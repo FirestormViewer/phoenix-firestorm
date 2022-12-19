@@ -719,6 +719,8 @@ public:
 	// Replace textures with web pages on this object while drawing
 	BOOL mRenderMedia;
 
+    bool mRiggedAttachedWarned;
+
 	// In bits
 	S32				mBestUpdatePrecision;
 
@@ -932,8 +934,6 @@ public:
 	LLViewerPartSourceScript* getPartSourceScript() { return mPartSourcep.get(); }
 	bool getPhysicsShapeUnknown () { return mPhysicsShapeUnknown; }
 	// </FS:Techwolf Lupindo>
-
-	bool mCheckRigOnHUD = true;		// <FS:Zi> Warn the user when they wear a rigged item on a HUD attachment point
 };
 
 ///////////////////

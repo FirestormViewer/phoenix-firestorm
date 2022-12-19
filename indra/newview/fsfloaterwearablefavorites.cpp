@@ -42,6 +42,8 @@
 #include "rlvactions.h"
 #include "rlvlocks.h"
 
+// Hello Kokua! Have fun yoinking! ;)
+
 #define FS_WEARABLE_FAVORITES_FOLDER "#Wearable Favorites"
 
 static LLDefaultChildRegistry::Register<FSWearableFavoritesItemsList> r("fs_wearable_favorites_items_list");
@@ -85,7 +87,7 @@ LLUUID FSFloaterWearableFavorites::sFolderID = LLUUID();
 
 FSFloaterWearableFavorites::FSFloaterWearableFavorites(const LLSD& key)
 	: LLFloater(key),
-	mItemsList(NULL),
+	mItemsList(nullptr),
 	mInitialized(false),
 	mDADCallbackConnection()
 {
@@ -200,6 +202,30 @@ BOOL FSFloaterWearableFavorites::handleKeyHere(KEY key, MASK mask)
 }
 
 // static
+std::optional<LLUUID> FSFloaterWearableFavorites::getWearableFavoritesFolderID()
+{
+	LLUUID fs_root_cat_id = gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER);
+	if (!fs_root_cat_id.isNull())
+	{
+		LLInventoryModel::item_array_t* items;
+		LLInventoryModel::cat_array_t* cats;
+		gInventory.getDirectDescendentsOf(fs_root_cat_id, cats, items);
+		if (cats)
+		{
+			for (const auto& cat : *cats)
+			{
+				if (cat->getName() == FS_WEARABLE_FAVORITES_FOLDER)
+				{
+					return cat->getUUID();
+				}
+			}
+		}
+	}
+
+	return std::nullopt;
+}
+
+// static
 void FSFloaterWearableFavorites::initCategory()
 {
 	if (!gInventory.isInventoryUsable())
@@ -208,63 +234,30 @@ void FSFloaterWearableFavorites::initCategory()
 		return;
 	}
 
-	LLUUID fs_favs_id;
-
-	LLUUID fs_root_cat_id = gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER);
-	if (!fs_root_cat_id.isNull())
+	if (auto fs_favs_id = getWearableFavoritesFolderID(); fs_favs_id.has_value())
 	{
-		LLInventoryModel::item_array_t* items;
-		LLInventoryModel::cat_array_t* cats;
-		gInventory.getDirectDescendentsOf(fs_root_cat_id, cats, items);
-		if (cats)
-		{
-			for (LLInventoryModel::cat_array_t::iterator it = cats->begin(); it != cats->end(); ++it)
-			{
-				if ((*it)->getName() == FS_WEARABLE_FAVORITES_FOLDER)
-				{
-					fs_favs_id = (*it)->getUUID();
-					break;
-				}
-			}
-		}
+		sFolderID = fs_favs_id.value();
 	}
 	else
 	{
-		fs_root_cat_id = gInventory.createNewCategory(gInventory.getRootFolderID(), LLFolderType::FT_NONE, ROOT_FIRESTORM_FOLDER);
-	}
+		LLUUID fs_root_cat_id = gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER);
+		if (fs_root_cat_id.isNull())
+		{
+			fs_root_cat_id = gInventory.createNewCategory(gInventory.getRootFolderID(), LLFolderType::FT_NONE, ROOT_FIRESTORM_FOLDER);
+		}
 
-	if (fs_favs_id.isNull())
-	{
-		fs_favs_id = gInventory.createNewCategory(fs_root_cat_id, LLFolderType::FT_NONE, FS_WEARABLE_FAVORITES_FOLDER);
+		sFolderID = gInventory.createNewCategory(fs_root_cat_id, LLFolderType::FT_NONE, FS_WEARABLE_FAVORITES_FOLDER);
 	}
-
-	sFolderID = fs_favs_id;
 }
 
 //static
 LLUUID FSFloaterWearableFavorites::getFavoritesFolder()
 {
-	if (sFolderID.notNull())
+	if (!sFolderID.isNull())
 	{
-		return sFolderID;
-	}
-
-	LLUUID fs_root_cat_id = gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER);
-	if (!fs_root_cat_id.isNull())
-	{
-		LLInventoryModel::item_array_t* items;
-		LLInventoryModel::cat_array_t* cats;
-		gInventory.getDirectDescendentsOf(fs_root_cat_id, cats, items);
-		if (cats)
+		if (auto fs_favs_id = getWearableFavoritesFolderID(); fs_favs_id.has_value())
 		{
-			for (LLInventoryModel::cat_array_t::iterator it = cats->begin(); it != cats->end(); ++it)
-			{
-				if ((*it)->getName() == FS_WEARABLE_FAVORITES_FOLDER)
-				{
-					sFolderID = (*it)->getUUID();
-					break;
-				}
-			}
+			sFolderID = fs_favs_id.value();
 		}
 	}
 
@@ -283,7 +276,7 @@ void FSFloaterWearableFavorites::updateList(const LLUUID& folder_id)
 
 void FSFloaterWearableFavorites::onItemDAD(const LLUUID& item_id)
 {
-	link_inventory_object(sFolderID, item_id, LLPointer<LLInventoryCallback>(NULL));
+	link_inventory_object(sFolderID, item_id, LLPointer<LLInventoryCallback>(nullptr));
 }
 
 void FSFloaterWearableFavorites::handleRemove()
@@ -291,9 +284,9 @@ void FSFloaterWearableFavorites::handleRemove()
 	uuid_vec_t selected_item_ids;
 	mItemsList->getSelectedUUIDs(selected_item_ids);
 
-	for (uuid_vec_t::iterator it = selected_item_ids.begin(); it != selected_item_ids.end(); ++it)
+	for (const auto& id : selected_item_ids)
 	{
-		remove_inventory_item(*it, LLPointer<LLInventoryCallback>(NULL));
+		remove_inventory_item(id, LLPointer<LLInventoryCallback>(nullptr));
 	}
 }
 
@@ -378,4 +371,3 @@ void FSFloaterWearableFavorites::onDoubleClick()
 		}
 	}
 }
-

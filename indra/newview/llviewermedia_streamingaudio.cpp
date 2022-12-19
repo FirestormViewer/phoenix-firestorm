@@ -82,6 +82,9 @@ void LLStreamingAudio_MediaPlugins::stop()
 	}
 
 	mURL.clear();
+
+	// <FS:Ansariel> Stream meta data display
+	updateMetadata();
 }
 
 void LLStreamingAudio_MediaPlugins::pause(int pause)
@@ -105,6 +108,9 @@ void LLStreamingAudio_MediaPlugins::update()
 {
 	if (mMediaPlugin)
 		mMediaPlugin->idle();
+
+	// <FS:Ansariel> Stream meta data display
+	updateMetadata();
 }
 
 int LLStreamingAudio_MediaPlugins::isPlaying()
@@ -164,22 +170,22 @@ LLPluginClassMedia* LLStreamingAudio_MediaPlugins::initializeMedia(const std::st
 }
 
 // <FS:ND> stream metadata from plugin
-bool LLStreamingAudio_MediaPlugins::getNewMetadata(LLSD& metadata)
+void LLStreamingAudio_MediaPlugins::updateMetadata() noexcept
 {
 	if (!mMediaPlugin)
 	{
-		metadata.clear();
-		return false;
+		return;
 	}
 
 	if (mTitle != mMediaPlugin->getTitle() || mArtist != mMediaPlugin->getArtist())
 	{
 		mArtist = mMediaPlugin->getArtist();
 		mTitle = mMediaPlugin->getTitle();
-		metadata["ARTIST"] = mArtist;
-		metadata["TITLE"] = mTitle;
-		return true;
+		mMetadata.clear();
+		mMetadata["ARTIST"] = mArtist;
+		mMetadata["TITLE"] = mTitle;
+		
+		mMetadataUpdateSignal(mMetadata);
 	}
-	return false;
 }
 // </FS:ND>

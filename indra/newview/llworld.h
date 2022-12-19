@@ -147,7 +147,6 @@ public:
 	F32 getMinPrimZPos() const			{ return mMinPrimZPos; }
 	F32 getMaxDragDistance() const		{ return mMaxDragDistance; }
 	F32 getMaxPhysPrimScale() const		{ return mMaxPhysPrimScale; }
-	BOOL getSkyUseClassicClouds() const	{ return mClassicCloudsEnabled; }
 	BOOL getAllowParcelWindLight() const{ return mAllowParcelWindLight; }
 	BOOL getEnableTeenMode() const		{ return mEnableTeenMode; }
 	BOOL getEnforceMaxBuild() const		{ return mEnforceMaxBuild; }
@@ -180,7 +179,6 @@ public:
 	void setMinPrimZPos(F32 val);
 	void setMaxDragDistance(F32 val);
 	void setMaxPhysPrimScale(F32 val);
-	void setSkyUseClassicClouds(BOOL val);
 	void setAllowParcelWindLight(BOOL val);
 	void setEnableTeenMode(BOOL val);
 	void setEnforceMaxBuild(BOOL val);
@@ -310,8 +308,6 @@ private:
 	S32 mLastPacketsLost;
 	U32 mNumOfActiveCachedObjects;
 	U64MicrosecondsImplicit mSpaceTimeUSec;
-
-	BOOL mClassicCloudsEnabled;
 
 	////////////////////////////
 	//

@@ -238,6 +238,7 @@
 #include "fsfloaterimcontainer.h"
 #include "fsfloaternearbychat.h"
 #include "fsfloatersearch.h"
+#include "fsfloaterstreamtitle.h"
 #include "fsfloaterwearablefavorites.h"
 #include "fslslbridge.h"
 #include "fsradar.h"
@@ -1951,9 +1952,6 @@ bool idle_startup()
 		// Initialize classes w/graphics stuff.
 		//
 		LLViewerStatsRecorder::instance(); // Since textures work in threads
-		gTextureList.doPrefetchImages();		
-		display_startup();
-
 		LLSurface::initClasses();
 		display_startup();
 
@@ -2101,6 +2099,15 @@ bool idle_startup()
 	if (STATE_SEED_CAP_GRANTED == LLStartUp::getStartupState())
 	{
 		display_startup();
+
+        // These textures are not warrantied to be cached, so needs
+        // to hapen with caps granted
+        gTextureList.doPrefetchImages();
+
+        // will init images, should be done with caps, but before gSky.init()
+        LLEnvironment::getInstance()->initSingleton();
+
+        display_startup();
 		update_texture_fetch();
 		display_startup();
 
@@ -3425,8 +3432,10 @@ void use_circuit_callback(void**, S32 result)
 void register_viewer_callbacks(LLMessageSystem* msg)
 {
 	msg->setHandlerFuncFast(_PREHASH_LayerData,				process_layer_data );
+	// <FS:Ansariel> OpenSim compatibility
 	msg->setHandlerFuncFast(_PREHASH_ImageData,				LLViewerTextureList::receiveImageHeader );
 	msg->setHandlerFuncFast(_PREHASH_ImagePacket,				LLViewerTextureList::receiveImagePacket );
+	// </FS:Ansariel>
 	msg->setHandlerFuncFast(_PREHASH_ObjectUpdate,				process_object_update );
 	msg->setHandlerFunc("ObjectUpdateCompressed",				process_compressed_object_update );
 	msg->setHandlerFunc("ObjectUpdateCached",					process_cached_object_update );
@@ -3847,6 +3856,7 @@ void reset_login()
 	gAgentWearables.cleanup();
 	gAgentCamera.cleanup();
 	gAgent.cleanup();
+    gSky.cleanup(); // mVOSkyp is an inworld object.
 	LLWorld::getInstance()->resetClass();
 
 	if ( gViewerWindow )
@@ -3883,7 +3893,8 @@ void LLStartUp::multimediaInit()
 	display_startup();
 
 	// Also initialise the stream titles.
-	new StreamTitleDisplay();
+	StreamTitleDisplay::instance();
+	FSStreamTitleManager::instance();
 }
 
 void LLStartUp::fontInit()

@@ -5921,6 +5921,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Mav_Details_MAV_CONFIRMATION_DATA_MISMATCH">
 		Kształt fizyczny zawiera uszkodzone dane. Spróbuj poprawić model fizyczny.
 	</string>
+	<string name="Mav_Details_MAV_BLOCK_MISSING">
+		Brakujące dane. Upewnij się, że wysoki LOD jest obecny i prawidłowy. Ustaw model fizyczny, jeśli nie jest obecny.
+	</string>
 	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
 		Kształt fizyczny zawiera niepoprawną wersję. Ustaw poprawną wersję dla modelu fizycznego.
 	</string>

@@ -127,6 +127,7 @@
 		<menu_item_check label="Мини карта" name="Mini-Map"/>
 		<menu_item_check label="Карта мира" name="World Map"/>
 		<menu_item_check label="Отслеживание региона" name="Region Tracker"/>
+		<menu_item_check label="Название Потока" name="Stream Title"/>
 		<menu_item_call label="Создать закладку" name="Create Landmark Here"/>
 		<menu_item_call label="Профиль локации" name="Place Profile"/>
 		<menu_item_call label="Детали участка" name="About Land"/>
@@ -562,7 +563,10 @@
 			<menu_item_call label="Отключить журнал сообщений" name="Disable Message Log"/>
 			<menu_item_check label="Скорость интерполяции объектов" name="Velocity Interpolate Objects"/>
 			<menu_item_check label="Время ответа интерполяции позиции объекта" name="Ping Interpolate Object Positions"/>
-			<menu_item_call label="Снижение пакета" name="Drop a Packet"/>
+			<menu_item_call label="Сбросить пакет" name="Drop a Packet"/>
+		</menu>
+		<menu label="Кэш" name="Cache">
+			<menu_item_call label="Очистить кэш диска" name="Purge Disk Cache"/>
 		</menu>
 		<menu_item_call label="Дамп камеры со скриптами" name="Dump Scripted Camera"/>
 		<menu label="Запись" name="Recorder">

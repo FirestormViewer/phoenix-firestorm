@@ -4,9 +4,6 @@
 		Decir en el chat local
 	</floater.string>
 	<layout_stack name="ls_control_panel">
-		<layout_panel name="lp_translate_btn">
-			<button tool_tip="Usar el servicio de traducción seleccionado" name="translate_btn"/>
-		</layout_panel>
 		<layout_panel name="lp_chat_history_btn">
 			<button tool_tip="Abre la transcripción del chat local" name="chat_history_btn"/>
 		</layout_panel>

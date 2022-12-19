@@ -10391,7 +10391,7 @@ Do you wish to continue?
     The selected object affects the navmesh.  Changing it to a Flexible Path will remove it from the navmesh.
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="The selected object affects the navmesh.  Changing it to a Flexible Path will remove it from the navmesh."
+     ignoretext="The selected object affects the navmesh. Changing it to a Flexible Path will remove it from the navmesh."
      name="okcancelignore"
      notext="Cancel"
      yestext="OK"/>
@@ -13853,6 +13853,22 @@ Unpacking: [UNPACK_TIME]s [USIZE]KB
   </notification>
 
   <notification
+    icon="alertmodal.tga"
+    name="RiggedMeshAttachedToHUD"
+    type="alertmodal">
+    An object "[NAME]" attached to HUD point "[POINT]" contains rigged mesh.
+
+Rigged mesh objects are designed for attachment to the avatar. Neither you nor anyone else will see this object.
+
+If you want to see this object, remove it and re-attach it to an avatar attachment point.
+    <tag>confirm</tag>
+    <usetemplate
+        ignoretext="Warn me when rigged mesh is attached to HUD point."
+        name="okignore"
+        yestext="OK"/>
+  </notification>
+
+  <notification
    icon="notify.tga"
    name="NoValidEnvSettingFound"
    persist="true"
@@ -13889,16 +13905,6 @@ Bulk import of Windlights has finished.
 Firestorm Animation Overrider: [AO_MESSAGE]
    <usetemplate
     ignoretext="Warn me when the Firestorm Animation Overrider gets accessed by a scripted object"
-    name="notifyignore"/>
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="AttachedRiggedObjectToHUD"
-   type="alertmodal">
-An attachment named "[NAME]" contains rigged mesh but is attached to the HUD point "[HUD_POINT]". Rigged meshes attached to HUD points won't be visible at all - neither for you nor for anybody else. You might want to consider taking it off and re-attaching it to a regular body attachment point.
-   <usetemplate
-    ignoretext="Warn me when a rigged attachment is worn on a HUD attachment point"
     name="notifyignore"/>
   </notification>
   <notification

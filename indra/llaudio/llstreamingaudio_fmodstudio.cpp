@@ -199,15 +199,14 @@ void LLStreamingAudio_FMODSTUDIO::update()
         if (!Check_FMOD_Error(mFMODInternetStreamChannelp->getCurrentSound(&sound), "FMOD::Channel::getCurrentSound") && sound)
         {
             FMOD_TAG tag;
-            S32 tagcount, dirtytagcount;
+            S32 tagcount, numtagsupdated;
 
-            if (!Check_FMOD_Error(sound->getNumTags(&tagcount, &dirtytagcount), "FMOD::Sound::getNumTags") && dirtytagcount)
+            if (!Check_FMOD_Error(sound->getNumTags(&tagcount, &numtagsupdated), "FMOD::Sound::getNumTags") && numtagsupdated > 0)
             {
-                LL_DEBUGS("StreamMetadata") << "Tag count: " << tagcount << "  Dirty tag count: " << dirtytagcount << LL_ENDL;
+                LL_DEBUGS("StreamMetadata") << "Tag count: " << tagcount << "  Tags updated since last call: " << numtagsupdated << LL_ENDL;
 
                 // <DKO> Stream metadata - originally by Shyotl Khur
                 mMetadata.clear();
-                mNewMetadata = true;
                 // </DKO>
                 for (S32 i = 0; i < tagcount; ++i)
                 {
@@ -298,6 +297,8 @@ void LLStreamingAudio_FMODSTUDIO::update()
                             break;
                     }
                 }
+
+                mMetadataUpdateSignal(mMetadata);
             }
 
             if (starving)
@@ -329,6 +330,11 @@ void LLStreamingAudio_FMODSTUDIO::stop()
         Check_FMOD_Error(mFMODInternetStreamChannelp->setPaused(true), "FMOD::Channel::setPaused");
         Check_FMOD_Error(mFMODInternetStreamChannelp->setPriority(0), "FMOD::Channel::setPriority");
         mFMODInternetStreamChannelp = NULL;
+
+        // <FS:Ansariel> Stream meta data display
+        mMetadata.clear();
+        mMetadataUpdateSignal(mMetadata);
+        // </FS:Ansariel>
     }
 
     if (mCurrentInternetStreamp)
@@ -410,29 +416,6 @@ void LLStreamingAudio_FMODSTUDIO::setGain(F32 vol)
         Check_FMOD_Error(mFMODInternetStreamChannelp->setVolume(vol), "FMOD::Channel::setVolume");
     }
 }
-
-// <DKO> Streamtitle display
-// virtual
-bool LLStreamingAudio_FMODSTUDIO::getNewMetadata(LLSD& metadata)
-{
-    if (mCurrentInternetStreamp)
-    {
-        if (mNewMetadata)
-        {
-            metadata = mMetadata;
-            mNewMetadata = false;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    metadata = LLSD();
-    return false;
-}
-// </DKO>
 
 ///////////////////////////////////////////////////////
 // manager of possibly-multiple internet audio streams

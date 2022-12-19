@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="stream_info" title="Joué actuellement :">
+	<floater.string name="NoStream">
+		Flux inactif
+	</floater.string>
+	<button name="btn_history" label="Historique" />
+</floater>

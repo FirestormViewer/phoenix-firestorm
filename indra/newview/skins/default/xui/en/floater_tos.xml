@@ -57,7 +57,7 @@
      follows="top|left"
      font="SansSerif"
      height="16"
-     label="I have read and agree to"
+     label="I have read and consent to"
      layout="topleft"
      left_delta="0"
      name="agree_chk"
@@ -76,7 +76,7 @@
      word_wrap="true"
      width="552"
      text_color="LabelTextColor"
-     text_readonly_color="LabelDisabledColor">the Terms and Conditions, Privacy Policy, and Terms of Service, including the dispute resolution requirements. 
+     text_readonly_color="LabelDisabledColor">the Terms and Conditions, Privacy Policy, Terms of Service, and acknowledge receipt of the Privacy Policy.
     </text>
     <button
      enabled="false"
