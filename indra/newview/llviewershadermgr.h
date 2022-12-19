@@ -163,6 +163,7 @@ extern LLGLSLShader			gClipProgram;
 extern LLGLSLShader			gDownsampleDepthProgram;
 extern LLGLSLShader			gDownsampleDepthRectProgram;
 extern LLGLSLShader			gBenchmarkProgram;
+extern LLGLSLShader         gReflectionProbeDisplayProgram;
 
 //output tex0[tc0] + tex1[tc1]
 extern LLGLSLShader			gTwoTextureAddProgram;
@@ -278,6 +279,7 @@ extern LLGLSLShader			gDeferredSoftenWaterProgram;
 extern LLGLSLShader			gDeferredShadowProgram;
 extern LLGLSLShader			gDeferredShadowCubeProgram;
 extern LLGLSLShader			gDeferredShadowAlphaMaskProgram;
+extern LLGLSLShader         gDeferredShadowGLTFAlphaMaskProgram;
 extern LLGLSLShader			gDeferredShadowFullbrightAlphaMaskProgram;
 extern LLGLSLShader			gDeferredPostProgram;
 extern LLGLSLShader			gDeferredCoFProgram;

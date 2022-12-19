@@ -92,8 +92,7 @@ LLGLSLShader	gDownsampleDepthProgram;
 LLGLSLShader	gDownsampleDepthRectProgram;
 LLGLSLShader	gAlphaMaskProgram;
 LLGLSLShader	gBenchmarkProgram;
-LLGLSLShader    gScreenSpaceReflectionProgram;
-
+LLGLSLShader    gReflectionProbeDisplayProgram;
 
 //object shaders
 LLGLSLShader		gObjectSimpleProgram;
@@ -217,6 +216,7 @@ LLGLSLShader			gDeferredShadowProgram;
 LLGLSLShader            gDeferredSkinnedShadowProgram;
 LLGLSLShader			gDeferredShadowCubeProgram;
 LLGLSLShader			gDeferredShadowAlphaMaskProgram;
+LLGLSLShader			gDeferredShadowGLTFAlphaMaskProgram;
 LLGLSLShader            gDeferredSkinnedShadowAlphaMaskProgram;
 LLGLSLShader			gDeferredShadowFullbrightAlphaMaskProgram;
 LLGLSLShader            gDeferredSkinnedShadowFullbrightAlphaMaskProgram;
@@ -701,6 +701,7 @@ void LLViewerShaderMgr::unloadShaders()
 	gDownsampleDepthProgram.unload();
 	gDownsampleDepthRectProgram.unload();
 	gBenchmarkProgram.unload();
+    gReflectionProbeDisplayProgram.unload();
 	gAlphaMaskProgram.unload();
 	gUIProgram.unload();
 	gPathfindingProgram.unload();
@@ -717,7 +718,6 @@ void LLViewerShaderMgr::unloadShaders()
 	gOneTextureFilterProgram.unload();
 	gOneTextureNoColorProgram.unload();
 	gSolidColorProgram.unload();
-    gScreenSpaceReflectionProgram.unload();
 
 	gObjectFullbrightNoColorProgram.unload();
 	gObjectFullbrightNoColorWaterProgram.unload();
@@ -1285,6 +1285,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
         gDeferredSkinnedShadowProgram.unload();
 		gDeferredShadowCubeProgram.unload();
         gDeferredShadowAlphaMaskProgram.unload();
+        gDeferredShadowGLTFAlphaMaskProgram.unload();
         gDeferredSkinnedShadowAlphaMaskProgram.unload();
         gDeferredShadowFullbrightAlphaMaskProgram.unload();
         gDeferredSkinnedShadowFullbrightAlphaMaskProgram.unload();
@@ -2606,6 +2607,22 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		success = gDeferredShadowAlphaMaskProgram.createShader(NULL, NULL);
 		llassert(success);
 	}
+    
+
+    if (success)
+    {
+        gDeferredShadowGLTFAlphaMaskProgram.mName = "Deferred Shadow Alpha Mask Shader";
+        gDeferredShadowGLTFAlphaMaskProgram.mFeatures.mIndexedTextureChannels = LLGLSLShader::sIndexedTextureChannels;
+        gDeferredShadowGLTFAlphaMaskProgram.mShaderFiles.clear();
+        gDeferredShadowGLTFAlphaMaskProgram.mShaderFiles.push_back(make_pair("deferred/shadowAlphaMaskV.glsl", GL_VERTEX_SHADER));
+        gDeferredShadowGLTFAlphaMaskProgram.mShaderFiles.push_back(make_pair("deferred/shadowAlphaMaskF.glsl", GL_FRAGMENT_SHADER));
+        gDeferredShadowGLTFAlphaMaskProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+        gDeferredShadowGLTFAlphaMaskProgram.clearPermutations();
+        gDeferredShadowGLTFAlphaMaskProgram.addPermutation("GLTF", "1");
+        gDeferredShadowGLTFAlphaMaskProgram.mRiggedVariant = &gDeferredSkinnedShadowAlphaMaskProgram;
+        success = gDeferredShadowGLTFAlphaMaskProgram.createShader(NULL, NULL);
+        llassert(success);
+    }
 
     if (success)
     {
@@ -3910,6 +3927,18 @@ BOOL LLViewerShaderMgr::loadShadersInterface()
 		success = gBenchmarkProgram.createShader(NULL, NULL);
 	}
 
+    if (success)
+    {
+        gReflectionProbeDisplayProgram.mName = "Reflection Probe Display Shader";
+        gReflectionProbeDisplayProgram.mFeatures.hasReflectionProbes = true;
+        gReflectionProbeDisplayProgram.mShaderFiles.clear();
+        gReflectionProbeDisplayProgram.mShaderFiles.push_back(make_pair("interface/reflectionprobeV.glsl", GL_VERTEX_SHADER));
+        gReflectionProbeDisplayProgram.mShaderFiles.push_back(make_pair("interface/reflectionprobeF.glsl", GL_FRAGMENT_SHADER));
+        gReflectionProbeDisplayProgram.mShaderLevel = mShaderLevel[SHADER_INTERFACE];
+        success = gReflectionProbeDisplayProgram.createShader(NULL, NULL);
+    }
+
+    
 	if (success)
 	{
 		gDownsampleDepthRectProgram.mName = "DownsampleDepthRect Shader";

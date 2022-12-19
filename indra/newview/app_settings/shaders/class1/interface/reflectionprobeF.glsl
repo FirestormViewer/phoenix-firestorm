@@ -1,6 +1,5 @@
 /** 
- * @file lldrawpoolpbropaque.cpp
- * @brief LLDrawPoolGLTFPBR class implementation
+ * @file reflectionprobeF.glsl
  *
  * $LicenseInfo:firstyear=2022&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -24,32 +23,10 @@
  * $/LicenseInfo$
  */
 
-#include "llviewerprecompiledheaders.h"
+// debug stub
+out vec4 frag_color;
 
-#include "lldrawpool.h"
-#include "lldrawpoolpbropaque.h"
-#include "llviewershadermgr.h"
-#include "pipeline.h"
-
-LLDrawPoolGLTFPBR::LLDrawPoolGLTFPBR() :
-    LLRenderPass(POOL_GLTF_PBR)
+void main() 
 {
+	frag_color = vec4(0,1,0,0.5);
 }
-
-void LLDrawPoolGLTFPBR::renderDeferred(S32 pass)
-{
-    const U32 types[] = { LLPipeline::RENDER_TYPE_PASS_GLTF_PBR, LLPipeline::RENDER_TYPE_PASS_GLTF_PBR_ALPHA_MASK };
-
-    for (U32 type : types)
-    {
-        gDeferredPBROpaqueProgram.bind();
-        pushGLTFBatches(type, getVertexDataMask());
-        
-        gDeferredPBROpaqueProgram.bind(true);
-        pushRiggedGLTFBatches(type+1, getVertexDataMask());
-    }
-
-    LLGLSLShader::sCurBoundShaderPtr->unbind();
-}
-
-

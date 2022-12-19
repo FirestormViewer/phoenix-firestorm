@@ -366,6 +366,18 @@ static LLCullResult* sCull = NULL;
 
 void validate_framebuffer_object();
 
+// override the projection_matrix uniform on the given shader to that which would be set by the main camera
+void set_camera_projection_matrix(LLGLSLShader& shader)
+{
+    auto          camProj = LLViewerCamera::getInstance()->getProjection();
+    glh::matrix4f projection = get_current_projection();
+    projection.set_row(0, glh::vec4f(camProj.mMatrix[0][0], camProj.mMatrix[0][1], camProj.mMatrix[0][2], camProj.mMatrix[0][3]));
+    projection.set_row(0, glh::vec4f(camProj.mMatrix[1][0], camProj.mMatrix[1][1], camProj.mMatrix[1][2], camProj.mMatrix[1][3]));
+    projection.set_row(0, glh::vec4f(camProj.mMatrix[2][0], camProj.mMatrix[2][1], camProj.mMatrix[2][2], camProj.mMatrix[2][3]));
+    projection.set_row(0, glh::vec4f(camProj.mMatrix[3][0], camProj.mMatrix[3][1], camProj.mMatrix[3][2], camProj.mMatrix[3][3]));
+    shader.uniformMatrix4fv(LLShaderMgr::PROJECTION_MATRIX, 1, FALSE, projection.m);
+}
+
 // Add color attachments for deferred rendering
 // target -- RenderTarget to add attachments to
 bool addDeferredAttachments(LLRenderTarget& target, bool for_impostor = false)
@@ -536,7 +548,21 @@ void LLPipeline::init()
 	//mDeferredVB->allocateBuffer(8, 0, true);
 	initDeferredVB();
 	// </FS:Ansariel>
-	setLightingDetail(-1);
+
+    {
+        mScreenTriangleVB = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX, GL_STATIC_DRAW);
+        mScreenTriangleVB->allocateBuffer(3, 0, true);
+        LLStrider<LLVector3> vert;
+        mScreenTriangleVB->getVertexStrider(vert);
+
+        vert[0].set(-1, 1, 0);
+        vert[1].set(-1, -3, 0);
+        vert[2].set(3, 1, 0);
+
+        mScreenTriangleVB->flush();
+    }
+
+    setLightingDetail(-1);
 	
 	// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
 	initAuxiliaryVB();
@@ -726,6 +752,7 @@ void LLPipeline::cleanup()
 	mAuxiliaryVB = NULL;
 
 	mDeferredVB = NULL;
+    mScreenTriangleVB = nullptr;
 
 	mCubeVB = NULL;
 
@@ -5424,6 +5451,24 @@ void LLPipeline::renderDebug()
         mReflectionMapManager.renderDebug();
     }
 
+    if (gSavedSettings.getBOOL("RenderReflectionProbeVolumes"))
+    {
+        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("probe debug display");
+
+        bindDeferredShader(gReflectionProbeDisplayProgram, NULL);
+        mScreenTriangleVB->setBuffer(LLVertexBuffer::MAP_VERTEX);
+
+        // Provide our projection matrix.
+        set_camera_projection_matrix(gReflectionProbeDisplayProgram);
+
+        LLGLEnable blend(GL_BLEND);
+        LLGLDepthTest depth(GL_FALSE);
+
+        mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
+
+        unbindDeferredShader(gReflectionProbeDisplayProgram);
+    }
+
 	gUIProgram.bind();
 
 	if (hasRenderDebugMask(LLPipeline::RENDER_DEBUG_RAYCAST) && !hud_only)
@@ -7739,31 +7784,18 @@ void LLPipeline::renderFinalize()
 
     if (!gCubeSnapshot)
     {
+        LLRenderTarget* screen_target = &mRT->screen;
+        screen_target->bindTarget();
+
         if (RenderScreenSpaceReflections)
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("renderDeferredLighting - screen space reflections");
             LL_PROFILE_GPU_ZONE("screen space reflections");
-            LLStrider<LLVector3> vert;
-            mDeferredVB->getVertexStrider(vert);
-
-            vert[0].set(-1, 1, 0);
-            vert[1].set(-1, -3, 0);
-            vert[2].set(3, 1, 0);
-
-            // Make sure the deferred VB is a full screen triangle.
-            mDeferredVB->getVertexStrider(vert);
 
             bindDeferredShader(gPostScreenSpaceReflectionProgram, NULL);
-            mDeferredVB->setBuffer(LLVertexBuffer::MAP_VERTEX);
+            mScreenTriangleVB->setBuffer(LLVertexBuffer::MAP_VERTEX);
 
-            // Provide our projection matrix.
-            auto          camProj    = LLViewerCamera::getInstance()->getProjection();
-            glh::matrix4f projection = get_current_projection();
-            projection.set_row(0, glh::vec4f(camProj.mMatrix[0][0], camProj.mMatrix[0][1], camProj.mMatrix[0][2], camProj.mMatrix[0][3]));
-            projection.set_row(0, glh::vec4f(camProj.mMatrix[1][0], camProj.mMatrix[1][1], camProj.mMatrix[1][2], camProj.mMatrix[1][3]));
-            projection.set_row(0, glh::vec4f(camProj.mMatrix[2][0], camProj.mMatrix[2][1], camProj.mMatrix[2][2], camProj.mMatrix[2][3]));
-            projection.set_row(0, glh::vec4f(camProj.mMatrix[3][0], camProj.mMatrix[3][1], camProj.mMatrix[3][2], camProj.mMatrix[3][3]));
-            gPostScreenSpaceReflectionProgram.uniformMatrix4fv(LLShaderMgr::PROJECTION_MATRIX, 1, FALSE, projection.m);
+            set_camera_projection_matrix(gPostScreenSpaceReflectionProgram);
 
             // We need linear depth.
             static LLStaticHashedString zfar("zFar");
@@ -7773,14 +7805,10 @@ void LLPipeline::renderFinalize()
             gPostScreenSpaceReflectionProgram.uniform1f(zfar, farClip);
             gPostScreenSpaceReflectionProgram.uniform1f(znear, nearClip);
 
-            LLRenderTarget *screen_target = &mRT->screen;
-
-            screen_target->bindTarget();
             S32 channel = gPostScreenSpaceReflectionProgram.enableTexture(LLShaderMgr::DIFFUSE_MAP, screen_target->getUsage());
             if (channel > -1)
             {
                 screen_target->bindTexture(0, channel, LLTexUnit::TFO_POINT);
-				
             }
 
             {
@@ -7788,28 +7816,22 @@ void LLPipeline::renderFinalize()
                 LLGLDepthTest depth(GL_TRUE, GL_FALSE, GL_ALWAYS);
 
                 stop_glerror();
-                mDeferredVB->drawArrays(LLRender::TRIANGLES, 0, 3);
+                mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
                 stop_glerror();
             }
 
             unbindDeferredShader(gPostScreenSpaceReflectionProgram);
-
-            screen_target->flush();
         }
 
         // gamma correct lighting
-
         {
             LL_PROFILE_GPU_ZONE("gamma correct");
 
             LLGLDepthTest depth(GL_FALSE, GL_FALSE);
 
-            LLRenderTarget* screen_target = &mRT->screen;
-
             LLVector2 tc1(0, 0);
             LLVector2 tc2((F32)screen_target->getWidth() * 2, (F32)screen_target->getHeight() * 2);
 
-            screen_target->bindTarget();
             // Apply gamma correction to the frame here.
             gDeferredPostGammaCorrectProgram.bind();
             // mDeferredVB->setBuffer(LLVertexBuffer::MAP_VERTEX);
@@ -7840,8 +7862,9 @@ void LLPipeline::renderFinalize()
 
             gGL.getTexUnit(channel)->unbind(screen_target->getUsage());
             gDeferredPostGammaCorrectProgram.unbind();
-            screen_target->flush();
         }
+
+        screen_target->flush();
 
         LLVertexBuffer::unbind();
     }
@@ -8671,7 +8694,14 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
     channel = shader.enableTexture(LLShaderMgr::DEFERRED_LIGHT, light_target->getUsage());
 	if (channel > -1)
 	{
-        light_target->bindTexture(0, channel, LLTexUnit::TFO_POINT);
+        if (light_target->isComplete())
+        {
+            light_target->bindTexture(0, channel, LLTexUnit::TFO_POINT);
+        }
+        else
+        {
+            gGL.getTexUnit(channel)->bindFast(LLViewerFetchedTexture::sWhiteImagep);
+        }
 	}
 
 	channel = shader.enableTexture(LLShaderMgr::DEFERRED_BLOOM);
@@ -9745,7 +9775,8 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
         LLRenderPass::PASS_NORMMAP,
         LLRenderPass::PASS_NORMMAP_EMISSIVE,
         LLRenderPass::PASS_NORMSPEC,
-        LLRenderPass::PASS_NORMSPEC_EMISSIVE
+        LLRenderPass::PASS_NORMSPEC_EMISSIVE,
+        LLRenderPass::PASS_GLTF_PBR
     };
 
     LLGLEnable cull(GL_CULL_FACE);
@@ -9846,6 +9877,12 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
     {
         LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow alpha");
         LL_PROFILE_GPU_ZONE("shadow alpha");
+
+        U32 mask = LLVertexBuffer::MAP_VERTEX |
+            LLVertexBuffer::MAP_TEXCOORD0 |
+            LLVertexBuffer::MAP_COLOR |
+            LLVertexBuffer::MAP_TEXTURE_INDEX;
+
         for (int i = 0; i < 2; ++i)
         {
             bool rigged = i == 1;
@@ -9853,11 +9890,6 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
             gDeferredShadowAlphaMaskProgram.bind(rigged);
             LLGLSLShader::sCurBoundShaderPtr->uniform1f(LLShaderMgr::DEFERRED_SHADOW_TARGET_WIDTH, (float)target_width);
             LLGLSLShader::sCurBoundShaderPtr->uniform1i(LLShaderMgr::SUN_UP_FACTOR, environment.getIsSunUp() ? 1 : 0);
-
-            U32 mask = LLVertexBuffer::MAP_VERTEX |
-                LLVertexBuffer::MAP_TEXCOORD0 |
-                LLVertexBuffer::MAP_COLOR |
-                LLVertexBuffer::MAP_TEXTURE_INDEX;
 
             {
                 LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow alpha masked");
@@ -9870,7 +9902,6 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
                 renderAlphaObjects(mask, TRUE, TRUE, rigged);
             }
 
-
             {
                 LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow fullbright alpha masked");
                 gDeferredShadowFullbrightAlphaMaskProgram.bind(rigged);
@@ -9878,7 +9909,6 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
                 LLGLSLShader::sCurBoundShaderPtr->uniform1i(LLShaderMgr::SUN_UP_FACTOR, environment.getIsSunUp() ? 1 : 0);
                 renderFullbrightMaskedObjects(LLRenderPass::PASS_FULLBRIGHT_ALPHA_MASK, mask, TRUE, TRUE, rigged);
             }
-
 
             {
                 LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("shadow alpha grass");
@@ -9896,9 +9926,32 @@ void LLPipeline::renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera
                 renderMaskedObjects(LLRenderPass::PASS_NORMMAP_MASK, no_idx_mask, true, false, rigged);
             }
         }
-    }
 
-    //glCullFace(GL_BACK);
+        for (int i = 0; i < 2; ++i)
+        {
+            bool rigged = i == 1;
+            gDeferredShadowGLTFAlphaMaskProgram.bind(rigged);
+            LLGLSLShader::sCurBoundShaderPtr->uniform1f(LLShaderMgr::DEFERRED_SHADOW_TARGET_WIDTH, (float)target_width);
+            LLGLSLShader::sCurBoundShaderPtr->uniform1i(LLShaderMgr::SUN_UP_FACTOR, environment.getIsSunUp() ? 1 : 0);
+            
+            gGL.loadMatrix(gGLModelView);
+            gGLLastMatrix = NULL;
+
+            U32 type = LLRenderPass::PASS_GLTF_PBR_ALPHA_MASK;
+
+            if (rigged)
+            {
+                mAlphaMaskPool->pushRiggedGLTFBatches(type + 1, mask);
+            }
+            else
+            {
+                mAlphaMaskPool->pushGLTFBatches(type, mask);
+            }
+
+            gGL.loadMatrix(gGLModelView);
+            gGLLastMatrix = NULL;
+        }
+    }
 
     gDeferredShadowCubeProgram.bind();
     gGLLastMatrix = NULL;
@@ -10237,6 +10290,8 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
                     LLPipeline::RENDER_TYPE_PASS_NORMSPEC_EMISSIVE_RIGGED,
                     LLPipeline::RENDER_TYPE_PASS_GLTF_PBR,
                     LLPipeline::RENDER_TYPE_PASS_GLTF_PBR_RIGGED,
+                    LLPipeline::RENDER_TYPE_PASS_GLTF_PBR_ALPHA_MASK,
+                    LLPipeline::RENDER_TYPE_PASS_GLTF_PBR_ALPHA_MASK_RIGGED,
 					END_RENDER_TYPES);
 
 	gGL.setColorMask(false, false);

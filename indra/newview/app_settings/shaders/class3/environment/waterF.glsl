@@ -34,7 +34,7 @@ out vec4 frag_color;
 vec3 scaleSoftClipFragLinear(vec3 l);
 vec3 atmosFragLightingLinear(vec3 light, vec3 additive, vec3 atten);
 void calcAtmosphericVarsLinear(vec3 inPositionEye, vec3 norm, vec3 light_dir, out vec3 sunlit, out vec3 amblit, out vec3 atten, out vec3 additive);
-vec4 applyWaterFogViewLinear(vec3 pos, vec4 color);
+vec4 applyWaterFogViewLinear(vec3 pos, vec4 color, vec3 sunlit);
 
 // PBR interface
 vec3 pbrIbl(vec3 diffuseColor,
@@ -120,12 +120,12 @@ void main()
 
     vec3 pos = vary_position.xyz;
 
-	float dist = length(pos.xyz);
-	
-	//normalize view vector
-	vec3 viewVec = normalize(pos.xyz);
-	
-	//get wave normals
+    float dist = length(pos.xyz);
+
+    //normalize view vector
+    vec3 viewVec = normalize(pos.xyz);
+
+    //get wave normals
     vec2 bigwave = vec2(refCoord.w, view.w);
     vec3 wave1_a = texture(bumpMap, bigwave, -2      ).xyz*2.0-1.0;
     vec3 wave2_a = texture2D(bumpMap, littleWave.xy).xyz*2.0-1.0;
@@ -135,15 +135,23 @@ void main()
     vec3 wave2_b = texture2D(bumpMap2, littleWave.xy).xyz*2.0-1.0;
     vec3 wave3_b = texture2D(bumpMap2, littleWave.zw).xyz*2.0-1.0;
 
+    //wave1_a = wave2_a = wave3_a = wave1_b = wave2_b = wave3_b = vec3(0,0,1);
+
     vec3 wave1 = BlendNormal(wave1_a, wave1_b);
     vec3 wave2 = BlendNormal(wave2_a, wave2_b);
     vec3 wave3 = BlendNormal(wave3_a, wave3_b);
 
-    wave1 = transform_normal(wave1);
-    wave2 = transform_normal(wave2);
-    wave3 = transform_normal(wave3);
+    vec2 distort = (refCoord.xy/refCoord.z) * 0.5 + 0.5;
+     
+    //wave1 = transform_normal(wave1);
+    //wave2 = transform_normal(wave2);
+    //wave3 = transform_normal(wave3);
 
     vec3 wavef = (wave1 + wave2 * 0.4 + wave3 * 0.6) * 0.5;
+
+    vec3 waver = wavef*3;
+
+    wavef = transform_normal(wavef);
 
     //wavef.z *= max(-viewVec.z, 0.1);
 
@@ -157,26 +165,28 @@ void main()
 					dot(viewVec, wave3)
 				 ) * fresnelScale + fresnelOffset;
 		    
-	vec2 distort = (refCoord.xy/refCoord.z) * 0.5 + 0.5;
-	
 	float dist2 = dist;
 	dist = max(dist, 5.0);
 	
 	float dmod = sqrt(dist);
 	
-	vec2 dmod_scale = vec2(dmod*dmod, dmod);
-	
     float df1 = df.x + df.y + df.z;
 
-    //wavef = normalize(wavef - vary_normal);
-    //wavef = vary_normal;
 
-    vec3 waver = reflect(viewVec, -wavef)*3;
+    
 
 	//figure out distortion vector (ripply)   
-    vec2 distort2 = distort + waver.xy * refScale / max(dmod * df1, 1.0);
-    distort2 = clamp(distort2, vec2(0), vec2(0.99));
- 
+    vec2 distort2 = distort + waver.xy * refScale / max(dmod, 1.0);
+
+    distort2 = clamp(distort2, vec2(0), vec2(0.999));
+
+    vec3 sunlit;
+    vec3 amblit;
+    vec3 additive;
+    vec3 atten;
+
+    calcAtmosphericVarsLinear(pos.xyz, wavef, vary_light_dir, sunlit, amblit, additive, atten);
+
 #ifdef TRANSPARENT_WATER
     vec4 fb = texture2D(screenTex, distort2);
     float depth = texture2D(screenDepth, distort2).r;
@@ -191,18 +201,11 @@ void main()
         refPos = getPositionWithNDC(vec3(distort2 * 2.0 - vec2(1.0), depth * 2.0 - 1.0));
     }
 
-    fb = applyWaterFogViewLinear(refPos, fb);
+    fb = applyWaterFogViewLinear(refPos, fb, sunlit);
 #else
     vec4 fb = vec4(waterFogColorLinear.rgb, 0.0);
 #endif
 
-    vec3 sunlit;
-    vec3 amblit;
-    vec3 additive;
-    vec3 atten;
-
-    calcAtmosphericVarsLinear(pos.xyz, wavef, vary_light_dir, sunlit, amblit, additive, atten);
-    sunlit = vec3(1); // TODO -- figure out why sunlit is breaking at some view angles
     vec3 v = -viewVec;
     float NdotV = clamp(abs(dot(wavef.xyz, v)), 0.001, 1.0);
 

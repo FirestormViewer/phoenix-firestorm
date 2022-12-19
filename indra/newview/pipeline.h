@@ -548,7 +548,9 @@ public:
 		RENDER_TYPE_PASS_NORMSPEC_EMISSIVE		= LLRenderPass::PASS_NORMSPEC_EMISSIVE,
         RENDER_TYPE_PASS_NORMSPEC_EMISSIVE_RIGGED = LLRenderPass::PASS_NORMSPEC_EMISSIVE_RIGGED,
         RENDER_TYPE_PASS_GLTF_PBR                 = LLRenderPass::PASS_GLTF_PBR,
-        RENDER_TYPE_PASS_GLTF_PBR_RIGGED        = LLRenderPass::PASS_GLTF_PBR_RIGGED,
+        RENDER_TYPE_PASS_GLTF_PBR_RIGGED         = LLRenderPass::PASS_GLTF_PBR_RIGGED,
+        RENDER_TYPE_PASS_GLTF_PBR_ALPHA_MASK        = LLRenderPass::PASS_GLTF_PBR_ALPHA_MASK,
+        RENDER_TYPE_PASS_GLTF_PBR_ALPHA_MASK_RIGGED = LLRenderPass::PASS_GLTF_PBR_ALPHA_MASK_RIGGED,
 		// Following are object types (only used in drawable mRenderType)
 		RENDER_TYPE_HUD = LLRenderPass::NUM_RENDER_TYPES,
 		RENDER_TYPE_VOLUME,
@@ -714,8 +716,11 @@ public:
     LLCullResult            mReflectedObjects;
     LLCullResult            mRefractedObjects;
 
-	//utility buffer for rendering post effects, gets abused by renderDeferredLighting
+	//utility buffers for rendering post effects
 	LLPointer<LLVertexBuffer> mDeferredVB;
+
+    // a single triangle that covers the whole screen
+    LLPointer<LLVertexBuffer> mScreenTriangleVB;
 
 	//utility buffer for rendering cubes, 8 vertices are corners of a cube [-1, 1]
 	LLPointer<LLVertexBuffer> mCubeVB;

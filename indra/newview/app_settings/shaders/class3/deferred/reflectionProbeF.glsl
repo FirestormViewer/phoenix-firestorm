@@ -262,6 +262,47 @@ vec3 sphereIntersect(vec3 origin, vec3 dir, vec3 center, float radius2)
         return v; 
 } 
 
+void swap(inout float a, inout float b)
+{
+    float t = a;
+    a = b;
+    b = a;
+}
+
+// debug implementation, make no assumptions about origin
+void sphereIntersectDebug(vec3 origin, vec3 dir, vec3 center, float radius2, float depth, inout vec4 col)
+{
+    float t[2]; // solutions for t if the ray intersects 
+
+    // geometric solution
+    vec3 L = center - origin; 
+    float tca = dot(L, dir);
+    // if (tca < 0) return false;
+    float d2 = dot(L, L) - tca * tca; 
+    if (d2 > radius2) return; 
+    float thc = sqrt(radius2 - d2); 
+    t[0] = tca - thc; 
+    t[1] = tca + thc; 
+
+    for (int i = 0; i < 2; ++i)
+    {
+        if (t[i] > 0)
+        {
+            if (t[i] > depth)
+            {
+                float w = 0.125/((t[i]-depth)*0.125 + 1.0);
+                col += vec4(0, 0, w, w)*(1.0-min(col.a, 1.0));
+            }
+            else
+            {
+                float w = 0.25;
+                col += vec4(w,w,0,w)*(1.0-min(col.a, 1.0));
+            }
+        }
+    }
+
+}
+
 // from https://seblagarde.wordpress.com/2012/09/29/image-based-lighting-approaches-and-parallax-corrected-cubemap/
 /*
 vec3 DirectionWS = normalize(PositionWS - CameraWS);
@@ -310,6 +351,66 @@ vec3 boxIntersect(vec3 origin, vec3 dir, int i)
     return IntersectPositionCS;
 }
 
+void debugBoxCol(vec3 ro, vec3 rd, float t, vec3 p, inout vec4 col)
+{
+    vec3 v = ro + rd * t;
+
+    v -= ro;
+    vec3 pos = p - ro;
+
+
+    bool behind = dot(v,v) > dot(pos,pos);
+
+    float w = 0.25;
+   
+    if (behind) 
+    {
+        w *= 0.5;
+        w /= (length(v)-length(pos))*0.5+1.0;
+        col += vec4(0,0,w,w)*(1.0-min(col.a, 1.0));
+    }
+    else
+    {
+        col += vec4(w,w,0,w)*(1.0-min(col.a, 1.0));
+    }
+}
+
+// cribbed from https://iquilezles.org/articles/intersectors/
+// axis aligned box centered at the origin, with size boxSize
+void boxIntersectionDebug( in vec3 ro, in vec3 p, vec3 boxSize, inout vec4 col) 
+{
+    vec3 rd = normalize(p-ro);
+
+    vec3 m = 1.0/rd; // can precompute if traversing a set of aligned boxes
+    vec3 n = m*ro;   // can precompute if traversing a set of aligned boxes
+    vec3 k = abs(m)*boxSize;
+    vec3 t1 = -n - k;
+    vec3 t2 = -n + k;
+    float tN = max( max( t1.x, t1.y ), t1.z );
+    float tF = min( min( t2.x, t2.y ), t2.z );
+    if( tN>tF || tF<0.0) return ; // no intersection
+
+    float t = tN < 0 ? tF : tN;
+
+    debugBoxCol(ro, rd, t, p, col);
+
+    if (tN > 0) // eye is outside box, check backside, too
+    {
+        debugBoxCol(ro, rd, tF, p, col);
+    }
+}
+
+
+void boxIntersectDebug(vec3 origin, vec3 pos, int i, inout vec4 col)
+{
+    mat4 clipToLocal = refBox[i];
+    
+    // transform into unit cube space
+    origin = (clipToLocal * vec4(origin, 1.0)).xyz;
+    pos = (clipToLocal * vec4(pos, 1.0)).xyz;
+
+    boxIntersectionDebug(origin, pos, vec3(1), col);
+}
 
 
 // Tap a reflection probe
@@ -518,12 +619,53 @@ void sampleReflectionProbes(inout vec3 ambenv, inout vec3 glossenv,
     glossenv = sampleProbes(pos, normalize(refnormpersp), lod, errorCorrect);
 }
 
+void debugTapRefMap(vec3 pos, vec3 dir, float depth, int i, inout vec4 col)
+{
+    vec3 origin = vec3(0,0,0);
+
+    bool manual_probe = abs(refIndex[i].w) > 2;
+
+    if (manual_probe)
+    {
+        if (refIndex[i].w < 0)
+        {
+            boxIntersectDebug(origin, pos, i, col);
+        }
+        else
+        {
+            float r = refSphere[i].w; // radius of sphere volume
+            float rr = r * r; // radius squared
+
+            float t = 0.0;
+
+            sphereIntersectDebug(origin, dir, refSphere[i].xyz, rr, depth, col);
+        }
+    }
+}
+
+vec4 sampleReflectionProbesDebug(vec3 pos)
+{
+    vec4 col = vec4(0,0,0,0);
+
+    vec3 dir = normalize(pos);
+
+    float d = length(pos);
+
+    for (int i = 1; i < refmapCount; ++i)
+    {
+        debugTapRefMap(pos, dir, d, i, col);
+    }
+
+    return col;
+}
+
 void sampleReflectionProbes(inout vec3 ambenv, inout vec3 glossenv,
     vec3 pos, vec3 norm, float glossiness)
 {
     sampleReflectionProbes(ambenv, glossenv,
         pos, norm, glossiness, false);
 }
+
 
 void sampleReflectionProbesLegacy(inout vec3 ambenv, inout vec3 glossenv, inout vec3 legacyenv,
         vec3 pos, vec3 norm, float glossiness, float envIntensity)

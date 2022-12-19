@@ -713,7 +713,8 @@ void LLReflectionMapManager::updateUniforms()
     LLEnvironment& environment = LLEnvironment::instance();
     LLSettingsSky::ptr_t psky = environment.getCurrentSky();
 
-    F32 minimum_ambiance = psky->getReflectionProbeAmbiance();
+    F32 minimum_ambiance = psky->getTotalReflectionProbeAmbiance();
+    F32 ambscale = gCubeSnapshot ? 0.5f : 1.f;
 
     for (auto* refmap : mReflectionMaps)
     {
@@ -747,7 +748,7 @@ void LLReflectionMapManager::updateUniforms()
             rpd.refIndex[count][3] = -rpd.refIndex[count][3];
         }
 
-        rpd.refParams[count].set(llmax(minimum_ambiance, refmap->getAmbiance()), 0.f, 0.f, 0.f);
+        rpd.refParams[count].set(llmax(minimum_ambiance, refmap->getAmbiance())*ambscale, 0.f, 0.f, 0.f);
 
         S32 ni = nc; // neighbor ("index") - index into refNeighbor to write indices for current reflection probe's neighbors
         {
