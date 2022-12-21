@@ -37,6 +37,7 @@
 #include "llwindowcallbacks.h"
 
 // Linden library includes
+#include "llapp.h" // <FS:Beq/> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
 #include "llerror.h"
 #include "llexception.h"
 #include "llfasttimer.h"
@@ -88,6 +89,7 @@ const UINT WM_DUMMY_(WM_USER + 0x0017);
 const UINT WM_POST_FUNCTION_(WM_USER + 0x0018);
 
 extern BOOL gDebugWindowProc;
+extern BOOL gDisconnected; // <FS:Beq/> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
 
 static std::thread::id sWindowThreadId;
 static std::thread::id sMainThreadId;
@@ -346,6 +348,7 @@ struct LLWindowWin32::LLWindowWin32Thread : public LL::ThreadPool
     LLWindowWin32Thread();
 
     void run() override;
+    void close() override; // <FS:Beq/> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
 
     /// called by main thread to post work to this window thread
     template <typename CALLABLE>
@@ -4735,6 +4738,31 @@ private:
     std::string mPrev;
 };
 
+// <FS:Beq> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
+// Provide a close() override that ignores the initial close triggered by the threadpool detecting "quit"
+// but waits for the viewer to be disconected and the second close call triggered by the app window destructor
+void LLWindowWin32::LLWindowWin32Thread::close()
+{
+	assert_main_thread();
+    if (! mQueue.isClosed() && gDisconnected)
+    {
+        LL_DEBUGS("ThreadPool") << mName << " closing queue and joining threads" << LL_ENDL;
+        mQueue.close();
+        for (auto& pair: mThreads)
+        {
+            LL_DEBUGS("ThreadPool") << mName << " waiting on thread " << pair.first << LL_ENDL;
+            // if mName does not contain the word Window
+            pair.second.join();
+        }
+        LL_DEBUGS("ThreadPool") << mName << " shutdown complete" << LL_ENDL;
+    }
+	else
+	{
+        LL_DEBUGS("ThreadPool") << mName << " shutdown request ignored - not yet disconneced." << LL_ENDL;
+	}
+}
+// </FS:Beq>
+
 void LLWindowWin32::LLWindowWin32Thread::run()
 {
     sWindowThreadId = std::this_thread::get_id();
@@ -4766,20 +4794,30 @@ void LLWindowWin32::LLWindowWin32Thread::run()
                               ", ", msg.wParam, ")");
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
-
-                mMessageQueue.pushFront(msg);
+				// <FS:Beq> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
+                // mMessageQueue.pushFront(msg);
+                try
+                {
+                    // <FS:Beq> Nobody is reading this queue once we are quitting. Writing to it causes a hang.
+                    if(!LLApp::isQuitting()) 
+                    mMessageQueue.pushFront(msg);
+                }
+                catch (const LLThreadSafeQueueInterrupt&)
+                {
+                    // Shutdown timing is tricky. The main thread can end up trying
+                    // to post a cursor position after having closed the WorkQueue.
+                    logger.always("Message procesing tried to push() to closed MessageQueue - caught");
+                }
+                // </FS:Beq>
             }
         }
 
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("w32t - Function Queue");
-            logger.onChange("runPending()");
+			logger.onChange("runPending()");
             //process any pending functions
             getQueue().runPending();
         }
-        // <FS:Beq> This is very verbose even for debug so it has it's own debug tag
-        LL_DEBUGS("WindowVerbose") << "PreCheck Done - closed="  << getQueue().isClosed() << " size=" << getQueue().size() << LL_ENDL;
-        // </FS:Beq>
 
 #if 0
         {
@@ -4794,12 +4832,26 @@ void LLWindowWin32::LLWindowWin32Thread::run()
 
 void LLWindowWin32::post(const std::function<void()>& func)
 {
-    mFunctionQueue.pushFront(func);
+    try
+    {
+        mFunctionQueue.pushFront(func);
+    }
+    catch (const LLThreadSafeQueueInterrupt&)
+    {
+        LL_INFOS("Window") << "push function to closed Queue caught" << LL_ENDL;
+    }
 }
 
 void LLWindowWin32::postMouseButtonEvent(const std::function<void()>& func)
 {
-    mMouseQueue.pushFront(func);
+    try
+    {
+        mMouseQueue.pushFront(func);
+    }
+    catch (const LLThreadSafeQueueInterrupt&)
+    {
+        LL_INFOS("Window") << "push mouse event to closed Queue caught" << LL_ENDL;
+    }
 }
 
 void LLWindowWin32::kickWindowThread(HWND windowHandle)

@@ -308,7 +308,13 @@ bool LLThreadSafeQueue<ElementT, QueueT>::push_(lock_t& lock, T&& element)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD;
     if (mStorage.size() >= mCapacity)
+    // <FS:Beq> Make thread queue capacity hangs visible
+    //     return false;
+    {
+        LL_WARNS("ThreadPool") << "Threadsafe queue push_(lockacquired) queue full " << mStorage.size() << " >= " << mCapacity << LL_ENDL;
         return false;
+    }
+    // </FS:Beq>
 
     mStorage.push(std::forward<T>(element));
     lock.unlock();
