@@ -180,7 +180,7 @@ protected:
 	typedef QueueT queue_type;
 	QueueT mStorage;
 	U32 mCapacity;
-	bool mClosed;
+	std::atomic<bool> mClosed; // <FS:Beq/> Try harder to stop the compiler optimising the mClosed state inside the loops
 
 	boost::fibers::timed_mutex mLock;
 	typedef std::unique_lock<decltype(mLock)> lock_t;
@@ -342,7 +342,11 @@ bool LLThreadSafeQueue<ElementT, QueueT>::pushIfOpen(T&& element)
             return true;
 
         // Storage Full. Wait for signal.
-        mCapacityCond.wait(lock1);
+        // <FS:Beq> [FIRE-32453][BUG-232971] Improve shutdown behaviour. Time bound the sleep
+        // When the queue is full and the consuming thread has exited we will never wake up.
+        const auto timeout = std::chrono::milliseconds(50);
+        mCapacityCond.wait_for(lock1, timeout);
+        // </FS:Beq>
     }
 }
 

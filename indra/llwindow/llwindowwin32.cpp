@@ -901,9 +901,12 @@ void LLWindowWin32::close()
                 // This causes WM_DESTROY to be sent *immediately*
                 if (!destroy_window_handler(mWindowHandle))
                 {
-                    OSMessageBox(mCallbacks->translateString("MBDestroyWinFailed"),
-                        mCallbacks->translateString("MBShutdownErr"),
-                        OSMB_OK);
+                    // <FS:Beq> Can't use a message box here because we're about to stop servicing the events.
+                    // OSMessageBox(mCallbacks->translateString("MBDestroyWinFailed"),
+                    //     mCallbacks->translateString("MBShutdownErr"),
+                    //     OSMB_OK);
+                    LL_INFOS("Window") << "Destroying Window failed" << LL_ENDL;
+                    // </FS:Beq>
                 }
             }
             else
@@ -4751,8 +4754,14 @@ void LLWindowWin32::LLWindowWin32Thread::close()
         for (auto& pair: mThreads)
         {
             LL_DEBUGS("ThreadPool") << mName << " waiting on thread " << pair.first << LL_ENDL;
-            // if mName does not contain the word Window
-            pair.second.join();
+            // As we cannot seem to rely on the clean and timely exit of the windows thread in ALL situations we apply a timeout.
+            std::future<void> f = std::async(std::launch::async, [&] { pair.second.join(); });
+            if (f.wait_until(std::chrono::steady_clock::now() + std::chrono::seconds(5)) == std::future_status::ready) {
+                LL_DEBUGS("ThreadPool") << mName << " joined normally." << LL_ENDL;
+            } else {
+                LL_WARNS("ThreadPool") << mName << " join timed out." << LL_ENDL;
+                // the specified time point was reached before the thread finished execution and could be joined
+            }
         }
         LL_DEBUGS("ThreadPool") << mName << " shutdown complete" << LL_ENDL;
     }
@@ -4767,7 +4776,10 @@ void LLWindowWin32::LLWindowWin32Thread::run()
 {
     sWindowThreadId = std::this_thread::get_id();
     LogChange logger("Window");
-
+    // <FS:Beq> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
+    try
+    {
+    // </FS:Beq>
     while (! getQueue().done())
     {
         LL_PROFILE_ZONE_SCOPED_CATEGORY_WIN32;
@@ -4827,7 +4839,18 @@ void LLWindowWin32::LLWindowWin32Thread::run()
         }
 #endif
     }
-	logger.always("done - queue closed on windows thread.");// <FS:Beq/> extra debug for threaded window handler
+    // <FS:Beq> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
+    }
+    catch (const std::exception& e)
+    {
+        logger.always("Windows thread exiting - Exception: ", e.what());
+    }
+    catch (...)
+    {
+        logger.always("Windows thread exiting - Exception: Unknown");
+    }
+	logger.always("done - queue closed on windows thread.");
+    // </FS:Beq>
 }
 
 void LLWindowWin32::post(const std::function<void()>& func)
