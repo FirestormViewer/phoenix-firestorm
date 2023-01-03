@@ -925,6 +925,10 @@ void LLWindowWin32::close()
     // operations we're asking. That's the last time WE should touch it.
     mhDC = NULL;
     mWindowHandle = NULL;
+    // <FS:Beq> [FIRE-32453][BUG-232971] close the related queues first to prevent spinning.
+    mFunctionQueue.close();
+    mMouseQueue.close();
+    // </FS:Beq>
     mWindowThread->close();
 }
 
