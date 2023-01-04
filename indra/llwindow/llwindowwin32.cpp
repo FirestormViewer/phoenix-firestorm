@@ -5072,10 +5072,10 @@ void LLWindowWin32::LLWindowWin32Thread::updateVRAMUsage()
 void LLWindowWin32::LLWindowWin32Thread::close()
 {
 	assert_main_thread();
-    if (! mQueue.isClosed() && gDisconnected)
+    if (!mQueue->isClosed() && gDisconnected)
     {
         LL_DEBUGS("ThreadPool") << mName << " closing queue and joining threads" << LL_ENDL;
-        mQueue.close();
+        mQueue->close();
         for (auto& pair: mThreads)
         {
             LL_DEBUGS("ThreadPool") << mName << " waiting on thread " << pair.first << LL_ENDL;

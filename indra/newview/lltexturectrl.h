@@ -48,6 +48,7 @@ class LLRadioGroup;
 class LLFloaterTexturePicker;
 class LLInventoryItem;
 class LLViewerFetchedTexture;
+class LLFetchedGLTFMaterial;
 
 // used for setting drag & drop callbacks.
 typedef boost::function<BOOL (LLUICtrl*, LLInventoryItem*)> drag_n_drop_callback;
@@ -374,6 +375,7 @@ protected:
     void refreshInventoryFilter();
 
 	LLPointer<LLViewerTexture> mTexturep;
+    LLPointer<LLFetchedGLTFMaterial> mGLTFMaterial;
 	LLView*				mOwner;
 
 	LLUUID				mImageAssetID; // Currently selected texture
