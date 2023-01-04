@@ -564,10 +564,6 @@ void LLPipeline::init()
 
     setLightingDetail(-1);
 	
-	// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
-	initAuxiliaryVB();
-	// </FS:Ansariel>
-
 	//
 	// Update all settings to trigger a cached settings refresh
 	//
@@ -747,9 +743,6 @@ void LLPipeline::cleanup()
     mShiftList.clear();
 
 	mInitialized = false;
-
-	// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
-	mAuxiliaryVB = NULL;
 
 	mDeferredVB = NULL;
     mScreenTriangleVB = nullptr;
@@ -7526,7 +7519,6 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 
 	mCubeVB = NULL;
     mDeferredVB = NULL;
-	mAuxiliaryVB = NULL;
 	exoPostProcess::instance().destroyVB(); // Will be re-created via updateRenderDeferred()
 
 	for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin(); 
@@ -7600,7 +7592,6 @@ void LLPipeline::doResetVertexBuffers(bool forced)
 
 	// <FS:Ansariel> Reset VB during TP
 	updateRenderDeferred(); // Moved further down because of exoPostProcess creating a new VB
-	initAuxiliaryVB();
 	// </FS:Ansariel>
 }
 
@@ -11890,64 +11881,5 @@ void LLPipeline::initDeferredVB()
 		// Most likely going to crash...
 		LL_WARNS() << "Failed to allocate Vertex Buffer for deferred rendering" << LL_ENDL;
 	}
-}
-// </FS:Ansariel>
-
-// <FS:Ansariel> FIRE-16829: Visual Artifacts with ALM enabled on AMD graphics
-void LLPipeline::initAuxiliaryVB()
-{
-	mAuxiliaryVB = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_COLOR, 0);
-	if (!mAuxiliaryVB->allocateBuffer(3, 0, true))
-	{
-		LL_WARNS() << "Failed to allocate auxiliary Vertex Buffer" << LL_ENDL;
-		mAuxiliaryVB = NULL;
-		return;
-	}
-
-	LLStrider<LLVector3> verts;
-	mAuxiliaryVB->getVertexStrider(verts);
-	verts[0].set(-1.f, -1.f, 0.f);
-	verts[1].set(-1.f, 3.f, 0.f);
-	verts[2].set(3.f, -1.f, 0.f);
-}
-
-void LLPipeline::drawAuxiliaryVB(U32 mask /*= 0*/)
-{
-	if (!mAuxiliaryVB)
-	{
-		return;
-	}
-	mAuxiliaryVB->setBuffer(LLVertexBuffer::MAP_VERTEX | mask);
-	mAuxiliaryVB->drawArrays(LLRender::TRIANGLES, 0, 3);
-}
-
-void LLPipeline::drawAuxiliaryVB(const LLVector2& tc1, const LLVector2& tc2, U32 mask /*= 0*/)
-{
-	if (!mAuxiliaryVB)
-	{
-		return;
-	}
-	LLStrider<LLVector2> tc;
-	mAuxiliaryVB->getTexCoord0Strider(tc);
-	tc[0].set(tc1.mV[0], tc1.mV[1]);
-	tc[1].set(tc1.mV[0], tc2.mV[1]);
-	tc[2].set(tc2.mV[0], tc1.mV[1]);
-
-	drawAuxiliaryVB(LLVertexBuffer::MAP_TEXCOORD0 | mask);
-}
-
-void LLPipeline::drawAuxiliaryVB(const LLVector2& tc1, const LLVector2& tc2, const LLColor4& color)
-{
-	if (!mAuxiliaryVB)
-	{
-		return;
-	}
-	LLStrider<LLColor4U> col;
-	mAuxiliaryVB->getColorStrider(col);
-	col[0].set(color);
-	col[1].set(color);
-	col[2].set(color);
-
-	drawAuxiliaryVB(tc1, tc2, LLVertexBuffer::MAP_COLOR);
 }
 // </FS:Ansariel>
