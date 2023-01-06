@@ -1775,6 +1775,7 @@ bool LLAppViewer::doFrame()
                     FSPerfStats::RecordSceneTime T(FSPerfStats::StatType_t::RENDER_IDLE);
                     LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df Snapshot")
                     pingMainloopTimeout("Main:Snapshot");
+                    gPipeline.mReflectionMapManager.update();
                     LLFloaterSnapshot::update(); // take snapshots
                     LLFloaterSimpleOutfitSnapshot::update();
                     gGLActive = FALSE;
