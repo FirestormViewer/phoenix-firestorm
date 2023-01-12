@@ -845,7 +845,7 @@ LLSD LLModel::writeModel(
 
 				mdl[model_names[idx]][i]["TriangleList"] = indices;
 
-				if (skinning)
+				if (skinning && idx != LLModel::LOD_PHYSICS)
 				{
 					//write out skin weights
 
