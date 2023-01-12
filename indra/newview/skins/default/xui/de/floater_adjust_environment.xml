@@ -43,6 +43,9 @@
 					<text name="scene_gamma_label">
 						Szenen-Gamma:
 					</text>
+					<text name="reflection_probe_ambiance_label">
+						Reflexionstest Umgebung:
+					</text>
 				</layout_panel>
 				<layout_panel name="lp_3">
 					<text name="label">
