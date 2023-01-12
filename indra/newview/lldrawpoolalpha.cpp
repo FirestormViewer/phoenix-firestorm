@@ -642,6 +642,16 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
         begin = gPipeline.beginAlphaGroups();
         end = gPipeline.endAlphaGroups();
     }
+    
+    LLEnvironment& env = LLEnvironment::instance();
+    F32 water_height = env.getWaterHeight();
+
+    bool above_water = getType() == LLDrawPool::POOL_ALPHA_POST_WATER;
+    if (LLPipeline::sUnderWaterRender)
+    {
+        above_water = !above_water;
+    }
+
 
     for (LLCullResult::sg_iterator i = begin; i != end; ++i)
 	{
@@ -653,6 +663,25 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
 		if (group->getSpatialPartition()->mRenderByGroup &&
 		    !group->isDead())
 		{
+
+            LLSpatialBridge* bridge = group->getSpatialPartition()->asBridge();
+            const LLVector4a* ext = bridge ? bridge->getSpatialExtents() : group->getExtents();
+
+            if (above_water)
+            { // reject any spatial groups that have no part above water
+                if (ext[1].getF32ptr()[2] < water_height)
+                {
+                    continue;
+                }
+            }
+            else
+            { // reject any spatial groups that he no part below water
+                if (ext[0].getF32ptr()[2] > water_height)
+                {
+                    continue;
+                }
+            }
+
             static std::vector<LLDrawInfo*> emissives;
             static std::vector<LLDrawInfo*> rigged_emissives;
             emissives.resize(0);
@@ -686,7 +715,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
                     continue;
                 }
 
-                LL_PROFILE_ZONE_NAMED_CATEGORY_DRAWPOOL("ra - push batch")
+                LL_PROFILE_ZONE_NAMED_CATEGORY_DRAWPOOL("ra - push batch");
 
                 U32 have_mask = params.mVertexBuffer->getTypeMask() & mask;
 				if (have_mask != mask)

@@ -844,11 +844,11 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 			if (!for_snapshot)
 			{
-				if (gFrameCount > 1)
-				{ //for some reason, ATI 4800 series will error out if you 
-				  //try to generate a shadow before the first frame is through
-					gPipeline.generateSunShadow(camera); // <FS:Ansariel> Factor out calls to getInstance
-				}
+                if (gFrameCount > 1 && !for_snapshot)
+                { //for some reason, ATI 4800 series will error out if you 
+                  //try to generate a shadow before the first frame is through
+                    gPipeline.generateSunShadow(*LLViewerCamera::getInstance());
+                }
 
 				LLVertexBuffer::unbind();
 
@@ -1080,8 +1080,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			else
 			{
 				gPipeline.renderGeom(camera, TRUE); // <FS:Ansariel> Factor out calls to getInstance
-			}
-			
+			}			
 			gGL.setColorMask(true, true);
 
 			//store this frame's modelview matrix for use
@@ -1110,13 +1109,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
         LLRenderTarget &rt = (gPipeline.sRenderDeferred ? gPipeline.mRT->deferredScreen : gPipeline.mRT->screen);
         rt.flush();
-
-        /*if (rt.sUseFBO)
-        {
-            LLRenderTarget::copyContentsToFramebuffer(rt, 0, 0, rt.getWidth(), rt.getHeight(), 0, 0, rt.getWidth(),
-                                                      rt.getHeight(), GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT,
-                                                      GL_NEAREST);
-        }*/
 
         if (LLPipeline::sRenderDeferred)
         {
@@ -1340,7 +1332,7 @@ void render_hud_attachments()
 		LLSpatialGroup::sNoDelete = TRUE;
 
 		LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
-		gPipeline.updateCull(hud_cam, result, NULL, true);
+		gPipeline.updateCull(hud_cam, result, true);
 
 		gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_BUMP);
 		gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_SIMPLE);
@@ -1533,6 +1525,8 @@ void render_ui(F32 zoom_factor, int subfield)
 // [/RLVa:KB]
 		render_hud_attachments();
 
+        LLGLState::checkStates();
+
 		LLGLSDefault gls_default;
 		LLGLSUIDefault gls_ui;
 		{
@@ -1547,6 +1541,7 @@ void render_ui(F32 zoom_factor, int subfield)
             if (!gDisconnected)
             {
                 LL_PROFILE_ZONE_NAMED_CATEGORY_UI("UI 3D"); //LL_RECORD_BLOCK_TIME(FTM_RENDER_UI_3D);
+                LLGLState::checkStates();
                 render_ui_3d();
                 LLGLState::checkStates();
             }

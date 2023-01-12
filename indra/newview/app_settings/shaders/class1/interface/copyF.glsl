@@ -1,8 +1,9 @@
 /** 
- * @file attachmentShadowV.glsl
- * $LicenseInfo:firstyear=2007&license=viewerlgpl$
+ * @file copyF.glsl
+ *
+ * $LicenseInfo:firstyear=2023&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2007, Linden Research, Inc.
+ * Copyright (C) 2023, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,29 +23,18 @@
  * $/LicenseInfo$
  */
 
-uniform mat4 projection_matrix;
-uniform mat4 modelview_matrix;
-uniform mat4 texture_matrix0;
+in vec2 tc;
 
-ATTRIBUTE vec3 position;
-ATTRIBUTE vec2 texcoord0;
+uniform sampler2D depthMap;
+uniform sampler2D diffuseMap;
 
-mat4 getObjectSkinnedTransform();
+out vec4 frag_color;
 
-void main()
+void main() 
 {
-	//transform vertex
-	mat4 mat = getObjectSkinnedTransform();
-	
-	mat = modelview_matrix * mat;
-	vec3 pos = (mat*vec4(position.xyz, 1.0)).xyz;
-	
-
-	vec4 p = projection_matrix * vec4(pos, 1.0);
-#if !defined(DEPTH_CLAMP)
-	p.z = max(p.z, -p.w+0.01);
-	gl_Position = p;
-#else
-	gl_Position = p;
+    frag_color = texture(diffuseMap, tc);
+#if defined(COPY_DEPTH)
+    gl_FragDepth = texture(depthMap, tc).r;
 #endif
 }
+

@@ -173,7 +173,6 @@ public:
 	// if source's depth buffer cannot be bound for reading, a scratch space depth buffer must be provided
 	void		downsampleDepthBuffer(LLRenderTarget& source, LLRenderTarget& dest, LLRenderTarget* scratch_space = NULL);
 
-	void		doOcclusion(LLCamera& camera, LLRenderTarget& source, LLRenderTarget& dest, LLRenderTarget* scratch_space = NULL);
 	void		doOcclusion(LLCamera& camera);
 	void		markNotCulled(LLSpatialGroup* group, LLCamera &camera);
 	void        markMoved(LLDrawable *drawablep, bool damped_motion = false);
@@ -244,7 +243,9 @@ public:
 	bool visibleObjectsInFrustum(LLCamera& camera);
 	bool getVisibleExtents(LLCamera& camera, LLVector3 &min, LLVector3& max);
 	bool getVisiblePointCloud(LLCamera& camera, LLVector3 &min, LLVector3& max, std::vector<LLVector3>& fp, LLVector3 light_dir = LLVector3(0,0,0));
-	void updateCull(LLCamera& camera, LLCullResult& result, LLPlane* plane = NULL, bool hud_attachments = false);  //if water_clip is 0, ignore water plane, 1, cull to above plane, -1, cull to below plane; different because SL-11614
+
+    // Populate given LLCullResult with results of a frustum cull of the entire scene against the given LLCamera
+	void updateCull(LLCamera& camera, LLCullResult& result, bool hud_attachments = false);
 	void createObjects(F32 max_dtime);
 	void createObject(LLViewerObject* vobj);
 	void processPartitionQ();
@@ -272,6 +273,8 @@ public:
 	void forAllVisibleDrawables(void (*func)(LLDrawable*));
 
     void renderObjects(U32 type, U32 mask, bool texture = true, bool batch_texture = false, bool rigged = false);
+    void renderShadowSimple(U32 type);
+
     void renderAlphaObjects(U32 mask, bool texture = true, bool batch_texture = false, bool rigged = false);
 	void renderMaskedObjects(U32 type, U32 mask, bool texture = true, bool batch_texture = false, bool rigged = false);
     void renderFullbrightMaskedObjects(U32 type, U32 mask, bool texture = true, bool batch_texture = false, bool rigged = false);
@@ -686,12 +689,10 @@ public:
         LLRenderTarget			fxaaBuffer;
         LLRenderTarget			edgeMap;
         LLRenderTarget			deferredDepth;
-        LLRenderTarget			occlusionDepth;
         LLRenderTarget			deferredLight;
 
         //sun shadow map
         LLRenderTarget			shadow[4];
-        LLRenderTarget			shadowOcclusion[4];
     };
 
     // main full resoltuion render target
@@ -704,7 +705,6 @@ public:
     RenderTargetPack* mRT;
 
     LLRenderTarget          mSpotShadow[2];
-    LLRenderTarget          mSpotShadowOcclusion[2];
 
     LLRenderTarget          mPbrBrdfLut;
 

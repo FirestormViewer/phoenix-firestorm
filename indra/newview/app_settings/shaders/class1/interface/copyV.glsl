@@ -1,8 +1,9 @@
 /** 
- * @file avatarShadowF.glsl
- * $LicenseInfo:firstyear=2007&license=viewerlgpl$
+ * @file copyV.glsl
+ *
+ * $LicenseInfo:firstyear=2023&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2007, Linden Research, Inc.
+ * Copyright (C) 2023, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,20 +23,12 @@
  * $/LicenseInfo$
  */
 
-/*[EXTRA_CODE_HERE]*/
 
-#ifdef DEFINE_GL_FRAGCOLOR
-out vec4 frag_color;
-#else
-#define frag_color gl_FragColor
-#endif
-
-uniform sampler2D diffuseMap;
-
-VARYING vec2 vary_texcoord0;
+in vec3 position;
+out vec2 tc;
 
 void main() 
 {
-	frag_color = vec4(1,1,1,1);
+    tc = position.xy * 0.5 + 0.5;
+    gl_Position = vec4(position, 1.0);
 }
-

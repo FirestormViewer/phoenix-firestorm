@@ -398,12 +398,12 @@ void LLRenderPass::renderGroup(LLSpatialGroup* group, U32 type, U32 mask, BOOL t
 		if (pparams) 
         {
 			// <FS:Beq> Capture render times
-			if(pparams->mFace)
+			if (pparams->mFace)
 			{
 				LLViewerObject* vobj = pparams->mFace->getViewerObject();
-				if(vobj->isAttachment())
+				if (vobj->isAttachment())
 				{
-					trackAttachments( vobj, false,&ratPtr);
+					trackAttachments(vobj, false,&ratPtr);
 				}
 			}
 			// </FS:Beq>
@@ -420,22 +420,22 @@ void LLRenderPass::renderRiggedGroup(LLSpatialGroup* group, U32 type, U32 mask, 
     U64 lastMeshId = 0;
     mask |= LLVertexBuffer::MAP_WEIGHT4;
 
-	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Perf stats 
+    std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Perf stats 
     for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k)
     {
         LLDrawInfo* pparams = *k;
         if (pparams) 
         {
-			// <FS:Beq> Capture render times
-			if(pparams->mFace)
-			{
-				LLViewerObject* vobj = pparams->mFace->getViewerObject();
-				if(vobj->isAttachment())
-				{
-					trackAttachments( vobj, true ,&ratPtr);
-				}
-			}
-			// </FS:Beq>
+            // <FS:Beq> Capture render times
+            if (pparams->mFace)
+            {
+                LLViewerObject* vobj = pparams->mFace->getViewerObject();
+                if (vobj->isAttachment())
+                {
+                    trackAttachments(vobj, true ,&ratPtr);
+                }
+            }
+            // </FS:Beq>
             if (lastAvatar != pparams->mAvatar || lastMeshId != pparams->mSkinInfo->mHash)
             {
                 uploadMatrixPalette(*pparams);
@@ -472,10 +472,14 @@ void teardown_texture_matrix(LLDrawInfo& params)
 void LLRenderPass::pushGLTFBatches(U32 type, U32 mask)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
-    for (LLCullResult::drawinfo_iterator i = gPipeline.beginRenderMap(type); i != gPipeline.endRenderMap(type); ++i)
+    auto* begin = gPipeline.beginRenderMap(type);
+    auto* end = gPipeline.endRenderMap(type);
+    for (LLCullResult::drawinfo_iterator i = begin; i != end; )
     {
         LL_PROFILE_ZONE_NAMED_CATEGORY_DRAWPOOL("pushGLTFBatch");
         LLDrawInfo& params = **i;
+        LLCullResult::increment_iterator(i, end);
+
         auto& mat = params.mGLTFMaterial;
 
         mat->bind();
@@ -499,10 +503,14 @@ void LLRenderPass::pushRiggedGLTFBatches(U32 type, U32 mask)
     LLVOAvatar* lastAvatar = nullptr;
     U64 lastMeshId = 0;
     mask |= LLVertexBuffer::MAP_WEIGHT4;
-    for (LLCullResult::drawinfo_iterator i = gPipeline.beginRenderMap(type); i != gPipeline.endRenderMap(type); ++i)
+    auto* begin = gPipeline.beginRenderMap(type);
+    auto* end = gPipeline.endRenderMap(type);
+    for (LLCullResult::drawinfo_iterator i = begin; i != end; )
     {
         LL_PROFILE_ZONE_NAMED_CATEGORY_DRAWPOOL("pushRiggedGLTFBatch");
         LLDrawInfo& params = **i;
+        LLCullResult::increment_iterator(i, end);
+
         auto& mat = params.mGLTFMaterial;
 
         mat->bind();
@@ -530,24 +538,25 @@ void LLRenderPass::pushRiggedGLTFBatches(U32 type, U32 mask)
 void LLRenderPass::pushBatches(U32 type, U32 mask, BOOL texture, BOOL batch_textures)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
-	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};
-	for (LLCullResult::drawinfo_iterator i = gPipeline.beginRenderMap(type); i != gPipeline.endRenderMap(type); ++i)	
-	{
-		LLDrawInfo* pparams = *i;
-		if (pparams) 
-		{
-			// <FS:Beq> Capture render times
-			if(pparams->mFace)
-			{
-				LLViewerObject* vobj = pparams->mFace->getViewerObject();
-				if(vobj->isAttachment())
-				{
-					trackAttachments( vobj, false, &ratPtr);
-				}
-			}
-			// </FS:Beq>
-			pushBatch(*pparams, mask, texture, batch_textures);
-		}
+    std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};
+    auto* begin = gPipeline.beginRenderMap(type);
+    auto* end = gPipeline.endRenderMap(type);
+    for (LLCullResult::drawinfo_iterator i = begin; i != end; )
+    {
+        LLDrawInfo* pparams = *i;
+        LLCullResult::increment_iterator(i, end);
+        // <FS:Beq> Capture render times
+        if (pparams && pparams->mFace)
+        {
+            LLViewerObject* vobj = pparams->mFace->getViewerObject();
+            if (vobj->isAttachment())
+            {
+                trackAttachments(vobj, false, &ratPtr);
+            }
+        }
+        // </FS:Beq>
+
+		pushBatch(*pparams, mask, texture, batch_textures);
 	}
 }
 
@@ -557,56 +566,58 @@ void LLRenderPass::pushRiggedBatches(U32 type, U32 mask, BOOL texture, BOOL batc
     LLVOAvatar* lastAvatar = nullptr;
     U64 lastMeshId = 0;
     mask |= LLVertexBuffer::MAP_WEIGHT4;
-	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Perf stats 
-    for (LLCullResult::drawinfo_iterator i = gPipeline.beginRenderMap(type); i != gPipeline.endRenderMap(type); ++i)
+    std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Perf stats 
+    auto* begin = gPipeline.beginRenderMap(type);
+    auto* end = gPipeline.endRenderMap(type);
+    for (LLCullResult::drawinfo_iterator i = begin; i != end; )
     {
         LLDrawInfo* pparams = *i;
-        if (pparams)
-        {
-			// <FS:Beq> Capture render times
-			if(pparams->mFace)
-			{
-				LLViewerObject* vobj = pparams->mFace->getViewerObject();
-				if(vobj->isAttachment())
-				{
-					trackAttachments( vobj, true, &ratPtr);
-				}
-			}
-			// </FS:Beq>			
-            if (pparams->mAvatar.notNull() && (lastAvatar != pparams->mAvatar || lastMeshId != pparams->mSkinInfo->mHash))
-            {
-                uploadMatrixPalette(*pparams);
-                lastAvatar = pparams->mAvatar;
-                lastMeshId = pparams->mSkinInfo->mHash;
-            }
+        LLCullResult::increment_iterator(i, end);
 
-            pushBatch(*pparams, mask, texture, batch_textures);
+        // <FS:Beq> Capture render times
+        if (pparams && pparams->mFace)
+        {
+            LLViewerObject* vobj = pparams->mFace->getViewerObject();
+            if (vobj->isAttachment())
+            {
+                trackAttachments(vobj, true, &ratPtr);
+            }
         }
+        // </FS:Beq>
+
+        if (pparams->mAvatar.notNull() && (lastAvatar != pparams->mAvatar || lastMeshId != pparams->mSkinInfo->mHash))
+        {
+            uploadMatrixPalette(*pparams);
+            lastAvatar = pparams->mAvatar;
+            lastMeshId = pparams->mSkinInfo->mHash;
+        }
+
+        pushBatch(*pparams, mask, texture, batch_textures);
     }
 }
 
 void LLRenderPass::pushMaskBatches(U32 type, U32 mask, BOOL texture, BOOL batch_textures)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
-	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};
-	for (LLCullResult::drawinfo_iterator i = gPipeline.beginRenderMap(type); i != gPipeline.endRenderMap(type); ++i)	
+    std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};
+    auto* begin = gPipeline.beginRenderMap(type);
+    auto* end = gPipeline.endRenderMap(type);
+	for (LLCullResult::drawinfo_iterator i = begin; i != end; )
 	{
-		LLDrawInfo* pparams = *i;
-		if (pparams) 
-		{
-			// <FS:Beq> Capture render times
-			if((*pparams).mFace)
-			{
-				LLViewerObject* vobj = (*pparams).mFace->getViewerObject();
-				if(vobj->isAttachment())
-				{
-					trackAttachments( vobj, false, &ratPtr);
-				}
-			}
-			// </FS:Beq>
-			LLGLSLShader::sCurBoundShaderPtr->setMinimumAlpha(pparams->mAlphaMaskCutoff);
-			pushBatch(*pparams, mask, texture, batch_textures);
-		}
+        LLDrawInfo* pparams = *i;
+        LLCullResult::increment_iterator(i, end);
+        // <FS:Beq> Capture render times
+        if (pparams && pparams->mFace)
+        {
+            LLViewerObject* vobj = pparams->mFace->getViewerObject();
+            if (vobj->isAttachment())
+            {
+                trackAttachments(vobj, false, &ratPtr);
+            }
+        }
+        // </FS:Beq>
+		LLGLSLShader::sCurBoundShaderPtr->setMinimumAlpha(pparams->mAlphaMaskCutoff);
+		pushBatch(*pparams, mask, texture, batch_textures);
 	}
 }
 
@@ -615,40 +626,43 @@ void LLRenderPass::pushRiggedMaskBatches(U32 type, U32 mask, BOOL texture, BOOL 
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
     LLVOAvatar* lastAvatar = nullptr;
     U64 lastMeshId = 0;
-	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};
-    for (LLCullResult::drawinfo_iterator i = gPipeline.beginRenderMap(type); i != gPipeline.endRenderMap(type); ++i)
+    std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{};
+    auto* begin = gPipeline.beginRenderMap(type);
+    auto* end = gPipeline.endRenderMap(type);
+    for (LLCullResult::drawinfo_iterator i = begin; i != end; )
     {
         LLDrawInfo* pparams = *i;
-        if (pparams)
+
+        LLCullResult::increment_iterator(i, end);
+
+        // <FS:Beq> Capture render times
+        if (pparams && pparams->mFace)
         {
-			// <FS:Beq> Capture render times
-			if((*pparams).mFace)
-			{
-				LLViewerObject* vobj = (*pparams).mFace->getViewerObject();
-				if(vobj->isAttachment())
-				{
-					trackAttachments( vobj, true, &ratPtr);
-				}
-			}
-			// </FS:Beq>
-            if (LLGLSLShader::sCurBoundShaderPtr)
+            LLViewerObject* vobj = pparams->mFace->getViewerObject();
+            if (vobj->isAttachment())
             {
-                LLGLSLShader::sCurBoundShaderPtr->setMinimumAlpha(pparams->mAlphaMaskCutoff);
+                trackAttachments(vobj, true, &ratPtr);
             }
-            else
-            {
-                gGL.flush();
-            }
-
-            if (lastAvatar != pparams->mAvatar || lastMeshId != pparams->mSkinInfo->mHash)
-            {
-                uploadMatrixPalette(*pparams);
-                lastAvatar = pparams->mAvatar;
-                lastMeshId = pparams->mSkinInfo->mHash;
-            }
-
-            pushBatch(*pparams, mask | LLVertexBuffer::MAP_WEIGHT4, texture, batch_textures);
         }
+        // </FS:Beq>
+
+        if (LLGLSLShader::sCurBoundShaderPtr)
+        {
+            LLGLSLShader::sCurBoundShaderPtr->setMinimumAlpha(pparams->mAlphaMaskCutoff);
+        }
+        else
+        {
+            gGL.flush();
+        }
+
+        if (lastAvatar != pparams->mAvatar || lastMeshId != pparams->mSkinInfo->mHash)
+        {
+            uploadMatrixPalette(*pparams);
+            lastAvatar = pparams->mAvatar;
+            lastMeshId = pparams->mSkinInfo->mHash;
+        }
+
+        pushBatch(*pparams, mask | LLVertexBuffer::MAP_WEIGHT4, texture, batch_textures);
     }
 }
 

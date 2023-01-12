@@ -742,22 +742,22 @@ void LLDrawPoolBump::renderDeferred(S32 pass)
         U64 skin = 0;
 
         std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
-        for (LLCullResult::drawinfo_iterator i = begin; i != end; ++i)
+        for (LLCullResult::drawinfo_iterator i = begin; i != end; )
         {
             LLDrawInfo& params = **i;
 
+            LLCullResult::increment_iterator(i, end);
             // <FS:Beq> Capture render times
-            if(params.mFace)
+            if (params.mFace)
             {
                 LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
 
-                if(vobj && vobj->isAttachment())
+                if (vobj && vobj->isAttachment())
                 {
-                     trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
+                     trackAttachments(vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
                 }
             }
             // </FS:Beq>
-
             LLGLSLShader::sCurBoundShaderPtr->setMinimumAlpha(params.mAlphaMaskCutoff);
             LLDrawPoolBump::bindBumpMap(params, bump_channel);
 
