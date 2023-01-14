@@ -3,13 +3,21 @@
 	<button name="Expand Experience" label="Expérience"/>
 	<check_box label="Utiliser de l'expérience" name="enable_xp"/>
 	<layout_stack name="xp_details">
-		<layout_panel>
-			<text>Script :</text>
-			<text>En association avec :</text>
-			<text>Vous pouvez contribuer :</text>
-			<text>Associé avec :</text>
+		<layout_panel name="xp_layout_panel">
+			<text name="lbl_script">
+				Script :
+			</text>
+			<text name="lbl_associated">
+				En association avec :
+			</text>
+			<text name="lbl_contribute">
+				Vous pouvez contribuer :
+			</text>
+			<text name="lbl_associate">
+				Associé avec :
+			</text>
 		</layout_panel>
-		<layout_panel>
+		<layout_panel name="xp_choose_panel">
 			<combo_box label="Sélectionner une expérience..." name="Experiences..."/>
 		</layout_panel>
 	</layout_stack>
