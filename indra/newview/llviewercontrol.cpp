@@ -1239,7 +1239,7 @@ void settings_setup_listeners()
 	setting_setup_signal_listener(gSavedSettings, "RenderDeferredSSAO", handleSetShaderChanged);
 	setting_setup_signal_listener(gSavedSettings, "RenderPerformanceTest", handleRenderPerfTestChanged);
 	setting_setup_signal_listener(gSavedSettings, "TextureMemory", handleVideoMemoryChanged);
-	setting_setup_signal_listener(gSavedSettings, "ChatFontSize", handleChatFontSizeChanged);
+	setting_setup_signal_listener(gSavedSettings, "ChatConsoleFontSize", handleChatFontSizeChanged);
 	setting_setup_signal_listener(gSavedSettings, "ChatPersistTime", handleChatPersistTimeChanged);
 	setting_setup_signal_listener(gSavedSettings, "ConsoleMaxLines", handleConsoleMaxLinesChanged);
 	setting_setup_signal_listener(gSavedSettings, "UploadBakedTexOld", handleUploadBakedTexOldChanged);
