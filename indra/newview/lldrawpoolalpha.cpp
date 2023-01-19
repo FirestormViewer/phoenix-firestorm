@@ -383,26 +383,21 @@ void LLDrawPoolAlpha::renderAlphaHighlight(U32 mask)
             {
                 LLSpatialGroup::drawmap_elem_t& draw_info = group->mDrawMap[LLRenderPass::PASS_ALPHA+pass]; // <-- hacky + pass to use PASS_ALPHA_RIGGED on second pass 
 
-                std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Render time Stats collection
+                //std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Render time Stats collection
                 for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k)
                 {
                     LLDrawInfo& params = **k;
 
-                    if (params.mParticle)
-                    {
-                        continue;
-                    }
-
                     bool rigged = (params.mAvatar != nullptr);
-                    // <FS:Beq> Capture render times
-                    if(params.mFace)
-                    {
-                        LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
-                        if(vobj->isAttachment())
-                        {
-                            trackAttachments( vobj, rigged, &ratPtr );
-                        }
-                    }
+                    // <FS:Beq> Capture render times - BEQFIXMEPLEASE
+                    //if(params.mFace)
+                    //{
+                    //    LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+                    //    if(vobj->isAttachment())
+                    //    {
+                    //        trackAttachments( vobj, rigged, &ratPtr );
+                    //    }
+                    //}
                     // </FS:Beq>
                     gHighlightProgram.bind(rigged);
                     // <FS:Beq> FIRE-32132 et al. Allow rigged mesh transparency highlights to be toggled
@@ -435,12 +430,8 @@ void LLDrawPoolAlpha::renderAlphaHighlight(U32 mask)
                     }
 
                     LLRenderPass::applyModelMatrix(params);
-                    if (params.mGroup)
-                    {
-                        params.mGroup->rebuildMesh();
-                    }
-                    params.mVertexBuffer->setBufferFast(rigged ? mask | LLVertexBuffer::MAP_WEIGHT4 : mask);
-                    params.mVertexBuffer->drawRangeFast(LLRender::TRIANGLES, params.mStart, params.mEnd, params.mCount, params.mOffset);
+                    params.mVertexBuffer->setBuffer();
+                    params.mVertexBuffer->drawRange(LLRender::TRIANGLES, params.mStart, params.mEnd, params.mCount, params.mOffset);
                 }
             }
         }
@@ -467,9 +458,9 @@ inline bool IsEmissive(LLDrawInfo& params)
 
 inline void Draw(LLDrawInfo* draw, U32 mask)
 {
-    draw->mVertexBuffer->setBufferFast(mask);
+    draw->mVertexBuffer->setBuffer();
     LLRenderPass::applyModelMatrix(*draw);
-	draw->mVertexBuffer->drawRangeFast(LLRender::TRIANGLES, draw->mStart, draw->mEnd, draw->mCount, draw->mOffset);                    
+	draw->mVertexBuffer->drawRange(LLRender::TRIANGLES, draw->mStart, draw->mEnd, draw->mCount, draw->mOffset);                    
 }
 
 bool LLDrawPoolAlpha::TexSetup(LLDrawInfo* draw, bool use_material)
@@ -562,8 +553,8 @@ void LLDrawPoolAlpha::RestoreTexSetup(bool tex_setup)
 void LLDrawPoolAlpha::drawEmissive(U32 mask, LLDrawInfo* draw)
 {
     LLGLSLShader::sCurBoundShaderPtr->uniform1f(LLShaderMgr::EMISSIVE_BRIGHTNESS, 1.f);
-    draw->mVertexBuffer->setBufferFast((mask & ~LLVertexBuffer::MAP_COLOR) | LLVertexBuffer::MAP_EMISSIVE);
-	draw->mVertexBuffer->drawRangeFast(LLRender::TRIANGLES, draw->mStart, draw->mEnd, draw->mCount, draw->mOffset);
+    draw->mVertexBuffer->setBuffer();
+	draw->mVertexBuffer->drawRange(LLRender::TRIANGLES, draw->mStart, draw->mEnd, draw->mCount, draw->mOffset);
 }
 
 
@@ -592,17 +583,17 @@ void LLDrawPoolAlpha::renderRiggedEmissives(U32 mask, std::vector<LLDrawInfo*>& 
 
     mask |= LLVertexBuffer::MAP_WEIGHT4;
 
-	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Render time Stats collection
+    //std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Render time Stats collection
     for (LLDrawInfo* draw : emissives)
     {
-		// <FS:Beq> Capture render times
-		LL_PROFILE_ZONE_NAMED_CATEGORY_DRAWPOOL("Emissives");
-		auto vobj = draw->mFace?draw->mFace->getViewerObject():nullptr;
-		if(vobj && vobj->isAttachment())
-		{
-			trackAttachments( vobj, draw->mFace->isState(LLFace::RIGGED), &ratPtr );
-		}
-		// </FS:Beq>
+        // <FS:Beq> Capture render times - BEQFIXMEPLEASE
+        //LL_PROFILE_ZONE_NAMED_CATEGORY_DRAWPOOL("Emissives");
+        //auto vobj = draw->mFace ? draw->mFace->getViewerObject() : nullptr;
+        //if (vobj && vobj->isAttachment())
+        //{
+        //    trackAttachments(vobj, draw->mFace->isState(LLFace::RIGGED), &ratPtr);
+        //}
+        // </FS:Beq>
 
         bool tex_setup = TexSetup(draw, false);
         if (lastAvatar != draw->mAvatar || lastMeshId != draw->mSkinInfo->mHash)
@@ -706,7 +697,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
 
 			LLSpatialGroup::drawmap_elem_t& draw_info = rigged ? group->mDrawMap[LLRenderPass::PASS_ALPHA_RIGGED] : group->mDrawMap[LLRenderPass::PASS_ALPHA];
 
-			std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Render time Stats collection
+			//std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Render time Stats collection
 			for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k)	
 			{
 				LLDrawInfo& params = **k;
@@ -717,44 +708,17 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
 
                 LL_PROFILE_ZONE_NAMED_CATEGORY_DRAWPOOL("ra - push batch");
 
-                U32 have_mask = params.mVertexBuffer->getTypeMask() & mask;
-				if (have_mask != mask)
-				{ //FIXME!
-					// <FS:Beq> Remove useless logging info from critical path (can be called many times per frame)
-					// TODO(Beq) Determine whether this can be intercepted earlier
-					// LL_WARNS_ONCE() << "Missing required components, expected mask: " << mask
-					// 				<< " present: " << have_mask
-					// 				<< ". Skipping render batch." << LL_ENDL;
-					// </FS:Beq>
-					continue;
-				}
-
-				// <FS:Beq> Capture render times
-				if(params.mFace)
-				{
-					LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
-					
-					if(vobj->isAttachment())
-					{
-						trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
-					}
-				}
+				// <FS:Beq> Capture render times - BEQFIXMEPLEASE
+				//if (params.mFace)
+				//{
+				//	LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+				//	
+				//	if (vobj->isAttachment())
+				//	{
+				//		trackAttachments(vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr);
+				//	}
+				//}
 				// </FS:Beq>
-
-				if(depth_only)
-				{
-                    // when updating depth buffer, discard faces that are more than 90% transparent
-					LLFace*	face = params.mFace;
-					if(face)
-					{
-						const LLTextureEntry* tep = face->getTextureEntry();
-						if(tep)
-						{ // don't render faces that are more than 90% transparent
-							if(tep->getColor().mV[3] < MINIMUM_IMPOSTOR_ALPHA)
-								continue;
-						}
-					}
-				}
 
                 LLRenderPass::applyModelMatrix(params);
 
@@ -902,18 +866,8 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
                         reset_minimum_alpha = true;
                     }
                     
-                    U32 drawMask = mask;
-                    if (params.mFullbright)
-                    {
-                        drawMask &= ~(LLVertexBuffer::MAP_TANGENT | LLVertexBuffer::MAP_TEXCOORD1 | LLVertexBuffer::MAP_TEXCOORD2);
-                    }
-                    if (params.mAvatar != nullptr)
-                    {
-                        drawMask |= LLVertexBuffer::MAP_WEIGHT4;
-                    }
-
-                    params.mVertexBuffer->setBufferFast(drawMask);
-                    params.mVertexBuffer->drawRangeFast(LLRender::TRIANGLES, params.mStart, params.mEnd, params.mCount, params.mOffset);
+                    params.mVertexBuffer->setBuffer();
+                    params.mVertexBuffer->drawRange(LLRender::TRIANGLES, params.mStart, params.mEnd, params.mCount, params.mOffset);
 
                     if (reset_minimum_alpha)
                     {
@@ -923,11 +877,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
 
 				// If this alpha mesh has glow, then draw it a second time to add the destination-alpha (=glow).  Interleaving these state-changing calls is expensive, but glow must be drawn Z-sorted with alpha.
 				if (draw_glow_for_this_partition &&
-					// <FS:Ansariel> Re-add particle rendering optimization
-					//params.mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_EMISSIVE))
-					params.mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_EMISSIVE) &&
-					(!params.mParticle || params.mHasGlow))
-					// </FS:Ansariel>
+					params.mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_EMISSIVE))
 				{
                     if (params.mAvatar != nullptr)
                     {
@@ -948,7 +898,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
 				}
 			}
 			// <FS:Beq> performance stats
-			ratPtr.reset(); // force the final batch to terminate to avoid double counting on the subsidiary batches for FB and Emmissives
+			//ratPtr.reset(); // force the final batch to terminate to avoid double counting on the subsidiary batches for FB and Emmissives - BEQFIXMEPLEASE
 			// </FS:Beq>
 
             // render emissive faces into alpha channel for bloom effects

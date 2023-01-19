@@ -157,8 +157,6 @@ void LLDrawPoolMaterials::renderDeferred(S32 pass)
         type += 1;
     }
 
-	U32 mask = mShader->mAttributeMask;
-
 	LLCullResult::drawinfo_iterator begin = gPipeline.beginRenderMap(type);
 	LLCullResult::drawinfo_iterator end = gPipeline.endRenderMap(type);
 	
@@ -204,22 +202,22 @@ void LLDrawPoolMaterials::renderDeferred(S32 pass)
 
     LLVOAvatar* lastAvatar = nullptr;
 
-	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
+	//std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
 	for (LLCullResult::drawinfo_iterator i = begin; i != end; )
 	{
         LL_PROFILE_ZONE_NAMED_CATEGORY_MATERIAL("materials draw loop");
 		LLDrawInfo& params = **i;
 
-		// <FS:Beq> Capture render times
-		if (params.mFace)
-		{
-			LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
-			
-			if (vobj && vobj->isAttachment() )
-			{
-				trackAttachments(vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr);
-			}
-		}
+		// <FS:Beq> Capture render times - BEQFIXMEPLEASE
+		//if (params.mFace)
+		//{
+		//	LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+		//	
+		//	if (vobj && vobj->isAttachment() )
+		//	{
+		//		trackAttachments(vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr);
+		//	}
+		//}
 		// </FS:Beq>
 
         LLCullResult::increment_iterator(i, end);
@@ -318,8 +316,8 @@ void LLDrawPoolMaterials::renderDeferred(S32 pass)
             params.mGroup->rebuildMesh();
         }*/
 
-        params.mVertexBuffer->setBufferFast(mask);
-        params.mVertexBuffer->drawRangeFast(LLRender::TRIANGLES, params.mStart, params.mEnd, params.mCount, params.mOffset);
+        params.mVertexBuffer->setBuffer();
+        params.mVertexBuffer->drawRange(LLRender::TRIANGLES, params.mStart, params.mEnd, params.mCount, params.mOffset);
 
         if (tex_setup)
         {

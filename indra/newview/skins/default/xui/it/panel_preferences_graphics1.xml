@@ -104,7 +104,6 @@
 		<panel label="Impostazioni Hardware" name="Hardware Settings">
 			<check_box label="Filtro Anisotropico (rallenta se attivo)" name="ani"/>
 			<check_box label="Abilita OpenGL Vertex Buffer sugli oggetti" name="vbo" tool_tip="Abilitare questo su computer con schede video di ultima generazione per aumentare le prestazioni della scheda video.  Tuttavia, gli hardware vecchi spesso hanno una scarsa implementazione dei VBOs e questo può provocare crash improvvisi quando questa opzione è abilitata."/>
-			<check_box label="Abilita Streamed VBO" name="vbo_stream" tool_tip="La disattivazione di questa opzione può migliorare le prestazioni quando le VBO sono abilitate. Disattivato mostra importanti miglioramenti su molte GPU AMD (es: Schede video ATI)."/>
 			<check_box label="Abilita compressione texture (richiede riavvio)" name="texture compression" tool_tip="Le texture vengono compresse nella memoria video, questo consente per le texture con una risoluzione alta di essere caricate più rapidamente perdendo qualità nel colore."/>
 			<check_box label="Abilita supporto display HiDPI (solo Mac OSX; richiede riavvio)" name="use HiDPI" tool_tip="Abilita OpenGL per il disegno ad alta risoluzione." />
 			<text name="Antialiasing:">

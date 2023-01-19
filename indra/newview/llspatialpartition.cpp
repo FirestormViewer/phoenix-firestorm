@@ -65,12 +65,12 @@ extern bool gShiftFrame;
 static U32 sZombieGroups = 0;
 U32 LLSpatialGroup::sNodeCount = 0;
 
-BOOL LLSpatialGroup::sNoDelete = FALSE;
+bool LLSpatialGroup::sNoDelete = false;
 
 static F32 sLastMaxTexPriority = 1.f;
 static F32 sCurMaxTexPriority = 1.f;
 
-BOOL LLSpatialPartition::sTeleportRequested = FALSE;
+bool LLSpatialPartition::sTeleportRequested = false;
 
 //static counter for frame to switch LOD on
 
@@ -315,28 +315,15 @@ void LLSpatialPartition::rebuildGeom(LLSpatialGroup* group)
 	if (vertex_count > 0 && index_count > 0)
 	{ //create vertex buffer containing volume geometry for this node
 		{
-
 			group->mBuilt = 1.f;
-			if (group->mVertexBuffer.isNull() ||
-				!group->mVertexBuffer->isWriteable() ||
-				(group->mBufferUsage != group->mVertexBuffer->getUsage() && LLVertexBuffer::sEnableVBOs))
+			if (group->mVertexBuffer.isNull() || 
+                group->mVertexBuffer->getNumVerts() != vertex_count ||
+                group->mVertexBuffer->getNumVerts() != index_count)
 			{
-				group->mVertexBuffer = createVertexBuffer(mVertexDataMask, group->mBufferUsage);
-				if (!group->mVertexBuffer->allocateBuffer(vertex_count, index_count, true))
+				group->mVertexBuffer = new LLVertexBuffer(mVertexDataMask);
+				if (!group->mVertexBuffer->allocateBuffer(vertex_count, index_count))
 				{
 					LL_WARNS() << "Failed to allocate Vertex Buffer on rebuild to "
-						<< vertex_count << " vertices and "
-						<< index_count << " indices" << LL_ENDL;
-					group->mVertexBuffer = NULL;
-					group->mBufferMap.clear();
-				}
-			}
-			else
-			{
-				if (!group->mVertexBuffer->resizeBuffer(vertex_count, index_count))
-				{
-					// Is likely to cause a crash. If this gets triggered find a way to avoid it (don't forget to reset face)
-					LL_WARNS() << "Failed to resize Vertex Buffer on rebuild to "
 						<< vertex_count << " vertices and "
 						<< index_count << " indices" << LL_ENDL;
 					group->mVertexBuffer = NULL;
@@ -544,7 +531,6 @@ LLSpatialGroup::LLSpatialGroup(OctreeNode* node, LLSpatialPartition* part) : LLO
 	mSurfaceArea(0.f),
 	mBuilt(0.f),
 	mVertexBuffer(NULL), 
-	mBufferUsage(part->mBufferUsage),
 	mDistance(0.f),
 	mDepth(0.f),
 	mLastUpdateDistance(-1.f), 
@@ -573,6 +559,7 @@ void LLSpatialGroup::updateDistance(LLCamera &camera)
 	if (LLViewerCamera::sCurCameraID != LLViewerCamera::CAMERA_WORLD)
 	{
 		LL_WARNS() << "Attempted to update distance for camera other than world camera!" << LL_ENDL;
+        llassert(false);
 		return;
 	}
 
@@ -858,13 +845,12 @@ void LLSpatialGroup::destroyGL(bool keep_occlusion)
 
 //==============================================
 
-LLSpatialPartition::LLSpatialPartition(U32 data_mask, BOOL render_by_group, U32 buffer_usage, LLViewerRegion* regionp)
+LLSpatialPartition::LLSpatialPartition(U32 data_mask, BOOL render_by_group, LLViewerRegion* regionp)
 : mRenderByGroup(render_by_group), mBridge(NULL)
 {
 	mRegionp = regionp;		
 	mPartitionType = LLViewerRegion::PARTITION_NONE;
 	mVertexDataMask = data_mask;
-	mBufferUsage = buffer_usage;
 	mDepthMask = FALSE;
 	mSlopRatio = 0.25f;
 	mInfiniteFarClip = FALSE;
@@ -1460,15 +1446,15 @@ S32 LLSpatialPartition::cull(LLCamera &camera, bool do_occlusion)
 	return 0;
 }
 
-void pushVerts(LLDrawInfo* params, U32 mask)
+void pushVerts(LLDrawInfo* params)
 {
 	LLRenderPass::applyModelMatrix(*params);
-	params->mVertexBuffer->setBuffer(mask);
-	params->mVertexBuffer->drawRange(params->mParticle ? LLRender::POINTS : LLRender::TRIANGLES,
+	params->mVertexBuffer->setBuffer();
+	params->mVertexBuffer->drawRange(LLRender::TRIANGLES,
 								params->mStart, params->mEnd, params->mCount, params->mOffset);
 }
 
-void pushVerts(LLSpatialGroup* group, U32 mask)
+void pushVerts(LLSpatialGroup* group)
 {
 	LLDrawInfo* params = NULL;
 
@@ -1477,36 +1463,25 @@ void pushVerts(LLSpatialGroup* group, U32 mask)
 		for (LLSpatialGroup::drawmap_elem_t::iterator j = i->second.begin(); j != i->second.end(); ++j) 
 		{
 			params = *j;
-			pushVerts(params, mask);
+			pushVerts(params);
 		}
 	}
 }
 
-void pushVerts(LLFace* face, U32 mask)
+void pushVerts(LLFace* face)
 {
 	if (face)
 	{
 		llassert(face->verify());
-
-		LLVertexBuffer* buffer = face->getVertexBuffer();
-
-		if (buffer && (face->getGeomCount() >= 3))
-		{
-			buffer->setBuffer(mask);
-			U16 start = face->getGeomStart();
-			U16 end = start + face->getGeomCount()-1;
-			U32 count = face->getIndicesCount();
-			U16 offset = face->getIndicesStart();
-			buffer->drawRange(LLRender::TRIANGLES, start, end, count, offset);
-		}
+        face->renderIndexed();
 	}
 }
 
-void pushVerts(LLDrawable* drawable, U32 mask)
+void pushVerts(LLDrawable* drawable)
 {
 	for (S32 i = 0; i < drawable->getNumFaces(); ++i)
 	{
-		pushVerts(drawable->getFace(i), mask);
+		pushVerts(drawable->getFace(i));
 	}
 }
 
@@ -1520,16 +1495,16 @@ void pushVerts(LLVolume* volume)
 	}
 }
 
-void pushBufferVerts(LLVertexBuffer* buffer, U32 mask)
+void pushBufferVerts(LLVertexBuffer* buffer)
 {
 	if (buffer)
 	{
-		buffer->setBuffer(mask);
+		buffer->setBuffer();
 		buffer->drawRange(LLRender::TRIANGLES, 0, buffer->getNumVerts()-1, buffer->getNumIndices(), 0);
 	}
 }
 
-void pushBufferVerts(LLSpatialGroup* group, U32 mask, bool push_alpha = true)
+void pushBufferVerts(LLSpatialGroup* group, bool push_alpha = true)
 {
 	if (group->getSpatialPartition()->mRenderByGroup)
 	{
@@ -1540,7 +1515,7 @@ void pushBufferVerts(LLSpatialGroup* group, U32 mask, bool push_alpha = true)
 		
 			if (push_alpha)
 			{
-				pushBufferVerts(group->mVertexBuffer, mask);
+				pushBufferVerts(group->mVertexBuffer);
 			}
 
 			for (LLSpatialGroup::buffer_map_t::iterator i = group->mBufferMap.begin(); i != group->mBufferMap.end(); ++i)
@@ -1549,7 +1524,7 @@ void pushBufferVerts(LLSpatialGroup* group, U32 mask, bool push_alpha = true)
 				{
 					for (LLSpatialGroup::buffer_list_t::iterator k = j->second.begin(); k != j->second.end(); ++k)
 					{
-						pushBufferVerts(*k, mask);
+						pushBufferVerts(*k);
 					}
 				}
 			}
@@ -1562,7 +1537,7 @@ void pushBufferVerts(LLSpatialGroup* group, U32 mask, bool push_alpha = true)
 	}*/
 }
 
-void pushVertsColorCoded(LLSpatialGroup* group, U32 mask)
+void pushVertsColorCoded(LLSpatialGroup* group)
 {
 	LLDrawInfo* params = NULL;
 
@@ -1587,8 +1562,8 @@ void pushVertsColorCoded(LLSpatialGroup* group, U32 mask)
 			params = *j;
 			LLRenderPass::applyModelMatrix(*params);
 			gGL.diffuseColor4f(colors[col].mV[0], colors[col].mV[1], colors[col].mV[2], 0.5f);
-			params->mVertexBuffer->setBuffer(mask);
-			params->mVertexBuffer->drawRange(params->mParticle ? LLRender::POINTS : LLRender::TRIANGLES,
+			params->mVertexBuffer->setBuffer();
+			params->mVertexBuffer->drawRange(LLRender::TRIANGLES,
 				params->mStart, params->mEnd, params->mCount, params->mOffset);
 			col = (col+1)%col_count;
 		}
@@ -1660,17 +1635,8 @@ void renderOctree(LLSpatialGroup* group)
 	if (group->mBuilt > 0.f)
 	{
 		group->mBuilt -= 2.f * gFrameIntervalSeconds.value();
-		if (group->mBufferUsage == GL_STATIC_DRAW)
-		{
-			col.setVec(1.0f, 0, 0, group->mBuilt*0.5f);
-		}
-		else 
-		{
-			col.setVec(0.1f,0.1f,1,0.1f);
-			//col.setVec(1.0f, 1.0f, 0, sinf(group->mBuilt*3.14159f)*0.5f);
-		}
-
-		if (group->mBufferUsage != GL_STATIC_DRAW)
+		col.setVec(0.1f,0.1f,1,0.1f);
+		
 		{
 			LLGLDepthTest gl_depth(FALSE, FALSE);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -1731,20 +1697,36 @@ void renderOctree(LLSpatialGroup* group)
 					LLFace* face = drawable->getFace(j);
 					if (face && face->getVertexBuffer())
 					{
-						if (gFrameTimeSeconds - face->mLastUpdateTime < 0.5f)
-						{
-							gGL.diffuseColor4f(0, 1, 0, group->mBuilt);
-						}
-						else if (gFrameTimeSeconds - face->mLastMoveTime < 0.5f)
-						{
-							gGL.diffuseColor4f(1, 0, 0, group->mBuilt);
-						}
-						else
-						{
-							continue;
-						}
+                        LLVOVolume* vol = drawable->getVOVolume();
 
-						face->getVertexBuffer()->setBuffer(LLVertexBuffer::MAP_VERTEX | (rigged ? LLVertexBuffer::MAP_WEIGHT4 : 0));
+                        if (gFrameTimeSeconds - face->mLastUpdateTime < 0.5f)
+                        {
+                            if (vol && vol->isShrinkWrapped())
+                            {
+                                gGL.diffuseColor4f(0, 1, 1, group->mBuilt);
+                            }
+                            else
+                            {
+                                gGL.diffuseColor4f(0, 1, 0, group->mBuilt);
+                            }
+                        }
+                        else if (gFrameTimeSeconds - face->mLastMoveTime < 0.5f)
+                        {
+                            if (vol && vol->isShrinkWrapped())
+                            {
+                                gGL.diffuseColor4f(1, 1, 0, group->mBuilt);
+                            }
+                            else
+                            {
+                                gGL.diffuseColor4f(1, 0, 0, group->mBuilt);
+                            }
+                        }
+                        else
+                        {
+                            continue;
+                        }
+
+						face->getVertexBuffer()->setBuffer();
 						//drawBox((face->mExtents[0] + face->mExtents[1])*0.5f,
 						//		(face->mExtents[1]-face->mExtents[0])*0.5f);
 						face->getVertexBuffer()->draw(LLRender::TRIANGLES, face->getIndicesCount(), face->getIndicesStart());
@@ -1764,18 +1746,6 @@ void renderOctree(LLSpatialGroup* group)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             gDebugProgram.bind(); // make sure non-rigged variant is bound
 			gGL.diffuseColor4f(1,1,1,1);
-		}
-	}
-	else
-	{
-		if (group->mBufferUsage == GL_STATIC_DRAW && !group->isEmpty() 
-			&& group->getSpatialPartition()->mRenderByGroup)
-		{
-			col.setVec(0.8f, 0.4f, 0.1f, 0.1f);
-		}
-		else
-		{
-			col.setVec(0.1f, 0.1f, 1.f, 0.1f);
 		}
 	}
 
@@ -1930,7 +1900,7 @@ void renderXRay(LLSpatialGroup* group, LLCamera* camera)
 	
 	if (render_objects)
 	{
-		pushBufferVerts(group, LLVertexBuffer::MAP_VERTEX, false);
+		pushBufferVerts(group, false);
 
 		bool selected = false;
 
@@ -2012,7 +1982,7 @@ void renderUpdateType(LLDrawable* drawablep)
 	{
 		for (S32 i = 0; i < num_faces; ++i)
 		{
-			pushVerts(drawablep->getFace(i), LLVertexBuffer::MAP_VERTEX);
+			pushVerts(drawablep->getFace(i));
 		}
 	}
 }
@@ -2103,7 +2073,7 @@ void renderComplexityDisplay(LLDrawable* drawablep)
 		{
 			for (S32 i = 0; i < num_faces; ++i)
 			{
-				pushVerts(drawablep->getFace(i), LLVertexBuffer::MAP_VERTEX);
+				pushVerts(drawablep->getFace(i));
 			}
 		}
 		LLViewerObject::const_child_list_t children = voVol->getChildren();
@@ -2117,7 +2087,7 @@ void renderComplexityDisplay(LLDrawable* drawablep)
 				{
 					for (S32 i = 0; i < num_faces; ++i)
 					{
-						pushVerts(child->mDrawable->getFace(i), LLVertexBuffer::MAP_VERTEX);
+						pushVerts(child->mDrawable->getFace(i));
 					}
 				}
 			}
@@ -2788,7 +2758,7 @@ void renderPhysicsShapes(LLSpatialGroup* group, bool wireframe)
 							{
 								glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-								buff->setBuffer(LLVertexBuffer::MAP_VERTEX);
+								buff->setBuffer();
 								gGL.diffuseColor4f(0.2f, 0.5f, 0.3f, 0.5f);
 								buff->draw(LLRender::TRIANGLES, buff->getNumIndices(), 0);
 									
@@ -2894,7 +2864,7 @@ void renderTextureAnim(LLDrawInfo* params)
 	
 	LLGLEnable blend(GL_BLEND);
 	gGL.diffuseColor4f(1,1,0,0.5f);
-	pushVerts(params, LLVertexBuffer::MAP_VERTEX);
+	pushVerts(params);
 }
 
 void renderBatchSize(LLDrawInfo* params)
@@ -2902,7 +2872,6 @@ void renderBatchSize(LLDrawInfo* params)
 	LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
 	glPolygonOffset(-1.f, 1.f);
     LLGLSLShader* old_shader = LLGLSLShader::sCurBoundShaderPtr;
-    U32 mask = LLVertexBuffer::MAP_VERTEX;
     bool bind = false;
     if (params->mAvatar)
     { 
@@ -2911,11 +2880,11 @@ void renderBatchSize(LLDrawInfo* params)
         bind = true;
         old_shader->mRiggedVariant->bind();
         LLRenderPass::uploadMatrixPalette(*params);
-        mask |= LLVertexBuffer::MAP_WEIGHT4;
     }
 	
-    gGL.diffuseColor4ubv((GLubyte*)&(params->mDebugColor));
-	pushVerts(params, mask);
+    
+    gGL.diffuseColor4ubv(params->getDebugColor().mV);
+	pushVerts(params);
 
     if (bind)
     {
@@ -2971,7 +2940,7 @@ void renderTexelDensity(LLDrawable* drawable)
 
 		if (buffer && (facep->getGeomCount() >= 3))
 		{
-			buffer->setBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0);
+			buffer->setBuffer();
 			U16 start = facep->getGeomStart();
 			U16 end = start + facep->getGeomCount()-1;
 			U32 count = facep->getIndicesCount();
@@ -3046,7 +3015,7 @@ void renderLights(LLDrawable* drawablep)
 			LLFace * face = drawablep->getFace(i);
 			if (face)
 			{
-				pushVerts(face, LLVertexBuffer::MAP_VERTEX);
+				pushVerts(face);
 			}
 		}
 
@@ -4160,56 +4129,44 @@ LLDrawable* LLSpatialGroup::lineSegmentIntersect(const LLVector4a& start, const 
 
 LLDrawInfo::LLDrawInfo(U16 start, U16 end, U32 count, U32 offset, 
 					   LLViewerTexture* texture, LLVertexBuffer* buffer,
-					   bool selected,
-					   BOOL fullbright, U8 bump, BOOL particle, F32 part_size)
+					   bool fullbright, U8 bump)
 :	mVertexBuffer(buffer),
 	mTexture(texture),
-	mTextureMatrix(NULL),
-	mModelMatrix(NULL),
 	mStart(start),
 	mEnd(end),
 	mCount(count),
 	mOffset(offset), 
 	mFullbright(fullbright),
 	mBump(bump),
-	mParticle(particle),
-	mPartSize(part_size),
-	mVSize(0.f),
-	mGroup(NULL),
-	mFace(NULL),
-	mDistance(0.f),
-	mMaterial(NULL),
-	mShaderMask(0),
-	mSpecColor(1.0f, 1.0f, 1.0f, 0.5f),
 	mBlendFuncSrc(LLRender::BF_SOURCE_ALPHA),
 	mBlendFuncDst(LLRender::BF_ONE_MINUS_SOURCE_ALPHA),
-	mHasGlow(FALSE),
+	mHasGlow(false),
 	mEnvIntensity(0.0f),
-	mAlphaMaskCutoff(0.5f),
-	mDiffuseAlphaMode(0)
+	mAlphaMaskCutoff(0.5f)
 {
 	mVertexBuffer->validateRange(mStart, mEnd, mCount, mOffset);
-	
-    mDebugColor = (rand() << 16) + rand();
-    ((U8*)&mDebugColor)[3] = 200;
 }
 
 LLDrawInfo::~LLDrawInfo()	
 {
-	/*if (LLSpatialGroup::sNoDelete)
-	{
-		LL_ERRS() << "LLDrawInfo deleted illegally!" << LL_ENDL;
-	}*/
-
-	if (mFace)
-	{
-		mFace->setDrawInfo(NULL);
-	}
-
 	if (gDebugGL)
 	{
 		gPipeline.checkReferences(this);
 	}
+}
+
+LLColor4U LLDrawInfo::getDebugColor() const
+{
+    LLColor4U color;
+
+    LLCRC hash;
+    hash.update((U8*)this + sizeof(S32), sizeof(LLDrawInfo) - sizeof(S32));
+
+    *((U32*) color.mV) = hash.getCRC();
+
+    color.mV[3] = 200;
+    
+    return color;
 }
 
 void LLDrawInfo::validate()
@@ -4220,11 +4177,6 @@ void LLDrawInfo::validate()
 U64 LLDrawInfo::getSkinHash()
 {
     return mSkinInfo ? mSkinInfo->mHash : 0;
-}
-
-LLVertexBuffer* LLGeometryManager::createVertexBuffer(U32 type_mask, U32 usage)
-{
-	return new LLVertexBuffer(type_mask, usage);
 }
 
 LLCullResult::LLCullResult() 

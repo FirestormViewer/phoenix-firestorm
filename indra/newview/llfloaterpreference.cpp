@@ -2099,13 +2099,6 @@ void LLFloaterPreference::refreshEnabledState()
 	childSetEnabled("FSRestrictMaxTextureSize", false);
 #endif
 
-#if LL_DARWIN
-	getChildView("vbo_stream")->setEnabled(FALSE);  //Hardcoded disable on mac
-	getChild<LLUICtrl>("vbo_stream")->setValue((LLSD::Boolean) FALSE);
-#else
-	getChildView("vbo_stream")->setEnabled(LLVertexBuffer::sEnableVBOs);
-#endif
-
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures"))
 	{
 		getChildView("texture compression")->setEnabled(FALSE);

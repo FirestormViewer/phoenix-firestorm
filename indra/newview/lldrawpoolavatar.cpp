@@ -62,8 +62,6 @@
 #include "fsperfstats.h" // <FS:Beq> performance stats support
 
 
-static U32 sDataMask = LLDrawPoolAvatar::VERTEX_DATA_MASK;
-static U32 sBufferUsage = GL_STREAM_DRAW;
 static U32 sShaderLevel = 0;
 
 LLGLSLShader* LLDrawPoolAvatar::sVertexProgram = NULL;
@@ -152,15 +150,6 @@ void LLDrawPoolAvatar::prerender()
 	mShaderLevel = LLViewerShaderMgr::instance()->getShaderLevel(LLViewerShaderMgr::SHADER_AVATAR);
 	
 	sShaderLevel = mShaderLevel;
-	
-	if (sShaderLevel > 0)
-	{
-		sBufferUsage = GL_DYNAMIC_DRAW;
-	}
-	else
-	{
-		sBufferUsage = GL_STREAM_DRAW;
-	}
 }
 
 LLMatrix4& LLDrawPoolAvatar::getModelView()
@@ -1047,14 +1036,6 @@ LLViewerTexture *LLDrawPoolAvatar::getDebugTexture()
 LLColor3 LLDrawPoolAvatar::getDebugColor() const
 {
 	return LLColor3(0.f, 1.f, 0.f);
-}
-
-
-LLVertexBufferAvatar::LLVertexBufferAvatar()
-: LLVertexBuffer(sDataMask, 
-	GL_STREAM_DRAW) //avatars are always stream draw due to morph targets
-{
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
 }
 
 

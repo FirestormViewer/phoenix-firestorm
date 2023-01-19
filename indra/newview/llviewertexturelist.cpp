@@ -814,19 +814,20 @@ void LLViewerTextureList::updateImages(F32 max_time)
 		sample(FORMATTED_MEM, F64Bytes(LLImageFormatted::sGlobalFormattedMemory));
 	}
 
-		//loading from fast cache 
-	// <FS:Ansariel> Don't let the fast cache choke image processing
-	//max_time -= updateImagesLoadingFastCache(max_time);
-	F32 fastcache_time = updateImagesLoadingFastCache(max_time / 3);
-	max_time = llmax(max_time * 2/3, max_time - fastcache_time); // at least 66% for update fetch & create
-	// </FS:Ansariel>
+    // make sure each call below gets at least its "fair share" of time
+    F32 min_time = max_time * 0.33f;
+    F32 remaining_time = max_time;
 
-    F32 total_max_time = max_time;
+	//loading from fast cache
+	remaining_time -= updateImagesLoadingFastCache(remaining_time);
+    remaining_time = llmax(remaining_time, min_time);
 
-	max_time -= updateImagesFetchTextures(max_time);
-		
-	max_time = llmax(max_time, total_max_time*.50f); // at least 50% of max_time
-	max_time -= updateImagesCreateTextures(max_time);
+    //dispatch to texture fetch threads
+	remaining_time -= updateImagesFetchTextures(remaining_time);
+    remaining_time = llmax(remaining_time, min_time);
+
+    //handle results from decode threads
+	updateImagesCreateTextures(remaining_time);
 	
 	if (!mDirtyTextureList.empty())
 	{
@@ -873,6 +874,14 @@ void LLViewerTextureList::clearFetchingRequests()
 	}
 }
 
+static void touch_texture(LLViewerFetchedTexture* tex, F32 vsize)
+{
+    if (tex)
+    {
+        tex->addTextureStats(vsize);
+    }
+}
+
 void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imagep)
 {
     if (imagep->isInDebug() || imagep->isUnremovable())
@@ -881,6 +890,39 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
         return; //is in debug, ignore.
     }
 
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE
+    {
+        for (U32 i = 0; i < LLRender::NUM_TEXTURE_CHANNELS; ++i)
+        {
+            for (U32 fi = 0; fi < imagep->getNumFaces(i); ++fi)
+            {
+                const LLFace* face = (*(imagep->getFaceList(i)))[fi];
+
+                if (face && face->getViewerObject() && face->getTextureEntry())
+                {
+                    F32 vsize = face->getVirtualSize();
+
+                    // if a GLTF material is present, ignore that face
+                    // as far as this texture stats go, but update the GLTF material 
+                    // stats
+                    const LLTextureEntry* te = face->getTextureEntry();
+                    LLFetchedGLTFMaterial* mat = te ? (LLFetchedGLTFMaterial*)te->getGLTFRenderMaterial() : nullptr;
+                    if (mat)
+                    {
+                        touch_texture(mat->mBaseColorTexture, vsize);
+                        touch_texture(mat->mNormalTexture, vsize);
+                        touch_texture(mat->mMetallicRoughnessTexture, vsize);
+                        touch_texture(mat->mEmissiveTexture, vsize);
+                    }
+                    else
+                    {
+                        imagep->addTextureStats(vsize);
+                    }
+                }
+            }
+        }
+    }
+    
     F32 lazy_flush_timeout = 30.f; // stop decoding
     F32 max_inactive_time = 20.f; // actually delete
     S32 min_refs = 3; // 1 for mImageList, 1 for mUUIDMap, 1 for local reference
@@ -1008,6 +1050,11 @@ F32 LLViewerTextureList::updateImagesCreateTextures(F32 max_time)
 		LLViewerFetchedTexture *imagep = *curiter;
 		imagep->createTexture();
         imagep->postCreateTexture();
+
+        if (create_timer.getElapsedTimeF32() > max_time)
+        {
+            break;
+        }
 	}
 	mCreateTextureList.erase(mCreateTextureList.begin(), enditer);
 	return create_timer.getElapsedTimeF32();
@@ -1065,8 +1112,6 @@ void LLViewerTextureList::forceImmediateUpdate(LLViewerFetchedTexture* imagep)
 F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-    LLTimer image_op_timer;
-
     typedef std::vector<LLPointer<LLViewerFetchedTexture> > entries_list_t;
     entries_list_t entries;
 
@@ -1099,6 +1144,10 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
         }
     }
 
+    LLTimer timer;
+
+    LLPointer<LLViewerTexture> last_imagep = nullptr;
+
     for (auto& imagep : entries)
     {
         if (imagep->getNumRefs() > 1) // make sure this image hasn't been deleted before attempting to update (may happen as a side effect of some other image updating)
@@ -1106,15 +1155,21 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
             updateImageDecodePriority(imagep);
             imagep->updateFetch();
         }
+
+        last_imagep = imagep;
+
+        if (timer.getElapsedTimeF32() > max_time)
+        {
+            break;
+        }
     }
 
-    if (entries.size() > 0)
+    if (last_imagep)
     {
-        LLViewerFetchedTexture* imagep = *entries.rbegin();
-        mLastUpdateKey = LLTextureKey(imagep->getID(), (ETexListType)imagep->getTextureListType());
+        mLastUpdateKey = LLTextureKey(last_imagep->getID(), (ETexListType)last_imagep->getTextureListType());
     }
 
-	return image_op_timer.getElapsedTimeF32();
+	return timer.getElapsedTimeF32();
 }
 
 void LLViewerTextureList::updateImagesUpdateStats()

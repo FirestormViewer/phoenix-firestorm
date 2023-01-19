@@ -357,22 +357,22 @@ void LLDrawPoolBump::renderShiny()
 		{
             if (mRigged)
             {
-                LLRenderPass::pushRiggedBatches(LLRenderPass::PASS_SHINY_RIGGED, sVertexMask | LLVertexBuffer::MAP_TEXTURE_INDEX, TRUE, TRUE);
+                LLRenderPass::pushRiggedBatches(LLRenderPass::PASS_SHINY_RIGGED, true, true);
             }
             else
             {
-                LLRenderPass::pushBatches(LLRenderPass::PASS_SHINY, sVertexMask | LLVertexBuffer::MAP_TEXTURE_INDEX, TRUE, TRUE);
+                LLRenderPass::pushBatches(LLRenderPass::PASS_SHINY, true, true);
             }
 		}
 		else
 		{
             if (mRigged)
             {
-                gPipeline.renderRiggedGroups(this, LLRenderPass::PASS_SHINY_RIGGED, sVertexMask, TRUE);
+                gPipeline.renderRiggedGroups(this, LLRenderPass::PASS_SHINY_RIGGED, true);
             }
             else
             {
-                gPipeline.renderGroups(this, LLRenderPass::PASS_SHINY, sVertexMask, TRUE);
+                gPipeline.renderGroups(this, LLRenderPass::PASS_SHINY, true);
             }
 		}
 	}
@@ -512,22 +512,22 @@ void LLDrawPoolBump::renderFullbrightShiny()
 		{
             if (mRigged)
             {
-                LLRenderPass::pushRiggedBatches(LLRenderPass::PASS_FULLBRIGHT_SHINY_RIGGED, sVertexMask | LLVertexBuffer::MAP_TEXTURE_INDEX, TRUE, TRUE);
+                LLRenderPass::pushRiggedBatches(LLRenderPass::PASS_FULLBRIGHT_SHINY_RIGGED, true, true);
             }
             else
             {
-                LLRenderPass::pushBatches(LLRenderPass::PASS_FULLBRIGHT_SHINY, sVertexMask | LLVertexBuffer::MAP_TEXTURE_INDEX, TRUE, TRUE);
+                LLRenderPass::pushBatches(LLRenderPass::PASS_FULLBRIGHT_SHINY, true, true);
             }
 		}
 		else
 		{
             if (mRigged)
             {
-                LLRenderPass::pushRiggedBatches(LLRenderPass::PASS_FULLBRIGHT_SHINY_RIGGED, sVertexMask);
+                LLRenderPass::pushRiggedBatches(LLRenderPass::PASS_FULLBRIGHT_SHINY_RIGGED);
             }
             else
             {
-                LLRenderPass::pushBatches(LLRenderPass::PASS_FULLBRIGHT_SHINY, sVertexMask);
+                LLRenderPass::pushBatches(LLRenderPass::PASS_FULLBRIGHT_SHINY);
             }
 		}
 	}
@@ -553,30 +553,26 @@ void LLDrawPoolBump::endFullbrightShiny()
 	mShiny = FALSE;
 }
 
-void LLDrawPoolBump::renderGroup(LLSpatialGroup* group, U32 type, U32 mask, BOOL texture = TRUE)
+void LLDrawPoolBump::renderGroup(LLSpatialGroup* group, U32 type, bool texture = true)
 {			
 	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
 	LLSpatialGroup::drawmap_elem_t& draw_info = group->mDrawMap[type];	
 	
-	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
+	//std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
 	for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k) 
 	{
 		LLDrawInfo& params = **k;
-		// <FS:Beq> Capture render times
-		LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
-		
-		if( vobj && vobj->isAttachment() )
-		{
-			trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
-		}
-		// </FS:Beq>		
+		// <FS:Beq> Capture render times - BEQFIXMEPLEASE
+		//LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+		//
+		//if (vobj && vobj->isAttachment())
+		//{
+		//	trackAttachments(vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr);
+		//}
+		// </FS:Beq>
 		applyModelMatrix(params);
 
-		if (params.mGroup)
-		{
-			params.mGroup->rebuildMesh();
-		}
-		params.mVertexBuffer->setBuffer(mask);
+		params.mVertexBuffer->setBuffer();
 		params.mVertexBuffer->drawRange(LLRender::TRIANGLES, params.mStart, params.mEnd, params.mCount, params.mOffset);
 	}
 }
@@ -587,7 +583,7 @@ BOOL LLDrawPoolBump::bindBumpMap(LLDrawInfo& params, S32 channel)
 {
 	U8 bump_code = params.mBump;
 
-	return bindBumpMap(bump_code, params.mTexture, params.mVSize, channel);
+	return bindBumpMap(bump_code, params.mTexture, channel);
 }
 
 //static
@@ -597,14 +593,14 @@ BOOL LLDrawPoolBump::bindBumpMap(LLFace* face, S32 channel)
 	if (te)
 	{
 		U8 bump_code = te->getBumpmap();
-		return bindBumpMap(bump_code, face->getTexture(), face->getVirtualSize(), channel);
+		return bindBumpMap(bump_code, face->getTexture(), channel);
 	}
 
 	return FALSE;
 }
 
 //static
-BOOL LLDrawPoolBump::bindBumpMap(U8 bump_code, LLViewerTexture* texture, F32 vsize, S32 channel)
+BOOL LLDrawPoolBump::bindBumpMap(U8 bump_code, LLViewerTexture* texture, S32 channel)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
 	//Note: texture atlas does not support bump texture now.
@@ -630,7 +626,7 @@ BOOL LLDrawPoolBump::bindBumpMap(U8 bump_code, LLViewerTexture* texture, F32 vsi
 		if( bump_code < LLStandardBumpmap::sStandardBumpmapCount )
 		{
 			bump = gStandardBumpmapList[bump_code].mImage;
-			gBumpImageList.addTextureStats(bump_code, tex->getID(), vsize);
+			gBumpImageList.addTextureStats(bump_code, tex->getID(), tex->getMaxVirtualSize());
 		}
 		break;
 	}
@@ -687,7 +683,7 @@ void LLDrawPoolBump::renderBump(U32 pass)
 	/// Get rid of z-fighting with non-bump pass.
 	LLGLEnable polyOffset(GL_POLYGON_OFFSET_FILL);
 	glPolygonOffset(-1.0f, -1.0f);
-	renderBump(pass, sVertexMask);
+	pushBumpBatches(pass);
 }
 
 //static
@@ -736,27 +732,25 @@ void LLDrawPoolBump::renderDeferred(S32 pass)
         LLCullResult::drawinfo_iterator begin = gPipeline.beginRenderMap(type);
         LLCullResult::drawinfo_iterator end = gPipeline.endRenderMap(type);
 
-        U32 mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_TANGENT | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_COLOR;
-
         LLVOAvatar* avatar = nullptr;
         U64 skin = 0;
 
-        std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
+        //std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
         for (LLCullResult::drawinfo_iterator i = begin; i != end; )
         {
             LLDrawInfo& params = **i;
 
             LLCullResult::increment_iterator(i, end);
-            // <FS:Beq> Capture render times
-            if (params.mFace)
-            {
-                LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+            // <FS:Beq> Capture render times - BEQFIXMEPLEASE
+            //if (params.mFace)
+            //{
+            //    LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
 
-                if (vobj && vobj->isAttachment())
-                {
-                     trackAttachments(vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
-                }
-            }
+            //    if (vobj && vobj->isAttachment())
+            //    {
+            //         trackAttachments(vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr);
+            //    }
+            //}
             // </FS:Beq>
             LLGLSLShader::sCurBoundShaderPtr->setMinimumAlpha(params.mAlphaMaskCutoff);
             LLDrawPoolBump::bindBumpMap(params, bump_channel);
@@ -769,11 +763,11 @@ void LLDrawPoolBump::renderDeferred(S32 pass)
                     avatar = params.mAvatar;
                     skin = params.mSkinInfo->mHash;
                 }
-                pushBatch(params, mask | LLVertexBuffer::MAP_WEIGHT4, TRUE, FALSE);
+                pushBatch(params, true, false);
             }
             else
             {
-                pushBatch(params, mask, TRUE, FALSE);
+                pushBatch(params, true, false);
             }
         }
 
@@ -1374,7 +1368,7 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
 	}
 }
 
-void LLDrawPoolBump::renderBump(U32 type, U32 mask)
+void LLDrawPoolBump::pushBumpBatches(U32 type)
 {	
     LLVOAvatar* avatar = nullptr;
     U64 skin = 0;
@@ -1382,26 +1376,25 @@ void LLDrawPoolBump::renderBump(U32 type, U32 mask)
     if (mRigged)
     { // nudge type enum and include skinweights for rigged pass
         type += 1;
-        mask |= LLVertexBuffer::MAP_WEIGHT4;
     }
 
     LLCullResult::drawinfo_iterator begin = gPipeline.beginRenderMap(type);
     LLCullResult::drawinfo_iterator end = gPipeline.endRenderMap(type);
 
-	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
+	//std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
 	for (LLCullResult::drawinfo_iterator i = begin; i != end; ++i)	
 	{
 		LLDrawInfo& params = **i;
-		// <FS:Beq> Capture render times
-		if(params.mFace)
-		{
-			LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
-			
-			if( vobj && vobj->isAttachment() )
-			{
-				trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
-			}
-		}
+		// <FS:Beq> Capture render times - BEQFIXMEPLEASE
+		//if (params.mFace)
+		//{
+		//	LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+		//	
+		//	if (vobj && vobj->isAttachment())
+		//	{
+		//		trackAttachments(vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr);
+		//	}
+		//}
 		// </FS:Beq>
 
 		if (LLDrawPoolBump::bindBumpMap(params))
@@ -1421,12 +1414,12 @@ void LLDrawPoolBump::renderBump(U32 type, U32 mask)
                     }
                 }
             }
-			pushBatch(params, mask, FALSE);
+			pushBatch(params, false);
 		}
 	}
 }
 
-void LLDrawPoolBump::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL batch_textures)
+void LLDrawPoolBump::pushBatch(LLDrawInfo& params, bool texture, bool batch_textures)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
 	applyModelMatrix(params);
@@ -1479,12 +1472,8 @@ void LLDrawPoolBump::pushBatch(LLDrawInfo& params, U32 mask, BOOL texture, BOOL 
 		}
 	}
 
-	if (params.mGroup)
-	{
-		params.mGroup->rebuildMesh();
-	}
-	params.mVertexBuffer->setBufferFast(mask);
-	params.mVertexBuffer->drawRangeFast(LLRender::TRIANGLES, params.mStart, params.mEnd, params.mCount, params.mOffset);
+	params.mVertexBuffer->setBuffer();
+	params.mVertexBuffer->drawRange(LLRender::TRIANGLES, params.mStart, params.mEnd, params.mCount, params.mOffset);
 
     if (tex_setup)
 	{

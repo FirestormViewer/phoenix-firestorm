@@ -55,7 +55,7 @@ RenderVBOEnable				1	1
 RenderVBOMappingDisable		1	1
 RenderVolumeLODFactor		1	4.0
 UseStartScreen				1	1
-UseOcclusion				1	0
+UseOcclusion				1	1
 WindLightUseAtmosShaders	1	1
 WLSkyDetail					1	128
 Disregard128DefaultDrawDistance	1	1
@@ -72,7 +72,7 @@ RenderUseStreamVBO			1	1
 RenderFSAASamples			1	16
 RenderMaxTextureIndex		1	16
 RenderGLContextCoreProfile         1   1
-RenderGLMultiThreaded       1   1
+RenderGLMultiThreaded       1   0
 
 
 //

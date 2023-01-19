@@ -1731,7 +1731,7 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
             for (U32 i = 0; i < mVertexBuffer[5][mdl].size(); ++i)
             {
                 LLVertexBuffer* buff = mVertexBuffer[5][mdl][i];
-                buff->setBuffer(type_mask & buff->getTypeMask());
+                buff->setBuffer();
 
                 U32 num_indices = mVertexBuffer[5][mdl][i]->getNumIndices();
                 if (num_indices > 2)
@@ -1885,18 +1885,18 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
             {
                 type_mask = mVertexBuffer[5][base][i]->getTypeMask();
 
-                LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(type_mask, 0);
+                LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(type_mask);
 
                 if (sizes[i * 2 + 1] > 0 && sizes[i * 2] > 0)
                 {
-                    if (!buff->allocateBuffer(sizes[i * 2 + 1], sizes[i * 2], true))
+                    if (!buff->allocateBuffer(sizes[i * 2 + 1], sizes[i * 2]))
                     {
                         // Todo: find a way to stop preview in this case instead of crashing
                         LL_ERRS() << "Failed buffer allocation during preview LOD generation."
                             << " Vertices: " << sizes[i * 2 + 1]
                             << " Indices: " << sizes[i * 2] << LL_ENDL;
                     }
-                    buff->setBuffer(type_mask);
+                    buff->setBuffer();
                     // <FS:ND> Fix glod so it works when just using the opengl core profile
                     //glodFillElements(mObject[base], names[i], GL_UNSIGNED_SHORT, (U8*)buff->getIndicesPointer());
                     LLStrider<LLVector3> vertex_strider;
@@ -1940,7 +1940,7 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
                 {
                     // This face was eliminated or we failed to allocate buffer,
                     // attempt to create a dummy triangle (one vertex, 3 indices, all 0)
-                    buff->allocateBuffer(1, 3, true);
+                    buff->allocateBuffer(1, 3);
                     memset((U8*)buff->getMappedData(), 0, buff->getSize());
                     // <FS:ND> Fix when running with opengl core profile
                     //memset((U8*)buff->getIndicesPointer(), 0, buff->getIndicesSize());
@@ -3792,9 +3792,9 @@ void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
                 mask |= LLVertexBuffer::MAP_WEIGHT4;
             }
 
-            vb = new LLVertexBuffer(mask, 0);
+            vb = new LLVertexBuffer(mask);
 
-            if (!vb->allocateBuffer(num_vertices, num_indices, TRUE))
+            if (!vb->allocateBuffer(num_vertices, num_indices))
             {
                 // We are likely to crash due this failure, if this happens, find a way to gracefully stop preview
                 std::ostringstream out;
@@ -3869,7 +3869,7 @@ void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
                 *(index_strider++) = vf.mIndices[i];
             }
 
-            vb->flush();
+            vb->unmapBuffer();
 
             mVertexBuffer[lod][mdl].push_back(vb);
 
@@ -4091,19 +4091,11 @@ void LLModelPreview::addEmptyFace(LLModel* pTarget)
 {
     U32 type_mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_TEXCOORD0;
 
-    LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(type_mask, 0);
+    LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(type_mask);
 
-    buff->allocateBuffer(1, 3, true);
+    buff->allocateBuffer(1, 3);
     memset((U8*)buff->getMappedData(), 0, buff->getSize());
-    // <FS:ND> Fix when running with opengl core profile
-    //memset((U8*)buff->getIndicesPointer(), 0, buff->getIndicesSize());
-    {
-    LLStrider< U16 > index_strider;
-    buff->getIndexStrider( index_strider );
-
-    memset( (U8*)index_strider.get(), 0, buff->getIndicesSize() );
-    }
-    // </FS:ND>
+    memset((U8*)buff->getMappedIndices(), 0, buff->getIndicesSize());
 
     buff->validateRange(0, buff->getNumVerts() - 1, buff->getNumIndices(), 0);
 
@@ -4408,8 +4400,6 @@ BOOL LLModelPreview::render()
     gGL.pushMatrix();
     gGL.color4fv(edge_col().mV); // <FS:Beq/> restore changes removed by the lab
 
-    const U32 type_mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_TEXCOORD0;
-
     LLGLEnable normalize(GL_NORMALIZE);
 
     if (!mBaseModel.empty() && mVertexBuffer[5].empty())
@@ -4472,7 +4462,7 @@ BOOL LLModelPreview::render()
                 {
                     LLVertexBuffer* buffer = mVertexBuffer[mPreviewLOD][model][i];
 
-                    buffer->setBuffer(type_mask & buffer->getTypeMask());
+                    buffer->setBuffer();
 
                     if (textures)
                     {
@@ -4523,7 +4513,7 @@ BOOL LLModelPreview::render()
                         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
                         gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
                     }
-                    buffer->flush();
+                    buffer->unmapBuffer();
                 }
                 gGL.popMatrix();
             }
@@ -4637,7 +4627,7 @@ BOOL LLModelPreview::render()
                                     gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
                                     gGL.diffuseColor4fv(phys_fill_col().mV); // <FS:Beq/> restore changes removed by the lab
 
-                                    buffer->setBuffer(type_mask & buffer->getTypeMask());
+                                    buffer->setBuffer();
                                     buffer->drawRange(LLRender::TRIANGLES, 0, buffer->getNumVerts() - 1, buffer->getNumIndices(), 0);
                                     // <FS:Beq> restore changes removed by the lab
                                     // gGL.diffuseColor4fv(PREVIEW_PSYH_EDGE_COL.mV);
@@ -4651,7 +4641,7 @@ BOOL LLModelPreview::render()
                                     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
                                     gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
 
-                                    buffer->flush();
+                                    buffer->unmapBuffer();
                                 }
                             }
                         }
@@ -4707,7 +4697,7 @@ BOOL LLModelPreview::render()
                                     {
                                         LLVertexBuffer* buffer = mVertexBuffer[LLModel::LOD_PHYSICS][model][v];
 
-                                        buffer->setBuffer(type_mask & buffer->getTypeMask());
+                                        buffer->setBuffer();
 
                                         LLStrider<LLVector3> pos_strider;
                                         buffer->getVertexStrider(pos_strider, 0);
@@ -4737,7 +4727,7 @@ BOOL LLModelPreview::render()
                                             }
                                         }
 
-                                        buffer->flush();
+                                        buffer->unmapBuffer();
                                     }
                                 }
                             }
@@ -4878,7 +4868,7 @@ BOOL LLModelPreview::render()
                             const std::string& binding = instance.mModel->mMaterialList[i];
                             const LLImportMaterial& material = instance.mMaterial[binding];
 
-                            buffer->setBuffer(type_mask & buffer->getTypeMask());
+                            buffer->setBuffer();
                             gGL.diffuseColor4fv(material.mDiffuseColor.mV);
                             gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
@@ -4891,7 +4881,7 @@ BOOL LLModelPreview::render()
                             }
                             } else  // <FS:ND> FIRE-13465 Make sure there's a material set before dereferencing it, if none, set buffer type and unbind texture.
                             {
-                                buffer->setBuffer(type_mask & buffer->getTypeMask());
+                                buffer->setBuffer();
                                 gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
                             } // </FS:ND>
 

@@ -66,11 +66,11 @@ void exoPostProcess::ExodusRenderPostUpdate()
 void exoPostProcess::initVB()
 {
 	destroyVB();
-	mExoPostBuffer = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_TEXCOORD1, 0);
+	mExoPostBuffer = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_TEXCOORD1);
 
 	if (!gPipeline.sRenderDeferred)
 	{
-		if (mExoPostBuffer->allocateBuffer(3, 0, true))
+		if (mExoPostBuffer->allocateBuffer(3, 0))
 		{
 			LLStrider<LLVector3> v;
 			LLStrider<LLVector2> uv1;
@@ -92,7 +92,7 @@ void exoPostProcess::initVB()
 			v[1] = LLVector3(-1.f, 3.f, 0.f);
 			v[2] = LLVector3(3.f, -1.f, 0.f);
 
-			mExoPostBuffer->flush();
+			mExoPostBuffer->unmapBuffer();
 		}
 		else
 		{
@@ -102,7 +102,7 @@ void exoPostProcess::initVB()
 	}
 	else
 	{
-		if (mExoPostBuffer->allocateBuffer(8, 0, true))
+		if (mExoPostBuffer->allocateBuffer(8, 0))
 		{
 			LLStrider<LLVector3> vert;
 			mExoPostBuffer->getVertexStrider(vert);
@@ -144,7 +144,7 @@ void exoPostProcess::ExodusRenderVignette(LLRenderTarget* src, LLRenderTarget* d
 		LLGLSLShader *shader = &gPostVignetteProgram;
 		shader->bind();
 
-		mExoPostBuffer->setBuffer(LLVertexBuffer::MAP_VERTEX);
+		mExoPostBuffer->setBuffer();
 
 		exoShader::BindRenderTarget(dst, shader, LLShaderMgr::EXO_RENDER_SCREEN);
 

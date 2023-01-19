@@ -5650,6 +5650,7 @@ S32 LLViewerObject::setTERotation(const U8 te, const F32 r)
 	if (mDrawable.notNull() && retval)
 	{
 		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_TCOORD);
+        shrinkWrap();
 	}
 	return retval;
 }
@@ -7049,7 +7050,7 @@ F32 LLAlphaObject::getPartSize(S32 idx)
 	return 0.f;
 }
 
-void LLAlphaObject::getBlendFunc(S32 face, U32& src, U32& dst)
+void LLAlphaObject::getBlendFunc(S32 face, LLRender::eBlendFactor& src, LLRender::eBlendFactor& dst)
 {
 
 }
@@ -7461,6 +7462,18 @@ void LLViewerObject::setRenderMaterialIDs(const LLRenderMaterialParams* material
         {
             const LLUUID& id = material_params ? material_params->getMaterial(te) : LLUUID::null;
             setRenderMaterialID(te, id, false);
+        }
+    }
+}
+
+void LLViewerObject::shrinkWrap()
+{
+    if (!mShouldShrinkWrap)
+    {
+        mShouldShrinkWrap = true;
+        if (mDrawable)
+        { // we weren't shrink wrapped before but we are now, update the spatial partition
+            gPipeline.markPartitionMove(mDrawable);
         }
     }
 }
