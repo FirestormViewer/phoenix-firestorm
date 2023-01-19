@@ -57,7 +57,7 @@ exportMutliArchDRIPath() {
 
 ## Help fontconfig find its default configuration file, otherwise the viewer will stall
 ## with Fontconfig error: Cannot load default config file
-export FONTCONFIG_PATH=/etc/fonts
+# export FONTCONFIG_PATH=/etc/fonts
 
 if [ "`uname -m`" = "x86_64" ]; then
     echo '64-bit Linux detected.'

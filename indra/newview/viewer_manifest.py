@@ -2203,10 +2203,10 @@ class Linux_i686_Manifest(LinuxManifest):
             # particular wildcard specification gets us exactly what the
             # previous call did, without having to explicitly state the
             # version number.
-            self.path("libfontconfig.so.*.*")
+            # self.path("libfontconfig.so.*.*")    # <FS:PC> fontconfig and freetype should be taken from the user's system
 
             # Include libfreetype.so. but have it work as libfontconfig does.
-            self.path("libfreetype.so.*.*")
+            # self.path("libfreetype.so.*.*")      # <FS:PC> fontconfig and freetype should be taken from the user's system
 
             try:
                 self.path("libtcmalloc.so*") #formerly called google perf tools
