@@ -5585,15 +5585,14 @@ class LLViewMouselook : public view_listener_t
 		else
 		{
 			// NaCl - Rightclick-mousewheel zoom
-			static LLCachedControl<LLVector3> _NACL_MLFovValues(gSavedSettings,"_NACL_MLFovValues");
-			static LLCachedControl<F32> CameraAngle(gSavedSettings,"CameraAngle");
-			LLVector3 vTemp=_NACL_MLFovValues;
-			if(vTemp.mV[2] > 0.0f)
+			LLVector3 _NACL_MLFovValues = gSavedSettings.getVector3("_NACL_MLFovValues");
+			F32 CameraAngle = gSavedSettings.getF32("CameraAngle");
+			if (_NACL_MLFovValues.mV[VZ] > 0.0f)
 			{
-				vTemp.mV[1]=CameraAngle;
-				vTemp.mV[2]=0.0f;
-				gSavedSettings.setVector3("_NACL_MLFovValues",vTemp);
-				gSavedSettings.setF32("CameraAngle",vTemp.mV[0]);
+				_NACL_MLFovValues.mV[VY] = CameraAngle;
+				_NACL_MLFovValues.mV[VZ] = 0.0f;
+				gSavedSettings.setVector3("_NACL_MLFovValues", _NACL_MLFovValues);
+				gSavedSettings.setF32("CameraAngle", _NACL_MLFovValues.mV[VX]);
 			}
 			// NaCl End
 			gAgentCamera.changeCameraToDefault();

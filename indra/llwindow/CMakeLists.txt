@@ -67,6 +67,7 @@ set(viewer_HEADER_FILES
 # Libraries on which this library depends, needed for Linux builds
 # Sort by high-level to low-level
 if (LINUX)
+  find_package(Fontconfig REQUIRED)   # <FS:PC> fontconfig and freetype should be taken from the user's system
   set(llwindow_LINK_LIBRARIES
       ${LLCOMMON_LIBRARIES}
       ${LLIMAGE_LIBRARIES}
@@ -77,8 +78,10 @@ if (LINUX)
       ${LLXML_LIBRARIES}
       ${UI_LIBRARIES}     # for GTK
 	  sdl
-      libfontconfig.a          # For FCInit and other FC* functions.
-      libfreetype.a
+      # libfontconfig.a        # <FS:PC> fontconfig and freetype should
+      # libfreetype.a          #         be taken from the user's system,
+      Freetype::Freetype       #         and not be packaged with
+      Fontconfig::Fontconfig   #         the viewer
       )
 
   if( USE_SDL1 )

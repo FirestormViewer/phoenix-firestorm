@@ -47,7 +47,7 @@ else (USESYSTEMLIBS)
   if (LINUX)
     set(UI_LIB_NAMES
         libfltk.a
-        libfreetype.a
+        # libfreetype.a    # <FS:PC> fontconfig and freetype should be taken from the user's system, and not be packaged with the viewer
         )
 
     foreach(libname ${UI_LIB_NAMES})

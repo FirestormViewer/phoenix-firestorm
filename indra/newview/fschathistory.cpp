@@ -149,7 +149,8 @@ public:
 		mNeedsTimeBox(true),
 		mTimeBoxTextBox(NULL),
 		mHeaderLayoutStack(NULL),
-		mAvatarNameCacheConnection()
+		mAvatarNameCacheConnection(),
+		mTime(0)
 	{}
 
 	static FSChatHistoryHeader* createInstance(const std::string& file_name)
