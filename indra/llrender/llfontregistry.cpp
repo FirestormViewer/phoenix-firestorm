@@ -519,6 +519,8 @@ LLFontGL *LLFontRegistry::createFont(const LLFontDescriptor& desc)
 	font_search_paths.push_back(LLFontGL::getFontPathSystem());
 	// <FS:Kadah> User fonts: Also load from user_settings/fonts
 	font_search_paths.push_back(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "fonts", ""));
+	// <FS:Ansariel> Search executable path as well - in case we run from within VS (seems to work without as well, but just to be safe)
+	font_search_paths.push_back(gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "fonts", ""));
 #if LL_DARWIN
 	font_search_paths.push_back(MACOSX_FONT_PATH_LIBRARY);
 	font_search_paths.push_back(MACOSX_FONT_PATH_LIBRARY + MACOSX_FONT_SUPPLEMENTAL);

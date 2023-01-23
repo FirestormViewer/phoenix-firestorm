@@ -1899,11 +1899,13 @@ if (WINDOWS)
         set(viewer_SOURCE_FILES "${viewer_SOURCE_FILES}" llviewerprecompiledheaders.cpp)
     endif(USE_PRECOMPILED_HEADERS)
 
-    message("Copying fonts")
-    file(GLOB FONT_FILE_GLOB_LIST
-      "${AUTOBUILD_INSTALL_DIR}/fonts/*"
-    )
-    file(COPY ${FONT_FILE_GLOB_LIST} DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/fonts")
+    # <FS:Ansariel> Don't copy fonts into the source folder!
+    # message("Copying fonts")
+    # file(GLOB FONT_FILE_GLOB_LIST
+      # "${AUTOBUILD_INSTALL_DIR}/fonts/*"
+    # )
+    # file(COPY ${FONT_FILE_GLOB_LIST} DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/fonts")
+    # </FS:Ansariel>
 
     # Replace the icons with the appropriate ones for the channel
     # ('test' is the default)
