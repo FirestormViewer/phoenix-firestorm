@@ -2699,7 +2699,7 @@ void LLFloaterView::bringToFront(LLFloater* child, BOOL give_focus, BOOL restore
 
 	if (mFrontChildHandle.get() == child)
 	{
-		if (give_focus && !gFocusMgr.childHasKeyboardFocus(child))
+		if (give_focus && child->canFocusStealFrontmost() && !gFocusMgr.childHasKeyboardFocus(child))
 		{
 			child->setFocus(TRUE);
 		}
@@ -3373,7 +3373,34 @@ void LLFloaterView::syncFloaterTabOrder()
 			LLFloater* floaterp = dynamic_cast<LLFloater*>(*child_it);
 			if (gFocusMgr.childHasKeyboardFocus(floaterp))
 			{
-				bringToFront(floaterp, FALSE);
+                if (mFrontChildHandle.get() != floaterp)
+                {
+                    // Grab a list of the top floaters that want to stay on top of the focused floater
+					std::list<LLFloater*> listTop;
+					if (mFrontChildHandle.get() && !mFrontChildHandle.get()->canFocusStealFrontmost())
+                    {
+                        for (LLView* childp : *getChildList())
+                        {
+							LLFloater* child_floaterp = static_cast<LLFloater*>(childp);
+                            if (child_floaterp->canFocusStealFrontmost())
+                                break;
+							listTop.push_back(child_floaterp);
+                        }
+                    }
+
+                    bringToFront(floaterp, FALSE);
+
+                    // Restore top floaters
+					if (!listTop.empty())
+					{
+						for (LLView* childp : listTop)
+						{
+							sendChildToFront(childp);
+						}
+						mFrontChildHandle = listTop.back()->getHandle();
+					}
+                }
+
 				break;
 			}
 		}

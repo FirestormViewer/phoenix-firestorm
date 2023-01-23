@@ -29,6 +29,7 @@
 
 #include "lltextbase.h"
 
+#include "llemojihelper.h"
 #include "lllocalcliprect.h"
 #include "llmenugl.h"
 #include "llscrollcontainer.h"
@@ -180,10 +181,12 @@ LLTextBase::Params::Params()
 	line_spacing("line_spacing"),
 	max_text_length("max_length", 255),
 	font_shadow("font_shadow"),
+	text_valign("text_valign"),
 	wrap("wrap"),
 	trusted_content("trusted_content", true),
 	always_show_icons("always_show_icons", false),
 	use_ellipses("use_ellipses", false),
+	use_color("use_color", false),
 	// <FS:Ansariel> Optional icon position
 	icon_positioning("icon_positioning", LLTextBaseEnums::RIGHT),
 	// </FS:Ansariel> Optional icon position
@@ -233,6 +236,7 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 	mVPad(p.v_pad),
 	mHAlign(p.font_halign),
 	mVAlign(p.font_valign),
+	mTextVAlign(p.text_valign.isProvided() ? p.text_valign.getValue() : p.font_valign.getValue()),
 	mLineSpacingMult(p.line_spacing.multiple),
 	mLineSpacingPixels(p.line_spacing.pixels),
 	mClip(p.clip),
@@ -247,6 +251,7 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 	mPlainText ( p.plain_text ),
 	mWordWrap(p.wrap),
 	mUseEllipses( p.use_ellipses ),
+	mUseColor(p.use_color),
 	mParseHTML(p.parse_urls),
 	mForceUrlsExternal(p.force_urls_external),
 	mParseHighlights(p.parse_highlights),
@@ -719,7 +724,7 @@ void LLTextBase::drawCursor()
 				fontp = segmentp->getStyle()->getFont();
 				fontp->render(text, mCursorPos, cursor_rect, 
 					LLColor4(1.f - text_color.mV[VRED], 1.f - text_color.mV[VGREEN], 1.f - text_color.mV[VBLUE], alpha),
-					LLFontGL::LEFT, mVAlign,
+					LLFontGL::LEFT, mTextVAlign,
 					LLFontGL::NORMAL,
 					LLFontGL::NO_SHADOW,
 					1);
@@ -1036,6 +1041,25 @@ S32 LLTextBase::insertStringNoUndo(S32 pos, const LLWString &wstr, LLTextBase::s
 		{
 			LLTextSegment* segmentp = *seg_iter;
 			insertSegment(segmentp);
+		}
+	}
+
+	// Insert special segments where necessary (insertSegment takes care of splitting normal text segments around them for us)
+	{
+		LLStyleSP emoji_style;
+		for (S32 text_kitty = 0, text_len = wstr.size(); text_kitty < text_len; text_kitty++)
+		{
+			if (LLStringOps::isEmoji(wstr[text_kitty]))
+			{
+				if (!emoji_style)
+				{
+					emoji_style = new LLStyle(getStyleParams());
+					emoji_style->setFont(LLFontGL::getFontEmoji());
+				}
+
+				S32 new_seg_start = pos + text_kitty;
+				insertSegment(new LLEmojiTextSegment(emoji_style, new_seg_start, new_seg_start + 1, *this));
+			}
 		}
 	}
 
@@ -2159,8 +2183,6 @@ LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index)
 		text_len = mLabel.getWString().length();
 	}
 
-	if (index > text_len) { return mSegments.end(); }
-
 	// when there are no segments, we return the end iterator, which must be checked by caller
 	if (mSegments.size() <= 1) { return mSegments.begin(); }
 
@@ -2184,8 +2206,6 @@ LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 i
 	{
 		text_len = mLabel.getWString().length();
 	}
-
-	if (index > text_len) { return mSegments.end(); }
 
 	// when there are no segments, we return the end iterator, which must be checked by caller
 	if (mSegments.size() <= 1) { return mSegments.begin(); }
@@ -3664,12 +3684,13 @@ F32 LLNormalTextSegment::drawClippedSegment(S32 seg_start, S32 seg_end, S32 sele
 		font->render(text, start, 
 				 rect, 
 				 color, 
-				 LLFontGL::LEFT, mEditor.mVAlign, 
+				 LLFontGL::LEFT, mEditor.mTextVAlign,
 				 LLFontGL::NORMAL, 
 				 mStyle->getShadowType(), 
 				 length,
 				 &right_x, 
-				 mEditor.getUseEllipses());
+				 mEditor.getUseEllipses(),
+				 mEditor.getUseColor());
 	}
 	rect.mLeft = right_x;
 	
@@ -3683,12 +3704,13 @@ F32 LLNormalTextSegment::drawClippedSegment(S32 seg_start, S32 seg_end, S32 sele
 		font->render(text, start, 
 				 rect,
 				 mStyle->getSelectedColor().get(),
-				 LLFontGL::LEFT, mEditor.mVAlign, 
+				 LLFontGL::LEFT, mEditor.mTextVAlign,
 				 LLFontGL::NORMAL, 
 				 LLFontGL::NO_SHADOW, 
 				 length,
 				 &right_x, 
-				 mEditor.getUseEllipses());
+				 mEditor.getUseEllipses(),
+				 mEditor.getUseColor());
 	}
 	rect.mLeft = right_x;
 	if( selection_end < seg_end )
@@ -3700,12 +3722,13 @@ F32 LLNormalTextSegment::drawClippedSegment(S32 seg_start, S32 seg_end, S32 sele
 		font->render(text, start, 
 				 rect, 
 				 color, 
-				 LLFontGL::LEFT, mEditor.mVAlign, 
+				 LLFontGL::LEFT, mEditor.mTextVAlign,
 				 LLFontGL::NORMAL, 
 				 mStyle->getShadowType(), 
 				 length,
 				 &right_x, 
-				 mEditor.getUseEllipses());
+				 mEditor.getUseEllipses(),
+				 mEditor.getUseColor());
 	}
     return right_x;
 }
@@ -3947,6 +3970,33 @@ const LLWString& LLLabelTextSegment::getWText()	const
 const S32 LLLabelTextSegment::getLength() const
 {
 	return mEditor.getWlabel().length();
+}
+
+//
+// LLEmojiTextSegment
+//
+LLEmojiTextSegment::LLEmojiTextSegment(LLStyleConstSP style, S32 start, S32 end, LLTextBase& editor)
+	: LLNormalTextSegment(style, start, end, editor)
+{
+}
+
+LLEmojiTextSegment::LLEmojiTextSegment(const LLColor4& color, S32 start, S32 end, LLTextBase& editor, BOOL is_visible)
+	: LLNormalTextSegment(color, start, end, editor, is_visible)
+{
+}
+
+BOOL LLEmojiTextSegment::handleToolTip(S32 x, S32 y, MASK mask)
+{
+	if (mTooltip.empty())
+	{
+		LLWString emoji = getWText().substr(getStart(), getEnd() - getStart());
+		if (!emoji.empty())
+		{
+			mTooltip = LLEmojiHelper::instance().getToolTip(emoji[0]);
+		}
+	}
+
+	return LLNormalTextSegment::handleToolTip(x, y, mask);
 }
 
 //

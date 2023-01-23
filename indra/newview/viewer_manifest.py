@@ -176,7 +176,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 self.path("*.tga")
 
             # Include our fonts
-            with self.prefix(src_dst="fonts"):
+            with self.prefix(src="../packages/fonts",src_dst="fonts"):
                 self.path("*.ttf")
                 self.path("*.txt")
                 self.path("*.xml")

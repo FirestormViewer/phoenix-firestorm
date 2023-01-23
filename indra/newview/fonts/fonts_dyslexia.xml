@@ -3,6 +3,7 @@
 
   <font name="default" comment="default font files (global fallbacks)">
     <file>MobiSans.ttf</file>
+    <file functor="is_emoji">TwemojiSVG.ttf</file>
     <os name="Windows">
       <file>meiryo.TTC</file>
       <file>YuGothR.ttc</file>
@@ -74,6 +75,11 @@
 	comment="Name of bold italic sans-serif font"
 	font_style="BOLD|ITALIC">
     <file>opendyslexic-bolditalic.ttf</file>
+  </font>
+
+  <font name="Emoji"
+	comment="Name of emoji font">
+    <file>TwemojiSVG.ttf</file>
   </font>
 
   <font name="Monospace"

@@ -60,6 +60,7 @@ public:
 								ignore_tab,
 								commit_on_focus_lost,
 								show_context_menu,
+								show_emoji_helper,
 								enable_tooltip_paste,
 								enable_tab_remove,	// <FS:Ansariel> FIRE-15591: Optional tab remove
 								auto_indent;
@@ -91,6 +92,8 @@ public:
 	void	setParseHighlights(BOOL parsing) {mParseHighlights=parsing;}
 
 	static S32		spacesPerTab();
+
+	        void    handleEmojiCommit(const LLWString& wstr);
 
 	// mousehandler overrides
 	virtual BOOL	handleMouseDown(S32 x, S32 y, MASK mask);
@@ -211,6 +214,9 @@ public:
 
 	void			setShowContextMenu(bool show) { mShowContextMenu = show; }
 	bool			getShowContextMenu() const { return mShowContextMenu; }
+
+	void			setShowEmojiHelper(bool show);
+	bool			getShowEmojiHelper() const { return mShowEmojiHelper; }
 
 	void			setPassDelete(BOOL b) { mPassDelete = b; }
 
@@ -333,6 +339,7 @@ private:
 
 	BOOL			mAllowEmbeddedItems;
 	bool			mShowContextMenu;
+	bool			mShowEmojiHelper;
 	bool			mEnableTooltipPaste;
 	bool			mPassDelete;
 	bool			mKeepSelectionOnReturn;	// disabling of removing selected text after pressing of Enter

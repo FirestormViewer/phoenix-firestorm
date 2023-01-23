@@ -12,3 +12,5 @@ if (NOT USESYSTEMLIBS)
 #  use_prebuilt_binary(libidn)
 endif(NOT USESYSTEMLIBS)
 
+use_prebuilt_binary(nanosvg)
+use_prebuilt_binary(viewer-fonts)
