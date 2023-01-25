@@ -1948,10 +1948,12 @@ EMeshProcessingResult LLMeshRepoThread::headerReceived(const LLVolumeParams& mes
         //     // out of memory, we won't be able to process this mesh
         //     return MESH_OUT_OF_MEMORY;
         // }
-		U32 dsize = data_size;
-		char* result_ptr = strip_deprecated_header((char*)data, dsize, &header_size);
+		llssize dsize = data_size;
+		llssize header_size_tmp{};
+		char* result_ptr = strip_deprecated_header((char*)data, dsize, &header_size_tmp);
+		header_size = static_cast<U32>(header_size_tmp);
 
-		data_size = dsize;
+		data_size = static_cast<S32>(dsize);
 
 		boost::iostreams::stream<boost::iostreams::array_source> stream(result_ptr, data_size);
 		// </FS:Beq pp Rye> 

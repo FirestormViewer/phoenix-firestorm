@@ -365,7 +365,6 @@ BOOL LLPolyMorphTarget::setInfo(LLPolyMorphTargetInfo* info)
 	setWeight(getDefaultWeight(), FALSE);
 
 	LLAvatarAppearance* avatarp = mMesh->getAvatar();
-	LLPolyMorphTargetInfo::volume_info_list_t::iterator iter;
 	for (LLPolyVolumeMorphInfo& volume_info : getInfo()->mVolumeInfoList)
 	{
 		for (S32 i = 0; i < avatarp->mNumCollisionVolumes; i++)

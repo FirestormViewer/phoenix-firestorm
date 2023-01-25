@@ -145,7 +145,6 @@ BOOL LLPolySkeletalDistortion::setInfo(LLPolySkeletalDistortionInfo *info)
     //setWeight(getDefaultWeight());
     setWeight(getDefaultWeight(), FALSE);
 
-    LLPolySkeletalDistortionInfo::bone_info_list_t::iterator iter;
     for (LLPolySkeletalBoneInfo& bone_info : getInfo()->mBoneInfoList)
     {
         LLJoint* joint = mAvatar->getJoint(bone_info.mBoneName);
