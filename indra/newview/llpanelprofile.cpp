@@ -2235,7 +2235,7 @@ void LLPanelProfileSecondLife::onSaveDescriptionChanges()
     }
 // <FS:Beq> Restore UDP profiles
 #ifdef OPENSIM
-    else if(LLGridManager::getInstance()->isInOpenSim())
+    else if (LLGridManager::getInstance()->isInOpenSim())
     {
         if (getIsLoaded() && getSelfProfile())
         {
@@ -2482,7 +2482,7 @@ void LLPanelProfileSecondLife::onCommitProfileImage(const LLUUID& id)
     {
 // <FS:Beq> Make OpenSim profiles work again
 #ifdef OPENSIM
-        if(LLGridManager::getInstance()->isInOpenSim())
+        if (LLGridManager::getInstance()->isInOpenSim())
         {
             mImageId = id;
             // save immediately only if description changes are not pending.
@@ -2870,7 +2870,7 @@ void LLPanelProfileFirstLife::onCommitPhoto(const LLUUID& id)
     {
 // <FS:Beq> Make OpenSim profiles work again
 #ifdef OPENSIM
-        if(LLGridManager::getInstance()->isInOpenSim())
+        if (LLGridManager::getInstance()->isInOpenSim())
         {
             mImageId = id;
             mImageId = id;
@@ -2915,7 +2915,7 @@ void LLPanelProfileFirstLife::onSaveDescriptionChanges()
     }
 // <FS:Beq> Restore UDP profiles
 #ifdef OPENSIM
-    else if(LLGridManager::getInstance()->isInOpenSim())
+    else if (LLGridManager::getInstance()->isInOpenSim())
     {
         if (getIsLoaded() && getSelfProfile())
         {
@@ -3069,7 +3069,7 @@ void LLPanelProfileNotes::updateData()
         }
 // <FS:Beq> Restore UDO profiles
 #ifdef OPENSIM
-        else
+        else if(LLGridManager::instance().isInOpenSim())
         {
             LLAvatarPropertiesProcessor::getInstance()->sendAvatarNotesRequest(avatar_id);
         }
@@ -3134,17 +3134,16 @@ void LLPanelProfileNotes::onSaveNotesChanges()
     }
 // <FS:Beq> Restore UDO profiles
 #ifdef OPENSIM
-        else
-        {
-            LLAvatarPropertiesProcessor::getInstance()->sendNotes(getAvatarId(), mCurrentNotes);
-        }
-#else
-// </FS:Beq>    
+    else if (LLGridManager::instance().isInOpenSim())
+    {
+        LLAvatarPropertiesProcessor::getInstance()->sendNotes(getAvatarId(), mCurrentNotes);
+    }
+#endif
+// </FS:Beq>
     else
     {
         LL_WARNS("AvatarProperties") << "Failed to update profile data, no cap found" << LL_ENDL;
     }
-#endif // <FS:Beq/>
 
     mSaveChanges->setEnabled(FALSE);
     mDiscardChanges->setEnabled(FALSE);
@@ -3261,18 +3260,23 @@ void LLPanelProfile::updateData()
     {
 // <FS:Beq> Restore UDP profiles
 #ifdef OPENSIM
-        mPanelSecondlife->updateData();
-        mPanelPicks->updateData();
-        mPanelFirstlife->updateData();
-        mPanelNotes->updateData();
-#else
+        if (LLGridManager::instance().isInOpenSim())
+        {
+            mPanelSecondlife->updateData();
+            mPanelPicks->updateData();
+            mPanelFirstlife->updateData();
+            mPanelNotes->updateData();
+        }
+        else
+#endif
+        {
 // </FS:Beq>
         setIsLoading();
         mPanelSecondlife->setIsLoading();
         mPanelPicks->setIsLoading();
         mPanelFirstlife->setIsLoading();
         mPanelNotes->setIsLoading();
-#endif // <FS:Beq/> restore udp profiles
+        } // <FS:Beq/> restore udp profiles
         std::string cap_url = gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP);
         if (!cap_url.empty())
         {
@@ -3280,10 +3284,12 @@ void LLPanelProfile::updateData()
                 boost::bind(request_avatar_properties_coro, cap_url, avatar_id));
         }
 // <FS:Beq> Restore UDP profiles
-        else
+#ifdef OPENSIM
+        else if (LLGridManager::instance().isInOpenSim())
         {
             LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(avatar_id);
         }
+#endif
 // </FS:Beq>
     }
 }
@@ -3341,7 +3347,7 @@ void LLPanelProfile::commitUnsavedChanges()
     mPanelNotes->commitUnsavedChanges();
     // <FS:Beq> restore UDP - this is effectvely the apply() method from the previous incarnation
 #ifdef OPENSIM
-	if ( (gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty()) && getSelfProfile() )
+	if (LLGridManager::instance().isInOpenSim() && (gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty()) && getSelfProfile())
 	{
 		//KC - Avatar data is spread over 3 different panels
 		// collect data from the last 2 and give to the first to save
