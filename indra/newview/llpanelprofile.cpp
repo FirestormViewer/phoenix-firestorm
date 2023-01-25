@@ -3132,10 +3132,19 @@ void LLPanelProfileNotes::onSaveNotesChanges()
         LLCoros::instance().launch("putAgentUserInfoCoro",
             boost::bind(put_avatar_properties_coro, cap_url, getAvatarId(), LLSD().with("notes", mCurrentNotes)));
     }
+// <FS:Beq> Restore UDO profiles
+#ifdef OPENSIM
+        else
+        {
+            LLAvatarPropertiesProcessor::getInstance()->sendNotes(getAvatarId(), mCurrentNotes);
+        }
+#else
+// </FS:Beq>    
     else
     {
         LL_WARNS("AvatarProperties") << "Failed to update profile data, no cap found" << LL_ENDL;
     }
+#endif // <FS:Beq/>
 
     mSaveChanges->setEnabled(FALSE);
     mDiscardChanges->setEnabled(FALSE);
@@ -3250,19 +3259,20 @@ void LLPanelProfile::updateData()
     // include 'inited' or 'data_provided' state to not rerequest
     if (!getStarted() && avatar_id.notNull())
     {
-        setIsLoading();
-        mPanelSecondlife->setIsLoading();
-        mPanelPicks->setIsLoading();
-        mPanelFirstlife->setIsLoading();
-        mPanelNotes->setIsLoading();
 // <FS:Beq> Restore UDP profiles
 #ifdef OPENSIM
         mPanelSecondlife->updateData();
         mPanelPicks->updateData();
         mPanelFirstlife->updateData();
         mPanelNotes->updateData();
-#endif
+#else
 // </FS:Beq>
+        setIsLoading();
+        mPanelSecondlife->setIsLoading();
+        mPanelPicks->setIsLoading();
+        mPanelFirstlife->setIsLoading();
+        mPanelNotes->setIsLoading();
+#endif // <FS:Beq/> restore udp profiles
         std::string cap_url = gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP);
         if (!cap_url.empty())
         {
