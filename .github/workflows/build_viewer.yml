@@ -44,15 +44,28 @@ jobs:
         run: echo "FS_GRID=-DOPENSIM:BOOL=ON" >> $GITHUB_ENV
         shell: bash
 
-      - name: Set channel name
-        if: matrix.addrsize == '64'
-        run: echo "FS_RELEASE_CHAN=Releasex64" >> $GITHUB_ENV
+      - name: find channel from Branch name
+        run: | 
+          if [[ "${{ github.ref_name }}" == *"Release"* ]]; then
+            FS_RELEASE_CHAN="Release"
+          else
+            FS_RELEASE_CHAN="Beta"
+          fi
+          if [[ "${{ matrix.addrsize }}" == "64" ]]; then
+            FS_RELEASE_CHAN="${FS_RELEASE_CHAN}x64"
+          fi
+          echo "FS_RELEASE_CHAN=\"${FS_RELEASE_CHAN}\"" >> $GITHUB_ENV
+          echo "Building for channel ${FS_RELEASE_CHAN}"
         shell: bash
 
-      - name: Set channel name for 32 bit
-        if: matrix.addrsize == '32'
-        run: echo "FS_RELEASE_CHAN=Release" >> $GITHUB_ENV
-        shell: bash
+      # - name: Set channel name
+      #   if: matrix.addrsize == '64'
+      #   run: echo "FS_RELEASE_CHAN=Releasex64" >> $GITHUB_ENV
+      #   shell: bash
+
+      # - name: Set channel name for 32 bit
+      #   if: matrix.addrsize == '32'
+      #   shell: bash
 
       - name: Set SL flag
         if: matrix.grid == 'sl'

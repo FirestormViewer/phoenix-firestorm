@@ -482,7 +482,7 @@ static apr_status_t tcp_blocking_handshake(LLSocket::ptr_t handle, char * dataou
 
 	apr_size_t expected_len = outlen;
 
-	handle->setBlocking(1000);
+	handle->setBlocking(100000); // <FS:Beq/> extend the arbitrary timeout value to 100ms. this should be more than enough for most LAN proxies and plenty for a localhost
 
   	rv = apr_socket_send(apr_socket, dataout, &outlen);
 	if (APR_SUCCESS != rv)
@@ -498,7 +498,7 @@ static apr_status_t tcp_blocking_handshake(LLSocket::ptr_t handle, char * dataou
 		rv = -1;
 	}
 
-	ms_sleep(1);
+	// ms_sleep(1); // <FS:Beq/> remove the unnecessary sleep.
 
 	if (APR_SUCCESS == rv)
 	{

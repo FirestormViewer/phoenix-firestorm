@@ -40,6 +40,12 @@
 
 #include <boost/static_assert.hpp>
 
+// <FS:Ansariel> Disable C6011 code analyses warning for now popping up everywhere because of the LL_ENDL / LLERROR_CRASH macro
+#if LL_WINDOWS
+#pragma warning (disable : 6011)
+#endif
+// </FS:Ansariel>
+
 // <FS:ND> Supress some false positives of PVS Studio.
 // They are misleading as there is opossibly a pointr taken behid the array and that pointer is passed down. But it's never dereferenced.
 //-V:llassert_always:557

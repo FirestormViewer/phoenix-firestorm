@@ -300,9 +300,9 @@ BOOL LLNameListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
     LLNameListItem* hit_item = dynamic_cast<LLNameListItem*>(hitItem(x, y));
     LLFloater* floater = gFloaterView->getParentFloater(this);
-    if (floater && floater->isFrontmost() && hit_item)
+    if (floater && floater->isFrontmost() && hit_item && hit_item->isGroup()) // <FS:Ansariel> Fix wrong check
     {
-        if(hit_item->isGroup())
+        //if(hit_item->isGroup()) // <FS:Ansariel> Fix wrong check
         {
             ContextMenuType prev_menu = getContextMenuType();
             setContextMenu(MENU_GROUP);
@@ -311,7 +311,9 @@ BOOL LLNameListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
             return handled;
         }
     }
-    return LLScrollListCtrl::handleRightMouseDown(x, y, mask);    
+    // <FS:Ansariel> Inherit from FSScrollListCtrl for additional features
+    //return LLScrollListCtrl::handleRightMouseDown(x, y, mask);    
+    return FSScrollListCtrl::handleRightMouseDown(x, y, mask);
 }
 
 // public
