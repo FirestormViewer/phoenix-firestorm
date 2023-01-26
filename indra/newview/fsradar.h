@@ -72,6 +72,7 @@ public:
 	void requestRadarChannelAlertSync();
 	void updateNames();
 	void updateName(const LLUUID& avatar_id);
+	void updateNotes(const LLUUID& avatar_id, const std::string& notes);
 
 	static void	onRadarNameFmtClicked(const LLSD& userdata);
 	static bool	radarNameFmtCheck(const LLSD& userdata);

@@ -1066,3 +1066,12 @@ void FSRadar::updateAgeAlertCheck()
 		it->second->checkAge();
 	}
 }
+
+void FSRadar::updateNotes(const LLUUID& avatar_id, const std::string& notes)
+{
+	FSRadarEntry* entry = getEntry(avatar_id);
+	if (entry)
+	{
+		entry->setNotes(notes);
+	}
+}

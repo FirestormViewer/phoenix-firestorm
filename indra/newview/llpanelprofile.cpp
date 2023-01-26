@@ -81,6 +81,7 @@
 #include "llviewernetwork.h" // <FS:Beq> For LLGridManager
 
 #include "fsdata.h"
+#include "fsradar.h"        // <FS:Zi> Update notes in radar when edited
 #include "llviewermenu.h"
 
 static LLPanelInjector<LLPanelProfileSecondLife> t_panel_profile_secondlife("panel_profile_secondlife");
@@ -3144,6 +3145,8 @@ void LLPanelProfileNotes::onSaveNotesChanges()
     {
         LL_WARNS("AvatarProperties") << "Failed to update profile data, no cap found" << LL_ENDL;
     }
+
+    FSRadar::getInstance()->updateNotes(getAvatarId(), mCurrentNotes);     // <FS:Zi> Update notes in radar when edited
 
     mSaveChanges->setEnabled(FALSE);
     mDiscardChanges->setEnabled(FALSE);

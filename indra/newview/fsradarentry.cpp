@@ -126,8 +126,7 @@ void FSRadarEntry::processProperties(void* data, EAvatarProcessorType type)
 			LLAvatarNotes* avatar_notes = static_cast<LLAvatarNotes*>(data);
 			if (avatar_notes && avatar_notes->agent_id == gAgentID && avatar_notes->target_id == mID && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 			{
-				mNotes = avatar_notes->notes;
-				LLStringUtil::trim(mNotes);
+				setNotes(avatar_notes->notes);
 			}
 		}
 	}
@@ -190,4 +189,10 @@ void FSRadarEntry::checkAge()
 	{
 		mAgeAlertPerformed = true;
 	}
+}
+
+void FSRadarEntry::setNotes(const std::string& notes)
+{
+	mNotes = notes;
+	LLStringUtil::trim(mNotes);
 }

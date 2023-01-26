@@ -63,6 +63,8 @@ public:
 
 	static std::string getRadarName(const LLAvatarName& av_name);
 
+	void		setNotes(const std::string& notes);
+
 private:
 	void updateName();
 	void onAvatarNameCache(const LLUUID& av_id, const LLAvatarName& av_name);
