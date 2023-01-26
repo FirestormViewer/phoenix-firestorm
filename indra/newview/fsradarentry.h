@@ -63,7 +63,7 @@ public:
 
 	static std::string getRadarName(const LLAvatarName& av_name);
 
-	void		setNotes(const std::string& notes);
+	void		setNotes(std::string_view notes);
 
 private:
 	void updateName();

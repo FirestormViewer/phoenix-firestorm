@@ -85,15 +85,15 @@ LLContextMenu* FSNameListAvatarMenu::createMenu()
 bool FSNameListAvatarMenu::enableContextMenuItem(const LLSD& userdata)
 {
 	std::string item = userdata.asString();
-	bool isSelf = mUUIDs.size() > 0 && mUUIDs.front() == gAgentID;
+	bool isSelf = !mUUIDs.empty() && mUUIDs.front() == gAgentID;
 
 	if (item == "remove_friend")
 	{
-		bool result = (mUUIDs.size() > 0);
+		bool result = !mUUIDs.empty();
 
-		for (uuid_vec_t::const_iterator it = mUUIDs.begin(); it != mUUIDs.end(); ++it)
+		for (const auto& avid : mUUIDs)
 		{
-			if (!LLAvatarActions::isFriend(*it))
+			if (!LLAvatarActions::isFriend(avid))
 			{
 				result = false;
 				break;
@@ -127,14 +127,14 @@ bool FSNameListAvatarMenu::enableContextMenuItem(const LLSD& userdata)
 		else if (mUUIDs.size() > 1)
 		{
 			// Prevent starting a conference if IMs are blocked for a member
-			for (uuid_vec_t::const_iterator it = mUUIDs.begin(); it != mUUIDs.end(); ++it)
+			for (const auto& avid : mUUIDs)
 			{
-				if ((*it) == gAgentID)
+				if (avid == gAgentID)
 				{
 					continue;
 				}
 
-				if (!RlvActions::canStartIM(*it))
+				if (!RlvActions::canStartIM(avid))
 				{
 					return false;
 				}
@@ -147,7 +147,7 @@ bool FSNameListAvatarMenu::enableContextMenuItem(const LLSD& userdata)
 	{
 		if (mUUIDs.size() == 1)
 		{
-			return (!isSelf && FSRadar::getInstance()->getEntry(mUUIDs.front()) != NULL);
+			return (!isSelf && FSRadar::getInstance()->getEntry(mUUIDs.front()) != nullptr);
 		}
 		return false;
 	}
@@ -167,7 +167,7 @@ bool FSNameListAvatarMenu::enableContextMenuItem(const LLSD& userdata)
 	{
 		if (mUUIDs.size() == 1)
 		{
-			return (!isSelf && FSRadar::getInstance()->getEntry(mUUIDs.front()) != NULL);
+			return (!isSelf && FSRadar::getInstance()->getEntry(mUUIDs.front()) != nullptr);
 		}
 		return false;
 	}
@@ -191,14 +191,14 @@ bool FSNameListAvatarMenu::enableContextMenuItem(const LLSD& userdata)
 
 void FSNameListAvatarMenu::offerTeleport()
 {
-	uuid_vec_t uuids;
+	uuid_vec_t uuids{};
 	uuids.reserve(mUUIDs.size());
-	for (uuid_vec_t::const_iterator it = mUUIDs.begin(); it != mUUIDs.end(); ++it)
+	for (const auto& avid : mUUIDs)
 	{
 		// Skip ourself if sending a TP to more than one agent
-		if ((*it) != gAgentID)
+		if (avid != gAgentID)
 		{
-			uuids.push_back(*it);
+			uuids.emplace_back(avid);
 		}
 	}
 	LLAvatarActions::offerTeleport(uuids);
@@ -216,14 +216,14 @@ void FSNameListAvatarMenu::onTrackAvatarMenuItemClick()
 
 void FSNameListAvatarMenu::addToContactSet()
 {
-	uuid_vec_t uuids;
+	uuid_vec_t uuids{};
 	uuids.reserve(mUUIDs.size());
-	for (uuid_vec_t::const_iterator it = mUUIDs.begin(); it != mUUIDs.end(); ++it)
+	for (const auto& avid : mUUIDs)
 	{
 		// Skip ourself if adding more than one agent
-		if ((*it) != gAgentID)
+		if (avid != gAgentID)
 		{
-			uuids.push_back(*it);
+			uuids.emplace_back(avid);
 		}
 	}
 	LLAvatarActions::addToContactSet(uuids);
