@@ -150,8 +150,8 @@ public:
 
 	// <FS:KC> [LSL PreProc]
 	static void finishLSLUpload(LLUUID itemId, LLUUID taskId, LLUUID newAssetId, LLSD response, std::string scriptName, LLUUID queueId);
-	static void scriptPreprocComplete(const LLUUID& asset_id, LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_text);
-	static void scriptLogMessage(LLScriptQueueData* data, std::string message);
+	static void scriptPreprocComplete(LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_text);
+	static void scriptLogMessage(LLScriptQueueData* data, std::string_view message);
 protected:
 	LLFloaterCompileQueue(const LLSD& key);
 	virtual ~LLFloaterCompileQueue();

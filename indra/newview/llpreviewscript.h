@@ -177,7 +177,9 @@ private:
 	bool		enableAction(const std::string& action);
 	// NaCl End
 	void		onBtnHelp(); // <FS:Ansariel> Keep help links
+public: // <FS:Ansariel> Show keyword help on F1
 	void		onBtnDynamicHelp();
+private: // <FS:Ansariel> Show keyword help on F1
 	void		onBtnUndoChanges();
 
 	bool		hasChanged();
