@@ -229,6 +229,7 @@ public:
 private:
 	void				resetRotTime();
     void				setRenderMaterialIDs(const LLRenderMaterialParams* material_params, bool local_origin);
+    void                rebuildMaterial();
 public:
 	void				resetRot();
 	void				applyAngularVelocity(F32 dt);

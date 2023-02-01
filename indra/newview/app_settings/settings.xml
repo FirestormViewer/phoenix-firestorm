@@ -12716,18 +12716,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <integer>0</integer>
   </map>
 
-  <key>RenderPBR</key>
-  <map>
-    <key>Comment</key>
-    <string>DEPRECATED - only true supported - Use PBR rendering pipeline (Physically Based Rendering).</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>1</integer>
-  </map>
-
   <key>RenderDeferred</key>
   <map>
     <key>Comment</key>
@@ -13479,6 +13467,28 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>S32</string>
     <key>Value</key>
     <integer>256</integer>
+  </map>
+  <key>RenderReflectionProbeResolution</key>
+  <map>
+    <key>Comment</key>
+    <string>Resolution of reflection probe radiance maps (requires restart).  Will be set to the next highest power of two clamped to [64, 512].  Note that changing this value may consume a massive amount of video memory.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>256</integer>
+  </map>
+  <key>RenderReflectionProbeAmbianceScale</key>
+  <map>
+    <key>Comment</key>
+    <string>Scaler to apply to reflection probes to over-brighten sky contributions to indirect light</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <integer>8</integer>
   </map>
 
   <key>RenderReflectionProbeDrawDistance</key>

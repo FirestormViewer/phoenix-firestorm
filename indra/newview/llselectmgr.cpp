@@ -2305,7 +2305,7 @@ void LLSelectMgr::selectionRevertGLTFMaterials()
                     && asset_id.notNull())
                 {
                     // Restore overrides
-                    LLGLTFMaterialList::queueModify(objectp->getID(), te, nodep->mSavedGLTFOverrideMaterials[te]);
+                    LLGLTFMaterialList::queueModify(objectp, te, nodep->mSavedGLTFOverrideMaterials[te]);
                 } 
                 else
                 {

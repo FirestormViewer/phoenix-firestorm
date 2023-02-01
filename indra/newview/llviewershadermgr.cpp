@@ -475,7 +475,6 @@ void LLViewerShaderMgr::setShaders()
     gPipeline.releaseGLBuffers();
 
     LLPipeline::sRenderGlow = gSavedSettings.getBOOL("RenderGlow"); 
-    LLPipeline::updateRenderDeferred();
     
     //hack to reset buffers that change behavior with shaders
     gPipeline.resetVertexBuffers();
@@ -504,10 +503,7 @@ void LLViewerShaderMgr::setShaders()
 
     //bool canRenderDeferred = true; // DEPRECATED -- LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred");
     //bool hasWindLightShaders = true; // DEPRECATED -- LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders");
-    S32 shadow_detail            = gSavedSettings.getS32("RenderShadowDetail");
-    bool pbr = gSavedSettings.getBOOL("RenderPBR");
     bool doingWindLight = true; //DEPRECATED -- hasWindLightShaders&& gSavedSettings.getBOOL("WindLightUseAtmosShaders");
-    bool useRenderDeferred = true; //DEPRECATED -- doingWindLight&& canRenderDeferred&& gSavedSettings.getBOOL("RenderDeferred");
 
     S32 light_class = 3;
     S32 interface_class = 2;
@@ -516,32 +512,7 @@ void LLViewerShaderMgr::setShaders()
     S32 effect_class = 2;
     S32 wl_class = 1;
     S32 water_class = 3;
-    S32 deferred_class = 0;
-
-    if (useRenderDeferred)
-    {
-        //shadows
-        switch (shadow_detail)
-        {                
-            case 1:
-                deferred_class = 2; // PCF shadows
-            break; 
-
-            case 2:
-                deferred_class = 2; // PCF shadows
-            break; 
-
-            case 0: 
-            default:
-                deferred_class = 1; // no shadows
-            break; 
-        }
-    }
-
-    if (deferred_class > 0 && pbr)
-    {
-        deferred_class = 3;
-    }
+    S32 deferred_class = 3;
 
     if (doingWindLight)
     {
@@ -880,6 +851,7 @@ std::string LLViewerShaderMgr::loadBasicShaders()
     BOOL ambient_kill = gSavedSettings.getBOOL("AmbientDisable");
 	BOOL sunlight_kill = gSavedSettings.getBOOL("SunlightDisable");
     BOOL local_light_kill = gSavedSettings.getBOOL("LocalLightDisable");
+    BOOL ssr = gSavedSettings.getBOOL("RenderScreenSpaceReflections");
 
     if (ambient_kill)
     {
@@ -894,6 +866,23 @@ std::string LLViewerShaderMgr::loadBasicShaders()
     if (local_light_kill)
     {
        attribs["LOCAL_LIGHT_KILL"] = "1";
+    }
+
+    S32 shadow_detail            = gSavedSettings.getS32("RenderShadowDetail");
+
+    if (shadow_detail >= 1)
+    {
+        attribs["SUN_SHADOW"] = "1";
+
+        if (shadow_detail >= 2)
+        {
+            attribs["SPOT_SHADOW"] = "1";
+        }
+    }
+
+    if (ssr)
+    {
+        attribs["SSR"] = "1";
     }
 
 	// We no longer have to bind the shaders to global glhandles, they are automatically added to a map now.
@@ -935,7 +924,7 @@ std::string LLViewerShaderMgr::loadBasicShaders()
 	index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/shadowUtil.glsl",                      1) );
 	index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/aoUtil.glsl",                          1) );
     index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/reflectionProbeF.glsl",                has_reflection_probes ? 3 : 2) );
-    index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/screenSpaceReflUtil.glsl",				3) );
+    index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/screenSpaceReflUtil.glsl",             ssr ? 3 : 1) );
 	index_channels.push_back(-1);    shaders.push_back( make_pair( "lighting/lightNonIndexedF.glsl",                    mShaderLevel[SHADER_LIGHTING] ) );
 	index_channels.push_back(-1);    shaders.push_back( make_pair( "lighting/lightAlphaMaskNonIndexedF.glsl",                   mShaderLevel[SHADER_LIGHTING] ) );
 	index_channels.push_back(-1);    shaders.push_back( make_pair( "lighting/lightFullbrightNonIndexedF.glsl",          mShaderLevel[SHADER_LIGHTING] ) );
@@ -1759,8 +1748,6 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	{
 		gDeferredTreeShadowProgram.mName = "Deferred Tree Shadow Shader";
 		gDeferredTreeShadowProgram.mShaderFiles.clear();
-		gDeferredTreeShadowProgram.mFeatures.isDeferred = true;
-		gDeferredTreeShadowProgram.mFeatures.hasShadows = true;
 		gDeferredTreeShadowProgram.mShaderFiles.push_back(make_pair("deferred/treeShadowV.glsl", GL_VERTEX_SHADER));
 		gDeferredTreeShadowProgram.mShaderFiles.push_back(make_pair("deferred/treeShadowF.glsl", GL_FRAGMENT_SHADER));
 		gDeferredTreeShadowProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
@@ -1773,8 +1760,6 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
     {
         gDeferredSkinnedTreeShadowProgram.mName = "Deferred Skinned Tree Shadow Shader";
         gDeferredSkinnedTreeShadowProgram.mShaderFiles.clear();
-        gDeferredSkinnedTreeShadowProgram.mFeatures.isDeferred = true;
-        gDeferredSkinnedTreeShadowProgram.mFeatures.hasShadows = true;
         gDeferredSkinnedTreeShadowProgram.mFeatures.hasObjectSkinning = true;
         gDeferredSkinnedTreeShadowProgram.mShaderFiles.push_back(make_pair("deferred/treeShadowSkinnedV.glsl", GL_VERTEX_SHADER));
         gDeferredSkinnedTreeShadowProgram.mShaderFiles.push_back(make_pair("deferred/treeShadowF.glsl", GL_FRAGMENT_SHADER));
@@ -3881,6 +3866,12 @@ BOOL LLViewerShaderMgr::loadShadersInterface()
     {
         gReflectionProbeDisplayProgram.mName = "Reflection Probe Display Shader";
         gReflectionProbeDisplayProgram.mFeatures.hasReflectionProbes = true;
+        gReflectionProbeDisplayProgram.mFeatures.hasSrgb = true;
+        gReflectionProbeDisplayProgram.mFeatures.calculatesAtmospherics = true;
+        gReflectionProbeDisplayProgram.mFeatures.hasAtmospherics = true;
+        gReflectionProbeDisplayProgram.mFeatures.hasTransport = true;
+        gReflectionProbeDisplayProgram.mFeatures.hasGamma = true;
+        gReflectionProbeDisplayProgram.mFeatures.isDeferred = true;
         gReflectionProbeDisplayProgram.mShaderFiles.clear();
         gReflectionProbeDisplayProgram.mShaderFiles.push_back(make_pair("interface/reflectionprobeV.glsl", GL_VERTEX_SHADER));
         gReflectionProbeDisplayProgram.mShaderFiles.push_back(make_pair("interface/reflectionprobeF.glsl", GL_FRAGMENT_SHADER));
@@ -3934,6 +3925,9 @@ BOOL LLViewerShaderMgr::loadShadersInterface()
     {
         gReflectionMipProgram.mName = "Reflection Mip Shader";
         gReflectionMipProgram.mFeatures.isDeferred = true;
+        gReflectionMipProgram.mFeatures.hasGamma = true;
+        gReflectionMipProgram.mFeatures.hasAtmospherics = true;
+        gReflectionMipProgram.mFeatures.calculatesAtmospherics = true;
         gReflectionMipProgram.mShaderFiles.clear();
         gReflectionMipProgram.mShaderFiles.push_back(make_pair("interface/splattexturerectV.glsl", GL_VERTEX_SHADER));
         gReflectionMipProgram.mShaderFiles.push_back(make_pair("interface/reflectionmipF.glsl", GL_FRAGMENT_SHADER));

@@ -2130,7 +2130,7 @@ void LLFloaterPreference::refreshEnabledState()
 	sky->setEnabled(TRUE);
 
     //PBR
-    ctrl_pbr->setEnabled(LLFeatureManager::getInstance()->isFeatureAvailable("RenderPBR"));
+    ctrl_pbr->setEnabled(TRUE);
 
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");

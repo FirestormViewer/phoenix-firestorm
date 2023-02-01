@@ -260,6 +260,8 @@ static GLWorkQueue* sQueue = nullptr;
 static GLuint gen_buffer()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_VERTEX;
+
+    GLuint ret = 0;
     constexpr U32 pool_size = 4096;
 
     thread_local static GLuint sNamePool[pool_size];
@@ -269,10 +271,21 @@ static GLuint gen_buffer()
     {
         LL_PROFILE_ZONE_NAMED_CATEGORY_VERTEX("gen buffer");
         sIndex = pool_size;
-        glGenBuffers(pool_size, sNamePool);
+        if (!gGLManager.mIsAMD)
+        {
+            glGenBuffers(pool_size, sNamePool);
+        }
+        else
+        { // work around for AMD driver bug
+            for (U32 i = 0; i < pool_size; ++i)
+            {
+                glGenBuffers(1, sNamePool + i);
+            }
+        }
     }
 
-    return sNamePool[--sIndex];
+    ret = sNamePool[--sIndex];
+    return ret;
 }
 
 #define ANALYZE_VBO_POOL 0
@@ -741,14 +754,13 @@ void LLVertexBuffer::drawRange(U32 mode, U32 start, U32 end, U32 count, U32 indi
     llassert(mGLBuffer == sGLRenderBuffer);
     llassert(mGLIndices == sGLRenderIndices);
     gGL.syncMatrices();
-
     glDrawRangeElements(sGLMode[mode], start, end, count, GL_UNSIGNED_SHORT,
         (GLvoid*) (indices_offset * sizeof(U16)));
 }
 
 void LLVertexBuffer::draw(U32 mode, U32 count, U32 indices_offset) const
 {
-    drawRange(mode, 0, mNumVerts, count, indices_offset);
+    drawRange(mode, 0, mNumVerts-1, count, indices_offset);
 }
 
 
@@ -1160,7 +1172,8 @@ static void flush_vbo(GLenum target, U32 start, U32 end, void* data)
             LL_PROFILE_ZONE_NAMED_CATEGORY_VERTEX("glBufferSubData block");
             //LL_PROFILE_GPU_ZONE("glBufferSubData");
             U32 tend = llmin(i + block_size, end);
-            glBufferSubData(target, i, tend - i+1, (U8*) data + (i-start));
+            U32 size = tend - i + 1;
+            glBufferSubData(target, i, size, (U8*) data + (i-start));
         }
     }
 }

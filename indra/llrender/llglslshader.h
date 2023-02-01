@@ -240,6 +240,9 @@ public:
     S32 enableTexture(S32 uniform, LLTexUnit::eTextureType mode = LLTexUnit::TT_TEXTURE, LLTexUnit::eTextureColorSpace space = LLTexUnit::TCS_LINEAR);
     S32 disableTexture(S32 uniform, LLTexUnit::eTextureType mode = LLTexUnit::TT_TEXTURE, LLTexUnit::eTextureColorSpace space = LLTexUnit::TCS_LINEAR);
 
+    // get the texture channel of the given uniform, or -1 if uniform is not used as a texture
+    S32 getTextureChannel(S32 uniform) const;
+
     // bindTexture returns the texture unit we've bound the texture to.
     // You can reuse the return value to unbind a texture when required.
     S32 bindTexture(const std::string& uniform, LLTexture* texture, LLTexUnit::eTextureType mode = LLTexUnit::TT_TEXTURE, LLTexUnit::eTextureColorSpace space = LLTexUnit::TCS_LINEAR);
@@ -251,10 +254,9 @@ public:
     void bind();
     //helper to conditionally bind mRiggedVariant instead of this
     void bind(bool rigged);
-    void unbind();
-
+    
     // Unbinds any previously bound shader by explicitly binding no shader.
-    static void bindNoShader(void);
+    static void unbind();
 
     U32 mMatHash[LLRender::NUM_MATRIX_MODES];
     U32 mLightHash;

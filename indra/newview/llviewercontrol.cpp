@@ -245,7 +245,6 @@ bool handleSetShaderChanged(const LLSD& newvalue)
         // ALM depends onto atmospheric shaders, state might have changed
         bool old_state = LLPipeline::sRenderDeferred;
         LLPipeline::refreshCachedSettings();
-        gPipeline.updateRenderDeferred();
         if (old_state != LLPipeline::sRenderDeferred)
         {
             gPipeline.releaseGLBuffers();
@@ -301,7 +300,6 @@ bool handleRenderTransparentWaterChanged(const LLSD& newvalue)
 	if (gPipeline.isInit())
 	{
 		gPipeline.updateRenderTransparentWater();
-		gPipeline.updateRenderDeferred();
 		gPipeline.releaseGLBuffers();
 		gPipeline.createGLBuffers();
 		gPipeline.resetVertexBuffers();
@@ -540,7 +538,6 @@ static bool handleReflectionProbeDetailChanged(const LLSD& newvalue)
     if (gPipeline.isInit())
     {
         LLPipeline::refreshCachedSettings();
-        gPipeline.updateRenderDeferred();
         gPipeline.releaseGLBuffers();
         gPipeline.createGLBuffers();
         gPipeline.resetVertexBuffers();
@@ -548,46 +545,6 @@ static bool handleReflectionProbeDetailChanged(const LLSD& newvalue)
     }
     return true;
 }
-
-#if 0 // DEPRECATED
-// NOTE: may be triggered by RenderDeferred OR RenderPBR changing, don't trust "newvalue"
-static bool handleRenderDeferredChanged(const LLSD& newvalue)
-{
-    LLRenderTarget::sUseFBO = gSavedSettings.getBOOL("RenderDeferred");
-	if (gPipeline.isInit())
-	{
-		LLPipeline::refreshCachedSettings();
-		gPipeline.updateRenderDeferred();
-		gPipeline.releaseGLBuffers();
-		gPipeline.createGLBuffers();
-		gPipeline.resetVertexBuffers();
-		if (LLPipeline::sRenderDeferred == (BOOL)LLRenderTarget::sUseFBO)
-		{
-			LLViewerShaderMgr::instance()->setShaders();
-		}
-	}
-	return true;
-}
-
-// This looks a great deal like handleRenderDeferredChanged because
-// Advanced Lighting (Materials) implies bumps and shiny so disabling
-// bumps should further disable that feature.
-//
-static bool handleRenderBumpChanged(const LLSD& newval)
-{
-    LLRenderTarget::sUseFBO = newval.asBoolean() && gSavedSettings.getBOOL("RenderDeferred");
-	if (gPipeline.isInit())
-	{
-		gPipeline.updateRenderBump();
-		gPipeline.updateRenderDeferred();
-		gPipeline.releaseGLBuffers();
-		gPipeline.createGLBuffers();
-		gPipeline.resetVertexBuffers();
-		LLViewerShaderMgr::instance()->setShaders();
-	}
-	return true;
-}
-#endif
 
 static bool handleRenderDebugPipelineChanged(const LLSD& newvalue)
 {
@@ -1229,6 +1186,7 @@ void settings_setup_listeners()
 	// DEPRECATED - setting_setup_signal_listener(gSavedSettings, "RenderDeferred", handleRenderDeferredChanged);
 	setting_setup_signal_listener(gSavedSettings, "RenderReflectionProbeDetail", handleReflectionProbeDetailChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderReflectionsEnabled", handleReflectionProbeDetailChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderScreenSpaceReflections", handleReflectionProbeDetailChanged);
 	setting_setup_signal_listener(gSavedSettings, "RenderShadowDetail", handleSetShaderChanged);
 	setting_setup_signal_listener(gSavedSettings, "RenderDeferredSSAO", handleSetShaderChanged);
 	setting_setup_signal_listener(gSavedSettings, "RenderPerformanceTest", handleRenderPerfTestChanged);

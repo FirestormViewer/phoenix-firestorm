@@ -35,7 +35,7 @@
 #include "llrendertarget.h"
 #include "lltexture.h"
 #include "llshadermgr.h"
-#include "llmd5.h"
+#include "hbxxh.h"
 
 #if LL_WINDOWS
 extern void APIENTRY gl_debug_callback(GLenum source,
@@ -55,7 +55,13 @@ F32	gGLModelView[16];
 F32	gGLLastModelView[16];
 F32 gGLLastProjection[16];
 F32 gGLProjection[16];
+
+// transform from last frame's camera space to this frame's camera space (and inverse)
+F32 gGLDeltaModelView[16];
+F32 gGLInverseDeltaModelView[16];
+
 S32	gGLViewport[4];
+
 
 U32 LLRender::sUICalls = 0;
 U32 LLRender::sUIVerts = 0;
@@ -73,7 +79,7 @@ struct LLVBCache
     std::chrono::steady_clock::time_point touched;
 };
 
-static std::unordered_map<std::size_t, LLVBCache> sVBCache;
+static std::unordered_map<U64, LLVBCache> sVBCache;
 
 static const GLenum sGLTextureType[] =
 {
@@ -372,11 +378,7 @@ bool LLTexUnit::bind(LLRenderTarget* renderTarget, bool bindDepth)
 
 	if (bindDepth)
 	{
-
-		if (renderTarget->getDepth() && !renderTarget->canSampleDepth())
-		{
-			LL_ERRS() << "Cannot bind a render buffer for sampling.  Allocate render target with depth buffer sampling enabled." << LL_ENDL;
-		}
+        llassert(renderTarget->getDepth()); // target MUST have a depth buffer attachment
 
 		bindManual(renderTarget->getUsage(), renderTarget->getDepth());
 	}
@@ -1682,7 +1684,7 @@ void LLRender::flush()
         if (mBuffer)
         {
 
-            LLMD5 hash;
+            HBXXH64 hash;
             U32 attribute_mask = LLGLSLShader::sCurBoundShaderPtr->mAttributeMask;
 
             {
@@ -1702,8 +1704,8 @@ void LLRender::flush()
                 hash.finalize();
             }
             
-            size_t vhash[2];
-            hash.raw_digest((unsigned char*) vhash);
+            
+            U64 vhash = hash.digest();
 
             // check the VB cache before making a new vertex buffer
             // This is a giant hack to deal with (mostly) our terrible UI rendering code
@@ -1714,7 +1716,7 @@ void LLRender::flush()
             // To leverage this, we maintain a running hash of the vertex stream being
             // built up before a flush, and then check that hash against a VB 
             // cache just before creating a vertex buffer in VRAM
-            std::unordered_map<std::size_t, LLVBCache>::iterator cache = sVBCache.find(vhash[0]);
+            std::unordered_map<U64, LLVBCache>::iterator cache = sVBCache.find(vhash);
 
             LLPointer<LLVertexBuffer> vb;
 
@@ -1747,7 +1749,7 @@ void LLRender::flush()
 
                 vb->unbind();
 
-                sVBCache[vhash[0]] = { vb , std::chrono::steady_clock::now() };
+                sVBCache[vhash] = { vb , std::chrono::steady_clock::now() };
 
                 static U32 miss_count = 0;
                 miss_count++;
@@ -1759,7 +1761,7 @@ void LLRender::flush()
 
                     using namespace std::chrono_literals;
                     // every 1024 misses, clean the cache of any VBs that haven't been touched in the last second
-                    for (std::unordered_map<std::size_t, LLVBCache>::iterator iter = sVBCache.begin(); iter != sVBCache.end(); )
+                    for (std::unordered_map<U64, LLVBCache>::iterator iter = sVBCache.begin(); iter != sVBCache.end(); )
                     {
                         if (now - iter->second.touched > 1s)
                         {

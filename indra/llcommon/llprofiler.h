@@ -96,7 +96,7 @@ namespace LLProfiler
         //// GPU Mutually exclusive with detailed memory tracing
         // #define LL_PROFILER_ENABLE_TRACY_OPENGL 0
         #define LL_PROFILER_ENABLE_TRACY_MEMORY 1
-        #define LL_PROFILER_ENABLE_TRACY_OPENGL 1
+        #define LL_PROFILER_ENABLE_TRACY_OPENGL 0
 
         // Enable RenderDoc labeling
         #define LL_PROFILER_ENABLE_RENDER_DOC 0

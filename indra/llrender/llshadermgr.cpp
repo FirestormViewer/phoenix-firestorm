@@ -222,7 +222,7 @@ BOOL LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
 		}
 	}
 
-	if (features->hasScreenSpaceReflections)
+	if (features->hasScreenSpaceReflections || features->hasReflectionProbes)
 	{
         if (!shader->attachFragmentObject("deferred/screenSpaceReflUtil.glsl"))
         {
@@ -262,7 +262,7 @@ BOOL LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
 		}
 	}
 
-	if (features->hasGamma)
+	if (features->hasGamma || features->isDeferred)
 	{
         if (!shader->attachFragmentObject("windlight/gammaF.glsl"))
 		{
@@ -278,7 +278,7 @@ BOOL LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
 		}
 	}
 
-	if (features->hasAtmospherics)
+	if (features->hasAtmospherics || features->isDeferred)
     {
         if (!shader->attachFragmentObject("windlight/atmosphericsFuncs.glsl")) {
             return FALSE;
@@ -1250,6 +1250,8 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("bumpMap");
     mReservedUniforms.push_back("bumpMap2");
 	mReservedUniforms.push_back("environmentMap");
+    mReservedUniforms.push_back("sceneMap");
+    mReservedUniforms.push_back("sceneDepth");
     mReservedUniforms.push_back("reflectionProbes");
     mReservedUniforms.push_back("irradianceProbes");
 	mReservedUniforms.push_back("cloud_noise_texture");
@@ -1326,9 +1328,12 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("depth_cutoff");
 	mReservedUniforms.push_back("norm_cutoff");
 	mReservedUniforms.push_back("shadow_target_width");
-    mReservedUniforms.push_back("view_dir"); // DEFERRED_VIEW_DIR
 	
-	llassert(mReservedUniforms.size() == LLShaderMgr::DEFERRED_VIEW_DIR+1);
+	llassert(mReservedUniforms.size() == LLShaderMgr::DEFERRED_SHADOW_TARGET_WIDTH+1);
+
+    mReservedUniforms.push_back("modelview_delta");
+    mReservedUniforms.push_back("inv_modelview_delta");
+    mReservedUniforms.push_back("cube_snapshot");
 
 	mReservedUniforms.push_back("tc_scale");
 	mReservedUniforms.push_back("rcp_screen_res");
@@ -1445,6 +1450,7 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("moon_brightness");
     mReservedUniforms.push_back("cloud_variance");
     mReservedUniforms.push_back("reflection_probe_ambiance");
+    mReservedUniforms.push_back("max_probe_lod");
 
     mReservedUniforms.push_back("sh_input_r");
     mReservedUniforms.push_back("sh_input_g");

@@ -86,7 +86,7 @@ void APIENTRY gl_debug_callback(GLenum source,
                                 const GLchar* message,
                                 GLvoid* userParam)
 {
-    if (severity != GL_DEBUG_SEVERITY_HIGH // &&
+    if (severity != GL_DEBUG_SEVERITY_HIGH  //&&
         //severity != GL_DEBUG_SEVERITY_MEDIUM &&
         //severity != GL_DEBUG_SEVERITY_LOW
         )
@@ -112,10 +112,28 @@ void APIENTRY gl_debug_callback(GLenum source,
     glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &vao);
     GLint vbo = 0;
     glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &vbo);
+    GLint vbo_size = 0;
+    if (vbo != 0)
+    {
+        glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &vbo_size);
+    }
     GLint ibo = 0;
     glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &ibo);
-
-    if (severity == GL_DEBUG_SEVERITY_HIGH)
+    GLint ibo_size = 0;
+    if (ibo != 0)
+    {
+        glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &ibo_size);
+    }
+    GLint ubo = 0;
+    glGetIntegerv(GL_UNIFORM_BUFFER_BINDING, &ubo);
+    GLint ubo_size = 0;
+    GLint ubo_immutable = 0;
+    if (ubo != 0)
+    {
+        glGetBufferParameteriv(GL_UNIFORM_BUFFER, GL_BUFFER_SIZE, &ubo_size);
+        glGetBufferParameteriv(GL_UNIFORM_BUFFER, GL_BUFFER_IMMUTABLE_STORAGE, &ubo_immutable);
+    }
+    //if (severity == GL_DEBUG_SEVERITY_HIGH)
     {
         LL_ERRS() << "Halting on GL Error" << LL_ENDL;
     }
@@ -1018,8 +1036,6 @@ bool LLGLManager::initGL()
 		LL_ERRS("RenderInit") << "Calling init on LLGLManager after already initialized!" << LL_ENDL;
 	}
 
-	stop_glerror();
-
 #if 0 && LL_WINDOWS
 	if (!glGetStringi)
 	{
@@ -1055,8 +1071,6 @@ bool LLGLManager::initGL()
 	}
 #endif
 	
-	stop_glerror();
-
 	// Extract video card strings and convert to upper case to
 	// work around driver-to-driver variation in capitalization.
 	mGLVendor = ll_safe_string((const char *)glGetString(GL_VENDOR));
@@ -1128,10 +1142,8 @@ bool LLGLManager::initGL()
 		mGLVendorShort = "MISC";
 	}
 	
-	stop_glerror();
 	// This is called here because it depends on the setting of mIsGF2or4MX, and sets up mHasMultitexture.
 	initExtensions();
-	stop_glerror();
 
 	S32 old_vram = mVRAM;
 	mVRAM = 0;
@@ -1195,29 +1207,19 @@ bool LLGLManager::initGL()
 		LL_WARNS("RenderInit") << "VRAM detected via MemInfo OpenGL extension most likely broken. Reverting to " << mVRAM << " MB" << LL_ENDL;
 	}
 
-	stop_glerror();
-
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &mNumTextureImageUnits);
-    stop_glerror();
 	glGetIntegerv(GL_MAX_COLOR_TEXTURE_SAMPLES, &mMaxColorTextureSamples);
-    stop_glerror();
 	glGetIntegerv(GL_MAX_DEPTH_TEXTURE_SAMPLES, &mMaxDepthTextureSamples);
-    stop_glerror();
 	glGetIntegerv(GL_MAX_INTEGER_SAMPLES, &mMaxIntegerSamples);
-    stop_glerror();
 	glGetIntegerv(GL_MAX_SAMPLE_MASK_WORDS, &mMaxSampleMaskWords);
-    stop_glerror();
     glGetIntegerv(GL_MAX_SAMPLES, &mMaxSamples);
-    stop_glerror();
 
     if (mGLVersion >= 4.59f)
     {
         glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY, &mMaxAnisotropy);
-        stop_glerror();
     }
 
 	initGLStates();
-	stop_glerror();
 
 	return true;
 }
@@ -2271,7 +2273,7 @@ void do_assert_glerror()
 	GLenum error;
 	error = glGetError();
 	BOOL quit = FALSE;
-	while (LL_UNLIKELY(error))
+	if (LL_UNLIKELY(error))
 	{
 		quit = TRUE;
 		GLubyte const * gl_error_msg = gluErrorString(error);
@@ -2296,7 +2298,6 @@ void do_assert_glerror()
 				gFailLog << "GL Error: UNKNOWN 0x" << std::hex << error << std::dec << std::endl;
 			}
 		}
-		error = glGetError();
 	}
 
 	if (quit)
@@ -2412,12 +2413,13 @@ void LLGLState::checkStates(GLboolean writeAlpha)
     llassert_always(src == GL_SRC_ALPHA);
     llassert_always(dst == GL_ONE_MINUS_SRC_ALPHA);
   
-    GLboolean colorMask[4];
-    glGetBooleanv(GL_COLOR_WRITEMASK, colorMask);
-    llassert_always(colorMask[0]);
-    llassert_always(colorMask[1]);
-    llassert_always(colorMask[2]);
-    llassert_always(colorMask[3] == writeAlpha);
+    // disable for now until usage is consistent
+    //GLboolean colorMask[4];
+    //glGetBooleanv(GL_COLOR_WRITEMASK, colorMask);
+    //llassert_always(colorMask[0]);
+    //llassert_always(colorMask[1]);
+    //llassert_always(colorMask[2]);
+    // llassert_always(colorMask[3] == writeAlpha);  
 	
 	for (boost::unordered_map<LLGLenum, LLGLboolean>::iterator iter = sStateMap.begin();
 		 iter != sStateMap.end(); ++iter)

@@ -68,6 +68,8 @@
 
 #undef  VERIFY_LEGACY_CONVERSION
 
+extern BOOL gCubeSnapshot;
+
 //=========================================================================
 namespace 
 {
@@ -673,6 +675,8 @@ void LLSettingsVOSky::applySpecial(void *ptarget, bool force)
     LL_PROFILE_ZONE_SCOPED_CATEGORY_SHADER;
     LLVector3 light_direction = LLVector3(LLEnvironment::instance().getClampedLightNorm().mV);
 
+    bool radiance_pass = gCubeSnapshot && !gPipeline.mReflectionMapManager.isRadiancePass();
+
     LLShaderUniforms* shader = &((LLShaderUniforms*)ptarget)[LLGLSLShader::SG_DEFAULT];
 	{        
         shader->uniform3fv(LLViewerShaderMgr::LIGHTNORM, light_direction);
@@ -680,43 +684,54 @@ void LLSettingsVOSky::applySpecial(void *ptarget, bool force)
 	} 
     
     shader = &((LLShaderUniforms*)ptarget)[LLGLSLShader::SG_SKY];
-	{
-        shader->uniform3fv(LLViewerShaderMgr::LIGHTNORM, light_direction);
 
-        // Legacy? SETTING_CLOUD_SCROLL_RATE("cloud_scroll_rate")
-        LLVector4 vect_c_p_d1(mSettings[SETTING_CLOUD_POS_DENSITY1]);
-        LLVector4 cloud_scroll( LLEnvironment::instance().getCloudScrollDelta() );
+    shader->uniform3fv(LLViewerShaderMgr::LIGHTNORM, light_direction);
 
-        // SL-13084 EEP added support for custom cloud textures -- flip them horizontally to match the preview of Clouds > Cloud Scroll
-        // Keep in Sync!
-        // * indra\newview\llsettingsvo.cpp
-        // * indra\newview\app_settings\shaders\class2\windlight\cloudsV.glsl
-        // * indra\newview\app_settings\shaders\class1\deferred\cloudsV.glsl
-        cloud_scroll[0] = -cloud_scroll[0];
-        vect_c_p_d1 += cloud_scroll;
-        shader->uniform3fv(LLShaderMgr::CLOUD_POS_DENSITY1, LLVector3(vect_c_p_d1.mV));
+    // Legacy? SETTING_CLOUD_SCROLL_RATE("cloud_scroll_rate")
+    LLVector4 vect_c_p_d1(mSettings[SETTING_CLOUD_POS_DENSITY1]);
+    LLVector4 cloud_scroll( LLEnvironment::instance().getCloudScrollDelta() );
 
-        LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
+    // SL-13084 EEP added support for custom cloud textures -- flip them horizontally to match the preview of Clouds > Cloud Scroll
+    // Keep in Sync!
+    // * indra\newview\llsettingsvo.cpp
+    // * indra\newview\app_settings\shaders\class2\windlight\cloudsV.glsl
+    // * indra\newview\app_settings\shaders\class1\deferred\cloudsV.glsl
+    cloud_scroll[0] = -cloud_scroll[0];
+    vect_c_p_d1 += cloud_scroll;
+    shader->uniform3fv(LLShaderMgr::CLOUD_POS_DENSITY1, LLVector3(vect_c_p_d1.mV));
 
-        // TODO -- make these getters return vec3s
-        LLVector3 sunDiffuse = LLVector3(psky->getSunlightColor().mV);
-        LLVector3 moonDiffuse = LLVector3(psky->getMoonlightColor().mV);
+    LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
 
-        shader->uniform3fv(LLShaderMgr::SUNLIGHT_COLOR, sunDiffuse);
-        shader->uniform3fv(LLShaderMgr::MOONLIGHT_COLOR, moonDiffuse);
+    // TODO -- make these getters return vec3s
+    LLVector3 sunDiffuse = LLVector3(psky->getSunlightColor().mV);
+    LLVector3 moonDiffuse = LLVector3(psky->getMoonlightColor().mV);
 
-        shader->uniform3fv(LLShaderMgr::CLOUD_COLOR, LLVector3(psky->getCloudColor().mV));
-	}
-    
+    shader->uniform3fv(LLShaderMgr::SUNLIGHT_COLOR, sunDiffuse);
+    shader->uniform3fv(LLShaderMgr::MOONLIGHT_COLOR, moonDiffuse);
+
+    shader->uniform3fv(LLShaderMgr::CLOUD_COLOR, LLVector3(psky->getCloudColor().mV));
+
     shader = &((LLShaderUniforms*)ptarget)[LLGLSLShader::SG_ANY];
     shader->uniform1f(LLShaderMgr::SCENE_LIGHT_STRENGTH, mSceneLightStrength);
 
     LLColor3 ambient(getTotalAmbient());
 
     shader->uniform3fv(LLShaderMgr::AMBIENT, LLVector3(ambient.mV));
-    shader->uniform3fv(LLShaderMgr::AMBIENT_LINEAR, linearColor3v(getAmbientColor()/3.f)); // note magic number 3.f comes from SLIDER_SCALE_SUN_AMBIENT
-    shader->uniform3fv(LLShaderMgr::SUNLIGHT_LINEAR, linearColor3v(getSunlightColor()));
-    shader->uniform3fv(LLShaderMgr::MOONLIGHT_LINEAR,linearColor3v(getMoonlightColor()));
+
+    if (radiance_pass)
+    { // during an irradiance map update, disable ambient lighting (direct lighting only) and desaturate sky color (avoid tinting the world blue)
+        shader->uniform3fv(LLShaderMgr::AMBIENT_LINEAR, LLVector3::zero.mV);
+    }
+    else
+    {
+        shader->uniform3fv(LLShaderMgr::AMBIENT_LINEAR, linearColor3v(getAmbientColor() / 3.f)); // note magic number 3.f comes from SLIDER_SCALE_SUN_AMBIENT
+    }
+
+    shader->uniform3fv(LLShaderMgr::BLUE_HORIZON_LINEAR, linearColor3v(getBlueHorizon() / 2.f)); // note magic number of 2.f comes from SLIDER_SCALE_BLUE_HORIZON_DENSITY
+    shader->uniform3fv(LLShaderMgr::BLUE_DENSITY_LINEAR, linearColor3v(getBlueDensity() / 2.f));
+
+    shader->uniform3fv(LLShaderMgr::SUNLIGHT_LINEAR, linearColor3v(sunDiffuse));
+    shader->uniform3fv(LLShaderMgr::MOONLIGHT_LINEAR,linearColor3v(moonDiffuse));
 
     shader->uniform1f(LLShaderMgr::REFLECTION_PROBE_AMBIANCE, getTotalReflectionProbeAmbiance());
 
@@ -724,16 +739,14 @@ void LLSettingsVOSky::applySpecial(void *ptarget, bool force)
     shader->uniform1f(LLShaderMgr::SUN_MOON_GLOW_FACTOR, getSunMoonGlowFactor());
     shader->uniform1f(LLShaderMgr::DENSITY_MULTIPLIER, getDensityMultiplier());
     shader->uniform1f(LLShaderMgr::DISTANCE_MULTIPLIER, getDistanceMultiplier());
-    
+
+    shader->uniform1f(LLShaderMgr::HAZE_DENSITY_LINEAR, sRGBtoLinear(getHazeDensity()));
+
     F32 g             = getGamma();
     F32 display_gamma = gSavedSettings.getF32("RenderDeferredDisplayGamma");
 
     shader->uniform1f(LLShaderMgr::GAMMA, g);
     shader->uniform1f(LLShaderMgr::DISPLAY_GAMMA, display_gamma);
-
-    shader->uniform3fv(LLShaderMgr::BLUE_HORIZON_LINEAR, linearColor3v(getBlueHorizon()/2.f)); // note magic number of 2.f comes from SLIDER_SCALE_BLUE_HORIZON_DENSITY
-    shader->uniform3fv(LLShaderMgr::BLUE_DENSITY_LINEAR, linearColor3v(getBlueDensity()/2.f));
-    shader->uniform1f(LLShaderMgr::HAZE_DENSITY_LINEAR, sRGBtoLinear(getHazeDensity()));
 }
 
 LLSettingsSky::parammapping_t LLSettingsVOSky::getParameterMap() const

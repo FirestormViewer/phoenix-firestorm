@@ -1062,15 +1062,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 			gGL.setColorMask(true, true);
 			gPipeline.renderGeomDeferred(*LLViewerCamera::getInstance(), true);
-
-			//store this frame's modelview matrix for use
-			//when rendering next frame's occlusion queries
-			for (U32 i = 0; i < 16; i++)
-			{
-				gGLLastModelView[i] = gGLModelView[i];
-				gGLLastProjection[i] = gGLProjection[i];
-			}
-			stop_glerror();
 		}
 
 		{
@@ -1170,6 +1161,12 @@ void display_cube_face()
     }
 
     display_update_camera();
+
+    {
+        LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("Env Update");
+        // update all the sky/atmospheric/water settings
+        LLEnvironment::instance().update(LLViewerCamera::getInstance());
+    }
 
     LLSpatialGroup::sNoDelete = TRUE;
         
