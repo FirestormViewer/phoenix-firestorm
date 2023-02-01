@@ -2100,7 +2100,7 @@ set_source_files_properties(${viewer_XUI_FILES}
 
 list(APPEND viewer_SOURCE_FILES ${viewer_XUI_FILES})
 
-file(GLOB_RECURSE viewer_SHADER_FILES LIST_DIRECTORIES TRUE
+file(GLOB_RECURSE viewer_SHADER_FILES LIST_DIRECTORIES FALSE
     ${CMAKE_CURRENT_SOURCE_DIR}/app_settings/shaders/*.glsl)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/app_settings/shaders PREFIX "Shaders" FILES ${viewer_SHADER_FILES})
 set_source_files_properties(${viewer_SHADER_FILES} 
