@@ -1114,28 +1114,23 @@ void LLFloaterCompileQueue::finishLSLUpload(LLUUID itemId, LLUUID taskId, LLUUID
 
 // This is the callback after the script has been processed by preproc
 // static
-void LLFloaterCompileQueue::scriptPreprocComplete(const LLUUID& asset_id, LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_text)
+void LLFloaterCompileQueue::scriptPreprocComplete(LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_text)
 {
 	LL_INFOS() << "LLFloaterCompileQueue::scriptPreprocComplete()" << LL_ENDL;
 	if (!data)
 	{
 		return;
 	}
+
 	LLFloaterCompileQueue* queue = LLFloaterReg::findTypedInstance<LLFloaterCompileQueue>("compile_queue", data->mQueueID);
-	
 	if (queue)
 	{
-		std::string filename;
-		std::string uuid_str;
-		asset_id.toString(uuid_str);
-		filename = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,uuid_str) + llformat(".%s",LLAssetType::lookup(type));
-		
-		const bool is_running = true;
+		constexpr bool is_running{ true };
 		LLViewerObject* object = gObjectList.findObject(data->mTaskId);
 		if (object)
 		{
-			std::string scriptName = data->mItem->getName();
-			std::string url = object->getRegion()->getCapability("UpdateScriptTask");
+			const std::string scriptName = data->mItem->getName();
+			const std::string url = object->getRegion() ? object->getRegion()->getCapability("UpdateScriptTask") : std::string();
 			if (!url.empty())
 			{
 				queue->addProcessingMessage("CompileQueuePreprocessingComplete", LLSD().with("SCRIPT", scriptName));
@@ -1166,7 +1161,7 @@ void LLFloaterCompileQueue::scriptPreprocComplete(const LLUUID& asset_id, LLScri
 }
 
 // static
-void LLFloaterCompileQueue::scriptLogMessage(LLScriptQueueData* data, std::string message)
+void LLFloaterCompileQueue::scriptLogMessage(LLScriptQueueData* data, std::string_view message)
 {
 	if (!data)
 	{
@@ -1175,7 +1170,7 @@ void LLFloaterCompileQueue::scriptLogMessage(LLScriptQueueData* data, std::strin
 	LLFloaterCompileQueue* queue = LLFloaterReg::findTypedInstance<LLFloaterCompileQueue>("compile_queue", data->mQueueID);
 	if (queue)
 	{
-		queue->addStringMessage(message);
+		queue->addStringMessage(static_cast<std::string>(message));
 	}
 }
 // </FS:KC>

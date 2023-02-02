@@ -3472,24 +3472,45 @@ BOOL LLWindowWin32::getClientRectInScreenSpace( RECT* rectp )
 
 void LLWindowWin32::flashIcon(F32 seconds)
 {
-    if (mWindowHandle && (GetFocus() != mWindowHandle || GetForegroundWindow() != mWindowHandle))
-    {
-        mWindowThread->post([=]()
-            {
-                FLASHWINFO flash_info;
+    // <FS:Ansariel> FIRE-32105: Application icon flashes also while viewer has focus
+    //if (mWindowHandle && (GetFocus() != mWindowHandle || GetForegroundWindow() != mWindowHandle))
+    //{
+    //    mWindowThread->post([=]()
+    //        {
+    //            FLASHWINFO flash_info;
 
-                flash_info.cbSize = sizeof(FLASHWINFO);
-                flash_info.hwnd = mWindowHandle;
-                flash_info.dwFlags = FLASHW_TRAY;
-                // <FS:Ansariel> FIRE-23498: Tray icon flash functions randomly
-                //flash_info.uCount = UINT(seconds / ICON_FLASH_TIME);
-                //flash_info.dwTimeout = DWORD(1000.f * ICON_FLASH_TIME); // milliseconds
-                flash_info.uCount = UINT(ll_round(seconds / ICON_FLASH_TIME));
-                flash_info.dwTimeout = DWORD(ll_round(1000.f * ICON_FLASH_TIME)); // milliseconds
-                // </FS:Ansariel>
-                FlashWindowEx(&flash_info);
-            });
-    }
+    //            flash_info.cbSize = sizeof(FLASHWINFO);
+    //            flash_info.hwnd = mWindowHandle;
+    //            flash_info.dwFlags = FLASHW_TRAY;
+    //            // <FS:Ansariel> FIRE-23498: Tray icon flash functions randomly
+    //            //flash_info.uCount = UINT(seconds / ICON_FLASH_TIME);
+    //            //flash_info.dwTimeout = DWORD(1000.f * ICON_FLASH_TIME); // milliseconds
+    //            flash_info.uCount = UINT(ll_round(seconds / ICON_FLASH_TIME));
+    //            flash_info.dwTimeout = DWORD(ll_round(1000.f * ICON_FLASH_TIME)); // milliseconds
+    //            // </FS:Ansariel>
+    //            FlashWindowEx(&flash_info);
+    //        });
+    //}
+
+    mWindowThread->post([=]()
+    {
+        if (mWindowHandle && (GetFocus() != mWindowHandle || GetForegroundWindow() != mWindowHandle))
+        {
+            FLASHWINFO flash_info;
+
+            flash_info.cbSize = sizeof(FLASHWINFO);
+            flash_info.hwnd = mWindowHandle;
+            flash_info.dwFlags = FLASHW_TRAY;
+            // <FS:Ansariel> FIRE-23498: Tray icon flash functions randomly
+            //flash_info.uCount = UINT(seconds / ICON_FLASH_TIME);
+            //flash_info.dwTimeout = DWORD(1000.f * ICON_FLASH_TIME); // milliseconds
+            flash_info.uCount = UINT(ll_round(seconds / ICON_FLASH_TIME));
+            flash_info.dwTimeout = DWORD(ll_round(1000.f * ICON_FLASH_TIME)); // milliseconds
+            // </FS:Ansariel>
+            FlashWindowEx(&flash_info);
+        }
+    });
+    // </FS:Ansariel>
 }
 
 F32 LLWindowWin32::getGamma()

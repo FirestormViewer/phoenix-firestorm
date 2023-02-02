@@ -106,7 +106,7 @@ bool FSContactsFriendsMenu::enableContextMenuItem(const LLSD& userdata)
 	{
 		if (mUUIDs.size() == 1)
 		{
-			return (FSRadar::getInstance()->getEntry(mUUIDs.front()) != NULL);
+			return FSRadar::getInstance()->getEntry(mUUIDs.front()) != nullptr;
 		}
 		return false;
 	}
@@ -126,7 +126,7 @@ bool FSContactsFriendsMenu::enableContextMenuItem(const LLSD& userdata)
 	{
 		if (mUUIDs.size() == 1)
 		{
-			return (FSRadar::getInstance()->getEntry(mUUIDs.front()) != NULL);
+			return FSRadar::getInstance()->getEntry(mUUIDs.front()) != nullptr;
 		}
 		return false;
 	}
