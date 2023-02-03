@@ -67,7 +67,7 @@ namespace LLPerfStats
 // Note if changing these, they should correspond with the log range of the correpsonding sliders
     static constexpr U64 ART_UNLIMITED_NANOS{50000000};
     static constexpr U64 ART_MINIMUM_NANOS{100000};
-    static constexpr U64 ART_MIN_ADJUST_UP_NANOS{10000};
+    static constexpr U64 ART_MIN_ADJUST_UP_NANOS{5000};
     static constexpr U64 ART_MIN_ADJUST_DOWN_NANOS{10000}; 
 
     static constexpr F32 PREFERRED_DD{180};
@@ -84,6 +84,8 @@ namespace LLPerfStats
     extern std::atomic<U64> renderAvatarMaxART_ns;
     extern bool belowTargetFPS;
     extern U32 lastGlobalPrefChange;
+    extern U32 lastSleepedFrame;
+    extern U64 meanFrameTime;
     extern std::mutex bufferToggleLock;
 
     enum class ObjType_t{
@@ -156,6 +158,8 @@ namespace LLPerfStats
         U32 userTargetFPS{0};
         F32 userARTCutoffSliderValue{0};
         S32 userTargetReflections{0};
+        bool autoTuneTimeout{true};
+        bool vsyncEnabled{true};
 
         void updateNonImposters(U32 nv){nonImpostors=nv; tuningFlag |= NonImpostors;};
         void updateReflectionDetail(S32 nv){reflectionDetail=nv; tuningFlag |= ReflectionDetail;};
@@ -194,6 +198,7 @@ namespace LLPerfStats
         }
         static inline void setFocusAv(const LLUUID& avID){focusAv = avID;};
         static inline const LLUUID& getFocusAv(){return focusAv;};
+        static inline void setAutotuneInit(){autotuneInit = true;};
 		// <FS:Beq> We do not want to use lock based queues
         // static inline void send(StatsRecord && upd){StatsRecorder::getInstance().q.pushFront(std::move(upd));};
         // static void endFrame(){StatsRecorder::getInstance().q.pushFront(StatsRecord{StatType_t::RENDER_DONE, ObjType_t::OT_GENERAL, LLUUID::null, LLUUID::null, 0});};
@@ -231,6 +236,8 @@ namespace LLPerfStats
         StatsRecorder();
 
         static int countNearbyAvatars(S32 distance);
+        static U64 getMeanTotalFrameTime();
+        static void updateMeanFrameTime(U64 tot_frame_time_raw);
 // StatsArray is a uint64_t for each possible statistic type.
         using StatsArray    = std::array<uint64_t, static_cast<size_t>(LLPerfStats::StatType_t::STATS_COUNT)>;
         using StatsMap      = std::unordered_map<LLUUID, StatsArray, FSUUIDHash>; // <FS:Beq/>
@@ -239,6 +246,7 @@ namespace LLPerfStats
 
         static std::atomic<int> writeBuffer;
         static LLUUID focusAv;
+        static bool autotuneInit;
         static std::array<StatsTypeMatrix,2> statsDoubleBuffer;
         static std::array<StatsSummaryArray,2> max;
         static std::array<StatsSummaryArray,2> sum;

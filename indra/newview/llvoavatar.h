@@ -432,6 +432,8 @@ private:
     bool			mTooSlow{false};
     bool			mTooSlowWithoutShadows{false};
 
+    bool            mTuned{false};
+
 private:
 	LLViewerStats::PhaseMap mPhases;
 

@@ -29,7 +29,9 @@
 #include "llcontrol.h"
 #include "pipeline.h"
 #include "llagentcamera.h"
+#include "llviewerwindow.h"
 #include "llvoavatar.h"
+#include "llwindow.h"
 #include "llworld.h"
 #include <llthread.h>
 
@@ -51,15 +53,19 @@ namespace LLPerfStats
     std::atomic<U64> renderAvatarMaxART_ns{(U64)(ART_UNLIMITED_NANOS)}; // highest render time we'll allow without culling features
     bool belowTargetFPS{false};
     U32 lastGlobalPrefChange{0}; 
+    U32 lastSleepedFrame{0};
+    U64 meanFrameTime{0};
     std::mutex bufferToggleLock{};
 
     F64 cpu_hertz{0.0};
+    U32 vsync_max_fps{60};
 
     Tunables tunables;
 
     std::atomic<int> 	StatsRecorder::writeBuffer{0};
     bool 	            StatsRecorder::collectionEnabled{true};
     LLUUID              StatsRecorder::focusAv{LLUUID::null};
+    bool                StatsRecorder::autotuneInit{false};
 	std::array<StatsRecorder::StatsTypeMatrix,2>  StatsRecorder::statsDoubleBuffer{ {} };
     std::array<StatsRecorder::StatsSummaryArray,2> StatsRecorder::max{ {} };
     std::array<StatsRecorder::StatsSummaryArray,2> StatsRecorder::sum{ {} };
@@ -125,9 +131,23 @@ namespace LLPerfStats
         LLPerfStats::tunables.userImpostorDistanceTuningEnabled = gSavedSettings.getBOOL("AutoTuneImpostorByDistEnabled");
         LLPerfStats::tunables.userFPSTuningStrategy = gSavedSettings.getU32("TuningFPSStrategy");
         LLPerfStats::tunables.userTargetFPS = gSavedSettings.getU32("TargetFPS");
+        LLPerfStats::tunables.vsyncEnabled = gSavedSettings.getBOOL("RenderVSyncEnable");
         LLPerfStats::tunables.userTargetReflections = gSavedSettings.getS32("UserTargetReflections");
-        LLPerfStats::tunables.userAutoTuneEnabled = gSavedSettings.getBOOL("AutoTuneFPS");
-        LLPerfStats::tunables.userAutoTuneLock = gSavedSettings.getBOOL("AutoTuneLock");
+
+        LLPerfStats::tunables.userAutoTuneLock = gSavedSettings.getBOOL("AutoTuneLock") && gSavedSettings.getU32("KeepAutoTuneLock");
+
+        if(gSavedSettings.getBOOL("AutoTuneLock") && !gSavedSettings.getU32("KeepAutoTuneLock"))
+        {
+            gSavedSettings.setBOOL("AutoTuneLock", FALSE);
+        }
+
+        LLPerfStats::tunables.userAutoTuneEnabled = LLPerfStats::tunables.userAutoTuneLock;
+
+        if (LLPerfStats::tunables.userAutoTuneEnabled && !gSavedSettings.getBOOL("AutoTuneFPS"))
+        {
+            gSavedSettings.setBOOL("AutoTuneFPS", TRUE);
+        }
+
         // Note: The Max ART slider is logarithmic and thus we have an intermediate proxy value
         updateRenderCostLimitFromSettings();
         resetChanges();
@@ -139,7 +159,7 @@ namespace LLPerfStats
         // create a thread to consume from the queue
         tunables.initialiseFromSettings();
         LLPerfStats::cpu_hertz = (F64)LLTrace::BlockTimer::countsPerSecond();
-
+        LLPerfStats::vsync_max_fps = gViewerWindow->getWindow()->getRefreshRate();
         t.detach();
     }
 
@@ -245,7 +265,7 @@ namespace LLPerfStats
         }
 
         // and now adjust the proxy vars so that the main thread can adjust the visuals.
-        if(tunables.userAutoTuneEnabled)
+        if(autotuneInit && tunables.userAutoTuneEnabled)
         {
             updateAvatarParams();
         }
@@ -309,9 +329,69 @@ namespace LLPerfStats
         return positions.size();
 	}
 
+    const U32 NUM_PERIODS = 50;
+    void StatsRecorder::updateMeanFrameTime(U64 cur_frame_time_raw)
+    {
+        static std::deque<U64> frame_time_deque;
+        frame_time_deque.push_front(cur_frame_time_raw);
+        if (frame_time_deque.size() > NUM_PERIODS)
+        {
+            frame_time_deque.pop_back();
+        }
+        
+        std::vector<U64> buf(frame_time_deque.begin(), frame_time_deque.end());
+        std::sort(buf.begin(), buf.end());
+
+        LLPerfStats::meanFrameTime = (buf.size() % 2 == 0) ? (buf[buf.size() / 2 - 1] + buf[buf.size() / 2]) / 2 : buf[buf.size() / 2];
+    }
+    U64 StatsRecorder::getMeanTotalFrameTime()
+    {
+        return LLPerfStats::meanFrameTime;
+    }
+
     // static
     void StatsRecorder::updateAvatarParams()
     {
+        if(tunables.autoTuneTimeout)
+        {
+            LLPerfStats::lastSleepedFrame = gFrameCount;
+            tunables.autoTuneTimeout = false;
+            return;
+        }
+        // sleep time is basically forced sleep when window out of focus
+        auto tot_sleep_time_raw = LLPerfStats::StatsRecorder::getSceneStat(LLPerfStats::StatType_t::RENDER_SLEEP);
+        // similar to sleep time, induced by FPS limit
+        auto tot_limit_time_raw = LLPerfStats::StatsRecorder::getSceneStat(LLPerfStats::StatType_t::RENDER_FPSLIMIT);// <FS:Beq/> restore FPSLimit reporting
+
+
+        // the time spent this frame on the "doFrame" call. Treated as "tot time for frame"
+        auto tot_frame_time_raw = LLPerfStats::StatsRecorder::getSceneStat(LLPerfStats::StatType_t::RENDER_FRAME);
+
+        if( tot_sleep_time_raw != 0 )
+        {
+            // Note: we do not average sleep 
+            // if at some point we need to, the averaging will need to take this into account or 
+            // we forever think we're in the background due to residuals.
+            LL_DEBUGS() << "No tuning when not in focus" << LL_ENDL;
+            LLPerfStats::lastSleepedFrame = gFrameCount;
+            return;
+        }
+
+        U32 target_fps = tunables.vsyncEnabled ? std::min(LLPerfStats::vsync_max_fps, tunables.userTargetFPS) : tunables.userTargetFPS;
+
+        if(LLPerfStats::lastSleepedFrame != 0)
+        {
+            // wait a short time after viewer regains focus
+            if((gFrameCount - LLPerfStats::lastSleepedFrame) > target_fps * 5)
+            {
+                LLPerfStats::lastSleepedFrame = 0;
+            }
+            else
+            {
+                return;
+            }
+        }
+        updateMeanFrameTime(tot_frame_time_raw);
 
         if(tunables.userImpostorDistanceTuningEnabled)
         {
@@ -329,37 +409,30 @@ namespace LLPerfStats
         // Is our target frame time lower than current? If so we need to take action to reduce draw overheads.
         // cumulative avatar time (includes idle processing, attachments and base av)
         auto tot_avatar_time_raw = LLPerfStats::StatsRecorder::getSum(ObjType_t::OT_AVATAR, LLPerfStats::StatType_t::RENDER_COMBINED);
-        // sleep time is basically forced sleep when window out of focus 
-        auto tot_sleep_time_raw = LLPerfStats::StatsRecorder::getSceneStat(LLPerfStats::StatType_t::RENDER_SLEEP);
-        // similar to sleep time, induced by FPS limit
-        auto tot_limit_time_raw = LLPerfStats::StatsRecorder::getSceneStat(LLPerfStats::StatType_t::RENDER_FPSLIMIT);// <FS:Beq/> restore FPSLimit reporting
-
-
-        // the time spent this frame on the "doFrame" call. Treated as "tot time for frame"
-        auto tot_frame_time_raw = LLPerfStats::StatsRecorder::getSceneStat(LLPerfStats::StatType_t::RENDER_FRAME);
-
-        if( tot_sleep_time_raw != 0 )
-        {
-            // Note: we do not average sleep 
-            // if at some point we need to, the averaging will need to take this into account or 
-            // we forever think we're in the background due to residuals.
-            LL_DEBUGS() << "No tuning when not in focus" << LL_ENDL;
-            return;
-        }
 
         // The frametime budget we have based on the target FPS selected
-        auto target_frame_time_raw = (U64)llround(LLPerfStats::cpu_hertz/(tunables.userTargetFPS==0?1:tunables.userTargetFPS));
+        auto target_frame_time_raw = (U64)llround(LLPerfStats::cpu_hertz / (target_fps == 0 ? 1 : target_fps));
         // LL_INFOS() << "Effective FPS(raw):" << tot_frame_time_raw << " Target:" << target_frame_time_raw << LL_ENDL;
         auto inferredFPS{1000/(U32)std::max(raw_to_ms(tot_frame_time_raw),1.0)};
-        U32 settingsChangeFrequency{inferredFPS > 25?inferredFPS:25};
+        U32 settingsChangeFrequency{inferredFPS > 50?inferredFPS:50};
         if( tot_limit_time_raw != 0)// <FS:Beq/> restore FPSLimit reporting
         {
             // This could be problematic.
             tot_frame_time_raw -= tot_limit_time_raw;
         }// <FS:Beq/> restore FPSLimit reporting
+        
+        F64 time_buf = target_frame_time_raw * 0.1;
+
         // 1) Is the target frame time lower than current?
-        if( target_frame_time_raw <= tot_frame_time_raw )
+        if ((target_frame_time_raw + time_buf) <= tot_frame_time_raw)
         {
+            if (target_frame_time_raw - time_buf >= getMeanTotalFrameTime())
+            {
+                belowTargetFPS = false;
+                LLPerfStats::lastGlobalPrefChange = gFrameCount;
+                return;
+            }
+
             if(belowTargetFPS == false)
             {
                 // this is the first frame under. hold fire to add a little hysteresis
@@ -440,7 +513,8 @@ namespace LLPerfStats
             }
             // LL_DEBUGS() << "AUTO_TUNE: Target frame time:"<< LLPerfStats::raw_to_us(target_frame_time_raw) << "usecs (non_avatar is " << LLPerfStats::raw_to_us(non_avatar_time_raw) << "usecs) Max cost limited=" << renderAvatarMaxART_ns << LL_ENDL;
         }
-        else if( LLPerfStats::raw_to_ns(target_frame_time_raw) > (LLPerfStats::raw_to_ns(tot_frame_time_raw) + renderAvatarMaxART_ns) )
+        else if(( LLPerfStats::raw_to_ns(target_frame_time_raw) > (LLPerfStats::raw_to_ns(tot_frame_time_raw) + renderAvatarMaxART_ns) ) ||
+                 (tunables.vsyncEnabled && (target_fps == LLPerfStats::vsync_max_fps) && (target_frame_time_raw > getMeanTotalFrameTime())))
         {
             if(belowTargetFPS == true)
             {
@@ -458,10 +532,11 @@ namespace LLPerfStats
                     // turn off if we are not locked.
                     tunables.updateUserAutoTuneEnabled(false);
                 }
-                if( LLPerfStats::tunedAvatars > 0 )
+                if(renderAvatarMaxART_ns != 0 && LLPerfStats::tunedAvatars > 0 )
                 {
                     // if we have more time to spare let's shift up little in the hope we'll restore an avatar.
-                    renderAvatarMaxART_ns += LLPerfStats::ART_MIN_ADJUST_UP_NANOS;
+                    U64 up_step = LLPerfStats::tunedAvatars > 2 ? LLPerfStats::ART_MIN_ADJUST_UP_NANOS : LLPerfStats::ART_MIN_ADJUST_UP_NANOS * 2;
+                    renderAvatarMaxART_ns += up_step;
                     tunables.updateSettingsFromRenderCostLimit();
                     return;
                 }

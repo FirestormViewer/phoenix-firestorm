@@ -3090,7 +3090,9 @@ bool idle_startup()
 		// <FS:Ansariel> Disable this in favor of FS performance floater customization
         //if (gAgent.isFirstLogin())
         //{
-        //    gSavedSettings.setBOOL("AutoFPS", TRUE);
+        //    gSavedSettings.setBOOL("AutoTuneLock", TRUE);
+        //    gSavedSettings.setBOOL("KeepAutoTuneLock", TRUE);
+        //    gSavedSettings.setBOOL("AutoTuneFPS", TRUE);
         //}
 		// </FS:Ansariel>
         set_startup_status(1.0, "", "");
@@ -3219,6 +3221,8 @@ bool idle_startup()
 			"");
 
 		LLUIUsage::instance().clear();
+
+        LLPerfStats::StatsRecorder::setAutotuneInit();
 
 		// <FS:Techwolf Lupindo> FIRE-6643 Display MOTD when login screens are disabled
 		if (gSavedSettings.getBOOL("FSDisableLoginScreens"))

@@ -61,11 +61,16 @@ private:
     void setFPSText();
 
     void onClickAdvanced();
+    void onClickDefaults();
     void onChangeQuality(const LLSD& data);
     void onClickHideAvatars();
     void onClickExceptions();
     void onClickShadows();
     void onClickAdvancedLighting();
+
+    void startAutotune();
+    void stopAutotune();
+    void updateAutotuneCtrls(bool autotune_enabled);
 
     void updateMaxRenderTime();
 
@@ -80,6 +85,9 @@ private:
     LLNameListCtrl* mHUDList;
     LLNameListCtrl* mObjectList;
     LLNameListCtrl* mNearbyList;
+
+    LLButton* mStartAutotuneBtn;
+    LLButton* mStopAutotuneBtn;
 
     LLListContextMenu* mContextMenu;
 

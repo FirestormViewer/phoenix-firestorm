@@ -1378,6 +1378,13 @@ void LLFloaterPreference::setHardwareDefaults()
 	//	saveSettings(); // save here to be able to return to the previous preset by Cancel
 	//}
 	// </FS:Ansariel>
+    setRecommendedSettings();
+}
+
+void LLFloaterPreference::setRecommendedSettings()
+{
+    resetAutotuneSettings();
+    gSavedSettings.getControl("RenderVSyncEnable")->resetToDefault(true);
 
 	LLFeatureManager::getInstance()->applyRecommendedSettings();
 
@@ -1400,6 +1407,28 @@ void LLFloaterPreference::setHardwareDefaults()
 			panel->setHardwareDefaults();
 		}
 	}
+}
+
+void LLFloaterPreference::resetAutotuneSettings()
+{
+    gSavedSettings.setBOOL("AutoTuneFPS", FALSE);
+
+    const std::string autotune_settings[] = {
+        "AutoTuneLock",
+        "KeepAutoTuneLock",
+        "TargetFPS",
+        "TuningFPSStrategy",
+        "AutoTuneImpostorByDistEnabled",
+        "AutoTuneImpostorFarAwayDistance" ,
+        "AutoTuneRenderFarClipMin",
+        "AutoTuneRenderFarClipTarget",
+        "RenderAvatarMaxART"
+    };
+
+    for (auto it : autotune_settings)
+    {
+        gSavedSettings.getControl(it)->resetToDefault(true);
+    }
 }
 
 void LLFloaterPreference::getControlNames(std::vector<std::string>& names)

@@ -11217,11 +11217,9 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar, bool preview_avatar)
                               << " is " << ( too_complex ? "" : "not ") << "too complex"
                               << LL_ENDL;
 
-    bool too_slow = avatar->isTooSlowWithoutShadows();// <FS:Beq/> only if we really have to do we imposter.
-
     pushRenderTypeMask();
 
-    if ( !too_slow && ( visually_muted || too_complex ) )
+    if (visually_muted || too_complex)
     {
         // only show jelly doll geometry
 		andRenderTypeMask(LLPipeline::RENDER_TYPE_AVATAR,

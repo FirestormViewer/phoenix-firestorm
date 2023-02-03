@@ -297,6 +297,9 @@ public:
 	// <FS:Zi> Support preferences search SLURLs
 	void onCopySearch();
 
+    void setRecommendedSettings();
+    void resetAutotuneSettings();
+
 private:
 
 	void onDeleteTranscripts();
