@@ -72,16 +72,16 @@ NSOpenPanel *init_panel(const std::vector<std::string>* allowed_types, unsigned 
     return panel;
 }
 
-std::vector<std::string>* doLoadDialog(const std::vector<std::string>* allowed_types, 
+std::unique_ptr<std::vector<std::string>> doLoadDialog(const std::vector<std::string>* allowed_types, 
                  unsigned int flags)
 {
+    std::unique_ptr<std::vector<std::string>> outfiles;
+    
     int result;
     
     NSOpenPanel *panel = init_panel(allowed_types,flags);
     
     result = [panel runModal];
-    
-    std::vector<std::string>* outfiles = NULL;
     
     if (result == NSOKButton) 
     {
@@ -90,7 +90,7 @@ std::vector<std::string>* doLoadDialog(const std::vector<std::string>* allowed_t
         
         if (count > 0)
         {
-            outfiles = new std::vector<std::string>;
+            outfiles.reset(new std::vector<std::string>);
         }
         
         for (i=0; i<count; i++) {
@@ -143,12 +143,14 @@ void doLoadDialogModeless(const std::vector<std::string>* allowed_types,
         }];
 }
 
-std::string* doSaveDialog(const std::string* file, 
+std::unique_ptr<std::string> doSaveDialog(const std::string* file, 
                   const std::string* type,
                   const std::string* creator,
                   const std::string* extension,
                   unsigned int flags)
 {
+    std::unique_ptr<std::string> outfile;
+
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; // <FS> Fix mem leak by Cinder Roxley
     NSSavePanel *panel = [NSSavePanel savePanel]; 
     
@@ -161,17 +163,16 @@ std::string* doSaveDialog(const std::string* file,
     [panel setAllowedFileTypes:fileType];
     NSString *fileName = [NSString stringWithCString:file->c_str() encoding:[NSString defaultCStringEncoding]];
     
-    std::string *outfile = NULL;
     NSURL* url = [NSURL fileURLWithPath:fileName];
     [panel setNameFieldStringValue: fileName];
     [panel setDirectoryURL: url];
-	[panel setNameFieldStringValue: fileName];	// <FS:CR> Populate filename in the save panel
+    [panel setNameFieldStringValue: fileName]; // <FS:CR> Populate filename in the save panel
     if([panel runModal] == 
        NSFileHandlingPanelOKButton) 
     {
         NSURL* url = [panel URL];
         NSString* p = [url path];
-        outfile = new std::string( [p UTF8String] );
+        outfile.reset(new std::string([p UTF8String]));
         // write the file 
     }
     [pool release]; // <FS> Fix mem leak by Cinder Roxley

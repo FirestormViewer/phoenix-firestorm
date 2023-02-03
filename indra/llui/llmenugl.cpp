@@ -4125,12 +4125,7 @@ void LLTearOffMenu::closeTearOff()
 
 LLContextMenuBranch::LLContextMenuBranch(const LLContextMenuBranch::Params& p) 
 :	LLMenuItemGL(p)
-	//mBranch( p.branch()->getHandle() ) // <FS> Context menu memory leak fix by Rye Mutt
 {
-	// <FS> Context menu memory leak fix by Rye Mutt
-	//mBranch.get()->hide();
-	//mBranch.get()->setParentMenuItem(this);
-	// </FS>
 	LLContextMenu* branch = static_cast<LLContextMenu*>(p.branch);
 	if (branch)
 	{
@@ -4140,7 +4135,6 @@ LLContextMenuBranch::LLContextMenuBranch(const LLContextMenuBranch::Params& p)
 	}
 }
 
-// <FS> Context menu memory leak fix by Rye Mutt
 LLContextMenuBranch::~LLContextMenuBranch()
 {
 	if (mBranch.get())
@@ -4148,30 +4142,21 @@ LLContextMenuBranch::~LLContextMenuBranch()
 		mBranch.get()->die();
 	}
 }
-// </FS>
 
 // called to rebuild the draw label
 void LLContextMenuBranch::buildDrawLabel( void )
 {
-	// <FS> Context menu memory leak fix by Rye Mutt
 	auto menu = getBranch();
 	if (menu)
-	// </FS>
 	{
 		// default enablement is this -- if any of the subitems are
 		// enabled, this item is enabled. JC
-		// <FS> Context menu memory leak fix by Rye Mutt
-		//U32 sub_count = mBranch.get()->getItemCount();
 		U32 sub_count = menu->getItemCount();
-		// </FS>
 		U32 i;
 		BOOL any_enabled = FALSE;
 		for (i = 0; i < sub_count; i++)
 		{
-			// <FS> Context menu memory leak fix by Rye Mutt
-			//LLMenuItemGL* item = mBranch.get()->getItem(i);
 			LLMenuItemGL* item = menu->getItem(i);
-			// </FS>
 			item->buildDrawLabel();
 			if (item->getEnabled() && !item->getDrawTextDisabled() )
 			{
@@ -4193,28 +4178,18 @@ void LLContextMenuBranch::buildDrawLabel( void )
 
 void	LLContextMenuBranch::showSubMenu()
 {
-	// <FS> Context menu memory leak fix by Rye Mutt
-	//LLMenuItemGL* menu_item = mBranch.get()->getParentMenuItem();
-	//if (menu_item != NULL && menu_item->getVisible())
-	//{
-	//	S32 center_x;
-	//	S32 center_y;
-	//	localPointToScreen(getRect().getWidth(), getRect().getHeight() , &center_x, &center_y);
-	//	mBranch.get()->show(center_x, center_y);
-	//}
 	auto menu = getBranch();
-	if (menu)
+	if(menu)
 	{
 		LLMenuItemGL* menu_item = menu->getParentMenuItem();
 		if (menu_item != NULL && menu_item->getVisible())
 		{
 			S32 center_x;
 			S32 center_y;
-			localPointToScreen(getRect().getWidth(), getRect().getHeight() , &center_x, &center_y);
+			localPointToScreen(getRect().getWidth(), getRect().getHeight(), &center_x, &center_y);
 			menu->show(center_x, center_y);
 		}
 	}
-	// </FS>
 }
 
 // onCommit() - do the primary funcationality of the menu item.
@@ -4227,15 +4202,6 @@ void LLContextMenuBranch::setHighlight( BOOL highlight )
 {
 	if (highlight == getHighlight()) return;
 	LLMenuItemGL::setHighlight(highlight);
-	// <FS> Context menu memory leak fix by Rye Mutt
-	//if( highlight )
-	//{
-	//	showSubMenu();
-	//}
-	//else
-	//{
-	//	mBranch.get()->hide();
-	//}
 	auto menu = getBranch();
 	if (menu)
 	{
@@ -4248,7 +4214,6 @@ void LLContextMenuBranch::setHighlight( BOOL highlight )
 			menu->hide();
 		}
 	}
-	// </FS>
 }
 
 

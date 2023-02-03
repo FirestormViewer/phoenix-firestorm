@@ -81,6 +81,7 @@
 #include "llviewernetwork.h" // <FS:Beq> For LLGridManager
 
 #include "fsdata.h"
+#include "fsradar.h"        // <FS:Zi> Update notes in radar when edited
 #include "llviewermenu.h"
 
 static LLPanelInjector<LLPanelProfileSecondLife> t_panel_profile_secondlife("panel_profile_secondlife");
@@ -495,6 +496,30 @@ class LLAgentHandler : public LLCommandHandler
 public:
 	// requires trusted browser to trigger
 	LLAgentHandler() : LLCommandHandler("agent", UNTRUSTED_THROTTLE) { }
+
+    virtual bool canHandleUntrusted(
+        const LLSD& params,
+        const LLSD& query_map,
+        LLMediaCtrl* web,
+        const std::string& nav_type)
+    {
+        if (params.size() < 2)
+        {
+            return true; // don't block, will fail later
+        }
+
+        if (nav_type == NAV_TYPE_CLICKED)
+        {
+            return true;
+        }
+
+        const std::string verb = params[1].asString();
+        if (verb == "about" || verb == "inspect" || verb == "reportAbuse")
+        {
+            return true;
+        }
+        return false;
+    }
 
 	bool handle(const LLSD& params, const LLSD& query_map,
 		LLMediaCtrl* web)
@@ -1237,7 +1262,6 @@ void LLPanelProfileSecondLife::resetData()
 
 void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avatar_data)
 {
-    LLUUID avatar_id = getAvatarId();
     const LLRelationship* relationship = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
     if ((relationship != NULL || gAgent.isGodlike()) && !getSelfProfile())
     {
@@ -1267,7 +1291,7 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
 #ifdef OPENSIM
     if (LLGridManager::instance().isInOpenSim())
     {
-        LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", avatar_id));
+        LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", getAvatarId()));
         if (!floater_profile)
         {
             // floater is dead, so panels are dead as well
@@ -1592,6 +1616,8 @@ void LLPanelProfileSecondLife::fillRightsData()
 void LLPanelProfileSecondLife::fillAgeData(const LLDate &born_on)
 {
     // <FS:Ansariel> Fix LL UI/UX design accident
+    //// Date from server comes already converted to stl timezone,
+    //// so display it as an UTC + 0
     //std::string name_and_date = getString("date_format");
     //LLSD args_name;
     //args_name["datetime"] = (S32)born_on.secondsSinceEpoch();
@@ -3144,6 +3170,8 @@ void LLPanelProfileNotes::onSaveNotesChanges()
     {
         LL_WARNS("AvatarProperties") << "Failed to update profile data, no cap found" << LL_ENDL;
     }
+
+    FSRadar::getInstance()->updateNotes(getAvatarId(), mCurrentNotes);     // <FS:Zi> Update notes in radar when edited
 
     mSaveChanges->setEnabled(FALSE);
     mDiscardChanges->setEnabled(FALSE);

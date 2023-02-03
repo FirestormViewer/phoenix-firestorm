@@ -39,12 +39,12 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	mUserName(LLStringUtil::null),
 	mDisplayName(LLStringUtil::null),
 	mRange(0.f),
-	mFirstSeen(time(NULL)),
+	mFirstSeen(time(nullptr)),
 	mGlobalPos(LLVector3d(0.0, 0.0, 0.0)),
 	mRegion(LLUUID::null),
 	mStatus(0),
 	mZOffset(0.f),
-	mLastZOffsetTime(time(NULL)),
+	mLastZOffsetTime(time(nullptr)),
 	mAge(-1),
 	mIsLinden(false),
 	mIgnore(false),
@@ -126,8 +126,7 @@ void FSRadarEntry::processProperties(void* data, EAvatarProcessorType type)
 			LLAvatarNotes* avatar_notes = static_cast<LLAvatarNotes*>(data);
 			if (avatar_notes && avatar_notes->agent_id == gAgentID && avatar_notes->target_id == mID && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 			{
-				mNotes = avatar_notes->notes;
-				LLStringUtil::trim(mNotes);
+				setNotes(avatar_notes->notes);
 			}
 		}
 	}
@@ -190,4 +189,10 @@ void FSRadarEntry::checkAge()
 	{
 		mAgeAlertPerformed = true;
 	}
+}
+
+void FSRadarEntry::setNotes(std::string_view notes)
+{
+	mNotes = notes;
+	LLStringUtil::trim(mNotes);
 }

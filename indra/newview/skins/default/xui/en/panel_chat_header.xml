@@ -16,6 +16,7 @@
      right="-120"
      name="header_ls"
      layout="topleft"
+     orientation="horizontal"
      follows="top|left|right"
      animate="false">
         <layout_panel

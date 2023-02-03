@@ -422,9 +422,6 @@ protected:
 
 	LLHandle<LLContextMenu> mContextMenuHandle;
 
-	// <FS:Ansariel> Delay context menu initialization if LLMenuGL::sMenuContainer is still NULL
-	bool		mDelayedInit;
-
 private:
 	// Instances that by default point to the statics but can be overidden in XML.
 	LLPointer<LLUIImage> mBgImage;

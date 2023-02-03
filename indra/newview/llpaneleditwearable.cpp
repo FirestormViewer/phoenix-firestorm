@@ -1892,7 +1892,7 @@ void LLPanelEditWearable::onClickedImportBtnCallback(const std::vector<std::stri
 class LLMetricSystemHandler : public LLCommandHandler
 {
 public:
-        LLMetricSystemHandler() : LLCommandHandler("metricsystem", UNTRUSTED_THROTTLE) { }
+        LLMetricSystemHandler() : LLCommandHandler("metricsystem", UNTRUSTED_CLICK_ONLY) { }
 
         bool handle(const LLSD& params, const LLSD& query_map, LLMediaCtrl* web)
         {
