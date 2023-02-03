@@ -27,32 +27,18 @@
 
 /*[EXTRA_CODE_HERE]*/
 
-#ifdef DEFINE_GL_FRAGCOLOR
 out vec4 frag_color;
-#else
-#define frag_color gl_FragColor
-#endif
 
-uniform sampler2D glowMap;
-uniform sampler2D screenMap;
-uniform vec3 exo_vignette;
+uniform sampler2D emissiveRect;
+uniform sampler2D diffuseRect;
+uniform sampler2D depthMap;
 
-VARYING vec2 vary_texcoord0;
-VARYING vec2 vary_texcoord1;
-
-float saturate(float val)
-{
-	return clamp(val, 0, 1);
-}
+in vec2 tc;
 
 void main() 
 {
-	vec4 diff = texture2D(screenMap, vary_texcoord1.xy) + texture2D(glowMap, vary_texcoord0.xy);
-	if (exo_vignette.x > 0)
-	{
-		vec2 tc = vary_texcoord0.xy - 0.5f;
-		float vignette = 1 - dot(tc, tc);
-		diff.rgb *= saturate(pow(mix(1, vignette * vignette * vignette * vignette * exo_vignette.z, saturate(exo_vignette.x)), exo_vignette.y));
-	}
-	frag_color = diff;
+	frag_color = texture2D(emissiveRect, tc) +
+					texture2D(diffuseRect, tc);
+
+    gl_FragDepth = texture(depthMap, tc).r;
 }

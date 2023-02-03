@@ -680,7 +680,6 @@ public:
         LLRenderTarget			deferredScreen;
         LLRenderTarget			fxaaBuffer;
         LLRenderTarget			edgeMap;
-        LLRenderTarget			deferredDepth;
         LLRenderTarget			deferredLight;
 
         //sun shadow map
@@ -1016,13 +1015,10 @@ public:
 	static F32 RenderGlowStrength;
 	static bool RenderDepthOfField;
 	static bool RenderDepthOfFieldInEditMode;
-	//<FS:TS> FIRE-16251: Depth of Field does not work underwater
-	static bool FSRenderDepthOfFieldUnderwater;
-	//</FS:TS> FIRE-16251
 	// <FS:Beq> FIRE-16728
 	static bool FSFocusPointLocked;
 	static bool FSFocusPointFollowsPointer;
-	// </FS:Beq>	
+	// </FS:Beq>
 	static F32 CameraFocusTransitionTime;
 	static F32 CameraFNumber;
 	static F32 CameraFocalLength;

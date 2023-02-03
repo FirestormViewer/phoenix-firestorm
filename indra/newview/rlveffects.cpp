@@ -356,11 +356,12 @@ void RlvSphereEffect::renderPass(LLGLSLShader* pShader, const LLShaderEffectPara
 		gGL.getTexUnit(nDiffuseChannel)->setTextureFilteringOption(LLTexUnit::TFO_POINT);
 	}
 
-	S32 nDepthChannel = pShader->enableTexture(LLShaderMgr::DEFERRED_DEPTH, gPipeline.mRT->deferredDepth.getUsage());
-	if (nDepthChannel > -1)
-	{
-		gGL.getTexUnit(nDepthChannel)->bind(&gPipeline.mRT->deferredDepth, TRUE);
-	}
+	// KITTYFIXME
+	//S32 nDepthChannel = pShader->enableTexture(LLShaderMgr::DEFERRED_DEPTH, gPipeline.mRT->deferredDepth.getUsage());
+	//if (nDepthChannel > -1)
+	//{
+	//	gGL.getTexUnit(nDepthChannel)->bind(&gPipeline.mRT->deferredDepth, TRUE);
+	//}
 
 	gGL.matrixMode(LLRender::MM_PROJECTION);
 	gGL.pushMatrix();
@@ -386,7 +387,7 @@ void RlvSphereEffect::renderPass(LLGLSLShader* pShader, const LLShaderEffectPara
 	gGL.popMatrix();
 
 	pShader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, pParams->m_pSrcBuffer->getUsage());
-	pShader->disableTexture(LLShaderMgr::DEFERRED_DEPTH, gPipeline.mRT->deferredDepth.getUsage());
+	//pShader->disableTexture(LLShaderMgr::DEFERRED_DEPTH, gPipeline.mRT->deferredDepth.getUsage()); // KITTYFIXME
 
 	if (pParams->m_pDstBuffer)
 	{

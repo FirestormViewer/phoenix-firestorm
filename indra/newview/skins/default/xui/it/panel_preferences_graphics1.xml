@@ -167,7 +167,6 @@
 		<panel label="Profondità di Campo" name="DOF panel">
 			<check_box label="Abilita Profondità di Campo (PdC: sfoca la vista tranne che nella direzione della camera)" name="UseDoF"/>
 			<check_box label="Abilita in modalità Costruzione" name="RenderDepthOfFieldInEditMode"/>
-			<check_box label="Abilita sott'acqua" name="FSRenderDoFUnderwater"/>
 			<check_box label="La messa a fuoco della PdC segue il cursore" name="FSFocusPointFollowsPointer" tool_tip="La messa a fuoco della profondità di campo (PdC) seguirà il tuo mouse, questo comportamento corrisponde a quello visto quando si utilizza flycam. Utilizzare in combinazione con il blocco della messa a fuoco PdC." />
 			<slider label="F-Number Camera" name="CameraFNum" tool_tip="Il valore F è un valore della profondità di campo."/>
 			<slider label="Lunghezza focale (mm):" name="CameraFocal" tool_tip="A che distanza avviene la messa a fuoco (in millimetri)."/>

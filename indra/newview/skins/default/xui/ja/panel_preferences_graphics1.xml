@@ -227,7 +227,6 @@
 	
 		<check_box label="被写体深度を利用する（この設定をすると、カメラのフォーカスが当たっていない部分がぼやけます。）" name="UseDoF" />
 		<check_box label="編集モード中でも有効にする" name="RenderDepthOfFieldInEditMode" />
-		<check_box label="水中でも有効にする" name="FSRenderDoFUnderwater" />
 		<check_box label="DOF フォーカスがポインタに追随" name="FSFocusPointFollowsPointer" tool_tip="被写界深度（DOF）のフォーカスが、マウスを追いかけるようになります。この動きはフライカムを使用している時に見られるものに対応しています。「DOF フォーカスのロック」機能と合わせてお使い下さい。" />
         <slider label="カメラのF値（絞り）：" name="CameraFNum" tool_tip="DOF効果を得るためのカメラのF値（絞り）" />
         <slider label="カメラの焦点距離（mm）：" name="CameraFocal" tool_tip="DOF効果を得るための焦点距離（単位はミリ）" />

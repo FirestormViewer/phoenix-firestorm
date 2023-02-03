@@ -8,7 +8,6 @@
 		<string>CameraFNumber</string>
 		<string>FramePerSecondLimit</string>
 		<string>FSLimitFramerate</string>
-		<string>FSRenderDoFUnderwater</string>
 		<string>FSRenderVignette</string>
 		<string>FullScreen</string>
 		<string>RenderAnisotropic</string>
@@ -33,7 +32,9 @@
 		<string>RenderLocalLights</string>
 		<string>RenderMaxPartCount</string>
 		<string>RenderQualityPerformance</string>
+		<string>RenderReflectionsEnabled</string>
 		<string>RenderReflectionProbeDetail</string>
+		<string>RenderScreenSpaceReflections</string>
 		<string>RenderShaderLightingMaxLevel</string>
 		<string>RenderShadowDetail</string>
 		<string>RenderShadowResolutionScale</string>
@@ -45,6 +46,7 @@
 		<string>RenderUnloadedAvatar</string>
 		<string>RenderUseStreamVBO</string>
 		<string>RenderVBOEnable</string>
+		<string>RenderVSyncEnable</string>
 		<string>RenderVolumeLODFactor</string>
 		<string>RenderWaterRefResolution</string>
 		<string>TextureDiscardLevel</string>

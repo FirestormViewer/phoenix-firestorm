@@ -718,11 +718,6 @@ BOOL LLSpatialGroup::changeLOD()
        
 			return TRUE;
 		}
-
-		if (mDistance > mRadius*2.f)
-		{
-			return FALSE;
-		}
 	}
 	
 	if (needsUpdate())
