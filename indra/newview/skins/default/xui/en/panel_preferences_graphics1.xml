@@ -30,6 +30,28 @@
      follows="all"
      label="General"
      name="General" >
+  <text
+    follows="top|left|right"
+    height="16"
+    layout="topleft"
+    left="5"
+    name="preset_label"
+    top="5"
+    width="70">
+      Preset in use:
+  </text>
+
+  <text
+    follows="top|left|right"
+    height="16"
+    layout="topleft"
+    left_pad="10"
+    name="preset_text"
+    top="5"
+    width="120">
+      (None)
+  </text>
+
       <text
        type="string"
        length="1"
@@ -298,6 +320,44 @@
           <check_box.commit_callback
          function="Pref.RenderOptionUpdate" />
         </check_box>
+
+        <text
+         type="string"
+         length="1"
+         top_pad="4"
+         follows="top|left"
+         height="12"
+         width="110"
+         word_wrap="true"
+         layout="topleft"
+         left_delta="-5"
+         name="shadows_label">
+          Shadows:
+        </text>
+        <combo_box
+         control_name="RenderShadowDetail"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="ShadowDetail"
+         width="150">
+          <combo_box.commit_callback
+         function="Pref.RenderOptionUpdate" />
+          <combo_box.item
+           label="None"
+           name="0"
+           value="0"/>
+          <combo_box.item
+           label="Sun/Moon"
+           name="1"
+           value="1"/>
+          <combo_box.item
+           label="Sun/Moon + Projectors"
+           name="2"
+           value="2"/>
+        </combo_box>
+
         <text
          type="string"
          length="1"
@@ -548,19 +608,20 @@
          top_pad="5"
          width="297"/>
 
-  <button
-  height="23"
-  label="Automatic adjustments settings"
-  layout="topleft"
-  left="30"
-  name="AutoAdjustmentsButton"
-  top_delta="30"
-  width="200">
-    <button.commit_callback
-      function="Pref.AutoAdjustments"/>
-  </button>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="200"
+         name="MeshDetailText"
+         top_pad="10"
+         width="400">
+          Level of Detail (LOD) Distance Factors:
+        </text>
 
-         <slider
+        <slider
          control_name="RenderVolumeLODFactor"
          tool_tip="Controls when lower-detail objects can be used to reduce rendering cost. Higher values cause lag, use with care."
          follows="left|top"
