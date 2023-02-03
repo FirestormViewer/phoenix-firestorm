@@ -115,6 +115,9 @@ if(WINDOWS)
     elseif (MSVC_VERSION GREATER_EQUAL 1920 AND MSVC_VERSION LESS 1930) # Visual Studio 2019
         set(MSVC_VER 140)
         set(MSVC_TOOLSET_VER 142)
+    elseif (MSVC_VERSION GREATER_EQUAL 1930 AND MSVC_VERSION LESS 1940) # Visual Studio 2022
+        set(MSVC_VER 140)
+        set(MSVC_TOOLSET_VER 143)
     else (MSVC80)
         MESSAGE(WARNING "New MSVC_VERSION ${MSVC_VERSION} of MSVC: adapt Copy3rdPartyLibs.cmake")
     endif (MSVC80)
@@ -250,11 +253,11 @@ elseif(LINUX)
         ${EXPAT_COPY}
         libhunspell-1.3.so.0.0.0
         libopenal.so
-        #libopenjpeg.so
+        #libopenjp2.so
         libuuid.so.16
         libuuid.so.16.0.22
-        libfontconfig.so.1.10.1
-        libfontconfig.so.1
+        #libfontconfig.so.1.10.1 # <FS:PC> fontconfig and freetype should be taken from the
+        #libfontconfig.so.1      #         user's system, and not be packaged with the viewer
         libaprutil-1.so.0
         libapr-1.so.0
        )

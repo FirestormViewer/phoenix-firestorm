@@ -723,8 +723,7 @@ void LLAvatarTracker::processChange(LLMessageSystem* msg)
 		{
 			if(mBuddyInfo.find(agent_id) != mBuddyInfo.end())
 			{
-                if (((mBuddyInfo[agent_id]->getRightsGrantedFrom() ^  new_rights) & LLRelationship::GRANT_MODIFY_OBJECTS)
-                    && !gAgent.isDoNotDisturb())
+                if (((mBuddyInfo[agent_id]->getRightsGrantedFrom() ^  new_rights) & LLRelationship::GRANT_MODIFY_OBJECTS))
 				{
 					LLSD args;
 					// <FS:Ansariel> Always show complete name in rights dialogs
@@ -803,8 +802,8 @@ void LLAvatarTracker::processNotify(LLMessageSystem* msg, bool online)
 				// we were tracking someone who went offline
 				deleteTrackingData();
 			}
-			//[FIX FIRE-3522 : SJ] Notify Online/Offline to Nearby Chat even if chat_notify isnt true
 
+			//[FIX FIRE-3522 : SJ] Notify Online/Offline to Nearby Chat even if chat_notify isnt true
 			// <FS:PP> Attempt to speed up things a little
 			// if(chat_notify||LGGContactSets::getInstance()->notifyForFriend(agent_id)||gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat"))
 			static LLCachedControl<bool> OnlineOfflinetoNearbyChat(gSavedSettings, "OnlineOfflinetoNearbyChat");

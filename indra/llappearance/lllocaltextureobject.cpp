@@ -76,7 +76,7 @@ LLLocalTextureObject::LLLocalTextureObject(const LLLocalTextureObject& lto) :
 
 LLLocalTextureObject::~LLLocalTextureObject()
 {
-	delete_and_clear(mTexLayers); // <FS:Ansariel> Mem-leak fix by Drake Arconis
+	delete_and_clear(mTexLayers);
 }
 
 LLGLTexture* LLLocalTextureObject::getImage() const

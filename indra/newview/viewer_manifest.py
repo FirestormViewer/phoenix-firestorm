@@ -630,8 +630,8 @@ class WindowsManifest(ViewerManifest):
 
             # These need to be installed as a SxS assembly, currently a 'private' assembly.
             # See http://msdn.microsoft.com/en-us/library/ms235291(VS.80).aspx
-            self.path_optional("msvcp140.dll") # FS:ND make them optional to be able to build with VS2022, on a developer PC this will not be harmful
-            self.path_optional("vcruntime140.dll") # FS:ND make them optional to be able to build with VS2022, on a developer PC this will not be harmful
+            self.path("msvcp140.dll")
+            self.path("vcruntime140.dll")
             self.path_optional("vcruntime140_1.dll")
 
             # SLVoice executable
@@ -722,11 +722,10 @@ class WindowsManifest(ViewerManifest):
                 self.path("v8_context_snapshot.bin")
 
             # MSVC DLLs needed for CEF and have to be in same directory as plugin
-            # FS:ND They are all optional, as when compilig with VS2022 they won't be available'
             with self.prefix(src=os.path.join(self.args['build'], os.pardir,
                                               'sharedlibs', 'Release')):
-                self.path_optional("msvcp140.dll")
-                self.path_optional("vcruntime140.dll")
+                self.path("msvcp140.dll")
+                self.path("vcruntime140.dll")
                 self.path_optional("vcruntime140_1.dll")
 
             # CEF files common to all configurations
@@ -2175,7 +2174,7 @@ class Linux_i686_Manifest(LinuxManifest):
             self.path("libdirectfb-1.*.so.*")
             self.path("libfusion-1.*.so.*")
             self.path("libdirect-1.*.so.*")
-            self.path("libopenjpeg.so*")
+            self.path("libopenjp2.so*")
             self.path("libdirectfb-1.4.so.5")
             self.path("libfusion-1.4.so.5")
             self.path("libdirect-1.4.so.5*")
@@ -2204,10 +2203,10 @@ class Linux_i686_Manifest(LinuxManifest):
             # particular wildcard specification gets us exactly what the
             # previous call did, without having to explicitly state the
             # version number.
-            self.path("libfontconfig.so.*.*")
+            # self.path("libfontconfig.so.*.*")    # <FS:PC> fontconfig and freetype should be taken from the user's system
 
             # Include libfreetype.so. but have it work as libfontconfig does.
-            self.path("libfreetype.so.*.*")
+            # self.path("libfreetype.so.*.*")      # <FS:PC> fontconfig and freetype should be taken from the user's system
 
             try:
                 self.path("libtcmalloc.so*") #formerly called google perf tools

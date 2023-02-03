@@ -52,7 +52,7 @@
     follows="left|top"
     height="23"
     label="Clear History"
-    tool_tip="Clear login image, last location, teleport history, web and texture cache"
+    tool_tip="Clear search and teleport history, web and texture cache"
     layout="topleft"
     left="15"
     name="clear_webcache"

@@ -812,13 +812,12 @@ BOOL LLToolCompGun::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	// NaCl - Rightclick-mousewheel zoom
 	if (!(gKeyboard->currentMask(TRUE) & MASK_ALT))
 	{
-		static LLCachedControl<LLVector3> _NACL_MLFovValues(gSavedSettings,"_NACL_MLFovValues");
-		static LLCachedControl<F32> CameraAngle(gSavedSettings,"CameraAngle");
-		LLVector3 vTemp=_NACL_MLFovValues;
-		vTemp.mV[0]=CameraAngle;
-		vTemp.mV[2]=1.0f;
-		gSavedSettings.setVector3("_NACL_MLFovValues",vTemp);
-		gSavedSettings.setF32("CameraAngle",vTemp.mV[1]);
+		LLVector3 _NACL_MLFovValues = gSavedSettings.getVector3("_NACL_MLFovValues");
+		F32 CameraAngle = gSavedSettings.getF32("CameraAngle");
+		_NACL_MLFovValues.mV[VX] = CameraAngle;
+		_NACL_MLFovValues.mV[VZ] = 1.0f;
+		gSavedSettings.setVector3("_NACL_MLFovValues", _NACL_MLFovValues);
+		gSavedSettings.setF32("CameraAngle", _NACL_MLFovValues.mV[VY]);
 
 		return TRUE;
 	}
@@ -832,16 +831,15 @@ BOOL LLToolCompGun::handleRightMouseDown(S32 x, S32 y, MASK mask)
 // NaCl - Rightclick-mousewheel zoom
 BOOL LLToolCompGun::handleRightMouseUp(S32 x, S32 y, MASK mask)
 {
-	static LLCachedControl<LLVector3> _NACL_MLFovValues(gSavedSettings,"_NACL_MLFovValues");
-	static LLCachedControl<F32> CameraAngle(gSavedSettings,"CameraAngle");
-	LLVector3 vTemp=_NACL_MLFovValues;
+	LLVector3 _NACL_MLFovValues = gSavedSettings.getVector3("_NACL_MLFovValues");
+	F32 CameraAngle = gSavedSettings.getF32("CameraAngle");
 	// Only reset if zoomed
-	if (vTemp.mV[2] == 1.0f)
+	if (_NACL_MLFovValues.mV[VZ] == 1.0f)
 	{
-		vTemp.mV[1]=CameraAngle;
-		vTemp.mV[2]=0.0f;
-		gSavedSettings.setVector3("_NACL_MLFovValues",vTemp);
-		gSavedSettings.setF32("CameraAngle",vTemp.mV[0]);
+		_NACL_MLFovValues.mV[VY] = CameraAngle;
+		_NACL_MLFovValues.mV[VZ] = 0.0f;
+		gSavedSettings.setVector3("_NACL_MLFovValues", _NACL_MLFovValues);
+		gSavedSettings.setF32("CameraAngle", _NACL_MLFovValues.mV[VX]);
 	}
 	return TRUE;
 }
@@ -883,15 +881,14 @@ void	LLToolCompGun::handleDeselect()
 BOOL LLToolCompGun::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
 	// NaCl - Rightclick-mousewheel zoom
-	static LLCachedControl<LLVector3> _NACL_MLFovValues(gSavedSettings, "_NACL_MLFovValues");
-	static LLCachedControl<F32> CameraAngle(gSavedSettings, "CameraAngle");
-	LLVector3 vTemp = _NACL_MLFovValues;
-	vTemp.mV[VY] = CameraAngle;
-	if (vTemp.mV[VZ] > 0.0f)
+	LLVector3 _NACL_MLFovValues = gSavedSettings.getVector3("_NACL_MLFovValues");
+	F32 CameraAngle = gSavedSettings.getF32("CameraAngle");
+	_NACL_MLFovValues.mV[VY] = CameraAngle;
+	if (_NACL_MLFovValues.mV[VZ] > 0.0f)
 	{
-		vTemp.mV[VY] = llclamp(vTemp.mV[VY] + (F32)(clicks * 0.1f), LLViewerCamera::getInstance()->getMinView(), LLViewerCamera::getInstance()->getMaxView());
-		gSavedSettings.setVector3("_NACL_MLFovValues", vTemp);
-		gSavedSettings.setF32("CameraAngle", vTemp.mV[VY]);
+		_NACL_MLFovValues.mV[VY] = llclamp(_NACL_MLFovValues.mV[VY] + (F32)(clicks * 0.1f), LLViewerCamera::getInstance()->getMinView(), LLViewerCamera::getInstance()->getMaxView());
+		gSavedSettings.setVector3("_NACL_MLFovValues", _NACL_MLFovValues);
+		gSavedSettings.setF32("CameraAngle", _NACL_MLFovValues.mV[VY]);
 	}
 	else if (clicks > 0 && gSavedSettings.getBOOL("FSScrollWheelExitsMouselook"))
 	// NaCl End

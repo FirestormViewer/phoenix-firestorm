@@ -694,12 +694,8 @@ void LLSettingsVOSky::applySpecial(void *ptarget, bool force)
 
         LLSettingsSky::ptr_t psky = LLEnvironment::instance().getCurrentSky();
 
-        // <FS:Zi> Fix array out of bounds on assigning LLColor3() to llVector4()
-        // LLVector4 sunDiffuse = LLVector4(psky->getSunlightColor().mV);
-        // LLVector4 moonDiffuse = LLVector4(psky->getMoonlightColor().mV);
         LLVector4 sunDiffuse = LLVector4(LLVector3(psky->getSunlightColor().mV));
         LLVector4 moonDiffuse = LLVector4(LLVector3(psky->getMoonlightColor().mV));
-        // </FS:Zi>
 
         shader->uniform4fv(LLShaderMgr::SUNLIGHT_COLOR, sunDiffuse);
         shader->uniform4fv(LLShaderMgr::MOONLIGHT_COLOR, moonDiffuse);

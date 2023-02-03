@@ -556,8 +556,6 @@ void LLGroupNoticeNotificationListItem::close()
 void LLGroupNoticeNotificationListItem::onClickAttachment()
 {
     if (mInventoryOffer != NULL) {
-        mInventoryOffer->forceResponse(IOR_ACCEPT);
-
         static const LLUIColor textColor = LLUIColorTable::instance().getColor(
             "GroupNotifyDimmedTextColor");
         mAttachmentTextBox->setColor(textColor);
@@ -567,7 +565,7 @@ void LLGroupNoticeNotificationListItem::onClickAttachment()
         if (!isAttachmentOpenable(mInventoryOffer->mType)) {
             LLNotifications::instance().add("AttachmentSaved", LLSD(), LLSD());
         }
-
+        mInventoryOffer->forceResponse(IOR_ACCEPT);
         mInventoryOffer = NULL;
     }
 }
