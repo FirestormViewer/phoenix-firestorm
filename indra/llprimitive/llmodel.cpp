@@ -845,7 +845,7 @@ LLSD LLModel::writeModel(
 
 				mdl[model_names[idx]][i]["TriangleList"] = indices;
 
-				if (skinning)
+				if (skinning && idx != LLModel::LOD_PHYSICS)
 				{
 					//write out skin weights
 
@@ -1409,6 +1409,16 @@ LLMeshSkinInfo::LLMeshSkinInfo(LLSD& skin):
     mLockScaleIfJointPosition(false),
     mInvalidJointsScrubbed(false),
     mJointNumsInitialized(false)
+{
+	fromLLSD(skin);
+}
+
+LLMeshSkinInfo::LLMeshSkinInfo(const LLUUID& mesh_id, LLSD& skin) :
+	mMeshID(mesh_id),
+	mPelvisOffset(0.0),
+	mLockScaleIfJointPosition(false),
+	mInvalidJointsScrubbed(false),
+	mJointNumsInitialized(false)
 {
 	fromLLSD(skin);
 }

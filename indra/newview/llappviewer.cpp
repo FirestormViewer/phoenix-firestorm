@@ -151,6 +151,10 @@
 #include "vlc/libvlc_version.h"
 #endif // LL_LINUX
 
+#if LL_DARWIN
+#include "llwindowmacosx.h"
+#endif
+
 // Third party library includes
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
@@ -638,6 +642,7 @@ static void settings_to_globals()
     LLWorldMapView::setScaleSetting(gSavedSettings.getF32("MapScale"));
 	
 #if LL_DARWIN
+    LLWindowMacOSX::sUseMultGL = gSavedSettings.getBOOL("RenderAppleUseMultGL");
 	gHiDPISupport = gSavedSettings.getBOOL("RenderHiDPI");
 #endif
 }
@@ -2012,7 +2017,8 @@ bool LLAppViewer::cleanup()
 	{
 		if (!isSecondInstance())
 		{
-			LLSceneMonitor::instance().dumpToFile(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "scene_monitor_results.csv"));
+            std::string dump_path = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "scene_monitor_results.csv");
+			LLSceneMonitor::instance().dumpToFile(dump_path);
 		}
 		LLSceneMonitor::deleteSingleton();
 	}
@@ -2043,13 +2049,12 @@ bool LLAppViewer::cleanup()
 
     // Give any remaining SLPlugin instances a chance to exit cleanly.
     LLPluginProcessParent::shutdown();
-	// <FS:Beq> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
-	// disconnectViewer();
-	// LLViewerCamera::deleteSingleton();
 
-	// LL_INFOS() << "Viewer disconnected" << LL_ENDL;
+	disconnectViewer();
 	LLViewerCamera::deleteSingleton();
-	// </FS:Beq>
+
+	LL_INFOS() << "Viewer disconnected" << LL_ENDL;
+	
 	if (gKeyboard)
 	{
 		gKeyboard->resetKeys();
@@ -2919,15 +2924,15 @@ bool LLAppViewer::initConfiguration()
         if (gDirUtilp->fileExists(settings_file_list))
         {
             LL_ERRS() << "Cannot load default configuration file settings_files.xml. "
-                << "Please reinstall viewer from https://secondlife.com/support/downloads/ "
-                << "and contact https://support.secondlife.com if issue persists after reinstall."
+                << "Please reinstall viewer from https://www.firestormviewer.org/choose-your-platform/ "
+                << "and contact https://www.firestormviewer.org/support if issue persists after reinstall."
                 << LL_ENDL;
         }
         else
         {
             LL_ERRS() << "Default configuration file settings_files.xml not found. "
-                << "Please reinstall viewer from https://secondlife.com/support/downloads/ "
-                << "and contact https://support.secondlife.com if issue persists after reinstall."
+                << "Please reinstall viewer from https://www.firestormviewer.org/choose-your-platform/ "
+                << "and contact https://www.firestormviewer.org/support if issue persists after reinstall."
                 << LL_ENDL;
         }
 	}
@@ -4845,10 +4850,6 @@ void LLAppViewer::removeDumpDir()
 
 void LLAppViewer::forceQuit()
 {
-	// <FS:Beq> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
-	disconnectViewer();
-	LL_INFOS() << "Viewer disconnected" << LL_ENDL;
-	// </FS:Beq>
 	LLApp::setQuitting();
 }
 
@@ -6319,12 +6320,7 @@ void LLAppViewer::idleNetwork()
 		}
 	}
 	add(LLStatViewer::NUM_NEW_OBJECTS, gObjectList.mNumNewObjects);
-	// <FS:Beq> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
-	if(gDisconnected)
-	{
-		return;
-	}
-	// </FS:Beq>
+
 	// Retransmit unacknowledged packets.
 	gXferManager->retransmitUnackedPackets();
 	gAssetStorage->checkForTimeouts();
@@ -6353,7 +6349,6 @@ void LLAppViewer::disconnectViewer()
 	{
 		return;
 	}
-	gDisconnected = TRUE;// <FS:Beq> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
 	//
 	// Cleanup after quitting.
 	//
@@ -6436,7 +6431,7 @@ void LLAppViewer::disconnectViewer()
 	LLDestroyClassList::instance().fireCallbacks();
 
 	cleanup_xfer_manager();
-	// gDisconnected = TRUE; // <FS:Beq/> [FIRE-32453] [BUG-232971] disconnect sooner to force the cache write.
+	gDisconnected = TRUE;
 
 	// Pass the connection state to LLUrlEntryParcel not to attempt
 	// parcel info requests while disconnected.

@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <panel name="script_experience" title="Приключение">
-	<button label="Приключение" name="Expand Experience"/>
-	<check_box label="Используется приключение" name="enable_xp"/>
+	<button name="Expand Experience" label="Приключение"/>
+	<check_box name="enable_xp" label="Используется Приключение"/>
 	<layout_stack name="xp_details">
-		<layout_panel>
-			<combo_box label="Выбрать приключение..." name="Experiences..."/>
+		<layout_panel name="xp_layout_panel">
+			<text name="lbl_script">
+				Сценарий:
+			</text>
+			<text name="lbl_associated">
+				Связано с:
+			</text>
+			<text name="lbl_contribute">
+				Вы можете внести вклад:
+			</text>
+			<text name="lbl_associate">
+				Связано с:
+			</text>
+		</layout_panel>
+		<layout_panel name="xp_choose_panel">
+			<combo_box name="Experiences..."  label="Выбрать Приключение..." />
 		</layout_panel>
 	</layout_stack>
 	<text name="No Experiences">
-		Вы не являетесь автором приключений.
+		Вы не являетесь соучастником какого-либо приключения.
 	</text>
 </panel>

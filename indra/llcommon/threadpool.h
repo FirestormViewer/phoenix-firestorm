@@ -46,7 +46,10 @@ namespace LL
          * ThreadPool listens for application shutdown messages on the "LLApp"
          * LLEventPump. Call close() to shut down this ThreadPool early.
          */
-        void close();
+        // <FS:Beq> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
+        // void close();
+        virtual void close();
+        // </FS:Beq>
 
         std::string getName() const { return mName; }
         size_t getWidth() const { return mThreads.size(); }
@@ -61,7 +64,8 @@ namespace LL
 
     private:
         void run(const std::string& name);
-
+        
+    protected: // <FS:Beq/> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
         WorkQueue mQueue;
         std::string mName;
         size_t mThreadCount;

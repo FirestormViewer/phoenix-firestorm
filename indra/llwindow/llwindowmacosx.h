@@ -232,6 +232,7 @@ protected:
 	BOOL		mLanguageTextInputAllowed;
 	LLPreeditor*	mPreeditor;
 	
+public:
 	static BOOL	sUseMultGL;
 
 	friend class LLWindowManager;

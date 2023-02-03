@@ -266,7 +266,7 @@ private:
 	void handleEstateBan();
 	void handleDerender(bool permanent);
 
-	LLMenuGL*		mPopupMenu;
+    LLHandle<LLView> mPopupMenuHandle;
 	uuid_vec_t		gmSelected;
 };
 

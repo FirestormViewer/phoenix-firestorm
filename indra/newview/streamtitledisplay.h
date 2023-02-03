@@ -40,7 +40,7 @@ public:
 	~StreamTitleDisplay() { }
 
 protected:
-	void initSingleton() override;
+	void initSingleton() /*override*/;
 	void checkMetadata(const LLSD& metadata);
 	void sendStreamTitleToChat(std::string_view Title);
 

@@ -57,4 +57,26 @@
    top="4"
    value="..."
    width="70" />
+    <add_btn
+     name="add_wearable"
+     layout="topleft"
+     follows="top|right"
+     image_unselected="Add_Icon"
+     image_selected="Add_Icon"
+     top="1"
+     left="0"
+     height="16"
+     width="16"
+     tab_stop="false" />
+    <remove_btn
+     name="remove_wearable"
+     layout="topleft"
+     follows="top|right"
+     image_unselected="Remove_Icon"
+     image_selected="Remove_Icon"
+     top="1"
+     left="26"
+     height="16"
+     width="16"
+     tab_stop="false" />
 </cof_wearable_list_item>

@@ -1440,13 +1440,13 @@ bool LLTextureFetchWorker::doWork(S32 param)
 						LL_WARNS(LOG_TXT) << "trying to seek a non-default texture on the sim. Bad!" << LL_ENDL;
 					}
 					setUrl(http_url + "/?texture_id=" + mID.asString().c_str());
-					LL_WARNS(LOG_TXT) << "Texture URL: " << mUrl << LL_ENDL;
+					LL_DEBUGS(LOG_TXT) << "Texture URL: " << mUrl << LL_ENDL;
 					mWriteToCacheState = CAN_WRITE ; //because this texture has a fixed texture id.
 				}
 				else
 				{
 					mCanUseHTTP = false ;
-					LL_WARNS(LOG_TXT) << "Texture not available via HTTP: empty URL." << LL_ENDL;
+					LL_DEBUGS(LOG_TXT) << "Texture not available via HTTP: empty URL." << LL_ENDL;
 				}
 			}
 			else

@@ -1027,44 +1027,6 @@ LLUUID::LLUUID()
 	// </FS>
 }
 
-// Copy constructor
- LLUUID::LLUUID(const LLUUID& rhs)
-{
-	 LL_PROFILE_ZONE_SCOPED;
-	// <FS> Fix for misaligned unsigned ints in LLUUID; by Sovereign Engineer / Shyotl Kuhr
-	//U32 *tmp = (U32 *)mData;
-	//U32 *rhstmp = (U32 *)rhs.mData;
-	//tmp[0] = rhstmp[0];
-	//tmp[1] = rhstmp[1];
-	//tmp[2] = rhstmp[2];
-	//tmp[3] = rhstmp[3];
-	memcpy(mData, rhs.mData, sizeof(mData));
-	// </FS>
-}
-
- LLUUID::~LLUUID()
-{
-}
-
-// Assignment
- LLUUID& LLUUID::operator=(const LLUUID& rhs)
-{
-	 LL_PROFILE_ZONE_SCOPED;
-	// <FS> Fix for misaligned unsigned ints in LLUUID; by Sovereign Engineer / Shyotl Kuhr
-	//// No need to check the case where this==&rhs.  The branch is slower than the write.
-	//U32 *tmp = (U32 *)mData;
-	//U32 *rhstmp = (U32 *)rhs.mData;
-	//tmp[0] = rhstmp[0];
-	//tmp[1] = rhstmp[1];
-	//tmp[2] = rhstmp[2];
-	//tmp[3] = rhstmp[3];
-
-	memcpy(mData, rhs.mData, sizeof(mData));
-	// </FS>
-	return *this;
-}
-
-
  LLUUID::LLUUID(const char *in_string)
 {
 	if (!in_string || in_string[0] == 0)

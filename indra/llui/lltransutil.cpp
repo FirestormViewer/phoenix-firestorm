@@ -45,7 +45,7 @@ bool LLTransUtil::parseStrings(const std::string& xml_filename, const std::set<s
 	if (!success)
 	{
 		gDirUtilp->dumpCurrentDirectories(LLError::LEVEL_WARN);
-		LL_ERRS() << "Couldn't load string table " << xml_filename << ". Please reinstall viewer from  https://secondlife.com/support/downloads/ and contact https://support.secondlife.com if issue persists after reinstall." << LL_ENDL;
+		LL_ERRS() << "Couldn't load string table " << xml_filename << ". Please reinstall viewer from  https://www.firestormviewer.org/choose-your-platform/ and contact https://www.firestormviewer.org/support if issue persists after reinstall." << LL_ENDL;
 		return false;
 	}
 
