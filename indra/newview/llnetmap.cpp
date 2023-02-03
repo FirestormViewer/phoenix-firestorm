@@ -140,8 +140,7 @@ LLNetMap::LLNetMap (const Params & p)
 // [/SL:KB]
 	mClosestAgentToCursor(),
 //	mClosestAgentAtLastRightClick(),
-	mToolTipMsg(),
-	mPopupMenu(NULL)
+	mToolTipMsg()
 {
 	// <FS:Ansariel> Fixing borked minimap zoom level persistance
 	//mScale = gSavedSettings.getF32("MiniMapScale");
@@ -160,6 +159,13 @@ LLNetMap::LLNetMap (const Params & p)
 
 LLNetMap::~LLNetMap()
 {
+    auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
+    if (menu)
+    {
+        menu->die();
+        mPopupMenuHandle.markDead();
+    }
+
 	// <FS:Ansariel> Protect avatar name lookup callbacks
 	for (avatar_name_cache_connection_map_t::iterator it = mAvatarNameCacheConnections.begin(); it != mAvatarNameCacheConnections.end(); ++it)
 	{
@@ -252,10 +258,9 @@ BOOL LLNetMap::postBuild()
 	mParcelOverlayConn = LLViewerParcelOverlay::setUpdateCallback(boost::bind(&LLNetMap::refreshParcelOverlay, this));
 // [/SL:KB]
 
-    mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder,
-                                                                          LLViewerMenuHolderGL::child_registry_t::instance());
-    mPopupMenu->setItemEnabled("Re-center map", false);
-
+    LLMenuGL* menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+    mPopupMenuHandle = menu->getHandle();
+    menu->setItemEnabled("Re-center map", false);
     return TRUE;
 }
 
@@ -358,8 +363,12 @@ void LLNetMap::draw()
         mCentering = false;
     }
 
-    bool can_recenter_map = !(centered || mCentering || auto_centering);
-    mPopupMenu->setItemEnabled("Re-center map", can_recenter_map);
+    auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
+    if (menu)
+    {
+        bool can_recenter_map = !(centered || mCentering || auto_centering);
+        menu->setItemEnabled("Re-center map", can_recenter_map);
+    }
     updateAboutLandPopupButton();
 
 	// Prepare a scissor region
@@ -1045,14 +1054,15 @@ void LLNetMap::drawTracking(const LLVector3d& pos_global, const LLColor4& color,
 
 bool LLNetMap::isMouseOnPopupMenu()
 {
-    if (!mPopupMenu->isOpen())
+    auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
+    if (!menu || !menu->isOpen())
     {
         return false;
     }
 
     S32 popup_x;
     S32 popup_y;
-    LLUI::getInstance()->getMousePositionLocal(mPopupMenu, &popup_x, &popup_y);
+    LLUI::getInstance()->getMousePositionLocal(menu, &popup_x, &popup_y);
     // *NOTE: Tolerance is larger than it needs to be because the context menu is offset from the mouse when the menu is opened from certain
     // directions. This may be a quirk of LLMenuGL::showPopup. -Cosmic,2022-03-22
     constexpr S32 tolerance = 10;
@@ -1063,7 +1073,7 @@ bool LLNetMap::isMouseOnPopupMenu()
     {
         for (S32 sign_y = -1; sign_y <= 1; sign_y += 2)
         {
-            if (mPopupMenu->pointInView(popup_x + (sign_x * tolerance), popup_y + (sign_y * tolerance)))
+            if (menu->pointInView(popup_x + (sign_x * tolerance), popup_y + (sign_y * tolerance)))
             {
                 return true;
             }
@@ -1074,7 +1084,8 @@ bool LLNetMap::isMouseOnPopupMenu()
 
 void LLNetMap::updateAboutLandPopupButton()
 {
-    if (!mPopupMenu->isOpen())
+    auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
+    if (!menu || !menu->isOpen())
     {
         return;
     }
@@ -1082,7 +1093,7 @@ void LLNetMap::updateAboutLandPopupButton()
     LLViewerRegion *region = LLWorld::getInstance()->getRegionFromPosGlobal(mPopupWorldPos);
     if (!region)
     {
-        mPopupMenu->setItemEnabled("About Land", false);
+        menu->setItemEnabled("About Land", false);
     }
     else
     {
@@ -1097,7 +1108,7 @@ void LLNetMap::updateAboutLandPopupButton()
             {
                 valid_parcel = hover_parcel->getOwnerID().notNull();
             }
-            mPopupMenu->setItemEnabled("About Land", valid_parcel);
+            menu->setItemEnabled("About Land", valid_parcel);
         }
     }
 }
@@ -1744,11 +1755,15 @@ void LLNetMap::setAvatarProfileLabel(const LLUUID& av_id, const LLAvatarName& av
 		mAvatarNameCacheConnections.erase(it);
 	}
 
-	LLMenuItemGL* pItem = mPopupMenu->findChild<LLMenuItemGL>(item_name, TRUE /*recurse*/);
-	if (pItem)
+	auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
+	if (menu)
 	{
-		pItem->setLabel(avName.getCompleteName());
-		pItem->getMenu()->arrange();
+		LLMenuItemGL* pItem = menu->findChild<LLMenuItemGL>(item_name, TRUE /*recurse*/);
+		if (pItem)
+		{
+			pItem->setLabel(avName.getCompleteName());
+			pItem->getMenu()->arrange();
+		}
 	}
 }
 
@@ -1802,23 +1817,24 @@ void LLNetMap::handleTextureType(const LLSD& sdParam) const
 
 BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
-	if (mPopupMenu)
+    auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
+    if (menu)
 	{
 		mPopupWorldPos = viewPosToGlobal(x, y);
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
 		mClosestAgentRightClick = mClosestAgentToCursor;
 		mClosestAgentsRightClick = mClosestAgentsToCursor;
 
-		mPopupMenu->setItemVisible("Add to Set Multiple", mClosestAgentsToCursor.size() > 1);
-		mPopupMenu->setItemVisible("More Options", mClosestAgentsToCursor.size() == 1);
-		mPopupMenu->setItemVisible("View Profile", mClosestAgentsToCursor.size() == 1);
+		menu->setItemVisible("Add to Set Multiple", mClosestAgentsToCursor.size() > 1);
+		menu->setItemVisible("More Options", mClosestAgentsToCursor.size() == 1);
+		menu->setItemVisible("View Profile", mClosestAgentsToCursor.size() == 1);
 
 		bool can_show_names = !RlvActions::hasBehaviour(RLV_BHVR_SHOWNAMES);
-		mPopupMenu->setItemEnabled("Add to Set Multiple", can_show_names);
-		mPopupMenu->setItemEnabled("More Options", can_show_names);
-		mPopupMenu->setItemEnabled("View Profile", can_show_names);
+		menu->setItemEnabled("Add to Set Multiple", can_show_names);
+		menu->setItemEnabled("More Options", can_show_names);
+		menu->setItemEnabled("View Profile", can_show_names);
 
-		LLMenuItemBranchGL* pProfilesMenu = mPopupMenu->getChild<LLMenuItemBranchGL>("View Profiles");
+		LLMenuItemBranchGL* pProfilesMenu = menu->getChild<LLMenuItemBranchGL>("View Profiles");
 		if (pProfilesMenu)
 		{
 			pProfilesMenu->setVisible(mClosestAgentsToCursor.size() > 1);
@@ -1857,22 +1873,22 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 					pProfilesMenu->getBranch()->addChild(pMenuItem);
 			}
 		}
-		mPopupMenu->setItemVisible("Cam", LLAvatarActions::canZoomIn(mClosestAgentToCursor));
-		mPopupMenu->setItemVisible("MarkAvatar", mClosestAgentToCursor.notNull());
-		mPopupMenu->setItemVisible("Start Tracking", mClosestAgentToCursor.notNull());
-		mPopupMenu->setItemVisible("Profile Separator", (mClosestAgentsToCursor.size() >= 1 || mClosestAgentToCursor.notNull()));
-		mPopupMenu->setItemEnabled("Place Profile", RlvActions::canShowLocation());
-		mPopupMenu->setItemEnabled("World Map", !RlvActions::hasBehaviour(RLV_BHVR_SHOWWORLDMAP));
+		menu->setItemVisible("Cam", LLAvatarActions::canZoomIn(mClosestAgentToCursor));
+		menu->setItemVisible("MarkAvatar", mClosestAgentToCursor.notNull());
+		menu->setItemVisible("Start Tracking", mClosestAgentToCursor.notNull());
+		menu->setItemVisible("Profile Separator", (mClosestAgentsToCursor.size() >= 1 || mClosestAgentToCursor.notNull()));
+		menu->setItemEnabled("Place Profile", RlvActions::canShowLocation());
+		menu->setItemEnabled("World Map", !RlvActions::hasBehaviour(RLV_BHVR_SHOWWORLDMAP));
 
 // [/SL:KB]
-		mPopupMenu->buildDrawLabels();
-		mPopupMenu->updateParent(LLMenuGL::sMenuContainer);
+		menu->buildDrawLabels();
+		menu->updateParent(LLMenuGL::sMenuContainer);
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3)
-		mPopupMenu->setItemVisible("Stop Tracking", LLTracker::isTracking(0));
-		mPopupMenu->setItemVisible("Stop Tracking Separator", LLTracker::isTracking(0));
+		menu->setItemVisible("Stop Tracking", LLTracker::isTracking(0));
+		menu->setItemVisible("Stop Tracking Separator", LLTracker::isTracking(0));
 // [/SL:KB]
-//		mPopupMenu->setItemEnabled("Stop Tracking", LLTracker::isTracking(0));
-		LLMenuGL::showPopup(this, mPopupMenu, x, y);
+//		menu->setItemEnabled("Stop Tracking", LLTracker::isTracking(0));
+		LLMenuGL::showPopup(this, menu, x, y);
 	}
 	return TRUE;
 }
@@ -2127,11 +2143,12 @@ void LLNetMap::handleStartTracking()
 
 void LLNetMap::handleStopTracking (const LLSD& userdata)
 {
-	if (mPopupMenu)
+    auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
+    if (menu)
 	{
 		// <FS:Ansariel> Hide tracking option instead of disabling
-		//mPopupMenu->setItemEnabled ("Stop Tracking", false);
-		mPopupMenu->setItemVisible ("Stop Tracking", false);
+		//menu->setItemEnabled ("Stop Tracking", false);
+		menu->setItemVisible ("Stop Tracking", false);
 		// </FS:Ansariel>
 		LLTracker::stopTracking (LLTracker::isTracking(NULL));
 	}

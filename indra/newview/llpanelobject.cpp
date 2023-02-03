@@ -2781,7 +2781,7 @@ void LLPanelObject::onCommitSculptType(LLUICtrl *ctrl, void* userdata)
 //    }
 //    else if (command == "params_paste")
 //    {
-//        return mHasClipboardParams;
+//        return mClipboardParams.isMap() && (mClipboardParams.size() != 0);
 //    }
 //    // copy options
 //    else if (command == "psr_copy")

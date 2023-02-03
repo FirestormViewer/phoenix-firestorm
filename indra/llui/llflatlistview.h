@@ -307,6 +307,7 @@ public:
 
 	virtual S32	notify(const LLSD& info) ;
 
+	virtual ~LLFlatListView();
 protected:
 
 	/** Pairs LLpanel representing a single item LLPanel and LLSD associated with it */
