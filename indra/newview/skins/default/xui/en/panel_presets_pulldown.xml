@@ -67,7 +67,7 @@
       function="Presets.GoGraphicsPrefs" />
   </button>
   <button
-    name="open_prefs_btn"
+    name="open_autofps_btn"
     label="Performance"
     tool_tip="Open performance window"
     top_delta="0"
