@@ -63,11 +63,11 @@ public:
 	LLIMChiclet* createIMChiclet(const LLUUID& session_id);
 	// </FS:Ansariel> [FS communication UI]
 
-	BOOL postBuild();
+	BOOL postBuild() override;
 
 	LLChicletPanel*	getChicletPanel() { return mChicletPanel; }
 
-	/*virtual*/ void reshape(S32 width, S32 height, BOOL called_from_parent);
+	/*virtual*/ void reshape(S32 width, S32 height, BOOL called_from_parent) override;
 
 
 	/**

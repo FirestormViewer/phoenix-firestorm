@@ -569,7 +569,7 @@ set(viewer_SOURCE_FILES
     llpaneleditsky.cpp
     llpaneleditwater.cpp
     llpaneleditwearable.cpp
-	llpanelemojicomplete.cpp
+    llpanelemojicomplete.cpp
     llpanelenvironment.cpp
     llpanelexperiencelisteditor.cpp
     llpanelexperiencelog.cpp
@@ -1343,7 +1343,7 @@ set(viewer_HEADER_FILES
     llpaneleditsky.h
     llpaneleditwater.h
     llpaneleditwearable.h
-	llpanelemojicomplete.h
+    llpanelemojicomplete.h
     llpanelenvironment.h
     llpanelexperiencelisteditor.h
     llpanelexperiencelog.h
@@ -1898,14 +1898,6 @@ if (WINDOWS)
             )
         set(viewer_SOURCE_FILES "${viewer_SOURCE_FILES}" llviewerprecompiledheaders.cpp)
     endif(USE_PRECOMPILED_HEADERS)
-
-    # <FS:Ansariel> Don't copy fonts into the source folder!
-    # message("Copying fonts")
-    # file(GLOB FONT_FILE_GLOB_LIST
-      # "${AUTOBUILD_INSTALL_DIR}/fonts/*"
-    # )
-    # file(COPY ${FONT_FILE_GLOB_LIST} DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/fonts")
-    # </FS:Ansariel>
 
     # Replace the icons with the appropriate ones for the channel
     # ('test' is the default)
@@ -2576,6 +2568,14 @@ endif (LINUX)
 
 set(ARTWORK_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH
     "Path to artwork files.")
+
+# <FS:Ansariel> Don't copy fonts into the source folder!
+#message("Copying fonts")
+#file(GLOB FONT_FILE_GLOB_LIST
+#  "${AUTOBUILD_INSTALL_DIR}/fonts/*"
+#)
+#file(COPY ${FONT_FILE_GLOB_LIST} DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/fonts")
+# </FS:Ansariel>
 
 if (LINUX)
   set(product Firestorm-${ARCH}-${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION})
