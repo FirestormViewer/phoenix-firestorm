@@ -402,29 +402,30 @@ void RlvSphereEffect::run(const LLVisualEffectParams* pParams)
 	LL_RECORD_BLOCK_TIME(FTM_RLV_EFFECT_SPHERE);
 	LLGLDepthTest depth(GL_FALSE, GL_FALSE);
 
-	gRlvSphereProgram.bind();
-	setShaderUniforms(&gRlvSphereProgram);
+	// KITTYFIXME
+	//gRlvSphereProgram.bind();
+	//setShaderUniforms(&gRlvSphereProgram);
 
-	const LLShaderEffectParams* pShaderParams = static_cast<const LLShaderEffectParams*>(pParams);
-	switch (m_eMode)
-	{
-		case ESphereMode::Blend:
-		case ESphereMode::ChromaticAberration:
-		case ESphereMode::Pixelate:
-			renderPass(&gRlvSphereProgram, pShaderParams);
-			break;
-		case ESphereMode::Blur:
-		case ESphereMode::BlurVariable:
-			gRlvSphereProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM5, 1.f, 0.f);
-			renderPass(&gRlvSphereProgram, pShaderParams);
-			gRlvSphereProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM5, 0.f, 1.f);
-			renderPass(&gRlvSphereProgram, pShaderParams);
-			break;
-		default:
-			llassert(true);
-	}
+	//const LLShaderEffectParams* pShaderParams = static_cast<const LLShaderEffectParams*>(pParams);
+	//switch (m_eMode)
+	//{
+	//	case ESphereMode::Blend:
+	//	case ESphereMode::ChromaticAberration:
+	//	case ESphereMode::Pixelate:
+	//		renderPass(&gRlvSphereProgram, pShaderParams);
+	//		break;
+	//	case ESphereMode::Blur:
+	//	case ESphereMode::BlurVariable:
+	//		gRlvSphereProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM5, 1.f, 0.f);
+	//		renderPass(&gRlvSphereProgram, pShaderParams);
+	//		gRlvSphereProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM5, 0.f, 1.f);
+	//		renderPass(&gRlvSphereProgram, pShaderParams);
+	//		break;
+	//	default:
+	//		llassert(true);
+	//}
 
-	gRlvSphereProgram.unbind();
+	//gRlvSphereProgram.unbind();
 }
 
 // ====================================================================================

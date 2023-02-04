@@ -202,9 +202,6 @@ LLGLSLShader            gDeferredSkinnedFullbrightAlphaMaskProgram;
 LLGLSLShader            gDeferredSkinnedFullbrightAlphaMaskAlphaProgram;
 LLGLSLShader			gNormalMapGenProgram;
 LLGLSLShader            gDeferredGenBrdfLutProgram;
-// [RLVa:KB] - @setsphere
-LLGLSLShader			gRlvSphereProgram;
-// [/RLVa:KB]
 
 // Deferred materials shaders
 LLGLSLShader			gDeferredMaterialProgram[LLMaterial::SHADER_COUNT*2];
@@ -289,10 +286,6 @@ LLViewerShaderMgr::LLViewerShaderMgr() :
     mShaderList.push_back(&gDeferredWLSunProgram);
     mShaderList.push_back(&gDeferredPBRAlphaProgram);
     mShaderList.push_back(&gDeferredSkinnedPBRAlphaProgram);
-
-// [RLVa:KB] - @setsphere
-	mShaderList.push_back(&gRlvSphereProgram);
-// [/RLVa:KB]
 }
 
 LLViewerShaderMgr::~LLViewerShaderMgr()

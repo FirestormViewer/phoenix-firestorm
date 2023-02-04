@@ -226,15 +226,6 @@ static bool handleAvatarHoverOffsetChanged(const LLSD& newvalue)
 bool handleSetShaderChanged(const LLSD& newvalue)
 // </FS:Ansariel>
 {
-// [RLVa:KB] - @setenv and @setsphere
-	if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canChangeEnvironment() || (LLVfxManager::instance().hasEffect(EVisualEffect::RlvSphere))) &&
-		 (LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))&& (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")) )
-	{
-		gSavedSettings.setBOOL("WindLightUseAtmosShaders", TRUE);
-		return true;
-	}
-// [/RLVa:KB]
-
 	// changing shader level may invalidate existing cached bump maps, as the shader type determines the format of the bump map it expects - clear and repopulate the bump cache
 	gBumpImageList.destroyGL();
 	gBumpImageList.restoreGL();

@@ -349,9 +349,6 @@ bool	LLPipeline::sRenderParticles; // <FS:LO> flag to hold correct, user selecte
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
 bool	LLPipeline::sRenderTextures = true;
 // [/SL:KB]
-// [RLVa:KB] - @setsphere
-bool	LLPipeline::sUseDepthTexture = false;
-// [/RLVa:KB]
 
 // EventHost API LLPipeline listener.
 static LLPipelineListener sPipelineListener;
@@ -940,17 +937,14 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
 		mRT->fxaaBuffer.release();
 	}
 		
-//		if (shadow_detail > 0 || ssao || RenderDepthOfField || samples > 0)
-// [RLVa:KB] - @setsphere
-		if (shadow_detail > 0 || ssao || RenderDepthOfField || samples > 0 || RlvActions::hasPostProcess())
-// [/RLVa:KB]
-		{ //only need mRT->deferredLight for shadows OR ssao OR dof OR fxaa
-			if (!mRT->deferredLight.allocate(resX, resY, GL_RGBA16)) return false;
-		}
-		else
-		{
-			mRT->deferredLight.release();
-		}
+	if (shadow_detail > 0 || ssao || RenderDepthOfField || samples > 0)
+	{ //only need mRT->deferredLight for shadows OR ssao OR dof OR fxaa
+		if (!mRT->deferredLight.allocate(resX, resY, GL_RGBA16)) return false;
+	}
+	else
+	{
+		mRT->deferredLight.release();
+	}
 
     allocateShadowBuffer(resX, resY);
 
@@ -1067,7 +1061,7 @@ bool LLPipeline::allocateShadowBuffer(U32 resX, U32 resY)
 //static
 void LLPipeline::updateRenderTransparentWater()
 {
-	sRenderTransparentWater = gSavedSettings.getBOOL("RenderTransparentWater");
+    sRenderTransparentWater = gSavedSettings.getBOOL("RenderTransparentWater");
 }
 
 //static
@@ -5555,7 +5549,7 @@ void LLPipeline::setupAvatarLights(bool for_edit)
 			}
 		}
 		F32 backlight_mag;
-		if (environment.getIsSunUp()) // <FS:Ansariel> Factor out instance() calls
+		if (LLEnvironment::instance().getIsSunUp())
 		{
 			backlight_mag = BACKLIGHT_DAY_MAGNITUDE_OBJECT;
 		}
@@ -7302,23 +7296,14 @@ void LLPipeline::renderPostProcess()
 
 	LLVertexBuffer::unbind();
 
-	// [RLVa:KB] - @setsphere
-	LLRenderTarget* pRenderBuffer = (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE)) ? &mRT->deferredLight : nullptr;
-	// [/RLVa:KB]
-	{
-		bool dof_enabled =
+    {
+		bool dof_enabled = 
 			(RenderDepthOfFieldInEditMode || !LLToolMgr::getInstance()->inBuildMode()) &&
 			RenderDepthOfField &&
 			!gCubeSnapshot;
 
 		bool multisample = RenderFSAASamples > 1 && mRT->fxaaBuffer.isComplete() && !gCubeSnapshot;
 		exoPostProcess::instance().multisample = multisample;	// <FS:CR> Import Vignette from Exodus
-// [RLVa:KB] - @setsphere
-		if (multisample && !pRenderBuffer)
-		{
-			pRenderBuffer = &mRT->deferredLight;
-		}
-		// [/RLVa:KB]
 
 		gViewerWindow->setup3DViewport();
 
@@ -7513,18 +7498,11 @@ void LLPipeline::renderPostProcess()
 			}
 
 			{ // combine result based on alpha
-				//if (multisample)
-				//{
-				//	mRT->deferredLight.bindTarget();
-				//	glViewport(0, 0, mRT->deferredScreen.getWidth(), mRT->deferredScreen.getHeight());
-				//}
-// [RLVa:KB] - @setsphere
-				if (pRenderBuffer)
+				if (multisample)
 				{
-					pRenderBuffer->bindTarget();
+					mRT->deferredLight.bindTarget();
 					glViewport(0, 0, mRT->deferredScreen.getWidth(), mRT->deferredScreen.getHeight());
 				}
-// [/RLVa:KB]
 				else
 				{
 					gGLViewport[0] = gViewerWindow->getWorldViewRectRaw().mLeft;
@@ -7562,31 +7540,19 @@ void LLPipeline::renderPostProcess()
 
 				unbindDeferredShader(*shader);
 
-				// [RLVa:KB] - @setsphere
-				if (pRenderBuffer)
+				if (multisample)
 				{
-					pRenderBuffer->flush();
+					mRT->deferredLight.flush();
 				}
-				// [/RLVa:KB]
-				//if (multisample)
-				//{
-				//	mRT->deferredLight.flush();
-				//}
 			}
 		}
 		else
 		{
 			LL_PROFILE_GPU_ZONE("no dof");
-			//if (multisample)
-			//{
-			//	mRT->deferredLight.bindTarget();
-			//}
-// [RLVa:KB] - @setsphere
-			if (pRenderBuffer)
+			if (multisample)
 			{
-				pRenderBuffer->bindTarget();
+				mRT->deferredLight.bindTarget();
 			}
-			// [/RLVa:KB]
 			LLGLSLShader* shader = &gDeferredPostNoDoFProgram;
 
 			bindDeferredShader(*shader);
@@ -7611,16 +7577,10 @@ void LLPipeline::renderPostProcess()
 
 			unbindDeferredShader(*shader);
 
-			// [RLVa:KB] - @setsphere
-			if (pRenderBuffer)
+			if (multisample)
 			{
-				pRenderBuffer->flush();
+				mRT->deferredLight.flush();
 			}
-			// [/RLVa:KB]
-			//if (multisample)
-			//{
-			//	mRT->deferredLight.flush();
-			//}
 		}
 	}
 }
@@ -7768,33 +7728,15 @@ void LLPipeline::renderFinalize()
         LLVertexBuffer::unbind();
     }
 
-// [RLVa:KB] - @setsphere
-	LLRenderTarget* pRenderBuffer = (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE)) ? &mRT->deferredLight : nullptr;
-// [/RLVa:KB]
 	{
         llassert(!gCubeSnapshot);
 		bool multisample = RenderFSAASamples > 1 && mRT->fxaaBuffer.isComplete();
-// [RLVa:KB] - @setsphere
-		if (multisample && !pRenderBuffer)
-		{
-			pRenderBuffer = &mRT->deferredLight;
-		}
-// [/RLVa:KB]
 		LLGLSLShader* shader = &gGlowCombineProgram;
 
 		S32 width = mRT->screen.getWidth();
 		S32 height = mRT->screen.getHeight();
 
 		S32 channel = -1;
-
-// [RLVa:KB] - @setsphere
-		if (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE))
-		{
-			LLShaderEffectParams params(pRenderBuffer, &mRT->screen, !multisample);
-			LLVfxManager::instance().runEffect(EVisualEffect::RlvSphere, &params);
-			pRenderBuffer = params.m_pDstBuffer;
-		}
-// [/RLVa:KB]
 
 		// Present everything.
 		if (multisample)
@@ -7810,18 +7752,11 @@ void LLPipeline::renderFinalize()
 			shader->bind();
 			shader->uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, width, height);
 
-			//channel = shader->enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mRT->deferredLight.getUsage());
-			//if (channel > -1)
-			//{
-			//	mRT->deferredLight.bindTexture(0, channel);
-			//}
-// [RLVa:KB] - @setsphere
-			channel = shader->enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, pRenderBuffer->getUsage());
+			channel = shader->enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mRT->deferredLight.getUsage());
 			if (channel > -1)
 			{
-				pRenderBuffer->bindTexture(0, channel);
+				mRT->deferredLight.bindTexture(0, channel);
 			}
-// [RLVa:KB]
 
             {
                 LLGLDepthTest depth_test(GL_FALSE, GL_FALSE, GL_ALWAYS);
@@ -7831,10 +7766,7 @@ void LLPipeline::renderFinalize()
 
 			gGL.flush();
 
-// [RLVa:KB] - @setsphere
-			shader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, pRenderBuffer->getUsage());
-// [/RLVa:KB]
-			//shader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mRT->deferredLight.getUsage());
+			shader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mRT->deferredLight.getUsage());
 			shader->unbind();
 
 			mRT->fxaaBuffer.flush();

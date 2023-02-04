@@ -2148,38 +2148,39 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SETSPHERE>::onCommand(const RlvCommand& 
 		return RLV_RET_FAILED_LOCK;
 
 	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(rlvCmd, fRefCount);
-	if ( (RLV_RET_SUCCESS == eRet) && (!rlvCmd.isModifier()) )
-	{
-		if (gRlvHandler.hasBehaviour(rlvCmd.getObjectID(), rlvCmd.getBehaviourType()))
-		{
-			LLVfxManager::instance().addEffect(new RlvSphereEffect(rlvCmd.getObjectID()));
+	// KITTYFIXME
+	//if ( (RLV_RET_SUCCESS == eRet) && (!rlvCmd.isModifier()) )
+	//{
+	//	if (gRlvHandler.hasBehaviour(rlvCmd.getObjectID(), rlvCmd.getBehaviourType()))
+	//	{
+	//		LLVfxManager::instance().addEffect(new RlvSphereEffect(rlvCmd.getObjectID()));
 
-			Rlv::forceAtmosphericShadersIfAvailable();
+	//		Rlv::forceAtmosphericShadersIfAvailable();
 
-			// If we're not using deferred but are using Windlight shaders we need to force use of FBO and depthmap texture
-			if ( (!LLPipeline::sRenderDeferred) && (LLPipeline::WindLightUseAtmosShaders) && (!LLPipeline::sUseDepthTexture) )
-			{
-				LLRenderTarget::sUseFBO = true;
-				LLPipeline::sUseDepthTexture = true;
+	//		// If we're not using deferred but are using Windlight shaders we need to force use of FBO and depthmap texture
+	//		if ( (!LLPipeline::sRenderDeferred) && (LLPipeline::WindLightUseAtmosShaders) && (!LLPipeline::sUseDepthTexture) )
+	//		{
+	//			LLRenderTarget::sUseFBO = true;
+	//			LLPipeline::sUseDepthTexture = true;
 
-				gPipeline.releaseGLBuffers();
-				gPipeline.createGLBuffers();
-				gPipeline.resetVertexBuffers();
-				LLViewerShaderMgr::instance()->setShaders();
-			}
-			else if (!gPipeline.mRT->deferredLight.isComplete())
-			{
-				// In case of deferred with no shadows, no ambient occlusion, no depth of field, and no antialiasing
-				gPipeline.releaseGLBuffers();
-				gPipeline.createGLBuffers();
-				RLV_ASSERT(gPipeline.mRT->deferredLight.isComplete());
-			}
-		}
-		else
-		{
-			LLVfxManager::instance().removeEffect<RlvSphereEffect>(gRlvHandler.getCurrentObject());
-		}
-	}
+	//			gPipeline.releaseGLBuffers();
+	//			gPipeline.createGLBuffers();
+	//			gPipeline.resetVertexBuffers();
+	//			LLViewerShaderMgr::instance()->setShaders();
+	//		}
+	//		else if (!gPipeline.mRT->deferredLight.isComplete())
+	//		{
+	//			// In case of deferred with no shadows, no ambient occlusion, no depth of field, and no antialiasing
+	//			gPipeline.releaseGLBuffers();
+	//			gPipeline.createGLBuffers();
+	//			RLV_ASSERT(gPipeline.mRT->deferredLight.isComplete());
+	//		}
+	//	}
+	//	else
+	//	{
+	//		LLVfxManager::instance().removeEffect<RlvSphereEffect>(gRlvHandler.getCurrentObject());
+	//	}
+	//}
 	return eRet;
 }
 
