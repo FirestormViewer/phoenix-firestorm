@@ -552,9 +552,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5c3c29851edd837d5f9518618c4a303b</string>
+              <string>45acdda717f95ce9169de9f49199c066</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/apr_suite-1.4.5.180841559-linux64-180841559.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/apr_suite-1.4.5.230351228-linux64-230351228.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2720,9 +2720,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b7be1d6116fb5848ab2beef19b6a8b15</string>
+              <string>b66568bf5da8633e94a1a52540fd4bf1</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/openjpeg-2.3.1.202991551-linux64-202991551.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openjpeg-2.5.0.230340738-linux64-230340738.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
