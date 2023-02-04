@@ -341,7 +341,6 @@
 			<menu_item_check label="Flächenpatch" name="Rendering Type Surface Patch"/>
 			<menu_item_check label="Himmel" name="Rendering Type Sky"/>
 			<menu_item_check label="Wasser" name="Rendering Type Water"/>
-			<menu_item_check label="Boden" name="Rendering Type Ground"/>
 			<menu_item_check label="Volumen" name="Rendering Type Volume"/>
 			<menu_item_check label="Gras" name="Rendering Type Grass"/>
 			<menu_item_check label="Wolken" name="Rendering Type Clouds"/>

@@ -55,7 +55,6 @@
 #include "lldrawable.h"
 #include "lldrawpoolalpha.h"
 #include "lldrawpoolavatar.h"
-#include "lldrawpoolground.h"
 #include "lldrawpoolbump.h"
 #include "lldrawpooltree.h"
 #include "lldrawpoolwater.h"
@@ -86,7 +85,6 @@
 #include "llviewerwindow.h" // For getSpinAxis
 #include "llvoavatarself.h"
 #include "llvocache.h"
-#include "llvoground.h"
 #include "llvosky.h"
 #include "llvowlsky.h"
 #include "llvotree.h"
@@ -464,7 +462,6 @@ void LLPipeline::init()
 	getPool(LLDrawPool::POOL_FULLBRIGHT_ALPHA_MASK);
 	getPool(LLDrawPool::POOL_GRASS);
 	getPool(LLDrawPool::POOL_FULLBRIGHT);
-	getPool(LLDrawPool::POOL_INVISIBLE);
 	getPool(LLDrawPool::POOL_BUMP);
 	getPool(LLDrawPool::POOL_MATERIALS);
 	getPool(LLDrawPool::POOL_GLOW);
@@ -495,12 +492,6 @@ void LLPipeline::init()
 	else
 	{
 		setAllRenderTypes(); // By default, all rendering types start enabled
-		// Don't turn on ground when this is set
-		// Mac Books with intel 950s need this
-		if(!gSavedSettings.getBOOL("RenderGround"))
-		{
-			toggleRenderType(RENDER_TYPE_GROUND);
-		}
 	}
 
 	// make sure RenderPerformanceTest persists (hackity hack hack)
@@ -703,14 +694,10 @@ void LLPipeline::cleanup()
 	mTerrainPool = NULL;
 	delete mWaterPool;
 	mWaterPool = NULL;
-	delete mGroundPool;
-	mGroundPool = NULL;
 	delete mSimplePool;
 	mSimplePool = NULL;
 	delete mFullbrightPool;
 	mFullbrightPool = NULL;
-	delete mInvisiblePool;
-	mInvisiblePool = NULL;
 	delete mGlowPool;
 	mGlowPool = NULL;
 	delete mBumpPool;
@@ -1470,14 +1457,12 @@ bool LLPipeline::shadersLoaded()
 
 bool LLPipeline::canUseWindLightShaders() const
 {
-	return (gWLSkyProgram.mProgramObject != 0 &&
-			LLViewerShaderMgr::instance()->getShaderLevel(LLViewerShaderMgr::SHADER_WINDLIGHT) > 1);
+    return true;
 }
 
 bool LLPipeline::canUseWindLightShadersOnObjects() const
 {
-	return (canUseWindLightShaders() 
-		&& LLViewerShaderMgr::instance()->getShaderLevel(LLViewerShaderMgr::SHADER_OBJECT) > 0);
+    return true;
 }
 
 bool LLPipeline::canUseAntiAliasing() const
@@ -1632,10 +1617,6 @@ LLDrawPool *LLPipeline::findPool(const U32 type, LLViewerTexture *tex0)
 		poolp = mFullbrightPool;
 		break;
 
-	case LLDrawPool::POOL_INVISIBLE:
-		poolp = mInvisiblePool;
-		break;
-
 	case LLDrawPool::POOL_GLOW:
 		poolp = mGlowPool;
 		break;
@@ -1671,10 +1652,6 @@ LLDrawPool *LLPipeline::findPool(const U32 type, LLViewerTexture *tex0)
 
 	case LLDrawPool::POOL_WATER:
 		poolp = mWaterPool;
-		break;
-
-	case LLDrawPool::POOL_GROUND:
-		poolp = mGroundPool;
 		break;
 
 	case LLDrawPool::POOL_WL_SKY:
@@ -2575,64 +2552,6 @@ void LLPipeline::markOccluder(LLSpatialGroup* group)
 	}
 }
 
-void LLPipeline::downsampleDepthBuffer(LLRenderTarget& source, LLRenderTarget& dest, LLRenderTarget* scratch_space)
-{
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
-    LL_PROFILE_GPU_ZONE("downsampleDepthBuffer");
-
-	LLGLSLShader* last_shader = LLGLSLShader::sCurBoundShaderPtr;
-
-	LLGLSLShader* shader = NULL;
-
-	if (scratch_space)
-	{
-#if 0  // TODO -- restore occlusion culling functionality
-        GLint bits = 0;
-        bits = GL_DEPTH_BUFFER_BIT;
-		scratch_space->copyContents(source,
-									0, 0, source.getWidth(), source.getHeight(), 
-									0, 0, scratch_space->getWidth(), scratch_space->getHeight(), bits, GL_NEAREST);
-#endif
-	}
-
-	dest.bindTarget();
-	dest.clear(GL_DEPTH_BUFFER_BIT);
-
-	if (source.getUsage() == LLTexUnit::TT_TEXTURE)
-	{
-		shader = &gDownsampleDepthRectProgram;
-		shader->bind();
-		shader->uniform2f(sDelta, 1.f, 1.f);
-		shader->uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, source.getWidth(), source.getHeight());
-	}
-	else
-	{
-		shader = &gDownsampleDepthProgram;
-		shader->bind();
-		shader->uniform2f(sDelta, 1.f/source.getWidth(), 1.f/source.getHeight());
-		shader->uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, 1.f, 1.f);
-	}
-
-	gGL.getTexUnit(0)->bind(scratch_space ? scratch_space : &source, TRUE);
-
-	{
-		LLGLDepthTest depth(GL_TRUE, GL_TRUE, GL_ALWAYS);
-        mScreenTriangleVB->setBuffer();
-        mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
-	}
-	
-	dest.flush();
-	
-	if (last_shader)
-	{
-		last_shader->bind();
-	}
-	else
-	{
-		shader->unbind();
-	}
-}
-
 void LLPipeline::doOcclusion(LLCamera& camera)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
@@ -3303,7 +3222,6 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
 
 	if (hasAnyRenderType(LLPipeline::RENDER_TYPE_AVATAR,
 					  LLPipeline::RENDER_TYPE_CONTROL_AV,
-					  LLPipeline::RENDER_TYPE_GROUND,
 					  LLPipeline::RENDER_TYPE_TERRAIN,
 					  LLPipeline::RENDER_TYPE_TREE,
 					  LLPipeline::RENDER_TYPE_SKY,
@@ -5326,18 +5244,6 @@ void LLPipeline::addToQuickLookup( LLDrawPool* new_poolp )
 		}
 		break;
 
-	case LLDrawPool::POOL_INVISIBLE:
-		if (mInvisiblePool)
-		{
-			llassert(0);
-			LL_WARNS() << "Ignoring duplicate simple pool." << LL_ENDL;
-		}
-		else
-		{
-			mInvisiblePool = (LLRenderPass*) new_poolp;
-		}
-		break;
-
 	case LLDrawPool::POOL_GLOW:
 		if (mGlowPool)
 		{
@@ -5431,18 +5337,6 @@ void LLPipeline::addToQuickLookup( LLDrawPool* new_poolp )
 		}
 		break;
 
-	case LLDrawPool::POOL_GROUND:
-		if( mGroundPool )
-		{
-			llassert(0);
-			LL_WARNS() << "LLPipeline::addPool(): Ignoring duplicate Ground Pool" << LL_ENDL;
-		}
-		else
-		{ 
-			mGroundPool = new_poolp;
-		}
-		break;
-
 	case LLDrawPool::POOL_WL_SKY:
 		if( mWLSkyPool )
 		{
@@ -5512,11 +5406,6 @@ void LLPipeline::removeFromQuickLookup( LLDrawPool* poolp )
 		mFullbrightPool = NULL;
 		break;
 
-	case LLDrawPool::POOL_INVISIBLE:
-		llassert(mInvisiblePool == poolp);
-		mInvisiblePool = NULL;
-		break;
-
 	case LLDrawPool::POOL_WL_SKY:
 		llassert(mWLSkyPool == poolp);
 		mWLSkyPool = NULL;
@@ -5581,11 +5470,6 @@ void LLPipeline::removeFromQuickLookup( LLDrawPool* poolp )
 	case LLDrawPool::POOL_WATER:
 		llassert( poolp == mWaterPool );
 		mWaterPool = NULL;
-		break;
-
-	case LLDrawPool::POOL_GROUND:
-		llassert( poolp == mGroundPool );
-		mGroundPool = NULL;
 		break;
 
     case LLDrawPool::POOL_GLTF_PBR:
@@ -10502,7 +10386,6 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar, bool preview_avatar)
         clearRenderTypeMask(
             RENDER_TYPE_SKY,
             RENDER_TYPE_WL_SKY,
-            RENDER_TYPE_GROUND,
             RENDER_TYPE_TERRAIN,
             RENDER_TYPE_GRASS,
             RENDER_TYPE_CONTROL_AV, // Animesh

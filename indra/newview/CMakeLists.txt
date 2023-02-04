@@ -301,7 +301,6 @@ set(viewer_SOURCE_FILES
     lldrawpoolalpha.cpp
     lldrawpoolavatar.cpp
     lldrawpoolbump.cpp
-    lldrawpoolground.cpp
     lldrawpoolmaterials.cpp
     lldrawpoolpbropaque.cpp
     lldrawpoolsimple.cpp
@@ -839,7 +838,6 @@ set(viewer_SOURCE_FILES
     llvoavatarself.cpp
     llvocache.cpp
     llvograss.cpp
-    llvoground.cpp
     llvoicecallhandler.cpp
     llvoicechannel.cpp
     llvoiceclient.cpp
@@ -1091,7 +1089,6 @@ set(viewer_HEADER_FILES
     lldrawpoolbump.h
     lldrawpoolmaterials.h
     lldrawpoolpbropaque.h
-    lldrawpoolground.h
     lldrawpoolsimple.h
     lldrawpoolsky.h
     lldrawpoolterrain.h
@@ -1621,7 +1618,6 @@ set(viewer_HEADER_FILES
     llvoavatarself.h
     llvocache.h
     llvograss.h
-    llvoground.h
     llvoicechannel.h
     llvoiceclient.h
     llvoicevisualizer.h

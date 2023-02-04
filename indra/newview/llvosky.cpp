@@ -769,7 +769,6 @@ bool LLVOSky::updateSky()
         mForceUpdate = FALSE;
 
         mForceUpdateThrottle.setTimerExpirySec(UPDATE_EXPRY);
-        gPipeline.markRebuild(gSky.mVOGroundp->mDrawable, LLDrawable::REBUILD_ALL, TRUE);
 
         if (mDrawable.notNull() && mDrawable->getFace(0) && !mDrawable->getFace(0)->getVertexBuffer())
         {

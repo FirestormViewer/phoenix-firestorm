@@ -88,7 +88,6 @@
 #include "llviewerthrottle.h"
 #include "llvoavatarself.h"
 #include "llvotree.h"
-#include "llvosky.h"
 #include "llfloaterpathfindingconsole.h"
 // linden library includes
 #include "llavatarnamecache.h"

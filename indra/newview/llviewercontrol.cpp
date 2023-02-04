@@ -57,7 +57,6 @@
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llvoiceclient.h"
-#include "llvosky.h"
 #include "llvotree.h"
 #include "llvovolume.h"
 #include "llworld.h"
@@ -264,8 +263,7 @@ static bool handleRenderPerfTestChanged(const LLSD& newvalue)
        if (!status)
        {
                gPipeline.clearRenderTypeMask(LLPipeline::RENDER_TYPE_WL_SKY,
-                                                                         LLPipeline::RENDER_TYPE_GROUND,
-                                                                        LLPipeline::RENDER_TYPE_TERRAIN,
+                                                                         LLPipeline::RENDER_TYPE_TERRAIN,
                                                                          LLPipeline::RENDER_TYPE_GRASS,
                                                                          LLPipeline::RENDER_TYPE_TREE,
                                                                          LLPipeline::RENDER_TYPE_WATER,
@@ -279,7 +277,6 @@ static bool handleRenderPerfTestChanged(const LLSD& newvalue)
        else 
        {
                gPipeline.setRenderTypeMask(LLPipeline::RENDER_TYPE_WL_SKY,
-                                                                         LLPipeline::RENDER_TYPE_GROUND,
                                                                          LLPipeline::RENDER_TYPE_TERRAIN,
                                                                          LLPipeline::RENDER_TYPE_GRASS,
                                                                          LLPipeline::RENDER_TYPE_TREE,

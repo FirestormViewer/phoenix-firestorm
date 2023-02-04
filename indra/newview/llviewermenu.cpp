@@ -928,10 +928,6 @@ U32 render_type_from_string(std::string render_type)
 	{
 		return LLPipeline::RENDER_TYPE_WATER;
 	}
-	else if ("ground" == render_type)
-	{
-		return LLPipeline::RENDER_TYPE_GROUND;
-	}
 	else if ("volume" == render_type)
 	{
 		return LLPipeline::RENDER_TYPE_VOLUME;
