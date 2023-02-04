@@ -27,7 +27,7 @@
 
 static LLStaticHashedString sScreen_Res("screen_res");
 
-LLVector3	exoPostProcess::sExodusRenderVignette;
+LLVector3 exoPostProcess::sExodusRenderVignette;
 
 exoPostProcess::exoPostProcess()
 {
@@ -42,17 +42,18 @@ exoPostProcess::~exoPostProcess()
 
 void exoPostProcess::ExodusRenderPostStack(LLRenderTarget *src, LLRenderTarget *dst)
 {
-	if (mShaderLevel > 0)
+	if (mShaderLevel > 0 && sExodusRenderVignette.mV[0] > 0.f && LLPipeline::sRenderDeferred)
 	{
-		if (sExodusRenderVignette.mV[0] > 0.f && LLPipeline::sRenderDeferred)
-			ExodusRenderVignette(src, dst); // Don't render vignette here in non-deferred. Do it in the glow combine shader.
+		ExodusRenderVignette(src, dst);
 	}
 }
+
 void exoPostProcess::ExodusRenderPostSettingsUpdate()
 {
 	mShaderLevel = LLViewerShaderMgr::instance()->getShaderLevel(LLViewerShaderMgr::SHADER_AVATAR);
 	sExodusRenderVignette = gSavedSettings.getVector3("FSRenderVignette");
 }
+
 void exoPostProcess::ExodusRenderPostUpdate()
 {
 	if (!gPipeline.mRT)
@@ -65,75 +66,34 @@ void exoPostProcess::ExodusRenderPostUpdate()
 
 void exoPostProcess::initVB()
 {
+	if (!gPipeline.sRenderDeferred)
+		return;
+
 	destroyVB();
 	mExoPostBuffer = new LLVertexBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_TEXCOORD1);
-
-	if (!gPipeline.sRenderDeferred)
+	if (mExoPostBuffer->allocateBuffer(8, 0))
 	{
-		if (mExoPostBuffer->allocateBuffer(3, 0))
-		{
-			LLStrider<LLVector3> v;
-			LLStrider<LLVector2> uv1;
-			LLStrider<LLVector2> uv2;
+		LLStrider<LLVector3> vert;
+		mExoPostBuffer->getVertexStrider(vert);
+		LLStrider<LLVector2> tc0;
+		LLStrider<LLVector2> tc1;
+		mExoPostBuffer->getTexCoord0Strider(tc0);
+		mExoPostBuffer->getTexCoord1Strider(tc1);
 
-			mExoPostBuffer->getVertexStrider(v);
-			mExoPostBuffer->getTexCoord0Strider(uv1);
-			mExoPostBuffer->getTexCoord1Strider(uv2);
-		
-			uv1[0] = LLVector2(0.f, 0.f);
-			uv1[1] = LLVector2(0.f, 2.f);
-			uv1[2] = LLVector2(2.f, 0.f);
-		
-			uv2[0] = LLVector2(0.f, 0.f);
-			uv2[1] = LLVector2(0.f, etc2.mV[1] * 2.f);
-			uv2[2] = LLVector2(etc2.mV[0] * 2.f, 0.f);
-		
-			v[0] = LLVector3(-1.f, -1.f, 0.f);
-			v[1] = LLVector3(-1.f, 3.f, 0.f);
-			v[2] = LLVector3(3.f, -1.f, 0.f);
-
-			mExoPostBuffer->unmapBuffer();
-		}
-		else
-		{
-			LL_WARNS() << "Failed to allocate Vertex Buffer for exoPostProcessing" << LL_ENDL;
-			destroyVB();
-		}
+		vert[0].set(-1.f, 1.f, 0.f);
+		vert[1].set(-1.f, -3.f, 0.f);
+		vert[2].set(3.f, 1.f, 0.f);
 	}
 	else
 	{
-		if (mExoPostBuffer->allocateBuffer(8, 0))
-		{
-			LLStrider<LLVector3> vert;
-			mExoPostBuffer->getVertexStrider(vert);
-			LLStrider<LLVector2> tc0;
-			LLStrider<LLVector2> tc1;
-			mExoPostBuffer->getTexCoord0Strider(tc0);
-			mExoPostBuffer->getTexCoord1Strider(tc1);
-
-			vert[0].set(-1.f, 1.f, 0.f);
-			vert[1].set(-1.f, -3.f, 0.f);
-			vert[2].set(3.f, 1.f, 0.f);
-		}
-		else
-		{
-			LL_WARNS() << "Failed to allocate Vertex Buffer for exoPostProcessing" << LL_ENDL;
-			destroyVB();
-		}
+		LL_WARNS() << "Failed to allocate Vertex Buffer for exoPostProcessing" << LL_ENDL;
+		destroyVB();
 	}
 }
 
 void exoPostProcess::destroyVB()
 {
-	mExoPostBuffer = NULL;
-}
-
-void exoPostProcess::ExodusRenderPost(LLRenderTarget* src, LLRenderTarget* dst, S32 type)
-{
-	if (type == EXODUS_RENDER_VIGNETTE_POST)
-	{
-		ExodusRenderVignette(src, dst);
-	}
+	mExoPostBuffer = nullptr;
 }
 
 void exoPostProcess::ExodusRenderVignette(LLRenderTarget* src, LLRenderTarget* dst)
@@ -157,47 +117,16 @@ void exoPostProcess::ExodusRenderVignette(LLRenderTarget* src, LLRenderTarget* d
 	}
 }
 
-void exoShader::BindTex2D(LLTexture *tex2D, LLGLSLShader *shader, S32 uniform, S32 unit, LLTexUnit::eTextureType mode, LLTexUnit::eTextureAddressMode addressMode, LLTexUnit::eTextureFilterOptions filterMode)
-{
-	if (gPipeline.sRenderDeferred)
-	{
-		S32 channel = 0;
-		channel = shader->enableTexture(uniform);
-		if (channel > -1)
-		{
-			gGL.getTexUnit(channel)->bind(tex2D);
-			gGL.getTexUnit(channel)->setTextureFilteringOption(filterMode);
-			gGL.getTexUnit(channel)->setTextureAddressMode(addressMode);
-		}
-	}
-	else
-	{
-		gGL.getTexUnit(unit)->bind(tex2D);
-	}
-}
-
 void exoShader::BindRenderTarget(LLRenderTarget* tgt, LLGLSLShader* shader, S32 uniform, S32 unit, LLTexUnit::eTextureType mode)
 {
 	if (gPipeline.sRenderDeferred)
 	{
-		S32 channel = 0;
-		channel = shader->enableTexture(uniform, tgt->getUsage());
+		S32 channel = channel = shader->enableTexture(uniform, tgt->getUsage());
 		if (channel > -1)
 		{
-			tgt->bindTexture(0,channel);
+			tgt->bindTexture(0, channel);
 			gGL.getTexUnit(channel)->setTextureFilteringOption(LLTexUnit::TFO_POINT);
 		}
+		shader->uniform2f(sScreen_Res, tgt->getWidth(), tgt->getHeight());
 	}
-	else
-	{
-		S32 reftex = shader->enableTexture(uniform, tgt->getUsage());
-		if (reftex > -1)
-		{
-			gGL.getTexUnit(reftex)->activate();
-			gGL.getTexUnit(reftex)->bind(tgt);
-			gGL.getTexUnit(0)->activate();
-		}
-	}
-	shader->uniform2f(sScreen_Res, tgt->getWidth(), tgt->getHeight());
 }
-

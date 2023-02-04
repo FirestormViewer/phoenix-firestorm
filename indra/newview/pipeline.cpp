@@ -7303,7 +7303,6 @@ void LLPipeline::renderPostProcess()
 			!gCubeSnapshot;
 
 		bool multisample = RenderFSAASamples > 1 && mRT->fxaaBuffer.isComplete() && !gCubeSnapshot;
-		exoPostProcess::instance().multisample = multisample;	// <FS:CR> Import Vignette from Exodus
 
 		gViewerWindow->setup3DViewport();
 
