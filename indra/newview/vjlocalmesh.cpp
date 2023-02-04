@@ -380,7 +380,8 @@ LLLocalMeshFile::LLLocalMeshFile(const std::string& filename, bool try_lods)
 	mFilenames[LOCAL_LOD_HIGH] = filename;
 
 	// check if we have a valid extension, can't switch with string can we?
-	if (std::string exten_str = boost::filesystem::extension(filename); exten_str == ".dae")
+	if( std::string exten_str = boost::filesystem::extension(filename);
+		boost::iequals(exten_str, ".dae") )
 	{
 		mExtension = LLLocalMeshFileExtension::EXTEN_DAE;
 		pushLog("LLLocalMeshFile", "Extension found: COLLADA");
