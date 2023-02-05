@@ -32,8 +32,10 @@
 #include "vjlocalmeshimportdae.h"
 
 /* linden headers */
+#include "llviewercontrol.h" // for gSavedSettings
 #include "llmodelloader.h"
 #include "llvoavatarself.h"
+#include "lldaeloader.h" // for preProcessDAE
 
 /* dae headers*/
 #if LL_MSVC
@@ -54,7 +56,6 @@
 #pragma warning (default : 4264)
 #endif
 
-
 LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMeshFile* data, LLLocalMeshFileLOD lod)
 {
 	pushLog("DAE Importer", "Starting");
@@ -70,7 +71,16 @@ LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMesh
 	mLoadingLog.clear();
 
 	// open file and check if opened
-	collada_dom = collada_core.open(filename);
+	if (gSavedSettings.getBOOL("ImporterPreprocessDAE"))
+	{
+		collada_dom = collada_core.openFromMemory(filename, LLDAELoader::preprocessDAE(filename).c_str());
+	}
+	else
+	{
+		LL_INFOS() << "Skipping dae preprocessing" << LL_ENDL;
+		collada_dom = collada_core.open(filename);
+	}	
+
 	if (!collada_dom)
 	{
 		pushLog("DAE Importer", "Collada DOM instance could not initialize.");
