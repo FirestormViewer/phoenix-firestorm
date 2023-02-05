@@ -32,12 +32,6 @@ set_source_files_properties(${llimagej2coj_HEADER_FILES}
 list(APPEND llimagej2coj_SOURCE_FILES ${llimagej2coj_HEADER_FILES})
 
 add_library (llimagej2coj ${llimagej2coj_SOURCE_FILES})
-
-# <FS:PC> Stop GCC complaining about deprecated functions
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-   target_compile_options(llimagej2coj PUBLIC "-Wno-deprecated-declarations")
-endif()
-
 target_link_libraries(
     llimagej2coj
     ${OPENJPEG_LIBRARIES}
