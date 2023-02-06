@@ -595,7 +595,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
     fi
 fi
-
+status = 0
 if [ $WANTS_BUILD -eq $TRUE ] ; then
     echo "Building $TARGET_PLATFORM..."
     if [ $TARGET_PLATFORM == "darwin" ] ; then
@@ -626,6 +626,10 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
                 -verbosity:normal -toolsversion:15.0 -p:"VCBuildAdditionalOptions= /incremental"
         fi
     fi
+    if [ $? -ne 0 ]; then
+        status=1
+    fi
 fi
+echo "Finished status=$status"
+exit $status
 
-echo "Finished"
