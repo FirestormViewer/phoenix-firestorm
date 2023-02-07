@@ -9,11 +9,11 @@ jobs:
   build_matrix:
     strategy:
       matrix:
-        os: [macos-10.15,ubuntu-18.04,windows-2022]
+        os: [macos-10.15,ubuntu-20.04,windows-2022]
         grid: [sl,os]
         addrsize: [64,32]
         exclude:
-          - os: ubuntu-18.04
+          - os: ubuntu-20.04
             addrsize: 32
           - os: macos-10.15
             addrsize: 32
@@ -30,6 +30,18 @@ jobs:
 
       - name: Check python version
         run: python -V
+
+      - name: Install Bash 4 and GNU sed on Mac
+        if: runner.os == 'macOS'
+        run: |
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          brew update
+
+          brew install bash
+          brew install gnu-sed
+
+          echo "/usr/local/bin" >> $GITHUB_PATH
+          echo "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
 
       - name: Setup rclone and download the folder
         uses: beqjanus/setup-rclone@main
@@ -65,11 +77,12 @@ jobs:
           repository: FirestormViewer/fs-build-variables
           path: build-variables
 
-      - name: Define platform variable
+      - name: Define platform variable(s)
         run: |
           declare -A os_map
           os_map=( ["Windows"]="windows" ["Linux"]="linux" ["macOS"]="darwin" )
           platform="${os_map[${{ runner.os}}]}"
+          echo "fallback_platform=${platform}" >> $GITHUB_ENV
           if [ ${{ matrix.addrsize }} -ne 32 ];
           then
             platform+=${{ matrix.addrsize }}
@@ -77,8 +90,8 @@ jobs:
           echo "platform=${platform}" >> $GITHUB_ENV
         shell: bash
 
-      - name: rclone the private 3p packages for this platform
-        run: 'rclone copy fs_bundles: --include "*${{ env.platform }}*bz2" .'
+      - name: rclone the private 3p packages for this platform (both 64 & 32)
+        run: 'rclone copy fs_bundles: --include "*${{ env.fallback_platform }}*bz2" .'
 
       - name: set VSVER for Windows builds
         if: runner.os == 'Windows'
@@ -111,31 +124,47 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y "${dependencies[@]}"
 
+      - name: test macOS bundles are present
+        if: runner.os == 'MacOS'
+        run: |
+          dirlisting="$(ls -l ${{ github.workspace }}${path_sep}${pattern})"
+          echo "${dirlisting}"
+        shell: bash
+
       - name: edit installables
         run: |
+          path_sep="/"
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            path_sep="\\"
+          fi
           function find_most_recent_bundle() {
-            local pattern="$1*${{ env.platform }}*"
-            local most_recent_file=$(find "${{ github.workspace }}" -name "$pattern" -printf '%T@ %f\n' 2>/dev/null | sort -n | tail -1 | awk '{print $2}')
+            local pattern="$1.*$2.*"
+            local most_recent_file=$(ls -t "${{ github.workspace }}" | grep "$pattern" | head -1)
             if [ -z "$most_recent_file" ]; then
               echo ""
             else
               echo "$most_recent_file"
             fi
           }
-          if [[ "${{ runner.os }}" == "Windows" ]]; then
-            path_sep="\\"
-          else
-            path_sep="/"
-          fi
           packages=("fmodstudio" "llphysicsextensions_tpv" "kdu")
           for package in "${packages[@]}"; do
-            package_file=$(find_most_recent_bundle $package)
+            package_file=$(find_most_recent_bundle $package ${{ env.platform }})
             full_package_path="${{ github.workspace }}${path_sep}${package_file}"
             if [ -n "$package_file" ]; then
               echo "Installing ${package_file}"
-              autobuild installables edit ${package} platform=${{ env.platform }} url="file:///${full_package_path}"
+              autobuild installables remove ${package} 
+              autobuild installables add ${package} platform=${{ env.platform }} url="file:///${full_package_path}"
             else
               echo "No bundle found for ${package} on ${{ env.platform }}"
+              package_file=$(find_most_recent_bundle $package ${{ env.fallback_platform }})
+              full_package_path="${{ github.workspace }}${path_sep}${package_file}"
+              if [ -n "$package_file" ]; then
+                echo "Installing ${package_file}"
+                autobuild installables remove ${package} 
+                autobuild installables add ${package} platform=${{ env.fallback_platform }} url="file:///${full_package_path}"
+              else
+                echo "No bundle found for ${package} on ${{ env.fallback_platform }}. Package will not be available for build."
+              fi
             fi
           done
         shell: bash
