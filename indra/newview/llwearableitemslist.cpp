@@ -98,17 +98,82 @@ LLPanelWearableListItem::LLPanelWearableListItem(LLViewerInventoryItem* item, co
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
+static LLWidgetNameRegistry::StaticRegistrar sRegisterPanelWearableOutfitItem(&typeid(LLPanelWearableOutfitItem::Params), "wearable_outfit_list_item");
+
+LLPanelWearableOutfitItem::Params::Params()
+:   add_btn("add_btn"),
+    remove_btn("remove_btn")
+{
+}
+
+BOOL LLPanelWearableOutfitItem::postBuild()
+{
+    LLPanelWearableListItem::postBuild();
+    
+    LLViewerInventoryItem* inv_item = getItem();
+    mShowWidgets &= (inv_item->getType() != LLAssetType::AT_BODYPART);
+    //if(mShowWidgets) // <FS:Ansariel> Make Add/Remove buttons work
+    {
+        // <FS:Ansariel> Make Add/Remove buttons work
+        //addWidgetToRightSide("add_wearable");
+        //addWidgetToRightSide("remove_wearable");
+        addWidgetToRightSide("add_wearable", mShowWidgets);
+        addWidgetToRightSide("remove_wearable", mShowWidgets);
+        // </FS:Ansariel>
+
+        childSetAction("add_wearable", boost::bind(&LLPanelWearableOutfitItem::onAddWearable, this));
+        childSetAction("remove_wearable", boost::bind(&LLPanelWearableOutfitItem::onRemoveWearable, this));
+
+        setWidgetsVisible(false);
+        reshapeWidgets();
+    }
+
+    return TRUE;
+}
+
+BOOL LLPanelWearableOutfitItem::handleDoubleClick(S32 x, S32 y, MASK mask)
+{
+    if(!mShowWidgets)
+    {
+        return LLPanelWearableListItem::handleDoubleClick(x, y, mask);
+    }
+
+    if(LLAppearanceMgr::instance().isLinkedInCOF(mInventoryItemUUID))
+    {
+        onRemoveWearable();
+    }
+    else
+    {
+        onAddWearable();
+    }
+    return TRUE;
+}
+
+void LLPanelWearableOutfitItem::onAddWearable()
+{
+    setWidgetsVisible(false);
+    reshapeWidgets();
+    LLAppearanceMgr::instance().wearItemOnAvatar(mInventoryItemUUID, true, false);
+}
+
+void LLPanelWearableOutfitItem::onRemoveWearable()
+{
+    setWidgetsVisible(false);
+    reshapeWidgets();
+    LLAppearanceMgr::instance().removeItemFromAvatar(mInventoryItemUUID);
+}
 
 // static
 LLPanelWearableOutfitItem* LLPanelWearableOutfitItem::create(LLViewerInventoryItem* item,
-															 bool worn_indication_enabled)
+															 bool worn_indication_enabled,
+                                                             bool show_widgets)
 {
 	LLPanelWearableOutfitItem* list_item = NULL;
 	if (item)
 	{
-		const LLPanelInventoryListItemBase::Params& params = LLUICtrlFactory::getDefaultParams<LLPanelInventoryListItemBase>();
+		const LLPanelWearableOutfitItem::Params& params = LLUICtrlFactory::getDefaultParams<LLPanelWearableOutfitItem>();
 
-		list_item = new LLPanelWearableOutfitItem(item, worn_indication_enabled, params);
+		list_item = new LLPanelWearableOutfitItem(item, worn_indication_enabled, params, show_widgets);
 		list_item->initFromParams(params);
 		list_item->postBuild();
 	}
@@ -116,11 +181,24 @@ LLPanelWearableOutfitItem* LLPanelWearableOutfitItem::create(LLViewerInventoryIt
 }
 
 LLPanelWearableOutfitItem::LLPanelWearableOutfitItem(LLViewerInventoryItem* item,
-													 bool worn_indication_enabled,
-													 const LLPanelWearableOutfitItem::Params& params)
-: LLPanelInventoryListItemBase(item, params)
+                                                     bool worn_indication_enabled,
+                                                     const LLPanelWearableOutfitItem::Params& params,
+                                                     bool show_widgets)
+: LLPanelWearableListItem(item, params)
 , mWornIndicationEnabled(worn_indication_enabled)
+, mShowWidgets(show_widgets)
+, mIsWorn(false) // <FS:Ansariel> Make Add/Remove buttons work
 {
+    if(mShowWidgets)
+    {
+        LLButton::Params button_params = params.add_btn;
+        applyXUILayout(button_params, this);
+        addChild(LLUICtrlFactory::create<LLButton>(button_params));
+
+        button_params = params.remove_btn;
+        applyXUILayout(button_params, this);
+        addChild(LLUICtrlFactory::create<LLButton>(button_params));
+    }
 }
 
 // virtual
@@ -133,8 +211,11 @@ void LLPanelWearableOutfitItem::updateItem(const std::string& name,
 	// We don't use get_is_item_worn() here because this update is triggered by
 	// an inventory observer upon link in COF beind added or removed so actual
 	// worn status of a linked item may still remain unchanged.
+	bool is_worn = LLAppearanceMgr::instance().isLinkedInCOF(mInventoryItemUUID);
+	// <FS:Ansariel> Make Add/Remove buttons work
+	mIsWorn = is_worn;
 	// <FS:Ansariel> Better attachment list
-	//if (mWornIndicationEnabled && LLAppearanceMgr::instance().isLinkedInCOF(mInventoryItemUUID))
+	//if (mWornIndicationEnabled && is_worn)
 	//{
 	//	search_label += LLTrans::getString("worn");
 	//	item_state = IS_WORN;
@@ -161,15 +242,26 @@ void LLPanelWearableOutfitItem::updateItem(const std::string& name,
 				search_label += LLTrans::getString("AttachmentErrorMessage", args);
 			}
 
-			item_state = LLAppearanceMgr::instance().isLinkedInCOF(mInventoryItemUUID) ? IS_WORN : IS_MISMATCH;
+			item_state = is_worn ? IS_WORN : IS_MISMATCH;
 		}
-		else if (getType() != LLAssetType::AT_OBJECT && LLAppearanceMgr::instance().isLinkedInCOF(mInventoryItemUUID))
+		else if (getType() != LLAssetType::AT_OBJECT && is_worn)
 		{
 			search_label += LLTrans::getString("worn");
 			item_state = IS_WORN;
 		}
 	}
 	// </FS:Ansariel>
+
+    if(mShowWidgets)
+    {
+        setShowWidget("add_wearable", !is_worn);
+        setShowWidget("remove_wearable", is_worn);
+        if(mHovered)
+        {
+            setWidgetsVisible(true);
+            reshapeWidgets();
+        }
+    }
 
 	LLPanelInventoryListItemBase::updateItem(search_label, item_state);
 }
@@ -430,13 +522,13 @@ FSPanelCOFWearableOutfitListItem::Params::Params()
 
 // static
 FSPanelCOFWearableOutfitListItem* FSPanelCOFWearableOutfitListItem::create(LLViewerInventoryItem* item,
-															 bool worn_indication_enabled, U32 weight)
+															 bool worn_indication_enabled, bool show_widgets, U32 weight)
 {
 	FSPanelCOFWearableOutfitListItem* list_item = NULL;
 	if(item)
 	{
 		const Params& params = LLUICtrlFactory::getDefaultParams<FSPanelCOFWearableOutfitListItem>();
-		list_item = new FSPanelCOFWearableOutfitListItem(item, worn_indication_enabled, params);
+		list_item = new FSPanelCOFWearableOutfitListItem(item, worn_indication_enabled, show_widgets, params);
 		list_item->initFromParams(params);
 		list_item->postBuild();
 		list_item->updateItemWeight(weight);
@@ -447,8 +539,9 @@ FSPanelCOFWearableOutfitListItem* FSPanelCOFWearableOutfitListItem::create(LLVie
 
 FSPanelCOFWearableOutfitListItem::FSPanelCOFWearableOutfitListItem(LLViewerInventoryItem* item,
 													 bool worn_indication_enabled,
+													 bool show_widgets,
 													 const FSPanelCOFWearableOutfitListItem::Params& params)
-: LLPanelWearableOutfitItem(item, worn_indication_enabled, params)
+: LLPanelWearableOutfitItem(item, worn_indication_enabled, params, show_widgets)
 , mWeightCtrl(NULL)
 {
 	LLTextBox::Params weight_params = params.item_weight;
@@ -460,13 +553,17 @@ BOOL FSPanelCOFWearableOutfitListItem::postBuild()
 {
 	mWeightCtrl = getChild<LLTextBox>("item_weight");
 
-	LLPanelWearableOutfitItem::postBuild();
+	if (!LLPanelWearableOutfitItem::postBuild())
+	{
+		return FALSE;
+	}
 
-	addWidgetToRightSide("item_weight");
+	addWidgetToRightSide(mWeightCtrl);
 
 	// Reserve space for 'delete' button event if it is invisible.
 	setRightWidgetsWidth(mWeightCtrl->getRect().getWidth() + 5);
 
+	setWidgetsVisible(true);
 	reshapeWidgets();
 
 	return TRUE;
@@ -481,6 +578,35 @@ void FSPanelCOFWearableOutfitListItem::updateItemWeight(U32 item_weight)
 		LLResMgr::getInstance()->getIntegerString(complexity_string, item_weight);
 	}
 	mWeightCtrl->setText(complexity_string);
+}
+
+//virtual
+void FSPanelCOFWearableOutfitListItem::updateItem(const std::string& name, EItemState item_state)
+{
+	LLPanelWearableOutfitItem::updateItem(name, item_state);
+
+	setShowWidget("add_wearable", false);
+	setShowWidget("remove_wearable", mShowWidgets && mIsWorn && mHovered);
+	setWidgetsVisible(true);
+	reshapeWidgets();
+}
+
+//virtual
+void FSPanelCOFWearableOutfitListItem::onMouseEnter(S32 x, S32 y, MASK mask)
+{
+	LLPanelInventoryListItemBase::onMouseEnter(x, y, mask);
+	setShowWidget("remove_wearable", mShowWidgets && mIsWorn);
+	setWidgetsVisible(true);
+	reshapeWidgets();
+}
+
+//virtual
+void FSPanelCOFWearableOutfitListItem::onMouseLeave(S32 x, S32 y, MASK mask)
+{
+	LLPanelInventoryListItemBase::onMouseLeave(x, y, mask);
+	setShowWidget("remove_wearable", false);
+	setWidgetsVisible(true);
+	reshapeWidgets();
 }
 
 //virtual
@@ -745,6 +871,7 @@ static const LLDefaultChildRegistry::Register<LLWearableItemsList> r("wearable_i
 LLWearableItemsList::Params::Params()
 :	standalone("standalone", true)
 ,	worn_indication_enabled("worn_indication_enabled", true)
+,   show_item_widgets("show_item_widgets", false)
 ,	show_create_new("show_create_new", true) // <FS:Ansariel> Optional "Create new" menu item
 ,	show_complexity("show_complexity", false) // <FS:Ansariel> Show per-item complexity in COF
 {}
@@ -763,6 +890,7 @@ LLWearableItemsList::LLWearableItemsList(const LLWearableItemsList::Params& p)
 	}
 	mWornIndicationEnabled = p.worn_indication_enabled;
 	setNoItemsCommentText(LLTrans::getString("LoadingData"));
+    mShowItemWidgets = p.show_item_widgets;
 	mShowCreateNew = p.show_create_new; // <FS:Ansariel> Optional "Create new" menu item
 	// <FS:Ansariel> Show per-item complexity in COF
 	mShowComplexity = p.show_complexity;
@@ -795,10 +923,10 @@ LLPanel* LLWearableItemsList::createNewItem(LLViewerInventoryItem* item)
     }
 
     // <FS:Ansariel> Show per-item complexity in COF
-    //return LLPanelWearableOutfitItem::create(item, mWornIndicationEnabled);
+    //return LLPanelWearableOutfitItem::create(item, mWornIndicationEnabled, mShowItemWidgets);
     if (!mShowComplexity)
     {
-        return LLPanelWearableOutfitItem::create(item, mWornIndicationEnabled);
+        return LLPanelWearableOutfitItem::create(item, mWornIndicationEnabled, mShowItemWidgets);
     }
     else
     {
@@ -813,7 +941,7 @@ LLPanel* LLWearableItemsList::createNewItem(LLViewerInventoryItem* item)
             mLinkedItemsMap[linked_item_id] = item->getUUID();
             weight = mItemComplexityMap[linked_item_id];
         }
-        return FSPanelCOFWearableOutfitListItem::create(item, mWornIndicationEnabled, weight);
+        return FSPanelCOFWearableOutfitListItem::create(item, mWornIndicationEnabled, mShowItemWidgets, weight);
     }
     // </FS:Ansariel>
 }

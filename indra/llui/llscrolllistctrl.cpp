@@ -201,7 +201,6 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	mHighlightedItem(-1),
 	mBorder(NULL),
 	mSortCallback(NULL),
-	mPopupMenu(NULL),
 	mCommentTextView(NULL),
 	mNumDynamicWidthColumns(0),
 	mTotalStaticColumnWidth(0),
@@ -412,6 +411,13 @@ LLScrollListCtrl::~LLScrollListCtrl()
 	mItemList.clear();
     clearColumns(); //clears columns and deletes headers
 	delete mIsFriendSignal;
+
+	auto menu = mPopupMenuHandle.get();
+	if (menu)
+	{
+		menu->die();
+		mPopupMenuHandle.markDead();
+	}
 }
 
 
@@ -1423,20 +1429,20 @@ LLScrollListItem* LLScrollListCtrl::getItemByLabel(const std::string& label, BOO
 }
 
 
-BOOL LLScrollListCtrl::selectItemByPrefix(const std::string& target, BOOL case_sensitive)
+BOOL LLScrollListCtrl::selectItemByPrefix(const std::string& target, BOOL case_sensitive, S32 column)
 {
-	return selectItemByPrefix(utf8str_to_wstring(target), case_sensitive);
+	return selectItemByPrefix(utf8str_to_wstring(target), case_sensitive, column);
 }
 
 // Selects first enabled item that has a name where the name's first part matched the target string.
 // Returns false if item not found.
-BOOL LLScrollListCtrl::selectItemByPrefix(const LLWString& target, BOOL case_sensitive)
+BOOL LLScrollListCtrl::selectItemByPrefix(const LLWString& target, BOOL case_sensitive, S32 column)
 // <FS:Ansariel> Allow selection by substring match
 {
 	return selectItemByStringMatch(target, true, case_sensitive);
 }
 
-BOOL LLScrollListCtrl::selectItemByStringMatch(const LLWString& target, bool prefix_match, BOOL case_sensitive)
+BOOL LLScrollListCtrl::selectItemByStringMatch(const LLWString& target, bool prefix_match, BOOL case_sensitive, S32 column)
 // </FS:Ansariel>
 {
 	BOOL found = FALSE;
@@ -1452,7 +1458,7 @@ BOOL LLScrollListCtrl::selectItemByStringMatch(const LLWString& target, bool pre
 		{
 			LLScrollListItem* item = *iter;
 			// Only select enabled items with matching names
-			LLScrollListCell* cellp = item->getColumn(getSearchColumn());
+			LLScrollListCell* cellp = item->getColumn(column == -1 ? getSearchColumn() : column);
 			BOOL select = cellp ? item->getEnabled() && ('\0' == cellp->getValue().asString()[0]) : FALSE;
 			if (select)
 			{
@@ -1475,7 +1481,7 @@ BOOL LLScrollListCtrl::selectItemByStringMatch(const LLWString& target, bool pre
 			LLScrollListItem* item = *iter;
 
 			// Only select enabled items with matching names
-			LLScrollListCell* cellp = item->getColumn(getSearchColumn());
+			LLScrollListCell* cellp = item->getColumn(column == -1 ? getSearchColumn() : column);
 			if (!cellp)
 			{
 				continue;
@@ -2252,17 +2258,23 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 
 			// create the context menu from the XUI file and display it
 			std::string menu_name = is_group ? "menu_url_group.xml" : "menu_url_agent.xml";
-			delete mPopupMenu;
-			llassert(LLMenuGL::sMenuContainer != NULL);
-			mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>(
-				menu_name, LLMenuGL::sMenuContainer, LLMenuHolderGL::child_registry_t::instance());
-			if (mPopupMenu)
+			auto menu = mPopupMenuHandle.get();
+			if (menu)
 			{
+				menu->die();
+				mPopupMenuHandle.markDead();
+			}
+			llassert(LLMenuGL::sMenuContainer != NULL);
+			menu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>(
+				menu_name, LLMenuGL::sMenuContainer, LLMenuHolderGL::child_registry_t::instance());
+			if (menu)
+			{
+				mPopupMenuHandle = menu->getHandle();
 				if (mIsFriendSignal)
 				{
 					bool isFriend = *(*mIsFriendSignal)(uuid);
-					LLView* addFriendButton = mPopupMenu->getChild<LLView>("add_friend");
-					LLView* removeFriendButton = mPopupMenu->getChild<LLView>("remove_friend");
+					LLView* addFriendButton = menu->getChild<LLView>("add_friend");
+					LLView* removeFriendButton = menu->getChild<LLView>("remove_friend");
 
 					if (addFriendButton && removeFriendButton)
 					{
@@ -2271,8 +2283,8 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 					}
 				}
 
-				mPopupMenu->show(x, y);
-				LLMenuGL::showPopup(this, mPopupMenu, x, y);
+				menu->show(x, y);
+				LLMenuGL::showPopup(this, menu, x, y);
 				return TRUE;
 			}
 		}

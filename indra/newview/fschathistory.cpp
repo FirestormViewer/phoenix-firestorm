@@ -1265,9 +1265,7 @@ FSChatHistory::FSChatHistory(const FSChatHistory::Params& p)
 
 LLSD FSChatHistory::getValue() const
 {
-  LLSD* text=new LLSD(); 
-  text->assign(getText());
-  return *text;
+	return LLSD(getText());
 }
 
 FSChatHistory::~FSChatHistory()

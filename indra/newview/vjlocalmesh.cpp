@@ -308,12 +308,12 @@ void LLLocalMeshObject::attachSkinInfo()
 	auto skinmap_seeker = gMeshRepo.mSkinMap.find(mSculptID);
 	if (skinmap_seeker == gMeshRepo.mSkinMap.end())
 	{
-		gMeshRepo.mSkinMap[mSculptID] = mMeshSkinInfo;
+		gMeshRepo.mSkinMap[mSculptID] = &mMeshSkinInfo;
 	}
 	else
 	{	
 		// NOTE: seems necessary, not tested without.
-		skinmap_seeker->second = mMeshSkinInfo;
+		skinmap_seeker->second = &mMeshSkinInfo;
 	}
 }
 

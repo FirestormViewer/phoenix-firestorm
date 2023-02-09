@@ -3460,14 +3460,15 @@ bool enable_object_show_original()
 }
 // </FS:Ansariel>
 
-static void init_default_item_label(const std::string& item_name)
+static void init_default_item_label(LLUICtrl* ctrl)
 {
+	const std::string& item_name = ctrl->getName();
 	boost::unordered_map<std::string, LLStringExplicit>::iterator it = sDefaultItemLabels.find(item_name);
 	if (it == sDefaultItemLabels.end())
 	{
 		// *NOTE: This will not work for items of type LLMenuItemCheckGL because they return boolean value
 		//       (doesn't seem to matter much ATM).
-		LLStringExplicit default_label = gMenuHolder->childGetValue(item_name).asString();
+		LLStringExplicit default_label = ctrl->getValue().asString();
 		if (!default_label.empty())
 		{
 			sDefaultItemLabels.insert(std::pair<std::string, LLStringExplicit>(item_name, default_label));
@@ -3506,18 +3507,17 @@ bool enable_object_touch(LLUICtrl* ctrl)
 	}
 // [/RLVa:KB]
 
-	std::string item_name = ctrl->getName();
-	init_default_item_label(item_name);
+	init_default_item_label(ctrl);
 
 	// Update label based on the node touch name if available.
 	LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstRootNode();
 	if (node && node->mValid && !node->mTouchName.empty())
 	{
-		gMenuHolder->childSetValue(item_name, node->mTouchName);
+		ctrl->setValue(node->mTouchName);
 	}
 	else
 	{
-		gMenuHolder->childSetValue(item_name, get_default_item_label(item_name));
+		ctrl->setValue(get_default_item_label(ctrl->getName()));
 	}
 
 	return new_value;
@@ -6915,9 +6915,6 @@ class LLToolsSelectNextPartFace : public view_listener_t
                     }
                 }
                 LLSelectMgr::getInstance()->selectObjectOnly(to_select, new_te);
-
-                // <FS:Zi> Add this back in additionally to selectObjectOnly() to get the lastOperadedTE()
-                // function back working to properly shift+cycle through faces
                 LLSelectMgr::getInstance()->addAsIndividual(to_select, new_te, false);
             }
             else
@@ -8155,20 +8152,18 @@ bool enable_object_sit(LLUICtrl* ctrl)
 	bool sitting_on_sel = sitting_on_selection();
 	if (!sitting_on_sel)
 	{
-		std::string item_name = ctrl->getName();
-
 		// init default labels
-		init_default_item_label(item_name);
+		init_default_item_label(ctrl);
 
 		// Update label
 		LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstRootNode();
 		if (node && node->mValid && !node->mSitName.empty())
 		{
-			gMenuHolder->childSetValue(item_name, node->mSitName);
+			ctrl->setValue(node->mSitName);
 		}
 		else
 		{
-			gMenuHolder->childSetValue(item_name, get_default_item_label(item_name));
+			ctrl->setValue(get_default_item_label(ctrl->getName()));
 		}
 	}
 
@@ -9531,7 +9526,6 @@ void handle_selected_texture_info(void*)
    		map_t::iterator it;
    		for (it = faces_per_texture.begin(); it != faces_per_texture.end(); ++it)
    		{
-   			LLUUID image_id = it->first;
    			U8 te = it->second[0];
    			LLViewerTexture* img = node->getObject()->getTEImage(te);
    			S32 height = img->getHeight();

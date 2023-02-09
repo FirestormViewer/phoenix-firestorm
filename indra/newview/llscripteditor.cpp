@@ -31,6 +31,8 @@
 #include "llsyntaxid.h"
 #include "lllocalcliprect.h"
 
+#include "llpreviewscript.h"
+
 // <FS:Ansariel> FIRE-23047: Increase width of line number column
 //const S32	UI_TEXTEDITOR_LINE_NUMBER_MARGIN = 32;
 const S32	UI_TEXTEDITOR_LINE_NUMBER_MARGIN = 40;
@@ -283,3 +285,19 @@ void LLScriptEditor::startOfLine()
 	}
 }
 // </FS>
+
+// <FS:Ansariel> Show keyword help on F1
+BOOL LLScriptEditor::handleKeyHere(KEY key, MASK mask)
+{
+	if (key == KEY_F1 && mask == MASK_NONE)
+	{
+		if (LLScriptEdCore* parent = getParentByType<LLScriptEdCore>(); parent != nullptr)
+		{
+			parent->onBtnDynamicHelp();
+			return TRUE;
+		}
+	}
+
+	return LLTextEditor::handleKeyHere(key, mask);
+}
+// </FS:Ansariel>

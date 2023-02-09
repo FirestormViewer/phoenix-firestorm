@@ -78,13 +78,13 @@ static LLPanelInjector<FSPanelRadar> t_fs_panel_radar("fs_panel_radar");
 
 FSPanelRadar::FSPanelRadar()
 	:	LLPanel(),
-		mRadarGearButton(NULL),
-		mOptionsButton(NULL),
-		mMiniMap(NULL),
+		mRadarGearButton(nullptr),
+		mOptionsButton(nullptr),
+		mMiniMap(nullptr),
 		mFilterSubString(LLStringUtil::null),
 		mFilterSubStringOrig(LLStringUtil::null),
-		mRadarList(NULL),
-		mVisibleCheckFunction(NULL),
+		mRadarList(nullptr),
+		mVisibleCheckFunction(),
 		mUpdateSignalConnection(),
 		mFSRadarColumnConfigConnection(),
 		mLastResizeDelta(0)
@@ -215,10 +215,9 @@ LLUUID FSPanelRadar::getCurrentItemID() const
 
 void FSPanelRadar::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 {
-	std::vector<LLScrollListItem*> selected_items = mRadarList->getAllSelected();
-	for (std::vector<LLScrollListItem*>::iterator it = selected_items.begin(); it != selected_items.end(); ++it)
+	for (auto selected_item : mRadarList->getAllSelected())
 	{
-		selected_uuids.push_back((*it)->getUUID());
+		selected_uuids.emplace_back(selected_item->getUUID());
 	}
 }
 
@@ -314,7 +313,7 @@ void FSPanelRadar::requestUpdate()
 
 void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stats)
 {
-	if (mVisibleCheckFunction && !mVisibleCheckFunction())
+	if (!mVisibleCheckFunction.empty() && !mVisibleCheckFunction())
 	{
 		return;
 	}
@@ -331,11 +330,10 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 	{
 		last_selected_id = mRadarList->getLastSelectedItem()->getUUID();
 	}
-	std::vector<LLScrollListItem*> selected_items = mRadarList->getAllSelected();
 	uuid_vec_t selected_ids;
-	for (std::vector<LLScrollListItem*>::iterator it = selected_items.begin(); it != selected_items.end(); ++it)
+	for (auto selected_item : mRadarList->getAllSelected())
 	{
-		selected_ids.push_back((*it)->getUUID());
+		selected_ids.emplace_back(selected_item->getUUID());
 	}
 	S32 lastScroll = mRadarList->getScrollPos();
 
@@ -346,11 +344,10 @@ void FSPanelRadar::updateList(const std::vector<LLSD>& entries, const LLSD& stat
 	mRadarList->setNeedsSort(false);
 
 	mRadarList->clearRows();
-	const std::vector<LLSD>::const_iterator it_end = entries.end();
-	for (std::vector<LLSD>::const_iterator it = entries.begin(); it != it_end; ++it)
+	for (const auto& avdata : entries)
 	{
-		LLSD entry = (*it)["entry"];
-		LLSD options = (*it)["options"];
+		LLSD entry = avdata["entry"];
+		LLSD options = avdata["options"];
 
 		LLSD row_data;
 		row_data["value"] = entry["id"];
@@ -480,7 +477,7 @@ void FSPanelRadar::onColumnDisplayModeChanged()
 	std::vector<LLScrollListColumn::Params> column_params = mRadarList->getColumnInitParams();
 	S32 column_padding = mRadarList->getColumnPadding();
 
-	LLFloater* parent_floater = NULL;
+	LLFloater* parent_floater = nullptr;
 	LLView* parent = getParent();
 	while (parent)
 	{
@@ -508,10 +505,8 @@ void FSPanelRadar::onColumnDisplayModeChanged()
 	mRadarList->clearColumns();
 	mRadarList->updateLayout();
 
-	std::vector<LLScrollListColumn::Params>::iterator param_it;
-	for (param_it = column_params.begin(); param_it != column_params.end(); ++param_it)
+	for (const auto& p : column_params)
 	{
-		LLScrollListColumn::Params p = *param_it;
 		default_width += (p.width.pixel_width.getValue() + column_padding);
 		
 		LLScrollListColumn::Params params;

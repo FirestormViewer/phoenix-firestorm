@@ -754,11 +754,7 @@ public:
 
 	LLContextMenuBranch(const Params&);
 
-	// <FS> Context menu memory leak fix by Rye Mutt
-	//virtual ~LLContextMenuBranch()
-	//{}
 	virtual ~LLContextMenuBranch();
-	// </FS>
 
 	// called to rebuild the draw label
 	virtual void	buildDrawLabel( void );

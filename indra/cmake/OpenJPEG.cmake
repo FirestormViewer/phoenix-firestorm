@@ -8,8 +8,7 @@ if (USESYSTEMLIBS)
   include(FindOpenJPEG)
 else (USESYSTEMLIBS)
   use_prebuilt_binary(openjpeg)
-  
-  set(OPENJPEG_LIBRARIES openjp2)
 
+  set(OPENJPEG_LIBRARIES openjp2)
   set(OPENJPEG_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include/openjpeg)
 endif (USESYSTEMLIBS)

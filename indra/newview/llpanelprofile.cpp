@@ -81,6 +81,7 @@
 #include "llviewernetwork.h" // <FS:Beq> For LLGridManager
 
 #include "fsdata.h"
+#include "fsradar.h"        // <FS:Zi> Update notes in radar when edited
 #include "llviewermenu.h"
 
 static LLPanelInjector<LLPanelProfileSecondLife> t_panel_profile_secondlife("panel_profile_secondlife");
@@ -495,6 +496,30 @@ class LLAgentHandler : public LLCommandHandler
 public:
 	// requires trusted browser to trigger
 	LLAgentHandler() : LLCommandHandler("agent", UNTRUSTED_THROTTLE) { }
+
+    virtual bool canHandleUntrusted(
+        const LLSD& params,
+        const LLSD& query_map,
+        LLMediaCtrl* web,
+        const std::string& nav_type)
+    {
+        if (params.size() < 2)
+        {
+            return true; // don't block, will fail later
+        }
+
+        if (nav_type == NAV_TYPE_CLICKED)
+        {
+            return true;
+        }
+
+        const std::string verb = params[1].asString();
+        if (verb == "about" || verb == "inspect" || verb == "reportAbuse")
+        {
+            return true;
+        }
+        return false;
+    }
 
 	bool handle(const LLSD& params, const LLSD& query_map,
 		LLMediaCtrl* web)
@@ -1237,7 +1262,6 @@ void LLPanelProfileSecondLife::resetData()
 
 void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avatar_data)
 {
-    LLUUID avatar_id = getAvatarId();
     const LLRelationship* relationship = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
     if ((relationship != NULL || gAgent.isGodlike()) && !getSelfProfile())
     {
@@ -1267,7 +1291,7 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
 #ifdef OPENSIM
     if (LLGridManager::instance().isInOpenSim())
     {
-        LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", avatar_id));
+        LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", getAvatarId()));
         if (!floater_profile)
         {
             // floater is dead, so panels are dead as well
@@ -1592,6 +1616,8 @@ void LLPanelProfileSecondLife::fillRightsData()
 void LLPanelProfileSecondLife::fillAgeData(const LLDate &born_on)
 {
     // <FS:Ansariel> Fix LL UI/UX design accident
+    //// Date from server comes already converted to stl timezone,
+    //// so display it as an UTC + 0
     //std::string name_and_date = getString("date_format");
     //LLSD args_name;
     //args_name["datetime"] = (S32)born_on.secondsSinceEpoch();
@@ -2235,7 +2261,7 @@ void LLPanelProfileSecondLife::onSaveDescriptionChanges()
     }
 // <FS:Beq> Restore UDP profiles
 #ifdef OPENSIM
-    else if(LLGridManager::getInstance()->isInOpenSim())
+    else if (LLGridManager::getInstance()->isInOpenSim())
     {
         if (getIsLoaded() && getSelfProfile())
         {
@@ -2482,7 +2508,7 @@ void LLPanelProfileSecondLife::onCommitProfileImage(const LLUUID& id)
     {
 // <FS:Beq> Make OpenSim profiles work again
 #ifdef OPENSIM
-        if(LLGridManager::getInstance()->isInOpenSim())
+        if (LLGridManager::getInstance()->isInOpenSim())
         {
             mImageId = id;
             // save immediately only if description changes are not pending.
@@ -2870,7 +2896,7 @@ void LLPanelProfileFirstLife::onCommitPhoto(const LLUUID& id)
     {
 // <FS:Beq> Make OpenSim profiles work again
 #ifdef OPENSIM
-        if(LLGridManager::getInstance()->isInOpenSim())
+        if (LLGridManager::getInstance()->isInOpenSim())
         {
             mImageId = id;
             mImageId = id;
@@ -2915,7 +2941,7 @@ void LLPanelProfileFirstLife::onSaveDescriptionChanges()
     }
 // <FS:Beq> Restore UDP profiles
 #ifdef OPENSIM
-    else if(LLGridManager::getInstance()->isInOpenSim())
+    else if (LLGridManager::getInstance()->isInOpenSim())
     {
         if (getIsLoaded() && getSelfProfile())
         {
@@ -3069,7 +3095,7 @@ void LLPanelProfileNotes::updateData()
         }
 // <FS:Beq> Restore UDO profiles
 #ifdef OPENSIM
-        else
+        else if(LLGridManager::instance().isInOpenSim())
         {
             LLAvatarPropertiesProcessor::getInstance()->sendAvatarNotesRequest(avatar_id);
         }
@@ -3132,10 +3158,20 @@ void LLPanelProfileNotes::onSaveNotesChanges()
         LLCoros::instance().launch("putAgentUserInfoCoro",
             boost::bind(put_avatar_properties_coro, cap_url, getAvatarId(), LLSD().with("notes", mCurrentNotes)));
     }
+// <FS:Beq> Restore UDO profiles
+#ifdef OPENSIM
+    else if (LLGridManager::instance().isInOpenSim())
+    {
+        LLAvatarPropertiesProcessor::getInstance()->sendNotes(getAvatarId(), mCurrentNotes);
+    }
+#endif
+// </FS:Beq>
     else
     {
         LL_WARNS("AvatarProperties") << "Failed to update profile data, no cap found" << LL_ENDL;
     }
+
+    FSRadar::getInstance()->updateNotes(getAvatarId(), mCurrentNotes);     // <FS:Zi> Update notes in radar when edited
 
     mSaveChanges->setEnabled(FALSE);
     mDiscardChanges->setEnabled(FALSE);
@@ -3250,19 +3286,25 @@ void LLPanelProfile::updateData()
     // include 'inited' or 'data_provided' state to not rerequest
     if (!getStarted() && avatar_id.notNull())
     {
+// <FS:Beq> Restore UDP profiles
+#ifdef OPENSIM
+        if (LLGridManager::instance().isInOpenSim())
+        {
+            mPanelSecondlife->updateData();
+            mPanelPicks->updateData();
+            mPanelFirstlife->updateData();
+            mPanelNotes->updateData();
+        }
+        else
+#endif
+        {
+// </FS:Beq>
         setIsLoading();
         mPanelSecondlife->setIsLoading();
         mPanelPicks->setIsLoading();
         mPanelFirstlife->setIsLoading();
         mPanelNotes->setIsLoading();
-// <FS:Beq> Restore UDP profiles
-#ifdef OPENSIM
-        mPanelSecondlife->updateData();
-        mPanelPicks->updateData();
-        mPanelFirstlife->updateData();
-        mPanelNotes->updateData();
-#endif
-// </FS:Beq>
+        } // <FS:Beq/> restore udp profiles
         std::string cap_url = gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP);
         if (!cap_url.empty())
         {
@@ -3270,10 +3312,12 @@ void LLPanelProfile::updateData()
                 boost::bind(request_avatar_properties_coro, cap_url, avatar_id));
         }
 // <FS:Beq> Restore UDP profiles
-        else
+#ifdef OPENSIM
+        else if (LLGridManager::instance().isInOpenSim())
         {
             LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(avatar_id);
         }
+#endif
 // </FS:Beq>
     }
 }
@@ -3331,7 +3375,7 @@ void LLPanelProfile::commitUnsavedChanges()
     mPanelNotes->commitUnsavedChanges();
     // <FS:Beq> restore UDP - this is effectvely the apply() method from the previous incarnation
 #ifdef OPENSIM
-	if ( (gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty()) && getSelfProfile() )
+	if (LLGridManager::instance().isInOpenSim() && (gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty()) && getSelfProfile())
 	{
 		//KC - Avatar data is spread over 3 different panels
 		// collect data from the last 2 and give to the first to save
