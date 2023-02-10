@@ -778,9 +778,18 @@ void LLLocalMeshFile::applyToVObject(LLUUID viewer_object_id, int object_index, 
 
 	// force refresh (selected/edit mode won't let it redraw otherwise)
 	auto& target_drawable = target_object->mDrawable;
-	target_drawable->getVOVolume()->forceLOD(LLModel::LOD_LOW);
-    target_drawable->getVOVolume()->forceLOD(LLModel::LOD_HIGH);
-	gPipeline.markRebuild(target_drawable, LLDrawable::REBUILD_VOLUME, FALSE);
+
+	if( target_drawable.notNull() )
+	{
+		target_object->markForUpdate(true);
+		// target_drawable->updateSpatialExtents();
+		// target_drawable->movePartition();
+		gPipeline.markRebuild(target_drawable, LLDrawable::REBUILD_ALL, true);
+		if(auto floater_ptr = LLLocalMeshSystem::getInstance()->getFloaterPointer(); floater_ptr != nullptr)
+		{
+			floater_ptr->toggleSelectTool(false);
+		}
+	}
 	// NOTE: this ^^ (or lod change) causes renderer crash on mesh with degenerate primitives.
 	LL_INFOS("LocalMesh") << "Object " << object_index << " marked for rebuild" << LL_ENDL;
 }
