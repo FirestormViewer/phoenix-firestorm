@@ -5486,8 +5486,11 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 		(type == LLRenderPass::PASS_ALPHA && facep->isState(LLFace::FULLBRIGHT)) ||
 		(facep->getTextureEntry()->getFullbright());
 	
-	if (!fullbright && type != LLRenderPass::PASS_GLOW && !facep->getVertexBuffer()->hasDataType(LLVertexBuffer::TYPE_NORMAL))
+	if (!fullbright && 
+        type != LLRenderPass::PASS_GLOW && 
+        !facep->getVertexBuffer()->hasDataType(LLVertexBuffer::TYPE_NORMAL))
 	{
+        llassert(false);
 		LL_WARNS() << "Non fullbright face has no normals!" << LL_ENDL;
 		return;
 	}
@@ -5596,33 +5599,35 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 		}
 	}
 
-	if (idx >= 0 && 
-		draw_vec[idx]->mVertexBuffer == facep->getVertexBuffer() &&
-		draw_vec[idx]->mEnd == facep->getGeomIndex()-1 &&
+    LLDrawInfo* info = idx >= 0 ? draw_vec[idx] : nullptr;
+
+	if (info && 
+		info->mVertexBuffer == facep->getVertexBuffer() &&
+		info->mEnd == facep->getGeomIndex()-1 &&
 		(LLPipeline::sTextureBindTest || draw_vec[idx]->mTexture == tex || batchable) &&
 #if LL_DARWIN
-		draw_vec[idx]->mEnd - draw_vec[idx]->mStart + facep->getGeomCount() <= (U32) gGLManager.mGLMaxVertexRange &&
-		draw_vec[idx]->mCount + facep->getIndicesCount() <= (U32) gGLManager.mGLMaxIndexRange &&
+		info->mEnd - draw_vec[idx]->mStart + facep->getGeomCount() <= (U32) gGLManager.mGLMaxVertexRange &&
+		info->mCount + facep->getIndicesCount() <= (U32) gGLManager.mGLMaxIndexRange &&
 #endif
-		draw_vec[idx]->mMaterialID == mat_id &&
-		draw_vec[idx]->mFullbright == fullbright &&
-		draw_vec[idx]->mBump == bump &&
-		(!mat || (draw_vec[idx]->mShiny == shiny)) && // need to break batches when a material is shared, but legacy settings are different
-		draw_vec[idx]->mTextureMatrix == tex_mat &&
-		draw_vec[idx]->mModelMatrix == model_mat &&
-		draw_vec[idx]->mShaderMask == shader_mask &&
-        draw_vec[idx]->mAvatar == facep->mAvatar &&
-        draw_vec[idx]->getSkinHash() == facep->getSkinHash())
+		info->mMaterialID == mat_id &&
+		info->mFullbright == fullbright &&
+		info->mBump == bump &&
+		(!mat || (info->mShiny == shiny)) && // need to break batches when a material is shared, but legacy settings are different
+		info->mTextureMatrix == tex_mat &&
+		info->mModelMatrix == model_mat &&
+		info->mShaderMask == shader_mask &&
+        info->mAvatar == facep->mAvatar &&
+        info->getSkinHash() == facep->getSkinHash())
 	{
-		draw_vec[idx]->mCount += facep->getIndicesCount();
-		draw_vec[idx]->mEnd += facep->getGeomCount();
+		info->mCount += facep->getIndicesCount();
+		info->mEnd += facep->getGeomCount();
 
-		if (index < FACE_DO_NOT_BATCH_TEXTURES && index >= draw_vec[idx]->mTextureList.size())
+		if (index < FACE_DO_NOT_BATCH_TEXTURES && index >= info->mTextureList.size())
 		{
-			draw_vec[idx]->mTextureList.resize(index+1);
-			draw_vec[idx]->mTextureList[index] = tex;
+			info->mTextureList.resize(index+1);
+			info->mTextureList[index] = tex;
 		}
-		draw_vec[idx]->validate();
+		info->validate();
 	}
 	else
 	{
@@ -5632,6 +5637,9 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 		U32 count = facep->getIndicesCount();
 		LLPointer<LLDrawInfo> draw_info = new LLDrawInfo(start,end,count,offset, tex,
 			facep->getVertexBuffer(), fullbright, bump);
+
+        info = draw_info;
+
 		draw_vec.push_back(draw_info);
 		draw_info->mTextureMatrix = tex_mat;
 		draw_info->mModelMatrix = model_mat;
@@ -5707,6 +5715,13 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 		}
 		draw_info->validate();
 	}
+
+    llassert(type != LLPipeline::RENDER_TYPE_PASS_GLTF_PBR || info->mGLTFMaterial != nullptr);
+    llassert(type != LLPipeline::RENDER_TYPE_PASS_GLTF_PBR_RIGGED || info->mGLTFMaterial != nullptr);
+    llassert(type != LLPipeline::RENDER_TYPE_PASS_GLTF_PBR_ALPHA_MASK || info->mGLTFMaterial != nullptr);
+    llassert(type != LLPipeline::RENDER_TYPE_PASS_GLTF_PBR_ALPHA_MASK_RIGGED || info->mGLTFMaterial != nullptr);
+
+    llassert(type != LLRenderPass::PASS_NORMSPEC || info->mNormalMap.notNull());
 }
 
 void LLVolumeGeometryManager::getGeometry(LLSpatialGroup* group)
@@ -6128,7 +6143,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 					}
 					facep->setPoolType(type);
 
-					if (vobj->isHUDAttachment())
+					if (vobj->isHUDAttachment() && !is_pbr)
 					{
 						facep->setState(LLFace::FULLBRIGHT);
 					}
@@ -6856,17 +6871,17 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 				fullbright = TRUE;
 			}
 
-			if (hud_group)
+            const LLTextureEntry* te = facep->getTextureEntry();
+            LLGLTFMaterial* gltf_mat = te->getGLTFRenderMaterial();
+
+			if (hud_group && gltf_mat == nullptr)
 			{ //all hud attachments are fullbright
 				fullbright = TRUE;
 			}
-
-			const LLTextureEntry* te = facep->getTextureEntry();
+			
 			tex = facep->getTexture();
 
 			BOOL is_alpha = (facep->getPoolType() == LLDrawPool::POOL_ALPHA) ? TRUE : FALSE;
-		
-            LLGLTFMaterial* gltf_mat = te->getGLTFRenderMaterial();
 
             LLMaterial* mat = nullptr;
             bool can_be_shiny = false;
@@ -6892,7 +6907,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 
             is_alpha = (is_alpha || transparent) ? TRUE : FALSE;
 
-			if ((gltf_mat || mat) && LLPipeline::sRenderDeferred && !hud_group)
+			if (gltf_mat || (mat && !hud_group))
 			{
 				bool material_pass = false;
 
@@ -7062,7 +7077,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 					registerFace(group, facep, LLRenderPass::PASS_INVISI_SHINY);
 					registerFace(group, facep, LLRenderPass::PASS_INVISIBLE);
 				}
-				else if (LLPipeline::sRenderDeferred && !hud_group)
+				else if (!hud_group)
 				{ //deferred rendering
 					if (te->getFullbright())
 					{ //register in post deferred fullbright shiny pass
@@ -7107,7 +7122,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 					{
 						registerFace(group, facep, LLRenderPass::PASS_FULLBRIGHT);
 					}
-					if (LLPipeline::sRenderDeferred && !hud_group && LLPipeline::sRenderBump && use_legacy_bump)
+					if (!hud_group && LLPipeline::sRenderBump && use_legacy_bump)
 					{ //if this is the deferred render and a bump map is present, register in post deferred bump
 						registerFace(group, facep, LLRenderPass::PASS_POST_BUMP);
 					}
@@ -7143,7 +7158,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 			}
 			
 			//not sure why this is here, and looks like it might cause bump mapped objects to get rendered redundantly -- davep 5/11/2010
-			if (!is_alpha && (hud_group || !LLPipeline::sRenderDeferred))
+			if (!is_alpha && hud_group)
 			{
 				llassert((mask & LLVertexBuffer::MAP_NORMAL) || fullbright);
 				facep->setPoolType((fullbright) ? LLDrawPool::POOL_FULLBRIGHT : LLDrawPool::POOL_SIMPLE);
@@ -7156,7 +7171,14 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 
 			if (!is_alpha && LLPipeline::sRenderGlow && te->getGlow() > 0.f)
 			{
-				registerFace(group, facep, LLRenderPass::PASS_GLOW);
+                if (gltf_mat)
+                {
+                    registerFace(group, facep, LLRenderPass::PASS_GLTF_GLOW);
+                }
+                else
+                {
+                    registerFace(group, facep, LLRenderPass::PASS_GLOW);
+                }
 			}
 						
 			++face_iter;

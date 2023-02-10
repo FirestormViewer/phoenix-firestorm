@@ -907,6 +907,11 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
 	}
 // [/SL:KB]
 
+    if (LLPipeline::sRenderTransparentWater)
+    { //water reflection texture
+        mWaterDis.allocate(resX, resY, GL_RGBA, true);
+    }
+
 	if (RenderUIBuffer)
 	{
 		if (!mRT->uiScreen.allocate(resX,resY, GL_RGBA))
@@ -1203,7 +1208,6 @@ void LLPipeline::releaseGLBuffers()
 
 	releaseLUTBuffers();
 
-	mWaterRef.release();
 	mWaterDis.release();
     mBake.release();
 	
@@ -1278,12 +1282,6 @@ void LLPipeline::createGLBuffers()
 	assertInitialized();
 
 	exoPostProcess::instance().ExodusRenderPostUpdate(); // <FS:CR> Import Vignette from Exodus
-	if (LLPipeline::sRenderTransparentWater)
-	{ //water reflection texture
-		U32 res = (U32) llmax(gSavedSettings.getS32("RenderWaterRefResolution"), 512);
-        mWaterDis.allocate(res,res,GL_RGBA,true);
-	}
-
     // Use FBO for bake tex
     // <FS:Ansariel> Allow higher resolution rendering in mesh render preview
     //mBake.allocate(512, 512, GL_RGBA, true); // SL-12781 Build > Upload > Model; 3D Preview
@@ -4091,6 +4089,8 @@ void LLPipeline::renderGeomDeferred(LLCamera& camera, bool do_occlusion)
 	LLAppViewer::instance()->pingMainloopTimeout("Pipeline:RenderGeomDeferred");
 	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL; //LL_RECORD_BLOCK_TIME(FTM_RENDER_GEOMETRY);
     LL_PROFILE_GPU_ZONE("renderGeomDeferred");
+
+    llassert(!sRenderingHUDs);
 
     if (gUseWireframe)
     {
@@ -8176,6 +8176,8 @@ void LLPipeline::renderDeferredLighting()
         return;
     }
 
+    llassert(!sRenderingHUDs);
+
     static LLCachedControl<F32> ambiance_scale(gSavedSettings, "RenderReflectionProbeAmbianceScale", 8.f);
 
     F32 light_scale = 1.f;
@@ -8617,6 +8619,7 @@ void LLPipeline::renderDeferredLighting()
                           LLPipeline::RENDER_TYPE_VOLUME,
                           LLPipeline::RENDER_TYPE_GLOW,
                           LLPipeline::RENDER_TYPE_BUMP,
+                          LLPipeline::RENDER_TYPE_GLTF_PBR,
                           LLPipeline::RENDER_TYPE_PASS_SIMPLE,
                           LLPipeline::RENDER_TYPE_PASS_ALPHA,
                           LLPipeline::RENDER_TYPE_PASS_ALPHA_MASK,
@@ -8626,6 +8629,7 @@ void LLPipeline::renderDeferredLighting()
                           LLPipeline::RENDER_TYPE_PASS_FULLBRIGHT_ALPHA_MASK,
                           LLPipeline::RENDER_TYPE_PASS_FULLBRIGHT_SHINY,
                           LLPipeline::RENDER_TYPE_PASS_GLOW,
+                          LLPipeline::RENDER_TYPE_PASS_GLTF_GLOW,
                           LLPipeline::RENDER_TYPE_PASS_GRASS,
                           LLPipeline::RENDER_TYPE_PASS_SHINY,
                           LLPipeline::RENDER_TYPE_PASS_INVISIBLE,

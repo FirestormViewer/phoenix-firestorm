@@ -610,7 +610,7 @@ void LLReflectionMapManager::updateProbeFace(LLReflectionMap* probe, U32 face)
 
                 gRadianceGenProgram.uniform1f(sRoughness, (F32)i / (F32)(mMipChain.size() - 1));
                 gRadianceGenProgram.uniform1f(sMipLevel, i);
-                gRadianceGenProgram.uniform1i(sWidth, mMipChain[i].getWidth());
+                gRadianceGenProgram.uniform1i(sWidth, mProbeResolution);
 
                 for (int cf = 0; cf < 6; ++cf)
                 { // for each cube face
@@ -798,7 +798,9 @@ void LLReflectionMapManager::updateUniforms()
     LLEnvironment& environment = LLEnvironment::instance();
     LLSettingsSky::ptr_t psky = environment.getCurrentSky();
 
-    F32 minimum_ambiance = psky->getTotalReflectionProbeAmbiance();
+    static LLCachedControl<F32> cloud_shadow_scale(gSavedSettings, "RenderCloudShadowAmbianceFactor", 0.125f);
+    F32 minimum_ambiance = psky->getTotalReflectionProbeAmbiance(cloud_shadow_scale);
+
     F32 ambscale = gCubeSnapshot && !isRadiancePass() ? 0.f : 1.f;
     
 

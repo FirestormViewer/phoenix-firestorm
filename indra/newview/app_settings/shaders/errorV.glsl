@@ -1,9 +1,9 @@
 /** 
- * @file class1\lighting\lightFullbrightWaterF.glsl
+ * @file errorV.glsl
  *
- * $LicenseInfo:firstyear=2007&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2023&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2007, Linden Research, Inc.
+ * Copyright (C) 2023, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,26 +23,13 @@
  * $/LicenseInfo$
  */
 
-#ifdef DEFINE_GL_FRAGCOLOR
-out vec4 frag_color;
-#else
-#define frag_color gl_FragColor
-#endif
+ // fallback shader for whenever there is a compilation error
+uniform mat4 modelview_projection_matrix;
 
-VARYING vec4 vertex_color;
-VARYING vec2 vary_texcoord0;
+in vec3 position;
 
-/* vec4 diffuseLookup(vec2 texcoord); */
-
-vec3 fullbrightAtmosTransport(vec3 light);
-vec4 applyWaterFog(vec4 color);
-
-void fullbright_lighting_water()
+void main()
 {
-	vec4 color = diffuseLookup(vary_texcoord0.xy) * vertex_color;
-
-	color.rgb = fullbrightAtmosTransport(color.rgb);
-	
-	frag_color = applyWaterFog(color);
+    gl_Position = modelview_projection_matrix * vec4(position.xyz, 1.0);
 }
 

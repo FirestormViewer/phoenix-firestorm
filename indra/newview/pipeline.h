@@ -496,6 +496,8 @@ public:
         RENDER_TYPE_PASS_POST_BUMP_RIGGED = LLRenderPass::PASS_POST_BUMP_RIGGED,
 		RENDER_TYPE_PASS_GLOW					= LLRenderPass::PASS_GLOW,
         RENDER_TYPE_PASS_GLOW_RIGGED = LLRenderPass::PASS_GLOW_RIGGED,
+        RENDER_TYPE_PASS_GLTF_GLOW = LLRenderPass::PASS_GLTF_GLOW,
+        RENDER_TYPE_PASS_GLTF_GLOW_RIGGED = LLRenderPass::PASS_GLTF_GLOW_RIGGED,
 		RENDER_TYPE_PASS_ALPHA					= LLRenderPass::PASS_ALPHA,
 		RENDER_TYPE_PASS_ALPHA_MASK				= LLRenderPass::PASS_ALPHA_MASK,
         RENDER_TYPE_PASS_ALPHA_MASK_RIGGED = LLRenderPass::PASS_ALPHA_MASK_RIGGED,
@@ -730,12 +732,6 @@ public:
 	LLVector4				mSunOrthoClipPlanes;
 	LLVector2				mScreenScale;
 
-	//water reflection texture
-	LLRenderTarget				mWaterRef;
-    LLRenderTarget				mWaterDeferredScreen;
-    LLRenderTarget				mWaterDeferredDepth;
-    LLRenderTarget				mWaterOcclusionDepth;
-    LLRenderTarget			    mWaterDeferredLight;
 	//water distortion texture (refraction)
 	LLRenderTarget				mWaterDis;
 

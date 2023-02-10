@@ -1,9 +1,9 @@
 /** 
- * @file class1\lighting\lightFullbrightAlphaMaskF.glsl
+ * @file waterF.glsl
  *
- * $LicenseInfo:firstyear=2011&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2023&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2011, Linden Research, Inc.
+ * Copyright (C) 2023, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,37 +23,12 @@
  * $/LicenseInfo$
  */
 
-#ifdef DEFINE_GL_FRAGCOLOR
+ // error fallback on compilation failure
+
 out vec4 frag_color;
-#else
-#define frag_color gl_FragColor
-#endif
 
-uniform float minimum_alpha;
-uniform float texture_gamma; // either 1.0 or 2.2; see: "::TEXTURE_GAMMA"
-
-vec3 fullbrightAtmosTransport(vec3 light);
-vec3 fullbrightScaleSoftClip(vec3 light);
-
-VARYING vec4 vertex_color;
-VARYING vec2 vary_texcoord0;
-
-void fullbright_lighting()
+void main()
 {
-	vec4 color = diffuseLookup(vary_texcoord0.xy);
-	
-	if (color.a < minimum_alpha)
-	{
-		discard;
-	}
-
-	color *= vertex_color;
-
-	color.rgb = pow(color.rgb, vec3(texture_gamma));
-
-	color.rgb = fullbrightAtmosTransport(color.rgb);
-	color.rgb = fullbrightScaleSoftClip(color.rgb);
-
-	frag_color = color;
+    frag_color = vec4(1,0,1,1);
 }
 

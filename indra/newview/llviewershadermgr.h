@@ -170,7 +170,6 @@ extern LLGLSLShader			gOneTextureFilterProgram;
 //object shaders
 extern LLGLSLShader		gObjectPreviewProgram;
 extern LLGLSLShader        gPhysicsPreviewProgram;
-extern LLGLSLShader		gObjectFullbrightAlphaMaskProgram;
 extern LLGLSLShader        gSkinnedObjectFullbrightAlphaMaskProgram;
 extern LLGLSLShader		gObjectBumpProgram;
 extern LLGLSLShader        gSkinnedObjectBumpProgram;
@@ -269,6 +268,9 @@ extern LLGLSLShader         gDeferredGenBrdfLutProgram;
 extern LLGLSLShader			gDeferredMaterialProgram[LLMaterial::SHADER_COUNT*2];
 extern LLGLSLShader			gDeferredMaterialWaterProgram[LLMaterial::SHADER_COUNT*2];
 
+extern LLGLSLShader         gHUDPBROpaqueProgram;
+extern LLGLSLShader         gPBRGlowProgram;
 extern LLGLSLShader         gDeferredPBROpaqueProgram;
 extern LLGLSLShader         gDeferredPBRAlphaProgram;
+extern LLGLSLShader         gHUDPBRAlphaProgram;
 #endif

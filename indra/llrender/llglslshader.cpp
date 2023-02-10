@@ -82,12 +82,10 @@ BOOL shouldChange(const LLVector4& v1, const LLVector4& v2)
 }
 
 LLShaderFeatures::LLShaderFeatures()
-    : atmosphericHelpers(false)
-    , calculatesLighting(false)
+    : calculatesLighting(false)
     , calculatesAtmospherics(false)
     , hasLighting(false)
     , isAlphaLighting(false)
-    , isFullbright(false)
     , isSpecular(false)
     , hasWaterFog(false)
     , hasTransport(false)

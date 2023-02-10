@@ -206,8 +206,12 @@ LLGLSLShader            gDeferredGenBrdfLutProgram;
 // Deferred materials shaders
 LLGLSLShader			gDeferredMaterialProgram[LLMaterial::SHADER_COUNT*2];
 LLGLSLShader			gDeferredMaterialWaterProgram[LLMaterial::SHADER_COUNT*2];
+LLGLSLShader			gHUDPBROpaqueProgram;
+LLGLSLShader            gPBRGlowProgram;
+LLGLSLShader            gPBRGlowSkinnedProgram;
 LLGLSLShader			gDeferredPBROpaqueProgram;
 LLGLSLShader            gDeferredSkinnedPBROpaqueProgram;
+LLGLSLShader            gHUDPBRAlphaProgram;
 LLGLSLShader            gDeferredPBRAlphaProgram;
 LLGLSLShader            gDeferredSkinnedPBRAlphaProgram;
 
@@ -285,6 +289,7 @@ LLViewerShaderMgr::LLViewerShaderMgr() :
     mShaderList.push_back(&gDeferredWLMoonProgram);
     mShaderList.push_back(&gDeferredWLSunProgram);
     mShaderList.push_back(&gDeferredPBRAlphaProgram);
+    mShaderList.push_back(&gHUDPBRAlphaProgram);
     mShaderList.push_back(&gDeferredSkinnedPBRAlphaProgram);
 }
 
@@ -555,7 +560,6 @@ void LLViewerShaderMgr::unloadShaders()
 	gImpostorProgram.unload();
 	gObjectBumpProgram.unload();
     gSkinnedObjectBumpProgram.unload();
-	gObjectFullbrightAlphaMaskProgram.unload();
     gSkinnedObjectFullbrightAlphaMaskProgram.unload();
 	
 	gObjectAlphaMaskNoColorProgram.unload();
@@ -740,21 +744,13 @@ std::string LLViewerShaderMgr::loadBasicShaders()
     index_channels.push_back(-1);    shaders.push_back( make_pair( "deferred/screenSpaceReflUtil.glsl",             ssr ? 3 : 1) );
 	index_channels.push_back(-1);    shaders.push_back( make_pair( "lighting/lightNonIndexedF.glsl",                    mShaderLevel[SHADER_LIGHTING] ) );
 	index_channels.push_back(-1);    shaders.push_back( make_pair( "lighting/lightAlphaMaskNonIndexedF.glsl",                   mShaderLevel[SHADER_LIGHTING] ) );
-	index_channels.push_back(-1);    shaders.push_back( make_pair( "lighting/lightFullbrightNonIndexedF.glsl",          mShaderLevel[SHADER_LIGHTING] ) );
-	index_channels.push_back(-1);    shaders.push_back( make_pair( "lighting/lightFullbrightNonIndexedAlphaMaskF.glsl",         mShaderLevel[SHADER_LIGHTING] ) );
 	index_channels.push_back(-1);    shaders.push_back( make_pair( "lighting/lightWaterNonIndexedF.glsl",               mShaderLevel[SHADER_LIGHTING] ) );
 	index_channels.push_back(-1);    shaders.push_back( make_pair( "lighting/lightWaterAlphaMaskNonIndexedF.glsl",              mShaderLevel[SHADER_LIGHTING] ) );
-	index_channels.push_back(-1);    shaders.push_back( make_pair( "lighting/lightFullbrightWaterNonIndexedF.glsl", mShaderLevel[SHADER_LIGHTING] ) );
-	index_channels.push_back(-1);    shaders.push_back( make_pair( "lighting/lightFullbrightWaterNonIndexedAlphaMaskF.glsl",    mShaderLevel[SHADER_LIGHTING] ) );
 	index_channels.push_back(ch);    shaders.push_back( make_pair( "lighting/lightF.glsl",                  mShaderLevel[SHADER_LIGHTING] ) );
 	index_channels.push_back(ch);    shaders.push_back( make_pair( "lighting/lightAlphaMaskF.glsl",                 mShaderLevel[SHADER_LIGHTING] ) );
-	index_channels.push_back(ch);    shaders.push_back( make_pair( "lighting/lightFullbrightF.glsl",            mShaderLevel[SHADER_LIGHTING] ) );
-	index_channels.push_back(ch);    shaders.push_back( make_pair( "lighting/lightFullbrightAlphaMaskF.glsl",           mShaderLevel[SHADER_LIGHTING] ) );
 	index_channels.push_back(ch);    shaders.push_back( make_pair( "lighting/lightWaterF.glsl",             mShaderLevel[SHADER_LIGHTING] ) );
 	index_channels.push_back(ch);    shaders.push_back( make_pair( "lighting/lightWaterAlphaMaskF.glsl",    mShaderLevel[SHADER_LIGHTING] ) );
-	index_channels.push_back(ch);    shaders.push_back( make_pair( "lighting/lightFullbrightWaterF.glsl",   mShaderLevel[SHADER_LIGHTING] ) );
-	index_channels.push_back(ch);    shaders.push_back( make_pair( "lighting/lightFullbrightWaterAlphaMaskF.glsl",  mShaderLevel[SHADER_LIGHTING] ) );
-    
+	
 	for (U32 i = 0; i < shaders.size(); i++)
 	{
 		// Note usage of GL_FRAGMENT_SHADER
@@ -1036,6 +1032,8 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 			gDeferredMaterialWaterProgram[i].unload();
 		}
 
+        gHUDPBROpaqueProgram.unload();
+        gPBRGlowProgram.unload();
         gDeferredPBROpaqueProgram.unload();
         gDeferredSkinnedPBROpaqueProgram.unload();
         gDeferredPBRAlphaProgram.unload();
@@ -1336,11 +1334,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
         gDeferredPBROpaqueProgram.mShaderFiles.push_back(make_pair("deferred/pbropaqueV.glsl", GL_VERTEX_SHADER));
         gDeferredPBROpaqueProgram.mShaderFiles.push_back(make_pair("deferred/pbropaqueF.glsl", GL_FRAGMENT_SHADER));
         gDeferredPBROpaqueProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
-        gDeferredPBROpaqueProgram.addPermutation("HAS_NORMAL_MAP", "1");
-        gDeferredPBROpaqueProgram.addPermutation("HAS_SPECULAR_MAP", "1");
-        gDeferredPBROpaqueProgram.addPermutation("HAS_EMISSIVE_MAP", "1");
-        gDeferredPBROpaqueProgram.addPermutation("DIFFUSE_ALPHA_MODE", "0");
-
+        
         success = make_rigged_variant(gDeferredPBROpaqueProgram, gDeferredSkinnedPBROpaqueProgram);
         if (success)
         {
@@ -1348,6 +1342,41 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
         }
         llassert(success);
     }
+
+    if (success)
+    {
+        gPBRGlowProgram.mName = " PBR Glow Shader";
+        gPBRGlowProgram.mFeatures.hasSrgb = true;
+        gPBRGlowProgram.mShaderFiles.clear();
+        gPBRGlowProgram.mShaderFiles.push_back(make_pair("deferred/pbrglowV.glsl", GL_VERTEX_SHADER));
+        gPBRGlowProgram.mShaderFiles.push_back(make_pair("deferred/pbrglowF.glsl", GL_FRAGMENT_SHADER));
+        gPBRGlowProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+
+        success = make_rigged_variant(gPBRGlowProgram, gPBRGlowSkinnedProgram);
+        if (success)
+        {
+            success = gPBRGlowProgram.createShader(NULL, NULL);
+        }
+        llassert(success);
+    }
+
+    if (success)
+    {
+        gHUDPBROpaqueProgram.mName = "HUD PBR Opaque Shader";
+        gHUDPBROpaqueProgram.mFeatures.hasSrgb = true;
+        gHUDPBROpaqueProgram.mShaderFiles.clear();
+        gHUDPBROpaqueProgram.mShaderFiles.push_back(make_pair("deferred/pbropaqueV.glsl", GL_VERTEX_SHADER));
+        gHUDPBROpaqueProgram.mShaderFiles.push_back(make_pair("deferred/pbropaqueF.glsl", GL_FRAGMENT_SHADER));
+        gHUDPBROpaqueProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+        gHUDPBROpaqueProgram.clearPermutations();
+        gHUDPBROpaqueProgram.addPermutation("IS_HUD", "1");
+
+        success = gHUDPBROpaqueProgram.createShader(NULL, NULL);
+ 
+        llassert(success);
+    }
+
+    
 
 	if (success)
 	{
@@ -1385,21 +1414,6 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
             shader->addPermutation("HAS_SUN_SHADOW", "1");
         }
 
-        if (ambient_kill)
-        {
-            shader->addPermutation("AMBIENT_KILL", "1");
-        }
-
-        if (sunlight_kill)
-        {
-            shader->addPermutation("SUNLIGHT_KILL", "1");
-        }
-
-        if (local_light_kill)
-        {
-            shader->addPermutation("LOCAL_LIGHT_KILL", "1");
-        }
-
         shader->mShaderLevel = mShaderLevel[SHADER_DEFERRED];
         success = make_rigged_variant(*shader, gDeferredSkinnedPBRAlphaProgram);
         if (success)
@@ -1417,6 +1431,25 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
         shader->mRiggedVariant->mFeatures.hasLighting = true;
     }
 
+    if (success)
+    {
+        LLGLSLShader* shader = &gHUDPBRAlphaProgram;
+        shader->mName = "HUD PBR Alpha Shader";
+
+        shader->mFeatures.hasSrgb = true;
+        
+        shader->mShaderFiles.clear();
+        shader->mShaderFiles.push_back(make_pair("deferred/pbralphaV.glsl", GL_VERTEX_SHADER));
+        shader->mShaderFiles.push_back(make_pair("deferred/pbralphaF.glsl", GL_FRAGMENT_SHADER));
+
+        shader->clearPermutations();
+
+        shader->addPermutation("IS_HUD", "1");
+
+        shader->mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+        success = shader->createShader(NULL, NULL);
+        llassert(success);
+    }
 	
 	if (success)
 	{
@@ -2609,7 +2642,6 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
         gDeferredWLSunProgram.mFeatures.hasTransport = true;
         gDeferredWLSunProgram.mFeatures.hasGamma = true;
         gDeferredWLSunProgram.mFeatures.hasAtmospherics = true;
-        gDeferredWLSunProgram.mFeatures.isFullbright = true;
         gDeferredWLSunProgram.mFeatures.disableTextureIndex = true;
         gDeferredWLSunProgram.mFeatures.hasSrgb = true;
         gDeferredWLSunProgram.mShaderFiles.clear();
@@ -2629,7 +2661,6 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
         gDeferredWLMoonProgram.mFeatures.hasGamma = true;
         gDeferredWLMoonProgram.mFeatures.hasAtmospherics = true;
         gDeferredWLMoonProgram.mFeatures.hasSrgb = true;
-        gDeferredWLMoonProgram.mFeatures.isFullbright = true;
         gDeferredWLMoonProgram.mFeatures.disableTextureIndex = true;
         
         gDeferredWLMoonProgram.mShaderFiles.clear();
@@ -2799,24 +2830,6 @@ BOOL LLViewerShaderMgr::loadShadersObject()
 		gPhysicsPreviewProgram.mShaderLevel = mShaderLevel[SHADER_OBJECT];
 		success = gPhysicsPreviewProgram.createShader(NULL, NULL);
 		gPhysicsPreviewProgram.mFeatures.hasLighting = false;
-	}
-
-	if (success)
-	{
-		gObjectFullbrightAlphaMaskProgram.mName = "Fullbright Alpha Mask Shader";
-		gObjectFullbrightAlphaMaskProgram.mFeatures.calculatesAtmospherics = true;
-		gObjectFullbrightAlphaMaskProgram.mFeatures.hasGamma = true;
-		gObjectFullbrightAlphaMaskProgram.mFeatures.hasTransport = true;
-		gObjectFullbrightAlphaMaskProgram.mFeatures.isFullbright = true;
-		gObjectFullbrightAlphaMaskProgram.mFeatures.hasAlphaMask = true;
-		gObjectFullbrightAlphaMaskProgram.mFeatures.hasSrgb = true;
-		gObjectFullbrightAlphaMaskProgram.mFeatures.mIndexedTextureChannels = 0;
-		gObjectFullbrightAlphaMaskProgram.mShaderFiles.clear();
-		gObjectFullbrightAlphaMaskProgram.mShaderFiles.push_back(make_pair("objects/fullbrightV.glsl", GL_VERTEX_SHADER));
-		gObjectFullbrightAlphaMaskProgram.mShaderFiles.push_back(make_pair("objects/fullbrightF.glsl", GL_FRAGMENT_SHADER));
-		gObjectFullbrightAlphaMaskProgram.mShaderLevel = mShaderLevel[SHADER_OBJECT];
-        success = make_rigged_variant(gObjectFullbrightAlphaMaskProgram, gSkinnedObjectFullbrightAlphaMaskProgram);
-		success = success && gObjectFullbrightAlphaMaskProgram.createShader(NULL, NULL);
 	}
 
     if (!success)

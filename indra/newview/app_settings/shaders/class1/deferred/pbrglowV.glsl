@@ -1,9 +1,9 @@
-/**
- * @file fullbrightV.glsl
+/** 
+ * @file pbgglowV.glsl
  *
- * $LicenseInfo:firstyear=2007&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2023&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2007, Linden Research, Inc.
+ * Copyright (C) 2023, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,43 +23,48 @@
  * $/LicenseInfo$
  */
 
-uniform mat4 texture_matrix0;
-uniform mat4 modelview_matrix;
-uniform mat4 modelview_projection_matrix;
- 
-ATTRIBUTE vec3 position;
-void passTextureIndex();
-ATTRIBUTE vec2 texcoord0;
-ATTRIBUTE vec3 normal;
-ATTRIBUTE vec4 diffuse_color;
-
-void calcAtmospherics(vec3 inPositionEye);
-
-VARYING vec4 vertex_color;
-VARYING vec2 vary_texcoord0;
 
 #ifdef HAS_SKIN
-mat4 getObjectSkinnedTransform();
+uniform mat4 modelview_matrix;
 uniform mat4 projection_matrix;
+mat4 getObjectSkinnedTransform();
+#else
+uniform mat4 modelview_projection_matrix;
 #endif
+
+uniform mat4 texture_matrix0;
+
+uniform mat3 texture_basecolor_matrix;
+uniform mat3 texture_emissive_matrix;
+
+in vec3 position;
+in vec4 emissive;
+
+in vec2 texcoord0;
+
+out vec2 basecolor_texcoord;
+out vec2 emissive_texcoord;
+ 
+out vec4 vertex_emissive;
 
 void main()
 {
-	//transform vertex
-	vec4 vert = vec4(position.xyz,1.0);
-	passTextureIndex();
 #ifdef HAS_SKIN
     mat4 mat = getObjectSkinnedTransform();
-    mat = modelview_matrix * mat;
-    vec4 pos = mat * vert;
-    gl_Position = projection_matrix * pos;
-#else
-    vec4 pos = (modelview_matrix * vert);
-	gl_Position = modelview_projection_matrix*vec4(position.xyz, 1.0);
-#endif
-	vary_texcoord0 = (texture_matrix0 * vec4(texcoord0,0,1)).xy;
-	
-	calcAtmospherics(pos.xyz);
 
-	vertex_color = diffuse_color;
+    mat = modelview_matrix * mat;
+
+    vec3 pos = (mat*vec4(position.xyz,1.0)).xyz;
+
+    gl_Position = projection_matrix*vec4(pos,1.0);
+#else
+    //transform vertex
+    gl_Position = modelview_projection_matrix * vec4(position.xyz, 1.0); 
+#endif
+
+    basecolor_texcoord = (texture_matrix0 * vec4(texture_basecolor_matrix * vec3(texcoord0,1), 1)).xy;
+    emissive_texcoord = (texture_matrix0 * vec4(texture_emissive_matrix * vec3(texcoord0,1), 1)).xy;
+
+    vertex_emissive = emissive;
 }
+

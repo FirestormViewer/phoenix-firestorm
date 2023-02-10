@@ -40,8 +40,10 @@ void main()
 	//transform vertex
     vec4 pos = modelview_projection_matrix * vec4(position, 1.0);
 
-// bias z to fix SL-9806 and get stars to depth test against clouds
-    pos.z += 0.001f;
+    
+    // smash to far clip plane to 
+    // avoid rendering on top of moon (do NOT write to gl_FragDepth, it's slow)
+    pos.z = pos.w;
 
 	gl_Position = pos;
 
