@@ -8,7 +8,7 @@
 (dla obecnej sesji)
 	</global>
 	<global name="alwayschoose">
-		Zawsze wybieraj tą opcję
+		Zawsze wybieraj tę opcję
 	</global>
 	<global name="implicitclosebutton">
 		Zamknij
@@ -84,7 +84,7 @@ Inicjalizacja Marketplace nieudana z powodu błędu sieci lub systemu. Spróbuj 
 	<notification name="StockPasteFailed">
 		Kopiowanie lub przeniesienie do folderu Magazynowego nie powiodło się:
 
-        &apos;[ERROR_CODE]&apos;
+&apos;[ERROR_CODE]&apos;
 	</notification>
 	<notification name="MyOutfitsPasteFailed">
 		Jeden lub więcej przedmiotów nie może być użyty w "Strojach"
@@ -105,12 +105,12 @@ Inicjalizacja Marketplace nieudana z powodu błędu sieci lub systemu. Spróbuj 
 	<notification name="MerchantListingFailed">
 		Listowanie na Marketplace nie powiodło się:
 
-        &apos;[ERROR_CODE]&apos;
+&apos;[ERROR_CODE]&apos;
 	</notification>
 	<notification name="MerchantFolderActivationFailed">
 		Aktywacja tego folderu wersji nie powiodła się:
 
-        &apos;[ERROR_CODE]&apos;
+&apos;[ERROR_CODE]&apos;
 	</notification>
 	<notification name="MerchantForceValidateListing">
 		Aby wylistowanie tej rzeczy było możliwe hierarchia w jej zawartości została automatycznie naprawiona.
