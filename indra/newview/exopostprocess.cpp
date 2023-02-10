@@ -121,7 +121,7 @@ void exoShader::BindRenderTarget(LLRenderTarget* tgt, LLGLSLShader* shader, S32 
 {
 	if (gPipeline.sRenderDeferred)
 	{
-		S32 channel = channel = shader->enableTexture(uniform, tgt->getUsage());
+		S32 channel = shader->enableTexture(uniform, tgt->getUsage());
 		if (channel > -1)
 		{
 			tgt->bindTexture(0, channel);
