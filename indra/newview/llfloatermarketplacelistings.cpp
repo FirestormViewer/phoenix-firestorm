@@ -46,6 +46,7 @@
 #include "lltextbox.h"
 #include "lltrans.h"
 #include "fscommon.h"
+#include "llviewerwindow.h" // <FS:Ansariel> Multi item properties floater
 
 ///----------------------------------------------------------------------------
 /// LLPanelMarketplaceListings
@@ -996,3 +997,22 @@ void LLFloaterItemProperties::onOpen(const LLSD& key)
     }
 }
 
+// <FS:Ansariel> Multi item properties floater
+LLMultiItemProperties::LLMultiItemProperties(const LLSD& key)
+	: LLMultiFloater(LLSD())
+{
+	// start with a small rect in the top-left corner ; will get resized
+	LLRect rect;
+	rect.setLeftTopAndSize(0, gViewerWindow->getWindowHeightScaled(), 350, 350);
+	setRect(rect);
+	LLFloater* last_floater = LLFloaterReg::getLastFloaterInGroup(key.asString());
+	if (last_floater)
+	{
+		stackWith(*last_floater);
+	}
+	setTitle(LLTrans::getString("MultiPropertiesTitle"));
+	buildTabContainer();
+	// <FS:Ansariel> Center multifloater on screen
+	center();
+}
+// </FS:Ansariel>

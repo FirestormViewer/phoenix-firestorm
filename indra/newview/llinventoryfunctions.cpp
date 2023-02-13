@@ -99,6 +99,7 @@
 #include "aoengine.h"
 #include "fsfloaterwearablefavorites.h"
 #include "fslslbridge.h"
+#include "llfloatermarketplacelistings.h"
 #include "llfloaterproperties.h"
 
 BOOL LLInventoryState::sWearNewClothing = FALSE;
@@ -2842,6 +2843,7 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 
 	LLMultiPreview* multi_previewp = NULL;
 	LLMultiProperties* multi_propertiesp = NULL; // <FS:Ansariel> Keep legacy properties floater
+	LLMultiItemProperties* multi_itempropertiesp = nullptr; // <FS:Ansariel> Multi item properties floater
 
 	if (("task_open" == action  || "open" == action) && selected_items.size() > 1)
 	{
@@ -2878,9 +2880,18 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 		// <FS:Ansariel> Keep legacy properties floater
         //// Isn't supported (previously used LLMultiProperties)
         //LL_WARNS() << "Tried to open properties for multiple items" << LL_ENDL;
-		multi_propertiesp = new LLMultiProperties();
-		gFloaterView->addChild(multi_propertiesp);
-		LLFloater::setFloaterHost(multi_propertiesp);
+		if (gSavedSettings.getBOOL("FSUseLegacyObjectProperties"))
+		{
+			multi_propertiesp = new LLMultiProperties();
+			gFloaterView->addChild(multi_propertiesp);
+			LLFloater::setFloaterHost(multi_propertiesp);
+		}
+		else
+		{
+			multi_itempropertiesp = new LLMultiItemProperties("item_properties");
+			gFloaterView->addChild(multi_itempropertiesp);
+			LLFloater::setFloaterHost(multi_itempropertiesp);
+		}
 		// </FS:Ansariel>
 	}
 
@@ -3064,6 +3075,10 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 	else if (multi_propertiesp)
 	{
 		multi_propertiesp->openFloater(LLSD());
+	}
+	else if (multi_itempropertiesp)
+	{
+		multi_itempropertiesp->openFloater(LLSD());
 	}
 	// </FS:Ansariel>
 }
