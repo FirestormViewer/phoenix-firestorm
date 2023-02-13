@@ -119,6 +119,7 @@
 #include "llviewernetwork.h"
 #endif
 // </FS:Ansariel> [Legacy Bake]
+#include "llfloaterproperties.h" // <FS:Ansariel> Keep legacy properties floater
 
 //#define DEBUG_UPDATE_TYPE
 
@@ -3617,6 +3618,11 @@ void LLViewerObject::doInventoryCallback()
 
 void LLViewerObject::removeInventory(const LLUUID& item_id)
 {
+	// <FS:Ansariel> Keep legacy properties floater
+	// close any associated floater properties
+	LLFloaterReg::hideInstance("properties", item_id);
+	// </FS:Ansariel>
+
 	LLMessageSystem* msg = gMessageSystem;
 	msg->newMessageFast(_PREHASH_RemoveTaskInventory);
 	msg->nextBlockFast(_PREHASH_AgentData);
