@@ -41,6 +41,8 @@
 #include "llnotificationmanager.h"
 #include "llnotificationsutil.h"
 #include "llsidepaneliteminfo.h"
+#include "llsidepaneltaskinfo.h"
+#include "lltabcontainer.h"
 #include "lltextbox.h"
 #include "lltrans.h"
 #include "fscommon.h"
@@ -968,18 +970,29 @@ LLFloaterItemProperties::~LLFloaterItemProperties()
 
 BOOL LLFloaterItemProperties::postBuild()
 {
-    // On the standalone properties floater, we have no need for a back button...
-    LLSidepanelItemInfo* panel = getChild<LLSidepanelItemInfo>("item_panel");
-    LLButton* back_btn = panel->getChild<LLButton>("back_btn");
-    back_btn->setVisible(FALSE);
-    
 	return LLFloater::postBuild();
 }
 
 void LLFloaterItemProperties::onOpen(const LLSD& key)
 {
     // Tell the panel which item it needs to visualize
-    LLSidepanelItemInfo* panel = getChild<LLSidepanelItemInfo>("item_panel");
-    panel->setItemID(key["id"].asUUID());
+    LLPanel* panel = findChild<LLPanel>("sidepanel");
+    
+    LLSidepanelItemInfo* item_panel = dynamic_cast<LLSidepanelItemInfo*>(panel);
+    if (item_panel)
+    {
+        item_panel->setItemID(key["id"].asUUID());
+        if (key.has("object"))
+        {
+            item_panel->setObjectID(key["object"].asUUID());
+        }
+        item_panel->setParentFloater(this);
+    }
+    
+    LLSidepanelTaskInfo* task_panel = dynamic_cast<LLSidepanelTaskInfo*>(panel);
+    if (task_panel)
+    {
+        task_panel->setObjectSelection(LLSelectMgr::getInstance()->getSelection());
+    }
 }
 

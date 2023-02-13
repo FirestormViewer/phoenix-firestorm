@@ -1370,6 +1370,16 @@ BOOL LLInvFVBridge::isLinkedObjectInTrash() const
 	return FALSE;
 }
 
+bool LLInvFVBridge::isItemInOutfits() const
+{
+    const LLInventoryModel* model = getInventoryModel();
+    if(!model) return false;
+
+    const LLUUID my_outfits_cat = gInventory.findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS, false);
+
+    return isCOFFolder() || (my_outfits_cat == mUUID) || model->isObjectDescendentOf(mUUID, my_outfits_cat);
+}
+
 BOOL LLInvFVBridge::isLinkedObjectMissing() const
 {
 	const LLInventoryObject *obj = getInventoryObject();
@@ -2174,9 +2184,14 @@ std::string LLItemBridge::getLabelSuffix() const
 {
 	// String table is loaded before login screen and inventory items are
 	// loaded after login, so LLTrans should be ready.
+	// <FS:Ansariel> Keep it the old way please
+	//static std::string NO_COPY = LLTrans::getString("no_copy_lbl");
+	//static std::string NO_MOD = LLTrans::getString("no_modify_lbl");
+	//static std::string NO_XFER = LLTrans::getString("no_transfer_lbl");
 	static std::string NO_COPY = LLTrans::getString("no_copy");
 	static std::string NO_MOD = LLTrans::getString("no_modify");
 	static std::string NO_XFER = LLTrans::getString("no_transfer");
+	// </FS:Ansariel>
 	static std::string LINK = LLTrans::getString("link");
 	static std::string BROKEN_LINK = LLTrans::getString("broken_link");
 	std::string suffix;
@@ -2197,17 +2212,20 @@ std::string LLItemBridge::getLabelSuffix() const
 			BOOL copy = item->getPermissions().allowCopyBy(gAgent.getID());
 			if (!copy)
 			{
+                //suffix += " "; // <FS:Ansariel> Keep it the old way please
 				suffix += NO_COPY;
 			}
 			BOOL mod = item->getPermissions().allowModifyBy(gAgent.getID());
 			if (!mod)
 			{
-				suffix += NO_MOD;
+                //suffix += suffix.empty() ? " " : ","; // <FS:Ansariel> Keep it the old way please
+                suffix += NO_MOD;
 			}
 			BOOL xfer = item->getPermissions().allowOperationBy(PERM_TRANSFER,
 																gAgent.getID());
 			if (!xfer)
 			{
+                //suffix += suffix.empty() ? " " : ","; // <FS:Ansariel> Keep it the old way please
 				suffix += NO_XFER;
 			}
 		}
@@ -2410,6 +2428,21 @@ LLViewerInventoryItem* LLItemBridge::getItem() const
 		item = (LLViewerInventoryItem*)model->getItem(mUUID);
 	}
 	return item;
+}
+
+const LLUUID& LLItemBridge::getThumbnailUUID() const
+{
+    LLViewerInventoryItem* item = NULL;
+    LLInventoryModel* model = getInventoryModel();
+    if(model)
+    {
+        item = (LLViewerInventoryItem*)model->getItem(mUUID);
+    }
+    if (item)
+    {
+        return item->getThumbnailUUID();
+    }
+    return LLUUID::null;
 }
 
 BOOL LLItemBridge::isItemPermissive() const
@@ -6632,7 +6665,7 @@ std::string LLCallingCardBridge::getLabelSuffix() const
 	if( item && LLAvatarTracker::instance().isBuddyOnline(item->getCreatorUUID()) )
 	{
 		// <FS:Ansariel> FIRE-17715: Make "online" suffix in calling card folder localizable
-		//return LLItemBridge::getLabelSuffix() + " (online)";
+		//return LLItemBridge::getLabelSuffix() + " online";
 		return LLItemBridge::getLabelSuffix() + " " + LLTrans::getString("CallingCardOnlineLabelSuffix");
 		// </FS:Ansariel>
 	}
@@ -8389,9 +8422,6 @@ class LLObjectBridgeAction: public LLInvFVBridgeAction
 public:
 	virtual void doIt()
 	{
-		/*
-		  LLFloaterReg::showInstance("properties", mUUID);
-		*/
 		LLInvFVBridgeAction::doIt();
 	}
 	virtual ~LLObjectBridgeAction(){}

@@ -28,7 +28,6 @@
 #define LL_LLINVENTORYBRIDGE_H
 
 #include "llcallingcard.h"
-#include "llfloaterproperties.h"
 #include "llfolderviewmodel.h"
 #include "llinventorymodel.h"
 #include "llinventoryobserver.h"
@@ -84,6 +83,7 @@ public:
 	// LLInvFVBridge functionality
 	//--------------------------------------------------------------------
 	virtual const LLUUID& getUUID() const { return mUUID; }
+    virtual const LLUUID& getThumbnailUUID() const { return LLUUID::null; }
 	virtual void clearDisplayName() { mDisplayName.clear(); }
 	virtual void restoreItem() {}
 	virtual void restoreToWorld() {}
@@ -115,6 +115,7 @@ public:
 	virtual BOOL isItemRemovable() const;
 	virtual BOOL isItemMovable() const;
 	virtual BOOL isItemInTrash() const;
+    virtual bool isItemInOutfits() const;
 	virtual BOOL isLink() const;
 	virtual BOOL isLibraryItem() const;
 	//virtual BOOL removeItem() = 0;
@@ -269,6 +270,7 @@ public:
 	virtual LLUIImagePtr getIconOverlay() const;
 
 	LLViewerInventoryItem* getItem() const;
+    virtual const LLUUID& getThumbnailUUID() const;
 
 protected:
 	BOOL confirmRemoveItem(const LLSD& notification, const LLSD& response);

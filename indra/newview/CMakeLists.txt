@@ -420,7 +420,7 @@ set(viewer_SOURCE_FILES
     llfloaterpreferenceviewadvanced.cpp
     llfloaterpreviewtrash.cpp
     llfloaterprofiletexture.cpp
-    llfloaterproperties.cpp
+    llfloaterproperties.cpp # <FS:Ansariel> Keep legacy properties floater
     llfloaterregiondebugconsole.cpp
     llfloaterregioninfo.cpp
     llfloaterreporter.cpp
@@ -494,6 +494,7 @@ set(viewer_SOURCE_FILES
     llinspectgroup.cpp
     llinspectobject.cpp
     llinspectremoteobject.cpp
+    llinspecttexture.cpp
     llinspecttoast.cpp
     llinventorybridge.cpp
     llinventoryfilter.cpp
@@ -723,6 +724,7 @@ set(viewer_SOURCE_FILES
     lltextureinfodetails.cpp
     lltexturestats.cpp
     lltextureview.cpp
+    llthumbnailctrl.cpp
     lltoast.cpp
     lltoastalertpanel.cpp
     lltoastgroupnotifypanel.cpp
@@ -1204,7 +1206,7 @@ set(viewer_HEADER_FILES
     llfloaterpreferenceviewadvanced.h
     llfloaterpreviewtrash.h
     llfloaterprofiletexture.h
-    llfloaterproperties.h
+    llfloaterproperties.h # <FS:Ansariel> Keep legacy properties floater
     llfloaterregiondebugconsole.h
     llfloaterregioninfo.h
     llfloaterreporter.h
@@ -1276,6 +1278,7 @@ set(viewer_HEADER_FILES
     llinspectgroup.h
     llinspectobject.h
     llinspectremoteobject.h
+    llinspecttexture.h
     llinspecttoast.h
     llinventorybridge.h
     llinventoryfilter.h
@@ -1496,6 +1499,7 @@ set(viewer_HEADER_FILES
     lltextureinfodetails.h
     lltexturestats.h
     lltextureview.h
+    llthumbnailctrl.h
     lltoast.h
     lltoastalertpanel.h
     lltoastgroupnotifypanel.h

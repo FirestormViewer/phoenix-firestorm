@@ -189,7 +189,7 @@ protected:
 	void updateListCommands();
 	void onAddButtonClick();
 	void showActionMenu(LLMenuGL* menu, std::string spawning_view_name);
-	void onTrashButtonClick();
+	void onTrashButtonClick(); // <FS:Ansariel> Keep better inventory layout
 	void onClipboardAction(const LLSD& userdata);
 	BOOL isActionEnabled(const LLSD& command_name);
 	BOOL isActionChecked(const LLSD& userdata);
@@ -215,6 +215,7 @@ protected:
 	void onSearchTypeChecked(const LLSD& userdata);
 	// </FS:Zi> Extended Inventory Search
 
+	// <FS:Ansariel> Keep better inventory layout
 	bool handleDragAndDropToTrash(BOOL drop, EDragAndDropType cargo_type, EAcceptance* accept);
     static bool hasSettingsInventory();
 	/**
@@ -222,10 +223,12 @@ protected:
 	 */
 	void setUploadCostIfNeeded();
 private:
-	LLDragAndDropButton*		mTrashButton;
+	LLDragAndDropButton*		mTrashButton; // <FS:Ansariel> Keep better inventory layout
 	LLToggleableMenu*			mMenuGearDefault;
+    LLToggleableMenu*           mMenuViewDefault;
 	LLToggleableMenu*			mMenuVisibility;
 	LLMenuButton*				mGearMenuButton;
+    LLMenuButton*               mViewMenuButton;
 	LLMenuButton*				mVisibilityMenuButton;
 	LLHandle<LLView>			mMenuAddHandle;
 

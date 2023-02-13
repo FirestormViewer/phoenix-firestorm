@@ -40,6 +40,7 @@
 #include "llfolderviewitem.h"
 #include "llfloaterimcontainer.h"
 #include "llimview.h"
+#include "llinspecttexture.h"
 #include "llinventorybridge.h"
 #include "llinventoryfunctions.h"
 #include "llinventorymodelbackgroundfetch.h"
@@ -175,7 +176,7 @@ LLInventoryPanel::LLInventoryPanel(const LLInventoryPanel::Params& p) :
 	if (!sColorSetInitialized)
 	{
 		// <FS:Ansariel> Make inventory selection color independent from menu color
-		//sDefaultColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", DEFAULT_WHITE);
+		//sDefaultColor = LLUIColorTable::instance().getColor("InventoryItemColor", DEFAULT_WHITE);
 		//sDefaultHighlightColor = LLUIColorTable::instance().getColor("MenuItemHighlightFgColor", DEFAULT_WHITE);
 		sDefaultColor = LLUIColorTable::instance().getColor("InventoryItemEnabledColor", DEFAULT_WHITE);
 		sDefaultHighlightColor = LLUIColorTable::instance().getColor("InventoryItemHighlightFgColor", DEFAULT_WHITE);
@@ -1375,6 +1376,29 @@ BOOL LLInventoryPanel::handleHover(S32 x, S32 y, MASK mask)
 // </FS:AW>
 
 	return TRUE;
+}
+
+BOOL LLInventoryPanel::handleToolTip(S32 x, S32 y, MASK mask)
+{
+	if (const LLFolderViewItem* hover_item_p = (!mFolderRoot.isDead()) ? mFolderRoot.get()->getHoveredItem() : nullptr)
+	{
+		if (const LLFolderViewModelItemInventory* vm_item_p = static_cast<const LLFolderViewModelItemInventory*>(hover_item_p->getViewModelItem()))
+		{
+            LLSD params;
+            params["inv_type"] = vm_item_p->getInventoryType();
+            params["thumbnail_id"] = vm_item_p->getThumbnailUUID();
+            params["item_id"] = vm_item_p->getUUID();
+            
+			LLToolTipMgr::instance().show(LLToolTip::Params()
+					.message(hover_item_p->getToolTip())
+					.sticky_rect(hover_item_p->calcScreenRect())
+					.delay_time(LLView::getTooltipTimeout())
+					.create_callback(boost::bind(&LLInspectTextureUtil::createInventoryToolTip, _1))
+					.create_params(params));
+			return TRUE;
+		}
+	}
+	return LLPanel::handleToolTip(x, y, mask);
 }
 
 BOOL LLInventoryPanel::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,

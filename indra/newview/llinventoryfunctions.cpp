@@ -99,6 +99,7 @@
 #include "aoengine.h"
 #include "fsfloaterwearablefavorites.h"
 #include "fslslbridge.h"
+#include "llfloaterproperties.h"
 
 BOOL LLInventoryState::sWearNewClothing = FALSE;
 LLUUID LLInventoryState::sWearNewClothingTransactionID;
@@ -419,6 +420,7 @@ void copy_inventory_category(LLInventoryModel* model,
 							 bool move_no_copy_items )
 {
 	// Create the initial folder
+	// D567 needs to handle new fields
 	inventory_func_type func = boost::bind(&copy_inventory_category_content, _1, model, cat, root_copy_id, move_no_copy_items);
 	gInventory.createNewCategory(parent_id, LLFolderType::FT_NONE, cat->getName(), func);
 }
@@ -856,14 +858,21 @@ BOOL get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id)
 void show_task_item_profile(const LLUUID& item_uuid, const LLUUID& object_id)
 {
 	// <FS:Ansariel> Optional legacy object properties
-	//LLFloaterSidePanelContainer::showPanel("inventory", LLSD().with("id", item_uuid).with("object", object_id));
+    //LLSD params;
+    //params["id"] = item_uuid;
+    //params["object"] = object_id;
+    
+    //LLFloaterReg::showInstance("item_properties", params);
 	if (gSavedSettings.getBOOL("FSUseLegacyObjectProperties"))
 	{
 		LLFloaterReg::showInstance("properties", LLSD().with("item_id", item_uuid).with("object_id", object_id));
 	}
 	else
 	{
-		LLFloaterSidePanelContainer::showPanel("inventory", LLSD().with("id", item_uuid).with("object", object_id));
+		LLSD params;
+		params["id"] = item_uuid;
+		params["object"] = object_id;
+		LLFloaterReg::showInstance("item_properties", params);
 	}
 	// </FS:Ansariel>
 }
@@ -872,14 +881,14 @@ void show_item_profile(const LLUUID& item_uuid)
 {
 	LLUUID linked_uuid = gInventory.getLinkedItemID(item_uuid);
 	// <FS:Ansariel> Optional legacy object properties
-	//LLFloaterSidePanelContainer::showPanel("inventory", LLSD().with("id", linked_uuid));
+    //LLFloaterReg::showInstance("item_properties", LLSD().with("id", linked_uuid));
 	if (gSavedSettings.getBOOL("FSUseLegacyObjectProperties"))
 	{
 		LLFloaterReg::showInstance("properties", LLSD().with("item_id", linked_uuid));
 	}
 	else
 	{
-		LLFloaterSidePanelContainer::showPanel("inventory", LLSD().with("id", linked_uuid));
+		LLFloaterReg::showInstance("item_properties", LLSD().with("id", linked_uuid));
 	}
 	// </FS:Ansariel>
 }
@@ -2832,7 +2841,7 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 
 
 	LLMultiPreview* multi_previewp = NULL;
-	LLMultiProperties* multi_propertiesp = NULL;
+	LLMultiProperties* multi_propertiesp = NULL; // <FS:Ansariel> Keep legacy properties floater
 
 	if (("task_open" == action  || "open" == action) && selected_items.size() > 1)
 	{
@@ -2866,10 +2875,13 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 	}
 	else if (("task_properties" == action || "properties" == action) && selected_items.size() > 1)
 	{
+		// <FS:Ansariel> Keep legacy properties floater
+        //// Isn't supported (previously used LLMultiProperties)
+        //LL_WARNS() << "Tried to open properties for multiple items" << LL_ENDL;
 		multi_propertiesp = new LLMultiProperties();
 		gFloaterView->addChild(multi_propertiesp);
-
 		LLFloater::setFloaterHost(multi_propertiesp);
+		// </FS:Ansariel>
 	}
 
 	std::set<LLUUID> selected_uuid_set = LLAvatarActions::getInventorySelectedUUIDs();
@@ -3048,10 +3060,12 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 	{
 		multi_previewp->openFloater(LLSD());
 	}
+	// <FS:Ansariel> Keep legacy properties floater
 	else if (multi_propertiesp)
 	{
 		multi_propertiesp->openFloater(LLSD());
 	}
+	// </FS:Ansariel>
 }
 
 void LLInventoryAction::saveMultipleTextures(const std::vector<std::string>& filenames, std::set<LLFolderViewItem*> selected_items, LLInventoryModel* model)

@@ -128,6 +128,8 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	  mMenuVisibility(NULL),
 	  mMenuAddHandle(),
 	  mNeedUploadCost(true),
+      mMenuViewDefault(NULL),
+	  mViewMenuButton(nullptr), // <FS:Ansariel> Keep better inventory layout
 	  mSearchTypeCombo(NULL) // <FS:Ansariel> Properly initialize this
 {
 	// Menu Callbacks (non contex menus)
@@ -348,6 +350,9 @@ BOOL LLPanelMainInventory::postBuild()
 
 	mGearMenuButton = getChild<LLMenuButton>("options_gear_btn");
 	mVisibilityMenuButton = getChild<LLMenuButton>("options_visibility_btn");
+	// <FS:Ansariel> Keep better inventory layout
+    //mViewMenuButton = getChild<LLMenuButton>("view_btn");
+	mViewMenuButton = findChild<LLMenuButton>("view_btn");
 
 	initListCommandsHandlers();
 	const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
@@ -425,12 +430,12 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
 	gInventory.removeObserver(this);
 	delete mSavedFolderState;
 
-	auto menu = mMenuAddHandle.get();
-	if(menu)
-	{
-		menu->die();
-		mMenuAddHandle.markDead();
-	}
+    auto menu = mMenuAddHandle.get();
+    if(menu)
+    {
+        menu->die();
+        mMenuAddHandle.markDead();
+    }
 }
 
 LLInventoryPanel* LLPanelMainInventory::getAllItemsPanel()
@@ -1622,26 +1627,31 @@ void LLPanelMainInventory::showAllItemsPanel()
 
 void LLPanelMainInventory::initListCommandsHandlers()
 {
-	childSetAction("trash_btn", boost::bind(&LLPanelMainInventory::onTrashButtonClick, this));
+	childSetAction("trash_btn", boost::bind(&LLPanelMainInventory::onTrashButtonClick, this)); // <FS:Ansariel> Keep better inventory layout
 	childSetAction("add_btn", boost::bind(&LLPanelMainInventory::onAddButtonClick, this));
 
+	// <FS:Ansariel> Keep better inventory layout
 	mTrashButton = getChild<LLDragAndDropButton>("trash_btn");
 	mTrashButton->setDragAndDropHandler(boost::bind(&LLPanelMainInventory::handleDragAndDropToTrash, this
 			,	_4 // BOOL drop
 			,	_5 // EDragAndDropType cargo_type
 			,	_7 // EAcceptance* accept
 			));
+	// </FS:Ansariel>
 
 	mCommitCallbackRegistrar.add("Inventory.GearDefault.Custom.Action", boost::bind(&LLPanelMainInventory::onCustomAction, this, _2));
 	mEnableCallbackRegistrar.add("Inventory.GearDefault.Check", boost::bind(&LLPanelMainInventory::isActionChecked, this, _2));
 	mEnableCallbackRegistrar.add("Inventory.GearDefault.Enable", boost::bind(&LLPanelMainInventory::isActionEnabled, this, _2));
 	mMenuGearDefault = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_inventory_gear_default.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	mGearMenuButton->setMenu(mMenuGearDefault, LLMenuButton::MP_TOP_LEFT, true);
+    mMenuViewDefault = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_inventory_view_default.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	if (mViewMenuButton) // <FS:Ansariel> Keep better inventory layout
+		mViewMenuButton->setMenu(mMenuViewDefault);
 	LLMenuGL* menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_inventory_add.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	mMenuAddHandle = menu->getHandle();
 
 	mMenuVisibility = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_inventory_search_visibility.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-	mVisibilityMenuButton->setMenu(mMenuVisibility, LLMenuButton::MP_BOTTOM_LEFT, true);
+    mVisibilityMenuButton->setMenu(mMenuVisibility, LLMenuButton::MP_BOTTOM_LEFT, true);
 
 	// Update the trash button when selected item(s) get worn or taken off.
 	LLOutfitObserver::instance().addCOFChangedCallback(boost::bind(&LLPanelMainInventory::updateListCommands, this));
@@ -1649,9 +1659,10 @@ void LLPanelMainInventory::initListCommandsHandlers()
 
 void LLPanelMainInventory::updateListCommands()
 {
+	// <FS:Ansariel> Keep better inventory layout
 	bool trash_enabled = isActionEnabled("delete");
-
 	mTrashButton->setEnabled(trash_enabled);
+	// </FS:Ansariel>
 }
 
 void LLPanelMainInventory::onAddButtonClick()
@@ -1685,10 +1696,12 @@ void LLPanelMainInventory::showActionMenu(LLMenuGL* menu, std::string spawning_v
 	}
 }
 
+// <FS:Ansariel> Keep better inventory layout
 void LLPanelMainInventory::onTrashButtonClick()
 {
 	onClipboardAction("delete");
 }
+// </FS:Ansariel>
 
 void LLPanelMainInventory::onClipboardAction(const LLSD& userdata)
 {
@@ -1840,6 +1853,11 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 		}
 		LLFloaterReg::showInstance("linkreplace", params);
 	}
+
+    if (command_name == "toggle_search_outfits")
+    {
+        mActivePanel->getFilter().toggleSearchVisibilityOutfits();
+    }
 
 	if (command_name == "toggle_search_trash")
 	{
@@ -2008,6 +2026,11 @@ BOOL LLPanelMainInventory::isActionChecked(const LLSD& userdata)
 	{
 		return sort_order_mask & LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP;
 	}
+
+    if (command_name == "toggle_search_outfits")
+    {
+        return (mActivePanel->getFilter().getSearchVisibilityTypes() & LLInventoryFilter::VISIBILITY_OUTFITS) != 0;
+    }
 
 	if (command_name == "toggle_search_trash")
 	{
@@ -2209,6 +2232,7 @@ BOOL LLPanelMainInventory::isSearchTypeChecked(const LLSD& userdata)
 }
 // </FS:Zi> Extended Inventory Search
 
+// <FS:Ansariel> Keep better inventory layout
 bool LLPanelMainInventory::handleDragAndDropToTrash(BOOL drop, EDragAndDropType cargo_type, EAcceptance* accept)
 {
 	*accept = ACCEPT_NO;
@@ -2222,6 +2246,7 @@ bool LLPanelMainInventory::handleDragAndDropToTrash(BOOL drop, EDragAndDropType 
 	}
 	return true;
 }
+// </FS:Ansariel>
 
 void LLPanelMainInventory::setUploadCostIfNeeded()
 {

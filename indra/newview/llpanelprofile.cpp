@@ -71,6 +71,7 @@
 #include "llpanelblockedlist.h"
 #include "llpanelprofileclassifieds.h"
 #include "llpanelprofilepicks.h"
+#include "llthumbnailctrl.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"
 #include "llviewermenu.h" //is_agent_mappable
@@ -954,7 +955,7 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mShowInSearchCheckbox   = getChild<LLCheckBoxCtrl>("show_in_search");
     // </FS:Ansariel>
     // <FS:Zi> Allow proper texture swatch handling
-    // mSecondLifePic          = getChild<LLIconCtrl>("2nd_life_pic");
+    // mSecondLifePic          = getChild<LLThumbnailCtrl>("2nd_life_pic");
     mSecondLifePic          = getChild<LLTextureCtrl>("2nd_life_pic");
     // <FS:Zi>
     mSecondLifePicLayout    = getChild<LLPanel>("image_panel");
@@ -2700,7 +2701,7 @@ BOOL LLPanelProfileFirstLife::postBuild()
 {
     mDescriptionEdit = getChild<LLTextEditor>("fl_description_edit");
     // <FS:Zi> Allow proper texture swatch handling
-    // mPicture = getChild<LLIconCtrl>("real_world_pic");
+    // mPicture = getChild<LLThumbnailCtrl>("real_world_pic");
     mPicture = getChild<LLTextureCtrl>("real_world_pic");
     // </FS:Zi>
 

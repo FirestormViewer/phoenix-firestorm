@@ -1,8 +1,8 @@
 /** 
- * @file llmortician.h
- * @brief Base class for delayed deletions.
+ * @file lltexturemanagerbridge.h
+ * @brief Bridge to an application-specific texture manager.
  *
- * $LicenseInfo:firstyear=2005&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2012&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
  * 
@@ -24,33 +24,24 @@
  * $/LicenseInfo$
  */
 
-#ifndef LLMORTICIAN_H
-#define LLMORTICIAN_H
+#ifndef LL_TEXTUREMANAGERBRIDGE_H
+#define LL_TEXTUREMANAGERBRIDGE_H
 
-#include "stdtypes.h"
-#include <list>
+#include "llpointer.h"
+#include "llgltexture.h"
 
-class LL_COMMON_API LLMortician 
+// Abstract bridge interface
+class LLTextureManagerBridge
 {
 public:
-	LLMortician() { mIsDead = FALSE; }
-	static auto graveyardCount() { return sGraveyard.size(); };
-	static size_t logClass(std::stringstream &str);
-	static void updateClass();
-	virtual ~LLMortician();
-	void die();
-	BOOL isDead() { return mIsDead; }
+    virtual ~LLTextureManagerBridge() {}
 
-	// sets destroy immediate true
-	static void setZealous(BOOL b);
-
-private:
-	static BOOL sDestroyImmediate;
-
-	BOOL mIsDead;
-
-	static std::list<LLMortician*> sGraveyard;
+	virtual LLPointer<LLGLTexture> getLocalTexture(BOOL usemipmaps = TRUE, BOOL generate_gl_tex = TRUE) = 0;
+	virtual LLPointer<LLGLTexture> getLocalTexture(const U32 width, const U32 height, const U8 components, BOOL usemipmaps, BOOL generate_gl_tex = TRUE) = 0;
+	virtual LLGLTexture* getFetchedTexture(const LLUUID &image_id) = 0;
 };
 
-#endif
+extern LLTextureManagerBridge* gTextureManagerBridgep;
+
+#endif // LL_TEXTUREMANAGERBRIDGE_H
 

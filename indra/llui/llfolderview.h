@@ -144,6 +144,10 @@ public:
 	// applies filters to control visibility of items
 	virtual void filter( LLFolderViewFilter& filter);
 
+	void              clearHoveredItem() { setHoveredItem(nullptr); }
+	LLFolderViewItem* getHoveredItem() const;
+	void              setHoveredItem(LLFolderViewItem* itemp);
+
 	// Get the last selected item
 	virtual LLFolderViewItem* getCurSelectedItem( void );
     selected_items_t& getSelectedItems( void );
@@ -280,6 +284,7 @@ protected:
 	LLHandle<LLView>					mPopupMenuHandle;
 	std::string						mMenuFileName;
 	
+	LLHandle<LLView>				mHoveredItem;
 	selected_items_t				mSelectedItems;
 	bool							mKeyboardSelection,
 									mAllowMultiSelect,

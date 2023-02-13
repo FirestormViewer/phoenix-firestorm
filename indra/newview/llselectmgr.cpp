@@ -58,7 +58,7 @@
 #include "llviewerwindow.h"
 #include "lldrawable.h"
 #include "llfloaterinspect.h"
-#include "llfloaterproperties.h"
+#include "llfloaterproperties.h" // <FS:Ansariel> Keep legacy properties floater
 #include "llfloaterreporter.h"
 #include "llfloaterreg.h"
 #include "llfloatertools.h"
@@ -7061,7 +7061,7 @@ void dialog_refresh_all()
 		gMenuAttachmentOther->arrange();
 	}
 
-	LLFloaterProperties::dirtyAll();
+	LLFloaterProperties::dirtyAll(); // <FS:Ansariel> Keep legacy properties floater
 
 	LLFloaterInspect* inspect_instance = LLFloaterReg::findTypedInstance<LLFloaterInspect>("inspect");
 	if(inspect_instance)

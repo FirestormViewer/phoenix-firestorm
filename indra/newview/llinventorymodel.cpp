@@ -518,6 +518,31 @@ void LLInventoryModel::getDirectDescendentsOf(const LLUUID& cat_id,
 	items = get_ptr_in_map(mParentChildItemTree, cat_id);
 }
 
+void LLInventoryModel::getDirectDescendentsOf(const LLUUID& cat_id, cat_array_t& categories, item_array_t& items, LLInventoryCollectFunctor& f) const
+{
+    if (cat_array_t* categoriesp = get_ptr_in_map(mParentChildCategoryTree, cat_id))
+    {
+        for (LLViewerInventoryCategory* pFolder : *categoriesp)
+        {
+			if (f(pFolder, nullptr))
+			{
+				categories.push_back(pFolder);
+			}
+        }
+    }
+
+    if (item_array_t* itemsp = get_ptr_in_map(mParentChildItemTree, cat_id))
+    {
+        for (LLViewerInventoryItem* pItem : *itemsp)
+        {
+			if (f(nullptr, pItem))
+			{
+				items.push_back(pItem);
+			}
+        }
+    }
+}
+
 LLMD5 LLInventoryModel::hashDirectDescendentNames(const LLUUID& cat_id) const
 {
 	LLInventoryModel::cat_array_t* cat_array;
@@ -754,24 +779,25 @@ LLUUID LLInventoryModel::findCategoryByName(std::string name)
 // updateCategory() with a newly generated UUID category, but this
 // version will take care of details like what the name should be
 // based on preferred type. Returns the UUID of the new category.
+//
+// On failure, returns a null UUID.
+// FIXME: callers do not check for or handle a null results currently.
 LLUUID LLInventoryModel::createNewCategory(const LLUUID& parent_id,
 										   LLFolderType::EType preferred_type,
 										   const std::string& pname,
 										   inventory_func_type callback)
 {
-	LLUUID id;
+	LLUUID id; // Initially null.
 	if (!isInventoryUsable())
 	{
 		LL_WARNS(LOG_INV) << "Inventory is not usable; can't create requested category of type "
 						  << preferred_type << LL_ENDL;
-		// FIXME failing but still returning an id?
 		return id;
 	}
 
 	if(LLFolderType::lookup(preferred_type) == LLFolderType::badLookup())
 	{
 		LL_DEBUGS(LOG_INV) << "Attempt to create undefined category." << LL_ENDL;
-		// FIXME failing but still returning an id?
 		return id;
 	}
 
@@ -783,17 +809,29 @@ LLUUID LLInventoryModel::createNewCategory(const LLUUID& parent_id,
 		LL_WARNS(LOG_INV) << "Creating new system folder, type " << preferred_type << LL_ENDL;
 	}
 
-	id.generate();
 	std::string name = pname;
-	if(!pname.empty())
-	{
-		name.assign(pname);
-	}
-	else
+	if (pname.empty())
 	{
 		name.assign(LLViewerFolderType::lookupNewCategoryName(preferred_type));
 	}
 	
+#ifdef USE_AIS_FOR_NC
+	// D567 currently this doesn't really work due to limitations in
+	// AIS3, also violates the common caller assumption that we can
+	// assign the id and return immediately.
+	if (callback)
+	{
+		// D567 note that we no longer assign the UUID in the viewer, so various workflows need to change.
+		LLSD new_inventory = LLSD::emptyMap();
+		new_inventory["categories"] = LLSD::emptyArray();
+		LLViewerInventoryCategory cat(LLUUID::null, parent_id, preferred_type, name, gAgent.getID());
+		LLSD cat_sd = cat.asLLSD();
+		new_inventory["categories"].append(cat_sd);
+		AISAPI::CreateInventory(parent_id, new_inventory, callback);
+
+		return LLUUID::null;
+	}
+#else
 	LLViewerRegion* viewer_region = gAgent.getRegion();
 	std::string url;
 	if ( viewer_region )
@@ -803,6 +841,7 @@ LLUUID LLInventoryModel::createNewCategory(const LLUUID& parent_id,
 	{
 		//Let's use the new capability.
 		
+		id.generate();
 		LLSD request, body;
 		body["folder_id"] = id;
 		body["parent_id"] = parent_id;
@@ -818,17 +857,22 @@ LLUUID LLInventoryModel::createNewCategory(const LLUUID& parent_id,
 
 		return LLUUID::null;
 	}
+#endif
+
 
 	if (!gMessageSystem)
 	{
 		return LLUUID::null;
 	}
 
-	// FIXME this UDP code path needs to be removed. Requires
+	// D567 FIXME this UDP code path needs to be removed. Requires
 	// reworking many of the callers to use callbacks rather than
 	// assuming instant success.
 
 	// Add the category to the internal representation
+	LL_WARNS() << "D567 need to remove this usage" << LL_ENDL;
+	
+	id.generate();
 	LLPointer<LLViewerInventoryCategory> cat =
 		new LLViewerInventoryCategory(id, parent_id, preferred_type, name, gAgent.getID());
 	cat->setVersion(LLViewerInventoryCategory::VERSION_INITIAL - 1); // accountForUpdate() will icrease version by 1

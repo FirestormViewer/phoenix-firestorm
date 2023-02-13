@@ -71,6 +71,7 @@
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+#include "llfloaterproperties.h" // <FS:Ansariel> Keep legacy properties floater
 
 const LLColor4U DEFAULT_WHITE(255, 255, 255);
 #include "tea.h" // <FS:AW opensim currency support>
@@ -122,6 +123,7 @@ public:
 	virtual PermissionMask getPermissionMask() const { return PERM_NONE; }
 	/*virtual*/ LLFolderType::EType getPreferredType() const { return LLFolderType::FT_NONE; }
 	virtual const LLUUID& getUUID() const { return mUUID; }
+    virtual const LLUUID& getThumbnailUUID() const { return LLUUID::null;}
 	virtual time_t getCreationDate() const;
 	virtual void setCreationDate(time_t creation_date_utc);
 
@@ -1573,6 +1575,7 @@ void LLPanelObjectInventory::inventoryChanged(LLViewerObject* object,
 		mInventoryNeedsUpdate = TRUE;
 	}
 
+	// <FS:Ansariel> Keep legacy properties floater
 	// refresh any properties floaters that are hanging around.
 	if(inventory)
 	{
@@ -1587,6 +1590,7 @@ void LLPanelObjectInventory::inventoryChanged(LLViewerObject* object,
 			}
 		}
 	}
+	// </FS:Ansariel>
 }
 
 void LLPanelObjectInventory::updateInventory()
