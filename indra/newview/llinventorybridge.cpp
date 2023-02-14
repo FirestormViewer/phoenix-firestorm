@@ -999,14 +999,6 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 
 	addDeleteContextMenuOptions(items, disabled_items);
 
-	// If multiple items are selected, disable properties (if it exists).
-	// <FS> Old, standalone properties floater
-	//if ((flags & FIRST_SELECTED_ITEM) == 0)
-	//{
-	//	disabled_items.push_back(std::string("Properties"));
-	//}
-	// </FS>
-
 	LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel(FALSE);
 	// <FS:Zi> Don't offer "Show in Main View" for folders opened in separate inventory views
 	//         as there are no tabs to switch to

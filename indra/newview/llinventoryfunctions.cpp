@@ -49,6 +49,7 @@
 #include "llclipboard.h"
 #include "lldirpicker.h"
 #include "lldonotdisturbnotificationstorage.h"
+#include "llfloatermarketplacelistings.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llfocusmgr.h"
 #include "llfolderview.h"
@@ -2842,8 +2843,8 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 
 
 	LLMultiPreview* multi_previewp = NULL;
+	LLMultiItemProperties* multi_itempropertiesp = nullptr;
 	LLMultiProperties* multi_propertiesp = NULL; // <FS:Ansariel> Keep legacy properties floater
-	LLMultiItemProperties* multi_itempropertiesp = nullptr; // <FS:Ansariel> Multi item properties floater
 
 	if (("task_open" == action  || "open" == action) && selected_items.size() > 1)
 	{
@@ -2878,8 +2879,9 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 	else if (("task_properties" == action || "properties" == action) && selected_items.size() > 1)
 	{
 		// <FS:Ansariel> Keep legacy properties floater
-        //// Isn't supported (previously used LLMultiProperties)
-        //LL_WARNS() << "Tried to open properties for multiple items" << LL_ENDL;
+		//multi_itempropertiesp = new LLMultiItemProperties("item_properties");
+		//gFloaterView->addChild(multi_itempropertiesp);
+		//LLFloater::setFloaterHost(multi_itempropertiesp);
 		if (gSavedSettings.getBOOL("FSUseLegacyObjectProperties"))
 		{
 			multi_propertiesp = new LLMultiProperties();
@@ -3071,14 +3073,14 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 	{
 		multi_previewp->openFloater(LLSD());
 	}
+	else if (multi_itempropertiesp)
+	{
+		multi_itempropertiesp->openFloater(LLSD());
+	}
 	// <FS:Ansariel> Keep legacy properties floater
 	else if (multi_propertiesp)
 	{
 		multi_propertiesp->openFloater(LLSD());
-	}
-	else if (multi_itempropertiesp)
-	{
-		multi_itempropertiesp->openFloater(LLSD());
 	}
 	// </FS:Ansariel>
 }

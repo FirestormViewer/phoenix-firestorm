@@ -33,8 +33,8 @@
 #include "llinventorypanel.h"
 #include "llnotificationptr.h"
 #include "llmodaldialog.h"
+#include "llmultifloater.h"
 #include "lltexteditor.h"
-#include "llmultifloater.h" // <FS:Ansariel> Multi item properties floater
 
 class LLInventoryCategoriesObserver;
 class LLInventoryCategoryAddedObserver;
@@ -228,12 +228,10 @@ public:
 private:
 };
 
-// <FS:Ansariel> Multi item properties floater
 class LLMultiItemProperties : public LLMultiFloater
 {
 public:
 	LLMultiItemProperties(const LLSD& key);
 };
-// </FS:Ansariel>
 
 #endif // LL_LLFLOATERMARKETPLACELISTINGS_H
