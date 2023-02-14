@@ -2,7 +2,7 @@
 <floater name="Local Mesh"
   positioning="centered"
   legacy_header_height="18"
-  can_resize="false"
+  can_resize="true"
   can_dock="false"
   can_close="true"
   height="300"
@@ -18,7 +18,7 @@
   title="Local Mesh">
 
   <tab_container name="local_mesh_tabs"
-    follows="top|left"
+    follows="top|left|right|bottom"
     top="20"
     left="0"
     height="223"
@@ -28,15 +28,15 @@
     tabs_flashing_color="MenuItemFlashBgColor">
     <last_tab tab_top_image_flash="TabTop_Right_Flashing" />
     <panel name="local_mesh_assets_panel"
+      follows="top|left|right|bottom"
       help_topic="local_mesh_assets"
       label="Local Mesh Assets"
       layout="topleft"
       title="Local Mesh Assets">
       <fs_scroll_list name="l_name_list"
         left_delta="5"
-        top_pad="5"
+        top_pad="18"
         width="495"
-        height="220"
         content_type="Objects"
         follows="left|top|right|bottom"
         column_padding="0"
@@ -62,13 +62,13 @@
       </fs_scroll_list>
     </panel>
     <panel name="logs_panel"
+    follows="top|left|right|bottom"
     label="Log"
     layout="topleft"
     help_topic="local_mesh_log">
       <view_border name="local_mesh_log_tab_border"
         bevel_style="none"
-        follows="top|left"
-        height="200"
+        follows="top|left|right|bottom"
         layout="topleft"
         left="3"
         ignore_tab="false"
@@ -79,7 +79,6 @@
         left_delta="0"
         top_delta="0"
         right="-2"
-        height="195"
         follows="left|top|right|bottom"
         type="string"
         embedded_items="false"
@@ -93,13 +92,13 @@
       </text_editor>
     </panel>
     <panel name="local_mesh_settings_panel"
+      follows="top|left|right|bottom"
       layout="topleft"
       label="Settings"
       help_topic="local_mesh_settings">
       <view_border name="local_mesh_settings_tab_border"
         bevel_style="none"
-        follows="top|left"
-        height="200"
+        follows="top|left|right|bottom"
         layout="topleft"
         left="3"
         ignore_tab="false"
@@ -263,7 +262,7 @@
   <combo_box name="object_apply_list"
     height="18"
     layout="topleft"
-    follows="left|top|bottom"
+    follows="bottom"
     left="105"
     top="253"
     width="315"
