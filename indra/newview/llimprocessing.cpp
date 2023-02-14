@@ -878,6 +878,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                     region_id,
                     position,
                     false,
+                    timestamp,
                     false,
                     keyword_alert_performed);
 
@@ -909,6 +910,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                         region_id,
                         position,
                         false,
+                        0,
                         true
                         );
                     // </FS:LO>
@@ -932,6 +934,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                                     region_id,
                                     position,
                                     false,
+                                    0,
                                     true);
                             LLGiveInventory::doGiveInventoryItem(from_id, item, session_id);
                         }
@@ -1028,6 +1031,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                         region_id,
                         position,
                         region_message,
+                        timestamp,
                         false,
                         keyword_alert_performed);
                 }
@@ -1704,7 +1708,9 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                     IM_SESSION_INVITE,
                     parent_estate_id,
                     region_id,
-                    position);
+                    position,
+                    false,      // is_region_msg
+                    timestamp);
             }
             else
             {
@@ -1735,13 +1741,14 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                     from_id,
                     name,
                     buffer,
-                    IM_OFFLINE == offline,
-                    ll_safe_string((char*)binary_bucket),
+                    (IM_OFFLINE == offline),
+                    ll_safe_string((char*)binary_bucket),   // session name
                     IM_SESSION_INVITE,
                     parent_estate_id,
                     region_id,
                     position,
                     false,
+                    timestamp,
                     false,
                     keyword_alert_performed);
             }
