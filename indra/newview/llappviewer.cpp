@@ -1817,7 +1817,10 @@ bool LLAppViewer::doFrame()
 			{
 				// Sleep if we're not rendering, or the window is minimized.
 				static LLCachedControl<S32> s_background_yield_time(gSavedSettings, "BackgroundYieldTime", 40);
-				S32 milliseconds_to_sleep = llclamp((S32)s_background_yield_time, 0, 1000);
+				// <FS:Ansariel> FIRE-32722: Make sure to idle if actually minimized
+				//S32 milliseconds_to_sleep = llclamp((S32)s_background_yield_time, 0, 1000);
+				S32 milliseconds_to_sleep = llclamp((S32)s_background_yield_time, (gViewerWindow && gViewerWindow->getWindow()->getMinimized()) ? 1 : 0, 1000);
+				// </FS:Ansariel>
 				// don't sleep when BackgroundYieldTime set to 0, since this will still yield to other threads
 				// of equal priority on Windows
 				if (milliseconds_to_sleep > 0)

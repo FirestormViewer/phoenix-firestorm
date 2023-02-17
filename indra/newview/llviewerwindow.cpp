@@ -6827,6 +6827,12 @@ void LLViewerWindow::setStartupComplete()
 	{
 		mProgressView->setStartupComplete();
 	}
+
+#if LL_SDL2
+	// FIRE-32559: For some reason aftrer login vsync always acts as if it's disabled, so
+	// the flag will get set again here after the 3D view is set up -Zi
+	getWindow()->toggleVSync(gSavedSettings.getBOOL("RenderVSyncEnable"));
+#endif
 }
 
 BOOL LLViewerWindow::getShowProgress() const
