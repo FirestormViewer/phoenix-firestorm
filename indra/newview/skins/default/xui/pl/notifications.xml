@@ -5215,4 +5215,8 @@ Zresetować adres URL do domyślnego?
 
 [SOURCES]
 	</notification>
+	<notification label="Rozgrupuj folder" name="UngroupFolder">
+		Rozgrupować folder "[FOLDER_NAME]"?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Tak" />
+	</notification>
 </notifications>
