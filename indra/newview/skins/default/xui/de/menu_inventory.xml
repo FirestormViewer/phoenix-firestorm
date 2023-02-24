@@ -83,10 +83,12 @@
 	<menu_item_call label="Original öffnen" name="Open Original"/>
 	<menu_item_call label="Eigenschaften" name="Properties"/>
 	<menu_item_call label="Umbenennen" name="Rename"/>
+	<menu_item_call label="Abbildung..." name="thumbnail"/>
 	<menu_item_call label="Schützen" name="ProtectFolder"/>
 	<menu_item_call label="Schutz aufheben" name="UnprotectFolder"/>
+	<menu_item_call label="Ordner neu laden" name="ReloadFolder"/>
 	<menu_item_call label="Asset-UUID kopieren" name="Copy Asset UUID"/>
-    <menu_item_call label="Wiederherstellen an letzter Position" name="Restore to Last Position"/>
+	<menu_item_call label="Wiederherstellen an letzter Position" name="Restore to Last Position"/>
 	<menu_item_call label="Ausschneiden" name="Cut"/>
 	<menu_item_call label="Kopieren" name="Copy"/>
 	<menu_item_call label="Einfügen" name="Paste"/>
@@ -123,7 +125,8 @@
 	<menu_item_call label="Bearbeiten" name="Wearable Edit"/>
 	<menu_item_call label="In Gesamtansicht anzeigen" name="Show in Main Panel"/>
 	<menu_item_call label="In neuem Fenster anzeigen" name="Show in new Window"/>
-	<menu_item_call label="Ordner neu laden" name="ReloadFolder"/>
+	<menu_item_call label="Öffnen" name="open_in_current_window"/>
+	<menu_item_call label="In neuem Fenster öffnen" name="open_in_new_window"/>
 	<menu_item_call label="Hinzufügen" name="Wearable Add"/>
 	<menu_item_call label="Texturen aktualisieren" name="Texture Refresh Attachment"/>
 	<menu_item_call label="Ausziehen" name="Take Off"/>

@@ -2512,6 +2512,12 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 Möchten Sie diese Objekte wirklich löschen?
 		<usetemplate ignoretext="Vor dem Löschen gefilterter Objekte bestätigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="DeleteThumbnail">
+		Soll die Abbildung für dieses Objekt gelöscht werden?
+
+Diese Aktion kann nicht rückgängig gemacht werden.
+		<usetemplate ignoretext="Vor dem Löschen von Abbildungen bestätigen" name="okcancelignore" notext="Abbrechen" yestext="Löschen"/>
+	</notification>
 	<notification name="ConfirmUnlink">
 		Soll das ausgewählte Objekt wirklich getrennt werden?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Trennen"/>
