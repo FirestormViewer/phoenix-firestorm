@@ -163,7 +163,7 @@ void LLUIColorTable::insertFromParams(const Params& p, string_color_map_t& table
 						iter != visited_refs.end();
 						++iter)
 					{
-						LL_WARNS() << iter->first << " references a non-existent color" << LL_ENDL;
+						LL_WARNS() << iter->first << " references a non-existent color: " << iter->second->second << LL_ENDL;
 						unresolved_refs.erase(iter->second);
 					}
 
