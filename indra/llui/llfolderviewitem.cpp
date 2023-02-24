@@ -117,6 +117,7 @@ LLFolderViewItem::Params::Params()
     icon_width("icon_width", 0),
     text_pad("text_pad", 0),
     text_pad_right("text_pad_right", 0),
+    single_folder_mode("single_folder_mode", false),
     arrow_size("arrow_size", 0),
     max_folder_item_overlap("max_folder_item_overlap", 0),
 	// <FS:Ansariel> Inventory specials
@@ -158,6 +159,7 @@ LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)
     mTextPad(p.text_pad),
     mTextPadRight(p.text_pad_right),
     mArrowSize(p.arrow_size),
+    mSingleFolderMode(p.single_folder_mode),
     mMaxFolderItemOverlap(p.max_folder_item_overlap),
 	// <FS:Ansariel> Inventory specials
 	mForInventory(p.for_inventory),
@@ -970,7 +972,10 @@ void LLFolderViewItem::draw()
 
     getViewModelItem()->update();
 
-    drawOpenFolderArrow(default_params, sFgColor);
+    if(!mSingleFolderMode)
+    {
+        drawOpenFolderArrow(default_params, sFgColor);
+    }
 
     drawHighlight(show_context, filled, sHighlightBgColor, sFlashBgColor, sFocusOutlineColor, sMouseOverColor);
 
@@ -1945,7 +1950,14 @@ void LLFolderViewFolder::toggleOpen()
 // Force a folder open or closed
 void LLFolderViewFolder::setOpen(BOOL openitem)
 {
-	setOpenArrangeRecursively(openitem);
+    if(mSingleFolderMode)
+    {
+        getViewModelItem()->navigateToFolder();
+    }
+    else
+    {
+        setOpenArrangeRecursively(openitem);
+    }
 }
 
 void LLFolderViewFolder::setOpenArrangeRecursively(BOOL openitem, ERecurseType recurse)
@@ -2148,7 +2160,8 @@ BOOL LLFolderViewFolder::handleMouseDown( S32 x, S32 y, MASK mask )
 	}
 	if( !handled )
 	{
-		if(mIndentation < x && x < mIndentation + (isCollapsed() ? 0 : mArrowSize) + mTextPad)
+		if((mIndentation < x && x < mIndentation + (isCollapsed() ? 0 : mArrowSize) + mTextPad)
+           && !mSingleFolderMode)
 		{
 			toggleOpen();
 			handled = TRUE;
@@ -2166,6 +2179,11 @@ BOOL LLFolderViewFolder::handleMouseDown( S32 x, S32 y, MASK mask )
 BOOL LLFolderViewFolder::handleDoubleClick( S32 x, S32 y, MASK mask )
 {
 	BOOL handled = FALSE;
+    if(mSingleFolderMode)
+    {
+        getViewModelItem()->navigateToFolder();
+        return TRUE;
+    }
 	if( isOpen() )
 	{
 		handled = childrenHandleDoubleClick( x, y, mask ) != NULL;

@@ -31,6 +31,7 @@
 #include "llpanel.h"
 #include "llinventoryfilter.h"
 #include "llinventoryobserver.h"
+#include "llinventorypanel.h"
 #include "lldndbutton.h"
 
 #include "llfolderview.h"
@@ -44,6 +45,7 @@ class LLTabContainer;
 class LLFloaterInventoryFinder;
 class LLMenuButton;
 class LLMenuGL;
+class LLSidepanelInventory;
 class LLToggleableMenu;
 class LLFloater;
 class LLComboBox;	// <FS:Zi> Filter dropdown
@@ -99,10 +101,17 @@ public:
 	void setFocusFilterEditor();
 
 	static void newWindow();
+    static void newFolderWindow(const LLUUID& folder_id);
 
 	void toggleFindOptions();
 
     void resetFilters();
+    void onViewModeClick();
+    void onUpFolderClicked();
+    void onBackFolderClicked();
+    void onForwardFolderClicked();
+    void setSingleFolderViewRoot(const LLUUID& folder_id);
+    bool isSingleFolderMode() { return mSingleFolderMode; }
 
 	// <FS:Zi> Filter dropdown
 	void onFilterTypeSelected(const std::string& filter_type_name);
@@ -156,6 +165,8 @@ protected:
 	void onSelectSearchType();
 	void updateSearchTypeCombo();
 
+    LLSidepanelInventory* getParentSidepanelInventory();
+
 private:
 	LLFloaterInventoryFinder* getFinder();
 
@@ -175,12 +186,16 @@ private:
 	std::string					mCategoryCountString;
 	LLComboBox*					mSearchTypeCombo;
 
+    bool mSingleFolderMode;
+    LLInventorySingleFolderPanel* mSingleFolderPanelInventory;
+
 	// <FS:Zi> Filter dropdown
 	LLComboBox*					mFilterComboBox;
 	std::map<std::string,U64>	mFilterMap;			// contains name-to-number mapping for dropdown filter types
 	U64							mFilterMask;		// contains the cumulated bit filter for all dropdown filter types
 	// </FS:Zi> Filter dropdown
 
+    boost::signals2::connection mFolderRootChangedConnection;
 
 	//////////////////////////////////////////////////////////////////////////////////
 	// List Commands                                                                //
@@ -194,6 +209,7 @@ protected:
 	BOOL isActionEnabled(const LLSD& command_name);
 	BOOL isActionChecked(const LLSD& userdata);
 	void onCustomAction(const LLSD& command_name);
+    bool isActionVisible(const LLSD& userdata);
 
 	// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
 	void onCoalescedObjectsToggled(const LLSD& userdata);
@@ -218,6 +234,7 @@ protected:
 	// <FS:Ansariel> Keep better inventory layout
 	bool handleDragAndDropToTrash(BOOL drop, EDragAndDropType cargo_type, EAcceptance* accept);
     static bool hasSettingsInventory();
+    void updateTitle();
 	/**
 	 * Set upload cost in "Upload" sub menu.
 	 */

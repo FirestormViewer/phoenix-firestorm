@@ -3256,7 +3256,7 @@ Your current position: [AVATAR_POS]
   <string name="Yes">Yes</string>
   <string name="No">No</string>
   <string name="FSUrlEntryWearLabel">Wear inventory folder</string>
-  <string name="TexturePickerOutfitHeader">Picture for Outfit</string>
+  <string name="TexturePickerOutfitHeader">Item Snapshot</string>
   <string name="unknown_script">(Unknown script)</string>
   <string name="FSAreaSearch_Cost_Label">L$[COST]</string>
 

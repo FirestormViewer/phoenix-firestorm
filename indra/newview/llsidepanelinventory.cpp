@@ -127,6 +127,7 @@ LLSidepanelInventory::LLSidepanelInventory()
 	, mInboxEnabled(false)
 	, mCategoriesObserver(NULL)
 	, mInboxAddedObserver(NULL)
+    , mInboxLayoutPanel(NULL)
 {
 	//buildFromFile( "panel_inventory.xml"); // Called from LLRegisterPanelClass::defaultPanelClassBuilder()
 }
@@ -134,14 +135,12 @@ LLSidepanelInventory::LLSidepanelInventory()
 LLSidepanelInventory::~LLSidepanelInventory()
 {
 	// <FS:Ansariel> FIRE-17603: Received Items button sometimes vanishing
-	//LLLayoutPanel* inbox_layout_panel = getChild<LLLayoutPanel>(INBOX_LAYOUT_PANEL_NAME);
-	LLLayoutPanel* inbox_layout_panel = findChild<LLLayoutPanel>(INBOX_LAYOUT_PANEL_NAME);
-	if (inbox_layout_panel)
+	if (mInboxLayoutPanel)
 	{
 	// </FS:Ansariel>
 
 	// Save the InventoryMainPanelHeight in settings per account
-	gSavedPerAccountSettings.setS32("InventoryInboxHeight", inbox_layout_panel->getTargetDim());
+	gSavedPerAccountSettings.setS32("InventoryInboxHeight", mInboxLayoutPanel->getTargetDim());
 	// <FS:Ansariel> FIRE-17603: Received Items button sometimes vanishing
 	}
 	// </FS:Ansariel>
@@ -209,11 +208,11 @@ BOOL LLSidepanelInventory::postBuild()
 		bool is_inbox_collapsed = !inbox_button->getToggleState();
 
 		// Restore the collapsed inbox panel state
-		LLLayoutPanel* inbox_panel = getChild<LLLayoutPanel>(INBOX_LAYOUT_PANEL_NAME);
-		inv_stack->collapsePanel(inbox_panel, is_inbox_collapsed);
+        mInboxLayoutPanel = getChild<LLLayoutPanel>(INBOX_LAYOUT_PANEL_NAME);
+		inv_stack->collapsePanel(mInboxLayoutPanel, is_inbox_collapsed);
 		if (!is_inbox_collapsed)
 		{
-			inbox_panel->setTargetDim(gSavedPerAccountSettings.getS32("InventoryInboxHeight"));
+            mInboxLayoutPanel->setTargetDim(gSavedPerAccountSettings.getS32("InventoryInboxHeight"));
 		}
 
 		// Set the inbox visible based on debug settings (final setting comes from http request below)
@@ -329,16 +328,29 @@ void LLSidepanelInventory::enableInbox(bool enabled)
 {
 	mInboxEnabled = enabled;
 	
-	LLLayoutPanel * inbox_layout_panel = getChild<LLLayoutPanel>(INBOX_LAYOUT_PANEL_NAME);
+    if(!enabled || !mPanelMainInventory->isSingleFolderMode())
+    {
+        toggleInbox();
+    }
+}
+
+void LLSidepanelInventory::hideInbox()
+{
+	if (mInboxLayoutPanel) // <FS:Ansariel> Inbox panel randomly shown on secondary inventory window
+		mInboxLayoutPanel->setVisible(false);
+}
+
+void LLSidepanelInventory::toggleInbox()
+{
 	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
-	//inbox_layout_panel->setVisible(enabled);
-	inbox_layout_panel->setVisible(enabled && (!gSavedSettings.getBOOL("FSShowInboxFolder") || gSavedSettings.getBOOL("FSAlwaysShowInboxButton"))
+    //mInboxLayoutPanel->setVisible(mInboxEnabled);
+	if (mInboxLayoutPanel)
+		mInboxLayoutPanel->setVisible(mInboxEnabled && (!gSavedSettings.getBOOL("FSShowInboxFolder") || gSavedSettings.getBOOL("FSAlwaysShowInboxButton"))
 // <FS:CR> Show Received Items panel only in Second Life
 #ifdef OPENSIM
 								   && LLGridManager::getInstance()->isInSecondLife()
 #endif // OPENSIM
 								   );
-// </FS:CR>
 }
 
 // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
@@ -375,25 +387,24 @@ void LLSidepanelInventory::onInboxChanged(const LLUUID& inbox_id)
 void LLSidepanelInventory::onToggleInboxBtn()
 {
 	LLButton* inboxButton = getChild<LLButton>(INBOX_BUTTON_NAME);
-	LLLayoutPanel* inboxPanel = getChild<LLLayoutPanel>(INBOX_LAYOUT_PANEL_NAME);
 	LLLayoutStack* inv_stack = getChild<LLLayoutStack>(INVENTORY_LAYOUT_STACK_NAME);
 	
 	const bool inbox_expanded = inboxButton->getToggleState();
 	
 	// Expand/collapse the indicated panel
-	inv_stack->collapsePanel(inboxPanel, !inbox_expanded);
+	inv_stack->collapsePanel(mInboxLayoutPanel, !inbox_expanded);
 
 	if (inbox_expanded)
 	{
-		inboxPanel->setTargetDim(gSavedPerAccountSettings.getS32("InventoryInboxHeight"));
-		if (inboxPanel->isInVisibleChain())
+        mInboxLayoutPanel->setTargetDim(gSavedPerAccountSettings.getS32("InventoryInboxHeight"));
+		if (mInboxLayoutPanel->isInVisibleChain())
 	{
 		gSavedPerAccountSettings.setU32("LastInventoryInboxActivity", time_corrected());
 	}
 }
 	else
 	{
-		gSavedPerAccountSettings.setS32("InventoryInboxHeight", inboxPanel->getTargetDim());
+		gSavedPerAccountSettings.setS32("InventoryInboxHeight", mInboxLayoutPanel->getTargetDim());
 	}
 
 }

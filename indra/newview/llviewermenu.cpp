@@ -12549,6 +12549,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new FSResetMeshLOD(), "Avatar.ResetMeshLOD");
 
 	commit.add("Inventory.NewWindow", boost::bind(&LLPanelMainInventory::newWindow));
+    commit.add("Inventory.NewFolderWindow", boost::bind(&LLPanelMainInventory::newFolderWindow, LLUUID()));
 
 	enable.add("EnablePayObject", boost::bind(&enable_pay_object));
 	enable.add("EnablePayAvatar", boost::bind(&enable_pay_avatar));

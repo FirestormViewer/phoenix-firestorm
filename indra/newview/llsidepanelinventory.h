@@ -74,6 +74,8 @@ public:
 	void onToggleInboxBtn();
 
 	void enableInbox(bool enabled);
+    void toggleInbox();
+    void hideInbox();
 
 	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
 	void refreshInboxVisibility();
@@ -103,6 +105,8 @@ private:
 	LLPanel*					mInventoryPanel; // Main inventory view
 	LLHandle<LLInventoryPanel>	mInventoryPanelInbox;
 	LLPanelMainInventory*		mPanelMainInventory;
+
+    LLLayoutPanel* mInboxLayoutPanel;
 
 protected:
 public:

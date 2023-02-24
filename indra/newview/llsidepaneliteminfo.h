@@ -119,6 +119,7 @@ protected:
 	void 						onCommitDescription();
 	void 						onCommitPermissions(LLUICtrl* ctrl);
 	void 						updatePermissions();
+    void 						onEditThumbnail();
 	void 						onCommitSaleInfo(LLUICtrl* ctrl);
 	void 						updateSaleInfo();
 	void 						onCommitChanges(LLPointer<LLViewerInventoryItem> item);
