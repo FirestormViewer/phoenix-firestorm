@@ -262,7 +262,9 @@
 
 
   <!-- UI Colors -->
-  
+    <color
+     name="TextFgColor"
+     value="0.102 0.102 0.102 1" />
     <color
      name="BottomTrayAlphaColor"
      reference="Transparent" />

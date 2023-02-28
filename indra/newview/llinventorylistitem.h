@@ -201,6 +201,7 @@ protected:
 	virtual const LLPanelInventoryListItemBase::Params& getDefaultParams() const; // <FS:Ansariel> Better attachment list
 
 	const LLUUID mInventoryItemUUID;
+    bool mHovered;
 
 private:
 
@@ -225,7 +226,6 @@ private:
 	LLUIImagePtr	mSelectedImage;
 	LLUIImagePtr	mSeparatorImage;
 
-	bool			mHovered;
 	bool			mSelected;
 	bool			mSeparatorVisible;
 

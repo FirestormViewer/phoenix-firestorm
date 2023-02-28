@@ -154,7 +154,7 @@ for dir in dirs:
         full_file = os.path.join(args.path_to_directory, dir, file)
         md5 = get_md5(full_file)
         base_name = os.path.basename(file)
-        if "-Release-" in base_name:
+        if "-Release-" in base_name or "-Beta-" in base_name:
             wordsize = "32"
         else:
             wordsize = "64"
@@ -191,20 +191,24 @@ for dir in dirs:
     platform = f"{platforms_printable[dir]}"
     for grid in ["SL", "OS"]:
         grid_printable = f"{grids_printable[grid]}"
-        print (f"{platform} for {grid_printable} ({wordsize}-bit)")
-        print ( "{}/{}/{}".format(download_root,dir,os.path.basename(file_dict[f"{grid}{dir}{wordsize}"])) )
-        print ()
-        print ( "MD5: {}".format(md5_dict[f"{grid}{dir}{wordsize}"]) )
-        print ()
-        if(dir == "windows"):
-            # Need to do 32 bit as well
-            wordsize = "32"
+        try:
             print (f"{platform} for {grid_printable} ({wordsize}-bit)")
             print ( "{}/{}/{}".format(download_root,dir,os.path.basename(file_dict[f"{grid}{dir}{wordsize}"])) )
             print ()
             print ( "MD5: {}".format(md5_dict[f"{grid}{dir}{wordsize}"]) )
             print ()
-            wordsize = "64"
+            if(dir == "windows"):
+                # Need to do 32 bit as well
+                wordsize = "32"
+                print (f"{platform} for {grid_printable} ({wordsize}-bit)")
+                print ( "{}/{}/{}".format(download_root,dir,os.path.basename(file_dict[f"{grid}{dir}{wordsize}"])) )
+                print ()
+                print ( "MD5: {}".format(md5_dict[f"{grid}{dir}{wordsize}"]) )
+                print ()
+                wordsize = "64"
+        except KeyError:
+            print (f"{platform} for {grid_printable} ({wordsize}-bit) - NOT AVAILABLE")
+            print ()
 
 print('''
 -------------------------------------------------------------------------------------------------------''')

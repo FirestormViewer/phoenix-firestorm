@@ -149,7 +149,8 @@ public:
 		mNeedsTimeBox(true),
 		mTimeBoxTextBox(NULL),
 		mHeaderLayoutStack(NULL),
-		mAvatarNameCacheConnection()
+		mAvatarNameCacheConnection(),
+		mTime(0)
 	{}
 
 	static FSChatHistoryHeader* createInstance(const std::string& file_name)
@@ -1262,9 +1263,7 @@ FSChatHistory::FSChatHistory(const FSChatHistory::Params& p)
 
 LLSD FSChatHistory::getValue() const
 {
-  LLSD* text=new LLSD(); 
-  text->assign(getText());
-  return *text;
+	return LLSD(getText());
 }
 
 FSChatHistory::~FSChatHistory()

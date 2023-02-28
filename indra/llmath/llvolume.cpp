@@ -52,6 +52,12 @@
 #include "llmeshoptimizer.h"
 #include "lltimer.h"
 
+// <FS:Zi> Use Alchemy's vertex cache optimizer for Linux. Thank you!
+#ifdef LL_LINUX
+#include "meshoptimizer/meshoptimizer.h"
+#endif
+// </FS:Zi> Use Alchemy's vertex cache optimizer for Linux. Thank you!
+
 #define DEBUG_SILHOUETTE_BINORMALS 0
 #define DEBUG_SILHOUETTE_NORMALS 0 // TomY: Use this to display normals using the silhouette
 #define DEBUG_SILHOUETTE_EDGE_MAP 0 // DaveP: Use this to display edge map using the silhouette
@@ -2406,13 +2412,12 @@ bool LLVolume::unpackVolumeFaces(std::istream& is, S32 size)
 		LL_DEBUGS("MeshStreaming") << "Failed to unzip LLSD blob for LoD with code " << uzip_result << " , will probably fetch from sim again." << LL_ENDL;
 		return false;
 	}
-// <FS:Beq pp Rye> Add non-allocating variants of of unpackVolumeFaces
 	return unpackVolumeFacesInternal(mdl);
 }
 
 bool LLVolume::unpackVolumeFaces(U8* in_data, S32 size)
 {
-	//input stream is now pointing at a zlib compressed block of LLSD
+	//input data is now pointing at a zlib compressed block of LLSD
 	//decompress block
 	LLSD mdl;
 	U32 uzip_result = LLUZipHelper::unzip_llsd(mdl, in_data, size);
@@ -2426,7 +2431,6 @@ bool LLVolume::unpackVolumeFaces(U8* in_data, S32 size)
 
 bool LLVolume::unpackVolumeFacesInternal(const LLSD& mdl)
 {
-// </FS:Beq pp Rye>
 	{
 		U32 face_count = mdl.size();
 
@@ -5434,6 +5438,204 @@ public:
 	}
 };
 
+// <FS:Zi> Use Alchemy's vertex cache optimizer for Linux. Thank you!
+#ifdef LL_LINUX
+
+bool allocateVertices(LLVolumeFace* self, S32 num_verts)
+{
+	bool copy = false;
+
+	if (!copy || !num_verts)
+	{
+		ll_aligned_free<64>(self->mPositions);
+		self->mPositions = nullptr;
+		self->mNormals = nullptr;
+		self->mTexCoords = nullptr;
+	}
+
+	if (num_verts)
+	{
+		const U32 new_vsize = num_verts * sizeof(LLVector4a);
+		const U32 new_nsize = new_vsize;
+		const U32 new_tcsize = (num_verts * sizeof(LLVector2) + 0xF) & ~0xF;
+		const U32 new_size = new_vsize + new_nsize + new_tcsize;
+
+		//allocate new buffer space
+		LLVector4a* old_buf = self->mPositions;
+		self->mPositions = (LLVector4a*)ll_aligned_malloc<64>(new_size);
+		if (!self->mPositions)
+		{
+			LL_WARNS("LLVOLUME") << "Allocation of positions vector[" << new_size << "] failed. " << LL_ENDL;
+			return false;
+		}
+		self->mNormals = self->mPositions + num_verts;
+		self->mTexCoords = (LLVector2*)(self->mNormals + num_verts);
+
+		if (copy && old_buf)
+		{
+			U32 verts_to_copy = std::min(self->mNumVertices, num_verts);
+			if (verts_to_copy)
+			{
+				const U32 old_vsize = verts_to_copy * sizeof(LLVector4a);
+				const U32 old_nsize = old_vsize;
+				const U32 old_tcsize = (verts_to_copy * sizeof(LLVector2) + 0xF) & ~0xF;
+
+				LLVector4a::memcpyNonAliased16((F32*)self->mPositions, (F32*)old_buf, old_vsize);
+				LLVector4a::memcpyNonAliased16((F32*)self->mNormals, (F32*)(old_buf + self->mNumVertices), old_nsize);
+				LLVector4a::memcpyNonAliased16((F32*)self->mTexCoords, (F32*)(old_buf + self->mNumVertices * 2), old_tcsize);
+			}
+			ll_aligned_free<64>(old_buf);
+		}
+	}
+
+	self->mNumAllocatedVertices = num_verts;
+	return true;
+}
+
+bool LLVolumeFace::cacheOptimize()
+{
+	llassert(!mOptimized);
+	mOptimized = TRUE;
+
+    if (mNumVertices < 3 || mNumIndices < 3)
+    { //nothing to do
+        return true;
+    }
+
+    struct buffer_data_t {
+        void** dst;		// Double pointer to volume attribute data. Avoids fixup after reallocating buffers on resize.
+        void* scratch;	// Scratch buffer. Allocated with vert count from meshopt_generateVertexRemapMulti
+        size_t stride;	// Stride between continguous attributes
+    };
+    std::vector<meshopt_Stream> streams;	// Contains data necessary for meshopt_generateVertexRemapMulti call
+    std::vector<buffer_data_t> buffers;	// Contains data necessary for meshopt_remapVertexBuffer calls.
+
+    {
+        static struct { size_t offs; size_t size; size_t stride; } ref_streams[] = {
+                { (U64) &mPositions - (U64) this,	sizeof(float) * 3, sizeof(mPositions[0]) },
+                { (U64) &mNormals   - (U64) this,	sizeof(float) * 3, sizeof(mNormals[0]) },	// Subsection of mPositions allocation
+                { (U64) &mTexCoords - (U64) this,	sizeof(float) * 2, sizeof(mTexCoords[0]) },	// Subsection of mPositions allocation
+                { (U64) &mTangents  - (U64) this,	sizeof(float) * 3, sizeof(mTangents[0]) },
+                { (U64) &mWeights   - (U64) this,	sizeof(float) * 3, sizeof(mWeights[0]) },
+        };
+
+        for (size_t i = 0; i < sizeof(ref_streams) / sizeof(ref_streams[0]); ++i)
+        {
+            void** ptr = reinterpret_cast<void**>((char*)this + ref_streams[i].offs);
+            if (*ptr)
+            {
+                streams.push_back({ *ptr, ref_streams[i].size, ref_streams[i].stride });
+                buffers.push_back({ ptr, nullptr, ref_streams[i].stride });
+            }
+        }
+    }
+
+    std::vector<unsigned int> remap;
+    try
+    {
+        remap.reserve(mNumIndices);
+    }
+    catch (const std::bad_alloc&)
+    {
+        return false;
+    }
+
+    size_t total_vertices = meshopt_generateVertexRemapMulti(remap.data(), mIndices, mNumIndices, mNumVertices, streams.data(), streams.size());
+    meshopt_remapIndexBuffer(mIndices, mIndices, mNumIndices, remap.data());
+    bool failed = false;
+    for (auto& entry : buffers)
+    {
+        // Create scratch buffer for attribute data. Avoids extra allocs in meshopt_remapVertexBuffer calls
+        void* buf_tmp = ll_aligned_malloc_16(entry.stride * total_vertices);
+        if (!buf_tmp)
+        {
+            failed = true;
+            break;
+        }
+        entry.scratch = buf_tmp;
+        // Write to scratch buffer
+        meshopt_remapVertexBuffer(entry.scratch, *entry.dst, mNumVertices, entry.stride, remap.data());
+    }
+
+    if (failed)
+    {
+        for (auto& entry : buffers)
+        {
+            // Release scratch buffer
+            ll_aligned_free_16(entry.scratch);
+        }
+        return false;
+    }
+
+    if (mNumAllocatedVertices != total_vertices)
+    {
+        // New allocations will be transparently accessable through dereffing dest_buffers.
+        if (!allocateVertices(this, total_vertices))
+        {
+            for (auto& entry : buffers)
+            {
+                // Release scratch buffer
+                ll_aligned_free_16(entry.scratch);
+            }
+            allocateVertices(this, 0);
+            allocateWeights(0);
+            allocateTangents(0);
+            return false;
+        }
+
+        if (mWeights)
+		{
+			allocateWeights(total_vertices);
+			if(!mWeights)
+			{
+				for (auto& entry : buffers)
+				{
+					// Release scratch buffer
+					ll_aligned_free_16(entry.scratch);
+				}
+				allocateVertices(this, 0);
+				allocateWeights(0);
+				allocateTangents(0);
+				return false;
+			}
+        }
+
+        if (mTangents)
+		{
+			allocateTangents(total_vertices);
+			if(!mTangents)
+			{
+				for (auto& entry : buffers)
+				{
+					// Release scratch buffer
+					ll_aligned_free_16(entry.scratch);
+				}
+				allocateVertices(this, 0);
+				allocateWeights(0);
+				allocateTangents(0);
+				return false;
+			}
+        }
+    }
+
+    meshopt_optimizeVertexCache(mIndices, mIndices, mNumIndices, total_vertices);
+    //meshopt_optimizeOverdraw(mIndices, mIndices, mNumIndices, (float*)buffers[0].scratch, total_vertices, buffers[0].stride, 1.05f);
+    meshopt_optimizeVertexFetchRemap(remap.data(), mIndices, mNumIndices, total_vertices);
+    meshopt_remapIndexBuffer(mIndices, mIndices, mNumIndices, remap.data());
+    for (auto& entry : buffers)
+    {
+        // Write to llvolume attribute buffer
+        meshopt_remapVertexBuffer(*entry.dst, entry.scratch, total_vertices, entry.stride, remap.data());
+        // Release scratch buffer
+        ll_aligned_free_16(entry.scratch);
+    }
+    mNumVertices = total_vertices;
+
+    return true;
+}
+
+#else
+// </FS:Zi> Use Alchemy's vertex cache optimizer for Linux. Thank you!
 
 bool LLVolumeFace::cacheOptimize()
 { //optimize for vertex cache according to Forsyth method: 
@@ -5449,7 +5651,7 @@ bool LLVolumeFace::cacheOptimize()
 	// windows version.
 	//
 	
-#ifndef LL_LINUX
+// #ifndef LL_LINUX	// <FS:Zi> Use Alchemy's vertex cache optimizer for Linux. Thank you!
 	LLVCacheLRU cache;
 	
 	if (mNumVertices < 3 || mNumIndices < 3)
@@ -5693,10 +5895,11 @@ bool LLVolumeFace::cacheOptimize()
 
 	//std::string result = llformat("ACMR pre/post: %.3f/%.3f  --  %d triangles %d breaks", pre_acmr, post_acmr, mNumIndices/3, breaks);
 	//LL_INFOS() << result << LL_ENDL;
-#endif
+// #endif	// <FS:Zi> Use Alchemy's vertex cache optimizer for Linux. Thank you!
 	
 	return true;
 }
+#endif	// <FS:Zi> Use Alchemy's vertex cache optimizer for Linux. Thank you!
 
 void LLVolumeFace::createOctree(F32 scaler, const LLVector4a& center, const LLVector4a& size)
 {
@@ -6643,15 +6846,48 @@ void LLVolumeFace::pushVertex(const LLVector4a& pos, const LLVector4a& norm, con
 
 void LLVolumeFace::allocateTangents(S32 num_verts)
 {
+// <FS:Zi> Use Alchemy's vertex cache optimizer for Linux. Thank you!
+#ifdef LL_LINUX
+	ll_aligned_free_16(mTangents);
+	mTangents = nullptr;
+	if (num_verts)
+	{
+		mTangents = (LLVector4a*)ll_aligned_malloc_16(sizeof(LLVector4a)*num_verts);
+		if (!mTangents)
+		{
+			LL_WARNS("LLVOLUME") << "Allocation of binormals[" << sizeof(LLVector4a)*num_verts << "] failed" << LL_ENDL;
+			return;
+		}
+	}
+	return;
+#else
+// </FS:Zi> Use Alchemy's vertex cache optimizer for Linux. Thank you!
 	ll_aligned_free_16(mTangents);
 	mTangents = (LLVector4a*) ll_aligned_malloc_16(sizeof(LLVector4a)*num_verts);
+#endif	// <FS:Zi> Use Alchemy's vertex cache optimizer for Linux. Thank you!
 }
 
 void LLVolumeFace::allocateWeights(S32 num_verts)
 {
+// <FS:Zi> Use Alchemy's vertex cache optimizer for Linux. Thank you!
+#ifdef LL_LINUX
+	ll_aligned_free_16(mWeights);
+	mWeights = nullptr;
+	if (num_verts)
+	{
+		mWeights = (LLVector4a*)ll_aligned_malloc_16(sizeof(LLVector4a)*num_verts);
+		if (!mWeights)
+		{
+			LL_WARNS("LLVOLUME") << "Allocation of weights[" << sizeof(LLVector4a) * num_verts << "] failed" << LL_ENDL;
+			return;
+		}
+	}
+	return;
+#else
+// </FS:Zi> Use Alchemy's vertex cache optimizer for Linux. Thank you!
 	ll_aligned_free_16(mWeights);
 	mWeights = (LLVector4a*)ll_aligned_malloc_16(sizeof(LLVector4a)*num_verts);
-    
+#endif	// <FS:Zi> Use Alchemy's vertex cache optimizer for Linux. Thank you!
 }
 
 void LLVolumeFace::allocateJointIndices(S32 num_verts)

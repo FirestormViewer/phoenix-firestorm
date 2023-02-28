@@ -137,22 +137,23 @@ void LLLocalMeshObject::computeObjectTransform(const LLMatrix4& scene_transform)
 	// actual bounding box size
 	mObjectSize = mObjectBoundingBox.second;
 	mObjectSize -= mObjectBoundingBox.first;
-	for (int vec_iter = 0; vec_iter < 4; ++vec_iter)
-	{
-		// make sure it can be divided by
-		if (fabs(mObjectSize.mV[vec_iter]) <= F_APPROXIMATELY_ZERO)
-		{
-			mObjectSize.mV[vec_iter] = 1.0f;
-		}
-	}
 
+	// make sure all axes of mObjectSize are non zero
+	for (auto& axis_size : mObjectSize.mV)
+    {
+		// set size of 1.0 if < F_APPROXIMATELY_ZERO
+		if (axis_size <= F_APPROXIMATELY_ZERO)
+        {
+            axis_size = 1.0f;
+        }
+    }
 	// bounding box scale in a 1Mx3 cube
 	mObjectScale.set(1.f, 1.f, 1.f);
 	for (int vec_iter = 0; vec_iter < 4; ++vec_iter)
 	{
 		mObjectScale.mV[vec_iter] = mObjectScale.mV[vec_iter] / mObjectSize.mV[vec_iter];
 	}
-	mObjectSize = mObjectSize * scene_transform;
+	
 }
 
 void LLLocalMeshObject::normalizeFaceValues(LLLocalMeshFileLOD lod_iter)
@@ -308,12 +309,12 @@ void LLLocalMeshObject::attachSkinInfo()
 	auto skinmap_seeker = gMeshRepo.mSkinMap.find(mSculptID);
 	if (skinmap_seeker == gMeshRepo.mSkinMap.end())
 	{
-		gMeshRepo.mSkinMap[mSculptID] = mMeshSkinInfo;
+		gMeshRepo.mSkinMap[mSculptID] = &mMeshSkinInfo;
 	}
 	else
 	{	
 		// NOTE: seems necessary, not tested without.
-		skinmap_seeker->second = mMeshSkinInfo;
+		skinmap_seeker->second = &mMeshSkinInfo;
 	}
 }
 
@@ -379,7 +380,8 @@ LLLocalMeshFile::LLLocalMeshFile(const std::string& filename, bool try_lods)
 	mFilenames[LOCAL_LOD_HIGH] = filename;
 
 	// check if we have a valid extension, can't switch with string can we?
-	if (std::string exten_str = boost::filesystem::extension(filename); exten_str == ".dae")
+	if( std::string exten_str = boost::filesystem::extension(filename);
+		boost::iequals(exten_str, ".dae") )
 	{
 		mExtension = LLLocalMeshFileExtension::EXTEN_DAE;
 		pushLog("LLLocalMeshFile", "Extension found: COLLADA");

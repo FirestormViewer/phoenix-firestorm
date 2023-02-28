@@ -100,12 +100,8 @@ LLSkyTex::LLSkyTex() :
 void LLSkyTex::init(bool isShiny)
 {
     mIsShiny = isShiny;
-	// <FS_Zi> Compiler fix - make sure the array size is an integer value
-	// mSkyData = new LLColor4[SKYTEX_RESOLUTION * SKYTEX_RESOLUTION];
-	// mSkyDirs = new LLVector3[SKYTEX_RESOLUTION * SKYTEX_RESOLUTION];
 	mSkyData = new LLColor4[(U32)(SKYTEX_RESOLUTION * SKYTEX_RESOLUTION)];
 	mSkyDirs = new LLVector3[(U32)(SKYTEX_RESOLUTION * SKYTEX_RESOLUTION)];
-	// </FS:Zi>
 
 	for (S32 i = 0; i < 2; ++i)
 	{

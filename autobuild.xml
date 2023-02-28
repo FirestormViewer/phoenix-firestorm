@@ -540,9 +540,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b6357ef3a0ec37877a5831820f25094e</string>
+              <string>178b16ee9ff67986c8c14413ee68218e</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/80557/759704/apr_suite-1.4.5.558565-darwin64-558565.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/107593/938535/apr_suite-1.4.5.576669-darwin64-576669.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -552,9 +552,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5c3c29851edd837d5f9518618c4a303b</string>
+              <string>45acdda717f95ce9169de9f49199c066</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/apr_suite-1.4.5.180841559-linux64-180841559.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/apr_suite-1.4.5.230351228-linux64-230351228.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -564,9 +564,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>cb48ac069440f6dcd564cfa9fd02a4c2</string>
+              <string>d2997cad03dbd0d70a060276b5671480</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/80556/759710/apr_suite-1.4.5.558565-windows-558565.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/107594/938548/apr_suite-1.4.5.576669-windows-576669.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -576,16 +576,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>646dc3828d9c39fb1e77c4eec44ed739</string>
+              <string>ec24f5945faa8f13807b83eeaeb994f8</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/80555/759709/apr_suite-1.4.5.558565-windows64-558565.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/107592/938547/apr_suite-1.4.5.576669-windows64-576669.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.4.5.558565</string>
+        <string>1.4.5.576669</string>
       </map>
       <key>boost</key>
       <map>
@@ -988,9 +988,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d3f4d83e7b81673731ece92125473b00</string>
+              <string>ad7b9fc10184e8145731f45ae400bfd1</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.12.2.202209171157_91.1.23_g04c8d56_chromium-91.0.4472.164-linux64-222600157.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.12.2.202210012157_92.0.27_g274abcf_chromium-92.0.4515.159-linux64-222741156.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1098,11 +1098,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a45bb657d668b7f1b4fa4c88eb81a80a</string>
+              <string>e610f49fa7ed5b10b0cc6409b9bf4afc</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.09-linux64-222891103.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.11-linux64-230190114.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1112,11 +1112,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6dd278518e791dbc2841e337feb295db</string>
+              <string>8b2fff1a0a7e057da99fdade1f9e82ff</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.09-windows-222890940.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.11-windows-230181802.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1126,18 +1126,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1b7ced6f750b12f0d014556705019534</string>
+              <string>6cf457e2268ed83326c6d77f3475e8f5</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.09-windows64-222890941.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.11-windows64-230181820.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.02.09</string>
+        <string>2.02.11</string>
       </map>
       <key>fontconfig</key>
       <map>
@@ -1892,9 +1892,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c1c9e32e21f3c34d91ed045b2ca91f24</string>
+              <string>7a0059748d0b8733f2f9ce434cf604b8</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/87781/805801/libpng-1.6.8.563850-darwin64-563850.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/107514/937867/libpng-1.6.38.576621-darwin64-576621.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1916,9 +1916,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>642e9cf95c8ccd0eb34f6d7a40df585a</string>
+              <string>3112013186ad60b0fc270a398d4dd499</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/87782/805831/libpng-1.6.8.563850-windows-563850.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/107513/937823/libpng-1.6.38.576621-windows-576621.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1928,16 +1928,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ce46aa0f171d97626c4a3940347cecd7</string>
+              <string>7c6bfcdb0d6162587cdbc436f595dd02</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/87780/805832/libpng-1.6.8.563850-windows64-563850.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/107512/937822/libpng-1.6.38.576621-windows64-576621.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.6.8.563850</string>
+        <string>1.6.38.576621</string>
       </map>
       <key>libuuid</key>
       <map>
@@ -2217,9 +2217,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e584491b67916c502233b23c6e4e44be</string>
+              <string>8ee0979f3808568b5d8940b9b4f52e94</string>
               <key>url</key>
-              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.571939-darwin64-571939.tar.bz2</string>
+              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.577418-darwin64-577418.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2241,9 +2241,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>534b3af2266f37151e629af7552f4cf2</string>
+              <string>7638421f5df1fef9f98d608be8d8de14</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.571939-windows-571939.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.577418-windows-577418.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2253,16 +2253,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9c39018c783443ee4b4eb368c937aeb3</string>
+              <string>c0ccb2a5d721ea130c1e05c4f223e0ec</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.571939-windows64-571939.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.577418-windows64-577418.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.0.571939</string>
+        <string>1.0.577418</string>
       </map>
       <key>mesa</key>
       <map>
@@ -2708,9 +2708,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>53966a7ba6342395acb7ce15bc3fbe0a</string>
+              <string>8114c6a7e499ea20d325db0de08ce30a</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/openjpeg-2.3.1.203000304-darwin-203000304.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/105469/923024/openjpeg-2.5.0.575496-darwin64-575496.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2720,9 +2720,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b7be1d6116fb5848ab2beef19b6a8b15</string>
+              <string>b1dad7c841118a3b6e03a01722d1846a</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/openjpeg-2.3.1.202991551-linux64-202991551.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openjpeg-2.5.0.230362345-linux64-230362345.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2732,9 +2732,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ba2034b4a372fd46c3e09f56bede38a7</string>
+              <string>edc9388870d951632a6d595792293e05</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/openjpeg-2.4.0.211361403-windows-211361403.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/105472/923036/openjpeg-2.5.0.575496-windows-575496.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2744,16 +2744,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d7ac606703a9330a2d8a3f7276cb6894</string>
+              <string>b95f0732f2388ebb0ddf33d4a30e0ff1</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/openjpeg-2.4.0.211361407-windows64-211361407.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/105471/923037/openjpeg-2.5.0.575496-windows64-575496.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.4.0</string>
+        <string>2.5.0.575496</string>
       </map>
       <key>openssl</key>
       <map>

@@ -67,11 +67,12 @@ public:
 	entry_map_t getRadarList() { return mEntryList; }
 
 	void startTracking(const LLUUID& avatar_id);
-	void zoomAvatar(const LLUUID& avatar_id, const std::string& name);
+	void zoomAvatar(const LLUUID& avatar_id, std::string_view name);
 	void teleportToAvatar(const LLUUID& targetAv);
 	void requestRadarChannelAlertSync();
 	void updateNames();
 	void updateName(const LLUUID& avatar_id);
+	void updateNotes(const LLUUID& avatar_id, std::string_view notes);
 
 	static void	onRadarNameFmtClicked(const LLSD& userdata);
 	static bool	radarNameFmtCheck(const LLSD& userdata);
@@ -112,7 +113,7 @@ private:
 	void					updateRadarList();
 	void					updateTracking();
 	void					checkTracking();
-	void					radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& postMsg);
+	void					radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name, std::string_view postMsg);
 	void					updateAgeAlertCheck();
 
 	Updater*				mRadarListUpdater;

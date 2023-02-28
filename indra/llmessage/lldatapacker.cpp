@@ -754,14 +754,13 @@ BOOL LLDataPackerAsciiBuffer::packString(const std::string& value, const char *n
 
 BOOL LLDataPackerAsciiBuffer::unpackString(std::string& value, const char *name)
 {
-	BOOL success = TRUE;
 	char valuestr[DP_BUFSIZE]; /*Flawfinder: ignore*/
 	if (!getValueStr(name, valuestr, DP_BUFSIZE))  // NULL terminated
 	{
 		return FALSE;
 	}
 	value = valuestr;
-	return success;
+	return TRUE;
 }
 
 

@@ -112,10 +112,9 @@ FSRadar::~FSRadar()
 {
 	delete mRadarListUpdater;
 
-	entry_map_t::iterator em_it_end = mEntryList.end();
-	for (entry_map_t::iterator em_it = mEntryList.begin(); em_it != em_it_end; ++em_it)
+	for (const auto& [av_id, entry] : mEntryList)
 	{
-		delete em_it->second;
+		delete entry;
 	}
 
 	if (mShowUsernamesCallbackConnection.connected())
@@ -134,7 +133,7 @@ FSRadar::~FSRadar()
 	}
 }
 
-void FSRadar::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& postMsg)
+void FSRadar::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name, std::string_view postMsg)
 {
 // <FS:CR> Milkshake-style radar alerts
 	static LLCachedControl<bool> sFSMilkshakeRadarToasts(gSavedSettings, "FSMilkshakeRadarToasts", false);
@@ -144,7 +143,7 @@ void FSRadar::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name,
 		LLSD payload = agent_id;
 		LLSD args;
 		args["NAME"] = FSRadarEntry::getRadarName(av_name);
-		args["MESSAGE"] = postMsg;
+		args["MESSAGE"] = static_cast<std::string>(postMsg);
 		LLNotificationsUtil::add("RadarAlert",
 									args,
 									payload.with("respond_on_mousedown", TRUE),
@@ -250,20 +249,16 @@ void FSRadar::updateRadarList()
 
 	// Determine lists of new added and removed avatars
 	uuid_vec_t current_vec, added_vec, removed_vec;
-	uuid_vec_t::iterator vec_it_end;
-	entry_map_t::iterator em_it_end = mEntryList.end();
 	current_vec.reserve(mEntryList.size());
-	for (entry_map_t::iterator em_it = mEntryList.begin(); em_it != em_it_end; ++em_it)
+	for (const auto& [av_id, entry] : mEntryList)
 	{
-		current_vec.push_back(em_it->first);
+		current_vec.emplace_back(av_id);
 	}
 	LLCommonUtils::computeDifference(avatar_ids, current_vec, added_vec, removed_vec);
 
 	// Remove old avatars from our list
-	vec_it_end = removed_vec.end();
-	for (uuid_vec_t::iterator it = removed_vec.begin(); it != vec_it_end; ++it)
+	for (const auto& avid : removed_vec)
 	{
-		LLUUID avid = *it;
 		entry_map_t::iterator found = mEntryList.find(avid);
 		if (found != mEntryList.end())
 		{
@@ -273,10 +268,8 @@ void FSRadar::updateRadarList()
 	}
 
 	// Add new avatars
-	vec_it_end = added_vec.end();
-	for (uuid_vec_t::iterator it = added_vec.begin(); it != vec_it_end; ++it)
+	for (const auto& avid : added_vec)
 	{
-		LLUUID avid = *it;
 		mEntryList[avid] = new FSRadarEntry(avid);
 	}
 
@@ -695,11 +688,8 @@ void FSRadar::updateRadarList()
 	//
 	if (RlvActions::canShowNearbyAgents())
 	{
-		radarfields_map_t::iterator rf_it_end = mLastRadarSweep.end();
-		for (radarfields_map_t::iterator i = mLastRadarSweep.begin(); i != rf_it_end; ++i)
+		for (const auto& [prevId, rf] : mLastRadarSweep)
 		{
-			LLUUID prevId = i->first;
-			RadarFields rf = i->second;
 			if ((sFSRadarShowMutedAndDerendered || !rf.lastIgnore) && mEntryList.find(prevId) == mEntryList.end())
 			{
 				if (sRadarReportChatRangeLeave && (rf.lastDistance <= chat_range_say) && rf.lastDistance > AVATAR_UNKNOWN_RANGE)
@@ -797,24 +787,22 @@ void FSRadar::updateRadarList()
 	//
 
 	mLastRadarSweep.clear();
-	em_it_end = mEntryList.end();
-	for (entry_map_t::iterator em_it = mEntryList.begin(); em_it != em_it_end; ++em_it)
+	for (const auto& [avid, entry] : mEntryList)
 	{
-		FSRadarEntry* ent = em_it->second;
 		RadarFields rf;
-		rf.lastDistance = ent->mRange;
-		rf.lastIgnore = ent->mIgnore;
+		rf.lastDistance = entry->mRange;
+		rf.lastIgnore = entry->mIgnore;
 		rf.lastRegion = LLUUID::null;
-		if (ent->mGlobalPos != LLVector3d(0.0, 0.0, 0.0))
+		if (entry->mGlobalPos != LLVector3d(0.0, 0.0, 0.0))
 		{
-			LLViewerRegion* lastRegion = world->getRegionFromPosGlobal(ent->mGlobalPos);
+			LLViewerRegion* lastRegion = world->getRegionFromPosGlobal(entry->mGlobalPos);
 			if (lastRegion)
 			{
 				rf.lastRegion = lastRegion->getRegionID();
 			}
 		}
 		
-		mLastRadarSweep[ent->mID] = rf;
+		mLastRadarSweep[entry->mID] = rf;
 	}
 
 	//
@@ -857,7 +845,7 @@ FSRadarEntry* FSRadar::getEntry(const LLUUID& avatar_id)
 	entry_map_t::iterator found = mEntryList.find(avatar_id);
 	if (found == mEntryList.end())
 	{
-		return NULL;
+		return nullptr;
 	}
 	return found->second;
 }
@@ -1026,7 +1014,7 @@ void FSRadar::updateTracking()
 	}
 }
 
-void FSRadar::zoomAvatar(const LLUUID& avatar_id, const std::string& name)
+void FSRadar::zoomAvatar(const LLUUID& avatar_id, std::string_view name)
 {
 	if (LLAvatarActions::canZoomIn(avatar_id))
 	{
@@ -1035,7 +1023,7 @@ void FSRadar::zoomAvatar(const LLUUID& avatar_id, const std::string& name)
 	else
 	{
 		LLStringUtil::format_map_t args;
-		args["AVATARNAME"] = name.c_str();
+		args["AVATARNAME"] = static_cast<std::string>(name);
 		report_to_nearby_chat(LLTrans::getString("camera_no_focus", args));
 	}
 }
@@ -1060,9 +1048,17 @@ void FSRadar::updateName(const LLUUID& avatar_id)
 
 void FSRadar::updateAgeAlertCheck()
 {
-	const entry_map_t::iterator it_end = mEntryList.end();
-	for (entry_map_t::iterator it = mEntryList.begin(); it != it_end; ++it)
+	for (auto& [av_id, entry] : mEntryList)
 	{
-		it->second->checkAge();
+		entry->checkAge();
+	}
+}
+
+void FSRadar::updateNotes(const LLUUID& avatar_id, std::string_view notes)
+{
+	FSRadarEntry* entry = getEntry(avatar_id);
+	if (entry)
+	{
+		entry->setNotes(notes);
 	}
 }

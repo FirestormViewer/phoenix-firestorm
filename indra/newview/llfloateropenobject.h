@@ -64,8 +64,6 @@ protected:
 
 	// <FS:Ansariel> Cinder's fly-out button
 	//void onClickMoveToInventory();
-	//void onClickMoveAndWear();
-	//void onClickReplace();
 	void onClickCopy(const LLSD& value);
 	// </FS:Ansariel>
 	void onClickCancel();

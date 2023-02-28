@@ -1108,7 +1108,7 @@ LLSD LLDXHardware::getDisplayInfo()
     }
 
 LCleanup:
-    if (ret.emptyMap())
+    if (!ret.isMap() || (ret.size() == 0))
     {
         LL_INFOS() << "Failed to get data, cleaning up" << LL_ENDL;
     }

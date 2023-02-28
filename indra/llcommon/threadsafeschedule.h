@@ -248,8 +248,6 @@ namespace LL
                 TimePoint until = TimePoint::clock::now() + std::chrono::hours(24);
                 pop_result popped = tryPopUntil_(lock, until, tt);
                 if (popped == POPPED)
-                    // <FS:Ansariel> Prevent RVO elision
-                    //return std::move(tt);
                     return tt;
 
                 // DONE: throw, just as super::pop() does

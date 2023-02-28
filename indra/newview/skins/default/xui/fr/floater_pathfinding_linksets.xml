@@ -97,9 +97,11 @@
 		<text name="linksets_name_label">
 			Nom
 		</text>
+		<search_editor label="Objets par nom" name="filter_by_name"/>
 		<text name="linksets_desc_label">
 			Description
 		</text>
+		<search_editor label="Objets par description" name="filter_by_description"/>
 		<combo_box name="filter_by_linkset_use">
 			<combo_box.item label="Filtrer par usage..." name="filter_by_linkset_use_none"/>
 			<combo_box.item label="Marche possible" name="filter_by_linkset_use_walkable"/>
@@ -129,7 +131,7 @@
 		</text>
 		<button label="Actualiser" name="refresh_objects_list"/>
 		<button label="Tout sélectionner" name="select_all_objects"/>
-		<button label="Ne rien sélectionner" name="select_none_objects"/>
+		<button label="Rien sélectionner" name="select_none_objects"/>
 	</panel>
 	<panel name="pathfinding_linksets_actions">
 		<text name="linksets_actions_label">
@@ -137,7 +139,7 @@
 		</text>
 		<check_box label="Afficher la balise" name="show_beacon"/>
 		<button label="Prendre" name="take_objects"/>
-		<button label="Prendre une copie" name="take_copy_objects"/>
+		<button label="Prendre copie" name="take_copy_objects"/>
 		<button label="M’y téléporter" name="teleport_me_to_object"/>
 		<button label="Retour" name="return_objects"/>
 		<button label="Supprimer" name="delete_objects"/>
@@ -165,7 +167,7 @@
 			D
 		</text>
 		<line_editor name="edit_d_value" tool_tip="Marche possible pour les personnages de type D. Exemple de type de personnage : autre."/>
-		<button label="Appliquer les changements" name="apply_edit_values"/>
+		<button label="Appliquer changements" name="apply_edit_values"/>
 		<text name="suggested_use_a_label">
 			(Humanoïde)
 		</text>

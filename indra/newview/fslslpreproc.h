@@ -37,16 +37,13 @@
 #include "llviewerprecompiledheaders.h"
 #include "llpreviewscript.h"
 
-#define DARWINPREPROC
-//force preproc on mac
-
 struct LLScriptQueueData;
 
 class FSLSLPreprocessor
 {
 	LOG_CLASS(FSLSLPreprocessor);
-public:
 
+public:
 	FSLSLPreprocessor(LLScriptEdCore* corep)
 		: mCore(corep), mWaving(false), mClose(FALSE), mSync(false), mStandalone(false)
 	{}
@@ -55,23 +52,21 @@ public:
 		: mWaving(false), mClose(FALSE), mSync(false), mStandalone(true)
 	{}
 
-	static bool mono_directive(std::string const& text, bool agent_inv = true);
+	static bool mono_directive(std::string_view text, bool agent_inv = true);
 	std::string encode(const std::string& script);
 	std::string decode(const std::string& script);
 
 	std::string lslopt(std::string script);
 	std::string lslcomp(std::string script);
 
-	static LLUUID findInventoryByName(std::string name);
+	static std::optional<LLUUID> findInventoryByName(std::string_view name);
 	static void FSProcCacheCallback(const LLUUID& uuid, LLAssetType::EType type,
 									void *userdata, S32 result, LLExtStat extstat);
 	void preprocess_script(BOOL close = FALSE, bool sync = false, bool defcache = false);
 	void preprocess_script(const LLUUID& asset_id, LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_data);
 	void start_process();
-	void display_message(const std::string& err);
-	void display_error(const std::string& err);
-
-	std::string uncollide_string_literals(std::string script);
+	void display_message(std::string_view msg);
+	void display_error(std::string_view err);
 
 	//dual function, determines if files have been modified this session and if we have cached them
 	//also assetids exposed in-preprocessing as a predefined macro for use in include once style include files, e.g. #define THISFILE file_ ## __ASSETIDRAW__
@@ -85,8 +80,6 @@ public:
 	//(it seems rather dumb that readable scripts don't show the asset id without a DL, but thats beside the point.)
 	static std::map<std::string, LLUUID> cached_assetids;
 
-	static std::map<std::string, std::string> decollided_literals;
-
 	std::set<std::string> caching_files;
 	std::set<std::string> defcached_files;
 	bool mDefinitionCaching;
@@ -96,7 +89,7 @@ public:
 	BOOL mClose;
 	bool mSync;
 	std::string mMainScriptName;
-	
+
 	// Compile queue
 	bool mStandalone;
 	std::string mScript;

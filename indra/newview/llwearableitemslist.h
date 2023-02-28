@@ -72,12 +72,23 @@ protected:
  * Extends LLPanelInventoryListItemBase with handling
  * double click to wear the item.
  */
-class LLPanelWearableOutfitItem : public LLPanelInventoryListItemBase
+class LLPanelWearableOutfitItem : public LLPanelWearableListItem
 {
 	LOG_CLASS(LLPanelWearableOutfitItem);
 public:
+    struct Params : public LLInitParam::Block<Params, LLPanelWearableListItem::Params>
+    {
+        Optional<LLButton::Params>   add_btn, remove_btn;
+
+        Params();
+    };
+
+    BOOL postBuild();
+    BOOL handleDoubleClick(S32 x, S32 y, MASK mask);
+
 	static LLPanelWearableOutfitItem* create(LLViewerInventoryItem* item,
-											 bool worn_indication_enabled);
+											 bool worn_indication_enabled,
+                                             bool show_widgets);
 
 	/**
 	 * Updates item name and (worn) suffix.
@@ -85,12 +96,20 @@ public:
 	/*virtual*/ void updateItem(const std::string& name,
 								EItemState item_state = IS_DEFAULT);
 
+    void onAddWearable();
+    void onRemoveWearable();
+
 protected:
 	LLPanelWearableOutfitItem(LLViewerInventoryItem* item,
-							  bool worn_indication_enabled, const Params& params);
+							  bool worn_indication_enabled, const Params& params, bool show_widgets = false);
 
 private:
 	bool	mWornIndicationEnabled;
+	// <FS:Ansariel> Make Add/Remove buttons work
+protected:
+	bool mShowWidgets;
+	bool mIsWorn;
+	// </FS:Ansariel>
 };
 
 class LLPanelDeletableWearableListItem : public LLPanelWearableListItem
@@ -222,7 +241,7 @@ class FSPanelCOFWearableOutfitListItem : public LLPanelWearableOutfitItem
 {
 	LOG_CLASS(FSPanelCOFWearableOutfitListItem);
 public:
-	struct Params : public LLInitParam::Block<Params, LLPanelWearableListItem::Params>
+	struct Params : public LLInitParam::Block<Params, LLPanelWearableOutfitItem::Params>
 	{
 		Optional<LLTextBox::Params>		item_weight;
 
@@ -230,15 +249,20 @@ public:
 	};
 
 	static FSPanelCOFWearableOutfitListItem* create(LLViewerInventoryItem* item,
-											 bool worn_indication_enabled, U32 weight);
+											 bool worn_indication_enabled, bool show_widgets, U32 weight);
 
 	/*virtual*/ BOOL postBuild();
 
 	void updateItemWeight(U32 item_weight);
 
+	/*virtual*/ void updateItem(const std::string& name, EItemState item_state = IS_DEFAULT);
+
+	/*virtual*/ void onMouseEnter(S32 x, S32 y, MASK mask);
+	/*virtual*/ void onMouseLeave(S32 x, S32 y, MASK mask);
+
 protected:
 	FSPanelCOFWearableOutfitListItem(LLViewerInventoryItem* item,
-							  bool worn_indication_enabled, const Params& params);
+							  bool worn_indication_enabled, bool show_widgets, const Params& params);
 
 	virtual const LLPanelInventoryListItemBase::Params& getDefaultParams() const;
 private:
@@ -479,6 +503,7 @@ public:
 	{
 		Optional<bool> standalone;
 		Optional<bool> worn_indication_enabled;
+        Optional<bool> show_item_widgets;
 		Optional<bool> show_create_new; // <FS:Ansariel> Optional "Create new" menu item
 		Optional<bool> show_complexity; // <FS:Ansariel> Show per-item complexity in COF
 
@@ -528,6 +553,7 @@ protected:
 
 	bool mIsStandalone;
 	bool mWornIndicationEnabled;
+    bool mShowItemWidgets;
 	bool mShowCreateNew; // <FS:Ansariel> Optional "Create new" menu item
 	bool mShowComplexity; // <FS:Ansariel> Show per-item complexity in COF
 

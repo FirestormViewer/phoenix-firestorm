@@ -2058,32 +2058,49 @@ endif (WINDOWS)
 
 # Add the xui files. This is handy for searching for xui elements
 # from within the IDE.
-set(viewer_XUI_FILES
-    skins/default/colors.xml
-    skins/default/default_languages.xml
-    skins/default/textures/textures.xml
-    )
-file(GLOB DEFAULT_XUI_FILE_GLOB_LIST
-     ${CMAKE_CURRENT_SOURCE_DIR}/skins/*/xui/en/*.xml)
-list(APPEND viewer_XUI_FILES ${DEFAULT_XUI_FILE_GLOB_LIST})
+# <FS:Ansariel> Make all XUI files accessible in Visual Studio
+#set(viewer_XUI_FILES
+#    skins/default/colors.xml
+#    skins/default/default_languages.xml
+#    skins/default/textures/textures.xml
+#    )
+#file(GLOB DEFAULT_XUI_FILE_GLOB_LIST
+#     ${CMAKE_CURRENT_SOURCE_DIR}/skins/*/xui/en/*.xml)
+#list(APPEND viewer_XUI_FILES ${DEFAULT_XUI_FILE_GLOB_LIST})
 
-file(GLOB DEFAULT_WIDGET_FILE_GLOB_LIST
-     ${CMAKE_CURRENT_SOURCE_DIR}/skins/*/xui/en/widgets/*.xml)
-list(APPEND viewer_XUI_FILES ${DEFAULT_WIDGET_FILE_GLOB_LIST})
+#file(GLOB DEFAULT_WIDGET_FILE_GLOB_LIST
+#     ${CMAKE_CURRENT_SOURCE_DIR}/skins/*/xui/en/widgets/*.xml)
+#list(APPEND viewer_XUI_FILES ${DEFAULT_WIDGET_FILE_GLOB_LIST})
 
-# Cannot append empty lists in CMake, wait until we have files here.
-#file(GLOB SILVER_WIDGET_FILE_GLOB_LIST
-#     ${CMAKE_CURRENT_SOURCE_DIR}/skins/silver/xui/en-us/widgets/*.xml)
-#list(APPEND viewer_XUI_FILES ${SILVER_WIDGET_FILE_GLOB_LIST})
+## Cannot append empty lists in CMake, wait until we have files here.
+##file(GLOB SILVER_WIDGET_FILE_GLOB_LIST
+##     ${CMAKE_CURRENT_SOURCE_DIR}/skins/silver/xui/en-us/widgets/*.xml)
+##list(APPEND viewer_XUI_FILES ${SILVER_WIDGET_FILE_GLOB_LIST})
 
-list(SORT viewer_XUI_FILES)
+#list(SORT viewer_XUI_FILES)
 
-source_group("XUI Files" FILES ${viewer_XUI_FILES})
+#source_group("XUI Files" FILES ${viewer_XUI_FILES})
 
-set_source_files_properties(${viewer_XUI_FILES}
+#set_source_files_properties(${viewer_XUI_FILES}
+#                            PROPERTIES HEADER_FILE_ONLY TRUE)
+
+#list(APPEND viewer_SOURCE_FILES ${viewer_XUI_FILES})
+
+file(GLOB_RECURSE viewer_XUI_FILES LIST_DIRECTORIES FALSE
+    ${CMAKE_CURRENT_SOURCE_DIR}/skins/*.xml)
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/skins PREFIX "XUI Files" FILES ${viewer_XUI_FILES})
+set_source_files_properties(${viewer_XUI_FILES} 
                             PROPERTIES HEADER_FILE_ONLY TRUE)
-
 list(APPEND viewer_SOURCE_FILES ${viewer_XUI_FILES})
+# </FS:Ansariel>
+
+file(GLOB_RECURSE viewer_SHADER_FILES LIST_DIRECTORIES FALSE
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_settings/shaders/*.glsl)
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/app_settings/shaders PREFIX "Shaders" FILES ${viewer_SHADER_FILES})
+set_source_files_properties(${viewer_SHADER_FILES} 
+                            PROPERTIES HEADER_FILE_ONLY TRUE)
+list(APPEND viewer_SOURCE_FILES ${viewer_SHADER_FILES})
+
 
 set(viewer_APPSETTINGS_FILES
     app_settings/anim.ini
@@ -2238,9 +2255,9 @@ if (WINDOWS)
     set_target_properties(${VIEWER_BINARY_NAME}
         PROPERTIES
         # *TODO -reenable this once we get server usage sorted out
-        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /LARGEADDRESSAWARE"
-        LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\" /INCREMENTAL:NO /LARGEADDRESSAWARE"
-        LINK_FLAGS_RELEASE "/FORCE:MULTIPLE /MAP\"secondlife-bin.MAP\" /OPT:REF /LARGEADDRESSAWARE"
+        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /LARGEADDRESSAWARE /LTCG"
+        LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\" /INCREMENTAL:NO /LARGEADDRESSAWARE /LTCG"
+        LINK_FLAGS_RELEASE "/FORCE:MULTIPLE /MAP\"secondlife-bin.MAP\" /OPT:REF /LARGEADDRESSAWARE /LTCG"
         )
 
     if(USE_PRECOMPILED_HEADERS)
@@ -2267,18 +2284,17 @@ if (WINDOWS)
       # The following commented dependencies are determined at variably at build time. Can't do this here.
       ${CMAKE_SOURCE_DIR}/../etc/message.xml
       ${CMAKE_SOURCE_DIR}/../scripts/messages/message_template.msg
-      ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/llcommon.dll
+      # ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/llcommon.dll # <FS:Ansariel> Doesn't exist
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libapr-1.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libaprutil-1.dll
       ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libapriconv-1.dll
       # <FS:Beq> Restore GLOD build dependencies
       ${SHARED_LIB_STAGING_DIR}/Release/glod.dll
       ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/glod.dll
-      ${SHARED_LIB_STAGING_DIR}/Debug/glod.dll
       # </FS:Beq>
-      ${SHARED_LIB_STAGING_DIR}/Release/libcollada14dom22.dll
-      ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libcollada14dom22.dll
-      ${SHARED_LIB_STAGING_DIR}/Debug/libcollada14dom22-d.dll
+      #${SHARED_LIB_STAGING_DIR}/Release/libcollada14dom22.dll # <FS:Ansariel> Doesn't exist
+      #${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libcollada14dom22.dll # <FS:Ansariel> Doesn't exist
+      #${SHARED_LIB_STAGING_DIR}/Debug/libcollada14dom22-d.dll # <FS:Ansariel> Doesn't exist
       # <FS:Ansariel> Only copy OpenJPEG dll if needed
       #${SHARED_LIB_STAGING_DIR}/Release/openjp2.dll
       #${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/openjp2.dll
@@ -2286,13 +2302,13 @@ if (WINDOWS)
       # </FS:Ansariel>
       ${SHARED_LIB_STAGING_DIR}/Release/libhunspell.dll
       ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libhunspell.dll
-      ${SHARED_LIB_STAGING_DIR}/Debug/libhunspell.dll
+      # ${SHARED_LIB_STAGING_DIR}/Debug/libhunspell.dll # <FS:Ansariel> Doesn't exist
       ${SHARED_LIB_STAGING_DIR}/Release/uriparser.dll
       ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/uriparser.dll
-      ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/SLVoice.exe
-      ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libsndfile-1.dll
-      ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/vivoxoal.dll
-      ${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/ca-bundle.crt
+      #${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/SLVoice.exe # <FS:Ansariel> Doesn't exist
+      #${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/libsndfile-1.dll # <FS:Ansariel> Doesn't exist
+      #${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/vivoxoal.dll # <FS:Ansariel> Doesn't exist
+      #${SHARED_LIB_STAGING_DIR}/${CMAKE_CFG_INTDIR}/ca-bundle.crt # <FS:Ansariel> Doesn't exist
       ${GOOGLE_PERF_TOOLS_SOURCE}
       ${CMAKE_CURRENT_SOURCE_DIR}/licenses-win32.txt
       ${CMAKE_CURRENT_SOURCE_DIR}/featuretable.txt
@@ -2334,7 +2350,7 @@ if (WINDOWS)
       list(APPEND COPY_INPUT_DEPENDENCIES
            ${SHARED_LIB_STAGING_DIR}/Release/fmod.dll
            ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/fmod.dll
-           ${SHARED_LIB_STAGING_DIR}/Debug/fmodL.dll
+           #${SHARED_LIB_STAGING_DIR}/Debug/fmodL.dll # <FS:Ansariel> Doesn't exist
           )
     endif (FMODSTUDIO)
 

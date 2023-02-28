@@ -38,12 +38,12 @@
 #include "fslslpreprocviewer.h"
 #include "llagent.h"
 #include "llappviewer.h"
-#include "llinventoryfunctions.h"
-#include "lltrans.h"
-#include "llfilesystem.h"
-#include "llviewercontrol.h"
 #include "llcompilequeue.h"
+#include "llfilesystem.h"
+#include "llinventoryfunctions.h"
 #include "llnotificationsutil.h"
+#include "lltrans.h"
+#include "llviewercontrol.h"
 
 #ifdef __GNUC__
 // There is a sprintf( ... "%d", size_t_value) buried inside boost::wave. In order to not mess with system header, I rather disable that warning here.
@@ -53,7 +53,7 @@
 class ScriptMatches : public LLInventoryCollectFunctor
 {
 public:
-	ScriptMatches(const std::string& name)
+	ScriptMatches(std::string_view name)
 	{
 		mName = name;
 	}
@@ -70,7 +70,7 @@ private:
 	std::string mName;
 };
 
-LLUUID FSLSLPreprocessor::findInventoryByName(std::string name)
+std::optional<LLUUID> FSLSLPreprocessor::findInventoryByName(std::string_view name)
 {
 	LLInventoryModel::cat_array_t cats;
 	LLInventoryModel::item_array_t items;
@@ -81,17 +81,11 @@ LLUUID FSLSLPreprocessor::findInventoryByName(std::string name)
 	{
 		return items.front()->getUUID();
 	}
-	return LLUUID::null;
+	return std::nullopt;
 }
 
 
-std::map<std::string,LLUUID> FSLSLPreprocessor::cached_assetids;
-
-#if !defined(LL_DARWIN) || defined(DARWINPREPROC)
-
-//apparently LL #defined this function which happens to precisely match
-//a boost::wave function name, destroying the internet, silly grey furries
-#undef equivalent
+std::map<std::string, LLUUID> FSLSLPreprocessor::cached_assetids;
 
 // Work around stupid Microsoft STL warning
 #ifdef LL_WINDOWS
@@ -131,20 +125,14 @@ using namespace boost::regex_constants;
 std::string FSLSLPreprocessor::encode(const std::string& script)
 {
 	std::string otext = FSLSLPreprocessor::decode(script);
-	
-	bool mono = mono_directive(script);
-	
+
 	otext = boost::regex_replace(otext, boost::regex("([/*])(?=[/*|])", boost::regex::perl), "$1|");
-	
-	//otext = curl_escape(otext.c_str(), otext.size());
-	
 	otext = encode_start + otext + encode_end;
-	
 	otext += "\n//nfo_preprocessor_version 0";
-	
+
 	//otext += "\n//^ = determine what featureset is supported";
 	otext += llformat("\n//program_version %s", LLAppViewer::instance()->getWindowTitle().c_str());
-	
+
 	time_t utc_time = time_corrected();
 	std::string timeStr ="["+LLTrans::getString ("TimeMonth")+"]/["
 				 +LLTrans::getString ("TimeDay")+"]/["
@@ -156,10 +144,9 @@ std::string FSLSLPreprocessor::encode(const std::string& script)
 	substitution["datetime"] = (S32) utc_time;
 	LLStringUtil::format (timeStr, substitution);
 	otext += "\n//last_compiled " + timeStr;
-	
 	otext += "\n";
-	
-	if (mono)
+
+	if (mono_directive(script))
 	{
 		otext += "//mono\n";
 	}
@@ -173,19 +160,19 @@ std::string FSLSLPreprocessor::encode(const std::string& script)
 
 std::string FSLSLPreprocessor::decode(const std::string& script)
 {
-	static S32 startpoint = encode_start.length();
-	
+	static const S32 startpoint = encode_start.length();
+
 	std::string tip = script.substr(0, startpoint);
-	
+
 	if (tip != encode_start)
 	{
 		LL_DEBUGS("FSLSLPreprocessor") << "No start" << LL_ENDL;
 		//if(sp != -1)trigger warningg/error?
 		return script;
 	}
-	
+
 	S32 end = script.find(encode_end);
-	
+
 	if (end == -1)
 	{
 		LL_DEBUGS("FSLSLPreprocessor") << "No end" << LL_ENDL;
@@ -196,10 +183,7 @@ std::string FSLSLPreprocessor::decode(const std::string& script)
 	LL_DEBUGS("FSLSLPreprocessor") << "data = " << data << LL_ENDL;
 
 	std::string otext = data;
-
 	otext = boost::regex_replace(otext, boost::regex("([/*])\\|", boost::regex::perl), "$1");
-
-	//otext = curl_unescape(otext.c_str(),otext.length());
 
 	return otext;
 }
@@ -211,13 +195,13 @@ static std::string scopeript2(std::string& top, S32 fstart, char left = '{', cha
 	{
 		return "begin out of bounds";
 	}
-	
+
 	S32 cursor = fstart;
 	bool noscoped = true;
 	bool in_literal = false;
 	S32 count = 0;
 	char ltoken = ' ';
-	
+
 	do
 	{
 		char token = top.at(cursor);
@@ -253,7 +237,7 @@ static std::string scopeript2(std::string& top, S32 fstart, char left = '{', cha
 		return "end out of bounds";
 	}
 	
-	return top.substr(fstart,(cursor-fstart));
+	return top.substr(fstart, (cursor - fstart));
 }
 
 static inline S32 const_iterator_to_pos(std::string::const_iterator begin, std::string::const_iterator cursor)
@@ -317,7 +301,6 @@ static void shredder(std::string& text)
 
 std::string FSLSLPreprocessor::lslopt(std::string script)
 {
-	
 	try
 	{
 		std::string bottom;
@@ -409,17 +392,12 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 		do
 		{
 			repass = false;
-			std::map<std::string, std::string>::iterator func_it;
-			for (func_it = functions.begin(); func_it != functions.end(); func_it++)
+			for (const auto& [funcname, function] : functions)
 			{
-
-				std::string funcname = func_it->first;
-
 				if (kept_functions.find(funcname) == kept_functions.end())
 				{
-
 					boost::smatch calls;
-											//funcname has to be [a-zA-Z0-9_]+, so we know it's safe
+					//funcname has to be [a-zA-Z0-9_]+, so we know it's safe
 					boost::regex findcalls(std::string() +
 						rDOT_MATCHES_NEWLINE
 						"(?<![A-Za-z0-9_])(" + funcname + ")" rOPT_SPC "\\(" // a call to the function...
@@ -439,7 +417,6 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 					{
 						if (calls[1].matched)
 						{
-							std::string function = func_it->second;
 							kept_functions.insert(funcname);
 							bottom = function + bottom;
 							repass = true;
@@ -456,11 +433,9 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 		while (repass);
 
 		// Find variable invocations and add the declarations back if used.
-
 		std::vector<std::pair<std::string, std::string> >::reverse_iterator var_it;
 		for (var_it = gvars.rbegin(); var_it != gvars.rend(); var_it++)
 		{
-
 			std::string varname = var_it->first;
 			boost::regex findvcalls(std::string() + rDOT_MATCHES_NEWLINE
 				"(?<![a-zA-Z0-9_.])(" + varname + ")(?![a-zA-Z0-9_\"])" // invocation of the variable
@@ -509,6 +484,7 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 		display_error(err);
 		throw;
 	}
+
 	return script;
 }
 
@@ -546,9 +522,9 @@ struct ProcCacheInfo
 	FSLSLPreprocessor* self;
 };
 
-static inline std::string shortfile(std::string in)
+static inline std::string shortfile(const std::string& in)
 {
-	return boost::filesystem::path(std::string(in)).filename().string();
+	return boost::filesystem::path(in).filename().string();
 }
 
 
@@ -556,22 +532,21 @@ class trace_include_files : public boost::wave::context_policies::default_prepro
 {
 public:
 	trace_include_files(FSLSLPreprocessor* proc)
-	:   mProc(proc) 
+	:   mProc(proc)
 	{
 		mAssetStack.push(LLUUID::null.asString());
 		mFileStack.push(proc->mMainScriptName);
 	}
-
 
 	template <typename ContextT>
 	bool found_include_directive(ContextT const& ctx, std::string const &filename, bool include_next)
 	{
 		std::string cfilename = filename.substr(1, filename.length() - 2);
 		LL_DEBUGS("FSLSLPreprocessor") << cfilename << ":found_include_directive" << LL_ENDL;
-		LLUUID item_id = FSLSLPreprocessor::findInventoryByName(cfilename);
-		if (item_id.notNull())
+		std::optional<LLUUID> item_id = FSLSLPreprocessor::findInventoryByName(cfilename);
+		if (item_id.has_value())
 		{
-			LLViewerInventoryItem* item = gInventory.getItem(item_id);
+			LLViewerInventoryItem* item = gInventory.getItem(item_id.value());
 			if (item)
 			{
 				std::map<std::string,LLUUID>::iterator it = mProc->cached_assetids.find(cfilename);
@@ -605,8 +580,8 @@ public:
 						info->self = mProc;
 						LLPermissions perm(((LLInventoryItem*)item)->getPermissions());
 						gAssetStorage->getInvItemAsset(LLHost(),
-														gAgent.getID(),
-														gAgent.getSessionID(),
+														gAgentID,
+														gAgentSessionID,
 														perm.getOwner(),
 														LLUUID::null,
 														item->getUUID(),
@@ -624,7 +599,6 @@ public:
 		{
 			//todo check on HDD in user defined dir for file in question
 		}
-		//++include_depth;
 		return false;
 	}
 
@@ -633,11 +607,10 @@ public:
 		std::string const &relname, std::string const& absname,
 		bool is_system_include)
 	{
-		
 		ContextT& usefulctx = const_cast<ContextT&>(ctx);
 		std::string id;
-		std::string filename = shortfile(relname);//boost::filesystem::path(std::string(relname)).filename();
-		std::map<std::string,LLUUID>::iterator it = mProc->cached_assetids.find(filename);
+		std::string filename = shortfile(relname);
+		std::map<std::string, LLUUID>::iterator it = mProc->cached_assetids.find(filename);
 		if (it != mProc->cached_assetids.end())
 		{
 			id = mProc->cached_assetids[filename].asString();
@@ -707,7 +680,6 @@ private:
 
 void cache_script(std::string name, std::string content)
 {
-	
 	content += "\n";/*hack!*/
 	LL_DEBUGS("FSLSLPreprocessor") << "writing " << name << " to cache" << LL_ENDL;
 	std::string path = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "lslpreproc", name);
@@ -752,15 +724,16 @@ void FSLSLPreprocessor::FSProcCacheCallback(const LLUUID& iuuid, LLAssetType::ET
 				args["[FILENAME]"] = name;
 				self->display_message(LLTrans::getString("fs_preprocessor_cache_completed", args));
 				cache_script(name, content);
-				std::set<std::string>::iterator loc = self->caching_files.find(name);
-				if (loc != self->caching_files.end())
+				if (std::set<std::string>::iterator loc = self->caching_files.find(name); loc != self->caching_files.end())
 				{
 					LL_DEBUGS("FSLSLPreprocessor") << "finalizing cache" << LL_ENDL;
 					self->caching_files.erase(loc);
-					//self->cached_files.insert(name);
-					if(uuid.isNull())uuid.generate();
+					if (uuid.isNull())
+					{
+						uuid.generate();
+					}
 					item->setAssetUUID(uuid);
-					self->cached_assetids[name] = uuid;//.insert(uuid.asString());
+					self->cached_assetids[name] = uuid;
 					self->start_process();
 				}
 				else
@@ -797,12 +770,11 @@ void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
 	caching_files.clear();
 	LLStringUtil::format_map_t args;
 	display_message(LLTrans::getString("fs_preprocessor_starting"));
-	
-	LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,"") + gDirUtilp->getDirDelimiter() + "lslpreproc");
-	std::string script = mCore->mEditor->getText();
+
+	LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "lslpreproc"));
 	if (mMainScriptName.empty())//more sanity
 	{
-		const LLInventoryItem* item = NULL;
+		const LLInventoryItem* item = nullptr;
 		LLPreview* preview = (LLPreview*)mCore->mUserdata;
 		if (preview)
 		{
@@ -818,34 +790,33 @@ void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
 			mMainScriptName = "(Unknown)";
 		}
 	}
-	std::string name = mMainScriptName;
-	cached_assetids[name] = LLUUID::null;
-	cache_script(name, script);
+	cached_assetids[mMainScriptName] = LLUUID::null;
+	cache_script(mMainScriptName, mCore->mEditor->getText());
 	//start the party
 	start_process();
 }
 
 void FSLSLPreprocessor::preprocess_script(const LLUUID& asset_id, LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_data)
 {
-	if(!data)
+	if (!data)
 	{
 		return;
 	}
-	
+
 	std::string script = FSLSLPreprocessor::decode(script_data);
-	
+
 	mScript = script;
 	mAssetID = asset_id;
 	mData = data;
 	mType = type;
-	
+
 	mDefinitionCaching = false;
 	caching_files.clear();
 	LLStringUtil::format_map_t args;
 	display_message(LLTrans::getString("fs_preprocessor_starting"));
-	
-	LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,"") + gDirUtilp->getDirDelimiter() + "lslpreproc");
-	
+
+	LLFile::mkdir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "lslpreproc"));
+
 	if (mData->mItem)
 	{
 		mMainScriptName = mData->mItem->getName();
@@ -854,10 +825,9 @@ void FSLSLPreprocessor::preprocess_script(const LLUUID& asset_id, LLScriptQueueD
 	{
 		mMainScriptName = "(Unknown)";
 	}
-	
-	std::string name = mMainScriptName;
-	cached_assetids[name] = LLUUID::null;
-	cache_script(name, script);
+
+	cached_assetids[mMainScriptName] = LLUUID::null;
+	cache_script(mMainScriptName, script);
 	//start the party
 	start_process();
 }
@@ -973,13 +943,6 @@ static inline std::string quicklabel()
 {
 	return std::string("c") + randstr(5, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
 }
-
-/* unused:
-static std::string minimalize_whitespace(std::string in)
-{
-	return boost::regex_replace(in, boost::regex("\\s*",boost::regex::perl), "\n");
-}
-*/
 
 static std::string reformat_switch_statements(std::string script, bool &lackDefault)
 {
@@ -1274,11 +1237,11 @@ void FSLSLPreprocessor::start_process()
 		}
 		input = oaux.str();
 	}
-	
+
 	//Make sure wave does not complain about missing newline at end of script.
 	input += "\n";
 	std::string output;
-	
+
 	std::string name = mMainScriptName;
 	bool lazy_lists = gSavedSettings.getBOOL("_NACL_PreProcLSLLazyLists");
 	bool use_switch = gSavedSettings.getBOOL("_NACL_PreProcLSLSwitch");
@@ -1327,7 +1290,7 @@ void FSLSLPreprocessor::start_process()
 			ctx.set_language(boost::wave::enable_long_long(ctx.get_language()));
 			ctx.set_language(boost::wave::enable_prefer_pp_numbers(ctx.get_language()));
 			ctx.set_language(boost::wave::enable_variadics(ctx.get_language()));
-			
+
 			std::string path = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,"") + gDirUtilp->getDirDelimiter() + "lslpreproc" + gDirUtilp->getDirDelimiter();
 			ctx.add_include_path(path.c_str());
 			if (enable_hdd_include)
@@ -1447,7 +1410,7 @@ void FSLSLPreprocessor::start_process()
 			display_error(err);
 		}
 	}
-	
+
 	if (preprocessor_enabled && !errored)
 	{
 		FAILDEBUG
@@ -1534,7 +1497,7 @@ void FSLSLPreprocessor::start_process()
 					output = lslopt(output);
 				}
 				catch(...)
-				{	
+				{
 					errored = true;
 					display_error(LLTrans::getString("fs_preprocessor_optimizer_unexpected_exception"));
 				}
@@ -1584,7 +1547,7 @@ void FSLSLPreprocessor::start_process()
 
 		if (mStandalone)
 		{
-			LLFloaterCompileQueue::scriptPreprocComplete(mAssetID, mData, mType, output);
+			LLFloaterCompileQueue::scriptPreprocComplete(mData, mType, output);
 		}
 		else
 		{
@@ -1605,66 +1568,20 @@ void FSLSLPreprocessor::start_process()
 	mWaving = false;
 }
 
-#else
 
-std::string FSLSLPreprocessor::encode(const std::string& script)
-{
-	LLStringUtil::format_map_t args;
-	args["[WHERE]"] = "encode";
-	display_error(LLTrans::getString("fs_preprocessor_not_supported", args));
-	return script;
-}
-
-std::string FSLSLPreprocessor::decode(const std::string& script)
-{
-	LLStringUtil::format_map_t args;
-	args["[WHERE]"] = "decode";
-	display_error(LLTrans::getString("fs_preprocessor_not_supported", args));
-	return script;
-}
-
-std::string FSLSLPreprocessor::lslopt(std::string script)
-{
-	LLStringUtil::format_map_t args;
-	args["[WHERE]"] = "lslopt";
-	display_error(LLTrans::getString("fs_preprocessor_not_supported", args));
-	return script;
-}
-
-void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& uuid, LLAssetType::EType type, void *userdata, S32 result, LLExtStat extstat)
-{
-}
-
-void FSLSLPreprocessor::preprocess_script(BOOL close, bool sync, bool defcache)
-{
-	FSLSLPreProcViewer* outfield = mCore->mPostEditor;
-	if (outfield)
-	{
-		outfield->setText(LLStringExplicit(mCore->mEditor->getText()));
-	}
-	mCore->doSaveComplete((void*)mCore, close, sync);
-}
-
-void FSLSLPreprocessor::preprocess_script(const LLUUID& asset_id, LLScriptQueueData* data, LLAssetType::EType type, const std::string& script_data)
-{
-	LLFloaterCompileQueue::scriptPreprocComplete(asset_id, data, type, script_data);
-}
-
-#endif
-
-void FSLSLPreprocessor::display_message(const std::string& err)
+void FSLSLPreprocessor::display_message(std::string_view msg)
 {
 	if (mStandalone)
 	{
-		LLFloaterCompileQueue::scriptLogMessage(mData, err);
+		LLFloaterCompileQueue::scriptLogMessage(mData, msg);
 	}
 	else
 	{
-		mCore->mErrorList->addCommentText(err);
+		mCore->mErrorList->addCommentText(msg.data());
 	}
 }
 
-void FSLSLPreprocessor::display_error(const std::string& err)
+void FSLSLPreprocessor::display_error(std::string_view err)
 {
 	if (mStandalone)
 	{
@@ -1673,14 +1590,13 @@ void FSLSLPreprocessor::display_error(const std::string& err)
 	else
 	{
 		LLSD row;
-		row["columns"][0]["value"] = err;
+		row["columns"][0]["value"] = err.data();
 		row["columns"][0]["font"] = "SANSSERIF_SMALL";
 		mCore->mErrorList->addElement(row);
 	}
 }
 
-
-bool FSLSLPreprocessor::mono_directive(std::string const& text, bool agent_inv)
+bool FSLSLPreprocessor::mono_directive(std::string_view text, bool agent_inv)
 {
 	bool domono = agent_inv;
 	

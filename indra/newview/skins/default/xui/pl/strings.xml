@@ -222,7 +222,7 @@ Więcej informacji w naszym FAQ:
 http://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginFailed">
-		Awaria logowania awaryjnego do świata.
+		Logowanie nieudane.
 Jeśli uważasz, że to błąd, skontaktuj się z obsługą świata.
 	</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">
@@ -2226,10 +2226,10 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 		Pracownik Linden Lab
 	</string>
 	<string name="PaymentInfoUsed">
-		Płatności: Dane użyte
+		Płatności: Dane w użyciu
 	</string>
 	<string name="PaymentInfoOnFile">
-		Płatności: Dane znane
+		Płatności: Dane przypisane
 	</string>
 	<string name="NoPaymentInfoOnFile">
 		Płatności: Dane nieznane
@@ -2744,13 +2744,13 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 		Nie dodano żadnych reklam. Kliknij na przycisk Nowa, aby utworzyć reklamę.
 	</string>
 	<string name="NoAvatarPicksClassifiedsText">
-		Użytkownik nie ma ulubionych miejsc ani reklam
+		Brak ulubionych miejsc/reklam
 	</string>
 	<string name="NoAvatarPicksText">
-		Użytkownik nie ma ulubionych miejsc
+		Brak ulubionych miejsc
 	</string>
 	<string name="NoAvatarClassifiedsText">
-		Użytkownik nie ma reklam
+		Brak reklam
 	</string>
 	<string name="PicksClassifiedsLoadingText">
 		Ładowanie...
@@ -2924,6 +2924,9 @@ Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .anim
 	<string name="Linden Location">
 		Lokalizacja Lindenów
 	</string>
+	<string name="Adult">
+		Dla dorosłych
+	</string>
 	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
 	<string name="Arts and Culture">
 		Sztuka i Kultura
@@ -2985,7 +2988,7 @@ Błąd:
 	<string name="MBUnableToAccessFile">
 		Aplikacja [APP_NAME] nie odnalazła poszukiwanego pliku.
 
-Może być to spowodowane aktywnością kilku kopii oprogramowania w tej samej chwili lub Twój system błędnie odczytuje proces zakończenia dla uruchomionych aplikacji.
+Może być to spowodowane aktywnością kilku kopii oprogramowania w tej samej chwili lub Twój system błędnie uważa, że plik jest otwarty / zablokowany.
 Jeżeli nadal otrzymujesz ten komunikat, uruchom swój komputer ponownie.
 Jeżeli problem nadal występuje, proponujemy całkowite odinstalowanie aplikacji [APP_NAME] oraz ponowną jej instalację.
 	</string>
@@ -3058,7 +3061,7 @@ Uruchomione w oknie.
 Ustaw tryb koloru swojego wyświetlacza na 32-bity.
 	</string>
 	<string name="MBAlpha">
-		Aplikacja [APP_NAME] nie może zostać uruchomiona, ponieważ nie jest możliwe dostanie się na kanał 8 bitowy alpha. Najczęściej jest to spowodowane błędami sterowników karty video.
+		Aplikacja [APP_NAME] nie może zostać uruchomiona, ponieważ nie może uzyskać dostępu do 8 bitowego kanału alpha. Najczęściej jest to spowodowane błędami sterowników karty video.
 Upewnij się, że posiadasz najnowsze aktualizacje sterowników karty video.
 Dodatkowo, sprawdź czy Twój monitor posiada poprawną konfigurację koloru (32-bity) w Panel Sterowania &gt; Ekran &gt; Ustawienia.
 Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
@@ -5137,7 +5140,7 @@ Jeśli problemy będą występowały nadal, proszę sprawdź sieć i ustawienia 
 		Wewnętrzne
 	</string>
 	<string name="MembershipUpgradeText">
-		Przejdź na Premium
+		Zmień plan członkostwa
 	</string>
 	<string name="MembershipPremiumText">
 		Moje członkostwo Premium
