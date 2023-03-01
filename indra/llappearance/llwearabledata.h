@@ -85,6 +85,7 @@ protected:
 private:
 	void			pullCrossWearableValues(const LLWearableType::EType type);
 
+// <FS:Ansariel> [Legacy Bake]
 	//--------------------------------------------------------------------
 	// Server Communication
 	//--------------------------------------------------------------------
@@ -93,6 +94,7 @@ public:
 											BOOL generate_valid_hash = TRUE);
 protected:
 	virtual void	invalidateBakedTextureHash(LLMD5& hash) const {}
+// </FS:Ansariel> [Legacy Bake]
 
 	//--------------------------------------------------------------------
 	// Member variables
