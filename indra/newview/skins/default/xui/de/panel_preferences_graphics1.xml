@@ -63,6 +63,9 @@
 			<combo_box.item label="Alle Avatare und Objekte" name="3"/>
 			<combo_box.item label="Alles" name="4"/>
 		</combo_box>
+		<text name="RenderTonemapperText">
+			Tone Mapper:
+		</text>
 		<text name="local lights_label" tool_tip="Beeinflusst die Anzahl an dargestellten Lichtquellen, wenn Erweitertes Beleuchtungsmodell aktiviert ist (Neustart erforderlich).">
 			Punkt. Beleucht. (Neustart erf.):
 		</text>
@@ -83,6 +86,7 @@
 			Niedrig
 		</text>
 		<slider label="Avatar-Physik:" name="AvatarPhysicsDetail"/>
+		<slider label="Exponierung:" name="RenderExposure"/>
 		<text name="MeshDetailText">
 			Darstellungsgrad:
 		</text>

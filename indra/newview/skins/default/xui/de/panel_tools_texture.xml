@@ -33,8 +33,8 @@
 	<button name="paste_face_btn" tool_tip="Textur-Parameter aus Zwischenablage einfügen"/>
 	<menu_button name="paste_face_gear_btn" tool_tip="Einfüge-Optionen"/>
 	<combo_box name="combobox matmedia">
-		<combo_box.item label="Material" name="Materials"/>
-		<combo_box.item label="PBR" name="PBR"/>
+		<combo_box.item label="Blinn-Phong" name="Materials"/>
+		<combo_box.item label="PBR metallische Unebenheit" name="PBR"/>
 		<combo_box.item label="Medien" name="Media"/>
 	</combo_box>
 	<radio_group name="radio_material_type">
@@ -47,7 +47,7 @@
 		<radio_item label="Normal" name="Normal"/>
 		<radio_item label="Metallisch/Unenbenheit" name="Metallic/roughness"/>
 	</radio_group>
-	<texture_picker label="PBR" name="pbr_control" tool_tip="Klicken, um ein PBR-Material zu wählen"/>
+	<texture_picker label="Material" name="pbr_control" tool_tip="Klicken, um ein PBR-Material zu wählen"/>
 	<button name="pbr_from_inventory" label="Aus Inventory wählen"/>
 	<button name="edit_selected_pbr" label="Ausgewählte bearbeiten"/>
 	<button name="save_selected_pbr" label="In Inventar speichern"/>

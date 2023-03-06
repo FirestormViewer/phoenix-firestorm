@@ -4938,8 +4938,8 @@ Falls Sie dieses Objekt sehen möchten, nehmen Sie es ab und hängen es an einem
 		Material erfolggreich erstellt. Asset ID: [ASSET_ID]
 	</notification>
 	<notification name="ReflectionProbeApplied">
-		Das Objekt wurde auf den Standard für den Reflexionstest gesetzt (unsichtbar, phantom, 5m Kugel). Weitere Informationen über Reflexionstests und deren Anwendung finden Sie in der Knowledge Base.
-		<usetemplate ignoretext="Hinweis zum Reflexionstest" name="okignore" yestext="OK"/>
+		WARNUNG: Sie haben aus Ihrem Objekt einen Reflexionstest erzeugt. Dieser verändert implizit das Objekt, um dessen Einflusskörper nachzuahmen. Diese Änderungen sind nicht umkehrbar. Möchten Sie fortfahren?
+		<usetemplate ignoretext="Hinweis zum Reflexionstest" name="okcancelignore" yestext="OK" notext="Abbrechen"/>
 	</notification>
 
 	<notification name="NoValidEnvSettingFound">
