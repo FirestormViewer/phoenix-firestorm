@@ -5331,4 +5331,8 @@ https://wiki.firestormviewer.org/fs_voice
 
 [SOURCES]
 	</notification>
+	<notification name="UngroupFolder">
+		Разгруппировать папку "[FOLDER_NAME]"?
+		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Да"/>
+	</notification>
 </notifications>

@@ -113,8 +113,8 @@ void LLLocalMeshObject::computeObjectBoundingBox()
 	// process any additional faces
 	for (size_t face_iter = 1; face_iter < lod3_faces.size(); ++face_iter)
 	{
-		auto& current_bbox_min = lod3_faces[face_iter]->getFaceBoundingBox().first;
-		auto& current_bbox_max = lod3_faces[face_iter]->getFaceBoundingBox().second;
+		const auto& [current_bbox_min, current_bbox_max] = lod3_faces[face_iter]->getFaceBoundingBox();
+
 
 		for (size_t array_iter = 0; array_iter < 4; ++array_iter)
 		{
@@ -130,30 +130,30 @@ void LLLocalMeshObject::computeObjectTransform(const LLMatrix4& scene_transform)
 	// most things here were tactfully stolen from LLModel::normalizeVolumeFaces()
 
 	// translation of bounding box to origin
+	// We will use this to centre the object at the origin (hence the -ve 1/2)
 	mObjectTranslation = mObjectBoundingBox.first;
 	mObjectTranslation += mObjectBoundingBox.second;
 	mObjectTranslation *= -0.5f;
 
-	// actual bounding box size
-	mObjectSize = mObjectBoundingBox.second;
-	mObjectSize -= mObjectBoundingBox.first;
+	// actual bounding box size (max-min)
+	mObjectSize = mObjectBoundingBox.second - mObjectBoundingBox.first;
 
-	// make sure all axes of mObjectSize are non zero
-	for (auto& axis_size : mObjectSize.mV)
+	// make sure all axes of mObjectSize are non zero (don't adjust the 4th dim)
+	for ( int i=0; i <3; i++ )
     {
+		auto& axis_size = mObjectSize[i];
 		// set size of 1.0 if < F_APPROXIMATELY_ZERO
 		if (axis_size <= F_APPROXIMATELY_ZERO)
         {
             axis_size = 1.0f;
         }
     }
-	// bounding box scale in a 1Mx3 cube
-	mObjectScale.set(1.f, 1.f, 1.f);
+	// object scale is the inverse of the object size
+	mObjectScale.set(1.f, 1.f, 1.f,1.f);
 	for (int vec_iter = 0; vec_iter < 4; ++vec_iter)
 	{
-		mObjectScale.mV[vec_iter] = mObjectScale.mV[vec_iter] / mObjectSize.mV[vec_iter];
-	}
-	
+		mObjectScale[vec_iter] /= mObjectSize[vec_iter];
+	}		
 }
 
 void LLLocalMeshObject::normalizeFaceValues(LLLocalMeshFileLOD lod_iter)
@@ -172,15 +172,18 @@ void LLLocalMeshObject::normalizeFaceValues(LLLocalMeshFileLOD lod_iter)
 	// process current lod
 	for (auto& current_face : lod_faces)
 	{
-		// first transform the bounding boxes 
+		// first transform the bounding boxes ro be centred at 0,0,0
 		auto& current_submesh_bbox = current_face->getFaceBoundingBox();
 		current_submesh_bbox.first += mObjectTranslation;
 		current_submesh_bbox.second += mObjectTranslation;
+
+		LL_INFOS("LocalMesh") << "before squish:" << current_submesh_bbox.first << " " << current_submesh_bbox.second << LL_ENDL;
 		for (int vec_iter = 0; vec_iter < 4; ++vec_iter)
 		{
 			current_submesh_bbox.first.mV[vec_iter] *= mObjectScale.mV[vec_iter];
 			current_submesh_bbox.second.mV[vec_iter] *= mObjectScale.mV[vec_iter];
 		}
+		LL_INFOS("LocalMesh") << "after squish:" << current_submesh_bbox.first << " " << current_submesh_bbox.second << LL_ENDL;
 
 		// then transform the positions
 		auto& current_face_positions = current_face->getPositions();
@@ -309,13 +312,18 @@ void LLLocalMeshObject::attachSkinInfo()
 	auto skinmap_seeker = gMeshRepo.mSkinMap.find(mSculptID);
 	if (skinmap_seeker == gMeshRepo.mSkinMap.end())
 	{
-		gMeshRepo.mSkinMap[mSculptID] = &mMeshSkinInfo;
+		// Not found create it
+		mMeshSkinInfoPtr->mMeshID = mSculptID;
+		gMeshRepo.mSkinMap[mSculptID] = mMeshSkinInfoPtr;
+		LL_INFOS("LocalMesh") << "Skinmap entry for UUID " << mSculptID << " created with " << std::hex << std::showbase << (void *)mMeshSkinInfoPtr << LL_ENDL;
 	}
 	else
 	{	
-		// NOTE: seems necessary, not tested without.
-		skinmap_seeker->second = &mMeshSkinInfo;
+		// found but we will update it to ours
+		LL_INFOS("LocalMesh") << "Skinmap entry for UUID " << mSculptID << " updated from " << std::hex << std::showbase << (void *)skinmap_seeker->second << " to " << (void *)mMeshSkinInfoPtr << LL_ENDL;
+		skinmap_seeker->second = mMeshSkinInfoPtr;
 	}
+
 }
 
 bool LLLocalMeshObject::getIsRiggedObject() const
@@ -326,6 +334,7 @@ bool LLLocalMeshObject::getIsRiggedObject() const
 	// main lod isn't empty
 	if (!main_lod_faces.empty())
 	{
+		LL_INFOS("LocalMesh") << "Main lod is not empty" << LL_ENDL;
 		auto& skin = main_lod_faces[0]->getSkin();
 		if (!skin.empty())
 		{
@@ -750,22 +759,39 @@ void LLLocalMeshFile::applyToVObject(LLUUID viewer_object_id, int object_index, 
 
 		auto current_lod = static_cast<LLLocalMeshFileLOD>(lod_reverse_iter);
 		mLoadedObjectList[object_index]->fillVolume(current_lod);
+		LL_INFOS("LocalMesh") << "Loaded LOD " << current_lod << LL_ENDL;
 	}
-
+	LL_INFOS("LocalMesh") << "Loaded Object " << object_index << LL_ENDL;
 	if (mLoadedObjectList[object_index]->getIsRiggedObject())
 	{
+		LL_INFOS("LocalMesh") << "Object " << object_index << " is rigged" << LL_ENDL;
 		mLoadedObjectList[object_index]->attachSkinInfo();
+		target_object->notifySkinInfoLoaded(mLoadedObjectList[object_index]->getObjectMeshSkinInfo());
 	}
 
 	if ((!target_object->isAttachment()) && use_scale)
 	{
+		LL_INFOS("LocalMesh") << "Object " << object_index << " is not attachment" << LL_ENDL;
 		auto scale = mLoadedObjectList[object_index]->getObjectSize();
 		target_object->setScale(LLVector3(scale), false);
 	}
 
 	// force refresh (selected/edit mode won't let it redraw otherwise)
-	gPipeline.markRebuild(target_object->mDrawable, LLDrawable::REBUILD_VOLUME, FALSE);
+	auto& target_drawable = target_object->mDrawable;
+
+	if( target_drawable.notNull() )
+	{
+		target_object->markForUpdate(true);
+		// target_drawable->updateSpatialExtents();
+		// target_drawable->movePartition();
+		gPipeline.markRebuild(target_drawable, LLDrawable::REBUILD_ALL, true);
+		if(auto floater_ptr = LLLocalMeshSystem::getInstance()->getFloaterPointer(); floater_ptr != nullptr)
+		{
+			floater_ptr->toggleSelectTool(false);
+		}
+	}
 	// NOTE: this ^^ (or lod change) causes renderer crash on mesh with degenerate primitives.
+	LL_INFOS("LocalMesh") << "Object " << object_index << " marked for rebuild" << LL_ENDL;
 }
 
 void LLLocalMeshFile::pushLog(const std::string& who, const std::string& what, bool is_error) 
