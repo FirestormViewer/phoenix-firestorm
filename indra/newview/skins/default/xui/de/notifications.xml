@@ -2518,6 +2518,10 @@ Möchten Sie diese Objekte wirklich löschen?
 Diese Aktion kann nicht rückgängig gemacht werden.
 		<usetemplate ignoretext="Vor dem Löschen von Abbildungen bestätigen" name="okcancelignore" notext="Abbrechen" yestext="Löschen"/>
 	</notification>
+	<notification name="ThumbnailDimantionsLimit">
+		Es sind nur quadratische Bilder zwischen 64 und 256 Pixel pro Seite erlaubt.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmUnlink">
 		Soll das ausgewählte Objekt wirklich getrennt werden?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Trennen"/>

@@ -233,7 +233,7 @@ public:
 	void doCreate(const LLSD& userdata);
 	bool beginIMSession();
 	void fileUploadLocation(const LLSD& userdata);
-    void openSingleViewInventory(const LLSD& userdata);
+    void openSingleViewInventory(LLUUID folder_id = LLUUID());
 	void purgeSelectedItems();
 	bool attachObject(const LLSD& userdata);
 	static void idle(void* user_data);
@@ -262,7 +262,7 @@ public:
 													BOOL main_panel = FALSE,
 													BOOL take_keyboard_focus = TAKE_FOCUS_YES,
 													BOOL reset_filter = FALSE);
-
+    static void setSFViewAndOpenFolder(const LLInventoryPanel* panel, const LLUUID& folder_id);
 	void addItemID(const LLUUID& id, LLFolderViewItem* itemp);
 	void removeItemID(const LLUUID& id);
 	LLFolderViewItem* getItemByID(const LLUUID& id);
@@ -419,6 +419,9 @@ public:
     void onBackwardFolder();
     void clearNavigationHistory();
     LLUUID getSingleFolderRoot() { return mFolderID; }
+
+    bool isBackwardAvailable();
+    bool isForwardAvailable();
 
     void setSelectCallback(const boost::function<void (const std::deque<LLFolderViewItem*>& items, BOOL user_action)>& cb);
 

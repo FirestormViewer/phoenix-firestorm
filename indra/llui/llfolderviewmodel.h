@@ -161,7 +161,7 @@ public:
 	virtual void closeItem( void ) = 0;
 	virtual void selectItem(void) = 0;
 
-    virtual void navigateToFolder() = 0;
+    virtual void navigateToFolder(bool new_window = false, bool change_mode = false) = 0;
     
     virtual BOOL isItemWearable() const { return FALSE; }
 

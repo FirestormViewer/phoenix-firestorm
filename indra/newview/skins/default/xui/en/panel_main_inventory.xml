@@ -276,7 +276,6 @@
    width="322">
     <single_folder_inventory_panel
      name="single_folder_inv"
-     show_empty_message="false"
      follows="all"
      left="0"
      top="0"
@@ -284,14 +283,17 @@
      height="338"
      width="322"
      layout="topleft"
+     show_item_link_overlays="true"
      background_visible="true"
      border="false"
      bevel_style="none"
      scroll.reserve_scroll_corner="false">
-      <item folder_indentation="0"/>
+      <item
+       single_folder_mode="true"
+       folder_indentation="-8"/>
       <folder
        single_folder_mode="true"
-       folder_indentation="0"/>
+       folder_indentation="-8"/>
     </single_folder_inventory_panel>
   </panel>
   <panel

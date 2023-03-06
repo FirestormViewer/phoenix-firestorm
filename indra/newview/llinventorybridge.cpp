@@ -461,23 +461,30 @@ void LLInvFVBridge::showProperties()
     }
 }
 
-void LLInvFVBridge::navigateToFolder()
+void LLInvFVBridge::navigateToFolder(bool new_window, bool change_mode)
 {
-    LLInventorySingleFolderPanel* panel = dynamic_cast<LLInventorySingleFolderPanel*>(mInventoryPanel.get());
-    if (!panel)
+    if(new_window)
     {
-        return;
+        mInventoryPanel.get()->openSingleViewInventory(mUUID);
     }
-    LLInventoryModel* model = getInventoryModel();
-    if (!model)
+    else
     {
-        return;
+        if(change_mode)
+        {
+            LLInventoryPanel::setSFViewAndOpenFolder(mInventoryPanel.get(), mUUID);
+        }
+        else
+        {
+            LLInventorySingleFolderPanel* panel = dynamic_cast<LLInventorySingleFolderPanel*>(mInventoryPanel.get());
+            if (!panel || !getInventoryModel() || mUUID.isNull())
+            {
+                return;
+            }
+
+            panel->changeFolderRoot(mUUID);
+        }
+
     }
-    if (mUUID.isNull())
-    {
-        return;
-    }
-    panel->changeFolderRoot(mUUID);
 }
 
 void LLInvFVBridge::removeBatch(std::vector<LLFolderViewModelItem*>& batch)
@@ -4679,6 +4686,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 			if (cat && (cat->getPreferredType() == LLFolderType::FT_OUTFIT))
 			{
 				items.push_back(std::string("Rename"));
+                items.push_back(std::string("thumbnail"));
 
 				addDeleteContextMenuOptions(items, disabled_items);
 				// EXT-4030: disallow deletion of currently worn outfit

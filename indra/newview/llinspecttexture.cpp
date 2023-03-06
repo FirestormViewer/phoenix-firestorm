@@ -25,7 +25,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#include "llfloaterreg.h"
 #include "llinspect.h"
 #include "llinspecttexture.h"
 #include "llinventoryfunctions.h"
@@ -34,101 +33,6 @@
 #include "lltrans.h"
 #include "llviewertexturelist.h"
 
-// ============================================================================
-// LLInspectTexture class
-//
-
-class LLInspectTexture : public LLInspect
-{
-	friend class LLFloaterReg;
-public:
-	LLInspectTexture(const LLSD& sdKey);
-	~LLInspectTexture();
-
-public:
-	void onOpen(const LLSD& sdData) override;
-	BOOL postBuild() override;
-
-public:
-	const LLUUID& getAssetId() const { return mAssetId; }
-	const LLUUID& getItemId() const  { return mItemId; }
-
-protected:
-	LLUUID         mAssetId;
-	LLUUID         mItemId;		// Item UUID relative to gInventoryModel (or null if not displaying an inventory texture)
-	LLUUID         mNotecardId;
-	LLTextureCtrl* mTextureCtrl = nullptr;
-	LLTextBox*     mTextureName = nullptr;
-};
-
-LLInspectTexture::LLInspectTexture(const LLSD& sdKey)
-	: LLInspect(LLSD())
-{
-}
-
-LLInspectTexture::~LLInspectTexture()
-{
-}
-
-void LLInspectTexture::onOpen(const LLSD& sdData)
-{
-	// Start fade animation
-	LLInspect::onOpen(sdData);
-
-	bool fIsAsset = sdData.has("thumbnail_id");
-	bool fIsInventory = sdData.has("item_id");
-
-	// Skip if we're being asked to display the same thing
-	const LLUUID idAsset = (fIsAsset) ? sdData["thumbnail_id"].asUUID() : LLUUID::null;
-	const LLUUID idItem = (fIsInventory) ? sdData["item_id"].asUUID() : LLUUID::null;
-	if ( (getVisible()) && ( ((fIsAsset) && (idAsset == mAssetId)) || ((fIsInventory) && (idItem == mItemId)) ) )
-	{
-		return;
-	}
-
-	// Position the inspector relative to the mouse cursor
-	// Similar to how tooltips are positioned [see LLToolTipMgr::createToolTip()]
-	if (sdData.has("pos"))
-		LLUI::instance().positionViewNearMouse(this, sdData["pos"]["x"].asInteger(), sdData["pos"]["y"].asInteger());
-	else
-		LLUI::instance().positionViewNearMouse(this);
-
-	std::string strName = sdData["name"].asString();
-	if (fIsAsset)
-	{
-		mAssetId = idAsset;
-		mItemId = idItem;		// Will be non-null in the case of a notecard
-		mNotecardId = sdData["notecard_id"].asUUID();
-	}
-	else if (fIsInventory)
-	{
-		const LLViewerInventoryItem* pItem = gInventory.getItem(idItem);
-		if ( (pItem) && (LLAssetType::AT_TEXTURE == pItem->getType()) )
-		{
-			if (strName.empty())
-				strName = pItem->getName();
-			mAssetId = pItem->getAssetUUID();
-			mItemId = idItem;
-		}
-		else
-		{
-			mAssetId.setNull();
-			mItemId.setNull();
-		}
-		mNotecardId = LLUUID::null;
-	}
-
-	mTextureCtrl->setImageAssetID(mAssetId);
-	mTextureName->setText(strName);
-}
-
-BOOL LLInspectTexture::postBuild()
-{
-	mTextureCtrl = getChild<LLTextureCtrl>("texture_ctrl");
-	mTextureName = getChild<LLTextBox>("texture_name");
-
-	return TRUE;
-}
 
 // ============================================================================
 // Helper functions
@@ -155,6 +59,7 @@ LLToolTip* LLInspectTextureUtil::createInventoryToolTip(LLToolTip::Params p)
     if (sdTooltip.has("thumbnail_id") && sdTooltip["thumbnail_id"].asUUID().notNull())
     {
         // go straight for thumbnail regardless of type
+        // TODO: make a tooltip factory?
         return LLUICtrlFactory::create<LLTextureToolTip>(p);
     }
 
@@ -202,11 +107,6 @@ LLToolTip* LLInspectTextureUtil::createInventoryToolTip(LLToolTip::Params p)
 	}
 }
 
-void LLInspectTextureUtil::registerFloater()
-{
-	LLFloaterReg::add("inspect_texture", "inspect_texture.xml", &LLFloaterReg::build<LLInspectTexture>);
-}
-
 // ============================================================================
 // LLTexturePreviewView helper class
 //
@@ -248,12 +148,12 @@ LLTexturePreviewView::~LLTexturePreviewView()
 
 void LLTexturePreviewView::draw()
 {
+    LLView::draw();
+
 	if (m_Image)
 	{
 		LLRect rctClient = getLocalRect();
 
-		gl_rect_2d(rctClient, LLColor4::black);
-		rctClient.stretch(-2);
 		if (4 == m_Image->getComponents())
 			gl_rect_2d_checkerboard(rctClient);
 		gl_draw_scaled_image(rctClient.mLeft, rctClient.mBottom, rctClient.getWidth(), rctClient.getHeight(), m_Image);
@@ -300,6 +200,11 @@ LLTextureToolTip::LLTextureToolTip(const LLToolTip::Params& p)
 	, mPreviewSize(256)
 {
 	mMaxWidth = llmax(mMaxWidth, mPreviewSize);
+
+    // Currently has to share params with LLToolTip, override values
+    setBackgroundColor(LLColor4::black);
+    setTransparentColor(LLColor4::black);
+    setBorderVisible(true);
 }
 
 LLTextureToolTip::~LLTextureToolTip()
@@ -329,6 +234,25 @@ void LLTextureToolTip::initFromParams(const LLToolTip::Params& p)
     {
         mPreviewView->setImageFromItemId(sdTextureParams["item_id"].asUUID());
     }
+
+    // Currently has to share params with LLToolTip, override values manually
+    // Todo: provide from own params instead, may be like object inspector does it
+    LLViewBorder::Params border_params;
+    border_params.border_thickness(LLPANEL_BORDER_WIDTH);
+    border_params.highlight_light_color(LLColor4::white);
+    border_params.highlight_dark_color(LLColor4::white);
+    border_params.shadow_light_color(LLColor4::white);
+    border_params.shadow_dark_color(LLColor4::white);
+    addBorder(border_params);
+    setBorderVisible(true);
+
+    setBackgroundColor(LLColor4::black);
+    setBackgroundVisible(true);
+    setBackgroundOpaque(true);
+    setBackgroundImage(nullptr);
+    setTransparentImage(nullptr);
+
+    mTextBox->setColor(LLColor4::white);
 
 	snapToChildren();
 }

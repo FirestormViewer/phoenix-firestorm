@@ -7,37 +7,6 @@
  name="menu_gear_default"
  visible="false">
     <menu_item_call
-     label="Open"
-     layout="topleft"
-     name="open_in_current_window">
-       <on_click
-         function="Inventory.GearDefault.Custom.Action"
-         parameter="open_in_current_window" />
-        <on_visible
-         function="Inventory.GearDefault.Visible"
-         parameter="open_folder" />
-    </menu_item_call>
-    <menu_item_call
-     label="Open in new window"
-     layout="topleft"
-     name="open_in_new_window">
-        <on_click
-         function="Inventory.GearDefault.Custom.Action"
-         parameter="open_in_new_window" />
-        <on_visible
-         function="Inventory.GearDefault.Visible"
-         parameter="open_new_folder" />
-    </menu_item_call>
-    <menu_item_call
-     label="New Folder Window"
-     layout="topleft"
-     shortcut="control|shift|J"
-     name="new_single_folder">
-        <on_click
-         function="Inventory.GearDefault.Custom.Action"
-         parameter="new_single_folder_window" />
-    </menu_item_call>
-    <menu_item_call
      label="New Inventory Window"
      layout="topleft"
      shortcut="control|shift|I"
@@ -55,6 +24,16 @@
         <menu_item_check.on_click
          function="Floater.Toggle"
          parameter="fs_protectedfolders" />
+    </menu_item_check>
+    <menu_item_check
+     label="Inventory settings..."
+     name="inv_settings">
+        <menu_item_check.on_check
+         function="Floater.Visible"
+         parameter="inventory_settings" />
+        <menu_item_check.on_click
+         function="Floater.Toggle"
+         parameter="inventory_settings" />
     </menu_item_check>
     <menu_item_separator>
         <menu_item_separator.on_visible
@@ -257,7 +236,7 @@
          parameter="reset_filters" />
     </menu_item_call>
     <menu_item_call
-     label="Close All Folders"
+     label="Collapse All Folders"
      layout="topleft"
      name="close_folders">
         <on_click
@@ -266,6 +245,14 @@
         <on_visible
          function="Inventory.GearDefault.Visible"
          parameter="multi_folder_view" />
+    </menu_item_call>
+    <menu_item_call
+     label="Close All Windows"
+     layout="topleft"
+     name="close_windows">
+        <on_click
+         function="Inventory.GearDefault.Custom.Action"
+         parameter="close_inv_windows" />
     </menu_item_call>
     <menu_item_separator>
         <menu_item_separator.on_visible

@@ -325,9 +325,11 @@ void LLFloaterChangeItemThumbnail::refreshFromObject(LLInventoryObject* obj)
                         LL_INFOS() << "Setting image from outfit as a thumbnail" << LL_ENDL;
                         thumbnail_id = item->getAssetUUID();
 
-                        // per SL-19188, set this image as a thumbnail
-                        cat->setThumbnailUUID(thumbnail_id);
-                        // todo: needs to trigger send/update once server support is done
+                        if (validateAsset(thumbnail_id))
+                        {
+                            // per SL-19188, set this image as a thumbnail
+                            setThumbnailId(thumbnail_id);
+                        }
                     }
                 }
             }
@@ -428,11 +430,14 @@ void LLFloaterChangeItemThumbnail::onPasteFromClipboard(void *userdata)
     LLClipboard::instance().pasteFromClipboard(objects);
     if (objects.size() > 0)
     {
-        LLInventoryObject* obj = self->getInventoryObject();
-        if (obj)
+        LLUUID asset_id = objects[0];
+        if (validateAsset(asset_id))
         {
-            obj->setThumbnailUUID(objects[0]);
-            // todo: need to trigger send/update once server support is done
+            self->setThumbnailId(asset_id);
+        }
+        else
+        {
+            LLNotificationsUtil::add("ThumbnailDimantionsLimit");
         }
     }
 }
@@ -454,14 +459,36 @@ void LLFloaterChangeItemThumbnail::onRemovalConfirmation(const LLSD& notificatio
     if (option == 0 && !handle.isDead() && !handle.get()->isDead())
     {
         LLFloaterChangeItemThumbnail* self = (LLFloaterChangeItemThumbnail*)handle.get();
-
-        LLInventoryObject* obj = self->getInventoryObject();
-        if (obj)
-        {
-            obj->setThumbnailUUID(LLUUID::null);
-            // todo: need to trigger send/update once server support is done
-        }
+        self->setThumbnailId(LLUUID::null);
     }
+}
+
+bool LLFloaterChangeItemThumbnail::validateAsset(const LLUUID &asset_id)
+{
+    LLPointer<LLViewerFetchedTexture> texturep = LLViewerTextureManager::getFetchedTexture(asset_id);
+
+    if (!texturep)
+    {
+        return false;
+    }
+
+    if (texturep->getFullWidth() != texturep->getFullHeight())
+    {
+        return false;
+    }
+
+    if (texturep->getFullWidth() > LLFloaterSimpleSnapshot::THUMBNAIL_SNAPSHOT_DIM_MAX
+        || texturep->getFullHeight() > LLFloaterSimpleSnapshot::THUMBNAIL_SNAPSHOT_DIM_MAX)
+    {
+        return false;
+    }
+
+    if (texturep->getFullWidth() < LLFloaterSimpleSnapshot::THUMBNAIL_SNAPSHOT_DIM_MIN
+        || texturep->getFullHeight() < LLFloaterSimpleSnapshot::THUMBNAIL_SNAPSHOT_DIM_MIN)
+    {
+        return false;
+    }
+    return true;
 }
 
 void LLFloaterChangeItemThumbnail::showTexturePicker(const LLUUID &thumbnail_id)
@@ -523,12 +550,48 @@ void LLFloaterChangeItemThumbnail::showTexturePicker(const LLUUID &thumbnail_id)
 void LLFloaterChangeItemThumbnail::onTexturePickerCommit(LLUUID id)
 {
     LLFloaterTexturePicker* floaterp = (LLFloaterTexturePicker*)mPickerHandle.get();
-    LLInventoryObject* obj = getInventoryObject();
 
-    if (obj && floaterp)
+    if (floaterp)
     {
-        obj->setThumbnailUUID(floaterp->getAssetID());
-        // todo: need to trigger send/update once server support is done
+        LLUUID asset_id = floaterp->getAssetID();
+        if (validateAsset(asset_id))
+        {
+            setThumbnailId(asset_id);
+        }
+        else
+        {
+            LLNotificationsUtil::add("ThumbnailDimantionsLimit");
+        }
+    }
+}
+
+
+void LLFloaterChangeItemThumbnail::setThumbnailId(const LLUUID &new_thumbnail_id)
+{
+    LLInventoryObject* obj = getInventoryObject();
+    if (!obj)
+    {
+        return;
+    }
+
+    if (mTaskId.notNull())
+    {
+        LL_ERRS() << "Not implemented yet" << LL_ENDL;
+    }
+    else if (obj->getThumbnailUUID() != new_thumbnail_id)
+    {
+        LLSD updates;
+        updates["thumbnail"] = LLSD().with("asset_id", new_thumbnail_id);
+        LLViewerInventoryCategory* view_folder = dynamic_cast<LLViewerInventoryCategory*>(obj);
+        if (view_folder)
+        {
+            update_inventory_category(mItemId, updates, NULL);
+        }
+        LLViewerInventoryItem* view_item = dynamic_cast<LLViewerInventoryItem*>(obj);
+        if (view_item)
+        {
+            update_inventory_item(mItemId, updates, NULL);
+        }
     }
 }
 

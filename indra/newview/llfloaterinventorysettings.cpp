@@ -1,9 +1,10 @@
 /**
- * @file llinspecttexture.h
+ * @file llfloaterinventorysettings.cpp
+ * @brief LLFloaterInventorySettings class implementation
  *
- * $LicenseInfo:firstyear=2009&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2023&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2023, Linden Research, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,27 +24,21 @@
  * $/LicenseInfo$
  */
 
-#pragma once
+#include "llviewerprecompiledheaders.h"
 
-#include "lltooltip.h"
+#include "llfloaterinventorysettings.h"
 
-class LLTexturePreviewView;
-
-namespace LLInspectTextureUtil
+LLFloaterInventorySettings::LLFloaterInventorySettings(const LLSD& key)
+  : LLFloater(key)
 {
-	LLToolTip* createInventoryToolTip(LLToolTip::Params p);
 }
 
-class LLTextureToolTip : public LLToolTip
+LLFloaterInventorySettings::~LLFloaterInventorySettings()
+{}
+
+BOOL LLFloaterInventorySettings::postBuild()
 {
-public:
-	LLTextureToolTip(const LLToolTip::Params& p);
-	~LLTextureToolTip();
+    getChild<LLButton>("ok_btn")->setCommitCallback(boost::bind(&LLFloater::closeFloater, this, false));
+    return TRUE;
+}
 
-public:
-	void initFromParams(const LLToolTip::Params& p) override;
-
-protected:
-	LLTexturePreviewView* mPreviewView;
-	S32                   mPreviewSize;
-};

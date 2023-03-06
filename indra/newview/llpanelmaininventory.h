@@ -101,7 +101,7 @@ public:
 	void setFocusFilterEditor();
 
 	static void newWindow();
-    static void newFolderWindow(const LLUUID& folder_id);
+    static void newFolderWindow(LLUUID folder_id = LLUUID(), LLUUID item_to_select = LLUUID());
 
 	void toggleFindOptions();
 
@@ -110,7 +110,7 @@ public:
     void onUpFolderClicked();
     void onBackFolderClicked();
     void onForwardFolderClicked();
-    void setSingleFolderViewRoot(const LLUUID& folder_id);
+    void setSingleFolderViewRoot(const LLUUID& folder_id, bool clear_nav_history = true);
     bool isSingleFolderMode() { return mSingleFolderMode; }
 
 	// <FS:Zi> Filter dropdown
@@ -235,6 +235,7 @@ protected:
 	bool handleDragAndDropToTrash(BOOL drop, EDragAndDropType cargo_type, EAcceptance* accept);
     static bool hasSettingsInventory();
     void updateTitle();
+    void updateNavButtons();
 	/**
 	 * Set upload cost in "Upload" sub menu.
 	 */

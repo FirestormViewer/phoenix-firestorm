@@ -67,8 +67,12 @@ private:
     static void onRemove(void*);
     static void onRemovalConfirmation(const LLSD& notification, const LLSD& response, LLHandle<LLFloater> handle);
 
+    static bool validateAsset(const LLUUID &asset_id);
+
     void showTexturePicker(const LLUUID &thumbnail_id);
     void onTexturePickerCommit(LLUUID id);
+
+    void setThumbnailId(const LLUUID &new_thumbnail_id);
 
     enum EToolTipState
     {

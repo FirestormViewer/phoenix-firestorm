@@ -904,7 +904,22 @@ void show_item_original(const LLUUID& item_uuid)
     }
     // </FS:Ansariel>
 
-    LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
+    static LLUICachedControl<bool> find_original_new_floater("FindOriginalOpenWindow", false);
+
+    //show in a new single-folder window
+    if(find_original_new_floater)
+    {
+        const LLUUID& linked_item_uuid = gInventory.getLinkedItemID(item_uuid);
+        const LLInventoryObject *obj = gInventory.getObject(linked_item_uuid);
+        if (obj && obj->getParentUUID().notNull())
+        {
+            LLPanelMainInventory::newFolderWindow(obj->getParentUUID(), linked_item_uuid);
+        }
+    }
+    //show in main Inventory
+    else
+    {
+        LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
     if (!floater_inventory)
     {
         LL_WARNS() << "Could not find My Inventory floater" << LL_ENDL;
@@ -913,13 +928,16 @@ void show_item_original(const LLUUID& item_uuid)
     LLSidepanelInventory *sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
     if (sidepanel_inventory)
     {
-        // <FS:Ansariel> FIRE-31037: "Recent" inventory filter gets reset when using "Show Original"
-        //LLPanelMainInventory* main_inventory = sidepanel_inventory->getMainInventoryPanel();
-        //if (main_inventory)
-        //{
-        //    main_inventory->resetFilters();
-        //}
-        // </FS:Ansariel>
+        LLPanelMainInventory* main_inventory = sidepanel_inventory->getMainInventoryPanel();
+        if (main_inventory)
+        {
+            if(main_inventory->isSingleFolderMode())
+            {
+                main_inventory->onViewModeClick();
+            }
+            // <FS:Ansariel> FIRE-31037: "Recent" inventory filter gets reset when using "Show Original"
+            //main_inventory->resetFilters();
+        }
         reset_inventory_filter();
 
         if (!LLFloaterReg::getTypedInstance<LLFloaterSidePanelContainer>("inventory")->isInVisibleChain())
@@ -947,6 +965,7 @@ void show_item_original(const LLUUID& item_uuid)
                 sidepanel_inventory->getActivePanel()->setSelection(gInventory.getLinkedItemID(item_uuid), TAKE_FOCUS_YES);
             }
         }
+    }
     }
 }
 

@@ -179,7 +179,7 @@ LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)
 		sFilterBGColor = LLUIColorTable::instance().getColor("FilterBackgroundColor", DEFAULT_WHITE);
 		sFilterTextColor = LLUIColorTable::instance().getColor("FilterTextColor", DEFAULT_WHITE);
 		// <FS:Ansariel> Fix misleading color name
-		//sSuffixColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", DEFAULT_WHITE);
+		//sSuffixColor = LLUIColorTable::instance().getColor("InventoryItemLinkColor", DEFAULT_WHITE);
 		sSuffixColor = LLUIColorTable::instance().getColor("InventoryItemSuffixColor", DEFAULT_WHITE);
 		// </FS:Ansariel>
 		sSearchStatusColor = LLUIColorTable::instance().getColor("InventorySearchStatusColor", DEFAULT_WHITE);
@@ -2181,15 +2181,28 @@ BOOL LLFolderViewFolder::handleDoubleClick( S32 x, S32 y, MASK mask )
 	BOOL handled = FALSE;
     if(mSingleFolderMode)
     {
-        getViewModelItem()->navigateToFolder();
+        static LLUICachedControl<bool> double_click_new_window("SingleModeDoubleClickOpenWindow", false);
+        getViewModelItem()->navigateToFolder(double_click_new_window);
         return TRUE;
     }
+
 	if( isOpen() )
 	{
 		handled = childrenHandleDoubleClick( x, y, mask ) != NULL;
 	}
 	if( !handled )
 	{
+        static LLUICachedControl<U32> double_click_action("MultiModeDoubleClickFolder", false);
+        if (double_click_action == 1)
+        {
+            getViewModelItem()->navigateToFolder(true);
+            return TRUE;
+        }
+        if (double_click_action == 2)
+        {
+            getViewModelItem()->navigateToFolder(false, true);
+            return TRUE;
+        }
 		if(mIndentation < x && x < mIndentation + (isCollapsed() ? 0 : mArrowSize) + mTextPad)
 		{
 			// don't select when user double-clicks plus sign

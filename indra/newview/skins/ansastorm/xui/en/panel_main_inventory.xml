@@ -79,6 +79,16 @@
 				function="Floater.Toggle"
 				parameter="fs_protectedfolders" />
 		</menu_item_check>
+		<menu_item_check
+			label="Inventory settings..."
+			name="inv_settings">
+			<menu_item_check.on_check
+				function="Floater.Visible"
+				parameter="inventory_settings" />
+			<menu_item_check.on_click
+				function="Floater.Toggle"
+				parameter="inventory_settings" />
+		</menu_item_check>
 		<menu_item_separator>
 			<menu_item_separator.on_visible
 				function="Inventory.GearDefault.Visible"
@@ -162,7 +172,7 @@
 		</menu_item_call>
 		<menu_item_call
 			name="inventory_close_all_folders"
-			label="Close All Folders">
+			label="Collapse All Folders">
 			<menu_item_call.on_click
 				function="Inventory.CloseAllFolders" />
 			<menu_item_call.on_visible
@@ -841,22 +851,24 @@
    width="326">
     <single_folder_inventory_panel
      name="single_folder_inv"
-     show_empty_message="false"
      follows="all"
      left="0"
      top="0"
      top_pad="5"
      height="319"
-     width="324"
+     width="322"
      layout="topleft"
+     show_item_link_overlays="true"
      background_visible="true"
      border="false"
      bevel_style="none"
      scroll.reserve_scroll_corner="false">
-      <item folder_indentation="0"/>
+      <item
+       single_folder_mode="true"
+       folder_indentation="-8"/>
       <folder
        single_folder_mode="true"
-       folder_indentation="0"/>
+       folder_indentation="-8"/>
     </single_folder_inventory_panel>
   </panel>
   <panel

@@ -195,7 +195,7 @@ LLInventoryPanel::LLInventoryPanel(const LLInventoryPanel::Params& p) :
 	mCommitCallbackRegistrar.add("Inventory.BeginIMSession", boost::bind(&LLInventoryPanel::beginIMSession, this));
 	mCommitCallbackRegistrar.add("Inventory.Share",  boost::bind(&LLAvatarActions::shareWithAvatars, this));
 	mCommitCallbackRegistrar.add("Inventory.FileUploadLocation", boost::bind(&LLInventoryPanel::fileUploadLocation, this, _2));
-    mCommitCallbackRegistrar.add("Inventory.OpenNewFolderWindow", boost::bind(&LLInventoryPanel::openSingleViewInventory, this, _2));
+    mCommitCallbackRegistrar.add("Inventory.OpenNewFolderWindow", boost::bind(&LLInventoryPanel::openSingleViewInventory, this, LLUUID()));
 	mCommitCallbackRegistrar.add("Inventory.CustomAction", boost::bind(&LLInventoryPanel::onCustomAction, this, _2)); // <FS:Ansariel> Prevent warning "No callback found for: 'Inventory.CustomAction' in control: Find Links"
 }
 
@@ -1011,8 +1011,8 @@ LLFolderViewFolder * LLInventoryPanel::createFolderViewFolder(LLInvFVBridge * br
 	//	params.tool_tip = params.name; // <ND/> Don't bother with tooltips in inventory
     params.allow_drop = allow_drop;
 
-	params.font_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultColor));
-	params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultHighlightColor));
+	params.font_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultColor);
+	params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultHighlightColor);
 
 	// <FS:Ansariel> Inventory specials
 	params.for_inventory = true;
@@ -1037,8 +1037,8 @@ LLFolderViewItem * LLInventoryPanel::createFolderViewItem(LLInvFVBridge * bridge
 	params.rect = LLRect (0, 0, 0, 0);
 	//	params.tool_tip = params.name; // <ND/> Don't bother with tooltips in inventory
 
-	params.font_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultColor));
-	params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultHighlightColor));
+	params.font_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultColor);
+	params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultHighlightColor);
 
 	// <FS:Ansariel> Inventory specials
 	params.for_inventory = true;
@@ -1798,9 +1798,9 @@ void LLInventoryPanel::fileUploadLocation(const LLSD& userdata)
     }
 }
 
-void LLInventoryPanel::openSingleViewInventory(const LLSD& userdata)
+void LLInventoryPanel::openSingleViewInventory(LLUUID folder_id)
 {
-    LLPanelMainInventory::newFolderWindow(LLFolderBridge::sSelf.get()->getUUID());
+    LLPanelMainInventory::newFolderWindow(folder_id.isNull() ? LLFolderBridge::sSelf.get()->getUUID() : folder_id);
 }
 
 void LLInventoryPanel::purgeSelectedItems()
@@ -2069,6 +2069,24 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 	}
 }
 
+void LLInventoryPanel::setSFViewAndOpenFolder(const LLInventoryPanel* panel, const LLUUID& folder_id)
+{
+
+    LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("inventory");
+    for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin(); iter != inst_list.end(); ++iter)
+    {
+        LLFloaterSidePanelContainer* inventory_floater = dynamic_cast<LLFloaterSidePanelContainer*>(*iter);
+        LLSidepanelInventory* sidepanel_inventory = inventory_floater->findChild<LLSidepanelInventory>("main_panel");
+
+        LLPanelMainInventory* main_inventory = sidepanel_inventory->getMainInventoryPanel();
+        if (main_inventory && panel->hasAncestor(main_inventory) && !main_inventory->isSingleFolderMode())
+        {
+            main_inventory->onViewModeClick();
+            main_inventory->setSingleFolderViewRoot(folder_id, false);
+        }
+    }
+}
+
 void LLInventoryPanel::addHideFolderType(LLFolderType::EType folder_type)
 {
 	getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << folder_type));
@@ -2296,6 +2314,8 @@ LLInventorySingleFolderPanel::LLInventorySingleFolderPanel(const Params& params)
     : LLInventoryPanel(params)
 {
     getFilter().setSingleFolderMode(true);
+    getFilter().setEmptyLookupMessage("InventorySingleFolderNoMatches");
+    getFilter().setDefaultEmptyLookupMessage("InventorySingleFolderEmpty");
 
     mCommitCallbackRegistrar.add("Inventory.OpenSelectedFolder", boost::bind(&LLInventorySingleFolderPanel::openInCurrentWindow, this, _2));
 }
@@ -2338,7 +2358,7 @@ void LLInventorySingleFolderPanel::changeFolderRoot(const LLUUID& new_id)
 
 void LLInventorySingleFolderPanel::onForwardFolder()
 {
-    if(!mForwardFolders.empty() && (mFolderID != mForwardFolders.back()))
+    if(isForwardAvailable())
     {
         mBackwardFolders.push_back(mFolderID);
         mFolderID = mForwardFolders.back();
@@ -2349,7 +2369,7 @@ void LLInventorySingleFolderPanel::onForwardFolder()
 
 void LLInventorySingleFolderPanel::onBackwardFolder()
 {
-    if(!mBackwardFolders.empty() && (mFolderID != mBackwardFolders.back()))
+    if(isBackwardAvailable())
     {
         mForwardFolders.push_back(mFolderID);
         mFolderID = mBackwardFolders.back();
@@ -2362,6 +2382,16 @@ void LLInventorySingleFolderPanel::clearNavigationHistory()
 {
     mForwardFolders.clear();
     mBackwardFolders.clear();
+}
+
+bool LLInventorySingleFolderPanel::isBackwardAvailable()
+{
+    return (!mBackwardFolders.empty() && (mFolderID != mBackwardFolders.back()));
+}
+
+bool LLInventorySingleFolderPanel::isForwardAvailable()
+{
+    return (!mForwardFolders.empty() && (mFolderID != mForwardFolders.back()));
 }
 
 boost::signals2::connection LLInventorySingleFolderPanel::setRootChangedCallback(root_changed_callback_t cb)
@@ -2417,8 +2447,12 @@ void LLInventorySingleFolderPanel::updateSingleFolderRoot()
         mFolderRoot.get()->setCallbackRegistrar(&mCommitCallbackRegistrar);
 
         buildNewViews(mFolderID);
-
-        mFolderRoot.get()->setShowEmptyMessage(false);
+        
+        LLFloater* root_floater = gFloaterView->getParentFloater(this);
+        if(root_floater)
+        {
+            root_floater->setFocus(true);
+        }
     }
 }
 

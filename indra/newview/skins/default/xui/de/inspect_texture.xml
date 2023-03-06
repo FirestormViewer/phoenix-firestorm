@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="inspect_texture">
-	<button label="Öffnen" name="open_btn" left="3"/>
-	<button label="In Inventar kopieren" name="copy_btn" width="120"/>
-</floater>
