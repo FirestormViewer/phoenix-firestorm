@@ -376,6 +376,40 @@
            name="2"
            value="2"/>
         </combo_box>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="-5"
+         name="RenderTonemapperText"
+         text_readonly_color="LabelDisabledColor"
+         top_pad="4"
+         width="170">
+          Tonemapper:
+        </text>
+        <combo_box
+         control_name="RenderTonemapper"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="ToneMapper"
+         width="150">
+          <combo_box.item
+           label="Linear"
+           name="0"
+           value="0"/>
+          <combo_box.item
+           label="ACES Narkowicz"
+           name="1"
+           value="1"/>
+          <combo_box.item
+           label="ACES Hill"
+           name="2"
+           value="2"/>
+        </combo_box>
 <!-- FS:TM Avatar Physics was moved down to LOD section-->
 <!-- FS:TM Point Lighting added instead of above-->
         <text
@@ -574,6 +608,24 @@
          name="AvatarPhysicsDetail"
          show_text="true"
          top_pad="5"
+         width="297"/>
+
+        <slider
+         control_name="RenderExposure"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         initial_value="1"
+         label="Exposure"
+         label_width="185"
+         layout="topleft"
+         left="200"
+         min_val="0.5"
+         max_val="4.0"
+         name="RenderExposure"
+         show_text="true"
+         top_pad="2"
          width="297"/>
 
         <text

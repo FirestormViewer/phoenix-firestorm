@@ -1,4 +1,4 @@
-version 48
+version 50
 // The version number above should be incremented IF AND ONLY IF some
 // change has been made that is sufficiently important to justify
 // resetting the graphics preferences of all users to the recommended
@@ -71,7 +71,7 @@ RenderFSAASamples			1	16
 RenderMaxTextureIndex		1	16
 RenderGLContextCoreProfile         1   1
 RenderGLMultiThreaded       1   0
-RenderReflectionProbeResolution 1 256
+RenderReflectionProbeResolution 1 128
 RenderScreenSpaceReflections 1  1
 
 
@@ -117,7 +117,7 @@ RenderGlowResolutionPow		1	8
 RenderMaxPartCount			1	2048
 RenderLocalLights			1	1
 RenderTransparentWater      1   0
-RenderReflectionsEnabled    1   0
+RenderReflectionsEnabled    1   1
 RenderReflectionProbeDetail	1	0
 RenderTerrainDetail			1	1
 RenderTerrainLODFactor		1	1.0
@@ -278,12 +278,6 @@ RenderUseAdvancedAtmospherics 1 0
 //
 list VRAMGT512
 RenderCompressTextures		1	0
-
-//
-// VRAM < 2GB
-//
-list VRAMLT2GB
-RenderReflectionProbeResolution 1 128
 
 //
 // "Default" setups for safe, low, medium, high

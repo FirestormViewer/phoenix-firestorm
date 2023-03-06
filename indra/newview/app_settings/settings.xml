@@ -13462,7 +13462,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>256</integer>
+    <integer>128</integer>
   </map>
   <key>RenderReflectionProbeAmbianceScale</key>
   <map>
@@ -13473,9 +13473,31 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <integer>8</integer>
+    <real>8</real>
   </map>
-
+  <key>RenderTonemapper</key>
+  <map>
+    <key>Comment</key>
+    <string>Which tone mapping function to use (0 - Linear, 1 - ACES Narkowicz, 2 - ACES Hill)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <real>1</real>
+  </map>
+  <key>RenderExposure</key>
+  <map>
+    <key>Comment</key>
+    <string>Exposure value to send to tonemapper.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>1</real>
+  </map>
+  
   <key>RenderReflectionProbeDrawDistance</key>
   <map>
     <key>Comment</key>
@@ -13485,7 +13507,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>64</real>
+    <integer>64</integer>
   </map>
   <key>RenderReflectionProbeAmbiance</key>
   <map>

@@ -177,6 +177,11 @@ BOOL LLShaderMgr::attachShaderFeatures(LLGLSLShader * shader)
 			return FALSE;
 		}
 	}
+
+    if (!shader->attachVertexObject("deferred/textureUtilV.glsl"))
+    {
+        return FALSE;
+    }
 	
 	///////////////////////////////////////
 	// Attach Fragment Shader Features Next
@@ -685,7 +690,6 @@ GLuint LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shader_lev
 		extra_code_text[extra_code_count++] = strdup("#define texture2D texture\n");
 		extra_code_text[extra_code_count++] = strdup("#define textureCube texture\n");
 		extra_code_text[extra_code_count++] = strdup("#define texture2DLod textureLod\n");
-		extra_code_text[extra_code_count++] = strdup("#define shadow2D(a,b) vec2(texture(a,b))\n");
 		
 		if (major_version > 1 || minor_version >= 40)
 		{ //GLSL 1.40 replaces texture2DRect et al with texture
@@ -1075,11 +1079,13 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("texture_matrix3");
 	mReservedUniforms.push_back("object_plane_s");
 	mReservedUniforms.push_back("object_plane_t");
-    mReservedUniforms.push_back("texture_basecolor_matrix"); // GLTF
-    mReservedUniforms.push_back("texture_normal_matrix"); // GLTF
-    mReservedUniforms.push_back("texture_metallic_roughness_matrix"); // GLTF
-    mReservedUniforms.push_back("texture_emissive_matrix"); // GLTF
-    llassert(mReservedUniforms.size() == LLShaderMgr::TEXTURE_EMISSIVE_MATRIX+1);
+
+    mReservedUniforms.push_back("texture_base_color_transform"); // (GLTF)
+    mReservedUniforms.push_back("texture_normal_transform"); // (GLTF)
+    mReservedUniforms.push_back("texture_metallic_roughness_transform"); // (GLTF)
+    mReservedUniforms.push_back("texture_emissive_transform"); // (GLTF)
+
+    llassert(mReservedUniforms.size() == LLShaderMgr::TEXTURE_EMISSIVE_TRANSFORM+1);
 
 	mReservedUniforms.push_back("viewport");
 

@@ -39,6 +39,8 @@ public:
     // allocate an environment map of the given resolution 
     LLReflectionMap();
 
+    ~LLReflectionMap();
+
     // update this environment map
     // resolution - size of cube map to generate
     void update(U32 resolution, U32 face);
@@ -63,6 +65,12 @@ public:
     // with its reflection probe influence volume to to VOLUME_TYPE_BOX
     // return false if no bounding box (treat as sphere influence volume)
     bool getBox(LLMatrix4& box);
+
+    // return true if this probe is active for rendering
+    bool isActive();
+
+    // perform occlusion query/readback
+    void doOcclusion(const LLVector4a& eye);
 
     // point at which environment map was last generated from (in agent space)
     LLVector4a mOrigin;
@@ -97,6 +105,14 @@ public:
     LLViewerObject* mViewerObject = nullptr;
 
     // what priority should this probe have (higher is higher priority)
-    U32 mPriority = 1;
+    // currently only 0 or 1
+    // 0 - automatic probe
+    // 1 - manual probe
+    U32 mPriority = 0;
+
+    // occlusion culling state
+    GLuint mOcclusionQuery = 0;
+    bool mOccluded = false;
+    U32 mOcclusionPendingFrames = 0;
 };
 

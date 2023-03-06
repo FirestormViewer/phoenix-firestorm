@@ -755,18 +755,8 @@ void LLVOVolume::animateTextures()
 					continue;
 				}
 		
-				if (!(result & LLViewerTextureAnim::ROTATE))
-				{
-					te->getRotation(&rot);
-				}
-				if (!(result & LLViewerTextureAnim::TRANSLATE))
-				{
-					te->getOffset(&off_s,&off_t);
-				}			
-				if (!(result & LLViewerTextureAnim::SCALE))
-				{
-					te->getScale(&scale_s, &scale_t);
-				}
+                LLGLTFMaterial *gltf_mat = te->getGLTFRenderMaterial();
+                const bool is_pbr = gltf_mat != nullptr;
 
 				if (!facep->mTextureMatrix)
 				{
@@ -775,22 +765,65 @@ void LLVOVolume::animateTextures()
 
 				LLMatrix4& tex_mat = *facep->mTextureMatrix;
 				tex_mat.setIdentity();
-				LLVector3 trans ;
 
-					trans.set(LLVector3(off_s+0.5f, off_t+0.5f, 0.f));			
-					tex_mat.translate(LLVector3(-0.5f, -0.5f, 0.f));
+                if (!is_pbr)
+                {
+                    if (!(result & LLViewerTextureAnim::ROTATE))
+                    {
+                        te->getRotation(&rot);
+                    }
+                    if (!(result & LLViewerTextureAnim::TRANSLATE))
+                    {
+                        te->getOffset(&off_s,&off_t);
+                    }
+                    if (!(result & LLViewerTextureAnim::SCALE))
+                    {
+                        te->getScale(&scale_s, &scale_t);
+                    }
 
-				LLVector3 scale(scale_s, scale_t, 1.f);			
-				LLQuaternion quat;
-				quat.setQuat(rot, 0, 0, -1.f);
-		
-				tex_mat.rotate(quat);				
+                    LLVector3 trans ;
 
-				LLMatrix4 mat;
-				mat.initAll(scale, LLQuaternion(), LLVector3());
-				tex_mat *= mat;
-		
-				tex_mat.translate(trans);
+                        trans.set(LLVector3(off_s+0.5f, off_t+0.5f, 0.f));			
+                        tex_mat.translate(LLVector3(-0.5f, -0.5f, 0.f));
+
+                    LLVector3 scale(scale_s, scale_t, 1.f);			
+                    LLQuaternion quat;
+                    quat.setQuat(rot, 0, 0, -1.f);
+            
+                    tex_mat.rotate(quat);				
+
+                    LLMatrix4 mat;
+                    mat.initAll(scale, LLQuaternion(), LLVector3());
+                    tex_mat *= mat;
+            
+                    tex_mat.translate(trans);
+                }
+                else
+                {
+                    // For PBR materials, use Blinn-Phong rotation as hint for
+                    // translation direction. In a Blinn-Phong material, the
+                    // translation direction would be a byproduct the texture
+                    // transform.
+                    F32 rot_frame;
+                    te->getRotation(&rot_frame);
+
+                    tex_mat.translate(LLVector3(-0.5f, -0.5f, 0.f));
+
+                    LLQuaternion quat;
+                    quat.setQuat(rot, 0, 0, -1.f);
+                    tex_mat.rotate(quat);				
+
+                    LLMatrix4 mat;
+                    LLVector3 scale(scale_s, scale_t, 1.f);			
+                    mat.initAll(scale, LLQuaternion(), LLVector3());
+                    tex_mat *= mat;
+            
+                    LLVector3 off(off_s, off_t, 0.f);
+                    off.rotVec(rot_frame, 0, 0, 1.f);
+                    tex_mat.translate(off);
+
+                    tex_mat.translate(LLVector3(0.5f, 0.5f, 0.f));
+                }
 			}
 		}
 		else
@@ -5374,6 +5407,7 @@ LLFace** LLVolumeGeometryManager::sSimpleFaces[2] = { NULL };
 LLFace** LLVolumeGeometryManager::sNormFaces[2] = { NULL };
 LLFace** LLVolumeGeometryManager::sSpecFaces[2] = { NULL };
 LLFace** LLVolumeGeometryManager::sNormSpecFaces[2] = { NULL };
+LLFace** LLVolumeGeometryManager::sPbrFaces[2] = { NULL };
 LLFace** LLVolumeGeometryManager::sAlphaFaces[2] = { NULL };
 
 LLVolumeGeometryManager::LLVolumeGeometryManager()
@@ -5410,6 +5444,7 @@ void LLVolumeGeometryManager::allocateFaces(U32 pMaxFaceCount)
         sNormFaces[i] = static_cast<LLFace**>(ll_aligned_malloc<64>(pMaxFaceCount * sizeof(LLFace*)));
         sSpecFaces[i] = static_cast<LLFace**>(ll_aligned_malloc<64>(pMaxFaceCount * sizeof(LLFace*)));
         sNormSpecFaces[i] = static_cast<LLFace**>(ll_aligned_malloc<64>(pMaxFaceCount * sizeof(LLFace*)));
+        sPbrFaces[i] = static_cast<LLFace**>(ll_aligned_malloc<64>(pMaxFaceCount * sizeof(LLFace*)));
         sAlphaFaces[i] = static_cast<LLFace**>(ll_aligned_malloc<64>(pMaxFaceCount * sizeof(LLFace*)));
     }
 }
@@ -5424,6 +5459,7 @@ void LLVolumeGeometryManager::freeFaces()
         ll_aligned_free<64>(sNormFaces[i]);
         ll_aligned_free<64>(sSpecFaces[i]);
         ll_aligned_free<64>(sNormSpecFaces[i]);
+        ll_aligned_free<64>(sPbrFaces[i]);
         ll_aligned_free<64>(sAlphaFaces[i]);
 
         sFullbrightFaces[i] = NULL;
@@ -5432,6 +5468,7 @@ void LLVolumeGeometryManager::freeFaces()
         sNormFaces[i] = NULL;
         sSpecFaces[i] = NULL;
         sNormSpecFaces[i] = NULL;
+        sPbrFaces[i] = NULL;
         sAlphaFaces[i] = NULL;
     }
 }
@@ -5883,6 +5920,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 	U32 norm_count[2] = { 0 };
 	U32 spec_count[2] = { 0 };
 	U32 normspec_count[2] = { 0 };
+	U32 pbr_count[2] = { 0 };
 
 	static LLCachedControl<S32> max_vbo_size(gSavedSettings, "RenderMaxVBOSize", 512);
 	static LLCachedControl<S32> max_node_size(gSavedSettings, "RenderMaxNodeSize", 65536);
@@ -6215,8 +6253,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 							{
                                 if (gltf_mat != nullptr)
                                 {
-                                    // all gltf materials have all vertex attributes for now
-                                    add_face(sNormSpecFaces, normspec_count, facep);
+                                    add_face(sPbrFaces, pbr_count, facep);
                                 }
                                 else
                                 {
@@ -6315,6 +6352,8 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 	U32 normspec_mask = norm_mask | LLVertexBuffer::MAP_TEXCOORD2;
 	U32 spec_mask = simple_mask | LLVertexBuffer::MAP_TEXCOORD2;
 
+	U32 pbr_mask = LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_COLOR | LLVertexBuffer::MAP_TANGENT;
+
 	if (emissive)
 	{ //emissive faces are present, include emissive byte to preserve batching
 		simple_mask = simple_mask | LLVertexBuffer::MAP_EMISSIVE;
@@ -6324,6 +6363,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 		norm_mask = norm_mask | LLVertexBuffer::MAP_EMISSIVE;
 		normspec_mask = normspec_mask | LLVertexBuffer::MAP_EMISSIVE;
 		spec_mask = spec_mask | LLVertexBuffer::MAP_EMISSIVE;
+        pbr_mask = pbr_mask | LLVertexBuffer::MAP_EMISSIVE;
 	}
 
 	BOOL batch_textures = LLViewerShaderMgr::instance()->getShaderLevel(LLViewerShaderMgr::SHADER_OBJECT) > 1;
@@ -6354,6 +6394,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
         geometryBytes += genDrawInfo(group, norm_mask | extra_mask, sNormFaces[i], norm_count[i], FALSE, FALSE, rigged);
         geometryBytes += genDrawInfo(group, spec_mask | extra_mask, sSpecFaces[i], spec_count[i], FALSE, FALSE, rigged);
         geometryBytes += genDrawInfo(group, normspec_mask | extra_mask, sNormSpecFaces[i], normspec_count[i], FALSE, FALSE, rigged);
+        geometryBytes += genDrawInfo(group, pbr_mask | extra_mask, sPbrFaces[i], pbr_count[i], FALSE, FALSE, rigged);
 
         // for rigged set, add weights and disable alpha sorting (rigged items use depth buffer)
         extra_mask |= LLVertexBuffer::MAP_WEIGHT4;
@@ -7051,7 +7092,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 					LL_PROFILE_ZONE_NAMED_CATEGORY_VOLUME("facep->alpha -> invisible");
 					registerFace(group, facep, LLRenderPass::PASS_ALPHA_INVISIBLE);
 				}
-				else if (facep->canRenderAsMask())
+				else if (facep->canRenderAsMask() && !hud_group)
 				{
 					if (te->getFullbright() || LLPipeline::sNoAlpha)
 					{

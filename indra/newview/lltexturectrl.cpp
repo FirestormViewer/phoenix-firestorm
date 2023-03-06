@@ -289,7 +289,9 @@ void LLFloaterTexturePicker::setCanApplyImmediately(BOOL b)
 {
 	mCanApplyImmediately = b;
 
-	getChild<LLUICtrl>("apply_immediate_check")->setValue(mCanApplyImmediately);
+    LLUICtrl *apply_checkbox = getChild<LLUICtrl>("apply_immediate_check");
+    apply_checkbox->setValue(mCanApplyImmediately && gSavedSettings.getBOOL("TextureLivePreview"));
+    apply_checkbox->setEnabled(mCanApplyImmediately);
 }
 
 void LLFloaterTexturePicker::stopUsingPipette()
@@ -585,7 +587,7 @@ BOOL LLFloaterTexturePicker::postBuild()
 
 	mNoCopyTextureSelected = FALSE;
 
-	getChild<LLUICtrl>("apply_immediate_check")->setValue(gSavedSettings.getBOOL("TextureLivePreview"));
+	getChild<LLUICtrl>("apply_immediate_check")->setValue(mCanApplyImmediately && gSavedSettings.getBOOL("TextureLivePreview"));
 	childSetCommitCallback("apply_immediate_check", onApplyImmediateCheck, this);
     getChildView("apply_immediate_check")->setEnabled(mCanApplyImmediately);
 
@@ -973,7 +975,7 @@ void LLFloaterTexturePicker::onSelectionChange(const std::deque<LLFolderViewItem
 			
 			if(!mPreviewSettingChanged)
 			{
-				mCanPreview = gSavedSettings.getBOOL("TextureLivePreview");
+				mCanPreview = mCanApplyImmediately && gSavedSettings.getBOOL("TextureLivePreview");
 			}
 			else
 			{
@@ -1288,7 +1290,7 @@ void LLFloaterTexturePicker::onBakeTextureSelect(LLUICtrl* ctrl, void *user_data
 
 	if (!self->mPreviewSettingChanged)
 	{
-		self->mCanPreview = gSavedSettings.getBOOL("TextureLivePreview");
+		self->mCanPreview = self->mCanApplyImmediately && gSavedSettings.getBOOL("TextureLivePreview");
 	}
 	else
 	{
@@ -1309,7 +1311,7 @@ void LLFloaterTexturePicker::setCanApply(bool can_preview, bool can_apply)
 	getChildRef<LLUICtrl>("apply_immediate_check").setVisible(can_preview);
 
 	mCanApply = can_apply;
-	mCanPreview = can_preview ? gSavedSettings.getBOOL("TextureLivePreview") : false;
+	mCanPreview = can_preview ? (mCanApplyImmediately && gSavedSettings.getBOOL("TextureLivePreview")) : false;
 	mPreviewSettingChanged = true;
 }
 

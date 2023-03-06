@@ -45,6 +45,8 @@
 #include "llvowlsky.h"
 #include "llsettingsvo.h"
 
+extern BOOL gCubeSnapshot;
+
 static LLStaticHashedString sCamPosLocal("camPosLocal");
 static LLStaticHashedString sCustomAlpha("custom_alpha");
 
@@ -416,10 +418,13 @@ void LLDrawPoolWLSky::renderHeavenlyBodies()
 void LLDrawPoolWLSky::renderDeferred(S32 pass)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL; //LL_RECORD_BLOCK_TIME(FTM_RENDER_WL_SKY);
-	if (!gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_SKY))
+	if (!gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_SKY) || gSky.mVOSkyp.isNull())
 	{
 		return;
 	}
+
+    // TODO: remove gSky.mVOSkyp and fold sun/moon into LLVOWLSky
+    gSky.mVOSkyp->updateGeometry(gSky.mVOSkyp->mDrawable);
 
     const F32 camHeightLocal = LLEnvironment::instance().getCamHeight();
 
@@ -431,7 +436,10 @@ void LLDrawPoolWLSky::renderDeferred(S32 pass)
     {
         renderSkyHazeDeferred(origin, camHeightLocal);
         renderHeavenlyBodies();
-        renderStarsDeferred(origin);
+        if (!gCubeSnapshot)
+        {
+            renderStarsDeferred(origin);
+        }
         renderSkyCloudsDeferred(origin, camHeightLocal, cloud_shader);
     }
     gGL.setColorMask(true, true);

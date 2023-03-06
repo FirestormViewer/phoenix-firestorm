@@ -46,14 +46,15 @@ uniform vec3 moon_dir;
 
 out vec4 frag_color;
 
+in vec3 vary_fragcoord;
+
 #ifdef HAS_SUN_SHADOW
-  in vec3 vary_fragcoord;
   uniform vec2 screen_res;
 #endif
 
 in vec3 vary_position;
 
-in vec2 basecolor_texcoord;
+in vec2 base_color_texcoord;
 in vec2 normal_texcoord;
 in vec2 metallic_roughness_texcoord;
 in vec2 emissive_texcoord;
@@ -81,6 +82,8 @@ vec3 srgb_to_linear(vec3 c);
 vec3 linear_to_srgb(vec3 c);
 
 void calcAtmosphericVarsLinear(vec3 inPositionEye, vec3 norm, vec3 light_dir, out vec3 sunlit, out vec3 amblit, out vec3 atten, out vec3 additive);
+vec3 atmosFragLightingLinear(vec3 color, vec3 additive, vec3 atten);
+vec3 scaleSoftClipFragLinear(vec3 color);
 
 void calcHalfVectors(vec3 lv, vec3 n, vec3 v, out vec3 h, out vec3 l, out float nh, out float nl, out float nv, out float vh, out float lightDist);
 float calcLegacyDistanceAttenuation(float distance, float falloff);
@@ -106,16 +109,16 @@ vec3 pbrBaseLight(vec3 diffuseColor,
                   vec3 colorEmissive,
                   float ao,
                   vec3 additive,
-                  vec3 atten);
+                  vec3 atten,
+                  out vec3 specContrib);
 
 vec3 pbrPunctual(vec3 diffuseColor, vec3 specularColor, 
                     float perceptualRoughness, 
                     float metallic,
                     vec3 n, // normal
                     vec3 v, // surface point to camera
-                    vec3 l); //surface point to light
-
-vec2 BRDF(float NoV, float roughness);
+                    vec3 l, //surface point to light
+                    out vec3 specContrib); 
 
 vec3 calcPointLightOrSpotLight(vec3 diffuseColor, vec3 specularColor, 
                     float perceptualRoughness, 
@@ -126,7 +129,7 @@ vec3 calcPointLightOrSpotLight(vec3 diffuseColor, vec3 specularColor,
                     vec3 lp, // light position
                     vec3 ld, // light direction (for spotlights)
                     vec3 lightColor,
-                    float lightSize, float falloff, float is_pointlight, float ambiance)
+                    float lightSize, float falloff, float is_pointlight, inout float glare, float ambiance)
 {
     vec3 color = vec3(0,0,0);
 
@@ -148,7 +151,10 @@ vec3 calcPointLightOrSpotLight(vec3 diffuseColor, vec3 specularColor,
 
         vec3 intensity = spot_atten * dist_atten * lightColor * 3.0;
 
-        color = intensity*pbrPunctual(diffuseColor, specularColor, perceptualRoughness, metallic, n.xyz, v, lv);
+        vec3 speccol;
+        color = intensity*pbrPunctual(diffuseColor, specularColor, perceptualRoughness, metallic, n.xyz, v, lv, speccol);
+        speccol *= intensity;
+        glare += max(max(speccol.r, speccol.g), speccol.b);
     }
 
     return color;
@@ -157,13 +163,14 @@ vec3 calcPointLightOrSpotLight(vec3 diffuseColor, vec3 specularColor,
 void main()
 {
     vec3 color = vec3(0,0,0);
+    float glare = 0.0;
 
     vec3  light_dir   = (sun_up_factor == 1) ? sun_dir : moon_dir;
     vec3  pos         = vary_position;
 
     waterClip(pos);
 
-    vec4 basecolor = texture(diffuseMap, basecolor_texcoord.xy).rgba;
+    vec4 basecolor = texture(diffuseMap, base_color_texcoord.xy).rgba;
     basecolor.rgb = srgb_to_linear(basecolor.rgb);
 #ifdef HAS_ALPHA_MASK
     if (basecolor.a < minimum_alpha)
@@ -191,8 +198,11 @@ void main()
     vec3 atten;
     calcAtmosphericVarsLinear(pos.xyz, norm, light_dir, sunlit, amblit, additive, atten);
 
-#ifdef HAS_SUN_SHADOW
+    vec3 sunlit_linear = srgb_to_linear(sunlit);
+
     vec2 frag = vary_fragcoord.xy/vary_fragcoord.z*0.5+0.5;
+
+#ifdef HAS_SUN_SHADOW
     scol = sampleDirectionalShadow(pos.xyz, norm.xyz, frag);
 #endif
 
@@ -211,7 +221,7 @@ void main()
     float gloss      = 1.0 - perceptualRoughness;
     vec3  irradiance = vec3(0);
     vec3  radiance  = vec3(0);
-    sampleReflectionProbes(irradiance, radiance, vec2(0), pos.xyz, norm.xyz, gloss);
+    sampleReflectionProbes(irradiance, radiance, vary_position.xy*0.5+0.5, pos.xyz, norm.xyz, gloss);
     // Take maximium of legacy ambient vs irradiance sample as irradiance
     // NOTE: ao is applied in pbrIbl (see pbrBaseLight), do not apply here
     irradiance       = max(amblit,irradiance);
@@ -222,15 +232,19 @@ void main()
 
     vec3 v = -normalize(pos.xyz);
 
-    color = pbrBaseLight(diffuseColor, specularColor, metallic, v, norm.xyz, perceptualRoughness, light_dir, sunlit, scol, radiance, irradiance, colorEmissive, ao, additive, atten);
+    vec3 spec;
+    color = pbrBaseLight(diffuseColor, specularColor, metallic, v, norm.xyz, perceptualRoughness, light_dir, sunlit_linear, scol, radiance, irradiance, colorEmissive, ao, additive, atten, spec);
+    glare += max(max(spec.r, spec.g), spec.b);
 
-    float nv = clamp(abs(dot(norm.xyz, v)), 0.001, 1.0);
-    vec2 brdf = BRDF(clamp(nv, 0, 1), 1.0-perceptualRoughness);
+    color.rgb = linear_to_srgb(color.rgb);
+    color.rgb = atmosFragLightingLinear(color.rgb, additive, atten);
+    color.rgb = scaleSoftClipFragLinear(color.rgb);
+    color.rgb = srgb_to_linear(color.rgb);
 
     vec3 light = vec3(0);
 
     // Punctual lights
-#define LIGHT_LOOP(i) light += calcPointLightOrSpotLight(diffuseColor, specularColor, perceptualRoughness, metallic, norm.xyz, pos.xyz, v, light_position[i].xyz, light_direction[i].xyz, light_diffuse[i].rgb, light_deferred_attenuation[i].x, light_deferred_attenuation[i].y, light_attenuation[i].z, light_attenuation[i].w);
+#define LIGHT_LOOP(i) light += calcPointLightOrSpotLight(diffuseColor, specularColor, perceptualRoughness, metallic, norm.xyz, pos.xyz, v, light_position[i].xyz, light_direction[i].xyz, light_diffuse[i].rgb, light_deferred_attenuation[i].x, light_deferred_attenuation[i].y, light_attenuation[i].z, glare, light_attenuation[i].w);
 
     LIGHT_LOOP(1)
     LIGHT_LOOP(2)
@@ -244,11 +258,10 @@ void main()
 
     
     float a = basecolor.a*vertex_color.a;
-    vec3 spec = radiance; // *specularColor;
-    float lum = max(max(spec.r, spec.g), spec.b);
     
-    float f = brdf.y;
-    a += f;
+    glare = min(glare, 1.0);
+    a = max(a, glare);
+
     frag_color = vec4(color.rgb,a);
 }
 
@@ -263,7 +276,7 @@ out vec4 frag_color;
 
 in vec3 vary_position;
 
-in vec2 basecolor_texcoord;
+in vec2 base_color_texcoord;
 in vec2 emissive_texcoord;
 
 in vec4 vertex_color;
@@ -282,7 +295,7 @@ void main()
 
     vec3  pos         = vary_position;
 
-    vec4 basecolor = texture(diffuseMap, basecolor_texcoord.xy).rgba;
+    vec4 basecolor = texture(diffuseMap, base_color_texcoord.xy).rgba;
     basecolor.rgb = srgb_to_linear(basecolor.rgb);
 #ifdef HAS_ALPHA_MASK
     if (basecolor.a < minimum_alpha)

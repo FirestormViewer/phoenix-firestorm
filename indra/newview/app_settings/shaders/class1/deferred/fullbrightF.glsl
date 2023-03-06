@@ -100,8 +100,10 @@ void main()
 #endif
 
 #ifndef IS_HUD
+    color.rgb = fullbrightAtmosTransport(color.rgb);
     color.rgb = srgb_to_linear(color.rgb);
 #endif
+
     frag_color.rgb = color.rgb;
     frag_color.a   = color.a;
 }

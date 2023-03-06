@@ -23,6 +23,7 @@
 		<string>RenderDeferredSSAO</string>
 		<string>RenderDepthOfField</string>
 		<string>RenderDepthOfFieldInEditMode</string>
+		<string>RenderExposure</string>
 		<string>RenderFarClip</string>
 		<string>RenderFlexTimeFactor</string>
 		<string>RenderFSAASamples</string>
@@ -41,6 +42,7 @@
 		<string>RenderTerrainDetail</string>
 		<string>RenderTerrainLODFactor</string>
 		<string>RenderTerrainScale</string>
+		<string>RenderTonemapper</string>
 		<string>RenderTreeLODFactor</string>
 		<string>RenderTransparentWater</string>
 		<string>RenderUnloadedAvatar</string>

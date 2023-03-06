@@ -31,11 +31,22 @@
 #include "llviewerwindow.h"
 #include "llviewerregion.h"
 #include "llworld.h"
+#include "llshadermgr.h"
 
 extern F32SecondsImplicit gFrameTimeSeconds;
 
+extern U32 get_box_fan_indices(LLCamera* camera, const LLVector4a& center);
+
 LLReflectionMap::LLReflectionMap()
 {
+}
+
+LLReflectionMap::~LLReflectionMap()
+{
+    if (mOcclusionQuery)
+    {
+        glDeleteQueries(1, &mOcclusionQuery);
+    }
 }
 
 void LLReflectionMap::update(U32 resolution, U32 face)
@@ -66,7 +77,7 @@ void LLReflectionMap::autoAdjustOrigin()
 
         if (mGroup->getSpatialPartition()->mPartitionType == LLViewerRegion::PARTITION_VOLUME)
         {
-            mPriority = 1;
+            mPriority = 0;
             // cast a ray towards 8 corners of bounding box
             // nudge origin towards center of empty space
 
@@ -150,7 +161,7 @@ void LLReflectionMap::autoAdjustOrigin()
     }
     else if (mViewerObject)
     {
-        mPriority = 64;
+        mPriority = 1;
         mOrigin.load3(mViewerObject->getPositionAgent().mV);
         mRadius = mViewerObject->getScale().mV[0]*0.5f;
     }
@@ -244,4 +255,72 @@ bool LLReflectionMap::getBox(LLMatrix4& box)
     }
 
     return false;
+}
+
+bool LLReflectionMap::isActive()
+{
+    return mCubeIndex != -1;
+}
+
+void LLReflectionMap::doOcclusion(const LLVector4a& eye)
+{
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
+#if 1
+    // super sloppy, but we're doing an occlusion cull against a bounding cube of
+    // a bounding sphere, pad radius so we assume if the eye is within
+    // the bounding sphere of the bounding cube, the node is not culled
+    F32 dist = mRadius * F_SQRT3 + 1.f;
+
+    LLVector4a o;
+    o.setSub(mOrigin, eye);
+
+    bool do_query = false;
+
+    if (o.getLength3().getF32() < dist)
+    { // eye is inside radius, don't attempt to occlude
+        mOccluded = false;
+        return;
+    }
+    
+    if (mOcclusionQuery == 0)
+    { // no query was previously issued, allocate one and issue
+        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("rmdo - glGenQueries");
+        glGenQueries(1, &mOcclusionQuery);
+        do_query = true;
+    }
+    else
+    { // query was previously issued, check it and only issue a new query
+        // if previous query is available
+        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("rmdo - glGetQueryObject");
+        GLuint result = 0;
+        glGetQueryObjectuiv(mOcclusionQuery, GL_QUERY_RESULT_AVAILABLE, &result);
+
+        if (result > 0)
+        {
+            do_query = true;
+            glGetQueryObjectuiv(mOcclusionQuery, GL_QUERY_RESULT, &result);
+            mOccluded = result == 0;
+            mOcclusionPendingFrames = 0;
+        }
+        else
+        {
+            mOcclusionPendingFrames++;
+        }
+    }
+
+    if (do_query)
+    {
+        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("rmdo - push query");
+        glBeginQuery(GL_ANY_SAMPLES_PASSED, mOcclusionQuery);
+
+        LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
+
+        shader->uniform3fv(LLShaderMgr::BOX_CENTER, 1, mOrigin.getF32ptr());
+        shader->uniform3f(LLShaderMgr::BOX_SIZE, mRadius, mRadius, mRadius);
+
+        gPipeline.mCubeVB->drawRange(LLRender::TRIANGLE_FAN, 0, 7, 8, get_box_fan_indices(LLViewerCamera::getInstance(), mOrigin));
+
+        glEndQuery(GL_ANY_SAMPLES_PASSED);
+    }
+#endif
 }

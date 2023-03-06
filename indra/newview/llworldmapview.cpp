@@ -424,22 +424,14 @@ void LLWorldMapView::draw()
 	S32 level = LLWorldMipmap::scaleToLevel(mMapScale);
 
 	LLLocalClipRect clip(getLocalRect());
-	{
-		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
-		gGL.matrixMode(LLRender::MM_MODELVIEW);
+	gGL.matrixMode(LLRender::MM_MODELVIEW);
 
-		// Clear the background alpha to 0
-		gGL.flush();
-		gGL.setColorMask(false, true);
-        gGL.flush();
-		gGL.setSceneBlendType(LLRender::BT_REPLACE);
-		gGL.color4f(0.0f, 0.0f, 0.0f, 0.0f);
-		gl_rect_2d(0, height, width, 0);
-	}
-
-	gGL.flush();
-	gGL.setColorMask(true, true);
+    // Draw background rectangle
+    gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+    gGL.color4fv(mBackgroundColor.mV);
+    gl_rect_2d(0, height, width, 0);
 
 	// Draw the image tiles
 // <FS:CR> Aurora Sim
@@ -451,10 +443,6 @@ void LLWorldMapView::draw()
 	drawMipmap(width, height);
 #endif //OPENSIM
 // </FS:CR> Aurora Sim
-
-	gGL.flush();
-
-	gGL.setColorMask(true, true);
 
 	// Draw per sim overlayed information (names, mature, offline...)
 	// <FS:Ansariel> Performance tweak
@@ -508,7 +496,6 @@ void LLWorldMapView::draw()
 		if (info->isDown())
 		{
 			// Draw a transparent red square over down sims
-			gGL.blendFunc(LLRender::BF_DEST_ALPHA, LLRender::BF_SOURCE_ALPHA);
 			gGL.color4f(0.2f, 0.0f, 0.0f, 0.4f);
 
 			gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
@@ -532,31 +519,13 @@ void LLWorldMapView::draw()
 			gGL.end();
 			// </FS:Ansariel>
 		}
-        // As part of the AO project, we no longer want to draw access indicators;
-		// it's too complicated to get all the rules straight and will only
-		// cause confusion.
-		/**********************
-        else if (!info->isPG() && gAgent.isTeen())
-		{
-			// If this is a mature region, and you are not, draw a line across it
-			gGL.blendFunc(LLRender::BF_DEST_ALPHA, LLRender::BF_ZERO);
-
-			gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-			gGL.color3f(1.f, 0.f, 0.f);
-			gGL.begin(LLRender::LINES);
-				gGL.vertex2f(left, top);
-				gGL.vertex2f(right, bottom);
-				gGL.vertex2f(left, bottom);
-				gGL.vertex2f(right, top);
-			gGL.end();
-		}
-		 **********************/
 // <FS:CR> Aurora Sim
 #ifdef OPENSIM
 		else if ((mapShowLandForSale && (level <= DRAW_LANDFORSALE_THRESHOLD)) || LLGridManager::getInstance()->isInAuroraSim())
 #else
 		else if (mapShowLandForSale && (level <= DRAW_LANDFORSALE_THRESHOLD))
 #endif //OPENSIM
+
 		{
 			// Draw the overlay image "Land for Sale / Land for Auction"
 			LLViewerFetchedTexture* overlayimage = info->getLandForSaleImage();
@@ -576,7 +545,6 @@ void LLWorldMapView::draw()
 				// Draw something whenever we have enough info
 				if (overlayimage->hasGLTexture())
 				{
-					gGL.blendFunc(LLRender::BF_SOURCE_ALPHA, LLRender::BF_ONE_MINUS_SOURCE_ALPHA);	
 					gGL.getTexUnit(0)->bind(overlayimage);
 					gGL.color4f(1.f, 1.f, 1.f, 1.f);
 					// <FS:Ansariel> Remove QUADS rendering mode
@@ -685,21 +653,6 @@ void LLWorldMapView::draw()
 // </FS:CR>
 		}
 	}
-
-
-
-	// Draw background rectangle
-	LLGLSUIDefault gls_ui;
-	{
-		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-        gGL.flush();
-		gGL.blendFunc(LLRender::BF_ONE_MINUS_DEST_ALPHA, LLRender::BF_DEST_ALPHA);
-		gGL.color4fv( mBackgroundColor.mV );
-		gl_rect_2d(0, height, width, 0);
-	}
-
-    gGL.flush();
-	gGL.setSceneBlendType(LLRender::BT_ALPHA);
 
 	// Draw item infos if we're not zoomed out too much and there's something to draw
 	if ((level <= DRAW_SIMINFO_THRESHOLD) && (mapShowInfohubs || 
@@ -905,7 +858,6 @@ bool LLWorldMapView::drawMipmapLevel(S32 width, S32 height, S32 level, bool load
 					gGL.getTexUnit(0)->bind(simimage.get());
 					simimage->setAddressMode(LLTexUnit::TAM_CLAMP);
 
-					gGL.setSceneBlendType(LLRender::BT_ALPHA);
 					gGL.color4f(1.f, 1.0f, 1.0f, 1.0f);
 
 					// <FS:Ansariel> Remove QUADS rendering mode
@@ -963,8 +915,6 @@ bool LLWorldMapView::drawMipmapLevel(S32 width, S32 height, S32 level, bool load
 // Used for debug only
 void LLWorldMapView::drawTileOutline(S32 level, F32 top, F32 left, F32 bottom, F32 right)
 {
-	gGL.blendFunc(LLRender::BF_DEST_ALPHA, LLRender::BF_ZERO);
-	
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 	if (level == 1)
 		gGL.color3f(1.f, 0.f, 0.f);		// red

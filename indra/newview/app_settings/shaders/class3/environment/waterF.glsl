@@ -114,6 +114,7 @@ vec3 BlendNormal(vec3 bump1, vec3 bump2)
 }
 
 vec3 srgb_to_linear(vec3 col);
+vec3 linear_to_srgb(vec3 col);
 
 vec3 vN, vT, vB;
 
@@ -122,11 +123,8 @@ vec3 transform_normal(vec3 vNt)
     return normalize(vNt.x * vT + vNt.y * vB + vNt.z * vN);
 }
 
-void sampleReflectionProbes(inout vec3 ambenv, inout vec3 glossenv,
-    vec2 tc, vec3 pos, vec3 norm, float glossiness);
-
-void sampleReflectionProbes(inout vec3 ambenv, inout vec3 glossenv,
-     vec2 tc, vec3 pos, vec3 norm, float glossiness, bool errorCorrect);
+void sampleReflectionProbesWater(inout vec3 ambenv, inout vec3 glossenv,
+        vec2 tc, vec3 pos, vec3 norm, float glossiness);
 
 vec3 getPositionWithNDC(vec3 ndc);
 
@@ -203,6 +201,8 @@ void main()
 
     calcAtmosphericVarsLinear(pos.xyz, wavef, vary_light_dir, sunlit, amblit, additive, atten);
 
+    vec3 sunlit_linear = srgb_to_linear(sunlit);
+
 #ifdef TRANSPARENT_WATER
     vec4 fb = texture2D(screenTex, distort2);
     float depth = texture2D(screenDepth, distort2).r;
@@ -219,21 +219,24 @@ void main()
 
     fb = applyWaterFogViewLinear(refPos, fb, sunlit);
 #else
-    vec4 fb = applyWaterFogViewLinear(viewVec*1024.0, vec4(0.5), sunlit);
+    vec4 fb = applyWaterFogViewLinear(viewVec*2048.0, vec4(1.0), sunlit_linear);
 #endif
 
+    // fudge sample on other side of water to be a tad darker
+    fb.rgb *= 0.75;
+
     float metallic = 0.0;
-    float perceptualRoughness = 0.1;
+    float perceptualRoughness = 0.05;
     float gloss      = 1.0 - perceptualRoughness;
     
     vec3  irradiance = vec3(0);
     vec3  radiance  = vec3(0);
-    sampleReflectionProbes(irradiance, radiance, distort2, pos.xyz, wave_ibl.xyz, gloss);
+    sampleReflectionProbesWater(irradiance, radiance, distort2, pos.xyz, wave_ibl.xyz, gloss);
 
     irradiance       = vec3(0);
 
-    vec3 diffuseColor;
-    vec3 specularColor;
+    vec3 diffuseColor = vec3(0);
+    vec3 specularColor = vec3(0);
     calcDiffuseSpecular(vec3(1), metallic, diffuseColor, specularColor);
 
     vec3 v = -normalize(pos.xyz);
@@ -250,10 +253,7 @@ void main()
 
     vec3 punctual = pbrPunctual(vec3(0), specularColor, 0.1, metallic, normalize(wavef+up*max(dist, 32.0)/32.0*(1.0-vdu)), v, normalize(light_dir));
 
-    vec3 color = punctual * sunlit * 2.75 * scol;
-
-    color = atmosFragLightingLinear(color, additive, atten);
-    color = scaleSoftClipFragLinear(color);
+    vec3 color = punctual * sunlit_linear * 2.75 * scol;
 
     vec3 ibl = pbrIbl(vec3(0), vec3(1), radiance, vec3(0), ao, NdotV, 0.0);
 
@@ -265,10 +265,24 @@ void main()
     f *= 0.9;
     f *= f;
 
+    // incoming scale is [0, 1] with 0.5 being default
+    // shift to 0.5 to 1.5
+    f *= (fresnelScale - 0.5)+1.0;
+
+    // incoming offset is [0, 1] with 0.5 being default
+    // shift from -1 to 1
+    f += (fresnelOffset - 0.5) * 2.0;
+
     f = clamp(f, 0, 1);
-    //fb.rgb *= 1.;
-    
+
     color = mix(color, fb.rgb, f);
+
+    color.rgb = linear_to_srgb(color.rgb);
+    color = atmosFragLightingLinear(color, additive, atten);
+    color = scaleSoftClipFragLinear(color);
+    color.rgb = srgb_to_linear(color.rgb);
+
+
     float spec = min(max(max(punctual.r, punctual.g), punctual.b), 0.05);
     
     frag_color = vec4(color, spec); //*sunAngle2);

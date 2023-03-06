@@ -97,9 +97,7 @@ public:
 
 	void destroyGL();
 	void restoreGL();
-	void resetVertexBuffers();
-	void doResetVertexBuffers(bool forced = false);
-    void requestResizeScreenTexture(); // set flag only, no work, safer for callbacks...
+	void requestResizeScreenTexture(); // set flag only, no work, safer for callbacks...
     void requestResizeShadowTexture(); // set flag only, no work, safer for callbacks...
 
 	void resizeScreenTexture();
@@ -327,7 +325,7 @@ public:
 	S32  getLightCount() const { return mLights.size(); }
 
 	void calcNearbyLights(LLCamera& camera);
-	void setupHWLights(LLDrawPool* pool);
+	void setupHWLights();
 	void setupAvatarLights(bool for_edit = false);
 	void enableLights(U32 mask);
 	void enableLightsStatic();
@@ -913,6 +911,8 @@ protected:
 	LLDrawPool*					mMaterialsPool = nullptr;
 	LLDrawPool*					mWLSkyPool = nullptr;
 	LLDrawPool*					mPBROpaquePool = nullptr;
+    LLDrawPool*                 mPBRAlphaMaskPool = nullptr;
+
 	// Note: no need to keep an quick-lookup to avatar pools, since there's only one per avatar
 	
 public:

@@ -23,78 +23,14 @@
  * $/LicenseInfo$
  */
  
-#extension GL_ARB_texture_rectangle : enable
-
-/*[EXTRA_CODE_HERE]*/
-
-#ifdef DEFINE_GL_FRAGCOLOR
 out vec4 frag_color;
-#else
-#define frag_color gl_FragColor
-#endif
 
-// NOTE screenMap should always be texture channel 0 and 
-// depthmap should always be channel 1
 uniform sampler2D diffuseRect;
-uniform sampler2D depthMap;
 
-uniform float resScale;
-uniform float znear;
-uniform float zfar;
-
-VARYING vec2 vary_texcoord0;
-
-// get linear depth value given a depth buffer sample d and znear and zfar values
-float linearDepth(float d, float znear, float zfar);
+in vec2 vary_texcoord0;
 
 void main() 
 {
-#if 0
-    float w[9];
-
-    float c = 1.0/16.0;  //corner weight
-    float e = 1.0/8.0; //edge weight
-    float m = 1.0/4.0; //middle weight
-
-    //float wsum = c*4+e*4+m;
-
-    w[0] = c;   w[1] = e;    w[2] = c;
-    w[3] = e;    w[4] = m;     w[5] = e;
-    w[6] = c;   w[7] = e;    w[8] = c;
-    
-    vec2 tc[9];
-
-    float ed = 1;
-    float cd = 1;
-
-
-    tc[0] = vec2(-cd, cd);    tc[1] = vec2(0, ed);    tc[2] = vec2(cd, cd);
-    tc[3] = vec2(-ed, 0);    tc[4] = vec2(0, 0);    tc[5] = vec2(ed, 0);
-    tc[6] = vec2(-cd, -cd);    tc[7] = vec2(0, -ed);   tc[8] = vec2(cd, -1);
-
-    vec3 color = vec3(0,0,0);
-
-    for (int i = 0; i < 9; ++i)
-    {
-        color += texture2D(screenMap, vary_texcoord0.xy+tc[i]).rgb * w[i];
-        //color += texture2D(screenMap, vary_texcoord0.xy+tc[i]*2.0).rgb * w[i]*0.5;
-    }
-
-    //color /= wsum;
-
-    frag_color = vec4(color, 1.0);
-#else
-    float depth = texture(depthMap, vary_texcoord0.xy).r;
-    float dist = linearDepth(depth, znear, zfar);
-
-    // convert linear depth to distance
-    vec3 v;
-    v.xy = vary_texcoord0.xy / 512.0 * 2.0 - 1.0;
-    v.z = 1.0;
-    v = normalize(v);
-    dist /= v.z;
-
-    vec3 col = texture2D(diffuseRect, vary_texcoord0.xy).rgb;
-    frag_color = vec4(col, dist/256.0); 
-#endif
+    vec3 col = texture(diffuseRect, vary_texcoord0.xy).rgb;
+    frag_color = vec4(col, 0.0);
 }

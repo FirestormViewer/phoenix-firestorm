@@ -1975,6 +1975,7 @@ void LLPanelFace::updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, 
         const U32 pbr_type = findChild<LLRadioGroup>("radio_pbr_type")->getSelectedIndex();
         const LLGLTFMaterial::TextureInfo texture_info = texture_info_from_pbrtype(pbr_type);
         const bool show_texture_info = texture_info != LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT;
+        const bool new_state = show_texture_info && has_pbr_capabilities && has_pbr_material;
 
         LLUICtrl* gltfCtrlTextureScaleU = getChild<LLUICtrl>("gltfTextureScaleU");
         LLUICtrl* gltfCtrlTextureScaleV = getChild<LLUICtrl>("gltfTextureScaleV");
@@ -1982,13 +1983,15 @@ void LLPanelFace::updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, 
         LLUICtrl* gltfCtrlTextureOffsetU = getChild<LLUICtrl>("gltfTextureOffsetU");
         LLUICtrl* gltfCtrlTextureOffsetV = getChild<LLUICtrl>("gltfTextureOffsetV");
 
-        gltfCtrlTextureScaleU->setEnabled(show_texture_info && has_pbr_capabilities && has_pbr_material);
-        gltfCtrlTextureScaleV->setEnabled(show_texture_info && has_pbr_capabilities && has_pbr_material);
-        gltfCtrlTextureRotation->setEnabled(show_texture_info && has_pbr_capabilities && has_pbr_material);
-        gltfCtrlTextureOffsetU->setEnabled(show_texture_info && has_pbr_capabilities && has_pbr_material);
-        gltfCtrlTextureOffsetV->setEnabled(show_texture_info && has_pbr_capabilities && has_pbr_material);
+        gltfCtrlTextureScaleU->setEnabled(new_state);
+        gltfCtrlTextureScaleV->setEnabled(new_state);
+        gltfCtrlTextureRotation->setEnabled(new_state);
+        gltfCtrlTextureOffsetU->setEnabled(new_state);
+        gltfCtrlTextureOffsetV->setEnabled(new_state);
 
-        // Control values are set in setMaterialOverridesFromSelection
+        // Control values will be set once per frame in
+        // setMaterialOverridesFromSelection
+        sMaterialOverrideSelection.setDirty();
     }
 }
 
@@ -2979,7 +2982,6 @@ void LLPanelFace::onCommitPbrType(LLUICtrl* ctrl, void* userdata)
     // and generally reflecting old state when switching tabs or objects
     //
     self->updateUI();
-    self->setMaterialOverridesFromSelection();
 }
 
 // static
@@ -3981,34 +3983,12 @@ private:
 
 struct LLPanelFaceUpdateFunctor : public LLSelectedObjectFunctor
 {
-    LLPanelFaceUpdateFunctor(bool update_media, bool update_pbr)
+    LLPanelFaceUpdateFunctor(bool update_media)
         : mUpdateMedia(update_media)
-        , mUpdatePbr(update_pbr)
     {}
 
     virtual bool apply(LLViewerObject* object)
     {
-        if (mUpdatePbr)
-        {
-            // setRenderMaterialId is supposed to create it
-            LLRenderMaterialParams* param_block = (LLRenderMaterialParams*)object->getParameterEntry(LLNetworkData::PARAMS_RENDER_MATERIAL);
-            if (param_block)
-            {
-                if (param_block->isEmpty())
-                {
-                    object->setHasRenderMaterialParams(false);
-                }
-                else if (object->hasRenderMaterialParams())
-                {
-                    object->parameterChanged(LLNetworkData::PARAMS_RENDER_MATERIAL, true);
-                }
-                else
-                {
-                    object->setHasRenderMaterialParams(true);
-                }
-            }
-        }
-
         object->sendTEUpdate();
 
         if (mUpdateMedia)
@@ -4023,7 +4003,6 @@ struct LLPanelFaceUpdateFunctor : public LLSelectedObjectFunctor
     }
 private:
     bool mUpdateMedia;
-    bool mUpdatePbr;
 };
 
 struct LLPanelFaceNavigateHomeFunctor : public LLSelectedTEFunctor
@@ -4159,7 +4138,7 @@ void LLPanelFace::onPasteColor()
     LLPanelFacePasteTexFunctor paste_func(this, PASTE_COLOR);
     selected_objects->applyToTEs(&paste_func);
 
-    LLPanelFaceUpdateFunctor sendfunc(false, false);
+    LLPanelFaceUpdateFunctor sendfunc(false);
     selected_objects->applyToObjects(&sendfunc);
 }
 
@@ -4520,7 +4499,7 @@ void LLPanelFace::onPasteTexture()
     LLPanelFacePasteTexFunctor paste_func(this, PASTE_TEXTURE);
     selected_objects->applyToTEs(&paste_func);
 
-    LLPanelFaceUpdateFunctor sendfunc(true, true);
+    LLPanelFaceUpdateFunctor sendfunc(true);
     selected_objects->applyToObjects(&sendfunc);
 
     LLGLTFMaterialList::flushUpdates();
@@ -4837,7 +4816,7 @@ void LLPanelFace::onPasteFaces()
 	LLPanelFacePasteTexFunctor paste_color_func(this, PASTE_COLOR);
 	selected_objects->applyToTEs(&paste_color_func);
 
-	LLPanelFaceUpdateFunctor sendfunc(true, true);
+	LLPanelFaceUpdateFunctor sendfunc(true);
 	selected_objects->applyToObjects(&sendfunc);
 
 	LLPanelFaceNavigateHomeFunctor navigate_home_func;
@@ -4950,17 +4929,7 @@ void LLPanelFace::Selection::connect()
 
 bool LLPanelFace::Selection::update()
 {
-    const bool selection_changed = compareSelection();
-    if (selection_changed)
-    {
-        clearObjectUpdatePending();
-    }
-    else if (isObjectUpdatePending())
-    {
-        return false;
-    }
-
-    const bool changed = mChanged;
+    const bool changed = mChanged || compareSelection();
     mChanged = false;
     return changed;
 }
@@ -4976,14 +4945,7 @@ void LLPanelFace::Selection::onSelectedObjectUpdated(const LLUUID& object_id, S3
     if (object_id == mSelectedObjectID && side == mSelectedSide)
     {
         mChanged = true;
-        clearObjectUpdatePending();
     }
-}
-
-void LLPanelFace::Selection::clearObjectUpdatePending()
-{
-    mPendingObjectID = LLUUID::null;
-    mPendingSide = -1;
 }
 
 bool LLPanelFace::Selection::compareSelection()

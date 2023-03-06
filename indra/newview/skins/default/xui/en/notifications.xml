@@ -13979,10 +13979,12 @@ Material successfully created.  Asset ID: [ASSET_ID]
     name="ReflectionProbeApplied"
     persist="true"
     type="alertmodal">
-    Your object has been set to the default Reflection Probe state, which is an invisible, phantom, 5m sphere.  To learn more about Reflection Probes and how to use them, see the Knowledge Base.
-    <usetemplate ignoretext="Reflection Probe tips"
-                 name="okignore"
-                 yestext="OK"/>
+    WARNING: You have made your object a Reflection Probe.  This will implicitly change the object to mimic its influence volume and will make irreversible changes to the object.  Do you want to continue?
+   <usetemplate
+       ignoretext="Reflection Probe tips"
+       name="okcancelignore"
+       notext="Cancel"
+       yestext="OK"/>
   </notification>
 
   <notification

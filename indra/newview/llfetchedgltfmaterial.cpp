@@ -110,14 +110,21 @@ void LLFetchedGLTFMaterial::bind(LLViewerTexture* media_tex)
         shader->uniform1f(LLShaderMgr::METALLIC_FACTOR, mMetallicFactor);
         shader->uniform3fv(LLShaderMgr::EMISSIVE_COLOR, 1, mEmissiveColor.mV);
 
-        const LLMatrix3 base_color_matrix = mTextureTransform[GLTF_TEXTURE_INFO_BASE_COLOR].asMatrix();
-        shader->uniformMatrix3fv(LLShaderMgr::TEXTURE_BASECOLOR_MATRIX, 1, false, (F32*)base_color_matrix.mMatrix);
-        const LLMatrix3 normal_matrix = mTextureTransform[GLTF_TEXTURE_INFO_NORMAL].asMatrix();
-        shader->uniformMatrix3fv(LLShaderMgr::TEXTURE_NORMAL_MATRIX, 1, false, (F32*)normal_matrix.mMatrix);
-        const LLMatrix3 metallic_roughness_matrix = mTextureTransform[GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS].asMatrix();
-        shader->uniformMatrix3fv(LLShaderMgr::TEXTURE_METALLIC_ROUGHNESS_MATRIX, 1, false, (F32*)metallic_roughness_matrix.mMatrix);
-        const LLMatrix3 emissive_matrix = mTextureTransform[GLTF_TEXTURE_INFO_EMISSIVE].asMatrix();
-        shader->uniformMatrix3fv(LLShaderMgr::TEXTURE_EMISSIVE_MATRIX, 1, false, (F32*)emissive_matrix.mMatrix);
+        F32 base_color_packed[8];
+        mTextureTransform[GLTF_TEXTURE_INFO_BASE_COLOR].getPacked(base_color_packed);
+        shader->uniform4fv(LLShaderMgr::TEXTURE_BASE_COLOR_TRANSFORM, 2, (F32*)base_color_packed);
+
+        F32 normal_packed[8];
+        mTextureTransform[GLTF_TEXTURE_INFO_NORMAL].getPacked(normal_packed);
+        shader->uniform4fv(LLShaderMgr::TEXTURE_NORMAL_TRANSFORM, 2, (F32*)normal_packed);
+
+        F32 metallic_roughness_packed[8];
+        mTextureTransform[GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS].getPacked(metallic_roughness_packed);
+        shader->uniform4fv(LLShaderMgr::TEXTURE_METALLIC_ROUGHNESS_TRANSFORM, 2, (F32*)metallic_roughness_packed);
+
+        F32 emissive_packed[8];
+        mTextureTransform[GLTF_TEXTURE_INFO_EMISSIVE].getPacked(emissive_packed);
+        shader->uniform4fv(LLShaderMgr::TEXTURE_EMISSIVE_TRANSFORM, 2, (F32*)emissive_packed);
     }
 
 }

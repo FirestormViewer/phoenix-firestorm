@@ -10951,7 +10951,6 @@ BOOL get_visibility(void* user_data)
 	return viewp->getVisible();
 }
 
-// TomY TODO: Get rid of these?
 class LLViewShowHoverTips : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -10970,7 +10969,6 @@ class LLViewCheckShowHoverTips : public view_listener_t
 	}
 };
 
-// TomY TODO: Get rid of these?
 class LLViewHighlightTransparent : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -10979,7 +10977,6 @@ class LLViewHighlightTransparent : public view_listener_t
 // [RLVa:KB] - @edit and @viewtransparent
 		LLDrawPoolAlpha::sShowDebugAlpha = (!LLDrawPoolAlpha::sShowDebugAlpha) && (RlvActions::canHighlightTransparent());
 // [/RLVa:KB]
-        gPipeline.resetVertexBuffers();
 		return true;
 	}
 };
@@ -10998,7 +10995,6 @@ class LLViewHighlightTransparentRigged : public view_listener_t
 	bool handleEvent(const LLSD& userdata)
 	{
 		LLDrawPoolAlpha::sShowDebugAlphaRigged = !LLDrawPoolAlpha::sShowDebugAlphaRigged;
-        gPipeline.resetVertexBuffers();
 		return true;
 	}
 };
