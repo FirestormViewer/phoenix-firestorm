@@ -589,9 +589,6 @@ void LLPipeline::init()
 	connectRefreshCachedSettingsSafe("RenderGlowStrength");
 	connectRefreshCachedSettingsSafe("RenderDepthOfField");
 	connectRefreshCachedSettingsSafe("RenderDepthOfFieldInEditMode");
-	//<FS:TS> FIRE-16251: Depth of Field does not work underwater
-	connectRefreshCachedSettingsSafe("FSRenderDoFUnderwater");
-	//</FS:TS> FIRE-16251
 	connectRefreshCachedSettingsSafe("CameraFocusTransitionTime");
 	connectRefreshCachedSettingsSafe("CameraFNumber");
 	connectRefreshCachedSettingsSafe("CameraFocalLength");
