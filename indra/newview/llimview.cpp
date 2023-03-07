@@ -3384,7 +3384,7 @@ void LLIMMgr::addMessage(
 		name_is_setted = true;
 	}
 	bool skip_message = false;
-	bool from_linden = LLMuteList::getInstance()->isLinden(from);
+	bool from_linden = LLMuteList::isLinden(from);
 	// <FS:Ansariel> FIRE-14564: VoiceCallFriendsOnly prevents receiving of
 	//if (gSavedPerAccountSettings.getBOOL("VoiceCallsFriendsOnly") && !from_linden)
 	if (gSavedPerAccountSettings.getBOOL("VoiceCallsFriendsOnly") && !from_linden &&
@@ -3930,7 +3930,7 @@ void LLIMMgr::inviteToSession(
 	std::string question_type = "VoiceInviteQuestionDefault";
 
 	BOOL voice_invite = FALSE;
-	bool is_linden = LLMuteList::getInstance()->isLinden(caller_name);
+	bool is_linden = LLMuteList::isLinden(caller_name);
 
 
 	if(type == IM_SESSION_P2P_INVITE)

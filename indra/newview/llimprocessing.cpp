@@ -693,7 +693,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
     BOOL is_friend = (LLAvatarTracker::instance().getBuddyInfo(from_id) == NULL) ? false : true;
     static LLCachedControl<bool> accept_im_from_only_friend(gSavedPerAccountSettings, "VoiceCallsFriendsOnly");
     //BOOL is_linden = chat.mSourceType != CHAT_SOURCE_OBJECT &&
-    //		LLMuteList::getInstance()->isLinden(name); <:FS:TM> Bear compie fix - is_linden not referenced
+    //		LLMuteList::isLinden(name); <:FS:TM> Bear compile fix - is_linden not referenced
 
     // <FS:PP> FIRE-10500: Autoresponse for (Away)
     static LLCachedControl<bool> FSSendAwayAvatarResponse(gSavedPerAccountSettings, "FSSendAwayAvatarResponse");
