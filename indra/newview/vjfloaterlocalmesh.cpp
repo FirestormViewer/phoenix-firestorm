@@ -270,7 +270,7 @@ void LLFloaterLocalMesh::onBtnApply(void* userdata)
 	int object_idx = objectlist_combo_box->getFirstSelectedIndex();
 
 	// finally tell local mesh system to apply
-	LLLocalMeshSystem::getInstance()->applyVObject(selected_object_id, file_id, object_idx, true);
+	LLLocalMeshSystem::getInstance()->applyVObject(selected_object_id, file_id, object_idx, false);
 }
 
 //static
@@ -411,7 +411,7 @@ bool LLFloaterLocalMesh::processPrimCreated(LLViewerObject* object)
 		{
 			local_id = scroll_ctrl_selected_column->getValue().asUUID();
 			// fill it up with local goodness
-			static const bool use_scale {true};
+			static const bool use_scale {false};
 
 			// // make sure the selection is still valid, and if so - get id.
 

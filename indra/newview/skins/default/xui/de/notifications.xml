@@ -5600,4 +5600,8 @@ URL auf Standard zurücksetzen?
 
 [SOURCES]
 	</notification>
+	<notification label="Ordner-Gruppierung aufheben" name="UngroupFolder">
+		Gruppierung durch den Ordner „[FOLDER_NAME]“ aufheben?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Okay"/>
+	</notification>
 </notifications>

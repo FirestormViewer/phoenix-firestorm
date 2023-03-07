@@ -437,7 +437,7 @@ LLWindowSDL::LLWindowSDL(LLWindowCallbacks* callbacks,
 			 const std::string& title, S32 x, S32 y, S32 width,
 			 S32 height, U32 flags,
 			 BOOL fullscreen, BOOL clearBg,
-			 BOOL disable_vsync, BOOL use_gl,
+			 BOOL enable_vsync, BOOL use_gl,
 			 // <FS:LO> Legacy cursor setting from main program
 			 //BOOL ignore_pixel_depth, U32 fsaa_samples,)
 			 BOOL ignore_pixel_depth, U32 fsaa_samples, BOOL useLegacyCursors)
@@ -483,7 +483,7 @@ LLWindowSDL::LLWindowSDL(LLWindowCallbacks* callbacks,
 		mWindowTitle = title;
 
 	// Create the GL context and set it up for windowed or fullscreen, as appropriate.
-	if(createContext(x, y, width, height, 32, fullscreen, disable_vsync))
+	if(createContext(x, y, width, height, 32, fullscreen, enable_vsync))
 	{
 		gGLManager.initGL();
 
@@ -667,7 +667,7 @@ void LLWindowSDL::setTitle(const std::string &title)
 	SDL_WM_SetCaption(title.c_str(), title.c_str());
 }
 
-BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, BOOL fullscreen, BOOL disable_vsync)
+BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, BOOL fullscreen, BOOL enable_vsync)
 {
 	//bool			glneedsinit = false;
 
@@ -1001,7 +1001,7 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 
 
 // changing fullscreen resolution, or switching between windowed and fullscreen mode.
-BOOL LLWindowSDL::switchContext(BOOL fullscreen, const LLCoordScreen &size, BOOL disable_vsync, const LLCoordScreen * const posp)
+BOOL LLWindowSDL::switchContext(BOOL fullscreen, const LLCoordScreen &size, BOOL enable_vsync, const LLCoordScreen * const posp)
 {
 	const BOOL needsRebuild = TRUE;  // Just nuke the context and start over.
 	BOOL result = true;
@@ -1011,7 +1011,7 @@ BOOL LLWindowSDL::switchContext(BOOL fullscreen, const LLCoordScreen &size, BOOL
 	if(needsRebuild)
 	{
 		destroyContext();
-		result = createContext(0, 0, size.mX, size.mY, 0, fullscreen, disable_vsync);
+		result = createContext(0, 0, size.mX, size.mY, 0, fullscreen, enable_vsync);
 		if (result)
 		{
 			gGLManager.initGL();

@@ -1269,7 +1269,7 @@ BOOL LLWindowMacOSX::pasteTextFromClipboard(LLWString &dst)
 	llutf16string str(pboard_data);
     free(pboard_data);
 
-	dst = utf16str_to_wstring(str)
+	dst = utf16str_to_wstring(str);
 	LLWStringUtil::removeCRLF(dst);	// <FS:CR>;
 	if (dst != L"")
 	{

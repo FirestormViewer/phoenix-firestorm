@@ -595,7 +595,6 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
     fi
 fi
-
 if [ $WANTS_BUILD -eq $TRUE ] ; then
     echo "Building $TARGET_PLATFORM..."
     if [ $TARGET_PLATFORM == "darwin" ] ; then
@@ -627,5 +626,5 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
         fi
     fi
 fi
+echo "finished"
 
-echo "Finished"
