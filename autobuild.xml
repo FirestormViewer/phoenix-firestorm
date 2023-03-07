@@ -552,9 +552,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5c3c29851edd837d5f9518618c4a303b</string>
+              <string>45acdda717f95ce9169de9f49199c066</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/apr_suite-1.4.5.180841559-linux64-180841559.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/apr_suite-1.4.5.230351228-linux64-230351228.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -988,9 +988,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d3f4d83e7b81673731ece92125473b00</string>
+              <string>ad7b9fc10184e8145731f45ae400bfd1</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.12.2.202209171157_91.1.23_g04c8d56_chromium-91.0.4472.164-linux64-222600157.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.12.2.202210012157_92.0.27_g274abcf_chromium-92.0.4515.159-linux64-222741156.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2217,9 +2217,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e584491b67916c502233b23c6e4e44be</string>
+              <string>8ee0979f3808568b5d8940b9b4f52e94</string>
               <key>url</key>
-              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.571939-darwin64-571939.tar.bz2</string>
+              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.577418-darwin64-577418.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2241,9 +2241,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>534b3af2266f37151e629af7552f4cf2</string>
+              <string>7638421f5df1fef9f98d608be8d8de14</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.571939-windows-571939.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.577418-windows-577418.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2253,16 +2253,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9c39018c783443ee4b4eb368c937aeb3</string>
+              <string>c0ccb2a5d721ea130c1e05c4f223e0ec</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.571939-windows64-571939.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.577418-windows64-577418.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.0.571939</string>
+        <string>1.0.577418</string>
       </map>
       <key>mesa</key>
       <map>
@@ -2720,9 +2720,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b7be1d6116fb5848ab2beef19b6a8b15</string>
+              <string>b1dad7c841118a3b6e03a01722d1846a</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/openjpeg-2.3.1.202991551-linux64-202991551.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openjpeg-2.5.0.230362345-linux64-230362345.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

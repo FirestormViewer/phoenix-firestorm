@@ -382,7 +382,7 @@ LLWindowSDL::LLWindowSDL(LLWindowCallbacks* callbacks,
 			 const std::string& title, S32 x, S32 y, S32 width,
 			 S32 height, U32 flags,
 			 BOOL fullscreen, BOOL clearBg,
-			 BOOL disable_vsync, BOOL use_gl,
+			 BOOL enable_vsync, BOOL use_gl,
 			 // <FS:LO> Legacy cursor setting from main program
 			 //BOOL ignore_pixel_depth, U32 fsaa_samples,)
 			 BOOL ignore_pixel_depth, U32 fsaa_samples, BOOL useLegacyCursors)
@@ -427,7 +427,7 @@ LLWindowSDL::LLWindowSDL(LLWindowCallbacks* callbacks,
 		mWindowTitle = title;
 
 	// Create the GL context and set it up for windowed or fullscreen, as appropriate.
-	if(createContext(x, y, width, height, 32, fullscreen, disable_vsync))
+	if(createContext(x, y, width, height, 32, fullscreen, enable_vsync))
 	{
 		gGLManager.initGL();
 
@@ -663,7 +663,7 @@ void LLWindowSDL::tryFindFullscreenSize( int &width, int &height )
 	}
 }
 
-BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, BOOL fullscreen, BOOL disable_vsync)
+BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, BOOL fullscreen, BOOL enable_vsync)
 {
 	//bool			glneedsinit = false;
 
@@ -739,7 +739,6 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 	// We need stencil support for a few (minor) things.
 	if (stencilBits)
 		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, stencilBits);
-	// *FIX: try to toggle vsync here?
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
@@ -763,7 +762,11 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 			setupFailure("GL Context creation error creation error", "Error", OSMB_OK);
 			return FALSE;
 		}
-		// SDL_GL_SetSwapInterval(1);
+
+		// FIRE-32559: This *should* work, but for some reason aftrer login vsync always acts as if it's disabled, so
+		// the flag will get set again later in void LLViewerWindow::setStartupComplete() -Zi
+		toggleVSync(enable_vsync);
+
 		mSurface = SDL_GetWindowSurface( mWindow );
 	}
 
@@ -921,7 +924,7 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 
 
 // changing fullscreen resolution, or switching between windowed and fullscreen mode.
-BOOL LLWindowSDL::switchContext(BOOL fullscreen, const LLCoordScreen &size, BOOL disable_vsync, const LLCoordScreen * const posp)
+BOOL LLWindowSDL::switchContext(BOOL fullscreen, const LLCoordScreen &size, BOOL enable_vsync, const LLCoordScreen * const posp)
 {
 	const BOOL needsRebuild = TRUE;  // Just nuke the context and start over.
 	BOOL result = true;
@@ -931,7 +934,7 @@ BOOL LLWindowSDL::switchContext(BOOL fullscreen, const LLCoordScreen &size, BOOL
 	if(needsRebuild)
 	{
 		destroyContext();
-		result = createContext(0, 0, size.mX, size.mY, 0, fullscreen, disable_vsync);
+		result = createContext(0, 0, size.mX, size.mY, 0, fullscreen, enable_vsync);
 		if (result)
 		{
 			gGLManager.initGL();
@@ -2731,7 +2734,31 @@ void LLWindowSDL::destroySharedContext(void* context)
 
 void LLWindowSDL::toggleVSync(bool enable_vsync)
 {
-	SDL_GL_SetSwapInterval(enable_vsync);
+	if (enable_vsync)
+	{
+		// try adaptive vsync first (-1) and if that fails, try regular vsync (1)
+		if (SDL_GL_SetSwapInterval(-1) == -1)
+		{
+			LL_INFOS() << "Failed to enable adaptive vsync, trying regular vsync" << LL_ENDL;
+			if (SDL_GL_SetSwapInterval(1) == -1)
+			{
+				LL_WARNS() << "Failed to enable vsync" << LL_ENDL;
+			}
+			else
+			{
+				LL_DEBUGS() << "Vsync enabled" << LL_ENDL;
+			}
+		}
+		else
+		{
+			LL_DEBUGS() << "Adaptive vsync enabled" << LL_ENDL;
+		}
+	}
+	else
+	{
+		SDL_GL_SetSwapInterval(0);
+		LL_DEBUGS() << "Vsync disabled" << LL_ENDL;
+	}
 }
 // </FS:Zi>
 

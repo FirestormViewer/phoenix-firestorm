@@ -107,13 +107,14 @@ class LLLocalMeshObject
 		// getters
 		std::vector<std::unique_ptr<LLLocalMeshFace>>& getFaces(LLLocalMeshFileLOD lod) { return mFaces[lod]; };
 		std::pair<LLVector4, LLVector4>& getObjectBoundingBox() { return mObjectBoundingBox; };
-		LLVector4		getObjectTranslation() const	{ return mObjectTranslation; };
-		std::string		getObjectName() const		{ return mObjectName; };
-		LLVector4		getObjectSize() const		{ return mObjectSize; };
-		LLVector4		getObjectScale() const		{ return mObjectScale; };
-		LLMeshSkinInfo& getObjectMeshSkinInfo() 	{ return mMeshSkinInfo; };
-		LLVolumeParams	getVolumeParams() const		{ return mVolumeParams; };
-		bool			getIsRiggedObject() const;
+		LLVector4					getObjectTranslation() const	{ return mObjectTranslation; };
+		std::string					getObjectName() const		{ return mObjectName; };
+		LLVector4					getObjectSize() const		{ return mObjectSize; };
+		LLVector4					getObjectScale() const		{ return mObjectScale; };
+		LLPointer<LLMeshSkinInfo> 	getObjectMeshSkinInfo() 	{ return mMeshSkinInfoPtr; };
+		void					 	setObjectMeshSkinInfo(LLPointer<LLMeshSkinInfo> skininfop ) 	{ mMeshSkinInfoPtr = skininfop; };
+		LLVolumeParams				getVolumeParams() const		{ return mVolumeParams; };
+		bool						getIsRiggedObject() const;
 
 	private:
 		// internal data keeping
@@ -125,7 +126,7 @@ class LLLocalMeshObject
 		LLVector4		mObjectScale;
 
 		// vovolume
-		LLMeshSkinInfo		mMeshSkinInfo;
+		LLPointer<LLMeshSkinInfo>		mMeshSkinInfoPtr{nullptr};
 		LLUUID				mSculptID;
 		LLVolumeParams		mVolumeParams;
 };

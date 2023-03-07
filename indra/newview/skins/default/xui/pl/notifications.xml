@@ -8,7 +8,7 @@
 (dla obecnej sesji)
 	</global>
 	<global name="alwayschoose">
-		Zawsze wybieraj tą opcję
+		Zawsze wybieraj tę opcję
 	</global>
 	<global name="implicitclosebutton">
 		Zamknij
@@ -84,7 +84,7 @@ Inicjalizacja Marketplace nieudana z powodu błędu sieci lub systemu. Spróbuj 
 	<notification name="StockPasteFailed">
 		Kopiowanie lub przeniesienie do folderu Magazynowego nie powiodło się:
 
-        &apos;[ERROR_CODE]&apos;
+&apos;[ERROR_CODE]&apos;
 	</notification>
 	<notification name="MyOutfitsPasteFailed">
 		Jeden lub więcej przedmiotów nie może być użyty w "Strojach"
@@ -105,12 +105,12 @@ Inicjalizacja Marketplace nieudana z powodu błędu sieci lub systemu. Spróbuj 
 	<notification name="MerchantListingFailed">
 		Listowanie na Marketplace nie powiodło się:
 
-        &apos;[ERROR_CODE]&apos;
+&apos;[ERROR_CODE]&apos;
 	</notification>
 	<notification name="MerchantFolderActivationFailed">
 		Aktywacja tego folderu wersji nie powiodła się:
 
-        &apos;[ERROR_CODE]&apos;
+&apos;[ERROR_CODE]&apos;
 	</notification>
 	<notification name="MerchantForceValidateListing">
 		Aby wylistowanie tej rzeczy było możliwe hierarchia w jej zawartości została automatycznie naprawiona.
@@ -1163,7 +1163,7 @@ Zazwyczaj jest to tymczasowy problem. Możesz kontynuować modyfikacje i zapisa�
 		Nie możesz kupić działek dla grupy.
 Nie masz praw kupowania działek dla Twojej aktywnej grupy.
 	</notification>
-	<notification label="Add Friend" name="AddFriendWithMessage">
+	<notification label="Dodaj znajomego" name="AddFriendWithMessage">
 		Znajomi mogą pozwalać na odnajdywanie się wzajemnie na mapie i na otrzymywanie informacji o statusie online.
 
 Zaproponować znajomość [NAME]?
@@ -1407,7 +1407,7 @@ Możesz normalnie używać [APP_NAME], inni użytkownicy będą Cię widzieli po
 	<notification name="AgentComplexityWithVisibility">
 		Twój [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 stopień złożoności awatara] to [AGENT_COMPLEXITY].
 [OVERLIMIT_MSG]
-	<usetemplate ignoretext="Ostrzegaj mnie, gdy stopień złożoności mojego awatara jest zbyt wysoki" name="notifyignore"/>
+		<usetemplate ignoretext="Ostrzegaj mnie, gdy stopień złożoności mojego awatara jest zbyt wysoki" name="notifyignore"/>
 	</notification>
 	<notification name="AgentComplexity">
 		Twój [https://community.secondlife.com/t5/English-Knowledge-Base/Avatar-Rendering-Complexity/ta-p/2967838 stopień złożoności awatara] to [AGENT_COMPLEXITY].
@@ -1793,7 +1793,7 @@ Premium Plus pozwala na [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/m
 		</form>
 	</notification>
 	<notification name="KickAllUsers">
-		Z jakim komunikatem wyrzucić wszystkich użytkowników z regionu?
+		Z jakim komunikatem wyrzucić wszystkich użytkowników ze świata?
 		<form name="form">
 			<input name="message">
 				Administrator wylogował Cię.
@@ -1933,7 +1933,7 @@ Kontynuować?
 	<notification label="Zmiana dostępu do Majątku Lindenów" name="ChangeLindenAccess">
 		Dokonujesz zmiany w liście dostępu Regionu głównego należącego do Lindenów (Regiony Główne, Teen Grid, Orientacja).
 
-Żądana operacja jest wyjątkowo niebezpieczna dla wszystkich Rezydentów przebywających w regionie i powinna być używana wyłącznie w celu zablokowania opcji pozwalającej na przeniesienie obiektów/L$ do/z sieci.
+Żądana operacja jest wyjątkowo niebezpieczna dla wszystkich Rezydentów przebywających w regionie i powinna być używana wyłącznie w celu zablokowania opcji pozwalającej na przeniesienie obiektów/L$ do/ze świata.
 Dodatkowo, zmiany dokonane w Regionie Głównym mogą spowodować problemy przestrzeni serwerowej innych regionów.
 
 Kontynuować?
@@ -2865,7 +2865,7 @@ Nie możesz tutaj latać.
 		Popychanie niedozwolone. Nie możesz tutaj popychać innych chyba, że jesteś właścicielem tej działki.
 	</notification>
 	<notification name="NoVoice">
-		Ta działka nie pozwala na rozmowy głosowe.
+		Ta działka nie pozwala na rozmowy głosowe. Nie będziesz słyszeć, jak ktoś rozmawia.
 	</notification>
 	<notification name="NoBuild">
 		Ta działka nie pozwala na budowanie. Nie możesz tworzyć tutaj obiektów.
@@ -2910,7 +2910,7 @@ Pełne informacje na temat klasyfikacji treści można znaleźć [https://commun
 		Region, do którego próbujesz się dostać, właśnie się wyłącza.
 	</notification>
 	<notification name="URBannedFromRegion">
-		Zostałeś zbanowany w regionie.
+		Zostałeś/aś zbanowany/a w regionie.
 	</notification>
 	<notification name="NoTeenGridAccess">
 		Twoje konto nie może zostać połączone z podanym regionem Teen Grid.
@@ -3808,7 +3808,7 @@ Zmienić tryb i wyłączyć program?
 	</notification>
 	<notification name="ConfirmHideUI">
 		Ta akcja ukryje wszystkie menu i przyciski. Aby je pokazać użyj skrótu [SHORTCUT] ponownie.
-		<usetemplate name="okcancelignore"  notext="Anuluj" ignoretext="Potwierdź przed ukryciem interfejsu"/>
+		<usetemplate name="okcancelignore" notext="Anuluj" ignoretext="Potwierdź przed ukryciem interfejsu"/>
 	</notification>
 	<notification name="PathfindingLinksets_WarnOnPhantom">
 		Niektórym z zaznaczonych zbiorów części zostanie przełączony status Widmowy.
@@ -4851,7 +4851,7 @@ Będzie można użyć http://opensimulator.org/wiki/inventory aby rozwiązać pr
 i kliknij przycisk składania zamówienia.
 Będziesz mógł/a dodać metodę płatności w kasie.
 		<form name="form">
-			<button name="Continue" text="Kontyntynuj" />
+			<button name="Continue" text="Kontynuuj" />
 			<button name="Cancel" text="Anuluj" />
 		</form>
 	</notification>
@@ -5089,18 +5089,6 @@ Jeśli nie zgadzasz się z niniejszymi warunkami użytkowania, nie należy przep
 	<notification name="EnableHiDPI">
 		Włączenie obsługi HiDPI może mieć niekorzystne skutki i pogorszyć wydajność.
 	</notification>
-
-
-
-
-
-
-
-
-
-
-
-
 	<notification name="FailedToFindSettings">
 		Nie można załadować ustawień dla [NAME] z bazy danych.
 	</notification>
@@ -5226,5 +5214,9 @@ Zresetować adres URL do domyślnego?
 		Resetowanie kamery może być zablokowane przez następujące obiekty:
 
 [SOURCES]
+	</notification>
+	<notification label="Rozgrupuj folder" name="UngroupFolder">
+		Rozgrupować folder "[FOLDER_NAME]"?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Tak" />
 	</notification>
 </notifications>

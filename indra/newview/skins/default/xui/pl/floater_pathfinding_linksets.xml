@@ -82,9 +82,11 @@
 		<text name="linksets_name_label">
 			Nazwa
 		</text>
+		<search_editor label="Obiekty według nazwy" name="filter_by_name" />
 		<text name="linksets_desc_label">
 			Opis
 		</text>
+		<search_editor label="Obiekty według opisu" name="filter_by_description" />
 		<combo_box name="filter_by_linkset_use">
 			<combo_box.item label="Filtr po zastosowaniu zbioru..." name="filter_by_linkset_use_none" />
 			<combo_box.item label="Dostępne do przejścia" name="filter_by_linkset_use_walkable" />
