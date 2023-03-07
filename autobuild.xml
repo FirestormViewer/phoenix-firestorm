@@ -988,9 +988,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d3f4d83e7b81673731ece92125473b00</string>
+              <string>ad7b9fc10184e8145731f45ae400bfd1</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.12.2.202209171157_91.1.23_g04c8d56_chromium-91.0.4472.164-linux64-222600157.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.12.2.202210012157_92.0.27_g274abcf_chromium-92.0.4515.159-linux64-222741156.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

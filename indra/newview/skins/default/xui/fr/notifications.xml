@@ -1897,7 +1897,7 @@ jusqu'à [MAX_PREMIUM_PLUS]. [https://secondlife.com/my/account/membership.php? 
 		</form>
 	</notification>
 	<notification name="KickAllUsers">
-		Éjecter tous les résidents actuellement en ligne avec quel message ?
+		Avec quel message éjecter tous les résidents actuellement en ligne ?
 		<form name="form">
 			<input name="message">
 				Un administrateur vous a déconnecté.
@@ -3047,7 +3047,7 @@ Vous ne pouvez pas voler ici.
 		Les bousculades sont interdites dans cette zone. Vous ne pouvez pas pousser les autres à moins que vous soyez propriétaire de ce terrain.
 	</notification>
 	<notification name="NoVoice">
-		Le chat vocal est interdit dans cette zone. Vous n&apos;entendrez personne parler.
+		Les appels vocaux sont interdits dans cette zone. Vous n&apos;entendrez personne parler.
 	</notification>
 	<notification name="NoBuild">
 		La construction est interdite dans cette zone. Vous ne pouvez pas construite ou rezzer d&apos;objets ici.
@@ -5414,5 +5414,9 @@ Remettre l'URL par défaut ?
 La réinitialisation de la caméra peut être empêchée par les objets suivants :
 
 [SOURCES]
+	</notification>
+	<notification label="Dégrouper le dossier" name="UngroupFolder">
+		Dégrouper le dossier "[FOLDER_NAME]" ?
+		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Ok"/>
 	</notification>
 </notifications>

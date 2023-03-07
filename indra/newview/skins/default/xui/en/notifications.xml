@@ -13930,4 +13930,18 @@ Camera reset might be inhibited by the following objects:
 [SOURCES]
   </notification>
 
+  <notification
+   icon="alertmodal.tga"
+   label="Ungroup folder"
+   name="UngroupFolder"
+   type="alertmodal">
+    <unique/>
+    Ungroup the folder "[FOLDER_NAME]"?
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="Okay"/>
+  </notification>
+
 </notifications>

@@ -3004,6 +3004,18 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
             {
                 return;
             }
+
+            // <FS:Ansariel> FIRE-32736: Add confirmation before ungrouping folder
+            LLSD args;
+            args["FOLDER_NAME"] = inv_cat->getName();
+            LLNotificationsUtil::add("UngroupFolder", args, LLSD(),
+                [inv_cat](const LLSD& notification, const LLSD& response)
+            {
+                S32 opt = LLNotificationsUtil::getSelectedOption(notification, response);
+                if (opt == 1)
+                    return;
+            // </FS:Ansariel>
+
             const LLUUID &new_cat_uuid = inv_cat->getParentUUID();
             LLInventoryModel::cat_array_t* cat_array;
             LLInventoryModel::item_array_t* item_array;
@@ -3029,6 +3041,9 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
             }
             gInventory.removeCategory(inv_cat->getUUID());
             gInventory.notifyObservers();
+
+            }); // <FS:Ansariel> FIRE-32736: Add confirmation before ungrouping folder
+
         }
     }
     // <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once

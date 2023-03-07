@@ -485,8 +485,19 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 	LLVector4 objct_size = current_object->getObjectSize();
 
 	// this is basically the data_out but for skinning data
-	auto& skininfo = current_object->getObjectMeshSkinInfo();
-
+	LLPointer<LLMeshSkinInfo> skininfop = current_object->getObjectMeshSkinInfo();
+	if (skininfop == nullptr)
+	{
+		try
+		{
+			skininfop = new LLMeshSkinInfo();
+		}
+		catch (const std::bad_alloc& ex)
+		{
+			LL_WARNS() << "Failed to allocate skin info with exception: " << ex.what()  << LL_ENDL;
+			return false;
+		}
+	}
 	// basically copy-pasted from linden magic
 	LLMatrix4 normalized_transformation;
 	LLMatrix4 mesh_scale;
@@ -513,10 +524,10 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 				mat4_proxy.mMatrix[matrix_i][matrix_j] = bind_matrix_value[matrix_i + (matrix_j * 4)];
 			}
 		}
-		skininfo.mBindShapeMatrix.loadu(mat4_proxy);
+		skininfop->mBindShapeMatrix.loadu(mat4_proxy);
 		// matrix multiplication order matters, so this is as clean as it gets.
 		LLMatrix4a transform{normalized_transformation};
-		matMul(transform, skininfo.mBindShapeMatrix, skininfo.mBindShapeMatrix);
+		matMul(transform, skininfop->mBindShapeMatrix, skininfop->mBindShapeMatrix);
 	}
 
 	// setup joint map
@@ -611,7 +622,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 	// jointlist processing
 	
 	// moved this lambda definition out of the loop below.
-	auto lambda_process_joint_name = [&skininfo, &joint_map](std::string joint_name)
+	auto lambda_process_joint_name = [&skininfo = *skininfop, &joint_map](std::string joint_name)
 	{
 		// looking for internal joint name, otherwise use provided name?
 		// seems weird, but ok.
@@ -695,13 +706,13 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 					}
 				}
 
-				skininfo.mInvBindMatrix.push_back(LLMatrix4a(current_matrix));
+				skininfop->mInvBindMatrix.push_back(LLMatrix4a(current_matrix));
 			}
 		}
 	}
 
 	int jointname_number_iter = 0;
-	for (auto jointname_iterator = skininfo.mJointNames.begin(); jointname_iterator != skininfo.mJointNames.end(); ++jointname_iterator, ++jointname_number_iter)
+	for (auto jointname_iterator = skininfop->mJointNames.begin(); jointname_iterator != skininfop->mJointNames.end(); ++jointname_iterator, ++jointname_number_iter)
 	{
 		std::string name_lookup = jointname_iterator->mName;
 		if (joint_map.find(name_lookup) == joint_map.end())
@@ -710,25 +721,25 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 			continue;
 		}
 
-		if (skininfo.mInvBindMatrix.size() <= jointname_number_iter)
+		if (skininfop->mInvBindMatrix.size() <= jointname_number_iter)
 		{
 			// doesn't seem like a critical fail that should invalidate the entire skin, just break and move on?
 			pushLog("DAE Importer", "WARNING: Requesting out of bounds joint named  " + name_lookup);
 			break;
 		}
 
-		LLMatrix4 newinverse = LLMatrix4(skininfo.mInvBindMatrix[jointname_number_iter].getF32ptr());
+		LLMatrix4 newinverse = LLMatrix4(skininfop->mInvBindMatrix[jointname_number_iter].getF32ptr());
 		auto joint_translation = joint_transforms[name_lookup].getTranslation();
 		newinverse.setTranslation(joint_translation);
-		skininfo.mAlternateBindMatrix.push_back( LLMatrix4a(newinverse) );
+		skininfop->mAlternateBindMatrix.push_back( LLMatrix4a(newinverse) );
 	}
 
-	size_t bind_count = skininfo.mAlternateBindMatrix.size();
-	if ((bind_count > 0) && (bind_count != skininfo.mJointNames.size()))
+	size_t bind_count = skininfop->mAlternateBindMatrix.size();
+	if ((bind_count > 0) && (bind_count != skininfop->mJointNames.size()))
 	{
 		// different number of binds vs jointnames, i hestiate to fail the entire skinmap over this
 		// because it can just be a case of a few additional joints being ignored, unless i'm missing something?
-		pushLog("DAE Importer", "WARNING: " + std::to_string(skininfo.mJointNames.size()) + " joints were found, but " + std::to_string(bind_count) + " binds matrices were made.");
+		pushLog("DAE Importer", "WARNING: " + std::to_string(skininfop->mJointNames.size()) + " joints were found, but " + std::to_string(bind_count) + " binds matrices were made.");
 	}
 
 	//==============================
@@ -964,7 +975,8 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 			weights.push_back(new_wght);
 		}
 	}
-
+	skininfop->updateHash();
+	current_object->setObjectMeshSkinInfo(skininfop);
 	return true;
 }
 
