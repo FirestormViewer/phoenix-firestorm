@@ -158,6 +158,8 @@ protected:
 	// updates click/double-click action keybindngs depending on view values
 	void updateClickActionControls();
 
+    void onAtmosShaderChange();
+
 	// <FS:PP> updates UI Sounds controls depending on values from settings.xml
 	void updateUISoundsControls();
 

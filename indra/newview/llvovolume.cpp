@@ -5727,7 +5727,7 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 			}
 		}
 		
-		// if (type == LLRenderPass::PASS_ALPHA) // <FS:Beq/> always populate the draw_info ptr
+		// if (type == LLRenderPass::PASS_ALPHA) // always populate the draw_info ptr
 		{ //for alpha sorting
 			facep->setDrawInfo(draw_info);
 		}
