@@ -41,6 +41,7 @@
 #include "llinventorypanel.h"
 #include "llinventorybridge.h"
 #include "llinventoryfunctions.h"
+#include "llinventorymodelbackgroundfetch.h"
 #include "llinventoryobserver.h"
 #include "llinventorypanel.h"
 #include "llfloaterpreviewtrash.h"
@@ -209,6 +210,7 @@ public:
                 titem->unpackMessage(item);
                 LL_DEBUGS("Inventory") << "unpacked item '" << titem->getName() << "' in "
                     << titem->getParentUUID() << LL_ENDL;
+                // callback id might be no longer supported
                 U32 callback_id = item["callback_id"].asInteger();
 
                 if (titem->getUUID().notNull())
@@ -454,6 +456,7 @@ LLInventoryModel::LLInventoryModel()
 	mIsNotifyObservers(FALSE),
 	mModifyMask(LLInventoryObserver::ALL),
 	mChangedItemIDs(),
+    mBulckFecthCallbackSlot(),
 	mObservers(),
 	mProtectedCategoriesChangedCallbackConnection(), // <FS:Ansariel> FIRE-29342: Protect folder option
 	mHttpRequestFG(NULL),
@@ -493,6 +496,11 @@ void LLInventoryModel::cleanupInventory()
 		mObservers.erase(iter);
 		delete observer;
 	}
+
+    if (mBulckFecthCallbackSlot.connected())
+    {
+        mBulckFecthCallbackSlot.disconnect();
+    }
 	mObservers.clear();
 
 	// Run down HTTP transport
@@ -872,10 +880,63 @@ void LLInventoryModel::consolidateForType(const LLUUID& main_id, LLFolderType::E
 	}
 }
 
+void LLInventoryModel::ensureCategoryForTypeExists(LLFolderType::EType preferred_type)
+{
+    LLUUID rv = LLUUID::null;
+    LLUUID root_id = gInventory.getRootFolderID();
+    if (LLFolderType::FT_ROOT_INVENTORY == preferred_type)
+    {
+        rv = root_id;
+    }
+    else if (root_id.notNull())
+    {
+        cat_array_t* cats = NULL;
+        cats = get_ptr_in_map(mParentChildCategoryTree, root_id);
+        if (cats)
+        {
+            S32 count = cats->size();
+            for (S32 i = 0; i < count; ++i)
+            {
+                LLViewerInventoryCategory* p_cat = cats->at(i);
+                if (p_cat && p_cat->getPreferredType() == preferred_type)
+                {
+                    const LLUUID& folder_id = cats->at(i)->getUUID();
+                    if (rv.isNull() || folder_id < rv)
+                    {
+                        rv = folder_id;
+                    }
+                }
+            }
+        }
+    }
+
+    if (rv.isNull() && root_id.notNull())
+    {
+
+        if (isInventoryUsable())
+        {
+            createNewCategory(
+                root_id,
+                preferred_type,
+                LLStringUtil::null,
+                [preferred_type](const LLUUID &new_cat_id)
+            {
+                LL_DEBUGS("Inventory") << "Created category: " << new_cat_id
+                    << " for type: " << preferred_type << LL_ENDL;
+            }
+            );
+        }
+        else
+        {
+            LL_WARNS("Inventory") << "Can't create requested folder, type " << preferred_type
+                << " because inventory is not usable" << LL_ENDL;
+        }
+    }
+}
+
 const LLUUID LLInventoryModel::findCategoryUUIDForTypeInRoot(
 	LLFolderType::EType preferred_type,
-	bool create_folder,
-	const LLUUID& root_id)
+	const LLUUID& root_id) const
 {
 	LLUUID rv = LLUUID::null;
 	if(LLFolderType::FT_ROOT_INVENTORY == preferred_type)
@@ -904,18 +965,14 @@ const LLUUID LLInventoryModel::findCategoryUUIDForTypeInRoot(
 		}
 	}
 	
-	if(rv.isNull() && create_folder && root_id.notNull())
+	if(rv.isNull() && root_id.notNull() && preferred_type != LLFolderType::FT_MARKETPLACE_LISTINGS)
 	{
-
-		if (isInventoryUsable())
-		{
-			return createNewCategory(root_id, preferred_type, LLStringUtil::null);
-		}
-		else
-		{
-			LL_WARNS("Inventory") << "Can't create requested folder, type " << preferred_type
-								  << " because inventory is not usable" << LL_ENDL;
-		}
+        // if it does not exists, it should either be added
+        // to createCommonSystemCategories or server should
+        // have set it
+        llassert(false);
+        LL_WARNS("Inventory") << "Tried to find folder, type " << preferred_type
+								  << " but category does not exist" << LL_ENDL;
 	}
 	return rv;
 }
@@ -924,12 +981,12 @@ const LLUUID LLInventoryModel::findCategoryUUIDForTypeInRoot(
 // specifies 'type' as what it defaults to containing. The category is
 // not necessarily only for that type. *NOTE: This will create a new
 // inventory category on the fly if one does not exist.
-const LLUUID LLInventoryModel::findCategoryUUIDForType(LLFolderType::EType preferred_type, bool create_folder)
+const LLUUID LLInventoryModel::findCategoryUUIDForType(LLFolderType::EType preferred_type) const
 {
-	return findCategoryUUIDForTypeInRoot(preferred_type, create_folder, gInventory.getRootFolderID());
+	return findCategoryUUIDForTypeInRoot(preferred_type, gInventory.getRootFolderID());
 }
 
-const LLUUID LLInventoryModel::findUserDefinedCategoryUUIDForType(LLFolderType::EType preferred_type)
+const LLUUID LLInventoryModel::findUserDefinedCategoryUUIDForType(LLFolderType::EType preferred_type) const
 {
     LLUUID cat_id;
     switch (preferred_type)
@@ -960,14 +1017,14 @@ const LLUUID LLInventoryModel::findUserDefinedCategoryUUIDForType(LLFolderType::
     
     if (cat_id.isNull() || !getCategory(cat_id))
     {
-        cat_id = findCategoryUUIDForTypeInRoot(preferred_type, true, getRootFolderID());
+        cat_id = findCategoryUUIDForTypeInRoot(preferred_type, getRootFolderID());
     }
     return cat_id;
 }
 
-const LLUUID LLInventoryModel::findLibraryCategoryUUIDForType(LLFolderType::EType preferred_type, bool create_folder)
+const LLUUID LLInventoryModel::findLibraryCategoryUUIDForType(LLFolderType::EType preferred_type) const
 {
-	return findCategoryUUIDForTypeInRoot(preferred_type, create_folder, gInventory.getLibraryRootFolderID());
+	return findCategoryUUIDForTypeInRoot(preferred_type, gInventory.getLibraryRootFolderID());
 }
 
 LLUUID LLInventoryModel::findCategoryByName(std::string name)
@@ -995,27 +1052,31 @@ LLUUID LLInventoryModel::findCategoryByName(std::string name)
 // Convenience function to create a new category. You could call
 // updateCategory() with a newly generated UUID category, but this
 // version will take care of details like what the name should be
-// based on preferred type. Returns the UUID of the new category.
-//
-// On failure, returns a null UUID.
-// FIXME: callers do not check for or handle a null results currently.
-LLUUID LLInventoryModel::createNewCategory(const LLUUID& parent_id,
+// based on preferred type.
+void LLInventoryModel::createNewCategory(const LLUUID& parent_id,
 										   LLFolderType::EType preferred_type,
 										   const std::string& pname,
 										   inventory_func_type callback)
 {
-	LLUUID id; // Initially null.
 	if (!isInventoryUsable())
 	{
 		LL_WARNS(LOG_INV) << "Inventory is not usable; can't create requested category of type "
 						  << preferred_type << LL_ENDL;
-		return id;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
+		return;
 	}
 
 	if(LLFolderType::lookup(preferred_type) == LLFolderType::badLookup())
 	{
 		LL_DEBUGS(LOG_INV) << "Attempt to create undefined category." << LL_ENDL;
-		return id;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
+		return;
 	}
 
 	if (preferred_type != LLFolderType::FT_NONE)
@@ -1031,33 +1092,64 @@ LLUUID LLInventoryModel::createNewCategory(const LLUUID& parent_id,
 	{
 		name.assign(LLViewerFolderType::lookupNewCategoryName(preferred_type));
 	}
-	
-#ifdef USE_AIS_FOR_NC
-	// D567 currently this doesn't really work due to limitations in
-	// AIS3, also violates the common caller assumption that we can
-	// assign the id and return immediately.
-	if (callback)
+
+	if (AISAPI::isAvailable())
 	{
-		// D567 note that we no longer assign the UUID in the viewer, so various workflows need to change.
 		LLSD new_inventory = LLSD::emptyMap();
 		new_inventory["categories"] = LLSD::emptyArray();
 		LLViewerInventoryCategory cat(LLUUID::null, parent_id, preferred_type, name, gAgent.getID());
 		LLSD cat_sd = cat.asLLSD();
 		new_inventory["categories"].append(cat_sd);
-		AISAPI::CreateInventory(parent_id, new_inventory, callback);
+		AISAPI::CreateInventory(
+            parent_id,
+            new_inventory,
+            [this, callback, parent_id, preferred_type, name] (const LLUUID& new_category)
+        {
+            if (new_category.isNull())
+            {
+                if (callback)
+                {
+                    callback(new_category);
+                }
+                return;
+            }
 
-		return LLUUID::null;
+            LLViewerInventoryCategory* folderp = gInventory.getCategory(new_category);
+            if (!folderp)
+            {
+                // Add the category to the internal representation
+                LLPointer<LLViewerInventoryCategory> cat = new LLViewerInventoryCategory(
+                    new_category,
+                    parent_id,
+                    preferred_type,
+                    name,
+                    gAgent.getID());
+
+                LLInventoryModel::LLCategoryUpdate update(cat->getParentUUID(), 1);
+                accountForUpdate(update);
+
+                cat->setVersion(LLViewerInventoryCategory::VERSION_INITIAL - 1); // accountForUpdate() will icrease version by 1
+                cat->setDescendentCount(0);
+                updateCategory(cat);
+            }
+
+            if (callback)
+            {
+                callback(new_category);
+            }
+        });
+        return;
 	}
-#else
+
 	LLViewerRegion* viewer_region = gAgent.getRegion();
 	std::string url;
 	if ( viewer_region )
 		url = viewer_region->getCapability("CreateInventoryCategory");
 	
-	if (!url.empty() && callback)
+	if (!url.empty())
 	{
 		//Let's use the new capability.
-		
+        LLUUID id;
 		id.generate();
 		LLSD request, body;
 		body["folder_id"] = id;
@@ -1071,48 +1163,13 @@ LLUUID LLInventoryModel::createNewCategory(const LLUUID& parent_id,
 		LL_DEBUGS(LOG_INV) << "Creating category via request: " << ll_pretty_print_sd(request) << LL_ENDL;
         LLCoros::instance().launch("LLInventoryModel::createNewCategoryCoro",
             boost::bind(&LLInventoryModel::createNewCategoryCoro, this, url, body, callback));
-
-		return LLUUID::null;
-	}
-#endif
-
-
-	if (!gMessageSystem)
-	{
-		return LLUUID::null;
+        return;
 	}
 
-	// D567 FIXME this UDP code path needs to be removed. Requires
-	// reworking many of the callers to use callbacks rather than
-	// assuming instant success.
-
-	// Add the category to the internal representation
-	LL_WARNS() << "D567 need to remove this usage" << LL_ENDL;
-	
-	id.generate();
-	LLPointer<LLViewerInventoryCategory> cat =
-		new LLViewerInventoryCategory(id, parent_id, preferred_type, name, gAgent.getID());
-	cat->setVersion(LLViewerInventoryCategory::VERSION_INITIAL - 1); // accountForUpdate() will icrease version by 1
-	cat->setDescendentCount(0);
-	LLCategoryUpdate update(cat->getParentUUID(), 1);
-	accountForUpdate(update);
-	updateCategory(cat);
-
-	LL_DEBUGS(LOG_INV) << "Creating category via UDP message CreateInventoryFolder, type " << preferred_type << LL_ENDL;
-
-	// Create the category on the server. We do this to prevent people
-	// from munging their protected folders.
-	LLMessageSystem* msg = gMessageSystem;
-	msg->newMessage("CreateInventoryFolder");
-	msg->nextBlock("AgentData");
-	msg->addUUID("AgentID", gAgent.getID());
-	msg->addUUID(_PREHASH_SessionID, gAgent.getSessionID());
-	msg->nextBlock("FolderData");
-	cat->packMessage(msg);
-	gAgent.sendReliableMessage();
-
-	// return the folder id of the newly created folder
-	return id;
+    if (callback)
+    {
+        callback(LLUUID::null); // Notify about failure
+    }
 }
 
 void LLInventoryModel::createNewCategoryCoro(std::string url, LLSD postData, inventory_func_type callback)
@@ -1136,12 +1193,20 @@ void LLInventoryModel::createNewCategoryCoro(std::string url, LLSD postData, inv
     if (!status)
     {
         LL_WARNS() << "HTTP failure attempting to create category." << LL_ENDL;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
         return;
     }
 
     if (!result.has("folder_id"))
     {
         LL_WARNS() << "Malformed response contents" << ll_pretty_print_sd(result) << LL_ENDL;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
         return;
     }
 
@@ -1707,7 +1772,7 @@ void LLInventoryModel::updateCategory(const LLViewerInventoryCategory* cat, U32 
 			mask |= LLInventoryObserver::LABEL;
 		}
         // Under marketplace, category labels are quite complex and need extra upate
-        const LLUUID marketplace_id = findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS, false);
+        const LLUUID marketplace_id = findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
         if (marketplace_id.notNull() && isObjectDescendentOf(cat->getUUID(), marketplace_id))
         {
 			mask |= LLInventoryObserver::LABEL;
@@ -1870,17 +1935,13 @@ void LLInventoryModel::changeCategoryParent(LLViewerInventoryCategory* cat,
 	notifyObservers();
 }
 
-void LLInventoryModel::onAISUpdateReceived(const std::string& context, const LLSD& update)
+void LLInventoryModel::rebuildBrockenLinks()
 {
-	LLTimer timer;
-	if (gSavedSettings.getBOOL("DebugAvatarAppearanceMessage"))
-	{
-		dump_sequential_xml(gAgentAvatarp->getFullname() + "_ais_update", update);
-	}
-
-	AISUpdate ais_update(update); // parse update llsd into stuff to do.
-	ais_update.doUpdate(); // execute the updates in the appropriate order.
-	LL_INFOS(LOG_INV) << "elapsed: " << timer.getElapsedTimeF32() << LL_ENDL;
+    for (LLUUID link_id : mPossiblyBrockenLinks)
+    {
+        addChangedMask(LLInventoryObserver::REBUILD, link_id);
+    }
+    mPossiblyBrockenLinks.clear();
 }
 
 // Does not appear to be used currently.
@@ -2516,9 +2577,34 @@ void LLInventoryModel::addItem(LLViewerInventoryItem* item)
 		// The item will show up as a broken link.
 		if (item->getIsBrokenLink())
 		{
-			LL_INFOS(LOG_INV) << "Adding broken link [ name: " << item->getName()
-							  << " itemID: " << item->getUUID()
-							  << " assetID: " << item->getAssetUUID() << " )  parent: " << item->getParentUUID() << LL_ENDL;
+            if (!LLInventoryModelBackgroundFetch::getInstance()->isEverythingFetched())
+            {
+                // isEverythingFetched is actually 'initial' fetch only.
+                // Schedule this link for a recheck once inventory gets loaded
+                mPossiblyBrockenLinks.insert(item->getUUID());
+                if (!mBulckFecthCallbackSlot.connected())
+                {
+                    // Links might take a while to update this way, and there
+                    // might be a lot of them. A better option might be to check
+                    // links periodically with final check on fetch completion.
+                    mBulckFecthCallbackSlot =
+                        LLInventoryModelBackgroundFetch::getInstance()->setAllFoldersFetchedCallback(
+                            []()
+                    {
+                        gInventory.rebuildBrockenLinks();
+                    });
+                }
+                LL_DEBUGS(LOG_INV) << "Scheduling a link to be rebuilt later [ name: " << item->getName()
+                    << " itemID: " << item->getUUID()
+                    << " assetID: " << item->getAssetUUID() << " )  parent: " << item->getParentUUID() << LL_ENDL;
+
+            }
+            else
+            {
+                LL_INFOS(LOG_INV) << "Adding broken link [ name: " << item->getName()
+                    << " itemID: " << item->getUUID()
+                    << " assetID: " << item->getAssetUUID() << " )  parent: " << item->getParentUUID() << LL_ENDL;
+            }
 		}
 		if (item->getIsLinkType())
 		{
@@ -3127,7 +3213,7 @@ void LLInventoryModel::buildParentChildMap()
 		}
 	}
 
-	const BOOL COF_exists = (findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT, FALSE) != LLUUID::null);
+	const BOOL COF_exists = (findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT) != LLUUID::null);
 	sFirstTimeInViewer2 = !COF_exists || gAgent.isFirstLogin();
 
 
@@ -3383,14 +3469,14 @@ LLCore::HttpHandle LLInventoryModel::requestPost(bool foreground,
 
 void LLInventoryModel::createCommonSystemCategories()
 {
-	gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH,true);
-	gInventory.findCategoryUUIDForType(LLFolderType::FT_FAVORITE,true);
-	gInventory.findCategoryUUIDForType(LLFolderType::FT_CALLINGCARD,true);
-	gInventory.findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS,true);
-	gInventory.findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT, true);
-	gInventory.findCategoryUUIDForType(LLFolderType::FT_LANDMARK, true); // folder should exist before user tries to 'landmark this'
-    gInventory.findCategoryUUIDForType(LLFolderType::FT_SETTINGS, true);
-    gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX, true);
+	gInventory.ensureCategoryForTypeExists(LLFolderType::FT_TRASH);
+	gInventory.ensureCategoryForTypeExists(LLFolderType::FT_FAVORITE);
+	gInventory.ensureCategoryForTypeExists(LLFolderType::FT_CALLINGCARD);
+	gInventory.ensureCategoryForTypeExists(LLFolderType::FT_MY_OUTFITS);
+	gInventory.ensureCategoryForTypeExists(LLFolderType::FT_CURRENT_OUTFIT);
+	gInventory.ensureCategoryForTypeExists(LLFolderType::FT_LANDMARK); // folder should exist before user tries to 'landmark this'
+    gInventory.ensureCategoryForTypeExists(LLFolderType::FT_SETTINGS);
+    gInventory.ensureCategoryForTypeExists(LLFolderType::FT_INBOX);
 }
 
 struct LLUUIDAndName
@@ -3614,9 +3700,6 @@ void LLInventoryModel::registerCallbacks(LLMessageSystem* msg)
 	msg->setHandlerFuncFast(_PREHASH_RemoveInventoryItem,
 						processRemoveInventoryItem,
 						NULL);
-	msg->setHandlerFuncFast(_PREHASH_UpdateInventoryFolder,
-						processUpdateInventoryFolder,
-						NULL);
 	msg->setHandlerFuncFast(_PREHASH_RemoveInventoryFolder,
 						processRemoveInventoryFolder,
 						NULL);
@@ -3762,66 +3845,6 @@ void LLInventoryModel::processRemoveInventoryItem(LLMessageSystem* msg, void**)
 	}
 	LLInventoryModel::removeInventoryItem(agent_id, msg, _PREHASH_InventoryData);
 	gInventory.notifyObservers();
-}
-
-// 	static
-void LLInventoryModel::processUpdateInventoryFolder(LLMessageSystem* msg,
-													void**)
-{
-	LL_DEBUGS(LOG_INV) << "LLInventoryModel::processUpdateInventoryFolder()" << LL_ENDL;
-	LLUUID agent_id, folder_id, parent_id;
-	//char name[DB_INV_ITEM_NAME_BUF_SIZE];
-	msg->getUUIDFast(_PREHASH_FolderData, _PREHASH_AgentID, agent_id);
-	if(agent_id != gAgent.getID())
-	{
-		LL_WARNS(LOG_INV) << "Got an UpdateInventoryFolder for the wrong agent."
-						  << LL_ENDL;
-		return;
-	}
-	LLPointer<LLViewerInventoryCategory> lastfolder; // hack
-	cat_array_t folders;
-	update_map_t update;
-	S32 count = msg->getNumberOfBlocksFast(_PREHASH_FolderData);
-	for(S32 i = 0; i < count; ++i)
-	{
-		LLPointer<LLViewerInventoryCategory> tfolder = new LLViewerInventoryCategory(gAgent.getID());
-		lastfolder = tfolder;
-		tfolder->unpackMessage(msg, _PREHASH_FolderData, i);
-		// make sure it's not a protected folder
-		tfolder->setPreferredType(LLFolderType::FT_NONE);
-		folders.push_back(tfolder);
-		// examine update for changes.
-		LLViewerInventoryCategory* folderp = gInventory.getCategory(tfolder->getUUID());
-		if(folderp)
-		{
-			if(tfolder->getParentUUID() == folderp->getParentUUID())
-			{
-				update[tfolder->getParentUUID()];
-			}
-			else
-			{
-				++update[tfolder->getParentUUID()];
-				--update[folderp->getParentUUID()];
-			}
-		}
-		else
-		{
-			++update[tfolder->getParentUUID()];
-		}
-	}
-	gInventory.accountForUpdate(update);
-	for (cat_array_t::iterator it = folders.begin(); it != folders.end(); ++it)
-	{
-		gInventory.updateCategory(*it);
-	}
-	gInventory.notifyObservers();
-
-	// *HACK: Do the 'show' logic for a new item in the inventory.
-	LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel();
-	if (active_panel)
-	{
-		active_panel->setSelection(lastfolder->getUUID(), TAKE_FOCUS_NO);
-	}
 }
 
 // 	static
@@ -4071,10 +4094,20 @@ void LLInventoryModel::processBulkUpdateInventory(LLMessageSystem* msg, void**)
 	for (cat_array_t::iterator cit = folders.begin(); cit != folders.end(); ++cit)
 	{
 		gInventory.updateCategory(*cit);
+
+        // Temporary workaround: just fetch the item using AIS to get missing fields.
+        // If this works fine we might want to extract ids only from the message
+        // then use AIS as a primary fetcher
+        AISAPI::FetchCategoryChildren((*cit)->getUUID(), AISAPI::INVENTORY);
 	}
 	for (item_array_t::iterator iit = items.begin(); iit != items.end(); ++iit)
 	{
 		gInventory.updateItem(*iit);
+
+        // Temporary workaround: just fetch the item using AIS to get missing fields.
+        // If this works fine we might want to extract ids only from the message
+        // then use AIS as a primary fetcher
+        AISAPI::FetchItem((*iit)->getUUID(), AISAPI::INVENTORY);
 	}
 // [SL:KB] - Patch: UI-Notifications | Checked: Catznip-6.5
 	gInventory.notifyObservers(tid);

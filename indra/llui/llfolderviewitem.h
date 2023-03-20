@@ -72,7 +72,8 @@ public:
                                                     text_pad_right,
                                                     arrow_size,
                                                     max_folder_item_overlap;
-        Optional<bool>                              single_folder_mode;
+        Optional<bool>                              single_folder_mode,
+                                                    double_click_override;
 
 		// <FS:Ansariel> Inventory specials
 		Optional<bool>								for_inventory;
@@ -127,6 +128,7 @@ protected:
 								mAllowWear,
                                 mAllowDrop,
                                 mSingleFolderMode,
+                                mDoubleClickOverride,
 								mSelectPending,
 								mIsItemCut;
 

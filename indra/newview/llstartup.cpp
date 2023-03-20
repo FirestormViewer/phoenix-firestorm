@@ -2653,6 +2653,7 @@ bool idle_startup()
 			LLNotificationsUtil::add("InventoryUnusable");
 		}
 		
+        LLInventoryModelBackgroundFetch::instance().start();
 		gInventory.createCommonSystemCategories();
 
 		// It's debatable whether this flag is a good idea - sets all
@@ -3696,7 +3697,7 @@ void LLStartUp::loadInitialOutfit( const std::string& outfit_folder_name,
 	// Not going through the processAgentInitialWearables path, so need to set this here.
 	LLAppearanceMgr::instance().setAttachmentInvLinkEnable(true);
 	// Initiate creation of COF, since we're also bypassing that.
-	gInventory.findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT);
+	gInventory.ensureCategoryForTypeExists(LLFolderType::FT_CURRENT_OUTFIT);
 	
 	ESex gender;
 	if (gender_name == "male")
@@ -3872,6 +3873,11 @@ void reset_login()
 	}
 	LLFloaterReg::hideVisibleInstances();
     LLStartUp::setStartupState( STATE_BROWSER_INIT );
+
+    if (LLVoiceClient::instanceExists())
+    {
+        LLVoiceClient::getInstance()->terminate();
+    }
 
     // Clear any verified certs and verify them again on next login
     // to ensure cert matches server instead of just getting reused

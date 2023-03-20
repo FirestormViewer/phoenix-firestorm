@@ -74,6 +74,7 @@
 // [RLVa:KB] - Checked: 2014-11-02 (RLVa-1.4.11)
 #include "rlvcommon.h"
 // [/RLVa:KB]
+#include "llviewernetwork.h"
 
 // do-nothing ops for use in callbacks.
 void no_op_inventory_func(const LLUUID&) {} 
@@ -457,48 +458,66 @@ void LLViewerInventoryItem::fetchFromServer(void) const
 {
 	if(!mIsComplete)
 	{
-		std::string url; 
+        if (AISAPI::isAvailable()) // AIS v 3
+        {
+            if (gAgent.getID() != mPermissions.getOwner())
+            {
+                AISAPI::FetchItem(mUUID, AISAPI::LIBRARY);
+            }
+            else
+            {
+                AISAPI::FetchItem(mUUID, AISAPI::INVENTORY);
+            }
+        }
+        else
+        {
+            std::string url;
 
-		LLViewerRegion* region = gAgent.getRegion();
-		// we have to check region. It can be null after region was destroyed. See EXT-245
-		if (region)
-		{
-		  if (gAgent.getID() != mPermissions.getOwner())
-		  {
-		      url = region->getCapability("FetchLib2");
-		  }
-		  else
-		  {	
-		      url = region->getCapability("FetchInventory2");
-		  }
-		}
-		else
-		{
-			LL_WARNS(LOG_INV) << "Agent Region is absent" << LL_ENDL;
-		}
+            LLViewerRegion* region = gAgent.getRegion();
+            // we have to check region. It can be null after region was destroyed. See EXT-245
+            if (region)
+            {
+                if (gAgent.getID() != mPermissions.getOwner())
+                {
+                    url = region->getCapability("FetchLib2");
+                }
+                else
+                {
+                    url = region->getCapability("FetchInventory2");
+                }
+            }
+            else
+            {
+                LL_WARNS(LOG_INV) << "Agent Region is absent" << LL_ENDL;
+            }
 
-		if (!url.empty())
-		{
-			LLSD body;
-			body["agent_id"]	= gAgent.getID();
-			body["items"][0]["owner_id"]	= mPermissions.getOwner();
-			body["items"][0]["item_id"]		= mUUID;
+            if (!url.empty())
+            {
+                LLSD body;
+                body["agent_id"] = gAgent.getID();
+                body["items"][0]["owner_id"] = mPermissions.getOwner();
+                body["items"][0]["item_id"] = mUUID;
 
-            LLCore::HttpHandler::ptr_t handler(new LLInventoryModel::FetchItemHttpHandler(body));
-			gInventory.requestPost(true, url, body, handler, "Inventory Item");
-		}
-		else
-		{
-			LLMessageSystem* msg = gMessageSystem;
-			msg->newMessage("FetchInventory");
-			msg->nextBlock("AgentData");
-			msg->addUUID("AgentID", gAgent.getID());
-			msg->addUUID("SessionID", gAgent.getSessionID());
-			msg->nextBlock("InventoryData");
-			msg->addUUID("OwnerID", mPermissions.getOwner());
-			msg->addUUID("ItemID", mUUID);
-			gAgent.sendReliableMessage();
-		}
+                LLCore::HttpHandler::ptr_t handler(new LLInventoryModel::FetchItemHttpHandler(body));
+                gInventory.requestPost(true, url, body, handler, "Inventory Item");
+            }
+            // </FS:Ansariel> OpenSim compatibility
+#ifdef OPENSIM
+            else if (LLGridManager::instance().isInOpenSim()) // no cap
+            {
+                LLMessageSystem* msg = gMessageSystem;
+                msg->newMessage("FetchInventory");
+                msg->nextBlock("AgentData");
+                msg->addUUID("AgentID", gAgent.getID());
+                msg->addUUID("SessionID", gAgent.getSessionID());
+                msg->nextBlock("InventoryData");
+                msg->addUUID("OwnerID", mPermissions.getOwner());
+                msg->addUUID("ItemID", mUUID);
+                gAgent.sendReliableMessage();
+            }
+#endif
+            // </FS:Ansariel>
+        }
 	}
 }
 
@@ -715,7 +734,7 @@ bool LLViewerInventoryCategory::fetch()
 		{
 			LL_WARNS(LOG_INV) << "agent region is null" << LL_ENDL;
 		}
-		if (!url.empty()) //Capability found.  Build up LLSD and use it.
+		if (!url.empty() || AISAPI::isAvailable())
 		{
 			LLInventoryModelBackgroundFetch::instance().start(mUUID, false);			
 		}
@@ -1100,13 +1119,18 @@ void create_notecard_cb(const LLUUID& inv_item)
 
 LLInventoryCallbackManager gInventoryCallbacks;
 
-void create_inventory_item(const LLUUID& agent_id, const LLUUID& session_id,
-						   const LLUUID& parent, const LLTransactionID& transaction_id,
-						   const std::string& name,
-						   const std::string& desc, LLAssetType::EType asset_type,
-						   LLInventoryType::EType inv_type, U8 subtype,
-						   U32 next_owner_perm,
-						   LLPointer<LLInventoryCallback> cb)
+void create_inventory_item(
+    const LLUUID& agent_id,
+    const LLUUID& session_id,
+    const LLUUID& parent_id,
+    const LLTransactionID& transaction_id,
+    const std::string& name,
+    const std::string& desc,
+    LLAssetType::EType asset_type,
+    LLInventoryType::EType inv_type,
+    U8 subtype,
+    U32 next_owner_perm,
+    LLPointer<LLInventoryCallback> cb)
 {
 	//check if name is equal to one of special inventory items names
 	//EXT-5839
@@ -1127,6 +1151,54 @@ void create_inventory_item(const LLUUID& agent_id, const LLUUID& session_id,
 		}
 	}
 
+#ifdef USE_AIS_FOR_NC
+    // D567 18.03.2023 not yet implemented within AIS3
+    if (AISAPI::isAvailable())
+    {
+        LLSD new_inventory = LLSD::emptyMap();
+        new_inventory["items"] = LLSD::emptyArray();
+
+        LLPermissions perms;
+        perms.init(
+            gAgentID,
+            gAgentID,
+            LLUUID::null,
+            LLUUID::null);
+        perms.initMasks(
+            PERM_ALL,
+            PERM_ALL,
+            PERM_NONE,
+            PERM_NONE,
+            next_owner_perm);
+
+        LLUUID null_id;
+        LLPointer<LLViewerInventoryItem> item = new LLViewerInventoryItem(
+            null_id, /*don't know yet*/
+            parent_id,
+            perms,
+            null_id, /*don't know yet*/
+            asset_type,
+            inv_type,
+            server_name,
+            desc,
+            LLSaleInfo(),
+            0,
+            0 /*don't know yet, whenever server creates it*/);
+        LLSD item_sd = item->asLLSD();
+        new_inventory["items"].append(item_sd);
+        AISAPI::completion_t cr = boost::bind(&doInventoryCb, cb, _1);
+        AISAPI::CreateInventory(
+            parent_id,
+            new_inventory,
+            cr);
+        return;
+    }
+    else
+    {
+        LL_WARNS() << "AIS v3 not available" << LL_ENDL;
+    }
+#endif
+
 	LLMessageSystem* msg = gMessageSystem;
 	msg->newMessageFast(_PREHASH_CreateInventoryItem);
 	msg->nextBlock(_PREHASH_AgentData);
@@ -1134,7 +1206,7 @@ void create_inventory_item(const LLUUID& agent_id, const LLUUID& session_id,
 	msg->addUUIDFast(_PREHASH_SessionID, session_id);
 	msg->nextBlock(_PREHASH_InventoryBlock);
 	msg->addU32Fast(_PREHASH_CallbackID, gInventoryCallbacks.registerCB(cb));
-	msg->addUUIDFast(_PREHASH_FolderID, parent);
+	msg->addUUIDFast(_PREHASH_FolderID, parent_id);
 	msg->addUUIDFast(_PREHASH_TransactionID, transaction_id);
 	msg->addU32Fast(_PREHASH_NextOwnerMask, next_owner_perm);
 	msg->addS8Fast(_PREHASH_Type, (S8)asset_type);
@@ -1584,7 +1656,9 @@ void remove_inventory_item(
 				gInventory.onObjectDeletedFromServer(item_id);
 			}
 		}
-		else // no cap
+		// </FS:Ansariel> OpenSim compatibility
+#ifdef OPENSIM
+		else if (LLGridManager::instance().isInOpenSim()) // no cap
 		{
 			LLMessageSystem* msg = gMessageSystem;
 			msg->newMessageFast(_PREHASH_RemoveInventoryItem);
@@ -1603,6 +1677,12 @@ void remove_inventory_item(
 				cb->fire(item_id);
 			}
 		}
+#endif
+		// </FS:Ansariel>
+        else
+        {
+            LL_WARNS(LOG_INV) << "Tried to use inventory without AIS API" << LL_ENDL;
+        }
 	}
 	else
 	{
@@ -1769,7 +1849,9 @@ void purge_descendents_of(const LLUUID& id, LLPointer<LLInventoryCallback> cb)
 			AISAPI::completion_t cr = (cb) ? boost::bind(&doInventoryCb, cb, _1) : AISAPI::completion_t();
 			AISAPI::PurgeDescendents(id, cr);
 		}
-		else // no cap
+		// </FS:Ansariel> OpenSim compatibility
+#ifdef OPENSIM
+		else if (LLGridManager::instance().isInOpenSim()) // no cap
 		{
 			// Fast purge
 			LL_DEBUGS(LOG_INV) << "purge_descendents_of fast case " << cat->getName() << LL_ENDL;
@@ -1791,6 +1873,12 @@ void purge_descendents_of(const LLUUID& id, LLPointer<LLInventoryCallback> cb)
 				cb->fire(id);
 			}
 		}
+#endif
+		// </FS:Ansariel>
+        else
+        {
+            LL_WARNS(LOG_INV) << "Tried to use inventory without AIS API" << LL_ENDL;
+        }
 	}
 }
 
@@ -2066,9 +2154,21 @@ void menu_create_inventory_item(LLInventoryPanel* panel, LLFolderBridge *bridge,
 			parent_id = gInventory.getRootFolderID();
 		}
 
-		LLUUID category = gInventory.createNewCategory(parent_id, preferred_type, LLStringUtil::null);
-		gInventory.notifyObservers();
-		panel->setSelectionByID(category, TRUE);
+        LLHandle<LLPanel> handle = panel->getHandle();
+		gInventory.createNewCategory(
+            parent_id,
+            preferred_type,
+            LLStringUtil::null,
+            [handle](const LLUUID &new_category_id)
+        {
+            gInventory.notifyObservers();
+            LLInventoryPanel* panel = static_cast<LLInventoryPanel*>(handle.get());
+            if (panel)
+            {
+                panel->setSelectionByID(new_category_id, TRUE);
+            }
+        }
+        );
 	}
 	else if ("lsl" == type_name)
 	{
@@ -2271,11 +2371,13 @@ const LLUUID& LLViewerInventoryItem::getThumbnailUUID() const
     }
     if (mThumbnailUUID.isNull() && mType == LLAssetType::AT_LINK)
     {
-        return gInventory.getItem(getLinkedUUID())->getThumbnailUUID();
+        LLViewerInventoryItem *linked_item = gInventory.getItem(mAssetUUID);
+        return linked_item ? linked_item->getThumbnailUUID() : LLUUID::null;
     }
     if (mThumbnailUUID.isNull() && mType == LLAssetType::AT_LINK_FOLDER)
     {
-        return gInventory.getCategory(getLinkedUUID())->getThumbnailUUID();
+        LLViewerInventoryCategory *linked_cat = gInventory.getCategory(mAssetUUID);
+        return linked_cat ? linked_cat->getThumbnailUUID() : LLUUID::null;
     }
     return mThumbnailUUID;
 }

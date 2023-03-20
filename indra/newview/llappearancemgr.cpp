@@ -1777,12 +1777,17 @@ void LLAppearanceMgr::shallowCopyCategory(const LLUUID& src_id, const LLUUID& ds
 	}
 	// USES UDP PATH
 	// D567 needs to carry over thumbnail info
-	LLUUID subfolder_id = gInventory.createNewCategory( parent_id,
-														LLFolderType::FT_NONE,
-														src_cat->getName());
-	shallowCopyCategoryContents(src_id, subfolder_id, cb);
+	gInventory.createNewCategory(
+        parent_id,
+        LLFolderType::FT_NONE,
+        src_cat->getName(),
+        [src_id, cb](const LLUUID &new_id)
+    {
+        LLAppearanceMgr::getInstance()->shallowCopyCategoryContents(src_id, new_id, cb);
 
-	gInventory.notifyObservers();
+        gInventory.notifyObservers();
+    }
+    );
 }
 
 void LLAppearanceMgr::slamCategoryLinks(const LLUUID& src_id, const LLUUID& dst_id,
@@ -3103,21 +3108,27 @@ void LLAppearanceMgr::wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool ap
 
 		// UDP PATH
 		// D567 needs to carry over thumbnail info if present
-		LLUUID new_cat_id = gInventory.createNewCategory(
+		gInventory.createNewCategory(
 			pid,
 			LLFolderType::FT_NONE,
-			name);
+            name,
+            [cat_id, append](const LLUUID& new_cat_id)
+        {
+            LLInventoryModel::cat_array_t* cats;
+            LLInventoryModel::item_array_t* items;
+            gInventory.getDirectDescendentsOf(cat_id, cats, items);
+            // Create a CopyMgr that will copy items, manage its own destruction
+            new LLCallAfterInventoryCopyMgr(
+                *items, new_cat_id, std::string("wear_inventory_category_callback"),
+                boost::bind(&LLAppearanceMgr::wearInventoryCategoryOnAvatar,
+                    LLAppearanceMgr::getInstance(),
+                    gInventory.getCategory(new_cat_id),
+                    append));
 
-		// Create a CopyMgr that will copy items, manage its own destruction
-		new LLCallAfterInventoryCopyMgr(
-			*items, new_cat_id, std::string("wear_inventory_category_callback"),
-			boost::bind(&LLAppearanceMgr::wearInventoryCategoryOnAvatar,
-						LLAppearanceMgr::getInstance(),
-						gInventory.getCategory(new_cat_id),
-						append));
-
-		// BAP fixes a lag in display of created dir.
-		gInventory.notifyObservers();
+            // BAP fixes a lag in display of created dir.
+            gInventory.notifyObservers();
+        }
+        );
 	}
 	else
 	{
@@ -3607,7 +3618,7 @@ void LLAppearanceMgr::copyLibraryGestures()
 
 	// Copy gestures
 	LLUUID lib_gesture_cat_id =
-		gInventory.findLibraryCategoryUUIDForType(LLFolderType::FT_GESTURE,false);
+		gInventory.findLibraryCategoryUUIDForType(LLFolderType::FT_GESTURE);
 	if (lib_gesture_cat_id.isNull())
 	{
 		LL_WARNS() << "Unable to copy gestures, source category not found" << LL_ENDL;
@@ -4502,31 +4513,17 @@ void LLAppearanceMgr::makeNewOutfitLinks(const std::string& new_folder_name, boo
 
 	// First, make a folder in the My Outfits directory.
 	const LLUUID parent_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS);
-	// D567 replace with coros
-    if (AISAPI::isAvailable())
-	{
-		// cap-based category creation was buggy until recently. use
-		// existence of AIS as an indicator the fix is present. Does
-		// not actually use AIS to create the category.
-		inventory_func_type func = boost::bind(&LLAppearanceMgr::onOutfitFolderCreated,this,_1,show_panel);
 
-		// D567 copy thumbnail info from source folder
-		gInventory.createNewCategory(
-			parent_id,
-			LLFolderType::FT_OUTFIT,
-			new_folder_name,
-			func);
-	}
-	else
-	{
-		// UDP PATH, should remove
-		// D567 copy thumbnail info from source folder
-		LLUUID folder_id = gInventory.createNewCategory(
-			parent_id,
-			LLFolderType::FT_OUTFIT,
-			new_folder_name);
-		onOutfitFolderCreated(folder_id, show_panel);
-	}
+    // UDP PATH, should remove
+    // D567 copy thumbnail info from source folder
+    gInventory.createNewCategory(
+        parent_id,
+        LLFolderType::FT_OUTFIT,
+        new_folder_name,
+        [show_panel](const LLUUID &new_cat_id)
+        {
+            LLAppearanceMgr::getInstance()->onOutfitFolderCreated(new_cat_id, show_panel);
+        });
 }
 
 void LLAppearanceMgr::wearBaseOutfit()

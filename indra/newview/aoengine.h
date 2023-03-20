@@ -31,6 +31,7 @@
 #include "lleventtimer.h"
 #include "llextendedstatus.h"
 #include "llsingleton.h"
+#include "llviewerinventory.h"
 #include <boost/signals2.hpp>
 
 class AOTimerCollection
@@ -105,7 +106,7 @@ class AOEngine
 
 		const LLUUID& getAOFolder() const;
 
-		LLUUID addSet(const std::string& name, bool reload = true);
+		bool addSet(const std::string& name, inventory_func_type callback, bool reload = true);
 		bool removeSet(AOSet* set);
 
 		bool addAnimation(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item, bool reload = true);

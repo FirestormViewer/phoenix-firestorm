@@ -817,7 +817,7 @@ LLUUID LLInventoryPanel::getRootFolderID()
                 LLStringExplicit label(mParams.start_folder.name());
                 setLabel(label);
                 
-				root_id = gInventory.findCategoryUUIDForType(preferred_type, false);
+				root_id = gInventory.findCategoryUUIDForType(preferred_type);
 				if (root_id.isNull())
 				{
 					LL_WARNS() << "Could not find folder of type " << preferred_type << LL_ENDL;
@@ -2081,7 +2081,7 @@ void LLInventoryPanel::setSFViewAndOpenFolder(const LLInventoryPanel* panel, con
         LLPanelMainInventory* main_inventory = sidepanel_inventory->getMainInventoryPanel();
         if (main_inventory && panel->hasAncestor(main_inventory) && !main_inventory->isSingleFolderMode())
         {
-            main_inventory->onViewModeClick();
+            main_inventory->toggleViewMode();
             main_inventory->setSingleFolderViewRoot(folder_id, false);
         }
     }

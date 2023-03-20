@@ -107,10 +107,12 @@ public:
 
     void resetFilters();
     void onViewModeClick();
+    void toggleViewMode();
     void onUpFolderClicked();
     void onBackFolderClicked();
     void onForwardFolderClicked();
     void setSingleFolderViewRoot(const LLUUID& folder_id, bool clear_nav_history = true);
+    LLUUID getSingleFolderViewRoot();
     bool isSingleFolderMode() { return mSingleFolderMode; }
 
 	// <FS:Zi> Filter dropdown

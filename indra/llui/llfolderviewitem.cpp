@@ -118,6 +118,7 @@ LLFolderViewItem::Params::Params()
     text_pad("text_pad", 0),
     text_pad_right("text_pad_right", 0),
     single_folder_mode("single_folder_mode", false),
+    double_click_override("double_click_override", false),
     arrow_size("arrow_size", 0),
     max_folder_item_overlap("max_folder_item_overlap", 0),
 	// <FS:Ansariel> Inventory specials
@@ -161,9 +162,10 @@ LLFolderViewItem::LLFolderViewItem(const LLFolderViewItem::Params& p)
     mArrowSize(p.arrow_size),
     mSingleFolderMode(p.single_folder_mode),
     mMaxFolderItemOverlap(p.max_folder_item_overlap),
-	// <FS:Ansariel> Inventory specials
-	mForInventory(p.for_inventory),
-	mItemTopPad(p.item_top_pad)
+    mDoubleClickOverride(p.double_click_override),
+    // <FS:Ansariel> Inventory specials
+    mForInventory(p.for_inventory),
+    mItemTopPad(p.item_top_pad)
 {
 	if (!sColorSetInitialized)
 	{
@@ -2192,16 +2194,19 @@ BOOL LLFolderViewFolder::handleDoubleClick( S32 x, S32 y, MASK mask )
 	}
 	if( !handled )
 	{
-        static LLUICachedControl<U32> double_click_action("MultiModeDoubleClickFolder", false);
-        if (double_click_action == 1)
+        if(mDoubleClickOverride)
         {
-            getViewModelItem()->navigateToFolder(true);
-            return TRUE;
-        }
-        if (double_click_action == 2)
-        {
-            getViewModelItem()->navigateToFolder(false, true);
-            return TRUE;
+            static LLUICachedControl<U32> double_click_action("MultiModeDoubleClickFolder", false);
+            if (double_click_action == 1)
+            {
+                getViewModelItem()->navigateToFolder(true);
+                return TRUE;
+            }
+            if (double_click_action == 2)
+            {
+                getViewModelItem()->navigateToFolder(false, true);
+                return TRUE;
+            }
         }
 		if(mIndentation < x && x < mIndentation + (isCollapsed() ? 0 : mArrowSize) + mTextPad)
 		{

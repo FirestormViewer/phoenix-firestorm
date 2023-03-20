@@ -33,6 +33,8 @@
 #include "llinventorymodel.h"
 #include "llsdutil.h"
 #include "llviewerregion.h"
+#include "llvoavatar.h"
+#include "llvoavatarself.h"
 #include "llinventoryobserver.h"
 #include "llviewercontrol.h"
 
@@ -98,6 +100,7 @@ void AISAPI::CreateInventory(const LLUUID& parentId, const LLSD& newInventory, c
     if (cap.empty())
     {
         LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
+        callback(LLUUID::null);
         return;
     }
 
@@ -373,6 +376,125 @@ void AISAPI::UpdateItem(const LLUUID &itemId, const LLSD &updates, completion_t 
 }
 
 /*static*/
+void AISAPI::FetchItem(const LLUUID &itemId, ITEM_TYPE type, completion_t callback)
+{
+
+	std::string cap;
+
+	cap = (type == INVENTORY) ? getInvCap() : getLibCap();
+	if (cap.empty())
+	{
+		LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
+		return;
+	}
+	std::string url = cap + std::string("/item/") + itemId.asString();
+
+	invokationFn_t getFn = boost::bind(
+		// Humans ignore next line.  It is just a cast to specify which LLCoreHttpUtil::HttpCoroutineAdapter routine overload.
+		static_cast<LLSD(LLCoreHttpUtil::HttpCoroutineAdapter::*)(LLCore::HttpRequest::ptr_t, const std::string &, LLCore::HttpOptions::ptr_t, LLCore::HttpHeaders::ptr_t)>
+		//----
+		// _1 -> httpAdapter
+		// _2 -> httpRequest
+		// _3 -> url
+		// _4 -> body 
+		// _5 -> httpOptions
+		// _6 -> httpHeaders
+		(&LLCoreHttpUtil::HttpCoroutineAdapter::getAndSuspend), _1, _2, _3, _5, _6);
+
+	LLCoprocedureManager::CoProcedure_t proc(boost::bind(&AISAPI::InvokeAISCommandCoro,
+		_1, getFn, url, itemId, LLSD(), callback, FETCHITEM));
+
+	EnqueueAISCommand("FetchItem", proc);
+}
+
+/*static*/
+void AISAPI::FetchCategoryChildren(const LLUUID &catId, ITEM_TYPE type, bool recursive, completion_t callback, S32 depth)
+{
+    std::string cap;
+
+    cap = (type == INVENTORY) ? getInvCap() : getLibCap();
+    if (cap.empty())
+    {
+        LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
+        callback(LLUUID::null);
+        return;
+    }
+    std::string url = cap + std::string("/category/") + catId.asString() + "/children";
+
+    if (recursive)
+    {
+        url += "?depth=*";
+    }
+    else
+    {
+        url += "?depth=" + std::to_string(depth);
+    }
+
+    invokationFn_t getFn = boost::bind(
+        // Humans ignore next line.  It is just a cast to specify which LLCoreHttpUtil::HttpCoroutineAdapter routine overload.
+        static_cast<LLSD(LLCoreHttpUtil::HttpCoroutineAdapter::*)(LLCore::HttpRequest::ptr_t, const std::string &, LLCore::HttpOptions::ptr_t, LLCore::HttpHeaders::ptr_t)>
+        //----
+        // _1 -> httpAdapter
+        // _2 -> httpRequest
+        // _3 -> url
+        // _4 -> body 
+        // _5 -> httpOptions
+        // _6 -> httpHeaders
+        (&LLCoreHttpUtil::HttpCoroutineAdapter::getAndSuspend), _1, _2, _3, _5, _6);
+
+    // get doesn't use body, can pass additional data
+    LLSD body;
+    body["depth"] = recursive ? S32_MAX : depth;
+    LLCoprocedureManager::CoProcedure_t proc(boost::bind(&AISAPI::InvokeAISCommandCoro,
+        _1, getFn, url, catId, body, callback, FETCHCATEGORYCHILDREN));
+
+    EnqueueAISCommand("FetchCategoryChildren", proc);
+}
+
+/*static*/
+void AISAPI::FetchCategoryCategories(const LLUUID &catId, ITEM_TYPE type, bool recursive, completion_t callback, S32 depth)
+{
+    std::string cap;
+
+    cap = (type == INVENTORY) ? getInvCap() : getLibCap();
+    if (cap.empty())
+    {
+        LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
+        return;
+    }
+    std::string url = cap + std::string("/category/") + catId.asString() + "/categories";
+
+    if (recursive)
+    {
+        url += "?depth=*";
+    }
+    else
+    {
+        url += "?depth=" + std::to_string(depth);
+    }
+
+    invokationFn_t getFn = boost::bind(
+        // Humans ignore next line.  It is just a cast to specify which LLCoreHttpUtil::HttpCoroutineAdapter routine overload.
+        static_cast<LLSD(LLCoreHttpUtil::HttpCoroutineAdapter::*)(LLCore::HttpRequest::ptr_t, const std::string &, LLCore::HttpOptions::ptr_t, LLCore::HttpHeaders::ptr_t)>
+        //----
+        // _1 -> httpAdapter
+        // _2 -> httpRequest
+        // _3 -> url
+        // _4 -> body 
+        // _5 -> httpOptions
+        // _6 -> httpHeaders
+        (&LLCoreHttpUtil::HttpCoroutineAdapter::getAndSuspend), _1, _2, _3, _5, _6);
+
+    // get doesn't use body, can pass additional data
+    LLSD body;
+    body["depth"] = depth;
+    LLCoprocedureManager::CoProcedure_t proc(boost::bind(&AISAPI::InvokeAISCommandCoro,
+        _1, getFn, url, catId, body, callback, FETCHCATEGORYCATEGORIES));
+
+    EnqueueAISCommand("FetchCategoryCategories", proc);
+}
+
+/*static*/
 void AISAPI::EnqueueAISCommand(const std::string &procName, LLCoprocedureManager::CoProcedure_t proc)
 {
     LLCoprocedureManager &inst = LLCoprocedureManager::instance();
@@ -423,6 +545,28 @@ void AISAPI::onIdle(void *userdata)
 }
 
 /*static*/
+void AISAPI::onUpdateReceived(const std::string& context, const LLSD& update, COMMAND_TYPE type, const LLSD& request_body)
+{
+    LLTimer timer;
+    if (gSavedSettings.getBOOL("DebugAvatarAppearanceMessage"))
+    {
+        dump_sequential_xml(gAgentAvatarp->getFullname() + "_ais_update", update);
+    }
+    bool is_fetch = (type == FETCHITEM)
+        || (type == FETCHCATEGORYCHILDREN)
+        || (type == FETCHCATEGORYCATEGORIES);
+    // parse update llsd into stuff to do or parse received items.
+    S32 depth = 0;
+    if (is_fetch && request_body.has("depth"))
+    {
+        depth = request_body["depth"].asInteger();
+    }
+    AISUpdate ais_update(update, is_fetch, depth);
+    ais_update.doUpdate(); // execute the updates in the appropriate order.
+    LL_INFOS("Inventory") << "elapsed: " << timer.getElapsedTimeF32() << LL_ENDL;
+}
+
+/*static*/
 void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter, 
         invokationFn_t invoke, std::string url, 
         LLUUID targetId, LLSD body, completion_t callback, COMMAND_TYPE type)
@@ -431,7 +575,7 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
     LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest());
     LLCore::HttpHeaders::ptr_t httpHeaders;
 
-    httpOptions->setTimeout(LLCoreHttpUtil::HTTP_REQUEST_EXPIRY_SECS);
+    httpOptions->setTimeout(180);
 
     LL_DEBUGS("Inventory") << "url: " << url << LL_ENDL;
 
@@ -479,23 +623,42 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
                 }
             }
         }
+        else if (status.getType() == 403)
+        {
+            if (type == FETCHCATEGORYCHILDREN)
+            {
+                LL_DEBUGS("Inventory") << "Fetch failed, content is over imit" << LL_ENDL;
+            }
+        }
         LL_WARNS("Inventory") << "Inventory error: " << status.toString() << LL_ENDL;
         LL_WARNS("Inventory") << ll_pretty_print_sd(result) << LL_ENDL;
     }
 
 	LL_DEBUGS("Inventory") << result << LL_ENDL;
-    gInventory.onAISUpdateReceived("AISCommand", result);
+    onUpdateReceived("AISCommand", result, type, body);
 
     if (callback && !callback.empty())
-    {   
+    {
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: Catznip-3.7
 		uuid_list_t ids;
 		switch (type)
 		{
 			case COPYLIBRARYCATEGORY:
+			case FETCHCATEGORYCATEGORIES:
+			case FETCHCATEGORYCHILDREN:
 				if (result.has("category_id"))
 				{
-					ids.insert(result["category_id"]);
+					ids.emplace(result["category_id"]);
+				}
+				break;
+			case FETCHITEM:
+				if (result.has("linked_id"))
+				{
+					ids.emplace(result["linked_id"]);
+				}
+				else if (result.has("item_id"))
+				{
+					ids.emplace(result["item_id"]);
 				}
 				break;
 			case COPYINVENTORY:
@@ -514,48 +677,80 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
 				break;
 		}
 
-		if (!ids.empty())
+		// Call callback at least once regardless of failure.
+		if (ids.empty())
 		{
-			for (const auto& id : ids)
-				callback(id);
+			ids.emplace(LLUUID::null);
 		}
+
+		for (const auto& id : ids)
+		{
+			callback(id);
+		}
+
 // [/SL:KB]
-//        LLUUID id(LLUUID::null);
-//
-//        if (result.has("category_id") && (type == COPYLIBRARYCATEGORY))
-//	    {
-//		    id = result["category_id"];
-//			callback(id);
-//	    }
-//		if (type == CREATEINVENTORY)
-//		{
-//			if (result.has("_created_categories"))
-//			{
-//				LLSD& cats = result["_created_categories"];
-//				LLSD::array_const_iterator cat_iter;
-//				for (cat_iter = cats.beginArray(); cat_iter != cats.endArray(); ++cat_iter)
-//				{
-//					LLUUID cat_id = *cat_iter;
-//					callback(cat_id);
-//				}
-//			}
-//			if (result.has("_created_items"))
-//			{
-//				LLSD& items = result["_created_items"];
-//				LLSD::array_const_iterator item_iter;
-//				for (item_iter = items.beginArray(); item_iter != items.endArray(); ++item_iter)
-//				{
-//					LLUUID item_id = *item_iter;
-//					callback(item_id);
-//				}
-//			}
-//		}
+  //      bool needs_callback = true;
+  //      LLUUID id(LLUUID::null);
+
+  //      if ( ( (type == COPYLIBRARYCATEGORY)
+  //             || (type == FETCHCATEGORYCATEGORIES)
+  //             || (type == FETCHCATEGORYCHILDREN))
+  //           && result.has("category_id"))
+  //      {
+  //          id = result["category_id"];
+	 //   }
+  //      if (type == FETCHITEM)
+  //      {
+  //          if (result.has("item_id"))
+  //          {
+  //              id = result["item_id"];
+  //          }
+  //          if (result.has("linked_id"))
+  //          {
+  //              id = result["linked_id"];
+  //          }
+  //      }
+		//if (type == CREATEINVENTORY)
+		//{
+  //          // CREATEINVENTORY can have multiple callbacks
+		//	if (result.has("_created_categories"))
+		//	{
+		//		LLSD& cats = result["_created_categories"];
+		//		LLSD::array_const_iterator cat_iter;
+		//		for (cat_iter = cats.beginArray(); cat_iter != cats.endArray(); ++cat_iter)
+		//		{
+		//			LLUUID cat_id = *cat_iter;
+		//			callback(cat_id);
+  //                  needs_callback = false;
+		//		}
+		//	}
+		//	if (result.has("_created_items"))
+		//	{
+		//		LLSD& items = result["_created_items"];
+		//		LLSD::array_const_iterator item_iter;
+		//		for (item_iter = items.beginArray(); item_iter != items.endArray(); ++item_iter)
+		//		{
+		//			LLUUID item_id = *item_iter;
+		//			callback(item_id);
+  //                  needs_callback = false;
+		//		}
+		//	}
+		//}
+
+  //      if (needs_callback)
+  //      {
+  //          // Call callback at least once regardless of failure.
+  //          // UPDATEITEM doesn't expect an id
+  //          callback(id);
+  //      }
     }
 
 }
 
 //-------------------------------------------------------------------------
-AISUpdate::AISUpdate(const LLSD& update)
+AISUpdate::AISUpdate(const LLSD& update, bool fetch, S32 depth)
+: mFetch(fetch)
+, mFetchDepth(depth)
 {
 	parseUpdate(update);
 }
@@ -672,13 +867,13 @@ void AISUpdate::parseContent(const LLSD& update)
 
 	if (update.has("category_id"))
 	{
-		parseCategory(update);
+		parseCategory(update, mFetchDepth);
 	}
 	else
 	{
 		if (update.has("_embedded"))
 		{
-			parseEmbedded(update["_embedded"]);
+			parseEmbedded(update["_embedded"], mFetchDepth);
 		}
 	}
 }
@@ -696,7 +891,12 @@ void AISUpdate::parseItem(const LLSD& item_map)
 	BOOL rv = new_item->unpackMessage(item_map);
 	if (rv)
 	{
-		if (curr_item)
+        if (mFetch)
+        {
+            mItemsCreated[item_id] = new_item;
+            mCatDescendentDeltas[new_item->getParentUUID()];
+        }
+        else if (curr_item)
 		{
 			mItemsUpdated[item_id] = new_item;
 			// This statement is here to cause a new entry with 0
@@ -731,7 +931,19 @@ void AISUpdate::parseLink(const LLSD& link_map)
 	if (rv)
 	{
 		const LLUUID& parent_id = new_link->getParentUUID();
-		if (curr_link)
+        if (mFetch)
+        {
+            LLPermissions default_perms;
+            default_perms.init(gAgent.getID(), gAgent.getID(), LLUUID::null, LLUUID::null);
+            default_perms.initMasks(PERM_NONE, PERM_NONE, PERM_NONE, PERM_NONE, PERM_NONE);
+            new_link->setPermissions(default_perms);
+            LLSaleInfo default_sale_info;
+            new_link->setSaleInfo(default_sale_info);
+            //LL_DEBUGS("Inventory") << "creating link from llsd: " << ll_pretty_print_sd(link_map) << LL_ENDL;
+            mItemsCreated[item_id] = new_link;
+            mCatDescendentDeltas[parent_id];
+        }
+		else if (curr_link)
 		{
 			mItemsUpdated[item_id] = new_link;
 			// This statement is here to cause a new entry with 0
@@ -760,9 +972,27 @@ void AISUpdate::parseLink(const LLSD& link_map)
 }
 
 
-void AISUpdate::parseCategory(const LLSD& category_map)
+void AISUpdate::parseCategory(const LLSD& category_map, S32 depth)
 {
-	LLUUID category_id = category_map["category_id"].asUUID();
+    LLUUID category_id = category_map["category_id"].asUUID();
+    S32 version = LLViewerInventoryCategory::VERSION_UNKNOWN;
+
+    if (category_map.has("version"))
+    {
+        version = category_map["version"].asInteger();
+    }
+
+    LLViewerInventoryCategory *curr_cat = gInventory.getCategory(category_id);
+
+    if (curr_cat
+        && curr_cat->getVersion() > LLViewerInventoryCategory::VERSION_UNKNOWN
+        && version > LLViewerInventoryCategory::VERSION_UNKNOWN
+        && version < curr_cat->getVersion())
+    {
+        LL_WARNS() << "Got stale folder, known: " << curr_cat->getVersion()
+            << ", received: " << version << LL_ENDL;
+        return;
+    }
 
 	// Check descendent count first, as it may be needed
 	// to populate newly created categories
@@ -772,7 +1002,6 @@ void AISUpdate::parseCategory(const LLSD& category_map)
 	}
 
 	LLPointer<LLViewerInventoryCategory> new_cat;
-	LLViewerInventoryCategory *curr_cat = gInventory.getCategory(category_id);
 	if (curr_cat)
 	{
 		// Default to current values where not provided.
@@ -792,13 +1021,33 @@ void AISUpdate::parseCategory(const LLSD& category_map)
     }
 	BOOL rv = new_cat->unpackMessage(category_map);
 	// *NOTE: unpackMessage does not unpack version or descendent count.
-	//if (category_map.has("version"))
-	//{
-	//	mCatVersionsUpdated[category_id] = category_map["version"].asInteger();
-	//}
 	if (rv)
 	{
-		if (curr_cat)
+        if (mFetch)
+        {
+            // set version only if previous one was already known 
+            // or if we are sure this update has full data and embeded items (depth 0+)
+            // since bulk fetch uses this to decide what still needs fetching
+            if (version > LLViewerInventoryCategory::VERSION_UNKNOWN
+                && (depth >= 0 || (curr_cat && curr_cat->getVersion() > LLViewerInventoryCategory::VERSION_UNKNOWN)))
+            {
+                // Set version/descendents for newly fetched categories.
+                LL_DEBUGS("Inventory") << "Setting version to " << version
+                    << " for category " << category_id << LL_ENDL;
+                new_cat->setVersion(version);
+            }
+            uuid_int_map_t::const_iterator lookup_it = mCatDescendentsKnown.find(category_id);
+            if (mCatDescendentsKnown.end() != lookup_it)
+            {
+                S32 descendent_count = lookup_it->second;
+                LL_DEBUGS("Inventory") << "Setting descendents count to " << descendent_count
+                    << " for category " << category_id << LL_ENDL;
+                new_cat->setDescendentCount(descendent_count);
+            }
+            mCategoriesCreated[category_id] = new_cat;
+            mCatDescendentDeltas[new_cat->getParentUUID()];
+        }
+		else if (curr_cat)
 		{
 			mCategoriesUpdated[category_id] = new_cat;
 			// This statement is here to cause a new entry with 0
@@ -839,7 +1088,7 @@ void AISUpdate::parseCategory(const LLSD& category_map)
 	// Check for more embedded content.
 	if (category_map.has("_embedded"))
 	{
-		parseEmbedded(category_map["_embedded"]);
+		parseEmbedded(category_map["_embedded"], depth - 1);
 	}
 }
 
@@ -856,7 +1105,7 @@ void AISUpdate::parseDescendentCount(const LLUUID& category_id, const LLSD& embe
 	}
 }
 
-void AISUpdate::parseEmbedded(const LLSD& embedded)
+void AISUpdate::parseEmbedded(const LLSD& embedded, S32 depth)
 {
 	if (embedded.has("links")) // _embedded in a category
 	{
@@ -872,11 +1121,11 @@ void AISUpdate::parseEmbedded(const LLSD& embedded)
 	}
 	if (embedded.has("categories")) // _embedded in a category
 	{
-		parseEmbeddedCategories(embedded["categories"]);
+		parseEmbeddedCategories(embedded["categories"], depth);
 	}
 	if (embedded.has("category")) // _embedded in a link
 	{
-		parseEmbeddedCategory(embedded["category"]);
+		parseEmbeddedCategory(embedded["category"], depth);
 	}
 }
 
@@ -901,7 +1150,7 @@ void AISUpdate::parseEmbeddedLinks(const LLSD& links)
 	{
 		const LLUUID link_id((*linkit).first);
 		const LLSD& link_map = (*linkit).second;
-		if (mItemIds.end() == mItemIds.find(link_id))
+		if (!mFetch && mItemIds.end() == mItemIds.find(link_id))
 		{
 			LL_DEBUGS("Inventory") << "Ignoring link not in items list " << link_id << LL_ENDL;
 		}
@@ -917,7 +1166,7 @@ void AISUpdate::parseEmbeddedItem(const LLSD& item)
 	// a single item (_embedded in a link)
 	if (item.has("item_id"))
 	{
-		if (mItemIds.end() != mItemIds.find(item["item_id"].asUUID()))
+		if (mFetch || mItemIds.end() != mItemIds.find(item["item_id"].asUUID()))
 		{
 			parseItem(item);
 		}
@@ -933,7 +1182,7 @@ void AISUpdate::parseEmbeddedItems(const LLSD& items)
 	{
 		const LLUUID item_id((*itemit).first);
 		const LLSD& item_map = (*itemit).second;
-		if (mItemIds.end() == mItemIds.find(item_id))
+		if (!mFetch && mItemIds.end() == mItemIds.find(item_id))
 		{
 			LL_DEBUGS("Inventory") << "Ignoring item not in items list " << item_id << LL_ENDL;
 		}
@@ -944,19 +1193,19 @@ void AISUpdate::parseEmbeddedItems(const LLSD& items)
 	}
 }
 
-void AISUpdate::parseEmbeddedCategory(const LLSD& category)
+void AISUpdate::parseEmbeddedCategory(const LLSD& category, S32 depth)
 {
 	// a single category (_embedded in a link)
 	if (category.has("category_id"))
 	{
-		if (mCategoryIds.end() != mCategoryIds.find(category["category_id"].asUUID()))
+		if (mFetch || mCategoryIds.end() != mCategoryIds.find(category["category_id"].asUUID()))
 		{
-			parseCategory(category);
+			parseCategory(category, depth);
 		}
 	}
 }
 
-void AISUpdate::parseEmbeddedCategories(const LLSD& categories)
+void AISUpdate::parseEmbeddedCategories(const LLSD& categories, S32 depth)
 {
 	// a map of categories (_embedded in a category)
 	for(LLSD::map_const_iterator categoryit = categories.beginMap(),
@@ -965,13 +1214,13 @@ void AISUpdate::parseEmbeddedCategories(const LLSD& categories)
 	{
 		const LLUUID category_id((*categoryit).first);
 		const LLSD& category_map = (*categoryit).second;
-		if (mCategoryIds.end() == mCategoryIds.find(category_id))
+		if (!mFetch && mCategoryIds.end() == mCategoryIds.find(category_id))
 		{
 			LL_DEBUGS("Inventory") << "Ignoring category not in categories list " << category_id << LL_ENDL;
 		}
 		else
 		{
-			parseCategory(category_map);
+			parseCategory(category_map, depth);
 		}
 	}
 }
