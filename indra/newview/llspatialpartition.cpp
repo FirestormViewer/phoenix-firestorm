@@ -70,8 +70,6 @@ bool LLSpatialGroup::sNoDelete = false;
 static F32 sLastMaxTexPriority = 1.f;
 static F32 sCurMaxTexPriority = 1.f;
 
-bool LLSpatialPartition::sTeleportRequested = false;
-
 //static counter for frame to switch LOD on
 
 void sg_assert(BOOL expr)
@@ -1318,8 +1316,6 @@ void drawBoxOutline(const LLVector4a& pos, const LLVector4a& size)
 class LLOctreeDirty : public OctreeTraveler
 {
 public:
-	LLOctreeDirty(bool no_rebuild) : mNoRebuild(no_rebuild){}
-
 	virtual void visit(const OctreeNode* state)
 	{
 		LLSpatialGroup* group = (LLSpatialGroup*) state->getListener(0);
@@ -1332,7 +1328,7 @@ public:
 			{
 				continue;
 			}
-			if (!mNoRebuild && drawable->getVObj().notNull() && !group->getSpatialPartition()->mRenderByGroup)
+			if (drawable->getVObj().notNull() && !group->getSpatialPartition()->mRenderByGroup)
 			{
 				gPipeline.markRebuild(drawable, LLDrawable::REBUILD_ALL, TRUE);
 			}
@@ -1344,9 +1340,6 @@ public:
 			traverse(bridge->mOctree);
 		}
 	}
-
-private:
-	BOOL mNoRebuild;
 };
 
 void LLSpatialPartition::restoreGL()
@@ -1355,7 +1348,7 @@ void LLSpatialPartition::restoreGL()
 
 void LLSpatialPartition::resetVertexBuffers()
 {
-	LLOctreeDirty dirty(sTeleportRequested);
+	LLOctreeDirty dirty;
 	dirty.traverse(mOctree);
 }
 
@@ -3151,6 +3144,60 @@ void renderAgentTarget(LLVOAvatar* avatar)
 	}
 }
 
+static void setTextureAreaDebugText(LLDrawable* drawablep)
+{
+    LLVOVolume* vobjp = drawablep->getVOVolume();
+
+    if (vobjp)
+    {
+        if (drawablep->mDistanceWRTCamera < 32.f)
+        {
+            std::ostringstream str;
+
+            //for (S32 i = 0; i < vobjp->getNumTEs(); ++i)
+            S32 i = 0;
+            {
+                if (i < drawablep->getNumFaces())
+                {
+                    LLFace* facep = drawablep->getFace(i);
+
+                    if (facep)
+                    {
+                        LLViewerTexture* imagep = facep->getTexture();
+
+                        if (imagep)
+                        {
+                            str << llformat("D - %.2f", sqrtf(imagep->getMaxVirtualSize()));
+                        }
+
+                        imagep = vobjp->getTENormalMap(i);
+
+                        if (imagep && imagep != LLViewerFetchedTexture::sDefaultImagep)
+                        {
+                            str << llformat("\nN - %.2f", sqrtf(imagep->getMaxVirtualSize()));
+                        }
+
+                        imagep = vobjp->getTESpecularMap(i);
+
+                        if (imagep && imagep != LLViewerFetchedTexture::sDefaultImagep)
+                        {
+                            str << llformat("\nS - %.2f", sqrtf(imagep->getMaxVirtualSize()));
+                        }
+
+                        str << "\n\n";
+                    }
+
+                    vobjp->setDebugText(str.str());
+                }
+            }
+        }
+        else
+        {
+            vobjp->setDebugText(".");
+        }
+    }
+}
+
 class LLOctreeRenderNonOccluded : public OctreeTraveler
 {
 public:
@@ -3239,7 +3286,12 @@ public:
 					size.mul(0.5f);
 					drawBoxOutline(center, size);
 				}
-			}	
+			}
+
+            if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_TEXTURE_AREA))
+            {
+                setTextureAreaDebugText(drawable);
+            }
 
 			/*if (drawable->getVOVolume() && gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_TEXTURE_PRIORITY))
 			{
@@ -3570,6 +3622,7 @@ void LLSpatialPartition::renderDebug()
 									  LLPipeline::RENDER_DEBUG_NORMALS |
 									  LLPipeline::RENDER_DEBUG_POINTS |
 									  //LLPipeline::RENDER_DEBUG_TEXTURE_PRIORITY |
+                                      LLPipeline::RENDER_DEBUG_TEXTURE_AREA |
 									  LLPipeline::RENDER_DEBUG_TEXTURE_ANIM |
 									  LLPipeline::RENDER_DEBUG_RAYCAST |
 									  LLPipeline::RENDER_DEBUG_AVATAR_VOLUME |

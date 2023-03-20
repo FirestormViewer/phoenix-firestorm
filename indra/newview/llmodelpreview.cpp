@@ -972,7 +972,9 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
 
     // three possible file extensions, .dae .gltf .glb
     // check for .dae and if not then assume one of the .gl??
-    if (std::string::npos != filename.rfind(".dae"))
+    std::string filename_lc(filename);
+    LLStringUtil::toLower(filename_lc);
+    if (std::string::npos != filename_lc.rfind(".dae"))
     {
         // <FS> allow LOD suffix configuration
         std::array<std::string, LLModel::NUM_LODS> lod_suffix;

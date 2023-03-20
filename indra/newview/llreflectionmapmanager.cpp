@@ -94,7 +94,7 @@ void LLReflectionMapManager::update()
 
     if (!mRenderTarget.isComplete())
     {
-        U32 color_fmt = GL_RGB16;
+        U32 color_fmt = GL_RGB16F;
         U32 targetRes = mProbeResolution * 4; // super sample
         mRenderTarget.allocate(targetRes, targetRes, color_fmt, true);
     }
@@ -107,7 +107,7 @@ void LLReflectionMapManager::update()
         mMipChain.resize(count);
         for (int i = 0; i < count; ++i)
         {
-            mMipChain[i].allocate(res, res, GL_RGB16);
+            mMipChain[i].allocate(res, res, GL_RGB16F);
             res /= 2;
         }
     }
@@ -815,7 +815,7 @@ void LLReflectionMapManager::updateUniforms()
 
     F32 ambscale = gCubeSnapshot && !isRadiancePass() ? 0.f : 1.f;
     F32 radscale = gCubeSnapshot && !isRadiancePass() ? 0.5f : 1.f;
-
+    
     for (auto* refmap : mReflectionMaps)
     {
         if (refmap == nullptr)

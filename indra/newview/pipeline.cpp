@@ -323,7 +323,6 @@ bool	LLPipeline::sDelayVBUpdate = true;
 bool	LLPipeline::sAutoMaskAlphaDeferred = true;
 bool	LLPipeline::sAutoMaskAlphaNonDeferred = false;
 bool	LLPipeline::sRenderTransparentWater = true;
-bool	LLPipeline::sRenderBump = true;
 bool	LLPipeline::sBakeSunlight = false;
 bool	LLPipeline::sNoAlpha = false;
 bool	LLPipeline::sUseFarClip = true;
@@ -356,18 +355,6 @@ static LLPipelineListener sPipelineListener;
 static LLCullResult* sCull = NULL;
 
 void validate_framebuffer_object();
-
-// override the projection_matrix uniform on the given shader to that which would be set by the main camera
-void set_camera_projection_matrix(LLGLSLShader& shader)
-{
-    auto          camProj = LLViewerCamera::getInstance()->getProjection();
-    glh::matrix4f projection = get_current_projection();
-    projection.set_row(0, glh::vec4f(camProj.mMatrix[0][0], camProj.mMatrix[0][1], camProj.mMatrix[0][2], camProj.mMatrix[0][3]));
-    projection.set_row(0, glh::vec4f(camProj.mMatrix[1][0], camProj.mMatrix[1][1], camProj.mMatrix[1][2], camProj.mMatrix[1][3]));
-    projection.set_row(0, glh::vec4f(camProj.mMatrix[2][0], camProj.mMatrix[2][1], camProj.mMatrix[2][2], camProj.mMatrix[2][3]));
-    projection.set_row(0, glh::vec4f(camProj.mMatrix[3][0], camProj.mMatrix[3][1], camProj.mMatrix[3][2], camProj.mMatrix[3][3]));
-    shader.uniformMatrix4fv(LLShaderMgr::PROJECTION_MATRIX, 1, FALSE, projection.m);
-}
 
 // Add color attachments for deferred rendering
 // target -- RenderTarget to add attachments to
@@ -434,7 +421,6 @@ void LLPipeline::init()
 	gOctreeMaxCapacity = gSavedSettings.getU32("OctreeMaxNodeCapacity");
 	gOctreeMinSize = gSavedSettings.getF32("OctreeMinimumNodeSize");
 	sDynamicLOD = gSavedSettings.getBOOL("RenderDynamicLOD");
-    sRenderBump = TRUE; // DEPRECATED -- gSavedSettings.getBOOL("RenderObjectBump");
 	sRenderAttachedLights = gSavedSettings.getBOOL("RenderAttachedLights");
 	sRenderAttachedParticles = gSavedSettings.getBOOL("RenderAttachedParticles");
 
@@ -1065,12 +1051,6 @@ void LLPipeline::updateRenderTransparentWater()
     sRenderTransparentWater = gSavedSettings.getBOOL("RenderTransparentWater");
 }
 
-//static
-void LLPipeline::updateRenderBump()
-{
-    sRenderBump = TRUE; // DEPRECATED -- gSavedSettings.getBOOL("RenderObjectBump");
-}
-
 // static
 void LLPipeline::refreshCachedSettings()
 {
@@ -1300,45 +1280,43 @@ void LLPipeline::createGLBuffers()
     mRT->width = 0;
     mRT->height = 0;
 
-    if (sRenderDeferred)
-    {
-		if (!mNoiseMap)
+    
+	if (!mNoiseMap)
+	{
+		const U32 noiseRes = 128;
+		LLVector3 noise[noiseRes*noiseRes];
+
+		F32 scaler = gSavedSettings.getF32("RenderDeferredNoise")/100.f;
+		for (U32 i = 0; i < noiseRes*noiseRes; ++i)
 		{
-			const U32 noiseRes = 128;
-			LLVector3 noise[noiseRes*noiseRes];
+			noise[i] = LLVector3(ll_frand()-0.5f, ll_frand()-0.5f, 0.f);
+			noise[i].normVec();
+			noise[i].mV[2] = ll_frand()*scaler+1.f-scaler/2.f;
+		}
 
-			F32 scaler = gSavedSettings.getF32("RenderDeferredNoise")/100.f;
-			for (U32 i = 0; i < noiseRes*noiseRes; ++i)
-			{
-				noise[i] = LLVector3(ll_frand()-0.5f, ll_frand()-0.5f, 0.f);
-				noise[i].normVec();
-				noise[i].mV[2] = ll_frand()*scaler+1.f-scaler/2.f;
-			}
-
-			LLImageGL::generateTextures(1, &mNoiseMap);
+		LLImageGL::generateTextures(1, &mNoiseMap);
 			
-			gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_TEXTURE, mNoiseMap);
-			LLImageGL::setManualImage(LLTexUnit::getInternalType(LLTexUnit::TT_TEXTURE), 0, GL_RGB16F, noiseRes, noiseRes, GL_RGB, GL_FLOAT, noise, false);
-			gGL.getTexUnit(0)->setTextureFilteringOption(LLTexUnit::TFO_POINT);
-		}
-
-		if (!mTrueNoiseMap)
-		{
-			const U32 noiseRes = 128;
-			F32 noise[noiseRes*noiseRes*3];
-			for (U32 i = 0; i < noiseRes*noiseRes*3; i++)
-			{
-				noise[i] = ll_frand()*2.0-1.0;
-			}
-
-			LLImageGL::generateTextures(1, &mTrueNoiseMap);
-			gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_TEXTURE, mTrueNoiseMap);
-			LLImageGL::setManualImage(LLTexUnit::getInternalType(LLTexUnit::TT_TEXTURE), 0, GL_RGB16F, noiseRes, noiseRes, GL_RGB,GL_FLOAT, noise, false);
-			gGL.getTexUnit(0)->setTextureFilteringOption(LLTexUnit::TFO_POINT);
-		}
-
-		createLUTBuffers();
+		gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_TEXTURE, mNoiseMap);
+		LLImageGL::setManualImage(LLTexUnit::getInternalType(LLTexUnit::TT_TEXTURE), 0, GL_RGB16F, noiseRes, noiseRes, GL_RGB, GL_FLOAT, noise, false);
+		gGL.getTexUnit(0)->setTextureFilteringOption(LLTexUnit::TFO_POINT);
 	}
+
+	if (!mTrueNoiseMap)
+	{
+		const U32 noiseRes = 128;
+		F32 noise[noiseRes*noiseRes*3];
+		for (U32 i = 0; i < noiseRes*noiseRes*3; i++)
+		{
+			noise[i] = ll_frand()*2.0-1.0;
+		}
+
+		LLImageGL::generateTextures(1, &mTrueNoiseMap);
+		gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_TEXTURE, mTrueNoiseMap);
+		LLImageGL::setManualImage(LLTexUnit::getInternalType(LLTexUnit::TT_TEXTURE), 0, GL_RGB16F, noiseRes, noiseRes, GL_RGB,GL_FLOAT, noise, false);
+		gGL.getTexUnit(0)->setTextureFilteringOption(LLTexUnit::TFO_POINT);
+	}
+
+	createLUTBuffers();
 
 	gBumpImageList.restoreGL();
 }
@@ -1350,70 +1328,67 @@ F32 lerpf(F32 a, F32 b, F32 w)
 
 void LLPipeline::createLUTBuffers()
 {
-	if (sRenderDeferred)
+	if (!mLightFunc)
 	{
-		if (!mLightFunc)
+		U32 lightResX = gSavedSettings.getU32("RenderSpecularResX");
+		U32 lightResY = gSavedSettings.getU32("RenderSpecularResY");
+		F32* ls = new F32[lightResX*lightResY];
+		F32 specExp = gSavedSettings.getF32("RenderSpecularExponent");
+        // Calculate the (normalized) blinn-phong specular lookup texture. (with a few tweaks)
+		for (U32 y = 0; y < lightResY; ++y)
 		{
-			U32 lightResX = gSavedSettings.getU32("RenderSpecularResX");
-			U32 lightResY = gSavedSettings.getU32("RenderSpecularResY");
-			F32* ls = new F32[lightResX*lightResY];
-			F32 specExp = gSavedSettings.getF32("RenderSpecularExponent");
-            // Calculate the (normalized) blinn-phong specular lookup texture. (with a few tweaks)
-			for (U32 y = 0; y < lightResY; ++y)
+			for (U32 x = 0; x < lightResX; ++x)
 			{
-				for (U32 x = 0; x < lightResX; ++x)
-				{
-					ls[y*lightResX+x] = 0;
-					F32 sa = (F32) x/(lightResX-1);
-					F32 spec = (F32) y/(lightResY-1);
-					F32 n = spec * spec * specExp;
+				ls[y*lightResX+x] = 0;
+				F32 sa = (F32) x/(lightResX-1);
+				F32 spec = (F32) y/(lightResY-1);
+				F32 n = spec * spec * specExp;
 					
-					// Nothing special here.  Just your typical blinn-phong term.
-					spec = powf(sa, n);
+				// Nothing special here.  Just your typical blinn-phong term.
+				spec = powf(sa, n);
 					
-					// Apply our normalization function.
-					// Note: This is the full equation that applies the full normalization curve, not an approximation.
-					// This is fine, given we only need to create our LUT once per buffer initialization.
-					spec *= (((n + 2) * (n + 4)) / (8 * F_PI * (powf(2, -n/2) + n)));
+				// Apply our normalization function.
+				// Note: This is the full equation that applies the full normalization curve, not an approximation.
+				// This is fine, given we only need to create our LUT once per buffer initialization.
+				spec *= (((n + 2) * (n + 4)) / (8 * F_PI * (powf(2, -n/2) + n)));
 
-					// Since we use R16F, we no longer have a dynamic range issue we need to work around here.
-					// Though some older drivers may not like this, newer drivers shouldn't have this problem.
-					ls[y*lightResX+x] = spec;
-				}
+				// Since we use R16F, we no longer have a dynamic range issue we need to work around here.
+				// Though some older drivers may not like this, newer drivers shouldn't have this problem.
+				ls[y*lightResX+x] = spec;
 			}
-			
-			U32 pix_format = GL_R16F;
-#if LL_DARWIN
-			// Need to work around limited precision with 10.6.8 and older drivers
-			//
-			pix_format = GL_R32F;
-#endif
-			LLImageGL::generateTextures(1, &mLightFunc);
-			gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_TEXTURE, mLightFunc);
-			LLImageGL::setManualImage(LLTexUnit::getInternalType(LLTexUnit::TT_TEXTURE), 0, pix_format, lightResX, lightResY, GL_RED, GL_FLOAT, ls, false);
-			gGL.getTexUnit(0)->setTextureAddressMode(LLTexUnit::TAM_CLAMP);
-			gGL.getTexUnit(0)->setTextureFilteringOption(LLTexUnit::TFO_TRILINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			
-			delete [] ls;
 		}
-
-        mPbrBrdfLut.allocate(512, 512, GL_RG16F);
-        mPbrBrdfLut.bindTarget();
-        gDeferredGenBrdfLutProgram.bind();
-
-        gGL.begin(LLRender::TRIANGLE_STRIP);
-        gGL.vertex2f(-1, -1);
-        gGL.vertex2f(-1, 1);
-        gGL.vertex2f(1, -1);
-        gGL.vertex2f(1, 1);
-        gGL.end();
-        gGL.flush();
-
-        gDeferredGenBrdfLutProgram.unbind();
-        mPbrBrdfLut.flush();
+			
+		U32 pix_format = GL_R16F;
+#if LL_DARWIN
+		// Need to work around limited precision with 10.6.8 and older drivers
+		//
+		pix_format = GL_R32F;
+#endif
+		LLImageGL::generateTextures(1, &mLightFunc);
+		gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_TEXTURE, mLightFunc);
+		LLImageGL::setManualImage(LLTexUnit::getInternalType(LLTexUnit::TT_TEXTURE), 0, pix_format, lightResX, lightResY, GL_RED, GL_FLOAT, ls, false);
+		gGL.getTexUnit(0)->setTextureAddressMode(LLTexUnit::TAM_CLAMP);
+		gGL.getTexUnit(0)->setTextureFilteringOption(LLTexUnit::TFO_TRILINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			
+		delete [] ls;
 	}
+
+    mPbrBrdfLut.allocate(512, 512, GL_RG16F);
+    mPbrBrdfLut.bindTarget();
+    gDeferredGenBrdfLutProgram.bind();
+
+    gGL.begin(LLRender::TRIANGLE_STRIP);
+    gGL.vertex2f(-1, -1);
+    gGL.vertex2f(-1, 1);
+    gGL.vertex2f(1, -1);
+    gGL.vertex2f(1, 1);
+    gGL.end();
+    gGL.flush();
+
+    gDeferredGenBrdfLutProgram.unbind();
+    mPbrBrdfLut.flush();
 }
 
 
@@ -1444,11 +1419,6 @@ bool LLPipeline::shadersLoaded()
 }
 
 bool LLPipeline::canUseWindLightShaders() const
-{
-    return true;
-}
-
-bool LLPipeline::canUseWindLightShadersOnObjects() const
 {
     return true;
 }
@@ -2568,7 +2538,7 @@ void LLPipeline::doOcclusion(LLCamera& camera)
         gGL.setColorMask(true, true);
     }
 
-    if (LLPipeline::sUseOcclusion > 1 && !LLSpatialPartition::sTeleportRequested &&
+    if (LLPipeline::sUseOcclusion > 1 &&
 		(sCull->hasOcclusionGroups() || LLVOCachePartition::sNeedsOcclusionCheck))
 	{
 		LLVertexBuffer::unbind();
@@ -4484,6 +4454,8 @@ extern std::set<LLSpatialGroup*> visible_selected_groups;
 
 void LLPipeline::renderDebug()
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
+
 	assertInitialized();
 
 	bool hud_only = hasRenderType(LLPipeline::RENDER_TYPE_HUD);
@@ -4868,9 +4840,6 @@ void LLPipeline::renderDebug()
 
         bindDeferredShader(gReflectionProbeDisplayProgram, NULL);
         mScreenTriangleVB->setBuffer();
-
-        // Provide our projection matrix.
-        set_camera_projection_matrix(gReflectionProbeDisplayProgram);
 
         LLGLEnable blend(GL_BLEND);
         LLGLDepthTest depth(GL_FALSE);
@@ -7577,40 +7546,6 @@ void LLPipeline::renderFinalize()
 
         if (RenderScreenSpaceReflections && !gCubeSnapshot)
         {
-#if 0
-            LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("renderDeferredLighting - screen space reflections");
-            LL_PROFILE_GPU_ZONE("screen space reflections");
-
-            bindDeferredShader(gPostScreenSpaceReflectionProgram, NULL);
-            mScreenTriangleVB->setBuffer();
-
-            set_camera_projection_matrix(gPostScreenSpaceReflectionProgram);
-
-            // We need linear depth.
-            static LLStaticHashedString zfar("zFar");
-            static LLStaticHashedString znear("zNear");
-            float                       nearClip = LLViewerCamera::getInstance()->getNear();
-            float                       farClip  = LLViewerCamera::getInstance()->getFar();
-            gPostScreenSpaceReflectionProgram.uniform1f(zfar, farClip);
-            gPostScreenSpaceReflectionProgram.uniform1f(znear, nearClip);
-
-            S32 channel = gPostScreenSpaceReflectionProgram.enableTexture(LLShaderMgr::DIFFUSE_MAP, screenTarget()->getUsage());
-            if (channel > -1)
-            {
-				screenTarget()->bindTexture(0, channel, LLTexUnit::TFO_POINT);
-            }
-
-            {
-                LLGLDisable blend(GL_BLEND);
-                LLGLDepthTest depth(GL_TRUE, GL_FALSE, GL_ALWAYS);
-
-                stop_glerror();
-                mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
-                stop_glerror();
-            }
-
-            unbindDeferredShader(gPostScreenSpaceReflectionProgram);
-#else
             LL_PROFILE_GPU_ZONE("ssr copy");
             LLGLDepthTest depth(GL_TRUE, GL_TRUE, GL_ALWAYS);
 
@@ -7632,7 +7567,6 @@ void LLPipeline::renderFinalize()
             mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
 
             dst.flush();
-#endif
         }
 
         screenTarget()->bindTarget();
@@ -7655,6 +7589,12 @@ void LLPipeline::renderFinalize()
             {
 				screenTarget()->bindTexture(0, channel, LLTexUnit::TFO_POINT);
             }
+
+			channel = gDeferredPostGammaCorrectProgram.enableTexture(LLShaderMgr::DEFERRED_EMISSIVE, screenTarget()->getUsage());
+			if (channel > -1)
+			{
+				mGlow[1].bindTexture(0, channel, LLTexUnit::TFO_BILINEAR);
+			}
 
             gDeferredPostGammaCorrectProgram.uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, screenTarget()->getWidth(), screenTarget()->getHeight());
 
@@ -7683,8 +7623,8 @@ void LLPipeline::renderFinalize()
 		bool multisample = RenderFSAASamples > 1 && mRT->fxaaBuffer.isComplete();
 		LLGLSLShader* shader = &gGlowCombineProgram;
 
-		S32 width = mRT->screen.getWidth();
-		S32 height = mRT->screen.getHeight();
+		S32 width = screenTarget()->getWidth();
+		S32 height = screenTarget()->getHeight();
 
 		S32 channel = -1;
 
@@ -7702,10 +7642,10 @@ void LLPipeline::renderFinalize()
 			shader->bind();
 			shader->uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, width, height);
 
-			channel = shader->enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mRT->deferredLight.getUsage());
+			channel = shader->enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, screenTarget()->getUsage());
 			if (channel > -1)
 			{
-				mRT->deferredLight.bindTexture(0, channel);
+				screenTarget()->bindTexture(0, channel);
 			}
 
             {
@@ -7716,7 +7656,7 @@ void LLPipeline::renderFinalize()
 
 			gGL.flush();
 
-			shader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mRT->deferredLight.getUsage());
+			shader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, screenTarget()->getUsage());
 			shader->unbind();
 
 			mRT->fxaaBuffer.flush();
@@ -7768,11 +7708,9 @@ void LLPipeline::renderFinalize()
 
 			shader->bind();
 
-            S32 glow_channel = shader->getTextureChannel(LLShaderMgr::DEFERRED_EMISSIVE);
             S32 screen_channel = shader->getTextureChannel(LLShaderMgr::DEFERRED_DIFFUSE);
             S32 depth_channel = shader->getTextureChannel(LLShaderMgr::DEFERRED_DEPTH);
 
-			gGL.getTexUnit(glow_channel)->bind(&mGlow[1]);
 			gGL.getTexUnit(screen_channel)->bind(screenTarget());
             gGL.getTexUnit(depth_channel)->bind(&mRT->deferredScreen, true);
 
@@ -7789,7 +7727,6 @@ void LLPipeline::renderFinalize()
 			shader->unbind();
 		}
 	}
-    
 
     gGL.setSceneBlendType(LLRender::BT_ALPHA);
 
@@ -7944,12 +7881,6 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
         {
             gGL.getTexUnit(channel)->bindFast(LLViewerFetchedTexture::sWhiteImagep);
         }
-	}
-
-	channel = shader.enableTexture(LLShaderMgr::DEFERRED_BLOOM);
-	if (channel > -1)
-	{
-		mGlow[1].bindTexture(0, channel);
 	}
 
 	stop_glerror();

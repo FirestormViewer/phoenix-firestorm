@@ -260,6 +260,8 @@ private:
     bool	allocateBuffer(S32 nverts, S32 nindices, BOOL create) { return allocateBuffer(nverts, nindices); }
 
 public:
+
+    static U64 getBytesAllocated();
 	static const U32 sTypeSize[TYPE_MAX];
 	static const U32 sGLMode[LLRender::NUM_MODES];
 	static U32 sGLRenderBuffer;

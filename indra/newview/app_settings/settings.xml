@@ -13473,7 +13473,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>8</real>
+    <real>32</real>
   </map>
   <key>RenderTonemapper</key>
   <map>
@@ -15797,29 +15797,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>20.0</real>
     </map>
-    <key>TextureCameraMotionThreshold</key>
+    <key>TextureBiasDistanceScale</key>
     <map>
       <key>Comment</key>
-      <string>If the overall motion is lower than this value, textures will be loaded faster</string>
+      <string>When biasing textures to lower resolution due to lack of vram, weight to put on distance factor.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.2</real>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
-    <key>TextureCameraMotionBoost</key>
-    <map>
-      <key>Comment</key>
-      <string>Progressive discard level decrement when the camera is still</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>3</integer>
+      <real>8.0</real>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -26261,17 +26248,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>FSMaxTexMemory</key>
-    <map>
-      <key>Comment</key>
-      <string>Restrict amount of VRAM used for textures (in MB)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>U32</string>
       <key>Value</key>
       <integer>0</integer>
     </map>

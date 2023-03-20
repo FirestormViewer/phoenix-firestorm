@@ -175,10 +175,6 @@ void LLTextureBar::draw()
 	{
 		color = LLColor4::green4;
 	}
-	else if (mImagep->getBoostLevel() > LLGLTexture::BOOST_ALM)
-	{
-		color = LLColor4::magenta; // except none and alm
-	}
 	else if (mImagep->getMaxVirtualSize() <= 0.0f)
 	{
 		color = LLColor4::grey; color[VALPHA] = .7f;
@@ -604,31 +600,6 @@ void LLGLTexMemBar::draw()
 	right = left + llfloor(gpu_used * bar_scale);
 
 	gl_rect_2d(left, top, right, bottom, color);
-
-	static LLCachedControl<U32> fsMaxTexMem(gSavedSettings, "FSMaxTexMemory");
-	if (fsMaxTexMem > 0)
-	{
-		left = left + bar_width + 10;
-		text = "Bound";
-		LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height * 6,
-			text_color, LLFontGL::LEFT, LLFontGL::TOP);
-		left = left + 45;
-		right = left + bar_width;
-
-		gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f);
-		gl_rect_2d(left, top, right, bottom);
-
-		U64 max_texmem = ((U64)fsMaxTexMem) * 1024 * 1024;
-		U64 texmem_used = LLImageGL::getTextureBytesAllocated();
-		color = (texmem_used < llfloor(max_texmem * texmem_lower_bound_scale)) ? LLColor4::green :
-			(texmem_used < max_texmem) ? LLColor4::yellow : LLColor4::red;
-		color[VALPHA] = .75f;
-
-		bar_scale = (F32)bar_width / max_texmem;
-		right = left + llclamp(llfloor(texmem_used * bar_scale), 0, bar_width);
-
-		gl_rect_2d(left, top, right, bottom, color);
-	}
 	// </FS:Ansariel>
 
 	U32 cache_read(0U), cache_write(0U), res_wait(0U);

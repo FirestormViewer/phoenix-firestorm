@@ -70,9 +70,6 @@ bool LLRender::sGLCoreProfile = false;
 bool LLRender::sNsightDebugSupport = false;
 LLVector2 LLRender::sUIGLScaleFactor = LLVector2(1.f, 1.f);
 
-static const U32 LL_NUM_TEXTURE_LAYERS = 32; 
-static const U32 LL_NUM_LIGHT_UNITS = 8;
-
 struct LLVBCache
 {
     LLPointer<LLVertexBuffer> vb;
@@ -828,16 +825,14 @@ LLRender::LLRender()
     mMaxLineWidthAliased(1.f)
     // </FS:Ansariel>
 {	
-	mTexUnits.reserve(LL_NUM_TEXTURE_LAYERS);
 	for (U32 i = 0; i < LL_NUM_TEXTURE_LAYERS; i++)
 	{
-		mTexUnits.push_back(new LLTexUnit(i));
+        mTexUnits[i].mIndex = i;
 	}
-	mDummyTexUnit = new LLTexUnit(-1);
 
 	for (U32 i = 0; i < LL_NUM_LIGHT_UNITS; ++i)
 	{
-		mLightState.push_back(new LLLightState(i));
+        mLightState[i].mIndex = i;
 	}
 
 	for (U32 i = 0; i < 4; i++)
@@ -936,19 +931,6 @@ void LLRender::resetVertexBuffer()
 
 void LLRender::shutdown()
 {
-	for (U32 i = 0; i < mTexUnits.size(); i++)
-	{
-		delete mTexUnits[i];
-	}
-	mTexUnits.clear();
-	delete mDummyTexUnit;
-	mDummyTexUnit = NULL;
-
-	for (U32 i = 0; i < mLightState.size(); ++i)
-	{
-		delete mLightState[i];
-	}
-	mLightState.clear();
     resetVertexBuffer();
 }
 
@@ -960,10 +942,10 @@ void LLRender::refreshState(void)
 
 	for (U32 i = 0; i < mTexUnits.size(); i++)
 	{
-		mTexUnits[i]->refreshState();
+		mTexUnits[i].refreshState();
 	}
 	
-	mTexUnits[active_unit]->activate();
+	mTexUnits[active_unit].activate();
 
 	setColorMask(mCurrColorMask[0], mCurrColorMask[1], mCurrColorMask[2], mCurrColorMask[3]);
 	
@@ -995,7 +977,7 @@ void LLRender::syncLightState()
 
         for (U32 i = 0; i < LL_NUM_LIGHT_UNITS; i++)
         {
-            LLLightState *light = mLightState[i];
+            LLLightState *light = &mLightState[i];
 
             position[i]  = light->mPosition;
             direction[i] = light->mSpotDirection;
@@ -1013,7 +995,7 @@ void LLRender::syncLightState()
         shader->uniform3fv(LLShaderMgr::LIGHT_DIFFUSE, LL_NUM_LIGHT_UNITS, diffuse[0].mV);
         shader->uniform3fv(LLShaderMgr::LIGHT_AMBIENT, 1, mAmbientLightColor.mV);
         shader->uniform1i(LLShaderMgr::SUN_UP_FACTOR, sun_primary[0] ? 1 : 0);
-        shader->uniform3fv(LLShaderMgr::AMBIENT, 1, mAmbientLightColor.mV);
+        //shader->uniform3fv(LLShaderMgr::AMBIENT, 1, mAmbientLightColor.mV);
         shader->uniform3fv(LLShaderMgr::SUNLIGHT_COLOR, 1, diffuse[0].mV);
         shader->uniform3fv(LLShaderMgr::MOONLIGHT_COLOR, 1, diffuse_b[0].mV);
     }
@@ -1522,12 +1504,12 @@ LLTexUnit* LLRender::getTexUnit(U32 index)
 {
 	if (index < mTexUnits.size())
 	{
-		return mTexUnits[index];
+		return &mTexUnits[index];
 	}
 	else 
 	{
 		LL_DEBUGS() << "Non-existing texture unit layer requested: " << index << LL_ENDL;
-		return mDummyTexUnit;
+		return &mDummyTexUnit;
 	}
 }
 
@@ -1535,7 +1517,7 @@ LLLightState* LLRender::getLight(U32 index)
 {
 	if (index < mLightState.size())
 	{
-		return mLightState[index];
+		return &mLightState[index];
 	}
 	
 	return NULL;

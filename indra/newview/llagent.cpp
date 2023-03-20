@@ -4726,8 +4726,6 @@ bool LLAgent::teleportCore(bool is_local)
 		gTeleportDisplay = TRUE;
 		LL_INFOS("Teleport") << "Non-local, setting teleport state to TELEPORT_START" << LL_ENDL;
 		gAgent.setTeleportState( LLAgent::TELEPORT_START );
-
-		LLSpatialPartition::sTeleportRequested = TRUE;
 		
 		// <FS:Ansariel> Draw Distance stepping; originally based on SpeedRez by Henri Beauchamp, licensed under LGPL
 		if (gSavedSettings.getBOOL("FSRenderFarClipStepping"))
