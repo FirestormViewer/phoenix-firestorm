@@ -35,6 +35,7 @@
 
 #include "llviewercontrol.h"
 #include "lltexteditor.h"
+#include <memory>
 
 #define MOUSE_LEAVE false
 #define MOUSE_ENTER true
