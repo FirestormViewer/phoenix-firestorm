@@ -2298,7 +2298,7 @@ LLUZipHelper::EZipRresult LLUZipHelper::unzip_llsd(LLSD& data, const U8* in, S32
 //This unzip function will only work with a gzip header and trailer - while the contents
 //of the actual compressed data is the same for either format (gzip vs zlib ), the headers
 //and trailers are different for the formats.
-U8* unzip_llsdNavMesh(bool& valid, unsigned int& outsize, std::istream& is, S32 size)
+U8* unzip_llsdNavMesh(bool& valid, size_t& outsize, std::istream& is, S32 size)
 {
 	// <FS:Beq pp Rye> Add non-allocating variants of unzip_llsd	
 	// 	if (size == 0)
@@ -2434,7 +2434,7 @@ U8* unzip_llsdNavMesh(bool& valid, unsigned int& outsize, std::istream& is, S32 
 	return unzip_llsdNavMesh(valid, outsize, in.get(), size);
 }
 
-U8* unzip_llsdNavMesh(bool& valid, unsigned int& outsize, const U8* in, S32 size)
+U8* unzip_llsdNavMesh(bool& valid, size_t& outsize, const U8* in, S32 size)
 {
 	if (size == 0)
 	{
