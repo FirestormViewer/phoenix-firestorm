@@ -5,15 +5,16 @@ env:
   EXTRA_ARGS: -DFMODSTUDIO=ON -DUSE_KDU=ON --crashreporting
   build_secrets_checkout: ${{github.workspace}}/signing
 
+
 jobs:
   build_matrix:
     strategy:
       matrix:
-        os: [macos-10.15,ubuntu-18.04,windows-2022]
+        os: [macos-10.15,ubuntu-20.04,windows-2022]
         grid: [sl,os]
         addrsize: [64,32]
         exclude:
-          - os: ubuntu-18.04
+          - os: ubuntu-20.04
             addrsize: 32
           - os: macos-10.15
             addrsize: 32
@@ -27,21 +28,41 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
       - run: pip3 install -r requirements.txt
+
       - name: Check python version
         run: python -V
-      - name: Checkout build var
-        uses: actions/checkout@v3
-        with:
-          repository: FirestormViewer/fs-build-variables
-          path: build-variables
+
+      - name: Free Disk Space (Ubuntu)
+        if: runner.os == 'Linux'
+        uses: jlumbroso/free-disk-space@main
+        with: 
+          swap-storage: false
+
+      - name: Set gcc version on Linux
+        if: runner.os == 'Linux'
+        run: |
+          echo "CC=gcc-10" >> $GITHUB_ENV
+          echo "CXX=g++-10" >> $GITHUB_ENV
+
+      - name: Install Bash 4 and GNU sed on Mac
+        if: runner.os == 'macOS'
+        run: |
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          brew update
+
+          brew install bash
+          brew install gnu-sed
+
+          echo "/usr/local/bin" >> $GITHUB_PATH
+          echo "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
+
       - name: Setup rclone and download the folder
         uses: beqjanus/setup-rclone@main
         with:
           rclone_config: ${{ secrets.RCLONE_CONFIG }}
 
-      - name: Set OS flag
-        if: matrix.grid == 'os'
-        run: echo "FS_GRID=-DOPENSIM:BOOL=ON" >> $GITHUB_ENV
+      - name: Set OS/SL flags
+        run: echo "FS_GRID=-DOPENSIM:BOOL=$([ "${{ matrix.grid }}" == "os" ] && echo "ON" || echo "OFF") -DHAVOK_TPV:BOOL=$([ "${{ matrix.grid }}" == "sl" ] && echo "ON" || echo "OFF")" >> $GITHUB_ENV
         shell: bash
 
       - name: find channel from Branch name
@@ -57,46 +78,39 @@ jobs:
           echo "FS_RELEASE_CHAN=\"${FS_RELEASE_CHAN}\"" >> $GITHUB_ENV
           echo "Building for channel ${FS_RELEASE_CHAN}"
         shell: bash
-
-      # - name: Set channel name
-      #   if: matrix.addrsize == '64'
-      #   run: echo "FS_RELEASE_CHAN=Releasex64" >> $GITHUB_ENV
-      #   shell: bash
-
-      # - name: Set channel name for 32 bit
-      #   if: matrix.addrsize == '32'
-      #   shell: bash
-
-      - name: Set SL flag
-        if: matrix.grid == 'sl'
-        run: echo "FS_GRID=-DOPENSIM:BOOL=OFF -DHAVOK_TPV:BOOL=ON" >> $GITHUB_ENV
-        shell: bash
         
       - name: Get the code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Checkout build var
+      - name: Checkout build vars (after the main code)
         uses: actions/checkout@v3
         with:
           repository: FirestormViewer/fs-build-variables
           path: build-variables
 
-      - name: rclone the private 3p packages on Windows
-        if: runner.os == 'Windows'
-        run: 'rclone copy fs_bundles: --include "*windows*bz2" .'
-      - name: rclone the private 3p packages on MacOS
-        if: runner.os == 'MacOS'
-        run: 'rclone copy fs_bundles: --include "*darwin*bz2" .'
-      - name: rclone the private 3p packages on Linux
-        if: runner.os == 'Linux'
-        run: 'rclone copy fs_bundles: --include "*linux*bz2" .'
+      - name: Define platform variable(s)
+        run: |
+          declare -A os_map
+          os_map=( ["Windows"]="windows" ["Linux"]="linux" ["macOS"]="darwin" )
+          platform="${os_map[${{ runner.os}}]}"
+          echo "fallback_platform=${platform}" >> $GITHUB_ENV
+          if [ ${{ matrix.addrsize }} -ne 32 ];
+          then
+            platform+=${{ matrix.addrsize }}
+          fi
+          echo "platform=${platform}" >> $GITHUB_ENV
+        shell: bash
+
+      - name: rclone the private 3p packages for this platform (both 64 & 32)
+        run: 'rclone copy fs_bundles: --include "*${{ env.fallback_platform }}*bz2" .'
 
       - name: set VSVER for Windows builds
         if: runner.os == 'Windows'
         run: echo "AUTOBUILD_VSVER=170" >> $GITHUB_ENV
         shell: bash
+
       - name: Install certificate
         if: runner.os == 'macOS'
         env:
@@ -115,50 +129,63 @@ jobs:
           security import ${build_secrets_checkout}/code-signing-osx/fs-cert.p12 -P "$FS_CERT_PASS" -A -t cert -f pkcs12 -k ~/Library/Keychains/viewer.keychain
           security set-key-partition-list -S apple-tool:,apple:, -s -k "$FS_KEYCHAIN_PASS" -t private ~/Library/Keychains/viewer.keychain
           security list-keychain -d user -s ~/Library/Keychains/viewer.keychain
-      - name: Install required Ubuntu packages
+
+      - name: Install required Ubuntu packages and release some space.
         if: runner.os == 'Linux'
-        run: sudo apt-get install python3-setuptools mesa-common-dev libgl1-mesa-dev libxinerama-dev libxrandr-dev libpulse-dev libglu1-mesa-dev
-      - name: install autobuild
-        run: pip3 install git+https://github.com/Nicky-D/autobuild@main_nd
-
-      - name: install autobuild
-        run: pip3 install llbase
-
-      - name: edit installables (64 bit)
-        if: runner.os == 'Windows' && matrix.addrsize == 64
         run: |
-          autobuild installables edit llphysicsextensions_tpv platform=windows${{matrix.addrsize}} url='file:///\${{ github.workspace }}\llphysicsextensions_tpv-1.0.571939-windows${{matrix.addrsize}}-571939.tar.bz2'
-          autobuild installables edit fmodstudio platform=windows${{matrix.addrsize}} url='file:///\${{ github.workspace }}\fmodstudio-2.02.09-windows${{matrix.addrsize}}-222890941.tar.bz2'
-        shell: bash
+          dependencies=("python3-setuptools" "mesa-common-dev" "libgl1-mesa-dev" "libxinerama-dev" "libxrandr-dev" "libpulse-dev" "libglu1-mesa-dev" "libfreetype6-dev" "libfontconfig1")
+          sudo apt-get update
+          sudo apt-get install -y "${dependencies[@]}"
+          sudo apt-get autoremove --purge 
+          sudo apt-get clean
 
-      - name: edit installables (32 bit)
-        if: runner.os == 'Windows' && matrix.addrsize == 32
+      - name: test macOS bundles are present
+        if: runner.os == 'MacOS'
         run: |
-          autobuild installables edit llphysicsextensions_tpv platform=windows url='file:///\${{ github.workspace }}\llphysicsextensions_tpv-1.0.571939-windows-571939.tar.bz2'
-          autobuild installables edit fmodstudio platform=windows url='file:///\${{ github.workspace }}\fmodstudio-2.02.09-windows-222890940.tar.bz2'
-        shell: bash
-
-      - name: edit installables (32/64 agnostic)
-        if: runner.os == 'Windows'
-        run: |
-          autobuild installables edit kdu platform=windows url='file:///\${{ github.workspace }}\kdu-8.2-windows-212351246.tar.bz2'
-        shell: bash
-      
-      - name: edit installables
-        if: runner.os == 'macOS'
-        run: |
-          autobuild installables edit llphysicsextensions_tpv platform=darwin${{matrix.addrsize}} url='file:////${{ github.workspace }}/llphysicsextensions_tpv-1.0.571939-darwin${{matrix.addrsize}}-571939.tar.bz2'
-          autobuild installables edit kdu platform=darwin url='file:////${{ github.workspace }}/kdu-8.2-darwin-212431232.tar.bz2'
-          autobuild installables --debug edit fmodstudio platform=darwin${{matrix.addrsize}} url='file:////${{ github.workspace }}/fmodstudio-2.02.09-darwin${{matrix.addrsize}}-5.tar.bz2'
+          dirlisting="$(ls -l ${{ github.workspace }}${path_sep}${pattern})"
+          echo "${dirlisting}"
         shell: bash
 
       - name: edit installables
-        if: runner.os == 'Linux'
         run: |
-          autobuild installables edit kdu platform=linux${{matrix.addrsize}} url='file:////${{ github.workspace }}/kdu-8.2-linux${{matrix.addrsize}}_bionic-220911445.tar.bz2'
-          autobuild installables edit fmodstudio platform=linux${{matrix.addrsize}} url='file:////${{ github.workspace }}/fmodstudio-2.02.09-linux${{matrix.addrsize}}-222891103.tar.bz2'
+          path_sep="/"
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            path_sep="\\"
+          fi
+          function find_most_recent_bundle() {
+            local pattern="$1.*$2.*"
+            local most_recent_file=$(ls -t "${{ github.workspace }}" | grep "$pattern" | head -1)
+            if [ -z "$most_recent_file" ]; then
+              echo ""
+            else
+              echo "$most_recent_file"
+            fi
+          }
+          packages=("fmodstudio" "llphysicsextensions_tpv" "kdu")
+          for package in "${packages[@]}"; do
+            package_file=$(find_most_recent_bundle $package ${{ env.platform }})
+            full_package_path="${{ github.workspace }}${path_sep}${package_file}"
+            if [ -n "$package_file" ]; then
+              echo "Installing ${package_file}"
+              autobuild installables remove ${package} 
+              autobuild installables add ${package} platform=${{ env.platform }} url="file:///${full_package_path}"
+            else
+              echo "No bundle found for ${package} on ${{ env.platform }}"
+              package_file=$(find_most_recent_bundle $package ${{ env.fallback_platform }})
+              full_package_path="${{ github.workspace }}${path_sep}${package_file}"
+              if [ -n "$package_file" ]; then
+                echo "Installing ${package_file}"
+                autobuild installables remove ${package} 
+                autobuild installables add ${package} platform=${{ env.fallback_platform }} url="file:///${full_package_path}"
+              else
+                echo "No bundle found for ${package} on ${{ env.fallback_platform }}. Package will not be available for build."
+              fi
+            fi
+          done
         shell: bash
-
+      - name: Clean up packages to give more space
+        run: rm *${{ env.fallback_platform }}*bz2
+        shell: bash
       - name: Configure
         run: autobuild configure --debug -c ReleaseFS -A${{matrix.addrsize}} -- --package --chan ${{env.FS_RELEASE_CHAN}} ${{env.EXTRA_ARGS}} ${{env.FS_GRID}}
         shell: bash

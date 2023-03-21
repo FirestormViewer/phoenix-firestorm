@@ -107,9 +107,9 @@ protected:
 	static std::string getElementLabel(daeElement *element);
 	static size_t getSuffixPosition(std::string label);
 	static std::string getLodlessLabel(daeElement *element);
-
-	static std::string preprocessDAE(std::string filename);
 	static LODSuffixArray sLODSuffix; // <FS:Beq/> mesh loader suffix configuration
+public: // <FS:Beq/> open up for local mesh to use
+	static std::string preprocessDAE(std::string filename);
 
 private:
 	U32 mGeneratedModelLimit; // Attempt to limit amount of generated submodels
