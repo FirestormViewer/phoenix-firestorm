@@ -617,8 +617,6 @@ void LLPanelWearing::onRemoveAttachment()
 	{
 		LLSelectMgr::getInstance()->deselectAll();
 		LLSelectMgr::getInstance()->selectObjectAndFamily(mAttachmentsMap[item->getUUID()]);
-		// <FS:Ansariel> Can't drop to the ground, so detach instead
-		//LLSelectMgr::getInstance()->sendDropAttachment();
 		LLSelectMgr::getInstance()->sendDetach();
 	}
 }

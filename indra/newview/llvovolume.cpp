@@ -5586,13 +5586,14 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 
 	if (mat)
 	{
+		BOOL is_alpha = (facep->getPoolType() == LLDrawPool::POOL_ALPHA) || (facep->getTextureEntry()->getColor().mV[3] < 0.999f) ? TRUE : FALSE;
 		if (type == LLRenderPass::PASS_ALPHA)
 		{
-			shader_mask = mat->getShaderMask(LLMaterial::DIFFUSE_ALPHA_MODE_BLEND);
+			shader_mask = mat->getShaderMask(LLMaterial::DIFFUSE_ALPHA_MODE_BLEND, is_alpha);
 		}
 		else
 		{
-			shader_mask = mat->getShaderMask();
+			shader_mask = mat->getShaderMask(LLMaterial::DIFFUSE_ALPHA_MODE_DEFAULT, is_alpha);
 		}
 	}
 
@@ -6190,18 +6191,21 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 						}
 						else
 						{
-                            // <FS:ND> Even more crash avoidance ...
-                            // if (te->getColor().mV[3] > 0.f || te->getGlow() > 0.f)
-                            if (te && (te->getColor().mV[3] > 0.f || te->getGlow() > 0.f))
-                            // </FS:ND>
-                            { //only treat as alpha in the pipeline if < 100% transparent
-                                drawablep->setState(LLDrawable::HAS_ALPHA);
-                                add_face(sAlphaFaces, alpha_count, facep);
-                            }
-                            else if (LLDrawPoolAlpha::sShowDebugAlpha)
-                            {
-                                add_face(sAlphaFaces, alpha_count, facep);
-                            }
+							// <FS:ND> Even more crash avoidance ...
+							//if (te->getColor().mV[3] > 0.f || te->getGlow() > 0.f)
+							if (te && (te->getColor().mV[3] > 0.f || te->getGlow() > 0.f))
+							// </FS:ND>
+							{ //only treat as alpha in the pipeline if < 100% transparent
+								drawablep->setState(LLDrawable::HAS_ALPHA);
+								add_face(sAlphaFaces, alpha_count, facep);
+							}
+							else if (LLDrawPoolAlpha::sShowDebugAlpha ||
+								(gPipeline.sRenderHighlight &&
+								(LLPipeline::getRenderScriptedBeacons() || LLPipeline::getRenderScriptedTouchBeacons()) &&
+								drawablep->getVObj() && drawablep->getVObj()->flagScripted()))
+							{ //draw the transparent face for debugging purposes using a custom texture
+								add_face(sAlphaFaces, alpha_count, facep);
+							}
 						}
 					}
 					else
@@ -7043,7 +7047,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 						LLRenderPass::PASS_NORMSPEC_EMISSIVE,
 					};
 
-					U32 mask = mat->getShaderMask();
+					U32 mask = mat->getShaderMask(LLMaterial::DIFFUSE_ALPHA_MODE_DEFAULT, is_alpha);
 
 					llassert(mask < sizeof(pass)/sizeof(U32));
 

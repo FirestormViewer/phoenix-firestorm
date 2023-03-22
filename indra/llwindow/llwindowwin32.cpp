@@ -4708,6 +4708,9 @@ void LLWindowWin32::getWindowChrome( U32 &aChromeW, U32 &aChromeH )
 inline LLWindowWin32::LLWindowWin32Thread::LLWindowWin32Thread()
     : ThreadPool("Window Thread", 1, MAX_QUEUE_SIZE)
 {
+    // Set this flag to true to avoid of implicit call of close() from start()
+    mExplicitShutdown = true;
+
     ThreadPool::start();
 }
 
