@@ -6,8 +6,8 @@ if (LINUX)
   add_library( ll::fontconfig INTERFACE IMPORTED )
 
   if( NOT USE_CONAN )
-    find_package(Fontconfig REQUIRED) # <FS:PC> fontconfig and freetype should be taken from the
-    # use_prebuilt_binary(fontconfig) #         user's system, and not be packaged with the viewer
+    find_package(Fontconfig REQUIRED) # <FS:PC> Use system wide Fontconfig
+    target_link_libraries( ll::fontconfig INTERFACE Fontconfig::Fontconfig )
   else()
     target_link_libraries( ll::fontconfig INTERFACE CONAN_PKG::fontconfig )
   endif()
@@ -18,4 +18,3 @@ if( NOT USE_CONAN )
 endif()
 
 use_prebuilt_binary(slvoice)
-

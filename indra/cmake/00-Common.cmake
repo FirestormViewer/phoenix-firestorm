@@ -206,16 +206,40 @@ set(SIGNING_IDENTITY "Developer ID Application: The Phoenix Firestorm Project, I
 endif (DARWIN)
 
 if (LINUX OR DARWIN)
-  set(GCC_WARNINGS -Wall -Wno-sign-compare -Wno-trigraphs)
+  if (CMAKE_CXX_COMPILER MATCHES ".*clang")
+    set(CMAKE_COMPILER_IS_CLANGXX 1)
+  endif (CMAKE_CXX_COMPILER MATCHES ".*clang")
+
+  if (CMAKE_COMPILER_IS_GNUCXX)
+    set(GCC_WARNINGS "-Wall -Wno-sign-compare -Wno-trigraphs")
+  elseif (CMAKE_COMPILER_IS_CLANGXX)
+    set(GCC_WARNINGS "-Wall -Wno-sign-compare -Wno-trigraphs")
+  endif()
 
   if (NOT GCC_DISABLE_FATAL_WARNINGS)
-    list(APPEND GCC_WARNINGS -Werror)
+    set(GCC_WARNINGS "${GCC_WARNINGS} -Werror")
   endif (NOT GCC_DISABLE_FATAL_WARNINGS)
 
-  list(APPEND GCC_WARNINGS -Wno-reorder -Wno-non-virtual-dtor )
+  if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" AND DARWIN AND XCODE_VERSION GREATER 4.9)
+    set(GCC_CXX_WARNINGS "$[GCC_WARNINGS] -Wno-reorder -Wno-unused-const-variable -Wno-format-extra-args -Wno-unused-private-field -Wno-unused-function -Wno-tautological-compare -Wno-empty-body -Wno-unused-variable -Wno-unused-value")
+  else (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" AND DARWIN AND XCODE_VERSION GREATER 4.9)
+  #elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+    set(GCC_CXX_WARNINGS "${GCC_WARNINGS} -Wno-reorder -Wno-non-virtual-dtor -Wno-unused-variable")
+  endif ()
 
-  add_compile_options(${GCC_WARNINGS})
-  add_compile_options(-m${ADDRESS_SIZE})
+  if(LINUX)
+    set(GCC_CXX_WARNINGS "${GCC_WARNINGS} -Wno-reorder -Wno-non-virtual-dtor -Wno-unused-variable -Wno-unused-but-set-variable -Wno-pragmas -Wno-deprecated")
+  endif()
+
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 13.0)
+    set(GCC_CXX_WARNINGS "${GCC_CXX_WARNINGS} -Wno-c++20-compat")
+  endif()
+
+  set(CMAKE_C_FLAGS "${GCC_WARNINGS} ${CMAKE_C_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${GCC_CXX_WARNINGS} ${CMAKE_CXX_FLAGS}")
+
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m${ADDRESS_SIZE}")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m${ADDRESS_SIZE}")
 endif (LINUX OR DARWIN)
 
 

@@ -1551,16 +1551,6 @@
             <key>name</key>
             <string>windows64</string>
           </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>e70898903475d8ac2e81ff33278fc987</string>
-              <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/89309/815433/jpegencoderbasic-1.0-windows64-564842.tar.bz2</string>
-            </map>
-          </map>
         </map>
         <key>version</key>
         <string>1.0</string>
