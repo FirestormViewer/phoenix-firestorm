@@ -47,9 +47,9 @@
     <text
      type="string"
      length="1"
-     bottom_delta="30"
+     top_pad="8"
      follows="top|left"
-     height="25"
+     height="16"
      width="105"
      word_wrap="true"
      layout="topleft"
@@ -105,6 +105,38 @@
          value="Sculpted Prim"
          name="SculptedPrim" />
     </combo_box>
+
+   <panel
+     follows="left|right"
+     height="32"
+     layout="topleft"
+     left="10"
+     name="image_alpha_warning"
+     right="-10"
+     top_pad="4"
+     visible="false">
+
+   <icon
+     height="24"
+     image_name="Popup_Caution"
+     left="0"
+     top="0"
+     width="24"
+   />
+
+    <check_box
+     follows="top|left|right"
+     height="12"
+     label="Empty alpha channel will be removed"
+     layout="topleft"
+     left_pad="8"
+     name="strip_alpha_check"
+     right="-1"
+     top_delta="10"
+   />
+
+    </panel>
+
     <text
      type="string"
      length="1"
