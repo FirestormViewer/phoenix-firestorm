@@ -92,7 +92,7 @@
 
 // Increment this if the inventory contents change in a non-backwards-compatible way.
 // For viewer 2, the addition of link items makes a pre-viewer-2 cache incorrect.
-const S32 LLInventoryModel::sCurrentInvCacheVersion = 2;
+const S32 LLInventoryModel::sCurrentInvCacheVersion = 3;
 BOOL LLInventoryModel::sFirstTimeInViewer2 = TRUE;
 
 ///----------------------------------------------------------------------------
@@ -456,7 +456,7 @@ LLInventoryModel::LLInventoryModel()
 	mIsNotifyObservers(FALSE),
 	mModifyMask(LLInventoryObserver::ALL),
 	mChangedItemIDs(),
-    mBulckFecthCallbackSlot(),
+    mBulkFecthCallbackSlot(),
 	mObservers(),
 	mProtectedCategoriesChangedCallbackConnection(), // <FS:Ansariel> FIRE-29342: Protect folder option
 	mHttpRequestFG(NULL),
@@ -497,9 +497,9 @@ void LLInventoryModel::cleanupInventory()
 		delete observer;
 	}
 
-    if (mBulckFecthCallbackSlot.connected())
+    if (mBulkFecthCallbackSlot.connected())
     {
-        mBulckFecthCallbackSlot.disconnect();
+        mBulkFecthCallbackSlot.disconnect();
     }
 	mObservers.clear();
 
@@ -1937,11 +1937,15 @@ void LLInventoryModel::changeCategoryParent(LLViewerInventoryCategory* cat,
 
 void LLInventoryModel::rebuildBrockenLinks()
 {
-    for (LLUUID link_id : mPossiblyBrockenLinks)
+    // make sure we aren't adding expensive Rebuild to anything else.
+    notifyObservers();
+
+    for (const LLUUID &link_id : mPossiblyBrockenLinks)
     {
         addChangedMask(LLInventoryObserver::REBUILD, link_id);
     }
     mPossiblyBrockenLinks.clear();
+    notifyObservers();
 }
 
 // Does not appear to be used currently.
@@ -2577,21 +2581,22 @@ void LLInventoryModel::addItem(LLViewerInventoryItem* item)
 		// The item will show up as a broken link.
 		if (item->getIsBrokenLink())
 		{
-            if (!LLInventoryModelBackgroundFetch::getInstance()->isEverythingFetched())
+            if (LLInventoryModelBackgroundFetch::getInstance()->folderFetchActive())
             {
                 // isEverythingFetched is actually 'initial' fetch only.
                 // Schedule this link for a recheck once inventory gets loaded
                 mPossiblyBrockenLinks.insert(item->getUUID());
-                if (!mBulckFecthCallbackSlot.connected())
+                if (!mBulkFecthCallbackSlot.connected())
                 {
                     // Links might take a while to update this way, and there
                     // might be a lot of them. A better option might be to check
                     // links periodically with final check on fetch completion.
-                    mBulckFecthCallbackSlot =
-                        LLInventoryModelBackgroundFetch::getInstance()->setAllFoldersFetchedCallback(
-                            []()
+                    mBulkFecthCallbackSlot =
+                        LLInventoryModelBackgroundFetch::getInstance()->setFetchCompletionCallback(
+                            [this]()
                     {
-                        gInventory.rebuildBrockenLinks();
+                        rebuildBrockenLinks();
+                        mBulkFecthCallbackSlot.disconnect();
                     });
                 }
                 LL_DEBUGS(LOG_INV) << "Scheduling a link to be rebuilt later [ name: " << item->getName()
@@ -3733,6 +3738,10 @@ void LLInventoryModel::processUpdateCreateInventoryItem(LLMessageSystem* msg, vo
 		msg->getU32Fast(_PREHASH_InventoryData, _PREHASH_CallbackID, callback_id);
 
 		gInventoryCallbacks.fire(callback_id, item_id);
+
+        // todo: instead of unpacking message fully,
+        // grab only an item_id, then fetch via AIS
+        LLInventoryModelBackgroundFetch::instance().start(item_id, false);
 	}
 
 }
@@ -4098,6 +4107,9 @@ void LLInventoryModel::processBulkUpdateInventory(LLMessageSystem* msg, void**)
         // Temporary workaround: just fetch the item using AIS to get missing fields.
         // If this works fine we might want to extract ids only from the message
         // then use AIS as a primary fetcher
+
+        // Use AIS derectly to not reset folder's version
+        // Todo: May be LLInventoryModelBackgroundFetch needs a 'forced' option
         AISAPI::FetchCategoryChildren((*cit)->getUUID(), AISAPI::INVENTORY);
 	}
 	for (item_array_t::iterator iit = items.begin(); iit != items.end(); ++iit)
@@ -4107,7 +4119,7 @@ void LLInventoryModel::processBulkUpdateInventory(LLMessageSystem* msg, void**)
         // Temporary workaround: just fetch the item using AIS to get missing fields.
         // If this works fine we might want to extract ids only from the message
         // then use AIS as a primary fetcher
-        AISAPI::FetchItem((*iit)->getUUID(), AISAPI::INVENTORY);
+        LLInventoryModelBackgroundFetch::instance().scheduleItemFetch((*iit)->getUUID());
 	}
 // [SL:KB] - Patch: UI-Notifications | Checked: Catznip-6.5
 	gInventory.notifyObservers(tid);

@@ -31,8 +31,10 @@
 #include "llagent.h"
 #include "llappviewer.h"
 #include "llcallbacklist.h"
-#include "llinventorypanel.h"
 #include "llinventorymodel.h"
+#include "llinventoryobserver.h"
+#include "llinventorypanel.h"
+#include "llstartup.h"
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
 #include "llviewermessage.h"
@@ -192,6 +194,7 @@ LLInventoryModelBackgroundFetch::LLInventoryModelBackgroundFetch():
 	mBackgroundFetchActive(false),
 	mFolderFetchActive(false),
 	mFetchCount(0),
+    mFetchFolderCount(0),
 	mAllFoldersFetched(false),
 	mRecursiveInventoryFetchStarted(false),
 	mRecursiveLibraryFetchStarted(false),
@@ -203,7 +206,12 @@ LLInventoryModelBackgroundFetch::~LLInventoryModelBackgroundFetch()
 
 bool LLInventoryModelBackgroundFetch::isBulkFetchProcessingComplete() const
 {
-	return mFetchQueue.empty() && mFetchCount <= 0;
+	return mFetchFolderQueue.empty() && mFetchItemQueue.empty() && mFetchCount <= 0;
+}
+
+bool LLInventoryModelBackgroundFetch::isFolderFetchProcessingComplete() const
+{
+    return mFetchFolderQueue.empty() && mFetchFolderCount <= 0;
 }
 
 bool LLInventoryModelBackgroundFetch::libraryFetchStarted() const
@@ -249,13 +257,27 @@ BOOL LLInventoryModelBackgroundFetch::folderFetchActive() const
 void LLInventoryModelBackgroundFetch::addRequestAtFront(const LLUUID & id, bool recursive, bool is_category)
 {
     ERecursionType recursion_type = recursive ? RT_RECURSIVE : RT_NONE;
-	mFetchQueue.push_front(FetchQueueInfo(id, recursion_type, is_category));
+    if (is_category)
+    {
+        mFetchFolderQueue.push_front(FetchQueueInfo(id, recursion_type, is_category));
+    }
+    else
+    {
+        mFetchItemQueue.push_front(FetchQueueInfo(id, recursion_type, is_category));
+    }
 }
 
 void LLInventoryModelBackgroundFetch::addRequestAtBack(const LLUUID & id, bool recursive, bool is_category)
 {
     ERecursionType recursion_type = recursive ? RT_RECURSIVE : RT_NONE;
-	mFetchQueue.push_back(FetchQueueInfo(id, recursion_type, is_category));
+    if (is_category)
+    {
+        mFetchFolderQueue.push_back(FetchQueueInfo(id, recursion_type, is_category));
+    }
+    else
+    {
+        mFetchItemQueue.push_back(FetchQueueInfo(id, recursion_type, is_category));
+    }
 }
 
 void LLInventoryModelBackgroundFetch::start(const LLUUID& id, bool recursive)
@@ -280,37 +302,38 @@ void LLInventoryModelBackgroundFetch::start(const LLUUID& id, bool recursive)
                     // Not only root folder can be massive, but
                     // most system folders will be requested independently
                     // so request root folder and content separately
-                    mFetchQueue.push_front(FetchQueueInfo(gInventory.getRootFolderID(), RT_CONTENT));
+                    mFetchFolderQueue.push_front(FetchQueueInfo(gInventory.getRootFolderID(), RT_CONTENT));
                 }
                 else
                 {
-                    mFetchQueue.push_back(FetchQueueInfo(gInventory.getRootFolderID(), recursion_type));
+                    mFetchFolderQueue.push_back(FetchQueueInfo(gInventory.getRootFolderID(), recursion_type));
                 }
 				gIdleCallbacks.addFunction(&LLInventoryModelBackgroundFetch::backgroundFetchCB, NULL);
 			}
 			if (! mRecursiveLibraryFetchStarted)
 			{
 				mRecursiveLibraryFetchStarted |= recursive;
-                mFetchQueue.push_back(FetchQueueInfo(gInventory.getLibraryRootFolderID(), recursion_type));
+                mFetchFolderQueue.push_back(FetchQueueInfo(gInventory.getLibraryRootFolderID(), recursion_type));
 				gIdleCallbacks.addFunction(&LLInventoryModelBackgroundFetch::backgroundFetchCB, NULL);
 			}
 		}
 		else
 		{
-            if (mFetchQueue.empty() || mFetchQueue.front().mUUID != id)
+            if (AISAPI::isAvailable())
             {
-                if (AISAPI::isAvailable())
+                if (mFetchFolderQueue.empty() || mFetchFolderQueue.back().mUUID != id)
                 {
                     // On AIS make sure root goes to the top and follow up recursive
                     // fetches, not individual requests
-                    mFetchQueue.push_back(FetchQueueInfo(id, recursion_type));
+                    mFetchFolderQueue.push_back(FetchQueueInfo(id, recursion_type));
+                    gIdleCallbacks.addFunction(&LLInventoryModelBackgroundFetch::backgroundFetchCB, NULL);
                 }
-                else
-                {
+            }
+            else if (mFetchFolderQueue.empty() || mFetchFolderQueue.front().mUUID != id)
+            {
                     // Specific folder requests go to front of queue.
-                    mFetchQueue.push_front(FetchQueueInfo(id, recursion_type));
-                }
-                gIdleCallbacks.addFunction(&LLInventoryModelBackgroundFetch::backgroundFetchCB, NULL);
+                    mFetchFolderQueue.push_front(FetchQueueInfo(id, recursion_type));
+                    gIdleCallbacks.addFunction(&LLInventoryModelBackgroundFetch::backgroundFetchCB, NULL);
             }
 
 			if (id == gInventory.getLibraryRootFolderID())
@@ -325,22 +348,37 @@ void LLInventoryModelBackgroundFetch::start(const LLUUID& id, bool recursive)
 	}
 	else if (LLViewerInventoryItem * itemp = gInventory.getItem(id))
 	{
-		if (! itemp->mIsComplete && (mFetchQueue.empty() || mFetchQueue.front().mUUID != id))
+		if (! itemp->mIsComplete)
 		{
-			mBackgroundFetchActive = true;
-
-			mFetchQueue.push_front(FetchQueueInfo(id, RT_NONE, false));
-			gIdleCallbacks.addFunction(&LLInventoryModelBackgroundFetch::backgroundFetchCB, NULL);
+            scheduleItemFetch(id);
 		}
 	}
 }
 
+void LLInventoryModelBackgroundFetch::scheduleItemFetch(const LLUUID& item_id)
+{
+    if (mFetchItemQueue.empty() || mFetchItemQueue.front().mUUID != item_id)
+    {
+        mBackgroundFetchActive = true;
+
+        mFetchItemQueue.push_front(FetchQueueInfo(item_id, RT_NONE, false));
+        gIdleCallbacks.addFunction(&LLInventoryModelBackgroundFetch::backgroundFetchCB, NULL);
+    }
+}
+
 void LLInventoryModelBackgroundFetch::findLostItems()
 {
-	mBackgroundFetchActive = true;
-	mFolderFetchActive = true;
-    mFetchQueue.push_back(FetchQueueInfo(LLUUID::null, RT_RECURSIVE));
-    gIdleCallbacks.addFunction(&LLInventoryModelBackgroundFetch::backgroundFetchCB, NULL);
+    if (AISAPI::isAvailable())
+    {
+        LL_WARNS() << "Not implemented yet" << LL_ENDL;
+    }
+    else
+    {
+        mBackgroundFetchActive = true;
+        mFolderFetchActive = true;
+        mFetchFolderQueue.push_back(FetchQueueInfo(LLUUID::null, RT_RECURSIVE));
+        gIdleCallbacks.addFunction(&LLInventoryModelBackgroundFetch::backgroundFetchCB, NULL);
+    }
 }
 
 void LLInventoryModelBackgroundFetch::setAllFoldersFetched()
@@ -351,18 +389,23 @@ void LLInventoryModelBackgroundFetch::setAllFoldersFetched()
 		mAllFoldersFetched = true;
 		//LL_INFOS(LOG_INV) << "All folders fetched, validating" << LL_ENDL;
 		//gInventory.validate();
-
-        // For now only informs about initial fetch being done
-        mAllFoldersFetchedSignal();
 	}
+
 	mFolderFetchActive = false;
-	mBackgroundFetchActive = false;
+    if (isBulkFetchProcessingComplete())
+    {
+        mBackgroundFetchActive = false;
+    }
+
+    // For now only informs about initial fetch being done
+    mFoldersFetchedSignal();
+
 	LL_INFOS(LOG_INV) << "Inventory background fetch completed" << LL_ENDL;
 }
 
-boost::signals2::connection LLInventoryModelBackgroundFetch::setAllFoldersFetchedCallback(folders_fetched_callback_t cb)
+boost::signals2::connection LLInventoryModelBackgroundFetch::setFetchCompletionCallback(folders_fetched_callback_t cb)
 {
-    return mAllFoldersFetchedSignal.connect(cb);
+    return mFoldersFetchedSignal.connect(cb);
 }
 
 void LLInventoryModelBackgroundFetch::backgroundFetchCB(void *)
@@ -392,13 +435,13 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
 			return;
 		}
 		
-#if 1
+#ifdef OPENSIM // Only OpenSim still might support old UDP fetch
 		//--------------------------------------------------------------------------------
 		// DEPRECATED OLD CODE
 		//
 
 		// No more categories to fetch, stop fetch process.
-		if (mFetchQueue.empty())
+		if (mFetchFolderQueue.empty())
 		{
 			setAllFoldersFetched();
 			return;
@@ -418,7 +461,7 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
 
 		while(1)
 		{
-			if (mFetchQueue.empty())
+			if (mFetchFolderQueue.empty())
 			{
 				break;
 			}
@@ -429,7 +472,7 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
 				break;
 			}
 
-			const FetchQueueInfo info = mFetchQueue.front();
+			const FetchQueueInfo info = mFetchFolderQueue.front();
 
 			if (info.mIsCategory)
 			{
@@ -439,7 +482,7 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
 				// Category has been deleted, remove from queue.
 				if (!cat)
 				{
-					mFetchQueue.pop_front();
+					mFetchFolderQueue.pop_front();
 					continue;
 				}
 			
@@ -465,7 +508,7 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
 				else if (gInventory.isCategoryComplete(info.mUUID))
 				{
 					// Finished with this category, remove from queue.
-					mFetchQueue.pop_front();
+					mFetchFolderQueue.pop_front();
 
 					// Add all children to queue.
 					LLInventoryModel::cat_array_t* categories;
@@ -475,7 +518,7 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
 						 it != categories->end();
 						 ++it)
 					{
-						mFetchQueue.push_back(FetchQueueInfo((*it)->getUUID(),info.mRecursive));
+						mFetchFolderQueue.push_back(FetchQueueInfo((*it)->getUUID(),info.mRecursive));
 					}
 
 					// We received a response in less than the fast time.
@@ -494,12 +537,12 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
 				{
 					// Received first packet, but our num descendants does not match db's num descendants
 					// so try again later.
-					mFetchQueue.pop_front();
+					mFetchFolderQueue.pop_front();
 
 					if (mNumFetchRetries++ < MAX_FETCH_RETRIES)
 					{
 						// push on back of queue
-						mFetchQueue.push_back(info);
+						mFetchFolderQueue.push_back(info);
 					}
 					mTimelyFetchPending = FALSE;
 					mFetchTimer.reset();
@@ -513,7 +556,7 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
 			{
 				LLViewerInventoryItem* itemp = gInventory.getItem(info.mUUID);
 
-				mFetchQueue.pop_front();
+				mFetchFolderQueue.pop_front();
 				if (!itemp) 
 				{
 					continue;
@@ -531,7 +574,7 @@ void LLInventoryModelBackgroundFetch::backgroundFetch()
 				}
 				else if (mFetchTimer.getElapsedTimeF32() > mMaxTimeBetweenFetches)
 				{
-					mFetchQueue.push_back(info);
+					mFetchFolderQueue.push_back(info);
 					mFetchTimer.reset();
 					mTimelyFetchPending = FALSE;
 				}
@@ -556,15 +599,32 @@ void LLInventoryModelBackgroundFetch::incrFetchCount(S32 fetching)
 		mFetchCount = 0; 
 	}
 }
+void LLInventoryModelBackgroundFetch::incrFetchFolderCount(S32 fetching)
+{
+    incrFetchCount(fetching);
+    mFetchFolderCount += fetching;
+    if (mFetchCount < 0)
+    {
+        LL_WARNS_ONCE(LOG_INV) << "Inventory fetch count fell below zero (0)." << LL_ENDL;
+        mFetchFolderCount = 0;
+    }
+}
 
-void ais_simple_callback(const LLUUID& inv_id)
+void ais_simple_folder_callback(const LLUUID& inv_id)
+{
+    LLInventoryModelBackgroundFetch::instance().incrFetchFolderCount(-1);
+    LLViewerInventoryCategory * cat(gInventory.getCategory(inv_id));
+    if (cat) cat->setFetching(false);
+}
+
+void ais_simple_item_callback(const LLUUID& inv_id)
 {
     LLInventoryModelBackgroundFetch::instance().incrFetchCount(-1);
 }
 
-void LLInventoryModelBackgroundFetch::onAISCalback(const LLUUID &request_id, const LLUUID &response_id, ERecursionType recursion)
+void LLInventoryModelBackgroundFetch::onAISFodlerCalback(const LLUUID &request_id, const LLUUID &response_id, ERecursionType recursion)
 {
-    incrFetchCount(-1);
+    incrFetchFolderCount(-1);
     if (response_id.isNull()) // Failure
     {
         if (recursion == RT_RECURSIVE)
@@ -573,7 +633,7 @@ void LLInventoryModelBackgroundFetch::onAISCalback(const LLUUID &request_id, con
             // Try requesting folder and nested content separately
             mBackgroundFetchActive = true;
             mFolderFetchActive = true;
-            mFetchQueue.push_front(FetchQueueInfo(request_id, RT_CONTENT));
+            mFetchFolderQueue.push_front(FetchQueueInfo(request_id, RT_CONTENT));
             gIdleCallbacks.addFunction(&LLInventoryModelBackgroundFetch::backgroundFetchCB, NULL);
         }
     }
@@ -589,15 +649,22 @@ void LLInventoryModelBackgroundFetch::onAISCalback(const LLUUID &request_id, con
                 it != categories->end();
                 ++it)
             {
-                mFetchQueue.push_front(FetchQueueInfo((*it)->getUUID(), RT_RECURSIVE));
+                mFetchFolderQueue.push_front(FetchQueueInfo((*it)->getUUID(), RT_RECURSIVE));
             }
-            if (!mFetchQueue.empty())
+            if (!mFetchFolderQueue.empty())
             {
                 mBackgroundFetchActive = true;
                 mFolderFetchActive = true;
                 gIdleCallbacks.addFunction(&LLInventoryModelBackgroundFetch::backgroundFetchCB, NULL);
             }
         }
+    }
+
+    // done
+    LLViewerInventoryCategory * cat(gInventory.getCategory(request_id));
+    if (cat)
+    {
+        cat->setFetching(false);
     }
 }
 
@@ -612,7 +679,8 @@ void LLInventoryModelBackgroundFetch::bulkFetchViaAis()
         return;
     }
 
-    static const S32 max_concurrent_fetches(50);
+    static LLCachedControl<U32> ais_pool(gSavedSettings, "PoolSizeAIS", 20);
+    const U32 max_concurrent_fetches = llmax(1, ais_pool - 1);
 
     if (mFetchCount >= max_concurrent_fetches)
     {
@@ -621,20 +689,35 @@ void LLInventoryModelBackgroundFetch::bulkFetchViaAis()
 
     // Don't loop for too long (in case of large, fully loaded inventory)
     F64 curent_time = LLTimer::getTotalSeconds();
-    const F64 max_time = 0.006f; // 6 ms
+    const F64 max_time = LLStartUp::getStartupState() > STATE_WEARABLES_WAIT
+        ? 0.006f // 6 ms
+        : 1.f; 
     const F64 end_time = curent_time + max_time;
 
-    while (!mFetchQueue.empty() && mFetchCount < max_concurrent_fetches && curent_time < end_time)
+    while (!mFetchFolderQueue.empty() && mFetchCount < max_concurrent_fetches && curent_time < end_time)
     {
-        const FetchQueueInfo & fetch_info(mFetchQueue.front());
+        const FetchQueueInfo & fetch_info(mFetchFolderQueue.front());
         bulkFetchViaAis(fetch_info);
-        mFetchQueue.pop_front();
+        mFetchFolderQueue.pop_front();
+        curent_time = LLTimer::getTotalSeconds();
+    }
+
+    while (!mFetchItemQueue.empty() && mFetchCount < max_concurrent_fetches && curent_time < end_time)
+    {
+        const FetchQueueInfo & fetch_info(mFetchItemQueue.front());
+        bulkFetchViaAis(fetch_info);
+        mFetchItemQueue.pop_front();
         curent_time = LLTimer::getTotalSeconds();
     }
     
-    if (isBulkFetchProcessingComplete())
+    if (isFolderFetchProcessingComplete() && mFolderFetchActive)
     {
         setAllFoldersFetched();
+    }
+
+    if (isBulkFetchProcessingComplete())
+    {
+        mBackgroundFetchActive = false;
     }
 }
 
@@ -645,20 +728,22 @@ void LLInventoryModelBackgroundFetch::bulkFetchViaAis(const FetchQueueInfo& fetc
         const LLUUID & cat_id(fetch_info.mUUID);
         if (cat_id.isNull()) // Lost and found
         {
-            AISAPI::FetchCategoryChildren(LLUUID::null, AISAPI::INVENTORY, false, ais_simple_callback);
-            mFetchCount++;
+            LL_WARNS() << "Lost and found not implemented yet" << LL_ENDL;
+            // todo: needs to be requested from ais in special manner?
+            /*AISAPI::FetchCategoryChildren(LLUUID::null, AISAPI::INVENTORY, false, ais_simple_callback);
+            incrFetchFolderCount(1);*/
         }
         else
         {
 
-            const LLViewerInventoryCategory * cat(gInventory.getCategory(cat_id));
+            LLViewerInventoryCategory * cat(gInventory.getCategory(cat_id));
             if (cat)
             {
                 if (LLViewerInventoryCategory::VERSION_UNKNOWN == cat->getVersion())
                 {
                     if (ALEXANDRIA_LINDEN_ID == cat->getOwnerID())
                     {
-                        AISAPI::FetchCategoryChildren(cat->getUUID(), AISAPI::LIBRARY, fetch_info.mRecursive == RT_RECURSIVE, ais_simple_callback);
+                        AISAPI::FetchCategoryChildren(cat->getUUID(), AISAPI::LIBRARY, fetch_info.mRecursive == RT_RECURSIVE, ais_simple_folder_callback);
                     }
                     else
                     {
@@ -670,10 +755,11 @@ void LLInventoryModelBackgroundFetch::bulkFetchViaAis(const FetchQueueInfo& fetc
                             type == RT_RECURSIVE,
                             [cat_id, type](const LLUUID &response_id)
                         {
-                            LLInventoryModelBackgroundFetch::instance().onAISCalback(cat_id, response_id, type);
+                            LLInventoryModelBackgroundFetch::instance().onAISFodlerCalback(cat_id, response_id, type);
                         });
                     }
-                    mFetchCount++;
+                    incrFetchFolderCount(1);
+                    cat->setFetching(true);
                 }
                 else
                 {
@@ -688,7 +774,7 @@ void LLInventoryModelBackgroundFetch::bulkFetchViaAis(const FetchQueueInfo& fetc
                             ++it)
                         {
                             // not push_front to not cause an infinite loop
-                            mFetchQueue.push_back(FetchQueueInfo((*it)->getUUID(), fetch_info.mRecursive));
+                            mFetchFolderQueue.push_back(FetchQueueInfo((*it)->getUUID(), fetch_info.mRecursive));
                         }
                     }
                 }
@@ -703,14 +789,19 @@ void LLInventoryModelBackgroundFetch::bulkFetchViaAis(const FetchQueueInfo& fetc
         {
             if (itemp->getPermissions().getOwner() == gAgent.getID())
             {
-                AISAPI::FetchItem(itemp->getUUID(), AISAPI::INVENTORY, ais_simple_callback);
+                AISAPI::FetchItem(fetch_info.mUUID, AISAPI::INVENTORY, ais_simple_item_callback);
             }
             else
             {
-                AISAPI::FetchItem(itemp->getUUID(), AISAPI::LIBRARY, ais_simple_callback);
+                AISAPI::FetchItem(fetch_info.mUUID, AISAPI::LIBRARY, ais_simple_item_callback);
             }
-            mFetchCount++;
         }
+        else
+        {
+            // Assume agent's inventory, library wouldn't have gotten here
+            AISAPI::FetchItem(fetch_info.mUUID, AISAPI::INVENTORY, ais_simple_item_callback);
+        }
+        mFetchCount++;
     }
 }
 
@@ -771,10 +862,10 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
 	LLSD item_request_body;
 	LLSD item_request_body_lib;
 
-	while (! mFetchQueue.empty() 
+	while (! mFetchFolderQueue.empty() 
 			&& (item_count + folder_count) < max_batch_size)
 	{
-		const FetchQueueInfo & fetch_info(mFetchQueue.front());
+		const FetchQueueInfo & fetch_info(mFetchFolderQueue.front());
 		if (fetch_info.mIsCategory)
 		{
 			const LLUUID & cat_id(fetch_info.mUUID);
@@ -828,7 +919,7 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
                                 it != categories->end();
                                 ++it)
                             {
-                                mFetchQueue.push_back(FetchQueueInfo((*it)->getUUID(), fetch_info.mRecursive));
+                                mFetchFolderQueue.push_back(FetchQueueInfo((*it)->getUUID(), fetch_info.mRecursive));
                             }
                         }
                     }
@@ -839,29 +930,36 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
 				recursive_cats.push_back(cat_id);
 			}
 		}
-		else
-		{
-			LLViewerInventoryItem * itemp(gInventory.getItem(fetch_info.mUUID));
 
-			if (itemp)
-			{
-				LLSD item_sd;
-				item_sd["owner_id"] = itemp->getPermissions().getOwner();
-				item_sd["item_id"] = itemp->getUUID();
-				if (itemp->getPermissions().getOwner() == gAgent.getID())
-				{
-					item_request_body.append(item_sd);
-				}
-				else
-				{
-					item_request_body_lib.append(item_sd);
-				}
-				//itemp->fetchFromServer();
-				item_count++;
-			}
-		}
+        mFetchFolderQueue.pop_front();
+    }
 
-		mFetchQueue.pop_front();
+
+    while (!mFetchItemQueue.empty()
+        && (item_count + folder_count) < max_batch_size)
+    {
+        const FetchQueueInfo & fetch_info(mFetchItemQueue.front());
+
+        LLViewerInventoryItem * itemp(gInventory.getItem(fetch_info.mUUID));
+
+        if (itemp)
+        {
+            LLSD item_sd;
+            item_sd["owner_id"] = itemp->getPermissions().getOwner();
+            item_sd["item_id"] = itemp->getUUID();
+            if (itemp->getPermissions().getOwner() == gAgent.getID())
+            {
+                item_request_body.append(item_sd);
+            }
+            else
+            {
+                item_request_body_lib.append(item_sd);
+            }
+            //itemp->fetchFromServer();
+            item_count++;
+        }
+
+        mFetchItemQueue.pop_front();
 	}
 
 	// Issue HTTP POST requests to fetch folders and items
@@ -932,14 +1030,22 @@ void LLInventoryModelBackgroundFetch::bulkFetch()
 
 bool LLInventoryModelBackgroundFetch::fetchQueueContainsNoDescendentsOf(const LLUUID & cat_id) const
 {
-	for (fetch_queue_t::const_iterator it = mFetchQueue.begin();
-		 it != mFetchQueue.end();
+	for (fetch_queue_t::const_iterator it = mFetchFolderQueue.begin();
+		 it != mFetchFolderQueue.end();
 		 ++it)
 	{
 		const LLUUID & fetch_id = (*it).mUUID;
 		if (gInventory.isObjectDescendentOf(fetch_id, cat_id))
 			return false;
 	}
+    for (fetch_queue_t::const_iterator it = mFetchItemQueue.begin();
+        it != mFetchItemQueue.end();
+        ++it)
+    {
+        const LLUUID & fetch_id = (*it).mUUID;
+        if (gInventory.isObjectDescendentOf(fetch_id, cat_id))
+            return false;
+    }
 	return true;
 }
 

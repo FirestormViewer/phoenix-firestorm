@@ -40,6 +40,7 @@
 #include "llgesturemgr.h"
 #include "llinventorybridge.h"
 #include "llinventoryfunctions.h"
+#include "llinventorymodelbackgroundfetch.h"
 #include "llinventoryobserver.h"
 #include "llnotificationsutil.h"
 #include "lloutfitobserver.h"
@@ -2672,6 +2673,58 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool enforce_item_restrictions,
 
 	LL_DEBUGS("Avatar") << self_av_string() << "starting" << LL_ENDL;
 
+    if (gInventory.hasPosiblyBrockenLinks())
+    {
+        // Inventory has either broken links or links that
+        // haven't loaded yet.
+        // Check if LLAppearanceMgr needs to wait.
+        LLUUID current_outfit_id = getCOF();
+        LLInventoryModel::item_array_t cof_items;
+        LLInventoryModel::cat_array_t cof_cats;
+        LLFindBrokenLinks is_brocken_link;
+        gInventory.collectDescendentsIf(current_outfit_id,
+            cof_cats,
+            cof_items,
+            LLInventoryModel::EXCLUDE_TRASH,
+            is_brocken_link);
+
+        if (cof_items.size() > 0)
+        {
+            // Some links haven't loaded yet, but fetch isn't complete so
+            // links are likely fine and we will have to wait for them to
+            // load (if inventory takes too long to load, might be a good
+            // idea to make this check periodical)
+            if (LLInventoryModelBackgroundFetch::getInstance()->folderFetchActive())
+            {
+                if (!mBulkFecthCallbackSlot.connected())
+                {
+                    nullary_func_t cb = post_update_func;
+                    mBulkFecthCallbackSlot =
+                        LLInventoryModelBackgroundFetch::getInstance()->setFetchCompletionCallback(
+                            [this, enforce_ordering, post_update_func, cb]()
+                    {
+                        // inventory model should be already tracking this
+                        // callback, but make sure rebuildBrockenLinks gets
+                        // called before a cof update
+                        gInventory.rebuildBrockenLinks();
+                        updateAppearanceFromCOF(enforce_ordering, post_update_func, post_update_func);
+                        mBulkFecthCallbackSlot.disconnect();
+                    });
+                }
+                return;
+            }
+            else
+            {
+                // this should have happened on completion callback,
+                // check why it didn't then fix it
+                llassert(false); 
+
+                // try to recover now
+                gInventory.rebuildBrockenLinks();
+            }
+        }
+    }
+
 	if (enforce_item_restrictions)
 	{
 		// The point here is just to call
@@ -4779,6 +4832,11 @@ LLAppearanceMgr::LLAppearanceMgr():
 LLAppearanceMgr::~LLAppearanceMgr()
 {
 	mActive = false;
+
+    if (!mBulkFecthCallbackSlot.connected())
+    {
+        mBulkFecthCallbackSlot.disconnect();
+    }
 }
 
 void LLAppearanceMgr::setAttachmentInvLinkEnable(bool val)
@@ -4909,6 +4967,70 @@ public:
 	~CallAfterCategoryFetchStage1()
 	{
 	}
+    /*virtual*/ void startFetch()
+    {
+        bool ais3 = AISAPI::isAvailable();
+        for (uuid_vec_t::const_iterator it = mIDs.begin(); it != mIDs.end(); ++it)
+        {
+            LLViewerInventoryCategory* cat = gInventory.getCategory(*it);
+            if (!cat) continue;
+            if (!isCategoryComplete(cat))
+            {
+                // CHECK IT: isCategoryComplete() checks both version and descendant count but
+                // fetch() only works for Unknown version and doesn't care about descentants,
+                // as result fetch won't start and folder will potentially get stuck as
+                // incomplete in observer.
+                // Likely either both should use only version or both should check descendants.
+                cat->fetch();		//blindly fetch it without seeing if anything else is fetching it.
+                mIncomplete.push_back(*it);	//Add to list of things being downloaded for this observer.
+            }
+            else if (ais3)
+            {
+                LLInventoryModel::cat_array_t* cats;
+                LLInventoryModel::item_array_t* items;
+                gInventory.getDirectDescendentsOf(cat->getUUID(), cats, items);
+
+                if (items)
+                {
+                    S32 complete_count = 0;
+                    S32 incomplete_count = 0;
+                    for (LLInventoryModel::item_array_t::const_iterator it = items->begin(); it < items->end(); ++it)
+                    {
+                        if (!(*it)->isFinished())
+                        {
+                            incomplete_count++;
+                        }
+                        else
+                        {
+                            complete_count++;
+                        }
+                    }
+                    // AIS can fetch couple items, but if there
+                    // is more than a dozen it will be very slow
+                    // it's faster to get whole folder in such case
+                    const S32 MAX_INDIVIDUAL_FETCH = 10;
+                    if (incomplete_count > MAX_INDIVIDUAL_FETCH
+                        || (incomplete_count > 1 && complete_count == 0))
+                    {
+                        // To prevent premature removal from mIncomplete and
+                        // since we are doing a full refetch anyway, mark unknown
+                        cat->setVersion(LLViewerInventoryCategory::VERSION_UNKNOWN);
+                        cat->fetch();
+                        mIncomplete.push_back(*it);
+                    }
+                    else
+                    {
+                        // let stage2 handle incomplete ones
+                        mComplete.push_back(*it);
+                    }
+                }
+            }
+            else
+            {
+                mComplete.push_back(*it);
+            }
+        }
+    }
 	virtual void done()
 	{
         if (mComplete.size() <= 0)

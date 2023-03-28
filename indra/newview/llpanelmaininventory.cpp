@@ -37,6 +37,7 @@
 #include "llfilepicker.h"
 #include "llinventorybridge.h"
 #include "llinventoryfunctions.h"
+#include "llinventorygallery.h"
 #include "llinventorymodelbackgroundfetch.h"
 #include "llfiltereditor.h"
 #include "llfloatersidepanelcontainer.h"
@@ -52,6 +53,7 @@
 #include "llspinctrl.h"
 #include "lltoggleablemenu.h"
 #include "lltooldraganddrop.h"
+#include "lltrans.h"
 #include "llviewermenu.h"
 #include "llviewertexturelist.h"
 #include "llsidepanelinventory.h"
@@ -129,9 +131,11 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	  mNeedUploadCost(true),
       mMenuViewDefault(NULL),
       mSingleFolderMode(false),
-      mFolderRootChangedConnection(),
-	  mViewMenuButton(nullptr), // <FS:Ansariel> Keep better inventory layout
-	  mSearchTypeCombo(NULL) // <FS:Ansariel> Properly initialize this
+      mViewMode(MODE_LIST),
+      mListViewRootUpdatedConnection(),
+      mGalleryRootUpdatedConnection(),
+      mViewMenuButton(nullptr), // <FS:Ansariel> Keep better inventory layout
+      mSearchTypeCombo(NULL) // <FS:Ansariel> Properly initialize this
 {
 	// Menu Callbacks (non contex menus)
 	mCommitCallbackRegistrar.add("Inventory.DoToSelected", boost::bind(&LLPanelMainInventory::doToSelected, this, _2));
@@ -363,8 +367,11 @@ BOOL LLPanelMainInventory::postBuild()
 	mViewMenuButton = findChild<LLMenuButton>("view_btn");
 
     mSingleFolderPanelInventory = getChild<LLInventorySingleFolderPanel>("single_folder_inv");
-    mFolderRootChangedConnection = mSingleFolderPanelInventory->setRootChangedCallback(boost::bind(&LLPanelMainInventory::updateTitle, this));
+    mListViewRootUpdatedConnection = mSingleFolderPanelInventory->setRootChangedCallback(boost::bind(&LLPanelMainInventory::updateTitle, this));
     mSingleFolderPanelInventory->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, mSingleFolderPanelInventory, _1, _2));
+
+    mInventoryGalleryPanel = getChild<LLInventoryGallery>("gallery_view_inv");
+    mGalleryRootUpdatedConnection = mInventoryGalleryPanel->setRootChangedCallback(boost::bind(&LLPanelMainInventory::updateTitle, this));
 
 	initListCommandsHandlers();
 	const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
@@ -449,9 +456,13 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
         mMenuAddHandle.markDead();
     }
 
-    if (mFolderRootChangedConnection.connected())
+    if (mListViewRootUpdatedConnection.connected())
     {
-        mFolderRootChangedConnection.disconnect();
+        mListViewRootUpdatedConnection.disconnect();
+    }
+    if (mGalleryRootUpdatedConnection.connected())
+    {
+        mGalleryRootUpdatedConnection.disconnect();
     }
 }
 
@@ -610,11 +621,18 @@ void LLPanelMainInventory::doCreate(const LLSD& userdata)
 	// </FS:Ansariel>
     if(mSingleFolderMode)
     {
-        LLFolderViewItem* current_folder = getActivePanel()->getRootFolder();
-        if (current_folder)
+        if(isListViewMode())
         {
-            LLFolderBridge* bridge = (LLFolderBridge*)current_folder->getViewModelItem();
-            menu_create_inventory_item(getPanel(), bridge, userdata);
+            LLFolderViewItem* current_folder = getActivePanel()->getRootFolder();
+            if (current_folder)
+            {
+                LLFolderBridge* bridge = (LLFolderBridge*)current_folder->getViewModelItem();
+                menu_create_inventory_item(getPanel(), bridge, userdata);
+            }
+        }
+        else if(isGalleryViewMode())
+        {
+            menu_create_inventory_item(NULL, mInventoryGalleryPanel->getRootFolder(), userdata);
         }
     }
     else
@@ -839,10 +857,18 @@ void LLPanelMainInventory::onClearSearch()
 
 void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
 {
+    if(mSingleFolderMode && isGalleryViewMode())
+    {
+        mFilterSubString = search_string;
+        mInventoryGalleryPanel->setFilterSubString(mFilterSubString);
+        return;
+    }
+
 	if (search_string == "")
 	{
 		onClearSearch();
 	}
+
 	if (!mActivePanel)
 	{
 		return;
@@ -1084,11 +1110,7 @@ void LLPanelMainInventory::onFilterSelected()
 		finder->changeFilter(&filter);
         if (mSingleFolderMode)
         {
-            const LLViewerInventoryCategory* cat = gInventory.getCategory(mSingleFolderPanelInventory->getSingleFolderRoot());
-            if (cat)
-            {
-                finder->setTitle(cat->getName());
-            }
+            finder->setTitle(getLocalizedRootName());
         }
 	}
 	if (filter.isActive())
@@ -1247,8 +1269,9 @@ void LLPanelMainInventory::updateItemcountText()
     {
         LLInventoryModel::cat_array_t *cats;
         LLInventoryModel::item_array_t *items;
-        gInventory.getDirectDescendentsOf(mSingleFolderPanelInventory->getSingleFolderRoot(), cats, items);
-    
+
+        gInventory.getDirectDescendentsOf(getCurrentSFVRoot(), cats, items);
+
         string_args["[ITEM_COUNT]"] = llformat("%d", items->size());
         string_args["[CATEGORY_COUNT]"] = llformat("%d", cats->size());
         text = getString("ItemcountCompleted", string_args);
@@ -1298,11 +1321,7 @@ void LLPanelMainInventory::toggleFindOptions()
 
         if (mSingleFolderMode)
         {
-            const LLViewerInventoryCategory* cat = gInventory.getCategory(mSingleFolderPanelInventory->getSingleFolderRoot());
-            if (cat)
-            {
-                finder->setTitle(cat->getName());
-            }
+            finder->setTitle(getLocalizedRootName());
         }
 	}
 	else
@@ -1813,7 +1832,8 @@ void LLPanelMainInventory::toggleViewMode()
     mSingleFolderMode = !mSingleFolderMode;
 
     getChild<LLPanel>("default_inventory_panel")->setVisible(!mSingleFolderMode);
-    getChild<LLPanel>("single_folder_inventory")->setVisible(mSingleFolderMode);
+    getChild<LLPanel>("single_folder_inventory")->setVisible(mSingleFolderMode && isListViewMode());
+    getChild<LLPanel>("gallery_view_inventory")->setVisible(mSingleFolderMode && isGalleryViewMode());
     getChild<LLLayoutPanel>("nav_buttons")->setVisible(mSingleFolderMode);
     getChild<LLButton>("view_mode_btn")->setImageOverlay(mSingleFolderMode ? getString("default_mode_btn") : getString("single_folder_mode_btn"));
 
@@ -1844,7 +1864,7 @@ void LLPanelMainInventory::onViewModeClick()
     LLUUID new_root_folder;
     if(mSingleFolderMode)
     {
-        selected_folder = mSingleFolderPanelInventory->getSingleFolderRoot();
+        selected_folder = getCurrentSFVRoot();
     }
     else
     {
@@ -1878,7 +1898,7 @@ void LLPanelMainInventory::onViewModeClick()
     if (mSingleFolderMode && new_root_folder.notNull())
     {
         setSingleFolderViewRoot(new_root_folder, true);
-        if(selected_folder.notNull())
+        if(selected_folder.notNull() && isListViewMode())
         {
             getActivePanel()->setSelection(selected_folder, TAKE_FOCUS_YES);
         }
@@ -1895,34 +1915,66 @@ void LLPanelMainInventory::onViewModeClick()
 
 void LLPanelMainInventory::onUpFolderClicked()
 {
-    const LLViewerInventoryCategory* cat = gInventory.getCategory(mSingleFolderPanelInventory->getSingleFolderRoot());
+    const LLViewerInventoryCategory* cat = gInventory.getCategory(getCurrentSFVRoot());
     if (cat)
     {
         if (cat->getParentUUID().notNull())
         {
-            mSingleFolderPanelInventory->changeFolderRoot(cat->getParentUUID());
+            if(isListViewMode())
+            {
+                mSingleFolderPanelInventory->changeFolderRoot(cat->getParentUUID());
+            }
+            if(isGalleryViewMode())
+            {
+                mInventoryGalleryPanel->setRootFolder(cat->getParentUUID());
+            }
         }
     }
 }
 
 void LLPanelMainInventory::onBackFolderClicked()
 {
-    mSingleFolderPanelInventory->onBackwardFolder();
+    if(isListViewMode())
+    {
+        mSingleFolderPanelInventory->onBackwardFolder();
+    }
+    if(isGalleryViewMode())
+    {
+        mInventoryGalleryPanel->onBackwardFolder();
+    }
 }
 
 void LLPanelMainInventory::onForwardFolderClicked()
 {
-    mSingleFolderPanelInventory->onForwardFolder();
+    if(isListViewMode())
+    {
+        mSingleFolderPanelInventory->onForwardFolder();
+    }
+    if(isGalleryViewMode())
+    {
+        mInventoryGalleryPanel->onForwardFolder();
+    }
 }
 
 void LLPanelMainInventory::setSingleFolderViewRoot(const LLUUID& folder_id, bool clear_nav_history)
 {
-    mSingleFolderPanelInventory->changeFolderRoot(folder_id);
-    if(clear_nav_history)
+    if(isListViewMode())
     {
-        mSingleFolderPanelInventory->clearNavigationHistory();
-        updateNavButtons();
+        mSingleFolderPanelInventory->changeFolderRoot(folder_id);
+        if(clear_nav_history)
+        {
+            mSingleFolderPanelInventory->clearNavigationHistory();
+        }
     }
+    else if(isGalleryViewMode())
+    {
+        mInventoryGalleryPanel->setRootFolder(folder_id);
+        if(clear_nav_history)
+        {
+            mInventoryGalleryPanel->clearNavigationHistory();
+        }
+    }
+    updateNavButtons();
 }
 
 LLUUID LLPanelMainInventory::getSingleFolderViewRoot()
@@ -2135,7 +2187,16 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 	if (command_name == "include_links")
 	{
 		mActivePanel->getFilter().toggleSearchVisibilityLinks();
-	}		
+	}
+
+    if (command_name == "list_view")
+    {
+        setViewMode(MODE_LIST);
+    }
+    if (command_name == "gallery_view")
+    {
+        setViewMode(MODE_GALLERY);
+    }
 }
 
 void LLPanelMainInventory::onVisibilityChange( BOOL new_visibility )
@@ -2327,11 +2388,11 @@ BOOL LLPanelMainInventory::isActionChecked(const LLSD& userdata)
 
     if (command_name == "list_view")
     {
-        return true;
+        return isListViewMode();
     }
     if (command_name == "gallery_view")
     {
-        return false;
+        return isGalleryViewMode();
     }
     if (command_name == "combination_view")
     {
@@ -2565,15 +2626,11 @@ void LLPanelMainInventory::updateTitle()
     {
         if(mSingleFolderMode)
         {
-            const LLViewerInventoryCategory* cat = gInventory.getCategory(mSingleFolderPanelInventory->getSingleFolderRoot());
-            if (cat)
+            inventory_floater->setTitle(getLocalizedRootName());
+            LLFloaterInventoryFinder *finder = getFinder();
+            if (finder)
             {
-                inventory_floater->setTitle(cat->getName());
-                LLFloaterInventoryFinder *finder = getFinder();
-                if (finder)
-                {
-                    finder->setTitle(cat->getName());
-                }
+                finder->setTitle(getLocalizedRootName());
             }
         }
         else
@@ -2586,10 +2643,18 @@ void LLPanelMainInventory::updateTitle()
 
 void LLPanelMainInventory::updateNavButtons()
 {
-    getChild<LLButton>("back_btn")->setEnabled(mSingleFolderPanelInventory->isBackwardAvailable());
-    getChild<LLButton>("forward_btn")->setEnabled(mSingleFolderPanelInventory->isForwardAvailable());
-    
-    const LLViewerInventoryCategory* cat = gInventory.getCategory(mSingleFolderPanelInventory->getSingleFolderRoot());
+    if(isListViewMode())
+    {
+        getChild<LLButton>("back_btn")->setEnabled(mSingleFolderPanelInventory->isBackwardAvailable());
+        getChild<LLButton>("forward_btn")->setEnabled(mSingleFolderPanelInventory->isForwardAvailable());
+    }
+    if(isGalleryViewMode())
+    {
+        getChild<LLButton>("back_btn")->setEnabled(mInventoryGalleryPanel->isBackwardAvailable());
+        getChild<LLButton>("forward_btn")->setEnabled(mInventoryGalleryPanel->isForwardAvailable());
+    }
+
+    const LLViewerInventoryCategory* cat = gInventory.getCategory(getCurrentSFVRoot());
     bool up_enabled = (cat && cat->getParentUUID().notNull());
     getChild<LLButton>("up_btn")->setEnabled(up_enabled);
 }
@@ -2602,6 +2667,56 @@ LLSidepanelInventory* LLPanelMainInventory::getParentSidepanelInventory()
         return dynamic_cast<LLSidepanelInventory*>(inventory_container->findChild<LLPanel>("main_panel", true));
     }
     return NULL;
+}
+
+void LLPanelMainInventory::setViewMode(EViewModeType mode)
+{
+    if(mode != mViewMode)
+    {
+        LLUUID cur_root = getCurrentSFVRoot();
+        mViewMode = mode;
+
+        getChild<LLPanel>("single_folder_inventory")->setVisible(mSingleFolderMode && isListViewMode());
+        getChild<LLPanel>("gallery_view_inventory")->setVisible(mSingleFolderMode && isGalleryViewMode());
+
+        if(isListViewMode())
+        {
+            mSingleFolderPanelInventory->changeFolderRoot(cur_root);
+            mSingleFolderPanelInventory->setNavForwardList(mInventoryGalleryPanel->getNavForwardList());
+            mSingleFolderPanelInventory->setNavBackwardList(mInventoryGalleryPanel->getNavBackwardList());
+        }
+        if(isGalleryViewMode())
+        {
+            mInventoryGalleryPanel->setRootFolder(cur_root);
+            mInventoryGalleryPanel->setNavForwardList(mSingleFolderPanelInventory->getNavForwardList());
+            mInventoryGalleryPanel->setNavBackwardList(mSingleFolderPanelInventory->getNavBackwardList());
+        }
+        updateNavButtons();
+
+        if((isListViewMode() && (mActivePanel->getFilterSubString() != mFilterSubString)) ||
+           (isGalleryViewMode() && (mInventoryGalleryPanel->getFilterSubString() != mFilterSubString)))
+        {
+            onFilterEdit(mFilterSubString);
+        }
+    }
+}
+
+std::string LLPanelMainInventory::getLocalizedRootName()
+{
+    return mSingleFolderMode ? get_localized_folder_name(getCurrentSFVRoot()) : "";
+}
+
+LLUUID LLPanelMainInventory::getCurrentSFVRoot()
+{
+    if(isListViewMode())
+    {
+        return mSingleFolderPanelInventory->getSingleFolderRoot();
+    }
+    if(isGalleryViewMode())
+    {
+        return mInventoryGalleryPanel->getRootFolder();
+    }
+    return LLUUID::null;
 }
 // List Commands                                                              //
 ////////////////////////////////////////////////////////////////////////////////

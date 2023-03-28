@@ -303,6 +303,28 @@
     </single_folder_inventory_panel>
   </panel>
   <panel
+   follows="all"
+   halign="center"
+   height="338"
+   layout="topleft"
+   left="0"
+   name="gallery_view_inventory"
+   top_delta="0"
+   visible="false"
+   width="322">
+    <panel
+     class="inventory_gallery"
+     filename="panel_inventory_gallery.xml"
+     left="0"
+     top="0"
+     height="338"
+     width="322"
+     name="gallery_view_inv"
+     background_visible="true"
+     follows="all"
+     layout="topleft" />
+  </panel>
+  <panel
    follows="left|right|bottom"
    height="25"
    layout="topleft"
@@ -452,5 +474,5 @@
            top="0"
            width="31"/>
        </panel>
-	</panel>
+    </panel>
 </panel>

@@ -319,7 +319,7 @@ LLViewerInventoryItem::LLViewerInventoryItem(const LLUUID& uuid,
 											 time_t creation_date_utc) :
 	LLInventoryItem(uuid, parent_uuid, perm, asset_uuid, type, inv_type,
 					name, desc, sale_info, flags, creation_date_utc),
-	mIsComplete(TRUE)
+	mIsComplete(true)
 {
 }
 
@@ -328,7 +328,7 @@ LLViewerInventoryItem::LLViewerInventoryItem(const LLUUID& item_id,
 											 const std::string& name,
 											 LLInventoryType::EType inv_type) :
 	LLInventoryItem(),
-	mIsComplete(FALSE)
+	mIsComplete(false)
 {
 	mUUID = item_id;
 	mParentUUID = parent_id;
@@ -338,7 +338,7 @@ LLViewerInventoryItem::LLViewerInventoryItem(const LLUUID& item_id,
 
 LLViewerInventoryItem::LLViewerInventoryItem() :
 	LLInventoryItem(),
-	mIsComplete(FALSE)
+	mIsComplete(false)
 {
 }
 
@@ -355,7 +355,7 @@ LLViewerInventoryItem::LLViewerInventoryItem(const LLViewerInventoryItem* other)
 
 LLViewerInventoryItem::LLViewerInventoryItem(const LLInventoryItem *other) :
 	LLInventoryItem(other),
-	mIsComplete(TRUE)
+	mIsComplete(true)
 {
 }
 
@@ -460,14 +460,7 @@ void LLViewerInventoryItem::fetchFromServer(void) const
 	{
         if (AISAPI::isAvailable()) // AIS v 3
         {
-            if (gAgent.getID() != mPermissions.getOwner())
-            {
-                AISAPI::FetchItem(mUUID, AISAPI::LIBRARY);
-            }
-            else
-            {
-                AISAPI::FetchItem(mUUID, AISAPI::INVENTORY);
-            }
+            LLInventoryModelBackgroundFetch::getInstance()->scheduleItemFetch(mUUID);
         }
         else
         {
@@ -724,7 +717,6 @@ bool LLViewerInventoryCategory::fetch()
 		mDescendentsRequested.reset();
 		mDescendentsRequested.setTimerExpirySec(FETCH_TIMER_EXPIRY);
 
-
 		std::string url;
 		if (gAgent.getRegion())
 		{
@@ -736,7 +728,7 @@ bool LLViewerInventoryCategory::fetch()
 		}
 		if (!url.empty() || AISAPI::isAvailable())
 		{
-			LLInventoryModelBackgroundFetch::instance().start(mUUID, false);			
+			LLInventoryModelBackgroundFetch::instance().start(mUUID, false);
 		}
 		// <FS:Ansariel> [UDP-Msg]
 		else
@@ -766,6 +758,24 @@ bool LLViewerInventoryCategory::fetch()
 		return true;
 	}
 	return false;
+}
+
+void LLViewerInventoryCategory::setFetching(bool fetching)
+{
+    if (fetching)
+    {
+        if ((VERSION_UNKNOWN == getVersion())
+            && mDescendentsRequested.hasExpired())
+        {
+            const F32 FETCH_TIMER_EXPIRY = 10.0f;
+            mDescendentsRequested.reset();
+            mDescendentsRequested.setTimerExpirySec(FETCH_TIMER_EXPIRY);
+        }
+    }
+    else
+    {
+        mDescendentsRequested.stop();
+    }
 }
 
 S32 LLViewerInventoryCategory::getViewerDescendentCount() const
@@ -2134,69 +2144,78 @@ const std::string NEW_GESTURE_NAME = "New Gesture"; // *TODO:Translate? (probabl
 // ! REFACTOR ! Really need to refactor this so that it's not a bunch of if-then statements...
 void menu_create_inventory_item(LLInventoryPanel* panel, LLFolderBridge *bridge, const LLSD& userdata, const LLUUID& default_parent_uuid)
 {
-	std::string type_name = userdata.asString();
-	
-	if (("inbox" == type_name) || ("category" == type_name) || ("current" == type_name) || ("outfit" == type_name) || ("my_otfts" == type_name))
-	{
-		LLFolderType::EType preferred_type = LLFolderType::lookup(type_name);
+    menu_create_inventory_item(panel, bridge ? bridge->getUUID() : LLUUID::null, userdata, default_parent_uuid);
+}
 
-		LLUUID parent_id;
-		if (bridge)
-		{
-			parent_id = bridge->getUUID();
-		}
-		else if (default_parent_uuid.notNull())
-		{
-			parent_id = default_parent_uuid;
-		}
-		else
-		{
-			parent_id = gInventory.getRootFolderID();
-		}
+void menu_create_inventory_item(LLInventoryPanel* panel, LLUUID dest_id, const LLSD& userdata, const LLUUID& default_parent_uuid)
+{
+    std::string type_name = userdata.asString();
+    
+    if (("inbox" == type_name) || ("category" == type_name) || ("current" == type_name) || ("outfit" == type_name) || ("my_otfts" == type_name))
+    {
+        LLFolderType::EType preferred_type = LLFolderType::lookup(type_name);
 
-        LLHandle<LLPanel> handle = panel->getHandle();
-		gInventory.createNewCategory(
+        LLUUID parent_id;
+        if (dest_id.notNull())
+        {
+            parent_id = dest_id;
+        }
+        else if (default_parent_uuid.notNull())
+        {
+            parent_id = default_parent_uuid;
+        }
+        else
+        {
+            parent_id = gInventory.getRootFolderID();
+        }
+
+        std::function<void(const LLUUID&)> callback_cat_created = NULL;
+        if(panel)
+        {
+            LLHandle<LLPanel> handle = panel->getHandle();
+            std::function<void(const LLUUID&)> callback_cat_created = [handle](const LLUUID &new_category_id)
+            {
+                gInventory.notifyObservers();
+                LLInventoryPanel* panel = static_cast<LLInventoryPanel*>(handle.get());
+                if (panel)
+                {
+                    panel->setSelectionByID(new_category_id, TRUE);
+                }
+            };
+        }
+        gInventory.createNewCategory(
             parent_id,
             preferred_type,
             LLStringUtil::null,
-            [handle](const LLUUID &new_category_id)
-        {
-            gInventory.notifyObservers();
-            LLInventoryPanel* panel = static_cast<LLInventoryPanel*>(handle.get());
-            if (panel)
-            {
-                panel->setSelectionByID(new_category_id, TRUE);
-            }
-        }
-        );
-	}
-	else if ("lsl" == type_name)
-	{
-		const LLUUID parent_id = bridge ? bridge->getUUID() : gInventory.findCategoryUUIDForType(LLFolderType::FT_LSL_TEXT);
-		create_new_item(NEW_LSL_NAME,
-					  parent_id,
-					  LLAssetType::AT_LSL_TEXT,
-					  LLInventoryType::IT_LSL,
-					  PERM_MOVE | PERM_TRANSFER);	// overridden in create_new_item
-	}
-	else if ("notecard" == type_name)
-	{
-		const LLUUID parent_id = bridge ? bridge->getUUID() : gInventory.findCategoryUUIDForType(LLFolderType::FT_NOTECARD);
-		create_new_item(NEW_NOTECARD_NAME,
-					  parent_id,
-					  LLAssetType::AT_NOTECARD,
-					  LLInventoryType::IT_NOTECARD,
-					  PERM_ALL);	// overridden in create_new_item
-	}
-	else if ("gesture" == type_name)
-	{
-		const LLUUID parent_id = bridge ? bridge->getUUID() : gInventory.findCategoryUUIDForType(LLFolderType::FT_GESTURE);
-		create_new_item(NEW_GESTURE_NAME,
-					  parent_id,
-					  LLAssetType::AT_GESTURE,
-					  LLInventoryType::IT_GESTURE,
-					  PERM_ALL);	// overridden in create_new_item
-	}
+            callback_cat_created);
+    }
+    else if ("lsl" == type_name)
+    {
+        const LLUUID parent_id = dest_id.notNull() ? dest_id : gInventory.findCategoryUUIDForType(LLFolderType::FT_LSL_TEXT);
+        create_new_item(NEW_LSL_NAME,
+                      parent_id,
+                      LLAssetType::AT_LSL_TEXT,
+                      LLInventoryType::IT_LSL,
+                      PERM_MOVE | PERM_TRANSFER);    // overridden in create_new_item
+    }
+    else if ("notecard" == type_name)
+    {
+        const LLUUID parent_id = dest_id.notNull() ? dest_id : gInventory.findCategoryUUIDForType(LLFolderType::FT_NOTECARD);
+        create_new_item(NEW_NOTECARD_NAME,
+                      parent_id,
+                      LLAssetType::AT_NOTECARD,
+                      LLInventoryType::IT_NOTECARD,
+                      PERM_ALL);    // overridden in create_new_item
+    }
+    else if ("gesture" == type_name)
+    {
+        const LLUUID parent_id = dest_id.notNull() ? dest_id : gInventory.findCategoryUUIDForType(LLFolderType::FT_GESTURE);
+        create_new_item(NEW_GESTURE_NAME,
+                      parent_id,
+                      LLAssetType::AT_GESTURE,
+                      LLInventoryType::IT_GESTURE,
+                      PERM_ALL);    // overridden in create_new_item
+    }
     else if (("sky" == type_name) || ("water" == type_name) || ("daycycle" == type_name))
     {
         LLSettingsType::type_e stype(LLSettingsType::ST_NONE);
@@ -2219,25 +2238,28 @@ void menu_create_inventory_item(LLInventoryPanel* panel, LLFolderBridge *bridge,
             return;
         }
 
-        LLUUID parent_id = bridge ? bridge->getUUID() : gInventory.findCategoryUUIDForType(LLFolderType::FT_SETTINGS);
+        LLUUID parent_id = dest_id.notNull() ? dest_id : gInventory.findCategoryUUIDForType(LLFolderType::FT_SETTINGS);
 
         LLSettingsVOBase::createNewInventoryItem(stype, parent_id);
     }
-	else
-	{
-		// Use for all clothing and body parts.  Adding new wearable types requires updating LLWearableDictionary.
-		LLWearableType::EType wearable_type = LLWearableType::getInstance()->typeNameToType(type_name);
-		if (wearable_type >= LLWearableType::WT_SHAPE && wearable_type < LLWearableType::WT_COUNT)
-		{
-			const LLUUID parent_id = bridge ? bridge->getUUID() : LLUUID::null;
-			LLAgentWearables::createWearable(wearable_type, false, parent_id);
-		}
-		else
-		{
-			LL_WARNS(LOG_INV) << "Can't create unrecognized type " << type_name << LL_ENDL;
-		}
-	}
-	panel->getRootFolder()->setNeedsAutoRename(TRUE);	
+    else
+    {
+        // Use for all clothing and body parts.  Adding new wearable types requires updating LLWearableDictionary.
+        LLWearableType::EType wearable_type = LLWearableType::getInstance()->typeNameToType(type_name);
+        if (wearable_type >= LLWearableType::WT_SHAPE && wearable_type < LLWearableType::WT_COUNT)
+        {
+            const LLUUID parent_id = dest_id;
+            LLAgentWearables::createWearable(wearable_type, false, parent_id);
+        }
+        else
+        {
+            LL_WARNS(LOG_INV) << "Can't create unrecognized type " << type_name << LL_ENDL;
+        }
+    }
+    if(panel)
+    {
+        panel->getRootFolder()->setNeedsAutoRename(TRUE);
+    }
 }
 
 LLAssetType::EType LLViewerInventoryItem::getType() const

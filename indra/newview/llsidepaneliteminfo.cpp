@@ -157,15 +157,16 @@ LLSidepanelItemInfo::~LLSidepanelItemInfo()
 // virtual
 BOOL LLSidepanelItemInfo::postBuild()
 {
+    mChangeThumbnailBtn = getChild<LLUICtrl>("change_thumbnail_btn");
+    mItemTypeIcon = getChild<LLIconCtrl>("item_type_icon");
     mLabelOwnerName = getChild<LLTextBox>("LabelOwnerName");
     mLabelCreatorName = getChild<LLTextBox>("LabelCreatorName");
-    mItemTypeIcon = getChild<LLIconCtrl>("item_type_icon");
     
 	getChild<LLLineEditor>("LabelItemName")->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
 	getChild<LLUICtrl>("LabelItemName")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitName,this));
 	getChild<LLUICtrl>("LabelItemDesc")->setCommitCallback(boost::bind(&LLSidepanelItemInfo:: onCommitDescription, this));
     // Thumnail edition
-    getChild<LLUICtrl>("change_thumbnail_btn")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onEditThumbnail, this));
+    mChangeThumbnailBtn->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onEditThumbnail, this));
 	// acquired date
 	// owner permissions
 	// Permissions debug text
@@ -282,7 +283,7 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
     }
 
 	// do not enable the UI for incomplete items.
-	BOOL is_complete = item->isFinished();
+	bool is_complete = item->isFinished();
 	const BOOL cannot_restrict_permissions = LLInventoryType::cannotRestrictPermissions(item->getInventoryType());
 	const BOOL is_calling_card = (item->getInventoryType() == LLInventoryType::IT_CALLINGCARD);
 	const BOOL is_settings = (item->getInventoryType() == LLInventoryType::IT_SETTINGS);
@@ -481,6 +482,9 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
         mLabelOwnerName->setEnabled(FALSE);
         mLabelOwnerName->setValue(getString("public"));
 	}
+
+    // Not yet supported for task inventories
+    mChangeThumbnailBtn->setEnabled(mObjectID.isNull());
 	
 	////////////
 	// ORIGIN //

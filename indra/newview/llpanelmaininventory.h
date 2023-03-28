@@ -39,6 +39,7 @@
 class LLComboBox;
 class LLFolderViewItem;
 class LLInventoryPanel;
+class LLInventoryGallery;
 class LLSaveFolderState;
 class LLFilterEditor;
 class LLTabContainer;
@@ -66,6 +67,13 @@ public:
 	~LLPanelMainInventory();
 
 	BOOL postBuild();
+
+    enum EViewModeType
+    {
+        MODE_LIST,
+        MODE_GALLERY,
+        MODE_COMBINATION
+    };
 
 	virtual BOOL handleKeyHere(KEY key, MASK mask);
 
@@ -114,6 +122,12 @@ public:
     void setSingleFolderViewRoot(const LLUUID& folder_id, bool clear_nav_history = true);
     LLUUID getSingleFolderViewRoot();
     bool isSingleFolderMode() { return mSingleFolderMode; }
+
+    void setViewMode(EViewModeType mode);
+    bool isListViewMode() { return (mViewMode == MODE_LIST); }
+    bool isGalleryViewMode() { return (mViewMode == MODE_GALLERY); }
+    LLUUID getCurrentSFVRoot();
+    std::string getLocalizedRootName();
 
 	// <FS:Zi> Filter dropdown
 	void onFilterTypeSelected(const std::string& filter_type_name);
@@ -189,7 +203,9 @@ private:
 	LLComboBox*					mSearchTypeCombo;
 
     bool mSingleFolderMode;
+    EViewModeType mViewMode;
     LLInventorySingleFolderPanel* mSingleFolderPanelInventory;
+    LLInventoryGallery* mInventoryGalleryPanel;
 
 	// <FS:Zi> Filter dropdown
 	LLComboBox*					mFilterComboBox;
@@ -197,7 +213,8 @@ private:
 	U64							mFilterMask;		// contains the cumulated bit filter for all dropdown filter types
 	// </FS:Zi> Filter dropdown
 
-    boost::signals2::connection mFolderRootChangedConnection;
+    boost::signals2::connection mListViewRootUpdatedConnection;
+    boost::signals2::connection mGalleryRootUpdatedConnection;
 
 	//////////////////////////////////////////////////////////////////////////////////
 	// List Commands                                                                //

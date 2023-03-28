@@ -104,6 +104,11 @@ void move_items_to_folder(const LLUUID& new_cat_uuid, const uuid_vec_t& selected
 bool is_only_cats_selected(const uuid_vec_t& selected_uuids);
 bool is_only_items_selected(const uuid_vec_t& selected_uuids);
 
+bool can_move_to_outfit(LLInventoryItem* inv_item, BOOL move_is_into_current_outfit);
+bool can_move_to_landmarks(LLInventoryItem* inv_item);
+bool can_move_to_my_outfits(LLInventoryModel* model, LLInventoryCategory* inv_cat, U32 wear_limit);
+std::string get_localized_folder_name(LLUUID cat_uuid);
+
 /**                    Miscellaneous global functions
  **                                                                            **
  *******************************************************************************/
@@ -368,6 +373,20 @@ public:
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Class LLFindBrokenLinks
+//
+// Collects broken links
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+class LLFindBrokenLinks : public LLInventoryCollectFunctor
+{
+public:
+    LLFindBrokenLinks() {}
+    virtual ~LLFindBrokenLinks() {}
+    virtual bool operator()(LLInventoryCategory* cat,
+        LLInventoryItem* item);
+};
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLFindByMask
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class LLFindByMask : public LLInventoryCollectFunctor
@@ -463,6 +482,15 @@ public:
 
 private:
 	LLWearableType::EType mWearableType;
+};
+
+class LLIsTextureType : public LLInventoryCollectFunctor
+{
+public:
+    LLIsTextureType() {}
+    virtual ~LLIsTextureType() {}
+    virtual bool operator()(LLInventoryCategory* cat,
+        LLInventoryItem* item);
 };
 
 /** Filter out wearables-links */

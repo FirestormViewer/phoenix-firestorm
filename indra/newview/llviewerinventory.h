@@ -135,8 +135,8 @@ public:
 	virtual BOOL importLegacyStream(std::istream& input_stream);
 
 	// new methods
-	BOOL isFinished() const { return mIsComplete; }
-	void setComplete(BOOL complete) { mIsComplete = complete; }
+	bool isFinished() const { return mIsComplete; }
+	void setComplete(bool complete) { mIsComplete = complete; }
 	//void updateAssetOnServer() const;
 
 	virtual void setTransactionID(const LLTransactionID& transaction_id);
@@ -164,7 +164,7 @@ public:
 	BOOL regenerateLink();
 
 public:
-	BOOL mIsComplete;
+	bool mIsComplete;
 	LLTransactionID mTransactionID;
 };
 
@@ -211,6 +211,8 @@ public:
 
 	// Returns true if a fetch was issued.
 	bool fetch();
+    // Returns true if a fetch was issued.
+    void setFetching(bool);
 
 	// used to help make caching more robust - for example, if
 	// someone is getting 4 packets but logs out after 3. the viewer
@@ -448,6 +450,8 @@ void menu_create_inventory_item(LLInventoryPanel* root,
 								LLFolderBridge* bridge,
 								const LLSD& userdata,
 								const LLUUID& default_parent_uuid = LLUUID::null);
+
+void menu_create_inventory_item(LLInventoryPanel* panel, LLUUID dest_id, const LLSD& userdata, const LLUUID& default_parent_uuid = LLUUID::null);
 
 void slam_inventory_folder(const LLUUID& folder_id,
 						   const LLSD& contents,
