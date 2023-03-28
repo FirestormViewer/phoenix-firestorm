@@ -39,6 +39,7 @@ class LLVOAvatar;
 class LLTextBox;
 class LLVertexBuffer;
 class LLVolume;
+class LLCheckBoxCtrl;	// <FS:Zi> detect and strip empty alpha layers from images on upload
 
 class LLImagePreviewSculpted : public LLViewerDynamicTexture
 {
@@ -129,6 +130,11 @@ protected:
 	void			draw();
 	bool			loadImage(const std::string& filename);
 
+	// <FS:Zi> detect and strip empty alpha layers from images on upload
+	void			onBtnUpload();
+	void			emptyAlphaCheckboxCallback();
+	bool			imageEmptyAlphaCallback(const LLSD& notification, const LLSD& response);
+	// </FS:Zi>
 	LLPointer<LLImageRaw> mRawImagep;
 	LLPointer<LLImagePreviewAvatar> mAvatarPreview;
 	LLPointer<LLImagePreviewSculpted> mSculptedPreview;
@@ -139,6 +145,10 @@ protected:
 	LLPointer<LLViewerTexture> mImagep ;
 	
 	std::string mImageLoadError;
+	// <FS:Zi> detect and strip empty alpha layers from images on upload
+	std::string mDeleteTempFile;
+	LLCheckBoxCtrl*	mEmptyAlphaCheck;
+	// </FS:Zi>
 };
 
 #endif  // LL_LLFLOATERIMAGEPREVIEW_H
