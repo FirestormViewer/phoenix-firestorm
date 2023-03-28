@@ -26,11 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
 $/LicenseInfo$
 """
-#<FS:TS> Remove this line if Python 2 compatibility is not needed.
-#        Note that, as is, the script works under both versions, so no
-#        matter what version "/usr/bin/env python" returns, it'll run.
-from __future__ import print_function, division
-
 import errno
 import glob
 import itertools

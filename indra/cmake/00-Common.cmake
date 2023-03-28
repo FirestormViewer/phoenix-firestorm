@@ -257,7 +257,11 @@ if (LINUX OR DARWIN)
   if(LINUX)
     set(GCC_CXX_WARNINGS "${GCC_WARNINGS} -Wno-reorder -Wno-non-virtual-dtor -Wno-unused-variable -Wno-unused-but-set-variable -Wno-pragmas -Wno-deprecated")
   endif()
-  
+
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 13.0)
+    set(GCC_CXX_WARNINGS "${GCC_CXX_WARNINGS} -Wno-c++20-compat")
+  endif()
+
   set(CMAKE_C_FLAGS "${GCC_WARNINGS} ${CMAKE_C_FLAGS}")
   set(CMAKE_CXX_FLAGS "${GCC_CXX_WARNINGS} ${CMAKE_CXX_FLAGS}")
 
