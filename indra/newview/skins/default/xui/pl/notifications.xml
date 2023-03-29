@@ -5219,4 +5219,11 @@ Zresetować adres URL do domyślnego?
 		Rozgrupować folder "[FOLDER_NAME]"?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Tak" />
 	</notification>
+	<notification label="Obraz zawiera pusty kanał alfa" name="ImageEmptyAlphaLayer">
+		Obraz, który próbujesz przesłać, zawiera pusty (lub prawie pusty) kanał alfa (informacje o przezroczystości). Jest on prawie zawsze niepożądany i powinien zostać usunięty. Dodanie kanału alfa do obrazu spowoduje, że tekstury będą nakładać się na siebie pod różnymi kątami patrzenia kamery, co spowolni renderowanie. Jeśli naprawdę nie potrzebujesz by ta tekstura miała pusty/prawie pusty kanał alfa, to rozważ usunięcie go.
+		<form name="form">
+			<button name="strip" text="Usuń alfę" />
+			<button name="use_as_is" text="Zostaw jak jest" />
+		</form>
+	</notification>
 </notifications>
