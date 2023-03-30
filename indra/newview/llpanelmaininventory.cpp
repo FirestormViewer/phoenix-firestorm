@@ -2220,7 +2220,14 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 
 	if (command_name == "include_links")
 	{
-		mActivePanel->getFilter().toggleSearchVisibilityLinks();
+        if(mSingleFolderMode && isGalleryViewMode())
+        {
+            mInventoryGalleryPanel->toggleSearchLinks();
+        }
+        else
+        {
+            mActivePanel->getFilter().toggleSearchVisibilityLinks();
+        }
 	}
 
     if (command_name == "list_view")
@@ -2417,7 +2424,14 @@ BOOL LLPanelMainInventory::isActionChecked(const LLSD& userdata)
 
 	if (command_name == "include_links")
 	{
-		return (mActivePanel->getFilter().getSearchVisibilityTypes() & LLInventoryFilter::VISIBILITY_LINKS) != 0;	
+        if(mSingleFolderMode && isGalleryViewMode())
+        {
+            return mInventoryGalleryPanel->getSearchLinks();
+        }
+        else
+        {
+            return (mActivePanel->getFilter().getSearchVisibilityTypes() & LLInventoryFilter::VISIBILITY_LINKS) != 0;
+        }
 	}	
 
     if (command_name == "list_view")

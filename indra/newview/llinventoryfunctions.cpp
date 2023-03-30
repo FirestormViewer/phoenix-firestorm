@@ -550,11 +550,12 @@ BOOL get_is_item_worn(const LLUUID& id)
 	const LLViewerInventoryItem* item = gInventory.getItem(id);
 	if (!item)
 		return FALSE;
-    
+
     if (item->getIsLinkType() && !gInventory.getItem(item->getLinkedUUID()))
     {
         return FALSE;
     }
+
 	// Consider the item as worn if it has links in COF.
 // [SL:KB] - The code below causes problems across the board so it really just needs to go
 //	if (LLAppearanceMgr::instance().isLinkedInCOF(id))
@@ -949,7 +950,6 @@ void show_item_original(const LLUUID& item_uuid)
         {
             LLFloaterReg::toggleInstanceOrBringToFront("inventory");
         }
-        sidepanel_inventory->showInventoryPanel();
 
         const LLUUID inbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX);
         // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
