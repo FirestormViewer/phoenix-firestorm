@@ -46,6 +46,7 @@
 #include "llappearancemgr.h"
 #include "llappviewer.h"
 #include "llavataractions.h"
+#include "llavatarnamecache.h"
 #include "llclipboard.h"
 #include "lldirpicker.h"
 #include "lldonotdisturbnotificationstorage.h"
@@ -424,7 +425,7 @@ void copy_inventory_category(LLInventoryModel* model,
 	// Create the initial folder
 	// D567 needs to handle new fields
 	inventory_func_type func = boost::bind(&copy_inventory_category_content, _1, model, cat, root_copy_id, move_no_copy_items);
-	gInventory.createNewCategory(parent_id, LLFolderType::FT_NONE, cat->getName(), func);
+	gInventory.createNewCategory(parent_id, LLFolderType::FT_NONE, cat->getName(), func, cat->getThumbnailUUID());
 }
 
 void copy_inventory_category_content(const LLUUID& new_cat_uuid, LLInventoryModel* model, LLViewerInventoryCategory* cat, const LLUUID& root_copy_id, bool move_no_copy_items)
@@ -2261,6 +2262,112 @@ std::string get_localized_folder_name(LLUUID cat_uuid)
     
     return localized_root_name;
 }
+
+void new_folder_window(const LLUUID& folder_id)
+{
+    LLPanelMainInventory::newFolderWindow(folder_id);
+}
+
+void ungroup_folder_items(const LLUUID& folder_id)
+{
+    LLInventoryCategory* inv_cat = gInventory.getCategory(folder_id);
+    if (!inv_cat || LLFolderType::lookupIsProtectedType(inv_cat->getPreferredType()))
+    {
+        return;
+    }
+
+    // <FS:Ansariel> FIRE-32736: Add confirmation before ungrouping folder
+    LLSD args;
+    args["FOLDER_NAME"] = inv_cat->getName();
+    LLNotificationsUtil::add("UngroupFolder", args, LLSD(),
+        [inv_cat](const LLSD& notification, const LLSD& response)
+    {
+        S32 opt = LLNotificationsUtil::getSelectedOption(notification, response);
+        if (opt == 1)
+            return;
+    // </FS:Ansariel>
+
+    const LLUUID &new_cat_uuid = inv_cat->getParentUUID();
+    LLInventoryModel::cat_array_t* cat_array;
+    LLInventoryModel::item_array_t* item_array;
+    gInventory.getDirectDescendentsOf(inv_cat->getUUID(), cat_array, item_array);
+    LLInventoryModel::cat_array_t cats = *cat_array;
+    LLInventoryModel::item_array_t items = *item_array;
+
+    for (LLInventoryModel::cat_array_t::const_iterator cat_iter = cats.begin(); cat_iter != cats.end(); ++cat_iter)
+    {
+        LLViewerInventoryCategory* cat = *cat_iter;
+        if (cat)
+        {
+            gInventory.changeCategoryParent(cat, new_cat_uuid, false);
+        }
+    }
+    for (LLInventoryModel::item_array_t::const_iterator item_iter = items.begin(); item_iter != items.end(); ++item_iter)
+    {
+        LLViewerInventoryItem* item = *item_iter;
+        if(item)
+        {
+            gInventory.changeItemParent(item, new_cat_uuid, false);
+        }
+    }
+    gInventory.removeCategory(inv_cat->getUUID());
+    gInventory.notifyObservers();
+
+    }); // <FS:Ansariel> FIRE-32736: Add confirmation before ungrouping folder
+}
+
+std::string get_searchable_description(LLInventoryModel* model, const LLUUID& item_id)
+{
+    if (model)
+    {
+        const LLInventoryItem *item = model->getItem(item_id);
+        if(item)
+        {
+            std::string desc = item->getDescription();
+            LLStringUtil::toUpper(desc);
+            return desc;
+        }
+    }
+    return LLStringUtil::null;
+}
+
+std::string get_searchable_creator_name(LLInventoryModel* model, const LLUUID& item_id)
+{
+    if (model)
+    {
+        const LLInventoryItem *item = model->getItem(item_id);
+        if(item)
+        {
+            LLAvatarName av_name;
+            // <FS:Beq> Avoid null id requests entering name cache
+            //if (LLAvatarNameCache::get(item->getCreatorUUID(), &av_name))
+            const auto& creatorId {item->getCreatorUUID()};
+            if (creatorId.notNull() && LLAvatarNameCache::get(creatorId, &av_name))
+            // </FS:Beq>
+            {
+                std::string username = av_name.getUserName();
+                LLStringUtil::toUpper(username);
+                return username;
+            }
+        }
+    }
+    return LLStringUtil::null;
+}
+
+std::string get_searchable_UUID(LLInventoryModel* model, const LLUUID& item_id)
+{
+    if (model)
+    {
+        const LLViewerInventoryItem *item = model->getItem(item_id);
+        if(item /*&& (item->getIsFullPerm() || gAgent.isGodlikeWithoutAdminMenuFakery())*/) // Keep it FS-legacy style since we had it like this for ages
+        {
+            std::string uuid = item->getAssetUUID().asString();
+            LLStringUtil::toUpper(uuid);
+            return uuid;
+        }
+    }
+    return LLStringUtil::null;
+}
 ///----------------------------------------------------------------------------
 /// LLMarketplaceValidator implementations
 ///----------------------------------------------------------------------------
@@ -3277,51 +3384,7 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
     {
         if (selected_uuid_set.size() == 1)
         {
-            LLInventoryCategory* inv_cat = gInventory.getCategory(*ids.begin());
-            if (!inv_cat || LLFolderType::lookupIsProtectedType(inv_cat->getPreferredType()))
-            {
-                return;
-            }
-
-            // <FS:Ansariel> FIRE-32736: Add confirmation before ungrouping folder
-            LLSD args;
-            args["FOLDER_NAME"] = inv_cat->getName();
-            LLNotificationsUtil::add("UngroupFolder", args, LLSD(),
-                [inv_cat](const LLSD& notification, const LLSD& response)
-            {
-                S32 opt = LLNotificationsUtil::getSelectedOption(notification, response);
-                if (opt == 1)
-                    return;
-            // </FS:Ansariel>
-
-            const LLUUID &new_cat_uuid = inv_cat->getParentUUID();
-            LLInventoryModel::cat_array_t* cat_array;
-            LLInventoryModel::item_array_t* item_array;
-            gInventory.getDirectDescendentsOf(inv_cat->getUUID(), cat_array, item_array);
-            LLInventoryModel::cat_array_t cats = *cat_array;
-            LLInventoryModel::item_array_t items = *item_array;
-
-            for (LLInventoryModel::cat_array_t::const_iterator cat_iter = cats.begin(); cat_iter != cats.end(); ++cat_iter)
-            {
-                LLViewerInventoryCategory* cat = *cat_iter;
-                if (cat)
-                {
-                    gInventory.changeCategoryParent(cat, new_cat_uuid, false);
-                }
-            }
-            for (LLInventoryModel::item_array_t::const_iterator item_iter = items.begin(); item_iter != items.end(); ++item_iter)
-            {
-                LLViewerInventoryItem* item = *item_iter;
-                if(item)
-                {
-                    gInventory.changeItemParent(item, new_cat_uuid, false);
-                }
-            }
-            gInventory.removeCategory(inv_cat->getUUID());
-            gInventory.notifyObservers();
-
-            }); // <FS:Ansariel> FIRE-32736: Add confirmation before ungrouping folder
-
+            ungroup_folder_items(*ids.begin());
         }
     }
     // <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once

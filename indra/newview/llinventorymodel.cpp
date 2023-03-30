@@ -1056,7 +1056,8 @@ LLUUID LLInventoryModel::findCategoryByName(std::string name)
 void LLInventoryModel::createNewCategory(const LLUUID& parent_id,
 										   LLFolderType::EType preferred_type,
 										   const std::string& pname,
-										   inventory_func_type callback)
+										   inventory_func_type callback,
+										   const LLUUID& thumbnail_id)
 {
 	if (!isInventoryUsable())
 	{
@@ -1098,6 +1099,7 @@ void LLInventoryModel::createNewCategory(const LLUUID& parent_id,
 		LLSD new_inventory = LLSD::emptyMap();
 		new_inventory["categories"] = LLSD::emptyArray();
 		LLViewerInventoryCategory cat(LLUUID::null, parent_id, preferred_type, name, gAgent.getID());
+        cat.setThumbnailUUID(thumbnail_id);
 		LLSD cat_sd = cat.asLLSD();
 		new_inventory["categories"].append(cat_sd);
 		AISAPI::CreateInventory(
@@ -3740,8 +3742,8 @@ void LLInventoryModel::processUpdateCreateInventoryItem(LLMessageSystem* msg, vo
 		gInventoryCallbacks.fire(callback_id, item_id);
 
         // todo: instead of unpacking message fully,
-        // grab only an item_id, then fetch via AIS
-        LLInventoryModelBackgroundFetch::instance().start(item_id, false);
+        // grab only an item_id, then fetch
+        LLInventoryModelBackgroundFetch::instance().scheduleItemFetch(item_id, true);
 	}
 
 }
@@ -4107,10 +4109,7 @@ void LLInventoryModel::processBulkUpdateInventory(LLMessageSystem* msg, void**)
         // Temporary workaround: just fetch the item using AIS to get missing fields.
         // If this works fine we might want to extract ids only from the message
         // then use AIS as a primary fetcher
-
-        // Use AIS derectly to not reset folder's version
-        // Todo: May be LLInventoryModelBackgroundFetch needs a 'forced' option
-        AISAPI::FetchCategoryChildren((*cit)->getUUID(), AISAPI::INVENTORY);
+        LLInventoryModelBackgroundFetch::instance().scheduleFolderFetch((*cit)->getUUID(), true /*force, since it has changes*/);
 	}
 	for (item_array_t::iterator iit = items.begin(); iit != items.end(); ++iit)
 	{
@@ -4119,7 +4118,7 @@ void LLInventoryModel::processBulkUpdateInventory(LLMessageSystem* msg, void**)
         // Temporary workaround: just fetch the item using AIS to get missing fields.
         // If this works fine we might want to extract ids only from the message
         // then use AIS as a primary fetcher
-        LLInventoryModelBackgroundFetch::instance().scheduleItemFetch((*iit)->getUUID());
+        LLInventoryModelBackgroundFetch::instance().scheduleItemFetch((*iit)->getUUID(), true);
 	}
 // [SL:KB] - Patch: UI-Notifications | Checked: Catznip-6.5
 	gInventory.notifyObservers(tid);

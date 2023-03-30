@@ -27,8 +27,8 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llinventorygallery.h"
+#include "llinventorygallerymenu.h"
 
-#include "llaccordionctrltab.h"
 #include "llcommonutils.h"
 #include "lliconctrl.h"
 #include "llinventorybridge.h"
@@ -83,7 +83,8 @@ LLInventoryGallery::LLInventoryGallery(const LLInventoryGallery::Params& p)
       mItemsInRow(p.items_in_row),
       mRowPanWidthFactor(p.row_panel_width_factor),
       mGalleryWidthFactor(p.gallery_width_factor),
-      mIsInitialized(false)
+      mIsInitialized(false),
+      mSearchType(LLInventoryFilter::SEARCHTYPE_NAME)
 {
     updateGalleryWidth();
 
@@ -115,12 +116,14 @@ BOOL LLInventoryGallery::postBuild()
     LLPanel::Params params = LLPanel::getDefaultParams();
     mGalleryPanel = LLUICtrlFactory::create<LLPanel>(params);
     mMessageTextBox = getChild<LLTextBox>("empty_txt");
-
+    mInventoryGalleryMenu = new LLInventoryGalleryContextMenu(this);
     return TRUE;
 }
 
 LLInventoryGallery::~LLInventoryGallery()
 {
+    delete mInventoryGalleryMenu;
+
     while (!mUnusedRowPanels.empty())
     {
         LLPanel* panelp = mUnusedRowPanels.back();
@@ -458,7 +461,7 @@ void LLInventoryGallery::removeFromLastRow(LLInventoryGalleryItem* item)
     mItemPanels.pop_back();
 }
 
-LLInventoryGalleryItem* LLInventoryGallery::buildGalleryItem(std::string name, LLUUID item_id, LLAssetType::EType type, LLUUID thumbnail_id, bool is_link)
+LLInventoryGalleryItem* LLInventoryGallery::buildGalleryItem(std::string name, LLUUID item_id, LLAssetType::EType type, LLUUID thumbnail_id, LLInventoryType::EType inventory_type, U32 flags, bool is_link)
 {
     LLInventoryGalleryItem::Params giparams;
     LLInventoryGalleryItem* gitem = LLUICtrlFactory::create<LLInventoryGalleryItem>(giparams);
@@ -469,8 +472,11 @@ LLInventoryGalleryItem* LLInventoryGallery::buildGalleryItem(std::string name, L
     gitem->setName(name);
     gitem->setUUID(item_id);
     gitem->setGallery(this);
-    gitem->setType(type, is_link);
+    gitem->setType(type, inventory_type, flags, is_link);
     gitem->setThumbnail(thumbnail_id);
+    gitem->setCreatorName(get_searchable_creator_name(&gInventory, item_id));
+    gitem->setDescription(get_searchable_description(&gInventory, item_id));
+    gitem->setAssetIDStr(get_searchable_UUID(&gInventory, item_id));
     return gitem;
 }
 
@@ -554,14 +560,41 @@ void LLInventoryGallery::applyFilter(LLInventoryGalleryItem* item, const std::st
 {
     if (!item) return;
 
-    std::string item_name = item->getItemName();
-    LLStringUtil::toUpper(item_name);
+    std::string desc;
+
+    switch(mSearchType)
+    {
+        case LLInventoryFilter::SEARCHTYPE_CREATOR:
+            desc = item->getCreatorName();
+            break;
+        case LLInventoryFilter::SEARCHTYPE_DESCRIPTION:
+            desc = item->getDescription();
+            break;
+        case LLInventoryFilter::SEARCHTYPE_UUID:
+            desc = item->getAssetIDStr();
+            break;
+        case LLInventoryFilter::SEARCHTYPE_NAME:
+        default:
+            desc = item->getItemName();
+            break;
+    }
+    
+    LLStringUtil::toUpper(desc);
 
     std::string cur_filter = filter_substring;
     LLStringUtil::toUpper(cur_filter);
 
-    bool hidden = (std::string::npos == item_name.find(cur_filter));
+    bool hidden = (std::string::npos == desc.find(cur_filter));
     item->setHidden(hidden);
+}
+
+void LLInventoryGallery::setSearchType(LLInventoryFilter::ESearchType type)
+{
+    if(mSearchType != type)
+    {
+        mSearchType = type;
+        reArrangeRows();
+    }
 }
 
 void LLInventoryGallery::getCurrentCategories(uuid_vec_t& vcur)
@@ -588,7 +621,8 @@ void LLInventoryGallery::updateAddedItem(LLUUID item_id)
 
     std::string name = obj->getName();
     LLUUID thumbnail_id = obj->getThumbnailUUID();;
-
+    LLInventoryType::EType inventory_type(LLInventoryType::IT_CATEGORY);
+    U32 misc_flags = 0;
     if (LLAssetType::AT_CATEGORY == obj->getType())
     {
         name = get_localized_folder_name(item_id);
@@ -597,10 +631,19 @@ void LLInventoryGallery::updateAddedItem(LLUUID item_id)
             thumbnail_id = getOutfitImageID(item_id);
         }
     }
+    else
+    {
+        LLInventoryItem* inv_item = gInventory.getItem(item_id);
+        if (inv_item)
+        {
+            inventory_type = inv_item->getInventoryType();
+            misc_flags = inv_item->getFlags();
+        }
+    }
     
-    LLInventoryGalleryItem* item = buildGalleryItem(name, item_id, obj->getType(), thumbnail_id, obj->getIsLinkType());
+    LLInventoryGalleryItem* item = buildGalleryItem(name, item_id, obj->getType(), thumbnail_id, inventory_type, misc_flags, obj->getIsLinkType());
     mItemMap.insert(LLInventoryGallery::gallery_item_map_t::value_type(item_id, item));
-
+    item->setRightMouseDownCallback(boost::bind(&LLInventoryGallery::showContextMenu, this, _1, _2, _3, item_id));
     item->setFocusReceivedCallback(boost::bind(&LLInventoryGallery::onChangeItemSelection, this, item_id));
     if (mGalleryCreated)
     {
@@ -668,6 +711,16 @@ void LLInventoryGallery::updateItemThumbnail(LLUUID item_id)
     if (mItemMap[item_id])
     {
         mItemMap[item_id]->setThumbnail(thumbnail_id);
+    }
+}
+
+void LLInventoryGallery::showContextMenu(LLUICtrl* ctrl, S32 x, S32 y, const LLUUID& item_id)
+{
+    if (mInventoryGalleryMenu && item_id.notNull())
+    {
+        uuid_vec_t selected_uuids;
+        selected_uuids.push_back(item_id);
+        mInventoryGalleryMenu->show(ctrl, selected_uuids, x, y);
     }
 }
 
@@ -907,12 +960,12 @@ BOOL LLInventoryGalleryItem::postBuild()
     return TRUE;
 }
 
-void LLInventoryGalleryItem::setType(LLAssetType::EType type, bool is_link)
+void LLInventoryGalleryItem::setType(LLAssetType::EType type, LLInventoryType::EType inventory_type, U32 flags, bool is_link)
 {
     mType = type;
     mIsFolder = (mType == LLAssetType::AT_CATEGORY);
 
-    std::string icon_name = LLInventoryIcon::getIconName(mType);
+    std::string icon_name = LLInventoryIcon::getIconName(mType, inventory_type, flags);
     if(mIsFolder)
     {
         mSortGroup = SG_NORMAL_FOLDER;
@@ -1008,19 +1061,30 @@ BOOL LLInventoryGalleryItem::handleHover(S32 x, S32 y, MASK mask)
     {
         S32 screen_x;
         S32 screen_y;
-        const LLInventoryItem *item = gInventory.getItem(mUUID);
-
         localPointToScreen(x, y, &screen_x, &screen_y );
-        if(item && LLToolDragAndDrop::getInstance()->isOverThreshold(screen_x, screen_y))
+
+        if(LLToolDragAndDrop::getInstance()->isOverThreshold(screen_x, screen_y))
         {
-            EDragAndDropType type = LLViewerAssetType::lookupDragAndDropType(item->getType());
-            LLToolDragAndDrop::ESource src = LLToolDragAndDrop::SOURCE_LIBRARY;
-            if(item->getPermissions().getOwner() == gAgent.getID())
+            const LLInventoryItem *item = gInventory.getItem(mUUID);
+            if(item)
             {
-                src = LLToolDragAndDrop::SOURCE_AGENT;
+                EDragAndDropType type = LLViewerAssetType::lookupDragAndDropType(item->getType());
+                LLToolDragAndDrop::ESource src = LLToolDragAndDrop::SOURCE_LIBRARY;
+                if(item->getPermissions().getOwner() == gAgent.getID())
+                {
+                    src = LLToolDragAndDrop::SOURCE_AGENT;
+                }
+                LLToolDragAndDrop::getInstance()->beginDrag(type, item->getUUID(), src);
+                return LLToolDragAndDrop::getInstance()->handleHover(x, y, mask );
             }
-            LLToolDragAndDrop::getInstance()->beginDrag(type, item->getUUID(), src);
-            return LLToolDragAndDrop::getInstance()->handleHover(x, y, mask );
+
+            const LLInventoryCategory *cat = gInventory.getCategory(mUUID);
+            if(cat && gInventory.isObjectDescendentOf(mUUID, gInventory.getRootFolderID())
+                   && !LLFolderType::lookupIsProtectedType((cat)->getPreferredType()))
+            {
+                LLToolDragAndDrop::getInstance()->beginDrag(LLViewerAssetType::lookupDragAndDropType(cat->getType()), cat->getUUID(), LLToolDragAndDrop::SOURCE_AGENT);
+                return LLToolDragAndDrop::getInstance()->handleHover(x, y, mask );
+            }
         }
     }
     return LLUICtrl::handleHover(x,y,mask);
@@ -1900,6 +1964,6 @@ void dropToMyOutfits(LLInventoryCategory* inv_cat)
     // Note: creation will take time, so passing folder id to callback is slightly unreliable,
     // but so is collecting and passing descendants' ids
     inventory_func_type func = boost::bind(&outfitFolderCreatedCallback, inv_cat->getUUID(), _1);
-    gInventory.createNewCategory(dest_id, LLFolderType::FT_OUTFIT, inv_cat->getName(), func);
+    gInventory.createNewCategory(dest_id, LLFolderType::FT_OUTFIT, inv_cat->getName(), func, inv_cat->getThumbnailUUID());
 }
 

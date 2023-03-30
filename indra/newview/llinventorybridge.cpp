@@ -41,7 +41,6 @@
 #include "llfloateropenobject.h"
 #include "llfloaterreg.h"
 #include "llfloatermarketplacelistings.h"
-#include "llfloateroutfitphotopreview.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llsidepanelinventory.h"
 #include "llfloaterworldmap.h"
@@ -238,58 +237,17 @@ const std::string& LLInvFVBridge::getDisplayName() const
 
 std::string LLInvFVBridge::getSearchableDescription() const
 {
-	const LLInventoryModel* model = getInventoryModel();
-	if (model)
-	{
-		const LLInventoryItem *item = model->getItem(mUUID);
-		if(item)
-		{
-			std::string desc = item->getDescription();
-			LLStringUtil::toUpper(desc);
-			return desc;
-		}
-	}
-	return LLStringUtil::null;
+    return get_searchable_description(getInventoryModel(), mUUID);
 }
 
 std::string LLInvFVBridge::getSearchableCreatorName() const
 {
-	const LLInventoryModel* model = getInventoryModel();
-	if (model)
-	{
-		const LLInventoryItem *item = model->getItem(mUUID);
-		if(item)
-		{
-			LLAvatarName av_name;
-			// <FS:Beq> Avoid null id requests entering name cache
-			// if (LLAvatarNameCache::get(item->getCreatorUUID(), &av_name))
-			const auto& creatorId {item->getCreatorUUID()};
-			if ( creatorId.notNull() && LLAvatarNameCache::get(creatorId, &av_name) )
-			// </FS:Beq>
-			{
-				std::string username = av_name.getUserName();
-				LLStringUtil::toUpper(username);
-				return username;
-			}
-		}
-	}
-	return LLStringUtil::null;
+    return get_searchable_creator_name(getInventoryModel(), mUUID);
 }
 
 std::string LLInvFVBridge::getSearchableUUIDString() const
 {
-	const LLInventoryModel* model = getInventoryModel();
-	if (model)
-	{
-		const LLViewerInventoryItem *item = model->getItem(mUUID);
-		if(item /*&& (item->getIsFullPerm() || gAgent.isGodlikeWithoutAdminMenuFakery())*/) // Keep it FS-legacy style since we had it like this for ages
-		{
-			std::string uuid = item->getAssetUUID().asString();
-			LLStringUtil::toUpper(uuid);
-			return uuid;
-		}
-	}
-	return LLStringUtil::null;
+    return get_searchable_UUID(getInventoryModel(), mUUID);
 }
 
 // <FS:Ansariel> Zi's extended inventory search
@@ -5486,11 +5444,8 @@ void LLFolderBridge::dropToOutfit(LLInventoryItem* inv_item, BOOL move_is_into_c
 		const LLUUID &my_outifts_id = getInventoryModel()->findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS);
 		if(mUUID != my_outifts_id)
 		{
-			LLFloaterOutfitPhotoPreview* photo_preview  = LLFloaterReg::showTypedInstance<LLFloaterOutfitPhotoPreview>("outfit_photo_preview", inv_item->getUUID());
-			if(photo_preview)
-			{
-				photo_preview->setOutfitID(mUUID);
-			}
+            // Legacy: prior to thumbnails images in outfits were used for outfit gallery.
+            LLNotificationsUtil::add("ThumbnailOutfitPhoto");
 		}
 		return;
 	}
@@ -5518,7 +5473,8 @@ void LLFolderBridge::dropToMyOutfits(LLInventoryCategory* inv_cat)
     gInventory.createNewCategory(dest_id,
                                  LLFolderType::FT_OUTFIT,
                                  inv_cat->getName(),
-                                 func);
+                                 func,
+                                 inv_cat->getThumbnailUUID());
 }
 
 void LLFolderBridge::outfitFolderCreatedCallback(LLUUID cat_source_id, LLUUID cat_dest_id)

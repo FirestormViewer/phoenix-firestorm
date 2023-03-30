@@ -3384,6 +3384,29 @@ See https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 
   <notification
    icon="alertmodal.tga"
+   label="Rename Selected Item"
+   name="RenameItem"
+   type="alertmodal">
+    Choose a new name for [NAME]
+   <tag>confirm</tag>
+    <form name="form">
+    <input name="new_name" type="text" width="300">
+      [NAME]
+    </input>
+    <button
+     default="true"
+     index="0"
+     name="OK"
+     text="OK"/>
+    <button
+     index="1"
+     name="Cancel"
+     text="Cancel"/>
+   </form>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    name="RemoveFromFriends"
    type="alertmodal">
 Are you sure you want to remove [NAME] from your Friends List?
@@ -6420,10 +6443,32 @@ Are you sure you want to delete them?
 
   <notification
    icon="alertmodal.tga"
-   name="ThumbnailDimantionsLimit"
+   name="ThumbnailDimentionsLimit"
    type="alertmodal">
     <unique/>
     Only square images from 64 to 256 pixels per side are allowed.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="ThumbnailInsufficientPermissions"
+   type="alertmodal">
+    <unique/>
+    Only copy and transfer free images can be assigned as thumbnails.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="ThumbnailOutfitPhoto"
+   type="alertmodal">
+    <unique/>
+    To add an image to an outfit, use the Outfit Gallery window, or right-click on the outfit folder and select "Image..."
     <usetemplate
      name="okbutton"
      yestext="OK"/>

@@ -180,6 +180,7 @@ protected:
 	void onFocusReceived();
 	void onSelectSearchType();
 	void updateSearchTypeCombo();
+    void setSearchType(LLInventoryFilter::ESearchType type);
 
     LLSidepanelInventory* getParentSidepanelInventory();
 

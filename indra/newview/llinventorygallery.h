@@ -27,13 +27,17 @@
 #ifndef LL_LLINVENTORYGALLERY_H
 #define LL_LLINVENTORYGALLERY_H
 
+#include "lllistcontextmenu.h"
 #include "llpanel.h"
+#include "llinventoryfilter.h"
 #include "llinventorymodel.h"
 
 class LLInventoryCategoriesObserver;
 class LLInventoryGalleryItem;
 class LLScrollContainer;
 class LLTextBox;
+
+class LLInventoryGalleryContextMenu;
 
 class LLInventoryGallery : public LLPanel
 {
@@ -105,9 +109,13 @@ public:
     void signalSelectionItemID(const LLUUID& category_id);
     boost::signals2::connection setSelectionChangeCallback(selection_change_callback_t cb);
 
+    void setSearchType(LLInventoryFilter::ESearchType type);
+    LLInventoryFilter::ESearchType getSearchType() { return mSearchType; }
+
 protected:
 
     void onChangeItemSelection(const LLUUID& category_id);
+    void showContextMenu(LLUICtrl* ctrl, S32 x, S32 y, const LLUUID& item_id);
 
     void applyFilter(LLInventoryGalleryItem* item, const std::string& filter_substring);
 
@@ -136,7 +144,7 @@ private:
     void updateRowsIfNeeded();
     void updateGalleryWidth();
 
-    LLInventoryGalleryItem* buildGalleryItem(std::string name, LLUUID item_id, LLAssetType::EType type, LLUUID thumbnail_id, bool is_link);
+    LLInventoryGalleryItem* buildGalleryItem(std::string name, LLUUID item_id, LLAssetType::EType type, LLUUID thumbnail_id, LLInventoryType::EType inventory_type, U32 flags, bool is_link);
 
     void buildGalleryPanel(int row_count);
     void reshapeGalleryPanel(int row_count);
@@ -171,11 +179,14 @@ private:
     int mRowPanWidthFactor;
     int mGalleryWidthFactor;
 
+    LLInventoryGalleryContextMenu* mInventoryGalleryMenu;
     std::string mFilterSubString;
 
     typedef std::map<LLUUID, LLInventoryGalleryItem*> gallery_item_map_t;
     gallery_item_map_t mItemMap;
     std::map<LLInventoryGalleryItem*, S32> mItemIndexMap;
+
+    LLInventoryFilter::ESearchType mSearchType;
 };
 
 class LLInventoryGalleryItem : public LLPanel
@@ -212,14 +223,21 @@ public:
     void setSelected(bool value);
     void setUUID(LLUUID id) {mUUID = id;}
     LLUUID getUUID() { return mUUID;}
-    
+
+    void setAssetIDStr(std::string asset_id) {mAssetIDStr = asset_id;}
+    std::string getAssetIDStr() { return mAssetIDStr;}
+    void setDescription(std::string desc) {mDesc = desc;}
+    std::string getDescription() { return mDesc;}
+    void setCreatorName(std::string name) {mCreatorName = name;}
+    std::string getCreatorName() { return mCreatorName;}
+
     std::string getItemName() {return mName;}
     bool isDefaultImage() {return mDefaultImage;}
     
     bool isHidden() {return mHidden;}
     void setHidden(bool hidden) {mHidden = hidden;}
 
-    void setType(LLAssetType::EType type, bool is_link);
+    void setType(LLAssetType::EType type, LLInventoryType::EType inventory_type, U32 flags, bool is_link);
     void setThumbnail(LLUUID id);
     void setGallery(LLInventoryGallery* gallery) { mGallery = gallery; }
     bool isFolder() { return mIsFolder; }
@@ -233,7 +251,11 @@ private:
     bool     mDefaultImage;
     bool     mHidden;
     bool     mIsFolder;
-    
+
+    std::string mAssetIDStr;
+    std::string mDesc;
+    std::string mCreatorName;
+
     EInventorySortGroup mSortGroup;
     LLAssetType::EType mType;
     std::string mName;
