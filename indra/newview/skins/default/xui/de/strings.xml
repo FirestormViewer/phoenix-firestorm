@@ -238,7 +238,7 @@ https://www.firestormviewer.org/choose-your-platform/
 Weitere Informationen finden Sie auf der folgenden FAQ-Seite: 
 http://secondlife.com/viewer-access-faq
 	</string>
-	<string name="LoginFailed">Grid-Notfall Login-Fehler.
+	<string name="LoginFailed">Login-Prozess konnte aufgrund eines Systemfehlers nicht durchgeführt werden. Bitte versuchen Sie es in ein paar Minuten erneut.
 
 Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten haben, wenden Sie sich bitte an den Support des entsprechenden Grids.
 	</string>
