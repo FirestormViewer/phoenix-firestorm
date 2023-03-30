@@ -141,34 +141,47 @@ endif (WINDOWS)
 if (LINUX)
   set(CMAKE_SKIP_RPATH TRUE)
 
-   # EXTERNAL_TOS
-   # force this platform to accept TOS via external browser
+  # <FS:ND/>
+  # And another hack for FORTIFY_SOURCE. Some distributions (for example Gentoo) define FORTIFY_SOURCE by default.
+  # Check if this is the case, if yes, do not define it again.
+  execute_process(
+      COMMAND echo "int main( char **a, int c ){ \n#ifdef _FORTIFY_SOURCE\n#error FORTITY_SOURCE_SET\n#else\nreturn 0;\n#endif\n}" 
+      COMMAND sh -c "${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} -xc++ -w - -o /dev/null"
+      OUTPUT_VARIABLE FORTIFY_SOURCE_OUT
+         ERROR_VARIABLE FORTIFY_SOURCE_ERR
+         RESULT_VARIABLE FORTIFY_SOURCE_RES
+     )
 
-   # LL_IGNORE_SIGCHLD
-   # don't catch SIGCHLD in our base application class for the viewer - some of
-   # our 3rd party libs may need their *own* SIGCHLD handler to work. Sigh! The
-   # viewer doesn't need to catch SIGCHLD anyway.
 
-  add_compile_definitions(
-          _REENTRANT
-          _FORTIFY_SOURCE=2
-          EXTERNAL_TOS
-          APPID=secondlife
-          LL_IGNORE_SIGCHLD
-  )
+  if ( ${FORTIFY_SOURCE_RES} EQUAL 0 )
+   add_definitions(-D_FORTIFY_SOURCE=2)
+  endif()
+
+  # gcc 4.3 and above don't like the LL boost and also
+  # cause warnings due to our use of deprecated headers
+
+  add_definitions(
+      -D_REENTRANT
+      )
   add_compile_options(
-          -fexceptions
-          -fno-math-errno
-          -fno-strict-aliasing
-          -fsigned-char
-          -msse2
-          -mfpmath=sse
-          -pthread
-          -Wno-parentheses
-          -Wno-deprecated
-          -fvisibility=hidden
-  )
+      -fexceptions
+      -fno-math-errno
+      -fno-strict-aliasing
+      -fsigned-char
+      -msse2
+      -mfpmath=sse
+      -pthread
+      )
 
+  # force this platform to accept TOS via external browser <FS:ND> No, do not.
+  # add_definitions(-DEXTERNAL_TOS)
+
+  add_definitions(-DAPPID=secondlife)
+  add_compile_options(-fvisibility=hidden)
+  # don't catch SIGCHLD in our base application class for the viewer - some of
+  # our 3rd party libs may need their *own* SIGCHLD handler to work. Sigh! The
+  # viewer doesn't need to catch SIGCHLD anyway.
+  add_definitions(-DLL_IGNORE_SIGCHLD)
   if (ADDRESS_SIZE EQUAL 32)
     add_compile_options(-march=pentium4)
   endif (ADDRESS_SIZE EQUAL 32)
