@@ -5335,4 +5335,16 @@ https://wiki.firestormviewer.org/fs_voice
 		Разгруппировать папку "[FOLDER_NAME]"?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Да"/>
 	</notification>
+
+	<!-- <FS:Zi> detect and strip empty alpha layers from images on upload -->
+	<notification
+		label="Изображение содержит пустой альфа-канал"
+		name="ImageEmptyAlphaLayer">
+Изображение, которое вы пытаетесь загрузить, содержит пустой или почти пустой альфа-канал (информация о прозрачности). Это почти всегда нежелательно и должно быть удалено. Добавление альфа-канала к изображению приведет к тому, что текстуры будут переворачиваться друг над другом под разными углами камеры, что замедлит рендеринг. Итак, если вам действительно не нужна эта текстура с пустым/почти пустым альфа-каналом, рассмотрите возможность ее удаления.
+		<form name="form">
+			<button name="strip" text="Удалить Альфу"/>
+			<button name="use_as_is" text="Оставить как есть"/>
+		</form>
+	</notification>
+	<!-- </FS:Zi> -->
 </notifications>

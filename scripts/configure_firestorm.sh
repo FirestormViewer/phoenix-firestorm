@@ -459,9 +459,9 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         KDU="-DUSE_KDU:BOOL=OFF"
     fi
     if [ $WANTS_FMODSTUDIO -eq $TRUE ] ; then
-        FMODSTUDIO="-DFMODSTUDIO:BOOL=ON"
+        FMODSTUDIO="-DUSE_FMODSTUDIO:BOOL=ON"
     else
-        FMODSTUDIO="-DFMODSTUDIO:BOOL=OFF"
+        FMODSTUDIO="-DUSE_FMODSTUDIO:BOOL=OFF"
     fi
     if [ $WANTS_OPENAL -eq $TRUE ] ; then
         OPENAL="-DOPENAL:BOOL=ON"

@@ -51,6 +51,7 @@ public:
 
 	virtual LLTool*	getOverrideTool(MASK mask) { return NULL; }
 
+    void setClickPickPending() { mClickPickPending = true; }
 	static void pickCallback(const LLPickInfo& pick_info);
 	BOOL mouseSteerMode() { return mMouseSteering; }
 
@@ -67,6 +68,7 @@ protected:
 	BOOL	mOutsideSlopX;
 	BOOL	mOutsideSlopY;
 	BOOL	mValidClickPoint;
+    bool	mClickPickPending;
 	BOOL	mValidSelection;
 	BOOL	mMouseSteering;
 	S32		mMouseUpX;	// needed for releaseMouse()

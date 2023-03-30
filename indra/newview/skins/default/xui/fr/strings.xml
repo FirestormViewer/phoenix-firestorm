@@ -6085,7 +6085,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Affiche la liste de tous les éléments mis dans la liste noire
 	</string>
 	<string name="Command_Phototools_Tooltip">
-		Outils pour la création d'image (ATL+P).
+		Outils pour la création d'image (ALT+P).
 	</string>
 	<string name="Command_Phototools_View_Tooltip">
 		Contrôles avancés de la caméra (CTRL+SHIFT+C)

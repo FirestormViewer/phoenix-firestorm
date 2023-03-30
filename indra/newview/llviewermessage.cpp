@@ -2198,7 +2198,7 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 				log_message = LLTrans::getString("InvOfferDecline", log_message_args);
 			}
 			chat.mText = log_message;
-			if( LLMuteList::getInstance()->isMuted(mFromID ) && ! LLMuteList::getInstance()->isLinden(mFromName) )  // muting for SL-42269
+			if( LLMuteList::getInstance()->isMuted(mFromID ) && ! LLMuteList::isLinden(mFromName) )  // muting for SL-42269
 			{
 				chat.mMuted = TRUE;
 				accept_to_trash = false; // will send decline message
@@ -2865,6 +2865,7 @@ void translateSuccess(LLChat chat, LLSD toastArgs, std::string originalMsg, std:
         chat.mText += " (" + LLTranslate::removeNoTranslateTags(translation) + ")";
     }
 
+	LLTranslate::instance().logSuccess(1);
     LLNotificationsUI::LLNotificationManager::instance().onChat(chat, toastArgs);
 }
 
@@ -2874,6 +2875,7 @@ void translateFailure(LLChat chat, LLSD toastArgs, int status, const std::string
     LLStringUtil::replaceString(msg, "\n", " "); // we want one-line error messages
     chat.mText += " (" + msg + ")";
 
+	LLTranslate::instance().logFailure(1);
     LLNotificationsUI::LLNotificationManager::instance().onChat(chat, toastArgs);
 }
 
@@ -3001,7 +3003,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		LLMute::flagTextChat) 
 		|| LLMuteList::getInstance()->isMuted(owner_id, LLMute::flagTextChat);
 	is_linden = chat.mSourceType != CHAT_SOURCE_OBJECT &&
-		LLMuteList::getInstance()->isLinden(from_name);
+		LLMuteList::isLinden(from_name);
 
 	if (is_muted && (chat.mSourceType == CHAT_SOURCE_OBJECT))
 	{
@@ -3419,6 +3421,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		}
 		// </FS:PP>
 
+		LLTranslate::instance().logCharsSeen(mesg.size());
 		// <FS:PP> gSavedSettings to LLCachedControl
 		// if (gSavedSettings.getBOOL("TranslateChat") && chat.mSourceType != CHAT_SOURCE_SYSTEM)
 		static LLCachedControl<bool> TranslateChat(gSavedSettings, "TranslateChat");
@@ -3432,6 +3435,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			const std::string from_lang = ""; // leave empty to trigger autodetect
 			const std::string to_lang = LLTranslate::getTranslateLanguage();
 
+			LLTranslate::instance().logCharsSent(mesg.size());
             LLTranslate::translateMessage(from_lang, to_lang, mesg,
                 boost::bind(&translateSuccess, chat, args, mesg, from_lang, _1, _2),
                 boost::bind(&translateFailure, chat, args, _1, _2));
@@ -7394,8 +7398,12 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 			{
 				count++;
 				known_questions |= script_perm.permbit;
-				// check whether permission question should cause special caution dialog
-				caution |= (script_perm.caution);
+
+                if (!LLMuteList::isLinden(owner_name))
+                {
+                    // check whether permission question should cause special caution dialog
+                    caution |= (script_perm.caution);
+                }
 
 				if (("ScriptTakeMoney" == script_perm.question) && has_not_only_debit)
 					continue;
@@ -8066,7 +8074,7 @@ bool teleport_request_callback(const LLSD& notification, const LLSD& response)
 	LLAvatarName av_name;
 	LLAvatarNameCache::get(from_id, &av_name);
 
-	if(LLMuteList::getInstance()->isMuted(from_id) && !LLMuteList::getInstance()->isLinden(av_name.getUserName()))
+	if(LLMuteList::getInstance()->isMuted(from_id) && !LLMuteList::isLinden(av_name.getUserName()))
 	{
 		return false;
 	}

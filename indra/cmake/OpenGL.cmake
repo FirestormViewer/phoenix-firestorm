@@ -1,19 +1,13 @@
 # -*- cmake -*-
 
+if(LINUX)
+  # <FS:Zi> make sure to link to libGL.so instead of libOpenGL.so so the linker does not
+  # complain about libGL.so.1: error adding symbols: DSO missing from command line
+  set(OpenGL_GL_PREFERENCE "LEGACY")
+endif()
+
 include(Variables)
 include(Prebuilt)
-
-# <FS:TS> Shut cmake up about OpenGL library preference. This can
-# be either LEGACY or GLVND.
-if (LINUX)
-  SET(OpenGL_GL_PREFERENCE LEGACY)
-endif (LINUX)
-
-if (BUILD_HEADLESS)
-  SET(OPENGL_glu_LIBRARY GLU)
-  SET(OPENGL_HEADLESS_LIBRARIES OSMesa16 dl GLU)
-endif (BUILD_HEADLESS)
-
 include(FindOpenGL)
 
 if(LINUX)

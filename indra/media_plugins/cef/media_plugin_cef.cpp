@@ -35,7 +35,9 @@
 #include "llpluginmessage.h"
 #include "llpluginmessageclasses.h"
 #include "llstring.h"
+#if LL_VOLUME_CATCHER
 #include "volume_catcher.h"
+#endif
 #include "media_plugin_base.h"
 
 #include "dullahan.h"
@@ -109,7 +111,9 @@ private:
 	std::string mCefLogFile;
 	bool mCefLogVerbose;
 	std::vector<std::string> mPickedFiles;
+#if LL_VOLUME_CATCHER
 	VolumeCatcher mVolumeCatcher;
+#endif
 	F32 mCurVolume;
 	dullahan* mCEFLib;
 };
@@ -544,7 +548,9 @@ void MediaPluginCEF::receiveMessage(const char* message_string)
 			{
 				mCEFLib->update();
 
+#if LL_VOLUME_CATCHER
 				mVolumeCatcher.pump();
+#endif
 
 				// this seems bad but unless the state changes (it won't until we figure out
 				// how to get CEF to tell us if copy/cut/paste is available) then this function
@@ -1171,7 +1177,9 @@ void MediaPluginCEF::checkEditState()
 
 void MediaPluginCEF::setVolume()
 {
+#if LL_VOLUME_CATCHER
 	mVolumeCatcher.setVolume(mCurVolume);
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////
