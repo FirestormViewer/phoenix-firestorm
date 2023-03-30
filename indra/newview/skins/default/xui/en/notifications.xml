@@ -13944,4 +13944,26 @@ Camera reset might be inhibited by the following objects:
      yestext="Okay"/>
   </notification>
 
+  <!-- <FS:Zi> detect and strip empty alpha layers from images on upload -->
+  <notification
+   icon="alertmodal.tga"
+   label="Image Contains Empty Alpha Channel"
+   name="ImageEmptyAlphaLayer"
+   type="alertmodal">
+    The image you are trying to upload contains an empty, or almost empty alpha channel (transparency information). This is almost always not desired and should be stripped off. Adding an alpha channel to an image will lead to textures flipping on top of each other at different camera angles, and it makes rendering slower. So, unless you really need this texture to have an empty / almost empty alpha channel, consider stripping it out.
+    <tag>confirm_strip</tag>
+    <form name="form">
+      <button
+       default="true"
+       index="0"
+       name="strip"
+       text="Strip Alpha"/>
+      <button
+       index="1"
+       name="use_as_is"
+       text="Use As Is"/>
+    </form>
+  </notification>
+  <!-- </FS:Zi> -->
+
 </notifications>

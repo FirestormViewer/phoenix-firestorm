@@ -5,6 +5,7 @@ env:
   EXTRA_ARGS: -DFMODSTUDIO=ON -DUSE_KDU=ON --crashreporting
   build_secrets_checkout: ${{github.workspace}}/signing
 
+
 jobs:
   build_matrix:
     strategy:
@@ -30,6 +31,18 @@ jobs:
 
       - name: Check python version
         run: python -V
+
+      - name: Free Disk Space (Ubuntu)
+        if: runner.os == 'Linux'
+        uses: jlumbroso/free-disk-space@main
+        with: 
+          swap-storage: false
+
+      - name: Set gcc version on Linux
+        if: runner.os == 'Linux'
+        run: |
+          echo "CC=gcc-10" >> $GITHUB_ENV
+          echo "CXX=g++-10" >> $GITHUB_ENV
 
       - name: Install Bash 4 and GNU sed on Mac
         if: runner.os == 'macOS'
@@ -117,12 +130,14 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple:, -s -k "$FS_KEYCHAIN_PASS" -t private ~/Library/Keychains/viewer.keychain
           security list-keychain -d user -s ~/Library/Keychains/viewer.keychain
 
-      - name: Install required Ubuntu packages
+      - name: Install required Ubuntu packages and release some space.
         if: runner.os == 'Linux'
         run: |
           dependencies=("python3-setuptools" "mesa-common-dev" "libgl1-mesa-dev" "libxinerama-dev" "libxrandr-dev" "libpulse-dev" "libglu1-mesa-dev" "libfreetype6-dev" "libfontconfig1")
           sudo apt-get update
           sudo apt-get install -y "${dependencies[@]}"
+          sudo apt-get autoremove --purge 
+          sudo apt-get clean
 
       - name: test macOS bundles are present
         if: runner.os == 'MacOS'
@@ -168,7 +183,9 @@ jobs:
             fi
           done
         shell: bash
-
+      - name: Clean up packages to give more space
+        run: rm *${{ env.fallback_platform }}*bz2
+        shell: bash
       - name: Configure
         run: autobuild configure --debug -c ReleaseFS -A${{matrix.addrsize}} -- --package --chan ${{env.FS_RELEASE_CHAN}} ${{env.EXTRA_ARGS}} ${{env.FS_GRID}}
         shell: bash

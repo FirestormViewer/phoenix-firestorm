@@ -21,6 +21,9 @@
 		<item label="Rock" name="Skirt" value="Rock"/>
 		<item label="Geformtes Primitiv" name="SculptedPrim" value="Geformtes Primitiv"/>
 	</combo_box>
+	<panel name="image_alpha_warning">
+		<check_box name="strip_alpha_check" label="Leeren Alpha-Kanal entfernen"/>
+	</panel>
 	<text name="bad_image_text">
 		Bild kann nicht gelesen werden.
 
