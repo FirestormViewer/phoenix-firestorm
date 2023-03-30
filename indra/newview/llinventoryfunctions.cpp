@@ -550,7 +550,11 @@ BOOL get_is_item_worn(const LLUUID& id)
 	const LLViewerInventoryItem* item = gInventory.getItem(id);
 	if (!item)
 		return FALSE;
-
+    
+    if (item->getIsLinkType() && !gInventory.getItem(item->getLinkedUUID()))
+    {
+        return FALSE;
+    }
 	// Consider the item as worn if it has links in COF.
 // [SL:KB] - The code below causes problems across the board so it really just needs to go
 //	if (LLAppearanceMgr::instance().isLinkedInCOF(id))
@@ -937,7 +941,7 @@ void show_item_original(const LLUUID& item_uuid)
                 main_inventory->toggleViewMode();
             }
             // <FS:Ansariel> FIRE-31037: "Recent" inventory filter gets reset when using "Show Original"
-            //main_inventory->resetFilters();
+            //main_inventory->resetAllItemsFilters();
         }
         reset_inventory_filter();
 
@@ -945,6 +949,7 @@ void show_item_original(const LLUUID& item_uuid)
         {
             LLFloaterReg::toggleInstanceOrBringToFront("inventory");
         }
+        sidepanel_inventory->showInventoryPanel();
 
         const LLUUID inbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX);
         // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
@@ -3321,7 +3326,12 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
     }
     else
     {
-        std::copy(selected_uuid_set.begin(), selected_uuid_set.end(), std::back_inserter(ids));
+        for (std::set<LLFolderViewItem*>::iterator it = selected_items.begin(), end_it = selected_items.end();
+            it != end_it;
+            ++it)
+        {
+            ids.push_back(static_cast<LLFolderViewModelItemInventory*>((*it)->getViewModelItem())->getUUID());
+        }
     }
 
     // Check for actions that get handled in bulk
@@ -3382,7 +3392,7 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
     }
     else if ("ungroup_folder_items" == action)
     {
-        if (selected_uuid_set.size() == 1)
+        if (ids.size() == 1)
         {
             ungroup_folder_items(*ids.begin());
         }

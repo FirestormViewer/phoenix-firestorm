@@ -643,7 +643,6 @@ BOOL LLWindowMacOSX::createContext(int x, int y, int width, int height, int bits
 		// Get the view instead.
 		mGLView = createOpenGLView(mWindow, mFSAASamples, enable_vsync);
 		mContext = getCGLContextObj(mGLView);
-		
 		gGLManager.mVRAM = getVramSize(mGLView);
 	}
 	
@@ -1757,12 +1756,6 @@ void LLSplashScreenMacOSX::showImpl()
 
 void LLSplashScreenMacOSX::updateImpl(const std::string& mesg)
 {
-#if 0 // [FS:CR] This isn't used for anything at all...
-	if(mWindow != NULL)
-	{
-		CFStringCreateWithCString(NULL, mesg.c_str(), kCFStringEncodingUTF8);
-	}
-#endif // [FS:CR]
 }
 
 

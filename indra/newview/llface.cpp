@@ -2211,7 +2211,18 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			
 			while (dst < end_f32)
 			{
+// <FS:Zi> GCC12 warning: maybe-uninitialized - probably bogus
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+// </FS:Zi>
 				res0.store4a((F32*) dst);
+// <FS:Zi> GCC12 warning: maybe-uninitialized - probably bogus
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic pop
+#endif
+// </FS:Zi>
 				dst += 4;
 			}
 
@@ -2262,7 +2273,18 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			while (src < end)
 			{
 				LLVector4a tangent_out;
+// <FS:Zi> GCC12 warning: maybe-uninitialized - probably bogus
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+// </FS:Zi>
 				mat_normal.rotate(*src, tangent_out);
+// <FS:Zi> GCC12 warning: maybe-uninitialized - probably bogus
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic pop
+#endif
+// </FS:Zi>
 				tangent_out.normalize3fast();
 				tangent_out.setSelectWithMask(mask, *src, tangent_out);
 				tangent_out.store4a(tangents);

@@ -114,6 +114,8 @@ public:
 	void toggleFindOptions();
 
     void resetFilters();
+    void resetAllItemsFilters();
+
     void onViewModeClick();
     void toggleViewMode();
     void onUpFolderClicked();
