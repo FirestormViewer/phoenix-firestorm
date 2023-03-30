@@ -2413,7 +2413,6 @@ if (LINUX)
     target_link_libraries(${VIEWER_BINARY_NAME}
         "dl"
         # <FS:Zi> I wish I knew how to make this cleaner, this looks like a mess
-        "fontconfig"    # <FS:Zi> tried ll::fontconfig, didn't work
         ll::vorbis
         ${GIO_LIBRARIES}
     )
@@ -2430,12 +2429,12 @@ if (LINUX)
     ${VIEWER_BINARY_NAME}
     SLPlugin
     media_plugin_cef
-    media_plugin_gstreamer010
+    media_plugin_gstreamer10
     llcommon
     linux-crash-logger
     )
 
-  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_gstreamer010 media_plugin_cef linux-crash-logger)
+  add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_gstreamer10 media_plugin_cef linux-crash-logger)
   
   add_custom_command(
       OUTPUT ${product}.tar.bz2

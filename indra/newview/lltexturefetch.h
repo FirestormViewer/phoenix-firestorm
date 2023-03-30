@@ -496,6 +496,13 @@ private:
 			mFetchedSize(f_size),
 			mDecodedSize(d_size),
 			mNeedsAux(false),
+// <FS:Zi> gcc12: -Werror=maybe-uninitialized
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+			mCacheHandle(0),
+			mCurlState(CURL_NOT_DONE),
+			mCurlReceivedSize(0),
+#endif
+// </FS:Zi>
 			mHttpHandle(LLCORE_HTTP_HANDLE_INVALID)
 			{}
 	};
