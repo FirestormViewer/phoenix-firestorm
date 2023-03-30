@@ -50,7 +50,7 @@ set(LIBRT_LIBRARY rt)
 
 
 target_link_libraries(linux-crash-logger
-        llcrashlogger
+#        llcrashlogger
         llfilesystem
         llxml
         llmessage
