@@ -21,6 +21,9 @@
 		<item label="Юбка" name="Skirt" value="Юбка"/>
 		<item label="Скульптурный примитив" name="SculptedPrim" value="Скульптурный примитив"/>
 	</combo_box>
+	<panel name="image_alpha_warning">
+		<check_box label="Пустой альфа-канал будет удален" name="strip_alpha_check"/>
+	</panel>
 	<text name="bad_image_text">
 		Невозможно прочитать изображение.
 Попробуйте сохранить изображение как 24-битный TGA-файл (Targa).

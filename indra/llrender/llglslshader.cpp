@@ -267,15 +267,13 @@ void LLGLSLShader::readProfileQuery()
         glEndQuery(GL_SAMPLES_PASSED);
         glEndQuery(GL_PRIMITIVES_GENERATED);
 
-        //<FS:TS> U64 and GLuint64 somehow turn out different on x86_64
-        //U64 time_elapsed = 0;
         GLuint64 time_elapsed = 0;
         glGetQueryObjectui64v(mTimerQuery, GL_QUERY_RESULT, &time_elapsed);
 
-        U64 samples_passed = 0;
+        GLuint64 samples_passed = 0;
         glGetQueryObjectui64v(mSamplesQuery, GL_QUERY_RESULT, &samples_passed);
 
-        U64 primitives_generated = 0;
+        GLuint64 primitives_generated = 0;
         glGetQueryObjectui64v(mPrimitivesQuery, GL_QUERY_RESULT, &primitives_generated);
         sTotalTimeElapsed += time_elapsed;
         mTimeElapsed += time_elapsed;

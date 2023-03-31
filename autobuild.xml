@@ -45,7 +45,7 @@
         <string>gstreamer10</string>
         <key>platforms</key>
         <map>
-          <key>linux</key>
+          <key>linux64</key>
           <map>
             <key>archive</key>
             <map>
@@ -55,7 +55,7 @@
               <string>http://downloads.phoenixviewer.com/gstreamer10-1.6.3.201605191852-linux-201605191852.tar.bz2</string>
             </map>
             <key>name</key>
-            <string>linux</string>
+            <string>linux64</string>
           </map>
         </map>
         <key>version</key>
@@ -83,7 +83,7 @@
               <string>http://3p.firestormviewer.org/breakpad-4708e6fb-linux64_bionic-220392253.tar.bz2</string>
             </map>
             <key>name</key>
-            <string>linux</string>
+            <string>linux64</string>
           </map>
         </map>
         <key>version</key>
@@ -111,7 +111,7 @@
               <string>http://3p.firestormviewer.org/glib-2.56.0.220911433-linux64_bionic-220911433.tar.bz2</string>
             </map>
             <key>name</key>
-            <string>linux</string>
+            <string>linux64</string>
           </map>
         </map>
         <key>version</key>
@@ -325,7 +325,7 @@
             <key>name</key>
             <string>darwin</string>
           </map>
-          <key>linux</key>
+          <key>linux64</key>
           <map>
             <key>archive</key>
             <map>
@@ -335,7 +335,7 @@
               <uri>http://3p.firestormviewer.org/libnotify-0.4.4-linux-20101003.tar.bz2</uri>
             </map>
             <key>name</key>
-            <string>linux</string>
+            <string>linux64</string>
           </map>
           <key>windows</key>
           <map>
@@ -724,9 +724,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f283a064c30695bd7bf071f1bd481f32</string>
+              <string>a880dfc15fcb330baf548a85324cd88a</string>
               <key>url</key>
-			  <string>https://3p.firestormviewer.org/colladadom-2.3.222232011-darwin64-222232011.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/104133/913090/colladadom-2.3.574693-darwin64-574693.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -748,9 +748,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1c094d709a35b252bba7b6ef1871085c</string>
+              <string>7e84441d9c7cf019a7bdc7b818b16c27</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/colladadom-2.3.222231850-windows-222231850.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/104112/912957/colladadom-2.3.574693-windows-574693.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -760,16 +760,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a7596da3696fc423ec1bc7d6764c01ab</string>
+              <string>2eaffbb8a93b03a732d3c47055a8efcb</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/colladadom-2.3.222231903-windows64-222231903.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/104135/913103/colladadom-2.3.574693-windows64-574693.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.3.569219</string>
+        <string>2.3.574693</string>
       </map>
       <key>cubemaptoequirectangular</key>
       <map>
@@ -1084,11 +1084,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fec86a4837ae9c6932c10af11851c4d0</string>
+              <string>eebbcd0757dd28646ebb4505e7af140e</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.09-darwin64-5.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.13-darwin64-6.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -1098,11 +1098,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e610f49fa7ed5b10b0cc6409b9bf4afc</string>
+              <string>5fee0f9587f50531211ff9e1e860692f</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.11-linux64-230190114.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.13-linux64-230861132.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1112,11 +1112,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8b2fff1a0a7e057da99fdade1f9e82ff</string>
+              <string>99c928b18a0d2f08b0ee33fca90c4118</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.11-windows-230181802.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.13-windows-230860911.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1126,18 +1126,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6cf457e2268ed83326c6d77f3475e8f5</string>
+              <string>01946a6427d126570607c02b75560f02</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.11-windows64-230181820.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.13-windows64-230860913.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.02.11</string>
+        <string>2.02.13</string>
       </map>
       <key>fontconfig</key>
       <map>
@@ -2077,9 +2077,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>da57838d80cf332f4a3026713a13f086</string>
+              <string>e51c6f5dfd76eb148348a44ff57e66c2</string>
               <key>url</key>
-              <string>https://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/90708/824484/llphysicsextensions_source-1.0.565754-darwin64-565754.tar.bz2</string>
+              <string>https://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/104810/918016/llphysicsextensions_source-1.0.575107-darwin64-575107.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2101,9 +2101,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>28ad884012aa0bb70cf4101853af2f9a</string>
+              <string>dbbe4cc568ac149d862e421cdda4dd48</string>
               <key>url</key>
-              <string>https://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/90733/824570/llphysicsextensions_source-1.0.565768-windows-565768.tar.bz2</string>
+              <string>https://s3-proxy.lindenlab.com/private-builds-secondlife-com/ct2/104809/918011/llphysicsextensions_source-1.0.575107-windows-575107.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3033,6 +3033,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>name</key>
             <string>windows64</string>
           </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>46edf0f55417f8ef0d33a5c007bc3644</string>
+              <key>url</key>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/89310/815451/threejs-0.132.2-windows64-564843.tar.bz2</string>
+            </map>
+          </map>
         </map>
         <key>version</key>
         <string>0.132.2</string>
@@ -3252,9 +3262,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2e8d817e7837dd6f4284b13fa3f5c15e</string>
+              <string>9e1b5515ab59b4e9cfeef6626d65d03d</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/104765/917714/viewer_manager-3.0.575083-darwin64-575083.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/108609/945996/viewer_manager-3.0.577252-darwin64-577252.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3276,9 +3286,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>3efa80faaf537e39a77218cd6efa9409</string>
+              <string>a3c599595ecc8fb987a5499fca42520a</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/104766/917721/viewer_manager-3.0.575083-windows-575083.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/108610/946003/viewer_manager-3.0.577252-windows-577252.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3289,7 +3299,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>source_type</key>
         <string>hg</string>
         <key>version</key>
-        <string>3.0.575083</string>
+        <string>3.0.577252</string>
       </map>
       <key>vlc-bin</key>
       <map>
@@ -3873,6 +3883,112 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
           <key>name</key>
           <string>common</string>
         </map>
+        <key>linux64</key>
+        <map>
+          <key>build_directory</key>
+          <string>build-linux-x86_64</string>
+          <key>configurations</key>
+          <map>
+            <key>Release</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>ninja</string>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>../indra</string>
+                </array>
+                <key>options</key>
+                <array>
+                  <string>-G</string>
+                  <string>Ninja</string>
+                  <string>-DLL_TESTS=Off</string>
+                </array>
+              </map>
+              <key>default</key>
+              <string>True</string>
+              <key>name</key>
+              <string>Release</string>
+            </map>
+            <key>ReleaseOS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>ninja</string>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>-G</string>
+                  <string>Ninja</string>
+                  <string>-DLL_TESTS=Off</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseOS</string>
+            </map>
+            <key>default</key>
+            <map>
+              <key>build</key>
+              <map>
+              </map>
+              <key>name</key>
+              <string>default</string>
+            </map>
+            <key>ReleaseFS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--build</string>
+                  <string>--platform linux</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--kdu</string>
+                  <string>--fmodstudio</string>
+                  <string>--platform linux</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseFS</string>
+            </map>
+            <key>ReleaseFS_open</key>
+              <map>
+                <key>build</key>
+                <map>
+                  <key>options</key>
+                  <array>
+                    <string>--build</string>
+                    <string>--platform linux</string>
+                    <string>--package</string>
+                  </array>
+                </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--platform linux</string>
+                  <string>--package</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseFS_open</string>
+            </map>
+          </map>
+          <key>name</key>
+          <string>linux64</string>
+        </map>
         <key>darwin64</key>
         <map>
           <key>build_directory</key>
@@ -4324,7 +4440,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>windows</key>
         <map>
           <key>build_directory</key>
-          <string>build-vc${AUTOBUILD_VSVER|150}-$AUTOBUILD_ADDRSIZE</string>
+          <string>build-vc${AUTOBUILD_VSVER|170}-$AUTOBUILD_ADDRSIZE</string>
           <key>configurations</key>
           <map>
             <key>RelWithDebInfo</key>
@@ -4353,6 +4469,8 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>-G</string>
                   <string>${AUTOBUILD_WIN_CMAKE_GEN|NOTWIN}</string>
+                  <string>-A</string>
+                  <string>${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
                 </array>
               </map>
               <key>name</key>
@@ -4389,9 +4507,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>-G</string>
                   <string>${AUTOBUILD_WIN_CMAKE_GEN|NOTWIN}</string>
+                  <string>-A</string>
+                  <string>${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
-                  <string>-DOPENAL:BOOL=ON</string>
+                  <string>-DUSE_OPENAL:BOOL=ON</string>
                 </array>
               </map>
               <key>name</key>
@@ -4423,6 +4543,8 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>-G</string>
                   <string>${AUTOBUILD_WIN_CMAKE_GEN|NOTWIN}</string>
+                  <string>-A</string>
+                  <string>${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
                 </array>
               </map>
               <key>name</key>
@@ -4459,10 +4581,12 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>-G</string>
                   <string>${AUTOBUILD_WIN_CMAKE_GEN|NOTWIN}</string>
+                  <string>-A</string>
+                  <string>${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
                   <string>-DUNATTENDED:BOOL=ON</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
-                  <string>-DOPENAL:BOOL=ON</string>
+                  <string>-DUSE_OPENAL:BOOL=ON</string>
                 </array>
               </map>
               <key>name</key>

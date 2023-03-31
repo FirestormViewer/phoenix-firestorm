@@ -94,7 +94,18 @@ std::map<std::string, LLUUID> FSLSLPreprocessor::cached_assetids;
 //#define BOOST_SPIRIT_THREADSAFE
 
 #include <boost/assert.hpp>
+// <FS:Zi> GCC specific warning
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wfree-nonheap-object"
+#endif
+// </FS:Zi>
 #include <boost/wave.hpp>
+// <FS:Zi> GCC specific warning
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic pop
+#endif
+// </FS:Zi>
 #include <boost/wave/cpplexer/cpp_lex_token.hpp>    // token class
 #include <boost/wave/cpplexer/cpp_lex_iterator.hpp> // lexer class
 #include <boost/wave/preprocessing_hooks.hpp>

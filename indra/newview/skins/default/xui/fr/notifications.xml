@@ -5419,4 +5419,11 @@ La réinitialisation de la caméra peut être empêchée par les objets suivants
 		Dégrouper le dossier "[FOLDER_NAME]" ?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Ok"/>
 	</notification>
+	<notification label="L'image contient un canal alpha vide" name="ImageEmptyAlphaLayer">
+L'image que vous essayez de télécharger contient un canal alpha (informations de transparence) vide ou presque vide. Ce canal est presque toujours indésirable et doit être supprimé. L'ajout d'un canal alpha à une image entraînera le superposition des textures les unes sur les autres selon l'angle de la caméra, et rendra le rendu plus lent. Par conséquent, à moins que vous n'ayez vraiment besoin que cette texture ait un canal alpha vide ou presque vide, pensez à le supprimer.
+		<form name="form">
+			<button name="strip" text="Supprimer l'alpha'"/>
+			<button name="use_as_is" text="Utiliser tel quel"/>
+		</form>
+	</notification>
 </notifications>

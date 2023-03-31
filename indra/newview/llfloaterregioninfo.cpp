@@ -717,11 +717,11 @@ void LLFloaterRegionInfo::refreshFromRegion(LLViewerRegion* region)
 	}
 
 	// call refresh from region on all panels
-	std::for_each(
-		mInfoPanels.begin(),
-		mInfoPanels.end(),
-		[region](info_panels_t::value_type panel) { panel->refreshFromRegion(region); });
-    mEnvironmentPanel->refreshFromRegion(region);
+	for (const auto& infoPanel : mInfoPanels)
+	{
+		infoPanel->refreshFromRegion(region);
+	}
+	mEnvironmentPanel->refreshFromRegion(region);
 }
 
 // public
@@ -2115,6 +2115,7 @@ BOOL LLPanelEstateInfo::postBuild()
 	initCtrl("allow_direct_teleport");
 	initCtrl("limit_payment");
 	initCtrl("limit_age_verified");
+    initCtrl("limit_bots");
 	initCtrl("voice_chat_check");
     initCtrl("parcel_access_override");
 
@@ -2139,12 +2140,14 @@ void LLPanelEstateInfo::refresh()
 	// getChildView("Only Allow")->setEnabled(public_access);
 	getChildView("limit_payment")->setEnabled(public_access);
 	getChildView("limit_age_verified")->setEnabled(public_access);
+    getChildView("limit_bots")->setEnabled(public_access);
 
 	// if this is set to false, then the limit fields are meaningless and should be turned off
 	if (public_access == false)
 	{
 		getChild<LLUICtrl>("limit_payment")->setValue(false);
 		getChild<LLUICtrl>("limit_age_verified")->setValue(false);
+        getChild<LLUICtrl>("limit_bots")->setValue(false);
 	}
 }
 
@@ -2161,6 +2164,7 @@ void LLPanelEstateInfo::refreshFromEstate()
 	getChild<LLUICtrl>("limit_payment")->setValue(estate_info.getDenyAnonymous());
 	getChild<LLUICtrl>("limit_age_verified")->setValue(estate_info.getDenyAgeUnverified());
     getChild<LLUICtrl>("parcel_access_override")->setValue(estate_info.getAllowAccessOverride());
+    getChild<LLUICtrl>("limit_bots")->setValue(estate_info.getDenyScriptedAgents());
 
 	// Ensure appriopriate state of the management UI
 	updateControls(gAgent.getRegion());
@@ -2204,6 +2208,7 @@ bool LLPanelEstateInfo::callbackChangeLindenEstate(const LLSD& notification, con
 			estate_info.setDenyAgeUnverified(getChild<LLUICtrl>("limit_age_verified")->getValue().asBoolean());
 			estate_info.setAllowVoiceChat(getChild<LLUICtrl>("voice_chat_check")->getValue().asBoolean());
             estate_info.setAllowAccessOverride(getChild<LLUICtrl>("parcel_access_override")->getValue().asBoolean());
+            estate_info.setDenyScriptedAgents(getChild<LLUICtrl>("limit_bots")->getValue().asBoolean());
             // JIGGLYPUFF
             //estate_info.setAllowAccessOverride(getChild<LLUICtrl>("")->getValue().asBoolean());
 			// send the update to sim
