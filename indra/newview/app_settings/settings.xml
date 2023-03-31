@@ -22010,7 +22010,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>30</integer>
+    <integer>15</integer>
   </map>
   <key>AutoTuneFPS</key>
   <map>
@@ -22147,7 +22147,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>TuningFPSStrategy</key>
   <map>
     <key>Comment</key>
-    <string>Strategy to use when tuning FPS. 0=Tune avatar rendering only, 1=Tune both avatar and global scene settings.</string>
+    <string>Strategy to use when tuning FPS. 0=Tune avatar rendering only, 1=Tune both avatar and global scene settings, 2=Tune only global scene.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>

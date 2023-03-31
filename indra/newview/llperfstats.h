@@ -76,7 +76,7 @@ namespace LLPerfStats
 
     static constexpr U32 TUNE_AVATARS_ONLY{0};
     static constexpr U32 TUNE_SCENE_AND_AVATARS{1};
-    extern F64 cpu_hertz; // <FS:Beq/> reinstate thread safety
+    static constexpr U32 TUNE_SCENE_ONLY{2};
 
     extern F64 cpu_hertz;
 

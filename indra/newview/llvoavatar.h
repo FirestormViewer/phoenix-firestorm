@@ -330,6 +330,8 @@ public:
 
 	void 			idleUpdateBelowWater();
 
+	static void updateNearbyAvatarCount();
+
 	//--------------------------------------------------------------------
 	// Static preferences (controlled by user settings/menus)
 	//--------------------------------------------------------------------
@@ -354,6 +356,9 @@ public:
 	static LLPartSysData sCloud;
 
     static LLPointer<LLViewerTexture>  sCloudTexture;
+
+	static std::vector<LLUUID> sAVsIgnoringARTLimit;
+    static S32 sAvatarsNearby;
 
 	//--------------------------------------------------------------------
 	// Region state

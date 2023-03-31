@@ -148,6 +148,10 @@
      label="Avatars and Scene"
      name="av_and_scene"
      value="1" />
+	<combo_box.item
+     label="World Only"
+     name="scene_only"
+     value="2" />
   </combo_box>
   <view_border
    bevel_style="in"
