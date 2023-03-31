@@ -5604,4 +5604,7 @@ URL auf Standard zurücksetzen?
 		Gruppierung durch den Ordner „[FOLDER_NAME]“ aufheben?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Okay"/>
 	</notification>
+	<notification name="ImageEmptyAlphaLayer" label="Textur enthält leeren Alpha-Kanal">
+		Die Textur, die Sie hochladen möchten, enthält einen leeren oder fast-leeren Alpha-Kanal (Transparenz-Informationen). Dies ist fast immer nicht gewünscht und der Kanel sollte daher entfernt werden. Das Hinzufügen eines Alpha-Kanals kann zu Textur-Flackern bei übereinanderliegenden Texturen bei unterschiedlichem Kamerawinkel führen. Zudem verringert sich dadurch die Darstellungsgeschwindigkeit. Sofern diese Textur nicht unbedingt einen (fast-)leeren Alpgha-Kanal benötigt, sollte dieser möglichst entfernt werden.
+	</notification>
 </notifications>

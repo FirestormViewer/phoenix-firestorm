@@ -548,6 +548,18 @@ void LLPanelMainInventory::resetFilters()
 	setFilterTextFromFilter();
 }
 
+void LLPanelMainInventory::resetAllItemsFilters()
+{
+    LLFloaterInventoryFinder *finder = getFinder();
+    getAllItemsPanel()->getFilter().resetDefault();
+    if (finder)
+    {
+        finder->updateElementsFromFilter();
+    }
+
+    setFilterTextFromFilter();
+}
+
 void LLPanelMainInventory::onSelectSearchType()
 {
 	std::string new_type = mSearchTypeCombo->getValue();

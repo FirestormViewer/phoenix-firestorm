@@ -26,11 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
 $/LicenseInfo$
 """
-#<FS:TS> Remove this line if Python 2 compatibility is not needed.
-#        Note that, as is, the script works under both versions, so no
-#        matter what version "/usr/bin/env python" returns, it'll run.
-from __future__ import print_function, division
-
 import errno
 import glob
 import itertools
@@ -1929,7 +1924,7 @@ class LinuxManifest(ViewerManifest):
 
         # plugins
         with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'media_plugins'), dst="bin/llplugin"):
-            self.path("gstreamer010/libmedia_plugin_gstreamer010.so", "libmedia_plugin_gstreamer.so")
+            self.path("gstreamer10/libmedia_plugin_gstreamer10.so", "libmedia_plugin_gstreamer.so")
             self.path("cef/libmedia_plugin_cef.so", "libmedia_plugin_cef.so" )
 
         # CEF files 

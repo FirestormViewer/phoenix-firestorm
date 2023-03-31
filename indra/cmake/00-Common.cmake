@@ -141,34 +141,47 @@ endif (WINDOWS)
 if (LINUX)
   set(CMAKE_SKIP_RPATH TRUE)
 
-   # EXTERNAL_TOS
-   # force this platform to accept TOS via external browser
+  # <FS:ND/>
+  # And another hack for FORTIFY_SOURCE. Some distributions (for example Gentoo) define FORTIFY_SOURCE by default.
+  # Check if this is the case, if yes, do not define it again.
+  execute_process(
+      COMMAND echo "int main( char **a, int c ){ \n#ifdef _FORTIFY_SOURCE\n#error FORTITY_SOURCE_SET\n#else\nreturn 0;\n#endif\n}" 
+      COMMAND sh -c "${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} -xc++ -w - -o /dev/null"
+      OUTPUT_VARIABLE FORTIFY_SOURCE_OUT
+         ERROR_VARIABLE FORTIFY_SOURCE_ERR
+         RESULT_VARIABLE FORTIFY_SOURCE_RES
+     )
 
-   # LL_IGNORE_SIGCHLD
-   # don't catch SIGCHLD in our base application class for the viewer - some of
-   # our 3rd party libs may need their *own* SIGCHLD handler to work. Sigh! The
-   # viewer doesn't need to catch SIGCHLD anyway.
 
-  add_compile_definitions(
-          _REENTRANT
-          _FORTIFY_SOURCE=2
-          EXTERNAL_TOS
-          APPID=secondlife
-          LL_IGNORE_SIGCHLD
-  )
+  if ( ${FORTIFY_SOURCE_RES} EQUAL 0 )
+   add_definitions(-D_FORTIFY_SOURCE=2)
+  endif()
+
+  # gcc 4.3 and above don't like the LL boost and also
+  # cause warnings due to our use of deprecated headers
+
+  add_definitions(
+      -D_REENTRANT
+      )
   add_compile_options(
-          -fexceptions
-          -fno-math-errno
-          -fno-strict-aliasing
-          -fsigned-char
-          -msse2
-          -mfpmath=sse
-          -pthread
-          -Wno-parentheses
-          -Wno-deprecated
-          -fvisibility=hidden
-  )
+      -fexceptions
+      -fno-math-errno
+      -fno-strict-aliasing
+      -fsigned-char
+      -msse2
+      -mfpmath=sse
+      -pthread
+      )
 
+  # force this platform to accept TOS via external browser <FS:ND> No, do not.
+  # add_definitions(-DEXTERNAL_TOS)
+
+  add_definitions(-DAPPID=secondlife)
+  add_compile_options(-fvisibility=hidden)
+  # don't catch SIGCHLD in our base application class for the viewer - some of
+  # our 3rd party libs may need their *own* SIGCHLD handler to work. Sigh! The
+  # viewer doesn't need to catch SIGCHLD anyway.
+  add_definitions(-DLL_IGNORE_SIGCHLD)
   if (ADDRESS_SIZE EQUAL 32)
     add_compile_options(-march=pentium4)
   endif (ADDRESS_SIZE EQUAL 32)
@@ -206,16 +219,40 @@ set(SIGNING_IDENTITY "Developer ID Application: The Phoenix Firestorm Project, I
 endif (DARWIN)
 
 if (LINUX OR DARWIN)
-  set(GCC_WARNINGS -Wall -Wno-sign-compare -Wno-trigraphs)
+  if (CMAKE_CXX_COMPILER MATCHES ".*clang")
+    set(CMAKE_COMPILER_IS_CLANGXX 1)
+  endif (CMAKE_CXX_COMPILER MATCHES ".*clang")
+
+  if (CMAKE_COMPILER_IS_GNUCXX)
+    set(GCC_WARNINGS "-Wall -Wno-sign-compare -Wno-trigraphs")
+  elseif (CMAKE_COMPILER_IS_CLANGXX)
+    set(GCC_WARNINGS "-Wall -Wno-sign-compare -Wno-trigraphs")
+  endif()
 
   if (NOT GCC_DISABLE_FATAL_WARNINGS)
-    list(APPEND GCC_WARNINGS -Werror)
+    set(GCC_WARNINGS "${GCC_WARNINGS} -Werror")
   endif (NOT GCC_DISABLE_FATAL_WARNINGS)
 
-  list(APPEND GCC_WARNINGS -Wno-reorder -Wno-non-virtual-dtor )
+  if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" AND DARWIN AND XCODE_VERSION GREATER 4.9)
+    set(GCC_CXX_WARNINGS "$[GCC_WARNINGS] -Wno-reorder -Wno-unused-const-variable -Wno-format-extra-args -Wno-unused-private-field -Wno-unused-function -Wno-tautological-compare -Wno-empty-body -Wno-unused-variable -Wno-unused-value")
+  else (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" AND DARWIN AND XCODE_VERSION GREATER 4.9)
+  #elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+    set(GCC_CXX_WARNINGS "${GCC_WARNINGS} -Wno-reorder -Wno-non-virtual-dtor -Wno-unused-variable")
+  endif ()
 
-  add_compile_options(${GCC_WARNINGS})
-  add_compile_options(-m${ADDRESS_SIZE})
+  if(LINUX)
+    set(GCC_CXX_WARNINGS "${GCC_WARNINGS} -Wno-reorder -Wno-non-virtual-dtor -Wno-unused-variable -Wno-unused-but-set-variable -Wno-pragmas -Wno-deprecated")
+  endif()
+
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 13.0)
+    set(GCC_CXX_WARNINGS "${GCC_CXX_WARNINGS} -Wno-c++20-compat")
+  endif()
+
+  set(CMAKE_C_FLAGS "${GCC_WARNINGS} ${CMAKE_C_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${GCC_CXX_WARNINGS} ${CMAKE_CXX_FLAGS}")
+
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m${ADDRESS_SIZE}")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m${ADDRESS_SIZE}")
 endif (LINUX OR DARWIN)
 
 

@@ -15,9 +15,13 @@
 		<item label="Jupe" name="Skirt"/>
 		<item label="Prim sculpté" name="SculptedPrim"/>
 	</combo_box>
+	<panel name="image_alpha_warning">
+		<check_box name="strip_alpha_check" label="Le canal alpha vide sera supprimé"/>
+	</panel>
 	<text name="bad_image_text">
-         Impossible de lire l'image.
- Essayez d'enregistrer l'image au format Targa 24 bits (.tga).
+		Impossible de lire l'image.
+
+Essayez d'enregistrer l'image au format Targa 24 bits (.tga).
 	</text>
 	<check_box label="Utiliser une compression sans pertes" name="lossless_check"/>
 	<check_box name="temp_check" label="Temporaire (Gratuit)" tool_tip="Défini l'envoi comme étant temporaire, celui-ci étant gratuit, mais disponible uniquement pour un temps limité avant qu'il ne cesse d'exister définitivement."/>

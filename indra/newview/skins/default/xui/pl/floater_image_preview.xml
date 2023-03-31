@@ -21,6 +21,9 @@
 		<item label="Spódnica" name="Skirt" />
 		<item label="Prim skulptowy" name="SculptedPrim" />
 	</combo_box>
+	<panel name="image_alpha_warning">
+		<check_box label="Pusty kanał alfa zostanie usunięty" name="strip_alpha_check" />
+	</panel>
 	<text name="bad_image_text">
 		Nie można wczytać obrazu.
 
