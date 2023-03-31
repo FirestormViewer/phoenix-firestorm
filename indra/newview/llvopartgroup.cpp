@@ -912,7 +912,7 @@ void LLParticlePartition::getGeometry(LLSpatialGroup* group)
 
 		llassert(facep->getGeomCount() == 4);
 		llassert(facep->getIndicesCount() == 6);
-
+        
 		S32 idx = draw_vec.size()-1;
 
 		bool fullbright = facep->isState(LLFace::FULLBRIGHT);

@@ -2762,8 +2762,8 @@ if (LL_TESTS)
   set_source_files_properties(
     llvocache.cpp
     PROPERTIES
-    LL_TEST_ADDITIONAL_SOURCE_FILES 
-    ../llmessage/lldatapacker.cpp
+    LL_TEST_ADDITIONAL_SOURCE_FILES ../llmessage/lldatapacker.cpp
+    LL_TEST_ADDITIONAL_PROJECTS "llprimitive"
   )
 
   set(test_libs
@@ -2793,7 +2793,6 @@ if (LL_TESTS)
     LL_TEST_ADDITIONAL_LIBRARIES "${test_libs}"
   )
 
-
   set_source_files_properties(
     llworldmap.cpp
     llworldmipmap.cpp
@@ -2813,6 +2812,7 @@ if (LL_TESTS)
     PROPERTIES
     LL_TEST_ADDITIONAL_SOURCE_FILES llversioninfo.cpp
   )
+
   set_property( SOURCE
           ${viewer_TEST_SOURCE_FILES}
           PROPERTY
