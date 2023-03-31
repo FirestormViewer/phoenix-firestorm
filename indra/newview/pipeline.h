@@ -300,8 +300,6 @@ public:
     void bindReflectionProbes(LLGLSLShader& shader);
     void unbindReflectionProbes(LLGLSLShader& shader);
 
-    
-
 	void renderDeferredLighting();
 	void postDeferredGammaCorrect(LLRenderTarget* screen_target);
 
@@ -691,6 +689,13 @@ public:
     // for use by SSR
     LLRenderTarget          mSceneMap;
 
+    // exposure map for getting average color in scene
+    LLRenderTarget          mExposureMap;
+    LLRenderTarget          mLastExposure;
+
+    // tonemapped and gamma corrected render ready for post
+    LLRenderTarget          mPostMap;
+
     LLCullResult            mSky;
     LLCullResult            mReflectedObjects;
     LLCullResult            mRefractedObjects;
@@ -1024,9 +1029,6 @@ public:
 	static F32 RenderShadowBlurDistFactor;
 	static bool RenderDeferredAtmospheric;
 	static F32 RenderHighlightFadeTime;
-	static LLVector3 RenderShadowClipPlanes;
-	static LLVector3 RenderShadowOrthoClipPlanes;
-	static LLVector3 RenderShadowNearDist;
 	static F32 RenderFarClip;
 	static LLVector3 RenderShadowSplitExponent;
 	static F32 RenderShadowErrorCutoff;

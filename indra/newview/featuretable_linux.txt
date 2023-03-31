@@ -102,6 +102,7 @@ RenderShadowDetail			1	0
 WLSkyDetail					1	96
 RenderFSAASamples			1	0
 RenderScreenSpaceReflections 1  0
+RenderReflectionProbeCount  1   8
 
 //
 // Medium Low Graphics Settings
@@ -109,6 +110,7 @@ RenderScreenSpaceReflections 1  0
 list LowMid
 RenderAnisotropic			1	0
 RenderAvatarLODFactor		1	0.5
+RenderAvatarMaxNonImpostors 1   5
 RenderAvatarMaxComplexity   1	100000
 RenderAvatarPhysicsLODFactor 1	0.75
 RenderFarClip				1	96
@@ -129,6 +131,7 @@ RenderShadowDetail			1	0
 WLSkyDetail					1	96
 RenderFSAASamples			1	0
 RenderScreenSpaceReflections 1  0
+RenderReflectionProbeCount  1   16
 
 //
 // Medium Graphics Settings (standard)
@@ -136,6 +139,7 @@ RenderScreenSpaceReflections 1  0
 list Mid
 RenderAnisotropic			1	1
 RenderAvatarLODFactor		1	1.0
+RenderAvatarMaxNonImpostors 1   7
 RenderAvatarMaxComplexity   1	200000
 RenderAvatarPhysicsLODFactor 1	1.0
 RenderFarClip				1	128
@@ -156,6 +160,7 @@ RenderFSAASamples			1	2
 RenderReflectionsEnabled    1   1
 RenderReflectionProbeDetail	1	0
 RenderScreenSpaceReflections 1  0
+RenderReflectionProbeCount  1   32
 
 //
 // Medium High Graphics Settings (deferred enabled)
@@ -163,6 +168,7 @@ RenderScreenSpaceReflections 1  0
 list MidHigh
 RenderAnisotropic			1	1
 RenderAvatarLODFactor		1	1.0
+RenderAvatarMaxNonImpostors 1   9
 RenderAvatarMaxComplexity   1	250000
 RenderAvatarPhysicsLODFactor 1	1.0
 RenderFarClip				1	128
@@ -183,6 +189,7 @@ RenderFSAASamples			1	2
 RenderReflectionsEnabled    1   1
 RenderReflectionProbeDetail	1	1
 RenderScreenSpaceReflections 1  0
+RenderReflectionProbeCount  1   64
 
 //
 // High Graphics Settings (deferred + SSAO)
@@ -190,6 +197,7 @@ RenderScreenSpaceReflections 1  0
 list High
 RenderAnisotropic			1	1
 RenderAvatarLODFactor		1	1.0
+RenderAvatarMaxNonImpostors 1   11
 RenderAvatarMaxComplexity   1	300000
 RenderAvatarPhysicsLODFactor 1	1.0
 RenderFarClip				1	128
@@ -210,6 +218,7 @@ RenderFSAASamples			1	2
 RenderReflectionsEnabled    1   1
 RenderReflectionProbeDetail	1	1
 RenderScreenSpaceReflections 1  0
+RenderReflectionProbeCount  1   128
 
 //
 // High Ultra Graphics Settings (deferred + SSAO)
@@ -217,6 +226,7 @@ RenderScreenSpaceReflections 1  0
 list HighUltra
 RenderAnisotropic			1	1
 RenderAvatarLODFactor		1	1.0
+RenderAvatarMaxNonImpostors 1   16
 RenderAvatarMaxComplexity   1	350000
 RenderAvatarPhysicsLODFactor 1	1.0
 RenderFarClip				1	128
@@ -237,6 +247,7 @@ RenderFSAASamples			1	2
 RenderReflectionsEnabled    1   1
 RenderReflectionProbeDetail	1	1
 RenderScreenSpaceReflections 1  0
+RenderReflectionProbeCount  1   256
 
 //
 // Ultra graphics (REALLY PURTY!)
@@ -244,6 +255,7 @@ RenderScreenSpaceReflections 1  0
 list Ultra
 RenderAnisotropic			1	1
 RenderAvatarLODFactor		1	1.0
+RenderAvatarMaxNonImpostors 1   16
 RenderAvatarPhysicsLODFactor 1	1.0
 RenderFarClip				1	256
 RenderFlexTimeFactor		1	1.0
@@ -264,6 +276,7 @@ RenderFSAASamples			1	2
 RenderReflectionsEnabled    1   1
 RenderReflectionProbeDetail	1	1
 RenderScreenSpaceReflections 1  1
+RenderReflectionProbeCount  1   256
 
 //
 // Class Unknown Hardware (unknown)

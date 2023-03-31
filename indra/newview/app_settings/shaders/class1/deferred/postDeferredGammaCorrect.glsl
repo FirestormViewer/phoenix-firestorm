@@ -35,6 +35,7 @@ out vec4 frag_color;
 
 uniform sampler2D diffuseRect;
 uniform sampler2D emissiveRect;
+uniform sampler2D exposureMap;
 
 uniform vec2 screen_res;
 VARYING vec2 vary_fragcoord;
@@ -107,7 +108,9 @@ uniform float gamma;
 
 vec3 toneMap(vec3 color)
 {
-    color *= exposure;
+    float exp_scale = texture(exposureMap, vec2(0.5,0.5)).r;
+
+    color *= exposure * exp_scale;
 
 #ifdef TONEMAP_ACES_NARKOWICZ
     color = toneMapACES_Narkowicz(color);
@@ -190,6 +193,9 @@ void main()
     vec3 nz = vec3(noise(seed.rg), noise(seed.gb), noise(seed.rb));
     diff.rgb += nz*0.003;
     //diff.rgb = nz;
+
+    //float exp_sample = texture(exposureMap, vec2(0.5,0.5)).r;
+    //diff.g = exp_sample;
     frag_color = diff;
 }
 

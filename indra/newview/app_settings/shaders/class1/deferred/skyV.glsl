@@ -32,8 +32,8 @@ ATTRIBUTE vec3 position;
 ///////////////////////////////////////////////////////////////////////////////
 
 // Output parameters
-VARYING vec3 vary_HazeColor;
-VARYING float vary_LightNormPosDot;
+out vec3 vary_HazeColor;
+out float vary_LightNormPosDot;
 
 // Inputs
 uniform vec3 camPosLocal;
@@ -55,6 +55,8 @@ uniform float max_y;
 
 uniform vec3  glow;
 uniform float sun_moon_glow_factor;
+
+uniform int cube_snapshot;
 
 // NOTE: Keep these in sync!
 //       indra\newview\app_settings\shaders\class1\deferred\skyV.glsl
@@ -89,8 +91,8 @@ void main()
     vary_LightNormPosDot = rel_pos_lightnorm_dot;
 
     // Initialize temp variables
-    vec3 sunlight = (sun_up_factor == 1) ? sunlight_color : moonlight_color;
-
+    vec3 sunlight = (sun_up_factor == 1) ? sunlight_color*2.0 : moonlight_color*0.75;
+    
     // Sunlight attenuation effect (hue and brightness) due to atmosphere
     // this is used later for sunlight modulation at various altitudes
     vec3 light_atten = (blue_density + vec3(haze_density * 0.25)) * (density_multiplier * max_y);

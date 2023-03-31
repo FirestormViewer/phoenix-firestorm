@@ -124,27 +124,7 @@
 #include "llenvironment.h"
 #include "llsettingsvo.h"
 
-#ifdef _DEBUG
-// Debug indices is disabled for now for debug performance - djs 4/24/02
-//#define DEBUG_INDICES
-#else
-//#define DEBUG_INDICES
-#endif
-
-// Expensive and currently broken
-//
-#define MATERIALS_IN_REFLECTIONS 0
-
-// NOTE: Keep in sync with indra/newview/skins/default/xui/en/floater_preferences_graphics_advanced.xml
-// NOTE: Unused consts are commented out since some compilers (on macOS) may complain about unused variables.
-//  const S32 WATER_REFLECT_NONE_WATER_OPAQUE       = -2;
-    //const S32 WATER_REFLECT_NONE_WATER_TRANSPARENT  = -1;
-    //const S32 WATER_REFLECT_MINIMAL                 =  0;
-//  const S32 WATER_REFLECT_TERRAIN                 =  1;
-    //const S32 WATER_REFLECT_STATIC_OBJECTS          =  2;
-    //const S32 WATER_REFLECT_AVATARS                 =  3;
-    //const S32 WATER_REFLECT_EVERYTHING              =  4;
-
+extern BOOL gSnapshot;
 bool gShiftFrame = false;
 
 //cached settings
@@ -217,9 +197,6 @@ LLVector3 LLPipeline::RenderShadowGaussian;
 F32 LLPipeline::RenderShadowBlurDistFactor;
 bool LLPipeline::RenderDeferredAtmospheric;
 F32 LLPipeline::RenderHighlightFadeTime;
-LLVector3 LLPipeline::RenderShadowClipPlanes;
-LLVector3 LLPipeline::RenderShadowOrthoClipPlanes;
-LLVector3 LLPipeline::RenderShadowNearDist;
 F32 LLPipeline::RenderFarClip;
 LLVector3 LLPipeline::RenderShadowSplitExponent;
 F32 LLPipeline::RenderShadowErrorCutoff;
@@ -363,7 +340,7 @@ bool addDeferredAttachments(LLRenderTarget& target, bool for_impostor = false)
     bool valid = true
         && target.addColorAttachment(GL_RGBA) // frag-data[1] specular OR PBR ORM
         && target.addColorAttachment(GL_RGBA16F)                              // frag_data[2] normal+z+fogmask, See: class1\deferred\materialF.glsl & softenlight
-        && target.addColorAttachment(GL_RGB16);                  // frag_data[3] PBR emissive
+        && target.addColorAttachment(GL_RGB16F);                  // frag_data[3] PBR emissive
     return valid;
 }
 
@@ -597,9 +574,6 @@ void LLPipeline::init()
 	connectRefreshCachedSettingsSafe("RenderShadowBlurDistFactor");
 	connectRefreshCachedSettingsSafe("RenderDeferredAtmospheric");
 	connectRefreshCachedSettingsSafe("RenderHighlightFadeTime");
-	connectRefreshCachedSettingsSafe("RenderShadowClipPlanes");
-	connectRefreshCachedSettingsSafe("RenderShadowOrthoClipPlanes");
-	connectRefreshCachedSettingsSafe("RenderShadowNearDist");
 	connectRefreshCachedSettingsSafe("RenderFarClip");
 	connectRefreshCachedSettingsSafe("RenderShadowSplitExponent");
 	connectRefreshCachedSettingsSafe("RenderShadowErrorCutoff");
@@ -940,6 +914,8 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
         mSceneMap.allocate(resX, resY, GL_RGB, true);
     }
 
+    mPostMap.allocate(resX, resY, GL_RGBA);
+
     //HACK make screenbuffer allocations start failing after 30 seconds
     if (gSavedSettings.getBOOL("SimulateFBOFailure"))
     {
@@ -1140,9 +1116,6 @@ void LLPipeline::refreshCachedSettings()
 	RenderShadowBlurDistFactor = gSavedSettings.getF32("RenderShadowBlurDistFactor");
 	RenderDeferredAtmospheric = gSavedSettings.getBOOL("RenderDeferredAtmospheric");
 	RenderHighlightFadeTime = gSavedSettings.getF32("RenderHighlightFadeTime");
-	RenderShadowClipPlanes = gSavedSettings.getVector3("RenderShadowClipPlanes");
-	RenderShadowOrthoClipPlanes = gSavedSettings.getVector3("RenderShadowOrthoClipPlanes");
-	RenderShadowNearDist = gSavedSettings.getVector3("RenderShadowNearDist");
 	RenderFarClip = gSavedSettings.getF32("RenderFarClip");
 	RenderShadowSplitExponent = gSavedSettings.getVector3("RenderShadowSplitExponent");
 	RenderShadowErrorCutoff = gSavedSettings.getF32("RenderShadowErrorCutoff");
@@ -1189,6 +1162,8 @@ void LLPipeline::releaseGLBuffers()
 	
     mSceneMap.release();
 
+    mPostMap.release();
+
 	for (U32 i = 0; i < 3; i++)
 	{
 		mGlow[i].release();
@@ -1209,6 +1184,10 @@ void LLPipeline::releaseLUTBuffers()
 	}
 
     mPbrBrdfLut.release();
+
+    mExposureMap.release();
+    mLastExposure.release();
+
 }
 
 void LLPipeline::releaseShadowBuffers()
@@ -1389,6 +1368,13 @@ void LLPipeline::createLUTBuffers()
 
     gDeferredGenBrdfLutProgram.unbind();
     mPbrBrdfLut.flush();
+
+    mExposureMap.allocate(1, 1, GL_R16F);
+    mExposureMap.bindTarget();
+    mExposureMap.clear();
+    mExposureMap.flush();
+
+    mLastExposure.allocate(1, 1, GL_R16F);
 }
 
 
@@ -7569,7 +7555,62 @@ void LLPipeline::renderFinalize()
             dst.flush();
         }
 
-        screenTarget()->bindTarget();
+        // exposure sample
+        {
+            LL_PROFILE_GPU_ZONE("exposure sample");
+
+            {
+                // copy last frame's exposure into mLastExposure
+                mLastExposure.bindTarget();
+                gCopyProgram.bind();
+                gGL.getTexUnit(0)->bind(&mExposureMap);
+
+                mScreenTriangleVB->setBuffer();
+                mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
+
+                mLastExposure.flush();
+            }
+
+
+            mExposureMap.bindTarget();
+
+            LLGLDepthTest depth(GL_FALSE, GL_FALSE);
+            
+            gExposureProgram.bind();
+
+            S32 channel = 0;
+            channel = gExposureProgram.enableTexture(LLShaderMgr::DEFERRED_DIFFUSE);
+            if (channel > -1)
+            {
+                screenTarget()->bindTexture(0, channel, LLTexUnit::TFO_POINT);
+            }
+
+            channel = gExposureProgram.enableTexture(LLShaderMgr::DEFERRED_EMISSIVE);
+            if (channel > -1)
+            {
+                mGlow[1].bindTexture(0, channel);
+            }
+
+            channel = gExposureProgram.enableTexture(LLShaderMgr::EXPOSURE_MAP);
+            if (channel > -1)
+            {
+                mLastExposure.bindTexture(0, channel);
+            }
+
+            static LLStaticHashedString dt("dt");
+            static LLStaticHashedString noiseVec("noiseVec");
+            gExposureProgram.uniform1f(dt, gFrameIntervalSeconds);
+            gExposureProgram.uniform2f(noiseVec, ll_frand() * 2.0 - 1.0, ll_frand() * 2.0 - 1.0);
+           
+            mScreenTriangleVB->setBuffer();
+            mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
+
+            gGL.getTexUnit(channel)->unbind(screenTarget()->getUsage());
+            gExposureProgram.unbind();
+            mExposureMap.flush();
+        }
+
+        mPostMap.bindTarget();
 
         // gamma correct lighting
         {
@@ -7596,6 +7637,12 @@ void LLPipeline::renderFinalize()
 				mGlow[1].bindTexture(0, channel, LLTexUnit::TFO_BILINEAR);
 			}
 
+            channel = gDeferredPostGammaCorrectProgram.enableTexture(LLShaderMgr::EXPOSURE_MAP, mExposureMap.getUsage());
+            if (channel > -1)
+            {
+                mExposureMap.bindTexture(0, channel);
+            }
+
             gDeferredPostGammaCorrectProgram.uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, screenTarget()->getWidth(), screenTarget()->getHeight());
 
             static LLCachedControl<F32> exposure(gSavedSettings, "RenderExposure", 1.f);
@@ -7613,7 +7660,7 @@ void LLPipeline::renderFinalize()
             gDeferredPostGammaCorrectProgram.unbind();
         }
 
-		screenTarget()->flush();
+        mPostMap.flush();
 
         LLVertexBuffer::unbind();
     }
@@ -7642,10 +7689,10 @@ void LLPipeline::renderFinalize()
 			shader->bind();
 			shader->uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, width, height);
 
-			channel = shader->enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, screenTarget()->getUsage());
+			channel = shader->enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mPostMap.getUsage());
 			if (channel > -1)
 			{
-				screenTarget()->bindTexture(0, channel);
+				mPostMap.bindTexture(0, channel);
 			}
 
             {
@@ -7656,7 +7703,7 @@ void LLPipeline::renderFinalize()
 
 			gGL.flush();
 
-			shader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, screenTarget()->getUsage());
+			shader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, mPostMap.getUsage());
 			shader->unbind();
 
 			mRT->fxaaBuffer.flush();
@@ -7686,9 +7733,8 @@ void LLPipeline::renderFinalize()
 				2.f / width * scale_x, 2.f / height * scale_y);
 
             {
-                // at this point we should pointed at the backbuffer
-                llassert(LLRenderTarget::sCurFBO == 0);
-
+                // at this point we should pointed at the backbuffer (or a snapshot render target)
+                llassert(gSnapshot || LLRenderTarget::sCurFBO == 0);
                 LLGLDepthTest depth_test(GL_TRUE, GL_TRUE, GL_ALWAYS);
                 S32 depth_channel = shader->getTextureChannel(LLShaderMgr::DEFERRED_DEPTH);
                 gGL.getTexUnit(depth_channel)->bind(&mRT->deferredScreen, true);
@@ -7701,8 +7747,8 @@ void LLPipeline::renderFinalize()
 		}
 		else
 		{
-            // at this point we should pointed at the backbuffer
-            llassert(LLRenderTarget::sCurFBO == 0);
+            // at this point we should pointed at the backbuffer (or a snapshot render target)
+            llassert(gSnapshot || LLRenderTarget::sCurFBO == 0);
 
             LLGLDepthTest depth_test(GL_TRUE, GL_TRUE, GL_ALWAYS);
 
@@ -7711,7 +7757,7 @@ void LLPipeline::renderFinalize()
             S32 screen_channel = shader->getTextureChannel(LLShaderMgr::DEFERRED_DIFFUSE);
             S32 depth_channel = shader->getTextureChannel(LLShaderMgr::DEFERRED_DEPTH);
 
-			gGL.getTexUnit(screen_channel)->bind(screenTarget());
+			gGL.getTexUnit(screen_channel)->bind(&mPostMap);
             gGL.getTexUnit(depth_channel)->bind(&mRT->deferredScreen, true);
 
 			gGLViewport[0] = gViewerWindow->getWorldViewRectRaw().mLeft;
@@ -9444,27 +9490,12 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 	glh::matrix4f view[6];
 	glh::matrix4f proj[6];
 	
-	//clip contains parallel split distances for 3 splits
-	LLVector3 clip = RenderShadowClipPlanes;
-
     LLVector3 caster_dir(environment.getIsSunUp() ? mSunDir : mMoonDir);
-
-	//F32 slope_threshold = gSavedSettings.getF32("RenderShadowSlopeThreshold");
-
-	//far clip on last split is minimum of camera view distance and 128
-	mSunClipPlanes = LLVector4(clip, clip.mV[2] * clip.mV[2]/clip.mV[1]);
-
-	clip = RenderShadowOrthoClipPlanes;
-	mSunOrthoClipPlanes = LLVector4(clip, clip.mV[2]*clip.mV[2]/clip.mV[1]);
-
-	//currently used for amount to extrude frusta corners for constructing shadow frusta
-	//LLVector3 n = RenderShadowNearDist;
-	//F32 nearDist[] = { n.mV[0], n.mV[1], n.mV[2], n.mV[2] };
 
 	//put together a universal "near clip" plane for shadow frusta
 	LLPlane shadow_near_clip;
 	{
-		LLVector3 p = gAgent.getPositionAgent();
+        LLVector3 p = camera.getOrigin(); // gAgent.getPositionAgent();
 		p += caster_dir * RenderFarClip*2.f;
 		shadow_near_clip.setVec(p, caster_dir);
 	}
@@ -9484,9 +9515,6 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 	{
 		up = camera.getUpAxis();
 	}
-
-	/*LLVector3 left = up%at;
-	up = at%left;*/
 
 	up.normVec();
 	at.normVec();
@@ -9570,6 +9598,14 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 		mSunClipPlanes.mV[0] *= 1.25f; //bump back first split for transition padding
 	}
 
+    if (gCubeSnapshot)
+    { // stretch clip planes for reflection probe renders to reduce number of shadow passes
+        mSunClipPlanes.mV[1] = mSunClipPlanes.mV[2];
+        mSunClipPlanes.mV[2] = mSunClipPlanes.mV[3];
+        mSunClipPlanes.mV[3] *= 1.5f;
+    }
+
+
 	// convenience array of 4 near clip plane distances
 	F32 dist[] = { near_clip, mSunClipPlanes.mV[0], mSunClipPlanes.mV[1], mSunClipPlanes.mV[2], mSunClipPlanes.mV[3] };
 	
@@ -9586,7 +9622,7 @@ void LLPipeline::generateSunShadow(LLCamera& camera)
 	}
 	else
 	{
-        for (S32 j = 0; j < 4; j++)
+        for (S32 j = 0; j < (gCubeSnapshot ? 2 : 4); j++)
 		{
 			if (!hasRenderDebugMask(RENDER_DEBUG_SHADOW_FRUSTA) && !gCubeSnapshot)
 			{

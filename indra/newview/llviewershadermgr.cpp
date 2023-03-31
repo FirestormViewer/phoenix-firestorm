@@ -188,6 +188,7 @@ LLGLSLShader			gDeferredPostProgram;
 LLGLSLShader			gDeferredCoFProgram;
 LLGLSLShader			gDeferredDoFCombineProgram;
 LLGLSLShader			gDeferredPostGammaCorrectProgram;
+LLGLSLShader			gExposureProgram;
 LLGLSLShader			gFXAAProgram;
 LLGLSLShader			gDeferredPostNoDoFProgram;
 LLGLSLShader			gDeferredWLSkyProgram;
@@ -670,6 +671,10 @@ std::string LLViewerShaderMgr::loadBasicShaders()
     BOOL local_light_kill = gSavedSettings.getBOOL("LocalLightDisable");
     BOOL ssr = gSavedSettings.getBOOL("RenderScreenSpaceReflections");
 
+	bool has_reflection_probes = gSavedSettings.getBOOL("RenderReflectionsEnabled") && gGLManager.mGLVersion > 3.99f;
+
+	S32 probe_count = gSavedSettings.getS32("RenderReflectionProbeCount");
+
     if (ambient_kill)
     {
         attribs["AMBIENT_KILL"] = "1";
@@ -702,6 +707,12 @@ std::string LLViewerShaderMgr::loadBasicShaders()
         attribs["SSR"] = "1";
     }
 
+	if (has_reflection_probes)
+	{
+		attribs["REFMAP_COUNT"] = std::to_string(probe_count);
+		attribs["REF_SAMPLE_COUNT"] = "32";
+	}
+
 	// We no longer have to bind the shaders to global glhandles, they are automatically added to a map now.
 	for (U32 i = 0; i < shaders.size(); i++)
 	{
@@ -724,7 +735,6 @@ std::string LLViewerShaderMgr::loadBasicShaders()
 		ch = llmax(LLGLSLShader::sIndexedTextureChannels, 1);
 	}
 
-    bool has_reflection_probes = gSavedSettings.getBOOL("RenderReflectionsEnabled") && gGLManager.mGLVersion > 3.99f;
 
 	std::vector<S32> index_channels;    
 	index_channels.push_back(-1);    shaders.push_back( make_pair( "windlight/atmosphericsVarsF.glsl",      mShaderLevel[SHADER_WINDLIGHT] ) );
@@ -1007,6 +1017,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredPostProgram.unload();		
 		gDeferredCoFProgram.unload();		
 		gDeferredDoFCombineProgram.unload();
+        gExposureProgram.unload();
 		gDeferredPostGammaCorrectProgram.unload();
 		gFXAAProgram.unload();
 		gDeferredWLSkyProgram.unload();
@@ -2525,6 +2536,20 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredAvatarAlphaProgram.mFeatures.calculatesLighting = true;
 		gDeferredAvatarAlphaProgram.mFeatures.hasLighting = true;
 	}
+
+    if (success)
+    {
+        gExposureProgram.mName = "Exposure";
+        gExposureProgram.mFeatures.hasSrgb = true;
+        gExposureProgram.mFeatures.isDeferred = true;
+        gExposureProgram.mShaderFiles.clear();
+        gExposureProgram.clearPermutations();
+        gExposureProgram.mShaderFiles.push_back(make_pair("deferred/postDeferredNoTCV.glsl", GL_VERTEX_SHADER));
+        gExposureProgram.mShaderFiles.push_back(make_pair("deferred/exposureF.glsl", GL_FRAGMENT_SHADER));
+        gExposureProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+        success = gExposureProgram.createShader(NULL, NULL);
+        llassert(success);
+    }
 
 	if (success)
 	{
