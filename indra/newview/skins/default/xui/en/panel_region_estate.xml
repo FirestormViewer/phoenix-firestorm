@@ -122,7 +122,7 @@
      layout="topleft"
      left_delta="0"
      name="limit_payment"
-     tool_tip="Residents must have payment information on file to access this estate.  See the [SUPPORT_SITE] for more information."
+     tool_tip="Residents must have payment information on file to access this estate. See the [SUPPORT_SITE] for more information."
      top_pad="2"
      width="278" />
     <check_box
@@ -132,7 +132,7 @@
      layout="topleft"
      left_delta="0"
      name="limit_bots"
-     tool_tip="Residents must not be a scripted agents (bots) to access this estate.  See the [SUPPORT_SITE] for more information."
+     tool_tip="Residents must not be a scripted agents (bots) to access this estate. See the [SUPPORT_SITE] for more information."
      top_pad="2"
      width="278" />
     <check_box
