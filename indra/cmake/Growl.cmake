@@ -12,7 +12,7 @@ use_prebuilt_binary(gntp-growl)
 if (WINDOWS)
   target_link_libraries( fs::growl INTERFACE growl.lib growl++.lib)
 elseif (DARWIN)
-  target_link_libraries( fs:growl INTERFACE libgrowl.dylib libgrowl++.dylib)
+  target_link_libraries( fs::growl INTERFACE libgrowl.dylib libgrowl++.dylib)
 endif (WINDOWS)
 
 target_include_directories( fs::growl SYSTEM INTERFACE
