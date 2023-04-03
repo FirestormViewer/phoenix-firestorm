@@ -9,8 +9,6 @@ set(USE_TRACY OFF CACHE BOOL "Use Tracy profiler.")
 if (USE_TRACY)
   set(TRACY_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include/tracy) 
 
-# See: indra/llcommon/llprofiler.h
-  add_definitions(-DLL_PROFILER_CONFIGURATION=2)
   use_prebuilt_binary(tracy)
 
   target_include_directories( ll::tracy SYSTEM INTERFACE ${LIBS_PREBUILT_DIR}/include/tracy)
