@@ -9,6 +9,7 @@
 		</text>
 		<button label="Inworld abspielen" label_selected="Stopp" name="Inworld" tool_tip="Diese Animation so wiedergeben, dass andere sie sehen können."/>
 		<button label="Lokal wiedergeben" label_selected="Stopp" name="Locally" tool_tip="Diese Animation so wiedergeben, dass nur Sie sie sehen."/>
+		<button name="btn_expand" tool_tip="Aufklappen, um erweiterte Informationen über diese Animation zu erhalten."/>
 	</panel>
 	<panel name="advanced_info_panel">
 		<text name="AdvancedStatsLeft">
