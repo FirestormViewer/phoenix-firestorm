@@ -45,6 +45,8 @@ public:
 
 	void cleanup(); // cleanup 'playing' state
 	void play(const LLSD& param);
+	// <FS:Ansariel> Improved animation preview
+	//void showAdvanced();
 
 protected:
 	
@@ -52,6 +54,8 @@ protected:
 
 	LLUUID	mItemID; // Not an item id, but a playing asset id
 	bool	mDidStart;
+	// <FS:Ansariel> Improved animation preview
+	//LLTextBox* pAdvancedStatsTextBox;
 };
 
 #endif  // LL_LLPREVIEWANIM_H
