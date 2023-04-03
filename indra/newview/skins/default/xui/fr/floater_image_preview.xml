@@ -2,7 +2,7 @@
 <floater name="Image Preview">
 	<text name="name_label">Nom :</text>
 	<text name="description_label">Description :</text>
-	<text name="preview_label" width="115">Prévisualiser l'image en tant que :</text>
+	<text name="preview_label" width="115">Prévisualiser :</text>
 	<combo_box label="Type de vêtement" left_delta="115" name="clothing_type_combo">
 		<item label="Image" name="Image"/>
 		<item label="Cheveux" name="Hair"/>

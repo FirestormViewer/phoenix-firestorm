@@ -7,7 +7,7 @@
 		Описание:
 	</text>
 	<text name="preview_label">
-		Показать изображение как:
+		Показать как:
 	</text>
 	<combo_box label="Тип одежды" name="clothing_type_combo">
 		<item label="Изображение" name="Image" value="Изображение"/>
