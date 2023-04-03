@@ -880,7 +880,7 @@ BOOL LLImageGL::setImage(const U8* data_in, BOOL data_hasmips /* = FALSE */, S32
 							prev_mip_data = nullptr;
 							cur_mip_data = nullptr;
 							// </FS:Zi>
-//
+
 							mGLTextureCreated = false;
 							return FALSE;
 						}
