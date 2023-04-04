@@ -1,5 +1,4 @@
 # -*- cmake -*-
-set(CMAKE_VERBOSE_MAKEFILE ON) # <FS:Zi> remove this once things work
 
 # <FS:ND> Try to find pulse header, if we got them we can use the linux volume catcher
 if (LINUX)
