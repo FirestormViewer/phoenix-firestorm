@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Image Preview" title="">
+	<string name="with_alpha">
+		mit Alpha
+	</string>
+	<string name="no_alpha">
+		ohne Alpha
+	</string>
 	<text name="name_label">
 		Name:
 	</text>
@@ -29,8 +35,11 @@
 
 Speichern Sie das Bild als 24 Bit Targa (.tga).
 	</text>
+	<text name="uploaded_size_text">
+		Größe hochgeladen: [X_RES]x[Y_RES], [ALPHA]
+	</text>
 	<check_box label="Verlustfrei komprimieren" name="lossless_check" left_delta="-5"/>
 	<check_box name="temp_check" label="Temporär (kostenlos)" tool_tip="Lädt das Bild temporär hoch, d.h. der Upload ist kostenlos. Im Gegenzug wird es nach einiger Zeit automatisch gelöscht." />
-	<button label="Abbrechen" name="cancel_btn"/>
 	<button label="Hochladen ([AMOUNT] L$)" name="ok_btn" width="146"/>
+	<button label="Abbrechen" name="cancel_btn"/>
 </floater>
