@@ -106,7 +106,7 @@
          name="SculptedPrim" />
     </combo_box>
 
-   <panel
+    <panel
      follows="left|right"
      height="32"
      layout="topleft"
@@ -116,13 +116,13 @@
      top_pad="4"
      visible="false">
 
-   <icon
+    <icon
      height="24"
      image_name="Popup_Caution"
      left="0"
      top="0"
      width="24"
-   />
+    />
 
     <check_box
      follows="top|left|right"
@@ -133,9 +133,22 @@
      name="strip_alpha_check"
      right="-1"
      top_delta="10"
-   />
+    />
 
     </panel>
+
+    <panel
+     background_opaque="true"
+     background_visible="true"
+     bg_opaque_color="red"
+     follows="top|left"
+     height="239"
+     layout="topleft"
+     left="9"
+     name="preview_area"
+     top_pad="11"
+     width="282"
+    />
 
     <text
      type="string"
