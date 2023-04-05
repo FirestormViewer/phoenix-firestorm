@@ -724,9 +724,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b923ca041271446592b3b10e678b93b6</string>
+              <string>df05eee28649996c78a47dd054de2a47</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/109517/952832/colladadom-2.3.577706-darwin64-577706.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/112764/977018/colladadom-2.3.579218-darwin64-579218.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -748,9 +748,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>26f3e24adbd0bbb6ed002f5eb61c64ab</string>
+              <string>6752b4f098a522bb22b6334cdfba7614</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/colladadom-2.3.230231147-windows-230231147.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/112771/977087/colladadom-2.3.579224-windows-579224.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -760,16 +760,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>231a7ce499126806e051490d81591fec</string>
+              <string>81de6dc4a79b547a25d0040370c42fec</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/colladadom-2.3.230231451-windows64-230231451.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/112770/977082/colladadom-2.3.579224-windows64-579224.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.3.577706</string>
+        <string>2.3.579218</string>
       </map>
       <key>cubemaptoequirectangular</key>
       <map>
@@ -1512,9 +1512,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>dc09e870c8419979d748855c2d956711</string>
+              <string>acc2484ff03dfaf7652cac9f42ce198a</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/109675/954163/icu4c-4.8.1-darwin64-577789.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/112891/977803/icu4c-4.8.1-darwin64-579276.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1524,9 +1524,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>08749d1f7f0a96b1951eecdae5dc11ba</string>
+              <string>d88003ff2c3c9145bc2c7d2d2f80f9b1</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/109679/954178/icu4c-4.8.1-windows-577789.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/112892/977809/icu4c-4.8.1-windows-579276.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1536,9 +1536,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>98bca5c137e6d47c5b57827e156b1857</string>
+              <string>2cdc400727294edcc144558d4f94fd00</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/109678/954182/icu4c-4.8.1-windows64-577789.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/112893/977815/icu4c-4.8.1-windows64-579276.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -3136,16 +3136,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             </map>
             <key>name</key>
             <string>windows64</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>46edf0f55417f8ef0d33a5c007bc3644</string>
-              <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/89310/815451/threejs-0.132.2-windows64-564843.tar.bz2</string>
-            </map>
           </map>
         </map>
         <key>version</key>
