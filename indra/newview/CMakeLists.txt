@@ -2381,14 +2381,12 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         ll::bugsplat
         ll::tracy
         fs::glod # <FS:Beq/> restore GLOD dependencies
-        # fs::growl # <FS:Ansariel> Growl support <FS:Zi> added further down for win/mac only
+        fs::discord # <FS:Ansariel> Discord  support
         )
 
 if( TARGET ll::intel_memops )
    target_link_libraries(${VIEWER_BINARY_NAME} ll::intel_memops )
 endif()
-
-target_link_libraries(${VIEWER_BINARY_NAME} ${DISCORD_LIBRARY} )
 
 if (USE_BUGSPLAT)
   target_link_libraries(${VIEWER_BINARY_NAME}
