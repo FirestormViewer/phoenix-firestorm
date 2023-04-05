@@ -225,8 +225,8 @@ Pour plus d&apos;informations, consultez la page FAQ ci-dessous :
 http://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginFailed">
-		Échec de la connexion d'urgence de la grille.
-Si vous pensez qu'il s'agit d'une erreur, veuillez contacter le support du réseau.
+		Le processus de connexion n'a pas abouti en raison d'un problème du système. Réessayez dans quelques minutes.
+Si vous pensez qu'il s'agit d'une erreur, veuillez contacter le service d'assistance du réseau.
 	</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">
 		Mise à jour facultative du client disponible : [VERSION]
@@ -6085,7 +6085,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Affiche la liste de tous les éléments mis dans la liste noire
 	</string>
 	<string name="Command_Phototools_Tooltip">
-		Outils pour la création d'image (ATL+P).
+		Outils pour la création d'image (ALT+P).
 	</string>
 	<string name="Command_Phototools_View_Tooltip">
 		Contrôles avancés de la caméra (CTRL+SHIFT+C)

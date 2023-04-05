@@ -12,9 +12,7 @@
 #   Also realize that CMAKE_CXX_FLAGS may already be partially populated on
 #   entry to this file.
 #*****************************************************************************
-
-if(NOT DEFINED ${CMAKE_CURRENT_LIST_FILE}_INCLUDED)
-set(${CMAKE_CURRENT_LIST_FILE}_INCLUDED "YES")
+include_guard()
 
 include(Variables)
 
@@ -34,25 +32,22 @@ endif (WINDOWS)
 # as well?
 
 # Portable compilation flags.
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DADDRESS_SIZE=${ADDRESS_SIZE}")
+add_compile_definitions( ADDRESS_SIZE=${ADDRESS_SIZE})
 
 # Configure crash reporting
 set(RELEASE_CRASH_REPORTING OFF CACHE BOOL "Enable use of crash reporting in release builds")
 set(NON_RELEASE_CRASH_REPORTING OFF CACHE BOOL "Enable use of crash reporting in developer builds")
 
 if(RELEASE_CRASH_REPORTING)
-  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DLL_SEND_CRASH_REPORTS=1")
+  add_compile_definitions( LL_SEND_CRASH_REPORTS=1)
 endif()
 
 if(NON_RELEASE_CRASH_REPORTING)
-  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -DLL_SEND_CRASH_REPORTS=1")
-  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DLL_SEND_CRASH_REPORTS=1")
-endif()  
+  add_compile_definitions( LL_SEND_CRASH_REPORTS=1)
+endif()
 
-# Don't bother with MinSizeRel or Debug builds.
-set(CMAKE_CONFIGURATION_TYPES "RelWithDebInfo;Release" CACHE STRING
-    "Supported build types." FORCE)
-
+# Don't bother with a MinSizeRel or Debug builds.
+set(CMAKE_CONFIGURATION_TYPES "RelWithDebInfo;Release" CACHE STRING "Supported build types." FORCE)
 
 # Platform-specific compilation flags.
 
@@ -82,45 +77,34 @@ if (WINDOWS)
   # CP changed to only append the flag for 32bit builds - on 64bit builds,
   # locally at least, the build output is spammed with 1000s of 'D9002'
   # warnings about this switch being ignored.
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")  
   # <FS:ND> Remove this, it's no option to cl.exe and causes a massive amount of warnings.
   #if( ADDRESS_SIZE EQUAL 32 )
     #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /p:PreferredToolArchitecture=x64")  
   #endif()
   
-  # Preserve first-pass-through versions (ie no FORCE overwrite). Prevents recursive addition of /Zo (04/2021)
-  set(OG_CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE} CACHE STRING "OG_CXX_FLAGS_RELEASE")
-  set(OG_CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS_RELWITHDEBINFO} CACHE STRING "OG_CXX_FLAGS_RELWITHDEBINFO")
-
-  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO 
-      "${OG_CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Zo"
-      CACHE STRING "C++ compiler release-with-debug options" FORCE)
-  set(CMAKE_CXX_FLAGS_RELEASE
-      "${OG_CMAKE_CXX_FLAGS_RELEASE} ${LL_CXX_FLAGS} /Zo"
-      CACHE STRING "C++ compiler release options" FORCE)
-  
   # zlib has assembly-language object files incompatible with SAFESEH
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /LARGEADDRESSAWARE /SAFESEH:NO /NODEFAULTLIB:LIBCMT /IGNORE:4099")
-
-  set(CMAKE_CXX_STANDARD_LIBRARIES "")
-  set(CMAKE_C_STANDARD_LIBRARIES "")
+  add_link_options(/LARGEADDRESSAWARE
+          /SAFESEH:NO
+          /NODEFAULTLIB:LIBCMT
+          /IGNORE:4099)
 
   add_definitions(
-      /DNOMINMAX
+      -DNOMINMAX
 #      /DDOM_DYNAMIC            # For shared library colladadom
       )
   add_compile_options(
-      /GS
-      /TP
-      /W3
-      /c
-      /Zc:forScope
-      /nologo
-      /Oy-
-      /Oi
-      /Ot
-#      /arch:SSE2
-      /fp:fast
+          /Zo
+          /GS
+          /TP
+          /W3
+          /c
+          /Zc:forScope
+          /nologo
+          /Oy-
+          /Oi
+          /Ot
+          /fp:fast
+          /MP
       )
 
   # <FS:Ansariel> AVX/AVX2 support
@@ -138,8 +122,19 @@ if (WINDOWS)
 
   # Are we using the crummy Visual Studio KDU build workaround?
   if (NOT VS_DISABLE_FATAL_WARNINGS)
-    add_definitions(/WX)
+    add_compile_options(/WX)
   endif (NOT VS_DISABLE_FATAL_WARNINGS)
+
+  #ND: When using something like buildcache (https://github.com/mbitsnbites/buildcache)
+  # to make those wrappers work /Zi must be changed to /Z7, as /Zi due to it's nature is not compatible with caching
+  if( ${CMAKE_CXX_COMPILER_LAUNCHER} MATCHES ".*cache.*")
+    add_compile_options( /Z7 )
+    string(REPLACE "/Zi" "/Z7" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    string(REPLACE "/Zi" "/Z7" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+    string(REPLACE "/Zi" "/Z7" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+    string(REPLACE "/Zi" "/Z7" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+    string(REPLACE "/Zi" "/Z7" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+  endif()
 endif (WINDOWS)
 
 
@@ -153,8 +148,8 @@ if (LINUX)
       COMMAND echo "int main( char **a, int c ){ \n#ifdef _FORTIFY_SOURCE\n#error FORTITY_SOURCE_SET\n#else\nreturn 0;\n#endif\n}" 
       COMMAND sh -c "${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} -xc++ -w - -o /dev/null"
       OUTPUT_VARIABLE FORTIFY_SOURCE_OUT
-	  ERROR_VARIABLE FORTIFY_SOURCE_ERR
-	  RESULT_VARIABLE FORTIFY_SOURCE_RES
+         ERROR_VARIABLE FORTIFY_SOURCE_ERR
+         RESULT_VARIABLE FORTIFY_SOURCE_RES
      )
 
 
@@ -190,15 +185,13 @@ if (LINUX)
   if (ADDRESS_SIZE EQUAL 32)
     add_compile_options(-march=pentium4)
   endif (ADDRESS_SIZE EQUAL 32)
-  #add_compile_options(-ftree-vectorize) # THIS CRASHES GCC 3.1-3.2
-  if (NOT USESYSTEMLIBS)
-    # this stops us requiring a really recent glibc at runtime
-    add_compile_options(-fno-stack-protector)
-    # linking can be very memory-hungry, especially the final viewer link
-    #set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory")
-	set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory -Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../lib' -Wl,--exclude-libs,ALL")
-	set(CMAKE_EXE_LINKER_FLAGS "-Wl,--no-keep-memory -Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../lib' -Wl,--exclude-libs,ALL")
-  endif (NOT USESYSTEMLIBS)
+
+  # this stops us requiring a really recent glibc at runtime
+  add_compile_options(-fno-stack-protector)
+  # linking can be very memory-hungry, especially the final viewer link
+  #set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory")
+  set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory -Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../lib' -Wl,--exclude-libs,ALL")
+  set(CMAKE_EXE_LINKER_FLAGS "-Wl,--no-keep-memory -Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../lib' -Wl,--exclude-libs,ALL")
 
   set(CMAKE_CXX_FLAGS_DEBUG "-fno-inline ${CMAKE_CXX_FLAGS_DEBUG}")
 endif (LINUX)
@@ -216,13 +209,7 @@ if (DARWIN)
   # see Variables.cmake.
   string(REPLACE "-gdwarf-2" "-g${CMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT}"
     CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-  # The viewer code base can now be successfully compiled with -std=c++14. But
-  # turning that on in the generic viewer-build-variables/variables file would
-  # potentially require tweaking each of our ~50 third-party library builds.
-  # Until we decide to set -std=c++14 in viewer-build-variables/variables, set
-  # it locally here: we want to at least prevent inadvertently reintroducing
-  # viewer code that would fail with C++14.
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DARWIN_extra_cstar_flags} -std=c++14")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DARWIN_extra_cstar_flags}")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  ${DARWIN_extra_cstar_flags}")
   # NOTE: it's critical that the optimization flag is put in front.
   # NOTE: it's critical to have both CXX_FLAGS and C_FLAGS covered.
@@ -230,7 +217,6 @@ if (DARWIN)
 set(ENABLE_SIGNING TRUE)
 set(SIGNING_IDENTITY "Developer ID Application: The Phoenix Firestorm Project, Inc." )
 endif (DARWIN)
-
 
 if (LINUX OR DARWIN)
   if (CMAKE_CXX_COMPILER MATCHES ".*clang")
@@ -257,7 +243,11 @@ if (LINUX OR DARWIN)
   if(LINUX)
     set(GCC_CXX_WARNINGS "${GCC_WARNINGS} -Wno-reorder -Wno-non-virtual-dtor -Wno-unused-variable -Wno-unused-but-set-variable -Wno-pragmas -Wno-deprecated")
   endif()
-  
+
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 13.0)
+    set(GCC_CXX_WARNINGS "${GCC_CXX_WARNINGS} -Wno-c++20-compat")
+  endif()
+
   set(CMAKE_C_FLAGS "${GCC_WARNINGS} ${CMAKE_C_FLAGS}")
   set(CMAKE_CXX_FLAGS "${GCC_CXX_WARNINGS} ${CMAKE_CXX_FLAGS}")
 
@@ -266,23 +256,3 @@ if (LINUX OR DARWIN)
 endif (LINUX OR DARWIN)
 
 
-if (USESYSTEMLIBS)
-  add_definitions(-DLL_USESYSTEMLIBS=1)
-
-  if (LINUX AND ADDRESS_SIZE EQUAL 32)
-    add_definitions(-march=pentiumpro)
-  endif (LINUX AND ADDRESS_SIZE EQUAL 32)
-
-else (USESYSTEMLIBS)
-  set(${ARCH}_linux_INCLUDES
-      atk-1.0
-      cairo
-      freetype
-      glib-2.0
-      gstreamer-0.10
-      gtk-2.0
-      pango-1.0
-      )
-endif (USESYSTEMLIBS)
-
-endif(NOT DEFINED ${CMAKE_CURRENT_LIST_FILE}_INCLUDED)

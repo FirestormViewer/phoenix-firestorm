@@ -152,7 +152,7 @@ https://www.firestormviewer.org/choose-your-platform/
 
 For more information, see our FAQ below:
 http://secondlife.com/viewer-access-faq</string>
-	<string name="LoginFailed">Grid emergency login failure.
+	<string name="LoginFailed">Login process did not complete due to system issues. Try again in a few minutes.
 If you feel this is an error, please contact the grid support.</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">Optional viewer update available: [VERSION]</string>
 	<string name="LoginFailedRequiredUpdate">Required viewer update: [VERSION]</string>
@@ -2775,7 +2775,7 @@ name="Command_360_Capture_Tooltip">Capture a 360° equirectangular image</string
   <string name="Command_Groundsit_Tooltip">Toggle ground sit mode on/off (CTRL+ALT+S)</string>
   <string name="Command_Sound_Explorer_Tooltip">Opens the sound explorer</string>
   <string name="Command_Asset_Blacklist_Tooltip">Opens the list of all the items you have blacklisted</string>
-  <string name="Command_Phototools_Tooltip">Tools for full-featured image making (ATL+P).</string>
+  <string name="Command_Phototools_Tooltip">Tools for full-featured image making (ALT+P).</string>
   <string name="Command_Phototools_View_Tooltip">Advanced phototools camera controls (CTRL+SHIFT+C)</string>
   <string name="Command_Contact_Sets_Tooltip">Opens contact sets (CTRL+ALT+SHIFT+C)</string>
   <string name="Command_Mouselook_Tooltip">Enter mouselook mode (M)</string>

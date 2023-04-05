@@ -103,6 +103,7 @@ public:
 	void toggleFindOptions();
 
     void resetFilters();
+    void resetAllItemsFilters();
 
 	// <FS:Zi> Filter dropdown
 	void onFilterTypeSelected(const std::string& filter_type_name);

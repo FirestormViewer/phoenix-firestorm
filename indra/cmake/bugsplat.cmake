@@ -9,37 +9,39 @@ else (INSTALL_PROPRIETARY)
     set(USE_BUGSPLAT OFF CACHE BOOL "Use the BugSplat crash reporting system")
 endif (INSTALL_PROPRIETARY)
 
+include_guard()
+add_library( ll::bugsplat INTERFACE IMPORTED )
+
 if (USE_BUGSPLAT)
-    if (NOT USESYSTEMLIBS)
-        include(Prebuilt)
-        if (WINDOWS)
-          use_prebuilt_binary(bugsplat)
-            set(BUGSPLAT_LIBRARIES 
+    include(Prebuilt)
+    use_prebuilt_binary(bugsplat)
+    if (WINDOWS)
+        target_link_libraries( ll::bugsplat INTERFACE
                 ${ARCH_PREBUILT_DIRS_RELEASE}/bugsplat.lib
                 )
-        elseif (DARWIN)
-          use_prebuilt_binary(bugsplat)
-            find_library(BUGSPLAT_LIBRARIES BugsplatMac REQUIRED
+        target_include_directories( ll::bugsplat SYSTEM INTERFACE ${LIBS_PREBUILT_DIR}/include/bugsplat)
+    elseif (DARWIN)
+        find_library(BUGSPLAT_LIBRARIES BugsplatMac REQUIRED
                 NO_DEFAULT_PATH PATHS "${ARCH_PREBUILT_DIRS_RELEASE}")
-            message("Bugsplat for OSX not fully implemented, please adapt llappdelegate-objc.mm to honor options of sending user name and settings.xml.")
-        else (WINDOWS)
-          use_prebuilt_binary(breakpad)
-          set(BUGSPLAT_LIBRARIES ${ARCH_PREBUILT_DIRS_RELEASE}/libbreakpad.a   ${ARCH_PREBUILT_DIRS_RELEASE}/libbreakpad_client.a  )
-        endif (WINDOWS)
-    else (NOT USESYSTEMLIBS)
-        set(BUGSPLAT_FIND_QUIETLY ON)
-        set(BUGSPLAT_FIND_REQUIRED ON)
-        include(FindBUGSPLAT)
-    endif (NOT USESYSTEMLIBS)
+        target_link_libraries( ll::bugsplat INTERFACE
+                ${BUGSPLAT_LIBRARIES}
+                )
+    else (WINDOWS) #ie: Linux...
+               add_compile_definitions(__STDC_FORMAT_MACROS)
+               use_prebuilt_binary(breakpad)
+               target_link_libraries( ll::bugsplat INTERFACE
+                       ${ARCH_PREBUILT_DIRS_RELEASE}/libbreakpad.a
+                       ${ARCH_PREBUILT_DIRS_RELEASE}/libbreakpad_client.a
+                       )
+               target_include_directories( ll::bugsplat SYSTEM INTERFACE ${LIBS_PREBUILT_DIR}/include/breakpad)
+    endif (WINDOWS)
 
-    set(BUGSPLAT_DB "" CACHE STRING "BugSplat crash database name")
-
-    if( LINUX )
-      set(BUGSPLAT_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include/breakpad)
-      add_compile_definitions(__STDC_FORMAT_MACROS)
-    else()
-        set(BUGSPLAT_INCLUDE_DIR ${LIBS_PREBUILT_DIR}/include/bugsplat)
+    if( NOT BUGSPLAT_DB )
+        message( FATAL_ERROR "You need to set BUGSPLAT_DB when setting USE_BUGSPLAT" )
     endif()
-    set(BUGSPLAT_DEFINE "LL_BUGSPLAT")
+
+    set_property( TARGET ll::bugsplat APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS LL_BUGSPLAT)
+else()
+    set(BUGSPLAT_DB "" CACHE STRING "BugSplat crash database name")
 endif (USE_BUGSPLAT)
 

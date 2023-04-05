@@ -33,6 +33,12 @@
 #endif
 // </FS:ND>
 
+// <FS:Zi> More GCC specific warnings, starting with GCC12
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic ignored "-Wdangling-pointer="
+#endif
+// </FS:Zi>
+
 #include "linden_common.h"
 
 #include "llcalc.h"

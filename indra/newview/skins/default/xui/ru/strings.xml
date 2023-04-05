@@ -248,7 +248,7 @@ https://www.firestormviewer.org/choose-your-platform/
 http://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginFailed">
-		Аварийный сбой входа в сеть.
+		Процесс входа не завершен из-за системных проблем. Повторите попытку через несколько минут.
 Если вы считаете, что это ошибка, пожалуйста, свяжитесь со службой поддержки сети.
 	</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">
@@ -5834,7 +5834,7 @@ https://www.firestormviewer.org/support за помощь в решении эт
 		Открыть черный список
 	</string>
 	<string name="Command_Phototools_Tooltip">
-		Инструменты для создания фотографий (ATL+P).
+		Инструменты для создания фотографий (ALT+P).
 	</string>
 	<string name="Command_Phototools_View_Tooltip">
 		Расширенные настройки фотокамеры (CTRL+SHIFT+C)

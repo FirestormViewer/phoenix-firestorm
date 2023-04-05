@@ -222,7 +222,7 @@ Więcej informacji w naszym FAQ:
 http://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginFailed">
-		Logowanie nieudane.
+		Proces logowania nie został ukończony z powodu problemów systemu. Spróbuj ponownie za kilka minut.
 Jeśli uważasz, że to błąd, skontaktuj się z obsługą świata.
 	</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">
@@ -5541,7 +5541,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Otwiera listę obiektów, jakie masz na swojej czarnej liście zasobów danych (assetów)
 	</string>
 	<string name="Command_Phototools_Tooltip">
-		Narzędzia do zaawansowanego tworzenia obrazów (ATL+P)
+		Narzędzia do zaawansowanego tworzenia obrazów (ALT+P)
 	</string>
 	<string name="Command_Phototools_View_Tooltip">
 		Zaawansowane ustawienia kamery fotograficznej (CTRL+SHIFT+C)
