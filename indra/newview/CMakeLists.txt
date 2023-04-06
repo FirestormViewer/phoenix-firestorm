@@ -2394,12 +2394,11 @@ if (USE_BUGSPLAT)
     )
 endif (USE_BUGSPLAT)
 
+# <FS:Ansariel> Growl support
 if (WINDOWS OR DARWIN)
-    target_link_libraries(${VIEWER_BINARY_NAME}
-    fs::growl # <FS:Ansariel> Growl support
-    ${GROWL_LIBRARY}
-    )
+    target_link_libraries(${VIEWER_BINARY_NAME} fs::growl)
 endif (WINDOWS OR DARWIN)
+# </FS:Ansariel>
 
 if( TARGET ll::nvapi )
    target_link_libraries(${VIEWER_BINARY_NAME} ll::nvapi )
