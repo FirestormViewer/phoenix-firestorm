@@ -1678,6 +1678,13 @@ bool LLFilePicker::openFileDialog( int32_t filter, bool blocking, EType aType )
 				file_dialog_filter = "*.wav";
 				break;
 
+			// <FS:Zi> Handle all enums in a switch, or you make GCC unhappy
+			case FFSAVE_GLTF:
+				file_type = "gltf_files";
+				file_dialog_filter = "*.gltf";
+				break;
+			// </FS:Zi>
+
 			// Firestorm additions
 			case FFSAVE_BEAM:
 				file_type = "xml_file";
@@ -1755,6 +1762,21 @@ bool LLFilePicker::openFileDialog( int32_t filter, bool blocking, EType aType )
 			case FFLOAD_EXE:
 				file_type = "executable_files";
 				break;
+
+			// <FS:Zi> Handle all enums in a switch, or you make GCC unhappy
+			case FFLOAD_GLTF:
+				file_type = "gltf_files";
+				file_dialog_filter = "*.gltf";
+				break;
+			case FFLOAD_MATERIAL:
+				file_type = "material_files";
+				file_dialog_filter = "*";
+				break;
+			case FFLOAD_MATERIAL_TEXTURE:
+				file_type = "material_texture_files";
+				file_dialog_filter = "*";
+				break;
+			// </FS:Zi>
 
 			// Firestorm additions
 			case FFLOAD_IMPORT:

@@ -1870,7 +1870,18 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 						LLVector4a t;
 						tangent_to_object.rotate(binormal_dir, t);
 						LLVector4a binormal;
+// <FS:Zi> GCC12 warning: maybe-uninitialized - probably bogus
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+// </FS:Zi>
 						mat_normal.rotate(t, binormal);
+// <FS:Zi> GCC12 warning: maybe-uninitialized - probably bogus
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic pop
+#endif
+// </FS:Zi>
 						
 						//VECTORIZE THIS
 						if (mDrawablep->isActive())

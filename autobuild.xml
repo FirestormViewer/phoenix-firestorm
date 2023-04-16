@@ -2350,6 +2350,18 @@
             <key>name</key>
             <string>darwin64</string>
           </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>5b719b8d3602f8dc9401cc92d606b34e</string>
+              <key>url</key>
+              <string>https://3p.firestormviewer.org/mikktspace-1-linux64-223421209.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
           <key>windows</key>
           <map>
             <key>archive</key>

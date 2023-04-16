@@ -90,6 +90,10 @@ endif (BUILD_HEADLESS)
 add_library (llrender ${llrender_SOURCE_FILES})
 target_include_directories( llrender  INTERFACE   ${CMAKE_CURRENT_SOURCE_DIR})
 
+if (SDL_FOUND)
+  set_property(TARGET llrender PROPERTY COMPILE_DEFINITIONS LL_SDL=1)
+endif (SDL_FOUND)
+
 # Libraries on which this library depends, needed for Linux builds
 # Sort by high-level to low-level
 target_link_libraries(llrender

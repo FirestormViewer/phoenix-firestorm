@@ -183,7 +183,8 @@ LLMatrix4 gGLObliqueProjectionInverse;
 
 std::list<LLGLUpdate*> LLGLUpdate::sGLQ;
 
-#if (LL_WINDOWS || LL_LINUX)  && !LL_MESA_HEADLESS
+// <FS:Zi> Linux support
+// #if (LL_WINDOWS || LL_LINUX)  && !LL_MESA_HEADLESS
 
 #if LL_WINDOWS
 // WGL_ARB_create_context
@@ -204,7 +205,8 @@ PFNWGLBLITCONTEXTFRAMEBUFFERAMDPROC             wglBlitContextFramebufferAMD = n
 PFNWGLSWAPINTERVALEXTPROC    wglSwapIntervalEXT = nullptr;
 PFNWGLGETSWAPINTERVALEXTPROC wglGetSwapIntervalEXT = nullptr;
 
-#endif
+// <FS:Zi> Linux support
+// #endif
 
 // GL_VERSION_1_2
 //PFNGLDRAWRANGEELEMENTSPROC  glDrawRangeElements = nullptr;
@@ -1356,6 +1358,12 @@ void LLGLManager::shutdownGL()
 
 void LLGLManager::initExtensions()
 {
+// <FS:Zi> Linux support
+#if LL_LINUX
+    glh_init_extensions("");
+#endif
+// </FS:Zi>
+
 #if LL_DARWIN
     GLint num_extensions = 0;
     std::string all_extensions{""};
@@ -1386,10 +1394,14 @@ void LLGLManager::initExtensions()
 
     mInited = TRUE;
 
-#if (LL_WINDOWS || LL_LINUX) && !LL_MESA_HEADLESS
-	LL_DEBUGS("RenderInit") << "GL Probe: Getting symbols" << LL_ENDL;
-	
+// <FS:Zi> Linux support
+//#if (LL_WINDOWS || LL_LINUX) && !LL_MESA_HEADLESS
 #if LL_WINDOWS
+// </FS:Zi>
+	LL_DEBUGS("RenderInit") << "GL Probe: Getting symbols" << LL_ENDL;
+
+// <FS:Zi> Linux support
+// #if LL_WINDOWS
     // WGL_AMD_gpu_association
     wglGetGPUIDsAMD = (PFNWGLGETGPUIDSAMDPROC)GLH_EXT_GET_PROC_ADDRESS("wglGetGPUIDsAMD");
     wglGetGPUInfoAMD = (PFNWGLGETGPUINFOAMDPROC)GLH_EXT_GET_PROC_ADDRESS("wglGetGPUInfoAMD");
@@ -1407,8 +1419,8 @@ void LLGLManager::initExtensions()
 
     // WGL_ARB_create_context
     wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)GLH_EXT_GET_PROC_ADDRESS("wglCreateContextAttribsARB");
-#endif
-
+// <FS:Zi>
+// #endif
 
     // Load entire OpenGL API through GetProcAddress, leaving sections beyond mGLVersion unloaded
 
