@@ -1633,6 +1633,14 @@
          top_pad="8"
          follows="left|top"
          height="16"
+         label="Always expand animation preview advanced information"
+         tool_tip="Expand the advanced animation information in the animation preview floater by default"
+         name="FSAnimationPreviewExpanded"
+         control_name="FSAnimationPreviewExpanded"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
          label="Enable extended script info details"
          tool_tip="If enabled, extend basic script info feature with various details useful for builders"
          name="FSScriptInfoExtended"

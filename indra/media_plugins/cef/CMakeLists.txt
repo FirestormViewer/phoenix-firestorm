@@ -31,8 +31,6 @@ set(media_plugin_cef_HEADER_FILES
     volume_catcher.h
     )
 
-if (NOT DISABLE_VOLUME_CATCHER) # <FS:Zi> disable volume catcher in cef with -DDISABLE_VOLUME_CATCHER=TRUE
-
 add_compile_definitions(LL_VOLUME_CATCHER)
 
 # Select which VolumeCatcher implementation to use
@@ -53,8 +51,6 @@ elseif (DARWIN)
 elseif (WINDOWS)
   list(APPEND media_plugin_cef_SOURCE_FILES windows_volume_catcher.cpp)
 endif (LINUX)
-
-endif (NOT DISABLE_VOLUME_CATCHER)
 
 list(APPEND media_plugin_cef_SOURCE_FILES ${media_plugin_cef_HEADER_FILES})
 

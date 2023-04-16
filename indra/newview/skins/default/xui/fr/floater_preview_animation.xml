@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="preview_anim" width="350">
+<floater name="preview_anim" width="380">
 	<floater.string name="Title">Animation : [NAME]</floater.string>
-	<text name="desc txt">Description :</text>
-	<line_editor name="desc" width="230" />
-	<button label="Jouer devant tout le monde" width="160" label_selected="Arrêter" name="Inworld" tool_tip="Jouer cette animation de façon à ce que les autres la voient"/>
-	<button label="Jouer localement" width="160" label_selected="Arrêter" name="Locally" tool_tip="Jouer cette animation de façon à ce que vous soyez la seule personne à la voir"/>
+	<panel name="basic_info_panel" width="380">
+		<text name="desc txt">Description :</text>
+		<line_editor name="desc" width="230" />
+		<button label="Jouer devant tout le monde" width="160" label_selected="Arrêter" name="Inworld" tool_tip="Jouer cette animation de façon à ce que les autres la voient"/>
+		<button label="Jouer localement" width="160" label_selected="Arrêter" name="Locally" tool_tip="Jouer cette animation de façon à ce que vous soyez la seule personne à la voir"/>
+		<button name="btn_expand" tool_tip="Développez pour voir des informations détaillées sur cette animation" />
+	</panel>
+	<panel name="advanced_info_panel">
+		<text name="AdvancedStatsLeft">
+Priorité : [PRIORITY]
+Durée : [DURATION]s
+En boucle : [IS_LOOP]
+		</text>
+		<text name="AdvancedStatsRight">
+Entrée : [EASE_IN]s
+Sortie : [EASE_OUT]s
+Joints : [NUM_JOINTS]
+		</text>
+	</panel>
 </floater>

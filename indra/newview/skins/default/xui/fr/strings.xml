@@ -225,8 +225,8 @@ Pour plus d&apos;informations, consultez la page FAQ ci-dessous :
 http://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginFailed">
-		Échec de la connexion d'urgence de la grille.
-Si vous pensez qu'il s'agit d'une erreur, veuillez contacter le support du réseau.
+		Le processus de connexion n'a pas abouti en raison d'un problème du système. Réessayez dans quelques minutes.
+Si vous pensez qu'il s'agit d'une erreur, veuillez contacter le service d'assistance du réseau.
 	</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">
 		Mise à jour facultative du client disponible : [VERSION]
