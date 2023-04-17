@@ -44,10 +44,11 @@ vec4 applyWaterFogView(vec3 pos, vec4 color);
 vec3 atmosFragLightingLinear(vec3 l, vec3 additive, vec3 atten);
 vec3 scaleSoftClipFragLinear(vec3 l);
 void calcAtmosphericVarsLinear(vec3 inPositionEye, vec3 norm, vec3 light_dir, out vec3 sunlit, out vec3 amblit, out vec3 atten, out vec3 additive);
-vec3 fullbrightAtmosTransportFragLinear(vec3 light, vec3 additive, vec3 atten);
+void calcHalfVectors(vec3 lv, vec3 n, vec3 v, out vec3 h, out vec3 l, out float nh, out float nl, out float nv, out float vh, out float lightDist);
 
 vec3 srgb_to_linear(vec3 cs);
 vec3 linear_to_srgb(vec3 cs);
+vec3 legacy_adjust(vec3 c);
 
 #if (DIFFUSE_ALPHA_MODE == DIFFUSE_ALPHA_MODE_BLEND)
 
@@ -184,7 +185,7 @@ vec3 calcPointLightOrSpotLight(vec3 light_col, vec3 npos, vec3 diffuse, vec4 spe
 
 #else
 #ifdef DEFINE_GL_FRAGCOLOR
-out vec4 frag_data[3];
+out vec4 frag_data[4];
 #else
 #define frag_data gl_FragData
 #endif
@@ -317,6 +318,7 @@ void main()
 
 #if (DIFFUSE_ALPHA_MODE == DIFFUSE_ALPHA_MODE_BLEND)
     //forward rendering, output lit linear color
+    diffcol.rgb = legacy_adjust(diffcol.rgb);
     diffcol.rgb = srgb_to_linear(diffcol.rgb);
     spec.rgb = srgb_to_linear(spec.rgb);
     spec.a = glossiness; // pack glossiness into spec alpha for lighting functions
@@ -358,6 +360,7 @@ void main()
 
     float glare = 0.0;
 
+#if 0 //wrong implementation
     if (glossiness > 0.0)  // specular reflection
     {
         float sa        = dot(normalize(refnormpersp), light_dir.xyz);
@@ -374,6 +377,32 @@ void main()
 
         applyGlossEnv(color, glossenv, spec, pos.xyz, norm.xyz);
     }
+#else //right implementation ported from pointLightF.glsl
+    if (glossiness > 0.0)
+    {
+        vec3  lv = light_dir.xyz;
+        vec3  h, l, v = -normalize(pos.xyz);
+        float nh, nl, nv, vh, lightDist;
+        vec3 n = norm.xyz;
+        calcHalfVectors(lv, n, v, h, l, nh, nl, nv, vh, lightDist);
+
+        if (nl > 0.0 && nh > 0.0)
+        {
+            float lit = min(nl*6.0, 1.0);
+
+            float sa = nh;
+            float fres = pow(1 - vh, 5) * 0.4+0.5;
+            float gtdenom = 2 * nh;
+            float gt = max(0,(min(gtdenom * nv / vh, gtdenom * nl / vh)));
+
+            float scol = shadow*fres*texture2D(lightFunc, vec2(nh, glossiness)).r*gt/(nh*nl);
+            color.rgb += lit*scol*sunlit_linear.rgb*spec.rgb;
+        }
+
+        // add radiance map
+        applyGlossEnv(color, glossenv, spec, pos.xyz, norm.xyz);
+    }
+#endif
 
     color = mix(color.rgb, diffcol.rgb, emissive);
 
@@ -382,14 +411,12 @@ void main()
         applyLegacyEnv(color, legacyenv, spec, pos.xyz, norm.xyz, env);
 
         float cur_glare = max(max(legacyenv.r, legacyenv.g), legacyenv.b);
-        cur_glare *= env*4.0;
+        cur_glare = clamp(cur_glare, 0, 1);
+        cur_glare *= env;
         glare += cur_glare;
     }
 
-    color.rgb = linear_to_srgb(color.rgb);
     color.rgb = atmosFragLightingLinear(color.rgb, additive, atten); 
-    color.rgb = scaleSoftClipFragLinear(color.rgb);
-    color.rgb = srgb_to_linear(color.rgb);
 
     vec3 npos = normalize(-pos.xyz);
     vec3 light = vec3(0, 0, 0);
@@ -416,13 +443,14 @@ void main()
     color = temp.rgb;
 #endif
 
-    frag_color = vec4(color, al);
+    frag_color = max(vec4(color, al), vec4(0));
 
 #else // mode is not DIFFUSE_ALPHA_MODE_BLEND, encode to gbuffer 
     // deferred path               // See: C++: addDeferredAttachment(), shader: softenLightF.glsl
     frag_data[0] = vec4(diffcol.rgb, emissive);        // gbuffer is sRGB for legacy materials
     frag_data[1] = vec4(spec.rgb, glossiness);           // XYZ = Specular color. W = Specular exponent.
     frag_data[2] = vec4(encode_normal(norm), env, GBUFFER_FLAG_HAS_ATMOS);;   // XY = Normal.  Z = Env. intensity. W = 1 skip atmos (mask off fog)
+    frag_data[3] = vec4(0);
 #endif
 }
 

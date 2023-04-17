@@ -34,7 +34,6 @@ out vec4 frag_color;
 #endif
 
 uniform sampler2D diffuseRect;
-uniform sampler2D emissiveRect;
 uniform sampler2D exposureMap;
 
 uniform vec2 screen_res;
@@ -106,29 +105,21 @@ vec3 toneMapACES_Hill(vec3 color)
 uniform float exposure;
 uniform float gamma;
 
-vec3 toneMap(vec3 color)
+vec3 legacy_adjust_post(vec3 c);
+
+vec3 toneMap(vec3 color, float gs)
 {
     float exp_scale = texture(exposureMap, vec2(0.5,0.5)).r;
 
-    color *= exposure * exp_scale;
+    color *= exposure * exp_scale * gs;
 
-#ifdef TONEMAP_ACES_NARKOWICZ
-    color = toneMapACES_Narkowicz(color);
-#endif
-
-#ifdef TONEMAP_ACES_HILL
     color = toneMapACES_Hill(color);
-#endif
 
-#ifdef TONEMAP_ACES_HILL_EXPOSURE_BOOST
-    // boost exposure as discussed in https://github.com/mrdoob/three.js/pull/19621
-    // this factor is based on the exposure correction of Krzysztof Narkowicz in his
-    // implemetation of ACES tone mapping
-    color *= 1.0/0.6;
-    color = toneMapACES_Hill(color);
-#endif
+    color = linear_to_srgb(color);
 
-    return linear_to_srgb(color);
+    color = legacy_adjust_post(color);
+
+    return color;
 }
 
 //===============================================================
@@ -180,21 +171,27 @@ vec3 legacyGamma(vec3 color)
     return color;
 }
 
+float legacyGammaApprox()
+{
+    //TODO -- figure out how to plumb this in as a uniform
+    float c = 0.5;
+    float gc = 1.0-pow(c, gamma);
+    
+    return gc/c * gamma;
+}
+
 void main() 
 {
     //this is the one of the rare spots where diffuseRect contains linear color values (not sRGB)
-    vec4 diff = texture2D(diffuseRect, vary_fragcoord) + texture2D(emissiveRect, vary_fragcoord);
-    diff.rgb = toneMap(diff.rgb);
-    diff.rgb = legacyGamma(diff.rgb);
+    vec4 diff = texture2D(diffuseRect, vary_fragcoord);
+
+    diff.rgb = toneMap(diff.rgb, legacyGammaApprox());
     
     vec2 tc = vary_fragcoord.xy*screen_res*4.0;
     vec3 seed = (diff.rgb+vec3(1.0))*vec3(tc.xy, tc.x+tc.y);
     vec3 nz = vec3(noise(seed.rg), noise(seed.gb), noise(seed.rb));
     diff.rgb += nz*0.003;
-    //diff.rgb = nz;
-
-    //float exp_sample = texture(exposureMap, vec2(0.5,0.5)).r;
-    //diff.g = exp_sample;
-    frag_color = diff;
+    
+    frag_color = max(diff, vec4(0));
 }
 

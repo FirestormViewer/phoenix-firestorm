@@ -79,6 +79,8 @@
 #include <boost/bind.hpp>	// for SkinFolder listener
 #include <boost/signals2.hpp>
 
+extern BOOL gCubeSnapshot;
+
 // *TODO: Consider enabling mipmaps (they have been disabled for a long time). Likely has a significant performance impact for tiled/high texture repeat media. Mip generation in a shader may also be an option if necessary.
 constexpr BOOL USE_MIPMAPS = FALSE;
 
@@ -264,6 +266,7 @@ viewer_media_t LLViewerMedia::newMediaImpl(
 
 viewer_media_t LLViewerMedia::updateMediaImpl(LLMediaEntry* media_entry, const std::string& previous_url, bool update_from_self)
 {
+    llassert(!gCubeSnapshot);
 	// Try to find media with the same media ID
 	viewer_media_t media_impl = getMediaImplFromTextureID(media_entry->getMediaID());
 
@@ -625,6 +628,8 @@ void LLViewerMedia::onIdle(void *dummy_arg)
 void LLViewerMedia::updateMedia(void *dummy_arg)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_MEDIA; //LL_RECORD_BLOCK_TIME(FTM_MEDIA_UPDATE);
+
+    llassert(!gCubeSnapshot);
 
 	// Enable/disable the plugin read thread
 	// <FS:Ansariel> Replace frequently called gSavedSettings
@@ -2939,7 +2944,7 @@ void LLViewerMediaImpl::update()
     if (preMediaTexUpdate(media_tex, data, data_width, data_height, x_pos, y_pos, width, height))
     {
         // Push update to worker thread
-        auto main_queue = LLImageGLThread::sEnabled ? mMainQueue.lock() : nullptr;
+        auto main_queue = LLImageGLThread::sEnabledMedia ? mMainQueue.lock() : nullptr;
         if (main_queue)
         {
             mTextureUpdatePending = true;
@@ -3026,15 +3031,17 @@ void LLViewerMediaImpl::doMediaTexUpdate(LLViewerMediaTexture* media_tex, U8* da
     LL_PROFILE_ZONE_SCOPED_CATEGORY_MEDIA;
     LLMutexLock lock(&mLock); // don't allow media source tear-down during update
 
-    const LLGLuint tex_name = media_tex->getGLTexture() ? media_tex->getGLTexture()->getTexName() : (LLGLuint)0;
-    if (!tex_name)
-    {
-        llassert(false);
-        return;
-    }
-
     // wrap "data" in an LLImageRaw but do NOT make a copy
     LLPointer<LLImageRaw> raw = new LLImageRaw(data, media_tex->getWidth(), media_tex->getHeight(), media_tex->getComponents(), true);
+
+    // *NOTE: Recreating the GL texture each media update may seem wasteful
+    // (note the texture creation in preMediaTexUpdate), however, it apparently
+    // prevents GL calls from blocking, due to poor bookkeeping of state of
+    // updated textures by the OpenGL implementation. (Windows 10/Nvidia)
+    // -Cosmic,2023-04-04
+    // Allocate GL texture based on LLImageRaw but do NOT copy to GL
+    LLGLuint tex_name = 0;
+    media_tex->createGLTexture(0, raw, 0, TRUE, LLGLTexture::OTHER, true, &tex_name);
 
     // copy just the subimage covered by the image raw to GL
     media_tex->setSubImage(data, data_width, data_height, x_pos, y_pos, width, height, tex_name);
@@ -3062,6 +3069,7 @@ void LLViewerMediaImpl::updateImagesMediaStreams()
 LLViewerMediaTexture* LLViewerMediaImpl::updateMediaImage()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_MEDIA;
+    llassert(!gCubeSnapshot);
     if (!mMediaSource)
     {
         return nullptr; // not ready for updating
@@ -3623,6 +3631,8 @@ void LLViewerMediaImpl::calculateInterest()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_MEDIA; //LL_RECORD_BLOCK_TIME(FTM_MEDIA_CALCULATE_INTEREST);
 	LLViewerMediaTexture* texture = LLViewerTextureManager::findMediaTexture( mTextureId );
+
+    llassert(!gCubeSnapshot);
 
 	if(texture != NULL)
 	{

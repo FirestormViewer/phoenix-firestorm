@@ -1,4 +1,4 @@
-version 39
+version 40
 // The version number above should be incremented IF AND ONLY IF some
 // change has been made that is sufficiently important to justify
 // resetting the graphics preferences of all users to the recommended
@@ -70,7 +70,8 @@ RenderUseStreamVBO			1	1
 RenderFSAASamples			1	16
 RenderMaxTextureIndex		1	16
 RenderGLContextCoreProfile         1   1
-RenderGLMultiThreaded       1   0
+RenderGLMultiThreadedTextures      1   0
+RenderGLMultiThreadedMedia         1   1
 RenderReflectionProbeResolution 1 128
 RenderScreenSpaceReflections 1  1
 
@@ -312,12 +313,13 @@ RenderAnisotropic			1	0
 // Avoid some Intel crashes on Linux
 RenderCubeMap				0	0
 RenderFSAASamples			1	0
-RenderGLMultiThreaded       1   0
-RenderGLContextCoreProfile         1   0
+RenderGLContextCoreProfile  1   0
+RenderGLMultiThreadedMedia  1   0
 
 // AMD cards generally perform better when not using VBOs for streaming data
 // AMD cards also prefer an OpenGL Compatibility Profile Context
 list AMD
+RenderGLMultiThreadedTextures       1   1
 RenderUseStreamVBO			1	0
 RenderGLContextCoreProfile         1   0
 
@@ -325,5 +327,5 @@ list GL3
 RenderFSAASamples           0   0
 RenderReflectionsEnabled    0   0
 RenderReflectionProbeDetail	0	0
-RenderGLMultiThreaded       0   0
+RenderGLMultiThreadedTextures       0   0
 

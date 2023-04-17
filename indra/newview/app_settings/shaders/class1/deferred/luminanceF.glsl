@@ -1,9 +1,9 @@
 /** 
- * @file postDeferredNoDoFF.glsl
+ * @file luminanceF.glsl
  *
- * $LicenseInfo:firstyear=2007&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2023&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2007, Linden Research, Inc.
+ * Copyright (C) 2023, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,28 +23,30 @@
  * $/LicenseInfo$
  */
  
-#extension GL_ARB_texture_rectangle : enable
 
 /*[EXTRA_CODE_HERE]*/
 
-#ifdef DEFINE_GL_FRAGCOLOR
+// take a luminance sample of diffuseRect and emissiveRect 
+
 out vec4 frag_color;
-#else
-#define frag_color gl_FragColor
-#endif
+
+in vec2 vary_fragcoord;
 
 uniform sampler2D diffuseRect;
-uniform sampler2D depthMap;
+uniform sampler2D emissiveRect;
 
-uniform vec2 screen_res;
-VARYING vec2 vary_fragcoord;
+float lum(vec3 col)
+{
+    vec3 l = vec3(0.2126, 0.7152, 0.0722);
+    return dot(l, col);
+}
 
 void main() 
 {
-	vec4 diff = texture2D(diffuseRect, vary_fragcoord.xy);
-	
-	frag_color = diff;
-
-    gl_FragDepth = texture(depthMap, vary_fragcoord.xy).r;
+    vec2 tc = vary_fragcoord*0.6+0.2;
+    tc.y -= 0.1; // HACK - nudge exposure sample down a little bit to favor ground over sky
+    vec3 c = texture(diffuseRect, tc).rgb + texture(emissiveRect, tc).rgb;
+    float L = lum(c);
+    frag_color = vec4(L);
 }
 

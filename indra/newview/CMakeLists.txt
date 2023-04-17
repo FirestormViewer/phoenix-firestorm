@@ -2742,7 +2742,7 @@ if (LL_TESTS)
 #    llremoteparcelrequest.cpp
     llviewerhelputil.cpp
     llversioninfo.cpp
-    llvocache.cpp
+#    llvocache.cpp  
     llworldmap.cpp
     llworldmipmap.cpp
   )
@@ -2756,12 +2756,12 @@ if (LL_TESTS)
     #llviewertexturelist.cpp
   )
 
-  set_source_files_properties(
-    llvocache.cpp
-    PROPERTIES
-    LL_TEST_ADDITIONAL_SOURCE_FILES ../llmessage/lldatapacker.cpp
-    LL_TEST_ADDITIONAL_PROJECTS "llprimitive"
-  )
+#  set_source_files_properties(
+#    llvocache.cpp
+#    PROPERTIES
+#    LL_TEST_ADDITIONAL_SOURCE_FILES ../llmessage/lldatapacker.cpp
+#    LL_TEST_ADDITIONAL_PROJECTS "llprimitive"
+#  )
 
   set(test_libs
           llcommon

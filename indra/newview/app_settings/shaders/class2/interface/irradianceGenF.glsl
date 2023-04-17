@@ -32,7 +32,6 @@ uniform samplerCubeArray   reflectionProbes;
 uniform int sourceIdx;
 
 uniform float max_probe_lod;
-uniform float ambiance_scale;
 
 in vec3 vary_dir;
 
@@ -200,8 +199,6 @@ vec4 filterColor(vec3 N)
 
     color /= float(u_sampleCount);
 
-    color.rgb *= ambiance_scale;
-
     return color;
 }
 
@@ -212,6 +209,6 @@ void main()
 
     color = filterColor(vary_dir);
     
-    frag_color = color;
+    frag_color = max(color, vec4(0));
 }
 

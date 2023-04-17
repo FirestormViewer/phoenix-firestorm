@@ -50,6 +50,7 @@ uniform float sun_moon_glow_factor;
 float getAmbientClamp() { return 1.0f; }
 
 vec3 srgb_to_linear(vec3 col);
+vec3 legacy_adjust(vec3 col);
 
 // return colors in sRGB space
 void calcAtmosphericVars(vec3 inPositionEye, vec3 light_dir, float ambFactor, out vec3 sunlit, out vec3 amblit, out vec3 additive,
@@ -63,10 +64,8 @@ void calcAtmosphericVars(vec3 inPositionEye, vec3 light_dir, float ambFactor, ou
     vec3  rel_pos_norm = normalize(rel_pos);
     float rel_pos_len  = length(rel_pos);
     
-    float scale = sun_up_factor + 1;
-    vec3  sunlight     = (sun_up_factor == 1) ? sunlight_color: moonlight_color;
-    sunlight *= scale;
-
+    vec3  sunlight     = (sun_up_factor == 1) ? sunlight_color: moonlight_color * 0.7;  // magic 0.7 to match legacy color
+    
     // sunlight attenuation effect (hue and brightness) due to atmosphere
     // this is used later for sunlight modulation at various altitudes
     vec3 light_atten = (blue_density + vec3(haze_density * 0.25)) * (density_multiplier * max_y);
@@ -141,10 +140,8 @@ void calcAtmosphericVars(vec3 inPositionEye, vec3 light_dir, float ambFactor, ou
 
     // brightness of surface both sunlight and ambient
     
-    // fudge sunlit and amblit to get consistent lighting compared to legacy
-    // midday before PBR was a thing
-    sunlit = sunlight.rgb / scale;
-    amblit = tmpAmbient.rgb * 0.25;
+    sunlit = sunlight.rgb;
+    amblit = vec3(1,0,1); //should no longer be used, filled in by calcAtmosphericVarsLinear
 
     additive *= vec3(1.0 - combined_haze);
 }
@@ -174,7 +171,7 @@ void calcAtmosphericVarsLinear(vec3 inPositionEye, vec3 norm, vec3 light_dir, ou
     sunlit *= 2.0;
 
     // squash ambient to approximate whatever weirdness legacy atmospherics were doing
-    amblit = ambient_color * 0.5;
+    amblit = ambient_color; // * (1.0+sun_up_factor*0.3);
 
     amblit *= ambientLighting(norm, light_dir);
     amblit = srgb_to_linear(amblit);

@@ -1071,7 +1071,7 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
 				bump->setExplicitFormat(GL_ALPHA8, GL_ALPHA);
 
 #if LL_BUMPLIST_MULTITHREADED
-                auto tex_queue = LLImageGLThread::sEnabled ? sTexUpdateQueue.lock() : nullptr;
+                auto tex_queue = LLImageGLThread::sEnabledTextures ? sTexUpdateQueue.lock() : nullptr;
 
                 if (tex_queue)
                 { //dispatch creation to background thread
@@ -1183,7 +1183,7 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
                 };
 
 #if LL_BUMPLIST_MULTITHREADED
-                auto main_queue = LLImageGLThread::sEnabled ? sMainQueue.lock() : nullptr;
+                auto main_queue = LLImageGLThread::sEnabledTextures ? sMainQueue.lock() : nullptr;
 
                 if (main_queue)
                 { //dispatch texture upload to background thread, issue GPU commands to generate normal map on main thread

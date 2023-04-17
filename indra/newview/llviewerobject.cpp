@@ -5130,10 +5130,12 @@ void LLViewerObject::updateTEMaterialTextures(U8 te)
 	}
 
     LLFetchedGLTFMaterial* mat = (LLFetchedGLTFMaterial*) getTE(te)->getGLTFRenderMaterial();
+    llassert(mat == nullptr || dynamic_cast<LLFetchedGLTFMaterial*>(getTE(te)->getGLTFRenderMaterial()) != nullptr);
     LLUUID mat_id = getRenderMaterialID(te);
     if (mat == nullptr && mat_id.notNull())
     {
         mat = (LLFetchedGLTFMaterial*) gGLTFMaterialList.getMaterial(mat_id);
+        llassert(mat == nullptr || dynamic_cast<LLFetchedGLTFMaterial*>(gGLTFMaterialList.getMaterial(mat_id)) != nullptr);
         if (mat->isFetching())
         { // material is not loaded yet, rebuild draw info when the object finishes loading
             mat->onMaterialComplete([id=getID()]
@@ -5556,7 +5558,7 @@ S32 LLViewerObject::setTEGLTFMaterialOverride(U8 te, LLGLTFMaterial* override_ma
     }
 
     LLFetchedGLTFMaterial* src_mat = (LLFetchedGLTFMaterial*) tep->getGLTFMaterial();
-
+    llassert(src_mat == nullptr || dynamic_cast<LLFetchedGLTFMaterial*>(tep->getGLTFMaterial()) != nullptr);
     // if override mat exists, we must also have a source mat
     if (!src_mat)
     {
@@ -5572,19 +5574,22 @@ S32 LLViewerObject::setTEGLTFMaterialOverride(U8 te, LLGLTFMaterial* override_ma
         return retval;
     }
 
-    tep->setGLTFMaterialOverride(override_mat);
+    retval = tep->setGLTFMaterialOverride(override_mat);
 
-    if (override_mat)
+    if (retval)
     {
-        LLFetchedGLTFMaterial* render_mat = new LLFetchedGLTFMaterial(*src_mat);
-        render_mat->applyOverride(*override_mat);
-        tep->setGLTFRenderMaterial(render_mat);
-        retval = TEM_CHANGE_TEXTURE;
+        if (override_mat)
+        {
+            LLFetchedGLTFMaterial* render_mat = new LLFetchedGLTFMaterial(*src_mat);
+            render_mat->applyOverride(*override_mat);
+            tep->setGLTFRenderMaterial(render_mat);
+            retval = TEM_CHANGE_TEXTURE;
 
-    }
-    else if (tep->setGLTFRenderMaterial(nullptr))
-    {
-        retval = TEM_CHANGE_TEXTURE;
+        }
+        else if (tep->setGLTFRenderMaterial(nullptr))
+        {
+            retval = TEM_CHANGE_TEXTURE;
+        }
     }
 
     return retval;

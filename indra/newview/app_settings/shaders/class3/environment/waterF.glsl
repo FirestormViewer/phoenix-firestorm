@@ -25,10 +25,10 @@
  
 // class3/environment/waterF.glsl
 
-#ifdef DEFINE_GL_FRAGCOLOR
 out vec4 frag_color;
-#else
-#define frag_color gl_FragColor
+
+#ifdef HAS_SUN_SHADOW
+float sampleDirectionalShadow(vec3 pos, vec3 norm, vec2 pos_screen);
 #endif
 
 vec3 scaleSoftClipFragLinear(vec3 l);
@@ -199,6 +199,12 @@ void main()
     vec3 additive;
     vec3 atten;
 
+    float shadow = 1.0f;
+
+#ifdef HAS_SUN_SHADOW
+    shadow = sampleDirectionalShadow(pos.xyz, norm.xyz, distort);
+#endif
+
     calcAtmosphericVarsLinear(pos.xyz, wavef, vary_light_dir, sunlit, amblit, additive, atten);
 
     vec3 sunlit_linear = srgb_to_linear(sunlit);
@@ -241,7 +247,6 @@ void main()
 
     vec3 v = -normalize(pos.xyz);
 
-    float scol = 1.0;
     vec3 colorEmissive = vec3(0);
     float ao = 1.0;
     vec3 light_dir = transform_normal(lightDir);
@@ -253,7 +258,7 @@ void main()
 
     vec3 punctual = pbrPunctual(vec3(0), specularColor, 0.1, metallic, normalize(wavef+up*max(dist, 32.0)/32.0*(1.0-vdu)), v, normalize(light_dir));
 
-    vec3 color = punctual * sunlit_linear * 2.75 * scol;
+    vec3 color = punctual * sunlit_linear * 2.75 * shadow;
 
     vec3 ibl = pbrIbl(vec3(0), vec3(1), radiance, vec3(0), ao, NdotV, 0.0);
 
@@ -277,14 +282,10 @@ void main()
 
     color = mix(color, fb.rgb, f);
 
-    color.rgb = linear_to_srgb(color.rgb);
     color = atmosFragLightingLinear(color, additive, atten);
-    color = scaleSoftClipFragLinear(color);
-    color.rgb = srgb_to_linear(color.rgb);
-
 
     float spec = min(max(max(punctual.r, punctual.g), punctual.b), 0.05);
     
-    frag_color = vec4(color, spec); //*sunAngle2);
+    frag_color = max(vec4(color, spec), vec4(0));
 }
 

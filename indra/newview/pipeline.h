@@ -135,6 +135,15 @@ public:
 	void generateImpostor(LLVOAvatar* avatar, bool preview_avatar = false);
 	void bindScreenToTexture();
 	void renderFinalize();
+	void copyScreenSpaceReflections(LLRenderTarget* src, LLRenderTarget* dst);
+	void generateLuminance(LLRenderTarget* src, LLRenderTarget* dst);
+	void generateExposure(LLRenderTarget* src, LLRenderTarget* dst);
+	void gammaCorrect(LLRenderTarget* src, LLRenderTarget* dst);
+	void generateGlow(LLRenderTarget* src);
+	void applyFXAA(LLRenderTarget* src, LLRenderTarget* dst);
+	void renderDoF(LLRenderTarget* src, LLRenderTarget* dst);
+	void copyRenderTarget(LLRenderTarget* src, LLRenderTarget* dst);
+	void combineGlow(LLRenderTarget* src, LLRenderTarget* dst);
 	void renderPostProcess();
 	LLRenderTarget* screenTarget();
 
@@ -467,6 +476,7 @@ public:
 		RENDER_TYPE_VOIDWATER					= LLDrawPool::POOL_VOIDWATER,
 		RENDER_TYPE_WATER						= LLDrawPool::POOL_WATER,
         RENDER_TYPE_GLTF_PBR                    = LLDrawPool::POOL_GLTF_PBR,
+        RENDER_TYPE_GLTF_PBR_ALPHA_MASK         = LLDrawPool::POOL_GLTF_PBR_ALPHA_MASK,
  		RENDER_TYPE_ALPHA						= LLDrawPool::POOL_ALPHA,
         RENDER_TYPE_ALPHA_PRE_WATER             = LLDrawPool::POOL_ALPHA_PRE_WATER,
         RENDER_TYPE_ALPHA_POST_WATER            = LLDrawPool::POOL_ALPHA_POST_WATER,
@@ -690,6 +700,7 @@ public:
     LLRenderTarget          mSceneMap;
 
     // exposure map for getting average color in scene
+    LLRenderTarget          mLuminanceMap;
     LLRenderTarget          mExposureMap;
     LLRenderTarget          mLastExposure;
 

@@ -1654,7 +1654,7 @@ void LLViewerFetchedTexture::scheduleCreateTexture()
             }
 #endif
             mNeedsCreateTexture = true;
-            auto mainq = LLImageGLThread::sEnabled ? mMainQueue.lock() : nullptr;
+            auto mainq = LLImageGLThread::sEnabledTextures ? mMainQueue.lock() : nullptr;
             if (mainq)
             {
                 ref();

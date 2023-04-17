@@ -147,6 +147,7 @@
 		<menu label="Umgebung" name="Environment">
 			<menu_item_check label="Sonnenaufgang" name="Sunrise"/>
 			<menu_item_check label="Mittag" name="Noon"/>
+			<menu_item_check label="Mittag (historisch)" name="legacy noon"/>
 			<menu_item_check label="Sonnenuntergang" name="Sunset"/>
 			<menu_item_check label="Mitternacht" name="Midnight"/>
 			<menu_item_check label="Gemeinsame Umgebung verwenden" name="Use Shared Environment"/>

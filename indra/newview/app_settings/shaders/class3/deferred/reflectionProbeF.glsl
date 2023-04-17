@@ -134,7 +134,7 @@ void preProbeSample(vec3 pos)
             int neighborIdx = refIndex[i].y;
             if (neighborIdx != -1)
             {
-                int neighborCount = min(refIndex[i].z, REF_SAMPLE_COUNT-1);
+                int neighborCount = refIndex[i].z;
 
                 int count = 0;
                 while (count < neighborCount)
@@ -433,13 +433,15 @@ void boxIntersectDebug(vec3 origin, vec3 pos, int i, inout vec4 col)
 // dw - distance weight
 float sphereWeight(vec3 pos, vec3 dir, vec3 origin, float r, int i, out float dw)
 {
-    float r1 = r * 0.5; // 50% of radius (outer sphere to start interpolating down)
+    float r1 = r * 0.5; // 50% of radius (outer sphere to start interpolating down) 
     vec3 delta = pos.xyz - origin;
     float d2 = max(length(delta), 0.001);
 
     float atten = 1.0 - max(d2 - r1, 0.0) / max((r - r1), 0.001);
     float w = 1.0 / d2;
-    
+
+    w *= refParams[i].z;
+
     dw = w * atten * max(r, 1.0)*4;
 
     w *= atten;
@@ -750,6 +752,8 @@ void sampleReflectionProbesLegacy(inout vec3 ambenv, inout vec3 glossenv, inout 
         legacyenv = mix(legacyenv, ssr.rgb, w);
     }
 #endif
+
+    glossenv = clamp(glossenv, vec3(0), vec3(10));
 }
 
 void applyGlossEnv(inout vec3 color, vec3 glossenv, vec4 spec, vec3 pos, vec3 norm)

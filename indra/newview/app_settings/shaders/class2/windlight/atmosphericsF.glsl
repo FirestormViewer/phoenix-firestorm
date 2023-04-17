@@ -30,10 +30,16 @@ vec3 scaleSoftClipFrag(vec3 light);
 vec3 srgb_to_linear(vec3 col);
 vec3 linear_to_srgb(vec3 col);
 
+uniform int sun_up_factor;
+
 vec3 atmosFragLighting(vec3 light, vec3 additive, vec3 atten)
 { 
     light *= atten.r;
-    light += additive * 2.0;
+    additive = srgb_to_linear(additive*2.0);
+    // magic 1.25 here is to match the default RenderSkyHDRScale -- this parameter needs to be plumbed into sky settings or something
+    // so it's available to all shaders that call atmosFragLighting instead of just softenLightF.glsl
+    additive *= sun_up_factor*1.25 + 1.0; 
+    light += additive;
     return light;
 }
 

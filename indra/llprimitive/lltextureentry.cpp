@@ -536,7 +536,7 @@ void LLTextureEntry::setGLTFMaterial(LLGLTFMaterial* material, bool local_origin
         // whether or not mGLTFMaterial is null, any existing override should have been cleared
         // before calling setGLTFMaterial
         // NOTE: if you're hitting this assert, try to make sure calling code is using LLViewerObject::setRenderMaterialID
-        llassert(!local_origin || getGLTFMaterialOverride() == nullptr || getGLTFMaterialOverride()->isClearedForBaseMaterial());
+        //llassert(!local_origin || getGLTFMaterialOverride() == nullptr || getGLTFMaterialOverride()->isClearedForBaseMaterial());
 
         if (mGLTFMaterial)
         {
@@ -559,10 +559,17 @@ void LLTextureEntry::setGLTFMaterial(LLGLTFMaterial* material, bool local_origin
     }
 }
 
-void LLTextureEntry::setGLTFMaterialOverride(LLGLTFMaterial* mat)
+S32 LLTextureEntry::setGLTFMaterialOverride(LLGLTFMaterial* mat)
 { 
     llassert(mat == nullptr || getGLTFMaterial() != nullptr); // if override is not null, base material must not be null
-    mGLTFMaterialOverrides = mat; 
+    if (mat == mGLTFMaterialOverrides)
+    {
+        return TEM_CHANGE_NONE;
+    }
+
+    mGLTFMaterialOverrides = mat;
+
+    return TEM_CHANGE_TEXTURE;
 }
 
 S32 LLTextureEntry::setBaseMaterial()

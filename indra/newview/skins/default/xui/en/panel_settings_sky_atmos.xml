@@ -352,7 +352,7 @@
                           layout="topleft"
                           left_pad="5"
                           min_val="0"
-                          max_val="1"
+                          max_val="10"
                           name="probe_ambiance"
                           top_delta="3"
                           width="219"

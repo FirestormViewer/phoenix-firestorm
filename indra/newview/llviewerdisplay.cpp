@@ -1281,6 +1281,7 @@ void render_hud_attachments()
 		LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
 		gPipeline.updateCull(hud_cam, result, true);
 
+        // Toggle render types
 		gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_BUMP);
 		gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_SIMPLE);
 		gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_VOLUME);
@@ -1290,6 +1291,9 @@ void render_hud_attachments()
 		gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_FULLBRIGHT_ALPHA_MASK);
 		gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_FULLBRIGHT);
         gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_GLTF_PBR);
+        gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_GLTF_PBR_ALPHA_MASK);
+
+        // Toggle render passes
 		gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_PASS_ALPHA);
 		gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_PASS_ALPHA_MASK);
 		gPipeline.toggleRenderType(LLPipeline::RENDER_TYPE_PASS_BUMP);
@@ -1450,9 +1454,6 @@ void render_ui(F32 zoom_factor, int subfield)
 		gViewerWindow->setup3DRender();
 		gGL.popMatrix();
 	}
-
-    // Render our post process prior to the HUD, UI, etc.
-    gPipeline.renderPostProcess();
 
     // apply gamma correction and post effects
     gPipeline.renderFinalize();

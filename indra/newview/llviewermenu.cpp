@@ -10839,12 +10839,6 @@ void handle_cache_clear_immediately()
 	LLNotificationsUtil::add("ConfirmClearCache", LLSD(), LLSD(), callback_clear_cache_immediately);
 }
 
-void handle_rebuild_reflection_probes()
-{
-    gPipeline.mReflectionMapManager.rebuild();
-}
-
-
 void handle_web_content_test(const LLSD& param)
 {
 	std::string url = param.asString();
@@ -11431,6 +11425,12 @@ class LLWorldEnvSettings : public view_listener_t
             // </FS:Beq>
             defocusEnvFloaters();
 		}
+        else if (event_name == "legacy noon")
+        {
+            LLEnvironment::instance().setEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::KNOWN_SKY_LEGACY_MIDDAY, LLEnvironment::TRANSITION_INSTANT);
+            LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::TRANSITION_INSTANT);
+            defocusEnvFloaters();
+        }
 		else if (event_name == "sunset")
 		{
             // <FS:Beq> FIRE-29926 - allow manually selected environments to have a user defined transition time.
@@ -11451,6 +11451,9 @@ class LLWorldEnvSettings : public view_listener_t
 		}
         else if (event_name == "region")
 		{
+            // reset probe data when reverting back to region sky setting
+            gPipeline.mReflectionMapManager.reset();
+
             LLEnvironment::instance().clearEnvironment(LLEnvironment::ENV_LOCAL);
             LLEnvironment::instance().setSelectedEnvironment(LLEnvironment::ENV_LOCAL, LLEnvironment::TRANSITION_INSTANT);
             defocusEnvFloaters();
@@ -11505,6 +11508,10 @@ class LLWorldEnableEnvSettings : public view_listener_t
 			{
             result = (skyid == LLEnvironment::KNOWN_SKY_MIDDAY);
 			}
+        else if (event_name == "legacy noon")
+        {
+            result = (skyid == LLEnvironment::KNOWN_SKY_LEGACY_MIDDAY);
+        }
 		else if (event_name == "sunset")
 			{
             result = (skyid == LLEnvironment::KNOWN_SKY_SUNSET);
@@ -12350,9 +12357,7 @@ void initialize_menus()
 	
 	//Develop (clear cache immediately)
 	commit.add("Develop.ClearCache", boost::bind(&handle_cache_clear_immediately) );
-    //Develop (override environment map)
-    commit.add("Develop.RebuildReflectionProbes", boost::bind(&handle_rebuild_reflection_probes));
-
+    
 	// <FS:Beq/> Add telemetry controls to the viewer Develop menu (Toggle profiling)
 	view_listener_t::addMenu(new FSProfilerToggle(), "Develop.ToggleProfiling");
 	view_listener_t::addMenu(new FSProfilerCheckEnabled(), "Develop.EnableProfiling");

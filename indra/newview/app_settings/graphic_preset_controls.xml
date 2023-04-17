@@ -42,7 +42,6 @@
 		<string>RenderTerrainDetail</string>
 		<string>RenderTerrainLODFactor</string>
 		<string>RenderTerrainScale</string>
-		<string>RenderTonemapper</string>
 		<string>RenderTreeLODFactor</string>
 		<string>RenderTransparentWater</string>
 		<string>RenderUnloadedAvatar</string>

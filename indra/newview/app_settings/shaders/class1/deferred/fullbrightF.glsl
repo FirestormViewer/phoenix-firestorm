@@ -42,9 +42,10 @@ vec4 applyWaterFogView(vec3 pos, vec4 color);
 #endif
 
 vec3 srgb_to_linear(vec3 cs);
+vec3 legacy_adjust_fullbright(vec3 c);
+vec3 legacy_adjust(vec3 c);
 vec3 linear_to_srgb(vec3 cl);
 vec3 fullbrightAtmosTransport(vec3 light);
-vec3 fullbrightScaleSoftClip(vec3 light);
 
 #ifdef HAS_ALPHA_MASK
 uniform float minimum_alpha;
@@ -53,9 +54,6 @@ uniform float minimum_alpha;
 #ifdef IS_ALPHA
 void waterClip(vec3 pos);
 #endif
-
-// <FS> Fullbright fog fix w/ gamma 0 workaround.
-uniform float gamma;
 
 void main() 
 {
@@ -80,15 +78,6 @@ void main()
 #endif
 
     color.rgb *= vertex_color.rgb;
-    // <FS> Fullbright fog fix w/ gamma 0 workaround.
-    // color.rgb = fullbrightAtmosTransport(color.rgb);
-    // color.rgb = fullbrightScaleSoftClip(color.rgb);
-    if(gamma != 0.)
-    {
-        color.rgb = fullbrightAtmosTransport(color.rgb);
-        color.rgb = fullbrightScaleSoftClip(color.rgb);
-    }
-    // </FS> Fullbright fog fix w/ gamma 0 workaround.
 
 #ifdef WATER_FOG
     vec3 pos = vary_position;
@@ -100,11 +89,12 @@ void main()
 #endif
 
 #ifndef IS_HUD
-    color.rgb = fullbrightAtmosTransport(color.rgb);
+    color.rgb = legacy_adjust(color.rgb);
     color.rgb = srgb_to_linear(color.rgb);
+    color.rgb = legacy_adjust_fullbright(color.rgb);
+    color.rgb = fullbrightAtmosTransport(color.rgb);
 #endif
 
-    frag_color.rgb = color.rgb;
-    frag_color.a   = color.a;
+    frag_color = max(color, vec4(0));
 }
 
