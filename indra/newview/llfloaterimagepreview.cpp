@@ -186,6 +186,8 @@ BOOL LLFloaterImagePreview::postBuild()
 	getChild<LLUICtrl>("uploaded_size_text")->setTextArg("[X_RES]", llformat("%d", mRawImagep->getWidth()));
 	getChild<LLUICtrl>("uploaded_size_text")->setTextArg("[Y_RES]", llformat("%d", mRawImagep->getHeight()));
 
+	mEmptyAlphaCheck = getChild<LLCheckBoxCtrl>("strip_alpha_check");
+
 	if (mRawImagep->getComponents() != 4)
 	{
 		getChild<LLUICtrl>("image_alpha_warning")->setVisible(false);
@@ -204,8 +206,6 @@ BOOL LLFloaterImagePreview::postBuild()
 			emptyAlphaCount++;
 		}
 	}
-
-	mEmptyAlphaCheck = getChild<LLCheckBoxCtrl>("strip_alpha_check");
 
 	if (emptyAlphaCount > (imageBytes / 4 * ALPHA_EMPTY_THRESHOLD_RATIO))
 	{
