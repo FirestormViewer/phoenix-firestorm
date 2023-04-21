@@ -263,9 +263,7 @@ using namespace LL;
 #include "llcoproceduremanager.h"
 #include "llviewereventrecorder.h"
 
-#if HAS_GROWL
 #include "growlmanager.h"
-#endif
 #include "fsavatarrenderpersistence.h"
 
 // *FIX: These extern globals should be cleaned up.
@@ -2019,9 +2017,7 @@ bool LLAppViewer::cleanup()
 	// workaround for DEV-35406 crash on shutdown
 	LLEventPumps::instance().reset();
 
-#if HAS_GROWL
-	GrowlManager::destroyManager();
-#endif
+	GrowlManager::destroyManager(); // <FS> Growl support
 
 	//dump scene loading monitor results
 	if (LLSceneMonitor::instanceExists())

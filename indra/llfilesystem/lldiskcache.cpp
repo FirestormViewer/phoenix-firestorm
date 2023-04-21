@@ -115,8 +115,12 @@ void LLDiskCache::purge()
 #endif
     if (boost::filesystem::is_directory(cache_path, ec) && !ec.failed())
     {
-        boost::filesystem::directory_iterator iter(cache_path, ec);
-        while (iter != boost::filesystem::directory_iterator() && !ec.failed())
+        // <FS:Ansariel> Optimize asset simple disk cache
+        //boost::filesystem::directory_iterator iter(cache_path, ec);
+        //while (iter != boost::filesystem::directory_iterator() && !ec.failed())
+        boost::filesystem::recursive_directory_iterator iter(cache_path, ec);
+        while (iter != boost::filesystem::recursive_directory_iterator() && !ec.failed())
+        // </FS:Ansariel>
         {
             if (boost::filesystem::is_regular_file(*iter, ec) && !ec.failed())
             {
@@ -469,8 +473,12 @@ void LLDiskCache::clearCache()
 #endif
     if (boost::filesystem::is_directory(cache_path, ec) && !ec.failed())
     {
-        boost::filesystem::directory_iterator iter(cache_path, ec);
-        while (iter != boost::filesystem::directory_iterator() && !ec.failed())
+        // <FS:Ansariel> Optimize asset simple disk cache
+        //boost::filesystem::directory_iterator iter(cache_path, ec);
+        //while (iter != boost::filesystem::directory_iterator() && !ec.failed())
+        boost::filesystem::recursive_directory_iterator iter(cache_path, ec);
+        while (iter != boost::filesystem::recursive_directory_iterator() && !ec.failed())
+        // </FS:Ansariel>
         {
             if (boost::filesystem::is_regular_file(*iter, ec) && !ec.failed())
             {
@@ -526,7 +534,7 @@ void LLDiskCache::removeOldVFSFiles()
     }
 }
 
-uintmax_t LLDiskCache::dirFileSize(const std::string dir)
+uintmax_t LLDiskCache::dirFileSize(const std::string& dir)
 {
     uintmax_t total_file_size = 0;
 
@@ -547,8 +555,12 @@ uintmax_t LLDiskCache::dirFileSize(const std::string dir)
 #endif
     if (boost::filesystem::is_directory(dir_path, ec) && !ec.failed())
     {
-        boost::filesystem::directory_iterator iter(dir_path, ec);
-        while (iter != boost::filesystem::directory_iterator() && !ec.failed())
+        // <FS:Ansariel> Optimize asset simple disk cache
+        //boost::filesystem::directory_iterator iter(dir_path, ec);
+        //while (iter != boost::filesystem::directory_iterator() && !ec.failed())
+        boost::filesystem::recursive_directory_iterator iter(dir_path, ec);
+        while (iter != boost::filesystem::recursive_directory_iterator() && !ec.failed())
+            // </FS:Ansariel>
         {
             if (boost::filesystem::is_regular_file(*iter, ec) && !ec.failed())
             {

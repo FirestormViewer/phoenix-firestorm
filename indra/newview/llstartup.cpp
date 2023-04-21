@@ -225,9 +225,7 @@
 //#include "llfloaterimsession.h"
 #include "fsfloaterim.h"
 // </FS:Ansariel> [FS communication UI]
-#if HAS_GROWL
 #include "growlmanager.h"
-#endif
 
 #include "fsassetblacklist.h"
 #include "fsavatarrenderpersistence.h"
@@ -664,10 +662,8 @@ bool idle_startup()
 		//
 		std::string lastGPU = gSavedSettings.getString("LastGPUString");
 		std::string thisGPU = LLFeatureManager::getInstance()->getGPUString();
-		
-#if HAS_GROWL
-		GrowlManager::initiateManager();
-#endif
+
+		GrowlManager::initiateManager(); // <FS> Growl support
 
 		// <FS:Ansariel> Store current font and skin for system info (FIRE-6806)
 		gSavedSettings.setString("FSInternalFontSettingsFile", gSavedSettings.getString("FSFontSettingsFile"));

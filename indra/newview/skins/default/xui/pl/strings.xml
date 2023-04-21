@@ -222,7 +222,7 @@ Więcej informacji w naszym FAQ:
 http://secondlife.com/viewer-access-faq
 	</string>
 	<string name="LoginFailed">
-		Logowanie nieudane.
+		Proces logowania nie został ukończony z powodu problemów systemu. Spróbuj ponownie za kilka minut.
 Jeśli uważasz, że to błąd, skontaktuj się z obsługą świata.
 	</string>
 	<string name="LoginIntermediateOptionalUpdateAvailable">

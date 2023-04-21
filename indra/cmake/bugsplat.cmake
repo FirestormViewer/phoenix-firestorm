@@ -26,8 +26,14 @@ if (USE_BUGSPLAT)
         target_link_libraries( ll::bugsplat INTERFACE
                 ${BUGSPLAT_LIBRARIES}
                 )
-    else (WINDOWS)
-        message(FATAL_ERROR "BugSplat is not supported; add -DUSE_BUGSPLAT=OFF")
+    else (WINDOWS) #ie: Linux...
+               add_compile_definitions(__STDC_FORMAT_MACROS)
+               use_prebuilt_binary(breakpad)
+               target_link_libraries( ll::bugsplat INTERFACE
+                       ${ARCH_PREBUILT_DIRS_RELEASE}/libbreakpad.a
+                       ${ARCH_PREBUILT_DIRS_RELEASE}/libbreakpad_client.a
+                       )
+               target_include_directories( ll::bugsplat SYSTEM INTERFACE ${LIBS_PREBUILT_DIR}/include/breakpad)
     endif (WINDOWS)
 
     if( NOT BUGSPLAT_DB )

@@ -7,7 +7,7 @@
 		Descrizione:
 	</text>
 	<text name="preview_label">
-		Anteprima dell&apos;immagine come:
+		Anteprima come:
 	</text>
 	<combo_box label="Tipo di capo" left="120" name="clothing_type_combo">
 		<item label="Immagine" name="Image"/>
