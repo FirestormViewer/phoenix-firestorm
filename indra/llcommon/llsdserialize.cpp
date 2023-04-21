@@ -146,7 +146,7 @@ bool LLSDSerialize::deserialize(LLSD& sd, std::istream& str, llssize max_bytes)
 		// byte. We could store one if needed, since even the incremented
 		// inbuf won't exceed sizeof(hdr_buf)-1, but there's no need.
 	}
-	std::string header{ hdr_buf, std::string::size_type(inbuf) };
+	std::string header{ hdr_buf, static_cast<std::string::size_type>(inbuf) };
 	if (str.fail())
 	{
 		str.clear();
@@ -2242,7 +2242,7 @@ LLUZipHelper::EZipRresult LLUZipHelper::unzip_llsd(LLSD& data, std::istream& is,
 LLUZipHelper::EZipRresult LLUZipHelper::unzip_llsd(LLSD& data, const U8* in, S32 size)
 {
 	U8* result = NULL;
-	llssize cur_size = 0;
+	U32 cur_size = 0;
 	z_stream strm;
 		
 	constexpr U32 CHUNK = 1024 * 512;
@@ -2448,7 +2448,7 @@ U8* unzip_llsdNavMesh( bool& valid, size_t& outsize, std::istream& is, S32 size 
 	return result;
 }
 
-char* strip_deprecated_header(char* in, llssize& cur_size, llssize* header_size)
+char* strip_deprecated_header(char* in, U32& cur_size, U32* header_size)
 {
 	const char* deprecated_header = "<? LLSD/Binary ?>";
 	constexpr size_t deprecated_header_size = 17;

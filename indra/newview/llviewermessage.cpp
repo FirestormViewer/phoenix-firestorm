@@ -6449,6 +6449,11 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 				LandBuyAccessBlocked_AdultsOnlyContent
 			 
 			-----------------------------------------------------------------------*/ 
+            static LLCachedControl<S32> ban_lines_mode(gSavedSettings , "ShowBanLines" , LLViewerParcelMgr::PARCEL_BAN_LINES_ON_COLLISION);
+            if (ban_lines_mode == LLViewerParcelMgr::PARCEL_BAN_LINES_ON_COLLISION)
+            {
+                LLViewerParcelMgr::getInstance()->resetCollisionTimer();
+            }
 			if (handle_special_notification(notificationID, llsdBlock))
 			{
 				return true;
@@ -6654,6 +6659,13 @@ void process_alert_message(LLMessageSystem *msgsystem, void **user_data)
 	{
 		BOOL modal = FALSE;
 		process_alert_core(message, modal);
+
+        static LLCachedControl<S32> ban_lines_mode(gSavedSettings , "ShowBanLines" , LLViewerParcelMgr::PARCEL_BAN_LINES_ON_COLLISION);
+        if (ban_lines_mode == LLViewerParcelMgr::PARCEL_BAN_LINES_ON_COLLISION
+            && message.find("Cannot enter parcel") != std::string::npos)
+        {
+            LLViewerParcelMgr::getInstance()->resetCollisionTimer();
+        }
 	}
 }
 

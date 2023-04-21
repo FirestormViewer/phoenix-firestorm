@@ -103,6 +103,8 @@ private:
 		// Called by LLWorldMap when a region name has been resolved to a
 		// location in-world, used by places-panel display.
 
+    static bool handleGrid(const LLSLURL& slurl);
+
 	friend class LLTeleportHandler;
 };
 
@@ -186,7 +188,7 @@ bool LLURLDispatcherImpl::dispatchApp(const LLSLURL& slurl,
 	}
 
 	bool handled = LLCommandDispatcher::dispatch(
-			slurl.getAppCmd(), path, query_map, web, nav_type, trusted_browser);
+			slurl.getAppCmd(), path, query_map, slurl.getGrid(), web, nav_type, trusted_browser);
 // </FS:AW handle hop app teleports properly>
 
 	// alert if we didn't handle this secondlife:///app/ SLURL
@@ -219,6 +221,11 @@ bool LLURLDispatcherImpl::dispatchRegion(const LLSLURL& slurl, const std::string
 		return true;
 	}
 // <FS:AW hypergrid support >
+//    if (!handleGrid(slurl))
+//    {
+//        return true;
+//    }
+
 // 	LLWorldMapMessage::getInstance()->sendNamedRegionRequest(slurl.getRegion(),
 // 
 // 									  LLURLDispatcherImpl::regionNameCallback,
@@ -263,6 +270,31 @@ void LLURLDispatcherImpl::regionNameCallback(U64 region_handle, const LLSLURL& s
     {        
       regionHandleCallback(region_handle, slurl, snapshot_id, teleport);
     }
+}
+
+bool LLURLDispatcherImpl::handleGrid(const LLSLURL& slurl)
+{
+    if (LLGridManager::getInstance()->getGrid(slurl.getGrid())
+        != LLGridManager::getInstance()->getGrid())
+    {
+        LLSD args;
+        args["SLURL"] = slurl.getLocationString();
+        args["CURRENT_GRID"] = LLGridManager::getInstance()->getGridLabel();
+        std::string grid_label =
+            LLGridManager::getInstance()->getGridLabel(slurl.getGrid());
+
+        if (!grid_label.empty())
+        {
+            args["GRID"] = grid_label;
+        }
+        else
+        {
+            args["GRID"] = slurl.getGrid();
+        }
+        LLNotificationsUtil::add("CantTeleportToGrid", args);
+        return false;
+    }
+    return true;
 }
 
 /* static */
@@ -339,8 +371,10 @@ public:
 						&LLTeleportHandler::from_event);
 	}
 
-	bool handle(const LLSD& tokens, const LLSD& query_map,
-				LLMediaCtrl* web)
+	bool handle(const LLSD& tokens,
+                const LLSD& query_map,
+                const std::string& grid,
+                LLMediaCtrl* web)
 	{
 		// construct a "normal" SLURL, resolve the region to
 		// a global position, and teleport to it
@@ -350,19 +384,19 @@ public:
 #ifdef OPENSIM
 		LLSLURL slurl(tokens, true);
 
-		std::string grid = slurl.getGrid();
-		std::string gatekeeper = LLGridManager::getInstance()->getGatekeeper(grid);
+		std::string url_grid = slurl.getGrid();
+		std::string gatekeeper = LLGridManager::getInstance()->getGatekeeper(url_grid);
 		std::string region_name = slurl.getRegion();
 		std::string dest;
 		std::string current = LLGridManager::getInstance()->getGrid();
-		if ((grid != current) && (!LLGridManager::getInstance()->isInOpenSim() || (!slurl.getHypergrid() && gatekeeper.empty())))
+		if ((url_grid != current) && (!LLGridManager::getInstance()->isInOpenSim() || (!slurl.getHypergrid() && gatekeeper.empty())))
 		{
 			dest = slurl.getSLURLString();
 			if (!dest.empty())
 			{
 				LLSD args;
 				args["SLURL"] = dest;
-				args["GRID"] = grid;
+				args["GRID"] = url_grid;
 				args["CURRENT_GRID"] = current;
 				LLNotificationsUtil::add("CantTeleportToGrid", args);
 				return true;
@@ -397,7 +431,7 @@ public:
 		
 		std::string region_name = LLURI::unescape(tokens[0]);
 
-		std::string callback_url = LLSLURL(region_name, coords).getSLURLString();
+		std::string callback_url = LLSLURL(url_grid, region_name, coords).getSLURLString();
 #endif // OPENSIM
 // </FS:AW optional opensim support>
 

@@ -11593,6 +11593,25 @@ class LLWorldPostProcess : public view_listener_t
 	}
 };
 
+class LLWorldCheckBanLines : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        S32 callback_data = userdata.asInteger();
+        return gSavedSettings.getS32("ShowBanLines") == callback_data;
+    }
+};
+
+class LLWorldShowBanLines : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        S32 callback_data = userdata.asInteger();
+        gSavedSettings.setS32("ShowBanLines", callback_data);
+        return true;
+    }
+};
+
 void handle_flush_name_caches()
 {
 	// <FS:Ansariel> Crash fix
@@ -12131,6 +12150,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLWorldEnvPreset(), "World.EnvPreset");
 	view_listener_t::addMenu(new LLWorldEnableEnvPreset(), "World.EnableEnvPreset");
 	view_listener_t::addMenu(new LLWorldPostProcess(), "World.PostProcess");
+    view_listener_t::addMenu(new LLWorldCheckBanLines() , "World.CheckBanLines");
+    view_listener_t::addMenu(new LLWorldShowBanLines() , "World.ShowBanLines");
 
 	// Tools menu
 	view_listener_t::addMenu(new LLToolsSelectTool(), "Tools.SelectTool");

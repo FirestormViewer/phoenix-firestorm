@@ -847,7 +847,7 @@ public:
 	LLChatCommandHandler() : LLCommandHandler("chat", UNTRUSTED_THROTTLE) { }
 
 	// Your code here
-	bool handle(const LLSD& tokens, const LLSD& query_map,
+	bool handle(const LLSD& tokens, const LLSD& query_map, const std::string& grid,
 				LLMediaCtrl* web)
 	{
 		bool retval = false;
