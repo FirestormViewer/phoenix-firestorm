@@ -12,7 +12,7 @@
 	<text name="name_confirm_label">
 		Wpisz Twoje nowe Imię aby potwierdzić:
 	</text>
-	<button label="Zapisz" name="save_btn" tool_tip="Zapisz swoje nowe Wyświetlane Imię"/>
 	<button label="Resetuj" name="reset_btn" tool_tip="Uczyń Wyświetlane Imię takim samym, jak nazwa konta użytkownika"/>
+	<button label="Zapisz" name="save_btn" tool_tip="Zapisz swoje nowe Wyświetlane Imię"/>
 	<button label="Anuluj" name="cancel_btn"/>
 </floater>

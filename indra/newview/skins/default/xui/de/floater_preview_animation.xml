@@ -3,20 +3,24 @@
 	<floater.string name="Title">
 		Animation: [NAME]
 	</floater.string>
-	<text name="desc txt" width="90">
-		Beschreibung:
-	</text>
-	<line_editor name="desc"/>
-	<button label="Inworld abspielen" label_selected="Stopp" name="Inworld" tool_tip="Diese Animation so wiedergeben, dass andere sie sehen können."/>
-	<button label="Lokal wiedergeben" label_selected="Stopp" name="Locally" tool_tip="Diese Animation so wiedergeben, dass nur Sie sie sehen."/>
-	<text name="AdvancedStatsLeft">
+	<panel name="basic_info_panel">
+		<text name="desc txt" width="90">
+			Beschreibung:
+		</text>
+		<button label="Inworld abspielen" label_selected="Stopp" name="Inworld" tool_tip="Diese Animation so wiedergeben, dass andere sie sehen können."/>
+		<button label="Lokal wiedergeben" label_selected="Stopp" name="Locally" tool_tip="Diese Animation so wiedergeben, dass nur Sie sie sehen."/>
+		<button name="btn_expand" tool_tip="Aufklappen, um erweiterte Informationen über diese Animation zu erhalten."/>
+	</panel>
+	<panel name="advanced_info_panel">
+		<text name="AdvancedStatsLeft">
 Priorität: [PRIORITY]
 Dauer: [DURATION]s
 Schleife: [IS_LOOP]
-	</text>
-	<text name="AdvancedStatsRight">
+		</text>
+		<text name="AdvancedStatsRight">
 Einblenden: [EASE_IN]s
 Ausblenden: [EASE_OUT]s
 Gelenke: [NUM_JOINTS]
-	</text>
+		</text>
+	</panel>
 </floater>

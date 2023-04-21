@@ -2,7 +2,7 @@
 <floater name="Image Preview">
 	<text name="name_label">Nom :</text>
 	<text name="description_label">Description :</text>
-	<text name="preview_label" width="115">Prévisualiser l'image en tant que :</text>
+	<text name="preview_label" width="115">Prévisualiser :</text>
 	<combo_box label="Type de vêtement" left_delta="115" name="clothing_type_combo">
 		<item label="Image" name="Image"/>
 		<item label="Cheveux" name="Hair"/>
@@ -23,8 +23,11 @@
 
 Essayez d'enregistrer l'image au format Targa 24 bits (.tga).
 	</text>
+	<text name="uploaded_size_text">
+		Taille transférée : [X_RES]x[Y_RES], [ALPHA]
+	</text>
 	<check_box label="Utiliser une compression sans pertes" name="lossless_check"/>
 	<check_box name="temp_check" label="Temporaire (Gratuit)" tool_tip="Défini l'envoi comme étant temporaire, celui-ci étant gratuit, mais disponible uniquement pour un temps limité avant qu'il ne cesse d'exister définitivement."/>
+	<button label="Transferer (L$[AMOUNT])" name="ok_btn"/>
 	<button label="Annuler" name="cancel_btn"/>
-	<button label="Uploader ([AMOUNT] L$)" width="130" name="ok_btn"/>
 </floater>

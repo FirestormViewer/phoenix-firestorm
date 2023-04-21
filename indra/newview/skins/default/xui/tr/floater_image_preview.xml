@@ -7,7 +7,7 @@
 		Açıklama:
 	</text>
 	<text name="preview_label">
-		Görüntüyü şu şekilde önizle:
+		Olarak önizleyin:
 	</text>
 	<combo_box label="Giysi Türü" name="clothing_type_combo">
 		<item label="Görüntü" name="Image" value="Görüntü"/>

@@ -3,19 +3,24 @@
 	<floater.string name="Title">
 		Animacja: [NAME]
 	</floater.string>
-	<text name="desc txt">
-		Opis:
-	</text>
-	<button label="Uruchom publicznie" label_selected="Zatrzymaj" name="Inworld" tool_tip="Uruchom animację tak, aby widzieli ją pozostali Rezydenci"/>
-	<button label="Uruchom prywatnie" label_selected="Zatrzymaj" name="Locally" tool_tip="Uruchom animację tak, aby była ona widoczna tylko dla Ciebie"/>
-	<text name="AdvancedStatsLeft">
+	<panel name="basic_info_panel">
+		<text name="desc txt">
+			Opis:
+		</text>
+		<button label="Uruchom publicznie" label_selected="Zatrzymaj" name="Inworld" tool_tip="Uruchom animację tak, aby widzieli ją pozostali Rezydenci"/>
+		<button label="Uruchom prywatnie" label_selected="Zatrzymaj" name="Locally" tool_tip="Uruchom animację tak, aby była ona widoczna tylko dla Ciebie"/>
+		<button name="btn_expand" tool_tip="Rozwiń, aby zobaczyć zaawansowane informacje o tej animacji" />
+	</panel>
+	<panel name="advanced_info_panel">
+		<text name="AdvancedStatsLeft">
 Priorytet: [PRIORITY]
 Długość: [DURATION]s
 Zapętlona: [IS_LOOP]
-	</text>
-	<text name="AdvancedStatsRight">
+		</text>
+		<text name="AdvancedStatsRight">
 Wygł. startu: [EASE_IN]s
 Wygł. końca: [EASE_OUT]s
 Stawy: [NUM_JOINTS]
-	</text>
+		</text>
+	</panel>
 </floater>

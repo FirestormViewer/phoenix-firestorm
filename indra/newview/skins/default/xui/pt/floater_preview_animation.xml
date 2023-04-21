@@ -3,9 +3,11 @@
 	<floater.string name="Title">
 		Animação: [NOME]
 	</floater.string>
-	<text name="desc txt">
-		Descrição:
-	</text>
-	<button label="Tocar inworld" label_selected="Parar" name="Inworld" tool_tip="Executar essa animação de forma que outros possam ver"/>
-	<button label="Tocar localmente" label_selected="Parar" name="Locally" tool_tip="Executar animação de forma que apenas você possa ver"/>
+	<panel name="basic_info_panel">
+		<text name="desc txt">
+			Descrição:
+		</text>
+		<button label="Tocar inworld" label_selected="Parar" name="Inworld" tool_tip="Executar essa animação de forma que outros possam ver"/>
+		<button label="Tocar localmente" label_selected="Parar" name="Locally" tool_tip="Executar animação de forma que apenas você possa ver"/>
+	</panel>
 </floater>

@@ -1,13 +1,9 @@
 # -*- cmake -*-
-set(CMAKE_VERBOSE_MAKEFILE ON) # <FS:Zi> remove this once things work
 
 # <FS:ND> Try to find pulse header, if we got them we can use the linux volume catcher
 if (LINUX)
-  include(GLIB)
 
-  include_directories( ${GLIB_INCLUDE_DIRS} )
-
-  foreach( PULSE_FILE pulse/introspect.h pulse/context.h pulse/subscribe.h pulse/glib-mainloop.h )
+  foreach( PULSE_FILE pulse/introspect.h pulse/context.h pulse/subscribe.h )
 	find_path( PULSE_FILE_${PULSE_FILE}_FOUND ${PULSE_FILE} NO_CACHE)
 	if( NOT PULSE_FILE_${PULSE_FILE}_FOUND )
 	  message( "Looking for ${PULSE_FILE} ... not found")

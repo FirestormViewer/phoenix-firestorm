@@ -40,6 +40,8 @@
 #include "lluictrlfactory.h"
 #include "lldatapacker.h"
 
+#include "llviewercontrol.h"	// <FS:Zi> Make advanced animation preview optional
+
 extern LLAgent gAgent;
 //const S32 ADVANCED_VPAD = 3; // <FS:Ansariel> Improved animation preview
 
@@ -47,6 +49,9 @@ LLPreviewAnim::LLPreviewAnim(const LLSD& key)
 	: LLPreview( key )
 {
 	mCommitCallbackRegistrar.add("PreviewAnim.Play", boost::bind(&LLPreviewAnim::play, this, _2));
+	// <FS:Zi> Make advanced animation preview optional
+	mCommitCallbackRegistrar.add("PreviewAnim.Expand", boost::bind(&LLPreviewAnim::expand, this, _2));
+	// </FS:Zi>
 }
 
 // virtual
@@ -63,6 +68,15 @@ BOOL LLPreviewAnim::postBuild()
     //LLRect rect = getRect();
     //reshape(rect.getWidth(), rect.getHeight() - pAdvancedStatsTextBox->getRect().getHeight() - ADVANCED_VPAD, FALSE);
 	// </FS:Ansariel>
+
+	// <FS:Zi> Make advanced animation preview optional
+	bool expanded = gSavedSettings.getBOOL("FSAnimationPreviewExpanded");
+
+	getChild<LLView>("advanced_info_panel")->setVisible(!expanded);
+	getChild<LLButton>("btn_expand")->setToggleState(expanded);
+
+	expand(LLSD());
+	// </FS:Zi>
 
 	return LLPreview::postBuild();
 }
@@ -253,3 +267,37 @@ void LLPreviewAnim::onClose(bool app_quitting)
 //    }
 //}
 // </FS:Ansariel>
+
+// <FS:Zi> Make advanced animation preview optional
+void LLPreviewAnim::expand(const LLSD& param)
+{
+	LLView* basic_info_panel = getChild<LLView>("basic_info_panel");
+	LLView* advanced_info_panel = getChild<LLView>("advanced_info_panel");
+
+	// I don't get why we can't use getLocalRect().mTop or something similar to get the .top from the XML -Zi
+	S32 height = getRect().getHeight() - basic_info_panel->getRect().mTop;
+	S32 basic_info_height = basic_info_panel->getRect().getHeight();
+	S32 advanced_info_height = advanced_info_panel->getRect().getHeight();
+
+	bool was_expanded = advanced_info_panel->getVisible();
+	advanced_info_panel->setVisible(!was_expanded);
+
+	height += basic_info_height;
+	if (!was_expanded)
+	{
+		height += advanced_info_height;
+	}
+
+	LLRect rect = getRect();
+
+	rect.setLeftTopAndSize(rect.mLeft, rect.mTop, rect.getWidth(), height);
+	reshape(rect.getWidth(), rect.getHeight(), false);
+
+	setRect(rect);
+
+	if(getHost())
+	{
+		getHost()->growToFit(rect.getWidth(), height);
+	}
+}
+// </FS:Zi>

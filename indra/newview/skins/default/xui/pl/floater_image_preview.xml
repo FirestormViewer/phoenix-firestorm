@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Image Preview">
+    <string name="with_alpha" value="z alfą" />
+    <string name="no_alpha" value="bez alfy" />
 	<text name="name_label">
 		Nazwa:
 	</text>
@@ -7,7 +9,7 @@
 		Opis:
 	</text>
 	<text name="preview_label">
-		Wyświetl obraz jako:
+		Wyświetl jako:
 	</text>
 	<combo_box label="Rodzaj Ubrania" name="clothing_type_combo">
 		<item label="Obraz" name="Image" />
@@ -29,8 +31,12 @@
 
 Spróbuj zapisać obraz jako 24 bitową Targa (.tga).
 	</text>
+	<text name="uploaded_size_text">
+		Przesłano: [X_RES]x[Y_RES], [ALPHA]
+	</text>
 	<check_box label="Kompresja bezstratna" name="lossless_check"/>
-	<check_box name="temp_check" label="Tymczas. (darmowy)" tool_tip="Ustawia obraz na serwerze jako tymczasowy, a zatem jako darmowy, ale będzie on istnieć tylko przez krótki okres - po czym zostanie skasowany." />
-	<button label="Anuluj" name="cancel_btn"/>
+	<check_box left_delta="158" name="temp_check" label="Tymczas. (darmowy)" tool_tip="Ustawia obraz na serwerze jako tymczasowy, a zatem jako darmowy, ale będzie on istnieć tylko przez krótki okres - po czym zostanie skasowany." />
 	<button label="Prześlij ([AMOUNT]L$)" name="ok_btn"/>
+	<button label="Anuluj" name="cancel_btn"/>
+	<text name="info_text" value="= tu pojawią się informacje o koszcie przesyłania =" />
 </floater>
