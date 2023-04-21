@@ -98,7 +98,6 @@ public:
 	// not the wearable asset itself.
 	void				refreshName();
 	// <FS:Ansariel> [Legacy Bake]
-	///*virtual*/void		addToBakedTextureHash(LLMD5& hash) const {}
 	/*virtual*/void		addToBakedTextureHash(LLMD5& hash) const;
 
 protected:

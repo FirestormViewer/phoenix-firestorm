@@ -16,13 +16,13 @@
         min_width="265"
         width="313">
     <layout_stack 
+            name="main_layout"
             follows="all"
             layout="topleft"
             left="5"
             top="20"
             right="-5"
             bottom="-5"
-            name="main_layout"
             orientation="vertical">
         <layout_panel
                 border="true"

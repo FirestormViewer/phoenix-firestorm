@@ -31,7 +31,7 @@
 #include "llavatarappearance.h"
 #include "llavatarappearancedefines.h"
 #include "lldriverparam.h"
-#include "llmd5.h"
+#include "llmd5.h" // <FS:Ansariel> [Legacy Bake]
 
 LLWearableData::LLWearableData() :
 	mAvatarAppearance(NULL)
@@ -355,6 +355,7 @@ U32 LLWearableData::getWearableCount(const U32 tex_index) const
 	return getWearableCount(wearable_type);
 }
 
+// <FS:Ansariel> [Legacy Bake]
 LLUUID LLWearableData::computeBakedTextureHash(LLAvatarAppearanceDefines::EBakedTextureIndex baked_index,
 												 BOOL generate_valid_hash) // Set to false if you want to upload the baked texture w/o putting it in the cache
 {
@@ -391,5 +392,6 @@ LLUUID LLWearableData::computeBakedTextureHash(LLAvatarAppearanceDefines::EBaked
 
 	return hash_id;
 }
+// </FS:Ansariel> [Legacy Bake]
 
 
