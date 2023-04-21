@@ -36,10 +36,7 @@
 #define GROWLNOTIFIERWIN_H
 
 #include "growlnotifier.h"
-
-#ifdef HAS_GROWL
 #include <growl++.hpp>
-#endif
 
 class GrowlNotifierWin : public GrowlNotifier
 {
@@ -53,9 +50,7 @@ public:
 
 private:
 	std::string mApplicationName;
-#ifdef HAS_GROWL
 	Growl* mGrowlImpl;
-#endif
 };
 
 #endif // GROWLNOTIFIERWIN_H

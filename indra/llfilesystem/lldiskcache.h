@@ -164,7 +164,7 @@ class LLDiskCache :
          * directory. Primarily used here to determine the directory size
          * before and after the cache purge
          */
-        uintmax_t dirFileSize(const std::string dir);
+        uintmax_t dirFileSize(const std::string& dir);
 
         /**
          * Utility function to convert an LLAssetType enum into a

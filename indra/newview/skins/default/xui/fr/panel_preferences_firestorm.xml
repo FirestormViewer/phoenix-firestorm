@@ -152,17 +152,18 @@
 			<check_box label="Sauvegarder les textures sur le disque dur au format PNG au lieu de TGA" tool_tip="Utilisé dans l'aperçu de texture et dans le menu contextuel de l'inventaire." name="FSTextureDefaultSaveAsFormat"/>
 			<check_box label="Utiliser Ctrl+clic pour attraper et déplacer des objets" tool_tip="Quand coché, vous pourrez attraper et déplacer des objets en utilisant la souris et la touche Ctrl." name="FSEnableGrab"/>
 			<check_box label="Déplacer les textures directement en maintenant Shift-Clic en mode construction" tool_tip="Activer cette option vous permettra de faire glisser la texture sur la face de l'objet en mode de construction" name="FSExperimentalDragTexture"/>
-			<check_box label="Prévisualiser les animations sur son avatar pendant l'upload" tool_tip="Si activé, vous pouvez prévisualiser les animations sur votre propre avatar pendant le processus d'upload" name="FSUploadAnimationOnOwnAvatar"/>
+			<check_box label="Prévisualiser les animations sur son avatar pendant le téléchargement sur le serveur" tool_tip="Si activé, vous pouvez prévisualiser les animations sur votre propre avatar pendant le téléchargement sur le serveur" name="FSUploadAnimationOnOwnAvatar"/>
+			<check_box label="Toujours développer les informations détaillées de la prévisualisation de l'animation" tool_tip="Développer par défaut les informations détaillées sur l'animation dans le flotteur de l'aperçu de l'animation" name="FSAnimationPreviewExpanded"/>
 			<check_box label="Active les informations détaillées pour les script" tool_tip="Activée, ajoute aux informations de base sur les scripts des détails utiles aux créateurs" name="FSScriptInfoExtended"/>
 		</panel>
 		<panel label="Chargements" name="UploadsTab">
-		<text name="title">Dossiers de destination pour les chargements :</text>
-		<text name="title_sounds">Sons</text>
-		<text name="title_models">Modèles</text>
-		<text name="upload_help">Pour changer le dossier de destinatio, cliquez droit dessus dans l'inventaire et sélectionnez 
+			<text name="title">Dossiers de destination pour les chargements :</text>
+			<text name="title_sounds">Sons</text>
+			<text name="title_models">Modèles</text>
+			<text name="upload_help">Pour changer le dossier de destination, cliquez droit dessus dans l'inventaire et sélectionnez
 "Par défaut pour"
-		</text>
-		<button name="reset_default_folders" label="Réinitialiser les dossiers par défaut"/>
+			</text>
+			<button name="reset_default_folders" label="Réinitialiser les dossiers par défaut"/>
 		</panel>
 	</tab_container>
 </panel>

@@ -110,7 +110,6 @@ private:
 	LLSD		mResultsContent;
 	LLUUID		mQueryID;
 
-	FSFloaterSearch*		mParent;
 	LLSearchComboBox*		mSearchComboBox;
 	FSScrollListCtrl*		mSearchResults;
 };
@@ -145,7 +144,6 @@ private:
 	LLSD		mResultsContent;
 	LLUUID		mQueryID;
 
-	FSFloaterSearch*	mParent;
 	LLSearchComboBox*	mSearchComboBox;
 	LLScrollListCtrl*	mSearchResults;
 };
@@ -180,7 +178,6 @@ private:
 	LLSD		mResultsContent;
 	LLUUID		mQueryID;
 
-	FSFloaterSearch*	mParent;
 	LLSearchComboBox*	mSearchComboBox;
 	LLScrollListCtrl*	mSearchResults;
 	LLComboBox*			mPlacesCategory;
@@ -214,7 +211,6 @@ private:
 	LLSD		mResultsContent;
 	LLUUID		mQueryID;
 
-	FSFloaterSearch*	mParent;
 	LLLineEditor*		mPriceEditor;
 	LLLineEditor*		mAreaEditor;
 	LLScrollListCtrl*	mSearchResults;
@@ -250,7 +246,6 @@ private:
 	LLSD		mResultsContent;
 	LLUUID		mQueryID;
 
-	FSFloaterSearch*	mParent;
 	LLSearchComboBox*	mSearchComboBox;
 	LLScrollListCtrl*	mSearchResults;
 	LLComboBox*			mClassifiedsCategory;
@@ -292,7 +287,6 @@ private:
 	LLSD		mResultsContent;
 	LLUUID		mQueryID;
 
-	FSFloaterSearch*	mParent;
 	LLSearchComboBox*	mSearchComboBox;
 	LLScrollListCtrl*	mSearchResults;
 	LLRadioGroup*		mEventsMode;

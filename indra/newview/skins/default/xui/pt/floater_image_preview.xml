@@ -7,8 +7,7 @@
 		Descrição:
 	</text>
 	<text name="preview_label">
-		Prévia da
-imagem como:
+		Pré-visualizar:
 	</text>
 	<combo_box label="Tipo de Roupas" name="clothing_type_combo">
 		<item label="Imagem" name="Image" value="Imagem"/>

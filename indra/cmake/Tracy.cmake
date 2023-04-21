@@ -7,7 +7,6 @@ add_library( ll::tracy INTERFACE IMPORTED )
 set(USE_TRACY OFF CACHE BOOL "Use Tracy profiler.")
 
 if (USE_TRACY)
-  use_system_binary(tracy)
   use_prebuilt_binary(tracy)
 
   target_include_directories( ll::tracy SYSTEM INTERFACE ${LIBS_PREBUILT_DIR}/include/tracy)

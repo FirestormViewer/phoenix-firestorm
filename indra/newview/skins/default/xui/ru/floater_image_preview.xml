@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Image Preview">
+	<string name="with_alpha" value="с альфой"/>
+	<string name="no_alpha" value="нет альфы"/>
 	<text name="name_label">
 		Название:
 	</text>
@@ -7,7 +9,7 @@
 		Описание:
 	</text>
 	<text name="preview_label">
-		Показать изображение как:
+		Показать как:
 	</text>
 	<combo_box label="Тип одежды" name="clothing_type_combo">
 		<item label="Изображение" name="Image" value="Изображение"/>
@@ -28,7 +30,12 @@
 		Невозможно прочитать изображение.
 Попробуйте сохранить изображение как 24-битный TGA-файл (Targa).
 	</text>
+	<text name="uploaded_size_text">
+		Загруженный размер: [X_RES]x[Y_RES], [ALPHA]
+	</text>
 	<check_box label="Использовать сжатие без потерь" name="lossless_check"/>
+	<check_box name="temp_check" label="Временно (бесплатно)" tool_tip="Устанавливает актив как временный, что означает, что он бесплатный, но взамен годится только в течение короткого времени, прежде чем он перестанет существовать."/>
 	<button label="Отмена" name="cancel_btn"/>
 	<button label="Загрузить (L$[AMOUNT])" name="ok_btn"/>
+	<text name="info_text" value="= здесь будет текст информации о плате за загрузку ="/>
 </floater>
