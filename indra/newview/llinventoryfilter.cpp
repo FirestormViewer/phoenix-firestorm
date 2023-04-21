@@ -71,6 +71,7 @@ LLInventoryFilter::FilterOps::FilterOps(const Params& p)
 	mFilterTypes(p.types),
 	mFilterUUID(p.uuid),
 	mFilterLinks(p.links),
+    mFilterThumbnails(p.thumbnails),
 	mCoalescedObjectsOnly(p.coalesced_objects_only),		// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
 	mSearchVisibility(p.search_visibility)
 {
@@ -176,6 +177,8 @@ bool LLInventoryFilter::check(const LLFolderViewModelItem* item)
 	passed = passed && checkAgainstFilterLinks(listener);
 	passed = passed && checkAgainstCreator(listener);
 	passed = passed && checkAgainstSearchVisibility(listener);
+
+    passed = passed && checkAgainstFilterThumbnails(listener->getUUID());
 
 	return passed;
 }
@@ -627,6 +630,19 @@ bool LLInventoryFilter::checkAgainstFilterLinks(const LLFolderViewModelItemInven
 	return TRUE;
 }
 
+bool LLInventoryFilter::checkAgainstFilterThumbnails(const LLUUID& object_id) const
+{
+    const LLInventoryObject *object = gInventory.getObject(object_id);
+    if (!object) return true;
+
+    const bool is_thumbnail = object->getThumbnailUUID().notNull();
+    if (is_thumbnail && (mFilterOps.mFilterThumbnails == FILTER_EXCLUDE_THUMBNAILS))
+        return false;
+    if (!is_thumbnail && (mFilterOps.mFilterThumbnails == FILTER_ONLY_THUMBNAILS))
+        return false;
+    return true;
+}
+
 bool LLInventoryFilter::checkAgainstCreator(const LLFolderViewModelItemInventory* listener) const
 {
 	if (!listener) return TRUE;
@@ -818,6 +834,19 @@ void LLInventoryFilter::setFilterSettingsTypes(U64 types)
 {
     updateFilterTypes(types, mFilterOps.mFilterSettingsTypes);
     mFilterOps.mFilterTypes |= FILTERTYPE_SETTINGS;
+}
+
+void LLInventoryFilter::setFilterThumbnails(U64 filter_thumbnails)
+{
+    if (mFilterOps.mFilterThumbnails != filter_thumbnails)
+    {
+        if (mFilterOps.mFilterThumbnails == FILTER_EXCLUDE_THUMBNAILS ||
+            mFilterOps.mFilterThumbnails == FILTER_ONLY_THUMBNAILS)
+            setModified(FILTER_MORE_RESTRICTIVE);
+        else
+            setModified(FILTER_LESS_RESTRICTIVE);
+    }
+    mFilterOps.mFilterThumbnails = filter_thumbnails;
 }
 
 void LLInventoryFilter::setFilterEmptySystemFolders()
@@ -1741,6 +1770,11 @@ U64 LLInventoryFilter::getSearchVisibilityTypes() const
 	return mFilterOps.mSearchVisibility;
 }
 
+U64 LLInventoryFilter::getFilterThumbnails() const
+{
+    return mFilterOps.mFilterThumbnails;
+}
+
 bool LLInventoryFilter::hasFilterString() const
 {
 	return mFilterSubString.size() > 0;
@@ -1818,9 +1852,9 @@ void LLInventoryFilter::setDefaultEmptyLookupMessage(const std::string& message)
 	mDefaultEmptyLookupMessage = message;
 }
 
-std::string LLInventoryFilter::getEmptyLookupMessage() const
+std::string LLInventoryFilter::getEmptyLookupMessage(bool is_empty_folder) const
 {
-	if (isDefault() && !mDefaultEmptyLookupMessage.empty())
+	if ((isDefault() || is_empty_folder) && !mDefaultEmptyLookupMessage.empty())
 	{
 		return LLTrans::getString(mDefaultEmptyLookupMessage);
 	}

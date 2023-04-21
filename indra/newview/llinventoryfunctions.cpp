@@ -55,6 +55,7 @@
 #include "llfocusmgr.h"
 #include "llfolderview.h"
 #include "llgesturemgr.h"
+#include "llgiveinventory.h"
 #include "lliconctrl.h"
 #include "llimview.h"
 #include "llinventorybridge.h"
@@ -1528,9 +1529,29 @@ bool move_item_to_marketplacelistings(LLInventoryItem* inv_item, LLUUID dest_fol
             LLUUID item_id = inv_item->getUUID();
             std::function<void(const LLUUID&)> callback_create_stock = [copy, item_id](const LLUUID& new_cat_id)
             {
+                if (new_cat_id.isNull())
+                {
+                    LL_WARNS() << "Failed to create category" << LL_ENDL;
+                    LLSD subs;
+                    subs["[ERROR_CODE]"] =
+                        LLTrans::getString("Marketplace Error Prefix") + LLTrans::getString("Marketplace Error Not Accepted");
+                    LLNotificationsUtil::add("MerchantPasteFailed", subs);
+                    return;
+                }
+
                 // Verify we can have this item in that destination category
                 LLViewerInventoryCategory* dest_cat = gInventory.getCategory(new_cat_id);
                 LLViewerInventoryItem * viewer_inv_item = gInventory.getItem(item_id);
+                if (!dest_cat || !viewer_inv_item)
+                {
+                    LL_WARNS() << "Move to marketplace: item or folder do not exist" << LL_ENDL;
+
+                    LLSD subs;
+                    subs["[ERROR_CODE]"] =
+                        LLTrans::getString("Marketplace Error Prefix") + LLTrans::getString("Marketplace Error Not Accepted");
+                    LLNotificationsUtil::add("MerchantPasteFailed", subs);
+                    return;
+                }
                 if (!dest_cat->acceptItem(viewer_inv_item))
                 {
                     LLSD subs;
@@ -1559,6 +1580,16 @@ bool move_item_to_marketplacelistings(LLInventoryItem* inv_item, LLUUID dest_fol
 
             std::function<void(const LLUUID&)> callback_dest_create = [item_id, callback_create_stock](const LLUUID& new_cat_id)
             {
+                if (new_cat_id.isNull())
+                {
+                    LL_WARNS() << "Failed to create category" << LL_ENDL;
+                    LLSD subs;
+                    subs["[ERROR_CODE]"] =
+                        LLTrans::getString("Marketplace Error Prefix") + LLTrans::getString("Marketplace Error Not Accepted");
+                    LLNotificationsUtil::add("MerchantPasteFailed", subs);
+                    return;
+                }
+
                 LLViewerInventoryCategory* dest_cat = gInventory.getCategory(new_cat_id);
                 LLViewerInventoryItem * viewer_inv_item = gInventory.getItem(item_id);
                 if (!viewer_inv_item->getPermissions().allowOperationBy(PERM_COPY, gAgent.getID(), gAgent.getGroupID()) &&
@@ -1576,7 +1607,28 @@ bool move_item_to_marketplacelistings(LLInventoryItem* inv_item, LLUUID dest_fol
             if (depth == 0)
             {
                 // We need a listing folder
-               gInventory.createNewCategory(dest_folder, LLFolderType::FT_NONE, viewer_inv_item->getName(), callback_dest_create);
+               gInventory.createNewCategory(dest_folder,
+                                            LLFolderType::FT_NONE,
+                                            viewer_inv_item->getName(),
+                                            [callback_dest_create](const LLUUID &new_cat_id)
+                                            {
+                                                if (new_cat_id.isNull())
+                                                {
+                                                    LL_WARNS() << "Failed to create listing folder for marketpace" << LL_ENDL;
+                                                    return;
+                                                }
+                                                LLViewerInventoryCategory *dest_cat = gInventory.getCategory(new_cat_id);
+                                                if (!dest_cat)
+                                                {
+                                                    LL_WARNS() << "Failed to find freshly created listing folder" << LL_ENDL;
+                                                    return;
+                                                }
+                                                // version folder
+                                                gInventory.createNewCategory(new_cat_id,
+                                                                             LLFolderType::FT_NONE,
+                                                                             dest_cat->getName(),
+                                                                             callback_dest_create);
+                                            });
             }
             if (depth == 1)
             {
@@ -1728,16 +1780,20 @@ void validate_marketplacelistings(
             gInventory.createNewCategory(parent_uuid,
                 LLFolderType::FT_NONE,
                 cat->getName(),
-                [cat_uuid, cb_result, cb_msg, fix_hierarchy, depth, notify_observers](const LLUUID &new_cat_id)
+                [cat_uuid, cb_result, cb_msg, fix_hierarchy, depth](const LLUUID &new_cat_id)
             {
+                if (new_cat_id.isNull())
+                {
+                    cb_result(0, false);
+                    return;
+                }
                 LLInventoryCategory * move_cat = gInventory.getCategory(cat_uuid);
                 LLViewerInventoryCategory * viewer_cat = (LLViewerInventoryCategory *)(move_cat);
                 LLInventoryCategory * new_cat = gInventory.getCategory(new_cat_id);
                 gInventory.changeCategoryParent(viewer_cat, new_cat_id, false);
                 S32 pending = 0;
                 bool result = true;
-                // notify_observers probably should be true in such case?
-                validate_marketplacelistings(new_cat, cb_result, cb_msg, fix_hierarchy, depth + 1, notify_observers, pending, result);
+                validate_marketplacelistings(new_cat, cb_result, cb_msg, fix_hierarchy, depth + 1, true, pending, result);
                 cb_result(pending, result);
             }
             );
@@ -2373,14 +2429,46 @@ std::string get_searchable_UUID(LLInventoryModel* model, const LLUUID& item_id)
     }
     return LLStringUtil::null;
 }
+
+bool can_share_item(const LLUUID& item_id)
+{
+    bool can_share = false;
+
+    if (gInventory.isObjectDescendentOf(item_id, gInventory.getRootFolderID()))
+    {
+            const LLViewerInventoryItem *item = gInventory.getItem(item_id);
+            if (item)
+            {
+                if (LLInventoryCollectFunctor::itemTransferCommonlyAllowed(item))
+                {
+                    can_share = LLGiveInventory::isInventoryGiveAcceptable(item);
+                }
+            }
+            else
+            {
+                can_share = (gInventory.getCategory(item_id) != NULL);
+            }
+
+            const LLUUID trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
+            if ((item_id == trash_id) || gInventory.isObjectDescendentOf(item_id, trash_id))
+            {
+                can_share = false;
+            }
+    }
+
+    return can_share;
+}
 ///----------------------------------------------------------------------------
 /// LLMarketplaceValidator implementations
 ///----------------------------------------------------------------------------
 
 
 LLMarketplaceValidator::LLMarketplaceValidator()
+    : mPendingCallbacks(0)
+    , mValidationInProgress(false)
 {
 }
+
 LLMarketplaceValidator::~LLMarketplaceValidator()
 {
 }
@@ -2408,9 +2496,20 @@ void LLMarketplaceValidator::start()
         return;
     }
     mValidationInProgress = true;
-    mPendingCallbacks = 1; // do '1' in case something decides ro callback immediately
+
     const ValidationRequest &first = mValidationQueue.front();
     LLViewerInventoryCategory* cat = gInventory.getCategory(first.mCategoryId);
+    if (!cat)
+    {
+        LL_WARNS() << "Tried to validate a folder that doesn't exist" << LL_ENDL;
+        if (first.mCbDone)
+        {
+            first.mCbDone(false);
+        }
+        mValidationQueue.pop();
+        start();
+        return;
+    }
 
     validation_result_callback_t result_callback = [](S32 pending, bool result)
     {
@@ -2431,6 +2530,11 @@ void LLMarketplaceValidator::start()
         }
     };
 
+    mPendingResult = true;
+    mPendingCallbacks = 1; // do '1' in case something decides to callback immediately
+
+    S32 pending_calbacks = 0;
+    bool result = true;
     validate_marketplacelistings(
         cat,
         result_callback,
@@ -2438,10 +2542,10 @@ void LLMarketplaceValidator::start()
         first.mFixHierarchy,
         first.mDepth,
         true,
-        mPendingCallbacks,
-        mPendingResult);
+        pending_calbacks,
+        result);
 
-    result_callback(mPendingCallbacks, mPendingResult);
+    result_callback(pending_calbacks, result);
 }
 
 LLMarketplaceValidator::ValidationRequest::ValidationRequest(

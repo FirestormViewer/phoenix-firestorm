@@ -29,6 +29,7 @@
 #include "llaisapi.h"
 
 #include "llagent.h"
+#include "llappviewer.h"
 #include "llcallbacklist.h"
 #include "llinventorymodel.h"
 #include "llsdutil.h"
@@ -100,7 +101,10 @@ void AISAPI::CreateInventory(const LLUUID& parentId, const LLSD& newInventory, c
     if (cap.empty())
     {
         LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
-        callback(LLUUID::null);
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
         return;
     }
 
@@ -143,6 +147,10 @@ void AISAPI::SlamFolder(const LLUUID& folderId, const LLSD& newInventory, comple
     if (cap.empty())
     {
         LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
         return;
     }
 
@@ -178,6 +186,10 @@ void AISAPI::RemoveCategory(const LLUUID &categoryId, completion_t callback)
     if (cap.empty())
     {
         LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
         return;
     }
 
@@ -211,6 +223,10 @@ void AISAPI::RemoveItem(const LLUUID &itemId, completion_t callback)
     if (cap.empty())
     {
         LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
         return;
     }
 
@@ -243,6 +259,10 @@ void AISAPI::CopyLibraryCategory(const LLUUID& sourceId, const LLUUID& destId, b
     if (cap.empty())
     {
         LL_WARNS("Inventory") << "Library cap not found!" << LL_ENDL;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
         return;
     }
 
@@ -287,6 +307,10 @@ void AISAPI::PurgeDescendents(const LLUUID &categoryId, completion_t callback)
     if (cap.empty())
     {
         LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
         return;
     }
 
@@ -321,6 +345,10 @@ void AISAPI::UpdateCategory(const LLUUID &categoryId, const LLSD &updates, compl
     if (cap.empty())
     {
         LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
         return;
     }
     std::string url = cap + std::string("/category/") + categoryId.asString();
@@ -353,6 +381,10 @@ void AISAPI::UpdateItem(const LLUUID &itemId, const LLSD &updates, completion_t 
     if (cap.empty())
     {
         LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
         return;
     }
     std::string url = cap + std::string("/item/") + itemId.asString();
@@ -384,6 +416,10 @@ void AISAPI::FetchItem(const LLUUID &itemId, ITEM_TYPE type, completion_t callba
 	if (cap.empty())
 	{
 		LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
 		return;
 	}
 	std::string url = cap + std::string("/item/") + itemId.asString();
@@ -415,19 +451,26 @@ void AISAPI::FetchCategoryChildren(const LLUUID &catId, ITEM_TYPE type, bool rec
     if (cap.empty())
     {
         LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
-        callback(LLUUID::null);
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
         return;
     }
     std::string url = cap + std::string("/category/") + catId.asString() + "/children";
 
     if (recursive)
     {
-        url += "?depth=*";
+        // can specify depth=*, but server side is going to cap requests
+        // and reject everything 'over the top',.
+        depth = 50;
     }
     else
     {
-        url += "?depth=" + std::to_string(depth);
+        depth = llmax(depth, 50);
     }
+
+    url += "?depth=" + std::to_string(depth);
 
     invokationFn_t getFn = boost::bind(
         // Humans ignore next line.  It is just a cast to specify which LLCoreHttpUtil::HttpCoroutineAdapter routine overload.
@@ -443,7 +486,7 @@ void AISAPI::FetchCategoryChildren(const LLUUID &catId, ITEM_TYPE type, bool rec
 
     // get doesn't use body, can pass additional data
     LLSD body;
-    body["depth"] = recursive ? S32_MAX : depth;
+    body["depth"] = depth;
     LLCoprocedureManager::CoProcedure_t proc(boost::bind(&AISAPI::InvokeAISCommandCoro,
         _1, getFn, url, catId, body, callback, FETCHCATEGORYCHILDREN));
 
@@ -461,19 +504,26 @@ void AISAPI::FetchCategoryChildren(const std::string &identifier, bool recursive
     if (cap.empty())
     {
         LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
-        callback(LLUUID::null);
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
         return;
     }
     std::string url = cap + std::string("/category/") + identifier + "/children";
 
     if (recursive)
     {
-        url += "?depth=*";
+        // can specify depth=*, but server side is going to cap requests
+        // and reject everything 'over the top',.
+        depth = 50;
     }
     else
     {
-        url += "?depth=" + std::to_string(depth);
+        depth = llmax(depth, 50);
     }
+
+    url += "?depth=" + std::to_string(depth);
 
     invokationFn_t getFn = boost::bind(
         // Humans ignore next line.  It is just a cast to specify which LLCoreHttpUtil::HttpCoroutineAdapter routine overload.
@@ -489,7 +539,7 @@ void AISAPI::FetchCategoryChildren(const std::string &identifier, bool recursive
 
     // get doesn't use body, can pass additional data
     LLSD body;
-    body["depth"] = recursive ? S32_MAX : depth;
+    body["depth"] = depth;
     LLCoprocedureManager::CoProcedure_t proc(boost::bind(&AISAPI::InvokeAISCommandCoro,
         _1, getFn, url, LLUUID::null, body, callback, FETCHCATEGORYCHILDREN));
 
@@ -505,18 +555,26 @@ void AISAPI::FetchCategoryCategories(const LLUUID &catId, ITEM_TYPE type, bool r
     if (cap.empty())
     {
         LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
         return;
     }
     std::string url = cap + std::string("/category/") + catId.asString() + "/categories";
 
     if (recursive)
     {
-        url += "?depth=*";
+        // can specify depth=*, but server side is going to cap requests
+        // and reject everything 'over the top',.
+        depth = 50;
     }
     else
     {
-        url += "?depth=" + std::to_string(depth);
+        depth = llmax(depth, 50);
     }
+
+    url += "?depth=" + std::to_string(depth);
 
     invokationFn_t getFn = boost::bind(
         // Humans ignore next line.  It is just a cast to specify which LLCoreHttpUtil::HttpCoroutineAdapter routine overload.
@@ -537,6 +595,39 @@ void AISAPI::FetchCategoryCategories(const LLUUID &catId, ITEM_TYPE type, bool r
         _1, getFn, url, catId, body, callback, FETCHCATEGORYCATEGORIES));
 
     EnqueueAISCommand("FetchCategoryCategories", proc);
+}
+
+/*static*/
+void AISAPI::FetchOrphans(completion_t callback)
+{
+    std::string cap = getInvCap();
+    if (cap.empty())
+    {
+        LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
+        return;
+    }
+    std::string url = cap + std::string("/orphans");
+
+    invokationFn_t getFn = boost::bind(
+        // Humans ignore next line.  It is just a cast to specify which LLCoreHttpUtil::HttpCoroutineAdapter routine overload.
+        static_cast<LLSD(LLCoreHttpUtil::HttpCoroutineAdapter::*)(LLCore::HttpRequest::ptr_t , const std::string& , LLCore::HttpOptions::ptr_t , LLCore::HttpHeaders::ptr_t)>
+        //----
+        // _1 -> httpAdapter
+        // _2 -> httpRequest
+        // _3 -> url
+        // _4 -> body 
+        // _5 -> httpOptions
+        // _6 -> httpHeaders
+        (&LLCoreHttpUtil::HttpCoroutineAdapter::getAndSuspend) , _1 , _2 , _3 , _5 , _6);
+
+    LLCoprocedureManager::CoProcedure_t proc(boost::bind(&AISAPI::InvokeAISCommandCoro ,
+                                                         _1 , getFn , url , LLUUID::null , LLSD() , callback , FETCHORPHANS));
+
+    EnqueueAISCommand("FetchOrphans" , proc);
 }
 
 /*static*/
@@ -600,7 +691,8 @@ void AISAPI::onUpdateReceived(const std::string& context, const LLSD& update, CO
     }
     bool is_fetch = (type == FETCHITEM)
         || (type == FETCHCATEGORYCHILDREN)
-        || (type == FETCHCATEGORYCATEGORIES);
+        || (type == FETCHCATEGORYCATEGORIES)
+        || (type == FETCHORPHANS);
     // parse update llsd into stuff to do or parse received items.
     S32 depth = 0;
     if (is_fetch && request_body.has("depth"))
@@ -609,7 +701,7 @@ void AISAPI::onUpdateReceived(const std::string& context, const LLSD& update, CO
     }
     AISUpdate ais_update(update, is_fetch, depth);
     ais_update.doUpdate(); // execute the updates in the appropriate order.
-    LL_DEBUGS("Inventory") << "elapsed: " << timer.getElapsedTimeF32() << LL_ENDL;
+    LL_DEBUGS("Inventory", "AIS3") << "Elapsed processing: " << timer.getElapsedTimeF32() << LL_ENDL;
 }
 
 /*static*/
@@ -617,17 +709,47 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
         invokationFn_t invoke, std::string url, 
         LLUUID targetId, LLSD body, completion_t callback, COMMAND_TYPE type)
 {
+    if (gDisconnected)
+    {
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
+        return;
+    }
+
     LLCore::HttpOptions::ptr_t httpOptions(new LLCore::HttpOptions);
     LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest());
     LLCore::HttpHeaders::ptr_t httpHeaders;
 
     httpOptions->setTimeout(180);
 
-    LL_DEBUGS("Inventory") << "url: " << url << LL_ENDL;
+    LL_DEBUGS("Inventory") << "Request url: " << url << LL_ENDL;
 
-    LLSD result = invoke(httpAdapter, httpRequest, url, body, httpOptions, httpHeaders);
-    LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
-    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+    LLSD result;
+    LLSD httpResults;
+    LLCore::HttpStatus status;
+
+    if (debugLoggingEnabled("Inventory"))
+    {
+        LLTimer ais_timer;
+        ais_timer.start();
+        result = invoke(httpAdapter , httpRequest , url , body , httpOptions , httpHeaders);
+        httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+        status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+        F32MillisecondsImplicit elapsed_time = ais_timer.getElapsedTimeF32();
+
+        LL_DEBUGS("Inventory") << "Request type: " << (S32)type
+            << " \nRequest target: " << targetId
+            << " \nElapsed time ince request: " << elapsed_time
+            << " \nstatus: " << status.toULong() << LL_ENDL;
+    }
+    else
+    {
+        result = invoke(httpAdapter , httpRequest , url , body , httpOptions , httpHeaders);
+        httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+        status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+    }
 
     if (!status || !result.isMap())
     {
@@ -680,7 +802,7 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
         LL_WARNS("Inventory") << ll_pretty_print_sd(result) << LL_ENDL;
     }
 
-	LL_DEBUGS("Inventory") << result << LL_ENDL;
+	LL_DEBUGS("Inventory", "AIS3") << "Result: " << result << LL_ENDL;
     onUpdateReceived("AISCommand", result, type, body);
 
     if (callback && !callback.empty())
@@ -811,6 +933,7 @@ void AISUpdate::clearParseResults()
 	mCatDescendentsKnown.clear();
 	mCatVersionsUpdated.clear();
 	mItemsCreated.clear();
+    mItemsLost.clear();
 	mItemsUpdated.clear();
 	mCategoriesCreated.clear();
 	mCategoriesUpdated.clear();
@@ -946,6 +1069,11 @@ void AISUpdate::parseItem(const LLSD& item_map)
             mItemsCreated[item_id] = new_item;
             mCatDescendentDeltas[new_item->getParentUUID()];
             new_item->setComplete(true);
+
+            if (new_item->getParentUUID().isNull())
+            {
+                mItemsLost[item_id] = new_item;
+            }
         }
         else if (curr_item)
 		{
@@ -995,6 +1123,11 @@ void AISUpdate::parseLink(const LLSD& link_map)
             mItemsCreated[item_id] = new_link;
             mCatDescendentDeltas[parent_id];
             new_link->setComplete(true);
+
+            if (new_link->getParentUUID().isNull())
+            {
+                mItemsLost[item_id] = new_link;
+            }
         }
 		else if (curr_link)
 		{
@@ -1353,6 +1486,24 @@ void AISUpdate::doUpdate()
 			LL_DEBUGS("Inventory") << "updated category " << new_category->getName() << " " << category_id << LL_ENDL;
 		}
 	}
+
+    // LOST ITEMS
+    if (!mItemsLost.empty())
+    {
+        LL_INFOS("Inventory") << "Received " << (S32)mItemsLost.size() << " items without a parent" << LL_ENDL;
+        const LLUUID lost_uuid(gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND));
+        if (lost_uuid.notNull())
+        {
+            for (deferred_item_map_t::const_iterator lost_it = mItemsLost.begin();
+                 lost_it != mItemsLost.end(); ++lost_it)
+            {
+                LLPointer<LLViewerInventoryItem> new_item = lost_it->second;
+
+                new_item->setParent(lost_uuid);
+                new_item->updateParentOnServer(FALSE);
+            }
+        }
+    }
 
 	// CREATE ITEMS
 	for (deferred_item_map_t::const_iterator create_it = mItemsCreated.begin();

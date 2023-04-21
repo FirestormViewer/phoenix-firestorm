@@ -84,12 +84,19 @@ LLInventoryGallery::LLInventoryGallery(const LLInventoryGallery::Params& p)
       mRowPanWidthFactor(p.row_panel_width_factor),
       mGalleryWidthFactor(p.gallery_width_factor),
       mIsInitialized(false),
-      mSearchType(LLInventoryFilter::SEARCHTYPE_NAME),
-      mSearchLinks(true)
+      mSearchType(LLInventoryFilter::SEARCHTYPE_NAME)
 {
     updateGalleryWidth();
-
+    mFilter = new LLInventoryFilter();
     mCategoriesObserver = new LLInventoryCategoriesObserver();
+    mThumbnailsObserver = new LLThumbnailsObserver();
+    gInventory.addObserver(mThumbnailsObserver);
+
+    mGestureObserver = new LLGalleryGestureObserver(this);
+    LLGestureMgr::instance().addObserver(mGestureObserver);
+
+    mUsername = gAgentUsername;
+    LLStringUtil::toUpper(mUsername);
 }
 
 LLInventoryGallery::Params::Params()
@@ -124,6 +131,7 @@ BOOL LLInventoryGallery::postBuild()
 LLInventoryGallery::~LLInventoryGallery()
 {
     delete mInventoryGalleryMenu;
+    delete mFilter;
 
     while (!mUnusedRowPanels.empty())
     {
@@ -143,6 +151,15 @@ LLInventoryGallery::~LLInventoryGallery()
         gInventory.removeObserver(mCategoriesObserver);
     }
     delete mCategoriesObserver;
+
+    if (gInventory.containsObserver(mThumbnailsObserver))
+    {
+        gInventory.removeObserver(mThumbnailsObserver);
+    }
+    delete mThumbnailsObserver;
+    
+    LLGestureMgr::instance().removeObserver(mGestureObserver);
+    delete mGestureObserver;
 }
 
 void LLInventoryGallery::setRootFolder(const LLUUID cat_id)
@@ -168,6 +185,11 @@ void LLInventoryGallery::updateRootFolder()
         for (S32 i = count - 1; i >= 0; i--)
         {
             updateRemovedItem(mItems[i]->getUUID());
+        }
+        S32 hidden_count = mHiddenItems.size();
+        for (S32 i = hidden_count - 1; i >= 0; i--)
+        {
+            updateRemovedItem(mHiddenItems[i]->getUUID());
         }
         
         if (gInventory.containsObserver(mCategoriesObserver))
@@ -222,6 +244,9 @@ void LLInventoryGallery::updateRootFolder()
         }
     }
 
+    const LLUUID cof = gInventory.findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT);
+    mCategoriesObserver->addCategory(cof, boost::bind(&LLInventoryGallery::onCOFChanged, this));
+
     if (!mGalleryCreated)
     {
         initGallery();
@@ -251,20 +276,26 @@ void LLInventoryGallery::draw()
     LLPanel::draw();
     if (mGalleryCreated)
     {
-        updateRowsIfNeeded();
+        if(!updateRowsIfNeeded())
+        {
+            handleModifiedFilter();
+        }
     }
 }
 
-void LLInventoryGallery::updateRowsIfNeeded()
+bool LLInventoryGallery::updateRowsIfNeeded()
 {
     if(((getRect().getWidth() - mRowPanelWidth) > mItemWidth) && mRowCount > 1)
     {
         reArrangeRows(1);
+        return true;
     }
     else if((mRowPanelWidth > (getRect().getWidth() + mItemHorizontalGap)) && mItemsInRow > GALLERY_ITEMS_PER_ROW_MIN)
     {
         reArrangeRows(-1);
+        return true;
     }
+    return false;
 }
 
 bool compareGalleryItem(LLInventoryGalleryItem* item1, LLInventoryGalleryItem* item2)
@@ -309,6 +340,7 @@ void LLInventoryGallery::reArrangeRows(S32 row_diff)
         applyFilter(*it, mFilterSubString);
         addToGallery(*it);
     }
+    mFilter->clearModified();
     updateMessageVisibility();
 }
 
@@ -462,7 +494,7 @@ void LLInventoryGallery::removeFromLastRow(LLInventoryGalleryItem* item)
     mItemPanels.pop_back();
 }
 
-LLInventoryGalleryItem* LLInventoryGallery::buildGalleryItem(std::string name, LLUUID item_id, LLAssetType::EType type, LLUUID thumbnail_id, LLInventoryType::EType inventory_type, U32 flags, bool is_link)
+LLInventoryGalleryItem* LLInventoryGallery::buildGalleryItem(std::string name, LLUUID item_id, LLAssetType::EType type, LLUUID thumbnail_id, LLInventoryType::EType inventory_type, U32 flags, bool is_link, bool is_worn)
 {
     LLInventoryGalleryItem::Params giparams;
     LLInventoryGalleryItem* gitem = LLUICtrlFactory::create<LLInventoryGalleryItem>(giparams);
@@ -475,6 +507,7 @@ LLInventoryGalleryItem* LLInventoryGallery::buildGalleryItem(std::string name, L
     gitem->setGallery(this);
     gitem->setType(type, inventory_type, flags, is_link);
     gitem->setThumbnail(thumbnail_id);
+    gitem->setWorn(is_worn);
     gitem->setCreatorName(get_searchable_creator_name(&gInventory, item_id));
     gitem->setDescription(get_searchable_description(&gInventory, item_id));
     gitem->setAssetIDStr(get_searchable_UUID(&gInventory, item_id));
@@ -554,20 +587,59 @@ void LLInventoryGallery::moveRowPanel(LLPanel* stack, int left, int bottom)
 void LLInventoryGallery::setFilterSubString(const std::string& string)
 {
     mFilterSubString = string;
-    reArrangeRows();
+    mFilter->setFilterSubString(string);
+    
+    //reArrangeRows();
 }
 
 void LLInventoryGallery::applyFilter(LLInventoryGalleryItem* item, const std::string& filter_substring)
 {
-    if (!item) return;
-
-    std::string desc;
-    if(!mSearchLinks && item->isLink())
+    if(item)
     {
-        item->setHidden(true);
-        return;
+        item->setHidden(!checkAgainstFilters(item, filter_substring));
+    }
+}
+
+bool LLInventoryGallery::checkAgainstFilters(LLInventoryGalleryItem* item, const std::string& filter_substring)
+{
+    if (!item) return false;
+
+    if (item->isFolder() && (mFilter->getShowFolderState() == LLInventoryFilter::SHOW_ALL_FOLDERS))
+    {
+        return true;
     }
 
+    if(item->isLink() && ((mFilter->getSearchVisibilityTypes() & LLInventoryFilter::VISIBILITY_LINKS) == 0) && !filter_substring.empty())
+    {
+        return false;
+    }
+    
+    bool hidden = false;
+
+    if(mFilter->getFilterCreatorType() == LLInventoryFilter::FILTERCREATOR_SELF)
+    {
+        hidden = (item->getCreatorName() == mUsername) || item->isFolder();
+    }
+    else if(mFilter->getFilterCreatorType() == LLInventoryFilter::FILTERCREATOR_OTHERS)
+    {
+        hidden = (item->getCreatorName() != mUsername) || item->isFolder();
+    }
+    if(hidden)
+    {
+        return false;
+    }
+
+    if(!mFilter->checkAgainstFilterThumbnails(item->getUUID()))
+    {
+        return false;
+    }
+
+    if(!checkAgainstFilterType(item->getUUID()))
+    {
+        return false;
+    }
+
+    std::string desc;
     switch(mSearchType)
     {
         case LLInventoryFilter::SEARCHTYPE_CREATOR:
@@ -581,7 +653,7 @@ void LLInventoryGallery::applyFilter(LLInventoryGalleryItem* item, const std::st
             break;
         case LLInventoryFilter::SEARCHTYPE_NAME:
         default:
-            desc = item->getItemName();
+            desc = item->getItemName() + item->getItemNameSuffix();
             break;
     }
     
@@ -590,8 +662,8 @@ void LLInventoryGallery::applyFilter(LLInventoryGalleryItem* item, const std::st
     std::string cur_filter = filter_substring;
     LLStringUtil::toUpper(cur_filter);
 
-    bool hidden = (std::string::npos == desc.find(cur_filter));
-    item->setHidden(hidden);
+    hidden = (std::string::npos == desc.find(cur_filter));
+    return !hidden;
 }
 
 void LLInventoryGallery::setSearchType(LLInventoryFilter::ESearchType type)
@@ -603,15 +675,6 @@ void LLInventoryGallery::setSearchType(LLInventoryFilter::ESearchType type)
         {
             reArrangeRows();
         }
-    }
-}
-
-void LLInventoryGallery::toggleSearchLinks()
-{
-    mSearchLinks = !mSearchLinks;
-    if(!mFilterSubString.empty())
-    {
-        reArrangeRows();
     }
 }
 
@@ -641,7 +704,22 @@ void LLInventoryGallery::updateAddedItem(LLUUID item_id)
     LLUUID thumbnail_id = obj->getThumbnailUUID();;
     LLInventoryType::EType inventory_type(LLInventoryType::IT_CATEGORY);
     U32 misc_flags = 0;
-    if (LLAssetType::AT_CATEGORY == obj->getType())
+    bool is_worn = false;
+    LLInventoryItem* inv_item = gInventory.getItem(item_id);
+    if (inv_item)
+    {
+        inventory_type = inv_item->getInventoryType();
+        misc_flags = inv_item->getFlags();
+        if (LLAssetType::AT_GESTURE == obj->getType())
+        {
+            is_worn = LLGestureMgr::instance().isGestureActive(item_id);
+        }
+        else
+        {
+            is_worn = LLAppearanceMgr::instance().isLinkedInCOF(item_id);
+        }
+    }
+    else if (LLAssetType::AT_CATEGORY == obj->getType())
     {
         name = get_localized_folder_name(item_id);
         if(thumbnail_id.isNull())
@@ -649,32 +727,19 @@ void LLInventoryGallery::updateAddedItem(LLUUID item_id)
             thumbnail_id = getOutfitImageID(item_id);
         }
     }
-    else
-    {
-        LLInventoryItem* inv_item = gInventory.getItem(item_id);
-        if (inv_item)
-        {
-            inventory_type = inv_item->getInventoryType();
-            misc_flags = inv_item->getFlags();
-        }
-    }
-    
-    LLInventoryGalleryItem* item = buildGalleryItem(name, item_id, obj->getType(), thumbnail_id, inventory_type, misc_flags, obj->getIsLinkType());
+
+    LLInventoryGalleryItem* item = buildGalleryItem(name, item_id, obj->getType(), thumbnail_id, inventory_type, misc_flags, obj->getIsLinkType(), is_worn);
     mItemMap.insert(LLInventoryGallery::gallery_item_map_t::value_type(item_id, item));
     item->setRightMouseDownCallback(boost::bind(&LLInventoryGallery::showContextMenu, this, _1, _2, _3, item_id));
-    item->setFocusReceivedCallback(boost::bind(&LLInventoryGallery::onChangeItemSelection, this, item_id));
+    item->setFocusReceivedCallback(boost::bind(&LLInventoryGallery::changeItemSelection, this, item_id, false));
     if (mGalleryCreated)
     {
+        applyFilter(item, mFilterSubString);
         addToGallery(item);
     }
 
-    if (mCategoriesObserver == NULL)
-    {
-        mCategoriesObserver = new LLInventoryCategoriesObserver();
-        gInventory.addObserver(mCategoriesObserver);
-    }
-    mCategoriesObserver->addCategory(item_id,
-        boost::bind(&LLInventoryGallery::updateItemThumbnail, this, item_id), true);
+    mThumbnailsObserver->addItem(item_id,
+        boost::bind(&LLInventoryGallery::updateItemThumbnail, this, item_id));
 }
 
 void LLInventoryGallery::updateRemovedItem(LLUUID item_id)
@@ -682,7 +747,7 @@ void LLInventoryGallery::updateRemovedItem(LLUUID item_id)
     gallery_item_map_t::iterator item_iter = mItemMap.find(item_id);
     if (item_iter != mItemMap.end())
     {
-        mCategoriesObserver->removeCategory(item_id);
+        mThumbnailsObserver->removeItem(item_id);
 
         LLInventoryGalleryItem* item = item_iter->second;
 
@@ -696,7 +761,6 @@ void LLInventoryGallery::updateRemovedItem(LLUUID item_id)
             item->die();
         }
     }
-
 }
 
 void LLInventoryGallery::updateChangedItemName(LLUUID item_id, std::string name)
@@ -708,6 +772,19 @@ void LLInventoryGallery::updateChangedItemName(LLUUID item_id, std::string name)
         if (item)
         {
             item->setName(name);
+        }
+    }
+}
+
+void LLInventoryGallery::updateWornItem(LLUUID item_id, bool is_worn)
+{
+    gallery_item_map_t::iterator iter = mItemMap.find(item_id);
+    if (iter != mItemMap.end())
+    {
+        LLInventoryGalleryItem* item = iter->second;
+        if (item)
+        {
+            item->setWorn(is_worn);
         }
     }
 }
@@ -729,6 +806,13 @@ void LLInventoryGallery::updateItemThumbnail(LLUUID item_id)
     if (mItemMap[item_id])
     {
         mItemMap[item_id]->setThumbnail(thumbnail_id);
+
+        bool passes_filter = checkAgainstFilters(mItemMap[item_id], mFilterSubString);
+        if((mItemMap[item_id]->isHidden() && passes_filter)
+           || (!mItemMap[item_id]->isHidden() && !passes_filter))
+        {
+            reArrangeRows();
+        }
     }
 }
 
@@ -742,26 +826,71 @@ void LLInventoryGallery::showContextMenu(LLUICtrl* ctrl, S32 x, S32 y, const LLU
     }
 }
 
-void LLInventoryGallery::onChangeItemSelection(const LLUUID& category_id)
+void LLInventoryGallery::changeItemSelection(const LLUUID& item_id, bool scroll_to_selection)
 {
-    if (mSelectedItemID == category_id)
+    if ((mItemMap.count(item_id) == 0))
+    {
+        mItemToSelect = item_id;
         return;
+    }
+    if (mSelectedItemID != item_id)
+    {
+        
+        if (mItemMap[mSelectedItemID])
+        {
+            mItemMap[mSelectedItemID]->setSelected(FALSE);
+        }
+        if (mItemMap[item_id])
+        {
+            mItemMap[item_id]->setSelected(TRUE);
+        }
+        mSelectedItemID = item_id;
+        signalSelectionItemID(item_id);
 
-    if (mItemMap[mSelectedItemID])
-    {
-        mItemMap[mSelectedItemID]->setSelected(FALSE);
+        mItemToSelect = LLUUID::null;
+        if(scroll_to_selection)
+        {
+            scrollToShowItem(mSelectedItemID);
+        }
     }
-    if (mItemMap[category_id])
+}
+
+void LLInventoryGallery::scrollToShowItem(const LLUUID& item_id)
+{
+    LLInventoryGalleryItem* item = mItemMap[item_id];
+    if(item)
     {
-        mItemMap[category_id]->setSelected(TRUE);
+        const LLRect visible_content_rect = mScrollPanel->getVisibleContentRect();
+
+        LLRect item_rect;
+        item->localRectToOtherView(item->getLocalRect(), &item_rect, this);
+        LLRect overlap_rect(item_rect);
+        overlap_rect.intersectWith(visible_content_rect);
+
+        //Scroll when the selected item is outside the visible area
+        if (overlap_rect.getHeight() + 5 < item->getRect().getHeight())
+        {
+            LLRect content_rect = mScrollPanel->getContentWindowRect();
+            LLRect constraint_rect;
+            constraint_rect.setOriginAndSize(0, 0, content_rect.getWidth(), content_rect.getHeight());
+
+            LLRect item_doc_rect;
+            item->localRectToOtherView(item->getLocalRect(), &item_doc_rect, this);
+
+            mScrollPanel->scrollToShowRect( item_doc_rect, constraint_rect );
+        }
     }
-    mSelectedItemID = category_id;
-    signalSelectionItemID(category_id);
 }
 
 void LLInventoryGallery::updateMessageVisibility()
 {
+
     mMessageTextBox->setVisible(mItems.empty());
+    if(mItems.empty())
+    {
+        mMessageTextBox->setText(hasDescendents(mFolderID) ? LLTrans::getString("InventorySingleFolderEmpty") : LLTrans::getString("InventorySingleFolderNoMatches"));
+    }
+
     mScrollPanel->setVisible(!mItems.empty());
 }
 
@@ -806,6 +935,11 @@ void LLInventoryGallery::refreshList(const LLUUID& category_id)
 
         updateChangedItemName(*items_iter, obj->getName());
     }
+
+    if(mItemToSelect.notNull())
+    {
+        changeItemSelection(mItemToSelect, true);
+    }
     updateMessageVisibility();
 }
 
@@ -834,6 +968,77 @@ void LLInventoryGallery::computeDifference(
     getCurrentCategories(vcur);
 
     LLCommonUtils::computeDifference(vnew, vcur, vadded, vremoved);
+}
+
+void LLInventoryGallery::onCOFChanged()
+{
+    LLInventoryModel::cat_array_t cat_array;
+    LLInventoryModel::item_array_t item_array;
+
+    gInventory.collectDescendents(
+        LLAppearanceMgr::instance().getCOF(),
+        cat_array,
+        item_array,
+        LLInventoryModel::EXCLUDE_TRASH);
+
+    uuid_vec_t vnew;
+    uuid_vec_t vadded;
+    uuid_vec_t vremoved;
+
+    for (LLInventoryModel::item_array_t::const_iterator iter = item_array.begin();
+        iter != item_array.end();
+        ++iter)
+    {
+        vnew.push_back((*iter)->getLinkedUUID());
+    }
+
+    // We need to update only items that were added or removed from COF.
+    LLCommonUtils::computeDifference(vnew, mCOFLinkedItems, vadded, vremoved);
+
+    mCOFLinkedItems = vnew;
+    
+    for (uuid_vec_t::const_iterator iter = vadded.begin();
+        iter != vadded.end();
+        ++iter)
+    {
+        updateWornItem(*iter, true);
+    }
+
+    for (uuid_vec_t::const_iterator iter = vremoved.begin(); iter != vremoved.end(); ++iter)
+    {
+        updateWornItem(*iter, false);
+    }
+}
+
+void LLInventoryGallery::onGesturesChanged()
+{
+    uuid_vec_t vnew;
+    uuid_vec_t vadded;
+    uuid_vec_t vremoved;
+
+    const LLGestureMgr::item_map_t& active_gestures = LLGestureMgr::instance().getActiveGestures();
+    for (LLGestureMgr::item_map_t::const_iterator iter = active_gestures.begin();
+        iter != active_gestures.end();
+        ++iter)
+    {
+        vnew.push_back(iter->first);
+    }
+
+    LLCommonUtils::computeDifference(vnew, mActiveGestures, vadded, vremoved);
+
+    mActiveGestures = vnew;
+    
+    for (uuid_vec_t::const_iterator iter = vadded.begin();
+        iter != vadded.end();
+        ++iter)
+    {
+        updateWornItem(*iter, true);
+    }
+
+    for (uuid_vec_t::const_iterator iter = vremoved.begin(); iter != vremoved.end(); ++iter)
+    {
+        updateWornItem(*iter, false);
+    }
 }
 
 void LLInventoryGallery::deselectItem(const LLUUID& category_id)
@@ -885,7 +1090,7 @@ LLUUID LLInventoryGallery::getOutfitImageID(LLUUID outfit_id)
     return thumbnail_id;
 }
 
-boost::signals2::connection LLInventoryGallery::setRootChangedCallback(root_changed_callback_t cb)
+boost::signals2::connection LLInventoryGallery::setRootChangedCallback(callback_t cb)
 {
     return mRootChangedSignal.connect(cb);
 }
@@ -945,6 +1150,101 @@ BOOL LLInventoryGallery::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
     return handled;
 }
 
+bool LLInventoryGallery::hasDescendents(const LLUUID& cat_id)
+{
+    LLInventoryModel::cat_array_t* cats;
+    LLInventoryModel::item_array_t* items;
+    gInventory.getDirectDescendentsOf(cat_id, cats, items);
+
+    return (cats->empty() && items->empty());
+}
+
+bool LLInventoryGallery::checkAgainstFilterType(const LLUUID& object_id)
+{
+    const LLInventoryObject *object = gInventory.getObject(object_id);
+    if(!object) return false;
+
+    LLInventoryType::EType object_type = LLInventoryType::IT_CATEGORY;
+    LLInventoryItem* inv_item = gInventory.getItem(object_id);
+    if (inv_item)
+    {
+        object_type = inv_item->getInventoryType();
+    }
+    const U32 filterTypes = mFilter->getFilterTypes();
+
+    if ((filterTypes & LLInventoryFilter::FILTERTYPE_OBJECT) && inv_item)
+    {
+        switch (object_type)
+        {
+        case LLInventoryType::IT_NONE:
+            // If it has no type, pass it, unless it's a link.
+            if (object && object->getIsLinkType())
+            {
+                return false;
+            }
+            break;
+        case LLInventoryType::IT_UNKNOWN:
+            {
+                // Unknows are only shown when we show every type.
+                // Unknows are 255 and won't fit in 64 bits.
+                if (mFilter->getFilterObjectTypes() != 0xffffffffffffffffULL)
+                {
+                    return false;
+                }
+                break;
+            }
+        default:
+            if ((1LL << object_type & mFilter->getFilterObjectTypes()) == U64(0))
+            {
+                return false;
+            }
+            break;
+        }
+    }
+    
+    if (filterTypes & LLInventoryFilter::FILTERTYPE_DATE)
+    {
+        const U16 HOURS_TO_SECONDS = 3600;
+        time_t earliest = time_corrected() - mFilter->getHoursAgo() * HOURS_TO_SECONDS;
+
+        if (mFilter->getMinDate() > time_min() && mFilter->getMinDate() < earliest)
+        {
+            earliest = mFilter->getMinDate();
+        }
+        else if (!mFilter->getHoursAgo())
+        {
+            earliest = 0;
+        }
+
+        if (LLInventoryFilter::FILTERDATEDIRECTION_NEWER == mFilter->getDateSearchDirection() || mFilter->isSinceLogoff())
+        {
+            if (object->getCreationDate() < earliest ||
+                object->getCreationDate() > mFilter->getMaxDate())
+                return false;
+        }
+        else
+        {
+            if (object->getCreationDate() > earliest ||
+                object->getCreationDate() > mFilter->getMaxDate())
+                return false;
+        }
+    }
+    return true;
+}
+
+bool LLInventoryGallery::hasVisibleItems()
+{
+    return mItemsAddedCount > 0;
+}
+
+void LLInventoryGallery::handleModifiedFilter()
+{
+    if(mFilter->isModified())
+    {
+        reArrangeRows();
+    }
+}
+
 //-----------------------------
 // LLInventoryGalleryItem
 //-----------------------------
@@ -956,9 +1256,12 @@ LLInventoryGalleryItem::LLInventoryGalleryItem(const Params& p)
     mSelected(false),
     mDefaultImage(true),
     mName(""),
+    mWornSuffix(""),
+    mPermSuffix(""),
     mUUID(LLUUID()),
     mIsFolder(true),
     mIsLink(false),
+    mHidden(false),
     mGallery(NULL),
     mType(LLAssetType::AT_NONE),
     mSortGroup(SG_ITEM)
@@ -973,9 +1276,8 @@ LLInventoryGalleryItem::~LLInventoryGalleryItem()
 BOOL LLInventoryGalleryItem::postBuild()
 {
     mNameText = getChild<LLTextBox>("item_name");
-
     mTextBgPanel = getChild<LLPanel>("text_bg_panel");
-    mHidden = false;
+
     return TRUE;
 }
 
@@ -989,7 +1291,16 @@ void LLInventoryGalleryItem::setType(LLAssetType::EType type, LLInventoryType::E
     if(mIsFolder)
     {
         mSortGroup = SG_NORMAL_FOLDER;
-        LLViewerInventoryCategory * cat = gInventory.getCategory(mUUID);
+        LLUUID folder_id = mUUID;
+        if(mIsLink)
+        {
+            LLInventoryObject* obj = gInventory.getObject(mUUID);
+            if (obj)
+            {
+                folder_id = obj->getLinkedUUID();
+            }
+        }
+        LLViewerInventoryCategory* cat = gInventory.getCategory(folder_id);
         if (cat)
         {
             LLFolderType::EType preferred_type = cat->getPreferredType();
@@ -1005,6 +1316,32 @@ void LLInventoryGalleryItem::setType(LLAssetType::EType type, LLInventoryType::E
             }
         }
     }
+    else
+    {
+        const LLInventoryItem *item = gInventory.getItem(mUUID);
+        if(item && (LLAssetType::AT_CALLINGCARD != item->getType()) && !mIsLink)
+        {
+            std::string delim(" --");
+            bool copy = item->getPermissions().allowCopyBy(gAgent.getID());
+            if (!copy)
+            {
+                mPermSuffix += delim;
+                mPermSuffix += LLTrans::getString("no_copy_lbl");
+            }
+            bool mod = item->getPermissions().allowModifyBy(gAgent.getID());
+            if (!mod)
+            {
+                mPermSuffix += mPermSuffix.empty() ? delim : ",";
+                mPermSuffix += LLTrans::getString("no_modify_lbl");
+            }
+            bool xfer = item->getPermissions().allowOperationBy(PERM_TRANSFER, gAgent.getID());
+            if (!xfer)
+            {
+                mPermSuffix += mPermSuffix.empty() ? delim : ",";
+                mPermSuffix += LLTrans::getString("no_transfer_lbl");
+            }
+        }
+    }
 
     getChild<LLIconCtrl>("item_type")->setValue(icon_name);
     getChild<LLIconCtrl>("link_overlay")->setVisible(is_link);
@@ -1015,7 +1352,7 @@ void LLInventoryGalleryItem::setThumbnail(LLUUID id)
     mDefaultImage = id.isNull();
     if(mDefaultImage)
     {
-        getChild<LLThumbnailCtrl>("preview_thumbnail")->setValue("Thumbnail_Fallback");
+        getChild<LLThumbnailCtrl>("preview_thumbnail")->clearTexture();
     }
     else
     {
@@ -1036,9 +1373,8 @@ void LLInventoryGalleryItem::draw()
 
 void LLInventoryGalleryItem::setName(std::string name)
 {
-    mNameText->setText(name);
-    mNameText->setToolTip(name);
     mName = name;
+    updateNameText();
 }
 
 void LLInventoryGalleryItem::setSelected(bool value)
@@ -1135,6 +1471,94 @@ BOOL LLInventoryGalleryItem::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL dro
         return FALSE;
     }
     return baseHandleDragAndDrop(mUUID, drop, cargo_type, cargo_data, accept, tooltip_msg);
+}
+
+void LLInventoryGalleryItem::setWorn(bool value)
+{
+    mWorn = value;
+
+    if(mWorn)
+    {
+        mWornSuffix = (mType == LLAssetType::AT_GESTURE) ? LLTrans::getString("active") : LLTrans::getString("worn");
+    }
+    else
+    {
+        mWornSuffix = "";
+    }
+
+    updateNameText();
+}
+
+LLFontGL* LLInventoryGalleryItem::getTextFont()
+{
+    if(mWorn)
+    {
+        return LLFontGL::getFontSansSerifSmallBold();
+    }
+    return mIsLink ? LLFontGL::getFontSansSerifSmallItalic() : LLFontGL::getFontSansSerifSmall();
+}
+
+void LLInventoryGalleryItem::updateNameText()
+{
+    mNameText->setFont(getTextFont());
+    mNameText->setText(mName + mPermSuffix + mWornSuffix);
+    mNameText->setToolTip(mName + mPermSuffix + mWornSuffix);
+    getChild<LLThumbnailCtrl>("preview_thumbnail")->setToolTip(mName + mPermSuffix + mWornSuffix);
+}
+
+//-----------------------------
+// LLThumbnailsObserver
+//-----------------------------
+
+void LLThumbnailsObserver::changed(U32 mask)
+{
+    if (!mItemMap.size())
+        return;
+    std::vector<LLUUID> deleted_ids;
+
+    for (item_map_t::iterator iter = mItemMap.begin();
+         iter != mItemMap.end();
+         ++iter)
+    {
+        const LLUUID& obj_id = (*iter).first;
+        LLItemData& data = (*iter).second;
+        
+        LLInventoryObject* obj = gInventory.getObject(obj_id);
+        if (!obj)
+        {
+            deleted_ids.push_back(obj_id);
+            continue;
+        }
+
+        const LLUUID thumbnail_id = obj->getThumbnailUUID();
+        if (data.mThumbnailID != thumbnail_id)
+        {
+            data.mThumbnailID = thumbnail_id;
+            data.mCallback();
+        }
+    }
+
+    // Remove deleted items from the list
+    for (std::vector<LLUUID>::iterator deleted_id = deleted_ids.begin(); deleted_id != deleted_ids.end(); ++deleted_id)
+    {
+        removeItem(*deleted_id);
+    }
+}
+
+bool LLThumbnailsObserver::addItem(const LLUUID& obj_id, callback_t cb)
+{
+    LLInventoryObject* obj = gInventory.getObject(obj_id);
+    if (obj)
+    {
+        mItemMap.insert(item_map_value_t(obj_id, LLItemData(obj_id, obj->getThumbnailUUID(), cb)));
+        return true;
+    }
+    return false;
+}
+
+void LLThumbnailsObserver::removeItem(const LLUUID& obj_id)
+{
+    mItemMap.erase(obj_id);
 }
 
 //-----------------------------

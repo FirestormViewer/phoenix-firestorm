@@ -336,7 +336,7 @@ void LLFloaterChangeItemThumbnail::refreshFromObject(LLInventoryObject* obj)
     LLViewerInventoryItem* item = dynamic_cast<LLViewerInventoryItem*>(obj);
     if (item)
     {
-        // This floater probably shouldn't be be possible to open
+        // This floater probably shouldn't be possible to open
         // for imcomplete items
         llassert(item->isFinished());
 
@@ -370,13 +370,14 @@ void LLFloaterChangeItemThumbnail::refreshFromObject(LLInventoryObject* obj)
                     }
                     if (item)
                     {
-                        LL_INFOS() << "Setting image from outfit as a thumbnail" << LL_ENDL;
                         thumbnail_id = item->getAssetUUID();
-
-                        if (validateAsset(thumbnail_id))
+                        if (thumbnail_id.notNull())
                         {
                             // per SL-19188, set this image as a thumbnail
-                            setThumbnailId(thumbnail_id);
+                            LL_INFOS() << "Setting image " << thumbnail_id
+                                       << " from outfit as a thumbnail for inventory object " << obj->getUUID()
+                                       << LL_ENDL;
+                            assignAndValidateAsset(thumbnail_id, true);
                         }
                     }
                 }
@@ -541,11 +542,20 @@ void LLFloaterChangeItemThumbnail::onRemovalConfirmation(const LLSD& notificatio
     }
 }
 
-void LLFloaterChangeItemThumbnail::assignAndValidateAsset(const LLUUID &asset_id)
+void LLFloaterChangeItemThumbnail::assignAndValidateAsset(const LLUUID &asset_id, bool silent)
 {
     LLPointer<LLViewerFetchedTexture> texturep = LLViewerTextureManager::getFetchedTexture(asset_id);
     if (texturep->getFullWidth() == 0 && !texturep->isFullyLoaded() && !texturep->isMissingAsset())
     {
+        if (silent)
+        {
+            mExpectingAssetId = LLUUID::null;
+        }
+        else
+        {
+            // don't warn user multiple times if some textures took their time
+            mExpectingAssetId = asset_id;
+        }
         texturep->setLoadedCallback(onImageLoaded,
             MAX_DISCARD_LEVEL, // don't actually need max one, 3 or 4 should be enough
             FALSE,
@@ -560,7 +570,7 @@ void LLFloaterChangeItemThumbnail::assignAndValidateAsset(const LLUUID &asset_id
         {
             setThumbnailId(asset_id);
         }
-        else
+        else if (!silent)
         {
             LLNotificationsUtil::add("ThumbnailDimentionsLimit");
         }
@@ -568,6 +578,11 @@ void LLFloaterChangeItemThumbnail::assignAndValidateAsset(const LLUUID &asset_id
 }
 bool LLFloaterChangeItemThumbnail::validateAsset(const LLUUID &asset_id)
 {
+    if (asset_id.isNull())
+    {
+        return false;
+    }
+
     LLPointer<LLViewerFetchedTexture> texturep = LLViewerTextureManager::findFetchedTexture(asset_id, TEX_LIST_STANDARD);
 
     if (!texturep)
@@ -625,9 +640,10 @@ void LLFloaterChangeItemThumbnail::onImageLoaded(
             {
                 self->setThumbnailId(asset_id);
             }
-            else
+            else if (self->mExpectingAssetId == asset_id)
             {
                 LLNotificationsUtil::add("ThumbnailDimentionsLimit");
+                self->mExpectingAssetId = LLUUID::null;
             }
         }
     }
@@ -725,7 +741,8 @@ void LLFloaterChangeItemThumbnail::setThumbnailId(const LLUUID &new_thumbnail_id
     else if (obj->getThumbnailUUID() != new_thumbnail_id)
     {
         LLSD updates;
-        updates["thumbnail"] = LLSD().with("asset_id", new_thumbnail_id);
+        // At the moment server expects id as a string
+        updates["thumbnail"] = LLSD().with("asset_id", new_thumbnail_id.asString());
         LLViewerInventoryCategory* view_folder = dynamic_cast<LLViewerInventoryCategory*>(obj);
         if (view_folder)
         {

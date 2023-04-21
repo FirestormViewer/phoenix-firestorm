@@ -246,6 +246,8 @@ public:
 	void setCallbackRegistrar(LLUICtrl::CommitCallbackRegistry::ScopedRegistrar* registrar) { mCallbackRegistrar = registrar; }
 	void setEnableRegistrar(LLUICtrl::EnableCallbackRegistry::ScopedRegistrar* registrar) { mEnableRegistrar = registrar; }
 
+    void setForceArrange(bool force) { mForceArrange = force; }
+
 	LLPanel* getParentPanel() { return mParentPanel.get(); }
 	// DEBUG only
 	void dumpSelectionInformation();
@@ -346,6 +348,8 @@ protected:
 
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar* mCallbackRegistrar;
 	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar* mEnableRegistrar;
+
+    bool mForceArrange;
 	
 public:
 	static F32 sAutoOpenTime;

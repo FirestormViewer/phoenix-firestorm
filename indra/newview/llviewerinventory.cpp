@@ -623,6 +623,7 @@ LLViewerInventoryCategory::LLViewerInventoryCategory(const LLUUID& owner_id) :
 LLViewerInventoryCategory::LLViewerInventoryCategory(const LLViewerInventoryCategory* other)
 {
 	copyViewerCategory(other);
+    mFetching = FETCH_NONE;
 }
 
 LLViewerInventoryCategory::~LLViewerInventoryCategory()
@@ -779,7 +780,7 @@ void LLViewerInventoryCategory::setFetching(LLViewerInventoryCategory::EFetchTyp
     {
         if (mDescendentsRequested.hasExpired() || (mFetching == FETCH_NONE))
         {
-            const F32 FETCH_TIMER_EXPIRY = 10.0f;
+            const F32 FETCH_TIMER_EXPIRY = 30.0f;
             mDescendentsRequested.reset();
             mDescendentsRequested.setTimerExpirySec(FETCH_TIMER_EXPIRY);
         }
@@ -1592,7 +1593,8 @@ void update_inventory_category(
 	LL_DEBUGS(LOG_INV) << "cat_id: [" << cat_id << "] name " << (obj ? obj->getName() : "(NOT FOUND)") << LL_ENDL;
 	if(obj)
 	{
-		if (LLFolderType::lookupIsProtectedType(obj->getPreferredType()))
+        if (LLFolderType::lookupIsProtectedType(obj->getPreferredType())
+            && (updates.size() != 1 || !updates.has("thumbnail")))
 		{
 			LLNotificationsUtil::add("CannotModifyProtectedCategories");
 			return;
@@ -2161,7 +2163,7 @@ void menu_create_inventory_item(LLInventoryPanel* panel, LLFolderBridge *bridge,
     menu_create_inventory_item(panel, bridge ? bridge->getUUID() : LLUUID::null, userdata, default_parent_uuid);
 }
 
-void menu_create_inventory_item(LLInventoryPanel* panel, LLUUID dest_id, const LLSD& userdata, const LLUUID& default_parent_uuid)
+void menu_create_inventory_item(LLInventoryPanel* panel, LLUUID dest_id, const LLSD& userdata, const LLUUID& default_parent_uuid, std::function<void(const LLUUID&)> folder_created_cb)
 {
     std::string type_name = userdata.asString();
     
@@ -2196,6 +2198,10 @@ void menu_create_inventory_item(LLInventoryPanel* panel, LLUUID dest_id, const L
                     panel->setSelectionByID(new_category_id, TRUE);
                 }
             };
+        }
+        else if(folder_created_cb != NULL)
+        {
+            callback_cat_created = folder_created_cb;
         }
         gInventory.createNewCategory(
             parent_id,

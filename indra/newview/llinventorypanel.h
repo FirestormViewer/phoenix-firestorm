@@ -411,7 +411,6 @@ public:
 
     void initFromParams(const Params& p);
     bool isSelectionRemovable() { return false; }
-    //void setSelectCallback(const boost::function<void(const std::deque<LLFolderViewItem*>& items, BOOL user_action)>& cb);
 
     void openInCurrentWindow(const LLSD& userdata);
     void changeFolderRoot(const LLUUID& new_id);
@@ -420,8 +419,12 @@ public:
     void clearNavigationHistory();
     LLUUID getSingleFolderRoot() { return mFolderID; }
 
+    void doCreate(const LLSD& userdata);
+
     bool isBackwardAvailable();
     bool isForwardAvailable();
+
+    bool hasVisibleItems();
 
     void setNavBackwardList(std::list<LLUUID> backward_list) { mBackwardFolders = backward_list; }
     void setNavForwardList(std::list<LLUUID> forward_list) { mForwardFolders = forward_list; }

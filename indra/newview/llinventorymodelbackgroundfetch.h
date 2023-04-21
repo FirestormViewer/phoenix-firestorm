@@ -100,7 +100,7 @@ protected:
     };
     typedef std::deque<FetchQueueInfo> fetch_queue_t;
 
-    void onAISFodlerCalback(const LLUUID &request_id, const LLUUID &response_id, EFetchType recursion);
+    void onAISFolderCalback(const LLUUID &request_id, const LLUUID &response_id, EFetchType recursion);
     void bulkFetchViaAis();
     void bulkFetchViaAis(const FetchQueueInfo& fetch_info);
 	void bulkFetch();
@@ -113,20 +113,21 @@ protected:
 private:
  	bool mRecursiveInventoryFetchStarted;
 	bool mRecursiveLibraryFetchStarted;
-	bool mAllFoldersFetched;
+	bool mAllRecursiveFoldersFetched;
     typedef boost::signals2::signal<void()> folders_fetched_signal_t;
     folders_fetched_signal_t mFoldersFetchedSignal;
 
     bool mBackgroundFetchActive;
 	bool mFolderFetchActive;
 	S32 mFetchCount;
+    S32 mLastFetchCount; // for debug
     S32 mFetchFolderCount;
 
 	LLFrameTimer mFetchTimer;
 	F32 mMinTimeBetweenFetches;
 	fetch_queue_t mFetchFolderQueue;
     fetch_queue_t mFetchItemQueue;
-
+    std::list<LLUUID> mExpectedFolderIds; // for debug, should this track time?
 	// <FS:ND> For legacy inventory
 	BOOL mTimelyFetchPending;
 	S32 mNumFetchRetries;

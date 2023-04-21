@@ -15,7 +15,7 @@
    top="0">
   <thumbnail
    name="preview_thumbnail"
-   image_name="Thumbnail_Fallback"
+   fallback_image="Thumbnail_Fallback"
    layout="topleft"
    follows="left|top"
    interactable="false"
@@ -60,10 +60,12 @@
       length="1"
       follows="left|top"
       left="1"
-      height="10"
+      height="23"
       layout="topleft"
       name="item_name"
       parse_urls="false"
+      text_readonly_color="White"
+      word_wrap="true"
       top="2"
       width="127"
       use_ellipses="true">

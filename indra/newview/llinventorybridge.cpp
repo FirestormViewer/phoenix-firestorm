@@ -907,13 +907,13 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 				}
 			}
 
-            LLViewerInventoryItem* inv_item = gInventory.getItem(mUUID);
             items.push_back(std::string("thumbnail"));
-            if (inv_item && !inv_item->getPermissions().allowOperationBy(PERM_MODIFY, gAgent.getID()))
+            if (isLibraryItem())
             {
                 disabled_items.push_back(std::string("thumbnail"));
             }
-			
+
+            LLViewerInventoryItem *inv_item = gInventory.getItem(mUUID);
 			if (show_asset_id)
 			{
 				items.push_back(std::string("Copy Asset UUID"));
@@ -994,8 +994,8 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 
 	// <FS:Zi> Don't offer "Show in Main View" for folders opened in separate inventory views
 	//         as there are no tabs to switch to
-	//if (!isPanelActive("All Items") && !isPanelActive("single_folder_inv"))
-	if (!isPanelActive("All Items") && !isPanelActive("single_folder_inv") && !isPanelActive("inv_panel"))
+	//if (!isPanelActive("All Items") && !isPanelActive("single_folder_inv") && !isPanelActive("comb_single_folder_inv"))
+	if (!isPanelActive("All Items") && !isPanelActive("single_folder_inv") && !isPanelActive("comb_single_folder_inv") && !isPanelActive("inv_panel"))
 	// </FS:Zi>
 	{
 		items.push_back(std::string("Show in Main Panel"));

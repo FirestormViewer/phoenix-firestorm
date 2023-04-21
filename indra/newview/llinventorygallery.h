@@ -27,17 +27,23 @@
 #ifndef LL_LLINVENTORYGALLERY_H
 #define LL_LLINVENTORYGALLERY_H
 
+#include "llgesturemgr.h"
 #include "lllistcontextmenu.h"
 #include "llpanel.h"
 #include "llinventoryfilter.h"
+#include "llinventoryobserver.h"
 #include "llinventorymodel.h"
 
 class LLInventoryCategoriesObserver;
 class LLInventoryGalleryItem;
 class LLScrollContainer;
 class LLTextBox;
+class LLThumbnailsObserver;
+class LLGalleryGestureObserver;
 
 class LLInventoryGalleryContextMenu;
+
+typedef boost::function<void()> callback_t;
 
 class LLInventoryGallery : public LLPanel
 {
@@ -75,20 +81,22 @@ public:
 
     void setFilterSubString(const std::string& string);
     std::string getFilterSubString() { return mFilterSubString; }
+    LLInventoryFilter& getFilter() const { return *mFilter; }
+    bool checkAgainstFilterType(const LLUUID& object_id);
 
     void getCurrentCategories(uuid_vec_t& vcur);
     void updateAddedItem(LLUUID item_id);
     void updateRemovedItem(LLUUID item_id);
     void updateChangedItemName(LLUUID item_id, std::string name);
     void updateItemThumbnail(LLUUID item_id);
+    void updateWornItem(LLUUID item_id, bool is_worn);
 
     void updateMessageVisibility();
 
     void setRootFolder(const LLUUID cat_id);
     void updateRootFolder();
     LLUUID getRootFolder() { return mFolderID; }
-    typedef boost::function<void()> root_changed_callback_t;
-    boost::signals2::connection setRootChangedCallback(root_changed_callback_t cb);
+    boost::signals2::connection setRootChangedCallback(callback_t cb);
     void onForwardFolder();
     void onBackwardFolder();
     void clearNavigationHistory();
@@ -103,26 +111,36 @@ public:
     LLUUID getOutfitImageID(LLUUID outfit_id);
 
     void refreshList(const LLUUID& category_id);
+    void onCOFChanged();
+    void onGesturesChanged();
     void computeDifference(const LLInventoryModel::cat_array_t vcats, const LLInventoryModel::item_array_t vitems, uuid_vec_t& vadded, uuid_vec_t& vremoved);
 
     void deselectItem(const LLUUID& category_id);
+    void changeItemSelection(const LLUUID& item_id, bool scroll_to_selection = false);
+    void scrollToShowItem(const LLUUID& item_id);
     void signalSelectionItemID(const LLUUID& category_id);
     boost::signals2::connection setSelectionChangeCallback(selection_change_callback_t cb);
+    LLUUID getSelectedItemID() { return mSelectedItemID; }
 
     void setSearchType(LLInventoryFilter::ESearchType type);
     LLInventoryFilter::ESearchType getSearchType() { return mSearchType; }
-    void toggleSearchLinks();
-    bool getSearchLinks(){ return mSearchLinks; }
+
+    bool hasDescendents(const LLUUID& cat_id);
+    bool hasVisibleItems();
+    void handleModifiedFilter();
 
 protected:
 
-    void onChangeItemSelection(const LLUUID& category_id);
     void showContextMenu(LLUICtrl* ctrl, S32 x, S32 y, const LLUUID& item_id);
 
     void applyFilter(LLInventoryGalleryItem* item, const std::string& filter_substring);
+    bool checkAgainstFilters(LLInventoryGalleryItem* item, const std::string& filter_substring);
 
     LLInventoryCategoriesObserver*     mCategoriesObserver;
+    LLThumbnailsObserver*              mThumbnailsObserver;
+    LLGalleryGestureObserver*          mGestureObserver;
     LLUUID                             mSelectedItemID;
+    LLUUID                             mItemToSelect;
     bool                               mIsInitialized;
 
     selection_change_signal_t        mSelectionChangeSignal;
@@ -143,10 +161,10 @@ private:
     LLPanel* addToRow(LLPanel* row_stack, LLInventoryGalleryItem* item, int pos, int hgap);
     void removeFromLastRow(LLInventoryGalleryItem* item);
     void reArrangeRows(S32 row_diff = 0);
-    void updateRowsIfNeeded();
+    bool updateRowsIfNeeded();
     void updateGalleryWidth();
 
-    LLInventoryGalleryItem* buildGalleryItem(std::string name, LLUUID item_id, LLAssetType::EType type, LLUUID thumbnail_id, LLInventoryType::EType inventory_type, U32 flags, bool is_link);
+    LLInventoryGalleryItem* buildGalleryItem(std::string name, LLUUID item_id, LLAssetType::EType type, LLUUID thumbnail_id, LLInventoryType::EType inventory_type, U32 flags, bool is_link, bool is_worn);
 
     void buildGalleryPanel(int row_count);
     void reshapeGalleryPanel(int row_count);
@@ -183,13 +201,16 @@ private:
 
     LLInventoryGalleryContextMenu* mInventoryGalleryMenu;
     std::string mFilterSubString;
+    LLInventoryFilter* mFilter;
 
     typedef std::map<LLUUID, LLInventoryGalleryItem*> gallery_item_map_t;
     gallery_item_map_t mItemMap;
+    uuid_vec_t mCOFLinkedItems;
+    uuid_vec_t mActiveGestures;
     std::map<LLInventoryGalleryItem*, S32> mItemIndexMap;
 
     LLInventoryFilter::ESearchType mSearchType;
-    bool mSearchLinks;
+    std::string mUsername;
 };
 
 class LLInventoryGalleryItem : public LLPanel
@@ -222,8 +243,11 @@ public:
                                    EAcceptance* accept,
                                    std::string& tooltip_msg);
 
+    LLFontGL* getTextFont();
+
     void setName(std::string name);
     void setSelected(bool value);
+    void setWorn(bool value);
     void setUUID(LLUUID id) {mUUID = id;}
     LLUUID getUUID() { return mUUID;}
 
@@ -235,23 +259,28 @@ public:
     std::string getCreatorName() { return mCreatorName;}
 
     std::string getItemName() {return mName;}
+    std::string getItemNameSuffix() {return mPermSuffix + mWornSuffix;}
     bool isDefaultImage() {return mDefaultImage;}
     
     bool isHidden() {return mHidden;}
     void setHidden(bool hidden) {mHidden = hidden;}
 
     void setType(LLAssetType::EType type, LLInventoryType::EType inventory_type, U32 flags, bool is_link);
+    LLAssetType::EType getAssetType() { return mType; }
     void setThumbnail(LLUUID id);
     void setGallery(LLInventoryGallery* gallery) { mGallery = gallery; }
     bool isFolder() { return mIsFolder; }
     bool isLink() { return mIsLink; }
     EInventorySortGroup getSortGroup() { return mSortGroup; }
+
+    void updateNameText();
     
 private:
     LLUUID mUUID;
     LLTextBox* mNameText;
     LLPanel* mTextBgPanel;
     bool     mSelected;
+    bool     mWorn;
     bool     mDefaultImage;
     bool     mHidden;
     bool     mIsFolder;
@@ -264,6 +293,48 @@ private:
     EInventorySortGroup mSortGroup;
     LLAssetType::EType mType;
     std::string mName;
+    std::string mWornSuffix;
+    std::string mPermSuffix;
+    LLInventoryGallery* mGallery;
+};
+
+class LLThumbnailsObserver : public LLInventoryObserver
+{
+public:
+    LLThumbnailsObserver(){};
+
+    virtual void changed(U32 mask);
+    bool addItem(const LLUUID& obj_id, callback_t cb);
+    void removeItem(const LLUUID& obj_id);
+
+protected:
+
+    struct LLItemData
+    {
+        LLItemData(const LLUUID& obj_id, const LLUUID& thumbnail_id, callback_t cb)
+            : mItemID(obj_id)
+            , mCallback(cb)
+            , mThumbnailID(thumbnail_id)
+        {}
+
+        callback_t mCallback;
+        LLUUID mItemID;
+        LLUUID mThumbnailID;
+    };
+
+    typedef std::map<LLUUID, LLItemData> item_map_t;
+    typedef item_map_t::value_type item_map_value_t;
+    item_map_t mItemMap;
+};
+
+class LLGalleryGestureObserver : public LLGestureManagerObserver
+{
+public:
+    LLGalleryGestureObserver(LLInventoryGallery* gallery) : mGallery(gallery) {}
+    virtual ~LLGalleryGestureObserver() {}
+    virtual void changed() { mGallery->onGesturesChanged(); }
+
+private:
     LLInventoryGallery* mGallery;
 };
 

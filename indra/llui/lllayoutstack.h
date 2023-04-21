@@ -59,6 +59,8 @@ public:
 		Optional<S32>			drag_handle_thickness;
 		Optional<S32>			drag_handle_shift;
 
+        Optional<LLUIColor>     drag_handle_color;
+
 		// <FS:Zi> Add size save control. Caveat: contained panels and widgets need to use
 		//         relative sizing, like right="-1" instead of width="XYZ" to get resized
 		//         properly when a saved size is being restored. -Zi
@@ -135,6 +137,7 @@ private:
 	S32  mDragHandleSecondIndent;
 	S32  mDragHandleThickness;
 	S32  mDragHandleShift;
+    LLUIColor mDragHandleColor;
 
 	// <FS:Zi> Save sizes of the layout stack panels
 	const bool	mSaveSizes;

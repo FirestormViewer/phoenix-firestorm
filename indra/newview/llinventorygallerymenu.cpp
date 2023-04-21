@@ -33,7 +33,6 @@
 #include "llavataractions.h"
 #include "llclipboard.h"
 #include "llfloaterreg.h"
-#include "llgiveinventory.h"
 #include "llinventorybridge.h"
 #include "llinventoryfunctions.h"
 #include "llinventorymodel.h"
@@ -251,9 +250,35 @@ void LLInventoryGalleryContextMenu::doToSelected(const LLSD& userdata, const LLU
             }
         }
     }
-    else if ("paste_as_link" == action)
+    else if ("paste_link" == action)
     {
-        link_inventory_object(selected_id, obj, LLPointer<LLInventoryCallback>(NULL));
+        const LLUUID &current_outfit_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT);
+        const LLUUID &marketplacelistings_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
+        const LLUUID &my_outifts_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS);
+
+        const BOOL move_is_into_current_outfit = (selected_id == current_outfit_id);
+        const BOOL move_is_into_my_outfits = (selected_id == my_outifts_id) || gInventory.isObjectDescendentOf(selected_id, my_outifts_id);
+        const BOOL move_is_into_marketplacelistings = gInventory.isObjectDescendentOf(selected_id, marketplacelistings_id);
+
+        if (move_is_into_marketplacelistings || move_is_into_current_outfit || move_is_into_my_outfits)
+        {
+            return;
+        }
+
+        std::vector<LLUUID> objects;
+        LLClipboard::instance().pasteFromClipboard(objects);
+        for (std::vector<LLUUID>::const_iterator iter = objects.begin();
+             iter != objects.end();
+             ++iter)
+        {
+            const LLUUID &object_id = (*iter);
+            if (LLConstPointer<LLInventoryObject> link_obj = gInventory.getObject(object_id))
+            {
+                link_inventory_object(selected_id, link_obj, LLPointer<LLInventoryCallback>(NULL));
+            }
+        }
+
+        LLClipboard::instance().setCutMode(false);
     }
     else if ("rename" == action)
     {
@@ -288,6 +313,26 @@ void LLInventoryGalleryContextMenu::doToSelected(const LLSD& userdata, const LLU
     else if ("wear" == action)
     {
         LLAppearanceMgr::instance().wearItemOnAvatar(selected_id, true, true);
+    }
+    else if ("activate" == action)
+    {
+        LLGestureMgr::instance().activateGesture(selected_id);
+
+        LLViewerInventoryItem* item = gInventory.getItem(selected_id);
+        if (!item) return;
+
+        gInventory.updateItem(item);
+        gInventory.notifyObservers();
+    }
+    else if ("deactivate" == action)
+    {
+        LLGestureMgr::instance().deactivateGesture(selected_id);
+
+        LLViewerInventoryItem* item = gInventory.getItem(selected_id);
+        if (!item) return;
+
+        gInventory.updateItem(item);
+        gInventory.notifyObservers();
     }
 }
 
@@ -340,35 +385,6 @@ void LLInventoryGalleryContextMenu::fileUploadLocation(const LLSD& userdata, con
     {
         gSavedPerAccountSettings.setString("AnimationUploadFolder", selected_id.asString());
     }
-}
-
-bool can_share_item(LLUUID item_id)
-{
-    bool can_share = false;
-
-    if (gInventory.isObjectDescendentOf(item_id, gInventory.getRootFolderID()))
-    {
-            const LLViewerInventoryItem *item = gInventory.getItem(item_id);
-            if (item)
-            {
-                if (LLInventoryCollectFunctor::itemTransferCommonlyAllowed(item))
-                {
-                    can_share = LLGiveInventory::isInventoryGiveAcceptable(item);
-                }
-            }
-            else
-            {
-                can_share = (gInventory.getCategory(item_id) != NULL);
-            }
-
-            const LLUUID trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
-            if ((item_id == trash_id) || gInventory.isObjectDescendentOf(item_id, trash_id))
-            {
-                can_share = false;
-            }
-    }
-
-    return can_share;
 }
 
 bool is_inbox_folder(LLUUID item_id)
@@ -593,6 +609,19 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
             {
                 disabled_items.push_back(std::string("Open"));
                 disabled_items.push_back(std::string("Open Original"));
+            }
+            
+            if(LLAssetType::AT_GESTURE == obj->getType())
+            {
+                items.push_back(std::string("Gesture Separator"));
+                if(!LLGestureMgr::instance().isGestureActive(selected_id))
+                {
+                    items.push_back(std::string("Activate"));
+                }
+                else
+                {
+                    items.push_back(std::string("Deactivate"));
+                }
             }
         }
         else if(LLAssetType::AT_LANDMARK == obj->getType())

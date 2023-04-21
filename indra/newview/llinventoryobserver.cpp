@@ -153,7 +153,7 @@ LLInventoryFetchItemsObserver::LLInventoryFetchItemsObserver(const uuid_vec_t& i
 
 void LLInventoryFetchItemsObserver::changed(U32 mask)
 {
-	LL_DEBUGS() << this << " remaining incomplete " << mIncomplete.size()
+    LL_DEBUGS("InventoryFetch") << this << " remaining incomplete " << mIncomplete.size()
 			 << " complete " << mComplete.size()
 			 << " wait period " << mFetchingPeriod.getRemainingTimeF32()
 			 << LL_ENDL;
@@ -162,6 +162,15 @@ void LLInventoryFetchItemsObserver::changed(U32 mask)
 	// appropriate.
 	if (!mIncomplete.empty())
 	{
+        if (!LLInventoryModelBackgroundFetch::getInstance()->isEverythingFetched())
+        {
+            // Folders have a priority over items and they download items as well
+            // Wait untill initial folder fetch is done
+            LL_DEBUGS("InventoryFetch") << "Folder fetch in progress, resetting fetch timer" << LL_ENDL;
+
+            mFetchingPeriod.reset();
+            mFetchingPeriod.setTimerExpirySec(FETCH_TIMER_EXPIRY);
+        }
 
 		// Have we exceeded max wait time?
 		bool timeout_expired = mFetchingPeriod.hasExpired();
@@ -180,7 +189,7 @@ void LLInventoryFetchItemsObserver::changed(U32 mask)
 				if (timeout_expired)
 				{
 					// Just concede that this item hasn't arrived in reasonable time and continue on.
-					LL_WARNS() << "Fetcher timed out when fetching inventory item UUID: " << item_id << LL_ENDL;
+                    LL_WARNS("InventoryFetch") << "Fetcher timed out when fetching inventory item UUID: " << item_id << LL_ENDL;
 					it = mIncomplete.erase(it);
 				}
 				else
@@ -195,7 +204,7 @@ void LLInventoryFetchItemsObserver::changed(U32 mask)
 
 	if (mIncomplete.empty())
 	{
-		LL_DEBUGS() << this << " done at remaining incomplete "
+        LL_DEBUGS("InventoryFetch") << this << " done at remaining incomplete "
 				 << mIncomplete.size() << " complete " << mComplete.size() << LL_ENDL;
 		done();
 	}

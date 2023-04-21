@@ -1362,6 +1362,8 @@ BOOL LLInventoryPanel::handleHover(S32 x, S32 y, MASK mask)
 //	BOOL handled = LLView::handleHover(x, y, mask);
 //	if(handled)
 //	{
+//        // getCursor gets current cursor, setCursor sets next cursor
+//        // check that children didn't set own 'next' cursor
 //		ECursorType cursor = getWindow()->getCursor();
 //		if (LLInventoryModelBackgroundFetch::instance().folderFetchActive() && cursor == UI_CURSOR_ARROW)
 //		{
@@ -2020,6 +2022,20 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 	//}
 	// </FS:Ansariel>
 
+
+    LLFloater* inventory_floater = LLFloaterSidePanelContainer::getTopmostInventoryFloater();
+    if(!auto_open && inventory_floater && inventory_floater->getVisible())
+    {
+        LLSidepanelInventory *inventory_panel = inventory_floater->findChild<LLSidepanelInventory>("main_panel");
+        LLPanelMainInventory* main_panel = inventory_panel->getMainInventoryPanel();
+        if(main_panel->isSingleFolderMode() && main_panel->isGalleryViewMode())
+        {
+            main_panel->setGallerySelection(obj_id);
+            return;
+        }
+    }
+
+
 	LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open);
 
 	if (active_panel)
@@ -2315,6 +2331,7 @@ LLInventorySingleFolderPanel::LLInventorySingleFolderPanel(const Params& params)
     getFilter().setDefaultEmptyLookupMessage("InventorySingleFolderEmpty");
 
     mCommitCallbackRegistrar.add("Inventory.OpenSelectedFolder", boost::bind(&LLInventorySingleFolderPanel::openInCurrentWindow, this, _2));
+    mCommitCallbackRegistrar.replace("Inventory.DoCreate", boost::bind(&LLInventorySingleFolderPanel::doCreate, this, _2));
 }
 
 LLInventorySingleFolderPanel::~LLInventorySingleFolderPanel()
@@ -2456,6 +2473,22 @@ void LLInventorySingleFolderPanel::updateSingleFolderRoot()
     }
 }
 
+bool LLInventorySingleFolderPanel::hasVisibleItems()
+{
+    return mFolderRoot.get()->hasVisibleChildren();
+}
+
+void LLInventorySingleFolderPanel::doCreate(const LLSD& userdata)
+{
+    std::string type_name = userdata.asString();
+    LLUUID dest_id = LLFolderBridge::sSelf.get()->getUUID();
+    if (("category" == type_name) || ("outfit" == type_name))
+    {
+        changeFolderRoot(dest_id);
+    }
+    reset_inventory_filter();
+    menu_create_inventory_item(this, dest_id, userdata);
+}
 /************************************************************************/
 /* Asset Pre-Filtered Inventory Panel related class                     */
 /************************************************************************/

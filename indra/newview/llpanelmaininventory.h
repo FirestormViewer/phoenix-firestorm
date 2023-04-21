@@ -49,6 +49,7 @@ class LLMenuGL;
 class LLSidepanelInventory;
 class LLToggleableMenu;
 class LLFloater;
+class LLFloaterSidePanelContainer;
 class LLComboBox;	// <FS:Zi> Filter dropdown
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,6 +98,7 @@ public:
 	// <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel
 	void showAllItemsPanel();
 	// </FS:Ansariel>
+    void setActivePanel();
 
 	bool isRecentItemsPanelSelected();
 
@@ -108,7 +110,7 @@ public:
 
 	void setFocusFilterEditor();
 
-	static void newWindow();
+	static LLFloaterSidePanelContainer* newWindow();
     static void newFolderWindow(LLUUID folder_id = LLUUID(), LLUUID item_to_select = LLUUID());
 
 	void toggleFindOptions();
@@ -116,20 +118,26 @@ public:
     void resetFilters();
     void resetAllItemsFilters();
 
+    void findLinks(const LLUUID& item_id, const std::string& item_name);
+
     void onViewModeClick();
     void toggleViewMode();
     void onUpFolderClicked();
     void onBackFolderClicked();
     void onForwardFolderClicked();
     void setSingleFolderViewRoot(const LLUUID& folder_id, bool clear_nav_history = true);
+    void setGallerySelection(const LLUUID& item_id);
     LLUUID getSingleFolderViewRoot();
     bool isSingleFolderMode() { return mSingleFolderMode; }
 
     void setViewMode(EViewModeType mode);
     bool isListViewMode() { return (mViewMode == MODE_LIST); }
     bool isGalleryViewMode() { return (mViewMode == MODE_GALLERY); }
+    bool isCombinationViewMode() { return (mViewMode == MODE_COMBINATION); }
     LLUUID getCurrentSFVRoot();
     std::string getLocalizedRootName();
+
+    LLInventoryFilter& getCurrentFilter();
 
 	// <FS:Zi> Filter dropdown
 	void onFilterTypeSelected(const std::string& filter_type_name);
@@ -175,6 +183,8 @@ protected:
 	bool isSaveTextureEnabled(const LLSD& userdata);
 	void updateItemcountText();
 
+    void updateCombinationVisibility();
+
 	// <FS:Zi> Inventory Collapse and Expand Buttons
 	void onCollapseButtonClicked();
 	void onExpandButtonClicked();
@@ -209,6 +219,9 @@ private:
     EViewModeType mViewMode;
     LLInventorySingleFolderPanel* mSingleFolderPanelInventory;
     LLInventoryGallery* mInventoryGalleryPanel;
+
+    LLInventorySingleFolderPanel* mCombinationInventoryPanel;
+    LLInventoryGallery* mCombinationGalleryPanel;
 
 	// <FS:Zi> Filter dropdown
 	LLComboBox*					mFilterComboBox;
@@ -258,6 +271,8 @@ protected:
     static bool hasSettingsInventory();
     void updateTitle();
     void updateNavButtons();
+    
+    void onCombinationRootChanged(bool gallery_clicked);
 	/**
 	 * Set upload cost in "Upload" sub menu.
 	 */
@@ -278,6 +293,8 @@ private:
 	// </FS:Zi> Inventory Collapse and Expand Buttons
 
 	bool						mNeedUploadCost;
+
+    bool                        mForceShowInvLayout;
 	// List Commands                                                              //
 	////////////////////////////////////////////////////////////////////////////////
 };
