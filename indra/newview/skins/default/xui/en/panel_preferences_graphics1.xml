@@ -376,6 +376,44 @@
            name="2"
            value="2"/>
         </combo_box>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="-5"
+         name="ReflectionProbeText"
+         text_readonly_color="LabelDisabledColor"
+         top_pad="4"
+         width="170">
+          Reflection Detail:
+        </text>
+        <combo_box
+         control_name="RenderReflectionProbeLevel"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="ReflectionLevel"
+         width="150">
+          <combo_box.item
+           label="None"
+           name="0"
+           value="0"/>
+          <combo_box.item
+           label="Manual only"
+           name="1"
+           value="1"/>
+          <combo_box.item
+           label="Manual &amp; terrain and water"
+           name="2"
+           value="2"/>
+          <combo_box.item
+           label="Full scene"
+           name="3"
+           value="3"/>
+        </combo_box>
 <!-- FS:TM Avatar Physics was moved down to LOD section-->
 <!-- FS:TM Point Lighting added instead of above-->
         <text

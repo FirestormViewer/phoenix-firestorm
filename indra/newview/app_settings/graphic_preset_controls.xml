@@ -35,6 +35,7 @@
 		<string>RenderQualityPerformance</string>
 		<string>RenderReflectionsEnabled</string>
 		<string>RenderReflectionProbeDetail</string>
+		<string>RenderReflectionProbeLevel</string>
 		<string>RenderScreenSpaceReflections</string>
 		<string>RenderShaderLightingMaxLevel</string>
 		<string>RenderShadowDetail</string>

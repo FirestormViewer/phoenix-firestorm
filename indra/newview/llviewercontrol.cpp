@@ -512,6 +512,7 @@ static bool handleReflectionProbeDetailChanged(const LLSD& newvalue)
         gPipeline.releaseGLBuffers();
         gPipeline.createGLBuffers();
         LLViewerShaderMgr::instance()->setShaders();
+        gPipeline.mReflectionMapManager.reset();
     }
     return true;
 }
@@ -1147,6 +1148,7 @@ void settings_setup_listeners()
 // [SL:KB] - Patch: Settings-RenderResolutionMultiplier | Checked: Catznip-5.4
 	setting_setup_signal_listener(gSavedSettings, "RenderResolutionMultiplier", handleRenderResolutionDivisorChanged);
 // [/SL:KB]
+    setting_setup_signal_listener(gSavedSettings, "RenderReflectionProbeLevel", handleReflectionProbeDetailChanged);
 	setting_setup_signal_listener(gSavedSettings, "RenderReflectionProbeDetail", handleReflectionProbeDetailChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderReflectionsEnabled", handleReflectionProbeDetailChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderScreenSpaceReflections", handleReflectionProbeDetailChanged);

@@ -144,8 +144,7 @@ public:
 	void renderDoF(LLRenderTarget* src, LLRenderTarget* dst);
 	void copyRenderTarget(LLRenderTarget* src, LLRenderTarget* dst);
 	void combineGlow(LLRenderTarget* src, LLRenderTarget* dst);
-	void renderPostProcess();
-	LLRenderTarget* screenTarget();
+	void visualizeBuffers(LLRenderTarget* src, LLRenderTarget* dst, U32 bufferIndex);
 
 	void init();
 	void cleanup();
@@ -273,7 +272,7 @@ public:
     void renderObjects(U32 type, bool texture = true, bool batch_texture = false, bool rigged = false);
     void renderShadowSimple(U32 type);
 
-    void renderAlphaObjects(bool texture = true, bool batch_texture = false, bool rigged = false);
+    void renderAlphaObjects(bool rigged = false);
 	void renderMaskedObjects(U32 type, bool texture = true, bool batch_texture = false, bool rigged = false);
     void renderFullbrightMaskedObjects(U32 type, bool texture = true, bool batch_texture = false, bool rigged = false);
 
@@ -1049,6 +1048,7 @@ public:
 	static F32 CameraDoFResScale;
 	static F32 RenderAutoHideSurfaceAreaLimit;
 	static bool RenderScreenSpaceReflections;
+	static S32 RenderBufferVisualization;
 };
 
 void render_bbox(const LLVector3 &min, const LLVector3 &max);
