@@ -51,6 +51,15 @@
 			<combo_box.item label="Statisch &amp; Dynamisch" name="1"/>
 			<combo_box.item label="Echtzeit" name="2"/>
 		</combo_box>
+		<text name="ReflectionProbeText">
+			Reflexionsumfang:
+		</text>
+		<combo_box name="ReflectionLevel">
+			<combo_box.item label="Keiner" name="0"/>
+			<combo_box.item label="Nur manuelle" name="1"/>
+			<combo_box.item label="Manuelle &amp; Terrain und Wasser" name="2"/>
+			<combo_box.item label="Komplette Szene" name="3"/>
+		</combo_box>
 		<text name="reflection_label">
 			Wasserreflexionen:
 		</text>
