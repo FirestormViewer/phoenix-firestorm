@@ -2657,6 +2657,7 @@ bool idle_startup()
 			LLNotificationsUtil::add("InventoryUnusable");
 		}
 		
+        LLInventoryModelBackgroundFetch::instance().start();
 		gInventory.createCommonSystemCategories();
 
 		// It's debatable whether this flag is a good idea - sets all
