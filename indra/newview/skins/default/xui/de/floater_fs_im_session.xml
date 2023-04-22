@@ -65,6 +65,9 @@
 				</layout_panel>
 				<layout_panel name="chat_layout_panel">
 					<layout_stack name="input_panels">
+						<layout_panel name="emoji_button_layout_panel">
+							<button name="emoji_panel_btn" tool_tip="Emoji-Auswahl öffnen/schliessen"/>
+						</layout_panel>
 						<layout_panel name="input_button_layout_panel">
 							<button name="send_chat" label="Senden"/>
 						</layout_panel>

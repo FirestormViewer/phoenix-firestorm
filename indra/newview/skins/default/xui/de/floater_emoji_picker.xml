@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="emojipicker" title="Emoji auswählen">
+	<line_editor name="Search" label="Nach Emoji suchen"/>
+	<scroll_list name="Emojis">
+		<columns label="Emoji" name="look" />
+		<columns label="Name" name="name" />
+	</scroll_list>
+	<combo_box name="Category" label="Kategorie auswählen"/>
+</floater>
