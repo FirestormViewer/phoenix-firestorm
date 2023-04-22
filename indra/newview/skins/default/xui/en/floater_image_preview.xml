@@ -7,6 +7,17 @@
  name="Image Preview"
  help_topic="image_preview"
  width="300">
+
+    <string
+     name="with_alpha"
+     value="with alpha"
+    />
+
+    <string
+     name="no_alpha"
+     value="no alpha"
+    />
+
     <text
      type="string"
      length="1"
@@ -60,7 +71,7 @@
      height="18"
      label="Clothing Type"
      layout="topleft"
-     left_delta="110"
+     right="-10"
      name="clothing_type_combo"
      top_delta="-2"
      width="160">
@@ -106,23 +117,23 @@
          name="SculptedPrim" />
     </combo_box>
 
-   <panel
+    <panel
      follows="left|right"
-     height="32"
+     height="24"
      layout="topleft"
      left="10"
      name="image_alpha_warning"
      right="-10"
      top_pad="4"
-     visible="false">
+     visible="true">
 
-   <icon
+    <icon
      height="24"
      image_name="Popup_Caution"
      left="0"
      top="0"
      width="24"
-   />
+    />
 
     <check_box
      follows="top|left|right"
@@ -133,14 +144,28 @@
      name="strip_alpha_check"
      right="-1"
      top_delta="10"
-   />
+    />
 
     </panel>
+
+    <panel
+     background_opaque="true"
+     background_visible="true"
+     bg_opaque_color="0 0 0 0.333"
+     follows="top|left"
+     height="239"
+     layout="topleft"
+     left="10"
+     name="preview_area"
+     right="-10"
+     top_pad="4"
+    />
 
     <text
      type="string"
      length="1"
      bottom="250"
+     halign="center"
      height="45"
      word_wrap="true"
      follows="top|left"
@@ -151,6 +176,22 @@
 
 Try saving image as 24 bit Targa (.tga).
     </text>
+
+    <text
+     type="string"
+     length="1"
+     height="16"
+     word_wrap="true"
+     follows="top|left"
+     halign="center"
+     layout="topleft"
+     left="10"
+     name="uploaded_size_text"
+     right="-10"
+     top_pad="142">
+Uploaded Size: [X_RES]x[Y_RES], [ALPHA]
+    </text>
+
     <check_box
      enabled="false"
      initial_value="false"
@@ -158,50 +199,53 @@ Try saving image as 24 bit Targa (.tga).
      height="16"
      label="Use lossless compression"
      layout="topleft"
-     left_delta="2"
+     left_delta="-3"
      name="lossless_check"
-     top_pad="162"
+     top_pad="7"
      width="280" />
      <check_box
       control_name="TemporaryUpload"
-      visible="false"
+      visible="true"
       follows="bottom|left"
       height="16"
       initial_value="false"
-      left_delta="155"
+      left_delta="168"
       name="temp_check"
       width="280"
       label="Temporary (Free)"
        tool_tip="Sets the asset to be temporary, meaning its free, but in return, only good for a short time before it ceases to exist." />
     <button
-     follows="bottom|right"
-     height="20"
-     label="Cancel"
-     layout="topleft"
-     left="165"
-     name="cancel_btn"
-     top="430"
-     width="125" />
-    <button
      follows="bottom|left"
      height="20"
      label="Upload (L$[AMOUNT])"
      layout="topleft"
-     left_delta="-150"
+     left="10"
      name="ok_btn"
+     top_pad="4"
+     width="130" />
+    <button
+     follows="bottom|right"
+     height="20"
+     label="Cancel"
+     layout="topleft"
+     name="cancel_btn"
+     right="-10"
      top_delta="0"
-     width="125" />
+     width="130" />
     <text
      type="string"
      length="1"
      follows="left|top"
+     halign="center"
      height="35"
      layout="topleft"
      left="10"
      mouse_opaque="false"
+     right="-10"
      skip_link_underline="true"
      name="info_text"
      word_wrap="true"
-     top_pad="10"
-     width="270"/>
+     top_pad="5"
+     value="= upload fee information text goes here ="
+    />
 </floater>

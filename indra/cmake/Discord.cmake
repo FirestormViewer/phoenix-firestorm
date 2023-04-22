@@ -1,13 +1,19 @@
 # -*- cmake -*-
 
+include_guard()
+add_library(fs::discord INTERFACE IMPORTED)
+
 include(Prebuilt)
 use_prebuilt_binary(discord-rpc)
-set(DISCORD_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include/discord-rpc)
 
 if (WINDOWS)
-  set(DISCORD_LIBRARY discord-rpc)
+  target_link_libraries(fs::discord INTERFACE discord-rpc)
 elseif (LINUX)
-set(DISCORD_LIBRARY discord-rpc)
+  target_link_libraries(fs::discord INTERFACE discord-rpc)
 elseif (DARWIN)
-set(DISCORD_LIBRARY discord-rpc)
+  target_link_libraries(fs::discord INTERFACE discord-rpc)
 endif (WINDOWS)
+
+target_include_directories(fs::discord SYSTEM INTERFACE
+        ${AUTOBUILD_INSTALL_DIR}/include/discord-rpc
+        )

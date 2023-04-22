@@ -106,9 +106,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>88b6b9ebc2eda992b721529921c82066</string>
+              <string>80d157facdba399b3a59c400e29cb625</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/glib-2.56.0.220911433-linux64_bionic-220911433.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/glib-2.64.6.230870115-linux64-230870115.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -552,9 +552,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>45acdda717f95ce9169de9f49199c066</string>
+              <string>1c341bdbb5fd0c8a8930f76e6c1647d4</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/apr_suite-1.4.5.230351228-linux64-230351228.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/apr_suite-1.4.5.230921251-linux64-230921251.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -736,9 +736,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>30b1a9b7637f7a1546d38430064ca582</string>
+              <string>8b79711b4fa914c16f1284939d55dcc1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/colladadom-2.3.222261253-linux64-222261253.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/colladadom-2.3.230940029-linux64-230940029.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1030,9 +1030,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bbcfe77b920fb7f00c7f2a494ffc6c43</string>
+              <string>39702f98867a319b090ee04f22d82762</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/expat-2.1.1.180841547-linux64-180841547.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/expat-2.5.0.230021327-linux64-230021327.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2000,9 +2000,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c68bbfe6c9bd59d182c4d20d966492b4</string>
+              <string>d72c6d8db827ce3d83c5703f519a2ac9</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/libxml2-2.9.4.222130358-linux64-222130358.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/libxml2-2.10.3.230940019-linux64-230940019.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3328,9 +3328,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f810193590cae9b35a1c77b6c72bfb01</string>
+              <string>71a9c7c03a2c26cdb21fa476de485d9c</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/xmlrpc_epi-0.54.1.180841935-linux64-180841935.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/xmlrpc_epi-0.54.2.230940042-linux64-230940042.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

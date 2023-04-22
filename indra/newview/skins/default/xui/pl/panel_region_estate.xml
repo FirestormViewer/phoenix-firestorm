@@ -21,6 +21,7 @@
 	</radio_group>
 	<check_box label="Osoba musi mieć 18+ lat" name="limit_age_verified" tool_tip="Zbanuj Rezydetów, którzy mają mniej niż 18 lat. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji." />
 	<check_box label="Musi mieć dane płatnicze w systemie LL" name="limit_payment" tool_tip="Zbanuj Rezydentów niezarejestrowanych w systemie płatniczym Linden Lab. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji." />
+	<check_box label="Nie może być agentem skryptowym" name="limit_bots" tool_tip="Rezydenci nie mogą być agentami skryptowymi (botami), aby uzyskać dostęp do tego majątku. Odwiedź [SUPPORT_SITE], aby uzyskać więcej informacji." />
 	<check_box label="Właściciele działek mogą być bardziej restrykcyjni" name="parcel_access_override" />
 	<check_box label="Rozmowy głosowe" name="voice_chat_check" />
 	<check_box label="Teleportacja bezpośrednia" name="allow_direct_teleport" />
@@ -28,4 +29,3 @@
 	<button label="Wyślij wiadomość do Majątku..." name="message_estate_btn" />
 	<button label="Wyrzuć Rezydenta z Majątku..." name="kick_user_from_estate_btn" />
 </panel>
-

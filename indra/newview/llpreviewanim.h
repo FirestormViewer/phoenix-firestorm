@@ -50,6 +50,8 @@ public:
 
 protected:
 	
+	void expand(const LLSD& param);		// <FS:Zi> Make advanced animation preview optional
+
 	LLUUID	mItemID; // Not an item id, but a playing asset id
 	bool	mDidStart;
 	// <FS:Ansariel> Improved animation preview

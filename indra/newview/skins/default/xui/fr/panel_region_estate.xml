@@ -23,6 +23,7 @@ domaine.
 	</radio_group>
 	<check_box label="Doit avoir plus de 18 ans" name="limit_age_verified" tool_tip="Pour accéder à ce domaine, les résidents doivent avoir au moins 18 ans. Consultez le [SUPPORT_SITE] pour plus d&apos;informations."/>
 	<check_box label="Les infos de paiement doivent être enregistrées" name="limit_payment" tool_tip="Pour pouvoir accéder à ce domaine, les résidents doivent avoir enregistré des informations de paiement. Consultez le [SUPPORT_SITE] pour plus d&apos;informations."/>
+	<check_box label="Ne doit pas être un agent scripté" name="limit_bots" tool_tip="Les résidents ne doivent pas être des agents scriptés (bots) pour accéder à ce domaine. Consultez le [SUPPORT_SITE] pour plus d'informations."/>
 	<check_box label="Les propriétaires de terrain peuvent imposer plus de restrictions" name="parcel_access_override"/>
 	<check_box label="Autoriser les chats vocaux" name="voice_chat_check"/>
 	<check_box label="Autoriser la téléportation directe" name="allow_direct_teleport"/>
