@@ -19,5 +19,3 @@ target_include_directories( fs::growl SYSTEM INTERFACE
         ${AUTOBUILD_INSTALL_DIR}/include/Growl
         )
 endif (DARWIN OR WINDOWS) # <FS:Zi> no need to do these things on Linux
-
-add_compile_definitions(HAS_GROWL)

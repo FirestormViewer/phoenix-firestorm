@@ -41,13 +41,11 @@
 
 
 extern "C" {
-#include <glib.h>
-#include <glib-object.h>
-
 #include <pulse/introspect.h>
 #include <pulse/context.h>
 #include <pulse/subscribe.h>
-#include <pulse/glib-mainloop.h> // There's no special reason why we want the *glib* PA mainloop, but the generic polling implementation seems broken.
+
+#include <pulse/mainloop.h>
 
 #include "apr_pools.h"
 #include "apr_dso.h"
@@ -62,7 +60,6 @@ extern "C" {
 
 #define LL_PA_SYM(REQUIRED, PASYM, RTN, ...) RTN (*ll##PASYM)(__VA_ARGS__) = NULL
 #include "linux_volume_catcher_pa_syms.inc"
-#include "linux_volume_catcher_paglib_syms.inc"
 #undef LL_PA_SYM
 
 static bool sSymsGrabbed = false;
@@ -94,7 +91,6 @@ bool grab_pa_syms(std::string pulse_dso_name)
 		INFOMSG("Found DSO: %s", pulse_dso_name.c_str());
 
 #include "linux_volume_catcher_pa_syms.inc"
-#include "linux_volume_catcher_paglib_syms.inc"
       
 		if ( sSymPADSOHandle )
 		{
@@ -141,7 +137,6 @@ void ungrab_pa_syms()
 	// NULL-out all of the symbols we'd grabbed
 #define LL_PA_SYM(REQUIRED, PASYM, RTN, ...) do{ll##PASYM = NULL;}while(0)
 #include "linux_volume_catcher_pa_syms.inc"
-#include "linux_volume_catcher_paglib_syms.inc"
 #undef LL_PA_SYM
 
 	sSymsGrabbed = false;
@@ -178,7 +173,7 @@ public:
 	std::set<U32> mSinkInputIndices;
 	std::map<U32,U32> mSinkInputNumChannels;
 	F32 mDesiredVolume;
-	pa_glib_mainloop *mMainloop;
+	pa_mainloop *mMainloop;
 	pa_context *mPAContext;
 	bool mConnected;
 	bool mGotSyms;
@@ -210,18 +205,14 @@ void VolumeCatcherImpl::init()
 	// bit fragile and (for our purposes) we'd rather simply not function
 	// than crash
 
-	// we cheat and rely upon libpulse-mainloop-glib.so.0 to pull-in
-	// libpulse.so.0 - this isn't a great assumption, and the two DSOs should
-	// probably be loaded separately.  Our Linux DSO framework needs refactoring,
-	// we do this sort of thing a lot with practically identical logic...
-	mGotSyms = loadsyms("libpulse-mainloop-glib.so.0");
+	mGotSyms = loadsyms("libpulse.so.0");
 	if (!mGotSyms) return;
 
-	mMainloop = llpa_glib_mainloop_new(g_main_context_default());
+	mMainloop = llpa_mainloop_new();
 	
 	if (mMainloop)
 	{
-		pa_mainloop_api *api = llpa_glib_mainloop_get_api(mMainloop);
+		pa_mainloop_api *api = llpa_mainloop_get_api(mMainloop);
 
 		if (api)
 		{
@@ -274,7 +265,7 @@ void VolumeCatcherImpl::cleanup()
 
 	if (mGotSyms && mMainloop)
 	{
-		llpa_glib_mainloop_free(mMainloop);
+		llpa_mainloop_free(mMainloop);
 	}
 	mMainloop = NULL;
 }
@@ -295,8 +286,7 @@ void VolumeCatcherImpl::setVolume(F32 volume)
 
 void VolumeCatcherImpl::pump()
 {
-	gboolean may_block = FALSE;
-	g_main_context_iteration(g_main_context_default(), may_block);
+	return;
 }
 
 void VolumeCatcherImpl::connected_okay()

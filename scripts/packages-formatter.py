@@ -75,6 +75,7 @@ def add_info(key, pkg, lines):
     # <FS:Ansariel> Only add as duplicate of the version is duplicate and the copyright string does not match
     #else:
     elif info[key][pkg] != '\n'.join(lines):
+        print("key: %s - pkg: %s - line: %s" % (key, pkg, lines))
     # </FS:Ansariel>
         dups[key].add(pkg)
 

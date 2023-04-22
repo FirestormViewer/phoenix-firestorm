@@ -534,7 +534,7 @@ void LLDiskCache::removeOldVFSFiles()
     }
 }
 
-uintmax_t LLDiskCache::dirFileSize(const std::string dir)
+uintmax_t LLDiskCache::dirFileSize(const std::string& dir)
 {
     uintmax_t total_file_size = 0;
 

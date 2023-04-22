@@ -23,8 +23,11 @@
 
 Essayez d'enregistrer l'image au format Targa 24 bits (.tga).
 	</text>
+	<text name="uploaded_size_text">
+		Taille transférée : [X_RES]x[Y_RES], [ALPHA]
+	</text>
 	<check_box label="Utiliser une compression sans pertes" name="lossless_check"/>
 	<check_box name="temp_check" label="Temporaire (Gratuit)" tool_tip="Défini l'envoi comme étant temporaire, celui-ci étant gratuit, mais disponible uniquement pour un temps limité avant qu'il ne cesse d'exister définitivement."/>
+	<button label="Transferer (L$[AMOUNT])" name="ok_btn"/>
 	<button label="Annuler" name="cancel_btn"/>
-	<button label="Uploader ([AMOUNT] L$)" width="130" name="ok_btn"/>
 </floater>
