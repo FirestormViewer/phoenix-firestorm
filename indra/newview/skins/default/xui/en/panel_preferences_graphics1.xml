@@ -406,7 +406,7 @@
            name="1"
            value="1"/>
           <combo_box.item
-           label="Manual &amp; terrain and water"
+           label="Manual &amp; terrain"
            name="2"
            value="2"/>
           <combo_box.item
