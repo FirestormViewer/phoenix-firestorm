@@ -6947,7 +6947,7 @@ void LLPipeline::renderAlphaObjects(bool rigged)
                     lastMeshId = pparams->mSkinInfo->mHash;
                 }
 
-                mSimplePool->pushBatch(*pparams, true, true);
+                mSimplePool->pushBatch(*pparams, true, true, true);
             }
         }
         else
@@ -6958,7 +6958,7 @@ void LLPipeline::renderAlphaObjects(bool rigged)
             }
             else
             {
-                mSimplePool->pushBatch(*pparams, true, true);
+                mSimplePool->pushBatch(*pparams, true, true, true);
             }
         }
     }
@@ -6975,11 +6975,11 @@ void LLPipeline::renderMaskedObjects(U32 type, bool texture, bool batch_texture,
 	gGLLastMatrix = NULL;
     if (rigged)
     {
-        mAlphaMaskPool->pushRiggedMaskBatches(type+1, texture, batch_texture);
+        mAlphaMaskPool->pushRiggedMaskBatches(type+1, texture, batch_texture, true);
     }
     else
     {
-        mAlphaMaskPool->pushMaskBatches(type, texture, batch_texture);
+        mAlphaMaskPool->pushMaskBatches(type, texture, batch_texture, true);
     }
 	gGL.loadMatrix(gGLModelView);
 	gGLLastMatrix = NULL;		
@@ -6993,11 +6993,11 @@ void LLPipeline::renderFullbrightMaskedObjects(U32 type, bool texture, bool batc
 	gGLLastMatrix = NULL;
     if (rigged)
     {
-        mFullbrightAlphaMaskPool->pushRiggedMaskBatches(type+1, texture, batch_texture);
+        mFullbrightAlphaMaskPool->pushRiggedMaskBatches(type+1, texture, batch_texture, true);
     }
     else
     {
-        mFullbrightAlphaMaskPool->pushMaskBatches(type, texture, batch_texture);
+        mFullbrightAlphaMaskPool->pushMaskBatches(type, texture, batch_texture, true);
     }
 	gGL.loadMatrix(gGLModelView);
 	gGLLastMatrix = NULL;		
@@ -7192,7 +7192,7 @@ void LLPipeline::gammaCorrect(LLRenderTarget* src, LLRenderTarget* dst) {
 
 		static LLCachedControl<F32> exposure(gSavedSettings, "RenderExposure", 1.f);
 
-		F32 e = llclamp(exposure(), 0.5f, 4.f);       
+		F32 e = llclamp(exposure(), 0.5f, 4.f);
 
 		static LLStaticHashedString s_exposure("exposure");
 
