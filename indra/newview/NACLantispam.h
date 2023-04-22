@@ -1,8 +1,8 @@
 #ifndef NACL_ANTISPAM_H
 #define NACL_ANTISPAM_H
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
+#include <unordered_map>
+#include <unordered_set>
 #include "llsingleton.h"
 #include "llavatarnamecache.h"
 
@@ -24,6 +24,14 @@ typedef enum e_antispam_source_type
 	ANTISPAM_SOURCE_AGENT,
 	ANTISPAM_SOURCE_OBJECT
 } EAntispamSource;
+
+
+enum class EAntispamCheckResult
+{
+	Unblocked,
+	NewBlock,
+	ExistingBlock
+};
 
 struct AntispamObjectData
 {
@@ -58,8 +66,8 @@ private:
 	bool	mBlocked;
 };
 
-typedef boost::unordered_map<LLUUID, NACLAntiSpamQueueEntry*, FSUUIDHash> spam_queue_entry_map_t;
-typedef boost::unordered_set<LLUUID, FSUUIDHash> collision_sound_set_t;
+typedef std::unordered_map<LLUUID, NACLAntiSpamQueueEntry*, FSUUIDHash> spam_queue_entry_map_t;
+typedef std::unordered_set<LLUUID, FSUUIDHash> collision_sound_set_t;
 
 class NACLAntiSpamQueue
 {
@@ -77,7 +85,7 @@ protected:
 	void setTime(U32 time);
 
 	void blockEntry(const LLUUID& source);
-	S32 checkEntry(const LLUUID& source, U32 multiplier);
+	EAntispamCheckResult checkEntry(const LLUUID& source, U32 multiplier);
 	NACLAntiSpamQueueEntry* getEntry(const LLUUID& source);
 
 	void clearEntries();
@@ -119,7 +127,7 @@ private:
 	const char* getQueueName(EAntispamQueue queue);
 
 	void blockGlobalEntry(const LLUUID& source);
-	S32 checkGlobalEntry(const LLUUID& source, U32 multiplier);
+	EAntispamCheckResult checkGlobalEntry(const LLUUID& source, U32 multiplier);
 
 	void clearGlobalEntries();
 	void purgeGlobalEntries();
