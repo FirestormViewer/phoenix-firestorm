@@ -155,6 +155,16 @@
 			parameter="show_channel_selection"/>
 	</menu_item_check>
 	<menu_item_check
+		label="Show emoji button"
+		name="show_emoji_button">
+		<menu_item_check.on_check
+			function="CheckControl"
+			parameter="FSShowEmojiButton"/>
+		<menu_item_check.on_click
+			function="ToggleControl"
+			parameter="FSShowEmojiButton"/>
+	</menu_item_check>
+	<menu_item_check
 		label="Show chat type / send button"
 		name="show_send_button">
 		<menu_item_check.on_check

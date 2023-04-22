@@ -53,6 +53,7 @@
 #include "llconsole.h"
 #include "llfloaterabout.h"		// for sysinfo button -Zi
 #include "llfloateravatarpicker.h"
+#include "llfloateremojipicker.h"
 #include "llfloaterreg.h"
 #include "llfloatersearchreplace.h"
 #include "llgroupactions.h"
@@ -953,8 +954,10 @@ BOOL FSFloaterIM::postBuild()
 	mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
 	mInputEditor->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 
-	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
+	mEmojiButton = getChild<LLButton>("emoji_panel_btn");
+	mEmojiButton->setClickedCallback(boost::bind(&FSFloaterIM::onEmojiPanelBtnClicked, this));
 
+	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 	getChild<LLButton>("chat_search_btn")->setCommitCallback(boost::bind(&FSFloaterIM::onChatSearchButtonClicked, this));
 
 	bool isFSSupportGroup = FSData::getInstance()->isFirestormGroup(mSessionID);
@@ -2500,4 +2503,35 @@ bool FSFloaterIM::applyRectControl()
 	}
 
 	return res;
+}
+
+void FSFloaterIM::onEmojiPanelBtnClicked(FSFloaterIM* self)
+{
+	if (LLFloaterEmojiPicker* picker = LLFloaterEmojiPicker::getInstance())
+	{
+		if (!picker->isShown())
+		{
+			picker->show(
+				boost::bind(&FSFloaterIM::onEmojiPicked, self, _1),
+				boost::bind(&FSFloaterIM::onEmojiPickerClosed, self));
+			if (LLFloater* root_floater = gFloaterView->getParentFloater(self))
+			{
+				root_floater->addDependentFloater(picker, TRUE, TRUE);
+			}
+		}
+		else
+		{
+			picker->closeFloater();
+		}
+	}
+}
+
+void FSFloaterIM::onEmojiPicked(llwchar emoji)
+{
+	mInputEditor->insertEmoji(emoji);
+}
+
+void FSFloaterIM::onEmojiPickerClosed()
+{
+	mInputEditor->setFocus(TRUE);
 }

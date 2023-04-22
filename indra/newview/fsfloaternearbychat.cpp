@@ -50,6 +50,7 @@
 #include "llcommandhandler.h"
 #include "llconsole.h"
 #include "lldraghandle.h"
+#include "llfloateremojipicker.h"
 #include "llfloaterreg.h"
 #include "llfloatersearchreplace.h"
 #include "llfocusmgr.h"
@@ -141,8 +142,10 @@ BOOL FSFloaterNearbyChat::postBuild()
 	mChatLayoutPanelHeight = mChatLayoutPanel->getRect().getHeight();
 	mInputEditorPad = mChatLayoutPanelHeight - mInputEditor->getRect().getHeight();
 
-	getChild<LLButton>("chat_history_btn")->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onHistoryButtonClicked, this));
+	mEmojiButton = getChild<LLButton>("emoji_panel_btn");
+	mEmojiButton->setClickedCallback(boost::bind(&FSFloaterNearbyChat::onEmojiPanelBtnClicked, this));
 
+	getChild<LLButton>("chat_history_btn")->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onHistoryButtonClicked, this));
 	getChild<LLButton>("chat_search_btn")->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onSearchButtonClicked, this));
 
 	// chat type selector and send chat button
@@ -941,4 +944,35 @@ void FSFloaterNearbyChat::handleMinimized(bool minimized)
 	{
 		gConsole->addSession(LLUUID::null);
 	}
+}
+
+void FSFloaterNearbyChat::onEmojiPanelBtnClicked(FSFloaterNearbyChat* self)
+{
+	if (LLFloaterEmojiPicker* picker = LLFloaterEmojiPicker::getInstance())
+	{
+		if (!picker->isShown())
+		{
+			picker->show(
+				boost::bind(&FSFloaterNearbyChat::onEmojiPicked, self, _1),
+				boost::bind(&FSFloaterNearbyChat::onEmojiPickerClosed, self));
+			if (LLFloater* root_floater = gFloaterView->getParentFloater(self))
+			{
+				root_floater->addDependentFloater(picker, TRUE, TRUE);
+			}
+		}
+		else
+		{
+			picker->closeFloater();
+		}
+	}
+}
+
+void FSFloaterNearbyChat::onEmojiPicked(llwchar emoji)
+{
+	mInputEditor->insertEmoji(emoji);
+}
+
+void FSFloaterNearbyChat::onEmojiPickerClosed()
+{
+	mInputEditor->setFocus(TRUE);
 }

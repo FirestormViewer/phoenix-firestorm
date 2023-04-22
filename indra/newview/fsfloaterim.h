@@ -173,7 +173,6 @@ protected:
 	// support sysinfo button -Zi
 
 	BOOL enableViewerVersionCallback(const LLSD& notification,const LLSD& response);		// <FS:Zi> Viewer version popup
-	void reshapeFloater(bool collapse);
 	void reshapeChatLayoutPanel();
 private:
 	// process focus events to set a currently active session
@@ -236,10 +235,14 @@ private:
 	void addSessionParticipants(const uuid_vec_t& uuids);
 	void addP2PSessionParticipants(const LLSD& notification, const LLSD& response, const uuid_vec_t& uuids);
 
-	void	onChatOptionsContextMenuItemClicked(const LLSD& userdata);
-	bool	onChatOptionsCheckContextMenuItem(const LLSD& userdata);
-	bool	onChatOptionsVisibleContextMenuItem(const LLSD& userdata);
-	bool	onChatOptionsEnableContextMenuItem(const LLSD& userdata);
+	void onChatOptionsContextMenuItemClicked(const LLSD& userdata);
+	bool onChatOptionsCheckContextMenuItem(const LLSD& userdata);
+	bool onChatOptionsVisibleContextMenuItem(const LLSD& userdata);
+	bool onChatOptionsEnableContextMenuItem(const LLSD& userdata);
+
+	static void onEmojiPanelBtnClicked(FSFloaterIM* self);
+	void onEmojiPicked(llwchar emoji);
+	void onEmojiPickerClosed();
 
 	FSPanelChatControlPanel* mControlPanel;
 	LLUUID mSessionID;
@@ -254,7 +257,7 @@ private:
 	LLLayoutStack* mInputPanels;
 	LLLayoutPanel* mUnreadMessagesNotificationPanel;
 	LLTextBox* mUnreadMessagesNotificationTextBox;
-	// bool mPositioned;		// dead code -Zi
+	LLButton* mEmojiButton;
 
 	std::string mSavedTitle;
 	LLUIString mTypingStart;

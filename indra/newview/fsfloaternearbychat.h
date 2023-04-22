@@ -93,7 +93,6 @@ public:
 
 	virtual BOOL handleKeyHere( KEY key, MASK mask );
 
-	static void startChat(const char* line);
 	static void stopChat();
 
 	void updateUnreadMessageNotification(S32 unread_messages, bool muted_history);
@@ -111,22 +110,26 @@ protected:
 	void onChatBoxCommit();
 	void onChatTypeChanged();
 	
-	void reshapeFloater(bool collapse);
 	void reshapeChatLayoutPanel();
 	
 	static S32 sLastSpecialChatChannel;
 
 private:
-	void	onChatOptionsContextMenuItemClicked(const LLSD& userdata);
-	bool	onChatOptionsCheckContextMenuItem(const LLSD& userdata);
-	bool	onChatOptionsVisibleContextMenuItem(const LLSD& userdata);
-	bool	onChatOptionsEnableContextMenuItem(const LLSD& userdata);
+	void onChatOptionsContextMenuItemClicked(const LLSD& userdata);
+	bool onChatOptionsCheckContextMenuItem(const LLSD& userdata);
+	bool onChatOptionsVisibleContextMenuItem(const LLSD& userdata);
+	bool onChatOptionsEnableContextMenuItem(const LLSD& userdata);
+
+	static void onEmojiPanelBtnClicked(FSFloaterNearbyChat* self);
+	void onEmojiPicked(llwchar emoji);
+	void onEmojiPickerClosed();
 
 	FSChatHistory*		mChatHistory;
 	FSChatHistory*		mChatHistoryMuted;
 	LLChatEntry*		mInputEditor;
 
 	// chat type selector and send chat buttons
+	LLButton*			mEmojiButton;
 	LLButton*			mSendChatButton;
 	LLComboBox*			mChatTypeCombo;
 
