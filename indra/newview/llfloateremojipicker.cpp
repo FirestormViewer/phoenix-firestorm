@@ -109,7 +109,7 @@ BOOL LLFloaterEmojiPicker::postBuild()
 	if ((mCategory = getChild<LLComboBox>("Category")))
 	{
 		mCategory->setCommitCallback(boost::bind(&LLFloaterEmojiPicker::onCategoryCommit, this));
-		mCategory->setLabel(LLStringExplicit("Choose a category"));
+		//mCategory->setLabel(LLStringExplicit("Choose a category"));
 		const auto& cat2Descrs = LLEmojiDictionary::instance().getCategory2Descrs();
 		mCategory->clearRows();
 		for (const auto& item : cat2Descrs)
@@ -125,7 +125,7 @@ BOOL LLFloaterEmojiPicker::postBuild()
 	if ((mSearch = getChild<LLLineEditor>("Search")))
 	{
 		mSearch->setKeystrokeCallback(boost::bind(&LLFloaterEmojiPicker::onSearchKeystroke, this, _1, _2), NULL);
-		mSearch->setLabel(LLStringExplicit("Type to search an emoji"));
+		//mSearch->setLabel(LLStringExplicit("Type to search an emoji"));
 		mSearch->setFont(LLViewerChat::getChatFont());
 		mSearch->setText(mSearchPattern);
 	}

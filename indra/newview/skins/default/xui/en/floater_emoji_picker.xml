@@ -11,6 +11,7 @@
     width="200">
   <line_editor
       name="Search"
+      label="Type to search an emoji"
       layout="bottomleft"
       follows="bottom|left|right"
       text_tentative_color="TextFgTentativeColor"
@@ -53,6 +54,7 @@
   </scroll_list>
   <combo_box
       name="Category"
+      label="Choose a category"
       layout="topleft"
       follows="top|left|right"
 	  allow_text_entry="true"
