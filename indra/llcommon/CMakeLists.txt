@@ -303,7 +303,6 @@ endif(NOT WORD_SIZE EQUAL 32)
 
 target_link_libraries(
         llcommon
-        ll::icu4c
         ll::apr
         ll::expat
         ll::jsoncpp
@@ -312,6 +311,7 @@ target_link_libraries(
         ll::uriparser
         ll::oslibraries
         ll::tracy
+        ll::icu4c
     )
 
 target_include_directories(llcommon INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

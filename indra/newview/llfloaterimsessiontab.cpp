@@ -42,6 +42,7 @@
 #include "llchicletbar.h"
 #include "lldraghandle.h"
 #include "llfloaterreg.h"
+#include "llfloateremojipicker.h"
 #include "llfloaterimsession.h"
 #include "llfloaterimcontainer.h" // to replace separate IM Floaters with multifloater container
 #include "lllayoutstack.h"
@@ -252,10 +253,13 @@ BOOL LLFloaterIMSessionTab::postBuild()
 	mTearOffBtn = getChild<LLButton>("tear_off_btn");
 	mTearOffBtn->setCommitCallback(boost::bind(&LLFloaterIMSessionTab::onTearOffClicked, this));
 
+	mEmojiBtn = getChild<LLButton>("emoji_panel_btn");
+	mEmojiBtn->setClickedCallback(boost::bind(&LLFloaterIMSessionTab::onEmojiPanelBtnClicked, this));
+
 	mGearBtn = getChild<LLButton>("gear_btn");
     mAddBtn = getChild<LLButton>("add_btn");
 	mVoiceButton = getChild<LLButton>("voice_call_btn");
-    
+
 	mParticipantListPanel = getChild<LLLayoutPanel>("speakers_list_panel");
 	mRightPartPanel = getChild<LLLayoutPanel>("right_part_holder");
 
@@ -424,6 +428,37 @@ void LLFloaterIMSessionTab::onInputEditorClicked()
 		im_box->flashConversationItemWidget(mSessionID,false);
 	}
 	gToolBarView->flashCommand(LLCommandId("chat"), false);
+}
+
+void LLFloaterIMSessionTab::onEmojiPanelBtnClicked(LLFloaterIMSessionTab* self)
+{
+	if (LLFloaterEmojiPicker* picker = LLFloaterEmojiPicker::getInstance())
+	{
+		if (!picker->isShown())
+		{
+			picker->show(
+				boost::bind(&LLFloaterIMSessionTab::onEmojiPicked, self, _1),
+				boost::bind(&LLFloaterIMSessionTab::onEmojiPickerClosed, self));
+			if (LLFloater* root_floater = gFloaterView->getParentFloater(self))
+			{
+				root_floater->addDependentFloater(picker, TRUE, TRUE);
+			}
+		}
+		else
+		{
+			picker->closeFloater();
+		}
+	}
+}
+
+void LLFloaterIMSessionTab::onEmojiPicked(llwchar emoji)
+{
+	mInputEditor->insertEmoji(emoji);
+}
+
+void LLFloaterIMSessionTab::onEmojiPickerClosed()
+{
+	mInputEditor->setFocus(TRUE);
 }
 
 std::string LLFloaterIMSessionTab::appendTime()

@@ -183,6 +183,7 @@ protected:
 	LLButton* mExpandCollapseLineBtn;
 	LLButton* mExpandCollapseBtn;
 	LLButton* mTearOffBtn;
+	LLButton* mEmojiBtn;
 	LLButton* mCloseBtn;
 	LLButton* mGearBtn;
 	LLButton* mAddBtn;
@@ -207,6 +208,10 @@ private:
 	void reshapeChatLayoutPanel();
 
 	void onInputEditorClicked();
+
+	static void onEmojiPanelBtnClicked(LLFloaterIMSessionTab* self);
+	void onEmojiPicked(llwchar emoji);
+	void onEmojiPickerClosed();
 
 	bool checkIfTornOff();
     bool mIsHostAttached;

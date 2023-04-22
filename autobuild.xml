@@ -672,9 +672,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7b4aceaed511d44c4d1354b2162b59c7</string>
+              <string>878eaf654926e400d67680100cb780c9</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/107398/936936/bugsplat-1.0.7.576560-darwin64-576560.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/113512/981912/bugsplat-1.0.7.579546-darwin64-579546.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -684,9 +684,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>53918c7c74b943cdc0bb90caf9657a84</string>
+              <string>5b32c47ae8e8cf0d4106f08e8db18044</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/107400/936949/bugsplat-4.0.3.0.576560-windows-576560.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/113878/983697/bugsplat-4.0.3.0.579696-windows-579696.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -696,16 +696,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>19d6a55db101f02e7eb531daf3e8cfd1</string>
+              <string>79c005fd8a660f8551b3c9ede64fa4ef</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/107401/936948/bugsplat-.576560-windows64-576560.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/113879/983696/bugsplat-4.0.3.0.579696-windows64-579696.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>4.0.3.0.576560</string>
+        <string>4.0.3.0.579696</string>
       </map>
       <key>colladadom</key>
       <map>
@@ -998,6 +998,62 @@
         </map>
         <key>version</key>
         <string>1.12.4.202209142021_91.1.21_g9dd45fe_chromium-91.0.4472.114</string>
+      </map>
+      <key>emoji_shortcodes</key>
+      <map>
+        <key>canonical_repo</key>
+        <string>https://github.com/secondlife/3p-emoji-shortcodes</string>
+        <key>copyright</key>
+        <string>Copyright 2017-2019 Miles Johnson.</string>
+        <key>description</key>
+        <string>Emoji shortcodes</string>
+        <key>license</key>
+        <string>MIT</string>
+        <key>license_file</key>
+        <string>LICENSES/emojibase-license.txt</string>
+        <key>name</key>
+        <string>emoji_shortcodes</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>7ac35da9b1b5c9a05954edeef3fe8e54</string>
+              <key>url</key>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/113242/980233/emoji_shortcodes-6.1.0.579438-darwin64-579438.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
+          <key>windows</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>3c5c4c7e3bb2eeef61e605b6690a63f3</string>
+              <key>url</key>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/113244/980245/emoji_shortcodes-6.1.0.579438-windows-579438.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows</string>
+          </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>087ce7e6d93dcd88b477b10d8e1ab259</string>
+              <key>url</key>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/113243/980244/emoji_shortcodes-6.1.0.579438-windows64-579438.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>6.1.0.579438</string>
       </map>
       <key>expat</key>
       <map>
@@ -3304,7 +3360,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
       <key>viewer-fonts</key>
       <map>
         <key>copyright</key>
-        <string>Copyright various</string>
+        <string>Copyright 2016-2022 Brad Erickson CC-BY-4.0/MIT, Copyright 2016-2022 Twitter, Inc. CC-BY-4.0, Copyright 2013 Joe Loughry and Terence Eden MIT</string>
         <key>description</key>
         <string>Viewer fonts</string>
         <key>license</key>
@@ -3320,9 +3376,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d47e0ed35dad11f0a5dc821758e2ae46</string>
+              <string>6041bbd4001e3951f96ac3456c7906da</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/109658/953998/viewer_fonts-1.577782-darwin64-577782.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/113314/980656/viewer_fonts-1.579464-darwin64-579464.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3332,9 +3388,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7dc39bb7cd8133d251eaff9c9e16bdfd</string>
+              <string>19c48abc168a1c4e0f0ec6d471b2e1bd</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/109660/954010/viewer_fonts-1.577782-windows-577782.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/113308/980632/viewer_fonts-1.579464-windows-579464.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -3344,16 +3400,16 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>86134368c16c7d685156403e15a7cbcd</string>
+              <string>1745ba6eec0108250446fe01d4aa065c</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/109659/954009/viewer_fonts-1.577782-windows64-577782.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/113307/980631/viewer_fonts-1.579464-windows64-579464.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>1.577782</string>
+        <string>1.579464</string>
       </map>
       <key>viewer-manager</key>
       <map>
