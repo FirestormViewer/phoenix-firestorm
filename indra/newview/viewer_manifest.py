@@ -87,6 +87,11 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             self.path("fonts")
         # </FS:Ansariel>
 
+        # <FS:Ansariel> Copy emoji characters to build output
+        with self.prefix(src=pkgdir, dst="skins/default"):
+            self.path("xui")
+        # </FS:Ansariel>
+
         if self.is_packaging_viewer():
             with self.prefix(src_dst="app_settings"):
                 self.exclude("logcontrol.xml")
