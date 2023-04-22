@@ -13904,6 +13904,20 @@ If you want to see this object, remove it and re-attach it to an avatar attachme
   </notification>
 
   <notification
+   icon="alertmodal.tga"
+   name="EnableAutoFPSWarning"
+   type="alertmodal">
+You are about to enable AutoFPS. All unsaved graphics settings will be lost.
+
+Would you like to save them first?
+      <tag>confirm</tag>
+      <usetemplate
+       name="okcancelbuttons"
+       notext="No"
+       yestext="Yes"/>
+  </notification>
+    
+  <notification
    icon="notify.tga"
    name="NoValidEnvSettingFound"
    persist="true"
