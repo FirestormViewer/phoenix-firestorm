@@ -3957,8 +3957,10 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DLL_TESTS=Off</string>
                 </array>
               </map>
+              <!-- FS:Ansariel: This will cause packages being installed twice
               <key>default</key>
               <string>True</string>
+              -->
               <key>name</key>
               <string>Release</string>
             </map>
