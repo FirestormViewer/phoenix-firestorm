@@ -1,6 +1,12 @@
 name: Build viewer
-on: push
-env:
+on:
+  push:
+    branches:
+      - "*release"
+      - master
+  schedule:
+    - cron: '00 03 * * *' # Run every day at 3am UTC
+env:    
   AUTOBUILD_VARIABLES_FILE: ${{github.workspace}}/build-variables/variables
   EXTRA_ARGS: -DFMODSTUDIO=ON -DUSE_KDU=ON --crashreporting
   build_secrets_checkout: ${{github.workspace}}/signing
@@ -67,10 +73,14 @@ jobs:
 
       - name: find channel from Branch name
         run: | 
-          if [[ "${{ github.ref_name }}" == *"Release"* ]]; then
+          if [[ "${{ github.ref_name }}" == *Release* ]]; then
             FS_RELEASE_CHAN="Release"
           else
-            FS_RELEASE_CHAN="Beta"
+            if [[ "${{github.event_name}}" == 'schedule' ]]; then
+              FS_RELEASE_CHAN="Nightly"
+            else
+              FS_RELEASE_CHAN="Beta"
+            fi
           fi
           if [[ "${{ matrix.addrsize }}" == "64" ]]; then
             FS_RELEASE_CHAN="${FS_RELEASE_CHAN}x64"
@@ -194,29 +204,38 @@ jobs:
         run: autobuild build --debug -c ReleaseFS -A${{matrix.addrsize}} --no-configure
         shell: bash
 
-      - name: publish Windows artifacts
-        if: runner.os == 'Windows'
+      - name: Prep Nightly Build for deploy
+        if: github.event_name == 'schedule'
+        uses: actions/download-artifact@v3
+        id: download
+        with:
+          name: ${{ matrix.os }}-${{matrix.addrsize}}-${{matrix.grid}}-artifacts.zip
+          path: |
+            ${{ if eq(runner.os, 'Windows') }}:
+              build-*/newview/Release/*Setup.exe
+              build-*/newview/Release/*.xz
+            ${{ if eq(runner.os, 'Linux') }}:
+              build-linux-*/newview/*.xz
+              build-linux-*/newview/*.bz2
+            ${{ if eq(runner.os, 'macOS') }}:
+              build-darwin-*/newview/*.dmg
+              build-darwin-*/newview/*.bz2
+
+      - name: Deploy Nightly to server
+
+      - name: publish artifacts
+        if: github.event_name == 'push'
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.os }}-${{matrix.addrsize}}-${{matrix.grid}}-artifacts.zip
           path: |
-            build-*/newview/Release/*Setup.exe
-            build-*/newview/Release/*.xz
-
-      - name: publish Linux artifacts
-        if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.os }}-${{matrix.addrsize}}-${{matrix.grid}}-artifacts.zip
-          path: | 
-            build-linux-*/newview/*.xz
-            build-linux-*/newview/*.bz2
-
-      - name: publish MacOS artifacts
-        if: runner.os == 'macOS'
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.os }}-${{matrix.addrsize}}-${{matrix.grid}}-artifacts.zip
-          path: |
-            build-darwin-*/newview/*.dmg
-            build-darwin-*/newview/*.bz2
+            ${{ if eq(runner.os, 'Windows') }}:
+              build-*/newview/Release/*Setup.exe
+              build-*/newview/Release/*.xz
+            ${{ if eq(runner.os, 'Linux') }}:
+              build-linux-*/newview/*.xz
+              build-linux-*/newview/*.bz2
+            ${{ if eq(runner.os, 'macOS') }}:
+              build-darwin-*/newview/*.dmg
+              build-darwin-*/newview/*.bz2
+      
