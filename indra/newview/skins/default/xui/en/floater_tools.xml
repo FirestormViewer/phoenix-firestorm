@@ -2945,7 +2945,7 @@ Low ↔ Lwst
              height="50"
              layout="topleft"
              left_pad="10"
-             top_pad="-17"
+             top_pad="-21"
              name="colorswatch"
              tool_tip="Click to open color picker"
              width="40" />
