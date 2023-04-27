@@ -32,7 +32,7 @@
 #include "pipeline.h"
 #include "llglcommonfunc.h"
 #include "llvoavatar.h"
-#include "fsperfstats.h" // <FS:Beq> performance stats support
+#include "llperfstats.h"
 
 LLDrawPoolMaterials::LLDrawPoolMaterials()
 :  LLRenderPass(LLDrawPool::POOL_MATERIALS)
@@ -193,7 +193,7 @@ void LLDrawPoolMaterials::renderDeferred(S32 pass)
 
     LLVOAvatar* lastAvatar = nullptr;
 
-	//std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
+	//std::unique_ptr<LLPerfStats::RecordAttachmentTime> ratPtr{};
 	for (LLCullResult::drawinfo_iterator i = begin; i != end; )
 	{
         LL_PROFILE_ZONE_NAMED_CATEGORY_MATERIAL("materials draw loop");

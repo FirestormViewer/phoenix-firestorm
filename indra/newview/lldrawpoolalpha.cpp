@@ -49,7 +49,7 @@
 #include "llspatialpartition.h"
 #include "llglcommonfunc.h"
 #include "llvoavatar.h"
-#include "fsperfstats.h" // <FS:Beq> performance stats support
+#include "llperfstats.h"
 
 #include "llenvironment.h"
 
@@ -356,7 +356,7 @@ void LLDrawPoolAlpha::renderAlphaHighlight(U32 mask)
             {
                 LLSpatialGroup::drawmap_elem_t& draw_info = group->mDrawMap[LLRenderPass::PASS_ALPHA+pass]; // <-- hacky + pass to use PASS_ALPHA_RIGGED on second pass 
 
-                //std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Render time Stats collection
+                //std::unique_ptr<LLPerfStats::RecordAttachmentTime> ratPtr{}; // Render time Stats collection
                 for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k)
                 {
                     LLDrawInfo& params = **k;
@@ -567,7 +567,7 @@ void LLDrawPoolAlpha::renderRiggedEmissives(std::vector<LLDrawInfo*>& emissives)
     LLVOAvatar* lastAvatar = nullptr;
     U64 lastMeshId = 0;
 
-    //std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Render time Stats collection
+    //std::unique_ptr<LLPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Render time Stats collection
     for (LLDrawInfo* draw : emissives)
     {
         // <FS:Beq> Capture render times - BEQFIXMEPLEASE
@@ -715,7 +715,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
 
 			LLSpatialGroup::drawmap_elem_t& draw_info = rigged ? group->mDrawMap[LLRenderPass::PASS_ALPHA_RIGGED] : group->mDrawMap[LLRenderPass::PASS_ALPHA];
 
-			//std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Render time Stats collection
+			//std::unique_ptr<LLPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> Render time Stats collection
 			for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k)	
 			{
 				LLDrawInfo& params = **k;

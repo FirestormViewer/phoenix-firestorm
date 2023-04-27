@@ -49,7 +49,7 @@
 #include "llspatialpartition.h"
 #include "llviewershadermgr.h"
 #include "llmodel.h"
-#include "fsperfstats.h" // <FS:Beq> performance stats support
+#include "llperfstats.h"
 
 //#include "llimagebmp.h"
 //#include "../tools/imdebug/imdebug.h"
@@ -411,7 +411,7 @@ void LLDrawPoolBump::renderGroup(LLSpatialGroup* group, U32 type, bool texture =
 	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
 	LLSpatialGroup::drawmap_elem_t& draw_info = group->mDrawMap[type];	
 	
-	//std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
+	//std::unique_ptr<LLPerfStats::RecordAttachmentTime> ratPtr{};
 	for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k) 
 	{
 		LLDrawInfo& params = **k;
@@ -572,7 +572,7 @@ void LLDrawPoolBump::renderDeferred(S32 pass)
         LLVOAvatar* avatar = nullptr;
         U64 skin = 0;
 
-        //std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
+        //std::unique_ptr<LLPerfStats::RecordAttachmentTime> ratPtr{};
         for (LLCullResult::drawinfo_iterator i = begin; i != end; )
         {
             LLDrawInfo& params = **i;
@@ -1221,7 +1221,7 @@ void LLDrawPoolBump::pushBumpBatches(U32 type)
     LLCullResult::drawinfo_iterator begin = gPipeline.beginRenderMap(type);
     LLCullResult::drawinfo_iterator end = gPipeline.endRenderMap(type);
 
-	//std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
+	//std::unique_ptr<LLPerfStats::RecordAttachmentTime> ratPtr{};
 	for (LLCullResult::drawinfo_iterator i = begin; i != end; ++i)	
 	{
 		LLDrawInfo& params = **i;

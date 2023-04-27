@@ -213,8 +213,8 @@
 #include "llenvironment.h"
 
 #include "llstacktrace.h"
-#include "fsperfstats.h"
 #include "threadpool.h"
+#include "llperfstats.h"
 
 
 #if LL_WINDOWS
@@ -2221,9 +2221,8 @@ bool idle_startup()
 		update_static_eyes();
 		// </FS:KC>
 
-		// <FS:Beq>
-		gAgent.addRegionChangedCallback(boost::bind(&FSPerfStats::StatsRecorder::clearStats));
-		// </FS:Beq>
+
+		gAgent.addRegionChangedCallback(boost::bind(&LLPerfStats::StatsRecorder::clearStats));
 
 		// *Note: this is where gWorldMap used to be initialized.
 
@@ -3088,7 +3087,7 @@ bool idle_startup()
 
 	if (STATE_CLEANUP == LLStartUp::getStartupState())
 	{
-		set_startup_status(1.0, "", "");
+        set_startup_status(1.0, "", "");
 		display_startup();
 
 		if (!mBenefitsSuccessfullyInit)
@@ -3214,6 +3213,8 @@ bool idle_startup()
 			"");
 
 		LLUIUsage::instance().clear();
+
+        LLPerfStats::StatsRecorder::setAutotuneInit();
 
 		// <FS:Techwolf Lupindo> FIRE-6643 Display MOTD when login screens are disabled
 		if (gSavedSettings.getBOOL("FSDisableLoginScreens"))
@@ -4391,10 +4392,6 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	// unpack login data needed by the application
 	text = response["agent_id"].asString();
 	if(!text.empty()) gAgentID.set(text);
-	// <FS:Beq> Performance floater initialisation
-	FSPerfStats::StatsRecorder::setEnabled(gSavedSettings.getBOOL("FSPerfStatsCaptureEnabled"));
-    FSPerfStats::StatsRecorder::setFocusAv(gAgentID);
-	// </FS:Beq>
 //	gDebugInfo["AgentID"] = text;
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-16 (Catznip-2.6.0a) | Added: Catznip-2.4.0b
 	if (gCrashSettings.getBOOL("CrashSubmitName"))
@@ -4404,6 +4401,9 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	}
 // [/SL:KB]
 	
+	LLPerfStats::StatsRecorder::setEnabled(gSavedSettings.getBOOL("PerfStatsCaptureEnabled"));
+	LLPerfStats::StatsRecorder::setFocusAv(gAgentID);
+
 	// Agent id needed for parcel info request in LLUrlEntryParcel
 	// to resolve parcel name.
 	LLUrlEntryParcel::setAgentID(gAgentID);
