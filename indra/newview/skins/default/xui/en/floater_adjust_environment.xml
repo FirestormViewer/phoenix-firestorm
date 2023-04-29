@@ -246,12 +246,12 @@
                             width="185"
                             can_edit_text="true"/>
                     <text follows="left|top"
-                          name="scene_gamma_label"
+                          name="bightness_label"
                           height="10"
                           layout="topleft"
                           left_delta="-5"
                           top_pad="15"
-                          width="185">Scene Gamma:</text>
+                          width="185">Brightness:</text>
                     <slider decimal_digits="2"
                             follows="left|top"
                             height="16"

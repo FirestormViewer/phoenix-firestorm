@@ -1723,7 +1723,7 @@ bool LLAppViewer::doFrame()
 
 				{
                     LLPerfStats::RecordSceneTime T (LLPerfStats::StatType_t::RENDER_IDLE);
-					LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df idle"); //LL_RECORD_BLOCK_TIME(FTM_IDLE);
+                    LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df idle");
 					idle();
 				}
 
@@ -1760,7 +1760,7 @@ bool LLAppViewer::doFrame()
 
                 {
                     LLPerfStats::RecordSceneTime T(LLPerfStats::StatType_t::RENDER_IDLE);
-                    LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df Snapshot")
+                    LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df Snapshot");
                     pingMainloopTimeout("Main:Snapshot");
                     gPipeline.mReflectionMapManager.update();
                     LLFloaterSnapshot::update(); // take snapshots

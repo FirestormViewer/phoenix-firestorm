@@ -5862,7 +5862,7 @@ S32 LLViewerObject::countInventoryContents(LLAssetType::EType type)
 	return count;
 }
 
-void LLViewerObject::setDebugText(const std::string &utf8text)
+void LLViewerObject::setDebugText(const std::string &utf8text, const LLColor4& color)
 {
 	if (utf8text.empty() && !mText)
 	{
@@ -5873,7 +5873,7 @@ void LLViewerObject::setDebugText(const std::string &utf8text)
 	{
 	    initHudText();
 	}
-	mText->setColor(LLColor4::white);
+	mText->setColor(color);
 	mText->setString(utf8text);
 	mText->setZCompare(FALSE);
 	mText->setDoFade(FALSE);

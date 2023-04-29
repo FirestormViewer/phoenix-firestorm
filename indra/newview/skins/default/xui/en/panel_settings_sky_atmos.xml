@@ -310,14 +310,14 @@
                             width="219"
                             can_edit_text="true"/>
                             <text
-                            name="scene_gamma_label"
+                            name="brightness_label"
                             follows="left|top"
                             height="10"
                             layout="topleft"
                             left="5"
                             top_pad="15"
                             width="105">
-                        Scene Gamma:
+                        Brightness:
                     </text>
                     <slider
                             decimal_digits="2"

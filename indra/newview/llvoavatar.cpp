@@ -2727,7 +2727,7 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
         {
             idleUpdateNameTag( mLastRootPos );
         }
-        return;
+		return;
 	}
 
     // Update should be happening max once per frame.

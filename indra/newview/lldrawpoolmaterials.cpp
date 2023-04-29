@@ -151,6 +151,7 @@ void LLDrawPoolMaterials::renderDeferred(S32 pass)
 	LLCullResult::drawinfo_iterator begin = gPipeline.beginRenderMap(type);
 	LLCullResult::drawinfo_iterator end = gPipeline.endRenderMap(type);
 	
+    //std::unique_ptr<LLPerfStats::RecordAttachmentTime> ratPtr{};
     F32 lastIntensity = 0.f;
     F32 lastFullbright = 0.f;
     F32 lastMinimumAlpha = 0.f;
@@ -193,25 +194,24 @@ void LLDrawPoolMaterials::renderDeferred(S32 pass)
 
     LLVOAvatar* lastAvatar = nullptr;
 
-	//std::unique_ptr<LLPerfStats::RecordAttachmentTime> ratPtr{};
 	for (LLCullResult::drawinfo_iterator i = begin; i != end; )
 	{
         LL_PROFILE_ZONE_NAMED_CATEGORY_MATERIAL("materials draw loop");
 		LLDrawInfo& params = **i;
-
-		// <FS:Beq> Capture render times - BEQFIXMEPLEASE
-		//if (params.mFace)
-		//{
-		//	LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
-		//	
-		//	if (vobj && vobj->isAttachment() )
-		//	{
-		//		trackAttachments(vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr);
-		//	}
-		//}
-		// </FS:Beq>
-
+		
         LLCullResult::increment_iterator(i, end);
+
+#if 0 // TODO SL-19656 figure out how to reenable trackAttachments()
+        if(params.mFace)
+        {
+            LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+
+            if( vobj && vobj->isAttachment() )
+            {
+                trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
+            }
+        }
+#endif
 
         if (specular > -1 && params.mSpecColor != lastSpecular)
         {

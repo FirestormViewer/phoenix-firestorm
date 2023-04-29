@@ -120,8 +120,8 @@ public:
 	void updateClickActionViews();
     void updateSearchableItems();
 
-    void		onBtnOK(const LLSD& userdata);
-    void		onBtnCancel(const LLSD& userdata);
+	void		onBtnOK(const LLSD& userdata);
+	void		onBtnCancel(const LLSD& userdata);
 
 protected:	
 

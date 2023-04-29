@@ -142,8 +142,6 @@ BOOL LLFloaterPerformance::postBuild()
     mMaxARTChangedSignal = gSavedSettings.getControl("RenderAvatarMaxART")->getCommitSignal()->connect(boost::bind(&LLFloaterPerformance::updateMaxRenderTime, this));
     mNearbyPanel->getChild<LLSliderCtrl>("RenderAvatarMaxART")->setCommitCallback(boost::bind(&LLFloaterPerformance::updateMaxRenderTime, this));
 
-    // store the current setting as the users desired reflection detail and DD
-    gSavedSettings.setS32("UserTargetReflections", LLPipeline::RenderReflectionDetail);
     if(!LLPerfStats::tunables.userAutoTuneEnabled)
     {
         gSavedSettings.setF32("AutoTuneRenderFarClipTarget", LLPipeline::RenderFarClip);
@@ -633,7 +631,7 @@ void LLFloaterPerformance::changeQualityLevel(const std::string& notif)
 
 bool is_ALM_available()
 {
-    bool bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump") && gSavedSettings.getBOOL("RenderObjectBump");
+    bool bumpshiny = LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump") && gSavedSettings.getBOOL("RenderObjectBump");
     bool shaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders");
     
     return LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
