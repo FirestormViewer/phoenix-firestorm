@@ -40,8 +40,8 @@
 					<text name="cloud_scale_label">
 						Wolken-Skalierung:
 					</text>
-					<text name="scene_gamma_label">
-						Szenen-Gamma:
+					<text name="bightness_label">
+						Helligkeit:
 					</text>
 					<text name="reflection_probe_ambiance_label">
 						Reflexionstest Umgebung:
