@@ -210,7 +210,7 @@ for build_type in build_types_created:
     platforms_printable = {"windows":"MS Windows", "mac":"MacOS", "linux":"Linux"}
     grids_printable = {"SL":"Second Life", "OS":"OpenSim"}
 
-    download_root = "https://downloads.firestormviewer.org/{build_types[build_type]}/"
+    download_root = f"https://downloads.firestormviewer.org/{build_types[build_type]}/"
     for dir in dirs:
         print(f"Getting files for {dir} in {build_type_dir}")
         files = get_files(os.path.join(build_type_dir, dir))
