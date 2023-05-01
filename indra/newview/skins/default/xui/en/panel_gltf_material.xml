@@ -289,7 +289,6 @@
       layout="topleft"
       left="10"
       top="5"
-      width="64"
       name="emissive_lbl">
       Emissive:
     </text>
