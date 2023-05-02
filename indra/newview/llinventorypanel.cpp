@@ -1356,24 +1356,22 @@ void LLInventoryPanel::unSelectAll()
 
 BOOL LLInventoryPanel::handleHover(S32 x, S32 y, MASK mask)
 {
-// <FS:AW>
-//	BOOL handled = LLView::handleHover(x, y, mask);
-//	if(handled)
-//	{
-//		ECursorType cursor = getWindow()->getCursor();
-//		if (LLInventoryModelBackgroundFetch::instance().folderFetchActive() && cursor == UI_CURSOR_ARROW)
-//		{
-//			// replace arrow cursor with arrow and hourglass cursor
-//			getWindow()->setCursor(UI_CURSOR_WORKING);
-//		}
-//	}
-//	else
-//	{
-//		getWindow()->setCursor(UI_CURSOR_ARROW);
-//	}
-	LLView::handleHover(x, y, mask);
-// </FS:AW>
-
+	BOOL handled = LLView::handleHover(x, y, mask);
+	if(handled)
+    {
+        // getCursor gets current cursor, setCursor sets next cursor
+        // check that children didn't set own 'next' cursor
+		ECursorType cursor = getWindow()->getNextCursor();
+		if (LLInventoryModelBackgroundFetch::instance().folderFetchActive() && cursor == UI_CURSOR_ARROW)
+		{
+			// replace arrow cursor with arrow and hourglass cursor
+			getWindow()->setCursor(UI_CURSOR_WORKING);
+		}
+	}
+	else
+	{
+		getWindow()->setCursor(UI_CURSOR_ARROW);
+	}
 	return TRUE;
 }
 

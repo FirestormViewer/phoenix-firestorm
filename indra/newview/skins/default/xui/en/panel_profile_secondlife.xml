@@ -31,6 +31,26 @@
 [PAYMENTINFO]
 [FIRESTORM][FSDEV][FSSUPP][FSQA][FSGW]
     </string>
+    
+    <!--Badges-->
+    <string
+     name="BadgeBeta"
+     value="Original Beta Tester" />
+    <string
+     name="BadgeBetaLifetime"
+     value="Beta Lifetime member" />
+    <string
+     name="BadgeLifetime"
+     value="Lifetime member" />
+    <string
+     name="BadgeLinden"
+     value="Linden Lab employee" />
+    <string
+     name="BadgePremiumLifetime"
+     value="Premium lifetime" />
+    <string
+     name="BadgePremiumPlusLifetime"
+     value="Premium Plus lifetime" />
     <string
      name="payment_update_link_url"
     >
