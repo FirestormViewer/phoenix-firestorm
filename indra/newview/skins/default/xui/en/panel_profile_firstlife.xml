@@ -26,7 +26,7 @@
     />
     <texture_picker
      name="real_world_pic"
-     image_name="Generic_Person_Large"
+     fallback_image="Generic_Person_Large"
      follows="top|left"
      layout="topleft"
      show_caption="false"
