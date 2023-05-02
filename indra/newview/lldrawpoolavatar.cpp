@@ -52,7 +52,6 @@
 #include "llviewerpartsim.h"
 #include "llviewercontrol.h" // for gSavedSettings
 #include "llviewertexturelist.h"
-#include "llperfstats.h"
 
 // <FS:Zi> Add avatar hitbox debug
 #include "llviewercontrol.h"
@@ -378,9 +377,8 @@ void LLDrawPoolAvatar::renderShadow(S32 pass)
 	{
 		return;
 	}
-    LLPerfStats::RecordAvatarTime T(avatarp->getID(), LLPerfStats::StatType_t::RENDER_SHADOWS);
 
-	LLVOAvatar::AvatarOverallAppearance oa = avatarp->getOverallAppearance();
+    LLVOAvatar::AvatarOverallAppearance oa = avatarp->getOverallAppearance();
 	BOOL impostor = !LLPipeline::sImpostorRender && avatarp->isImpostor();
     // no shadows if the shadows are causing this avatar to breach the limit.
     if (avatarp->isTooSlow() || impostor || (oa == LLVOAvatar::AOA_INVISIBLE))
@@ -751,7 +749,6 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	{
 		return;
 	}
-    LLPerfStats::RecordAvatarTime T(avatarp->getID(), LLPerfStats::StatType_t::RENDER_GEOMETRY);
 
 	// <FS:Zi> Add avatar hitbox debug
 	static LLCachedControl<bool> render_hitbox(gSavedSettings, "DebugRenderHitboxes", false);
