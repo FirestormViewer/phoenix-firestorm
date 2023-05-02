@@ -1201,7 +1201,9 @@ void LLPanelProfileSecondLife::resetData()
     resetLoading();
 
     // Set default image and 1:1 dimensions for it
-    mSecondLifePic->setValue("Generic_Person_Large");
+    // <FS:Ansariel> Retain texture picker for profile images
+    //mSecondLifePic->setValue("Generic_Person_Large");
+    mSecondLifePic->setImageAssetID(LLUUID::null);
     mImageId = LLUUID::null;
 
     // <FS:Ansariel> Fix LL UI/UX design accident
@@ -3028,7 +3030,9 @@ void LLPanelProfileFirstLife::apply(LLAvatarData* data)
 void LLPanelProfileFirstLife::resetData()
 {
     setDescriptionText(std::string());
-    mPicture->setValue("Generic_Person_Large");
+    // <FS:Ansariel> Retain texture picker for profile images
+    //mPicture->setValue("Generic_Person_Large");
+    mPicture->setImageAssetID(LLUUID::null);
     mImageId = LLUUID::null;
 
 // <FS:Beq> remove the buttons and just have click image to update profile

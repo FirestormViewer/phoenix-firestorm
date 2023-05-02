@@ -164,6 +164,49 @@ BOOL LLFloaterImagePreview::postBuild()
 		}
 		getChild<LLCheckBoxCtrl>("temp_check")->setVisible(enable_temp_uploads);
 		// </FS:CR>
+
+		// <FS:Zi> detect and strip empty alpha layers from images on upload
+		getChild<LLUICtrl>("ok_btn")->setCommitCallback(boost::bind(&LLFloaterImagePreview::onBtnUpload, this));
+
+		getChild<LLUICtrl>("uploaded_size_text")->setTextArg("[X_RES]", llformat("%d", mRawImagep->getWidth()));
+		getChild<LLUICtrl>("uploaded_size_text")->setTextArg("[Y_RES]", llformat("%d", mRawImagep->getHeight()));
+
+		mEmptyAlphaCheck = getChild<LLCheckBoxCtrl>("strip_alpha_check");
+
+		if (mRawImagep->getComponents() != 4)
+		{
+			getChild<LLUICtrl>("image_alpha_warning")->setVisible(false);
+			getChild<LLUICtrl>("uploaded_size_text")->setTextArg("[ALPHA]", getString("no_alpha"));
+			return true;
+		}
+
+		U32 imageBytes = mRawImagep->getWidth() * mRawImagep->getHeight() * 4;
+
+		U32 emptyAlphaCount = 0;
+		U8* data = mRawImagep->getData();
+		for (U32 i = 3; i < imageBytes; i += 4)
+		{
+			if (data[i] > ALPHA_EMPTY_THRESHOLD)
+			{
+				emptyAlphaCount++;
+			}
+		}
+
+		if (emptyAlphaCount > (imageBytes / 4 * ALPHA_EMPTY_THRESHOLD_RATIO))
+		{
+			getChild<LLUICtrl>("image_alpha_warning")->setVisible(true);
+
+			mEmptyAlphaCheck->setCommitCallback(boost::bind(&LLFloaterImagePreview::emptyAlphaCheckboxCallback, this));
+			mEmptyAlphaCheck->setValue(true);
+		}
+		else
+		{
+			getChild<LLUICtrl>("image_alpha_warning")->setVisible(false);
+			mEmptyAlphaCheck->setValue(false);
+		}
+
+		getChild<LLUICtrl>("uploaded_size_text")->setTextArg("[ALPHA]", getString(mEmptyAlphaCheck->getValue() ? "no_alpha" : "with_alpha"));
+		// </FS:Zi>
 	}
 	else
 	{
@@ -181,47 +224,6 @@ BOOL LLFloaterImagePreview::postBuild()
 	
 	// <FS:Zi> detect and strip empty alpha layers from images on upload
 	// getChild<LLUICtrl>("ok_btn")->setCommitCallback(boost::bind(&LLFloaterNameDesc::onBtnOK, this));
-	getChild<LLUICtrl>("ok_btn")->setCommitCallback(boost::bind(&LLFloaterImagePreview::onBtnUpload, this));
-	
-	getChild<LLUICtrl>("uploaded_size_text")->setTextArg("[X_RES]", llformat("%d", mRawImagep->getWidth()));
-	getChild<LLUICtrl>("uploaded_size_text")->setTextArg("[Y_RES]", llformat("%d", mRawImagep->getHeight()));
-
-	mEmptyAlphaCheck = getChild<LLCheckBoxCtrl>("strip_alpha_check");
-
-	if (mRawImagep->getComponents() != 4)
-	{
-		getChild<LLUICtrl>("image_alpha_warning")->setVisible(false);
-		getChild<LLUICtrl>("uploaded_size_text")->setTextArg("[ALPHA]", getString("no_alpha"));
-		return true;
-	}
-
-	U32 imageBytes = mRawImagep->getWidth() * mRawImagep->getHeight() * 4;
-
-	U32 emptyAlphaCount = 0;
-	U8* data = mRawImagep->getData();
-	for (U32 i = 3; i < imageBytes; i += 4)
-	{
-		if (data[i] > ALPHA_EMPTY_THRESHOLD)
-		{
-			emptyAlphaCount++;
-		}
-	}
-
-	if (emptyAlphaCount > (imageBytes / 4 * ALPHA_EMPTY_THRESHOLD_RATIO))
-	{
-		getChild<LLUICtrl>("image_alpha_warning")->setVisible(true);
-
-		mEmptyAlphaCheck->setCommitCallback(boost::bind(&LLFloaterImagePreview::emptyAlphaCheckboxCallback, this));
-		mEmptyAlphaCheck->setValue(true);
-	}
-	else
-	{
-		getChild<LLUICtrl>("image_alpha_warning")->setVisible(false);
-		mEmptyAlphaCheck->setValue(false);
-	}
-
-	getChild<LLUICtrl>("uploaded_size_text")->setTextArg("[ALPHA]", getString(mEmptyAlphaCheck->getValue() ? "no_alpha" : "with_alpha"));
-	// </FS:Zi>
 	return TRUE;
 }
 

@@ -43,10 +43,7 @@ import tarfile
 import time
 import zipfile
 
-#<FS:AO>
-import shlex
-import zipfile
-#</FS:AO>
+sys.dont_write_bytecode = True # <FS:Ansariel> Prevents creating __pycache__ directory
 
 from fs_viewer_manifest import FSViewerManifest #<FS:ND/> Manifest extensions for Firestorm
 
