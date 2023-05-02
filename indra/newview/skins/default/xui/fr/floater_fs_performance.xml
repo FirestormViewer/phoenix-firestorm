@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="performance" title="Améliorer les performances graphiques (expérimental)">
+<floater name="performance" title="Améliorer les performances graphiques">
 	<floater.string name="frame_stats">
 		Images: [TOT_FRAME_TIME]ms - Scène:[SCENERY_FRAME_PCT]% Avatars:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% Huds:[HUDS_FRAME_PCT]% Swap:[SWAP_FRAME_PCT]% Tâches:[IDLE_FRAME_PCT]%
 	</floater.string>

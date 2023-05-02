@@ -88,12 +88,12 @@
 #include "llcallstack.h"
 #include "llsculptidsize.h"
 #include "llavatarappearancedefines.h"
+#include "llperfstats.h" 
 // [RLVa:KB] - Checked: RLVa-2.0.0
 #include "rlvactions.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
 #include "llviewernetwork.h"
-#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 const F32 FORCE_SIMPLE_RENDER_AREA = 512.f;
 const F32 FORCE_CULL_AREA = 8.f;
@@ -5727,7 +5727,7 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 			}
 		}
 		
-		// if (type == LLRenderPass::PASS_ALPHA) // <FS:Beq/> always populate the draw_info ptr
+		// if (type == LLRenderPass::PASS_ALPHA) // always populate the draw_info ptr
 		{ //for alpha sorting
 			facep->setDrawInfo(draw_info);
 		}
@@ -5932,7 +5932,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 		LL_PROFILE_ZONE_NAMED_CATEGORY_VOLUME("rebuildGeom - face list");
 
 		//get all the faces into a list
-		std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
+        std::unique_ptr<LLPerfStats::RecordAttachmentTime> ratPtr{};
 		for (LLSpatialGroup::element_iter drawable_iter = group->getDataBegin(); 
              drawable_iter != group->getDataEnd(); ++drawable_iter)
 		{
@@ -5974,6 +5974,11 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 				trackAttachments( vobj, drawablep->isState(LLDrawable::RIGGED),&ratPtr);
 			}
 			// </FS:Beq>
+
+            if(vobj->isAttachment())
+            {
+                trackAttachments( vobj, drawablep->isState(LLDrawable::RIGGED),&ratPtr);
+            }
 
 			LLVolume* volume = vobj->getVolume();
 			if (volume)
@@ -6404,7 +6409,7 @@ void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 
 			U32 buffer_count = 0;
 
-			std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> capture render times
+            std::unique_ptr<LLPerfStats::RecordAttachmentTime> ratPtr{};
 			for (LLSpatialGroup::element_iter drawable_iter = group->getDataBegin(); drawable_iter != group->getDataEnd(); ++drawable_iter)
 			{
 				LLDrawable* drawablep = (LLDrawable*)(*drawable_iter)->getDrawable();
@@ -6416,8 +6421,7 @@ void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 
 					if (!vobj) continue;
 
-					// <FS:Beq> capture render times
-					if (vobj->isAttachment())
+                    if (vobj->isAttachment())
 					{
 						trackAttachments( vobj, drawablep->isState(LLDrawable::RIGGED), &ratPtr );
 					}
@@ -6865,18 +6869,16 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 		U32 indices_index = 0;
 		U16 index_offset = 0;
 
-		std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr; // <FS:Beq/> capture render times
-		while (face_iter < i)
+        std::unique_ptr<LLPerfStats::RecordAttachmentTime> ratPtr;
+        while (face_iter < i)
 		{
 			//update face indices for new buffer
 			facep = *face_iter;
-			LLViewerObject* vobj = facep->getViewerObject();
-			// <FS:Beq> capture render times
-			if(vobj && vobj->isAttachment())
-			{
-				trackAttachments(vobj, LLPipeline::sShadowRender, &ratPtr);
-			}
-			// </FS:Beq>
+            LLViewerObject* vobj = facep->getViewerObject();
+            if(vobj && vobj->isAttachment())
+            {
+                trackAttachments(vobj, LLPipeline::sShadowRender, &ratPtr);
+            }
 			if (buffer.isNull())
 			{
 				// Bulk allocation failed

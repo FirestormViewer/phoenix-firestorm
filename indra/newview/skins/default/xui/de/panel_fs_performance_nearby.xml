@@ -19,10 +19,12 @@
 	</text>
 	<name_list name="nearby_list">
 		<name_list.columns tool_tip="Balkendiagram der benötigten Renderzeit (inkl. Auto-Anpassung) in Prozent, basierend auf dem Langsamsten." name="art_visual" />
-		<name_list.columns tool_tip="Avatar-Renderzeit (ART). Tatsächlich benötigte Zeit in Mikrosekunden für die Darstellung des Avatars vor Auto-Anpassung." name="art_value" />
+		<name_list.columns label="Zeit (μs)" tool_tip="Avatar-Renderzeit (ART). Tatsächlich benötigte Zeit in Mikrosekunden für die Darstellung des Avatars vor Auto-Anpassung." name="art_value" />
+		<name_list.columns label="Ang. Zeit (μs)" tool_tip="Avatar-Renderzeit (ART). Tatsächlich benötigte Zeit in Mikrosekunden für die Darstellung des Avatars nach Anpassungen." name="adj_art_value" />
 		<name_list.columns tool_tip="Avatar-Komplexität (ARC) basierend auf Standard-Berechnung." name="complex_value" />
 		<name_list.columns tool_tip="Zeigt Auto-Anpassung: I = Impostor, S = Kein Schatten." name="state" />
 		<name_list.columns label="Name" name="name"/>
+		<name_list.columns label="Übersicht" tool_tip="Wo die Renderzeit anfällt (Geometrie/Shader/Übriges)" name="breakdown"/>
 	</name_list>
 	<text name="av_nearby_desc2">
 		Per Rechts-Klick auf einen Avatar kann auch die Darstellung angepasst werden.

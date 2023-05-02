@@ -5,7 +5,7 @@
     name="performance"
     help_topic="fs_performance_floater"
     save_rect="true"
-    title="Improve Graphics Speed (Experimental)"
+    title="Improve Graphics Speed"
     can_resize="false"
     min_width="580"
     width="580">
@@ -39,6 +39,12 @@
   <floater.string name="tot_att_template">
   Total: [TOT_ATT] ([TOT_ATT_TIME]μs)
   </floater.string>
+  <flaoter.string
+  name="fps_text"
+  value="frames per second"/>
+ <floater.string
+  name="max_fps"
+  value="VSync @ [VSYNCFREQ] FPS"/>
   <panel
       bevel_style="none"
       follows="left|top|right"
@@ -165,7 +171,7 @@
       </text>
       <spinner
           name="target_fps"
-          control_name="FSTargetFPS"
+          control_name="TargetFPS"
           font="SansSerifLarge"
           tool_tip="Target FPS - The desired FPS level. The viewer will attempt to achieve this by adjusting your graphics settings."
           layout="topleft"
@@ -182,7 +188,7 @@
           width="48"
           label_width="0" />
       <button
-          control_name="FSAutoTuneFPS"
+          control_name="AutoTuneFPS"
           follows="top|right"
           height="20"
           initial_value="false"
@@ -200,7 +206,7 @@
           width="72">
       </button>
       <check_box
-          control_name="FSAutoTuneLock"
+          control_name="AutoTuneLock"
           follows="top|right"
           height="20"
           initial_value="true"
@@ -279,7 +285,7 @@
           height="20"
           layout="topleft"
           left_pad="10"
-          control_name="FSTuningFPSStrategy"
+          control_name="TuningFPSStrategy"
           name="FSTuningFPSStrategy"
           top_delta="0"
           width="125">
@@ -556,55 +562,9 @@ HUDs
           top="19"
           right="-20" />
     </panel>
-    <panel
-     bg_alpha_color="PanelGray"
-     background_visible="true"
-     background_opaque="false"
-     border="true"
-     bevel_style="none"
-     follows="left|top"
-     height="50"
-     width="560"
-     name="autoadjustments_subpanel"
-     layout="topleft"
-     top_pad="10">
-      <text
-       follows="left|top"
-       font="SansSerifLarge"
-       text_color="White"
-       height="20"
-       layout="topleft"
-       left="10"
-       name="auto_adj_lbl"
-       top="7"
-       width="175">
-        Preferred frame rate
-      </text>
-      <text
-       follows="left|top"
-       font="SansSerif"
-       text_color="White"
-       height="20"
-       layout="topleft"
-       left="10"
-       name="auto_adj_desc"
-       top_pad="0"
-       width="485">
-        Allow automatic adjustments to reach your preferred frame rate (advanced).
-      </text>
-      <icon
-       height="16"
-       width="16"
-       image_name="Arrow_Right_Off"
-       mouse_opaque="true"
-       name="icon_arrow4"
-       follows="right|top"
-       top="19"
-       right="-20"/>
-    </panel>
   </panel>
   <panel
-      filename="panel_performance_nearby.xml"
+      filename="panel_fs_performance_nearby.xml"
       follows="all"
       layout="topleft"
       left="0"
@@ -612,7 +572,7 @@ HUDs
       visible="false"
       top="115" />
   <panel
-      filename="panel_performance_complexity.xml"
+      filename="panel_fs_performance_complexity.xml"
       follows="all"
       layout="topleft"
       left="0"
@@ -620,7 +580,7 @@ HUDs
       visible="false"
       top="115" />
   <panel
-      filename="panel_performance_preferences.xml"
+      filename="panel_fs_performance_preferences.xml"
       follows="all"
       layout="topleft"
       left="0"
@@ -628,19 +588,19 @@ HUDs
       visible="false"
       top="115" />
   <panel
-    filename="panel_performance_huds.xml"
-    follows="all"
-    layout="topleft"
-    left="0"
-    name="panel_performance_huds"
-    visible="false"
-    top="55" />
+      filename="panel_fs_performance_huds.xml"
+      follows="all"
+      layout="topleft"
+      left="0"
+      name="panel_performance_huds"
+      visible="false"
+      top="115" />
   <panel
-    filename="panel_performance_autoadjustments.xml"
-    follows="all"
-    layout="topleft"
-    left="0"
-    name="panel_performance_autoadjustments"
-    visible="false"
-    top="55" />
+      filename="panel_fs_performance_autotune.xml"
+      follows="all"
+      layout="topleft"
+      left="0"
+      name="panel_performance_autotune"
+      visible="false"
+      top="115" />
 </floater>

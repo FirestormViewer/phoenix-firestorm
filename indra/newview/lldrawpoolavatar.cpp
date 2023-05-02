@@ -52,6 +52,7 @@
 #include "llviewerpartsim.h"
 #include "llviewercontrol.h" // for gSavedSettings
 #include "llviewertexturelist.h"
+#include "llperfstats.h"
 
 // <FS:Zi> Add avatar hitbox debug
 #include "llviewercontrol.h"
@@ -59,7 +60,6 @@
 // void drawBoxOutline(const LLVector3& pos,const LLVector3& size);	// llspatialpartition.cpp
 // </FS:Zi>
 #include "llnetmap.h"
-#include "fsperfstats.h" // <FS:Beq> performance stats support
 
 
 static U32 sDataMask = LLDrawPoolAvatar::VERTEX_DATA_MASK;
@@ -389,14 +389,12 @@ void LLDrawPoolAvatar::renderShadow(S32 pass)
 	{
 		return;
 	}
-	FSPerfStats::RecordAvatarTime T(avatarp->getID(), FSPerfStats::StatType_t::RENDER_SHADOWS);
+    LLPerfStats::RecordAvatarTime T(avatarp->getID(), LLPerfStats::StatType_t::RENDER_SHADOWS);
 
 	LLVOAvatar::AvatarOverallAppearance oa = avatarp->getOverallAppearance();
-	BOOL impostor = !LLPipeline::sImpostorRender && avatarp->isImpostor();
-	// <FS:Beq> no shadows if the shadows are causing this avatar to breach the limit.
-	//if (impostor || (oa == LLVOAvatar::AOA_INVISIBLE))
-	if (avatarp->isTooSlowWithShadows() || impostor || (oa == LLVOAvatar::AOA_INVISIBLE))
-	// </FS:Beq>
+	BOOL impostor = !LLPipeline::sImpostorRender && avatarp->isImpostor();    
+    // no shadows if the shadows are causing this avatar to breach the limit.
+    if (avatarp->isTooSlow() || impostor || (oa == LLVOAvatar::AOA_INVISIBLE))
 	{
         // No shadows for impostored (including jellydolled) or invisible avs.
 		return;
@@ -805,7 +803,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	{
 		return;
 	}
-	FSPerfStats::RecordAvatarTime T(avatarp->getID(), FSPerfStats::StatType_t::RENDER_GEOMETRY);
+    LLPerfStats::RecordAvatarTime T(avatarp->getID(), LLPerfStats::StatType_t::RENDER_GEOMETRY);
 
 	// <FS:Zi> Add avatar hitbox debug
 	static LLCachedControl<bool> render_hitbox(gSavedSettings, "DebugRenderHitboxes", false);

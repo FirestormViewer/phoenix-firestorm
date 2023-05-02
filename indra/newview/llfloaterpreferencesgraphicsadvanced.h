@@ -45,9 +45,11 @@ public:
     void refreshEnabledState();
     void updateSliderText(LLSliderCtrl* ctrl, LLTextBox* text_box);
     void updateMaxNonImpostors();
+    void updateIndirectMaxNonImpostors(const LLSD& newvalue);
     void setMaxNonImpostorsText(U32 value, LLTextBox* text_box);
     void updateMaxComplexity();
     void updateComplexityText();
+    void updateObjectMeshDetailText();
     void refresh();
     // callback for when client modifies a render option
     void onRenderOptionEnable();
@@ -59,6 +61,7 @@ protected:
     void		onBtnCancel(const LLSD& userdata);
 
     boost::signals2::connection	mComplexityChangedSignal;
+    boost::signals2::connection	mLODFactorChangedSignal;
 };
 
 #endif //LLFLOATERPREFERENCEGRAPHICSADVANCED_H
