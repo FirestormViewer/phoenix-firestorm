@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="performance" title="Migliora Velocità Grafica (sperimentale)">
+<floater name="performance" title="Migliora Velocità Grafica">
 	<floater.string name="frame_stats">
 		Frame: [TOT_FRAME_TIME]ms - Scenario:[SCENERY_FRAME_PCT]% Avatar:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUD:[HUDS_FRAME_PCT]% Swap:[SWAP_FRAME_PCT]% Tasks:[IDLE_FRAME_PCT]%
 	</floater.string>
