@@ -2166,7 +2166,7 @@ class Linux_i686_Manifest(LinuxManifest):
             self.path("libdirectfb-1.*.so.*")
             self.path("libfusion-1.*.so.*")
             self.path("libdirect-1.*.so.*")
-            self.path("libopenjp2.so*")
+            #self.path("libopenjp2.so*")
             self.path("libdirectfb-1.4.so.5")
             self.path("libfusion-1.4.so.5")
             self.path("libdirect-1.4.so.5*")
