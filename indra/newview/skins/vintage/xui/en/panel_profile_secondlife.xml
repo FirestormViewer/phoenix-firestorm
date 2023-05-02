@@ -233,6 +233,7 @@
 
       <texture_picker
         name="2nd_life_pic"
+        fallback_image="Generic_Person_Large"
         top="0"
         left="0"
         width="158"

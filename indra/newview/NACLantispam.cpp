@@ -103,18 +103,18 @@ NACLAntiSpamQueueEntry* NACLAntiSpamQueue::getEntry(const LLUUID& source)
 	}
 	else
 	{
-		return NULL;
+		return nullptr;
 	}
 }
 
 void NACLAntiSpamQueue::clearEntries()
 {
-	for (spam_queue_entry_map_t::iterator it = mEntries.begin(); it != mEntries.end(); ++it)
+	for (auto& [id, entry] : mEntries)
 	{
 		//AO: Only clear entries that are not blocked.
-		if (!it->second->getBlocked())
+		if (!entry->getBlocked())
 		{
-			it->second->clearEntry();
+			entry->clearEntry();
 		}
 	}
 }
@@ -139,15 +139,14 @@ void NACLAntiSpamQueue::blockEntry(const LLUUID& source)
 	mEntries[source]->setBlocked();
 }
 
-S32 NACLAntiSpamQueue::checkEntry(const LLUUID& name, U32 multiplier)
-// Returns 0 if unblocked, 1 if check results in a new block, 2 if by an existing block
+EAntispamCheckResult NACLAntiSpamQueue::checkEntry(const LLUUID& name, U32 multiplier)
 {
 	spam_queue_entry_map_t::iterator it = mEntries.find(name);
 	if (it != mEntries.end())
 	{
 		if (it->second->getBlocked())
 		{
-			return 2;
+			return EAntispamCheckResult::ExistingBlock;
 		}
 		U32 eTime = it->second->getEntryTime();
 		U32 currentTime = time(0);
@@ -158,11 +157,11 @@ S32 NACLAntiSpamQueue::checkEntry(const LLUUID& name, U32 multiplier)
 			if (eAmount > (mQueueAmount * multiplier))
 			{
 				it->second->setBlocked();
-				return 1;
+				return EAntispamCheckResult::NewBlock;
 			}
 			else
 			{
-				return 0;
+				return EAntispamCheckResult::Unblocked;
 			}
 		}
 		else
@@ -170,7 +169,7 @@ S32 NACLAntiSpamQueue::checkEntry(const LLUUID& name, U32 multiplier)
 			it->second->clearEntry();
 			it->second->updateEntryAmount();
 			it->second->updateEntryTime();
-			return 0;
+			return EAntispamCheckResult::Unblocked;
 		}
 	}
 	else
@@ -180,7 +179,7 @@ S32 NACLAntiSpamQueue::checkEntry(const LLUUID& name, U32 multiplier)
 		entry->updateEntryAmount();
 		entry->updateEntryTime();
 		mEntries[name] = entry;
-		return 0;
+		return EAntispamCheckResult::Unblocked;
 	}
 }
 
@@ -219,7 +218,7 @@ NACLAntiSpamRegistry::~NACLAntiSpamRegistry()
 
 const char* NACLAntiSpamRegistry::getQueueName(EAntispamQueue queue)
 {
-	if (queue >= ANTISPAM_QUEUE_MAX)
+	if (queue >= ANTISPAM_QUEUE_MAX || queue < ANTISPAM_QUEUE_CHAT)
 	{
 		return "Unknown";
 	}
@@ -228,7 +227,7 @@ const char* NACLAntiSpamRegistry::getQueueName(EAntispamQueue queue)
 
 void NACLAntiSpamRegistry::setRegisteredQueueTime(EAntispamQueue queue, U32 time)
 {
-	if (queue >= ANTISPAM_QUEUE_MAX || mQueues[queue] == NULL)
+	if (queue >= ANTISPAM_QUEUE_MAX || queue < ANTISPAM_QUEUE_CHAT || mQueues[queue] == nullptr)
 	{
 		LL_ERRS("AntiSpam") << "CODE BUG: Attempting to use a antispam queue that was not created or was outside of the reasonable range of queues. Queue: " << getQueueName(queue) << LL_ENDL;
 		return;
@@ -239,7 +238,7 @@ void NACLAntiSpamRegistry::setRegisteredQueueTime(EAntispamQueue queue, U32 time
 
 void NACLAntiSpamRegistry::setRegisteredQueueAmount(EAntispamQueue queue, U32 amount)
 {
-	if (queue >= ANTISPAM_QUEUE_MAX || mQueues[queue] == NULL)
+	if (queue >= ANTISPAM_QUEUE_MAX || queue < ANTISPAM_QUEUE_CHAT || mQueues[queue] == nullptr)
 	{
 		LL_ERRS("AntiSpam") << "CODE BUG: Attempting to use a antispam queue that was not created or was outside of the reasonable range of queues. Queue: " << getQueueName(queue) << LL_ENDL;
 		return;
@@ -283,7 +282,7 @@ void NACLAntiSpamRegistry::setAllQueueAmounts(U32 amount)
 
 void NACLAntiSpamRegistry::clearRegisteredQueue(EAntispamQueue queue)
 {
-	if (queue >= ANTISPAM_QUEUE_MAX || mQueues[queue] == NULL)
+	if (queue >= ANTISPAM_QUEUE_MAX || queue < ANTISPAM_QUEUE_CHAT || mQueues[queue] == nullptr)
 	{
 		LL_ERRS("AntiSpam") << "CODE BUG: Attempting to use a antispam queue that was not created or was outside of the reasonable range of queues. Queue: " << getQueueName(queue) << LL_ENDL;
 		return;
@@ -294,7 +293,7 @@ void NACLAntiSpamRegistry::clearRegisteredQueue(EAntispamQueue queue)
 
 void NACLAntiSpamRegistry::purgeRegisteredQueue(EAntispamQueue queue)
 {
-	if (queue >= ANTISPAM_QUEUE_MAX || mQueues[queue] == NULL)
+	if (queue >= ANTISPAM_QUEUE_MAX || queue < ANTISPAM_QUEUE_CHAT || mQueues[queue] == nullptr)
 	{
 		LL_ERRS("AntiSpam") << "CODE BUG: Attempting to use a antispam queue that was not created or was outside of the reasonable range of queues. Queue: " << getQueueName(queue) << LL_ENDL;
 		return;
@@ -317,7 +316,7 @@ void NACLAntiSpamRegistry::blockOnQueue(EAntispamQueue queue, const LLUUID& sour
 	}
 	else
 	{
-		if (queue >= ANTISPAM_QUEUE_MAX || mQueues[queue] == NULL)
+		if (queue >= ANTISPAM_QUEUE_MAX || queue < ANTISPAM_QUEUE_CHAT || mQueues[queue] == nullptr)
 		{
 			LL_ERRS("AntiSpam") << "CODE BUG: Attempting to use a antispam queue that was not created or was outside of the reasonable range of queues. Queue: " << getQueueName(queue) << LL_ENDL;
 			return;
@@ -362,14 +361,14 @@ bool NACLAntiSpamRegistry::checkQueue(EAntispamQueue queue, const LLUUID& source
 		}
 	}
 	
-	S32 result = 0;
+	EAntispamCheckResult result{ EAntispamCheckResult::Unblocked };
 	if (mGlobalQueue)
 	{
 		result = checkGlobalEntry(source, multiplier);
 	}
 	else
 	{
-		if (queue >= ANTISPAM_QUEUE_MAX || mQueues[queue] == NULL)
+		if (queue >= ANTISPAM_QUEUE_MAX || queue < ANTISPAM_QUEUE_CHAT || mQueues[queue] == nullptr)
 		{
 			LL_ERRS("AntiSpam") << "CODE BUG: Attempting to use a antispam queue that was not created or was outside of the reasonable range of queues. Queue: " << getQueueName(queue) << LL_ENDL;
 			return false;
@@ -377,17 +376,17 @@ bool NACLAntiSpamRegistry::checkQueue(EAntispamQueue queue, const LLUUID& source
 		result = mQueues[queue]->checkEntry(source, multiplier);
 	}
 
-	if (result == 0) // safe
+	if (result == EAntispamCheckResult::Unblocked) // safe
 	{
 		return false;
 	}
 	
-	if (result == 2) // previously blocked
+	if (result == EAntispamCheckResult::ExistingBlock) // previously blocked
 	{
 		return true;
 	}
 	
-	if (result == 1) // newly blocked, result == 1
+	if (result == EAntispamCheckResult::NewBlock) // newly blocked, result == 1
 	{
 		if (!LLMuteList::getInstance()->isMuted(source))
 		{
@@ -402,16 +401,14 @@ bool NACLAntiSpamRegistry::checkQueue(EAntispamQueue queue, const LLUUID& source
 			{
 				bool sent = false;
 
-				for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
-					iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
+				for (auto region : LLWorld::getInstance()->getRegionList())
 				{
-					LLViewerRegion* region = *iter;
 					if (gMessageSystem && region && region->isAlive())
 					{
 						gMessageSystem->newMessage(_PREHASH_RequestObjectPropertiesFamily);
 						gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 						gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
-						gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+						gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 						gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 						gMessageSystem->addU32Fast(_PREHASH_RequestFlags, 0);
 						gMessageSystem->addUUIDFast(_PREHASH_ObjectID, source);
@@ -499,7 +496,7 @@ bool NACLAntiSpamRegistry::isBlockedOnQueue(EAntispamQueue queue, const LLUUID& 
 	}
 	else
 	{
-		if (queue >= ANTISPAM_QUEUE_MAX || mQueues[queue] == NULL)
+		if (queue >= ANTISPAM_QUEUE_MAX || queue < ANTISPAM_QUEUE_CHAT || mQueues[queue] == nullptr)
 		{
 			LL_ERRS("AntiSpam") << "CODE BUG: Attempting to use a antispam queue that was not created or was outside of the reasonable range of queues. Queue: " << getQueueName(queue) << LL_ENDL;
 			return false;
@@ -547,12 +544,11 @@ void NACLAntiSpamRegistry::clearAllQueues()
 
 void NACLAntiSpamRegistry::purgeAllQueues()
 {
-	std::map<LLUUID, LLAvatarNameCache::callback_connection_t>::iterator it = mAvatarNameCallbackConnections.begin();
-	for (; it != mAvatarNameCallbackConnections.end(); ++it)
+	for (auto& [avid, callback] : mAvatarNameCallbackConnections)
 	{
-		if (it->second.connected())
+		if (callback.connected())
 		{
-			it->second.disconnect();
+			callback.disconnect();
 		}
 	}
 	mAvatarNameCallbackConnections.clear();
@@ -574,14 +570,14 @@ void NACLAntiSpamRegistry::purgeAllQueues()
 	mObjectData.clear();
 }
 
-S32 NACLAntiSpamRegistry::checkGlobalEntry(const LLUUID& source, U32 multiplier)
+EAntispamCheckResult NACLAntiSpamRegistry::checkGlobalEntry(const LLUUID& source, U32 multiplier)
 {
 	spam_queue_entry_map_t::iterator it = mGlobalEntries.find(source);
 	if (it != mGlobalEntries.end())
 	{
 		if (it->second->getBlocked())
 		{
-			return 2;
+			return EAntispamCheckResult::ExistingBlock;
 		}
 
 		U32 eTime = it->second->getEntryTime();
@@ -592,11 +588,11 @@ S32 NACLAntiSpamRegistry::checkGlobalEntry(const LLUUID& source, U32 multiplier)
 			U32 eAmount = it->second->getEntryAmount();
 			if (eAmount > (mGlobalAmount * multiplier))
 			{
-				return 1;
+				return EAntispamCheckResult::NewBlock;
 			}
 			else
 			{
-				return 0;
+				return EAntispamCheckResult::Unblocked;
 			}
 		}
 		else
@@ -604,7 +600,7 @@ S32 NACLAntiSpamRegistry::checkGlobalEntry(const LLUUID& source, U32 multiplier)
 			it->second->clearEntry();
 			it->second->updateEntryAmount();
 			it->second->updateEntryTime();
-			return 0;
+			return EAntispamCheckResult::Unblocked;
 		}
 	}
 	else
@@ -613,15 +609,15 @@ S32 NACLAntiSpamRegistry::checkGlobalEntry(const LLUUID& source, U32 multiplier)
 		entry->updateEntryAmount();
 		entry->updateEntryTime();
 		mGlobalEntries[source] = entry;
-		return 0;
+		return EAntispamCheckResult::Unblocked;
 	}
 }
 
 void NACLAntiSpamRegistry::clearGlobalEntries()
 {
-	for (spam_queue_entry_map_t::iterator it = mGlobalEntries.begin(); it != mGlobalEntries.end(); ++it)
+	for (auto& [id, entry] : mGlobalEntries)
 	{
-		it->second->clearEntry();
+		entry->clearEntry();
 	}
 }
 
