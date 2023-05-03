@@ -365,8 +365,8 @@ set(viewer_SOURCE_FILES
     llfloaterpathfindinglinksets.cpp
     llfloaterpathfindingobjects.cpp
     llfloaterpay.cpp
-    # llfloaterperformance.cpp <FS:Beq/> replaced with fs version due to large changes and likelihood that LL version will not release.
-    fsfloaterperformance.cpp 
+    # llfloaterperformance.cpp
+    fsfloaterperformance.cpp # <FS:Beq> restore fs perf floater
     llfloaterperms.cpp
     llfloaterpostprocess.cpp
     llfloaterprofile.cpp
@@ -1622,6 +1622,9 @@ set(viewer_HEADER_FILES
     NACLfloaterexploresounds.h
     )
 
+  list(APPEND viewer_SOURCE_FILES llperfstats.cpp)
+  list(APPEND viewer_HEADER_FILES llperfstats.h)
+
 # <FS:Ansariel> Flickr / Discord keys and fsversionvalues headers are generated in here
 include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 
@@ -1655,10 +1658,6 @@ configure_file(
 list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/fsversionvalues.h)
 # </FS:TS>
 
-  # <FS:Beq> Performance stast support
-  list(APPEND viewer_SOURCE_FILES fsperfstats.cpp)
-  list(APPEND viewer_HEADER_FILES fsperfstats.h)
-  # </FS:Beq> 
 source_group("CMake Rules" FILES ViewerInstall.cmake)
 
 #build_data.json creation moved to viewer_manifest.py MAINT-6413

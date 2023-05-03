@@ -3,5 +3,6 @@
 	<text name="Graphic Presets">
 		Ustawienia graficzne
 	</text>
-	<button name="open_prefs_btn" label="Otwórz preferencje graficzne" tool_tip="Otwórz kartę preferencji graficznych" />
+	<button name="open_prefs_btn" label="Opcje graficzne" tool_tip="Otwórz kartę preferencji graficznych" />
+	<button name="open_autofps_btn" label="Wydajność" tool_tip="Otwórz okno ustawień wydajności" />
 </panel>
