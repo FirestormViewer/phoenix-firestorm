@@ -18,6 +18,13 @@
 			<check_box label="Включено" name="enable_media"/>
 			<slider label="Голосовой чат" name="Voice Volume"/>
 			<check_box label="Включено" name="enable_voice_check_volume"/>
+			<text name="Listen media from" width="200">
+				Слышать мультимедиа и звуки из:
+			</text>
+			<radio_group name="media_ear_location">
+				<radio_item label="Позиции камеры" name="0"/>
+				<radio_item label="Позиции аватара" name="1"/>
+			</radio_group>
 			<text name="auto_unmute_label" width="300">
 				Автоматически включать звук после телепортации:
 			</text>
@@ -51,7 +58,7 @@
 		</panel>
 		<panel name="Media Media Panel" label="Медиа">
 			<text name="media_autoplay_label" width="130">
-Автовоспроизведение
+				Автовоспроизведение
 			</text>
 			<combo_box name="media_auto_play_combo" width="100">
 				<item label="Запрещено" name="autoplay_disabled"/>

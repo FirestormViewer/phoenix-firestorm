@@ -85,6 +85,7 @@
 #include "llspellcheck.h"
 #include "llslurl.h"
 #include "llstartup.h"
+#include "llperfstats.h"
 // [RLVa:KB] - Checked: 2015-12-27 (RLVa-1.5.0)
 #include "llvisualeffect.h"
 #include "rlvactions.h"
@@ -112,7 +113,6 @@
 #include "llviewerregion.h"
 #include "NACLantispam.h"
 #include "nd/ndlogthrottle.h"
-#include "fsperfstats.h"
 // <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
 #include "llanimationstates.h"
 
@@ -259,6 +259,12 @@ bool handleSetShaderChanged(const LLSD& newvalue)
 	return true;
 }
 
+static bool handleShadowDetailChanged(const LLSD& newvalue)
+{
+    gPipeline.handleShadowDetailChanged();
+    return true;
+}
+
 static bool handleRenderPerfTestChanged(const LLSD& newvalue)
 {
        bool status = !newvalue.asBoolean();
@@ -353,7 +359,14 @@ static bool handleAnisotropicChanged(const LLSD& newvalue)
 
 static bool handleVSyncChanged(const LLSD& newvalue)
 {
+    LLPerfStats::tunables.vsyncEnabled = newvalue.asBoolean();
     gViewerWindow->getWindow()->toggleVSync(newvalue.asBoolean());
+
+    if(newvalue.asBoolean() == true)
+    {
+        U32 current_target = gSavedSettings.getU32("TargetFPS");
+        gSavedSettings.setU32("TargetFPS", std::min((U32)gViewerWindow->getWindow()->getRefreshRate(), current_target));
+    }
 
     return true;
 }
@@ -1074,68 +1087,76 @@ void handleDiskCacheSizeChanged(const LLSD& newValue)
 }
 // </FS:Ansariel>
 
-// <FS:Beq> perrf floater stuffs
 void handleTargetFPSChanged(const LLSD& newValue)
 {
-	const auto targetFPS = gSavedSettings.getU32("FSTargetFPS");
-	FSPerfStats::tunables.userTargetFPS = targetFPS;
-}
-// <FS:Beq> perf floater stuffs
-void handleAutoTuneLockChanged(const LLSD& newValue)
-{
-	const auto newval = gSavedSettings.getBOOL("FSAutoTuneLock");
-	FSPerfStats::tunables.userAutoTuneLock = newval;
+    const auto targetFPS = gSavedSettings.getU32("TargetFPS");
+
+    U32 frame_rate_limit = gViewerWindow->getWindow()->getRefreshRate();
+    if(LLPerfStats::tunables.vsyncEnabled && (targetFPS > frame_rate_limit))
+    {
+        gSavedSettings.setU32("TargetFPS", std::min(frame_rate_limit, targetFPS));
+    }
+    else
+    {
+        LLPerfStats::tunables.userTargetFPS = targetFPS;
+    }
 }
 
-// <FS:Beq> perrf floater stuffs
+void handleAutoTuneLockChanged(const LLSD& newValue)
+{
+    const auto newval = gSavedSettings.getBOOL("AutoTuneLock");
+    LLPerfStats::tunables.userAutoTuneLock = newval;
+
+    gSavedSettings.setBOOL("AutoTuneFPS", newval);
+}
+
 void handleAutoTuneFPSChanged(const LLSD& newValue)
 {
-	const auto newval = gSavedSettings.getBOOL("FSAutoTuneFPS");
-	FSPerfStats::tunables.userAutoTuneEnabled = newval;
-	if(newval && FSPerfStats::renderAvatarMaxART_ns == 0) // If we've enabled autotune we override "unlimited" to max
-	{
-		gSavedSettings.setF32("FSRenderAvatarMaxART",log10(FSPerfStats::ART_UNLIMITED_NANOS-1000));//triggers callback to update static var
-	}
+    const auto newval = gSavedSettings.getBOOL("AutoTuneFPS");
+    LLPerfStats::tunables.userAutoTuneEnabled = newval;
+    if(newval && LLPerfStats::renderAvatarMaxART_ns == 0) // If we've enabled autotune we override "unlimited" to max
+    {
+        gSavedSettings.setF32("RenderAvatarMaxART",log10(LLPerfStats::ART_UNLIMITED_NANOS-1000));//triggers callback to update static var
+    }
 }
 
 void handleRenderAvatarMaxARTChanged(const LLSD& newValue)
 {
-	FSPerfStats::tunables.updateRenderCostLimitFromSettings();
+    LLPerfStats::tunables.updateRenderCostLimitFromSettings();
 }
 
 void handleUserTargetDrawDistanceChanged(const LLSD& newValue)
 {
-	const auto newval = gSavedSettings.getF32("FSAutoTuneRenderFarClipTarget");
-	FSPerfStats::tunables.userTargetDrawDistance = newval;
+    const auto newval = gSavedSettings.getF32("AutoTuneRenderFarClipTarget");
+    LLPerfStats::tunables.userTargetDrawDistance = newval;
 }
 
 void handleUserTargetReflectionsChanged(const LLSD& newValue)
 {
-	const auto newval = gSavedSettings.getS32("FSUserTargetReflections");
-	FSPerfStats::tunables.userTargetReflections = newval;
+    const auto newval = gSavedSettings.getS32("UserTargetReflections");
+    LLPerfStats::tunables.userTargetReflections = newval;
 }
 
 void handlePerformanceStatsEnabledChanged(const LLSD& newValue)
 {
-	const auto newval = gSavedSettings.getBOOL("FSPerfStatsCaptureEnabled");
-	FSPerfStats::StatsRecorder::setEnabled(newval);
+    const auto newval = gSavedSettings.getBOOL("PerfStatsCaptureEnabled");
+    LLPerfStats::StatsRecorder::setEnabled(newval);
 }
 void handleUserImpostorByDistEnabledChanged(const LLSD& newValue)
 {
-	const auto newval = gSavedSettings.getBOOL("FSAutoTuneImpostorByDistEnabled");
-	FSPerfStats::tunables.userImpostorDistanceTuningEnabled = newval;
+    const auto newval = gSavedSettings.getBOOL("AutoTuneImpostorByDistEnabled");
+    LLPerfStats::tunables.userImpostorDistanceTuningEnabled = newval;
 }
 void handleUserImpostorDistanceChanged(const LLSD& newValue)
 {
-	const auto newval = gSavedSettings.getF32("FSAutoTuneImpostorFarAwayDistance");
-	FSPerfStats::tunables.userImpostorDistance = newval;
+    const auto newval = gSavedSettings.getF32("AutoTuneImpostorFarAwayDistance");
+    LLPerfStats::tunables.userImpostorDistance = newval;
 }
 void handleFPSTuningStrategyChanged(const LLSD& newValue)
 {
-	const auto newval = gSavedSettings.getU32("FSTuningFPSStrategy");
-	FSPerfStats::tunables.userFPSTuningStrategy = newval;
+    const auto newval = gSavedSettings.getU32("TuningFPSStrategy");
+    LLPerfStats::tunables.userFPSTuningStrategy = newval;
 }
-// </FS:Beq>
 
 // <FS:Ansariel> FIRE-6809: Quickly moving the bandwidth slider has no effect
 void handleBandwidthChanged(const LLSD& newValue)
@@ -1188,146 +1209,147 @@ void setting_setup_signal_listener(LLControlGroup& group, const std::string& set
 void settings_setup_listeners()
 {
     setting_setup_signal_listener(gSavedSettings, "FirstPersonAvatarVisible", handleRenderAvatarMouselookChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderFarClip", handleRenderFarClipChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderTerrainDetail", handleTerrainDetailChanged);
-	setting_setup_signal_listener(gSavedSettings, "OctreeStaticObjectSizeFactor", handleRepartition);
-	setting_setup_signal_listener(gSavedSettings, "OctreeDistanceFactor", handleRepartition);
-	setting_setup_signal_listener(gSavedSettings, "OctreeMaxNodeCapacity", handleRepartition);
-	setting_setup_signal_listener(gSavedSettings, "OctreeAlphaDistanceFactor", handleRepartition);
-	setting_setup_signal_listener(gSavedSettings, "OctreeAttachmentSizeFactor", handleRepartition);
-	setting_setup_signal_listener(gSavedSettings, "RenderMaxTextureIndex", handleSetShaderChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderUseTriStrips", handleResetVertexBuffersChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderUIBuffer", handleWindowResized);
-	setting_setup_signal_listener(gSavedSettings, "RenderDepthOfField", handleReleaseGLBufferChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderFSAASamples", handleReleaseGLBufferChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderSpecularResX", handleLUTBufferChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderSpecularResY", handleLUTBufferChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderSpecularExponent", handleLUTBufferChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderAnisotropic", handleAnisotropicChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderShadowResolutionScale", handleShadowsResized);
-	setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleReleaseGLBufferChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleSetShaderChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderGlowResolutionPow", handleReleaseGLBufferChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderAvatarCloth", handleSetShaderChanged);
-	setting_setup_signal_listener(gSavedSettings, "WindLightUseAtmosShaders", handleSetShaderChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderGammaFull", handleSetShaderChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderVolumeLODFactor", handleVolumeLODChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderAvatarLODFactor", handleAvatarLODChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderAvatarPhysicsLODFactor", handleAvatarPhysicsLODChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderTerrainLODFactor", handleTerrainLODChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderTreeLODFactor", handleTreeLODChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderFlexTimeFactor", handleFlexLODChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderGamma", handleGammaChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderFogRatio", handleFogRatioChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderMaxPartCount", handleMaxPartCountChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderDynamicLOD", handleRenderDynamicLODChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderLocalLights", handleRenderLocalLightsChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderDebugTextureBind", handleResetVertexBuffersChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderAutoMaskAlphaDeferred", handleResetVertexBuffersChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderAutoMaskAlphaNonDeferred", handleResetVertexBuffersChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderObjectBump", handleRenderBumpChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderMaxVBOSize", handleResetVertexBuffersChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderFarClip", handleRenderFarClipChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderTerrainDetail", handleTerrainDetailChanged);
+    setting_setup_signal_listener(gSavedSettings, "OctreeStaticObjectSizeFactor", handleRepartition);
+    setting_setup_signal_listener(gSavedSettings, "OctreeDistanceFactor", handleRepartition);
+    setting_setup_signal_listener(gSavedSettings, "OctreeMaxNodeCapacity", handleRepartition);
+    setting_setup_signal_listener(gSavedSettings, "OctreeAlphaDistanceFactor", handleRepartition);
+    setting_setup_signal_listener(gSavedSettings, "OctreeAttachmentSizeFactor", handleRepartition);
+    setting_setup_signal_listener(gSavedSettings, "RenderMaxTextureIndex", handleSetShaderChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderUseTriStrips", handleResetVertexBuffersChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderUIBuffer", handleWindowResized);
+    setting_setup_signal_listener(gSavedSettings, "RenderDepthOfField", handleReleaseGLBufferChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderFSAASamples", handleReleaseGLBufferChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderSpecularResX", handleLUTBufferChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderSpecularResY", handleLUTBufferChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderSpecularExponent", handleLUTBufferChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderAnisotropic", handleAnisotropicChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderShadowResolutionScale", handleShadowsResized);
+    setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleReleaseGLBufferChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleSetShaderChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderGlowResolutionPow", handleReleaseGLBufferChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderAvatarCloth", handleSetShaderChanged);
+    setting_setup_signal_listener(gSavedSettings, "WindLightUseAtmosShaders", handleSetShaderChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderGammaFull", handleSetShaderChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderVolumeLODFactor", handleVolumeLODChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderAvatarLODFactor", handleAvatarLODChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderAvatarPhysicsLODFactor", handleAvatarPhysicsLODChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderTerrainLODFactor", handleTerrainLODChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderTreeLODFactor", handleTreeLODChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderFlexTimeFactor", handleFlexLODChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderGamma", handleGammaChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderFogRatio", handleFogRatioChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderMaxPartCount", handleMaxPartCountChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderDynamicLOD", handleRenderDynamicLODChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderLocalLights", handleRenderLocalLightsChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderDebugTextureBind", handleResetVertexBuffersChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderAutoMaskAlphaDeferred", handleResetVertexBuffersChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderAutoMaskAlphaNonDeferred", handleResetVertexBuffersChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderObjectBump", handleRenderBumpChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderMaxVBOSize", handleResetVertexBuffersChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderVSyncEnable", handleVSyncChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderDeferredNoise", handleReleaseGLBufferChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderDebugPipeline", handleRenderDebugPipelineChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderResolutionDivisor", handleRenderResolutionDivisorChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderDeferredNoise", handleReleaseGLBufferChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderDebugPipeline", handleRenderDebugPipelineChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderResolutionDivisor", handleRenderResolutionDivisorChanged);
 // [SL:KB] - Patch: Settings-RenderResolutionMultiplier | Checked: Catznip-5.4
 	setting_setup_signal_listener(gSavedSettings, "RenderResolutionMultiplier", handleRenderResolutionDivisorChanged);
 // [/SL:KB]
-	setting_setup_signal_listener(gSavedSettings, "RenderDeferred", handleRenderDeferredChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderShadowDetail", handleSetShaderChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderDeferredSSAO", handleSetShaderChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderPerformanceTest", handleRenderPerfTestChanged);
-	setting_setup_signal_listener(gSavedSettings, "TextureMemory", handleVideoMemoryChanged);
-	setting_setup_signal_listener(gSavedSettings, "ChatConsoleFontSize", handleChatFontSizeChanged);
-	setting_setup_signal_listener(gSavedSettings, "ChatPersistTime", handleChatPersistTimeChanged);
-	setting_setup_signal_listener(gSavedSettings, "ConsoleMaxLines", handleConsoleMaxLinesChanged);
-	setting_setup_signal_listener(gSavedSettings, "UploadBakedTexOld", handleUploadBakedTexOldChanged);
-	setting_setup_signal_listener(gSavedSettings, "UseOcclusion", handleUseOcclusionChanged);
-	setting_setup_signal_listener(gSavedSettings, "AudioLevelMaster", handleAudioVolumeChanged);
-	setting_setup_signal_listener(gSavedSettings, "AudioLevelSFX", handleAudioVolumeChanged);
-	setting_setup_signal_listener(gSavedSettings, "AudioLevelUI", handleAudioVolumeChanged);
-	setting_setup_signal_listener(gSavedSettings, "AudioLevelAmbient", handleAudioVolumeChanged);
-	setting_setup_signal_listener(gSavedSettings, "AudioLevelMusic", handleAudioVolumeChanged);
-	setting_setup_signal_listener(gSavedSettings, "AudioLevelMedia", handleAudioVolumeChanged);
-	setting_setup_signal_listener(gSavedSettings, "AudioLevelVoice", handleAudioVolumeChanged);
-	setting_setup_signal_listener(gSavedSettings, "AudioLevelDoppler", handleAudioVolumeChanged);
-	setting_setup_signal_listener(gSavedSettings, "AudioLevelRolloff", handleAudioVolumeChanged);
-	setting_setup_signal_listener(gSavedSettings, "AudioLevelUnderwaterRolloff", handleAudioVolumeChanged);
-	setting_setup_signal_listener(gSavedSettings, "MuteAudio", handleAudioVolumeChanged);
-	setting_setup_signal_listener(gSavedSettings, "MuteMusic", handleAudioVolumeChanged);
-	setting_setup_signal_listener(gSavedSettings, "MuteMedia", handleAudioVolumeChanged);
-	setting_setup_signal_listener(gSavedSettings, "MuteVoice", handleAudioVolumeChanged);
-	setting_setup_signal_listener(gSavedSettings, "MuteAmbient", handleAudioVolumeChanged);
-	setting_setup_signal_listener(gSavedSettings, "MuteUI", handleAudioVolumeChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderVBOEnable", handleResetVertexBuffersChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderUseVAO", handleResetVertexBuffersChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderVBOMappingDisable", handleResetVertexBuffersChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderUseStreamVBO", handleResetVertexBuffersChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderPreferStreamDraw", handleResetVertexBuffersChanged);
-	setting_setup_signal_listener(gSavedSettings, "WLSkyDetail", handleWLSkyDetailChanged);
-	setting_setup_signal_listener(gSavedSettings, "JoystickAxis0", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "JoystickAxis1", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "JoystickAxis2", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "JoystickAxis3", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "JoystickAxis4", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "JoystickAxis5", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "JoystickAxis6", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale0", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale1", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale2", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale3", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale4", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale5", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale6", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone0", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone1", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone2", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone3", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone4", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone5", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone6", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale0", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale1", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale2", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale3", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale4", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale5", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone0", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone1", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone2", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone3", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone4", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone5", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "BuildAxisScale0", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "BuildAxisScale1", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "BuildAxisScale2", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "BuildAxisScale3", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "BuildAxisScale4", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "BuildAxisScale5", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone0", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone1", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone2", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone3", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone4", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone5", handleJoystickChanged);
-	setting_setup_signal_listener(gSavedSettings, "DebugViews", handleDebugViewsChanged);
-	setting_setup_signal_listener(gSavedSettings, "UserLogFile", handleLogFileChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderHideGroupTitle", handleHideGroupTitleChanged);
-	setting_setup_signal_listener(gSavedSettings, "HighResSnapshot", handleHighResSnapshotChanged);
-	setting_setup_signal_listener(gSavedSettings, "EnableVoiceChat", handleVoiceClientPrefsChanged);
-	setting_setup_signal_listener(gSavedSettings, "PTTCurrentlyEnabled", handleVoiceClientPrefsChanged);
-	setting_setup_signal_listener(gSavedSettings, "PushToTalkButton", handleVoiceClientPrefsChanged);
-	setting_setup_signal_listener(gSavedSettings, "PushToTalkToggle", handleVoiceClientPrefsChanged);
-	setting_setup_signal_listener(gSavedSettings, "VoiceEarLocation", handleVoiceClientPrefsChanged);
-	setting_setup_signal_listener(gSavedSettings, "VoiceInputAudioDevice", handleVoiceClientPrefsChanged);
-	setting_setup_signal_listener(gSavedSettings, "VoiceOutputAudioDevice", handleVoiceClientPrefsChanged);
-	setting_setup_signal_listener(gSavedSettings, "AudioLevelMic", handleVoiceClientPrefsChanged);
-	setting_setup_signal_listener(gSavedSettings, "LipSyncEnabled", handleVoiceClientPrefsChanged);	
-	setting_setup_signal_listener(gSavedSettings, "VelocityInterpolate", handleVelocityInterpolate);
-	setting_setup_signal_listener(gSavedSettings, "QAMode", show_debug_menus);
-	setting_setup_signal_listener(gSavedSettings, "UseDebugMenus", show_debug_menus);
-	setting_setup_signal_listener(gSavedSettings, "AgentPause", toggle_agent_pause);
+    setting_setup_signal_listener(gSavedSettings, "RenderDeferred", handleRenderDeferredChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderShadowDetail", handleShadowDetailChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderDeferredSSAO", handleSetShaderChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderPerformanceTest", handleRenderPerfTestChanged);
+	setting_setup_signal_listener(gSavedSettings, "RenderHiDPI", handleRenderHiDPIChanged);
+    setting_setup_signal_listener(gSavedSettings, "TextureMemory", handleVideoMemoryChanged);
+    setting_setup_signal_listener(gSavedSettings, "ChatConsoleFontSize", handleChatFontSizeChanged);
+    setting_setup_signal_listener(gSavedSettings, "ChatPersistTime", handleChatPersistTimeChanged);
+    setting_setup_signal_listener(gSavedSettings, "ConsoleMaxLines", handleConsoleMaxLinesChanged);
+    setting_setup_signal_listener(gSavedSettings, "UploadBakedTexOld", handleUploadBakedTexOldChanged);
+    setting_setup_signal_listener(gSavedSettings, "UseOcclusion", handleUseOcclusionChanged);
+    setting_setup_signal_listener(gSavedSettings, "AudioLevelMaster", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "AudioLevelSFX", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "AudioLevelUI", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "AudioLevelAmbient", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "AudioLevelMusic", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "AudioLevelMedia", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "AudioLevelVoice", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "AudioLevelDoppler", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "AudioLevelRolloff", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "AudioLevelUnderwaterRolloff", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "MuteAudio", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "MuteMusic", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "MuteMedia", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "MuteVoice", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "MuteAmbient", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "MuteUI", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderVBOEnable", handleResetVertexBuffersChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderUseVAO", handleResetVertexBuffersChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderVBOMappingDisable", handleResetVertexBuffersChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderUseStreamVBO", handleResetVertexBuffersChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderPreferStreamDraw", handleResetVertexBuffersChanged);
+    setting_setup_signal_listener(gSavedSettings, "WLSkyDetail", handleWLSkyDetailChanged);
+    setting_setup_signal_listener(gSavedSettings, "JoystickAxis0", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "JoystickAxis1", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "JoystickAxis2", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "JoystickAxis3", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "JoystickAxis4", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "JoystickAxis5", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "JoystickAxis6", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale0", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale1", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale2", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale3", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale4", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale5", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "FlycamAxisScale6", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone0", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone1", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone2", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone3", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone4", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone5", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "FlycamAxisDeadZone6", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale0", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale1", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale2", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale3", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale4", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "AvatarAxisScale5", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone0", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone1", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone2", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone3", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone4", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "AvatarAxisDeadZone5", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "BuildAxisScale0", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "BuildAxisScale1", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "BuildAxisScale2", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "BuildAxisScale3", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "BuildAxisScale4", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "BuildAxisScale5", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone0", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone1", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone2", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone3", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone4", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "BuildAxisDeadZone5", handleJoystickChanged);
+    setting_setup_signal_listener(gSavedSettings, "DebugViews", handleDebugViewsChanged);
+    setting_setup_signal_listener(gSavedSettings, "UserLogFile", handleLogFileChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderHideGroupTitle", handleHideGroupTitleChanged);
+    setting_setup_signal_listener(gSavedSettings, "HighResSnapshot", handleHighResSnapshotChanged);
+    setting_setup_signal_listener(gSavedSettings, "EnableVoiceChat", handleVoiceClientPrefsChanged);
+    setting_setup_signal_listener(gSavedSettings, "PTTCurrentlyEnabled", handleVoiceClientPrefsChanged);
+    setting_setup_signal_listener(gSavedSettings, "PushToTalkButton", handleVoiceClientPrefsChanged);
+    setting_setup_signal_listener(gSavedSettings, "PushToTalkToggle", handleVoiceClientPrefsChanged);
+    setting_setup_signal_listener(gSavedSettings, "VoiceEarLocation", handleVoiceClientPrefsChanged);
+    setting_setup_signal_listener(gSavedSettings, "VoiceInputAudioDevice", handleVoiceClientPrefsChanged);
+    setting_setup_signal_listener(gSavedSettings, "VoiceOutputAudioDevice", handleVoiceClientPrefsChanged);
+    setting_setup_signal_listener(gSavedSettings, "AudioLevelMic", handleVoiceClientPrefsChanged);
+    setting_setup_signal_listener(gSavedSettings, "LipSyncEnabled", handleVoiceClientPrefsChanged);	
+    setting_setup_signal_listener(gSavedSettings, "VelocityInterpolate", handleVelocityInterpolate);
+    setting_setup_signal_listener(gSavedSettings, "QAMode", show_debug_menus);
+    setting_setup_signal_listener(gSavedSettings, "UseDebugMenus", show_debug_menus);
+    setting_setup_signal_listener(gSavedSettings, "AgentPause", toggle_agent_pause);
 	// <FS:Zi> Is done inside XUI now, using visibility_control
 	// setting_setup_signal_listener(gSavedSettings, "ShowNavbarNavigationPanel", toggle_show_navigation_panel);
 	// </FS:Zi>
@@ -1335,16 +1357,27 @@ void settings_setup_listeners()
 	// setting_setup_signal_listener(gSavedSettings, "ShowMiniLocationPanel", toggle_show_mini_location_panel);
 	// </FS: Zi>
 	setting_setup_signal_listener(gSavedSettings, "ShowMenuBarLocation", toggle_show_menubar_location_panel);
-	setting_setup_signal_listener(gSavedSettings, "ShowObjectRenderingCost", toggle_show_object_render_cost);
-	setting_setup_signal_listener(gSavedSettings, "ForceShowGrid", handleForceShowGrid);
+    setting_setup_signal_listener(gSavedSettings, "ShowObjectRenderingCost", toggle_show_object_render_cost);
+    setting_setup_signal_listener(gSavedSettings, "ForceShowGrid", handleForceShowGrid);
 	// <FS:Ansariel> Show start location setting has no effect on login
 	setting_setup_signal_listener(gSavedSettings, "ShowStartLocation", handleForceShowGrid);
-	setting_setup_signal_listener(gSavedSettings, "RenderTransparentWater", handleRenderTransparentWaterChanged);
-	setting_setup_signal_listener(gSavedSettings, "SpellCheck", handleSpellCheckChanged);
-	setting_setup_signal_listener(gSavedSettings, "SpellCheckDictionary", handleSpellCheckChanged);
-	setting_setup_signal_listener(gSavedSettings, "LoginLocation", handleLoginLocationChanged);
-	setting_setup_signal_listener(gSavedSettings, "DebugAvatarJoints", handleDebugAvatarJointsChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderAutoMuteByteLimit", handleRenderAutoMuteByteLimitChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderTransparentWater", handleRenderTransparentWaterChanged);
+    setting_setup_signal_listener(gSavedSettings, "SpellCheck", handleSpellCheckChanged);
+    setting_setup_signal_listener(gSavedSettings, "SpellCheckDictionary", handleSpellCheckChanged);
+    setting_setup_signal_listener(gSavedSettings, "LoginLocation", handleLoginLocationChanged);
+    setting_setup_signal_listener(gSavedSettings, "DebugAvatarJoints", handleDebugAvatarJointsChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderAutoMuteByteLimit", handleRenderAutoMuteByteLimitChanged);
+
+    setting_setup_signal_listener(gSavedSettings, "TargetFPS", handleTargetFPSChanged);
+    setting_setup_signal_listener(gSavedSettings, "AutoTuneFPS", handleAutoTuneFPSChanged);
+    setting_setup_signal_listener(gSavedSettings, "AutoTuneLock", handleAutoTuneLockChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderAvatarMaxART", handleRenderAvatarMaxARTChanged);
+    setting_setup_signal_listener(gSavedSettings, "PerfStatsCaptureEnabled", handlePerformanceStatsEnabledChanged);
+    setting_setup_signal_listener(gSavedSettings, "UserTargetReflections", handleUserTargetReflectionsChanged);
+    setting_setup_signal_listener(gSavedSettings, "AutoTuneRenderFarClipTarget", handleUserTargetDrawDistanceChanged);
+    setting_setup_signal_listener(gSavedSettings, "AutoTuneImpostorFarAwayDistance", handleUserImpostorDistanceChanged);
+    setting_setup_signal_listener(gSavedSettings, "AutoTuneImpostorByDistEnabled", handleUserImpostorByDistEnabledChanged);
+    setting_setup_signal_listener(gSavedSettings, "TuningFPSStrategy", handleFPSTuningStrategyChanged);
 
     setting_setup_signal_listener(gSavedPerAccountSettings, "AvatarHoverOffsetZ", handleAvatarHoverOffsetChanged);
 
@@ -1432,18 +1465,6 @@ void settings_setup_listeners()
 	// <FS:Ansariel> Better asset cache size control
 	setting_setup_signal_listener(gSavedSettings, "FSDiskCacheSize", handleDiskCacheSizeChanged);
 
-	// <FS:Beq> perf floater controls
-	setting_setup_signal_listener(gSavedSettings, "FSTargetFPS", handleTargetFPSChanged);
-	setting_setup_signal_listener(gSavedSettings, "FSAutoTuneFPS", handleAutoTuneFPSChanged);
-	setting_setup_signal_listener(gSavedSettings, "FSAutoTuneLock", handleAutoTuneLockChanged);
-	setting_setup_signal_listener(gSavedSettings, "FSRenderAvatarMaxART", handleRenderAvatarMaxARTChanged);
-	setting_setup_signal_listener(gSavedSettings, "FSPerfStatsCaptureEnabled", handlePerformanceStatsEnabledChanged);
-	setting_setup_signal_listener(gSavedSettings, "FSUserTargetReflections", handleUserTargetReflectionsChanged);
-	setting_setup_signal_listener(gSavedSettings, "FSAutoTuneRenderFarClipTarget", handleUserTargetDrawDistanceChanged);
-	setting_setup_signal_listener(gSavedSettings, "FSAutoTuneImpostorFarAwayDistance", handleUserImpostorDistanceChanged);
-	setting_setup_signal_listener(gSavedSettings, "FSAutoTuneImpostorByDistEnabled", handleUserImpostorByDistEnabledChanged);
-	setting_setup_signal_listener(gSavedSettings, "FSTuningFPSStrategy", handleFPSTuningStrategyChanged);
-	// </FS:Beq>
 
 	// <FS:Zi> Handle IME text input getting enabled or disabled
 #if LL_SDL2

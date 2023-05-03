@@ -57,13 +57,24 @@
     width="215" />
   <button
     name="open_prefs_btn"
-    label="Open Graphics Preferences"
-    tool_tip = "Bring up graphics prefs"
+    label="Graphics Preferences"
+    tool_tip="Open graphics preferences"
     top_delta="3"
-    left="15"
+    left="4"
     height="22"
-    width="200">
+    width="132">
     <button.commit_callback
       function="Presets.GoGraphicsPrefs" />
+  </button>
+  <button
+    name="open_autofps_btn"
+    label="Performance"
+    tool_tip="Open performance window"
+    top_delta="0"
+    left_pad="5"
+    height="22"
+    width="80">
+    <button.commit_callback
+      function="Presets.GoAutofpsPrefs" />
   </button>
 </panel>

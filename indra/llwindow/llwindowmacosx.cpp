@@ -53,6 +53,8 @@ BOOL check_for_card(const char* RENDERER, const char* bad_card);
 const char* cursorIDToName(int id);
 // </FS:CR>
 
+const S32   DEFAULT_REFRESH_RATE = 60;
+
 namespace
 {
     NSKeyEventRef mRawKeyEvent = NULL;
@@ -663,6 +665,13 @@ BOOL LLWindowMacOSX::createContext(int x, int y, int width, int height, int bits
 			return FALSE;
 		}
 	}
+
+    mRefreshRate = CGDisplayModeGetRefreshRate(CGDisplayCopyDisplayMode(mDisplay));
+    if(mRefreshRate == 0)
+    {
+        //consider adding more appropriate fallback later
+        mRefreshRate = DEFAULT_REFRESH_RATE;
+    }
 
 	// Disable vertical sync for swap
     toggleVSync(enable_vsync);

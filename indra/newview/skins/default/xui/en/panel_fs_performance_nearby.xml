@@ -69,22 +69,23 @@ top="0">
     Hide the most complex avatars to boost speed.
   </text>
   <slider
-    control_name="RenderAvatarMaxART"
-    tool_tip="Controls when a visually complex avatar is considered to be taking too long to render (unit: microseconds)"
+    control_name="IndirectMaxComplexity"
+    visible="false"
+    tool_tip="Controls at what point a visually complex avatar is drawn as a Impostor"
     follows="left|top"
     height="16"
-    initial_value="4.7"
-    increment="0.01"
-    label="Maximum render time (μs)"
+    initial_value="101"
+    increment="1"
+    label="Maximum complexity (K)"
     text_color="White"
     label_width="165"
     layout="topleft"
-    min_val="2"
-    max_val="4.7"
-    name="RenderAvatarMaxART"
+    min_val="1"
+    max_val="101"
+    name="IndirectMaxComplexity"
     show_text="false"
     top_pad="10"
-    width="490">
+    width="300">
   </slider>
   <text
     type="string"
@@ -94,14 +95,14 @@ top="0">
     height="16"
     layout="topleft"
     top_delta="0"
-    left_pad="5"
+    left_delta="304"
     text_color="White"
-    name="RenderAvatarMaxARTText"
+    name="IndirectMaxComplexityText"
     width="65">
-    no limit
+    0
   </text>
   <slider
-    control_name="FSRenderAvatarMaxART"
+    control_name="RenderAvatarMaxART"
     tool_tip="Controls when a visually complex avatar is considered to be taking too long to render (unit: microseconds)"
     follows="left|top"
     height="16"
@@ -157,6 +158,11 @@ top="0">
          name="art_value"
          width="80" />
          <name_list.columns
+         label="Adj. Time (μs)"
+         tool_tip="Avatar Render Time. Actual time taken to render this avatar after adjustments (in microseconds)."
+         name="adj_art_value"
+         width="80" />
+         <name_list.columns
          label="ARC"
          tool_tip="Complexity (ARC) based on standard rules."
          name="complex_value"
@@ -166,9 +172,13 @@ top="0">
          tool_tip="Shows any tuning. I=Impostor, S=no shadow."
          name="state"
          width="15" />
-        <name_list.columns
+         <name_list.columns
          label="Name"
          name="name"/>
+         <name_list.columns
+         label="Breakdown"
+         tool_tip="Where the rendering time is spent (Geom/Shad/Other)"
+         name="breakdown"/>
   </name_list>
   <text
    follows="left|top"

@@ -32,7 +32,7 @@
 #include "pipeline.h"
 #include "llglcommonfunc.h"
 #include "llvoavatar.h"
-#include "fsperfstats.h" // <FS:Beq> performance stats support
+#include "llperfstats.h"
 
 S32 diffuse_channel = -1;
 
@@ -165,23 +165,21 @@ void LLDrawPoolMaterials::renderDeferred(S32 pass)
 	LLCullResult::drawinfo_iterator begin = gPipeline.beginRenderMap(type);
 	LLCullResult::drawinfo_iterator end = gPipeline.endRenderMap(type);
 	
-	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
-	for (LLCullResult::drawinfo_iterator i = begin; i != end; ++i)
+    std::unique_ptr<LLPerfStats::RecordAttachmentTime> ratPtr{};
+    for (LLCullResult::drawinfo_iterator i = begin; i != end; ++i)
 	{
 		LLDrawInfo& params = **i;
 
-		// <FS:Beq> Capture render times
-		if(params.mFace)
-		{
-			LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
-			
-			if( vobj && vobj->isAttachment() )
-			{
-				trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
-			}
-		}
-		// </FS:Beq>
+        if(params.mFace)
+        {
+            LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
 
+            if( vobj && vobj->isAttachment() )
+            {
+                trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
+            }
+        }
+		
 		mShader->uniform4f(LLShaderMgr::SPECULAR_COLOR, params.mSpecColor.mV[0], params.mSpecColor.mV[1], params.mSpecColor.mV[2], params.mSpecColor.mV[3]);
 		mShader->uniform1f(LLShaderMgr::ENVIRONMENT_INTENSITY, params.mEnvIntensity);
 		

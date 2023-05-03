@@ -60,7 +60,7 @@
 // [RLVa:KB] - Checked: RLVa-2.0.0
 #include "rlvhandler.h"
 // [/RLVa:KB]
-#include "fsperfstats.h" // <FS:Beq> performance stats support
+#include "llperfstats.h"
 
 #if LL_LINUX
 // Work-around spurious used before init warning on Vector4a
