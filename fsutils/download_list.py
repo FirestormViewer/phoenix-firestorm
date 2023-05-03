@@ -211,6 +211,10 @@ for build_type in build_types_created:
     grids_printable = {"SL":"Second Life", "OS":"OpenSim"}
 
     download_root = f"https://downloads.firestormviewer.org/{build_types[build_type]}/"
+    output += f'''
+DOWNLOADS - {build_type}
+-------------------------------------------------------------------------------------------------------
+'''
     for dir in dirs:
         print(f"Getting files for {dir} in {build_type_dir}")
         files = get_files(os.path.join(build_type_dir, dir))
@@ -236,11 +240,8 @@ for build_type in build_types_created:
             print(f"No files found for {dir} in {build_type_dir}")
 
 
-        output += f'''
-DOWNLOADS - {build_type}
-'''
 
-        output += f'''-------------------------------------------------------------------------------------------------------
+        output += f'''
 {platforms_printable[dir]}
 '''
         dir = dir.lower()
@@ -266,8 +267,7 @@ DOWNLOADS - {build_type}
             except KeyError:
                 output += f"{platform} for {grid_printable} ({wordsize}-bit) - NOT AVAILABLE\n"
                 output += "\n"
-        output += '''
--------------------------------------------------------------------------------------------------------
+        output += '''-------------------------------------------------------------------------------------------------------
 '''
 
     if args.webhook:
@@ -276,6 +276,7 @@ DOWNLOADS - {build_type}
         # Send the webhook
         response = webhook.execute()
         # Print the response
-        print(f"Webhook response: {response}")
+        if not response.ok:
+            print(f"Webhook Error {response.status_code}: {response.text}")        
     print(output)
 

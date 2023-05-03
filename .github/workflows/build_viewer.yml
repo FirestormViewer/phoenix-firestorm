@@ -10,6 +10,7 @@ env:
   AUTOBUILD_VARIABLES_FILE: ${{github.workspace}}/build-variables/variables
   EXTRA_ARGS: -DUSE_FMODSTUDIO=ON -DUSE_KDU=ON --crashreporting
   build_secrets_checkout: ${{github.workspace}}/signing
+  XZ_DEFAULTS: -T0
 
 
 jobs:
