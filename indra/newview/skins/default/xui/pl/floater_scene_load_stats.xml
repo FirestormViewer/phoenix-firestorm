@@ -61,6 +61,13 @@
 					</stat_view>
 				</stat_view>
 			</stat_view>
+			<stat_view name="frame_stats" label="Składowe klatki">
+				<stat_bar name="scenery_frame_pct" label="Scena" />
+				<stat_bar name="avatar_frame_pct" label="Awatary" />
+				<stat_bar name="ui_frame_pct" label="Interfejs" />
+				<stat_bar name="huds_frame_pct" label="HUDy" />
+				<stat_bar name="idle_frame_pct" label="Zadania" />
+			</stat_view>
 		</container_view>
 	</scroll_container>
 </floater>

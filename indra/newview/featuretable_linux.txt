@@ -1,10 +1,10 @@
-version 29
+version 30
 // The version number above should be incremented IF AND ONLY IF some
 // change has been made that is sufficiently important to justify
 // resetting the graphics preferences of all users to the recommended
 // defaults.  This should be as rare an event as we can manage.
 
-// NOTE: This is mostly identical to featuretable_mac.txt with a few differences
+// NOTE: This is mostly identical to featuretable_mac.txt with a few differences 
 // Should be combined into one table
 
 //
@@ -112,6 +112,7 @@ RenderAvatarCloth			1	0
 RenderAvatarLODFactor		1	0.5
 RenderAvatarMaxComplexity   1	100000
 RenderAvatarPhysicsLODFactor 1	0.75
+RenderAvatarMaxNonImpostors 1   5
 RenderFarClip				1	96
 RenderFlexTimeFactor		1	1.0
 RenderGlowResolutionPow		1	8
@@ -141,6 +142,7 @@ RenderAvatarCloth			1	0
 RenderAvatarLODFactor		1	1.0
 RenderAvatarMaxComplexity   1	200000
 RenderAvatarPhysicsLODFactor 1	1.0
+RenderAvatarMaxNonImpostors 1   7
 RenderFarClip				1	128
 RenderFlexTimeFactor		1	1.0
 RenderGlowResolutionPow		1	9
@@ -170,6 +172,7 @@ RenderAvatarCloth			1	0
 RenderAvatarLODFactor		1	1.0
 RenderAvatarMaxComplexity   1	250000
 RenderAvatarPhysicsLODFactor 1	1.0
+RenderAvatarMaxNonImpostors 1   9
 RenderFarClip				1	128
 RenderFlexTimeFactor		1	1.0
 RenderGlowResolutionPow		1	9
@@ -199,6 +202,7 @@ RenderAvatarCloth			1	0
 RenderAvatarLODFactor		1	1.0
 RenderAvatarMaxComplexity   1	300000
 RenderAvatarPhysicsLODFactor 1	1.0
+RenderAvatarMaxNonImpostors 1   11
 RenderFarClip				1	128
 RenderFlexTimeFactor		1	1.0
 RenderGlowResolutionPow		1	9
@@ -228,6 +232,7 @@ RenderAvatarCloth			1	0
 RenderAvatarLODFactor		1	1.0
 RenderAvatarMaxComplexity   1	350000
 RenderAvatarPhysicsLODFactor 1	1.0
+RenderAvatarMaxNonImpostors 1   16
 RenderFarClip				1	128
 RenderFlexTimeFactor		1	1.0
 RenderGlowResolutionPow		1	9
@@ -255,6 +260,7 @@ list Ultra
 RenderAnisotropic			1	1
 RenderAvatarCloth			1	1
 RenderAvatarLODFactor		1	1.0
+RenderAvatarMaxNonImpostors 1   16
 RenderAvatarPhysicsLODFactor 1	1.0
 RenderFarClip				1	256
 RenderFlexTimeFactor		1	1.0

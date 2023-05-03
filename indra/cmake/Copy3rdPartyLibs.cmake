@@ -272,6 +272,7 @@ elseif(LINUX)
 
 
                  libhunspell-1.3.so.0.0.0
+                 #libopenjp2.so
                  libuuid.so.16
                  libuuid.so.16.0.22
 

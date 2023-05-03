@@ -42,7 +42,7 @@
 #include "llagentcamera.h"
 #include "llfile.h"
 #include "quickprefs.h"
-#include "fsperfstats.h" // <FS:Beq/> avoid triggering reloads while autotuning
+#include "llperfstats.h"
 
 LLPresetsManager::LLPresetsManager()
 	// <FS:Ansariel> Graphic preset controls independent from XUI
@@ -723,7 +723,7 @@ void LLPresetsManager::handleGraphicPresetControlChanged(LLControlVariablePtr co
 
 	if (!mIsLoadingPreset && 
 		(!mIsDrawDistanceSteppingActive || control->getName() != "RenderFarClip") &&
-		(!FSPerfStats::tunables.userAutoTuneEnabled) )
+		(!LLPerfStats::tunables.userAutoTuneEnabled) )
 	{
 		LL_DEBUGS() << "Trigger graphic preset control changed signal" << LL_ENDL;
 

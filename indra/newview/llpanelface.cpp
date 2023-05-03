@@ -80,6 +80,8 @@
 #include "llpluginclassmedia.h"
 #include "llviewertexturelist.h"// Update sel manager as to which channel we're editing so it can reflect the correct overlay UI
 
+#include <unordered_set>	// <FS:Zi> Find all faces with same texture
+
 //
 // Constant definitions for comboboxes
 // Must match the commbobox definitions in panel_tools_texture.xml
@@ -420,6 +422,12 @@ BOOL	LLPanelFace::postBuild()
 
 	clearCtrls();
 
+	// <FS:Zi> Find all faces with same texture
+	getChild<LLUICtrl>("btn_select_same_diff")->setEnabled(false);
+	getChild<LLUICtrl>("btn_select_same_norm")->setEnabled(false);
+	getChild<LLUICtrl>("btn_select_same_spec")->setEnabled(false);
+	// </FS:Zi>
+
 	return TRUE;
 }
 
@@ -436,6 +444,10 @@ LLPanelFace::LLPanelFace()
     //mCommitCallbackRegistrar.add("PanelFace.menuDoToSelected", boost::bind(&LLPanelFace::menuDoToSelected, this, _2));
     //mEnableCallbackRegistrar.add("PanelFace.menuEnable", boost::bind(&LLPanelFace::menuEnableItem, this, _2));
     // </FS>
+
+	// <FS:Zi> Find all faces with same texture
+	mCommitCallbackRegistrar.add("BuildTool.SelectSameTexture", boost::bind(&LLPanelFace::onClickBtnSelectSameTexture, this, _1, _2));
+	// </FS:Zi>
 }
 
 LLPanelFace::~LLPanelFace()
@@ -1687,6 +1699,12 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 		calcp->setVar(LLCalc::TEX_ROTATION, getCurrentTextureRot());
 		calcp->setVar(LLCalc::TEX_TRANSPARENCY, childGetValue("ColorTrans").asReal());
 		calcp->setVar(LLCalc::TEX_GLOW, childGetValue("glow").asReal());
+
+		// <FS:Zi> Find all faces with same texture
+		getChild<LLUICtrl>("btn_select_same_diff")->setEnabled(LLSelectMgr::getInstance()->getTEMode() && mTextureCtrl->getEnabled());
+		getChild<LLUICtrl>("btn_select_same_norm")->setEnabled(LLSelectMgr::getInstance()->getTEMode() && mBumpyTextureCtrl->getEnabled());
+		getChild<LLUICtrl>("btn_select_same_spec")->setEnabled(LLSelectMgr::getInstance()->getTEMode() && mShinyTextureCtrl->getEnabled());
+		// </FS:Zi>
 	}
 	else
 	{
@@ -2661,6 +2679,11 @@ void LLPanelFace::updateVisibility()
 	getChildView("bumpyOffsetV")->setVisible(show_bumpiness);
 
 
+	// <FS:Zi> Find all faces with same texture
+	getChild<LLUICtrl>("btn_select_same_diff")->setVisible(mTextureCtrl->getVisible());
+	getChild<LLUICtrl>("btn_select_same_norm")->setVisible(mBumpyTextureCtrl->getVisible());
+	getChild<LLUICtrl>("btn_select_same_spec")->setVisible(mShinyTextureCtrl->getVisible());
+	// </FS:Zi>
 }
 
 // static
@@ -4819,3 +4842,82 @@ void LLPanelFace::changePrecision(S32 decimal_precision)
 	mCtrlRpt->setPrecision(decimal_precision);
 }
 // </FS:CR>
+
+// <FS:Zi> Find all faces with same texture
+void LLPanelFace::onClickBtnSelectSameTexture(const LLUICtrl* ctrl, const LLSD& user_data)
+{
+	char channel = user_data.asStringRef()[0];
+
+	std::unordered_set<LLViewerObject*> objects;
+
+	// get a list of all linksets where at least one face is selected
+	for (auto iter = LLSelectMgr::getInstance()->getSelection()->valid_begin();
+		iter != LLSelectMgr::getInstance()->getSelection()->valid_end(); iter++)
+	{
+		objects.insert((*iter)->getObject()->getRootEdit());
+	}
+
+	// clean out the selection
+	LLSelectMgr::getInstance()->deselectAll();
+
+	// select all faces of all linksets that were found before
+	LLObjectSelectionHandle handle;
+	for(auto objectp : objects)
+	{
+		handle = LLSelectMgr::getInstance()->selectObjectAndFamily(objectp, true, false);
+	}
+
+	// grab the texture ID from the texture selector
+	LLTextureCtrl* texture_control = mTextureCtrl;
+	if (channel == 'n')
+	{
+		texture_control = mBumpyTextureCtrl;
+	}
+	else if (channel == 's')
+	{
+		texture_control = mShinyTextureCtrl;
+	}
+
+	LLUUID id = texture_control->getImageAssetID();
+
+	// go through all selected links in all selecrted linksets
+	for (auto iter = handle->begin(); iter != handle->end(); iter++)
+	{
+		LLSelectNode* node = *iter;
+		LLViewerObject* objectp = node->getObject();
+
+		U8 te_count = objectp->getNumTEs();
+
+		for (U8 i = 0; i < te_count; i++)
+		{
+			LLUUID image_id;
+			if (channel == 'd')
+			{
+				image_id = objectp->getTEImage(i)->getID();
+			}
+			else
+			{
+				const LLMaterialPtr mat = objectp->getTEref(i).getMaterialParams();
+				if (mat.notNull())
+				{
+					if (channel == 'n')
+					{
+						image_id = mat->getNormalID();
+					}
+					else if (channel == 's')
+					{
+						image_id = mat->getSpecularID();
+					}
+				}
+			}
+
+			// deselect all faces that use a different texture UUID
+			if (image_id != id)
+			{
+				objectp->setTESelected(i, false);
+				node->selectTE(i, false);
+			}
+		}
+	}
+}
+// </FS:Zi>

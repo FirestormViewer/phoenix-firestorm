@@ -32,6 +32,7 @@
 #include "llfeaturemanager.h"
 #include "llfloaterpreference.h"
 #include "llfloaterreg.h"
+#include "llnotificationsutil.h"
 #include "llsliderctrl.h"
 #include "lltextbox.h"
 #include "lltrans.h"
@@ -51,11 +52,14 @@ LLFloaterPreferenceGraphicsAdvanced::LLFloaterPreferenceGraphicsAdvanced(const L
 
     mCommitCallbackRegistrar.add("Pref.Cancel", boost::bind(&LLFloaterPreferenceGraphicsAdvanced::onBtnCancel, this, _2));
     mCommitCallbackRegistrar.add("Pref.OK",     boost::bind(&LLFloaterPreferenceGraphicsAdvanced::onBtnOK, this, _2));
+
+    gSavedSettings.getControl("RenderAvatarMaxNonImpostors")->getSignal()->connect(boost::bind(&LLFloaterPreferenceGraphicsAdvanced::updateIndirectMaxNonImpostors, this, _2));
 }
 
 LLFloaterPreferenceGraphicsAdvanced::~LLFloaterPreferenceGraphicsAdvanced()
 {
     mComplexityChangedSignal.disconnect();
+    mLODFactorChangedSignal.disconnect();
 }
 
 BOOL LLFloaterPreferenceGraphicsAdvanced::postBuild()
@@ -75,8 +79,8 @@ BOOL LLFloaterPreferenceGraphicsAdvanced::postBuild()
     use_HiDPI->setVisible(FALSE);
 #endif
 
-    mComplexityChangedSignal = gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&LLFloaterPreferenceGraphicsAdvanced::updateComplexityText, this));
-
+    mComplexityChangedSignal = gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&LLFloaterPreferenceGraphicsAdvanced::updateComplexityText, this)); 
+    mLODFactorChangedSignal = gSavedSettings.getControl("RenderVolumeLODFactor")->getCommitSignal()->connect(boost::bind(&LLFloaterPreferenceGraphicsAdvanced::updateObjectMeshDetailText, this));
     return TRUE;
 }
 
@@ -162,6 +166,11 @@ void LLFloaterPreferenceGraphicsAdvanced::updateComplexityText()
         getChild<LLTextBox>("IndirectMaxComplexityText", true));
 }
 
+void LLFloaterPreferenceGraphicsAdvanced::updateObjectMeshDetailText()
+{
+    updateSliderText(getChild<LLSliderCtrl>("ObjectMeshDetail", true), getChild<LLTextBox>("ObjectMeshDetailText", true));
+}
+
 void LLFloaterPreferenceGraphicsAdvanced::updateSliderText(LLSliderCtrl* ctrl, LLTextBox* text_box)
 {
     if (text_box == NULL || ctrl== NULL)
@@ -205,6 +214,16 @@ void LLFloaterPreferenceGraphicsAdvanced::updateMaxNonImpostors()
     gSavedSettings.setU32("RenderAvatarMaxNonImpostors", value);
     LLVOAvatar::updateImpostorRendering(value); // make it effective immediately
     setMaxNonImpostorsText(value, getChild<LLTextBox>("IndirectMaxNonImpostorsText"));
+}
+
+void LLFloaterPreferenceGraphicsAdvanced::updateIndirectMaxNonImpostors(const LLSD& newvalue)
+{
+    U32 value = newvalue.asInteger();
+    if ((value != 0) && (value != gSavedSettings.getU32("IndirectMaxNonImpostors")))
+    {
+        gSavedSettings.setU32("IndirectMaxNonImpostors", value);
+        setMaxNonImpostorsText(value, getChild<LLTextBox>("IndirectMaxNonImpostorsText"));
+    }
 }
 
 void LLFloaterPreferenceGraphicsAdvanced::setMaxNonImpostorsText(U32 value, LLTextBox* text_box)
@@ -259,8 +278,7 @@ void LLFloaterPreferenceGraphicsAdvanced::disableUnavailableSettings()
     }
 
     // disabled deferred
-    if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") ||
-        !gGLManager.mHasFramebufferObject)
+    if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred"))
     {
         ctrl_shadows->setEnabled(FALSE);
         ctrl_shadows->setValue(0);
@@ -341,9 +359,6 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
     ctrl_reflections->setEnabled(reflections);
     reflections_text->setEnabled(reflections);
 
-    // Transparent Water
-    LLCheckBoxCtrl* transparent_water_ctrl = getChild<LLCheckBoxCtrl>("TransparentWater");
-
     // Bump & Shiny	
     LLCheckBoxCtrl* bumpshiny_ctrl = getChild<LLCheckBoxCtrl>("BumpShiny");
     bool bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump");
@@ -400,9 +415,6 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
 
     BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
         ((bumpshiny_ctrl && bumpshiny_ctrl->get()) ? TRUE : FALSE) &&
-        ((transparent_water_ctrl && transparent_water_ctrl->get()) ? TRUE : FALSE) &&
-        gGLManager.mHasFramebufferObject &&
-        gSavedSettings.getBOOL("RenderAvatarVP") &&
         (ctrl_wind_light->get()) ? TRUE : FALSE;
 
     ctrl_deferred->setEnabled(enabled);

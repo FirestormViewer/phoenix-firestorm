@@ -158,6 +158,8 @@ protected:
 	// updates click/double-click action keybindngs depending on view values
 	void updateClickActionControls();
 
+    void onAtmosShaderChange();
+
 	// <FS:PP> updates UI Sounds controls depending on values from settings.xml
 	void updateUISoundsControls();
 
@@ -276,6 +278,7 @@ public:
 	void onClickAutoReplace();
 	void onClickSpellChecker();
 	void onClickRenderExceptions();
+	void onClickAutoAdjustments();
 	void onClickAdvanced();
 	void applyUIColor(LLUICtrl* ctrl, const LLSD& param);
 	void getUIColor(LLUICtrl* ctrl, const LLSD& param);
@@ -295,6 +298,9 @@ public:
 
 	// <FS:Zi> Support preferences search SLURLs
 	void onCopySearch();
+
+    void setRecommendedSettings();
+    void resetAutotuneSettings();
 
 private:
 
@@ -487,10 +493,8 @@ class LLAvatarComplexityControls
   public: 
 	static void updateMax(LLSliderCtrl* slider, LLTextBox* value_label, bool short_val = false);
 	static void setText(U32 value, LLTextBox* text_box, bool short_val = false);
-	// <FS:Beq> for render time support
 	static void updateMaxRenderTime(LLSliderCtrl* slider, LLTextBox* value_label, bool short_val = false);
-	static void setRenderTimeText(F32 value, LLTextBox* text_box, bool short_val = false); 
-	// </FS:Beq>
+	static void setRenderTimeText(F32 value, LLTextBox* text_box, bool short_val = false);
 	static void setIndirectControls();
 	static void setIndirectMaxNonImpostors();
 	static void setIndirectMaxArc();

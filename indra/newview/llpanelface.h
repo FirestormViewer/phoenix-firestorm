@@ -230,6 +230,8 @@ protected:
     void            onPasteFaces();
     // </FS>
 
+	void onClickBtnSelectSameTexture(const LLUICtrl* ctrl, const LLSD& user_data);	// <FS:Zi> Find all faces with same texture
+
 public: // needs to be accessible to selection manager
     void            onCopyColor(); // records all selected faces
     void            onPasteColor(); // to specific face

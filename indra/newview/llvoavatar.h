@@ -330,6 +330,8 @@ public:
 
 	void 			idleUpdateBelowWater();
 
+	static void updateNearbyAvatarCount();
+
 	//--------------------------------------------------------------------
 	// Static preferences (controlled by user settings/menus)
 	//--------------------------------------------------------------------
@@ -351,10 +353,12 @@ public:
 	static F32		sLODFactor; // user-settable LOD factor
 	static F32		sPhysicsLODFactor; // user-settable physics LOD factor
 	static BOOL		sJointDebug; // output total number of joints being touched for each avatar
-	static U64		sRenderTimeLimit_ns; // <FS:Beq/> nanosecond time limit for avatar rendering 0 is unlimited. 
 	static LLPartSysData sCloud;
 
     static LLPointer<LLViewerTexture>  sCloudTexture;
+
+	static std::vector<LLUUID> sAVsIgnoringARTLimit;
+    static S32 sAvatarsNearby;
 
 	//--------------------------------------------------------------------
 	// Region state
@@ -367,17 +371,16 @@ public:
 	//--------------------------------------------------------------------
 public:
 	BOOL			isFullyLoaded() const;
-	// <FS:Beq> check and return current state relative to limits
-	// default will test only the geometry (combined=false).
-	// this allows us to disable shadows separately on complex avatars.
-	inline bool 	isTooSlowWithShadows() const {return mTooSlow;};
-	inline bool 	isTooSlowWithoutShadows() const {return mTooSlowWithoutShadows;};
-	inline bool 	isTooSlow(bool combined = false) const 
-	{
-		return(combined?mTooSlow:mTooSlowWithoutShadows);
-	}
-	void 			updateTooSlow();
-	// </FS:Beq>
+
+    // check and return current state relative to limits
+    // default will test only the geometry (combined=false).
+    // this allows us to disable shadows separately on complex avatars.
+
+    inline bool 	isTooSlowWithoutShadows() const {return mTooSlowWithoutShadows;};
+    bool 	isTooSlow() const;
+
+    void 			updateTooSlow();
+
 	virtual bool	isTooComplex() const; // <FS:Ansariel> FIRE-29012: Standalone animesh avatars get affected by complexity limit; changed to virtual
 	bool 			visualParamWeightsAreDefault();
 	virtual bool	getIsCloud() const;
@@ -399,7 +402,11 @@ public:
 	void 			logMetricsTimerRecord(const std::string& phase_name, F32 elapsed, bool completed);
 
     void            calcMutedAVColor();
-	void			markARTStale();
+    void            markARTStale();
+	// <FS:Beq> refactoring post LL merge
+	void 			clearSlowARTCache();
+	void 			setSlowARTCache(U64 full_render_time, U64 geometry_render_time);
+	// </FS:Beq>
 
 protected:
 	LLViewerStats::PhaseMap& getPhases() { return mPhases; }
@@ -420,15 +427,17 @@ private:
 	LLColor4		mMutedAVColor;
 	LLFrameTimer	mFullyLoadedTimer;
 	LLFrameTimer	mRuthTimer;
-	U32				mLastARTUpdateFrame{0};
-	U64				mRenderTime{0};
-	U64				mGeomTime{0};
-	bool			mARTStale{true};
-	bool			mARTCapped{false};
-	// <FS:Beq> variables to hold "slowness" status
-	bool			mTooSlow{false};
-	bool			mTooSlowWithoutShadows{false};
-	// </FS:Beq>
+
+    U32				mLastARTUpdateFrame{0};
+    U64				mRenderTime{0};
+    U64				mRenderTimeNoShadows{0};
+    bool			mARTStale{true};
+    bool			mARTCapped{false};
+    // variables to hold "slowness" status
+    bool			mTooSlow{false};
+    bool			mTooSlowWithoutShadows{false};
+
+    bool            mTuned{false};
 
 private:
 	LLViewerStats::PhaseMap mPhases;
@@ -1233,7 +1242,7 @@ public:
 	// COF version of last appearance message received for this av.
 	S32 mLastUpdateReceivedCOFVersion;
 
-	U64 getLastART() const { return mRenderTime; }
+    U64 getLastART() const { return mRenderTime; }
 
 /**                    Diagnostics
  **                                                                            **

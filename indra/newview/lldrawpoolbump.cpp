@@ -49,7 +49,7 @@
 #include "llspatialpartition.h"
 #include "llviewershadermgr.h"
 #include "llmodel.h"
-#include "fsperfstats.h" // <FS:Beq> performance stats support
+#include "llperfstats.h"
 
 //#include "llimagebmp.h"
 //#include "../tools/imdebug/imdebug.h"
@@ -548,18 +548,18 @@ void LLDrawPoolBump::renderGroup(LLSpatialGroup* group, U32 type, U32 mask, BOOL
 	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWPOOL;
 	LLSpatialGroup::drawmap_elem_t& draw_info = group->mDrawMap[type];	
 	
-	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
-	for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k) 
+    std::unique_ptr<LLPerfStats::RecordAttachmentTime> ratPtr{};
+    for (LLSpatialGroup::drawmap_elem_t::iterator k = draw_info.begin(); k != draw_info.end(); ++k) 
 	{
 		LLDrawInfo& params = **k;
-		// <FS:Beq> Capture render times
-		LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
 		
-		if( vobj && vobj->isAttachment() )
-		{
-			trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
-		}
-		// </FS:Beq>		
+        LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+
+        if( vobj && vobj->isAttachment() )
+        {
+            trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
+        }
+
 		applyModelMatrix(params);
 
 		if (params.mGroup)
@@ -728,22 +728,20 @@ void LLDrawPoolBump::renderDeferred(S32 pass)
         LLVOAvatar* avatar = nullptr;
         U64 skin = 0;
 
-        std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
+        std::unique_ptr<LLPerfStats::RecordAttachmentTime> ratPtr{};
         for (LLCullResult::drawinfo_iterator i = begin; i != end; ++i)
         {
             LLDrawInfo& params = **i;
 
-            // <FS:Beq> Capture render times
             if(params.mFace)
             {
                 LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
 
                 if(vobj && vobj->isAttachment())
                 {
-                     trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
+                    trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
                 }
             }
-            // </FS:Beq>
 
             LLGLSLShader::sCurBoundShaderPtr->setMinimumAlpha(params.mAlphaMaskCutoff);
             LLDrawPoolBump::bindBumpMap(params, bump_channel);
@@ -1374,7 +1372,7 @@ void LLDrawPoolBump::renderBump(U32 type, U32 mask)
     LLCullResult::drawinfo_iterator begin = gPipeline.beginRenderMap(type);
     LLCullResult::drawinfo_iterator end = gPipeline.endRenderMap(type);
 
-	std::unique_ptr<FSPerfStats::RecordAttachmentTime> ratPtr{}; // <FS:Beq/> render time capture
+    std::unique_ptr<LLPerfStats::RecordAttachmentTime> ratPtr{};
 	for (LLCullResult::drawinfo_iterator i = begin; i != end; ++i)	
 	{
 		LLDrawInfo& params = **i;
@@ -1389,6 +1387,16 @@ void LLDrawPoolBump::renderBump(U32 type, U32 mask)
 			}
 		}
 		// </FS:Beq>
+
+        if(params.mFace)
+        {
+            LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
+
+            if( vobj && vobj->isAttachment() )
+            {
+                trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
+            }
+        }
 
 		if (LLDrawPoolBump::bindBumpMap(params))
 		{

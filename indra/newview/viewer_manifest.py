@@ -43,10 +43,7 @@ import tarfile
 import time
 import zipfile
 
-#<FS:AO>
-import shlex
-import zipfile
-#</FS:AO>
+sys.dont_write_bytecode = True # <FS:Ansariel> Prevents creating __pycache__ directory
 
 from fs_viewer_manifest import FSViewerManifest #<FS:ND/> Manifest extensions for Firestorm
 
@@ -2169,7 +2166,7 @@ class Linux_i686_Manifest(LinuxManifest):
             self.path("libdirectfb-1.*.so.*")
             self.path("libfusion-1.*.so.*")
             self.path("libdirect-1.*.so.*")
-            self.path("libopenjp2.so*")
+            #self.path("libopenjp2.so*")
             self.path("libdirectfb-1.4.so.5")
             self.path("libfusion-1.4.so.5")
             self.path("libdirect-1.4.so.5*")
