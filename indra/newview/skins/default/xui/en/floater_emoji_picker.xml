@@ -45,9 +45,9 @@
 	  height="338"
 	  width="192">
     <columns
-        label="Look"
+        label="@"
         name="look"
-        width="50" />
+        width="30" />
 	<columns
         label="Name"
         name="name" />

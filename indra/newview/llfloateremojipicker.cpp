@@ -73,15 +73,14 @@ LLFloaterEmojiPicker* LLFloaterEmojiPicker::getInstance()
 {
 	LLFloaterEmojiPicker* floater = LLFloaterReg::getTypedInstance<LLFloaterEmojiPicker>("emoji_picker");
 	if (!floater)
-		LL_WARNS() << "Cannot instantiate emoji picker" << LL_ENDL;
+		LL_ERRS() << "Cannot instantiate emoji picker" << LL_ENDL;
 	return floater;
 }
 
 LLFloaterEmojiPicker* LLFloaterEmojiPicker::showInstance(pick_callback_t pick_callback, close_callback_t close_callback)
 {
 	LLFloaterEmojiPicker* floater = getInstance();
-	if (LLFloaterEmojiPicker* floater = getInstance())
-		floater->show(pick_callback, close_callback);
+	floater->show(pick_callback, close_callback);
 	return floater;
 }
 
@@ -101,41 +100,31 @@ LLFloaterEmojiPicker::LLFloaterEmojiPicker(const LLSD& key)
 BOOL LLFloaterEmojiPicker::postBuild()
 {
 	// Should be initialized first
-	if ((mPreviewEmoji = getChild<LLButton>("PreviewEmoji")))
-	{
-		mPreviewEmoji->setClickedCallback(boost::bind(&LLFloaterEmojiPicker::onPreviewEmojiClick, this));
-	}
+	mPreviewEmoji = getChild<LLButton>("PreviewEmoji");
+	mPreviewEmoji->setClickedCallback(boost::bind(&LLFloaterEmojiPicker::onPreviewEmojiClick, this));
 
-	if ((mCategory = getChild<LLComboBox>("Category")))
+	mCategory = getChild<LLComboBox>("Category");
+	mCategory->setCommitCallback(boost::bind(&LLFloaterEmojiPicker::onCategoryCommit, this));
+	const LLEmojiDictionary::cat2descrs_map_t& cat2Descrs = LLEmojiDictionary::instance().getCategory2Descrs();
+	mCategory->clearRows();
+	for (const LLEmojiDictionary::cat2descrs_item_t& item : cat2Descrs)
 	{
-		mCategory->setCommitCallback(boost::bind(&LLFloaterEmojiPicker::onCategoryCommit, this));
-		//mCategory->setLabel(LLStringExplicit("Choose a category"));
-		const auto& cat2Descrs = LLEmojiDictionary::instance().getCategory2Descrs();
-		mCategory->clearRows();
-		for (const auto& item : cat2Descrs)
-		{
-			std::string value = item.first;
-			std::string name = value;
-			LLStringUtil::capitalize(name);
-			mCategory->add(name, value);
-		}
-		mCategory->setSelectedByValue(mSelectedCategory, true);
+		std::string value = item.first;
+		std::string name = value;
+		LLStringUtil::capitalize(name);
+		mCategory->add(name, value);
 	}
+	mCategory->setSelectedByValue(mSelectedCategory, true);
 
-	if ((mSearch = getChild<LLLineEditor>("Search")))
-	{
-		mSearch->setKeystrokeCallback(boost::bind(&LLFloaterEmojiPicker::onSearchKeystroke, this, _1, _2), NULL);
-		//mSearch->setLabel(LLStringExplicit("Type to search an emoji"));
-		mSearch->setFont(LLViewerChat::getChatFont());
-		mSearch->setText(mSearchPattern);
-	}
+	mSearch = getChild<LLLineEditor>("Search");
+	mSearch->setKeystrokeCallback(boost::bind(&LLFloaterEmojiPicker::onSearchKeystroke, this, _1, _2), NULL);
+	mSearch->setFont(LLViewerChat::getChatFont());
+	mSearch->setText(mSearchPattern);
 
-	if ((mEmojis = getChild<LLScrollListCtrl>("Emojis")))
-	{
-		mEmojis->setCommitCallback(boost::bind(&LLFloaterEmojiPicker::onEmojiSelect, this));
-		mEmojis->setDoubleClickCallback(boost::bind(&LLFloaterEmojiPicker::onEmojiPick, this));
-		fillEmojis();
-	}
+	mEmojis = getChild<LLScrollListCtrl>("Emojis");
+	mEmojis->setCommitCallback(boost::bind(&LLFloaterEmojiPicker::onEmojiSelect, this));
+	mEmojis->setDoubleClickCallback(boost::bind(&LLFloaterEmojiPicker::onEmojiPick, this));
+	fillEmojis();
 
 	return TRUE;
 }
@@ -149,8 +138,8 @@ void LLFloaterEmojiPicker::fillEmojis()
 {
 	mEmojis->clearRows();
 
-	const auto& emoji2Descr = LLEmojiDictionary::instance().getEmoji2Descr();
-	for (const std::pair<const llwchar, const LLEmojiDescriptor*>& it : emoji2Descr)
+	const LLEmojiDictionary::emoji2descr_map_t& emoji2Descr = LLEmojiDictionary::instance().getEmoji2Descr();
+	for (const LLEmojiDictionary::emoji2descr_item_t& it : emoji2Descr)
 	{
 		const LLEmojiDescriptor* descr = it.second;
 
@@ -189,10 +178,10 @@ bool LLFloaterEmojiPicker::matchesPattern(const LLEmojiDescriptor* descr)
 {
 	if (descr->Name.find(mSearchPattern) != std::string::npos)
 		return true;
-	for (auto shortCode : descr->ShortCodes)
+	for (const std::string& shortCode : descr->ShortCodes)
 		if (shortCode.find(mSearchPattern) != std::string::npos)
 			return true;
-	for (auto category : descr->Categories)
+	for (const std::string& category : descr->Categories)
 		if (category.find(mSearchPattern) != std::string::npos)
 			return true;
 	return false;
@@ -214,7 +203,7 @@ void LLFloaterEmojiPicker::onSearchKeystroke(LLLineEditor* caller, void* user_da
 
 void LLFloaterEmojiPicker::onPreviewEmojiClick()
 {
-	if (mEmojis && mEmojiPickCallback)
+	if (mEmojiPickCallback)
 	{
 		if (LLEmojiScrollListItem* item = dynamic_cast<LLEmojiScrollListItem*>(mEmojis->getFirstSelected()))
 		{
@@ -231,8 +220,7 @@ void LLFloaterEmojiPicker::onEmojiSelect()
 		mSelectedEmojiIndex = mEmojis->getFirstSelectedIndex();
 		LLUIString text;
 		text.insert(0, LLWString(1, item->getEmoji()));
-		if (mPreviewEmoji)
-			mPreviewEmoji->setLabel(text);
+		mPreviewEmoji->setLabel(text);
 		return;
 	}
 
@@ -242,13 +230,12 @@ void LLFloaterEmojiPicker::onEmojiSelect()
 void LLFloaterEmojiPicker::onEmojiEmpty()
 {
 	mSelectedEmojiIndex = 0;
-	if (mPreviewEmoji)
-		mPreviewEmoji->setLabel(LLUIString());
+	mPreviewEmoji->setLabel(LLUIString());
 }
 
 void LLFloaterEmojiPicker::onEmojiPick()
 {
-	if (mEmojis && mEmojiPickCallback)
+	if (mEmojiPickCallback)
 	{
 		if (LLEmojiScrollListItem* item = dynamic_cast<LLEmojiScrollListItem*>(mEmojis->getFirstSelected()))
 		{

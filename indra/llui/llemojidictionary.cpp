@@ -141,8 +141,6 @@ void LLEmojiDictionary::initClass()
 
 	LLSD data;
 
-	// <FS:Ansariel> Load correct localized file
-	//const std::string filename = gDirUtilp->findSkinnedFilenames(LLDir::XUI, SKINNED_EMOJI_FILENAME, LLDir::CURRENT_SKIN).front();
 	auto filenames = gDirUtilp->findSkinnedFilenames(LLDir::XUI, SKINNED_EMOJI_FILENAME, LLDir::CURRENT_SKIN);
 	if (filenames.empty())
 	{
@@ -150,7 +148,6 @@ void LLEmojiDictionary::initClass()
 		return;
 	}
 	const std::string filename = filenames.back();
-	// </FS:Ansariel>
 	llifstream file(filename.c_str());
 	if (file.is_open())
 	{

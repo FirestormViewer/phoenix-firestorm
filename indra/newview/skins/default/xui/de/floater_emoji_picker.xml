@@ -2,7 +2,7 @@
 <floater name="emojipicker" title="Emoji auswählen">
 	<line_editor name="Search" label="Nach Emoji suchen"/>
 	<scroll_list name="Emojis">
-		<columns label="Emoji" name="look" />
+		<columns label="@" name="look" />
 		<columns label="Name" name="name" />
 	</scroll_list>
 	<combo_box name="Category" label="Kategorie auswählen"/>
