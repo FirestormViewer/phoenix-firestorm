@@ -85,8 +85,9 @@ public:
 									   EAcceptance* accept,
 									   std::string& tooltip_msg);
 	/*virtual*/ void changed(U32);
+    /*virtual*/ void reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
 	/*virtual*/ void draw();
-	/*virtual*/ void 	onVisibilityChange ( BOOL new_visibility );
+	/*virtual*/ void onVisibilityChange ( BOOL new_visibility );
 	// <FS:Ansariel> CTRL-F focusses local search editor
 	/*virtual*/ bool hasAccelerators() const { return true; }
 
@@ -160,8 +161,6 @@ protected:
 
 	static BOOL filtersVisible(void* user_data);
 	void onClearSearch();
-	static void onFoldersByName(void *user_data);
-	static BOOL checkFoldersByName(void *user_data);
 	
 	static BOOL incrementalFind(LLFolderViewItem* first_item, const char *find_text, BOOL backward);
 	void onFilterSelected();
@@ -220,8 +219,10 @@ private:
     LLInventorySingleFolderPanel* mSingleFolderPanelInventory;
     LLInventoryGallery* mInventoryGalleryPanel;
 
+    LLUICtrl* mCombinationScrollPanel;
     LLInventorySingleFolderPanel* mCombinationInventoryPanel;
     LLInventoryGallery* mCombinationGalleryPanel;
+    LLView* mCombinationScroller;
 
 	// <FS:Zi> Filter dropdown
 	LLComboBox*					mFilterComboBox;
@@ -295,6 +296,7 @@ private:
 	bool						mNeedUploadCost;
 
     bool                        mForceShowInvLayout;
+    bool                        mCombinationShapeDirty;
 	// List Commands                                                              //
 	////////////////////////////////////////////////////////////////////////////////
 };

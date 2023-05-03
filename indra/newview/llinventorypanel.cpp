@@ -979,7 +979,10 @@ void LLInventoryPanel::initializeViews(F64 max_time)
 
 	gIdleCallbacks.addFunction(idle, this);
 	
-	openStartFolderOrMyInventory();
+    if(mParams.open_first_folder)
+    {
+        openStartFolderOrMyInventory();
+    }
 	
 	// Special case for new user login
 	if (gAgent.isFirstLogin())
@@ -2349,10 +2352,11 @@ void LLInventorySingleFolderPanel::setSelectCallback(const boost::function<void(
 
 void LLInventorySingleFolderPanel::initFromParams(const Params& p)
 {
-    Params fav_params(p);
-    fav_params.start_folder.id = gInventory.getRootFolderID();
-    LLInventoryPanel::initFromParams(p);
-    changeFolderRoot(gInventory.getRootFolderID());
+    mFolderID = gInventory.getRootFolderID();
+    Params pane_params(p);
+    pane_params.open_first_folder = false;
+    pane_params.start_folder.id = mFolderID;
+    LLInventoryPanel::initFromParams(pane_params);
 }
 
 void LLInventorySingleFolderPanel::openInCurrentWindow(const LLSD& userdata)

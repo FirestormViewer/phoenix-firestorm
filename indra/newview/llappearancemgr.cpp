@@ -5131,18 +5131,45 @@ protected:
 	nullary_func_t mCallable;
 };
 
+void callAfterCOFFetch(nullary_func_t cb)
+{
+    LLUUID cat_id = LLAppearanceMgr::instance().getCOF();
+    LLViewerInventoryCategory* cat = gInventory.getCategory(cat_id);
+    if (cat->getVersion() == LLViewerInventoryCategory::VERSION_UNKNOWN && AISAPI::isAvailable())
+    {
+        // Assume that we have no relevant cache. Fetch cof, and items cof's links point to.
+        AISAPI::FetchCOF([cb](const LLUUID& id)
+                         {
+                             cb();
+                             LLUUID cat_id = LLAppearanceMgr::instance().getCOF();
+                             LLViewerInventoryCategory* cat = gInventory.getCategory(cat_id);
+                             if (cat)
+                             {
+                                 cat->setFetching(LLViewerInventoryCategory::FETCH_NONE);
+                             }
+                         });
+        // Mark it so that background fetch won't request it if it didn't already
+        cat->setFetching(LLViewerInventoryCategory::FETCH_RECURSIVE);
+    }
+    else
+    {
+        // Assume that cache is present. Process like a normal folder.
+        callAfterCategoryFetch(cat_id, cb);
+    }
+}
+
 void callAfterCategoryFetch(const LLUUID& cat_id, nullary_func_t cb)
 {
-	CallAfterCategoryFetchStage1 *stage1 = new CallAfterCategoryFetchStage1(cat_id, cb);
-	stage1->startFetch();
-	if (stage1->isFinished())
-	{
-		stage1->done();
-	}
-	else
-	{
-		gInventory.addObserver(stage1);
-	}
+    CallAfterCategoryFetchStage1* stage1 = new CallAfterCategoryFetchStage1(cat_id, cb);
+    stage1->startFetch();
+    if (stage1->isFinished())
+    {
+        stage1->done();
+    }
+    else
+    {
+        gInventory.addObserver(stage1);
+    }
 }
 
 void add_wearable_type_counts(const uuid_vec_t& ids,

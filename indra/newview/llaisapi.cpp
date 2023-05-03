@@ -48,10 +48,15 @@
 //=========================================================================
 const std::string AISAPI::INVENTORY_CAP_NAME("InventoryAPIv3");
 const std::string AISAPI::LIBRARY_CAP_NAME("LibraryAPIv3");
+const S32 AISAPI::HTTP_TIMEOUT = 180;
 
 std::list<AISAPI::ais_query_item_t> AISAPI::sPostponedQuery;
 
 const S32 MAX_SIMULTANEOUS_COROUTINES = 2048;
+
+// AIS3 allows '*' requests, but in reality those will be cut at some point
+// Specify own depth to be able to anticipate it and mark folders as incomplete
+const S32 MAX_FOLDER_DEPTH_REQUEST = 50;
 
 //-------------------------------------------------------------------------
 /*static*/
@@ -463,11 +468,11 @@ void AISAPI::FetchCategoryChildren(const LLUUID &catId, ITEM_TYPE type, bool rec
     {
         // can specify depth=*, but server side is going to cap requests
         // and reject everything 'over the top',.
-        depth = 50;
+        depth = MAX_FOLDER_DEPTH_REQUEST;
     }
     else
     {
-        depth = llmax(depth, 50);
+        depth = llmin(depth, MAX_FOLDER_DEPTH_REQUEST);
     }
 
     url += "?depth=" + std::to_string(depth);
@@ -516,11 +521,11 @@ void AISAPI::FetchCategoryChildren(const std::string &identifier, bool recursive
     {
         // can specify depth=*, but server side is going to cap requests
         // and reject everything 'over the top',.
-        depth = 50;
+        depth = MAX_FOLDER_DEPTH_REQUEST;
     }
     else
     {
-        depth = llmax(depth, 50);
+        depth = llmin(depth, MAX_FOLDER_DEPTH_REQUEST);
     }
 
     url += "?depth=" + std::to_string(depth);
@@ -567,11 +572,11 @@ void AISAPI::FetchCategoryCategories(const LLUUID &catId, ITEM_TYPE type, bool r
     {
         // can specify depth=*, but server side is going to cap requests
         // and reject everything 'over the top',.
-        depth = 50;
+        depth = MAX_FOLDER_DEPTH_REQUEST;
     }
     else
     {
-        depth = llmax(depth, 50);
+        depth = llmin(depth, MAX_FOLDER_DEPTH_REQUEST);
     }
 
     url += "?depth=" + std::to_string(depth);
@@ -595,6 +600,117 @@ void AISAPI::FetchCategoryCategories(const LLUUID &catId, ITEM_TYPE type, bool r
         _1, getFn, url, catId, body, callback, FETCHCATEGORYCATEGORIES));
 
     EnqueueAISCommand("FetchCategoryCategories", proc);
+}
+
+void AISAPI::FetchCategorySubset(const LLUUID& catId,
+                                   const uuid_vec_t specificChildren,
+                                   ITEM_TYPE type,
+                                   bool recursive,
+                                   completion_t callback,
+                                   S32 depth)
+{
+    std::string cap = (type == INVENTORY) ? getInvCap() : getLibCap();
+    if (cap.empty())
+    {
+        LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
+        return;
+    }
+    if (specificChildren.empty())
+    {
+        LL_WARNS("Inventory") << "Empty request!" << LL_ENDL;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
+        return;
+    }
+    // category/any_folder_id/children?depth=*&children=child_id1,child_id2,child_id3
+    std::string url = cap + std::string("/category/") + catId.asString() + "/children";
+
+    if (recursive)
+    {
+        depth = MAX_FOLDER_DEPTH_REQUEST;
+    }
+    else
+    {
+        depth = llmin(depth, MAX_FOLDER_DEPTH_REQUEST);
+    }
+
+    uuid_vec_t::const_iterator iter = specificChildren.begin();
+    uuid_vec_t::const_iterator end = specificChildren.end();
+
+    url += "?depth=" + std::to_string(depth) + "&children=" + iter->asString();
+    iter++;
+
+    while (iter != end)
+    {
+        url += "," + iter->asString();
+        iter++;
+    }
+
+    const S32 MAX_URL_LENGH = 2000; // RFC documentation specifies a maximum length of 2048
+    if (url.length() > MAX_URL_LENGH)
+    {
+        LL_WARNS("Inventory") << "Request url is too long, url: " << url << LL_ENDL;
+    }
+
+    invokationFn_t getFn = boost::bind(
+        // Humans ignore next line.  It is just a cast to specify which LLCoreHttpUtil::HttpCoroutineAdapter routine overload.
+        static_cast<LLSD(LLCoreHttpUtil::HttpCoroutineAdapter::*)(LLCore::HttpRequest::ptr_t, const std::string&, LLCore::HttpOptions::ptr_t, LLCore::HttpHeaders::ptr_t)>
+        //----
+        // _1 -> httpAdapter
+        // _2 -> httpRequest
+        // _3 -> url
+        // _4 -> body 
+        // _5 -> httpOptions
+        // _6 -> httpHeaders
+        (&LLCoreHttpUtil::HttpCoroutineAdapter::getAndSuspend), _1, _2, _3, _5, _6);
+
+    // get doesn't use body, can pass additional data
+    LLSD body;
+    body["depth"] = depth;
+    LLCoprocedureManager::CoProcedure_t proc(boost::bind(&AISAPI::InvokeAISCommandCoro,
+                                                         _1, getFn, url, catId, body, callback, FETCHCATEGORYSUBSET));
+
+    EnqueueAISCommand("FetchCategorySubset", proc);
+}
+
+/*static*/
+// Will get COF folder, links in it and items those links point to
+void AISAPI::FetchCOF(completion_t callback)
+{
+    std::string cap = getInvCap();
+    if (cap.empty())
+    {
+        LL_WARNS("Inventory") << "Inventory cap not found!" << LL_ENDL;
+        if (callback)
+        {
+            callback(LLUUID::null);
+        }
+        return;
+    }
+    std::string url = cap + std::string("/category/current/links");
+
+    invokationFn_t getFn = boost::bind(
+        // Humans ignore next line.  It is just a cast to specify which LLCoreHttpUtil::HttpCoroutineAdapter routine overload.
+        static_cast<LLSD(LLCoreHttpUtil::HttpCoroutineAdapter::*)(LLCore::HttpRequest::ptr_t, const std::string&, LLCore::HttpOptions::ptr_t, LLCore::HttpHeaders::ptr_t)>
+        //----
+        // _1 -> httpAdapter
+        // _2 -> httpRequest
+        // _3 -> url
+        // _4 -> body 
+        // _5 -> httpOptions
+        // _6 -> httpHeaders
+        (&LLCoreHttpUtil::HttpCoroutineAdapter::getAndSuspend), _1, _2, _3, _5, _6);
+
+    LLCoprocedureManager::CoProcedure_t proc(boost::bind(&AISAPI::InvokeAISCommandCoro,
+                                                         _1, getFn, url, LLUUID::null, LLSD(), callback, FETCHCOF));
+
+    EnqueueAISCommand("FetchCOF", proc);
 }
 
 /*static*/
@@ -681,7 +797,7 @@ void AISAPI::onIdle(void *userdata)
 }
 
 /*static*/
-void AISAPI::onUpdateReceived(const std::string& context, const LLSD& update, COMMAND_TYPE type, const LLSD& request_body)
+void AISAPI::onUpdateReceived(const LLSD& update, COMMAND_TYPE type, const LLSD& request_body)
 {
     LLTimer timer;
     if ( (type == UPDATECATEGORY || type == UPDATEITEM)
@@ -689,17 +805,8 @@ void AISAPI::onUpdateReceived(const std::string& context, const LLSD& update, CO
     {
         dump_sequential_xml(gAgentAvatarp->getFullname() + "_ais_update", update);
     }
-    bool is_fetch = (type == FETCHITEM)
-        || (type == FETCHCATEGORYCHILDREN)
-        || (type == FETCHCATEGORYCATEGORIES)
-        || (type == FETCHORPHANS);
-    // parse update llsd into stuff to do or parse received items.
-    S32 depth = 0;
-    if (is_fetch && request_body.has("depth"))
-    {
-        depth = request_body["depth"].asInteger();
-    }
-    AISUpdate ais_update(update, is_fetch, depth);
+
+    AISUpdate ais_update(update, type, request_body);
     ais_update.doUpdate(); // execute the updates in the appropriate order.
     LL_DEBUGS("Inventory", "AIS3") << "Elapsed processing: " << timer.getElapsedTimeF32() << LL_ENDL;
 }
@@ -722,7 +829,7 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
     LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest());
     LLCore::HttpHeaders::ptr_t httpHeaders;
 
-    httpOptions->setTimeout(180);
+    httpOptions->setTimeout(HTTP_TIMEOUT);
 
     LL_DEBUGS("Inventory") << "Request url: " << url << LL_ENDL;
 
@@ -741,7 +848,7 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
 
         LL_DEBUGS("Inventory") << "Request type: " << (S32)type
             << " \nRequest target: " << targetId
-            << " \nElapsed time ince request: " << elapsed_time
+            << " \nElapsed time since request: " << elapsed_time
             << " \nstatus: " << status.toULong() << LL_ENDL;
     }
     else
@@ -803,7 +910,7 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
     }
 
 	LL_DEBUGS("Inventory", "AIS3") << "Result: " << result << LL_ENDL;
-    onUpdateReceived("AISCommand", result, type, body);
+    onUpdateReceived(result, type, body);
 
     if (callback && !callback.empty())
     {
@@ -814,6 +921,8 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
             case COPYLIBRARYCATEGORY:
             case FETCHCATEGORYCATEGORIES:
             case FETCHCATEGORYCHILDREN:
+            case FETCHCATEGORYSUBSET:
+            case FETCHCOF:
                 if (result.has("category_id"))
                 {
                     ids.emplace(result["category_id"]);
@@ -865,6 +974,8 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
         //case COPYLIBRARYCATEGORY:
         //case FETCHCATEGORYCATEGORIES:
         //case FETCHCATEGORYCHILDREN:
+        //case FETCHCATEGORYSUBSET:
+        //case FETCHCOF:
         //    if (result.has("category_id"))
         //    {
         //        id = result["category_id"];
@@ -920,10 +1031,24 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
 }
 
 //-------------------------------------------------------------------------
-AISUpdate::AISUpdate(const LLSD& update, bool fetch, S32 depth)
-: mFetch(fetch)
-, mFetchDepth(depth)
+AISUpdate::AISUpdate(const LLSD& update, AISAPI::COMMAND_TYPE type, const LLSD& request_body)
+: mType(type)
 {
+    mFetch = (type == AISAPI::FETCHITEM)
+        || (type == AISAPI::FETCHCATEGORYCHILDREN)
+        || (type == AISAPI::FETCHCATEGORYCATEGORIES)
+        || (type == AISAPI::FETCHCATEGORYSUBSET)
+        || (type == AISAPI::FETCHCOF)
+        || (type == AISAPI::FETCHORPHANS);
+    // parse update llsd into stuff to do or parse received items.
+    mFetchDepth = MAX_FOLDER_DEPTH_REQUEST;
+    if (mFetch && request_body.has("depth"))
+    {
+        mFetchDepth = request_body["depth"].asInteger();
+    }
+
+    mTimer.setTimerExpirySec(debugLoggingEnabled("Inventory") ? EXPIRY_SECONDS_DEBUG : EXPIRY_SECONDS_LIVE);
+    mTimer.start();
 	parseUpdate(update);
 }
 
@@ -940,6 +1065,16 @@ void AISUpdate::clearParseResults()
 	mObjectsDeletedIds.clear();
 	mItemIds.clear();
 	mCategoryIds.clear();
+}
+
+void AISUpdate::checkTimeout()
+{
+    if (mTimer.hasExpired())
+    {
+        llcoro::suspend();
+        LLCoros::checkStop();
+        mTimer.setTimerExpirySec(debugLoggingEnabled("Inventory") ? EXPIRY_SECONDS_DEBUG : EXPIRY_SECONDS_LIVE);
+    }
 }
 
 void AISUpdate::parseUpdate(const LLSD& update)
@@ -1031,17 +1166,26 @@ void AISUpdate::parseContent(const LLSD& update)
 {
 	if (update.has("linked_id"))
 	{
-		parseLink(update);
+		parseLink(update, mFetchDepth);
 	}
 	else if (update.has("item_id"))
 	{
 		parseItem(update);
 	}
 
-	if (update.has("category_id"))
-	{
-		parseCategory(update, mFetchDepth);
-	}
+    if (mType == AISAPI::FETCHCATEGORYSUBSET)
+    {
+        // initial category is incomplete, don't process it,
+        // go for content instead
+        if (update.has("_embedded"))
+        {
+            parseEmbedded(update["_embedded"], mFetchDepth - 1);
+        }
+    }
+    else if (update.has("category_id"))
+    {
+        parseCategory(update, mFetchDepth);
+    }
 	else
 	{
 		if (update.has("_embedded"))
@@ -1097,7 +1241,7 @@ void AISUpdate::parseItem(const LLSD& item_map)
 	}
 }
 
-void AISUpdate::parseLink(const LLSD& link_map)
+void AISUpdate::parseLink(const LLSD& link_map, S32 depth)
 {
 	LLUUID item_id = link_map["item_id"].asUUID();
 	LLPointer<LLViewerInventoryItem> new_link(new LLViewerInventoryItem);
@@ -1150,6 +1294,11 @@ void AISUpdate::parseLink(const LLSD& link_map)
 			mCatDescendentDeltas[parent_id]++;
             new_link->setComplete(true);
 		}
+
+        if (link_map.has("_embedded"))
+        {
+            parseEmbedded(link_map["_embedded"], depth);
+        }
 	}
 	else
 	{
@@ -1294,9 +1443,11 @@ void AISUpdate::parseDescendentCount(const LLUUID& category_id, const LLSD& embe
 
 void AISUpdate::parseEmbedded(const LLSD& embedded, S32 depth)
 {
+    checkTimeout();
+
 	if (embedded.has("links")) // _embedded in a category
 	{
-		parseEmbeddedLinks(embedded["links"]);
+		parseEmbeddedLinks(embedded["links"], depth);
 	}
 	if (embedded.has("items")) // _embedded in a category
 	{
@@ -1329,7 +1480,7 @@ void AISUpdate::parseUUIDArray(const LLSD& content, const std::string& name, uui
 	}
 }
 
-void AISUpdate::parseEmbeddedLinks(const LLSD& links)
+void AISUpdate::parseEmbeddedLinks(const LLSD& links, S32 depth)
 {
 	for(LLSD::map_const_iterator linkit = links.beginMap(),
 			linkend = links.endMap();
@@ -1343,7 +1494,7 @@ void AISUpdate::parseEmbeddedLinks(const LLSD& links)
 		}
 		else
 		{
-			parseLink(link_map);
+			parseLink(link_map, depth);
 		}
 	}
 }
@@ -1414,6 +1565,8 @@ void AISUpdate::parseEmbeddedCategories(const LLSD& categories, S32 depth)
 
 void AISUpdate::doUpdate()
 {
+    checkTimeout();
+
 	// Do version/descendant accounting.
 	for (std::map<LLUUID,S32>::const_iterator catit = mCatDescendentDeltas.begin();
 		 catit != mCatDescendentDeltas.end(); ++catit)
@@ -1455,6 +1608,7 @@ void AISUpdate::doUpdate()
 	}
 
 	// CREATE CATEGORIES
+    const S32 MAX_UPDATE_BACKLOG = 50; // stall prevention
 	for (deferred_category_map_t::const_iterator create_it = mCategoriesCreated.begin();
 		 create_it != mCategoriesCreated.end(); ++create_it)
 	{
@@ -1463,6 +1617,13 @@ void AISUpdate::doUpdate()
 
 		gInventory.updateCategory(new_category, LLInventoryObserver::CREATE);
 		LL_DEBUGS("Inventory") << "created category " << category_id << LL_ENDL;
+
+        // fetching can receive massive amount of items and fodlers
+        if (gInventory.getChangedIDs().size() > MAX_UPDATE_BACKLOG)
+        {
+            gInventory.notifyObservers();
+            checkTimeout();
+        }
 	}
 
 	// UPDATE CATEGORIES
@@ -1517,6 +1678,13 @@ void AISUpdate::doUpdate()
 		// case this is create.
 		LL_DEBUGS("Inventory") << "created item " << item_id << LL_ENDL;
 		gInventory.updateItem(new_item, LLInventoryObserver::CREATE);
+
+        // fetching can receive massive amount of items and fodlers
+        if (gInventory.getChangedIDs().size() > MAX_UPDATE_BACKLOG)
+        {
+            gInventory.notifyObservers();
+            checkTimeout();
+        }
 	}
 	
 	// UPDATE ITEMS
@@ -1576,6 +1744,8 @@ void AISUpdate::doUpdate()
             }
 		}
 	}
+
+    checkTimeout();
 
 	gInventory.notifyObservers();
 }

@@ -1198,11 +1198,7 @@ LLSD LLInventoryCategory::asAISLLSD() const
     S8 type                 = static_cast<S8>(mPreferredType);
     sd[INV_ASSET_TYPE_LABEL_WS] = type;
     sd[INV_NAME_LABEL] = mName;
-
-    if (mThumbnailUUID.notNull())
-    {
-        sd[INV_THUMBNAIL_LABEL] = LLSD().with(INV_ASSET_ID_LABEL, mThumbnailUUID);
-    }
+    sd[INV_THUMBNAIL_LABEL] = LLSD().with(INV_ASSET_ID_LABEL, mThumbnailUUID);
 
     return sd;
 }
@@ -1427,16 +1423,16 @@ bool LLInventoryCategory::importLLSD(const LLSD& cat_data)
 	{
 		setPreferredType(LLFolderType::lookup(cat_data[INV_PREFERRED_TYPE_LABEL].asString()));
 	}
-    LLUUID thumbnail_uuid;
     if (cat_data.has(INV_THUMBNAIL_LABEL))
     {
+        LLUUID thumbnail_uuid;
         const LLSD &thumbnail_data = cat_data[INV_THUMBNAIL_LABEL];
         if (thumbnail_data.has(INV_ASSET_ID_LABEL))
         {
             thumbnail_uuid = thumbnail_data[INV_ASSET_ID_LABEL].asUUID();
         }
+        setThumbnailUUID(thumbnail_uuid);
     }
-    setThumbnailUUID(thumbnail_uuid);
 	if (cat_data.has(INV_NAME_LABEL))
 	{
 		mName = cat_data[INV_NAME_LABEL].asString();

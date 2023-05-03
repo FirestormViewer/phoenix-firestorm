@@ -221,13 +221,18 @@ bool LLInventoryFilter::checkFolder(const LLUUID& folder_id) const
         && !LLInventoryModelBackgroundFetch::instance().inventoryFetchInProgress())
     {
         LLViewerInventoryCategory* cat = gInventory.getCategory(folder_id);
-        if (!cat || (cat->getVersion() == LLViewerInventoryCategory::VERSION_UNKNOWN))
+        if ((!cat && folder_id.notNull()) || (cat && cat->getVersion() == LLViewerInventoryCategory::VERSION_UNKNOWN))
         {
             // At the moment background fetch only cares about VERSION_UNKNOWN,
             // so do not check isCategoryComplete that compares descendant count
             LLInventoryModelBackgroundFetch::instance().start(folder_id, false);
         }
 	}
+
+    if (!checkAgainstFilterThumbnails(folder_id))
+    {
+        return false;
+    }
 
 	// Marketplace folder filtering
     const U32 filterTypes = mFilterOps.mFilterTypes;

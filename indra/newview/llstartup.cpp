@@ -2985,7 +2985,7 @@ bool idle_startup()
 				gAgentWearables.sendDummyAgentWearablesUpdate();
 			}
 // </FS:Ansariel> [Legacy Bake]
-			callAfterCategoryFetch(LLAppearanceMgr::instance().getCOF(), set_flags_and_update_appearance);
+            callAfterCOFFetch(set_flags_and_update_appearance);
 		}
 
 		display_startup();

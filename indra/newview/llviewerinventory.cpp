@@ -780,9 +780,16 @@ void LLViewerInventoryCategory::setFetching(LLViewerInventoryCategory::EFetchTyp
     {
         if (mDescendentsRequested.hasExpired() || (mFetching == FETCH_NONE))
         {
-            const F32 FETCH_TIMER_EXPIRY = 30.0f;
             mDescendentsRequested.reset();
-            mDescendentsRequested.setTimerExpirySec(FETCH_TIMER_EXPIRY);
+            if (AISAPI::isAvailable())
+            {
+                mDescendentsRequested.setTimerExpirySec(AISAPI::HTTP_TIMEOUT);
+            }
+            else
+            {
+                const F32 FETCH_TIMER_EXPIRY = 30.0f;
+                mDescendentsRequested.setTimerExpirySec(FETCH_TIMER_EXPIRY);
+            }
         }
         mFetching = fetching;
     }
@@ -1600,19 +1607,18 @@ void update_inventory_category(
 			return;
 		}
 
-		LLPointer<LLViewerInventoryCategory> new_cat = new LLViewerInventoryCategory(obj);
-		new_cat->fromLLSD(updates);
 		// <FS:Ansariel> [UDP-Msg]
 		if (AISAPI::isAvailable())
 		{
 		// </FS:Ansariel> [UDP-Msg]
-        LLSD new_llsd = new_cat->asLLSD();
         AISAPI::completion_t cr = boost::bind(&doInventoryCb, cb, _1);
-        AISAPI::UpdateCategory(cat_id, new_llsd, cr);
+        AISAPI::UpdateCategory(cat_id, updates, cr);
 		// <FS:Ansariel> [UDP-Msg]
 		}
 		else
 		{
+			LLPointer<LLViewerInventoryCategory> new_cat = new LLViewerInventoryCategory(obj);
+			new_cat->fromLLSD(updates);
 			LLMessageSystem* msg = gMessageSystem;
 			msg->newMessageFast(_PREHASH_UpdateInventoryFolder);
 			msg->nextBlockFast(_PREHASH_AgentData);

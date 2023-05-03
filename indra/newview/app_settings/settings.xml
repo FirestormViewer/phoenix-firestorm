@@ -19051,6 +19051,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>BatchSizeAIS3</key>
+    <map>
+        <key>Comment</key>
+        <string>Amount of folder ais packs into category subset request</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>S32</string>
+        <key>Value</key>
+        <integer>20</integer>
+    </map>
     <key>PoolSizeAIS</key>
         <map>
         <key>Comment</key>

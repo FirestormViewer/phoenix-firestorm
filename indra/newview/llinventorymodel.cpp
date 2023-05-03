@@ -2878,12 +2878,6 @@ bool LLInventoryModel::loadSkeleton(
 			cat->setUUID(folder_id.asUUID());
 			cat->setParent(parent_id.asUUID());
 
-            LLSD thumbnail = (*it)["thumbnail"];
-            if (thumbnail.isMap())
-            {
-                cat->setThumbnailUUID(thumbnail["asset_id"].asUUID());
-            }
-
 			LLFolderType::EType preferred_type = LLFolderType::FT_NONE;
 			LLSD type_default = (*it)["type_default"];
 			if(type_default.isDefined())
@@ -2975,6 +2969,10 @@ bool LLInventoryModel::loadSkeleton(
 				else
 				{
 					cached_ids.insert(tcat->getUUID());
+
+                    // At the moment download does not provide a thumbnail
+                    // uuid, use the one from cache
+                    tcat->setThumbnailUUID(cat->getThumbnailUUID());
 				}
 			}
 
@@ -5257,7 +5255,6 @@ LLPointer<LLInventoryValidationInfo> LLInventoryModel::validate() const
 			}
 			else if (count_under_root > 1)
 			{
-				// LL_WARNS("Inventory") << "Fatal inventory corruption: system folder type has excess copies under root, type " << ft << " count " << count_under_root << LL_ENDL; // <FS:Beq/>  FIRE-31634 [OPENSIM] Better inventory validation logging
 				validation_info->mDuplicateRequiredSystemFolders.insert(folder_type);
                 if (!is_automatic && folder_type != LLFolderType::FT_SETTINGS)
                 {
@@ -5273,6 +5270,8 @@ LLPointer<LLInventoryValidationInfo> LLInventoryModel::validate() const
                     // outfits, trash and other non-automatic folders.
 					validation_info->mFatalSystemDuplicate++;
                     fatal_errs++;
+                    // <FS:Beq>  FIRE-31634 [OPENSIM] Better inventory validation logging
+                    //LL_WARNS("Inventory") << "Fatal inventory corruption: system folder type has excess copies under root, type " << ft << " count " << count_under_root << LL_ENDL;
                 }
                 else
                 {
@@ -5282,6 +5281,8 @@ LLPointer<LLInventoryValidationInfo> LLInventoryModel::validate() const
                     // Exception: FT_SETTINGS is not automatic, but only deserves a warning.
 					validation_info->mWarnings["non_fatal_system_duplicate_under_root"]++;
                     warning_count++;
+                    // <FS:Beq>  FIRE-31634 [OPENSIM] Better inventory validation logging
+                    //LL_WARNS("Inventory") << "System folder type has excess copies under root, type " << ft << " count " << count_under_root << LL_ENDL;
                 }
 			}
 			if (count_elsewhere > 0)
