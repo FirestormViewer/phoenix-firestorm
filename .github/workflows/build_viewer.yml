@@ -197,6 +197,12 @@ jobs:
             fi
           done
         shell: bash
+
+      - name: make Nightly builds expire after 14 days
+        if: env.FS_BUILD_TYPE == 'Nightly'
+        run: |
+          echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}} --testbuild=14" >> $GITHUB_ENV
+
       - name: Clean up packages to give more space
         run: rm *${{ env.fallback_platform }}*bz2
         shell: bash
