@@ -210,7 +210,7 @@ for build_type in build_types_created:
     platforms_printable = {"windows":"MS Windows", "mac":"MacOS", "linux":"Linux"}
     grids_printable = {"SL":"Second Life", "OS":"OpenSim"}
 
-    download_root = f"https://downloads.firestormviewer.org/{build_types[build_type]}/"
+    download_root = f"https://downloads.firestormviewer.org/{build_types[build_type]}"
     output += f'''
 DOWNLOADS - {build_type}
 -------------------------------------------------------------------------------------------------------
