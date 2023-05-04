@@ -17,13 +17,13 @@ jobs:
   build_matrix:
     strategy:
       matrix:
-        os: [macos-10.15,ubuntu-20.04,windows-2022]
+        os: [macos-11,ubuntu-20.04,windows-2022]
         grid: [sl,os]
         addrsize: [64,32]
         exclude:
           - os: ubuntu-20.04
             addrsize: 32
-          - os: macos-10.15
+          - os: macos-11
             addrsize: 32
     runs-on: ${{ matrix.os }}
     steps:
