@@ -2371,11 +2371,6 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
     static bool sHandleDoubleClick = true;
 
     LLWindowWin32* window_imp = (LLWindowWin32*)GetWindowLongPtr(h_wnd, GWLP_USERDATA);
-    //<FS:Beq> avoid unfortunate sleep during trylock by static check
-    // bool debug_window_proc = false; // gDebugWindowProc || debugLoggingEnabled("Window");
-    // static auto debug_logging_on = debugLoggingEnabled("Window");
-    bool debug_window_proc = false; // gDebugWindowProc || debug_logging_on;
-    //</FS:Beq>	
 
     if (NULL != window_imp)
     {
@@ -2403,11 +2398,8 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_DEVICECHANGE:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_DEVICECHANGE");
-            if (debug_window_proc)
-            {
-                LL_INFOS("Window") << "  WM_DEVICECHANGE: wParam=" << w_param
-                    << "; lParam=" << l_param << LL_ENDL;
-            }
+            LL_INFOS("Window") << "  WM_DEVICECHANGE: wParam=" << w_param
+                << "; lParam=" << l_param << LL_ENDL;
             if (w_param == DBT_DEVNODES_CHANGED || w_param == DBT_DEVICEARRIVAL)
             {
                 WINDOW_IMP_POST(window_imp->mCallbacks->handleDeviceChange(window_imp));
@@ -2471,14 +2463,11 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                     BOOL activating = (BOOL)w_param;
                     BOOL minimized = window_imp->getMinimized();
 
-                    if (debug_window_proc)
-                    {
-                        LL_INFOS("Window") << "WINDOWPROC ActivateApp "
-                            << " activating " << S32(activating)
-                            << " minimized " << S32(minimized)
-                            << " fullscreen " << S32(window_imp->mFullscreen)
-                            << LL_ENDL;
-                    }
+                    LL_INFOS("Window") << "WINDOWPROC ActivateApp "
+                        << " activating " << S32(activating)
+                        << " minimized " << S32(minimized)
+                        << " fullscreen " << S32(window_imp->mFullscreen)
+                        << LL_ENDL;
 
                     if (window_imp->mFullscreen)
                     {
@@ -2523,13 +2512,10 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                     // JC - I'm not sure why, but if we don't report that we handled the 
                     // WM_ACTIVATE message, the WM_ACTIVATEAPP messages don't work 
                     // properly when we run fullscreen.
-                    if (debug_window_proc)
-                    {
-                        LL_INFOS("Window") << "WINDOWPROC Activate "
-                            << " activating " << S32(activating)
-                            << " minimized " << S32(minimized)
-                            << LL_ENDL;
-                    }
+                    LL_INFOS("Window") << "WINDOWPROC Activate "
+                        << " activating " << S32(activating)
+                        << " minimized " << S32(minimized)
+                        << LL_ENDL;
                 });
             
             break;
@@ -2608,12 +2594,9 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                     window_imp->mRawLParam = l_param;
 
                     {
-                        if (debug_window_proc)
-                        {
-                            LL_INFOS("Window") << "Debug WindowProc WM_KEYDOWN "
-                                << " key " << S32(w_param)
-                                << LL_ENDL;
-                        }
+                        LL_INFOS("Window") << "Debug WindowProc WM_KEYDOWN "
+                            << " key " << S32(w_param)
+                            << LL_ENDL;
                         
                         gKeyboard->handleKeyDown(w_param, mask);
                     }
@@ -2638,12 +2621,9 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                 {
                     LL_RECORD_BLOCK_TIME(FTM_KEYHANDLER);
 
-                    if (debug_window_proc)
-                    {
-                        LL_INFOS("Window") << "Debug WindowProc WM_KEYUP "
-                            << " key " << S32(w_param)
-                            << LL_ENDL;
-                    }
+                    LL_INFOS("Window") << "Debug WindowProc WM_KEYUP "
+                        << " key " << S32(w_param)
+                        << LL_ENDL;
                     gKeyboard->handleKeyUp(w_param, mask);
                 }
             });
@@ -2653,10 +2633,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_IME_SETCONTEXT:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_IME_SETCONTEXT");
-            if (debug_window_proc)
-            {
-                LL_INFOS("Window") << "WM_IME_SETCONTEXT" << LL_ENDL;
-            }
+            LL_INFOS("Window") << "WM_IME_SETCONTEXT" << LL_ENDL;
             if (LLWinImm::isAvailable() && window_imp->mPreeditor)
             {
                 l_param &= ~ISC_SHOWUICOMPOSITIONWINDOW;
@@ -2667,10 +2644,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_IME_STARTCOMPOSITION:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_IME_STARTCOMPOSITION");
-            if (debug_window_proc)
-            {
-                LL_INFOS() << "WM_IME_STARTCOMPOSITION" << LL_ENDL;
-            }
+            LL_INFOS("Window") << "WM_IME_STARTCOMPOSITION" << LL_ENDL;
             if (LLWinImm::isAvailable() && window_imp->mPreeditor)
             {
                 WINDOW_IMP_POST(window_imp->handleStartCompositionMessage());
@@ -2681,10 +2655,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_IME_ENDCOMPOSITION:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_IME_ENDCOMPOSITION");
-            if (debug_window_proc)
-            {
-                LL_INFOS() << "WM_IME_ENDCOMPOSITION" << LL_ENDL;
-            }
+            LL_INFOS("Window") << "WM_IME_ENDCOMPOSITION" << LL_ENDL;
             if (LLWinImm::isAvailable() && window_imp->mPreeditor)
             {
                 return 0;
@@ -2694,10 +2665,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_IME_COMPOSITION:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_IME_COMPOSITION");
-            if (debug_window_proc)
-            {
-                LL_INFOS() << "WM_IME_COMPOSITION" << LL_ENDL;
-            }
+            LL_INFOS("Window") << "WM_IME_COMPOSITION" << LL_ENDL;
             if (LLWinImm::isAvailable() && window_imp->mPreeditor)
             {
                 WINDOW_IMP_POST(window_imp->handleCompositionMessage(l_param));
@@ -2708,10 +2676,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_IME_REQUEST:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_IME_REQUEST");
-            if (debug_window_proc)
-            {
-                LL_INFOS() << "WM_IME_REQUEST" << LL_ENDL;
-            }
+            LL_INFOS("Window") << "WM_IME_REQUEST" << LL_ENDL;
             if (LLWinImm::isAvailable() && window_imp->mPreeditor)
             {
                 LRESULT result;
@@ -2740,12 +2705,9 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
                     // it is worth trying.  The good old WM_CHAR works just fine even for supplementary
                     // characters.  We just need to take care of surrogate pairs sent as two WM_CHAR's
                     // by ourselves.  It is not that tough.  -- Alissa Sabre @ SL
-                    if (debug_window_proc)
-                    {
-                        LL_INFOS("Window") << "Debug WindowProc WM_CHAR "
-                            << " key " << S32(w_param)
-                            << LL_ENDL;
-                    }
+                    LL_INFOS("Window") << "Debug WindowProc WM_CHAR "
+                        << " key " << S32(w_param)
+                        << LL_ENDL;
                     // Even if LLWindowCallbacks::handleUnicodeChar(llwchar, BOOL) returned FALSE,
                     // we *did* processed the event, so I believe we should not pass it to DefWindowProc...
                     window_imp->handleUnicodeUTF16((U16)w_param, gKeyboard->currentMask(FALSE));
@@ -3073,19 +3035,17 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
             S32 height = S32(HIWORD(l_param));
 
             
-            if (debug_window_proc)
-            {
-                BOOL maximized = (w_param == SIZE_MAXIMIZED);
-                BOOL restored = (w_param == SIZE_RESTORED);
-                BOOL minimized = (w_param == SIZE_MINIMIZED);
+            LL_INFOS("Window");
+            BOOL maximized = (w_param == SIZE_MAXIMIZED);
+            BOOL restored = (w_param == SIZE_RESTORED);
+            BOOL minimized = (w_param == SIZE_MINIMIZED);
 
-                LL_INFOS("Window") << "WINDOWPROC Size "
-                    << width << "x" << height
-                    << " max " << S32(maximized)
-                    << " min " << S32(minimized)
-                    << " rest " << S32(restored)
-                    << LL_ENDL;
-            }
+            LL_CONT << "WINDOWPROC Size "
+                << width << "x" << height
+                << " max " << S32(maximized)
+                << " min " << S32(minimized)
+                << " rest " << S32(restored);
+            LL_ENDL;
 
             // There's an odd behavior with WM_SIZE that I would call a bug. If 
             // the window is maximized, and you call MoveWindow() with a size smaller
@@ -3151,10 +3111,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_SETFOCUS:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_SETFOCUS");
-            if (debug_window_proc)
-            {
-                LL_INFOS("Window") << "WINDOWPROC SetFocus" << LL_ENDL;
-            }
+            LL_INFOS("Window") << "WINDOWPROC SetFocus" << LL_ENDL;
 
             // <FS:Ansariel> Stop flashing when we gain focus
             if (window_imp->mWindowHandle)
@@ -3176,10 +3133,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         case WM_KILLFOCUS:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - WM_KILLFOCUS");
-            if (debug_window_proc)
-            {
-                LL_INFOS("Window") << "WINDOWPROC KillFocus" << LL_ENDL;
-            }
+            LL_INFOS("Window") << "WINDOWPROC KillFocus" << LL_ENDL;
             WINDOW_IMP_POST(window_imp->mCallbacks->handleFocusLost(window_imp));
             return 0;
         }
@@ -3300,10 +3254,7 @@ LRESULT CALLBACK LLWindowWin32::mainWindowProc(HWND h_wnd, UINT u_msg, WPARAM w_
         default:
         {
             LL_PROFILE_ZONE_NAMED_CATEGORY_WIN32("mwp - default");
-            if (debug_window_proc)
-            {
-                LL_INFOS("Window") << "Unhandled windows message code: 0x" << std::hex << U32(u_msg) << LL_ENDL;
-            }
+            LL_INFOS("Window") << "Unhandled windows message code: 0x" << std::hex << U32(u_msg) << LL_ENDL;
         }
         break;
         }
