@@ -278,6 +278,7 @@ protected:
 	 * Set upload cost in "Upload" sub menu.
 	 */
 	void setUploadCostIfNeeded();
+    void disableAddIfNeeded();
 private:
 	LLDragAndDropButton*		mTrashButton; // <FS:Ansariel> Keep better inventory layout
 	LLToggleableMenu*			mMenuGearDefault;

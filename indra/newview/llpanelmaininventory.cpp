@@ -940,6 +940,8 @@ void LLPanelMainInventory::onClearSearch()
 		}
 	}
 	// </FS:Ansariel>
+
+    mCombinationShapeDirty = true;
 }
 
 void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
@@ -1030,6 +1032,8 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
 		}
 	}
 	// </FS:Ansariel>
+
+    mCombinationShapeDirty = true;
 }
 
 // <FS:Zi> Filter dropdown
@@ -1969,6 +1973,7 @@ void LLPanelMainInventory::onAddButtonClick()
 	LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
 	if (menu)
 	{
+        disableAddIfNeeded();
 		menu->getChild<LLMenuItemGL>("New Folder")->setEnabled(!isRecentItemsPanelSelected());
 
 		setUploadCostIfNeeded();
@@ -2163,6 +2168,8 @@ void LLPanelMainInventory::setSingleFolderViewRoot(const LLUUID& folder_id, bool
         mCombinationInventoryPanel->changeFolderRoot(folder_id);
     }
     updateNavButtons();
+
+    mCombinationShapeDirty = true;
 }
 
 LLUUID LLPanelMainInventory::getSingleFolderViewRoot()
@@ -2896,6 +2903,55 @@ void LLPanelMainInventory::setUploadCostIfNeeded()
 	}
 }
 
+bool is_add_allowed(LLUUID folder_id)
+{
+    if(!gInventory.isObjectDescendentOf(folder_id, gInventory.getRootFolderID()))
+    {
+        return false;
+    }
+
+    std::vector<LLFolderType::EType> not_allowed_types;
+    not_allowed_types.push_back(LLFolderType::FT_LOST_AND_FOUND);
+    not_allowed_types.push_back(LLFolderType::FT_FAVORITE);
+    not_allowed_types.push_back(LLFolderType::FT_MARKETPLACE_LISTINGS);
+    not_allowed_types.push_back(LLFolderType::FT_TRASH);
+    not_allowed_types.push_back(LLFolderType::FT_CURRENT_OUTFIT);
+    not_allowed_types.push_back(LLFolderType::FT_INBOX);
+
+    for (std::vector<LLFolderType::EType>::const_iterator it = not_allowed_types.begin();
+         it != not_allowed_types.end(); ++it)
+    {
+        if(gInventory.isObjectDescendentOf(folder_id, gInventory.findCategoryUUIDForType(*it)))
+        {
+            return false;
+        }
+    }
+
+    LLViewerInventoryCategory* cat = gInventory.getCategory(folder_id);
+    if (cat && (cat->getPreferredType() == LLFolderType::FT_OUTFIT))
+    {
+        return false;
+    }
+    return true;
+}
+
+void LLPanelMainInventory::disableAddIfNeeded()
+{
+    LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
+    if (menu)
+    {
+        bool enable = !mSingleFolderMode || is_add_allowed(getCurrentSFVRoot());
+
+        menu->getChild<LLMenuItemGL>("New Folder")->setEnabled(enable);
+        menu->getChild<LLMenuItemGL>("New Script")->setEnabled(enable);
+        menu->getChild<LLMenuItemGL>("New Note")->setEnabled(enable);
+        menu->getChild<LLMenuItemGL>("New Gesture")->setEnabled(enable);
+        menu->setItemEnabled("New Clothes", enable);
+        menu->setItemEnabled("New Body Parts", enable);
+        menu->setItemEnabled("New Settings", enable);
+    }
+}
+
 bool LLPanelMainInventory::hasSettingsInventory()
 {
     return LLEnvironment::instance().isInventoryEnabled();
@@ -2938,14 +2994,20 @@ void LLPanelMainInventory::onCombinationRootChanged(bool gallery_clicked)
 
     //force update scroll container
     mCombinationShapeDirty = true;
+    mCombinationInventoryPanel->reshape(1, 1);
 }
 
 void LLPanelMainInventory::updateCombinationVisibility()
 {
-    if(mSingleFolderMode && isCombinationViewMode() && mCombinationShapeDirty)
+    if(mSingleFolderMode
+       && isCombinationViewMode()
+       && mCombinationShapeDirty)
     {
-        mCombinationShapeDirty = false;
-        mCombinationInventoryPanel->reshape(1,1); // HACK: force reduce visible area
+        if (mCombinationInventoryPanel->areViewsInitialized())
+        {
+            mCombinationShapeDirty = false;
+            mCombinationInventoryPanel->reshape(1,1); // HACK: force reduce visible area
+        }
         if (!mCombinationGalleryPanel->hasVisibleItems())
         {
             mCombinationGalleryPanel->handleModifiedFilter();
@@ -2956,8 +3018,8 @@ void LLPanelMainInventory::updateCombinationVisibility()
         LLRect inner_galery_rect = mCombinationGalleryPanel->getScrollableContainer()->getScrolledViewRect();
         LLScrollContainer* scroll = static_cast<LLScrollContainer*>(mCombinationScrollPanel);
         LLRect scroller_window_rect = scroll->getContentWindowRect();
-        S32 desired_width = llmax(inv_inner_rect.getWidth(), scroller_window_rect.getWidth());
         const S32 BORDER_PAD = 2; // two sides
+        S32 desired_width = llmax(inv_inner_rect.getWidth(), scroller_window_rect.getWidth() - BORDER_PAD);
 
         inv_rect.mBottom = 0;
         inv_rect.mRight = inv_rect.mLeft + desired_width;
