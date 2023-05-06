@@ -117,4 +117,9 @@
 	<check_box initial_value="false" label="Согласование" name="checkbox planar align" tool_tip="Согласование текстур на всех выбранных гранях по последней выбранной грани. Должно быть выбрано наложение по плоскостям."/>
 	<check_box label="Синхронизировать материалы" name="checkbox_sync_settings" tool_tip="Синхронизация параметров карты текстур" />
 	<button label="Выровнять" name="button align textures" tool_tip="Выровнять текущие слои текстуры" width="84" />
+	<!-- <FS:Zi> Find all faces with same texture -->
+	<button label="Найти все" name="btn_select_same_diff" tool_tip="Выбрать все грани с такой же диффузной текстурой, как у этой"/>
+	<button label="Найти все" name="btn_select_same_norm" tool_tip="Выбрать все грани с такой же картой нормалей, как у этой"/>
+	<button label="Найти все" name="btn_select_same_spec" tool_tip="Выбрать все грани с такой же картой бликов, как у этой"/>
+	<!-- </FS:Zi> -->
 </panel>
