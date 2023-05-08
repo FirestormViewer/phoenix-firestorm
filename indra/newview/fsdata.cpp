@@ -612,7 +612,7 @@ void FSData::selectNextMOTD()
 }
 
 //WS: Create a new LLSD based on the data from the mLegacyClientList if
-LLSD FSData::resolveClientTag(const LLUUID& id, bool new_system, const LLColor4& color)
+LLSD FSData::resolveClientTag(const LLUUID& id, bool new_system, const LLColor4& color) const
 {
 	LLSD curtag;
 	curtag["uuid"] = id.asString();
@@ -762,9 +762,9 @@ void FSData::saveLLSD(const LLSD& data, const std::string& filename, const LLDat
 #endif
 }
 
-S32 FSData::getAgentFlags(const LLUUID& avatar_id)
+S32 FSData::getAgentFlags(const LLUUID& avatar_id) const
 {
-	std::map<LLUUID, S32>::iterator iter = mTeamAgents.find(avatar_id);
+	std::map<LLUUID, S32>::const_iterator iter = mTeamAgents.find(avatar_id);
 	if (iter == mTeamAgents.end())
 	{
 		return -1;
@@ -772,27 +772,27 @@ S32 FSData::getAgentFlags(const LLUUID& avatar_id)
 	return iter->second;
 }
 
-bool FSData::isSupport(const LLUUID& avatar_id)
+bool FSData::isSupport(const LLUUID& avatar_id) const
 {
 	S32 flags = getAgentFlags(avatar_id);
 	return (flags != -1 && (flags & SUPPORT));
 }
 
-bool FSData::isDeveloper(const LLUUID& avatar_id)
+bool FSData::isDeveloper(const LLUUID& avatar_id) const
 {
 	S32 flags = getAgentFlags(avatar_id);
 	return (flags != -1 && (flags & DEVELOPER));
 }
 
-bool FSData::isQA(const LLUUID& avatar_id)
+bool FSData::isQA(const LLUUID& avatar_id) const
 {
 	S32 flags = getAgentFlags(avatar_id);
 	return (flags != -1 && (flags & QA));
 }
 
-LLSD FSData::allowedLogin()
+LLSD FSData::allowedLogin() const
 {
-	std::map<std::string, LLSD>::iterator iter = mBlockedVersions.find(LLVersionInfo::getInstance()->getChannelAndVersionFS());
+	std::map<std::string, LLSD>::const_iterator iter = mBlockedVersions.find(LLVersionInfo::getInstance()->getChannelAndVersionFS());
 	if (iter == mBlockedVersions.end())
 	{
 		return LLSD();
@@ -831,24 +831,24 @@ LLSD FSData::allowedLogin()
 	}
 }
 
-bool FSData::isFirestormGroup(const LLUUID& id)
+bool FSData::isFirestormGroup(const LLUUID& id) const
 {
 	return isSupportGroup(id) || isTestingGroup(id);
 }
 
-bool FSData::isSupportGroup(const LLUUID& id)
+bool FSData::isSupportGroup(const LLUUID& id) const
 {
 	return mSupportGroup.count(id);
 }
 
-bool FSData::isTestingGroup(const LLUUID& id)
+bool FSData::isTestingGroup(const LLUUID& id) const
 {
 	return mTestingGroup.count(id);
 }
 
-bool FSData::isAgentFlag(const LLUUID& agent_id, flags_t flag)
+bool FSData::isAgentFlag(const LLUUID& agent_id, flags_t flag) const
 {
-	std::map<LLUUID, S32>::iterator iter = mTeamAgents.find(agent_id);
+	std::map<LLUUID, S32>::const_iterator iter = mTeamAgents.find(agent_id);
 	if (iter == mTeamAgents.end())
 	{
 		return false;
