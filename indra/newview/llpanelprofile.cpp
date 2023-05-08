@@ -1576,61 +1576,82 @@ void LLPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
     std::string caption_text = getString("CaptionTextAcctInfo", args);
     getChild<LLUICtrl>("account_info")->setValue(caption_text);
 
-    // <FS:Ansariel> Leave this out for now until we figured out if/how to show badges
-    //const S32 LINDEN_EMPLOYEE_INDEX = 3;
-    //LLDate sl_release;
-    //sl_release.fromYMDHMS(2003, 6, 23, 0, 0, 0);
-    //std::string customer_lower = avatar_data->customer_type;
-    //LLStringUtil::toLower(customer_lower);
-    //if (avatar_data->caption_index == LINDEN_EMPLOYEE_INDEX)
-    //{
-    //    getChild<LLUICtrl>("badge_icon")->setValue("Profile_Badge_Linden");
-    //    getChild<LLUICtrl>("badge_text")->setValue(getString("BadgeLinden"));
-    //    childSetVisible("badge_layout", TRUE);
-    //    childSetVisible("partner_spacer_layout", FALSE);
-    //}
-    //else if (avatar_data->born_on < sl_release)
-    //{
-    //    getChild<LLUICtrl>("badge_icon")->setValue("Profile_Badge_Beta");
-    //    getChild<LLUICtrl>("badge_text")->setValue(getString("BadgeBeta"));
-    //    childSetVisible("badge_layout", TRUE);
-    //    childSetVisible("partner_spacer_layout", FALSE);
-    //}
-    //else if (customer_lower == "beta_lifetime")
-    //{
-    //    getChild<LLUICtrl>("badge_icon")->setValue("Profile_Badge_Beta_Lifetime");
-    //    getChild<LLUICtrl>("badge_text")->setValue(getString("BadgeBetaLifetime"));
-    //    childSetVisible("badge_layout", TRUE);
-    //    childSetVisible("partner_spacer_layout", FALSE);
-    //}
-    //else if (customer_lower == "lifetime")
-    //{
-    //    getChild<LLUICtrl>("badge_icon")->setValue("Profile_Badge_Lifetime");
-    //    getChild<LLUICtrl>("badge_text")->setValue(getString("BadgeLifetime"));
-    //    childSetVisible("badge_layout", TRUE);
-    //    childSetVisible("partner_spacer_layout", FALSE);
-    //}
-    //else if (customer_lower == "premium_lifetime")
-    //{
-    //    getChild<LLUICtrl>("badge_icon")->setValue("Profile_Premium_Lifetime");
-    //    getChild<LLUICtrl>("badge_text")->setValue(getString("BadgePremiumLifetime"));
-    //    childSetVisible("badge_layout", TRUE);
-    //    childSetVisible("partner_spacer_layout", FALSE);
-    //}
-    //else if (customer_lower == "pplus_lifetime" || customer_lower == "premium_plus_lifetime")
-    //{
-    //    getChild<LLUICtrl>("badge_icon")->setValue("Profile_Badge_Pplus_Lifetime");
-    //    getChild<LLUICtrl>("badge_text")->setValue(getString("BadgePremiumPlusLifetime"));
-    //    childSetVisible("badge_layout", TRUE);
-    //    childSetVisible("partner_spacer_layout", FALSE);
-    //}
-    //else
-    //{
-    //    childSetVisible("badge_layout", FALSE);
-    //    childSetVisible("partner_spacer_layout", TRUE);
-    //}
-    // </FS:Ansariel>
+    const S32 LINDEN_EMPLOYEE_INDEX = 3;
+    LLDate sl_release;
+    sl_release.fromYMDHMS(2003, 6, 23, 0, 0, 0);
+    std::string customer_lower = avatar_data->customer_type;
+    LLStringUtil::toLower(customer_lower);
+    if (avatar_data->caption_index == LINDEN_EMPLOYEE_INDEX)
+    {
+        // <FS:Ansariel> Fix LL UI/UX design accident
+        //getChild<LLUICtrl>("badge_icon")->setValue("Profile_Badge_Linden");
+        //getChild<LLUICtrl>("badge_text")->setValue(getString("BadgeLinden"));
+        //childSetVisible("badge_layout", TRUE);
+        //childSetVisible("partner_spacer_layout", FALSE);
+        setBadge("Profile_Badge_Linden", "BadgeLinden");
+    }
+    else if (avatar_data->born_on < sl_release)
+    {
+        // <FS:Ansariel> Fix LL UI/UX design accident
+        //getChild<LLUICtrl>("badge_icon")->setValue("Profile_Badge_Beta");
+        //getChild<LLUICtrl>("badge_text")->setValue(getString("BadgeBeta"));
+        //childSetVisible("badge_layout", TRUE);
+        //childSetVisible("partner_spacer_layout", FALSE);
+        setBadge("Profile_Badge_Beta", "BadgeBeta");
+    }
+    else if (customer_lower == "beta_lifetime")
+    {
+        // <FS:Ansariel> Fix LL UI/UX design accident
+        //getChild<LLUICtrl>("badge_icon")->setValue("Profile_Badge_Beta_Lifetime");
+        //getChild<LLUICtrl>("badge_text")->setValue(getString("BadgeBetaLifetime"));
+        //childSetVisible("badge_layout", TRUE);
+        //childSetVisible("partner_spacer_layout", FALSE);
+        setBadge("Profile_Badge_Beta_Lifetime", "BadgeBetaLifetime");
+    }
+    else if (customer_lower == "lifetime")
+    {
+        // <FS:Ansariel> Fix LL UI/UX design accident
+        //getChild<LLUICtrl>("badge_icon")->setValue("Profile_Badge_Lifetime");
+        //getChild<LLUICtrl>("badge_text")->setValue(getString("BadgeLifetime"));
+        //childSetVisible("badge_layout", TRUE);
+        //childSetVisible("partner_spacer_layout", FALSE);
+        setBadge("Profile_Badge_Lifetime", "BadgeLifetime");
+    }
+    else if (customer_lower == "premium_lifetime")
+    {
+        // <FS:Ansariel> Fix LL UI/UX design accident
+        //getChild<LLUICtrl>("badge_icon")->setValue("Profile_Premium_Lifetime");
+        //getChild<LLUICtrl>("badge_text")->setValue(getString("BadgePremiumLifetime"));
+        //childSetVisible("badge_layout", TRUE);
+        //childSetVisible("partner_spacer_layout", FALSE);
+        setBadge("Profile_Premium_Lifetime", "BadgePremiumLifetime");
+    }
+    else if (customer_lower == "pplus_lifetime" || customer_lower == "premium_plus_lifetime")
+    {
+        // <FS:Ansariel> Fix LL UI/UX design accident
+        //getChild<LLUICtrl>("badge_icon")->setValue("Profile_Badge_Pplus_Lifetime");
+        //getChild<LLUICtrl>("badge_text")->setValue(getString("BadgePremiumPlusLifetime"));
+        //childSetVisible("badge_layout", TRUE);
+        //childSetVisible("partner_spacer_layout", FALSE);
+        setBadge("Profile_Badge_Pplus_Lifetime", "BadgePremiumPlusLifetime");
+    }
+    else
+    {
+        childSetVisible("badge_layout", FALSE);
+        // <FS:Ansariel> Fix LL UI/UX design accident
+        //childSetVisible("partner_spacer_layout", TRUE);
+    }
 }
+
+// <FS:Ansariel> Fix LL UI/UX design accident
+void LLPanelProfileSecondLife::setBadge(std::string_view icon_name, std::string_view tooltip)
+{
+    auto iconctrl = getChild<LLIconCtrl>("badge_icon");
+    iconctrl->setValue(icon_name.data());
+    iconctrl->setToolTip(getString(tooltip.data()));
+    childSetVisible("badge_layout", true);
+}
+// </FS:Ansariel>
 
 void LLPanelProfileSecondLife::fillRightsData()
 {
