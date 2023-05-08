@@ -99,7 +99,7 @@ private:
 	void updateClientTagsLocal();
 	void onNameCache(const LLUUID& av_id, const LLAvatarName& av_name);
 
-	std::map<LLUUID, S32> mSupportAgents;
+	std::map<LLUUID, S32> mTeamAgents;
 	std::map<std::string, LLSD> mBlockedVersions;
 
 	LLSD mHeaders;

@@ -524,8 +524,8 @@ void FSData::processAgents(const LLSD& data)
 		for (LLSD::map_const_iterator iter = agents.beginMap(); iter != agents.endMap(); ++iter)
 		{
 			LLUUID key = LLUUID(iter->first);
-			mSupportAgents[key] = iter->second.asInteger();
-			LL_DEBUGS("fsdata") << "Added " << key << " with " << mSupportAgents[key] << " flag mask to mSupportAgentList" << LL_ENDL;
+			mTeamAgents[key] = iter->second.asInteger();
+			LL_DEBUGS("fsdata") << "Added " << key << " with " << mTeamAgents[key] << " flag mask to mSupportAgentList" << LL_ENDL;
 		}
 	}
 	else if (data.has("SupportAgents")) // Legacy format
@@ -535,19 +535,19 @@ void FSData::processAgents(const LLSD& data)
 		for (LLSD::map_const_iterator iter = support_agents.beginMap(); iter != support_agents.endMap(); ++iter)
 		{
 			LLUUID key = LLUUID(iter->first);
-			mSupportAgents[key] = 0;
+			mTeamAgents[key] = 0;
 			const LLSD& content = iter->second;
 			if(content.has("support"))
 			{
-				mSupportAgents[key] |= SUPPORT;
+				mTeamAgents[key] |= SUPPORT;
 			}
 
 			if(content.has("developer"))
 			{
-				mSupportAgents[key] |= DEVELOPER;
+				mTeamAgents[key] |= DEVELOPER;
 			}
-			LL_DEBUGS("fsdata") << "Added Legacy " << key << " with " << mSupportAgents[key] << " flag mask to mSupportAgentList" << LL_ENDL;
-			std::string text = llformat("<key>%s</key><!-- %s -->\n    <integer>%d</integer>\n", key.asString().c_str(), content["name"].asString().c_str(), mSupportAgents[key]);
+			LL_DEBUGS("fsdata") << "Added Legacy " << key << " with " << mTeamAgents[key] << " flag mask to mSupportAgentList" << LL_ENDL;
+			std::string text = llformat("<key>%s</key><!-- %s -->\n    <integer>%d</integer>\n", key.asString().c_str(), content["name"].asString().c_str(), mTeamAgents[key]);
 			newFormat.append(text);
 		}
 		LL_DEBUGS("fsdata") << "New format for copy paste:\n" << newFormat << LL_ENDL;
@@ -764,8 +764,8 @@ void FSData::saveLLSD(const LLSD& data, const std::string& filename, const LLDat
 
 S32 FSData::getAgentFlags(const LLUUID& avatar_id)
 {
-	std::map<LLUUID, S32>::iterator iter = mSupportAgents.find(avatar_id);
-	if (iter == mSupportAgents.end())
+	std::map<LLUUID, S32>::iterator iter = mTeamAgents.find(avatar_id);
+	if (iter == mTeamAgents.end())
 	{
 		return -1;
 	}
@@ -848,8 +848,8 @@ bool FSData::isTestingGroup(const LLUUID& id)
 
 bool FSData::isAgentFlag(const LLUUID& agent_id, flags_t flag)
 {
-	std::map<LLUUID, S32>::iterator iter = mSupportAgents.find(agent_id);
-	if (iter == mSupportAgents.end())
+	std::map<LLUUID, S32>::iterator iter = mTeamAgents.find(agent_id);
+	if (iter == mTeamAgents.end())
 	{
 		return false;
 	}
@@ -879,7 +879,7 @@ void FSData::addAgents()
 		return;
 	}
 
-	for (std::map<LLUUID, S32>::iterator iter = mSupportAgents.begin(); iter != mSupportAgents.end(); ++iter)
+	for (std::map<LLUUID, S32>::iterator iter = mTeamAgents.begin(); iter != mTeamAgents.end(); ++iter)
 	{
 		if (iter->second & NO_SPAM)
 		{

@@ -614,6 +614,7 @@ with the same filename but different name
   <texture name="Profile_Badge_Linden" file_name="icons/profile_badge_linden.png" preload="true"/>
   <texture name="Profile_Badge_Pplus_Lifetime" file_name="icons/profile_badge_pplus_lifetime.png" preload="true"/>
   <texture name="Profile_Badge_Premium_Lifetime" file_name="icons/profile_badge_premium_lifetime.png" preload="true"/>
+  <texture name="Profile_Badge_Team" file_name="icons/profile_badge_team.png" preload="true"/>
   <texture name="Profile_Group_Visibility_Off" file_name="icons/profile_group_visibility_eye_off.png" preload="true"/>
   <texture name="Profile_Group_Visibility_Off_Pressed" file_name="icons/profile_group_visibility_eye_off_pressed.png" preload="true"/>
   <texture name="Profile_Group_Visibility_On" file_name="icons/profile_group_visibility_eye_on.png" preload="true"/>

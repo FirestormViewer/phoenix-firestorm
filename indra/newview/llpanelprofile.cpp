@@ -1635,6 +1635,12 @@ void LLPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
         //childSetVisible("partner_spacer_layout", FALSE);
         setBadge("Profile_Badge_Pplus_Lifetime", "BadgePremiumPlusLifetime");
     }
+    // <FS:Ansariel> Add Firestorm team badge
+    else if (FSData::getInstance()->getAgentFlags(avatar_data->avatar_id) != -1)
+    {
+        setBadge("Profile_Badge_Team", "BadgeTeam");
+    }
+    // </FS:Ansariel>
     else
     {
         childSetVisible("badge_layout", FALSE);

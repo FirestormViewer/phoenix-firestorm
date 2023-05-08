@@ -21,6 +21,8 @@
 		value="Premium Lebenszeit" />
 	<string name="BadgePremiumPlusLifetime"
 		value="Premium Plus Lebenszeit" />
+	<string name="BadgeTeam"
+		value="[APP_NAME]-Mitglied" />
 	<string name="payment_update_link_url">
 		http://www.secondlife.com/account/billing.php?lang=de
 	</string>
