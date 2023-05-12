@@ -2353,12 +2353,18 @@ bool LLPipeline::getVisibleExtents(LLCamera& camera, LLVector3& min, LLVector3& 
 
 static LLTrace::BlockTimerStatHandle FTM_CULL("Object Culling");
 
+// static
+bool LLPipeline::isWaterClip()
+{
+	return (!sRenderTransparentWater || gCubeSnapshot) && !sRenderingHUDs;
+}
+
 void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, bool hud_attachments)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE; //LL_RECORD_BLOCK_TIME(FTM_CULL);
     LL_PROFILE_GPU_ZONE("updateCull"); // should always be zero GPU time, but drop a timer to flush stuff out
 
-    bool water_clip = !sRenderTransparentWater && !sRenderingHUDs;
+	bool water_clip = isWaterClip();
 
     if (water_clip)
     {
@@ -10235,6 +10241,9 @@ void LLPipeline::profileAvatar(LLVOAvatar* avatar, bool profile_attachments)
 
     LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
 
+    // don't continue to profile an avatar that is known to be too slow
+    llassert(!avatar->isTooSlow());
+
     LLGLSLShader* cur_shader = LLGLSLShader::sCurBoundShaderPtr;
 
     mRT->deferredScreen.bindTarget();
@@ -10513,25 +10522,28 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar, bool preview_avatar, bool 
 		resY = llmin(nhpo2((U32) (fov*pa)), (U32) 512);
 		resX = llmin(nhpo2((U32) (atanf(tdim.mV[0]/distance)*2.f*RAD_TO_DEG*pa)), (U32) 512);
 
-		if (!avatar->mImpostor.isComplete())
-		{
-            avatar->mImpostor.allocate(resX, resY, GL_RGBA, true);
+        if (!for_profile)
+        {
+            if (!avatar->mImpostor.isComplete())
+            {
+                avatar->mImpostor.allocate(resX, resY, GL_RGBA, true);
 
-			if (LLPipeline::sRenderDeferred)
-			{
-				addDeferredAttachments(avatar->mImpostor, true);
-			}
-		
-			gGL.getTexUnit(0)->bind(&avatar->mImpostor);
-			gGL.getTexUnit(0)->setTextureFilteringOption(LLTexUnit::TFO_POINT);
-			gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-		}
-		else if(resX != avatar->mImpostor.getWidth() || resY != avatar->mImpostor.getHeight())
-		{
-			avatar->mImpostor.resize(resX,resY);
-		}
+                if (LLPipeline::sRenderDeferred)
+                {
+                    addDeferredAttachments(avatar->mImpostor, true);
+                }
 
-		avatar->mImpostor.bindTarget();
+                gGL.getTexUnit(0)->bind(&avatar->mImpostor);
+                gGL.getTexUnit(0)->setTextureFilteringOption(LLTexUnit::TFO_POINT);
+                gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+            }
+            else if (resX != avatar->mImpostor.getWidth() || resY != avatar->mImpostor.getHeight())
+            {
+                avatar->mImpostor.resize(resX, resY);
+            }
+
+            avatar->mImpostor.bindTarget();
+        }
 	}
 
 	F32 old_alpha = LLDrawPoolAvatar::sMinimumAlpha;
@@ -10647,7 +10659,7 @@ void LLPipeline::generateImpostor(LLVOAvatar* avatar, bool preview_avatar, bool 
 		gGL.popMatrix();
 	}
 
-    if (!preview_avatar)
+    if (!preview_avatar && !for_profile)
     {
         avatar->mImpostor.flush();
         avatar->setImpostorDim(tdim);

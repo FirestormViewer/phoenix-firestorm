@@ -756,14 +756,7 @@ void FSFloaterPerformance::populateNearbyList()
 
             row[colno]["column"] = "art_value";
             row[colno]["type"] = "text";
-            if (is_slow)
-            {
-                row[colno]["value"] = llformat( "%.2f", LLPerfStats::raw_to_us( avatar->getLastART() ) );
-            }
-            else
-            {
-                row[colno]["value"] = llformat( "%.2f", render_av_gpu_ms * 1000.f);
-            }
+            row[colno]["value"] = llformat( "%.2f", render_av_gpu_ms * 1000.f);
             row[colno]["font"]["name"] = "SANSSERIF";
             row[colno]["width"] = "50";
             colno++;
