@@ -80,7 +80,8 @@ def get_md5(mdfile):
     #split md5sum on space
     md5sum = md5sum.split()[0]
     #remove leading '\'
-    md5sum = md5sum[1:]
+    if md5sum[0] == "\\":
+        md5sum = md5sum[1:]
     print(f"generating md5sum for {mdfile} as {md5sum}")
     return md5sum
 
