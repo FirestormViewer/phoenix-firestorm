@@ -176,7 +176,7 @@ void LLSurface::create(const S32 grids_per_edge,
 	if ((sTextureSize & (sTextureSize - 1)) != 0)
 	{
 		// Not a power of 2, find the next power of 2
-		sTextureSize = 1 << static_cast<S32>( pow( 2, static_cast<S32>( ceil(log2(sTextureSize)) ) ) );
+		sTextureSize = 1 << static_cast<S32>( ceil(log2(sTextureSize)) ) ;
 	}
 
 	// Clamp to maximum limit
