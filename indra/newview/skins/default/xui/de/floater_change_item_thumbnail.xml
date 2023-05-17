@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="change_item_thumbnail" title="Abbildung ändern">
+	<floater.string name="title_item_thumbnail">
+		Abbildung für Gegenstand ändern
+	</floater.string>
+	<floater.string name="title_folder_thumbnail">
+		Abbildung für Ordner ändern
+	</floater.string>
 	<floater.string name="tooltip_upload_local">
 		Vom Computer hochladen
 	</floater.string>
