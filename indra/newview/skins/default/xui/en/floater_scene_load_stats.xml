@@ -413,7 +413,7 @@
         name="frame_stats"
         label="Frame breakdown"
         show_label="true">
-          <stat_bar name="packet_loss"
+          <stat_bar name="scenery_frame_pct"
             label="Scenery"
             orientation="horizontal"
             unit_label=" %"
@@ -421,7 +421,7 @@
             bar_max="100"
             tick_spacing="0.5"
             show_bar="false"/>
-          <stat_bar name="packet_loss"
+          <stat_bar name="avatar_frame_pct"
             label="Avatar"
             orientation="horizontal"
             unit_label=" %"
@@ -429,7 +429,7 @@
             bar_max="100"
             tick_spacing="0.5"
             show_bar="false"/>
-          <stat_bar name="packet_loss"
+          <stat_bar name="ui_frame_pct"
             label="UI"
             orientation="horizontal"
             unit_label=" %"
@@ -437,7 +437,7 @@
             bar_max="100"
             tick_spacing="0.5"
             show_bar="false"/>
-          <stat_bar name="packet_loss"
+          <stat_bar name="huds_frame_pct"
             label="HUDs"
             orientation="horizontal"
             unit_label=" %"
@@ -445,7 +445,7 @@
             bar_max="100"
             tick_spacing="0.5"
             show_bar="false"/>
-        <stat_bar name="packet_loss"
+        <stat_bar name="swap_frame_pct"
             label="Swap"
             orientation="horizontal"
             unit_label=" %"
@@ -453,7 +453,7 @@
             bar_max="100"
             tick_spacing="0.5"
             show_bar="false"/>
-        <stat_bar name="packet_loss"
+        <stat_bar name="idle_frame_pct"
             label="Tasks"
             orientation="horizontal"
             unit_label=" %"

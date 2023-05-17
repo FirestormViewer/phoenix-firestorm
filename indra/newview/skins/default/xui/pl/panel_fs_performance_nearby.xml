@@ -17,9 +17,11 @@
 	<name_list name="nearby_list">
 		<name_list.columns tool_tip="Wykres słupkowy pokazujący aktualny czas renderowania (w tym autodostrajanie) jako % najwolniejszego." name="art_visual" />
 		<name_list.columns label="Czas (μs)" tool_tip="Czas renderowania awatara (Avatar Render Time, ART). Rzeczywisty czas potrzebny na wyrenderowanie tego awatara przed automatycznym dostrajaniem (w mikrosekundach)." name="art_value" />
+		<name_list.columns label="Czas dostr. (μs)" tool_tip="Czas renderowania awatara (Avatar Render Time, ART). Rzeczywisty czas potrzebny na wyrenderowanie tego awatara po dostrajaniu (w mikrosekundach)." name="adj_art_value" />
 		<name_list.columns tool_tip="Złożoność (ARC) oparta na standardowych zasadach SL." name="complex_value" />
 		<name_list.columns tool_tip="Pokazuje jakiekolwiek strojenie. I=Awatar zastępczy, S=brak cienia." name="state" />
-		<name_list.columns label="Imię" name="name"/>
+		<name_list.columns label="Imię" name="name" />
+		<name_list.columns label="Składowe" tool_tip="Gdzie zużywany jest czas renderowania (Geometria/Shadery/Inne)" name="breakdown" />
 	</name_list>
 	<text name="av_nearby_desc2">
 		Możesz kliknąć PPM na awatarze w świecie, aby sterować wyświetlaniem.

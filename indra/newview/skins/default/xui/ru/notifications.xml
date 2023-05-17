@@ -3441,13 +3441,13 @@ URL: [AUDIOURL]
 		</form>
 	</notification>
 	<notification name="AutoUnmuteByIM">
-		[NAME] отправил(а) вам мгновенное сообщение и был(а) автоматически разблокирован(а).
+		[NAME] было отправлено мгновенное сообщение и был автоматически разблокирован.
 	</notification>
 	<notification name="AutoUnmuteByMoney">
-		[NAME] получил(а) деньги и был(а) автоматически разблокирован(а).
+		[NAME] получил деньги и был автоматически разблокирован.
 	</notification>
 	<notification name="AutoUnmuteByInventory">
-		[NAME] предложил(а) инвентарь и был(а) автоматически разблокирован(а).
+		[NAME] предложен инвентарь и был автоматически разблокирован.
 	</notification>
 	<notification name="VoiceInviteGroup">
 		[NAME] вступил(а) в голосовой чат с группой [GROUP].

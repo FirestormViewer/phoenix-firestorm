@@ -3138,6 +3138,14 @@ void LLPanelProfileNotes::onOpen(const LLSD& key)
 
 void LLPanelProfileNotes::setNotesText(const std::string &text)
 {
+    // <FS:Zi> FIRE-32926 - Profile notes that are actively being edited get discarded when
+    //                      the profile owner enters or leaves the region at the same time.
+    if (mHasUnsavedChanges)
+    {
+        return;
+    }
+    // </FS:Zi>
+
     mSaveChanges->setEnabled(FALSE);
     mDiscardChanges->setEnabled(FALSE);
     mHasUnsavedChanges = false;

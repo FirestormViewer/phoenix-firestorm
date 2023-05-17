@@ -888,4 +888,49 @@
              height="4"
              start_url="about:blank"
              decouple_texture_size="true" />
+            <!-- <FS:Zi> Find all faces with same texture -->
+            <button
+             enabled="false"
+             layout="topleft"
+             follows="right|top"
+             height="23"
+             left="8"
+             top="178"
+             label="Find All"
+             name="btn_select_same_diff"
+             tool_tip="Select all faces with the same diffuse texture as this one"
+             width="90">
+             <button.commit_callback
+               function="BuildTool.SelectSameTexture"
+               parameter="diffuse"/>
+            </button>
+            <button
+             enabled="false"
+             layout="topleft"
+             follows="right|top"
+             height="23"
+             left_delta="0"
+             label="Find All"
+             name="btn_select_same_norm"
+             tool_tip="Select all faces with the same normal map as this one"
+             width="90">
+             <button.commit_callback
+               function="BuildTool.SelectSameTexture"
+               parameter="normal"/>
+            </button>
+            <button
+             enabled="false"
+             layout="topleft"
+             follows="right|top"
+             height="23"
+             left_delta="0"
+             label="Find All"
+             name="btn_select_same_spec"
+             tool_tip="Select all faces with the same specular map as this one"
+             width="90">
+             <button.commit_callback
+               function="BuildTool.SelectSameTexture"
+               parameter="specular"/>
+            </button>
+            <!-- </FS:Zi> -->
 	   </panel>
