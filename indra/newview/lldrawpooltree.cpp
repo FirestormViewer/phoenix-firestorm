@@ -71,7 +71,6 @@ void LLDrawPoolTree::renderDeferred(S32 pass)
         return;
     }
 
-    LLGLState test(GL_ALPHA_TEST, 0);
 
 // [SL:KB] - Patch: Render-TextureToggle (Catznip-4.0)
     if( (LLPipeline::sRenderTextures) )

@@ -5777,9 +5777,6 @@ U32 LLVOAvatar::renderSkinned()
 	// render all geometry attached to the skeleton
 	//--------------------------------------------------------------------
 
-		bool should_alpha_mask = shouldAlphaMask();
-		LLGLState test(GL_ALPHA_TEST, should_alpha_mask);
-		
 		BOOL first_pass = TRUE;
 		if (!LLDrawPoolAvatar::sSkipOpaque)
 		{
@@ -5829,7 +5826,6 @@ U32 LLVOAvatar::renderSkinned()
 		if (!LLDrawPoolAvatar::sSkipTransparent || LLPipeline::sImpostorRender)
 		{
 			LLGLState blend(GL_BLEND, !mIsDummy);
-			LLGLState test(GL_ALPHA_TEST, !mIsDummy);
 			num_indices += renderTransparent(first_pass);
 		}
 
@@ -5909,9 +5905,6 @@ U32 LLVOAvatar::renderRigid()
 		return 0;
 	}
 
-	bool should_alpha_mask = shouldAlphaMask();
-	LLGLState test(GL_ALPHA_TEST, should_alpha_mask);
-
 	if (isTextureVisible(TEX_EYES_BAKED) || (getOverallAppearance() == AOA_JELLYDOLL && !isControlAvatar()) || isUIAvatar())
 	{
 		LLViewerJoint* eyeball_left = getViewerJoint(MESH_ID_EYEBALL_LEFT);
@@ -5976,8 +5969,7 @@ U32 LLVOAvatar::renderImpostor(LLColor4U color, S32 diffuse_channel)
 		gGL.flush();
 	}
 	{
-	LLGLEnable test(GL_ALPHA_TEST);
-    gGL.flush();
+	gGL.flush();
 
 	gGL.color4ubv(color.mV);
 	gGL.getTexUnit(diffuse_channel)->bind(&mImpostor);
@@ -12621,7 +12613,10 @@ void LLVOAvatar::readProfileQuery(S32 retries)
 
         LL::WorkQueue::getInstance("mainloop")->post([id, retries] {
             LLVOAvatar* avatar = (LLVOAvatar*) gObjectList.findObject(id);
-            avatar->readProfileQuery(retries);
+            if(avatar)
+            {
+                avatar->readProfileQuery(retries);
+            }
             });
     }
 }

@@ -2575,6 +2575,10 @@ bool LLAppViewer::initThreads()
 	LLAppViewer::sTextureFetch = new LLTextureFetch(LLAppViewer::getTextureCache(),
 													enable_threads && true,
 													app_metrics_qa_mode);
+
+    // general task background thread (LLPerfStats, etc)
+    LLAppViewer::instance()->initGeneralThread();
+
 	LLAppViewer::sPurgeDiskCacheThread = new LLPurgeDiskCacheThread();
 
 	if (LLTrace::BlockTimer::sLog || LLTrace::BlockTimer::sMetricLog)
@@ -6524,6 +6528,8 @@ void LLAppViewer::pauseMainloopTimeout()
 void LLAppViewer::pingMainloopTimeout( char const* state, F32 secs)
 // </FS:ND>
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_APP;
+
 	if(mMainloopTimeout)
 	{
 		if(secs < 0.0f)

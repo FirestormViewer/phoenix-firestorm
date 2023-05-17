@@ -4145,7 +4145,7 @@ BOOL LLModelPreview::render()
     S32 width = getWidth();
     S32 height = getHeight();
 
-    LLGLSUIDefault def; // GL_BLEND, GL_ALPHA_TEST, GL_CULL_FACE, depth test
+    LLGLSUIDefault def;
     LLGLDisable no_blend(GL_BLEND);
     LLGLEnable cull(GL_CULL_FACE);
     LLGLDepthTest depth(GL_FALSE); // SL-12781 disable z-buffer to render background color
@@ -4378,8 +4378,6 @@ BOOL LLModelPreview::render()
 
     gGL.pushMatrix();
     gGL.color4fv(edge_col().mV); // <FS:Beq/> restore changes removed by the lab
-
-    LLGLEnable normalize(GL_NORMALIZE);
 
     if (!mBaseModel.empty() && mVertexBuffer[5].empty())
     {

@@ -156,7 +156,7 @@ namespace LLPerfStats
         resetChanges();
     }
 
-    StatsRecorder::StatsRecorder():q(1024*16)
+    StatsRecorder::StatsRecorder()
     {
         // create a queue
         tunables.initialiseFromSettings();
@@ -304,27 +304,6 @@ namespace LLPerfStats
         sTotalAvatarTime = LLVOAvatar::getTotalGPURenderTime();
         sAverageAvatarTime = LLVOAvatar::getAverageGPURenderTime();
         sMaxAvatarTime = LLVOAvatar::getMaxGPURenderTime();
-
-        auto general = LL::WorkQueue::getInstance("General");
-
-        if (general)
-        {
-            general->post([] { StatsRecorder::update(); });
-        }
-    }
-
-    // called once per main loop iteration on General thread
-    void StatsRecorder::update()
-    {
-        LL_PROFILE_ZONE_SCOPED_CATEGORY_STATS;
-        StatsRecord upd;
-        auto& instance{ StatsRecorder::getInstance() };
-
-        //while (enabled() && !LLApp::isQuitting() && instance.q.tryPop(upd))
-        while (enabled() && !LLApp::isQuitting() && instance.q.try_dequeue(upd))
-        {
-            instance.processUpdate(upd);
-        }
     }
 
     //static

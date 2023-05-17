@@ -1677,6 +1677,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 			check_fullbright->setValue((S32)(fullbright_flag != 0));
 			check_fullbright->setEnabled(editable && !has_pbr_material);
 			check_fullbright->setTentative(!identical_fullbright);
+            getChild<LLComboBox>("combobox matmedia")->setEnabledByValue("Materials", !has_pbr_material);
 		}
 		
 		// Repeats per meter
