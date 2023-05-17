@@ -169,7 +169,8 @@ LLInventoryPanel::LLInventoryPanel(const LLInventoryPanel::Params& p) :
 	mInvFVBridgeBuilder(NULL),
 	mInventoryViewModel(p.name),
 	mGroupedItemBridge(new LLFolderViewGroupedItemBridge),
-	mFocusSelection(false)
+	mFocusSelection(false),
+    mBuildChildrenViews(true)
 {
 	mInvFVBridgeBuilder = &INVENTORY_BRIDGE_BUILDER;
 
@@ -1106,8 +1107,11 @@ LLFolderViewItem* LLInventoryPanel::buildViewsTree(const LLUUID& id,
                                                   LLInventoryObject const* objectp,
                                                   LLFolderViewItem *folder_view_item,
                                                   LLFolderViewFolder *parent_folder,
-                                                  const EBuildModes &mode)
+                                                  const EBuildModes &mode,
+                                                  S32 depth)
 {
+    depth++;
+
     // Force the creation of an extra root level folder item if required by the inventory panel (default is "false")
     bool allow_drop = true;
     bool create_root = false;
@@ -1207,7 +1211,8 @@ LLFolderViewItem* LLInventoryPanel::buildViewsTree(const LLUUID& id,
         }
 	}
 
-    bool create_children = folder_view_item && objectp->getType() == LLAssetType::AT_CATEGORY;
+    bool create_children = folder_view_item && objectp->getType() == LLAssetType::AT_CATEGORY
+                            && (mBuildChildrenViews || depth == 0);
 
     if (create_children)
     {
@@ -1227,7 +1232,10 @@ LLFolderViewItem* LLInventoryPanel::buildViewsTree(const LLUUID& id,
                 {
                     create_children = false;
                     // run it again for the sake of creating children
-                    mBuildViewsQueue.push_back(id);
+                    if (mBuildChildrenViews || depth == 0)
+                    {
+                        mBuildViewsQueue.push_back(id);
+                    }
                 }
                 else
                 {
@@ -1240,7 +1248,10 @@ LLFolderViewItem* LLInventoryPanel::buildViewsTree(const LLUUID& id,
             {
                 create_children = false;
                 // run it to create children, current caller is only interested in current view
-                mBuildViewsQueue.push_back(id);
+                if (mBuildChildrenViews || depth == 0)
+                {
+                    mBuildViewsQueue.push_back(id);
+                }
                 break;
             }
             case BUILD_ONE_FOLDER:
@@ -1288,11 +1299,11 @@ LLFolderViewItem* LLInventoryPanel::buildViewsTree(const LLUUID& id,
                         // each time, especially since content is growing, we can just
                         // iter over copy of mItemMap in some way
                         LLFolderViewItem* view_itemp = getItemByID(cat->getUUID());
-                        buildViewsTree(cat->getUUID(), id, cat, view_itemp, parentp, (mode == BUILD_ONE_FOLDER ? BUILD_NO_CHILDREN : mode));
+                        buildViewsTree(cat->getUUID(), id, cat, view_itemp, parentp, (mode == BUILD_ONE_FOLDER ? BUILD_NO_CHILDREN : mode), depth);
                     }
                     else
                     {
-                        buildViewsTree(cat->getUUID(), id, cat, NULL, parentp, (mode == BUILD_ONE_FOLDER ? BUILD_NO_CHILDREN : mode));
+                        buildViewsTree(cat->getUUID(), id, cat, NULL, parentp, (mode == BUILD_ONE_FOLDER ? BUILD_NO_CHILDREN : mode), depth);
                     }
                 }
 			}
@@ -1312,7 +1323,7 @@ LLFolderViewItem* LLInventoryPanel::buildViewsTree(const LLUUID& id,
                     // each time, especially since content is growing, we can just
                     // iter over copy of mItemMap in some way
                     LLFolderViewItem* view_itemp = getItemByID(item->getUUID());
-                    buildViewsTree(item->getUUID(), id, item, view_itemp, parentp, mode);
+                    buildViewsTree(item->getUUID(), id, item, view_itemp, parentp, mode, depth);
                 }
 			}
 		}
@@ -2008,7 +2019,7 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 }
 
 //static
-void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const LLUUID& obj_id, BOOL main_panel, BOOL take_keyboard_focus, BOOL reset_filter)
+void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const LLUUID& obj_id, BOOL use_main_panel, BOOL take_keyboard_focus, BOOL reset_filter)
 {
 	// <FS:Ansariel> Use correct inventory floater
 	//LLSidepanelInventory* sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
@@ -2019,7 +2030,7 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 	bool show_inbox = gSavedSettings.getBOOL("FSShowInboxFolder"); // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
 
 	// <FS:Ansariel> FIRE-22167: Make "Show in Main View" work properly
-	//if (!in_inbox && (main_panel || !sidepanel_inventory->getMainInventoryPanel()->isRecentItemsPanelSelected()))	//if (main_panel && !in_inbox)
+	//if (!in_inbox && (use_main_panel || !sidepanel_inventory->getMainInventoryPanel()->isRecentItemsPanelSelected()))	//if (main_panel && !in_inbox)
 	//{
 	//	sidepanel_inventory->selectAllItemsPanel();
 	//}
@@ -2038,6 +2049,27 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
         }
     }
 
+    // <FS:Ansariel> Use correct inventory floater
+    //LLPanelMainInventory* main_inventory = sidepanel_inventory->getMainInventoryPanel();
+    //if (main_inventory && main_inventory->isSingleFolderMode()
+    //    && use_main_panel)
+    //{
+    //    main_inventory->toggleViewMode();
+    //}
+    if (!inventory_floater)
+    {
+        inventory_floater = LLFloaterReg::showInstance("inventory");
+    }
+    if (use_main_panel && inventory_floater)
+    {
+        LLSidepanelInventory* inventory_panel = inventory_floater->findChild<LLSidepanelInventory>("main_panel");
+        LLPanelMainInventory* main_inventory = inventory_panel->getMainInventoryPanel();
+        if (main_inventory && main_inventory->isSingleFolderMode())
+        {
+            main_inventory->toggleViewMode();
+        }
+    }
+    // </FS:Ansariel>
 
 	LLInventoryPanel *active_panel = LLInventoryPanel::getActiveInventoryPanel(auto_open);
 
@@ -2069,7 +2101,7 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 		{
 			// <FS:Ansariel> FIRE-22167: Make "Show in Main View" work properly
 			//LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
-			if (main_panel)
+			if (use_main_panel)
 			{
 				active_panel->getParentByType<LLTabContainer>()->selectFirstTab();
 				active_panel = getActiveInventoryPanel(FALSE);
@@ -2329,6 +2361,7 @@ static LLDefaultChildRegistry::Register<LLInventorySingleFolderPanel> t_single_f
 LLInventorySingleFolderPanel::LLInventorySingleFolderPanel(const Params& params)
     : LLInventoryPanel(params)
 {
+    mBuildChildrenViews = false;
     getFilter().setSingleFolderMode(true);
     getFilter().setEmptyLookupMessage("InventorySingleFolderNoMatches");
     getFilter().setDefaultEmptyLookupMessage("InventorySingleFolderEmpty");
@@ -2429,8 +2462,8 @@ void LLInventorySingleFolderPanel::updateSingleFolderRoot()
         LLUUID root_id = mFolderID;
         if (mFolderRoot.get())
         {
-            removeItemID(getRootFolderID());
-            mFolderRoot.get()->destroyView();
+            mItemMap.clear();
+            mFolderRoot.get()->destroyRoot();
         }
 
         mCommitCallbackRegistrar.pushScope();

@@ -127,9 +127,12 @@ public:
     void onBackFolderClicked();
     void onForwardFolderClicked();
     void setSingleFolderViewRoot(const LLUUID& folder_id, bool clear_nav_history = true);
-    void setGallerySelection(const LLUUID& item_id);
+    void setGallerySelection(const LLUUID& item_id, bool new_window = false);
     LLUUID getSingleFolderViewRoot();
     bool isSingleFolderMode() { return mSingleFolderMode; }
+
+    void scrollToGallerySelection();
+    void scrollToInvPanelSelection();
 
     void setViewMode(EViewModeType mode);
     bool isListViewMode() { return (mViewMode == MODE_LIST); }
@@ -274,6 +277,8 @@ protected:
     void updateNavButtons();
     
     void onCombinationRootChanged(bool gallery_clicked);
+    void onCombinationGallerySelectionChanged(const LLUUID& category_id);
+    void onCombinationInventorySelectionChanged(const std::deque<LLFolderViewItem*>& items, BOOL user_action);
 	/**
 	 * Set upload cost in "Upload" sub menu.
 	 */
@@ -298,6 +303,8 @@ private:
 
     bool                        mForceShowInvLayout;
     bool                        mCombinationShapeDirty;
+    bool                        mDelayedCombGalleryScroll;
+    bool                        mDelayedCombInvPanelScroll;
 	// List Commands                                                              //
 	////////////////////////////////////////////////////////////////////////////////
 };

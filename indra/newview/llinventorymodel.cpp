@@ -921,8 +921,17 @@ void LLInventoryModel::ensureCategoryForTypeExists(LLFolderType::EType preferred
                 LLStringUtil::null,
                 [preferred_type](const LLUUID &new_cat_id)
             {
-                LL_DEBUGS("Inventory") << "Created category: " << new_cat_id
-                    << " for type: " << preferred_type << LL_ENDL;
+                    if (new_cat_id.isNull())
+                    {
+                        LL_WARNS("Inventory")
+                            << "Failed to create folder of type " << preferred_type
+                            << LL_ENDL;
+                    }
+                    else
+                    {
+                        LL_DEBUGS("Inventory") << "Created category: " << new_cat_id
+                            << " for type: " << preferred_type << LL_ENDL;
+                    }
             }
             );
         }
@@ -965,7 +974,10 @@ const LLUUID LLInventoryModel::findCategoryUUIDForTypeInRoot(
 		}
 	}
 	
-	if(rv.isNull() && root_id.notNull() && preferred_type != LLFolderType::FT_MARKETPLACE_LISTINGS)
+	if(rv.isNull() 
+       && root_id.notNull()
+       && preferred_type != LLFolderType::FT_MARKETPLACE_LISTINGS
+       && preferred_type != LLFolderType::FT_OUTBOX)
 	{
         // if it does not exists, it should either be added
         // to createCommonSystemCategories or server should

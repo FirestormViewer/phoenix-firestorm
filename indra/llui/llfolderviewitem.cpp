@@ -1884,6 +1884,11 @@ BOOL LLFolderViewFolder::isRemovable()
 	return TRUE;
 }
 
+void LLFolderViewFolder::destroyRoot()
+{
+    delete this;
+}
+
 // this is an internal method used for adding items to folders. 
 void LLFolderViewFolder::addItem(LLFolderViewItem* item)
 {

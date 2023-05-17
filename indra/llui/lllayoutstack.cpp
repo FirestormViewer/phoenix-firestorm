@@ -322,6 +322,17 @@ void LLLayoutStack::draw()
 	}
 }
 
+void LLLayoutStack::deleteAllChildren()
+{
+    mPanels.clear();
+    LLView::deleteAllChildren();
+
+    // Not really needed since nothing is left to
+    // display, but for the sake of consistency
+    updateFractionalSizes();
+    mNeedsLayout = true;
+}
+
 void LLLayoutStack::removeChild(LLView* view)
 {
 	LLLayoutPanel* embedded_panelp = findEmbeddedPanel(dynamic_cast<LLPanel*>(view));
@@ -329,21 +340,20 @@ void LLLayoutStack::removeChild(LLView* view)
 	if (embedded_panelp)
 	{
 		mPanels.erase(std::find(mPanels.begin(), mPanels.end(), embedded_panelp));
-		// delete embedded_panelp;	// <FS:Zi> Fix crash when removing layout panels from a stack
+        LLView::removeChild(view);
 		updateFractionalSizes();
 		mNeedsLayout = true;
-	}
-
-	LLView::removeChild(view);
-
-	// <FS:Zi> Fix crash when removing layout panels from a stack
-	if (embedded_panelp)
-	{
-		// only delete the panel after it was removed from LLView to prevent
-		// LLView::removeChild() to run into an already deleted pointer
+		// <FS:Zi> Fix crash when removing layout panels from a stack
+		// <FS:Ansariel> LL replaced "delete embedded_panelp;" with "LLView::removeChild(view);". AFAIK
+		//               removeChild does not call delete, so we might exhibit a memory leak. Thus
+		//               we leave this in place.
 		delete embedded_panelp;
+		// </FS:Zi>
 	}
-	// </FS:Zi>
+    else
+    {
+        LLView::removeChild(view);
+    }
 }
 
 BOOL LLLayoutStack::postBuild()

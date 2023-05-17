@@ -409,6 +409,7 @@ public:
 
 	// destroys this folder, and all children
 	virtual void destroyView();
+    void destroyRoot();
 
     // whether known children are fully loaded (arrange sets to true)
     virtual bool isFolderComplete() { return mIsFolderComplete; }

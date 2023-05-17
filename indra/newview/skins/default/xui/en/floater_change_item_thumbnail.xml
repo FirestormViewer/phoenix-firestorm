@@ -9,6 +9,14 @@
  width="319">
 
   <floater.string
+    name="title_item_thumbnail">
+    Change Item Image
+  </floater.string>
+  <floater.string
+    name="title_folder_thumbnail">
+    Change Folder Image
+  </floater.string>
+  <floater.string
     name="tooltip_upload_local">
     Upload from computer
   </floater.string>

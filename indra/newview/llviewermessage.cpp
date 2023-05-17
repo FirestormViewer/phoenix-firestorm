@@ -79,6 +79,7 @@
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llpanelgrouplandmoney.h"
+#include "llpanelmaininventory.h"
 #include "llrecentpeople.h"
 #include "llscriptfloater.h"
 #include "llscriptruntimeperms.h"
@@ -1699,15 +1700,40 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 		}
 
 		////////////////////////////////////////////////////////////////////////////////
+        static LLUICachedControl<bool> find_original_new_floater("FindOriginalOpenWindow", false);
+        //show in a new single-folder window
+        if(find_original_new_floater && !from_name.empty())
+        {
+            const LLInventoryObject *obj = gInventory.getObject(obj_id);
+            if (obj && obj->getParentUUID().notNull())
+            {
+                if (obj->getActualType() == LLAssetType::AT_CATEGORY)
+                {
+                    LLPanelMainInventory::newFolderWindow(obj_id);
+                }
+                else
+                {
+                    LLPanelMainInventory::newFolderWindow(obj->getParentUUID(), obj_id);
+                }
+            }
+        }
+        else
+        {
 		// Highlight item
 		// <FS:Ansariel> Only show if either ShowInInventory is true OR it is an inventory
 		//               offer from an agent and the asset is not previewable
 		const BOOL auto_open = gSavedSettings.getBOOL("ShowInInventory") || (from_agent_manual && !check_asset_previewable(asset_type));
 			//gSavedSettings.getBOOL("ShowInInventory") && // don't open if showininventory is false
 			//!from_name.empty(); // don't open if it's not from anyone.
-		// <FS:Ansariel> Don't mess with open inventory panels when ShowInInventory is FALSE
-		if (auto_open)
-		LLInventoryPanel::openInventoryPanelAndSetSelection(auto_open, obj_id);
+		// <FS:Ansariel> Use correct inventory floater
+		//if (auto_open)
+		//{
+		//	LLFloaterReg::showInstance("inventory");
+		//}
+		// </FS:Ansariel>
+		if (auto_open) // <FS:Ansariel> Don't mess with open inventory panels when ShowInInventory is FALSE
+		LLInventoryPanel::openInventoryPanelAndSetSelection(auto_open, obj_id, true);
+        }
 	}
 }
 
