@@ -171,6 +171,16 @@ void LLSurface::create(const S32 grids_per_edge,
 	mMetersPerEdge = mMetersPerGrid * (mGridsPerEdge - 1);
 // <FS:CR> Aurora Sim
 	sTextureSize = width;
+
+	// Trap non-power of 2 widths to avoid GLtexture issues.
+	if ((sTextureSize & (sTextureSize - 1)) != 0)
+	{
+		// Not a power of 2, find the next power of 2
+		sTextureSize = 1 << static_cast<S32>( ceil(log2(sTextureSize)) ) ;
+	}
+
+	// Clamp to maximum limit
+	sTextureSize = std::min(sTextureSize, 1024);	
 // </FS:CR> Aurora Sim
 
 	mOriginGlobal.setVec(origin_global);

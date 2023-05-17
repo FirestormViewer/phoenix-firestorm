@@ -10,19 +10,20 @@ env:
   AUTOBUILD_VARIABLES_FILE: ${{github.workspace}}/build-variables/variables
   EXTRA_ARGS: -DUSE_FMODSTUDIO=ON -DUSE_KDU=ON --crashreporting
   build_secrets_checkout: ${{github.workspace}}/signing
+  XZ_DEFAULTS: -T0
 
 
 jobs:
   build_matrix:
     strategy:
       matrix:
-        os: [macos-10.15,ubuntu-20.04,windows-2022]
+        os: [macos-11,ubuntu-20.04,windows-2022]
         grid: [sl,os]
         addrsize: [64,32]
         exclude:
           - os: ubuntu-20.04
             addrsize: 32
-          - os: macos-10.15
+          - os: macos-11
             addrsize: 32
     runs-on: ${{ matrix.os }}
     steps:
@@ -196,6 +197,12 @@ jobs:
             fi
           done
         shell: bash
+
+      - name: make Nightly builds expire after 14 days
+        if: env.FS_BUILD_TYPE == 'Nightly'
+        run: |
+          echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}} --testbuild=14" >> $GITHUB_ENV
+
       - name: Clean up packages to give more space
         run: rm *${{ env.fallback_platform }}*bz2
         shell: bash
@@ -246,18 +253,22 @@ jobs:
       - name: Install discord-webhook library
         run: pip install discord-webhook
 
-      - name: find channel from Branch name
+      - name: find channel and webhook from Branch name
         run: | 
           if [[ "${{ github.ref_name }}" == *Release* ]]; then
             FS_RELEASE_FOLDER=release
-          else
-            if [[ "${{github.event_name}}" == 'schedule' ]]; then
-              FS_RELEASE_FOLDER=nightly
+            FS_BUILD_WEBHOOK_URL=${{ secrets.RELEASE_WEBHOOK_URL }}
             else
-              FS_RELEASE_FOLDER=preview
+            if [[ "${{github.event_name}}" == 'schedule' ]]; then
+            FS_RELEASE_FOLDER=nightly
+            FS_BUILD_WEBHOOK_URL=${{ secrets.NIGHTLY_WEBHOOK_URL }}
+            else
+            FS_RELEASE_FOLDER=preview
+            FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
             fi
           fi
           echo "FS_RELEASE_FOLDER=${FS_RELEASE_FOLDER}" >> $GITHUB_ENV
+          echo "FS_BUILD_WEBHOOK_URL=${FS_BUILD_WEBHOOK_URL}" >> $GITHUB_ENV
 
       - name: Download artifacts
         uses: actions/download-artifact@v3
@@ -269,7 +280,7 @@ jobs:
         working-directory: ${{steps.download.outputs.download-path}}
 
       - name: Reorganise artifacts ready for server upload.
-        run: python ./fsutils/download_list.py -u ${{steps.download.outputs.download-path}} -w ${{ secrets.RELEASE_WEBHOOK_URL }}
+        run: python ./fsutils/download_list.py -u ${{steps.download.outputs.download-path}} -w ${{ env.FS_BUILD_WEBHOOK_URL }}
 
       - name: Setup rclone and download the folder
         uses: beqjanus/setup-rclone@main
