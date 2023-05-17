@@ -466,7 +466,7 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 
 			if (setVolume(volume_params, 0))
 			{
-				markForUpdate(TRUE);
+				markForUpdate();
 			}
 		}
 
@@ -501,10 +501,6 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 			}
 		}
 		// </FS:Beq>
-		if (result & teDirtyBits)
-		{
-			updateTEData();
-		}
 		if (result & TEM_CHANGE_MEDIA)
 		{
 			retval |= MEDIA_FLAGS_CHANGED;
@@ -552,7 +548,7 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 
 			if (setVolume(volume_params, 0))
 			{
-				markForUpdate(TRUE);
+				markForUpdate();
 			}
 			S32 res2 = unpackTEMessage(*dp);
 			if (TEM_INVALID == res2)
@@ -590,10 +586,6 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 			}
 			else 
 			{
-				if (res2 & teDirtyBits) 
-				{
-					updateTEData();
-				}
 				if (res2 & TEM_CHANGE_MEDIA)
 				{
 					retval |= MEDIA_FLAGS_CHANGED;
@@ -655,8 +647,7 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 				S32 result = unpackTEMessage(tdp);
 				if (result & teDirtyBits)
 				{
-					updateTEData();
-                    if (mDrawable)
+					if (mDrawable)
                     { //on the fly TE updates break batches, isolate in octree
                         shrinkWrap();
                     }
@@ -884,24 +875,7 @@ void LLVOVolume::animateTextures()
 void LLVOVolume::updateTextures()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
-	//const F32 TEXTURE_AREA_REFRESH_TIME = 1.f; // seconds
-	//if (mTextureUpdateTimer.getElapsedTimeF32() > TEXTURE_AREA_REFRESH_TIME)
-	{
-		updateTextureVirtualSize();
-
-		/*if (mDrawable.notNull() && !isVisible() && !mDrawable->isActive())
-		{ //delete vertex buffer to free up some VRAM
-			LLSpatialGroup* group  = mDrawable->getSpatialGroup();
-			if (group && (group->mVertexBuffer.notNull() || !group->mBufferMap.empty() || !group->mDrawMap.empty()))
-			{
-				group->destroyGL(true);
-
-				//flag the group as having changed geometry so it gets a rebuild next time
-				//it becomes visible
-				group->setState(LLSpatialGroup::GEOM_DIRTY | LLSpatialGroup::MESH_DIRTY | LLSpatialGroup::NEW_DRAWINFO);
-			}
-		}*/
-    }
+    updateTextureVirtualSize();
 }
 
 BOOL LLVOVolume::isVisible() const 
@@ -1013,7 +987,7 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
 			if ((vsize < MIN_TEX_ANIM_SIZE && old_size > MIN_TEX_ANIM_SIZE) ||
 				(vsize > MIN_TEX_ANIM_SIZE && old_size < MIN_TEX_ANIM_SIZE))
 			{
-				gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_TCOORD, FALSE);
+				gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_TCOORD);
 			}
 		}
 				
@@ -1064,7 +1038,7 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
 				(texture_discard < current_discard || //texture has more data than last rebuild
 				current_discard < 0)) //no previous rebuild
 			{
-				gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, FALSE);
+				gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME);
 				mSculptChanged = TRUE;
 			}
 
@@ -1172,7 +1146,7 @@ void LLVOVolume::setScale(const LLVector3 &scale, BOOL damped)
 
 		//since drawable transforms do not include scale, changing volume scale
 		//requires an immediate rebuild of volume verts.
-		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_POSITION, TRUE);
+		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_POSITION);
 
         if (mDrawable)
         {
@@ -1408,7 +1382,7 @@ void LLVOVolume::updateVisualComplexity()
 void LLVOVolume::notifyMeshLoaded()
 { 
 	mSculptChanged = TRUE;
-	gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_GEOMETRY, TRUE);
+	gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_GEOMETRY);
 
     LLVOAvatar *av = getAvatar();
     if (av && !isAnimatedObject())
@@ -1539,7 +1513,7 @@ void LLVOVolume::sculpt()
 			LLVOVolume* volume = (*(mSculptTexture->getVolumeList(LLRender::SCULPT_TEX)))[i];
 			if (volume != this && volume->getVolume() == getVolume())
 			{
-				gPipeline.markRebuild(volume->mDrawable, LLDrawable::REBUILD_GEOMETRY, FALSE);
+				gPipeline.markRebuild(volume->mDrawable, LLDrawable::REBUILD_GEOMETRY);
 			}
 		}
 	}
@@ -1766,7 +1740,7 @@ BOOL LLVOVolume::calcLOD()
 void LLVOVolume::forceLOD(S32 lod)
 {
 	mLOD = lod;
-	gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, FALSE);
+	gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME);
 	mLODChanged = true;
 }
 //</FS:Beq>
@@ -1793,7 +1767,7 @@ BOOL LLVOVolume::updateLOD()
 
 	if (lod_changed)
 	{
-		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, FALSE);
+		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME);
 		mLODChanged = TRUE;
 	}
 	else
@@ -1822,7 +1796,7 @@ BOOL LLVOVolume::setDrawableParent(LLDrawable* parentp)
 	if (!mDrawable->isRoot())
 	{
 		// rebuild vertices in parent relative space
-		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, TRUE);
+		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME);
 
 		if (mDrawable->isActive() && !parentp->isActive())
 		{
@@ -1879,7 +1853,7 @@ BOOL LLVOVolume::setParent(LLViewerObject* parent)
 		if (ret && mDrawable)
 		{
 			gPipeline.markMoved(mDrawable);
-			gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, TRUE);
+			gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME);
 		}
         onReparent(old_parent, parent);
 	}
@@ -2278,7 +2252,7 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 	LLSpatialGroup* group = drawable->getSpatialGroup();
 	if (group)
 	{
-		group->dirtyMesh();
+        gPipeline.markRebuild(group);
 	}
 
 	updateRelativeXform();
@@ -2295,7 +2269,7 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 
 	if (mVolumeChanged || mFaceMappingChanged)
 	{
-		dirtySpatialGroup(drawable->isState(LLDrawable::IN_REBUILD_Q1));
+		dirtySpatialGroup();
 
 		bool was_regen_faces = false;
         should_update_octree_bounds = true;
@@ -2317,7 +2291,7 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 	}
 	else if (mLODChanged || mSculptChanged || mColorChanged)
 	{
-		dirtySpatialGroup(drawable->isState(LLDrawable::IN_REBUILD_Q1));
+		dirtySpatialGroup();
 		compiled = TRUE;
         lodOrSculptChanged(drawable, compiled, should_update_octree_bounds);
 		
@@ -2495,7 +2469,7 @@ S32 LLVOVolume::setTEColor(const U8 te, const LLColor4& color)
 			gPipeline.markTextured(mDrawable);
 			//treat this alpha change as an LoD update since render batches may need to get rebuilt
 			mLODChanged = TRUE;
-			gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, FALSE);
+			gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME);
 		}
 		retval = LLPrimitive::setTEColor(te, color);
 		if (mDrawable.notNull() && retval)
@@ -2709,16 +2683,6 @@ S32 LLVOVolume::setTEScaleT(const U8 te, const F32 t)
 		mFaceMappingChanged = TRUE;
 	}
 	return res;
-}
-
-
-void LLVOVolume::updateTEData()
-{
-	/*if (mDrawable.notNull())
-	{
-		mFaceMappingChanged = TRUE;
-		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_MATERIAL, TRUE);
-	}*/
 }
 
 bool LLVOVolume::hasMedia() const
@@ -3863,7 +3827,7 @@ BOOL LLVOVolume::setIsFlexible(BOOL is_flexible)
 		res = setVolume(volume_params, 1);
 		if (res)
 		{
-			markForUpdate(TRUE);
+			markForUpdate();
 		}
 	}
 	return res;
@@ -3911,7 +3875,7 @@ void LLVOVolume::onSetExtendedMeshFlags(U32 flags)
 	if (/*!getRootEdit()->isAnySelected() &&*/ mDrawable.notNull())
     {
         // Need to trigger rebuildGeom(), which is where control avatars get created/removed
-        getRootEdit()->recursiveMarkForUpdate(TRUE);
+        getRootEdit()->recursiveMarkForUpdate();
     }
     if (isAttachment() && getAvatarAncestor())
     {
@@ -4688,13 +4652,13 @@ void LLVOVolume::setSelected(BOOL sel)
 	LLViewerObject::setSelected(sel);
     if (isAnimatedObject())
     {
-        getRootEdit()->recursiveMarkForUpdate(TRUE);
+        getRootEdit()->recursiveMarkForUpdate();
     }
     else
     {
         if (mDrawable.notNull())
         {
-            markForUpdate(TRUE);
+            markForUpdate();
         }
     }
 }
@@ -4791,14 +4755,14 @@ const LLMatrix4& LLVOVolume::getWorldMatrix(LLXformMatrix* xform) const
 	return xform->getWorldMatrix();
 }
 
-void LLVOVolume::markForUpdate(BOOL priority)
+void LLVOVolume::markForUpdate()
 { 
     if (mDrawable)
     {
         shrinkWrap();
     }
 
-    LLViewerObject::markForUpdate(priority); 
+    LLViewerObject::markForUpdate(); 
     mVolumeChanged = TRUE; 
 }
 
@@ -5778,81 +5742,6 @@ void LLVolumeGeometryManager::getGeometry(LLSpatialGroup* group)
 
 }
 
-void handleRenderAutoMuteByteLimitChanged(const LLSD& new_value)
-{
-	static LLCachedControl<U32> render_auto_mute_byte_limit(gSavedSettings, "RenderAutoMuteByteLimit", 0U);
-
-	if (0 != render_auto_mute_byte_limit)
-	{
-		//for unload
-		LLSculptIDSize::container_BY_SIZE_view::iterator
-			itL = LLSculptIDSize::instance().getSizeInfo().get<LLSculptIDSize::tag_BY_SIZE>().lower_bound(render_auto_mute_byte_limit),
-			itU = LLSculptIDSize::instance().getSizeInfo().get<LLSculptIDSize::tag_BY_SIZE>().end();
-
-		for (; itL != itU; ++itL)
-		{
-			const LLSculptIDSize::Info &nfo = *itL;
-			LLVOVolume *pVVol = nfo.getPtrLLDrawable()->getVOVolume();
-			if (pVVol
-				&& !pVVol->isDead()
-				&& pVVol->isAttachment()
-				&& !pVVol->getAvatar()->isSelf()
-				&& LLVOVolume::NO_LOD != pVVol->getLOD()
-				)
-			{
-				//postponed
-				pVVol->markForUnload();
-				LLSculptIDSize::instance().addToUnloaded(nfo.getSculptId());
-			}
-		}
-
-		//for load if it was unload
-		itL = LLSculptIDSize::instance().getSizeInfo().get<LLSculptIDSize::tag_BY_SIZE>().begin();
-		itU = LLSculptIDSize::instance().getSizeInfo().get<LLSculptIDSize::tag_BY_SIZE>().upper_bound(render_auto_mute_byte_limit);
-
-		for (; itL != itU; ++itL)
-		{
-			const LLSculptIDSize::Info &nfo = *itL;
-			LLVOVolume *pVVol = nfo.getPtrLLDrawable()->getVOVolume();
-			if (pVVol
-				&& !pVVol->isDead()
-				&& pVVol->isAttachment()
-				&& !pVVol->getAvatar()->isSelf()
-				&& LLVOVolume::NO_LOD == pVVol->getLOD()
-				)
-			{
-				LLSculptIDSize::instance().remFromUnloaded(nfo.getSculptId());
-				pVVol->updateLOD();
-				pVVol->markForUpdate(TRUE);
-			}
-		}
-	}
-	else
-	{
-		LLSculptIDSize::instance().clearUnloaded();
-
-		LLSculptIDSize::container_BY_SIZE_view::iterator
-			itL = LLSculptIDSize::instance().getSizeInfo().get<LLSculptIDSize::tag_BY_SIZE>().begin(),
-			itU = LLSculptIDSize::instance().getSizeInfo().get<LLSculptIDSize::tag_BY_SIZE>().end();
-
-		for (; itL != itU; ++itL)
-		{
-			const LLSculptIDSize::Info &nfo = *itL;
-			LLVOVolume *pVVol = nfo.getPtrLLDrawable()->getVOVolume();
-			if (pVVol
-				&& !pVVol->isDead()
-				&& pVVol->isAttachment()
-				&& !pVVol->getAvatar()->isSelf()
-				&& LLVOVolume::NO_LOD == pVVol->getLOD()
-				) 
-			{
-				pVVol->updateLOD();
-				pVVol->markForUpdate(TRUE);
-			}
-		}
-	}
-}
-
 // add a face pointer to a list of face pointers without going over MAX_COUNT faces
 template<typename T>
 static inline void add_face(T*** list, U32* count, T* face)
@@ -5889,7 +5778,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 
 	if (!group->hasState(LLSpatialGroup::GEOM_DIRTY | LLSpatialGroup::ALPHA_DIRTY))
 	{
-		if (group->hasState(LLSpatialGroup::MESH_DIRTY) && !LLPipeline::sDelayVBUpdate)
+		if (group->hasState(LLSpatialGroup::MESH_DIRTY))
 		{
 			rebuildMesh(group);
 		}
@@ -6386,7 +6275,6 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 
 	group->mGeometryBytes = geometryBytes;
 
-	if (!LLPipeline::sDelayVBUpdate)
 	{
 		//drawables have been rebuilt, clear rebuild status
 		for (LLSpatialGroup::element_iter drawable_iter = group->getDataBegin(); drawable_iter != group->getDataEnd(); ++drawable_iter)
@@ -6402,12 +6290,6 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 	group->mLastUpdateTime = gFrameTimeSeconds;
 	group->mBuilt = 1.f;
 	group->clearState(LLSpatialGroup::GEOM_DIRTY | LLSpatialGroup::ALPHA_DIRTY);
-
-	if (LLPipeline::sDelayVBUpdate)
-	{
-		group->setState(LLSpatialGroup::MESH_DIRTY | LLSpatialGroup::NEW_DRAWINFO);
-	}
-
 }
 
 void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
@@ -6460,7 +6342,7 @@ void LLVolumeGeometryManager::rebuildMesh(LLSpatialGroup* group)
 									vobj->getRelativeXform(), vobj->getRelativeXformInvTrans(), face->getGeomIndex()))
 								{ //something's gone wrong with the vertex buffer accounting, rebuild this group 
 									group->dirtyGeom();
-									gPipeline.markRebuild(group, TRUE);
+									gPipeline.markRebuild(group);
 								}
 
                                 buff->unmapBuffer();
@@ -6826,7 +6708,6 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 				//for debugging, set last time face was updated vs moved
 				facep->updateRebuildFlags();
 
-				if (!LLPipeline::sDelayVBUpdate)
 				{ //copy face geometry into vertex buffer
 					LLDrawable* drawablep = facep->getDrawable();
 					LLVOVolume* vobj = drawablep->getVOVolume();

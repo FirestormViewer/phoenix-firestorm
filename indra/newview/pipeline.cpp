@@ -298,7 +298,6 @@ bool	LLPipeline::sRenderHighlight = true;
 LLRender::eTexIndex LLPipeline::sRenderHighlightTextureChannel = LLRender::DIFFUSE_MAP;
 bool	LLPipeline::sForceOldBakedUpload = false;
 S32		LLPipeline::sUseOcclusion = 0;
-bool	LLPipeline::sDelayVBUpdate = true;
 bool	LLPipeline::sAutoMaskAlphaDeferred = true;
 bool	LLPipeline::sAutoMaskAlphaNonDeferred = false;
 bool	LLPipeline::sRenderTransparentWater = true;
@@ -510,7 +509,6 @@ void LLPipeline::init()
 	connectRefreshCachedSettingsSafe("RenderAutoMaskAlphaNonDeferred");
 	connectRefreshCachedSettingsSafe("RenderUseFarClip");
 	connectRefreshCachedSettingsSafe("RenderAvatarMaxNonImpostors");
-	connectRefreshCachedSettingsSafe("RenderDelayVBUpdate");
 	connectRefreshCachedSettingsSafe("UseOcclusion");
 	// DEPRECATED -- connectRefreshCachedSettingsSafe("WindLightUseAtmosShaders");
 	// DEPRECATED -- connectRefreshCachedSettingsSafe("RenderDeferred");
@@ -1039,7 +1037,6 @@ void LLPipeline::refreshCachedSettings()
 	LLPipeline::sShowJellyDollAsImpostor = gSavedSettings.getBOOL("RenderJellyDollsAsImpostors");
 	LLVOAvatar::sMaxNonImpostors = gSavedSettings.getU32("RenderAvatarMaxNonImpostors");
 	LLVOAvatar::updateImpostorRendering(LLVOAvatar::sMaxNonImpostors);
-	LLPipeline::sDelayVBUpdate = gSavedSettings.getBOOL("RenderDelayVBUpdate");
 	// <FS:Ansariel> Make change to RenderAttachedLights & RenderAttachedParticles instant
 	LLPipeline::sRenderAttachedLights = gSavedSettings.getBOOL("RenderAttachedLights");
 	LLPipeline::sRenderAttachedParticles = gSavedSettings.getBOOL("RenderAttachedParticles");
@@ -1864,7 +1861,7 @@ void LLPipeline::createObject(LLViewerObject* vobj)
 		vobj->setDrawableParent(NULL); // LLPipeline::addObject 2
 	}
 
-	markRebuild(drawablep, LLDrawable::REBUILD_ALL, TRUE);
+	markRebuild(drawablep, LLDrawable::REBUILD_ALL);
 
 	// <FS:Beq> FIRE-23122 BUG-225920 Remove broken RenderAnimateRes functionality.
 	//if (drawablep->getVOVolume() && RenderAnimateRes)
@@ -1983,10 +1980,10 @@ void LLPipeline::updateMovedList(LLDrawable::drawable_vector_t& moved_list)
 			{ //will likely not receive any future world matrix updates
 				// -- this keeps attachments from getting stuck in space and falling off your avatar
 				drawablep->clearState(LLDrawable::ANIMATED_CHILD);
-				markRebuild(drawablep, LLDrawable::REBUILD_VOLUME, TRUE);
+				markRebuild(drawablep, LLDrawable::REBUILD_VOLUME);
 				if (drawablep->getVObj())
 				{
-					drawablep->getVObj()->dirtySpatialGroup(TRUE);
+					drawablep->getVObj()->dirtySpatialGroup();
 				}
 			}
 		// <FS:ND> removing elements in the middle of a vector is a really bad idea. I'll just create a new one and swap it at the end.
@@ -3096,70 +3093,34 @@ void LLPipeline::markMeshDirty(LLSpatialGroup* group)
 	mMeshDirtyGroup.push_back(group);
 }
 
-void LLPipeline::markRebuild(LLSpatialGroup* group, bool priority)
+void LLPipeline::markRebuild(LLSpatialGroup* group)
 {
 	if (group && !group->isDead() && group->getSpatialPartition())
 	{
-		if (group->getSpatialPartition()->mPartitionType == LLViewerRegion::PARTITION_HUD)
+		if (!group->hasState(LLSpatialGroup::IN_BUILD_Q1))
 		{
-			priority = true;
-		}
+			llassert_always(!mGroupQ1Locked);
 
-		if (priority)
-		{
-			if (!group->hasState(LLSpatialGroup::IN_BUILD_Q1))
-			{
-				llassert_always(!mGroupQ1Locked);
-
-				mGroupQ1.push_back(group);
-				group->setState(LLSpatialGroup::IN_BUILD_Q1);
-
-				if (group->hasState(LLSpatialGroup::IN_BUILD_Q2))
-				{
-					LLSpatialGroup::sg_vector_t::iterator iter = std::find(mGroupQ2.begin(), mGroupQ2.end(), group);
-					if (iter != mGroupQ2.end())
-					{
-						mGroupQ2.erase(iter);
-					}
-					group->clearState(LLSpatialGroup::IN_BUILD_Q2);
-				}
-			}
-		}
-		else if (!group->hasState(LLSpatialGroup::IN_BUILD_Q2 | LLSpatialGroup::IN_BUILD_Q1))
-		{
-			llassert_always(!mGroupQ2Locked);
-			mGroupQ2.push_back(group);
-			group->setState(LLSpatialGroup::IN_BUILD_Q2);
-
+			mGroupQ1.push_back(group);
+			group->setState(LLSpatialGroup::IN_BUILD_Q1);
 		}
 	}
 }
 
-void LLPipeline::markRebuild(LLDrawable *drawablep, LLDrawable::EDrawableFlags flag, bool priority)
+void LLPipeline::markRebuild(LLDrawable *drawablep, LLDrawable::EDrawableFlags flag)
 {
 	if (drawablep && !drawablep->isDead() && assertInitialized())
 	{
-		if (!drawablep->isState(LLDrawable::BUILT))
+		if (!drawablep->isState(LLDrawable::IN_REBUILD_Q1))
 		{
-			priority = true;
+			mBuildQ1.push_back(drawablep);
+			drawablep->setState(LLDrawable::IN_REBUILD_Q1); // mark drawable as being in priority queue
 		}
-		if (priority)
-		{
-			if (!drawablep->isState(LLDrawable::IN_REBUILD_Q1))
-			{
-				mBuildQ1.push_back(drawablep);
-				drawablep->setState(LLDrawable::IN_REBUILD_Q1); // mark drawable as being in priority queue
-			}
-		}
-		else if (!drawablep->isState(LLDrawable::IN_REBUILD_Q2))
-		{
-			mBuildQ2.push_back(drawablep);
-			drawablep->setState(LLDrawable::IN_REBUILD_Q2); // need flag here because it is just a list
-		}
-		// <FS:Ansariel> FIRE-16485: Crash when calling texture refresh on an object that has a blacklisted copy
-		//if (flag & (LLDrawable::REBUILD_VOLUME | LLDrawable::REBUILD_POSITION))
-		if ((flag & (LLDrawable::REBUILD_VOLUME | LLDrawable::REBUILD_POSITION)) && drawablep->getVObj().notNull())
-		// </FS:Ansariel>
+
+        // <FS:Ansariel> FIRE-16485: Crash when calling texture refresh on an object that has a blacklisted copy
+        //if (flag & (LLDrawable::REBUILD_VOLUME | LLDrawable::REBUILD_POSITION))
+        if ((flag & (LLDrawable::REBUILD_VOLUME | LLDrawable::REBUILD_POSITION)) && drawablep->getVObj().notNull())
+        // </FS:Ansariel>
 		{
 			drawablep->getVObj()->setChanged(LLXform::SILHOUETTE);
 		}
@@ -3207,7 +3168,6 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
 				markVisible(drawablep, camera);
 			}
 
-			if (!sDelayVBUpdate)
 			{ //rebuild mesh as soon as we know it's visible
 				group->rebuildMesh();
 			}
@@ -3266,7 +3226,6 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
 			group->setVisible();
 			stateSort(group, camera);
 
-			if (!sDelayVBUpdate)
 			{ //rebuild mesh as soon as we know it's visible
 				group->rebuildMesh();
 			}
@@ -10976,7 +10935,7 @@ void LLPipeline::hideObject( const LLUUID& id )
 void LLPipeline::hideDrawable( LLDrawable *pDrawable )
 {
 	pDrawable->setState( LLDrawable::FORCE_INVISIBLE );
-	markRebuild( pDrawable, LLDrawable::REBUILD_ALL, TRUE );
+	markRebuild( pDrawable, LLDrawable::REBUILD_ALL);
 	//hide the children
 	LLViewerObject::const_child_list_t& child_list = pDrawable->getVObj()->getChildren();
 	for ( LLViewerObject::child_list_t::const_iterator iter = child_list.begin();
@@ -10987,14 +10946,14 @@ void LLPipeline::hideDrawable( LLDrawable *pDrawable )
 		if ( drawable )
 		{
 			drawable->setState( LLDrawable::FORCE_INVISIBLE );
-			markRebuild( drawable, LLDrawable::REBUILD_ALL, TRUE );
+			markRebuild( drawable, LLDrawable::REBUILD_ALL);
 		}
 	}
 }
 void LLPipeline::unhideDrawable( LLDrawable *pDrawable )
 {
 	pDrawable->clearState( LLDrawable::FORCE_INVISIBLE );
-	markRebuild( pDrawable, LLDrawable::REBUILD_ALL, TRUE );
+	markRebuild( pDrawable, LLDrawable::REBUILD_ALL);
 	//restore children
 	LLViewerObject::const_child_list_t& child_list = pDrawable->getVObj()->getChildren();
 	for ( LLViewerObject::child_list_t::const_iterator iter = child_list.begin();
@@ -11005,7 +10964,7 @@ void LLPipeline::unhideDrawable( LLDrawable *pDrawable )
 		if ( drawable )
 		{
 			drawable->clearState( LLDrawable::FORCE_INVISIBLE );
-			markRebuild( drawable, LLDrawable::REBUILD_ALL, TRUE );
+			markRebuild( drawable, LLDrawable::REBUILD_ALL);
 		}
 	}
 }

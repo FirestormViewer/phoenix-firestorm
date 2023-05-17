@@ -883,6 +883,10 @@ U32 LLUUID::getRandomSeed()
     // time from generating the same seed.
     pid_t pid = LLApp::getPid();
 
+    seed[6] = (unsigned char)(pid >> 8);
+    seed[7] = (unsigned char)(pid);
+    getSystemTime((uuid_time_t*)(&seed[8]));
+
    U64 seed64 = HBXXH64((const void*)seed, 16).digest();
    return U32(seed64) ^ U32(seed64 >> 32);
 }

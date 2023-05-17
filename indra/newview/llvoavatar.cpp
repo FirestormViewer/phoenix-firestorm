@@ -2002,7 +2002,7 @@ BOOL LLVOAvatar::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 						LLDrawable* drawable = attached_object->mDrawable;
 						if (drawable->isState(LLDrawable::RIGGED))
 						{ //regenerate octree for rigged attachment
-							gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_RIGGED, TRUE);
+							gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_RIGGED);
 						}
 					}
 				}
@@ -2437,7 +2437,7 @@ void LLVOAvatar::restoreMeshData()
 	}
 
 	// force mesh update as LOD might not have changed to trigger this
-	gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_GEOMETRY, TRUE);
+	gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_GEOMETRY);
 }
 
 //-----------------------------------------------------------------------------
@@ -9315,7 +9315,7 @@ void LLVOAvatar::updateTooSlow()
     // <FS:Beq> better state change flagging
     if( changed_slow_state )
     {
-        gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_GEOMETRY, true);
+        gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_GEOMETRY);
     }
     // </FS:Beq>
 }

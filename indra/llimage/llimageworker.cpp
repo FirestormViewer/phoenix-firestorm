@@ -79,7 +79,7 @@ size_t LLImageDecodeThread::update(F32 max_time_ms)
     return getPending();
 }
 
-S32 LLImageDecodeThread::getPending()
+size_t LLImageDecodeThread::getPending()
 {
     return mThreadPool->getQueue().size();
 }

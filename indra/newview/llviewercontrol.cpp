@@ -716,8 +716,6 @@ bool toggle_show_object_render_cost(const LLSD& newvalue)
 	return true;
 }
 
-void handleRenderAutoMuteByteLimitChanged(const LLSD& new_value);
-
 // <FS:Ansariel> Change visibility of main chatbar if autohide setting is changed
 static void handleAutohideChatbarChanged(const LLSD& new_value)
 {
@@ -1270,7 +1268,6 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "SpellCheckDictionary", handleSpellCheckChanged);
     setting_setup_signal_listener(gSavedSettings, "LoginLocation", handleLoginLocationChanged);
     setting_setup_signal_listener(gSavedSettings, "DebugAvatarJoints", handleDebugAvatarJointsChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderAutoMuteByteLimit", handleRenderAutoMuteByteLimitChanged);
 
     setting_setup_signal_listener(gSavedSettings, "TargetFPS", handleTargetFPSChanged);
     setting_setup_signal_listener(gSavedSettings, "AutoTuneFPS", handleAutoTuneFPSChanged);

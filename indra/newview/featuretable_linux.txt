@@ -1,4 +1,4 @@
-version 41
+version 42
 // The version number above should be incremented IF AND ONLY IF some
 // change has been made that is sufficiently important to justify
 // resetting the graphics preferences of all users to the recommended
@@ -35,7 +35,6 @@ RenderAvatarMaxNonImpostors 1   16
 RenderAvatarMaxComplexity          1	350000
 RenderAutoMuteSurfaceAreaLimit     1	1000.0
 RenderCubeMap				1	1
-RenderDelayVBUpdate			1	0
 RenderFarClip				1	256
 RenderFlexTimeFactor		1	1.0
 RenderFogRatio				1	4.0

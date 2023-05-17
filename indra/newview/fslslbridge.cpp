@@ -1180,7 +1180,7 @@ void FSLSLBridge::setupBridgePrim(LLViewerObject* object)
 	object->updateFlags();
 
 	object->setChanged(LLXform::MOVED | LLXform::SILHOUETTE | LLXform::TEXTURE);
-	object->markForUpdate(TRUE);
+	object->markForUpdate();
 
 	LL_DEBUGS("FSLSLBridge") << "End bridge container setup." << LL_ENDL;
 }

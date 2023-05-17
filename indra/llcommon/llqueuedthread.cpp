@@ -185,7 +185,7 @@ void LLQueuedThread::incQueue()
 // May be called from any thread
 size_t LLQueuedThread::getPending()
 {
-	return mRequestQueue.size();
+    return mRequestQueue.size();
 }
 
 // MAIN thread

@@ -462,9 +462,8 @@ public:
 	// <FS:Ansariel> Getter for HUD icon attached to the object
 	LLPointer<LLHUDIcon> getIcon() const { return mIcon; };
 
-    void recursiveMarkForUpdate(BOOL priority);
-	virtual void markForUpdate(BOOL priority);
-	void markForUnload(BOOL priority);
+    void recursiveMarkForUpdate();
+	virtual void markForUpdate();
 	void updateVolume(const LLVolumeParams& volume_params);
 	virtual	void updateSpatialExtents(LLVector4a& min, LLVector4a& max);
 	virtual F32 getBinRadius();
@@ -611,7 +610,7 @@ public:
 
 	virtual S32 getLOD() const { return 3; } 
 	virtual U32 getPartitionType() const;
-	virtual void dirtySpatialGroup(BOOL priority = FALSE) const;
+	void dirtySpatialGroup() const;
 	virtual void dirtyMesh();
 
 	virtual LLNetworkData* getParameterEntry(U16 param_type) const;

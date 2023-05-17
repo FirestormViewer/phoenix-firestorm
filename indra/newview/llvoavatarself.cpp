@@ -1441,7 +1441,7 @@ void LLVOAvatarSelf::restoreMeshData()
 	updateAttachmentVisibility(gAgentCamera.getCameraMode());
 
 	// force mesh update as LOD might not have changed to trigger this
-	gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_GEOMETRY, TRUE);
+	gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_GEOMETRY);
 }
 
 
