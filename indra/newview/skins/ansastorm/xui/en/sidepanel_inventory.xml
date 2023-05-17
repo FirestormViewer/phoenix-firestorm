@@ -15,7 +15,7 @@
 		 name="sidepanel_inventory_panel"
 		 top="0"
 		 label=""
-		 height="565"
+		 height="570"
 		 visible="true"
 		 width="330">
          <layout_stack
@@ -25,7 +25,7 @@
               top="0"
               orientation="vertical"
               name="inventory_layout_stack"
-              height="565"
+              height="570"
               width="330">
              <layout_panel
                  name="main_inventory_layout_panel"

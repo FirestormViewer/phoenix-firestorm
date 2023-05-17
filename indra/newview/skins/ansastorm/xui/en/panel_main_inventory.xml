@@ -774,7 +774,7 @@
   <panel
    follows="all"
    halign="center"
-   height="319"
+   height="314"
    layout="topleft"
    left="2"
    name="default_inventory_panel"
@@ -787,7 +787,7 @@
        background_opaque="false"
        follows="all"
        halign="center"
-       height="319"
+       height="314"
        layout="topleft"
        left="0"
        name="inventory filter tabs"
@@ -849,7 +849,7 @@
   <panel
    follows="all"
    halign="center"
-   height="319"
+   height="314"
    layout="topleft"
    left="2"
    name="single_folder_inventory"
@@ -862,7 +862,7 @@
      left="0"
      top="0"
      top_pad="5"
-     height="319"
+     height="314"
      width="322"
      layout="topleft"
      show_item_link_overlays="true"
@@ -881,7 +881,7 @@
   <panel
    follows="all"
    halign="center"
-   height="319"
+   height="314"
    layout="topleft"
    left="0"
    name="gallery_view_inventory"
@@ -893,7 +893,7 @@
      filename="panel_inventory_gallery.xml"
      left="0"
      top="0"
-     height="319"
+     height="314"
      width="326"
      name="gallery_view_inv"
      background_visible="true"
@@ -903,7 +903,7 @@
     <scroll_container
      follows="all"
      halign="center"
-     height="319"
+     height="314"
      layout="topleft"
      left="0"
      name="combination_view_inventory"
@@ -954,9 +954,9 @@
     </scroll_container>
   <panel
    follows="left|right|bottom"
-   height="25"
+   height="33"
    layout="topleft"
-   bottom="-8"
+   bottom="-5"
    left="4"
    name="bottom_panel"
    width="322">
