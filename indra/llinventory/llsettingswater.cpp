@@ -286,7 +286,7 @@ F32 LLSettingsWater::getModifiedWaterFogDensity(bool underwater) const
     if (underwater && underwater_fog_mod > 0.0f)
     {        
         underwater_fog_mod = llclamp(underwater_fog_mod, 0.0f, 10.0f);
-        // <FS:Beq> BUG-233797/BUG-233798 -ve underwater fog density can cause (unrecoverable) blackout.
+        // BUG-233797/BUG-233798 -ve underwater fog density can cause (unrecoverable) blackout.
         // raising a negative number to a non-integral power results in a non-real result (which is NaN for our purposes)
         // Two methods were tested, number 2 is being used:
         // 1) Force the fog_mod to be integral. The effect is unlikely to be nice, but it is better than blackness.
@@ -299,7 +299,6 @@ F32 LLSettingsWater::getModifiedWaterFogDensity(bool underwater) const
         {
             fog_density = 1.0f;
         }
-        // </FS:Beq>
         fog_density = pow(fog_density, underwater_fog_mod);
     }
     return fog_density;
