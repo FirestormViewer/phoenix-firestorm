@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_export" title="Obyektlərin yedəklənməsi...">
+	<floater.string name="title_floater">
+		[OBJECT] Yaddaşa yedəklənməsi...
+	</floater.string>
+	<floater.string name="title_working">
+		[OBJECT] İşləyir - Məlumat toplanır...
+	</floater.string>
+	<floater.string name="title_inventory">
+		[OBJECT] İşləyir - Avadanlıq siyahısı toplanır...
+	</floater.string>
+	<floater.string name="title_assets">
+		[OBJECT] İşləyir - Aktivlər toplanır...
+	</floater.string>
+	<floater.string name="title_textures">
+		[OBJECT] İşləyir - Teksuturlər toplanır...
+	</floater.string>
+	<layout_stack name="resizing_stack">
+		<layout_panel name="control_panel">
+			<text name="SelectionInfoText">
+				Seçilmiş obyektlər üzərində məlumatlar
+			</text>
+			<text name="exportable_prims">
+				İxrac edilə bilən primlər: [COUNT]/[TOTAL]
+			</text>
+			<text name="exportable_textures">
+				İxrac edilə bilən texsurlar: [COUNT]/[TOTAL]
+			</text>
+			<text name="OptionsText">
+				Seçimlər:
+			</text>
+			<check_box label="Obyektin məzmununu saxla" name="contents_check"/>
+			<button label="Yadda saxla..." name="export_btn"/>
+		</layout_panel>
+		<layout_panel name="contents_panel">
+			<tab_container name="ls_tabs">
+				<panel label="Obyektlər" name="prims_panel"/>
+				<panel label="Teksturlar" name="texture_panel"/>
+			</tab_container>
+		</layout_panel>
+	</layout_stack>
+</floater>

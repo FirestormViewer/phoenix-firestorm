@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater label="Yerlər" name="gestures" title="Jestlər">
+	<floater.string name="loading">
+		Yüklənir...
+	</floater.string>
+	<floater.string name="playing">
+		(oynadılır)
+	</floater.string>
+	<floater.string name="copy_name">
+		Köçürtmə [COPY_NAME]
+	</floater.string>
+	<scroll_list name="gesture_list">
+		<scroll_list.columns label="Ad" name="name"/>
+		<scroll_list.columns label="Söhbət" name="trigger"/>
+		<scroll_list.columns label="Düymə" name="shortcut"/>
+	</scroll_list>
+	<panel label="bottom_panel" name="bottom_panel">
+		<menu_button name="gear_btn" tool_tip="Əlavə seçimlər"/>
+		<button name="new_gesture_btn" tool_tip="Yeni jest yarat"/>
+		<button name="activate_btn" tool_tip="Seçilmiş jesti aktivləşdirin/deaktiv et"/>
+		<check_box label="Только активные" name="FSShowOnlyActiveGestures" width="150"/>
+		<button name="del_btn" tool_tip="Bu jesti sil"/>
+	</panel>
+	<button label="Dəyişdir" name="edit_btn" tool_tip="Seçilmiş jesti dəyişdirmək üçün pəncərəni açır."/>
+	<button label="Oynat" name="play_btn" tool_tip="Seçilmiş jesti oyun dünyasında oynadır."/>
+	<button label="Dayandır" name="stop_btn"/>
+</floater>

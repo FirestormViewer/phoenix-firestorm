@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Image Preview">
+	<text name="name_label">
+		Adı:
+	</text>
+	<text name="description_label">
+		Təsviri:
+	</text>
+	<text name="preview_label">
+		Şəkilin göstərmə üsulu:
+	</text>
+	<combo_box label="Geyim növü" name="clothing_type_combo">
+		<item label="Şəkil" name="Image" value="Şəkil"/>
+		<item label="Saç" name="Hair" value="Saç"/>
+		<item label="Qadın başı" name="FemaleHead" value="Qadın başı"/>
+		<item label="Qadın üst hissəsi" name="FemaleUpperBody" value="Qadın üst hissəsi"/>
+		<item label="Qadın alt hissəsi" name="FemaleLowerBody" value="Qadın alt hissəsi"/>
+		<item label="Kişi başı" name="MaleHead" value="Kişi başı"/>
+		<item label="Kişi üst hissəsi" name="MaleUpperBody" value="Kişi üst hissəsi"/>
+		<item label="Kişi alt hissəsi" name="MaleLowerBody" value="Kişi alt hissəsi"/>
+		<item label="Don" name="Skirt" value="Don"/>
+		<item label="Heykəl prim" name="SculptedPrim" value="Heykəl prim"/>
+	</combo_box>
+	<text name="bad_image_text">
+		Şəkil oxudula bilmədi.
+Şəkili 24-bit TGA faylı olaraq saxlayıb yenidən yoxlayın.
+	</text>
+	<check_box label="İtkisiz sıxlaşdırmadan istifadə et" name="lossless_check"/>
+	<button label="Ləğv et" name="cancel_btn"/>
+	<button label="Yüklə (L$[AMOUNT])" name="ok_btn"/>
+</floater>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="navigation_bar">
+	<layout_stack name="navigation_favorites_bar_visibility_stack">
+		<layout_panel name="navigation_bar_visibility_panel">
+			<layout_stack name="location_search_layout">
+				<layout_panel name="navigation_buttons_visibility_panel">
+					<pull_button name="back_btn" tool_tip="Əvvəlki məkanə qayıt"/>
+					<pull_button name="forward_btn" tool_tip="İrəli məkana get"/>
+					<button name="home_btn" tool_tip="Evimə teleport ol"/>
+					<button name="About_Land" tool_tip="Torpaq hissəsinin məlumat pəncərəsini göstər"/>
+					<button name="Environment" tool_tip="Mühit konfiqurasiya pəncərəsini göstər"/>
+				</layout_panel>
+				<layout_panel name="location_bar_visibility_panel">
+					<location_input label="Məkan" name="location_combo"/>
+				</layout_panel>
+				<layout_panel name="search_bar_visibility_panel">
+					<search_combo_box label="Axtarış" name="search_combo_box" tool_tip="Axtarış">
+						<combo_editor label="Metaversdə axtarış et" name="search_combo_editor"/>
+					</search_combo_box>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="favorites_bar_visibility_panel">
+			<favorites_bar name="favorite" tool_tip="Second Life-dakı sevimli yerlərinizə daha tez daxil olmaq üçün əlfəcinləri bura daşıyın!">
+				<more_button name="more_btn_stl" tool_tip="Sevimlilərimin daha çoxunu göstər">
+					Ətraflı &#9660;
+				</more_button>
+			</favorites_bar>
+		</layout_panel>
+	</layout_stack>
+</panel>
+
+
+
+

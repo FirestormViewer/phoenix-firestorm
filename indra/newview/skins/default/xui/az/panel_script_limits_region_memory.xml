@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Region yaddaşı" name="script_limits_region_memory_panel">
+	<text name="script_memory">
+		Sahədə skriptlər üçün yaddaş
+	</text>
+	<text name="loading_text">
+		Yüklənir...
+	</text>
+	<scroll_list name="scripts_list">
+		<scroll_list.columns label="Həcm (Kb)" name="size"/>
+		<scroll_list.columns label="URL ünvanı" name="urls"/>
+		<scroll_list.columns label="Obektin adı" name="name"/>
+		<scroll_list.columns label="Sahibinin adı" name="owner"/>
+		<scroll_list.columns label="Sahə" name="parcel"/>
+		<scroll_list.columns label="Yer" name="location"/>
+	</scroll_list>
+	<button label="Siyahını yenilə" name="refresh_list_btn" width="120"/>
+	<button label="İşıqlandır" name="highlight_btn"/>
+	<button label="Qaytar" name="return_btn"/>
+</panel>

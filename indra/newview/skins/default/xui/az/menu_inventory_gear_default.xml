@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_gear_default">
+	<menu_item_call label="Yeni avadanlıq siyahısı pəncərəsi" name="new_window"/>
+	<menu_item_check label="Qorunan Qovluqlar" name="Protected Folders"/>
+	<menu_item_check label="Adına görə sırala" name="sort_by_name"/>
+	<menu_item_check label="Tarixə görə sırala" name="sort_by_recent"/>
+	<menu_item_check label="Qovluqları adına görə sırala" name="sort_folders_by_name"/>
+	<menu_item_check label="Sistem qovluqlarını yuxarıdan sırala" name="sort_system_folders_to_top"/>
+	<context_menu label="Axtarış..." name="inventory_search_menu">
+		<menu_item_check name="inventory_search_by_name" label="Adına görə"/>
+		<menu_item_check name="inventory_search_by_creator" label="Yaradıcısına görə"/>
+		<menu_item_check name="inventory_search_by_description" label="Təsvirinə görə"/>
+		<menu_item_check name="inventory_search_by_all" label="Hamısına görə"/>
+	</context_menu>
+	<menu_item_check label="İki dəfə basmaqlda obyektlərin əlavə edilməsi" name="add_inv_toggle"/>
+	<menu_item_check label="İki dəfə basmaqla paltarın əlavə edilməsi" name="add_invclothing_toggle"/>
+	<menu_item_call label="Filterləri göstər..." name="show_filters"/>
+	<menu_item_call label="Filterləri sıfırla" name="reset_filters"/>
+	<menu_item_call label="Bütün qovluqları bağla" name="close_folders"/>
+	<menu_item_call label="'Tapılan əşyaları' silin" name="empty_lostnfound"/>
+	<menu_item_call label="Teksturanı ayrı saxla" name="Save Texture As"/>
+	<menu_item_call label="Paylaş" name="Share"/>
+	<menu_item_call label="Orijinalını tap" name="Find Original"/>
+	<menu_item_call label="Bütün keçidləri tap" name="Find All Links"/>
+	<menu_item_call label="Keçidləri əvəz et" name="Replace Links"/>
+	<menu_item_check name="inventory_filter_show_links" label="Keçidləri göstər"/>
+	<menu_item_check name="inventory_filter_only_links" label="Yalnız keçidləri göstər"/>
+	<menu_item_check name="inventory_filter_hide_links" label="Keçidləri gizlət"/>
+	<menu_item_check name="inventory_filter_only_modify" label="Yalnız dəyişdirilə bilən"/>
+	<menu_item_check name="inventory_filter_only_copy" label="Yalnız köçürülə bilən"/>
+	<menu_item_check name="inventory_filter_only_transfer" label="Yalnız paylaşıla bilən"/>
+	<menu_item_call label="Səbəti təmizlə" name="empty_trash"/>
+</toggleable_menu>

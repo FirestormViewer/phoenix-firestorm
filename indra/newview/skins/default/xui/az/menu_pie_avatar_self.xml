@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Self Pie">
+    <pie_slice label="Profil" name="Profile..."/>
+    <pie_slice label="Qruplar" name="Groups..."/>
+    <pie_menu label="Çıxart &gt;" name="Take Off &gt;">
+        <pie_menu label="Paltar &gt;" name="Clothes &gt;">
+            <pie_slice label="Köynək" name="Shirt"/>
+            <pie_slice label="Şalvar" name="Pants"/>
+            <pie_slice label="Ayaqqabı" name="Shoes"/>
+            <pie_slice label="Corablar" name="Socks"/>
+            <pie_slice label="Pencək" name="Jacket"/>
+            <pie_slice label="Əlcəklər" name="Gloves"/>
+            <pie_menu label="İrəli &gt;" name="Clothes More">
+                <pie_slice label="Mayka" name="Self Undershirt"/>
+                <pie_slice label="Bütün paltar" name="All Clothes"/>
+                <pie_slice label="Tuman" name="Self Underpants"/>
+                <pie_slice label="Döymə" name="Self Tattoo"/>
+                <pie_slice label="Fizika" name="Self Physics"/>
+                <pie_slice label="Alfa" name="Self Alpha"/>
+            </pie_menu>
+            <pie_slice label="Юбку" name="Skirt"/>
+        </pie_menu>
+        <pie_menu name="Pie Object Detach HUD"/>
+        <pie_menu label="Ayır &gt;" name="Pie Object Detach">
+            <pie_menu label="Əlv. skelet &gt;" name="Enhanced Skeleton">
+                <pie_slice label="Sağ qanad" name="Right Wing"/>
+                <pie_slice label="Qasıq" name="Groin"/>
+                <pie_slice label="Quyruq kökü" name="Tail Base"/>
+                <pie_slice label="Quyruq ucu" name="Tail Tip"/>
+                <pie_slice label="Sol qanad" name="Left Wing"/>
+                <pie_slice label="Sol arxa ayaq" name="Left Hind Foot"/>
+                <pie_menu label="Əlavə &gt;" name="Enhanced Skeleton More">
+                    <pie_slice label="Əlv.Sağ Qulaq" name="Alt Right Ear"/>
+                    <pie_slice label="Əlv.Sağ Göz" name="Alt Right Eye"/>
+                    <pie_slice label="Dil" name="Tongue"/>
+                    <pie_slice label="Əlv.Sol Göz" name="Alt Left Eye"/>
+                    <pie_slice label="Əlv.Sol Qulaq" name="Alt Left Ear"/>
+                    <pie_slice label="Sol üzük barmağı" name="Left Ring Finger"/>
+                    <pie_slice label="Çənə" name="Jaw"/>
+                    <pie_slice label="Sağ üzük barmağı" name="Right Ring Finger"/>
+                </pie_menu>
+                <pie_slice label="Sağ arxa ayaq" name="Right Hind Foot"/>
+            </pie_menu>
+        </pie_menu>
+        <pie_slice label="Hamısını ayır" name="Detach All"/>
+    </pie_menu>
+    <pie_slice label="Otur" name="Sit Down Here"/>
+    <pie_slice label="Dur" name="Stand Up"/>
+    <pie_slice label="Skriptlər" name="ScriptInfo"/>
+    <pie_slice label="Jestlər..." name="Gestures"/>
+    <pie_menu label="Görünüş &gt;" name="Appearance &gt;">
+        <pie_slice label="Forma" name="Edit My Shape"/>
+        <pie_menu name="ResetMenu" label="Сброс &gt;">
+            <pie_slice label="Skel. &amp; Anim." name="Reset Skeleton And Animations"/>
+            <pie_slice label="Skelet" name="Reset Skeleton"/>
+            <pie_slice label="Mesh LOD" name="Reset Mesh LOD"/>
+        </pie_menu>
+        <pie_slice label="Teksturları yenilə" name="Texture Refresh"/>
+        <pie_slice label="Geyim" name="Edit My Outfit"/>
+        <pie_slice label="XML Çıxarışı" name="Dump XML"/>
+        <pie_slice label="Hündürlük" name="Hover Height"/>
+    </pie_menu>
+    <pie_slice label="Sazlama" name="Debug..."/>
+</pie_menu>

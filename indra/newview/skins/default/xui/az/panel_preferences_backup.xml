@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel label="Nüsxə" name="backup">
+	<text name="backup_path_label" width="180">
+		Yedək yaratma yol:
+	</text>
+	<button label="Təyin et" name="set_backup_settings_path" />
+	<layout_stack name="ls_account_specific_label">
+		<layout_panel name="lp_account_specific_label">
+			<text name="account_specific_label">
+				Hazırda sistemə daxil olmamısınız. Xatırladırıq ki, hesabınızın bəzi seçimləri yalnız giriş etdikdə qeyd edilərək bərpa edilə bilər. Mənfi tərəfdən, bütün hesablar üzərində tətbiq edilən seçimlərin ehtiyat nüsxəsi yaratmaq mümkündür.
+			</text>
+		</layout_panel>
+		<layout_panel name="lp_buttons">
+			<text name="settings_restored_label">
+				Saxlanılacaq qrup seçimləri:
+			</text>
+			<layout_stack name="ls_list_view_stack">
+				<layout_panel name="lp_restore_global_files">
+					<scroll_list name="restore_global_files_list">
+						<column label="Ümumi fayllar:" name="restore_global_files_label" />
+						<column label="Dəyər" name="value" />
+						<row name="restore_global_row_login">
+							<column name="restore_global_files_label">Giriş məlumatları</column>
+						</row>
+						<row name="restore_global_row_colors">
+							<column name="restore_global_files_label">Rənglər</column>
+						</row>
+						<row name="restore_global_row_dialogs">
+							<column name="restore_global_files_label">Söhbət pəncərələri</column>
+						</row>
+						<row name="restore_global_row_grids">
+							<column name="restore_global_files_label">İstifadəçi şəbəkələri</column>
+						</row>
+						<row name="restore_global_row_autoreplace">
+							<column name="restore_global_files_label">Avtomatik dəyişikliklər</column>
+						</row>
+						<row name="restore_global_row_quickprefs">
+							<column name="restore_global_files_label">Cəld seçimlər</column>
+						</row>
+						<row name="restore_global_row_favorites">
+							<column name="restore_global_files_label">Sevimlilər</column>
+						</row>
+						<row name="restore_global_row_controls">
+							<column name="restore_global_files_label">Nəzarət</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+				<layout_panel name="lp_restore_per_account_files">
+					<scroll_list name="restore_per_account_files_list">
+						<column label="Hesab faylları:" name="restore_per_account_files_label" />
+						<column label="Dəyər" name="value" />
+						<row name="restore_per_account_row_blacklist">
+							<column name="restore_per_account_files_label">Qara sıyahıda olanlar</column>
+						</row>
+						<row name="restore_per_account_row_contactsets">
+							<column name="restore_per_account_files_label">Kontakt dəstləri</column>
+						</row>
+						<row name="restore_per_account_row_invfilters">
+							<column name="restore_per_account_files_label">İnventar filtrləri</column>
+						</row>
+						<row name="restore_per_account_row_favsort">
+							<column name="restore_per_account_files_label">Sevimli elementlərin sıralanması</column>
+						</row>
+						<row name="restore_per_account_row_medialists">
+							<column name="restore_per_account_files_label">Media siyahıları</column>
+						</row>
+						<row name="restore_per_account_row_toolbars">
+							<column name="restore_per_account_files_label">Alətlər çubuqları</column>
+						</row>
+						<row name="restore_per_account_row_volumes">
+							<column name="restore_per_account_files_label">Səsli söhbət səsli gücləri</column>
+						</row>
+						<row name="restore_per_account_row_tphistory">
+							<column name="restore_per_account_files_label">Teleport tarixçəsi</column>
+						</row>
+						<row name="restore_per_account_row_regiontracker">
+							<column name="restore_per_account_files_label">Region izləyici</column>
+						</row>
+						<row name="restore_per_account_row_groupmutes">
+							<column name="restore_per_account_files_label">Söndürülmüş qrup söhbətləri</column>
+						</row>
+						<row name="restore_per_account_row_avatar_render_settings">
+							<column name="restore_per_account_files_label">Avatar göstəriciləri</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+				<layout_panel name="lp_restore_folders">
+					<scroll_list name="restore_global_folders_list">
+						<column label="Qovluqlar:" name="restore_global_folders_label" />
+						<column label="Dəyər" name="value" />
+						<row name="restore_folders_row_beams">
+							<column name="restore_global_folders_label">Seçim şuaları</column>
+						</row>
+						<row name="restore_folders_row_beamcolors">
+							<column name="restore_global_folders_label">Seçim şuası rəngləri</column>
+						</row>
+						<row name="restore_folders_row_spellcheck">
+							<column name="restore_global_folders_label">Yazı səhvlərini yoxlamaq</column>
+						</row>
+						<row name="restore_folders_row_windlight">
+							<column name="restore_global_folders_label">Mühit (Məcburidir)</column>
+						</row>
+						<row name="restore_folders_row_daycycles">
+							<column name="restore_global_folders_label">Mühit: Gün dövrü</column>
+						</row>
+						<row name="restore_folders_row_skies">
+							<column name="restore_global_folders_label">Mühit: Səma</column>
+						</row>
+						<row name="restore_folders_row_waters">
+							<column name="restore_global_folders_label">Mühit: Su</column>
+						</row>
+						<row name="restore_folders_row_presets" value="presets">
+							<column name="restore_global_folders_label">Əvvəlcədən təyinlər</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+				</layout_stack>
+				<button label="Hamısını seç" name="select_all_button" />
+				<button label="Hamısını ləğv et" name="deselect_all_button" />
+				<check_box label="Ümumi seçimlərin bərpa edilməsi" name="restore_global_settings_checkbox" />
+				<check_box label="Hesab seçimlərinin bərpa edilməsi" name="restore_per_account_settings_checkbox" />
+				<button width="165" label="Seçimləri yadda saxla" name="backup_settings" />
+				<button width="165" label="Seçimləri bərpa et" name="restore_settings" />```
+		</layout_panel>
+	</layout_stack>
+</panel>

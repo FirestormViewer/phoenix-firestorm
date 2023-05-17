@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--
+  Not can_close / no title to avoid window chrome
+  Single instance - only have one at a time, recycle it each spawn
+-->
+<floater name="inspect_avatar">
+	<slider name="volume_slider" tool_tip="Səs ucalıqı"/>
+	<button label="Dostlara əlavə et" name="add_friend_btn"/>
+	<button label="İM" name="im_btn"/>
+	<button label="Profil" name="view_profile_btn"/>
+	<panel name="moderator_panel">
+		<button label="Səsli söhbəti söndür" name="disable_voice"/>
+		<button label="Səsli söhbəti aktiv et" name="enable_voice"/>
+	</panel>
+</floater>

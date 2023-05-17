@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_complexity">
+	<text name="back_lbl">Geri</text>
+	<text name="attachments_title">Qoşma çətinliyi</text>
+	<text name="tot_att_count">Cəmi: 50 (120000.10μs)</text>
+	<text name="attachments_desc1">Qoşmalar avatarnızı render etmək üçün daha çətin və yavaş edir.</text>
+	<text name="attachments_desc2">Bu ekran özünüzün avatarınızın qoşmalarını baxmağa imkan verir.</text>
+	<text name="attachments_desc3">X düyməsinə basaraq öz qoşmalarınızı sürətli və asan şəkildə silə bilərsiniz.</text>
+	<name_list name="obj_list">
+		<name_list.columns name="art_value" label="Zaman (μs)" tool_tip="Bu qoşmanın render edilməsi üçün sərf edilən zaman (mikrosaniyə)"/>
+		<name_list.columns name="complex_value" label="ARC" tool_tip="Əşyanın çətinliyi (ARC)" />
+		<name_list.columns name="name" label="Qoşmanın adı" tool_tip="'X' düyməsinə basaraq qoparıla bilər"/>
+	</name_list>
+</panel>

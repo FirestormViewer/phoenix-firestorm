@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="contents" title="Obyektin köçürtməsin al">
+	<floater.string name="title_buy_text">
+		Al
+	</floater.string>
+	<floater.string name="title_buy_copy_text">
+		Köçürtməsin al
+	</floater.string>
+	<floater.string name="no_copy_text">
+		(köçürülmür)
+	</floater.string>
+	<floater.string name="no_modify_text">
+		(dəyişdirilmir)
+	</floater.string>
+	<floater.string name="multiple_selected">
+		Çoxlu seçim
+	</floater.string>
+	<floater.string name="no_transfer_text">
+		(paylaşılmır)
+	</floater.string>
+	<text name="contents_text">
+		Məzmunu:
+	</text>
+	<text name="buy_text">
+		L$[AMOUNT] qiymətinə bu istifadəçidən almaq istədiyinizə əminsiniz:
+	</text>
+	<text name="buy_name_text">
+		[NAME]?
+	</text>
+	<button label="Almaq" label_selected="Almaq" name="buy_btn"/>
+	<button label="Ləğv et" label_selected="Ləğv et" name="cancel_btn"/>
+</floater>

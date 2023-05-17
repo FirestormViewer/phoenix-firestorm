@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="landmark_info">
+        <string name="title_create_landmark" value="Əlfəcin yarat"/>
+        <string name="title_edit_landmark" value="Əlfəcini dəyişdir"/>
+        <string name="title_landmark" value="Əlfəcin"/>
+        <string name="not_available" value="(naməlum)"/>
+        <string name="unknown" value="(naməlum)"/>
+        <string name="public" value="(içtimai)"/>
+        <string name="server_update_text">
+                Məlumatı əlçatan etmək üçün server yeniləməsi tələb olunur.
+        </string>
+        <string name="server_error_text">
+                Bu yer haqqında məlumat hazırda əlçatan deyil. Zəhmət olmasa bir az sonra yenə cəhd edin.
+        </string>
+        <string name="server_forbidden_text">
+                Bu yer haqqında məlumat əlçatan deyil, çünki ona baxmaq icazəniz yoxdur. Sahə sahibi ilə əlaqə saxlayaraq hüquqlarınız haqqında məlumat əldə edin.
+        </string>
+        <string name="acquired_date">
+                [wkday,datetime,slt], [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+        </string>
+        <string name="information_text">
+                Trafik: [TRAFFIC] Sahə: [AREA] m²
+        </string>
+        <layout_stack name="place_info_sidetray_main">
+                <layout_panel name="header_container">
+                        <button name="back_btn" tool_tip="Geri"/>
+                        <text name="title" value="Yer profili"/>
+                </layout_panel>
+                <layout_panel name="place_info_content">
+                        <text name="parcel_title" value="Sahə nümunəsi, uzun ad"/>
+                        <text name="region_title">
+                                Region: [REGIONAMEPOS]
+                        </text>
+                        <text name="maturity_value" value="Naməlum" width="70"/>
+                        <text name="parcel_owner_label" value="Sahibi:" width="70" />
+                        <text name="parcel_owner" value="naməlum"/>
+                        <panel name="description_panel">
+                                <expandable_text name="description" value="(yüklənir ...)"/>
+                        </panel>
+                        <panel name="landmark_info_panel">
+                                <text name="owner_label" value="Sahibi:" width="70"/>
+                                <text name="creator_label" value="Yaradıcı:" width="70"/>
+                                <text name="created_label" value="Yaradılıb:"/>
+                                <text name="information_label" value="Məlumat:"/>
+                        </panel>
+                        <panel name="landmark_edit_panel">
+                                <text name="title_label" value="Adı:"/>
+                                <text name="notes_label" value="Qeydlərim:"/>
+                                <text name="folder_label" value="Yerləşmə:"/>
+                                <button label="Dəyişdir" name="edit_btn" tool_tip="Əlfəcin haqqında məlumatı dəyişdir"/>
+                        </panel>
+                </layout_panel>
+        </layout_stack>
+</panel>

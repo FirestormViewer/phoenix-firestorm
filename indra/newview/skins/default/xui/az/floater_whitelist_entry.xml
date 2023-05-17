@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="whitelist_entry" title="Ağ siyahı">
+	<text name="media_label">
+		İcazə verilən domenlər siyahısına əlavə etmək üçün URL və ya URL nümunəsi daxil edin
+	</text>
+	<line_editor name="whitelist_entry" tool_tip="İcazə verilən domenlər siyahısına əlavə etmək üçün URL və ya URL nümunəsi daxil edin"/>
+	<button label="Ləğv et" name="cancel_btn"/>
+</floater>

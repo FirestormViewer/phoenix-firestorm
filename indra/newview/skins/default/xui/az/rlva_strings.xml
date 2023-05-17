@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<llsd>
+<map>
+
+	<key>strings</key>
+	<map>
+		<!-- Primarily used when @showloc restricted -->
+		<key>hidden_generic</key>
+		<map>
+			<key>value</key>
+			<string>(Gizli)</string>
+		</map>
+		<key>hidden_parcel</key>
+		<map>
+			<key>value</key>
+			<string>(Gizli sahə)</string>
+		</map>
+		<key>hidden_region</key>
+		<map>
+			<key>value</key>
+			<string>(Gizli region)</string>
+		</map>
+
+		<!-- Received/sent IMs will be replaced by the matching string when @recvim/sendim restricted -->
+		<key>blocked_recvim</key>
+		<map>
+			<key>value</key>
+			<string>*** İM klient tərəfindən bloklanıbr</string>
+			<key>description</key>
+			<string>Gələn söhbət bloklandıqda orijinal mesajın yerinə göstərilir</string>
+			<key>label</key>
+			<string>Bloklanmış gələn şəxsi mesaj (yerli)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>blocked_sendim</key>
+		<map>
+			<key>value</key>
+			<string>*** İM göndərənin klient tərəfindən bloklanıb</string>
+			<key>description</key>
+			<string>Çıxan söhbət bloklandıqda (və qəbul edən tərəfə göndərilən zaman) göstərilir</string>
+			<key>label</key>
+			<string>Bloklanmış çıxan şəxsi mesaj (yerli + uzaq)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+
+		<!-- Sent to the remote party when they issue @list or @except as an IM query (if enabled) -->
+		<key>imquery_list_deny</key>
+		<map>
+			<key>value</key>
+			<string>*** Qarşı tərəf hörmətlə sizdən öz işinizlə məşğul olmağınızı xahiş edir (bunu mənə dovşanlar vadar etdi!)</string>
+			<key>description</key>
+			<string>Aktiv RLV limitlərinizi siyahıya salmaq tələbini rədd etdiyiniz zaman uzaq tərəfə göndərilir)</string>
+			<key>label</key>
+			<string>@list və @except əmri (uzaqdan)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+
+		<!-- Sent to the remote party as a suffix to @list to inform them there might be more information -->
+		<key>imquery_list_suffix</key>
+		<map>
+			<key>value</key>
+			<string>(Aktiv istisnaların siyahısını görmək üçün @except işarəsindən istifadə edin)</string>
+			<key>description</key>
+			<string>İstisnalarınızı necə tələb edəcəyinizi bildirmək üçün @listə şəkilçi kimi uzaq tərəfə göndərildi</string>
+			<key>label</key>
+			<string>@list əmr şəkilçisi (uzaqdan)</string>
+			<key>customizable</key>
+			<boolean>0</boolean>
+		</map>
+
+		<!-- Sent to the remote party when they issue @stopim as an IM query (if enabled) -->
+		<key>stopim_nosession</key>
+		<map>
+			<key>value</key>
+			<string>*** Qarşı tərəf @startim məhdudiyyəti altında deyil</string>
+			<key>description</key>
+			<string>Onlarla söhbətinizi zorla bağlamağa çalışdıqda uzaq tərəfə göndərilir (və belə sessiya yoxdur)</string>
+			<key>label</key>
+			<string>@stopim əmri sessiya olmadan (uzaqdan)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>stopim_endsession_remote</key>
+		<map>
+			<key>value</key>
+			<string>*** Qarşı tərəf üçün sessiya bitdi</string>
+			<key>description</key>
+			<string>Söhbəti zorla bağlamağa çalışdıqda uzaq tərəfə göndərilir (və o, mövcuddur)</string>
+			<key>label</key>
+			<string>@stopim əmri aktiv seansla (uzaqdan)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>stopim_endsession_local</key>
+		<map>
+			<key>value</key>
+			<string>[NAME] uzaqdan @stopim ilə söhbəti bitirdi</string>
+		</map>
+
+		<!-- Shown as notifications -->
+		<key>blocked_autopilot</key>
+		<map>
+			<key>value</key>
+			<string>RLV məhdudiyyətlərinə görə avtopilotdan istifadə etmək mümkün deyil</string>
+		</map>
+		<key>blocked_generic</key>
+		<map>
+			<key>value</key>
+			<string>RLV məhdudiyyətlərinə görə əməliyyat həyata keçirmək mümkün deyil</string>
+		</map>
+		<key>blocked_groupchange</key>
+		<map>
+			<key>value</key>
+			<string>RLV məhdudiyyətinə görə aktiv qrupu dəyişdirmək mümkün deyil; "[GROUP_SLURL]" qrupuna qayıtdı</string>
+		</map>
+		<key>blocked_invfolder</key>
+		<map>
+			<key>value</key>
+			<string>Tələb olunan siyahlandırma əməliyyatı kilidli RLV qovluğuna görə yerinə yetirilə bilməz.</string>
+		</map>
+		<key>blocked_nearby</key>
+		<map>
+			<key>value</key>
+			<string>RLV məhdudiyyətlərinə görə yaxınlıqdakı avatarların mövcudluğunu görmək mümkün deyil</string>
+		</map>
+		<key>blocked_permattach</key>
+		<map>
+			<key>value</key>
+			<string>RLV məhdudiyyətlərinə görə '[OBJECT]' birləşdirmək cəhdi rədd edildi</string>
+		</map>
+		<key>blocked_permteleport</key>
+		<map>
+			<key>value</key>
+			<string>RLV məhdudiyyətlərinə görə '[OBJECT]' sizə teleportasiya icazəsi verilmədi</string>
+		</map>
+		<key>blocked_scriptdialog</key>
+		<map>
+			<key>value</key>
+			<string>RLV məhdudiyyətlərinə görə skript dialoqunu və ya mətn qutusunu göstərmək mümkün deyil</string>
+		</map>
+		<key>blocked_share</key>
+		<map>
+			<key>value</key>
+			<string>RLV məhdudiyyətlərinə görə avadanlıq siyahını [RECIPIENT] ilə paylaşmaq mümkün deyil.</string>
+		</map>
+		<key>blocked_share_generic</key>
+		<map>
+			<key>value</key>
+			<string>RLV məhdudiyyətlərinə görə avadanlıq siyahısı ilə paylaşmaq mümkün deyil.</string>
+		</map>
+		<key>blocked_startim</key>
+		<map>
+			<key>value</key>
+			<string>RLV məhdudiyyətlərinə görə [RECIPIENT] ilə IM sessiyasına başlamaq mümkün deyil</string>
+		</map>
+		<key>blocked_startconf</key>
+		<map>
+			<key>value</key>
+			<string>RLV məhdudiyyətlərinə görə [RECIPIENT] ilə konfransa başlamaq mümkün deyil</string>
+		</map>
+		<key>blocked_teleport</key>
+		<map>
+			<key>value</key>
+			<string>RLV məhdudiyyətlərinə görə teleporta başlamaq mümkün deyil</string>
+		</map>
+		<key>blocked_teleport_offer</key>
+		<map>
+			<key>value</key>
+			<string>RLV məhdudiyyətlərinə görə teleport təklif etmək mümkün deyil</string>
+		</map>
+		<key>blocked_viewxxx</key>
+		<map>
+			<key>value</key>
+			<string>RLV məhdudiyyətlərinə görə [TYPE] açmaq mümkün deyil</string>
+		</map>
+		<key>blocked_wireframe</key>
+		<map>
+			<key>value</key>
+			<string>RLV məhdudiyyətlərinə görə tel kafes rejimini aktivləşdirmək mümkün deyil</string>
+		</map>
+
+		<!-- Sent as "Busy" messages to the remote party -->
+		<key>blocked_recvim_remote</key>
+		<map>
+			<key>value</key>
+			<string>Mesajı göndərdiyiniz sakin hazırda ani mesajlarınızı oxuya bilmir, sonra yenidən cəhd edin.</string>
+			<key>description</key>
+			<string>İM bloklananda uzaq bir şəxsə göndərilir</string>
+			<key>label</key>
+			<string>Bloklanmış gələn mesaj (uzaqdan)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>blocked_tplurerequest_remote</key>
+		<map>
+			<key>value</key>
+			<string>Hazırda sakinə qəbul etmək qadağandır. Zəhmət olmasa bir az sonra yenə cəhd edin.</string>
+			<key>description</key>
+			<string>Teleportasiya təklifi və ya sorğusu bloklandıqda uzaq tərəfə göndərilir</string>
+			<key>label</key>
+			<string>Bloklanmış teleport təklifi/tələbi (uzaqdan)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+	</map>
+
+	<!-- Generic names used to replace resident names when @shownames restricted -->
+	<key>anonyms</key>
+	<array>
+		<string>Qəsəbə sakini</string>
+		<string>Bu qəsəbə sakini</string>
+		<string>O qəsəbə sakini</string>
+		<string>Birey</string>
+		<string>Bu birey</string>
+		<string>O birey</string>
+		<string>Şəxs</string>
+		<string>Bu şəxs</string>
+		<string>O şəxs</string>
+		<string>Naməlum</string>
+		<string>Bu naməlum</string>
+		<string>O naməlum</string>
+		<string>Məxluq</string>
+		<string>Bu məxluq</string>
+		<string>O məxluq</string>
+		<string>Fəaliyyətçi</string>
+		<string>Bu fəaliyyətçi</string>
+		<string>O fəaliyyətçi</string>
+		<string>İnsan</string>
+		<string>Bu insan</string>
+		<string>O insan</string>
+		<string>Birisi</string>
+		<string>Bəzi insanlar</string>
+		<string>Kimsə</string>
+		<string>Müəmmalı</string>
+		<string>Naməlum məxluq</string>
+		<string>Təyin edilməmiş</string>
+		<string>Naməlum insan</string>
+	</array>
+
+</map>
+</llsd>

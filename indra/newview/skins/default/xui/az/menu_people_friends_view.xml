@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="Adına görə sırala" name="sort_name" />
+	<menu_item_check label="İstifadəçi adına görə sırala" name="sort_username" />
+	<menu_item_check label="Statusa görə sırala" name="sort_status" />
+	<menu_item_check name="view_icons" label="Nişanələri göstər" />
+	<menu_item_check name="view_permissions" label="İcazələri göstər" />
+	<menu_item_check name="view_conversation" label="Söhbət jurnalını göstər..." />
+</toggleable_menu>

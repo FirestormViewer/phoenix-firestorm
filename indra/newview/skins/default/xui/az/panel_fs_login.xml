@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_login">
+	<string name="ServerComboTooltip">
+		Mövcud şəbəkə və ya şəbəkə URI-si
+	</string>
+	<layout_stack name="login_widgets">
+		<layout_panel name="login">
+			<text name="log_in_text">
+				Daxil ol
+			</text>
+			<text name="username_text">
+				İstifadəçi adı:
+			</text>
+			<button tool_tip="İstifadəçi adını sil" name="remove_user_btn"/>
+			<combo_box name="username_combo" tool_tip="İstifadəçi adı qeydiyyat zamanı seçilir, məsələn, bobsmith12 və ya Steller Sunshine"/>
+			<text name="password_text">
+				Parol:
+			</text>
+		</layout_panel>
+		<layout_panel name="start_location_panel">
+			<text name="start_location_text">
+				Başlanğıc yeri:
+			</text>
+			<combo_box name="start_location_combo">
+				<combo_box.item label="Son yer" name="MyLastLocation"/>
+				<combo_box.item label="Evim" name="MyHome"/>
+				<combo_box.item label="&lt;Region adını yazın&gt;" name="Typeregionname"/>
+			</combo_box>
+		</layout_panel>
+		<layout_panel name="grid_panel">
+			<text name="grid_login_text">
+				Şəbəkəyə qoşul:
+			</text>
+		</layout_panel>
+		<layout_panel name="links_login_panel">
+			<text name="create_new_account_text">
+				Hesab yarat
+			</text>
+			<text name="forgot_password_text">
+				İstifadəçi adınızı və ya parolunuzu unutmusunuz?
+			</text>
+			<button label="Daxil ol" name="connect_btn"/>
+			<check_box label="İstifadəçi adını xatırla" name="remember_username_check" />
+			<check_box label="Parolu xatırla" name="remember_check"/>
+		</layout_panel>
+		<layout_panel name="mode_selection">
+			<text name="mode_selection_text">
+				Rejim seçimi
+			</text>
+			<combo_box name="mode_combo" tool_tip="Sizə ən məhərətli olduğunuz tənzimləmə rejimi seçin. Firestorm rejimi əsas olaraq quraşdırılacaq">
+				<combo_box.item label="Hibrid" name="Hybrid"/>
+			</combo_box>
+		</layout_panel>
+	</layout_stack>
+</panel>

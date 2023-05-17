@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="script panel" width="497">
+	<panel.string name="loading">
+		Yüklənir...
+	</panel.string>
+	<panel.string name="can_not_view">
+		Siz bu skriptə baxa və ya dəyişdirə bilməzsiniz, çünki o «köçürülməz» kateqoriyasındadır. Obyektdəki skriptə baxmaq və ya dəyişdirmək üçün sizə tam giriş hüquqları lazımdır.
+	</panel.string>
+	<panel.string name="public_objects_can_not_run">
+		İctimai obyektlər skriptləri icra edə bilməz
+	</panel.string>
+	<panel.string name="script_running">
+		İcra olunur
+	</panel.string>
+	<panel.string name="Title">
+		Skript: [NAME]
+	</panel.string>
+	<panel.string name="external_editor_not_set">
+		LL_SCRIPT_EDITOR mühit dəyişənini və ya Xarici Redaktor seçimini təyin etməklə redaktoru seçin.
+	</panel.string>
+	<menu_bar name="script_menu">
+		<menu label="Fayl" name="File">
+			<menu_item_call label="Yadda saxla" name="Save" />
+			<menu_item_call label="Bütün dəyişikləri ləğv et" name="Revert All Changes" />
+			<menu_item_call label="Fayldan yüklə..." name="LoadFromFile" />
+			<menu_item_call label="Fayla yadda saxla..." name="SaveToFile" />
+			<menu_item_call label="Skript dəyişdirici seçimləri..." name="ScriptPrefs" />
+		</menu>
+ 		<menu label="Dəyişdir" name="Edit">
+			<menu_item_call label="Ləğv et" name="Undo" />
+			<menu_item_call label="Qaytar" name="Redo" />
+			<menu_item_call label="Kəs" name="Cut" />
+			<menu_item_call label="Köçürt" name="Copy" />
+			<menu_item_call label="Yapışdır" name="Paste" />
+			<menu_item_call label="Hamısını seç" name="Select All" />
+			<menu_item_call label="Seçimi sil" name="Deselect" />
+			<menu_item_call label="Axtarış/Əvəz etmə..." name="Search / Replace..." />
+			<menu_item_call label="Sətirə keç..." name="Go to line..." />
+		</menu>
+		<menu label="İstinad" name="Help">
+			<menu_item_call label="İstinad..." name="Help..." />
+			<menu_item_call label="Əsas sözlər ilə istinad..." name="Keyword Help..." />
+			<menu_item_call label="Skript kitabxanası..." name="Script Library" />
+		</menu>
+	</menu_bar>
+	<layout_stack name="script_editor_button_bar">
+		<layout_panel name="script_editor_buttons_panel">
+			<button tool_tip="Skripti yadda saxla" name="save_btn" />
+			<button tool_tip="Xarici Dəyişdirici" name="Edit_btn" />
+			<button tool_tip="Skripti sabit diskinizdən yükləyin" name="load_disk_btn" />
+			<button tool_tip="Skripti sabit diskinizdə saxlayın" name="save_disk_btn" />
+			<button tool_tip="Kəs" name="cut_btn" />
+			<button tool_tip="Köçürt" name="copy_btn" />
+			<button tool_tip="Yapışdır" name="paste_btn" />
+			<button tool_tip="Ləğv et" name="undo_btn" />
+			<button tool_tip="Qaytar" name="redo_btn" />
+			<button tool_tip="Axtarış/Əvəz etmə" name="search_btn" />
+			<button tool_tip="Skript dəyişdirici seçimləri" name="prefs_btn" />
+		</layout_panel>
+	</layout_stack>
+
+	<tab_container name="Tabset" >
+		<panel name="Script" label="Skript" width="487">
+			<script_editor name="Script Editor">
+				Yüklənir...
+			</script_editor>
+		</panel>
+		<panel name="Preprocessed" label="Ön proseslənmiş" width="487">
+			<fs_lsl_preproc_viewer name="Post Editor">
+				Yüklənir...
+			</fs_lsl_preproc_viewer>
+		</panel>
+	</tab_container>
+
+	<combo_box label="Daxil et..." name="Insert..." width="128" />
+	<text name="line_col" value="Sətir 0, Sütun 0" width="128" />
+	<button label="Dəyişdirici..." name="edit_btn_2" width="90" />
+	<button label="Yadda saxla" label_selected="Yadda saxla" name="save_btn_2" width="90" />
+</panel>

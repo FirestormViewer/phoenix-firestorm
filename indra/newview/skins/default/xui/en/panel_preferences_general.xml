@@ -36,6 +36,11 @@
          label="English"
          name="English"
          value="en" />
+        <!-- <combo_box.item
+         enabled="true"
+         label="Azərbaycanca (Azerbaijani)"
+         name="Azerbaijani"
+         value="az" /> -->
         <!--
         <combo_box.item
          enabled="true"

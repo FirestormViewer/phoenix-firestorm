@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="texture picker" title="Seç: Tekstura" min_height="350">
+
+	<!--  top static -->
+	<floater.string name="choose_picture">
+		Şəkil seçmək üçün basın
+	</floater.string>
+	<floater.string name="pick title">
+		Seç:
+	</floater.string>
+	<text name="Multiple">
+		Bir neçə tekstur
+	</text>
+
+	<!-- mode selector -->
+	<radio_group name="mode_selection" left="7">
+		<radio_item label="A/s." name="inventory"/>
+		<radio_item label="Yer." name="local"/>
+		<radio_item label="Biş." name="bake"/>
+	</radio_group>
+	<text name="size_lbl">
+Ölçü:
+[DIMENSIONS]
+	</text>
+
+	<!--  middle: inventory mode -->
+	<button label="Susma." label_selected="Susma." name="Default"/>
+	<button label="Təmizlə" label_selected="Təmizlə" name="Blank"/>
+	<button label="Şəffaf" label_selected="Şəffaf" name="Transparent" tool_tip="Qeyd: Şəffaf tekstur və ya qismən şəffaflığı olan başqa bir tekstur seçilərsə, heç bir işıq proqnozlaşdırılmayacaq."/>
+	<button label="Yox" label_selected="Yox" name="None"/>
+	<text name="preview_disabled" value="Baxış deaktivdir"/>
+
+	<!--  middle: local mode -->
+	<filter_editor label="Teksturları filtrlə" name="inventory search editor"/>
+	<check_box initial_value="false" label="Qovluqları göstər" name="show_folders_check"/>
+	<button label="Əlavə et" label_selected="Əlavə et" name="l_add_btn"/>
+	<button label="Sil" label_selected="Sil" name="l_rem_btn"/>
+	<button label="Paylaş" label_selected="Paylaş" name="l_upl_btn"/>
+	<scroll_list name="l_name_list">
+		<column label="Ad" name="unit_name"/>
+		<column label="ID" name="unit_id_HIDDEN"/>
+	</scroll_list>
+
+	<!-- middle: bake mode -->
+	<combo_box name="l_bake_use_texture_combo_box" tool_tip="Tekstur seçin">
+		<combo_box.item label="Yox" name="None"/>
+		<combo_box.item label="BAŞ" name="BAKED_HEAD"/>
+		<combo_box.item label="ÜST" name="BAKED_UPPER"/>
+		<combo_box.item label="ALT" name="BAKED_LOWER"/>
+		<combo_box.item label="GÖZLƏR" name="BAKED_EYES"/>
+		<combo_box.item label="DON" name="BAKED_SKIRT"/>
+		<combo_box.item label="SAÇLAR" name="BAKED_HAIR"/>
+		<combo_box.item label="QOL" name="BAKED_LEFTARM"/>
+		<combo_box.item label="AYAQ" name="BAKED_LEFTLEG"/>
+		<combo_box.item label="ƏLV1" name="BAKED_AUX1"/>
+		<combo_box.item label="ƏLV2" name="BAKED_AUX2"/>
+		<combo_box.item label="ƏLV3" name="BAKED_AUX3"/>
+	</combo_box>
+	<check_box label="Meşin əsas regionunu gizlədin" name="hide_base_mesh_region"/>
+
+	<!-- bottom static -->
+	<line_editor name="TextureKey" tool_tip="Tekstur açarı"/>
+	<button name="TextureKeyApply" label="UUID Tətbiq et" width="100" tool_tip="Bu UUID tətbiq et"/>
+	<button label="Bəli" label_selected="Bəli" name="Select" left="150"/>
+	<button label="Ləğv et" label_selected="Ləğv et" name="Cancel"/>
+	<check_box initial_value="true" label="İndi tətbiq et" name="apply_immediate_check" width="200"/>
+</floater>

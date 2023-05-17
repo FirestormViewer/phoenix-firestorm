@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_wearable_favorites" title="Sevimli Paltarlar">
+	<floater.string name="empty_list">
+		Siyahıya əlavə etmək üçün paltarları buraya atın.
+	</floater.string>
+	<floater.string name="search_no_items">
+		Heçnə tapılmadı.
+	</floater.string>
+	<panel name="buttons_panel">
+		<filter_editor label="Paltar Filtri" name="wearable_filter_input" />
+		<menu_button name="options_btn" tool_tip="Sevimli paltar seçimləri" />
+		<button name="remove_btn" tool_tip="Sevimli paltar siyahısından silin"/>
+	</panel>
+</floater>

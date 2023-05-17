@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel label="Yükləmələr" name="uploads">
+	<text name="title">
+		Göndərmək üçün hazır olan cari qovluqlar
+	</text>
+	<text name="title_models">
+		Şəkillər
+	</text>
+	<text name="title_sounds">
+		Səs efektləri
+	</text>
+	<text name="title_animation">
+		Animasiya
+	</text>
+	<text name="title_model">
+		Modellər
+	</text>
+	<text name="upload_help">
+		Qovluğun dəyişdirilməsi üçün, həmin qovluğa sağ düymə ilə klikləyin və "Ümumi üçün istifadə et" seçimini edin
+	</text>
+</panel>
+
+

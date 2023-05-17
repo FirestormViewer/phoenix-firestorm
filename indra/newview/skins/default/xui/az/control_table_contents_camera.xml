@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="camera_actions">
+		<columns label="Kamera" name="lst_action"/>
+	</rows>
+	<rows name="look_up">
+		<columns name="lst_action" value="Yuxarı bax"/>
+	</rows>
+	<rows name="look_down">
+		<columns name="lst_action" value="Aşağı bax"/>
+	</rows>
+	<rows name="move_forward">
+		<columns name="lst_action" value="Kameranı önə doğru"/>
+	</rows>
+	<rows name="move_backward">
+		<columns name="lst_action" value="Kameranı arxa doğru"/>
+	</rows>
+	<rows name="move_forward_fast">
+		<columns name="lst_action" value="Kameranı sürətli önə doğru"/>
+	</rows>
+	<rows name="move_backward_fast">
+		<columns name="lst_action" value="Kameranı sürətli arxa doğru"/>
+	</rows>
+	<rows name="spin_over">
+		<columns name="lst_action" value="Kameranı üstündə döndər"/>
+	</rows>
+	<rows name="spin_under">
+		<columns name="lst_action" value="Kameranı alta döndər"/>
+	</rows>
+	<rows name="pan_up">
+		<columns name="lst_action" value="Kameranı yuxarı mənzərələ"/>
+	</rows>
+	<rows name="pan_down">
+		<columns name="lst_action" value="Kameranı aşağı mənzərələ"/>
+	</rows>
+	<rows name="pan_left">
+		<columns name="lst_action" value="Kameranı sola mənzərələ"/>
+	</rows>
+	<rows name="pan_right">
+		<columns name="lst_action" value="Kameranı sağa mənzərələ"/>
+	</rows>
+	<rows name="pan_in">
+		<columns name="lst_action" value="Kameranı özündən uzaqlaşdır"/>
+	</rows>
+	<rows name="pan_out">
+		<columns name="lst_action" value="Kameranı özünə yaxınlaşdır"/>
+	</rows>
+	<rows name="spin_around_ccw">
+		<columns name="lst_action" tool_tip="Kameranı saat istiqamətindən əksinə döndər" value="Saata əksinə"/>
+	</rows>
+	<rows name="spin_around_cw">
+		<columns name="lst_action" tool_tip="Kameranı saat istiqamətində döndər" value="Saata doğru"/>
+	</rows>
+	<rows name="move_forward_sitting">
+		<columns name="lst_action" value="Sedəndən öndə kameranı"/>
+	</rows>
+	<rows name="move_backward_sitting">
+		<columns name="lst_action" value="Sedəndən arxada kameranı"/>
+	</rows>
+	<rows name="spin_over_sitting">
+		<columns name="lst_action" value="Kameranı oturanın üstündən döndər"/>
+	</rows>
+	<rows name="spin_under_sitting">
+		<columns name="lst_action" value="Kameranı oturanın altından döndər"/>
+	</rows>
+	<rows name="spin_around_ccw_sitting">
+		<columns name="lst_action" tool_tip="Kameranı oturanın ətrafında saat istiqamətinin əksinə döndər" value="Oturaraq saat əksinə"/>
+	</rows>
+	<rows name="spin_around_cw_sitting">
+		<columns name="lst_action" tool_tip="Kameranı oturanın ətrafında saat istiqamətində döndər" value="Oturaraq saata doğru"/>
+	</rows>
+</contents>

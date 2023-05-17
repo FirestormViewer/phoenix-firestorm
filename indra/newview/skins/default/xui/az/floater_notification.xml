@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="notification" title="Bildiriş konsolu">
+	<text_editor name="payload">
+		Yüklənir...
+	</text_editor>
+	<combo_box label="Cavab" name="response"/>
+</floater>

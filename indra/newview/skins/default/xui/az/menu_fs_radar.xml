@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Avatar Context Menu">
+	<menu_item_call label="Profil" name="View Profile"/>
+	<menu_item_call label="Dostlara əlavə et" name="Add Friend"/>
+	<menu_item_call label="Kontakt dəstlərinə əlavə et" name="Add to Set"/>
+	<menu_item_call label="Dostluqdan sil" name="Remove Friend"/>
+	<menu_item_call label="İM Göndər" name="IM"/>
+	<menu_item_call label="Zəng" name="Call"/>
+	<menu_item_call label="Xəritə" name="Map"/>
+	<menu_item_call label="İzlə" name="Track"/>
+	<menu name="MarkAvatar" label="Nişan...">
+		<menu_item_call label="Qırmızı" name="MarkRed"/>
+		<menu_item_call label="Yaşıl" name="MarkGreen"/>
+		<menu_item_call label="Göy" name="MarkBlue"/>
+		<menu_item_call label="Bənövşəyi" name="MarkPurple"/>
+		<menu_item_call label="Sarı" name="MarkYellow"/>
+		<menu_item_call label="Nişanı sil" name="Clear Mark"/>
+		<menu_item_call label="Nişanları sil" name="Clear Marks"/>
+	</menu>
+	<menu_item_call label="Paylaş" name="Share"/>
+	<menu_item_call label="Ödə" name="Pay"/>
+	<menu_item_call label="Teleport təklif et" name="teleport"/>
+	<menu_item_call label="Teleport tələb et" name="request_teleport"/>
+	<menu_item_call label="Teleport ol" name="teleport_to"/>
+	<menu_item_call label="Yaxınlaşdır" name="zoom_in"/>
+	<menu_item_call label="Qrupa dəvət et" name="GroupInvite"/>
+	<menu_item_call label="Skriptlər haqqında məlumat" name="ScriptInfo"/>
+	<menu_item_check label="Blokla/Blokdan çıxart" name="Block/Unblock"/>
+	<menu_item_call label="Şikayət" name="report"/>
+	<menu_item_call label="Dondur" name="freeze"/>
+	<menu_item_call label="Sahə: Torpaqdan çıxart" name="eject"/>
+	<menu_item_call label="Ada: Təpiklə" name="kick"/>
+	<menu_item_call label="Ada: Evə göndər" name="teleport_home"/>
+	<menu_item_call label="Ada: Qadağan et" name="estate_ban"/>
+	<menu_item_call label="Göstərmə" name="derender"/>
+	<menu_item_call label="Həmişə göstərmə" name="derender_permanent"/>
+	<menu label="Render seçimləri" name="render_settings">
+		<menu_item_check label="Normal göstər" name="av_render_normal"/>
+		<menu_item_check label="Göstərmə" name="av_render_never"/>
+		<menu_item_check label="Tam olaraq göstər" name="av_render_always"/>
+	</menu>
+</context_menu>

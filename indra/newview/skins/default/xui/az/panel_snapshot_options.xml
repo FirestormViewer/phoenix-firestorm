@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_snapshot_options" width="208">
+	<layout_stack name="option_buttons" width="208">
+		<layout_panel name="lp_download">
+			<button label="Diskə yadda saxla" name="save_to_computer_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_inventory">
+			<button label="Avadanlıq siyahısı (L$[AMOUNT])" name="save_to_inventory_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_profile">
+			<button label="Profilə yüklə" name="save_to_profile_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_facebook">
+			<button label="Facebook-a yüklə" name="send_to_facebook_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_twitter">
+			<button label="Twitter-ə yüklə" name="send_to_twitter_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_flickr">
+			<button label="Flickr-ə yüklə" name="send_to_flickr_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_email">
+			<button label="E-mailə göndər" name="save_to_email_btn"/>
+		</layout_panel>
+	</layout_stack>
+	<text name="fee_hint_lbl" width="200">
+		Ödəniş abunə səviyyənizdən asılıdır. Yüksək səviyyələrdə daha aşağı ödənişlər tələb olunur.
+	</text>
+</panel>

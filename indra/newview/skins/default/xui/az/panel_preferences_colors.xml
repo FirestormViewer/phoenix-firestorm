@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Rənglər" name="colors_panel">
+	<tab_container label="Rəngıər seçimləri" name="tabs">
+		<panel label="Söhbət rəngi" name="tab-chat">
+			<text name="font_colors">
+				Söhbət mesajları:
+			</text>
+			<text name="user_label">
+				Mətnim
+			</text>
+			<text name="others_label">
+				Başqaları
+			</text>
+			<text name="text_box3">
+				Obyektlər
+			</text>
+			<text name="friends_label">
+				Dostlar
+			</text>
+			<text name="linden_label">
+				Linden Lab
+			</text>
+			<text name="muted_label">
+				Bloklanmış
+			</text>
+			<text name="system_label">
+				Sistem
+			</text>
+			<text name="script_error_label">
+				Səhv
+			</text>
+			<text name="object_im_label">
+				Obyektə aid özəl söhbət
+			</text>
+			<text name="llownersay_label">
+				Sahib
+			</text>
+			<text name="htmllink_label">
+				Linklər (URL)
+			</text>
+			<text name="uriquerypart_label">
+				URL sorğu hissəsi
+			</text>
+			<text name="direct_label">
+				Düz
+			</text>
+			<text name="header_colors">
+				Söhbət başlıqları:
+			</text>
+			<text name="chat_name_label">
+				Avatarlar
+			</text>
+			<text name="object_name_header_label">
+				Obyektlər
+			</text>
+			<slider label="Söhbət sərhədlərindən kənarda rəngin solması faktoru::" label_width="295" name="FSBeyondNearbyChatColorDiminishFactor"  />
+			<check_box name="FSColorIMsDistinctly" label="Söhbət İM/Qrup seçiminin rəngi:" />
+			<panel name="im_color_panel">
+				<text name="console_im_label">
+					İM / Qrup
+				</text>
+			</panel>
+		</panel>
+		<panel label="Ad başlıqları" name="tab-nametag">
+			<text name="nametag_colors">
+				İstifadəçi adlarının başlıqda göstərildiyi rənglər:
+			</text>
+			<text name="self_tag_label">
+				Adım
+			</text>
+			<text name="friend_tag_label">
+				Dostlar
+			</text>
+			<text name="muted_tag_label">
+				Bloklananlar
+			</text>
+			<text name="linden_tag_label">
+				Linden Lab
+			</text>
+			<text name="match_tag_label">
+				Uyğunluq
+			</text>
+			<text name="mismatch_tag_label">
+				Uyğunsuzluq
+			</text>
+			<check_box label="İstifadəçi adlarının seçilmə rəngi" name="FSColorUsername" tool_tip="İstifadəçi adlarının seçilmə rəngi" />
+			<check_box name="NameTagShowFriends" label="Dostların ad başlığının rəngləndirilməsi" tool_tip="Dostların ad başlığının rəngləndirilməsi" />
+			<text name="username_tag_label">
+				İstifadəçi adı
+			</text>
+			<text name="bubble_chat">
+				Ad başlıqı / Qarışıq söhbət:
+			</text>
+			<color_swatch name="background" tool_tip="Ad başlığının rəngini seçin"/>
+			<slider label="Şəffaflıq:" name="bubble_chat_opacity" tool_tip="Ad başlığının şəffaflığını seçin"/>
+			<slider name="FSNameTagZOffsetCorrection" label="Tagın dəqiqliyi:" tool_tip="Ad tagınızın dəqiqliyini dəyişin. Default 0" />
+			<check_box label="Ad tagında məsafəni göstər" name="FSTagShowDistance" tool_tip="Avatarın ad tagında məsafəni göstər" />
+			<check_box label="Məsafəyə əsasən ad başlığının rəngini dəyişdirin:" name="FSTagShowDistanceColors" tool_tip="Məsafəyə əsasən ad başlığının rəngini dəyişdirin:" />
+			<panel name="distance_panel">
+				<text name="chat_distance_tag_label">
+					Söhbət dairəsində
+				</text>
+				<text name="whisper_distance_tag_label">
+					Pıçıltı dairəsində
+				</text>
+				<text name="shout_tag_label">
+					Qışqırmaq
+				</text>
+				<text name="beyond_shout_distance_tag_label">
+					Qışqırtı dairəsinin xaricində
+				</text>
+			</panel>
+			<panel name="client_tags_panel">
+				<text name="client_tags_colors">
+					Klientin başlıq rəngləri: (yalnız OpenSim / AuroraSim üçün)
+				</text>
+				<text name="whattagstoshow">
+					Hansı başlıqlari görmək istərdiniz?
+				</text>
+				<combo_box name="ClientTagsVisibility">
+					<combo_box.item name="No Viewertags" label="Klient başlıqlarını göstərmə" />
+					<combo_box.item name="TPVD Viewer" label="TPVD klientlər (siyahı istifadə edilir)" />
+					<combo_box.item name="All known Viewers" label="Bütün məlum olan klientlər (siyahı istifadə edilir)" />
+					<combo_box.item name="All Viewers" label="Bütün klientlər" />
+				</combo_box>
+				<text name="colorbasedonviewer">
+					Klient başlıqının rəngi klientdən asılıdı?
+				</text>
+				<combo_box name="ColorClienttags">
+					<combo_box.item name="Color not based on Viewer" label="Rəng klientdən asılı deyil" />
+					<combo_box.item name="Single color per Viewer" label="Hər klient üçün bir rəng" />
+					<combo_box.item name="Multiple colors per Viewer" label="Hər klient üçün bir neçə rəng" />
+					<combo_box.item name="Userdefined color" label="İstifadəçi təyin etdiyi rəng" />
+				</combo_box>
+				<text name="listtodisplayviewertags_txt">
+					Klient başlıqlarının göstərilməsi üçün siyahıdan istifadə etmək?
+				</text>
+				<combo_box name="UseLegacyClienttags">
+					<combo_box.item name="Don't use a list" label="Siyahıdan istifadə etməyin" />
+					<combo_box.item name="Local Clienttags" label="Yerli başlıq siyahısı" />
+					<combo_box.item name="Download Clienttags" label="Klient başlıq siyahısını başladarkən yükləyin" />
+				</combo_box>
+			</panel>
+		</panel>
+		<panel label="Mini-xəritə" name="tab-minimap">
+			<slider label="Arxa fon şəffaflığı:" name="FSMiniMapOpacity"/>
+			<text name="netmap_pickradius_color_textbox" width="90">
+				Seçim radiusu:
+			</text>
+			<color_swatch name="MapPickRadiusColor"
+			tool_tip="Mini xəritədə seçim radiusunun rəngini idarə edirsiniz. Seçim radiusunun ölçüsünü Seçim radiusu tənzimləməsi ilə tənzimləyə bilərsiniz."/>
+			<text name="netmap_pickradius_opacity_textbox" width="85">
+				Şəffaflıq:
+			</text>
+			<slider name="MapPickRadiusTransparency"
+			tool_tip="Mini xəritədə seçim radiusunun şəffaflığını idarə edirsiniz. Seçim radiusunun ölçüsünü Seçim radiusu tənzimləməsi ilə tənzimləyə bilərsiniz." />
+			<text name="netmap_dots_textbox">
+				Mini xəritə nöqtələri:
+			</text>
+			<text name="MapAvatarSelfColor_label">
+				Mən=:
+			</text>
+			<text name="MapAvatarColor_label">
+				Başqaları
+			</text>
+			<text name="MapAvatarFriendColor_label">
+				Dostlar
+			</text>
+			<text name="MapAvatarLindenColor_label">
+				Linden Lab
+			</text>
+			<text name="MapAvatarMutedColor_label">
+				Bloklanmış
+			</text>
+			<check_box name="MiniMapChatRing" label="Danışmaq və qışqırmaq üçün diapazonları göstərən minixəritədə dairələri göstərin"/>
+			<text name="netmap_whisperring_color_label">
+				Pıçıltı dairəsi
+			</text>
+			<text name="netmap_chatring_color_label">
+				Söhbət dairəsi
+			</text>
+			<text name="netmap_shoutring_color_label">
+				Qışqırtı dairəsi
+			</text>
+		</panel>
+		<panel label="Müxtəlif" name="tab-misc">
+			<text name="effects_color_textbox">
+				Seçim effektləri (Parçacıq şüaları):
+			</text>
+			<text name="ScriptDialogFgLabel" width="160">
+				Skriptlər Mətni/Fonu:
+			</text>
+			<text name="floater_opacity">
+				Pəncərə şəffaflığı:
+			</text>
+			<slider label="Aktiv:" name="active"/>
+			<slider label="Passiv:" name="inactive"/>
+			<slider label="Kamera/Hərəkət:" name="camera_movement"/>
+			<text name="console_opacity">
+				Konsol şəffaflığı:
+			</text>
+			<color_swatch name="console_background" tool_tip="Konsol rəngini seçin"/>
+			<slider label="Şəffaflıq:" name="console_background_opacity" tool_tip="Konsol fonunun şəffaflığını seçin"/>
+			<text name="preferences_search_label">
+				Seçim axtarışının rəngi:
+			</text>
+			<color_swatch name="preferences_search_color" tool_tip="Seçim axtarışının rəngini seçin"/>
+			<text name="area_search_beacon_color_label">
+				Axtarış zonasının işarənin rəngi:
+			</text>
+			<color_swatch name="area_search_beacon_color" tool_tip="Axtarış zonasının işarənin rəngini seçin"/>
+			<text name="notecard_editor_color_label">
+				Qeydlərin rəngləri:
+			</text>
+			<text name="notecard_editor_writable_text_color_label" width="30">
+				Mətn:
+			</text>
+			<color_swatch name="notecard_editor_writable_text_color" tool_tip="Qeyd Mətninin Rəngi"/>
+			<text name="notecard_editor_writable_bg_color_label" width="70">
+				Fon:
+			</text>
+			<color_swatch name="notecard_editor_writable_bg_color" tool_tip="Qeyd Fonunun Rəngi"/>
+			<text name="notecard_editor_writable_cursor_color_label" width="40">
+				Kursor:
+			</text>
+			<color_swatch name="notecard_editor_writable_cursor_color" tool_tip="Qeyd Kursorunun Rəngi"/>
+			<text name="notecard_editor_writable_selection_color_label" width="60">
+				Seçim:
+			</text>
+			<color_swatch name="notecard_editor_writable_selection_color" tool_tip="Qeyd mətnindəki seçilmiş mətn rəngi"/>
+			<check_box name="FSScriptDialogNoTransparency" label="Skript dialoqlarını həmişə şəffaflıqsız fon üzərində göstər"/>
+			<check_box name="FSGroupNotifyNoTransparency" label="Qrup bildirişlərini həmişə şəffaflıqsız fon üzərində göstər"/>
+			<check_box name="override_pie_color_checkbox" label="Menyu fonunu, seçilmiş bölmələrin rəngini və dairəvi menyunun şəffaflığını dəyişdirin:"/>
+			<panel name="tab-colorize">
+				<color_swatch name="pie_bg_color_override" tool_tip="Menyunun arxa fonunu dəyişin"/>
+				<color_swatch name="pie_selected_color_override" tool_tip="Seçilmiş meny bölməsinin rəngini dəyişin"/>
+				<slider label="Şəffaflıq:" name="pie_menu_opacity" tool_tip="Dairəvi menyunun şəffaflığını seçin"/>
+				<slider label="Solğunlaşma:" name="pie_menu_fade_out" tool_tip="Menyunun mərkəzindən kenarına doğru solğunlaşma dəyərini seçin"/>
+			</panel>
+		</panel>
+	</tab_container>
+</panel>

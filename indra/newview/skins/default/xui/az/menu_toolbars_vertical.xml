@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Toolbars Popup" label="Düymələr">
+  <menu_item_call label="Bu düyməni sil" name="Remove button" />
+  <menu_item_call label="Alətlər panelindəki düymələr..." name="Choose Buttons" />
+  <menu_item_check label="Yuxarıya doğru düzləndir" name="top_aligned" />
+  <menu_item_check label="Mərkəzdə düzləndir" name="center_aligned" />
+  <menu_item_check label="Aşağıya doğru düzləndir" name="bottom_aligned" />
+  <menu_item_check label="Nişanlar və yazı" name="icons_with_text" />
+  <menu_item_check label="Yalnız nişanlar" name="icons_only" />
+  <menu_item_check label="Yalnız yazı" name="text_only" />
+  <menu_item_check label="Bağlanmış" name="toolbars_locked" />
+</context_menu>

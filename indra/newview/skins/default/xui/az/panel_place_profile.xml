@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="place_profile">
+	<string name="on" value="Yan."/>
+	<string name="off" value="Sön."/>
+	<string name="anyone" value="Hamısı"/>
+	<string name="available" value="mövcud"/>
+	<string name="allocated" value="yerləşdirilib"/>
+	<string name="title_place" value="Məkan profil"/>
+	<string name="title_teleport_history" value="Teleport tarixi"/>
+	<string name="not_available" value="(yox)"/>
+	<string name="unknown" value="(naməlum)"/>
+	<string name="public" value="(ictimai)"/>
+	<string name="none_text" value="(yox)"/>
+	<string name="sale_pending_text" value="(Satış gözləmədə)"/>
+	<string name="group_owned_text" value="(Qrupun mülkiyyəti)"/>
+	<string name="price_text" value="L$"/>
+	<string name="area_text" value="m²"/>
+	<string name="all_residents_text" value="Bütün sakinlər"/>
+	<string name="group_text" value="Qrup"/>
+	<string name="can_resell">
+		Bu regionda aldığınız ərazi satıla bilər.
+	</string>
+	<string name="can_not_resell">
+		Bu regionda aldığınız ərazi satıla bilməz.
+	</string>
+	<string name="can_change">
+		Bu regionda aldığınız ərazi birləşdirilə və ya bölmək olar.
+	</string>
+	<string name="can_not_change">
+		Bu regionda aldığınız ərazi birləşdirilə və ya bölmək olmaz.
+	</string>
+	<string name="server_update_text">
+		Məkan haqqında məlumat server yenilənmədən əldə edilə bilməz.
+	</string>
+	<string name="server_error_text">
+		Bu məkan haqqında məlumat indi mövcud deyil. Biraz sonra yenidən cəhd edin.
+	</string>
+	<string name="server_forbidden_text">
+		Bu məkan haqqında məlumat məhdudlaşdırmalar səbəbiylə əldə edilə bilmir.  Məkan sahibi ilə əlaqə saxlayaraq giriş hüququ səviyyənizi razılaşdırın.
+	</string>
+	<string name="acquired_date">
+		[wkday,datetime,local], [day,datetime,local] [mth,datetime,local] [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</string>
+
+	<layout_stack name="place_info_sidetray_main">
+		<layout_panel name="header_container">
+
+	<button name="back_btn" tool_tip="Geri"/>
+	<text name="title" value="Məkan profili"/>
+
+		</layout_panel>
+		<layout_panel name="place_info_content">
+
+			<text name="region_title" value="Region_nümunəsi"/>
+			<text name="parcel_title" value="Sahə_nümunəsi, adı Long (145, 228, 26)"/>
+			<expandable_text name="description" value="Naməlum"/>
+			<text name="owner_label" value="Sahibi:"/>
+			<text name="owner_value" value="Ərtoğrul bəy salis Xəzərli"/>
+			<text name="maturity_value" value="naməlum"/>
+			<accordion name="advanced_info_accordion">
+				<accordion_tab name="parcel_characteristics_tab" title="Sahə">
+					<panel name="parcel_characteristics_panel">
+						<text name="rating_label" value="Reytinq:"/>
+						<text name="rating_value" value="naməlum"/>
+						<text name="voice_label" value="Səs:"/>
+						<text name="voice_value" value="Yan."/>
+						<text name="fly_label" value="Uçuş:"/>
+						<text name="fly_value" value="Yan."/>
+						<text name="push_label" value="Toqquşma:"/>
+						<text name="push_value" value="Sön."/>
+						<text name="build_label" value="Tikinti:"/>
+						<text name="build_value" value="Yan."/>
+						<text name="scripts_label" value="Skriptlər:"/>
+						<text name="scripts_value" value="Yan."/>
+						<text name="damage_label" value="Zədələr:"/>
+						<text name="damage_value" value="Sön."/>
+						<text name="see_avatars_label" value="Avatarları görmək:"/>
+						<text name="see_avatars_value" value="Sön."/>
+						<button label="Torpaq haqqında" name="about_land_btn"/>
+					</panel>
+				</accordion_tab>
+				<accordion_tab name="region_information_tab" title="Region">
+					<panel name="region_information_panel">
+						<text name="region_name_label" value="Region:"/>
+						<text name="region_name" value="Danabaşlı"/>
+						<text name="region_type_label" value="Növ:"/>
+						<text name="region_type" value="Dabandaş"/>
+						<text name="region_rating_label" value="Reytinq:"/>
+						<text name="region_rating" value="Yetkin"/>
+						<text name="region_owner_label" value="Sahibi:"/>
+						<text name="region_owner" value="Danabaşlı Dadaş Dabandaş oğlu"/>
+						<text name="region_group_label" value="Qrup:"/>
+						<text name="region_group">
+							Danabaşlı kəndinin yaxınlığındakı Dabandaşlıdan güclü Dadaş
+						</text>
+						<button label="Region/mülkiyyət" name="region_info_btn"/>
+					</panel>
+				</accordion_tab>
+				<accordion_tab name="estate_information_tab" title="mülkiyyət">
+					<panel name="estate_information_panel">
+						<text name="estate_name_label" value="Əmlak:"/>
+						<text name="estate_rating_label" value="Reytinq:"/>
+						<text name="estate_owner_label" value="Sahibi:"/>
+						<text name="estate_owner" value="Тест имени владельца используя длинное имя"/>
+						<text name="covenant_label" value="Müqavilə:"/>
+					</panel>
+				</accordion_tab>
+				<accordion_tab name="sales_tab" title="Satış üçün">
+					<panel name="sales_panel">
+						<text name="sales_price_label" value="Qiymət:"/>
+						<text name="area_label" value="Sahə:"/>
+						<text name="traffic_label" value="Davamiyyət:"/>
+						<text name="primitives_label" value="Primitivlər:"/>
+						<text name="parcel_scripts_label" value="Skriptlər:"/>
+						<text name="terraform_limits_label" value="Terraformasiya:"/>
+						<text name="subdivide_label" value="Ayırma/Birləşmə imkanı:"/>
+						<text name="resale_label" value="Yenidən satış imkanı:"/>
+						<text name="sale_to_label" value="Kimə sat:"/>
+					</panel>
+				</accordion_tab>
+			</accordion>
+
+		</layout_panel>
+	</layout_stack>
+</panel>

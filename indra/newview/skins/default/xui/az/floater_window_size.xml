@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="window_size" title="Pəncərə ölçüsü">
+	<text name="windowsize_text">
+		Pəncərə ölçüsünü təyin edin:
+	</text>
+	<combo_box name="window_size_combo" tool_tip="en x hündürlük">
+		<combo_box.item label="1000 x 700 (standart)" name="item1"/>
+	</combo_box>
+	<button label="Təyin et" name="set_btn"/>
+	<button label="Ləğv et" name="cancel_btn"/>
+</floater>

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="firestorm">
+<panel.string name="BeamsOffLabel">
+	=== SÖN ===
+</panel.string>
+<string name="EmbeddedItemNotSet">
+	Dəst yoxdur
+</string>
+<string name="EmbeddedItemNotAvailable">
+	Mövcud deyil
+</string>
+<string name="EmbeddedItemNotLoggedIn">
+	Daxil ol
+</string>
+<tab_container label="Firestorm seçimləri" name="tabs">
+    <panel label="Əsas" name="tab-extras">
+        <check_box name="checkMiscRLVa" label="Skriptlər ilə nəzarət (RLVa)" />
+        <text name="textMiscRLVaRestart">
+            (yenidən başlatma tələb olunur)
+        </text>
+        <check_box label="Bir qrup torpaq altında tikin və yerləşdirin (mümkünsə)" name="grouplandrez" tool_tip="Yer qrupunun üzvüsinizsə, cari qrup etiketinizdən asılı olmayaraq, obyektləri torpaq qrupunun altına qoymağa çalışın."/>
+        <check_box label="Skriptlərlə əlaqə qurarkən hissəcik effektlərinin yaradılması" name="EffectScriptChatParticles" tool_tip="Bu seçimi aktiv etsəniz, skriptlər danışarkən skriptli obyektlər fırlanan işıq hissəciklərini göstərəcək" />
+        <check_box label="Avatar hədəfə çatdıqdan sonra izləmə mayakının söndürülməsi (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Bu seçimi aktiv etdikdə, avatarla məsafə 3 metrdən az olarsa, izləmə mayağı avtomatik olaraq sönəcək (susmaya görə)." />
+        <check_box label="Boş bento animasiyasını düzəldin" name="play_default_bento_idle_animation_toggle" tool_tip="Bu seçim aktivləşdirilərsə, defolt bento animasiyası 0 prioritetində işləyəcək, bu da başqa heç bir bento animasiyası işləmədikdə qolları, qanadları, ağızı və quyruğu öz təbii vəziyyətinə gətirir."/>
+        <check_box label="Daxil ol ekranını söndürün" name="login_screen_toggle" tool_tip="Qara daxil ol ekranını söndürün" />
+        <check_box label="Çıxış ekranını söndürün" name="logout_screen_toggle" tool_tip="Qara çıxış ekranını söndürün" />
+        <check_box label="Çəkmə məsafəsinin tədricən artması" name="FSRenderFarClipStepping" tool_tip="Bu seçimi aktiv etsəniz, Firestorm teleportdan sonra çəkiliş məsafəsini tədricən artıracaq." />
+        <slider name="progressive_draw_distance_interval" tool_tip="Hər bir ardıcıl uzatma arasında saniyələrlə interval" />
+        <check_box name="UseLSLBridge" label="LSL körpüsünü aktivləşdirin" tool_tip="LSL körpüsünü aktivləşdirin" />
+        <combo_box name="UseLSLFlightAssist" tool_tip="Yüksək hündürlüklərdə uçmağa və havada qalmağa kömək etmək üçün skripti aktiv edin">
+            <combo_box.item label="Uçuş köməyi: Söndürülüb" name="flight_disabled" />
+            <combo_box.item label="Uçuş köməyi: Yüngül sürətlənmə" name="flight_mild" />
+            <combo_box.item label="Uçuş köməyi: Orta sürətlənmə" name="flight_moderate" />
+            <combo_box.item label="Uçuş köməyi: Güclü sürətlənmə" name="flight_strong" />
+            <combo_box.item label="Uçuş köməyi: Ekstremal sürətlənmə" name="flight_extreme" />
+        </combo_box>
+        <slider name="manual_environment_change_transition_period" label="Ətraf mühitin dəyişmə vaxtı:"
+        tool_tip="Quraşdırma zamanı mühitin dəyişəcəyi saniyələrlə interval. Sıfır anidir."/>
+        <check_box name="EnvironmentPersistAcrossLogin" label="Seanslar arasında mühit seçimlərini yadda saxlayın" tool_tip="Növbəti girişdən sonra cari mühit seçimlərini bərpa edir."/>
+    </panel>
+    <panel label="Qoruma" name="ProtectionTab">
+        <check_box label="Sol maus düyməsi ilə basdıqda obyektə oturmaq bloku" name="FSBlockClickSit" />
+        <check_box label="Skriptlərin (llMapDestination) istifadəsinə icazə verin" name="ScriptsCanShowUI" />
+        <text name="revokepermissions_txt">
+         Animasiya icazələrini ləğv edin:
+         </text>
+        <radio_group name="FSRevokePerms">
+            <radio_item label="Heç vaxt (orijinal icazə)" name="never_radio" />
+            <radio_item label="OTURMAQ üçün ləğv edin" name="sit_radio" />
+            <radio_item label="DURMAQ üçün ləğv edin" name="stand_radio" />
+            <radio_item label="OTURMAQ və DURMAQ üçün ləğv edin" name="sitnstand_radio" />
+        </radio_group>
+        <text name="SurfaceAreaThreshholdLabel">
+         Tekstura gecikməsinin qorunması (bəzi obyektləri poza bilər):
+        </text>
+        <check_box label="Yüksək tekstura sahəsi olan obyektləri gizlədin. Həddi: " name="RenderVolumeSAProtection" tool_tip="Bu, klientin tez-tez qəzaya uğramasına səbəb olan çox böyük teksturalı obyektlərdən qoruyur. Varsayılan olaraq 5000 kvadratmetrdir" />
+        <check_box label="Antispamı aktivləşdirin" name="UseAntiSpam" />
+        <check_box label="Obyektləriniz üçün antispamı aktivləşdirin" name="FSUseAntiSpamMine" tool_tip="Bu, hətta obyektlərinizə spamdan qorunma tətbiq etməyə imkan verəcək."/>
+        <text name="AntiSpamText1">
+           Mesaj başına maksimum sətir:
+        </text>
+        <spinner name="_NACL_AntiSpamNewlines" tool_tip="Bir mətn mesajında ​​qəbul ediləcək sətirlərin maksimum sayı [Defolt: 70]" />
+        <text name="AntiSpamText2">
+           Mənbədən maksimum axın:
+        </text>
+        <spinner name="_NACL_AntiSpamAmount" tool_tip="2 saniyəlik intervalda bir mənbədən oxşar hadisələrin maksimum sayı. [Defolt: 10]" />
+        <text name="AntiSpamText3">
+           Səs sorğuları üçün vuran:
+        </text>
+        <spinner name="_NACL_AntiSpamSoundMulti" tool_tip="Audio oxutma vuranı [Defolt: 10]" />
+        <text name="AntiSpamText4">
+          Əvvəlcədən yükləmə vuranı:
+        </text>
+        <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Səs Öncədən Yükləmə Sorğusu Vuranı [Defolt: 4]" />
+        <button name="AntiSpamUnblock" label="Bütün spam mənbələrini blokdan çıxarın" />
+        <check_box label="Ödənişdən əvvəl təsdiqləmə:" name="FSConfirmPayments" tool_tip="Həddini aşan məbləği ödəməzdən əvvəl ödənişin təsdiqi dialoq pəncərəsini göstərin. Həmişə təsdiqi göstərmək üçün həddi 0-a təyin edin."/>
+        <spinner name="FSPaymentConfirmationThreshold" tool_tip="Həddini aşan məbləği ödəməzdən əvvəl ödənişin təsdiqi dialoq pəncərəsini göstərin. Həmişə təsdiqi göstərmək üçün həddi 0-a təyin edin." width="100"/>
+    </panel>
+    <panel label="Avatar" name="firestorm_avatar">
+        <text name="HeadMovement">
+            Başın dönmə radiusu ('0' hərəkət yoxdur.):
+        </text>
+        <slider label="Baş hərəkətinin şaquli diapazonu:" tool_tip="Başın şaquli hərəkət diapazonu dərəcələrlə" name="PitchFromMousePositionSlider" />
+        <text name="PitchFromMousePositionText">
+            d-cə.
+        </text>
+        <slider label="Baş hərəkətinin üfüqi diapazonu:" tool_tip="Baş hərəkətinin dərəcələrlə üfüqi diapazonu" name="YawFromMousePositionSlider" />
+        <text name="YawFromMousePositionText">
+            d-cə.
+        </text>
+        <text name="note_lookat">
+             (Kamera diqqətinin seçimləri Məxfilik → Kamera diqqəti pəncərəsindədir)
+        </text>
+        <check_box label="Təsadüfi avatar göz hərəkətinin qarşısını alın" name="FSStaticEyes"/>
+        <text name="BeamPrefs">
+            Seçim şüa effektləri
+        </text>
+        <button name="BeamColor_delete" label="Sil" tool_tip="Sil" />
+        <combo_box name="BeamColor_combo" tool_tip="Seçim şüası üçün əvvəlcədən təyin edilmiş tənzimləmə seçin" />
+        <button name="BeamColor_new" label="Yarat" tool_tip="Yarat" />
+        <button name="BeamColor_refresh" label="Yenilə" tool_tip="Yenilə" />
+        <slider name="FSMaxBeamsPerSecond" label="Şüa yeniləmələri/san.:" tool_tip="Şüa bir saniyədə nə qədər yeniləmə alır. Defolt 40" />
+        <check_box label="Seçim şüasını aktivləşdirin" name="SLPartBeam" />
+        <check_box label="Seçim məlumatlarını söhbətə göndərin" name="FSParticleChat" tool_tip="Seçim məlumatlarını 9000 kanalında ümumi söhbətə göndərin." />
+        <combo_box name="FSBeamShape_combo" tool_tip="Hissəcik Şüasının Formasının Seçimi" />
+        <button name="delete_beam" label="Sil" tool_tip="Sil" />
+        <button name="custom_beam_btn" label="Yarat" tool_tip="Yarat" />
+        <button name="refresh_beams" label="Yenilə" tool_tip="Yenilə" />
+        <slider name="FSBeamShapeScale" label="Ölçü:" tool_tip="Seçim şüasının hissəcik miqyasını dəyişdirin" />
+        <text name="BridgeProtocols">
+            Xarici LSL körpü protokollarının inteqrasiyası:
+        </text>
+        <check_box label="OpenCollar protokoluna daxili AO-nu işə salmağa və ya söndürməyə icazə verin" name="BridgeIntegrationOC" />
+        <check_box label="LockMeister protokoluna daxili AO-nu işə salmağa və ya söndürməyə icazə verin" name="BridgeIntegrationLM" />
+    </panel>
+    <panel label="Tikinti 1" name="BuildTab">
+        <text name="text_box_objprams">
+         Başlanğıc ölçü
+        </text>
+        <text name="text_box_objprams2">
+         Tənzimləmələr
+        </text>
+        <text name="text_box_objprams3">
+         Tekstur
+        </text>
+        <spinner label="Ölçü X" name="X size" />
+        <spinner label="Ölçü Y" name="Y size" />
+        <spinner label="Ölçü Z" name="Z size" />
+        <check_box label="Fantom" name="FSBuildPrefs_PhantomToggle"/>
+        <check_box label="Fiziki" name="FSBuildPrefs_PhysicalToggle"/>
+        <check_box label="Müvəqqəti" name="FSBuildPrefs_TemporaryToggle"/>
+        <combo_box name="material">
+             <combo_item name="Stone" label="Daş"/>
+             <combo_item name="Metal" label="Dəmir"/>
+             <combo_item name="Glass" label="Ot"/>
+             <combo_item name="Wood" label="Taxta"/>
+             <combo_item name="Flesh"  label="Dəri"/>
+             <combo_item name="Plastic" label="Plastik"/>
+             <combo_item name="Rubber"  label="Rezin"/>
+        </combo_box>
+        <texture_picker label="Tekstur" name="texture control" tool_tip="Şəkil seçmək üçün basın"/>
+        <color_swatch label="Rəng" name="colorswatch" tool_tip="Rəng palitrasını açmaq üçün basın"/>
+        <spinner label="Afla" name="alpha"/>
+        <spinner label="İşar." name="glow"/>
+        <check_box label="Tam işıq" name="EmFBToggle"/>
+        <combo_box name="combobox shininess" tool_tip="Bir obyekt üçün parlaqlıq miqdarını təyin edin">
+          <combo_item name="None" label="Yox"/>
+          <combo_item name="Low" label="Aşağı"/>
+          <combo_item name="Medium" label="Ortam"/>
+          <combo_item name="High" label="Yüksək"/>
+        </combo_box>
+        <check_box name="FSBuildPrefs_EmbedItem" label="Yeni obyektə element daxil edin"/>
+        <fs_embedded_item_drop_target name="embed_item" tool_tip="Avadanlıq siyahısı elementini buraya daşıyın.">
+         Avadanlıq siyahısı elementini buraya daşıyın.
+        </fs_embedded_item_drop_target>
+        <text name="build_item_add_disp_rect_txt">
+         Məzmun: [ITEM]
+        </text>
+        <text name="text_box_pivotpoint">
+          İstinad nöqtəsi
+        </text>
+        <check_box label="Kök üzərində oxlar" tool_tip="Varsayılan olaraq, oxlar birləşdirilən əsasların mərkəzində göstərilir. Bu seçim aktivdirsə, oxlar kök priminin mərkəzində göstərilir" name="FSBuildPrefsActualRoot_toggle" />
+        <spinner label="Yerl. X" name="X pos" />
+        <spinner label="Yerl. Y" name="Y pos" />
+        <spinner label="Yerl. Z" name="Z pos" />
+        <check_box label="Faizlə" tool_tip="Varsayılan olaraq, faizlər hər bir ox üçün 50-yə təyin edilmişdir." name="FSPivotPercToggle" />
+        <button label="Defolt Yaratma İcazələri" name="fs_default_creation_permissions" />
+        <text name="text_box_scripting_font">
+          Skript yazı tipi:
+        </text>
+        <combo_box name="FSScriptingFontName" tool_tip="LSL skript dəyişdiricisində istifadə olunan yazı tipinin adı">
+          <combo_item name="Monospace" label="Monogeniş"/>
+          <combo_item name="Scripting" label="Skriptli"/>
+        </combo_box>
+        <combo_box name="FSScriptingFontSize" tool_tip="LSL skript dəyişdiricisində istifadə olunan yazı tipinin ölçüsü">
+          <combo_item name="Monospace" label="Monogeniş"/>
+          <combo_item name="Scripting" label="Skriptli"/>
+          <combo_item name="Small" label="Kiçik"/>
+          <combo_item name="Medium" label="Ortam"/>
+          <combo_item name="Large" label="Yerkə"/>
+        </combo_box>
+		<check_box label="LSL Önprosessorunu aktivləşdir" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru işləyəcəkdir." name="preproc_checkbox" />
+		<check_box label="Optimallaşdırma" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru skript tərəfindən istifadə edilən sahəni optimizə edəcəkdir." name="preprocoptimizer_checkbox" />
+		<check_box label="switch() operatoru" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru switch() operatorunun skript axarını idarə edərkən istifadəsinə icazə verəcəkdir." name="preprocswitch_checkbox" />
+		<check_box label="Tənbəl siyahılar" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru siyahılarla işləmək üçün sintaksis genişlətmələrə icazə verəcəkdir." name="preproclazy_checkbox" />
+		<check_box label="Diskdən #include" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru #include operatorunu sizin yerli sürücünüzə göndərilən fayllarla istifadəyə imkan verəcəkdir." name="preprocinclude_checkbox" />
+        <text name="lslpreprocinclude_textbox">
+		  Önprosessor yolu:
+        </text>
+        <button label="Baxış" label_selected="Baxış" name="SetPreprocInclude" />
+        <text name="externaleditor_textbox">
+          Xarici dəyişdirici:
+        </text>
+        <button label="Baxış" label_selected="Baxış" name="SetExternalEditor" />
+    </panel>
+    <panel label="Tikinti 2" name="BuildTab2">
+        <check_box label="Seçilmiş obyektin işıqlandırılması yandırın" tool_tip="Seçilmiş obyektin işıqlandırılması yandırın" name="FSBuildPrefsRenderHighlight_toggle" />
+        <check_box label="Seçilmiş ərazinin sərhədlərini işıqlandırın" name="RenderParcelSelection"/>
+        <check_box label="Maksimum tikinti hündürlüyünə sərhəddini göstərin" name="FSRenderParcelSelectionToMaxBuildHeight"/>
+        <check_box label="Seçim məsafəsi həddi:" name="LimitSelectDistance" width="237" />
+        <spinner name="MaxSelectDistance" tool_tip="Maksimum icazə verilən seçim məsafəsi (avatardan metrlə) [Defolt: 128.000]" />
+        <check_box label="Məsafə limitini çəkin:" name="LimitDragDistance" width="237" />
+        <spinner name="MaxDragDistance" tool_tip="Hərəkət alətlərinin bir əməliyyatında icazə verilən maksimum məsafə (başlanğıc nöqtəsindən metrlə) [Defolt: 48.000]" />
+        <text name="RotationStepText1" width="175">
+          Fırlanma məhdudiyyəti
+        </text>
+        <spinner name="RotationStep" tool_tip="[Defolt: 1.0]"/>
+        <text name="RotationStepText2">
+          dərəcə, əgər şəbəkəyə istinad yoxdursa
+        </text>
+        <check_box label="Ən azı neçə obyekt sayında ayırma təsdiq sorğusu" name="FSUnlinkConfirmEnabled"/>
+        <text name="MinObjectsForUnlinkConfirmText2">
+          obyekt
+        </text>
+        <check_box label=" &quot;Satış üçün element təyin et&quot; üçün köhnə davranışı təyin edin" tool_tip=" &quot;Satış üçün element təyin et&quot; üçün köhnə davranışı təyin edin" name="FSCommitForSaleOnChange_toggle" />
+        <check_box label="Avadanlıq siyahısında dəyişdirilmiş skriptləri Mono olaraq saxlayın" tool_tip="Avadanlıq siyahısında dəyişdirilmiş skriptləri Mono olaraq saxlayın" name="FSSaveInventoryScriptsAsMono_toggle" />
+        <check_box label="Teksturaları avadanlıq siyahısından diskə TGA əvəzinə PNG olaraq saxlayın" tool_tip="Teksturaları avadanlıq siyahısından diskə TGA əvəzinə PNG olaraq saxlayın" name="FSTextureDefaultSaveAsFormat" />
+        <check_box label="Obyektləri tutmaq və manipulyasiya etmək üçün Ctrl + siçan istifadə edin" tool_tip="Obyektləri tutmaq və manipulyasiya etmək üçün Ctrl + siçan istifadə edin" name="FSEnableGrab" />
+        <check_box label="Tikinti zamanı teksturlar üçün basdıqda miqyaslama (caps lock ilə birlikdə)." tool_tip="Aktivləşdirildikdə, tikinti rejimində teksturalar üçün basım ilə sürükləməyə və ya basdıqda miqyasına (caps lock ilə) icazə verir. Bu xüsusiyyət eksperimentaldır və ehtiyatla istifadə edilməlidir." name="FSExperimentalDragTexture" />
+        <check_box label="Yükləyərkən öz avatarınızda animasiyaya önbaxış" tool_tip="Yükləyərkən öz avatarınızda animasiyaya önbaxış" name="FSUploadAnimationOnOwnAvatar" />
+        <check_box label="Genişləndirilmiş Skript Məlumatını aktivləşdirin" name="FSScriptInfoExtended" tool_tip="Aktiv edilərsə, əsas skript məlumatı funksiyasını inşaatçılar üçün faydalı olan müxtəlif detallarla genişləndirir"/>
+    </panel>
+    <!--Uploads-->
+    <panel label="Yükləmələr" name="UploadsTab">
+      <text name="title">
+        Cari yükləmə istiqamətləri:
+      </text>
+      <text name="title_images">
+        Şəkillər
+      </text>
+      <text name="title_sounds">
+        Səslər
+      </text>
+      <text name="title_animations">
+        Animasiyalar
+      </text>
+      <text name="title_models">
+        Modellər
+      </text>
+      <text name="upload_help">
+        Təyinat qovluğunu dəyişmək üçün onu inventarınızda sağ klikləyin və
+      "Nə üçün susmaya görə istifadə et" seçin
+      </text>
+        <button name="reset_default_folders" label="Susmaya görə qovluqları sıfırlayın" width="200"/>
+    </panel>
+</tab_container>
+</panel>

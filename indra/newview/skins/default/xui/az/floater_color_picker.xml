@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="ColorPicker" title="Rəng seçimi">
+  <tab_container name="scale_type_container">
+    <panel name="RGB" label="RGB">
+      <text name="r_val_text">
+        Qırmızı:
+      </text>
+      <text name="g_val_text">
+        Yaşıl:
+      </text>
+      <text name="b_val_text">
+        Göy:
+      </text>
+    </panel>
+    <panel name="LSL" label="LSL">
+      <text name="r_val_text_lsl">
+        Qırmızı:
+      </text>
+      <text name="g_val_text_lsl">
+        Yaşıl:
+      </text>
+      <text name="b_val_text_lsl">
+        Göy:
+      </text>
+    </panel>
+    <panel name="Hex" label="Hex">
+      <text name="hex_text">
+        Hex (#rrggbb):
+      </text>
+    </panel>
+  </tab_container>
+  <text name="h_val_text">
+    Çalar:
+  </text>
+  <text name="s_val_text">
+    Doyma:
+  </text>
+  <text name="l_val_text">
+    Parlaqlıq:
+  </text>
+  <check_box label="İndi t. et" name="apply_immediate" width="100" />
+  <button label="LSL köç."
+     tool_tip="Rəng dəyərini &lt;r, g, b&gt;. formatda LSL rəng vektoruna köçürdür" name="copy_lsl_btn" width="80" />
+  <button label="ОК" label_selected="ОК" name="select_btn"/>
+  <button label="Ləğv et" label_selected="Ləğv et" name="cancel_btn"/>
+  <text name="Current color:">
+    ^ Cari rəng ^
+  </text>
+  <text name="(Drag below to save.)">
+    (Saxlam. üçün aşağı daşı.)
+  </text>
+</floater>

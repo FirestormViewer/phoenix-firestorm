@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Avatar Profile Menu">
+	<menu_item_call label="İM" name="im"/>
+	<menu_item_call label="Teleport təklif et" name="offer_teleport"/>
+	<menu_item_call label="Teleport sorğula" name="request_teleport"/>
+	<menu_item_call label="Səsli zəng" name="voice_call"/>
+	<menu_item_call label="Söhbət jurnalına bax..." name="chat_history"/>
+	<menu_item_call label="Dost əlavə et"name="add_friend"/>
+	<menu_item_call label="Dostluqdan sil" name="remove_friend"/>
+	<menu_item_call label="Qrupa dəvət et..." name="invite_to_group"/>
+	<menu_item_call label="İcazələr" name="agent_permissions"/>
+	<menu_item_call label="Xəritə" name="map"/>
+	<menu_item_call label="Paylaş" name="share"/>
+	<menu_item_call label="Ödə" name="pay"/>
+	<menu_item_check label="Blokla/Blokdan çıxart" name="block_unblock"/>
+	<menu_item_call label="Göstərilən adı köçürt" name="copy_display_name"/>
+	<menu_item_call label="İstifadəçi adını köçürt" name="copy_name"/>
+	<menu_item_call label="İdentifikasiyasını köçürt" name="copy_id"/>
+</toggleable_menu>

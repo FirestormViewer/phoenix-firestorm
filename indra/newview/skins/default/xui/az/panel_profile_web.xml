@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Veb" name="panel_profile_web">
+	<panel.string name="LoadTime" value="Yüklənmə vaxtı: [TIME] saniyə"/>
+	<line_editor name="url_edit">
+		(yüklənir…)
+	</line_editor>
+	<flyout_button label="Yüklə" name="load" tool_tip="Daxil olmuş veb brauzerdə profil səhifəsini yükləyin.">
+		<flyout_button.item label="Brauzer baxışçısında aç" name="open_item"/>
+		<flyout_button.item label="Xarici brauzerdə aç" name="home_item"/>
+	</flyout_button>
+	<button name="web_profile_popout_btn" tool_tip="Veb profilin açılan pəncərəsi"/>
+</panel>

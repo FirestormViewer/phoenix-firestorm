@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="queue" title="Progressi sıfırla">
+	<floater.string name="Starting">
+		[COUNT] obyektlərin [START] işə salınması.
+	</floater.string>
+	<floater.string name="Done">
+		Hazır.
+	</floater.string>
+	<floater.string name="Resetting">
+		Sıfırlanır
+	</floater.string>
+	<floater.string name="Running">
+		Bərpa edildi
+	</floater.string>
+	<floater.string name="NotRunning">
+		Bərpa edilmədi
+	</floater.string>
+	<floater.string name="Timeout">
+		Gecikmə: [OBJECT_NAME]
+	</floater.string>
+	<floater.string name="LoadingObjInv">
+		[OBJECT_NAME] üçün inventarın yüklənməsi
+	</floater.string>
+	<button label="Bağla" label_selected="Bağla" name="close"/>
+</floater>

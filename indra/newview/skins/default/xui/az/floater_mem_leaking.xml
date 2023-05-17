@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="MemLeak" title="Yaddaş sızıntısının simulasiyası">
+	<spinner label="Sızıntı sürəti (bayt cinsində):" name="leak_speed"/>
+	<spinner label="Maksimum yaddaş sızıntısı (MB):" name="max_leak"/>
+	<text name="total_leaked_label">
+		Cari yaddaş sızıntısı: [SIZE] KB
+	</text>
+	<button label="Azad et" name="release_btn"/>
+	<button label="Bağla" name="close_btn"/>
+	<button label="Başla" name="start_btn"/>
+	<button label="Dayandır" name="stop_btn"/>
+</floater>

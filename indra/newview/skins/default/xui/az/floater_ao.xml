@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="animation_overrider" title="Animasiya əvəzçisi (AO)">
+    <floater.string name="ao_no_sets_loaded">Yüklənmiş dəstlər yoxdur</floater.string>
+    <floater.string name="ao_no_animations_loaded">Yüklənmiş animasiyalar yoxdur</floater.string>
+	<floater.string name="ao_dnd_only_on_full_interface">Siz yalnız animasiya dəsti ilə qeydi tam Animator pəncərə interfeysinə daşıyıb buraxa bilərsiniz. Açmaq üçün açar işarəsinə klikləyin.</floater.string>
+</floater>

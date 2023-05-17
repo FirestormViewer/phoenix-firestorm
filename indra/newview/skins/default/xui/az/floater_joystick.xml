@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Joystick" title="Coystik tənzimləmələri">
+	<floater.string name="JoystickDisabled">
+		Yox
+	</floater.string>
+	<text name="joystick_lbl" width="60">
+		Coystik:
+	</text>
+	<spinner label="X oxu" name="JoystickAxis1"/>
+	<spinner label="Y oxu" name="JoystickAxis2"/>
+	<spinner label="Z oxu" name="JoystickAxis0"/>
+	<spinner label="Əymə oxu" name="JoystickAxis4"/>
+	<spinner label="Dönmə oxu" name="JoystickAxis5"/>
+	<spinner label="Fırlanma oxu" name="JoystickAxis3"/>
+	<spinner label="Miqyas oxu" name="JoystickAxis6"/>
+	<check_box label="Miqyaslama" name="ZoomDirect"/>
+	<check_box label="3D kursoru" name="Cursor3D" left="320" />
+	<check_box label="Avtomatik səviyyələndirmə" name="AutoLeveling"/>
+	<text name="Control Modes:">
+		Idarə etmə rejimləri:
+	</text>
+	<check_box label="Avatar" name="JoystickAvatarEnabled"/>
+	<check_box label="Quruluş" name="JoystickBuildEnabled"/>
+	<check_box label="Kamera" name="JoystickFlycamEnabled"/>
+	<text name="joystick_monitor_label">
+		Coystik monitoru
+	</text>
+	<icon name="button_light_0" tool_tip="Düymə 0"/>
+	<icon name="button_light_1" tool_tip="Düymə 1"/>
+	<icon name="button_light_2" tool_tip="Düymə 2"/>
+	<icon name="button_light_3" tool_tip="Düymə 3"/>
+	<icon name="button_light_4" tool_tip="Düymə 4"/>
+	<icon name="button_light_5" tool_tip="Düymə 5"/>
+	<icon name="button_light_6" tool_tip="Düymə 6"/>
+	<icon name="button_light_7" tool_tip="Düymə 7"/>
+	<icon name="button_light_8" tool_tip="Düymə 8"/>
+	<icon name="button_light_9" tool_tip="Düymə 9"/>
+	<icon name="button_light_10" tool_tip="Düymə 10"/>
+	<icon name="button_light_11" tool_tip="Düymə 11"/>
+	<icon name="button_light_12" tool_tip="Düymə 12"/>
+	<icon name="button_light_13" tool_tip="Düymə 13"/>
+	<icon name="button_light_14" tool_tip="Düymə 14"/>
+	<icon name="button_light_15" tool_tip="Düymə 15"/>
+	<scroll_container name="joystick_monitor_axes_scroller">
+		<container_view name="joystick_monitor_axes_container">
+			<stat_view name="axis_view_0">
+				<stat_bar label="Ox 0" name="axis0"/>
+			</stat_view>
+			<stat_view name="axis_view_1">
+				<stat_bar label="Ox 1" name="axis1"/>
+			</stat_view>
+			<stat_view name="axis_view_2">
+				<stat_bar label="Ox 2" name="axis2"/>
+			</stat_view>
+			<stat_view name="axis_view_3">
+				<stat_bar label="Ox 3" name="axis3"/>
+			</stat_view>
+			<stat_view name="axis_view_4">
+				<stat_bar label="Ox 4" name="axis4"/>
+			</stat_view>
+			<stat_view name="axis_view_5">
+				<stat_bar label="Ox 5" name="axis5"/>
+			</stat_view>
+			<stat_view name="axis_view_6">
+				<stat_bar label="Ox 6" name="axis6"/>
+			</stat_view>
+			<stat_view name="axis_view_7">
+				<stat_bar label="Ox 7" name="axis7"/>
+			</stat_view>
+		</container_view>
+	</scroll_container>
+	<text name="XScale">
+		X ölçüsü
+	</text>
+	<text name="YScale">
+		Y ölçüsü
+	</text>
+	<text name="ZScale">
+		Z ölçüsü
+	</text>
+	<text name="PitchScale">
+		Əymə ölçüsü
+	</text>
+	<text name="YawScale">
+		Yön ölçüsü
+	</text>
+	<text name="RollScale">
+		Dönmə ölçüsü
+	</text>
+	<text name="XDeadZone">
+		X boşluq zonası
+	</text>
+	<text name="YDeadZone">
+		Y boşluq zonası
+	</text>
+	<text name="ZDeadZone">
+		Z boşluq zonası
+	</text>
+	<text name="PitchDeadZone">
+		Əymə boşluq zonası
+	</text>
+	<text name="YawDeadZone">
+		Yön boşluq zonası
+	</text>
+	<text name="RollDeadZone">
+		Dönmə boşluq zonası
+	</text>
+	<text name="Feathering">
+		Yumuşaldıcı
+	</text>
+	<text name="ZoomScale2">
+		Miqyas ölçüsü
+	</text>
+	<text name="ZoomDeadZone">
+		Miqyas boşluq zonası
+	</text>
+	<button label="SpaceNavigator üçün standartlar" name="SpaceNavigatorDefaults"/>
+	<button label="Bəli" label_selected="Bəli" name="ok_btn"/>
+	<button label="Ləğv et" label_selected="Ləğv et" name="cancel_btn"/>
+</floater>

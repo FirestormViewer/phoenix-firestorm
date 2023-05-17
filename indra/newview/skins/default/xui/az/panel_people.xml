@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Adamlar" name="people_panel">
+	<string name="no_recent_people" value="Son zamanlarda danışan insan yoxdur. Kimləsə danışmaq istəyirsiniz? [secondlife:///app/search/people Axtarışdan] və ya [secondlife:///app/worldmap dünya xəritəsindən] istifadə edin." />
+	<string name="no_filtered_recent_people" value="Tələb etdiyiniz məzmun tapılmadı? [secondlife:///app/search/people/[SEARCH_TERM] Axtarışdan] istifadə edin." />
+	<string name="no_one_near" value="Yaxınınızda heç kim yoxdur. Kimlə danışmaq istəyirsiniz? [secondlife:///app/search/people Axtarışdan] və ya [secondlife:///app/worldmap dünya xəritəsindən] istifadə edin." />
+	<string name="no_one_filtered_near" value="Tələb etdiyiniz məzmun tapılmadı? [secondlife:///app/search/people/[SEARCH_TERM] Axtarışdan] istifadə edin." />
+	<string name="no_friends_online" value="Dostlarınızdan heç biri şəbəkədə deyil." />
+	<string name="no_friends" value="Dost yoxdur." />
+	<string name="no_friends_msg">
+		[secondlife:///app/search/people axtarışdan] dost tapın və ya sağ düyməsi ilə sakinləri dostlarınıza əlavə edin.
+Kimləsə danışmaq istəyirsiniz? [secondlife:///app/worldmap dünya xəritəsindən] istifadə edin.
+	</string>
+	<string name="no_filtered_friends_msg">
+		Tələb etdiyiniz məzmun tapılmadı? [secondlife:///app/search/people/[SEARCH_TERM] Axtarışdan] istifadə edin.
+	</string>
+	<string name="no_filtered_groups_msg" value="Tələb etdiyiniz məzmun tapılmadı? [secondlife:///app/search/groups/[SEARCH_TERM] Axtarışdan] istifadə edin." />
+	<string name="no_groups_msg" value="Qoşulmaü üçün qrup axtarırsınız?? [secondlife:///app/search/groups Axtarışdan] istifadə edin." />
+	<string name="MiniMapToolTipMsg" value="[REGION] (İkili kliklə xəritəni açmaq, shift+surüşdürmə – baxış)" />
+	<string name="AltMiniMapToolTipMsg" value="[REGION] (İkili kliklə teleportasiya, shift+surüşdürmə – baxış)" />
+	<panel.string name="empty_list">
+		Bu əlaqələr siyahısı boşdur.
+	</panel.string>
+	<panel.string name="no_sets">
+		Dəst yoxdur
+	</panel.string>
+	<panel.string name="all_sets">
+		Bütün dəstlər
+	</panel.string>
+	<panel.string name="pseudonyms">
+		Ləqəblər
+	</panel.string>
+	<string name="AllFriendsTitle">
+		Hamısı ([ALL])
+	</string>
+	<string name="OnlineFriendsTitle">
+		Daxil olanlar ([ONLINE])
+	</string>
+	<tab_container name="tabs">
+		<panel label="Yaxındakılar" name="nearby_panel">
+			<panel name="nearby_buttons_panel">
+				<filter_editor label="İnsanların filtri" name="nearby_filter_input" />
+				<button name="gear_btn" tool_tip="Seçilmiş sakini üzərindəki əməliyyatlar" />
+				<menu_button name="nearby_view_btn" tool_tip="Göstərilmə/sıralanma seçimləri" />
+				<button name="add_friend_btn" tool_tip="Sakinə dostluq təklif et" />
+				<dnd_button name="nearby_del_btn" tool_tip="Seçilmiş istifadəçini dostlarınızdan silin" />
+			</panel>
+		</panel>
+		<panel label="Dostlar" name="friends_panel">
+			<panel name="friends_buttons_panel">
+				<filter_editor label="İnsanların filtri" name="friends_filter_input" />
+				<button name="gear_btn" tool_tip="Seçilmiş sakini üzərindəki əməliyyatlar" />
+				<menu_button name="friends_view_btn" tool_tip="Göstərilmə/sıralanma seçimləri" />
+				<button name="friends_add_btn" tool_tip="Sakinə dostluq təklif et" />
+				<button name="GlobalOnlineStatusToggle" tool_tip="Ümumi görünürlüyün dəyişdirilməsi" />
+				<dnd_button name="friends_del_btn" tool_tip="Seçilmiş istifadəçini dostlarınızdan silin" />
+			</panel>
+			<tab_container name="friends_accordion">
+				<panel name="tab_online" title="Onlayn" />
+				<panel name="tab_all" title="Hamısı" />
+				<panel name="tab_suggested_friends" title="Təklif olunanlar" />
+			</tab_container>
+		</panel>
+		<panel label="Qruplar" name="groups_panel">
+			<panel name="groups_buttons_panel">
+				<filter_editor label="Qrupların filtri" name="groups_filter_input" />
+				<menu_button name="groups_gear_btn" tool_tip="Seçilmiş qrup üzərindəki əməliyyatlar" />
+				<menu_button name="groups_view_btn" tool_tip="Göstərilmə/sıralanma seçimləri" />
+				<menu_button name="plus_btn" tool_tip="Qrupa qoşul/Yeni qrup yarat" />
+				<dnd_button name="minus_btn" tool_tip="Seçilmiş qrupdan ayırıl" />
+			</panel>
+			<text name="groupcount">
+				Siz [COUNT] qrupa qoşulmusunuz ([REMAINING] mümkündür).
+			</text>
+		</panel>
+		<panel label="Sonuncular" name="recent_panel">
+			<panel name="recent_buttons_panel">
+				<filter_editor label="İnsanların filtri" name="recent_filter_input" />
+				<button name="gear_btn" tool_tip="Seçilmiş sakini üzərindəki əməliyyatlar" />
+				<menu_button name="recent_view_btn" tool_tip="Göstərilmə/sıralanma seçimləri" />
+				<button name="add_friend_btn" tool_tip="Sakinə dostluq təklif et" />
+				<dnd_button name="recent_del_btn" tool_tip="Seçilmiş istifadəçini dostluqdan sil" />
+			</panel>
+		</panel>
+		<panel label="Bloklanmışlar" name="blocked_panel">
+			<panel name="panel_block_list_sidetray" label="Bloklanmış sakinlər və obyektlər" />
+		</panel>
+		<panel label="Kontakt dəstləri" name="contact_sets_panel">
+			<panel name="panel_people_contacts_sidetray" label="Kontakt dəstləri" />
+		</panel>
+	</tab_container>
+</panel>

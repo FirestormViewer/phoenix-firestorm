@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_protected_folders" title="Mühafizə edilən qovluqlar">
+	<floater.string name="UnknownFolder">
+		(Naməlum qovluq)
+	</floater.string>
+	<panel name="buttons_panel">
+		<filter_editor label="Mühafizə edilən qovluqları filtirləyin" name="filter_input" />
+		<button name="remove_btn" tool_tip="Mühafizə edilən qovluq siyahısından silin"/>
+	</panel>
+	<panel name="panel_fs_protected_folders">
+		<scroll_list name="folder_list">
+			<scroll_list.columns label="Ad" name="name"/>
+		</scroll_list>
+	</panel>
+</floater>

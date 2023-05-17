@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_avatar_render_settings" title="Avatar Göstərmə İstisnaları">
+	<string name="av_never_render" value="Heç vaxt"/>
+	<string name="av_always_render" value="Həmişə"/>
+	<name_list name="render_settings_list">
+		<name_list.columns label="Ad" name="name"/>
+		<name_list.columns label="Ətraflı" name="setting"/>
+	</name_list>
+	<panel name="add_subpanel">
+		<menu_button label="Kimisə əlavə etmək..." name="plus_btn" tool_tip="Seçilmiş adam ilə hərəkətlər"/>
+	</panel>
+</floater>

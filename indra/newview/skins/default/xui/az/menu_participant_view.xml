@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="participant_manu_view">
+	<menu_item_check label="Söhbətləri növü üzrə sırala" name="sort_sessions_by_type" />
+	<menu_item_check label="Söhbətləri adı üzrə sırala" name="sort_sessions_by_name" />
+	<menu_item_check label="Söhbətləri son aktivliyə görə sırala" name="sort_sessions_by_recent" />
+	<menu_item_check label="Müsahibə aparırların adı üzrə sırala" name="sort_participants_by_name" />
+	<menu_item_check label="Müsahibə aparırların son aktivliyə görə sırala" name="sort_participants_by_recent" />
+	<menu_item_call label="Çat seçimləri..." name="chat_preferences" />
+	<menu_item_call label="Məxfilik seçimləri..." name="privacy_preferences" />
+	<menu_item_check label="Söhbət jurnalı..." name="Conversation" />
+	<menu_item_check name="Translate_chat" label="Ümumi söhbəti tərcümə et" />
+	<menu_item_check name="Translation_settings" label="Tərcümə seçimləri..." />
+</toggleable_menu>
+
+
+
+

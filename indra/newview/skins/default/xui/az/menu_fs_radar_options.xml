@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="Radarın üzərində kiçik xəritəni göstərmək" name="ShowRadarMinimap"/>
+	<menu_item_check label="Məsafə ilə məhdudlaşdırılmış nəticələri göstərmək" name="LimitRadarByRange"/>
+	<menu_item_check label="Bloklanmış avatarları göstərmək" name="FSRadarShowMutedAndDerendered"/>
+	<context_menu label="Radar adları formatı" name="radarNameFormat">
+		<menu_item_check label="Göstərilən ad" name="radarFmtDN"/>
+		<menu_item_check label="İstifadəçi adı" name="radarFmtUN"/>
+		<menu_item_check label="Göstərilən ad (İstifadəçi adı)" name="radarFmtDNUN"/>
+		<menu_item_check label="İstifadəçi adı (Göstərilən ad)" name="radarFmtUNDN"/>
+	</context_menu>
+	<context_menu label="Göstərilən sütunlar" name="visible_columns">
+		<menu_item_check label="Səs" name="voice_level"/>
+		<menu_item_check label="Bu regionda" name="in_region"/>
+		<menu_item_check label="Yazı yazanın göstəricisi" name="typing_status"/>
+		<menu_item_check label="Oturur vəziyyəti" name="sitting_status"/>
+		<menu_item_check label="Ödəniş informasiyası vəziyyəti" name="flags"/>
+		<menu_item_check label="Qeydlər" name="has_notes"/>
+		<menu_item_check label="Yaş" name="age"/>
+		<menu_item_check label="Vaxt" name="seen"/>
+	</context_menu>
+	<menu_item_check label="Ad rəngləri məsafəyə əsasən" name="radarColorNamesBasedOnDistance"/>
+	<context_menu label="Bildirişləri göstər" name="report_to_menu">
+		<menu_item_check label="Ümumi söhbətdə" name="radar_nearby_chat"/>
+		<menu_item_check label="Pop-up pəncərədə" name="radar_nearby_chat"/>
+	</context_menu>
+	<menu_item_check label="Ümumi söhbət örtülmə dairələri" name="MiniMapChatRing"/>
+	<menu_item_check label="Göstərmə radiusuna daxil olanda xəbər ver" name="RadarReportDrawRangeEnter"/>
+	<menu_item_check label="Göstərmə radiusundan çıxanda xəbər ver" name="RadarReportDrawRangeLeave"/>
+	<menu_item_check label="Söhbət radiusuna daxil olanda xəbər ver" name="RadarReportChatRangeEnter"/>
+	<menu_item_check label="Söhbət radiusundan çıxanda xəbər ver" name="RadarReportChatRangeLeave"/>
+	<menu_item_check label="İstifadəçi regiona daxil olanda xəbər ver" name="RadarReportSimRangeEnter"/>
+	<menu_item_check label="İstifadəçi regiondan çıxanda xəbər ver" name="RadarReportSimRangeLeave"/>
+	<menu_item_check label="Avatar yaşından xəbər ver" name="RadarReportAgeAlert"/>
+	<menu_item_check label="Skriptlər daxil olanda xəbər ver" name="RadarEnterChannelAlert"/>
+	<menu_item_check label="Skriptlər çıxanda xəbər ver" name="RadarLeaveChannelAlert"/>
+	<menu_item_check label="LSL körpüsü ilə radarın gücləndirməsi" name="FSRadarEnhanceByBridge"/>
+	<menu_item_call label="Bloklanmış istifadəçiləri və obyektləri göstər" name="show_blocked_list"/>
+</toggleable_menu>

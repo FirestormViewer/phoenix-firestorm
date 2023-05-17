@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="block_list_panel">
+     <panel name="blocked_buttons_panel">
+         <filter_editor label="Filtr" name="blocked_filter_input"/>
+         <menu_button name="blocked_gear_btn" tool_tip="Seçilmiş şəxs və ya obyekt üçün əməliyyatlar"/>
+         <menu_button name="view_btn" tool_tip="Sıralama seçimləri"/>
+         <menu_button name="plus_btn" tool_tip="Bloklanması üçün sakin və ya obyekt seçin"/>
+         <button name="unblock_btn" tool_tip="Siyahıdan bloklanan sakin və ya obyekti silin"/>
+     </panel>
+     <text name="block_limit">
+          [COUNT] siyahınızda, maksimum [LIMIT].
+      </text>
+    <block_list name="blocked" tool_tip="Hal-hazırda blokda olan sakinlərin siyahısı"/>
+</panel>

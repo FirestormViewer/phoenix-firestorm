@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview_conversation" title="Söhbət:">
+	<floater.string name="Title">
+		Söhbət: [NAME]
+	</floater.string>
+	<text name="page_label" value="Səh." />
+	<button tool_tip="Ayrı bir pəncərədə mesaj tarixini açın" name="open_external_btn" />
+	<button tool_tip="Söhbət tarixinin axtarışı" name="search_btn" />
+</floater>

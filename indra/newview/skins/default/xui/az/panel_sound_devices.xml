@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel label="Cihaz seçimləri" name="device_settings_panel">
+	<panel.string name="default_text">
+		Susmaya görə
+	</panel.string>
+	<string name="name_no_device">
+		Cihaz yoxdur
+	</string>
+	<string name="name_default_system_device">
+		Susmaya görə sistem cihazı
+	</string>
+	<text name="Input">
+		Daxiletmə
+	</text>
+	<text name="Output">
+		Çıxış
+	</text>
+	<text name="My volume label">
+		Mikrofon:
+	</text>
+	<slider_bar name="mic_volume_slider" tool_tip="Filtr istifadə edərək mikrofondakı səs səviyyəsini dəyişin"/>
+	<text name="wait_text">
+		Gözləyin
+	</text>
+</panel>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_skin_panel">
+	<panel name="avatar_skin_color_panel">
+		<texture_picker label="Baş" name="Head" tool_tip="Şəkil seçmək üçün basın"/>
+		<texture_picker label="Bədənin üstü" name="Upper Body" tool_tip="Şəkil seçmək üçün basın"/>
+		<texture_picker label="Bədənin altı" name="Lower Body" tool_tip="Şəkil seçmək üçün basın"/>
+	</panel>
+	<panel name="accordion_panel">
+		<accordion name="wearable_accordion">
+			<accordion_tab name="skin_color_tab" title="Dəri rəngi"/>
+			<accordion_tab name="skin_face_tab" title="Üz detalları"/>
+			<accordion_tab name="skin_makeup_tab" title="Makiyaj"/>
+			<accordion_tab name="skin_body_tab" title="Bədən detalları"/>
+		</accordion>
+	</panel>
+</panel>

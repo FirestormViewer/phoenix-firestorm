@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu name="Popup">
+	<menu_item_call label="Siyahı yarat" name="Marketplace Create Listing"/>
+	<menu_item_call label="Siyahını bağla" name="Marketplace Associate Listing"/>
+	<menu_item_call label="Siyahını (yeniləmək) almaq" name="Marketplace Get Listing"/>
+	<menu_item_call label="Xətalara yoxlanış" name="Marketplace Check Listing"/>
+	<menu_item_call label="Siyahını dəyişdir" name="Marketplace Edit Listing"/>
+	<menu_item_call label="Nəşr etmək" name="Marketplace List"/>
+	<menu_item_call label="Nəşri ləğv etmək" name="Marketplace Unlist"/>
+	<menu_item_call label="Aktivləşdirmək" name="Marketplace Activate"/>
+	<menu_item_call label="Deaktivləşdirmək" name="Marketplace Deactivate"/>
+	<menu_item_call label="Paylaş" name="Share"/>
+	<menu_item_call label="Aç" name="Task Open"/>
+	<menu_item_call label="Oynat" name="Task Play"/>
+	<menu_item_call label="Xüsusiyyətlər" name="Task Properties"/>
+	<menu_item_call label="Adı dəyişdir" name="Task Rename"/>
+	<menu_item_call label="Sil" name="Task Remove"/>
+	<menu_item_call label="Səbəti təmizlə" name="Empty Trash"/>
+	<menu_item_call label="'Tapılan əşyaları' silin" name="Empty Lost And Found"/>
+	<menu_item_call label="Yeni qovluq" name="New Folder"/>
+	<menu_item_call label="Yeni geyim" name="New Outfit"/>
+	<menu_item_call label="Yeni skript" name="New Script"/>
+	<menu_item_call label="Yeni qeyd" name="New Note"/>
+	<menu_item_call label="Yeni jest" name="New Gesture"/>
+	<menu label="Yeni paltar" name="New Clothes">
+		<menu_item_call label="Yeni köynək" name="New Shirt"/>
+		<menu_item_call label="Yeni şalvar" name="New Pants"/>
+		<menu_item_call label="Yeni ayaqqabı" name="New Shoes"/>
+		<menu_item_call label="Yeni corablar" name="New Socks"/>
+		<menu_item_call label="Yeni pencək" name="New Jacket"/>
+		<menu_item_call label="Yeni don" name="New Skirt"/>
+		<menu_item_call label="Yeni əlcəklər" name="New Gloves"/>
+		<menu_item_call label="Yeni mayka" name="New Undershirt"/>
+		<menu_item_call label="Yeni tuman" name="New Underpants"/>
+		<menu_item_call label="Yeni alfa" name="New Alpha"/>
+		<menu_item_call label="Yeni döymə" name="New Tattoo"/>
+		<menu_item_call label="Yeni universal" name="New Universal"/>
+		<menu_item_call label="Yeni fizika" name="New Physics"/>
+	</menu>
+	<menu label="Yeni bədən hissəsi" name="New Body Parts">
+		<menu_item_call label="Yeni fiqura" name="New Shape"/>
+		<menu_item_call label="Yeni dəri" name="New Skin"/>
+		<menu_item_call label="Yeni saç" name="New Hair"/>
+		<menu_item_call label="Yeni gözlər" name="New Eyes"/>
+	</menu>
+	<menu label="Yeni seçimlər" name="New Settings">
+		<menu_item_call label="Yeni səma" name="New Sky"/>
+		<menu_item_call label="Yeni su" name="New Water"/>
+		<menu_item_call label="Yeni gün dövrü" name="New Day Cycle"/>
+	</menu>
+	<menu label="İşlət:" name="upload_def">
+		<menu_item_call label="Şəkil yükləmək üçün" name="Image uploads"/>
+		<menu_item_call label="Səs yükləmək üçün" name="Sound uploads"/>
+		<menu_item_call label="Animasiya yükləmək üçün" name="Animation uploads"/>
+		<menu_item_call label="Model yükləmək üçün" name="Model uploads"/>
+	</menu>
+	<menu label="Növü dəyişdir" name="Change Type">
+		<menu_item_call label="Susmaya görə" name="Default"/>
+		<menu_item_call label="Əlcəklər" name="Gloves"/>
+		<menu_item_call label="Pencək" name="Jacket"/>
+		<menu_item_call label="Şalvar" name="Pants"/>
+		<menu_item_call label="Forma" name="Shape"/>
+		<menu_item_call label="Ayaqqabı" name="Shoes"/>
+		<menu_item_call label="Köynək" name="Shirt"/>
+		<menu_item_call label="Don" name="Skirt"/>
+		<menu_item_call label="Tuman" name="Underpants"/>
+		<menu_item_call label="Mayka" name="Undershirt"/>
+	</menu>
+	<menu_item_call label="Teleport" name="Landmark Open"/>
+	<menu_item_call label="Oynat" name="Animation Open"/>
+	<menu_item_call label="Oynat" name="Sound Open"/>
+	<menu_item_call label="Geyimi əvəz et" name="Replace Outfit"/>
+	<menu_item_call label="Geyimə əlavə et" name="Add To Outfit"/>
+	<menu_item_call label="Element yarat" name="Wear Items"/>
+	<menu_item_call label="Geyimdən sil" name="Remove From Outfit"/>
+	<menu_item_call label="Siyahını buferə köçürt" name="Copy outfit list to clipboard"/>
+	<menu_item_call label="Orijinalını tap" name="Find Original"/>
+	<menu_item_call label="Obyekti sil" name="Purge Item"/>
+	<menu_item_call label="Obyekti bərpa et" name="Restore Item"/>
+	<menu_item_call label="Aç" name="Open"/>
+	<menu_item_call label="Orijinalı aç" name="Open Original"/>
+	<menu_item_call label="Xüsusiyyətlər" name="Properties"/>
+	<menu_item_call label="Adı dəyişdir" name="Rename"/>
+	<menu_item_call label="Qovluqu qorumaq" name="ProtectFolder"/>
+	<menu_item_call label="Qovluq qorunmasını sil" name="UnprotectFolder"/>
+	<menu_item_call label="UUID-ni köçürt" name="Copy Asset UUID"/>
+	<menu_item_call label="Əsas paneldə göstər" name="Show in Main Panel"/>
+	<menu_item_call label="Yeni pəncərədə göstər" name="Show in new Window"/>
+	<menu_item_call label="Qovluğu yenidən yüklə" name="ReloadFolder"/>
+	<menu_item_call label="Son mövqeyə qayıt" name="Restore to Last Position"/>
+	<menu_item_call label="Köçürt" name="Copy"/>
+	<menu_item_call label="Kəs" name="Cut"/>
+	<menu_item_call label="Yapışdır" name="Paste"/>
+	<menu_item_call label="Keçid kimi yapışdır" name="Paste As Link"/>
+	<menu_item_call label="Bütün keçidləri tap" name="Find Links"/>
+	<menu_item_call label="Keçidləri əvəz et" name="Replace Links"/>
+	<menu_item_call label="Sil" name="Delete"/>
+	<menu_item_call label="İşləməyən keçidləri təmizlə" name="Cleanup broken Links"/>
+	<menu_item_call label="Susmaya görə olan qovluğa daşı" name="Move to Default Folder"/>
+	<menu_item_call label="'İtmiş və tapılmış'-a daşı" name="Move to Lost And Found"/>
+	<menu_item_call label="Sistem qovluğunu sil" name="Delete System Folder"/>
+	<menu_item_call label="Seçilmişlərdən qovluq yarat" name="New folder from selected"/>
+	<menu_item_call label="Qovluq elementlərini qrupdan çıxart" name="Ungroup folder items"/>
+	<menu_item_call label="Konfrans söhbətinə başla" name="Conference Chat Folder"/>
+	<menu_item_call label="Oynat" name="Sound Play"/>
+	<menu_item_call label="SLurl-ni köçürt" name="url_copy"/>
+	<menu_item_call label="Yer haqqında" name="About Landmark"/>
+	<menu_item_call label="Xəritədə göstər" name="show_on_map"/>
+	<menu_item_call label="Hamı üçün oynat" name="Animation Play"/>
+	<menu_item_call label="Tək mənim üçün oynat" name="Animation Audition"/>
+	<menu_item_call label="İM Göndər" name="Send Instant Message"/>
+	<menu_item_call label="Teleport təklif et" name="Offer Teleport..."/>
+	<menu_item_call label="Teleport tələb et" name="Request Teleport..."/>
+	<menu_item_call label="Начать конференц чат" name="Conference Chat"/>
+	<menu_item_call label="Aktivləşdirm" name="Activate"/>
+	<menu_item_call label="Deaktivləşdir" name="Deactivate"/>
+	<menu_item_call label="Ayrı saxla" name="Save As"/>
+	<menu_item_call label="Ayrı saxla" name="Save Selected As"/>
+	<menu_item_call label="Geyin" name="Wearable And Object Wear"/>
+	<menu_item_call label="Əlavə et" name="Wearable Add"/>
+	<menu label="Nəyə birləşdir" name="Attach To"/>
+	<menu label="Ekrana birləşdir" name="Attach To HUD"/>
+	<menu_item_call label="Toxun" name="Attachment Touch"/>
+	<menu_item_call label="Dəyişdir" name="Wearable Edit"/>
+	<menu_item_call label="Teksturasını yenilə" name="Texture Refresh Attachment" />
+	<menu_item_call label="Özündən ayır" name="Detach From Yourself"/>
+	<menu_item_call label="Çıxart" name="Take Off"/>
+	<menu_item_call name="Settings Apply Local" label="Применить только к себе"/>
+	<menu_item_call name="Settings Apply Parcel" label="Применить к Участку"/>
+	<menu_item_call label="Ticarət mərkəzinin məhsul siyahılarına köçürt" name="Marketplace Copy"/>
+	<menu_item_call label="Ticarət mərkəzinin məhsul siyahılarına daşı" name="Marketplace Move"/>
+	<menu_item_call label="--seçim yoxdur--" name="--no options--"/>
+</menu>

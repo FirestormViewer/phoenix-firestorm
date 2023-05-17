@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_preferences">
+	<text name="back_lbl">Geri</text>
+	<text name="settings_title">Qrafika seçimləri</text>
+	<text name="quality_lbl">Keyfiyyət və ya sürət</text>
+	<text name="FasterText">Sürətli</text>
+	<text name="BetterText">Keyfiyyətli</text>
+	<text name="ShadersPrefText">Aşağı</text>
+	<text name="ShadersPrefText2">Orta</text>
+	<text name="ShadersPrefText3">Yüksək</text>
+	<text name="ShadersPrefText4">Ultra</text>
+	<text name="quality_desc">Öncədən təyin edilmişlərdən birini seçərsinizsə, bütün dəyişikliklər sıfırlanacaq.</text>
+	<text name="distance_lbl">Görüş məsafəsi</text>
+	<text name="faster_lbl">Sürətli</text>
+	<text name="draw_distance_m">m</text>
+	<text name="farther_lbl" width="50">Uzaqda</text>
+	<text name="distance_desc1">Daha yaxşı sürət üçün azaltın, daha uzağı görmək üçün artırın.</text>
+	<text name="environment_lbl">Ətraf mühit</text>
+	<text name="enhancements_desc">
+Kölgələrin azaldılması/silinməsi FPS-i artıra bilər,
+amma mühitə və mənzərəyə təsir edir.
+	</text>
+	<text name="RenderShadowDetailText">Kölgə mənbələri:</text>
+	<combo_box name="ShadowDetail">
+		<combo_box.item label="Yox" name="0"/>
+		<combo_box.item label="Günəş/Ay" name="1"/>
+		<combo_box.item label="Günəş/Ay + Projektorlar" name="2"/>
+	</combo_box>
+	<text name="water_lbl">Su</text>
+	<text name="water_desc">Effektlərin azaldılması FPS-i yaxşılaşdıra bilər.</text>
+	<text name="ReflectionsText">Su üzərində əkslər:</text>
+	<combo_box name="Reflections">
+		<combo_box.item label="Heçnə; qeyri-şəffaf" name="-2"/>
+		<combo_box.item label="Heçnə; şəffaflıq" name="-1"/>
+		<combo_box.item label="Minimum" name="0" value="0"/>
+		<combo_box.item label="Yer və ağaclar" name="1"/>
+		<combo_box.item label="Bütün sabit obyektlər" name="2"/>
+		<combo_box.item label="Bütün avatarlar və obyektlər" name="3"/>
+		<combo_box.item label="Hamısı" name="4"/>
+	</combo_box>
+	<text name="photo_lbl">Şəkil</text>
+	<text name="photo_desc">
+	Fotoqraflar üçün yüksək keyfiyyət tələb olunur,
+lakin bu kadrların sürətini aşağı salır. [APP_NAME] Fotoalətləri sizə düzgün
+balans tapmağınıza kömək edə bilər.
+	</text>
+	<button name="open_phototools" label="Fotoalətləri açın" tool_tip="Fotoqrafların genişləndirilmiş tənzimləmələri üçün xüsusi fotoalətləri açın."/>
+</panel>
+

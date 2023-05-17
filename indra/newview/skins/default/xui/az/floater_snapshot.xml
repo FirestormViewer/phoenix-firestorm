@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Snapshot" title="Şəkil önizləməsi">
+	<floater.string name="unknown">
+		naməlum
+	</floater.string>
+	<string name="postcard_progress_str">
+		Məktub göndərilməsi
+	</string>
+	<string name="facebook_progress_str">
+		Facebook-da nəşr
+	</string>
+	<string name="profile_progress_str">
+		Nəşr gedir
+	</string>
+	<string name="inventory_progress_str">
+		Avadanlıq siyahısına saxlanılır
+	</string>
+	<string name="local_progress_str">
+		Kompüterə saxlanılır
+	</string>
+	<string name="facebook_succeeded_str">
+		Şəkil yükləndi
+	</string>
+	<string name="profile_succeeded_str">
+		Şəkil göndərildi
+	</string>
+	<string name="postcard_succeeded_str">
+		Məktub göndərildi!
+	</string>
+	<string name="inventory_succeeded_str">
+		Avadanlıq siyahısına saxlanıldı!
+	</string>
+	<string name="local_succeeded_str">
+		Kompüterdə saxlanıldı!
+	</string>
+	<string name="facebook_failed_str">
+		Şəkil sizin Facebook səlnaməsinə göndərilə bilmədi.
+	</string>
+	<string name="profile_failed_str">
+		Şəkili profilinizə göndərilmədi.
+	</string>
+	<string name="postcard_failed_str">
+		Məktub göndərilmədi.
+	</string>
+	<string name="inventory_failed_str">
+		Avadanlıq siyahısında saxlanılmadı.
+	</string>
+	<string name="local_failed_str">
+		Kompüterdə saxlanılmadı.
+	</string>
+	<view name="controls_container">
+	<button label="Yenilə" name="new_snapshot_btn"/>
+	<panel name="advanced_options_panel">
+		<text name="layer_type_label">
+			Çəkilən sahə:
+		</text>
+		<combo_box label="Şəkil qatları" name="layer_types">
+			<combo_box.item label="Rənglər" name="Colors"/>
+			<combo_box.item label="Dərinlik" name="Depth"/>
+		</combo_box>
+		<check_box label="İnterfeys" name="ui_check"/>
+		<check_box label="L$ Balansı" name="currency_check"/>
+		<check_box label="Oyun içi məlumatlar" name="hud_check"/>
+		<check_box label="Stop-kadr (tam ekran)" name="freeze_frame_check"/>
+		<check_box label="Avtomatik yeniləmə" name="auto_snapshot_check"/>
+		<text name="filter_list_label" width="60">
+            Filtr:
+        </text>
+		<combo_box name="filters_combobox" left="60" >
+            <combo_box.item label="Filtersiz" name="NoFilter"/>
+        </combo_box>
+	</panel>
+	</view>
+	<text name="image_res_text">
+		[WIDTH] (en) x [HEIGHT] (hündürlük) пикс.
+	</text>
+	<text name="file_size_label">
+		[SIZE] KB
+	</text>
+	<button label="360° şəkil" name="360_label"/>
+</floater>

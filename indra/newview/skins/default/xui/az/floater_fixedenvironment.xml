@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Fixed Environment" title="Sabit mühit">
+	<string name="edit_sky">
+		Səma seçimlərini dəyişdir:
+	</string>
+	<string name="edit_water">
+		Su seçimlərini dəyişdir:
+	</string>
+	<layout_stack name="floater_stack">
+		<layout_panel name="info_panel">
+			<text name="info_panel_label">
+				Ad:
+			</text>
+			<button label="Yüklə" name="btn_load" tool_tip="Seçimləri avadanlıq siyahısından yüklə"/>
+			<button label="İdxal" name="btn_import" tool_tip="Köhnəlmiş seçimləri diskdən idxal et."/>
+		</layout_panel>
+		<layout_panel name="button_panel">
+			<layout_stack name="button_bar_ls">
+				<layout_panel name="save_btn_lp">
+					<button label="Yadda saxla" name="btn_commit"/>
+				</layout_panel>
+				<layout_panel name="revert_btn_lp">
+					<button label="Ləğv et" name="btn_cancel" tool_tip="Axırıncı yadda saxlanılmış verisyaya qayıt"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</floater>

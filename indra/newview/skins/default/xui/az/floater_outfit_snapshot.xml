@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="outfit_snapshot" title="Geyim şəkili">
+  <floater.string name="unknown">
+    naməlum
+  </floater.string>
+  <string name="inventory_progress_str">
+    Avadanlıq siyahısına saxlanıldı
+  </string>
+  <string name="inventory_succeeded_str">
+    Avadanlıq siyahısına saxlanıldı!
+  </string>
+  <string name="inventory_failed_str">
+    Avadanlıq siyahısına saxlamaq alınmadı.
+  </string>
+  <view name="controls_container">
+    <button label="Yenilə" name="new_snapshot_btn"/>
+    <panel name="advanced_options_panel">
+      <text name="layer_type_label">
+        Şəkil:
+      </text>
+      <combo_box label="Şəkil təbəqələri" name="layer_types">
+        <combo_box.item label="Rənglər" name="Colors" />
+        <combo_box.item label="Dərinlik" name="Depth" />
+        <combo_box.item label="Dərinlik (24 bit)" name="Depth24" />
+      </combo_box>
+      <check_box label="İnterfeys" name="ui_check" />
+      <check_box label="L$ Balansı" name="currency_check" />
+      <check_box label="Displey" name="hud_check" />
+      <check_box label="Çərçivəni dondur (tam ekran)" name="freeze_frame_check" />
+      <check_box label="Avtomatik yeniləmə" name="auto_snapshot_check" />
+      <text name="filter_list_label" width="60" >
+        Filtr:
+      </text>
+      <combo_box name="filters_combobox" tool_tip="Şəkil filterləri" left="60" >
+        <combo_box.item label="Filtersiz" name="NoFilter" />
+      </combo_box>
+    </panel>
+    <panel name="succeeded_panel">
+      <text name="succeeded_lbl">
+        Uğurlu
+      </text>
+    </panel>
+    <panel name="failed_panel">
+      <text name="failed_lbl">
+        Uğursuz
+      </text>
+    </panel>
+    <text name="working_lbl">
+      İş
+    </text>
+    <text name="refresh_lbl">
+      Yadda saxlamaq üçün yeniləyin.
+    </text>
+  </view>
+  <text name="image_res_text">
+     [WIDTH]piks (en) x [HEIGHT]piks (hündürlük)
+  </text>
+  <text name="file_size_label">
+     [SIZE] KB
+  </text>
+</floater>
