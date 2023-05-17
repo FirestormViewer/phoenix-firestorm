@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Toolbars Popup">
+  <menu_item_call label="Bu düyməni sil" name="Remove button" />
+  <menu_item_call label="Alətlər paneli düymələri..." name="Choose Buttons" />
+  <menu_item_check label="Nişanlar və yazılar" name="icons_with_text" />
+  <menu_item_check label="Yalnız nişanlar" name="icons_only" />
+  <menu_item_check label="Bloklanmış" name="toolbars_locked" />
+</context_menu>

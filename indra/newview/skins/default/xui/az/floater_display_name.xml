@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Display Name" title="Göstərilən ad">
+	<text name="info_text">
+		Avatar verdiyiniz ad göstərilən ad adlanır. Həftədə bir dəfə dəyişə bilərsiniz.
+	</text>
+	<text name="lockout_text">
+		Adınızı [TIME] tarixinə qədər dəyişə bilməzsiniz.
+	</text>
+	<text name="set_name_label">
+		Yeni ad:
+	</text>
+	<text name="name_confirm_label">
+		Təsdiq etmək üçün yeni adınızı yenidən daxil edin:
+	</text>
+	<button label="Saxla" name="save_btn" tool_tip="Yeni adı qeyd edin"/>
+	<button label="Sıfırla" name="reset_btn" tool_tip="Adı istifadəçi adına dəyişdirin"/>
+	<button label="Ləğv et" name="cancel_btn"/>
+</floater>

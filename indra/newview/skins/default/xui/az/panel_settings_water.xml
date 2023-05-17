@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Su" name="panel_settings_water">
+	<layout_stack name="water_stack1">
+		<layout_panel name="lp_top">
+			<text name="water_fog_label">Su tumanı:</text>
+			<text name="color_label">Rəng:</text>
+			<text name="density_exponent_label">Tündlik göstəricisi:</text>
+			<text name="underwater_modifier_label">Dəniz altı dəyişdirici:</text>
+			<text name="FresnelScaleText">Fresnel Ölçüsü:</text>
+			<text name="FresnelOffsetText">Frensel Versiyası:</text>
+		</layout_panel>
+		<layout_panel name="lp_bottom">
+			<layout_stack name="water_stack2">
+				<layout_panel name="lp_left">
+					<text name="normal_map_label">Normal xəritəsi</text>
+					<text name="large_wave_speed_label">Böyük dalğanın sürəti</text>
+					<text name="small_wave_speed_label">Kiçik dalğanın sürəti</text>
+					<text name="reflection_wavelet_scale_label">Abfraksiya ölçüsü</text>
+				</layout_panel>
+				<layout_panel name="lp_right">
+					<text name="refraction_and_blur_label">Refraksiya və bulanıqlıq:</text>
+					<text name="refraction_scale_above_label">Refraksiya ölçüsü (yuxarı)</text>
+					<text name="refraction_scale_below_label">Refraksiya ölçüsü (aşağı)</text>
+					<text name="blur_multiplier_label">Bulanıqlıq çoxalıcısı</text>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>

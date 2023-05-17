@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="fs_camera_floater_small">
+    <floater.string name="rotate_tooltip">
+        Kameranı diqqətləşdirmə nöqtəsinin üzərində çevir
+    </floater.string>
+    <floater.string name="zoom_tooltip">
+        Kameranın diqqətləşdirmə nöqtəsinə nisbətən ölçüsü
+    </floater.string>
+    <floater.string name="move_tooltip">
+        Kameranı yuxarı/aşağı, sola/sağa sürüşdürün
+    </floater.string>
+    <panel name="zoom">
+        <layout_stack name="camera_view_layout_stack">
+            <layout_panel name="camera_rotate_layout_panel">
+                <joystick_rotate name="cam_rotate_stick" tool_tip="Kameranı diqqətləşdirmə nöqtəsinin üzərində çevir"/>
+            </layout_panel>
+            <layout_panel name="camera_zoom_layout_panel">
+                <slider_bar name="zoom_slider" tool_tip="Kameranı diqqətləşdirmə nöqtəsinə/nöqtəsindən yaxınlaşdır/uzaqlaşdır"/>
+            </layout_panel>
+            <layout_panel name="panel_track">
+                <joystick_track name="cam_track_stick" tool_tip="Kameranı yuxarı/aşağı, sola/sağa sürüşdürün"/>
+            </layout_panel>
+        </layout_stack>
+    </panel>
+    <panel name="buttons_view">
+        <panel_camera_item name="front_view" tool_tip="Öndən baxış"/>
+        <panel_camera_item name="group_view" tool_tip="Kənardan baxış"/>
+        <panel_camera_item name="rear_view" tool_tip="Arxadan baxış"/>
+    </panel>
+    <panel name="buttons">
+        <panel_camera_item name="object_view" tool_tip="Obyektə baxış"/>
+        <panel_camera_item name="mouselook_view" tool_tip="Birini şəxs baxışı"/>
+        <panel_camera_item name="reset_view" tool_tip="Baxışı sıfırla"/>
+    </panel>
+</floater>

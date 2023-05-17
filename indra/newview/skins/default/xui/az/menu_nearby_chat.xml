@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu name="NearBy Chat Menu">
+	<menu_item_call label="Yaxınlıqdakı insanları göstər..." name="nearby_people"/>
+	<menu_item_check label="Bloklanmış mətni göstər" name="muted_text"/>
+	<menu_item_check label="Dost nişanlarını göstər" name="show_buddy_icons"/>
+	<menu_item_check label="Adları göstər" name="show_names"/>
+	<menu_item_check label="Nişanlar və adları göstər" name="show_icons_and_names"/>
+	<menu_item_call label="Şrift ölçüsü" name="font_size"/>
+</menu>

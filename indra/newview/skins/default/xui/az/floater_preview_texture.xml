@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview_texture">
+	<floater.string name="Title">
+		Tekstur: [NAME]
+	</floater.string>
+	<floater.string name="Copy">
+		Avadanlıq siyahısına köçürt
+	</floater.string>
+	<floater.string name="DateTime">
+		[weekday,datetime,slt], [day,datetime,slt] [month,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+	</floater.string>
+	<floater.string name="UploaderDateTime">
+		Yükləyib: [UPLOADER] [DATE_TIME] tarixində
+	</floater.string>
+	<text name="desc txt">
+		Təsviri:
+	</text>
+	<button label="Profil" name="openprofile" width="65" />
+	<panel name="dimensions_panel" >
+		<text name="dimensions" width="110">
+			[WIDTH] x [HEIGHT] pks.
+		</text>
+		<button label="UUID" name="copyuuid" tool_tip="UUID buferə köçürt" width="60" />
+		<text right="-128" name="aspect_ratio" width="128">
+			Önizləmə
+		</text>
+		<combo_box width="100" name="combo_aspect_ratio" tool_tip="Предварительный просмотр с фиксированным соотношением сторон">
+		</combo_box>
+	</panel>
+
+	<panel name="button_panel">
+		<button name="btn_refresh" width="22" />
+		<button label="OK" name="Keep" width="90" />
+		<button label="Ləğv et" name="Discard" width="110" />
+		<flyout_button label="Yadda saxla..." name="save_tex_btn" width="110">
+			<flyout_button.item label="TGA olaraq saxlamaq" name="save_item_tga" />
+			<flyout_button.item label="PNG olaraq saxlamaq" name="save_item_png" />
+		</flyout_button>
+	</panel>
+</floater>

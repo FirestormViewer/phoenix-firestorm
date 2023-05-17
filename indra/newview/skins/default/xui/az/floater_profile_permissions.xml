@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="profile_permissions">
+	<string name="description_string" value="[AGENT_NAME]-a icazə vermək:" />
+	<text name="perm_description" value="İstifadəçiyə icazə vermək:"/>
+	<check_box name="online_check" label="Məni onlayn görə bilər"/>
+	<check_box name="map_check" label="Dünya xəritəsində məni tapa bilər"/>
+	<check_box name="objects_check" label="Mənim obyektlərimi dəyişdirmək, silmək və ya götürmək"/>
+	<button name="perms_btn_ok" label="Bəli"/>
+	<button name="perms_btn_cancel" label="Ləğv et"/>
+</floater>

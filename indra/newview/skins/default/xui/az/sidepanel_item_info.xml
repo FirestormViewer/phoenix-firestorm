@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="item properties" title="Obyekt profili">
+	<panel.string name="loading_experience">
+		(yüklənir)
+	</panel.string>
+	<panel.string name="unknown">
+		(naməlum)
+	</panel.string>
+	<panel.string name="unknown_multiple">
+		(naməlum/bir neçə)
+	</panel.string>
+	<panel.string name="public">
+		(içtimai)
+	</panel.string>
+	<panel.string name="you_can">
+		İcazələriniz:
+	</panel.string>
+	<panel.string name="owner_can">
+		Sahibin icazələri:
+	</panel.string>
+	<panel.string name="acquiredDate">
+		[wkday,datetime,slt], [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+	</panel.string>
+	<panel.string name="origin_inventory">
+		(avadanlıq siyahısı)
+	</panel.string>
+	<panel.string name="origin_inworld">
+		(dünyada)
+	</panel.string>
+	<text name="title" value="Obyekt profili"/>
+	<text name="origin" value="(avadanlıq siyahısı)"/>
+	<scroll_container name="item_profile_scroll">
+		<panel label="" name="item_profile">
+			<text name="LabelItemNameTitle">
+				Adı:
+			</text>
+			<line_editor name="LabelItemName" tool_tip="Adı 63 simvol ilə məhdudlaşdırılır. Daha uzun simvollar qısaltılır. Adlar yalnız ASCII-7 (genişləndirilməmiş) simvol dəstəsində olan çap simvollarından ibarət ola bilər, xaricdə qalın bir xətt olan | simvolu."/>
+			<text name="LabelItemDescTitle">
+				Təsviri:
+			</text>
+			<line_editor name="LabelItemDesc" tool_tip="Baxış pəcərəsinin tənzimləmələrində &apos;Pop-up anlatım pəncərəsi&apos; seçildiyi zaman oyunçular siçanı hər hansı obyektə nişanlandıranda pop-up anlatım pəncərəsi çıxacaq. Primitivin təsviri 127 bayt ilə məhdudlaşdırılır və bu ölçüyü aşan metin kəsilir."/>
+			<text name="LabelCreatorTitle">
+				Yaradıcı:
+			</text>
+			<text name="LabelOwnerTitle">
+				Sahibi:
+			</text>
+			<text name="LabelAcquiredTitle">
+				Alınıb:
+			</text>
+			<text name="LabelItemExperienceTitle">
+				Macəralar:
+			</text>
+			<panel name="perms_inv">
+				<text name="perm_modify">
+					İcazələriniz:
+				</text>
+				<check_box label="Dəyişdir" name="CheckOwnerModify"/>
+				<check_box label="Köçürt" name="CheckOwnerCopy"/>
+				<check_box label="Göndər" name="CheckOwnerTransfer"/>
+				<text name="AnyoneLabel">
+					Hamı:
+				</text>
+				<check_box label="Köçürt" name="CheckEveryoneCopy" tool_tip="Hər kəs obyektin köçürtməsin götürə bilər. Obyekt və onun bütün məzmunu köçürtməli və paylaşma icazəsinə məxsus olmalıdırlar."/>
+				<text name="GroupLabel">
+					Qrup:
+				</text>
+				<check_box label="Paylaş" name="CheckShareWithGroup" tool_tip="Seçilmiş qrupun bütün üzvlərinə bu obyektdə təyin etdiyiniz hüquqları almağa icazə verin. Rol məhdudiyyətlərini aktivləşdirmək üçün müqavilə bağlamalısınız."/>
+				<text name="NextOwnerLabel">
+					Yeni sahibi:
+				</text>
+				<check_box label="Dəyişdir" name="CheckNextOwnerModify" tool_tip="Növbəti sahib fərdi elementin adı və ya həmin elementin miqyası kimi xassələri dəyişdirə bilər."/>
+				<check_box label="Köçürt" name="CheckNextOwnerCopy" tool_tip="Növbəti sahibi bu obyektin qeyri-məhdud sayda köçürtməsini çıxara bilər. Köçürtmələr yaradıcı haqqında məlumat ehtiva edir və heç vaxt kopyalanan elementdən daha icazəli ola bilməz."/>
+				<check_box label="Göndər" name="CheckNextOwnerTransfer" tool_tip="Növbəti sahibi bu obyekti başqasına verə və ya yenidən sata bilər."/>
+			</panel>
+			<check_box label="Satış üçün" name="CheckPurchase" tool_tip="Oyunçulara göstərilən qiymətə bu obyekti, onun məzmununu almağa və ya onu oyun dünyasında köçürtməyə imkan verir."/>
+			<combo_box name="ComboBoxSaleType" tool_tip="Alıcının obyektin özünü, köçürtməsini və ya məzmunun köçürtməsin alacağını seçin.">
+				<combo_box.item label="Köçürt" name="Copy"/>
+				<combo_box.item label="Məzmun" name="Contents"/>
+				<combo_box.item label="Orijinal" name="Original"/>
+			</combo_box>
+			<spinner label="Qiymət: L$" name="Edit Cost" tool_tip="Obyektin qiyməti."/>
+		</panel>
+	</scroll_container>
+	<panel name="button_panel">
+		<button label="Ləğv et" name="cancel_btn"/>
+	</panel>
+</panel>
+
+
+		<line_editor name="LabelItemName" tool_tip="Adı 63 simvol ilə məhdudlaşdırılır. Daha uzun simvollar qısaltılır. Adlar yalnız ASCII-7 (genişləndirilməmiş) simvol dəstəsində olan çap simvollarından ibarət ola bilər, xaricdə qalın bir xətt olan | simvolu."/>
+		<text name="LabelItemDescTitle">
+			Təsviri:
+		</text>
+		<line_editor name="LabelItemDesc" tool_tip="Göstərilmə xüsusiyyətlərində 'Bütün obyektlərdə açılan sürüşdürmə' seçilibsə, istifadəçilər hər hansı bir obyektə sürüşdürəndə obyektin təsviri olan açılan pəncərə görünür. Primitivin təsviri 127 bayt ilə məhdudlaşdırılır və bu ölçüyü aşan metin kəsilir."/>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Chat Options Menu">
+	<menu_item_check label="Yaxınlıqdakı insanları göstər..." name="nearby_people"/>
+	<menu_item_check label="Səsləri göstər..." name="nearby_voice"/>
+	<menu_item_check label="Qara siyahını göstər..." name="block_list"/>
+	<menu_item_check label="Söhbət tarixində V1 üslubunu istifadə et" name="plain_text_chat_history"/>
+	<menu_item_check label="Söhbət başlıqlarında profil nişanlarını göstər" name="chat_header_icons"/>
+	<context_menu label="Yazı tipinin ölçüsü..." name="font_size">
+		<menu_item_check label="Kiçik" name="font_size_small"/>
+		<menu_item_check label="Orta" name="font_size_medium"/>
+		<menu_item_check label="Böyük" name="font_size_large"/>
+		<menu_item_check label="Çox böyük" name="font_size_huge"/>
+	</context_menu>
+	<menu_item_check label="Yazı yazıldığı zaman (>) işarəsini göstər" name="typing_chevron"/>
+	<menu_item_check label="Yeni mesaj bildirişini göstər" name="new_message_notification"/>
+	<menu_item_check label="Söhbət çubuğunu göstər" name="show_chat_bar"/>
+	<menu_item_check label="Kanal seçimini göstər" name="show_channel_selection"/>
+	<menu_item_check label="Göndər/Yolla düyməsini göstər" name="show_send_button"/>
+	<menu_item_check label="Şəxsi mesaj göndərmək üçün düyməni göstər" name="show_im_send_button"/>
+</toggleable_menu>

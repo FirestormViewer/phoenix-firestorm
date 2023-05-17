@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="group_info">
+	<floater.string name="title_create_group">
+		Yeni qrup yarat...
+	</floater.string>
+	<floater.string name="title_loading">
+		Qrup profili - Yüklənir...
+	</floater.string>
+	<floater.string name="title">
+		Qrup profili - [NAME]
+	</floater.string>
+</floater>

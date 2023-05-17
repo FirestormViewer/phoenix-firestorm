@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Mənim Avatarım" name="script_limits_my_avatar_panel">
+	<text name="script_memory">
+		Avatar skriptləri üçün yaddaş
+	</text>
+	<text name="loading_text">
+		Yüklənir...
+	</text>
+	<scroll_list name="scripts_list">
+		<scroll_list.columns label="Ölçü (KB)" name="size"/>
+		<scroll_list.columns label="URL ünvanları" name="urls"/>
+		<scroll_list.columns label="Obyekt adı" name="name"/>
+		<scroll_list.columns label="Yer" name="location"/>
+	</scroll_list>
+	<button label="Siyahını yenilə" name="refresh_list_btn" width="120"/>
+</panel>

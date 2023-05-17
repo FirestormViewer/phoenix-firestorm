@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Friends Popup">  
+	<menu_item_call label="İM Göndər" name="send_im" />
+	<menu_item_call label="Qrupa əlavə et" name="Add to Set" />
+	<menu_item_call label="Teleport təklif et" name="offer_teleport" />
+	<menu_item_call label="Dostluqdan sil" name="remove_friend" />
+	<menu name="options" label="Seçimlər...">
+		<menu_item_check label="Göstərmə sütunu: İstifadəçi adı" name="show_username" />
+		<menu_item_check label="Göstərmə sütunu: Göstərilən ad" name="show_displayname" />
+		<menu_item_check label="Göstərmə sütunu: Tam adı" name="show_fullname" />
+		<menu_item_check label="İcazə sütununu göstər" name="show_permissions" />
+		<menu_item_check label="Sırala: İstifadəçi adına görə" name="sort_by_username" />
+		<menu_item_check label="Sırala: Göstərilən adına görə" name="sort_by_displayname" />
+		<menu_item_check label="Tam adı göstərmək: İstifadəçi adı (Göstərilən ad)" name="format_username_displayname" />
+		<menu_item_check label="Tam adı göstərmək: Göstərilən ad (İstifadəçi adı)" name="format_displayname_username" />
+	</menu>
+</context_menu>

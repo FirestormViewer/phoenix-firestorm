@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Map">
+	<floater.string name="mini_map_caption">
+		Minixəritə
+	</floater.string>
+	<text label="Şi" name="floater_map_north">
+        Şi
+    </text>
+    <text label="Şə" name="floater_map_east">
+        Şə
+    </text>
+    <text label="Q" name="floater_map_west">
+        Q
+    </text>
+    <text label="C" name="floater_map_south">
+        C
+    </text>
+    <text label="CŞə" name="floater_map_southeast">
+        CŞə
+    </text>
+    <text label="ŞiŞə" name="floater_map_northeast">
+        ŞiŞə
+    </text>
+    <text label="CQ" name="floater_map_southwest">
+        CQ
+    </text>
+    <text label="ŞiQ" name="floater_map_northwest">
+        ŞiQ
+    </text>
+</floater>

@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floaterland" title="Yer haqqında">
+    <floater.string name="Hours">
+        [HOURS] sa
+    </floater.string>
+    <floater.string name="Hour">
+        sa.
+    </floater.string>
+    <floater.string name="Minutes">
+        [MINUTES] dəd.
+    </floater.string>
+    <floater.string name="Minute">
+        dəq.
+    </floater.string>
+    <floater.string name="Seconds">
+        [SECONDS] sn.
+    </floater.string>
+    <floater.string name="Remaining">
+        qalıb
+    </floater.string>
+    <floater.string name="Always">
+        Həmişə
+    </floater.string>
+    <tab_container name="landtab">
+        <panel label="Ümumi" name="land_general_panel">
+            <panel.string name="new users only">
+                Yalnız yeni sakinlər
+            </panel.string>
+            <panel.string name="anyone">
+                Hər kəs
+            </panel.string>
+            <panel.string name="area_text">
+                Sahə
+            </panel.string>
+            <panel.string name="area_size_text">
+                [AREA] m²
+            </panel.string>
+            <panel.string name="auction_id_text">
+                Hərrac ID-si: [ID]
+            </panel.string>
+            <panel.string name="need_tier_to_modify">
+                Bu torpağı dəyişdirmək üçün satınalmanı təsdiq etməlisiniz.
+            </panel.string>
+            <panel.string name="group_owned_text">
+                (Qrup əmlakı)
+            </panel.string>
+            <panel.string name="profile_text">
+                Profil
+            </panel.string>
+            <panel.string name="info_text">
+                Məlumat
+            </panel.string>
+            <panel.string name="public_text">
+                (içtimai)
+            </panel.string>
+            <panel.string name="none_text">
+                (yox)
+            </panel.string>
+            <panel.string name="sale_pending_text">
+                (Satışı gözlənilir)
+            </panel.string>
+            <panel.string name="no_selection_text">
+                Sahə seçilməyib.
+            </panel.string>
+            <panel.string name="time_stamp_template">
+                [wkday,datetime,slt], [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+            </panel.string>
+            <panel.string name="error_resolving_uuid">
+                Sahənin UUID-si düzəldilə bilməz.
+            </panel.string>
+            <text name="Name:">
+                Adı:
+            </text>
+            <text name="UUID:">
+                Sahənin UUID-si:
+            </text>
+            <text name="Description:">
+                Təsviri:
+            </text>
+            <text name="LandType">
+                Növ:
+            </text>
+            <text name="LandTypeText">
+                Qitə / Əmlak
+            </text>
+            <text name="ContentRating">
+                Reytinq:
+            </text>
+            <text name="ContentRatingText">
+                Yetkin
+            </text>
+            <text name="Owner:">
+                Sahibi:
+            </text>
+            <text name="OwnerText">
+                Yüklənir...
+            </text>
+            <text name="Group:">
+                Qrup:
+            </text>
+            <text name="GroupText">
+                Yüklənir...
+            </text>
+            <button label="Təyin et" name="Set..."/>
+            <check_box label="Torpağın qrupa verilməsinə icazə verin" name="check deed" tool_tip="Qrup məmuru bu torpağı mövcud töhfə şərti ilə qrupa verə bilər." />
+            <button label="Müqavilə" name="Deed..." tool_tip="Siz yalnız seçilmiş qrupun rəsmisisinizsə, torpağı verə bilərsiniz."/>
+            <check_box label="Sahib verdiyi zamanı töhfələr verir" name="check contrib" tool_tip="Torpaq bir qrupa verildikdə, keçmiş mülkiyyətçi torpağı saxlamaq üçün kifayət qədər töhfə verir."/>
+            <text name="For Sale:">
+                Satılır:
+            </text>
+            <text name="Not for sale.">
+                Satılmır
+            </text>
+            <text name="For Sale: Price L$[PRICE].">
+                Qiymət: L$[PRICE] (L$[PRICE_PER_SQM]/m²)
+            </text>
+            <text name="SalePending"/>
+            <button label="Torpağı sat" name="Sell Land..."/>
+            <text name="For sale to">
+                Kimə satılır: [BUYER]
+            </text>
+            <text name="Sell with landowners objects in parcel.">
+                Obyektlər satışa daxildir
+            </text>
+            <text name="Selling with no objects in parcel.">
+                Obyektlər satışa daxil deyil
+            </text>
+            <button label="Satışı ləğv edin" label_selected="Satışı ləğv edin" name="Cancel Land Sale" />
+            <text name="Claimed:">
+                Mülkiyyət:
+            </text>
+            <text name="PriceLabel">
+                Sahə:
+            </text>
+            <text name="PriceText">
+                4048 m²
+            </text>
+            <text name="Traffic:">
+                Trafik:
+            </text>
+            <text name="DwellText">
+                Yüklənir...
+            </text>
+            <button label="Torpağı al" name="Buy Land..."/>
+            <button label="Linden satışı" name="Linden Sale..." tool_tip="Torpaq mülkiyyətində olmalı, müəyyən məzmuna malik olmalı və hərraca çıxarılmamalıdır." />
+            <button label="Skriptlər haqqında məlumat" name="Scripts..."/>
+            <button label="Qrup üçün alın" name="Buy For Group..." />
+            <button label="İcazənamə alın" name="Buy Pass..." tool_tip="İcazənamə sizə bu əraziyə müvəqqəti giriş imkanı verir." />
+            <button label="Torpaqdan imtina edin" name="Abandon Land..." />
+            <button label="Torpağı geri alın" name="Reclaim Land..."/>
+        </panel>
+        <panel label="Müqavilə" name="land_covenant_panel">
+            <panel.string name="can_resell">
+				Bu regionda alınan torpaq yenidən satıla bilər.
+            </panel.string>
+            <panel.string name="can_not_resell">
+				Bu regionda alınan torpaq yenidən satıla bilməz.
+            </panel.string>
+            <panel.string name="can_change">
+				Alınan torpaq birləşə və ya bölünə bilər.
+            </panel.string>
+            <panel.string name="can_not_change">
+				Alınan torpaq birləşə və ya bölünə bilməz.
+            </panel.string>
+            <text name="estate_section_lbl">
+				Torpaq mülkiyyəti
+            </text>
+            <text name="estate_name_text">
+				qitə
+            </text>
+            <text name="estate_owner_lbl">
+                Sahibi:
+            </text>
+            <text name="estate_owner_text">
+                (yox)
+            </text>
+            <text_editor name="covenant_editor">
+				Bu torpaq mülkiyyəti ilə bağlı heç bir müqavilə yoxdur.
+            </text_editor>
+            <text name="covenant_timestamp_text">
+				Axırınci dəyişiklər: 31 dekabr 1969 il., cümə, 16:00:00
+            </text>
+            <text name="region_section_lbl">
+                Region:
+            </text>
+            <text name="region_name_text">
+                Yüklənir...
+            </text>
+            <text name="region_landtype_lbl">
+                Növ:
+            </text>
+            <text name="region_landtype_text">
+				Qitə / Əmlak
+            </text>
+            <text name="region_maturity_lbl">
+                Reytinq:
+            </text>
+            <text name="region_maturity_text">
+                Yetkin
+            </text>
+            <text name="resellable_lbl">
+				Yenidən satış:
+            </text>
+            <text name="resellable_clause">
+				Bu regiondakı torpaqlar yenidən satıla bilməz.
+            </text>
+            <text name="changeable_lbl">
+				Ayırma:
+            </text>
+            <text name="changeable_clause">
+				Bu regiondakı torpaqlar birləşdirilə və ya bölünə bilməz.
+            </text>
+        </panel>
+        <panel label="Obyektlər" name="land_objects_panel">
+            <panel.string name="objects_available_text">
+                [COUNT] sayından [MAX] (mövcuddur: [AVAILABLE])
+            </panel.string>
+            <panel.string name="objects_deleted_text">
+                [COUNT] sayından [MAX] (silinəcək: [DELETED])
+            </panel.string>
+            <text name="parcel_object_bonus">
+                Obyektlər üçün bonus vuran: [BONUS]
+            </text>
+            <text name="Simulator primitive usage:">
+               Region həcmi:
+            </text>
+            <text name="objects_available">
+                [COUNT] sayından [MAX] (mövcuddur: [AVAILABLE])
+            </text>
+            <text name="Primitives parcel supports:">
+                Sahə həcmi:
+            </text>
+            <text name="Primitives on parcel:">
+                Sahə istifadə edir:
+            </text>
+            <text name="Owned by parcel owner:">
+                Sahibinin əmlakı:
+            </text>
+            <button label="Göstər" label_selected="Göstər" name="ShowOwner"/>
+            <button label="Qaytar" name="ReturnOwner..." tool_tip="Obyektləri sahiblərinə qaytarın."/>
+            <text name="Set to group:">
+                Qrup tərəfindən təyin edilib:
+            </text>
+            <button label="Göstər" label_selected="Göstər" name="ShowGroup"/>
+            <button label="Qaytar" name="ReturnGroup..." tool_tip="Obyektləri sahiblərinə qaytarın."/>
+            <text name="Owned by others:">
+                Başqalarının mülkiyyəti:
+            </text>
+            <button label="Göstər" label_selected="Göstər" name="ShowOther"/>
+            <button label="Qaytar" name="ReturnOther..." tool_tip="Obyektləri sahiblərinə qaytarın."/>
+            <text name="Selected / sat upon:">
+                Seçilmiş / Üzərində:
+            </text>
+            <text name="Autoreturn">
+                Obyektlərin istifadəçilərə avtomatik qaytarılması (dəqiqələrlə, 0 - söndürülüb):
+            </text>
+            <text name="Object Owners:">
+                Obyekt sahibləri:
+            </text>
+            <button name="Refresh List" tool_tip="Obyektlərin siyahısını yeniləyin"/>
+            <button label="Obyektləri qaytarın" name="Return objects..."/>
+            <name_list name="owner list">
+                <name_list.columns label="Növ" name="type" />
+                <name_list.columns label="Ad" name="name" />
+                <name_list.columns label="Miqdar" name="count"/>
+                <name_list.columns label="Son" name="mostrecent" />
+            </name_list>
+        </panel>
+        <panel label="Seçimlər" name="land_options_panel">
+            <panel.string name="search_enabled_tooltip">
+                İnsanlara sahəni axtarış nəticələrində görmək imkanı verin
+            </panel.string>
+            <panel.string name="search_disabled_small_tooltip">
+                Torpağın sahəsi 128 m² və ya daha az olduğu üçün bu funksiya mövcud deyil.
+Yalnız daha böyük kvadrata malik olan sahələr axtarışda çıxa bilər.
+            </panel.string>
+            <panel.string name="search_disabled_permissions_tooltip">
+                Bu sahənin seçimlərini dəyişdirə bilməyəcəyiniz üçün bu seçim mövcud deyil
+            </panel.string>
+            <panel.string name="mature_check_mature">
+                Orta məzmun
+            </panel.string>
+            <panel.string name="mature_check_adult">
+                Yetkin məzmun
+            </panel.string>
+            <panel.string name="mature_check_mature_tooltip">
+                Sahə məlumatınız və ya məzmununuz mülayim hesab edilə bilər.
+            </panel.string>
+            <panel.string name="mature_check_adult_tooltip">
+                Sahə məlumatınız və ya məzmununuz Yetkin hesab edilə bilər.
+            </panel.string>
+            <panel.string name="landing_point_none">
+                (yox)
+            </panel.string>
+            <panel.string name="push_restrict_text">
+                İtələməyin
+            </panel.string>
+            <panel.string name="push_restrict_region_text">
+                İtələməyin (Regionda əvvəlcədən təyin edilib)
+            </panel.string>
+            <panel.string name="DirectoryFree">
+                Axtarışda yeri göstərin
+            </panel.string>
+            <panel.string name="DirectoryFee">
+                Bu yeri axtarışda göstərin (L$[DIRECTORY_FEE]/həftə)
+            </panel.string>
+            <text name="allow_label">
+                Digər sakinlərə icazə verin:
+            </text>
+            <text name="allow_label1" width="150">
+                Mənzərəni dəyişdirmək:
+            </text>
+            <check_box label="Hamısı" name="edit land check" tool_tip="Qutu işarələnərsə, hər kəs torpağınızın mənzərəsini dəyişə bilər. Bunu olduğu kimi buraxmaq daha yaxşıdır."/>
+            <text name="caution_text">
+                (Ehtiyatla istifadə edin!)
+            </text>
+            <text name="allow_label0">
+                Uçmaq:
+            </text>
+            <check_box label="Hamısı" name="check fly" tool_tip="Qutu işarələnərsə, sakinlər sizin torpağınızda uça bilər.Qutu işarələnməyibsə, onlar yalnız sahənizdən kənarda uça bilərlər"/>
+            <text name="allow_label2">
+                Tikmək:
+            </text>
+            <check_box label="Hamısı" name="edit objects check" tool_tip="Qutu işarələnərsə, sakinlər torpağınızda obyektlər yarada və yerləşdirə bilərlər."/>
+            <check_box label="Qrup" name="edit group objects check" tool_tip="Qutu işarələnərsə, sakinlər torpağınızda obyektlər yarada və yerləşdirə bilərlər."/>
+            <text name="allow_label3">
+                Obyekt qoymaq:
+            </text>
+            <check_box label="Hamısı" name="all object entry check" tool_tip="Qutu işarələnərsə, onda sakinlər mövcud obyektləri başqa sahələrdən bu sahəyə daşıya bilərlər."/>
+            <check_box label="Qrup" name="group object entry check" tool_tip="Qutu işarələnərsə, onda sahə qrupunun üzvləri mövcud obyektləri digər sahələrdən həmin sahəyə daşıya bilərlər."/>
+            <text name="allow_label4">
+                Skriptləri işə salmaq:
+            </text>
+            <check_box label="Hamısı" name="check other scripts" tool_tip="Qutu işarələnərsə, sakinlər proqramlar da daxil olmaqla sahənizdə skript işlədə bilərlər."/>
+            <check_box label="Qrup" name="check group scripts" tool_tip="Qutu işarələnərsə, qrup üzvləri proqramlar da daxil olmaqla sahənizdə skriptlər işlədə bilər."/>
+            <check_box label="Təhlükəsiz (zədə yoxdur)" name="check safe" tool_tip="Qutu işarələnərsə, yer təhlükəsiz sayılır, döyüş zərərləri aradan qaldırılır. Qutu işarələnməyibsə, döyüş ziyanı aktivləşdirilir." />
+            <check_box label="İtələməyin" name="PushRestrictCheck" tool_tip="Skriptlərin itələnməsinin qarşısını alır. Bu seçim torpağınızda arzuolunmaz davranışların qarşısını almaqda faydalı ola bilər." />
+            <check_box label="Bu yeri axtarışda göstər (həftədə 30 L$)" name="ShowDirectoryCheck" tool_tip="İnsanlara sahəni axtarış nəticələrində görmək imkanı verir" />
+            <combo_box name="land category">
+                <combo_box.item label="Hər kateqoriya" name="item0" />
+                <combo_box.item label="Linden məkanı" name="item1" />
+                <combo_box.item label="İncəsənət və mədəniyyət" name="item3" />
+                <combo_box.item label="Biznes" name="item4"/>
+                <combo_box.item label="Təhsil" name="item5"/>
+                <combo_box.item label="Oyunlar" name="item6" />
+                <combo_box.item label="Görüş yerləri" name="item7"/>
+                <combo_box.item label="Yeni başlayanlar üçün" name="item8" />
+                <combo_box.item label="Parklar və təbiət" name="item9" />
+                <combo_box.item label="Yaşayış" name="item10" />
+                <combo_box.item label="Ticarət" name="item11"/>
+                <combo_box.item label="İcra" name="item13" />
+                <combo_box.item label="Müxtəlif" name="item12" />
+            </combo_box>
+            <check_box label="Ortam məzmun" name="MatureCheck" />
+            <text name="Snapshot:">
+                Şəkil:
+            </text>
+            <texture_picker name="snapshot_ctrl" tool_tip="Şəkil seçmək üçün basın" />
+            <text name="allow_see_label">
+              Digər sahələrin avatarları həmin sahədəki avatarları görə və onlarla əlaqə saxlaya bilər
+            </text>
+            <check_box name="SeeAvatarsCheck" tool_tip="Digər sahələrin avatarlarına bu sahədəki avatarları görməyə və onlarla əlaqə saxlamağa icazə verin, siz də onları görə və onlarla əlaqə saxlaya bilərsiniz."/>
+            <text name="landing_point">
+                Gəliş nöqtəsi: [ENDING]
+            </text>
+            <button label="Təyin et" name="Set" tool_tip="Avatarların çatacağı gəliş nöqtəsini təyin edir. Bu nöqtə saytdakı avatarınızın koordinatları ilə müəyyən edilir." />
+            <button label="Təmizlə" label_selected="Təmizlə" name="Clear" tool_tip="Gəliş nöqtəsini təmizlə" width="65"/>
+            <button label="Teleport" label_selected="Teleport" name="teleport_to_landing_point" tool_tip="Gəliş nöqtəsinə teleport ol" width="90" />
+            <text name="Teleport Routing: ">
+                Teleportasiya marşrutu:
+            </text>
+            <combo_box name="landing type" tool_tip="Teleportasiya marşrutu -- torpağınıza teleportasiyanı necə idarə edəcəyinizi seçin">
+                <combo_box.item label="Bloklanıb" name="Blocked" />
+                <combo_box.item label="Gəliş nöqtəsi" name="LandingPoint" />
+                <combo_box.item label="Hər yerdə" name="Anywhere"/>
+            </combo_box>
+        </panel>
+        <panel label="Media" name="land_media_panel">
+            <text name="with media:">
+                Növ:
+            </text>
+            <combo_box name="media type" tool_tip="Keçidin video, veb səhifə və ya digər media olub olmadığını təyin edin"/>
+            <text name="at URL:">
+                URL:
+            </text>
+            <button label="Təyin et" name="set_media_url"/>
+            <text name="Description:">
+                Təsviri:
+            </text>
+            <line_editor name="url_description" tool_tip="Oynat/Yüklə düyməsinin yanında göstərilən mətn"/>
+            <text name="Media texture:">
+                Tekstura:
+            </text>
+            <texture_picker name="media texture" tool_tip="Şəkil seçmək üçün basın" />
+            <text name="replace_texture_help">
+             Bu teksturadan istifadə edən obyekt, oynatma düyməsinə basdıqda video və ya veb səhifəni oynadacaq. Fərqli tekstura seçmək üçün kiçik şəklin üzərinə basın.
+            </text>
+            <check_box label="Avto miqyas" name="media_auto_scale" tool_tip="Bu funksiyanın seçilməsi nəticəsində bu sahə üçün məzmun avtomatik olaraq ölçülür. Bu, bir qədər yavaş və aşağı şəkil keyfiyyətindədir, lakin miqyaslaşdırma və teksturanın uyğunlaşdırılmasını tələb etmir." />
+            <text name="media_size" tool_tip="Veb media ekranının ölçüsü, standart 0-dır.">
+                Ölçü:
+            </text>
+            <spinner name="media_size_width" tool_tip="Veb media ekranının genişliyi, standart 0-dır." />
+            <spinner name="media_size_height" tool_tip="Veb media ekranının hündürlüyü, standart 0-dır." />
+            <text name="pixels">
+                piksel
+            </text>
+            <text name="Options:">
+                Seçimlər:
+            </text>
+            <check_box label="Döngə" name="media_loop" tool_tip="Medianı döngədə oxudun. Media oynatmağı bitirdikdə, o, əvvəldən başlayacaq." />
+        </panel>
+        <panel label="Səs" name="land_audio_panel">
+            <text name="MusicURL:">
+                Musiqi üçün URL:
+            </text>
+            <button name="stream_add_btn" tool_tip="Musiqi Yayımının URL-sini Saxlanmış Yayımlar Siyahısına əlavə edin" />
+            <button name="stream_delete_btn" tool_tip="Musiqi Yayımının URL-sini Saxlanmış Yayımlar Siyahısına silin" />
+            <button name="stream_copy_btn" tool_tip="Musiqi axınının URL-sini buferə köçürdün" />
+            <text name="Sound:">
+                Səs:
+            </text>
+            <check_box label="Obyekt jestləri və səsləri sahə sərhədlərilə məhdudlaşdırın" name="check sound local" width="292" tool_tip="Əgər bu funksiya seçilibsə, o zaman obyektlərdən gələn jestlər və səslər yalnız bu sahədə eşidiləcək, lakin ondan kənarda eşidilməyəcək."/>
+            <text name="Avatar Sounds:">
+                Avatar səsləri:
+            </text>
+            <check_box label="Hamısı" name="all av sound check"/>
+            <check_box label="Qrup" name="group av sound check"/>
+            <text name="Voice settings:">
+                Səs(avaz):
+            </text>
+            <check_box label="Səsi aktivləşdirin" name="parcel_enable_voice_channel"/>
+            <check_box label="Səsi aktivləşdirin (adanın sahibi tərəfindən təyin olunur)" name="parcel_enable_voice_channel_is_estate_disabled" width="300" />
+            <check_box label="Bu sahənin sərhəddi ilə səsi məhdudlaşdırın" name="parcel_enable_voice_channel_local"/>
+            <text name="media">
+                Media:
+            </text>
+            <check_box label="Obyektdə anlaşılmaz media" name="obscure_moap" tool_tip="Sahədən kənarda yerləşən obyektdəki media həmin sahənin daxilindəki agent üçün avtomatik olaraq oynamamalıdır və əksinə."/>
+        </panel>
+        <panel label="Giriş" name="land_access_panel">
+            <panel.string name="access_estate_defined">
+                (Adada müəyyən edilmişdir)
+            </panel.string>
+            <panel.string name="estate_override">
+                Bir və ya daha çox seçim ada seçimləri ilə əvvəlcədən müəyyən edilib
+            </panel.string>
+            <check_box name="public_access" label="İctimai girişə icazə verin (Söndürülmə qadağa xətləri yaradacaq)" />
+            <text name="Only Allow">
+                Yalnız aşağıdakı istifadəçilərə girişə icazə verin:
+            </text>
+            <check_box label="Ödəniş məlumatı var [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Sakinlərin bu sahəyə daxil olmaq üçün ödəniş məlumatı olmalıdır. Ətraflı məlumatı burada tapa bilərsiniz: [SUPPORT_SITE]."/>
+            <check_box label="18 yaşa və yuxarıya çatıb [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Bu sahəyə giriş 18 yaşdan aşağı olan sakinlər üçün məhdudlaşdırılır. Ətraflı məlumatı burada tapa bilərsiniz: [SUPPORT_SITE]." />
+            <check_box label="Qrup girişinə icazə verin: [GROUP]" name="GroupCheck" tool_tip="Qrupu 'Ümumi' pəncərəsində təyin edin."/>
+            <check_box label="İcazənamənin satışı:" name="PassCheck" tool_tip="Bu sahəyə müvəqqəti girişə icazə verin" />
+            <combo_box name="pass_combo">
+                <combo_box.item label="Hamıya" name="Anyone" />
+                <combo_box.item label="Qrupa" name="Group" />
+            </combo_box>
+            <spinner label="L$-da qiymət:" name="PriceSpin"/>
+            <spinner label="Giriş saatları:" name="HoursSpin" />
+            <text name="OwnerLimited">
+                (Mülk sahibi bu seçimləri məhdudlaşdırmış ola bilər)
+            </text>
+            <panel name="Allowed_layout_panel">
+                <text name="AllowedText">
+                    İcazəli sakinlər ([COUNT]/[MAX])
+                </text>
+                <name_list name="AccessList" tool_tip="([LISTED] siyahıda, maksimal [MAX])" />
+                <button label="Əlavə et" name="add_allowed" />
+                <button label="Sil" label_selected="Sil" name="remove_allowed" />
+            </panel>
+            <panel name="Banned_layout_panel">
+                <text name="BanCheck">
+                    Bloklanıb ([COUNT], maks. [MAX])
+                </text>
+                <name_list name="BannedList" tool_tip="([LISTED] siyahıda, maksimal [MAX])">
+                    <columns label="Ad" name="name"/>
+                    <columns label="Vaxt" name="duration"/>
+                </name_list>
+                <button label="Əlavə et" name="add_banned"/>
+                <button label="Sil" label_selected="Sil"  name="remove_banned" />
+            </panel>
+        </panel>
+        <panel label="Macəralar" name="land_experiences_panel"/>
+        <panel label="Ətraf mühit" name="land_environment_panel"/>
+    </tab_container>
+</floater>

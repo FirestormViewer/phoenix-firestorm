@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="objectcontents" title="Obyekt məzmunu">
+	<layout_stack name="button_bar_ls">
+		<layout_panel name="copy_btn_lp">
+			<flyout_button label="Avadanlıq siyahısına köçürt" name="copy_flyout">
+				<flyout_button.item label="Geyimi dəyişdir" name="replace"/>
+				<flyout_button.item label="Geyimə əlavə et" name="add"/>
+			</flyout_button>
+		</layout_panel>
+		<layout_panel name="cancel_btn_lp">
+			<button label="Ləğv et" label_selected="Ləğv et" name="cancel_button"/>
+		</layout_panel>
+	</layout_stack>
+</floater>

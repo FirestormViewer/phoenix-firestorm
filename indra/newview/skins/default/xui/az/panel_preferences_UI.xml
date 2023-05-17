@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="İnterfeys seçimləri" name="Display panel">
+<tab_container label="Firestorm seçimləri" name="tabs">
+    <panel label="3D dünya" name="UI Prefs Panel">
+        <text name="HoverTipText" width="150">
+            Açılan ipuclar:
+        </text>
+        <check_box label="Açılan ipuclarını göstər" name="ShowHoverTips" tool_tip="İşarələdikdə avatarların və bəzi digər əşyaların ipuclarını göstərməyə təyin edin (CTRL+SHIFT+T)" />
+        <check_box label="Bütün obyektlərdə" tool_tip="Obyektlərə işarələdikdə ipucların göstərilməsi üçün təyin et" name="ShowAllHoverTips" />
+        <check_box label="Torpaqda" tool_tip="Torpağa işarələdikdə ipucların göstərilməsi üçün təyin et" name="ShowLandHoverTips" />
+        <check_box name="FSAdvancedTooltips" label="İpuclarında genişləndirilmiş məlumatı göstər" />
+        <check_box name="FSShowGroupTitleInTooltip" label="İpuclarında qrup rollarını göstər" />
+        <text name="tooltip_textbox">
+           İpucların gecikməsi:
+        </text>
+        <slider label="Alətlər:" name="ToolTipDelay_slider" tool_tip="(Susmaya görə: 0.7)" />
+        <text name="ToolTipDelay_text">
+            saniyə.
+        </text>
+        <slider label="Avatarlar:" name="AvatarInspectorTooltipDelay_slider" tool_tip="(Susmaya görə: 0.35)" />
+        <text name="AvatarInspectorTooltipDelay_text">
+            saniyə.
+        </text>
+        <slider label="Obyektlər:" name="ObjectInspectorTooltipDelay_slider" tool_tip="(Susmaya görə: 0.35)" />
+        <text name="ObjectInspectorTooltipDelay_text">
+            saniyə.
+        </text>
+        <slider name="FSHudTextFadeDistance" label="Üzən mətnin solma məsafəsi (m ilə):" tool_tip="Üzən mətnin solmağa başladığı məsafəni təyin edir" label_width="285" width="529"/>
+        <slider name="FSHudTextFadeRange" label="Üzən mətn diapazonu (metrlə):" tool_tip="Üzən mətnin tamamilə görünəndən tamamilə görünməyənə qədər solması üçün tələb olunan diapazonu təyin edir" label_width="285" width="529"/>
+    </panel>
+    <panel label="2D laylama" name="ui-2d-overlay">
+        <text name="UI Size:" width="130">
+            İnterfeys ölçüsü:
+        </text>
+        <text name="HUD Size:" width="130">
+            HUD ölçüsü:
+        </text>
+        <text name="ScriptDialogsPerObjectLabel" width="185">
+            Obyekt üçün skript dialoqları:
+        </text>
+        <combo_box name="ScriptDialogPerObjectDropdown">
+            <combo_box.item label="Obyektə bir dənə" name="ScriptDialogOption_0" />
+            <combo_box.item label="Obyektə və kanala bir dənə" name="ScriptDialogOption_1" />
+            <combo_box.item label="Birləşmələr kanalı üçün bir dənə" name="ScriptDialogOption_2" />
+            <combo_box.item label="Displey kanalı üçün bir dənə" name="ScriptDialogOption_3" />
+            <combo_box.item label="Displey üçün həddsiz" name="ScriptDialogOption_4" />
+            <combo_box.item label="Həddsiz" name="ScriptDialogOption_5" />
+        </combo_box>
+        <check_box label="&quot;Blok&quot; düyməsini sil " name="FSRemoveScriptBlockButton" />
+        <text name="ScriptDialogsPositionLabel" width="185">
+            Skript dialoqların yerləşməsi:
+        </text>
+        <combo_box name="ScriptDialogsPositionDropdown" tool_tip="Ekranda skript dialoq qutusunun harada göstəriləcəyini seçin">
+            <combo_box.item label="Nişanlar pəncərəsinə birləşmiş" name="ScriptDialogPositionOption_1" />
+            <combo_box.item label="Yuxarı solda" name="ScriptDialogPositionOption_2" />
+            <combo_box.item label="Yuxarı sağda" name="ScriptDialogPositionOption_3" />
+            <combo_box.item label="Aşağı solda" name="ScriptDialogPositionOption_4" />
+            <combo_box.item label="Aşağı sağda" name="ScriptDialogPositionOption_5" />
+        </combo_box>
+        <check_box label="Dialoqlar animasiyası" name="FSAnimatedScriptDialogs" tool_tip="Açılan zaman dialoq qutusunun animasiyasını göstərir (Yuxarıdan aşağıya açılır)" />
+        <slider label="Görünən skript dialoq sətirləri:" label_width="200" name="FSRowsPerScriptDialog" tool_tip="Skript dialoqunda bir anda göstəriləcək sətirlərin maksimum sayı." />
+        <check_box label="Dairəvi menyudan istifadə et" name="UsePieMenu" tool_tip="Obyektlərə, avatarlara və yerə sağ kliklədikdə dairəvi menyu göstərmək üçün V1 üslubundan istifadə edin" />
+        <check_box label="Mətn animasiyası" name="PieMenuPopupFontEffect" tool_tip="Dairəvi menyu açıldığında animasiyanın bir hissəsi olan dairəvi menyu mətnini aktivləşdirir." />
+        <check_box label="Xarici dairə rəngini aktivləşdirin" name="PieMenuOuterRingShade" tool_tip="Alt menyunu vizuallaşdırmağa kömək edən əlavə xarici dairə rəngi əlavə etməyə imkan verir." />
+        <text name="ShowGroupNoticesTopRightLabel" width="180">
+           Bildirişlər və İM yerləşməsi:
+        </text>
+        <radio_group name="ShowGroupNoticesTopRight" width="210"
+         tool_tip="Ekranda qrup bildirişləri və şəxsi mesaj nişanlarının göstəriləcəyi yeri seçin." >
+           <radio_item label="Aşağı sağda" name="radio" width="100" />
+           <radio_item label="Yuxarı sağda" name="radio1" width="100" />
+        </radio_group>
+        <text name="GroupTopRightRequiresRestart" left_delta="270" width="150">
+           (Yenidən başlatma tələb olunur)
+        </text>
+        <check_box label="Qrup və İM söhbət nişanlarını gizlədin" name="FSDisableIMChiclets" tool_tip="Şəxsi mesajlar və qrup söhbətləri üçün nişanlar silinəcək (Bildirişlər hələ də göstəriləcək)." />
+        <check_box label="Bildirişlər pəncərəsi üçün köhnə siyahıdan istifadə edin." name="FSLegacyNotificationWell" tool_tip="Əgər qeyd olunarsa, Firestorm saxlanmış bildirişləri göstərmək üçün köhnə siyahı görünüşündən istifadə edəcək." width="320" />
+        <text name="FSLegacyNotificationWellRequiresRestart" width="150">(Yenidən başlatma tələb olunur)</text>
+        <check_box label="Söhbətlərin və Bildirişlərin avtomatik ölçüsü siyahıları" name="FSLegacyNotificationWellAutoResize" tool_tip="Əgər bu qutu işarələnərsə, elementlər əlavə etdikdə və ya sildikdə Firestorm həmişə Söhbət siyahılarınızı və köhnə Bildirişlərinizi avtomatik olaraq dəyişdirəcək."/>
+        <check_box label="Artıq istifadə olunan isti düymələri yenidən təyin edin (yalnız Linux, yenidən başlatma tələb olunur)" name="FSRemapLinuxShortcuts" tool_tip="Aktivləşdirilərsə, Linux əməliyyat sistemi tərəfindən artıq istifadə olunan isti düymələr (məsələn, CTRL-ALT-Fx) yenidən təsvir olunacaq." />
+        <check_box label="Statistika Pəncərə Diqqətləşdirməsinin qarşısını alın" name="FSStatisticsNoFocus"
+        tool_tip="Aktiv edilərsə, başqa bir pəncərə bağlandıqda statistika pəncərəsi heç vaxt diqqət almayacaq (elementlər üçün qrafik tərtibatını dəyişdirmək kimi hərəkətlər aktiv olduqda hələ də mümkündür)."
+        width="256" />
+        <slider label="İM nişanının yanıb-sönmə sayı:" name="ButtonsFlashCount" />
+        <slider label="İM nişanının yanıb-sönmə tezliyi:" tool_tip="Şəxsi mesaj pəncərələrinin yanıb-sönmə tezliyi:" name="ButtonFlashRate" />
+        <text name="ButtonFlashRateText">
+            san
+        </text>
+    </panel>
+	<panel label="Yuxarı çubuq" name="UI-interface-top-bars" >
+
+		<text name="statusbar_textbox">
+		Status çubuğu:
+		</text>
+
+		<check_box tool_tip="Ekranın yuxarı sağ küncündə trafikin ölçülməsini göstərin" label="Ekranın yuxarı sağ küncündə trafikin ölçülməsini göstərin" name="ShowNetStats"/>
+		<check_box label="Gecikmə sayğacı üçün köhnə dəyər ekranından istifadə edin" name="FSStatbarLegacyMeanPerSec" tool_tip="Bu seçim aktivləşdirilərsə, Firestorm məlumatların göstərilməsində ənənəvi üsuldan istifadə edəcək."/>
+		<check_box label="Trafik göstəricisinə basmaqla Statistika açılır" name="FSUseStatsInsteadOfLagMeter"/>
+		<check_box label="Üst menyuda media nəzarətini göstərin" name="FSEnableVolumeControls" tool_tip="Yuxarı sağda axın audio, medianın daxil edilməsinə və söndürülməsinə nəzarət etmək imkanı göstərilir."/>
+		<check_box label="Simulyator kanalını panel statusunda göstərin" name="FSStatusbarShowSimulatorVersion" tool_tip="Kanal simulyatorunu (RC Magnum, RC Le Tigre, RC BlueSteel Və s.) yuxarı çubuğda göstər"/>
+		<check_box label="Üst menyuda məkanı göstərin" name="ShowMenuBarLocation"/>
+		<check_box label="Menyu axtarışını göstərin" name="show_search_menu_check"/>
+		<check_box label="Cari L$ balansını göstər" name="FSShowCurrencyBalanceInStatusbar"/>
+		<check_box label="Üst menyu nişanlarında siçan menyusunun açılan menyusunu aktivləşdirin" name="FSStatusBarMenuButtonPopupOnRollover" width="270" />
+		<text name="statusbar_timeformat_textbox" width="100">
+			Vaxt formatı:
+		</text>
+		<combo_box name="FSStatusBarTimeFormat" tool_tip="Əsas menyu çubuğunda istifadə olunan vaxt formatını seçir." width="250">
+			<combo_box.item label="Seçilmiş dil standartı" name="Language"/>
+			<combo_box.item label="12 Saat" name="12_Hour"/>
+			<combo_box.item label="12 Saat saniyələrlə" name="12_Hour_Seconds"/>
+			<combo_box.item label="12 Saat saat qurşağı ilə" name="12_Hour_TZ"/>
+			<combo_box.item label="12 Saat saniyələrlə və saat qurşağı ilə" name="12_Hour_TZ_Seconds"/>
+			<combo_box.item label="24 Saat" name="24_Hour"/>
+			<combo_box.item label="24 Saat saniyələrlə" name="24_Hour_Seconds"/>
+			<combo_box.item label="24 Saat saat qurşağı ilə" name="24_Hour_TZ"/>
+			<combo_box.item label="24 Saat saniyələrlə və saat qurşağı ilə" name="24_Hour_TZ_Seconds"/>
+		</combo_box>
+		<text name="navfav_textbox">
+		Naviqasiya paneli və əlfəcinlər:
+		</text>
+
+		<check_box label="Əlfəcinlər panelini göstər" name="ShowNavbarFavoritesPanel"/>
+		<check_box label="Naviqasiya panelini və axtarışı göstər" name="ShowNavbarNavigationPanel"/>
+		<check_box label="Axtarışı göstər" name="ShowSearchTopBar"/>
+
+    </panel>
+    <panel label="Pəncərələr interfeysi" name="UI-interface-windows-tab">
+        <check_box label="Avatarın adına basdıqda profilini aç" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Avatarın adına basdıqda onun profilini aç" />
+        <check_box label="Bloklanmış siyahının avtomatik açılmasını deaktiv edin" name="FSDisableBlockListAutoOpen" tool_tip="Avatar və ya obyekti blokladığınız zaman bloklanmış siyahının avtomatik açılmasını söndürün" />
+        <check_box label="'Dostlar' və 'Qruplar' üçün [SHORT_VIEWER_GENERATION] üslubunda pəncərələri açın" name="FSUseV2Friends" tool_tip="Bu seçimi aktivləşdirdiyiniz zaman dostlar/qruplar pəncərələrdə açılacaq, əks halda bu, Kontaktlarda ediləcək." />
+        <check_box label="Köhnə obyekt xüsusiyyətləri pəncərəsindən istifadə edin" name="FSUseLegacyObjectProperties" tool_tip="Aktivləşdirilərsə, köhnə xüsusiyyətlər pəncərəsi obyekt xassələrini açarkən istifadə olunacaq."/>
+        <check_box label="Kiçik kamera pəncərəsindən istifadə edin" name="FSUseSmallCameraFloater" tool_tip="Bu seçim aktivləşdirilərsə, daha kiçik, köhnə kamera pəncərəsi kameranın əvvəlcədən təyin edilmiş nəzarətləri olmadan istifadə ediləcək."/>
+        <text name="standalone_textbox">
+            Nələr üçün ayrı-ayrı pəncərələrdən istifadə edin:
+        </text>
+        <check_box name="FSUseStandaloneGroupFloater" label="Qrup pfoili" tool_tip="Aktivləşdirilərsə, qrup profilləri ayrıca pəncərədə göstəriləcək" />
+        <check_box name="FSUseStandaloneTeleportHistoryFloater" label="Teleport tarixçəsi" tool_tip="Aktivləşdirilərsə, teleport tarixçələri ayrıca pəncərədə göstəriləcək" />
+        <check_box name="FSUseStandaloneBlocklistFloater" label="Bloklanmış siyahısı" tool_tip="Aktiv edilərsə, bloklanmış siyahı ayrı bir pəncərədə göstəriləcək" />
+        <check_box name="FSUseStandalonePlaceDetailsFloater" label="Əlfəcinlər, yer təfərrüatları və teleport tarixçəsi" tool_tip="Aktivləşdirilərsə, əlfəcinlər, yer təfərrüatları və teleport tarixçəsi təfərrüatları ayrıca pəncərədə göstəriləcək" />
+        <text name="ExtendedTeleportHistoryLabel">
+            Teleport tarixçəsinə əlavə edin:
+        </text>
+        <check_box name="FSTeleportHistoryShowPosition" label="Yerləşməni" tool_tip="Seçim aktiv edilərsə, bölgədəki yerli koordinatlar teleportasiya tarixçəsində göstəriləcək."/>
+        <check_box name="FSTeleportHistoryShowDate" label="Tarixi" tool_tip="Aktivləşdirilərsə, teleport tarixi və vaxtı teleport tarixçəsində göstəriləcək."/>
+        <text name="textFriendlistOptions">
+            Kontakt dəsti seçimləri:
+        </text>
+        <text name="textFriendlistColumns" width="113">
+            Ad sütunu:
+        </text>
+        <check_box width="80" label="Ad" name="FSFriendListColumnShowUserName" tool_tip="Göstərilən ad sütununda yalnız istifadəçi adı göstərilir." />
+        <check_box width="105" label="Göstərilən ad" name="FSFriendListColumnShowDisplayName" tool_tip="Göstərilən ad sütununda yalnız ekran adı göstərilir." />
+        <check_box label="Tam ad" name="FSFriendListColumnShowFullName" tool_tip="Göstərilən ad sütununda tam adı göstərilir." />
+        <text name="textFriendListSortOrder" width="83">
+            Sırala:
+        </text>
+        <radio_group name="FSFriendListSortOrder">
+            <radio_item label="Ad" name="username" width="80" />
+            <radio_item label="Göstərilən ad" name="displayname" />
+        </radio_group>
+        <text name="textFriendListFullNameFormat" width="93">
+            Necə göstər:
+        </text>
+        <radio_group name="FSFriendListFullNameFormat">
+            <radio_item label="Ad (Göstərilən)" name="username_displayname" />
+            <radio_item label="Göstərilən (Ad)" name="displayname_username" />
+        </radio_group>
+        <check_box label="İcazələr sütununu göstərin" name="FSFriendListColumnShowPermissions" tool_tip="Əlaqə siyahısı həmin avatarlara verdiyiniz icazələrə və əksinə sütunları göstərir." />
+        <check_box label="Axtarış süzgəcini göstərin" name="FSContactListShowSearch" tool_tip="Əlaqə siyahısı siyahını filtrləmək üçün axtarış mətn qutusunu göstərəcək."/>
+        <text name="textInventoryOptions">
+            Avadanlıq siyahısı seçimləri:
+        </text>
+        <check_box label="Boş sistem qovluqlarını avadanlıq siyahısında gizlədin" name="DebugHideEmptySystemFolders" tool_tip="Aktiv edilərsə, avadanlıq siyahısında sistem qovluqları göstərilməyəcək (Əlfəcinlər, Qeydlər və s.)" />
+        <check_box label="Qəbul edilmiş element qovluğunu avadanlıq siyahısında göstərin" name="FSShowInboxFolder" tool_tip="Aktivləşdirilərsə, satın alınan bütün əşyalar Qəbul edilənlər qovluğunda göstəriləcək." />
+        <check_box label="Həmişə avadanlıq siyahısının aşağı hissəsində 'Qəbul edilən mallar'ı göstərin" name="FSAlwaysShowInboxButton" tool_tip="Həmişə avadanlıq siyahısının aşağı hissəsində 'Qəbul edilən mallar'ı göstərin" />
+        <check_box label="Hər bir avadanlıq siyahısı pəncərəsində ayrıca axtarış şərtlərinə icazə verin" name="FSSplitInventorySearchOverTabs" tool_tip="Hər bir avadanlıq siyahısı pəncərəsində ayrıca axtarış şərtlərinə icazə verin" />
+    </panel>
+    <panel label="Toastlar" name="UI-toasts-tab">
+        <text name="ToastSettings" width="450">
+            Bildiriş göstərilməsi seçimləri (açılan bildiriş, konsol, tostlar):
+        </text>
+        <slider label="Alt tost və interfeysin dibi arasında:" tool_tip="Alt tost və interfeysin aşağı hissəsi arasında:" name="ToastSpace" />
+        <text name="ToastSpaceText">
+            piksel
+        </text>
+        <slider label="Bildiriş müddəti:" tool_tip="Solmadan əvvəl bildiriş müddəti" name="ToastLifetime" />
+        <text name="ToastLifetimeText">
+            saniyə
+        </text>
+        <slider label="İpucu müddəti:" tool_tip="Daha az vacib məlumatı olan tostun ekrandan silindiyi saniyələrin sayı" name="TipToastLifetime" />
+        <text name="TipToastLifetimeText">
+            saniyə
+        </text>
+        <slider label="Ümumi söhbət müddəti:" tool_tip="Solmazdan əvvəl ümumi söhbət ekranının müddəti" name="NearbyToastLifetime" />
+        <text name="NearbyToastLifetimeText">
+            saniyə
+        </text>
+        <slider label="Söhbət tostları üçün z-sürüşdürmə:" tool_tip="Ümumi söhbət tostları üçün Z sürüşdürməsi" name="FSNearbyChatToastsOffset" />
+        <text name="FSNearbyChatToastsOffsetText">
+            piksel
+        </text>
+        <slider label="Ümumi söhbətin solma vaxtı:" tool_tip="Solma effekti üçün tələb olunan vaxt" name="NearbyToastFadingTime" />
+        <text name="NearbyToastFadingTimeText">
+            saniyə
+        </text>
+        <slider label="İtilməzdən əvvəl müddət:" tool_tip="Görünmədən əvvəl müddət:" name="StartupToastLifetime" />
+        <text name="StartupToastLifetimeText">
+            saniyə
+        </text>
+        <slider label="Tostun yox olma vaxtı:" tool_tip="Tostun yox olması üçün lazım olan vaxt" name="ToastFadingTime" />
+        <text name="ToastFadingTimeText">
+            saniyə
+        </text>
+        <slider label="Tostlar arasında boşluq:" tool_tip="Tostlar arasında boşluq" name="ToastGap" />
+        <text name="ToastGapText">
+            piksel
+        </text>
+        <slider label="Tost daşmasının hündürlüyü:" tool_tip="Tost daşmasının hündürlüyü" name="OverflowToastHeight" />
+        <text name="OverflowToastHeightText">
+            piksel
+        </text>
+        <slider label="Ümumi Söhbət Konsolunun Genişliyi:" tool_tip="Ümumi Söhbət Konsolunun Genişliyi" name="NearbyToastWidth" />
+        <check_box label="Tostları digər pəncərələrin üstündə göstərin" name="FSShowToastsInFront" />
+        <check_box label="Bölgənin yenidən başlaması üçün yeni bildirişdən istifadə et" name="FSUseNewRegionRestartNotification" />
+        <check_box label="Regionun yenidən yüklənməsi bildirişi alanda ekranımı silkələməyin" name="FSNoScreenShakeOnRegionRestart" />
+        <check_box label="Bölgənin yenidən başlaması haqqında kanala bildir:" width="245" name="FSReportRegionRestartToChat" />
+    </panel>
+    <panel label="Yazı tipi" name="UI-font-tab">
+        <text name="tooltip_textbox1">
+           Yazı tipi sxemi:
+        </text>
+        <text name="tooltip_textbox2" width="150">
+           (Yenidən başlatma tələb olunur)
+        </text>
+        <text name="tooltip_textbox5">
+           Ölçünün dəyişdirilməsi:
+        </text>
+        <text name="tooltip_textbox6" >
+           pt (yenidən başlatma tələb olunur)
+Susmaya görə 0. Yuxarı dəyərlər səhvlərə səbəb ola bilər.
+        </text>
+        <text name="tooltip_textbox3">
+           Sətir aralığı:
+        </text>
+        <text name="tooltip_textbox4">
+          piksel (yenidən başlatma tələb olunur)
+[VIEWER_GENERATION] susmaya görə 0. V1 susmaya görə 2.
+        </text>
+        <text name="Label_FolderItemViewHeight">
+           Высота папок:
+        </text>
+        <text name="Label_FolderItemViewHeight_Scale">
+          piksel (yenidən başlatma tələb olunur)
+[VIEWER_GENERATION] susmaya görə 20. V1 susmaya görə 18.
+        </text>
+        <text name="text_box_notecard_font" width="120">
+          Qeyd dəyişdiricisi yazı tipi:
+        </text>
+        <combo_box name="FSNotecardFontName" tool_tip="Qeyd dəyişdiricisində istifadə olunan yazı tipinin adı"/>
+        <combo_box name="FSNotecardFontSize" tool_tip="Qeyd dəyişdiricisində istifadə olunan yazı tipinin ölçüsü">
+             <combo_item name="Monospace" label="Monogeniş"/>
+             <combo_item name="Scripting" label="Əl yazısı"/>
+             <combo_item name="Cascadia" label="Kasksdiya"/>
+             <combo_item name="Small" label="Balaca"/>
+             <combo_item name="Medium" label="Ortam"/>
+             <combo_item name="Large" label="Yekə"/>
+        </combo_box>
+    </panel>
+</tab_container>
+</panel>

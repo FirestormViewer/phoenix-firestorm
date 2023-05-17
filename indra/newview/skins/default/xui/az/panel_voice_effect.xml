@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_voice_effect">
+	<string name="no_voice_effect">
+		Səs effektlərini söndür
+	</string>
+	<string name="preview_voice_effects">
+		Səs effektlərinə bax  ▶
+	</string>
+	<string name="get_voice_effects">
+		Səs effektlərini al ▶
+	</string>
+	<combo_box name="voice_effect" tool_tip="Səs tonunu dəyişdirmək üçün uyğun təsvir seçin">
+		<combo_box.item label="Səs effektlərini söndür" name="no_voice_effect"/>
+	</combo_box>
+</panel>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="Local Mesh" title="Yerli Meş">
+  <tab_container name="local_mesh_tabs">
+    <panel name="local_mesh_assets_panel"
+      label="Yerli Meş Aktivləri"
+      title="Yerli Meş Aktivləri">
+      <fs_scroll_list name="l_name_list">
+        <column name="unit_status" label="Status"/>
+        <column name="unit_name" label="Ad"/>
+        <column name="unit_lods" label="LOD-lar"/>
+        <column name="unit_objects" label="Obyektlər"/>
+        <column name="unit_id_HIDDEN" label="ID"/>
+      </fs_scroll_list>
+    </panel>
+    <panel name="logs_panel" label="Log"/>
+    <panel name="local_mesh_settings_panel" label="Seçimlər">
+      <check_box name="local_mesh_scale_use_meters"
+        label="Təxminən məlumatlıq üçün ölçü vahidi olaraq metrləri seçin."
+        tool_tip="Maya kimi alətlər tərəfindən istifadə edilən santimetr ölçü vahidlərini göz ardı edin." />
+      <text name="lod_suffix_label">
+        LOD sufiksləri:
+      </text>
+      <combo_box name="lod_suffix_combo"
+        tool_tip="Standartı seçin və ya əl ilə düzəliş edin... || Default SL - (Aşağı kimi LOD0, Sufiksiz yüksək). || Oyun Mühərriki - Unity/UE5, və s. (Aşağı=LOD3, Yüksək=LOD0). || LOD adları - İngilis adları LOD-lar, (Aşağı='LOWEST', Yüksək='HIGH').">
+        <combo_item name="choose_one">Hazırkı</combo_item>
+        <combo_item name="suff_sl">Standart SL</combo_item>
+        <combo_item name="suff_unity">Oyun Motoru Standartı</combo_item>
+        <combo_item name="suff_descriptive">LOD Adları</combo_item>
+      </combo_box>
+      <text name="suf_lowest_lab">
+        Ən aşağı:
+      </text>
+      <line_editor name="suf_lowest"
+        tool_tip="Diskdəki ən aşağı LOD faylı və faylın daxilindəki modellər üçün istifadə edilən sifəks."/>
+      <text name="suf_low_lab">
+        Aşağı:
+      </text>
+      <line_editor name="suf_low"
+        tool_tip="Diskdəki aşağı LOD faylı və faylın daxilindəki modellər üçün istifadə edilən sifəks."/>
+      <text name="suf_medium_lab">
+        Orta:
+      </text>
+      <line_editor name="suf_medium"
+        tool_tip="diskdəki fizika faylını və fayl içindəki modelləri müəyyən etmək üçün istifadə olunan şəkilçi."/>
+    </panel>
+  </tab_container>
+  <button name="btn_apply" label="Tətbiq et"/>
+  <button name="btn_add" label="Əlavə et"/>
+  <button name="btn_remove" label="Sil"/>
+  <button name="btn_reload" label="Yen.yük."/>
+  <button name="btn_clear" label="Təmizlə"/>
+  <button name="btn_rez" label="Seçilmişləri rez"
+    tool_tip="Dünyada donor şəbəkəsi yaradın və onu seçilmiş yerli şəbəkə ilə doldurun. Bu, dünyada boş bir obyekt yaradacaq."/>
+</floater>
+

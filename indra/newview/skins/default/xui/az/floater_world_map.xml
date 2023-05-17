@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="worldmap" title="Dünya xəritəsi">
+	 <layout_stack name="resizing_stack">
+	<layout_panel name="map_details_panel">
+	<panel name="layout_panel_1">
+		<text name="events_label">
+			Nişanlar
+		</text>
+	</panel>
+	<panel name="layout_panel_2">
+		<button name="Show My Location" tool_tip="Xəritəni avatarımın yerləşməsində mərkəzləşdirin"/>
+		<text name="me_label">
+			Mən
+		</text>
+		<text name="person_label">
+			Adamlar
+		</text>
+		<text name="infohub_label">
+			İnfoxab
+		</text>
+		<text name="land_sale_label">
+			Torpaq satışı
+		</text>
+		<text name="auction_label">
+			hərracdan
+		</text>
+		<text name="by_owner_label">
+			sahibdən
+		</text>
+		<button name="Go Home" tool_tip="Evə get"/>
+		<text name="Home_label">
+			Ev
+		</text>
+		<text name="events_label">
+			Hadisələr:
+		</text>
+		<text name="pg_label">
+			Ümumi
+		</text>
+		<check_box initial_value="true" name="events_mature_chk"/>
+		<text name="events_mature_label">
+			Ortam
+		</text>
+		<text name="events_adult_label">
+			Yetkin
+		</text>
+	</panel>
+	<panel name="layout_panel_3">
+		<text name="find_on_map_label">
+			Xəritədə tap
+		</text>
+	</panel>
+	<panel name="layout_panel_4">
+		<combo_box label="Daxil olmuş dostlar" name="friend combo" tool_tip="Xəritədə dostlarımı göstərin">
+			<combo_box.item label="Mənim daxil olmuş dostlarım" name="item1"/>
+		</combo_box>
+		<combo_box label="Əlfəcinlərim" name="landmark combo" tool_tip="Əlfəcinlərimi xəritədə göstərin">
+			<combo_box.item label="Əlfəcinlərim" name="item1"/>
+		</combo_box>
+		<search_editor label="Regionun adı" name="location" tool_tip="Regionun adını daxil edin"/>
+		<button label="Axtarış" name="DoSearch" tool_tip="Regioni axtarın"/>
+		<button label="Təmizlə" name="Clear" tool_tip="İzləməni təmizləyin və xəritəni standart görüntüyə qaytarın"/>
+		<text name="events_label">
+			Məkan:
+		</text>
+		<button label="Teleport" name="Teleport" tool_tip="Seçilmiş yere teleportasiya edin"/>
+		<button label="Kopyala" name="copy_slurl" tool_tip="İnternetdə istifadə üçün SL URL ünvanı ilə cari yerin nümunəsini kopyalayın."/>
+		<button label="Məkanı göstərin" name="Show Destination" tool_tip="Xəritəni seçilmiş yerə mərkəzləşdirin"/>
+		<button label="Regionu izləyin" name="track_region" tool_tip="Regioni izləməyə əlavə edin"/>
+	</panel>
+	<panel name="layout_panel_5">
+		<text name="zoom_label">
+			Yaxınlaşdırma
+		</text>
+	</panel>
+</layout_panel>
+</layout_stack> 
+</floater>

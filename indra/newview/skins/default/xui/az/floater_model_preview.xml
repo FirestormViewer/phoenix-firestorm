@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Model Preview" title="Model yüklənməsi">
+  <string name="no_havok">fizikası olan mesh yüklənir</string>
+  <string name="status_parse_error">Xəta: DAE faylının təhlilində problem var - Ətraflı məlumatlar üçün jurnalı baxın.</string>
+  <string name="status_bind_shape_orientation">Xəbərdarlıq: Matrix formu standart olaraq X koordinatına uyğun deyil.</string>
+  <string name="status_material_mismatch">Xəta: Modelin materialı standart modeldə yoxdur.</string>
+  <string name="status_lod_model_mismatch">Xəta: Detalların səviyyəsi atası olmayan modeldir.</string>
+  <string name="status_reading_file">Yüklənir...</string>
+  <string name="status_generating_meshes">Meshlər yaradılır...</string>
+  <string name="status_vertex_number_overflow">Xəta: Vertex sayı 65535-dən çoxdur, Ləğv edildi!</string>
+  <string name="bad_element">Xəta: Qəbul edilməyən element</string>
+  <string name="high">Yüksək</string>
+  <string name="medium">Orta</string>
+  <string name="low">Aşağı</string>
+  <string name="lowest">Ən aşağı</string>
+  <string name="mesh_status_good">Yükləmək olar!</string>
+  <string name="mesh_status_na">Yoxdur</string>
+  <string name="mesh_status_none">Yoxdur</string>
+  <string name="mesh_status_submesh_mismatch">Detalların səviyyələrində tekstur qrafiklərinin sayı fərqlidir.</string>
+  <string name="mesh_status_mesh_mismatch">Detalların səviyyələrində mesh nümunələrinin sayı fərqlidir.</string>
+  <string name="mesh_status_too_many_vertices">Detal səviyyəsində çox çox vertex var.</string>
+  <string name="mesh_status_missing_lod">Tələb olunan detall səviyyəsi yoxdur.</string>
+  <string name="mesh_status_invalid_material_list">Detal səviyyəsinin materialları standart modelə daxil deyil.</string>
+  <string name="phys_status_vertex_limit_exceeded">Bəzi fiziki qabıqlar üçün vertex limiti aşıldı (256); Digər 'Analiz Metodu'nu sınayın.</string>
+  <string name="phys_status_hull_limit_exceeded">Bəzi modellər qabığın limitini keçir (256); 'Sadələşdirmə'ni sınayın.</string>
+  <string name="phys_status_degenerate_triangles">Mesh fizikası çox sıxdır və ya degenerativ üçbucaqları ehtiva edir. Həll etmək üçün Analiz/Sadələşdirmədən istifadə edin.</string>
+  <string name="phys_status_no_havok">Bu versiya Havok-u dəstəkləmir və fizikanı Second Life-a yükləmək üçün tövsiyə edilmir. Nəticələr gözlənilməz ola bilər.</string>
+  <string name="phys_status_too_thin">0,5 m-dən kiçik bir və ya bir neçə ölçü, yalnız gövdəyə əsaslanan fiziki formalar (təhlil edilmiş) düzgün işləyəcək.</string>
+  <string name="phys_status_unknown_error">Tanınmamış xəta tapıldı.</string>
+  <string name="layer_all">Hamısı</string>
+  <string name="decomposing">Analiz...</string>
+  <string name="simplifying">Sadələşdirmə...</string>
+  <string name="tbd">Sonra</string>
+
+  <!-- Warnings and info from model loader-->
+   <string name="TooManyJoint">Teksturasiya deaktiv edilib, həddən artıq çox oynaq: [JOINTS], maks.: [MAX]</string>
+   <string name="UnrecognizedJoint">Naməlum birləşməyə uyğunlaşdırın [NAME]</string>
+   <string name="UnknownJoints">Teksturasiya deaktiv edilib, həddən çox [COUNT] naməlum oynaq</string>
+   <string name="ModelLoaded">Model [MODEL_NAME] yükləndi</string>
+   <string name="IncompleteTC">Teksturanın koordinat məlumatları tam deyil.</string>
+   <string name="PositionNaN">DAE modelindən yerləşmə datası yüklənərkən NaN aşkarlandı, etibarsız model.</string>
+   <string name="NormalsNaN">DAE modelindən normalları yükləyərkən NaN tapıldı, etibarsız model.</string>
+   <string name="NegativeScaleTrans">Mənfi miqyas aşkarlandı, dəstəklənməyən transformasiya. domInstance_geometry: [LABEL]</string>
+   <string name="NegativeScaleNormTrans">Mənfi miqyas aşkarlandı, normallaşmadan sonra dəstəklənməyən transformasiya. domInstance_geometry: [LABEL]</string>
+   <string name="CantResolveGeometryUrl">URL həndəsəsini həll etmək mümkün deyil.</string>
+   <string name="ParsingErrorBadElement">Pis element</string>
+   <string name="ParsingErrorCantParseScene">Səhnəni təhlil etmək mümkün olmadı</string>
+   <string name="ParsingErrorCorrupt">Dae ilə xəta - ənənəvi olaraq zədələnmiş faylı göstərir.</string>
+   <string name="ParsingErrorNoController">Nəzarətçini doğrulamaq alınmadı</string>
+   <string name="ParsingErrorNoDoc">Daxili sənədləri tapmaq mümkün deyil</string>
+   <string name="ParsingErrorNoRoot">Sənədin kökü yoxdur</string>
+   <string name="ParsingErrorNoScene">Sənədin vizual_səhnəsi yoxdur</string>
+   <string name="ParsingErrorPositionInvalidModel">Məkan datası olmadan şəbəkəni təhlil etmək mümkün deyil. Yanlış model.</string>
+   
+  <panel name="left_panel">
+    <panel name="model_name_representation_panel">
+      <text name="name_label">Model adı:</text>
+    </panel>
+    <tab_container name="import_tab">
+      <panel label="Detal səviyyəsi" name="lod_panel" title="Detal səviyyəsi">
+        <text initial_value="Mənbə" name="source" value="Mənbə"/>
+        <text initial_value="Üçbucaqlar" name="triangles" value="Üçbucaqlar"/>
+        <text initial_value="Zirvələr" name="vertices" value="Zirvələr"/>
+        <text initial_value="Yüksək" name="high_label" value="Yüksək"/>
+        <combo_box name="lod_source_high">
+          <item name="Load from file" label="Fayldan yüklə"/>
+          <item name="MeshOpt Auto" label="Avtomatik yarat"/>
+          <item name="MeshOptCombine" label="Dəqiq yarat"/>
+          <item name="MeshOptSloppy" label="Diqqətsiz yarat"/>
+          <item name="Generate" label="Etibarlı yarat"/>
+        </combo_box>
+        <button label="İcmal..." name="lod_browse_high"/>
+        <combo_box name="lod_mode_high">
+          <item label="Üçbucaq həddi" name="Triangle Limit"/>
+          <item label="Xəta həddi" name="Error Threshold"/>
+        </combo_box>
+        <text initial_value="Orta" name="medium_label" value="Orta"/>
+        <combo_box name="lod_source_medium">
+          <item name="Load from file" label="Fayldan yüklə"/>
+          <item name="MeshOpt Auto" label="Avtomatik yarat"/>
+          <item name="MeshOptCombine" label="Dəqiq yarat"/>
+          <item name="MeshOptSloppy" label="Diqqətsiz yarat"/>
+          <item name="Generate" label="Etibarlı yarat"/>
+          <item name="Use LoD above" label="Yuxarıdan istifadə et"/>
+        </combo_box>
+        <button label="İcmal..." name="lod_browse_medium"/>
+        <combo_box name="lod_mode_medium">
+          <item label="Üçbucaq həddi" name="Triangle Limit"/>
+          <item label="Xəta həddi" name="Error Threshold"/>
+        </combo_box>
+        <text initial_value="Aşağı" name="low_label" value="Aşağı"/>
+        <combo_box name="lod_source_low">
+          <item name="MeshOpt Auto" label="Avtomatik yarat"/>
+          <item name="MeshOptCombine" label="Dəqiq yarat"/>
+          <item name="MeshOptSloppy" label="Diqqətsiz yarat"/>
+          <item name="Generate" label="Etibarlı yarat"/>
+          <item name="Use LoD above" label="Yuxarıdan istifadə et"/>
+        </combo_box>
+        <button label="İcmal..." name="lod_browse_low"/>
+        <combo_box name="lod_mode_low">
+          <item label="Üçbucaq həddi" name="Triangle Limit"/>
+          <item label="Xəta həddi" name="Error Threshold"/>
+        </combo_box>
+        <text initial_value="Ən aşağı" name="lowest_label" value="Ən aşağı"/>
+        <combo_box name="lod_source_lowest">
+          <item name="MeshOpt Auto" label="Avtomatik yarat"/>
+          <item name="MeshOptCombine" label="Dəqiq yarat"/>
+          <item name="MeshOptSloppy" label="Diqqətsiz yarat"/>
+          <item name="Generate" label="Etibarlı yarat"/>
+          <item name="Use LoD above" label="Yuxarıdan istifadə et"/>
+        </combo_box>
+        <button label="İcmal..." name="lod_browse_lowest"/>
+        <combo_box name="lod_mode_lowest">
+          <item label="Üçbucaq həddi" name="Triangle Limit"/>
+          <item label="Xəta həddi" name="Error Threshold"/>
+        </combo_box>
+        <check_box label="Normallar yarat" name="gen_normals"/>
+        <text initial_value="Bükülmə bucağı:" name="crease_label" value="Bükülmə bucağı:"/>
+      </panel>
+
+      <!-- PHYSYCS PANEL -->
+      <panel label="Fizika" name="physics_panel">
+        <panel name="physics geometry">
+		<text name="first_step_name">Addım 1: Detallaşdırma Səviyyəsi</text>
+           <combo_box name="physics_lod_combo" tool_tip="Fizika Forması üçün Detal Səviyyəsi">
+             <combo_item name="choose_one">Seçim seçin...</combo_item>
+             <combo_item name="physics_high">Yüksək</combo_item>
+             <combo_item name="physics_medium">Orta</combo_item>
+             <combo_item name="physics_low">Aşağı</combo_item>
+             <combo_item name="physics_lowest">Aşağı</combo_item>
+             <combo_item name="physics_cube">Kub</combo_item>
+             <combo_item name="physics_hex">Altıbucaqlı</combo_item>
+             <combo_item name="physics_ud">Müəyyən edilib</combo_item>
+             <combo_item name="physics_bounding_box">Bounding Box</combo_item>
+             <combo_item name="load_from_file">Fayldan</combo_item>          
+			</combo_box>
+          <button label="İcmal..." name="physics_browse"/>
+        </panel>
+        <panel name="physics analysis">
+          <text name="method_label">Addım 2. Analiz</text>
+          <text name="analysis_method_label">Üsul:</text>
+          <text name="quality_label">Keyfiyyət:</text>
+          <text name="smooth_method_label">Hamarlıq:</text>
+          <check_box label="Deşikləri Bağlayın" name="Close Holes (Slow)"/>
+          <button label="Analiz" name="Decompose"/>
+          <button label="Ləğv et" name="decompose_cancel"/>
+        </panel>
+        <panel name="physics simplification">
+          <text name="second_step_label">Addım 3. Sadələşdirmə</text>
+          <text name="simp_method_header">Üsul:</text>
+          <text name="pass_method_header">Keçidlər:</text>
+          <text name="Detail Scale label" left_pad="30" width="100">Detal ölçüsü:</text>
+          <text name="Retain%_label">Saxla:</text>
+          <combo_box name="Combine Quality" value="1"/>
+          <button label="Sadələşdirmə" name="Simplify"/>
+          <button label="Ləğv et" name="simplify_cancel"/>
+        </panel>
+        <panel name="physics info">
+          <text name="results_text" width="70">Nəticələr:</text>
+          <text name="physics_triangles" width="150">Üçbucaqlar: [TRIANGLES],</text>
+          <text name="physics_points" width="120">Verteks: [POINTS],</text>
+          <text name="physics_hulls" width="120">Qabıqlar: [HULLS]</text>
+        </panel>
+      </panel>
+      <!-- MODIFIERS PANEL -->
+      <panel label="Yükləmə Seçimləri" name="modifiers_panel">
+        <text name="scale_label" width="195">Miqyas (1=miqyaslamayın):</text>
+        <text name="dimensions_label">Ölçülər:</text>
+        <check_box label="Teksturları aktivləşdir" name="upload_textures"/>
+      </panel>
+
+      <panel label="Qaydalar" name="rigging_panel" title="Riging">
+        <check_box label="Dəri çəkisi daxil olmaqla" name="upload_skin"/>
+        <check_box label="Oynaqların yerləşməyi daxil olmaqla" name="upload_joints"/>
+        <check_box label="Oynağın yerləşməsi quraşdırılıbsa, miqyası kilidləyin" name="lock_scale_if_joint_position"/>
+        <text name="pelvis_offset_label">Z ofseti (qaldır/endir):</text>
+        <text name="skin_too_many_joints">Həddindən artıq dəri oynaqları</text>
+        <text name="skin_unknown_joint">Modeldə naməlum birləşmə(lər) var</text>
+        <text name="joints_descr">Oynaqlar:</text>
+        <text name="conflicts_description">[JOINTS_COUNT] birləşmədə [CONFLICTS] münaqişə</text>
+        <text name="pos_overrides_descr">Oynaq '[JOINT]' üçün yerləşmə ləğv edilir:</text>
+        <scroll_list name="pos_overrides_list">
+          <scroll_list.columns label="Model" name="model_name"/>
+       </scroll_list>
+      </panel>
+      <panel label="Jurnal" name="logs_panel">
+        <check_box label="Jurnal təfərrüatlarını göstər" name="verbose_logging" width="80"/>
+      </panel>
+      <panel label="Önbaxış seçimləri" adı="mesh_preview_settings_panel">
+        <text name="mesh_upload_behaviour_label">
+         Modeli yükləyərkən davranış seçimləri:
+        </text>
+        <check_box label="Çəkiləri avtomatik olaraq daxil edin"
+         tool_tip="Avtomatik olaraq riglənmiş meshlər üçün çəkiləri aktivləşdirmək üçün təyin edilir"
+         name="mesh_preview_auto_weights"/>
+        <check_box label="Avtomatik baxış miqyası"
+         tool_tip="Qeyd edilmiş meshlər üçün önizləmə çəkilərini avtomatik göstər"
+         name="mesh_preview_auto_show_weights"/>
+        <text name="lod_suffix_label" width="110">
+            LOD şəkilçiləri:
+        </text>
+        <combo_box name="lod_suffix_combo" width="250" tool_tip="Ön təyin seçin və ya özünüz quraşdırın">
+            <combo_item name="choose_one">Standart seçin və ya əl ilə dəyişdirin...</combo_item>
+            <combo_item name="suff_sl">SL Standartı (Aşağı=LOD0)</combo_item>
+            <combo_item name="suff_unity">Oyun Mühərriki Standartı (Aşağı=LOD3)</combo_item>
+            <combo_item name="suff_descriptive">Sözlər (yüksək, orta...)</combo_item>
+        </combo_box>
+        <text name="suf_lowest_lab" width="60">
+            Ən aşağı:
+        </text>
+        <line_editor name="suf_lowest" tool_tip="Diskdəki ən aşağı səviyyəli faylı və fayldakı modelləri müəyyən etmək üçün istifadə olunan şəkilçi."/>
+        <text name="suf_low_lab" width="60">
+            Aşağı:
+        </text>
+        <line_editor name="suf_low" tool_tip="Diskdəki aşağı səviyyəli faylı və fayldakı modelləri müəyyən etmək üçün istifadə olunan şəkilçi."/>
+        <text name="suf_medium_lab" width="60">
+            Orta:
+        </text>
+        <line_editor name="suf_medium" tool_tip="Diskdəki orta səviyyəli faylı və fayldakı modelləri müəyyən etmək üçün istifadə olunan şəkilçi."/>
+        <text name="suf_high_lab" width="60">
+            Yüksək:
+        </text>
+        <line_editor name="suf_high" tool_tip="Diskdəki yüksək səviyyəli faylı və fayldakı modelləri müəyyən etmək üçün istifadə olunan şəkilçi."/>
+        <text name="suf_physics_lab" width="60">
+            Fizika:
+        </text>
+        <line_editor name="suf_physics" tool_tip="Diskdəki fizika faylını və fayldakı modelləri müəyyən etmək üçün istifadə olunan şəkilçi."/>
+        <text name="mesh_preview_ud_preset_label">
+          Fizika öntəyinləri:
+        </text>
+        <line_editor name="ud_physics" tool_tip="Fizikada istifadə üçün sadə Collada mesh tərifinə tam sistem yolu."/>
+        <button label="Baxış" label_selected="Baxış" name="set_user_def_phys"/>
+        <text name="mesh_preview_colors_label">
+         Önizləmə Rəngləri:
+        </text>
+        <text name="user_label">
+         Əsas:
+        </text>
+        <color_swatch label="Arxa plan" tool_tip="Önizləmə pəncərəsi üçün kətan rəngi"
+         name="mesh_preview_canvas_color"/>
+        <color_swatch label="Model üzləri" tool_tip="Önizləmə pəncərəsində model üzlərinin rəngi"
+         name="mesh_preview_edge_color"/>
+        <color_swatch label="Mühit işığı" tool_tip="Önizləmə pəncərəsindəki ətraf işıq səviyyəsi (həmçinin animasiyaya baxmağa və s. təsir göstərir)"
+         name="preview_ambient_color"/>
+        <text name="physics_settings_label">
+         Fizika:
+        </text>
+        <color_swatch label="Fizikanın kənarları"
+         tool_tip="Önizləmə pəncərəsində fiziki üçbucaqlar üçün üz rəngi"
+         name="mesh_preview_physics_edge_color"/>
+        <color_swatch label="Fizikanın doldurması"
+         tool_tip="Önizləmə pəncərəsində fiziki model üçün rəngi doldurun"
+         name="mesh_preview_physics_fill_color"/>
+        <text name="physics_issues_setting_label" width="110">
+         Fizika problemləri:
+        </text>
+        <color_swatch label="Pis kənarlar"
+         tool_tip="Önizləmə pəncərəsində degenerativ (nazik) üçbucaqların üz rəngi"
+         name="mesh_preview_degenerate_edge_color"/>
+        <color_swatch label="Pis doldurma"
+         tool_tip="Önizləmə pəncərəsində degenerativ (nazik) üçbucaqların rəngini doldurun"
+         name="mesh_degenerate_fill_color"/>
+      </panel>
+    </tab_container>
+    <panel name="weights_and_warning_panel">
+      <button label="Çəki və haqqı hesablayın" name="calculate_btn" tool_tip="Çəki və haqqı hesablayın"/>
+      <button label="Ləğv et" name="cancel_btn"/>
+      <button label="Yüklə" name="ok_btn" tool_tip="Загрузить в симулятор"/>
+      <button label="Seçimləri silin və formanı sıfırlayın" name="reset_btn"/>
+      <!-- ========== WEIGHTS ==========-->
+      <text name="upload_fee">Qiymət: L$ [FEE]</text>
+      <text name="prim_weight" width="140">Yerə təsir: [EQ]</text>
+      <text name="download_weight">Yükləmək: [ST]</text>
+      <text name="physics_weight">Fizika: [PH]</text>
+      <text name="server_weight">Server: [SIM]</text>
+      <!-- =========== Cost breakdown ======== -->
+      <panel name="price_breakdown_panel">
+        <text name="price_breakdown_title">Qiymət bölgüsü</text>
+        <text name="price_breakdown_labels">
+Yükləmək:
+Fizika:
+Nümunələr:
+Teksturlar:
+Model:
+        </text>
+      </panel>
+      <panel name="physics_costs_panel">
+        <text name="physics_breakdown_title">Fizika xərcləri</text>
+        <text name="physics_breakdown_labels">
+Çərçivə:
+Meş:
+Analiz:
+        </text>
+      </panel>
+      <panel name="preview_controls_panel">
+        <panel name="preview_controls_inner_panel">
+          <text name="preview_controls_title">Önbaxış</text>
+          <combo_box name="preview_lod_combo" tool_tip="Önizləmə Detalının Səviyyəsi">
+            <combo_item name="high">Yüksək</combo_item>
+            <combo_item name="medium">Orta</combo_item>
+            <combo_item name="low">Aşağı</combo_item>
+            <combo_item name="lowest">Aşağı</combo_item>
+          </combo_box>
+        </panel>
+        <check_box label="Kənarları" name="show_edges"/>
+        <check_box label="Teksturlar" name="show_textures"/>
+        <check_box label="UV" name="show_uv_guide"/>
+        <check_box label="Fizika" name="show_physics"/>
+        <text name="exploder_label">Aralıq</text>
+        <check_box label="Çəkilər" name="show_skin_weight"/>
+        <check_box label="Oynaqlar" name="show_joint_positions"/>
+        <check_box label="Oynaqları ləğv et" name="show_joint_overrides"/>
+      </panel>
+
+      <!-- ========== NOTE MESSAGE ========== -->
+      <text name="warning_title">QEYD:</text>
+      <text name="warning_message">Mesh modelləri yükləmək hüququnuz yoxdur. [[VURL] Necə alacağınızı] oxuyun.</text>
+    </panel>
+  </panel>
+  <text name="lod_label">Baxış:</text>
+</floater>

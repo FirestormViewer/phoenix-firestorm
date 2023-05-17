@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="item properties" title="ƏŞYA XÜSUSİYYƏTLƏRİ">
+	<floater.string name="unknown">(naməlum)</floater.string>
+	<floater.string name="public">(içtimai)</floater.string>
+	<floater.string name="you_can">İcazələriniz:</floater.string>
+	<floater.string name="owner_can">Sahibin icazələri:</floater.string>
+	<floater.string name="acquiredDate">[wkday,datetime,local], [day,datetime,local] [mth,datetime,local] [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]</floater.string>
+	<text name="LabelItemNameTitle">Adı:</text>
+	<text name="LabelItemDescTitle">Təsviri:</text>
+	<text name="LabelCreatorTitle">Yaradıcı:</text>
+	<button label="Профиль…" name="BtnCreator"/>
+	<text name="LabelOwnerTitle">Sahibi:</text>
+	<button label="Профиль…" name="BtnOwner"/>
+	<text name="LabelAcquiredTitle">Alınıb:</text>
+	<text name="LabelAcquiredDate">Ç. 24 May 12:50:46 2006</text>
+	<text name="LabelItemExperienceTitle">Macəra:</text>
+	<text name="OwnerLabel">Siz:</text>
+	<check_box label="Dəyişdir" name="CheckOwnerModify"/>
+	<check_box label="Köçürt" name="CheckOwnerCopy"/>
+	<check_box label="Paylaş" name="CheckOwnerTransfer"/>
+	<check_box label="İxrac" name="CheckOwnerExport"/>
+	<text name="AnyoneLabel">Hamı:</text>
+	<check_box label="Köçürt" name="CheckEveryoneCopy"/>
+	<text name="GroupLabel">Qrup:</text>
+	<check_box label="Paylaş" name="CheckShareWithGroup"/>
+	<text name="NextOwnerLabel">Yeni sahibi:</text>
+	<check_box label="Dəyişdir" name="CheckNextOwnerModify"/>
+	<check_box label="Köçürt" name="CheckNextOwnerCopy"/>
+	<check_box label="Paylaş" name="CheckNextOwnerTransfer"/>
+	<check_box label="Satmaq" name="CheckPurchase"/>
+	<combo_box name="ComboBoxSaleType">
+		<combo_box.item label="Köçürtməsin" name="Copy"/>
+		<combo_box.item label="Məzmununu" name="Contents"/>
+		<combo_box.item label="Orijinal" name="Original"/>
+	</combo_box>
+	<spinner label="Qiymət:" name="Edit Cost"/>
+	<text name="CurrencySymbol">L$</text>
+</floater>

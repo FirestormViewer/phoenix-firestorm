@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Yerlər" name="places panel">
+	<string name="landmarks_tab_title" value="Əlfəcinlərim"/>
+	<string name="teleport_history_tab_title" value="Teleport tarixçəsi"/>
+	<string name="favorites_tab_title" value="Sevimlilər"/>
+	<string name="tooltip_trash_items" value="Seçilmiş əlfəcini və ya qovluğu sil"/>
+	<string name="tooltip_trash_history" value="Ziyarət edilən yerlərin siyahısını sil"/>
+	<layout_stack name="places_layout_panel">
+		<layout_panel name="main_panel">
+			<layout_stack name="top_menu_panel">
+				<layout_panel name="filter_panel">
+					<filter_editor label="Əlfəcin süzgəci" name="Filter"/>
+				</layout_panel>
+				<layout_panel name="options_gear_btn_panel">
+					<menu_button tool_tip="Seçimləri göstər" name="options_gear_btn"/>
+				</layout_panel>
+				<layout_panel name="options_sort_btn_panel">
+					<menu_button tool_tip="Sıralama seçimlərini göstər" name="sorting_menu_btn"/>
+				</layout_panel>
+				<layout_panel name="add_btn_panel">
+					<menu_button name="add_menu_btn" tool_tip="Yeni əlfəcin və ya qovluq əlavə et"/>
+				</layout_panel>
+				<layout_panel name="trash_btn_panel" tool_tip="Seçilmiş əlfəcini və ya qovluğu sil">
+					<dnd_button name="trash_btn"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="button_layout_panel">
+			<panel name="button_panel">
+				<layout_stack name="bottom_bar_ls0">
+					<layout_panel name="lp1">
+						<layout_stack name="bottom_bar_ls1">
+							<layout_panel name="teleport_btn_lp">
+								<button label="Teleport" name="teleport_btn" tool_tip="Seçilmiş əraziyə teleport"/>
+							</layout_panel>
+							<layout_panel name="chat_btn_lp">
+								<button label="Xəritə" name="map_btn" tool_tip="Dünya Xəritəsində müvafiq ərazini göstər"/>
+							</layout_panel>
+						</layout_stack>
+					</layout_panel>
+					<layout_panel name="lp_options">
+						<menu_button name="overflow_btn" tool_tip="Əlavə seçimlıəri göstər"/>
+					</layout_panel>
+					<layout_panel name="lp2">
+						<layout_stack name="bottom_bar_profile_ls">
+							<layout_panel name="profile_btn_lp">
+								<button label="Profil" name="profile_btn" tool_tip="Yer profilini göstər"/>
+							</layout_panel>
+						</layout_stack>
+						<layout_stack name="bottom_bar_close_ls3">
+							<layout_panel name="close_btn_lp">
+								<button label="Bağla" name="close_btn"/>
+							</layout_panel>
+						</layout_stack>
+					</layout_panel>
+				</layout_stack>
+				<layout_stack name="bottom_bar_ls2">
+					<layout_panel name="save_btn_lp">
+						<button label="Yadda saxla" name="save_btn"/>
+					</layout_panel>
+					<layout_panel name="cancel_btn_lp">
+						<button label="Ləğv et" name="cancel_btn"/>
+					</layout_panel>
+				</layout_stack>
+			</panel>
+		</layout_panel>
+	</layout_stack>
+</panel>

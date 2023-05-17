@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="env_edit_extdaycycle" title="Gün dövrünü dəyişdir">
+	<string name="title_new">
+		Yeni gün dövrü yaradın
+	</string>
+	<string name="title_edit">
+		Gün dövrünü dəyişdir
+	</string>
+	<string name="hint_new">
+		Gün dövrünün adını daxil edin, idarə elemə vasitələri ilə parametrlərini təyin edin və «Yadda saxla» düyməsini basın.
+	</string>
+	<string name="hint_edit">
+		Gün dövrünü dəyişdirmək üçün, aşağıda yerləşən idarə elemə vasitələri ilə parametrlərini təyin edin və «Yadda saxla» düyməsini basın.
+	</string>
+	<string name="time_label">
+		([HH]:[MM])
+	</string>
+	<string name="sky_track_label">
+		Səma [ALT]
+	</string>
+	<string name="sky_label">
+		Səma
+	</string>
+	<string name="water_label">
+		Su
+	</string>
+	<string name="commit_parcel">
+		Sahəyə tətbiq et
+	</string>
+	<string name="commit_region">
+		Regiona tətbiq et
+	</string>
+	<layout_stack name="outer_stack">
+		<layout_panel name="name_and_import">
+			<text name="label">
+				Günlük döngü:
+			</text>
+			<button label="İdxal" name="btn_import" tool_tip="Diskdən köhnə ayarları idxal edin."/>
+		</layout_panel>
+		<layout_panel name="content">
+			<layout_stack name="content_stack">
+				<layout_panel name="timeline_track_selection">
+					<panel name="timeline_layers">
+						<button label="Səma 4" name="sky4_track"/>
+						<button label="Səma 3" name="sky3_track"/>
+						<button label="Səma 2" name="sky2_track"/>
+						<button label="Yer səviyyəsi" name="sky1_track"/>
+						<button label="Su" name="water_track"/>
+					</panel>
+					<panel name="timeline">
+						<layout_stack name="track_options_ls">
+							<layout_panel name="track_options_lp">
+								<button label="Trek klonla" name="copy_track"/>
+								<button label="Trek yüklə" name="load_track"/>
+								<button label="Trek təmizlə" name="clear_track"/>
+							</layout_panel>
+							<layout_panel name="track_progress_lp">
+								<layout_stack name="progress_control">
+									<layout_panel name="skip_back">
+										<button name="skip_back_btn" tool_tip="Geri adım"/>
+									</layout_panel>
+									<layout_panel name="skip_forward">
+										<button name="skip_forward_btn" tool_tip="İrəli addım"/>
+									</layout_panel>
+								</layout_stack>
+							</layout_panel>
+							<layout_panel name="frames_lp">
+								<button label="[FRAME] Əlavə et" name="add_frame" width="120"/>
+								<button label="[FRAME] Yüklə" name="btn_load_frame" width="120"/>
+								<button label="[FRAME] Sil" name="delete_frame" width="120"/>
+							</layout_panel>
+						</layout_stack>
+					</panel>
+				</layout_panel>
+				<layout_panel name="frame_edit_controls">
+					<text name="icn_lock_edit">
+						Seçimləri dəyişmək üçün yuxarıdakı vaxt qrafikində əsas kadr seçin.
+					</text>
+				</layout_panel>
+				<layout_panel name="frame_settings_water">
+					<tab_container name="water_tabs">
+						<panel label="Su" name="water_panel"/>
+					</tab_container>
+				</layout_panel>
+				<layout_panel name="frame_settings_sky">
+					<tab_container name="sky_tabs">
+						<panel label="Atmosfer və İşıq" name="atmosphere_panel"/>
+						<panel label="Buludlar" name="clouds_panel"/>
+						<panel label="Günəş və ay" name="moon_panel"/>
+					</tab_container>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="buttons">
+			<button label="Yadda saxla" name="save_btn"/>
+			<button label="Ləğv et" name="cancel_btn"/>
+		</layout_panel>
+	</layout_stack>
+</floater>

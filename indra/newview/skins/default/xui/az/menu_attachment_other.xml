@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Avatar Pie">
+	<menu_item_call label="Profil" name="Profile..."/>
+	<menu_item_call label="Dostlara əlavə et" name="Add Friend"/>
+	<menu_item_call label="Kontakt dəstlərinə əlavə et" name="Add to Set"/>
+	<menu_item_call label="İM Göndər" name="Send IM..."/>
+	<menu_item_call label="Vizit kartı ver" name="Give Calling Card"/>
+	<menu_item_call label="Zəng" name="Call"/>
+	<menu_item_call label="Qrupa dəvət et" name="Invite..."/>
+	<menu_item_call label="Skeleti sıfırla" name="Reset Skeleton"/>
+	<menu_item_call label="Skelet və animasiyanı sıfırla" name="Reset Skeleton And Animations"/>
+	<menu_item_call label="Meş LOD sıfırlanması" name="Reset Mesh LOD" />
+	<context_menu label="Управление" name="Annoyance">
+		<menu_item_call label="Blokla" name="Avatar Mute"/>
+		<menu_item_call label="Blokdan çıxart" name="Avatar Unmute"/>
+		<menu_item_call label="Şikayət" name="abuse"/>
+		<menu_item_call label="Dondur" name="Freeze..."/>
+		<menu_item_call label="Təpiklə" name="Eject..."/>
+	</context_menu>
+	<menu_item_call label="Damp XML" name="Dump XML"/>
+	<menu_item_call label="Yaxınlaşdır" name="Zoom In"/>
+	<menu_item_call label="Ödə" name="Pay..."/>
+	<menu_item_call label="Obyekt profili" name="Object Inspect"/>
+	<menu_item_check name="AlwaysRenderFully" label="Həmişə tam göstər"/>
+	<menu_item_check name="DoNotRender" label="Heç vaxt göstərmə"/>
+	<menu_item_check name="RenderNormally" label="Çəkmə istisnalarından sil"/>
+	<menu_item_call label="Hissəciklərin sahibini blokla" name="Mute Particle"/>
+	<menu_item_call label="Müayinə" name="Object_Inspect_Floater"/>
+	<menu_item_call label="Skriptlər haqqında məlumat" name="ScriptInfo"/>
+	<menu_item_call label="Göstərmə" name="Derender"/>
+	<menu_item_call label="Göstərmə + QS" name="DerenderPermanent"/>
+	<menu_item_call label="Teksturların göstər" name="Debug..."/>
+	<menu_item_call label="Teksturasını yenilə" name="Texture Refresh"/>
+	<context_menu label="Ayrı saxla" name="Export Menu">
+		<menu_item_call label="Backup" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>
+</context_menu>

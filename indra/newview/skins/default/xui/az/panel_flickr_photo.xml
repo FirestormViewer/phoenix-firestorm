@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel name="panel_flickr_photo">
+	<combo_box name="resolution_combobox" tool_tip="Şəkil ölçüsü">
+		<combo_box.item label="Cari pəncərə" name="CurrentWindow"/>
+		<combo_box.item label="640x480" name="640x480"/>
+		<combo_box.item label="800x600" name="800x600"/>
+		<combo_box.item label="1024x768" name="1024x768"/>
+	</combo_box>
+	<combo_box name="filters_combobox" tool_tip="Şəkil filterləri">
+		<combo_box.item label="Filter yoxdur" name="NoFilter"/>
+	</combo_box>
+	<check_box label="En/hündürlük nisbətini saxla" name="keep_aspect_ratio"/>
+	<text name="working_lbl">
+		Yeniləmə...
+	</text>
+	<button label="Yenilə" name="new_snapshot_btn" tool_tip="Yeniləmək üçün klikləyin"/>
+	<button label="Baxış" name="big_preview_btn" tool_tip="Baxışı dəyişmək üçün klikləyin"/>
+	<text name="title_label">
+		Adı:
+	</text>
+	<text name="description_label">
+		Təsviri:
+	</text>
+	<check_box initial_value="true" label="SL-dəki yerləşməni təsvirə əlavə et" name="add_location_cb"/>
+	<text name="tags_label">
+		Teglər:
+	</text>
+	<text name="tags_help_label">
+		Tegləri boşluqla ayırın. Çoxlu sözlü təg'ləri ayrı ayrı qavlaqlar içində yazın.
+	</text>
+	<combo_box name="rating_combobox" tool_tip="Flickr məzmun rəyinə uyğunluq">
+		<combo_box.item label="Təhlükəsiz rəy" name="SafeRating"/>
+		<combo_box.item label="Orta rəy" name="ModerateRating"/>
+		<combo_box.item label="Məhdud rəy" name="RestrictedRating"/>
+	</combo_box>
+	<button label="Paylaş" name="post_photo_btn"/>
+	<button label="Ləğv et" name="cancel_photo_btn"/>
+</panel>

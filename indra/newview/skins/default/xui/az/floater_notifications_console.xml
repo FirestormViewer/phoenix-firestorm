@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="notifications_console" title="Bildiriş konsolu">
+	<combo_box label="Bildiriş növünü seçin" name="notification_types"/>
+	<button label="Əlavə et" name="add_notification"/>
+</floater>

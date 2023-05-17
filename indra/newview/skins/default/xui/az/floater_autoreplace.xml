@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="autoreplace_floater" title="Avtomatik əvəzləmə Ayarları">
+	<check_box label="Avtomatik əvəzləməni aktivləşdir" name="autoreplace_enable" tool_tip="Çatda mətn yazarkən müvafiq əvəzləmə elementlərinə uyğun sözlər dəyişdiriləcək"/>
+	<button label="Siyahını idxal et..." name="autoreplace_import_list" tool_tip="Daha əvvəl idxal edilmiş siyahını bir fayldan yükləyin."/>
+	<button label="Siyahını ixrac et..." name="autoreplace_export_list" tool_tip="Seçilmiş siyahını bir fayla yaddaşa verin ki, daha sonra yayıma verilə bilərsiniz."/>
+	<button label="Yeni siyahı yarat..." name="autoreplace_new_list" tool_tip="Yeni siyahı yaradın."/>
+	<button label="Siyahını sil" name="autoreplace_delete_list" tool_tip="Seçilmiş siyahını silin."/>
+	<button name="autoreplace_list_up" tool_tip="Siyahı prioritetini artırın."/>
+	<button name="autoreplace_list_down" tool_tip="Siyahı prioritetini azaltın."/>
+	<scroll_list name="autoreplace_list_replacements">
+		<scroll_list.columns label="Açar söz" name="keyword"/>
+		<scroll_list.columns label="Əvəzləmə" name="replacement"/>
+	</scroll_list>
+	<button label="Əlavə et..." name="autoreplace_add_entry"/>
+	<button label="Sil" name="autoreplace_delete_entry"/>
+	<text name="autoreplace_keyword_txt">
+		Açar söz:
+	</text>
+	<text name="autoreplace_replacement_txt">
+		Əvəzləmə:
+	</text>
+	<button label="Qeyd etməni saxla" name="autoreplace_save_entry" tool_tip="Bu qeydi saxlayın."/>
+	<button label="Dəyişiklikləri saxla" name="autoreplace_save_changes" tool_tip="Bütün dəyişiklikləri saxlayın."/>
+	<button label="Ləğv et" name="autoreplace_cancel" tool_tip="Bütün dəyişiklikləri ləğv edin."/>
+</floater>

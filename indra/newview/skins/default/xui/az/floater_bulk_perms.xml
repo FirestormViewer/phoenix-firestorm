@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floaterbulkperms" title="Məzmun üçün icazələrin təyin edilməsi">
+	<floater.string name="nothing_to_modify_text">
+		Seçilmiş məzmunda dəyişdirmək üçün heçnə yoxdur.
+	</floater.string>
+	<floater.string name="status_text">
+		[NAME] üçün icazələrin təyin edilməsi
+	</floater.string>
+	<floater.string name="start_text">
+		İcazə dəyişdirmə sorğusu yaradılır...
+	</floater.string>
+	<floater.string name="done_text">
+		İcra edilmiş icazə dəyişdirmə sorğuları.
+	</floater.string>
+	<icon name="icon_animation" tool_tip="Animasiya"/>
+	<icon name="icon_bodypart" tool_tip="Bədən hissələri"/>
+	<icon name="icon_clothing" tool_tip="Paltarlar"/>
+	<icon name="icon_gesture" tool_tip="Jestlər"/>
+	<icon name="icon_notecard" tool_tip="Qeydlər"/>
+	<icon name="icon_object" tool_tip="Obyektlər"/>
+	<icon name="icon_script" tool_tip="Skriptlər"/>
+	<icon name="icon_sound" tool_tip="Səslər"/>
+	<icon name="icon_texture" tool_tip="Teksturlar"/>
+	<icon name="icon_setting" tool_tip="Mühit seçimləri"/>
+	<button label="√ Hamısı" name="check_all"/>
+	<button label="Təmizlə" label_selected="Yox" name="check_none"/>
+	<text name="newperms">
+		Seçilmiş üçün icazələri təyin et:
+	</text>
+	<text name="GroupLabel">
+		Qrup:
+	</text>
+	<check_box label="Paylaş" name="share_with_group" tool_tip="Позволить всем участникам выбранной группы получить установленные вам права на этот объект. Для включения ролевых ограничений необходимо произвести сделку."/>
+	<text name="AnyoneLabel">
+		Hamısı:
+	</text>
+	<check_box label="Köçürt" name="everyone_copy" tool_tip="Копию объекта может взять любой желающий. Объект и все его содержимое должны копироваться и передаваться."/>
+	<text left="200" name="NextOwnerLabel">
+		Yeni Sahibi:
+	</text>
+	<check_box top_pad="15" label="Dəyişdirmək" name="next_owner_modify" tool_tip="Yeni sahibi obyektin xüsiyyətlərini dəyişdirə bilər, məsələn: ayrı elementin adını, və ya ölçüsünü"/>
+	<check_box label="Köçürt" name="next_owner_copy" tool_tip="Növbəti sahibi bu obyektin qeyri-məhdud sayda köçürtməsini çıxarda bilər. Köçürtmələr yaradıcı haqqında məlumat içərirlər, və köçürdülmüş obyektdən çox icazəli ola bilməzlər."/>
+	<check_box initial_value="true" label="Paylaş" name="next_owner_transfer" tool_tip="Yeni sahibi bu obyekti paylaşa və ya sata bilər."/>
+	<scroll_list height="75" name="queue output"/>
+	<button label="OK" name="ok"/>
+	<button label="Tətbiq et" name="apply"/>
+	<button label="Ləğv et" name="close"/>
+</floater>

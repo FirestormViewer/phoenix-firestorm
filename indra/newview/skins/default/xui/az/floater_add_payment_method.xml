@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_add_payment_method">
+	<panel name="wrapper_panel">
+		<text name="title_txt">
+			Second Life-dan daha çox zövq almaq üçün Linden dolları almaq üçün ödəniş üsulunu əlavə edin.
+		</text>
+		<button label="Başla" name="continue_btn" width="140"/>
+		<button label="Sonra" name="close_btn" width="90"/>
+		<text name="image_left_desc">
+			Sevimli avatar yaradın. Second Life dükkanlarında və Marketplace-də milyonlarla mallardan seçim edin. Siz burada stil yarada bilərsiniz.
+		</text>
+		<text name="image_center_desc">
+			Sevimli müğənnilər və aparıcılar üçün hədiyyələr verin. Dəstəyiniz onlara gözəl təsirlər yaratmağa kömək edir.
+		</text>
+		<text name="image_right_desc">
+			Xəyallarınızın evini yaradın. Almaq üçün milyonlarla əşya var, bu sayədə məskəninizi unikal edə bilərsiniz.
+		</text>
+	</panel>
+</floater>

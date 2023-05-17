@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_gesture_gear">
+	<menu_item_call label="Jesti aktivləşdir/deaktivləşdir" name="activate"/>
+	<menu_item_call label="Köçürt" name="copy_gesture"/>
+	<menu_item_call label="Yapışdır" name="paste"/>
+	<menu_item_call label="UUID köçürt" name="copy_uuid"/>
+	<menu_item_call label="Cari geyimə yadda saxla" name="save_to_outfit"/>
+	<menu_item_call label="Dəyişdir" name="edit_gesture"/>
+</toggleable_menu>

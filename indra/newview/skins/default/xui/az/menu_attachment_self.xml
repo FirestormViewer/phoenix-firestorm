@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Attachment Pie">
+	<menu_item_call label="Toxun" name="Attachment Object Touch"/>
+	<menu_item_call label="Avadanlıq siyahısında göstər" name="Show original"/>
+	<menu_item_call label="Dəyişdir" name="Edit..."/>
+	<menu_item_call label="Ayır" name="Detach"/>
+	<context_menu label="Ayrı saxla" name="Export Menu">
+		<menu_item_call label="Backup" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>
+	<menu_item_call label="Otur" name="Sit Down Here"/>
+	<menu_item_call label="Dur" name="Stand Up"/>
+	<context_menu label="Görünüş" name="AppearanceSubmenu">
+		<menu_item_call label="İndi geyindiyim..." name="NowWearing"/>
+		<menu_item_call label="Geyimlər" name="Change Outfit"/>
+		<menu_item_call label="Formanı dəyişdir" name="Edit My Shape"/>
+		<menu_item_call label="Geyimi dəyişdir" name="Edit Outfit Parts"/>
+		<menu_item_call label="Hündürlük" name="Hover Height"/>
+		<menu_item_call label="Skelet sıfırlanması" name="Reset Skeleton"/>
+		<menu_item_call label="Skelet və animasiyaların sıfırlanması" name="Reset Skeleton And Animations"/>
+		<menu_item_call label="Meş LOD sıfırlanması" name="Reset Mesh LOD"/>
+	</context_menu>
+	<context_menu label="Çıxart" name="Take Off &gt;">
+		<context_menu label="Paltar" name="Clothes &gt;">
+			<menu_item_call label="Köynək" name="Shirt"/>
+			<menu_item_call label="Şalvar" name="Pants"/>
+			<menu_item_call label="Don" name="Skirt"/>
+			<menu_item_call label="Ayaqqabı" name="Shoes"/>
+			<menu_item_call label="Corablar" name="Socks"/>
+			<menu_item_call label="Pencək" name="Jacket"/>
+			<menu_item_call label="Əlcəklər" name="Gloves"/>
+			<menu_item_call label="Mayka" name="Self Undershirt"/>
+			<menu_item_call label="Tuman" name="Self Underpants"/>
+			<menu_item_call label="Döymə" name="Self Tattoo"/>
+			<menu_item_call label="Fizika" name="Self Physics"/>
+			<menu_item_call label="Alfa" name="Self Alpha"/>
+			<menu_item_call label="Hamısını" name="All Clothes"/>
+		</context_menu>
+		<context_menu label="Ekran" name="Detach Self HUD" />
+		<context_menu label="Ayır" name="Detach Self" />
+		<menu_item_call label="Hamısını ayır" name="Detach All"/>
+	</context_menu>
+	<menu_item_call label="Otur/dur" name="Sit stand"/>
+	<menu_item_call label="Uçmaq/enmək" name="Fly land"/>
+	<menu_item_call label="Animasiyaları dayandır" name="Stop Animating My Avatar"/>
+	<context_menu label="Cəmiyyət" name="CommunitySubmenu">
+		<menu_item_call label="Dostlar" name="Friends..."/>
+		<menu_item_call label="Qruplar" name="Groups..."/>
+		<menu_item_call label="Profil" name="Profile..."/>
+	</context_menu>
+	<menu_item_call label="XML Çıxarışı" name="Dump XML"/>
+	<menu_item_call label="Obyekt profili" name="Object Inspect"/>
+	<menu_item_call label="Müayinə" name="Object_Inspect_Floater"/>
+	<menu_item_call label="Skriptlər haqqında" name="ScriptInfo"/>
+	<menu_item_call label="Göstərmə" name="Derender"/>
+	<menu_item_call label="Həmişə göstərmə" name="DerenderPermanent"/>
+	<menu_item_call label="Teksturları göstər" name="Debug..."/>
+	<menu_item_call label="Teksturasını yenilə" name="Texture Refresh"/>
+	<menu_item_call label="Yerə at" name="Drop"/>
+	<menu_item_call label="Hissəcik sahibini blokla" name="Mute Particle"/>
+</context_menu>

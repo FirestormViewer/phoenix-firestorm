@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatarpicker" title="Avatar seçimi">
+	<floater.string name="not_found">
+		'[TEXT]' mətni tapılmadı
+	</floater.string>
+	<floater.string name="not_found_text">
+		Sakin tapılmadı.
+	</floater.string>
+	<floater.string name="no_one_near">
+		Yaxınlıqda heç kəs yoxdur
+	</floater.string>
+	<floater.string name="no_results">
+		Nəticə yoxdur
+	</floater.string>
+	<floater.string name="searching">
+		Axtarış...
+	</floater.string>
+	<string name="Select">
+		Seç
+	</string>
+	<string name="Close">
+		Bağla
+	</string>
+	<tab_container name="ResidentChooserTabs">
+		<panel label="Axtarış" name="SearchPanel">
+			<text name="InstructSearchResidentName">
+				Sakinin adının bir hissəsini daxil edin:
+			</text>
+			<button label="Axtarış" label_selected="Axtarış" name="Find"/>
+			<fs_scroll_list name="SearchResults">
+				<columns label="Ad" name="name"/>
+				<columns label="İstifadəçi adı" name="username"/>
+			</fs_scroll_list>
+		</panel>
+		<panel label="Dostlar" name="FriendsPanel">
+			<text name="InstructSelectFriend">
+				Sakini seçin:
+			</text>
+			<fs_scroll_list name="Friends">
+				<columns label="Ad" name="name"/>
+				<columns label="İstifadəçi adı" name="username"/>
+			</fs_scroll_list>
+		</panel>
+		<panel label="Yaxınlıqımda" name="NearMePanel">
+			<text name="InstructSelectResident">
+				Yaxınlıqda olan sakini seçin:
+			</text>
+			<slider label="Məsafə" name="near_me_range"/>
+			<text name="meters">
+				Metr
+			</text>
+			<fs_scroll_list name="NearMe">
+				<columns label="Ad" name="name"/>
+				<columns label="İstifadəçi adı" name="username"/>
+			</fs_scroll_list>
+		</panel>
+		<panel label="UUID ilə axtarış" name="SearchPanelUUID">
+            <text name="SearchByUUIDLabel">
+                UUID daxil edin:
+            </text>
+            <line_editor name="EditUUID"/>
+            <button label="Axtarış" label_selected="Axtarış" name="FindUUID"/>
+            <fs_scroll_list name="SearchResultsUUID">
+             <columns label="Ad" name="nameUUID"/>
+             <columns label="İstifadəçi adı" name="usernameUUID"/>
+          </fs_scroll_list>
+        </panel>
+	</tab_container>
+	<button label="ОК" label_selected="ОК" name="ok_btn"/>
+	<button label="Ləğv et" label_selected="Ləğv et" name="cancel_btn"/>
+</floater>

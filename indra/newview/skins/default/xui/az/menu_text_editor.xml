@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Text editor context menu">
+	<menu_item_call label="(naməlum)" name="Suggestion 1"/>
+	<menu_item_call label="(naməlum)" name="Suggestion 2"/>
+	<menu_item_call label="(naməlum)" name="Suggestion 3"/>
+	<menu_item_call label="(naməlum)" name="Suggestion 4"/>
+	<menu_item_call label="(naməlum)" name="Suggestion 5"/>
+	<menu_item_call label="Sözlükə əlavə et" name="Add to Dictionary"/>
+	<menu_item_call label="Boş verilən siyahısına əlavə et" name="Add to Ignore"/>
+	<menu_item_call label="Kəs" name="Cut"/>
+	<menu_item_call label="Köçürt" name="Copy"/>
+	<menu_item_call label="Yapışdır" name="Paste"/>
+	<menu_item_call label="Sil" name="Delete"/>
+	<menu_item_call label="Hamısını seç" name="Select All"/>
+</context_menu>

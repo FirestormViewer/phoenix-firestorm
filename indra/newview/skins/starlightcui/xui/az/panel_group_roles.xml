@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Üzvlər və rollar" name="roles_tab">
+	<panel.string name="default_needs_apply_text">
+		Paneldə yadda saxlanılmamış dəyişikliklər var
+	</panel.string>
+	<panel.string name="want_apply_text">
+		Dəyişikliklərinizi saxlamaq istəyirsiniz?
+	</panel.string>
+	<tab_container name="roles_tab_container">
+		<panel label="Üzvlər" name="members_sub_tab" tool_tip="Üzvlər">
+			<panel.string name="help_text">
+				İnsanlara təyin edilmiş funksiyaları əlavə edə və silə bilərsiniz.
+Ctrl düyməsini sıxaraq və adlarının üzərinə basaraq bir neçə nəfəri seçə bilərsiniz.
+			</panel.string>
+			<filter_editor label="Üzv süzgəci" name="filter_input"/>
+			<name_list name="member_list">
+				<name_list.columns label="Ad" name="name"/>
+				<name_list.columns label="Töhfə" name="donated"/>
+			</name_list>
+			<button label="Dəvət et" name="member_invite"/>
+			<button label="Təpiklə" name="member_eject"/>
+		</panel>
+		<panel label="Rollar" name="roles_sub_tab">
+			<panel.string name="help_text">
+				Rollar, bir funksiyanı yerinə yetirən ad və imtiyazlar
+ilə təyin edilir. Hər kəs bir və ya bir neçə rol ola bilər.
+Hər qrup 10 rol, &quot;Hamı&quot; və &quot;Sahib&quot; rolları daxil olmaqla
+əlavə edə bilər.
+			</panel.string>
+			<panel.string name="cant_delete_role">
+				 &quot;Hamı&quot; və &quot;Sahib&quot; rolları xüsusi rollardır və silinə bilməz.
+			</panel.string>
+			<filter_editor label="Rolların süzgəci" name="filter_input"/>
+			<scroll_list name="role_list">
+				<scroll_list.columns label="Rol" name="name"/>
+				<scroll_list.columns label="Başlıq" name="title"/>
+			</scroll_list>
+			<button label="Yeni rol" name="role_create"/>
+			<button label="Rolu sil" name="role_delete"/>
+		</panel>
+		<panel label="İmtiyazlar" name="actions_sub_tab" tool_tip="İmtiyaz haqqında təsviri, kimlər və rolların bu haqqı olanları baxa bilərsiniz.">
+			<panel.string name="help_text">
+				İmtiyazlar, uyğun rolları təyin olunan üzvlərin qrupda xüsusi əməliyyatları yerinə yetirmələrinə imkan verir. Geniş seçim imkanı var.
+			</panel.string>
+			<filter_editor label="İmtiyaz süzgəci" name="filter_input"/>
+			<scroll_list name="action_list" tool_tip="Məlumatları baxmaq üçün bir imtiyaz seçin"/>
+		</panel>
+	</tab_container>
+	<panel name="members_footer">
+		<text name="assigned_roles_label">
+			Rollar
+		</text>
+		<text name="static2">
+			İmtiyazlar
+		</text>
+		<scroll_list name="member_allowed_actions" tool_tip="Ətraflı məlumat üçün imtiyaz seçin"/>
+	</panel>
+	<panel name="roles_footer">
+		<text name="static">
+			Rol
+		</text>
+		<text name="static3">
+			Rol başlığı
+		</text>
+		<text name="static2">
+			Təsvir
+		</text>
+		<text name="static4">
+			Təyin edilmiş üzvlər
+		</text>
+		<check_box label="Üzvləri göstər" name="role_visible_in_list" tool_tip="Qrupa daxil olmamış sakinlər qrupun «Ümumi» pəncərəsində üzvlərin görülüb görülməməsini təyin edir."/>
+		<text name="static5">
+			İcazə verilən imtiyazlar
+		</text>
+		<scroll_list name="role_allowed_actions" tool_tip="İmtiyaz haqqında ətraflı məlumatı görmək üçün 'İmtiyazlar' pəncərəsinə keçin"/>
+	</panel>
+	<panel name="actions_footer">
+		<text_editor name="action_description">
+			&apos;Üzvü qrupdan çıxart&apos; imtiyazı. Yalnız sahib başqa sahibdən silə bilər.
+		</text_editor>
+		<text name="static2">
+			Bu imtiyazla olan rollar
+		</text>
+		<text name="static3">
+			Bu imtiyazla olan üzvlər
+		</text>
+	</panel>
+</panel>

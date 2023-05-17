@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Elanlar" name="panel_ls_classifieds">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Sorğunu daxil edin:
+		</text>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_classifieds">
+			<columns label="Ad" name="classified_name" />
+			<columns label="Qiymət" name="price" />
+		</scroll_list>
+		<button label="Geri" name="classifieds_back" />
+		<button label="İrəli" name="classifieds_next" />
+	</panel>
+</panel>

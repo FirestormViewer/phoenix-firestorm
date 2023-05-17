@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Bildirişlər" name="notices_tab">
+	<panel.string name="help_text">
+		Bildirişlər sizə mesaj və istəyə bağlı bir əlavə bərkitmə göndərməyə imkan verir.
+Bildirişlər yalnız həmin bacarığa malik olan qrup üzvləri tərəfindən qəbul edilir.
+Bildirişlərin bu qrupdan qəbul edilməsini Ümumi pəncərəsindən deaktiv edə bilərsiniz.
+	</panel.string>
+	<panel.string name="no_notices_text">
+		Bildiriş yoxdur
+	</panel.string>
+	<text name="lbl2">
+		Bildirişlər 14 gün boyunca saxlanılır.
+Günlük maksimum 200 bildiriş göndərilə bilər.
+	</text>
+	<scroll_list name="notice_list">
+		<scroll_list.columns label="Mövzu" name="subject"/>
+		<scroll_list.columns label="Kimdən" name="from"/>
+		<scroll_list.columns label="Tarix" name="date"/>
+	</scroll_list>
+	<button label="Yarat" name="create_new_notice" tool_tip="Yeni bildiriş yarat"/>
+	<button name="refresh_notices" tool_tip="Bildirişlərin siyahısını yeniləyin"/>
+	<text name="notice_list_none_found">
+		Bildiriş tapılmadı
+	</text>
+	<panel label="Yeni bildiriş yarat" name="panel_create_new_notice">
+		<text name="lbl">
+			Bir bildiriş yaratmaq
+		</text>
+		<text name="lbl3">
+			Mövzu:
+		</text>
+		<text name="lbl4">
+			Mesaj:
+		</text>
+		<text name="lbl5">
+			Əlavə etmək:
+		</text>
+		<text name="drag_and_drop_help">
+			Bərkitmə əlavə etmək üçün buraya daşıyın:
+		</text>
+		<button name="remove_attachment" tool_tip="Bildirişinizdən əlavəni silin"/>
+		<button label="Avadanklq siyahısı" name="open_inventory" tool_tip="Avadanlıq siyahısını aç"/>
+		<button label="Göndər" label_selected="Göndər" name="send_notice"/>
+		<group_drop_target name="drop_target" tool_tip="Перетащите из инвентаря на эту панель предмет, чтобы отправить его вместе с сообщением. У вас должно быть разрешение на копирование и передачу этого предмета."/>
+	</panel>
+	<panel label="Arxivlənmiş bildirişlər" name="panel_view_past_notice">
+		<text name="lbl6">
+			Arxivlənmiş bildirişlər
+		</text>
+		<text name="lbl7">
+			Yeni bildiriş göndərmək üçün +Yeni düyməsini basın
+		</text>
+		<text name="lbl8">
+			Mövzu:
+		</text>
+		<text name="lbl9">
+			Mətn:
+		</text>
+		<text name="lbl10">
+			Əlavə:
+		</text>
+		<button label="Əlavəni aç" name="open_attachment"/>
+	</panel>
+</panel>

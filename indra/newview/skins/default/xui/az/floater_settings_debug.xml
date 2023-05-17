@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="settings_debug" title="Sazlama seçimləri">
+	<panel name="debug_settings_search_panel">
+		<search_editor label="Tap" name="search_settings_input" tool_tip="Sorgunu daxil edin. Axtarış nəticələri seçim adları və ya şərhlərdə kəsişən tam mətn üçün göstəriləcəkdir."/>
+	</panel>
+	<panel name="debug_settings_values_panel">
+		<text_editor name="comment_text" tool_tip="Sazlama şərhlər parametrləri ilə bağlı faydalı məlumatlar verir."/>
+		<radio_group name="boolean_combo">
+			<radio_item label="Doğru" name="TRUE"/>
+			<radio_item label="Yalnış" name="FALSE"/>
+		</radio_group>
+		<color_swatch label="Rəng" name="val_color_swatch"/>
+		<button label="Köçürt" name="copy_btn" tool_tip="Seçim adını keçid yaddaşına köçürdün."/>
+		<button label="Varsayılan" name="default_btn" tool_tip="Sazlama seçimlərini standart saylara qaytarın."/>
+	</panel>
+</floater>

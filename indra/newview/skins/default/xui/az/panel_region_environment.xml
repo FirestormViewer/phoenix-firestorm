@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Mühit" name="panel_env_info">
+	<string name="str_label_use_default">
+		Susmaya görə
+	</string>
+	<string name="str_label_use_region">
+		Region seçimləri
+	</string>
+	<string name="str_altitude_desription">
+		Səma [INDEX]([ALTITUDE]m)
+	</string>
+	<string name="str_no_parcel">
+		Heç bir sahə seçilməyib. Mühit seçimləri söndürülüb.
+	</string>
+	<string name="str_cross_region">
+		Bu region daxilində ətraf mühit seçimləri mövcud deyil.
+	</string>
+	<string name="str_legacy">
+		Bu region üçün mühit seçimləri mövcud deyil.
+	</string>
+	<string name="str_disallowed">
+		Əmlak idarəçisi bu ərazidə ətraf mühiti dəyişdirməyə icazə vermədi.
+	</string>
+	<string name="str_too_small">
+		Ətraf mühit seçimlərini saxlamaq üçün sahənin ərazisi 128 kvadrat metrdən az ola bilməz.
+	</string>
+	<string name="str_empty">
+		(boşdur)
+	</string>
+	<string name="str_region_env">
+		(region mühiti)
+	</string>
+	<layout_stack name="ls_main">
+		<layout_panel name="pnl_environment_region_msg">
+			<text name="region_text_lbl">
+				Region:
+			</text>
+			<text name="region_text">
+				naməlum
+			</text>
+		</layout_panel>
+		<layout_panel name="pnl_environment_config">
+			<layout_stack name="ls_environment_config">
+				<layout_panel name="pnl_environment_config">
+					<layout_stack name="ls_environment_config2">
+						<layout_panel name="pnl_environment_current">
+							<text name="select_environment_label">
+								Выбор окружающей среды
+							</text>
+							<button label="[USEDEFAULT]" name="btn_usedefault"/>
+							<button label="Avadanlıq siyahısından" name="btn_select_inventory"/>
+							<button label="Gün dövrünü dəyişdirmək" name="btn_edit"/>
+							<check_box label="Sahə sahibləri dəyişə bilər" name="chk_allow_override"/>
+						</layout_panel>
+						<layout_panel name="pnl_environment_length">
+							<text name="day_settings_label">
+								Gün seçimlərini
+							</text>
+							<text name="day_length_label">
+								Gün uzunluğunu (saat)
+							</text>
+							<text name="day_offset_label">
+								Gün sürüşməsini (saat)
+							</text>
+							<text name="apparent_time_of_day_label">
+								Günün görünən vaxtı:
+							</text>
+						</layout_panel>
+						<layout_panel name="pnl_environment_buttons"/>
+					</layout_stack>
+				</layout_panel>
+				<layout_panel name="pnl_environment_altitudes">
+					<panel name="pnl_alt1">
+						<text name="txt_alt1">
+							Səma [INDEX]
+                            [ALTITUDE]m
+						</text>
+						<line_editor name="edt_invname_alt1">
+							Naməlum
+						</line_editor>
+						<settings_drop_target name="sdt_alt1" tool_tip="Cari səma kimi seçmək üçün seçimləri avadanlıq siyahısından bu hədəf pəncərəyə çəkin."/>
+					</panel>
+					<panel name="pnl_alt2">
+						<text name="txt_alt2">
+							Səma [INDEX]
+                            [ALTITUDE]m
+						</text>
+						<line_editor name="edt_invname_alt2">
+							Naməlum
+						</line_editor>
+						<settings_drop_target name="sdt_alt2" tool_tip="Cari səma kimi seçmək üçün seçimləri avadanlıq siyahısından bu hədəf pəncərəyə çəkin."/>
+					</panel>
+					<panel name="pnl_alt3">
+						<text name="txt_alt3">
+							Səma [INDEX]
+                            [ALTITUDE]m
+						</text>
+						<line_editor name="edt_invname_alt3">
+							Naməlum
+						</line_editor>
+						<settings_drop_target name="sdt_alt3" tool_tip="Cari səma kimi seçmək üçün seçimləri avadanlıq siyahısından bu hədəf pəncərəyə çəkin."/>
+					</panel>
+					<text name="sky_altitudes_label">
+						Səma hündürlükləri
+					</text>
+					<multi_slider initial_value="0" name="sld_altitudes">
+						<slider name="sld1" value="1000"/>
+						<slider name="sld2" value="2000"/>
+						<slider name="sld3" value="3000"/>
+					</multi_slider>
+					<panel name="pnl_ground">
+						<text name="txt_ground">
+							Torpaq
+						</text>
+						<line_editor name="edt_invname_ground">
+							Naməlum
+						</line_editor>
+						<settings_drop_target name="sdt_ground" tool_tip="Yer səviyyəsində səma kimi seçmək üçün seçimləri avadanlıq siyahısından bu hədəf pəncərəyə çəkin."/>
+					</panel>
+					<panel name="pnl_water">
+						<text name="txt_water">
+							Su
+						</text>
+						<line_editor name="edt_invname_water">
+							Naməlum
+						</line_editor>
+						<settings_drop_target name="sdt_water" tool_tip="Cari su kimi seçmək üçün seçimləri avadanlıq siyahısından bu hədəf pəncərəyə çəkin"/>
+					</panel>
+					<button label="Sıfırla" name="btn_rst_altitudes" tool_tip="Defolt seçimlərə sıfırlayın"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>

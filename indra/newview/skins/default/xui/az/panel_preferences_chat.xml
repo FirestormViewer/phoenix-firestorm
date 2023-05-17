@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Söhbət/İM" name="chat">
+	<tab_container label="Firestorm tənzimləmələri" name="tabs">
+		<panel label="Göstərişlər" name="ChatVisuals">
+			<text name="console_font_size">
+				Konsol yazı tipi ölçüsü:
+			</text>
+			<radio_group name="chat_console_font_size">
+				<radio_item label="Kiçik" name="consradio" />
+				<radio_item label="Orta" name="consradio2"/>
+				<radio_item label="Böyük" name="consradio3"/>
+				<radio_item label="Çox böyük" name="consradio4"/>
+			</radio_group>
+			<check_box label="Avatar animasiyalarını göstər (məsələn, qışqırır)" name="play_avatar_animations"/>
+			<check_box name="FSIMSystemMessageBrackets" label="Sistem mesajlarını mötərizə içində göstər"/>
+			<check_box name="FSChatHistoryShowYou" label="Söhbət tarixində özünüzü &quot;Siz&quot; olaraq göstər" />
+			<check_box name="EmotesUseItalic" label="Emosiyalar üçün kursiv istifadə et"/>
+			<check_box name="FSEmphasizeShoutWhisper" label="Qalın qısqırma, kursiv şöhbət"/>
+			<check_box name="FSMarkObjects" label="Qandarmaq qarşısında söhbətdə göndərilən obyektləri işarələyin"/>
+			<check_box label="llOwnerSay script-ini sazlama pəncərəsinə yönləndirin" name="FSllOwnerSayToScriptDebugWindow_checkbox" />
+			<check_box label="Şöhbət balonlarında avatarların üstündə göstərin" name="bubble_text_chat"/>
+			<check_box label="Məlumat pəncərəsində və toast-larda şöhbəti göstərməyin"  name="FSBubblesHideConsoleAndToasts"/>
+			<check_box label="Şöhbət balonlarında yazarkən işarəsi göstərin" name="bubble_text_typing"/>
+			<check_box label="Avatarların üstündəki ad hissəsində yazarkən işarəsi göstərin" name="FSShowTypingStateInNameTag"/>
+			<check_box label="Mesajların tarixinə saniyələri göstərin [SS:DD:CC]" name="FSSecondsinChatTimestamps"/>
+			<text name="show_timestamps_label" width="150">
+				Zamanı harda göstər:
+			</text>
+			<check_box label="Ümumi söhbətdə" name="show_timestamps_nearby_chat" width="95"/>
+			<check_box label="İM" name="show_timestamps_im" width="75"/>
+			<check_box label="Söhbət tarixçəsində və İM-də" name="show_timestamps_transcripts"/>
+			<check_box name="FSConsoleClassicDrawMode" label="Klassik konsol istifadə edilsin" tool_tip="Bu variant konsol fonunu bütün sətrlər üzərindəki böyük blok kimi göstərir, onların ən uzunu genişlikdə."/>
+			<check_box name="ChatFullWidth" label="Ekranın tam genişliyində istifadə edilsin"/>
+			<spinner label="Solduqdan sonra sönəcək:" name="fade_chat_time" label_width="100" width="140"/>
+			<text name="text_box4">
+				(saniyə)
+			</text>
+			<text name="text_box5">
+				(sətir)
+			</text>
+		</panel>
+		<panel label="Söhbət pəncərələri" name="ChatWindows">
+			<text name="font_size" width="150">
+				Söhbət pəncərəsi yazı tipi:
+			</text>
+			<radio_group name="chat_font_size">
+				<radio_item label="Kiçik" width="100" name="radio"/>
+				<radio_item label="Orta" name="radio2"/>
+				<radio_item label="Böyük" name="radio3"/>
+				<radio_item label="Çox böyük" name="radio4"/>
+			</radio_group>
+			<check_box name="IMShowNamesForP2PConv" label="Açıq keçidlərdə adları göstərsin" />
+			<check_box label="Söhbət tarixi üçün V1 üslub istifadə edilsin" name="plain_text_chat_history" />
+			<check_box label="Başlıqları [SHORT_VIEWER_GENERATION] üslubunda istifadə edərkən, miniatür avatarlar göstərsin" name="ShowChatMiniIcons" />
+			<check_box label="Əvvəlki söhbətin sonunu göstərsin" name="LogShowHistory"/>
+			<check_box name="FSTypingChevronPrefix" label="(&gt;) Yazma göstəricisi kimi əlavə etsin"/>
+			<text name="show_unread_messages_label">
+				Yeni mesajları bildirsin:
+			</text>
+			<check_box name="FSNotifyUnreadChatMessages" label="Ümumi söhbətdə" tool_tip="Yeni mesajlar göründüyü zaman, ümumi söhbətdə hələ oxunmamış mesajları (və sayını) göstərir, tarix yuxarıya doğru çəkilir." />
+			<check_box name="FSNotifyUnreadIMMessages" label="Şəxsi/qrup mesajlarında" tool_tip="Yeni mesajlar göründüyü zaman, şəxsi/qrup mesajlarında hələ oxunmamış mesajları (və sayını) göstərir, tarix yuxarıya doğru çəkilir." />
+			<text name="show_ims_in_label" width="110">
+				Şəxsi mesajları göstərsin:
+			</text>
+			<radio_group name="chat_window" tool_tip="Mesajları ayrı pəncərələrdə və ya sekmələrdə göstərin (yenidən başlatma tələb olunur).">
+				<radio_item label="Pəncərələrdə" name="radio"/>
+				<radio_item label="Panellərdə" name="radio2"/>
+			</radio_group>
+			<text name="req_restart_ims" left_pad="50" width="120">
+				(yenidən başlatma tələb olunur)
+			</text>
+			<text name="tab_direction_label" width="120">
+				Səhifələr sekməsi:
+			</text>
+			<radio_group name="chat_tab_direction" tool_tip="Panellərdə göstərmə rejimi aktiv olduqda, söhbət səhifələrinin yerləşmə istiqamətini dəyişin (yenidən başlatma tələb olunur).">
+				<radio_item label="Üfüqi" name="radio_horizontal" width="120"/>
+				<radio_item label="Şaquli" name="radio_vertical" />
+			</radio_group>
+			<text name="req_restart_chattabs" left_pad="80" width="120">
+				(yenidən başlatma tələb olunur)
+			</text>
+			<text name="FSIMTabNameFormat_label">
+				İM panelində ad formatı:
+			</text>
+			<combo_box name="FSIMTabNameFormat">
+				<combo_box.item label="Göstərilən adı" name="display_name"/>
+				<combo_box.item label="İstifadəçi adı" name="user_name"/>
+				<combo_box.item label="Göstərilən adı (İstifadəçi adı)" name="display_user_name"/>
+				<combo_box.item label="İstifadəçi adı (Göstərilən adı)" name="user_display_name"/>
+			</combo_box>
+			<check_box name="FSHighlightGroupMods" label="Qrup moderatorlarının mətnini vurğulayın"/>
+			<text name="Moderator Name Style">
+				Ad:
+			</text>
+			<combo_box name="mod_name_style">
+				<combo_box.item label="Normal" name="normal"/>
+				<combo_box.item label="Qalın" name="BOLD"/>
+				<combo_box.item label="Kursiv" name="ITALIC"/>
+				<combo_box.item label="Qalın və kursiv" name="BOLDITALIC"/>
+				<combo_box.item label="Alt xəttli" name="UNDERLINE"/>
+				<combo_box.item label="Qalın və alt xəttli" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Kursiv və alt xəttli" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Qalın, kursiv və alt xəttli" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
+			<text name="Moderator Text Style">
+				Mətn:
+			</text>
+			<combo_box name="mod_text_style">
+				<combo_box.item label="Normal" name="normal"/>
+				<combo_box.item label="Qalın" name="BOLD"/>
+				<combo_box.item label="Kursiv" name="ITALIC"/>
+				<combo_box.item label="Qalın və kursiv" name="BOLDITALIC"/>
+				<combo_box.item label="Alt xəttli" name="UNDERLINE"/>
+				<combo_box.item label="Qalın və alt xəttli" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Kursiv və alt xəttli" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Qalın, kursiv və alt xəttli" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
+			<check_box name="FSMuteAllGroups" label="Bütün qrup söhbətlərini söndür"/>
+			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Qrup bildirişləri söndürüldüyü zaman qrup söhbətlərini də söndür"/>
+			<check_box name="FSIgnoreAdHocSessions" label="Bütün Ad-Hoc konfransları avtomatik olaraq rədd et"/>
+			<check_box name="FSReportIgnoredAdHocSession" label="Bütün rədd edilmiş konfransları Ümumi söhbətə bildir"/>
+			<check_box name="FSDontIgnoreAdHocFromFriends" label="Dostlarımdan gələn Ad-Hoc konfrans təkliflərini rədd etmə"/>
+			<text width="290" name="group_snooze_time_label" tool_tip="Qrup söhbətinin vaxt müddəti ki, 'Gözlə' düyməsini basdıqdan sonra, qrup söhbəti müvəqqəti olaraq bağlanacaq. Bu dəyəri 0-a qoymaq sadəcə qrup söhbətini növbəti mesajın gəlməsinə qədər bağlayacaqdır.">
+				Qrupun müvəqqəti olaraq bağlanma müddəti:
+			</text>
+			<spinner name="GroupSnoozeTime" tool_tip="Qrup söhbətinin vaxt müddəti ki, 'Gözlə' düyməsini basdıqdan sonra, qrup söhbəti müvəqqəti olaraq bağlanacaq. Bu dəyəri 0-a qoymaq sadəcə qrup söhbətini növbəti mesajın gəlməsinə qədər bağlayacaqdır." />
+			<text name="group_snooze_time_seconds_label" tool_tip="Qrup söhbətinin vaxt müddəti ki, 'Gözlə' düyməsini basdıqdan sonra, qrup söhbəti müvəqqəti olaraq bağlanacaq. Bu dəyəri 0-a qoymaq sadəcə qrup söhbətini növbəti mesajın gəlməsinə qədər bağlayacaqdır.">
+				saniyə
+			</text>
+			<check_box name="FSEnablePerGroupSnoozeDuration" label="Hər qrup üçün ayrı-ayrı bağlanma müddəti təyin et"/>
+		</panel>
+		<panel label="Yazışma" name="ChatTyping">
+			<button name="autoreplace_showgui" label="Avtomatik əvəzetmə"/>
+			<button name="spellcheck_showgui" label="Orfoqrafi yoxlanışı göstər"/>
+			<button label="Tərcümə et..." name="translation_settings_btn"/>
+			<check_box label="Mətn yazıldıqda animasiyadan istifadə et" name="play_typing_animation"/>
+			<check_box label="Emosiyalar zamanı da animasiya göstər"  name="play_typing_animation_emote"/>
+			<check_box label="Biri Ümumi söhbətə mətn yazdıqda dəfələrlə səslənməyi eşidin" name="play_typing_sound"/>
+			<check_box label="Şəxsləri özürlərin yazdıqlarından xəbərdar et" name="FSSendTypingState"/>
+			<check_box label="Ümumi söhbətdə işarələrin avtomatik tamamlanmasını aktivləşdir" name="FSChatbarGestureAutoCompleteEnable"/>
+			<check_box label="Ümumi söhbətdə avtomatik olaraq adın daxil edilməsini aktivləşdir" name="FSChatbarNamePrediction"/>
+			<check_box name="AllowMUpose" label="&quot;:&quot; işarəsi /me ilə eyni məna verər"/>
+			<check_box name="AutoCloseOOC" label="OOC söhbəti üçün ((mesaj)) işarələri bağlanacaq"/>
+			<check_box name="FSShowIMSendButton" label="Mənimsənmiş Mesajlar üçün göndərmə düyməsini göstər"/>
+			<check_box name="FSNearbyChatbar" label="Ümumi söhbət pəncərəsinə mətn daxil etmə xanası əlavə edin"/>
+			<check_box name="FSShowChatChannel" label="Ümumi söhbət pəncərəsində kanal seçimini göstər"/>
+			<check_box name="FSShowChatType" label="Ümumi söhbət pəncərəsində &apos;Göndər&apos; düyməsini əlavə edin"/>
+			<check_box label="Mətn daxil etmə xanasını avtomatik olaraq gizlətmək" name="AutohideChatBar" tool_tip="Ümumi söhbətə mətn yazmaq üçün nəzərdə tutulmuş xana gizlənir. Mətn yazmağa başladığınızda, bu xana yenidən görünür"/>
+			<check_box label="Mesajı göndərdikdən sonra söhbət seçimini sıfırlayın" name="CloseChatOnReturn"/>
+			<check_box label="Söhbət tarixindən da seçimi sıfırlayın" name="FSUnfocusChatHistoryOnReturn" />
+			<text name="textUseKeyboardShortcuts">
+				Qısayol düymələrdən istifadə et:
+			</text>
+			<check_box name="FSUseCtrlShout" label="Ctrl+Enter (Qışqır)" tool_tip="Ümumi söhbətdə qışqırmaq üçün Ctrl + Enter klaviatura qısayolunu istifadə etmək istəyirsinizsə bu seçimi işarələyin." />
+			<check_box name="FSUseShiftWhisper" label="Shift+Enter (Pıçıltı)" tool_tip="Ümumi söhbətdə pıçıltı üçün Shift + Enter klaviatura qısayolunu istifadə etmək istəyirsinizsə bu seçimi işarələyin." />
+			<check_box name="FSUseAltOOC" tool_tip="Ümumi söhbətdə ((OOC)) mesajları göndərmək üçün Alt + Enter klaviatura qısayolunu istifadə etmək istəyirsinizsə bu seçimi işarələyin." />
+		</panel>
+		<panel label="Bildirişlər" name="ChatNotices">
+			<text name="disable_toast_label">
+				Müzakirə qutularının açılmasını aktivləşdirin:
+			</text>
+			<check_box label="Qrup müzakirələri" name="EnableGroupChatPopups" tool_tip="Seçin ki, qrup müzakirələrindən birində yeni bir mesaj varsa açılan bir pəncərə görsənməsin"/>
+			<check_box label="Şəxsi mesajlar" name="EnableIMChatPopups" tool_tip="Seçin ki, özəl mesajınız varsa açılan bir pəncərə görsənməsin"/>
+			<check_box name="FSUseNearbyChatConsole" label="1.x istifadəçi interfeysi üçün açılan pəncərələrə nisbətən konsolu istifadə edin"/>
+			<check_box name="FSLogImToChatConsole" label="Şəxsi mesajları konsolda göstərin"/>
+			<check_box name="FSLogGroupImToChatConsole" label="Qrup mesajlarını konsolda göstərin"/>
+			<text name="FSShowGroupNameLength_label" width="270">
+				Müzakirə tarixində göstərilən qrup adı uzunluğu
+			</text>
+			<spinner tool_tip="-1 Tam qrup adı üçün, 0 = qrup adını göstərməyin" name="FSShowGroupNameLength"/>
+			<check_box name="FSOpenIMContainerOnOfflineMessage" label="Siz bağlanmadan öncə mesajınız varsa açılan pəncərəni göstərin"/>
+			<check_box label="Mənim olmadığım zamanı özəl mesajlarımı mənim e-poçtuma göndərin ([EMAIL])" name="send_im_to_email"/>
+			<text name="email_settings">[https://accounts.secondlife.com/change_email Çıxış zamanı özəl mesajların gəlməsi seçimlərini açın]</text>
+			<text name="email_settings_login_to_change">E-poçt uyarı ayarlarını dəyişmək üçün giriş edin</text>
+			<check_box name="FSShowIMInChatHistory" label="Şəxsi mesajları əsas söhbət pəncərəsində göstərin"/>
+			<check_box name="FSLogIMInChatHistory" label="Şəxsi mesajları əsas söhbət pəncərəsində saxlayın"/>
+			<text name="FSIMChatHistoryFade_label" width="220">
+				Əsas söhbət pəncərəsindəki şəxsi mesajların solması
+			</text>
+			<spinner tool_tip="0.25-1.0, 0.25 kəskin solma üçün, 1 solmağı söndürür" name="FSIMChatHistoryFade"/>
+			<check_box name="FSShowMessageCountInWindowTitle" label="Firestorm pəncərə başlığında oxunmamış şəxsi mesajların sayısını göstərin"/>
+			<check_box name="FSAnnounceIncomingIM" label="Göndəricinin yazmağa başladığı kimi yeni şəxsi mesajları mənə bildirin"/>
+			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Sizə dostlarınızın daxil olmuş və ya çıxmış olduğunu bildirən şəxsi mesajlarınızın tablarının qırpılmasını göstərin"/>
+			<check_box name="FSNotifyNearbyChatFlash" label="Mesaj gəldikdə ən yaxın söhbət tabının qırpılmasını göstərin" tool_tip="Yeni mesajların gəldiyi zaman ən yaxın söhbət tabının qırpılmasını göstərin. Ümumi söhbət tabını ümumi söhbət pəncərəsinə birləşdirməlisiniz"/>
+			<check_box name="FSNotifyIMFlash" label="Yeni şəxsi mesajlar gəldikdə şəxsi mesajlar tabının qırpılmasını göstərin" tool_tip="Yeni şəxsi mesajlar gəldikdə şəxsi mesajlar tabının qırpılmasını göstərin. Şəxsi mesajlar tabını ümumi söhbət pəncərəsinə birləşdirməlisiniz"/>
+			<check_box name="FSReportMutedGroupChat" label="Sessiyada olan Ümumi söhbət qrupunun bağlı olduğunu bildirin"/>
+			<check_box name="FSGroupNoticesToIMLog" label="Qrup bildirişlərinin pop-up pəncərələrinə əlavə olaraq Ümumi söhbətə göstəriləsin"/>
+			<check_box name="FSBetterGroupNoticesToIMLog" label="Qrup bildirişlərinin başlıqlarını və göndəricilərini göstərin"/>
+		</panel>
+		<panel name="ChatRadar" label="Radar">
+			<check_box name="reportChatRangeEnter" label="Avatar söhbət dairəsinə girəndə radarın bildirişi"/>
+			<check_box name="PlayModeUISndRadarChatEnter" width="150" label="Səs çalın:"/>
+			<button name="Prev_UISndRadarChatEnter" tool_tip="Bu səsi dinləyin."/>
+			<button name="Def_UISndRadarChatEnter" tool_tip="Standart UUID."/>
+			<check_box name="reportChatRangeLeave" label="Avatar söhbət dairəsindən çıxdıqda radarın bildirişi"/>
+			<check_box name="PlayModeUISndRadarChatLeave" width="150" label="Səs çalın:"/>
+			<button name="Prev_UISndRadarChatLeave" tool_tip="Bu səsi dinləyin."/>
+			<button name="Def_UISndRadarChatLeave" tool_tip="Standart UUID."/>
+			<check_box name="reportDrawRangeEnter" label="Avatar göstəricisinin sərhədində giriş zamanı radar bildirişi"/>
+			<check_box name="PlayModeUISndRadarDrawEnter" width="150" label="Səs çalın:"/>
+			<button name="Prev_UISndRadarDrawEnter" tool_tip="Bu səsi dinləyin."/>
+			<button name="Def_UISndRadarDrawEnter" tool_tip="Standart UUID."/>
+			<check_box name="reportDrawRangeLeaave" label="Avatar göstəricisinin sərhədindən çıxdıqda radar bildirişi"/>
+			<check_box name="PlayModeUISndRadarDrawLeave" width="150" label="Səs çalın:"/>
+			<button name="Prev_UISndRadarDrawLeave" tool_tip="Bu səsi dinləyin."/>
+			<button name="Def_UISndRadarDrawLeave" tool_tip="Standart UUID."/>
+			<check_box name="RadarReportSimRangeEnter" label="Avatar regiona daxil olduqda radar bildirişi"/>
+			<check_box name="PlayModeUISndRadarSimEnter" width="150" label="Səs çalın:"/>
+			<button name="Prev_UISndRadarSimEnter" tool_tip="Bu səsi dinləyin."/>
+			<button name="Def_UISndRadarSimEnter" tool_tip="Standart UUID."/>
+			<check_box name="RadarReportSimRangeLeave" label="Avatar regiondan çıxdıqda radar bildirişi"/>
+			<check_box name="PlayModeUISndRadarSimLeave" width="150" label="Səs çalın:"/>
+			<button name="Prev_UISndRadarSimLeave" tool_tip="Bu səsi dinləyin."/>
+			<button name="Def_UISndRadarSimLeave" tool_tip="Standart UUID."/>
+			<check_box name="RadarEnterChannelAlert" label="Skriplərin giriş bildirişi"/>
+			<check_box name="RadarLeaveChannelAlert" label="Skriplərin çıxış bildirişi"/>
+			<check_box name="FSRadarEnhanceByBridge" label="Radarın LSL körpüsü ilə gücləndirilməsi" tool_tip="Bu seçim işarələndikdə, radar avatarın hündür yerlərdə məkanını təyin edən funksiyaları LSL körpüsü tərəfindən gücləndirir"/>
+			<text name="AgeAlertLabel">
+				Yaş məlumatı:
+			</text>
+			<text name="RadarAvatarAgeAlertValueLabel">
+				Səviyyə:
+			</text>
+			<spinner name="RadarAvatarAgeAlertValue" tool_tip="Həm də radarın yaş sütununun rəngidir. Deaktivləşdirmək üçün -1 təyin edin." />
+			<text name="RadarAvatarAgeAlertValueLabelSuffix">
+				Gün
+			</text>
+			<check_box name="RadarAvatarAgeAlert" label="Avatarın təyin edilmiş yaşdan kiçik olması haqqında radar mesajı" />
+			<check_box name="PlayModeUISndRadarAgeAlert" width="150" label="Səs çalın:" />
+			<button name="Prev_UISndRadarAgeAlert" tool_tip="Bu səsi dinləyin." />
+			<button name="Def_UISndRadarAgeAlert" tool_tip="Standart UUID." />
+		</panel>
+		<panel label="Söz detektoru" name="ChatKeywordAlerts">
+			<check_box name="FSKeywordOn" label="Söz detektorunu aktivləşdir"/>
+			<check_box name="FSKeywordInChat" label="Ümumi söhbətdə sözlərin axtarılması"/>
+			<check_box name="FSKeywordInIM" label="IM və qrup söhbətlərində sözlərin axtarılması"/>
+			<check_box name="FSKeywordSpeakersName" label="İnsan adları və obyekt adlarında sözlərin axtarılması"/>
+			<check_box name="FSKeywordCaseSensitive" label="Hərf böyük-kicikliklərinə diqqət yetirilsin"/>
+			<check_box name="FSKeywordMatchWholeWords" label="Yalnız tam sözlər uyğun gəlsin"/>
+			<text name="textFSKeywords">
+				Açar sözlər (vergüllə ayıraraq):
+			</text>
+			<check_box name="FSKeywordChangeColor" label="Vurgulama rəngi"/>
+			<color_swatch name="colorswatch" tool_tip="Rəng seçmək üçün klikləyin"/>
+			<check_box name="FSKeywordPlaySound" label="Tapılan söz üçün səs çalınması"/>
+			<text name="textFSKeywordSound">
+				Xəbərdarlıq səsi:
+			</text>
+			<button name="Prev_UISndFSKeywordSound" tool_tip="Bu səsi dinləyin."/>
+			<button name="Def_UISndFSKeywordSound" tool_tip="Standart UUID."/>
+		</panel>
+		<panel label="Komandalar" name="tab-CmdLine">
+			<check_box label="Söhbət sətrini əmrlər üçün istifadə etmək" name="chat_cmd_toggle" />
+			<text name="FSCmdLineCalc_txt">
+				Kalkulyator
+			</text>
+			<text name="FSCmdLineDrawDistance_txt">
+				Görmə məsafəsi (metr)
+			</text>
+			<text name="FSCmdLineBandWidth_txt">
+				Band genişliyi (kbps)
+			</text>
+			<text name="FSCmdLineCopyCam_txt">
+				Kamera yerləşməsini buferə köçürtmək
+			</text>
+			<text name="FSCmdLineAO_txt">
+				AO aç / bağla (on/off)
+			</text>
+			<text name="FSCmdLineClearChat_txt">
+				Söhbət tarixçəsini təmizləmək
+			</text>
+			<line_editor tool_tip="Spamların yol açdığı gecikmələri önəmək üçün söhbət jurnalını silir." name="FSCmdLineClearChat" />
+			<text name="FSCmdLineMedia_txt">
+				Media üçün URL təyin edin
+			</text>
+			<line_editor tool_tip="Verilən URL üçün media axını quraşdırır və çalır" name="FSCmdLineMedia" />
+			<text name="FSCmdLineMusic_txt">
+				Streaming musiqi üçün URL təyin edin
+			</text>
+			<line_editor tool_tip="Verilən URL üçün musiqi axını quraşdırır və çalır" name="FSCmdLineMusic" />
+			<text name="FSCmdLineRezPlatform_txt">
+				Platforma yerləşdir (0 - 64)
+			</text>
+			<slider name="FSCmdLinePlatformSize" label="Eni:" tool_tip="Platformanın ölçüsünü necə böyük etmək istəyirsiniz?" />
+			<text name="FSCmdLineKeyToName_txt">
+				UUID əsasında avatarın adını öyrənin
+			</text>
+			<text name="FSCmdLineRollDice_txt">
+				Zar atmaq
+			</text>
+			<line_editor tool_tip="Zar atmaq - [zar sayı] [bölmə sayı] [növ modifikatoru (seçimli)] [dəyər modifikatoru (arzuya görə)]. Nümunə: CMD 1 20 2 40 Ctrl + 5." name="FSCmdLineRollDice" />
+			<text name="FSCmdLinePos_txt">
+				Sim daxilində teleport (x y z)
+			</text>
+			<text name="FSCmdLineGround_txt">
+				Yerdə teleport
+			</text>
+			<text name="FSCmdLineHeight_txt">
+				Yüksəklikdə teleport (z)
+			</text>
+			<text name="FSCmdTeleportToCam_txt">
+				Kamera yerləşməsinə teleport etmək
+   			</text>
+			<text name="FSCmdLineOfferTp_txt">
+				Avatara teleport təklif etmək (UUID)
+			</text>
+			<text name="FSCmdLineTP2_txt">
+				Avatara teleport olmaq (ad)
+			</text>
+			<line_editor tool_tip="Sintaksis böyük hərflərə həssas deyil, lakin adı radarda göründüyü kimi yazmaq tövsiyə olunur" name="FSCmdLineTP2" />
+			<text name="FSCmdLineTeleportHome_txt">
+				Evə teleport olmaq
+			</text>
+			<text name="FSCmdLineMapTo_txt">
+				Regiona teleport (region | x y z)
+			</text>
+			<check_box label="Teleportdan sonra yerləşməni saxla" name="toggle" />
+		</panel>
+	</tab_container>
+</panel>

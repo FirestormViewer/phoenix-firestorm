@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="groups">
+	<filter_editor label="Qrup filtri" name="group_filter_input"/>
+	<button label="İM/Zəng" name="chat_btn" tool_tip="İM sessiyasını açın"/>
+	<button label="Profil" name="info_btn"/>
+	<button label="Başlıqlar" name="titles_btn"/>
+	<button label="Seç" name="activate_btn"/>
+	<button label="Tərk et" name="leave_btn"/>
+	<button label="Yarat..." name="create_btn"/>
+	<button label="Axtarış..." name="search_btn"/>
+	<button label="Dəvət et..." name="invite_btn"/>
+</panel>

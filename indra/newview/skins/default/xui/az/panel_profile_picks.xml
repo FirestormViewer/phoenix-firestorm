@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_picks" label="Seçilmiş">
+	<string name="no_picks" value="Seçilmiş yoxdur"/>
+	<layout_stack name="main_stack">
+		<layout_panel name="buttons_header">
+			<text name="header_text">
+				[GRID] şəbəkəsində sevimli yerlərinizdən danışın.
+			</text>
+			<button name="new_btn" label="Yeni..."
+			 tool_tip="Cari yerləşmədə yeni seçilmiş yarat"/>
+			<button name="delete_btn" label="Sil..."
+			 tool_tip="Cari seçilmişi sil"/>
+		</layout_panel>
+		<layout_panel name="main_body">
+			<text name="picks_panel_text">
+				Yüklənir...
+			</text>
+		</layout_panel>
+	</layout_stack>
+</panel>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Geyinmək olar" name="panel_edit_wearable">
+	<string name="edit_shape_title">
+		Forma düzəlişi
+	</string>
+	<string name="edit_skin_title">
+		Dəri düzəlişi
+	</string>
+	<string name="edit_hair_title">
+		Saç düzəlişi
+	</string>
+	<string name="edit_eyes_title">
+		Göz düzəlişi
+	</string>
+	<string name="edit_shirt_title">
+		Kötək düzəlişi
+	</string>
+	<string name="edit_pants_title">
+		Şalvar düzəlişi
+	</string>
+	<string name="edit_shoes_title">
+		Ayaqqabı düzəlişi
+	</string>
+	<string name="edit_socks_title">
+		Çorab düzəlişi
+	</string>
+	<string name="edit_jacket_title">
+		Pencək düzəlişi
+	</string>
+	<string name="edit_skirt_title">
+		Don düzəlişi
+	</string>
+	<string name="edit_gloves_title">
+		Əlcək düzəlişi
+	</string>
+	<string name="edit_undershirt_title">
+		İçkiyən düzəlişi
+	</string>
+	<string name="edit_underpants_title">
+		İç tumanın düzəlişi
+	</string>
+	<string name="edit_alpha_title">
+		Alfa maskasının düzəlişi
+	</string>
+	<string name="edit_tattoo_title">
+		Döymə düzəlişi
+	</string>
+	<string name="edit_universal_title">
+		Universal düzəlişi
+	</string>
+	<string name="edit_physics_title">
+		Fizika düzəlişi
+	</string>
+	<string name="shape_desc_text">
+		Forma:
+	</string>
+	<string name="skin_desc_text">
+		Dəri:
+	</string>
+	<string name="hair_desc_text">
+		Saç:
+	</string>
+	<string name="eyes_desc_text">
+		Göz:
+	</string>
+	<string name="shirt_desc_text">
+		Köynək:
+	</string>
+	<string name="pants_desc_text">
+		Şalvar:
+	</string>
+	<string name="shoes_desc_text">
+		Ayaqqabı:
+	</string>
+	<string name="socks_desc_text">
+		Çorab:
+	</string>
+	<string name="jacket_desc_text">
+		Pencək:
+	</string>
+	<string name="skirt_desc_text">
+		Don:
+	</string>
+	<string name="gloves_desc_text">
+		Əlcək:
+	</string>
+	<string name="undershirt_desc_text">
+		Mayka:
+	</string>
+	<string name="underpants_desc_text">
+		İç tumanı:
+	</string>
+	<string name="alpha_desc_text">
+		Alfa maskası:
+	</string>
+	<string name="tattoo_desc_text">
+		Döymə:
+	</string>
+	<string name="universal_desc_text">
+		Universal:
+	</string>
+	<string name="physics_desc_text">
+		Fizika:
+	</string>
+	<labeled_back_button label="Yadda saxla" name="back_btn" tool_tip="Geyimin dəyişdirilməsinə qayıt"/>
+	<text name="edit_wearable_title" value="Fiquranın dəyişdirilməsi"/>
+	<panel label="Köynək" name="wearable_type_panel">
+		<text name="description_text" value="Фигура:"/>
+		<radio_group name="sex_radio">
+			<radio_item label="" name="sex_male" tool_tip="Kişi" value="1"/>
+			<radio_item label="" name="sex_female" tool_tip="Qadın" value="0"/>
+		</radio_group>
+		<icon name="male_icon" tool_tip="Kişi"/>
+		<icon name="female_icon" tool_tip="Qadın"/>
+	</panel>
+	<panel name="button_panel">
+		<layout_stack name="button_panel_ls">
+			<layout_panel name="save_as_btn_lp">
+				<button label="Ayrı saxla" name="save_as_button"/>
+			</layout_panel>
+			<layout_panel name="revert_btn_lp">
+				<button label="Dəyişikləri ləğv et" name="revert_button"/>
+			</layout_panel>
+			<layout_panel name="import_btn_lp">
+				<button label="İdxal" name="import_btn"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

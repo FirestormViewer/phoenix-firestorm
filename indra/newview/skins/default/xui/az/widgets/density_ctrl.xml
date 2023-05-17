@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<densityctrl label="Sıxlıq" name="density_ctrl">
+    <text name="exponential_term_label">Əksponensial termin</text>
+    <text name="exponential_scale_factor_label" width="120">Əksponensial masshtab koeffisienti</text>
+    <text name="linear_term_label" width="120">Lineer termin</text>
+    <text name="constant_term_label" width="120">Sabit termin</text>
+    <text name="max_altitude_label" width="80">Maksimum hündürlük</text>
+    <text name="aniso_factor_label" width="80">Anizotrop faktoru</text>
+</densityctrl>

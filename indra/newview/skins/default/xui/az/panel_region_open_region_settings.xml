@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Region seçimləri" name="RegionSettings">
+	<spinner label="Qəribəçək çəkilişi" name="draw_distance" tool_tip="Bölgələr arasında çəkiliş məsafəsi üçün standart çəkiliş məsafəsi"/>
+	<check_box label="Məcburi çəkiliş məsafəsi" name="force_draw_distance" tool_tip="Bu bölgədəki bütün agentlər üçün çəkiliş məsafəsinin bağlanmasını aktivləşdirir. Qeyd: Bu daha az performanslı kompüterlər olan istifadəçilər arasında qalmağa səbəb ola bilər. (Standart olaraq söndürülüb.)"/>
+	<spinner label="Maks. çəkiliş məsafəsi" name="max_drag_distance" tool_tip="Bu bölgədə bir primitivin sürüklənə biləcəyi Maks. məsafə"/>
+	<spinner label="Maks. primitiv ölçüsü" name="max_prim_scale" tool_tip="Bu bölgədə yaradıla biləcək Maks. primitiv ölçüsü"/>
+	<spinner label="Min. primitiv ölçüsü" name="min_prim_scale" tool_tip="Bu bölgədə yaradıla biləcək minimum primitiv ölçüsü"/>
+	<spinner label="Maks. fiziki primitiv ölçüsü" name="max_phys_prim_scale" tool_tip="Bu bölgədə yaradıla biləcək Maks. fiziki primitiv ölçüsü"/>
+	<spinner label="Maks. birləşmə ölçüsü" name="max_hollow_size" tool_tip="Bu bölgədə yaradıla biləcək açılıq ölçüsünün Maks. ölçüsü"/>
+	<spinner label="Min. açılıq ölçüsü" name="min_hole_size" tool_tip="Bu bölgədə yaradıla biləcək açılıq ölçüsünün minimum ölçüsü" />
+	<spinner label="Maks. link sayı" name="max_link_count" tool_tip="Bu bölgədə bir ne fizik olmayan həddində olan obyektlərin sayı Maks.dur"/>
+	<spinner label="Maks. fiziki link sayı" name="max_link_count_phys" tool_tip="Bu bölgədə bir fizik həddində olan obyektlərin sayı Maks.dur"/>
+	<spinner label="Maks. paylaşma sayı" name="max_inventory_items_transfer" tool_tip="Eyni anda istifadəçilər arasında paylaşıla biləcək obyekt sayı. -1 qeyri-məhdud sayda obyekt təyin edir. (Defolt: -1)"/>
+	<spinner label="Mənzərə detal. ölçüsü" name="terrain_detail_scale" tool_tip="Bölgənin məkan detallarının miqyası"/>
+	<spinner label="Qısayolları göstərmək" name="show_tags" tool_tip="Bu bölgə üçün etiket rejimi. (Qısayolları göstərmək = 2, Qısayolları qısa göstərmək = 1, Qısayolları bağlamaq = 0)"/>
+	<spinner label="Maksimum Qruplar" name="max_groups" tool_tip="Agentin qoşula biləcəyi qrupların sayı. -1 limitsiz qrup sayını təyin edir. (Standart: -1)"/>
+	<check_box label="Su göstəricisi" name="render_water" tool_tip="Bölgədə su göstəricisinin aktivləşdirilməsi. (Standart: Aktiv)"/>
+	<check_box label="Minikartı İcazə ver" name="allow_minimap" tool_tip="Bu bölgədə minikartın aktivləşdirilməsi. (Standart: Aktiv)"/>
+	<check_box label="Fiziki primitivlərə İcazə ver" name="allow_physical_prims" tool_tip="Bu bölgədə fiziki primitivlərin yaradılmasına izin verilməsi. (Standart: Aktiv)"/>
+	<check_box label="Maksimum tikinti məhdudiyyətlərini gücləndirin" name="enforce_max_build" tool_tip="Bu bölgədə tikinti məhdudiyyətlərinin maksimumunu gücləndirin. (Standart: Aktiv)"/>
+	<check_box label="Bölgə mühitini İcazə ver" name="allow_parcel_windlight" tool_tip="Bu bölgədə parsellər üçün mühiti aktivləşdirin. (Standart: Aktiv)"/>
+	<button label="Tətbiq et" name="apply_ors_btn"/>
+</panel>
