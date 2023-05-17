@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_postcard_settings">
+	<combo_box label="Ölçü" name="postcard_size_combo">
+		<combo_box.item label="Hazırki Pəncərə" name="CurrentWindow" />
+		<combo_box.item label="Ayrı" name="Custom" />
+	</combo_box>
+	<spinner label="En Hündürlük" name="postcard_snapshot_width" />
+	<check_box label="Nisbətləri saxla" name="postcard_keep_aspect_check" />
+	<slider label="Keyfiyyət:" name="image_quality_slider" label_width="55"/>
+</panel>

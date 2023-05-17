@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="save_settings_menu">
+	<menu_item_check label="Yadda saxla" name="save_settings"/>
+	<menu_item_check label="Ayrı saxla" name="save_as_new_settings"/>
+	<menu_item_check label="Təsdiq edin" name="commit_changes"/>
+	<menu_item_check label="Yalnız özünə tətbiq et" name="apply_local"/>
+	<menu_item_check label="Sahəyə tətbiq et" name="apply_parcel"/>
+	<menu_item_check label="Regiona tətbiq et" name="apply_region"/>
+</toggleable_menu>

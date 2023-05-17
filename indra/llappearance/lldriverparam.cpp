@@ -102,9 +102,8 @@ void LLDriverParamInfo::toStream(std::ostream &out)
 	LLViewerVisualParamInfo::toStream(out);
 	out << "driver" << "\t";
 	out << mDrivenInfoList.size() << "\t";
-	for (entry_info_list_t::iterator iter = mDrivenInfoList.begin(); iter != mDrivenInfoList.end(); iter++)
+	for (LLDrivenEntryInfo& driven : mDrivenInfoList)
 	{
-		LLDrivenEntryInfo driven = *iter;
 		out << driven.mDrivenID << "\t";
 	}
 
@@ -121,9 +120,8 @@ void LLDriverParamInfo::toStream(std::ostream &out)
 	if(mDriverParam && mDriverParam->getAvatarAppearance()->isSelf() &&
 		mDriverParam->getAvatarAppearance()->isValid())
 	{
-		for (entry_info_list_t::iterator iter = mDrivenInfoList.begin(); iter != mDrivenInfoList.end(); iter++)
+		for (LLDrivenEntryInfo& driven : mDrivenInfoList)
 		{
-			LLDrivenEntryInfo driven = *iter;
 			LLViewerVisualParam *param = 
 				(LLViewerVisualParam*)mDriverParam->getAvatarAppearance()->getVisualParam(driven.mDrivenID);
 			if (param)
@@ -237,19 +235,19 @@ void LLDriverParam::setWeight(F32 weight, BOOL upload_bake)
 	//-------|----|-------|----|-------> driver
 	//  | min1   max1    max2  min2
 
-	for( entry_list_t::iterator iter = mDriven.begin(); iter != mDriven.end(); iter++ )
+	for(LLDrivenEntry& driven : mDriven)
 	{
-		LLDrivenEntry* driven = &(*iter);
-		LLDrivenEntryInfo* info = driven->mInfo;
+		LLDrivenEntry* drivenp = &driven;
+		LLDrivenEntryInfo* info = drivenp->mInfo;
 		
 		F32 driven_weight = 0.f;
-		F32 driven_min = driven->mParam->getMinWeight();
-		F32 driven_max = driven->mParam->getMaxWeight();
+		F32 driven_min = drivenp->mParam->getMinWeight();
+		F32 driven_max = drivenp->mParam->getMaxWeight();
 
 		if (mIsAnimating)
 		{
 			// driven param doesn't interpolate (textures, for example)
-			if (!driven->mParam->getAnimating())
+			if (!drivenp->mParam->getAnimating())
 			{
 				continue;
 			}
@@ -274,8 +272,8 @@ void LLDriverParam::setWeight(F32 weight, BOOL upload_bake)
 				}
 				
 				// <FS:Ansariel> [Legacy Bake]
-				//setDrivenWeight(driven,driven_weight);
-				setDrivenWeight(driven,driven_weight,upload_bake);
+				//setDrivenWeight(drivenp,driven_weight);
+				setDrivenWeight(drivenp,driven_weight,upload_bake);
 				// </FS:Ansariel> [Legacy Bake]
 				continue;
 			}
@@ -301,27 +299,26 @@ void LLDriverParam::setWeight(F32 weight, BOOL upload_bake)
 				}
 
 				// <FS:Ansariel> [Legacy Bake]
-				//setDrivenWeight(driven,driven_weight);
-				setDrivenWeight(driven,driven_weight,upload_bake);
+				//setDrivenWeight(drivenp,driven_weight);
+				setDrivenWeight(drivenp,driven_weight,upload_bake);
 				// </FS:Ansariel> [Legacy Bake]
 				continue;
 			}
 		}
 
-		driven_weight = getDrivenWeight(driven, mCurWeight);
+		driven_weight = getDrivenWeight(drivenp, mCurWeight);
 		// <FS:Ansariel> [Legacy Bake]
-		//setDrivenWeight(driven,driven_weight);
-		setDrivenWeight(driven,driven_weight, upload_bake);
+		//setDrivenWeight(drivenp,driven_weight);
+		setDrivenWeight(drivenp,driven_weight, upload_bake);
 	}
 }
 
 F32	LLDriverParam::getTotalDistortion()
 {
 	F32 sum = 0.f;
-	for( entry_list_t::iterator iter = mDriven.begin(); iter != mDriven.end(); iter++ )
+	for(LLDrivenEntry& driven : mDriven)
 	{
-		LLDrivenEntry* driven = &(*iter);
-		sum += driven->mParam->getTotalDistortion();
+		sum += driven.mParam->getTotalDistortion();
 	}
 
 	return sum; 
@@ -333,10 +330,9 @@ const LLVector4a	&LLDriverParam::getAvgDistortion()
 	LLVector4a sum;
 	sum.clear();
 	S32 count = 0;
-	for( entry_list_t::iterator iter = mDriven.begin(); iter != mDriven.end(); iter++ )
+	for(LLDrivenEntry& driven : mDriven)
 	{
-		LLDrivenEntry* driven = &(*iter);
-		sum.add(driven->mParam->getAvgDistortion());
+		sum.add(driven.mParam->getAvgDistortion());
 		count++;
 	}
 	sum.mul( 1.f/(F32)count);
@@ -348,10 +344,9 @@ const LLVector4a	&LLDriverParam::getAvgDistortion()
 F32	LLDriverParam::getMaxDistortion() 
 {
 	F32 max = 0.f;
-	for( entry_list_t::iterator iter = mDriven.begin(); iter != mDriven.end(); iter++ )
+	for(LLDrivenEntry& driven : mDriven)
 	{
-		LLDrivenEntry* driven = &(*iter);
-		F32 param_max = driven->mParam->getMaxDistortion();
+		F32 param_max = driven.mParam->getMaxDistortion();
 		if( param_max > max )
 		{
 			max = param_max;
@@ -366,10 +361,9 @@ LLVector4a	LLDriverParam::getVertexDistortion(S32 index, LLPolyMesh *poly_mesh)
 {
 	LLVector4a sum;
 	sum.clear();
-	for( entry_list_t::iterator iter = mDriven.begin(); iter != mDriven.end(); iter++ )
+	for(LLDrivenEntry& driven : mDriven)
 	{
-		LLDrivenEntry* driven = &(*iter);
-		sum.add(driven->mParam->getVertexDistortion( index, poly_mesh ));
+		sum.add(driven.mParam->getVertexDistortion(index, poly_mesh));
 	}
 	return sum;
 }
@@ -378,13 +372,12 @@ const LLVector4a*	LLDriverParam::getFirstDistortion(U32 *index, LLPolyMesh **pol
 {
 	mCurrentDistortionParam = NULL;
 	const LLVector4a* v = NULL;
-	for( entry_list_t::iterator iter = mDriven.begin(); iter != mDriven.end(); iter++ )
+	for(LLDrivenEntry& driven : mDriven)
 	{
-		LLDrivenEntry* driven = &(*iter);
-		v = driven->mParam->getFirstDistortion( index, poly_mesh );
+		v = driven.mParam->getFirstDistortion(index, poly_mesh);
 		if( v )
 		{
-			mCurrentDistortionParam = driven->mParam;
+			mCurrentDistortionParam = driven.mParam;
 			break;
 		}
 	}
@@ -428,7 +421,7 @@ const LLVector4a*	LLDriverParam::getNextDistortion(U32 *index, LLPolyMesh **poly
 		for( iter++; iter != mDriven.end(); iter++ )
 		{
 			driven = &(*iter);
-			v = driven->mParam->getFirstDistortion( index, poly_mesh );
+			v = driven->mParam->getFirstDistortion(index, poly_mesh);
 			if( v )
 			{
 				mCurrentDistortionParam = driven->mParam;
@@ -466,16 +459,16 @@ void LLDriverParam::setAnimationTarget( F32 target_value, BOOL upload_bake )
 	LLVisualParam::setAnimationTarget(target_value, upload_bake);
 // </FS:Ansariel> [Legacy Bake]
 
-	for( entry_list_t::iterator iter = mDriven.begin(); iter != mDriven.end(); iter++ )
+	for(LLDrivenEntry& driven : mDriven)
 	{
-		LLDrivenEntry* driven = &(*iter);
-		F32 driven_weight = getDrivenWeight(driven, mTargetWeight);
+		LLDrivenEntry* drivenp = &driven;
+		F32 driven_weight = getDrivenWeight(drivenp, mTargetWeight);
 
 		// this isn't normally necessary, as driver params handle interpolation of their driven params
 		// but texture params need to know to assume their final value at beginning of interpolation
 		// <FS:Ansariel> [Legacy Bake]
-		//driven->mParam->setAnimationTarget(driven_weight);
-		driven->mParam->setAnimationTarget(driven_weight, upload_bake);
+		//drivenp->mParam->setAnimationTarget(driven_weight);
+		drivenp->mParam->setAnimationTarget(driven_weight, upload_bake);
 		// </FS:Ansariel> [Legacy Bake]
 	}
 }
@@ -492,10 +485,9 @@ void LLDriverParam::stopAnimating(BOOL upload_bake)
 	LLVisualParam::stopAnimating(upload_bake);
 // </FS:Ansariel> [Legacy Bake]
 
-	for( entry_list_t::iterator iter = mDriven.begin(); iter != mDriven.end(); iter++ )
+	for(LLDrivenEntry& driven : mDriven)
 	{
-		LLDrivenEntry* driven = &(*iter);
-		driven->mParam->setAnimating(FALSE);
+		driven.mParam->setAnimating(FALSE);
 	}
 }
 
@@ -503,17 +495,15 @@ void LLDriverParam::stopAnimating(BOOL upload_bake)
 BOOL LLDriverParam::linkDrivenParams(visual_param_mapper mapper, BOOL only_cross_params)
 {
 	BOOL success = TRUE;
-	LLDriverParamInfo::entry_info_list_t::iterator iter;
-	for (iter = getInfo()->mDrivenInfoList.begin(); iter != getInfo()->mDrivenInfoList.end(); ++iter)
+	for (LLDrivenEntryInfo& driven_info : getInfo()->mDrivenInfoList)
 	{
-		LLDrivenEntryInfo *driven_info = &(*iter);
-		S32 driven_id = driven_info->mDrivenID;
+		S32 driven_id = driven_info.mDrivenID;
 
 		// check for already existing links. Do not overwrite.
 		BOOL found = FALSE;
-		for (entry_list_t::iterator driven_iter = mDriven.begin(); driven_iter != mDriven.end() && !found; ++driven_iter)
+		for (auto& driven : mDriven)
 		{
-			if (driven_iter->mInfo->mDrivenID == driven_id)
+			if (driven.mInfo->mDrivenID == driven_id)
 			{
 				found = TRUE;
 			}
@@ -526,7 +516,7 @@ BOOL LLDriverParam::linkDrivenParams(visual_param_mapper mapper, BOOL only_cross
 			bool push = param && (!only_cross_params || param->getCrossWearable());
 			if (push)
 			{
-				mDriven.push_back(LLDrivenEntry( param, driven_info ));
+				mDriven.push_back(LLDrivenEntry( param, &driven_info ));
 			}
 			else
 			{
@@ -549,10 +539,9 @@ void LLDriverParam::updateCrossDrivenParams(LLWearableType::EType driven_type)
 	bool needs_update = (getWearableType()==driven_type);
 
 	// if the driver has a driven entry for the passed-in wearable type, we need to refresh the value
-	for( entry_list_t::iterator iter = mDriven.begin(); iter != mDriven.end(); iter++ )
+	for(LLDrivenEntry& driven : mDriven)
 	{
-		LLDrivenEntry* driven = &(*iter);
-		if (driven && driven->mParam && driven->mParam->getCrossWearable() && driven->mParam->getWearableType() == driven_type)
+		if (driven.mParam && driven.mParam->getCrossWearable() && driven.mParam->getWearableType() == driven_type)
 		{
 			needs_update = true;
 		}

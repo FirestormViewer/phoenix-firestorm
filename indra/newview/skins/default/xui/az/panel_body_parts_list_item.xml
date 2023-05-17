@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="wearable_item">
+	<panel name="btn_lock" tool_tip="Sizin dəyişdirmək üçün ixtiyarınız yoxdur"/>
+	<panel name="btn_edit_panel">
+		<button name="btn_edit" tool_tip="Bu formanı dəyişdirin"/>
+	</panel>
+</panel>

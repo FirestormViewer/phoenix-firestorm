@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="Outfit Gallery">
+  <string name="outfit_photo_string">[OUTFIT_NAME] geyiminin şəkili</string>
+  <string name="no_outfits_msg">Sizdə hal hazırda geyim yoxdur. [secondlife:///app/search/all/ Axtarışı] sınayın.</string>
+  <string name="no_matched_outfits_msg">Axtardığınızı tapa bilmədiniz? [secondlife:///app/search/all/[SEARCH_TERM] Axtarışı] sınayın.</string>
+  <text name="no_outfits_txt">Axtarış...</text>
+  <panel name="bottom_panel">
+    <menu_button tool_tip="Əlavə seçimləri göstər" name="options_gear_btn"/>
+      <text name="OutfitcountText" width="130">
+        [COUNT] Geyim
+      </text>
+      <text name="avatar_complexity_label" width="150">
+        Çətinlik: [WEIGHT]
+      </text>
+      <button name="trash_btn" tool_tip="Seçilmiş geyimi sil" />
+    </panel>
+</panel>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_rlvLocks" title="RLV blokunu aktiv et">
+  <scroll_list name="lock_list">
+    <scroll_list.columns label="Blok tipi" name="lock_type" />
+    <scroll_list.columns label="Metod" name="lock_addrem" />
+    <scroll_list.columns label="Obyekt blok edilsin?" name="lock_target" />
+    <scroll_list.columns label="Blokun mənbəyi" name="lock_origin" width="150" />
+  </scroll_list>
+  <panel name="bottom_panel">
+    <button label="Yenilə" name="refresh_btn" />
+  </panel>
+</panel>

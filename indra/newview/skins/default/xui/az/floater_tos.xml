@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="modal container">
+	<floater.string name="real_url">
+		http://secondlife.com/app/tos/
+	</floater.string>
+	<floater.string name="loading_url">
+		data:text/html,%3Chtml%3E%3Chead%3E%3C/head%3E%3Cbody text=%22000000%22%3E%3Ch2%3E Loading %3Ca%20target%3D%22_external%22%20href%3D%22http%3A//secondlife.com/app/tos/%22%3ETerms%20of%20Service%3C/a%3E...%3C/h2%3E %3C/body%3E %3C/html%3E
+	</floater.string>
+	<text name="tos_heading">
+		Second Life istifadəçi müqaviləsi konfidensiallığı və münaqişələrin həllinə dair şərtlər, həmçinin qrup və ya sinif tələblərinin münaqişələrin həlli üçün imtina edilməsini əhatə edən şərtlər daxil olmaqla oxuyun. [SECOND_LIFE]-ə girmək üçün siz müqavilə şərtlərini qəbul etməlisiniz.
+	</text>
+	<text name="external_tos_required">
+		Davam etmək üçün https://my.secondlife.com saytına daxil olun, hesabınıza giriş edin və Xidmət Şərtlərini qəbul edin. Təşəkkürlər!
+	</text>
+	<check_box label="" name="agree_chk"/>
+	<text name="agree_list">
+		Mən Second Life istifadəçi müqaviləsinin, münaqişələrin həllinə dair şərtlərin və konfidensiallığa dair tələblərinin, həmçinin qrup və ya sinif tələblərinin münaqişələrin həlli üçün imtina edilməsini qəbul edirəm.
+	</text>
+	<button label="Davam et" label_selected="Davam et" name="Continue"/>
+	<button label="Ləğv et" label_selected="Ləğv et" name="Cancel"/>
+</floater>

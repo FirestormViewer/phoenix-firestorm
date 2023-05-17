@@ -1,0 +1,6812 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- This file contains strings that used to be hardcoded in the source.
+     It is only for those strings which do not belong in a floater.
+     For example, the strings used in avatar chat bubbles, and strings
+     that are returned from one component and may appear in many places-->
+<strings>
+	<string name="SECOND_LIFE">
+		[CURRENT_GRID]
+	</string>
+	<string name="APP_NAME">
+		Firestorm
+	</string>
+	<string name="CAPITALIZED_APP_NAME">
+		FIRESTORM
+	</string>
+	<string name="SECOND_LIFE_GRID">
+		Second Life şəbəkəsi
+	</string>
+	<string name="SUPPORT_SITE">
+		Firestorm texniki dəstək portalı
+	</string>
+	<string name="StartupDetectingHardware">
+		Avadanlıq təyin olunur...
+	</string>
+	<string name="StartupLoading">
+		[APP_NAME] yüklənir...
+	</string>
+	<string name="StartupClearingCache">
+		Keşin təmizlənməsi...
+	</string>
+	<string name="StartupClearingTextureCache">
+		Texture keşinin təmizlənməsi...
+	</string>
+	<string name="StartupInitializingTextureCache">
+		Texture keşinin başlanması...
+	</string>
+	<string name="StartupRequireDriverUpdate">
+		Grafika başladıla bilmədi. Zəhmət olmasa, video kartın sürücüsünü yeniləyin
+	</string>
+	<string name="AboutHeader">
+[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE] bit / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
+[[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
+	</string>
+	<string name="AboutCompiler">
+		İstifadə olunan kompilyator [COMPILER], versiya [COMPILER_VERSION]
+	</string>
+	<string name="BuildConfig">
+		Qurğu konfiqurasiyası [BUILD_CONFIG]
+	</string>
+	<string name="AboutPosition">
+		Siz [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] nöqtəsində [REGION] regionunda [HOSTNAME] ünvanında yerləşirsiniz.
+SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
+(ümumi koordinatlar [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
+[SERVER_VERSION]
+[SERVER_RELEASE_NOTES_URL]
+	</string>
+	<string name="AboutPositionRLVShowLoc">
+Siz [REGION] regionundasınız
+[SERVER_VERSION]
+[SERVER_RELEASE_NOTES_URL]
+	</string>
+	<string name="AboutSystem">
+Prosesor: [CPU]
+RAM: [MEMORY_MB] MB
+Şəkilləri dekodlaşdırma threadləri: [CONCURRENCY]
+OS versiyası: [OS_VERSION]
+Grafik kartının istehsalçısı: [GRAPHICS_CARD_VENDOR]
+Grafik kartı: [GRAPHICS_CARD]
+Grafik kartının yaddaşı: [GRAPHICS_CARD_MEMORY] MB
+	</string>
+	<string name="AboutDriver">
+		Windows grafik sürücüsü versiyası: [GRAPHICS_DRIVER_VERSION]
+	</string>
+	<string name="AboutOGL">
+		OpenGL versiyası: [OPENGL_VERSION]
+	</string>
+	<string name="AboutSettings">
+		Qurğu rejimi: [MODE]
+Grafik tərtibatı: [SKIN] ([THEME])
+Pəncərə ölçüsü: [WINDOW_WIDTH]x[WINDOW_HEIGHT] px
+Istifadə olunan şrift: [FONT] ([FONT_SCREEN_DPI])
+Şrift ölçüsü: [FONT_SIZE] pt
+UI məstabı: [UI_SCALE_FACTOR]
+Çəkilmə məsafəsi: [DRAW_DISTANCE]
+Bandwidth: [BANDWIDTH]
+Detallaşdırma səviyyəsi: [LOD]
+Grafika keyfiyyəti: [RENDERQUALITY]
+Yüksəldilmiş işıqlandırma modeli: [ALMSTATUS]
+	</string>
+	<string name="AboutTextureMemory">
+		Tekstur yaddaşı: [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
+	</string>
+	<string name="AboutTextureMemoryDynamic">
+		Tekstur yaddaşı: dinamik ([TEXTUREMEMORYMIN] MB min. / [TEXTUREMEMORYCACHERESERVE]% Cache / [TEXTUREMEMORYGPURESERVE]% VRAM)
+	</string>
+	<string name="AboutCache">
+		Disk keşi: [DISK_CACHE_INFO]
+	</string>
+	<string name="AboutOSXHiDPI">
+		HiDPI göstəricisi: [HIDPI]
+	</string>
+	<string name="AboutLibs">
+Skript nəzarəti (RLVa): [RLV_VERSION]
+libcurl versiyası: [LIBCURL_VERSION]
+J2C dekoder versiyası: [J2C_VERSION]
+Səsli sürücü versiyası: [AUDIO_DRIVER_VERSION]
+[LIBCEF_VERSION]
+LibVLC versiyası: [LIBVLC_VERSION]
+Səs serveri versiyası: [VOICE_VERSION]
+	</string>
+	<string name="AboutTraffic">
+		Paket itki: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
+	</string>
+	<string name="AboutTime">
+		[day, datetime, slt] [month, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt] SLT
+	</string>
+	<string name="LocalTime">
+		[day, datetime, local] [month, datetime, local] [year, datetime, local] [hour, datetime, local]:[min, datetime, local]:[second,datetime, local]
+	</string>
+	<string name="ErrorFetchingServerReleaseNotesURL">
+		Server buraxılış qeydləri URL adresi alınarkən səhv baş verdi.
+	</string>
+	<string name="BuildConfiguration">
+		Quruluş tənzimləməsi
+	</string>
+	<string name="ProgressRestoring">
+		Bərpa edilir...
+	</string>
+	<string name="ProgressChangingResolution">
+		Çözünürlük dəyişdirilir...
+	</string>
+	<string name="Fullbright">
+		Özü-nümunə rönglik (artıq qabaqlıq)
+	</string>
+	<string name="LoginInProgress">
+		Daxil olunur... [APP_NAME] proqramı donmuş kimi görünə bilər. Xahiş edirik, gözləyin.
+	</string>
+	<string name="LoginInProgressNoFrozen">
+		Daxil olunur...
+	</string>
+	<string name="LoginAuthenticating">
+		Təyinat
+	</string>
+	<string name="LoginMaintenance">
+		Hesabın təmiri aparılır......
+	</string>
+	<string name="LoginAttempt">
+		Əvvəlki daxil olma cəhddi uğursuz oldu. [NUMBER] daxil olma cəhddi edilir.
+	</string>
+	<string name="LoginPrecaching">
+		Dünya yüklənir...
+	</string>
+	<string name="LoginInitializingBrowser">
+		Daxil olunmuş brauzerin başlanması...
+	</string>
+	<string name="LoginInitializingMultimedia">
+		Multimediyanın başlanması...
+	</string>
+	<string name="LoginInitializingFonts">
+		Şriftlərin yüklənməsi...
+	</string>
+	<string name="LoginVerifyingCache">
+		Kəş fayllarının yoxlanılması (60-90 saniyə çəkə bilər)...
+	</string>
+	<string name="LoginProcessingResponse">
+		Cavabın işlənməsi...
+	</string>
+	<string name="LoginInitializingWorld">
+		Dünyanın başlanması...
+	</string>
+	<string name="LoginDecodingImages">
+		Şəkillərin açılması...
+	</string>
+	<string name="LoginInitializingQuicktime">
+		QuickTime başlanması...
+	</string>
+	<string name="LoginQuicktimeNotFound">
+		QuickTime tapılmadı - başlanma səhvi.
+	</string>
+	<string name="LoginQuicktimeOK">
+		Uğurlu QuickTime inisializasiyası.
+	</string>
+	<string name="LoginRequestSeedCapGrant">
+		Regionun bacarıqları sorğulanır ...
+	</string>
+	<string name="LoginRetrySeedCapGrant">
+		Regionun bacarıqları sorğulanır, cəhd [NUMBER]...
+	</string>
+	<string name="LoginWaitingForRegionHandshake">
+		Region ilə əlaqə qurulur...
+	</string>
+	<string name="LoginConnectingToRegion">
+		Regiona qoşulma gedir...
+	</string>
+	<string name="LoginDownloadingClothing">
+		Geyim yüklənir...
+	</string>
+	<string name="InvalidCertificate">
+		Server etibarsız və ya zədəli sertifikat qaytarıb. Şəbəkənin administratoruna müraciət edin.
+	</string>
+	<string name="CertInvalidHostname">
+		Serverə giriş üçün etibarsız host adı istifadə edilmişdir. SL URL və ya şəbəkədəki host adını yoxlayın.
+	</string>
+	<string name="CertExpired">
+		Sertifikatın vaxtı bitdiyi üçün şəbəkə tərəfindən geri qaytarıldı. Sistimdə quraşdırılmış vaxtı yoxlayın və ya şəbəkənin administratoruna müraciət edin.
+	</string>
+	<string name="CertKeyUsage">
+		Server tərəfindən qaytarılan sertifikat SSL üçün istifadə edilə bilmir. Şəbəkənin administratoruna müraciət edin.
+	</string>
+	<string name="CertBasicConstraints">
+		Server sertifikatı sıralamasında çox çox sertifikat var. Şəbəkənin administratoruna müraciət edin.
+	</string>
+	<string name="CertInvalid">
+		Sertifikat yüklənə bilmir. Şəbəkənin administratoruna müraciət edin.
+	</string>
+	<string name="CertInvalidSignature">
+		Şəbəkənin serveri tərəfindən qaytarılan sertifikatın imzasını yoxlamaq mümkün olmadı. Şəbəkənin administratoruna müraciət edin.
+	</string>
+	<string name="CertAllocationFailure">
+		Sertifikat üçün openssl yaddaşını ayrıla bilmədik.
+	</string>
+	<string name="LoginFailedNoNetwork">
+		Şəbəkə xətası: bağlantı qurulmada. Şəbəkə ilə əlaqənizi yoxlayın.
+	</string>
+	<string name="LoginFailedHeader">
+		Qoşulma səhvi.
+	</string>
+	<string name="Quit">
+		Çıxış
+	</string>
+	<string name="create_account_url">
+		https://www.firestormviewer.org/join-secondlife/
+	</string>
+	<string name="AgniGridLabel">
+		Second Life Əsas Şəbəkəsi (Agni)
+	</string>
+	<string name="AditiGridLabel">
+		Second Life Beta Test Şəbəkəsi (Aditi)
+	</string>
+	<string name="ViewerDownloadURL">
+		https://www.firestormviewer.org/choose-your-platform/
+	</string>
+	<string name="LoginFailedViewerNotPermitted">
+		İstifadə etdiyiniz klientin artıq Second Life oyununa girişi yoxdur. Siz müştərinin yeni versiyasını bu ünvandan yükləyə bilərsiniz:
+https://www.firestormviewer.org/choose-your-platform/
+
+Ətraflı məlumat üçün FAQ bölməsinə baxın:
+http://secondlife.com/viewer-access-faq
+	</string>
+	<string name="LoginFailed">
+		Şəbəkəyə daxil olmaqda xəta baş verdi.
+Əgər bu səhv olduğunu düşünürsünüzsə, lütfən şəbəkə dəstək xidməti ilə əlaqə saxlayın.
+	</string>
+	<string name="LoginIntermediateOptionalUpdateAvailable">
+		Klient üçün məcburi olmayan yeniləmə mövcuddur: [VERSION]
+	</string>
+	<string name="LoginFailedRequiredUpdate">
+		Klient yenilənməlidir: [VERSION]
+	</string>
+	<string name="LoginFailedAlreadyLoggedIn">
+		Bu klient artıq daxil olunub.
+	</string>
+	<string name="LoginFailedAuthenticationFailed">
+		Üzr istəyirik! Sizi qoşa bilmədik.
+Zəhmət olmasa düzgün daxil etdiyinizi yoxlayın:
+    * İstifadəçi adını (məsələn, bobsmith12 və ya steller.sunshine)
+    * Şifrəni
+    * İkinci faktor tokenini (aktivdirsə)
+Həmçinin, lütfən Caps Lock rejiminin söndürüldüyündən əmin olun.
+</string>
+	<string name="LoginFailedPasswordChanged">
+	Tədbirlərin təhlükəsizliyi üçün, sizin şifrəniz dəyişdirilmişdir.
+Öz hesabınızın səhifəsinə http://secondlife.com/password ünvanında keçin 
+və şifrənizi bərpa etmək üçün nəzarət sualına cavab verin.
+Narahatçılıq üçün üzr istəyirik.
+	</string>
+	<string name="LoginFailedPasswordReset">
+		Sistemimizdə dəyişikliklər olduğu üçün, şifrənizi bərpa etmək lazımdır.
+Öz hesabınızın səhifəsinə http://secondlife.com/password ünvanında keçin 
+və şifrənizi bərpa etmək üçün nəzarət sualına cavab verin.
+Narahatçılıq üçün üzr istəyirik.
+	</string>
+	<string name="LoginFailedEmployeesOnly">
+		Second Life müvəqqəti olaraq texniki xidmətdədir.
+Yalnız işçilər giriş edə bilər.
+Status yeniliklərini www.secondlife.com/status saytında izləyə bilərsiniz.
+	</string>
+	<string name="LoginFailedPremiumOnly">
+		Cari istifadəçilər üçün oyun dünyasının ən yüksək keyfiyyətini qorumaq üçün Second Life-a giriş müvəqqəti olaraq məhdudlaşdırılıb.
+
+Bu müddət ərzində pulsuz hesabları olan istifadəçilər Second Life-a daxil ola bilməyəcəklər ki, ödəniş edənlər daha çox yerə sahib olsunlar.
+	</string>
+	<string name="LoginFailedComputerProhibited">
+		Siz bu kompüterdə Second Life-a daxil ola bilməzsiniz.
+Bunun səhv olduğunu düşünürsünüzsə, buraya məktub göndərin:
+support@secondlife.com.
+	</string>
+	<string name="PacificTime">
+		Sakit okean vaxtı.
+	</string>
+	<string name="LoginFailedAcountSuspended">
+		Hesabınız bu vaxta qədər əlçatan olmayacaq:
+[TIME]
+	</string>
+	<string name="LoginFailedAccountDisabled">
+		Hazırda sorğunuzu tamamlaya bilmirik. 
+Yardım üçün http://support.secondlife.com ünvanında Second Life Dəstək ilə əlaqə saxlayın.
+	</string>
+	<string name="LoginFailedTransformError">
+		Giriş zamanı məlumat uyğunsuzluğu aşkar edildi.
+support@secondlife.com ünvanına mesaj göndərin.
+	</string>
+	<string name="LoginFailedAccountMaintenance">
+		Hesabınızda kiçik texniki xidmət aparılır.
+Hesabınız bu vaxta qədər əlçatan olmayacaq:
+[TIME]
+Bunun səhv olduğunu düşünürsünüzsə, buraya məktub göndərin: support@secondlife.com.
+	</string>
+	<string name="LoginFailedPendingLogoutFault">
+		Çıxış sorğusuna cavab olaraq simulyator xəta mesajı qaytardı.
+	</string>
+	<string name="LoginFailedPendingLogout">
+		Sizin hesabınız üçün çıxış icra olunur.
+	Sistemə yenidən daxil olmadan əvvəl bir dəqiqə gözləyin.
+	</string>
+	<string name="LoginFailedUnableToCreateSession">
+		İcazə verilən sessiya yaradıla bilmir.
+	</string>
+	<string name="LoginFailedUnableToConnectToSimulator">
+		Simulatora qoşulmaq mümkün deyil.
+	</string>
+	<string name="LoginFailedRestrictedHours">
+		Sizin Second Life hesabınız yalnız
+	[START]-[END] saatları arasında Sakit Okean vaxtı (PST) ilə giriş etməyə icazə verilir.
+	Bu vaxtda giriş edin.
+	Bu bir xəta olduğunu düşünürsəniz, support@secondlife.com ünvanına məktub göndərin.																												   
+	</string>
+	<string name="LoginFailedIncorrectParameters">
+		Yanlış seçimlər.
+	Bu bir xəta olduğunu düşünürsəniz, support@secondlife.com ünvanına məktub göndərin.
+	</string>
+	<string name="LoginFailedFirstNameNotAlphanumeric">
+		Istifadəçi adı yalnız hərflər və rəqəmlərdən ibarət olmalıdır.
+	Bu bir xəta olduğunu düşünürsəniz, support@secondlife.com ünvanına məktub göndərin.
+	</string>
+	<string name="LoginFailedLastNameNotAlphanumeric">
+		Istifadəçi soyadı yalnız hərflər və rəqəmlərdən ibarət olmalıdır.
+	Bu bir xəta olduğunu düşünürsəniz, support@secondlife.com ünvanına məktub göndərin.
+	</string>
+	<string name="LogoutFailedRegionGoingOffline">
+		Bölgə hal hazırda söndürülüb.
+Bir dəqiqədən sonra yenidən daxil olmağa çalışın.
+	</string>
+	<string name="LogoutFailedAgentNotInRegion">
+		Agent bölgədə deyil.
+Bir dəqiqədən sonra yenidən daxil olmağa çalışın.
+	</string>
+	<string name="LogoutFailedPendingLogin">
+		Bölqəyə fərqli seansdan daxil olunma icra olunub.
+Bir dəqiqədən sonra yenidən daxil olmağa çalışın.
+	</string>
+	<string name="LogoutFailedLoggingOut">
+		Bölgəyə əvvəlki sessiyadan çıxış icra olunub.
+Bir dəqiqədən sonra yenidən daxil olmağa çalışın.
+	</string>
+	<string name="LogoutFailedStillLoggingOut">
+		Bölgəyə əvvəlki sessiyadan hələm ki çıxış icra olunub.
+Bir dəqiqədən sonra yenidən daxil olmağa çalışın.
+	</string>
+	<string name="LogoutSucceeded">
+		Son sessiyada bölgədən çıxış icra olundu.
+Bir dəqiqədən sonra yenidən daxil olmağa çalışın.
+	</string>
+	<string name="LogoutFailedLogoutBegun">
+		Bölgə üçün çıxış icra olunur.
+Bir dəqiqədən sonra yenidən daxil olmağa çalışın.
+	</string>
+	<string name="LoginFailedLoggingOutSession">
+		Son sessiyanız zamanı sistem çıxış icrasına başladı.
+Bir dəqiqədən sonra yenidən daxil olmağa çalışın.
+	</string>
+	<string name="LoginFailedAuthenticationMFARequired">
+		Чтобы продолжить вход в систему, введите новый токен из приложения многофакторной аутентификации.
+Если вы считаете, что это ошибка, пожалуйста, свяжитесь с support@secondlife.com
+	</string>
+	<string name="AgentLostConnection">
+		Bu bölgədə, ola bilsin ki, problemlər ola bilər.  Şəbəkə bağlantınızı yoxlayın.
+	</string>
+	<string name="SavingSettings">
+		Seçimlər yadda saxlanılır...
+	</string>
+	<string name="LoggingOut">
+		Çıxış icra olunur...
+	</string>
+	<string name="ShuttingDown">
+		Söndürülür...
+	</string>
+	<string name="YouHaveBeenDisconnected">
+		Olduğunuz bölgə ilə əlaqəniz kəsildi.
+	</string>
+	<string name="SentToInvalidRegion">
+		Siz yanlış bölgəyə göndərildiniz.
+	</string>
+	<string name="TestingDisconnect">
+		Proqram Bağlantısını Ayırma Testi
+	</string>
+
+	<string name="SocialFlickrConnecting">
+		Flickr ilə bağlantı qurulur...
+	</string>
+	<string name="SocialFlickrPosting">
+		Göndərilir...
+	</string>
+	<string name="SocialFlickrDisconnecting">
+		Flickr-dən ayrılma gedir...
+	</string>
+	<string name="SocialFlickrErrorConnecting">
+		Flickr-ə qoşulmaq mümkün deyil
+	</string>
+	<string name="SocialFlickrErrorPosting">
+		Flickr-ə göndərmək mümkün deyil
+	</string>
+	<string name="SocialFlickrErrorDisconnecting">
+		Flickr-dən ayrılmaq mümkün deyil
+	</string>
+
+	<string name="BlackAndWhite">
+		Qara və Ağ
+	</string>
+	<string name="Colors1970">
+		1970-ci il rəngləri
+	</string>
+	<string name="Intense">
+		İntensiv
+	</string>
+	<string name="Newspaper">
+		Qəzet kağızı
+	</string>
+	<string name="Sepia">
+		Sepya
+	</string>
+	<string name="Spotlight">
+		Işıq nöqtəsi
+	</string>
+	<string name="Video">
+		Video
+	</string>
+	<string name="Autocontrast">
+		Avto kontrast
+	</string>
+	<string name="LensFlare">
+		Işıq zirzəmi
+	</string>
+	<string name="Miniature">
+		Minyatür
+	</string>
+	<string name="Toycamera">
+		Oyuncaq kamera
+	</string>
+	<string name="Antique">
+		Antikvar
+	</string>
+	<string name="Badtrip">
+		Pis səyahət
+	</string>
+	<string name="Blownhighlights">
+		Yüksək parlama
+	</string>
+	<string name="Softfocus">
+		Yumuşaq fokus
+	</string>
+	<string name="Brighten">
+		Yüksək kontrast
+	</string>
+	<string name="Cartoon">
+		Çizgi filmi
+	</string>
+	<string name="Darken">
+		Tünd
+	</string>
+	<string name="Edges">
+		Işıqlandırılmış sərhədlər
+	</string>
+	<string name="Focus">
+		Mərkəz fokus
+	</string>
+	<string name="Heatwave">
+		İsti havalar
+	</string>
+	<string name="Julesverne">
+		Jul Vern
+	</string>
+	<string name="Lightleak">
+		Işıq sızması
+	</string>
+	<string name="Linearize">
+		Linəarizasiya
+	</string>
+	<string name="Negative">
+		Nəqativ
+	</string>
+	<string name="Overcast">
+		Buludlu
+	</string>
+	<string name="Posterize">
+		Postere çevirmək
+	</string>
+	<string name="Rotatecolors180">
+		Rəng dövrü
+	</string>
+	<string name="Sharpen">
+		Kəskinlik
+	</string>
+	<string name="Thematrix">
+		Matrix
+	</string>
+	<string name="TooltipPerson">
+		İnsan
+	</string>
+	<string name="TooltipNoName">
+		(Ad yoxdur)
+	</string>
+	<string name="TooltipOwner">
+		Sahib:
+	</string>
+	<string name="TooltipPublic">
+		İctimai
+	</string>
+	<string name="TooltipIsGroup">
+		(Qrup)
+	</string>
+	<string name="TooltipForSaleL$">
+		Satış üçün: L$[AMOUNT]
+	</string>
+	<string name="TooltipFlagGroupBuild">
+		Qrupa görə tikinti
+	</string>
+	<string name="TooltipFlagNoBuild">
+		Tikinti qadağandır
+	</string>
+	<string name="TooltipFlagNoEdit">
+		Dəyişdirmək qadağandır
+	</string>
+	<string name="TooltipFlagNotSafe">
+		Тəhlükəsiz deyil
+	</string>
+	<string name="TooltipFlagNoFly">
+		Uçuşlar qadağandır
+	</string>
+	<string name="TooltipFlagGroupScripts">
+		Qrup skriptləri
+	</string>
+	<string name="TooltipFlagNoScripts">
+		Skriptlər qadağandır
+	</string>
+	<string name="TooltipLand">
+		Yer:
+	</string>
+	<string name="TooltipMustSingleDrop">
+		Yalnız bir şeyi buraya daşımaq mümkündür
+	</string>
+	<string name="TooltipTooManyWearables">
+		[AMOUNT] elementə sahib olan qovluğu geyinə bilməzsiniz. Bu limiti Əlavə &gt; Təkmilləşdirilmiş &gt; İzləmə parametrlərini göstərin &gt; WearFolderLimit dəyişərək dəyişə bilərsiniz.
+	</string>
+	<string name="TooltipPrice" value="L$[AMOUNT]: "/>
+	<string name="TooltipSLIcon">
+		Bu bir SecondLife.com və ya LindenLab.com rəsmi domen səhifəsinə keçiddir.
+	</string>
+	<string name="TooltipFlagScript">
+		Skript
+	</string>
+	<string name="TooltipFlagPhysics">
+		Fizika
+	</string>
+	<string name="TooltipFlagTouch">
+		Toxunmaq
+	</string>
+	<string name="TooltipFlagL$">
+		L$
+	</string>
+	<string name="TooltipFlagDropInventory">
+		Avadanlıq siyahısının köçürülməsi
+	</string>
+	<string name="TooltipFlagPhantom">
+		Fantom
+	</string>
+	<string name="TooltipFlagTemporary">
+		Müvəqqəti
+	</string>
+	<string name="TooltipPrimCount">
+		Primlər: [COUNT]
+	</string>
+	<string name="TooltipPrimEquivalent">
+		, Yerə təsir: [PEWEIGHT]
+	</string>
+	<string name="TooltipPrimEquivalentLoading">
+		, Yer təsiri yüklənir...
+	</string>
+	<string name="TooltipDistance">
+		Məsafə: [DISTANCE] m
+	</string>
+	<string name="TooltipPosition">
+		Yerləşmə: [POSITION]
+	</string>
+	<string name="TooltipOutboxDragToWorld">
+		Dükan mərkəzinin element siyahısı qovluğundan elementləri atmaq mümkün deyil
+	</string>
+	<string name="TooltipOutboxWorn">
+		Geyindiyiniz əşyaları dükan mərkəzinin əşya siyahısı qovluğuna yerləşdirmək mümkün deyil
+	</string>
+	<string name="TooltipOutboxFolderLevels">
+		Qovluq yerləşdirmə dərinliyi [AMOUNT] keçir. Əlavə dərinliyini azaldın; elementləri lazım olduqda qruplaşdırın.
+	</string>
+	<string name="TooltipOutboxTooManyFolders">
+		Alt qovluqların sayı [AMOUNT] sayından çox ola bilməz. Siyahıdakı qovluqların sayını azaldın; elementləri lazım olduqda qruplaşdırın.
+	</string>
+	<string name="TooltipOutboxTooManyObjects">
+		Elementlərin sayı [AMOUNT] miqdarından çox ola bilməz. [AMOUNT] ədəddən çox satılır. bir siyahıda bəziləri qruplaşdırılmalıdır.
+	</string>
+	<string name="TooltipOutboxTooManyStockItems">
+		Elementlərin sayı [AMOUNT] miqdarından çox ola bilməz.
+	</string>
+	<string name="TooltipOutboxCannotDropOnRoot">
+		Siz yalnız elementləri və ya qovluqları BÜTÜN və ya ƏLAQƏSİZ tabına çəkə bilərsiniz. Bu nişanlardan birini seçin və elementləri və ya qovluqları yenidən köçürün.
+	</string>
+	<string name="TooltipOutboxNoTransfer">
+		Bu obyektlərin bəziləri satıla vəya göndərilə bilməz
+	</string>
+	<string name="TooltipOutboxNotInInventory">
+		Alış-veriş mərkəzində yalnız inventarınızdan əşyalar yerləşdirə bilərsiniz
+	</string>
+	<string name="TooltipOutboxLinked">
+		Əlaqədar elementlər və ya qovluqlar dükan mərkəzində yerləşdirilə bilməz
+	</string>
+	<string name="TooltipOutboxCallingCard">
+		Dükan mərkəzində vizit kartları qoymaq olmaz
+	</string>
+	<string name="TooltipOutboxDragActive">
+		Dərc edilmiş siyahı köçürülə bilməz
+	</string>
+	<string name="TooltipOutboxCannotMoveRoot">
+		Mall məhsul siyahılarının kök qovluğu köçürülə bilməz
+	</string>
+	<string name="TooltipOutboxMixedStock">
+		Dükan qovluğundakı bütün əşyalar eyni növ və icazəyə məxsus olmalıdırlar
+	</string>
+	<string name="TooltipOutfitNotInInventory">
+		Siz yalnız şəxsi avadanlıq siyahınızdan əşyalar və ya geyimləri "Geyimlər"də yerləşdirə bilərsiniz.
+	</string>
+	<string name="TooltipCantCreateOutfit">
+		Bir və ya bir neçə element "Geyimlər" daxilində istifadə edilə bilməz
+	</string>
+	<string name="TooltipDragOntoOwnChild">
+		Qovluq onun alt qovluğuna köçürülə bilməz
+	</string>
+	<string name="TooltipDragOntoSelf">
+		Qovluq öz içinə köçürülə bilməz
+	</string>
+	<string name="TooltipHttpUrl">
+		Bu veb səhifəyə baxmaq üçün klikləyin
+	</string>
+	<string name="TooltipSLURL">
+		Bu yer haqqında məlumatı görmək üçün klikləyin
+	</string>
+	<string name="TooltipAgentUrl">
+		Bu sakinin profilinə baxmaq üçün klikləyin
+	</string>
+	<string name="TooltipAgentInspect">
+		Bu sakin haqqında ətraflı məlumat əldə edin
+	</string>
+	<string name="TooltipAgentMute">
+		Bu sakini eşitməmək üçün klikləyin
+	</string>
+	<string name="TooltipAgentUnmute">
+		Bu sakini eşitmək üçün klikləyin
+	</string>
+	<string name="TooltipAgentIM">
+		Bu sakinlə şəxsi söhbəti açmaq üçün klikləyin
+	</string>
+	<string name="TooltipAgentPay">
+		Sakinə pul göndərmək üçün klikləyin
+	</string>
+	<string name="TooltipAgentOfferTeleport">
+		Bu sakinə teleportasiya təklif etmək üçün klikləyin
+	</string>
+	<string name="TooltipAgentRequestFriend">
+		Bu sakinə dostluq müraciəti göndərmək üçün klikləyin
+	</string>
+	<string name="TooltipGroupUrl">
+		Cəmiyyət təsvirinə baxmaq üçün klikləyin
+	</string>
+	<string name="TooltipEventUrl">
+		Tədbirin təsvirinə baxmaq üçün klikləyin
+	</string>
+	<string name="TooltipClassifiedUrl">
+		Bu elana baxmaq üçün klikləyin
+	</string>
+	<string name="TooltipParcelUrl">
+		Saytın təsvirinə baxmaq üçün klikləyin
+	</string>
+	<string name="TooltipTeleportUrl">
+		Bu yerə teleport etmək üçün klikləyin
+	</string>
+	<string name="TooltipObjectIMUrl">
+		Bu obyektin təsvirini açmaq üçün klikləyin
+	</string>
+	<string name="TooltipMapUrl">
+		Xəritədə bu yeri görmək üçün klikləyin
+	</string>
+	<string name="TooltipSLAPP">
+		secondlife:// əmrini yerinə yetirmək üçün klikləyin
+	</string>
+	<string name="TooltipFSHelpDebugSLUrl">
+		Bu seçim üçün sazlayıcı pəncərəsini açmaq üçün basın.
+	</string>
+	<string name="TooltipFSUrlEntryWear">
+		Avadanlıq siyahısı qovluğunun məzmununu geyinmək üçün basın
+	</string>
+	<string name="CurrentURL" value=" CurrentURL: [CurrentURL]"/>
+	<string name="TooltipEmail">
+		Məktub yazmaq üçün klikləyin
+	</string>
+	<string name="SLurlLabelTeleport">
+		Teleport:
+	</string>
+	<string name="SLurlLabelShowOnMap">
+		Xəritədə göstər
+	</string>
+	<string name="SLappAgentMute">
+		Sönd. səsi
+	</string>
+	<string name="SLappAgentUnmute">
+		Yan. səsi
+	</string>
+	<string name="SLappAgentIM">
+		IM
+	</string>
+	<string name="SLappAgentPay">
+		Ödə
+	</string>
+	<string name="SLappAgentOfferTeleport">
+		Teleport təklif et:
+	</string>
+	<string name="SLappAgentRequestFriend">
+		Dostluq təklif et
+	</string>
+	<string name="SLappAgentRemoveFriend">
+		Dostu sil
+	</string>
+	<string name="BUTTON_CLOSE_DARWIN">
+		Bağla (&#8984;W)
+	</string>
+	<string name="BUTTON_CLOSE_WIN">
+		Bağla (Ctrl+W)
+	</string>
+	<string name="BUTTON_CLOSE_CHROME">
+		Bağla
+	</string>
+	<string name="BUTTON_RESTORE">
+		Genişləndir
+	</string>
+	<string name="BUTTON_MINIMIZE">
+		Minimallaşdır
+	</string>
+	<string name="BUTTON_TEAR_OFF">
+		Ayır
+	</string>
+	<string name="BUTTON_DOCK">
+		Calaşdır
+	</string>
+	<string name="BUTTON_HELP">
+		Kömək göstər
+	</string>
+	<string name="BUTTON_SNOOZE">
+		Yuxulamaq
+	</string>
+	<string name="TooltipNotecardNotAllowedTypeDrop">
+		Bu tip elementlər siyahıya daxil edilə bilməz
+bu bölgədə şərh kartı.
+	</string>
+	<string name="TooltipNotecardOwnerRestrictedDrop">
+		Yalnız qeyd-şərtsiz icazəsi olan maddələr
+'növbəti sahib' daxil edilə bilər
+şərh kartlarında.
+	</string>
+	<string name="Searching">
+		Axtarış...
+	</string>
+	<string name="NoneFound">
+		Heç nə tapılmadı.
+	</string>
+	<string name="RetrievingData">
+		Alınır...
+	</string>
+	<string name="ReleaseNotes">
+		Buraxılış qeydləri
+	</string>
+	<string name="LoadingData">
+		Yüklənir...
+	</string>
+	<string name="LockedFolder">
+		bloklanıb
+	</string>
+	<string name="ProtectedFolder">
+		qorunub
+	</string>
+	<string name="AvatarNameNobody">
+		(adsız)
+	</string>
+	<string name="AvatarNameWaiting">
+		(gözlənilir)
+	</string>
+	<string name="AvatarNameMultiple">
+		(bir neçə)
+	</string>
+	<string name="GroupNameNone">
+		(yox)
+	</string>
+	<string name="AssetErrorNone">
+		Xəta yoxdur
+	</string>
+	<string name="AssetErrorRequestFailed">
+		Aktiv sorğusu: alınmadı
+	</string>
+	<string name="AssetErrorNonexistentFile">
+		Aktiv sorğusu: fayl mövcud deyil
+	</string>
+	<string name="AssetErrorNotInDatabase">
+		Aktiv sorğusu: aktiv verilənlər bazasında tapılmadı
+	</string>
+	<string name="AssetErrorEOF">
+		Faylın sonu
+	</string>
+	<string name="AssetErrorCannotOpenFile">
+		Faylı açmaq mümkün deyil
+	</string>
+	<string name="AssetErrorFileNotFound">
+		Fayl tapılmadı
+	</string>
+	<string name="AssetErrorTCPTimeout">
+		Fayl ötürmə vaxtı bitdi
+	</string>
+	<string name="AssetErrorCircuitGone">
+		Kanalda fasilə
+	</string>
+	<string name="AssetErrorPriceMismatch">
+		Klient və server arasında qiymət razılaşması əldə olunmayıb
+	</string>
+	<string name="AssetErrorUnknownStatus">
+		Naməlum status
+	</string>
+	<string name="AssetUploadServerUnreacheble">
+		Xidmətlər mövcud deyil.
+	</string>
+	<string name="AssetUploadServerDifficulties">
+		Server gözlənilməz çətinliklərlə üzləşir.
+	</string>
+	<string name="AssetUploadServerUnavaliable">
+		Xidmətlər əlçatan deyil və ya ötürmə vaxtı bitdi.
+	</string>
+	<string name="AssetUploadRequestInvalid">
+Transfer sorğusu zamanı xəta baş verdi. Bu problemi həll 
+etmək haqqında kömək almaq üçün http://secondlife.com/support ünvanına keçin.
+	</string>
+	<string name="SettingValidationError">
+		[NAME] seçimlərini idxal etmək üçün doğrulamaq alınmadı
+	</string>
+	<string name="SettingImportFileError">
+		[FILE] faylını açmaq alınmadı
+	</string>
+	<string name="SettingParseFileError">
+		[FILE] faylını açmaq alınmadı
+	</string>
+	<string name="SettingTranslateError">
+		Köhnəlmiş külək effektini tətbiq etmək alınmadı \[NAME]
+	</string>
+	<string name="texture">
+		teksturu
+	</string>
+	<string name="sound">
+		səs
+	</string>
+	<string name="calling card">
+		vizit kartı
+	</string>
+	<string name="landmark">
+		əlfəcini
+	</string>
+	<string name="legacy script">
+		köhnə skript
+	</string>
+	<string name="clothing">
+		paltarı
+	</string>
+	<string name="object">
+		obyekt
+	</string>
+	<string name="note card">
+		qeydi
+	</string>
+	<string name="folder">
+		qovluqu
+	</string>
+	<string name="root">
+		kök kataloqu
+	</string>
+	<string name="lsl2 script">
+		LSL2 skripti
+	</string>
+	<string name="lsl bytecode">
+		LSL bayt kodu
+	</string>
+	<string name="tga texture">
+		TGA teksturası
+	</string>
+	<string name="body part">
+		bədən hissəsi
+	</string>
+	<string name="snapshot">
+		şəkil
+	</string>
+	<string name="lost and found">
+		tapılmış əşyalar
+	</string>
+	<string name="targa image">
+		TGA şəkli
+	</string>
+	<string name="trash">
+		səbətin məzmunu
+	</string>
+	<string name="jpeg image">
+		JPEG şəkli
+	</string>
+	<string name="animation">
+		animasiyanı
+	</string>
+	<string name="gesture">
+		jest
+	</string>
+	<string name="simstate">
+		simulyasiya vəziyyəti
+	</string>
+	<string name="favorite">
+		sevimlilər
+	</string>
+	<string name="symbolic link">
+		keçidi
+	</string>
+	<string name="settings blob">
+		seçimlər
+	</string>
+	<string name="symbolic folder link">
+		qovluğa keçidi
+	</string>
+	<string name="mesh">
+		tor
+	</string>
+	<string name="AvatarEditingAppearance">
+		(görünüş dəyişdirilir)
+	</string>
+	<string name="AvatarAway">
+		Yerində yoxdur
+	</string>
+	<string name="AvatarDoNotDisturb">
+		Narahat etməyin
+	</string>
+	<string name="AvatarMuted">
+		Qara siyahıda
+	</string>
+	<string name="AvatarAutoResponse">
+		Avto-cavab
+	</string>
+	<string name="AvatarTyping">
+		Yazır
+	</string>
+	<string name="anim_express_afraid">
+		Qorxu
+	</string>
+	<string name="anim_express_anger">
+		Acığ
+	</string>
+	<string name="anim_away">
+		Yerində yoxdur
+	</string>
+	<string name="anim_backflip">
+		Geriyə salto
+	</string>
+	<string name="anim_express_laugh">
+		Gülüş
+	</string>
+	<string name="anim_express_toothsmile">
+		Geniş təbəssüm
+	</string>
+	<string name="anim_blowkiss">
+		Hava öpüşü
+	</string>
+	<string name="anim_express_bored">
+		Cansıxıcılıq
+	</string>
+	<string name="anim_bow">
+		Baş-əymə
+	</string>
+	<string name="anim_clap">
+		Əl çalmaq
+	</string>
+	<string name="anim_courtbow">
+		Nəzakətli baş-əymə
+	</string>
+	<string name="anim_express_cry">
+		Ağlamaq
+	</string>
+	<string name="anim_dance1">
+		Rəqs 1
+	</string>
+	<string name="anim_dance2">
+		Rəqs 2
+	</string>
+	<string name="anim_dance3">
+		Rəqs 3
+	</string>
+	<string name="anim_dance4">
+		Rəqs 4
+	</string>
+	<string name="anim_dance5">
+		Rəqs 5
+	</string>
+	<string name="anim_dance6">
+		Rəqs 6
+	</string>
+	<string name="anim_dance7">
+		Rəqs 7
+	</string>
+	<string name="anim_dance8">
+		Rəqs 8
+	</string>
+	<string name="anim_express_disdain">
+		Nifrət
+	</string>
+	<string name="anim_drink">
+		İçki
+	</string>
+	<string name="anim_express_embarrased">
+		Xəcalət
+	</string>
+	<string name="anim_angry_fingerwag">
+		Barmağ yelləmək
+	</string>
+	<string name="anim_fist_pump">
+		Yumruq qaldırmaq
+	</string>
+	<string name="anim_yoga_float">
+		Uçan Budda
+	</string>
+	<string name="anim_express_frown">
+		Qaşqabaq
+	</string>
+	<string name="anim_impatient">
+		Səbirsizlik
+	</string>
+	<string name="anim_jumpforjoy">
+		Sevinc atlaması
+	</string>
+	<string name="anim_kissmybutt">
+		Göt öpüşü
+	</string>
+	<string name="anim_express_kiss">
+		Öpüş
+	</string>
+	<string name="anim_laugh_short">
+		Gülmək
+	</string>
+	<string name="anim_musclebeach">
+		Əzələlərin nümayişi
+	</string>
+	<string name="anim_no_unhappy">
+		Kədərli imtina
+	</string>
+	<string name="anim_no_head">
+		İmtina
+	</string>
+	<string name="anim_nyanya">
+		Nya nya nya
+	</string>
+	<string name="anim_punch_onetwo">
+		Əllə iki
+	</string>
+	<string name="anim_express_open_mouth">
+		Ağız açılması
+	</string>
+	<string name="anim_peace">
+		Dostluq
+	</string>
+	<string name="anim_point_you">
+		Kiməsə işarə etmək
+	</string>
+	<string name="anim_point_me">
+		Özünüzə işarə eləmək
+	</string>
+	<string name="anim_punch_l">
+		Sol əl zərbəsi
+	</string>
+	<string name="anim_punch_r">
+		Sağ əl zərbəsi
+	</string>
+	<string name="anim_rps_countdown">
+		DQK-də hesab
+	</string>
+	<string name="anim_rps_paper">
+		DQK – kağız
+	</string>
+	<string name="anim_rps_rock">
+		DQK - daş
+	</string>
+	<string name="anim_rps_scissors">
+		DQK - qayçı
+	</string>
+	<string name="anim_express_repulsed">
+		İmtina
+	</string>
+	<string name="anim_kick_roundhouse_r">
+		«Təpik»
+	</string>
+	<string name="anim_express_sad">
+		Kədər
+	</string>
+	<string name="anim_salute">
+		Salamlaşma
+	</string>
+	<string name="anim_shout">
+		Qışqırıq
+	</string>
+	<string name="anim_express_shrug">
+		Çiyinləri çəkmək
+	</string>
+	<string name="anim_express_smile">
+		Təbəssüm
+	</string>
+	<string name="anim_smoke_idle">
+		Nəfəs almaqsız siqaret çəkmək
+	</string>
+	<string name="anim_smoke_inhale">
+		Nəfəs almaq ilə siqaret çəkmək
+	</string>
+	<string name="anim_smoke_throw_down">
+		Siqareti atmaq
+	</string>
+	<string name="anim_express_surprise">
+		Heyrət
+	</string>
+	<string name="anim_sword_strike_r">
+		Qılınc zərbəsi
+	</string>
+	<string name="anim_angry_tantrum">
+		Acığ alışması
+	</string>
+	<string name="anim_express_tongue_out">
+		Dil göstərmək
+	</string>
+	<string name="anim_hello">
+		Əl salamı
+	</string>
+	<string name="anim_whisper">
+		Pıçıltı
+	</string>
+	<string name="anim_whistle">
+		Fışıltı
+	</string>
+	<string name="anim_express_wink">
+		Qaş-göz etmək
+	</string>
+	<string name="anim_wink_hollywood">
+		Hollivudca qaş-göz etmək
+	</string>
+	<string name="anim_express_worry">
+		Narahatlıq
+	</string>
+	<string name="anim_yes_happy">
+		Sevincli razılıq
+	</string>
+	<string name="anim_yes_head">
+		Razılaşma
+	</string>
+	<string name="multiple_textures">
+		Bir neçə
+	</string>
+	<string name="use_texture">
+		Teksturdan istifadə edin
+	</string>
+	<string name="manip_hint1">
+		Siçanınızı xətkeşin ütstünə gətirin
+	</string>
+	<string name="manip_hint2">
+		tora bağlamaq üçün
+	</string>
+	<string name="texture_loading">
+		Yüklənir...
+	</string>
+	<string name="worldmap_offline">
+		Çıxıb
+	</string>
+	<string name="worldmap_item_tooltip_format">
+		[AREA] m² L$[PRICE] ([SQMPRICE] L$/m²)
+	</string>
+	<string name="worldmap_results_none_found">
+		Heç nə tapılmadı.
+	</string>
+	<string name="worldmap_agent_position">
+		Siz burdasınız
+	</string>
+	<string name="minimap_distance">
+		(Məsafə: [DISTANCE] m)
+	</string>
+	<string name="minimap_no_focus">
+		Kamera istifadəçiyə diqqətləşdirilə bilmir, çünki onlar göstərmə məsafənizdən kənardadırlar.
+	</string>
+	<string name="Ok">
+		ОК
+	</string>
+	<string name="Premature end of file">
+		Faylın vaxtından əvvəl sonu
+	</string>
+	<string name="ST_NO_JOINT">
+		ROOT və ya JOINT obyektini tapmaq mümkün deyil.
+	</string>
+	<string name="no_name_object">
+		(adsız)
+	</string>
+	<string name="NearbyChatTitle">
+		Ümumi söhbət
+	</string>
+	<string name="NearbyChatLabel">
+		(Ümumi söhbət)
+	</string>
+	<string name="whisper">
+		pıçıldıyır:
+	</string>
+	<string name="shout">
+		qışqırır:
+	</string>
+	<string name="ringing">
+		Səsli söhbətə bağlantı gedir...
+	</string>
+	<string name="connected">
+		Bağlantı quruldu
+	</string>
+	<string name="unavailable">
+		Bu məkanda səsli rabitə mövcud deyil
+	</string>
+	<string name="hang_up">
+		Ümumi səsli söhbətdən ayırılma
+	</string>
+	<string name="reconnect_nearby">
+		Yerli səsli söhbətə əlaqə qurulacaq
+	</string>
+	<string name="ScriptQuestionCautionChatGranted">
+		«[OWNERNAME]» istifadəçisinə məxsus olan və «[REGIONNAME]» regionunda [REGIONPOS] ərazisində yerləşən «[OBJECTNAME]» obyektinə icazə verilib: [PERMISSIONS].
+	</string>
+	<string name="ScriptQuestionCautionChatDenied">
+		«[OWNERNAME]» istifadəçisinə məxsus olan və «[REGIONNAME]» regionunda [REGIONPOS] ərazisində yerləşən «[OBJECTNAME]» obyektinə icazə rədd edilib: [PERMISSIONS].
+	</string>
+	<string name="AdditionalPermissionsRequestHeader">
+		Hesabınıza girişə icazə verməklə siz həmçinin obyektə icazə verəcəksiniz:
+	</string>
+	<string name="ScriptTakeMoney">
+		Sizdən Linden-pul götürürlər
+	</string>
+	<string name="ActOnControlInputs">
+		İdarəetmələr aktivləşdirildikdə hərəkətlər
+	</string>
+	<string name="RemapControlInputs">
+		Yeni idarəetmə təyinləri
+	</string>
+	<string name="AnimateYourAvatar">
+		Avatarınızı animasiyalaşdırmaq
+	</string>
+	<string name="AttachToYourAvatar">
+		Avatara birləşdirmək
+	</string>
+	<string name="ReleaseOwnership">
+		Mülkiyyətdən imtina edin, ümumi etmək
+	</string>
+	<string name="LinkAndDelink">
+		Digər obyektləri əlaqələndirin və ya əlaqəni kəsin
+	</string>
+	<string name="AddAndRemoveJoints">
+		Digər obyektlərə keçidlərin əlavə edilməsi və silinməsi
+	</string>
+	<string name="ChangePermissions">
+		Ölçü dəyişimi
+	</string>
+	<string name="TrackYourCamera">
+		Kameranı izləyin
+	</string>
+	<string name="ControlYourCamera">
+		Kameranı idarə etmək
+	</string>
+	<string name="TeleportYourAgent">
+		Sizi teleport etmək
+	</string>
+	<string name="ManageEstateSilently">
+		Mülklərinizi sakitcə idarə edin
+	</string>
+	<string name="ChangeYourDefaultAnimations">
+		Defolt animasiyalarınızı dəyişdirin
+	</string>
+	<string name="ForceSitAvatar">
+		Avatarı oturmağa məcbur edin
+	</string>
+	<string name="ChangeEnvSettings">
+		Ətraf mühit seçimlərinizi dəyişdirin
+	</string>
+	<string name="SnapshotSavedToDisk">
+		Şəkil saxlanılıb: [FILENAME]
+	</string>
+	<string name="JoinAnExperience"/>
+	<string name="SilentlyManageEstateAccess">
+		Torpaq əmlaklarına giriş siyahılarını idarə edərkən bildirişləri söndürün
+	</string>
+	<string name="OverrideYourAnimations">
+		Defolt animasiyalarınızı əvəz edin
+	</string>
+	<string name="ScriptReturnObjects">
+		Sizin adınıza obyektləri qaytarın
+	</string>
+	<string name="NotConnected">
+		Qoşulu deyil
+	</string>
+	<string name="AgentNameSubst">
+		(Siz)
+	</string>
+	<string name="UnknownScriptPermission">
+		(naməlum)!
+	</string>
+	<string name="SIM_ACCESS_PG">
+		Ümumi
+	</string>
+	<string name="SIM_ACCESS_MATURE">
+		Ortam
+	</string>
+	<string name="SIM_ACCESS_ADULT">
+		Yetkin
+	</string>
+	<string name="SIM_ACCESS_DOWN">
+		Oflayn
+	</string>
+	<string name="SIM_ACCESS_MIN">
+		Naməlum
+	</string>
+	<string name="land_type_unknown">
+		(naməlum)
+	</string>
+	<string name="Estate / Full Region">
+		Torpaq əmlakı/bütün bölgə
+	</string>
+	<string name="Estate / Homestead">
+		Torpaq əmlakı/əmlak
+	</string>
+	<string name="Mainland / Homestead">
+		Qitə/əmlak
+	</string>
+	<string name="Mainland / Full Region">
+		Qitə/bütün bölgə
+	</string>
+	<string name="Linden Homes / Full Region">
+		Linden Evlər / Bütün bölgə
+	</string>
+	<string name="all_files">
+		Bütün fayllar
+	</string>
+	<string name="sound_files">
+		Səslər
+	</string>
+	<string name="animation_files">
+		Animasiya
+	</string>
+	<string name="image_files">
+		Şəkillər
+	</string>
+	<string name="save_file_verb">
+		Yadda saxlamaq
+	</string>
+	<string name="load_file_verb">
+		Yükləmək
+	</string>
+	<string name="targa_image_files">
+		TGA şəkli
+	</string>
+	<string name="bitmap_image_files">
+		BMP şəkli
+	</string>
+	<string name="png_image_files">
+		PNG şəkli
+	</string>
+	<string name="save_texture_image_files">
+		Targa və ya PNG şəkilləri
+	</string>
+	<string name="avi_movie_file">
+		AVI video
+	</string>
+	<string name="xaf_animation_file">
+		XAF animasiyası
+	</string>
+	<string name="xml_file">
+		XML-fayl
+	</string>
+	<string name="raw_file">
+		RAW-fayl
+	</string>
+	<string name="compressed_image_files">
+		Sıxılmamış şəkillər
+	</string>
+	<string name="load_files">
+		Faylları yükləyin
+	</string>
+	<string name="choose_the_directory">
+		Kataloq seçin
+	</string>
+	<string name="script_files">
+		Skriptlər
+	</string>
+	<string name="dictionary_files">
+		Sözlüklər
+	</string>
+	<string name="backup_files">
+		Obyektlərin nüsxəsi
+	</string>
+	<string name="collada_files">
+		COLLADA modelləri
+	</string>
+	<string name="csv_files">
+		Dəyərlər vergüllə ayrılır
+	</string>
+	<string name="recompile_script_verb">
+		Yenidən kompilasiya
+	</string>
+	<string name="jpeg_image_files">
+		JPEG formatında şəkillər
+	</string>
+	<string name="executable_files">
+		İcra edilə bilən proqram faylları
+	</string>
+	<string name="LSLTipSleepTime">
+		Skripti [SLEEP_TIME] saniyə dayandırın.
+	</string>
+	<string name="shape">
+		Forma
+	</string>
+	<string name="skin">
+		Dəri
+	</string>
+	<string name="hair">
+		Saçlar
+	</string>
+	<string name="eyes">
+		Gözlər
+	</string>
+	<string name="shirt">
+		Köynək
+	</string>
+	<string name="pants">
+		Şalvar
+	</string>
+	<string name="shoes">
+		Ayaqqabılar
+	</string>
+	<string name="socks">
+		Corablar
+	</string>
+	<string name="jacket">
+		Pencək
+	</string>
+	<string name="gloves">
+		Əlcəklər
+	</string>
+	<string name="undershirt">
+		Mayka
+	</string>
+	<string name="underpants">
+		Tuman
+	</string>
+	<string name="skirt">
+		Yubka
+	</string>
+	<string name="alpha">
+		Alfa-maskası
+	</string>
+	<string name="tattoo">
+		Döymə
+	</string>
+	<string name="universal">
+		Universal
+	</string>
+	<string name="physics">
+		Fiziki varilər
+	</string>
+	<string name="invalid">
+		xəta
+	</string>
+	<string name="none">
+		yox
+	</string>
+	<string name="sky">
+		Səma
+	</string>
+	<string name="water">
+		Su
+	</string>
+	<string name="day">
+		Gün dövrü
+	</string>
+	<string name="shirt_not_worn">
+		Köynək geyinilməyib
+	</string>
+	<string name="pants_not_worn">
+		Şalvar geyinilməyib
+	</string>
+	<string name="shoes_not_worn">
+		Ayaqqabı geyinilməyib
+	</string>
+	<string name="socks_not_worn">
+		Corablar geyinilməyib
+	</string>
+	<string name="jacket_not_worn">
+		Pencək geyinilməyib
+	</string>
+	<string name="gloves_not_worn">
+		Əlcəklər geyinilməyib
+	</string>
+	<string name="undershirt_not_worn">
+		Mayka geyinilməyib
+	</string>
+	<string name="underpants_not_worn">
+		Tuman geyinilməyib
+	</string>
+	<string name="skirt_not_worn">
+		Yubka geyinilməyib
+	</string>
+	<string name="alpha_not_worn">
+		Alfa-maskası geyinilməyib
+	</string>
+	<string name="tattoo_not_worn">
+		Döymə geyinilməyib
+	</string>
+	<string name="universal_not_worn">
+		Universal geyinilməyib
+	</string>
+	<string name="physics_not_worn">
+		Fizika nəzərə alınmır
+	</string>
+	<string name="invalid_not_worn">
+		xəta
+	</string>
+	<string name="create_new_shape">
+		Forma yarat
+	</string>
+	<string name="create_new_skin">
+		Dəri yarat
+	</string>
+	<string name="create_new_hair">
+		Saç yarat
+	</string>
+	<string name="create_new_eyes">
+		Göz yarat
+	</string>
+	<string name="create_new_shirt">
+		Köynək yarat
+	</string>
+	<string name="create_new_pants">
+		Şalvar yarat
+	</string>
+	<string name="create_new_shoes">
+		Ayaqqabı yarat
+	</string>
+	<string name="create_new_socks">
+		Corab yarat
+	</string>
+	<string name="create_new_jacket">
+		Pencək yarat
+	</string>
+	<string name="create_new_gloves">
+		Əlcək yarat
+	</string>
+	<string name="create_new_undershirt">
+		Mayka yarat
+	</string>
+	<string name="create_new_underpants">
+		Tuman yarat
+	</string>
+	<string name="create_new_skirt">
+		Yubka yarat
+	</string>
+	<string name="create_new_alpha">
+		Alfa-maskası yarat
+	</string>
+	<string name="create_new_tattoo">
+		Döymə yarat
+	</string>
+	<string name="create_new_universal">
+		Yeni Universal yarat
+	</string>
+	<string name="create_new_physics">
+		Fizika yarat
+	</string>
+	<string name="create_new_invalid">
+		xəta
+	</string>
+	<string name="NewWearable">
+		[WEARABLE_ITEM] yarat
+	</string>
+	<string name="next">
+		İrəli
+	</string>
+	<string name="ok">
+		OK
+	</string>
+	<string name="GroupNotifyGroupNotice">
+		Cəmiyyət bildirişi
+	</string>
+	<string name="GroupNotifyGroupNotices">
+		Cəmiyyət bildirişləri
+	</string>
+	<string name="GroupNotifySentBy">
+		Göndərən
+	</string>
+	<string name="GroupNotifyAttached">
+		Əlavələr:
+	</string>
+	<string name="GroupNotifyViewPastNotices">
+		Burada siz ən son bildirişlərə baxa və ya onları almaqdan imtina edə bilərsiniz.
+	</string>
+	<string name="GroupNotifyOpenAttachment">
+		Əlavəni açın
+	</string>
+	<string name="GroupNotifySaveAttachment">
+		Əlavəni saxlayın
+	</string>
+	<string name="GroupNotifySender">
+		Göndərib: [SENDER], [GROUPNAME]
+	</string>
+	<string name="TeleportOffer">
+		Teleportasiya təklif olunub
+	</string>
+	<string name="StartUpNotifications">
+		Siz uzaqda olduğunuz müddətdə yeni bildirişlər gəldi.
+	</string>
+	<string name="OverflowInfoChannelString">
+		Digər bildirişlərin sayı: %d
+	</string>
+	<string name="BodyPartsRightArm">
+		Sağ əl
+	</string>
+	<string name="BodyPartsHead">
+		Baş
+	</string>
+	<string name="BodyPartsLeftArm">
+		Sol əl
+	</string>
+	<string name="BodyPartsLeftLeg">
+		Sol ayaq
+	</string>
+	<string name="BodyPartsTorso">
+		Bədən
+	</string>
+	<string name="BodyPartsRightLeg">
+		Sağ ayaq
+	</string>
+	<string name="BodyPartsEnhancedSkeleton">
+		Təkmilləşdirilmiş Skelet
+	</string>
+	<string name="GraphicsQualityLow">
+		aşağı
+	</string>
+	<string name="GraphicsQualityMid">
+		ortam
+	</string>
+	<string name="GraphicsQualityHigh">
+		yüksək
+	</string>
+	<string name="LeaveMouselook">
+		Normal görünüşə qayıtmaq üçün ESC düyməsini basın
+	</string>
+	<string name="InventoryNoMatchingItems">
+		Sizə lazım olanı tapmadınız? [secondlife:///app/search/all/[SEARCH_TERM] Axtarışdan] istifadə edin.
+	</string>
+	<string name="InventoryNoMatchingRecentItems">
+		Axtardığınızı tapmadınız? [secondlife:///app/inventory/filters Filtrləri] cəhd edin.
+	</string>
+	<string name="PlacesNoMatchingItems">
+		Sizə lazım olanı tapmadınız? [secondlife:///app/search/places/[SEARCH_TERM] Axtarışdan] istifadə edin.
+	</string>
+	<string name="FavoritesNoMatchingItems">
+		Sevimlilər siyahısına əlavə etmək üçün əlfəcini bura dartın.
+	</string>
+	<string name="MarketplaceNoListing">
+		Hələ ticarət mərkəzində məhsullarınız yoxdur.
+	</string>
+	<string name="MarketplaceNoMatchingItems">
+		Elementlər tapılmadı. Axtarış sətirinin düzgün olduğunu yoxlayın və yenidən cəhd edin.
+	</string>
+	<string name="InventoryNoTexture">
+		Avadanlıq siyahınızda bu teksturanın köçürməsi yoxdur
+	</string>
+	<string name="InventoryInboxNoItems">
+		Alış-veriş mərkəzindən alışlarınız burada göstəriləcək. Onları istifadə etmək üçün avadanlıq siyahınıza daşıya bilərsiniz.
+	</string>
+	<string name="MarketplaceURL">
+		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
+	</string>
+	<string name="MarketplaceURL_CreateStore">
+		http://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3
+	</string>
+	<string name="MarketplaceURL_Dashboard">
+		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/dashboard
+	</string>
+	<string name="MarketplaceURL_Imports">
+		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/imports
+	</string>
+	<string name="MarketplaceURL_LearnMore">
+		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
+	</string>
+	<string name="InventoryPlayAnimationTooltip">
+		Oynatma seçimləri pəncərəsini açın.
+	</string>
+	<string name="InventoryPlayGestureTooltip">
+		Oyun dünyasında seçilmiş jesti icra edin.
+	</string>
+	<string name="InventoryPlaySoundTooltip">
+		Oynatma seçimləri pəncərəsini açın.
+	</string>
+	<string name="InventoryOutboxNotMerchantTitle">
+		Hər kəs Ticarət mərkəzində məhsullarını sata bilər.
+	</string>
+	<string name="InventoryOutboxNotMerchantTooltip">
+	</string>
+	<string name="InventoryOutboxNotMerchant">
+		Satıcı olmaq istəyirsinizsə, [[MARKETPLACE_CREATE_STORE_URL] dükan yaradın].
+	</string>
+	<string name="InventoryOutboxNoItemsTitle">
+		«Göndərilən» qovluqunuz boşdur.
+	</string>
+	<string name="InventoryOutboxNoItemsTooltip">
+	</string>
+	<string name="InventoryOutboxNoItems">
+		Qovluqları bu sahəyə daşıyın və [[MARKETPLACE_DASHBOARD_URL] Ticarət mərkəzində] satış üçün siyahıya atmaq üçün Ticarət mərkəzində Göndər üzərinə basın.
+	</string>
+	<string name="InventoryOutboxInitializingTitle">
+		Ticarət mərkəzinin inisiallaşdrılıması.
+	</string>
+	<string name="InventoryOutboxInitializingTooltip">
+	</string>
+	<string name="InventoryOutboxInitializing">
+		[[MARKETPLACE_CREATE_STORE_URL] Dükan hesabınıza] müraciət eləyirik.
+	</string>
+	<string name="InventoryOutboxErrorTitle">
+		Ticarət mərkəzinin səhvləri.
+	</string>
+	<string name="InventoryOutboxErrorTooltip">
+	</string>
+	<string name="InventoryOutboxError">
+		[[MARKETPLACE_CREATE_STORE_URL] Dükan] xətaları qaytarır.
+	</string>
+	<string name="InventoryMarketplaceError">
+		Ticarət mərkəzinin məhsul siyahılarını açarkən xəta.
+Bu mesaj yenidən baş verərsə, kömək üçün http://support.secondlife.com ünvanında Second Life Dəstək ilə əlaqə saxlayın
+	</string>
+	<string name="InventoryMarketplaceListingsNoItemsTitle">
+		Ticarət mərkəzi element siyahısı qovluğu boşdur.
+	</string>
+	<string name="InventoryMarketplaceListingsNoItems">
+		Qovluqları bu sahəyə sürükləyin və [[MARKETPLACE_DASHBOARD_URL] Ticarət mərkəzində] satış üçün siyahıya atmaq üçün Ticarət mərkəzində Göndər üzərinə klikləyin.
+	</string>
+	<string name="InventoryItemsCount">
+		([ITEMS]/[CATEGORIES] ədəd əşya)
+	</string>
+	<string name="Marketplace Validation Warning Stock">
+		Versiya qovluğunda fond qovluğu olmalıdır
+	</string>
+	<string name="Marketplace Validation Error Mixed Stock">
+		: Xəta: Fond qovluğundakı bütün elementlər köçürülə bilməz və eyni tipdə olmalıdır
+	</string>
+	<string name="Marketplace Validation Error Subfolder In Stock">
+		: Xəta: fond qovluğunda alt qovluqlar ola bilməz
+	</string>
+	<string name="Marketplace Validation Warning Empty">
+		: Xəbərdarlıq: Qovluqda element yoxdur
+	</string>
+	<string name="Marketplace Validation Warning Create Stock">
+		: Xəbərdarlıq: fond qovluğu yaradılır
+	</string>
+	<string name="Marketplace Validation Warning Create Version">
+		: Xəbərdarlıq: versiya qovluğu yaradılır
+	</string>
+	<string name="Marketplace Validation Warning Move">
+		: Xəbərdarlıq: elementlərin yeri dəyişilir
+	</string>
+	<string name="Marketplace Validation Warning Delete">
+		: Xəbərdarlıq: Qovluq məzmunu fond qovluğuna köçürülür, boş qovluq silinir
+	</string>
+	<string name="Marketplace Validation Error Stock Item">
+		: Xəta: Fond qovluğunda kopyalana bilməyən elementlər olmalıdır
+	</string>
+	<string name="Marketplace Validation Warning Unwrapped Item">
+		: Xəbərdarlıq: versiya qovluğunda elementlər olmalıdır
+	</string>
+	<string name="Marketplace Validation Error">
+		: Xəta:
+	</string>
+	<string name="Marketplace Validation Warning">
+		: Xəbərdarlıq:
+	</string>
+	<string name="Marketplace Validation Error Empty Version">
+		: Xəbərdarlıq: versiya qovluğunda ən azı 1 element olmalıdır
+	</string>
+	<string name="Marketplace Validation Error Empty Stock">
+		: Xəbərdarlıq: Fond qovluğunda ən azı 1 element olmalıdır
+	</string>
+	<string name="Marketplace Validation No Error">
+		Heç bir səhv və ya xəbərdarlıq yoxdur
+	</string>
+	<string name="Marketplace Error None">
+		Xəta yoxdur
+	</string>
+	<string name="Marketplace Error Prefix">
+		Xəta:
+	</string>
+	<string name="Marketplace Error Not Merchant">
+		Əşyaları ticarət mərkəzinə göndərməzdən əvvəl siz tacir kimi qeydiyyatdan keçməlisiniz (pulsuz).
+	</string>
+	<string name="Marketplace Error Not Accepted">
+		Elementi bu qovluğa köçürmək mümkün deyil.
+	</string>
+	<string name="Marketplace Error Unsellable Item">
+		Bu əşya ticarət mərkəzində satıla bilməz.
+	</string>
+	<string name="MarketplaceNoID">
+		ticarət mərkəzinin ID-si yoxdur
+	</string>
+	<string name="MarketplaceLive">
+		nəşr edilmişdir
+	</string>
+	<string name="MarketplaceActive">
+		fəal şəkildə
+	</string>
+	<string name="MarketplaceMax">
+		maks.
+	</string>
+	<string name="MarketplaceStock">
+		səhm
+	</string>
+	<string name="MarketplaceNoStock">
+		ehtiyyatda yoxdur
+	</string>
+	<string name="MarketplaceUpdating">
+		yeniləmə...
+	</string>
+	<string name="UploadFeeInfo">
+		Tarif abunəliyiniz növündən asılıdır. Uzatılmış paketlərin sahibləri üçün tariflər daha aşağıdır. [https://secondlife.com/my/account/membership.php? Ətraflı]
+	</string>
+	<string name="Open landmarks">
+		Saxlanmış yerləri açın	
+	</string>
+	<string name="Unconstrained">
+		Bağlanmayan
+	</string>
+	<string name="no_transfer" value="(paylaşılmır)"/>
+	<string name="no_modify" value="(dəyişdirilmir)"/>
+	<string name="no_copy" value="(köçürülmür)"/>
+	<string name="worn" value="(geyinilib)"/>
+	<string name="link" value="(keçid)"/>
+	<string name="broken_link" value="(qırılmış_keçid)"/>
+	<string name="LoadingContents">
+		Məzmun yüklənir...
+	</string>
+	<string name="NoContents">
+		Məzmun yoxdur
+	</string>
+	<string name="WornOnAttachmentPoint" value="(harada daşınır: [ATTACHMENT_POINT])"/>
+	<string name="AttachmentErrorMessage" value="([ATTACHMENT_ERROR])"/>
+	<string name="ActiveGesture" value="[GESLABEL] (aktiv)"/>
+	<string name="PermYes">
+		Bəli
+	</string>
+	<string name="PermNo">
+		Xeyr
+	</string>
+	<string name="Chat Message" value="Söhbət:"/>
+	<string name="Sound" value="Səs:"/>
+	<string name="Wait" value="--- Gözləyin:"/>
+	<string name="AnimFlagStop" value="Animasiyanı dayandır:"/>
+	<string name="AnimFlagStart" value="Animasiyanı başlat:"/>
+	<string name="Wave" value="Əl salamı"/>
+	<string name="GestureActionNone" value="Heç biri"/>
+	<string name="HelloAvatar" value="Salam, avatar!"/>
+	<string name="ViewAllGestures" value="Bütün &gt;&gt; bax"/>
+	<string name="GetMoreGestures" value="Qabaqcıl &gt;&gt;"/>
+	<string name="Animations" value="Animasiya,"/>
+	<string name="Calling Cards" value="Vizit kartları,"/>
+	<string name="Clothing" value="Paltar,"/>
+	<string name="Gestures" value="Jestlər,"/>
+	<string name="Landmarks" value="Əlfəcinlər,"/>
+	<string name="Notecards" value="Qeydlər,"/>
+	<string name="Objects" value="Obyektlər,"/>
+	<string name="Scripts" value="Skriptlər,"/>
+	<string name="Sounds" value="Səslər,"/>
+	<string name="Textures" value="Teksturlar,"/>
+	<string name="Settings" value=" Seçimlər,"/>
+	<string name="Snapshots" value=" Şəkillər,"/>
+	<string name="No Filters" value="Heç biri"/>
+	<string name="Since Logoff" value="- Çıxışdan bəri"/>
+	<string name="Modifiable" value="Dəyişdiriləbilən"/>
+	<string name="Copyable" value="Köçürüləbilən"/>
+	<string name="Transferable" value="Paylaşılabilən"/>
+	<string name="PermissionsFilter" value=" - Yalnız [PERMISSIONS]"/>
+	<string name="InvFolder My Inventory">
+		Avadanlıq siyahım
+	</string>
+	<string name="InvFolder Library">
+		Kitabxana
+	</string>
+	<string name="InvFolder Textures">
+		Teksturlar
+	</string>
+	<string name="InvFolder Sounds">
+		Səslər
+	</string>
+	<string name="InvFolder Calling Cards">
+		Vizit kartları
+	</string>
+	<string name="InvFolder Landmarks">
+		Əlfəcinlər
+	</string>
+	<string name="InvFolder Scripts">
+		Skriptlər
+	</string>
+	<string name="InvFolder Clothing">
+		Paltar
+	</string>
+	<string name="InvFolder Objects">
+		Obyektlər
+	</string>
+	<string name="InvFolder Notecards">
+		Qeydlər
+	</string>
+	<string name="InvFolder New Folder">
+		Yeni qovluq
+	</string>
+	<string name="InvFolder Inventory">
+		Avadanlıq siyahısı
+	</string>
+	<string name="InvFolder Uncompressed Images">
+		Sıxılmamış şəkillər
+	</string>
+	<string name="InvFolder Body Parts">
+		Bədən hissələri
+	</string>
+	<string name="InvFolder Trash">
+		Səbət
+	</string>
+	<string name="InvFolder Photo Album">
+		Şəkil Albomu
+	</string>
+	<string name="InvFolder Lost And Found">
+		İtmiş və tapılmış
+	</string>
+	<string name="InvFolder Uncompressed Sounds">
+		Sıxılmamış səslər
+	</string>
+	<string name="InvFolder Animations">
+		Animasiya
+	</string>
+	<string name="InvFolder Gestures">
+		Jestlər
+	</string>
+	<string name="InvFolder Favorites">
+		Sevimlilərim
+	</string>
+	<string name="InvFolder favorite">
+		Sevimlilərim
+	</string>
+	<string name="InvFolder favorites">
+		Sevimlilər
+	</string>
+	<string name="InvFolder Current Outfit">
+		Cari geyim
+	</string>
+	<string name="InvFolder Initial Outfits">
+		Başlanğıc geyimləri
+	</string>
+	<string name="InvFolder My Outfits">
+		Mənim geyimlərim
+	</string>
+	<string name="InvFolder Accessories">
+		Aksessuarlar
+	</string>
+	<string name="InvFolder Meshes">
+		Meşlər
+	</string>
+	<string name="InvFolder Received Items">
+		Alınan əşyalar
+	</string>
+	<string name="InvFolder Merchant Outbox">
+		Al-ver gedən
+	</string>
+	<string name="InvFolder Settings">
+		Seçimlər
+	</string>
+	<string name="InvFolder Friends">
+		Dostlar
+	</string>
+	<string name="InvFolder All">
+		Hamısı
+	</string>
+	<string name="InvFolder #Firestorm">
+		#Firestorm
+	</string>
+	<string name="InvFolder #Phoenix">
+		#Phoenix
+	</string>
+	<string name="InvFolder #RLV">
+		#RLV
+	</string>
+	<string name="InvFolder My Suitcase">
+		Çamadanım
+	</string>
+	<string name="no_attachments">
+		Heç bir obyekt calaşdırılmayıb
+	</string>
+	<string name="Attachments remain">
+		Calaşdırmalar ([COUNT] ədəd yer qalıb)
+	</string>
+	<string name="Buy">
+		Al
+	</string>
+	<string name="BuyforL$">
+		L$ Məbləğinə al
+	</string>
+	<string name="Stone">
+		Daş
+	</string>
+	<string name="Metal">
+		Dəmir
+	</string>
+	<string name="Glass">
+		Şüşə
+	</string>
+	<string name="Wood">
+		Ağac
+	</string>
+	<string name="Flesh">
+		Ət
+	</string>
+	<string name="Plastic">
+		Plastik
+	</string>
+	<string name="Rubber">
+		Rezin
+	</string>
+	<string name="Light">
+		Açıq rəngli
+	</string>
+	<string name="KBShift">
+		Shift
+	</string>
+	<string name="KBCtrl">
+		Ctrl
+	</string>
+	<string name="Chest">
+		Döş
+	</string>
+	<string name="Skull">
+		Qayıq
+	</string>
+	<string name="Left Shoulder">
+		Sol çiyin
+	</string>
+	<string name="Right Shoulder">
+		Sağ çiyin
+	</string>
+	<string name="Left Hand">
+		Sol əl
+	</string>
+	<string name="Right Hand">
+		Sağ əl
+	</string>
+	<string name="Left Foot">
+		Sol ayaq
+	</string>
+	<string name="Right Foot">
+		Sağ ayaq
+	</string>
+	<string name="Spine">
+		Onurğa
+	</string>
+	<string name="Pelvis">
+		Çanaq sümüyü
+	</string>
+	<string name="Mouth">
+		Ağız
+	</string>
+	<string name="Chin">
+		Çənə
+	</string>
+	<string name="Left Ear">
+		Sol qulaq
+	</string>
+	<string name="Right Ear">
+		Sağ qulaq
+	</string>
+	<string name="Left Eyeball">
+		Sol göz
+	</string>
+	<string name="Right Eyeball">
+		Sağ göz
+	</string>
+	<string name="Nose">
+		Burun
+	</string>
+	<string name="R Upper Arm">
+		Sağ çiyin
+	</string>
+	<string name="R Forearm">
+		Sağ bazuönü
+	</string>
+	<string name="L Upper Arm">
+		Sol çiyin
+	</string>
+	<string name="L Forearm">
+		Sol bazuönü
+	</string>
+	<string name="Right Hip">
+		Sağ bud
+	</string>
+	<string name="R Upper Leg">
+		Sağ diz
+	</string>
+	<string name="R Lower Leg">
+		Sağ alt ayaq
+	</string>
+	<string name="Left Hip">
+		Sol bud
+	</string>
+	<string name="L Upper Leg">
+		Sol diz
+	</string>
+	<string name="L Lower Leg">
+		Sol alt ayaq
+	</string>
+	<string name="Stomach">
+		Qarın
+	</string>
+	<string name="Left Pec">
+		Sol döş
+	</string>
+	<string name="Right Pec">
+		Sağ döş
+	</string>
+	<string name="Neck">
+		Boyun
+	</string>
+	<string name="Avatar Center">
+		Avatar Mərkəzi
+	</string>
+	<string name="Left Ring Finger">
+		Sol üzük barmağı
+	</string>
+	<string name="Right Ring Finger">
+		Sağ üzük barmağı
+	</string>
+	<string name="Tail Base">
+		Quyruq kökü
+	</string>
+	<string name="Tail Tip">
+		Quyruq ucu
+	</string>
+	<string name="Left Wing">
+		Sol qanad
+	</string>
+	<string name="Right Wing">
+		Sağ qanad
+	</string>
+	<string name="Jaw">
+		Ağız
+	</string>
+	<string name="Alt Left Ear">
+		Altr. sol qulaq
+	</string>
+	<string name="Alt Right Ear">
+		Altr. sağ qulaq
+	</string>
+	<string name="Alt Left Eye">
+		Altr. sol göz
+	</string>
+	<string name="Alt Right Eye">
+		Altr. sağ göz
+	</string>
+	<string name="Tongue">
+		Dil
+	</string>
+	<string name="Groin">
+		Qasıq
+	</string>
+	<string name="Left Hind Foot">
+		Sol arxa ayaq
+	</string>
+	<string name="Right Hind Foot">
+		Sağ arxa ayaq
+	</string>
+	<string name="Invalid Attachment">
+		Yanlış calaşdırma nöqtəsi
+	</string>
+	<string name="ATTACHMENT_MISSING_ITEM">
+		Xəta: itkin element
+	</string>
+	<string name="ATTACHMENT_MISSING_BASE_ITEM">
+		Xəta: əsas element yoxdur
+	</string>
+	<string name="ATTACHMENT_NOT_ATTACHED">
+		Xəta: Obyekt hazırkı geyimdədir, lakin calaşdırılmayıb
+	</string>
+	<string name="YearsMonthsOld">
+		[AGEYEARS] [AGEMONTHS]
+	</string>
+	<string name="YearsOld">
+		[AGEYEARS]
+	</string>
+	<string name="MonthsOld">
+		[AGEMONTHS]
+	</string>
+	<string name="WeeksOld">
+		[AGEWEEKS]
+	</string>
+	<string name="DaysOld">
+		[AGEDAYS]
+	</string>
+	<string name="TodayOld">
+		Bu gün qeydiyyatdan keçib
+	</string>
+	<string name="TotalDaysOld">
+		; [AGEDAYSTOTAL]
+	</string>
+	<string name="av_render_everyone_now">
+		İndi hamı sizi görə bilər.
+	</string>
+	<string name="av_render_not_everyone">
+		Ətrafdakı bütün istifadəçi sizi çəkə bilməz.
+	</string>
+	<string name="av_render_over_half">
+		Ətrafdakı istifadəçilərin yarıdan çoxu sizi çəkə bilməz.
+	</string>
+	<string name="av_render_most_of">
+		Ətrafdakı istifadəçilərin çoxu sizi çəkə bilməz.
+	</string>
+	<string name="av_render_anyone">
+		Ətrafdakı istifadəçilərin heç biri sizi çəkə bilməz.
+	</string>
+	<string name="hud_description_total">
+		Oyundakı məlumatlarınız
+	</string>
+	<string name="hud_name_with_joint">
+		[OBJ_NAME] ([JNT_NAME] üstündə daşınır)
+	</string>
+	<string name="hud_render_memory_warning">
+		[HUD_DETAILS] çoxlu tekstura yaddaşından istifadə edir
+	</string>
+	<string name="hud_render_cost_warning">
+		[HUD_DETAILS] çoxlu həcmli obyektləri və teksturalar ehtiva edir
+	</string>
+	<string name="hud_render_heavy_textures_warning">
+		[HUD_DETAILS] çoxlu böyük teksturaları ehtiva edir
+	</string>
+	<string name="hud_render_cramped_warning">
+		[HUD_DETAILS] həddən çox obyekt ehtiva edir
+	</string>
+	<string name="hud_render_textures_warning">
+		[HUD_DETAILS] həddən çox tekstura ehtiva edir
+	</string>
+	<string name="AgeYearsA">
+		[COUNT] il
+	</string>
+	<string name="AgeYearsB">
+		[COUNT] il
+	</string>
+	<string name="AgeYearsC">
+		[COUNT] il
+	</string>
+	<string name="AgeMonthsA">
+		[COUNT] ay
+	</string>
+	<string name="AgeMonthsB">
+		[COUNT] ay
+	</string>
+	<string name="AgeMonthsC">
+		[COUNT] ay
+	</string>
+	<string name="AgeWeeksA">
+		[COUNT] həftə
+	</string>
+	<string name="AgeWeeksB">
+		[COUNT] həftə
+	</string>
+	<string name="AgeWeeksC">
+		[COUNT] həftə
+	</string>
+	<string name="AgeDaysA">
+		[COUNT] gün
+	</string>
+	<string name="AgeDaysB">
+		[COUNT] gün
+	</string>
+	<string name="AgeDaysC">
+		[COUNT] gün
+	</string>
+	<string name="GroupMembersA">
+		[COUNT] üzv
+	</string>
+	<string name="GroupMembersB">
+		[COUNT] üzv
+	</string>
+	<string name="GroupMembersC">
+		[COUNT] üzv
+	</string>
+	<string name="AcctTypeResident">
+		Sakin
+	</string>
+	<string name="AcctTypeTrial">
+		Qonaq
+	</string>
+	<string name="AcctTypeCharterMember">
+		Təsisçisi
+	</string>
+	<string name="AcctTypeEmployee">
+		Linden Lab əməkdaşı
+	</string>
+	<string name="PaymentInfoUsed">
+		Ödənişlər haqqında məlumat var
+	</string>
+	<string name="PaymentInfoOnFile">
+		Qeyd. keçmiş ödəniş məlumatı var
+	</string>
+	<string name="NoPaymentInfoOnFile">
+		Ödənişlər haqqında məlumat yoxdur
+	</string>
+	<string name="AgeVerified">
+		Yaş təsdiqlənilib
+	</string>
+	<string name="NotAgeVerified">
+		Yaş təsdiqlənmiyib
+	</string>
+	<string name="Center 2">
+		Mərkəzdə 2
+	</string>
+	<string name="Top Right">
+		Yuxarı sağda
+	</string>
+	<string name="Top">
+		Yuxarıda
+	</string>
+	<string name="Top Left">
+		Yuxarı solda
+	</string>
+	<string name="Center">
+		Mərkəzdə
+	</string>
+	<string name="Bottom Left">
+		Aşağı solda
+	</string>
+	<string name="Bottom">
+		Aşağıda
+	</string>
+	<string name="Bottom Right">
+		Aşağı sağda
+	</string>
+	<string name="CompileQueueDownloadedCompiling">
+		Yüklənib, kompilasiya gedir
+	</string>
+	<string name="CompileQueueServiceUnavailable">
+		Skript kompilyasiya xidməti əlçatan deyil
+	</string>
+	<string name="CompileQueueScriptNotFound">
+		Skript serverdə tapılmadı.
+	</string>
+	<string name="CompileQueueProblemDownloading">
+		Yükləmə problemi
+	</string>
+	<string name="CompileQueueInsufficientPermDownload">
+		Skripti yükləmək üçün kifayət qədər icazə yoxdur.
+	</string>
+	<string name="CompileQueueInsufficientPermFor">
+		Üçün kifayət qədər icazə yoxdur
+	</string>
+	<string name="CompileQueueUnknownFailure">
+		Naməlum yükləmə xətası
+	</string>
+	<string name="CompileNoExperiencePerm">
+		[EXPERIENCE] macərası ilə [SCRIPT] skriptinin atlanması.
+	</string>
+	<string name="CompileQueueTitle">
+		Yenidən kompilyasiya tərəqqisi
+	</string>
+	<string name="CompileQueueStart">
+		yenidən kompilasiya edin
+	</string>
+	<string name="CompileQueuePreprocessing">
+		İlkin emal: [SCRIPT]
+	</string>
+	<string name="CompileQueuePreprocessingComplete">
+		[SCRIPT] skriptinin ilkin emalı tamamlandı
+	</string>
+	<string name="ResetQueueTitle">
+		Sıfırlama tərəqqisi
+	</string>
+	<string name="ResetQueueStart">
+		sıfırla
+	</string>
+	<string name="RunQueueTitle">
+		Başlatma tərəqqisi
+	</string>
+	<string name="RunQueueStart">
+		başlat
+	</string>
+	<string name="NotRunQueueTitle">
+		Dayandırma tərəqqisi
+	</string>
+	<string name="NotRunQueueStart">
+		İcra etməni dayandırın
+	</string>
+	<string name="DeleteQueueTitle">
+		Silmə tərəqqisi
+	</string>
+	<string name="DeleteQueueStart">
+		Silinir
+	</string>
+	<string name="Compiling">
+		[NAME] kompilasiyası
+	</string>
+	<string name="CompileSuccessful">
+		Kompilasiya uğurla tamamlandı!
+	</string>
+	<string name="CompileSuccessfulSaving">
+		Kompilasiya uğurla tamamlandı, saxlanılır...
+	</string>
+	<string name="SaveComplete">
+		Yadda saxlama tamamlandı.
+	</string>
+	<string name="UploadFailed">
+		Faylı yükləmək alınmadı:
+	</string>
+	<string name="ObjectOutOfRange">
+		Skript (obyekt əhatə dairəsi xaricində)
+	</string>
+	<string name="ScriptWasDeleted">
+		Skript (avadanlıq siyahısından silindi)
+	</string>
+	<string name="GodToolsObjectOwnedBy">
+		[OWNER] istifadəçisinin [OBJECT] obyekti
+	</string>
+	<string name="GroupsNone">
+		yox
+	</string>
+	<string name="Group" value="(qrup)"/>
+	<string name="Unknown">
+		(Naməlum)
+	</string>
+	<string name="SummaryForTheWeek" value="Həftəlik xülasə, bu vaxtdan başlayaraq:"/>
+	<string name="NextStipendDay" value="Növbəti ödəniş tarixi:"/>
+	<string name="GroupPlanningDate">
+		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc]
+	</string>
+	<string name="GroupIndividualShare" value="Qrup üçün Şəxsi Paylaşılan"/>
+	<string name="GroupColumn" value="Qrup"/>
+	<string name="Balance">
+		Balans
+	</string>
+	<string name="Credits">
+		Kredit
+	</string>
+	<string name="Debits">
+		Gəlir
+	</string>
+	<string name="Total">
+		Toplam
+	</string>
+	<string name="NoGroupDataFound">
+		Qrup datası tapılmadı
+	</string>
+	<string name="AlreadyInGroup">
+		Artıq bu qrupdasınız
+	</string>
+	<string name="IMParentEstate">
+		qəbilə torpaq mülkiyyətçiliyi
+	</string>
+	<string name="IMMainland">
+		qitə
+	</string>
+	<string name="IMTeen">
+		yeniyetmə
+	</string>
+	<string name="Anyone">
+		hamı
+	</string>
+	<string name="RegionInfoError">
+		xəta
+	</string>
+	<string name="RegionInfoAllEstatesOwnedBy">
+		[OWNER] istifadəçinin bütün yer mülkiyyəti
+	</string>
+	<string name="RegionInfoAllEstatesYouOwn">
+		sizin bütün yer mülkiyyətiniz
+	</string>
+	<string name="RegionInfoAllEstatesYouManage">
+		[OWNER] istifadəçinin idarə etdiyiniz bütün yer mülkiyyətləri
+	</string>
+	<string name="RegionInfoAllowedResidents">
+		Həmişə icazə verilir: ([ALLOWEDAGENTS], ən çox [MAXACCESS])
+	</string>
+	<string name="RegionInfoAllowedGroups">
+		Qruplara həmişə icazə verilir: ([ALLOWEDGROUPS], ən çox [MAXACCESS])
+	</string>
+	<string name="RegionInfoEstateManagers">
+		Ada Menecerləri: ([ESTATEMANAGERS], maksimum [MAXMANAGERS])
+	</string>
+	<string name="RegionInfoBannedResidents">
+		Həmişə bloklanıb: ([BANNEDAGENTS], ən çox [MAXBANNED])
+	</string>
+	<string name="RegionInfoListTypeAllowedAgents">
+		Həmişə icazə verilir
+	</string>
+	<string name="RegionInfoListTypeBannedAgents">
+		Həmişə icazə verilir
+	</string>
+	<string name="RegionInfoAllEstates">
+		bütün yer mülkiyyətləri
+	</string>
+	<string name="RegionInfoManagedEstates">
+		idarə olunan yer mülkiyyətləri
+	</string>
+	<string name="RegionInfoThisEstate">
+		bu yer mülkiyyəti
+	</string>
+	<string name="AndNMore">
+		və [EXTRA_COUNT] artıq
+	</string>
+	<string name="ScriptLimitsParcelScriptMemory">
+		Sahədə skriptlər üçün yaddaş
+	</string>
+	<string name="ScriptLimitsParcelsOwned">
+		Siyahıdakı sahələr: [PARCELS]
+	</string>
+	<string name="ScriptLimitsMemoryUsed">
+		İstifadə olunan yaddaş: [MAX] KB-dan [COUNT] KB; mövcud: [AVAILABLE] KB
+	</string>
+	<string name="ScriptLimitsMemoryUsedSimple">
+		İstifadə olunan yaddaş: [COUNT] KB
+	</string>
+	<string name="ScriptLimitsParcelScriptURLs">
+		Sahə Skriptinin URL-ləri
+	</string>
+	<string name="ScriptLimitsURLsUsed">
+		İstifadə edilmiş URL-lər: [MAX] ədəddən [COUNT] (Mövcuddur: [AVAILABLE])
+	</string>
+	<string name="ScriptLimitsURLsUsedSimple">
+		İstifadə olunmuş URL-lər: [COUNT]
+	</string>
+	<string name="ScriptLimitsRequestError">
+		Data sorğusu zamanı xəta baş verdi
+	</string>
+	<string name="ScriptLimitsRequestNoParcelSelected">
+		Sahə seçilməyib
+	</string>
+	<string name="ScriptLimitsRequestWrongRegion">
+		Xəta. Skript təfərrüatları yalnız cari bölgədə mövcuddur
+	</string>
+	<string name="ScriptLimitsRequestWaiting">
+		Data əldə edilir...
+	</string>
+	<string name="ScriptLimitsRequestDontOwnParcel">
+		Bu ərazini araşdırmaq üçün icazəniz yoxdur
+	</string>
+	<string name="SITTING_ON">
+		Üstündə oturub:
+	</string>
+	<string name="ATTACH_CHEST">
+		Döş
+	</string>
+	<string name="ATTACH_HEAD">
+		Qayıq
+	</string>
+	<string name="ATTACH_LSHOULDER">
+		Sol çiyin
+	</string>
+	<string name="ATTACH_RSHOULDER">
+		Sağ çiyin
+	</string>
+	<string name="ATTACH_LHAND">
+		Sol əl
+	</string>
+	<string name="ATTACH_RHAND">
+		Sağ əl
+	</string>
+	<string name="ATTACH_LFOOT">
+		Sol ayaq
+	</string>
+	<string name="ATTACH_RFOOT">
+		Sağ ayaq
+	</string>
+	<string name="ATTACH_BACK">
+		Onurğa
+	</string>
+	<string name="ATTACH_PELVIS">
+		Çanaq sümüyü
+	</string>
+	<string name="ATTACH_MOUTH">
+		Ağız
+	</string>
+	<string name="ATTACH_CHIN">
+		Çənə
+	</string>
+	<string name="ATTACH_LEAR">
+		Sol qulaq
+	</string>
+	<string name="ATTACH_REAR">
+		Sağ qulaq
+	</string>
+	<string name="ATTACH_LEYE">
+		Sol göz
+	</string>
+	<string name="ATTACH_REYE">
+		Sağ göz
+	</string>
+	<string name="ATTACH_NOSE">
+		Burun
+	</string>
+	<string name="ATTACH_RUARM">
+		Sağ çiyin
+	</string>
+	<string name="ATTACH_RLARM">
+		Sağ bazuönü
+	</string>
+	<string name="ATTACH_LUARM">
+		Sol çiyin
+	</string>
+	<string name="ATTACH_LLARM">
+		Sol bazuönü
+	</string>
+	<string name="ATTACH_RHIP">
+		Sağ bud
+	</string>
+	<string name="ATTACH_RULEG">
+		Sağ diz
+	</string>
+	<string name="ATTACH_RLLEG">
+		Sağ alt ayaq
+	</string>
+	<string name="ATTACH_LHIP">
+		Sol bud
+	</string>
+	<string name="ATTACH_LULEG">
+		Sol diz
+	</string>
+	<string name="ATTACH_LLLEG">
+		Sol alt ayaq
+	</string>
+	<string name="ATTACH_BELLY">
+		Qarın
+	</string>
+	<string name="ATTACH_LEFT_PEC">
+		Sol döş
+	</string>
+	<string name="ATTACH_RIGHT_PEC">
+		Sağ döş
+	</string>
+	<string name="ATTACH_HUD_CENTER_2">
+		Oyun məlumatları mərkəzdə 2
+	</string>
+	<string name="ATTACH_HUD_TOP_RIGHT">
+		Oyun məlumatları yuxarı sağda
+	</string>
+	<string name="ATTACH_HUD_TOP_CENTER">
+		Oyun məlumatları yuxarı mərkəzdə
+	</string>
+	<string name="ATTACH_HUD_TOP_LEFT">
+		Oyun məlumatları yuxarı solda
+	</string>
+	<string name="ATTACH_HUD_CENTER_1">
+		Oyun məlumatları mərkəzdə 1
+	</string>
+	<string name="ATTACH_HUD_BOTTOM_LEFT">
+		Oyun məlumatları aşağı solda
+	</string>
+	<string name="ATTACH_HUD_BOTTOM">
+		Oyun məlumatları aşağıda
+	</string>
+	<string name="ATTACH_HUD_BOTTOM_RIGHT">
+		Oyun məlumatları aşağı sağda
+	</string>
+	<string name="ATTACH_NECK">
+		Boyun
+	</string>
+	<string name="ATTACH_AVATAR_CENTER">
+		Avatar Mərkəzi
+	</string>
+	<string name="ATTACH_LHAND_RING1">
+		Sol üzük barmağı
+	</string>
+	<string name="ATTACH_RHAND_RING1">
+		Sağ üzük barmağı
+	</string>
+	<string name="ATTACH_TAIL_BASE">
+		Quyruq kökü
+	</string>
+	<string name="ATTACH_TAIL_TIP">
+		Quyruq ucu
+	</string>
+	<string name="ATTACH_LWING">
+		Sol qanad
+	</string>
+	<string name="ATTACH_RWING">
+		Sağ qanad
+	</string>
+	<string name="ATTACH_FACE_JAW">
+		Ağız
+	</string>
+	<string name="ATTACH_FACE_LEAR">
+		Altr. sol qulaq
+	</string>
+	<string name="ATTACH_FACE_REAR">
+		Altr. sağ qulaq
+	</string>
+	<string name="ATTACH_FACE_LEYE">
+		Altr. sol göz
+	</string>
+	<string name="ATTACH_FACE_REYE">
+		Altr. sağ göz
+	</string>
+	<string name="ATTACH_FACE_TONGUE">
+		Dil
+	</string>
+	<string name="ATTACH_GROIN">
+		Qasıq
+	</string>
+	<string name="ATTACH_HIND_LFOOT">
+		Sol arxa ayaq
+	</string>
+	<string name="ATTACH_HIND_RFOOT">
+		Sağ arxa ayaq
+	</string>
+	<string name="CursorPos">
+		Sətir [LINE], sütun [COLUMN]
+	</string>
+	<string name="PanelDirCountFound">
+		Tapıldı: [COUNT]
+	</string>
+	<string name="PanelDirTimeStr">
+		[hour,datetime,slt]:[min,datetime,slt]
+	</string>
+	<string name="PanelDirEventsDateText">
+		[day,datetime,slt].[mthnum,datetime,slt]
+	</string>
+	<string name="PanelContentsTooltip">
+		Bir obyektə qoşulma
+	</string>
+	<string name="PanelContentsNewScript">
+		Yeni skript
+	</string>
+	<string name="DoNotDisturbModeResponseDefault">
+		Bu sakin 'Narahat etməyin' rejimini yandırıb və mesajınızı daha sonra görəcək.
+	</string>
+	<string name="AutoResponseModeDefault">
+		Bu sakin 'Avtomatik Cavab' rejimini aktiv edib. Narahat etməməyinizi xahiş edir. Mesajınız hələ də onun İM panelində göstəriləcək.
+	</string>
+	<string name="AutoResponseModeNonFriendsDefault">
+		Bu sakin 'Avtomatik Cavab' rejimini aktiv edib. Narahat etməməyinizi xahiş edir. Mesajınız hələ də onun İM panelində göstəriləcək.
+	</string>
+	<string name="RejectTeleportOffersResponseDefault">
+		Bu kəndli 'Bütün teleportasiya təkliflərini və sorğularını rədd et' funksiyasını aktiv edib. Ona şəxsi mesaj göndərə bilərsiniz.
+	</string>
+	<string name="RejectFriendshipRequestsResponseDefault">
+		Bu sakin 'Bütün dostluq sorğularını rədd et' funksiyasını aktiv edib. Ona şəxsi mesaj göndərə bilərsiniz.
+	</string>
+	<string name="MutedAvatarsResponseDefault">
+		Bu sakin sizin ona hər hansı mesaj göndərməyinizi bloklayıb.
+	</string>
+	<string name="AwayAvatarResponseDefault">
+		Bu sakin müvəqqəti olaraq yerində deyil. Mesajınız daha sonra baxmaq üçün onun Şəxsi Mesajlar panelində görünəcək.
+	</string>
+	<string name="MuteByName">
+		(adı ilə)
+	</string>
+	<string name="MuteAgent">
+		(sakin üçün)
+	</string>
+	<string name="MuteObject">
+		(obyekt üçün)
+	</string>
+	<string name="MuteGroup">
+		(cəmiyyət üçün)
+	</string>
+	<string name="MuteExternal">
+		(xarici)
+	</string>
+	<string name="RegionNoCovenant">
+		Bu yer mülkiyyəti ilə bağlı heç bir müqavilə yoxdur.
+	</string>
+	<string name="RegionNoCovenantOtherOwner">
+		Bu yer mülkiyyəti ilə bağlı heç bir müqavilə yoxdur. Bu yer mülkiyyətindəki torpaq sahəsi Linden Lab tərəfindən deyil, sahibi tərəfindən satılır.  Satış haqqında ətraflı məlumat üçün yer sahibi ilə əlaqə saxlayın.
+	</string>
+	<string name="covenant_last_modified" value="Son Dəyişiklik Tarixi: "/><!-- use value="" to keep the trailing space -->
+	<string name="none_text" value="(yox)"/>
+	<string name="never_text" value="(heç vaxt)"/>
+	<string name="GroupOwned">
+		Qrup mülkiyyəti
+	</string>
+	<string name="Public">
+		Ümumi mülkiyyət
+	</string>
+	<string name="LocalSettings">
+		Yerli seçimlər
+	</string>
+	<string name="RegionSettings">
+		Bölgə seçimləri
+	</string>
+	<string name="NoEnvironmentSettings">
+		Bu bölgə mühit seçimlərini dəstəkləmir.
+	</string>
+
+	<string name="EnvironmentSun">Günəş</string>
+	<string name="EnvironmentMoon">Ay</string>
+	<string name="EnvironmentBloom">Şəfəq</string>
+	<string name="EnvironmentCloudNoise">Bulud bulanığı</string>
+	<string name="EnvironmentNormalMap">Normal xəritəsi</string>
+	<string name="EnvironmentTransparent">Şəffaf</string>
+
+	<string name="ClassifiedClicksTxt">
+		Kliklər: teleport [TELEPORT], xəritə [MAP], Profil [PROFILE]
+	</string>
+	<string name="ClassifiedUpdateAfterPublish">
+		(paylaşımdan sonra yenilənəcək)
+	</string>
+	<string name="NoPicksClassifiedsText">
+		Siz kolleksiya və ya reklam yaratmamısınız. Kolleksiya və ya reklam yaratmaq üçün aşağıdakı plus düyməsini klikləyin
+	</string>
+	<string name="NoPicksText">
+		Siz heç bir seçim etməmisiniz. Seçim etmək üçün Yarat düyməsini klikləyin.
+	</string>
+	<string name="NoClassifiedsText">
+		Heç bir reklam etməmisiniz. Reklam etmək üçün Yarat düyməsini klikləyin.
+	</string>
+	<string name="NoAvatarPicksClassifiedsText">
+		Sakinin seçimləri və ya reklamları yoxdur
+	</string>
+	<string name="NoAvatarPicksText">
+		İstifadəçinin kolleksiyası yoxdur
+	</string>
+	<string name="NoAvatarClassifiedsText">
+		İstifadəçinin reklamı yoxdur
+	</string>
+	<string name="PicksClassifiedsLoadingText">
+		Yüklənir...
+	</string>
+	<string name="NoPicksText">
+		Seçilmiş yarartmamızınız.
+	</string>
+	<string name="NoAvatarPicksText">
+		İstifadəçinin seçilmişləri yoxdur
+	</string>
+	<string name="NoClassifiedsText">
+		Heç bir elan yaartmamızınız. Elan etmək üçün Yarat düyməsini basın.
+	</string>
+	<string name="NoAvatarClassifiedsText">
+		İstifadəçinin elanları yoxdur
+	</string>
+	<string name="MultiPreviewTitle">
+		Önizləmə
+	</string>
+	<string name="MultiPropertiesTitle">
+		Xüsusiyyətlər
+	</string>
+	<string name="InvOfferAnObjectNamed">
+		Adlandırılmış obyekt
+	</string>
+	<string name="InvOfferOwnedByGroup">
+		cəmiyyətə aiddir
+	</string>
+	<string name="InvOfferOwnedByUnknownGroup">
+		məşhur cəmiyyətə aiddir
+	</string>
+	<string name="InvOfferOwnedBy">
+		məxsusdur
+	</string>
+	<string name="InvOfferOwnedByUnknownUser">
+		naməlum istifadəçiyə məxsusdur
+	</string>
+	<string name="InvOfferGaveYou">
+		sizə verdi
+	</string>
+	<string name="InvOfferYouDecline">
+		İmtina etdiniz
+	</string>
+	<string name="InvOfferDecline">
+		Siz [NAME] adlı şəxsdən [DESC] imtina etdiniz.
+	</string>
+	<string name="InvOfferFrom">
+		kimdən:
+	</string>
+	<string name="InvOfferAutoAcceptObject">
+		[OBJECT_NAME] obyekti sənə bunu verdi [OBJECT_TYPE]: [DESC]
+	</string>
+	<string name="InvOfferAutoAcceptUser">
+		[USER_NAME] sənə bunu verdi [OBJECT_TYPE]: [DESC]
+	</string>
+	<string name="GroupMoneyTotal">
+		Toplam
+	</string>
+	<string name="GroupMoneyBought">
+		alıb
+	</string>
+	<string name="GroupMoneyPaidYou">
+		sizə ödənildi
+	</string>
+	<string name="GroupMoneyPaidInto">
+		ödənilmişdir
+	</string>
+	<string name="GroupMoneyBoughtPassTo">
+		üçün bilet alıb
+	</string>
+	<string name="GroupMoneyPaidFeeForEvent">
+		hadisəyə görə ödənilib
+	</string>
+	<string name="GroupMoneyPaidPrizeForEvent">
+		hadisə başına ödənilən pul mükafatı
+	</string>
+	<string name="GroupMoneyBalance">
+		Balans
+	</string>
+	<string name="GroupMoneyCredits">
+		Kredit
+	</string>
+	<string name="GroupMoneyDebits">
+		Gəlir
+	</string>
+	<string name="GroupMoneyDate">
+		[weekday,datetime,utc], [day,datetime,utc] [mth,datetime,utc] [year,datetime,utc]
+	</string>
+	<string name="AcquiredItems">
+		Alınan əşyalar
+	</string>
+	<string name="Cancel">
+		Ləğv et
+	</string>
+	<string name="UploadingCosts">
+		[NAME] yükləmə xərci L$[AMOUNT]
+	</string>
+	<string name="UnknownFileExtension">
+		Naməlum fayl uzantısı .%s
+Gözlənilən uzantılar: WAV, TGA, BMP, JPG, JPEG və ya BVH
+	</string>
+	<string name="MuteObject2">
+		Bloklamaq
+	</string>
+	<string name="MuteAvatar">
+		Bloklamaq
+	</string>
+	<string name="UnmuteObject">
+		Blokdan çıxartmaq
+	</string>
+	<string name="UnmuteAvatar">
+		Blokdan çıxartmaq
+	</string>
+	<string name="AddLandmarkNavBarMenu">
+		Əlfəcinlərimə əlavə et...
+	</string>
+	<string name="EditLandmarkNavBarMenu">
+		Əlfəcinimi dəyişdir...
+	</string>
+
+	<string name="FileSaved">
+		Fayl yadda saxlandı
+	</string>
+	<string name="Receiving">
+		Alınır
+	</string>
+	<string name="AM">
+		günortadan əvvəl
+	</string>
+	<string name="PM">
+		günortadan sonra
+	</string>
+	<string name="PST">
+		Sakit okean vaxtı
+	</string>
+	<string name="PDT">
+		Yay Sakit okean vaxtı
+	</string>
+	<string name="Direction_Forward">
+		İrəli
+	</string>
+	<string name="Direction_Left">
+		Sola
+	</string>
+	<string name="Direction_Right">
+		Sağa
+	</string>
+	<string name="Direction_Back">
+		Geri
+	</string>
+	<string name="Direction_North">
+		Quzey
+	</string>
+	<string name="Direction_South">
+		Güney
+	</string>
+	<string name="Direction_West">
+		Qərb
+	</string>
+	<string name="Direction_East">
+		Şərq
+	</string>
+	<string name="Direction_Up">
+		Yuxarı
+	</string>
+	<string name="Direction_Down">
+		Aşağı
+	</string>
+	<string name="Any Category">
+		Bütün kateqoriyalar
+	</string>
+	<string name="Shopping">
+		Satınalmalar
+	</string>
+	<string name="Land Rental">
+		Torpaq icarəsi
+	</string>
+	<string name="Property Rental">
+		Əmlak icarəsi
+	</string>
+	<string name="Special Attraction">
+		Xüsusi hadisə
+	</string>
+	<string name="New Products">
+		Yeni məhsullar
+	</string>
+	<string name="Employment">
+		Məşğulluq
+	</string>
+	<string name="Wanted">
+		Tapmaq istəyirəm
+	</string>
+	<string name="Service">
+		Xidmətlər
+	</string>
+	<string name="Personal">
+		Şəxsi mesaj
+	</string>
+	<string name="None">
+		Yox
+	</string>
+	<string name="Linden Location">
+		Linden Yeri
+	</string>
+	<string name="Adult">
+		Yetkin
+	</string>
+	<string name="Arts and Culture">
+		İncəsənət və mədəniyyət
+	</string>
+	<string name="Business">
+		Biznes
+	</string>
+	<string name="Educational">
+		Təhsil
+	</string>
+	<string name="Gaming">
+		Oyunlar
+	</string>
+	<string name="Hangout">
+		Görüş yerləri
+	</string>
+	<string name="Newcomer Friendly">
+		Yeni başlayanlar üçün
+	</string>
+	<string name="Parks and Nature">
+		Parklar və təbiət
+	</string>
+	<string name="Residential">
+		Yaşayış
+	</string>
+	<string name="Stage">
+		Mərhələ
+	</string>
+	<string name="Other">
+		Digər
+	</string>
+	<string name="Rental">
+		İcarə
+	</string>
+	<string name="Any">
+		Hamısı
+	</string>
+	<string name="You">
+		Siz
+	</string>
+
+	<string name="Multiple Media">
+		Çoxsaylı media mənbələri
+	</string>
+	<string name="Play Media">
+		Multimedia – oynat/fasilə   
+	</string>
+	<string name="StreamtitleNowPlaying">
+		İndi oynadılır:
+	</string>
+	<string name="IntelDriverPage">
+		http://www.intel.com/p/en_US/support/detect/graphics
+	</string>
+	<string name="NvidiaDriverPage">
+		http://www.nvidia.com/Download/index.aspx?lang=az
+	</string>
+	<string name="AMDDriverPage">
+		http://support.amd.com/us/Pages/AMDSupportHub.aspx
+	</string>
+	<string name="MBCmdLineError">
+		Əmr sətirini təhlil edərkən xəta baş verdi.
+Baxın: http://wiki.secondlife.com/wiki/Client_parameters
+Xəta:
+	</string>
+	<string name="MBCmdLineUsg">
+		Əmr sətirini istifadəsi [APP_NAME]:
+	</string>
+	<string name="MBUnableToAccessFile">
+		[APP_NAME] tələb olunan fayla daxil ola bilmir.
+
+Bir neçə proses gedə bilər və ya fayl sistemdə düzgün açılmaya bilər.
+Bu mesaj hələ də görünürsə, kompüterinizi yenidən başladın və yenidən cəhd edin.
+Bu da kömək eləməsə, [APP_NAME] tətbiqini yenidən quraşdırmalı ola bilərsiniz.
+	</string>
+	<string name="MBFatalError">
+		Ölümcül xəta
+	</string>
+	<string name="MBApplicationError">
+		Proqram xətası - fikir verməyin
+	</string>
+	<string name="MBApplicationErrorDetails">
+		Üzr istəyirik, lakin [APP_NAME] sıradan çıxıb və bağlanmalıdır. Bu problemlə dəfələrlə qarşılaşırsınızsa, dəstək komandamızla əlaqə saxlayın və aşağıdakı mesajı göndərin:
+
+[ERROR_DETAILS]
+	</string>
+	<string name="MBRequiresAltiVec">
+		[APP_NAME] AltiVec-i aktivləşdirən prosessor tələb edir (versiya G4 və ya sonrakı).
+	</string>
+	<string name="MBAlreadyRunning">
+		[APP_NAME] artıq işləyir.
+Tapşırıq çubuğunda proqram nişanını axtarın.
+Bu mesaj hələ də görünürsə, kompüterinizi yenidən başladın.
+	</string>
+	<string name="MBFrozenCrashed">
+		Görünür ki, [APP_NAME] tətbiqi əvvəlki işə salındıqda dayanıb və ya sıradan çıxıb.
+Qəza hesabatı təqdim edilsin?
+	</string>
+	<string name="MBAlert">
+		Bildirişlər
+	</string>
+	<string name="MBNoDirectX">
+		[APP_NAME] DirectX 9.0b və ya sonrakı versiyaları aşkar edə bilmir.
+[APP_NAME] hardware yoxlamaq və stabillik problemləri, performans problemləri və ya qəzaya səbəb ola biləcək köhnəlmiş drayverləri aşkar etmək üçün DirectX-dən istifadə edir.  [APP_NAME] bu komponent olmadan işləsə də, DirectX 9.0b quraşdırmaq tövsiyə olunur.
+
+Davam et?
+	</string>
+	<string name="MBWarning">
+		Diqqət!
+	</string>
+	<string name="MBNoAutoUpdate">
+		Linux ƏS-də avtomatik yeniləmə hələ həyata keçirilməyib.
+Yeni versiyanı www.secondlife.com saytından yükləyin.
+	</string>
+	<string name="MBRegClassFailed">
+		RegisterClass Xətası
+	</string>
+	<string name="MBError">
+		Xəta
+	</string>
+	<string name="MBFullScreenErr">
+		[WIDTH] x [HEIGHT] ekranda tam ekrand rejimində işləyə bilməz.
+Pəncərədə işə salındı.
+	</string>
+	<string name="MBDestroyWinFailed">
+		Pəncərəni silərkən bağlanma xətası (DestroyWindow() funksiyası uğursuz oldu)
+	</string>
+	<string name="MBShutdownErr">
+		Bağlanma xətası
+	</string>
+	<string name="MBDevContextErr">
+		GL cihaz kontekstini yaratmaq mümkün deyil
+	</string>
+	<string name="MBPixelFmtErr">
+		Uyğun piksel formatı tapılmadı
+	</string>
+	<string name="MBPixelFmtDescErr">
+		Piksel formatının təsvirini əldə etmək mümkün deyil
+	</string>
+	<string name="MBTrueColorWindow">
+		[APP_NAME] işləmək üçün Həqiqi Rəng rejimi (32 bit) tələb edir.
+Ekran seçimlərində 32 bit rəng rejiminə qoyun.
+	</string>
+	<string name="MBAlpha">
+		8 bitlik alfa kanalına giriş olmadığı üçün [APP_NAME] tətbiqini başlatmaq mümkün deyil.  Bu problem adətən qrafik kartı drayveri ilə bağlı problemdən qaynaqlanır.
+Yeni video kart drayverlərini quraşdırın.
+Həmçinin monitorunuzu 32-bit True Color (İdarəetmə Paneli &gt; Ekran &gt; Seçimlər) təyin edin.
+Bu mesaj göstərilməyə davam edərsə, [SUPPORT_SITE] saytına daxil olun.
+	</string>
+	<string name="MBPixelFmtSetErr">
+		Piksel formatını təyin etmək mümkün deyil
+	</string>
+	<string name="MBGLContextErr">
+		GL render konteksti yaratmaq mümkün deyil
+	</string>
+	<string name="MBGLContextActErr">
+		GL render kontekstini aktivləşdirmək mümkün deyil
+	</string>
+	<string name="MBVideoDrvErr">
+		[APP_NAME] tətbiqini işə salmaq mümkün deyil, çünki qrafik kartı drayverləri səhv quraşdırılıb, köhnəlmiş və ya dəstəklənməyən aparat üçün. Ən son video kart drayverlərini quraşdırın və ya yenidən quraşdırın.
+Bu mesaj göstərilməyə davam edərsə, [SUPPORT_SITE] saytına daxil olun.
+	</string>
+	<string name="5 O&apos;Clock Shadow">
+		Maye
+	</string>
+	<string name="All White">
+		Tam ağ
+	</string>
+	<string name="Anime Eyes">
+		Anime gözləri
+	</string>
+	<string name="Arced">
+		Qövs
+	</string>
+	<string name="Arm Length">
+		Qol uzunluğu
+	</string>
+	<string name="Attached">
+		Birləşmiş
+	</string>
+	<string name="Attached Earlobes">
+		Yapışan qulaqcıqlar
+	</string>
+	<string name="Back Fringe">
+		Başın arxası
+	</string>
+	<string name="Baggy">
+		Torbalı
+	</string>
+	<string name="Bangs">
+		Qəmli
+	</string>
+	<string name="Beady Eyes">
+		İncili gözlər
+	</string>
+	<string name="Belly Size">
+		Qarın ölçüsü
+	</string>
+	<string name="Big">
+		Böyük
+	</string>
+	<string name="Big Butt">
+		Yekə göt
+	</string>
+	<string name="Big Hair Back">
+		Həcmli saçlar: arxada
+	</string>
+	<string name="Big Hair Front">
+		Həcmli saçlar: öndə
+	</string>
+	<string name="Big Hair Top">
+		Həcmli saçlar: yuxarıda
+	</string>
+	<string name="Big Head">
+		Yekə baş
+	</string>
+	<string name="Big Pectorals">
+		Həcmli döş
+	</string>
+	<string name="Big Spikes">
+		Yekə «tikanlar»
+	</string>
+	<string name="Black">
+		Qara
+	</string>
+	<string name="Blonde">
+		Açıq rəngli
+	</string>
+	<string name="Blonde Hair">
+		Sarısaç
+	</string>
+	<string name="Blush">
+		Qızartı
+	</string>
+	<string name="Blush Color">
+		Qızartı rəngi
+	</string>
+	<string name="Blush Opacity">
+		Qızartı şəffaflığı
+	</string>
+	<string name="Body Definition">
+		Bədən quruluşu
+	</string>
+	<string name="Body Fat">
+		Piy təbəqəsi
+	</string>
+	<string name="Body Freckles">
+		Çillər
+	</string>
+	<string name="Body Thick">
+		Şişman bədən
+	</string>
+	<string name="Body Thickness">
+		Köklük
+	</string>
+	<string name="Body Thin">
+		İncə bədən
+	</string>
+	<string name="Bow Legged">
+		Əyriqılça
+	</string>
+	<string name="Breast Buoyancy">
+		Döş hündürlüyü
+	</string>
+	<string name="Breast Cleavage">
+		Döşlər arasında boşluq
+	</string>
+	<string name="Breast Size">
+		Döş ölçüsü
+	</string>
+	<string name="Bridge Width">
+		Burun körpüsünün eni
+	</string>
+	<string name="Broad">
+		Geniş
+	</string>
+	<string name="Brow Size">
+		Qaş ölçüsü
+	</string>
+	<string name="Bug Eyes">
+		Qabarıq gözlər
+	</string>
+	<string name="Bugged Eyes">
+		Qabarıq gözlər
+	</string>
+	<string name="Bulbous">
+		Kartof
+	</string>
+	<string name="Bulbous Nose">
+		Kartof burun
+	</string>
+	<string name="Breast Physics Mass">
+		Döş çəkisi
+	</string>
+	<string name="Breast Physics Smoothing">
+		Döş hamarlığı
+	</string>
+	<string name="Breast Physics Gravity">
+		Döş sallanması
+	</string>
+	<string name="Breast Physics Drag">
+		Döş aerodinamikası
+	</string>
+	<string name="Breast Physics InOut Max Effect">
+		Yuxarı hədd
+	</string>
+	<string name="Breast Physics InOut Spring">
+		Elastiklik
+	</string>
+	<string name="Breast Physics InOut Gain">
+		Cavab
+	</string>
+	<string name="Breast Physics InOut Damping">
+		Zəifləmə
+	</string>
+	<string name="Breast Physics UpDown Max Effect">
+		Yuxarı hədd
+	</string>
+	<string name="Breast Physics UpDown Spring">
+		Elastiklik
+	</string>
+	<string name="Breast Physics UpDown Gain">
+		Cavab
+	</string>
+	<string name="Breast Physics UpDown Damping">
+		Zəifləmə
+	</string>
+	<string name="Breast Physics LeftRight Max Effect">
+		Yuxarı hədd
+	</string>
+	<string name="Breast Physics LeftRight Spring">
+		Elastiklik
+	</string>
+	<string name="Breast Physics LeftRight Gain">
+		Cavab
+	</string>
+	<string name="Breast Physics LeftRight Damping">
+		Zəifləmə
+	</string>
+	<string name="Belly Physics Mass">
+		Qarın çəkisi
+	</string>
+	<string name="Belly Physics Smoothing">
+		Qarın hamarlığı
+	</string>
+	<string name="Belly Physics Gravity">
+		Qarın sallanması
+	</string>
+	<string name="Belly Physics Drag">
+		Qarın ətaləti
+	</string>
+	<string name="Belly Physics UpDown Max Effect">
+		Yuxarı hədd
+	</string>
+	<string name="Belly Physics UpDown Spring">
+		Elastiklik
+	</string>
+	<string name="Belly Physics UpDown Gain">
+		Cavab
+	</string>
+	<string name="Belly Physics UpDown Damping">
+		Zəifləmə
+	</string>
+	<string name="Butt Physics Mass">
+		Göt çəkisi
+	</string>
+	<string name="Butt Physics Smoothing">
+		Göt hamarlığı
+	</string>
+	<string name="Butt Physics Gravity">
+		Göt sallanması
+	</string>
+	<string name="Butt Physics Drag">
+		Göt ətaləti
+	</string>
+	<string name="Butt Physics UpDown Max Effect">
+		Yuxarı hədd
+	</string>
+	<string name="Butt Physics UpDown Spring">
+		Elastiklik
+	</string>
+	<string name="Butt Physics UpDown Gain">
+		Cavab
+	</string>
+	<string name="Butt Physics UpDown Damping">
+		Zəifləmə
+	</string>
+	<string name="Butt Physics LeftRight Max Effect">
+		Yuxarı hədd
+	</string>
+	<string name="Butt Physics LeftRight Spring">
+		Elastiklik
+	</string>
+	<string name="Butt Physics LeftRight Gain">
+		Cavab
+	</string>
+	<string name="Butt Physics LeftRight Damping">
+		Zəifləmə
+	</string>
+	<string name="Bushy Eyebrows">
+		Qalın qaşlar
+	</string>
+	<string name="Bushy Hair">
+		Həcmli
+	</string>
+	<string name="Butt Size">
+		Göt ölçüsü
+	</string>
+	<string name="Butt Gravity">
+		Göt sallanması
+	</string>
+	<string name="bustle skirt">
+		Təlaş
+	</string>
+	<string name="no bustle">
+		Təlaşsız
+	</string>
+	<string name="more bustle">
+		Yekə təlaş
+	</string>
+	<string name="Chaplin">
+		«Çarli Çaplin»
+	</string>
+	<string name="Cheek Bones">
+		Yanaq sümükləri
+	</string>
+	<string name="Chest Size">
+		Sinə ölçüsü
+	</string>
+	<string name="Chin Angle">
+		Çənə bucağı
+	</string>
+	<string name="Chin Cleft">
+		Çənədə boşluq
+	</string>
+	<string name="Chin Curtains">
+		Skipper saqqalı
+	</string>
+	<string name="Chin Depth">
+		Çənə qalınlığı
+	</string>
+	<string name="Chin Heavy">
+		Güclü çənə
+	</string>
+	<string name="Chin In">
+		Çənə içəri
+	</string>
+	<string name="Chin Out">
+		Çənə çöldə
+	</string>
+	<string name="Chin-Neck">
+		Çənədən boyuna keçid
+	</string>
+	<string name="Clear">
+		Təmiz
+	</string>
+	<string name="Cleft">
+		Kiç
+	</string>
+	<string name="Close Set Eyes">
+		Bir-birinə yaxın
+	</string>
+	<string name="Closed">
+		Bağlı
+	</string>
+	<string name="Closed Back">
+		Arxadan bağlanıb
+	</string>
+	<string name="Closed Front">
+		Qabağdan bağlanıb
+	</string>
+	<string name="Closed Left">
+		Soldan bağlanıb
+	</string>
+	<string name="Closed Right">
+		Sağdan bağlanıb
+	</string>
+	<string name="Coin Purse">
+		Pul kisəsi
+	</string>
+	<string name="Collar Back">
+		Arxa kəsmə
+	</string>
+	<string name="Collar Front">
+		Ön kəsmə
+	</string>
+	<string name="Corner Down">
+		Küncləri aşağı
+	</string>
+	<string name="Corner Up">
+		Küncləri yuxarı
+	</string>
+	<string name="Creased">
+		Əzik
+	</string>
+	<string name="Crooked Nose">
+		Əyri burun
+	</string>
+	<string name="Cuff Flare">
+		Manjetlər
+	</string>
+	<string name="Dark">
+		Tünd
+	</string>
+	<string name="Dark Green">
+		Tünd-yaşıl
+	</string>
+	<string name="Darker">
+		Daha tünd
+	</string>
+	<string name="Deep">
+		Dərin
+	</string>
+	<string name="Default Heels">
+		Standart daban
+	</string>
+	<string name="Dense">
+		Qalın
+	</string>
+	<string name="Double Chin">
+		İkiqat çənə
+	</string>
+	<string name="Downturned">
+		Aşağı
+	</string>
+	<string name="Duffle Bag">
+		Daha çox
+	</string>
+	<string name="Ear Angle">
+		Çıxıntılı qulaqlar
+	</string>
+	<string name="Ear Size">
+		Qulaq ölçüsü
+	</string>
+	<string name="Ear Tips">
+		Qulaq ucları
+	</string>
+	<string name="Egg Head">
+		Yumurta başlılıq
+	</string>
+	<string name="Eye Bags">
+		Gözlər altındakı torbalar
+	</string>
+	<string name="Eye Color">
+		Göz rəngi
+	</string>
+	<string name="Eye Depth">
+		Göz dərinliyi
+	</string>
+	<string name="Eye Lightness">
+		Göz yüngüllüyü
+	</string>
+	<string name="Eye Opening">
+		Göz açığlığı
+	</string>
+	<string name="Eye Pop">
+		Çıxan göz
+	</string>
+	<string name="Eye Size">
+		Göz ölçüsü
+	</string>
+	<string name="Eye Spacing">
+		Gözlər arasındakı məsafə
+	</string>
+	<string name="Eyebrow Arc">
+		Qaş xətti
+	</string>
+	<string name="Eyebrow Density">
+		Qaş sıxlığı
+	</string>
+	<string name="Eyebrow Height">
+		Qaş hündürlüyü
+	</string>
+	<string name="Eyebrow Points">
+		Qaş ucları
+	</string>
+	<string name="Eyebrow Size">
+		Qaş ölçüsü
+	</string>
+	<string name="Eyelash Length">
+		Kirpik uzunluğu
+	</string>
+	<string name="Eyeliner">
+		Göz layneri
+	</string>
+	<string name="Eyeliner Color">
+		Göz layneri rəngi
+	</string>
+	<string name="Eyes Bugged">
+		Qabarıq gözlər
+	</string>
+	<string name="Face Shear">
+		Üzün əyriliyi
+	</string>
+	<string name="Facial Definition">
+		Üz xüsusiyyətləri
+	</string>
+	<string name="Far Set Eyes">
+		Geniş aralı gözlər
+	</string>
+	<string name="Fat Lips">
+		Qalın dodaqlar
+	</string>
+	<string name="Female">
+		Qadın
+	</string>
+	<string name="Fingerless">
+		Barmaqsız
+	</string>
+	<string name="Fingers">
+		Barmaqlarla
+	</string>
+	<string name="Flared Cuffs">
+		Manjetlərlə
+	</string>
+	<string name="Flat">
+		Düz
+	</string>
+	<string name="Flat Butt">
+		Düz göt
+	</string>
+	<string name="Flat Head">
+		Düz baş
+	</string>
+	<string name="Flat Toe">
+		Düz burun
+	</string>
+	<string name="Foot Size">
+		Ayaq ölçüsü
+	</string>
+	<string name="Forehead Angle">
+		Alın yamacı
+	</string>
+	<string name="Forehead Heavy">
+		Güclü alın
+	</string>
+	<string name="Freckles">
+		Çillər
+	</string>
+	<string name="Front Fringe">
+		Öndən tel
+	</string>
+	<string name="Full Back">
+		Tamamilə geri
+	</string>
+	<string name="Full Eyeliner">
+		Tam göz layneri
+	</string>
+	<string name="Full Front">
+		Tam irəlidə
+	</string>
+	<string name="Full Hair Sides">
+		Yan saçlar
+	</string>
+	<string name="Full Sides">
+		Yanlarda
+	</string>
+	<string name="Glossy">
+		Parlaq
+	</string>
+	<string name="Glove Fingers">
+		Əlcəklərin barmaqları
+	</string>
+	<string name="Glove Length">
+		Əlcəklərin uzunluqu
+	</string>
+	<string name="Hair">
+		Saçlar
+	</string>
+	<string name="Hair Back">
+		Saçlar: geridə
+	</string>
+	<string name="Hair Front">
+		Saçlar: öndə
+	</string>
+	<string name="Hair Sides">
+		Saçlar: yandan
+	</string>
+	<string name="Hair Sweep">
+		Saçlar göz üstündə
+	</string>
+	<string name="Hair Thickess">
+		Saç qalınlığı
+	</string>
+	<string name="Hair Thickness">
+		Saç qalınlığı
+	</string>
+	<string name="Hair Tilt">
+		Saçların taranması
+	</string>
+	<string name="Hair Tilted Left">
+		Geri taranma
+	</string>
+	<string name="Hair Tilted Right">
+		Sağa taranma
+	</string>
+	<string name="Hair Volume">
+		Saç: həcm
+	</string>
+	<string name="Hand Size">
+		Əl ölçüsü
+	</string>
+	<string name="Handlebars">
+		Uzun bığ
+	</string>
+	<string name="Head Length">
+		Baş uzunluğu
+	</string>
+	<string name="Head Shape">
+		Baş forması
+	</string>
+	<string name="Head Size">
+		Baş ölçüsü
+	</string>
+	<string name="Head Stretch">
+		Başın uzanması
+	</string>
+	<string name="Heel Height">
+		Daban hündürlüyü
+	</string>
+	<string name="Heel Shape">
+		Daban forması
+	</string>
+	<string name="Height">
+		Uzunluq
+	</string>
+	<string name="High">
+		Yüksək
+	</string>
+	<string name="High Heels">
+		Hündür daban
+	</string>
+	<string name="High Jaw">
+		Çənə yüksək
+	</string>
+	<string name="High Platforms">
+		Yüksək platforma
+	</string>
+	<string name="High and Tight">
+		Hündür və sıx
+	</string>
+	<string name="Higher">
+		Yuxarı
+	</string>
+	<string name="Hip Length">
+		Bud uzunluqu
+	</string>
+	<string name="Hip Width">
+		Bud enliyi
+	</string>
+	<string name="Hover">
+		Yeniləyin
+	</string>
+	<string name="In">
+		İçəri
+	</string>
+	<string name="In Shdw Color">
+		Daxili kölgə rəngi
+	</string>
+	<string name="In Shdw Opacity">
+		Kölgənin daxili. şəffaflıqı
+	</string>
+	<string name="Inner Eye Corner">
+		Gözlərin daxili küncləri
+	</string>
+	<string name="Inner Eye Shadow">
+		Daxili künclərdə kölgələr
+	</string>
+	<string name="Inner Shadow">
+		Daxili kölgələr
+	</string>
+	<string name="Jacket Length">
+		Pencəy uzunluqu
+	</string>
+	<string name="Jacket Wrinkles">
+		Qırılışlı pencəy
+	</string>
+	<string name="Jaw Angle">
+		Çənə bucağı
+	</string>
+	<string name="Jaw Jut">
+		Çənə çıxıntısı
+	</string>
+	<string name="Jaw Shape">
+		Çənə forması
+	</string>
+	<string name="Join">
+		Calaşdırın
+	</string>
+	<string name="Jowls">
+		Yanaqlar
+	</string>
+	<string name="Knee Angle">
+		Diz bucağı
+	</string>
+	<string name="Knock Kneed">
+		Döyülmüş diz
+	</string>
+	<string name="Large">
+		Daha çox
+	</string>
+	<string name="Large Hands">
+		Yekə əllər
+	</string>
+	<string name="Left Part">
+		Sol ayırıq
+	</string>
+	<string name="Leg Length">
+		Ayağın uzunluğu
+	</string>
+	<string name="Leg Muscles">
+		Ayağların əzələləri
+	</string>
+	<string name="Less">
+		Daha az
+	</string>
+	<string name="Less Body Fat">
+		Daha az piy
+	</string>
+	<string name="Less Curtains">
+		Daha az saqqal
+	</string>
+	<string name="Less Freckles">
+		Daha az çillər
+	</string>
+	<string name="Less Full">
+		Daha az kök
+	</string>
+	<string name="Less Gravity">
+		Daha az cazibə
+	</string>
+	<string name="Less Love">
+		Daha az
+	</string>
+	<string name="Less Muscles">
+		Daha az əzələ
+	</string>
+	<string name="Less Muscular">
+		Daha az əzələ
+	</string>
+	<string name="Less Rosy">
+		Daha az qızartı
+	</string>
+	<string name="Less Round">
+		Daha az yuvarlaqlıq
+	</string>
+	<string name="Less Saddle">
+		Daha az
+	</string>
+	<string name="Less Square">
+		Daha az bucaqlı
+	</string>
+	<string name="Less Volume">
+		Daha az həcm
+	</string>
+	<string name="Less soul">
+		Daha az
+	</string>
+	<string name="Lighter">
+		Daha açıq
+	</string>
+	<string name="Lip Cleft">
+		Dodaqlar arasında boşluq
+	</string>
+	<string name="Lip Cleft Depth">
+		Boşluq dərinliyi
+	</string>
+	<string name="Lip Fullness">
+		Dodaq dolğunluğu
+	</string>
+	<string name="Lip Pinkness">
+		Çəhrayı dodaqlar
+	</string>
+	<string name="Lip Ratio">
+		Dodaq nisbəti
+	</string>
+	<string name="Lip Thickness">
+		Dodaq qalınlığı
+	</string>
+	<string name="Lip Width">
+		Dodaq eni
+	</string>
+	<string name="Lipgloss">
+		Dodaq parıltısı
+	</string>
+	<string name="Lipstick">
+		Pomada
+	</string>
+	<string name="Lipstick Color">
+		Pomada rəngi
+	</string>
+	<string name="Long">
+		Daha uzun
+	</string>
+	<string name="Long Head">
+		Uzun baş
+	</string>
+	<string name="Long Hips">
+		Uzun budlar
+	</string>
+	<string name="Long Legs">
+		Uzun ayaqlar
+	</string>
+	<string name="Long Neck">
+		Uzun boyun
+	</string>
+	<string name="Long Pigtails">
+		Yanlarda uzun quyruqlar
+	</string>
+	<string name="Long Ponytail">
+		Arxada uzun quyruq
+	</string>
+	<string name="Long Torso">
+		Uzun bədən
+	</string>
+	<string name="Long arms">
+		Uzun əllər
+	</string>
+	<string name="Loose Pants">
+		Boş şalvar
+	</string>
+	<string name="Loose Shirt">
+		Boş köynək
+	</string>
+	<string name="Loose Sleeves">
+		Boş qollar
+	</string>
+	<string name="Love Handles">
+		Beldə piy
+	</string>
+	<string name="Low">
+		Aşağı
+	</string>
+	<string name="Low Heels">
+		Qısa daban
+	</string>
+	<string name="Low Jaw">
+		Çənə aşağı
+	</string>
+	<string name="Low Platforms">
+		Qısa platforma
+	</string>
+	<string name="Low and Loose">
+		Aşağı və azad
+	</string>
+	<string name="Lower">
+		Aşağı
+	</string>
+	<string name="Lower Bridge">
+		Burun körpüsü
+	</string>
+	<string name="Lower Cheeks">
+		Yanaqlar aşağı
+	</string>
+	<string name="Male">
+		Kişi
+	</string>
+	<string name="Middle Part">
+		Mərkəzdə ayrılma
+	</string>
+	<string name="More">
+		Daha çox
+	</string>
+	<string name="More Blush">
+		Daha çox qızartı
+	</string>
+	<string name="More Body Fat">
+		Daha çox piy
+	</string>
+	<string name="More Curtains">
+		Daha çox saqqal
+	</string>
+	<string name="More Eyeshadow">
+		Daha çox kölgə
+	</string>
+	<string name="More Freckles">
+		Daha çox çillər
+	</string>
+	<string name="More Full">
+		Daha çox kök
+	</string>
+	<string name="More Gravity">
+		Daha çox cazibə
+	</string>
+	<string name="More Lipstick">
+		Daha çox pomada
+	</string>
+	<string name="More Love">
+		Daha çox
+	</string>
+	<string name="More Lower Lip">
+		Daha çox aşağı dodaq
+	</string>
+	<string name="More Muscles">
+		Daha çox əzələ
+	</string>
+	<string name="More Muscular">
+		Daha çox əzələ
+	</string>
+	<string name="More Rosy">
+		Daha çox qızartı
+	</string>
+	<string name="More Round">
+		Daha çox yuvarlaqlıq
+	</string>
+	<string name="More Saddle">
+		Daha çox
+	</string>
+	<string name="More Sloped">
+		Daha əyri
+	</string>
+	<string name="More Square">
+		Daha çox kvadrat
+	</string>
+	<string name="More Upper Lip">
+		Daha çox yuxarı dodaq
+	</string>
+	<string name="More Vertical">
+		Daha şaquli
+	</string>
+	<string name="More Volume">
+		Daha çox həcm
+	</string>
+	<string name="More soul">
+		Daha çox
+	</string>
+	<string name="Moustache">
+		Bığ
+	</string>
+	<string name="Mouth Corner">
+		Ağız bucağı
+	</string>
+	<string name="Mouth Position">
+		Ağız yeri
+	</string>
+	<string name="Mowhawk">
+		İrokez
+	</string>
+	<string name="Muscular">
+		Əzələli
+	</string>
+	<string name="Mutton Chops">
+		Bakenbardlar
+	</string>
+	<string name="Nail Polish">
+		Dırnaq lakı
+	</string>
+	<string name="Nail Polish Color">
+		Lak rəngi
+	</string>
+	<string name="Narrow">
+		Dar
+	</string>
+	<string name="Narrow Back">
+		Dar arxa
+	</string>
+	<string name="Narrow Front">
+		Dar ön
+	</string>
+	<string name="Narrow Lips">
+		Dar dodaqlar
+	</string>
+	<string name="Natural">
+		Təbii
+	</string>
+	<string name="Neck Length">
+		Boyun uzunluğu
+	</string>
+	<string name="Neck Thickness">
+		Boyun qalınlığı
+	</string>
+	<string name="No Blush">
+		Qızartısız
+	</string>
+	<string name="No Eyeliner">
+		Laynersiz
+	</string>
+	<string name="No Eyeshadow">
+		Kölgələrsiz
+	</string>
+	<string name="No Lipgloss">
+		Parıltısız
+	</string>
+	<string name="No Lipstick">
+		Pomadasız
+	</string>
+	<string name="No Part">
+		Ayırımsız
+	</string>
+	<string name="No Polish">
+		Laksız
+	</string>
+	<string name="No Red">
+		Qırmızısız
+	</string>
+	<string name="No Spikes">
+		Tikansız
+	</string>
+	<string name="No White">
+		Ağ yoxdur
+	</string>
+	<string name="No Wrinkles">
+		Qırışsız
+	</string>
+	<string name="Normal Lower">
+		Normadan aşağı
+	</string>
+	<string name="Normal Upper">
+		Normadan yuxarı
+	</string>
+	<string name="Nose Left">
+		Burun sola
+	</string>
+	<string name="Nose Right">
+		Burun sağa
+	</string>
+	<string name="Nose Size">
+		Burun ölçüsü
+	</string>
+	<string name="Nose Thickness">
+		Burun qalınlığı
+	</string>
+	<string name="Nose Tip Angle">
+		Burun ucunun əyriliyi
+	</string>
+	<string name="Nose Tip Shape">
+		Burun ucu forması
+	</string>
+	<string name="Nose Width">
+		Burun eni
+	</string>
+	<string name="Nostril Division">
+		Bölmə
+	</string>
+	<string name="Nostril Width">
+		Burun genişliyi
+	</string>
+	<string name="Opaque">
+		Qeyri-şəffaf
+	</string>
+	<string name="Open">
+		Açıq
+	</string>
+	<string name="Open Back">
+		Arxadan açıq
+	</string>
+	<string name="Open Front">
+		Qabağdan açıq
+	</string>
+	<string name="Open Left">
+		Soldan açıq
+	</string>
+	<string name="Open Right">
+		Sağdan açıq
+	</string>
+	<string name="Orange">
+		Narıncı
+	</string>
+	<string name="Out">
+		Kənarda
+	</string>
+	<string name="Out Shdw Color">
+		Xarici kölgə rəngi
+	</string>
+	<string name="Out Shdw Opacity">
+		Kölgənin xarici. şəffaflıqı
+	</string>
+	<string name="Outer Eye Corner">
+		Gözlərin xarici küncləri
+	</string>
+	<string name="Outer Eye Shadow">
+		Xarici künclərdə kölgələr
+	</string>
+	<string name="Outer Shadow">
+		Xarici kölgələr
+	</string>
+	<string name="Overbite">
+		Dərin dişləmə
+	</string>
+	<string name="Package">
+		Vallah-bilmirəm
+	</string>
+	<string name="Painted Nails">
+		Boyalı
+	</string>
+	<string name="Pale">
+		Solğun
+	</string>
+	<string name="Pants Crotch">
+		Addım
+	</string>
+	<string name="Pants Fit">
+		Sıx uyğunlu şalvar
+	</string>
+	<string name="Pants Length">
+		Uzunluq
+	</string>
+	<string name="Pants Waist">
+		Şalvarın beli
+	</string>
+	<string name="Pants Wrinkles">
+		Qırışlı şalvar
+	</string>
+	<string name="Part">
+		Ayrılıq
+	</string>
+	<string name="Part Bangs">
+		Ayrılma ilə tel
+	</string>
+	<string name="Pectorals">
+		Döş əzələləri
+	</string>
+	<string name="Pigment">
+		Piqmentasiya
+	</string>
+	<string name="Pigtails">
+		Yanlarda quyruqlar
+	</string>
+	<string name="Pink">
+		Çəhrayı
+	</string>
+	<string name="Pinker">
+		Daha çəhrayı
+	</string>
+	<string name="Platform Height">
+		Platformanın yüksəkliyi
+	</string>
+	<string name="Platform Width">
+		Platformanın eni
+	</string>
+	<string name="Pointy">
+		Kəskin
+	</string>
+	<string name="Pointy Heels">
+		Uclu daban
+	</string>
+	<string name="Ponytail">
+		Arxada quyruq
+	</string>
+	<string name="Poofy Skirt">
+		Həcmli yubka
+	</string>
+	<string name="Pop Left Eye">
+		Sol göz
+	</string>
+	<string name="Pop Right Eye">
+		Sağ göz
+	</string>
+	<string name="Puffy">
+		Dombul
+	</string>
+	<string name="Puffy Eyelids">
+		Göz qapaqlarının dombulluqu
+	</string>
+	<string name="Rainbow Color">
+		Göy qurşağının rəngləri
+	</string>
+	<string name="Red Hair">
+		Qırmızı saç
+	</string>
+	<string name="Regular">
+		Normal
+	</string>
+	<string name="Right Part">
+		Sağ ayırıq
+	</string>
+	<string name="Rosy Complexion">
+		Çəhrayı üz
+	</string>
+	<string name="Round">
+		Yumuru
+	</string>
+	<string name="Ruddiness">
+		Qızartı
+	</string>
+	<string name="Ruddy">
+		Qızarmış
+	</string>
+	<string name="Rumpled Hair">
+		Dağınıq
+	</string>
+	<string name="Saddle Bags">
+		Qalife
+	</string>
+	<string name="Scrawny Leg">
+		Arıq ayaq
+	</string>
+	<string name="Separate">
+		Bölmək
+	</string>
+	<string name="Shallow">
+		İncə
+	</string>
+	<string name="Shear Back">
+		Arxada əyilmə
+	</string>
+	<string name="Shear Face">
+		Üzün əyriliyi
+	</string>
+	<string name="Shear Front">
+		Öndə əyilmə
+	</string>
+	<string name="Shear Left Up">
+		Sola yuxarı əyilmə
+	</string>
+	<string name="Shear Right Up">
+		Sağa yuxarı əyilmə
+	</string>
+	<string name="Sheared Back">
+		Arxadan az
+	</string>
+	<string name="Sheared Front">
+		Öndən az
+	</string>
+	<string name="Shift Left">
+		Sola sürüşdür
+	</string>
+	<string name="Shift Mouth">
+		Ağızı sürüşdür
+	</string>
+	<string name="Shift Right">
+		Sağa sürüşdür
+	</string>
+	<string name="Shirt Bottom">
+		Köynəyin ətəyi
+	</string>
+	<string name="Shirt Fit">
+		Köynəyin sıx uyğunluqu
+	</string>
+	<string name="Shirt Wrinkles">
+		Köynəyin qırışması
+	</string>
+	<string name="Shoe Height">
+		Ayaqqabı hündürlüyü
+	</string>
+	<string name="Short">
+		Aşağı
+	</string>
+	<string name="Short Arms">
+		Qısa qollar
+	</string>
+	<string name="Short Legs">
+		Qısa ayaqlar
+	</string>
+	<string name="Short Neck">
+		Qısa boyun
+	</string>
+	<string name="Short Pigtails">
+		Yanlarda qısa quyruqlar
+	</string>
+	<string name="Short Ponytail">
+		Arxadan qısa quyruq
+	</string>
+	<string name="Short Sideburns">
+		Qısa bakenbardlar
+	</string>
+	<string name="Short Torso">
+		Qısa bədən
+	</string>
+	<string name="Short hips">
+		Qısa budlar
+	</string>
+	<string name="Shoulders">
+		Çiyinlər
+	</string>
+	<string name="Side Fringe">
+		Tel yana
+	</string>
+	<string name="Sideburns">
+		Bakenbardlar
+	</string>
+	<string name="Sides Hair">
+		Yan saçlar
+	</string>
+	<string name="Sides Hair Down">
+		Yan saçlar aşağıda
+	</string>
+	<string name="Sides Hair Up">
+		Yan saçlar yuxarıda
+	</string>
+	<string name="Skinny Neck">
+		İncə boyun
+	</string>
+	<string name="Skirt Fit">
+		Sıx uyğunlu yubka
+	</string>
+	<string name="Skirt Length">
+		Yubka uzunluğu
+	</string>
+	<string name="Slanted Forehead">
+		Maili alın
+	</string>
+	<string name="Sleeve Length">
+		Qol uzunluğu
+	</string>
+	<string name="Sleeve Looseness">
+		Qol eni
+	</string>
+	<string name="Slit Back">
+		Kəsmə: arxa
+	</string>
+	<string name="Slit Front">
+		Kəsmə: öndə
+	</string>
+	<string name="Slit Left">
+		Kəsmə: solda
+	</string>
+	<string name="Slit Right">
+		Kəsmə: sağda
+	</string>
+	<string name="Small">
+		Daha az
+	</string>
+	<string name="Small Hands">
+		Kiçik əllər
+	</string>
+	<string name="Small Head">
+		Kiçik baş
+	</string>
+	<string name="Smooth">
+		Hamar
+	</string>
+	<string name="Smooth Hair">
+		Hamarlanmış
+	</string>
+	<string name="Socks Length">
+		Corab uzunluğu
+	</string>
+	<string name="Soulpatch">
+		Keçi saqqalı
+	</string>
+	<string name="Sparse">
+		Maye
+	</string>
+	<string name="Spiked Hair">
+		«Tikanlar» saç düzümü
+	</string>
+	<string name="Square">
+		Dördbucaq
+	</string>
+	<string name="Square Toe">
+		Dördbucaq burun
+	</string>
+	<string name="Squash Head">
+		Balqabaq baş
+	</string>
+	<string name="Stretch Head">
+		Başın uzanması
+	</string>
+	<string name="Sunken">
+		Batmış
+	</string>
+	<string name="Sunken Chest">
+		Batıq döş
+	</string>
+	<string name="Sunken Eyes">
+		Batıq gözlər
+	</string>
+	<string name="Sweep Back">
+		Arxaya daranmış
+	</string>
+	<string name="Sweep Forward">
+		Qabağa daranmış
+	</string>
+	<string name="Tall">
+		Yuxarı
+	</string>
+	<string name="Taper Back">
+		Arxada konus
+	</string>
+	<string name="Taper Front">
+		Öndə konus
+	</string>
+	<string name="Thick Heels">
+		Enli daban
+	</string>
+	<string name="Thick Neck">
+		Gömbul boyun
+	</string>
+	<string name="Thick Toe">
+		Enli burun
+	</string>
+	<string name="Thin">
+		İncə
+	</string>
+	<string name="Thin Eyebrows">
+		İncə qaşlar
+	</string>
+	<string name="Thin Lips">
+		İncə dodaqlar
+	</string>
+	<string name="Thin Nose">
+		İncə burun
+	</string>
+	<string name="Tight Chin">
+		İncə çənə
+	</string>
+	<string name="Tight Cuffs">
+		İncə manjetlər
+	</string>
+	<string name="Tight Pants">
+		Sıx uyğunlu şalvar
+	</string>
+	<string name="Tight Shirt">
+		Sıx uyğunlu köynək
+	</string>
+	<string name="Tight Skirt">
+		Sıx uyğunlu yubka
+	</string>
+	<string name="Tight Sleeves">
+		Sıx uyğunlu manjetlər
+	</string>
+	<string name="Toe Shape">
+		Burun forması
+	</string>
+	<string name="Toe Thickness">
+		Burun qalınlığı
+	</string>
+	<string name="Torso Length">
+		Bədən uzunluqu
+	</string>
+	<string name="Torso Muscles">
+		Bədən əzələliliyi
+	</string>
+	<string name="Torso Scrawny">
+		Bədənin arıqlığı
+	</string>
+	<string name="Unattached">
+		Calaşdırılmayıb
+	</string>
+	<string name="Uncreased">
+		Qırışlar yoxdur
+	</string>
+	<string name="Underbite">
+		Mesial dişdəm
+	</string>
+	<string name="Unnatural">
+		Qeyri-təbii
+	</string>
+	<string name="Upper Bridge">
+		Burun körpüsü
+	</string>
+	<string name="Upper Cheeks">
+		Yanaqlar yüksək
+	</string>
+	<string name="Upper Chin Cleft">
+		Çənədə boşluq yuxarı
+	</string>
+	<string name="Upper Eyelid Fold">
+		Üst göz qapağının bükülməsi
+	</string>
+	<string name="Upturned">
+		Yuxarı
+	</string>
+	<string name="Very Red">
+		Çox qırmızı
+	</string>
+	<string name="Waist Height">
+		Bel hündürlüyü
+	</string>
+	<string name="Well-Fed">
+		Dolğun
+	</string>
+	<string name="White Hair">
+		Ağ saç
+	</string>
+	<string name="Wide">
+		Geniş
+	</string>
+	<string name="Wide Back">
+		Arxadan geniş
+	</string>
+	<string name="Wide Front">
+		Öndən geniş
+	</string>
+	<string name="Wide Lips">
+		Geniş dodaqlar
+	</string>
+	<string name="Wild">
+		Dəli
+	</string>
+	<string name="Wrinkles">
+		Qırışlar
+	</string>
+	<string name="LocationCtrlAddLandmarkTooltip">
+		Əlfəcinlərə əlavə et
+	</string>
+	<string name="LocationCtrlEditLandmarkTooltip">
+		Əlfəcini dəyişdir
+	</string>
+	<string name="LocationCtrlInfoBtnTooltip">
+		Cari yer haqqında ətraflı məlumatı göstərin
+	</string>
+	<string name="LocationCtrlComboBtnTooltip">
+		Teleport tarixçəm
+	</string>
+	<string name="LocationCtrlForSaleTooltip">
+		Bu torpağı al
+	</string>
+	<string name="LocationCtrlVoiceTooltip">
+		Səsli ünsiyyət burada mövcud deyil
+	</string>
+	<string name="LocationCtrlFlyTooltip">
+		Uçuş qadağandır
+	</string>
+	<string name="LocationCtrlPushTooltip">
+		İtələmək olmaz
+	</string>
+	<string name="LocationCtrlBuildTooltip">
+		Obyektlərin tikintisinə / yerləşdirilməsinə icazə verilmir
+	</string>
+	<string name="LocationCtrlScriptsTooltip">
+		Skriptlərə icazə verilmir
+	</string>
+	<string name="LocationCtrlDamageTooltip">
+		Sağlamlıq
+	</string>
+	<string name="LocationCtrlAdultIconTooltip">
+		Yetkinlər sahəsi
+	</string>
+	<string name="LocationCtrlModerateIconTooltip">
+		Ortam icazəlilik sahəsi
+	</string>
+	<string name="LocationCtrlGeneralIconTooltip">
+		Ümumi icazə verilən sahə
+	</string>
+	<string name="LocationCtrlSeeAVsTooltip">
+		Bu sahədəki avatarlar digər sahədəki avatarlar üçün görünməz və eşidilməzdir
+	</string>
+	<string name="LocationCtrlPathfindingDirtyTooltip">
+		Bölgə bərpa olunana qədər bu bölgədə obyektlərin hərəkətində problemlər yarana bilər.
+	</string>
+	<string name="LocationCtrlPathfindingDisabledTooltip">
+		Bu bölgədə dinamik yol tapmağa icazə verilmir.
+	</string>
+	<string name="UpdaterWindowTitle">
+		[APP_NAME] yenilənməsi
+	</string>
+	<string name="UpdaterNowUpdating">
+		[APP_NAME] yenilənir...
+	</string>
+	<string name="UpdaterNowInstalling">
+		[APP_NAME] quraşdırılır...
+	</string>
+	<string name="UpdaterUpdatingDescriptive">
+		[APP_NAME] tətbiqi ən son buraxılışa yenilənir.  Bu bir az vaxt ala bilər. Səbirli olun.
+	</string>
+	<string name="UpdaterProgressBarTextWithEllipses">
+		Yeniləmə yüklənir...
+	</string>
+	<string name="UpdaterProgressBarText">
+		Yeniləmə yüklənir
+	</string>
+	<string name="UpdaterFailDownloadTitle">
+		Yeniləməni yükləmək alınmadı
+	</string>
+	<string name="UpdaterFailUpdateDescriptive">
+		[APP_NAME] tətbiqini yeniləyərkən xəta baş verdi. Yeni versiyanı www.secondlife.com saytından yükləyin.
+	</string>
+	<string name="UpdaterFailInstallTitle">
+		Yeniləməni quraşdırmaq alınmadı
+	</string>
+	<string name="UpdaterFailStartTitle">
+		Proqramı işə salmaq alınmadı
+	</string>
+	<string name="ItemsComingInTooFastFrom">
+		[APP_NAME]: [FROM_NAME] tərəfindən çox sürətli açılan elementlərə görə avtomatik izləmə [TIME] saniyə müddətində deaktiv edilib
+	</string>
+	<string name="ItemsComingInTooFast">
+		[APP_NAME]: çox sürətli açılan elementlərə görə avtomatik izləmə [TIME] saniyə müddətində deaktiv edilib
+	</string>
+	<string name="IM_logging_string">
+		-- IM mesajı qeydi aktivləşdirildi --
+	</string>
+	<string name="IM_typing_start_string">
+		[NAME] yazır...
+	</string>
+	<string name="Unnamed">
+		(Adsız)
+	</string>
+	<string name="IM_moderated_chat_label">
+		(Moderator: səslər susmaya görə olaraq deaktivdir)
+	</string>
+	<string name="IM_unavailable_text_label">
+		Bu zəng zamanı mətn söhbəti mövcud deyil.
+	</string>
+	<string name="IM_muted_text_label">
+		Mətn söhbətiniz qrup moderatoru tərəfindən deaktiv edilib.
+	</string>
+	<string name="IM_default_text_label">
+		IM-mesaj yaratmaq üçün bura klikləyin.
+	</string>
+	<string name="IM_to_label">
+		Kimə:
+	</string>
+	<string name="IM_moderator_label">
+		(Moderator)
+	</string>
+	<string name="Saved_message">
+		(Saxlanıldı [LONG_TIMESTAMP])
+	</string>
+	<string name="IM_unblock_only_groups_friends">
+		Bu mesaja baxmaq üçün «Seçimlər/Məxfilik» pəncərəsində «Yalnız dostlar və qruplar mənə zəng edib IM göndərə bilər» işarəsini çıxarın.
+	</string>
+	<string name="OnlineStatus">
+		daxil olub
+	</string>
+	<string name="OfflineStatus">
+		çıxıb
+	</string>
+	<string name="not_online_msg">
+		İstifadəçi onlayn deyil - mesaj daha sonra yadda saxlanılacaq və çatdırılacaq.
+	</string>
+	<string name="not_online_inventory">
+		İstifadəçi onlayn deyil - avadanlıq siyahısı saxlandı.
+	</string>
+	<string name="IM_announce_incoming">
+		[NAME] tərəfindən gələn mesaj
+	</string>
+	<string name="IM_autoresponse_sent">
+		Avtomatik cavab göndərildi: [MESSAGE]
+	</string>
+	<string name="IM_autoresponse_item_sent">
+		[ITEM_NAME] elementi avtomatik cavabla göndərildi
+	</string>
+	<string name="answered_call">
+		Zənginizə cavab verildi
+	</string>
+	<string name="you_started_call">
+		Səsli söhbətə başladınız
+	</string>
+	<string name="you_joined_call">
+		Siz səsli söhbətə qoşuldunuz
+	</string>
+	<string name="you_auto_rejected_call-im">
+		Səsli zəng avtomatik olaraq rədd edilir, çünki «Narahat etməyin» rejimi aktivdir.
+	</string>
+	<string name="name_started_call">
+		[NAME] sakini səsli söhbətə başladı
+	</string>
+	<string name="ringing-im">
+		Səsli söhbətə qoşulur...
+	</string>
+	<string name="connected-im">
+		Bağlantı quruldu. Telefonu bağlamaq üçün «Zəngi bitir» seçin
+	</string>
+	<string name="hang_up-im">
+		Səsli zəng kəsildi
+	</string>
+	<string name="answering-im">
+		Qoşulur...
+	</string>
+	<string name="conference-title">
+		Çoxlu üzvlü söhbət
+	</string>
+	<string name="conference-title-incoming">
+		[AGENT_NAME] sakini ilə konfrans
+	</string>
+	<string name="inventory_item_offered-im">
+		Təklif olunan avadanlıq siyahısı elementi «[ITEM_NAME]»
+	</string>
+	<string name="inventory_folder_offered-im">
+		Təklif olunan avadanlıq siyahısı qovluqu «[ITEM_NAME]»
+	</string>
+	<string name="inventory_item_offered_rlv">
+		Təklif olunan avadanlıq siyahısı elementi [NAME]
+	</string>
+	<string name="share_alert">
+		Elementləri avadanlıq siyahısından buraya daşıyın
+	</string>
+	<string name="flickr_post_success">
+		Siz Flickr-də mesaj paylaşdınız.
+	</string>
+	<string name="no_session_message">
+		(IM sessiyası mövcud deyil)
+	</string>
+	<string name="only_user_message">
+		Siz – bu sessiyada yeganə istifadəçisiniz.
+	</string>
+	<string name="offline_message">
+		[NAME] çıxıb.
+	</string>
+	<string name="invite_message">
+		Bu səsli söhbətdə iştirak etmək üçün [BUTTON NAME] düyməsini basın.
+	</string>
+	<string name="muted_message">
+		Siz bu sakini blokladınız. Ona mesaj göndərsəniz, blok avtomatik olaraq silinəcək.
+	</string>
+	<string name="generic">
+		Sorğu xətası. Yenidən cəhd eləyin.
+	</string>
+	<string name="generic_request_error">
+		Sorğu xətası. Yenidən cəhd eləyin.
+	</string>
+	<string name="insufficient_perms_error">
+		Kifayət qədər icazəniz yoxdur.
+	</string>
+	<string name="session_does_not_exist_error">
+		Sessiya artıq mövcud deyil
+	</string>
+	<string name="no_ability_error">
+		Sizin bu bacarığınız yoxdur.
+	</string>
+	<string name="no_ability">
+		Sizin bu bacarığınız yoxdur.
+	</string>
+	<string name="not_a_mod_error">
+		Siz – sessiya moderatoru deyilsiniz.
+	</string>
+	<string name="muted">
+		Qrup moderatoru sizin üçün mətn söhbətini deaktiv edib.
+	</string>
+	<string name="muted_error">
+		Qrup moderatoru sizin üçün mətn söhbətini deaktiv edib.
+	</string>
+	<string name="add_session_event">
+		[RECIPIENT] sakini ilə söhbət sessiyasına istifadəçiləri əlavə etmək mümkün deyil.
+	</string>
+	<string name="message">
+		[RECIPIENT] tərəfindən göndərilən mesaj hələ də emal olunur.
+Mesaj növbəti bir neçə dəqiqə ərzində görünməzsə, o, server tərəfindən silinmiş ola bilər.
+	</string>
+	<string name="message_session_event">
+		[RECIPIENT] tərəfindən göndərilən mesaj hələ də emal olunur.
+Mesaj növbəti bir neçə dəqiqə ərzində görünməzsə, o, server tərəfindən silinmiş ola bilər.
+	</string>
+	<string name="mute">
+		Moderasiya xətası.
+	</string>
+	<string name="removed">
+		Siz cəmiyyətdən atıldınız.
+	</string>
+	<string name="removed_from_group">
+		Siz cəmiyyətdən atıldınız.
+	</string>
+	<string name="close_on_no_ability">
+		Siz artıq söhbət sessiyasında iştirak edə bilməzsiniz.
+	</string>
+	<string name="unread_chat_single">
+		[SOURCES] yeni bir şey dedi
+	</string>
+	<string name="unread_chat_multiple">
+		[SOURCES] yeni bir şey dedi
+	</string>
+	<string name="teleport_preamble_compact_chat">
+		Siz indi buradasınız:
+	</string>
+	<string name="session_initialization_timed_out_error">
+		Sessiyanın işə salınması vaxtı bitdi
+	</string>
+	<string name="Home position set.">
+		Evin yeri təyin edildi.
+	</string>
+
+	<string name="paid_you_ldollars">
+		[NAME] sakini sizə [REASON] üçün L$[AMOUNT] ödədi.
+	</string>
+	<string name="paid_you_ldollars_gift">
+		İstifadəçi [NAME] sizə L$[AMOUNT] ödədi: [REASON]
+	</string>
+	<string name="paid_you_ldollars_no_reason">
+		[NAME] sakini sizə L$[AMOUNT] ödədi.
+	</string>
+	<string name="you_paid_ldollars">
+		[NAME] adlı sakinə [REASON] üçün L$[AMOUNT] ödəmisiniz.
+	</string>
+	<string name="you_paid_ldollars_gift">
+		[NAME] istifadəçisinə L$[AMOUNT] ödəmisiniz: [REASON]
+	</string>
+	<string name="you_paid_ldollars_no_info">
+		L$[AMOUNT] ödəmisiniz.
+	</string>
+	<string name="you_paid_ldollars_no_reason">
+		[NAME] adlı sakinə L$[AMOUNT] ödəmisiniz.
+	</string>
+	<string name="you_paid_ldollars_no_name">
+		[REASON] üçün L$[AMOUNT] ödəmisiniz.
+	</string>
+	<string name="you_paid_failure_ldollars">
+		[NAME] istifadəçisinə L$[AMOUNT] ödəyə bilmədiniz: [REASON].
+	</string>
+	<string name="you_paid_failure_ldollars_gift">
+		[NAME] istifadəçisinə L$[AMOUNT] ödəyə bilmədiniz: [REASON]
+	</string>
+	<string name="you_paid_failure_ldollars_no_info">
+		Siz L$[AMOUNT] ödəyə bilmədiniz
+	</string>
+	<string name="you_paid_failure_ldollars_no_reason">
+		[NAME] istifadəçisinə L$[AMOUNT] ödəyə bilmədiniz
+	</string>
+	<string name="you_paid_failure_ldollars_no_name">
+		Siz L$[AMOUNT] ödəyə bilmədiniz: [REASON].
+	</string>
+	<string name="for item">
+		[ITEM] üçün
+	</string>
+	<string name="for a parcel of land">
+		torpağ sahəsi üçün
+	</string>
+	<string name="for a land access pass">
+		yer keçidi üçün
+	</string>
+	<string name="for deeding land">
+		torpağın ötürülməsi üçün
+	</string>
+	<string name="to create a group">
+		cəmiyyət yaratmaq üçün
+	</string>
+	<string name="to join a group">
+		cəmiyyətə üzv olmaq üçün
+	</string>
+	<string name="to upload">
+		şəbəkə içi ötürülmə üçün
+	</string>
+	<string name="to publish a classified ad">
+		elan yerləşdirmək üçün
+	</string>
+	<string name="uploading_costs">
+		Yükləmə xərci L$[AMOUNT]
+	</string>
+	<string name="this_costs">
+		Bunun qiyməti L$[AMOUNT]
+	</string>
+	<string name="buying_selected_land">
+		L$[AMOUNT] üçün seçilmiş torpaq alınır
+	</string>
+	<string name="this_object_costs">
+		Bu obyektin qiyməti L$[AMOUNT]
+	</string>
+	<string name="giving">
+		Vermək istəyirsiniz
+	</string>
+	<string name="group_role_everyone">
+		Hamı
+	</string>
+	<string name="group_role_officers">
+		Məmurlar
+	</string>
+	<string name="group_role_owners">
+		Sahiblər
+	</string>
+	<string name="group_member_status_online">
+		Onlayn
+	</string>
+	<string name="uploading_abuse_report">
+		Yüklənir...
+Şikayət
+	</string>
+	<string name="New Shape">
+		Yeni fiqur
+	</string>
+	<string name="New Skin">
+		Yeni dəri
+	</string>
+	<string name="New Hair">
+		Yeni saçlar
+	</string>
+	<string name="New Eyes">
+		Yeni gözlər
+	</string>
+	<string name="New Shirt">
+		Yeni köynək
+	</string>
+	<string name="New Pants">
+		Yeni şalvar
+	</string>
+	<string name="New Shoes">
+		Yeni ayaqqabı
+	</string>
+	<string name="New Socks">
+		Yeni corablar
+	</string>
+	<string name="New Jacket">
+		Yeni pencək
+	</string>
+	<string name="New Gloves">
+		Yeni əlcəklər
+	</string>
+	<string name="New Undershirt">
+		Yeni mayka
+	</string>
+	<string name="New Underpants">
+		Yeni tuman
+	</string>
+	<string name="New Skirt">
+		Yeni yubka
+	</string>
+	<string name="New Alpha">
+		Yeni alfa-maskası
+	</string>
+	<string name="New Tattoo">
+		Yeni döymə
+	</string>
+	<string name="New Universal">
+		Yeni universal
+	</string>
+	<string name="New Physics">
+		Yeni fizika
+	</string>
+	<string name="Invalid Wearable">
+		Geyinmək olmaz
+	</string>
+	<string name="New Gesture">
+		Yeni jest
+	</string>
+	<string name="New Script">
+		Yeni skript
+	</string>
+	<string name="New Note">
+		Yeni qeyd
+	</string>
+	<string name="New Folder">
+		Yeni qovluq
+	</string>
+	<string name="Contents">
+		Məzmun
+	</string>
+	<string name="Gesture">
+		Jest
+	</string>
+	<string name="Male Gestures">
+		Kişi jestləri
+	</string>
+	<string name="Female Gestures">
+		Qadın jestləri
+	</string>
+	<string name="Other Gestures">
+		Qalan jestlər
+	</string>
+	<string name="Speech Gestures">
+		Söhbət jestləri
+	</string>
+	<string name="Common Gestures">
+		Standart jestlər
+	</string>
+	<string name="Male - Excuse me">
+		Kişi - üzr istəmək
+	</string>
+	<string name="Male - Get lost">
+		Kişi - itil burdan
+	</string>
+	<string name="Male - Blow kiss">
+		Kişi - hava öpüşü
+	</string>
+	<string name="Male - Boo">
+		Kişi - püf!
+	</string>
+	<string name="Male - Bored">
+		Kişi - cansıxıcılıq
+	</string>
+	<string name="Male - Hey">
+		Kişi - ayə!
+	</string>
+	<string name="Male - Laugh">
+		Kişi - gülüş
+	</string>
+	<string name="Male - Repulsed">
+		Kişi - imtina
+	</string>
+	<string name="Male - Shrug">
+		Kişi - çiyin çəkir
+	</string>
+	<string name="Male - Stick tougue out">
+		Kişi - dil göstərir
+	</string>
+	<string name="Male - Wow">
+		Kişi - uyda!
+	</string>
+	<string name="Female - Chuckle">
+		Qadın - gülüşcük
+	</string>
+	<string name="Female - Cry">
+		Qadın - ağlamaq
+	</string>
+	<string name="Female - Embarrassed">
+		Qadın - xəcalət
+	</string>
+	<string name="Female - Excuse me">
+		Qadın - üzr istəmək
+	</string>
+	<string name="Female - Get lost">
+		Qadın - itil burdan
+	</string>
+	<string name="Female - Blow kiss">
+		Qadın - hava öpüşü
+	</string>
+	<string name="Female - Boo">
+		Qadın - püf!
+	</string>
+	<string name="Female - Bored">
+		Qadın - cansıxıcılıq
+	</string>
+	<string name="Female - Hey">
+		Qadın - ayə!
+	</string>
+	<string name="Female - Hey baby">
+		Qadın - hey bəybi!
+	</string>
+	<string name="Female - Laugh">
+		Qadın - gülüş
+	</string>
+	<string name="Female - Looking good">
+		Qadın - yaxşı görünürsən
+	</string>
+	<string name="Female - Over here">
+		Qadın - buraya!
+	</string>
+	<string name="Female - Please">
+		Qadın - xahiş
+	</string>
+	<string name="Female - Repulsed">
+		Qadın - imtina
+	</string>
+	<string name="Female - Shrug">
+		Qadın - çiyin çəkir
+	</string>
+	<string name="Female - Stick tougue out">
+		Qadın - dil göstərir
+	</string>
+	<string name="Female - Wow">
+		Qadın - uyda!
+	</string>
+	<string name="New Daycycle">
+		Yeni gündəlik dövrü
+	</string>
+	<string name="New Water">
+		Yeni su
+	</string>
+	<string name="New Sky">
+		Yeni səma
+	</string>
+	<string name="New Settings">
+		Yeni seçimlər
+	</string>
+	<string name="/bow">
+		/başəymək
+	</string>
+	<string name="/clap">
+		/alqışlar
+	</string>
+	<string name="/count">
+		/say
+	</string>
+	<string name="/extinguish">
+		/yanğınsöndür
+	</string>
+	<string name="/kmb">
+		/mənim götümü öp
+	</string>
+	<string name="/muscle">
+		/idmançı
+	</string>
+	<string name="/no">
+		/xeyr
+	</string>
+	<string name="/no!">
+		/xeyr!
+	</string>
+	<string name="/paper">
+		/kağız
+	</string>
+	<string name="/pointme">
+		/özünə göstər
+	</string>
+	<string name="/pointyou">
+		/başqasına göstər
+	</string>
+	<string name="/rock">
+		/daş
+	</string>
+	<string name="/scissor">
+		/qayçı
+	</string>
+	<string name="/smoke">
+		/çəkmək
+	</string>
+	<string name="/stretch">
+		/dartınmaq
+	</string>
+	<string name="/whistle">
+		/fit çalmaq
+	</string>
+	<string name="/yes">
+		/bəli
+	</string>
+	<string name="/yes!">
+		/həri!
+	</string>
+	<string name="afk">
+		uzaqlaşdım
+	</string>
+	<string name="dance1">
+		rəqs1
+	</string>
+	<string name="dance2">
+		rəqs2
+	</string>
+	<string name="dance3">
+		rəqs3
+	</string>
+	<string name="dance4">
+		rəqs4
+	</string>
+	<string name="dance5">
+		rəqs5
+	</string>
+	<string name="dance6">
+		rəqs6
+	</string>
+	<string name="dance7">
+		rəqs7
+	</string>
+	<string name="dance8">
+		rəqs8
+	</string>
+	<string name="AvatarBirthDateFormat">
+		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc]
+	</string>
+	<string name="AvatarBirthDateFormat_legacy">
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]
+	</string>
+	<string name="DefaultMimeType">
+		yox/yox
+	</string>
+	<string name="texture_load_dimensions_error">
+		[WIDTH]*[HEIGHT] ölçüsündən böyük şəkilləri yükləmək mümkün deyil
+	</string>
+	<string name="outfit_photo_load_dimensions_error">
+		Geyimin maksimum şəkil ölçüsü [WIDTH]*[HEIGHT]-dir. Ölçüsü dəyişdirin və ya başqa bir şəkil istifadə edin
+	</string>
+	<string name="outfit_photo_select_dimensions_error">
+		Geyimin maksimum şəkil ölçüsü [WIDTH]*[HEIGHT]-dir. Ayrı tekstura seçin.
+	</string>
+	<string name="outfit_photo_verify_dimensions_error">
+		Şəkilin ölçülərini yoxlamaq mümkün deyil. Şəkil ölçüləri seçim pəncərəsində görünənə qədər gözləyin
+	</string>
+	<string name="sentences_separator" value=" "/>
+	<string name="words_separator" value=", "/>
+	<string name="server_is_down">
+		Bizim qüvvətimizə baxmayaraq, gözlənilmədən bir şey səhv oldu.
+
+Bu xidmətlə bağlı məlum problemlər üçün http://status.secondlifegrid.net saytına baxın.
+Problemlər davam edərsə, şəbəkə bağlantınızı və firewall seçimlərini yoxlayın.
+	</string>
+	<string name="dateTimeWeekdaysNames">
+		Bazar:Bazar ertəsi:Çərşənbə axşamı:Çərşənbə:Cümə axşamı:Cümə:Şənbə
+	</string>
+	<string name="dateTimeWeekdaysShortNames">
+		B:Be:Ça:Ç:Ca:C:Ş
+	</string>
+	<string name="dateTimeMonthNames">
+		Yanvar:Fevral:Mart:Aprel:May:İyun:İyul:Avqust:Sentyabr:Oktyabr:Noyabr:Dekabr
+	</string>
+	<string name="dateTimeMonthShortNames">
+		Yan:Fev:Mar:Apr:May:İyn:İyl:Avq:Sen:Okt:Noy:Dek
+	</string>
+	<string name="dateTimeDayFormat">
+		[MDAY]
+	</string>
+	<string name="dateTimeAM">
+		günortadan əvvəl
+	</string>
+	<string name="dateTimePM">
+		günortadan sonra
+	</string>
+	<string name="LocalEstimateUSD">
+		[AMOUNT] US$
+	</string>
+	<string name="Group Ban">
+		Qrup bloklaması
+	</string>
+	<string name="Membership">
+		Üzvlük
+	</string>
+	<string name="Roles">
+		Rollar
+	</string>
+	<string name="Group Identity">
+		Qrup şəxsiyyəti
+	</string>
+	<string name="Parcel Management">
+		Sahənin idarə edilməsi
+	</string>
+	<string name="Parcel Identity">
+		Sahənin şəxsiyyəti
+	</string>
+	<string name="Parcel Settings">
+		Sahə seçimləri
+	</string>
+	<string name="Parcel Powers">
+		Sahə bacarıqları
+	</string>
+	<string name="Parcel Access">
+		Sahəyə giriş
+	</string>
+	<string name="Parcel Content">
+		Sahənin məzmunu
+	</string>
+	<string name="Object Management">
+		Obyekt İdarəetmə
+	</string>
+	<string name="Accounting">
+		Mühasibat
+	</string>
+	<string name="Notices">
+		Bildirişlər
+	</string>
+	<string name="Chat">
+		Söhbət
+	</string>
+	<string name="BaseMembership">
+		Baza
+	</string>
+	<string name="PremiumMembership">
+		Premium
+	</string>
+	<string name="Premium PlusMembership">
+		Premium Üstəgəl
+	</string>
+	<string name="MembershipUpgradeText">
+		Premiuma keç
+	</string>
+	<string name="MembershipPremiumText">
+		Premium üzvlüyüm
+	</string>
+	<string name="DeleteItems">
+		Seçilmiş [COUNT_SELECTION] obyekt silinsin? (Cəmi [COUNT_TOTAL])
+	</string>
+	<string name="DeleteItem">
+		Seçilmiş obyekt silinsin? (Cəmi [COUNT_TOTAL])
+	</string>
+	<string name="EmptyOutfitText">
+		Bu geyim üçün heç bir əşya yoxdur
+	</string>
+	<string name="ExternalEditorNotSet">
+		ExternalEditor seçimindən istifadə edərək dəyişdirici seçin.
+	</string>
+	<string name="ExternalEditorNotFound">
+		Göstərilən xarici dəyişdiricini tapmaq mümkün deyil.
+Dəyişdiricinin yolunu qoşa dırnaq içərisində qoymağa çalışın
+(məsələn &quot;/path to my/editor&quot; &quot;%s&quot;)
+	</string>
+	<string name="ExternalEditorCommandParseError">
+		Xarici dəyişdirici üçün komanda xətti təhlil xətası.
+	</string>
+	<string name="ExternalEditorFailedToRun">
+		Xarici dəyişdiricini işə salmaq alınmadı.
+	</string>
+	<string name="TranslationFailed">
+		Tərcümə xətası: [REASON]
+	</string>
+	<string name="TranslationResponseParseError">
+		Tərcüməçinin cavabını təhlil edərkən xəta baş verdi.
+	</string>
+	<string name="Esc">
+		ESC
+	</string>
+	<string name="Space">
+		Boşluq
+	</string>
+	<string name="Tab">
+		TAB
+	</string>
+	<string name="Ins">
+		INS
+	</string>
+	<string name="Del">
+		DEL
+	</string>
+	<string name="Backsp">
+		BACKSP
+	</string>
+	<string name="Shift">
+		SHIFT
+	</string>
+	<string name="Ctrl">
+		CTRL
+	</string>
+	<string name="Alt">
+		ALT
+	</string>
+	<string name="CapsLock">
+		CAPSLOCK
+	</string>
+	<string name="Left">
+		Sola oxu
+	</string>
+	<string name="Right">
+		Sağa oxu
+	</string>
+	<string name="Up">
+		Yuxarı oxu
+	</string>
+	<string name="Down">
+		Aşağı oxu
+	</string>
+	<string name="Home">
+		HOME
+	</string>
+	<string name="End">
+		END
+	</string>
+	<string name="PgUp">
+		PgUp
+	</string>
+	<string name="PgDn">
+		PgDn
+	</string>
+
+	<string name="Add">
+		Əlavə et
+	</string>
+	<string name="Subtract">
+		Çıx
+	</string>
+	<string name="Multiply">
+		Vur
+	</string>
+	<string name="Divide">
+		Böl
+	</string>
+
+
+	<string name="LMB">SaMD</string>
+	<string name="MMB">OMD</string>
+	<string name="RMB">SoMD</string>
+	<string name="MB4">MD4</string>
+	<string name="MB5">MD5</string>
+	<string name="Double LMB">İkili SoMD</string>
+
+	<string name="BeaconParticle">
+		Hissəcik markerlərinin baxılması (mavi)
+	</string>
+	<string name="BeaconPhysical">
+		Fiziki obyektlər markerlərinin baxılması (yaşıl)
+	</string>
+	<string name="BeaconScripted">
+		Skriptli obyektlər markerlərinin baxılması (qırmızı)
+	</string>
+	<string name="BeaconScriptedTouch">
+		Skriptli və toxunma funksiyası olan obyektlər markerlərinin baxılması (qırmızı)
+	</string>
+	<string name="BeaconSound">
+		Səs markerlərinin baxılması (sarı)
+	</string>
+	<string name="BeaconMedia">
+		Media markerlərinin baxılması (ağ)
+	</string>
+	<string name="BeaconSun">
+		Günəşin istiqamət markerinin baxılması (narıncı)
+	</string>
+	<string name="BeaconMoon">
+		Ayın istiqamət markerinin baxılması (bənövşəyi)
+	</string>
+	<string name="ParticleHiding">
+		Hissəciklər gizlənilib
+	</string>
+	<string name="Command_360_Capture_Label">
+		360° Çəkiliş
+	</string>
+	<string name="Command_AboutLand_Label">
+		Yer haqqında
+	</string>
+	<string name="Command_Appearance_Label">
+		Görünüş
+	</string>
+	<string name="Command_Avatar_Label">
+		Avatar
+	</string>
+	<string name="Command_Build_Label">
+		Tikinti
+	</string>
+	<string name="Command_Chat_Label">
+		Söhbət
+	</string>
+	<string name="Command_Conversations_Label">
+		Söhbətlər
+	</string>
+	<string name="Command_Compass_Label">
+		Kompas
+	</string>
+	<string name="Command_Destinations_Label">
+		Maraqlı yerlər
+	</string>
+	<string name="Command_Environments_Label">
+		Mühitlər
+	</string>
+	<string name="Command_Flickr_Label">
+		Flickr
+	</string>
+	<string name="Command_Gestures_Label">
+		Jestlər
+	</string>
+	<string name="Command_Grid_Status_Label">
+		Şəbəkə Statusu
+	</string>
+	<string name="Command_HowTo_Label">
+		Təlimatlar
+	</string>
+	<string name="Command_Inventory_Label">
+		Avadanlıq siyahısı
+	</string>
+	<string name="Command_Map_Label">
+		Xəritə
+	</string>
+	<string name="Command_Marketplace_Label">
+		Ticarət mərkəzi
+	</string>
+	<string name="Command_MarketplaceListings_Label">
+		Ticarət mərkəzi
+	</string>
+	<string name="Command_MiniMap_Label">
+		Mini-xəritə
+	</string>
+	<string name="Command_Move_Label">
+		Hərəkət
+	</string>
+	<string name="Command_People_Label">
+		Adamlar
+	</string>
+	<string name="Command_Performance_Label">
+		Qrafika sürəti
+	</string>
+	<string name="Command_Picks_Label">
+		Yerlər
+	</string>
+	<string name="Command_Places_Label">
+		Yer
+	</string>
+	<string name="Command_Preferences_Label">
+		Seçimlər
+	</string>
+	<string name="Command_Profile_Label">
+		Profil
+	</string>
+	<string name="Command_Report_Abuse_Label">
+		Şikayət
+	</string>
+	<string name="Command_Search_Label">
+		Axtarış
+	</string>
+	<string name="Command_Snapshot_Label">
+		Şəkil
+	</string>
+	<string name="Command_Speak_Label">
+		Danışmaq
+	</string>
+	<string name="Command_View_Label">
+		Kameraları idarə etmək
+	</string>
+	<string name="Command_Voice_Label">
+		Yaxındakı səs
+	</string>
+	<string name="Command_Quickprefs_Label">
+		Sürətli seçimlər
+	</string>
+	<string name="Command_AO_Label">
+		Animasiya meneceri
+	</string>
+	<string name="Command_Webbrowser_Label">
+		Web browser
+	</string>
+	<string name="Command_Default_Chat_Bar_Label">
+		Söhbət
+	</string>
+	<string name="Command_Areasearch_Label">
+		Ətraflı axtarış
+	</string>
+	<string name="Command_Settings_Debug_Label">
+		Seçimlərin səhvlərini tapmaq
+	</string>
+	<string name="Command_Statistics_Label">
+		Statistika
+	</string>
+	<string name="Command_Region_Label">
+		Region/Ada
+	</string>
+	<string name="Command_Fly_Label">
+		Uçuş
+	</string>
+	<string name="Command_Groundsit_Label">
+		Yerə oturmaq
+	</string>
+	<string name="Command_Sound_Explorer_Label">
+		Səs bələdçisi
+	</string>
+	<string name="Command_Asset_Blacklist_Label">
+		Aktivlərin qara siyahısı
+	</string>
+	<string name="Command_Phototools_Label">
+		Şəkil alətləri
+	</string>
+	<string name="Command_Phototools_View_Label">
+		Kamera alətləri
+	</string>
+	<string name="Command_Contact_Sets_Label">
+		Kontakt dəstləri
+	</string>
+	<string name="Command_Mouselook_Label">
+		Birinci şəxs görünüşü
+	</string>
+	<string name="Command_Landmark_Here_Label">
+		Əlfəcin yaradın
+	</string>
+	<string name="Command_Teleport_History_Label">
+		Teleport tarixi
+	</string>
+	<string name="Command_Pose_Stand_Label">
+		Dəyişdirmək duruşu
+	</string>
+	<string name="Command_Snapshot_To_Disk_Label">
+		Diskə şəkil
+	</string>
+	<string name="Command_Radar_Label">
+		Radar
+	</string>
+	<string name="Command_Conversation_Log_Label">
+		Söhbətlər jurnalı
+	</string>
+	<string name="Command_Move_Lock_Label">
+		Hərəkətlərin bloku
+	</string>
+	<string name="Command_Blocklist_Label">
+		Qara siyahı
+	</string>
+	<string name="Command_ResyncAnimations_Label">
+		Animasiya sinxronlaşdırması
+	</string>
+	<string name="Command_RegionTracker_Label">
+		Region izləyicisi
+	</string>
+	<string name="Command_Group_Titles_Label">
+		Qrup başlıqları
+	</string>
+	<string name="Command_Wearable_Favorites_Label">
+		Seçilmiş paltarlar
+	</string>
+	<string name="Command_RFO_Label">
+		Yalnız dostları göstərin
+	</string>
+	<string name="Command_DAO_Label">
+		Animeşləri gizlədin
+	</string>
+	<string name="Command_Beacons_Label">
+		Mayaklar
+	</string>
+	<string name="Command_360_Capture_Tooltip">
+		360° Düzbucaqlı Şəklin yaradılması
+	</string>
+	<string name="Command_AboutLand_Tooltip">
+		Ziyarət etdiyiniz torpaq haqqında məlumat
+	</string>
+	<string name="Command_Appearance_Tooltip">
+		Avatarınızı dəyişdirin
+	</string>
+	<string name="Command_Avatar_Tooltip">
+		Tam avatar seçin
+	</string>
+	<string name="Command_Build_Tooltip">
+		Obyektlərin tikintisi və landşaftın formalaşması (CTRL + 4)
+	</string>
+	<string name="Command_Chat_Tooltip">
+		Mətndən istifadə edərək yaxınlıqdakı insanlarla söhbət edin (CTRL+T)
+	</string>
+	<string name="Command_Conversations_Tooltip">
+		Hamı ilə danışın (CTRL+T)
+	</string>
+	<string name="Command_Compass_Tooltip">
+		Kompas
+	</string>
+	<string name="Command_Destinations_Tooltip">
+		Maraqlı yerlər
+	</string>
+	<string name="Command_Environments_Tooltip">
+		Mühitlər
+	</string>
+	<string name="Command_Flickr_Tooltip">
+		Flickr-a yükləyin
+	</string>
+	<string name="Command_Gestures_Tooltip">
+		Avatarınız üçün jestlər (CTRL+G)
+	</string>
+	<string name="Command_Grid_Status_Tooltip">
+		Cari şəbəkə vəziyyətini göstərin
+	</string>
+	<string name="Command_HowTo_Tooltip">
+		Ümumi tapşırıqların yerinə yetirilməsi
+	</string>
+	<string name="Command_Inventory_Tooltip">
+		Mülkiyyətinizə baxın və istifadə edin (CTRL+I)
+	</string>
+	<string name="Command_Map_Tooltip">
+		Dünya xəritəsi (CTRL+M)
+	</string>
+	<string name="Command_Marketplace_Tooltip">
+		Alışlar
+	</string>
+	<string name="Command_MarketplaceListings_Tooltip">
+		Yaradıcılığınızı satın
+	</string>
+	<string name="Command_MiniMap_Tooltip">
+		Yaxınlıqdakı insanları göstərin (CTRL+SHIFT+M)
+	</string>
+	<string name="Command_Move_Tooltip">
+		Avatarların hərəkəti
+	</string>
+	<string name="Command_People_Tooltip">
+		Dostlar, qruplar və yaxınlıqdakı insanlar (CTRL+SHIFT+A)
+	</string>
+	<string name="Command_Performance_Tooltip">
+		Qrafik seçimlərini tənzimləyin
+	</string>
+	<string name="Command_Picks_Tooltip">
+		Profilinizdə sevimli kimi göstəriləcək yerlər
+	</string>
+	<string name="Command_Places_Tooltip">
+		Saxladığınız yerlər (ALT+H)
+	</string>
+	<string name="Command_Preferences_Tooltip">
+		Seçimlər (CTRL+P)
+	</string>
+	<string name="Command_Profile_Tooltip">
+		Profilinizi dəyişdirmək və ya baxmaq
+	</string>
+	<string name="Command_Report_Abuse_Tooltip">
+		Şikayət
+	</string>
+	<string name="Command_Search_Tooltip">
+		Yer, adam, hadisə axtarışı (CTRL+F)
+	</string>
+	<string name="Command_Snapshot_Tooltip">
+		Şəkil çəkmək (CTRL+SHIFT+S)
+	</string>
+	<string name="Command_Speak_Tooltip">
+		Mikrofondan istifadə edərək ətrafınızdakı insanlarla danışın
+	</string>
+	<string name="Command_View_Tooltip">
+		Kamera bucağının seçimi
+	</string>
+	<string name="Command_Voice_Tooltip">
+		Yaxınlıqdakı insanlarla zənglərin və söhbətlərin həcmini tənzimləyin
+	</string>
+	<string name="Command_Quickprefs_Tooltip">
+		Tez-tez tənzimləmələri dəyişmək üçün cəld seçimlər
+	</string>
+	<string name="Command_AO_Tooltip">
+		AO
+	</string>
+	<string name="Command_Webbrowser_Tooltip">
+		Daxili veb brauzerini açın (CTRL+SHIFT+Z)
+	</string>
+	<string name="Command_Default_Chat_Bar_Tooltip">
+		Defolt olaraq söhbət pəncərəsini göstərin və ya gizlədin
+	</string>
+	<string name="Command_Areasearch_Tooltip">
+		Ətrafdakı obyektlərin axtarışı
+	</string>
+	<string name="Command_Settings_Debug_Tooltip">
+		Klient konfiqurasiya seçimlərini dəyişdirin (CTRL+ALT+SHIFT+S)
+	</string>
+	<string name="Command_Statistics_Tooltip">
+		Statistikanı göstərin (CTRL+SHIFT+1)
+	</string>
+	<string name="Command_Region_Tooltip">
+		Region Alətlərini açın (ALT+R)
+	</string>
+	<string name="Command_Groundsit_Tooltip">
+		Yerdə oturmaq (CTRL+ALT+S)
+	</string>
+	<string name="Command_Sound_Explorer_Tooltip">
+		Səs brauzerini açın
+	</string>
+	<string name="Command_Asset_Blacklist_Tooltip">
+		Qara siyahını açın
+	</string>
+	<string name="Command_Phototools_Tooltip">
+		Şəkil alətləri (ATL+P).
+	</string>
+	<string name="Command_Phototools_View_Tooltip">
+		Qabaqcıl kamera seçimləri (CTRL+SHIFT+C)
+	</string>
+	<string name="Command_Contact_Sets_Tooltip">
+		Kontakt dəstlərini aç (CTRL+ALT+SHIFT+C)
+	</string>
+	<string name="Command_Mouselook_Tooltip">
+		Mouselook rejimi (M)
+	</string>
+	<string name="Command_Landmark_Here_Tooltip">
+		Cari yeri əlfəcin edin
+	</string>
+	<string name="Command_Teleport_History_Tooltip">
+		Teleportasiya tarixini açın (ALT+H)
+	</string>
+	<string name="Command_Pose_Stand_Tooltip">
+		Avatar görünüşünün düzəldilməsi dayanışı
+	</string>
+	<string name="Command_Snapshot_To_Disk_Tooltip">
+		Diskə sürətli şəkil çəkin
+	</string>
+	<string name="Command_Radar_Tooltip">
+		Radarı açın
+	</string>
+	<string name="Command_Conversation_Log_Tooltip">
+		Yazışmalara baxmaq üçün mesaj jurnalını açın
+	</string>
+	<string name="Command_Move_Lock_Tooltip">
+		Avatar yerdəyişməsini bloklayın (CTRL+ALT+P)
+	</string>
+	<string name="Command_Blocklist_Tooltip">
+		Bloklanmış siyahını açın
+	</string>
+	<string name="Command_ResyncAnimations_Tooltip">
+		Avatar Animasiya Sinxronizasiyası
+	</string>
+	<string name="Command_RegionTracker_Tooltip">
+		Müxtəlif bölgələrin vəziyyətini izləyin
+	</string>
+	<string name="Command_Group_Titles_Tooltip">
+		Aktiv qrup başlığını dəyişdirin
+	</string>
+	<string name="Command_Wearable_Favorites_Tooltip">
+		Sevimli paltarların siyahısını açın
+	</string>
+	<string name="Command_RFO_Tooltip">
+		Yalnız dostlarını göstərir, bütün digər avatarlar görünməz olacaq. Aktivləşdirildikdən sonra teleportasiya başqalarının görünməsini bərpa edəcək.
+	</string>
+	<string name="Command_DAO_Tooltip">
+		Animasiya edilmiş obyektləri gizlət (həmçinin Animesh kimi tanınır) - müvəqqəti olaraq bütün hal-hazırda görünən Animeşləri ləğv edir (birləşmiş və sərbəst gəzənləri). Gizli animeşlər teleportdan sonra yenidən görünəcək
+	</string>
+	<string name="Command_Beacons_Tooltip">
+		Mayakları göstər
+	</string>
+	<string name="Toolbar_Bottom_Tooltip">
+		hal hazırda alt alətlər panelində
+	</string>
+	<string name="Toolbar_Left_Tooltip">
+		hal hazırda sol alətlər panelində
+	</string>
+	<string name="Toolbar_Right_Tooltip">
+		hal hazırda sağ alətlər panelində
+	</string>
+	<string name="Command_Fly_Tooltip">
+		Uçuş Rejiminin Yandırılması/Söndürülməsi (HOME)
+	</string>
+	<string name="Command_Stop_Animations_Label">
+		Animasiyaları dayandırın
+	</string>
+	<string name="Command_Stop_Animations_Tooltip">
+		Avatarımın animasiyalarını dayandırın
+	</string>
+	<string name="Retain%">
+		Qalan%
+	</string>
+	<string name="Detail">
+		Detallaşdırma
+	</string>
+	<string name="Better Detail">
+		Daha ətraflı
+	</string>
+	<string name="Surface">
+		Səthi
+	</string>
+	<string name="Solid">
+		Möhkəm
+	</string>
+	<string name="Wrap">
+		Üstü
+	</string>
+	<string name="Preview">
+		Önizləmə
+	</string>
+	<string name="Normal">
+		Normal
+	</string>
+	<string name="Pathfinding_Wiki_URL">
+		http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
+	</string>
+	<string name="Pathfinding_Object_Attr_None">
+		Yox
+	</string>
+	<string name="Pathfinding_Object_Attr_Permanent">
+		Naviqasiya toruna təsir edir
+	</string>
+	<string name="Pathfinding_Object_Attr_Character">
+		Xarakter
+	</string>
+	<string name="Pathfinding_Object_Attr_MultiSelect">
+		(bir neçə)
+	</string>
+	<string name="snapshot_quality_very_low">
+		Çox aşağı
+	</string>
+	<string name="snapshot_quality_low">
+		Aşağı
+	</string>
+	<string name="snapshot_quality_medium">
+		Ortam
+	</string>
+	<string name="snapshot_quality_high">
+		Yüksək
+	</string>
+	<string name="snapshot_quality_very_high">
+		Çox yüksək
+	</string>
+	<string name="IMPrefix">
+		İM:
+	</string>
+	<string name="SanityCheckEquals">
+		&quot;[CONTROL_NAME]&quot; idarəetmə tənzimləmələri [VALUE_1] olmalıdır.
+	</string>
+	<string name="SanityCheckNotEquals">
+		&quot;[CONTROL_NAME]&quot; idarəetmə tənzimləmələri [VALUE_1] olmamalıdır.
+	</string>
+	<string name="SanityCheckLessThan">
+		&quot;[CONTROL_NAME]&quot; idarəetmə tənzimləmələri [VALUE_1] dəyərindən kiçik olmalıdır.
+	</string>
+	<string name="SanityCheckGreaterThan">
+		&quot;[CONTROL_NAME]&quot; idarəetmə tənzimləmələri [VALUE_1] dəyərindən böyük olmalıdır.
+	</string>
+	<string name="SanityCheckLessThanEquals">
+		&quot;[CONTROL_NAME]&quot; idarəetmə tənzimləmələri [VALUE_1] dəyərindən aşağı və ya bərabər olmalıdır.
+	</string>
+	<string name="SanityCheckGreaterThanEquals">
+		&quot;[CONTROL_NAME]&quot; idarəetmə tənzimləmələri [VALUE_1] dəyərindən yüksək və ya bərabər olmalıdır.
+	</string>
+	<string name="SanityCheckBetween">
+		&quot;[CONTROL_NAME]&quot; idarəetmə tənzimləmələri [VALUE_1] və [VALUE_2] arasında olmalıdır.
+	</string>
+	<string name="SanityCheckNotBetween">
+		&quot;[CONTROL_NAME]&quot; idarəetmə tənzimləmələri [VALUE_1] və [VALUE_2] arasında olmamalıdır.
+	</string>
+	<string name="MediaFilterActionAllow">
+		İcazə ver
+	</string>
+	<string name="MediaFilterActionDeny">
+		Rədd et
+	</string>
+	<string name="MediaFilterConditionAlways">
+		Həmişə
+	</string>
+	<string name="MediaFilterConditionAlwaysLower">
+		həmişə
+	</string>
+	<string name="MediaFilterConditionNever">
+		Heç vaxt
+	</string>
+	<string name="MediaFilterConditionNeverLower">
+		heç vaxt
+	</string>
+	<string name="MediaFilterMediaContentBlocked">
+		[DOMAIN] domain üçün media blok edildi.
+	</string>
+	<string name="MediaFilterMediaContentDomainAlwaysAllowed">
+		[DOMAIN] domain üçün media həmişə icra olunacaq.
+	</string>
+	<string name="MediaFilterMediaContentDomainAlwaysBlocked">
+		[DOMAIN] domain üçün media həmişə icra olunmayacaq.
+	</string>
+	<string name="MediaFilterMediaContentUrlAlwaysAllowed">
+		[MEDIAURL] URL-i üçün media həmişə icra olunacaq.
+	</string>
+	<string name="MediaFilterMediaContentUrlAlwaysBlocked">
+		[MEDIAURL] URL-i üçün media həmişə icra olunmayacaq.
+	</string>
+	<string name="MediaFilterAudioContentBlocked">
+		[DOMAIN] domain üçün audio blok edildi.
+	</string>
+	<string name="MediaFilterAudioContentDomainAlwaysAllowed">
+		[DOMAIN] domain üçün audio həmişə icra olunacaq.
+	</string>
+	<string name="MediaFilterAudioContentDomainAlwaysBlocked">
+		[DOMAIN] domain üçün audio həmişə icra olunmayacaq.
+	</string>
+	<string name="MediaFilterAudioContentUrlAlwaysAllowed">
+		[MEDIAURL] URL üçün audio həmişə icra olunacaq.
+	</string>
+	<string name="MediaFilterAudioContentUrlAlwaysBlocked">
+		[MEDIAURL] URL üçün audio həmişə icra olunmayacaq.
+	</string>
+	<string name="MediaFilterBlacklist">
+		Qara siyahı
+	</string>
+	<string name="MediaFilterWhitelist">
+		Ağ siyahı
+	</string>
+	<string name="UnknownRegion">
+		(naməlum rayon)
+	</string>
+	<string name="UnknownPosition">
+		(naməlum yerləşmə)
+	</string>
+	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">
+		[AGENT][REGION](Xəritəni açmaq üçün iki dəfə bas, yerdəyişmə üçün Shift+dart)
+	</string>
+	<string name="NetMapDoubleClickTeleportToolTipMsg">
+		[REGION](Teleportasiya üçün iki dəfə basın, yerdəyişmə üçün Shift+dart)
+	</string>
+	<string name="NetMapDoubleClickNoActionToolTipMsg">
+		[REGION]
+	</string>
+	<string name="Collision_Bump">
+		[NAME] sizinlə toqquşdu.
+	</string>
+	<string name="Collision_PushObject">
+		[NAME] sizi skript ilə itələdi.
+	</string>
+	<string name="Collision_ObjectCollide">
+		[NAME] sizi obyekt ilə vurdu.
+	</string>
+	<string name="Collision_ScriptedObject">
+		[NAME] sizi skriptli obyekt ilə vurdu.
+	</string>
+	<string name="Collision_PhysicalObject">
+		[NAME] sizi fiziki obyekt ilə vurdu.
+	</string>
+	<string name="Collision_UnknownType">
+		[NAME] naməlum tipli toqquşmanın səbəbidir.
+	</string>
+	<string name="MovelockEnabled">
+		Avatar &gt; Hərəkət &gt; Blokla yandırılıb
+	</string>
+	<string name="BusyResponse">
+		məşğulluq cavabı
+	</string>
+	<string name="TeleportMaturityExceeded">
+		Sakin bu bölgəyə səyahət edə bilməz.
+	</string>
+	<string name="UserDictionary">
+		[User]
+	</string>
+	<string name="RLVaPendingRestart">
+		(yenidən başlamanı gözləyir)
+	</string>
+	<string name="RLVaToggleMessageLogin">
+		RLVa [STATE] olub (yernidən başlatma tələb etmir)
+	</string>
+	<string name="RLVaToggleMessageRestart">
+		RLVa yenidən başladıqdan sonra [STATE] olacaq
+	</string>
+	<string name="RLVaToggleEnabled">
+		yandırılıb
+	</string>
+	<string name="RLVaToggleDisabled">
+		söndürülüb
+	</string>
+	<string name="RLVaStatusDisabled">
+		(söndürülüb)
+	</string>
+
+	<string name="experience_tools_experience">
+		Macəra
+	</string>
+	<string name="ExperienceNameNull">
+		(Macəralarsız)
+	</string>
+	<string name="ExperienceNameUntitled">
+		(adsız macəra)
+	</string>
+	<string name="Land-Scope">
+		Yerə bağlıdır
+	</string>
+	<string name="Grid-Scope">
+		Tora bağlıdır
+	</string>
+	<string name="Allowed_Experiences_Tab">
+		İCAZƏ VERİLİB
+	</string>
+	<string name="Blocked_Experiences_Tab">
+		BLOK OLUNUB
+	</string>
+	<string name="Contrib_Experiences_Tab">
+		MÜƏLLİF
+	</string>
+	<string name="Admin_Experiences_Tab">
+		ADMINİSTRATOR
+	</string>
+	<string name="Recent_Experiences_Tab">
+		SON
+	</string>
+	<string name="Owned_Experiences_Tab">
+		ŞƏXSİ MÜLKİYYƏT
+	</string>
+	<string name="ExperiencesCounter">
+		([EXPERIENCES], maksimal: [MAXEXPERIENCES])
+	</string>
+	<string name="ExperiencePermission1">
+		idarə etmək
+	</string>
+	<string name="ExperiencePermission3">
+		avatarınızda animasiyalar başlatmaq
+	</string>
+	<string name="ExperiencePermission4">
+		avatara calaşdırmaq
+	</string>
+	<string name="ExperiencePermission9">
+		kameranı izləyin
+	</string>
+	<string name="ExperiencePermission10">
+		kameranı idarə etmək
+	</string>
+	<string name="ExperiencePermission11">
+		sizi teleport etmək
+	</string>
+	<string name="ExperiencePermission12">
+		Macəralar üçün icazələri avtomatik qəbul edin
+	</string>
+	<string name="ExperiencePermission16">
+		avatarı otuzdurmaq
+	</string>
+	<string name="ExperiencePermission17">
+		ətraf mühit seçimlərinizi dəyişdirin
+	</string>
+	<string name="ExperiencePermissionShortUnknown">
+		naməlum əməliyyat həyata keçirdi: [Permission]
+	</string>
+	<string name="ExperiencePermissionShort1">
+		Təhvil almaq
+	</string>
+	<string name="ExperiencePermissionShort3">
+		Animasiyaları başlatmaq
+	</string>
+	<string name="ExperiencePermissionShort4">
+		Calaşdırmaq
+	</string>
+	<string name="ExperiencePermissionShort9">
+		Kameranı izləmək
+	</string>
+	<string name="ExperiencePermissionShort10">
+		Kamera seçimləri
+	</string>
+	<string name="ExperiencePermissionShort11">
+		Teleport
+	</string>
+	<string name="ExperiencePermissionShort12">
+		İcazə
+	</string>
+	<string name="ExperiencePermissionShort16">
+		Oturmaq
+	</string>
+	<string name="ExperiencePermissionShort17">
+		Ətraf mühit
+	</string>
+	<string name="logging_calls_disabled_log_empty">
+		Söhbətlər qeydə alınmır. Söhbəti yazmağa başlamaq üçün «Seçimlər &gt; Söhbət» seçimində «Saxla: yalnız log» və ya «Saxla: jurnal və qeydlər» seçin.
+	</string>
+	<string name="logging_calls_disabled_log_not_empty">
+		Söhbətlər daha qeydə alınmayacaq. Söhbəti yazmağı yenidən qurmaq üçün «Seçimlər &gt; Söhbət» seçimində «Saxla: yalnız log» və ya «Saxla: jurnal və qeydlər» seçin.
+	</string>
+	<string name="logging_calls_enabled_log_empty">
+		Qeydə alınmış söhbət yoxdur. Əgər kimsə ilə əlaqə saxlasanız və ya əksinə, jurnalda yeni bir qeyd görünəcək.
+	</string>
+	<string name="loading_chat_logs">
+		Yüklənir...
+	</string>
+	<string name="na">
+		m/d
+	</string>
+	<string name="preset_combo_label">
+		-Boş siyahı-
+	</string>
+	<string name="Default">
+		Susmaya görə
+	</string>
+	<string name="none_paren_cap">
+		(yox)
+	</string>
+	<string name="no_limit">
+		Sərhədsiz
+	</string>
+	<string name="Mav_Details_MAV_FOUND_DEGENERATE_TRIANGLES">
+		Fiziki formada çox kiçik üçbucaqlar var. Fiziki modeli sadələşdirməyə çalışın.
+	</string>
+	<string name="Mav_Details_MAV_CONFIRMATION_DATA_MISMATCH">
+		Fiziki formada səhv təsdiq məlumatları var. Fizika modelini düzəltməyə çalışın.
+	</string>
+	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
+		Fiziki formanın düzgün versiyası yoxdur. Fiziki model üçün düzgün versiyanı təyin edin.
+	</string>
+	<string name="couldnt_resolve_host">
+		DNS domen adını ([HOSTNAME]) birləşdirə bilmədi. 
+www.secondlife.com saytına qoşula bildiyinizi yoxlayın. 
+Bu xətanı almağa davam etsəniz, dəstək bölgəsinə keçin 
+və xəta xaqqında bildirin.
+	</string>
+	<string name="ssl_peer_certificate">
+		Giriş serveri SSL protokolu ilə daxil ola bilmədi.
+Bu xətanı almağa davam etsəniz,
+SecondLife.com veb-saytının dəstək bölməsinə keçin
+və məsələni bildirin.
+	</string>
+	<string name="ssl_connect_error">
+		Çox vaxt bu, kompüterin saatının düzgün qurulmaması deməkdir. 
+Zəhmət olmasa İdarəetmə Panelinə gedin, vaxtın və tarixin düzgün qurulduğundan əmin olun.
+Həmçinin şəbəkə və brandmauer seçimlərinin düzgün olub olmadığını yoxlayın. 
+Bu xətanı almağa davam etsəniz, SecondLife.com saytında dəstək bölgəsinə keçin 
+və xəta xaqqında bildirin. 
+																											  
+[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 Bilik bazası]
+	</string>
+	<string name="LoadCameraPositionNoneSaved">
+		Kamera yerləşməsi yadda saxlanmayıb.
+	</string>
+	<string name="LoadCameraPositionOutsideDrawDistance">
+		Kameranın görüntüsünü bərpa etmək mümkün deyil, çünki kameranın mövqeyi cəlb oluna bilməz.
+	</string>
+	<string name="DrawDistanceSteppingGestureObsolete">
+		Kod dəyişikliklərinə görə artıq bu jesti istifadə etməyə ehtiyac yoxdur. Proqressiv addım-addım göstərmə aktivləşdirildi.
+	</string>
+	<string name="FSCameraPositionCopied">
+		[POS] kamera yerləşməsi buferə köçürüldü
+	</string>
+	<string name="FSCmdLineDrawDistanceSet">
+		Çəkmə məsafəsi [DISTANCE]m olaraq təyin edilib.
+	</string>
+	<string name="FSCmdLineRollDiceTotal">
+		[DICE]d[FACES][MODIFIER] üçün ümumi nəticə: [RESULT].
+	</string>
+	<string name="FSCmdLineRollDiceLimits">
+		Sümük (100-dən çox olmayan) və üzlər (1000-dən çox olmayan) üçün müsbət dəyərlər təmin etməlisiniz.
+	</string>
+	<string name="FSCmdLineRollDiceModifiersInvalid">
+		Əgər siz dəyişdiricidən istifadə etmək istəyirsinizsə, onda etibarlı dəyişdirici nömrəsi və dəyişdirici növü təqdim etməlisiniz. Dəyişdirici -1000 ilə 1000 aralığında olmalıdır. Etibarlı dəyişdirici növləri "+" (bonuslar), "-" (cərimələr), "&gt;", "&lt;" (uğurlar), "r&gt;", "r&lt;", "r" (rerolls), "!p&gt;", "!p&lt;", "!p" (yayılmış), "!&gt;",; "!&lt; " Və "!" (partlayışlar). Hər rulonda yalnız bir növ dəyişdirici istifadə edə bilərsiniz. Məsələn: "[COMMAND] 1 20 + 5", "[COMMAND] 5 40 &gt; 15", "[COMMAND] 10 25 ! 25", "[COMMAND] 15 25 !&lt; 10".
+	</string>
+	<string name="FSCmdLineRollDiceExploded">
+		Partalanmış
+	</string>
+	<string name="FSCmdLineRollDicePenetrated">
+		Dərk edilmiş
+	</string>
+	<string name="FSCmdLineRollDiceSuccess">
+		Uğurlu
+	</string>
+	<string name="FSCmdLineRollDiceReroll">
+		Yenidən atılmış
+	</string>
+	<string name="FSCmdLineRollDiceFreezeGuard">
+		Klient sonsuz dövrə dəyərlərində yalnız qalıb bu əməliyyat bitirilə bilməz. Xahiş edirik kriteriyaları dəyişin.
+	</string>
+	<string name="FSCmdLineCalcRandError">
+		'[RAND]' MIN və MAX aralığında, -10000 ilə 10000 arasında olduğu kimi MAX MIN-dən böyük bir ədəddir.
+	</string>
+	<string name="FSCmdLineRSP">
+		Maksimal keçid gücü [VALUE] KB / s qoyuldu.
+	</string>
+	<string name="FSCmdLineTpOffered">
+		[NAME] təklif edilir teleport.
+	</string>
+	<string name="FSWithHavok">
+		Havok dəstəyi ilə
+	</string>
+	<string name="FSWithOpensim">
+		OpenSimulator dəstəyi ilə
+	</string>
+	<string name="not_found">
+		'[TEXT]' tapılmadı
+	</string>
+	<string name="no_results">
+		Nəticə yoxdur
+	</string>
+	<string name="searching">
+		Axtarış...
+	</string>
+	<string name="all_categories">
+		Bütün kateqoriyalar
+	</string>
+	<string name="search_banned">
+		Axtarış sorğusundakı bəzi terminlər məzmun məhdudiyyətləri səbəbindən əlavə edilməmişdir.
+	</string>
+	<string name="search_short">
+		Axtarış kriteriyalarınız çox qısadır, bu səbəbdən axtarış icra edilmədi.
+	</string>
+	<string name="search_disabled">
+		Bu ərazi üzrə köhnə axtarış söndürüldü.
+	</string>
+	<string name="render_quality_low">
+		Aşağı (1/7)
+	</string>
+	<string name="render_quality_mediumlow">
+		Orta aşağı (2/7)
+	</string>
+	<string name="render_quality_medium">
+		Orta (3/7)
+	</string>
+	<string name="render_quality_mediumhigh">
+		Orta yüksək (4/7)
+	</string>
+	<string name="render_quality_high">
+		Yüksək (5/7)
+	</string>
+	<string name="render_quality_highultra">
+		Yüksək-ultra (6/7)
+	</string>
+	<string name="render_quality_ultra">
+		Ultra (7/7)
+	</string>
+	<string name="render_quality_unknown">
+		Naməlum, normal diapazon xaricində, RenderQualityPerformance sazlama seçimlərini yoxlayın
+	</string>
+	<string name="fsbridge_cant_create_disabled">
+		[APP_NAME] seçimlərində "LSL Körpüsünü Aktiv Et" deaktiv edilibsə, LSL körpüsü yarada bilməz.
+	</string>
+	<string name="fsbridge_no_library">
+		[APP_NAME] LSL körpüsü yarada bilməz. Kitabxananı aktivləşdirin və yenidən daxil olun.
+	</string>
+	<string name="fsbridge_already_creating">
+		Körpünün yaradılması davam edir. Yenidən cəhd etməzdən əvvəl bir neçə dəqiqə gözləyin.
+	</string>
+	<string name="fsbridge_creating">
+		Körpü yaradılır. Bu, vaxt apara bilər, səbirli olun.
+	</string>
+	<string name="fsbridge_failure_creation_create_script">
+		Körpü yaradılmayıb. Körpü skripti yaratmaq mümkün olmadı.
+	</string>
+	<string name="fsbridge_failure_creation_bad_name">
+		Körpü yaradılmayıb. Körpünün adı səhv qoyulub. Körpünü yenidən yaratmaq üçün [APP_NAME] 'Avatar/Avatarı Düzəlt/LSL Körpüsünü Yenidən Yarat' menyusundan istifadə edin.
+	</string>
+	<string name="fsbridge_failure_creation_null">
+		Körpü yaradılmayıb. Körpü avadanlıq siyahısında tapılmadı. Körpünü yenidən yaratmaq üçün [APP_NAME] 'Avatar/Avatarı Düzəlt/LSL Körpüsünü Yenidən Yarat' menyusundan istifadə edin.
+	</string>
+	<string name="fsbridge_failure_attach_wrong_object">
+		Körpünü birləşdirmək alınmadı. Bu körpünün indiki versiyası deyil. Körpünü yenidən yaratmaq üçün [APP_NAME] 'Avatar/Avatarı Düzəlt/LSL Körpüsünü Yenidən Yarat' menyusundan istifadə edin.
+	</string>
+	<string name="fsbridge_failure_attach_wrong_location">
+		Körpünü birləşdirmək alınmadı. Körpü düzgün inventar yerində tapılmadı. Körpünü yenidən yaratmaq üçün [APP_NAME] 'Avatar/Avatarı Düzəlt/LSL Körpüsünü Yenidən Yarat' menyusundan istifadə edin.
+	</string>
+	<string name="fsbridge_failure_attach_point_in_use">
+		Körpünü birləşdirmək alınmadı. Başqa bir şey körpünün qoşma nöqtəsindən istifadə edir. Körpünü yenidən yaratmaq üçün [APP_NAME] 'Avatar/Avatarı Düzəlt/LSL Körpüsünü Yenidən Yarat' menyusundan istifadə edin.
+	</string>
+	<string name="fsbridge_failure_not_found">
+		Körpü obyekti tapılmadı. Yaratmağa başlamaq mümkün deyil.
+	</string>
+	<string name="fsbridge_warning_unexpected_items">
+		Körpünün məzmununda gözlənilməz əşyalar var.
+	</string>
+	<string name="fsbridge_warning_not_finished">
+		Körpünün yaradılması bitməyib, körpünü yenidən yaratmaq üçün [APP_NAME] 'Avatar/Avatarı Düzəldin/LSL Körpüsünü Yenidən Qurun' menyusundan istifadə edin.
+	</string>
+	<string name="fsbridge_detached">
+		Körpü ayırılıb
+	</string>
+	<string name="fsbridge_created">
+		Körpü yaradılıb.
+	</string>
+	<string name="fsbridge_script_info">
+		Skript məlumatı: '[OBJECT_NAME]': [[OBJECT_RUNNING_SCRIPT_COUNT]/[OBJECT_TOTAL_SCRIPT_COUNT]] işləyən skriptlər, [OBJECT_SCRIPT_MEMORY] KB yaddaş limitinə icazə verilir, [OBJECT_SCRIPT_TIME] ms CPU vaxtı [TEXT_PA] TEXT_THIND] sərf olunur.
+	</string>
+	<string name="fsbridge_script_info_pf">
+		Naviqasiya yolunu tapmaq üçün istifadə olunan orta CPU vaxtı [OBJECT_CHARACTER_TIME] ms-dir.
+	</string>
+	<string name="fsbridge_script_info_ext">
+Obyekt İD-si: [INSPECTING_KEY]
+Təsviri: [OBJECT_DESC]
+Kök prim: [OBJECT_ROOT]
+Prim sayı: [OBJECT_PRIM_COUNT]
+Yerə təsir: [OBJECT_PRIM_EQUIVALENCE]
+Avadanlıq siyahısında: [OBJECT_TOTAL_INVENTORY_COUNT]
+Sürət: [OBJECT_VELOCITY]
+Yerləşmə: [OBJECT_POS]
+Fırlatma: [OBJECT_ROT]
+Bucaq sürəti: [OBJECT_OMEGA] (saniyədə radian)
+Yaradıcı: [OBJECT_CREATOR]
+Sahibi: [OBJECT_OWNER]
+Əvvəlki Sahibi: [OBJECT_LAST_OWNER_ID]
+Qoyulub: [OBJECT_REZZER_KEY]
+Qrup: [OBJECT_GROUP]
+Yaradılış vaxtı: [OBJECT_CREATION_TIME]
+Yerləşdirmə vaxtı: [OBJECT_REZ_TIME]
+Yol axtarış növü: [OBJECT_PATHFINDING_TYPE]
+Birləşdirilib: [OBJECT_ATTACHED_POINT]
+Müvəqqəti birləşdirilib: [OBJECT_TEMP_ATTACHED]
+Yerləşməniz: [AVATAR_POS]
+	</string>
+	<string name="fsbridge_error_scriptinfonotfound">
+		Skript məlumatı: Obyekt etibarsızdır və ya əlçatmazdır.
+	</string>
+	<string name="fsbridge_error_scriptinfomalformed">
+		Skript məlumatı: Körpüdən etibarsız cavab alındı. Yenidən cəhd elə.
+	</string>
+	<string name="fsbridge_error_injection">
+		XƏBƏRDARLIQ: [APP_NAME] körpüsünə bir və ya daha çox skript əlavə edildi! Bu mesajı gözləmirdinizsə, körpünü yenidən yaratmaq üçün [APP_NAME] menyu seçimindən istifadə edin "Avatar/Avatarı Düzəlt/LSL Körpüsünü Yenidən Yarat".
+	</string>
+	<string name="fsbridge_error_wrongvm">
+		XƏBƏRDARLIQ: Körpü skripti yeni Mono virtual maşını (yaddaş limiti 64K) əvəzinə köhnə LSO-dan (yaddaş limiti 16K) istifadə edir ki, bu da yaddaşın olmaması səbəbindən yığınların toqquşması və körpünün sıradan çıxması şansını artırır. Lütfən, körpünü yenidən yaratmaq üçün [APP_NAME] "Avatar/Avatarı düzəldin/LSL körpüsünü yenidən qurun" menyu elementindən istifadə edin. Bu mesajı yenidən görsəniz, başqa bölgədə yenidən cəhd edin.
+	</string>
+
+	<!-- <FS:Zi> Animation overrider enable/disable messages - FIRE-24160 -->
+	<string name="FSAOEnabled">[APP_NAME] Animasiya Meneceri yandırılıb.</string>
+	<string name="FSAODisabled">[APP_NAME] Animasiya Meneceri söndürülüb.</string>
+	<string name="FSAOPausedScript">Əlavə edilmiş skript tərəfindən dayandırıldı.</string>
+	<string name="FSAOResumedScript">Əlavə edilmiş skript tərəfindən davam etdirildi.</string>
+	<string name="FSAOStandsPausedScript">Duruş animasiyalar əlavə edilmiş skript tərəfindən dayandırıldı.</string>
+	<string name="FSAOStandsResumedScript">Duruş animasiyalar əlavə edilmiş skriptlə davam etdirildi.</string>
+
+	<string name="QP Draw Distance">
+		Görünüş məsafəsi
+	</string>
+	<string name="QP Max Particles">
+		Maksimum hissəcik
+	</string>
+	<string name="QP Avatar Physics LOD">
+		Avatar fizikası LOD-u
+	</string>
+	<string name="QP LOD Factor">
+		LOD faktoru
+	</string>
+	<string name="QP Max Avatars">
+		Maksimal avatar sayı
+	</string>
+	<string name="QP Tags Offset">
+		Başlıq hündürlüyü
+	</string>
+	<string name="QP Name Tags">
+		Ad başlıqları
+	</string>
+	<string name="QP LookAt Target">
+		Kamera diqqəti
+	</string>
+	<string name="QP Color Under Cursor">
+		Kursorun altında rəng
+	</string>
+	<string name="PS_T_Pose">
+		Qollar yana
+	</string>
+	<string name="PS_Arms_Down_Legs_together">
+		Qollar aşağı, ayaqlar birlikdə
+	</string>
+	<string name="PS_Arms_down_sitting">
+		Qollar aşağı, oturarkən
+	</string>
+	<string name="PS_Arms_downward_Legs_together">
+		Qollar yuxarıda, ayaqlar birlikdə
+	</string>
+	<string name="PS_Arms_downward_Legs_apart">
+		Qollar yuxarıda, ayaqlar aralıqda
+	</string>
+	<string name="PS_Arms_forward_Legs_apart">
+		Qollar önə doğru, ayaqlar aralıqda
+	</string>
+	<string name="PS_Arms_forward_Legs_together">
+		Qollar önə doğru, ayaqlar birlikdə
+	</string>
+	<string name="PS_Arms_straight_Legs_apart">
+		Qollar düz, ayaqlar aralıqda
+	</string>
+	<string name="PS_Arms_straight_sitting">
+		Qollar düz, oturarkən
+	</string>
+	<string name="PS_Arms_upward_Legs_apart">
+		Qollar yuxarı, ayaqlar aralıqda
+	</string>
+	<string name="PS_Arms_upward_Legs_together">
+		Qollar yuxarı, ayaqlar birlikdə
+	</string>
+	<string name="QP_WL_Region_Default">
+		Defolt olaraq
+	</string>
+	<string name="QP_WL_Day_Cycle_Based">
+		Gün dövrü əsasında
+	</string>
+	<string name="QP_WL_None">
+		Yox
+	</string>
+	<string name="GroupChatMuteNotice">
+		[NAME] qrupundan qrup söhbətinin söndürülməsi.
+	</string>
+	<string name="IgnoredAdHocSession">
+		[AVATAR_NAME] sizi konfransa dəvət etdi, lakin klient avtomatik olaraq rədd etdi, çünki siz onu belə quraşdırdınız.
+	</string>
+	<string name="camera_no_focus">
+		Kamera [AVATARNAME] üzərinə fokuslana bilmir, çünki onlar görünüş məsafənizdən kənardadır.
+	</string>
+	<string name="entering_draw_distance">
+		görünüş məsafəsi sərhədinə daxil oldu ([DISTANCE] m).
+	</string>
+	<string name="leaving_draw_distance">
+		görünüş məsafəsi sərhədini tərk etdi
+	</string>
+	<string name="entering_chat_range">
+		söhbət dairəsinə daxil oldu ([DISTANCE] m).
+	</string>
+	<string name="leaving_chat_range">
+		söhbət dairəsini tərk etdi
+	</string>
+	<string name="entering_region">
+		regiona daxil oldu
+	</string>
+	<string name="entering_region_distance">
+		regiona daxil oldu ([DISTANCE] m).
+	</string>
+	<string name="leaving_region">
+		regionu tərk etdi
+	</string>
+	<string name="avatar_age_alert">
+		yaş xəbərdarlığı işlədi. Yaş: [AGE] gün
+	</string>
+	<string name="TotalScriptCountChangeIncrease">
+		Regiondakı skriptlərin sayı [OLD_VALUE] dəyərindən [NEW_VALUE] dəyərinə ([DIFFERENCE]) qədər artıb.
+	</string>
+	<string name="TotalScriptCountChangeDecrease">
+		Regiondakı skriptlərin sayı [OLD_VALUE] dəyərindən [NEW_VALUE] dəyərinə ([DIFFERENCE]) qədər azalıb.
+	</string>
+	<string name="preproc_toggle_warning">
+		Bu dəyişdiricini bağlayana və yenidən açana qədər preprosessorun dəyişdirilməsi tam effekt verməyəcək.
+	</string>
+	<string name="fs_preprocessor_starting">
+		[APP_NAME] preprosessoru işə saldı...
+	</string>
+	<string name="fs_preprocessor_not_supported">
+		XƏBƏRDARLIQ: Bu quruluşda preprosessor dəstəklənmir. ([WHERE])
+	</string>
+	<string name="fs_preprocessor_disabled_by_script_marker">
+		[APP_NAME] [LINENUMBER] sətirindəki direktivlə preprosessoru deaktiv etdi.
+	</string>
+	<string name="fs_preprocessor_settings_list_prefix">
+		Seçimlər:
+	</string>
+	<string name="fs_preprocessor_exception">
+		[ERR_NAME]([LINENUMBER]): İstisna tapıldı: [ERR_DESC]
+	</string>
+	<string name="fs_preprocessor_error">
+		[ERR_NAME]([LINENUMBER]): Gözlənilməz istisna tapıldı.
+	</string>
+	<string name="fs_preprocessor_lsl2_directive_override">
+		LSL2 kimi kompilyasiya direktivinin aşkar edilmiş üstünlükləri ləğv etmə parametri.
+	</string>
+	<string name="fs_preprocessor_mono_directive_override">
+		Ləğv edilmiş mono kimi kompilyasiya direktiv seçim parametri aşkar edildi.
+	</string>
+	<string name="fs_preprocessor_optimizer_start">
+		İstifadə edilməmiş istifadəçi tərəfindən müəyyən edilmiş funksiyaların və qlobal dəyişənlərin optimallaşdırılması.
+	</string>
+	<string name="fs_preprocessor_optimizer_regex_err">
+		Yanlış normal ifadə: '[WHAT]'; LSL optimallaşdırması atlandı.
+	</string>
+	<string name="fs_preprocessor_optimizer_exception">
+		İstisna atıldı: '[WHAT]'; LSL optimallaşdırması atlandı.
+	</string>
+	<string name="fs_preprocessor_optimizer_unexpected_exception">
+		LSL optimallaşdırıcısında gözlənilməz istisna; tətbiq edilmir.
+	</string>
+	<string name="fs_preprocessor_compress_start">
+		Skriptin mətninin sıxılması, lazımsız yerin silinməsi.
+	</string>
+	<string name="fs_preprocessor_compress_regex_err">
+		Yanlış normal ifadə: '[WHAT]'; LSL optimallaşdırması atlandı.
+	</string>
+	<string name="fs_preprocessor_compress_exception">
+		İstisna atıldı: '[WHAT]'; LSL optimallaşdırması atlandı.
+	</string>
+	<string name="fs_preprocessor_compress_unexpected_exception">
+		LSL optimallaşdırıcısında gözlənilməz istisna; tətbiq edilmir.
+	</string>
+	<string name="fs_preprocessor_lazylist_start">
+		Tənbəl siyahı çevrilməsinin tətbiqi.
+	</string>
+	<string name="fs_preprocessor_lazylist_regex_err">
+		Yanlış normal ifadə: '[WHAT]'; tənbəl siyahının çevrilməsi atlandı.
+	</string>
+	<string name="fs_preprocessor_lazylist_exception">
+		İstisna atıldı: '[WHAT]'; tənbəl siyahının çevrilməsi atlandı.
+	</string>
+	<string name="fs_preprocessor_lazylist_unexpected_exception">
+		Tənbəl siyahıya çevrilmədə gözlənilməz istisna; tətbiq edilmir.
+	</string>
+	<string name="fs_preprocessor_switchstatement_start">
+		Dəyişiklik operatoru açarlarının tətbiqi.
+	</string>
+	<string name="fs_preprocessor_switchstatement_regex_err">
+		Yanlış normal ifadə: '[WHAT]'; dəyişiklik bəyanatı keçidi atlandı.
+	</string>
+	<string name="fs_preprocessor_switchstatement_exception">
+		İstisna atıldı: '[WHAT]'; dəyişiklik bəyanatı keçidi atlandı.
+	</string>
+	<string name="fs_preprocessor_switchstatement_unexpected_exception">
+		Dəyişiklik ifadəsi keçidində gözlənilməz istisna; tətbiq edilmir.
+	</string>
+	<string name="fs_preprocessor_cache_miss">
+		Əlavə edilmiş fayl keşi: '[FILENAME]'
+	</string>
+	<string name="fs_preprocessor_cache_invalidated">
+		Daxil edilmiş fayl '[FILENAME]' dəyişdirildi, yenidən keş.
+	</string>
+	<string name="fs_preprocessor_cache_completed">
+		'[FILENAME]' üçün keşləmə tamamlandı
+	</string>
+	<string name="fs_preprocessor_cache_unsafe">
+		Xəta: '[FILENAME]' skripti fayl sistemi üçün təhlükəsiz deyil. Bağlantı ləğv edilib.
+	</string>
+	<string name="fs_preprocessor_caching_err">
+		Əlavə edilmiş fayl keşləmə xətası '[FILENAME]'
+	</string>
+	<string name="skin_defaults_starlight_location">
+		Menyu çubuğunda cari yerinizin göstərilməsi Starlight üslub seriyası üçün defolt olaraq qeyri-aktiv edilib.
+	</string>
+	<string name="skin_defaults_starlight_navbar">
+		Naviqasiya panelinin göstərilməsi Starlight üslub seriyası üçün defolt olaraq aktiv edilib.
+	</string>
+	<string name="fs_preprocessor_truncated">
+		Xəbərdarlıq: Həddindən artıq skript mətn ölçüsünə görə preprosessor çıxışı kəsildi. Bu skript çox güman ki, işləməyəcək.
+	</string>
+	<string name="animation_explorer_seconds_ago">
+		[SECONDS] saniyə əvvəl
+	</string>
+	<string name="animation_explorer_still_playing">
+		Oynamağa davam edir
+	</string>
+	<string name="animation_explorer_unknown_priority">
+		naməlum
+	</string>
+	<string name="FriendOnlineNotification">
+		daxil olub.
+	</string>
+	<string name="FriendOfflineNotification">
+		çıxıb.
+	</string>
+	<string name="Inbox_Folderview_New">
+		Yeni
+	</string>
+	<string name="Mouselook_Unknown_Avatar">
+		Naməlum avatar
+	</string>
+	<string name="groupcountstring">
+		Siz [COUNT] qrupdasınız ([REMAINING] mövcuddur).
+	</string>
+	<string name="groupcountunlimitedstring">
+		Siz [COUNT] qrupdasınız
+	</string>
+	<string name="SLGridStatusInvalidMsg">
+		SL şəbəkə vəziyyəti xətası: Yanlış mesaj formatı. Daha sonra cəhd edin.
+	</string>
+	<string name="SLGridStatusTimedOut">
+		SL şəbəkə vəziyyəti xətası: Sorğunun vaxtı bitdi.
+	</string>
+	<string name="SLGridStatusOtherError">
+		SL şəbəkə vəziyyəti xətası: [STATUS] (https://en.wikipedia.org/wiki/List_of_HTTP_status_codes).
+	</string>
+	<string name="DoubleClickTeleportEnabled">
+		İki dəfə kliklə teleportasiya aktivləşdirildi
+	</string>
+	<string name="DoubleClickTeleportDisabled">
+		İki dəfə toxunma teleportasiyası deaktiv edildi
+	</string>
+	<string name="AlwaysRunEnabled">
+		Həmişə Qaçış yandırılıb.
+	</string>
+	<string name="AlwaysRunDisabled">
+		Həmişə Qaçış söndürülüb.
+	</string>
+	<string name="FSRegionRestartInLocalChat">
+		Hazırda olduğunuz region tezliklə yenidən yüklənəcək. Bu regionda qalsanız, SL ilə əlaqəniz kəsiləcək.
+	</string>
+	<string name="Mute_Add">
+		'[NAME]' qara siyahıya salınıb.
+	</string>
+	<string name="Mute_Remove">
+		'[NAME]' qara siyahıdan silindi.
+	</string>
+	<string name="Reqsysinfo_Chat_NoReason">
+		Sisteminizin qurulması haqqında məlumat tələb edirəm.
+	</string>
+	<string name="Reqsysinfo_Chat_Reason">
+		Bu səbəbdən sistem quraşdırmanız haqqında məlumat tələb edirəm: [REASON]
+	</string>
+	<string name="Reqsysinfo_Chat_Information_sent">
+		Məlumat göndərildi: [DATA]
+	</string>
+	<string name="Reqsysinfo_Chat_Request_Denied">
+		Sorğu rədd edildi.
+	</string>
+	<string name="Reqsysinfo_Reason">
+		Səbəb: [REASON]
+	</string>
+	<string name="All Items">
+		Bütün əşyalar
+	</string>
+	<string name="Recent Items">
+		Son əşyalar
+	</string>
+	<string name="Worn Items">
+		Daşınan əşyalar
+	</string>
+	<string name="InvOfferGroupNoticeName">
+		[NAME] adlı qrup üzvü
+	</string>
+	<string name="CallingCardOnlineLabelSuffix">
+		(daxil olub)
+	</string>
+	<string name="GroupNoticesPanelDateString">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</string>
+	<string name="GroupNoticesToastDateString">
+		[wkday,datetime,slt], [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+	</string>
+	<string name="NotificationItemDateStringLocal">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]
+	</string>
+	<string name="NotificationItemDateStringUTC">
+		[day,datetime,utc] [mth,datetime,utc] [year,datetime,utc] [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
+	</string>
+	<string name="NotificationItemDateStringSLT">
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt] [timezone,datetime,slt]
+	</string>
+	<string name="Pie_av_render_normally">
+		Adətən
+	</string>
+	<string name="Pie_av_render_never">
+		Heç vaxt
+	</string>
+	<string name="Pie_av_render_fully">
+		Tamamilə
+	</string>
+	<string name="Nametag_Complexity_Label">
+		Çətinlik: [COMPLEXITY]
+	</string>
+	<string name="Nametag_Texture_Area_Label">
+		Tekstur sahə: [TEXTURE_AREA] m²
+	</string>
+	<string name="font_unknown">
+		Naməlum yazı tipi
+	</string>
+	<string name="mode_unknown">
+		Naməlum rejim
+	</string>
+	<string name="Asset_Uploading">
+		[ASSET_NAME]
+	Yüklənir...
+	</string>
+	<string name="Yes">
+		Bəli
+	</string>
+	<string name="No">
+		Xeyr
+	</string>
+	<string name="FSUrlEntryWearLabel">
+		Inventar qovluğunu geyin
+	</string>
+	<string name="TexturePickerOutfitHeader">
+		Komplekt üçün şəkil
+	</string>
+	<string name="unknown_script">
+		(Naməlum skript)
+	</string>
+	<string name="ImportingWindlightBulk">
+		Mühitin idxalı ...
+	</string>
+
+	<!-- <FS:Zi> FIRE-24142 - Show number of elements in object inventory -->
+	<string name="FSObjectInventoryNoElements">Element yoxdur</string>
+	<string name="FSObjectInventoryOneElement">1 element</string>
+	<string name="FSObjectInventoryElements">[NUM_ELEMENTS] element</string>
+	<string name="OpenSimInventoryValidationErrorGenericHelp">şəbəkə operatoru dəstək komandanız</string>
+</strings>

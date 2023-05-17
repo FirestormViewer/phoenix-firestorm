@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="performance" title="Sürəti sürətləndirin (Sınaq)">
+<floater.string name="frame_stats">
+Kadr:[TOT_FRAME_TIME]ms Səhnə:[SCENERY_FRAME_PCT]% Avatarlar:[AV_FRAME_PCT]% İstifadəçi interfeysi:[UI_FRAME_PCT]% HUDS:[HUDS_FRAME_PCT]% Swap:[SWAP_FRAME_PCT]% Vəzifələr:[IDLE_FRAME_PCT]%
+</floater.string>
+<floater.string name="limit_fps">
+  FPS məhdud [FPSCAP] k/s
+</floater.string>
+<floater.string name="tuning_fps">
+  Məqsəd [FPSTARGET] k/s
+</floater.string>
+<floater.string name="focus_fps">
+  Fon rejimi
+</floater.string>
+<floater.string name="info_waitforit">
+  Dəyişikliklərin baş verməsi üçün 5-10 saniyə verin.
+</floater.string>
+<floater.string name="info_frozen">
+  FPS məhdudluğu və ya fon rejimi ilə dondurulmuş statistikanın dayandırılması.
+</floater.string>
+<floater.string name="tot_av_template">
+  Ümumi: [TOT_AV] ([TOT_AV_TIME]μs)
+</floater.string>
+<floater.string name="tot_att_template">
+  Ümumi: [TOT_ATT] ([TOT_ATT_TIME]μs)
+</floater.string>
+<panel name="panel_top">
+	<panel name="fps_subpanel">
+		<text name="fps_lbl">saniyədə kadr</text>
+		<text name="fps_warning">@ 000 FPS məhdudluğu</text>
+		<text name="fps_desc1_lbl">FPS məhdudluğu və ya fon rejimi ilə dondurulmuş statistikanın dayandırılması.</text>
+		<text name="frame_breakdown">
+[---------------------Burada kadr ayrılmaları göstəriləcək.----------------------]
+		</text>
+	</panel>
+	<panel name="target_subpanel">
+		<text name="settings_lbl" tool_tip="FPS dəyərlərinin saxlanılması üçün avtomatik tənzimləmə edin. Məqsədə istənilən frame sürətini təyin edin və baxış proqramı bu sürəti əldə etmək üçün grafika tənzimləmələrinizi dinamik şəkildə dəyişdirəcəkdir.">Avtomatik:</text>
+		<text name="targetfps_desc">Məqsəd FPS (frame/saniyə)</text>
+		<spinner name="target_fps" tool_tip="FPS məqsədi - İstənilən FPS səviyyəsi. Baxış proqramı, grafikanızı dəyişdirərək bunu əldə etməyə çalışacaq."/>
+		<button name="AutoTuneFPS"  label="Başla" label_selected="Dayandır" tool_tip="Programm çalışacaq ki, hədəf kadr dərəcəsinə çatmaq üçün seçimləri tənzimləyin."/>
+		<check_box name="AutoTuneContinuous" label="Davamlı" tool_tip="Program görüntüləyicisi, pəncərə bağlanmış olsa belə, məqsəd FPS-ə çatmaq üçün seçimləri dəyişdirəcəkdir. Funksiya söndürülməz və Avtoqurma düyməsini basmaqla cərəyan edən seçimləri tənzimləyəcək, sonra dayanacaq."/>
+		<button name="PrefSaveButton" tool_tip="Gələcəkdə istifadə üçün cari seçimləri standart olaraq qeyd edin."/>
+		<button name="PrefLoadButton" tool_tip="Mövcud seçimləri yükləyin."/>
+		<button name="Defaults" tool_tip="Sizin hardware üçün standart grafik seçimlərini yenidən yükləyin."/>
+		<text name="settings_desc">Seçimləri tənzimləmə strategiyası</text>
+		<combo_box name="FSTuningFPSStrategy">
+			<combo_box.item label="Sadəcə avatardır" name="av_only"/>
+			<combo_box.item label="Avatarlar və sahə" name="av_and_scene"/>
+		</combo_box>
+		<button name="target_btn" tool_tip="Seçimlərin strategiyasının davranışını dəyişdirin."/>
+	</panel>
+</panel>
+<panel name="panel_performance_main">
+	<panel name="settings_subpanel">
+		<text name="settings_lbl">Qrafik seçimləri</text>
+		<text name="settings_desc">Məsafə, su, işıqlandırma və s. seçimlərini seçin.</text>
+	</panel>
+	<panel name="nearby_subpanel">
+		<text name="avatars_nearby_lbl">Yaxın avatardar</text>
+		<text name="avatars_nearby_desc" >Yaxın avatardarın göstərilməsini idarə edin.</text>
+		<text name="avatars_frme_pct_lbl">
+Avatarlar
+çəkmə
+vaxtı
+		</text>
+	</panel>
+	<panel name="complexity_subpanel">
+		<text name="complexity_lbl">Avatarın çətinliyi</text>
+		<text name="complexity_info">Ərazi üzrə göstərilişinizi idarə edin. </text>
+	</panel>
+	<panel name="huds_subpanel">
+		<text name="huds_lbl">Avatarın HUD-ları</text>
+		<text name="huds_desc">Lazımsız HUD-ların silinməsi sürəti yaxşılaşdıra bilər.</text>
+		<text name="huds_frme_pct_lbl">
+HUD-ların
+çəkmə
+vaxtı
+		</text>
+	</panel>
+</panel>
+</floater>

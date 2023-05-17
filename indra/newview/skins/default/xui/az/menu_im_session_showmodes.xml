@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_modes">
+	<menu_item_check label="Kompakt görünüş" name="compact_view" />
+	<menu_item_check label="Geniş görünüş" name="expanded_view" />
+	<menu_item_check name="IMShowTime" label="Vaxtı göstər" />
+	<menu_item_check name="IMShowNamesForP2PConv" label="Bir şəxslə söhbətdə adları göstərin" />
+</toggleable_menu>

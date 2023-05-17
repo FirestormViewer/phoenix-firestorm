@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Adamlar" name="panel_ls_people">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Sorğu daxil edin:
+		</text>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<fs_scroll_list name="search_results_people">
+			<columns label="Ad" name="username" />
+		</fs_scroll_list>
+		<button label="Geri" name="people_back" />
+		<button label="İrəli" name="people_next" />
+	</panel>
+</panel>

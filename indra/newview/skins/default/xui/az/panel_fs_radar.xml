@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_radar">
+	<string name="TypingColumnIcon" value="radarbox_p"/>
+	<string name="MiniMapToolTipMsg" value="[REGION] (İki dəfə basmaq xəritəni açır)"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION] (İki dəfə basmaq xəritəni açır)"/>
+	<string name="avatar_name_count" value="Ad [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
+	<panel name="nearby_panel">
+		<panel name="nearby_buttons_panel">
+			<filter_editor label="Adamlar süzgəci" name="nearby_filter_input"/>
+			<button name="gear_btn" tool_tip="Seçilmiş istifadəçi üçün əməliyyatlar"/>
+			<menu_button name="options_btn" tool_tip="Radar seçimləri"/>
+			<button name="add_friend_btn" tool_tip="Dostlara əlavə et"/>
+		</panel>
+		<layout_stack name="radar_outer_ls">
+			<layout_panel name="radar_upper_layout">
+				<layout_stack name="radar_ls">
+					<layout_panel name="radarlayout">
+						<radar_list name="radar_list">
+							<radar_list.columns label="Ad" name="name" tool_tip="[TOTAL] avatar, [IN_REGION] bu bölgədə, [IN_CHAT_RANGE] söhbət radiusunda"/>
+							<radar_list.columns name="voice_level" tool_tip="Danışır"/>
+							<radar_list.columns name="in_region" tool_tip="Bu bölgədə"/>
+							<radar_list.columns name="typing_status" tool_tip="Mətn yazır"/>
+							<radar_list.columns name="sitting_status" tool_tip="Oturur"/>
+							<radar_list.columns name="flags" tool_tip="Ödəniş məlumatları"/>
+							<radar_list.columns name="has_notes" tool_tip="Avatar qeydləri"/>
+							<radar_list.columns label="Yaş" name="age"/>
+							<radar_list.columns label="Vaxt" name="seen"/>
+							<radar_list.columns label="Məsafə" name="range"/>
+						</radar_list>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="radar_lower_layout">
+				<slider label="Məsafə (m):" name="NearMeRange" />
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

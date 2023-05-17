@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_conversation_log" title="Söhbət jurnalı">
+	<panel name="buttons_panel">
+		<filter_editor label="Adam filtri" name="people_filter_input"/>
+		<menu_button name="conversations_gear_btn" tool_tip="Seçilmiş şəxs və ya qrup üçün hərəkətlər"/>
+		<menu_button name="conversation_view_btn" tool_tip="Görünüş/Sıralama Seçimləri"/>
+	</panel>
+</floater>

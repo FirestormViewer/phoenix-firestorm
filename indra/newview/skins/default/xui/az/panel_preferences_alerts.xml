@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Bildirişlər" name="popups">
+<tab_container name="tabs">
+	<panel label="Dünya" name="tab-world">
+		<check_box label="L$ xərcləndikdə və ya alındığında mənə bildirin" name="notify_money_change_checkbox"/>
+		<check_box name="FSPaymentInfoInChat" label="L$ əməliyyatlarını ümumi söhbətdə göstərin" tool_tip="L$ əməliyyatlarını çıxan pəncərə yerinə ümumi söhbətdə göstərin."/>
+		<check_box label="Region dəyişdikdə simulyator versiyası dəyişməsi barədə məlumat verin" name="FSShowServerVersionChangeNotice" tool_tip="Teleport zamanı və ya region sərhəddini keçərkən simulyator versiyasında dəyişiklik olduğunda xəbərdarlıq göstərin."/>
+		<check_box label="Giriş zamanı son xəbərlər üçün status.secondlifegrid.net sorğusunu et" name="AutoQueryGridStatus"/>
+		<check_box label="Growl bildirişlərini aktivləşdirin" name="notify_growl_checkbox"/>
+		<check_box label="Firestorm aktiv olduğu zaman belə Growl bildirişlərini göstərin" name="notify_growl_always_checkbox"/>
+		<check_box name="FSFilterGrowlKeywordDuplicateIMs" label="Əgər onlar artıq açar sözlərin bir hissəsi kimi göstərilibsə, təkrarlanan IM-ləri filtr edin"/>
+	</panel>
+	<panel label="Adamlar" name="tab-people">
+		<check_box label="[APP_NAME] minimallaşdırılıbsa, yeni mesaj gələndə tətbiq nişanını yanıb-söndür" name="FSFlashOnMessage"/>
+		<check_box label="Obyektdən mesaj aldığımda da tətbiq nişanını yanıb-söndür" name="FSFlashOnObjectIM" />
+		<check_box label="Biri göstərilən adını dəyişdiyi halda" name="FSShowDisplayNameUpdateNotification"/>
+		<check_box label="Birini blokladığım və ya blokdan çıxartdığım halda" name="FSReportBlockToNearbyChat"/>
+		<text name="friends_logon_label">
+			Mənim dostlarım şəbəkəyə daxil olub çıxdığı zaman:
+		</text>
+		<check_box label="Çıxan pəncərə kimi" width="170" name="friends_online_notify_checkbox"/>
+		<check_box name="OnlineOfflinetoNearbyChat" label="Ümumi söhbət konsolesinə"/>
+		<check_box label="Sadəcə Ümumi söhbətə" name="OnlineOfflinetoNearbyChatHistory"/>
+	</panel>
+	<panel label="Obyektlər və skriptlər" name="tab-objects">
+		<check_box label="[APP_NAME] minimallaşdırılıbsa, skript dialoqları alındığında tətbiq nişanını yanıb-söndürün" name="FSFlashOnScriptDialog"/>
+		<check_box label="Ümumi söhbətdə toqquşma mesajlarını göstərin" name="FSCollisionMessagesInChat"/>
+		<check_box label="Skript xətalarından xəbərdar edin:" name="show_script_errors"/>
+		<radio_group name="show_script_errors_location">
+			<radio_item label="Ümumi söhbət" name="script_0"/>
+			<radio_item label="Ayrı pəncərədə" name="script_1"/>
+		</radio_group>
+		<check_box label="Regionlar ümumi skript sayını dəyişdikdə:" name="FSReportTotalScriptCountChanges"/>
+		<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="Skript sayının ümumi dəyişikliyindən öncə xəbərdarlıq etmək üçün hədd [default: 100]"/>
+		<check_box label="Skript çarpışmalarından kanalda xəbərdar edin:" name="FSReportCollisionMessages"/>
+		<spinner name="FSReportCollisionMessagesChannel" tool_tip="Skript toqquşmaları barədə xəbərdarlıq üçün istifadə edilən kanal [default: -25000]"/>
+	</panel>
+	<panel label="Avadanlıq siyahısı" name="tab-inventory">
+		<check_box label="Yükləmə üçün ödəniş etdiyim zaman" name="FSShowUploadPaymentToast" />
+		<check_box label="Əlfəcin yaradıldığında" name="landmark_created_checkbox"/>
+		<check_box label="Əşyaların geri qaytarılması barədə bildirişləri söndür" name="FSDisableReturnObjectNotification"/>
+		<check_box label="Qeyd edilmiş çəkilmiş şəkillərin fayl adlarını söhbət tarixçəsinə yaz" name="FSLogSnapshotsToLocal"/>
+		<check_box label="Çox sürətli gələn obyekt elementləri barədə xəbərdarlıq" name="FSNotifyIncomingObjectSpam" />
+		<check_box label="Başqalarından çox sürətli gələn obyekt elementləri barədə xəbərdarlıq" name="FSNotifyIncomingObjectSpamFrom" />
+		<slider name="FSOfferThrottleMaxCount" label="10 saniyə ərzində gələn əşyaların sayı limiti:" tool_tip="10 saniyə ərzində gələn əşyaların sayı limitini təyin edin. Defolt olaraq 5" />
+	</panel>
+	<panel label="Xəbərdarlıqlar" name="tab-alerts">
+		<text name="show_label" tool_tip="Baxış proqramında göstərilə bilən xəbərdarlıqların siyahısı. Xəbərdarlığı aktivləşdirmək üçün sol tərəfdəki qutunu işarələyin, gizlətmək üçün işarəni çıxarın.">
+			Göstərilə bilən xəbərdarlıqlar:
+		</text>
+		<filter_editor label="Xəbərdarlıq filtri" name="popup_filter" tool_tip="Axtarış sorğusu daxil edin. Qısmi tam uyğunluqlu nəticələr görüntülənəcəkdir."/>
+		<scroll_list name="all_popups">
+			<column label="Göstər" name="alert_enabled_check"/>
+			<column label="Xəbərdarlıq" name="alert_label"/>
+		</scroll_list>
+	</panel>
+</tab_container>
+</panel>

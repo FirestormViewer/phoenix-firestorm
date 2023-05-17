@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Friends Popup">
+	<menu_item_call label="Profili göstər" name="show_agent" />
+	<menu_item_call label="İM Göndər" name="send_im" />
+	<menu_item_call label="Söhbət tarixini göstər" name="chat_history" />
+	<menu_item_call label="Dəstə əlavə et" name="Add to Set" />
+	<menu_item_call label="Dosta yaxınlaşdır" name="zoom_agent" />
+	<menu_item_call label="Dosta teleport ol" name="teleportto_agent" />
+	<menu_item_call label="Teleport təklif et" name="offer_teleport" />
+	<menu_item_call label="Teleport tələb et" name="request_teleport" />
+	<menu_item_call label="Ödə" name="pay" />
+	<menu_item_call label="Dostun izlənməsi" name="track_agent" />
+	<menu_item_call label="Dostluqdan sil" name="remove_friend" />
+	<menu_item_call label="Adı buferə köçürt" name="url_copy_label" />
+	<menu_item_call label="URL buferə köçürt" name="url_copy" />
+	<menu name="options" label="Seçimlər...">
+		<menu_item_check label="Sütunu göstər: İstifadəçi adı" name="show_username" />
+		<menu_item_check label="Sütunu göstər: Göstərilən adı" name="show_displayname" />
+		<menu_item_check label="Sütunu göstər: Tam adı" name="show_fullname" />
+		<menu_item_check label="Sütunu göstər: İcazələr" name="show_permissions" />
+		<menu_item_check label="Sırala: İstifadəçi adına görə" name="sort_by_username" />
+		<menu_item_check label="Sırala: Göstərilən ada görə" name="sort_by_displayname" />
+		<menu_item_check label="Tam adı: İstifadəçi adı (Göstərilən adı) kimi" name="format_username_displayname" />
+		<menu_item_check label="Tam adı: Göstərilən adı (İstifadəçi adı) kimi" name="format_displayname_username" />
+		<menu_item_check label="Axtarış filterini göstər" name="friend_filter" />
+	</menu>
+	<menu_item_check label="Статус онлайн для друзей" name="GlobalOnlineStatusToggle" />
+</context_menu>

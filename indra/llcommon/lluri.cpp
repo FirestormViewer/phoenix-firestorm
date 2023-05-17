@@ -688,9 +688,9 @@ LLSD LLURI::pathArray() const
 	tokenizer::iterator end = tokens.end();
 
 	LLSD params;
-	for ( ; it != end; ++it)
+	for (const std::string& str : tokens)
 	{
-		params.append(*it);
+		params.append(str);
 	}
 	return params;
 }

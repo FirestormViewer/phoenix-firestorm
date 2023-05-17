@@ -52,7 +52,7 @@ public:
 						 S32 discard, BOOL needs_aux,
 						 const LLPointer<Responder>& responder);
 	S32 getPending();
-	S32 update(F32 max_time_ms);
+	size_t update(F32 max_time_ms);
 	void shutdown();
 
 private:

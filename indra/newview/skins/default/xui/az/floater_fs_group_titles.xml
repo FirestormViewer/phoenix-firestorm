@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="group_titles" title="Qrup başlıqları">
+	<floater.string name="NoGroupTitle" value="&lt;Qrup başlıqı yoxdur&gt;" />
+	<filter_editor label="Qrup başlıqlarının filtri" name="filter_input"/>
+	<scroll_list name="title_list">
+		<column name="grouptitle" label="Başlıq" />
+		<column name="groupname" label="Qrup" />
+	</scroll_list>
+	<button tool_tip="Mövcud qrup başlıqlarının siyahısını yeniləyin" name="btnRefresh" />
+	<button name="btnInfo" label="Məlumat" tool_tip="Seçilmiş qrup başlıqı ilə bağlı qrup haqqında məlumat göstərin" />
+	<button name="btnActivate" label="Aktivləşdir" tool_tip="Seçilmiş qrup başlıqını aktivləşdirin" />
+</floater>

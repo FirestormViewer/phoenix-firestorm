@@ -1,0 +1,20 @@
+<panel name="panel_login">
+  <layout_stack name="logo_stack">
+    <layout_panel name="parent_panel2">
+      <layout_stack name="widget_stack">
+        <layout_panel name="widget_container">
+          <combo_box label="İstifadəçi"
+            tool_tip="Qeydiyyatdan keçərkən seçdiyiniz istifadəçi adı, məsələn: dabandashi50 və ya Ertogrul Khazarli"
+            name="username_combo"/>
+          <line_editor name="password_edit" label="Şifrə"/>
+          <button label="Daxil ol" name="connect_btn"/>
+          <text name="sign_up_text">Qeydiyyat</text>
+          <check_box label="Yadda saxla" name="remember_name"
+            tool_tip="Yadda saxlanılmış istifadəçi Avatar &gt; Seçimlər &gt; Əlavə&gt; Yadda saxlanılmış istifadəçi adları menyusunda silinə bilər."/>
+          <check_box label="Şifrəni yadda saxla" name="remember_password"/>
+          <text name="forgot_password_text">Şifrəni unutdunuz</text>
+        </layout_panel>
+      </layout_stack>
+    </layout_panel>
+  </layout_stack>
+</panel>

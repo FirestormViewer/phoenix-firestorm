@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="groups" title="YADDA QALMIŞ İSTİFADƏÇİLƏR">
+    <button label="Unut" label_selected="Unut" name="forget"/>
+    <check_box label="Yerli məlumatları da silmək" name="delete_data"
+     tool_tip="Sohbet tarixini, son sessiyaya aid ekran şəklini, brauzer cookie fayllarını, teleportasiya tarixini, alətlər panelinin ayarlarını və s. daxil olmaqla yerli faylları silir. Bəzi yerli fayllar şəbəkələr arasında paylanır."/>
+</floater>

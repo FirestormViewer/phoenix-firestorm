@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater title="Düyməni seçin" name="modal container">
+	<floater.string name="keyboard">Klaviatura</floater.string>
+	<floater.string name="mouse">Siçan düymələri</floater.string>
+	<floater.string name="basic_description">
+Düyməni və ya siçan düyməsini seçin.
+Daxil edin: [INPUT].
+	</floater.string>
+	<floater.string name="reserved_by_menu">
+[KEYSTR] kombinasiyası menyuda rezerv edilib.
+	</floater.string>
+	<text name="description">
+Düyməni və ya siçan düyməsini seçin.
+Daxil edin: [INPUT].
+	</text>
+	<check_box label="Hamısına tətbiq et" name="apply_all" tool_tip="Proqram düymələrin istifadəsini dünya ilə bağlı olaraq fərqli kombinasiyalarla edir, bu parametrin təyin olunması dəyişikliklərinizi bütün kombinasiyalara tətbiq edəcəkdir."/>
+	<button label="Təmizlə" name="SetEmpty"/>
+	<button label="Default" name="Default" width="90"/>
+	<button label="Ləğv et" name="Cancel"/>
+</floater>

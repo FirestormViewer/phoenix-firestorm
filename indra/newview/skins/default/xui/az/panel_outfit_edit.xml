@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Side tray Outfit Edit panel -->
+<panel name="outfit_edit">
+	<string name="No Outfit" value="Geyim yoxdur"/>
+	<string name="unsaved_changes" value="Saxlanılmamış dəyişiklər"/>
+	<string name="now_editing" value="İndi dəyişdirilir"/>
+	<panel.string name="not_available">
+		(нет)
+	</panel.string>
+	<panel.string name="unknown">
+		(naməlum)
+	</panel.string>
+	<string name="Filter.All" value="Hamısı"/>
+	<string name="Filter.Clothes/Body" value="Paltar/bədən"/>
+	<string name="Filter.Objects" value="Obyektlər"/>
+	<string name="Filter.Clothing" value="Paltarlar"/>
+	<string name="Filter.Bodyparts" value="Bədən hissələri"/>
+	<string name="replace_body_part" value="Cari fiquranı əvəz etmək üçün buraya basın"/>
+	<text name="title" value="Geyimi dəyişdir"/>
+	<panel name="header_panel">
+		<panel name="outfit_name_and_status">
+			<text name="status" value="İndi dəyişdirilir…"/>
+			<text name="curr_outfit_name" value="[Cari geyim]"/>
+		</panel>
+	</panel>
+	<layout_stack name="im_panels">
+		<layout_panel name="outfit_wearables_panel">
+			<layout_stack name="filter_panels">
+				<layout_panel name="add_button_and_combobox">
+					<button label="Əlavə et…" name="show_add_wearables_btn" tool_tip="Aç/bağla"/>
+				</layout_panel>
+				<layout_panel name="filter_panel">
+					<filter_editor label="Daşınılan avadanlıq siyahısı üçün süzgəc" name="look_item_filter"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="add_wearables_panel">
+			<button label="Daşınılan əşya" name="plus_btn"/>
+		</layout_panel>
+	</layout_stack>
+	<panel name="no_add_wearables_button_bar">
+		<text name="avatar_complexity_label">Çətinlik: [WEIGHT]</text>
+		<button name="shop_btn_1" tool_tip="Second Life dükanına baş çəkin. Siz həmçinin geyindiyiniz paltarı seçə və oxşar bir şey tapmaq üçün buraya basa bilərsiniz"/>
+	</panel>
+	<panel name="add_wearables_button_bar">
+		<text name="avatar_complexity_adding_label">Çətinlik: [WEIGHT]</text>
+		<button name="shop_btn_2" tool_tip="Second Life dükanına baş çəkin. Siz həmçinin geyindiyiniz paltarı seçə və oxşar bir şey tapmaq üçün buraya basa bilərsiniz"/>
+	</panel>
+	<panel name="save_revert_button_bar">
+		<layout_stack name="button_bar_ls">
+			<layout_panel name="save_btn_lp">
+				<button label="Yadda saxla" name="save_btn"/>
+			</layout_panel>
+			<layout_panel name="save_as_btn_lp">
+				<button label="Yadda saxla..." name="save_as_btn"/>
+			</layout_panel>
+			<layout_panel name="revert_btn_lp">
+				<button label="Dəyişikləri ləğv et" name="revert_btn" tool_tip="Son saxlanmış versiyaya qayıdın"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

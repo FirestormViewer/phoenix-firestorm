@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Url Popup">
+	<menu_item_call label="Obyekt profili..." name="show_object"/>
+	<menu_item_call label="Blokla" name="block_object"/>
+	<menu_item_call label="Blokdan çıxart" name="unblock_object"/>
+	<menu_item_call label="Xəritədə göstər" name="show_on_map"/>
+	<menu_item_call label="Obyektə teleport ol" name="teleport_to_object"/>
+	<menu_item_call label="Obyektin adını buferə köçürt" name="url_copy_label"/>
+	<menu_item_call label="SLurl-ni buferə köçürt" name="url_copy"/>
+</context_menu>

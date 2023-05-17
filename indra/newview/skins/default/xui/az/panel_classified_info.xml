@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_classified_info">
+	<panel.string name="type_mature">
+		Moderate-məzmun
+	</panel.string>
+	<panel.string name="type_pg">
+		General-məzmun
+	</panel.string>
+	<panel.string name="l$_price">
+		L$[PRICE]
+	</panel.string>
+	<panel.string name="click_through_text_fmt">
+		Teleport [TELEPORT], xəritə [MAP], profil [PROFILE]
+	</panel.string>
+	<panel.string name="date_fmt">
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]
+	</panel.string>
+	<panel.string name="auto_renew_on">
+		Yandırılıb
+	</panel.string>
+	<panel.string name="auto_renew_off">
+		Söndürülüb
+	</panel.string>
+	<text name="title" value="Elan haqqında məlumat"/>
+	<scroll_container name="profile_scroll">
+		<panel name="scroll_content_panel">
+			<text_editor name="classified_name" value="[adı]"/>
+			<text name="classified_location_label" value="Yer:"/>
+			<text_editor name="classified_location" value="[Yüklənir...]"/>
+			<text name="content_type_label" value="Məzmun növü:"/>
+			<text_editor name="content_type" value="[məzmun növü]"/>
+			<text name="category_label" value="Kateqoriya:"/>
+			<text_editor name="category" value="[kateqoriya]"/>
+			<text name="creation_date_label" value="Yaranma tarixi:"/>
+			<text_editor name="creation_date" tool_tip="Yaranma tarixi" value="[tarix]"/>
+			<text name="price_for_listing_label" value="Yerləşdirmə qiyməti:"/>
+			<text_editor name="price_for_listing" tool_tip="Yerləşdirmə qiyməti." value="[qiymət]"/>
+			<layout_stack name="descr_stack">
+				<layout_panel name="clickthrough_layout_panel">
+					<text name="click_through_label" value="Keçidlər:"/>
+					<text_editor name="click_through_text" tool_tip="Keçidlər haqqında məlumat" value="[Keçidlər]"/>
+				</layout_panel>
+				<layout_panel name="price_layout_panel">
+					<text name="auto_renew_label" value="Avtomatik ödəmə:"/>
+					<text name="auto_renew" value="Yandırılıb"/>
+				</layout_panel>
+				<layout_panel name="descr_layout_panel">
+					<text name="classified_desc_label" value="Təsviri:"/>
+					<text_editor name="classified_desc" value="[təsvir]"/>
+				</layout_panel>
+			</layout_stack>
+		</panel>
+	</scroll_container>
+	<panel name="buttons">
+		<layout_stack name="layout_stack1">
+			<layout_panel name="layout_panel1">
+				<button label="Teleport" name="teleport_btn"/>
+			</layout_panel>
+			<layout_panel name="show_on_map_btn_lp">
+				<button label="Xəritə" name="show_on_map_btn"/>
+			</layout_panel>
+			<layout_panel name="edit_btn_lp">
+				<button label="Dəyişdir" name="edit_btn"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

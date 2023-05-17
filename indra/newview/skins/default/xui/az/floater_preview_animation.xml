@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview_anim">
+	<floater.string name="Title">
+		Animasiya: [NAME]
+	</floater.string>
+	<text name="desc txt">
+		Təsviri:
+	</text>
+	<button label="Hər kəs üçün başlat" label_selected="Dayandır" name="Inworld" tool_tip="Avatar animasiyasını bütün ətrafınızda olanlar görür"/>
+	<button label="Özünüz üçün başlat" label_selected="Dayandır" name="Locally" tool_tip="Avatar animasiyasını yalnız siz görürsünüz"/>
+	<text name="AdvancedStatsLeft">
+Prioritet: [PRIORITY]
+Müddət: [DURATION]s
+Dövr: [IS_LOOP]
+	</text>
+	<text name="AdvancedStatsRight">
+Başlanğıc: [EASE_IN]s
+Son: [EASE_OUT]s
+Oynaqlar: [NUM_JOINTS]
+	</text>
+</floater>

@@ -3953,6 +3953,10 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               </map>
               <key>configure</key>
               <map>
+                <key>arguments</key>
+                <array>
+                  <string>../indra</string>
+                </array>
                 <key>options</key>
                 <array>
                   <string>-G</string>

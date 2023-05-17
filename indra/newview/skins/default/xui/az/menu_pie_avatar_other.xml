@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Avatar Pie">
+    <pie_slice label="Profil..." name="Profile..."/>
+    <pie_menu name="mute_menu" label="Blokla &gt;">
+        <pie_slice label="Avatarı" name="Avatar Mute"/>
+        <pie_slice label="Hissəciyi" name="Mute Particle"/>
+    </pie_menu>
+    <pie_slice label="Buraya" name="Go to"/>
+    <pie_slice label="Şikayət..." name="abuse"/>
+    <pie_menu label="Əlavə et &gt;" name="add_avatar">
+        <pie_slice label="Dostlara" name="Add Friend"/>
+        <pie_slice label="Dəstə əlavə et" name="Add to set"/>
+    </pie_menu>
+    <pie_slice label="Ödə..." name="Pay..."/>
+    <pie_menu name="Avatar Pie More 1" label="İrəli &gt;">
+        <pie_slice label="Dondur" name="Freeze..."/>
+        <pie_slice label="Vizit kartı ver" name="Give Calling Card"/>
+        <pie_slice label="Qrupa dəvət" name="Group Invite..."/>
+        <pie_slice label="Təpiklə..." name="Eject..."/>
+        <pie_menu name="Avatar Pie More 2" label="İrəli &gt;">
+            <pie_slice label="Sazlama" name="Debug..."/>
+            <pie_slice label="Skriptlər haq." name="ScriptInfo"/>
+            <pie_slice label="Zəng" name="Call"/>
+            <pie_slice label="Yaxınlaşdır" name="Zoom In"/>
+            <pie_slice label="Teksturasını yenilə" name="Texture Refresh"/>
+            <pie_menu name="ResetMenu" label="Sıfırla &gt;">
+                <pie_slice label="Skel. &amp; Anim." name="Reset Skeleton And Animations"/>
+                <pie_slice label="Skelet" name="Reset Skeleton"/>
+                <pie_slice label="Mesh LOD" name="Reset Mesh LOD"/>
+            </pie_menu>
+            <pie_slice label="Damp XML" name="Dump XML"/>
+            <pie_menu name="RenderMenu" label="Göstər &gt;">
+                <pie_slice name="RenderNormally" label="Normal"/>
+                <pie_slice name="DoNotRender" label="Heç vaxt"/>
+                <pie_slice name="AlwaysRenderFully" label="Tam olaraq"/>
+            </pie_menu>
+        </pie_menu>
+        <pie_menu name="DerenderMenu" label="Göstərmə &gt;">
+            <pie_slice label="Həmişə" name="DerenderPermanent"/>
+            <pie_slice label="Müvəqqəti" name="Derender"/>
+        </pie_menu>
+    </pie_menu>
+    <pie_slice label="İM" name="Send IM..."/>
+</pie_menu>

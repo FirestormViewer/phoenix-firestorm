@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Torpaq və L$" name="land_money_tab">
+	<panel.string name="help_text">
+		Bütün istifadədə olan ərazi ümumi ödənişdən kiçik və ya bərabər olduğu zaman xəbərdarlıq verilir.
+	</panel.string>
+	<panel.string name="cant_view_group_land_text">
+		Qrup mülkiyyətinə aid ərazini görmək üçün icazəniz yoxdur.
+	</panel.string>
+	<panel.string name="epmty_view_group_land_text">
+		Giriş yoxdur
+	</panel.string>
+	<panel.string name="cant_view_group_accounting_text">
+		Qrup hesablama məlumatlarını görmək üçün icazəniz yoxdur.
+	</panel.string>
+	<panel.string name="loading_txt">
+		Yüklənir...
+	</panel.string>
+	<panel.string name="land_contrib_error">
+		Ərazinizin ödənişi müəyyən edilə bilmədi.
+	</panel.string>
+	<panel name="layout_panel_landmoney">
+		<scroll_list name="group_parcel_list">
+			<scroll_list.columns label="Torpaq hissəsi" name="name"/>
+			<scroll_list.columns label="Region" name="location"/>
+			<scroll_list.columns label="Növü" name="type"/>
+			<scroll_list.columns label="Sahəsi" name="area"/>
+			<scroll_list.columns label="Gizli" name="hidden"/>
+		</scroll_list>
+		<text name="total_contributed_land_label">
+			Ümumi ödəniş:
+		</text>
+		<button label="Xəritə" label_selected="Xəritə" name="map_button"/>
+		<text name="total_land_in_use_label">
+			Ümumi istifadədə olan ərazi:
+		</text>
+		<text name="land_available_label">
+			Mövcud ərazi:
+		</text>
+		<text name="your_contribution_label">
+			Sizin ödənişiniz:
+		</text>
+		<text name="your_contribution_max_value">
+			(maks.: [AMOUNT])
+		</text>
+		<text name="group_over_limit_text">
+			Ərazinin istifadədə saxlanılması üçün daha çox torpaq kreditləri lazımdır.
+		</text>
+		<text name="group_money_heading">
+			Qrup L$
+		</text>
+	</panel>
+	<tab_container name="group_money_tab_container">
+		<panel label="Xülasə" name="group_money_planning_tab">
+			<text_editor name="group_money_planning_text">
+				Yüklənir...
+			</text_editor>
+		</panel>
+		<panel label="Ətraflı" name="group_money_details_tab">
+			<text_editor name="group_money_details_text">
+				Yüklənir...
+			</text_editor>
+			<button name="earlier_details_button" tool_tip="Keçmiş"/>
+			<button name="later_details_button" tool_tip="Yeni"/>
+		</panel>
+		<panel label="Satış" name="group_money_sales_tab">
+			<text_editor name="group_money_sales_text">
+				Yüklənir...
+			</text_editor>
+			<button name="earlier_sales_button" tool_tip="Keçmiş"/>
+			<button name="later_sales_button" tool_tip="Yeni"/>
+		</panel>
+	</tab_container>
+</panel>

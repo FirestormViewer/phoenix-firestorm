@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="godtools floater" title="Yaradıcı alətləri">
+	<tab_container name="GodTools Tabs">
+		<panel label="Şəbəkə" name="grid">
+			<button label="Bu region üçün keş məlumatını yenilə" label_selected="Bu region üçün keş məlumatını yenilə" name="Flush This Region&apos;s Map Visibility Caches"/>
+		</panel>
+		<panel label="Region" name="region">
+			<text name="Region Name:">
+				Adı:
+			</text>
+			<check_box label="Bufer zonu" name="check prelude" tool_tip="Bu regionu bufer zonası edin"/>
+			<check_box label="Günəş sabit" name="check fixed sun" tool_tip="Günəşin mövqeyisini sabitlənməsi («Region/Torpaq mülkiyyəti &gt; Mənzərə» menyusundakı kimi)"/>
+			<check_box label="Teleport zamanı evin sıfırlanması" name="check reset home" tool_tip="Buradan teleport edən sakinlərin evi teleport etdikləri yer olacaq."/>
+			<check_box label="Görünən" name="check visible" tool_tip="Region yaradıcıları üçün görünən etmək"/>
+			<check_box label="Xəsarətlər" name="check damage" tool_tip="Regionda xəsarətlərin mümkünlüyünü yaratmaq"/>
+			<check_box label="Trafik izləməni bloklamaq" name="block dwell" tool_tip="Region üçün trafik izləməsinin blok edilməsini seçin"/>
+			<check_box label="Təbii xəritədə dəyişikliklərə qadağa qoymaq" name="block terraform" tool_tip="Sakinlərə öz yerlərinin ətrafındakı mənzərəni dəyişdirmək üçün imkan verməmək üçün seçin"/>
+			<check_box label="Sahələr arası sınaq" name="is sandbox" tool_tip="Bu regionun «sahələr arası sınaq» olub-olmadığını seçin"/>
+			<button label="Mənzərəni sabitlə" label_selected="Mənzərəni sabitlə" name="Bake Terrain" tool_tip="Cari mənzərəni standart olaraq saxlamaq" width="130"/>
+			<button label="Mənzərəni geri qaytar" label_selected="Mənzərəni geri qaytar" name="Revert Terrain" tool_tip="Cari mənzərəni standart landşaftla əvəzləmək" width="130"/>
+			<button label="Mənzərəni dəyişdir" label_selected="Mənzərəni dəyişdir" name="Swap Terrain" tool_tip="Cari mənzərəni və standart mənzərəni yer dəyişməsi ilə əvəzləmək" width="130"/>
+			<text name="estate id">
+				Mülkiyyət İD-si:
+			</text>
+			<text name="parent id">
+				Valideyin İD-si:
+			</text>
+			<line_editor name="parentestate" tool_tip="Bu bölgə üçün ata-baba torpaq mülkiyyəti"/>
+			<text name="Grid Pos: ">
+				Şəbəkə yer.:
+			</text>
+			<line_editor name="gridposx" tool_tip="Bu region üçün x-ox şəbəkə mövqeyi"/>
+			<line_editor name="gridposy" tool_tip="Bu region üçün y-ox şəbəkə mövqeyi"/>
+			<text name="Redirect to Grid: ">
+				Yönləndir:
+			</text>
+			<text name="billable factor text">
+				Ödəniş əmsalı:
+			</text>
+			<text name="land cost text">
+				m² üçün L$:
+			</text>
+			<button label="Yenilə" label_selected="Yenilə" name="Refresh" tool_tip="Yuxarıdakı məlumatların yenilənməsi"/>
+			<button label="Tətbiq et" label_selected="Tətbiq et" name="Apply" tool_tip="Yuxarıdakı bütün dəyişiklikləri tətbiq edin"/>
+			<button label="Region seçin" label_selected="Region seçin" name="Select Region" tool_tip="Mənzərə aləti ilə bütün bölgənin seçilməsi" left="160" />
+			<button label="Avtomatik saxla" label_selected="Avtomatik saxla" name="Autosave now" tool_tip="Gzip arxivində avtomatik saxlama kataloqu vəziyyətində saxlayın"/>
+		</panel>
+		<panel label="Obyektlər" name="objects">
+			<panel.string name="no_target">
+				(xarakter yoxdur)
+			</panel.string>
+			<text name="Region Name:">
+				Adı:
+			</text>
+			<text name="region name">
+				Danabaş
+			</text>
+			<check_box label="Skriptləri sön." name="disable scripts" tool_tip="Bu bölgədəki bütün skriptləri deaktiv edin"/>
+			<check_box label="Toqquşmaları sön." name="disable collisions" tool_tip="Bu bölgədə agent olmayan toqquşmaları deaktiv edin"/>
+			<check_box label="Fizikanı sön." name="disable physics" tool_tip="Bu bölgədəki bütün fiziki seçimləri söndürün" left_delta="140"/>
+			<button label="Tətbiq et" label_selected="Tətbiq et" name="Apply" tool_tip="Yuxarıdakı bütün dəyişiklikləri tətbiq edin"/>
+			<button label="Xarakter təyin et" label_selected="Xarakter təyin et" name="Set Target" tool_tip="Obyekti silmək üçün avatar xaraketri seçin"/>
+			<text name="target_avatar_name">
+				(xarakter yoxdur)
+			</text>
+			<button label="Xarici torpaqda skriptlərlə xarakter obyektlərini silin" label_selected="Xarici ölkədə skriptlərlə xarakter obyektlərini silin" name="Delete Target&apos;s Scripted Objects On Others Land" tool_tip="Удаление всех объектов со скриптами, принадлежащих персонажу, на земле, не принадлежащей персонажу. «Не копируемые» объекты будут возвращены."/>
+			<button label="*Bütün* ərazilərdə skriptlərlə simvol obyektlərini silin" label_selected="*Bütün* ərazilərdə skriptlərlə simvol obyektlərini silin" name="Delete Target&apos;s Scripted Objects On *Any* Land" tool_tip="Удаление всех объектов со скриптами, принадлежащих персонажу, в этом регионе. «Не копируемые» объекты будут возвращены."/>
+			<button label="*BÜTÜN* xarakter obyektlərini silin" label_selected="*BÜTÜN* xarakter obyektlərini silin" name="Delete *ALL* Of Target&apos;s Objects" tool_tip="Удаление всех объектов, принадлежащих персонажу, в этом регионе. «Не копируемые» объекты будут возвращены."/>
+			<button label="Toqquşmaların ən fəal iştirakçıları" label_selected="Toqquşmaların ən fəal iştirakçıları" name="Get Top Colliders" tool_tip="Список объектов, для которых наблюдается больше всего детализированных обратных вызовов" width="260"/>
+			<button label="Ən yaxşı skriptləri yükləyin" label_selected="Ən yaxşı skriptləri yükləyin" name="Get Top Scripts" tool_tip="Список объектов, в которых скрипты выполняются дольше всего" width="200"/>
+			<button label="Skript Xülasəsi" label_selected="Skript Xülasəsi" name="Scripts digest" tool_tip="Список всех скриптов с числом использований по каждому из них" width="160"/>
+		</panel>
+		<panel label="Sorğu" name="request">
+			<text name="Destination:">
+				Məqsəd:
+			</text>
+			<combo_box name="destination">
+				<combo_box.item label="məqsədlənmiş" name="item1"/>
+				<combo_box.item label="cari region" name="item2"/>
+			</combo_box>
+			<text name="Request:">
+				Sorğu:
+			</text>
+			<combo_box name="request">
+				<combo_box.item label="toqquşma iştirakçıları &lt;steps&gt;" name="item1"/>
+				<combo_box.item label="skriptlər: &lt;count&gt;,&lt;optional pattern&gt;" name="item2"/>
+				<combo_box.item label="obyektlər &lt;pattern&gt;" name="item3"/>
+				<combo_box.item label="qoymaq &lt;asset_id&gt;" name="item4"/>
+			</combo_box>
+			<text name="Parameter:">
+				Seçim:
+			</text>
+			<button label="Sorğu göndərmək" label_selected="Sorğu göndərmək" name="Make Request"/>
+		</panel>
+	</tab_container>
+</floater>

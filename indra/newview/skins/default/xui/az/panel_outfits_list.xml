@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="Outfits">
+	<accordion name="outfits_accordion">
+		<no_matched_tabs_text name="no_matched_outfits_msg" value="Sizə lazım olan tapılmadı? [secondlife:///app/search/all/[SEARCH_TERM] Axtarışdan] istifadə edin."/>
+		<no_visible_tabs_text name="no_outfits_msg" value="Sizdə hələ ki, heç bir geyim yoxdur. [secondlife:///app/search/all/ Axtarışdan] istifadə edin."/>
+	</accordion>
+	<panel name="bottom_panel">
+		<menu_button name="options_gear_btn" tool_tip="Əlavə seçimləri göstər"/>
+		<text name="OutfitcountText" width="130">
+			[COUNT] Geyim
+		</text>
+		<text name="avatar_complexity_label">
+			Çətinlik: [WEIGHT]
+		</text>
+		<button name="trash_btn" tool_tip="Seçilmiş geyimi silin"/>
+	</panel>
+</panel>

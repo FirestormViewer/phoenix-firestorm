@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Ümumi" name="Media Settings General">
+	<text name="home_label">
+		Ev səhifəsi:
+	</text>
+	<text name="home_fails_whitelist_label">
+		(Bu səhifə ağ siyahıda müəyyən edilməyib)
+	</text>
+	<line_editor name="home_url" tool_tip="Bu media mənbəsi üçün ev səhifəsi"/>
+	<text name="preview_label">
+		Baxış
+	</text>
+	<text name="current_url_label">
+		Cari səhifə:
+	</text>
+	<text name="current_url" tool_tip="Bu media mənbəsi üçün cari səhifə" value=""/>
+	<button label="Sıfırla" name="current_url_reset_btn"/>
+	<check_box initial_value="false" label="Avtomatik dövrə" name="auto_loop"/>
+	<check_box initial_value="false" label="İlk klikrə reaksiya" name="first_click_interact"/>
+	<check_box initial_value="false" label="Avtomatik böyüt" name="auto_zoom"/>
+	<check_box initial_value="false" label="Avtomatik oxutma" name="auto_play"/>
+	<text name="media_setting_note">
+		Примечание: Жители могут игнорировать эту настройку.
+	</text>
+	<check_box initial_value="false" label="Obyekt üzərində avtomatik ölçüləndir" name="auto_scale"/>
+	<text name="size_label">
+		Ölçü:
+	</text>
+	<text name="X_label">
+		X
+	</text>
+</panel>

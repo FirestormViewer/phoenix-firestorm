@@ -73,7 +73,7 @@ LLImageDecodeThread::~LLImageDecodeThread()
 
 // MAIN THREAD
 // virtual
-S32 LLImageDecodeThread::update(F32 max_time_ms)
+size_t LLImageDecodeThread::update(F32 max_time_ms)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
     return getPending();

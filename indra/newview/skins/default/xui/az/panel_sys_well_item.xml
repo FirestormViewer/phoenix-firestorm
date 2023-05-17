@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="sys_well_item" >
+  <text name="title" >
+    Dabandaşından özünüzü qoruyun. DİQQƏT!! DABANDAŞI!
+  </text>
+  <button name="close_btn" />
+</panel>

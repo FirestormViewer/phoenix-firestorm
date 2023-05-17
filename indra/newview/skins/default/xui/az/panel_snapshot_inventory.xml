@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_snapshot_inventory">
+	<text name="title">
+		Avadanlıq siyahısı
+	</text>
+	<text name="hint_lbl">
+		Tekstur kimi saxlamaq üçün kvadrat formatlarından birini seçin.
+	</text>
+	<combo_box label="Ölçü" name="texture_size_combo">
+		<combo_box.item label="Cari pəncərə (512x512)" name="CurrentWindow"/>
+		<combo_box.item label="Kiçik (128x128)" name="Small(128x128)"/>
+		<combo_box.item label="Orta (256x256)" name="Medium(256x256)"/>
+		<combo_box.item label="Böyük (512x512)" name="Large(512x512)"/>
+		<combo_box.item label="Təyin et" name="Custom"/>
+	</combo_box>
+	<spinner label="En Yüksəklik" name="inventory_snapshot_width"/>
+	<check_box label="Nisbətləri saxlamaq" name="inventory_keep_aspect_check"/>
+	<button label="&#x25B6; Seçim" name="cancel_btn"/>
+	<button label="Saxla" name="save_btn"/>
+</panel>

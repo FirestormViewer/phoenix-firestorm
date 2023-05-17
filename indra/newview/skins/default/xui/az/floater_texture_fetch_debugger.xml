@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="TexFetchDebugger" title="Tekstur çıxarış sazlayıcısı">
+	<text name="total_num_fetched_label">
+		1, İstifadə olunmuş teksturun sayı: [NUM]
+	</text>
+	<text name="total_num_fetching_requests_label">
+		2, Çıxarış üçün sorğuların sayı: [NUM]
+	</text>
+	<text name="total_num_cache_hits_label">
+		3, Keşə düşmə sayı: [NUM]
+	</text>
+	<text name="total_num_visible_tex_label">
+		4, Görünən teksturun sayı: [NUM]
+	</text>
+	<text name="total_num_visible_tex_fetch_req_label">
+		5, Görünən teksturların çıxarışı üçün sorğuların sayı: [NUM]
+	</text>
+	<text name="total_fetched_data_label">
+		6, Çıxarılmış məlumatların ümumi həcmi: [SIZE1] KB, dekod edilmiş məlumatlar: [SIZE2] KB, [PIXEL] Mpiksellər
+	</text>
+	<text name="total_fetched_vis_data_label">
+		7, Görünən məlumatların ümumi həcmi: [SIZE1] KB, dekod edilmiş məlumatlar: [SIZE2] KB
+	</text>
+	<text name="total_fetched_rendered_data_label">
+		8, Vizualizasiya edilmiş məlumatların ümumi həcmi: [SIZE1] KB, dekod edilmiş məlumatlar: [SIZE2] KB, [PIXEL] Mpiksellər
+	</text>
+	<text name="total_time_cache_read_label">
+		9, Kəşdən oxunma üçün ümumi vaxt: [TIME] s
+	</text>
+	<text name="total_time_cache_write_label">
+		10, Keşə yazılma üçün ümumi vaxt: [TIME] s
+	</text>
+	<text name="total_time_decode_label">
+		11, Dekod etmə üçün ümumi vaxt: [TIME] s
+	</text>
+	<text name="total_time_gl_label">
+		12, Tekstur yaradılması üçün ümumi vaxt: [TIME] s
+	</text>
+	<text name="total_time_http_label">
+		13, HTTP-çıxarışı üçün ümumi vaxt: [TIME] s
+	</text>
+	<text name="total_time_fetch_label">
+		14, Ümumi çıxarış üçün ümumi vaxt: [TIME] s
+	</text>
+	<text name="total_time_refetch_vis_cache_label">
+		15, Kəşdən yenidən çıxarış, vaxt: [TIME] s, çıxarılmış: [SIZE] KB, [PIXEL] Mpiksellər
+	</text>
+	<text name="total_time_refetch_all_cache_label">
+		16, Kəşdən bütün teksturların yenidən çıxarışı, vaxt: [TIME] s, çıxarılmış: [SIZE] KB, [PIXEL] Mpiksellər
+	</text>
+	<text name="total_time_refetch_vis_http_label">
+		17, HTTP-dən yenidən çıxarış, vaxt: [TIME] s, çıxarılmış: [SIZE] KB, [PIXEL] Mpiksellər
+	</text>
+	<text name="total_time_refetch_all_http_label">
+		17, HTTP-dən bütün teksturların yenidən çıxarışı, vaxt: [TIME] s, çıxarılmış: [SIZE] KB, [PIXEL] Mpiksellər
+	</text>
+	<spinner label="19, Teksel/piksel nisbəti:" name="texel_pixel_ratio"/>
+	<text name="texture_source_label">
+		20, Tekstur mənbəsi:
+	</text>
+	<radio_group name="texture_source">
+		<radio_item label="Keş + HTTP" name="0"/>
+		<radio_item label="Yalnız HTTP" name="1"/>
+	</radio_group>
+	<button label="Başlat" name="start_btn"/>
+	<button label="Sıfırla" name="clear_btn"/>
+	<button label="Bağla" name="close_btn"/>
+	<button label="Vaxtın sıfırlanması" name="reset_time_btn"/>
+	<button label="Keş oxunması" name="cacheread_btn"/>
+	<button label="Keşə yazılma" name="cachewrite_btn"/>
+	<button label="HTTP" name="http_btn"/>
+	<button label="Dekodlaşdırma" name="decode_btn"/>
+	<button label="GL teksturu" name="gl_btn"/>
+	<button label="Keşdən yenidən çıxarış" name="refetchviscache_btn"/>
+	<button label="Hamısını keşdən yenidən çıxart" name="refetchallcache_btn"/>
+	<button label="HTTP-dən yenidən çıxart" name="refetchvishttp_btn"/>
+	<button label="Hamısını HTTP-dən yenidən çıxart" name="refetchallhttp_btn"/>
+</floater>

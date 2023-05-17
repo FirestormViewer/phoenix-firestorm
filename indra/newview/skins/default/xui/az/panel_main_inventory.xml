@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Əşyalar" name="main inventory panel">
+	<panel.string name="ItemcountFetching">
+		[ITEM_COUNT] əşya və [CATEGORY_COUNT] qovluq seçilir... [FILTER]
+	</panel.string>
+	<panel.string name="ItemcountCompleted">
+		[ITEM_COUNT] əşya və [CATEGORY_COUNT] qovluq [FILTER] tapıldı
+	</panel.string>
+	<panel.string name="ItemcountUnknown">
+		[ITEM_COUNT] əşya və [CATEGORY_COUNT] qovluq seçilir... [FILTER]
+	</panel.string>
+	<text name="ItemcountText">
+		Obyektlər:
+	</text>
+	<filter_editor label="Filtr" name="inventory search editor" tool_tip="Axtarış üçün bir neçə söz yazın. Bölüşmək üçün '+' simvolundan istifadə edin."/>
+	<button name="collapse_btn" label="Minimallaşdır"/>
+	<button name="expand_btn" label="Genişləndir" />
+	<text name="filter_label" width="60" value="Süzgəc:"/>
+	<combo_box name="filter_combo_box">
+		<combo_box.item value="filter_type_all" label="Hər növ" />
+		<combo_box.item value="filter_type_animations" label="Animasiya" />
+		<combo_box.item value="filter_type_calling_cards" label="Vizit kartları" />
+		<combo_box.item value="filter_type_clothing" label="Paltar / Bədən hissələri" />
+		<combo_box.item value="filter_type_gestures" label="Jestlər" />
+		<combo_box.item value="filter_type_landmarks" label="Əlfəcinlər" />
+		<combo_box.item value="filter_type_notecards" label="Qeydlər" />
+		<combo_box.item value="filter_type_objects" label="Obyektlər" />
+		<combo_box.item value="filter_type_scripts" label="Skriptlər" />
+		<combo_box.item value="filter_type_sounds" label="Səslər" />
+		<combo_box.item value="filter_type_textures" label="Teksturlar" />
+		<combo_box.item value="filter_type_snapshots" label="Şəkillər" />
+		<combo_box.item value="filter_type_meshes" label="Meş" />
+		<combo_box.item value="filter_type_settings" label="Seçimlər" />
+		<combo_box.item value="filter_type_custom" label="Ayrı..." />
+	</combo_box>
+	<tab_container name="inventory filter tabs">
+		<inventory_panel label="Avadanlıq siyahısı" name="All Items"/>
+		<recent_inventory_panel label="Son" name="Recent Items"/>
+		<worn_inventory_panel label="Daşınılan" name="Worn Items"/>
+	</tab_container>
+	<panel name="bottom_panel">
+		<panel name="options_gear_btn_panel">
+			<menu_button name="options_gear_btn" tool_tip="Əlavə seçimləri göstər"/>
+		</panel>
+		<panel name="add_btn_panel">
+			<button name="add_btn" tool_tip="Yeni element əlavə et"/>
+		</panel>
+		<panel name="new_inventory_panel">
+			<button name="new_inv_btn" tool_tip="Əlavə avadanlıq siyahısı pəncərəsi"/>
+		</panel>
+		<!-- Used by StarLight skins -->
+		<panel name="collapse_panel">
+			<button label="Minimallaşdır" name="collapse_btn" tool_tip="Bütün qovluqları yığışdır" />
+		</panel>
+		<panel name="expand_panel">
+			<button label="Genişləndir" name="expand_btn" tool_tip="Bütün qovluqları aç" />
+		</panel>
+		<!-- / Used by StarLight skins -->
+		<panel name="dummy_panel">
+			<text name="ItemcountText">
+				Element
+			</text>
+		</panel>
+		<panel name="trash_btn_panel">
+			<dnd_button name="trash_btn" tool_tip="Удалить выбранный элемент"/>
+		</panel>
+	</panel>
+</panel>

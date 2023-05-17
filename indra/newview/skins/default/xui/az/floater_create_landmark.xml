@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="create_landmark" title="Əlfəcin yarat">
+	<string name="favorites_bar">Sevimli paneli</string>
+	<text name="title_label" value="Ətraflı"/>
+	<text name="name_label" value="Adı:"/>
+	<text name="folder_label" value="Əlfəcini harada saxla:"/>
+	<text name="new_folder_textbox">[secondlife:/// Yeni qovluq yarat]</text>
+	<text name="notes_label" value="Qeydlərim:"/>
+	<button label="OK" name="ok_btn"/>
+	<button label="Ləğv et" name="cancel_btn"/>
+</floater>

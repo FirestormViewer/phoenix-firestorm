@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_pathfinding_characters" title="Yol axtarışı ilə xarakterlər">
+	<floater.string name="messaging_get_inprogress">
+		Yol axtarışı ilə olan xarakterlərin sorğulanması...
+	</floater.string>
+	<floater.string name="messaging_get_error">
+		Yol axtarışlı xxarakterləri sorğulayarkən xəta baş verdi.
+	</floater.string>
+	<floater.string name="messaging_complete_none_found">
+		Yol axtarışı ilə xarakterlər yoxdur.
+	</floater.string>
+	<floater.string name="messaging_complete_available">
+		Seçilmiş personajlar: [NUM_TOTAL] sayından [NUM_SELECTED].
+	</floater.string>
+	<floater.string name="messaging_not_enabled">
+		Bu regionda yol axtarışına icazə verilmir.
+	</floater.string>
+	<floater.string name="character_cpu_time">
+		[CPU_TIME] mks
+	</floater.string>
+	<floater.string name="character_owner_loading">
+		[Yüklənir]
+	</floater.string>
+	<floater.string name="character_owner_unknown">
+		[Naməlum]
+	</floater.string>
+	<floater.string name="character_owner_group">
+		[qrup]
+	</floater.string>
+	<panel name="pathfinding_chars_main">
+		<scroll_list name="objects_scroll_list">
+			<scroll_list.columns label="Ad" name="name"/>
+			<scroll_list.columns label="Təsvir" name="description"/>
+			<scroll_list.columns label="Sahib" name="owner"/>
+			<scroll_list.columns label="CPU" name="cpu_time"/>
+			<scroll_list.columns label="Hündürlük" name="altitude"/>
+		</scroll_list>
+		<text name="messaging_status">
+			Xarakterlər:
+		</text>
+		<button label="Siyahını yenilə" name="refresh_objects_list"/>
+		<button label="Hamısını seç" name="select_all_objects"/>
+		<button label="Seçimi ləğv et" name="select_none_objects"/>
+	</panel>
+	<panel name="pathfinding_chars_actions">
+		<text name="actions_label">
+			Seçilmiş xarakterlər ilə hərəkətlər:
+		</text>
+		<check_box label="Nişanı göstər" name="show_beacon"/>
+		<check_box label="Fiziki kapsul göstər" name="show_physics_capsule"/>
+		<button label="Götür" name="take_objects"/>
+		<button label="Köçürtməsin götür" name="take_copy_objects"/>
+		<button label="Məni oraya teleport edin" name="teleport_me_to_object" tool_tip="Yalnız bir xarakter seçildikdə icazə verilir."/>
+		<button label="Qaytar" name="return_objects"/>
+		<button label="Sil" name="delete_objects"/>
+	</panel>
+</floater>

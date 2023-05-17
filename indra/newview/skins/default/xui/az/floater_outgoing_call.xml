@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="outgoing call" title="Zəng">
+	<floater.string name="lifetime">
+		5
+	</floater.string>
+	<floater.string name="localchat">
+		Yaxınlıqdakı səsli söhbət
+	</floater.string>
+	<floater.string name="anonymous">
+		anonim
+	</floater.string>
+	<floater.string name="VoiceInviteP2P">
+		zəng edir.
+	</floater.string>
+	<floater.string name="VoiceInviteAdHoc">
+		konfransda səsli söhbət sessiyasına qoşuldu.
+	</floater.string>
+	<text name="connecting">
+		[CALLEE_NAME] qoşulur
+	</text>
+	<text name="calling">
+		[CALLEE_NAME] çağırılır
+	</text>
+	<text name="noanswer">
+		Cavab yoxdur.  Daha sonra yenidən cəhd edin.
+	</text>
+	<text name="nearby">
+		[VOICE_CHANNEL_NAME]-dən ayrıldınız.  [RECONNECT_NEARBY]
+	</text>
+	<text name="nearby_P2P_by_other">
+		Zəng başa çatdı.  [RECONNECT_NEARBY]
+	</text>
+	<text name="nearby_P2P_by_agent">
+		Siz zəngi sonlandırdınız.  [RECONNECT_NEARBY]
+	</text>
+	<text name="leaving">
+		[CURRENT_CHAT] söhbətindən çıxış
+	</text>
+	<button label="Ləğv et" label_selected="Ləğv et" name="Cancel"/>
+</floater>
