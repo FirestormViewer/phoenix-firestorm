@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<person_view>
+	<facebook_icon name="facebook_icon" tool_tip="Facebook istifadəçisi" />
+	<permission_edit_theirs_icon name="permission_edit_theirs_icon" tool_tip="Bu dostun obyektlərini dəyişdirə bilərsiniz" />
+	<permission_edit_mine_icon name="permission_edit_mine_icon" tool_tip="Bu dost sizin obyektlərinizi dəyişdirə, silə və götürə bilər" />
+	<permission_map_icon tool_tip="Bu dost sizi xəritədə tapa bilər" name="permission_map_icon" />
+	<permission_online_icon name="permission_online_icon" tool_tip="Bu dost sizin şəbəkədəki statusunuzu görə bilər" />
+	<info_btn name="info_btn" tool_tip="Daha çox məlumat" />
+	<profile_btn name="profile_btn" tool_tip="Profilə baxın" />
+</person_view>

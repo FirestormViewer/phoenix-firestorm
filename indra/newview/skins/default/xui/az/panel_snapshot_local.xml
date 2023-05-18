@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_snapshot_local">
+	<text name="title">
+		Disk
+	</text>
+	<combo_box label="Ölçü" name="local_size_combo">
+		<combo_box.item label="Cari pəncərə" name="CurrentWindow"/>
+		<combo_box.item label="320x240" name="320x240"/>
+		<combo_box.item label="640x480" name="640x480"/>
+		<combo_box.item label="800x600" name="800x600"/>
+		<combo_box.item label="1024x768" name="1024x768"/>
+		<combo_box.item label="1280x1024" name="1280x1024"/>
+		<combo_box.item label="1600x1200" name="1600x1200"/>
+		<combo_box.item label="Ayrı" name="Custom"/>
+	</combo_box>
+	<spinner label="En hündürlük" name="local_snapshot_width"/>
+	<check_box label="Nisbətləri saxla" name="local_keep_aspect_check"/>
+	<text name="local_format_label">
+		Format:
+	</text>
+	<combo_box label="Format" name="local_format_combo">
+		<combo_box.item label="PNG (İtkisiz sıxlaşdırma)" name="PNG"/>
+		<combo_box.item label="JPEG" name="JPEG"/>
+		<combo_box.item label="BMP (İtkisiz sıxlaşdırma)" name="BMP"/>
+	</combo_box>
+	<slider label="Keyfiyyət:" name="image_quality_slider"/>
+	<text name="local_remember_location_sessions_text">
+		Seanslar arasında yeri və fayl adını saxlayın
+	</text>
+	<button label="&#x25B6; Выбор" name="cancel_btn"/>
+	<flyout_button label="Yadda saxla" name="save_btn" tool_tip="Şəkili fayla yadda saxla">
+		<flyout_button.item label="Yadda saxla" name="save_item"/>
+		<flyout_button.item label="Ayrı saxla..." name="saveas_item"/>
+	</flyout_button>
+</panel>

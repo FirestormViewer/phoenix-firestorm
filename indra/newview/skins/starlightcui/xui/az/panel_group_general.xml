@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Ümumi" name="general_tab">
+	<panel.string name="help_text">
+		Ümumi pəncərəsində bu qrup haqqında ümumi məlumat, onun üzvlərinin siyahısı, ümumi qrup seçimləri və üzv seçimləri var.
+
+
+Daha çox kömək üçün kursoru seçimlərin üzərinə daşıyın.
+	</panel.string>
+	<panel.string name="group_info_unchanged">
+		Qrupun ümumi məlumatı dəyişdirildi
+	</panel.string>
+	<panel.string name="incomplete_member_data_str">
+		Üzvlərin məlumatları toplanır
+	</panel.string>
+	<panel name="group_info_top">
+		<texture_picker name="insignia" tool_tip="Şəkli böyütmək üçün basın" />
+		<text name="prepend_founded_by">
+			Təsisçi:
+		</text>
+		<text name="join_cost_text">
+			Pulsuz
+		</text>
+		<button label="İndi qoşulun!" name="btn_join"/>
+	</panel>
+	<text_editor name="charter">
+		Qrup nizamnaməsi
+	</text_editor>
+	<name_list name="visible_members">
+		<name_list.columns label="Ad" name="name"/>
+		<name_list.columns label="Təsvir" name="title"/>
+		<name_list.columns label="Vəziyyət" name="status"/>
+	</name_list>
+	<text name="my_group_settngs_label">
+		Mənim bu qrup üçün tənzimləmələrim:
+	</text>
+	<text name="active_title_label">
+		Başlıqım:
+	</text>
+	<combo_box name="active_title" tool_tip="Bu qrup aktiv olduğu zaman avatarınızın adının üstündə görünəcək başlıqı tənzimləyin."/>
+	<check_box label="Qrup bildirişlərini alın" name="receive_notices" tool_tip="Qrup bildirişlərini almaq istəyirsinizsə tənzimləyin. Eğer bu qrup sizə 'spam' göndərirsə işarəni silin."/>
+	<check_box label="Bu qrupun söhbətini qəbul edin" name="receive_chat" tool_tip="Bu qrupun söhbətlərinə qatılmaq istəyirsinizsə tənzimləyin."/>
+	<check_box label="Mənim profilimdə göstərin" name="list_groups_in_profile" tool_tip="Bu qrupun profilinizdə görünməsini tənzimləyin."/>
+	<panel name="preferences_container">
+		<text name="group_settngs_label">
+			Qrup tənzimləmələri
+		</text>
+	<check_box label="Hər kəs daxil ola bilər" name="open_enrollement" tool_tip="Yeni üzvlərin dəvət edilməsi tələb olunmadan qrupa daxil olub-olmamasını təyin edir."/>
+	<check_box label="Daxil olma haqqı" name="check_enrollment_fee" tool_tip="Qrupa qoşulmaq üçün daxil olma haqqı ödənilməsi lazım olub-olmamasını təyin edir."/>
+	<spinner name="spin_enrollment_fee" tool_tip="Əgər &apos;Daxil olma haqqı&apos; seçimi işarələnibsə, yeni üzvlər qrupa qoşulmaq üçün bu haqqı ödəməlidirlər."/>
+	<combo_box name="group_mature_check" tool_tip="Qrupunuzun İstirahət verilən adlandırılmış və ya yayılması mümkün olan məlumatları ehtiva edib etmədiyini təyin edir.">
+		<combo_item name="select_mature">
+			- Qiymətləndirmə səviyyəsini seçin -
+		</combo_item>
+		<combo_box.item label="Orta məzmun" name="mature"/>
+		<combo_box.item label="Ümumi məzmun" name="pg"/>
+	</combo_box>
+	<check_box label="Axtarışda göstər" name="show_in_group_list" tool_tip="İnsanlara bu qrupu axtarış nəticələrində görmək imkanı verir."/>
+		<text name="group_key_label">
+			İD:
+		</text>
+		<button name="copy_name" label="Adını köçürt" />
+		<text_editor name="group_key" label="Qrup İD-si:" initial_value="(yüklənir...)"/>
+		<button name="copy_uri" label="URI köçürt"/>
+	</panel>
+</panel>

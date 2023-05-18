@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Opensim" name="opensim_panel">
+	<tab_container label="Opensim" name="tabs">
+		<panel label="Şəbəkə idarəetməsi" name="grid_management_panel">
+			<text name="add_grid_text">
+				Yeni şəbəkə əlavə edin
+			</text>
+			<line_editor name="add_grid" label="LoginURI daxil edin" />
+			<button label="Təmizlə" label_selected="Təmizlə" width="80" name="clear_grid" />
+			<button label="Tətbiq et" width="80" name="apply_new_grid" />
+			<text name="add_grid_text">
+				Şəbəkə idarəetməsi
+			</text>
+			<scroll_list name="grid_list">
+				<scroll_list.columns label="Şəbəkə adı" name="grid_label" />
+				<scroll_list.columns label="Daxil olma URI" name="login_uri" />
+			</scroll_list>
+			<button label="Yenilə" name="refresh_grid" />
+			<button label="Sil" name="remove_grid" />
+			<panel name="advanced_grid_panel">
+				<text name="grid_name_text">
+					Şəbəkə adı:
+				</text>
+				<text name="grid_uri_text">
+					Şəbəkə URI:
+				</text>
+				<text name="login_page_text">
+					Giriş səhifəsi:
+				</text>
+				<text name="helper_uri_text">
+					Kömək URI:
+				</text>
+				<text name="website_text">
+					Şəbəkə saytı:
+				</text>
+				<text name="support_text">
+					Şəbəkə dəstəyi:
+				</text>
+				<text name="register_text">
+					Şəbəkə qeydiyyatı:
+				</text>
+				<text name="password_text">
+					Şəbəkə şifrə URI:
+				</text>
+				<text name="search_text">
+					Şəbəkə axtarışı:
+				</text>
+				<text name="message_text">
+					Şəbəkə mesajları URI:
+				</text>
+			</panel>
+		</panel>
+		<panel label="Başqa" name="opensim_misc_panel">
+			<check_box label="Axtarışın sazlanması" name="DebugSearch" />
+			<text name="search_url_debug_text">
+				Cari axtarış url-nin əvəz edilməsi: (boşdursa əvəzsiz)
+			</text>
+			<button label="Təmizlə" label_selected="Təmizlə" name="clear_search_url_debug" />
+			<button label="Seçin" name="pick_current_search_url" />
+		</panel>
+	</tab_container>
+</panel>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="object_weights" title="Əlavə">
+	<floater.string name="nothing_selected" value="--"/>
+	<text name="selected_text" value="Seçilmiş"/>
+	<text name="objects" value="--"/>
+	<text name="objects_label" value="Obyektlər"/>
+	<text name="prims" value="--"/>
+	<text name="prims_label" value="Primlər"/>
+	<text name="weights_of_selected_text" value="Seçilmişin çəkisi"/>
+	<text name="download" value="--"/>
+	<text name="download_label" value="Yüklə"/>
+	<text name="physics" value="--"/>
+	<text name="physics_label" value="Fizika"/>
+	<text name="server" value="--"/>
+	<text name="server_label" value="Server"/>
+	<text name="display" value="--"/>
+	<text name="display_label" value="Göstər"/>
+	<text name="land_impacts_text" value="Yer təsiri"/>
+	<text name="selected" value="--"/>
+	<text name="selected_label" value="Seçilmiş"/>
+	<text name="rezzed_on_land" value="--"/>
+	<text name="rezzed_on_land_label" value="Yerə qoyulmuş"/>
+	<text name="remaining_capacity" value="--"/>
+	<text name="remaining_capacity_label" value="Qalıq həcm"/>
+	<text name="total_capacity" value="--"/>
+	<text name="total_capacity_label" value="Ümumi həcm"/>
+	<text name="help_SLURL" value="[secondlife:///app/help/object_weights Bu nədir?...]"/>
+</floater>

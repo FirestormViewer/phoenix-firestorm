@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Torpaq mülkiyyəti" name="Estate">
+	<text name="estate_help_text">
+		Bu pəncərədəki seçimlərin dəyişdirilməsi həmin regionun bütün sahələrinə təsir edəcək.
+	</text>
+	<text name="estate_text">
+		Torpaq mülkiyyəti:
+	</text>
+	<text name="estate_name">
+		(naməlum)
+	</text>
+	<text name="owner_text">
+		Torpaq sahibi:
+	</text>
+	<text name="estate_owner">
+		(naməlum)
+	</text>
+	<radio_group name="externally_visible_radio">
+		<radio_item label="Yalnız giriş pəncərəsində qeyd olunan sakinlərə və qruplara icazə verilir" name="estate_restricted_access"/>
+		<radio_item label="Giriş hər kəs üçün açıqdır" name="estate_public_access"/>
+	</radio_group>
+	<check_box label="18 və yuxarı olmalıdır" name="limit_age_verified" tool_tip="Bu mülkiyyətə giriş 18 yaşdan az olan sakinlər üçün məhduddur. Daha ətraflı məlumatı burada tapa bilərsiniz: [SUPPORT_SITE]."/>
+	<check_box label="Ödəniş məlumatları faylda olmalıdır" name="limit_payment" tool_tip="Sakinlər bu mülkiyyətə daxil olmaq üçün qeydiyyatdan keçmiş ödəniş məlumatlarına malik olmalıdırlar. Daha ətraflı məlumatı burada tapa bilərsiniz: [SUPPORT_SITE]."/>
+	<check_box label="Torpaq sahibləri daha məhdudlaşdırıcı tədbirlər görə bilər" name="parcel_access_override"/>
+	<check_box label="Səsli söhbətə icazə verin" name="voice_chat_check"/>
+	<check_box label="Birbaşa teleporta icazə verin" name="allow_direct_teleport"/>
+	<button label="Tətbiq et" name="apply_btn"/>
+	<text name="estate_manager_label">
+		Torpaq idarəçiləri:
+	</text>
+	<text name="allow_resident_label">
+		Həmişə icazə verilir:
+	</text>
+	<button label="Əlavə et..." name="add_estate_manager_btn"/>
+	<button label="Sil..." name="remove_estate_manager_btn"/>
+	<button label="Əlavə et..." name="add_allowed_avatar_btn"/>
+	<button label="Sil..." name="remove_allowed_avatar_btn"/>
+	<text name="allow_group_label">
+		Qruplara həmişə icazə verilir:
+	</text>
+	<text name="ban_resident_label">
+		Həmişə bloklanıb:
+	</text>
+	<button label="Əlavə et..." name="add_allowed_group_btn"/>
+	<button label="Sil..." name="remove_allowed_group_btn"/>
+	<button label="Əlavə et..." name="add_banned_avatar_btn"/>
+	<button label="Sil..." name="remove_banned_avatar_btn"/>
+	<button label="Torpaq mülkiyyətinə mesaj..." name="message_estate_btn"/>
+	<button label="Sakini torpaq mülkiyyətindən təpiklə..." name="kick_user_from_estate_btn"/>
+</panel>

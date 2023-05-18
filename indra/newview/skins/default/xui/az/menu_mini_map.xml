@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu name="Popup" label="Mini-xəritə">
+	<menu_item_call label="Profili göstər" name="View Profile"/>
+	<menu label="Profilləri göstər" name="View Profiles"></menu>
+	<menu_item_call label="Dəstə əlavə et" name="Add to Set Multiple"/>
+	<menu_item_call label="Kameranı yaxınlaşdır" name="Cam"/>
+	<menu name="MarkAvatar" label="Nişan...">
+		<menu_item_call label="Qırmızı" name="MarkRed"/>
+		<menu_item_call label="Yaşıl" name="MarkGreen"/>
+		<menu_item_call label="Göy" name="MarkBlue"/>
+		<menu_item_call label="Bənövşəyi" name="MarkPurple"/>
+		<menu_item_call label="Sarı" name="MarkYellow"/>
+		<menu_item_call label="Nişanı sil" name="Clear Mark"/>
+		<menu_item_call label="Nişanları sil" name="Clear Marks"/>
+	</menu>
+	<menu name="More Options" label="Daha çox seçim...">
+		<menu_item_call label="Dostlara əlavə et" name="Add Friend"/>
+		<menu_item_call label="Dəstə əlavə et" name="Add to Set"/>
+		<menu_item_call label="Dostluqdan sil" name="Remove Friend"/>
+		<menu_item_call label="İM Göndər" name="IM"/>
+		<menu_item_call label="Zəng" name="Call"/>
+		<menu_item_call label="Xəritə" name="Map"/>
+		<menu_item_call label="Paylaş" name="Share"/>
+		<menu_item_call label="Ödə" name="Pay"/>
+		<menu_item_call label="Teleport təklif et" name="teleport"/>
+		<menu_item_call label="Teleport tələb et" name="request_teleport"/>
+		<menu_item_call label="Teleport ol" name="teleport_to"/>
+		<menu_item_call label="Qrupa dəvət et" name="GroupInvite"/>
+		<menu_item_call label="Skriptlər haqqında məlumat" name="ScriptInfo"/>
+		<menu_item_check label="Blokla/Blokdan çıxart" name="Block/Unblock"/>
+		<menu_item_call label="Şikayət" name="report"/>
+		<menu_item_call label="Dondur" name="freeze"/>
+		<menu_item_call label="Sahə: Torpaqdan çıxart" name="eject"/>
+		<menu_item_call label="Ada: Təpiklə" name="kick"/>
+		<menu_item_call label="Ada: Evə göndər" name="teleport_home"/>
+		<menu_item_call label="Ada: Qadağan et" name="estate_ban"/>
+		<menu_item_call label="Göstərmə" name="derender"/>
+		<menu_item_call label="Həmişə göstərmə" name="derender_permanent"/>
+	</menu>
+	<menu_item_call label="İzləməyə başla" name="Start Tracking"/>
+	<menu_item_call label="İzləməni dayandır" name="Stop Tracking"/>
+	<menu label="Yaxınlaşdır" name="Minimap Zoom">
+		<menu_item_check label="Çox yaxın" name="Zoom very close"/>
+		<menu_item_check label="Yaxın" name="Zoom close"/>
+		<menu_item_check label="Ortam (susmaya görə)" name="Zoom medium"/>
+		<menu_item_check label="Uzaq" name="Zoom far"/>
+	</menu>
+	<menu label="Göstər" name="Minimap Show">
+		<menu_item_check label="Obyektlər" name="Objects"/>
+		<menu_item_check label="Fiziki obyektlər" name="Physical Objects"/>
+		<menu_item_check label="Skriptli obyektlər" name="Scripted Objects"/>
+		<menu_item_check label="Müvəqqəti obyektlər" name="Temp On Rez Objects"/>
+		<menu_item_check label="Sahə sərhədləri" name="Property Lines"/>
+		<menu_item_check label="Satılan sahələr" name="Parcels for Sale"/>
+		<menu_item_check label="Torpaq teksturları" name="Terrain Textures"/>
+		<menu_item_check label="Dünya xəritəsinin teksturları" name="World Map Textures"/>
+	</menu>
+	<menu_item_check label="Şimal yuxarıda" name="North at top"/>
+	<menu_item_check label="Kamera yuxarıda" name="Camera at top"/>
+	<menu_item_check label="Xəritənin avtomatik mərkəzlənməsi" name="Auto-center map"/>
+	<menu_item_call label="Xəritəni mərkəzləşdir" name="Re-center map"/>
+	<menu label="Söhbət əhatə dairələrini göstər" name="Chat Distance Rings Menu">
+		<menu_item_check label="Söhbət əhatə dairələrini göstər" name="Chat Distance Rings"/>
+		<menu_item_check label="Pıçıltı əhatə dariəsini göstər" name="Whisper Distance Ring"/>
+		<menu_item_check label="Söhbət əhatə dariəsini göstər" name="Chat Distance Ring"/>
+		<menu_item_check label="Qışqırtı əhatə dariəsini göstər" name="Shout Distance Ring"/>
+	</menu>
+	<menu_item_call label="Torpaq haqqında" name="About Land"/>
+	<menu_item_call label="Yer profili" name="Place Profile"/>
+	<menu_item_call label="Dünya xəritəsi" name="World Map"/>
+</menu>

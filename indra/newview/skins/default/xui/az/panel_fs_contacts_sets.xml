@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="contact_sets_panel">
+	<panel.string name="empty_list">
+		Bu dəst boşdur.
+	</panel.string>
+	<panel.string name="no_sets">
+		Dəst yoxdur.
+	</panel.string>
+	<panel.string name="all_sets">
+		Bütün dəstlər
+	</panel.string>
+	<panel.string name="pseudonyms">
+		Ləqəblər
+	</panel.string>
+	<panel.string name="non_friends">
+		Dost siyahısında olmayan
+	</panel.string>
+	<button name="config_btn" tool_tip="Seçilmiş dəstin seçimləri" />
+	<button name="add_set_btn" tool_tip="Yeni kontakt dəsti əlavə et" />
+	<button name="remove_set_btn" tool_tip="Seçilmiş kontakt dəstini sil" />
+	<button label="Əlavə et..." name="add_btn" tool_tip="Avatarı cari kontakt dəstinə əlavə et" />
+	<button label="Sil..." name="remove_btn" tool_tip="Avatarı cari kontakt dəstindən sil" />
+	<button label="Profil..." name="profile_btn" tool_tip="Avatarın profilini aç" />
+	<button label="İM..." name="start_im_btn" tool_tip="Səxsi mesaj göndər (İM)" />
+	<button label="Teleport..." name="offer_teleport_btn" tool_tip="İstifadəçiyə özünüzə teleport təklif et" />
+	<button label="Ləqəb +" name="set_pseudonym_btn" tool_tip="Seçilmiş avatara ləqəb təyin et" />
+	<button label="Ləqəb -" name="remove_pseudonym_btn" tool_tip="Seçilmiş avatarın ləqəbini sil" />
+	<button label="GA Sil" name="remove_displayname_btn" tool_tip="Avatarın göstərilən adını sil" />
+	<text name="member_count">
+		Üzvlər: [COUNT]
+	</text>
+</panel>

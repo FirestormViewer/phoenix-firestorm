@@ -140,17 +140,12 @@ void LLPathfindingNavMesh::handleNavMeshResult(const LLSD &pContent, U32 pNavMes
 		if ( pContent.has(NAVMESH_DATA_FIELD) )
 		{
 			const LLSD::Binary &value = pContent.get(NAVMESH_DATA_FIELD).asBinary();
-			// <FS:Beq pp Rye> Use new variants of unzip_llsd calls
-			// unsigned int binSize = value.size();
-			// std::string newStr(reinterpret_cast<const char *>(&value[0]), binSize);
-			// std::istringstream streamdecomp( newStr );
-			// </FS:Beq pp Rye> 
-			unsigned int decompBinSize = 0;
+			unsigned int binSize = value.size();
+			std::string newStr(reinterpret_cast<const char *>(&value[0]), binSize);
+			std::istringstream streamdecomp( newStr );
+			size_t decompBinSize = 0;
 			bool valid = false;
-			// <FS:Beq pp Rye> Use new variants of unzip_llsd calls
-			// U8* pUncompressedNavMeshContainer = unzip_llsdNavMesh( valid, decompBinSize, streamdecomp, binSize ) ;
-			U8* pUncompressedNavMeshContainer = unzip_llsdNavMesh( valid, decompBinSize, value.data(), value.size() ) ;
-			// </FS:Beq pp Rye> 
+			U8* pUncompressedNavMeshContainer = unzip_llsdNavMesh( valid, decompBinSize, streamdecomp, binSize ) ;
 			if ( !valid )
 			{
 				LL_WARNS() << "Unable to decompress the navmesh llsd." << LL_ENDL;

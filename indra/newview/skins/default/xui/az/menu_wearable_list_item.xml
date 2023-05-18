@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Outfit Wearable Context Menu">
+	<menu_item_call label="Əvəz et" name="wear_replace"/>
+	<menu_item_call label="Geyin" name="wear_wear"/>
+	<menu_item_call label="Əlavə et" name="wear_add"/>
+	<context_menu label="Nəyə birləşdir" name="wearable_attach_to"/>
+	<context_menu label="Ekrana birləşdir" name="wearable_attach_to_hud"/>
+	<menu_item_call label="Toxun" name="touch"/>
+	<menu_item_call label="Dəyişdir" name="edit"/>
+	<menu_item_call label="Çıxart/Ayır" name="take_off_or_detach"/>
+	<menu_item_call label="Ayır" name="detach"/>
+	<menu_item_call label="Çıxart" name="take_off"/>
+	<menu_item_call label="Obyekt profili" name="object_profile"/>
+	<menu_item_call label="Orijinalı göstər" name="show_original"/>
+	<menu_item_call label="Yarat" name="create_new"/>
+	<menu_item_call label="--Seçim yoxdur--" name="--no options--"/>
+</context_menu>

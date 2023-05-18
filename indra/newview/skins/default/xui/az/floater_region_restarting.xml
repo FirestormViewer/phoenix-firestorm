@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="region_restarting" title="Region yenidən başladılır">
+	<string name="RegionName">
+		Siz burada olduğunuz [NAME] regionu yenidən başladılacaq.
+
+Əgər söndürülərkən regionda qalırsınızsa, avtomatik olaraq çıxacaqsınız.
+	</string>
+	<string name="RestartSeconds">
+		Yenidən başladılmaq qalıb:
+[SECONDS]
+	</string>
+	<panel name="layout_panel_1">
+		<text name="region_name">
+			Siz burada olduğunuz (-Uzun region adı-) regionu yenidən başladılacaq.
+
+Əgər söndürülərkən regionda qalırsınızsa, avtomatik olaraq çıxacaqsınız.
+		</text>
+		<text name="restart_seconds">
+			Yenidən başladılmağa qalıb:
+32767
+		</text>
+		<combo_box label="Əlfəcinlərim" name="landmark combo">
+			<combo_box.item label="Yerlərim" name="item1" />
+		</combo_box>
+		<button tool_tip="Yerləşməyə gedərək teleporlaşın" name="teleport_btn" />
+	</panel>
+</floater>

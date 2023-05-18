@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Proxy Settings Floater" title="Proxy server tənzimləmələri">
+	<check_box initial_value="false" label="Veb səhifələri üçün HTTP proxy istifadə et" name="web_proxy_enabled"/>
+	<text name="http_proxy_label">
+		HTTP proxy:
+	</text>
+	<line_editor name="web_proxy_editor" tool_tip="İstifadə edilməli olan HTTP proxy DNS adı və ya IP ünvanı."/>
+	<spinner label="Port nömrəsi:" name="web_proxy_port" tool_tip="İstifadə edilməli olan HTTP proxy portu."/>
+	<check_box label="UDP trafiki üçün SOCKS 5 proxy server istifadə et" name="socks_proxy_enabled"/>
+	<text name="socks5_proxy_label">
+		SOCKS 5 serveri:
+	</text>
+	<line_editor name="socks_proxy_editor" tool_tip="İstifadə edilməli olan SOCKS 5 proxy server DNS adı və ya IP ünvanı."/>
+	<spinner label="Port nömrəsi:" name="socks_proxy_port" tool_tip="İstifadə edilməli olan SOCKS 5 proxy server portu."/>
+	<text name="socks_auth_label">
+		SOCKS autentifikasiyası:
+	</text>
+	<radio_group name="socks5_auth_type">
+		<radio_item label="Autentifikasiya etmək olmaz" name="Socks5NoAuth" tool_tip="SOCKS 5 proxy serverdə autentifikasiya tələb olunmur." value="No"/>
+		<radio_item label="İstifadəçi adı/şifrə" name="Socks5UserPass" tool_tip="SOCKS 5 proxy serverdə autentifikasiya tələb olunur (istifadəçi adı və şifrə)." value="UserPass"/>
+	</radio_group>
+	<text name="socks5_username_label">
+		İstifadəçi adı:
+	</text>
+	<text name="socks5_password_label">
+		Şifrə:
+	</text>
+	<line_editor name="socks5_username" tool_tip="SOCKS 5 serverində autentifikasiya üçün istifadəçi adı"/>
+	<line_editor name="socks5_password" tool_tip="SOCKS 5 serverində autentifikasiya üçün şifrə"/>
+	<text name="other_proxy_label">
+		HTTP trafiki üçün digər proxy server:
+	</text>
+	<radio_group name="other_http_proxy_type">
+		<radio_item label="Proxy istifadə etmə" name="OtherNoProxy" tool_tip="Veb-saytlarla əlaqəli olmayan HTTP trafiki proxy serverə göndərilməyəcək." value="No"/>
+		<radio_item label="HTTP proxy istifadə et" name="OtherHTTPProxy" tool_tip="Veb səhifələrə daxil olarkən HTTP proxy istifadə edilsin." value="Veb"/>
+		<radio_item label="SOCKS 5 server istifadə et" name="OtherSocksProxy" tool_tip="Veb saytlarla bağlı olmayan HTTP trafiki SOCKS 5 serverindən keçirilsin." value="SOCKS"/>
+	</radio_group>
+	<button label="ОК" label_selected="ОК" name="OK"/>
+	<button label="Ləğv et" label_selected="Ləğv et" name="Cancel"/>
+</floater>
+

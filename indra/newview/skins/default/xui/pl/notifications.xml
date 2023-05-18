@@ -659,6 +659,19 @@ Jakość grafiki została zmniejszona - może to pomóc.
 Pewne funkcje graficzne zostały wyłączone. Zalecamy aktualizację sterowników graficznych.
 Możesz podnieść jakość grafiki pod Ustawienia &gt; Grafika.
 	</notification>
+	<notification name="AutoFPSConfirmDisable">
+		Zmiana tego ustawienia spowoduje wyłączenie automatycznego strojenia i wyłączenie 'Ustawień automatycznych'.
+Czy na pewno chcesz kontynuować?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Kontynuuj" />
+	</notification>
+	<notification name="AdvancedLightingConfirm">
+		Aby włączyć zaawansowane oświetlenie należy podnieść jakość do poziomu 4.
+		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	</notification>
+	<notification name="ShadowsConfirm">
+		Aby włączyć cienie należy podnieść jakość do poziomu 4.
+		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	</notification>
 	<notification name="RegionNoTerraforming">
 		Region [REGION] nie pozwala na zmianę powierzchni ziemi.
 	</notification>
@@ -5188,6 +5201,12 @@ Riggowane mesze są przeznaczone do dodawania do samego awatara. Ani ty, ani nik
 
 Jeśli chcesz zobaczyć ten obiekt, to usuń go i ponownie dołącz do punktu doczepienia na awatarze.
 		<usetemplate ignoretext="Ostrzegaj, gdy dodatek z riggowanym meszem jest dołączany do punktu HUD" name="okignore" />
+	</notification>
+	<notification name="EnableAutoFPSWarning">
+		Zamierzasz włączyć funkcję AutoFPS. Wszystkie niezapisane ustawienia grafiki zostaną utracone.
+
+Czy chcesz je najpierw zapisać?
+		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak" />
 	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Nie wybrano prawidłowego ustawienia otoczenia.

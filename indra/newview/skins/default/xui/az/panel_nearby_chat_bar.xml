@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="nearby_chat">
+	<line_editor label="Söhbət üçün buraya basın" name="chat_box" tool_tip="Söhbət üçün Enter, qışqırmaq üçün Ctrl+Enter basın"/>
+	<button name="show_nearby_chat" tool_tip="Ümumi söhbəti göstər/gizlət"/>
+</panel>

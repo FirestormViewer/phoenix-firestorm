@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_flickr" title="Flickr-ə göndər">
+	<panel name="background">
+		<tab_container name="tabs">
+			<panel label="Şəkil" name="panel_flickr_photo"/>
+			<panel label="Hesab" name="panel_flickr_account"/>
+		</tab_container>
+		<panel name="connection_status_panel">
+			<text name="connection_error_text">
+				Xəta
+			</text>
+			<text name="connection_loading_text">
+				Yüklənir...
+			</text>
+		</panel>
+	</panel>
+</floater>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatarrendersettings" title="Исключения отображения аватара">
+	<floater.string name="av_render_never">Heç vaxt</floater.string>
+	<floater.string name="av_render_always">Tam olaraq</floater.string>
+	<filter_editor label="Фильтр аватаров" name="filter_input" />
+	<menu_button name="plus_btn" tool_tip="Siyahıya yeni şəxs əlavə et"/>
+	<name_list name="avatar_list">
+		<name_list.columns label="Ad" name="name" />
+		<name_list.columns label="Detallaşdırma" name="render_setting" />
+	</name_list>
+	<button name="close_btn" label="Bağla"/>
+</floater>

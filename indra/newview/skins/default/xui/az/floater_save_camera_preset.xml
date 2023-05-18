@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<floater name="save_camera_preset" title="Kameranı yadda saxla">
+	<string name="btn_label_save">Yadda saxla</string>
+	<string name="btn_label_replace">Dəyişdir</string>
+	<radio_group name="radio_save_preset">
+		<radio_item label="Yeni tənzimləmə kimi saxla" name="new_preset"/>
+		<radio_item label="Tənzimləməni dəyişdir" name="replace_preset"/>
+	</radio_group>
+	<button label="Yadda saxla" name="save"/>
+	<button label="Ləğv et" name="cancel"/>
+</floater>

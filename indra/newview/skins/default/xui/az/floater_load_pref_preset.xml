@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<floater name="load_pref_preset" title="Öntəyini yüklə">
+	<string name="title_graphic">
+		Qrafika öncədən təyinini yüklə
+	</string>
+	<string name="title_camera">
+		Kamera öncədən təyinini yüklə
+	</string>
+	<text name="Preset">
+		Öncədən təyini seçin
+	</text>
+	<button label="OK" name="ok"/>
+	<button label="Ləğv et" name="cancel"/>
+</floater>

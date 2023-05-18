@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Land Pie">
+    <pie_slice label="Yer haqqında məlumat..." name="Place Information..." />
+    <pie_slice label="Yarat" name="Create" />
+    <pie_slice label="Buraya get" name="Go Here" />
+    <pie_slice label="Otur" name="Sit Here" />
+    <pie_slice label="Hissəcikləri blokla" name="Mute Particle" />
+    <pie_slice label="Keçid" name="Land Buy Pass Pie" />
+    <pie_slice label="Dəyişdir" name="Edit Terrain" />
+    <pie_slice label="Satın al" name="Land Buy Pie" />
+</pie_menu>

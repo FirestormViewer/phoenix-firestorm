@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="sell land" title="Torpaq satışı">
+	<scroll_container name="profile_scroll">
+		<panel name="scroll_content_panel">
+			<text name="info_parcel_label">
+				Sahə:
+			</text>
+			<text name="info_parcel">
+				Sahənin adı
+			</text>
+			<text name="info_size_label">
+				Ölçüsü:
+			</text>
+			<text name="info_size">
+				[AREA] m²
+			</text>
+			<text name="info_action">
+				Bu sahəni satmaq üçün:
+			</text>
+			<text name="price_label">
+				1. Qiyməti təyin edin:
+			</text>
+			<text name="price_text">
+				Sizə uyğun qiyməti təyin edin.
+			</text>
+			<text name="price_ld">
+				L$
+			</text>
+			<line_editor name="price">
+				0
+			</line_editor>
+			<text name="price_per_m">
+				(L$[PER_METER] m² üçün)
+			</text>
+			<text name="sell_to_label">
+				2. Torpağın satışı:
+			</text>
+			<text name="sell_to_text">
+				Torpağı kimə satdığınızı daxil edin
+			</text>
+			<combo_box name="sell_to">
+				<combo_box.item label="- seçin -" name="--selectone--"/>
+				<combo_box.item label="Hamı" name="Anyone"/>
+				<combo_box.item label="Seçilmiş sakinə:" name="Specificuser:"/>
+			</combo_box>
+			<button label="Seç" name="sell_to_select_agent"/>
+			<text name="sell_objects_label">
+				3. Obyektləri torpaqla bir yerdə satmaq?
+			</text>
+			<text name="sell_objects_text">
+				Sahibkarın yerdəyişən obyektləri sahibini dəyişəcəklər?
+			</text>
+			<radio_group name="sell_objects">
+				<radio_item label="Xeyr, obyekt sahibkarlığında qal" name="no"/>
+				<radio_item label="Bəli, obyektlər torpaq ilə satılsın" name="yes"/>
+			</radio_group>
+			<button label="Obyektləri göstər" name="show_objects"/>
+			<text name="nag_message_label">
+				VACİB: satışları geri qaytarmaq olmaz.
+			</text>
+			<button label="Torpağı satışa çıxart" name="sell_btn"/>
+			<button label="Ləğv et" name="cancel_btn"/>
+		</panel>
+	</scroll_container>
+</floater>

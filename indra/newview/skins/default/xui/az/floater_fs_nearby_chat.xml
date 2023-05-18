@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="nearby_chat" title="Ümumi söhbət">
+  <floater.string name="chatbox_label">Ümumi söhbətə</floater.string>
+  <layout_stack name="ls_control_panel">
+    <layout_panel name="lp_translate_btn">
+      <button tool_tip="Seçilmiş tərcümə xidmətini istifadə edin" name="translate_btn"/>
+    </layout_panel>
+     <layout_panel name="lp_chat_history_btn">
+      <button tool_tip="Ümumi söhbət tarixçəsini aç." name="chat_history_btn"/>
+     </layout_panel>
+     <layout_panel name="lp_chat_history_muted_btn">
+      <button tool_tip="Bloklanmış söhbəti ümumi söhbət tarixçəsində göstərin." name="chat_history_muted_btn"/>
+    </layout_panel>
+    <layout_panel name="lp_options_btn">
+      <menu_button tool_tip="Söhbət seçimləri" name="chat_options_btn"/>
+    </layout_panel>
+    <layout_panel name="lp_chat_search_btn">
+      <button name="chat_search_btn" tool_tip="Söhbətdə axtarış"/>
+    </layout_panel>
+  </layout_stack>
+  <layout_stack name="ls_chat">
+    <layout_panel name="panel_im_control_lp">
+      <layout_stack name="im_panels">
+        <layout_panel name="chat_holder">
+          <fs_chat_history name="chat_history"/>
+          <fs_chat_history name="chat_history_muted" />
+        </layout_panel>
+        <layout_panel name="unread_messages_holder">
+          <icon name="unread_messages_background"/>
+          <text name="unread_messages_text">
+            Oxunmamış mesaj: [NUM]
+          </text>
+        </layout_panel>
+        <layout_panel name="chat_layout_panel">
+          <layout_stack name="input_panels">
+            <layout_panel name="input_editor_layout_panel">
+              <chat_editor name="chat_box" />
+            </layout_panel>
+            <layout_panel name="input_button_layout_panel">
+              <spinner name="ChatChannel" tool_tip="Söhbətə göndərmə kanalı. Aktiv etmək üçün: Seçimlər → Söhbət -> Çap -> Ümumi söhbət daxiletmə pəncərəsində kanal seçimini göstər." />
+            </layout_panel>
+            <layout_panel name="chat_type_layout_panel">
+            <combo_box name="chat_type" tool_tip="Pıçıltı = 10m, Söhbət = 20m, Qışqırtı = 100m">
+              <combo_box.item name="chat_type_whisper" label="Pıçıltı" />
+              <combo_box.item name="chat_type_say" label="Söhbət" />
+              <combo_box.item name="chat_type_shout" label="Qışqırtı" />
+            </combo_box>
+            <button name="send_chat" tool_tip="Pıçıltı = 10m, Söhbət = 20m, Qışqırtı = 100m" />
+            <icon name="chat_type_combo_arrow_icon"/>
+            </layout_panel>
+          </layout_stack>
+        </layout_panel>
+      </layout_stack>
+    </layout_panel>
+  </layout_stack>
+</floater>

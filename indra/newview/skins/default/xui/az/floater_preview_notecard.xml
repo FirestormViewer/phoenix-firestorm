@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview notecard" title="Qeyd:">
+	<floater.string name="no_object">
+		Bu qeydi ehtiva edən obyekt tapılmadı.
+	</floater.string>
+	<floater.string name="not_allowed">
+		Sizin qeydə baxış icazəniz yoxdur.
+	</floater.string>
+	<floater.string name="Title">
+		Qeyd: [NAME]
+	</floater.string>
+	<text name="desc txt">
+		Təsviri:
+	</text>
+	<text_editor name="Notecard Editor">
+		Yüklənir...
+	</text_editor>
+	<button name="Search" tool_tip="Axtar və Əvəz et" />
+	<button label="Dəyişdir..." label_selected="Dəyişdir" name="Edit"/>
+	<button label="Yadda saxla" label_selected="Yadda saxla" name="Save"/>
+	<button label="Sil" label_selected="Sil" name="Delete"/>
+</floater>

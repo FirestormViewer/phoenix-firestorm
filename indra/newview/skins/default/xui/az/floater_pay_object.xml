@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Give Money">
+	<string name="payee_group">Qrupa pul vermək</string>
+	<string name="payee_resident">Sakinə pul vermək</string>
+	<text name="payee_name">Ericacita Moostopolison</text>
+	<text name="object_name_label">Obyekt vasitəsilə:</text>
+	<icon name="icon_object" tool_tip="Obyektlər"/>
+	<text name="object_name_text">Mənim uzun adı olan şahane obyektim</text>
+	<button label="1 L$ ödə" label_selected="1 L$ ödə" name="fastpay 1"/>
+	<button label="5 L$ ödə" label_selected="5 L$ ödə" name="fastpay 5"/>
+	<button label="10 L$ ödə" label_selected="10 L$ ödə" name="fastpay 10"/>
+	<button label="20 L$ ödə" label_selected="20 L$ ödə" name="fastpay 20"/>
+	<text name="amount text">Və ya məbləği daxil edin:</text>
+	<button label="Ödəniş et" label_selected="Ödəniş et" name="pay btn"/>
+	<button label="Ləğv et" label_selected="Ləğv et" name="cancel btn"/>
+</floater>

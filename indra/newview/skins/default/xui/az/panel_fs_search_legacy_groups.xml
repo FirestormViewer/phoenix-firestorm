@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Qruplar" name="panel_ls_groups">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Sorğunu daxil edin:
+		</text>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_groups">
+			<columns label="Qrup adı" name="group_name" />
+			<columns label="Adamlar" name="members" />
+		</scroll_list>
+		<button label="Geri" name="groups_back" />
+		<button label="İrəli" name="groups_next" />
+	</panel>
+</panel>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Animation Preview">
+	<floater.string name="failed_to_initialize">
+		Hərəkətin başlatılması mümkün olmadı
+	</floater.string>
+	<floater.string name="anim_too_long">
+		Animasiya faylının uzunluğu: [LENGTH] sn.
+
+Maksimum animasiya uzunluğu: [MAX_LENGTH] sn.
+	</floater.string>
+	<floater.string name="failed_file_read">
+		Animasiya faylını oxumaq mümkün olmadı.
+
+[STATUS]
+	</floater.string>
+	<floater.string name="E_ST_OK">
+		OK
+	</floater.string>
+	<floater.string name="E_ST_EOF">
+		Faylın tez bitişi.
+	</floater.string>
+	<floater.string name="E_ST_NO_CONSTRAINT">
+		Məhdudiyyət təyini oxuna bilmir.
+	</floater.string>
+	<floater.string name="E_ST_NO_FILE">
+		BVH faylı açıla bilmədi.
+	</floater.string>
+	<floater.string name="E_ST_NO_HIER">
+		Yanlış HIERARCHY başlığı.
+	</floater.string>
+	<floater.string name="E_ST_NO_JOINT">
+		ROOT və ya JOINT tapıla bilmədi.
+	</floater.string>
+	<floater.string name="E_ST_NO_NAME">
+		JOINT adını almaq mümkün olmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_OFFSET">
+		OFFSET tapıla bilmədi.
+	</floater.string>
+	<floater.string name="E_ST_NO_CHANNELS">
+		CHANNELS tapıla bilmədi.
+	</floater.string>
+	<floater.string name="E_ST_NO_ROTATION">
+		Döndürmə sırasını almaq mümkün olmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_AXIS">
+		Döndürmə mərzəni almaq mümkün olmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_MOTION">
+		MOTION tapıla bilmədi.
+	</floater.string>
+	<floater.string name="E_ST_NO_FRAMES">
+		Frame sayını almaq mümkün olmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_FRAME_TIME">
+		Frame vaxtını almaq mümkün olmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_POS">
+		Position dəyərlərini almaq mümkün olmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_ROT">
+		Döndürmə dəyərlərini almaq mümkün olmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_XLT_FILE">
+		Tərcümə faylını açmaq mümkün olmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_XLT_HEADER">
+		Tərcümə başlığını oxumaq mümkün olmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_XLT_NAME">
+		Tərcümə adları oxunmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_XLT_IGNORE">
+		Ignore tərcümə dəyəri oxunmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_XLT_RELATIVE">
+		Relative tərcümə dəyəri oxunmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_XLT_OUTNAME">
+		Outname tərcümə dəyəri oxunmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_XLT_MATRIX">
+		Tərcümə matrisi oxunmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_XLT_MERGECHILD">
+		Mergechild adı alınmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_XLT_MERGEPARENT">
+		Mergeparent adı alınmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_XLT_PRIORITY">
+		Priority dəyəri alınmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_XLT_LOOP">
+		Loop dəyəri alınmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_XLT_EASEIN">
+		EaseIn dəyərləri alınmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_XLT_EASEOUT">
+		EaseOut dəyərləri alınmadı.
+	</floater.string name="E_ST_NO_XLT_HAND">
+		Hand morph dəyəri alınmadı.
+	</floater.string>
+	<floater.string name="E_ST_NO_XLT_EMOTE">
+		Emote adı oxunmadı.
+	</floater.string>
+	<floater.string name="E_ST_BAD_ROOT">
+		Kök bağlantısının adı yanlışdır, «hip» olmalıdır.
+	</floater.string>
+	<text name="name_label">
+		Adı:
+	</text>
+	<text name="description_label">
+		Təsviri:
+	</text>
+	<spinner label="Prioritet" name="priority" tool_tip="Digər animasiyaların bununla necə üst-üstə düşə biləcəyinə nəzarət edir."/>
+	<check_box label="Dövr" name="loop_check" tool_tip="Animasiyanı dövrlənmiş eləyir"/>
+	<spinner label="Başlanğıc(%)" name="loop_in_point" tool_tip="Dövrün qayıtma nöqtəsini təyin edir"/>
+	<spinner label="Son(%)" name="loop_out_point" tool_tip="Dövrün son nöqtəsini təyin edir"/>
+	<spinner label="Başlanğıc(s)" name="loop_in_frames" tool_tip="Dövrün döndüyü animasiya nöqtəsini çərçivələrdə təyin edir"/>
+	<spinner label="Son(s)" name="loop_out_frames" tool_tip="Dövrü bitirən animasiya nöqtəsini çərçivələrdə təyin edir"/>
+	<text name="hand_label">
+		Barmaqların vəziyyəti
+	</text>
+	<combo_box name="hand_pose_combo" tool_tip="Animasiya zamanı əllərin pozisiyasını nəzarət edir">
+		<combo_box.item label="Ayrılmış" name="Spread"/>
+		<combo_box.item label="Sərbəst" name="Relaxed"/>
+		<combo_box.item label="Göstərir" name="PointBoth"/>
+		<combo_box.item label="Qapalı" name="Fist"/>
+		<combo_box.item label="Sol xash" name="RelaxedLeft"/>
+		<combo_box.item label="Sol göstərir" name="PointLeft"/>
+		<combo_box.item label="Sol qapalı" name="FistLeft"/>
+		<combo_box.item label="Sağ xaş" name="RelaxedRight"/>
+		<combo_box.item label="Sağ göstərir" name="PointRight"/>
+		<combo_box.item label="Sağ qapalı" name="FistRight"/>
+		<combo_box.item label="Sağ salam verir" name="SaluteRight"/>
+		<combo_box.item label="Yazı yazır" name="Typing"/>
+		<combo_box.item label="Sağ 'V'" name="PeaceRight"/>
+	</combo_box>
+	<text name="emote_label">
+		Üz ifadəsi
+	</text>
+	<combo_box name="emote_combo" tool_tip="Animasiya zamanı üz ifadəsini idarə edir">
+		<item label="(yox)" name="[None]"/>
+		<item label="Aaaah" name="Aaaaah"/>
+		<item label="Qorxur" name="Afraid"/>
+		<item label="Hirsli" name="Angry"/>
+		<item label="Geniş təbəssüm edir" name="BigSmile"/>
+		<item label="Yorğun" name="Bored"/>
+		<item label="Ağlayır" name="Cry"/>
+		<item label="Xor baxır" name="Disdain"/>
+		<item label="Həvəsli" name="Embarrassed"/>
+		<item label="Qaşqabağını tökür" name="Frown"/>
+		<item label="Öpüşür" name="Kiss"/>
+		<item label="Gülür" name="Laugh"/>
+		<item label="Əyləncəli" name="Plllppt"/>
+		<item label="Rədd edir" name="Repulsed"/>
+		<item label="Qəmli" name="Sad"/>
+		<item label="Anlamır" name="Shrug"/>
+		<item label="Təbəssüm edir" name="Smile"/>
+		<item label="Təəssüf edir" name="Surprise"/>
+		<item label="Göz kırpır" name="Wink"/>
+		<item label="Təəccüblənir" name="Worry"/>
+	</combo_box>
+	<text name="preview_label">
+		Baxış zamanı
+	</text>
+	<combo_box name="preview_base_anim" tool_tip="Əməliyyat icrası müddətində avatar tərəfindən animasiyanızın görüntüsünün izlənməsi.">
+		<item label="Durmaq" name="Standing"/>
+		<item label="Yürümək" name="Walking"/>
+		<item label="Oturmaq" name="Sitting"/>
+		<item label="Uçuş" name="Flying"/>
+	</combo_box>
+	<spinner label="Giriş (sn.)" name="ease_in_time" tool_tip="Başlanğıc mövqeyə daxil olmaq üçün keçirilən vaxt (saniyə cinsində)"/>
+	<spinner label="Çıxış (sn.)" name="ease_out_time" tool_tip="Animasiyadan çıxmaq üçün keçirilən vaxt (saniyə cinsində)"/>
+	<button name="play_btn" tool_tip="Animasiyanı oynat"/>
+	<button name="pause_btn" tool_tip="Animasiyaya fasilə"/>
+	<button name="stop_btn" tool_tip="Animasiyanı dayandır"/>
+	<text name="bad_animation_text">
+		Animasiya faylını oxumaq mümkün deyil.
+
+	Poser 4-dən idxal olunmuş BVH fayllarının istifadəsi tövsiyə olunur.
+	</text>
+	<button label="Faylı yenidən yüklə" name="reload_btn" width="128" />
+	<button label="Ötür (L$[AMOUNT])" name="ok_btn"/>
+	<button label="Ləğv et" name="cancel_btn"/>
+</floater>

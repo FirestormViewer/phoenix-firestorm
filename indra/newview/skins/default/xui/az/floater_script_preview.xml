@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview lsl text" title="Skript: Dönüş skripti">
+	<floater.string name="Title">
+		Skript: [NAME]
+	</floater.string>
+	<text name="desc txt">
+		Təsviri:
+	</text>
+</floater>

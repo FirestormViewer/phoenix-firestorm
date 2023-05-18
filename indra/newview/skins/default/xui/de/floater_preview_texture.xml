@@ -30,9 +30,9 @@
 		<combo_box name="combo_aspect_ratio" tool_tip="Mit einem vordefinierten Seitenverhältnis anzeigen"/>
 	</panel>
 	<panel name="button_panel">
-		<button label="OK" name="Keep" width="120"/>
+		<button label="OK" name="Keep"/>
 		<button label="Verwerfen" name="Discard"/>
-		<flyout_button label="Speichern..." name="save_tex_btn" width="140">
+		<flyout_button label="Speichern..." name="save_tex_btn">
 			<flyout_button.item label="Speichern als TGA" name="save_item_tga"/>
 			<flyout_button.item label="Speichern als PNG" name="save_item_png"/>
 		</flyout_button>

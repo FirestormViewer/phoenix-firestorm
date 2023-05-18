@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Namelist Popup">
+	<menu_item_call label="Profili göstər" name="show_agent" />
+	<menu_item_call label="İM Göndər" name="send_im" />
+	<menu_item_call label="Söhbət tarixini göstər" name="chat_history" />
+	<menu_item_call label="Dostlara əlavə et" name="add_friend" />
+	<menu_item_call label="Kontakt dəstlərinə əlavə et" name="Add to Set" />
+	<menu_item_call label="Kameranı yaxınlaşdır" name="zoom_agent" />
+	<menu_item_call label="Sakinə teleport ol" name="teleportto_agent" />
+	<menu_item_call label="Teleport təklif et" name="offer_teleport" />
+	<menu_item_call label="Teleport tələb et" name="request_teleport" />
+	<menu_item_call label="Sakin izlənməsi" name="track_agent" />
+	<menu_item_call label="Dostluqdan sil" name="remove_friend" />
+	<menu_item_check label="Blokla" name="Block" />
+	<menu_item_call label="Adı buferə köçürt" name="url_copy_label" />
+	<menu_item_call label="SLurl-ni buferə köçürt" name="url_copy" />
+</context_menu>

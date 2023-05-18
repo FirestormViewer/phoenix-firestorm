@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_pathfinding_linksets" title="REGION OBYEKTLƏRI">
+	<floater.string name="messaging_get_inprogress">
+		Yol axtarışı üçün bağlantı dəstlərinin sorğusu...
+	</floater.string>
+	<floater.string name="messaging_get_error">
+		Yol axtarışı üçün bağlantı dəstləri sorğusunda səhv.
+	</floater.string>
+	<floater.string name="messaging_set_inprogress">
+		Yol axtarışı üçün seçilmiş bağlantı dəstlərinin dəyişdirilməsi...
+	</floater.string>
+	<floater.string name="messaging_set_error">
+		Yol axtarışı üçün seçilmiş bağlantı dəstləri dəyişdirilərkən səhv oldu.
+	</floater.string>
+	<floater.string name="messaging_complete_none_found">
+		Yol axtarışı üçün bağlantı dəstləri tapılmadı.
+	</floater.string>
+	<floater.string name="messaging_complete_available">
+		Seçilən [NUM_SELECTED] / [NUM_TOTAL].
+	</floater.string>
+	<floater.string name="messaging_not_enabled">
+		Bu ərazidə yol axtarışına icazə verilmir.
+	</floater.string>
+	<floater.string name="linkset_terrain_name">
+		[Mənzərə]
+	</floater.string>
+	<floater.string name="linkset_terrain_description">
+		--
+	</floater.string>
+	<floater.string name="linkset_terrain_owner">
+		--
+	</floater.string>
+	<floater.string name="linkset_terrain_scripted">
+		--
+	</floater.string>
+	<floater.string name="linkset_terrain_land_impact">
+		--
+	</floater.string>
+	<floater.string name="linkset_terrain_dist_from_you">
+		--
+	</floater.string>
+	<floater.string name="linkset_owner_loading">
+		[Yüklənir]
+	</floater.string>
+	<floater.string name="linkset_owner_unknown">
+		[Naməlum]
+	</floater.string>
+	<floater.string name="linkset_owner_group">
+		[qrup]
+	</floater.string>
+	<floater.string name="linkset_is_scripted">
+		Bəli
+	</floater.string>
+	<floater.string name="linkset_is_not_scripted">
+		Xeyr
+	</floater.string>
+	<floater.string name="linkset_is_unknown_scripted">
+		Naməlum
+	</floater.string>
+	<floater.string name="linkset_use_walkable">
+		Keçilən yer
+	</floater.string>
+	<floater.string name="linkset_use_static_obstacle">
+		Statik maneə
+	</floater.string>
+	<floater.string name="linkset_use_dynamic_obstacle">
+		Yerdəyişən maneə
+	</floater.string>
+	<floater.string name="linkset_use_material_volume">
+		Material həcm
+	</floater.string>
+	<floater.string name="linkset_use_exclusion_volume">
+		İstisna həcm
+	</floater.string>
+	<floater.string name="linkset_use_dynamic_phantom">
+		Hərəkətli fantom
+	</floater.string>
+	<floater.string name="linkset_is_terrain">
+		[dəyişməz]
+	</floater.string>
+	<floater.string name="linkset_is_restricted_state">
+		[məhduddur]
+	</floater.string>
+	<floater.string name="linkset_is_non_volume_state">
+		[batıq]
+	</floater.string>
+	<floater.string name="linkset_is_restricted_non_volume_state">
+		[məhduddur,batıq]
+	</floater.string>
+	<floater.string name="linkset_choose_use">
+		Əlaqə dəstlərinin hansı dərəcədə istifadə olunduğunu seçin...
+	</floater.string>
+	<panel name="pathfinding_linksets_main">
+		<text name="linksets_filter_label">
+			Süzgəc:
+		</text>
+		<text name="linksets_name_label">
+			Ad
+		</text>
+		<text name="linksets_desc_label">
+			Təsvir
+		</text>
+		<combo_box name="filter_by_linkset_use">
+			<combo_box.item label="Keçid dəsti istifadə dərəcəsinə görə filter..." name="filter_by_linkset_use_none"/>
+			<combo_box.item label="Keçid imkanı olan" name="filter_by_linkset_use_walkable"/>
+			<combo_box.item label="Statik maneə" name="filter_by_linkset_use_static_obstacle"/>
+			<combo_box.item label="Hərəkətli maneə" name="filter_by_linkset_use_dynamic_obstacle"/>
+			<combo_box.item label="Material həcmi" name="filter_by_linkset_use_material_volume"/>
+			<combo_box.item label="Məhdudiyyət həcmi" name="filter_by_linkset_use_exclusion_volume"/>
+			<combo_box.item label="Hərəkətli fəntom" name="filter_by_linkset_use_dynamic_phantom"/>
+		</combo_box>
+		<button label="Tətbiq et" name="apply_filters"/>
+		<button label="Təmizlə" name="clear_filters"/>
+		<scroll_list name="objects_scroll_list">
+			<scroll_list.columns label="Ad (kök primitiv)" name="name"/>
+			<scroll_list.columns label="Təsvir (kök primitiv)" name="description"/>
+			<scroll_list.columns label="Sahib" name="owner"/>
+			<scroll_list.columns label="Skriptli" name="scripted"/>
+			<scroll_list.columns label="Təsvir" name="land_impact"/>
+			<scroll_list.columns label="Məsafə" name="dist_from_you"/>
+			<scroll_list.columns label="Yol axtarışından istifadə" name="linkset_use"/>
+			<scroll_list.columns label="A %" name="a_percent"/>
+			<scroll_list.columns label="B %" name="b_percent"/>
+			<scroll_list.columns label="C %" name="c_percent"/>
+			<scroll_list.columns label="D %" name="d_percent"/>
+		</scroll_list>
+		<text name="messaging_status">
+			Əlaqə dəstləri:
+		</text>
+		<button label="Siyahını yenilə" name="refresh_objects_list"/>
+		<button label="Hamısını seç" name="select_all_objects"/>
+		<button label="Seçimi ləğv et" name="select_none_objects"/>
+	</panel>
+	<panel name="pathfinding_linksets_actions">
+		<text name="linksets_actions_label">
+			Seçilmişlərlə hərəkətlər
+		</text>
+		<check_box label="Nişanı göstər" name="show_beacon"/>
+		<button label="Götür" name="take_objects"/>
+		<button label="Köçürtməsin götür" name="take_copy_objects"/>
+		<button label="Oraya teleport" name="teleport_me_to_object"/>
+		<button label="Qaytar" name="return_objects"/>
+		<button label="Sil" name="delete_objects"/>
+	</panel>
+	<panel name="pathfinding_linksets_attributes">
+		<text name="linksets_attributes_label">
+			Yol axtarış seçimlərini dəyişdirin
+		</text>
+		<text name="walkability_coefficients_label">
+			Keçilə bilmə:
+		</text>
+		<text name="edit_a_label">
+			A
+		</text>
+		<line_editor name="edit_a_value" tool_tip="A növlü xarakterlər üçün keçilə bilməsi. Xarakter nümunəsi - humanoid."/>
+		<text name="edit_b_label">
+			B
+		</text>
+		<line_editor name="edit_b_value" tool_tip="B növlü xarakterlər üçün keçilə bilməsi. Xarakter nümunəsi - məxluq."/>
+		<text name="edit_c_label">
+			C
+		</text>
+		<line_editor name="edit_c_value" tool_tip="C növlü xarakterlər üçün keçilə bilməsi. Xarakter nümunəsi - mexanizm."/>
+		<text name="edit_d_label">
+			D
+		</text>
+		<line_editor name="edit_d_value" tool_tip="D növlü xarakterlər üçün keçilə bilməsi. Xarakter nümunəsi - fərqli."/>
+		<button label="Применить изменения" name="apply_edit_values"/>
+		<text name="suggested_use_a_label">
+			(Humanoid)
+		</text>
+		<text name="suggested_use_b_label">
+			(Məxluq)
+		</text>
+		<text name="suggested_use_c_label">
+			(Mexanizm)
+		</text>
+		<text name="suggested_use_d_label">
+			(Fərqli)
+		</text>
+	</panel>
+</floater>

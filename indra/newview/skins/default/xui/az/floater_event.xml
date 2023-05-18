@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater label="Hadisə" name="Event" title="Hadisə ">
+	<floater.string name="loading_text">
+		Yüklənir...
+	</floater.string>
+	<floater.string name="done_text">
+		Hazır
+	</floater.string>
+</floater>

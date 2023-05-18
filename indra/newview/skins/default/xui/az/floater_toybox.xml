@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Toybox" title="Alətlər paneli düymələri">
+	<text name="toybox label 1">
+		Düymələri alətlər panelindən çıxararaq və ya oraya daşıyaraq düymələr əlavə edin və ya silin.
+	</text>
+	<text name="toybox label 2">
+		Düymələr hər alətlər panelinin seçimlərindən asılı olaraq olduğu kimi və ya nişanlar kimi göstəriləcək.
+	</text>
+	<button label="Bütün paneli təmizlə" label_selected="Bütün paneli təmizlə" name="btn_clear_all"/>
+	<button label="Standartları bərpa et" label_selected="Standartları bərpa et" name="btn_restore_defaults"/>
+	<check_box name="check_toolbars_locked" label="Bərkit" tool_tip="Alətlər panelini kilidləmək üçün bu qutuyu işarələyin ki, düymələr təsadüfən çıxarıla və ya silinə bilməsin"/>
+</floater>

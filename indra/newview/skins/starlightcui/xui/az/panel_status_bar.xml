@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="status">
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="Satılıq torpaq hissəsi"/>
+		<text tool_tip="Üzərində durduğunuz torpaq hissəsinin adı. Ətraflı oxumaq üçün basın." name="parcel_info_text" value="(yüklənir...)"/>
+	</panel>
+	<panel.string name="packet_loss_tooltip">
+		Paket itkisi
+	</panel.string>
+	<panel.string name="bandwidth_tooltip">
+		Band genişliyi
+	</panel.string>
+	<panel.string name="time">
+		[hour, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone,datetime, slt]
+	</panel.string>
+	<panel.string name="buycurrencylabel">
+		[AMT] L$
+	</panel.string>
+	<panel name="menu_search_panel">
+		<search_editor label="Menyuda axtar" name="search_menu_edit" tool_tip="Sizə maraqlı olan menyuların adını daxil edin" />
+	</panel>
+	<panel name="balance_bg">
+		<text name="balance" tool_tip="Balansı yeniləmək üçün basın"/>
+		<button label="Alış" name="buyL" tool_tip="L$ almaq üçün basın"/>
+	</panel>
+	<panel name="time_and_media_bg">
+		<icon name="dd_icon" tool_tip="İdarəetmə məsafəsi"/>
+		<slider tool_tip="Kameralardan max. göstərilən məsafə (metrlər)" name="drawdistance"/>
+		<text name="TimeText" tool_tip="Cari vaxt (Sakit okean)"/>
+		<button name="stream_toggle_btn" tool_tip="Axınlayıcı səsli yayımı açıb/söndürün"/>
+		<button name="media_toggle_btn" tool_tip="Bütün media məzmununu oxşatmaq açıb/söndürün (Musiqi, Video, Web)"/>
+		<button name="volume_btn" tool_tip="Səs gərginliyi"/>
+		<text name="FPSText" tool_tip="Kadr/saniyə"/>
+	</panel>
+</panel>

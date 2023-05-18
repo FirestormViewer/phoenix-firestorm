@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<floater name="360capture" title="360° Şəkil">
+	<panel name="ui_panel_left">
+		<text name="quality_level_label">Keyfiyyət</text>
+		<radio_group name="360_quality_selection">
+			<radio_item label="Önbaxış (tez)" name="preview_quality" tool_tip="Önbaxış keyfiyyəti"/>
+			<radio_item label="Ortam" name="medium_quality" tool_tip="Orta keyfiyyət"/>
+			<radio_item label="Yüksək" name="high_quality" tool_tip="Yüksək keyfiyyət"/>
+			<radio_item label="Maksimal" name="maximum_quality" tool_tip="Maksimal keyfiyyət"/>
+		</radio_group>
+		<check_box label="Bütün avatarları gizlət" name="360_hide_avatar"/>
+		<button label="360° Şəkil çək" name="capture_button"/>
+		<button label="Yadda saxla..." name="save_local_button"/>
+	</panel>
+	<panel name="ui_panel_right">
+		<text name="statusbar">Panorama etmək üçün şəkilə toxunub daşıyın</text>
+	</panel>
+</floater>

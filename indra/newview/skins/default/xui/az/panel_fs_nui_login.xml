@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_login">
+  <string name="ServerComboTooltip">
+Mövcud grid və ya grid URL-si
+  </string>
+  <layout_stack name="ui_stack">
+    <layout_panel name="ui_container">
+      <layout_stack name="vert_stack_left">
+        <layout_panel name="1st_row">
+          <layout_stack name="1st_row_stack">
+            <layout_panel name="login">
+              <combo_box label="İstifadəçi" name="username_combo" tool_tip="Qeydiyyatda istifadə etdiyiniz istifadəçi adı, məsələn: dabandashi50 və ya Ertogrul Khazarli"/>
+              <check_box label="İstifadəçini yadda saxla" name="remember_username_check"/>
+            </layout_panel> <!-- login -->
+            <layout_panel name="delete_container">
+              <button tool_tip="Bu istifadəçi adını sil" label="" name="remove_user_btn"/>
+            </layout_panel> <!-- delete_container -->
+            <layout_panel name="password_container">
+            <!-- The max length might be changed in FSPanelLogin.cpp for Opensim! -->
+              <line_editor name="password_edit" label="Şifrə"/>
+              <check_box label="Şifrəni yadda saxla" name="remember_check"/>
+            </layout_panel> <!-- password_container -->
+            <layout_panel name="start_location_panel">
+              <combo_box label="Başlanğıc yeri" name="start_location_combo">
+                <combo_box.item label="Keçmiş yer" name="MyLastLocation"/>
+                <combo_box.item label="Evim" name="MyHome"/>
+                <combo_box.item label="&lt;Region adını daxil edin&gt;" name="Typeregionname"/>
+              </combo_box>
+            </layout_panel>
+          </layout_stack>
+        </layout_panel>
+        <layout_panel name="2nd_row">
+          <layout_stack name="2nd_row_stack">
+            <layout_panel name="grid_panel">
+              <text name="grid_login_text" width="45">Grid:</text>
+            </layout_panel>
+            <layout_panel name="mode_selection">
+              <text name="mode_selection_text">Rejim:</text>
+              <combo_box name="mode_combo" tool_tip="Defolt seçimlərini düzgün qurmaq üçün ən çox tanış olduğunuz baxış tərzini seçin.">
+              <!--
+              <combo_box.item label="Firestorm" name="Firestorm"/>
+              <combo_box.item label="Phoenix" name="Phoenix"/>
+              <combo_box.item label="[VIEWER_GENERATION]" name="V3"/>
+              <combo_box.item label="Hybrid" name="Hybrid"/>
+              <combo_box.item label="Latency" name="Latency"/>
+              <combo_box.item label="Text" name="Text"/>
+              -->
+              </combo_box>
+            </layout_panel>
+          </layout_stack>
+        </layout_panel>
+      </layout_stack>
+      <button label="Daxil ol" name="connect_btn"/>
+      <text name="create_new_account_text">Hesab yarat</text>
+      <text name="forgot_password_text">Şifrəni unutdunuz?</text>
+    </layout_panel>
+  </layout_stack>
+</panel>

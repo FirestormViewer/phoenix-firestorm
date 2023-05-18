@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview_sound">
+	<floater.string name="Title">
+		Səs: [NAME]
+	</floater.string>
+	<text name="desc txt">
+		Təsviri:
+	</text>
+	<button label="Hamı üçün oynat" label_selected="Dayandır" name="Sound play btn" tool_tip="Səs ətrafdakı hər kəs tərəfindən eşidiləcək"/>
+	<button label="Tək mənim üçün oynat" label_selected="Dayandır" name="Sound audition btn" tool_tip="Səs yalnız özünüz eşidəcəksiniz"/>
+</floater>

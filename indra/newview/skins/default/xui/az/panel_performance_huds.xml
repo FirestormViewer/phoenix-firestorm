@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_huds">
+	<text name="back_lbl">Geri</text>
+	<text name="huds_title">HUD-larınız</text>
+	<text name="huds_desc1">
+		Istifadə edilməyən HUD-ların ayırılması yaddaşa qazanc təmin edir və proqramın işləməsini sürətləndirə bilər.
+	</text>
+	<text name="huds_desc2">
+		HUD-lar çox vaxtı çoxlu skriptlər daxil edir və server tərəfində gecikmələrə səbəb ola bilər.
+	</text>
+	<text name="huds_desc3">
+		Qeyd. HUD-u minimallaşdırmaq düyməsi onu ayırmır. Onu silmək üçün X-dan istifadə edin.
+	</text>
+	<name_list name="hud_list">
+		<name_list.columns name="art_value" label="Vaxt (μs)" tool_tip="Bu HUD-un render vaxtı (mikro saniyə) "/>
+		<name_list.columns name="name" label="Ad" tool_tip="'X' düyməsinə basaraq ayırın"/>
+	</name_list>
+</panel>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile_classified">
+	<panel.string name="type_mature">
+		Ortam
+	</panel.string>
+	<panel.string name="type_pg">
+		Ümumi
+	</panel.string>
+	<panel.string name="click_through_text_fmt">
+		[TELEPORT] teleport, [MAP] xəritə, [PROFILE] profil
+	</panel.string>
+	<panel.string name="date_fmt">
+		[day,datetime,slt]/[mthnum,datetime,slt]/[year,datetime,slt]
+	</panel.string>
+	<panel.string name="auto_renew_on">
+		Yandırılıb
+	</panel.string>
+	<panel.string name="auto_renew_off">
+		Söndürülüb
+	</panel.string>
+	<panel.string name="location_notice">
+		(saxladıqdan sonra yenilənəcək)
+	</panel.string>
+	<string name="publish_label">Nəşr</string>
+	<string name="save_label">Yadda saxla</string>
+	<layout_stack name="main_classifieds_stack">
+		<layout_panel name="scroll_layout_panel">
+			<scroll_container name="profile_scroll">
+				<panel name="info_scroll_content_panel">
+					<icon name="edit_icon" tool_tip="Şəkil seçmək üçün basın"/>
+					<layout_stack name="info_panel">
+						<layout_panel name="main_info_panel">
+							<text name="classified_location_label" value="Məkan:"/>
+							<text_editor name="classified_location" value="[Yüklənir...]"/>
+							<text name="content_type_label" value="Məzmun növü:"/>
+							<text name="category_label" value="Kateqoriya:"/>
+							<text name="creation_date_label" value="Yaradılma tarixi:"/>
+							<text name="price_for_listing_label" value="Yerləşdirmə qiyməti:"/>
+							<text_editor name="price_for_listing" tool_tip="Yerləşdirmə qiyməti.">[PRICE]</text_editor>
+						</layout_panel>
+						<layout_panel name="clickthrough_layout_panel">
+							<text name="click_through_label" value="Kliklər:"/>
+							<text_editor name="click_through_text" tool_tip="Tarixə görə baxış"/>
+						</layout_panel>
+						<layout_panel name="auto_renew_layout_panel">
+							<text name="auto_renew_label" value="Avtomatik yeniləmə:"/>
+							<text name="auto_renew" value="Yandırılıb"/>
+						</layout_panel>
+						<layout_panel name="descr_layout_panel">
+							<text name="classified_desc_label" value="Təsviri:"/>
+						</layout_panel>
+					</layout_stack>
+					<panel name="edit_panel">
+						<text name="Name:">Adı:</text>
+						<text name="description_label">Təsviri:</text>
+						<text name="location_label">Məkan:</text>
+						<text name="classified_location_edit">Yüklənir...</text>
+						<button name="set_to_curr_location_btn" label="Установить текущее местоположение"/>
+						<text name="category_label" value="Kateqoriya:"/>
+						<text name="content_type_label" value="Məzmun növü:"/>
+						<icons_combo_box name="content_type_edit" label="Ümumi">
+							<icons_combo_box.item name="mature_ci" label="Ortam"/>
+							<icons_combo_box.item name="pg_ci" label="Ümumi"/>
+						</icons_combo_box>
+						<check_box name="auto_renew_edit" label="Həftəlik avtomatik yeniləmə"/>
+					</panel>
+				</panel>
+			</scroll_container>
+		</layout_panel>
+		<layout_panel name="util_buttons_lp">
+			<layout_stack name="util_buttons_stack">
+				<layout_panel name="teleport_btn_lp">
+					<button name="teleport_btn" label="Teleport"/>
+				</layout_panel>
+				<layout_panel name="map_btn_lp">
+					<button name="show_on_map_btn" label="Xəritə"/>
+				</layout_panel>
+				<layout_panel name="edit_btn_lp">
+					<button name="edit_btn" label="Dəyişdir"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="publish_layout_panel">
+			<layout_stack name="publish_stack">
+				<layout_panel name="cancel_btn_lp">
+					<button name="cancel_btn" label="Ləğv et"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>

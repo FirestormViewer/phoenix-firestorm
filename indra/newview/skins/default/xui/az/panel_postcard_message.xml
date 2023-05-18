@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_postcard_message">
+	<text name="to_label">
+		Kimə:
+	</text>
+	<text name="name_label">
+		Göndərən:
+	</text>
+	<text name="subject_label">
+		Mövzu:
+	</text>
+	<line_editor label="Məktub mövzusunu daxil edin." name="subject_form"/>
+	<text name="msg_label">
+		Məktub:
+	</text>
+	<text_editor name="msg_form">
+		Məktub mətnini daxil edin.
+	</text_editor>
+	<button label="Ləğv et" name="cancel_btn"/>
+	<button label="Göndər" name="send_btn"/>
+</panel>

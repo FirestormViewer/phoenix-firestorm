@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu_bar name="Login Menu">
+	<menu label="Klient" name="File">
+		<menu_item_call label="Seçimlər..." name="Preferences..."/>
+		<menu_item_call label="Pəncərəni bağla" name="Close Window"/>
+		<menu_item_check label="Grid seçimini göstər" name="Show Grid Picker"/>
+		<menu_item_call label="[APP_NAME]-dan çıxış" name="Quit"/>
+	</menu>
+	<menu label="Kömək" name="Help">
+		<menu_item_call label="Firestorm Viki" name="Firestorm Wiki"/>
+		<menu_item_call label="Problem həll etmək" name="Troubleshooting"/>
+		<menu_item_call label="Necə etməliyəm" name="How To"/>
+		<!-- <menu_item_call label="Sürətli başlamaq" name="Quickstart"/>
+		<menu_item_call label="Bilmə mənbəyi" name="Knowledge Base"/>
+		<menu_item_call label="Second Life Viki" name="Wiki"/>
+		<menu_item_call label="İctimai Forumlar" name="Community Forums"/>
+		<menu_item_call label="Dəstək portalı" name="Support portal"/>
+		<menu_item_call label="Xəbərlər: [SECOND_LIFE]" name="Second Life News"/>
+		<menu_item_call label="Blogger: [SECOND_LIFE]" name="Second Life Blogs"/> -->
+		<menu_item_call label="Xəta bildir" name="Report Bug"/>
+		<menu_item_call label="[APP_NAME] haqqında məlumat" name="About Second Life"/>
+		<menu_item_call label="[CURRENT_GRID] üçün kömək" name="current_grid_help_login"/>
+		<menu_item_call label="[CURRENT_GRID] haqqında məlumat" name="current_grid_about_login"/>
+	</menu>
+	<menu_item_check label="Sazlama menyunu göstər" name="Show Debug Menu"/>
+	<menu label="Sazlama" name="Debug">
+		<menu_item_call label="Sazlama seçimlərini göstər" name="Debug Settings"/>
+		<menu_item_call label="UI Önbaxış alətləri" name="UI Preview Tool"/>
+		<menu label="İstifadəçi interfeysi testləri" name="UI Tests"/>
+		<menu_item_call label="Pəncərə ölçüsünü təyin et..." name="Set Window Size..."/>
+		<menu_item_call label="İstifadə şərtlərini göstər (TOS)" name="TOS"/>
+		<menu_item_call label="Kritik mesajları göstər" name="Critical"/>
+		<menu_item_call label="Media Brauzer" name="Media Browser"/>
+		<menu_item_call label="Bildiriş konsolunu göstər" name="Show Notifications Console"/>
+		<menu label="Jurnal səviyyəsini təyin et" name="Set Logging Level">
+			<menu_item_check label="Sazlama" name="Debug"/>
+			<menu_item_check label="Məlumat" name="Info"/>
+			<menu_item_check label="Xəbərdarlıq" name="Warning"/>
+			<menu_item_check label="Xəta" name="Error"/>
+			<menu_item_check label="Heçbiri" name="None"/>
+		</menu>
+	</menu>
+	</menu>
+</menu_bar>

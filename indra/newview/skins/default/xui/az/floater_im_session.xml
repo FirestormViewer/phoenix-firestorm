@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="panel_im">
+	<floater.string name="call_btn_start">
+		Conv_toolbar_open_call
+	</floater.string>
+	<floater.string name="call_btn_stop">
+		Conv_toolbar_hang_up
+	</floater.string>
+	<floater.string name="collapseline_icon" value="Conv_collapse_to_one_line"/>
+	<floater.string name="expandline_icon" value="Conv_expand_one_line"/>
+	<floater.string name="collapse_icon" value="Conv_toolbar_collapse"/>
+	<floater.string name="expand_icon" value="Conv_toolbar_expand"/>
+	<floater.string name="tear_off_icon" value="Conv_toolbar_arrow_ne"/>
+	<floater.string name="return_icon" value="Conv_toolbar_arrow_sw"/>
+	<floater.string name="participant_added" value="[NAME] dəvət edildi."/>
+	<floater.string name="multiple_participants_added" value="[NAME] dəvət edildilər."/>
+	<floater.string name="tooltip_to_separate_window" value="Bu söhbəti ayrı bir pəncərədə aç"/>
+	<floater.string name="tooltip_to_main_window" value="Bu söhbəti əsas pəncərəyə daşı"/>
+	<floater.string name="start_call_button_tooltip" value="Səsli bağlantını aç"/>
+	<floater.string name="end_call_button_tooltip" value="Səsli bağlantını bağla"/>
+	<floater.string name="expcol_button_not_tearoff_tooltip" value="Bu paneli qapalı şəkildə göstər"/>
+	<floater.string name="expcol_button_tearoff_and_expanded_tooltip" value="İştirakçılar siyahısını qapalı şəkildə göstər"/>
+	<floater.string name="expcol_button_tearoff_and_collapsed_tooltip" value="İştirakçılar siyahısını açıq şəkildə göstər"/>
+	<view name="contents_view">
+		<layout_stack name="main_stack">
+			<layout_panel name="toolbar_panel">
+				<menu_button name="view_options_btn" tool_tip="Baxış/sıralama seçimləri"/>
+				<menu_button name="gear_btn" tool_tip="Seçilmiş əhalinin əməliyyatları"/>
+				<button name="add_btn" tool_tip="Bu söhbətə iştirakçı əlavə et"/>
+				<button name="voice_call_btn" tool_tip="Səsli bağlantını aç"/>
+				<button name="close_btn" tool_tip="Bu söhbəti bağla"/>
+				<button name="expand_collapse_btn" tool_tip="Bu paneli açığa və ya qapalı şəkildə göstər"/>
+			</layout_panel>
+			<layout_panel name="body_panel">
+				<layout_stack name="im_panels">
+					<layout_panel name="right_part_holder">
+						<layout_stack name="translate_and_chat_stack">
+							<layout_panel name="translate_chat_checkbox_lp">
+								<check_box label="Söhbəti tərcümə et" name="translate_chat_checkbox"/>
+							</layout_panel>
+						</layout_stack>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="chat_layout_panel">
+				<layout_stack name="input_panels">
+					<layout_panel name="input_editor_layout_panel">
+						<chat_editor label="Kimə" name="chat_editor"/>
+					</layout_panel>
+					<layout_panel name="input_button_layout_panel">
+						<button name="minz_btn" tool_tip="Mesaj panelini göstər/gizlət"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>
+	</view>
+</floater>

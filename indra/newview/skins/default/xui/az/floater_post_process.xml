@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Post-Process Floater" title="Sonradan becərilmə seçimləri">
+	<tab_container name="Post-Process Tabs">
+		<panel label="Rəng filtri" name="wmiColorFilterPanel">
+			<check_box label="Aktiv" name="wmiColorFilterToggle"/>
+			<text name="wmiColorFilterBrightnessText">
+				Işıqlılıq
+			</text>
+			<text name="wmiColorFilterSaturationText">
+				Doyulma
+			</text>
+			<text name="wmiColorFilterContrastText">
+				Kontrast
+			</text>
+			<text name="wmiColorFilterBaseText">
+				Kontrastın əsas rəngi
+			</text>
+			<slider label="Q" name="wmiColorFilterBaseR"/>
+			<slider label="Y" name="wmiColorFilterBaseG"/>
+			<slider label="G" name="wmiColorFilterBaseB"/>
+			<slider label="İ" name="wmiColorFilterBaseI"/>
+		</panel>
+		<panel label="Gecə görüşü" name="wmiNightVisionPanel">
+			<check_box label="Aktiv" name="wmiNightVisionToggle"/>
+			<text name="wmiNightVisionBrightMultText">
+				Işığın qüvvət dərəcəsi
+			</text>
+			<text name="wmiNightVisionNoiseSizeText">
+				Pozulma ölçüsü
+			</text>
+			<text name="wmiNightVisionNoiseStrengthText">
+				Pozulma gücü
+			</text>
+		</panel>
+		<panel label="Şəfəq" name="wmiBloomPanel">
+			<check_box label="Aktiv" name="wmiBloomToggle"/>
+			<text name="wmiBloomExtractText">
+				Işığın şiddəti
+			</text>
+			<text name="wmiBloomSizeText">
+				Şəfəqin ölçüsü
+			</text>
+			<text name="wmiBloomStrengthText">
+				Şəfəqin gücü
+			</text>
+		</panel>
+		<panel label="Əlavə" name="Extras">
+			<button label="Effekti yüklə" label_selected="Effekti yüklə" name="PPLoadEffect" width="120"/>
+			<button label="Effekti saxla" label_selected="Effekti saxla" name="PPSaveEffect" width="120"/>
+			<combo_box left_delta="130" name="PPEffectsCombo"/>
+			<line_editor label="Effektin adı" name="PPEffectNameEditor"/>
+		</panel>
+	</tab_container>
+</floater>

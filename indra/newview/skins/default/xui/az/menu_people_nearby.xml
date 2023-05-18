@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Nearby People Context Menu">
+	<menu_item_call label="Profili göstər" name="view_profile"/>
+	<menu_item_call label="İM Göndər" name="im"/>
+	<menu_item_call label="Teleport təklif et" name="offer_teleport"/>
+	<menu_item_call label="Teleport tələb et" name="request_teleport"/>
+	<menu_item_call label="Səsli zəng" name="voice_call"/>
+	<menu_item_call label="Söhbət tarixini göstər" name="chat_history"/>
+	<menu_item_call label="Dostlara əlavə et" name="add_friend"/>
+	<menu_item_call label="Dəstə əlavə et" name="Add to Set"/>
+	<menu_item_call label="Dostluqdan sil" name="remove_friend"/>
+	<menu_item_call label="Qrupa dəvət et" name="invite_to_group"/>
+	<menu_item_call label="Kameranı yaxınlaşdır" name="zoom_in"/>
+	<menu_item_call label="Xəritədə göstər" name="map"/>
+	<menu_item_call label="Əşya ilə paylaş" name="share"/>
+	<menu_item_call label="Ödə" name="pay"/>
+	<menu_item_check label="Blokla/Blokdan çıxart" name="block_unblock"/>
+	<menu_item_call label="Dondur" name="freeze"/>
+	<menu_item_call label="Təpiklə" name="eject"/>
+</context_menu>

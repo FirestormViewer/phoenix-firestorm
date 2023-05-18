@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_outfit_snapshot_inventory">
+    <text name="title">
+        Avadanlıq siyahısı
+    </text>
+    <text name="hint_lbl">
+Şəkilin avadanlıq siyahısınıza yüklənməsi L$[UPLOAD_COST] qiymətinə başa gəlir.
+
+Ödəniş abunəlik səviyyənizdən asılıdır. Daha yüksək səviyyələr daha az ödəniş tələb edir.
+    </text>
+    <button label="Ləğv et" name="cancel_btn"/>
+    <button label="Yadda saxla" name="save_btn"/>
+</panel>

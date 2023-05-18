@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel label="Əlavə" name="advanced">
+	<panel.string name="middle_mouse">
+		Orta maus düyməsi
+	</panel.string>
+	<check_box label="Bir neçə klientin açılmasına icazə ver" name="allow_multiple_viewer_check"/>
+	<check_box label="Giriş zamanı şəbəkənin seçilməsinə icazə ver (Firestorm-u hər şəbəkə dəstəkləmir)" name="show_grid_selection_check"/>
+	<check_box label="Əlavə menyunu göstər (Öz riskinizə görə istifadə edin!)" name="show_advanced_menu_check"/>
+	<check_box label="Sazlama menyusunu göstər (Öz riskinizə görə istifadə edin!)" name="show_develop_menu_check"/>
+	<check_box label="Windows sistemlərində WMI ilə VRAM aşkarlamasını söndür" name="FSDisableWMIProbing"/>
+	<check_box label="Menyu axtarışını göstər" name="show_search_menu_check"/>
+	<!-- <check_box label="Включить использование анимации с временным шагом (Эксперементально)" tool_tip="Эта настройка может уменьшить нагрузку прорисовки на дальних аватаров но также может привести к воспроизведению их анимаций на неправильных скоростях" name="UseAnimationTimeSteps"/> -->
+	<text name="BackgroundYieldTimeText">
+		[APP_NAME] ön planda olmadıqda, hər bir kadrı digər tətbiqlərə qəbul etmək üçün millisaniyələrlə vaxtın miqdarı (defolt: 40; 1 saniyə = 1000 millisaniyə):
+	</text>
+	<button label="Yaradılma icazələrinin standart dəyərlərini təyin et" name="default_creation_permissions" />
+	<button label="Bütün seçimlərin sıfırlanması" label_selected="Bütün seçimlərin sıfırlanması..." name="clear_settings"/>
+</panel>

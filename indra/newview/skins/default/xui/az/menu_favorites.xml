@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu name="Popup">
+	<menu_item_call label="Teleport ol" name="Teleport To Landmark"/>
+	<menu_item_call label="Xəritədə göstər" name="Show On Map"/>
+	<menu_item_call label="Əlfəcini Aç/Dəyişdir" name="Landmark Open"/>
+	<menu_item_call label="Əlfəcinlərə daşı" name="Move to Landmarks"/>
+	<menu_item_call label="SLurl-ni köçürt" name="Copy slurl"/>
+	<menu_item_call label="Yer yarat" name="create_pick"/>
+	<menu_item_call label="Köçürt" name="Landmark Copy"/>
+	<menu_item_call label="Yapışdır" name="Landmark Paste"/>
+	<menu_item_call label="Adı dəyişdir" name="rename"/>
+	<menu_item_call label="Sil" name="Delete"/>
+</menu>

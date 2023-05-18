@@ -5,6 +5,7 @@
 	</text>
 	<combo_box name="language_combobox">
 		<combo_box.item label="English (Angielski)" name="English"/>
+		<combo_box.item label="Azərbaycanca (Azerbejdżański)" name="Azerbaijani"/>
 		<!-- <combo_box.item label="Dansk (Duński) - Beta" name="Danish"/> -->
 		<combo_box.item label="Deutsch (Niemiecki)" name="Deutsch(German)"/>
 		<combo_box.item label="Español (Hiszpański) - Beta" name="Spanish"/>

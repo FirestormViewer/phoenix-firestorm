@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Import Collada" title="Səhnə idxalı">
+	<text name="mesh count">
+		Meş: [COUNT]
+	</text>
+	<text name="texture count">
+		Tekstur: [COUNT]
+	</text>
+	<text name="status">
+		Vəziyyət: [STATUS]
+	</text>
+	<button name="cancel" label="Ləğv et"/>
+	<string name="status_idle">
+		Sadə
+	</string>
+	<string name="status_uploading">
+		[NAME] yüklənir
+	</string>
+	<string name="status_creating">
+		[NAME] obyekti yaradılır
+	</string>
+</floater>
