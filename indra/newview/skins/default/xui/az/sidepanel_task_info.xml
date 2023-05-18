@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="object properties" title="Obyekt profili">
+	<panel.string name="text deed continued">
+		Müqavilə
+	</panel.string>
+	<panel.string name="text deed">
+		Müqavilə
+	</panel.string>
+	<panel.string name="text modify info 1">
+		Bu obyekti dəyişə bilərsiniz
+	</panel.string>
+	<panel.string name="text modify info 2">
+		Bu obyektləri dəyişə bilərsiniz
+	</panel.string>
+	<panel.string name="text modify info 3">
+		Bu obyekti dəyişə bilmərsiniz
+	</panel.string>
+	<panel.string name="text modify info 4">
+		Bu obyektləri dəyişə bilmərsiniz
+	</panel.string>
+	<panel.string name="text modify info 5">
+		Bu obyekti ərazinin sərhədləri ilə dəyişə bilməzsiniz
+	</panel.string>
+	<panel.string name="text modify info 6">
+		Bu obyektləri ərazinin sərhədləri ilə dəyişə bilməzsiniz
+	</panel.string>
+	<panel.string name="text modify warning">
+		İcazələri təyin etmək üçün bütün obyekt seçməlisiniz
+	</panel.string>
+	<panel.string name="Cost Default">
+		Qiymət: L$
+	</panel.string>
+	<panel.string name="Cost Total">
+		Ümumi: L$
+	</panel.string>
+	<panel.string name="Cost Per Unit">
+		Üçün Qiymət: L$
+	</panel.string>
+	<panel.string name="Cost Mixed">
+		Qarışıq qiymət
+	</panel.string>
+	<panel.string name="Sale Mixed">
+		Qarışıq satış
+	</panel.string>
+	<button name="back_btn" />
+	<text name="title" value="Obyekt profili"/>
+	<text name="where" value="(dünyada)" />
+	<scroll_container name="item_profile_scroll">
+		<panel label="" name="properties_panel">
+			<text name="Name:" width="78">
+				Adı:
+			</text>
+			<line_editor name="Object Name" tool_tip="Başlıq 63 simvolla məhdudlaşır. Daha uzun primitiv adlar kəsilir. Adlar yalnız ASCII-7 (uzatılmamış) simvol dəstində olan çap edilə bilən simvollardan ibarət ola bilər, boru/sətir &quot;|&quot;. istisna olmaqla." />
+			<text name="Description:" width="78">
+				Təsviri:
+			</text>
+			<line_editor name="Object Description" tool_tip="Görünüş pəncərəsi parametrlərində &apos;Bütün obyektlər üzrə alət məsləhətləri&apos; seçildikdə, oyunçular siçanı hər hansı obyektin üzərinə apardıqda obyektin təsviri ilə açılan pəncərəni görəcəklər. Primitiv təsvir 127 baytla məhdudlaşır və dəyəri bu ölçüdən böyük olan sətir kəsilir." />
+			<text name="CreatorNameLabel" width="78">
+				Yaradıcı:
+			</text>
+			<text name="Creator Name">
+				(yüklənir ...)
+			</text>
+			<text name="Owner:" width="78">
+				Sahibi:
+			</text>
+			<text name="Owner Name">
+				(yüklənir ...)
+			</text>
+			<text name="Group_label" width="78">
+				Qrup:
+			</text>
+			<button name="button set group" tool_tip="Obyektə giriş hüquqlarını ona ötürmək üçün qrup seçin"/>
+			<name_box initial_value="Yüklənir..." name="Group Name Proxy"/>
+			<button label="Müqavilə" label_selected="Müqavilə" name="button deed" tool_tip="Müqavilə nəticəsində obyekt qrupa verilir, ona olan hüquqlar isə növbəti sahibin hüquqlarına uyğun olacaq. Qrupa verilən obyekt qrupun vəzifəli şəxsi tərəfindən verilə bilər." />
+			<text name="label click action" width="280">
+				Basıldıqda:
+			</text>
+			<combo_box name="clickaction" tool_tip="Vurma fəaliyyəti, obyektə sol kliklə bir toxunuşla əlaqə yaratmağınıza imkan verir. Hər bir vurma fəaliyyəti, onun nə etdiyini göstərən xüsusi bir imi ilə gəlir. Bəzi vurma fəaliyyətlərinin işləməsi üçün tələblər var. Məsələn, toxunma və ödəniş skriptlərini tələb edir" >
+				<combo_box.item label="Toxun (defolt)" name="Touch/grab(default)"/>
+				<combo_box.item label="Otur" name="Sitonobject"/>
+				<combo_box.item label="Al" name="Buyobject"/>
+				<combo_box.item label="Ödə" name="Payobject"/>
+				<combo_box.item label="Aç" name="Open"/>
+				<combo_box.item label="Yaxınlaşdır" name="Zoom"/>
+				<combo_box.item label="Heçnə" name="None"/>
+			</combo_box>
+			<panel name="perms_inv">
+				<text name="perm_modify">
+					Bu obyekti dəyişmək olar
+				</text>
+				<text name="Anyone can:">
+					Hamı:
+				</text>
+				<check_box label="Köçürtmək" name="checkbox allow everyone copy" width="95" tool_tip="Hər kəs obyektin köçürtməsin götürə bilər. Obyektin və onun bütün məzmununun köçürülməsinə və paylaşmasına icazə verilməlidir." />
+				<check_box label="Daşımaq" name="checkbox allow everyone move" width="95" tool_tip="Hər kəs obyekti daşıya bilər."/>
+				<text name="GroupLabel" >
+					Qrup:
+				</text>
+				<check_box label="Paylaş" name="checkbox share with group" tool_tip="Seçilmiş qrupun bütün üzvlərinə bu obyektdə təyin etdiyiniz hüquqları almağa icazə verin. Rol məhdudiyyətlərini aktivləşdirmək üçün müqavilə bağlamalısınız."/>
+				<text name="NextOwnerLabel">
+					Yeni sahibi edə bilər:
+				</text>
+				<check_box label="Dəyişdirmək" name="checkbox next owner can modify" width="95" tool_tip="Növbəti sahib elementin adı və ya bu obyektin miqyası kimi xassələri dəyişdirə bilər." />
+				<check_box label="Köçürtmək" name="checkbox next owner can copy" width="95" tool_tip="Növbəti sahibi bu obyektin qeyri-məhdud sayda köçürtməsini yarada bilər. Köçürtmələr yaradıcı haqqında məlumat ehtiva edir və heç vaxt köçürülən elementdən daha icazəli ola bilməz.."/>
+				<check_box label="Paylaşmaq" name="checkbox next owner can transfer" tool_tip="Növbəti sahibi obyekti başqasına verə və ya yenidən sata bilər"/>
+			</panel>
+			<check_box label="Satış üçün:" name="checkbox for sale" tool_tip="Bu obyekti, onun məzmununu və ya daxilindəkiləri göstərilən qiymətə bəzən insanlara almaq imkanı verir." />
+			<combo_box name="sale type" tool_tip="Alıcının obyektin nüsxəsini, daxilindəkilərinin nüsxəsini və ya özünü alacağını seçin." >
+				<combo_box.item label="Köçürt" name="Copy"/>
+				<combo_box.item label="Məzmun" name="Contents"/>
+				<combo_box.item label="Orijinal" name="Original"/>
+			</combo_box>
+			<spinner label="Qiymət: L$" name="Edit Cost" tool_tip="Obyekt qiyməti."/>
+			<check_box label="Axtarış nəticələrində göstərin" name="search_check" tool_tip="Elementi axtarış nəticələrində göstərin" />
+			<text name="pathfinding_attributes_label">
+				Yol axtarış atributları:
+			</text>
+			<text name="B:">
+				B:
+			</text>
+			<text name="O:">
+				O:
+			</text>
+			<text name="G:">
+				G:
+			</text>
+			<text name="E:">
+				E:
+			</text>
+			<text name="N:">
+				N:
+			</text>
+			<text name="F:">
+				F:
+			</text>
+		</panel>
+	</scroll_container>
+	<layout_stack name="buttons_ls">
+		<layout_panel name="open_btn_panel">
+			<button label="Aç" name="open_btn" tool_tip="Obyektin məzmununa baxmaq üçün açın." />
+		</layout_panel>
+		<layout_panel name="pay_btn_panel" >
+			<button label="Ödə" name="pay_btn" tool_tip="Ödəniş pəncərəsini açın. Obyekt üçün ödəniş etmək üçün onun ödəniş skripti olmalıdır." />
+		</layout_panel>
+		<layout_panel name="buy_btn_panel">
+			<button label="Almaq" name="buy_btn" tool_tip="Alış pəncərəsini açın. Elementin satış üçün siyahıya alınmasını tələb edir." />
+		</layout_panel>
+		<layout_panel name="details_btn_panel">
+			<button label="Ətraflı" name="details_btn" tool_tip="Obyekt yoxlama pəncərəsini açın." />
+		</layout_panel>
+	</layout_stack>
+</panel>

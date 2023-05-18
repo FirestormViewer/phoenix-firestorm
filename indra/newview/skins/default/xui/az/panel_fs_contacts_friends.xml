@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="friends">
+	<layout_stack name="ls_friend_list">
+		<layout_panel name="lp_search">
+			<filter_editor label="Dost süzgəci" name="friend_filter_input"/>
+		</layout_panel>
+		<layout_panel name="lp_friend_list">
+			<fs_scroll_list name="friend_list">
+				<fs_scroll_list.column name="icon_online_status" tool_tip="Şəbəkə vəziyyəti"/>
+				<fs_scroll_list.column label="Ad" name="user_name" tool_tip="İstifadəçi adı"/>
+				<fs_scroll_list.column label="Göstərilən" name="display_name" tool_tip="Göstərilən adı"/>
+				<fs_scroll_list.column label="Tam" name="full_name" tool_tip="İstifadəçinin tam adı"/>
+				<fs_scroll_list.column name="icon_visible_online" tool_tip="Dostunuz daxil olduğunuzu görə bilər"/>
+				<fs_scroll_list.column name="icon_visible_map" tool_tip="Dost sizi dünya xəritəsində axtara bilər"/>
+				<fs_scroll_list.column name="icon_edit_mine" tool_tip="Dostunuz obyektlərinizi dəyişdirə, silə və ya götürə bilər"/>
+				<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Dostunuzu xəritədə axtara bilərsiniz"/>
+				<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Dostunuzun obyektlərini dəyişdirə, silə və ya götürə bilərsiniz"/>
+			</fs_scroll_list>
+		</layout_panel>
+	</layout_stack>
+	<button label="İM/Zəng" name="im_btn" tool_tip="Şəxsi mesaj göndər (İM)"/>
+	<button label="Profil" name="profile_btn" tool_tip="Profili göstər"/>
+	<button label="Teleport..." name="offer_teleport_btn" tool_tip="Özünüzə teleport təklif et"/>
+	<button label="Xəritə..." name="map_btn" tool_tip="Dostun dünya xəritəsində yerləşməsin göstər"/>
+	<button label="Ödə..." name="pay_btn" tool_tip="Pul göndər(L$)"/>
+	<button label="Sil..." name="remove_btn" tool_tip="Dostluq siyahısından sil"/>
+	<button label="Əlavə et..." name="add_btn" tool_tip="İstifadəçiyə dostluq təklif et"/>
+	<text name="friend_count">
+	 Dostlar: [COUNT]
+	</text>
+</panel>

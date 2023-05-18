@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_blocklist" title="Bloklanmış sakinlər və obyektlər">
+	<panel name="panel_block_list_sidetray" label="Bloklanmış sakinlər və obyektlər"/>
+</floater>

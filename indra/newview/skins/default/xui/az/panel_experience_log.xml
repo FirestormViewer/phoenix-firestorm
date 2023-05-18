@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_experience_log" label="Hadisələr">
+	<string name="no_events" value="Hadisə yoxdur."/>
+	<string name="loading" value="yüklənir…"/>
+	<layout_stack name="ls1">
+		<layout_panel name="list panel">
+			<scroll_list name="experience_log_list">
+				<columns label="Vaxt" name="time"/>
+				<columns label="Hadisə" name="event"/>
+				<columns label="Macəra" name="experience_name"/>
+				<columns label="Obyekt" name="object_name"/>
+			</scroll_list>
+			<button label="Xəbərdar et" name="btn_notify"/>
+			<button label="Profil" name="btn_profile_xp"/>
+			<button label="Şikayət et" name="btn_report_xp"/>
+		</layout_panel>
+		<layout_panel name="button_panel">
+			<check_box label="Bütün hadisələrdən xəbərdar et (Günlər)" name="notify_all" width="210"/>
+			<button label="Təmizlə" name="btn_clear"/>
+			<button label="&lt;" name="btn_prev"/>
+			<button label="&gt;" name="btn_next"/>
+		</layout_panel>
+	</layout_stack>
+</panel>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<floater title="L$ Al" name="buy currency">
+	<floater.string name="buy_currency">
+		Təxminən [LOCALAMOUNT] üçün L$ [LINDENS] alın
+	</floater.string>
+	<floater.string name="info_cannot_buy">
+		Almaq olmaz
+	</floater.string>
+	<layout_stack name="outer_stack">
+		<layout_panel name="layout_panel_title">
+			<text name="info_need_more">
+				Sizə daha çox L$-a ehtiyacınız var
+			</text>
+			<text name="info_buying">
+				L$ alın
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_price">
+			<text name="target_price_label">
+				Sizin ehtiyacınız var:
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_balance">
+			<text name="balance_label">
+				Artıq sizin hesabınızda var:
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_required">
+			<text name="required_label">
+				Ən azından alınmalıdır
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_action">
+			<text name="currency_action">
+				Almaq üçün məbləği seçin
+			</text>
+			<text name="currency_est">
+				təxminən [LOCALAMOUNT]
+			</text>
+			<text name="getting_data">
+				Hesablanır...
+			</text>
+			<text name="total_label">
+				Yeni balansınız olacaq
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_msg">
+			<text name="currency_links">
+				[http://www.secondlife.com/my/account/payment_method_management.php ödəniş üsulu] | [http://www.secondlife.com/my/account/currency.php pul]
+			</text>
+			<text name="exchange_rate_note">
+				Yeni məzənnəni görmək üçün məbləği yenidən daxil edin.
+			</text>
+			<text name="purchase_warning_repurchase">
+				L$ aldıqdan sonra alışı yenidən cəhd edin.
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_buttons">
+			<text name="contacting">
+				LindeX ilə əlaqə...
+			</text>
+			<button label="Almaq" name="buy_btn"/>
+			<button label="Ləğv et" name="cancel_btn"/>
+		</layout_panel>
+	</layout_stack>
+</floater>

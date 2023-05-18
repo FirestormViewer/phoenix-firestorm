@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Ünsiyyət" name="im">
+	<string name="AutoresponseItemNotSet">
+		Təyin olunmayıb
+	</string>
+	<string name="AutoresponseItemNotAvailable">
+		Əlçatan deyil
+	</string>
+	<string name="AutoresponseItemNotLoggedIn">
+		Daxil olmayıb
+	</string>
+	<tab_container label="Məxfilik" name="tabs">
+		<panel label="Ümumi" name="tab-general">
+			<panel.string name="log_in_to_change">
+				Dəyişiklər üçün daxil olun
+			</panel.string>
+			<button label="Tarixçəni sil" tool_tip="Giriş şəklini, son yeri, teleport tarixçəsini, interneti və tekstur keşini silin" name="clear_webcache"/>
+			<text name="cache_size_label">
+				(Yerlər, şəkillər, internet, axtarış tarixçəsi)
+			</text>
+			<check_box label="Axtarış nəticələrində profil məlumatımı göstərin" name="online_searchresults"/>
+			<check_box label="Tək dostlar və qruplar mən onlayn olduğumu görür" name="online_visibility"/>
+			<check_box label="Tək dostlar və qruplar mənə zəng edib IM göndərə bilərlər" name="voice_call_friends_only_check"/>
+			<check_box label="Artıq qoşulmuş qruplar üçün dəvətləri göstərin" name="FSShowJoinedGroupInvitations" />
+			<check_box label="Zəngin sonunda mikrofonun səsini söndürün" name="auto_disengage_mic_check"/>
+			<check_box label="Skript obyektlərinin mənim cari dil seçimimi görməsinə icazə verin" name="LanguageIsPublic"/>
+			<check_box label="Yeni avadanlıq siyahısı elementlərini avtomatik qəbul edin" name="Auto_Accept_New_Inventory"/>
+			<check_box label="Ümumi söhbətdə avtomatik qəbul edilən elementlərin qeydi" name="FSLogAutoAcceptInventoryToChat" />
+			<check_box label="Qəbul etmək/rədd etmək üçün köhnə avadanlıq siyahısı mesajlarından istifadə edin" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Qəbul etmək/rədd etmək üçün köhnə avadanlıq siyahısı mesajlarından istifadə edin"/>
+			<check_box label="Avadanlıq siyahısında yeni qəbul edilmiş əşyaları avtomatik olaraq göstərin" name="Show_In_Inventory"/>
+			<check_box label="Qəbul etdikdən sonra qeydlərə, teksturlara, əlfəcinlərə avtomatik baxın" name="Show_New_Inventory"/>
+			<check_box label="Yüklədikdən sonra şəkilləri avtomatik olaraq avadanlıq siyahısında göstərin" name="FSOpenInventoryAfterSnapshot"/>
+			<check_box label="Digər avatarlardan inventar elementi alarkən hissəcik effekti yaradın" name="FSCreateGiveInventoryParticleEffect"/>
+			<check_box label="Girişdə sevimli əlfəcinləri göstərin (Başlanğıc Məkan menyusunda)" name="favorites_on_login_check"/>
+			<button label="Blok siyahısı idarə edilməsi" name="block_list"/>
+		</panel>
+		<panel label="Söhbət tarixçələri" name="tab-logging">
+			<text name="logging_label">
+				Yadda saxla:
+			</text>
+			<combo_box name="conversation_log_combo" >
+				<item name="log_and_transcripts" label="Jurnal və tarixçə"/>
+				<item name="log_only" label="Yalnız jurnal"/>
+				<item name="no_log_or_transcript" label="Heç biri"/>
+			</combo_box>
+			<button label="Jurnalı təmizlə..." name="clear_log"/>
+			<button label="Tarixçələri təmizlə..." name="delete_transcripts"/>
+			<check_box name="LogNearbyChat" label="Сохранить историю общего чата" tool_tip="Запись сообщения общего чата на жестком диске"/>
+			<check_box label="Использовать старый формат имени в истории" name="UseLegacyIMLogNames" tool_tip="Если опция включена, формат устаревшего имени файла для транскриптов  (User Name) будет использоваться вместо нового формата (user_name)."/>
+			<check_box label="Добавить время в названии файла истории" name="LogFileNamewithDate" tool_tip="Добавляет время в названии файла в формате chat-ГГГГ-ММ-ДД и 'ЛС имя файла'-ГГГГ-ММ."/>
+			<check_box label="Использовать встроенный просмотр истории" name="FSUseBuiltInHistory" tool_tip="Использовать встроенный просмотр истории, если отключено, то будет открываться программа просмотра текстовых файлов по умолчанию системы"/>
+		</panel>
+		<panel label="Kamera diqqəti (LookAt)" name="tab-lookat">
+			<check_box label="Başqaları nəyə baxdığını göstər:" name="showlookat" tool_tip="Avatarın kamera bağlantı nöqtəsini müəyyənləşdirmək üçün istifadə olunur."/>
+			<text name="lookatshownames" tool_tip="Kamera fokusunda olan avatarların adlarını göstərmək üçün ad formatı">
+				Kamera fokuslarındakı adlar:
+			</text>
+			<combo_box name="lookatshownames_combobox">
+				<combo_box.item label="Yoxdur" name="None"/>
+				<combo_box.item label="Tam ad" name="Complete_Name"/>
+				<combo_box.item label="Göstərilən ad" name="Display_Name"/>
+				<combo_box.item label="Köhnə ad" name="Legacy_Name"/>
+				<combo_box.item label="İstifadəçi adı" name="User_Name"/>
+			</combo_box>
+			<check_box label="Öz kamera diqqətimi göstərməmək" name="LookAtHideOwn" tool_tip="Öz kamera diqqətini göstərməmək"/>
+			<check_box label="Məqsədə doğru xətt çəkmək" name="ExodusLookAtLines" tool_tip="Avatarın kamera fokusuna olan məsafəni göstərmək üçün xətt çəkir." />
+			 <text name="mylookat">
+				Mənim kamera fokusum:
+			</text>
+			<check_box label="Öz kamera diqqətimi digərlərinə göstərməmək" name="privatelookat" tool_tip="Öz kamera diqqətini başqalarına göstərməmək"/>
+			<check_box label="Öz kamera diqqətimi yerli olaraq (özüm üçün) göstərməmək" name="privateLocalLookat" tool_tip="Öz kamera diqqətini yerli olaraq (özüm üçün) göstərməmək"/>
+			<check_box label="Seçim məlumatlarını göndərməmək" name="privatepointat" tool_tip="Mənim seçim nöqtəmi başqalarına göstərməmək"/>
+			<check_box label="Başın ətrafındakı məhdud məsafə:" name="LimitLookAt" tool_tip="Sizin baxışınızı başınızın ətrafındakı məqsədə bağlayır." width="220" />
+		</panel>
+		<panel label="Avtomatik cavab 1" name="tab-autoresponse-1">
+			<text name="autorespond_toggle_location_tip">
+				Qeyd: Avtomatik cavab mesajlarını aktivləşdirmək üçün daxil olma statusunuzu Əlaqə &gt; Şəbəkə statusu menyusunda qurun.
+			</text>
+			<text name="text_box3">
+				'Əlçatan deyil' rejimində avtomatik cavab (məs, məşğul):
+			</text>
+			<text name="autorespond_response_label">
+				'Avtomatik Cavabçı' rejimində bütün avatarlara avtomatik cavab göndər:
+			</text>
+			<text name="autorespond_nf_response_label">
+				'Dost olmayanlara avtomatik cavab vermək' rejimində dostlar siyahısında olmayan avatarlara avtomatik cavab verin:
+			</text>
+			<check_box label="Yerində yoxdur' rejimində olduqda avtomatik cavab göndərin:" name="send_away_av_response" tool_tip="Yerində yoxdur' rejimində olduqda avtomatik cavab göndərin:"/>
+			<check_box label="Bloklanmış avatarlara avtomatik cavab göndər" name="send_muted_av_response" tool_tip="Bloklanmış avatarlara avtomatik cavab göndər"/>
+		</panel>
+		<panel label="Avtomatik cavab 2" name="tab-autoresponse-2">
+			<text name="autorespond_rto_response_label">
+				'Bütün teleport təkliflərini rədd et' rejimində bütün avatarlara avtomatik cavab verin:
+			</text>
+			<check_box label="Dostlardan teleport təkliflərini rədd etməyin (və cavab göndərməyin)" name="FSDontRejectTeleportOffersFromFriends" />
+			<text name="autorespond_rfr_response_label">
+				DOSTLUQ SORĞUNU RƏDD ET rejimində hər kəsə avtomatik cavab verin:
+			</text>
+			<text name="autoresponse_item_label">
+				Avtomatik cavab elementi:
+			</text>
+			<fs_copytrans_inventory_drop_target name="autoresponse_item" tool_tip="Avadanlıq siyahısı elementini bura daşıyın."/>
+			<button label="Təmizlə" name="clear_autoresponse_item"/>
+		</panel>
+	</tab_container>
+</panel>

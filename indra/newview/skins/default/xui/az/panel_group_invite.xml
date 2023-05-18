@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Qrupa dəvət et" name="invite_panel">
+	<panel.string name="confirm_invite_owner_str">
+		Yeni qrup sahiblərini seçmək istədiyinizə əminsiniz? Bu əməliyyat geri qaytarıla bilməz!
+	</panel.string>
+	<panel.string name="loading">
+		(yüklənir...)
+	</panel.string>
+	<panel.string name="already_in_group">
+		Seçdiyiniz sakinlərdən bəziləri artıq qrupdadır və dəvət almayıblar.
+	</panel.string>
+	<panel.string name="invite_selection_too_large">
+		Dəvət göndərilmədi: çox sayda sakin seçildi. Dəvətlər hər sorğuda maksimum 100 istifadəçiyə çata bilər.
+	</panel.string>
+	<text name="help_text">
+		Bir qrupa bir neçə sakini dəvət edə bilərsiniz. &apos;Sakin seçimi&apos; düyməsinə basın.
+	</text>
+	<button label="Sakin seçimi" name="add_button"/>
+	<name_list name="invitee_list" tool_tip="Bir neçə sakin seçmək üçün CTRL düyməsini basıb saxlayın və sonra onların adlarını seçin"/>
+	<button label="Siyahıdan sil" name="remove_button" tool_tip="Seçilmiş sakinlərin dəvət olunanlar siyahısından silinməsi"/>
+	<text name="role_text">
+		Təyin ediləcək rolu seçin:
+	</text>
+	<combo_box name="role_name" tool_tip="Siyahıdan üzvlərə təyin edə biləcəyiniz bir rol seçin"/>
+	<button label="Dəvət et" name="invite_button"/>
+	<button label="Ləğv et" name="cancel_button"/>
+	<string name="GroupInvitation">
+		Qrupa dəvət
+	</string>
+</panel>

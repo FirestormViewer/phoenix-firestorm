@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_web_content" title="">
+	<layout_stack name="stack1">
+		<layout_panel name="nav_controls">
+			<button name="back" tool_tip="Geri"/>
+			<button name="forward" tool_tip="İrəli"/>
+			<button name="stop" tool_tip="Dayandır"/>
+			<button name="reload" tool_tip="Yenilə"/>
+			<combo_box name="address" tool_tip="Səhifənin URL ünvanını daxil edin"/>
+			<icon name="media_secure_lock_flag" tool_tip="Təhlükəsiz görüntüləmə"/>
+			<button name="popexternal" tool_tip="Cari URL ünvanını sizin brauzerinizdə açın"/>
+		</layout_panel>
+		<layout_panel name="debug_controls">
+			<button name="web_test_home_page" tool_tip="Veb sınaq səhifəsi"/>
+			<button name="VLC Plugin Test" tool_tip="MPEG4 video sınaqı"/>
+		</layout_panel>
+		<layout_panel name="external_controls" >
+			<text name="plugin_fail_text">
+Veb brauzer plugin-i açılmaq üçün daha çox vaxt tələb edir kimi görünür.
+Əgər plugin heç vaxt yüklənmirsə, zəhmət olmasa, bununla bağlı mümkün addımlar üçün aşağıdakı keçidləri səyahət edin:
+
+http://wiki.phoenixviewer.com/fs_search_issues
+
+və
+
+http://wiki.phoenixviewer.com/fs_media
+
+			</text>
+		</layout_panel>
+	</layout_stack>
+</floater>

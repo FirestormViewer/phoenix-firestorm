@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Əşyalar" name="Outfits">
+	<panel.string name="wear_outfit_tooltip">
+		Seçilmiş geyimi geyin
+	</panel.string>
+	<panel.string name="wear_items_tooltip">
+		Seçilmiş əşyaları geyin
+	</panel.string>
+	<panel.string name="cof_tab_label">
+		Geyinilib ([COUNT]/[MAX] Pr.)
+	</panel.string>
+	<tab_container name="appearance_tabs">
+		<panel label="Geyim qalereyası" name="outfit_gallery_tab"/>
+		<panel label="Geyimlərim" name="outfitslist_tab"/>
+		<panel label="Geyinlib" name="cof_tab"/>
+	</tab_container>
+	<panel name="bottom_panel">
+		<layout_stack name="bottom_panel_ls">
+			<layout_panel name="save_btn_lp">
+				<button label="Yadda saxla" name="save_btn"/>
+			</layout_panel>
+			<layout_panel name="save_as_btn_lp">
+				<button label="Yadda saxla..." name="save_as_btn"/>
+			</layout_panel>
+			<layout_panel name="wear_btn_lp">
+				<button label="Geyin" name="wear_btn"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

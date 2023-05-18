@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="media_settings" title="Media seçimləri">
+	<button label="Ləğv et" label_selected="Ləğv et" name="Cancel"/>
+	<button label="Tətbiq et" label_selected="Tətbiq et" name="Apply"/>
+</floater>

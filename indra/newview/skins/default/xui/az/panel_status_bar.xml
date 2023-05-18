@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="status">
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="Участок для продажи"/>
+		<text tool_tip="Üzərində durduğunuz torpaq hissəsinin adı. Ətraflı oxumaq üçün basın." name="parcel_info_text" value="(yüklənir...)"/>
+	</panel>
+	<panel.string name="packet_loss_tooltip">
+		Paket itkisi
+	</panel.string>
+	<panel.string name="bandwidth_tooltip">
+		Band genişliyi
+	</panel.string>
+	<panel.string name="time">
+		[hour, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone,datetime, slt]
+	</panel.string>
+	<panel.string name="timeTooltip">
+		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]
+	</panel.string>
+	<panel.string name="buycurrencylabel">
+		[AMT] L$
+	</panel.string>
+	<panel name="menu_search_panel">
+		<search_editor label="Menyuda axtar" name="search_menu_edit" tool_tip="Введите интересующий вас термин для поиска здесь. Результаты будут отображены для частичного совпадения полного текста в меню."/>
+	</panel>
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="Satılan sahə"/>
+		<button name="status_lightshare_btn" tool_tip="İşıqlandırma seçimləri"/>
+		<text tool_tip="Üzərində durduğunuz torpaq hissəsinin adı. Ətraflı oxumaq üçün basın." name="parcel_info_text" value="(yüklənir...)"/>
+	</panel>
+	<panel name="balance_bg">
+		<text name="balance" tool_tip="Balansı yeniləmək üçün basın"/>
+		<button label="L$ Alışı" name="buyL" tool_tip="L$ almaq üçün basın"/>
+	</panel>
+	<panel name="time_and_media_bg">
+		<text name="TimeText" tool_tip="Cari vaxt (Sakit okean)"/>
+		<button name="stream_toggle_btn" tool_tip="Axınlayıcı səsli yayımı açıb/söndürün"/>
+		<button name="media_toggle_btn" tool_tip="Bütün media məzmununu oxşatmaq açıb/söndürün (Musiqi, Video, Web)"/>
+		<text name="FPSText" tool_tip="Kadr/saniyə"/>
+	</panel>
+</panel>

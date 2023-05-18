@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Səslər" name="Preference Media panel">
+	<panel.string name="middle_mouse">
+		Orta siçan düyməsi
+	</panel.string>
+	<tab_container label="Firestorm Seçimləri" name="tabs">
+		<panel label="Səslər" name="Media Sounds Panel">
+			<slider label="Ümumi səs səviyyəsi" name="System Volume"/>
+			<check_box label="Çevirilərkən səssizləşdir" name="mute_when_minimized"/>
+			<slider label="İnterfeys" name="UI Volume"/>
+			<slider label="Ətraf mühit" name="Wind Volume"/>
+			<check_box name="collisions_audio_play_btn" tool_tip="Toqquşma səslərini dəyişdirmək üçün seçin" label="Toqquşma səslərini aktivləşdir"/>
+			<slider label="Səs effektləri" name="SFX Volume"/>
+			<check_box name="gesture_audio_play_btn" tool_tip="Jestlər səsləri eşitmək üçün seçin" label="Jestlər səsləri aktivləşdir"/>
+			<slider label="Musiqi səviyyəsi" name="Music Volume"/>
+			<check_box label="Aktivləşdir" name="enable_music"/>
+			<slider label="Media" name="Media Volume"/>
+			<check_box label="Aktivləşdir" name="enable_media"/>
+			<slider label="Səsli söhbət" name="Voice Volume"/>
+			<check_box label="Aktivləşdir" name="enable_voice_check_volume"/>
+			<text name="auto_unmute_label" width="300">
+				Teleportdan sonra səsləri avtomatik olaraq aktivləşdir:
+			</text>
+			<check_box name="FSAutoUnmuteAmbient" label="Ətraf mühit" tool_tip="Teleportdan sonra ətraf mühit səslərini avtomatik olaraq aktivləşdirin (varsayılan olaraq söndürülüb)" width="95"/>
+			<check_box name="FSAutoUnmuteSounds" label="Səs effektləri" tool_tip="Teleportdan sonra səs effektlərini avtomatik olaraq aktivləşdirin (varsayılan olaraq söndürülüb)" width="95"/>
+			<text name="friends_logon_sounds_label">
+				Dostlar daxil olanda/çıxanda səs çalın:
+			</text>
+			<check_box label="Daxil oldu" name="friends_notify_online_sound"/>
+			<check_box label="Çıxdı" name="friends_notify_offline_sound"/>
+			<text name="money_change_threshold_label" tool_tip="Balansınız dəyişdikdə səs çalın">
+				L$ dəyişiklik həddi:
+			</text>
+			<panel height="100" name="output_device_settings_panel">
+				<panel.string name="output_default_text">
+					Susmaya görə
+				</panel.string>
+				<panel.string name="output_no_device">
+					Əlçatan cihaz yoxdur
+				</panel.string>
+				<panel.string name="output_name_no_device">
+					Adsız cihaz
+				</panel.string>
+				<panel.string name="output_device_unavailable">
+					Cihaz əlçatan deyil
+				</panel.string>
+				<text name="output_label" width="120">
+					Səs çıxışı cihazı:
+				</text>
+			</panel>
+		</panel>
+		<panel name="Media Media Panel" label="Media">
+			<text name="media_autoplay_label" width="130">
+Avtomatik oxutma
+			</text>
+			<combo_box name="media_auto_play_combo" width="100">
+				<item label="Qadağan edilir" name="autoplay_disabled"/>
+				<item label="İcazə verilir" name="autoplay_enabled"/>
+				<!--<item label="Sorğu" name="autoplay_ask" />-->
+			</combo_box>
+			<check_box name="media_allowscript_btn" tool_tip="Bu seçim medya axınlarını idarə etmək üçün skriptlərin icazə verib / qadağan edir" label="Skriptlərə medyanın oxutmasına icazə ver"/>
+			<check_box label="Başqa avatara bağlı medyanın oxutmasını icazə ver" name="media_show_on_others_btn" tool_tip="Başqa avatara bağlı medyanın oxutmasını icazə ver"/>
+			<check_box name="media_filter" tool_tip="Belirli bir hostdan gələn media oynanıb oynanmayacağını seçmək üçün bunu seçin" label="Media filtri aktivləşdir (təhlükəsizlik artır)"/>
+			<button label="Media saytlarını idarə et" name="edit_media_lists_button"/>
+			<text name="Media Rolloff">
+				Səs mənbəsinin eşitilməsindən azaltma məsafəsi:
+			</text>
+			<slider label="Minimum" name="MediaRollOffMin" tool_tip="Səs mənbəsinin eşitilməsindən azaltma minimum məsafəsi"/>
+			<text name="MinMeters">
+				metr
+			</text>
+			<slider label="Maksimum" name="MediaRollOffMax" tool_tip="Səs mənbəsinin eşitilməsindən azaltma maksimum məsafəsi."/>
+			<text name="MaxMeters">
+				metr
+			</text>
+		</panel>
+		<panel label="Musiqi" name="Media Music Panel">
+			<check_box label="Musiqinin avtomatik çalınmasına icazə ver" name="audio_auto_play_btn" tool_tip="Səs axınını avtomatik olaraq başlatmaq üçün seçin."/>
+			<check_box name="FSFadeAudioStream" tool_tip="Sahədə musiqinin səsinin yumşaq artması və azalması aktivləşdirilsin" label="Səsin yumşaq artması / azalması aktivləşdir:"/>
+			<slider label="Artma:" name="FSAudioMusicFadeIn" tool_tip="Sahədə musiqinin səsinin yumşaq artma vaxtı." width="270" label_width="70"/>
+			<text name="FSAudioMusicFadeInSeconds" left_delta="275">
+				saniyə
+			</text>
+			<slider label="Azalma:" name="FSAudioMusicFadeOut" tool_tip="Sahədə musiqinin səsinin yumşaq azalma vaxtı." width="270" label_width="70"/>
+			<text name="FSAudioMusicFadeOutSeconds" left_delta="275">
+				saniyə
+			</text>
+			<text name="show_stream_metadata_text" >
+				Axın başlığı bildirişlərini göstərin:
+			</text>
+			<radio_group name="show_stream_metadata">
+				<radio_item label="Söndür" width="110" name="radio_off" />
+				<radio_item label="Açılan pəncərə" width="150" name="radio_toasts" />
+				<radio_item label="Ümumi söhbət" name="radio_chat" />
+			</radio_group>
+			<check_box name="StreamMetadataAnnounceToChat" width="200" label="Başlıqları kanala göndər:"/>
+		</panel>
+		<panel label="Səs seçimləri" name="Media Voice tab">
+			<check_box label="Səsi aktivləşdir" name="enable_voice_check" width="155"/>
+			<button tool_tip="Səsi yenilə" name="reset_voice_button"/>
+			<check_box label="Eyni anda birdən çox klientdə səs istifadəsinə icazə verin" name="VoiceMultiInstance" />
+			<radio_group name="ear_location">
+				<radio_item label="Kameraların mövqeyindən səsi eşitmək" name="0"/>
+				<radio_item label="Avatarın mövqeyindən səsi eşitmək" name="1"/>
+				<radio_item label="Bütün səsləri yüksək səslə eşitmək (yalnız Open Sim)" name="2"/>
+			</radio_group>
+			<check_box label="Müsahibə zamanı avatarın dudaklarının hərəkət etməsini tələb et" name="enable_lip_sync"/>
+			<check_box label="Avatarların üzərində səs göstəricisi göstər" tool_tip="Avatarların üzərində səs göstəricisi (ağ nöqtə) göstərir" name="FSShowVoiceVisualizer"/>
+			<check_box label="Mənim avatarımın üzərində səs göstəricisini göstər" name="FSShowMyOwnVoiceVisualizer"/>
+			<check_box label="Nöqtəni səs göstəricisinin bir hissəsi kimi göstər" tool_tip="Bu seçilərsə, nöqtə səs göstəricisinin bir hissəsi kimi göstərilir. Seçilməzsə, yalnız səs dalgaları göstərilir." name="FSShowVoiceVisualizerWithDot"/>
+			<check_box label="Zənglər zamanı səs göstəricilərini göstər" tool_tip="Şəxsi və qrup zəngində səs göstəricisini göstərir" name="Show_Voice_Visualizers_In_Calls"/>
+			<check_box label="Söhbət pəncərələrində səs kanallarının vəziyyətini göstər" tool_tip="Söhbət pəncərələrində səs kanallarının vəziyyətini göstərir" name="FSShowConversationVoiceStateIndicator"/>
+			<check_box label="Bütün qrup səs zənglərini avtomatik olaraq rədd et" name="VoiceCallsRejectGroup"/>
+			<check_box label="Bütün xüsusi AdHoc səs zənglərini avtomatik olaraq rədd et" name="VoiceCallsRejectAdHoc"/>
+			<check_box label="Bütün P2P (avatarla avatar arasında) səs zənglərini avtomatik olaraq rədd et" name="VoiceCallsRejectP2P"/>
+			<check_box label="Panel alət çubuğundakı düyməyə basıldığında mikrofonu aç / bağla" name="push_to_talk_toggle_check" tool_tip="Mikrofon açıq / bağlı rejimində, düyməni bir dəfə basaraq mikrofonu açıb bağlaya bilərsiniz. Başqa halda, mikrofon yalnız düymə basıldıqda açılır."/>
+			<button label="Səs cihazı seçimləri" name="device_settings_btn"/>
+			<panel label="Cihaz seçimləri" name="device_settings_panel">
+				<panel.string name="default_text">
+					Susmaya görə
+				</panel.string>
+				<panel.string name="default system device">
+					Susmaya görə sistem cihazı
+				</panel.string>
+				<panel.string name="name_default_system_device">
+					Susmaya görə sistem cihazı
+				</panel.string>
+				<panel.string name="no device">
+					Cihaz yoxdur
+				</panel.string>
+				<panel.string name="name_no_device">
+					Cihaz yoxdur
+				</panel.string>
+				<text name="Input">
+					Giriş
+				</text>
+				<text name="Output">
+					Çıxış
+				</text>
+				<text name="Volume label" width="110">
+					Səsin dərəcəsini:
+				</text>
+				<slider_bar name="mic_volume_slider" tool_tip="Səsin dərəcəsini slider ilə dəyişin"/>
+				<text name="wait_text" width="150">
+					Xahiş edirik gözləyin
+				</text>
+			</panel>
+		</panel>
+		<panel label="İnterfeys 1" name="UI Sounds tab 1">
+			<text name="textFSExplanation_tab1">
+				Burada (səs UUID-lərini dəyişərək), interfeys səsini dəyişə, aktivləşdirə və ya deaktivləşdirə bilərsiniz.
+Susmaya görə dəyərə qayıtmaq üçün UUID yanındakı 'D' düyməsini basın.
+			</text>
+
+			<text tool_tip="Susmaya görə xəbərdarlıq səsi olan UUID." name="textFSSndAlert">
+				Bildiriş:
+			</text>
+			<button name="Prev_UISndAlert" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndAlert" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndAlert"/>
+
+			<text tool_tip="Yanlış düymə basılması zamanı olan UUID səsi." name="textFSBadKeystroke">
+				Yanlış düymə basılması:
+			</text>
+			<button name="Prev_UISndBadKeystroke" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndBadKeystroke" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndBadKeystroke"/>
+
+			<text tool_tip="Siçan düyməsinin basılması zamanı olan UUID səsi." name="textFSClick">
+				Siçan düyməsinin basılması:
+			</text>
+			<button name="Prev_UISndClick" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndClick" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndClick"/>
+
+			<text tool_tip="Siçan düyməsinin buraxılış zamanı olan UUID səsi" name="textFSClickRelease">
+				Siçan düyməsinin buraxılması:
+			</text>
+			<button name="Prev_UISndClickRelease" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndClickRelease" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndClickRelease"/>
+
+			<text tool_tip="Qadın avatarda zədə alınması zamanı olan UUID səsi" name="textFSHealthReductionF">
+				Qadın avatarın acısı:
+			</text>
+			<button name="Prev_UISndHealthReductionF" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndHealthReductionF" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndHealthReductionF"/>
+
+			<text tool_tip="Kişi avatarda zədə alınması zamanı olan UUID səsi." name="textFSHealthReductionM">
+				Kişi avatarın acısı:
+			</text>
+			<button name="Prev_UISndHealthReductionM" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndHealthReductionM" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndHealthReductionM"/>
+
+			<text tool_tip="Pul balansının azalması ilə oynanan UUID səsi." name="textFSMoneyChangeDown">
+				Pul balansının azalması:
+			</text>
+			<button name="Prev_UISndMoneyChangeDown" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndMoneyChangeDown" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndMoneyChangeDown"/>
+
+			<text tool_tip="Pul balansının artırılması ilə oynanan UUID səsi." name="textFSMoneyChangeUp">
+				Pul balansının artırılması:
+			</text>
+			<button name="Prev_UISndMoneyChangeUp" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndMoneyChangeUp" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndMoneyChangeUp"/>
+
+			<text tool_tip="Gələn şəxsi mesaj bildirişinin UUID səsi" name="textFSNewIncomingIMSession">
+				Gələn İM:
+			</text>
+			<button name="Prev_UISndNewIncomingIMSession" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndNewIncomingIMSession" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<combo_box name="PlayModeUISndNewIncomingIMSession">
+				<combo_box.item label="Yalnız yeni sessiyada oxudun" name="1"/>
+				<combo_box.item label="Hər yeni mesaja oxudun" name="2"/>
+				<combo_box.item label="Pəncərə seçilmədikdə oxut" name="3"/>
+				<combo_box.item label="Səsi oxutma" name="0"/>
+			</combo_box>
+
+			<text tool_tip="Qrupdan gələn mesajlarda səsləndirilən UUID səsi." name="textFSNewGroupIncomingIMSession">
+				Qrupdan gələn mesajlar:
+			</text>
+			<button name="Prev_UISndNewIncomingGroupIMSession" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndNewIncomingGroupIMSession" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<combo_box name="PlayModeUISndNewIncomingGroupIMSession">
+				<combo_box.item label="Yalnız yeni sessiyada oxudun" name="1"/>
+				<combo_box.item label="Hər yeni mesaja oxudun" name="2"/>
+				<combo_box.item label="Pəncərə seçilmədikdə oxut" name="3"/>
+				<combo_box.item label="Səsi oxutma" name="0"/>
+			</combo_box>
+
+			<text tool_tip="Konfransdan gələn mesajlarda səsləndirilən UUID səsi." name="textFSNewConferenceIncomingIMSession">
+				Konfransdan gələn mesajlar:
+			</text>
+			<button name="Prev_UISndNewIncomingConfIMSession" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndNewIncomingConfIMSession" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<combo_box name="PlayModeUISndNewIncomingConfIMSession">
+				<combo_box.item label="Yalnız yeni sessiyada oxudun" name="1"/>
+				<combo_box.item label="Hər yeni mesaja oxudun" name="2"/>
+				<combo_box.item label="Pəncərə seçilmədikdə oxut" name="3"/>
+				<combo_box.item label="Səsi oxutma" name="0"/>
+			</combo_box>
+
+			<text tool_tip="Şəxsi söhbətə gələn mesajlarda səsləndirilən UUID səsi." name="textFSStartIM">
+				İM seansının başlanması:
+			</text>
+			<button name="Prev_UISndStartIM" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndStartIM" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndStartIM"/>
+
+			<text tool_tip="Obyektin yaradılması zamanı səsləndirilən UUID səsi." name="textFSObjectCreate">
+				Obyektin yaradılması:
+			</text>
+			<button name="Prev_UISndObjectCreate" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndObjectCreate" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndObjectCreate"/>
+
+			<text tool_tip="Obyektin silinməsi zamanı səsləndirilən UUID səsi." name="textFSObjectDelete">
+				Obyektin silinməsi:
+			</text>
+			<button name="Prev_UISndObjectDelete" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndObjectDelete" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndObjectDelete"/>
+
+			<text tool_tip="Obyektin meydana çıxması zamanı səsləndirilən UUID səsi (Rezz)" name="textFSObjectRezIn">
+				Obyektin meydana çıxması:
+			</text>
+			<button name="Prev_UISndObjectRezIn" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndObjectRezIn" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndObjectRezIn"/>
+
+			<text tool_tip="Obyektin yoxa çıxması zamanı səsləndirilən UUID səsi. (DeRezz)" name="textFSObjectRezOut">
+				Obyektin yoxa çıxması:
+			</text>
+			<button name="Prev_UISndObjectRezOut" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndObjectRezOut" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndObjectRezOut"/>
+
+			<text tool_tip="Şəkil çəkilən zaman səsləndirilən UUID səsi" name="textFSSnapshot">
+				Şəkil çək:
+			</text>
+			<button name="Prev_UISndSnapshot" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndSnapshot" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsin söndürülməsi" name="QuietSnapshotsToDiskCheckBox"/>
+
+			<text tool_tip="Teleportasiya zamanı UUID səsi" name="textFSTeleportOut">
+				Teleportasiya:
+			</text>
+			<button name="Prev_UISndTeleportOut" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndTeleportOut" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndTeleportOut"/>
+
+		</panel>
+		<panel label="İnteerfeys 2" name="UI Sounds tab 2">
+			<text name="textFSExplanation_tab2">
+				Burada (səs UUID-lərini dəyişərək), interfeys səsini dəyişə, aktivləşdirə və ya deaktivləşdirə bilərsiniz.
+Susmaya görə dəyərə qayıtmaq üçün UUID yanındakı 'D' düyməsini basın.
+			</text>
+
+			<text tool_tip="Dairəvi menyu açılan zaman UUID səsi (Pie Menu)." name="textFSPieMenuAppear">
+				Dairəvi menyu açılır:
+			</text>
+			<button name="Prev_UISndPieMenuAppear" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndPieMenuAppear" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndPieMenuAppear"/>
+
+			<text tool_tip="Dairəvi menyu bağlanılan zaman UUID səsi (Pie Menu)." name="textFSPieMenuHide">
+				Dairəvi menyu bağlanır:
+			</text>
+			<button name="Prev_UISndPieMenuHide" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndPieMenuHide" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndPieMenuHide"/>
+
+			<text tool_tip="Dairəvi menyu elementi seçildikdə UUID səsi, dəyər 1. (Pie Menu)." name="textFSPieMenuSliceHighlight0">
+				Dairəvi menyu, seçim 1:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight0" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndPieMenuSliceHighlight0" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndPieMenuSliceHighlight0"/>
+
+			<text tool_tip="Dairəvi menyu elementi seçildikdə UUID səsi, dəyər 2. (Pie Menu)." name="textFSPieMenuSliceHighlight1">
+				Dairəvi menyu, seçim 2:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight1" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndPieMenuSliceHighlight1" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndPieMenuSliceHighlight1"/>
+
+			<text tool_tip="Dairəvi menyu elementi seçildikdə UUID səsi, dəyər 3. (Pie Menu)." name="textFSPieMenuSliceHighlight2">
+				Dairəvi menyu, seçim 3:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight2" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndPieMenuSliceHighlight2" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndPieMenuSliceHighlight2"/>
+
+			<text tool_tip="Dairəvi menyu elementi seçildikdə UUID səsi, dəyər 4. (Pie Menu)." name="textFSPieMenuSliceHighlight3">
+				Dairəvi menyu, seçim 4:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight3" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndPieMenuSliceHighlight3" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndPieMenuSliceHighlight3"/>
+
+			<text tool_tip="Dairəvi menyu elementi seçildikdə UUID səsi, dəyər 5. (Pie Menu)." name="textFSPieMenuSliceHighlight4">
+				Dairəvi menyu, seçim 5:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight4" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndPieMenuSliceHighlight4" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndPieMenuSliceHighlight4"/>
+
+			<text tool_tip="Dairəvi menyu elementi seçildikdə UUID səsi, dəyər 6. (Pie Menu)." name="textFSPieMenuSliceHighlight5">
+				Dairəvi menyu, seçim 6:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight5" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndPieMenuSliceHighlight5" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndPieMenuSliceHighlight5"/>
+
+			<text tool_tip="Dairəvi menyu elementi seçildikdə UUID səsi, dəyər 7. (Pie Menu)." name="textFSPieMenuSliceHighlight6">
+				Dairəvi menyu, seçim 7:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight6" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndPieMenuSliceHighlight6" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndPieMenuSliceHighlight6"/>
+
+			<text tool_tip="Dairəvi menyu elementi seçildikdə UUID səsi, dəyər 8. (Pie Menu)." name="textFSPieMenuSliceHighlight7">
+				Dairəvi menyu, seçim 8:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight7" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndPieMenuSliceHighlight7" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndPieMenuSliceHighlight7"/>
+
+			<text tool_tip="Ümumi söhbətə mesaj yazılan zaman səsləndirilən UUID səsi." name="textFSTyping">
+				Mesaj yazılır:
+			</text>
+			<button name="Prev_UISndTyping" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndTyping" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="FSPlayTypingSoundCheckBox"/>
+
+			<text tool_tip="Pəncərə bağlandıqda səsləndirilən UUID səsi." name="textFSWindowClose">
+				Pəncərə bağlanır:
+			</text>
+			<button name="Prev_UISndWindowClose" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndWindowClose" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndWindowClose"/>
+
+			<text tool_tip="Pəncərə açıldıqda səsləndirilən UUID səsi." name="textFSWindowOpen">
+				Pəncərə açılır:
+			</text>
+			<button name="Prev_UISndWindowOpen" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndWindowOpen" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndWindowOpen"/>
+
+			<text tool_tip="Skript dialoqu açdıqda səsləndirilən UUID səsi." name="textFSScriptFloaterOpen">
+				Skript dialoqu:
+			</text>
+			<button name="Prev_UISndScriptFloaterOpen" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndScriptFloaterOpen" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndScriptFloaterOpen"/>
+
+			<text tool_tip="Dost daxil olduqda səsləndirilən UUID səsi." name="textFSFriendOnline">
+				Dost daxil olur:
+			</text>
+			<button name="Prev_UISndFriendOnline" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndFriendOnline" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndFriendOnline"/>
+
+			<text tool_tip="Dost çıxdıqda səsləndirilən UUID səsi." name="textFSFriendOffline">
+				Dost çıxır:
+			</text>
+			<button name="Prev_UISndFriendOffline" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndFriendOffline" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndFriendOffline"/>
+
+			<text tool_tip="Dostluq təklifi zamanı səsləndirilən UUID səsi.." name="textFSFriendshipOffer">
+				Dostluq təklifi:
+			</text>
+			<button name="Prev_UISndFriendshipOffer" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndFriendshipOffer" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndFriendshipOffer"/>
+
+			<text tool_tip="Teleport təklifi zamanı səsləndirilən UUID səsi." name="textFSTeleportOffer">
+				Teleport təklifi:
+			</text>
+			<button name="Prev_UISndTeleportOffer" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndTeleportOffer" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndTeleportOffer"/>
+
+		</panel>
+		<panel label="İnteerfeys 3" name="UI Sounds tab 3">
+			<text name="textFSExplanation_tab3">
+				Burada (səs UUID-lərini dəyişərək), interfeys səsini dəyişə, aktivləşdirə və ya deaktivləşdirə bilərsiniz.
+Susmaya görə dəyərə qayıtmaq üçün UUID yanındakı 'D' düyməsini basın.
+			</text>
+
+			<text tool_tip="Avadanlıq siyahısı təklif olunan zamanı səsləndirilən UUID səsi." name="textFSInventoryOffer">
+				Avadanlıq siyahısı təklifi:
+			</text>
+			<button name="Prev_UISndInventoryOffer" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndInventoryOffer" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndInventoryOffer"/>
+
+			<text tool_tip="Gələn səsli zəng zamanı səsləndirilən UUID səsi." name="textFSIncomingVoiceCall">
+				Səsli zəng:
+			</text>
+			<button name="Prev_UISndIncomingVoiceCall" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndIncomingVoiceCall" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndIncomingVoiceCall"/>
+
+			<text tool_tip="Qrupa dəvət zamanı səsləndirilən UUID səsi." name="textFSGroupInvitation">
+				Qrupa dəvət:
+			</text>
+			<button name="Prev_UISndGroupInvitation" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndGroupInvitation" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndGroupInvitation"/>
+
+			<text tool_tip="Qrup bilidirişi zamanı səsləndirilən UUID səsi." name="textFSGroupNotice">
+				Qrup bildirişi:
+			</text>
+			<button name="Prev_UISndGroupNotice" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndGroupNotice" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndGroupNotice"/>
+
+			<text tool_tip="Yeni macəra zamanı səsləndirilən UUID səsi." name="textFSQuestionExperience">
+				Yeni macəra:
+			</text>
+			<button name="Prev_UISndQuestionExperience" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndQuestionExperience" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndQuestionExperience"/>
+
+			<text tool_tip="Yalnış əməliyyatlar zamanı səsləndirilən UUID səsi." name="textFSInvalidOp">
+				Yalnış əməliyyatlar:
+			</text>
+			<button name="Prev_UISndInvalidOp" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndInvalidOp" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndInvalidOp"/>
+
+			<text tool_tip="Hərəkət bloklanması zamanı səsləndirilən UUID səsi." name="textFSMovelockToggle">
+				Hərəkət bloklanması:
+			</text>
+			<button name="Prev_UISndMovelockToggle" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndMovelockToggle" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndMovelockToggle"/>
+
+			<text tool_tip="Gəzinti zamanı addımların səsləndirilən UUID səsi." name="textFSFootsteps">
+				Susmaya görə addımlar:
+			</text>
+			<button name="Prev_UISndFootsteps" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndFootsteps" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndFootsteps"/>
+
+			<text tool_tip="İzləyici mayak yaxın olduğu zaman səsləndirilən UUID səsi. Avatar təyinat yerinə yaxın olduqda artır." name="textFSTrackerBeacon">
+				İzləyici mayak:
+			</text>
+			<button name="Prev_UISndTrackerBeacon" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndTrackerBeacon" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndTrackerBeacon"/>
+
+			<text tool_tip="Region yenidən başlayan zaman səsləndirilən UUID səsi." name="textFSRestart">
+				Region yenidən başlayır:
+			</text>
+			<button name="Prev_UISndRestart" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndRestart" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndRestart"/>
+
+			<text tool_tip="Region yenidən başlayan zaman səsləndirilən UUID səsi (OpenSim)." name="textFSRestartOpenSim">
+				Yenidən başlatma (OpenSim):
+			</text>
+			<button name="Prev_UISndRestartOpenSim" tool_tip="Bu səsi oxut."/>
+			<button name="Def_UISndRestartOpenSim" tool_tip="Susmaya görə olan UUID-yə sıfırla."/>
+			<check_box label="Səsi yandır" name="PlayModeUISndRestartOpenSim"/>
+
+		</panel>
+	</tab_container>
+</panel>

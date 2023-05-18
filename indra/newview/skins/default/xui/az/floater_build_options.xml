@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="build options floater" title="Şəbəkə seçimləri">
+	<spinner label="Şəbəkə ölçüləri (metr)" name="GridResolution"/>
+	<spinner label="Şəbəkə hündürlüyü (metr)" name="GridDrawSize"/>
+	<spinner label="Onluq nöqtəsi" name="DecimalPrecision"/>
+	<spinner label="Bucaq (dərəcə)" name="RotationStep"/>
+	<check_box label="Alt birliklərə bağlı ol" name="GridSubUnit"/>
+	<check_box label="Yan üçün görüntü" name="GridCrossSection"/>
+	<text name="grid_opacity_label" tool_tip="Şəbəkənin şəffaflığı">
+		Şəffaflıq:
+	</text>
+</floater>

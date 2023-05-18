@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Buludlar" name="panel_settings_sky_clouds">
+	<layout_stack name="main_ls">
+		<layout_panel name="left_lp">
+			<text name="cloud_coverage_label">Örtük:</text>
+			<text name="cloud_scale_label">Ölçü:</text>
+			<text name="cloud_variance_label">Dispersiya:</text>
+			<text name="cloud_scroll_label">Hərəkət:</text>
+			<text name="cloud_image_label">Şəkil:</text>
+			<text name="cloud_color_label">Rəng:</text>
+		</layout_panel>
+		<layout_panel name="right_lp">
+			<text name="cloud_density_label">Sıxlıq:</text>
+			<text name="cloud_detail_label">Detallaşdırma:</text>
+		</layout_panel>
+	</layout_stack>
+</panel>

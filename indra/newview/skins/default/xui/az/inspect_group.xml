@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--
+  Not can_close / no title to avoid window chrome
+  Single instance - only have one at a time, recycle it each spawn
+-->
+<floater name="inspect_group">
+	<string name="PrivateGroup">
+		Şəxsi qrup
+	</string>
+	<string name="FreeToJoin">
+		Pulsuz üzvlük
+	</string>
+	<string name="CostToJoin">
+		[AMOUNT]L$ üzvlük üçün
+	</string>
+	<string name="YouAreMember">
+		Siz qrupda iştiraksiniz
+	</string>
+	<button label="Qoşul" name="join_btn"/>
+	<button label="Çıx" name="leave_btn"/>
+	<button label="Profilə bax" name="view_profile_btn"/>
+</floater>

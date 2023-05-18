@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_shape_panel">
+	<string name="meters">
+		Metr
+	</string>
+	<string name="feet">
+		Fut
+	</string>
+	<string name="height">
+		Boy:
+	</string>
+	<panel label="Geyim" name="accordion_panel">
+		<accordion name="wearable_accordion">
+			<accordion_tab name="shape_body_tab" title="Bədən"/>
+			<accordion_tab name="shape_head_tab" title="Baş"/>
+			<accordion_tab name="shape_eyes_tab" title="Gözlər"/>
+			<accordion_tab name="shape_ears_tab" title="Qulaqlar"/>
+			<accordion_tab name="shape_nose_tab" title="Burun"/>
+			<accordion_tab name="shape_mouth_tab" title="Ağız"/>
+			<accordion_tab name="shape_chin_tab" title="Çənə"/>
+			<accordion_tab name="shape_torso_tab" title="Sinə"/>
+			<accordion_tab name="shape_legs_tab" title="Ayaqlar"/>
+		</accordion>
+	</panel>
+</panel>

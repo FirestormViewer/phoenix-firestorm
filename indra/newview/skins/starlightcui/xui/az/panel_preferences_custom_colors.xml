@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Fərdi rənglər" name="custom_colors_panel">
+	<text name="custom_colors_text">
+		Fərdi UI Rəngləri:
+	</text>
+	<text name="text_boxc1">
+		Düymələr, sürüşdürmə çubuqları və s.
+	</text>
+	<text name="text_boxc3">
+		Vurğulanan mətn
+	</text>
+	<text name="text_boxc4">
+		Düymə - normal
+	</text>
+	<text name="text_boxc6">
+		Düymə - seçilib
+	</text>
+	<text name="text_boxbn">
+		Panel fonu - normal
+	</text>
+	<text name="text_boxbn_restart">
+		(yenidən başlatma tələb olunur)
+	</text>
+	<text name="text_boxbl">
+		Panel fonu - daha yüngül
+	</text>
+	<text name="text_boxb1_restart">
+		(yenidən başlatma tələb olunur)
+	</text>
+	<text name="general_colors_text">
+		Ümumi UI Rəngləri (həmçinin Rənglərdə təyin olunur):
+	</text>
+	<text name="CustomScriptDialogBgLabel">
+		Skript dialoq fonu
+	</text>
+	<text name="CustomScriptDialogFgLabel">
+		Skript dialoq mətni
+	</text>
+</panel>

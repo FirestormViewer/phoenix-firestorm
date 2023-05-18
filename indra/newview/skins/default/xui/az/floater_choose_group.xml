@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="groups" title="Qruplar">
+	<text name="groupdesc">
+		Qrup seçin:
+	</text>
+	<button label="Ləğv et" label_selected="Ləğv et" name="Cancel"/>
+</floater>

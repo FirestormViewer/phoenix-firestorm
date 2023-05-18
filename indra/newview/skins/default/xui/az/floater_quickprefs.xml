@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="quickprefs" title="Cəld seçimlər">
+<panel name="quickprefs">
+  <layout_stack name="wl_options_stack">
+    <layout_panel name="wl_options_panel">
+      <text name="HoverHeightLabel" tool_tip="Formanı dəyişmədən avatarın hündürlüyüni dəyişdirməyə imkan verir." width="100">
+        Sürüşdürmə hün.:
+      </text>
+
+<!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
+      <text name="Maximum bandwidth" tool_tip="Kbps (Kilobit saniyədə) istifadə edərək şəbəkə istifadəsi üçün maksimum kanal genişliyini qurur." width="100">
+        Maksimum Şəbəkə Sürəti:
+      </text>
+
+      <text name="Maximum complexity" tool_tip="Görünüşü çətin olan avatarın siluet kimi görünməsinin nöqtəsini nəzarət edir." width="100">
+        Maksimum Çətinlik:
+      </text>
+      <slider text_width="40" name="IndirectMaxComplexity" right="-50" />
+      <text name="IndirectMaxComplexityText" width="50">
+        Yoxdur.
+      </text>
+ <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
+      <check_box label="Ətraf mühiti istifadə et" name="UseRegionWindlight"/>
+      <text name="WL Sky" tool_tip="Ətraf mühiti üçün üstünlük verilən səma seçimləri">
+        Səma:
+      </text>
+
+      <text name="WL Water" tool_tip="Ətraf mühiti üçün üstünlük verilən su seçimləri">
+        Su:
+      </text>
+
+      <text name="Day Cycle" tool_tip="Ətraf mühiti üçün üstünlük verilən gün dövrü seçimləri">
+        Gün Dövrü:
+      </text>
+      <button name="btn_personal_lighting" label="Şəxsi İşıqlandırma..."/>
+      <button name="ResetToRegionDefault" tool_tip="Ətraf Mühiti üçün təyin edilmiş seçimləri Sıfırla"/>
+
+      <!-- <FS:Zi> floater titlebar button to edit dynamic quickprefs -->
+      <button  name="button_edit" tool_tip="Dinamik Sürətli Tənzimləmələr Konfiqurasiyası"/>
+      <!--</FS:Zi>-->
+
+    </layout_panel>
+  </layout_stack>
+</panel>
+
+<!-- <FS:Zi> Dynamic quick prefs: edit overlay -->
+<panel  name="edit_overlay_panel">
+  <button name="move_up_button" tool_tip="Seçilmiş tənzimləməni bir pozisiya yuxarıya qaldırın"/>
+  <button name="add_new_button" tool_tip="Yeni cəld seçim tənzimləməsini əlavə edin"/>
+  <line_editor name="label_edit" tool_tip="İdarə etmək üçün qısayol daxil edin" label="İdarə Qısayolu:"/>
+  <button name="move_down_button" tool_tip="Seçilmiş tənzimləməni bir pozisiya aşağıya düşürdün"/>
+
+  <combo_box name="control_name_combo" tool_tip="Depurasiya parametrlər siyahısından idarə elementini seçin">
+    <combo_box.item label="=== Seç ===" name="control_name_list_header"/>
+  </combo_box>
+  <text name="control_type_label">
+    Növ:
+  </text>
+
+  <combo_box name="control_type_combo_box" tool_tip="Bu parametrlə üçün istifadə edəcəyiniz istifadəçi interfeysi idarə etmə növünü seçin">
+  <!-- <combo_item>Foo</combo_item> əlavə etmək olmaz, çalışmır -->
+    <combo_box.item label="Quş" name="Checkbox" />
+    <combo_box.item label="Mətn" name="Text" />
+    <combo_box.item label="Sayğac" name="Spinner" />
+    <combo_box.item label="Sürüşdür" name="Slider" />
+    <combo_box.item label="Keçirdici" name="Radio" />
+    <combo_box.item label="Rəng 3" name="Color 3"/>
+    <combo_box.item label="Rəng 4" name="Color 4"/>
+  </combo_box>
+
+  <!-- enable/disable done in code depending on the type of control chosen -->
+  <check_box name="control_integer_checkbox"
+  tool_tip="Əgər sizin parametr tam bir dəyərdir, yəni sadəcə tam rəqəmlərdən ibarətdirsə, bu işarəni aktivləşdirin"
+  label="Tam"/>
+
+  <!-- enable/disable additionally done in code depending on the type of control chosen -->
+  <spinner name="control_min_edit" tool_tip="Seçə biləcəyiniz minimal dəyər" label=" Min:"/>
+  <spinner name="control_max_edit" tool_tip="Seçə biləcəyiniz maksimal dəyər" label="Maks:"/>
+  <spinner name="control_increment_edit" tool_tip="Sayğacda yuxarı / aşağı oxu və ya sürücü düymələrindən istifadə etdikdə dəyəriniz üçün artım"
+  label="Addım:" label_width="32" width="81" />
+  <button name="Restore_Btn" tool_tip="Susmaya görə olan seçimləri bərpa edin" label="Sıfırla"/>
+  <!-- reverse the image names here beause we have a toggle ON button -->
+  <button name="button_close" tool_tip="Redaktə tətbiqetmə pəncərəsini bağlayın"/>
+</panel>
+
+</floater>

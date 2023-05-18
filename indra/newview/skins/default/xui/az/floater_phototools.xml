@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="phototools" title="Şəkil alətləri">
+	<tab_container name="tabs">
+		<panel name="EnvironmentTab" label="Ətr.mühit">
+			<panel name="PT_WL_Settings">
+				<text name="T_WL_Settings">
+					Ətraf mühit seçimləri
+				</text>
+			</panel>
+
+			<panel name="P_WL_Settings">
+				<check_box name="WindLightUseAtmosShaders" label="Atmosfer şeyderləri"
+				 tool_tip="Bu sizə Qabaqcıl Mühitin (Atmosfer şeyderləri) tam funksionallığından istifadə etməyə imkan verəcək."/>
+			</panel>
+
+			<panel name="P_WL_Sky_Water">
+				<text name="WL Sky" tool_tip="Mühitiniz üçün öncədən təyin edilmiş səma.">
+					Səma
+				</text>
+				<text name="WL Water" tool_tip="Mühitiniz üçün öncədən təyin edilmiş su.">
+					Su
+				</text>
+				<text name="Day Cycle" tool_tip="Mühitiniz üçün öncədən təyin edilmiş gün dövrü.">
+					Gün dövrü
+				</text>
+				<button name="btn_personal_lighting" label="Şəxsi işıqlandırma..."/>
+				<button name="ResetToRegionDefault" tool_tip="Seçimlərin region standartlarına sıfırlanması."/>
+				<button label="Buludları dayandır" name="PauseClouds" tool_tip="Buludların animasiyasını dayandırır"/>
+			</panel>
+
+			<panel name="P_Q_Windlights">
+				<text name="T_Q_Windlights">
+					Cəld tənzimləmə
+				</text>
+				<button name="Sunrise" label="Sübh"/>
+				<button name="Noon" label="Günorta"/>
+				<button name="Sunset" label="Gün batımı"/>
+				<button name="Midnight" label="Gecə yarısı"/>
+				<button name="Revert to Region Default" label="Region vaxtı"/>
+			</panel>
+
+			<panel name="P_WL_Presets">
+				<text name="T_WL_Presets" tool_tip="Yeni ilkin quraşdırma yaratmaq və ya mövcud olanı dəyişdirmək üçün aşağıdakı elementə basın.">
+					Öntəyinlər
+				</text>
+				<button name="new_sky_preset" label="Yeni səma"/>
+				<button name="edit_sky_preset" label="Səmanı dəyişdir"/>
+				<button name="new_water_preset" label="Yeni su"/>
+				<button name="edit_water_preset" label="Suyu dəyişdir"/>
+			</panel>
+
+			<panel name="P_W_Reflections">
+				<text name="T_W_Reflections">
+					Su əks etdirmə seçimləri
+				</text>
+			</panel>
+
+			<panel name="P_W_R_Types">
+				<text name="T_W_R_Types" tool_tip="Suda nəyin əks olunacağını müəyyənləşdirir.">
+					Növ
+				</text>
+				<combo_box name="Reflections">
+					<combo_box.item name="0" label="Minimal"/>
+					<combo_box.item name="1" label="Torpaq və ağaclar"/>
+					<combo_box.item name="2" label="Bütün statik obyektlər"/>
+					<combo_box.item name="3" label="Bütün avatarlar və obyektlər"/>
+					<combo_box.item name="4" label="Hamısı"/>
+				</combo_box>
+			</panel>
+
+			<panel name="P_R_Res">
+				<text name="T_R_Res" tool_tip="Su əks etdirmələrinin ayırdetmə qabiliyyətini/keyfiyyətini müəyyən edir. Çözünürlük seçimləri 'Çox Yaxşı' və ya daha yüksək olaraq təyin edilərsə, 'İşıq' pəncərəsində 'Qabaqcıl İşıqlandırma Modeli'ni də aktivləşdirməlisiniz.">
+					Çözünürlük
+				</text>
+				<combo_box name="ReflectionRescombo">
+					<combo_box.item name="0" label="Məqbul"/>
+					<combo_box.item name="1" label="Yaxşı"/>
+					<combo_box.item name="2" label="Çox Yaxşı - 'Qabaqcıl İşıqlandırma Modeli' aktivləşdirilməlidir (İşıq pəncərəsi)"/>
+					<combo_box.item name="3" label="Əla       - 'Qabaqcıl İşıqlandırma Modeli' aktivləşdirilməlidir (İşıq pəncərəsi)"/>
+					<combo_box.item name="4" label="Görkəmli   - 'Qabaqcıl İşıqlandırma Modeli' aktivləşdirilməlidir (İşıq pəncərəsi)"/>
+					<combo_box.item name="5" label="Canlı kimi - 'Qabaqcıl İşıqlandırma Modeli' aktivləşdirilməlidir (İşıq pəncərəsi)"/>
+				</combo_box>
+				<check_box name="TransparentWater" label="Şəffaf Su" tool_tip="Su şəffaflığını göstərir. Onu söndürmək, tətbiq olunan sadə tekstura ilə suyu qeyri-şəffaf edir."/>
+			</panel>
+		</panel>
+
+		<panel name="P_Lighting" label="İşıq">
+			<panel name="PT_Light_Shadows">
+				<text name="T_Light_Shadows">
+					İşıq və Kölgə Seçimləri
+				</text>
+			</panel>
+
+			<panel adı="P_L_S_Settings">
+				<check_box name="RenderDeferred" label="Qabaqcıl işıqlandırma modeli"
+				 tool_tip="Bu, Günəşdən və Aydan, eləcə də xarici işıqlardan kölgələr yaradacaq. Bu, həmçinin sizə Sahənin Dərinliyini və digər qrafik xüsusiyyətlərini aktiv etməyə imkan verəcək. Əsasən, siz dünyada ən yaxşı şeyləri görmək üçün bunu aktiv etməlisiniz. . Əgər bu funksiyanı aktiv edə bilmirsinizsə və ya onun təsirini görə bilmirsinizsə, əvvəlcə Ətraf mühit nişanında Atmosfer Kölgələrinin aktiv olduğundan əmin olun."/>
+				<check_box name="LocalLights" label="Bütün yerli işıqları aktivləşdir"
+				 tool_tip="Bu, dünyadakı bütün işıqları yandıracaq. Bu funksiyanı deaktiv etsəniz, Günəş/Aydan gələn işıq hələ də göstəriləcək. SİM kartın işıqlandırmasını çıxarmaq və yalnız Günəş işığından istifadə etmək istəyirsinizsə faydalıdır. /Ay."/>
+				<check_box name="Render Attached Lights"  label="Birləşdirilmiş İşıqları Aktivləşdir"
+				 tool_tip="Bu, avatar işıqları kimi istənilən işığı yandıracaq. Lazım olduqda işıqları söndürmək üçün faydalıdır."/>
+			</panel>
+
+			<panel name="P_Shadows">
+				<text name="T_Shadow_Types"
+				 tool_tip="Bu seçim yalnız işıqlardan alınan kölgələrə təsir edir, əks halda işıqlar yaxşı işləyəcək. Nöqtə işıqları (proyeksiya funksiyası olmayan işıqlar) həmişə kölgələr təəssüratını verəcək, lakin onları heç bir səthə atmayacaq. Qeyd etmək vacibdir ki, burada seçdiyiniz seçimdən asılı olmayaraq, proyeksiya işıqlarından proqnozlaşdırılan teksturalar hələ də aktiv olacaq.">
+					Kölgə növləri
+				</text>
+				<combo_box name="ShadowDetail">
+					<combo_box.item name="0" label="Heç nə"/>
+					<combo_box.item name="1" label="Günəş/Ay"/>
+					<combo_box.item name="2" label="Günəş/Ay + İşıqlandırıcılar"/>
+				</combo_box>
+			</panel>
+
+			<panel name="P_Shadow_Res">
+				<text name="T_Shadow_Res" tool_tip="Kölgə Keyfiyyəti: Bu, ÇOX vacib seçimdir. Kölgələrin keyfiyyətini müəyyən edir. Həm də kompüteri gücə salır. Şəkil çəkmirsinizsə, bu seçimi mümkün qədər yüksək buraxmaq yaxşı fikirdir. Şəkil çəkərkən, çəkiliş hazırlayarkən bu seçimi 1.0-a təyin edin. Çəkiliş etməyə hazır olduğunuz zaman slayderi yavaş-yavaş sağa köçürün. Bunu çevirərkən kadr sürətinizə diqqətli olmalısınız. Bunu ilk bir neçə dəfə edin ki, sisteminizlə ən yaxşı işləyən kölgə səviyyəsi ilə tanış olasınız. QEYD: Onun çox yüksək və ya çox sürətli qurulması proqramın çökməsinə səbəb olacaq.">
+					Keyfiyyət
+				</text>
+				<button name="Reset_Shadow_Res" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<!-- RenderShadowSplitExponent Y component -->
+				<text name="T_Shd_Clarity" tool_tip="Bu, çox vacib bir seçimdir. Bu, əslində Günəş/Ay kölgələrinin ümumilikdə nə qədər şəffaf olduğunu müəyyən edir. Aşağıdakı seçimlərdən əvvəl bu seçim təyin edilməlidir. Keyfiyyət dəyərini 1.0-dan yuxarı təyin etməklə, ən kəskin nəticə əldə olunana qədər Şəffaflıq dəyərini sürüşdürün. Qeyd edək ki, kölgələrin aydınlığı birbaşa kameranın və Günəş/Ayın mövqeyi ilə bağlıdır. Kameranı və ya Günəşi/Ayı hər dəfə hərəkət etdirdiyiniz zaman bu dəyəri yenidən tənzimləmək daha yaxşıdır. Həmçinin, bu dəyəri tənzimləməyi asanlaşdırmaq üçün əvvəlcə 'Şəffaflıq'ı 0.0-a təyin etmək faydalıdır.">
+					Şəffaflıq
+				</text>
+				<button name="Shd_Clarity_Reset" label="C" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Blur_Size" tool_tip="Rəqəm nə qədər yüksəkdirsə, kölgənin kənarları daha yumşaq olur. Ən kəskin kölgələr üçün 0-a təyin edin. Bu seçim birbaşa onun altındakı seçim ilə bağlıdır. Bu, kölgə bulanıqlığının ümumi mümkün miqdarını təyin etməyə imkan verir. 4.00-a təyin edilərsə, ətraf mühitin tıxanmasından asılı olmayaraq kölgənin bulanıqlığını tənzimləmək üçün kölgələrin yumşaqlığı funksiyasından istifadə edə bilərsiniz. DİQQƏT: Bu seçim üçün Ambient Occlusion aktivləşdirilməlidir." >
+					Bulanıqlıq
+				</text>
+				<button name="Blur_Reset" label="C" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<!-- RenderShadowGaussian X component -->
+				<text name="T_Shd_Soften" tool_tip="Günəş/Ay kölgələrinin yumşaldıcı təsirinə nəzarət edir. Xüsusi ehtiyaclarınız üçün bu dəyəri təyin etməyin asan yollarından biri əvvəlcə yuxarıdakı 'Bulanıqlığı' təxminən 3.0-a təyin etməkdir. Kaydırıcı daha sonra AO-nu zövqünüzə görə yumşaltmalıdır. Qeyd edək ki, 0.0 dəyəri bütün günəş/ay kölgələrini effektiv şəkildə söndürəcək. Həmçinin, o, proyektor işıqlarının yaratdığı kölgələrə təsir etmir.">
+					Yumuşaqlıq
+				</text>
+				<button name="Shd_Soften_Reset" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Blur_Dist" tool_tip="Kölgələrin kameraya nisbətən bulanıqlaşmağa başlayacağı nöqtəni təyin edir. Dəyər nə qədər aşağı olarsa, kölgənin bulanıqlıq nöqtəsi bir o qədər yaxın olacaq. XƏBƏRDARLIQ: bu seçim üçün 'Ətraf mühitin tıxanması'nı aktivləşdirməlisiniz.." >
+					Məsafə
+				</text>
+				<button name="Blur_Dist_Reset" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_FOV_Cutoff" tool_tip="Ekranın orto və perspektiv proyeksiyası arasında keçid etdiyi FOV kəsimini müəyyən edir. Əgər 'sıçrayan' kölgələr əldə edirsinizsə, təkmilləşdirmək üçün bu parametri tənzimləməyə çalışın. Həmçinin RenderShadowSplitExponent sazlamasını düzəltmək üçün XYZ dəyərlərini tənzimləmək ÇOX faydalı ola bilər.">
+					Kəsmək
+				</text>
+				<button name="FOV_Cutoff_Reset" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Shd_Bias">
+					Sürüşdürmə
+				</text>
+				<button name="Shd_Bias_Reset" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+			</panel>
+
+			<panel name="P_Ambient_Occlusion">
+				<text name="T_Ambient_Occlusion">
+					Ətraf Mühitin Tıxanması Seçimləri
+				</text>
+			</panel>
+
+			<panel name="P_Amb_Occ_Settings">
+				<check_box name="UseSSAO" label="Ətraf mühitin tıxanması (qavrayış dərinliyi)" tool_tip="Environment Occlusion bütün obyektlərə kölgəlik əlavə edir. Bu, aşağıdakı Effekt və Yumşaldıcı seçimlərindən istifadə edərkən ən effektivdir. Bu, çəkilişlərinizə yüksək səviyyəli realizm əlavə edə bilər. Şəkillər 2048 piksel və ya daha yüksək qətnamə ilə çəkildikdə bu xüsusilə doğrudur."/>
+			</panel>
+
+			<panel name="P_Scale">
+				<text name="T_Scale" tool_tip="Nümunə sahəsinə nəzarət edir; daha böyük sahələr daha dəqiqdir. Bu dəyərləri yüksək təyin etmək və sonra təsirini yumşaltmaq üçün kölgə bulanıqlığı əlavə etmək faydalı ola bilər.">
+					Miqyas
+				</text>
+				<button name="Reset_Scale" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Max_Scale" tool_tip="Qrafik kartın keşinin buraxılmaması və nəticədə ağır performans yükünün qarşısını almaq üçün nümunə götürmək üçün maksimum ekran radiusuna nəzarət edir. Bu dəyərləri yüksək təyin etmək və sonra təsirini yumşaltmaq üçün kölgə bulanıqlığı əlavə etmək faydalı ola bilər.">
+					Maksimal
+				</text>
+				<button name="Reset_Max_Scale" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Scaling_Factor" tool_tip="Effekt üçün miqyas amili (daha qaranlıq). Bu dəyərləri yüksək təyin etmək və sonra təsirini yumşaltmaq üçün bir az kölgə bulanıqlığı əlavə etmək faydalı ola bilər.">
+					Vurucu
+				</text>
+				<button name="Reset_Scaling_Factor" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<!-- RenderSSAOEffect X component -->
+				<text name="T_Effect" tool_tip="Ətraf Mühitin Okluzyonunun ümumi qaralma təsirinə nəzarət edir. Varsayılan 0.8 dəyəri demək olar ki, görünməz bir effekt verir. 0.0 və daha aşağı dəyərlər daha real nəticələr verir. Nəzərə alın ki, Ətraf Mühitin Tıxanması səs-küylü effekt yaradır və bu, Yumşaldıcı idarəetmə elementlərindən istifadə etməklə azaldıla bilər. Həmçinin, standart şəbəkə avatar avatar həndəsəsinin keyfiyyətsizliyi səbəbindən yüksək effekt dəyərləri ilə daha az cəlbedici görünə bilər. Qeyd edək ki, kaydırıcıda təyin edə biləcəyiniz ən kiçik dəyər 0-dır, sayğacda isə -10000-ə qədər mənfi dəyərlər daxil edə bilərsiniz.">
+					Effekt
+				</text>
+				<button name="Reset_Effect" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<!-- RenderShadowGaussian Y component -->
+				<text name="T_AO_Soften" tool_tip="Ətraf Mühitin Tıxanması effektinin yumşaldılmasına nəzarət edir. Xüsusi ehtiyaclarınız üçün bu dəyəri təyin etməyin asan bir yolu, əvvəlcə kölgələrin 'Bulanıqlığını' təxminən 4.0-dan yuxarı qurmaqdır. Sonra sürüşdürmə Ətraf Mühitin Okluzyonunu sizin zövqünüzə görə yumşaltmalıdır. Qeyd edək ki, 0.0 dəyəri ətraf mühit obyektlərinin göstərilməsini effektiv şəkildə aradan qaldıracaq.">
+					Yumuşaltma
+				</text>
+				<button name="Reset_AO_Soften" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+			</panel>
+		</panel>
+
+		<panel name="P_DoF_Glow" label="Kəsk./İşıq.">
+			<panel name="PT_DoF_Glow">
+				<text name="T_DoF">
+					Kəskinlik Dərinliyi Seçimləri
+				</text>
+			</panel>
+
+			<panel name="P_DoF_Settings">
+				<check_box name="UseDepthofField" label="Sahə dərinliyini aktivləşdirin (DoF)"
+				tool_tip="Bu, Sahənin Dərinliyini aktiv edəcək, bu, 'şəkildə məqbul dərəcədə kəskin görünən səhnədəki ən yaxın və ən uzaq obyektlər arasındakı məsafəni təyin edəcək' (Vikipediya). Əgər istifadə etmirsinizsə, onu söndürün və bu kadr sürətini sürətləndirəcək. Əgər bu funksiyanı yandıra bilmirsinizsə və ya onun effektini görmürsünüzsə, 'İşıqlar' pəncərəsində 'Qabaqcıl İşıqlandırma Modeli'ni yandırın." />
+				<check_box name="UseDoFUnderwater" label="Sualtı Sahənin Dərinliyini Aktivləşdir"
+				tool_tip="Ümumiyyətlə, sahənin dərinliyi hətta yuxarıda qeyd qutusu qoyulsa belə, su altında qeyri-aktiv edilir. Bu parametr bu məhdudiyyəti aradan qaldıracaq. Nəzərə alın ki, su altında olarkən onların üzərinə klikləməklə kameranı əl ilə istədiyiniz obyektlərə yönəltməlisiniz. " />
+				<check_box label="Diqqətləşdirmə Nöqtəsi Göstəricini izləyir" name="FSFocusPointFollowsPointer"
+				tool_tip="DoF diqqətləşdirmə siçan kursorunu izləyəcək, bu davranış uçan kameradan istifadə edərkən müşahidə olunanlara uyğundur. Sahənin Dərinliyi diqqətləşdirmə kilidi ilə istifadə edin"/>
+				<check_box name="MIC_Show_FOV" label="Ekranda Baxış Sahəsini (FOV) göstər"
+				tool_tip="Bu, sizə Kameranın FOV-unu göstərəcək. İzləyicinin içərisində siz real həyatda olduğu kimi obyektiv uzunluğunu dəyişə bilərsiniz. FOV dəyəri nə qədər kiçik olsa, kameranın obyektivi də bir o qədər uzun olar. 50 mm obyektiv 27,0 dərəcə FOV-ə malikdir. Bucağı tənzimləmək üçün Baxış Bucağı ilə obyektiv fokus uzunluğu (mm) arasındakı əlaqəni göstərən cədvəl üçün http://en.wikipedia.org/wiki/Angle_of_view baxmaq üçün aşağıdakı Böyütmə çubuğundan istifadə edin. !"/>
+			</panel>
+
+			<panel name="P_Zoom">
+				<text name="T_Zoom" width="85"
+				 tool_tip="Real mənada bu, yaxınlaşdırma funksiyasıdır. Bu, görünüş pəncərəsindəki baxış sahəsini dəyişəcək. Bu, Ctrl+0 və ya Ctrl+8 düymələrini basmaqla eynidir. QEYD. Əgər siz flycam-ı (3D SpacenNavigator) aktiv etmisinizsə, bu işləməyəcək..">
+					Yaxınlaşdırma
+				</text>
+				<slider_bar name="SB_Zoom" width="122"/>
+				<button name="Reset_Zoom" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_FOV" width="85"
+				 tool_tip="FOV: Bu, Kəskinlik Dərinliyi effekti üçün hansı FOV-u simulyasiya etmək istədiyinizi müəyyən edir. Bunu cari Baxış Bucağına təyin etmək yaxşıdır.">
+					Baxış bucağı
+				</text>
+				<slider_bar name="SB_FOV" width="122"/>
+				<button name="Reset_FOV" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_F_Number" tool_tip="Real həyatda bu, lens üçün diyaframı təyin edir və dəyər nə qədər aşağı olarsa, sahə dərinliyi bir o qədər qısa olar. Eyni şey SL üçün də keçərlidir.">
+					Diafraqma
+				</text>
+				<button name="Reset_F_Number" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Focal_Length" tool_tip="Diqqətləşdirmə Uzunluğu (mm): Bu, Diqqətləşdirmə Uzunluğunun/Obyektiv Uzunluğunun Kəskinlik Dərinliyinin təsirini simulyasiya etdiyini göstərir. Daha yüksək rəqəmlər daha dar kəskinlik dərinliyi verir.">
+					Diq.Məs.
+				</text>
+				<button name="Reset_Focal_Length" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Foc_Time" tool_tip="Diqqətləşdirmə vaxtı: Bir obyektdən diqqətləşdirmənin dəyişdirilməsi üçün lazım olan vaxtı saniyələrlə təyin edir.">
+					Diq.vaxtı
+				</text>
+				<button name="Reset_Foc_Time" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_CoC" tool_tip="Bulanıqlıq dairəsi: Bu, ÇOX ƏHƏMİYYƏTLİ QURULUMDUR. Bulanıqlığın gücünü özü müəyyən edir. O, kəskinlik dərinliyini dəyişmir, ondan kənarda olan obyektlərin nə qədər bulanıq olduğunu tənzimləyir. Mətn sahəsində maraqlı effektlər üçün mənfi dəyərlərə də daxil ola bilərsiniz.">
+					Bulanıqlıq
+				</text>
+				<button name="Reset_CoC" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Resolution" tool_tip="Çözünürlük: Bu, Kəskinlik Dərinliyi effektinin keyfiyyətini müəyyən edir. Qeyri-fotoqrafiya üçün '.25' istifadə olunur. Şəkil çəkmək üçün '.50' və ya '.70' çox gözəldir. Yüksək keyfiyyətli çəkiliş üçün 1.00 ən yaxşısıdır '. Yüksək dəyərlər FPS-nizi yavaşlatacaq! Mətn sahəsində maraqlı effektlər üçün mənfi dəyərlərə də daxil ola bilərsiniz.">
+					Çözünürlük
+				</text>
+				<button name="Reset_Resolution" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+			</panel>
+
+			<panel name="P_Glow_Settings">
+				<text name="T_Glow_Settings">
+					Parıltı Seçimləri
+				</text>
+			</panel>
+
+			<panel name="P_Glow_Quality">
+				<text name="T_Glow_Quality" tool_tip="Bu, parıltı effektinin keyfiyyətini təyin edəcək, nə qədər yüksək olsa, bir o qədər yaxşıdır. 8 və 10 arasında kiçik vizual fərq.">
+					Keyfiyyət
+				</text>
+				<button name="Reset_Glow_Quality" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+			</panel>
+
+			<panel name="P_Glow_Iterations">
+				<text name="T_Glow_Iterations" tool_tip="Parıltı təkrarlarının sayı (daha yüksək = daha geniş və hamar və bir qədər yavaş).">
+					Təkrarlar
+				</text>
+				<button name="Reset_Glow_Iterations" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Glow_Strength" tool_tip="Əlavə parıltı gücü. Bu təsir çox aşağı dəyərlər tələb edir. Kiçikdən başlayın!">
+					Güc
+				</text>
+				<button name="Reset_Glow_Strength" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Luminance" tool_tip="Avtomatik parıldamaq üçün kifayət qədər parlaq olan obyekti görmək üçün tələb olunan minimum parlaqlıq intensivliyi.">
+					Parlaqlıq
+				</text>
+				<button name="Reset_Luminance" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Warmth" tool_tip="İstifadə etmək üçün yaranan istilik miqdarı (parlaqlıqla müqayisədə). 0 = işıq, 1,0 = istilik. ÇOX KİÇİYİN TƏSİRİ YOXDUR!">
+					İstilik
+				</text>
+				<button name="Reset_Warmth" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Glow_Width" tool_tip="Parıltı modelinin ölçüsü. Daha yüksək = daha geniş və daha yumşaq parıltı, lakin daha pikselli olur.">
+					Genişlik
+				</text>
+				<button name="Reset_Glow_Width" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Alpha" tool_tip="Əsasən, parıltı nə qədər parlaq ola bilər.">
+					Alfa
+				</text>
+				<button name="Reset_Alpha" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+			</panel>
+		</panel>
+
+		<panel name="P_General" label="Üm.">
+			<panel name="PT_General">
+				<text name="T_General">
+					Ümumi ekran seçimləri
+				</text>
+			</panel>
+
+			<panel name="P_General_Settings">
+				<text name="T_Draw_Distance" tool_tip="Bu, ən böyük çəkiliş məsafəsini təyin edir. Yüksək dəyərlər FPS-nizi yavaşlatacaq!">
+					Çəkiliş
+				</text>
+				<button name="Reset_Draw_Distance" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Avi_Count" tool_tip="Səhnədə çəkiləcək maksimum digər avatarların sayı. Çoxlu avatarların FPS-nizi yavaşlatdığı vəziyyətlər üçün çox faydalıdır.">
+					Ava.Sayı
+				</text>
+				<button name="Reset_Avi_Count" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Avi_Detail" tool_tip="Avatarların çəkiliş keyfiyyətini təyin edir. Nə qədər yüksəkdir, bir o qədər yaxşıdır!">
+					Ava.Keyf
+				</text>
+				<button name="Reset_Avi_Detail" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Avi_Physics" tool_tip="Avatar fizikasının (məsələn, döş fizikası kimi) təfərrüat səviyyəsinə nəzarət edir. Nə qədər yüksəksə, bir o qədər yaxşıdır.">
+					Ava.Fizk
+				</text>
+				<button name="Reset_Avi_Physics" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Particle_Cnt" tool_tip="Çəkmək üçün hissəciklərin maksimum sayını təyin edir.">
+					Hissəciklər
+				</text>
+				<button name="Reset_Particle_Cnt" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Terrain_Scale" tool_tip="Defolt yer teksturasının keyfiyyətini (mənzərə) təyin edir.">
+					Torpaq
+				</text>
+				<button name="Reset_Terrain_Scale" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Terrain_Quality" tool_tip="Məkan keyfiyyətini təyin edir. Yüksək rəqəmlər məsafədə daha ətraflı ərazi deməkdir.">
+					Məkan
+				</text>
+				<button name="Reset_Terrain_Quality" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Object_Detail" tool_tip="Göstərmə xərclərini azaltmaq üçün daha aşağı detallı obyektlərin istifadə oluna biləcəyinə nəzarət. Daha yüksək dəyərlər gecikməyə səbəb olur, ehtiyatla istifadə edin." >
+					Obyektlər
+				</text>
+				<button name="Reset_Object_Detail" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Flexi_Detail" tool_tip="Çevik obyektlərin təfərrüat səviyyəsinə nəzarət edir. Yüksək rəqəm daha yüksək detal deməkdir.">
+					Çevik
+				</text>
+				<button name="Reset_Flexi_Detail" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Tree_Detail" tool_tip="Bitki örtüyünün təfərrüat səviyyəsinə nəzarət edir. Daha yüksək rəqəmlər daha çox təfərrüat verir.">
+					Ağaclar
+				</text>
+				<button name="Reset_Tree_Detail" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Sky_Detail" tool_tip="WindLight səmasının detallarına nəzarət edir. Aşağı rəqəmlər daha yaxşı performans və mükəmməl göydən daha az verir.">
+					Səma
+				</text>
+				<button name="Reset_Sky_Detail" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+			</panel>
+
+			<panel name="P_Vignetting">
+				<text name="T_VignetteX" tool_tip="Vinyet - şəkilin kənarları boyunca künclərinin qaralmasıdır.">
+					Vinyet
+				</text>
+				<button name="Reset_VignetteX" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_VignetteY" tool_tip="Kənar ətrafında qaralmanın qaralmasına təsir edir.">
+					Kontrast
+				</text>
+				<button name="Reset_VignetteY" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_VignetteZ" tool_tip="Kölgəli sahənin ölçüsünə təsir göstərir.">
+					Dəyər
+				</text>
+				<button name="Reset_VignetteZ" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+			</panel>
+
+			<panel name="P_Render">
+				<check_box label="Çəkmə Məsafəsini Aktivləşdir" name="UseFarClip" tool_tip="Məsafəni çəkmək imkanı verir, bu funksiyanı deaktiv etsəniz, əvvəlki Çəkmə Məsafəsi seçimləri istifadə olunacaq."/>
+				<check_box label="Dinamik LOD" name="RednerLod1" tool_tip="Bu, obyektlərdən uzaqlaşdıqca səhnədəki detalların səviyyəsini dinamik şəkildə tənzimləməyə imkan verən funksiyanı təmin edir. Bu, performansı yaxşılaşdırmağa kömək edir və həmçinin səhnədəki obyektlərin keyfiyyəti ."/>
+				<check_box label="Yalnız görünən obyektləri çəkin" tool_tip="Bu, başqa bir şeyin arxasında gizlənmək əvəzinə, yalnız kameranın baxış sahəsində olan obyektləri emal etməyə/çəkməyə imkan verir. Bu, adətən, performans gücləndiricisidir. Bəzən bu, həqiqətən də ola bilər. performansı aşağı salın, xüsusən də səhnədə/sim çoxlu obyekt olduqda. Bunun kömək edib-etmədiyini görmək üçün keçid edin!" name="UssOcclusion1"/>
+				<check_box label="Anizotrop Filtrləmə (Teksturalar)" tool_tip="Bu, teksturaları kəskinləşdirəcək." name="Anisotropic"/>
+				<check_box label="Avatarlara əlavə edilmiş hissəcikləri göstər" tool_tip="Digər avatarlara əlavə edilmiş bütün hissəcikləri göstərməyə imkan verir." name="Render Attached Hissecle"/>
+			</panel>
+
+			<panel name="P_Anti-aliasing">
+				<text name="T_Anti-aliasing" tool_tip="Obyektlərin kənarlarının nə qədər dəqiq və kəskin olduğunu müəyyən edir. Yüksək səviyyəli qrafik kartlarda daha yüksək dəyərlər performansa çox az təsir edir və ya heç bir təsir göstərmir. Aşağı qrafik kartlarda daha yüksək dəyərlər işləri ləngidə bilər.">
+					Hamalaşdırma
+				</text>
+				<combo_box name= "fsaa" label="Hamalaşdırma">
+					<combo_box.item label="Söndürülüb (Kobud kənarlar)" name="FSAADisabled"/>
+					<combo_box.item label="2x (hamar kənarlar)" name="2x"/>
+					<combo_box.item label="4x (Daha Hamar kənarlar)" name="4x"/>
+					<combo_box.item label="8x (Daha çox hamar kənarlar)" name="8x"/>
+					<combo_box.item label="16x (Çox hamar kənarlar)" name="16x"/>
+				</combo_box>
+
+				<text name="T_Texture_Bumpiness" tool_tip="Normalların və qabarıq xəritələrin gücünə və həllinə nəzarət edir.">
+					Tekstura qabarıqlığı
+				</text>
+				<combo_box name="BumpStrengthSelection">
+					<combo_box.item label="Çox İncə (Çox Zəif)" name="0"/>
+					<combo_box.item label="Daha incə (zəif)" name="1"/>
+					<combo_box.item label="Yaxşı (Zəif)" name="2"/>
+					<combo_box.item label="Normal" ad="3"/>
+					<combo_box.item label="Kobud (güclü)" name="4"/>
+					<combo_box.item label="Daha kobud (çox güclü)" name="5"/>
+				</combo_box>
+			</panel>
+		</panel>
+
+		<panel name="P_Aids" label="Əlv.">
+			<panel name="PT_Aids">
+				<text name="T_Aids">
+					Köməkçilər
+				</text>
+			</panel>
+
+			<check_box label="Bütün işıqlar üçün məhdudlaşdırıcı qutuları göstər" name="Lights"/>
+			<check_box label="Seçim üçün İşıq Radiusunu Göstər" name="Show Light Radius for Selection"/>
+			<check_box label="Obyektlər üçün məhdudlaşdırıcı qutuları göstər" name="Bounding Boxes"/>
+			<check_box label="Statistikanı göstər" name="Statistics Bar"/>
+			<check_box label="Kamera Konsolunu göstər" name="Camera"/>
+			<check_box label="Tekstura Konsolunu Göstər" name="Texture Console"/>
+			<check_box label="Kursorun altında RGB-I rəngini göstər" name="Show Color Under Cursor"/>
+			<check_box label="Şəffaf obyektləri vurğulayın" name="Highlight Transparent"/>
+			<check_box label="Səhnəni Wireframe ilə göstər" name="Wireframe"/>
+			<check_box label="Avatarınızda HUD-u göstərin" name="Show HUD Attachments"/>
+			<check_box label="Slow Motion Animation Your Avatar (sizin üçün)" name="Slow Motion Animations"/>
+			<button name="Rebake Texture" label="Görünüşünü Yeniləməyə Məcbur et (Rebake)" />
+			<button name="Set Window Size..." label="Pəncərə Ölçüsü təyin et..." />
+			<button name="Debug Settings" label="Sazlama seçimləri menyusunu göstər" />
+
+			<panel name="P_Quick_Stats">
+				<text name="T_Quick_Stats" tool_tip="Burada sistemin işini qiymətləndirmək üçün çox faydalı statistika tapa bilərsiniz. Başlıqlara basmaqla aşağıdakı elementləri genişləndirin/yığdırın.">
+					Cəld statistika
+				</text>
+			</panel>
+
+			<scroll_container name="statistics_scroll">
+				<container_view name="statistics_view">
+					<stat_view name="basic">
+						<stat_bar name="fps" label="FPS" tool_tip="FPS: Kompüteriniz saniyədə neçə dəfə ekranda olanı yenidən çəkir (və ya təzələyir). Daha yüksək rəqəmlər daha yaxşıdır. 12 ilə 15 arasında kadr tezliyi animasiyalar üçün ümumidir, 24 hərəkətli şəkillər üçün standartdır və saniyədə 25(PAL)/30(NTSC) kadr (FPS) televiziya yayımı üçün sürətdir."/>
+						<stat_bar name="bandwidth" label="Bandwidth" tool_tip="Bandwidth: Sizin kompüterinizlə virtual dünya arasında nə qədər məlumat ötürülür. Bu rəqəm istifadə etdiyiniz bant genişliyi parametrlərindən və dünyanın harasında olduğunuzdan asılı olaraq çox dəyişir. davam edir və siz baxış sahənizdə olan bəzi şeyləri (obyektlər/teksturalar/s.) yükləyirsinizsə, bant genişliyi 0 kbps-dirsə, nəsə səhv ola bilər (siz qismən ayırıla bilərsiniz)."/>
+						<stat_bar name="ktrisframe" label="Ktris render per frame" tool_tip="Ktris render: (hər çərçivəyə görə) Kompüter tərəfindən yaradılan 3D obyektlər üçbucaqlardan (əsas həndəsi forma) tikilir. Bu, üçbucaqların sayının hesablanmasıdır. və ya cari səhnə çərçivəsində 'tris'."/>
+						<stat_bar name="ktrissec" label="Ktrissec render per san." tool_tip="Tris render: (saniyədə) Kompüter tərəfindən yaradılan 3D obyektlər üçbucaqlardan tikilir (əsas həndəsə). Bu, üçbucaqların sayının və ya saniyədə 'tris'in sayıdır."/>
+						<stat_bar name="objs" label="Total Objects" tool_tip="Ümumi Obyektlər: Hal-hazırda göstərilən obyektlərin sayı, o cümlədən: Primlər, Avatarlar, Ərazilər, Ağaclar, Hissəcik Qrupları və Su Hissələri."/>
+						<stat_bar name="newobjs" label="Yeni Obyektlər" tool_tip="Yeni Obyektlər: Saniyədə yüklənən obyektlərin sayı."/>
+						<stat_bar name="numimagesstat" label="Texture Count" tool_tip="Sayı: Yüklənmiş unikal teksturaların sayı."/>
+					</stat_view>
+				</container_view>
+			</scroll_container>
+		</panel>
+
+		<panel name="P_Cam" label="Kam.">
+			<panel name="PT_Cam">
+				<text name="T_Cam">
+					3D Sıçan seçimləri (Joystik)
+				</text>
+			</panel>
+
+			<panel name="P_Cam_Settings">
+				<text name="T_LR_Axis" tool_tip="Sol/Sağ hərəkətinin həssaslığını tənzimləyir. Əgər dəqiqliklə hərəkət etmək çətindirsə, daha aşağı dəyərlər istifadə edin." width="100">
+					Sol/Sağ
+				</text>
+				<slider_bar name="SB_LR_Axis" width="110"/>
+				<button name="Reset_LR_Axis" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_UD_Axis" tool_tip="Yuxarı/Aşağı hərəkətinin həssaslığını tənzimləyir. Əgər dəqiqliklə hərəkət etmək çətindirsə, daha aşağı dəyərlər istifadə edin." width="100">
+					Yuxarı/Aşağı
+				</text>
+				<slider_bar name="SB_UD_Axis" width="110"/>
+				<button name="Reset_UD_Axis" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_IO_Axis" tool_tip="Ön/Arxa hərəkətinin həssaslığını tənzimləyir. Əgər dəqiqliklə hərəkət etmək çətindirsə, daha aşağı dəyərlər istifadə edin." width="100">
+					Ön/Arxa
+				</text>
+				<slider_bar name="SB_IO_Axis" width="110"/>
+				<button name="Reset_IO_Axis" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Tilt" tool_tip="Hündürlük hərəkətinin həssaslığını tənzimləyir. Əgər dəqiqliklə hərəkət etmək çətindirsə, daha aşağı dəyərlər istifadə edin." width="100">
+					Hündürlük
+				</text>
+				<slider_bar name="SB_Tilt" width="110"/>
+				<button name="Reset_Tilt" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Spin" tool_tip="Dönmə hərəkətinin həssaslığını tənzimləyir. Əgər dəqiqliklə hərəkət etmək çətindirsə, daha aşağı dəyərlər istifadə edin." width="100">
+					Dönmə
+				</text>
+				<slider_bar name="SB_Spin" width="110"/>
+				<button name="Reset_Spin" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Roll" tool_tip="Yatma hərəkətinin həssaslığını tənzimləyir. Əgər dəqiqliklə hərəkət etmək çətindirsə, daha aşağı dəyərlər istifadə edin." width="100">
+					Əyilmə
+				</text>
+				<slider_bar name="SB_Roll" width="110"/>
+				<button name="Reset_Roll" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Zoom_Speed" tool_tip="Ölçünün sürət həssaslığını tənzimləyir. Əgər dəqiqliklə hərəkət etmək çətindirsə, daha aşağı dəyərlər istifadə edin." width="100">
+					Yaxınlaşdırma tezliyi
+				</text>
+				<slider_bar name="SB_Zoom_Speed" width="110"/>
+				<button name="Reset_Zoom_Speed" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Feathering" tool_tip="Slayderin tam sağa qurulması kameranı çox axıcı edəcək və joystikə tam nəzarət imkanı verəcəkdir. Sürgünün sola qədər qurulması kameranın ağır olduğu kimi kameranı çox hərəkətsiz edəcək; şəkillər üçün yaxşıdır, video üçün yox" width="100">
+					Yüngüllük
+				</text>
+				<slider_bar name="SB_Feathering" width="110"/>
+				<button name="Reset_Feathering" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+			</panel>
+
+			<panel name="P_Axis_Mapping">
+				<spinner label="Miqyaslandırma oxu quraşdırılması" name="JoystickAxis6"
+				 tool_tip="Siçan funksiyası (onunla işləmək üçün) hansı oxda görüntülənir, bunu idarə edir."/>
+				<check_box label="3D Siçanı Aktivləşdirin" tool_tip="Bu, 3D Siçanı aktivləşdirir." name="enable_joystick"/>
+				<check_box name="CB_ZoomDirect" label="Miqyas idarəetməsi (İpucuna baxın!)"
+				 tool_tip="Miqyaslandırma idarəetməsi işləmək üçün, 'Miqyaslandırma oxu quraşdırılması'nı '4'-dən yüksək bir dəyərə qoymalısınız."/>
+				<check_box name="CB_AutoLeveling" label="Avtomatik səviyyə (əyilmənin qarşısını alır)"
+				 tool_tip="Kamera işə salındıqda düz qalır."/>
+				<check_box name="CB_Move_Avatar" label="3D siçan ilə avatarı hərəkət etdirin"
+				 tool_tip="Aktiv edildikdə, 3D siçan avatarınızı hərəkət etdirəcək."/>
+				<check_box name="CB_Move_Objects" label="3D siçan ilə obyektləri hərəkət etdirin (tikinti)"
+				 tool_tip="Yaradarkən və dəyişdirərkən obyektlərin yerini dəyişdirmək üçün 3D-siçandan istifadə edir."/>
+				<check_box label="Ekranda Baxış Bucağını (FOV) göstərin"
+				 tool_tip="Bu sizə Kameranın Baxış Bucağını göstərəcək. İzləyicinin içərisində siz real həyatda olduğu kimi obyektiv uzunluğunu dəyişə bilərsiniz. FOV dəyəri nə qədər kiçik olsa, kameranın linzaları bir o qədər uzun olur. 50 mm lensin 27,0 dərəcə Baxış Bucağı var. Baxış Bucağını tənzimləmək üçün aşağıdakı Zoom panelindən istifadə edin. Baxış bucağı ilə obyektiv fokus uzunluğu (mm) arasındakı əlaqəni göstərən cədvəl üçün 'http://en.wikipedia.org/wiki/Angle_of_view' ünvanına baxın. ÇEKİLİŞDƏN ƏVVƏL SÖNDÜR YOXSA ŞƏKİLDƏ OLACAQ!"
+				 name="CAM_Show_FOV"/>
+				<check_box label="Konsolda kamera detallarını göstərin" name="Camera"/>
+			</panel>
+
+			<panel name="P_Viewer_Cam_Menu">
+				<text name="PT_Viewer_Cam_Menu">
+					Kameranın seçimlər menyusu
+				</text>
+			</panel>
+
+			<panel name="P_Viewer_Cam_Menu_Settings">
+				<tab_container name="TC_Viewer_Cam_Menu_Settings">
+					<panel name="CamMov" label="Kamera Hərəkəti">
+						<panel name="P_Cam2">
+							<text name="T_Zoom2" tool_tip="Real mənada bu, yaxınlaşdırma funksiyasıdır. Bu, görünüş pəncərəsindəki baxış sahəsini dəyişəcək. Bu, Ctrl+0 və ya Ctrl+8 düymələrini basmaqla eynidir. QEYD. Əgər siz flycam-ı (3D SpacenNavigator) aktiv etmisinizsə, bu işləməyəcək.">
+								Baxış bucağı
+							</text>
+							<button name="Reset_Zoom2" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+							<text name="T_Zoom_Speed2" tool_tip="Kameranın nə qədər sürətli və yavaş böyüyəcəyini və böyüdəcəyini idarə edir. Daha yüksək dəyərlər daha yavaş və hamar miqyaslama təmin edir.">
+								Sür. miqyas
+							</text>
+							<button name="Reset_Zoom_Speed2" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+							<text name="T_Camera_Lag" tool_tip="Avatar hərəkətindən kamera gecikməsi dəyəri (0 = heç biri, 30 = avatar sürəti).">
+								Gecikmə
+							</text>
+							<button name="Reset_Camera_Lag" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+							<text name="T_Camera_Offset" tool_tip="Kameranın defolt baxış nöqtəsindən nə qədər uzaqlaşdığına/sürüşdürülməsinə nəzarət edir">
+								Sürüşdürmə
+							</text>
+							<button name="Reset_Camera_Offset" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+							<text name="T_Cam_Smoothing" tool_tip="Kameranın nə qədər hamar sürətlənməsinə və dayanmasına nəzarət edir. Daha yüksək dəyərlər daha hamar (və bir qədər yavaş) hərəkət verir.">
+								Hamalaşdırma
+							</text>
+							<button name="Reset_Cam_Smoothing" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+						</panel>
+					</panel>
+
+					<panel name="P_Mouse" label="Siçan">
+						<panel name="P_Mouse_Settings">
+							<text name="T_Mouse_Sens" tool_tip="Mouselook rejimində siçanın həssaslığına nəzarət edir.">
+								Həssaslıq
+							</text>
+							<button name="Reset_Mouse_Sens" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+							<check_box label="Mouselook-da Avatarı göstərin" tool_tip="Mouselook-da avatar və boyun altındakı geyimi göstərir (Birinci şəxs görünüşü). Susmaya görə seçim: OFF." name="first_person_avatar_visible"/>
+							<check_box label="Mouselook-da hamar hərəkət" tool_tip="Mouselook rejimində siçan hərəkətini hamarlaşdırır (Birinci şəxs görünüşü)." name="MouseSmooth"/>
+						</panel>
+					</panel>
+
+					<panel name="P_Misc" label="Разное">
+						<panel name="P_Misc_Settings">
+							<check_box label="Avatar kliklənməsi kameranın yerləşməsini saxlayır" name="clickonavatarkeepscamera"
+							 tool_tip="Adətən avatar üzərinə basmaqla kameranın yerləşməsi sıfırlanır. Bu seçim bu davranışı düzəldir."/>
+							<check_box label="Teleportdan sonra kamera yerləşməsini sıfırla" name="FSResetCameraOnTP"
+							 tool_tip="Bir qayda olaraq, teleportasiya zamanı (region daxilində) kamera yerləşməsi sıfırlanır. Bu seçim bu davranışın qarşısını alır."/>
+							<check_box label="Minimum kamera məsafəsini deaktiv edin" name="disableminzoomdist"
+							 tool_tip="Kamera və obyekt arasında ən yaxın məsafə məhdudiyyətini söndürür."/>
+							<check_box name="ignorecameraconstraints" label="Kameranın maneəsiz hərəkətinə icazə verin"
+							 tool_tip="Kameranın obyektlərdən kənara çıxarılmasına məhəl qoymur. YENİDƏN BAŞLAMA TƏLƏB EDİR!"/>
+							<check_box name="resetcamerapositiononmovement" label="Hərəkət edərkən kamera yerləşməsini sıfırlayın"
+							 tool_tip="Avatarı hərəkət etdirərkən kameranı defolt vəziyyətinə qaytarır"/>
+						</panel>
+					</panel>
+				</tab_container>
+			</panel>
+		</panel>
+	</tab_container>
+</floater>

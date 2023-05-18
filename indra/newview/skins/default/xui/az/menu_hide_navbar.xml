@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu name="hide_navbar_menu">
+	<menu_item_check label="Navigator və axtarış panelini göstərin" name="ShowNavbarNavigationPanel"/>
+	<menu_item_check label="Sevimli panelini göstərin" name="ShowNavbarFavoritesPanel"/>
+	<menu_item_check label="Axtarış panelini göstərin" name="ShowSearchTopBar"/>
+	<menu_item_check label="Yerləşməni üst menyuda göstərin" name="ShowMenuBarLocation"/>
+	<menu_item_check label="Simulyator versiyasını status çubuğunda göstərin" name="FSStatusbarShowSimulatorVersion"/>
+	<menu_item_check label="Menyuda bölmə axtarışını göstərin" name="FSMenuSearch"/>
+	<menu_item_check label="Balansı göstərin" name="FSShowCurrencyBalanceInStatusbar"/>
+	<menu_item_check label="Media idarəetməsini göstərin" name="FSEnableVolumeControls"/>
+	<menu_item_check label="FPS-i göstərin" name="FSStatusBarShowFPS"/>
+	<menu_item_check label="Trafik göstəricisini göstərin" name="ShowNetStats"/>
+	<menu_item_check label="Koordinatları göstərin" name="Coordinates"/>
+	<menu_item_check label="Sahə icazələrini göstərin" name="Parcel Properties"/>
+</menu>

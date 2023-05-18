@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="BeamCreator" title="Şüa yaratmaq paneli">
+	<text name="beamcreator_text">
+		Yeni bir şüa yaratmaq üçün aşağıdakı paneldə siçanın
+sol düyməsini basın və seçilmiş rəng ilə təyin edin və ya
+siçanın sağ düyməsi ilə basıb silin. Bitirdikdə Yadda saxla
+düyməsinə basın.
+	</text>
+	<color_swatch label="Rəng" name="beam_color_swatch" tool_tip="Rəng seçimini açmaq üçün toxunun" />
+	<button label="Yadda saxla" name="beamshape_save" />
+	<button label="Yüklə" name="beamshape_load" />
+	<button label="Təmizlə" name="beamshape_clear" />
+	<button label="Ləğv et" name="cancel" />
+</floater>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Region" name="General">
+	<text name="region_text_lbl">
+		Region:
+	</text>
+	<text name="region_text">
+		naməlum
+	</text>
+	<text name="estate_id_lbl">
+		Region ID-si:
+	</text>
+	<text name="region_type_lbl">
+		Növ:
+	</text>
+	<text name="region_type">
+		naməlum
+	</text>
+	<text name="grid_position_lbl">
+		Şəbəkə yerləşməsi:
+	</text>
+	<line_editor name="grid_position_x" default_text="naməl."/>
+	<line_editor name="grid_position_y" default_text="naməl."/>
+	<text name="version_channel_text_lbl">
+		Versiya:
+	</text>
+	<text name="version_channel_text">
+		naməlum
+	</text>
+	<check_box label="Terraformingi qadağan et" name="block_terraform_check"/>
+	<check_box label="Uçuşu yasaqla" name="block_fly_check"/>
+	<check_box label="Torpaq hissəsinin üzərindən uçuşa izn vermə" name="block_fly_over_check" tool_tip="Hissənin üzərində uçuşa qadağa qoyarkən, istifadəçilərə yuxarı qoşmaq üçün girişə icazə verilməz"/>
+	<check_box label="Zərərə icazə ver" name="allow_damage_check"/>
+	<check_box label="Dayamağı yasaqla" name="restrict_pushobject"/>
+	<check_box label="Torpağı yenidən satmağa icazə ver" name="allow_land_resell_check"/>
+	<check_box label="Torpaq hissələrini birləşdirib/ayırmağa icazə ver" name="allow_parcel_changes_check"/>
+	<check_box label="Axtarışda torpağı göstərmə" name="block_parcel_search_check" tool_tip="Hissə və regionin axtarış nəticələrində göstərilməsini dayandırın"/>
+	<check_box label="Mesh obyektlərinə icazə ver" name="mesh_rez_enabled_check" tool_tip="Yaşayıcılara bu regiondə meshlər yerləşdirməyə icazə ver"/>
+	<spinner label="Agent limiti" name="agent_limit_spin"/>
+	<spinner label="Obyekt bonusu" name="object_bonus_spin"/>
+	<text label="İcazə" name="access_text">
+		Kateqoriya:
+	</text>
+	<icons_combo_box label="Ortam" name="access_combo" width="125">
+		<icons_combo_box.item label="Yetkin" name="Adult"/>
+		<icons_combo_box.item label="Ortam" name="Mature"/>
+		<icons_combo_box.item label="Ümumi" name="PG"/>
+	</icons_combo_box>
+	<button label="Tətbiq et" name="apply_btn"/>
+	<button label="Bir sakini evinə göndər..." name="kick_btn"/>
+	<button label="Bütün sakinləri evlərinə göndər..." name="kick_all_btn"/>
+	<button label="Regiona mesaj göndər..." name="im_btn"/>
+	<button label="Telehab idarəetməsi..." name="manage_telehub_btn"/>
+</panel>

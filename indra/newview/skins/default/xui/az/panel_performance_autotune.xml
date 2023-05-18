@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_autotune">
+	<text name="back_lbl">Geri</text>
+	<text name="settings_title">Avtomatik tənzimləmə ayarları</text>
+	<text name="quality_lbl">Uzaq avatarlar</text>
+	<check_box name="FSAutoTuneImpostorByDistEnabled" label="Məsafə əsaslı optimizasiya" tool_tip="Bu seçim işarəsi aktiv edildikdə, görüntüleyici aləti MaxNonImpostors parameterini tənzimləyərək tamami ilə göstərilən avatarları yalnız müəyyən bir radius içində olanlarla məhdudlaşdıracaqdır."/>
+	<spinner name="ffa_autotune" label="Ən uzaq"/>
+	<text name="distant_av_advice">
+Uzaq avatarlar renderingdən asılı olmayaraq optimizasiya ediləcəkdir. Avatarın optimizasiya olunacağı məsafəni təyin edin.
+Qeyd. Ətrafda heç kəs yoxdursa, bu parameter MaxNonImpostors
+dəyərini 1-ə təyin edəcəkdir.
+	</text>
+	<text name="distance_lbl">Məsafə ayarlarının limitləri</text>
+	<spinner name="min_dd_autotune" label="Minimum məsafə"/>
+	<spinner name="pref_dd_autotune" label="Tərcümeyə məxsus məsafə"/>
+	<text name="distance_desc1">
+Sahə parametrlərini ayarlarkən, avtomatik tənzimləmə çizgisi minimum və tərcüməyə məxsus məsafə arasındakı dəyərləri seçəcəkdir.
+	</text>
+	<text name="sundry_lbl">Başqa ayarlar</text>
+	<check_box name="alow_self_impostor" label="Öz avatarınızın optimizasiyasına icazə verin" tool_tip="Bu seçim işarəsi aktiv edildikdə, öz avatarınız siluet kimi göstərilə bilər."/>
+	<check_box name="show_tuned_art" label="Optimizasiya edilmiş zaman" tool_tip="Bu seçim işarəsi aktiv edildikdə, 'Zaman' sütununda hazırlayış zamanı deyil, cari görüntülənmə zamanı göstəriləcəkdir."/>
+	<text name="sundry_desc1">
+Bu parametrlər daha incə ayarlamaları idarə edir. Onların nə işlədiyini öyrənmək üçün onlayn kömək səhifəsini istifadə edin.
+	</text>
+</panel>

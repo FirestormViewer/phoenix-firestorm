@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Preferences" title="Seçimlər">
+	<button label="Tətbiq et" label_selected="Tətbiq et" name="Apply"/>
+	<button label="Ləğv et" label_selected="Ləğv et" name="Cancel"/>
+	<panel name="search_panel">
+		<search_editor label="Axtarış" name="search_prefs_edit" tool_tip="Maraqlandığınız termini burada axtarın. Nəticələr parametrin tam mətnindən və ya şərhindən qismən uyğunluğa görə göstəriləcək."/>
+		<button name="copy_search_slurl_btn" tool_tip="Axtarış sorğusunu SLURL kimi kopyalayın"/>
+	</panel>
+	<tab_container name="pref core">
+		<panel label="Ümumi" name="general"/>
+		<panel label="Söhbət" name="chat"/>
+		<panel label="Rənglər" name="colors"/>
+		<panel label="Qrafika" name="display"/>
+		<panel label="Səs və media" name="audio"/>
+		<panel label="Şəbəkə və fayllar" name="input"/>
+		<panel label="Hərəkət və görünüş" name="move"/>
+		<panel label="İdarəetmə" name="controls"/>
+		<panel label="Bildirişlər" name="msgs"/>
+		<panel label="Məxfilik" name="im"/>
+		<panel label="Əlavə" name="advanced1"/>
+		<panel label="İstifadəçi interfeysi" name="ui"/>
+		<panel label="Mövzular" name="skins"/>
+		<panel label="Səhv raportları" name="crashreports"/>
+		<panel label="Firestorm" name="firestorm"/>
+		<panel label="OpenSim" name="opensim"/>
+		<panel label="Yedekləmə" name="backup"/>
+	</tab_container>
+</floater>

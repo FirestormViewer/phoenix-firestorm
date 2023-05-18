@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="media_actions">
+		<columns label="Səs və Media" name="lst_action"/>
+	</rows>
+	<rows name="toggle_pause_media">
+		<columns name="lst_action" value="Multimediya oynatmasını başlat/dayandır"/>
+	</rows>
+	<rows name="toggle_enable_media">
+		<columns name="lst_action" value="Bütün multimediyanı başlat/dayandır"/>
+	</rows>
+	<rows name="voice_follow_key">
+		<columns name="lst_action" value="Səs"/>
+	</rows>
+	<rows name="toggle_voice">
+		<columns name="lst_action" value="Səsi dəyişdir"/>
+	</rows>
+	<rows name="start_chat">
+		<columns name="lst_action" value="Çatı başlat"/>
+	</rows>
+	<rows name="start_gesture">
+		<columns name="lst_action" value="Jesti başlat"/>
+	</rows>
+	<rows name="script_trigger_lbutton">
+		<columns name="lst_action" value="Əlaqə (Sol Maus Düyməsi)"/>
+	</rows>
+</contents>

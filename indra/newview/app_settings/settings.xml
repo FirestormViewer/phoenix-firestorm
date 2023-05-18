@@ -25304,6 +25304,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>LLSD</string>
       <key>Value</key>
       <array>
+        <string>az</string>
         <string>de</string>
         <string>en</string>
         <string>es</string>

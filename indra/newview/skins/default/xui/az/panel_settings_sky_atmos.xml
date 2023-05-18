@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Atmosfer və İşıq" name="panel_settings_sky_atmos">
+	<layout_stack name="main_ls">
+		<layout_panel name="top_lp">
+			<text name="ambient_color_label">Mühit rəngi:</text>
+			<text name="blue_horizon_label">Səma Üfüq:</text>
+			<text name="blue_density_label">Səma Sıxlıq:</text>
+		</layout_panel>
+		<layout_panel name="bottom_lp" >
+			<layout_stack name="atmosphere1">
+				<layout_panel name="left_lp">
+					<text name="haze_horizon_label">Üfüq dumanı:</text>
+					<text name="haze_density_label">Dumanın sıxlığı:</text>
+					<text name="moisture_level_label">Nəmişlik dərəcəsi:</text>
+					<text name="droplet_radius_label">Damcı radiusu:</text>
+					<text name="ice_level_label">Buzun dərəcəsi:</text>
+				</layout_panel>
+				<layout_panel name="right_lp">
+					<text name="density_multiplier_label">Sıxlıq çox.:</text>
+					<text name="distance_multiplier_label">Məsafə çox.:</text>
+					<text name="maximum_altitude_label">Maks. yüksəklik:</text>
+					<text name="scene_gamma_label">Səhnə qamması:</text>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>

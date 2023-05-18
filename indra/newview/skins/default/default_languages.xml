@@ -4,6 +4,9 @@
 	 name="en"
 	 value="System default" />
 	<label
+	 name="az"
+	 value="Sistem standartı" />
+	<label
 	 name="it"
 	 value="Default di sistema" />
 	<label

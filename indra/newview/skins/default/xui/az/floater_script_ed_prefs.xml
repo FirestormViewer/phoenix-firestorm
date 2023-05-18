@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater height="680" name="floater_script_colors" title="Skript redaktoru ayarları" width="330">
+	<text name="color_pickers_label" width="200">
+		Istədiyiniz rəngləri seçin:
+	</text>
+	<text name="text_label" width="100">
+		Mətn
+	</text>
+	<text name="cursor_label" width="100">
+		Kursor
+	</text>
+	<text name="background_label" width="100">
+		Fon
+	</text>
+	<text name="section_label" width="100">
+		Bölmələr
+	</text>
+	<text name="datatype_label" width="100">
+		Məlumat növləri
+	</text>
+	<text name="event_label" width="100">
+		Hadisələr
+	</text>
+	<text name="comment_label" width="100">
+		Rəy
+	</text>
+	<text name="function_label" width="100">
+		Funksiya
+	</text>
+	<text name="string_literal_label" width="100">
+		Simbol sətiri
+	</text>
+	<text name="constant_label" width="100">
+		Sabit
+	</text>
+	<text name="i_constant_label" width="100">
+		Bütöv sabit
+	</text>
+	<text name="s_constant_label" width="100">
+		Simbol sətri sabit
+	</text>
+	<text name="f_constant_label" width="100">
+		Float sabit
+	</text>
+	<text name="c_constant_label" width="100">
+		Birikmə
+	</text>
+	<text name="flow_control_label" width="100">
+		Axın idarəetməsi
+	</text>
+	<text name="preprocessor_label" width="100">
+		Önprosessor
+	</text>
+	<text name="prefs_label" width="250">
+		Skript dəyişdirici seçimləri:
+		</text>
+	<check_box name="convert_tabs_to_spaces_checkbox" width="200" label="Tablaşmaları boşluq ilə əvəz etmək" />
+	<check_box label="LSL Önprosessorunu aktivləşdir" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru işləyəcəkdir." name="preproc_checkbox" />
+	<check_box label="Optimallaşdırma" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru skript tərəfindən istifadə edilən sahəni optimizə edəcəkdir." name="preprocoptimizer_checkbox" />
+	<check_box label="switch() operatoru" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru switch() operatorunun skript axarını idarə edərkən istifadəsinə icazə verəcəkdir." name="preprocswitch_checkbox" />
+	<check_box label="Tənbəl siyahılar" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru siyahılarla işləmək üçün sintaksis genişlətmələrə icazə verəcəkdir." name="preproclazy_checkbox" />
+	<check_box label="Diskdən #include" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru #include operatorunu sizin yerli sürücünüzə göndərilən fayllarla istifadəyə imkan verəcəkdir." name="preprocinclude_checkbox" />
+	<text name="lslpreprocinclude_textbox" width="256">
+		Önprosessor yolu:
+	</text>
+	<button label="..." label_selected="Baxış" name="SetPreprocInclude" width="30" />
+	<text name="advanced_label" width="150">
+		Qabaqcıl seçimlər:
+		</text>
+	<check_box name="FSllOwnerSayToScriptDebugWindow_checkbox" width="200" label="llOwnerSay dəyərini sazlayıcı pəncərəsinə göndər" />
+	<check_box name="FSScriptEditorRecompileButton_checkbox" width="200" label="Önkompilasiya düyməsi (#include üçün)" />
+
+	<button name="close_btn" width="100" label="OK" />
+</floater>

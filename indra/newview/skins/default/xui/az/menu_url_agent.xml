@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Url Popup">
+	<menu_item_call label="Profili göstər" name="show_agent"/>
+	<menu_item_call label="İM Göndər" name="send_im"/>
+	<menu_item_call label="Söhbət tarixini göstər" name="chat_history"/>
+	<menu_item_call label="Dostlara əlavə et" name="add_friend"/>
+	<menu_item_call label="Dəstə əlavə et" name="Add to Set"/>
+	<menu_item_call label="Sakinə yaxınlaşdır" name="zoom_agent"/>
+	<menu_item_call label="Sakinə teleport ol" name="teleportto_agent"/>
+	<menu_item_call label="Teleport təklif et" name="offer_teleport"/>
+	<menu_item_call label="Teleport tələb et" name="request_teleport"/>
+	<menu_item_call label="Sakini izlə" name="track_agent"/>
+	<menu_item_call label="Dostluqdan sil" name="remove_friend"/>
+	<menu_item_check label="Blokla" name="Block"/>
+	<context_menu label="Moderator seçimləri" name="GroupModerationSubmenu">
+		<menu_item_call label="Yazı söhbətinə icazə ver" name="AllowGroupChat"/>
+		<menu_item_call label="Yazı söhbətini qadağan et" name="ForbidGroupChat"/>
+		<menu_item_call label="Üzvü qadağalandır" name="BanGroupMember"/>
+		<menu_item_call label="Üzvü təpiklə" name="BanEjectMember"/>
+	</context_menu>
+	<menu_item_call label="Adı buferə köçürt" name="url_copy_label"/>
+	<menu_item_call label="SLurl-ni buferə köçürt" name="url_copy"/>
+</context_menu>

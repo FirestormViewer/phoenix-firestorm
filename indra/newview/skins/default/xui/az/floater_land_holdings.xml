@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="land holdings floater" title="Mənim torpağım">
+	<floater.string name="area_string">
+		[AREA] m²
+	</floater.string>
+	<scroll_list name="parcel list">
+		<scroll_list.columns label="Torpaq" name="name"/>
+		<scroll_list.columns label="Region" name="location"/>
+		<scroll_list.columns label="Növü" name="type"/>
+		<scroll_list.columns label="Sahə" name="area"/>
+	</scroll_list>
+	<button label="Teleport" label_selected="Teleport" name="Teleport" tool_tip="Bu ərazinin mərkəzinə teleport olun."/>
+	<button label="Xəritə" label_selected="Xəritə" name="Show on Map" tool_tip="Dünya xəritəsində bu torpağı göstərin."/>
+	<text name="contrib_label">
+		Qruplara yatırdığınız məbləğ:
+	</text>
+	<scroll_list name="grant list">
+		<scroll_list.columns label="Qrup" name="group"/>
+		<scroll_list.columns label="Sahə" name="area"/>
+	</scroll_list>
+	<text name="allowed_label">
+		Cari ödəmə planınız üçün icazə verilmiş sahə ölçüsü:
+	</text>
+	<text name="allowed_text">
+		[AREA] m²
+	</text>
+	<text name="current_label">
+		Cari ölçü:
+	</text>
+	<text name="current_text">
+		[AREA] m²
+	</text>
+	<text name="available_label">
+		Satın almaq üçün mövcuddur:
+	</text>
+	<text name="available_text">
+		[AREA] m²
+	</text>
+</floater>

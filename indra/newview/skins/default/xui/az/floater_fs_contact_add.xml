@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_add_contact" title="Kontakt dəstinə əlavə et...">
+	<floater.string name="no_sets">
+		Mövcud kontakt dəstləri yoxdur
+	</floater.string>
+	<floater.string name="text_add_single">
+		[NAME] adlı kontaktı hansı dəstə əlavə etmək istəyirsiniz?
+	</floater.string>
+	<floater.string name="text_add_multiple">
+		[COUNT] avatarı hansı dəstə əlavə etmək istəyirsiniz?
+	</floater.string>
+	<button label="Əlavə et" name="add_btn" />
+	<button label="Ləğv et" name="cancel_btn" />
+</floater>

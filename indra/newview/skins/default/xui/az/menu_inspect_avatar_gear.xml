@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<toggleable_menu name="Gear Menu">
+	<menu_item_call label="Profil" name="view_profile"/>
+	<menu_item_call label="Dostlara əlavə et" name="add_friend"/>
+	<menu_item_call label="İM Göndər" name="im"/>
+	<menu_item_call label="Zəng" name="call"/>
+	<menu_item_call label="Teleport təklif et" name="teleport"/>
+	<menu_item_call label="Teleport tələb et" name="request_teleport"/>
+	<menu_item_call label="Qrupa dəvət et" name="invite_to_group"/>
+	<menu_item_call label="Blokla" name="block"/>
+	<menu_item_call label="Blokdan çıxart" name="unblock"/>
+	<menu_item_call label="Şikayət" name="report"/>
+	<menu_item_call label="Dondur" name="freeze"/>
+	<menu_item_call label="Təpiklə (sahə)" name="eject"/>
+	<menu_item_call label="Təpiklə (mülkiyyət)" name="kick"/>
+	<menu_item_call label="CSR" name="csr"/>
+	<menu_item_call label="Tekstur sazlanması" name="debug"/>
+	<menu_item_call label="Damp XML" name="Dump XML"/>
+	<menu_item_call label="Xəritədə tap" name="find_on_map"/>
+	<menu_item_call label="Yaxınlaşdır" name="zoom_in"/>
+	<menu_item_call label="Ödə" name="pay"/>
+	<menu_item_call label="Paylaş" name="share"/>
+</toggleable_menu>

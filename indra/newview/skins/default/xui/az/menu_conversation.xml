@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_conversation_participant">
+	<menu_item_call label="Söhbəti bitir" name="close_conversation" />
+	<menu_item_call label="Səsli söhbəti başlat" name="open_voice_conversation" />
+	<menu_item_call label="Səsli söhbətdən ayırıl" name="disconnect_from_voice" />
+	<menu_item_call label="Seçilmişi bağla" name="close_selected_conversations" />
+	<menu_item_call label="Profili göstər" name="view_profile" />
+	<menu_item_call label="İM Göndər" name="im" />
+	<menu_item_call label="Teleport təklif et" name="offer_teleport" />
+	<menu_item_call label="Teleport tələb et" name="request_teleport" />
+	<menu_item_call label="Səsli zəng" name="voice_call" />
+	<menu_item_call label="Söhbət tarixi..." name="chat_history" />
+	<menu_item_call label="Dostlara əlavə et" name="add_friend" />
+	<menu_item_call label="Dostluqdan sil" name="remove_friend" />
+	<menu_item_call label="Dostluqdan sil" name="remove_friends" />
+	<menu_item_call label="Qrupa dəvət et..." name="invite_to_group" />
+	<menu_item_call label="Yaxınlaşdır" name="zoom_in" />
+	<menu_item_call label="Xəritə" name="map" />
+	<menu_item_call label="Paylaş" name="share" />
+	<menu_item_call label="Ödə" name="pay" />
+	<menu_item_check label="Səsini blokla" name="block_unblock" />
+	<menu_item_check label="Mətni blokla" name="MuteText" />
+	<menu_item_call label="Qrup profili" name="group_profile" />
+	<menu_item_call label="Qrupu aktivləşdir" name="activate_group" />
+	<menu_item_call label="Qrupu tərk et" name="leave_group" />
+	<context_menu label="Moderator seçimləri" name="Moderator Options">
+		<menu_item_check label="Mətni söhbətə icazə ver" name="AllowTextChat" />
+		<menu_item_call label="Seçilmiş sakini deaktiv et" name="ModerateVoiceMuteSelected" />
+		<menu_item_call label="Seçilmiş sakini aktivləşdir" name="ModerateVoiceUnMuteSelected" />
+		<menu_item_call label="Hamını deaktiv et" name="ModerateVoiceMute" />
+		<menu_item_call label="Hamını aktivləşdir" name="ModerateVoiceUnmute" />
+	</context_menu>
+	<menu_item_call label="Qadağan et" name="BanMember" />
+</toggleable_menu>

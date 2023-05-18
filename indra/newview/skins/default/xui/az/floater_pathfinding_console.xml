@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_pathfinding_console" title="Yol tapma önizləməsi/yoxlanması">
+	<floater.string name="navmesh_viewer_status_library_not_implemented">
+		Yol tapma kitabxanasının həyata keçirilməsi tapılmadı
+	</floater.string>
+	<floater.string name="navmesh_viewer_status_region_not_enabled">
+		Bu bölgədə yol tapma icazəsi yoxdur.
+	</floater.string>
+	<floater.string name="navmesh_viewer_status_region_loading">
+		Bölgə yüklənməsinin gözlənilməsi.
+	</floater.string>
+	<floater.string name="navmesh_viewer_status_checking_version">
+		Navigasiya şəbəkəsinin vəziyyətinin yoxlanılması.
+	</floater.string>
+	<floater.string name="navmesh_viewer_status_downloading">
+		Navigasiya şəbəkəsinin yüklənməsi.
+	</floater.string>
+	<floater.string name="navmesh_viewer_status_updating">
+		Serverdə navigasiya şəbəkəsi dəyişib. Yeni navigasiya şəbəkəsinin yüklənməsi.
+	</floater.string>
+	<floater.string name="navmesh_viewer_status_has_navmesh">
+		Ən son navigasiya şəbəkəsi yükləndi.
+	</floater.string>
+	<floater.string name="navmesh_viewer_status_error">
+		Navigasiya şəbəkəsi yüklənmədi.
+	</floater.string>
+	<floater.string name="navmesh_simulator_status_pending">
+		Navigasiya şəbəkəsində bitməmiş dəyişikliklər var.
+	</floater.string>
+	<floater.string name="navmesh_simulator_status_building">
+		Navigasiya şəbəkəsinin qurulması gedir.
+	</floater.string>
+	<floater.string name="navmesh_simulator_status_some_pending">
+		Bəzi navigasiya şəbəkəsinin bölgələrində bitməmiş dəyişikliklər var.
+	</floater.string>
+	<floater.string name="navmesh_simulator_status_some_building">
+		Navigasiya şəbəkəsinin bəzi bölgələrinin qurulması gedir.
+	</floater.string>
+	<floater.string name="navmesh_simulator_status_pending_and_building">
+		Bəzi navigasiya şəbəkəsinin bölgələrində bitməmiş dəyişikliklər var və digər bölgələrin qurulması gedir.
+	</floater.string>
+	<floater.string name="navmesh_simulator_status_complete">
+		Navigasiya şəbəkəsi artıq yeniləndi.
+	</floater.string>
+	<floater.string name="pathing_library_not_implemented">
+		Yol tapma kitabxanasının həyata keçirilməsi tapılmadı
+	</floater.string>
+	<floater.string name="pathing_region_not_enabled">
+		Bu regionda yol axtarışına icazə verilmir.
+	</floater.string>
+	<floater.string name="pathing_choose_start_and_end_points">
+		Başlanğıc və son nöqtələrini seçin.
+	</floater.string>
+	<floater.string name="pathing_choose_start_point">
+		Başlağıc nöqtəsini seçin.
+	</floater.string>
+	<floater.string name="pathing_choose_end_point">
+		Son nöqtəsini seçin.
+	</floater.string>
+	<floater.string name="pathing_path_valid">
+		Yol narıncı rənglə göstərilir.
+	</floater.string>
+	<floater.string name="pathing_path_invalid">
+		Seçilmiş nöqtələr arasında yol tapmaq mümkün olmadı.
+	</floater.string>
+	<floater.string name="pathing_error">
+		Yol yaradıldıqda xəta.
+	</floater.string>
+	<panel name="pathfinding_console_main">
+		<text name="viewer_status_label">
+			Klient statusu
+		</text>
+	</panel>
+	<panel name="pathfinding_console_simulator">
+		<text name="simulator_status_label">
+			Server statusu
+		</text>
+	</panel>
+	<tab_container name="view_test_tab_container">
+		<panel label="Görünüş" name="view_panel">
+			<text name="show_label">
+				Göstər:
+			</text>
+			<check_box label="Dünya" name="show_world"/>
+			<check_box label="Tək yerdəyişəbilən əşyalar" name="show_world_movables_only"/>
+			<check_box label="Naviqasiya şəbəkəsi" name="show_navmesh"/>
+			<text name="show_walkability_label">
+				Açıqlıq xəritəsini göstərin:
+			</text>
+			<combo_box name="show_heatmap_mode">
+				<combo_box.item label="Göstərmə" name="show_heatmap_mode_none"/>
+				<combo_box.item label="Xarakter növü A" name="show_heatmap_mode_a"/>
+				<combo_box.item label="Xarakter növü B" name="show_heatmap_mode_b"/>
+				<combo_box.item label="Xarakter növü C" name="show_heatmap_mode_c"/>
+				<combo_box.item label="Xarakter növü D" name="show_heatmap_mode_d"/>
+			</combo_box>
+			<check_box label="Gəziləbilən yerlər" name="show_walkables"/>
+			<check_box label="Material həcmlər" name="show_material_volumes"/>
+			<check_box label="Statik maneələr" name="show_static_obstacles"/>
+			<check_box label="İstisna Həcmlər" name="show_exclusion_volumes"/>
+			<check_box label="Su güzgüsü" name="show_water_plane"/>
+			<check_box label="Rentgen görmə" name="show_xray"/>
+		</panel>
+		<panel label="Yolu yoxla" name="test_panel">
+			<text name="ctrl_click_label">
+				Başlanqıc nöqtəsini seçmək üçün Ctrl-toxunuş
+			</text>
+			<text name="shift_click_label">
+				Sonuncu nöqtəni seçmək üçün Shift-toxunuş
+			</text>
+			<text name="character_width_label">
+				Avatar genişliyi
+			</text>
+			<slider name="character_width" value="1"/>
+			<text name="character_width_unit_label">
+				m
+			</text>
+			<text name="character_type_label">
+				Xarakter növü
+			</text>
+			<combo_box name="path_character_type">
+				<combo_box.item label="Heç biri" name="path_character_type_none"/>
+				<combo_box.item label="A" name="path_character_type_a"/>
+				<combo_box.item label="B" name="path_character_type_b"/>
+				<combo_box.item label="C" name="path_character_type_c"/>
+				<combo_box.item label="D" name="path_character_type_d"/>
+			</combo_box>
+			<button label="Yolu sil" name="clear_path"/>
+		</panel>
+	</tab_container>
+</floater>

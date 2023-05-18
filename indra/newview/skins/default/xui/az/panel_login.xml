@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel name="panel_login">
+	<layout_stack name="ui_stack">
+		<layout_panel name="ui_container">
+			<combo_box label="İstifadəçi adı" name="username_combo" tool_tip="Qeydiyyat zamanı seçdiyiniz istifadəçi adı, məsələn, «dabandashi50» və ya «Ertogrul Khazarli»"/>
+			<line_editor label="Şifrə" name="password_edit"/>
+			<combo_box label="Sevimli yerlərim" name="start_location_combo">
+				<combo_box.item label="Axırıncı yer" name="MyLastLocation"/>
+				<combo_box.item label="Evim" name="MyHome"/>
+			</combo_box>
+			<button label="Daxil ol" name="connect_btn"/>
+			<text name="forgot_password_text">
+				Şifrəni unutdunuz?
+			</text>
+			<combo_box label="Grid seçin" name="server_combo"/>
+			<text name="sign_up_text">
+				Qeydiyyat
+			</text>
+			<check_box label="Yadda saxla" name="remember_name" tool_tip="Yadda saxlanılmış istifadəçi Avatar &gt; Seçimlər &gt; Əlavə&gt; Yadda saxlanılmış istifadəçi adları menyusunda silinə bilər"/>
+			<check_box label="Şifrəni yadda saxla" name="remember_password"/>
+		</layout_panel>
+	</layout_stack>
+</panel>

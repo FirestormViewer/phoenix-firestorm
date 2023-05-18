@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="profile_overflow_menu">
+	<!--<menu_item_call label="Xəritə" name="show_on_map"/>
+	<menu_item_call label="Ödə" name="pay"/>-->
+	<menu_item_call label="Paylaş" name="share"/>
+	<menu_item_call label="Zəng" name="call"/>
+	<!--<menu_item_check label="Blokla/Blokdan çıxart" name="block_unblock"/>-->
+	<menu_item_call label="Kontakt dəstlərinə əlavə et" name="add_to_contact_set"/>
+	<menu_item_call label="Adı köçürt" name="copy_name_to_clipboard"/>
+	<menu_item_call label="URI köçürt" name="copy_uri_to_clipboard"/>
+	<menu_item_call label="UUID köçürt" name="copy_key_to_clipboard"/>
+	<menu_item_call label="Təpiklə" name="kick"/>
+	<menu_item_call label="Dondur" name="freeze"/>
+	<menu_item_call label="Dondurmadan çıxart" name="unfreeze"/>
+	<menu_item_call label="CSR" name="csr"/>
+	<menu_item_call label="Şikayət" name="report"/>
+</toggleable_menu>

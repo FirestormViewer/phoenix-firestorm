@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="avatar_list_item">
+    <string name="FormatSeconds">[COUNT]s</string>
+    <string name="FormatMinutes">[COUNT]d</string>
+    <string name="FormatHours">[COUNT]sa</string>
+    <string name="FormatDays">[COUNT]g</string>
+    <string name="FormatWeeks">[COUNT]h</string>
+    <string name="FormatMonths">[COUNT]ay</string>
+    <string name="FormatYears">[COUNT]il</string>
+    <text name="avatar_name" value="(yüklənir)" />
+    <icon name="permission_edit_theirs_icon" tool_tip="Bu dostun obyektlərini dəyişdirə bilərsiniz." />
+    <button name="permission_edit_mine_btn" tool_tip="Bu dost, sizin obyektlərinizi dəyişdirmə, silmə və götürmə qabiliyyətinə malikdir." />
+    <button name="permission_map_btn" tool_tip="Bu dost, sizi xəritədə tapa bilər." />
+    <button name="permission_online_btn" tool_tip="Bu dost, siz onlayn olduğunuzu görə bilər." />
+    <slider name="volume_slider" tool_tip="Səs səviyyəsi" />
+    <button name="info_btn" tool_tip="Daha çox məlumat" />
+    <button name="profile_btn" tool_tip="Profili göstər" />
+    <output_monitor name="speaking_indicator" tool_tip="Göstərir ki, avatar səsli söhbətdə və səslilik dərəcəsi olaraq hansı dairədə olduğunu." />
+</panel>

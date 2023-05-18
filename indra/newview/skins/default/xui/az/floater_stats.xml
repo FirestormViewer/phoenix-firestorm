@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Statistics" title="Statistika">
+	<scroll_container name="statistics_scroll">
+		<container_view name="statistics_view">
+			<stat_view label="Əsas" name="basic">
+				<stat_bar label="Çərçivə/s" name="fps"/>
+				<stat_bar name="frame_mean" label="çərçvə (dəyər)"/>
+				<stat_bar name="frame_median" label="çərçvə (orta)"/>
+				<stat_bar name="framet_jitter" label="tərpənmə"/>
+				<stat_bar label="Bant eni" name="bandwidth"/>
+				<stat_bar label="Paket itkisi" name="packet_loss"/>
+				<stat_bar label="Ping" name="ping"/>
+			</stat_view>
+			<stat_view label="Əlavə" name="advanced">
+				<stat_view label="Çəkmə" name="render">
+					<stat_bar label="Çəkmədəki üçbucaqlıların sayı/çərçvə" name="ktrisframe"/>
+					<stat_bar label="Saniyədəki üçbucaqlıların sayı" name="ktrissec"/>
+					<stat_bar label="Ümumi obyektlər" name="objs"/>
+					<stat_bar label="Yeni obyektlər" name="newobjs"/>
+					<stat_bar label="Obyekt kəşinin trafikliyinin tezliyi" name="object_cache_hits"/>
+				</stat_view>
+				<stat_view label="Tekstur" name="texture">
+					<stat_bar label="Kəşə düşən dəyərlərin sayı" name="texture_cache_hits"/>
+					<stat_bar label="Kəş oxunmasının gecikməsi" name="texture_cache_read_latency"/>
+					<stat_bar label="Say" name="numimagesstat"/>
+					<stat_bar label="Prosess olunmamış şəkillər" name="numrawimagesstat"/>
+					<stat_bar label="GL yaddaş" name="gltexmemstat"/>
+					<stat_bar label="Formatlanmış yaddaş" name="formattedmemstat"/>
+					<stat_bar label="Formatlanmamış yaddaş" name="rawmemstat"/>
+					<stat_bar label="Yaddaş məhdudiyyəti" name="glboundmemstat"/>
+				</stat_view>
+				<stat_view label="Şəbəkə" name="network">
+					<stat_bar label="Gələn paketlər" name="packetsinstat"/>
+					<stat_bar label="Göndərilən paketlər" name="packetsoutstat"/>
+					<stat_bar label="Obyektlər" name="objectkbitstat"/>
+					<stat_bar label="Tekstur" name="texturekbitstat"/>
+					<stat_bar label="Aktiv" name="assetkbitstat"/>
+					<stat_bar label="Qatlar" name="layerskbitstat"/>
+					<stat_bar label="Həqiqi giriş" name="actualinkbitstat"/>
+					<stat_bar label="Həqiqi çıxış" name="actualoutkbitstat"/>
+				</stat_view>
+			</stat_view>
+			<stat_view label="Simulyator" name="sim">
+				<stat_bar label="Vaxt yavaşlığı" name="simtimedilation"/>
+				<stat_bar label="Simulyasiya: Kadrlar/s" name="simfps"/>
+				<stat_bar label="Fizika: Kadrlar/s" name="simphysicsfps"/>
+				<stat_view label="Fiziki məlumatlar" name="physicsdetail">
+					<stat_bar label="Bağlanmış obyektlər" name="physicspinnedtasks"/>
+					<stat_bar label="Detalizasiyası aşağı olan obyektlər" name="physicslodtasks"/>
+					<stat_bar label="Ayrılan yaddaş" name="physicsmemoryallocated"/>
+				</stat_view>
+				<stat_bar label="Agent yeniləmələri/s" name="simagentups"/>
+				<stat_bar label="Əsas agentlər" name="simmainagents"/>
+				<stat_bar label="Uşaq agentləri" name="simchildagents"/>
+				<stat_bar label="Obyektlər" name="simobjects"/>
+				<stat_bar label="Aktiv obyektlər" name="simactiveobjects"/>
+				<stat_bar label="Aktiv skriptlər" name="simactivescripts"/>
+				<stat_bar label="Başlatılmış skriptlər" name="simpctscriptsrun"/>
+				<stat_bar label="Skript hadisələri" name="simscripteps"/>
+				<stat_view label="Yol axtarışı" name="simpathfinding">
+					<stat_bar label="AI addımlarının vaxtı" name="simsimaistepmsec"/>
+					<stat_bar label="Keçirilmiş silhouette addımları" name="simsimskippedsilhouettesteps"/>
+					<stat_bar label="Yenilənmiş personajlar" name="simsimpctsteppedcharacters"/>
+				</stat_view>
+				<stat_bar label="Gələn paketlər" name="siminpps"/>
+				<stat_bar label="Göndərilən paketlər" name="simoutpps"/>
+				<stat_bar label="Gecikdirilmiş yükləmələr" name="simpendingdownloads"/>
+				<stat_bar label="Gecikdirilmiş yüklənmələr" name="simpendinguploads"/>
+				<stat_bar label="Ümumi açılmamış məlumat həcmi (bayt)" name="simtotalunackedbytes"/>
+				<stat_view label="Vaxt (ms)" name="simperf">
+					<stat_bar label="Ümumi frame vaxtı" name="simframemsec"/>
+					<stat_bar label="Təmiz vaxt" name="simnetmsec"/>
+					<stat_bar label="Fizika üçün vaxt" name="simsimphysicsmsec"/>
+					<stat_bar label="Simulyasiya üçün vaxt" name="simsimothermsec"/>
+					<stat_bar label="Klient üçün vaxt" name="simagentmsec"/>
+					<stat_bar label="Şəkillər üçün vaxt" name="simimagesmsec"/>
+					<stat_bar label="Skript üçün vaxt" name="simscriptmsec"/>
+					<stat_bar label="Ehtiyat vaxt" name="simsparemsec"/>
+					<stat_view label="Vaxt məlumatları (ms)" name="timedetails">
+						<stat_bar label="Fizika addımı" name="simsimphysicsstepmsec"/>
+						<stat_bar label="Fizik formasını yeniləmək" name="simsimphysicsshapeupdatemsec"/>
+						<stat_bar label="Fizika - digər" name="simsimphysicsothermsec"/>
+						<stat_bar label="Yatmaq vaxtı" name="simsleepmsec"/>
+						<stat_bar label="Giriş/Çıxış" name="simpumpiomsec"/>
+					</stat_view>
+				</stat_view>
+			</stat_view>
+		</container_view>
+	</scroll_container>
+</floater>

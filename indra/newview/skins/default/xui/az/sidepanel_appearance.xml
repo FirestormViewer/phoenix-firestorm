@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Geyim" name="appearance panel">
+	<string name="No Outfit" value="Geyim yoxdur"/>
+	<string name="Unsaved Changes" value="Saxlanılmamış dəyişiklər"/>
+	<string name="Now Wearing" value="Geyinilib..."/>
+	<string name="Changing outfits" value="Geyim dəyişilməsi"/>
+	<panel name="panel_currentlook">
+		<text name="currentlook_status">
+			(Vəziyyət)
+		</text>
+		<button name="edit_outfit_btn" tool_tip="Geyimi dəyişdir"/>
+	</panel>
+	<search_editor label="Geyim filtri" name="Filter"/>
+</panel>

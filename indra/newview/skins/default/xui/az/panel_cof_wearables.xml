@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="cof_wearables">
+	<tab_container name="wearable_accordion">
+		<panel name="tab_clothing" title="Paltarlar"/>
+		<panel name="tab_attachments" title="Əlavələr"/>
+		<panel name="tab_body_parts" title="Bədən hissələri"/>
+	</tab_container>
+</panel>

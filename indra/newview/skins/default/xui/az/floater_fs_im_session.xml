@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="panel_im">
+	<floater.string name="participant_added" value="[NAME] söhbətə dəvət edildi."/>
+	<floater.string name="multiple_participants_added" value="[NAME] söhbətə dəvət edildilər."/>
+	<layout_stack name="ls_control_panel">
+		<layout_panel name="gprofile_panel">
+			<button name="group_info_btn" tool_tip="Bu qrupun profilini göstər"/>
+		</layout_panel>
+		<layout_panel name="profile_panel">
+			<button name="view_profile_btn" tool_tip="Bu sakinin profilini göstər"/>
+		</layout_panel>
+		<layout_panel name="friend_panel">
+			<button name="add_friend_btn" tool_tip="İstifadəçini dostlara əlavə et"/>
+		</layout_panel>
+		<layout_panel name="tp_panel">
+			<menu_button name="teleport_btn" tool_tip="Teleport təklif et və ya sorğula"/>
+		</layout_panel>
+		<layout_panel name="share_panel">
+			<button name="share_btn" tool_tip="Bu sakin ilə əşyanı paylaş"/>
+		</layout_panel>
+		<layout_panel name="pay_panel">
+			<button name="pay_btn" tool_tip="Bu sakinə pul göndər"/>
+		</layout_panel>
+		<layout_panel name="call_btn_panel">
+			<button name="call_btn" tool_tip="Bu söhbətə zəng əlavə et"/>
+		</layout_panel>
+		<layout_panel name="end_call_btn_panel">
+			<button name="end_call_btn" tool_tip="Zəngi bitir"/>
+		</layout_panel>
+		<layout_panel name="voice_ctrls_btn_panel">
+			<button name="voice_ctrls_btn" tool_tip="Səs seçimləri"/>
+		</layout_panel>
+		<layout_panel name="im_history_btn_panel">
+			<button name="im_history_btn" tool_tip="Söhbət jurnalını aç"/>
+		</layout_panel>
+		<layout_panel name="add_participant_panel">
+			<button tool_tip="İstifadəçini bu söhbətə əlavə edin" name="add_participant_btn"/>
+		</layout_panel>
+		<layout_panel name="send_sysinfo_btn_panel">
+			<button tool_tip="Sistem məlumatı göndər" name="send_sysinfo_btn"/>
+		</layout_panel>
+
+		<layout_panel name="lp_options_btn">
+			<menu_button tool_tip="Söhbət seçimləri" name="chat_options_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_chat_search_btn" >
+			<button name="chat_search_btn" tool_tip="Söhbətdə axrarış"/>
+		</layout_panel>
+
+		<!-- Checkbox for FS prefix on support groups -->
+		<layout_panel name="support_panel">
+			<check_box label="Versiyanı əlavə et" name="FSSupportGroupChatPrefix_toggle" tool_tip="Bu qrupda göndərdiyiniz mesajlarda, klient dəstək işçilərinə problemlərinizin düzgün diaqnostikasına və suallarınıza doğru cavabların verilməsinə kömək edəcək cari versiyanı və mövzunu əlavə edir."/>
+		</layout_panel>
+		<layout_panel name="testing_panel">
+			<check_box label="Qurğunu əlavə et" name="FSSupportGroupChatPrefixTesting_toggle" tool_tip="Bu qrupda göndərdiyiniz mesajların başında cari versiyanı, mövzunu, əməliyyat sistemi və RLVa vəziyyətini əlavə edir, bu da klient dəstək işçilərinin problemlərinizin düzgün diaqnostikasına və suallarınıza doğru cavabların verilməsinə kömək edir. (Bu müxtəlif dəstək qruplarından fərqli olaraq ayrı bir xüsusiyyətdir)"/>
+		</layout_panel>
+		<!-- END: FS Prefix -->
+	</layout_stack>
+	<layout_stack name="chat_stack">
+		<layout_panel name="panel_im_control_lp">
+			<layout_stack name="im_panels">
+				<layout_panel name="unread_messages_holder">
+					<text name="unread_messages_text">
+						Oxunmamış mesaj: [NUM]
+					</text>
+				</layout_panel>
+				<layout_panel name="chat_layout_panel">
+					<layout_stack name="input_panels">
+						<layout_panel name="input_button_layout_panel">
+							<button name="send_chat" label="Göndər" tool_tip="Mesaj göndərir" />
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</floater>

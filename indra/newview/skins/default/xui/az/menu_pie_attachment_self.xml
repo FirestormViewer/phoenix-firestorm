@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Attachment Pie">
+    <pie_slice label="Profil..." name="Profile..."/>
+    <pie_slice label="At" name="Drop"/>
+    <pie_menu name="Attachment Pie More" label="İrəli &gt;">
+        <pie_slice label="Teksturanı yenilə" name="Texture Refresh"/>
+        <pie_slice label="Skriptlər haqqında" name="ScriptInfo"/>
+        <pie_slice label="Toxun" name="Attachment Object Touch"/>
+        <pie_menu name="DerenderMenu" label="Göstərmə &gt;">
+            <pie_slice label="Müvəqqəti" name="Derender"/>
+            <pie_slice label="Həmişə" name="DerenderPermanent"/>
+        </pie_menu>
+        <pie_menu name="ExportMenu" label="Yadda saxla &gt;">
+            <pie_slice label="Backup" name="Backup"/>
+            <pie_slice label="Collada" name="Collada"/>
+        </pie_menu>
+        <pie_slice label="Müayinə" name="Avatar Inspect"/>
+        <pie_slice label="Sazlama" name="Debug..."/>
+    </pie_menu>
+    <pie_slice label="Otur" name="Sit Down Here"/>
+    <pie_slice label="Dur" name="Stand Up"/>
+    <pie_slice label="Ayır" name="Detach"/>
+    <pie_slice label="Jestlər..." name="Gestures"/>
+    <pie_menu label="Görünüş &gt;" name="Appearance &gt;">
+        <pie_slice label="Forma" name="Edit My Shape"/>
+        <pie_menu name="ResetMenu" label="Sıfırla &gt;">
+            <pie_slice label="Skel. &amp; Anim." name="Reset Skeleton And Animations"/>
+            <pie_slice label="Skelet" name="Reset Skeleton"/>
+            <pie_slice label="Mesh LOD" name="Reset Mesh LOD"/>
+        </pie_menu>
+        <pie_slice label="Geyim" name="Edit My Outfit"/>
+        <pie_slice label="XML Çıxarışı" name="Dump XML"/>
+        <pie_slice label="Hündürlük" name="Hover Height"/>
+    </pie_menu>
+    <pie_slice label="Dəyişdir" name="Edit..."/>
+</pie_menu>

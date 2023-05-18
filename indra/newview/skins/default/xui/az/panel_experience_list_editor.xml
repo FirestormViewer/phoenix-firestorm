@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="experince_list_editor">
+	<panel.string name="loading">
+		yüklənir…
+	</panel.string>
+	<panel.string name="panel_allowed">
+		İcazəli macəralar:
+	</panel.string>
+	<panel.string name="panel_blocked">
+		Bloklanmış macəralar:
+	</panel.string>
+	<panel.string name="panel_trusted">
+		Əsas macəralar:
+	</panel.string>
+	<panel.string name="no_results">
+		(boş)
+	</panel.string>
+	<text name="text_name">
+		Macəra siyahısı
+	</text>
+	<name_list name="experience_list">
+		<name_list.columns label="Ad" name="experience_name"/>
+	</name_list>
+	<button label="Əlavə et" name="btn_add"/>
+	<button label="Sil" name="btn_remove"/>
+	<button label="Profil" name="btn_profile"/>
+</panel>
