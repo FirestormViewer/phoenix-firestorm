@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Ticarət mərkəzi" name="Marketplace Panel">
+	<panel name="tool_panel">
+		<menu_button name="sort_btn" tool_tip="Baxış/Sıralama seçimləri"/>
+		<button name="add_btn" tool_tip="Yeni siyahı qovluqunu yaradın"/>
+		<button label="Səhvlərə görə yoxlanış" name="audit_btn" left_pad="110" width="130" tool_tip="Ticarət mərkəzindəki məhsul siyahılarınızı yoxlayın"/>
+	</panel>
+	<panel name="tab_container_panel">
+		<filter_editor label="Ticarət mərkəzindəki məhsul siyahılarını filterdən keçirin" name="filter_editor"/>
+	</panel>
+	<panel name="marketplace_drop_zone">
+		<text name="drop_zone_label">
+			Yeni siyahıları yaratmaq üçün qovluqları buraya daşıyın
+		</text>
+	</panel>
+</panel>

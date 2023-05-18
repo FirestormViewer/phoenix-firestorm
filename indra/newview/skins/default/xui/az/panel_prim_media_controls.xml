@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="MediaControls">
+	<string name="control_background_image_name">
+		Inspector_Background
+	</string>
+	<string name="skip_step">
+		0.2
+	</string>
+	<string name="min_width">
+		300
+	</string>
+	<string name="min_height">
+		75
+	</string>
+	<string name="zoom_near_padding">
+		1.0
+	</string>
+	<string name="zoom_medium_padding">
+		1.1
+	</string>
+	<string name="zoom_far_padding">
+		1.5
+	</string>
+	<string name="top_world_view_avoid_zone">
+		50
+	</string>
+	<layout_stack name="progress_indicator_area">
+		<layout_panel name="media_progress_indicator">
+			<progress_bar name="media_progress_bar" tool_tip="Media yüklənir"/>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="media_controls">
+		<layout_panel name="back">
+			<button name="back_btn" tool_tip="Geri"/>
+		</layout_panel>
+		<layout_panel name="fwd">
+			<button name="fwd_btn" tool_tip="İrəli"/>
+		</layout_panel>
+		<layout_panel name="home">
+			<button name="home_btn" tool_tip="Ev səhifəsi"/>
+		</layout_panel>
+		<layout_panel name="media_stop">
+			<button name="media_stop_btn" tool_tip="Medianı dayandır"/>
+		</layout_panel>
+		<layout_panel name="reload">
+			<button name="reload_btn" tool_tip="Yenilə"/>
+		</layout_panel>
+		<layout_panel name="stop">
+			<button name="stop_btn" tool_tip="Yükləməni dayandır"/>
+		</layout_panel>
+		<layout_panel name="play">
+			<button name="play_btn" tool_tip="Medianı oynat"/>
+		</layout_panel>
+		<layout_panel name="pause">
+			<button name="pause_btn" tool_tip="Fasilə"/>
+		</layout_panel>
+		<layout_panel name="media_address">
+			<line_editor name="media_address_url" tool_tip="Media keçidi"/>
+			<layout_stack name="media_address_url_icons">
+				<layout_panel name="media_address_url_icons_wl">
+					<icon name="media_whitelist_flag" tool_tip="Ağ siyahısına əlavə edilib"/>
+				</layout_panel>
+				<layout_panel name="media_address_url_icons_sb">
+					<icon name="media_secure_lock_flag" tool_tip="Təhlükəsiz baxış"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="media_play_position">
+			<slider_bar initial_value="0.5" name="media_play_slider" tool_tip="Video baxışının icrası"/>
+		</layout_panel>
+		<layout_panel name="skip_back">
+			<button name="skip_back_btn" tool_tip="Geri getmək"/>
+		</layout_panel>
+		<layout_panel name="skip_forward">
+			<button name="skip_forward_btn" tool_tip="İrəli getmək"/>
+		</layout_panel>
+		<layout_panel name="media_volume">
+			<button name="media_mute_button" tool_tip="Media səssizləşdir"/>
+			<slider name="volume_slider" tool_tip="Media səsinin səviyyəsi"/>
+		</layout_panel>
+		<layout_panel name="zoom_frame">
+			<button name="zoom_frame_btn" tool_tip="Media-yı yaxınlaşdır"/>
+		</layout_panel>
+		<layout_panel name="close">
+			<button name="close_btn" tool_tip="Geri qaytar"/>
+		</layout_panel>
+		<layout_panel name="new_window">
+			<button name="new_window_btn" tool_tip="Keçidi brauzerdə aç"/>
+		</layout_panel>
+	</layout_stack>
+</panel>

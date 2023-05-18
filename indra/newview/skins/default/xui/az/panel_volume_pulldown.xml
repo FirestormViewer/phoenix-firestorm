@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="volumepulldown_floater">
+	<slider label="Ümumi" name="System Volume"/>
+	<slider label="Düymələr" name="UI Volume"/>
+	<slider label="Mühit" name="Wind Volume"/>
+	<check_box name="collisions_audio_play_btn" tool_tip="Toqquşma səslərini aktivləşdir"/>
+	<slider label="Səslər" name="SFX Volume"/>
+	<check_box name="gesture_audio_play_btn" tool_tip="Jest səslərini aktivləşdir"/>
+	<slider label="Musiqi" name="Music Volume"/>
+	<check_box name="enable_music" tool_tip="Axınan musiqini aktivləşdir"/>
+	<slider label="Media" name="Media Volume"/>
+	<check_box name="enable_media" tool_tip="Axınan medianı aktivləşdir"/>
+	<slider label="Səs" name="Voice Volume"/>
+	<check_box name="enable_voice_check" tool_tip="Səsli Söhbəti Aktivləşdir"/>
+</panel>

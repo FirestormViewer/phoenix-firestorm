@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_notes" label="Qeydlər &amp; Məxfilik">
+    <text name="status_message" value="Bu şəxs haqqında qeydlər aparın. Onları heç kim görməyəcək."/>
+    <button name="notes_save_changes" label="Yadda saxla"/>
+    <button name="notes_discard_changes" label="Ləğv et"/>
+</panel>

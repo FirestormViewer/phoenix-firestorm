@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater width="285" title="Kamera alətləri" name="phototools_camera_floater" >
+	<floater.string name="rotate_tooltip">
+        Kameranı diqqətləşdirmə nöqtəsinin üzərində çevir
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+        Kameranı diqqətləşdirmə nöqtəsinə nisbətən yaxınlaşdır/uzaqlaşdır
+	</floater.string>
+	<floater.string name="move_tooltip">
+        Kameranı yuxarı/aşağı, sola/sağa sürüşdürün
+	</floater.string>
+	<floater.string name="free_mode_title">
+		Obyekt icmalı
+	</floater.string>
+	<string name="inactive_combo_text">Öntəyin ist. et</string>
+	<tab_container name="tabs">
+		<panel name="P_Cam_Controls_1" label="İdarəetmə 1">
+			<panel name="cameracontrolspanel">
+				<panel name="controls1">
+					<panel name="preset_views_list">
+						<panel_camera_item name="front_view">
+							<panel_camera_item.text name="front_view_text">
+								Öndən baxış
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="group_view">
+							<panel_camera_item.text name="side_view_text">
+								Kəndardan baxış
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="rear_view">
+							<panel_camera_item.text name="rear_view_text">
+								Arxadan baxış
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<combo_box name="preset_combo">
+							<combo_box.item label="Öntəyin istifafə et" name="Use preset"/>
+						</combo_box>
+						<button name="gear_btn" tool_tip="Kamera öntəyinləri"/>
+						<button label="Yerləşmə..." name="camera_position_btn"/>
+					</panel>
+					<panel name="camera_modes_list">
+						<panel_camera_item name="object_view">
+							<panel_camera_item.text name="object_view_text">
+								Obyekt icmalı
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="mouselook_view">
+							<panel_camera_item.text name="mouselook_view_text">
+								Mouselook baxışı
+							</panel_camera_item.text>
+						</panel_camera_item>
+					</panel>
+					<!--TODO: replace + - images -->
+					<panel name="zoom">
+						<joystick_rotate name="cam_rotate_stick" tool_tip="Kameranı diqqətləşdirmə nöqtəsinin üzərində çevir"/>
+						<slider_bar name="zoom_slider" tool_tip="Sadəcə kameranı hərəkətə gətirir. QEYD. Bu kameranın miqyası deyil! Bu baxış bucağına təsir etmir. Həqiqi böyütmək üçün «Baxış Bucağı» slayderindən istifadə edin."/>
+						<joystick_track name="cam_track_stick" tool_tip="Kameranı yuxarı/aşağı, sola/sağa sürüşdürün"/>
+					</panel>
+				</panel>
+
+				<panel name="buttons">
+					<button name="presets_btn" tool_tip="Öntəyin görünüşlər"/>
+					<button name="pan_btn" tool_tip="Orbit Miqyas Mənzərə"/>
+					<button name="avatarview_btn" tool_tip="Kamera rejimləri"/>
+					<button name="store_camera_view_btn" tool_tip="Cari Kamera Görünüşünü Saxla"/>
+					<button name="load_camera_view_btn" tool_tip="Saxlanmış kamera görünüşünü yükləyin" />
+				</panel>
+			</panel>
+
+			<panel name="P_Cam_Mov_Settings">
+				<text name="T_Cam_Mov_Settings">
+					Kamera hərəkət seçimləri
+				</text>
+			</panel>
+
+			<panel name="P_Zoom">
+				<text name="T_Zoom" tool_tip="Real mənada bu, yaxınlaşdırma funksiyasıdır. Bu, görünüş pəncərəsindəki baxış sahəsini dəyişəcək. Bu, Ctrl+0 və ya Ctrl+8 düymələrini basmaqla eynidir. QEYD. Əgər siz flycam-ı (3D SpacenNavigator) aktiv etmisinizsə, bu işləməyəcək.">
+					Baxış bucağı
+				</text>
+				<button name="Reset_Camera_Angle" label="С" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Zoom_Speed" tool_tip="Controls how fast/slow the camera will zoom in and out. Higher values produce slower and smother zoom.">
+					Sür. miqyas
+				</text>
+				<button name="Reset_Zoom_Time" label="С" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Camera_Lag" tool_tip="Avatar hərəkətindən kamera gecikməsi dəyəri (0 = heç biri, 30 = avatar sürəti).">
+					Gecikmə
+				</text>
+				<button name="Reset_Camera_Lag" label="С" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Camera_Offset" tool_tip="Kameranın defolt baxış nöqtəsindən nə qədər uzaqlaşdığına/sürüşdürülməsinə nəzarət edir.">
+					Sürüşdürmə
+				</text>
+				<button name="Reset_Camera_Offset" label="С" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<text name="T_Camera_Smoothing" tool_tip="Kameranın nə qədər hamar sürətlənməsinə və dayanmasına nəzarət edir. Daha yüksək dəyərlər daha hamar (və bir qədər yavaş) hərəkət verir.">
+					Hamalaşdırma
+				</text>
+				<button name="Reset_Camera_Smoothing" label="С" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+			</panel>
+		</panel>
+
+		<panel name="P_Cam_Controls_2" label="İdarəetmə 2" >
+			<panel name="P_Mouse_Movement">
+				<text name="T_Mouse_Movement">
+					Siçan hərəkət seçimləri
+				</text>
+			</panel>
+
+			<panel name="P_Mouse_Movement_Settings">
+				<text name="T_Mouse_Sensitivity" left="5" width="110" tool_tip="Mouselook rejimində siçanın həssaslığına nəzarət edir.">Həssaslıq
+				</text>
+				<button name="Reset_Mouse_Sensitivity" label="С" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<check_box name="first_person_avatar_visible" label="Mouselook-da Avatarı göstərin"
+				 tool_tip="Mouselook-da avatar və boyun altındakı geyimi göstərir (Birinci şəxs görünüşü). Susmaya görə seçim: OFF." />
+				<check_box name="MouseSmooth" label="Mouselook-da hamar hərəkət" tool_tip="Mouselook rejimində siçan hərəkətini hamarlaşdırır (Birinci şəxs görünüşü)."/>
+			</panel>
+
+			<panel name="P_Additional_Camera_Options">
+				<text name="T_Additional_Camera_Options" width="240">
+					Kameranın əlavə seçimləri
+				</text>
+			</panel>
+
+			<panel name="P_Add_Cam_Opt_Settings">
+				<check_box name="clickonavatarkeepscamera" label="Kamera yerləşməsini yadda saxlayın"
+				 tool_tip="Adətən avatarın üzərinə basmaqla kameranın yerləşməsi sıfırlanır. Bu seçim bu davranışı düzəldir."/>
+				<check_box name="FSResetCameraOnTP" label="Teleportdan sonra kamera yerləşməsini sıfırlayın"
+				 tool_tip="Bir qayda olaraq, teleportasiya zamanı (region daxilində) kameranın yerləşməsi sıfırlanır. Bu seçim bu davranışın qarşısını alır."/>
+				<check_box name="disableminzoomdist" label="Minimum məsafəni söndürün"
+				 tool_tip="Obyektə ən yaxın kamera məsafəsi ilə bağlı məhdudiyyəti söndürür."/>
+				<check_box name="ignorecameraconstraints" label="Məhdudiyyətsiz kamera hərəkəti"
+				 tool_tip="Kameranın obyektlərdən 'itələməsini' yoxsayır. YENİDƏN BAŞLAMA TƏLƏB EDİR!"/>
+				<check_box name="resetcameraonmovement"
+				 label="Hərəkət edərkən kamera yerləşməsini sıfırlayın"
+				 tool_tip="Avatarı hərəkət etdirərkən kameranı standart vəziyyətinə qaytarır"/>
+			</panel>
+		</panel>
+
+		<panel name="P_3D_Mouse" label="3D Sıçan">
+			<panel name="P_3D_Mouse_Settings1" >
+				<slider name="FlycamAxisScale1b" label="Sol/Sağ" tool_tip="Sol/Sağ hərəkətinin həssaslığını tənzimləyir. Əgər dəqiqliklə hərəkət etmək çətindirsə, daha aşağı dəyərlər istifadə edin."/>
+				<slider name="FlycamAxisScale2b" label="Yuxarı/Aşağı" tool_tip="Yuxarı/Aşağı hərəkətinin həssaslığını tənzimləyir. Əgər dəqiqliklə hərəkət etmək çətindirsə, daha aşağı dəyərlər istifadə edin."/>
+				<slider name="FlycamAxisScale0b" label="Ön/Arxa" tool_tip="Ön/Arxa hərəkətinin həssaslığını tənzimləyir. Əgər dəqiqliklə hərəkət etmək çətindirsə, daha aşağı dəyərlər istifadə edin."/>
+				<slider name="FlycamAxisScale4" label="Hündürlük" tool_tip="Hündürlük hərəkətinin həssaslığını tənzimləyir. Əgər dəqiqliklə hərəkət etmək çətindirsə, daha aşağı dəyərlər istifadə edin."/>
+				<slider name="FlycamAxisScale5" label="Dönmə" tool_tip="Dönmə hərəkətinin həssaslığını tənzimləyir. Əgər dəqiqliklə hərəkət etmək çətindirsə, daha aşağı dəyərlər istifadə edin."/>
+				<slider name="FlycamAxisScale3" label="Yatma" tool_tip="Yatma hərəkətinin həssaslığını tənzimləyir. Əgər dəqiqliklə hərəkət etmək çətindirsə, daha aşağı dəyərlər istifadə edin."/>
+				<slider name="FlycamAxisScale6" label="Ölçü" tool_tip="Ölçünün sürət həssaslığını tənzimləyir. Əgər dəqiqliklə hərəkət etmək çətindirsə, daha aşağı dəyərlər istifadə edin."/>
+				<slider name="FlycamFeathering" label="Yüngüllük" tool_tip="Slayderin tam sağa qurulması kameranı çox axıcı edəcək və joystikə tam nəzarət imkanı verəcəkdir. Sürgünün sola qədər qurulması kameranın ağır olduğu kimi kameranı çox hərəkətsiz edəcək."/>
+			</panel>
+
+			<panel name="P_3D_Mouse_Settings2">
+				<spinner name="JoystickAxis6" label="Miqyaslandırma oxu quraşdırılması"
+				 tool_tip="Siçan funksiyası (onunla işləmək üçün) hansı oxda görüntülənir, bunu idarə edir."/>
+				<check_box name="enable_joystick" label="3D Siçanı Aktivləşdirin" left="5"
+				 tool_tip="Bu, 3D Siçanı aktivləşdirir."/>
+				<check_box name="CB_Zoom_Control" label="Miqyas idarəetməsi (İpucuna baxın!)" left="5"
+				 tool_tip="Miqyaslandırma idarəetməsi işləmək üçün, 'Miqyaslandırma oxu quraşdırılması'nı '4'-dən yüksək bir dəyərə qoymalısınız."/>
+				<check_box name="CB_Auto_Leveling" label="Avtomatik təmizləmə (kreni qarşılar)" left="5"/>
+				<check_box name="CB_3D_Mouse_Avatar" label="Avatarı 3D Siçan ilə hərəkət etdirin" left="5"/>
+				<check_box name="CB_3D_Mouse_Build" label="3D-siçanla obyektləri hərəkət etdirin (qurma)"
+				 tool_tip="Yaradarkən və dəyişdirərkən obyektlərin yerini dəyişdirmək üçün 3D-siçandan istifadə edir."
+				 left="5"/>
+			</panel>
+		</panel>
+	</tab_container>
+</floater>

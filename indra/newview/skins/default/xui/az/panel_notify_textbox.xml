@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_notify_textbox">
+	<panel label="info_panel" name="info_panel">
+		<text_editor name="message" value="mesaj"/>
+	</panel>
+	<panel name="control_panel">
+		<button label="Göndər" name="btn_submit"/>
+		<button label="Boş ver" name="ignore_btn" left="195" width="90"/>
+	</panel>
+</panel>

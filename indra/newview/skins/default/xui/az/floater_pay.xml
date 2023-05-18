@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Give Money">
+	<string name="payee_group">Qrupa ödəniş et</string>
+	<string name="payee_resident">Sakinə ödəniş et</string>
+	<text name="payee_name">Yoxlamaq üçün Test adı</text>
+	<text name="amount text">Və ya məbləği daxil edin:</text>
+	<text name="payment_message_label">Mesaj (tələb olunmur):</text>
+	<button label="Ödə" label_selected="Ödə" name="pay btn"/>
+	<button label="Ləğv et" label_selected="Ləğv et" name="cancel btn"/>
+</floater>

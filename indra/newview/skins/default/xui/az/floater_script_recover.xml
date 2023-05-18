@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="script_recover" title="Skriptlərin bərpa edilməsi">
+	<text name="txt2">
+		[APP_NAME] klient çökəndən sonra bərpa edilə biləcək skriptlər aşkarlandı.
+
+Bərpa etmək qərarınızı verdinizsə, skriptlər 'Tapılanlar' qovluğunda yerləşdiriləcəkdir.
+	</text>
+	<scroll_list name="script_list">
+		<scroll_list.columns label="Skript adı" name="script_name" />
+	</scroll_list>
+	<button label="Bərpa et" name="recover_btn" />
+	<button label="Ləğv et" name="cancel_btn" />
+</floater>

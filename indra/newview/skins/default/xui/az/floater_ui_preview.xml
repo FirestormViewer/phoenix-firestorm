@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="gui_preview_tool" title="XUI Baxış Aləti">
+	<string name="ExternalEditorNotSet">
+LL_XUI_EDITOR mühit dəyərini təyin edərək xarici dəyişdiricini seçin,
+və ya ExternalEditor seçimlərini təyin edərək
+və ya Öz dəyişdiricinizi «Dəyişdirici yolu» sahəsində təyin edərək.</string>
+    <panel name="main_panel">
+        <text name="select_language_label">
+            Birinci dil:
+        </text>
+        <button label="Göstər" label_selected="Göstər" name="display_floater" tool_tip="Seçilmiş XML fayl təyin edən XUI pəncərəsini göstər"/>
+        <button label="Gizlət" label_selected="Gizlət" name="close_displayed_floater" tool_tip="Mövcud olan XUI pəncərəsini bağla"/>
+        <button label="Düzəliş et..." label_selected="Düzəliş et..." name="edit_floater" tool_tip="Seçilmiş XML fayl təyin edən XUI pəncərəsini düzəldin (xarici redaktorda açılır). Yerli olmayan versiya yoxdursa ingilis versiyasını açar."/>
+        <button label="Yadda Saxla" label_selected="Yadda Saxla" name="save_floater" tool_tip="Seçilmiş XML fayl təyin edən XUI pəncərəsini yadda saxla"/>
+        <button label="Hamısını Saxla" label_selected="Hamısını Saxla" name="save_all_floaters" tool_tip="Seçilmiş dilə uyğun olan bütün XUI pəncərələrini yadda saxlayın" width="95" />
+        <button name="toggle_overlap_panel" left_pad="35" tool_tip="Örtüşən elementlər üçün nöqtə işığını və ekran panelini dəyişdirin; Bu funksiyaya görə elementi seçmək üçün sağ düyməni vurun. Seçilmiş element qırmızı çərgə ilə işarələnir."/>
+
+        <text name="select_language_label_2">
+            İkinci dil:
+        </text>
+        <button label="Göstər" name="display_floater_2" tool_tip="Seçilmiş XML fayl təyin edən XUI pəncərəsini göstər"/>
+        <button label="Gizlət" name="close_displayed_floater_2" tool_tip="Mövcud olan XUI pəncərəsini bağla"/>
+        <button label="Sxem İxracı" name="export_schema"/>
+        <button label="Yenilə" name="refresh_btn"/>
+        <check_box label="Sərhədlər" name="show_rectangles"/>
+
+        <scroll_list label="Ad" name="name_list">
+            <scroll_list.columns label="Başlıq" name="title_column" width="220" />
+            <scroll_list.columns label="Fayl" name="file_column" width="220"/>
+            <scroll_list.columns label="Yuxarı səviyyə düyünü" name="top_level_node_column" />
+        </scroll_list>
+        <panel name="editor_panel">
+            <text name="editor_path_label" width="150">
+                Dəyişdirici yolu:
+            </text>
+            <line_editor name="executable_path_field" left_delta="120" width="350"
+             tool_tip="Dəyişdirənəcən tam yol (icra olunan fayla) XML-fayl dəyişdirmək üçün float (dırnaqlar lazım deyil)"/>
+            <button label="Seç..." label_selected="Seç..." name="browse_for_executable"
+             tool_tip="XML-fayl dəyişdirmək üçün dəyişdirici seç (icra olunan fayl)"
+             width="75" />
+            <text left_delta="-475" name="executable_args_label" width="150">
+                Dəyişdirici seçimləri:
+            </text>
+            <line_editor name="executable_args_field" left_delta="150" width="350"
+				tool_tip="Redaktor üçün komanda sətirləri; Məqsədli fayl üçün keçid &apos;%FILE%&apos;-dən istifadə edin; Bu sahə boş olsa, &apos;YourProgram.exe FileName.xml&apos; işləyəcəkdir"/>
+        </panel>
+        <panel name="vlt_panel">
+            <text name="diff_file_label" width="150">
+                Fərq faylı:
+            </text>
+            <line_editor name="vlt_diff_path_field" left_delta="100" width="350" 
+            tool_tip="XML D0 və ya D1 lokalizasiya fərqi faylının tam yolunu təyin edin; Lokalizasiya alətləri vasitəsilə generasiya edilir"/>
+            <button label="Seçin..." label_selected="Seçildi" name="browse_for_vlt_diffs"
+            tool_tip="Dəyişdirilmiş lokalizasiya məlumatlarını içərən fərqli D0 və ya D1 fərqi faylını seçin"/>
+            <button label="Fərqi göstər" label_selected="Fərqi göstərmə" name="toggle_vlt_diff_highlight"
+            tool_tip="Lokalizasiya məlumatlarını dəyişdirilmiş faylların və elementlərin vurğusunu dəyişdirin" 
+            width="150" />
+        </panel>
+    </panel>
+    <scroll_container name="overlap_scroll">
+      <panel name="overlap_dummy_panel">
+        <overlap_panel label="Örtüşmə paneli" name="overlap_panel"
+         tool_tip="Bu panel seçilmiş elementi və onu örtən bütün elementləri göstərir, horizontal xətlərlə ayrılır" />
+        <text name="overlap_panel_label" width="200">
+            Örtüşən elementlər:
+        </text>
+      </panel>
+    </scroll_container>
+</floater>

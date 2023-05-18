@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="animation_explorer" title="Animasiya bələdçisi">
+	<scroll_list name="animation_list">
+		<scroll_list.column label="Oynayan" name="played_by" />
+		<scroll_list.column label="Vəziyyət" name="played" />
+		<scroll_list.column label="Prioritet" name="priority" />
+		<scroll_list.column label="Vaxt" name="timestamp" />
+		<scroll_list.column label="Animasiya ID-si" name="animation_id" />
+		<scroll_list.column label="Obyekt ID-si" name="object_id" />
+	</scroll_list>
+	<panel name="buttons_panel">
+		<button label="Dayandır" name="stop_btn" />
+		<button label="Dayandır və İmtina et" name="stop_and_revoke_btn" />
+		<button label="İmtina et" name="revoke_btn" />
+		<check_box label="Mənim animasiyalarım yoxdur" name="no_owned_animations_check" tool_tip="Avatarınıza məxsus olan, AO animasiyaları və ya standart sistem animasiyaları kimi, bütün animasiyaları filtrləyəcək" />
+	</panel>
+</floater>

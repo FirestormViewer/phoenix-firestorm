@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Qrup Yaratma" name="GroupCreation">
+  <panel.string name="current_membership">
+    (sizin üzvlüyünüz)
+  </panel.string>
+  <panel name="group_info_top">
+    <text name="group_name_label">
+    Qrupun adı:
+    </text>
+    <line_editor label="Yeni qrupun adını daxil edin" name="group_name_editor" />
+  </panel>
+  <scroll_container name="content_scroll_container">
+    <panel name="content_panel">
+      <layout_stack name="layout">
+        <layout_panel name="group_info">
+          <panel name="group_info_top2">
+            <texture_picker name="insignia" tool_tip="Şəkil seçmək üçün basın"/>
+            <text_editor name="charter">
+              Qrup Mənşənaməsi
+            </text_editor>
+          </panel>
+          <panel name="preferences_container">
+            <check_box label="Hər kəs qoşula bilər" name="open_enrollement"
+              tool_tip="Bu qrupun yeni üzvlərinin dəvət olunmadan qoşulmasına icazə verib vermədiyini təyin edir."/>
+            <check_box label="Qoşulma üçün ödəniş" name="check_enrollment_fee"
+              tool_tip="Qrupa qoşulmaq üçün giriş ödənişinin tələb olunub olunmadığını təyin edir"/>
+            <spinner name="spin_enrollment_fee" tool_tip="Yeni üzvlər qeydiyyat ödənişinin yoxlanılmasında qrupa qoşulmaq üçün bu ödənişi ödəməlidirlər."/>
+            <combo_box name="group_mature_check" tool_tip="Mənşə ratingləri qrupda icazə verilən məzmun və hərəkətləri müəyyənləşdirir.">
+              <combo_item name="select_mature" value="Select">
+               - Yetkinlik reytinqini seçin -
+              </combo_item>
+              <combo_box.item label="Ortam" name="mature" />
+              <combo_box.item label="Ümumi" name="pg" />
+            </combo_box>
+          </panel>
+        </layout_panel>
+        <layout_panel name="create_info">
+          <text name="fee_information">
+            Qrup yaratmaq üçün ödəniş üzvlük səviyyənizdən asılıdır. [https://secondlife.com/my/account/membership.php Ətraflı məlumat]
+          </text>
+        </layout_panel>
+        <layout_panel name="create_actions" >
+          <layout_stack name="button_row_ls" >
+            <layout_panel name="layout_crt">
+              <button label="L$ [COST] üçün qrup yaradın" name="btn_create" tool_tip="Yeni qrup yarat"/>
+              <button name="back" label="Ləğv et"/>
+            </layout_panel>
+          </layout_stack>
+          <text name="info_deletion">
+            Qeyd: 2-dən az üzvü olan qrup 48 saat ərzində silinəcək!
+          </text>
+        </layout_panel>
+      </layout_stack>
+    </panel>
+  </scroll_container>
+</panel>

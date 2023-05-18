@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Giriş" name="Access">
+	<tab_container name="tabs">
+		<panel label="Torpaq idarəçiləri" name="estate_managers_panel">
+			<text name="estate_manager_label">
+				Torpaq idarəçiləri:
+			</text>
+			<name_list name="estate_manager_name_list">
+				<columns label="Ad" name="name"/>
+			</name_list>
+			<button label="Əlavə et..." name="add_estate_manager_btn"/>
+			<button label="Sil..." name="remove_estate_manager_btn"/>
+		</panel>
+		<panel label="İcazə verilən" name="allowed_panel">
+			<panel label="top_panel" name="allowed_search_panel">
+				<filter_editor label="İcazə verilən agentlərin axtarışı" name="allowed_search_input" width="385"/>
+				<button label="Köçürt" name="copy_allowed_list_btn" width="80"/>
+			</panel>
+			<text name="allow_resident_label">
+				Həmişə icazəli:
+			</text>
+			<name_list name="allowed_avatar_name_list">
+				<columns label="Ad" name="name"/>
+			</name_list>
+			<button label="Əlavə et..." name="add_allowed_avatar_btn"/>
+			<button label="Sil..." name="remove_allowed_avatar_btn"/>
+		</panel>
+		<panel label="İcazə verilən qruplar" name="allowed_groups_panel">
+			<panel label="top_panel" name="allowed_group_search_panel">
+				<filter_editor label="İcazə verilən qrupların axtarışı" name="allowed_group_search_input" width="385"/>
+				<button label="Köçürt" name="copy_allowed_group_list_btn" width="80"/>
+			</panel>
+			<text name="allow_group_label">
+				Qrupların icazəsi həmişə verilir:
+			</text>
+			<name_list name="allowed_group_name_list">
+				<columns label="Ad" name="name"/>
+			</name_list>
+			<button label="Əlavə et..." name="add_allowed_group_btn"/>
+			<button label="Sil..." name="remove_allowed_group_btn"/>
+		</panel>
+		<panel label="Bloklanan" name="banned_panel">
+			<panel label="top_panel" name="banned_search_panel">
+				<filter_editor label="Bloklanmış agentlərin axtarışı" name="banned_search_input" width="385"/>
+				<button label="Köçürt" name="copy_banned_list_btn" width="80"/>
+			</panel>
+			<text name="ban_resident_label">
+				Həmişə blokda olanlar:
+			</text>
+			<name_list name="banned_avatar_name_list">
+				<columns label="Ad" name="name"/>
+				<columns label="Son giriş tarixi" name="last_login_date"/>
+				<columns label="Bloklanma tarixi" name="ban_date"/>
+				<columns label="Kim bloklayıb" name="bannedby"/>
+			</name_list>
+			<button label="Əlavə et..." name="add_banned_avatar_btn"/>
+			<button label="Sil..." name="remove_banned_avatar_btn"/>
+		</panel>
+	</tab_container>
+</panel>

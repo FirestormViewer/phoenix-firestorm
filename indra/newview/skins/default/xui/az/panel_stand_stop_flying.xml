@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Width and height of this panel should be synchronized with "panel_modes" in the floater_moveview.xml-->
+<panel name="panel_stand_stop_flying">
+	<button label="Dur" name="stand_btn" tool_tip="Durmaq üçün buraya basın."/>
+	<button label="Uçmağa dayan" name="stop_fly_btn" width="130" tool_tip="Uçmağa dayan"/>
+	<button label="Flycam" name="flycam_btn" tool_tip="Flycam rejimindən çıx"/>
+</panel>

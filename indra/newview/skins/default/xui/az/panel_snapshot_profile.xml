@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_snapshot_profile">
+	<text name="title">
+		Profilimə
+	</text>
+	<combo_box label="Ölçülər" name="profile_size_combo">
+		<combo_box.item label="Cari Pəncərə" name="CurrentWindow"/>
+		<combo_box.item label="640x480" name="640x480"/>
+		<combo_box.item label="800x600" name="1024x768"/>
+		<combo_box.item label="İstifadəçinin seçimi" name="Custom"/>
+	</combo_box>
+<!--	<layout_stack name="profile_image_params_ls">
+		<layout_panel name="profile_image_size_lp">-->
+		<spinner label="En-Yüksəklik" name="profile_snapshot_width"/>
+		<check_box label="Nisbətləri saxlamaq" name="profile_keep_aspect_check"/>
+<!--		</layout_panel>
+		<layout_panel name="profile_image_metadata_lp">-->
+			<text name="caption_label">
+				Altyazı:
+			</text>
+		<check_box initial_value="true" label="Yeri əlavə et" name="add_location_cb"/>
+<!--		</layout_panel>
+	</layout_stack>-->
+	<button label="&#x25B6; Seçim" name="cancel_btn"/>
+	<button label="Əlavə et" name="post_btn"/>
+</panel>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="sound_explorer" title="Səslər">
+	<floater.string name="Playing">Oynayır</floater.string>
+	<floater.string name="NotPlaying">[TIME] dəq.əvvəl</floater.string>
+	<floater.string name="Type_UI">UI</floater.string>
+	<floater.string name="Type_Avatar">Avatar</floater.string>
+	<floater.string name="Type_llTriggerSound">llTriggerSound</floater.string>
+	<floater.string name="Type_llLoopSound">llLoopSound</floater.string>
+	<floater.string name="Type_llPlaySound">llPlaySound</floater.string>
+	<check_box width="80" name="avatars_chk" label="Avatarlar" />
+	<check_box left_delta="80" width="80" name="objects_chk" label="Obyektlər"/>
+	<check_box left_delta="80" width="150" name="collision_chk" label="Toqquşma səsləri" />
+	<check_box left_delta="150" width="120" name="repeated_asset_chk" label="Təkrarlanır" />
+	<check_box left_delta="120" width="80" name="pause_chk" label="Fasilə jurnalı"/>
+	<scroll_list name="sound_list">
+		<columns label="Oynayır" name="playing" />
+		<columns label="Növ" name="type" />
+		<columns label="Sahibi" name="owner" />
+		<columns width="200" label="Səs" name="sound" />
+	</scroll_list>
+	<button label="Yerli oynat" name="play_locally_btn" width="95"/>
+	<button label="Yerli dayandır" name="stop_locally_btn" width="95"/>
+	<button label="Bax" name="look_at_btn" left_delta="100" width="95"/>
+	<button label="Dayandır" name="stop_btn" right="-10" width="95"/>
+	<button label="Qara siyahı" name="bl_btn" right="-110" width="95"/>
+</floater>

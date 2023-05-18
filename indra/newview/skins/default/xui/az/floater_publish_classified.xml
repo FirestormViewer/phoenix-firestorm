@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="publish_classified" title="Elanın nəşri">
+	<text name="explanation_text">
+		Sizin elanınız nəşr edildikdən sonra bir həftə boyunca göstəriləcəkdir.
+
+Əsas olan, əldə edilən məbləğ geri qaytarılmır.
+	</text>
+	<spinner label="Qiymət: L$" name="price_for_listing" tool_tip="Axtarışda elan verilməsinin qiyməti"/>
+	<button label="Nəşr et" name="publish_btn"/>
+	<button label="Ləğv et" name="cancel_btn"/>
+</floater>

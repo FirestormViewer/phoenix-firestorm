@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_nearby">
+	<text name="back_lbl">Geri</text>
+	<text name="av_nearby_title">Yaxınlıqdakı avatarlar</text>
+	<text name="tot_av_count">Ümumi: 50 (120000.10μs)</text>
+	<text name="av_nearby_desc">Ən çətin avatarları gizlədin ki, sürəti artırasınız.</text>
+	<slider name="IndirectMaxComplexity" label="Ən böyük çətinlik (K)" tool_tip="Visual olaraq çətin avatarın siluet kimi göstərilməsinin müəyyənləşdirilməsi."/>
+	<slider name="FSRenderAvatarMaxART" label="Maksimum render zamanı (μs)" tool_tip="Visual olaraq çətin avatarın renderləməsi üçün çox vaxt alması halında, təyin edilmiş zamandan çox alıb almadığının müəyyənləşdirilməsi. (vahid: mikrosaniyə)"/>
+	<text name="FSRenderAvatarMaxARTText">limitsiz</text>
+	<name_list name="nearby_list">
+		<name_list.columns name="art_visual" tool_tip="Histogram, hazırkı vaxtın ən yavaşından faiz olaraq renderləmə zamanını göstərir. (otomatik tənzimləmə daxil olmaqla)"/>
+		<name_list.columns name="art_value" label="Zaman (μs)" tool_tip="Avatarın renderlənmə vaxtı. Həqiqi zaman, bu avatarın visual olaraq necə göründüyünə qədər harcanan (mikrosaniyə) cədvəlində."/>
+		<name_list.columns name="complex_value" label="ARC" tool_tip="Standart qaydalar əsasında təşkil edilən çətinlik (ARC)."/>
+		<name_list.columns name="state" tool_tip="Hər hansı bir tüninq göstərir. I=Siluet, S=Gölən yoxdur."/>
+		<name_list.columns name="name" label="Ad" />
+	</name_list>
+	<text name="av_nearby_desc2">
+		Dünyadakı avatarın üzərinə sağ klik edərək idarə etmək olar.
+	</text>
+	<text name="av_nearby_desc3">
+		Qeyd. Digərlərini necə təsirləndirdiyinizi görmək üçün Avatarın Çətinlik tabını istifadə edin.
+	</text>
+	<check_box label="Dostları həmişə bütün detallarda göstərmək" name="display_friends"/>
+	<button label="İstisnalar..." name="exceptions_btn"/>
+	<check_box label="Avatarları tamamilə gizlətmək" name="hide_avatars"/>
+	<text name="name_tags_textbox">Başlıqlar:</text>
+	<radio_group name="name_tag_mode">
+		<radio_item label="Sön." name="radio"/>
+		<radio_item label="Yan." name="radio2"/>
+		<radio_item label="Qısa göstər" name="radio3"/>
+	</radio_group>
+</panel>

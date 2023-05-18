@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Müqavilə" name="Covenant">
+	<panel.string name="can_resell">
+		Bu regionda alınan torpaq yenidən satıla bilər.
+	</panel.string>
+	<panel.string name="can_not_resell">
+		Bu regionda alınan torpaq yenidən satıla bilməz.
+	</panel.string>
+	<panel.string name="can_change">
+		Alınan torpaq birləşə və ya bölünə bilər.
+	</panel.string>
+	<panel.string name="can_not_change">
+		Alınan torpaq birləşə və ya bölünə bilməz.
+	</panel.string>
+	<text name="estate_section_lbl">
+		Torpaq mülkiyyəti
+	</text>
+	<text name="estate_name_lbl">
+		Adı:
+	</text>
+	<text name="estate_name_text">
+		qitə
+	</text>
+	<text name="estate_owner_lbl">
+		Sahibi:
+	</text>
+	<text name="estate_owner_text">
+		(yox)
+	</text>
+	<text name="estate_cov_lbl">
+		Müqavilə:
+	</text>
+	<text name="covenant_timestamp_text">
+		Axırınci dəyişiklər: 31 dekabr 1969 il., cümə, 16:00:00
+	</text>
+	<text_editor name="covenant_editor">
+		Bu torpaq mülkiyyəti ilə bağlı heç bir müqavilə yoxdur.
+	</text_editor>
+	<button label="Sıfırla" name="reset_covenant"/>
+	<text name="covenant_help_text">
+		Müqaviləyə edilən dəyişikliklər bu torpaq mülkiyyətin bütün sahələrində göstəriləcək.
+	</text>
+	<text name="covenant_instructions">
+		Bu əmlak üçün müqaviləni dəyişmək üçün qeydi bura daşıyın.
+	</text>
+	<text name="region_section_lbl">
+		Region
+	</text>
+	<text name="region_name_lbl">
+		Adı:
+	</text>
+	<text name="region_name_text">
+		Ərik
+	</text>
+	<text name="region_landtype_lbl">
+		Növ:
+	</text>
+	<text name="region_landtype_text" width="180">
+		Qitə/əmlak
+	</text>
+	<text name="region_maturity_lbl">
+		Reytinq:
+	</text>
+	<text name="region_maturity_text">
+		Yetkin
+	</text>
+	<text name="resellable_lbl">
+		Yenidən satış:
+	</text>
+	<text name="resellable_clause">
+		Bu regiondakı torpaqlar yenidən satıla bilməz.
+	</text>
+	<text name="changeable_lbl">
+		Ayırma:
+	</text>
+	<text name="changeable_clause">
+		Bu regiondakı torpaqlar birləşdirilə və ya bölünə bilməz.
+	</text>
+</panel>

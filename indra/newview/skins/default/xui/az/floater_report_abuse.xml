@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_report_abuse" title="Şikayət">
+	<floater.string name="Screenshot">
+		Şəkil
+	</floater.string>
+	<check_box label="Bu şəkili işlədin" name="screen_check"/>
+	<text name="reporter_title">
+		Müəllif:
+	</text>
+	<text name="sim_title">
+		Ərazi:
+	</text>
+	<text name="sim_field">
+		Ərazi adı
+	</text>
+	<text name="pos_title">
+		Koordinatlar:
+	</text>
+	<text name="pos_field">
+		{128.1, 128.1, 15.4}
+	</text>
+	<text name="select_object_label">
+		Düyməni, sonra təhqiredici obyekti basın:
+	</text>
+	<button name="pick_btn" tool_tip="Object Capture - Bu mesajın mövzusu kimi obyekti müəyyən edir"/>
+	<text name="object_name_label">
+		Obyekt:
+	</text>
+	<text name="owner_name_label">
+		Sahibi:
+	</text>
+	<combo_box name="category_combo" tool_tip="Kateqoriya - cinayət növünə ən uyğun olan kateqoriyanı seçin">
+		<combo_box.item label="Kateqoriya seçin" name="Select_category"/>
+		<combo_box.item label="Yaş &gt; Oyun yaşı" name="Age__Age_play"/>
+		<combo_box.item label="Yaş &gt; Yeniyetmələr üçün Second Life-da Yetkin sakin" name="Age__Adult_resident_on_Teen_Second_Life"/>
+		<combo_box.item label="Yaş &gt; Yeniyetmələr üçün Second Life-da yetkinlik yaşına çatmayan sakin" name="Age__Underage_resident_outside_of_Teen_Second_Life"/>
+		<combo_box.item label="Hücum &gt; Hərbi qum qutusu/təhlükəsiz ərazi" name="Assault__Combat_sandbox___unsafe_area"/>
+		<combo_box.item label="Hücum &gt; Təhlükəsiz ərazidə başqa bir sakini güllələmək, vurmaq və ya itələmək" name="Assault__Safe_area"/>
+		<combo_box.item label="Hücum &gt; Qum qutusunda silah sınağı" name="Assault__Weapons_testing_sandbox"/>
+		<combo_box.item label="Ticarət &gt; Məhsul və ya xidməti çatdırmaq mümkün deyil" name="Commerce__Failure_to_deliver_product_or_service"/>
+		<combo_box.item label="Açıqlama &gt; Real dünya haqqında məlumat" name="Disclosure__Real_world_information"/>
+		<combo_box.item label="Açıqlama &gt; Uzaqdan Söhbət İdarəsi" name="Disclosure__Remotely_monitoring chat"/>
+		<combo_box.item label="Açıqlama &gt; Məlumat/Söhbət/Second Life ani mesajlar" name="Disclosure__Second_Life_information_chat_IMs"/>
+		<combo_box.item label="Pozğunluq &gt; Regionun resurslarından ədalətsiz istifadəsi" name="Disturbing_the_peace__Unfair_use_of_region_resources"/>
+		<combo_box.item label="Pozğunluq &gt; Lazımsız skript obyektləri" name="Disturbing_the_peace__Excessive_scripted_objects"/>
+		<combo_box.item label="Pozğunluq &gt; Obyektlərin tullanması" name="Disturbing_the_peace__Object_littering"/>
+		<combo_box.item label="Pozğunluq &gt; Davamlı spam" name="Disturbing_the_peace__Repetitive_spam"/>
+		<combo_box.item label="Pozğunluq &gt; İstənməyən reklam" name="Disturbing_the_peace__Unwanted_advert_spam"/>
+		<combo_box.item label="Fırıldaqçılıq &gt; L$" name="Fraud__L$"/>
+		<combo_box.item label="Fırıldaqçılıq &gt; Torpaq" name="Fraud__Land"/>
+		<combo_box.item label="Fırıldaqçılıq &gt; «Piramida» və ya «xoşbəxtlik məktubu»" name="Fraud__Pyramid_scheme_or_chain_letter"/>
+		<combo_box.item label="Fırıldaqçılıq &gt; Linden dolları (L$) və ya ABŞ dolları" name="Fraud__US$"/>
+		<combo_box.item label="Narahatlıq &gt; Reklam ferması/görünən spam" name="Harassment__Advert_farms___visual_spam"/>
+		<combo_box.item label="Narahatlıq &gt; Fərdlərin və ya qrupların böhtanı" name="Harassment__Defaming_individuals_or_groups"/>
+		<combo_box.item label="Narahatlıq &gt; Nəqliyyatın maneəsi" name="Harassment__Impeding_movement"/>
+		<combo_box.item label="Narahatlıq &gt; Cinsi zorakılıq" name="Harassment__Sexual_harassment"/>
+		<combo_box.item label="Təqib &gt; Adi həyat tərzini pozmaq niyyəti ilə qəsdən davranış" name="Harassment__Solicting_inciting_others_to_violate_ToS"/>
+		<combo_box.item label="Narahatlıq &gt; Söz təhqiri" name="Harassment__Verbal_abuse"/>
+		<combo_box.item label="Ədəbsizlik &gt; Açıqcasına təhqiredici məzmun və ya davranış" name="Indecency__Broadly_offensive_content_or_conduct"/>
+		<combo_box.item label="Ədəbsizlik &gt; Yanlış avatar adı" name="Indecency__Inappropriate_avatar_name"/>
+		<combo_box.item label="Ədəbsizlik &gt; Bu regionun reytinqi üçün yanlış məzmun və ya davranış" name="Indecency__Mature_content_in_PG_region"/>
+		<combo_box.item label="Ədəbsizlik &gt; Ortam regionda yanlış məzmun və ya davranış" name="Indecency__Inappropriate_content_in_Mature_region"/>
+		<combo_box.item label="Əqli mülkiyyət hüquqlarının pozulması &gt; Məzmunun silinməsi" name="Intellectual_property_infringement_Content_Removal"/>
+		<combo_box.item label="Əqli mülkiyyət hüquqlarının pozulması &gt; CopyBot və ya icazənin pozulması" name="Intellectual_property_infringement_CopyBot_or_Permissions_Exploit"/>
+		<combo_box.item label="Dözümsüzlük" name="Intolerance"/>
+		<combo_box.item label="Torpaq &gt; «Qum qutusu» resurslarından ədalətsiz istifadəsi" name="Land__Abuse_of_sandbox_resources"/>
+		<combo_box.item label="Torpaq &gt; Təcavüz &gt; Obyektlər və ya teksturlar" name="Land__Encroachment__Objects_textures"/>
+		<combo_box.item label="Torpaq &gt; Təcavüz &gt; Hissəciklər" name="Land__Encroachment__Particles"/>
+		<combo_box.item label="Torpaq &gt; Təcavüz &gt; Ağaclar/bitkilər" name="Land__Encroachment__Trees_plants"/>
+		<combo_box.item label="Oyun qaydalarının pozulması" name="Wagering_gambling"/>
+		<combo_box.item label="Başqa" name="Other"/>
+	</combo_box>
+	<text name="abuser_name_title">
+		Cinayətkarın adı:
+	</text>
+	<button label="Seçim" name="select_abuser" tool_tip="Siyahıdan cinayətkarın adının seçilməsi"/>
+	<text name="abuser_name_title2">
+		Cinayət yeri:
+	</text>
+	<text name="sum_title">
+		Qısa Təsvir:
+	</text>
+	<text name="dscr_title">
+		Təfərrüatlar:
+	</text>
+	<text name="bug_aviso">
+		Problemi mümkün qədər ətraflı təsvir edin
+	</text>
+	<text name="incomplete_title">
+		* Natamam müraciətlərə baxılmayacaq
+	</text>
+	<button label="Şikayət" label_selected="Şikayət" name="send_btn"/>
+	<button label="Ləğv et" label_selected="Ləğv et" name="cancel_btn"/>
+</floater>

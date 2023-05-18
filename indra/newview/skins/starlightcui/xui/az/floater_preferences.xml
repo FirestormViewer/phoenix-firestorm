@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Preferences" title="Seçimlər">
+	<floater.string name="LoginToChange">
+		Dəyişmək üçün daxil olun
+	</floater.string>
+	<button label="Tətbiq et" label_selected="Tətbiq et" name="Apply"/>
+	<button label="Qəbul et" label_selected="Qəbul et" name="OK"/>
+	<button label="Ləğv et" label_selected="Ləğv et" name="Cancel"/>
+	<tab_container name="pref core">
+		<panel label="Ümumi" name="general"/>
+		<panel label="Söhbət" name="chat"/>
+		<panel label="Rənglər" name="colors"/>
+		<panel label="Fərdi rənglər" name="custom_colors"/>
+		<panel label="Qrafik" name="display"/>
+		<panel label="Səs və media" name="audio"/>
+		<panel label="Şəbəkə və keş" name="input"/>
+		<panel label="Hərəkət və görünüş" name="move"/>
+		<panel label="Bildirişlər" name="msgs"/>
+		<panel label="Məxfilik" name="im"/>
+		<panel label="Əlavə" name="advanced1"/>
+		<panel label="İstifadəçi interfeysi" name="ui"/>
+		<panel label="Üslublar" name="skins"/>
+		<panel label="Xəta bildirişləri" name="crashreports"/>
+		<panel label="Firestorm" name="firestorm"/>
+		<panel label="OpenSim" name="opensim"/>
+		<panel label="Yedəkləmə" name="backup"/>
+	</tab_container>
+</floater>

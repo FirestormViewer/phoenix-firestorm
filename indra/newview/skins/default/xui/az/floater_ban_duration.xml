@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="ban_duration" title="Qadağa müddəti">
+	<text name="duration_textbox">
+		Qadağa müddəti:
+	</text>
+	<radio_group name="ban_duration_radio">
+		<radio_item label="Həmişəlik" name="always_radio">
+			Həmişəlik
+		</radio_item>
+		<radio_item label="Müvəqqəti" name="temporary_radio">
+			Müvəqqəti
+		</radio_item>
+	</radio_group>
+	<text name="hours_textbox">
+		saat
+	</text>
+	<button label="ОК" name="ok_btn"/>
+	<button label="Ləğv et" name="cancel_btn"/>
+</floater>

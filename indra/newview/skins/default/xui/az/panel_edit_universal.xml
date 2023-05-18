@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="edit_universal_panel">
+  <scroll_container name="avatar_universal_scroll">
+    <panel name="avatar_universal_color_panel">
+      <texture_picker label="Baş döyməsi" name="Head Universal Tattoo" tool_tip="Şəkil seçmək üçün basın"/>
+      <texture_picker label="Üst döyməsiу" name="Upper Universal Tattoo" tool_tip="Şəkil seçmək üçün basın"/>
+      <texture_picker label="Alt döyməsi" name="Lower Universal Tattoo" tool_tip="Şəkil seçmək üçün basın"/>
+      <texture_picker label="Don döyməsi" name="Skirt Tattoo" tool_tip="Şəkil seçmək üçün basın"/>
+      <texture_picker label="Saç döyməsi" name="Hair Tattoo" tool_tip="Şəkil seçmək üçün basın"/>
+      <texture_picker label="Göz döyməsi" name="Eyes Tattoo" tool_tip="Şəkil seçmək üçün basın"/>
+      <texture_picker label="Qol döyməsi" name="Left Arm Tattoo" tool_tip="Şəkil seçmək üçün basın"/>
+      <texture_picker label="Ayaq döyməsi" name="Left Leg Tattoo" tool_tip="Şəkil seçmək üçün basın"/>
+      <texture_picker label="Əlv1 döyməsi" name="Aux1 Tattoo" tool_tip="Şəkil seçmək üçün basın"/>
+      <texture_picker label="Əlv2 döyməsi" name="Aux2 Tattoo" tool_tip="Şəkil seçmək üçün basın"/>
+      <texture_picker label="Əlv3 döyməsi" name="Aux3 Tattoo" tool_tip="Şəkil seçmək üçün basın"/>
+      <color_swatch label="Rəng/Doyma" name="Color/Tint" tool_tip="Rəng seçmək üçün klikləyin"/>
+    </panel>
+  </scroll_container>
+</panel>
+

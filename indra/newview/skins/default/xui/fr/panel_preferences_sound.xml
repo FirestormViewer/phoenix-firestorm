@@ -16,6 +16,13 @@
 			<check_box label="Actif" name="enable_media"/>
 			<slider label="Chat vocal" name="Voice Volume"/>
 			<check_box label="Actif" name="enable_voice_check_volume"/>
+			<text name="Listen media from">
+				Écouter médias et sons de :
+			</text>
+			<radio_group name="media_ear_location">
+				<radio_item label="Position de caméra" name="0"/>
+				<radio_item label="Position de l'avatar" name="1"/>
+			</radio_group>
 			<text name="auto_unmute_label">Réactiver le son après une téléportation :</text>
 			<check_box name="FSAutoUnmuteAmbient" label="Ambiance" tool_tip="Réactivation automatique des sons d'ambiance après une téléportation si le son est coupé (par défaut : désactivé)."/>
 			<check_box name="FSAutoUnmuteSounds" label="Effets sonores" tool_tip="Réactivation automatique des effets sonores après une téléportation si le son est coupé (par défaut : désactivé)"/>

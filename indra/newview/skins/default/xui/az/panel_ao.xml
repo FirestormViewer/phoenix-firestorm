@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel name="animation_overrider_outer_panel">
+<!-- Main Panel -->
+	<panel name="animation_overrider_panel">
+		<combo_box name="ao_set_selection_combo" tool_tip="Düzəliş üçün animasiya dəstini seçin." />
+		<button name="ao_activate" tool_tip="Bu animasiya dəstini hazırda aktiv etmək." />
+		<check_box name="ao_default" label="Susmaya görə" tool_tip="Bu animasiya dəstini sistemə daxil olanda başlatmaq." width="20" />
+		<button name="ao_add" tool_tip="Yeni animasiya qrupu yaratmaq." />
+		<button name="ao_remove" tool_tip="Bu animasiya dəstini silmək." />
+		<check_box name="ao_sit_override" label="Oturmaq" tool_tip="Oturma animasiyasını yenidən təyin etmək istəyirsinizsə işarələyin." width="100" />
+		<check_box name="ao_smart" label="Ağıllı" tool_tip="Ağıllı rejim, oturmaq animasiyasının obyektin öz animasiyası ilə münaqişə edib-etməyəcəyini müəyyən etməyə çalışır və təyinatını müvəqqəti olaraq söndürür."
+				left_pad="4" right="-1" height="16" />
+		<check_box name="ao_disable_stands_in_mouselook" label="Mouselookda Duruşlarını Aradan Qaldır" tool_tip="Əgər öz duruş animasiyanızı saxlamaq istəyirsinizsə, bu nişanı qoyun." width="100" />
+		<combo_box name="ao_state_selection_combo" tool_tip="Düzəliş üçün animasiya vəziyyətini seçin." />
+		<panel name="ao_animation_move_trash_panel" >
+			<button name="ao_move_up" tool_tip="Seçilmiş animasiyanı siyahıda yuxarıya doğru daşıyın." />
+			<button name="ao_move_down" tool_tip="Seçilmiş animasiyanı siyahıda aşağıya doğru daşıyın." />
+			<button name="ao_trash" tool_tip="Seçilmiş animasiyanı siyahıdan silin." />
+		</panel>
+		<check_box name="ao_cycle" label="Dövr" tool_tip="Hər bir animasiya vəziyyəti çağırıldığında siyahıdan başqa bir animasiya təkrarlanır." width="55" />
+		<check_box name="ao_randomize" label="Təsadüfi" tool_tip="Dövr rejimindəki animasiyaların təsadüfi sırası."
+				width="100" />
+		<text name="ao_cycle_time_seconds_label" value="Vaxt (saniyə):" width="120" />
+		<spinner name="ao_cycle_time" tool_tip="Növbəti animasiyaya keçid üçün zaman. 0 dəyərini qoyun ki, avtomatik animasiyanı söndürəsiniz." />
+		<button name="ao_reload" label="Yenidən yüklə" tool_tip="Animasiyanı yenidən yükləmək üçün konfiqurasiyanı yeniləyin." />
+		<layout_stack name="next_previous_buttons_stack" >
+			<layout_panel name="next_previous_buttons_stack_left">
+				<button name="ao_previous" tool_tip="Hazırki vəziyyətin öncəki animasiyasına keçid edin." />
+			</layout_panel>
+			<layout_panel name="next_previous_buttons_stack_right">
+				<button name="ao_next" tool_tip="Hazırki vəziyyətin növbəti animasiyasına keçid edin." />
+			</layout_panel>
+		</layout_stack>
+		<button name="ao_less" tool_tip="Animatorun kiçik interfeysini göstərin." />
+	</panel>
+<!-- Reload Cover Panel -->
+	<panel name="ao_reload_cover">
+		<panel name="ao_reload_text_panel">
+			<text name="reload_label" >
+				Konfiqurasiya yenidən yüklənir
+			</text>
+			<text name="wait_label">
+				Zəhmət olmasa, gözləyin
+			</text>
+		</panel>
+	</panel>
+<!-- Small Panel -->
+	<panel name="animation_overrider_panel_small">
+		<combo_box name="ao_set_selection_combo_small" tool_tip="Düzəliş etmək üçün animasiya dəsti seçin."/>
+		<button name="ao_more" tool_tip="Konfiqurasiya üçün tam interfeys göstərin." />
+		<button name="ao_previous_small" tool_tip="Cari vəziyyətin öncəki animasiyasına keçid edin." />
+		<button name="ao_next_small" tool_tip="Cari vəziyyətin növbəti animasiyasına keçid edin." />
+		<check_box name="ao_sit_override_small" label="Oturmaq" tool_tip="Əgər oturma animasiyasını özəlləştirmək istəyirsinizsə bu xanaya quş qoyun." width="45" />
+	</panel>
+</panel>

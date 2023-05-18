@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="price_for_listing" title="Elanın nəşri">
+	<text name="explanation_text">
+		Sizin elanınız nəşr edildiyi günündən bəri bir həftə müddətində görünəcəkdir.
+
+Elanın siyahıda durumu ona ödədiyiniz məbləğə bağlıdır.
+
+Ödəməli elanlar yuxarıda və axtarış nəticələrində üst sıralarda görünür.
+	</text>
+	<text name="price_text">
+		Qiymət təyin et:
+	</text>
+	<button label="Ləğv et" name="cancel_btn"/>
+</floater>

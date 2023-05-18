@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel name="panel_flickr_account">
+	<string name="flickr_connected" value="Flickr-ə qoşuldu: " />
+	<string name="flickr_disconnected" value="Flickr ilə bağlantıda problem var" />
+	<text name="account_caption_label">
+		Flickr-ə qoşulma yoxdur.
+	</text>
+	<panel name="panel_buttons">
+		<button label="Qoşul" name="connect_btn"/>
+		<button label="Ayırıl" name="disconnect_btn"/>
+		<text name="account_learn_more_label">
+			[http://community.secondlife.com/t5/English-Knowledge-Base/Second-Life-Share-Flickr/ta-p/2435609 Flickr-ə yükləmə haqqında ətraflı məlumat]
+		</text>
+	</panel>
+</panel>

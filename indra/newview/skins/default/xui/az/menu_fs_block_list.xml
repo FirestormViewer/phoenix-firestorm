@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="menu_blocked_gear">
+	<menu_item_call label="Blokdan çıxart" name="unblock"/>
+	<menu_item_check label="Səsi blokla" name="BlockVoice"/>
+	<menu_item_check label="Mətni blokla" name="MuteText"/>
+	<menu_item_check label="Hissəcikləri blokla" name="MuteParticles"/>
+	<menu_item_check label="Obyekt səslərini blokla" name="BlockObjectSounds"/>
+	<menu_item_call label="Profil…" name="profile"/>
+</context_menu>

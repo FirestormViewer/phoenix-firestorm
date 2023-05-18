@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Qrafika" name="Display panel">
+	<tab_container label="Qrafika seçimləri" name="tabs">
+		<panel label="Ümumi" name="General">
+			<text name="preset_label" width="90">
+				Öntəyinlər:
+			</text>
+			<text name="preset_text">
+				(yox)
+			</text>
+			<text name="QualitySpeed">
+				Keyfiyyət və sürət:
+			</text>
+			<text name="FasterText">
+				Sürət
+			</text>
+			<text name="BetterText">
+				Keyfiyyət
+			</text>
+			<text name="ShadersPrefText">
+				Aşağı
+			</text>
+			<text name="ShadersPrefText2">
+				Ortam
+			</text>
+			<text name="ShadersPrefText3">
+				Yüksək
+			</text>
+			<text name="ShadersPrefText4">
+				Ultra
+			</text>
+			<check_box label="Tam ekran rejimi" name="Fullscreen Mode" tool_tip="Firestorm-u tam ekran rejimində işə salın. Bu seçimi dəyişmək üçün yenidən başlatma tələb olunur."/>
+			<text name="ShadersText">
+				Şeyderlər:
+			</text>
+			<check_box label="Şəffaf su" name="TransparentWater"/>
+			<check_box label="Qabarıqlıq və parıltı" name="BumpShiny"/>
+			<check_box label="Yerli işıqlar" name="LocalLights"/>
+			<check_box label="Atmosfer şeyderləri" name="WindLightUseAtmosShaders"/>
+			<check_box label="Əlavə işıqlandırma modeli" tool_tip="İşıqlandırmanın genişləndirilməsini aktivləşdirin." name="UseLightShaders"/>
+			<check_box label="Əlavə kölgələr" name="UseSSAO"/>
+			<text name="shadows_label">
+				Kölgələr:
+			</text>
+			<combo_box name="ShadowDetail">
+				<combo_box.item label="Yoxdur" name="0"/>
+				<combo_box.item label="Günəş / Ay" name="1"/>
+				<combo_box.item label="Günəş / Ay + İşıqlandırıcılar" name="2"/>
+			</combo_box>
+			<text name="reflection_label">
+				Sudakı əkslər:
+			</text>
+			<combo_box name="Reflections">
+				<combo_box.item label="Yoxdur (qarışıq)" name="-2"/>
+				<combo_box.item label="Yoxdur (şəffaf)" name="-1"/>
+				<combo_box.item label="Minimum" name="0"/>
+				<combo_box.item label="Yer və ağaclar" name="1"/>
+				<combo_box.item label="Bütün statik obyektlər" name="2"/>
+				<combo_box.item label="Bütün avatarlar və obyektlər" name="3"/>
+				<combo_box.item label="Hər şeyi əksləndir" name="4"/>
+			</combo_box>
+			<text name="local lights_label" tool_tip="Əlavə işıqlandırma modeli söndürüldüyü zaman təqdim edilən işıqlandırma mənbələrinin sayına təsir edir. Yenidən başlatma tələb olunur">
+				Nöqtəvi işıqlandırma:
+			</text>
+			<combo_box name="LocalLightsDetail">
+				<combo_box.item label="Tam (susmaya görə)" name="3"/>
+				<combo_box.item label="Kiçikləşdirilmiş" name="2"/>
+				<combo_box.item label="Yalnız Günəş / Ay" name="1"/>
+			</combo_box>
+			<slider label="Göstərilmə məsafəsi" name="DrawDistance"/>
+			<slider label="Maksimum hissəciklər" name="MaxParticleCount"/>
+			<slider label="Maksimum çətinlik" name="IndirectMaxComplexity" tool_tip="Vizual olaraq çətin avatarın silyuet kimi göstərilməsinin nə vaxt başlanacağını nəzarət edir."/>
+			<slider label="Maksimum 3D avatarlar" name="IndirectMaxNonImpostors"/>
+			<slider label="Əməliyyatdan sonra keyfiyyət" name="RenderPostProcess"/>
+			<text name="PostProcessText">
+				Aşağı
+			</text>
+			<slider label="Avataar fizikası" name="AvatarPhysicsDetail"/>
+			<text name="MeshDetailText">
+				Detal səviyyəsi (LOD):
+			</text>
+			<slider label="  Əşyalar və heykəllər" name="ObjectMeshDetail" tool_tip="Göstərilmə yükünü azaltmaq üçün aşağı obyekt detallarının tətbiqinə nəzarət edir. Daha yüksək dəyərlər gecikmələrə səbəb olur, ehtiyatla istifadə edin."/>
+			<slider label="  Elastik obyektlər" name="FlexibleMeshDetail"/>
+			<slider label="  Ağaclar" name="TreeMeshDetail"/>
+			<slider label="  Avatarlar" name="AvatarMeshDetail"/>
+			<slider label="  Torpaq" name="TerrainMeshDetail"/>
+			<slider label="  Səma" name="SkyMeshDetail"/>
+			<text name="AvatarRenderingText">
+				Avatar çəkilişi:
+			</text>
+			<check_box label="Avatar paltarı" name="AvatarCloth"/>
+			<!--<text name="TerrainDetailText">
+				Torpaq detallaşması:
+			</text>
+			<radio_group name="TerrainDetailRadio">
+				<radio_item label="Aşağı" name="0"/>
+				<radio_item label="Yüksək" name="2"/>
+			</radio_group>-->
+			<text name="Presets_Label" left="160">Öntəyinlər:</text>
+			<button label="Yadda saxla" name="PrefSaveButton"/>
+			<button label="Yüklə" name="PrefLoadButton"/>
+			<button label="Sil" name="PrefDeleteButton"/>
+			<button tool_tip="Standart qrafik seçimlərini bərpa edin." name="Defaults"/>
+		</panel>
+		<panel label="Aparat seçimləri" name="Hardware Settings">
+			<check_box label="Anizotrop filtrləmə (aktiv olduqda yavaşladır)" name="ani" tool_tip = "Bu qutu anizotrop filtrləməni təmin edir. Bu, kamera mövqeyinə nisbətən nisbətən böyük bucaqlarla baxıldıqda teksturların keyfiyyətini artırmaq üçün bir texnikadır. Adətən teksturlar daha uzun məsafələrdə daha az bulanıq görünür."/>
+			<check_box label="VSync yandır" name="vsync" tool_tip="Daha hamar təcrübə üçün kadr sürətini monitorun yeniləmə tezliyi ilə sinxronlaşdırır."/>
+			<check_box label="Axın VBO-nu yandır" name="vbo_stream" tool_tip="Bunun söndürülməsi VBO aktivləşdirildikdə performansı yaxşılaşdıra bilər. Müşahidə göstərdi ki, söndürülməsi müxtəlif AMD və Intel qrafik kartlarında təkmilləşdirmələr təmin edib."/>
+			<check_box label="İtkili tekstura sıxılmasını aktivləşdirin (yenidən başlama tələb olunur)" name="texture compression" tool_tip="Video yaddaşda teksturanın sıxılması rəng keyfiyyətində müəyyən itkilər hesabına yüksək rezolyusiyaya malik teksturaların yüklənməsinə imkan verir."/>
+			<check_box label="HiDPI displey dəstəyini aktivləşdirin (yalnız Mac OSX; yenidən başladın tələb olunur)" name="use HiDPI" tool_tip="Yüksək nisbət ilə göstərmək üçün OpenGL-i aktiv edin."/>
+			<text name="Antialiasing:" tool_tip = "Bu seçimin dəyişdirilməsi bəzi avadanlıqların yenidən başlamasını tələb edə bilər." width="290">
+				Hamarlaşdırma (yenidən başlatma tövsiyyə olunur):
+			</text>
+			<combo_box label="Hamarlaşdırma" name="fsaa">
+				<combo_box.item label="Söndürülüb" name="FSAADisabled"/>
+			</combo_box>
+			<spinner label="Qamma:" name="gamma"/>
+			<text name="brightness text">
+				(0/1.0 = varsayılan parlaqlıq, aşağı = daha parlaq)
+			</text>
+			<slider label="Teksturlar üçün yaddaş (MB):" name="GraphicsCardTextureMemory" tool_tip="Teksturlar üçün ayrılmış yaddaşın miqdarı. Varsayılan olaraq, mövcud xüsusi qrafik kartı yaddaşından asılı olaraq, qrafik kartı yaddaşı 32-bit sistemlərdə 512MB-a qədər və 64-bit sistemlərdə 2048MB-a qədərdir. Bu seçimin azaldılması performansı yaxşılaşdıra bilər, lakin teksturları bulanıq edə bilər."/>
+			<check_box label="Dinamik tekstur yaddaşını aktivləşdirin" name="FSDynamicTextureMemory" tool_tip="Dinamik tekstura yaddaş hesablamasını aktivləşdirir (yalnız 64-bit izləyicilərdə və ən azı 512MB VRAM-a malik AMD/NVIDIA GPU-larda mövcuddur)"/>
+			<slider label="Minimum tekstur yaddaş buferi (MB):" name="FSDynamicTextureMemoryMinTextureMemory" tool_tip="Tekturalar üçün ayrılmış minimum yaddaş miqdarı. Bu, göstərilən məbləğin mövcud video yaddaşın həcmini aşsa belə, həmişə teksturlar üçün istifadə olunmasını təmin edir. Göstərilən üstəgəl ehtiyatlar fiziki video yaddaşın həcmini keçərsə, o, uyğun olaraq qapalıdır."/>
+			<slider label="Əlavə Tekstura Yaddaş Ehtiyatı (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="Hazırda göstərilməyən yüklənmiş teksturaların keşlənməsi üçün ayrılmış fiziki video yaddaşın faizi."/>
+			<slider label="Ehtiyat fiziki video yaddaş (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="Digər istifadə üçün ayrılmış fiziki video yaddaşın faizi."/>
+			<spinner label="Duman məsafəsi əmsalı:" name="fog"/>
+			<spinner label="Şəklin dekodlanması:" name="image_decode_threads" tool_tip="Şəkillərin şifrəsini açmaq üçün istifadə olunan axınların sayı. 0 = Avtomatik, 1 = Sinxron, 2+ = istifadəçi müəyyən edib. (0 və ya 1 tövsiyə olunur)"/>
+		</panel>
+		<panel label="Çəkmə" name="Rendering">
+			<text name="World Updating">
+				Dünya yeniləməsi:
+			</text>
+			<check_box label="Dünya yeniləmələrini dondurun (hamısını dayandırın)" tool_tip="Serverdən bütün yeniləmələri dondurmaq üçün təyin edin - dünyadakı bütün fəaliyyəti dayandırır, lakin söhbətə və ya səsə təsir etmir" name="WorldPause"/>
+			<text name="Texture Rendering">
+				Teksturların çəkilişi:
+			</text>
+			<check_box label="Maks.tekstura ölçüsünü 512 piks. məhdudlaşdırın. (yalnız 64 bit; yenidən başlatma lazımdır)"
+			tool_tip="Tekstur üçün maksimum piksel həcmi məhdudlaşdırılmasını 512 piksələ qədər təyin edir. Bu, məhdudlaşdırılmış tekstur yaddaşını aşmadan öncə daha çox tekstur göstərməyə imkan verir və bulanıq teksturlar müşahidə edir."
+			name="FSRestrictMaxTextureSize"/>
+			<text name="TextureDetailLabel">
+				Tekstur keyfiyyət səviyyəsi:
+			</text>
+			<combo_box name="TextureDetail" tool_tip = "Tekstura yükləmə keyfiyyəti, TextureDiscardLevel sazlama seçiminə təsir edir">
+				<combo_box.item label="Normal (0)" name="0"/>
+				<combo_box.item label="Ortam (3)" name="3"/>
+				<combo_box.item label="Aşağı (4)" name="4"/>
+				<combo_box.item label="Tekstur yoxdur (5)" name="5"/>
+			</combo_box>
+			<text name="Alpha Mask Rendering">
+				Şəffaflıq maskaları (alfa):
+			</text>
+			<check_box label="'Genişlənmiş İşıqlandırma Modeli' aktiv edilmədikdə alfa maskasının çəkilməsi" tool_tip="İşarələnəndə, genişləndirilmiş işıqlandırma modeli aktiv deyilsə, alfa maskasının düzgün çəkilməsinə imkan verir" name="RenderAutoMaskAlphaNonDeferred"/>
+			<check_box label="'Genişlənmiş İşıqlandırma Modeli' aktiv edildikdə alfa maskasının çəkilməsi" tool_tip="İşarələnəndə, genişləndirilmiş işıqlandırma modeli aktiv olduqda alfa maskasının düzgün çəkilməsinə imkan verir" name="RenderAutoMaskAlphaDeferred"/>
+			<text name="Miscellaneous Rendering">
+				Müxtəlif:
+			</text>
+			<check_box label="İşıqsaçma çəkilişi" tool_tip="İşıqsaçma çəkilişi. Nəzərə alın ki, kölgələr işə salındıqda işıqsaçmanı söndürmək üçün gücü sıfıra təyin etmək lazımdır." name="RenderGlow"/>
+			<slider label="Güc:" tool_tip="Güc. Yüksək = geniş və bulanıq (susmaya görə 2) " name="glow_strength"/>
+			<check_box label="Natamam yüklənmiş avatarları göstərin" name="RenderUnloadedAvatars"/>
+			<check_box label="Kadr dərəcəsi həddi" name="FSLimitFramerate"/>
+			<check_box label="Skelet göstərmə rejimi" name="Wireframe"/>
+			<check_box label="Birləşdirilmiş İşıqlandırmanı aktivləşdirin" tool_tip="Bu seçim üz işıqlandırması kimi avatara əlavə edilmiş işığı işə salır. " name="Render Attached Lights"/>
+			<check_box label="Digər avatarların hissəciklərini göstərin" name="Render Attached Particles"/>
+			<slider label="Ön keşləmə üçün gecikmə" tool_tip="Onlayn olduğunuzu başqalarına göstərdikdən sonra dünyanı sizə göstərmək nə qədər vaxt aparır (susmaya görə 6 saniyə)" name="PrecachingDelay"/>
+			<text name="PrecachingDelayText">
+				saniyə
+			</text>
+			<slider label="Kölgələr keyfiyyəti" tool_tip="Kölgələr keyfiyyəti (susmaya görə 1)" name="ShadowResolution"/>
+			<slider label="Torpaq Teksturasının Göstərilməsi miqyaslanması" name="RenderTerrainScale" tool_tip="Ərazi teksturunun miqyasını müəyyən edir - aşağı daha sıxdır (yenidən başlama tələb olunur)"/>
+		</panel>
+		<panel label="Kəskinlik dərinliyi (DoF)" name="DOF panel">
+			<check_box label="Kəskinlik dərinliyini yandır (Bu, kamera diqqətindən başqa görünüşü tutqunlaşdıracaq.)" name="UseDoF"/>
+			<check_box label="Dəyişdirmə rejimində yandır" name="RenderDepthOfFieldInEditMode"/>
+			<check_box label="Suyun altında olduqda icazə verin" name="FSRenderDoFUnderwater"/>
+			<check_box label="KD diqqəti göstəricini izləyir" name="FSFocusPointFollowsPointer" tool_tip="Kəskinlik dərinliyi (DoF) diqqəti siçan kursorunu izləyəcək, bu davranış uçan kameradan istifadə edərkən görülənlərə uyğundur. Kəskinlik dərinliyinin diqqətinin bloklaması ilə istifadə edin"/>
+			<slider label="Kamera diqqət nömrəsi:" name="CameraFNum" tool_tip="Kamera diqqət nömrəsi - kəskinlik dərinliyi effekti üçün dəyər"/>
+			<slider label="Diqqət məsafəsi (mm):" name="CameraFocal" tool_tip="Kəskinlik dərinliyi effekti üçün kameranın diqqət uzunluğu (millimetrlə)"/>
+			<slider label="Kamera Bucağı (dər.):" name="Camera FOV" tool_tip="Kəskinlik dərinliyi effekti üçün şaquli kamera bucağı (dərəcə ilə)"/>
+			<slider label="Aspekt nisbəti:" name="CameraAspectRatio" tool_tip="Kəskinlik dərinliyi effekti üçün kameranın aspekt nisbəti"/>
+			<slider label="Diqqət vaxtı:" name="CameraFocusTrans" tool_tip="Diqqəti bir yerdən digərinə dəyişməyin vaxtıdır"/>
+			<slider label="Göstərmə keyfiyyəti:" name="CameraDoFResScale" tool_tip="Bulanıqlığın keyfiyyətinə və göstərmə performansına təsir edir. (daha yüksək = daha keyfiyyətli, aşağı = daha yaxşı performans)"/>
+		</panel>
+	</tab_container>
+</panel>

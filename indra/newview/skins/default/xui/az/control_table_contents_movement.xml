@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="move_actions">
+		<columns label="Hərəkət Əməliyyatları" name="lst_action"/>
+	</rows>
+	<rows name="walk_to">
+		<columns name="lst_action" tool_tip="Sürətini təyin etdiyiniz nöqtəyə yürüyər" value="Yürüyərək get"/>
+	</rows>
+	<rows name="teleport_to">
+		<columns name="lst_action" tool_tip="Maus ilə göstərilən nöqtəyə teleport olur. Lakin teleport olmaq üçün yerdə buna icazə olmalıdır. Bu səbəbdən istənilən yerdən daha yaxın bir yerə teleport olmağa çalışın" value="Teleport ol"/>
+	</rows>
+	<rows name="push_forward">
+		<columns name="lst_action" value="İrəli get"/>
+	</rows>
+	<rows name="push_backward">
+		<columns name="lst_action" value="Geriyə get"/>
+	</rows>
+	<rows name="turn_left">
+		<columns name="lst_action" value="Sola dön"/>
+	</rows>
+	<rows name="turn_right">
+		<columns name="lst_action" value="Sağa dön"/>
+	</rows>
+	<rows name="slide_left">
+		<columns name="lst_action" value="Sola sürüşmək"/>
+	</rows>
+	<rows name="slide_right">
+		<columns name="lst_action" value="Sağa sürüşmək"/>
+	</rows>
+	<rows name="jump">
+		<columns name="lst_action" value="Hoppanmaq/Yuxarı"/>
+	</rows>
+	<rows name="push_down">
+		<columns name="lst_action" value="Aşağıya"/>
+	</rows>
+	<rows name="run_forward">
+		<columns name="lst_action" value="İrəliyə qaçış"/>
+	</rows>
+	<rows name="run_backward">
+		<columns name="lst_action" value="Geriyə qaçış"/>
+	</rows>
+	<rows name="run_left">
+		<columns name="lst_action" value="Sola qaçış"/>
+	</rows>
+	<rows name="run_right">
+		<columns name="lst_action" value="Sağa qaçış"/>
+	</rows>
+	<rows name="toggle_run">
+		<columns name="lst_action" value="Qaçışı yandır/söndür"/>
+	</rows>
+	<rows name="toggle_fly">
+		<columns name="lst_action" value="Uçmaq/Uçmamaq"/>
+	</rows>
+	<rows name="toggle_sit">
+		<columns name="lst_action" value="Oturmaq/Durmaq"/>
+	</rows>
+	<rows name="stop_moving">
+		<columns name="lst_action" value="Dayanmaq"/>
+	</rows>
+</contents>

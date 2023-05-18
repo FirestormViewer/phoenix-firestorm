@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Object List popup">
+	<menu_item_call label="Skript məlumatı" name="script_info" />
+	<menu_item_call label="Toxun" name="touch_object" />
+	<menu_item_call label="Otur" name="sit_on_object" />
+	<menu_item_call label="Teleport ol" name="teleport_to_object" />
+	<menu_item_call label="Yaxınlaşdır" name="look_at_object" />
+	<menu_item_call label="Obyekti yoxlamaq" name="inspect_object" />
+	<menu_item_call label="Dəyişdir" name="edit_object" />
+	<menu_item_call label="Qaytar" name="return_object" />
+	<menu_item_call label="Sil" name="delete_object" />
+	<menu_item_call label="Qara siyahıya əlavə et" name="blacklist_object" />
+	<menu_item_call label="Obyekti al" name="object_buy" />
+	<menu_item_call label="Obyektlərim" name="filter_my_objects" />
+	<menu_item_call label="Hamısını seç" name="select_all" />
+	<menu_item_call label="Seçimləri ləğv et" name="clear_selection" />
+</context_menu>

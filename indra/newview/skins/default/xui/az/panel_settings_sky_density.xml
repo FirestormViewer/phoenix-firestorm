@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Sıxlıq" name="panel_settings_sky_density">
+	<layout_stack name="main_ls">
+		<layout_panel name="lp_1">
+			<slider label="Rayleynin eksponensial hissəsi:" name="rayleigh_exponential"/>
+			<slider label="Rayleynin eksponensial miqyası:" name="rayleigh_exponential_scale"/>
+			<slider label="Rayleynin liniya hissəsi:" name="rayleigh_linear"/>
+			<slider label="Rayleynin sabit hissəsi:" name="rayleigh_constant"/>
+			<slider label="Rayleynin maksimum hündürlüyü:" name="rayleigh_max_altitude"/>
+		</layout_panel>
+		<layout_panel name="lp_2">
+			<slider label="Mie-nin eksponensial hissəsi:" name="mie_exponential"/>
+			<slider label="Mie-nin eksponensial miqyası:" name="mie_exponential_scale"/>
+			<slider label="Mie-nin liniya hissəsi:" name="mie_linear"/>
+			<slider label="Mie-nin sabit hissəsi:" name="mie_constant"/>
+			<slider label="Mie-nin anizo-faktoru:" name="mie_aniso_factor"/>
+			<slider label="Mie-nin maksimum hündürlüyü:" name="mie_max_altitude"/>
+		</layout_panel>
+		<layout_panel name="lp_3">
+			<slider label="Absorbsiyanın eksponensial hissəsi:" name="absorption_exponential"/>
+			<slider label="Absorbsiyanın eksponensial miqyası:" name="absorption_exponential_scale"/>
+			<slider label="Absorbsiyanın liniya hissəsi:" name="absorption_linear"/>
+			<slider label="Absorbsiyanın sabit hissəsi:" name="absorption_constant"/>
+			<slider label="Absorbsiyanın maksimum hündürlüyü:" name="absorption_max_altitude"/>
+		</layout_panel>
+	</layout_stack>
+</panel>

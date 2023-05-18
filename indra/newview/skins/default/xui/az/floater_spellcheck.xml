@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="spellcheck_floater" title="Yazımın yoxlanılması ayarları">
+	<check_box label="Yazımın yoxlanılması aktiv edilsin" name="spellcheck_enable"/>
+	<text name="spellcheck_main" width="110">
+		Əsas sözlük:
+	</text>
+	<text label="Jurnallar:" name="spellcheck_additional">
+		Əlavə sözlük:
+	</text>
+	<text name="spellcheck_available">
+		Mövcud
+	</text>
+	<text name="spellcheck_active">
+		Aktivdir
+	</text>
+	<button label="Sil" name="spellcheck_remove_btn"/>
+	<button label="İdxal..." name="spellcheck_import_btn"/>
+</floater>

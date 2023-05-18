@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Ümumi" name="general_tab">
+	<panel.string name="help_text">
+		Ümumi pəncərəsində bu qrup haqqında ümumi məlumat, onun üzvlərinin siyahısı, ümumi qrup seçimləri və üzv seçimləri var.
+
+Daha çox kömək üçün kursoru seçimlərin üzərinə daşıyın.
+	</panel.string>
+	<panel.string name="group_info_unchanged">
+		Qrupun ümumi məlumatı dəyişdirildi
+	</panel.string>
+	<panel.string name="incomplete_member_data_str">
+		Üzvlərin məlumatları toplanır
+	</panel.string>
+	<panel name="group_general_panel">
+		<text name="group_key_label">
+			Açar:
+		</text>
+		<text_editor name="group_key" label="Qrup açarı:" initial_value="(yüklənir...)"/>
+		<button name="copy_uri" label="URI köçürt"/>
+		<text name="prepend_founded_by">
+			Yaradıcı:
+		</text>
+		<text name="founder_name" initial_value="(yüklənir...)"/>
+		<button name="copy_name" label="Adı köçürt"/>
+		<texture_picker name="insignia" tool_tip="Şəkil seçmək üçün basın"/>
+		<text_editor name="charter">
+			Qrup nizamnaməsi
+		</text_editor>
+		<text name="join_cost_text">
+			Pulsuz
+		</text>
+		<button label="Qoşul!" name="btn_join"/>
+		<name_list name="visible_members">
+			<name_list.columns label="Ad" name="name"/>
+			<name_list.columns label="Başlıq" name="title"/>
+			<name_list.columns label="Vəziyyət" name="status"/>
+		</name_list>
+		<layout_stack name="group_preferences_layout">
+			<layout_panel name="user_preferences_container">
+				<text name="my_group_settngs_label">
+					Qrup tənzimləmələri
+				</text>
+				<check_box label="Profilimdə göstərin" name="list_groups_in_profile" tool_tip="Bu qrupun profilinizdə görünməsini tənzimləyin."/>
+				<check_box label="Qrup bildirişlərini alın" name="receive_notices" tool_tip="Qrup bildirişlərini almaq istəyirsinizsə tənzimləyin. Eğer bu qrup sizə 'spam' göndərirsə işarəni silin."/>
+				<check_box label="Bu qrupun söhbətini qəbul edin" name="receive_chat" tool_tip="Bu qrupun söhbətlərinə qatılmaq istəyirsinizsə tənzimləyin."/>
+				<text name="active_title_label">
+					Cari başlıq:
+				</text>
+				<combo_box name="active_title" tool_tip="Bu qrup aktiv olduğu zaman avatarınızın adının üstündə görünəcək başlıqı tənzimləyin."/>
+			</layout_panel>
+			<layout_panel name="group_preferences_container">
+				<text name="group_settngs_label">
+					Qrup seçimləri
+				</text>
+				<check_box label="Axtarışda göstər" name="show_in_group_list" tool_tip="İnsanlara bu qrupu axtarış nəticələrində görmək imkanı verir."/>
+				<check_box label="Hər kəs üzv ola bilər" name="open_enrollement" tool_tip="Qrup hər kəs üçün pulsuz üzvlük təklif edir və dəvət tələb etmir."/>
+				<check_box label="Üzlvük haqqı" name="check_enrollment_fee" tool_tip="Üzvlük haqqını təyin edin."/>
+				<spinner name="spin_enrollment_fee" tool_tip="'Üzlvuk haqqı' seçilərsə, yeni üzvlər qrupa qoşulmaq üçün bu məbləği ödəməlidir."/>
+				<combo_box name="group_mature_check" tool_tip="Yetkinlik reytinqləri qrupda icazə verilən məzmun və davranış növünü müəyyən edir">
+					<combo_item name="select_mature">
+						- Yetkinlik səviyyəsini seçin -
+					</combo_item>
+					<combo_box.item label="Ortam məzmun" name="mature"/>
+					<combo_box.item label="Ümumi məzmun" name="pg"/>
+				</combo_box>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

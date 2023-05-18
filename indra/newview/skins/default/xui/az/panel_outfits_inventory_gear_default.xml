@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu name="menu_gear_default">
+	<menu_item_call label="Cari geyimi dəyiş" name="wear"/>
+	<menu_item_call label="Cari geyimdən sil" name="remove"/>
+	<menu_item_call label="Adı dəyişdir" name="rename"/>
+	<menu_item_call label="Keçidi sil" name="remove_link"/>
+	<menu_item_call label="Geyimi sil" name="delete"/>
+</menu>

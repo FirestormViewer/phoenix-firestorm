@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Ümumi" name="general_panel">
+	<text name="language_textbox">
+		Dil:
+	</text>
+	<combo_box name="language_combobox">
+		<combo_box.item label="English (İngilis dili)" name="English"/>
+		<combo_box.item label="Azərbaycanca" name="Azerbaijani"/>
+		<combo_box.item label="Dansk (Daniya dili) - Beta" name="Danish"/>
+		<combo_box.item label="Deutsch (Alman dili)" name="Deutsch(German)"/>
+		<combo_box.item label="Español (İspan dili) - Beta" name="Spanish"/>
+		<combo_box.item label="Français (Fransız dili) - Beta" name="French"/>
+		<combo_box.item label="Italiano (İtalyan dili) - Beta" name="Italian"/>
+		<combo_box.item label="Polski (Polonya dili)" name="Polish"/>
+		<combo_box.item label="Português (Portugal dili) - Beta" name="Portugese"/>
+		<combo_box.item label="Русский (Rus dili)" name="Russian"/>
+		<combo_box.item label="Türkçe (Türkcə) - Beta" name="Turkish"/>
+		<combo_box.item label="日本語 (Yapon dili) - Beta" name="(Japanese)"/>
+		<combo_box.item label="正體中文 (Adəti Çin dili) - Beta" name="Traditional Chinese"/>
+	</combo_box>
+	<text name="language_textbox2" width="145">
+		(yenidən başlatma tələb olunur)
+	</text>
+	<check_box label="IME istifadəsi mətn daxil etmək üçün" name="use_ime" tool_tip="Yalnız bəzi dillər üçün lazım olan beynəlxalq metod redaktoru istifadə edin, məsələn, Yaponiya, Çin və s."/>
+	<text name="maturity_desired_prompt" width="250">
+		Reytinqli yerlərə giriş əldə edin:
+	</text>
+	<combo_box name="maturity_desired_combobox">
+		<combo_box.item label="Ümumi, Ortam, Yetkin" name="Desired_Adult"/>
+		<combo_box.item label="Ümumi, Ortam" name="Desired_Mature"/>
+		<combo_box.item label="Ümumi" name="Desired_PG"/>
+	</combo_box>
+	<text name="start_location_textbox">
+		Başlatma yeri:
+	</text>
+	<combo_box name="start_location_combo">
+		<combo_box.item label="Son yer" name="MyLastLocation" tool_tip="Standart olaraq. Son dəfə ziyarət etdiyiniz yerə daxil olun."/>
+		<combo_box.item label="Evim" name="MyHome" tool_tip="Ev təyin edilmiş yerə daxil olun"/>
+	</combo_box>
+	<check_box label="Daxil olma ekranında göstər" name="show_location_checkbox"/>
+	<text name="name_tags_textbox">
+		Ad göstəricisi:
+	</text>
+	<radio_group name="Name_Tag_Preference" width="220">
+		<radio_item width="95" label="Söndür" name="radio"/>
+		<radio_item width="85" label="Yandır" name="radio2"/>
+		<radio_item label="Müvəqqəti olaraq" name="radio3"/>
+	</radio_group>
+	<text name="RenderNameShowTime_LabelPrefix" left_pad="105">
+		(
+	</text>
+	<text name="RenderNameShowTime_LabelSuffix">
+		saniyə)
+	</text>
+	<check_box label="Mənim adımı göstər" name="show_my_name_checkbox1"/>
+	<check_box label="İstifadəçi adları" name="show_slids" tool_tip="İstifadəçi hesabının adını göstərmək, məsələn, Bobsmith123"/>
+	<check_box label="Qrupun adını göstərmək" name="show_all_title_checkbox1" tool_tip="Qrupun adını göstərmək, Məsələn, Sahib"/>
+	<check_box label="Öz qrupunun adını gizlətmək" name="RenderHideGroupTitle" tool_tip="Öz qrupunun adını özünüz və digərləri üçün göstərmək və ya gizlətmək."/>
+	<check_box label="Göstərilən ad" name="display_names_check" tool_tip="Çatda, İM-də və Avatar üzərindəki etiketlərdə Göstərilən adı (Display Names) göstərmək"/>
+	<check_box label="Adın köhnə göstərilməsi üsulu" name="FSshow_legacyun" tool_tip="Köhnə formatda adın göstərilməsi (Ad Soyad) istifadəçi adının (ad.soyad) yerinə"/>
+	<check_box label="Dostları vurğulamaq" name="show_friends" tool_tip="Dost adını başqa bir rəngdə vurğulamaq"/>
+	<check_box label="Qədim tip adlarda 'Resident' sözünü gizlətmək" name="legacy_trim_check" tool_tip="Qədim tip adlarda 'Resident' sözünü gizlətmək"/>
+	<check_box label="Qədim tip etiket yerləşməsi" name="FSLegacyNametagPosition" tool_tip="Bu seçimi etdiyinizdə, ad etiketi Avatarın üzündən daimi bir hündürlükdə olmayacaq və hərəkət edən zaman başının üzərinə toxulmayacaq. Məsələn, animasiyanın nəticəsində."/>
+	<check_box label="Avtomatik cavabı etikətdə göstər" name="FSShowAutorespondInNameTag" tool_tip="Bu özəllik öz etiketinizdə avtomatik cavabçını göstərir."/>
+	<check_box label="Avatarın çətinliyini göstərmək" name="FSTagShowARW" tool_tip="Əgər aktivdirsə, etiketdə hazırda olan avatarın çətinliyini göstərir."/>
+	<check_box label="Çox çətin olduğu halda" name="FSTagShowTooComplexOnlyARW" tool_tip="Əgər aktivdirsə, etiket, avatar çox çətin olduğu və sildi kimi göstərildiyi zaman hazırda olan avatarın çətinliyini göstərəcək"/>
+	<check_box label="Öz çətinliyimi göstər" name="FSTagShowOwnARW" tool_tip="Aktiv halda etiket sizin cari avatar çətinliyinizi göstərəcək."/>
+	<text name="title_afk_text">
+		'Uzaqda' statusu nəqədər zamandan sonra:
+	</text>
+	<text name="title_afk_quit_text">
+		Çıxış nəqədər zamandan sonra:
+	</text>
+	<combo_box label="'Uzaqda' nəqədər zamandan sonra::" name="afk">
+		<combo_box.item label="2 dəqiqə" name="item0"/>
+		<combo_box.item label="5 dəqiqə" name="item1"/>
+		<combo_box.item label="10 dəqiqə" name="item2"/>
+		<combo_box.item label="30 dəqiqə" name="item3"/>
+		<combo_box.item label="60 dəqiqə" name="item4"/>
+		<combo_box.item label="Heç vaxt" name="item5"/>
+	</combo_box>
+	<combo_box label="Çıxış nəqədər zamandan sonra:" name="quitafk">
+		<combo_box.item label="2 dəqiqə" name="item0"/>
+		<combo_box.item label="5 dəqiqə" name="item1"/>
+		<combo_box.item label="10 dəqiqə" name="item2"/>
+		<combo_box.item label="30 dəqiqə" name="item3"/>
+		<combo_box.item label="Heç vaxt" name="item4"/>
+	</combo_box>
+	<check_box name="AvatarSitOnAway" label="'Uzaqda' olanda oturuş"/>
+	<text name="text_box3">
+		Avtomatik mesajlar Məxfilik / Avtomatik cavabda dəyişdirilə bilər
+	</text>
+</panel>

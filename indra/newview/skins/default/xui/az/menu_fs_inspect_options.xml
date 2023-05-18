@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="Təsvir" name="description"/>
+	<menu_item_check label="Sahib" name="owner_name"/>
+	<menu_item_check label="Yaradan" name="creator_name"/>
+	<menu_item_check label="Üzlər" name="facecount"/>
+	<menu_item_check label="Tezlik nöqtələri" name="vertexcount"/>
+	<menu_item_check label="Üçbucaqlar" name="trianglecount" />
+	<menu_item_check label="TMem" name="tramcount"/>
+	<menu_item_check label="VRAM" name="vramcount"/>
+	<menu_item_check label="Yaradılma tarixi" name="creation_date"/>
+</toggleable_menu>

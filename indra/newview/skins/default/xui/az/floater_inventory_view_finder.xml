@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Inventory Finder" title="INVENTORY_RECENT_ITEMS">
+	<check_box label="Animasiyalar" name="check_animation"/>
+	<check_box label="Vizit kartları" name="check_calling_card"/>
+	<check_box label="Paltarlar" name="check_clothing"/>
+	<check_box label="Jestlər" name="check_gesture"/>
+	<check_box label="Əlfəcinlər" name="check_landmark"/>
+	<check_box label="Qeydlər" name="check_notecard"/>
+	<check_box label="Meşlər" name="check_mesh"/>
+	<check_box label="Obyektlər" name="check_object"/>
+	<check_box label="Skriptlər" name="check_script"/>
+	<check_box label="Səslər" name="check_sound"/>
+	<check_box label="Teksturlar" name="check_texture"/>
+	<check_box label="Şəkillər" name="check_snapshot"/>
+	<check_box label="Seçimlər" name="check_settings"/>
+	<button label="Hamısı" label_selected="Hamısı" name="All"/>
+	<button label="Heç biri" label_selected="Heç biri" name="None"/>
+	<check_box label="Dəy." name="check_modify"/>
+	<check_box label="Köç." name="check_copy"/>
+	<check_box label="Pay." name="check_transfer"/>
+	<check_box label="Qovluqları göstər" name="check_show_empty"/>
+	<check_box label="Yaradıcı mənəm" name="check_created_by_me"/>
+	<check_box label="Yaradıcı başqasıdır" name="check_created_by_others"/>
+	<check_box label="Çıxış zamanından" name="check_since_logoff"/>
+	<text name="- OR -">
+		- VƏ YA -
+	</text>
+	<radio_group name="date_search_direction">
+		<radio_item label="-dan yeni" name="newer"/>
+		<radio_item label="-dan yaşlı" name="older"/>
+	</radio_group>
+	<spinner label="Saat əvvəl" name="spin_hours_ago"/>
+	<text name="label_hours">
+		Saat
+	</text>
+	<spinner label="Gün əvvəl" name="spin_days_ago"/>
+	<text name="label_days">
+		Gün
+	</text>
+	<button label="Sıfırla" label_selected="Sıfırla" name="btnReset"/>
+	<button label="Bağla" label_selected="Bağla" name="Close"/>
+</floater>

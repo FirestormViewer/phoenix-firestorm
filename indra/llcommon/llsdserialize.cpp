@@ -2193,7 +2193,7 @@ LLUZipHelper::EZipRresult LLUZipHelper::unzip_llsd(LLSD& data, std::istream& is,
 LLUZipHelper::EZipRresult LLUZipHelper::unzip_llsd(LLSD& data, const U8* in, S32 size)
 {
 	U8* result = NULL;
-	llssize cur_size = 0;
+	U32 cur_size = 0;
 	z_stream strm;
 		
 	constexpr U32 CHUNK = 1024 * 512;
@@ -2294,169 +2294,41 @@ LLUZipHelper::EZipRresult LLUZipHelper::unzip_llsd(LLSD& data, const U8* in, S32
 		free(result);
 	return ZR_OK;
 }
-// </FS:Beq pp Rye> 
 //This unzip function will only work with a gzip header and trailer - while the contents
 //of the actual compressed data is the same for either format (gzip vs zlib ), the headers
 //and trailers are different for the formats.
-U8* unzip_llsdNavMesh(bool& valid, size_t& outsize, std::istream& is, S32 size)
-{
-	// <FS:Beq pp Rye> Add non-allocating variants of unzip_llsd	
-	// 	if (size == 0)
-	// 	{
-	// 		LL_WARNS() << "No data to unzip." << LL_ENDL;
-	// 		return NULL;
-	// 	}
-
-	// 	U8* result = NULL;
-	// 	U32 cur_size = 0;
-	// 	z_stream strm;
-
-	// 	const U32 CHUNK = 0x4000;
-
-	// 	U8 *in = new(std::nothrow) U8[size];
-	// 	if (in == NULL)
-	// 	{
-	// 		LL_WARNS() << "Memory allocation failure." << LL_ENDL;
-	// 		return NULL;
-	// 	}
-	// 	is.read((char*) in, size); 
-
-	// 	U8 out[CHUNK];
-
-	// 	strm.zalloc = Z_NULL;
-	// 	strm.zfree = Z_NULL;
-	// 	strm.opaque = Z_NULL;
-	// 	strm.avail_in = size;
-	// 	strm.next_in = in;
-
-	// 	valid = true; // <FS:ND/> Default is all okay.
-	// 	S32 ret = inflateInit2(&strm,  windowBits | ENABLE_ZLIB_GZIP );
-	// 	do
-	// 	{
-	// 		strm.avail_out = CHUNK;
-	// 		strm.next_out = out;
-	// 		ret = inflate(&strm, Z_NO_FLUSH);
-	// 		if (ret == Z_STREAM_ERROR)
-	// 		{
-	// 			inflateEnd(&strm);
-	// 			// free(result);
-	// 			if( result )
-	// 				free(result);
-	// 			delete [] in;
-	// 			in = NULL; result = NULL;// <FS:ND> Or we get a double free aftr the while loop ...
-	// 			valid = false;
-	// 		}
-
-	// 		switch (ret)
-	// 		{
-	// 		case Z_NEED_DICT:
-	// 			ret = Z_DATA_ERROR;
-	// 		case Z_DATA_ERROR:
-	// 		case Z_MEM_ERROR:
-	// 			inflateEnd(&strm);
-	// 			// free(result);
-	// 			if( result )
-	// 				free(result);
-	// 			delete [] in;
-	// 			valid = false;
-	// 			in = NULL; result = NULL;// <FS:ND> Or we get a double free aftr the while loop ...
-	// 			break;
-	// 		}
-
-	// 		if( valid ) {// <FS:ND> in case this stream is invalid, do not pass the already freed buffer to realloc.
-
-	// 		U32 have = CHUNK-strm.avail_out;
-
-	// 		U8* new_result = (U8*) realloc(result, cur_size + have);
-	// 		if (new_result == NULL)
-	// 		{
-	// 			LL_WARNS() << "Failed to unzip LLSD NavMesh block: can't reallocate memory, current size: " << cur_size
-	// 				<< " bytes; requested " << cur_size + have
-	// 				<< " bytes; total syze: ." << size << " bytes."
-	// 				<< LL_ENDL;
-	// 			inflateEnd(&strm);
-	// 			if (result)
-	// 			{
-	// 				free(result);
-	// 			}
-	// 			delete[] in;
-	// 			valid = false;
-	// 			return NULL;
-	// 		}
-	// 		result = new_result;
-	// 		memcpy(result+cur_size, out, have);
-	// 		cur_size += have;
-
-	// 		} // </FS:ND>
-
-	// 	} while (ret == Z_OK);
-
-	// 	inflateEnd(&strm);
-	// 	delete [] in;
-
-	// 	if (ret != Z_STREAM_END)
-	// 	{
-	// 		// <FS:ND> result might have been freed above. And calling free with a null pointer is not defined.
-	// 		// free(result);
-	// 		if( result )
-	// 			free(result);
-	// 		// </FS:ND>
-
-	// 		valid = false;
-	// 		return NULL;
-	// 	}
-
-	// 	//result now points to the decompressed LLSD block
-	// 	{
-	// 		outsize= cur_size;
-	// 		valid = true;		
-	// 	}
-
-	// 	return result;
-	// }
-	if (size == 0)
-	{
-		LL_WARNS() << "No data to unzip." << LL_ENDL;
-		return nullptr;
-	}
-	std::unique_ptr<U8[]> in;
-	try
-	{
-		in = std::make_unique<U8[]>(size);
-	}
-	catch (const std::bad_alloc&)
-	{
-		LL_WARNS() << "Memory allocation failure." << LL_ENDL;
-		return nullptr;
-	}
-
-	is.read((char*)in.get(), size);
-	return unzip_llsdNavMesh(valid, outsize, in.get(), size);
-}
-
-U8* unzip_llsdNavMesh(bool& valid, size_t& outsize, const U8* in, S32 size)
+U8* unzip_llsdNavMesh( bool& valid, size_t& outsize, std::istream& is, S32 size )
 {
 	if (size == 0)
 	{
 		LL_WARNS() << "No data to unzip." << LL_ENDL;
-		return nullptr;
+		return NULL;
 	}
-	U8* result = nullptr;
+
+	U8* result = NULL;
 	U32 cur_size = 0;
 	z_stream strm;
-
+		
 	const U32 CHUNK = 0x4000;
 
-	U8 out[CHUNK];
+	U8 *in = new(std::nothrow) U8[size];
+	if (in == NULL)
+	{
+		LL_WARNS() << "Memory allocation failure." << LL_ENDL;
+		return NULL;
+	}
+	is.read((char*) in, size); 
 
+	U8 out[CHUNK];
+		
 	strm.zalloc = Z_NULL;
 	strm.zfree = Z_NULL;
 	strm.opaque = Z_NULL;
 	strm.avail_in = size;
-	strm.next_in = const_cast<U8*>(in);
+	strm.next_in = in;
 
-
-	S32 ret = inflateInit2(&strm, windowBits | ENABLE_ZLIB_GZIP);
+	
+	S32 ret = inflateInit2(&strm,  windowBits | ENABLE_ZLIB_GZIP );
 	do
 	{
 		strm.avail_out = CHUNK;
@@ -2466,9 +2338,10 @@ U8* unzip_llsdNavMesh(bool& valid, size_t& outsize, const U8* in, S32 size)
 		{
 			inflateEnd(&strm);
 			free(result);
-			return nullptr;
+			delete [] in;
+			valid = false;
 		}
-
+		
 		switch (ret)
 		{
 		case Z_NEED_DICT:
@@ -2478,14 +2351,15 @@ U8* unzip_llsdNavMesh(bool& valid, size_t& outsize, const U8* in, S32 size)
 		case Z_MEM_ERROR:
 			inflateEnd(&strm);
 			free(result);
+			delete [] in;
 			valid = false;
-			return nullptr;
+			break;
 		}
 
-		U32 have = CHUNK - strm.avail_out;
+		U32 have = CHUNK-strm.avail_out;
 
-		U8* new_result = (U8*)realloc(result, cur_size + have);
-		if (!new_result)
+		U8* new_result = (U8*) realloc(result, cur_size + have);
+		if (new_result == NULL)
 		{
 			LL_WARNS() << "Failed to unzip LLSD NavMesh block: can't reallocate memory, current size: " << cur_size
 				<< " bytes; requested " << cur_size + have
@@ -2496,35 +2370,36 @@ U8* unzip_llsdNavMesh(bool& valid, size_t& outsize, const U8* in, S32 size)
 			{
 				free(result);
 			}
+			delete[] in;
 			valid = false;
-			return nullptr;
+			return NULL;
 		}
 		result = new_result;
-		memcpy(result + cur_size, out, have);
+		memcpy(result+cur_size, out, have);
 		cur_size += have;
 
 	} while (ret == Z_OK);
 
 	inflateEnd(&strm);
+	delete [] in;
 
 	if (ret != Z_STREAM_END)
 	{
 		free(result);
 		valid = false;
-		return nullptr;
+		return NULL;
 	}
 
 	//result now points to the decompressed LLSD block
 	{
-		outsize = cur_size;
-		valid = true;
+		outsize= cur_size;
+		valid = true;		
 	}
 
 	return result;
 }
-// </FS:Beq pp Rye>
 
-char* strip_deprecated_header(char* in, llssize& cur_size, llssize* header_size)
+char* strip_deprecated_header(char* in, U32& cur_size, U32* header_size)
 {
 	const char* deprecated_header = "<? LLSD/Binary ?>";
 	constexpr size_t deprecated_header_size = 17;
