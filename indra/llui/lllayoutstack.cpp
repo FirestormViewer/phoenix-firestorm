@@ -343,12 +343,6 @@ void LLLayoutStack::removeChild(LLView* view)
         LLView::removeChild(view);
 		updateFractionalSizes();
 		mNeedsLayout = true;
-		// <FS:Zi> Fix crash when removing layout panels from a stack
-		// <FS:Ansariel> LL replaced "delete embedded_panelp;" with "LLView::removeChild(view);". AFAIK
-		//               removeChild does not call delete, so we might exhibit a memory leak. Thus
-		//               we leave this in place.
-		delete embedded_panelp;
-		// </FS:Zi>
 	}
     else
     {
