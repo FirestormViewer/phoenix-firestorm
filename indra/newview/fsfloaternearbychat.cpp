@@ -953,8 +953,8 @@ void FSFloaterNearbyChat::onEmojiPanelBtnClicked(FSFloaterNearbyChat* self)
 		if (!picker->isShown())
 		{
 			picker->show(
-				boost::bind(&FSFloaterNearbyChat::onEmojiPicked, self, _1),
-				boost::bind(&FSFloaterNearbyChat::onEmojiPickerClosed, self));
+				[self](llwchar emoji) { self->onEmojiPicked(emoji); },
+				[self]() { self->onEmojiPickerClosed(); });
 			if (LLFloater* root_floater = gFloaterView->getParentFloater(self))
 			{
 				root_floater->addDependentFloater(picker, TRUE, TRUE);
