@@ -2033,11 +2033,11 @@ BOOL LLKeyframeMotion::serialize(LLDataPacker& dp) const
 		success &= dp.packS32(joint_motionp->mPriority, "joint_priority");
         success &= dp.packS32(joint_motionp->mRotationCurve.mKeys.size(), "num_rot_keys");
 
-		LL_DEBUGS("BVH") << "Joint " << i
+        LL_DEBUGS("BVH") << "Joint " << i
             << " name: " << joint_motionp->mJointName
             << " Rotation keys: " << joint_motionp->mRotationCurve.mKeys.size()
             << " Position keys: " << joint_motionp->mPositionCurve.mKeys.size() << LL_ENDL;
-		for (RotationCurve::key_map_t::value_type& rot_pair : joint_motionp->mRotationCurve.mKeys)
+        for (RotationCurve::key_map_t::value_type& rot_pair : joint_motionp->mRotationCurve.mKeys)
 		{
 			RotationKey& rot_key = rot_pair.second;
 			U16 time_short = F32_to_U16(rot_key.mTime, 0.f, mJointMotionList->mDuration);
@@ -2057,7 +2057,7 @@ BOOL LLKeyframeMotion::serialize(LLDataPacker& dp) const
 			LL_DEBUGS("BVH") << "  rot: t " << rot_key.mTime << " angles " << rot_angles.mV[VX] <<","<< rot_angles.mV[VY] <<","<< rot_angles.mV[VZ] << LL_ENDL;
 		}
 
-		success &= dp.packS32(joint_motionp->mPositionCurve.mKeys.size(), "num_pos_keys");
+		success &= dp.packS32(joint_motionp->mPositionCurve.mKeys.size(), "num_pos_keys"); // <FS:Ansariel> Fix LL merge bug
 		for (PositionCurve::key_map_t::value_type& pos_pair : joint_motionp->mPositionCurve.mKeys)
 		{
 			PositionKey& pos_key = pos_pair.second;
