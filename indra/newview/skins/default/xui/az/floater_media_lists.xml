@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floatermedialists" title="Media siyahıları">
+	<layout_stack name="lists_layout_stack">
+	<layout_panel name="whitelist_layout_panel">
+	<text name="whitelist_text">
+		İcazəli domenlər:
+	</text>
+	<scroll_list name="whitelist_list">
+		<column label="Ağ siyahı" name="whitelist_col" />
+	</scroll_list>
+	<layout_stack name="whitelist_buttons_layout_stack">
+	<layout_panel name="whitelist_buttons_panel_add">
+	<button label="Əlavə et..." label_selected="Add..." name="add_whitelist" />
+	</layout_panel>
+	<layout_panel name="whitelist_buttons_panel_remove">
+	<button label="Sil" name="remove_whitelist" />
+	</layout_panel>
+	</layout_stack>
+	</layout_panel>
+	<layout_panel name="blacklist_layout_panel">
+	<text name="blacklist_text">
+		Bloklanan domenlər:
+	</text>
+	<scroll_list name="blacklist_list">
+		<column label="Qara siyahı" name="blacklist_col" />
+	</scroll_list>
+	<layout_stack name="blacklist_buttons_layout_stack">
+	<layout_panel name="blacklist_buttons_panel_add">
+	<button label="Əlavə et..." label_selected="Add..." name="add_blacklist" />
+	</layout_panel>
+	<layout_panel name="blacklist_buttons_panel_remove">
+	<button label="Sil" label_selected="Remove" name="remove_blacklist" />
+	</layout_panel>
+	</layout_stack>
+	</layout_panel>
+	</layout_stack>
+	<text name="add_text" />
+	<line_editor name="input_domain"/>
+	<button label="Əlavə et" label_selected="Əlavə et" name="commit_domain" />
+</floater>

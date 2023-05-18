@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Sakinlərin qadağası" name="bulk_ban_panel">
+  <panel.string name="loading">
+    (yüklənir...)
+  </panel.string>
+  <panel.string name="ban_selection_too_large">
+    Qrup qadağaları göndərilmədi: çox sayda sakin seçildi. Qrup qadağası hər sorğu üçün 100 ilə məhdudlaşır.
+  </panel.string>
+  <panel.string name="ban_not_permitted">
+    Qrup qadağası göndərilmədi: 'Qadağalar siyahısını idarə et' imkanınız yoxdur.
+  </panel.string>
+  <panel.string name="ban_limit_fail">
+    Qrup qadağası göndərilmədi: qrupunuz icazə verilən qadağa girişlərinin limitinə çatıb.
+  </panel.string>
+  <panel.string name="partial_ban">
+    Bəzi qrup qadağaları göndərilmədi:
+[REASONS]
+  </panel.string>
+  <panel.string name="ban_failed">
+    Qrup qadağaları göndərilmədi:
+[REASONS]
+  </panel.string>
+  <panel.string name="residents_already_banned">
+    - Aşağıdakı sakin(lər) artıq bloklanıb: [RESIDENTS].
+  </panel.string>
+  <panel.string name="ban_limit_reached">
+    - Qadağa limiti çatdı, aşağıdakı agentlər bloklanmayıb: [RESIDENTS].
+  </panel.string>
+  <panel.string name="cant_ban_yourself">
+    - Özünüzü qrupda qadağan edə bilmərsiniz.
+  </panel.string>
+  <text name="help_text">
+    Qrupunuzdan onları qadağan etmək üçün bir neçə sakin seçə bilərsiniz.
+  </text>
+  <button label="Sakin seçimini aç" name="add_button"/>
+  <name_list name="banned_agent_list" tool_tip="Bir neçə sakin seçmək üçün Ctrl düyməsini basıb saxlayın, və onların adlarını seçin."/>
+  <button label="Seçilmişləri siyahıdan sil" name="remove_button"
+   tool_tip="Yuxarıda seçilmiş sakinləri qadağa siyahısından silir"/>
+  <button label="Sakinlərin qadağası" name="ban_button"/>
+  <button label="Ləğv et" name="cancel_button"/>
+  <string name="GroupBulkBan">
+    Qrup qadağası
+  </string>
+</panel>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu name="Navbar Menu">
+	<menu_item_check label="Koordinatları göstər" name="Show Coordinates"/>
+	<menu_item_check label="Sahə seçimlərini göstər" name="Show Parcel Properties"/>
+	<menu_item_call label="Kəs" name="Cut"/>
+	<menu_item_call label="Köçürt" name="Copy"/>
+	<menu_item_call label="Yapışdır" name="Paste"/>
+	<menu_item_call label="Sil" name="Delete"/>
+	<menu_item_call label="Hamısını seç" name="Select All"/>
+</menu>

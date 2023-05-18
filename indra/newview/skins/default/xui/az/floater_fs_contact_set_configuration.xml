@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_contact_set_configure" title="Kontakt dəstinin seçimləri" width="450">
+	<floater.string name="title">
+		Seçimlər [NAME]
+	</floater.string>
+	<panel name="top_panel" width="450">
+		<text name="set_label">
+			Kontakt dəstinin seçimləri:
+		</text>
+		<line_editor name="set_name_editor" right="-100"/>
+		<button name="rename_btn" width="85" label="Adı dəyişdir"/>
+		<color_swatch label="Rəngi təyin et" name="set_swatch" tool_tip="Rəng seçimini açmaq üçün toxunun" />
+		<check_box label="Bildirişlər göstər" name="show_set_notifications" />
+	</panel>
+	<panel name="bottom_panel" width="450">
+		<text name="global_label">
+			Ümumi seçimlər:
+		</text>
+		<color_swatch label="Susmaya görə rəng" name="global_swatch" tool_tip="Rəng seçimini açmaq üçün toxunun" />
+		<text name="label_online">
+			Status bildirişi:
+		</text>
+		<check_box label="BÜTÜN dostlar üçün daxil olma bildirişlərini tost kimi göstərin" name="ChatOnlineNotification" />
+		<check_box label="BÜTÜN dostlar üçün daxil olma bildirişlərini ümumi söhbətdə göstərin " name="OnlineOfflinetoNearbyChat" />
+		<check_box label="Müəyyən Dəstlər üçün daxil olma bildirişlərini tost kimi göstərin" name="FSContactSetsNotificationToast" />
+		<check_box label="Müəyyən Dəstlər üçün daxil olma bildirişlərini ümumi söhbətdə göstərin" name="FSContactSetsNotificationNearbyChat" />
+		<text name="label_colors">
+			Fərdi rənglər:
+		</text>
+		<check_box label="Kontaktlar dəstinə əsaslanan mini xəritə nişan rəngi" name="FSContactSetsColorizeMiniMap" />
+		<check_box label="Kontakt dəstinə əsaslanan ad etiketinin rəngi" name="FSContactSetsColorizeNameTag" />
+		<check_box label="Kontaktlar dəstinə əsaslanan radara qeyd rəngi" name="FSContactSetsColorizeRadar" />
+		<check_box label="Kontaktlar dəstinə əsaslanan ümumi söhbətdə rəng" name="FSContactSetsColorizeChat" />
+	</panel>
+</floater>

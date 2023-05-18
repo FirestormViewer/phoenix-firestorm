@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_folder_gear">
+	<menu_item_call label="Əlfəcinlərə əlavə et" name="add_landmark"/>
+	<menu_item_call label="Qovluq əlavə et" name="add_folder"/>
+	<menu_item_call label="Obyekti bərpa et" name="restore_item"/>
+	<menu_item_call label="Kəs" name="cut"/>
+	<menu_item_call label="Köçürt" name="copy_folder"/>
+	<menu_item_call label="Yapışdır" name="paste"/>
+	<menu_item_call label="Adı dəyişdir" name="rename"/>
+	<menu_item_call label="Sil" name="delete"/>
+	<menu_item_call label="Genişləndir" name="expand"/>
+	<menu_item_call label="Minimallaşdır" name="collapse"/>
+</toggleable_menu>

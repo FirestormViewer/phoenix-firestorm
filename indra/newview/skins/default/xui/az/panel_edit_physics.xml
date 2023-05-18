@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_physics_panel">
+	<panel label="" name="accordion_panel">
+		<accordion name="physics_accordion">
+			<accordion_tab name="physics_breasts_updown_tab" title="Döşlər hoppanır"/>
+			<accordion_tab name="physics_breasts_inout_tab" title="Döşlər arasında məsafə"/>
+			<accordion_tab name="physics_breasts_leftright_tab" title="Döşlər yellənir"/>
+			<accordion_tab name="physics_belly_tab" title="Qarın hoppanır"/>
+			<accordion_tab name="physics_butt_tab" title="Göt hoppanır"/>
+			<accordion_tab name="physics_butt_leftright_tab" title="Göt yellənir"/>
+			<accordion_tab name="physics_advanced_tab" title="Əlavə seçimlər"/>
+		</accordion>
+	</panel>
+</panel>
+

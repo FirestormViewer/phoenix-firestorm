@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_import" title="Obyekt idxalı" >
+	<floater.string name="floater_title">İdxal: [FILENAME]</floater.string>
+	<floater.string name="file_status">
+[LINKSETS] birləşmələr. [PRIMS] primitivlər.
+[TEXTURES] teksturlar.
+[SOUNDS] səslər. [ANIMATIONS] animasiyalar.
+</floater.string>
+	<floater.string name="file_status_error">Faylı oxumaq xətası. Başqa fayl seçin.</floater.string>
+	<floater.string name="file_version_error">Faylı təhlil edərkən xəta, yanlış format və ya versiya.</floater.string>
+	<floater.string name="file_status_running">[LINKSETS]-dən [LINKSET]-in birləşdirilməsi, məsələn, [PRIMS]-dan [PRIM]</floater.string>
+	<floater.string name="file_status_done">İdxal tamamlandı.</floater.string>
+	<floater.string name="texture_uploading">[TEXTURETOTAL]-dan faktura [TEXTURE] yüklənir.</floater.string>
+	<floater.string name="sound_uploading">[SOUNDTOTAL]-dan [SOUND] səsi yüklənir.</floater.string>
+	<floater.string name="animation_uploading">[ANIMATIONTOTAL]-dan [ANIMATION] animasiyası yüklənir.</floater.string>
+	<floater.string name="asset_uploading">[ASSETTOTAL]-dan [ASSET] əmlakı yüklənir.</floater.string>
+	<floater.string name="upload_cost">Ümumi yükləmə dəyəri: L$ [COST].</floater.string>
+	<floater.string name="object">obyekt</floater.string>
+	<floater.string name="objects">obyektlər</floater.string>
+	<text name="filename_text">[FILENAME]</text>
+	<text name="creation_date_text">Yaradılıb: [DATE_STRING]</text>
+	<text name="author_text">[AUTHOR] [GRID]</text>
+	<text name="client_text">Klient: [CLIENT] v.[VERSION]</text>
+	<text name="file_status_text">Fayl seçin.</text>
+	<check_box name="do_not_attach" label="Obyektə bağlama"/>
+	<check_box name="region_position" label="Region pozisiyasına qaytar"/>
+	<check_box name="upload_asset" label="Məzmunu yükləyin"/>
+	<check_box name="temp_asset" label="Müvəqqəti"/>
+	<button name="import_btn" label="İdxal"/>
+</floater>

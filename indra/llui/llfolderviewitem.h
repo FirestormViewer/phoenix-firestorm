@@ -350,7 +350,6 @@ protected:
 	F32			mAutoOpenCountdown;
 	S32			mLastArrangeGeneration;
 	S32			mLastCalculatedWidth;
-	// bool		mNeedsSort; <FS:ND/> Unused.
 	bool		mIsFolderComplete; // indicates that some children were not loaded/added yet
 	bool		mAreChildrenInited; // indicates that no children were initialized
 

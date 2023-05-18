@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_experiences" label="Macəralar">
+	<string name="loading_experiences" value="Macəralar yüklənir..."/>
+	<string name="no_experiences" value="Macəra yoxdur."/>
+	<string name="acquire" value="Macəra almaq"/>
+</panel>

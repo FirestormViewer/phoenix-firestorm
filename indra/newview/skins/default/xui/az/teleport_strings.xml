@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<teleport_messages>
+	<message_set name="errors">
+		<message name="invalid_tport">
+			Teləportasiya cəhd sayı 1 dəqiqədə 6-ya qədər məhduddur. Probleminiz varsa, bir dəqiqə gözləyin və yenidən cəhd edin. Probleminiz həll olunmazsa, sistemdən çıxın və yenidən daxil olun.
+		</message>
+		<message name="invalid_region_handoff">
+			Bölgə sərhədini keçərkən bir problem yarandı. Sərhədi keçməzdən əvvəl yenidən daxil olmağınız tələb oluna bilər.
+Bu xəbər təkrarlanarsa, [SUPPORT_SITE] saytını ziyarət edin.
+		</message>
+		<message name="blocked_tport">
+			Teləportasiya hal-hazırda bloklanıb. Bir az sonra yenidən cəhd edin.
+Hələ də teləportasiya edə bilməsəniz, probleminizi aradan qaldırmaq üçün sistemdən çıxın və yenidən daxil olun.
+		</message>
+		<message name="nolandmark_tport">
+			Sistem yerləşdirilmə yerini təyin edə bilmədi.
+		</message>
+		<message name="timeout_tport">
+			Teleport üçün bağlantı qurmaq mümkün olmadı.
+Bir az sonra yenidən cəhd edin.
+		</message>
+		<message name="NoHelpIslandTP">
+			Gəlmə adasına yenidən teləport oluna bilməz.
+Təlimi təkrarlamaq üçün 'Gəlmə Adası - Ümumi' nöqtəsinə keçin.
+		</message>
+		<message name="noaccess_tport">
+			Bu teleporun nöqtəsinə giriş üçün sizin giriş hüququnuz yoxdur.
+		</message>
+		<message name="missing_attach_tport">
+			Sizin bağlanmalarınız hələ ki təqdim edilməyib. Bir neçə saniyə gözləyin və ya teləportasiya cəhdinizi təkrarlamadan əvvəl proqramdan çıxıb yenidən daxil olun.
+		</message>
+		<message name="too_many_uploads_tport">
+			Bu bölgədə aktivlərin sirası doludur, beləliklə, teləportasiya tələbiniz zamanında yerinə yetirilməyəcəkdir. Bir neçə dəqiqə sonra yenidən cəhd edin və ya daha az yüklü bir bölgəyə keçin.
+		</message>
+		<message name="expired_tport">
+			Sistem teleportasiya sorğunuzu vaxtında yerinə yetirə bilmədi. Bir neçə dəqiqədən sonra yenidən cəhd edin.
+		</message>
+		<message name="expired_region_handoff">
+			Sistem sərhəd keçidinizi vaxtında tamamlaya bilmədi. Bir neçə dəqiqədən sonra yenidən cəhd edin.
+		</message>
+		<message name="preexisting_tport">
+			Sistem teleportunuzu işə sala bilmədi. Bir neçə dəqiqədən sonra yenidən cəhd edin.
+		</message>
+		<message name="no_host">
+			Teleport təyinatını tapmaq mümkün deyil. Təyinat müvəqqəti olaraq mövcud olmaya bilər və ya olmaya bilər. Bir neçə dəqiqədən sonra yenidən cəhd edin.
+		</message>
+		<message name="no_inventory_host">
+			Avadanlıq siyahısı sistemi hazırda əlçatan deyil.
+		</message>
+		<message name="MustGetAgeRegion">
+			Bu regionu ziyarət etmək üçün ən azı 18 yaşınız olmalıdır.
+		</message>
+		<message name="RegionTPSpecialUsageBlocked">
+			Regiona daxil olmaq mümkün deyil. '[REGION_NAME]' oyun regionu sayılır, və daxil olmaq üçün six является игровым регионом и вы должны отвечать определенным критериям, чтобы войти. Для получения дополнительной информации, пожалуйста, просмотрите [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
+		</message>
+	</message_set>
+	<message_set name="progress">
+		<message name="sending_dest">
+			Təyinat ünvana göndərilir.
+		</message>
+		<message name="redirecting">
+			Başqa yerə yönləndirilir.
+		</message>
+		<message name="relaying">
+			Təyinat ünvana yenidən göndərilir.
+		</message>
+		<message name="sending_home">
+			Evin ünvanına sorğu göndərilir.
+		</message>
+		<message name="sending_landmark">
+			Əlfəcin lokasiya sorğusu göndərilir.
+		</message>
+		<message name="completing">
+			Teleportasiya tamamlandı.
+		</message>
+		<message name="completed_from">
+			[T_SLURL] ünvanından teleport tamamlandı.
+		</message>
+		<message name="resolving">
+			Ünvana həll tapılır.
+		</message>
+		<message name="contacting">
+			Yeni regionla əlaqə qurulur.
+		</message>
+		<message name="arriving">
+			Gəliş...
+		</message>
+		<message name="requesting">
+			Teleportasiya sorğulanır...
+		</message>
+		<message name="pending">
+			Teleportasiya gözlənilir...
+		</message>
+	</message_set>
+</teleport_messages>

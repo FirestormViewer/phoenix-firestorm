@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_hair_panel">
+	<panel name="avatar_hair_color_panel">
+		<texture_picker label="Tekstur" name="Texture" tool_tip="Şəkil seçmək üçün basın"/>
+	</panel>
+	<panel name="accordion_panel">
+		<accordion name="wearable_accordion">
+			<accordion_tab name="hair_color_tab" title="Rəng"/>
+			<accordion_tab name="hair_style_tab" title="Tərz"/>
+			<accordion_tab name="hair_eyebrows_tab" title="Qaşlar"/>
+			<accordion_tab name="hair_facial_tab" title="Üz"/>
+		</accordion>
+	</panel>
+</panel>

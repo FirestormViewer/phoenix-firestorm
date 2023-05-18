@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Gear Outfit">
+	<menu_item_call label="Cari geyimi dəyişdir" name="wear"/>
+	<menu_item_call label="Cari geyimə əlavə et" name="wear_add"/>
+	<menu_item_call label="Cari geyimdən sil" name="take_off"/>
+	<menu_item_call label="Şəkil yüklə (L$[UPLOAD_COST])" name="upload_photo"/>
+	<menu_item_call label="Şəkil seç" name="select_photo"/>
+	<menu_item_call label="Şəkil çək" name="take_snapshot"/>
+	<menu_item_call label="Şəkili sil" name="remove_photo"/>
+	<context_menu label="Yeni paltar" name="New Clothes">
+		<menu_item_call label="Yeni köynəkа" name="New Shirt"/>
+		<menu_item_call label="Yeni şalvar" name="New Pants"/>
+		<menu_item_call label="Yeni ayaqqabı" name="New Shoes"/>
+		<menu_item_call label="Yeni corablar" name="New Socks"/>
+		<menu_item_call label="Yeni pencək" name="New Jacket"/>
+		<menu_item_call label="Yeni don" name="New Skirt"/>
+		<menu_item_call label="Yeni əlcəklər" name="New Gloves"/>
+		<menu_item_call label="Yeni mayka" name="New Undershirt"/>
+		<menu_item_call label="Yeni tuman" name="New Underpants"/>
+		<menu_item_call label="Yeni alfa" name="New Alpha"/>
+		<menu_item_call label="Yeni fizika" name="New Physics"/>
+		<menu_item_call label="Yeni döymə" name="New Tattoo"/>
+		<menu_item_call label="Yeni universal" name="New Universal"/>
+	</context_menu>
+	<context_menu label="Yeni bədən hissəsi" name="New Body Parts">
+		<menu_item_call label="Yeni fiqura" name="New Shape"/>
+		<menu_item_call label="Yeni dəri" name="New Skin"/>
+		<menu_item_call label="Yeni saç" name="New Hair"/>
+		<menu_item_call label="Yeni gözlər" name="New Eyes"/>
+	</context_menu>
+	<menu_item_call label="Bütün qovluqları genişləndir" name="expand"/>
+	<menu_item_call label="Bütün qovluqları yığışdır" name="collapse"/>
+	<menu_item_call label="Geyimin adını dəyişdir" name="rename"/>
+	<menu_item_call label="Geyimi sil" name="delete_outfit"/>
+	<menu_item_check label="Qovluqları həmişə adına görə sırala" name="sort_folders_by_name"/>
+</toggleable_menu>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Hadisələr" name="panel_ls_events">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Axtarış sorğusunu daxil edin:
+		</text>
+		<radio_group name="events_search_mode">
+			<radio_item label="Mövcud və gələcək" name="current"/>
+			<radio_item label="Tarixə görə" name="date"/>
+		</radio_group>
+		<combo_box name="events_category">
+			<combo_box.item label="Hər hansı kateqoriya" name="any"/>
+			<combo_box.item label="Müzakirə" name="discussion"/>
+			<combo_box.item label="İdman" name="sports"/>
+			<combo_box.item label="Canlı disko" name="dj"/>
+			<combo_box.item label="Canlı musiqi" name="music"/>
+			<combo_box.item label="Ticarət" name="commercial"/>
+			<combo_box.item label="Gecə həyatı/Təcrübələr" name="nightlife"/>
+			<combo_box.item label="Oyunlar/Müsabiqələr" name="games"/>
+			<combo_box.item label="Teatr" name="pageants"/>
+			<combo_box.item label="Təhsil" name="education"/>
+			<combo_box.item label="İncəsənət və mədəniyyət" name="arts"/>
+			<combo_box.item label="Xeyriyyə/Gəncə qrupları" name="charity"/>
+			<combo_box.item label="Müxtəlif" name="misc"/>
+		</combo_box>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_events">
+			<columns label="Hadisə" name="name"/>
+			<columns label="Tarix/Saat" name="date"/>
+			<columns label="Vaxt" name="time"/>
+		</scroll_list>
+		<button label="Dünən" name="events_yesterday"/>
+		<button label="Bu gün" name="events_today"/>
+		<button label="Sabah" name="events_tomorrow"/>
+		<button label="Geri" name="events_back"/>
+		<button label="İrəli" name="events_next"/>
+	</panel>
+</panel>

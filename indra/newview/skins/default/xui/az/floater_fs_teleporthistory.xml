@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_tphistory" title="Teleportasiya Tarixi">
+	<filter_editor label="Yer filtri" name="Filter" />
+	<panel name="button_panel">
+		<layout_stack name="bottom_bar_ls0">
+			<layout_panel name="show_lm_panel">
+				<layout_stack name="bottom_bar_ls1">
+					<layout_panel name="teleport_btn_lp">
+						<button label="Teleport" name="teleport_btn" tool_tip="Seçilmiş yerə teleportasiya et"/>
+					</layout_panel>
+					<layout_panel name="chat_btn_lp">
+						<button label="Xəritə" name="map_btn" tool_tip="Dünya xəritəsində müvafiq sahəni göstər"/>
+					</layout_panel>
+					<layout_panel name="profile_btn_lp">
+						<button label="Profil" name="profile_btn" tool_tip="Bu yerin profilini göstər"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>	
+	</panel>
+</floater>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="inspect" title="Obyekt müayinəsi">
+    <floater.string name="timeStamp">
+        [wkday,datetime,slt], [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+    </floater.string>
+    <floater.string name="Group">
+        (Qrup)
+    </floater.string>
+    <floater.string name="stats_list">
+        Ümumi statistika:
+
+[NUM_OBJECTS] obyekt, [NUM_PRIMS] prim
+
+Üz: [NUM_FACES]
+Görünür: [NUM_VISIBLE_FACES]
+Bucaq: [NUM_VERTICES]
+Üçbucaq.: [NUM_TRIANGLES]
+Çətin.: [COMPLEXITY]
+
+Tekstur: [NUM_TEXTURES]
+TMem: [TEXTURE_MEMORY] KB
+VRAM: [VRAM_USAGE] KB
+    </floater.string>
+
+    <text_editor name="linksetstats_text" value="(yüklənir...)"/>
+	<scroll_list name="object_list" tool_tip="Bu siyahıdan obyekt seçimi onun işıqlandırmasına səbəb olacaq">
+		<scroll_list.columns label="Obyektin adı" name="object_name" />
+		<scroll_list.columns label="Təsviri" name="description" />
+		<scroll_list.columns label="Sahibinin adı" name="owner_name" />
+		<scroll_list.columns label="Yaradıcının adı" name="creator_name" />
+		<scroll_list.columns label="Üz sayı" name="facecount"/>
+		<scroll_list.columns label="Üçbucaq Sayı" name="vertexcount" />
+		<scroll_list.columns label="Üçbucaqların Sayı" name="trianglecount"/>
+		<scroll_list.columns label="TMem Sayı" name="tramcount"/>
+		<scroll_list.columns label="VRAM Sayı" name="vramcount"/>
+		<scroll_list.columns label="Yaradılma Tarixi" name="creation_date"/>
+	</scroll_list>
+	<button label="Sahibin profili..." name="button owner"
+	 tool_tip="Işıqlandırılmış obyektin sahibinin profilini göstərir"/>
+	<button label="Yaradıcının Profili..." name="button creator" tool_tip="Işıqlandırılmış obyektin yaradıcısının profilini göstərir"/>
+	<menu_button name="options_btn" tool_tip="Seçimlər"/>
+</floater>

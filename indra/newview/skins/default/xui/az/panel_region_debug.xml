@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Sazlama" name="Debug">
+	<text name="region_text_lbl">
+		Region:
+	</text>
+	<text name="region_text">
+		naməlum
+	</text>
+	<check_box label="Skriptləri söndür" name="disable_scripts_check" tool_tip="Bu bölgədəki bütün skriptləri söndür"/>
+	<check_box label="Toqquşmaları söndür" name="disable_collisions_check" tool_tip="Bu bölgədəki avatar olmayan obyektlərin çırpışdırmalarını söndür"/>
+	<check_box label="Fizikanı söndür" name="disable_physics_check" tool_tip="Bu bölgədəki bütün fizikadan imtina et"/>
+	<button label="Tətbiq et" name="apply_btn"/>
+	<text name="objret_text_lbl">
+		Obyektlərin qaytarılması
+	</text>
+	<text name="resident_text_lbl">
+		Sakin:
+	</text>
+	<line_editor name="target_avatar_name">
+		(yox)
+	</line_editor>
+	<button label="Seç" name="choose_avatar_btn"/>
+	<text name="options_text_lbl">
+		Seçimlər:
+	</text>
+	<check_box label="Skriptlərlə birlikdə" name="return_scripts" tool_tip="Yalnız skriptləri olan obyektlər qaytarılacaq"/>
+	<check_box label="Qərib yerlərdə" name="return_other_land" tool_tip="Yalnız başqa yerlərdə yerləşən obyektlər qaytarılacaq"/>
+	<check_box label="Bu regionun hər sahəsindən" name="return_estate_wide" tool_tip="Bu regionu formalaşdıran bütün sahələrdəki obyektlər qaytarılacaq"/>
+	<button label="Qaytar" name="return_btn"/>
+	<button label="Çırpışdırmalar üçün ən aktiv üzvlər..." width="270" name="top_colliders_btn" tool_tip="Çırpışdırmaları ən çox ehtimal verilən obyektlərin siyahısı"/>
+	<button label="Ən yaxşı skriptlərin siyahısı..." width="170" name="top_scripts_btn" tool_tip="Ən çox zaman aparılan skriptləri olan obyektlərin siyahısı"/>
+	<button label="Regionun yenidən başladılması" width="150" name="restart_btn" tool_tip="2 dəqiqə hesablanacaq və region yenidən başladılacaq"/>
+	<text name="label_restart_delay" left_delta="165">
+		Saniyə:
+	</text>
+	<button label="Yendiən başladılmadan imtina et" width="150" name="cancel_restart_btn" tool_tip="Yendiən başladılmanı imtina et"/>
+	<button label="Region sazlama konsolu" name="region_debug_console_btn" tool_tip="Region sazlama konsolunu aç" width="165"/>
+</panel>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Macəralar" name="Experiences">
+	<panel.string name="trusted_estate_text">
+		Hər hansı bir macəra əsas ola bilər.
+
+Bu mülkiyyətdə əsas macəralarda başladılma icazəsi var.
+
+Bundan əlavə, əgər ərazidə içtimai daxil olma icazə verilmiyibsə, hər hansı əsas macərada iştirak edən sakinlər əsas macərada olduqları müddətəcən mülkiyyətə daxil ola və qala bilərlər.
+	</panel.string>
+	<panel.string name="allowed_estate_text">
+		Yalnız yerə bağlı olan macəralara icazə verilə bilər.
+
+İcazə verilən macəraların bu mülkdə başladılma icazəsi var.
+	</panel.string>
+	<panel.string name="blocked_estate_text">
+		Yalnız şəbəkəyə bağlı macəralar bloklana bilər.
+      
+Bu mülkdə bloklanmış macəraların başladılması mümkün deyil. 
+	</panel.string>
+	<panel.string name="estate_caption">
+		Bu pəncərədəki seçimlərin dəyişdirilməsi həmin mülkiyyətin bütün bölgələrinə təsir edəcək.
+	</panel.string>
+	<panel.string name="allowed_parcel_text">
+		Yalnız yerə bağlı olan macəralara icazə verilə bilər.
+      
+İcazə verilən macəraların, torpaq mülkiyyəti tərəfindən bloklanmadığı halda, bu sahədə başlamağa icazəsi var.
+	</panel.string>
+	<panel.string name="blocked_parcel_text">
+		Sakinin hər bir macərası bloklana bilər.
+      
+Bu sahədə bloklanmış macəraların başladılması mümkün deyil.
+	</panel.string>
+</panel>

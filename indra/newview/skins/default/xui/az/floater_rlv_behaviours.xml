@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="rlv_behaviours" title="Aktiv RLV məhdudiyyətləri">
+  <tab_container name="behaviour_tab">
+    <panel label="Məhdudiyyətlər" name="behaviour_panel">
+      <scroll_list name="behaviour_list" tool_tip="Cari RLVa məhdudiyyətlərinin siyahısı." >
+        <scroll_list.columns label="Məhdudiyyətlər" name="behaviour" width="100"/>
+        <scroll_list.columns label="Obyekt adı" name="issuer"/>
+      </scroll_list>
+    </panel>
+    <panel label="İstisnalar" name="exception_panel">
+      <scroll_list name="exception_list" tool_tip="Cari RLVa istisnaları." >
+        <scroll_list.columns label="İstisna" name="behaviour" width="100"/>
+        <scroll_list.columns label="Mənbə" name="option" />
+        <scroll_list.columns label="Obyekt adı" name="issuer" />
+      </scroll_list>
+    </panel>
+    <panel label="Dəyişdiricilər" name="modifier_panel">
+      <scroll_list name="modifier_list" tool_tip="Cari RLVa əyişdiricilərinin siyahısı." >
+        <scroll_list.columns label="Dəyişdiricilər" name="modifier" width="150" />
+        <scroll_list.columns label="Dəyər" name="value" width="105" />
+        <scroll_list.columns label="Əsas obyekt" name="primary" />
+      </scroll_list>
+    </panel>
+  </tab_container>
+  <panel name="bottom_panel">
+    <button label="Buferə köçürt" name="copy_btn" width="200" />
+  </panel>
+</floater>

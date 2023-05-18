@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="region_tracker" title="Region izlənməsi">
+	<text name="region_label_text" value="Dünya xəritəsindən regionlar əlavə edin" />
+	<button name="refresh" tool_tip="Yenilə" />
+	<button name="remove" tool_tip="Sil" />
+	<button name="open_map" tool_tip="Xəritə" />
+	<scroll_list name="region_list" tool_tip="Regionu dünya xəritəsində açmaq üçün iki dəfə klikləyin">
+		<scroll_list.columns name="region_label" label="Mayak" />
+		<scroll_list.columns name="region_name" label="Region" />
+	</scroll_list>
+</floater>

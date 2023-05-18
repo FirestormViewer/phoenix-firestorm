@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="toolbox floater" short_title="Tikinti alətləri">
+	<floater.string name="grid_screen_text">
+		Erkan
+	</floater.string>
+	<floater.string name="grid_local_text">
+		Yerli
+	</floater.string>
+	<floater.string name="grid_world_text">
+		Dünya
+	</floater.string>
+	<floater.string name="grid_reference_text">
+		Koordinat
+	</floater.string>
+	<floater.string name="grid_attachment_text">
+		Birləşdirmə
+	</floater.string>
+	<floater.string name="status_rotate">
+		Obyekti fırlatmaq üçün rəngli çubuqları dartın
+	</floater.string>
+	<floater.string name="status_scale">
+		Seçilmiş tərəfi uzatmaq üçün basın və daşıyın
+	</floater.string>
+	<floater.string name="status_move">
+		Yerdəyişmək üçün dartın. Köçürtmək üçün Shift+çəkin
+	</floater.string>
+	<floater.string name="status_modifyland">
+		Torpağı dəyişmək üçün basın və saxlayın
+	</floater.string>
+	<floater.string name="status_camera">
+		Kameranı keçirmək üçün basın və sürüşdürün
+	</floater.string>
+	<floater.string name="status_grab">
+		Hərəkət etdirmək üçün sürüşdürün, qaldırmaq üçün Ctrl, döndürmək üçün Ctrl + Shift istifadə edin
+	</floater.string>
+	<floater.string name="status_place">
+		Qurmaq üçün basın
+	</floater.string>
+	<floater.string name="status_selectland">
+		Torpağı seçmək üçün basın və sürüşdürün
+	</floater.string>
+	<floater.string name="status_selectcount">
+		[OBJ_COUNT] obyekt seçildi, torpağa təsiri [LAND_IMPACT]
+	</floater.string>
+	<floater.string name="status_remaining_capacity">
+		Qalan tutum [LAND_CAPACITY].
+	</floater.string>
+	<floater.string name="link_number">
+		Birləşdirmənin nömrəsi:
+	</floater.string>
+	<floater.string name="selected_faces">
+		Üzlər:
+	</floater.string>
+	<button name="button focus" tool_tip="Diqqət"/>
+	<button name="button move" tool_tip="Daşı"/>
+	<button name="button edit" tool_tip="Dəyişdir"/>
+	<button name="button create" tool_tip="Yarat"/>
+	<button name="button land" tool_tip="Torpaq"/>
+	<text name="text status">
+		Yerdəyişmək üçün dartın. Köçürtmək üçün Shift+çəkin
+	</text>
+	<radio_group name="focus_radio_group">
+		<radio_item label="Böyütmək" name="radio zoom"/>
+		<radio_item label="Fırlatmaq (Ctrl)" name="radio orbit"/>
+		<radio_item label="Panorama (Ctrl+Shift)" name="radio pan"/>
+	</radio_group>
+	<radio_group name="move_radio_group">
+		<radio_item label="Daşımaq" name="radio move" />
+		<radio_item label="Yuxarı qaldırmaq (Ctrl)" name="radio lift" />
+		<radio_item label="Fırlatmaq (Ctrl+Shift)" name="radio spin"/>
+	</radio_group>
+	<radio_group name="edit_radio_group">
+		<radio_item label="Daşımaq" name="radio position"/>
+		<radio_item label="Fırlatmaq (Ctrl)" name="radio rotate"/>
+		<radio_item label="Uzatmaq (Ctrl+Shift)" name="radio stretch"/>
+		<radio_item label="Üzü seçmək" name="radio select face"/>
+		<radio_item label="Düzləndirmək" name="radio align"/>
+	</radio_group>
+	<check_box label="Birləşdirilmişləri dəyişdirmək" name="checkbox edit linked parts"/>
+	<button name="prev_part_btn" tool_tip="Əvvəlki birləşdirilən hissəni seçin"/>
+	<button name="next_part_btn" tool_tip="Növbəti birləşdirilən hissəni seçin"/>
+	<button label="Birləşdir" name="link_btn"/>
+	<button label="Ayır" name="unlink_btn"/>
+	<combo_box name="combobox grid mode" tool_tip="Obyekti yerləşdirmək üçün şəbəkə hətkeş növünü seçin">
+		<combo_box.item label="Dünya" name="World"/>
+		<combo_box.item label="Yerli" name="Local"/>
+		<combo_box.item label="Başlanqıc nöqtəsi" name="Reference"/>
+	</combo_box>
+	<check_box label="Simmetrik olaraq" name="checkbox uniform"/>
+	<check_box label="Teksturanı dart" name="checkbox stretch textures"/>
+	<check_box label="Sarı" name="checkbox snap to grid"/>
+	<check_box label="Kökdən sarğı oxu" name="checkbox actual root"/>
+	<check_box label="Seçimi göstərin" name="checkbox show highlight"/>
+	<button name="Options..." tool_tip="Şəbəkə seçimlərini göstər"/>
+	<button name="ToolCube" tool_tip="Kub"/>
+	<button name="ToolPrism" tool_tip="Prizma"/>
+	<button name="ToolPyramid" tool_tip="Piramida"/>
+	<button name="ToolTetrahedron" tool_tip="Tetraedr"/>
+	<button name="ToolCylinder" tool_tip="Silindr"/>
+	<button name="ToolHemiCylinder" tool_tip="Yarım silindr"/>
+	<button name="ToolCone" tool_tip="Konus"/>
+	<button name="ToolHemiCone" tool_tip="Yarım konus"/>
+	<button name="ToolSphere" tool_tip="Sfera"/>
+	<button name="ToolHemiSphere" tool_tip="Yarım sfera"/>
+	<button name="ToolTorus" tool_tip="Torus"/>
+	<button name="ToolTube" tool_tip="Tuba"/>
+	<button name="ToolRing" tool_tip="Üzük"/>
+	<button name="ToolTree" tool_tip="Ağac"/>
+	<button name="ToolGrass" tool_tip="Ot"/>
+	<check_box label="Seçimi saxla" name="checkbox sticky"/>
+	<check_box label="Seçimi köçürt" name="checkbox copy selection"/>
+	<check_box label="Mərkəzi köçürt" name="checkbox copy centers"/>
+	<check_box label="Fırlat. köçürt" name="checkbox copy rotates"/>
+	<radio_group name="land_radio_group">
+		<radio_item label="Torpağı seç" name="radio select land"/>
+		<radio_item label="Hamarla" name="radio flatten"/>
+		<radio_item label="Qaldır" name="radio raise"/>
+		<radio_item label="Endir" name="radio lower"/>
+		<radio_item label="Bulanıq" name="radio smooth"/>
+		<radio_item label="Qabart" name="radio noise"/>
+		<radio_item label="Bərpa et" name="radio revert"/>
+	</radio_group>
+	<text name="Bulldozer:">
+		Buldozer:
+	</text>
+	<text name="Dozer Size:">
+		Ölçü
+	</text>
+	<text name="Strength:">
+		Güc
+	</text>
+	<button label="Tətbiq et" label_selected="Tətbiq et" name="button apply to selection" tool_tip="Seçilmiş torpağı dəyişdir"/>
+	<text name="link_num_obj_count" tool_tip="Birləşmə nömrəsi dəqiq olmaya bilər." width="160">
+		[DESC] [NUM]
+	</text>
+	<text name="selection_empty" width="120">
+		Heç nə seçilməyib.
+	</text>
+	<text name="remaining_capacity">
+		[CAPACITY_STRING] [secondlife:///app/openfloater/object_weights Ətraflı]
+	</text>
+	<tab_container name="Object Info Tabs">
+		<panel label="Ümumi" name="General">
+			<panel.string name="text deed continued">
+				Müqavilə
+			</panel.string>
+			<panel.string name="text deed">
+				Müqavilə
+			</panel.string>
+			<panel.string name="text modify info 1">
+				Bu obyekti dəyişə bilərsiniz
+			</panel.string>
+			<panel.string name="text modify info 2">
+				Bu obyektləri dəyişə bilərsiniz
+			</panel.string>
+			<panel.string name="text modify info 3">
+				Bu obyekti dəyişə bilmərsiniz
+			</panel.string>
+			<panel.string name="text modify info 4">
+				Bu obyektləri dəyişə bilmərsiniz
+			</panel.string>
+			<panel.string name="text modify info 5">
+				Bu obyekti ərazinin sərhədləri ilə dəyişə bilməzsiniz
+			</panel.string>
+			<panel.string name="text modify info 6">
+				Bu obyektləri ərazinin sərhədləri ilə dəyişə bilməzsiniz
+			</panel.string>
+			<panel.string name="text modify warning">
+				İcazələri təyin etmək üçün bütün obyekt seçməlisiniz
+			</panel.string>
+			<panel.string name="Cost Default">
+				Qiymət: L$
+			</panel.string>
+			<panel.string name="Cost Total">
+				Ümumi: L$
+			</panel.string>
+			<panel.string name="Cost Per Unit">
+				Üçün Qiymət: L$
+			</panel.string>
+			<panel.string name="Cost Mixed">
+				Qarışıq qiymət
+			</panel.string>
+			<panel.string name="Sale Mixed">
+				Qarışıq satış
+			</panel.string>
+			<panel.string name="multiple selection">
+				Çoxlu seçim
+			</panel.string>
+			<text name="Name:">
+				Adı:
+			</text>
+			<line_editor name="Object Name"
+			 tool_tip="Adı 63 simvoldan ibarət olmalıdır. Uzun adlar qısaltılır. Adlar yalnız ASCII-7 (təkcə müvafiq simvollar daxil) simvol növündən istifadə edilərək təyin edilə bilər, sadəcə &apos;|&apos; simvolu istisna olmaqla." />
+			<text name="Description:">
+				Təsviri:
+			</text>
+			<line_editor name="Object Description"
+             tool_tip="İnsanlar &apos;Bütün Obyektlərdə Alət Məsləhətlərini Göstər&apos; izləyici parametrlərində seçildikdə, onlar siçan göstəricisinin altında istənilən obyekt üçün pop-up təsvirini görəcəklər. Təsvir 127 baytla məhdudlaşır, artıq istənilən sətir kəsiləcək.." />
+			<text name="Creator:">
+				Yaradıcı:
+			</text>
+			<text name="Owner:">
+				Sahibi:
+			</text>
+			<text name="Last Owner:">
+				Əvvəlki:
+			</text>
+			<text name="Group:">
+				Qrup:
+			</text>
+			<!--<name_box initial_value="Yüklənir..." name="Group Name Proxy"/>-->
+			<button name="button set group" tool_tip="Obyektə giriş hüquqlarını ötürmək üçün qrup seçin"/>
+			<check_box label="Paylaş" name="checkbox share with group" tool_tip="Seçilmiş qrupun bütün üzvlərinə bu obyektdə təyin etdiyiniz hüquqları almağa icazə verin. Rol məhdudiyyətlərini aktivləşdirmək üçün müqavilə bağlamalısınız."/>
+			<button label="Müqavilə" label_selected="Müqavilə" name="button deed" tool_tip="Əməliyyat nəticəsində obyekt qrupa verilir, ona olan hüquqlar isə növbəti sahibin hüquqlarına uyğun olacaq. Qrupa verilən obyekt qrupun vəzifəli şəxsi tərəfindən verilə bilər."/>
+			<text name="label click action">
+				Basıldıqda:
+			</text>
+			<combo_box name="clickaction" tool_tip="Vurma fəaliyyəti, obyektə sol kliklə bir toxunuşla əlaqə yaratmağınıza imkan verir. Hər bir vurma fəaliyyəti, onun nə etdiyini göstərən xüsusi bir imi ilə gəlir. Bəzi vurma fəaliyyətlərinin işləməsi üçün tələblər var. Məsələn, toxunma və ödəniş skriptlərini tələb edir" >
+				<combo_box.item label="Toxun (defolt)" name="Touch/grab(default)"/>
+				<combo_box.item label="Otur" name="Sitonobject"/>
+				<combo_box.item label="Al" name="Buyobject"/>
+				<combo_box.item label="Ödə" name="Payobject"/>
+				<combo_box.item label="Aç" name="Open"/>
+				<combo_box.item label="Yaxınlaşdır" name="Zoom"/>
+				<combo_box.item label="Heçnə" name="None"/>
+			</combo_box>
+			<check_box label="Satış üçün:" name="checkbox for sale" tool_tip="Bu obyekti, onun məzmununu və ya daxilindəkiləri göstərilən qiymətə bəzən insanlara almaq imkanı verir." />
+			<combo_box name="sale type" tool_tip="Alıcının obyektin nüsxəsini, daxilindəkilərinin nüsxəsini və ya özünü alacağını seçin." >
+				<combo_box.item name="Copy" label="Nüsxə"/>
+				<combo_box.item name="Contents" label="Məzmun"/>
+				<combo_box.item name="Original" label="Orijinal"/>
+			</combo_box>
+			<spinner name="Edit Cost" label="Qiymət: L$" tool_tip="Obyektin qiyməti." />
+			<button label="Tətbiq et" name="button mark for sale" tool_tip="Satış üçün element(ləri) qeyd edin/yeniləyin."/>
+			<button label="Düymələri köçürt" name="btnCopyKeys" tool_tip="Seçilmiş obyektlərin kök düyməsini buferə köçürdün. Shift seçilmiş obyektlərin bütün düymələrini köçürür"/>
+			<check_box label="Axtarışda göstər" name="search_check" tool_tip="Obyekti axtarışda göstər"/>
+			<panel name="perms_build">
+				<text name="perm_modify">
+					Bu obyekti dəyişə bilərsiniz
+				</text>
+				<text name="Anyone can:">
+					Hər kəs edə bilər:
+				</text>
+				<check_box label="Daşımaq" name="checkbox allow everyone move" width="95" tool_tip="Hər kəs obyekti daşıya bilər."/>
+				<check_box label="Köçürtmək" name="checkbox allow everyone copy" width="95" tool_tip="Hər kəs obyektin köçürtməsin götürə bilər. Obyektin və onun bütün məzmununun köçürülməsinə və paylaşmasına icazə verilməlidir." />
+				<check_box label="İxrac etmək" name="checkbox allow export" tool_tip="Hər kəs bu obyekti ixrac edə bilər." />
+				<text name="Next owner can:">
+					Yeni sahibi edə bilər:
+				</text>
+				<check_box label="Dəyişdirmək" name="checkbox next owner can modify" width="95" tool_tip="Növbəti sahib elementin adı və ya bu obyektin miqyası kimi xassələri dəyişdirə bilər." />
+				<check_box label="Köçürtmək" name="checkbox next owner can copy" width="95" tool_tip="Növbəti sahibi bu obyektin qeyri-məhdud sayda köçürtməsini yarada bilər. Köçürtmələr yaradıcı haqqında məlumat ehtiva edir və heç vaxt köçürülən elementdən daha icazəli ola bilməz.."/>
+				<check_box label="Paylaşmaq" name="checkbox next owner can transfer" tool_tip="Növbəti sahibi obyekti başqasına verə və ya yenidən sata bilər"/>
+			</panel>
+			<panel name="pathfinding_attrs_panel">
+				<text name="pathfinding_attributes_label">
+					Yol axtarış atributları:
+				</text>
+			</panel>
+		</panel>
+		<panel label="Obyekt" name="Object">
+			<panel.string name="paste_position">
+				Mövqeyi daxil edin
+[VALUE]
+			</panel.string>
+			<panel.string name="paste_size">
+				Ölçüsü daxil edin
+[VALUE]
+			</panel.string>
+			<panel.string name="paste_rotation">
+				Döngə daxil edin
+[VALUE]
+			</panel.string>
+			<check_box label="Bloklanıb" name="checkbox locked" tool_tip="Bir obyektin daşınmasını və ya silinməsinin qarşısını alın. Adətən bu xüsusiyyət tikinti zamanı arzuolunmaz dəyişikliklərin qarşısını almaq üçün faydalıdır."/>
+			<check_box label="Fiziki" name="Physical Checkbox Ctrl" tool_tip="Bir obyekti itələməyə imkan verir. Cazibə qüvvəsi də obyektə təsir edəcək."/>
+			<check_box label="Müvəqqəti" name="Temporary Checkbox Ctrl" tool_tip="Obyektin yaradıldıqdan bir dəqiqə sonra avtomatik silinməsinə səbəb olur."/>
+			<check_box label="Fantom" name="Phantom Checkbox Ctrl" tool_tip="Obyektin digər obyektlər və ya avatarlarla toqquşmasının qarşısını alır."/>
+			<text name="label position">
+				Yerləşim (metr)
+			</text>
+			<button name="copy_pos_btn" label="К" tool_tip="Yerləşməni köçürt"/>
+			<button name="paste_pos_btn" label="В" tool_tip="Yerləşməni yapışdır"/>
+			<button name="paste_pos_clip_btn" label="в" tool_tip="Yerləşməni buferdən daxil et"/>
+			<text name="label size">
+				Ölçü (metr)
+			</text>
+			<button name="copy_size_btn" label="К" tool_tip="Ölçünü köçürt"/>
+			<button name="paste_size_btn" label="В" tool_tip="Ölçünü yapışdır"/>
+			<button name="paste_size_clip_btn" label="в" tool_tip="Ölçünü buferdən daxil et"/>
+			<text name="label rotation">
+				Döngə (dərəcə)
+			</text>
+			<button name="copy_rot_btn" label="К" tool_tip="Döngəni köçürt"/>
+			<button name="paste_rot_btn" label="В" tool_tip="Döngəni yapışdır"/>
+			<button name="paste_rot_clip_btn" label="в" tool_tip="Döngəni buferdən daxil et"/>
+			<button label="Köçürt" name="copy_params_btn" tool_tip="Seçimləri buferə köçürt"/>
+			<button label="Yapışdır" name="paste_params_btn" tool_tip="Seçimləri buferdən yapışdır"/>
+			<combo_box name="comboBaseType">
+				<combo_box.item label="Qutu" name="Box"/>
+				<combo_box.item label="Silindr" name="Cylinder"/>
+				<combo_box.item label="Prizma" name="Prism"/>
+				<combo_box.item label="Sfera" name="Sphere"/>
+				<combo_box.item label="Torus" name="Torus"/>
+				<combo_box.item label="Tuba" name="Tube"/>
+				<combo_box.item label="Üzük" name="Ring"/>
+				<combo_box.item label="Heykəl" name="Sculpted"/>
+				<combo_item name="PathLineProfileHalfCircle" label="Xətt->Yarım dairə"/>
+				<combo_item name="PathCircleProfileHalfCircle" label="Dairə->Yarım dairə"/>
+				<combo_item name="PathCircle2ProfileSquare" label="Dairə2->Kvadrat"/>
+				<combo_item name="PathCircle2ProfileTriangle" label="Dairə2->Üçbucaq"/>
+				<combo_item name="PathCircle2ProfileCircle" label="Dairə2->Dairə"/>
+				<combo_item name="PathCircle2ProfileHalfCircle" label="Dairə2->Yarım dairə"/>
+				<combo_item name="PathTestProfileSquare" label="Test->Kvadrat"/>
+				<combo_item name="PathTestProfileTriangle" label="Test->Üçbucaq"/>
+				<combo_item name="PathTestProfileCircle" label="Test->Dairə"/>
+				<combo_item name="PathTestProfileHalfCircle" label="Test->Yarım dairə"/>
+				<!-- Working33 by Gregory Maurer -->
+				<combo_item name="Path33Profile0" label="33->Dairə"/>
+				<combo_item name="Path33Profile1" label="33->Kvadrat"/>
+				<combo_item name="Path33Profile2" label="33->Üçbucaq"/>
+				<combo_item name="Path33Profile5" label="33->Yarım dairə"/>
+			</combo_box>
+			<text name="text cut">
+				Ölçü (başlanğıc/son)
+			</text>
+			<spinner label="B" name="cut begin"/>
+			<spinner label="S" name="cut end"/>
+			<text name="text hollow">
+				Sıxlıq
+			</text>
+			<text name="text skew">
+				Spiral
+			</text>
+			<text name="Hollow Shape">
+				Boşluq forması
+			</text>
+			<combo_box name="hole">
+				<combo_box.item label="Susmaya görə" name="Default"/>
+				<combo_box.item label="Dairə" name="Circle"/>
+				<combo_box.item label="Kvadrat" name="Square"/>
+				<combo_box.item label="Üçbucaq" name="Triangle"/>
+			</combo_box>
+			<text name="text twist">
+				Burulma
+			</text>
+			<spinner label="B" name="Twist Begin"/>
+			<spinner label="S" name="Twist End"/>
+			<text name="scale_taper">
+				Konus
+			</text>
+			<text name="scale_hole">
+				Deşik ölçüsü
+			</text>
+			<spinner label="X" name="Taper Scale X"/>
+			<spinner label="Y" name="Taper Scale Y"/>
+			<text name="text topshear">
+				Təpə sürüşməsi
+			</text>
+			<spinner label="X" name="Shear X"/>
+			<spinner label="Y" name="Shear Y"/>
+			<text name="advanced_cut">
+				Mərkəzdən bölmə
+			</text>
+			<text name="advanced_dimple">
+				Dərinləşmə (başlanğıc/son)
+			</text>
+			<text name="advanced_slice">
+				Dilim (başlanğıc/bitiş)
+			</text>
+			<spinner label="B" name="Path Limit Begin"/>
+			<spinner label="S" name="Path Limit End"/>
+			<text name="text taper2" tool_tip="Bütün növ primlərdə işləmir">
+				Konus bölmə
+			</text>
+			<spinner label="X" name="Taper X"/>
+			<spinner label="Y" name="Taper Y"/>
+			<text name="text radius delta">
+				Radius
+			</text>
+			<text name="text revolutions">
+				Dövriyyələr
+			</text>
+			<texture_picker label="Heykəl teksturu" name="sculpt texture control" tool_tip="Şəkil seçmək üçün basın"/>
+			<check_box label="Güzgü" name="sculpt mirror control" tool_tip="X oxu ilə güzgü kimi əks etdir"/>
+			<check_box label="Tərsinə" name="sculpt invert control" tool_tip="İçəriyə çevirərək primin normallarını tərsinə çevirin"/>
+			<text name="label sculpt type">
+				Calaq növü
+			</text>
+			<combo_box name="sculpt type control" tool_tip="&quot;Yox&quot; seçimi &quot;Yastılıq&quot;-la eyni olduğu üçün çıxarılıb." >
+				<combo_box.item label="Sfera" name="Sphere"/>
+				<combo_box.item label="Torus" name="Torus"/>
+				<combo_box.item label="Yastılıq / Yox" name="Plane"/>
+				<combo_box.item label="Silindr" name="Cylinder"/>
+			</combo_box>
+			<!-- FS:Beq adding Mesh Info support to Object panel-->
+			<text name="mesh_info_label" width="120">
+				Meş haqqında məlumat:
+			</text>
+			<text name="lod_label" value="LOD:"/>
+			<text name="lod_num_tris" value="Üçbucaqlar"/>
+			<text name="mesh_lod_label">
+Yüksək:
+Ortam:
+Aşağı:
+Ən aşağı:
+			</text>
+			<combo_box name="LOD_show_combo">
+				<combo_box.item label="Susmaya görə" name="Default"/>
+				<combo_box.item label="Yüksək" name="High"/>
+				<combo_box.item label="Ortam" name="Medium"/>
+				<combo_box.item label="Aşağı" name="Low"/>
+				<combo_box.item label="Ən aşağı" name="Lowest/Imposter"/>
+			</combo_box>
+			<text name="ObjectLODbehaviourLabel" value="LOD obyektinin davranışı:"/>
+			<text name="object_radius" value="Radius:"/>
+			<text name="LOD_swap_factors_label" value="LOD faktorları"/>
+			<text name="LOD_swap_defaults_label" value="Susmaya g." tool_tip="Əksər izləyicilər tərəfindən istifadə olunacaq defolt LOD faktoru dəyəri."/>
+			<text name="LOD_swap_usr_label" tool_tip="Cari RenderVolumeLODFactor-dan götürülmüş seçimləriniz" value="Sizin"/>
+			<text name="LOD_swap_label" value="Mübadilə LOD" width="65"/>
+			<string name="ll_lod_tooltip_msg">Linden Lab Second Life Viewer susmaya görə ([FACTOR])</string>
+			<text name="LOD_swap_ll_default" value="LL" width="25"/>
+			<string name="fs_lod_tooltip_msg">[APPNAME] susmaya görə ([FACTOR])</string>
+			<text name="LOD_swap_usr_current" tool_tip="Cari LOD nisbətiniz"/>
+			<text name="LOD_swap_LOD_Change_label">
+Yük. ↔ Or.
+Or. ↔ Aşğ.
+Aşğ. ↔ Əaşğ.
+			</text>
+			<text name="LODSwapTableDscriptionsText" tool_tip="Tövsiyə. Yaradıcılar bütün izləyicilər üçün standart parametrlər üçün yaxşı LOD davranışını təmin etməlidirlər.">
+				Bu cədvəl kameradan LOD dəyişmə limitlərini metrlərlə göstərir.
+			</text>
+			<!-- /FS:Beq end of Mesh info section-->
+		</panel>
+		<panel label="Xüsusiyyətlər" name="Features">
+			<panel.string name="None">
+				Yox
+			</panel.string>
+			<panel.string name="Prim">
+				Primitiv
+			</panel.string>
+			<panel.string name="Convex Hull">
+				Mürəkkəb qabıq
+			</panel.string>
+			<text name="select_single">
+				Xüsusiyyətləri dəyişdirmək üçün yalnız bir obyekt seçin.
+			</text>
+			<text name="edit_object">
+				Obyektin xüsusiyyətlərinin dəyişdirilməsi:
+			</text>
+			<check_box label="Animasiyalı Meş" name="Animated Mesh Checkbox Ctrl" tool_tip="Quraşdırılmış mesh obyektləri müstəqil şəkildə canlandırmaq imkanı verir" />
+			<check_box label="Çeviklik" name="Flexible1D Checkbox Ctrl" tool_tip="Obyekt Z oxunda əyilə bilər (klient tərəfi seçimləri)"/>
+			<spinner label="Yumşaqlıq" name="FlexNumSections"/>
+			<spinner label="Qravitasiya" name="FlexGravity"/>
+			<spinner label="Yelkənlik" name="FlexFriction"/>
+			<spinner label="Külək" name="FlexWind"/>
+			<spinner label="Elastiklik" name="FlexTension"/>
+			<spinner label="X təsiri" name="FlexForceX"/>
+			<spinner label="Y təsiri" name="FlexForceY"/>
+			<spinner label="Z təsiri" name="FlexForceZ"/>
+			<check_box label="İşıq" name="Light Checkbox Ctrl" tool_tip="Obyekt işıq saçacaq"/>
+			<color_swatch name="colorswatch" tool_tip="Rəng palitrasını açmaq üçün basın"/>
+			<texture_picker name="light texture control" tool_tip="Proqnozlaşdırılan şəkli seçmək üçün klikləyin (yalnız gecikmiş göstərmə aktiv olduqda effektivdir)"/>
+			<spinner label="İntensivlik" name="Light Intensity"/>
+			<spinner label="Dərəcə" name="Light FOV"/>
+			<spinner label="Radius" name="Light Radius"/>
+			<spinner label="Fokus" name="Light Focus"/>
+			<spinner label="Azlama" name="Light Falloff"/>
+			<spinner label="Ətraf" name="Light Ambiance"/>
+			<text name="label physicsshapetype" width="140">
+				Fiziki forma növü:
+			</text>
+			<combo_box name="Physics Shape Type Combo Ctrl" tool_tip="Fiziki forma üçün növ seçin"/>
+			<button name="PhysicsViewToggle" tool_tip="Dəyişdirmə rejimində fizikanın göstərilməsini aktivləşdirin" />
+			<combo_box name="material">
+				<combo_box.item label="Daş" name="Stone"/>
+				<combo_box.item label="Dəmir" name="Metal"/>
+				<combo_box.item label="Şüşə" name="Glass"/>
+				<combo_box.item label="Taxta" name="Wood"/>
+				<combo_box.item label="Ət" name="Flesh"/>
+				<combo_box.item label="Plastik" name="Plastic"/>
+				<combo_box.item label="Rezin" name="Rubber"/>
+			</combo_box>
+			<spinner label="Qravitasiya" name="Physics Gravity"/>
+			<spinner label="Sürtünmə" name="Physics Friction"/>
+			<spinner label="100 kq/m^3-də sıxlıq" name="Physics Density"/>
+			<spinner label="Bərpa" name="Physics Restitution"/>
+		</panel>
+		<panel label="Tekstur" name="Texture">
+			<panel.string name="string repeats per meter">
+				Metrə təkrarlama nisbəti
+			</panel.string>
+			<panel.string name="string repeats per face">
+				Üzə təkrarlama nisbəti
+			</panel.string>
+			<texture_picker label="Tekstur" name="texture control" tool_tip="Şəkil seçmək üçün basın"/>
+			<color_swatch label="Rəng" name="colorswatch" tool_tip="Rəng seçmək üçün basın"/>
+			<text name="color trans">
+				Şəffaflıq %
+			</text>
+			<text name="glow label">
+				İşıqlandırma
+			</text>
+			<text name="tex gen">
+				Yaxma
+			</text>
+			<combo_box name="combobox texgen">
+				<combo_box.item label="Susmaya görə" name="Default"/>
+				<combo_box.item label="Yastılığa" name="Planar"/>
+			</combo_box>
+			<text name="label shininess">
+				Parıltı
+			</text>
+			<combo_box name="combobox shininess">
+				<combo_box.item label="Yox" name="None"/>
+				<combo_box.item label="Aşağı" name="Low"/>
+				<combo_box.item label="Ortam" name="Medium"/>
+				<combo_box.item label="Yüksək" name="High"/>
+			</combo_box>
+			<text name="label bumpiness">
+				Qabarıqlıq
+			</text>
+			<combo_box name="combobox bumpiness">
+				<combo_box.item label="Yox" name="None"/>
+				<combo_box.item label="Parıltı" name="Brightness"/>
+				<combo_box.item label="Qaranın üstündən" name="Darkness"/>
+				<combo_box.item label="ağac" name="woodgrain"/>
+				<combo_box.item label="qabıq" name="bark"/>
+				<combo_box.item label="kərpic" name="bricks"/>
+				<combo_box.item label="şahmat taxtası" name="checker"/>
+				<combo_box.item label="beton" name="concrete"/>
+				<combo_box.item label="köhnə plitələr" name="crustytile"/>
+				<combo_box.item label="yonma daş" name="cutstone"/>
+				<combo_box.item label="disklər" name="discs"/>
+				<combo_box.item label="çınqıl" name="gravel"/>
+				<combo_box.item label="Petri qabı" name="petridish"/>
+				<combo_box.item label="örtük" name="siding"/>
+				<combo_box.item label="daş plitələr" name="stonetile"/>
+				<combo_box.item label="gips" name="stucco"/>
+				<combo_box.item label="əmzik" name="suction"/>
+				<combo_box.item label="hörmək" name="weave"/>
+			</combo_box>
+			<spinner label="Üfüqi (U)" name="TexScaleU"/>
+			<check_box label="Tərs çevrilmə" name="checkbox flip s"/>
+			<spinner label="Şaquli (V)" name="TexScaleV"/>
+			<check_box label="Tərs çevrilmə" name="checkbox flip t"/>
+			<spinner label="Fırlatmaq˚" name="TexRot"/>
+			<button label="Tətbiq et" label_selected="Tətbiq et" name="button apply"/>
+			<text name="tex offset">
+				Tekstur sürüşdürməsi
+			</text>
+			<spinner label="Üfüqi (U)" name="TexOffsetU"/>
+			<spinner label="Şaquli (V)" name="TexOffsetV"/>
+			<panel name="Add_Media">
+				<text name="media_tex">
+					Media
+				</text>
+				<button name="add_media" tool_tip="Media əlavə et"/>
+				<button name="delete_media" tool_tip="Media teksuturu sil"/>
+				<button name="edit_media" tool_tip="Medianı dəyişdir"/>
+				<button label="Düzləndirmək" label_selected="Medianı düzləndirmək" name="button align" tool_tip="Media teksturun miqyası (əvvəlcə yüklənməlidir)"/>
+			</panel>
+		</panel>
+		<panel label="Məzmun" name="Contents">
+			<button label="Skript yarat" label_selected="Skript yarat" name="button new script"/>
+			<button label="İcazələr" name="button permissions"/>
+			<button label="Yenilə" name="button refresh" width="100"/>
+			<button label="Skriptləri sıfırla" name="btn_reset_scripts" width="100"/>
+		</panel>
+	</tab_container>
+	<panel name="land info panel">
+		<text name="label_parcel_info">
+			Sahə haqqında məlumat
+		</text>
+		<text name="label_area_price">
+			Qiymət: [AREA] m² üçün L$[PRICE]
+		</text>
+		<text name="label_area">
+			Sahə: [AREA] m²
+		</text>
+		<button label="Torpaq haqqında" label_selected="Torpaq haqqında" name="button about land"/>
+		<check_box label="Показать владельцев" name="checkbox show owners" tool_tip="Цвет участка в зависимости от типа владения: &#10;&#10;Зеленый = ваша земля &#10;Голубой = земля вашей группы &#10;Красный = чужая земля &#10;Желтый = для продажи &#10;Фиолетовый = для аукциона &#10;Серый = общая"/>
+		<text name="label_parcel_modify">
+			Sahəni dəyişdir
+		</text>
+		<button label="Ayır" label_selected="Ayır" name="button subdivide land"/>
+		<button label="Birləşdir" label_selected="Birləşdir" name="button join land"/>
+		<text name="label_parcel_trans">
+			Torpaq ilə hərəkətlər
+		</text>
+		<button label="Torpağı al" label_selected="Torpağı al" name="button buy land"/>
+		<button label="Torpaqdan imtina et" label_selected="Torpaqdan imtina et" name="button abandon land"/>
+	</panel>
+</floater>

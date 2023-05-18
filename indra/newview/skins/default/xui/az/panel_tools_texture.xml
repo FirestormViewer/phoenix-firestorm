@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Tekstur" name="Texture">
+	<panel.string name="string repeats per meter">
+		Metrə təkrarlama nisbəti
+	</panel.string>
+	<panel.string name="string repeats per face">
+		Üzə təkrarlama nisbəti
+	</panel.string>
+	<text name="color label">
+		Rəng
+	</text>
+	<color_swatch label="" name="colorswatch" tool_tip="Rəng seçmək üçün basın"/>
+	<text name="color trans">
+		Şəffaflıq %
+	</text>
+	<text name="glow label">
+		İşıqlandırma
+	</text>
+	<check_box label="Öz parlaqlığı" name="checkbox fullbright"/>
+	<button tool_tip="Köçürt" name="copy_face_btn" />
+	<button tool_tip="Yapışdır" name="paste_face_btn" />
+	<combo_box name="combobox matmedia">
+		<combo_box.item label="Materiallar" name="Materials"/>
+		<combo_box.item label="Media" name="Media"/>
+	</combo_box>
+	<radio_group name="radio_material_type">
+		<radio_item label="Tekstur (səpələnmiş)" name="Texture (diffuse)" value="0"/>
+		<radio_item label="Qabarıqlıq (norm.)" name="Bumpiness (normal)" value="1"/>
+		<radio_item label="Parıltı (güzgü)" name="Shininess (specular)" value="2"/>
+	</radio_group>
+	<texture_picker label="Tekstur" name="texture control" tool_tip="Şəkil seçmək üçün basın"/>
+	<text name="label alphamode">
+		Alfa rejim
+	</text>
+	<combo_box name="combobox alphamode">
+		<combo_box.item label="Heç biri" name="None"/>
+		<combo_box.item label="Alfa qarışdırma" name="Alpha blending"/>
+		<combo_box.item label="Alfa maskalama" name="Alpha masking"/>
+		<combo_box.item label="Emissiya maskası" name="Emissive mask"/>
+	</combo_box>
+	<text name="label maskcutoff">
+		Maska kəsməsi
+	</text>
+	<texture_picker label="Tekstur" name="bumpytexture control" tool_tip="Şəkil seçmək üçün basın"/>
+	<text name="label bumpiness">
+		Qabarıqlıq
+	</text>
+	<combo_box name="combobox bumpiness">
+		<combo_box.item label="Heç biri" name="None"/>
+		<combo_box.item label="Parıltı" name="Brightness"/>
+		<combo_box.item label="Qaranın üstündən" name="Darkness"/>
+		<combo_box.item label="ağac" name="woodgrain"/>
+		<combo_box.item label="qabıq" name="bark"/>
+		<combo_box.item label="kərpic" name="bricks"/>
+		<combo_box.item label="şahmat taxtası" name="checker"/>
+		<combo_box.item label="beton" name="concrete"/>
+		<combo_box.item label="köhnə plitələr" name="crustytile"/>
+		<combo_box.item label="yonma daş" name="cutstone"/>
+		<combo_box.item label="disklər" name="discs"/>
+		<combo_box.item label="çınqıl" name="gravel"/>
+		<combo_box.item label="Petri qabı" name="petridish"/>
+		<combo_box.item label="örtük" name="siding"/>
+		<combo_box.item label="daş plitələr" name="stonetile"/>
+		<combo_box.item label="gips" name="stucco"/>
+		<combo_box.item label="əmzik" name="suction"/>
+		<combo_box.item label="hörmək" name="weave"/>
+	</combo_box>
+	<texture_picker label="Tekstur" name="shinytexture control" tool_tip="Şəkil seçmək üçün basın"/>
+	<text name="label shininess">
+		Parıltı
+	</text>
+	<combo_box name="combobox shininess">
+		<combo_box.item label="Yox" name="None"/>
+		<combo_box.item label="Aşağı" name="Low"/>
+		<combo_box.item label="Ortam" name="Medium"/>
+		<combo_box.item label="Yüksək" name="High"/>
+	</combo_box>
+	<text name="label glossiness">
+		Parıldadıcı
+	</text>
+	<text name="label environment">
+		Mühit
+	</text>
+	<text name="label shinycolor">
+		Rəng
+	</text>
+	<color_swatch label="" name="shinycolorswatch" tool_tip="Rəng seçmək üçün klikləyin"/>
+	<text name="media_info">
+		Seçilmiş media URL (əgər varsa)
+	</text>
+	<button label="Seç..." name="add_media" tool_tip="Media əlavə et"/>
+	<button label="Sil" name="delete_media" tool_tip="Media teksturasını silin"/>
+	<button label="Düzləndirmək" label_selected="Medianı düzləndirmək" name="button align" tool_tip="Media teksturasının miqyası (əvvəlcə yüklənməlidir)"/>
+	<text name="tex gen">
+		Üst-üstə düşmə
+	</text>
+	<combo_box name="combobox texgen">
+		<combo_box.item label="Susmaya görə" name="Default"/>
+		<combo_box.item label="Yastılıqa" name="Planar"/>
+	</combo_box>
+	<spinner label="Üfüqi miqyas" name="TexScaleU"/>
+	<spinner label="Şaquli miqyas" name="TexScaleV"/>
+	<spinner label="Metr başına təkrarlar" name="rptctrl"/>
+	<spinner label="Fırlanma, dərəcələr" name="TexRot"/>
+	<spinner label="Üfüqi kənarlaşma" name="TexOffsetU"/>
+	<spinner label="Şaquli kənarlaşma" name="TexOffsetV"/>
+	<spinner label="Üfüqi miqyas" name="bumpyScaleU"/>
+	<spinner label="Şaquli miqyas" name="bumpyScaleV"/>
+	<spinner label="Fırlanma, dərəcələr" name="bumpyRot"/>
+	<spinner label="Üfüqi kənarlaşma" name="bumpyOffsetU"/>
+	<spinner label="Şaquli kənarlaşma" name="bumpyOffsetV"/>
+	<spinner label="Üfüqi miqyas" name="shinyScaleU"/>
+	<spinner label="Şaquli miqyas" name="shinyScaleV"/>
+	<spinner label="Fırlanma, dərəcələr" name="shinyRot"/>
+	<spinner label="Üfüqi kənarlaşma" name="shinyOffsetU"/>
+	<spinner label="Şaquli kənarlaşma" name="shinyOffsetV"/>
+	<check_box initial_value="false" label="Uyğunlaşdırma" name="checkbox planar align" tool_tip="Bütün seçilmiş üzlərdəki teksturaları son seçilmiş üzlə uyğunlaşdırması. Yastılıqa örtük seçilməlidir."/>
+	<check_box label="Materialları sinxronlaşdırın" name="checkbox_sync_settings" tool_tip="Tekstura xəritəsi parametrlərinin sinxronizasiyası" />
+	<button label="Düzləndirmək" name="button align textures" tool_tip="Cari tekstura qatlarını düzləndirin" width="84" />
+</panel>

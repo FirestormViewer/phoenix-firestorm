@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Conversation Gear Menu">
+	<menu_item_call label="Profili göstər" name="View Profile" />
+	<menu_item_call label="Dostlara əlavə et" name="Add Friend" />
+	<menu_item_call label="Dostluqdan sil" name="remove_friend" />
+	<menu_item_call label="Teleport təklif et" name="offer_teleport" />
+	<menu_item_call label="Qrupa dəvət et..." name="invite_to_group" />
+	<menu_item_call label="Söhbət tarixi..." name="chat_history" />
+	<menu_item_call label="Yaxınlaşdır" name="zoom_in" />
+	<menu_item_call label="Xəritə" name="map" />
+	<menu_item_call label="Paylaş" name="Share" />
+	<menu_item_call label="Ödə" name="Pay" />
+	<menu_item_check label="Səsini blokla" name="Block/Unblock" />
+	<menu_item_check label="Söhbətini blokla" name="MuteText" />
+</toggleable_menu>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="script ed float" title="Skript: Yeni skript">
+	<floater.string name="not_allowed">
+		Siz bu skripti dəyişə və baxa bilməzsiniz, çünki onun üçün "köçürtmək" icazəsi yoxdur. Skripti obyektdə baxmaq və dəyişdirmək üçün tam icazə lazımdır.
+	</floater.string>
+	<floater.string name="script_running">
+		İcra olunur
+	</floater.string>
+	<floater.string name="Title">
+		Skript: [NAME]
+	</floater.string>
+	<floater.string name="experience_enabled">
+		Cari macəranı silmək üçün işarəni silin
+	</floater.string>
+	<floater.string name="no_experiences">
+		Siz macəralardan istifadə etməyə icazə verilməmisiniz
+	</floater.string>
+	<floater.string name="add_experiences">
+		Macəra əlavə etmək üçün seçin
+	</floater.string>
+	<floater.string name="show_experience_profile">
+		Macəra profilini görmək üçün tıklayın
+	</floater.string>
+	<floater.string name="loading">
+		Yüklənir...
+	</floater.string>
+	<button label="Sıfırla" label_selected="Sıfırla" name="Reset"/>
+	<check_box initial_value="true" label="İcra olunur" name="running"/>
+	<check_box initial_value="true" label="Mono" name="mono"/>
+	<check_box label="Macəra istifadə edin:" name="enable_xp"/>
+	<button label="&gt;" name="view_profile"/>
+</floater>

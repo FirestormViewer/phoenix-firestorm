@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<floater name="save_pref_preset" title="Təyini yadda saxla">
+	<text name="Preset">
+		Əvvəlcədən təyin edilmiş adı daxil edin və ya mövcud olanı seçin.
+	</text>
+	<button label="Yadda saxla" name="save"/>
+	<button label="Ləğv et" name="cancel"/>
+</floater>

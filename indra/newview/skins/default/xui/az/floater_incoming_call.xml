@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="incoming call" title="Gələn zəng">
+	<floater.string name="lifetime">
+		5
+	</floater.string>
+	<floater.string name="localchat">
+		Yerli səsli söhbət
+	</floater.string>
+	<floater.string name="anonymous">
+		anonim
+	</floater.string>
+	<floater.string name="VoiceInviteP2P">
+		sizi çağırır.
+	</floater.string>
+	<floater.string name="VoiceInviteAdHoc">
+		grup səsli söhbətdə artıq iştirak edir.
+	</floater.string>
+	<floater.string name="VoiceInviteGroup">
+		«[GROUP]» səsli kanalına qoşuldu.
+	</floater.string>
+	<floater.string name="VoiceInviteQuestionGroup">
+		«[CURRENT_CHAT]»  söhbətindən çıxıb, «[GROUP]» zənginə qoşulmaq istəyirsinizmi?
+	</floater.string>
+	<floater.string name="VoiceInviteQuestionDefault">
+		«[CURRENT_CHAT]» söhbətindən çıxıb, bu səsli söhbətə qoşulmaq istəyirsinizmi?
+	</floater.string>
+	<text name="question">
+		Cavabınızı verərsinizsə, cari səsli söhbətdən ayrılacaqsınız.
+	</text>
+	<button label="Cavab" label_selected="Cavab" name="Accept"/>
+	<button label="İmtina" label_selected="İmtina" name="Reject"/>
+	<button label="IM-i aç" name="Start IM"/>
+</floater>

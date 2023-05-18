@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="group_list_item">
+	<text name="group_name" value="Naməlum"/>
+	<button name="visibility_hide_btn" tool_tip="Mənim profilimdə qrupu gizlədin"/>
+	<button name="visibility_show_btn" tool_tip="Mənim profilimdə qrupu göstərin"/>
+	<button name="info_btn" tool_tip="Daha çox məlumat"/>
+	<button name="profile_btn" tool_tip="Profilə baxın"/>
+</panel>

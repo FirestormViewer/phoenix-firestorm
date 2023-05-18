@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="block by name" title="Obyekti ada görə blokla">
+	<text name="message">
+		Obyekti blokla:
+	</text>
+	<line_editor name="object_name">
+		Obyekt adı
+	</line_editor>
+	<text name="note">
+		* Yalnız obyekt mesajları bloklanır, səslər bloksuz qalır
+	</text>
+	<button label="Ləğv et" name="Cancel"/>
+</floater>

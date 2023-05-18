@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="buy land" title="Torpaq alma">
+	<floater.string name="can_resell">
+		Başqa şəxsə satıla bilər.
+	</floater.string>
+	<floater.string name="can_not_resell">
+		Satıla bilməz.
+	</floater.string>
+	<floater.string name="can_change">
+		Birləşdirilə, bölünə bilər.
+	</floater.string>
+	<floater.string name="can_not_change">
+		Birləşdirilə, bölünə bilməz.
+	</floater.string>
+	<floater.string name="cant_buy_for_group">
+		Aktiv qrupunuz üçün torpaq almaq üçün hüquqlarınız yoxdur.
+	</floater.string>
+	<floater.string name="no_land_selected">
+		Heç bir torpaq seçilmədi.
+	</floater.string>
+	<floater.string name="multiple_parcels_selected">
+		Bir neçə fərqli hissə seçildi. 
+Daha kiçik bir sahə seçməyə çalışın.
+	</floater.string>
+	<floater.string name="no_permission">
+		Aktiv qrupunuz üçün torpaq almaq üçün hüquqlarınız yoxdur.
+	</floater.string>
+	<floater.string name="parcel_not_for_sale">
+		Seçilmiş torpaq hissəsi satışa çıxarılmayıb.
+	</floater.string>
+	<floater.string name="group_already_owns">
+		Qrup artıq torpaq hissəsinin sahibidir.
+	</floater.string>
+	<floater.string name="you_already_own">
+		Siz artıq torpaq hissəsinin sahibisiniz.
+	</floater.string>
+	<floater.string name="set_to_sell_to_other">
+		Seçilmiş torpaq hissəsi başqaları üçün satışa çıxarılmışdır.
+	</floater.string>
+	<floater.string name="no_public_land">
+		Seçilmiş sahədə ictimai torpaq yoxdur.
+	</floater.string>
+	<floater.string name="not_owned_by_you">
+		Başqa bir sakini olan torpaq seçildi. 
+Daha kiçik bir sahə seçməyə çalışın.
+	</floater.string>
+	<floater.string name="processing">
+		Alışınız emal edilir...
+ 
+(bu bir neçə dəqiqə çəkə bilər).
+	</floater.string>
+	<floater.string name="fetching_error">
+		Xəta: torpaq almaq haqqında məlumat sorğusunda səhv baş verdi.
+	</floater.string>
+	<floater.string name="buying_will">
+		Bu torpaq satın alınacaq:
+	</floater.string>
+	<floater.string name="buying_for_group">
+		Qrup üçün torpaq almaq:
+	</floater.string>
+	<floater.string name="cannot_buy_now">
+		Hələ alış-veriş edə bilməzsiniz:
+	</floater.string>
+	<floater.string name="not_for_sale">
+		Satılıq deyil:
+	</floater.string>
+	<floater.string name="none_needed">
+		tələb olunmur
+	</floater.string>
+	<floater.string name="must_upgrade">
+		Torpaq sahibi olmaq üçün hesabınızın yüksəldilməsi lazımdır.
+	</floater.string>
+	<floater.string name="cant_own_land">
+		Hesabınız torpaq sahibi olmağa icazə verir.
+	</floater.string>
+	<floater.string name="land_holdings">
+		Siz [BUYER] m² torpaq sahibisiniz.
+	</floater.string>
+	<floater.string name="pay_to_for_land">
+		Bu torpaq üçün [AMOUNT] L$ [SELLER] satıcısına ödəniş edin
+	</floater.string>
+	<floater.string name="buy_for_US">
+		[AMOUNT] L$-ı təxminən [LOCAL_AMOUNT] qiymətə alın,
+	</floater.string>
+	<floater.string name="parcel_meters">
+		Torpaq sahəsi – [AMOUNT] m²
+	</floater.string>
+	<floater.string name="premium_land">
+		Bu torpaq premium klassdır və [AMOUNT] m² kimi hesablanır.
+	</floater.string>
+	<floater.string name="discounted_land">
+		Bu torpaq endirimlidir və [AMOUNT] m² kimi hesablanır.
+	</floater.string>
+	<floater.string name="meters_supports_object">
+		[AMOUNT] m²
+[AMOUNT2] obyektləri dəstəkləyir
+	</floater.string>
+	<floater.string name="sold_with_objects">
+		obyektlərlə satılıb
+	</floater.string>
+	<floater.string name="sold_without_objects">
+		obyektlər daxil deyil
+	</floater.string>
+	<floater.string name="info_price_string">
+		L$ [PRICE]
+(L$ [PRICE_PER_SQM]/м²)
+[SOLD_WITH_OBJECTS]
+	</floater.string>
+	<floater.string name="insufficient_land_credits">
+		[GROUP] qrupuna bu ərazini dəstəkləmək üçün satın alma prosesinin sonuna qədər ərazinin örtülməsi üçün kifayət qədər məbləğ ödəmək lazımdır.
+	</floater.string>
+	<floater.string name="have_enough_lindens">
+		Bu ərazini almaq üçün kifayət qədər L$ [AMOUNT] varınızdır.
+	</floater.string>
+	<floater.string name="not_enough_lindens">
+		L$ [AMOUNT2] olmadan yalnızca L$ [AMOUNT] varınızdır.
+	</floater.string>
+	<floater.string name="balance_left">
+		Alışdan sonra L$ [AMOUNT] qalacaq.
+	</floater.string>
+	<floater.string name="balance_needed">
+		Bu ərazini almaq üçün ən azı L$ [AMOUNT] qazanmalısınız.
+	</floater.string>
+	<floater.string name="no_parcel_selected">
+		(sahə seçilməyib)
+	</floater.string>
+	<text name="region_name_label">
+		Region:
+	</text>
+	<text name="region_name_text">
+		(naməlum)
+	</text>
+	<text name="region_type_label">
+		Növ:
+	</text>
+	<text name="region_type_text">
+		(naməlum)
+	</text>
+	<text name="estate_name_label">
+		Torpaq əmlakı:
+	</text>
+	<text name="estate_name_text">
+		(naməlum)
+	</text>
+	<text name="estate_owner_label">
+		Torpaq sahibi:
+	</text>
+	<text name="estate_owner_text">
+		(naməlum)
+	</text>
+	<text name="resellable_changeable_label">
+		Bu rayonda alınmış torpaq:
+	</text>
+	<text name="resellable_clause">
+		Yenidən satıla bilər və ya satılmaya bilər.
+	</text>
+	<text name="changeable_clause">
+		Biləşdirilə və ya bölünə bilməz və ya bilər.
+	</text>
+	<text name="covenant_text">
+		Siz torpaq mülkiyyəti müqaviləsini qəbul etməlisiniz:
+	</text>
+	<text_editor name="covenant_editor">
+		Yüklənir...
+	</text_editor>
+	<check_box label="Yuxarıda göstərilən müqaviləni qəbul edirəm." name="agree_covenant"/>
+	<text name="info_parcel_label">
+		Sahə:
+	</text>
+	<text name="info_parcel">
+		Dabandaşı 138,204
+	</text>
+	<text name="info_size_label">
+		Ölçü:
+	</text>
+	<text name="info_size">
+		1024 m²
+	</text>
+	<text name="info_price_label">
+		Qiymət:
+	</text>
+	<text name="info_price">
+		L$ 1500
+(L$ 1,1/м²)
+obyektlər daxil satılıb
+	</text>
+	<text name="info_action">
+		Bu torpağın alınması:
+	</text>
+	<text name="error_message">
+		Bir şey səhvdir.
+	</text>
+	<button label="Sayta keçid et" name="error_web"/>
+	<text name="account_action">
+		Hesabınızı Premium səviyyəsinə yüksəldin.
+	</text>
+	<text name="account_reason">
+		Yalnız Premium istifadəçilər torpağa sahib ola bilər.
+	</text>
+	<combo_box name="account_level">
+		<combo_box.item label="9,95 ABŞ dolları/ay, ayda bir ödənilir" name="US$9.95/month,billedmonthly"/>
+		<combo_box.item label="7,50 ABŞ dolları/ay, rüblük ödənilir" name="US$7.50/month,billedquarterly"/>
+		<combo_box.item label="6,00 ABŞ dolları/ay, illik ödənilir" name="US$6.00/month,billedannually"/>
+	</combo_box>
+	<text name="land_use_action">
+		Aylıq ödənişinizi US$ 40/ay artıracaq.
+	</text>
+	<text name="land_use_reason">
+		Siz 1309 m² torpaqda sahibsiniz.
+Bu hissədə 512 m² torpaq var.
+	</text>
+	<text name="purchase_action">
+		Joe sakininə torpaq almaq üçün 4000 L$ ödəyin.
+	</text>
+	<text name="currency_reason">
+		Sizin 2100 L$ varınızdır.
+	</text>
+	<text name="currency_action">
+		L$ alışı
+	</text>
+	<line_editor name="currency_amt">
+		1000
+	</line_editor>
+	<text name="currency_est">
+		tahmini qiyməti [LOCAL_AMOUNT] olacaq
+	</text>
+	<text name="currency_balance">
+		Sizin 2100 L$ varınızdır.
+	</text>
+	<check_box label="Qrupdan [AMOUNT] m² töhfəni silin." name="remove_contribution"/>
+	<button label="Almaq" name="buy_btn"/>
+	<button label="Ləğv et" name="cancel_btn"/>
+</floater>

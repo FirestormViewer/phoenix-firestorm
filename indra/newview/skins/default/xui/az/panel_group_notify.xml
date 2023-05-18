@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="instant_message" name="panel_group_notify">
+	<text name="title" value="Göndərən / Qrup"/>
+	<text name="group_notice" value="Qrup elanı"/>
+	<text name="attachment" value="Əlavə"/>
+	<button label="Digər elanlar" name="btn_notices" width="130" />
+	<button label="Qrup söhbəti" name="btn_groupchat"/>
+</panel>

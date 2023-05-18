@@ -80,7 +80,8 @@ def get_md5(mdfile):
     #split md5sum on space
     md5sum = md5sum.split()[0]
     #remove leading '\'
-    md5sum = md5sum[1:]
+    if md5sum[0] == "\\":
+        md5sum = md5sum[1:]
     print(f"generating md5sum for {mdfile} as {md5sum}")
     return md5sum
 
@@ -210,7 +211,11 @@ for build_type in build_types_created:
     platforms_printable = {"windows":"MS Windows", "mac":"MacOS", "linux":"Linux"}
     grids_printable = {"SL":"Second Life", "OS":"OpenSim"}
 
-    download_root = f"https://downloads.firestormviewer.org/{build_types[build_type]}/"
+    download_root = f"https://downloads.firestormviewer.org/{build_types[build_type]}"
+    output += f'''
+DOWNLOADS - {build_type}
+-------------------------------------------------------------------------------------------------------
+'''
     for dir in dirs:
         print(f"Getting files for {dir} in {build_type_dir}")
         files = get_files(os.path.join(build_type_dir, dir))
@@ -236,11 +241,8 @@ for build_type in build_types_created:
             print(f"No files found for {dir} in {build_type_dir}")
 
 
-        output += f'''
-DOWNLOADS - {build_type}
-'''
 
-        output += f'''-------------------------------------------------------------------------------------------------------
+        output += f'''
 {platforms_printable[dir]}
 '''
         dir = dir.lower()
@@ -266,8 +268,7 @@ DOWNLOADS - {build_type}
             except KeyError:
                 output += f"{platform} for {grid_printable} ({wordsize}-bit) - NOT AVAILABLE\n"
                 output += "\n"
-        output += '''
--------------------------------------------------------------------------------------------------------
+        output += '''-------------------------------------------------------------------------------------------------------
 '''
 
     if args.webhook:
@@ -276,6 +277,7 @@ DOWNLOADS - {build_type}
         # Send the webhook
         response = webhook.execute()
         # Print the response
-        print(f"Webhook response: {response}")
+        if not response.ok:
+            print(f"Webhook Error {response.status_code}: {response.text}")        
     print(output)
 

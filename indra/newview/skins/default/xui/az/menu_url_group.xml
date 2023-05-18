@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Url Popup">
+	<menu_item_call label="Qrup haqqında məlumatı göstərin" name="show_group"/>
+	<menu_item_call label="Qrup məlumatlarını alınır, yenidən cəhd edin!" name="waiting_for_group_data"/>
+	<menu_item_call label="Qrupu aktivləşdirin" name="activate_group"/>
+	<menu_item_call label="Qrupa qoşulun" name="join_group"/>
+	<menu_item_call label="Qrupdan ayrılın" name="leave_group"/>
+	<menu_item_call label="Qrupu bufferə kopyalayın" name="url_copy_label"/>
+	<menu_item_call label="SLurl-ni bufferə köçür" name="url_copy"/>
+</context_menu>

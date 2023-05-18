@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="particle_editor_floater" title="Hissəcik Dəyişdiricisi"
+  height="370" min_height="370" min_width="530" width="530">
+
+  <panel name="particle_editor_panel" height="343">
+    <panel name="top_left_panel">
+      <text name="Pattern_Label" width="100">Nümunə:</text>
+
+      <combo_box name="pattern_type_combo" width="140" >
+        <combo_box.item label="Partlayış" name="explode" />
+        <combo_box.item label="Dərəcə" name="angle" />
+        <combo_box.item label="Dərəcə konus" name="angle_cone" />
+        <combo_box.item label="Boş Dərəcə Konusu" name="angle_cone_empty"/>
+        <combo_box.item label="Yağış" name="drop" />
+      </combo_box>
+
+      <text name="Texture_Label" width="60">Tekstur:</text>
+      <text name="Burst_Rate_Label" width="120">XAtış tezliyi:</text>
+      <text name="Burst_Count_Label" width="120">Atış sayı:</text>
+      <text name="Angle_Begin_Label" width="120">Başlanğıc Dərəcəsi:</text>
+      <text name="Burst_Radius_Label" left_pad="21" width="100">Atış radiusu:</text>
+      <text name="Burst_Speed_Min_Label" left_pad="21" width="100">Min. Sürət:</text>
+      <text name="Angle_End_Label" width="120">Bitiş Dərəcəsi:</text>
+      <text name="Burst_Speed_Max_Label" left_pad="21" width="100">Maks. Sürət:</text>
+      <text name="Source_Max_Age_Label" width="120">Maks. Müddət Mənbə:</text>
+      <text name="Start_Alpha_Label" left_pad="21" width="100">Başlanğıc Alpha:</text>
+      <text name="Particles_Max_Age_Label" width="120">Maks. Müddət Hissəcik:</text>
+      <text name="End_Alpha_Label" left_pad="21" width="100">Bitiş Alpha:</text>
+      <text name="Start_Glow_Label" width="120">Başlanğıc Parıltı:</text>
+
+      <combo_box name="blend_func_src_combo" left_pad="21" width="160">
+        <combo_box.item label="Blend One" name="blend_one" />
+        <combo_box.item label="Blend Zero" name="blend_zero" />
+        <combo_box.item label="Blend Dest Color" name="blend_dest_color" />
+        <combo_box.item label="Blend Src Color" name="blend_src_color" />
+        <combo_box.item label="Blend 1 - Dest Color" name="blend_one_minus_dest_color" />
+        <combo_box.item label="Blend 1 - Src Color" name="blend_one_minus_src_color" />
+        <combo_box.item label="Blend Src Alpha" name="blend_src_alpha" />
+        <combo_box.item label="Blend 1 - Src Alpha" name="blend_one_minus_src_alpha" />
+      </combo_box>
+
+      <text name="End_Glow_Label" width="120">İşartı bitiş:</text>
+
+      <combo_box name="blend_func_dest_combo" left_pad="21" width="160">
+        <combo_box.item label="Blend One" name="blend_one" />
+        <combo_box.item label="Blend Zero" name="blend_zero" />
+        <combo_box.item label="Blend Dest Color" name="blend_dest_color" />
+        <combo_box.item label="Blend Src Color" name="blend_src_color" />
+        <combo_box.item label="Blend 1 - Dest Color" name="blend_one_minus_dest_color" />
+        <combo_box.item label="Blend 1 - Src Color" name="blend_one_minus_src_color" />
+        <combo_box.item label="Blend Src Alpha" name="blend_src_alpha" />
+        <combo_box.item label="Blend 1 - Src Alpha" name="blend_one_minus_src_alpha" />
+      </combo_box>
+
+      <text name="Scale_Start_Label" width="95">Başlanğıc ölçüsü:</text>
+      <text name="End_Label" left_pad="20" width="40">Bitiş:</text>
+
+    </panel>
+
+	<panel height="258" left_pad="0" name="top_right_panel" width="120">
+      <check_box name="bounce_checkbox" label="Sıçraması" width="120" />
+      <check_box name="emissive_checkbox" label="Şüa" width="120" />
+      <check_box name="follow_source_checkbox" label="Mənbəyi izlə" width="120" />
+      <check_box name="follow_velocity_checkbox" label="Sürəti izlə" width="120" />
+      <check_box name="interpolate_color_checkbox" label="Rəngi dəyiş" width="120" />
+      <check_box name="interpolate_scale_checkbox" label="Ölçüsü dəyiş" width="120" />
+      <check_box name="target_position_checkbox" label="Məqsəd yerləşməsi" width="120" />
+      <check_box name="target_linear_checkbox" label="Məqsəd düz xətti" width="120" />
+      <check_box name="wind_checkbox" label="Külək" width="120" />
+      <check_box name="ribbon_checkbox" label="Lenta" width="120" />
+      <button name="copy_button" label="Nüsxə" tool_tip="Səhnədəki hissəcik sistem seçimlərini LSL skripti kimi köçürür." width="58" />
+      <button name="inject_button" label="Daxil et" tool_tip="Bu hissəcik sistemini seçilmiş obyektə daxil edir." width="68" />
+    </panel>
+
+    <panel name="bottom_left_panel" top="270" width="320">
+      <text name="Target_Key_Label" left="0" width="76">Məqsəd açarı:</text>
+      <button left_pad="4" name="clear_target_button" tool_tip="Məqsəd obyektini və ya avatarını təmizləyir." width="20" />
+      <button left_pad="2" name="pick_target_button" tool_tip="Hissəciklərin məqsəd obyektini və ya avatarını seçmək üçün buraya basın." width="20" />
+      <text name="Acceleration_Label" left="0" width="76">Sürət artımı:</text>
+      <text name="Omega_Label" left="0" width="76">Omega:</text>
+    </panel>
+
+    <panel left="320" name="bottom_right_panel" width="170">
+      <color_swatch label="Başlanğıc rəngi" left="16" name="start_color_selector" width="70" />
+      <color_swatch label="Son rəng" left_pad="8" name="end_color_selector" width="70" />
+    </panel>
+
+  </panel>
+
+</floater>

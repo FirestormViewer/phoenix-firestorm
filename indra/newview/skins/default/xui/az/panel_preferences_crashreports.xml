@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Xəta bildirişləri" name="crash_reports">
+    <check_box label="Xəta bildirişlərini firestormviewer.org saytına göndər" name="checkSendCrashReports" />
+    <check_box label="Göndərmədən əvvəl həmişə soruş" name="checkSendCrashReportsAlwaysAsk" />
+    <check_box label="Seçimlər fayllarını daxil edin" name="checkSendSettings" />
+    <text name="textSendSettings">
+        (istifadəçinin adını daxil edir)
+    </text>
+    <check_box label="İstifadəçi adını daxil edin" name="checkSendName" />
+    <text name="textSendName">
+        (tələb olunsa əlavə məlumat sorğulamaq üçün istifadə olunur)
+    </text>
+    <text name="textRestartRequired">
+        Hər hansı bir parametrdə edilən dəyişikliklər tətbiq edilmək üçün yenidən başlatma tələb olunur.
+    </text>
+    <text name="textInformation1">
+        Yuxarıda qeyd edilən səhv raporları yalnız fəlya tətbiq edilən xəta ilə əlaqədar məlumatları daxil edir.
+    </text>
+    <text name="textInformation2">
+        Jurnallar göndərilmir, lütfən onların məzmununa və e-mailinə baxın,
+    </text>
+    <text name="textInformation3">
+        Əlavə məlumatlar ola biləcəyini hiss edərsinizsə.
+    </text>
+    <text name="textInformation4">
+        Gizlilik Siyasəti: [URL]
+    </text>
+</panel>

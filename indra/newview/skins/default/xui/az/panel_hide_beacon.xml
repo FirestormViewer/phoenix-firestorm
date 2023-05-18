@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_hide_beacon">
+    <button label="Mayakı gizlət" name="hide_beacon_btn" tool_tip="İzləməyi dayandırın və mayakı gizləyin"/>
+</panel>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="spellcheck_import" title="Sözlük idxalı">
+	<text name="import_dict">
+		Sözlük:
+	</text>
+	<button label="Önbaxış" label_selected="Önbaxış" name="dictionary_path_browse" />
+	<text name="import_name">
+		Adı:
+	</text>
+	<text name="import_lang">
+		Dil:
+	</text>
+	<button name="ok_btn" label="İdxal" />
+	<button name="cancel_btn" label="Ləğv et" />
+</floater>

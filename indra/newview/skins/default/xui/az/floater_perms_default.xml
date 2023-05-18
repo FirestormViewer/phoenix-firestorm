@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="perms default" title="YARADILMASI ÜÇÜN STANDART İCAZƏLƏR">
+	<panel label="Standart icazələr" name="default permissions">
+		<text name="label_1">
+			Növbəti Sahibi:
+		</text>
+		<text name="label_2">
+			Köçürtmək
+		</text>
+		<text name="label_3">
+			Dəyişdirmək
+		</text>
+		<text name="label_4">
+			Paylaşmaq
+		</text>
+		<text name="label_5">
+			Qrup ilə paylaşmaq
+		</text>
+		<text name="label_6">
+			Hər kəsə kopyalamaq icazəsi ver
+		</text>
+		<text name="label_7" tool_tip="Obyektlərin yaradılması üçün standart icazələri təyin edin">
+			Obyektlər
+		</text>
+		<text name="label_8" tool_tip="Paylaşılmış əşyalar üçün standart icazələri təyin edin">
+			Paylaşılmış
+		</text>
+		<text name="label_9" tool_tip="Skriptlərin yaradılması üçün standart icazələri təyin edin">
+			Skriptlər
+		</text>
+		<text name="label_10" tool_tip="Qeydlərin yaradılması üçün standart icazələri təyin edin">
+			Qeydlər
+		</text>
+		<text name="label_11" tool_tip="Jestlərimn yaradılması üçün standart icazələri təyin edin">
+			Jestlər
+		</text>
+		<text name="label_12" tool_tip="Geyimlərin və ya gövdə hissələrinin yaradılması üçün standart icazələri təyin edin">
+			Geyinilən əşyalar
+		</text>
+		<text name="label_13" tool_tip="Mühit seçimləri yaradılması üçün standart icazələri təyin edin">
+			Seçimlər
+		</text>
+	</panel>
+	<button label="OK" label_selected="OK" name="ok"/>
+	<button label="Ləğv et" label_selected="Ləğv et" name="cancel"/>
+</floater>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<floater name="fs_partial_inventory" title="Avadanlıq siyahısı">
+	<floater.string name="title">Avadanlıq siyahısı: [FOLDERNAME]</floater.string>
+	<filter_editor label="Avadanlıq siyahısı qovluğunu filtrləyin" name="flt_search" />
+</floater>

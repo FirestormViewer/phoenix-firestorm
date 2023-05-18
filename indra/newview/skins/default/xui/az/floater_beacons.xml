@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="beacons" title="Mayaklar">
+	<panel name="beacons_panel">
+		<text name="label_show">
+			Göstər:
+		</text>
+		<check_box label="Səhnədəki mayaklar məhdudları" name="lights_bounding_boxes"/>
+		<check_box label="Mayaklar" name="beacons"/>
+		<check_box label="Qeydə alma" name="highlights"/>
+		<check_box label="Ekran üzərində mayak məlumatı" name="FSRenderBeaconText"/>
+		<text name="beacon_width_label" tool_tip="Mayak eni">
+			En:
+		</text>
+		<text name="label_objects">
+			Bu obyektlər üçün:
+		</text>
+		<check_box label="Fiziki" name="physical"/>
+		<check_box label="Skriptli" name="scripted"/>
+		<check_box label="Sadəcə toxunma" name="touch_only"/>
+		<check_box label="Səs mənbələri" name="sounds"/>
+		<check_box label="Partikl mənbələri" name="particles"/>
+		<check_box label="Media mənbələri" name="moapbeacon"/>
+		<text name="label_objects">
+			Göstərmə istiqaməti:
+		</text>
+		<check_box label="Günəş" name="sun"/>
+		<check_box label="Ay" name="moon"/>
+	</panel>
+</floater>

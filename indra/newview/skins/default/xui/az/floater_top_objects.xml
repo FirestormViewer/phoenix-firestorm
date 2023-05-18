@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="top_objects" title="Ən yaxşı obyektlər" min_width="800">
+	<floater.string name="top_scripts_title">
+		Ən yaxşı skriptlər
+	</floater.string>
+	<floater.string name="top_scripts_text">
+		[TIME] ms müddəti və \[MEMORY] KB ölçüsü olan [COUNT] skript
+	</floater.string>
+	<floater.string name="scripts_score_label">
+		Vaxt
+	</floater.string>
+	<floater.string name="top_colliders_title">
+		Ən yaxşı toqquşmalar
+	</floater.string>
+	<floater.string name="top_colliders_text">
+		Potensial toqquşmaya məruz olan top [COUNT] obyekt
+	</floater.string>
+	<floater.string name="colliders_score_label">
+		Hal
+	</floater.string>
+	<floater.string name="none_descriptor">
+		Tapılmadı.
+	</floater.string>
+	<floater.string name="URLs">
+		URL-ünvanlar
+	</floater.string>
+	<floater.string name="memory">
+		Yaddaş (КБ)
+	</floater.string>
+	<text name="title_text">
+		Yüklənir...
+	</text>
+	<scroll_list name="objects_list">
+		<scroll_list.columns label="Hal" name="score"/>
+		<scroll_list.columns label="Ad" name="name"/>
+		<scroll_list.columns label="Sahib" name="owner"/>
+		<scroll_list.columns label="Yer" name="location"/>
+		<scroll_list.columns label="Sahə" name="parcel"/>
+		<scroll_list.columns label="Tarix" name="time"/>
+		<scroll_list.columns label="URL-ünvanlar" name="URLs"/>
+		<scroll_list.columns label="Yaddaş (KB)" name="memory"/>
+	</scroll_list>
+	<text name="id_text">
+		Obyekt ID-si:
+	</text>
+	<button label="Nişanı göstər" name="show_beacon_btn"/>
+	<text name="obj_name_text">
+		Obyektin adı:
+	</text>
+	<button label="Filtr" name="filter_object_btn"/>
+	<text name="owner_name_text">
+		Sahibi:
+	</text>
+	<button label="Filtr" name="filter_owner_btn"/>
+	<text name="parcel_name_text">
+		Sahə:
+	</text>
+	<button label="Filtr" name="filter_parcel_btn"/>
+	<button label="Yenilə" name="refresh_btn" />
+	<button label="Seçilmişi qaytar" name="return_selected_btn" width="120" />
+	<button label="Hamısını qaytar" name="return_all_btn" />
+	<button label="Teleport ol" name="teleport_to_btn" />
+	<button label="Profil" name="profile_btn" />
+	<button label="Skriptlər haqqında" name="script_info_btn" />
+	<button label="Təpiklə" name="estate_kick_btn" />
+</floater>

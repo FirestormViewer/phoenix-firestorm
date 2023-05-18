@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<floater name="floater_discord" title="Discord">
+	<string name="discord_connected">Siz Discord-a qoşulmusunuz:</string>
+	<string name="discord_disconnected">Discord-a qoşulmayıb.</string>
+	<string name="SocialDiscordConnecting">Discord-a qoşulur...</string>
+	<string name="SocialDiscordErrorConnecting">Discord-a qoşulma problemi</string>
+	<string name="SocialDiscordDisconnecting">Discord ilə əlaqə kəsilir...</string>
+	<text name="account_caption_label">
+		Discord-a qoşulmayıb.
+	</text>
+	<check_box label="Giriş zamanı avtomatik qoşulun" name="startup_check"/>
+	<check_box label="İstifadəçi adını bildirin" name="name_check"/>
+	<button label="Qoş..." name="connect_btn"/>
+	<button label="Deaktiv et" name="disconnect_btn"/>
+	<text name="rating_label">
+		Aşağıdakı məzmun reytinqi ilə regionların adlarını Discord-a bildirin:
+	</text>
+	<combo_box name="maturity_desired_combobox">
+		<combo_box.item label="Ümumi, Ortam, Yetkin" name="Desired_Adult"/>
+		<combo_box.item label="Ümumi və Ortam" name="Desired_Mature"/>
+		<combo_box.item label="Ümumi" name="Desired_PG"/>
+		<combo_box.item label="Paylaşmayın" name="Desired_None"/>
+	</combo_box>
+	<text name="dont_names_label">
+		Discord-da region adları aşağıda göstərilibsə, onları paylaşmayın:
+	</text>
+	<text name="connection_status_text">
+		Yüklənir...
+	</text>
+</floater>

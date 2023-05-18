@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Mənzərə" name="Terrain">
+	<text name="region_text_lbl">
+		Region:
+	</text>
+	<text name="region_text">
+		naməlum
+	</text>
+	<spinner label="Su səviyyəsi" name="water_height_spin" label_width="90" width="160"/>
+	<spinner label="Mənzərə qaldırma həddi" name="terrain_raise_spin" left="220" label_width="160" width="230"/>
+	<spinner label="Mənzərə endirmə həddi" name="terrain_lower_spin" left="220" label_width="160" width="230"/>
+	<text name="detail_texture_text">
+		Mənzərə teksturları (tələblər: 1024x1024, 24-bit, TGA)
+	</text>
+	<text name="height_text_lbl">
+		1 (Aşağı)
+	</text>
+	<text name="height_text_lbl2">
+		2
+	</text>
+	<text name="height_text_lbl3">
+		3
+	</text>
+	<text name="height_text_lbl4">
+		4 (Yuxarı)
+	</text>
+	<text name="height_text_lbl5">
+		Tekstura hündürlüyü diapazonu
+	</text>
+	<text name="height_text_lbl10">
+		Bu dəyərlər üst-üstə düşən teksturların qarışma dərəcəsini müəyyənləşdirir.
+	</text>
+	<text name="height_text_lbl11">
+		Metrlə ölçülür. Aşağı dəyər №1 teksturanın MAKSİMUM hündürlüyü, Üst dəyər isə №4 teksturanın MİNİMUM hündürlüyüdür.
+	</text>
+	<text name="height_text_lbl6">
+		Şimal-qərb
+	</text>
+	<text name="height_text_lbl7">
+		Şimal-şərq
+	</text>
+	<spinner label="Alt" name="height_start_spin_1"/>
+	<spinner label="Alt" name="height_start_spin_3"/>
+	<spinner label="Üst" name="height_range_spin_1"/>
+	<spinner label="Üst" name="height_range_spin_3"/>
+	<text name="height_text_lbl8">
+		Cənub-qərb
+	</text>
+	<text name="height_text_lbl9">
+		Cənub-şərq
+	</text>
+	<spinner label="Alt" name="height_start_spin_0"/>
+	<spinner label="Alt" name="height_start_spin_2"/>
+	<spinner label="Üst" name="height_range_spin_0"/>
+	<spinner label="Üst" name="height_range_spin_2"/>
+	<button label="Mənzərəni yükləyin RAW..." name="download_raw_btn" tool_tip="Yalnız torpaq sahibləri üçün mövcuddur, idarəçilər deyil"/>
+	<button label="Mənzərəni göndərin RAW..." name="upload_raw_btn" tool_tip="Yalnız torpaq sahibləri üçün mövcuddur, idarəçilər deyil"/>
+	<button label="Limitləri düzəldin" name="bake_terrain_btn" tool_tip="Ərazi hündürlüyünü yuxarı və aşağı nöqtələr arasında orta nöqtəyə təyin edin"/>
+	<button label="Tətbiq et" name="apply_btn"/>
+</panel>

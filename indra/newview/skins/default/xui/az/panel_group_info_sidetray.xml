@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Qrup profili" name="GroupInfo">
+	<panel.string name="default_needs_apply_text">
+		Yadda saxlanılmamış dəyişiklər var
+	</panel.string>
+	<panel.string name="want_apply_text">
+		Bu dəyişiklikləri yadda saxlamaq istəyirsiniz?
+	</panel.string>
+	<panel.string name="group_join_btn">
+		Qoşul (L$[AMOUNT])
+	</panel.string>
+	<panel.string name="group_join_free">
+		Pulsuz
+	</panel.string>
+
+	<layout_stack name="group_info_sidetray_main">
+		<layout_panel name="header_container">
+
+	<panel name="group_info_top">
+		<text_editor name="group_name" value="(yüklənir...)"/>
+		<line_editor label="Yeni qrupun adını daxil edin" name="group_name_editor"/>
+	</panel>
+
+		</layout_panel>
+		<layout_panel name="group_info_content">
+
+	<layout_stack name="layout">
+		<layout_panel name="group_accordions">
+			<accordion name="groups_accordion">
+				<accordion_tab name="group_general_tab" title="Ümumi"/>
+				<accordion_tab name="group_roles_tab" title="Rollar"/>
+				<accordion_tab name="group_notices_tab" title="Elanlar"/>
+				<accordion_tab name="group_land_tab" title="Torpaq/aktivlər"/>
+				<accordion_tab name="group_experiences_tab" title="Macəralar"/>
+			</accordion>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="button_row_ls">
+		<layout_panel name="btn_chat_lp">
+			<button label="Söhbət" name="btn_chat"/>
+		</layout_panel>
+		<layout_panel name="call_btn_lp">
+			<button label="Qrupa zəng" name="btn_call" tool_tip="Bu qrupa zəng gedəcək"/>
+		</layout_panel>
+		<layout_panel name="btn_apply_lp">
+			<button label="Yadda saxla" label_selected="Yadda saxla" name="btn_apply"/>
+			<button label="Qrup yarat" name="btn_create" tool_tip="Yeni qrup yarat"/>
+		</layout_panel>
+	</layout_stack>
+
+		</layout_panel>
+	</layout_stack>
+</panel>

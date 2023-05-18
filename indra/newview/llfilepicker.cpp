@@ -849,12 +849,14 @@ void set_nav_save_data(LLFilePicker::ESaveFilter filter, std::string &extension,
             break;
 #endif
             
-        case LLFilePicker::FFSAVE_XML:
-            type = "\?\?\?\?";
-            creator = "\?\?\?\?";
-            extension = "xml";
-            break;
-            
+        // <FS:TS> Compile fix
+        //case LLFilePicker::FFSAVE_XML:
+        //    type = "\?\?\?\?";
+        //    creator = "\?\?\?\?";
+        //    extension = "xml";
+        //    break;
+        // </FS:TS> Compile fix
+        
         case LLFilePicker::FFSAVE_RAW:
             type = "\?\?\?\?";
             creator = "\?\?\?\?";
@@ -871,6 +873,31 @@ void set_nav_save_data(LLFilePicker::ESaveFilter filter, std::string &extension,
             type = "LSL ";
             creator = "\?\?\?\?";
             extension = "lsl";
+            break;
+
+        // <FS:CR> Export filter
+        case FFSAVE_EXPORT:
+            type = "OXP ";
+            creator = "\?\?\?\?";
+            extension = "oxp";
+            break;
+        case FFSAVE_COLLADA:
+            type = "DAE ";
+            creator = "\?\?\?\?";
+            extension = "dae";
+            break;
+        // <FS:CR> CSV Filter
+        case FFSAVE_CSV:
+            type = "CSV ";
+            creator = "\?\?\?\?";
+            extension = "csv";
+            break;
+        // </FS:CR>
+        case FFSAVE_BEAM:
+        case FFSAVE_XML:
+            type = "XML ";
+            creator = "\?\?\?\?";
+            extension = "xml";
             break;
         
         case LLFilePicker::FFSAVE_ALL:

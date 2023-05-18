@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="gesture_preview">
+	<floater.string name="step_anim">
+		Animasiyanı oynat:
+	</floater.string>
+	<floater.string name="step_sound">
+		Səsi oynat:
+	</floater.string>
+	<floater.string name="step_chat">
+		Söhbətə yaz:
+	</floater.string>
+	<floater.string name="step_wait">
+		Gözləmək:
+	</floater.string>
+	<floater.string name="stop_txt">
+		Dayan
+	</floater.string>
+	<floater.string name="preview_txt">
+		Önbaxış
+	</floater.string>
+	<floater.string name="none_text">
+		- Heç nə -
+	</floater.string>
+	<floater.string name="Title">
+		Jest: [NAME]
+	</floater.string>
+	<text name="desc_label">
+		Təsviri:
+	</text>
+	<text name="trigger_label">
+		Siqnal:
+	</text>
+	<text name="replace_text" tool_tip="Bu sözlərlə signal sözünü əvəzləyin. Məsələn, əgər signal - «salam», əvəzləyici - «səlam» olsunsa, istifadəçinin çatda «Mən səlamlamaq istədim» ifadəsini yazması halında, «Mən səlam demək istədim» cümləsi və əl işarəsi göstəriləcəkdir.">
+		Əvəzi:
+	</text>
+	<line_editor name="replace_editor" tool_tip="Bu sözlərlə signal sözünü əvəzləyin. Məsələn, əgər signal - «salam», əvəzləyici - «səlam» olsunsa, istifadəçinin çatda «Mən səlamlamaq istədim» ifadəsini yazması halında, «Mən səlam demək istədim» cümləsi və əl işarəsi göstəriləcəkdir."/>
+	<text name="key_label">
+		İsti düymə:
+	</text>
+	<combo_box label="Yox" name="modifier_combo"/>
+	<combo_box label="Yox" name="key_combo"/>
+	<text name="library_label">
+		Kitabxana:
+	</text>
+	<scroll_list name="library_list">
+		<scroll_list.rows name="action_animation" value="Animasiya"/>
+		<scroll_list.rows name="action_sound" value="Səs"/>
+		<scroll_list.rows name="action_chat" value="Söhbət"/>
+		<scroll_list.rows name="action_wait" value="Gözləmək"/>
+	</scroll_list>
+	<button label="Əlavə et &gt;&gt;" name="add_btn"/>
+	<text name="steps_label">
+		Addımlar:
+	</text>
+	<button label="Yuxarı" name="up_btn"/>
+	<button label="Aşağı" name="down_btn"/>
+	<button label="Sil" name="delete_btn"/>
+	<text name="options_text">
+		(seçimlər)
+	</text>
+	<radio_group name="animation_trigger_type">
+		<radio_item label="Başlat" name="start"/>
+		<radio_item label="Dayandır" name="stop"/>
+	</radio_group>
+	<check_box label="animasiya dayana qədər" name="wait_anim_check"/>
+	<check_box label="saniyədə vaxt:" name="wait_time_check"/>
+	<text name="help_label">
+		Gözləmə addımları əlavə etməyincə, bütün addımlar eyni vaxtda icra olunur.
+	</text>
+	<check_box label="Aktiv" name="active_check" tool_tip="Aktiv jestləri söhbətə onların tətiklərini yazmaqla və ya isti düymələrə basmaqla aktivləşdirmək olar.  Düymələr münaqişəsi baş verərsə, jestlər adətən qeyri-aktiv olur."/>
+	<button label="Önbaxış" name="preview_btn"/>
+	<button label="Yadda saxla" name="save_btn"/>
+</floater>

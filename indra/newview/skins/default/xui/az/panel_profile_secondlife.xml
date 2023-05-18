@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile" label="Profil">
+	<string name="status_online">Daxil olub</string>
+	<string name="status_offline">Çıxıb</string>
+	<string name="status_unknown">Naməlum</string>
+	<string name="no_partner_text" value="Heç kim"/>
+	<string name="no_group_text" value="Heç kim"/>
+	<string name="FSDev" value=" Tərtibatçı"/>
+	<string name="FSSupp" value=" Dəstək"/>
+	<string name="FSQualityAssurance" value=" Sazladırıcı"/>
+	<string name="FSGW" value=" Gateway"/>
+	<text name="name_label" value="Adı:"/>
+	<panel name="name_holder">
+		<text_editor name="complete_name" value="(yüklənir...)"/>
+		<menu_button name="copy_btn" tool_tip="Köçürt"/>
+	</panel>
+	<button name="set_name" tool_tip="Ad göstərməyi təyin et"/>
+	<icon name="can_see_online" tool_tip="Dost mənim şəbəkə statusumu görmək üçün icazəsi var"/>
+	<icon name="cant_see_online" tool_tip="Dost mənim şəbəkə statusumu görmək üçün icazəsi yoxdur"/>
+	<icon name="can_see_on_map" tool_tip="Dost məni xəritədə görmək üçün icazəsi var"/>
+	<icon name="cant_see_on_map" tool_tip="Dost məni xəritədə görmək üçün icazəsi yoxdur"/>
+	<icon name="can_edit_objects" tool_tip="Dost mənim obyektlərimi düzəltmək üçün icazəsi var"/>
+	<icon name="cant_edit_objects" tool_tip="Dost mənim obyektlərimi düzəltmək üçün icazəsi yoxdur"/>
+	<text name="Key:" value="Açar:"/>
+	<text_editor name="user_key" value="(yüklənir...)"/>
+	<layout_stack name="imagepositioner">
+		<layout_panel name="image_action_panel">
+			<menu_button name="image_action_btn" tool_tip="Выполнение действий, связанных с изображением профиля"/>
+		</layout_panel>
+		<layout_panel name="label_stack">
+			<text name="label" value="Yaş:"/>
+			<text_editor name="user_age" value="(yüklənir...)"/>
+			<text name="label2" value="Hesab:"/>
+			<text name="partner_label" value="Yoldaş:"/>
+		</layout_panel>
+	</layout_stack>
+	<text name="About:" value="Haqqında:"/>
+	<text name="Groups:" value="Qruplar:"/>
+	<button name="group_invite" tool_tip="Qrupa dəvət et"/>
+	<text name="Give item:" value="Paylaş:"/>
+	<text name="Give inventory" tool_tip="Bu oyunçuya vermək üçün avadanlıq siyahısından əşyaları buraya daşıyın">Avadanlıq siyahısından əşyanı bura daşıyın.</text>
+	<layout_stack name="buttonstack">
+		<layout_panel name="left_buttonstack">
+			<button name="show_on_map_btn" label="Xəritədə tap" tool_tip="Sakini xəritədə tap" label_selected="Xəritədə tap"/>
+			<button name="pay" label="Ödə" tool_tip="Sakinə pul göndər" label_selected="Ödə"/>
+		</layout_panel>
+		<layout_panel name="middle_buttonstack">
+			<button name="teleport" label="Teleport təklif et" tool_tip="Bu sakinə teleport təklif et" label_selected="Teleport təklif et"/>
+			<button name="im" label="Şəxsi mesaj" tool_tip="Ani mesajlaşma seansını başlat" label_selected="Şəxsi mesaj"/>
+		</layout_panel>
+		<layout_panel name="right_buttonstack">
+			<button name="add_friend" label="Dostlaş" tool_tip="Bu sakinə dostluq təklif et" label_selected="Dostlaş"/>
+			<button name="remove_friend" label="Dostluqdan çıxart" tool_tip="Bu sakin ilə dostluğu ləğv et" label_selected="Dostluqdan çıxart"/>
+			<button name="block" label="Blokla" tool_tip="Bu sakini blokla"/>
+			<button name="unblock" label="Blokdan çıxart" tool_tip="Bu sakini blokdan çıxart"/>
+		</layout_panel>
+	</layout_stack>
+	<check_box name="show_in_search" label="Axtarışda göstər" tool_tip="Adamların sizi axtarış nəticələrində görməsinə icazə verin"/>
+	<button name="save_description_changes" label="Yadda saxla"/>
+	<button name="discard_description_changes" label="İmtina et"/>
+</panel>

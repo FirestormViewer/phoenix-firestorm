@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floaterpreferencesviewadvanced" title="Kamera yerləşməsi">
+	<text name="camera_offset_lbl" width="120">Kamera yerdəyişməsi:</text>
+	<text name="focus_offset_lbl" width="120">Fokus yerdəyişməsi:</text>
+	<text name="offset_scale_lbl" width="260">Kameranın yerdəyişmə ölçüsü:</text>
+	<button label="Yadda saxla..." name="save_preset_btn" width="125"/>
+	<button label="Bağla" name="close_btn" width="125"/>
+</floater>

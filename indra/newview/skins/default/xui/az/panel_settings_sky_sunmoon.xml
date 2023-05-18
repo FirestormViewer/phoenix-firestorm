@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Güneş və Ay" name="panel_settings_sky_hbodies">
+	<layout_stack name="main_ls">
+		<layout_panel name="sun_layout">
+			<text name="sun_stars_label">Günəş və ulduzlar</text>
+			<text name="position_label">Yerləşmə:</text>
+			<text name="image_label">Şəkil və ölçü:</text>
+			<text name="color_label">Rəng:</text>
+			<text name="sun_azimuth_label">Azimut:</text>
+			<text name="sun_elevation_label">Hündürlük:</text>
+			<text name="glow_focus_label">Parlama fokus:</text>
+			<text name="glow_size_label">Parlama ölçüsü:</text>
+			<text name="star_brightness_label">Ulduzların parlaqlığı:</text>
+			<check_box label="İşıqlıq nöqtələrini göstər" name="sunbeacon"/>
+		</layout_panel>
+		<layout_panel name="moon_layout">
+			<text name="moon_label">Ay</text>
+			<text name="position_label">Yerləşmə:</text>
+			<text name="moon_image_label">Şəkil və ölçü:</text>
+			<text name="moon_azimuth_label">Azimut:</text>
+			<text name="moon_elevation_label">Hündürlük:</text>
+			<text name="brightness_label">Parlaqlıq:</text>
+			<check_box label="İşıqlıq nöqtələrini göstər" name="moonbeacon"/>
+		</layout_panel>
+	</layout_stack>
+</panel>

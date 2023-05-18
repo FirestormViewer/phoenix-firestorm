@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="outfit_photo_preview">
+    <floater.string name="Title">
+        Tekstura: [NAME]
+    </floater.string>
+    <floater.string name="exceed_limits">
+        [MAX_WIDTH]*[MAX_HEIGHT] şəkilin maksimal ölçüsüdür. Zəhmət olmasa, ayrı şəkil seçin.
+    </floater.string>
+    <floater.string name="photo_confirmation">
+        [OUTFIT] geyimi üçün bu şəkil təyin edilsin?
+    </floater.string>
+    <text name="dimensions">
+        [WIDTH]piks. x [HEIGHT]piks.
+    </text>
+    <button label="OK" name="ok_btn"/>
+    <button label="Ləğv et" name="cancel_btn"/>
+</floater>

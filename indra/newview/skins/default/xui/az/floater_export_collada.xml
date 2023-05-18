@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_export_collada" title="Collada kimi yadda saxla...">
+	<floater.string name="texture_progress">
+		[OBJECT] Collada olaraq saxlanır: Texture-lər (Qalıq: [COUNT])
+	</floater.string>
+	<floater.string name="floater_title">
+		[OBJECT] Collada olaraq saxlanır...
+	</floater.string>
+	<layout_stack name="resizing_stack">
+		<layout_panel name="control_panel">
+			<text name="ObjectInfoText">
+				Obyekt haqqında
+			</text>
+			<text name="NameText">
+				Adı: [NAME]
+			</text>
+			<text name="exportable_prims">
+				İxrac olunan primitivlər: [COUNT]/[TOTAL]
+			</text>
+			<text name="exportable_textures">
+				İxrac olunan texture-lər: [COUNT]/[TOTAL]
+			</text>
+			<text name="OptionsText">
+				Seçimlər:
+			</text>
+			<check_box label="Teksturları saxla" name="export_textures_check" />
+			<check_box label="Teksturların konsolidasiyası" name="consolidate_check" />
+			<check_box label="Şəffaflığı ötür" name="skip_transparent_check" />
+			<check_box label="Tekstur seçimlərini istifadə et" name="texture_params_check" />
+			<check_box label="Tək UV xəritəsi" name="single_uv_map_check"/>
+			<text name="TextureFormatText">
+				Tekstur formatı:
+			</text>
+			<button label="Yadda saxla..." name="export_btn" />
+		</layout_panel>
+	</layout_stack>
+</floater>

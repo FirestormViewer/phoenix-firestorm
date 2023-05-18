@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Settings">
+	<menu_item_check label="Həmişə tam olaraq" name="always_render"/>
+	<menu_item_check label="Heç vaxt tam olaraq" name="never_render"/>
+	<menu_item_check label="İstisnalardan sil" name="default"/>
+	<menu_item_call label="Avatarın müayinəsi" name="inspect"/>
+	<menu_item_call label="Avatara yaxınlaşdır" tool_tip="bu avatara baxmaq üçün kameranı hərəkət etdirin." name="zoom"/>
+</context_menu>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Hərəkət və görünüş" name="move_panel">
+	<tab_container label="Hərəkət və görünüş" name="tabs">
+		<panel label="Görünüş" name="tab-view">
+			<slider label="Baxış bucağı" name="camera_fov" tool_tip="Real mənada bu, yaxınlaşdırma funksiyasıdır. Bu, görünüş pəncərəsindəki baxış sahəsini dəyişəcək. Bu, Ctrl+0 və ya Ctrl+8 düymələrini basmaqla eynidir. QEYD. Əgər siz flycam-ı (3D SpacenNavigator) aktiv etmisinizsə, bu işləməyəcək."/>
+			<slider label="Məsafə" name="camera_offset_scale"/>
+			<slider label="Keçid vaxtı" name="camera_transition_time"/>
+			<slider label="Hamarlaşdırma" name="camera_position_smoothing"/>
+			<check_box label="Kamera məhdudiyyətlərini söndürün" name="DisableCameraConstraints" tool_tip="Kameranı normal hüdudlarından kənara və yer səviyyəsindən aşağı hərəkət etdirmək üçün təyin edin."/>
+			<check_box label="Yaxınlaşdırma səviyyəsinə nəzarət etmək üçün siçan çarxından istifadə etməyin" name="FSDisableMouseWheelCameraZoom"/>
+			<text name="heading2" width="380">
+				Avatarın nə zaman avtomatik pozası (bir və ya bir neçəsini seçin):
+			</text>
+			<check_box label="Tikinti / Dəyişdirmək" name="edit_camera_movement" tool_tip="Dəyişdirmə rejiminə daxil olarkən və çıxanda avtomatik kamera yerləşdirməsindən istifadə edin"/>
+			<check_box label="Görünüş" name="appearance_camera_movement" tool_tip="Dəyişdirmə rejimində avtomatik kamera yerləşdirməsindən istifadə edin"/>
+			<check_box label="Vizual ipuclar" name="FSAppearanceShowHints" tool_tip="Dəyişmiş avatar hissələrini göstərən vizual ipuclarını aktivləşdirin və ya söndürün." width="150" />
+			<check_box label="Avatarınızın üzərinə basanda kamera yerləşməsi saxlanılır" name="clickonavatarkeepscamera" tool_tip="Adətən, avatar üzərinə basdığınız zaman o, kameranın yerləşdirməsini sıfırlayır. Bu seçim bu davranışı aradan qaldırır."/>
+			<check_box label="Teleportasiyadan sonra kamera yerləşməsini saxlayın (region daxilində)" name="FSResetCameraOnTP" tool_tip="Bir qayda olaraq, teleportasiya zamanı kameranın yerləşməsi sıfırlanır. Bu seçim bu davranışın qarşısını alır."/>
+			<check_box label="Avatar hərəkət edərkən kamera yerləşməsini saxlayın" name="FSResetCameraOnMovement"/>
+			<check_box label="Minimal kamera yaxınlaşdırma məsafəsini söndürün" name="disableminzoomdist" tool_tip="Kameranın yaxın məsafə limitini söndürmək sizə obyektə daha çox yaxınlaşmağa imkan verəcək."/>
+			<check_box label="Baxışı sıfırlayan zaman avatarı kameraya doğru çevirin" name="resetviewturnsavatar" tool_tip="Baxış rejimi sıfırlandıqda (ESC düyməsini basmaqla) bu seçim avatarı kameraya doğru çevirir."/>
+			<check_box label="Kameranın primdən keçməsinə icazə verin" name="ignorecameraconstraints" tool_tip="Kameranın primitivlər arasında sərbəst hərəkət etməsinə icazə verin"/>
+			<text name="ignorecameraconstraints_requires_restart">
+				(yenidən başlatma tələb olunur)
+			</text>
+			<check_box label="Teleportdan sonra müvəqqəti olaraq gizlənmiş obyektlərin yenidən göstərilməsi" name="FSTempDerenderUntilTeleport" tool_tip="Aktivləşdirilərsə, müvəqqəti olaraq gizlənmiş obyektlər teleporta qədər saxlanılacaq. Deaktiv edilərsə, onlar sessiyanın sonuna qədər və ya aktivin qara siyahısından əl ilə çıxarılana qədər gizli qalırlar." />
+		</panel>
+		<panel label="Birinci şəxs" name="tab-mouselook">
+			<check_box label="Birinci şəxs baxışı funksiyasını aktivləşdirin (Mouselook)" name="EnableMouselook" tool_tip="Kameraya birinci şəxsin baxmasına və siçanla idarə edilməsinə icazə verin"/>
+			<check_box label="Avatarı birinci şəxs görünüşündə göstərin" name="first_person_avatar_visible"/>
+			<check_box label="Birinci şəxs rejimində istifadəçi interfeysini göstərin" name="first_person_ui_visible"/>
+			<check_box label="Birinci şəxs rejimində söhbət və radar pəncərələrini bağlamayın (Mouselook)" name="FSShowConvoAndRadarInML"/>
+			<check_box label="Birinci şəxs rejimində kontekst menyusunu aktivləşdirin" tool_tip="ALT + sağ siçan düyməsini basarkən birinci şəxs rejimində kontekst menyusunu açın" name="FSEnableRightclickMenuInMouselook"/>
+			<check_box label="Sürüşdürmə təkərindən istifadə edərək birinci şəxs görünüşündən çıxın" name="FSScrollWheelExitsMouselook" tool_tip="Sürüşdürmə təkərindən istifadə edərək birinci şəxs görünüşündən çıxın"/>
+			<check_box label="Birinci şəxs təlimatlarını göstərin" name="mouselook_instructions_visible" tool_tip="Birinci şəxs təlimatlarını göstərin"/>
+			<check_box label="Nişangahı göstərin" name="ShowCrosshairs" tool_tip="Birinci şəxs baxımından nişangahı göstərin"/>
+			<check_box label="Döyüş qabiliyyətlərini aktivləşdirin" name="FSMouselookCombatFeatures"/>
+			<check_box label="Hədəf markerlərini çəkin (oxlar)" name="ExodusMouselookIFF"/>
+			<slider label="Məsafə (м)" name="ExodusMouselookIFFRange"/>
+			<text name="Mouse Sensitivity">
+				Siçan həssaslığı:
+			</text>
+			<check_box label="Tərs çevirmək" name="invert_mouse"/>
+		</panel>
+		<panel label="Hərəkət" name="tab-movement">
+			<check_box label="Ox düymələri həmişə məni hərəkət etdirir" name="arrow_keys_move_avatar_check"/>
+			<check_box label="Hərf düymələri (yəni WASD) yerli söhbətə başlamadan hərəkətə təsir edir." name="LetterKeysAffectsMovementNotFocusChatBar"/>
+			<check_box label="Qaçış üçün ikili basmaq" name="tap_tap_hold_to_run"/>
+			<check_box label="Uçmaq / Yerə düşmək (yuxarı (hoppan) / aşağı (otur))" name="automatic_fly"/>
+			<check_box label="Çöməl keçid rejimini aktiv edin" name="crouch_toggle_mode"/>
+			<check_box label="Atlamaya hazırlıq animasiyasını söndürün" name="FSIgnoreFinishAnimation"/>
+			<check_box label="Geriyə doğru hərəkət edərkən avatarın kamera ilə üzbəüz dönməsini söndürün" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Geriyə doğru hərəkət edərkən avatarın kamera ilə üzbəüz dönməsini söndürün"/>
+			<check_box label="Seçilmiş obyektə baxmaq üçün avatarı çevirin" name="FSTurnAvatarToSelectedObject" tool_tip="Avatarınızı hal-hazırda seçdiyiniz obyektlə üzbəüz çevirir."/>
+			<slider label="Avatarın fırlanma sürəti:" name="av_turn_spd" tool_tip="Avatarınızın dönməyə reaksiya sürətini dəyişir. Maksimal dönüş sürətinin faizi olaraq 0-100. Varsayılan olaraq 0. Yüksək dəyər sürətli/kəskin olacaq"/>
+			<text name="Region_Crossing_Movement_Label" width="275">
+				Regionlar arasında hərəkətin proqnozlaşdırılması:
+			</text>
+			<radio_group name="Region_Crossing_Movement">
+				<radio_item label="Proqnoz" name="move_predict"/>
+				<radio_item label="Dayandır" name="move_stop"/>
+			</radio_group>
+			<text name="movelock_lbl">
+				Əgər tikilmiş LSL körpüsündə hərəkətin bloklanması aktivdirsə...
+			</text>
+			<check_box label="Region dəyişikliyindən sonra həmişə bloklamağı təkrarla" name="RelockMoveLockAfterRegionChange"/>
+			<check_box label="Hərəkəti dayandırdıqdan və başladıqdan sonra mövqeyin kilidlənməsi və kilidinin açılması" name="RelockMoveLockAfterMovement"/>
+			<text name="single_click_action_lbl">
+				Yerə bir dəfə bas:
+			</text>
+			<combo_box name="single_click_action_combo">
+				<combo_box.item label="Heç bir fəaliyyət" name="0"/>
+				<combo_box.item label="Basım nöqtəsinə gediş" name="1"/>
+			</combo_box>
+			<text name="double_click_action_lbl">
+				Yerə ikili bas:
+			</text>
+			<combo_box name="double_click_action_combo">
+				<combo_box.item label="Hərəkətsiz" name="0"/>
+				<combo_box.item label="Basım nöqtəsinə gediş" name="1"/>
+				<combo_box.item label="Basım nöqtəsinə teleport" name="2"/>
+			</combo_box>
+			<check_box label="Skriptləri olan obyektlərə iki dəfə basmağa icazə verin" name="FSAllowDoubleClickOnScriptedObjects"/>
+			<button label="Joystick Konfiqurasiyası" name="joystick_setup_button"/>
+		</panel>
+		<panel label="Teleport" name="tab-teleports">
+			<check_box label="Teleportasiya zamanı səs effektini çalın" name="PlayTeleportSound"/>
+			<check_box label="Teleportdan sonra həmişə uçun" name="FSFlyAfterTeleport"/>
+			<check_box label="Həmişə teleport zamanı Ləğv et düyməsini göstərin" name="FSAlwaysShowTPCancel" tool_tip="Bu seçim RestrainedLoveAPI tərəfindən nəzərə alınmır"/>
+			<check_box label="Teleport markerlərini deaktiv edin" name="tp_beam_toggle" tool_tip="Teleportasiyadan sonra təyinat markerinin göstərilməsinin söndürülməsi" />
+			<check_box label="Teleportasiya qara ekranını söndürün" name="tp_screen_toggle" tool_tip="Teleportasiya qara ekranını söndürün" />
+			<check_box label="Teleportasiya zamanı xəritəni bağlamayın" name="FSDoNotHideMapOnTeleport"  tool_tip="Teleportasiya zamanı xəritənin avtomatik bağlanmasının qarşısını alın."/>
+			<check_box label="Teleportdan sonra 'Yalnız dostları göstər' funksiyasını aktiv saxlayın." name="FSRenderFriendsOnlyPersistsTP" tool_tip="'Yalnız dostları göstər' funksiyasının avtomatik ləğvini söndürür (defolt: qeyri-aktivdir)"/>
+			<check_box label="Teleportu tamamladığınız bölgənin SLURL-sini bildirin." name="FSShowBackSLURL"/>
+		</panel>
+		<panel label="Xəritə və Minixəritə" name="tab-maps">
+			<text name="minimap_options_label">
+				Minixəritə seçimləri:
+			</text>
+			<check_box label="Minixəritənin fırlanmasını aktivləşdirin" name="minimaprotate" tool_tip="Avatar istiqamətini dəyişdirərkən mini xəritəni fırladın"/>
+			<text name="netmap_double_click_action_lbl">
+				İki dəfə bas:
+			</text>
+			<combo_box name="netmap_double_click_action_combo">
+				<combo_box.item label="Fəaliyyətsiz" name="0"/>
+				<combo_box.item label="Dünya xəritəsini açın" name="1"/>
+				<combo_box.item label="Basım nöqtəsinə teleport edin" name="2"/>
+			</combo_box>
+			<slider label="Seçim radiusu:" name="FSMinimapPickScale" tool_tip="Minixəritədə seçim dairəsinin radiusunu idarə edir"/>
+			<text name="world_map_options_label">
+				Dünya xəritəsinin seçimləri:
+			</text>
+			<check_box label="Dünya xəritəsində dublikat əlfəcinləri süzgəcləyin" name="WorldmapFilterDuplicateLandmarks" tool_tip="Dünya xəritəsində dublikat əlfəcinləri süzgəcləyin"/>
+			<check_box label="Dünya xəritəsində region haqqında əlavə məlumatları göstərin" name="FSAdvancedWorldmapRegionInfo" tool_tip="Dünya xəritəsində region haqqında əlavə məlumatı göstərin (avatarların sayı və yetkinlik səviyyəsi)."/>
+			<check_box label="Dünya xəritəsində koordinatlar şəbəkəsini göstərin." name="FSShowRegionGridCoordinates" tool_tip="Dünya xəritəsində koordinatlar şəbəkəsini göstərin.."/>
+			<check_box label="Dünya xəritəsinə iki dəfə basmaqla teleportasiya" name="FSWorldMapDoubleclickTeleport" tool_tip="Dünya xəritəsinə iki dəfə basmaqla teleportasiyanın aktivləşdirilməsi"/>
+		</panel>
+	</tab_container>
+</panel>
