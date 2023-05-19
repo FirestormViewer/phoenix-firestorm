@@ -474,8 +474,18 @@ void LLNetMap::draw()
 					const F32 local_bottom(bottom + y * mScale);
 					const F32 local_top(local_bottom + mScale);
 					LLViewerTexture* pRegionImage = tiles[x * scaled_width + y];
-					if (pRegionImage && pRegionImage->hasGLTexture())
+					if (pRegionImage)
 					{
+						// Ansariel: Map texture ends up without GLTexture after a teleport.
+						//           Simply calling createGLTexture() should be fine here
+						//           because the same method is called in getSTexture() in
+						//           the render terrain path if for some reason no
+						//           GLTexture exists.
+						if (!pRegionImage->hasGLTexture() && !pRegionImage->createGLTexture())
+						{
+							continue;
+						}
+
 						gGL.getTexUnit(0)->bind(pRegionImage);
 						gGL.begin(LLRender::TRIANGLES);
 						{
