@@ -2125,8 +2125,6 @@ void LLFloaterPreference::onUpdatePopupFilter()
 
 void LLFloaterPreference::refreshEnabledState()
 {
-	LLCheckBoxCtrl* ctrl_pbr = getChild<LLCheckBoxCtrl>("UsePBRShaders");
-
 #if ADDRESS_SIZE == 32
 	childSetEnabled("FSRestrictMaxTextureSize", false);
 #endif
@@ -2160,9 +2158,6 @@ void LLFloaterPreference::refreshEnabledState()
 	// WindLight
 	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
 	sky->setEnabled(TRUE);
-
-    //PBR
-    ctrl_pbr->setEnabled(TRUE);
 
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
