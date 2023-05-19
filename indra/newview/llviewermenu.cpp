@@ -1196,10 +1196,6 @@ U64 info_display_from_string(std::string info_display)
 	{
 		return LLPipeline::RENDER_DEBUG_LOD_INFO;
 	}
-	else if ("build queue" == info_display)
-	{
-		return LLPipeline::RENDER_DEBUG_BUILD_QUEUE;
-	}
 	else if ("lights" == info_display)
 	{
 		return LLPipeline::RENDER_DEBUG_LIGHTS;
@@ -2394,6 +2390,21 @@ class LLAdvancedPurgeDiskCache : public view_listener_t
 	}
 };
 
+
+////////////////////////
+// PURGE SHADER CACHE //
+////////////////////////
+
+
+class LLAdvancedPurgeShaderCache : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLViewerShaderMgr::instance()->clearShaderCache();
+		LLViewerShaderMgr::instance()->setShaders();
+		return true;
+	}
+};
 
 ////////////////////
 // EVENT Recorder //
@@ -12222,6 +12233,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAdvancedClickRenderShadowOption(), "Advanced.ClickRenderShadowOption");
 	view_listener_t::addMenu(new LLAdvancedClickRenderProfile(), "Advanced.ClickRenderProfile");
 	view_listener_t::addMenu(new LLAdvancedClickRenderBenchmark(), "Advanced.ClickRenderBenchmark");
+	view_listener_t::addMenu(new LLAdvancedPurgeShaderCache(), "Advanced.ClearShaderCache");
 	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
 	view_listener_t::addMenu(new FSAdvancedToggleDoubleClickAction, "Advanced.SetDoubleClickAction");
 	view_listener_t::addMenu(new FSAdvancedCheckEnabledDoubleClickAction, "Advanced.CheckEnabledDoubleClickAction");

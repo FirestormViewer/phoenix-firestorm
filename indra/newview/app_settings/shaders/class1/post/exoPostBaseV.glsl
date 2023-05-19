@@ -5,10 +5,10 @@
  * Copyright Geenz Spad, 2012
  ***********************************/
 
-ATTRIBUTE vec3 position;
-ATTRIBUTE vec2 texcoord0;
+in vec3 position;
+in vec2 texcoord0;
 
-VARYING vec2 vary_fragcoord;
+out vec2 vary_fragcoord;
 
 uniform vec2 screen_res;
 

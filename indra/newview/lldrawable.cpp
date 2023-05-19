@@ -955,7 +955,7 @@ void LLDrawable::updateTexture()
 	}
 }
 
-BOOL LLDrawable::updateGeometry(BOOL priority)
+BOOL LLDrawable::updateGeometry()
 {
 	LL_PROFILE_ZONE_SCOPED_CATEGORY_DRAWABLE
 

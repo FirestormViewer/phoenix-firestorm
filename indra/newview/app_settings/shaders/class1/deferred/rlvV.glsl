@@ -14,12 +14,12 @@
  *
  */
 
-ATTRIBUTE vec3 position;
+in vec3 position;
 
 uniform vec2 screen_res;
 
-VARYING vec2 vary_fragcoord;
-VARYING vec3 vary_position;
+out vec2 vary_fragcoord;
+out vec3 vary_position;
 
 void main()
 {
