@@ -1724,6 +1724,36 @@ BOOL LLFilePicker::getMultipleOpenFiles( ELoadFilter filter, bool blocking)
 }
 
 #elif LL_FLTK
+
+BOOL LLFilePicker::getOpenFileModeless(ELoadFilter filter,
+                                       void (*callback)(bool, std::vector<std::string> &, void*),
+                                       void *userdata)
+{
+    // not supposed to be used yet, use LLFilePickerThread
+    LL_ERRS() << "NOT IMPLEMENTED" << LL_ENDL;
+    return FALSE;
+}
+
+
+BOOL LLFilePicker::getMultipleOpenFilesModeless(ELoadFilter filter,
+                                                void (*callback)(bool, std::vector<std::string> &, void*),
+                                                void *userdata )
+{
+    // not supposed to be used yet, use LLFilePickerThread
+    LL_ERRS() << "NOT IMPLEMENTED" << LL_ENDL;
+    return FALSE;
+}
+
+BOOL LLFilePicker::getSaveFileModeless(ESaveFilter filter,
+                                       const std::string& filename,
+                                       void (*callback)(bool, std::string&, void*),
+                                       void *userdata)
+{
+    // not supposed to be used yet, use LLFilePickerThread
+    LL_ERRS() << "NOT IMPLEMENTED" << LL_ENDL;
+    return FALSE;
+}
+
 BOOL LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename, bool blocking )
 {
 	return openFileDialog( filter, blocking, eSaveFile );
