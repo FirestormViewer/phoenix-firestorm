@@ -876,25 +876,25 @@ void set_nav_save_data(LLFilePicker::ESaveFilter filter, std::string &extension,
             break;
 
         // <FS:CR> Export filter
-        case FFSAVE_EXPORT:
+        case LLFilePicker::FFSAVE_EXPORT:
             type = "OXP ";
             creator = "\?\?\?\?";
             extension = "oxp";
             break;
-        case FFSAVE_COLLADA:
+        case LLFilePicker::FFSAVE_COLLADA:
             type = "DAE ";
             creator = "\?\?\?\?";
             extension = "dae";
             break;
         // <FS:CR> CSV Filter
-        case FFSAVE_CSV:
+        case LLFilePicker::FFSAVE_CSV:
             type = "CSV ";
             creator = "\?\?\?\?";
             extension = "csv";
             break;
         // </FS:CR>
-        case FFSAVE_BEAM:
-        case FFSAVE_XML:
+        case LLFilePicker::FFSAVE_BEAM:
+        case LLFilePicker::FFSAVE_XML:
             type = "XML ";
             creator = "\?\?\?\?";
             extension = "xml";
