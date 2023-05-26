@@ -127,7 +127,12 @@
 	</mimetype>
 	<mimetype name="application/xhtml+xml">
 		<label name="application/xhtml+xml_label">
-			Site web (XHTML)
+			Page Web (XHTML)
+		</label>
+	</mimetype>
+	<mimetype name="application/octet-stream">
+		<label name="application/octet-stream_label">
+			Flux
 		</label>
 	</mimetype>
 	<mimetype name="audio/mid">

@@ -120,6 +120,11 @@
 			Page Web (XHTML)
 		</label>
 	</mimetype>
+	<mimetype name="application/octet-stream">
+		<label name="application/octet-stream_label">
+			Flux
+		</label>
+	</mimetype>
 	<mimetype name="audio/mid">
 		<label name="audio/mid_label">
 			Audio (MIDI)

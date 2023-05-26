@@ -8,7 +8,7 @@
  border="false"
  chrome="true"
  follows="bottom"
- height="157"
+ height="257"
  layout="topleft"
  name="presets_camera_pulldown"
  width="225">
@@ -29,7 +29,7 @@
     follows="left|top"
     layout="topleft"
     column_padding="0"
-    height="100"
+    height="200"
     width="215"
     draw_heading="false"
     draw_stripes="false"
@@ -53,7 +53,7 @@
     layout="topleft"
     left="5"
     name="horiz_separator"
-    top_delta="105"
+    top_delta="205"
     width="215" />
   <button
     name="open_prefs_btn"
