@@ -32,6 +32,9 @@
 	<button name="copy_face_btn" tool_tip="Textur-Parameter in Zwischenablage kopieren"/>
 	<button name="paste_face_btn" tool_tip="Textur-Parameter aus Zwischenablage einfügen"/>
 	<menu_button name="paste_face_gear_btn" tool_tip="Einfüge-Optionen"/>
+	<text name="label_matmedia">
+		Material
+	</text>
 	<combo_box name="combobox matmedia">
 		<combo_box.item label="Blinn-Phong" name="Materials"/>
 		<combo_box.item label="PBR metallische Unebenheit" name="PBR"/>

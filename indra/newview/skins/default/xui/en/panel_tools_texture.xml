@@ -136,12 +136,24 @@
              top_pad="5"
              width="25">
             </button>
+            <text
+             type="string"
+             length="1"
+             follows="left|top"
+             height="10"
+             layout="topleft"
+             left="12"
+             top_pad="8"
+             name="label_matmedia"
+             width="90">
+                Material
+            </text>
             <combo_box
              height="23"
              layout="topleft"
              left="10"
              name="combobox matmedia"
-             top="65"
+             top="80"
              width="100">
                 <combo_box.item
                  label="Blinn-Phong"
@@ -160,7 +172,7 @@
             height="50"
             layout="topleft"
             left_pad="10"
-            top_delta="-17"
+            top_delta="-30"
             width="150"
             visible = "false"
             name="radio_material_type">

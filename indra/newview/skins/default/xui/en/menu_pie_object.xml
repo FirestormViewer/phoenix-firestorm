@@ -31,7 +31,6 @@
             parameter="Touch" />
     </pie_slice>
     <pie_slice
-        enabled="false"
         start_autohide="true"
         label="Sit Here"
         name="Pie Object Sit">
@@ -41,7 +40,6 @@
             function="Object.EnableSit" />
     </pie_slice>
     <pie_slice
-        enabled="false"
         autohide="true"
         label="Stand Up"
         name="Object Stand Up">
@@ -534,15 +532,7 @@
                 function="EnableEditGLTFMaterial"/>
         </pie_slice>
 
-        <pie_slice
-            label="Save Mat."
-            name="SaveGLTFMaterial">
-            <pie_slice.on_click
-                function="Object.SaveGLTFMaterial" />
-            <pie_slice.on_enable
-                function="EnableSaveGLTFMaterial"/>
-        </pie_slice>
-
+        <pie_separator/>
         <pie_separator/>
         <pie_separator/>
         <pie_separator/>

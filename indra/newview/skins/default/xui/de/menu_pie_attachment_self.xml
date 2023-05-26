@@ -35,7 +35,6 @@
 	</pie_menu>
 	<pie_menu name="Edit Object Pie More 1" label="Bearbeiten &gt;">
 		<pie_slice label="Mat. bearb." name="EditGLTFMaterial"/>
-		<pie_slice label="Mat. speich." name="SaveGLTFMaterial"/>
 		<pie_slice label="Obj. bearb." name="Edit..."/>
 	</pie_menu>
 </pie_menu>

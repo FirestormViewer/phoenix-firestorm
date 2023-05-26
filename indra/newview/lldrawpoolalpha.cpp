@@ -59,8 +59,6 @@ BOOL LLDrawPoolAlpha::sShowDebugAlphaRigged = FALSE;
 
 LLVector4 LLDrawPoolAlpha::sWaterPlane;
 
-static BOOL deferred_render = FALSE;
-
 // minimum alpha before discarding a fragment
 static const F32 MINIMUM_ALPHA = 0.004f; // ~ 1/255
 
@@ -156,7 +154,6 @@ void LLDrawPoolAlpha::renderPostDeferred(S32 pass)
     { // don't render alpha objects on the other side of the water plane if water is opaque
         return;
     }
-    deferred_render = TRUE;
 
     F32 water_sign = 1.f;
 
@@ -201,7 +198,10 @@ void LLDrawPoolAlpha::renderPostDeferred(S32 pass)
         prepare_alpha_shader(&materialShader[i], false, true, water_sign);
     }
 
-    pbr_shader = LLPipeline::sRenderingHUDs ? &gHUDPBRAlphaProgram : &gDeferredPBRAlphaProgram;
+    pbr_shader = 
+        (LLPipeline::sUnderWaterRender) ? &gDeferredPBRAlphaWaterProgram : 
+        (LLPipeline::sRenderingHUDs) ? &gHUDPBRAlphaProgram : 
+        &gDeferredPBRAlphaProgram;
 
     prepare_alpha_shader(pbr_shader, false, true, water_sign);
 
@@ -233,8 +233,6 @@ void LLDrawPoolAlpha::renderPostDeferred(S32 pass)
 
         gGL.setColorMask(true, false);
     }
-
-    deferred_render = FALSE;
 }
 
 void LLDrawPoolAlpha::forwardRender(bool rigged)
@@ -430,7 +428,7 @@ bool LLDrawPoolAlpha::TexSetup(LLDrawInfo* draw, bool use_material)
     }
     else
     {
-        if (deferred_render && use_material && current_shader)
+        if (!LLPipeline::sRenderingHUDs && use_material && current_shader)
         {
             if (draw->mNormalMap)
             {
@@ -719,10 +717,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
                 }
                 else
                 {
-                    if (deferred_render)
-                    {
-                        mat = params.mMaterial;
-                    }
+                    mat = LLPipeline::sRenderingHUDs ? nullptr : params.mMaterial;
 
                     if (params.mFullbright)
                     {
@@ -747,7 +742,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
                     {
                         target_shader = fullbright_shader;
                     }
-                    else if (deferred_render && mat)
+                    else if (mat)
                     {
                         U32 mask = params.mShaderMask;
 
@@ -794,7 +789,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
                     F32 brightness = 1.0f;
 
                     // We have a material.  Supply the appropriate data here.
-                    if (mat && deferred_render)
+                    if (mat)
                     {
                         spec_color = params.mSpecColor;
                         env_intensity = params.mEnvIntensity;
@@ -808,11 +803,6 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
                         current_shader->uniform1f(LLShaderMgr::EMISSIVE_BRIGHTNESS, brightness);
                     }
                 }
-
-				//if (params.mGroup) // TOO LATE
-				//{
-				//	params.mGroup->rebuildMesh();
-				//}
 
                 if (params.mAvatar != nullptr)
                 {
@@ -833,8 +823,6 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
                 bool tex_setup = TexSetup(&params, (mat != nullptr));
 
 				{
-					//LLGLEnableFunc stencil_test(GL_STENCIL_TEST, params.mSelected, &LLGLCommonFunc::selected_stencil_test);
-
 					gGL.blendFunc((LLRender::eBlendFactor) params.mBlendFuncSrc, (LLRender::eBlendFactor) params.mBlendFuncDst, mAlphaSFactor, mAlphaDFactor);
 
                     bool reset_minimum_alpha = false;
