@@ -108,7 +108,7 @@ private:
 	BOOL tick() override;
 
 	void updateStreamTitle(std::string_view streamtitle) noexcept;
-	void openHistory() noexcept;
+	void toggleHistory() noexcept;
 	void closeHistory() noexcept;
 	void checkTitleWidth() noexcept;
 
