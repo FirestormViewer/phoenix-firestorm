@@ -1405,10 +1405,18 @@ BOOL LLInventoryPanel::handleToolTip(S32 x, S32 y, MASK mask)
             params["inv_type"] = vm_item_p->getInventoryType();
             params["thumbnail_id"] = vm_item_p->getThumbnailUUID();
             params["item_id"] = vm_item_p->getUUID();
-            
+
+            // tooltip should only show over folder, but screen
+            // rect includes items under folder as well
+            LLRect actionable_rect = hover_item_p->calcScreenRect();
+            if (hover_item_p->isOpen() && hover_item_p->hasVisibleChildren())
+            {
+                actionable_rect.mBottom = actionable_rect.mTop - hover_item_p->getItemHeight();
+            }
+
 			LLToolTipMgr::instance().show(LLToolTip::Params()
 					.message(hover_item_p->getToolTip())
-					.sticky_rect(hover_item_p->calcScreenRect())
+					.sticky_rect(actionable_rect)
 					.delay_time(LLView::getTooltipTimeout())
 					.create_callback(boost::bind(&LLInspectTextureUtil::createInventoryToolTip, _1))
 					.create_params(params));
@@ -2054,7 +2062,13 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
     //if (main_inventory && main_inventory->isSingleFolderMode()
     //    && use_main_panel)
     //{
-    //    main_inventory->toggleViewMode();
+    //    const LLInventoryObject *obj = gInventory.getObject(obj_id);
+    //    if (obj)
+    //    {
+    //        main_inventory->setSingleFolderViewRoot(obj->getParentUUID(), false);
+    //        main_inventory->setGallerySelection(obj_id);
+    //        return;
+    //    }
     //}
     if (!inventory_floater)
     {
@@ -2066,7 +2080,13 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
         LLPanelMainInventory* main_inventory = inventory_panel->getMainInventoryPanel();
         if (main_inventory && main_inventory->isSingleFolderMode())
         {
-            main_inventory->toggleViewMode();
+            const LLInventoryObject *obj = gInventory.getObject(obj_id);
+            if (obj)
+            {
+                main_inventory->setSingleFolderViewRoot(obj->getParentUUID(), false);
+                main_inventory->setGallerySelection(obj_id);
+                return;
+            }
         }
     }
     // </FS:Ansariel>
@@ -2360,6 +2380,7 @@ static LLDefaultChildRegistry::Register<LLInventorySingleFolderPanel> t_single_f
 
 LLInventorySingleFolderPanel::LLInventorySingleFolderPanel(const Params& params)
     : LLInventoryPanel(params)
+    , mExternalScroller(NULL)
 {
     mBuildChildrenViews = false;
     getFilter().setSingleFolderMode(true);
@@ -2368,6 +2389,7 @@ LLInventorySingleFolderPanel::LLInventorySingleFolderPanel(const Params& params)
 
     mCommitCallbackRegistrar.add("Inventory.OpenSelectedFolder", boost::bind(&LLInventorySingleFolderPanel::openInCurrentWindow, this, _2));
     mCommitCallbackRegistrar.replace("Inventory.DoCreate", boost::bind(&LLInventorySingleFolderPanel::doCreate, this, _2));
+    mCommitCallbackRegistrar.replace("Inventory.Share", boost::bind(&LLInventorySingleFolderPanel::doShare, this));
 }
 
 LLInventorySingleFolderPanel::~LLInventorySingleFolderPanel()
@@ -2383,6 +2405,15 @@ void LLInventorySingleFolderPanel::setSelectCallback(const boost::function<void(
     }
 }
 
+void LLInventorySingleFolderPanel::setScroller(LLScrollContainer* scroller)
+{
+    mExternalScroller = scroller;
+    if (mFolderRoot.get())
+    {
+        mFolderRoot.get()->setScrollContainer(mExternalScroller);
+    }
+}
+
 void LLInventorySingleFolderPanel::initFromParams(const Params& p)
 {
     mFolderID = gInventory.getRootFolderID();
@@ -2390,6 +2421,7 @@ void LLInventorySingleFolderPanel::initFromParams(const Params& p)
     pane_params.open_first_folder = false;
     pane_params.start_folder.id = mFolderID;
     LLInventoryPanel::initFromParams(pane_params);
+    mFolderRoot.get()->setSingleFolderMode(true);
 }
 
 void LLInventorySingleFolderPanel::openInCurrentWindow(const LLSD& userdata)
@@ -2471,7 +2503,7 @@ void LLInventorySingleFolderPanel::updateSingleFolderRoot()
             LLFolderView* folder_view = createFolderRoot(root_id);
             folder_view->setChildrenInited(false);
             mFolderRoot = folder_view->getHandle();
-
+            mFolderRoot.get()->setSingleFolderMode(true);
             addItemID(root_id, mFolderRoot.get());
 
             LLRect scroller_view_rect = getRect();
@@ -2488,7 +2520,18 @@ void LLInventorySingleFolderPanel::updateSingleFolderRoot()
             mScroller = LLUICtrlFactory::create<LLFolderViewScrollContainer>(scroller_params);
             addChild(mScroller);
             mScroller->addChild(mFolderRoot.get());
-            mFolderRoot.get()->setScrollContainer(mScroller);
+            if (!mExternalScroller)
+            {
+                mFolderRoot.get()->setScrollContainer(mScroller);
+            }
+            else
+            {
+                // Hack to use exteranl scroll in combination view
+                // Todo: find a way to avoid this
+                // ideally combination view should be own inventory panel
+                // instead of piggy backing on two different ones
+                mFolderRoot.get()->setScrollContainer(mExternalScroller);
+            }
             mFolderRoot.get()->setFollowsAll();
             mFolderRoot.get()->addChild(mFolderRoot.get()->mStatusTextBox);
 
@@ -2525,6 +2568,19 @@ void LLInventorySingleFolderPanel::doCreate(const LLSD& userdata)
     }
     reset_inventory_filter();
     menu_create_inventory_item(this, dest_id, userdata);
+}
+
+void LLInventorySingleFolderPanel::doShare()
+{
+    if(mFolderRoot.get()->getCurSelectedItem() == NULL)
+    {
+        std::set<LLUUID> uuids{mFolderID};
+        LLAvatarActions::shareWithAvatars(uuids, gFloaterView->getParentFloater(this));
+    }
+    else
+    {
+        LLAvatarActions::shareWithAvatars(this);
+    }
 }
 /************************************************************************/
 /* Asset Pre-Filtered Inventory Panel related class                     */

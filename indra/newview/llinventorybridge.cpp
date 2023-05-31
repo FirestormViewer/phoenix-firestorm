@@ -835,33 +835,22 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 										menuentry_vec_t &disabled_items, U32 flags)
 {
 	const LLInventoryObject *obj = getInventoryObject();
+    bool single_folder_root = (mRoot == NULL);
 
 	if (obj)
 	{
 		
-// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.0)
 		items.push_back(std::string("Copy Separator"));
-
-		items.push_back(std::string("Cut"));
-		if (!isItemMovable() || !isItemRemovable() || isLibraryItem())
-		{
-			disabled_items.push_back(std::string("Cut"));
-		}
-
 		items.push_back(std::string("Copy"));
+// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.0)
 		if (!isItemCopyable() && !isItemLinkable())
+// [/SL:KB]
+		//if (!isItemCopyable())
 		{
 			disabled_items.push_back(std::string("Copy"));
 		}
-// [/SL:KB]
-		//items.push_back(std::string("Copy Separator"));
-		//items.push_back(std::string("Copy"));
-		//if (!isItemCopyable())
-		//{
-		//	disabled_items.push_back(std::string("Copy"));
-		//}
 
-        if (isAgentInventory())
+        if (isAgentInventory() && !single_folder_root)
         {
             items.push_back(std::string("New folder from selected"));
             items.push_back(std::string("Subfolder Separator"));
@@ -895,7 +884,7 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 				items.push_back(std::string("Find Links"));
 			}
 
-			if (!isInboxFolder())
+			if (!isInboxFolder() && !single_folder_root)
 			{
 				items.push_back(std::string("Rename"));
 				// <FS> Locked folder
@@ -931,13 +920,14 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 					disabled_items.push_back(std::string("Copy Asset UUID"));
 				}
 			}
-// [SL:KB] - Patch: Inventory-Links | Checked: 2010-04-12 (Catznip-2.0)
-			//items.push_back(std::string("Cut"));
-			//if (!isItemMovable() || !isItemRemovable())
-			//{
-			//	disabled_items.push_back(std::string("Cut"));
-			//}
-// [/SL:KB]
+
+            if(!single_folder_root)
+            {
+			items.push_back(std::string("Cut"));
+			if (!isItemMovable() || !isItemRemovable())
+			{
+				disabled_items.push_back(std::string("Cut"));
+			}
 
 			if (canListOnMarketplace() && !isMarketplaceListingsFolder() && !isInboxFolder())
 			{
@@ -954,6 +944,7 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
                     }
                 }
 			}
+            }
 		}
 	}
 
@@ -990,7 +981,10 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 
 	items.push_back(std::string("Paste Separator"));
 
-	addDeleteContextMenuOptions(items, disabled_items);
+    if(!single_folder_root)
+    {
+        addDeleteContextMenuOptions(items, disabled_items);
+    }
 
 	// <FS:Zi> Don't offer "Show in Main View" for folders opened in separate inventory views
 	//         as there are no tabs to switch to
@@ -4881,7 +4875,7 @@ void LLFolderBridge::buildContextMenuFolderOptions(U32 flags,   menuentry_vec_t&
 // [/SL:KB]
 
 	// Only enable calling-card related options for non-system folders.
-	if (!is_system_folder && is_agent_inventory)
+	if (!is_system_folder && is_agent_inventory && (mRoot != NULL))
 	{
 		LLIsType is_callingcard(LLAssetType::AT_CALLINGCARD);
 		if (mCallingCards || checkFolderForContentsOfType(model, is_callingcard))
@@ -4901,6 +4895,11 @@ void LLFolderBridge::buildContextMenuFolderOptions(U32 flags,   menuentry_vec_t&
         disabled_items.push_back(std::string("New folder from selected"));
     }
 
+    //skip the rest options in single-folder mode
+    if (mRoot == NULL)
+    {
+        return;
+    }
 
     if ((flags & ITEM_IN_MULTI_SELECTION) == 0)
     {

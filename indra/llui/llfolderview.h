@@ -127,6 +127,9 @@ public:
 	bool getAllowMultiSelect() { return mAllowMultiSelect; }
 	bool getAllowDrag() { return mAllowDrag; }
 
+    void setSingleFolderMode(bool is_single_mode) { mSingleFolderMode = is_single_mode; }
+    bool isSingleFolderMode() { return mSingleFolderMode; }
+
 	// Close all folders in the view
 	void closeAllFolders();
 	void openTopLevelFolders();
@@ -136,7 +139,7 @@ public:
 	// Find width and height of this object and its children. Also
 	// makes sure that this view and its children are the right size.
 	virtual S32 arrange( S32* width, S32* height );
-	virtual S32 getItemHeight();
+	virtual S32 getItemHeight() const;
 
 	void arrangeAll() { mArrangeGeneration++; }
 	S32 getArrangeGeneration() { return mArrangeGeneration; }
@@ -305,7 +308,8 @@ protected:
 									mShowItemLinkOverlays,
 									mShowSelectionContext,
 									mShowSingleSelection,
-									mSuppressFolderMenu;
+									mSuppressFolderMenu,
+                                    mSingleFolderMode;
 
 	// Renaming variables and methods
 	LLFolderViewItem*				mRenameItem;  // The item currently being renamed

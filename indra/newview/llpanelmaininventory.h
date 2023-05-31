@@ -37,19 +37,20 @@
 #include "llfolderview.h"
 
 class LLComboBox;
-class LLFolderViewItem;
 class LLInventoryPanel;
 class LLInventoryGallery;
-class LLSaveFolderState;
 class LLFilterEditor;
-class LLTabContainer;
+class LLFloater;
 class LLFloaterInventoryFinder;
+class LLFloaterSidePanelContainer;
+class LLFolderViewItem;
 class LLMenuButton;
 class LLMenuGL;
+class LLSaveFolderState;
+class LLScrollContainer;
 class LLSidepanelInventory;
+class LLTabContainer;
 class LLToggleableMenu;
-class LLFloater;
-class LLFloaterSidePanelContainer;
 class LLComboBox;	// <FS:Zi> Filter dropdown
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -222,7 +223,7 @@ private:
     LLInventorySingleFolderPanel* mSingleFolderPanelInventory;
     LLInventoryGallery* mInventoryGalleryPanel;
 
-    LLUICtrl* mCombinationScrollPanel;
+    LLScrollContainer* mCombinationScrollPanel;
     LLInventorySingleFolderPanel* mCombinationInventoryPanel;
     LLInventoryGallery* mCombinationGalleryPanel;
     LLView* mCombinationScroller;

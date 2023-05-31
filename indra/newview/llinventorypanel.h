@@ -426,6 +426,7 @@ public:
     LLUUID getSingleFolderRoot() { return mFolderID; }
 
     void doCreate(const LLSD& userdata);
+    void doShare();
 
     bool isBackwardAvailable();
     bool isForwardAvailable();
@@ -438,6 +439,7 @@ public:
     std::list<LLUUID> getNavForwardList() { return mForwardFolders; }
 
     void setSelectCallback(const boost::function<void (const std::deque<LLFolderViewItem*>& items, BOOL user_action)>& cb);
+    void setScroller(LLScrollContainer* scroller);
 
     typedef boost::function<void()> root_changed_callback_t;
     boost::signals2::connection setRootChangedCallback(root_changed_callback_t cb);
@@ -453,6 +455,7 @@ protected:
     LLUUID mFolderID;
     std::list<LLUUID> mBackwardFolders;
     std::list<LLUUID> mForwardFolders;
+    LLScrollContainer* mExternalScroller;
 
     boost::signals2::signal<void()> mRootChangedSignal;
 };

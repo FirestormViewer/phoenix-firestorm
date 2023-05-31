@@ -124,7 +124,7 @@ public:
 	virtual void move(LLFolderViewModelItem* new_parent_bridge) {}
     virtual bool isItemCopyable(bool can_copy_as_link = true) const { return false; }
 // [SL:KB] - Patch: Inventory-Links | Checked: 2013-09-19 (Catznip-3.6)
-	virtual bool isItemLinkable() const { return FALSE; }
+	virtual bool isItemLinkable() const { return false; }
 // [/SL:KB]
 	virtual BOOL copyToClipboard() const;
 	virtual BOOL cutToClipboard();

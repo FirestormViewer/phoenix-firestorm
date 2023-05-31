@@ -337,9 +337,6 @@ void LLFloaterChangeItemThumbnail::refreshFromObject(LLInventoryObject* obj)
     if (item)
     {
         setTitle(getString("title_item_thumbnail"));
-        // This floater probably shouldn't be possible to open
-        // for imcomplete items
-        llassert(item->isFinished());
 
         icon_img = LLInventoryIcon::getIcon(item->getType(), item->getInventoryType(), item->getFlags(), FALSE);
         mRemoveImageBtn->setEnabled(thumbnail_id.notNull() && ((item->getActualType() != LLAssetType::AT_TEXTURE) || (item->getAssetUUID() != thumbnail_id)));
@@ -472,6 +469,7 @@ void LLFloaterChangeItemThumbnail::onCopyToClipboard(void *userdata)
     LLInventoryObject* obj = self->getInventoryObject();
     if (obj)
     {
+        LLClipboard::instance().reset();
         LLClipboard::instance().addToClipboard(obj->getThumbnailUUID(), LLAssetType::AT_NONE);
         self->mPasteFromClipboardBtn->setEnabled(true);
     }
@@ -544,6 +542,13 @@ void LLFloaterChangeItemThumbnail::onRemovalConfirmation(const LLSD& notificatio
     }
 }
 
+struct ImageLoadedData
+{
+    LLUUID mThumbnailId;
+    LLUUID mObjectId;
+    LLHandle<LLFloater> mFloaterHandle;
+};
+
 void LLFloaterChangeItemThumbnail::assignAndValidateAsset(const LLUUID &asset_id, bool silent)
 {
     LLPointer<LLViewerFetchedTexture> texturep = LLViewerTextureManager::getFetchedTexture(asset_id);
@@ -558,11 +563,16 @@ void LLFloaterChangeItemThumbnail::assignAndValidateAsset(const LLUUID &asset_id
             // don't warn user multiple times if some textures took their time
             mExpectingAssetId = asset_id;
         }
+        ImageLoadedData *data = new ImageLoadedData();
+        data->mObjectId = mItemId;
+        data->mThumbnailId = asset_id;
+        data->mFloaterHandle = getHandle();
+
         texturep->setLoadedCallback(onImageLoaded,
             MAX_DISCARD_LEVEL, // don't actually need max one, 3 or 4 should be enough
             FALSE,
             FALSE,
-            new LLHandle<LLFloater>(getHandle()),
+            (void*)data,
             NULL,
             FALSE);
     }
@@ -630,19 +640,21 @@ void LLFloaterChangeItemThumbnail::onImageLoaded(
 
     if (!final && success) return; //not done yet
 
-    LLHandle<LLFloater>* handle = (LLHandle<LLFloater>*)userdata;
+    ImageLoadedData* data = (ImageLoadedData*)userdata;
 
-    if (success && !handle->isDead())
+    if (success)
     {
-        LLFloaterChangeItemThumbnail* self = static_cast<LLFloaterChangeItemThumbnail*>(handle->get());
-        if (self)
+        // Update the item, set it even if floater is dead
+        if (validateAsset(data->mThumbnailId))
         {
-            LLUUID asset_id = src_vi->getID();
-            if (validateAsset(asset_id))
-            {
-                self->setThumbnailId(asset_id);
-            }
-            else if (self->mExpectingAssetId == asset_id)
+            setThumbnailId(data->mThumbnailId, data->mObjectId);
+        }
+
+        // Update floater
+        if (!data->mFloaterHandle.isDead())
+        {
+            LLFloaterChangeItemThumbnail* self = static_cast<LLFloaterChangeItemThumbnail*>(data->mFloaterHandle.get());
+            if (self && self->mExpectingAssetId == data->mThumbnailId)
             {
                 LLNotificationsUtil::add("ThumbnailDimentionsLimit");
                 self->mExpectingAssetId = LLUUID::null;
@@ -650,7 +662,7 @@ void LLFloaterChangeItemThumbnail::onImageLoaded(
         }
     }
 
-    delete handle;
+    delete data;
 }
 
 void LLFloaterChangeItemThumbnail::showTexturePicker(const LLUUID &thumbnail_id)
@@ -739,8 +751,25 @@ void LLFloaterChangeItemThumbnail::setThumbnailId(const LLUUID &new_thumbnail_id
     if (mTaskId.notNull())
     {
         LL_ERRS() << "Not implemented yet" << LL_ENDL;
+        return;
     }
-    else if (obj->getThumbnailUUID() != new_thumbnail_id)
+
+    setThumbnailId(new_thumbnail_id, mItemId, obj);
+}
+
+void LLFloaterChangeItemThumbnail::setThumbnailId(const LLUUID& new_thumbnail_id, const LLUUID& object_id)
+{
+    LLInventoryObject* obj = gInventory.getObject(object_id);
+    if (!obj)
+    {
+        return;
+    }
+
+    setThumbnailId(new_thumbnail_id, object_id, obj);
+}
+void LLFloaterChangeItemThumbnail::setThumbnailId(const LLUUID& new_thumbnail_id, const LLUUID& object_id, LLInventoryObject* obj)
+{
+    if (obj->getThumbnailUUID() != new_thumbnail_id)
     {
         LLSD updates;
         // At the moment server expects id as a string
@@ -748,12 +777,12 @@ void LLFloaterChangeItemThumbnail::setThumbnailId(const LLUUID &new_thumbnail_id
         LLViewerInventoryCategory* view_folder = dynamic_cast<LLViewerInventoryCategory*>(obj);
         if (view_folder)
         {
-            update_inventory_category(mItemId, updates, NULL);
+            update_inventory_category(object_id, updates, NULL);
         }
         LLViewerInventoryItem* view_item = dynamic_cast<LLViewerInventoryItem*>(obj);
         if (view_item)
         {
-            update_inventory_item(mItemId, updates, NULL);
+            update_inventory_item(object_id, updates, NULL);
         }
     }
 }

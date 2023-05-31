@@ -453,7 +453,7 @@ S32 LLFolderViewItem::arrange( S32* width, S32* height )
 	return *height;
 }
 
-S32 LLFolderViewItem::getItemHeight()
+S32 LLFolderViewItem::getItemHeight() const
 {
 	return mItemHeight;
 }
@@ -1459,7 +1459,7 @@ BOOL LLFolderViewFolder::setSelection(LLFolderViewItem* selection, BOOL openitem
 			child_selected = TRUE;
 		}
 	}
-	if(openitem && child_selected)
+	if(openitem && child_selected && !mSingleFolderMode)
 	{
 		setOpenArrangeRecursively(TRUE);
 	}

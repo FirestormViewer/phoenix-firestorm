@@ -194,7 +194,8 @@ LLFolderView::LLFolderView(const Params& p)
 	mShowItemLinkOverlays(p.show_item_link_overlays),
 	mViewModel(p.view_model),
     mGroupedItemModel(p.grouped_item_model),
-    mForceArrange(false)
+    mForceArrange(false),
+    mSingleFolderMode(false)
 {
     LLPanel* panel = p.parent_panel;
     mParentPanel = panel->getHandle();
@@ -716,11 +717,18 @@ void LLFolderView::draw()
 		}
 	}
 
-	if (mRenameItem && mRenamer && mRenamer->getVisible() && !getVisibleRect().overlaps(mRenamer->getRect()))
+	if (mRenameItem
+        && mRenamer
+        && mRenamer->getVisible())
 	{
-		// renamer is not connected to the item we are renaming in any form so manage it manually
-		// TODO: consider stopping on any scroll action instead of when out of visible area
-		finishRenamingItem();
+        LLRect renamer_rect;
+        localRectToOtherView(mRenamer->getRect(), &renamer_rect, mScrollContainer);
+        if (!mScrollContainer->getRect().overlaps(renamer_rect))
+        {
+            // renamer is not connected to the item we are renaming in any form so manage it manually
+            // TODO: consider stopping on any scroll action instead of when out of visible area
+            finishRenamingItem();
+        }
 	}
 
 	// skip over LLFolderViewFolder::draw since we don't want the folder icon, label, 
@@ -855,9 +863,12 @@ void LLFolderView::autoOpenItem( LLFolderViewFolder* item )
 	mAutoOpenItems.push(item);
 	
 	item->setOpen(TRUE);
+    if(!item->isSingleFolderMode())
+    {
 	LLRect content_rect = (mScrollContainer ? mScrollContainer->getContentWindowRect() : LLRect());
 	LLRect constraint_rect(0,content_rect.getHeight(), content_rect.getWidth(), 0);
 	scrollToShowItem(item, constraint_rect);
+    }
 }
 
 void LLFolderView::closeAutoOpenedFolders()
@@ -1561,8 +1572,8 @@ BOOL LLFolderView::handleRightMouseDown( S32 x, S32 y, MASK mask )
 		}
 	}
 	bool hide_folder_menu = mSuppressFolderMenu && isFolderSelected();
-	if (menu && (handled
-		&& ( count > 0 && (hasVisibleChildren()) )) && // show menu only if selected items are visible
+	if (menu && (mSingleFolderMode || (handled
+		&& ( count > 0 && (hasVisibleChildren()) ))) && // show menu only if selected items are visible
 		!hide_folder_menu)
 	{
 		if (mCallbackRegistrar)
@@ -2004,6 +2015,11 @@ void LLFolderView::updateMenuOptions(LLMenuGL* menu)
 		flags = multi_select_flag;
 	}
 
+    if(mSingleFolderMode && (mSelectedItems.size() == 0))
+    {
+        buildContextMenu(*menu, flags);
+    }
+
 	// This adds a check for restrictions based on the entire
 	// selection set - for example, any one wearable may not push you
 	// over the limit, but all wearables together still might.
@@ -2160,7 +2176,7 @@ LLFolderViewItem* LLFolderView::getNextUnselectedItem()
 	return new_selection;
 }
 
-S32 LLFolderView::getItemHeight()
+S32 LLFolderView::getItemHeight() const
 {
 	if(!hasVisibleChildren())
 {
