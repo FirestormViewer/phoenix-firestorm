@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
-<llsd><map>
+<llsd>
+<map>
     <key>installables</key>
     <map>
       <key>SDL2</key>
@@ -723,9 +724,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>df05eee28649996c78a47dd054de2a47</string>
+              <string>cb76a5dcef6577fefff3f070029a4012</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/112764/977018/colladadom-2.3.579218-darwin64-579218.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/115496/994482/colladadom-2.3.580380-darwin64-580380.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -747,9 +748,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6752b4f098a522bb22b6334cdfba7614</string>
+              <string>31996b4f4bbf478298edcd28a6581f92</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/112771/977087/colladadom-2.3.579224-windows-579224.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/115498/994495/colladadom-2.3.580380-windows-580380.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -759,16 +760,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>81de6dc4a79b547a25d0040370c42fec</string>
+              <string>9b0de47cd59e1aa88617d751c40dcff7</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/112770/977082/colladadom-2.3.579224-windows64-579224.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/115497/994489/colladadom-2.3.580380-windows64-580380.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.3.579218</string>
+        <string>2.3.580380</string>
       </map>
       <key>cubemaptoequirectangular</key>
       <map>
@@ -2558,9 +2559,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bee6bf71cec184ab26c89c486fc5f427</string>
+              <string>32ead724319c2ea6f65fc5be0e3157cc</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/109526/952883/nanosvg-2022.09.27-darwin64-577709.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/115452/994130/nanosvg-2022.09.27-darwin64-580364.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -2570,9 +2571,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c5a2ae5ecc8ade5a85b674e4426d6403</string>
+              <string>84698f044598ff79e255965f3d1c3e80</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/107186/935576/nanosvg-2022.09.27-linux-576467.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/115397/993664/nanosvg-2022.09.27-linux-580337.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -2582,9 +2583,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b7d1baa8003f64bed4efc2c163ee7e26</string>
+              <string>4e56202b09c026e08fc51116b22feabc</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/109529/952902/nanosvg-2022.09.27-windows-577709.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/115456/994153/nanosvg-2022.09.27-windows-580364.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2594,9 +2595,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b8b51ad6b65be5bbc1470ee939c6bfae</string>
+              <string>ee61ff8b866be04c325f1fe2db516d71</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/109528/952895/nanosvg-2022.09.27-windows64-577709.tar.bz2</string>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/115454/994144/nanosvg-2022.09.27-windows64-580364.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -4660,4 +4661,5 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
     <string>autobuild</string>
     <key>version</key>
     <string>1.3</string>
-  </map></llsd>
+  </map>
+</llsd>
