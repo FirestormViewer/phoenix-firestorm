@@ -6680,7 +6680,7 @@ Your trash is overflowing. This may cause problems logging in.
    icon="notifytip.tga"
    name="InventoryLimitReachedAIS"
    type="notifytip">
-Your inventory is experiencing issues. Please, contact support.
+Your inventory is experiencing issues. Please contact support of your grid.
   <tag>fail</tag>
   </notification>
 
