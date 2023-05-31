@@ -123,6 +123,12 @@ BOOL LLFloaterImagePreview::postBuild()
 
 	getChildView("bad_image_text")->setVisible(FALSE);
 
+	// <FS:PP> FIRE-32944 - Hide some items if texture is invalid
+	LLCheckBoxCtrl* temp_check = getChild<LLCheckBoxCtrl>("temp_check");
+	LLCheckBoxCtrl* lossless_check = getChild<LLCheckBoxCtrl>("lossless_check");
+	LLUICtrl* uploaded_size_text = getChild<LLUICtrl>("uploaded_size_text");
+	// </FS:PP>
+
 	if (mRawImagep.notNull() && gAgent.getRegion() != NULL)
 	{
 		mAvatarPreview = new LLImagePreviewAvatar(256, 256);
@@ -142,16 +148,14 @@ BOOL LLFloaterImagePreview::postBuild()
         //}
 		if (mRawImagep->getWidth() * mRawImagep->getHeight () <= LL_IMAGE_REZ_LOSSLESS_CUTOFF * LL_IMAGE_REZ_LOSSLESS_CUTOFF)
 		{
-			LLCheckBoxCtrl* check_box = getChild<LLCheckBoxCtrl>("lossless_check");
-			check_box->setEnabled(TRUE);
-			check_box->setVisible(TRUE);
-			check_box->setControlVariable(gSavedSettings.getControl("LosslessJ2CUpload"));
+			lossless_check->setEnabled(TRUE);
+			lossless_check->setVisible(TRUE);
+			lossless_check->setControlVariable(gSavedSettings.getControl("LosslessJ2CUpload"));
 		}
 		else
 		{
-			LLCheckBoxCtrl* check_box = getChild<LLCheckBoxCtrl>("lossless_check");
-			check_box->setEnabled(FALSE);
-			check_box->setVisible(FALSE);
+			lossless_check->setEnabled(FALSE);
+			lossless_check->setVisible(FALSE);
 		}
 		//</FS:Beq>
 		
@@ -162,21 +166,22 @@ BOOL LLFloaterImagePreview::postBuild()
 		{
 			gSavedSettings.setBOOL("TemporaryUpload", FALSE);
 		}
-		getChild<LLCheckBoxCtrl>("temp_check")->setVisible(enable_temp_uploads);
+		temp_check->setVisible(enable_temp_uploads);
 		// </FS:CR>
 
 		// <FS:Zi> detect and strip empty alpha layers from images on upload
 		getChild<LLUICtrl>("ok_btn")->setCommitCallback(boost::bind(&LLFloaterImagePreview::onBtnUpload, this));
 
-		getChild<LLUICtrl>("uploaded_size_text")->setTextArg("[X_RES]", llformat("%d", mRawImagep->getWidth()));
-		getChild<LLUICtrl>("uploaded_size_text")->setTextArg("[Y_RES]", llformat("%d", mRawImagep->getHeight()));
+		uploaded_size_text->setTextArg("[X_RES]", llformat("%d", mRawImagep->getWidth()));
+		uploaded_size_text->setTextArg("[Y_RES]", llformat("%d", mRawImagep->getHeight()));
+		uploaded_size_text->setVisible(TRUE);
 
 		mEmptyAlphaCheck = getChild<LLCheckBoxCtrl>("strip_alpha_check");
 
 		if (mRawImagep->getComponents() != 4)
 		{
 			getChild<LLUICtrl>("image_alpha_warning")->setVisible(false);
-			getChild<LLUICtrl>("uploaded_size_text")->setTextArg("[ALPHA]", getString("no_alpha"));
+			uploaded_size_text->setTextArg("[ALPHA]", getString("no_alpha"));
 			return true;
 		}
 
@@ -205,7 +210,7 @@ BOOL LLFloaterImagePreview::postBuild()
 			mEmptyAlphaCheck->setValue(false);
 		}
 
-		getChild<LLUICtrl>("uploaded_size_text")->setTextArg("[ALPHA]", getString(mEmptyAlphaCheck->getValue() ? "no_alpha" : "with_alpha"));
+		uploaded_size_text->setTextArg("[ALPHA]", getString(mEmptyAlphaCheck->getValue() ? "no_alpha" : "with_alpha"));
 		// </FS:Zi>
 	}
 	else
@@ -215,6 +220,12 @@ BOOL LLFloaterImagePreview::postBuild()
 		getChildView("bad_image_text")->setVisible(TRUE);
 		getChildView("clothing_type_combo")->setEnabled(FALSE);
 		getChildView("ok_btn")->setEnabled(FALSE);
+
+		// <FS:PP> FIRE-32944 - Hide some items if texture is invalid
+		uploaded_size_text->setVisible(FALSE);
+		lossless_check->setVisible(FALSE);
+		temp_check->setVisible(FALSE);
+		// </FS:PP>
 
 		if(!mImageLoadError.empty())
 		{

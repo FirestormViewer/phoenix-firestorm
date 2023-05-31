@@ -3,6 +3,8 @@
 	<text name="language_textbox">Langue :</text>
 	<combo_box name="language_combobox">
 		<combo_box.item label="English (Anglais)" name="English"/>
+		<!-- <combo_box.item label="Azərbaycanca (Azerbaïdjanais)" name="Azerbaijani"/> -->
+		<!-- <combo_box.item label="Dansk (Danois) - Beta" name="Danish"/> -->
 		<combo_box.item label="Deutsch (Allemand)" name="Deutsch(German)"/>
 		<combo_box.item label="Español (Espagnol) - Beta" name="Spanish"/>
 		<combo_box.item label="Français - Beta" name="French"/>
