@@ -212,6 +212,11 @@
 			Видео (MP4)
 		</label>
 	</mimetype>
+	<mimetype name="video/x-flv">
+		<label name="video/x-flv_label">
+			Видео (flv)
+		</label>
+	</mimetype>
 	<mimetype name="application/octet-stream">
 		<label name="video/octet-stream">
 			Видео

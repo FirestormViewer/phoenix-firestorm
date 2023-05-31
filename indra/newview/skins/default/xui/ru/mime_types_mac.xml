@@ -202,6 +202,11 @@
 			Видео (MP4)
 		</label>
 	</mimetype>
+	<mimetype name="video/x-flv">
+		<label name="video/x-flv_label">
+			Видео (flv)
+		</label>
+	</mimetype>
 	<mimetype name="video/quicktime">
 		<label name="video/quicktime_label">
 			Видео (QuickTime)
