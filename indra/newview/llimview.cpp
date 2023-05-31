@@ -4476,6 +4476,7 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
 			LLUUID::null,
 			LLVector3::zero,
 			false,
+			0,
 			true
 			);
 	}
@@ -4548,6 +4549,7 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
 			LLUUID::null,
 			LLVector3::zero,
 			false,
+			0,
 			true
 			);
 
@@ -4570,6 +4572,7 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
 						LLUUID::null,
 						LLVector3::zero,
 						false,
+						0,
 						true);
 				LLGiveInventory::doGiveInventoryItem(av_id, item, session_id);
 			}
