@@ -194,7 +194,6 @@ private:
 
 	virtual void switchToCachedImage();
 	
-	static bool isMemoryForTextureSuficientlyFree();
 public: // <FS:Ansariel> Dynamic texture memory calculation
 	static void getGPUMemoryForTextures(S32Megabytes &gpu, S32Megabytes &physical);
 

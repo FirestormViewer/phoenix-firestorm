@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Atmosphäre &amp; Beleuchtung" name="panel_settings_sky_atmos">
+	<string name="hdr_string">
+		HDR-Skalierung:
+	</string>
+	<string name="brightness_string">
+		Helligkeit:
+	</string>
 	<layout_stack name="main_ls">
 		<layout_panel name="top_lp">
 			<text name="ambient_color_label">
@@ -44,14 +50,14 @@
 						Maximale Höhe:
 					</text>
 					<slider name="max_alt" width="199"/>
-					<text name="brightness_label" width="120">
+					<text name="probe_ambiance_label" tool_tip="Strahlungsintensität. Aktiviert HDR-Beleuchtungsmodell, falls nicht 0." width="120">
+						Umgebung Reflexionstest (HDR):
+					</text>
+					<slider name="probe_ambiance" width="187"/>
+					<text name="scene_gamma_label" width="120">
 						Helligkeit:
 					</text>
 					<slider name="scene_gamma" width="187"/>
-					<text name="probe_ambiance_label" width="120">
-						Umgebung Reflexionstest:
-					</text>
-					<slider name="probe_ambiance" width="187"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

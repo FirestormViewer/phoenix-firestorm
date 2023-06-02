@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="env_adjust_snapshot" title="Persönliche Beleuchtung">
+	<string name="hdr_string">
+		HDR-Skalierung:
+	</string>
+	<string name="brightness_string">
+		Helligkeit:
+	</string>
 	<layout_stack name="outer_stack">
 		<layout_panel name="env_controls">
 			<layout_stack name="settings_stack">
@@ -40,11 +46,11 @@
 					<text name="cloud_scale_label">
 						Wolken-Skalierung:
 					</text>
-					<text name="bightness_label">
-						Helligkeit:
-					</text>
 					<text name="reflection_probe_ambiance_label">
 						Reflexionstest Umgebung:
+					</text>
+					<text name="scene_gamma_label">
+						Helligkeit:
 					</text>
 				</layout_panel>
 				<layout_panel name="lp_3">

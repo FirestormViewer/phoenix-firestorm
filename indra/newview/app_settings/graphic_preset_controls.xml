@@ -23,6 +23,7 @@
 		<string>RenderDeferredSSAO</string>
 		<string>RenderDepthOfField</string>
 		<string>RenderDepthOfFieldInEditMode</string>
+		<string>RenderDynamicExposureCoefficient</string>
 		<string>RenderExposure</string>
 		<string>RenderFarClip</string>
 		<string>RenderFlexTimeFactor</string>
@@ -40,6 +41,11 @@
 		<string>RenderShaderLightingMaxLevel</string>
 		<string>RenderShadowDetail</string>
 		<string>RenderShadowResolutionScale</string>
+		<string>RenderSkyAutoAdjustLegacy</string>
+		<string>RenderSkyHDRScale</string>
+		<string>RenderSSAOIrradianceScale</string>
+		<string>RenderSSAOIrradianceMax</string>
+		<string>RenderSunDynamicRange</string>
 		<string>RenderTerrainDetail</string>
 		<string>RenderTerrainLODFactor</string>
 		<string>RenderTerrainScale</string>

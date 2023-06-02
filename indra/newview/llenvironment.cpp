@@ -175,6 +175,9 @@ namespace
     // Find normalized track position of given time along full length of cycle
     inline LLSettingsBase::TrackPosition convert_time_to_position(const LLSettingsBase::Seconds& time, const LLSettingsBase::Seconds& len)
     {
+        // early out to avoid divide by zero.  if len is zero then jump to end position
+        if (len == 0.f) return 1.f;
+
         LLSettingsBase::TrackPosition position = LLSettingsBase::TrackPosition(fmod((F64)time, (F64)len) / (F64)len);
         return llclamp(position, 0.0f, 1.0f);
     }
@@ -1869,19 +1872,8 @@ void LLEnvironment::updateGLVariablesForSettings(LLShaderUniforms* uniforms, con
             //_WARNS("RIDER") << "pushing '" << (*it).first << "' as " << value << LL_ENDL;
             break;
         case LLSD::TypeReal:
-        {
-            F32 v = value.asReal();
-            switch (it.second.getShaderKey())
-            { // convert to linear color space if this is a color parameter
-            case LLShaderMgr::HAZE_HORIZON:
-            case LLShaderMgr::HAZE_DENSITY:
-            case LLShaderMgr::CLOUD_SHADOW:
-                //v = sRGBtoLinear(v);
-                break;
-            }
-            shader->uniform1f(it.second.getShaderKey(), v);
+            shader->uniform1f(it.second.getShaderKey(), value.asReal());
             //_WARNS("RIDER") << "pushing '" << (*it).first << "' as " << value << LL_ENDL;
-        }
             break;
 
         case LLSD::TypeBoolean:
