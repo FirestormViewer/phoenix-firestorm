@@ -7,7 +7,7 @@
 		Təsviri:
 	</text>
 	<text name="preview_label">
-		Şəkilin göstərmə üsulu:
+		Göstərmə üsulu:
 	</text>
 	<combo_box label="Geyim növü" name="clothing_type_combo">
 		<item label="Şəkil" name="Image" value="Şəkil"/>
@@ -25,7 +25,7 @@
 		Şəkil oxudula bilmədi.
 Şəkili 24-bit TGA faylı olaraq saxlayıb yenidən yoxlayın.
 	</text>
-	<check_box label="İtkisiz sıxlaşdırmadan istifadə et" name="lossless_check"/>
+	<check_box label="İtkisiz şıxlaşdırma" name="lossless_check"/>
 	<button label="Ləğv et" name="cancel_btn"/>
 	<button label="Yüklə (L$[AMOUNT])" name="ok_btn"/>
 </floater>

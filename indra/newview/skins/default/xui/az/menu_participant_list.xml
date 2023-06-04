@@ -17,7 +17,7 @@
 		<menu_item_call label="Qrupdan çıxart" name="EjectSelected"/>
 		<menu_item_call label="Mətni söhbətə icazə ver" name="AllowTextChat"/>
 		<menu_item_call label="Mətni söhbəti qadağan et" name="ForbidTextChat"/>
-		<menu_item_call label="Səsli söhbəti qadağan et"name="ModerateVoiceMuteSelected"/>
+		<menu_item_call label="Səsli söhbəti qadağan et" name="ModerateVoiceMuteSelected"/>
 		<menu_item_call label="Səsli söhbətə icazə ver" name="ModerateVoiceUnMuteSelected"/>
 		<menu_item_call label="Hamının səsli söhbətini qadağan et" name="ModerateVoiceMute"/>
 		<menu_item_call label="Hamının səsli söhbətinə icazə ver" name="ModerateVoiceUnmute"/>
