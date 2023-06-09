@@ -31,7 +31,7 @@
 			<check_box label="Söhbət tarixçəsində və İM-də" name="show_timestamps_transcripts"/>
 			<check_box name="FSConsoleClassicDrawMode" label="Klassik konsol istifadə edilsin" tool_tip="Bu variant konsol fonunu bütün sətrlər üzərindəki böyük blok kimi göstərir, onların ən uzunu genişlikdə."/>
 			<check_box name="ChatFullWidth" label="Ekranın tam genişliyində istifadə edilsin"/>
-			<spinner label="Solduqdan sonra sönəcək:" name="fade_chat_time" label_width="100" width="140"/>
+			<spinner label="Söhbətin solma vaxtı:" name="fade_chat_time" label_width="140" width="180"/>
 			<text name="text_box4">
 				(saniyə)
 			</text>

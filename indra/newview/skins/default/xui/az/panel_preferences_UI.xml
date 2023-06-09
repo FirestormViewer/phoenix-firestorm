@@ -62,7 +62,7 @@
         <check_box label="Dairəvi menyudan istifadə et" name="UsePieMenu" tool_tip="Obyektlərə, avatarlara və yerə sağ kliklədikdə dairəvi menyu göstərmək üçün V1 üslubundan istifadə edin" />
         <check_box label="Mətn animasiyası" name="PieMenuPopupFontEffect" tool_tip="Dairəvi menyu açıldığında animasiyanın bir hissəsi olan dairəvi menyu mətnini aktivləşdirir." />
         <check_box label="Xarici dairə rəngini aktivləşdirin" name="PieMenuOuterRingShade" tool_tip="Alt menyunu vizuallaşdırmağa kömək edən əlavə xarici dairə rəngi əlavə etməyə imkan verir." />
-        <text name="ShowGroupNoticesTopRightLabel" width="180">
+        <text name="ShowGroupNoticesTopRightLabel" width="140">
            Bildirişlər və İM yerləşməsi:
         </text>
         <radio_group name="ShowGroupNoticesTopRight" width="210"
@@ -224,13 +224,13 @@
         <check_box label="Tostları digər pəncərələrin üstündə göstərin" name="FSShowToastsInFront" />
         <check_box label="Bölgənin yenidən başlaması üçün yeni bildirişdən istifadə et" name="FSUseNewRegionRestartNotification" />
         <check_box label="Bölgənin yenidən başlaması bildirişi alanda ekranımı silkələməyin" name="FSNoScreenShakeOnRegionRestart" />
-        <check_box label="Bölgənin yenidən başlaması haqqında kanala bildir:" width="275" name="FSReportRegionRestartToChat" />
+        <check_box label="Bölgənin yenidən başlaması haqqında kanala bildir:" width="290" name="FSReportRegionRestartToChat" />
     </panel>
     <panel label="Yazı tipi" name="UI-font-tab">
         <text name="tooltip_textbox1">
            Yazı tipi sxemi:
         </text>
-        <text name="tooltip_textbox2" width="160">
+        <text name="tooltip_textbox2" width="170">
            (Yenidən başlatma tələb olunur)
         </text>
         <text name="tooltip_textbox5">

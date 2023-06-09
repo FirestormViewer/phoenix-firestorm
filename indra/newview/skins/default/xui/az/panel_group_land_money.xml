@@ -44,8 +44,8 @@
 	<text name="group_money_heading">
 		Qrup L$
 	</text>
-	<text name="group_over_limit_text" width="370">
-		Ərazinin istifadədə saxlanılması üçün daha çox torpaq kreditləri lazımdır.
+	<text name="group_over_limit_text" width="380">
+		Sahənin istifadədə saxlanılması üçün daha çox torpaq krediti lazımdır.
 	</text>
 	<tab_container name="group_money_tab_container">
 		<panel label="Xülasə" name="group_money_planning_tab">
