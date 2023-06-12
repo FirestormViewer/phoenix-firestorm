@@ -86,10 +86,3 @@
 		<button label="Ləğv et" name="cancel_btn"/>
 	</panel>
 </panel>
-
-
-		<line_editor name="LabelItemName" tool_tip="Adı 63 simvol ilə məhdudlaşdırılır. Daha uzun simvollar qısaltılır. Adlar yalnız ASCII-7 (genişləndirilməmiş) simvol dəstəsində olan çap simvollarından ibarət ola bilər, xaricdə qalın bir xətt olan | simvolu."/>
-		<text name="LabelItemDescTitle">
-			Təsviri:
-		</text>
-		<line_editor name="LabelItemDesc" tool_tip="Göstərilmə xüsusiyyətlərində 'Bütün obyektlərdə açılan sürüşdürmə' seçilibsə, istifadəçilər hər hansı bir obyektə sürüşdürəndə obyektin təsviri olan açılan pəncərə görünür. Primitivin təsviri 127 bayt ilə məhdudlaşdırılır və bu ölçüyü aşan metin kəsilir."/>

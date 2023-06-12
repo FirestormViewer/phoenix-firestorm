@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Güneş və Ay" name="panel_settings_sky_hbodies">
+<panel label="Günəş və Ay" name="panel_settings_sky_hbodies">
 	<layout_stack name="main_ls">
 		<layout_panel name="sun_layout">
 			<text name="sun_stars_label">Günəş və ulduzlar</text>
@@ -10,7 +10,7 @@
 			<text name="sun_elevation_label">Hündürlük:</text>
 			<text name="glow_focus_label">Parlama fokus:</text>
 			<text name="glow_size_label">Parlama ölçüsü:</text>
-			<text name="star_brightness_label">Ulduzların parlaqlığı:</text>
+			<text name="star_brightness_label">Ulduz parlaqlığı:</text>
 			<check_box label="İşıqlıq nöqtələrini göstər" name="sunbeacon"/>
 		</layout_panel>
 		<layout_panel name="moon_layout">

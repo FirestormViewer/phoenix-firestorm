@@ -103,10 +103,10 @@
 		</panel>
 		<panel label="Yolu yoxla" name="test_panel">
 			<text name="ctrl_click_label">
-				Başlanqıc nöqtəsini seçmək üçün Ctrl-toxunuş
+				Başlanqıc nöqtəsi üçün Ctrl-toxunuş
 			</text>
 			<text name="shift_click_label">
-				Sonuncu nöqtəni seçmək üçün Shift-toxunuş
+				Son nöqtəsi üçün Shift-toxunuş
 			</text>
 			<text name="character_width_label">
 				Avatar genişliyi

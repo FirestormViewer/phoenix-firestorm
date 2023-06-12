@@ -123,7 +123,7 @@
 			<panel name="P_Add_Cam_Opt_Settings">
 				<check_box name="clickonavatarkeepscamera" label="Kamera yerləşməsini yadda saxlayın"
 				 tool_tip="Adətən avatarın üzərinə basmaqla kameranın yerləşməsi sıfırlanır. Bu seçim bu davranışı düzəldir."/>
-				<check_box name="FSResetCameraOnTP" label="Teleportdan sonra kamera yerləşməsini sıfırlayın"
+				<check_box name="FSResetCameraOnTP" label="Tp-dan sonra kamera yerləşməsini sıfırlayın"
 				 tool_tip="Bir qayda olaraq, teleportasiya zamanı (region daxilində) kameranın yerləşməsi sıfırlanır. Bu seçim bu davranışın qarşısını alır."/>
 				<check_box name="disableminzoomdist" label="Minimum məsafəni söndürün"
 				 tool_tip="Obyektə ən yaxın kamera məsafəsi ilə bağlı məhdudiyyəti söndürür."/>

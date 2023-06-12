@@ -14,8 +14,8 @@
 	<spinner label="Fırlanma oxu" name="JoystickAxis3"/>
 	<spinner label="Miqyas oxu" name="JoystickAxis6"/>
 	<check_box label="Miqyaslama" name="ZoomDirect"/>
-	<check_box label="3D kursoru" name="Cursor3D" left="320" />
-	<check_box label="Avtomatik səviyyələndirmə" name="AutoLeveling"/>
+	<check_box label="3D kursor" name="Cursor3D" left="280" />
+	<check_box label="Avtomatik səviyyələndirmə" name="AutoLeveling" left="370"/>
 	<text name="Control Modes:">
 		Idarə etmə rejimləri:
 	</text>

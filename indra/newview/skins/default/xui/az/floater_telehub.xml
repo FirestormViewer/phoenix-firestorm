@@ -8,22 +8,21 @@
 		Telehub qoşulmamışdır.
 	</text>
 	<text name="help_text_connected">
-		Qaldırmaq üçün "Qoşulmamış" düyməsini basın.
+		Ayırılmaq üçün "Ayır" düyməsini basın.
 	</text>
 	<text name="help_text_not_connected">
 		Obyekti seçin və "Telehuba qoşul" düyməsini basın.
 	</text>
 	<button label="Telehuba qoşul" name="connect_btn"/>
-	<button label="Qoşulmamış" name="disconnect_btn"/>
+	<button label="Ayır" name="disconnect_btn"/>
 	<text name="spawn_points_text">
-		Görünmə nöqtələri (obyektlər deyil, ancaq mövqeylər):
+		Gəliş nöqtələri (obyektlər deyil, ancaq mövqeylər):
 	</text>
-	<button label="Görünmə nöqtəsi əlavə et" name="add_spawn_point_btn"/>
-	<button label="Görünmə nöqtəsini sil" name="remove_spawn_point_btn"/>
+	<button label="Gəliş nöqtəsi əlavə et" name="add_spawn_point_btn" width="140"/>
+	<button label="Gəliş nöqtəsini sil" name="remove_spawn_point_btn"/>
 	<text name="spawn_point_help">
-		Pozisiyayı göstərmək üçün obyekti seçin və "Görünmə nöqtəsi əlavə et" düyməsini basın.
-	Sonra obyekti köçürə və ya silə bilərsiniz.
-	Pozisiyalar telehubun mərkəzi ilə əlaqəlidir.
-	Seçilmiş bir şeyi dünyada vurğulamaq üçün siyahıdan elementi seçin.
+		Yerləşməni göstərmək üçün obyekti seçin və "Əlavə et" düyməsini basın. Sonra obyekti köçürə və ya silə bilərsiniz.
+Yerləşmələr telehubun mərkəzi ilə əlaqəlidir.
+Seçilmiş bir şeyi dünyada vurğulamaq üçün bir obyekt seçin.
 	</text>
 </floater>

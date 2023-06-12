@@ -23,7 +23,7 @@
 	<context_menu label="Moderator seçimləri" name="Moderator Options">
 		<menu_item_call label="Mətni söhbətə icazə ver" name="AllowTextChat"/>
 		<menu_item_call label="Mətni söhbəti qadağan et" name="ForbidTextChat"/>
-		<menu_item_call label="Səsli söhbəti qadağan et"name="ModerateVoiceMuteSelected"/>
+		<menu_item_call label="Səsli söhbəti qadağan et" name="ModerateVoiceMuteSelected"/>
 		<menu_item_call label="Səsli söhbətə icazə ver" name="ModerateVoiceUnMuteSelected"/>
 	</context_menu>
 	<menu_item_call label="Qadağan et" name="BanMember"/>
