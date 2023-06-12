@@ -273,112 +273,11 @@ void LLInventoryPanel::initFromParams(const LLInventoryPanel::Params& params)
 {
 	// save off copy of params
 	mParams = params;
-	// Clear up the root view
-	// Note: This needs to be done *before* we build the new folder view 
-	LLUUID root_id = getRootFolderID();
-	if (mFolderRoot.get())
-	{
-		removeItemID(root_id);
-		mFolderRoot.get()->destroyView();
-	}
 
-	mCommitCallbackRegistrar.pushScope(); // registered as a widget; need to push callback scope ourselves
-	{
-		// Determine the root folder in case specified, and
-		// build the views starting with that folder.
-        LLFolderView* folder_view = createFolderRoot(root_id);
-		mFolderRoot = folder_view->getHandle();
-	
-		addItemID(root_id, mFolderRoot.get());
-	}
-	mCommitCallbackRegistrar.popScope();
-	mFolderRoot.get()->setCallbackRegistrar(&mCommitCallbackRegistrar);
-	mFolderRoot.get()->setEnableRegistrar(&mEnableCallbackRegistrar);
-	
-	// Scroller
-		LLRect scroller_view_rect = getRect();
-		scroller_view_rect.translate(-scroller_view_rect.mLeft, -scroller_view_rect.mBottom);
-		// <FS:Ansariel> Pull this magic number here so inventory scroll panel
-		//               doesn't get cut off on the left side!
-		scroller_view_rect.mLeft += 2;
-		// </FS:Ansariel>
-	LLScrollContainer::Params scroller_params(mParams.scroll());
-		scroller_params.rect(scroller_view_rect);
-		mScroller = LLUICtrlFactory::create<LLFolderViewScrollContainer>(scroller_params);
-		addChild(mScroller);
-		mScroller->addChild(mFolderRoot.get());
-		mFolderRoot.get()->setScrollContainer(mScroller);
-		mFolderRoot.get()->setFollowsAll();
-		mFolderRoot.get()->addChild(mFolderRoot.get()->mStatusTextBox);
+    initFolderRoot();
 
-	// Set up the callbacks from the inventory we're viewing, and then build everything.
-	mInventoryObserver = new LLInventoryPanelObserver(this);
-	mInventory->addObserver(mInventoryObserver);
-
-	mCompletionObserver = new LLInvPanelComplObserver(boost::bind(&LLInventoryPanel::onItemsCompletion, this));
-	mInventory->addObserver(mCompletionObserver);
-
-    if (mBuildViewsOnInit && mViewsInitialized == VIEWS_UNINITIALIZED)
-    {
-        // Build view of inventory if we need default full hierarchy and inventory is ready, otherwise do in onIdle.
-        // Initializing views takes a while so always do it onIdle if viewer already loaded.
-        if (mInventory->isInventoryUsable()            
-            && LLStartUp::getStartupState() <= STATE_WEARABLES_WAIT)
-        {
-            // Usually this happens on login, so we have less time constraits, but too long and we can cause a disconnect
-            const F64 max_time = 20.f;
-            initializeViews(max_time);
-        }
-        else
-        {
-            mViewsInitialized = VIEWS_INITIALIZING;
-            gIdleCallbacks.addFunction(onIdle, (void*)this);
-        }
-    }
-
-	if (mSortOrderSetting != INHERIT_SORT_ORDER)
-	{
-		setSortOrder(gSavedSettings.getU32(mSortOrderSetting));
-	}
-	else
-	{
-		setSortOrder(gSavedSettings.getU32(DEFAULT_SORT_ORDER));
-	}
-
-	// hide inbox
-	if (!gSavedSettings.getBOOL("InventoryOutboxMakeVisible"))
-	{
-		// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
-		//getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_INBOX));
-	}
-    // hide marketplace listing box, unless we are a marketplace panel
-	if (!gSavedSettings.getBOOL("InventoryOutboxMakeVisible") && !mParams.use_marketplace_folders)
-	{
-		getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_MARKETPLACE_LISTINGS));
-    }
-    
-	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
-	if (getName() != "Worn Items" && getName() != "inventory_inbox")
-	{
-		if (!gSavedSettings.getBOOL("FSShowInboxFolder"))
-		{
-			getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_INBOX));
-		}
-		gSavedSettings.getControl("FSShowInboxFolder")->getSignal()->connect(boost::bind(&LLInventoryPanel::updateShowInboxFolder, this, _2));
-	}
-	// </FS:Ansariel> Optional hiding of Received Items folder aka Inbox
-
-	// set the filter for the empty folder if the debug setting is on
-	if (gSavedSettings.getBOOL("DebugHideEmptySystemFolders"))
-	{
-		getFilter().setFilterEmptySystemFolders();
-	}
-	
-	// keep track of the clipboard state so that we avoid filtering too much
-	mClipboardState = LLClipboard::instance().getGeneration();
-	
-	// <FS:Ansariel> Optional hiding of empty system folders
-	gSavedSettings.getControl("DebugHideEmptySystemFolders")->getSignal()->connect(boost::bind(&LLInventoryPanel::updateHideEmptySystemFolders, this, _2));
+    // <FS:Ansariel> Optional hiding of empty system folders
+    gSavedSettings.getControl("DebugHideEmptySystemFolders")->getSignal()->connect(boost::bind(&LLInventoryPanel::updateHideEmptySystemFolders, this, _2));
 
 	// Initialize base class params.
 	LLPanel::initFromParams(mParams);
@@ -393,6 +292,119 @@ LLInventoryPanel::~LLInventoryPanel()
     }
     
     clearFolderRoot();
+}
+
+void LLInventoryPanel::initFolderRoot()
+{
+    // Clear up the root view
+    // Note: This needs to be done *before* we build the new folder view
+    LLUUID root_id = getRootFolderID();
+    if (mFolderRoot.get())
+    {
+        removeItemID(root_id);
+        mFolderRoot.get()->destroyView();
+    }
+
+    mCommitCallbackRegistrar.pushScope(); // registered as a widget; need to push callback scope ourselves
+    {
+        // Determine the root folder in case specified, and
+        // build the views starting with that folder.
+        LLFolderView* folder_view = createFolderRoot(root_id);
+        mFolderRoot = folder_view->getHandle();
+    
+        addItemID(root_id, mFolderRoot.get());
+    }
+    mCommitCallbackRegistrar.popScope();
+    mFolderRoot.get()->setCallbackRegistrar(&mCommitCallbackRegistrar);
+    mFolderRoot.get()->setEnableRegistrar(&mEnableCallbackRegistrar);
+    
+    // Scroller
+    LLRect scroller_view_rect = getRect();
+    scroller_view_rect.translate(-scroller_view_rect.mLeft, -scroller_view_rect.mBottom);
+	// <FS:Ansariel> Pull this magic number here so inventory scroll panel
+	//               doesn't get cut off on the left side!
+	scroller_view_rect.mLeft += 2;
+	// </FS:Ansariel>
+	scroller_view_rect.mTop -= 3;
+    LLScrollContainer::Params scroller_params(mParams.scroll());
+    scroller_params.rect(scroller_view_rect);
+    mScroller = LLUICtrlFactory::create<LLFolderViewScrollContainer>(scroller_params);
+    addChild(mScroller);
+    mScroller->addChild(mFolderRoot.get());
+    mFolderRoot.get()->setScrollContainer(mScroller);
+    mFolderRoot.get()->setFollowsAll();
+    mFolderRoot.get()->addChild(mFolderRoot.get()->mStatusTextBox);
+
+    if (mSelectionCallback)
+    {
+        mFolderRoot.get()->setSelectCallback(mSelectionCallback);
+    }
+
+    // Set up the callbacks from the inventory we're viewing, and then build everything.
+    mInventoryObserver = new LLInventoryPanelObserver(this);
+    mInventory->addObserver(mInventoryObserver);
+
+    mCompletionObserver = new LLInvPanelComplObserver(boost::bind(&LLInventoryPanel::onItemsCompletion, this));
+    mInventory->addObserver(mCompletionObserver);
+
+    if (mBuildViewsOnInit && mViewsInitialized == VIEWS_UNINITIALIZED)
+    {
+        // Build view of inventory if we need default full hierarchy and inventory is ready, otherwise do in onIdle.
+        // Initializing views takes a while so always do it onIdle if viewer already loaded.
+        if (mInventory->isInventoryUsable()
+            && LLStartUp::getStartupState() <= STATE_WEARABLES_WAIT)
+        {
+            // Usually this happens on login, so we have less time constraits, but too long and we can cause a disconnect
+            const F64 max_time = 20.f;
+            initializeViews(max_time);
+        }
+        else
+        {
+            mViewsInitialized = VIEWS_INITIALIZING;
+            gIdleCallbacks.addFunction(onIdle, (void*)this);
+        }
+    }
+
+    if (mSortOrderSetting != INHERIT_SORT_ORDER)
+    {
+        setSortOrder(gSavedSettings.getU32(mSortOrderSetting));
+    }
+    else
+    {
+        setSortOrder(gSavedSettings.getU32(DEFAULT_SORT_ORDER));
+    }
+
+    // hide inbox
+    if (!gSavedSettings.getBOOL("InventoryOutboxMakeVisible"))
+    {
+        // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
+        //getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_INBOX));
+    }
+    // hide marketplace listing box, unless we are a marketplace panel
+    if (!gSavedSettings.getBOOL("InventoryOutboxMakeVisible") && !mParams.use_marketplace_folders)
+    {
+        getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_MARKETPLACE_LISTINGS));
+    }
+
+    // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
+    if (getName() != "Worn Items" && getName() != "inventory_inbox")    
+    {
+        if (!gSavedSettings.getBOOL("FSShowInboxFolder"))
+        {
+            getFilter().setFilterCategoryTypes(getFilter().getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_INBOX));
+        }
+        gSavedSettings.getControl("FSShowInboxFolder")->getSignal()->connect(boost::bind(&LLInventoryPanel::updateShowInboxFolder, this, _2));
+    }
+    // </FS:Ansariel> Optional hiding of Received Items folder aka Inbox
+
+    // set the filter for the empty folder if the debug setting is on
+    if (gSavedSettings.getBOOL("DebugHideEmptySystemFolders"))
+    {
+        getFilter().setFilterEmptySystemFolders();
+    }
+    
+    // keep track of the clipboard state so that we avoid filtering too much
+    mClipboardState = LLClipboard::instance().getGeneration();
 }
 
 /*virtual*/
@@ -1538,6 +1550,7 @@ void LLInventoryPanel::setSelectCallback(const boost::function<void (const std::
 	{
 		mFolderRoot.get()->setSelectCallback(cb);
 	}
+    mSelectionCallback = cb;
 }
 
 void LLInventoryPanel::clearSelection()
@@ -2117,7 +2130,7 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 				inventory_panel->setSelection(obj_id, take_keyboard_focus);
 			}
 		}
-		else
+		else if (auto_open)
 		{
 			// <FS:Ansariel> FIRE-22167: Make "Show in Main View" work properly
 			//LLFloater* floater_inventory = LLFloaterReg::getInstance("inventory");
@@ -2134,6 +2147,11 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 			}
 			active_panel->setSelection(obj_id, take_keyboard_focus);
 		}
+        else
+        {
+            // Created items are going to receive proper focus from callbacks
+            active_panel->setSelection(obj_id, take_keyboard_focus);
+        }
 	}
 }
 
@@ -2149,6 +2167,7 @@ void LLInventoryPanel::setSFViewAndOpenFolder(const LLInventoryPanel* panel, con
         LLPanelMainInventory* main_inventory = sidepanel_inventory->getMainInventoryPanel();
         if (main_inventory && panel->hasAncestor(main_inventory) && !main_inventory->isSingleFolderMode())
         {
+            main_inventory->initSingleFolderRoot(folder_id);
             main_inventory->toggleViewMode();
             main_inventory->setSingleFolderViewRoot(folder_id, false);
         }
@@ -2380,9 +2399,9 @@ static LLDefaultChildRegistry::Register<LLInventorySingleFolderPanel> t_single_f
 
 LLInventorySingleFolderPanel::LLInventorySingleFolderPanel(const Params& params)
     : LLInventoryPanel(params)
-    , mExternalScroller(NULL)
 {
     mBuildChildrenViews = false;
+    mRootInited = false;
     getFilter().setSingleFolderMode(true);
     getFilter().setEmptyLookupMessage("InventorySingleFolderNoMatches");
     getFilter().setDefaultEmptyLookupMessage("InventorySingleFolderEmpty");
@@ -2396,31 +2415,28 @@ LLInventorySingleFolderPanel::~LLInventorySingleFolderPanel()
 {
 }
 
-void LLInventorySingleFolderPanel::setSelectCallback(const boost::function<void(const std::deque<LLFolderViewItem*>& items, BOOL user_action)>& cb)
-{
-    if (mFolderRoot.get())
-    {
-        mFolderRoot.get()->setSelectCallback(cb);
-        mSelectionCallback = cb;
-    }
-}
-
-void LLInventorySingleFolderPanel::setScroller(LLScrollContainer* scroller)
-{
-    mExternalScroller = scroller;
-    if (mFolderRoot.get())
-    {
-        mFolderRoot.get()->setScrollContainer(mExternalScroller);
-    }
-}
-
 void LLInventorySingleFolderPanel::initFromParams(const Params& p)
 {
     mFolderID = gInventory.getRootFolderID();
-    Params pane_params(p);
-    pane_params.open_first_folder = false;
-    pane_params.start_folder.id = mFolderID;
-    LLInventoryPanel::initFromParams(pane_params);
+
+    mParams = p;
+    LLPanel::initFromParams(mParams);
+}
+
+void LLInventorySingleFolderPanel::initFolderRoot(const LLUUID& start_folder_id)
+{
+    if(mRootInited) return;
+
+    mRootInited = true;
+    if(start_folder_id.notNull())
+    {
+        mFolderID = start_folder_id;
+    }
+
+    mParams.open_first_folder = false;
+    mParams.start_folder.id = mFolderID;
+
+    LLInventoryPanel::initFolderRoot();
     mFolderRoot.get()->setSingleFolderMode(true);
 }
 
@@ -2520,18 +2536,7 @@ void LLInventorySingleFolderPanel::updateSingleFolderRoot()
             mScroller = LLUICtrlFactory::create<LLFolderViewScrollContainer>(scroller_params);
             addChild(mScroller);
             mScroller->addChild(mFolderRoot.get());
-            if (!mExternalScroller)
-            {
-                mFolderRoot.get()->setScrollContainer(mScroller);
-            }
-            else
-            {
-                // Hack to use exteranl scroll in combination view
-                // Todo: find a way to avoid this
-                // ideally combination view should be own inventory panel
-                // instead of piggy backing on two different ones
-                mFolderRoot.get()->setScrollContainer(mExternalScroller);
-            }
+            mFolderRoot.get()->setScrollContainer(mScroller);
             mFolderRoot.get()->setFollowsAll();
             mFolderRoot.get()->addChild(mFolderRoot.get()->mStatusTextBox);
 
@@ -2572,15 +2577,7 @@ void LLInventorySingleFolderPanel::doCreate(const LLSD& userdata)
 
 void LLInventorySingleFolderPanel::doShare()
 {
-    if(mFolderRoot.get()->getCurSelectedItem() == NULL)
-    {
-        std::set<LLUUID> uuids{mFolderID};
-        LLAvatarActions::shareWithAvatars(uuids, gFloaterView->getParentFloater(this));
-    }
-    else
-    {
-        LLAvatarActions::shareWithAvatars(this);
-    }
+    LLAvatarActions::shareWithAvatars(this);
 }
 /************************************************************************/
 /* Asset Pre-Filtered Inventory Panel related class                     */

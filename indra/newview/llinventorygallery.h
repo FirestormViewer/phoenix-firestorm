@@ -45,7 +45,7 @@ class LLInventoryGalleryContextMenu;
 
 typedef boost::function<void()> callback_t;
 
-class LLInventoryGallery : public LLPanel
+class LLInventoryGallery : public LLPanel, public LLEditMenuHandler
 {
 public:
 
@@ -73,12 +73,17 @@ public:
     LLInventoryGallery(const LLInventoryGallery::Params& params = getDefaultParams());
     ~LLInventoryGallery();
 
-    BOOL postBuild();
+    BOOL postBuild() override;
     void initGallery();
-    void draw();
+    void draw() override;
     BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDropType cargo_type,
-                           void* cargo_data, EAcceptance* accept, std::string& tooltip_msg);
-    BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+                           void* cargo_data, EAcceptance* accept, std::string& tooltip_msg) override;
+    BOOL handleRightMouseDown(S32 x, S32 y, MASK mask) override;
+    BOOL handleKeyHere(KEY key, MASK mask) override;
+    void moveUp();
+    void moveDown();
+    void moveLeft();
+    void moveRight();
 
     void setFilterSubString(const std::string& string);
     std::string getFilterSubString() { return mFilterSubString; }
@@ -134,16 +139,40 @@ public:
     LLScrollContainer* getScrollableContainer() { return mScrollPanel; }
     LLInventoryGalleryItem* getSelectedItem();
 
+    // Copy & paste (LLEditMenuHandler)
+    void	copy() override;
+    BOOL	canCopy() const override;
+
+    void	cut() override;
+    BOOL	canCut() const override;
+
+    void paste() override;
+    BOOL canPaste() const override;
+
+    // Copy & paste & delete
+    static void onDelete(const LLSD& notification, const LLSD& response, const LLUUID& selected_id);
+    void deleteSelection();
+    bool canDeleteSelection();
+    void pasteAsLink();
+
+    void claimEditHandler();
+    static bool isItemCopyable(const LLUUID & item_id);
+
+    BOOL baseHandleDragAndDrop(LLUUID dest_id, BOOL drop, EDragAndDropType cargo_type,
+                               void* cargo_data, EAcceptance* accept, std::string& tooltip_msg);
+
 protected:
 
     void showContextMenu(LLUICtrl* ctrl, S32 x, S32 y, const LLUUID& item_id);
 
     void applyFilter(LLInventoryGalleryItem* item, const std::string& filter_substring);
     bool checkAgainstFilters(LLInventoryGalleryItem* item, const std::string& filter_substring);
+    static void onIdle(void* userdata);
 
     LLInventoryCategoriesObserver*     mCategoriesObserver;
     LLThumbnailsObserver*              mThumbnailsObserver;
     LLGalleryGestureObserver*          mGestureObserver;
+    LLInventoryObserver*               mInventoryObserver;
     LLUUID                             mSelectedItemID;
     LLUUID                             mItemToSelect;
     bool                               mIsInitialized;
@@ -190,6 +219,7 @@ private:
     int mRowCount;
     int mItemsAddedCount;
     bool mGalleryCreated;
+    bool mNeedsArrange;
 
     /* Params */
     int mRowPanelHeight;
@@ -214,6 +244,7 @@ private:
     uuid_vec_t mCOFLinkedItems;
     uuid_vec_t mActiveGestures;
     std::map<LLInventoryGalleryItem*, S32> mItemIndexMap;
+    std::map<S32, LLInventoryGalleryItem*> mIndexToItemMap;
 
     LLInventoryFilter::ESearchType mSearchType;
     std::string mUsername;
@@ -248,6 +279,7 @@ public:
                                    void* cargo_data,
                                    EAcceptance* accept,
                                    std::string& tooltip_msg);
+    BOOL handleKeyHere(KEY key, MASK mask);
 
     LLFontGL* getTextFont();
 

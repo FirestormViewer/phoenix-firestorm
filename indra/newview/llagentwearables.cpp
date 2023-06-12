@@ -1701,7 +1701,7 @@ bool LLAgentWearables::moveWearable(const LLViewerInventoryItem* item, bool clos
 }
 
 // static
-void LLAgentWearables::createWearable(LLWearableType::EType type, bool wear, const LLUUID& parent_id)
+void LLAgentWearables::createWearable(LLWearableType::EType type, bool wear, const LLUUID& parent_id, std::function<void(const LLUUID&)> created_cb)
 {
 	if (type == LLWearableType::WT_INVALID || type == LLWearableType::WT_NONE) return;
 
@@ -1713,7 +1713,7 @@ void LLAgentWearables::createWearable(LLWearableType::EType type, bool wear, con
 
 	LLViewerWearable* wearable = LLWearableList::instance().createNewWearable(type, gAgentAvatarp);
 	LLAssetType::EType asset_type = wearable->getAssetType();
-	LLPointer<LLInventoryCallback> cb;
+	LLPointer<LLBoostFuncInventoryCallback> cb;
 	if(wear)
 	{
 		cb = new LLBoostFuncInventoryCallback(wear_and_edit_cb);
@@ -1722,6 +1722,10 @@ void LLAgentWearables::createWearable(LLWearableType::EType type, bool wear, con
 	{
 		cb = new LLBoostFuncInventoryCallback(wear_cb);
 	}
+    if (created_cb != NULL)
+    {
+        cb->addOnFireFunc(created_cb);
+    }
 
 	LLUUID folder_id;
 

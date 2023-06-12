@@ -717,19 +717,15 @@ void LLFolderView::draw()
 		}
 	}
 
-	if (mRenameItem
+    if (mRenameItem
         && mRenamer
-        && mRenamer->getVisible())
-	{
-        LLRect renamer_rect;
-        localRectToOtherView(mRenamer->getRect(), &renamer_rect, mScrollContainer);
-        if (!mScrollContainer->getRect().overlaps(renamer_rect))
-        {
-            // renamer is not connected to the item we are renaming in any form so manage it manually
-            // TODO: consider stopping on any scroll action instead of when out of visible area
-            finishRenamingItem();
-        }
-	}
+        && mRenamer->getVisible()
+        && !getVisibleRect().overlaps(mRenamer->getRect()))
+    {
+        // renamer is not connected to the item we are renaming in any form so manage it manually
+        // TODO: consider stopping on any scroll action instead of when out of visible area
+        finishRenamingItem();
+    }
 
 	// skip over LLFolderViewFolder::draw since we don't want the folder icon, label, 
 	// and arrow for the root folder
@@ -1571,6 +1567,16 @@ BOOL LLFolderView::handleRightMouseDown( S32 x, S32 y, MASK mask )
 			mCallbackRegistrar->popScope();
 		}
 	}
+
+    bool item_clicked = false;
+    for (selected_items_t::iterator item_it = mSelectedItems.begin(); item_it != mSelectedItems.end(); ++item_it)
+    {
+        item_clicked |= (bool)(*item_it)->getRect().pointInRect(x, y);
+    }
+    if(!item_clicked && mSingleFolderMode)
+    {
+        clearSelection();
+    }
 	bool hide_folder_menu = mSuppressFolderMenu && isFolderSelected();
 	if (menu && (mSingleFolderMode || (handled
 		&& ( count > 0 && (hasVisibleChildren()) ))) && // show menu only if selected items are visible
@@ -1946,13 +1952,28 @@ void LLFolderView::update()
         }
 	}
 
-	if (mSignalSelectCallback)
-	{
-		//RN: we use keyboard focus as a proxy for user-explicit actions
-		BOOL take_keyboard_focus = (mSignalSelectCallback == SIGNAL_KEYBOARD_FOCUS);
-		mSelectSignal(mSelectedItems, take_keyboard_focus);
-	}
-	mSignalSelectCallback = FALSE;
+    if (mSelectedItems.size())
+    {
+        LLFolderViewItem* item = mSelectedItems.back();
+        // If the goal is to show renamer, don't callback untill
+        // item is visible or is no longer being scrolled to.
+        // Otherwise renamer will be instantly closed
+        // Todo: consider moving renamer out of selection callback
+        if (!mNeedsAutoRename || !mNeedsScroll || item->getVisible())
+        {
+            if (mSignalSelectCallback)
+            {
+                //RN: we use keyboard focus as a proxy for user-explicit actions
+                BOOL take_keyboard_focus = (mSignalSelectCallback == SIGNAL_KEYBOARD_FOCUS);
+                mSelectSignal(mSelectedItems, take_keyboard_focus);
+            }
+            mSignalSelectCallback = FALSE;
+        }
+    }
+    else
+    {
+        mSignalSelectCallback = FALSE;
+    }
 }
 
 void LLFolderView::dumpSelectionInformation()

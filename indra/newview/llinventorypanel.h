@@ -224,7 +224,7 @@ public:
 	LLUUID getRootFolderID();
 	LLScrollContainer* getScrollableContainer() { return mScroller; }
     bool getAllowDropOnRoot() { return mParams.allow_drop_on_root; }
-    bool areViewsInitialized() { return mViewsInitialized == VIEWS_INITIALIZED && !mFolderRoot.get()->needsArrange(); }
+    bool areViewsInitialized() { return mViewsInitialized == VIEWS_INITIALIZED && mFolderRoot.get() && !mFolderRoot.get()->needsArrange(); }
 	
 	void onSelectionChange(const std::deque<LLFolderViewItem*> &items, BOOL user_action);
 	
@@ -284,6 +284,7 @@ public:
     static void callbackPurgeSelectedItems(const LLSD& notification, const LLSD& response, const std::vector<LLUUID> inventory_selected);
 
     void changeFolderRoot(const LLUUID& new_id) {};
+    void initFolderRoot();
 
 protected:
 	void openStartFolderOrMyInventory(); // open the first level of inventory
@@ -322,6 +323,7 @@ protected:
 	const LLInventoryFolderViewModelBuilder* mInvFVBridgeBuilder;
 
     bool mBuildChildrenViews;
+    bool mRootInited;
 
 
 	//--------------------------------------------------------------------
@@ -383,6 +385,8 @@ protected:
     virtual LLFolderView * createFolderRoot(LLUUID root_id );
 	virtual LLFolderViewFolder*	createFolderViewFolder(LLInvFVBridge * bridge, bool allow_drop);
 	virtual LLFolderViewItem*	createFolderViewItem(LLInvFVBridge * bridge);
+
+    boost::function<void(const std::deque<LLFolderViewItem*>& items, BOOL user_action)> mSelectionCallback;
 private:
     // buildViewsTree does not include some checks and is meant
     // for recursive use, use buildNewViews() for first call
@@ -418,6 +422,8 @@ public:
     void initFromParams(const Params& p);
     bool isSelectionRemovable() { return false; }
 
+    void initFolderRoot(const LLUUID& start_folder_id = LLUUID::null);
+
     void openInCurrentWindow(const LLSD& userdata);
     void changeFolderRoot(const LLUUID& new_id);
     void onForwardFolder();
@@ -438,9 +444,6 @@ public:
     std::list<LLUUID> getNavBackwardList() { return mBackwardFolders; }
     std::list<LLUUID> getNavForwardList() { return mForwardFolders; }
 
-    void setSelectCallback(const boost::function<void (const std::deque<LLFolderViewItem*>& items, BOOL user_action)>& cb);
-    void setScroller(LLScrollContainer* scroller);
-
     typedef boost::function<void()> root_changed_callback_t;
     boost::signals2::connection setRootChangedCallback(root_changed_callback_t cb);
 
@@ -449,13 +452,11 @@ protected:
     ~LLInventorySingleFolderPanel();
     void updateSingleFolderRoot();
 
-    boost::function<void(const std::deque<LLFolderViewItem*>& items, BOOL user_action)> mSelectionCallback;
     friend class LLUICtrlFactory;
     
     LLUUID mFolderID;
     std::list<LLUUID> mBackwardFolders;
     std::list<LLUUID> mForwardFolders;
-    LLScrollContainer* mExternalScroller;
 
     boost::signals2::signal<void()> mRootChangedSignal;
 };

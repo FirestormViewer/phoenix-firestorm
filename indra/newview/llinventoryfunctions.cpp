@@ -108,6 +108,7 @@
 BOOL LLInventoryState::sWearNewClothing = FALSE;
 LLUUID LLInventoryState::sWearNewClothingTransactionID;
 std::list<LLUUID> LLInventoryAction::sMarketplaceFolders;
+//bool LLInventoryAction::sDeleteConfirmationDisplayed = false; // <FS:Ansariel> Undo delete item confirmation per-session annoyance
 
 // Helper function : callback to update a folder after inventory action happened in the background
 void update_folder_cb(const LLUUID& dest_folder)
@@ -418,14 +419,32 @@ void rename_category(LLInventoryModel* model, const LLUUID& cat_id, const std::s
 }
 
 void copy_inventory_category(LLInventoryModel* model,
-							 LLViewerInventoryCategory* cat,
-							 const LLUUID& parent_id,
-							 const LLUUID& root_copy_id,
-							 bool move_no_copy_items )
+                             LLViewerInventoryCategory* cat,
+                             const LLUUID& parent_id,
+                             const LLUUID& root_copy_id,
+                             bool move_no_copy_items)
+{
+    // Create the initial folder
+    inventory_func_type func = [model, cat, root_copy_id, move_no_copy_items](const LLUUID& new_id)
+    {
+        copy_inventory_category_content(new_id, model, cat, root_copy_id, move_no_copy_items);
+    };
+    gInventory.createNewCategory(parent_id, LLFolderType::FT_NONE, cat->getName(), func, cat->getThumbnailUUID());
+}
+
+void copy_inventory_category(LLInventoryModel* model,
+                             LLViewerInventoryCategory* cat,
+                             const LLUUID& parent_id,
+                             const LLUUID& root_copy_id,
+                             bool move_no_copy_items,
+                             inventory_func_type callback)
 {
 	// Create the initial folder
-	// D567 needs to handle new fields
-	inventory_func_type func = boost::bind(&copy_inventory_category_content, _1, model, cat, root_copy_id, move_no_copy_items);
+    inventory_func_type func = [model, cat, root_copy_id, move_no_copy_items, callback](const LLUUID &new_id)
+    {
+        copy_inventory_category_content(new_id, model, cat, root_copy_id, move_no_copy_items);
+        callback(new_id);
+    };
 	gInventory.createNewCategory(parent_id, LLFolderType::FT_NONE, cat->getName(), func, cat->getThumbnailUUID());
 }
 
@@ -3123,8 +3142,6 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
     
 	if ("delete" == action)
 	{
-		// <FS:Ansariel> Undo delete item confirmation per-session annoyance
-		//static bool sDisplayedAtSession = false;
 		const LLUUID &marketplacelistings_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
 		bool marketplacelistings_item = false;
 		LLAllDescendentsPassedFilter f;
@@ -3149,17 +3166,16 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 		else
 		{
 			// <FS:Ansariel> Undo delete item confirmation per-session annoyance
-			//if (!sDisplayedAtSession) // ask for the confirmation at least once per session
+			//if (!sDeleteConfirmationDisplayed) // ask for the confirmation at least once per session
 			//{
 			//	LLNotifications::instance().setIgnored("DeleteItems", false);
-			//	sDisplayedAtSession = true;
+			//	sDeleteConfirmationDisplayed = true;
 			//}
 			// </FS:Ansariel>
 
 			LLSD args;
 			// <FS:Ansariel> FIRE-31816: Include selection count when deleting more than one object from inventory
 			//args["QUESTION"] = LLTrans::getString(root->getSelectedCount() > 1 ? "DeleteItems" :  "DeleteItem");
-			//args["QUESTION"] = LLTrans::getString(root->getSelectedCount() > 1 ? "DeleteItems" : "DeleteItem", args);
 			LLLocale locale("");
 			std::string count_str{};
 			S32 selection_count = root->getSelectedCount();

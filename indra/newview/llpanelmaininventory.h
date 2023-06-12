@@ -37,20 +37,19 @@
 #include "llfolderview.h"
 
 class LLComboBox;
+class LLFolderViewItem;
 class LLInventoryPanel;
 class LLInventoryGallery;
+class LLSaveFolderState;
 class LLFilterEditor;
-class LLFloater;
+class LLTabContainer;
 class LLFloaterInventoryFinder;
-class LLFloaterSidePanelContainer;
-class LLFolderViewItem;
 class LLMenuButton;
 class LLMenuGL;
-class LLSaveFolderState;
-class LLScrollContainer;
 class LLSidepanelInventory;
-class LLTabContainer;
 class LLToggleableMenu;
+class LLFloater;
+class LLFloaterSidePanelContainer;
 class LLComboBox;	// <FS:Zi> Filter dropdown
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -86,9 +85,8 @@ public:
 									   EAcceptance* accept,
 									   std::string& tooltip_msg);
 	/*virtual*/ void changed(U32);
-    /*virtual*/ void reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
 	/*virtual*/ void draw();
-	/*virtual*/ void onVisibilityChange ( BOOL new_visibility );
+	/*virtual*/ void 	onVisibilityChange ( BOOL new_visibility );
 	// <FS:Ansariel> CTRL-F focusses local search editor
 	/*virtual*/ bool hasAccelerators() const { return true; }
 
@@ -124,6 +122,7 @@ public:
 
     void onViewModeClick();
     void toggleViewMode();
+    void initSingleFolderRoot(const LLUUID& start_folder_id = LLUUID::null);
     void onUpFolderClicked();
     void onBackFolderClicked();
     void onForwardFolderClicked();
@@ -165,6 +164,8 @@ protected:
 
 	static BOOL filtersVisible(void* user_data);
 	void onClearSearch();
+	static void onFoldersByName(void *user_data);
+	static BOOL checkFoldersByName(void *user_data);
 	
 	static BOOL incrementalFind(LLFolderViewItem* first_item, const char *find_text, BOOL backward);
 	void onFilterSelected();
@@ -186,6 +187,7 @@ protected:
 	bool isSaveTextureEnabled(const LLSD& userdata);
 	void updateItemcountText();
 
+    void updatePanelVisibility();
     void updateCombinationVisibility();
 
 	// <FS:Zi> Inventory Collapse and Expand Buttons
@@ -218,15 +220,22 @@ private:
 	std::string					mCategoryCountString;
 	LLComboBox*					mSearchTypeCombo;
 
+    LLButton* mBackBtn;
+    LLButton* mForwardBtn;
+    LLButton* mUpBtn;
+    LLButton* mViewModeBtn;
+    LLLayoutPanel* mNavigationBtnsPanel;
+
+    LLPanel* mDefaultViewPanel;
+    LLPanel* mCombinationViewPanel;
+
     bool mSingleFolderMode;
     EViewModeType mViewMode;
-    LLInventorySingleFolderPanel* mSingleFolderPanelInventory;
-    LLInventoryGallery* mInventoryGalleryPanel;
 
-    LLScrollContainer* mCombinationScrollPanel;
     LLInventorySingleFolderPanel* mCombinationInventoryPanel;
     LLInventoryGallery* mCombinationGalleryPanel;
-    LLView* mCombinationScroller;
+    LLPanel* mCombinationGalleryLayoutPanel;
+    LLPanel* mCombinationListLayoutPanel;
 
 	// <FS:Zi> Filter dropdown
 	LLComboBox*					mFilterComboBox;
@@ -303,9 +312,8 @@ private:
 	bool						mNeedUploadCost;
 
     bool                        mForceShowInvLayout;
-    bool                        mCombinationShapeDirty;
-    bool                        mDelayedCombGalleryScroll;
-    bool                        mDelayedCombInvPanelScroll;
+    bool                        mReshapeInvLayout;
+    LLUUID                      mCombInvUUIDNeedsRename;
 	// List Commands                                                              //
 	////////////////////////////////////////////////////////////////////////////////
 };
