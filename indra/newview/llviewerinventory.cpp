@@ -2204,7 +2204,7 @@ void menu_create_inventory_item(LLInventoryPanel* panel, LLUUID dest_id, const L
         if (panel)
         {
             LLHandle<LLPanel> handle = panel->getHandle();
-            std::function<void(const LLUUID&)> callback_cat_created = [handle](const LLUUID& new_category_id)
+            callback_cat_created = [handle](const LLUUID& new_category_id)
             {
                 gInventory.notifyObservers();
                 LLInventoryPanel* panel = static_cast<LLInventoryPanel*>(handle.get());
@@ -2212,6 +2212,7 @@ void menu_create_inventory_item(LLInventoryPanel* panel, LLUUID dest_id, const L
                 {
                     panel->setSelectionByID(new_category_id, TRUE);
                 }
+                LL_DEBUGS(LOG_INV) << "Done creating inventory: " << new_category_id << LL_ENDL;
             };
         }
         else if (created_cb != NULL)

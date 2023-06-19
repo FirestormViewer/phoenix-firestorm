@@ -3,8 +3,6 @@
 	<menu_item_call label="Teilen" name="Share"/>
 	<menu_item_call label="Papierkorb ausleeren" name="Empty Trash"/>
 	<menu_item_call label="Fundstücke ausleeren" name="Empty Lost And Found"/>
-	<menu_item_call label="Neuer Ordner" name="New Folder"/>
-	<menu_item_call label="Neues Outfit" name="New Outfit"/>
 	<menu_item_call label="Teleportieren" name="Landmark Open"/>
 	<menu_item_call label="Aktuelles Outfit ersetzen" name="Replace Outfit"/>
 	<menu_item_call label="Zum aktuellen Outfit hinzufügen" name="Add To Outfit"/>
@@ -37,7 +35,6 @@
 	<menu_item_call label="Instant Message senden" name="Send Instant Message"/>
 	<menu_item_call label="Teleport anbieten..." name="Offer Teleport..."/>
 	<menu_item_call label="Teleport anfordern..." name="Request Teleport..."/>
-	<menu_item_call label="Konferenz-Chat starten" name="Conference Chat"/>
 	<menu_item_call label="Aktivieren" name="Activate"/>
 	<menu_item_call label="Deaktivieren" name="Deactivate"/>
 	<menu_item_call label="Speichern unter" name="Save As"/>

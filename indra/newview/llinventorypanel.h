@@ -285,6 +285,7 @@ public:
 
     void changeFolderRoot(const LLUUID& new_id) {};
     void initFolderRoot();
+    void initializeViewBuilding();
 
 protected:
 	void openStartFolderOrMyInventory(); // open the first level of inventory
@@ -322,7 +323,7 @@ protected:
 	 */
 	const LLInventoryFolderViewModelBuilder* mInvFVBridgeBuilder;
 
-    bool mBuildChildrenViews;
+    bool mBuildChildrenViews; // build root and children
     bool mRootInited;
 
 
@@ -424,7 +425,6 @@ public:
 
     void initFolderRoot(const LLUUID& start_folder_id = LLUUID::null);
 
-    void openInCurrentWindow(const LLSD& userdata);
     void changeFolderRoot(const LLUUID& new_id);
     void onForwardFolder();
     void onBackwardFolder();
@@ -432,6 +432,7 @@ public:
     LLUUID getSingleFolderRoot() { return mFolderID; }
 
     void doCreate(const LLSD& userdata);
+    void doToSelected(const LLSD& userdata);
     void doShare();
 
     bool isBackwardAvailable();

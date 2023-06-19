@@ -170,7 +170,8 @@ LLInventoryPanel::LLInventoryPanel(const LLInventoryPanel::Params& p) :
 	mInventoryViewModel(p.name),
 	mGroupedItemBridge(new LLFolderViewGroupedItemBridge),
 	mFocusSelection(false),
-    mBuildChildrenViews(true)
+    mBuildChildrenViews(true),
+    mRootInited(false)
 {
 	mInvFVBridgeBuilder = &INVENTORY_BRIDGE_BUILDER;
 
@@ -311,6 +312,7 @@ void LLInventoryPanel::initFolderRoot()
         // build the views starting with that folder.
         LLFolderView* folder_view = createFolderRoot(root_id);
         mFolderRoot = folder_view->getHandle();
+        mRootInited = true;
     
         addItemID(root_id, mFolderRoot.get());
     }
@@ -347,22 +349,9 @@ void LLInventoryPanel::initFolderRoot()
     mCompletionObserver = new LLInvPanelComplObserver(boost::bind(&LLInventoryPanel::onItemsCompletion, this));
     mInventory->addObserver(mCompletionObserver);
 
-    if (mBuildViewsOnInit && mViewsInitialized == VIEWS_UNINITIALIZED)
+    if (mBuildViewsOnInit)
     {
-        // Build view of inventory if we need default full hierarchy and inventory is ready, otherwise do in onIdle.
-        // Initializing views takes a while so always do it onIdle if viewer already loaded.
-        if (mInventory->isInventoryUsable()
-            && LLStartUp::getStartupState() <= STATE_WEARABLES_WAIT)
-        {
-            // Usually this happens on login, so we have less time constraits, but too long and we can cause a disconnect
-            const F64 max_time = 20.f;
-            initializeViews(max_time);
-        }
-        else
-        {
-            mViewsInitialized = VIEWS_INITIALIZING;
-            gIdleCallbacks.addFunction(onIdle, (void*)this);
-        }
+        initializeViewBuilding();
     }
 
     if (mSortOrderSetting != INHERIT_SORT_ORDER)
@@ -407,13 +396,38 @@ void LLInventoryPanel::initFolderRoot()
     mClipboardState = LLClipboard::instance().getGeneration();
 }
 
+void LLInventoryPanel::initializeViewBuilding()
+{
+    if (mViewsInitialized == VIEWS_UNINITIALIZED)
+    {
+        LL_DEBUGS("Inventory") << "Setting views for " << getName() << " to initialize" << LL_ENDL;
+        // Build view of inventory if we need default full hierarchy and inventory is ready, otherwise do in onIdle.
+        // Initializing views takes a while so always do it onIdle if viewer already loaded.
+        if (mInventory->isInventoryUsable()
+            && LLStartUp::getStartupState() <= STATE_WEARABLES_WAIT)
+        {
+            // Usually this happens on login, so we have less time constraits, but too long and we can cause a disconnect
+            const F64 max_time = 20.f;
+            initializeViews(max_time);
+        }
+        else
+        {
+            mViewsInitialized = VIEWS_INITIALIZING;
+            gIdleCallbacks.addFunction(onIdle, (void*)this);
+        }
+    }
+}
+
 /*virtual*/
 void LLInventoryPanel::onVisibilityChange(BOOL new_visibility)
 {
     if (new_visibility && mViewsInitialized == VIEWS_UNINITIALIZED)
     {
-        mViewsInitialized = VIEWS_INITIALIZING;
-        gIdleCallbacks.addFunction(onIdle, (void*)this);
+        // first call can be from tab initialization
+        if (gFloaterView->getParentFloater(this) != NULL)
+        {
+            initializeViewBuilding();
+        }
     }
     LLPanel::onVisibilityChange(new_visibility);
 }
@@ -965,6 +979,7 @@ void LLInventoryPanel::idle(void* user_data)
 void LLInventoryPanel::initializeViews(F64 max_time)
 {
 	if (!gInventory.isInventoryUsable()) return;
+    if (!mRootInited) return;
 
     mViewsInitialized = VIEWS_BUILDING;
 
@@ -1153,7 +1168,7 @@ LLFolderViewItem* LLInventoryPanel::buildViewsTree(const LLUUID& id,
 			if (objectp->getType() >= LLAssetType::AT_COUNT)
   			{
 				// Example: Happens when we add assets of new, not yet supported type to library
-				LL_DEBUGS() << "LLInventoryPanel::buildViewsTree called with unknown objectp->mType : "
+				LL_DEBUGS("Inventory") << "LLInventoryPanel::buildViewsTree called with unknown objectp->mType : "
 				<< ((S32) objectp->getType()) << " name " << objectp->getName() << " UUID " << objectp->getUUID()
 				<< LL_ENDL;
 
@@ -1252,7 +1267,7 @@ LLFolderViewItem* LLInventoryPanel::buildViewsTree(const LLUUID& id,
                 else
                 {
                     create_children = true;
-                    folder_view_item->setChildrenInited(true);
+                    folder_view_item->setChildrenInited(mBuildChildrenViews);
                 }
                 break;
             }
@@ -1293,6 +1308,11 @@ LLFolderViewItem* LLInventoryPanel::buildViewsTree(const LLUUID& id,
 		LLViewerInventoryItem::item_array_t* items;
 		mInventory->lockDirectDescendentArrays(id, categories, items);
 
+        // Make sure panel won't lock in a loop over existing items if
+        // folder is enormous and at least some work gets done
+        const S32 MIN_ITEMS_PER_CALL = 500;
+        const S32 starting_item_count = mItemMap.size();
+
         LLFolderViewFolder *parentp = dynamic_cast<LLFolderViewFolder*>(folder_view_item);
 
 		if(categories)
@@ -1318,6 +1338,22 @@ LLFolderViewItem* LLInventoryPanel::buildViewsTree(const LLUUID& id,
                         buildViewsTree(cat->getUUID(), id, cat, NULL, parentp, (mode == BUILD_ONE_FOLDER ? BUILD_NO_CHILDREN : mode), depth);
                     }
                 }
+
+                if (!mBuildChildrenViews
+                    && mode == BUILD_TIMELIMIT
+                    && MIN_ITEMS_PER_CALL + starting_item_count < mItemMap.size())
+                {
+                    // Single folder view, check if we still have time
+                    // 
+                    // Todo: make sure this causes no dupplciates, breaks nothing,
+                    // especially filters and arrange
+                    F64 curent_time = LLTimer::getTotalSeconds();
+                    if (mBuildViewsEndTime < curent_time)
+                    {
+                        mBuildViewsQueue.push_back(id);
+                        break;
+                    }
+                }
 			}
 		}
 		
@@ -1337,8 +1373,30 @@ LLFolderViewItem* LLInventoryPanel::buildViewsTree(const LLUUID& id,
                     LLFolderViewItem* view_itemp = getItemByID(item->getUUID());
                     buildViewsTree(item->getUUID(), id, item, view_itemp, parentp, mode, depth);
                 }
+
+                if (!mBuildChildrenViews
+                    && mode == BUILD_TIMELIMIT
+                    && MIN_ITEMS_PER_CALL + starting_item_count < mItemMap.size())
+                {
+                    // Single folder view, check if we still have time
+                    // 
+                    // Todo: make sure this causes no dupplciates, breaks nothing,
+                    // especially filters and arrange
+                    F64 curent_time = LLTimer::getTotalSeconds();
+                    if (mBuildViewsEndTime < curent_time)
+                    {
+                        mBuildViewsQueue.push_back(id);
+                        break;
+                    }
+                }
 			}
 		}
+
+        if (!mBuildChildrenViews)
+        {
+            // flat list is done initializing folder
+            folder_view_item->setChildrenInited(true);
+        }
 		mInventory->unlockDirectDescendentArrays(id);
 	}
 	
@@ -1597,6 +1655,10 @@ void LLInventoryPanel::onSelectionChange(const std::deque<LLFolderViewItem*>& it
 		{
 			fv->startRenamingSelectedItem();
 		}
+        else
+        {
+            LL_DEBUGS("Inventory") << "Failed to start renemr, no items selected" << LL_ENDL;
+        }
 	}
 
 	std::set<LLFolderViewItem*> selected_items = mFolderRoot.get()->getSelectionList();
@@ -2065,6 +2127,7 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
         LLPanelMainInventory* main_panel = inventory_panel->getMainInventoryPanel();
         if(main_panel->isSingleFolderMode() && main_panel->isGalleryViewMode())
         {
+            LL_DEBUGS("Inventory") << "Opening gallery panel for item" << obj_id << LL_ENDL;
             main_panel->setGallerySelection(obj_id);
             return;
         }
@@ -2078,6 +2141,7 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
     //    const LLInventoryObject *obj = gInventory.getObject(obj_id);
     //    if (obj)
     //    {
+    //        LL_DEBUGS("Inventory") << "Opening main inventory panel for item" << obj_id << LL_ENDL;
     //        main_inventory->setSingleFolderViewRoot(obj->getParentUUID(), false);
     //        main_inventory->setGallerySelection(obj_id);
     //        return;
@@ -2108,7 +2172,7 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 
 	if (active_panel)
 	{
-		LL_DEBUGS("Messaging") << "Highlighting" << obj_id  << LL_ENDL;
+		LL_DEBUGS("Messaging", "Inventory") << "Highlighting" << obj_id  << LL_ENDL;
 
 		if (reset_filter)
 		{
@@ -2401,12 +2465,11 @@ LLInventorySingleFolderPanel::LLInventorySingleFolderPanel(const Params& params)
     : LLInventoryPanel(params)
 {
     mBuildChildrenViews = false;
-    mRootInited = false;
     getFilter().setSingleFolderMode(true);
     getFilter().setEmptyLookupMessage("InventorySingleFolderNoMatches");
     getFilter().setDefaultEmptyLookupMessage("InventorySingleFolderEmpty");
 
-    mCommitCallbackRegistrar.add("Inventory.OpenSelectedFolder", boost::bind(&LLInventorySingleFolderPanel::openInCurrentWindow, this, _2));
+    mCommitCallbackRegistrar.replace("Inventory.DoToSelected", boost::bind(&LLInventorySingleFolderPanel::doToSelected, this, _2));
     mCommitCallbackRegistrar.replace("Inventory.DoCreate", boost::bind(&LLInventorySingleFolderPanel::doCreate, this, _2));
     mCommitCallbackRegistrar.replace("Inventory.Share", boost::bind(&LLInventorySingleFolderPanel::doShare, this));
 }
@@ -2438,11 +2501,6 @@ void LLInventorySingleFolderPanel::initFolderRoot(const LLUUID& start_folder_id)
 
     LLInventoryPanel::initFolderRoot();
     mFolderRoot.get()->setSingleFolderMode(true);
-}
-
-void LLInventorySingleFolderPanel::openInCurrentWindow(const LLSD& userdata)
-{
-    changeFolderRoot(LLFolderBridge::sSelf.get()->getUUID());
 }
 
 void LLInventorySingleFolderPanel::changeFolderRoot(const LLUUID& new_id)
@@ -2573,6 +2631,16 @@ void LLInventorySingleFolderPanel::doCreate(const LLSD& userdata)
     }
     reset_inventory_filter();
     menu_create_inventory_item(this, dest_id, userdata);
+}
+
+void LLInventorySingleFolderPanel::doToSelected(const LLSD& userdata)
+{
+    if (("open_in_current_window" == userdata.asString()))
+    {
+        changeFolderRoot(LLFolderBridge::sSelf.get()->getUUID());
+        return;
+    }
+    LLInventoryPanel::doToSelected(userdata);
 }
 
 void LLInventorySingleFolderPanel::doShare()

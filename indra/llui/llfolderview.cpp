@@ -724,6 +724,7 @@ void LLFolderView::draw()
     {
         // renamer is not connected to the item we are renaming in any form so manage it manually
         // TODO: consider stopping on any scroll action instead of when out of visible area
+        LL_DEBUGS("Inventory") << "Renamer out of bounds, hiding" << LL_ENDL;
         finishRenamingItem();
     }
 
@@ -1085,6 +1086,8 @@ void LLFolderView::paste()
 // public rename functionality - can only start the process
 void LLFolderView::startRenamingSelectedItem( void )
 {
+    LL_DEBUGS("Inventory") << "Starting inventory renamer" << LL_ENDL;
+
 	// make sure selection is visible
 	scrollToShowSelection();
 
@@ -1568,10 +1571,10 @@ BOOL LLFolderView::handleRightMouseDown( S32 x, S32 y, MASK mask )
 		}
 	}
 
-    bool item_clicked = false;
+    BOOL item_clicked = FALSE;
     for (selected_items_t::iterator item_it = mSelectedItems.begin(); item_it != mSelectedItems.end(); ++item_it)
     {
-        item_clicked |= (bool)(*item_it)->getRect().pointInRect(x, y);
+        item_clicked |= (*item_it)->getRect().pointInRect(x, y);
     }
     if(!item_clicked && mSingleFolderMode)
     {

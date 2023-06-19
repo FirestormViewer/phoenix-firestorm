@@ -252,6 +252,17 @@ BOOL LLSidepanelInventory::postBuild()
 	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
 	//gSavedSettings.getControl("InventoryDisplayInbox")->getCommitSignal()->connect(boost::bind(&handleInventoryDisplayInboxChanged));
 
+    LLFloater *floater = dynamic_cast<LLFloater*>(getParent());
+    if (floater && floater->getKey().isUndefined() && !sLoginCompleted)
+    {
+        // Prefill inventory for primary inventory floater
+        // Other floaters should fill on visibility change
+        // 
+        // see get_instance_num();
+        // Primary inventory floater will have undefined key
+        initInventoryViews();
+    }
+
 	return TRUE;
 }
 
@@ -487,6 +498,11 @@ void LLSidepanelInventory::onSelectionChange(const std::deque<LLFolderViewItem*>
 void LLSidepanelInventory::showInventoryPanel()
 {
 	mInventoryPanel->setVisible(TRUE);
+}
+
+void LLSidepanelInventory::initInventoryViews()
+{
+    mPanelMainInventory->initInventoryViews();
 }
 
 bool LLSidepanelInventory::canShare()

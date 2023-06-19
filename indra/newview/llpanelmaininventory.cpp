@@ -301,7 +301,7 @@ BOOL LLPanelMainInventory::postBuild()
 	}
 	// Now load the stored settings from disk, if available.
 	std::string filterSaveName(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, FILTERS_FILENAME));
-	LL_INFOS() << "LLPanelMainInventory::init: reading from " << filterSaveName << LL_ENDL;
+	LL_INFOS("Inventory") << "LLPanelMainInventory::init: reading from " << filterSaveName << LL_ENDL;
 	llifstream file(filterSaveName.c_str());
 	LLSD savedFilterState;
 	if (file.is_open())
@@ -576,7 +576,10 @@ LLFloaterSidePanelContainer* LLPanelMainInventory::newWindow()
 
 	if (!gAgentCamera.cameraMouselook())
 	{
-		return LLFloaterReg::showTypedInstance<LLFloaterSidePanelContainer>("inventory", LLSD(instance_num));
+        LLFloaterSidePanelContainer* floater = LLFloaterReg::showTypedInstance<LLFloaterSidePanelContainer>("inventory", LLSD(instance_num));
+        LLSidepanelInventory* sidepanel_inventory = floater->findChild<LLSidepanelInventory>("main_panel");
+        sidepanel_inventory->initInventoryViews();
+		return floater;
 	}
     return NULL;
 }
@@ -648,8 +651,6 @@ void LLPanelMainInventory::doCreate(const LLSD& userdata)
             {
                 if(isCombinationViewMode())
                 {
-                    //show layout and inventory panel before adding the item
-                    //to avoid wrong position of the 'renamer'
                     mForceShowInvLayout = true;
                 }
 
@@ -662,6 +663,13 @@ void LLPanelMainInventory::doCreate(const LLSD& userdata)
                     {
                         // might need to refresh visibility, delay rename
                         panel->mCombInvUUIDNeedsRename = new_id;
+
+                        if (panel->isCombinationViewMode())
+                        {
+                            panel->mForceShowInvLayout = true;
+                        }
+
+                        LL_DEBUGS("Inventory") << "Done creating inventory: " << new_id << LL_ENDL;
                     }
                 };
                 menu_create_inventory_item(NULL, getCurrentSFVRoot(), userdata, LLUUID::null, callback_created);
@@ -679,6 +687,7 @@ void LLPanelMainInventory::doCreate(const LLSD& userdata)
                     if (panel)
                     {
                         panel->setGallerySelection(new_id);
+                        LL_DEBUGS("Inventory") << "Done creating inventory: " << new_id << LL_ENDL;
                     }
                 }
             };
@@ -1982,9 +1991,10 @@ void LLPanelMainInventory::onAddButtonClick()
 
 void LLPanelMainInventory::setActivePanel()
 {
+    // Todo: should cover gallery mode in some way
     if(mSingleFolderMode && isListViewMode())
     {
-        mActivePanel = getChild<LLInventoryPanel>("single_folder_inv");
+        mActivePanel = getChild<LLInventoryPanel>("comb_single_folder_inv");
     }
     else if(mSingleFolderMode && isCombinationViewMode())
     {
@@ -2000,6 +2010,16 @@ void LLPanelMainInventory::setActivePanel()
 void LLPanelMainInventory::initSingleFolderRoot(const LLUUID& start_folder_id)
 {
     mCombinationInventoryPanel->initFolderRoot(start_folder_id);
+}
+
+void LLPanelMainInventory::initInventoryViews()
+{
+    LLInventoryPanel* all_item = getChild<LLInventoryPanel>(ALL_ITEMS);
+    all_item->initializeViewBuilding();
+    LLInventoryPanel* recent_item = getChild<LLInventoryPanel>(RECENT_ITEMS);
+    recent_item->initializeViewBuilding();
+    LLInventoryPanel* worn_item = getChild<LLInventoryPanel>(WORN_ITEMS);
+    worn_item->initializeViewBuilding();
 }
 
 void LLPanelMainInventory::toggleViewMode()
@@ -3036,6 +3056,7 @@ void LLPanelMainInventory::updatePanelVisibility()
 
             // visibility will be controled by updateCombinationVisibility()
             mCombinationGalleryLayoutPanel->setVisible(true);
+            mCombinationGalleryPanel->setVisible(true);
             mCombinationListLayoutPanel->setVisible(true);
         }
         else
@@ -3049,12 +3070,14 @@ void LLPanelMainInventory::updatePanelVisibility()
             comb_gallery_filter.markDefault();
 
             mCombinationGalleryLayoutPanel->setVisible(mSingleFolderMode && isGalleryViewMode());
+            mCombinationGalleryPanel->setVisible(mSingleFolderMode && isGalleryViewMode()); // to prevent or process updates
             mCombinationListLayoutPanel->setVisible(mSingleFolderMode && isListViewMode());
         }
     }
     else
     {
         mCombinationGalleryLayoutPanel->setVisible(false);
+        mCombinationGalleryPanel->setVisible(false); // to prevent updates
         mCombinationListLayoutPanel->setVisible(false);
     }
 }
@@ -3081,7 +3104,7 @@ void LLPanelMainInventory::updateCombinationVisibility()
 
         if (mReshapeInvLayout
             && show_inv_pane
-            && mCombinationGalleryPanel->hasVisibleItems()
+            && (mCombinationGalleryPanel->hasVisibleItems() || mCombinationGalleryPanel->areViewsInitialized())
             && mCombinationInventoryPanel->areViewsInitialized())
         {
             mReshapeInvLayout = false;
@@ -3127,14 +3150,17 @@ void LLPanelMainInventory::updateCombinationVisibility()
                 mCombinationListLayoutPanel->setShape(list_latout, true /*tell stack to account for new shape*/);
             }
         }
+    }
 
-        if (mCombInvUUIDNeedsRename.notNull() && mCombinationInventoryPanel->areViewsInitialized())
-        {
-            mCombinationInventoryPanel->setSelectionByID(mCombInvUUIDNeedsRename, TRUE);
-            mCombinationInventoryPanel->getRootFolder()->scrollToShowSelection();
-            mCombinationInventoryPanel->getRootFolder()->setNeedsAutoRename(TRUE);
-            mCombInvUUIDNeedsRename.setNull();
-        }
+    if (mSingleFolderMode
+        && !isGalleryViewMode()
+        && mCombInvUUIDNeedsRename.notNull()
+        && mCombinationInventoryPanel->areViewsInitialized())
+    {
+        mCombinationInventoryPanel->setSelectionByID(mCombInvUUIDNeedsRename, TRUE);
+        mCombinationInventoryPanel->getRootFolder()->scrollToShowSelection();
+        mCombinationInventoryPanel->getRootFolder()->setNeedsAutoRename(TRUE);
+        mCombInvUUIDNeedsRename.setNull();
     }
 }
 

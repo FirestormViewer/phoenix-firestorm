@@ -76,6 +76,7 @@ public:
     BOOL postBuild() override;
     void initGallery();
     void draw() override;
+    void onVisibilityChange(BOOL new_visibility) override;
     BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDropType cargo_type,
                            void* cargo_data, EAcceptance* accept, std::string& tooltip_msg) override;
     BOOL handleRightMouseDown(S32 x, S32 y, MASK mask) override;
@@ -91,11 +92,10 @@ public:
     bool checkAgainstFilterType(const LLUUID& object_id);
 
     void getCurrentCategories(uuid_vec_t& vcur);
-    void updateAddedItem(LLUUID item_id);
+    bool updateAddedItem(LLUUID item_id); // returns true if added item is visible
     void updateRemovedItem(LLUUID item_id);
     void updateChangedItemName(LLUUID item_id, std::string name);
     void updateItemThumbnail(LLUUID item_id);
-    void onThumbnailAdded(LLUUID item_id);
     void updateWornItem(LLUUID item_id, bool is_worn);
 
     void updateMessageVisibility();
@@ -103,6 +103,7 @@ public:
     void setRootFolder(const LLUUID cat_id);
     void updateRootFolder();
     LLUUID getRootFolder() { return mFolderID; }
+    bool isRootDirty() { return mRootDirty; }
     boost::signals2::connection setRootChangedCallback(callback_t cb);
     void onForwardFolder();
     void onBackwardFolder();
@@ -133,6 +134,7 @@ public:
     void setSearchType(LLInventoryFilter::ESearchType type);
     LLInventoryFilter::ESearchType getSearchType() { return mSearchType; }
 
+    bool areViewsInitialized();
     bool hasDescendents(const LLUUID& cat_id);
     bool hasVisibleItems();
     void handleModifiedFilter();
@@ -165,9 +167,10 @@ protected:
 
     void showContextMenu(LLUICtrl* ctrl, S32 x, S32 y, const LLUUID& item_id);
 
-    void applyFilter(LLInventoryGalleryItem* item, const std::string& filter_substring);
+    bool applyFilter(LLInventoryGalleryItem* item, const std::string& filter_substring);
     bool checkAgainstFilters(LLInventoryGalleryItem* item, const std::string& filter_substring);
     static void onIdle(void* userdata);
+    void dirtyRootFolder();
 
     LLInventoryCategoriesObserver*     mCategoriesObserver;
     LLThumbnailsObserver*              mThumbnailsObserver;
@@ -176,6 +179,7 @@ protected:
     LLUUID                             mSelectedItemID;
     LLUUID                             mItemToSelect;
     bool                               mIsInitialized;
+    bool                               mRootDirty;
 
     selection_change_signal_t        mSelectionChangeSignal;
     boost::signals2::signal<void()>  mRootChangedSignal;
@@ -185,7 +189,7 @@ protected:
 
 private:
     void addToGallery(LLInventoryGalleryItem* item);
-    void removeFromGalleryLast(LLInventoryGalleryItem* item);
+    void removeFromGalleryLast(LLInventoryGalleryItem* item, bool needs_reshape = true);
     void removeFromGalleryMiddle(LLInventoryGalleryItem* item);
     LLPanel* addLastRow();
     void removeLastRow();
@@ -243,6 +247,7 @@ private:
     gallery_item_map_t mItemMap;
     uuid_vec_t mCOFLinkedItems;
     uuid_vec_t mActiveGestures;
+    uuid_set_t mItemBuildQuery;
     std::map<LLInventoryGalleryItem*, S32> mItemIndexMap;
     std::map<S32, LLInventoryGalleryItem*> mIndexToItemMap;
 
@@ -283,7 +288,7 @@ public:
 
     LLFontGL* getTextFont();
 
-    void setName(std::string name);
+    void setItemName(std::string name);
     void setSelected(bool value);
     void setWorn(bool value);
     void setUUID(LLUUID id) {mUUID = id;}
@@ -296,7 +301,7 @@ public:
     void setCreatorName(std::string name) {mCreatorName = name;}
     std::string getCreatorName() { return mCreatorName;}
 
-    std::string getItemName() {return mName;}
+    std::string getItemName() {return mItemName;}
     std::string getItemNameSuffix() {return mPermSuffix + mWornSuffix;}
     bool isDefaultImage() {return mDefaultImage;}
     
@@ -330,7 +335,7 @@ private:
 
     EInventorySortGroup mSortGroup;
     LLAssetType::EType mType;
-    std::string mName;
+    std::string mItemName;
     std::string mWornSuffix;
     std::string mPermSuffix;
     LLInventoryGallery* mGallery;
@@ -343,9 +348,7 @@ public:
 
     virtual void changed(U32 mask);
     bool addItem(const LLUUID& obj_id, callback_t cb);
-    void addSkippedItem(const LLUUID& obj_id, callback_t cb);
     void removeItem(const LLUUID& obj_id);
-    void removeSkippedItem(const LLUUID& obj_id);
 
 protected:
 
@@ -365,7 +368,6 @@ protected:
     typedef std::map<LLUUID, LLItemData> item_map_t;
     typedef item_map_t::value_type item_map_value_t;
     item_map_t mItemMap;
-    item_map_t mSkippedItems;
 };
 
 class LLGalleryGestureObserver : public LLGestureManagerObserver

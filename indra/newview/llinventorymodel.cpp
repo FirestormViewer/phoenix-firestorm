@@ -1121,13 +1121,14 @@ void LLInventoryModel::createNewCategory(const LLUUID& parent_id,
         {
             if (new_category.isNull())
             {
-                if (callback)
+                if (callback && !callback.empty())
                 {
                     callback(new_category);
                 }
                 return;
             }
 
+            // todo: not needed since AIS does the accounting?
             LLViewerInventoryCategory* folderp = gInventory.getCategory(new_category);
             if (!folderp)
             {
@@ -1147,7 +1148,7 @@ void LLInventoryModel::createNewCategory(const LLUUID& parent_id,
                 updateCategory(cat);
             }
 
-            if (callback)
+            if (callback && !callback.empty())
             {
                 callback(new_category);
             }
