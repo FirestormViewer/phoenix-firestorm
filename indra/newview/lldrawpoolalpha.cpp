@@ -244,11 +244,13 @@ void LLDrawPoolAlpha::forwardRender(bool rigged)
     //enable writing to alpha for emissive effects
     gGL.setColorMask(true, true);
 
-    bool write_depth = rigged || 
+    bool write_depth = rigged ||
         LLDrawPoolWater::sSkipScreenCopy
         // we want depth written so that rendered alpha will
         // contribute to the alpha mask used for impostors
-        || LLPipeline::sImpostorRenderAlphaDepthPass;
+        || LLPipeline::sImpostorRenderAlphaDepthPass
+        || getType() == LLDrawPoolAlpha::POOL_ALPHA_PRE_WATER; // needed for accurate water fog
+
 
     LLGLDepthTest depth(GL_TRUE, write_depth ? GL_TRUE : GL_FALSE);
 
@@ -666,8 +668,6 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
 			bool is_particle_or_hud_particle = group->getSpatialPartition()->mPartitionType == LLViewerRegion::PARTITION_PARTICLE
 													  || group->getSpatialPartition()->mPartitionType == LLViewerRegion::PARTITION_HUD_PARTICLE;
 
-			bool draw_glow_for_this_partition = mShaderLevel > 0; // no shaders = no glow.
-
 			// <FS:LO> Dont suspend partical processing while particles are hidden, just skip over drawing them
 			if(!(gPipeline.sRenderParticles) && (
 												 group->getSpatialPartition()->mPartitionType == LLViewerRegion::PARTITION_PARTICLE ||
@@ -844,7 +844,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
 				}
 
 				// If this alpha mesh has glow, then draw it a second time to add the destination-alpha (=glow).  Interleaving these state-changing calls is expensive, but glow must be drawn Z-sorted with alpha.
-				if (draw_glow_for_this_partition &&
+				if (getType() != LLDrawPool::POOL_ALPHA_PRE_WATER &&
 					params.mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_EMISSIVE))
 				{
                     if (params.mAvatar != nullptr)

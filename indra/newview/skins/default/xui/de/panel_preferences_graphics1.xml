@@ -35,7 +35,6 @@
 		<check_box label="Ambient Occlusion" name="UseSSAO"/>
 		<check_box label="Reflexionen" name="ReflectionsEnabled"/>
 		<check_box label="Screen Space Reflections" name="ScreenSpaceReflections"/>
-		<check_box label="Auto-Anpassung hist. Himmel" name="AutoAdjustLegacySky"/>
 		<text name="shadows_label">
 			Schatten:
 		</text>

@@ -60,7 +60,7 @@ float sampleDirectionalShadow(vec3 pos, vec3 norm, vec2 pos_screen);
 #endif
 
 void sampleReflectionProbesLegacy(inout vec3 ambenv, inout vec3 glossenv, inout vec3 legacyenv,
-        vec2 tc, vec3 pos, vec3 norm, float glossiness, float envIntensity);
+        vec2 tc, vec3 pos, vec3 norm, float glossiness, float envIntensity, bool transparent);
 void applyGlossEnv(inout vec3 color, vec3 glossenv, vec4 spec, vec3 pos, vec3 norm);
 void applyLegacyEnv(inout vec3 color, vec3 legacyenv, vec4 spec, vec3 pos, vec3 norm, float envIntensity);
 
@@ -339,7 +339,7 @@ void main()
     vec3 ambenv;
     vec3 glossenv;
     vec3 legacyenv;
-    sampleReflectionProbesLegacy(ambenv, glossenv, legacyenv, pos.xy*0.5+0.5, pos.xyz, norm.xyz, glossiness, env);
+    sampleReflectionProbesLegacy(ambenv, glossenv, legacyenv, pos.xy*0.5+0.5, pos.xyz, norm.xyz, glossiness, env, true);
     
     // use sky settings ambient or irradiance map sample, whichever is brighter
     color = max(amblit_linear, ambenv);
@@ -353,24 +353,6 @@ void main()
 
     float glare = 0.0;
 
-#if 0 //wrong implementation
-    if (glossiness > 0.0)  // specular reflection
-    {
-        float sa        = dot(normalize(refnormpersp), light_dir.xyz);
-        vec3  dumbshiny = sunlit_linear * shadow * (texture(lightFunc, vec2(sa, glossiness)).r);
-
-        // add the two types of shiny together
-        vec3 spec_contrib = dumbshiny * spec.rgb;
-        bloom             = dot(spec_contrib, spec_contrib) / 6;
-
-        glare = max(spec_contrib.r, spec_contrib.g);
-        glare = max(glare, spec_contrib.b);
-
-        color += spec_contrib;
-
-        applyGlossEnv(color, glossenv, spec, pos.xyz, norm.xyz);
-    }
-#else //right implementation ported from pointLightF.glsl
     if (glossiness > 0.0)
     {
         vec3  lv = light_dir.xyz;
@@ -395,7 +377,6 @@ void main()
         // add radiance map
         applyGlossEnv(color, glossenv, spec, pos.xyz, norm.xyz);
     }
-#endif
 
     color = mix(color.rgb, legacy_adjust_fullbright(diffcol.rgb), emissive);
 
@@ -429,13 +410,12 @@ void main()
         LIGHT_LOOP(6)
         LIGHT_LOOP(7)
 
-    light *= 1.0-emissive;
     color += light;
 
     glare *= 1.0-emissive;
     glare = min(glare, 1.0);
     float al = max(diffcol.a, glare) * vertex_color.a;
-    
+
     frag_color = max(vec4(color, al), vec4(0));
 
 #else // mode is not DIFFUSE_ALPHA_MODE_BLEND, encode to gbuffer 

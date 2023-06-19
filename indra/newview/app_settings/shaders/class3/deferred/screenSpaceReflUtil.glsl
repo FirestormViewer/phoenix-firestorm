@@ -36,7 +36,7 @@ uniform mat4 inv_modelview_delta;
 
 vec4 getPositionWithDepth(vec2 pos_screen, float depth);
 
-float random (vec2 uv) 
+float random (vec2 uv)
 {
     return fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453123); //simple random function
 }
@@ -61,6 +61,8 @@ uniform float rayStep;
 uniform float distanceBias;
 uniform float depthRejectBias;
 uniform float glossySampleCount;
+uniform float adaptiveStepMultiplier;
+uniform float noiseSine;
 
 float epsilon = 0.1;
 
@@ -73,7 +75,7 @@ float getLinearDepth(vec2 tc)
     return -pos.z;
 }
 
-bool traceScreenRay(vec3 position, vec3 reflection, out vec4 hitColor, out float hitDepth, float depth, sampler2D textureFrame) 
+bool traceScreenRay(vec3 position, vec3 reflection, out vec4 hitColor, out float hitDepth, float depth, sampler2D textureFrame)
 {
     // transform position and reflection into same coordinate frame as the sceneMap and sceneDepth
     reflection += position;
@@ -91,22 +93,27 @@ bool traceScreenRay(vec3 position, vec3 reflection, out vec4 hitColor, out float
     bool hit = false;
     hitColor = vec4(0);
     
-    
     int i = 0;
-    if (depth > depthRejectBias) 
+    if (depth > depthRejectBias)
     {
-        for (; i < iterationCount && !hit; i++) 
+        for (; i < iterationCount && !hit; i++)
         {
             screenPosition = generateProjectedPosition(marchingPosition);
+            if (screenPosition.x > 1 || screenPosition.x < 0 ||
+                screenPosition.y > 1 || screenPosition.y < 0)
+            {
+                hit = false;
+                break;
+            }
             depthFromScreen = getLinearDepth(screenPosition);
             delta = abs(marchingPosition.z) - depthFromScreen;
             
-            if (depth < depthFromScreen + epsilon && depth > depthFromScreen - epsilon) 
+            if (depth < depthFromScreen + epsilon && depth > depthFromScreen - epsilon)
             {
                 break;
             }
 
-            if (abs(delta) < distanceBias) 
+            if (abs(delta) < distanceBias)
             {
                 vec4 color = vec4(1);
                 if(debugDraw)
@@ -116,7 +123,7 @@ bool traceScreenRay(vec3 position, vec3 reflection, out vec4 hitColor, out float
                 hit = true;
                 break;
             }
-            if (isBinarySearchEnabled && delta > 0) 
+            if (isBinarySearchEnabled && delta > 0)
             {
                 break;
             }
@@ -128,14 +135,14 @@ bool traceScreenRay(vec3 position, vec3 reflection, out vec4 hitColor, out float
                 step = step * (1.0 - rayStep * max(directionSign, 0.0));
                 marchingPosition += step * (-directionSign);
             }
-            else 
+            else
             {
                 marchingPosition += step;
             }
 
             if (isExponentialStepEnabled)
             {
-                step *= 1.05;
+                step *= adaptiveStepMultiplier;
             }
         }
         if(isBinarySearchEnabled)
@@ -146,15 +153,21 @@ bool traceScreenRay(vec3 position, vec3 reflection, out vec4 hitColor, out float
                 marchingPosition = marchingPosition - step * sign(delta);
                 
                 screenPosition = generateProjectedPosition(marchingPosition);
+                if (screenPosition.x > 1 || screenPosition.x < 0 ||
+                    screenPosition.y > 1 || screenPosition.y < 0)
+                {
+                    hit = false;
+                    break;
+                }
                 depthFromScreen = getLinearDepth(screenPosition);
                 delta = abs(marchingPosition.z) - depthFromScreen;
 
-                if (depth < depthFromScreen + epsilon && depth > depthFromScreen - epsilon) 
+                if (depth < depthFromScreen + epsilon && depth > depthFromScreen - epsilon)
                 {
                     break;
                 }
 
-                if (abs(delta) < distanceBias && depthFromScreen != (depth - distanceBias)) 
+                if (abs(delta) < distanceBias && depthFromScreen != (depth - distanceBias))
                 {
                     vec4 color = vec4(1);
                     if(debugDraw)
@@ -302,8 +315,16 @@ uniform vec3 POISSON3D_SAMPLES[128] = vec3[128](
     vec3(0.2698198, 0.0002266169, 0.3449324)
 );
 
+vec3 getPoissonSample(int i) {
+    return POISSON3D_SAMPLES[i] * 2 - 1;
+}
+
 float tapScreenSpaceReflection(int totalSamples, vec2 tc, vec3 viewPos, vec3 n, inout vec4 collectedColor, sampler2D source, float glossiness)
 {
+#ifdef TRANSPARENT_SURFACE
+collectedColor = vec4(1, 0, 1, 1);
+    return 0;
+#endif
     collectedColor = vec4(0);
     int hits = 0;
 
@@ -316,12 +337,13 @@ float tapScreenSpaceReflection(int totalSamples, vec2 tc, vec3 viewPos, vec3 n, 
     float jitter = mod( c, 1.0);
     
     vec2 screenpos = 1 - abs(tc * 2 - 1);
-    float vignette = clamp((abs(screenpos.x) * abs(screenpos.y)) * 64,0, 1);
-    vignette *= clamp((dot(normalize(viewPos), n) * 0.5 + 0.5) * 16, 0, 1);
+    float vignette = clamp((abs(screenpos.x) * abs(screenpos.y)) * 16,0, 1);
+    vignette *= clamp((dot(normalize(viewPos), n) * 0.5 + 0.5) * 5.5 - 0.8, 0, 1);
     
-    float zFar = 32.0;
+    float zFar = 128.0;
     vignette *= clamp(1.0+(viewPos.z/zFar), 0.0, 1.0);
 
+    vignette *= clamp(glossiness * 3 - 1.7, 0, 1);
 
     vec4 hitpoint;
     
@@ -329,17 +351,17 @@ float tapScreenSpaceReflection(int totalSamples, vec2 tc, vec3 viewPos, vec3 n, 
 
     totalSamples = int(max(glossySampleCount, glossySampleCount * glossiness * vignette));
 
-    totalSamples = max(totalSamples, 4);
-
+    totalSamples = max(totalSamples, 1);
+    if (glossiness < 0.35)
     {
+        if (vignette > 0)
         {
-            for (int i = 0; i < totalSamples; i++) 
+            for (int i = 0; i < totalSamples; i++)
             {
-                vec3 firstBasis = normalize(cross(POISSON3D_SAMPLES[i] * 2 - 1, rayDirection));
+                vec3 firstBasis = normalize(cross(getPoissonSample(i), rayDirection));
                 vec3 secondBasis = normalize(cross(rayDirection, firstBasis));
                 vec2 coeffs = vec2(random(tc + vec2(0, i)) + random(tc + vec2(i, 0)));
-                vec3 reflectionDirectionRandomized = rayDirection + ((firstBasis * coeffs.x + secondBasis * coeffs.y) * 0.125 * max(glossiness, 0.025));
-                //vec3 reflectionDirectionRandomized = rayDirection + (POISSON3D_SAMPLES[i] * 2 - 1) * 0.125 * max(glossiness, 0.025);
+                vec3 reflectionDirectionRandomized = rayDirection + ((firstBasis * coeffs.x + secondBasis * coeffs.y) * glossiness);
 
                 //float hitDepth;
 
@@ -347,22 +369,22 @@ float tapScreenSpaceReflection(int totalSamples, vec2 tc, vec3 viewPos, vec3 n, 
 
                 hitpoint.a = 0;
 
-                if (hit) 
+                if (hit)
                 {
                     ++hits;
                     collectedColor += hitpoint;
                     collectedColor.a += 1;
                 }
             }
-        }
-
-        if (hits > 0)
-        {
-            collectedColor /= hits;
-        }
-        else
-        {
-            collectedColor = vec4(0);
+            
+            if (hits > 0)
+            {
+                collectedColor /= hits;
+            }
+            else
+            {
+                collectedColor = vec4(0);
+            }
         }
     }
     float hitAlpha = hits;

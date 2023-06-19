@@ -12115,7 +12115,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>S32</string>
     <key>Value</key>
-    <integer>40</integer>
+    <integer>25</integer>
   </map>
   <key>RenderScreenSpaceReflectionRayStep</key>
   <map>
@@ -12150,6 +12150,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>0.001</real>
   </map>
+  <key>RenderScreenSpaceReflectionAdaptiveStepMultiplier</key>
+  <map>
+    <key>Comment</key>
+    <string>Multiplier to scale adaptive stepping.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>1.6</real>
+  </map>
   <key>RenderScreenSpaceReflectionGlossySamples</key>
   <map>
     <key>Comment</key>
@@ -12159,7 +12170,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>S32</string>
     <key>Value</key>
-    <integer>8</integer>
+    <integer>4</integer>
   </map>
   <key>RenderBumpmapMinDistanceSquared</key>
     <map>
@@ -13598,7 +13609,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>20.0</real>
+    <real>2.0</real>
   </map>
   <key>RenderReflectionProbeLevel</key>
   <map>
@@ -13671,7 +13682,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderSkyAutoAdjustLegacy</key>
   <map>
     <key>Comment</key>
-    <string>If true, automatically adjust legacy skies (those without a probe ambiance value) to take advantage of probes and HDR.</string>
+    <string>If true, automatically adjust legacy skies (those without a probe ambiance value) to take advantage of probes and HDR.  This is the "opt-out" button for HDR and tonemapping when coupled with a sky setting that predates PBR.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -13699,7 +13710,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>0.3</real>
+    <real>0.4</real>
   </map>
     <key>RenderShaderLODThreshold</key>
     <map>
