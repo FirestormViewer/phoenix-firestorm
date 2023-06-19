@@ -4,7 +4,7 @@
 		Bing appID açarı təsdiqlənməyib. Yenidən cəhd edin.
 	</string>
 	<string name="google_api_key_not_verified">
-		Ключ Google API açarı təsdiqlənməyib. Yenidən cəhd edin.
+		Google API açarı təsdiqlənməyib. Yenidən cəhd edin.
 	</string>
 	<string name="bing_api_key_verified">
 		Bing appID açarı təsdiqlənib.

@@ -101,7 +101,7 @@
 						<text name="estate_name_label" value="Əmlak:"/>
 						<text name="estate_rating_label" value="Reytinq:"/>
 						<text name="estate_owner_label" value="Sahibi:"/>
-						<text name="estate_owner" value="Тест имени владельца используя длинное имя"/>
+						<text name="estate_owner" value="Uzun addan istifadə edərək sahib adı sınağı"/>
 						<text name="covenant_label" value="Müqavilə:"/>
 					</panel>
 				</accordion_tab>

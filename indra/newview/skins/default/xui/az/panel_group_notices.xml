@@ -41,7 +41,7 @@ Günlük maksimum 200 bildiriş göndərilə bilər.
 		<button name="remove_attachment" tool_tip="Bildirişinizdən əlavəni silin"/>
 		<button label="Avadanklq siyahısı" name="open_inventory" tool_tip="Avadanlıq siyahısını aç"/>
 		<button label="Göndər" label_selected="Göndər" name="send_notice"/>
-		<group_drop_target name="drop_target" tool_tip="Перетащите из инвентаря на эту панель предмет, чтобы отправить его вместе с сообщением. У вас должно быть разрешение на копирование и передачу этого предмета."/>
+		<group_drop_target name="drop_target" tool_tip="Mesajla birlikdə göndərmək üçün avadanlıq siyahınızdan elementi bu panelə çəkin. Bu elementi köçürtəmək və paylaşmaq üçün icazəniz olmalıdır."/>
 	</panel>
 	<panel label="Arxivlənmiş bildirişlər" name="panel_view_past_notice">
 		<text name="lbl6">

@@ -18,7 +18,7 @@
 		<menu_button name="gear_btn" tool_tip="Əlavə seçimlər"/>
 		<button name="new_gesture_btn" tool_tip="Yeni jest yarat"/>
 		<button name="activate_btn" tool_tip="Seçilmiş jesti aktivləşdirin/deaktiv et"/>
-		<check_box label="Только активные" name="FSShowOnlyActiveGestures" width="150"/>
+		<check_box label="Yalnız aktiv" name="FSShowOnlyActiveGestures" width="150"/>
 		<button name="del_btn" tool_tip="Bu jesti sil"/>
 	</panel>
 	<button label="Dəyişdir" name="edit_btn" tool_tip="Seçilmiş jesti dəyişdirmək üçün pəncərəni açır."/>

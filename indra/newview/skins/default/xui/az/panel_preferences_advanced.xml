@@ -9,7 +9,6 @@
 	<check_box label="Sazlama menyusunu göstər (Öz riskinizə görə istifadə edin!)" name="show_develop_menu_check"/>
 	<check_box label="Windows sistemlərində WMI ilə VRAM aşkarlamasını söndür" name="FSDisableWMIProbing"/>
 	<check_box label="Menyu axtarışını göstər" name="show_search_menu_check"/>
-	<!-- <check_box label="Включить использование анимации с временным шагом (Эксперементально)" tool_tip="Эта настройка может уменьшить нагрузку прорисовки на дальних аватаров но также может привести к воспроизведению их анимаций на неправильных скоростях" name="UseAnimationTimeSteps"/> -->
 	<text name="BackgroundYieldTimeText">
 		[APP_NAME] ön planda olmadıqda, hər bir kadrı digər tətbiqlərə qəbul etmək üçün millisaniyələrlə vaxtın miqdarı (defolt: 40; 1 saniyə = 1000 millisaniyə):
 	</text>

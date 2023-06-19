@@ -380,8 +380,8 @@ Bir dəqiqədən sonra yenidən daxil olmağa çalışın.
 Bir dəqiqədən sonra yenidən daxil olmağa çalışın.
 	</string>
 	<string name="LoginFailedAuthenticationMFARequired">
-		Чтобы продолжить вход в систему, введите новый токен из приложения многофакторной аутентификации.
-Если вы считаете, что это ошибка, пожалуйста, свяжитесь с support@secondlife.com
+		Daxil olmağa davam etmək üçün çoxfaktorlu autentifikasiya proqramından yeni token daxil edin.
+Bunun səhv olduğunu düşünürsünüzsə, buraya məktub göndərin: support@secondlife.com.
 	</string>
 	<string name="AgentLostConnection">
 		Bu bölgədə, ola bilsin ki, problemlər ola bilər.  Şəbəkə bağlantınızı yoxlayın.
@@ -542,7 +542,7 @@ Bir dəqiqədən sonra yenidən daxil olmağa çalışın.
 		Dəyişdirmək qadağandır
 	</string>
 	<string name="TooltipFlagNotSafe">
-		Тəhlükəsiz deyil
+		Təhlükəsiz deyil
 	</string>
 	<string name="TooltipFlagNoFly">
 		Uçuşlar qadağandır
@@ -1214,7 +1214,7 @@ etmək haqqında kömək almaq üçün http://secondlife.com/support ünvanına 
 		Kamera istifadəçiyə diqqətləşdirilə bilmir, çünki onlar göstərmə məsafənizdən kənardadırlar.
 	</string>
 	<string name="Ok">
-		ОК
+		OK
 	</string>
 	<string name="Premature end of file">
 		Faylın vaxtından əvvəl sonu

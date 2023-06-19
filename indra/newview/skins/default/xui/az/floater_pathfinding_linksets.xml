@@ -165,7 +165,7 @@
 			D
 		</text>
 		<line_editor name="edit_d_value" tool_tip="D növlü xarakterlər üçün keçilə bilməsi. Xarakter nümunəsi - fərqli."/>
-		<button label="Применить изменения" name="apply_edit_values"/>
+		<button label="Dəyişikləri tətbiq et" name="apply_edit_values"/>
 		<text name="suggested_use_a_label">
 			(Humanoid)
 		</text>
