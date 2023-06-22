@@ -53,6 +53,8 @@
 #include "llvoavatarself.h"			// for gAgentAvatarp
 #include "llavatarnamecache.h"
 
+#include "fsassetblacklist.h"
+
 constexpr S32 MAX_ANIMATIONS = 100;
 
 // --------------------------------------------------------------------------
@@ -157,13 +159,13 @@ BOOL AnimationExplorer::postBuild()
 {
 	mAnimationScrollList = getChild<LLScrollListCtrl>("animation_list");
 	mStopButton = getChild<LLButton>("stop_btn");
-	mRevokeButton = getChild<LLButton>("revoke_btn");
+	mBlacklistButton = getChild<LLButton>("blacklist_btn");
 	mStopAndRevokeButton = getChild<LLButton>("stop_and_revoke_btn");
 	mNoOwnedAnimationsCheckBox = getChild<LLCheckBoxCtrl>("no_owned_animations_check");
 
 	mAnimationScrollList->setCommitCallback(boost::bind(&AnimationExplorer::onSelectAnimation, this));
 	mStopButton->setCommitCallback(boost::bind(&AnimationExplorer::onStopPressed, this));
-	mRevokeButton->setCommitCallback(boost::bind(&AnimationExplorer::onRevokePressed, this));
+	mBlacklistButton->setCommitCallback(boost::bind(&AnimationExplorer::onBlacklistPressed, this));
 	mStopAndRevokeButton->setCommitCallback(boost::bind(&AnimationExplorer::onStopAndRevokePressed, this));
 	mNoOwnedAnimationsCheckBox->setCommitCallback(boost::bind(&AnimationExplorer::onOwnedCheckToggled, this));
 
@@ -199,7 +201,7 @@ void AnimationExplorer::onSelectAnimation()
 	S32 column = mAnimationScrollList->getColumn("animation_id")->mIndex;
 	mCurrentAnimationID = item->getColumn(column)->getValue().asUUID();
 
-	column = mAnimationScrollList->getColumn("played_by")->mIndex;
+	column = mAnimationScrollList->getColumn("object_id")->mIndex;
 	mCurrentObject = item->getColumn(column)->getValue().asUUID();
 
 	startMotion(mCurrentAnimationID);
@@ -214,8 +216,23 @@ void AnimationExplorer::onStopPressed()
 	}
 }
 
-void AnimationExplorer::onRevokePressed()
+void AnimationExplorer::onBlacklistPressed()
 {
+	onStopPressed();
+	LLScrollListItem* item = mAnimationScrollList->getFirstSelected();
+	if (!item)
+	{
+		return;
+	}
+
+	S32 column = mAnimationScrollList->getColumn("played_by")->mIndex;
+	FSAssetBlacklist::getInstance()->addNewItemToBlacklist(mCurrentAnimationID, item->getColumn(column)->getValue(), gAgent.getRegion()->getName(), LLAssetType::AT_ANIMATION);
+}
+
+void AnimationExplorer::onStopAndRevokePressed()
+{
+	onStopPressed();
+
 	if (mCurrentObject.notNull())
 	{
 		LLViewerObject* vo = gObjectList.findObject(mCurrentObject);
@@ -225,12 +242,6 @@ void AnimationExplorer::onRevokePressed()
 			gAgentAvatarp->revokePermissionsOnObject(vo);
 		}
 	}
-}
-
-void AnimationExplorer::onStopAndRevokePressed()
-{
-	onStopPressed();
-	onRevokePressed();
 }
 
 void AnimationExplorer::onOwnedCheckToggled()

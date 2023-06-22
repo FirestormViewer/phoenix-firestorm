@@ -54,6 +54,9 @@ LLAssetType::EType S32toAssetType(S32 assetindex)
 		case 6:
 			type = LLAssetType::AT_OBJECT;
 			break;
+		case 20:
+			type = LLAssetType::AT_ANIMATION;
+			break;
 		case 45:
 			type = LLAssetType::AT_PERSON;
 			break;

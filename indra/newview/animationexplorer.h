@@ -100,7 +100,7 @@ class AnimationExplorer
 
 		LLScrollListCtrl* mAnimationScrollList;
 		LLButton* mStopButton;
-		LLButton* mRevokeButton;
+		LLButton* mBlacklistButton;
 		LLButton* mStopAndRevokeButton;
 		LLCheckBoxCtrl* mNoOwnedAnimationsCheckBox;
 
@@ -126,7 +126,7 @@ class AnimationExplorer
 
 		void onSelectAnimation();
 		void onStopPressed();
-		void onRevokePressed();
+		void onBlacklistPressed();
 		void onStopAndRevokePressed();
 		void onOwnedCheckToggled();
 };
