@@ -226,7 +226,12 @@ void AnimationExplorer::onBlacklistPressed()
 	}
 
 	S32 column = mAnimationScrollList->getColumn("played_by")->mIndex;
-	FSAssetBlacklist::getInstance()->addNewItemToBlacklist(mCurrentAnimationID, item->getColumn(column)->getValue(), gAgent.getRegion()->getName(), LLAssetType::AT_ANIMATION);
+	std::string region_name{};
+	if (gAgent.getRegion())
+	{
+		region_name = gAgent.getRegion()->getName();
+	}
+	FSAssetBlacklist::getInstance()->addNewItemToBlacklist(mCurrentAnimationID, item->getColumn(column)->getValue(), region_name, LLAssetType::AT_ANIMATION);
 }
 
 void AnimationExplorer::onStopAndRevokePressed()
@@ -235,9 +240,7 @@ void AnimationExplorer::onStopAndRevokePressed()
 
 	if (mCurrentObject.notNull())
 	{
-		LLViewerObject* vo = gObjectList.findObject(mCurrentObject);
-
-		if (vo)
+		if (LLViewerObject* vo = gObjectList.findObject(mCurrentObject); vo)
 		{
 			gAgentAvatarp->revokePermissionsOnObject(vo);
 		}
@@ -327,11 +330,10 @@ void AnimationExplorer::updateList(F64 current_timestamp)
 
 		// go through the list of playing animations to find out if this animation played by
 		// this object is still running
-		for (LLVOAvatar::AnimSourceIterator anim_iter = gAgentAvatarp->mAnimationSources.begin();
-			anim_iter != gAgentAvatarp->mAnimationSources.end(); ++anim_iter)
+		for (const auto& [anim_object_id, anim_anim_id] : gAgentAvatarp->mAnimationSources)
 		{
 			// object and animation found
-			if (anim_iter->first == object_id && anim_iter->second == anim_id)
+			if (anim_object_id == object_id && anim_anim_id == anim_id)
 			{
 				// set text to "Still playing" and break out of this loop
 				played_text->setText(LLTrans::getString("animation_explorer_still_playing"));
@@ -354,8 +356,7 @@ void AnimationExplorer::updateList(F64 current_timestamp)
 		}
 
 		std::string prio_text = LLTrans::getString("animation_explorer_unknown_priority");
-		LLKeyframeMotion* motion = dynamic_cast<LLKeyframeMotion*>(gAgentAvatarp->findMotion(anim_id));
-		if (motion)
+		if (LLKeyframeMotion* motion = dynamic_cast<LLKeyframeMotion*>(gAgentAvatarp->findMotion(anim_id)); motion)
 		{
 			prio_text = llformat("%d", (S32)motion->getPriority());
 		}
@@ -378,8 +379,7 @@ void AnimationExplorer::addAnimation(const LLUUID& id, const LLUUID& played_by, 
 	std::string playedByName = played_by.asString();
 
 	// find out if the object is still in reach
-	LLViewerObject* vo = gObjectList.findObject(played_by);
-	if (vo)
+	if (LLViewerObject* vo = gObjectList.findObject(played_by); vo)
 	{
 		// if it was an avatar, get the name here
 		if (vo->isAvatar())
@@ -461,8 +461,7 @@ void AnimationExplorer::addAnimation(const LLUUID& id, const LLUUID& played_by, 
 
 void AnimationExplorer::onAvatarNameCallback(const LLUUID& id, const LLAvatarName& av_name)
 {
-	auto iter = mAvatarNameCacheConnections.find(id);
-	if (iter != mAvatarNameCacheConnections.end())
+	if (auto iter = mAvatarNameCacheConnections.find(id); iter != mAvatarNameCacheConnections.end())
 	{
 		if (iter->second.connected())
 		{
@@ -489,10 +488,8 @@ void AnimationExplorer::requestNameCallback(LLMessageSystem* msg)
 		LLUUID object_id;
 		msg->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, object_id, index);
 
-		uuid_vec_t::iterator iter;
-		iter = std::find(mRequestedIDs.begin(), mRequestedIDs.end(), object_id);
 		// if this is one of the objects we were looking for, process the data
-		if (iter != mRequestedIDs.end())
+		if (auto iter = std::find(mRequestedIDs.begin(), mRequestedIDs.end(), object_id); iter != mRequestedIDs.end())
 		{
 			// get the name of the object
 			std::string object_name;
@@ -513,11 +510,9 @@ void AnimationExplorer::updateListEntry(const LLUUID& id, const std::string& nam
 	S32 played_by_column = mAnimationScrollList->getColumn("played_by")->mIndex;
 
 	// find all scroll list entries with this object UUID and update the names there
-	std::vector<LLScrollListItem*> items = mAnimationScrollList->getAllData();
-	for (std::vector<LLScrollListItem*>::iterator list_iter = items.begin(); list_iter != items.end(); ++list_iter)
+	for (LLScrollListItem* item : mAnimationScrollList->getAllData())
 	{
-		LLScrollListItem* item = *list_iter;
-		LLUUID list_object_id = item->getColumn(object_id_column)->getValue().asUUID();
+		const LLUUID& list_object_id = item->getColumn(object_id_column)->getValue().asUUID();
 
 		if (id == list_object_id)
 		{
