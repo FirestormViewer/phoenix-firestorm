@@ -52,6 +52,7 @@ RequestExecutionLevel admin	# For when we write to Program Files
 !include "%%SOURCE%%\installers\windows\lang_en-us.nsi"
 
 # Danish and Polish no longer supported by the viewer itself
+!include "%%SOURCE%%\installers\windows\lang_az.nsi"
 ##!include "%%SOURCE%%\installers\windows\lang_da.nsi"
 !include "%%SOURCE%%\installers\windows\lang_de.nsi"
 !include "%%SOURCE%%\installers\windows\lang_es.nsi"
@@ -65,6 +66,7 @@ RequestExecutionLevel admin	# For when we write to Program Files
 ##!include "%%SOURCE%%\installers\windows\lang_zh.nsi"
 
 # *TODO: Move these into the language files themselves
+LangString LanguageCode ${LANG_AZERBAIJANI}   "az"
 ##LangString LanguageCode ${LANG_DANISH}   "da"
 LangString LanguageCode ${LANG_GERMAN}   "de"
 LangString LanguageCode ${LANG_ENGLISH}  "en"

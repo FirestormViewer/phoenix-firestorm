@@ -26,15 +26,9 @@ Xəta təfərrüatları: &quot;[_NAME]&quot; adlı bildiriş notifications.xml f
 	<notification name="TutorialNotFound">
 		Hazırda heç bir dərslik yoxdur
 	</notification>
-	<notification name="GenericAlert">
-		[MESSAGE]
-	</notification>
 	<notification name="GenericAlertYesCancel">
 		[MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="Ləğv et" yestext="Bəli"/>
-	</notification>
-	<notification name="GenericAlertOK">
-		[MESSAGE]
 	</notification>
 	<notification name="BadInstallation">
 		[APP_NAME] yenilənərkən xəta baş verdi. Klientin [https://www.firestormviewer.org/downloads ən son versiyasını yükləyin].
@@ -2893,21 +2887,6 @@ Daha kiçik bir sahə seçməyə çalışın.
 	<notification name="NoContentToSearch">
 		Axtarmaq üçün ən azı bir növ məzmun seçin (&quot;Ümumi&quot;, &quot;Ortam&quot; vəya &quot;Yetkin&quot;).
 	</notification>
-	<notification name="SystemMessage">
-		[MESSAGE]
-	</notification>
-	<notification name="FlickrConnect">
-		[MESSAGE]
-	</notification>
-	<notification name="PaymentReceived">
-		[MESSAGE]
-	</notification>
-	<notification name="PaymentSent">
-		[MESSAGE]
-	</notification>
-	<notification name="PaymentFailure">
-		[MESSAGE]
-	</notification>
 	<notification name="EventNotification">
 		Hadisə bildirişi:
 
@@ -4092,9 +4071,6 @@ Intel drayver veb-saytını yoxlamaq istəyirsiniz?
 [SYSINFO]
 		<usetemplate name="okcancelbuttons" yestext="Göndər" notext="Ləğv et"/>
 	</notification>
-	<notification name="BlockLoginInfo">
-		[REASON]
-	</notification>
 	<notification name="TestversionExpired">
 		[APP_NAME] tətbiqinin bu sınaq versiyasının vaxtı keçib və daha istifadə edilə bilməz.
 	</notification>
@@ -4961,9 +4937,6 @@ Onlar xətaları həll etmək üçün http://opensimulator.org/wiki/inventory is
 	</notification>
 	<notification name="DefaultObjectPermissions">
 		Defolt obyekt icazələrini yadda saxlayarkən problem baş verdi: [REASON]. Lütfən, defolt icazələri daha sonra təyin etməyə cəhd edin.
-	</notification>
-	<notification name="OutfitPhotoLoadError">
-		[REASON]
 	</notification>
 	<notification name="AddPaymentMethod">
 Növbəti səhifədə L$ məbləği seçin və
