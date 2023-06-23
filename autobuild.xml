@@ -1083,11 +1083,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>eebbcd0757dd28646ebb4505e7af140e</string>
+              <string>9d9f72f50cffe7443e4b58f009ffc1f4</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.13-darwin64-6.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.15-darwin64-9.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
