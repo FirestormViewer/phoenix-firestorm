@@ -11,7 +11,7 @@
 	<panel name="buttons_panel">
 		<button label="Stoppen" name="stop_btn" />
 		<button label="Stoppen und zurückziehen" name="stop_and_revoke_btn" />
-		<button label="Zurückziehen" name="revoke_btn" />
+		<button label="Blacklist" name="blacklist_btn" />
 		<check_box label="Keine im eigenen Besitz" name="no_owned_animations_check" tool_tip="Falls aktiviert, werden alle Animationen im Besitz des eigenen Avatars gefiltert, z.B. AO-Animationen oder Standard-Systemanimationen" />
 	</panel>
 </floater>
