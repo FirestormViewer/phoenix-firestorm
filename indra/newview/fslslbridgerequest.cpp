@@ -51,17 +51,16 @@ void FSLSLBridgeRequest_Failure(LLSD const &aData)
 
 void FSLSLBridgeRequestRadarPos_Success(LLSD const &aData)
 {
-	FSRadar* radar = FSRadar::getInstance();
 	LL_DEBUGS("FSLSLBridge") << ll_pretty_print_sd(aData) << LL_ENDL;
-	if (radar && aData.has(LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_CONTENT))
+	if (aData.has(LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_CONTENT))
 	{
 		std::string strContent = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_CONTENT].asString();
 		//LL_INFOS("FSLSLBridge") << "Got info: " << strContent << LL_ENDL;
 		// AO: parse content into pairs of [agent UUID,agent zHeight] , update our radar for each one
-		
+
 		LLUUID targetAv;
 		F32 targetZ;
-		
+
 		typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
 		boost::char_separator<char> sep(", "); 
 		tokenizer tokens(strContent, sep);
@@ -69,9 +68,8 @@ void FSLSLBridgeRequestRadarPos_Success(LLSD const &aData)
 		{
 			targetAv = LLUUID(*(tok_iter++));
 			targetZ = (F32)::atof((*tok_iter).c_str());
-			
-			FSRadarEntry* entry = radar->getEntry(targetAv);
-			if (entry)
+
+			if (auto entry = FSRadar::getInstance()->getEntry(targetAv); entry)
 			{
 				entry->setZOffset(targetZ);
 				//LL_INFOS("FSLSLBridge") << targetAv << " ::: " << targetZ << LL_ENDL;

@@ -4650,7 +4650,7 @@ public:
 			{
 				if ( body.has("session_info") )
 				{
-					im_floater->processSessionUpdate(body["session_info"]);
+					//im_floater->processSessionUpdate(body["session_info"]); // <FS:Ansariel> Method does nothing
 
                     // Send request for chat history, if enabled.
                     if (gSavedPerAccountSettings.getBOOL("FetchGroupChatHistory"))
@@ -4747,14 +4747,15 @@ public:
 		const LLSD& input) const
 	{
 		LLUUID session_id = input["body"]["session_id"].asUUID();
-		// <FS:Ansariel> [FS communication UI]
-		//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
-		FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
-		// </FS:Ansariel> [FS communication UI]
-		if ( im_floater )
-		{
-			im_floater->processSessionUpdate(input["body"]["info"]);
-		}
+		// <FS:Ansariel> Method does nothing
+		//// <FS:Ansariel> [FS communication UI]
+		////LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
+		//FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+		//// </FS:Ansariel> [FS communication UI]
+		//if ( im_floater )
+		//{
+		//	im_floater->processSessionUpdate(input["body"]["info"]);
+		//}
 		LLIMSpeakerMgr* im_mgr = LLIMModel::getInstance()->getSpeakerManager(session_id);
 		if (im_mgr)
 		{

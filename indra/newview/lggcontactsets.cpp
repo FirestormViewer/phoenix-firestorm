@@ -418,8 +418,7 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, const LLColor4& cur_color,
 	}
 	else
 	{
-		FSRadarEntry* entry = FSRadar::getInstance()->getEntry(uuid);
-		if ( (entry && entry->getIsLinden()) || (!entry && FSCommon::isLinden(uuid)) )
+		if (auto entry = FSRadar::getInstance()->getEntry(uuid); (entry && entry->getIsLinden()) || (!entry && FSCommon::isLinden(uuid)) )
 		{
 			switch (type)
 			{

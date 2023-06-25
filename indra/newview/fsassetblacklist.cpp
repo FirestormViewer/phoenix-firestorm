@@ -117,8 +117,7 @@ bool FSAssetBlacklist::removeItem(const LLUUID& id)
 {
 	gObjectList.removeDerenderedItem(id);
 
-	blacklist_data_t::iterator it;
-	it = mBlacklistData.find(id);
+	blacklist_data_t::iterator it = mBlacklistData.find(id);
 
 	if (it == mBlacklistData.end())
 	{
@@ -148,13 +147,13 @@ void FSAssetBlacklist::removeItemsFromBlacklist(const uuid_vec_t& ids)
 		bool need_save = false;
 		LLSD data;
 
-		for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
+		for (const auto& id : ids)
 		{
-			if (removeItem(*it))
+			if (removeItem(id))
 			{
 				need_save = true;
 			}
-			data.append((*it).asString());
+			data.append(id.asString());
 		}
 
 		if (need_save)

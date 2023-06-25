@@ -40,14 +40,14 @@
 #include "lltoolbarview.h"
 #include "llvoiceclient.h"
 
-static const F32 VOICE_STATUS_UPDATE_INTERVAL = 1.0f;
+constexpr F32 VOICE_STATUS_UPDATE_INTERVAL = 1.0f;
 
 //
 // FSFloaterIMContainer
 //
 FSFloaterIMContainer::FSFloaterIMContainer(const LLSD& seed)
 :	LLMultiFloater(seed),
-	mActiveVoiceFloater(NULL),
+	mActiveVoiceFloater(nullptr),
 	mCurrentVoiceState(VOICE_STATE_NONE),
 	mForceVoiceStateUpdate(false),
 	mIsAddingNewSession(false)
@@ -186,7 +186,8 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
 									BOOL select_added_floater, 
 									LLTabContainer::eInsertionPoint insertion_point)
 {
-	if(!floaterp) return;
+	if (!floaterp)
+		return;
 
 	// already here
 	if (floaterp->getHost() == this)
@@ -385,14 +386,12 @@ void FSFloaterIMContainer::setMinimized(BOOL b)
 {
 	if (mTabContainer)
 	{
-		FSFloaterNearbyChat* nearby_floater = dynamic_cast<FSFloaterNearbyChat*>(mTabContainer->getCurrentPanel());
-		if (nearby_floater)
+		if (FSFloaterNearbyChat* nearby_floater = dynamic_cast<FSFloaterNearbyChat*>(mTabContainer->getCurrentPanel()); nearby_floater)
 		{
 			nearby_floater->handleMinimized(b);
 		}
 
-		FSFloaterIM* im_floater = dynamic_cast<FSFloaterIM*>(mTabContainer->getCurrentPanel());
-		if (im_floater)
+		if (FSFloaterIM* im_floater = dynamic_cast<FSFloaterIM*>(mTabContainer->getCurrentPanel()); im_floater)
 		{
 			im_floater->handleMinimized(b);
 		}
@@ -405,7 +404,8 @@ void FSFloaterIMContainer::setMinimized(BOOL b)
 void FSFloaterIMContainer::sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg)
 {
 	LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(session_id);
-	if (!session) return;
+	if (!session)
+		return;
 
 	FSFloaterIM::onNewIMReceived(session_id);
 }
@@ -413,8 +413,7 @@ void FSFloaterIMContainer::sessionAdded(const LLUUID& session_id, const std::str
 //virtual
 void FSFloaterIMContainer::sessionRemoved(const LLUUID& session_id)
 {
-	FSFloaterIM* iMfloater = LLFloaterReg::findTypedInstance<FSFloaterIM>("fs_impanel", session_id);
-	if (iMfloater != NULL)
+	if (FSFloaterIM* iMfloater = LLFloaterReg::findTypedInstance<FSFloaterIM>("fs_impanel", session_id); iMfloater)
 	{
 		iMfloater->closeFloater();
 	}
@@ -535,7 +534,7 @@ LLFloater* FSFloaterIMContainer::getCurrentVoiceFloater()
 {
 	if (!LLVoiceClient::instance().voiceEnabled())
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	if (LLVoiceChannelProximal::getInstance() == LLVoiceChannel::getCurrentVoiceChannel())
@@ -551,7 +550,7 @@ LLFloater* FSFloaterIMContainer::getCurrentVoiceFloater()
 			return im_floater;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 void FSFloaterIMContainer::addFlashingSession(const LLUUID& session_id)
@@ -573,8 +572,7 @@ void FSFloaterIMContainer::checkFlashing()
 
 void FSFloaterIMContainer::sessionIDUpdated(const LLUUID& old_session_id, const LLUUID& new_session_id)
 {
-	avatarID_panel_map_t::iterator found = mSessions.find(old_session_id);
-	if (found != mSessions.end())
+	if (avatarID_panel_map_t::iterator found = mSessions.find(old_session_id); found != mSessions.end())
 	{
 		LLFloater* floaterp = found->second;
 		mSessions.erase(found);
