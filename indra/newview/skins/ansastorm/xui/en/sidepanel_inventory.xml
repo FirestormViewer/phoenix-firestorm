@@ -14,7 +14,7 @@
 		 name="sidepanel_inventory_panel"
 		 top="0"
 		 label=""
-		 height="570"
+		 height="565"
 		 visible="true">
          <layout_stack
               follows="left|right|top|bottom"
@@ -23,7 +23,7 @@
               top="0"
               orientation="vertical"
               name="inventory_layout_stack"
-              height="570">
+              height="565">
              <layout_panel
                  name="main_inventory_layout_panel"
                  layout="topleft"
@@ -80,7 +80,15 @@
                         pad_left="35"
                         top="0"
                         left="5"
-                        right="-5" />
+                        right="-43" />
+                     <button
+                        name="reload_received_items_btn"
+                        height="35"
+                        width="35"
+                        left_pad="3"
+                        follows="top|right"
+                        image_overlay="Refresh_Off"
+                        tool_tip="Reload the received items list." />
                      <text
                         type="string"
                         length="1"
@@ -88,7 +96,7 @@
                         layout="topleft"
                         height="13"
                         top="10"
-                        right="-20"
+                        right="-58"
                         name="inbox_fresh_new_count"
                         font="SansSerifMedium"
                         halign="right"

@@ -1919,7 +1919,7 @@ bool LLAvatarActions::canZoomIn(const LLUUID& idAgent)
 	else
 	{
 		// Special case for SL since interest list changes
-		FSRadarEntry* entry = FSRadar::getInstance()->getEntry(idAgent);
+		auto entry = FSRadar::getInstance()->getEntry(idAgent);
 #ifdef OPENSIM
 		if (LLGridManager::getInstance()->isInOpenSim())
 		{
@@ -1928,7 +1928,7 @@ bool LLAvatarActions::canZoomIn(const LLUUID& idAgent)
 		else
 #endif
 		{
-			return (entry != NULL);
+			return (entry != nullptr);
 		}
 	}
 	// </FS:Ansariel>
@@ -1939,8 +1939,7 @@ void LLAvatarActions::zoomIn(const LLUUID& idAgent)
 	// <FS:Ansariel> Firestorm radar support
 	//handle_zoom_to_object(idAgent);
 
-	FSRadarEntry* entry = FSRadar::getInstance()->getEntry(idAgent);
-	if (entry)
+	if (auto entry = FSRadar::getInstance()->getEntry(idAgent); entry)
 	{
 		handle_zoom_to_object(idAgent, entry->getGlobalPos());
 	}

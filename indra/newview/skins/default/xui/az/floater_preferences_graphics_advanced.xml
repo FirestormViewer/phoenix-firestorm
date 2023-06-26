@@ -72,7 +72,7 @@
 	<text name="ObjectMeshDetailText">
 		Aşağı
 	</text>
-	<slider label="Гибкие примитивы:" name="FlexibleMeshDetail"/>
+	<slider label="Çevik primitivlər:" name="FlexibleMeshDetail"/>
 	<text name="FlexibleMeshDetailText">
 		Aşağı
 	</text>

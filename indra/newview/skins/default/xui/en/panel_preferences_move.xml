@@ -467,6 +467,7 @@
          layout="topleft"
          left_delta="10"
          name="arrow_keys_move_avatar_check"
+         tool_tip="Only applies to the Nearby Chat entry field at the bottom of the viewer, not to the Nearby Chat tab in Conversations."
          width="237"
          top_pad="8"/>
         <check_box

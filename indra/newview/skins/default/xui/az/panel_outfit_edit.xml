@@ -5,7 +5,7 @@
 	<string name="unsaved_changes" value="Saxlanılmamış dəyişiklər"/>
 	<string name="now_editing" value="İndi dəyişdirilir"/>
 	<panel.string name="not_available">
-		(нет)
+		(yox)
 	</panel.string>
 	<panel.string name="unknown">
 		(naməlum)

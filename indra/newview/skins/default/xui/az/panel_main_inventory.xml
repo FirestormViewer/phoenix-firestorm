@@ -62,7 +62,7 @@
 			</text>
 		</panel>
 		<panel name="trash_btn_panel">
-			<dnd_button name="trash_btn" tool_tip="Удалить выбранный элемент"/>
+			<dnd_button name="trash_btn" tool_tip="Seçilmiş elementi sil"/>
 		</panel>
 	</panel>
 </panel>

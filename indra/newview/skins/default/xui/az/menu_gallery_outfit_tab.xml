@@ -17,7 +17,7 @@
         <menu_item_call label="Yeni əlcəklər" name="New Gloves"/>
         <menu_item_call label="Yeni mayka" name="New Undershirt"/>
         <menu_item_call label="Yenu tuman" name="New Underpants"/>
-        <menu_item_call label="Yeni alfaа" name="New Alpha"/>
+        <menu_item_call label="Yeni alfa" name="New Alpha"/>
         <menu_item_call label="Yeni fizika" name="New Physics"/>
         <menu_item_call label="Yeni döymə" name="New Tattoo"/>
     </menu>

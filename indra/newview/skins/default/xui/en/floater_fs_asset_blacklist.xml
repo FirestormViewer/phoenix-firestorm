@@ -21,6 +21,9 @@
 	<floater.string name="asset_sound">
 		Sound
 	</floater.string>
+	<floater.string name="asset_animation">
+		Animation
+	</floater.string>
 	<floater.string name="asset_resident">
 		Resident
 	</floater.string>

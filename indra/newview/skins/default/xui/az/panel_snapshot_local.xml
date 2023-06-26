@@ -27,7 +27,7 @@
 	<text name="local_remember_location_sessions_text">
 		Seanslar arasında yeri və fayl adını saxlayın
 	</text>
-	<button label="&#x25B6; Выбор" name="cancel_btn"/>
+	<button label="&#x25B6; Seçim" name="cancel_btn"/>
 	<flyout_button label="Yadda saxla" name="save_btn" tool_tip="Şəkili fayla yadda saxla">
 		<flyout_button.item label="Yadda saxla" name="save_item"/>
 		<flyout_button.item label="Ayrı saxla..." name="saveas_item"/>

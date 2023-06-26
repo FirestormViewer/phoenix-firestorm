@@ -103,7 +103,7 @@ Daha kiçik bir sahə seçməyə çalışın.
 	</floater.string>
 	<floater.string name="info_price_string">
 		L$ [PRICE]
-(L$ [PRICE_PER_SQM]/м²)
+(L$ [PRICE_PER_SQM]/m²)
 [SOLD_WITH_OBJECTS]
 	</floater.string>
 	<floater.string name="insufficient_land_credits">
@@ -181,7 +181,7 @@ Daha kiçik bir sahə seçməyə çalışın.
 	</text>
 	<text name="info_price">
 		L$ 1500
-(L$ 1,1/м²)
+(L$ 1,1/m²)
 obyektlər daxil satılıb
 	</text>
 	<text name="info_action">

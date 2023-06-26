@@ -110,6 +110,7 @@ private:
     LLLayoutPanel* mInboxLayoutPanel;
 
 protected:
+	void						onReloadInboxClicked();			// <FS:Zi> Add reload button to inventory inbox
 public:
 	void 						onBackButtonClicked();
 
