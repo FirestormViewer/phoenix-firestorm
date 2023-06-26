@@ -366,7 +366,13 @@ void LLSidepanelInventory::enableInbox(bool enabled)
 void LLSidepanelInventory::hideInbox()
 {
 	if (mInboxLayoutPanel) // <FS:Ansariel> Inbox panel randomly shown on secondary inventory window
+	{
 		mInboxLayoutPanel->setVisible(false);
+		if (LLLayoutStack* inv_stack = findChild<LLLayoutStack>(INVENTORY_LAYOUT_STACK_NAME); inv_stack)
+		{
+			inv_stack->setPanelSpacing(0);
+		}
+	}
 }
 
 void LLSidepanelInventory::toggleInbox()
@@ -374,12 +380,19 @@ void LLSidepanelInventory::toggleInbox()
 	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
     //mInboxLayoutPanel->setVisible(mInboxEnabled);
 	if (mInboxLayoutPanel)
+	{
 		mInboxLayoutPanel->setVisible(mInboxEnabled && (!gSavedSettings.getBOOL("FSShowInboxFolder") || gSavedSettings.getBOOL("FSAlwaysShowInboxButton"))
-// <FS:CR> Show Received Items panel only in Second Life
+			// <FS:CR> Show Received Items panel only in Second Life
 #ifdef OPENSIM
-								   && LLGridManager::getInstance()->isInSecondLife()
+			&& LLGridManager::getInstance()->isInSecondLife()
 #endif // OPENSIM
-								   );
+		);
+
+		if (LLLayoutStack* inv_stack = findChild<LLLayoutStack>(INVENTORY_LAYOUT_STACK_NAME); inv_stack)
+		{
+			inv_stack->setPanelSpacing(mInboxLayoutPanel->getVisible() ? gSavedSettings.getS32("UIResizeBarHeight") : 0);
+		}
+	}
 }
 
 // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox

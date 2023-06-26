@@ -108,24 +108,11 @@
 
 void copy_slurl_to_clipboard_callback_inv(const std::string& slurl);
 
-typedef std::pair<LLUUID, LLUUID> two_uuids_t;
-typedef std::list<two_uuids_t> two_uuids_list_t;
-
 const F32 SOUND_GAIN = 1.0f;
-
-struct LLMoveInv
-{
-	LLUUID mObjectID;
-	LLUUID mCategoryID;
-	two_uuids_list_t mMoveList;
-	void (*mCallback)(S32, void*);
-	void* mUserData;
-};
 
 using namespace LLOldEvents;
 
 // Function declarations
-bool move_task_inventory_callback(const LLSD& notification, const LLSD& response, boost::shared_ptr<LLMoveInv>);
 bool confirm_attachment_rez(const LLSD& notification, const LLSD& response);
 void teleport_via_landmark(const LLUUID& asset_id);
 // <FS:CR> Function left unused from FIRE-7219
@@ -4941,37 +4928,33 @@ void LLFolderBridge::buildContextMenuFolderOptions(U32 flags,   menuentry_vec_t&
 				// <FS:TT> Patch: ReplaceWornItemsOnly
 				items.push_back(std::string("Wear Items"));
 				// </FS:TT>
+                if (!LLAppearanceMgr::instance().getCanAddToCOF(mUUID))
+                {
+                    disabled_items.push_back(std::string("Add To Outfit"));
+                }
 			}
 
 			items.push_back(std::string("Replace Outfit"));
+            //if (!LLAppearanceMgr::instance().getCanReplaceCOF(mUUID))
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-11-24 (Catznip-2.4)
+            if ( ((is_outfit) && (!LLAppearanceMgr::instance().getCanReplaceCOF(mUUID))) || 
+                 ((!is_outfit) && (gAgentWearables.isCOFChangeInProgress())) )
+// [/SL:KB]
+            {
+                disabled_items.push_back(std::string("Replace Outfit"));
+            }
 		}
 		if (is_agent_inventory)
 		{
 			items.push_back(std::string("Folder Wearables Separator"));
+            // Note: If user tries to unwear "My Inventory", it's going to deactivate everything including gestures
+            // Might be safer to disable this for "My Inventory"
 			items.push_back(std::string("Remove From Outfit"));
-			if (!LLAppearanceMgr::getCanRemoveFromCOF(mUUID))
-			{
-					disabled_items.push_back(std::string("Remove From Outfit"));
-			}
-		}
-		//if (!LLAppearanceMgr::instance().getCanReplaceCOF(mUUID))
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-11-24 (Catznip-2.4)
-		if ( ((is_outfit) && (!LLAppearanceMgr::instance().getCanReplaceCOF(mUUID))) || 
-			 ((!is_outfit) && (gAgentWearables.isCOFChangeInProgress())) )
-// [/SL:KB]
-		{
-			disabled_items.push_back(std::string("Replace Outfit"));
-		}
-// [RLVa:KB] - Checked: RLVa-2.0.3
-		// Block "Replace Current Outfit" if the user can't wear the new folder
-		if ( (RlvActions::isRlvEnabled()) && (RlvFolderLocks::instance().isLockedFolder(mUUID, RLV_LOCK_ADD)) )
-		{
-			disabled_items.push_back(std::string("Replace Outfit"));
-		}
-// [/RLVa:KB]
-		if (!LLAppearanceMgr::instance().getCanAddToCOF(mUUID))
-		{
-			disabled_items.push_back(std::string("Add To Outfit"));
+            if (type != LLFolderType::FT_ROOT_INVENTORY // Unless COF is empty, whih shouldn't be, warrantied to have worn items
+                && !LLAppearanceMgr::getCanRemoveFromCOF(mUUID)) // expensive from root!
+            {
+                disabled_items.push_back(std::string("Remove From Outfit"));
+            }
 		}
 		items.push_back(std::string("Outfit Separator"));
 

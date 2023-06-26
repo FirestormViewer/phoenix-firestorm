@@ -236,7 +236,8 @@ private:
     LLInventorySingleFolderPanel* mCombinationInventoryPanel;
     LLInventoryGallery* mCombinationGalleryPanel;
     LLPanel* mCombinationGalleryLayoutPanel;
-    LLPanel* mCombinationListLayoutPanel;
+    LLLayoutPanel* mCombinationListLayoutPanel;
+    LLLayoutStack* mCombinationLayoutStack;
 
 	// <FS:Zi> Filter dropdown
 	LLComboBox*					mFilterComboBox;

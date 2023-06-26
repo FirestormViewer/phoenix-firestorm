@@ -6,8 +6,7 @@
  layout="topleft"
  min_height="300"
  min_width="240"
- name="main inventory panel"
- width="330">
+ name="main inventory panel">
   <panel.string
    name="Itemcount">
   </panel.string>
@@ -204,10 +203,10 @@
    halign="center"
    height="338"
    layout="topleft"
-   left="4"
+   left="3"
+   right="-3"
    name="default_inventory_panel"
-   top_pad="4"
-   width="322">
+   top_pad="4">
     <tab_container
        bg_alpha_color="DkGray"
        bg_opaque_color="DkGray"
@@ -221,54 +220,45 @@
        name="inventory filter tabs"
        open_tabs_on_drag_and_drop="true"
        tab_position="top"
-       top="0"
-       width="322">
+       top="0">
       <inventory_panel
        border="false"
        bevel_style="none"
        follows="all"
-       height="338"
        label="Inventory"
        help_topic="my_inventory_tab"
        layout="topleft"
-       left="0"
        name="All Items"
        sort_order_setting="InventorySortOrder"
        show_item_link_overlays="true"
        preinitialize_views="false"
-       top="16"
-       width="288" >
+       scroll.reserve_scroll_corner="false">
           <folder double_click_override="true"/>
       </inventory_panel>
       <recent_inventory_panel
        border="false"
        bevel_style="none"
        follows="all"
-       height="338"
        label="Recent"
        sort_order_setting="RecentItemsSortOrder"
        help_topic="recent_inventory_tab"
        layout="topleft"
-       left_delta="0"
        name="Recent Items"
        show_item_link_overlays="true"
        preinitialize_views="false"
-       width="290" >
+       scroll.reserve_scroll_corner="false">
           <folder double_click_override="true"/>
       </recent_inventory_panel>
       <worn_inventory_panel
        border="false"
        bevel_style="none"
        follows="all"
-       height="338"
        label="Worn"
        help_topic="worn_inventory_tab"
        layout="topleft"
-       left_delta="0"
        name="Worn Items"
        show_item_link_overlays="true"
-       preinitialize_views="false"
-       width="290" >
+       preinitialize_views="false">
           <folder double_click_override="true"/>
       </worn_inventory_panel>
     </tab_container>
@@ -281,14 +271,12 @@
      left="4"
      name="combination_view_inventory"
      top_delta="0"
-     visible="false"
-     width="322">
+     visible="false">
      <layout_stack
       follows="all"
       height="338"
-      width="322"
+      name="combination_view_stack"
       animate="false"
-      drag_handle_gap="13"
       drag_handle_thickness="6"
       drag_handle_first_indent="18"
       drag_handle_second_indent="18"
@@ -304,7 +292,6 @@
         user_resize="true"
         auto_resize="true"
         height="228"
-        width="322"
         min_width="150"
         name="comb_gallery_layout">
         <panel
@@ -313,7 +300,6 @@
          left="0"
          top_pad="0"
          height="228"
-         width="322"
          name="comb_gallery_view_inv"
          background_visible="true"
          follows="all"
@@ -326,15 +312,13 @@
         user_resize="true"
         auto_resize="true"
         height="110"
-        width="322"
         name="comb_inventory_layout">
         <single_folder_inventory_panel
          name="comb_single_folder_inv"
          follows="all"
          left="0"
-         top="1"
+         top="0"
          height="110"
-         width="322"
          layout="topleft"
          show_item_link_overlays="true"
          background_visible="true"
@@ -358,7 +342,7 @@
    bottom="-8"
    left="4"
    name="bottom_panel"
-   width="322">
+   right="-4">
       <panel
        follows="top|left"
        height="25"

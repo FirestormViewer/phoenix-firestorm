@@ -86,6 +86,9 @@ public:
     void moveLeft();
     void moveRight();
 
+    void onFocusLost() override;
+    void onFocusReceived() override;
+
     void setFilterSubString(const std::string& string);
     std::string getFilterSubString() { return mFilterSubString; }
     LLInventoryFilter& getFilter() const { return *mFilter; }
@@ -157,7 +160,11 @@ public:
     bool canDeleteSelection();
     void pasteAsLink();
 
+    void setSortOrder(U32 order, bool update = false);
+    U32 getSortOrder() { return mSortOrder; };
+
     void claimEditHandler();
+    void resetEditHandler();
     static bool isItemCopyable(const LLUUID & item_id);
 
     BOOL baseHandleDragAndDrop(LLUUID dest_id, BOOL drop, EDragAndDropType cargo_type,
@@ -202,7 +209,7 @@ private:
     bool updateRowsIfNeeded();
     void updateGalleryWidth();
 
-    LLInventoryGalleryItem* buildGalleryItem(std::string name, LLUUID item_id, LLAssetType::EType type, LLUUID thumbnail_id, LLInventoryType::EType inventory_type, U32 flags, bool is_link, bool is_worn);
+    LLInventoryGalleryItem* buildGalleryItem(std::string name, LLUUID item_id, LLAssetType::EType type, LLUUID thumbnail_id, LLInventoryType::EType inventory_type, U32 flags, time_t creation_date, bool is_link, bool is_worn);
 
     void buildGalleryPanel(int row_count);
     void reshapeGalleryPanel(int row_count);
@@ -242,6 +249,7 @@ private:
     LLInventoryGalleryContextMenu* mRootGalleryMenu;
     std::string mFilterSubString;
     LLInventoryFilter* mFilter;
+    U32 mSortOrder;
 
     typedef std::map<LLUUID, LLInventoryGalleryItem*> gallery_item_map_t;
     gallery_item_map_t mItemMap;
@@ -286,6 +294,9 @@ public:
                                    std::string& tooltip_msg);
     BOOL handleKeyHere(KEY key, MASK mask);
 
+    void onFocusLost();
+    void onFocusReceived();
+
     LLFontGL* getTextFont();
 
     void setItemName(std::string name);
@@ -300,6 +311,8 @@ public:
     std::string getDescription() { return mDesc;}
     void setCreatorName(std::string name) {mCreatorName = name;}
     std::string getCreatorName() { return mCreatorName;}
+    void setCreationDate(time_t date) {mCreationDate = date;}
+    time_t getCreationDate() { return mCreationDate;}
 
     std::string getItemName() {return mItemName;}
     std::string getItemNameSuffix() {return mPermSuffix + mWornSuffix;}
@@ -332,6 +345,7 @@ private:
     std::string mAssetIDStr;
     std::string mDesc;
     std::string mCreatorName;
+    time_t mCreationDate;
 
     EInventorySortGroup mSortGroup;
     LLAssetType::EType mType;

@@ -323,11 +323,6 @@ void LLInventoryPanel::initFolderRoot()
     // Scroller
     LLRect scroller_view_rect = getRect();
     scroller_view_rect.translate(-scroller_view_rect.mLeft, -scroller_view_rect.mBottom);
-	// <FS:Ansariel> Pull this magic number here so inventory scroll panel
-	//               doesn't get cut off on the left side!
-	scroller_view_rect.mLeft += 2;
-	// </FS:Ansariel>
-	scroller_view_rect.mTop -= 3;
     LLScrollContainer::Params scroller_params(mParams.scroll());
     scroller_params.rect(scroller_view_rect);
     mScroller = LLUICtrlFactory::create<LLFolderViewScrollContainer>(scroller_params);
@@ -1314,6 +1309,7 @@ LLFolderViewItem* LLInventoryPanel::buildViewsTree(const LLUUID& id,
         const S32 starting_item_count = mItemMap.size();
 
         LLFolderViewFolder *parentp = dynamic_cast<LLFolderViewFolder*>(folder_view_item);
+        bool done = true;
 
 		if(categories)
         {
@@ -1351,6 +1347,7 @@ LLFolderViewItem* LLInventoryPanel::buildViewsTree(const LLUUID& id,
                     if (mBuildViewsEndTime < curent_time)
                     {
                         mBuildViewsQueue.push_back(id);
+                        done = false;
                         break;
                     }
                 }
@@ -1386,13 +1383,14 @@ LLFolderViewItem* LLInventoryPanel::buildViewsTree(const LLUUID& id,
                     if (mBuildViewsEndTime < curent_time)
                     {
                         mBuildViewsQueue.push_back(id);
+                        done = false;
                         break;
                     }
                 }
 			}
 		}
 
-        if (!mBuildChildrenViews)
+        if (!mBuildChildrenViews && done)
         {
             // flat list is done initializing folder
             folder_view_item->setChildrenInited(true);

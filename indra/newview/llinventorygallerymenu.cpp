@@ -33,12 +33,16 @@
 #include "llavataractions.h"
 #include "llclipboard.h"
 #include "llfloaterreg.h"
+#include "llfloatersidepanelcontainer.h"
+#include "llfloaterworldmap.h"
 #include "llinventorybridge.h"
 #include "llinventoryfunctions.h"
 #include "llinventorymodel.h"
+#include "lllandmarkactions.h"
 #include "llmarketplacefunctions.h"
 #include "llmenugl.h"
 #include "llnotificationsutil.h"
+#include "llpreviewtexture.h"
 #include "lltrans.h"
 #include "llviewerfoldertype.h"
 #include "llviewerwindow.h"
@@ -217,6 +221,64 @@ void LLInventoryGalleryContextMenu::doToSelected(const LLSD& userdata, const LLU
     {
         LLFloaterReg::showInstance("linkreplace", LLSD(selected_id));
     }
+    else if ("copy_slurl" == action)
+    {
+        boost::function<void(LLLandmark*)> copy_slurl_cb = [](LLLandmark* landmark)
+        {
+            LLVector3d global_pos;
+            landmark->getGlobalPos(global_pos);
+            boost::function<void(std::string& slurl)> copy_slurl_to_clipboard_cb = [](const std::string& slurl)
+            {
+               gViewerWindow->getWindow()->copyTextToClipboard(utf8str_to_wstring(slurl));
+               LLSD args;
+               args["SLURL"] = slurl;
+               LLNotificationsUtil::add("CopySLURL", args);
+            };
+            LLLandmarkActions::getSLURLfromPosGlobal(global_pos, copy_slurl_to_clipboard_cb, true);
+        };
+        LLLandmark* landmark = LLLandmarkActions::getLandmark(selected_id, copy_slurl_cb);
+        if (landmark)
+        {
+            copy_slurl_cb(landmark);
+        }
+    }
+    else if ("about" == action)
+    {
+        LLSD key;
+        key["type"] = "landmark";
+        key["id"] = selected_id;
+        LLFloaterSidePanelContainer::showPanel("places", key);
+    }
+    else if ("show_on_map" == action)
+    {
+        boost::function<void(LLLandmark*)> show_on_map_cb = [](LLLandmark* landmark)
+        {
+            LLVector3d landmark_global_pos;
+            if (landmark->getGlobalPos(landmark_global_pos))
+            {
+                LLFloaterWorldMap* worldmap_instance = LLFloaterWorldMap::getInstance();
+                if (!landmark_global_pos.isExactlyZero() && worldmap_instance)
+                {
+                    worldmap_instance->trackLocation(landmark_global_pos);
+                    LLFloaterReg::showInstance("world_map", "center");
+                }
+            }
+        };
+        LLLandmark* landmark = LLLandmarkActions::getLandmark(selected_id, show_on_map_cb);
+        if(landmark)
+        {
+            show_on_map_cb(landmark);
+        }
+    }
+    else if ("save_as" == action)
+    {
+        LLPreviewTexture* preview_texture = LLFloaterReg::getTypedInstance<LLPreviewTexture>("preview_texture", selected_id);
+        if (preview_texture)
+        {
+            preview_texture->openToSave();
+            preview_texture->saveAs();
+        }
+    }
 }
 
 void LLInventoryGalleryContextMenu::onRename(const LLSD& notification, const LLSD& response)
@@ -356,6 +418,13 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
         if (is_agent_inventory && (obj->getType() != LLAssetType::AT_LINK_FOLDER))
         {
             items.push_back(std::string("Replace Links"));
+        }
+        if (obj->getType() == LLAssetType::AT_LANDMARK)
+        {
+            items.push_back(std::string("Landmark Separator"));
+            items.push_back(std::string("url_copy"));
+            items.push_back(std::string("About Landmark"));
+            items.push_back(std::string("show_on_map"));
         }
     }
 
@@ -559,6 +628,15 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
                 {
                     disabled_items.push_back(std::string("Wearable Add"));
                 }
+            }
+        }
+        if(obj->getType() == LLAssetType::AT_TEXTURE)
+        {
+            items.push_back(std::string("Save As"));
+            bool can_copy = selected_item && selected_item->checkPermissionsSet(PERM_ITEM_UNRESTRICTED);
+            if (!can_copy)
+            {
+                disabled_items.push_back(std::string("Save As"));
             }
         }
         if (is_link)
