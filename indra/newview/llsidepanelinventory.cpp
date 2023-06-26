@@ -76,6 +76,7 @@ static LLPanelInjector<LLSidepanelInventory> t_inventory("sidepanel_inventory");
 
 static const char * const INBOX_BUTTON_NAME = "inbox_btn";
 static const char * const INBOX_LAYOUT_PANEL_NAME = "inbox_layout_panel";
+static const char * const INBOX_RELOAD_BUTTON_NAME = "reload_received_items_btn";	// <FS:Zi> Add reload button to inventory inbox
 static const char * const INVENTORY_LAYOUT_STACK_NAME = "inventory_layout_stack";
 static const char * const MARKETPLACE_INBOX_PANEL = "marketplace_inbox";
 
@@ -198,6 +199,12 @@ BOOL LLSidepanelInventory::postBuild()
 		LLTabContainer* tabs = mPanelMainInventory->getChild<LLTabContainer>("inventory filter tabs");
 		tabs->setCommitCallback(boost::bind(&LLSidepanelInventory::updateVerbs, this));
 
+		// <FS:Zi> Add reload button to inventory inbox
+		if (LLButton* reload_inbox_btn = getChild<LLButton>(INBOX_RELOAD_BUTTON_NAME) ; reload_inbox_btn)
+		{
+			reload_inbox_btn->setClickedCallback(boost::bind(&LLSidepanelInventory::onReloadInboxClicked, this));
+		}
+		// </FS:Zi>
 		/* 
 		   EXT-4846 : "Can we suppress the "Landmarks" and "My Favorites" folder since they have their own Task Panel?"
 		   Deferring this until 2.1.
@@ -834,3 +841,16 @@ void LLSidepanelInventory::cleanup()
 	}
 	// </FS:Ansariel>
 }
+
+// <FS:Zi> Add reload button to inventory inbox
+void LLSidepanelInventory::onReloadInboxClicked()
+{
+	const LLUUID inbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_INBOX, true);
+
+	if (LLViewerInventoryCategory* cat = gInventory.getCategory(inbox_id); cat)
+	{
+		cat->setVersion(LLViewerInventoryCategory::VERSION_UNKNOWN);
+		cat->fetch();
+	}
+}
+// </FS:Zi>
