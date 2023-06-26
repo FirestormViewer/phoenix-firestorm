@@ -1473,7 +1473,7 @@ void FSFloaterIM::updateMessages()
 			LLUUID from_id = msg["from_id"].asUUID();
 			std::string from = msg["from"].asString();
 			std::string message = msg["message"].asString();
-			bool is_history = msg["is_history"].asBoolean();
+			S32 is_history = msg["is_history"].asInteger();
 			bool is_region_msg = msg["is_region_msg"].asBoolean();
 
 			LLChat chat;
@@ -1481,7 +1481,10 @@ void FSFloaterIM::updateMessages()
 			chat.mSessionID = mSessionID;
 			chat.mFromName = from;
 			chat.mTimeStr = time;
-			chat.mChatStyle = is_history ? CHAT_STYLE_HISTORY : chat.mChatStyle;
+			if (is_history)
+			{
+				chat.mChatStyle = (EChatStyle) is_history;
+			}
 			if (is_region_msg)
 			{
 				chat.mSourceType = CHAT_SOURCE_REGION;

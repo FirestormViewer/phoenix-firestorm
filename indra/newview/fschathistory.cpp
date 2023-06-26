@@ -803,6 +803,7 @@ public:
 		}
 		else if ((mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR))
 				 && !mAvatarID.isNull()
+				 && chat.mChatStyle != CHAT_STYLE_SERVER_HISTORY
 				 && chat.mChatStyle != CHAT_STYLE_HISTORY)
 		{
 			// ...from a normal user, lookup the name and fill in later.
@@ -831,6 +832,7 @@ public:
 // [/RLVa:KB]
 		}
 		else if (chat.mChatStyle == CHAT_STYLE_HISTORY ||
+				 chat.mChatStyle == CHAT_STYLE_SERVER_HISTORY ||
 				 (mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR)))
 		{
 			//if it's an avatar name with a username add formatting
@@ -1506,12 +1508,19 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		delimiter_style = "BOLD";
 	}
 
-	bool message_from_log = chat.mChatStyle == CHAT_STYLE_HISTORY;
+	bool message_from_log = (chat.mChatStyle == CHAT_STYLE_HISTORY || chat.mChatStyle == CHAT_STYLE_SERVER_HISTORY);
 	bool teleport_separator = chat.mSourceType == CHAT_SOURCE_TELEPORT;
 	// We graying out chat history by graying out messages that contains full date in a time string
 	if (message_from_log && !is_conversation_log)
 	{
-		txt_color = LLUIColorTable::instance().getColor("ChatHistoryMessageFromLog");
+		if (chat.mChatStyle == CHAT_STYLE_HISTORY)
+		{
+			txt_color = LLUIColorTable::instance().getColor("ChatHistoryMessageFromLog");
+		}
+		else if (chat.mChatStyle == CHAT_STYLE_SERVER_HISTORY)
+		{
+			txt_color = LLUIColorTable::instance().getColor("ChatHistoryMessageFromServerLog");
+		}
 		body_message_params.color(txt_color);
 		body_message_params.readonly_color(txt_color);
 		name_params.color(txt_color);
