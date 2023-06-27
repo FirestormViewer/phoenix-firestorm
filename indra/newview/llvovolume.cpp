@@ -6205,9 +6205,11 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 								add_face(sAlphaFaces, alpha_count, facep);
 							}
 							else if (LLDrawPoolAlpha::sShowDebugAlpha ||
-								(gPipeline.sRenderHighlight &&
-								(LLPipeline::getRenderScriptedBeacons() || LLPipeline::getRenderScriptedTouchBeacons()) &&
-								drawablep->getVObj() && drawablep->getVObj()->flagScripted()))
+								(gPipeline.sRenderHighlight && !drawablep->getParent() &&
+								//only root objects are highlighted with red color in this case
+								drawablep->getVObj() && drawablep->getVObj()->flagScripted() &&
+								(LLPipeline::getRenderScriptedBeacons() ||
+								(LLPipeline::getRenderScriptedTouchBeacons() && drawablep->getVObj()->flagHandleTouch()))))
 							{ //draw the transparent face for debugging purposes using a custom texture
 								add_face(sAlphaFaces, alpha_count, facep);
 							}
