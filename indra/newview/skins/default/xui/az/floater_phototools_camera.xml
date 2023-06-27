@@ -78,23 +78,23 @@
 				<text name="T_Zoom" tool_tip="Real mənada bu, yaxınlaşdırma funksiyasıdır. Bu, görünüş pəncərəsindəki baxış sahəsini dəyişəcək. Bu, Ctrl+0 və ya Ctrl+8 düymələrini basmaqla eynidir. QEYD. Əgər siz flycam-ı (3D SpacenNavigator) aktiv etmisinizsə, bu işləməyəcək.">
 					Baxış bucağı
 				</text>
-				<button name="Reset_Camera_Angle" label="С" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<button name="Reset_Camera_Angle" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
 				<text name="T_Zoom_Speed" tool_tip="Controls how fast/slow the camera will zoom in and out. Higher values produce slower and smother zoom.">
 					Sür. miqyas
 				</text>
-				<button name="Reset_Zoom_Time" label="С" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<button name="Reset_Zoom_Time" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
 				<text name="T_Camera_Lag" tool_tip="Avatar hərəkətindən kamera gecikməsi dəyəri (0 = heç biri, 30 = avatar sürəti).">
 					Gecikmə
 				</text>
-				<button name="Reset_Camera_Lag" label="С" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<button name="Reset_Camera_Lag" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
 				<text name="T_Camera_Offset" tool_tip="Kameranın defolt baxış nöqtəsindən nə qədər uzaqlaşdığına/sürüşdürülməsinə nəzarət edir.">
 					Sürüşdürmə
 				</text>
-				<button name="Reset_Camera_Offset" label="С" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<button name="Reset_Camera_Offset" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
 				<text name="T_Camera_Smoothing" tool_tip="Kameranın nə qədər hamar sürətlənməsinə və dayanmasına nəzarət edir. Daha yüksək dəyərlər daha hamar (və bir qədər yavaş) hərəkət verir.">
 					Hamalaşdırma
 				</text>
-				<button name="Reset_Camera_Smoothing" label="С" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
+				<button name="Reset_Camera_Smoothing" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
 			</panel>
 		</panel>
 
@@ -123,7 +123,7 @@
 			<panel name="P_Add_Cam_Opt_Settings">
 				<check_box name="clickonavatarkeepscamera" label="Kamera yerləşməsini yadda saxlayın"
 				 tool_tip="Adətən avatarın üzərinə basmaqla kameranın yerləşməsi sıfırlanır. Bu seçim bu davranışı düzəldir."/>
-				<check_box name="FSResetCameraOnTP" label="Teleportdan sonra kamera yerləşməsini sıfırlayın"
+				<check_box name="FSResetCameraOnTP" label="Tp-dan sonra kamera yerləşməsini sıfırlayın"
 				 tool_tip="Bir qayda olaraq, teleportasiya zamanı (region daxilində) kameranın yerləşməsi sıfırlanır. Bu seçim bu davranışın qarşısını alır."/>
 				<check_box name="disableminzoomdist" label="Minimum məsafəni söndürün"
 				 tool_tip="Obyektə ən yaxın kamera məsafəsi ilə bağlı məhdudiyyəti söndürür."/>

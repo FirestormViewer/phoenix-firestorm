@@ -41,7 +41,7 @@
   <check_box label="İndi t. et" name="apply_immediate" width="100" />
   <button label="LSL köç."
      tool_tip="Rəng dəyərini &lt;r, g, b&gt;. formatda LSL rəng vektoruna köçürdür" name="copy_lsl_btn" width="80" />
-  <button label="ОК" label_selected="ОК" name="select_btn"/>
+  <button label="OK" label_selected="OK" name="select_btn"/>
   <button label="Ləğv et" label_selected="Ləğv et" name="cancel_btn"/>
   <text name="Current color:">
     ^ Cari rəng ^

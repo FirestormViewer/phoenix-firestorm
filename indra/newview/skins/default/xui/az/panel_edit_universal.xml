@@ -3,7 +3,7 @@
   <scroll_container name="avatar_universal_scroll">
     <panel name="avatar_universal_color_panel">
       <texture_picker label="Baş döyməsi" name="Head Universal Tattoo" tool_tip="Şəkil seçmək üçün basın"/>
-      <texture_picker label="Üst döyməsiу" name="Upper Universal Tattoo" tool_tip="Şəkil seçmək üçün basın"/>
+      <texture_picker label="Üst döyməsi" name="Upper Universal Tattoo" tool_tip="Şəkil seçmək üçün basın"/>
       <texture_picker label="Alt döyməsi" name="Lower Universal Tattoo" tool_tip="Şəkil seçmək üçün basın"/>
       <texture_picker label="Don döyməsi" name="Skirt Tattoo" tool_tip="Şəkil seçmək üçün basın"/>
       <texture_picker label="Saç döyməsi" name="Hair Tattoo" tool_tip="Şəkil seçmək üçün basın"/>

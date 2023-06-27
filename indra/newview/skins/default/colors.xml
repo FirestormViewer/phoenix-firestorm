@@ -1358,6 +1358,11 @@
   <color
       name="ChatHistoryMessageFromLog"
       reference="Gray" />
+  <!-- <FS:Zi> Add a distinct color for server side group chat replay -->
+  <color
+      name="ChatHistoryMessageFromServerLog"
+      value=".37 .51 .38 1" />
+  <!-- </FS:Zi> -->
   <color
       name="AreaSearchBeaconColor"
       reference="Blue_80" />

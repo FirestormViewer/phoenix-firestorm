@@ -66,6 +66,6 @@
           </fs_scroll_list>
         </panel>
 	</tab_container>
-	<button label="ОК" label_selected="ОК" name="ok_btn"/>
+	<button label="OK" label_selected="OK" name="ok_btn"/>
 	<button label="Ləğv et" label_selected="Ləğv et" name="cancel_btn"/>
 </floater>

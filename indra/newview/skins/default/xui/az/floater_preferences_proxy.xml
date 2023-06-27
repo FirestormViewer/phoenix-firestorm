@@ -35,7 +35,7 @@
 		<radio_item label="HTTP proxy istifadə et" name="OtherHTTPProxy" tool_tip="Veb səhifələrə daxil olarkən HTTP proxy istifadə edilsin." value="Veb"/>
 		<radio_item label="SOCKS 5 server istifadə et" name="OtherSocksProxy" tool_tip="Veb saytlarla bağlı olmayan HTTP trafiki SOCKS 5 serverindən keçirilsin." value="SOCKS"/>
 	</radio_group>
-	<button label="ОК" label_selected="ОК" name="OK"/>
+	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Ləğv et" label_selected="Ləğv et" name="Cancel"/>
 </floater>
 

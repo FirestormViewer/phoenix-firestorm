@@ -9,6 +9,9 @@
 	<floater.string name="asset_sound">
 		Dźwięk
 	</floater.string>
+	<floater.string name="asset_animation">
+		Animacja
+	</floater.string>
 	<floater.string name="asset_resident">
 		Rezydent
 	</floater.string>

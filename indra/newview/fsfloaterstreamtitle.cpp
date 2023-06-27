@@ -183,25 +183,35 @@ BOOL FSFloaterStreamTitle::postBuild()
 	mUpdateConnection = instance.setUpdateCallback([this](std::string_view streamtitle) { updateStreamTitle(streamtitle); });
 	updateStreamTitle(instance.getCurrentStreamTitle());
 
-	mHistoryBtn->setCommitCallback(std::bind(&FSFloaterStreamTitle::openHistory, this));
+	mHistoryBtn->setCommitCallback(std::bind(&FSFloaterStreamTitle::toggleHistory, this));
+	mHistoryBtn->setIsToggledCallback([](LLUICtrl*, const LLSD&) { return LLFloaterReg::instanceVisible("fs_streamtitlehistory"); });
+
 
 	setVisibleCallback(boost::bind(&FSFloaterStreamTitle::closeHistory, this));
 
 	return TRUE;
 }
 
-void FSFloaterStreamTitle::openHistory() noexcept
+void FSFloaterStreamTitle::toggleHistory() noexcept
 {
 	LLFloater* root_floater = gFloaterView->getParentFloater(this);
-	FSFloaterStreamTitleHistory* history_floater = LLFloaterReg::showTypedInstance<FSFloaterStreamTitleHistory>("fs_streamtitlehistory");
+	FSFloaterStreamTitleHistory* history_floater = LLFloaterReg::findTypedInstance<FSFloaterStreamTitleHistory>("fs_streamtitlehistory");
 
-	if (root_floater)
+	if (!history_floater)
 	{
-		root_floater->addDependentFloater(history_floater);
-		history_floater->setOwnerOrigin(root_floater);
+		history_floater = LLFloaterReg::showTypedInstance<FSFloaterStreamTitleHistory>("fs_streamtitlehistory");
+		if (root_floater && history_floater)
+		{
+			root_floater->addDependentFloater(history_floater);
+			history_floater->setOwnerOrigin(root_floater);
+			mHistory = history_floater->getHandle();
+		}
+	}
+	else
+	{
+		closeHistory();
 	}
 
-	mHistory = history_floater->getHandle();
 }
 
 void FSFloaterStreamTitle::closeHistory() noexcept

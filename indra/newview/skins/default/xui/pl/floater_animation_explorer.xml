@@ -11,7 +11,7 @@
 	<panel name="buttons_panel">
 		<button label="Zatrzymaj" name="stop_btn" />
 		<button label="Zatrzymaj i cofnij zezwol." name="stop_and_revoke_btn" />
-		<button label="Cofnij zezwol." name="revoke_btn" />
+		<button label="Zablokuj" name="blacklist_btn" />
 		<check_box label="Bez moich animacji" name="no_owned_animations_check" tool_tip="Gdy zaznaczysz tą opcję, to odfiltrowane zostaną animacje będące w posiadaniu Twojego awatara - jak te pochodzące z Animatora, mechanizmów zastępowania animacji lub domyślne systemowe." />
 	</panel>
 </floater>

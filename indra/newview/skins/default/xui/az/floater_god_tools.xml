@@ -63,12 +63,12 @@
 			<text name="target_avatar_name">
 				(xarakter yoxdur)
 			</text>
-			<button label="Xarici torpaqda skriptlərlə xarakter obyektlərini silin" label_selected="Xarici ölkədə skriptlərlə xarakter obyektlərini silin" name="Delete Target&apos;s Scripted Objects On Others Land" tool_tip="Удаление всех объектов со скриптами, принадлежащих персонажу, на земле, не принадлежащей персонажу. «Не копируемые» объекты будут возвращены."/>
-			<button label="*Bütün* ərazilərdə skriptlərlə simvol obyektlərini silin" label_selected="*Bütün* ərazilərdə skriptlərlə simvol obyektlərini silin" name="Delete Target&apos;s Scripted Objects On *Any* Land" tool_tip="Удаление всех объектов со скриптами, принадлежащих персонажу, в этом регионе. «Не копируемые» объекты будут возвращены."/>
-			<button label="*BÜTÜN* xarakter obyektlərini silin" label_selected="*BÜTÜN* xarakter obyektlərini silin" name="Delete *ALL* Of Target&apos;s Objects" tool_tip="Удаление всех объектов, принадлежащих персонажу, в этом регионе. «Не копируемые» объекты будут возвращены."/>
-			<button label="Toqquşmaların ən fəal iştirakçıları" label_selected="Toqquşmaların ən fəal iştirakçıları" name="Get Top Colliders" tool_tip="Список объектов, для которых наблюдается больше всего детализированных обратных вызовов" width="260"/>
-			<button label="Ən yaxşı skriptləri yükləyin" label_selected="Ən yaxşı skriptləri yükləyin" name="Get Top Scripts" tool_tip="Список объектов, в которых скрипты выполняются дольше всего" width="200"/>
-			<button label="Skript Xülasəsi" label_selected="Skript Xülasəsi" name="Scripts digest" tool_tip="Список всех скриптов с числом использований по каждому из них" width="160"/>
+			<button label="Xarici torpaqda skriptlərlə xarakter obyektlərini silin" label_selected="Xarici regionda skriptlərlə xarakter obyektlərini silin" name="Delete Target&apos;s Scripted Objects On Others Land" tool_tip="Hədəfin sahibi olmayan torpaqda hədəfə məxsus bütün skript obyektlərini silin. Köçürülə bilməyən obyektlər geri qaytarılacaq."/>
+			<button label="*Bütün* ərazilərdə skriptlərlə simvol obyektlərini silin" label_selected="*Bütün* ərazilərdə skriptlərlə simvol obyektlərini silin" name="Delete Target&apos;s Scripted Objects On *Any* Land" tool_tip="Bu bölgədəki hədəfə məxsus bütün skript obyektlərini silin. Köçürülə bilməyən obyektlər geri qaytarılacaq."/>
+			<button label="*BÜTÜN* xarakter obyektlərini silin" label_selected="*BÜTÜN* xarakter obyektlərini silin" name="Delete *ALL* Of Target&apos;s Objects" tool_tip="Bu bölgədəki hədəfə məxsus bütün obyektləri silin. Köçürülə bilməyən obyektlər geri qaytarılacaq."/>
+			<button label="Toqquşmaların ən fəal iştirakçıları" label_selected="Toqquşmaların ən fəal iştirakçıları" name="Get Top Colliders" tool_tip="Ən çox ətraflı geri çağırışlı obyekt siyahısı" width="260"/>
+			<button label="Ən yaxşı skriptləri yükləyin" label_selected="Ən yaxşı skriptləri yükləyin" name="Get Top Scripts" tool_tip="Skriptlərin ən uzun müddət işlədiyi obyektlərin siyahısı" width="200"/>
+			<button label="Skript Xülasəsi" label_selected="Skript Xülasəsi" name="Scripts digest" tool_tip="Bütün skriptlərin siyahısını və hər birinin baş vermə sayını alır" width="160"/>
 		</panel>
 		<panel label="Sorğu" name="request">
 			<text name="Destination:">

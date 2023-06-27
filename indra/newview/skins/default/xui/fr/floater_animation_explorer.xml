@@ -11,7 +11,7 @@
 	<panel name="buttons_panel">
 		<button label="Stop" name="stop_btn"/>
 		<button label="Stop &amp; révoquer" name="stop_and_revoke_btn"/>
-		<button label="Révoquer" name="revoke_btn" width="100"/>
+		<button label="Blacklister" name="blacklist_btn" width="100"/>
 		<check_box label="Non possédées" name="no_owned_animations_check" tool_tip="Activer l'option filtrera les animations que possède votre avatar (AO et animations du système)."/>
 	</panel>
 </floater>
