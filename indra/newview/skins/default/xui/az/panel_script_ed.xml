@@ -64,7 +64,7 @@
 		Yüklənir...
 	</script_editor>
 	<combo_box label="Daxil et..." name="Insert..."/>
-	<text name="line_col" value="Строка 0, Столбец 0"/>
+	<text name="line_col" value="Sətir 0, Sütun 0"/>
 	<button label="Dəyişdirici..." name="edit_btn_2"/>
 	<button label="Yadda saxla" label_selected="Yadda saxla" name="save_btn_2"/>
 </panel>

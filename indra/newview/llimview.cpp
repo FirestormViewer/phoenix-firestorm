@@ -1032,7 +1032,9 @@ void LLIMModel::LLIMSession::addMessage(const std::string& from,
                                         const LLUUID& from_id,
                                         const std::string& utf8_text,
                                         const std::string& time,
-                                        const bool is_history,  // comes from a history file or chat server
+                                        // <FS:Zi> Add a distinct color for server side group chat replay
+                                        // const bool is_history,  // comes from a history file or chat server
+                                        const S32 is_history,  // comes from a history file or chat server
                                         const bool is_region_msg,
                                         const U32 timestamp)   // may be zero
 {
@@ -1101,7 +1103,9 @@ void LLIMModel::LLIMSession::addMessagesFromHistoryCache(const chat_message_list
         LL_DEBUGS("ChatHistory") << mSessionID << ": Adding history cache message: " << msg << LL_ENDL;
 
         // Add message from history cache to the display
-        addMessage(from, from_id, msg[LL_IM_TEXT], msg[LL_IM_TIME], true, false, 0);   // from history data, not region message, no timestamp
+        // <FS:Zi> Add a distinct color for server side group chat replay
+        // addMessage(from, from_id, msg[LL_IM_TEXT], msg[LL_IM_TIME], true, false, 0);   // from history data, not region message, no timestamp
+        addMessage(from, from_id, msg[LL_IM_TEXT], msg[LL_IM_TIME], CHAT_STYLE_HISTORY, false, 0);   // from history data, not region message, no timestamp
     }
 }
 
@@ -1309,7 +1313,9 @@ void LLIMModel::LLIMSession::addMessagesFromServerHistory(const LLSD& history,  
                 message["time"] = chat_time_str;
                 message["timestamp"] = (S32)history_msg_timestamp;
                 message["index"] = (LLSD::Integer)mMsgs.size();
-                message["is_history"] = true;
+                // <FS:Zi> Add a distinct color for server side group chat replay
+                // message["is_history"] = true;
+                message["is_history"] = CHAT_STYLE_SERVER_HISTORY;
                 mMsgs.push_front(message);
 
                 LL_DEBUGS("ChatHistory") << mSessionID << ": push_front() adding group chat history message " << message << LL_ENDL;
@@ -1356,12 +1362,16 @@ void LLIMModel::LLIMSession::chatFromLogFile(LLLogChat::ELogLineType type, const
 	if (type == LLLogChat::LOG_LINE)
 	{
         LL_DEBUGS("ChatHistory") << "chatFromLogFile() adding LOG_LINE message from " << msg << LL_ENDL;
-        self->addMessage("", LLSD(), msg["message"].asString(), "", true, false, 0);        // from history data, not region message, no timestamp
+        // <FS:Zi> Add a distinct color for server side group chat replay
+        // self->addMessage("", LLSD(), msg["message"].asString(), "", true, false, 0);        // from history data, not region message, no timestamp
+        self->addMessage("", LLSD(), msg["message"].asString(), "", CHAT_STYLE_HISTORY, false, 0);        // from history data, not region message, no timestamp
 	}
 	else if (type == LLLogChat::LOG_LLSD)
 	{
         LL_DEBUGS("ChatHistory") << "chatFromLogFile() adding LOG_LLSD message from " << msg << LL_ENDL;
-        self->addMessage(msg["from"].asString(), msg["from_id"].asUUID(), msg["message"].asString(), msg["time"].asString(), true, false, 0);  // from history data, not region message, no timestamp
+        // <FS:Zi> Add a distinct color for server side group chat replay
+        // self->addMessage(msg["from"].asString(), msg["from_id"].asUUID(), msg["message"].asString(), msg["time"].asString(), true, false, 0);  // from history data, not region message, no timestamp
+        self->addMessage(msg["from"].asString(), msg["from_id"].asUUID(), msg["message"].asString(), msg["time"].asString(), CHAT_STYLE_HISTORY, false, 0);  // from history data, not region message, no timestamp
 	}
 }
 
@@ -1717,7 +1727,9 @@ bool LLIMModel::addToHistory(const LLUUID& session_id,
 
 	// <FS:Ansariel>  Forward IM to nearby chat if wanted
 	std::string timestr = LLLogChat::timestamp2LogString(timestamp, false);
-	session->addMessage(from, from_id, utf8_text, timestr, false, is_region_msg, timestamp); //might want to add date separately
+	// <FS:Zi> Add a distinct color for server side group chat replay
+	// session->addMessage(from, from_id, utf8_text, timestr, false, is_region_msg, timestamp); //might want to add date separately
+	session->addMessage(from, from_id, utf8_text, timestr, CHAT_STYLE_NORMAL, is_region_msg, timestamp); //might want to add date separately
 
 	static LLCachedControl<bool> show_im_in_chat(gSavedSettings, "FSShowIMInChatHistory");
 	if (show_im_in_chat && !is_announcement)
@@ -4650,7 +4662,7 @@ public:
 			{
 				if ( body.has("session_info") )
 				{
-					im_floater->processSessionUpdate(body["session_info"]);
+					//im_floater->processSessionUpdate(body["session_info"]); // <FS:Ansariel> Method does nothing
 
                     // Send request for chat history, if enabled.
                     if (gSavedPerAccountSettings.getBOOL("FetchGroupChatHistory"))
@@ -4747,14 +4759,15 @@ public:
 		const LLSD& input) const
 	{
 		LLUUID session_id = input["body"]["session_id"].asUUID();
-		// <FS:Ansariel> [FS communication UI]
-		//LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
-		FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
-		// </FS:Ansariel> [FS communication UI]
-		if ( im_floater )
-		{
-			im_floater->processSessionUpdate(input["body"]["info"]);
-		}
+		// <FS:Ansariel> Method does nothing
+		//// <FS:Ansariel> [FS communication UI]
+		////LLFloaterIMSession* im_floater = LLFloaterIMSession::findInstance(session_id);
+		//FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+		//// </FS:Ansariel> [FS communication UI]
+		//if ( im_floater )
+		//{
+		//	im_floater->processSessionUpdate(input["body"]["info"]);
+		//}
 		LLIMSpeakerMgr* im_mgr = LLIMModel::getInstance()->getSpeakerManager(session_id);
 		if (im_mgr)
 		{

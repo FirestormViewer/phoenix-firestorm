@@ -51,7 +51,7 @@ Təlimi təkrarlamaq üçün 'Gəlmə Adası - Ümumi' nöqtəsinə keçin.
 			Bu regionu ziyarət etmək üçün ən azı 18 yaşınız olmalıdır.
 		</message>
 		<message name="RegionTPSpecialUsageBlocked">
-			Regiona daxil olmaq mümkün deyil. '[REGION_NAME]' oyun regionu sayılır, və daxil olmaq üçün six является игровым регионом и вы должны отвечать определенным критериям, чтобы войти. Для получения дополнительной информации, пожалуйста, просмотрите [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
+			Regiona daxil olmaq mümkün deyil. '[REGION_NAME]' oyun regionu sayılır, və daxil olmaq üçün siz müəyyən meyarlara cavab verməlisiniz. Ətraflı məlumat üçün [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ] səhifəsinə baxın.
 		</message>
 	</message_set>
 	<message_set name="progress">

@@ -40,7 +40,7 @@
 				<pie_slice label="Tekstur.yenilə" name="Texture Refresh"/>
 				<pie_slice label="Skelet" name="Reset Skeleton"/>
 			</pie_menu>
-			<pie_menu name="DerenderMenu" label="Неотображать &gt;">
+			<pie_menu name="DerenderMenu" label="Göstərmə &gt;">
 				<pie_slice label="Həmişə" name="DerenderPermanent"/>
 				<pie_slice label="Müvəqqəti" name="Derender"/>
 			</pie_menu>

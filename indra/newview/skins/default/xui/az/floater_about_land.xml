@@ -32,9 +32,6 @@
             <panel.string name="area_text">
                 Sahə
             </panel.string>
-            <panel.string name="area_size_text">
-                [AREA] m²
-            </panel.string>
             <panel.string name="auction_id_text">
                 Hərrac ID-si: [ID]
             </panel.string>
@@ -132,9 +129,6 @@
             <text name="PriceLabel">
                 Sahə:
             </text>
-            <text name="PriceText">
-                4048 m²
-            </text>
             <text name="Traffic:">
                 Trafik:
             </text>
@@ -179,9 +173,6 @@
             </text_editor>
             <text name="covenant_timestamp_text">
 				Axırınci dəyişiklər: 31 dekabr 1969 il., cümə, 16:00:00
-            </text>
-            <text name="region_section_lbl">
-                Region:
             </text>
             <text name="region_name_text">
                 Yüklənir...

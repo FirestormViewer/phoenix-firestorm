@@ -24,7 +24,7 @@
 		<text right="-128" name="aspect_ratio" width="128">
 			Önizləmə
 		</text>
-		<combo_box width="100" name="combo_aspect_ratio" tool_tip="Предварительный просмотр с фиксированным соотношением сторон">
+		<combo_box width="100" name="combo_aspect_ratio" tool_tip="Sabit aspekt nisbətində önizləmə">
 		</combo_box>
 	</panel>
 

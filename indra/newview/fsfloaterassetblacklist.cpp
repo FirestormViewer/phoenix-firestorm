@@ -100,6 +100,8 @@ std::string FSFloaterAssetBlacklist::getTypeString(S32 type)
 			return getString("asset_sound");
 		case LLAssetType::AT_OBJECT:
 			return getString("asset_object");
+		case LLAssetType::AT_ANIMATION:
+			return getString("asset_animation");
 		case LLAssetType::AT_PERSON:
 			return getString("asset_resident");
 		default:

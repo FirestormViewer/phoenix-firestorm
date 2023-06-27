@@ -20,7 +20,7 @@
 	<check_box initial_value="false" label="Avtomatik böyüt" name="auto_zoom"/>
 	<check_box initial_value="false" label="Avtomatik oxutma" name="auto_play"/>
 	<text name="media_setting_note">
-		Примечание: Жители могут игнорировать эту настройку.
+		Qeyd: Sakinlər bu seçimi ləğv edə bilər
 	</text>
 	<check_box initial_value="false" label="Obyekt üzərində avtomatik ölçüləndir" name="auto_scale"/>
 	<text name="size_label">

@@ -2,5 +2,5 @@
 <panel name="camera_preset_item">
 	<text name="preset_name" value="Susmaya görə"/>
 	<button name="delete_btn" tool_tip="Öncədən təyini sil"/>
-	<button name="reset_btn" tool_tip="Susmaya görə olan öncədən təyini sıfırla">
+	<button name="reset_btn" tool_tip="Susmaya görə olan öncədən təyini sıfırla"/>
 </panel>

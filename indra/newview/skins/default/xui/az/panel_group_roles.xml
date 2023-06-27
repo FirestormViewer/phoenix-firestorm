@@ -43,7 +43,6 @@ Hər qrup 10 rol, &quot;Hamı&quot; və &quot;Sahib&quot; rolları daxil olmaqla
 			<button label="Rolu köçürtmək" name="role_copy"/>
 			<button label="Rolu sil" name="role_delete"/>
 		</panel>
-		<panel label="Rollar" name="roles_sub_tab">
 		<panel label="İmtiyazlar" name="actions_sub_tab" tool_tip="İmtiyaz haqqında təsviri, kimlər və rolların bu haqqı olanları baxa bilərsiniz.">
 			<panel.string name="help_text">
 				İmtiyazlar, uyğun rolları təyin olunan üzvlərin qrupda xüsusi əməliyyatları
@@ -59,7 +58,7 @@ yerinə yetirmələrinə imkan verir. Geniş seçim imkanı var.
 			<panel.string name="ban_count_template">
 				Qadağanlanıb: [COUNT]/[LIMIT]
 			</panel.string>
-			<filter_editor label="Qadağanlanmışların süzgəci" name="filter_input"/>
+			<filter_editor label="Qadağanlanmışların süzgəci" name="filter_input" />
 			<name_list name="ban_list">
 				<name_list.columns label="Sakin" name="name"/>
 				<name_list.columns label="Qadağanlanıb" name="ban_date"/>
