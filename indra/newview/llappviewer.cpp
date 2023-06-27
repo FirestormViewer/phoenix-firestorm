@@ -5195,7 +5195,10 @@ bool LLAppViewer::initCache()
 	// </FS:Ansariel>
 
     const std::string cache_dir = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, cache_dir_name);
-    LLDiskCache::initParamSingleton(cache_dir, disk_cache_size, enable_cache_debug_info);
+	// <FS:Beq> Improve cache purge triggering
+    // LLDiskCache::initParamSingleton(cache_dir, disk_cache_size, enable_cache_debug_info);
+    LLDiskCache::initParamSingleton(cache_dir, disk_cache_size, enable_cache_debug_info, gSavedSettings.getF32("FSDiskCacheHighWaterPercent"), gSavedSettings.getF32("FSDiskCacheLowWaterPercent"));
+	// </FS:Beq>
 
 	if (!read_only)
 	{
