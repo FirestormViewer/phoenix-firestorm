@@ -5499,7 +5499,6 @@ public:
 static LLTrace::BlockTimerStatHandle FTM_AUDIO_UPDATE("Update Audio");
 static LLTrace::BlockTimerStatHandle FTM_CLEANUP("Cleanup");
 static LLTrace::BlockTimerStatHandle FTM_CLEANUP_DRAWABLES("Drawables");
-static LLTrace::BlockTimerStatHandle FTM_CLEANUP_OBJECTS("Objects");
 static LLTrace::BlockTimerStatHandle FTM_IDLE_CB("Idle Callbacks");
 static LLTrace::BlockTimerStatHandle FTM_LOD_UPDATE("Update LOD");
 static LLTrace::BlockTimerStatHandle FTM_OBJECTLIST_UPDATE("Update Objectlist");
@@ -5821,7 +5820,6 @@ void LLAppViewer::idle()
 	{
 		LL_RECORD_BLOCK_TIME(FTM_CLEANUP);
 		{
-			LL_RECORD_BLOCK_TIME(FTM_CLEANUP_OBJECTS);
 			gObjectList.cleanDeadObjects();
 		}
 		{

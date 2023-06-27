@@ -1537,6 +1537,7 @@ void LLViewerObjectList::cleanupReferences(LLViewerObject *objectp)
 
 BOOL LLViewerObjectList::killObject(LLViewerObject *objectp)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	// Don't ever kill gAgentAvatarp, just force it to the agent's region
 	// unless region is NULL which is assumed to mean you are logging out.
 	if ((objectp == gAgentAvatarp) && gAgent.getRegion())
@@ -1586,6 +1587,7 @@ void LLViewerObjectList::killAnimatedObjects()
 
 void LLViewerObjectList::killObjects(LLViewerRegion *regionp)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	LLViewerObject *objectp;
 
 	
@@ -1647,6 +1649,8 @@ void LLViewerObjectList::cleanDeadObjects(BOOL use_timer)
 		// No dead objects, don't need to scan object list.
 		return;
 	}
+
+    LL_PROFILE_ZONE_SCOPED;
 
 	// <FS:Beq/> FIRE-30694 DeadObject Spam
 	S32 num_divergent = 0;

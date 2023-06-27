@@ -246,7 +246,7 @@ LLVOVolume::LLVOVolume(const LLUUID &id, const LLPCode pcode, LLViewerRegion *re
     mColorChanged = FALSE;
 	mSpotLightPriority = 0.f;
 
-	mSkinInfoFailed = false;
+    mSkinInfoUnavaliable = false;
 	mSkinInfo = NULL;
 
 	mMediaImplList.resize(getNumTEs());
@@ -262,6 +262,7 @@ LLVOVolume::LLVOVolume(const LLUUID &id, const LLPCode pcode, LLViewerRegion *re
 
 LLVOVolume::~LLVOVolume()
 {
+    LL_PROFILE_ZONE_SCOPED;
 	delete mTextureAnimp;
 	mTextureAnimp = NULL;
 	delete mVolumeImpl;
@@ -285,6 +286,7 @@ void LLVOVolume::markDead()
 {
 	if (!mDead)
 	{
+        LL_PROFILE_ZONE_SCOPED;
         if (getVolume())
         {
             LLSculptIDSize::instance().rem(getVolume()->getParams().getSculptID());
@@ -1289,7 +1291,7 @@ BOOL LLVOVolume::setVolume(const LLVolumeParams &params_in, const S32 detail, bo
 				if (mSkinInfo && mSkinInfo->mMeshID != volume_params.getSculptID())
 				{
 					mSkinInfo = NULL;
-					mSkinInfoFailed = false;
+					mSkinInfoUnavaliable = false;
 				}
 
 				if (!getVolume()->isMeshAssetLoaded())
@@ -1302,13 +1304,24 @@ BOOL LLVOVolume::setVolume(const LLVolumeParams &params_in, const S32 detail, bo
 					}
 				}
 				
-				if (!mSkinInfo && !mSkinInfoFailed)
+				if (!mSkinInfo && !mSkinInfoUnavaliable)
 				{
-					const LLMeshSkinInfo* skin_info = gMeshRepo.getSkinInfo(volume_params.getSculptID(), this);
-					if (skin_info)
-					{
-						notifySkinInfoLoaded(skin_info);
-					}
+                    LLUUID mesh_id = volume_params.getSculptID();
+                    if (gMeshRepo.hasHeader(mesh_id) && !gMeshRepo.hasSkinInfo(mesh_id))
+                    {
+                        // If header is present but has no data about skin,
+                        // no point fetching
+                        mSkinInfoUnavaliable = true;
+                    }
+
+                    if (!mSkinInfoUnavaliable)
+                    {
+                        const LLMeshSkinInfo* skin_info = gMeshRepo.getSkinInfo(mesh_id, this);
+                        if (skin_info)
+                        {
+                            notifySkinInfoLoaded(skin_info);
+                        }
+                    }
 				}
 			}
 			else // otherwise is sculptie
@@ -1343,7 +1356,7 @@ void LLVOVolume::updateSculptTexture()
 			mSculptTexture = LLViewerTextureManager::getFetchedTexture(id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
 		}
 
-		mSkinInfoFailed = false;
+        mSkinInfoUnavaliable = false;
 		mSkinInfo = NULL;
 	}
 	else
@@ -1384,6 +1397,16 @@ void LLVOVolume::notifyMeshLoaded()
 	mSculptChanged = TRUE;
 	gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_GEOMETRY);
 
+    if (!mSkinInfo && !mSkinInfoUnavaliable)
+    {
+        // Header was loaded, update skin info state from header
+        LLUUID mesh_id = getVolume()->getParams().getSculptID();
+        if (!gMeshRepo.hasSkinInfo(mesh_id))
+        {
+            mSkinInfoUnavaliable = true;
+        }
+    }
+
     LLVOAvatar *av = getAvatar();
     if (av && !isAnimatedObject())
     {
@@ -1401,7 +1424,7 @@ void LLVOVolume::notifyMeshLoaded()
 
 void LLVOVolume::notifySkinInfoLoaded(const LLMeshSkinInfo* skin)
 {
-	mSkinInfoFailed = false;
+    mSkinInfoUnavaliable = false;
 	mSkinInfo = skin;
 
 	notifyMeshLoaded();
@@ -1409,7 +1432,7 @@ void LLVOVolume::notifySkinInfoLoaded(const LLMeshSkinInfo* skin)
 
 void LLVOVolume::notifySkinInfoUnavailable()
 {
-	mSkinInfoFailed = true;
+	mSkinInfoUnavaliable = true;
 	mSkinInfo = nullptr;
 }
 
@@ -4911,7 +4934,12 @@ BOOL LLVOVolume::lineSegmentIntersect(const LLVector4a& start, const LLVector4a&
 			end_face = face+1;
 		}
 		pick_transparent |= isHiglightedOrBeacon();
-		bool special_cursor = specialHoverCursor();
+
+        // we *probably* shouldn't care about special cursor at all, but we *definitely*
+        // don't care about special cursor for reflection probes -- makes alt-zoom
+        // go through reflection probes on vehicles
+		bool special_cursor = mReflectionProbe.isNull() && specialHoverCursor();
+
 		for (S32 i = start_face; i < end_face; ++i)
 		{
 			if (!special_cursor && !pick_transparent && getTE(i) && getTE(i)->getColor().mV[3] == 0.f)
@@ -5876,12 +5904,21 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 //</FS:Beq>
 
             bool is_mesh = vobj->isMesh();
-			if (is_mesh &&
+            if (is_mesh)
+            {
+                if ((vobj->getVolume() && !vobj->getVolume()->isMeshAssetLoaded())
+                    || !gMeshRepo.meshRezEnabled())
+                {
+                    // Waiting for asset to fetch
+                    continue;
+                }
 
-				((vobj->getVolume() && !vobj->getVolume()->isMeshAssetLoaded()) || !gMeshRepo.meshRezEnabled()))
-			{
-				continue;
-			}
+                if (!vobj->getSkinInfo() && !vobj->isSkinInfoUnavaliable())
+                {
+                     // Waiting for skin info to fetch
+                     continue;
+                }
+            }
 
 			LLVolume* volume = vobj->getVolume();
 			if (volume)

@@ -125,7 +125,7 @@ LLWorld::LLWorld() :
 	mDefaultWaterTexturep = LLViewerTextureManager::getLocalTexture(raw.get(), FALSE);
 	gGL.getTexUnit(0)->bind(mDefaultWaterTexturep);
 	mDefaultWaterTexturep->setAddressMode(LLTexUnit::TAM_CLAMP);
-	LLViewerRegion::sVOCacheCullingEnabled = gSavedSettings.getBOOL("RequestFullRegionCache") && gSavedSettings.getBOOL("ObjectCacheEnabled");
+    LLViewerRegion::sVOCacheCullingEnabled = gSavedSettings.getBOOL("RequestFullRegionCache") && gSavedSettings.getBOOL("ObjectCacheEnabled");
 }
 
 
@@ -1120,6 +1120,7 @@ static LLTrace::SampleStatHandle<> sNumActiveCachedObjects("numactivecachedobjec
 
 void LLWorld::updateRegions(F32 max_update_time)
 {
+    LL_PROFILE_ZONE_SCOPED;
 	LLTimer update_timer;
 	mNumOfActiveCachedObjects = 0;
 	

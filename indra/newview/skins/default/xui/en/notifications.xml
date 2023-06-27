@@ -14023,6 +14023,19 @@ Material successfully created.  Asset ID: [ASSET_ID]
   </notification>
 
   <notification
+    icon="notifytip.tga"
+    name="AutoAdjustHDRSky"
+    persist="true"
+    type="alertmodal">
+      You are editing a non-HDR sky that has been automatically converted to HDR.  To remove HDR and tone mapping, set Reflection Probe Ambiance to zero.
+    <usetemplate
+        ignoretext="HDR Sky adjustment warning"
+        name="okignore"
+        yestext="OK"/>
+  </notification>
+  
+
+  <notification
    icon="alertmodal.tga"
    name="EnableAutoFPSWarning"
    type="alertmodal">
