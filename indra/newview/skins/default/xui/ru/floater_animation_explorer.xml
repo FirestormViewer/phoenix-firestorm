@@ -11,7 +11,7 @@
 	<panel name="buttons_panel">
 		<button label="Стоп" name="stop_btn" />
 		<button label="Стоп и Отменить" name="stop_and_revoke_btn" />
-		<button label="Отменить" name="revoke_btn" />
+		<button label="Заблокировать" name="blacklist_btn" />
 		<check_box label="Нет моих анимаций" name="no_owned_animations_check" tool_tip="Будет отфильтровывать все анимации, которые принадлежат вашему аватару, такие как АО анимации или анимации системы по умолчанию" />
 	</panel>
 </floater>

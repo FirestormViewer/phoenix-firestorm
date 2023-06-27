@@ -25,7 +25,7 @@
 	<text_editor name="user_key" value="(yüklənir...)"/>
 	<layout_stack name="imagepositioner">
 		<layout_panel name="image_action_panel">
-			<menu_button name="image_action_btn" tool_tip="Выполнение действий, связанных с изображением профиля"/>
+			<menu_button name="image_action_btn" tool_tip="Profil şəkli ilə bağlı tədbirlər görmək"/>
 		</layout_panel>
 		<layout_panel name="label_stack">
 			<text name="label" value="Yaş:"/>

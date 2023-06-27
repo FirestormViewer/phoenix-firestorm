@@ -113,7 +113,6 @@ public:
 	void onVisibilityChange(BOOL new_visibility);
 	void processIMTyping(const LLUUID& from_id, BOOL typing);
 	void processAgentListUpdates(const LLSD& body);
-	void processSessionUpdate(const LLSD& session_update);
 
 	void updateChatHistoryStyle();
 	static void processChatHistoryStyleUpdate(const LLSD& newvalue);
@@ -173,7 +172,6 @@ protected:
 	// support sysinfo button -Zi
 
 	BOOL enableViewerVersionCallback(const LLSD& notification,const LLSD& response);		// <FS:Zi> Viewer version popup
-	void reshapeFloater(bool collapse);
 	void reshapeChatLayoutPanel();
 private:
 	// process focus events to set a currently active session
@@ -254,7 +252,6 @@ private:
 	LLLayoutStack* mInputPanels;
 	LLLayoutPanel* mUnreadMessagesNotificationPanel;
 	LLTextBox* mUnreadMessagesNotificationTextBox;
-	// bool mPositioned;		// dead code -Zi
 
 	std::string mSavedTitle;
 	LLUIString mTypingStart;

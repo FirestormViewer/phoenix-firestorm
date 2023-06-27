@@ -18,7 +18,7 @@
                 <pie_slice label="Fizika" name="Self Physics"/>
                 <pie_slice label="Alfa" name="Self Alpha"/>
             </pie_menu>
-            <pie_slice label="Юбку" name="Skirt"/>
+            <pie_slice label="Don" name="Skirt"/>
         </pie_menu>
         <pie_menu name="Pie Object Detach HUD"/>
         <pie_menu label="Ayır &gt;" name="Pie Object Detach">
@@ -50,7 +50,7 @@
     <pie_slice label="Jestlər..." name="Gestures"/>
     <pie_menu label="Görünüş &gt;" name="Appearance &gt;">
         <pie_slice label="Forma" name="Edit My Shape"/>
-        <pie_menu name="ResetMenu" label="Сброс &gt;">
+        <pie_menu name="ResetMenu" label="Sıfırla &gt;">
             <pie_slice label="Skel. &amp; Anim." name="Reset Skeleton And Animations"/>
             <pie_slice label="Skelet" name="Reset Skeleton"/>
             <pie_slice label="Mesh LOD" name="Reset Mesh LOD"/>

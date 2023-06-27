@@ -2,5 +2,5 @@
 <toggleable_menu name="menu_group_plus">
 	<menu_item_check label="Tarixə görə sırala" name="sort_most" />
 	<menu_item_check label="Adına görə sırala" name="sort_name" />
-	<menu_item_check name="view_icons" label="Показать иконки" />
+	<menu_item_check name="view_icons" label="Nişanları göstər" />
 </toggleable_menu>

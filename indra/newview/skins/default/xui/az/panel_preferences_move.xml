@@ -36,7 +36,7 @@
 			<check_box label="Nişangahı göstərin" name="ShowCrosshairs" tool_tip="Birinci şəxs baxımından nişangahı göstərin"/>
 			<check_box label="Döyüş qabiliyyətlərini aktivləşdirin" name="FSMouselookCombatFeatures"/>
 			<check_box label="Hədəf markerlərini çəkin (oxlar)" name="ExodusMouselookIFF"/>
-			<slider label="Məsafə (м)" name="ExodusMouselookIFFRange"/>
+			<slider label="Məsafə (m)" name="ExodusMouselookIFFRange"/>
 			<text name="Mouse Sensitivity">
 				Siçan həssaslığı:
 			</text>

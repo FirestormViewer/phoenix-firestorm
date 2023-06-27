@@ -77,7 +77,7 @@
 						font="SansSerifMedium"
                         name="inbox_btn"
                         height="35"
-                        width="308"
+                        width="270"
                         image_unselected="MarketplaceBtn_Off"
                         image_selected="MarketplaceBtn_Selected"
                         halign="left"
@@ -88,6 +88,14 @@
                         pad_left="35"
                         top="0"
                         left="10" />
+                     <button
+                        name="reload_received_items_btn"
+                        height="35"
+                        width="35"
+                        left_pad="3"
+                        follows="top|right"
+                        image_overlay="Refresh_Off"
+                        tool_tip="Reload the received items list." />
                      <text
                         type="string"
                         length="1"
@@ -95,7 +103,7 @@
                         layout="topleft"
                         height="13"
                         top="10"
-                        right="-20"
+                        right="-58"
                         name="inbox_fresh_new_count"
                         font="SansSerifMedium"
                         halign="right"

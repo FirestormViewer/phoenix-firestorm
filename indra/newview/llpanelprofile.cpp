@@ -1176,6 +1176,13 @@ void LLPanelProfileSecondLife::apply(LLAvatarData* data)
 
 void LLPanelProfileSecondLife::processProperties(void* data, EAvatarProcessorType type)
 {
+	// discard UDP replies for profile data if profile capability is available
+	// otherwise we will truncate profile descriptions to the old UDP limits
+	if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
+	{
+		return;
+	}
+
 	if (APT_PROPERTIES == type)
 	{
 		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
@@ -2988,6 +2995,13 @@ void LLPanelProfileFirstLife::onDiscardDescriptionChanges()
 // <FS:Beq> Restore UDP profiles
 void LLPanelProfileFirstLife::processProperties(void * data, EAvatarProcessorType type)
 {
+	// discard UDP replies for profile data if profile capability is available
+	// otherwise we will truncate profile first life descriptions to the old UDP limits
+	if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
+	{
+		return;
+	}
+
     if (APT_PROPERTIES == type)
 	{
         const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
@@ -3202,6 +3216,13 @@ void LLPanelProfileNotes::processProperties(LLAvatarNotes* avatar_notes)
 // <FS:Beq> Restore UDP profiles
 void LLPanelProfileNotes::processProperties(void * data, EAvatarProcessorType type)
 {
+	// discard UDP replies for profile data if profile capability is available
+	// otherwise we will truncate profile notes to the old UDP limits
+	if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
+	{
+		return;
+	}
+
     if (APT_NOTES == type)
 	{
 		LLAvatarNotes* avatar_notes = static_cast<LLAvatarNotes*>(data);

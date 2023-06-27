@@ -3,6 +3,7 @@
 	<floater.string name="asset_object">Objet</floater.string>
 	<floater.string name="asset_texture">Texture</floater.string>
 	<floater.string name="asset_sound">Son</floater.string>
+	<floater.string name="asset_animation">Animation</floater.string>
 	<floater.string name="asset_resident">Résident</floater.string>
 	<floater.string name="asset_unknown">Inconnu</floater.string>
 	<floater.string name="unknown_object">Objet inconnu</floater.string>

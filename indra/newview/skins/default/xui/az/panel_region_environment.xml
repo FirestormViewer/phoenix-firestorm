@@ -45,7 +45,7 @@
 					<layout_stack name="ls_environment_config2">
 						<layout_panel name="pnl_environment_current">
 							<text name="select_environment_label">
-								Выбор окружающей среды
+								Ətraf mühitin seçimi
 							</text>
 							<button label="[USEDEFAULT]" name="btn_usedefault"/>
 							<button label="Avadanlıq siyahısından" name="btn_select_inventory"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="prefs_graphics_advanced" title="Расширенные настройки графики">
+<floater name="prefs_graphics_advanced" title="Əlavə qrafika seçimləri">
 	<text name="GeneralText">
 		Ümumi
 	</text>
@@ -20,7 +20,7 @@
 	<text name="IndirectMaxComplexityText">
 		0
 	</text>
-	<slider label="Maksimum Həcmli Sayı:" name="IndirectMaxNonImpostors"/>
+	<slider label="Maksimum Avatar Sayı:" name="IndirectMaxNonImpostors"/>
 	<text name="IndirectMaxNonImpostorsText">
 		0
 	</text>
@@ -42,8 +42,8 @@
 		(az = daha parlaq, 0 – susmaya görə parlaqlıq)
 	</text>
 	<check_box label="Anizatrop filtrasiya (aktiv olanda daha gec olur)" name="ani"/>
-	<check_box label="Разрешить сжатие текстур (yenidən başlatmalar tələb olunur)" name="texture compression" tool_tip="Сжатие текстур в видеопамяти, что позволяет загружать текстуры большего размера за счет некоторого падения качества цвета."/>
-	<check_box label="Включить поддержку HiDPI дисплея (yenidən başlatma tələb olunur)" name="use HiDPI" tool_tip="Разрешить OpenGL отображение с высоким разрешением."/>
+	<check_box label="Tekstur sıxlaşdırması (yen.başlatma tələb olunur)" name="texture compression" tool_tip="Video yaddaşda teksturların sıxılması. Rəng keyfiyyətində müəyyən itkilər hesabına daha böyük teksturaları yükləməyə imkan verir."/>
+	<check_box label="HiDPI displey dəstəyi (yen. başlatma tələb olunur)" name="use HiDPI" tool_tip="OpenGL-in yüksək nisbət ilə göstərilməsinə icazə verir."/>
 	<text name="antialiasing label">
 		Hamarlaşdırma:
 	</text>
@@ -72,7 +72,7 @@
 	<text name="ObjectMeshDetailText">
 		Aşağı
 	</text>
-	<slider label="Гибкие примитивы:" name="FlexibleMeshDetail"/>
+	<slider label="Çevik primitivlər:" name="FlexibleMeshDetail"/>
 	<text name="FlexibleMeshDetailText">
 		Aşağı
 	</text>

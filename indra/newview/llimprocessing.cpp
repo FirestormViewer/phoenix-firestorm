@@ -444,6 +444,7 @@ void inventory_offer_handler(LLOfferInfo* info)
             }
 
             report_to_nearby_chat(LLTrans::getString(message_type, chat_args));
+            make_ui_sound("UISndInventoryOffer");
         }
         // </FS:Ansariel>
 

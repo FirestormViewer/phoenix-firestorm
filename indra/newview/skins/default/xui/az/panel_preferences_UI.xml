@@ -62,7 +62,7 @@
         <check_box label="Dairəvi menyudan istifadə et" name="UsePieMenu" tool_tip="Obyektlərə, avatarlara və yerə sağ kliklədikdə dairəvi menyu göstərmək üçün V1 üslubundan istifadə edin" />
         <check_box label="Mətn animasiyası" name="PieMenuPopupFontEffect" tool_tip="Dairəvi menyu açıldığında animasiyanın bir hissəsi olan dairəvi menyu mətnini aktivləşdirir." />
         <check_box label="Xarici dairə rəngini aktivləşdirin" name="PieMenuOuterRingShade" tool_tip="Alt menyunu vizuallaşdırmağa kömək edən əlavə xarici dairə rəngi əlavə etməyə imkan verir." />
-        <text name="ShowGroupNoticesTopRightLabel" width="180">
+        <text name="ShowGroupNoticesTopRightLabel" width="140">
            Bildirişlər və İM yerləşməsi:
         </text>
         <radio_group name="ShowGroupNoticesTopRight" width="210"
@@ -71,11 +71,11 @@
            <radio_item label="Yuxarı sağda" name="radio1" width="100" />
         </radio_group>
         <text name="GroupTopRightRequiresRestart" left_delta="270" width="150">
-           (Yenidən başlatma tələb olunur)
+           (Yen.başlatma tələb olunur)
         </text>
         <check_box label="Qrup və İM söhbət nişanlarını gizlədin" name="FSDisableIMChiclets" tool_tip="Şəxsi mesajlar və qrup söhbətləri üçün nişanlar silinəcək (Bildirişlər hələ də göstəriləcək)." />
         <check_box label="Bildirişlər pəncərəsi üçün köhnə siyahıdan istifadə edin." name="FSLegacyNotificationWell" tool_tip="Əgər qeyd olunarsa, Firestorm saxlanmış bildirişləri göstərmək üçün köhnə siyahı görünüşündən istifadə edəcək." width="320" />
-        <text name="FSLegacyNotificationWellRequiresRestart" width="150">(Yenidən başlatma tələb olunur)</text>
+        <text name="FSLegacyNotificationWellRequiresRestart" width="150">(Yen.başlatma tələb olunur)</text>
         <check_box label="Söhbətlərin və Bildirişlərin avtomatik ölçüsü siyahıları" name="FSLegacyNotificationWellAutoResize" tool_tip="Əgər bu qutu işarələnərsə, elementlər əlavə etdikdə və ya sildikdə Firestorm həmişə Söhbət siyahılarınızı və köhnə Bildirişlərinizi avtomatik olaraq dəyişdirəcək."/>
         <check_box label="Artıq istifadə olunan isti düymələri yenidən təyin edin (yalnız Linux, yenidən başlatma tələb olunur)" name="FSRemapLinuxShortcuts" tool_tip="Aktivləşdirilərsə, Linux əməliyyat sistemi tərəfindən artıq istifadə olunan isti düymələr (məsələn, CTRL-ALT-Fx) yenidən təsvir olunacaq." />
         <check_box label="Statistika Pəncərə Diqqətləşdirməsinin qarşısını alın" name="FSStatisticsNoFocus"
@@ -223,14 +223,14 @@
         <slider label="Ümumi Söhbət Konsolunun Genişliyi:" tool_tip="Ümumi Söhbət Konsolunun Genişliyi" name="NearbyToastWidth" />
         <check_box label="Tostları digər pəncərələrin üstündə göstərin" name="FSShowToastsInFront" />
         <check_box label="Bölgənin yenidən başlaması üçün yeni bildirişdən istifadə et" name="FSUseNewRegionRestartNotification" />
-        <check_box label="Regionun yenidən yüklənməsi bildirişi alanda ekranımı silkələməyin" name="FSNoScreenShakeOnRegionRestart" />
-        <check_box label="Bölgənin yenidən başlaması haqqında kanala bildir:" width="245" name="FSReportRegionRestartToChat" />
+        <check_box label="Bölgənin yenidən başlaması bildirişi alanda ekranımı silkələməyin" name="FSNoScreenShakeOnRegionRestart" />
+        <check_box label="Bölgənin yenidən başlaması haqqında kanala bildir:" width="290" name="FSReportRegionRestartToChat" />
     </panel>
     <panel label="Yazı tipi" name="UI-font-tab">
         <text name="tooltip_textbox1">
            Yazı tipi sxemi:
         </text>
-        <text name="tooltip_textbox2" width="150">
+        <text name="tooltip_textbox2" width="170">
            (Yenidən başlatma tələb olunur)
         </text>
         <text name="tooltip_textbox5">
@@ -248,13 +248,13 @@ Susmaya görə 0. Yuxarı dəyərlər səhvlərə səbəb ola bilər.
 [VIEWER_GENERATION] susmaya görə 0. V1 susmaya görə 2.
         </text>
         <text name="Label_FolderItemViewHeight">
-           Высота папок:
+           Qovluq hündürlüyü:
         </text>
         <text name="Label_FolderItemViewHeight_Scale">
           piksel (yenidən başlatma tələb olunur)
 [VIEWER_GENERATION] susmaya görə 20. V1 susmaya görə 18.
         </text>
-        <text name="text_box_notecard_font" width="120">
+        <text name="text_box_notecard_font" width="130">
           Qeyd dəyişdiricisi yazı tipi:
         </text>
         <combo_box name="FSNotecardFontName" tool_tip="Qeyd dəyişdiricisində istifadə olunan yazı tipinin adı"/>

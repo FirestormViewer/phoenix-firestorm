@@ -30,11 +30,11 @@
 	<text name="GroupLabel">
 		Qrup:
 	</text>
-	<check_box label="Paylaş" name="share_with_group" tool_tip="Позволить всем участникам выбранной группы получить установленные вам права на этот объект. Для включения ролевых ограничений необходимо произвести сделку."/>
+	<check_box label="Paylaş" name="share_with_group" tool_tip="Seçilmiş qrupun bütün üzvlərinə bu obyektdə təyin etdiyiniz hüquqları almağa icazə verin. Rol məhdudiyyətlərini aktivləşdirmək üçün müqavilə bağlamalısınız."/>
 	<text name="AnyoneLabel">
 		Hamısı:
 	</text>
-	<check_box label="Köçürt" name="everyone_copy" tool_tip="Копию объекта может взять любой желающий. Объект и все его содержимое должны копироваться и передаваться."/>
+	<check_box label="Köçürt" name="everyone_copy" tool_tip="Hər kəs obyektin köçürtməsin götürə bilər. Obyekt və onun bütün məzmunu köçürülə və paylaşıla bilməlidir."/>
 	<text left="200" name="NextOwnerLabel">
 		Yeni Sahibi:
 	</text>

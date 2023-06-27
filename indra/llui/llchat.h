@@ -72,7 +72,11 @@ typedef enum e_chat_style
 	CHAT_STYLE_IRC,
 	CHAT_STYLE_HISTORY,
 	CHAT_STYLE_TELEPORT_SEP,
-	CHAT_STYLE_MODERATOR
+	// <FS:Zi> Add a distinct color for server side group chat replay
+	// CHAT_STYLE_MODERATOR
+	CHAT_STYLE_MODERATOR,
+	CHAT_STYLE_SERVER_HISTORY
+	// </FS:Zi>
 }EChatStyle;
 
 // A piece of chat

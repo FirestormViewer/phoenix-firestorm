@@ -459,8 +459,8 @@
 				</text>
 				<slider_bar name="SB_Roll" width="110"/>
 				<button name="Reset_Roll" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
-				<text name="T_Zoom_Speed" tool_tip="Ölçünün sürət həssaslığını tənzimləyir. Əgər dəqiqliklə hərəkət etmək çətindirsə, daha aşağı dəyərlər istifadə edin." width="100">
-					Yaxınlaşdırma tezliyi
+				<text name="T_Zoom_Speed" tool_tip="Yaxınlaşdırmanın sürət həssaslığını tənzimləyir. Əgər dəqiqliklə hərəkət etmək çətindirsə, daha aşağı dəyərlər istifadə edin." width="100">
+					Yaxınlaşdır.sürəti
 				</text>
 				<slider_bar name="SB_Zoom_Speed" width="110"/>
 				<button name="Reset_Zoom_Speed" label="S" tool_tip="Susmaya görə olan vəziyyətə qaytarın."/>
@@ -533,11 +533,11 @@
 						</panel>
 					</panel>
 
-					<panel name="P_Misc" label="Разное">
+					<panel name="P_Misc" label="Əlavə">
 						<panel name="P_Misc_Settings">
-							<check_box label="Avatar kliklənməsi kameranın yerləşməsini saxlayır" name="clickonavatarkeepscamera"
+							<check_box label="Avatar kliklənməsi kameranın yerləşməsini saxla" name="clickonavatarkeepscamera"
 							 tool_tip="Adətən avatar üzərinə basmaqla kameranın yerləşməsi sıfırlanır. Bu seçim bu davranışı düzəldir."/>
-							<check_box label="Teleportdan sonra kamera yerləşməsini sıfırla" name="FSResetCameraOnTP"
+							<check_box label="Tp-dan sonra kamera yerləşməsini sıfırla" name="FSResetCameraOnTP"
 							 tool_tip="Bir qayda olaraq, teleportasiya zamanı (region daxilində) kamera yerləşməsi sıfırlanır. Bu seçim bu davranışın qarşısını alır."/>
 							<check_box label="Minimum kamera məsafəsini deaktiv edin" name="disableminzoomdist"
 							 tool_tip="Kamera və obyekt arasında ən yaxın məsafə məhdudiyyətini söndürür."/>

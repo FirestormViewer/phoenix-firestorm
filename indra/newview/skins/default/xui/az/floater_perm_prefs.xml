@@ -10,6 +10,6 @@
 		<check_box label="köçürtmək" name="next_owner_copy"/>
 		<check_box initial_value="true" label="satmaq/paylaşmaq" name="next_owner_transfer"/>
 	</panel>
-	<button label="ОК" label_selected="ОК" name="ok"/>
+	<button label="OK" label_selected="OK" name="ok"/>
 	<button label="Ləğv et" label_selected="Ləğv et" name="cancel"/>
 </floater>

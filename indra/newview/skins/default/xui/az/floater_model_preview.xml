@@ -265,7 +265,7 @@
     <panel name="weights_and_warning_panel">
       <button label="Çəki və haqqı hesablayın" name="calculate_btn" tool_tip="Çəki və haqqı hesablayın"/>
       <button label="Ləğv et" name="cancel_btn"/>
-      <button label="Yüklə" name="ok_btn" tool_tip="Загрузить в симулятор"/>
+      <button label="Yüklə" name="ok_btn" tool_tip="Simulyatora yüklə"/>
       <button label="Seçimləri silin və formanı sıfırlayın" name="reset_btn"/>
       <!-- ========== WEIGHTS ==========-->
       <text name="upload_fee">Qiymət: L$ [FEE]</text>

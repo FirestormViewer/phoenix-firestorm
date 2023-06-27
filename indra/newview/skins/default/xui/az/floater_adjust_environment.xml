@@ -28,7 +28,7 @@
 					<text name="scale_label">Ölçü:</text>
 					<text name="glow_focus_label">Parlaqlığın fokusu:</text>
 					<text name="glow_size_label">Parlaqlığın ölçüsü:</text>
-					<text name="star_brightness_label">Ulduzların parlaqlığı:</text>
+					<text name="star_brightness_label" width="140">Ulduzların parlaqlığı:</text>
 				</layout_panel>
 				<layout_panel name="lp_4">
 					<text name="label">Ay:</text>
