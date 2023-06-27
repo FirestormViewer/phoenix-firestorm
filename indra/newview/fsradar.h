@@ -30,7 +30,7 @@
 #include "llsingleton.h"
 
 #include "fsradarentry.h"
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class LLAvatarName;
 
