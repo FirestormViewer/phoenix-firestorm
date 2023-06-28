@@ -1624,16 +1624,16 @@ void LLPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
         //childSetVisible("partner_spacer_layout", FALSE);
         setBadge("Profile_Badge_Lifetime", "BadgeLifetime");
     }
-    else if (customer_lower == "premium_lifetime")
+    else if (customer_lower == "secondlifetime_premium")
     {
         // <FS:Ansariel> Fix LL UI/UX design accident
-        //getChild<LLUICtrl>("badge_icon")->setValue("Profile_Premium_Lifetime");
+        //getChild<LLUICtrl>("badge_icon")->setValue("Profile_Badge_Premium_Lifetime");
         //getChild<LLUICtrl>("badge_text")->setValue(getString("BadgePremiumLifetime"));
         //childSetVisible("badge_layout", TRUE);
         //childSetVisible("partner_spacer_layout", FALSE);
-        setBadge("Profile_Premium_Lifetime", "BadgePremiumLifetime");
+        setBadge("Profile_Badge_Premium_Lifetime", "BadgePremiumLifetime");
     }
-    else if (customer_lower == "pplus_lifetime" || customer_lower == "premium_plus_lifetime")
+    else if (customer_lower == "secondlifetime_premium_plus")
     {
         // <FS:Ansariel> Fix LL UI/UX design accident
         //getChild<LLUICtrl>("badge_icon")->setValue("Profile_Badge_Pplus_Lifetime");
