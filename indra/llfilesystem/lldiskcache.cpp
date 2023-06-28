@@ -44,7 +44,12 @@ static const char* subdirs = "0123456789abcdef";
 
 LLDiskCache::LLDiskCache(const std::string cache_dir,
                          const uintmax_t max_size_bytes,
-                         const bool enable_cache_debug_info) :
+                         const bool enable_cache_debug_info
+// <FS:Beq> Add High/Low water mark support
+                         ,const F32 highwater_mark_percent
+                         ,const F32 lowwater_mark_percent
+// </FS:Beq>
+                         ) :
     mCacheDir(cache_dir),
     mMaxSizeBytes(max_size_bytes),
     mEnableCacheDebugInfo(enable_cache_debug_info)
@@ -113,6 +118,8 @@ void LLDiskCache::purge()
 #else
     std::string cache_path(mCacheDir);
 #endif
+    uintmax_t file_size_total = 0; // <FS:Beq/> try to make simple cache less naive.
+    
     if (boost::filesystem::is_directory(cache_path, ec) && !ec.failed())
     {
         // <FS:Ansariel> Optimize asset simple disk cache
@@ -137,6 +144,7 @@ void LLDiskCache::purge()
                     {
                         continue;
                     }
+                    file_size_total += file_size; // <FS:Beq/> try to make simple cache less naive.
 
                     file_info.push_back(file_info_t(file_time, { file_size, file_path }));
                 }
@@ -145,52 +153,106 @@ void LLDiskCache::purge()
         }
     }
 
+    // <FS:Beq> add high water/low water thresholds to reduce the churn in the cache.
+    LL_DEBUGS("LLDiskCache") << "Cache is " << (int)(((F32)file_size_total)/mMaxSizeBytes*100.0) << "% full" << LL_ENDL;
+    if( file_size_total < mMaxSizeBytes * (mHighPercent/100) )
+    {
+        // Nothing to do here 
+        LL_DEBUGS("LLDiskCache") << "Not exceded high water - do nothing" << LL_ENDL;
+        return;
+    }
+    // If we reach here we are above the trigger level so we must purge until we've removed enough to take us down to the low water mark.
+    // </FS:Beq>
     std::sort(file_info.begin(), file_info.end(), [](file_info_t& x, file_info_t& y)
     {
-        return x.first > y.first;
+        return x.first < y.first; // <FS:Beq/> sort oldest to newest, to we can remove the oldest files first.
     });
 
-    LL_INFOS() << "Purging cache to a maximum of " << mMaxSizeBytes << " bytes" << LL_ENDL;
+
+    // <FS:Beq> add high water/low water thresholds to reduce the churn in the cache.
+    auto target_size = (uintmax_t)(mMaxSizeBytes * (mLowPercent/100));
+    LL_INFOS() << "Purging cache to a maximum of " << target_size << " bytes" << LL_ENDL;
+    // </FS:Beq>
 
     // <FS:Beq> Extra accounting to track the retention of static assets
     //std::vector<bool> file_removed;
-    std::vector<S32> file_removed;
-    int keep{0};
-    int del{0};
-    int skip{0};
+    enum class purge_action { delete_file=0, keep_file, skip_file };
+    std::map<std::string,purge_action> file_removed;
+    auto keep{file_info.size()};
+    auto del{0};
+    auto skip{0};
     // </FS:Beq>
-    if (mEnableCacheDebugInfo)
-    {
-        file_removed.reserve(file_info.size());
-    }
-    uintmax_t file_size_total = 0;
+    // <FS:Beq> revised purge logic to track amount removed not retained to shortern loop
+    // uintmax_t file_size_total = 0;
+    // if (mEnableCacheDebugInfo)
+    // {
+    //     file_removed.reserve(file_info.size());
+    // }
+    // uintmax_t file_size_total = 0;
+    // for (file_info_t& entry : file_info)
+    // {
+    //     file_size_total += entry.second.first;
+
+    //     bool should_remove = file_size_total > mMaxSizeBytes;
+    //     // <FS> Make sure static assets are not eliminated
+    //     S32 action{ should_remove ? 0 : 1 };
+    //     if (should_remove)
+    //     {
+    //         auto uuid_as_string = gDirUtilp->getBaseFileName(entry.second.second, true);
+    //         uuid_as_string = uuid_as_string.substr(mCacheFilenamePrefix.size() + 1, 36);// skip "sl_cache_" and trailing "_N"
+    //         // LL_INFOS() << "checking UUID=" <<uuid_as_string<< LL_ENDL;
+    //         if (std::find(mSkipList.begin(), mSkipList.end(), uuid_as_string) != mSkipList.end())
+    //         {
+    //             // this is one of our protected items so no purging
+    //             should_remove = false;
+    //             action = 2;
+    //             updateFileAccessTime(entry.second.second); // force these to the front of the list next time so that purge size works 
+    //         }
+    //     }
+    //     // </FS>
+    //     if (mEnableCacheDebugInfo)
+    //     {
+    //         // <FS> Static asset stuff
+    //         //file_removed.push_back(should_remove);
+    //         file_removed.push_back(action);
+    //     }
+    uintmax_t deleted_size_total = 0;
     for (file_info_t& entry : file_info)
     {
-        file_size_total += entry.second.first;
+        // first check if we still need to delete more files
+        bool should_remove = (file_size_total - deleted_size_total) > target_size;
 
-        bool should_remove = file_size_total > mMaxSizeBytes;
         // <FS> Make sure static assets are not eliminated
-        S32 action{ should_remove ? 0 : 1 };
-        if (should_remove)
+        auto action{ should_remove ? purge_action::delete_file : purge_action::keep_file };
+        if (!should_remove)
         {
-            auto uuid_as_string = gDirUtilp->getBaseFileName(entry.second.second, true);
-            uuid_as_string = uuid_as_string.substr(mCacheFilenamePrefix.size() + 1, 36);// skip "sl_cache_" and trailing "_N"
-            // LL_INFOS() << "checking UUID=" <<uuid_as_string<< LL_ENDL;
-            if (std::find(mSkipList.begin(), mSkipList.end(), uuid_as_string) != mSkipList.end())
-            {
-                // this is one of our protected items so no purging
-                should_remove = false;
-                action = 2;
-                updateFileAccessTime(entry.second.second); // force these to the front of the list next time so that purge size works 
-            }
+            break;
         }
-        // </FS>
+
+        auto this_file_size = entry.second.first;
+        deleted_size_total += this_file_size;
+        auto uuid_as_string = gDirUtilp->getBaseFileName(entry.second.second, true);
+        uuid_as_string = uuid_as_string.substr(mCacheFilenamePrefix.size() + 1, 36);// skip "sl_cache_" and trailing "_N"
+        // LL_INFOS() << "checking UUID=" <<uuid_as_string<< LL_ENDL;
+        if (std::find(mSkipList.begin(), mSkipList.end(), uuid_as_string) != mSkipList.end())
+        {
+            // this is one of our protected items so no purging
+            should_remove = false;
+            action = purge_action::skip_file;
+            updateFileAccessTime(entry.second.second); // force these to the front of the list next time so that purge size works 
+            skip++;
+        }
+        else{
+            del++;
+        }
+        keep--;
         if (mEnableCacheDebugInfo)
         {
-            // <FS> Static asset stuff
-            //file_removed.push_back(should_remove);
-            file_removed.push_back(action);
+        // <FS> Static asset stuff
+        //file_removed.push_back(should_remove);
+            file_removed.emplace(entry.second.second, action);
         }
+        // </FS>
         if (should_remove)
         {
             boost::filesystem::remove(entry.second.second, ec);
@@ -200,37 +262,52 @@ void LLDiskCache::purge()
             }
         }
     }
-
+// <FS:Beq> update the debug logging to be more useful
+    auto end_time = std::chrono::high_resolution_clock::now();
+    auto execute_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+// </FS:Beq>
     if (mEnableCacheDebugInfo)
     {
-        auto end_time = std::chrono::high_resolution_clock::now();
-        auto execute_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+        // <FS:Beq> update the debug logging to be more useful
+        // auto end_time = std::chrono::high_resolution_clock::now();
+        // auto execute_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+        // </FS:Beq>
 
         // Log afterward so it doesn't affect the time measurement
         // Logging thousands of file results can take hundreds of milliseconds
+        auto deleted_so_far = 0; // <FS:Beq/> update the debug logging to be more useful
         for (size_t i = 0; i < file_info.size(); ++i)
         {
             const file_info_t& entry = file_info[i];
             // <FS> Static asset stuff
+            deleted_so_far += entry.second.first; // <FS:Beq/> update the debug logging to be more useful
             //const bool removed = file_removed[i];
             //const std::string action = removed ? "DELETE:" : "KEEP:";
             std::string action{};
-            switch (file_removed[i])
-            {
-                default:
-                case 0:
-                    action = "KEEP";
-                    keep++;
-                    break;
-                case 1:
+
+            // Check if the file exists in the map
+            auto& filename{ entry.second.second };
+            if (file_removed.find(filename) != file_removed.end()) {
+            // File found in the map, retrieve the corresponding enum value
+            switch (file_removed[filename]) {
+                case purge_action::delete_file:
                     action = "DELETE";
                     del++;
-                    break;
-                case 2:
+                break;
+                case purge_action::skip_file:
                     action = "STATIC";
                     skip++;
-                    break;
+                break;
+                default:
+                // Handle any unexpected enum value
+                    action = "UNKNOWN";
+                break;
             }
+            }
+            else 
+            {
+                action = "KEEP";
+            }            
             // </FS>
 
             // have to do this because of LL_INFO/LL_END weirdness
@@ -240,14 +317,22 @@ void LLDiskCache::purge()
             line << entry.first << "  ";
             line << entry.second.first << "  ";
             line << entry.second.second;
-            line << " (" << file_size_total << "/" << mMaxSizeBytes << ")";
+            line << " (" << file_size_total - deleted_so_far << "/" << mMaxSizeBytes << ")"; // <FS:Beq/> update the debug logging to be more useful
             LL_INFOS() << line.str() << LL_ENDL;
         }
-
-        LL_INFOS() << "Total dir size after purge is " << dirFileSize(mCacheDir) << LL_ENDL;
-        LL_INFOS() << "Cache purge took " << execute_time << " ms to execute for " << file_info.size() << " files" << LL_ENDL;
-        LL_INFOS() << "Deleted: " << del << " Skipped: " << skip << " Kept: " << keep << LL_ENDL;    // <FS:Beq/> Extra accounting to track the retention of static assets
+// <FS:Beq> make the summary stats more easily enabled.
     }
+    // <FS:Beq> update the debug logging to be more useful
+        // LL_INFOS() << "Total dir size after purge is " << dirFileSize(mCacheDir) << LL_ENDL;
+        // LL_INFOS() << "Cache purge took " << execute_time << " ms to execute for " << file_info.size() << " files" << LL_ENDL;
+
+    auto newCacheSize = updateCacheSize(file_size_total - deleted_size_total); 
+    LL_INFOS("LLDiskCache") << "Total dir size after purge is " << newCacheSize << LL_ENDL; 
+    LL_INFOS("LLDiskCache") << "Cache purge took " << execute_time << " ms to execute for " << file_info.size() << " files" << LL_ENDL;
+// </FS:Beq>
+    LL_INFOS("LLDiskCache") << "Deleted: " << del << " Skipped: " << skip << " Kept: " << keep << LL_ENDL;    // <FS:Beq/> Extra accounting to track the retention of static assets
+    LL_INFOS("LLDiskCache") << "Total of " << deleted_size_total << " bytes removed." << LL_ENDL;    // <FS:Beq/> Extra accounting to track the retention of static assets
+    // } <FS:Beq/> this bracket was moved up a few lines.
 }
 
 const std::string LLDiskCache::assetTypeToString(LLAssetType::EType at)
@@ -534,8 +619,32 @@ void LLDiskCache::removeOldVFSFiles()
     }
 }
 
-uintmax_t LLDiskCache::dirFileSize(const std::string& dir)
+// <FS:Beq> Lets not scan every single time if we can avoid it eh?
+// uintmax_t LLDiskCache::dirFileSize(const std::string& dir)
+// {
+uintmax_t LLDiskCache::updateCacheSize(const uintmax_t newsize)
 {
+    mStoredCacheSize = newsize;
+    mLastScanTime = system_clock::now();
+    return mStoredCacheSize;
+}
+
+uintmax_t LLDiskCache::dirFileSize(const std::string& dir, bool force )
+{
+    using namespace std::chrono;
+    const seconds cache_duration{ 120 };// A rather arbitrary number. it takes 5 seconds+ on a fast drive to scan 80K+ items. purge runs every minute and will update. so 120 should mean we never need a superfluous cache scan.
+
+    const auto current_time = system_clock::now();
+
+    const auto time_difference = duration_cast<seconds>(current_time - mLastScanTime);
+
+    // Check if the cached result can be used
+    if( !force && time_difference < cache_duration )
+    {
+        LL_DEBUGS("LLDiskCache") << "Using cached result: " << mStoredCacheSize << LL_ENDL;
+        return mStoredCacheSize;
+    }
+// </FS:Beq>
     uintmax_t total_file_size = 0;
 
     /**
@@ -577,7 +686,10 @@ uintmax_t LLDiskCache::dirFileSize(const std::string& dir)
         }
     }
 
-    return total_file_size;
+// <FS:Beq> Lets not scan every single time if we can avoid it eh?
+    // return total_file_size;
+    return updateCacheSize(total_file_size);
+// </FS:Beq>
 }
 
 LLPurgeDiskCacheThread::LLPurgeDiskCacheThread() :

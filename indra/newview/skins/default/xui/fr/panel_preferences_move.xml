@@ -38,7 +38,7 @@
 			<check_box label="Inverser l'axe vertical" name="invert_mouse"/>
 		</panel>
 		<panel label="Mouvement" name="tab-movement">
-			<check_box label="Les flèches directionnelles déplacent toujours mon avatar" name="arrow_keys_move_avatar_check"/>
+			<check_box label="Les flèches directionnelles déplacent toujours mon avatar" name="arrow_keys_move_avatar_check" tool_tip="S'applique uniquement au champ de saisie du Chat local situé au bas du visualiseur, et non à l'onglet Chat local dans Conversations."/>
 			<check_box label="Appuyer sur les touches alphabétiques de déplacement (WASD) déplace mon avatar" name="LetterKeysAffectsMovementNotFocusChatBar"/>
 			<check_box label="Double-pression sur une touche directionnelle pour courir" name="tap_tap_hold_to_run"/>
 			<check_box label="Décoller / Atterrir en maintenant les touches Saut / Accroupi" name="automatic_fly"/>
