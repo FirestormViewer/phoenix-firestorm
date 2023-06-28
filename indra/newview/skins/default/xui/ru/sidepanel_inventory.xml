@@ -11,6 +11,7 @@
 						Полученные вещи
 					</string>
 					<button label="Полученные вещи" name="inbox_btn"/>
+					<button name="reload_received_items_btn" tool_tip="Перезагрузить список полученных предметов."/>
 					<text name="inbox_fresh_new_count">
 						Новых: [NUM]
 					</text>
