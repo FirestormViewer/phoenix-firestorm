@@ -525,6 +525,7 @@ HttpStatus HttpOpRequest::prepareRequest(HttpService * service)
     check_curl_easy_setopt(mCurlHandle, CURLOPT_SEEKDATA, getHandle());
 
 	check_curl_easy_setopt(mCurlHandle, CURLOPT_COOKIEFILE, "");
+	check_curl_easy_setopt(mCurlHandle, CURLOPT_USERAGENT, "Firestorm");
 
 	if (gpolicy.mSslCtxCallback)
 	{
