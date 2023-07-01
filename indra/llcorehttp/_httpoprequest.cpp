@@ -527,7 +527,7 @@ HttpStatus HttpOpRequest::prepareRequest(HttpService * service)
     check_curl_easy_setopt(mCurlHandle, CURLOPT_SEEKDATA, getHandle());
 
 	check_curl_easy_setopt(mCurlHandle, CURLOPT_COOKIEFILE, "");
-	check_curl_easy_setopt(mCurlHandle, CURLOPT_USERAGENT, APP_NAME); // <FS> Clownflare changes
+	check_curl_easy_setopt(mCurlHandle, CURLOPT_USERAGENT, APP_NAME.c_str()); // <FS> Clownflare changes
 
 	if (gpolicy.mSslCtxCallback)
 	{
