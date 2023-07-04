@@ -654,6 +654,7 @@ public:
 	std::vector<LLVector3> mUnselectedChildrenPositions ;
 
 private:
+    void setObjectCostStale();
     bool isAssetInInventory(LLViewerInventoryItem* item);
 
 	ExtraParameter* createNewParameterEntry(U16 param_type);

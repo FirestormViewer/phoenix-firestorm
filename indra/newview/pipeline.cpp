@@ -10816,8 +10816,11 @@ public:
     {
         LLSpatialGroup* group = (LLSpatialGroup*)state->getListener(0);
 
-        group->setState(LLSpatialGroup::GEOM_DIRTY);
-        gPipeline.markRebuild(group);
+        if (group->getSpatialPartition()->mRenderByGroup)
+        {
+            group->setState(LLSpatialGroup::GEOM_DIRTY);
+            gPipeline.markRebuild(group);
+        }
 
         for (LLSpatialGroup::bridge_list_t::iterator i = group->mBridgeList.begin(); i != group->mBridgeList.end(); ++i)
         {
@@ -10838,6 +10841,9 @@ void LLPipeline::rebuildDrawInfo()
         LLOctreeDirty dirty;
 
         LLSpatialPartition* part = region->getSpatialPartition(LLViewerRegion::PARTITION_VOLUME);
+        dirty.traverse(part->mOctree);
+
+        part = region->getSpatialPartition(LLViewerRegion::PARTITION_BRIDGE);
         dirty.traverse(part->mOctree);
     }
 }
