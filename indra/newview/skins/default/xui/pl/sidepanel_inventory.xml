@@ -11,6 +11,7 @@
 						Odebrane przedmioty
 					</string>
 					<button label="Odebrane przedmioty" name="inbox_btn"/>
+					<button name="reload_received_items_btn" tool_tip="Załaduj ponownie listę odebranych przedmiotów." />
 					<text name="inbox_fresh_new_count">
 						[NUM] nowe/y
 					</text>

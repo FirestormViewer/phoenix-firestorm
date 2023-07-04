@@ -29,15 +29,15 @@
 #ifndef FS_ASSETBLACKLIST_H
 #define FS_ASSETBLACKLIST_H
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
+#include <unordered_map>
+#include <unordered_set>
 
 #include "llsingleton.h"
 #include "llassettype.h"
 
-typedef boost::unordered_set<LLUUID, FSUUIDHash> blacklisted_uuid_container_t;
-typedef std::map<LLAssetType::EType, blacklisted_uuid_container_t> blacklist_type_map_t;
-typedef boost::unordered_map<LLUUID, LLSD, FSUUIDHash> blacklist_data_t;
+using blacklisted_uuid_container_t = std::unordered_set<LLUUID, FSUUIDHash>;
+using blacklist_type_map_t = std::map<LLAssetType::EType, blacklisted_uuid_container_t>;
+using blacklist_data_t = std::unordered_map<LLUUID, LLSD, FSUUIDHash>;
 
 class FSAssetBlacklist : public LLSingleton<FSAssetBlacklist>
 {
@@ -54,7 +54,7 @@ public:
 
 	blacklist_data_t getBlacklistData() const { return mBlacklistData; };
 
-	enum eBlacklistOperation
+	enum class eBlacklistOperation
 	{
 		BLACKLIST_ADD,
 		BLACKLIST_REMOVE

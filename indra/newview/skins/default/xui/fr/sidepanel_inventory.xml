@@ -4,9 +4,10 @@
 		<layout_stack name="inventory_layout_stack">
 			<layout_panel name="inbox_layout_panel">
 				<panel name="marketplace_inbox">
-					<string name="InboxLabelWithArg">Objets reçus ([NUM])</string>
-					<string name="InboxLabelNoArg">Objets reçus</string>
-					<button label="Objets reçus" name="inbox_btn"/>
+					<string name="InboxLabelWithArg">Achats reçus ([NUM])</string>
+					<string name="InboxLabelNoArg">Achats reçus</string>
+					<button label="Achats reçus" name="inbox_btn"/>
+					<button name="reload_received_items_btn" tool_tip="Recharger la liste des achats reçus."/>
 					<text name="inbox_fresh_new_count">[NUM] nouveaux</text>
 					<panel name="inbox_inventory_placeholder_panel" tool_tip="Glissez les objets dans votre inventaire pour les utiliser"><text name="inbox_inventory_placeholder">Les achats du Marketplace seront livrés ici.</text></panel>
 				</panel>
