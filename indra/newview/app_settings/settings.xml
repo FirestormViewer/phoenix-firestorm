@@ -2952,6 +2952,28 @@
       <key>Value</key>
       <integer>2048</integer>
     </map>
+    <key>FSDiskCacheHighWaterPercent</key>
+    <map>
+      <key>Comment</key>
+      <string>Trigger point above which we should start to clear out older cache entries</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <integer>95.0</integer>
+    </map>
+    <key>FSDiskCacheLowWaterPercent</key>
+    <map>
+      <key>Comment</key>
+      <string>Level to drain cache to once it goes over the high water limit.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <integer>70.0</integer>
+    </map>
     <key>CacheLocation</key>
     <map>
       <key>Comment</key>

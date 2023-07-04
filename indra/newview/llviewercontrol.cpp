@@ -1087,6 +1087,20 @@ void handleDiskCacheSizeChanged(const LLSD& newValue)
 }
 // </FS:Ansariel>
 
+// <FS:Beq> Better asset cache purge control
+void handleDiskCacheHighWaterPctChanged(const LLSD& newValue)
+{
+	const auto new_high = newValue.asReal();
+	LLDiskCache::getInstance()->setHighWaterPercentage(new_high);
+}
+
+void handleDiskCacheLowWaterPctChanged(const LLSD& newValue)
+{
+	const auto new_low = newValue.asReal();
+	LLDiskCache::getInstance()->setLowWaterPercentage(new_low);
+}
+// </FS:Beq>
+
 void handleTargetFPSChanged(const LLSD& newValue)
 {
     const auto targetFPS = gSavedSettings.getU32("TargetFPS");
@@ -1464,7 +1478,10 @@ void settings_setup_listeners()
 
 	// <FS:Ansariel> Better asset cache size control
 	setting_setup_signal_listener(gSavedSettings, "FSDiskCacheSize", handleDiskCacheSizeChanged);
-
+	// <FS:Beq> Better asset cache purge control
+	setting_setup_signal_listener(gSavedSettings, "FSDiskCacheHighWaterPercent", handleDiskCacheHighWaterPctChanged);
+	setting_setup_signal_listener(gSavedSettings, "FSDiskCacheLowWaterPercent", handleDiskCacheLowWaterPctChanged);
+	// </FS:Beq>
 
 	// <FS:Zi> Handle IME text input getting enabled or disabled
 #if LL_SDL2

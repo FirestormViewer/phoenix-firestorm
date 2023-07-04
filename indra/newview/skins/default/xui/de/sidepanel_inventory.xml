@@ -11,6 +11,7 @@
 						Erhaltene Artikel
 					</string>
 					<button label="Erhaltene Artikel" name="inbox_btn"/>
+					<button tool_tip="Liste der erhaltenen Artikel neu laden" name="reload_received_items_btn"/>
 					<text name="inbox_fresh_new_count">
 						[NUM] neu
 					</text>

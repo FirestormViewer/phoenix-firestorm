@@ -63,6 +63,9 @@
 #define _LLDISKCACHE
 
 #include "llsingleton.h"
+#include <chrono>
+using namespace std::chrono;
+
 
 class LLDiskCache :
     public LLParamSingleton<LLDiskCache>
@@ -92,7 +95,18 @@ class LLDiskCache :
                      * if there are bugs, we can ask uses to enable this
                      * setting and send us their logs
                      */
-                    const bool enable_cache_debug_info);
+                    const bool enable_cache_debug_info,
+                    // <FS:Beq> Add high/low threshold controls for cache purging
+                    /**
+                     * A floating point percentage of the max_size_bytes above which the cache purge will trigger.
+                     */
+                    const F32 highwater_mark_percent,
+                    /**
+                     * A floating point percentage of the max_size_bytes which the cache purge will aim to reach once triggered.
+                     */
+                    const F32 lowwater_mark_percent
+                    // </FS:Beq>
+                    );
 
         virtual ~LLDiskCache() = default;
 
@@ -157,6 +171,10 @@ class LLDiskCache :
 
         // <FS:Ansariel> Better asset cache size control
         void setMaxSizeBytes(uintmax_t size) { mMaxSizeBytes = size; }
+        // <FS:Beq> High/Low water control
+        void setHighWaterPercentage(F32 HiPct) { mHighPercent = llclamp(HiPct, mLowPercent, 100.0);  };
+        void setLowWaterPercentage(F32 LowPct) { mLowPercent = llclamp(LowPct, 0.0, mHighPercent);  };
+        // </FS:Beq>
 
     private:
         /**
@@ -164,13 +182,21 @@ class LLDiskCache :
          * directory. Primarily used here to determine the directory size
          * before and after the cache purge
          */
-        uintmax_t dirFileSize(const std::string& dir);
+        uintmax_t updateCacheSize(const uintmax_t newsize); // <FS:Beq/> enable time based caching of dirfilesize except when force is true.
+        uintmax_t dirFileSize(const std::string& dir, bool force=false); // <FS:Beq/> enable time based caching of dirfilesize except when force is true.
 
         /**
          * Utility function to convert an LLAssetType enum into a
          * string that we use as part of the cache file filename
          */
         const std::string assetTypeToString(LLAssetType::EType at);
+
+        /**
+         * cache the directory size cos it takes forever to calculate it
+         * 
+         */
+        uintmax_t mStoredCacheSize{ 0 };
+        time_point<system_clock> mLastScanTime{ };
 
     private:
         /**
@@ -179,6 +205,10 @@ class LLDiskCache :
          * less than this value
          */
         uintmax_t mMaxSizeBytes;
+        // <FS:Beq> High/Low water control
+        F32 mHighPercent { 95.0 };
+        F32 mLowPercent { 70.0 };
+        // </FS:Beq>
 
         /**
          * The folder that holds the cached files. The consumer of this
