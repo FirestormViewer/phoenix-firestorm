@@ -99,8 +99,10 @@ public:
 	void			pageDown(S32 overlap = 0);
 	void			goToTop();
 	void			goToBottom();
-	bool			isAtTop() { return mScrollbar[VERTICAL]->isAtBeginning(); }
-	bool			isAtBottom() { return mScrollbar[VERTICAL]->isAtEnd(); }
+	bool			isAtTop() const { return mScrollbar[VERTICAL]->isAtBeginning(); }
+	bool			isAtBottom() const { return mScrollbar[VERTICAL]->isAtEnd(); }
+    S32             getDocPosVertical() const { return mScrollbar[VERTICAL]->getDocPos(); }
+    S32             getDocPosHorizontal() const { return mScrollbar[HORIZONTAL]->getDocPos(); }
 	S32				getBorderWidth() const;
 	// <FS:Ansariel> Scrollbar accessor
 	LLScrollbar*	getScrollbar(SCROLL_ORIENTATION orientation) { return mScrollbar[orientation]; }
