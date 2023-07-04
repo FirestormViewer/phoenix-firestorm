@@ -168,7 +168,7 @@ jobs:
           fi
           function find_most_recent_bundle() {
             local pattern="$1-.*$2[-_]+.*"
-            local most_recent_file=$(ls -t "${{ github.workspace }}" | grep "$pattern" | head -1)
+            local most_recent_file=$(ls -t "${{ github.workspace }}" | egrep "$pattern" | head -1)
             if [ -z "$most_recent_file" ]; then
               echo ""
             else
