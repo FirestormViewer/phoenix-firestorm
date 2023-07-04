@@ -234,7 +234,19 @@ void LLInventoryGalleryContextMenu::doToSelected(const LLSD& userdata, const LLU
                args["SLURL"] = slurl;
                LLNotificationsUtil::add("CopySLURL", args);
             };
+// <FS:Zi> GCC12 warning: maybe-uninitialized - probably bogus
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuninitialized"
+#endif
+// </FS:Zi>
             LLLandmarkActions::getSLURLfromPosGlobal(global_pos, copy_slurl_to_clipboard_cb, true);
+// <FS:Zi> GCC12 warning: maybe-uninitialized - probably bogus
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic pop
+#endif
+// </FS:Zi>
+
         };
         LLLandmark* landmark = LLLandmarkActions::getLandmark(selected_id, copy_slurl_cb);
         if (landmark)
@@ -520,7 +532,10 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
             items.push_back(std::string("Copy Asset UUID"));
             items.push_back(std::string("Copy Separator"));
 
-            bool is_asset_knowable = is_asset_knowable = LLAssetType::lookupIsAssetIDKnowable(obj->getType());
+            // <FS:Zi> Fix typo that causes gcc12 to error out
+            // bool is_asset_knowable = is_asset_knowable = LLAssetType::lookupIsAssetIDKnowable(obj->getType());
+            bool is_asset_knowable = LLAssetType::lookupIsAssetIDKnowable(obj->getType());
+            // </FS:Zi>
             if ( !is_asset_knowable // disable menu item for Inventory items with unknown asset. EXT-5308
                  || (! ( is_full_perm_item || gAgent.isGodlike())))
             {
