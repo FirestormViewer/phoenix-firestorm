@@ -49,6 +49,8 @@
 
 #include "httpstats.h"
 
+#include "indra_constants.h" // <FS> Clownflare changes
+
 // *DEBUG:  "[curl:bugs] #1420" problem and testing.
 //
 // A pipelining problem, https://sourceforge.net/p/curl/bugs/1420/,
@@ -525,6 +527,7 @@ HttpStatus HttpOpRequest::prepareRequest(HttpService * service)
     check_curl_easy_setopt(mCurlHandle, CURLOPT_SEEKDATA, getHandle());
 
 	check_curl_easy_setopt(mCurlHandle, CURLOPT_COOKIEFILE, "");
+	check_curl_easy_setopt(mCurlHandle, CURLOPT_USERAGENT, APP_NAME.c_str()); // <FS> Clownflare changes
 
 	if (gpolicy.mSslCtxCallback)
 	{

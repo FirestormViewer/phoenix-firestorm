@@ -1097,7 +1097,7 @@ void handleDiskCacheHighWaterPctChanged(const LLSD& newValue)
 void handleDiskCacheLowWaterPctChanged(const LLSD& newValue)
 {
 	const auto new_low = newValue.asReal();
-	LLDiskCache::getInstance()->setHighWaterPercentage(new_low);
+	LLDiskCache::getInstance()->setLowWaterPercentage(new_low);
 }
 // </FS:Beq>
 
@@ -1480,7 +1480,7 @@ void settings_setup_listeners()
 	setting_setup_signal_listener(gSavedSettings, "FSDiskCacheSize", handleDiskCacheSizeChanged);
 	// <FS:Beq> Better asset cache purge control
 	setting_setup_signal_listener(gSavedSettings, "FSDiskCacheHighWaterPercent", handleDiskCacheHighWaterPctChanged);
-	setting_setup_signal_listener(gSavedSettings, "FSDiskCacheHighWaterPercent", handleDiskCacheLowWaterPctChanged);
+	setting_setup_signal_listener(gSavedSettings, "FSDiskCacheLowWaterPercent", handleDiskCacheLowWaterPctChanged);
 	// </FS:Beq>
 
 	// <FS:Zi> Handle IME text input getting enabled or disabled
