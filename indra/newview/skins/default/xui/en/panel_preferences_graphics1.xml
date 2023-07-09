@@ -1309,7 +1309,7 @@
          label="FPS:"
          label_width="30"
          layout="topleft"
-         max_val="120"
+         max_val="360"
          min_val="15"
          name="MaxFPS"
          left_delta="240"
