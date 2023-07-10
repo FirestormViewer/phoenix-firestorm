@@ -173,6 +173,7 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mRequestNeedsSent(false),
 	mRlvBehaviorCallbackConnection()
 {
+	LLViewerRegion::sFSAreaSearchActive = true;
 	mFactoryMap["area_search_list_panel"] = LLCallbackMap(createPanelList, this);
 	mFactoryMap["area_search_find_panel"] = LLCallbackMap(createPanelFind, this);
 	mFactoryMap["area_search_filter_panel"] = LLCallbackMap(createPanelFilter, this);
@@ -188,6 +189,7 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 
 FSAreaSearch::~FSAreaSearch()
 {
+	LLViewerRegion::sFSAreaSearchActive = false;
 	if (!gIdleCallbacks.deleteFunction(idle, this))
 	{
 		LL_WARNS("FSAreaSearch") << "FSAreaSearch::~FSAreaSearch() failed to delete callback" << LL_ENDL;
