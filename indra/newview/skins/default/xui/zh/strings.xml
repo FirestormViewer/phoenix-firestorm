@@ -53,7 +53,8 @@
 	</string>
 	<string name="AboutSystem">
 		CPU：[CPU]
-記憶體：[MEMORY_MB] MB
+記憶體：[MEMORY_MB] MB (Used: [USED_RAM] MB)
+Concurrency: [CONCURRENCY]
 作業系統版本：[OS_VERSION]
 顯示卡供應商：[GRAPHICS_CARD_VENDOR]
 顯示卡：[GRAPHICS_CARD]
