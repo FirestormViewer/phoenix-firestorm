@@ -558,7 +558,11 @@ void LLAgent::init()
 	
 	// *Note: this is where LLViewerCamera::getInstance() used to be constructed.
 
-	setFlying( gSavedSettings.getBOOL("FlyingAtExit") );
+    bool is_flying = gSavedSettings.getBOOL("FlyingAtExit");
+    if(is_flying)
+    {
+        setFlying(is_flying);
+    }
 
 	*mEffectColor = LLUIColorTable::instance().getColor("EffectColor");
 
@@ -3103,12 +3107,6 @@ void LLAgent::setStartPosition( U32 location_id )
         gAgent.sendReliableMessage();
     }
     // </FS:Ansariel>
-
-    const U32 HOME_INDEX = 1;
-    if( HOME_INDEX == location_id )
-    {
-        setHomePosRegion( mRegionp->getHandle(), getPositionAgent() );
-    }
 }
 
 void LLAgent::setStartPositionSuccess(const LLSD &result)
