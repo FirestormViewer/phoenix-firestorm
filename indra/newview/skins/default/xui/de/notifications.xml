@@ -3808,6 +3808,14 @@ Sie haben lokal eine [RESOLUTION]-gebackene Textur für „[BODYREGION]“ nach 
 		Einfügen fehlgeschlagen. [REASON]
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="FailedToApplyTextureNoCopyToMultiple">
+		Textur konnte nicht angewandt werden. Sie können eine Textur ohne Kopier-Berechtigung nicht auf mehrere Objekte anwenden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="FailedToApplyGLTFNoCopyToMultiple">
+		GLTF-Textur konnte nicht angewandt werden. Sie können ein Material ohne Kopier-Berechtigung nicht auf mehrere Objekte anwenden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="FacePasteTexturePermissions">
 		Sie haben eine Texture mit eingeschränkten Berechtigungen hinzugefügt. Das Objekt wird die Berechtigungen der Textur erben.
 		<usetemplate ignoretext="Einfügen: Sie haben eine Texture mit eingeschränkten Berechtigungen hinzugefügt." name="notifyignore"/>
