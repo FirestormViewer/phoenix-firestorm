@@ -3874,8 +3874,10 @@ LLSD LLAppViewer::getViewerInfo() const
 	}
 
 	// CPU
+	LLMemory::updateMemoryInfo();
 	info["CPU"] = gSysCPU.getCPUString();
 	info["MEMORY_MB"] = LLSD::Integer(gSysMemory.getPhysicalMemoryKB().valueInUnits<LLUnits::Megabytes>());
+	info["USED_RAM"] = LLSD::Real(LLMemory::getAllocatedMemKB().valueInUnits<LLUnits::Megabytes>());
 	info["CONCURRENCY"] = LLSD::Integer((S32)boost::thread::hardware_concurrency());	// <FS:Beq> Add hardware concurrency to info
 	// Moved hack adjustment to Windows memory size into llsys.cpp
 	info["OS_VERSION"] = LLOSInfo::instance().getOSString();
