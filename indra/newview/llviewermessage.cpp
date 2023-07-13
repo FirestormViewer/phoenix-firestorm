@@ -5220,6 +5220,16 @@ void process_avatar_animation(LLMessageSystem *mesgsys, void **user_data)
 			mesgsys->getUUIDFast(_PREHASH_AnimationList, _PREHASH_AnimID, animation_id, i);
 			mesgsys->getS32Fast(_PREHASH_AnimationList, _PREHASH_AnimSequenceID, anim_sequence_id, i);
 
+			// <FS:Zi> Asset blacklist
+			if (FSAssetBlacklist::getInstance()->isBlacklisted(animation_id, LLAssetType::AT_ANIMATION))
+			{
+				// stop animation for onlookers; this won't help with deformers, but at least the
+				// user themselves doesn't see it, and everyone who comes in after this won't either
+				gAgent.sendAnimationRequest(animation_id, ANIM_REQUEST_STOP);
+				continue;
+			}
+			// </FS:Zi>
+
 			avatarp->mSignaledAnimations[animation_id] = anim_sequence_id;
 
 			// *HACK: Disabling flying mode if it has been enabled shortly before the agent

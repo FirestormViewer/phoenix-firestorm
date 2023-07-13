@@ -26,15 +26,9 @@ Xəta təfərrüatları: &quot;[_NAME]&quot; adlı bildiriş notifications.xml f
 	<notification name="TutorialNotFound">
 		Hazırda heç bir dərslik yoxdur
 	</notification>
-	<notification name="GenericAlert">
-		[MESSAGE]
-	</notification>
 	<notification name="GenericAlertYesCancel">
 		[MESSAGE]
 		<usetemplate name="okcancelbuttons" notext="Ləğv et" yestext="Bəli"/>
-	</notification>
-	<notification name="GenericAlertOK">
-		[MESSAGE]
 	</notification>
 	<notification name="BadInstallation">
 		[APP_NAME] yenilənərkən xəta baş verdi. Klientin [https://www.firestormviewer.org/downloads ən son versiyasını yükləyin].
@@ -195,7 +189,7 @@ Zəhmət olmasa, bir element seçin və yenidən cəhd edin.
 	</notification>
 	<notification name="AllowMultipleViewers">
 		Birdən çox tətbiqin [APP_NAME] icrası dəstəklənmir. Bu, tekstur keşinin münaqişələrinə, zədələnmə, performans və vizual yavaşlamaya səbəb ola bilər.
-		<usetemplate name="okbutton" yestext="ОК"/>
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="GrantModifyRights">
 		Başqa sakinə dəyişdirmə hüquqlarının verilməsi ona HƏR obyektinizi dəyişdirməyə, silməyə və ya götürməyə imkan verəcək. Bu icazənin verilməsində ÇOX diqqətli olun.
@@ -421,7 +415,7 @@ Silahın işləməsi üçün skriptlər icra edilməlidir.
 		Birdən çox üz seçildi.
 Bu hərəkəti davam etdirsəniz, obyektin hər seçilmiş üzünə ayrıca media nümunəsi yerləşdiriləcək.
 Medianı yalnız bir üzdə yerləşdirmək üçün &quot;Üzü seçmək&quot; əmrini seçin və obyektin istədiyiniz üzünə basın, sonra &quot;Əlavə et&quot; düyməsini basın.
-		<usetemplate ignoretext="Медиа будет помещено на несколько выбранных граней" name="okcancelignore" notext="Ləğv et" yestext="Bəli"/>
+		<usetemplate ignoretext="Media bir neçə seçilmiş üzün üstünə tətbiq olunacaq" name="okcancelignore" notext="Ləğv et" yestext="Bəli"/>
 	</notification>
 	<notification name="MustBeInParcel">
 		Teleportasiya nöqtəsini təyin etmək üçün siz sahədə olmalısınız.
@@ -651,7 +645,7 @@ Obyekt əhatə dairəsindən kənarda ola və ya silinə bilər.
 	</notification>
 	<notification name="MediaFileDownloadUnsupported">
 		Siz [APP_NAME] tərəfindən dəstəklənməyən fayl endirilməsi üçün sorğu göndərmisiniz.
-		<usetemplate ignoretext="Предупреждать о загрузке неподдерживаемых файлов" name="okignore" yestext="Bəli"/>
+		<usetemplate ignoretext="Dəstəklənməyən faylları endirmək barədə xəbərdarlıq edin" name="okignore" yestext="Bəli"/>
 	</notification>
 	<notification name="CannotWriteFile">
 		[[FILE]] faylını yazmaq mümkün deyil
@@ -777,7 +771,7 @@ Bütün satın alınan əşyaları eyni bölgəyə köçürün.
 	<notification name="PromptGoToCurrencyPage">
 		[EXTRA]
 
-Перейти на [_URL] для получения информации о покупке L$?
+L$ almaq haqqında məlumat üçün [_URL] ünvanına keçmək istədiyinə əminsiniz?
 		<url name="url">
 			http://secondlife.com/app/currency/
 		</url>
@@ -1196,7 +1190,7 @@ Bu, adətən müvəqqəti bir problemdir. Seçimləri düzəldin və bir neçə 
 		Qrup üçün torpaq almaq mümkün deyil:
 Sizin aktiv qrupunuz üçün torpaq almaq hüququnuz yoxdur.
 	</notification>
-	<notification label="Добавить друга" name="AddFriendWithMessage">
+	<notification label="Dost əlavə et" name="AddFriendWithMessage">
 		Dostlar xəritədə bir-birlərini izləmək və onlayn statuslarını görmək üçün icazə verə bilərlər.
 
 [NAME] adlı şəxsə dostluq sorğusu göndərilsin?
@@ -1421,9 +1415,9 @@ Bu [AREA] m² torpaq &quot;[GROUP_NAME]&quot; qrupuna ötürülsün?
 		Ekran seçimləri səviyyəsi təhlükəsiz olaraq təyin edilib, çünki -safe seçimi müəyyən edilib.
 	</notification>
 	<notification name="DisplaySetToRecommendedGPUChange">
-		Установлен рекомендуемый уровень настроек отображения, так как графическая карта изменена:
-с &quot;[LAST_GPU]&quot;
-на &quot;[THIS_GPU]&quot;
+		Qrafik kartı dəyişdirildiyinə görə tövsiyə olunmuş göstərmə profili təyin olunub:
+əvvəlki &quot;[LAST_GPU]&quot;
+cari &quot;[THIS_GPU]&quot;
 	</notification>
 	<notification name="DisplaySetToRecommendedFeatureChange">
 		Göstərmə alt sistemi dəyişdirildiyi üçün tövsiyə olunan displey seçimləri səviyyəsi təyin edilir.
@@ -1635,7 +1629,7 @@ Zəhmət olmasa, bir obyekt seçin və yenidən cəhd edin.
 		[AGENT] torpaq sahibini bloklananlar siyahısına əlavə etmək mümkün deyil.
 	</notification>
 	<notification name="GroupIsAlreadyInList">
-		&lt;nolink&gt;[GROUP]&lt;/nolink&gt; уже находится в списке допущенных групп.
+		&lt;nolink&gt;[GROUP]&lt;/nolink&gt; artıq icazə verilən qruplar siyahısındadır.
 	</notification>
 	<notification name="AgentIsAlreadyInList">
 		[AGENT] artıq [LIST_TYPE] siyahınızdadır.
@@ -1816,12 +1810,12 @@ Bütün gələn dostluq sorğularını rədd et rejimi aktivdir.
 	</notification>
 	<notification name="RejectAllGroupInvitesModeSet">
 Bütün gələn qrup dəvətlərini rədd et rejimi aktivdir.
-Входящие групповые приглашения от кого-либо теперь будут отклоняться автоматически. Bu səbəbə görə sizə məlumat verilməyəcək.
+Hər kəsdən gələn qrup dəvətləri indi avtomatik olaraq rədd ediləcək. Bu səbəbə görə sizə məlumat verilməyəcək.
 		<usetemplate ignoretext="Bütün qrup dəvətlərini rədd etmək üçün statusumu dəyişirəm" name="okignore" yestext="Bəli"/>
 	</notification>
 	<notification name="JoinedTooManyGroupsMember">
 		Qrupların maksimum sayına çatdınız. Qoşulmazdan əvvəl hər hansı bir qrupdan ayrılın və ya təklifi rədd edin.
-[NAME] пригласил вас вступить в группу как участник.
+[NAME] qrupa üzv kimi qoşulmaq təklif etdi.
 		<usetemplate name="okcancelbuttons" notext="Rədd edt" yestext="Qoşul"/>
 	</notification>
 	<notification name="JoinedTooManyGroups">
@@ -1979,7 +1973,7 @@ Onu silmək istərdinizmi?
 		[HISTORY_ENTRY] yerinə teleport etmək istədiyinizə əminsiniz?
 		<usetemplate ignoretext="Tarixçədə bir yerə teleportasiyanı təsdiqləyin" name="okcancelignore" notext="Ləğv et" yestext="Teleport ol"/>
 	</notification>
-	<notification label="Сообщение всем в моем землевладении" name="MessageEstate">
+	<notification label="Torpaq mülkiyyətimdə hər kəsə mesaj" name="MessageEstate">
 		Hazırda mülkünüzdə olan bütün sakinlər üçün qısa bir elan daxil edin.
 		<form name="form">
 			<button name="OK" text="OK"/>
@@ -2296,7 +2290,7 @@ Zəhmət olmasa, bir obyekt seçin və yenidən cəhd edin.
 		Eyni zamanda bir neçə obyektin məzmununu ala bilməzsiniz.
 Zəhmət olmasa, bir obyekt seçin və yenidən cəhd edin.
 	</notification>
-	<notification label="Нельзя купить содержимое" name="BuyContentsOneOwner">
+	<notification label="Məzmunu almaq mümkün deyil" name="BuyContentsOneOwner">
 		Eyni zamanda müxtəlif sahiblərdən obyektləri ala bilməzsiniz.
 Zəhmət olmasa, bir obyekt seçin və yenidən cəhd edin.
 	</notification>
@@ -2407,7 +2401,7 @@ Element(lər) daşınılsın?
 	</notification>
 	<notification name="ConfirmAddingChatParticipants">
 		Mövcud söhbətə iştirakçı əlavə etdiyiniz zaman yeni söhbət yaradılacaq. Bütün iştirakçılar yeni söhbət haqqında bildirişlər alacaqlar.
-		<usetemplate ignoretext="Söhbət iştirakçılarının əlavə edilməsini təsdiqləyin" name="okcancelignore" notext="Ləğv et" yestext="ОК"/>
+		<usetemplate ignoretext="Söhbət iştirakçılarının əlavə edilməsini təsdiqləyin" name="okcancelignore" notext="Ləğv et" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmQuit">
 		Çıxmaq istədiyinizdə əminsiniz?
@@ -2680,8 +2674,8 @@ Domen: [MEDIADOMAIN]
 URL: [MEDIAURL]
 		<form name="form">
 			<button name="Do Now" text="İndi [ACTION]"/>
-			<button name="RememberDomain" text="[CONDITION] Разрешить этому домену"/>
-			<button name="RememberURL" text="[CONDITION] Разрешить этому URL"/>
+			<button name="RememberDomain" text="[CONDITION] Bu domenə icazə ver"/>
+			<button name="RememberURL" text="[CONDITION] Bu URL üçün icazə ver"/>
 		</form>
 	</notification>
 	<notification name="MediaAlertSingle">
@@ -2712,9 +2706,9 @@ URL: [AUDIOURL]
 Domen: [AUDIODOMAIN]
 URL: [AUDIOURL]
 		<form name="form">
-			<button name="Do Now" text="[ACTION] Сейчас"/>
-			<button name="RememberDomain" text="[CONDITION] Разрешить этому домену"/>
-			<button name="RememberURL" text="[CONDITION] Разрешить этому URL"/>
+			<button name="Do Now" text="[ACTION] İndi"/>
+			<button name="RememberDomain" text="[CONDITION] Bu domenə icazə ver"/>
+			<button name="RememberURL" text="[CONDITION] Bu URL üçün icazə ver"/>
 		</form>
 	</notification>
 	<notification name="AudioAlertSingle">
@@ -2808,7 +2802,7 @@ Mövzu: [SUBJECT], Mesaj: [MESSAGE]
 		Əsas əmlaklar arasında avadanlıq siyahısı göndərmək mümkün deyil.
 	</notification>
 	<notification name="UnableToLoadNotecard">
-		Невозможно загрузить заметку.
+		Qeydi yükləmək mümkün deyil.
 Yenidən cəhd edin.
 	</notification>
 	<notification name="ScriptMissing">
@@ -2892,21 +2886,6 @@ Daha kiçik bir sahə seçməyə çalışın.
 	</notification>
 	<notification name="NoContentToSearch">
 		Axtarmaq üçün ən azı bir növ məzmun seçin (&quot;Ümumi&quot;, &quot;Ortam&quot; vəya &quot;Yetkin&quot;).
-	</notification>
-	<notification name="SystemMessage">
-		[MESSAGE]
-	</notification>
-	<notification name="FlickrConnect">
-		[MESSAGE]
-	</notification>
-	<notification name="PaymentReceived">
-		[MESSAGE]
-	</notification>
-	<notification name="PaymentSent">
-		[MESSAGE]
-	</notification>
-	<notification name="PaymentFailure">
-		[MESSAGE]
 	</notification>
 	<notification name="EventNotification">
 		Hadisə bildirişi:
@@ -2993,7 +2972,7 @@ Burada uça bilməzsiniz.
 		<usetemplate name="okbutton" yestext="Regionu bərpa et"/>
 	</notification>
 	<notification name="DynamicPathfindingDisabled">
-		В этом регионе не разрешен динамический поиск пути.  Возможны нарушения работы скриптовых объектов с использованием вызовов LSL поиска пути.
+		Bu regionda dinamik yol axtarışı söndürülüb. Yol axtaran LSL çağırışlarından istifadə edən skriptli obyektlər bu regionda gözlənildiyi kimi işləməyə bilər.
 	</notification>
 	<notification name="PathfindingCannotRebakeNavmesh">
 		Bir xəta baş verdi. Şəbəkə və ya server problemi ola bilər və ya sizin tikinti icazəniz yoxdur. Bəzən sistemdən çıxmaq və yenidən daxil olmaq bu problemi həll edə bilər.
@@ -3662,7 +3641,7 @@ Aşağıdakı sakinlərlə:
 Aşağıdakı əşyalarla paylaşmaq istədiyinizə əminsiniz?
 
 &lt;nolink&gt;[ITEMS]&lt;/nolink&gt;
-		<usetemplate name="okcancelbuttons" notext="Ləğv et" yestext="ОК"/>
+		<usetemplate name="okcancelbuttons" notext="Ləğv et" yestext="OK"/>
 	</notification>
 	<notification name="ItemsShared">
 		Əşyalar uğurla paylaşıldı.
@@ -3740,10 +3719,10 @@ https://wiki.firestormviewer.org/fs_voice
 		<usetemplate ignoretext="Səs serverinə qoşulma zamanı problemlər yarandı" name="okignore" yestext="Bəli"/>
 	</notification>
 	<notification name="NoVoiceConnect-GIAB">
-		Проблемы соединения с речевым сервером:
+		Səs serverinə qoşulmaq mümkün deyil:
 
-Голосовое общение будет недоступно.
-Проверьте настройки сети и брандмауэра.
+Səsli rabitə mövcud olmayacaq.
+Zəhmət olmasa şəbəkənizi və təhlükəsizlik divarı quraşdırmanızı yoxlayın.
 [https://wiki.firestormviewer.org/fs_voice]
 	</notification>
 	<notification name="AvatarRezLeftNotification">
@@ -3811,8 +3790,7 @@ Görünüş sahəsini fırlatmaq üçün dünyanın istənilən yerinə basın v
     Burada fərdiləşdirilə bilən görünülən adınızı təyin edin. Bu, dəyişdirilə bilməyən unikal istifadəçi adınıza əlavədir. Siz seçimlərdə digər insanların adlarını necə gördüyünüzü dəyişə bilərsiniz.
 	</notification>
 	<notification label="Kamera" name="HintView">
-		Для изменения вида из камеры используйте инструменты &quot;Вращение&quot; и &quot;Сдвиг&quot;. При нажатии клавиши Esc или переходе вид из камеры возвращается к исходному состоянию.
-		Kamera görünüşünüzü dəyişdirmək üçün Fırlatma və Sürüşdürmə idarəetmə elementlərindən istifadə edin. Esc düyməsinə basmaqla və ya gəzməklə görünüşünüzü sıfırlayın.
+		Kamera görünüşünüzü dəyişdirmək üçün &quot;Döndər&quot; və &quot;Sürüşdür&quot; idarəetmə elementlərindən istifadə edin. Esc düyməsinə basmaqla və ya gəzməklə görünüşünüzü sıfırlayın.
 	</notification>
 	<notification label="Avadanlıq siyahısı" name="HintInventory">
 		Elementləri tapmaq üçün avadanlıq siyahınızı yoxlayın. Ən yeni elementləri Son pəncərəsində asanlıqla tapmaq olar.
@@ -3863,7 +3841,6 @@ Görünüş sahəsini fırlatmaq üçün dünyanın istənilən yerinə basın v
 		Proksi seçimləri [APP_NAME] tətbiqini yenidən başlatdıqdan sonra qüvvəyə minir.
 	</notification>
 	<notification name="AuthRequest">
-		Сайт по адресу &quot;&lt;nolink&gt;[HOST_NAME]&lt;/nolink&gt;&quot; в царстве &quot;in realm &quot;[REALM]&quot; требует имени пользователя и пароля.
 		&quot;[REALM]&quot; &quot; sahəsində &quot; &quot;&lt;nolink&gt;[HOST_NAME]&lt;/nolink&gt;&quot; saytı istifadəçi adı və parol tələb edir.
 		<form name="form">
 			<input name="username" text="İstifadəçi adı"/>
@@ -3961,7 +3938,7 @@ Davam edilsin?
 	<notification name="PathfindingLinksets_MismatchOnRestricted_MismatchOnVolume">
 		Bəzi seçilmiş keçid dəstləri keçiddə icazə məhdudiyyətlərinə görə '[REQUESTED_TYPE]' olaraq təyin edilə bilməz. Bu keçid dəstləri əvəzinə "[RESTRICTED_TYPE]" olaraq təyin ediləcək.
 
-Bəzi seçilmiş keçid dəstləri '[REQUESTED_TYPE]' olaraq təyin edilə bilməz, çünki forma qabarıq deyil. Тип использования этих наборов связей не изменится.
+Bəzi seçilmiş keçid dəstləri '[REQUESTED_TYPE]' olaraq təyin edilə bilməz, çünki forma qabarıq deyil. Bu keçid dəstlərinin istifadə növü dəyişilməyəcək.
 
 Davam edilsin?
 		<usetemplate ignoretext="Bəzi seçilmiş link dəstləri keçidlər dəstində icazə məhdudiyyətləri və forma qeyri-qabarıq olduğu üçün təyin edilə bilməz." name="okcancelignore" notext="Ləğv et" yestext="Bəli"/>
@@ -3971,7 +3948,7 @@ Davam edilsin?
 
 Bəzi seçilmiş keçid dəstləri keçiddə icazə məhdudiyyətlərinə görə '[REQUESTED_TYPE]' olaraq təyin edilə bilməz. Bu keçid dəstləri əvəzinə "[RESTRICTED_TYPE]" olaraq təyin ediləcək.
 
-Bəzi seçilmiş keçid dəstləri '[REQUESTED_TYPE]' olaraq təyin edilə bilməz, çünki forma qabarıq deyil. Тип использования этих наборов связей не изменится.
+Bəzi seçilmiş keçid dəstləri '[REQUESTED_TYPE]' olaraq təyin edilə bilməz, çünki forma qabarıq deyil. Bu keçid dəstlərinin istifadə növü dəyişilməyəcək.
 
 Davam edilsin?
 		<usetemplate ignoretext="Bəzi seçilmiş keçid dəstlərinin fantom bayrağı dəyişdiriləcək, digərləri isə keçid setindəki icazə məhdudiyyətləri və forma qeyri-qabarıq olduğu üçün təyin edilə bilməz." name="okcancelignore" notext="Ləğv et" yestext="Bəli"/>
@@ -4093,9 +4070,6 @@ Intel drayver veb-saytını yoxlamaq istəyirsiniz?
 
 [SYSINFO]
 		<usetemplate name="okcancelbuttons" yestext="Göndər" notext="Ləğv et"/>
-	</notification>
-	<notification name="BlockLoginInfo">
-		[REASON]
 	</notification>
 	<notification name="TestversionExpired">
 		[APP_NAME] tətbiqinin bu sınaq versiyasının vaxtı keçib və daha istifadə edilə bilməz.
@@ -4247,11 +4221,11 @@ Cəhd ləğv edildi.
 	</notification>
 	<notification name="PathfindingReturnMultipleItems">
 		Siz [NUM_ITEMS] elementi qaytarırsınız. Davam etmək istədiyinizə əminsiniz?
-		<usetemplate ignoretext="Вы уверены, что хотите вернуть несколько объектов?" name="okcancelignore" notext="Xeyr" yestext="Bəli"/>
+		<usetemplate ignoretext="Bir neçə obyekti qaytarmaq istədiyiniə əminsiniz?" name="okcancelignore" notext="Xeyr" yestext="Bəli"/>
 	</notification>
 	<notification name="PathfindingDeleteMultipleItems">
 		Siz [NUM_ITEMS] elementi silirsiniz. Davam etmək istədiyinizə əminsiniz?
-		<usetemplate ignoretext="Вы уверены, что хотите удалить несколько объектов?" name="okcancelignore" notext="Xeyr" yestext="Bəli"/>
+		<usetemplate ignoretext="Bir neçə obyekti silmək istədiyiniə əminsiniz?" name="okcancelignore" notext="Xeyr" yestext="Bəli"/>
 	</notification>
 	<notification name="AvatarFrozen">
 		[AV_FREEZER] sizi dondurdu. Siz hərəkət edə və ya dünya ilə əlaqə saxlaya bilməzsiniz.
@@ -4391,7 +4365,7 @@ O, dolu ola və ya tezliklə yenidən başlaya bilər.
 		Seçilmiş obyekti saxlamaq mümkün deyil: &quot;[OBJ_NAME]&quot; obyekti köçürülmür.
 	</notification>
 	<notification name="NoModNoTaking">
-		Нельзя забрать выбранное: вам не разрешено изменять объект &quot;[OBJ_NAME]&quot;.
+		Seçilmişləri götürmək mümkün deyil: &quot;[OBJ_NAME]&quot; obyektinə dəyişiklik etmək icazəniz yoxdur
 	</notification>
 	<notification name="RezDestInternalError">
 		Daxili xəta: naməlum növ təyinat yeri.
@@ -4594,7 +4568,7 @@ daşımaq mümkün deyil, çünki siz navigasiya şəbəkəsini region sərhədl
 		Tələb olunan obyekti yaratmaq mümkün deyil. Region artıq doludur.
 	</notification>
 	<notification name="CantCreateAnimatedObjectTooLarge">
-		НевTələb olunan animasiya obyektini yaratmaq mümkün deyil, çünki o, rig üçbucaq limitini keçib.
+		Tələb olunan animasiya obyektini yaratmaq mümkün deyil, çünki o, rig üçbucaq limitini keçib.
 	</notification>
 	<notification name="CantAttackMultipleObjOneSpot">
 		Eyni nöqtəyə birdən çox obyekt əlavə edə bilməzsiniz.
@@ -4702,10 +4676,10 @@ daşımaq mümkün deyil, çünki siz navigasiya şəbəkəsini region sərhədl
 		Əlavə edilmiş obyekti yerə atmaq alınmadı: burada yerə atmaq icazəniz yoxdur.
 	</notification>
 	<notification name="CantDropAttachmentInsufficientLandResources">
-		Əlavə edilmiş obyekti yerə atmaq alınmadı: не хватает свободных земельных ресурсов.
+		Əlavə edilmiş obyekti yerə atmaq alınmadı: boş torpaq resursları çatışmır.
 	</notification>
 	<notification name="CantDropAttachmentInsufficientResources">
-		Əlavə edilmiş obyektləri yerə atmaq alınmadı:: не хватает свободных ресурсов.
+		Əlavə edilmiş obyektləri yerə atmaq alınmadı: boş resurslar çatışmır.
 	</notification>
 	<notification name="CantDropObjectFullParcel">
 		Obyekti bura atmaq olmaz. Sahə artıq doludur.
@@ -4806,7 +4780,7 @@ Daha kiçik bir sahə seçməyə çalışın.
 		Regionda reklamlara icazə verilmir.
 	</notification>
 	<notification name="LandPassExpireSoon">
-		Ваш пропуск на эту землю скоро закончится.
+		Bu torpağa icazənamənin müddəti tezliklə bitəcək
 	</notification>
 	<notification name="CantSitNoSuitableSurface">
 		Oturmaq üçün uyğun səth yoxdur. Başqa yerdə cəhd edin.
@@ -4963,9 +4937,6 @@ Onlar xətaları həll etmək üçün http://opensimulator.org/wiki/inventory is
 	</notification>
 	<notification name="DefaultObjectPermissions">
 		Defolt obyekt icazələrini yadda saxlayarkən problem baş verdi: [REASON]. Lütfən, defolt icazələri daha sonra təyin etməyə cəhd edin.
-	</notification>
-	<notification name="OutfitPhotoLoadError">
-		[REASON]
 	</notification>
 	<notification name="AddPaymentMethod">
 Növbəti səhifədə L$ məbləği seçin və
@@ -5203,14 +5174,14 @@ hansı nişandan istifadə etmək istərdiniz?
 		<usetemplate ignoretext="Mənə bildirin ki, onlayn statusun görünməsinə keçid bir qədər vaxt apara bilər" name="okignore" yestext="Bəli"/>
 	</notification>
 	<notification name="RenderVolumeLODFactorWarning">
-		ВНИМАНИЕ: уровень детализации (LOD) установлен на высокий
+		XƏBƏRDARLIQ: Dətallaşdırma səviyyəsi (LOD) yüksək olaraq təyin edilib
 
-Для повседневного использования достаточно уровня в диапазоне 1-3.
-Попробуйте заменить объекты, которые выглядят деформированными при таких значениях.
+Gündəlik istifadə üçün 1-3 aralığında səviyyə kifayətdir.
+Bu səviyyələrdə əyri görünən obyektləri əvəz etməyə çalışın.
 
-Уровень LOD > 3: добавляет задержки. Рекомендуется только для фотографии.
-Уровень LOD > 4: использовать в особых случаях. Возврат после relog.
-Уровень LOD > 8: не имеет реального эффекта. Может вызвать ошибки.
+LOD > 3 səviyyəsi: gecikmə əlavə edir. Yalnız şəkil üçün tövsiyə olunur.
+LOD > 4 səviyyəsi: xüsusi hallarda istifadə edin. Yenidən daxil olduqdan sonra geri qayıdır.
+LOD > 8 səviyyəsi: real təsiri yoxdur. Səhvlərə səbəb ola bilər.
 	</notification>
 	<notification name="CurrencyURIOverrideReceived">
 Bu bölgə üçüncü tərəf valyuta portalını təyin etməyi seçdi.

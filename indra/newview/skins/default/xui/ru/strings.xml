@@ -61,7 +61,7 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 	</string>
 	<string name="AboutSystem">
 Процессор: [CPU]
-Память RAM: [MEMORY_MB] МБ
+Память RAM: [MEMORY_MB] МБ (Использовал: [USED_RAM] MB)
 Потоки декодирования изображений: [CONCURRENCY]
 Версия ОС: [OS_VERSION]
 Производитель видеокарты: [GRAPHICS_CARD_VENDOR]

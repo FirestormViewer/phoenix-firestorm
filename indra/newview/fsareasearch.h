@@ -217,7 +217,7 @@ private:
 	
 	class FSParcelChangeObserver;
 	friend class FSParcelChangeObserver;
-	FSParcelChangeObserver*	mParcelChangedObserver;
+	std::unique_ptr<FSParcelChangeObserver>	mParcelChangedObserver;
 
 	LLTabContainer* mTab;
 	FSPanelAreaSearchList* mPanelList;
@@ -332,7 +332,7 @@ class FSPanelAreaSearchFind
 	LOG_CLASS(FSPanelAreaSearchFind);
 public:
 	FSPanelAreaSearchFind(FSAreaSearch* pointer);
-	virtual ~FSPanelAreaSearchFind();
+	virtual ~FSPanelAreaSearchFind() = default;
 
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ BOOL handleKeyHere(KEY key,MASK mask);
@@ -365,7 +365,7 @@ class FSPanelAreaSearchFilter
 	LOG_CLASS(FSPanelAreaSearchFilter);
 public:
 	FSPanelAreaSearchFilter(FSAreaSearch* pointer);
-	virtual ~FSPanelAreaSearchFilter();
+	virtual ~FSPanelAreaSearchFilter() = default;
 
 	/*virtual*/ BOOL postBuild();
 
@@ -410,7 +410,7 @@ class FSPanelAreaSearchOptions
 	LOG_CLASS(FSPanelAreaSearchOptions);
 public:
 	FSPanelAreaSearchOptions(FSAreaSearch* pointer);
-	virtual ~FSPanelAreaSearchOptions();
+	virtual ~FSPanelAreaSearchOptions() = default;
 
 private:
 	void onCommitCheckboxDisplayColumn(const LLSD& userdata);
@@ -430,8 +430,8 @@ class FSPanelAreaSearchAdvanced
 {
 	LOG_CLASS(FSPanelAreaSearchAdvanced);
 public:
-	FSPanelAreaSearchAdvanced(FSAreaSearch* pointer);
-	virtual ~FSPanelAreaSearchAdvanced();
+	FSPanelAreaSearchAdvanced() = default;
+	virtual ~FSPanelAreaSearchAdvanced() = default;
 
 	/*virtual*/ BOOL postBuild();
 

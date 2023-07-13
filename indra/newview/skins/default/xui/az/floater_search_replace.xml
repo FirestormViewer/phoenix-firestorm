@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="search replace" title="Axtar / Əvəz et">
-    <check_box label="Böyük kiçik hərflərə diqqət etmə" left="50" name="case_text" width="140" />
+    <check_box label="Registeri nəzərə al" left="18" name="case_text" width="120" />
     <check_box label="Yuxarıdan aşağıya axtar" name="find_previous" />
     <button label="Axtar" label_selected="Axtar" name="search_btn" />
     <button label="Əvəz et" label_selected="Əvəz et" name="replace_btn" />

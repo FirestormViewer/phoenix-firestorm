@@ -113,7 +113,6 @@ public:
 	void onVisibilityChange(BOOL new_visibility);
 	void processIMTyping(const LLUUID& from_id, BOOL typing);
 	void processAgentListUpdates(const LLSD& body);
-	void processSessionUpdate(const LLSD& session_update);
 
 	void updateChatHistoryStyle();
 	static void processChatHistoryStyleUpdate(const LLSD& newvalue);

@@ -10,7 +10,7 @@
 		Məlumat yoxdur
 	</panel.string>
 	<panel.string name="cant_view_group_accounting_text">
-		У вас нет доступа к финансам группы
+		Qrupun mühasibat məlumatlarına baxmaq icazəniz yoxdur.
 	</panel.string>
 	<panel.string name="loading_txt">
 		Yüklənir...
@@ -27,10 +27,10 @@
 	</scroll_list>
 	<button label="Xəritə" label_selected="Xəritə" name="map_button"/>
 	<text name="total_land_in_use_label">
-		Ümumi istifadədə olan ərazi:
+		Ümumi istifadədə:
 	</text>
 	<text name="land_available_label">
-		Mövcud ərazi:
+		Mövcud:
 	</text>
 	<text name="total_contributed_land_label">
 		Ümumi ödəniş:
@@ -44,8 +44,8 @@
 	<text name="group_money_heading">
 		Qrup L$
 	</text>
-	<text name="group_over_limit_text">
-		Ərazinin istifadədə saxlanılması üçün daha çox torpaq kreditləri lazımdır.
+	<text name="group_over_limit_text" width="380">
+		Sahənin istifadədə saxlanılması üçün daha çox torpaq krediti lazımdır.
 	</text>
 	<tab_container name="group_money_tab_container">
 		<panel label="Xülasə" name="group_money_planning_tab">
@@ -53,7 +53,7 @@
 				Yüklənir...
 			</text_editor>
 		</panel>
-		<panel label="Подробности" name="group_money_details_tab">
+		<panel label="Ətraflı" name="group_money_details_tab">
 			<text_editor name="group_money_details_text">
 				Yüklənir...
 			</text_editor>

@@ -4,15 +4,6 @@
      For example, the strings used in avatar chat bubbles, and strings
      that are returned from one component and may appear in many places-->
 <strings>
-	<string name="SECOND_LIFE">
-		[CURRENT_GRID]
-	</string>
-	<string name="APP_NAME">
-		Firestorm
-	</string>
-	<string name="CAPITALIZED_APP_NAME">
-		FIRESTORM
-	</string>
 	<string name="SECOND_LIFE_GRID">
 		Second Life şəbəkəsi
 	</string>
@@ -61,7 +52,7 @@ Siz [REGION] regionundasınız
 	</string>
 	<string name="AboutSystem">
 Prosesor: [CPU]
-RAM: [MEMORY_MB] MB
+RAM: [MEMORY_MB] MB (İstifadə olunmuş yaddaş: [USED_RAM] MB)
 Şəkilləri dekodlaşdırma threadləri: [CONCURRENCY]
 OS versiyası: [OS_VERSION]
 Grafik kartının istehsalçısı: [GRAPHICS_CARD_VENDOR]
@@ -237,9 +228,6 @@ Səs serveri versiyası: [VOICE_VERSION]
 	<string name="AditiGridLabel">
 		Second Life Beta Test Şəbəkəsi (Aditi)
 	</string>
-	<string name="ViewerDownloadURL">
-		https://www.firestormviewer.org/choose-your-platform/
-	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		İstifadə etdiyiniz klientin artıq Second Life oyununa girişi yoxdur. Siz müştərinin yeni versiyasını bu ünvandan yükləyə bilərsiniz:
 https://www.firestormviewer.org/choose-your-platform/
@@ -380,8 +368,8 @@ Bir dəqiqədən sonra yenidən daxil olmağa çalışın.
 Bir dəqiqədən sonra yenidən daxil olmağa çalışın.
 	</string>
 	<string name="LoginFailedAuthenticationMFARequired">
-		Чтобы продолжить вход в систему, введите новый токен из приложения многофакторной аутентификации.
-Если вы считаете, что это ошибка, пожалуйста, свяжитесь с support@secondlife.com
+		Daxil olmağa davam etmək üçün çoxfaktorlu autentifikasiya proqramından yeni token daxil edin.
+Bunun səhv olduğunu düşünürsünüzsə, buraya məktub göndərin: support@secondlife.com.
 	</string>
 	<string name="AgentLostConnection">
 		Bu bölgədə, ola bilsin ki, problemlər ola bilər.  Şəbəkə bağlantınızı yoxlayın.
@@ -423,7 +411,6 @@ Bir dəqiqədən sonra yenidən daxil olmağa çalışın.
 	<string name="SocialFlickrErrorDisconnecting">
 		Flickr-dən ayrılmaq mümkün deyil
 	</string>
-
 	<string name="BlackAndWhite">
 		Qara və Ağ
 	</string>
@@ -542,7 +529,7 @@ Bir dəqiqədən sonra yenidən daxil olmağa çalışın.
 		Dəyişdirmək qadağandır
 	</string>
 	<string name="TooltipFlagNotSafe">
-		Тəhlükəsiz deyil
+		Təhlükəsiz deyil
 	</string>
 	<string name="TooltipFlagNoFly">
 		Uçuşlar qadağandır
@@ -731,9 +718,6 @@ Bir dəqiqədən sonra yenidən daxil olmağa çalışın.
 	</string>
 	<string name="SLappAgentUnmute">
 		Yan. səsi
-	</string>
-	<string name="SLappAgentIM">
-		IM
 	</string>
 	<string name="SLappAgentPay">
 		Ödə
@@ -1214,7 +1198,7 @@ etmək haqqında kömək almaq üçün http://secondlife.com/support ünvanına 
 		Kamera istifadəçiyə diqqətləşdirilə bilmir, çünki onlar göstərmə məsafənizdən kənardadırlar.
 	</string>
 	<string name="Ok">
-		ОК
+		OK
 	</string>
 	<string name="Premature end of file">
 		Faylın vaxtından əvvəl sonu
@@ -1738,23 +1722,17 @@ etmək haqqında kömək almaq üçün http://secondlife.com/support ünvanına 
 	<string name="InventoryOutboxNoItemsTitle">
 		«Göndərilən» qovluqunuz boşdur.
 	</string>
-	<string name="InventoryOutboxNoItemsTooltip">
-	</string>
 	<string name="InventoryOutboxNoItems">
 		Qovluqları bu sahəyə daşıyın və [[MARKETPLACE_DASHBOARD_URL] Ticarət mərkəzində] satış üçün siyahıya atmaq üçün Ticarət mərkəzində Göndər üzərinə basın.
 	</string>
 	<string name="InventoryOutboxInitializingTitle">
 		Ticarət mərkəzinin inisiallaşdrılıması.
 	</string>
-	<string name="InventoryOutboxInitializingTooltip">
-	</string>
 	<string name="InventoryOutboxInitializing">
 		[[MARKETPLACE_CREATE_STORE_URL] Dükan hesabınıza] müraciət eləyirik.
 	</string>
 	<string name="InventoryOutboxErrorTitle">
 		Ticarət mərkəzinin səhvləri.
-	</string>
-	<string name="InventoryOutboxErrorTooltip">
 	</string>
 	<string name="InventoryOutboxError">
 		[[MARKETPLACE_CREATE_STORE_URL] Dükan] xətaları qaytarır.
@@ -2010,15 +1988,6 @@ Bu mesaj yenidən baş verərsə, kömək üçün http://support.secondlife.com 
 	<string name="InvFolder All">
 		Hamısı
 	</string>
-	<string name="InvFolder #Firestorm">
-		#Firestorm
-	</string>
-	<string name="InvFolder #Phoenix">
-		#Phoenix
-	</string>
-	<string name="InvFolder #RLV">
-		#RLV
-	</string>
 	<string name="InvFolder My Suitcase">
 		Çamadanım
 	</string>
@@ -2217,9 +2186,6 @@ Bu mesaj yenidən baş verərsə, kömək üçün http://support.secondlife.com 
 	<string name="ATTACHMENT_NOT_ATTACHED">
 		Xəta: Obyekt hazırkı geyimdədir, lakin calaşdırılmayıb
 	</string>
-	<string name="YearsMonthsOld">
-		[AGEYEARS] [AGEMONTHS]
-	</string>
 	<string name="YearsOld">
 		[AGEYEARS]
 	</string>
@@ -2234,9 +2200,6 @@ Bu mesaj yenidən baş verərsə, kömək üçün http://support.secondlife.com 
 	</string>
 	<string name="TodayOld">
 		Bu gün qeydiyyatdan keçib
-	</string>
-	<string name="TotalDaysOld">
-		; [AGEDAYSTOTAL]
 	</string>
 	<string name="av_render_everyone_now">
 		İndi hamı sizi görə bilər.

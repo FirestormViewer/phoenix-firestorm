@@ -7,7 +7,7 @@
 		Təsviri:
 	</text>
 	<text name="preview_label">
-		Şəkilin göstərmə üsulu:
+		Göstərmə üsulu:
 	</text>
 	<combo_box label="Geyim növü" name="clothing_type_combo">
 		<item label="Şəkil" name="Image" value="Şəkil"/>
@@ -23,9 +23,11 @@
 	</combo_box>
 	<text name="bad_image_text">
 		Şəkil oxudula bilmədi.
+
 Şəkili 24-bit TGA faylı olaraq saxlayıb yenidən yoxlayın.
 	</text>
-	<check_box label="İtkisiz sıxlaşdırmadan istifadə et" name="lossless_check"/>
+	<check_box label="İtkisiz şıxlaşdırma" name="lossless_check"/>
+	<check_box name="temp_check" label="Müvəqqəti. (pulsuz)" tool_tip="O, serverdəki şəkli müvəqqəti və buna görə də pulsuz olaraq təyin edir, lakin o, yalnız qısa müddət ərzində mövcud olacaq - bundan sonra o, silinəcək." />
 	<button label="Ləğv et" name="cancel_btn"/>
 	<button label="Yüklə (L$[AMOUNT])" name="ok_btn"/>
 </floater>

@@ -8,9 +8,9 @@
 	<text name="LabelItemNameTitle">Adı:</text>
 	<text name="LabelItemDescTitle">Təsviri:</text>
 	<text name="LabelCreatorTitle">Yaradıcı:</text>
-	<button label="Профиль…" name="BtnCreator"/>
+	<button label="Profil…" name="BtnCreator"/>
 	<text name="LabelOwnerTitle">Sahibi:</text>
-	<button label="Профиль…" name="BtnOwner"/>
+	<button label="Profil…" name="BtnOwner"/>
 	<text name="LabelAcquiredTitle">Alınıb:</text>
 	<text name="LabelAcquiredDate">Ç. 24 May 12:50:46 2006</text>
 	<text name="LabelItemExperienceTitle">Macəra:</text>

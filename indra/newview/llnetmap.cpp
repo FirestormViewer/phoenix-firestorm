@@ -1353,19 +1353,12 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 			//               aka radar when above 1020m.
 			if (isHigher1020mBug)
 			{
-				FSRadar* radar = FSRadar::getInstance();
-				if (radar)
+				if (auto entry = FSRadar::getInstance()->getEntry(avatar_id); entry)
 				{
-					FSRadarEntry* entry = radar->getEntry(avatar_id);
-					if (entry)
+					if (F32 radar_distance = entry->getRange(); radar_distance > AVATAR_UNKNOWN_RANGE)
 					{
-						F32 radar_distance = entry->getRange();
-
-						if (radar_distance > AVATAR_UNKNOWN_RANGE)
-						{
-							distance = radar_distance;
-							isHigher1020mBug = false;
-						}
+						distance = radar_distance;
+						isHigher1020mBug = false;
 					}
 				}
 			}

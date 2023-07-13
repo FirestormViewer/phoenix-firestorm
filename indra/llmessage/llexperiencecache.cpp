@@ -332,6 +332,18 @@ void LLExperienceCache::requestExperiences()
     std::string urlBase = mCapability("GetExperienceInfo");
     if (urlBase.empty())
     {
+// <FS:Beq> FIRE-33046 reduce logging of warning in OS grids with no experiences capability
+#ifdef OPENSIM
+        if( LLGridManager::instance().isInOpenSim() )
+        {
+// In Opensim this can occur if the grid does not have experiences capability. make it a debug
+            LL_DEBUGS("ExperienceCache") << "No Experience capability." << LL_ENDL;
+        }
+        else
+// Danger: Dangling 'else'
+// In SL, this is a sign of a problem as everything should have experience capability so flag it as a warning still.
+#endif
+// </FS:Beq>
         LL_WARNS("ExperienceCache") << "No Experience capability." << LL_ENDL;
         return;
     }

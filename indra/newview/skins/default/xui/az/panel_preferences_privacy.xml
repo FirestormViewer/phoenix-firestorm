@@ -45,10 +45,10 @@
 			</combo_box>
 			<button label="Jurnalı təmizlə..." name="clear_log"/>
 			<button label="Tarixçələri təmizlə..." name="delete_transcripts"/>
-			<check_box name="LogNearbyChat" label="Сохранить историю общего чата" tool_tip="Запись сообщения общего чата на жестком диске"/>
-			<check_box label="Использовать старый формат имени в истории" name="UseLegacyIMLogNames" tool_tip="Если опция включена, формат устаревшего имени файла для транскриптов  (User Name) будет использоваться вместо нового формата (user_name)."/>
-			<check_box label="Добавить время в названии файла истории" name="LogFileNamewithDate" tool_tip="Добавляет время в названии файла в формате chat-ГГГГ-ММ-ДД и 'ЛС имя файла'-ГГГГ-ММ."/>
-			<check_box label="Использовать встроенный просмотр истории" name="FSUseBuiltInHistory" tool_tip="Использовать встроенный просмотр истории, если отключено, то будет открываться программа просмотра текстовых файлов по умолчанию системы"/>
+			<check_box name="LogNearbyChat" label="Ümumi söhbət tarixçəsini yadda saxlayın" tool_tip="Ümumi söhbət mesajının tarixini sabit diskinizə yazır"/>
+			<check_box label="Tarixdə köhnə ad formatından istifadə edin" name="UseLegacyIMLogNames" tool_tip="Bu seçim aktiv edilərsə, yeni format (user_name) əvəzinə tarixçə üçün köhnə fayl adı formatı (User Name) istifadə olunacaq."/>
+			<check_box label="Tarix faylının adına vaxt əlavə edin" name="LogFileNamewithDate" tool_tip="chat-YYYY-AA-GG və 'PM fayl adı'-YYYY-AA formatında fayl adına vaxt əlavə edir."/>
+			<check_box label="Daxili tarixə baxıcıdan istifadə edin" name="FSUseBuiltInHistory" tool_tip="Daxili tarixə baxıcıdan istifadə edir. Əgər söndürülsə, o, sistemin standart mətn faylı görüntüləyicisini açacaq"/>
 		</panel>
 		<panel label="Kamera diqqəti (LookAt)" name="tab-lookat">
 			<check_box label="Başqaları nəyə baxdığını göstər:" name="showlookat" tool_tip="Avatarın kamera bağlantı nöqtəsini müəyyənləşdirmək üçün istifadə olunur."/>

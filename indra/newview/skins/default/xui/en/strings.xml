@@ -50,7 +50,7 @@ You are in [REGION]
        and this info sometimes gets sent to support. -->
 	<string name="AboutSystem">
 CPU: [CPU]
-Memory: [MEMORY_MB] MB
+Memory: [MEMORY_MB] MB (Used: [USED_RAM] MB)
 Concurrency: [CONCURRENCY]
 OS Version: [OS_VERSION]
 Graphics Card Vendor: [GRAPHICS_CARD_VENDOR]

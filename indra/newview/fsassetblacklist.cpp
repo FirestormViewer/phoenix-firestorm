@@ -54,6 +54,9 @@ LLAssetType::EType S32toAssetType(S32 assetindex)
 		case 6:
 			type = LLAssetType::AT_OBJECT;
 			break;
+		case 20:
+			type = LLAssetType::AT_ANIMATION;
+			break;
 		case 45:
 			type = LLAssetType::AT_PERSON;
 			break;
@@ -76,8 +79,7 @@ bool FSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type)
 		return false;
 	}
 
-	blacklist_type_map_t::iterator it;
-	it = mBlacklistTypeContainer.find(type);
+	blacklist_type_map_t::iterator it = mBlacklistTypeContainer.find(type);
 	
 	if (it == mBlacklistTypeContainer.end())
 	{
@@ -114,8 +116,7 @@ bool FSAssetBlacklist::removeItem(const LLUUID& id)
 {
 	gObjectList.removeDerenderedItem(id);
 
-	blacklist_data_t::iterator it;
-	it = mBlacklistData.find(id);
+	blacklist_data_t::iterator it = mBlacklistData.find(id);
 
 	if (it == mBlacklistData.end())
 	{
@@ -133,9 +134,7 @@ bool FSAssetBlacklist::removeItem(const LLUUID& id)
 
 void FSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
 {
-	uuid_vec_t ids;
-	ids.push_back(id);
-	removeItemsFromBlacklist(ids);
+	removeItemsFromBlacklist({ id });
 }
 
 void FSAssetBlacklist::removeItemsFromBlacklist(const uuid_vec_t& ids)
@@ -145,13 +144,13 @@ void FSAssetBlacklist::removeItemsFromBlacklist(const uuid_vec_t& ids)
 		bool need_save = false;
 		LLSD data;
 
-		for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
+		for (const auto& id : ids)
 		{
-			if (removeItem(*it))
+			if (removeItem(id))
 			{
 				need_save = true;
 			}
-			data.append((*it).asString());
+			data.append(id.asString());
 		}
 
 		if (need_save)
@@ -161,7 +160,7 @@ void FSAssetBlacklist::removeItemsFromBlacklist(const uuid_vec_t& ids)
 
 		if (!mBlacklistChangedCallback.empty())
 		{
-			mBlacklistChangedCallback(data, BLACKLIST_REMOVE);
+			mBlacklistChangedCallback(data, eBlacklistOperation::BLACKLIST_REMOVE);
 		}
 	}
 }
@@ -194,7 +193,7 @@ void FSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD& d
 
 	if (!mBlacklistChangedCallback.empty())
 	{
-		mBlacklistChangedCallback(LLSD().with(id.asString(), data), BLACKLIST_ADD);
+		mBlacklistChangedCallback(LLSD().with(id.asString(), data), eBlacklistOperation::BLACKLIST_ADD);
 	}
 }
 
@@ -205,18 +204,13 @@ bool FSAssetBlacklist::addEntryToBlacklistMap(const LLUUID& id, LLAssetType::ETy
 		return false;
 	}
 
-	blacklist_type_map_t::iterator it;
-	it = mBlacklistTypeContainer.find(type);
-	
-	if (it != mBlacklistTypeContainer.end())
+	if (auto it = mBlacklistTypeContainer.find(type); it != mBlacklistTypeContainer.end())
 	{
 		mBlacklistTypeContainer[type].insert(id);
 	}
 	else
 	{
-		blacklisted_uuid_container_t cont;
-		cont.insert(id);
-		mBlacklistTypeContainer[type] = cont;
+		mBlacklistTypeContainer[type] = blacklisted_uuid_container_t{ id };
 	}
 	return true;
 }
@@ -233,7 +227,7 @@ void FSAssetBlacklist::loadBlacklist()
 			{
 				for (LLSD::map_const_iterator itr = data.beginMap(); itr != data.endMap(); ++itr)
 				{
-					LLUUID uid = LLUUID(itr->first);
+					LLUUID uid{ itr->first };
 					LLXORCipher cipher(MAGIC_ID.mData, UUID_BYTES);
 					cipher.decrypt(uid.mData, UUID_BYTES);
 					LLSD entry_data = itr->second;
@@ -273,7 +267,7 @@ void FSAssetBlacklist::loadBlacklist()
 				LLSDSerialize::fromXMLDocument(datallsd, oldfile);
 				for (LLSD::map_const_iterator itr = datallsd.beginMap(); itr != datallsd.endMap(); ++itr)
 				{
-					LLUUID uid = LLUUID(itr->first);
+					LLUUID uid{ itr->first };
 					LLSD data = itr->second;
 					if (uid.isNull() || !data.has("entry_name") || !data.has("entry_type") || !data.has("entry_date"))
 					{
@@ -310,14 +304,14 @@ void FSAssetBlacklist::saveBlacklist()
 	llofstream save_file(mBlacklistFileName.c_str());
 	LLSD savedata;
 
-	for (blacklist_data_t::const_iterator itr = mBlacklistData.begin(); itr != mBlacklistData.end(); ++itr)
+	for (const auto& [id, data] : mBlacklistData)
 	{
-		if (itr->second["asset_permanent"].asBoolean())
+		if (data["asset_permanent"].asBoolean())
 		{
-			LLUUID shadow_id(itr->first);
+			LLUUID shadow_id{ id };
 			LLXORCipher cipher(MAGIC_ID.mData, UUID_BYTES);
 			cipher.encrypt(shadow_id.mData, UUID_BYTES);
-			savedata[shadow_id.asString()] = itr->second;
+			savedata[shadow_id.asString()] = data;
 		}
 	}
 

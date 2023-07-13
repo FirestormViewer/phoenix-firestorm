@@ -277,21 +277,21 @@
 			<text name="label position">
 				Yerləşim (metr)
 			</text>
-			<button name="copy_pos_btn" label="К" tool_tip="Yerləşməni köçürt"/>
-			<button name="paste_pos_btn" label="В" tool_tip="Yerləşməni yapışdır"/>
-			<button name="paste_pos_clip_btn" label="в" tool_tip="Yerləşməni buferdən daxil et"/>
+			<button name="copy_pos_btn" label="K" tool_tip="Yerləşməni köçürt"/>
+			<button name="paste_pos_btn" label="Y" tool_tip="Yerləşməni yapışdır"/>
+			<button name="paste_pos_clip_btn" label="y" tool_tip="Yerləşməni buferdən daxil et"/>
 			<text name="label size">
 				Ölçü (metr)
 			</text>
-			<button name="copy_size_btn" label="К" tool_tip="Ölçünü köçürt"/>
-			<button name="paste_size_btn" label="В" tool_tip="Ölçünü yapışdır"/>
-			<button name="paste_size_clip_btn" label="в" tool_tip="Ölçünü buferdən daxil et"/>
+			<button name="copy_size_btn" label="K" tool_tip="Ölçünü köçürt"/>
+			<button name="paste_size_btn" label="Y" tool_tip="Ölçünü yapışdır"/>
+			<button name="paste_size_clip_btn" label="y" tool_tip="Ölçünü buferdən daxil et"/>
 			<text name="label rotation">
 				Döngə (dərəcə)
 			</text>
-			<button name="copy_rot_btn" label="К" tool_tip="Döngəni köçürt"/>
-			<button name="paste_rot_btn" label="В" tool_tip="Döngəni yapışdır"/>
-			<button name="paste_rot_clip_btn" label="в" tool_tip="Döngəni buferdən daxil et"/>
+			<button name="copy_rot_btn" label="K" tool_tip="Döngəni köçürt"/>
+			<button name="paste_rot_btn" label="Y" tool_tip="Döngəni yapışdır"/>
+			<button name="paste_rot_clip_btn" label="y" tool_tip="Döngəni buferdən daxil et"/>
 			<button label="Köçürt" name="copy_params_btn" tool_tip="Seçimləri buferə köçürt"/>
 			<button label="Yapışdır" name="paste_params_btn" tool_tip="Seçimləri buferdən yapışdır"/>
 			<combo_box name="comboBaseType">
@@ -577,7 +577,7 @@ Aşğ. ↔ Əaşğ.
 			Sahə: [AREA] m²
 		</text>
 		<button label="Torpaq haqqında" label_selected="Torpaq haqqında" name="button about land"/>
-		<check_box label="Показать владельцев" name="checkbox show owners" tool_tip="Цвет участка в зависимости от типа владения: &#10;&#10;Зеленый = ваша земля &#10;Голубой = земля вашей группы &#10;Красный = чужая земля &#10;Желтый = для продажи &#10;Фиолетовый = для аукциона &#10;Серый = общая"/>
+		<check_box label="Sahibləri göstər" name="checkbox show owners" tool_tip="Mülkiyyət növündən asılı olaraq sahə rəngi: &#10;&#10;Yaşıl = torpağınızdır &#10;Göy = qrupunuzun torpağı &#10;Qırmızı = yad torpaq &#10;Sarı = satış üçün &#10;Bənövşəyi = hərrac üçün &#10;Boz = ümumi"/>
 		<text name="label_parcel_modify">
 			Sahəni dəyişdir
 		</text>

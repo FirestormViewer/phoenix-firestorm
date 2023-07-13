@@ -55,7 +55,7 @@
 						<text name="description_label">Təsviri:</text>
 						<text name="location_label">Məkan:</text>
 						<text name="classified_location_edit">Yüklənir...</text>
-						<button name="set_to_curr_location_btn" label="Установить текущее местоположение"/>
+						<button name="set_to_curr_location_btn" label="Cari məkanı təyin et"/>
 						<text name="category_label" value="Kateqoriya:"/>
 						<text name="content_type_label" value="Məzmun növü:"/>
 						<icons_combo_box name="content_type_edit" label="Ümumi">

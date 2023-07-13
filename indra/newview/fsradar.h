@@ -30,14 +30,14 @@
 #include "llsingleton.h"
 
 #include "fsradarentry.h"
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class LLAvatarName;
 
-const U32	FSRADAR_MAX_AVATARS_PER_ALERT = 6;	// maximum number of UUIDs we can cram into a single channel radar alert message
-const U32	FSRADAR_COARSE_OFFSET_INTERVAL = 7;	// seconds after which we query the bridge for a coarse location adjustment
-const U32	FSRADAR_MAX_OFFSET_REQUESTS = 60;	// 2048 / UUID size, leaving overhead space
-const U32	FSRADAR_CHAT_MIN_SPACING = 6;		// minimum delay between radar chat messages
+constexpr U32 FSRADAR_MAX_AVATARS_PER_ALERT{ 6 };	// maximum number of UUIDs we can cram into a single channel radar alert message
+constexpr U32 FSRADAR_COARSE_OFFSET_INTERVAL{ 7 };	// seconds after which we query the bridge for a coarse location adjustment
+constexpr U32 FSRADAR_MAX_OFFSET_REQUESTS{ 60 };	// 2048 / UUID size, leaving overhead space
+constexpr U32 FSRADAR_CHAT_MIN_SPACING{ 6 };		// minimum delay between radar chat messages
 
 typedef enum e_radar_name_format
 {
@@ -63,7 +63,7 @@ class FSRadar
 	virtual ~FSRadar();
 
 public:
-	typedef boost::unordered_map<const LLUUID, FSRadarEntry*, FSUUIDHash> entry_map_t;
+	typedef std::unordered_map<const LLUUID, std::shared_ptr<FSRadarEntry>, FSUUIDHash> entry_map_t;
 	entry_map_t getRadarList() { return mEntryList; }
 
 	void startTracking(const LLUUID& avatar_id);
@@ -80,13 +80,13 @@ public:
 	static bool	radarReportToCheck(const LLSD& userdata);
 
 	void getCurrentData(std::vector<LLSD>& entries, LLSD& stats) const { entries = mRadarEntriesData; stats = mAvatarStats; }
-	FSRadarEntry* getEntry(const LLUUID& avatar_id);
+	std::shared_ptr<FSRadarEntry> getEntry(const LLUUID& avatar_id);
 
 	// internals
 	class Updater
 	{
 	public:
-		typedef boost::function<void()> callback_t;
+		typedef std::function<void()> callback_t;
 		Updater(callback_t cb)
 		: mCallback(cb)
 		{ }
@@ -100,7 +100,7 @@ public:
 			mCallback();
 		}
 
-		callback_t		mCallback;
+		callback_t mCallback;
 	};
 
 	typedef boost::signals2::signal<void(const std::vector<LLSD>& entries, const LLSD& stats)> radar_update_callback_t;
@@ -110,13 +110,13 @@ public:
 	}
 
 private:
-	void					updateRadarList();
-	void					updateTracking();
-	void					checkTracking();
-	void					radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name, std::string_view postMsg);
-	void					updateAgeAlertCheck();
+	void updateRadarList();
+	void updateTracking();
+	void checkTracking();
+	void radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name, std::string_view postMsg);
+	void updateAgeAlertCheck();
 
-	Updater*				mRadarListUpdater;
+	std::unique_ptr<Updater> mRadarListUpdater;
 	
 	struct RadarFields 
 	{
@@ -125,7 +125,7 @@ private:
 		bool		lastIgnore;
 	};
 
-	typedef boost::unordered_map<LLUUID, RadarFields, FSUUIDHash> radarfields_map_t;
+	typedef std::unordered_map<LLUUID, RadarFields, FSUUIDHash> radarfields_map_t;
 	radarfields_map_t		mLastRadarSweep;
 	entry_map_t				mEntryList;
 

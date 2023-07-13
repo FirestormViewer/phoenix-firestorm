@@ -8,7 +8,7 @@
 	<menu_item_call label="Şəkil çək" name="take_snapshot"/>
 	<menu_item_call label="Şəkili sil" name="remove_photo"/>
 	<context_menu label="Yeni paltar" name="New Clothes">
-		<menu_item_call label="Yeni köynəkа" name="New Shirt"/>
+		<menu_item_call label="Yeni köynək" name="New Shirt"/>
 		<menu_item_call label="Yeni şalvar" name="New Pants"/>
 		<menu_item_call label="Yeni ayaqqabı" name="New Shoes"/>
 		<menu_item_call label="Yeni corablar" name="New Socks"/>

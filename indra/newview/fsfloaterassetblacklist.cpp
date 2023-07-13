@@ -100,6 +100,8 @@ std::string FSFloaterAssetBlacklist::getTypeString(S32 type)
 			return getString("asset_sound");
 		case LLAssetType::AT_OBJECT:
 			return getString("asset_object");
+		case LLAssetType::AT_ANIMATION:
+			return getString("asset_animation");
 		case LLAssetType::AT_PERSON:
 			return getString("asset_resident");
 		default:
@@ -112,11 +114,9 @@ void FSFloaterAssetBlacklist::buildBlacklist()
 	bool needs_sort = mResultList->isSorted();
 	mResultList->setNeedsSort(false);
 
-	blacklist_data_t data = FSAssetBlacklist::instance().getBlacklistData();
-	
-	for (blacklist_data_t::const_iterator iterator = data.begin(); iterator != data.end(); ++iterator)
+	for (const auto& [id, data] : FSAssetBlacklist::instance().getBlacklistData())
 	{
-		addElementToList(iterator->first, iterator->second);
+		addElementToList(id, data);
 	}
 
 	mResultList->setNeedsSort(needs_sort);
@@ -166,11 +166,10 @@ void FSFloaterAssetBlacklist::addElementToList(const LLUUID& id, const LLSD& dat
 void FSFloaterAssetBlacklist::removeElements()
 {
 	uuid_vec_t items;
-	std::vector<LLScrollListItem*> list = mResultList->getAllSelected();
 
-	for (std::vector<LLScrollListItem*>::const_iterator it = list.begin(); it != list.end(); ++it)
+	for (auto listitem : mResultList->getAllSelected())
 	{
-		items.push_back((*it)->getUUID());
+		items.emplace_back(listitem->getUUID());
 	}
 
 	FSAssetBlacklist::instance().removeItemsFromBlacklist(items);
@@ -178,7 +177,7 @@ void FSFloaterAssetBlacklist::removeElements()
 
 void FSFloaterAssetBlacklist::onBlacklistChanged(const LLSD& data, FSAssetBlacklist::eBlacklistOperation op)
 {
-	if (op == FSAssetBlacklist::BLACKLIST_ADD)
+	if (op == FSAssetBlacklist::eBlacklistOperation::BLACKLIST_ADD)
 	{
 		bool need_sort = mResultList->isSorted();
 		mResultList->setNeedsSort(false);
@@ -216,8 +215,7 @@ void FSFloaterAssetBlacklist::onRemoveAllTemporaryBtn()
 void FSFloaterAssetBlacklist::onSelectionChanged()
 {
 	bool enabled = false;
-	size_t num_selected = mResultList->getAllSelected().size();
-	if (num_selected == 1)
+	if (size_t num_selected = mResultList->getAllSelected().size(); num_selected == 1)
 	{
 		const LLScrollListItem* item = mResultList->getFirstSelected();
 		S32 name_column = mResultList->getColumn("asset_type")->mIndex;
@@ -257,8 +255,7 @@ void FSFloaterAssetBlacklist::onStopBtn()
 		return;
 	}
 
-	LLAudioSource* audio_source = gAudiop->findAudioSource(mAudioSourceID);
-	if (audio_source && !audio_source->isDone())
+	if (LLAudioSource* audio_source = gAudiop->findAudioSource(mAudioSourceID); audio_source && !audio_source->isDone())
 	{
 		audio_source->play(LLUUID::null);
 	}
@@ -307,8 +304,7 @@ BOOL FSFloaterAssetBlacklist::tick()
 		return FALSE;
 	}
 
-	LLAudioSource* audio_source = gAudiop->findAudioSource(mAudioSourceID);
-	if (!audio_source || audio_source->isDone())
+	if (LLAudioSource* audio_source = gAudiop->findAudioSource(mAudioSourceID); !audio_source || audio_source->isDone())
 	{
 		childSetVisible("play_btn", true);
 		childSetVisible("stop_btn", false);
@@ -348,8 +344,7 @@ namespace FSFloaterAssetBlacklistMenu
 
 		if (command == "remove")
 		{
-			FSFloaterAssetBlacklist* floater = LLFloaterReg::findTypedInstance<FSFloaterAssetBlacklist>("fs_asset_blacklist");
-			if (floater)
+			if (FSFloaterAssetBlacklist* floater = LLFloaterReg::findTypedInstance<FSFloaterAssetBlacklist>("fs_asset_blacklist"); floater)
 			{
 				floater->removeElements();
 			}

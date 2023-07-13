@@ -10,7 +10,7 @@
 	<menu_item_call label="Skeleti sıfırla" name="Reset Skeleton"/>
 	<menu_item_call label="Skelet və animasiyanı sıfırla" name="Reset Skeleton And Animations"/>
 	<menu_item_call label="Meş LOD sıfırlanması" name="Reset Mesh LOD" />
-	<context_menu label="Управление" name="Annoyance">
+	<context_menu label="İdarə" name="Annoyance">
 		<menu_item_call label="Blokla" name="Avatar Mute"/>
 		<menu_item_call label="Blokdan çıxart" name="Avatar Unmute"/>
 		<menu_item_call label="Şikayət" name="abuse"/>

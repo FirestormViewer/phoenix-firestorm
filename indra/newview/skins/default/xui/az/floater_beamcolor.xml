@@ -8,9 +8,9 @@
 	</floater.string>
 	<text name="beamcolor_text">
 		Hansı rəng ilkin və hansı son olduğunu
-		göstərmək üçün siçandan istifadə edin
-		Başlanğıc üçün sol düyməni istifadə edin.
-		Son üçün sağ düyməni istifadə edin.
+göstərmək üçün siçandan istifadə edin.
+Başlanğıc üçün sol düyməni istifadə edin.
+Son üçün sağ düyməni istifadə edin.
 	</text>
 	<color_swatch name="BeamColor_Preview" tool_tip="Rəng seçimini açmaq üçün toxunun" />
 	<text name="beamcolor_text2">

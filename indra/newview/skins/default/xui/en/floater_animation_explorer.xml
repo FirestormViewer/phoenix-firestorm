@@ -86,10 +86,10 @@
 	<button
 	 follows="top|right"
 	 height="22"
-	 label="Revoke"
+	 label="Blacklist"
 	 layout="topleft"
 	 left="0"
-	 name="revoke_btn"
+	 name="blacklist_btn"
 	 top_pad="4"
 	 width="98" />
 

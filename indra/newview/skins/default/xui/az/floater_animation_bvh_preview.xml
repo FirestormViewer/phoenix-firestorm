@@ -99,7 +99,8 @@ Maksimum animasiya uzunluğu: [MAX_LENGTH] sn.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_EASEOUT">
 		EaseOut dəyərləri alınmadı.
-	</floater.string name="E_ST_NO_XLT_HAND">
+	</floater.string>
+	<floater.string name="E_ST_NO_XLT_HAND">
 		Hand morph dəyəri alınmadı.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_EMOTE">
@@ -128,10 +129,10 @@ Maksimum animasiya uzunluğu: [MAX_LENGTH] sn.
 		<combo_box.item label="Sərbəst" name="Relaxed"/>
 		<combo_box.item label="Göstərir" name="PointBoth"/>
 		<combo_box.item label="Qapalı" name="Fist"/>
-		<combo_box.item label="Sol xash" name="RelaxedLeft"/>
+		<combo_box.item label="Sol sərbəst" name="RelaxedLeft"/>
 		<combo_box.item label="Sol göstərir" name="PointLeft"/>
 		<combo_box.item label="Sol qapalı" name="FistLeft"/>
-		<combo_box.item label="Sağ xaş" name="RelaxedRight"/>
+		<combo_box.item label="Sağ sərbəst" name="RelaxedRight"/>
 		<combo_box.item label="Sağ göstərir" name="PointRight"/>
 		<combo_box.item label="Sağ qapalı" name="FistRight"/>
 		<combo_box.item label="Sağ salam verir" name="SaluteRight"/>

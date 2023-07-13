@@ -111,7 +111,7 @@
 	<menu_item_call label="İM Göndər" name="Send Instant Message"/>
 	<menu_item_call label="Teleport təklif et" name="Offer Teleport..."/>
 	<menu_item_call label="Teleport tələb et" name="Request Teleport..."/>
-	<menu_item_call label="Начать конференц чат" name="Conference Chat"/>
+	<menu_item_call label="Konfrans söhbətə başla" name="Conference Chat"/>
 	<menu_item_call label="Aktivləşdirm" name="Activate"/>
 	<menu_item_call label="Deaktivləşdir" name="Deactivate"/>
 	<menu_item_call label="Ayrı saxla" name="Save As"/>
@@ -125,8 +125,8 @@
 	<menu_item_call label="Teksturasını yenilə" name="Texture Refresh Attachment" />
 	<menu_item_call label="Özündən ayır" name="Detach From Yourself"/>
 	<menu_item_call label="Çıxart" name="Take Off"/>
-	<menu_item_call name="Settings Apply Local" label="Применить только к себе"/>
-	<menu_item_call name="Settings Apply Parcel" label="Применить к Участку"/>
+	<menu_item_call name="Settings Apply Local" label="Yalnız özümə tətbiq et"/>
+	<menu_item_call name="Settings Apply Parcel" label="Sahəyə tətbiq et"/>
 	<menu_item_call label="Ticarət mərkəzinin məhsul siyahılarına köçürt" name="Marketplace Copy"/>
 	<menu_item_call label="Ticarət mərkəzinin məhsul siyahılarına daşı" name="Marketplace Move"/>
 	<menu_item_call label="--seçim yoxdur--" name="--no options--"/>

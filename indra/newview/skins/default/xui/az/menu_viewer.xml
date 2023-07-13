@@ -163,32 +163,6 @@
 			</menu>
 		</menu>
 
-		<!-- <menu label="Положение солнца" name="Environment Settings">
-			<menu_item_check label="Восход" name="Sunrise"/>
-			<menu_item_check label="Полдень" name="Noon"/>
-			<menu_item_check label="Закат" name="Sunset"/>
-			<menu_item_check label="Полночь" name="Midnight"/>
-			<menu_item_check label="Время острова" name="Revert to Region Default"/>
-		</menu>
-		<menu label="Редактор окружающей среды" name="Environment Editor">
-			<menu_item_call label="Параметры среды..." name="Environment Settings"/>
-			<menu name="Water Presets" label="Предустановки воды">
-				<menu_item_call label="Новая предустановка..." name="new_water_preset"/>
-				<menu_item_call label="Редактировать предустановку..." name="edit_water_preset"/>
-				<menu_item_call label="Удалить предустановку..." name="delete_water_preset"/>
-			</menu>
-			<menu name="Sky Presets" label="Предустановки неба">
-				<menu_item_call label="Новая предустановка..." name="new_sky_preset"/>
-				<menu_item_call label="Редактировать предустановку..." name="edit_sky_preset"/>
-				<menu_item_call label="Удалить предустановку..." name="delete_sky_preset"/>
-			</menu>
-			<menu name="Day Presets" label="Предустановки дня">
-				<menu_item_call label="Новая предустановка..." name="new_day_preset"/>
-				<menu_item_call label="Редактировать предустановку..." name="edit_day_preset"/>
-				<menu_item_call label="Удалить предустановку..." name="delete_day_preset"/>
-			</menu>
-		</menu> -->
-
 		<menu name="photo_and_video" label="Şəkil və video">
 			<menu_item_call label="Şəkil alətləri" name="phototools_item_call"/>
 			<menu_item_call label="Kamera alətləri" name="cameratools_item_call"/>

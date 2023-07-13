@@ -173,6 +173,7 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mRequestNeedsSent(false),
 	mRlvBehaviorCallbackConnection()
 {
+	LLViewerRegion::sFSAreaSearchActive = true;
 	mFactoryMap["area_search_list_panel"] = LLCallbackMap(createPanelList, this);
 	mFactoryMap["area_search_find_panel"] = LLCallbackMap(createPanelFind, this);
 	mFactoryMap["area_search_filter_panel"] = LLCallbackMap(createPanelFilter, this);
@@ -182,12 +183,13 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	// Register an idle update callback
 	gIdleCallbacks.addFunction(idle, this);
 
-	mParcelChangedObserver = new FSParcelChangeObserver(this);
-	LLViewerParcelMgr::getInstance()->addObserver(mParcelChangedObserver);
+	mParcelChangedObserver = std::make_unique<FSParcelChangeObserver>(this);
+	LLViewerParcelMgr::getInstance()->addObserver(mParcelChangedObserver.get());
 }
 
 FSAreaSearch::~FSAreaSearch()
 {
+	LLViewerRegion::sFSAreaSearchActive = false;
 	if (!gIdleCallbacks.deleteFunction(idle, this))
 	{
 		LL_WARNS("FSAreaSearch") << "FSAreaSearch::~FSAreaSearch() failed to delete callback" << LL_ENDL;
@@ -209,9 +211,8 @@ FSAreaSearch::~FSAreaSearch()
 
 	if (mParcelChangedObserver)
 	{
-		LLViewerParcelMgr::getInstance()->removeObserver(mParcelChangedObserver);
-		delete mParcelChangedObserver;
-		mParcelChangedObserver = NULL;
+		LLViewerParcelMgr::getInstance()->removeObserver(mParcelChangedObserver.get());
+		mParcelChangedObserver = nullptr;
 	}
 }
 
@@ -252,9 +253,7 @@ void FSAreaSearch::draw()
 
 		for (const auto item : items)
 		{
-			LLViewerObject* objectp = gObjectList.findObject(item->getUUID());
-
-			if (objectp)
+			if (LLViewerObject* objectp = gObjectList.findObject(item->getUUID()); objectp)
 			{
 				const std::string& objectName = mObjectDetails[item->getUUID()].description;
 				gObjectList.addDebugBeacon(objectp->getPositionAgent(), objectName, mBeaconColor, mBeaconTextColor, beacon_line_width);
@@ -299,7 +298,7 @@ void* FSAreaSearch::createPanelFilter(void* data)
 void* FSAreaSearch::createPanelAdvanced(void* data)
 {
 	FSAreaSearch* self = (FSAreaSearch*)data;
-	self->mPanelAdvanced = new FSPanelAreaSearchAdvanced(self);
+	self->mPanelAdvanced = new FSPanelAreaSearchAdvanced();
 	return self->mPanelAdvanced;
 }
 
@@ -324,8 +323,7 @@ void FSAreaSearch::checkRegion()
 	if (mActive)
 	{
 		// Check if we changed region, and if we did, clear the object details cache.
-		LLViewerRegion* region = gAgent.getRegion(); // getRegion can return NULL if disconnected.
-		if (region && (region != mLastRegion))
+		if (LLViewerRegion* region = gAgent.getRegion(); region && (region != mLastRegion))
 		{
 			if (!mExcludeNeighborRegions)
 			{
@@ -459,8 +457,7 @@ void FSAreaSearch::findObjects()
 		if (object_it.second.request == FSObjectProperties::NEED || object_it.second.request == FSObjectProperties::SENT)
 		{
 			const LLUUID& id = object_it.second.id;
-			LLViewerObject* objectp = gObjectList.findObject(id);
-			if (!objectp)
+			if (LLViewerObject* objectp = gObjectList.findObject(id); !objectp)
 			{
 				object_it.second.request = FSObjectProperties::FAILED;
 				mRequested--;
@@ -1035,8 +1032,7 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 	row_params.columns.add(cell_params);
 
 	cell_params.column = "land_impact";
-	F32 cost = objectp->getLinksetCost();
-	if (cost > F_ALMOST_ZERO)
+	if (F32 cost = objectp->getLinksetCost(); cost > F_ALMOST_ZERO)
 	{
 		cell_params.value = cost;
 	}
@@ -1098,14 +1094,11 @@ void FSAreaSearch::updateObjectCosts(const LLUUID& object_id, F32 object_cost, F
 		return;
 	}
 
-	FSScrollListCtrl* result_list = mPanelList->getResultList();
-	if (result_list)
+	if (FSScrollListCtrl* result_list = mPanelList->getResultList(); result_list)
 	{
-		LLScrollListItem* list_row = result_list->getItem(LLSD(object_id));
-		if (list_row)
+		if (LLScrollListItem* list_row = result_list->getItem(LLSD(object_id)); list_row)
 		{
-			LLScrollListColumn* list_column = result_list->getColumn("land_impact");
-			if (list_column)
+			if (LLScrollListColumn* list_column = result_list->getColumn("land_impact"); list_column)
 			{
 				LLScrollListCell* linkset_cost_cell = list_row->getColumn(list_column->mIndex);
 				linkset_cost_cell->setValue(LLSD(link_cost));
@@ -1160,8 +1153,7 @@ void FSAreaSearch::avatarNameCacheCallback(const LLUUID& id, const LLAvatarName&
 
 void FSAreaSearch::callbackLoadFullName(const LLUUID& id, const std::string& full_name )
 {
-	auto iter = mNameCacheConnections.find(id);
-	if (iter != mNameCacheConnections.end())
+	if (auto iter = mNameCacheConnections.find(id); iter != mNameCacheConnections.end())
 	{
 		if (iter->second.connected())
 		{
@@ -1444,8 +1436,7 @@ void FSPanelAreaSearchList::onDoubleClick()
 	}
 
 	const LLUUID& object_id = item->getUUID();
-	LLViewerObject* objectp = gObjectList.findObject(object_id);
-	if (objectp)
+	if (LLViewerObject* objectp = gObjectList.findObject(object_id); objectp)
 	{
 		FSObjectProperties& details = mFSAreaSearch->mObjectDetails[object_id];
 		LLTracker::trackLocation(objectp->getPositionGlobal(), details.name, "", LLTracker::LOCATION_ITEM);
@@ -2060,10 +2051,6 @@ BOOL FSPanelAreaSearchFind::postBuild()
 	return LLPanel::postBuild();
 }
 
-// virtual
-FSPanelAreaSearchFind::~FSPanelAreaSearchFind()
-{ }
-
 void FSPanelAreaSearchFind::onButtonClickedClear()
 {
 	mNameLineEditor->clear();
@@ -2180,10 +2167,6 @@ BOOL FSPanelAreaSearchFilter::postBuild()
 	return LLPanel::postBuild();
 }
 
-// virtual
-FSPanelAreaSearchFilter::~FSPanelAreaSearchFilter()
-{ }
-
 void FSPanelAreaSearchFilter::onCommitCheckbox()
 {
 	mFSAreaSearch->setFilterLocked(mCheckboxLocked->get());
@@ -2280,10 +2263,6 @@ FSPanelAreaSearchOptions::FSPanelAreaSearchOptions(FSAreaSearch* pointer)
 	mEnableCallbackRegistrar.add("AreaSearch.EnableColumn",	boost::bind(&FSPanelAreaSearchOptions::onEnableColumnVisibilityChecked, this, _2));
 }
 
-// virtual
-FSPanelAreaSearchOptions::~FSPanelAreaSearchOptions()
-{ }
-
 void FSPanelAreaSearchOptions::onCommitCheckboxDisplayColumn(const LLSD& userdata)
 {
 	const std::string& column_name = userdata.asStringRef();
@@ -2306,11 +2285,6 @@ bool FSPanelAreaSearchOptions::onEnableColumnVisibilityChecked(const LLSD& userd
 // Advanced tab
 //---------------------------------------------------------------------------
 
-FSPanelAreaSearchAdvanced::FSPanelAreaSearchAdvanced(FSAreaSearch* pointer)
-:	LLPanel()
-{
-}
-
 BOOL FSPanelAreaSearchAdvanced::postBuild()
 {
 	mCheckboxClickTouch = getChild<LLCheckBoxCtrl>("double_click_touch");
@@ -2319,7 +2293,3 @@ BOOL FSPanelAreaSearchAdvanced::postBuild()
 
 	return LLPanel::postBuild();
 }
-
-// virtual
-FSPanelAreaSearchAdvanced::~FSPanelAreaSearchAdvanced()
-{ }

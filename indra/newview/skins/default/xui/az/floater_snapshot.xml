@@ -72,7 +72,7 @@
 	</panel>
 	</view>
 	<text name="image_res_text">
-		[WIDTH] (en) x [HEIGHT] (hündürlük) пикс.
+		[WIDTH] (en) x [HEIGHT] (hündürlük) piks.
 	</text>
 	<text name="file_size_label">
 		[SIZE] KB

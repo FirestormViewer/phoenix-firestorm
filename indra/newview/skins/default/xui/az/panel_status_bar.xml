@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
 	<panel name="parcel_info_panel">
-		<button name="buy_land_btn" tool_tip="Участок для продажи"/>
+		<button name="buy_land_btn" tool_tip="Satış üçün sahə"/>
 		<text tool_tip="Üzərində durduğunuz torpaq hissəsinin adı. Ətraflı oxumaq üçün basın." name="parcel_info_text" value="(yüklənir...)"/>
 	</panel>
 	<panel.string name="packet_loss_tooltip">
@@ -20,7 +20,7 @@
 		[AMT] L$
 	</panel.string>
 	<panel name="menu_search_panel">
-		<search_editor label="Menyuda axtar" name="search_menu_edit" tool_tip="Введите интересующий вас термин для поиска здесь. Результаты будут отображены для частичного совпадения полного текста в меню."/>
+		<search_editor label="Menyuda axtar" name="search_menu_edit" tool_tip="Axtarış sözünüzü bura daxil edin. Nəticələr menyuda tam mətnin qismən uyğunluğu üçün göstəriləcək."/>
 	</panel>
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="Satılan sahə"/>
