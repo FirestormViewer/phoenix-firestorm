@@ -7,59 +7,77 @@
     legacy_header_height="0"
     can_resize="true"
     layout="topleft"
+    min_width="250"
     height="400"
-    width="200">
+    width="250">
+  <floater.string name="title_for_recently_used" value="Recently used"/>
+  <floater.string name="title_for_frequently_used" value="Frequently used"/>
   <line_editor
       name="Search"
-      label="Type to search an emoji"
+      label="Type to search"
       layout="bottomleft"
       follows="bottom|left|right"
       text_tentative_color="TextFgTentativeColor"
       max_length_bytes="63"
-	  bottom="5"
-	  left="39"
+      bottom="5"
+      left="34"
       height="29"
-      width="158" />
+      width="212" />
+  <text
+      name="Description"
+      layout="bottomleft"
+      follows="bottom|left|right"
+      font="SansSerifMedium"
+      bottom="5"
+      left="42"
+      height="29"
+      width="200" />
   <button
-	  name="PreviewEmoji"
+      name="PreviewEmoji"
       layout="bottomleft"
       follows="bottom|left"
-	  font="EmojiHuge"
-	  use_font_color="true"
-	  bottom="5"
-	  left="5"
-	  height="29"
-	  width="29" />
-  <scroll_list
-      name="Emojis"
+      font="EmojiHuge"
+      use_font_color="true"
+      bottom="5"
+      left="2"
+      height="29"
+      width="29" />
+  <scroll_container
+      name="EmojiGridContainer"
       layout="topleft"
       follows="all"
-      sort_column="0"
-	  max_chars="63"
-	  commit_on_selection_change="true"
-      draw_heading="true"
-      heading_height="25"
-	  left="5"
-	  row_padding="0"
-	  top="25"
-	  height="338"
-	  width="192">
-    <columns
-        label="@"
-        name="look"
-        width="30" />
-	<columns
-        label="Name"
-        name="name" />
-  </scroll_list>
-  <combo_box
-      name="Category"
-      label="Choose a category"
+      top="25"
+      left="0"
+      height="339"
+      width="250">
+    <scrolling_panel_list
+        name="EmojiGrid"
+        layout="topleft"
+        follows="top|left|right"
+        padding="4"
+        spacing="0"
+        top="0"
+        left="0"
+        width="250"/>
+  </scroll_container>
+  <panel
+      name="Groups"
       layout="topleft"
       follows="top|left|right"
-	  allow_text_entry="true"
-	  top="0"
-	  left="5"
+      top="0"
+      left="0"
       height="25"
-      width="192" />
+      width="250">
+    <panel
+      name="Badge"
+      layout="bottomleft"
+      follows="bottom|left"
+      background_visible="true"
+      background_opaque="true"
+      bg_opaque_color="FrogGreen"
+      bottom="0"
+      height="2"
+      width="20"
+      />
+  </panel>
 </floater>
