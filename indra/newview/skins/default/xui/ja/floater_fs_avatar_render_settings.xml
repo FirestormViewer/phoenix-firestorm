@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatarrendersettings">
+  <floater.string name="av_render_never">表示しない</floater.string>
+  <floater.string name="av_render_always">常に表示</floater.string>
+  <filter_editor label="アバターをフィルタ" name="filter_input" />
+  <menu_button name="plus_btn" tool_tip="新しい人物をリストに追加します。" />
+  <name_list name="avatar_list">
+    <name_list.columns label="名前" name="name" />
+    <name_list.columns label="すべて描画" name="render_setting" />
+  </name_list>
+  <button name="close_btn" label="閉じる" />
+</floater>

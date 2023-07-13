@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu 
+     name="menu_people_contact_sets_gear"
+     left="0" bottom="0" visible="false"
+     mouse_opaque="false">
+  <menu_item_call
+   label="View Profile"
+   name="profile">
+     <menu_item_call.on_click
+      function="ContactSet.Action"
+      parameter="profile"/>
+     <menu_item_call.on_enable
+      function="ContactSet.Enable"
+      parameter="has_selection" />
+  </menu_item_call>
+  <menu_item_call
+   label="IM..."
+   name="im">
+     <menu_item_call.on_click
+      function="ContactSet.Action"
+      parameter="im"/>
+      <menu_item_call.on_enable
+       function="ContactSet.Enable"
+       parameter="has_selection" />
+  </menu_item_call>
+  <menu_item_call
+   label="Teleport..."
+   name="teleport">
+     <menu_item_call.on_click
+      function="ContactSet.Action"
+      parameter="teleport"/>
+     <menu_item_call.on_enable
+      function="ContactSet.Enable"
+      parameter="has_selection" />
+  </menu_item_call>
+  <menu_item_call
+   label="Set alias..."
+   name="set_pseudonym">
+     <menu_item_call.on_click
+      function="ContactSet.Action"
+      parameter="set_pseudonym"/>
+     <menu_item_call.on_visible
+      function="ContactSet.Enable"
+      parameter="has_single_selection" />
+  </menu_item_call>
+  <menu_item_call
+   label="Remove alias..."
+   name="remove_pseudonym">
+     <menu_item_call.on_click
+      function="ContactSet.Action"
+      parameter="remove_pseudonym"/>
+     <menu_item_call.on_visible
+      function="ContactSet.Enable"
+      parameter="has_pseudonym" />
+  </menu_item_call>
+  <menu_item_call
+   label="Remove display name..."
+   name="remove_displayname">
+     <menu_item_call.on_click
+      function="ContactSet.Action"
+      parameter="remove_display_name"/>
+     <menu_item_call.on_visible
+      function="ContactSet.Enable"
+      parameter="has_display_name" />
+  </menu_item_call>
+  <menu_item_call
+   label="Configure Contact Set..."
+   name="set_config">
+     <menu_item_call.on_click
+      function="ContactSet.Action"
+      parameter="set_config"/>
+     <menu_item_call.on_enable
+      function="ContactSet.Enable"
+      parameter="has_mutable_set" />
+  </menu_item_call>
+</toggleable_menu>

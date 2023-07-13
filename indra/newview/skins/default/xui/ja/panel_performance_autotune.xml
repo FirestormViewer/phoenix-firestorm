@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+  bevel_style="none"
+  follows="left|top"
+  height="530"
+  width="580"
+  name="panel_performance_autotune"
+  layout="topleft"
+  left="0"
+  top="0">
+  <button
+    height="16"
+    width="16"
+    layout="topleft"
+    mouse_opaque="true"
+    follows="left|top"
+    name="back_btn"
+    top="7"
+    image_selected="Arrow_Left_Off"
+    image_pressed="Arrow_Left_Off"
+    image_unselected="Arrow_Left_Off"
+    left="15"
+    is_toggle="true">
+  </button>
+  <text
+    follows="left|top"
+    height="20"
+    layout="topleft"
+    left_pad="3"
+    top="10"
+    name="back_lbl"
+    width="40">
+  Back
+  </text>
+  <text
+    follows="left|top"
+    font="SansSerifLarge"
+    text_color="white"
+    height="20"
+    layout="topleft"
+    left="20"
+    top_pad="10"
+    name="settings_title"
+    width="300">
+Auto Tune Preferences
+  </text>
+  <view_border
+    bevel_style="in"
+    height="0"
+    layout="topleft"
+    name="border1"
+    left="20"
+    top_pad="8"
+    width="540" />
+  <text
+    follows="left|top"
+    font="SansSerifSmall"
+    text_color="White"
+    height="40"
+    layout="topleft"
+    top_pad="20"
+    left="20"
+    name="quality_lbl"
+    width="100"
+    wrap="true">
+Distant Avatars
+  </text>
+  <check_box
+  control_name="FSAutoTuneImpostorByDistEnabled"
+  height="19"
+  label="Enable distance-based optimization"
+  layout="topleft"
+  follows="top|left"
+  left_pad="40"
+  name="FSAutoTuneImpostorByDistEnabled"
+  tool_tip="When enabled the viewer will adjust the MaxNonImpostors setting to limit fully rendered avatars to those within the defined radius."
+  top_delta="0"
+  width="190" />
+  <spinner
+  control_name="FSAutoTuneImpostorFarAwayDistance"
+  height="20"
+  layout="topleft"
+  label="Farthest full avatar"
+  label_width="80"
+  label_wrap="true"
+  follows="top|left"
+  name="ffa_autotune"
+  left_pad="40"
+  decimal_digits="2"
+  min_val="16"
+  max_val="256"
+  width="140" >
+</spinner>
+<text
+follows="left|top"
+font="SansSerifSmall"
+text_color="White"
+height="46"
+layout="topleft"
+top_pad="15"
+left="160"
+name="distant_av_advice"
+width="450"
+wrap="true">
+Distant avatars can be automatically optimized regardless of their render cost.
+Set the distance from camera beyond which an avatar will be optimized.
+Note: This setting will force MaxNonImpostors to 1 if nobody is nearby.
+</text>
+<view_border
+bevel_style="in"
+height="0"
+layout="topleft"
+name="border2"
+top_pad="8"
+left="20"
+width="540" />
+<text
+follows="left|top"
+font="SansSerifSmall"
+text_color="White"
+height="36"
+layout="topleft"
+top_pad="20"
+left="20"
+name="distance_lbl"
+width="100"
+wrap="true">
+Visibility distance tuning limits
+</text>
+<spinner
+control_name="FSAutoTuneRenderFarClipMin"
+height="20"
+layout="topleft"
+label="Minimum Distance"
+label_width="80"
+label_wrap="true"
+top_delta="0"
+follows="top|left"
+name="min_dd_autotune"
+decimal_digits="2"
+left_pad="40"
+min_val="32"
+max_val="256"
+width="140">
+</spinner>
+<spinner
+control_name="FSAutoTuneRenderFarClipTarget"
+height="20"
+layout="topleft"
+label="Preferred distance"
+label_width="80"
+label_wrap="true"
+follows="top|left"
+name="pref_dd_autotune"
+left_pad="20"
+min_val="32"
+max_val="256"
+width="140">
+</spinner>
+<text
+follows="left|top"
+font="SansSerifSmall"
+text_color="White"
+height="38"
+layout="topleft"
+top_pad="15"
+left="160"
+name="distance_desc1"
+wrap="true"
+width="400">
+When adjusting scene parameters, autotune will choose values between the minimum and the preferred draw distances.
+</text>
+<view_border
+bevel_style="in"
+height="0"
+layout="topleft"
+name="border2"
+top_pad="8"
+left="20"
+width="540" />
+<text
+follows="left|top"
+font="SansSerifSmall"
+text_color="White"
+height="36"
+layout="topleft"
+top_pad="20"
+left="20"
+name="sundry_lbl"
+width="100"
+wrap="true">
+Sundry Settings
+</text>
+<check_box
+control_name="FSAllowSelfImpostor"
+height="19"
+label="Allow your own avatar to be optimized"
+layout="topleft"
+follows="top|left"
+left_pad="40"
+name="alow_self_impostor"
+tool_tip="When enabled the viewer may render your own avatar as an impostor."
+top_delta="0"
+width="190" />
+<check_box
+control_name="FSShowTunedART"
+height="19"
+label="Show optimized render time"
+layout="topleft"
+follows="top|left"
+left_delta="0"
+name="show_tuned_art"
+tool_tip="When enabled the Time column shows the current render time not the pre-tuning render time."
+top_pad="0"
+width="190" />
+<text
+  follows="left|top"
+  font="SansSerifSmall"
+  text_color="White"
+  height="38"
+  layout="topleft"
+  top_pad="15"
+  left="160"
+  name="sundry_desc1"
+  wrap="true"
+  width="400">
+These options control more subtle settings. Use the online help page to get more information on what these do.
+</text>
+</panel>

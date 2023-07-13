@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<floater
+ positioning="cascading"
+ save_rect="true"
+ can_resize="true"
+ height="463"
+ name="fs_partial_inventory"
+ help_topic="fs_partial_inventory"
+ title="Inventory"
+ background_visible="true"
+ layout="topleft"
+ min_height="350"
+ min_width="265"
+ width="313">
+	<floater.string name="title">Inventory: [FOLDERNAME]</floater.string>
+	<filter_editor
+	 follows="left|top|right"
+	 height="23"
+	 label="Filter inventory folder"
+	 layout="topleft"
+	 left="4"
+	 name="flt_search"
+	 top="2"
+	 right="-4" />
+	<panel
+	 name="pnl_inv_wrap"
+	 follows="all"
+	 layout="topleft"
+	 left="4"
+	 top_pad="2"
+	 right="-4"
+	 height="430">
+	</panel>
+</floater>

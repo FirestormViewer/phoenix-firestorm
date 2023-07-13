@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!-- FS:Beq [timezone support for teleport history] -->
+<toggleable_menu
+     name="menu_teleport_history_timezone"
+     left="0" bottom="0" visible="false"
+     mouse_opaque="false">
+  <menu_item_check
+      name="teleport_history_tz_utc"
+      label="UTC">
+    <on_click
+      function="TeleportHistory.TimeZone.Set"
+      parameter="utc" />
+    <on_check
+      function="TeleportHistory.TimeZone.Check"
+      parameter="utc" />
+  </menu_item_check>
+  <menu_item_check
+      name="teleport_history_tz_slt"
+      label="SLT">
+    <on_click
+      function="TeleportHistory.TimeZone.Set"
+      parameter="slt" />
+    <on_check
+      function="TeleportHistory.TimeZone.Check"
+      parameter="slt" />
+  </menu_item_check>
+  <menu_item_check
+      name="teleport_history_tz_local"
+      label="Local">
+    <on_click
+      function="TeleportHistory.TimeZone.Set"
+      parameter="local" />
+    <on_check
+      function="TeleportHistory.TimeZone.Check"
+      parameter="local" />
+  </menu_item_check>
+</toggleable_menu>
+
+<!-- /FS:Beq [timezone support for teleport history] -->

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="rlvLocks" title="有効なＲＬＶロック">
+  <panel filename="panel_rlv_locks.xml" />
+</floater>

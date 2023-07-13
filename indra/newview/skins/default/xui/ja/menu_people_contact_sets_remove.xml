@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu 
+     name="menu_people_contact_sets_remove"
+     left="0" bottom="0" visible="false"
+     mouse_opaque="false">
+  <menu_item_call
+   label="Remove Set..."
+   name="remove_set">
+      <menu_item_call.on_click
+       function="ContactSet.Action"
+       parameter="remove_set" />
+      <menu_item_call.on_enable
+       function="ContactSet.Enable"
+       parameter="has_mutable_set" /> 
+  </menu_item_call>
+  <menu_item_call
+   label="Remove Contact..."
+   name="remove_contact">
+      <menu_item_call.on_click
+       function="ContactSet.Action"
+       parameter="remove_contact"/>
+      <menu_item_call.on_enable
+       function="ContactSet.Enable"
+       parameter="has_mutable_set_and_selection" />
+  </menu_item_call>
+  <menu_item_call
+   label="Remove Alias..."
+   name="remove_alias">
+      <menu_item_call.on_click
+       function="ContactSet.Action"
+       parameter="remove_pseudonym"/>
+      <menu_item_call.on_visible
+       function="ContactSet.Enable"
+       parameter="has_pseudonym" />
+  </menu_item_call>
+  <menu_item_call
+   label="Remove Display Name..."
+   name="remove_display_name">
+      <menu_item_call.on_click
+       function="ContactSet.Action"
+       parameter="remove_display_name"/>
+      <menu_item_call.on_visible
+       function="ContactSet.Enable"
+       parameter="has_display_name" />
+  </menu_item_call>
+</toggleable_menu>

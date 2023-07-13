@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ width="205"
+ background_visible="true"
+ background_opaque="false"
+ bg_alpha_color="HintBg"
+ height="34">
+  <text name="hint_title"
+        font="SansSerifMedium" 
+        left="8"
+        right="180"
+        top="8"
+        bottom="20"
+        follows="left|right|top"
+        text_color="HintTitle"
+        wrap="false"/>
+  <text name="hint_text"
+        left="8"
+        right="197"
+        top="26"
+        bottom="26"
+        follows="left|right|bottom" 
+        text_color="HintText"
+        wrap="true"/>
+  <button right="197" 
+          top="8"
+          width="16" 
+          height="16"
+          name="close" 
+          follows="right|top" 
+          image_color="LtGray" 
+          image_unselected="Icon_Close_Foreground"
+          image_selected="Icon_Close_Press"/>
+</panel>

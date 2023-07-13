@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater title="ビームカラーの周期">
+	<floater.string name="start_hue">開始色相</floater.string>
+	<floater.string name="end_hue">終了色相</floater.string>
+	<panel name="BeamColor_Picker" />
+	<text name="beamcolor_text">マウスで開始時と停止時のビームカラーにしたい色を選択してください。
+左クリックで開始位置が変わります。
+右クリックで終了位置を変更します。</text>
+	<color_swatch name="BeamColor_Preview" tool_tip="カラーピッカーを開く" />
+	<text name="beamcolor_text2">プレビュー</text>
+	<slider name="BeamColor_Speed" label="周期の速さ：" tool_tip="カラーサイクルの速度を調整します。"/>
+	<button label="保存" name="BeamColor_Save" />
+	<button label="読み込む" name="BeamColor_Load" />
+	<button label="キャンセル" name="BeamColor_Cancel" />
+</floater> 

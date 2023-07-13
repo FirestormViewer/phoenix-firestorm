@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+    height="652"
+    layout="topleft"
+    name="performance"
+    help_topic="fs_performance_floater"
+    save_rect="true"
+    title="Improve Graphics Speed"
+    can_resize="false"
+    min_width="580"
+    width="580">
+  <floater.string name="frame_stats">
+  Frame: [TOT_FRAME_TIME]ms - Scenery:[SCENERY_FRAME_PCT]% Avatars:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUDs:[HUDS_FRAME_PCT]% Swap:[SWAP_FRAME_PCT]% Tasks:[IDLE_FRAME_PCT]%
+  </floater.string>
+  <floater.string name="limit_fps">
+  User Limited @ [FPSCAP] FPS
+  </floater.string>
+  <floater.string name="tuning_fps">
+  Target [FPSTARGET] FPS
+  </floater.string>
+  <floater.string name="av_frame_pct">
+  [AV_FRAME_PCT]%
+  </floater.string>
+  <floater.string name="huds_frame_pct">
+  [HUDS_FRAME_PCT]%
+  </floater.string>
+  <floater.string name="focus_fps">
+   In Background
+  </floater.string>
+  <floater.string name="info_waitforit">
+  Allow 5-10 seconds for changes to take effect.
+  </floater.string>
+  <floater.string name="info_frozen">
+  Stats pause when FPS is limited or in background.
+  </floater.string>
+  <floater.string name="tot_av_template">
+  Total: [TOT_AV] ([TOT_AV_TIME]μs)
+  </floater.string>
+  <floater.string name="tot_att_template">
+  Total: [TOT_ATT] ([TOT_ATT_TIME]μs)
+  </floater.string>
+  <flaoter.string
+  name="fps_text"
+  value="frames per second"/>
+ <floater.string
+  name="max_fps"
+  value="VSync @ [VSYNCFREQ] FPS"/>
+  <panel
+      bevel_style="none"
+      follows="left|top|right"
+      height="600"
+      width="580"
+      name="panel_top"
+      visible="true"
+      layout="topleft"
+      left="0"
+      top="0">
+    <panel
+        bg_alpha_color="black"
+        background_visible="true"
+        background_opaque="false"
+        border="false"
+        bevel_style="none"
+        follows="left|top|right"
+        height="55"
+        width="560"
+        name="fps_subpanel"
+        layout="topleft"
+        left="10"
+        top="5">
+      <text
+          follows="left|top"
+          font="SansSerifHuge"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left="10"
+          top="8"
+          name="fps_value"
+          width="42">
+          167
+      </text>
+      <text
+          follows="left|top"
+          font="SansSerifLarge"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left_pad="3"
+          top="13"
+          name="fps_lbl"
+          width="150">
+          frames per second
+      </text>
+      <text
+          follows="left|top"
+          font="SansSerifLarge"
+          text_color="DrYellow"
+          height="28"
+          layout="topleft"
+          left_pad="10"
+          name="fps_warning"
+          top="13"
+          width="200"> User Limited @ 000 FPS
+      </text>
+      <text
+          follows="top|right"
+          text_color="White"
+          height="40"
+          layout="topleft"
+          left="420"
+          top="5"
+          name="fps_desc1_lbl"
+          width="140"
+          wrap="true">
+        Stats pause when FPS is limited or in background.
+      </text>
+      <text
+          follows="left|top|right"
+          font="MonospaceMedium"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          halign="center"
+          left="5"
+          top="38"
+          name="frame_breakdown"
+          width="550">
+[--------------------Frame breakdown will appear here.---------------------]
+      </text>
+    </panel>
+    <panel
+        bg_alpha_color="black"
+        background_visible="true"
+        background_opaque="false"
+        border="false"
+        bevel_style="none"
+        follows="left|top|right"
+        height="55"
+        width="560"
+        name="target_subpanel"
+        layout="topleft"
+        left="10"
+        top_pad="0">
+      <text
+          follows="left|top"
+          font="SansSerifLarge"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left="10"
+          name="settings_lbl"
+          top="7"
+          tool_tip="Automatically adjust settings to maintain FPS. Set the Target to the desired frame rate and the viewer will attempt to match this by dynamically altering your settings."
+          width="75">
+    Auto Tune:
+      </text>
+      <text
+          follows="left|top"
+          font="SansSerif"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left_pad="10"
+          name="targetfps_desc"
+          wrap="true"
+          width="140"
+          halign="right"
+          top_delta="3">
+          Target Frame Rate (fps)
+      </text>
+      <spinner
+          name="target_fps"
+          control_name="TargetFPS"
+          font="SansSerifLarge"
+          tool_tip="Target FPS - The desired FPS level. The viewer will attempt to achieve this by adjusting your graphics settings."
+          layout="topleft"
+          follows="right|top"
+          left_pad="10"
+          top_delta="0"
+          height="25"
+          visible="true"
+          decimal_digits="0"
+          increment="1"
+          initial_value="25"
+          max_val="300"
+          min_val="1"
+          width="48"
+          label_width="0" />
+      <button
+          control_name="AutoTuneFPS"
+          follows="top|right"
+          height="20"
+          initial_value="false"
+          image_pressed="PushButton_Press"
+          image_pressed_selected="PushButton_Selected_Press"
+          image_selected="PushButton_Selected_Press"
+          is_toggle="true"
+          label="Start"
+          label_selected="Stop"
+          layout="topleft"
+          left_pad="5"
+          name="AutoTuneFPS"
+          top_delta="0"
+          tool_tip="The viewer will attempt to adjust settings to meet the target FPS."
+          width="72">
+      </button>
+      <check_box
+          control_name="AutoTuneLock"
+          follows="top|right"
+          height="20"
+          initial_value="true"
+          image_pressed="PushButton_Press"
+          image_pressed_selected="PushButton_Selected_Press"
+          image_selected="PushButton_Selected_Press"
+          is_toggle="true"
+          label="Continuous"
+          layout="topleft"
+          left_pad="5"
+          name="AutoTuneContinuous"
+          top_delta="0"
+          tool_tip="The viewer will continually adapt the settings to meet the target FPS until stopped even with the floater closed. When disabled clicking the Auto Tune button will adjust for the current settings then stop."
+          width="64">
+      </check_box>
+      <button
+          follows="left|top"
+          height="24"
+          image_overlay="Script_Disk_Save"
+          layout="topleft"
+          right="-62"
+          name="PrefSaveButton"
+          top_delta="0"
+          tool_tip="Save the current settings to a default for future use."
+          width="24">
+          <button.commit_callback
+          function="Performance.PrefSave"
+          parameter="graphic" />
+      </button>
+      <button
+          follows="left|top"
+          height="24"
+          image_overlay="Script_Disk_Load"
+          layout="topleft"
+          right="-34"
+          name="PrefLoadButton"
+          top_delta="0"
+          tool_tip="Load an existing preset."
+          width="24">
+          <button.commit_callback
+          function="Performance.PrefLoad"
+          parameter="graphic" />
+      </button>
+      <!--Reset Button-->
+      <button
+          follows="left|top"
+          height="24"
+          image_overlay="Refresh_Off"
+          tool_tip="Reload default graphics settings for your hardware."
+          layout="topleft"
+          right="-6"
+          name="Defaults"
+          top_delta="0"
+          width="24">
+        <button.commit_callback
+          function="Performance.HardwareDefaults" />
+      </button>   
+      <text
+          follows="left|top"
+          font="SansSerif"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left="20"
+          name="settings_desc"
+          top_pad="0"
+          wrap="true"
+          width="215"
+          halign="right"
+          top_delta="5">
+        Tuning Strategy
+      </text>
+      <combo_box
+          follows="top|right"
+          font="SansSerif"
+          height="20"
+          layout="topleft"
+          left_pad="10"
+          control_name="TuningFPSStrategy"
+          name="FSTuningFPSStrategy"
+          top_delta="0"
+          width="125">
+        <combo_box.item
+            label="Avatars Only"
+            name="av_only"
+            value="0" />
+        <combo_box.item
+            label="Avatars and Scene"
+            name="av_and_scene"
+            value="1" />
+      </combo_box>
+      <button
+          height="16"
+          width="16"
+          scale_image="true"
+          layout="topleft"
+          mouse_opaque="true"
+          follows="right|top"
+          name="target_btn"
+          top_delta="2"
+          tool_tip="Change the Tuning Strategy behavior."
+          image_selected="Icon_Gear"
+          image_pressed="Icon_Gear"
+          image_unselected="Icon_Gear"
+          left_pad="8"
+          is_toggle="true"></button>
+    </panel>
+  </panel>
+  <panel
+      bevel_style="none"
+      follows="left|top|right"
+      height="540"
+      width="580"
+      name="panel_performance_main"
+      visible="true"
+      layout="topleft"
+      left="0"
+      top="115">
+    <panel
+        bg_alpha_color="PanelGray"
+        background_visible="true"
+        background_opaque="false"
+        border="true"
+        bevel_style="none"
+        follows="left|top|right"
+        height="50"
+        width="560"
+        name="settings_subpanel"
+        layout="topleft"
+        left="10"
+        top_pad="10">
+      <text
+          follows="left|top"
+          font="SansSerifLarge"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left="10"
+          name="settings_lbl"
+          top="7"
+          width="180">
+          Graphics settings
+        </text>
+      <text
+          follows="left|top"
+          font="SansSerif"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left="10"
+          name="settings_desc"
+          top_pad="0"
+          width="395">
+          Choose settings for distance, water, lighting and more.
+        </text>
+      <icon
+          height="16"
+          width="16"
+          image_name="Arrow_Right_Off"
+          mouse_opaque="true"
+          name="icon_arrow3"
+          follows="right|top"
+          top="19"
+          right="-20" />
+    </panel>
+    <panel
+        bg_alpha_color="PanelGray"
+        background_visible="true"
+        background_opaque="false"
+        border="true"
+        bevel_style="none"
+        follows="left|top|right"
+        height="50"
+        width="560"
+        name="nearby_subpanel"
+        layout="topleft"
+        top_pad="10">
+      <text
+          follows="left|top"
+          font="SansSerifLarge"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left="10"
+          name="avatars_nearby_lbl"
+          top="7"
+          width="205">
+       Avatars nearby
+      </text>
+      <text
+          follows="left|top"
+          font="SansSerif"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left="10"
+          name="avatars_nearby_desc"
+          top_pad="0"
+          width="345">
+      Manage which nearby avatars are fully displayed.
+    </text>
+      <text
+          follows="top|right"
+          font="SansSerifSmall"
+          text_color="White"
+          height="28"
+          layout="topleft"
+          left_pad="10"
+          name="avatars_frme_pct_lbl"
+          top="8"
+          width="75">
+Time spent
+drawing 
+avatars
+      </text>
+      <text
+          follows="top|right"
+          font="SansSerifHuge"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left_pad="10"
+          top="14"
+          name="av_frame_stats"
+          width="62">
+         00%
+     </text>
+      <icon
+          height="16"
+          width="16"
+          image_name="Arrow_Right_Off"
+          mouse_opaque="true"
+          name="icon_arrow2"
+          follows="right|top"
+          top="19"
+          right="-20" />
+    </panel>
+    <panel
+        bg_alpha_color="PanelGray"
+        background_visible="true"
+        background_opaque="false"
+        border="true"
+        bevel_style="none"
+        follows="left|top|right"
+        height="50"
+        width="560"
+        name="complexity_subpanel"
+        layout="topleft"
+        top_pad="10">
+      <text
+          follows="left|top"
+          font="SansSerifLarge"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left="10"
+          name="complexity_lbl"
+          top="7"
+          width="180">
+          Your avatar complexity
+      </text>
+      <text
+          follows="left|top"
+          font="SansSerif"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left="10"
+          name="complexity_info"
+          top_pad="0"
+          width="455">
+          Be a good citizen. Manage the impact of your avatar
+      </text>
+      <icon
+          height="16"
+          width="16"
+          image_name="Arrow_Right_Off"
+          mouse_opaque="true"
+          name="icon_arrow4"
+          follows="right|top"
+          top="19"
+          right="-20" />
+    </panel>
+    <panel
+        bg_alpha_color="PanelGray"
+        background_visible="true"
+        background_opaque="false"
+        border="true"
+        bevel_style="none"
+        follows="left|top|right"
+        height="50"
+        width="560"
+        name="huds_subpanel"
+        layout="topleft"
+        top_pad="10">
+      <text
+          follows="left|top"
+          font="SansSerifLarge"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left="10"
+          name="huds_lbl"
+          top="7"
+          width="135">
+          Your active HUDs
+      </text>
+      <text
+          follows="left|top"
+          font="SansSerif"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left="10"
+          name="huds_desc"
+          top_pad="0"
+          width="345">
+          Removing unnecessary HUDs may improve speed.
+      </text>
+      <text
+          follows="top|right"
+          font="SansSerifSmall"
+          text_color="White"
+          height="28"
+          layout="topleft"
+          left_pad="10"
+          name="huds_frme_pct_lbl"
+          top="8"
+          width="75">
+Time spent
+drawing 
+HUDs
+     </text>
+      <text
+          follows="top|right"
+          font="SansSerifHuge"
+          text_color="White"
+          height="20"
+          layout="topleft"
+          left_pad="10"
+          top="14"
+          name="huds_frame_stats"
+          width="62">
+        00%
+    </text>
+      <icon
+          height="16"
+          width="16"
+          image_name="Arrow_Right_Off"
+          mouse_opaque="true"
+          name="icon_arrow4"
+          follows="right|top"
+          top="19"
+          right="-20" />
+    </panel>
+  </panel>
+  <panel
+      filename="panel_fs_performance_nearby.xml"
+      follows="all"
+      layout="topleft"
+      left="0"
+      name="panel_performance_nearby"
+      visible="false"
+      top="115" />
+  <panel
+      filename="panel_fs_performance_complexity.xml"
+      follows="all"
+      layout="topleft"
+      left="0"
+      name="panel_performance_complexity"
+      visible="false"
+      top="115" />
+  <panel
+      filename="panel_fs_performance_preferences.xml"
+      follows="all"
+      layout="topleft"
+      left="0"
+      name="panel_performance_preferences"
+      visible="false"
+      top="115" />
+  <panel
+      filename="panel_fs_performance_huds.xml"
+      follows="all"
+      layout="topleft"
+      left="0"
+      name="panel_performance_huds"
+      visible="false"
+      top="115" />
+  <panel
+      filename="panel_fs_performance_autotune.xml"
+      follows="all"
+      layout="topleft"
+      left="0"
+      name="panel_performance_autotune"
+      visible="false"
+      top="115" />
+</floater>

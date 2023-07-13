@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu
+ layout="topleft"
+ name="Settings">
+    <menu_item_check
+     label="Always full detail"
+     layout="topleft"
+     name="always_render">
+        <on_click function="Settings.SetRendering" parameter="always"/>
+        <on_check function="Settings.IsSelected" parameter="always" />  
+    </menu_item_check>
+    <menu_item_check
+     label="Never full detail"
+     layout="topleft"
+     name="never_render">
+        <on_click function="Settings.SetRendering" parameter="never"/>
+        <on_check function="Settings.IsSelected" parameter="never" />
+    </menu_item_check>
+    <menu_item_check
+     label="Remove from exceptions"
+     layout="topleft"
+     name="default">
+        <on_click function="Settings.SetRendering" parameter="default"/>
+        <on_check function="Settings.IsSelected" parameter="default" />
+        <on_visible function="Settings.IsSelected" parameter="non_default" />
+  </menu_item_check>
+  <menu_item_separator />
+  <menu_item_call
+  label="Inspect Avatar"
+  name="inspect">
+    <menu_item_call.on_click
+     function="Avatar.Extended" parameter="inspect"/>
+</menu_item_call>
+  <menu_item_call
+  label="Zoom to Avatar"
+  tool_tip="Move camera to view this avatar."
+  name="zoom">
+    <menu_item_call.on_click
+     function="Avatar.Extended" parameter="zoom"/>
+</menu_item_call>
+</context_menu>

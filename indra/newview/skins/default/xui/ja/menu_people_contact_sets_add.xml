@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu
+     name="menu_people_contact_sets_add"
+     left="0" bottom="0" visible="false"
+     mouse_opaque="false">
+  <menu_item_call
+   label="Add Set..."
+   name="add_set">
+      <menu_item_call.on_click
+	   function="ContactSet.Action"
+	   parameter="add_set"/>
+  </menu_item_call>
+  <menu_item_call
+   label="Add Contact..."
+   name="add_contact">
+      <menu_item_call.on_click
+       function="ContactSet.Action"
+       parameter="add_contact"/>
+      <menu_item_call.on_enable
+       function="ContactSet.Enable"
+       parameter="has_mutable_set" />
+  </menu_item_call>
+</toggleable_menu>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+  name="fs_import"
+  help_topic="fs_import"
+  title="Object Import"
+  width="210"
+  height="206"
+  save_rect="true"
+  can_resize="false"
+  can_minimize="true"
+  can_close="true">
+	<floater.string
+	 name="floater_title">
+		Import [FILENAME]
+	</floater.string>
+    <floater.string
+     name="file_status">
+        [LINKSETS] linksets. [PRIMS] prims. [TEXTURES] textures.
+        [SOUNDS] sounds. [ANIMATIONS] animations.
+    </floater.string>
+    <floater.string
+     name="file_status_error">
+        Error reading file. Select another file.
+    </floater.string>
+    <floater.string
+     name="file_version_error">
+        Error parsing file, wrong format or version.
+    </floater.string>
+    <floater.string
+     name="file_status_running">
+        Linkset [LINKSET] of [LINKSETS], prim [PRIM] of [PRIMS]
+    </floater.string>
+    <floater.string
+     name="file_status_done">
+        Finished importing.
+    </floater.string>
+     <floater.string
+     name="texture_uploading">
+        Uploading texture [TEXTURE] of [TEXTURETOTAL].
+    </floater.string>
+    <floater.string
+     name="sound_uploading">
+        Uploading sound [SOUND] of [SOUNDTOTAL].
+    </floater.string>
+    <floater.string
+     name="animation_uploading">
+        Uploading animation [ANIMATION] of [ANIMATIONTOTAL].
+    </floater.string>
+    <floater.string
+     name="asset_uploading">
+        Uploading asset [ASSET] of [ASSETTOTAL].
+    </floater.string>
+    <floater.string
+     name="upload_cost">
+        Total cost of uploads: L$ [COST].
+    </floater.string>
+	<floater.string
+		name="object">
+        object
+    </floater.string>
+	<floater.string
+		name="objects">
+        objects
+    </floater.string>
+    <text
+	 type="string"
+	 length="1"
+	 follows="left|top"
+	 height="14"
+	 layout="topleft"
+	 left="5"
+	 name="filename_text"
+	 width="200">
+		[FILENAME]
+    </text>
+	<text
+	 type="string"
+	 length="1"
+	 follows="left|top"
+	 height="14"
+	 layout="topleft"
+	 left="5"
+	 name="creation_date_text"
+	 width="200">
+		Created on [DATE_STRING]
+    </text>
+	<text
+	 type="string"
+	 length="1"
+	 follows="left|top"
+	 height="14"
+	 layout="topleft"
+	 left="5"
+	 name="author_text"
+	 use_ellipses="true"
+	 width="200">
+		by [AUTHOR] [GRID]
+    </text>
+	<text
+	 type="string"
+	 length="1"
+	 follows="left|top"
+	 height="14"
+	 layout="topleft"
+	 left="5"
+	 name="client_text"
+	 use_ellipses="true"
+	 width="200">
+		Client: [CLIENT] v.[VERSION]
+    </text>
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="52"
+     layout="topleft"
+     left="5"
+     name="file_status_text"
+     width="200">
+        Select a file.
+    </text>
+    <check_box
+      follows="top|left"
+      height="16"
+      layout="topleft"
+      enabled="false"
+      name="do_not_attach"
+      label="Do not attach object"
+      top_pad="5"/>
+    <check_box
+      follows="top|left"
+      height="16"
+      layout="topleft"
+      enabled="false"
+      name="region_position"
+      label="Restore Region Position"
+      top_pad="1"/>
+    <check_box
+      follows="top|left"
+      height="16"
+      layout="topleft"
+      width="90"
+      enabled="false"
+      name="upload_asset"
+      label="Upload Content"
+      top_pad="1" >
+	<check_box.commit_callback
+	    function="Import.UploadAsset" />
+    </check_box>
+    <check_box
+      follows="top|left"
+      height="16"
+      layout="topleft"
+	  top_pad="1"
+	  left_delta="15"
+      enabled="false"
+      name="temp_asset"
+      label="Temp" >
+      <check_box.commit_callback
+	    function="Import.TempAsset" />
+    </check_box>
+	<button
+	 name="import_btn"
+	 label="Import"
+	 height="20"
+	 width="97"
+ 	 left="109"
+	 top_delta="-2"
+ 	 follows="right_bottom" />
+	<loading_indicator
+	 visible="false"
+	 follows="left|top"
+	 height="18"
+	 layout="topleft"
+	 left="187"
+	 name="progress_indicator"
+	 top="110"
+	 width="18" />
+</floater>
