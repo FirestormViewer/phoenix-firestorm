@@ -1,48 +1,35 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_script_colors" title="スクリプトの色">
-	<text name="color_pickers_label">
-		希望の色を選択:
-	</text>
-	<text name="text_label">
-		テキスト
-	</text>
-	<text name="cursor_label">
-		カーソル
-	</text>
-	<text name="background_label">
-		背景
-	</text>
-	<text name="datatype_label">
-		データ型
-	</text>
-	<text name="event_label">
-		イベント
-	</text>
-	<text name="string_literal_label">
-		文字列リテラル
-	</text>
-	<text name="constant_label">
-		定数
-	</text>
-	<text name="flow_control_label">
-		フロー制御
-	</text>
-	<text name="function_label">
-		関数
-	</text>
-	<text name="comment_label">
-		コメント
-	</text>
-	<script_editor name="Script Preview">
-		/* サンプル スクリプト */
+  <text name="color_pickers_label">希望の色を選択：</text>
+  <text name="text_label">テキスト</text>
+  <text name="cursor_label">カーソル</text>
+  <text name="background_label">背景</text>
+  <text name="datatype_label">データ型</text>
+  <text name="event_label">イベント</text>
+  <text name="string_literal_label">文字列リテラル</text>
+  <text name="constant_label">定数</text>
+  <text name="flow_control_label">フロー制御</text>
+  <text name="function_label">関数</text>
+  <text name="comment_label">コメント</text>
+  <script_editor name="Script Preview">/* サンプル スクリプト */
 default
 {
-state_entry()
-    {
-// コメント
-string greeting = &quot;こんにちは&quot;;
-llSay(PUBLIC_CHANNEL, greeting);
-    }
-}
-	</script_editor>
+  state_entry()
+  {
+    // コメント
+    string greeting = "こんにちは";
+    llSay(PUBLIC_CHANNEL, greeting);
+  }
+}</script_editor>
+  <text name="prefs_label">スクリプトエディタのオプション：</text>
+  <check_box label="ＬＳＬプリプロセッサを有効化" tool_tip="チェックすると、ＬＳＬプリプロセッサが有効になります。" name="preproc_checkbox" />
+  <check_box label="スクリプト最適化" tool_tip="チェックすると、ＬＳＬプリプロセッサはスクリプトによって使用されるスペースを最適化します。" name="preprocoptimizer_checkbox" />
+  <check_box label="switch()ステートメント" tool_tip="チェックすると、ＬＳＬプリプロセッサはスクリプトフロー制御にswitch()ステートメントの使用を許可します。" name="preprocswitch_checkbox" />
+  <check_box label="怠けリスト" tool_tip="チェックすると、ＬＳＬプリプロセッサはリスト処理に構文拡張の使用を許可します。" name="preproclazy_checkbox" />
+  <check_box label="ローカルディスクから#includes" tool_tip="チェックすると、ＬＳＬプリプロセッサにより、#includeステートメントによるローカルディスク上のファイルの参照が許可されます。" name="preprocinclude_checkbox" />
+  <text name="lslpreprocinclude_textbox">プリプロセッサのインクルードパス：</text>
+  <line_editor name="preprocinclude_location" />
+  <button label="…" label_selected="ブラウズ" name="SetPreprocInclude" />
+
+  <button name="close_btn" label="ＯＫ" />
 </floater>

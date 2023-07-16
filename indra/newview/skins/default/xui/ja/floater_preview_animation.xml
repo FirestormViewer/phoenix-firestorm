@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="preview_anim">
-	<floater.string name="Title">
-		アニメーション： [NAME]
-	</floater.string>
-	<panel name="basic_info_panel">
-		<text name="desc txt">
-			説明：
-		</text>
-		<button label="インワールドで再生" label_selected="停止" name="Inworld" tool_tip="他人に見えるように再生"/>
-		<button label="ローカル再生" label_selected="停止" name="Locally" tool_tip="自分だけが見えるように再生"/>
-	</panel>
+  <floater.string name="Title">アニメーション：[NAME]</floater.string>
+  <text name="desc txt">説明：</text>
+  <button label="インワールドで再生" label_selected="停止" name="Inworld" tool_tip="他人から見えるように再生します。" />
+  <text name="desc inworld">他の人から見えます</text>
+  <button label="ローカル再生" label_selected="停止" name="Locally" tool_tip="自分だけが見えるように再生します。" />
+  <text name="desc local">あなただけ見えます</text>
+  <line_editor name="desc" />
+  <text name="adv_trigger">拡張</text>
+  <text name="AdvancedStats">優先度：[PRIORITY]
+長さ：[DURATION]s
+イースイン：[EASE_IN]秒
+イースアウト：[EASE_OUT]秒
+ループ：[IS_LOOP]
+ジョイント数：[NUM_JOINTS]</text>
 </floater>
