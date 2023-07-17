@@ -478,6 +478,7 @@ public:
 	std::vector<U32> mMapAvatars;
 	std::vector<LLUUID> mMapAvatarIDs;
 
+	static bool sFSAreaSearchActive; // <FS:Beq/> FIRE-32688 Area Search improvements
 	static BOOL sVOCacheCullingEnabled; //vo cache culling enabled or not.
 	static S32  sLastCameraUpdated;
 

@@ -432,6 +432,7 @@ F32 LLVOCacheEntry::getSquaredPixelThreshold(bool is_front)
 
 bool LLVOCacheEntry::isAnyVisible(const LLVector4a& camera_origin, const LLVector4a& local_camera_origin, F32 dist_threshold)
 {
+	if( LLViewerRegion::sFSAreaSearchActive ) { return true; } // <FS:Beq/> FIRE-32688 Area Search improvements
 	LLOcclusionCullingGroup* group = (LLOcclusionCullingGroup*)getGroup();
 	if(!group)
 	{
@@ -928,7 +929,10 @@ S32 LLVOCachePartition::cull(LLCamera &camera, bool do_occlusion)
 
 			//process back objects selection
 			selectBackObjects(camera, LLVOCacheEntry::getSquaredPixelThreshold(mFrontCull), 
-				do_occlusion && use_object_cache_occlusion);
+				// <FS:Beq> FIRE-32688 Area Search improvements
+				// do_occlusion && use_object_cache_occlusion);
+				do_occlusion && use_object_cache_occlusion && !LLViewerRegion::sFSAreaSearchActive);
+				// </FS:Beq>
 			return 0; //nothing changed, reduce frequency of culling
 		}
 	}
@@ -942,7 +946,10 @@ S32 LLVOCachePartition::cull(LLCamera &camera, bool do_occlusion)
 	camera.calcRegionFrustumPlanes(region_agent, gAgentCamera.mDrawDistance);
 
 	mFrontCull = TRUE;
-	LLVOCacheOctreeCull culler(&camera, mRegionp, region_agent, do_occlusion && use_object_cache_occlusion, 
+	// <FS:Beq> FIRE-32688 Area Search improvements
+	// LLVOCacheOctreeCull culler(&camera, mRegionp, region_agent, do_occlusion && use_object_cache_occlusion, 
+	LLVOCacheOctreeCull culler(&camera, mRegionp, region_agent, do_occlusion && use_object_cache_occlusion && !LLViewerRegion::sFSAreaSearchActive, 
+	// </FS:Beq>
 		LLVOCacheEntry::getSquaredPixelThreshold(mFrontCull), this);
 	culler.traverse(mOctree);	
 

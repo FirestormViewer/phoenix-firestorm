@@ -1025,7 +1025,7 @@ LLSD FSData::getSystemInfo()
 	sysinfo1 += llformat("%s\n\n", info["SERVER_VERSION"].asString().c_str());
 
 	sysinfo1 += llformat("CPU: %s\n", info["CPU"].asString().c_str());
-	sysinfo1 += llformat("Memory: %d MB\n", info["MEMORY_MB"].asInteger());
+	sysinfo1 += llformat("Memory: %d MB (Used: %d MB)\n", info["MEMORY_MB"].asInteger(), info["USED_RAM"].asInteger());
 	sysinfo1 += llformat("OS: %s\n", info["OS_VERSION"].asString().c_str());
 	sysinfo1 += llformat("Graphics Card Vendor: %s\n", info["GRAPHICS_CARD_VENDOR"].asString().c_str());
 	sysinfo1 += llformat("Graphics Card: %s\n", info["GRAPHICS_CARD"].asString().c_str());

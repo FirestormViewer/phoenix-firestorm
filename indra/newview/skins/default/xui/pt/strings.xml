@@ -41,7 +41,8 @@ SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 	</string>
 	<string name="AboutSystem">
 		CPU: [CPU]
-Memória: [MEMORY_MB] MBs
+Memória: [MEMORY_MB] MBs (Memória usada: [USED_RAM] MBs)
+Concurrency: [CONCURRENCY]
 Versão OS: [OS_VERSION]
 Placa de vídeo: [GRAPHICS_CARD_VENDOR]
 Placa gráfica: [GRAPHICS_CARD]

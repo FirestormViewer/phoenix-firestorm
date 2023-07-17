@@ -1,4 +1,2 @@
 llbase>=1.2.11
 autobuild>=3.9.1
-# git+https://github.com/FirestormViewer/autobuild-3.0#egg=autobuild
-# git+https://github.com/Nicky-D/autobuild@main_nd#egg=autobuild
