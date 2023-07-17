@@ -1,79 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<context_menu
-	name="Bump List Context Menu">
-	<menu_item_call
-		label="View Profile"
-		name="show_agent">
-		<on_click
-			function="BumpList.Action"
-			parameter="show_profile"/>
-		<on_enable
-			function="BumpList.Enable"
-			parameter="can_show_profile"/>
-	</menu_item_call>
-	<menu_item_call
-		label="Send IM..."
-		name="send_im">
-		<on_click
-			function="BumpList.Action"
-			parameter="sendim"/>
-		<on_enable
-			function="BumpList.Enable"
-			parameter="can_sendim"/>
-	</menu_item_call>
-	<menu_item_call
-		label="Zoom at Resident"
-		name="zoom_agent">
-		<on_click
-			function="BumpList.Action"
-			parameter="zoom"/>
-		<on_enable
-			function="BumpList.Enable"
-			parameter="can_zoom"/>
-	</menu_item_call>
-	<menu_item_call
-		label="Teleport to Resident"
-		name="teleportto_agent">
-		<on_click
-			function="BumpList.Action"
-			parameter="teleportto"/>
-		<on_enable
-			function="BumpList.Enable"
-			parameter="can_teleportto"/>
-	</menu_item_call>
-	<menu_item_check
-		label="Block"
-		name="Block">
-		<menu_item_check.on_click
-			function="BumpList.Action"
-			parameter="block"/>
-		<menu_item_check.on_check
-			function="BumpList.Enable"
-			parameter="is_blocked"/>
-		<menu_item_check.on_enable
-			function="BumpList.Enable"
-			parameter="can_block"/>
-	</menu_item_check>
-	<menu_item_call
-		label="Report"
-		name="report">
-		<on_click
-			function="BumpList.Action"
-			parameter="report"/>
-		<on_enable
-			function="BumpList.Enable"
-			parameter="can_report"/>
-	</menu_item_call>
-	<menu_item_separator/>
-	<menu_item_call
-		enabled="false"
-		label="Copy"
-		name="Copy">
-		<on_click
-			function="BumpList.Action"
-			parameter="copy"/>
-		<on_enable
-			function="BumpList.Enable"
-			parameter="can_copy"/>
-	</menu_item_call>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Bump List Context Menu">
+  <menu_item_call label="プロフィールを見る" name="show_agent" />
+  <menu_item_call label="ＩＭを送信…" name="send_im" />
+  <menu_item_call label="住民をズーム" name="zoom_agent" />
+  <menu_item_call label="住民にテレポート" name="teleportto_agent" />
+  <menu_item_check label="ブロック" name="Block" />
+  <menu_item_call label="嫌がらせの報告" name="report" />
+  <menu_item_separator />
+  <menu_item_call label="コピー" name="Copy" />
 </context_menu>
