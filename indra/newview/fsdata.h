@@ -45,7 +45,7 @@ public:
 	void processResponder(const LLSD& content, const std::string& url, bool save_to_file, const LLDate& last_modified);
 	void addAgents();
 
-	LLSD resolveClientTag(const LLUUID& id, bool new_system, const LLColor4& new_system_color);
+	LLSD resolveClientTag(const LLUUID& id, bool new_system, const LLColor4& new_system_color) const;
 
 	enum flags_t
 	{
@@ -59,34 +59,31 @@ public:
 		GATEWAY		= (1 << 7), //0x80 128
 	};
 
-	std::set<LLUUID> mSupportGroup;
-	std::set<LLUUID> mTestingGroup;
-
-	bool isDeveloper(const LLUUID& avatar_id);
-	bool isSupport(const LLUUID& avatar_id);
-	bool isQA(const LLUUID& avatar_id);
-	bool isFirestormGroup(const LLUUID& id);
-	bool isSupportGroup(const LLUUID& id);
-	bool isTestingGroup(const LLUUID& id);
+	bool isDeveloper(const LLUUID& avatar_id) const;
+	bool isSupport(const LLUUID& avatar_id) const;
+	bool isQA(const LLUUID& avatar_id) const;
+	bool isFirestormGroup(const LLUUID& id) const;
+	bool isSupportGroup(const LLUUID& id) const;
+	bool isTestingGroup(const LLUUID& id) const;
 
 	// returns -1 if agent is not found.
-	S32 getAgentFlags(const LLUUID& avatar_id);
+	S32 getAgentFlags(const LLUUID& avatar_id) const;
 
-	LLSD allowedLogin();
+	LLSD allowedLogin() const;
 
-	bool enableLegacySearch() {return mLegacySearch;}
+	bool enableLegacySearch() const { return mLegacySearch; }
 
 	std::string processRequestForInfo(const LLUUID& requester, const std::string& message, const std::string& name, const LLUUID& sessionid);
 	static LLSD getSystemInfo();
 	static void callbackReqInfo(const LLSD &notification, const LLSD &response);
 
-	std::string getOpenSimMOTD() { return mOpenSimMOTD; }
+	std::string getOpenSimMOTD() const { return mOpenSimMOTD; }
 	void selectNextMOTD();
 
-	bool getFSDataDone() { return mFSDataDone; }
-	bool getAgentsDone() { return mAgentsDone; }
+	bool getFSDataDone() const { return mFSDataDone; }
+	bool getAgentsDone() const { return mAgentsDone; }
 
-	bool isAgentFlag(const LLUUID& agent_id, FSData::flags_t flag);
+	bool isAgentFlag(const LLUUID& agent_id, FSData::flags_t flag) const;
 
 private:
 	static void sendInfo(const LLUUID& destination, const LLUUID& sessionid, const std::string& my_name, EInstantMessage dialog);
@@ -99,8 +96,11 @@ private:
 	void updateClientTagsLocal();
 	void onNameCache(const LLUUID& av_id, const LLAvatarName& av_name);
 
-	std::map<LLUUID, S32> mSupportAgents;
+	std::map<LLUUID, S32> mTeamAgents;
 	std::map<std::string, LLSD> mBlockedVersions;
+
+	uuid_set_t mSupportGroup;
+	uuid_set_t mTestingGroup;
 
 	LLSD mHeaders;
 	LLSD mLegacyClientList;

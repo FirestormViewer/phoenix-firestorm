@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="floater_translation_settings" title="Ustawienia tłumaczenia czatu">
- <string name="bing_api_key_not_verified">Nie można zweryfikować Bing appID. Spróbuj ponownie.</string>
+ <string name="azure_api_key_not_verified">Nie można zweryfikować ID usługi Azure. Spróbuj ponownie.</string>
  <string name="google_api_key_not_verified">Nie można zweryfikować klucza Google API. Spróbuj ponownie.</string>
- <string name="bing_api_key_verified">Bing appID zweryfikowany.</string>
+ <string name="deepl_api_key_not_verified">Nie można zweryfikować klucza DeepL. Status: [STATUS]. Spróbuj ponownie.</string>
+ <string name="azure_api_key_verified">ID usługi Azure zweryfikowany.</string>
  <string name="google_api_key_verified">Klucz Google API zweryfikowany.</string>
+ <string name="deepl_api_key_verified">Klucz DeepL zweryfikowany.</string>
  <check_box label="Włącz maszynowe tłumaczenie czatu" name="translate_chat_checkbox" />
  <text name="translate_language_label">
   Tłumacz czat na:
@@ -30,12 +32,27 @@
  <text name="tip">
   Usługa tłumacząca:
  </text>
- <line_editor default_text="Wpisz Bing AppID i kliknij na &quot;Weryfikuj&quot;" name="bing_api_key" />
- <button label="Weryfikuj" name="verify_bing_api_key_btn" />
+ <text name="google_links_text">
+  [https://learn.microsoft.com/en-us/azure/cognitive-services/translator/create-translator-resource Wskazówki]
+ </text>
+ <text name="azure_api_key_label">
+  Klucz Azure:
+ </text>
+ <line_editor default_text="Wpisz klucz Azure i kliknij na &quot;Weryfikuj&quot;" name="azure_api_key" />
+ <line_editor default_text="Może być pusty dla usług globalnych" name="azure_api_region" />
+ <button label="Weryfikuj" name="verify_azure_api_key_btn" />
  <line_editor default_text="Wpisz klucz Google API i kliknij na &quot;Weryfikuj&quot;" name="google_api_key" />
  <button label="Weryfikuj" name="verify_google_api_key_btn" />
  <text name="google_links_text">
   [http://code.google.com/apis/language/translate/v2/pricing.html Koszty] | [https://code.google.com/apis/console Statystyki]
+ </text>
+ <text name="deepl_api_key_label">
+  Klucz DeepL:
+ </text>
+ <line_editor default_text="Wpisz klucz DeepL i kliknij na &quot;Weryfikuj&quot;" name="deepl_api_key" />
+ <button label="Weryfikuj" name="verify_deepl_api_key_btn" />
+ <text name="deepl_links_text">
+  [https://www.deepl.com/pro/select-country?cta=header-prices Koszty]
  </text>
  <button label="Gotowe" name="ok_btn" />
  <button label="Anuluj" name="cancel_btn" />

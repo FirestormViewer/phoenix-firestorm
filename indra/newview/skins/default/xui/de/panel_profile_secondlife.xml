@@ -9,6 +9,20 @@
 	<string name="status_unknown">
 		Unbekannt
 	</string>
+	<string name="BadgeBeta"
+		value="Original Beta-Tester" />
+	<string name="BadgeBetaLifetime"
+		value="Beta Lebenszeit-Mitglied" />
+	<string name="BadgeLifetime"
+		value="Lebenszeit-Mitglied" />
+	<string name="BadgeLinden"
+		value="Linden Lab-Mitarbeiter" />
+	<string name="BadgePremiumLifetime"
+		value="Premium Lebenszeit" />
+	<string name="BadgePremiumPlusLifetime"
+		value="Premium Plus Lebenszeit" />
+	<string name="BadgeTeam"
+		value="[APP_NAME]-Mitglied" />
 	<string name="payment_update_link_url">
 		http://www.secondlife.com/account/billing.php?lang=de
 	</string>
