@@ -866,21 +866,18 @@ BOOL LLImageGL::setImage(const U8* data_in, BOOL data_hasmips /* = FALSE */, S32
 						{
 							stop_glerror();
 
-							// <FS:Zi> Fix use-after-free
-							// if (prev_mip_data)
-							// 	delete[] prev_mip_data;
-							// if (cur_mip_data)
-							// 	delete[] cur_mip_data;
-							if (prev_mip_data != cur_mip_data)
+							if (prev_mip_data)
 							{
-								delete[] prev_mip_data;
+								if (prev_mip_data != cur_mip_data)
+									delete[] prev_mip_data;
+								prev_mip_data = nullptr;
 							}
-							delete[] cur_mip_data;
-
-							prev_mip_data = nullptr;
-							cur_mip_data = nullptr;
-							// </FS:Zi>
-
+							if (cur_mip_data)
+							{
+								delete[] cur_mip_data;
+								cur_mip_data = nullptr;
+							}
+							
 							mGLTextureCreated = false;
 							return FALSE;
 						}
