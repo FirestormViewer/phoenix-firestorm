@@ -336,6 +336,8 @@ public:
 	/*virtual*/ BOOL 	detachObject(LLViewerObject *viewer_object);
 	static BOOL			detachAttachmentIntoInventory(const LLUUID& item_id);
 
+    bool hasAttachmentsInTrash();
+
 // [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
 	enum EAttachAction { ACTION_ATTACH, ACTION_DETACH };
 	typedef boost::signals2::signal<void (LLViewerObject*, const LLViewerJointAttachment*, EAttachAction)> attachment_signal_t;
