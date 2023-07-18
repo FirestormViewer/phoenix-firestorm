@@ -1146,7 +1146,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 
         mComboMatMedia->setEnabled(editable);
 
-		//LLRadioGroup* radio_mat_type = getChild<LLRadioGroup>("radio_material_type");
+        //LLRadioGroup* radio_mat_type = getChild<LLRadioGroup>("radio_material_type");
         if (mRadioMatType->getSelectedIndex() < MATTYPE_DIFFUSE)
         {
             mRadioMatType->selectNthItem(MATTYPE_DIFFUSE);
@@ -1170,7 +1170,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
         // *NOTE: The "identical" variable is currently only used to decide if
         // the texgen control should be tentative - this is not used by GLTF
         // materials. -Cosmic;2022-11-09
-		bool identical				= true;	// true because it is anded below
+		bool identical			= true;	// true because it is anded below
         bool identical_diffuse	= false;
         bool identical_norm		= false;
         bool identical_spec		= false;

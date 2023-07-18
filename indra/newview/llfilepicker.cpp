@@ -214,11 +214,11 @@ BOOL LLFilePicker::setupFilter(ELoadFilter filter)
 		mOFN.lpstrFilter = ANIM_FILTER \
 			L"\0";
 		break;
-    case FFLOAD_GLTF:
-        mOFN.lpstrFilter = GLTF_FILTER \
-            L"\0";
-        break;
-    case FFLOAD_COLLADA:
+	case FFLOAD_GLTF:
+		mOFN.lpstrFilter = GLTF_FILTER \
+			L"\0";
+		break;
+	case FFLOAD_COLLADA:
 		mOFN.lpstrFilter = COLLADA_FILTER \
 			L"\0";
 		break;
@@ -849,7 +849,6 @@ void set_nav_save_data(LLFilePicker::ESaveFilter filter, std::string &extension,
             creator = "\?\?\?\?";
             extension = "xaf";
             break;
-
         case LLFilePicker::FFSAVE_GLTF:
             type = "\?\?\?\?";
             creator = "\?\?\?\?";

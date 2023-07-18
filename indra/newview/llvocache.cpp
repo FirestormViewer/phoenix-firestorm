@@ -1213,6 +1213,8 @@ void LLVOCache::initCache(ELLPath location, U32 size, U32 cache_version)
 
 	readCacheHeader();	
 
+	LL_INFOS() << "Viewer Object Cache Versions - expected: " << cache_version << " found: " << mMetaInfo.mVersion <<  LL_ENDL;
+
 	if( mMetaInfo.mVersion != cache_version
 		|| mMetaInfo.mAddressSize != expected_address) 
 	{
@@ -1223,7 +1225,8 @@ void LLVOCache::initCache(ELLPath location, U32 size, U32 cache_version)
 			clearCacheInMemory();
 		}
 		else //delete the current cache if the format does not match.
-		{			
+		{
+			LL_INFOS() << "Viewer Object Cache Versions unmatched.  clearing cache." <<  LL_ENDL;
 			removeCache();
 		}
 	}	

@@ -14030,13 +14030,6 @@ If you want to see this object, remove it and re-attach it to an avatar attachme
         yestext="OK"/>
   </notification>
 
-<notification
- icon="notifytip.tga"
- name="MaterialCreated"
- type="notifytip">
-Material successfully created.  Asset ID: [ASSET_ID]
-</notification>
-
   <notification
     icon="notifytip.tga"
     name="ReflectionProbeApplied"
