@@ -504,7 +504,7 @@ void LLTextBase::drawHighlightsBackground(const highlight_list_t& highlights, co
 }
 // [/SL:KB]
 
-std::vector<LLRect> LLTextBase::getSelctionRects()
+std::vector<LLRect> LLTextBase::getSelectionRects()
 {
     // Nor supposed to be called without selection
     llassert(hasSelection());
@@ -601,7 +601,7 @@ void LLTextBase::drawSelectionBackground()
     // Draw selection even if we don't have keyboard focus for search/replace
     if (hasSelection() && !mLineInfoList.empty())
     {
-        std::vector<LLRect> selection_rects = getSelctionRects();
+        std::vector<LLRect> selection_rects = getSelectionRects();
 		
 		// Draw the selection box (we're using a box instead of reversing the colors on the selected text).
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
@@ -1526,9 +1526,9 @@ void LLTextBase::draw()
 		drawCursor();
 	}
  
-	mDocumentView->setVisible(FALSE);
+	mDocumentView->setVisibleDirect(FALSE);
 	LLUICtrl::draw();
-	mDocumentView->setVisible(TRUE);
+	mDocumentView->setVisibleDirect(TRUE);
 }
 
 
@@ -3822,7 +3822,7 @@ bool LLNormalTextSegment::getDimensionsF32(S32 first_char, S32 num_chars, F32& w
 		height = mFontHeight;
 		const LLWString &text = getWText();
 		// if last character is a newline, then return true, forcing line break
-		width = mStyle->getFont()->getWidthF32(text.c_str(), mStart + first_char, num_chars);
+		width = mStyle->getFont()->getWidthF32(text.c_str(), mStart + first_char, num_chars, true);
 	}
 	return false;
 }

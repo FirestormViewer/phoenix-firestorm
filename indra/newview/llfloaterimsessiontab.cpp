@@ -94,6 +94,8 @@ LLFloaterIMSessionTab::LLFloaterIMSessionTab(const LLSD& session_id)
     mEnableCallbackRegistrar.add("Avatar.EnableItem", boost::bind(&LLFloaterIMSessionTab::enableContextMenuItem, this, _2));
     mCommitCallbackRegistrar.add("Avatar.DoToSelected", boost::bind(&LLFloaterIMSessionTab::doToSelected, this, _2));
     mCommitCallbackRegistrar.add("Group.DoToSelected", boost::bind(&cb_group_do_nothing));
+
+    mMinFloaterHeight = getMinHeight();
 }
 
 LLFloaterIMSessionTab::~LLFloaterIMSessionTab()
@@ -936,10 +938,13 @@ void LLFloaterIMSessionTab::reshapeFloater(bool collapse)
 		S32 height = mContentPanel->getRect().getHeight() + mToolbarPanel->getRect().getHeight()
 			+ mChatLayoutPanel->getRect().getHeight() - mChatLayoutPanelHeight + 2;
 		floater_rect.mTop -= height;
+
+        setResizeLimits(getMinWidth(), floater_rect.getHeight());
 	}
 	else
 	{
 		floater_rect.mTop = floater_rect.mBottom + mFloaterHeight;
+        setResizeLimits(getMinWidth(), mMinFloaterHeight);
 	}
 
 	enableResizeCtrls(true, true, !collapse);
@@ -964,6 +969,7 @@ void LLFloaterIMSessionTab::restoreFloater()
 		setShape(floater_rect, true);
 		mBodyStack->updateLayout();
 		mExpandCollapseLineBtn->setImageOverlay(getString("expandline_icon"));
+        setResizeLimits(getMinWidth(), mMinFloaterHeight);
 		setMessagePaneExpanded(true);
 		saveCollapsedState();
 		mInputEditor->enableSingleLineMode(false);

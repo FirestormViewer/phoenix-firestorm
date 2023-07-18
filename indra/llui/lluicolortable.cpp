@@ -226,7 +226,6 @@ LLUIColor LLUIColorTable::getColor( char const *name, const LLColor4& default_co
 void LLUIColorTable::setColor(const std::string& name, const LLColor4& color)
 {
 	setColor(name, color, mUserSetColors);
-	setColor(name, color, mLoadedColors);
 }
 
 bool LLUIColorTable::loadFromSettings()
@@ -255,6 +254,11 @@ void LLUIColorTable::saveUserSettings() const
 		it != mUserSetColors.end();
 		++it)
 	{
+		// Compare user color value with the default value, skip if equal
+		string_color_map_t::const_iterator itd = mLoadedColors.find(it->first);
+		if(itd != mLoadedColors.end() && itd->second == it->second)
+			continue;
+
 		ColorEntryParams color_entry;
 
 		// color_entry.name = it->first;

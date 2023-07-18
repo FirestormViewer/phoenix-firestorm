@@ -1915,7 +1915,10 @@ void LLTextEditor::unindentLineBeforeCloseBrace()
 		LLWString text = getWText();
 		if( ' ' == text[ mCursorPos - 1 ] )
 		{
-			S32 line = getLineNumFromDocIndex(mCursorPos, false);
+			// <FS:Zi> FIRE-19959: Fix unindent after } when a previous line had a word wrap
+			//S32 line = getLineNumFromDocIndex(mCursorPos, false);
+			S32 line = getLineNumFromDocIndex(mCursorPos, true);
+			// </FS:Zi>
 			S32 line_start = getLineStart(line);
 
 			// Jump over spaces in the current line

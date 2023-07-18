@@ -2598,6 +2598,9 @@ Möchten Sie den Nicht-stören-Modus deaktivieren, bevor Sie diese Transaktion a
 		Ihr Papierkorb läuft über. Dies kann zu Anmeldeproblemen führen.
 		<usetemplate name="okcancelbuttons" notext="Papierkorb später leeren" yestext="Papierkorb ansehen"/>
 	</notification>
+	<notification name="InventoryLimitReachedAIS">
+		Es gibt Probleme mit Ihrem Inventar. Bitte kontaktieren Sie den Support Ihres Grids.
+	</notification>
 	<notification name="ConfirmClearBrowserCache">
 		Sind Sie sicher, dass Sie Ihren Reise-, Internet- und Suchverlauf löschen möchten?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>

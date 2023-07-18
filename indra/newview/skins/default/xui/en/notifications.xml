@@ -6677,6 +6677,14 @@ Your trash is overflowing. This may cause problems logging in.
   </notification>
 
   <notification
+   icon="notifytip.tga"
+   name="InventoryLimitReachedAIS"
+   type="notifytip">
+Your inventory is experiencing issues. Please contact support of your grid.
+  <tag>fail</tag>
+  </notification>
+
+  <notification
    icon="alertmodal.tga"
    name="ConfirmClearBrowserCache"
    type="alertmodal">
