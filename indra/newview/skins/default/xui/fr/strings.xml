@@ -49,7 +49,8 @@ Vous êtes à [REGION]
 	</string>
 	<string name="AboutSystem">
 		CPU : [CPU]
-Mémoire : [MEMORY_MB] Mo
+Mémoire : [MEMORY_MB] Mo (Utilisée : [USED_RAM] Mo)
+Concurrence: [CONCURRENCY]
 Version OS : [OS_VERSION]
 Distributeur de cartes graphiques : [GRAPHICS_CARD_VENDOR]
 Carte graphique : [GRAPHICS_CARD]

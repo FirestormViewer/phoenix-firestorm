@@ -41,7 +41,7 @@ Położenie: [REGION]
 	</string>
 	<string name="AboutSystem">
 Procesor (CPU): [CPU]
-Pamięć (Memory): [MEMORY_MB] MB
+Pamięć (Memory): [MEMORY_MB] MB (w użyciu: [USED_RAM] MB)
 Wątki dekodowania obrazów (Concurrency): [CONCURRENCY]
 System operacyjny (OS Version): [OS_VERSION]
 Dostawca karty graficznej (Graphics Card Vendor): [GRAPHICS_CARD_VENDOR]

@@ -282,6 +282,8 @@ void LLDrawPoolAlpha::renderDebugAlpha()
 	{
         gHighlightProgram.bind();
         gGL.diffuseColor4f(1, 0, 0, 1);
+
+
         LLViewerFetchedTexture::sSmokeImagep->addTextureStats(1024.f * 1024.f);
         gGL.getTexUnit(0)->bindFast(LLViewerFetchedTexture::sSmokeImagep);
 
@@ -354,7 +356,7 @@ void LLDrawPoolAlpha::renderAlphaHighlight(U32 mask)
                     if(params.mFace)
                     {
                         LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
-                        if(vobj->isAttachment())
+                        if(vobj && vobj->isAttachment())
                         {
                             trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
                         }
@@ -662,7 +664,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask, bool depth_only, bool rigged)
                 {
                     LLViewerObject* vobj = (LLViewerObject *)params.mFace->getViewerObject();
 
-                    if(vobj->isAttachment())
+                    if(vobj && vobj->isAttachment())
                     {
                         trackAttachments( vobj, params.mFace->isState(LLFace::RIGGED), &ratPtr );
                     }

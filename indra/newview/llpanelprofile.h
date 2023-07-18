@@ -209,6 +209,7 @@ private:
 
     // <FS:Ansariel> Fix LL UI/UX design accident
     void updateButtons();
+    void setBadge(std::string_view icon_name, std::string_view tooltip);
 
 private:
 	typedef std::map<std::string, LLUUID> group_map_t;

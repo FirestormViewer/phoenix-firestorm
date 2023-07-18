@@ -52,7 +52,7 @@ Siz [REGION] regionundasınız
 	</string>
 	<string name="AboutSystem">
 Prosesor: [CPU]
-RAM: [MEMORY_MB] MB
+RAM: [MEMORY_MB] MB (İstifadə olunmuş yaddaş: [USED_RAM] MB)
 Şəkilləri dekodlaşdırma threadləri: [CONCURRENCY]
 OS versiyası: [OS_VERSION]
 Grafik kartının istehsalçısı: [GRAPHICS_CARD_VENDOR]
