@@ -35,8 +35,8 @@
 
 // prototypes
 class LLMessageSystem;
-extern void mask_to_string(U32 mask, char* str);
-extern std::string mask_to_string(U32 mask);
+extern void mask_to_string(U32 mask, char* str, bool isOpenSim=false);
+extern std::string mask_to_string(U32 mask, bool isOpenSim=false);
 template<class T> class LLMetaClassT;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
