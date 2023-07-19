@@ -261,7 +261,7 @@ U64 LLMemory::getCurrentRSS()
 #include <sstream>
 #include <string>
 #include <filesystem>
-#include <unistd>
+#include <unistd.h>
 
 U64 LLMemory::getCurrentRSS() {
     namespace fs = std::filesystem;
