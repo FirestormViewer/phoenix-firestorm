@@ -13,7 +13,7 @@
 			Farbton
 		</text>
 		<text name="base_color_transparency_lbl">
-			Transparenz
+			Alpha
 		</text>
 		<text name="alpha_mode_lbl">
 			Alpha-Modus
