@@ -6,5 +6,5 @@
   <menu_item_check label="パーティクルをブロックk Particles" name="BlockObjectParticles" />
   <menu_item_check label="オブジェクトの音をブロック" name="BlockObjectSounds" />
   <menu_item_separator />
-  <menu_item_call label="Profile..." name="profile" />
+  <menu_item_call label="プロフィール…" name="profile" />
 </context_menu>

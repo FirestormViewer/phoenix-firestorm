@@ -8,7 +8,7 @@
   <menu_item_call label="グループに招待…" name="Invite..." />
   <menu_item_separator />
   <context_menu label="容姿" name="Appearance">
-    <menu_item_call label="テスクチャをリフレッシュ" name="Refresh Textures" />
+    <menu_item_call label="テクスチャをリフレッシュ" name="Refresh Textures" />
     <menu_item_call label="スケルトンをリセット" name="Reset Skeleton" />
     <menu_item_call label="スケルトンとアニメーションをリセット" name="Reset Skeleton And Animations" />
     <menu_item_separator />

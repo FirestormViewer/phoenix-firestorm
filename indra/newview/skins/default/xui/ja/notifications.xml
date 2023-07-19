@@ -58,7 +58,7 @@
   </template>
 
   <notification functor="GenericAcknowledge" label="不明な通知メッセージ" name="MissingAlert">現在使用中の[APP_NAME]のバージョンでは、受け取った通知メッセージを表示することができません。
-最新のビューアーがインストールされている事をご確認ください。
+最新のビューアがインストールされている事をご確認ください。
 
 エラー詳細：「 [_NAME] 」という通知メッセージは、notifications.xmlに定義されていませんでした。
     <tag>fail</tag>
@@ -87,7 +87,7 @@
     <usetemplate name="okbutton" yestext="ＯＫ" />
   </notification>
 
-  <notification name="BadInstallation">[APP_NAME]のアップデート中にエラーが発生しました。[https://alchemyviewer.org/downloads 最新バージョンのビューアーをダウンロード]してください。
+  <notification name="BadInstallation">[APP_NAME]のアップデート時にエラーが発生しました。[https://www.firestormviewer.org/choose-your-platform/ 最新バージョンのビューアをダウンロード]してください。
     <usetemplate name="okbutton" yestext="ＯＫ" />
   </notification>
 
@@ -99,7 +99,7 @@
     <usetemplate name="okbutton" yestext="ＯＫ" />
   </notification>
 
-  <notification name="LoginFailedToParse">ビューアーがサーバーから不正な形式の応答を受け取りました。インターネット接続が正常に機能していることを確認してから、後でもう一度お試しください。
+  <notification name="LoginFailedToParse">ビューアがサーバーから不正な形式の応答を受け取りました。インターネット接続が正常に機能していることを確認してから、後でもう一度お試しください。
 
 これが誤りだと思われる場合は、サポートにお問い合わせください。
     <tag>fail</tag>
@@ -245,7 +245,7 @@
   <notification name="FavoritesOnLogin">注意：このオプションを有効にすると、このパソコンを使うユーザーは誰でも、あなたのお気に入りの場所を見ることができるようになります。
     <usetemplate name="okbutton" yestext="ＯＫ" />
   </notification>
-  <notification name="AllowMultipleViewers">Second Lifeビューアーの多重起動はサポートされていません。
+  <notification name="AllowMultipleViewers">Second Lifeビューアの多重起動はサポートされていません。
 テクスチャキャッシュの競合による破損や、およびビジュアルとパフォーマンスの低下につながる恐れがあります。
     <usetemplate name="okbutton" yestext="ＯＫ" />
   </notification>
@@ -376,7 +376,7 @@ L$が不足しているので、このグループに参加することができ
     <tag>success</tag>
     <usetemplate name="okbutton" yestext="ＯＫ" />
   </notification>
-  <notification name="JoinGroupError">グループ参加リクエスト中にエラーが発生しました。
+  <notification name="JoinGroupError">グループ参加のリクエスト時にエラーが発生しました。
     <tag>group_id</tag>
     <tag>success</tag>
     <usetemplate name="okbutton" yestext="ＯＫ" />
@@ -535,8 +535,19 @@ L$が不足しているので、このグループに参加することができ
   <notification name="ErrorUploadingReportScreenshot">以下の理由で、レポートのスクリーンショットのアップロード時に問題が起こりました：[REASON]
     <tag>fail</tag>
   </notification>
-  <notification name="MustAgreeToLogIn">[SECOND_LIFE]へのログインを続けるには、Second Lifeの利用規約、プライバシーポリシー、およびサービス規約に同意する必要があります。
+  <notification name="MustAgreeToLogIn">[CURRENT_GRID]へのログインを続けるには、[CURRENT_GRID]の利用規約、プライバシーポリシー、およびサービス規約に同意する必要があります。
     <tag>fail</tag>
+  </notification>
+  <notification name="CouldNotBuyCurrency">[TITLE]
+[MESSAGE]
+    <tag>fail</tag>
+    <usetemplate name="okbutton" yestext="ＯＫ"/>
+  </notification>
+  <notification name="CouldNotBuyCurrencyOS">[TITLE]
+[MESSAGE]
+    <tag>confirm</tag>
+    <url option="0" name="url" target="_external">[LINK]</url>
+    <usetemplate name="okcancelbuttons" notext="いいえ" yestext="ＯＫ"/>
   </notification>
   <notification name="CouldNotPutOnOutfit">アウトフィットを装着できません。
 アウトフィットフォルダに服装、身体部位、装着物がありません。
@@ -558,7 +569,7 @@ L$が不足しているので、このグループに参加することができ
   <notification name="MustHaveAccountToLogIn">おっと、記入漏れがあります。
 アバターのユーザー名を入力してください。
 
-[SECOND_LIFE]に入るにはアカウントが必要です。今すぐアカウントを作成しますか？
+[CURRENT_GRID]に入るにはアカウントが必要です。今すぐアカウントを作成しますか？
     <tag>confirm</tag>
     <url name="url">[create_account_url]</url>
     <usetemplate name="okcancelbuttons" notext="もう一度試す" yestext="新しいアカウントを作成" />
@@ -616,7 +627,7 @@ L$が不足しているので、このグループに参加することができ
     <tag>confirm</tag>
     <usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ" />
   </notification>
-  <notification name="PromptGoToEventsPage">[SECOND_LIFE]イベントWebページに移動しますか？
+  <notification name="PromptGoToEventsPage">[CURRENT_GRID]イベントWebページに移動しますか？
     <url name="url">https://secondlife.com/my/community/events/?lang=ja-JP</url>
     <tag>confirm</tag>
     <usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ" />
@@ -640,11 +651,15 @@ L$が不足しているので、このグループに参加することができ
   <notification name="CacheWillClear">キャッシュは、[APP_NAME]再起動後にクリアされます。</notification>
   <notification name="CacheWillBeMoved">キャッシュは、[APP_NAME]再起動後が移動されます。
 注意：キャッシュがクリアされます。</notification>
-  <notification name="ChangeConnectionPort">ポートの設定は、[APP_NAME]再起動後に反映されます。</notification>
+  <notification name="ChangeConnectionPort">ポートの設定は、[APP_NAME]再起動後に反映されます。
+修正した色をスキンのデフォルトに戻してもよろしいですか？
+    <tag>confirm</tag>
+    <usetemplate canceltext="キャンセル" name="yesnocancelbuttons" notext="いいえ" yestext="はい" />
+  </notification>
   <notification name="ChangeDeferredDebugSetting">デバッグ設定の変更は、[APP_NAME]再起動後に反映されます。</notification>
   <notification name="ChangeSkin">新しいスキンは、[APP_NAME]再起動後に表示されます。</notification>
   <notification name="ChangeLanguage">言語の変更は、[APP_NAME]再起動後に反映されます。</notification>
-  <notification name="GoToAuctionPage">[SECOND_LIFE]のWebページに移動し、入札あるいはオークションの詳細を確認しますか？
+  <notification name="GoToAuctionPage">[CURRENT_GRID]のWebページに移動し、入札あるいはオークションの詳細を確認しますか？
     <tag>confirm</tag>
     <url name="url">http://secondlife.com/auctions/auction-detail.php?id=[AUCTION_ID]&amp;lang=ja-JP</url>
     <usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ" />
@@ -793,17 +808,24 @@ L$が不足しているので、このグループに参加することができ
   <notification name="CannotGiveCategory">選択したフォルダを渡す権限がありません。
     <tag>fail</tag>
   </notification>
-  <notification name="FreezeAvatar">このアバターをフリーズしますか？
+  <notification name="FreezeAvatar">[AVATAR_NAMES]をフリーズしますか？
 アバターは一時的に動けなくなり、チャットを含めインワールドで何もできなくなります。
     <tag>confirm</tag>
     <usetemplate canceltext="キャンセル" name="yesnocancelbuttons" notext="解除" yestext="フリーズ" />
+  </notification>
+  <notification name="FreezeAvatarMultiple">以下の住民らをフリーズしますか？
+彼らは一時的に動けなくなり、チャットを含めインワールドで何もできなくなります。
+
+[AVATAR_NAMES]
+    <tag>confirm</tag>
+    <usetemplate canceltext="キャンセル" name="yesnocancelbuttons" notext="解除" yestext="フリーズ"/>
   </notification>
   <notification name="FreezeAvatarFullname">[AVATAR_NAME]をフリーズしますか？
 フリーズされた人は一時的に動けなくなり、チャットなど、この世界に対する関わりを持つことができなくなります。
     <tag>confirm</tag>
     <usetemplate canceltext="キャンセル" name="yesnocancelbuttons" notext="解除" yestext="フリーズ" />
   </notification>
-  <notification name="EjectAvatarFullname">あなたの土地から[AVATAR_NAME]を追放しますか？
+  <notification name="EjectAvatarFullname">あなたの土地から[AVATAR_NAMES]を追放しますか？
     <tag>confirm</tag>
     <usetemplate canceltext="キャンセル" name="yesnocancelbuttons" notext="追放しバンする" yestext="追放する" />
   </notification>
@@ -811,9 +833,55 @@ L$が不足しているので、このグループに参加することができ
     <tag>confirm</tag>
     <usetemplate name="okcancelbuttons" notext="キャンセル" yestext="追放" />
   </notification>
-  <notification name="EjectAvatarFullnameNoBan">[AVATAR_NAME]をあなたの土地から追放しますか？
+  <notification name="EjectAvatarFullnameNoBan">[AVATAR_NAMES]をあなたの土地から追放しますか？
+    <tag>confirm</tag>
+    <usetemplate name="okcancelbuttons" notext="Cancel" yestext="Eject"/>
+  </notification>
+  <notification name="EjectAvatarMultiple">以下の住民らをあなたの土地から追放しますか？
+
+[AVATAR_NAMES]
+    <tag>confirm</tag>
+    <usetemplate canceltext="キャンセル" name="yesnocancelbuttons" notext="追放しバンする" yestext="追放する" />
+  </notification>
+
+  <notification name="EjectAvatarMultipleNoBan">以下の住民らをあなたの土地から追放しますか？
+
+[AVATAR_NAMES]
     <tag>confirm</tag>
     <usetemplate name="okcancelbuttons" notext="キャンセル" yestext="追放" />
+  </notification>
+
+  <notification label="ホームにテレポートさせる確認" name="EstateTeleportHomeSingle">[AVATAR_NAMES]というアバターをホームにてレポートさせますか？
+    <tag>confirm</tag>
+    <usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ" />
+  </notification>
+
+  <notification label="ホームにテレポートさせる確認" name="EstateTeleportHomeMultiple">以下の住民らをホームにテレポートさせますか？
+
+[AVATAR_NAMES]
+    <usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ" />
+  </notification>
+
+  <notification label="Confirm Kick" name="EstateKickSingle">この不動産から[AVATAR_NAMES]をキックしますか？
+    <tag>confirm</tag>
+    <usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ" />
+  </notification>
+
+  <notification label="Confirm Kick" name="EstateKickMultiple">以下の住民らをこの不動産からキックしますか？
+
+[AVATAR_NAMES]
+    <tag>confirm</tag>
+    <usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ" />
+  </notification>
+
+  <notification label="バンの確認" name="EstateBanSingle">[AVATAR_NAMES]のこの不動産のみ、または[ALL_ESTATES]へのアクセスを拒否しますか？
+    <usetemplate name="yesnocancelbuttons" canceltext="キャンセル" notext="すべての不動産" yestext="この不動産" />
+  </notification>
+
+  <notification label="Confirm Ban" name="EstateBanMultiple">以下の住民らをこの不動産のみ、または[ALL_ESTATES]へのアクセスを拒否しますか？
+
+[AVATAR_NAMES]
+    <usetemplate name="yesnocancelbuttons" canceltext="キャンセル" notext="すべての不動産" yestext="この不動産" />
   </notification>
   <notification name="EjectAvatarFromGroup">&lt;nolink&gt;[GROUP_NAME]&lt;/nolink&gt;から[AVATAR_NAME]を追放しました。
     <tag>group</tag>
@@ -975,6 +1043,11 @@ L$が不足しているので、このグループに参加することができ
 修正権限のある、スクリプトが入ったオブジェクトを選択してください。
     <tag>fail</tag>
   </notification>
+  <notification name="CannotDeleteSelectObjectsNoScripts">「削除」ができません。
+
+スクリプトが入ったオブジェクトを選択してください。
+    <tag>fail</tag>
+  </notification>
   <notification name="CannotOpenScriptObjectNoMod">修正権限のないオブジェクトのスクリプトは開くことはできません。
     <tag>fail</tag>
   </notification>
@@ -1005,7 +1078,7 @@ L$が不足しているので、このグループに参加することができ
   <notification name="invalid_tport">テレポートの試行は１分間に６回までと制限されています。１分待ってからもう一度テレポートしてみてください。問題が解決しない場合は、ログインし直してください。
     <tag>fail</tag>
   </notification>
-  <notification name="invalid_region_handoff">リージョン間の移動中に問題が発生しました。ログインし直す必要があるかもしれません。
+  <notification name="invalid_region_handoff">リージョン間の移動時に問題が発生しました。ログインし直す必要があるかもしれません。
 このメッセージが何度も出る場合は、[SUPPORT_SITE]をご確認ください。
     <tag>fail</tag>
   </notification>
@@ -1264,11 +1337,13 @@ L$が不足しているので、このグループに参加することができ
     <tag>fail</tag>
   </notification>
 
-  <notification name="YouHaveBeenLoggedOut">しまった、[SECOND_LIFE]からログアウトされてしまいました。[MESSAGE]
+  <notification name="YouHaveBeenLoggedOut">しまった、[CURRENT_GRID]からログアウトされてしまいました。
+
+[MESSAGE]
     <usetemplate name="okcancelbuttons" notext="終了" yestext="ＩＭでチャット" />
   </notification>
 
-  <notification name="InventoryUnusable">インベントリの読み込み中に問題が発生しました。まず、ログアウトして再度ログインし直してみてください。
+  <notification name="InventoryUnusable">インベントリの読み込み時に問題が発生しました。お手数ですが、ログアウトしてから再度ログインし直してみてください。
 このメッセージが再度表示される場合は、サポートに連絡して問題を解決してください。
     <tag>fail</tag>
   </notification>
@@ -1559,8 +1634,8 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
     <tag>fail</tag>
   </notification>
 
-  <notification name="ClothingLoading">現在服装をダウンロード中です。
-このまま[SECOND_LIFE]を通常通りご使用いただけます。他人からはあなたは正しく表示されます。
+  <notification name="ClothingLoading">現在服装をダウンロードしています。
+このまま[CURRENT_GRID]を通常通りご使用いただけます。他者からはあなたは正常に表示されています。
     <form name="form">
       <ignore name="ignore" text="服装がダウンロードされるまで時間がかかっているとき" />
     </form>
@@ -1589,8 +1664,9 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
     <usetemplate ignoretext="ＨＵＤが複雑すぎる場合の警告" name="notifyignore" />
   </notification>
 
-  <notification name="FirstRun">[APP_NAME]のインストールが完了しました。
-[SECOND_LIFE]を使ったことがない場合は、ログインする前にアカウントの作成を行ってください。
+  <notification name="FirstRun">
+[APP_NAME]のインストールが完了しました。
+[CURRENT_GRID]を使ったことがない場合は、ログインする前にアカウントの作成を行ってください。
     <tag>confirm</tag>
     <usetemplate name="okcancelbuttons" notext="続行" yestext="アカウントを作成…" />
   </notification>
@@ -1608,7 +1684,7 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 
 インターネット接続を確認してから数分後に再接続するか、ヘルプをクリックして [SUPPORT_SITE]をご覧になるか、テレポートをクリックしてホームに移動してみてください。
     <tag>fail</tag>
-    <url name="url">https://support.secondlife.com/</url>
+    <url name="url">https://jira.firestormviewer.org/</url>
     <form name="form">
       <button name="ＯＫ" text="ＯＫ" />
       <button name="Help" text="ヘルプ" />
@@ -1622,7 +1698,7 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
     <tag>confirm</tag>
     <usetemplate name="okcancelbuttons" notext="女性" yestext="男性" />
   </notification>
-  <notification name="CantTeleportToGrid">現在のグリッド（[CURRENT_GRID]）とはグリッド（[GRID]）が異なるため、[SLURL] にテレポートできませんでした。ビューアーを閉じてからもう一度お試しください。
+  <notification name="CantTeleportToGrid">現在のグリッド（[CURRENT_GRID]）とはグリッド（[GRID]）が異なるため、[SLURL] にテレポートできませんでした。ビューアを閉じてからもう一度お試しください。
     <tag>fail</tag>
     <usetemplate name="okbutton" yestext="ＯＫ" />
   </notification>
@@ -1771,7 +1847,7 @@ https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
   <notification name="FinishedRawDownload">未加工の地形ファイルをダウンロードしました：[DOWNLOAD_PATH]</notification>
 
   <notification name="RequiredUpdate">ログインするには、バージョン[VERSION]が必要です。以下からダウンロードしてください。
-https://secondlife.com/support/downloads/
+https://www.firestormviewer.org/choose-your-platform/
     <tag>confirm</tag>
     <usetemplate name="okbutton" yestext="ＯＫ" />
   </notification>
@@ -1822,17 +1898,17 @@ OKをクリックして、ダウンロードとインストールを開始しま
     <usetemplate ignoretext="ブラウザを起動して、アカウントを管理するとき" name="okcancelignore" notext="キャンセル" yestext="ＯＫ" />
   </notification>
 
-  <notification name="WebLaunchSecurityIssues">[SECOND_LIFE] Wikiで、セキュリティ問題を報告する方法をご覧ください。
+  <notification name="WebLaunchSecurityIssues">[CURRENT_GRID] Wikiで、セキュリティ問題を報告する方法をご覧ください。
     <tag>confirm</tag>
     <usetemplate ignoretext="ブラウザを起動して、セキュリティ問題の報告方法を確認するとき" name="okcancelignore" notext="キャンセル" yestext="ＯＫ" />
   </notification>
 
-  <notification name="WebLaunchQAWiki">[SECOND_LIFE] QA（品質保証）Wikiをご覧ください。
+  <notification name="WebLaunchQAWiki">[CURRENT_GRID] QA（品質保証）Wikiをご覧ください。
     <tag>confirm</tag>
     <usetemplate ignoretext="ブラウザを起動して、QA Wikiを閲覧するとき" name="okcancelignore" notext="キャンセル" yestext="ＯＫ" />
   </notification>
 
-  <notification name="WebLaunchPublicIssue">[SECOND_LIFE] Public Issue Trackerにアクセスして、バグやその他の問題を報告できます。
+  <notification name="WebLaunchPublicIssue">[CURRENT_GRID] Public Issue Trackerにアクセスして、バグやその他の問題を報告できます。
     <tag>confirm</tag>
     <usetemplate ignoretext="ブラウザを起動して、Public Issue Trackerにアクセスするとき" name="okcancelignore" notext="キャンセル" yestext="ページへ行く" />
   </notification>
@@ -1941,7 +2017,7 @@ OKをクリックして、ダウンロードとインストールを開始しま
     <usetemplate name="okbutton" yestext="閉じる" />
   </notification>
 
-  <notification name="KickUser">どのようなメッセージを添えて、この住人を追い出しますか？
+  <notification name="KickUser">どのようなメッセージを添えて、この[AVATAR_NAME]をログアウトさせますか？
     <tag>win</tag>
     <tag>confirm</tag>
     <form name="form">
@@ -1961,7 +2037,7 @@ OKをクリックして、ダウンロードとインストールを開始しま
     </form>
   </notification>
 
-  <notification name="FreezeUser">どのようなメッセージを添えて、この住人をフリーズしますか？
+  <notification name="FreezeUser">どのようなメッセージを添えて、この[AVATAR_NAME]をフリーズしますか？
     <tag>win</tag>
     <tag>confirm</tag>
     <form name="form">
@@ -1971,7 +2047,7 @@ OKをクリックして、ダウンロードとインストールを開始しま
     </form>
   </notification>
 
-  <notification name="UnFreezeUser">どのようなメッセージを添えて、この住人のフリーズを解除しますか？
+  <notification name="UnFreezeUser">どのようなメッセージを添えて、この[AVATAR_NAME]のフリーズを解除しますか？
     <tag>win</tag>
     <tag>confirm</tag>
     <form name="form">
@@ -2030,6 +2106,14 @@ https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83
       <input name="message">[REGION]に来てみませんか？</input>
       <button name="ＯＫ" text="ＯＫ" />
       <button name="Cancel" text="キャンセル" />
+    </form>
+  </notification>
+  <notification name="TeleportRequestPrompt">次のメッセージを使用して、[NAME]にあなたのいる場所へのテレポートのリクエストをしますか？
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="message" type="text">こちらに入りませんか？</input>
+      <button default="true" index="0" name="OK" text="ＯＫ"/>
+      <button index="1" name="Cancel" text="キャンセル"/>
     </form>
   </notification>
 
@@ -2427,7 +2511,7 @@ https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83
     <usetemplate canceltext="キャンセル" name="yesnocancelbuttons" notext="いいえ" yestext="はい" />
   </notification>
 
-  <notification label="再起動を確認" name="ConfirmRestart">このリージョンを２分後に再起動しようとしています。このまま続けてもよろしいですか？
+  <notification label="再起動を確認" name="ConfirmRestart">このリージョンは[SECONDS]秒後に再起動しようとしています。このまま続けてもよろしいですか？
     <tag>confirm</tag>
     <usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ" />
   </notification>
@@ -2564,7 +2648,7 @@ https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83
 
   <notification name="ClickActionNotPayable">警告：クリックで「オブジェクトに支払う」設定をしました。スクリプトにmoney()イベントが追加されると動作します。
     <form name="form">
-      <ignore name="ignore" text="オブジェクトを作成中に、money() スクリプトを入れずに「オブジェクトに支払う」アクションを設定したとき" />
+      <ignore name="ignore" text="オブジェクト作成時に、money() スクリプトを入れずに「オブジェクトに支払う」アクションを設定したとき" />
     </form>
   </notification>
 
@@ -2747,7 +2831,7 @@ Linden Lab</notification>
     <usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ" />
   </notification>
 
-  <notification name="ConfirmClearCache">ビューアーのキャッシュをクリアしますか？
+  <notification name="ConfirmClearCache">ビューアのキャッシュをクリアしますか？
     <tag>confirm</tag>
     <usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ" />
   </notification>
@@ -2853,7 +2937,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
     <tag>fail</tag>
   </notification>
 
-  <notification name="Cannot enter parcel: no payment info on file">支払情報が登録されていないため、このエリアを訪れることができません。[SECOND_LIFE]サイトで登録を行いますか？
+  <notification name="Cannot enter parcel: no payment info on file">支払情報が登録されていないため、このエリアを訪れることができません。[CURRENT_GRID]サイトで登録を行いますか？
   
 [_URL]
     <tag>confirm</tag>
@@ -2866,7 +2950,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
   </notification>
 
   <notification name="SystemMessageTip">[MESSAGE]</notification>
-
+  <notification name="ChatSystemMessageTip">[MESSAGE]</notification>
   <notification name="IMSystemMessageTip">[MESSAGE]</notification>
 
   <notification name="Cancelled">取り消されました。</notification>
@@ -2887,7 +2971,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 
   <notification name="AddSelfRenderExceptions">あなた自身をレンダリングの例外リストに加えることはできません。</notification>
 
-  <notification name="UploadingAuctionSnapshot">インワールドとWebサイトのスナップショットをアップロード中です…
+  <notification name="UploadingAuctionSnapshot">インワールドとWebサイトのスナップショットをアップロードしています…
 （所要時間：約５分）</notification>
   <notification name="UploadPayment">アップロードにL$ [AMOUNT]支払いました。
     <tag>funds</tag>
@@ -2956,12 +3040,12 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
     <tag>fail</tag>
   </notification>
 
-  <notification name="UnableToBuyWhileDownloading">オブジェクトデータのダウンロード中は購入できません。
+  <notification name="UnableToBuyWhileDownloading">オブジェクトのデータをダウンロードしている最中は購入できません。
 もう一度お試しください。
     <tag>fail</tag>
   </notification>
 
-  <notification name="UnableToLinkWhileDownloading">オブジェクトデータのウンロード中はリンクできません。
+  <notification name="UnableToLinkWhileDownloading">オブジェクトのデータをダウンロードしている最中はリンクできません。
 もう一度お試しください。
     <tag>fail</tag>
   </notification>
@@ -3249,7 +3333,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
     </form>
   </notification>
 
-  <notification name="UserGiveItem">[NAME_SLURL] が、あなたに[OBJECTTYPE]を渡しました：
+  <notification name="UserGiveItem" label="[NAME_LABEL]からのインベントリのオファー">[NAME_SLURL] が、あなたに[OBJECTTYPE]を渡しました：
 [ITEM_SLURL]
     <form name="form">
       <button name="Show" text="表示" />
@@ -3271,7 +3355,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
     </form>
   </notification>
 
-  <notification name="TeleportOffered">[NAME_SLURL] は、テレポートであなたを呼んでいます。
+  <notification name="TeleportOffered" label="[NAME_LABEL]からのテレポートのオファー">[NAME_SLURL] は、テレポートであなたを呼んでいます。
 [MESSAGE]
 
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;－[MATURITY_STR]
@@ -3325,7 +3409,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
     </form>
   </notification>
 
-  <notification name="OfferFriendship">[NAME_SLURL] は、あなたにフレンド登録を申し込んでいます。
+  <notification name="OfferFriendship" label="[NAME_LABEL]からのフレンド登録のオファー">[NAME_SLURL] は、あなたにフレンド登録を申し込んでいます。
 
 [MESSAGE]
 
@@ -3401,7 +3485,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
     <tag>fail</tag>
   </notification>
 
-  <notification name="InvalidWearable">着用しようとしているアイテムは、あなたのビューアーでは読み込むことができません。[APP_NAME]のバージョンをアップグレードしてからこのアイテムを着用してください。
+  <notification name="InvalidWearable">着用しようとしているアイテムは、あなたのビューアでは読み込むことができません。[APP_NAME]のバージョンをアップグレードしてからこのアイテムを着用してください。
     <tag>fail</tag>
   </notification>
 
@@ -3488,7 +3572,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
     <footer>[FOOTERTEXT]</footer>
   </notification>
 
-  <notification name="ScriptDialog">[NAME]の「&lt;nolink&gt;[TITLE]&lt;/nolink&gt;」
+  <notification name="ScriptDialog">[CHANNEL]での[NAME]の「&lt;nolink&gt;[TITLE]&lt;/nolink&gt;」
 [MESSAGE]
     <form name="form">
       <button name="Client_Side_Mute" text="ブロック" />
@@ -3699,7 +3783,7 @@ Your L$ balance is shown in the upper-right.
     </unique>
   </notification>
 
-  <notification name="VoiceCallGenericError">[VOICE_CHANNEL_NAME]のボイスチャットに接続中に、エラーが発生しました。後でもう一度お試しください。
+  <notification name="VoiceCallGenericError">[VOICE_CHANNEL_NAME]のボイスチャットに接続時に、エラーが発生しました。後でもう一度お試しください。
     <tag>fail</tag>
     <tag>voice</tag>
     <unique>
@@ -3744,7 +3828,7 @@ Your L$ balance is shown in the upper-right.
 
   <notification name="DefaultPresetNotSaved">デフォルトのプリセットを上書きすることはできません。</notification>
 
-  <notification name="PresetAlreadyExists">「[NAME]」は使用中です。
+  <notification name="PresetAlreadyExists">「[NAME]」というプリセット名は、すでに使用されています。
 このプリセットを置き換えるか、別の名前を選択することができます。
     <tag>fail</tag>
     <usetemplate name="okbutton" yestext="ＯＫ"/>
@@ -3810,7 +3894,7 @@ Your L$ balance is shown in the upper-right.
 
 詳しくは、SecondLife.logをご覧ください</notification>
 
-  <notification name="MeshUploadPermError">メッシュのアップロード許可をリクエスト中にエラーが発生しました。</notification>
+  <notification name="MeshUploadPermError">メッシュのアップロード許可をリクエスト時にエラーが発生しました。</notification>
 
   <notification name="RegionCapabilityRequestError">リージョンの「[CAPABILITY]」という機能を取得できませんでした。</notification>
 
@@ -3866,6 +3950,8 @@ Your L$ balance is shown in the upper-right.
 [STATUS]</notification>
   <notification name="AvatarRezCloudNotification">（[EXISTENCE]秒）
 アバター「[NAME]」が、クラウドになります。</notification>
+
+  <notification name="AvatarRezSelfBakeForceUpdateNotification">ビューアは、あなたがクラウドのように見えることを検知し、自動的に修正しようとしています。</notification>
 
   <notification name="AvatarRezArrivedNotification">（[EXISTENCE]秒）
 アバター「[NAME]」が、現れます。</notification>
@@ -4266,7 +4352,7 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
   <notification name="LocalBitmapsVerifyFail">開いたりデコードすることができない、無効である、もしくは読み取り不能な画像ファイル「[FNAME]」を追加しようとしました。
 この試行はキャンセルされました。</notification>
 
-  <notification name="PathfindingReturnMultipleItems">[NUM_ITEMS]個のアイテムを返却中しようとしています。
+  <notification name="PathfindingReturnMultipleItems">[NUM_ITEMS]個のアイテムを返却しようとしています。
 このまま続けてもよろしいですか？
     <tag>confirm</tag>
     <usetemplate ignoretext="複数のアイテムを返しますか？" name="okcancelignore" notext="いいえ" yestext="はい" />
@@ -4423,7 +4509,7 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
     <tag>fail</tag>
   </notification>
 
-  <notification name="NoModNoSaveToContents">あなたには、オブジェクト &lt;nolink&gt;'[DEST_NAME]'&lt;/nolink&gt;を修正する権限がないため、&lt;nolink&gt;「[OBJ_NAME]」&lt;/nolink&gt;をオブジェクトの中身に保存できませんでした。
+  <notification name="NoModNoSaveToContents">あなたには、オブジェクト &lt;nolink&gt;「[DEST_NAME]」&lt;/nolink&gt;を修正する権限がないため、&lt;nolink&gt;「[OBJ_NAME]」&lt;/nolink&gt;をオブジェクトの中身に保存できませんでした。
     <tag>fail</tag>
   </notification>
 
@@ -4941,7 +5027,7 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
     <tag>fail</tag>
   </notification>
 
-  <notification name="UpdateViewerBuyParcel">この区画を購入するには、ビューアーを更新する必要があります。
+  <notification name="UpdateViewerBuyParcel">この区画を購入するには、ビューアを更新する必要があります。
     <tag>fail</tag>
   </notification>
 
@@ -5154,12 +5240,24 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
     <tag>fail</tag>
   </notification>
 
-  <notification name="UserBalanceOrLandUsageError">内部エラーが発生したため、ビューアーを正しく更新できませんでした。ビューアーに表示されるリンデンドルの残高または区画の所有は、サーバー上の実際の残高を反映していない可能性があります。
+  <notification name="UserBalanceOrLandUsageError">内部エラーが発生したため、ビューアを正しく更新できませんでした。ビューアに表示されるリンデンドルの残高または区画の所有は、サーバー上の実際の残高を反映していない可能性があります。
     <tag>fail</tag>
   </notification>
 
   <notification name="LargePrimAgentIntersect">他の住民と交差する大きなプリムを作成することはできません。他の住民が移動した場合は再度お試しください。
     <tag>fail</tag>
+  </notification>
+
+  <notification name="RLVaChangeStrings">[APP_NAME]を再起動するまで効果は現れません。</notification>
+
+  <notification name="RLVaListRequested" label="[NAME_LABEL]からの制限要求">[NAME_SLURL]は、現在有効なＲＬＶ制限のリストを送信するよう要請しました。
+    <tag>confirm</tag>
+    <form name="form">
+      <button name="Allow" text="許可"/>
+      <button name="Always Allow" text="常に許可"/>
+      <button name="Deny" text="拒否"/>
+      <ignore text="現在のＲＬＶの制限のリストを誰かに送る前の確認"/>
+    </form>
   </notification>
 
   <notification name="PreferenceChatClearLog">これにより、過去の会話のログ、およびそのファイルのすべてのバックアップが削除されます。
@@ -5209,122 +5307,6 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
     <tag>fail</tag>
   </notification>
 
-  <!-- messageには日本語が使えないため翻訳しない -->
-  <notification label="アウトフィットを保存する" name="SaveSettingAs">現在の設定を次の内容で保存する：
-    <unique />
-    <tag>confirm</tag>
-    <form name="form">
-      <input name="message">[DESC] (New)</input>
-      <button name="ＯＫ" text="ＯＫ" />
-      <button name="Cancel" text="キャンセル" />
-    </form>
-  </notification>
-
-  <notification name="WLImportFail">[FILE]から過去のウインドライトの設定「[NAME]」をインポートできません。
-
-[REASONS]
-    <tag>fail</tag>
-  </notification>
-
-  <notification name="WLParcelApplyFail">この区画で環境を設定することはできません。
-変更する権限のある区画を入力または選択してください。
-    <tag>fail</tag>
-  </notification>
-
-  <notification name="SettingsUnsuported">このリージョンでは設定をサポートしていません。
-設定に対応しているリージョンに移動し、アクションを再試行してください。
-    <tag>fail</tag>
-  </notification>
-
-  <notification name="SettingsConfirmLoss">「[NAME]」と名付けられたこの[TYPE]に加えられた変更が失われます。
-続けてもよろしいですか？
-    <tag>confirm</tag>
-    <usetemplate ignoretext="変更を失いますがよろしいですか？" name="okcancelignore" notext="いいえ" yestext="はい" />
-  </notification>
-
-  <notification name="SettingsConfirmReset">適用されたすべての設定を削除しようとしています。
-続けてもよろしいですか？
-    <tag>confirm</tag>
-    <usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい" />
-  </notification>
-
-  <notification name="PersonalSettingsConfirmReset">適用されたすべての個人的な照明の設定を削除しようとしています。
-続けてもよろしいですか？
-    <tag>confirm</tag>
-    <usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい" />
-  </notification>
-
-  <notification name="SettingsMakeNoTrans">このデイサイクルに譲渡不可の設定をインポートしようとしています。このまま続けると、編集中の設定も譲渡不可になります。
-
-この変更は元に戻すことができません。
-
-続けてもよろしいですか？
-    <tag>confirm</tag>
-    <usetemplate ignoretext="設定を譲渡不可にしますか？" name="okcancelignore" notext="いいえ" yestext="はい" />
-  </notification>
-
-  <notification name="NoEditFromLibrary">ライブラリから直接設定を変更することはできません。自分のインベントリからコピーしてやり直してください。
-    <tag>fail</tag>
-  </notification>
-
-  <notification name="EnvironmentApplyFailed">この設定で問題が発生しました。この設定は現在保存または適用ができません。
-    <tag>fail</tag>
-  </notification>
-
-  <notification name="TrackLoadFailed">トラックを[TRACK]にロードできません。
-    <tag>fail</tag>
-  </notification>
-
-  <notification name="TrackLoadMismatch">トラックを[TRACK1]から[TRACK2]にロードできません。
-    <tag>fail</tag>
-  </notification>
-
-  <notification name="CompressionTestResults">サイズ[SIZE]㎅のファイル[FILE]をgzipのレベル６で圧縮したテスト結果：
-圧縮：[PACK_TIME]秒　[PSIZE]㎅
-解凍：[UNPACK_TIME]秒　[USIZE]㎅
-    <tag>fail</tag>
-  </notification>
-
-  <notification label="二段階認証トークンプロンプト" name="PromptMFAToken">[MESSAGE]
-    <tag>confirm</tag>
-    <form name="form">
-      <input name="token" />
-      <button name="continue" text="確認" />
-      <button name="cancel" text="キャンセル" />
-    </form>
-  </notification>
-
-  <notification label="サブフォルダの作成" name="CreateSubfolder">新しいフォルダーに名前を付けます：
-    <unique />
-    <tag>confirm</tag>
-    <form name="form">
-      <input name="message">[DESC]</input>
-      <button name="ＯＫ" text="ＯＫ" />
-      <button name="Cancel" text="キャンセル" />
-    </form>
-  </notification>
-
-  <notification name="SameFolderRequired">選択したアイテムは、同じフォルダー内に存在する必要があります。
-    <tag>fail</tag>
-    <usetemplate name="okbutton" yestext="ＯＫ" />
-  </notification>
-
-  <notification name="RiggedMeshAttachedToHUD">ＨＵＤポイント「[POINT]」にアタッチされたオブジェクト「[NAME]」にはリグメッシュが含まれています。
-
-リグメッシュオブジェクトは、アバターに取り付けるように設計されています。あなたにはこのオブジェクトが表示されますが、他の人には表示されません。
-
-他の人にこのオブジェクトを見てもらいたい場合は、オブジェクトを削除して、アバターのアタッチメントポイントに再度アタッチします。
-    <tag>confirm</tag>
-    <usetemplate ignoretext="リグメッシュがＨＵＤポイントにアタッチされている場合に警告します。" name="okignore" yestext="ＯＫ" />
-  </notification>
-
-  <notification name="EnableAutoFPSWarning">自動ＦＰＳを有効にしようとしています。保存されていないグラフィック設定はすべて失われます。
-
-まずそれらを保存しますか？
-    <tag>confirm</tag>
-    <usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい" />
-  </notification>
-
   <notification name="MaterialCreated">マテリアルは正常に作成されました。アセットＩＤ：[ASSET_ID]</notification>
 
   <notification name="ReflectionProbeApplied">警告：オブジェクトを反射プローブとしました。これにより、オブジェクトが暗黙的に反射量を模倣するように不可逆的な変更が加えられます。
@@ -5333,102 +5315,43 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
     <usetemplate ignoretext="反射プローブのヒント" name="okcancelignore" notext="キャンセル" yestext="ＯＫ" />
   </notification>
 
-  <notification name="AutoAdjustHDRSky">編集中の非ＨＤＲの空の設定は自動的にＨＤＲの設定に変換されます。ＨＤＲとトーンマッピングを削除する場合は、反射プローブ環境値を０にしてください。
-    <usetemplate ignoretext="ＨＤＲの空の調整時の警告" name="okignore" yestext="OK" />
+  <notification name="AutoAdjustHDRSky">編集中の非ＨＤＲの空の設定は自動的にＨＤＲの設定に変換されます。ＨＤＲとトーンマッピングを削除する場合は、反射プローブ環境の値を０にしてください。
+    <usetemplate ignoretext="ＨＤＲの空の調整時の警告" name="okignore" yestext="ＯＫ" />
   </notification>
 
-  <!-- ALCHEMY BELOW THIS LINE -->
-  <notification name="ChatCommandCalc">計算結果：[EXPRESSION]＝[RESULT]</notification>
-  <notification name="ChatCommandCalcFailed">計算に失敗しました。</notification>
-  <notification name="ChatCommandDiceRoll">サイコロ振り：[RESULT]</notification>
-
-  <notification name="DumpArchetypeSuccess">外観は、[FILE_PATH]に正常に保存されました。</notification>
-
-  <notification name="InvalidGrid">「[GRID]」は有効なグリッド識別子ではありません。
-    <tag>fail</tag>
-    <tag>opensim</tag>
-  </notification>
-  <notification name="MalformedGridInfo">[GRID]は、不正な形式のグリッド情報が提供されました。
-
-サポートにお問い合わせください。
-    <tag>fail</tag>
-    <tag>opensim</tag>
-  </notification>
-  <notification name="CannotRemoveConnectedGrid">[GRID]に接続している間は削除できません。
-    <tag>fail</tag>
-    <tag>opensim</tag>
-  </notification>
-  <notification name="ConfirmRemoveGrid">[GRID]をグリッド リストから削除してもよろしいですか？  
-    <tag>opensim</tag>
+  <!-- these are alert strings from server. the name needs to match entire the server string, and needs to be changed
+	whenever the server string changes -->
+  <global name="You can only set your 'Home Location' on your land or at a mainland Infohub.">土地を所有している場合は、そこをホーム位置とすることができます。
+そうでない場合は、マップから「情報ハブ」と書かれた場所を見つけてください。</global>
+  <global name="You died and have been teleported to your home location">あなたは死亡したので、ホーム位置にテレポートされました。</global>
+  <!-- <FS:AW>  opensim search support-->
+  <notification name="ConfirmClearDebugSearchURL">本当にデバッグ検索ＵＲＬをクリアしてもよろしいですか？
     <tag>confirm</tag>
-    <usetemplate ignoretext="グリッド削除時の確認" name="okcancelignore" notext="キャンセル" yestext="ＯＫ" />
+    <usetemplate ignoretext="デバッグ検索ＵＲＬの削除確認" name="okcancelignore" notext="キャンセル" yestext="ＯＫ"/>
   </notification>
-  <notification name="RemoveGridFailure">[GRID] をリストから削除できませんでした。
-    <tag>fail</tag>
-    <tag>opensim</tag>
-  </notification>
-  <notification name="CantAddGrid">[GRID] のグリッド情報を取得できませんでした。
-エラー：[STATUS]　[REASON]
-    <tag>fail</tag>
-    <tag>opensim</tag>
-  </notification>
-  <notification name="AddGridSuccess">グリッドリストに[GRID]が追加されました。  
-    <form name="form">
-      <ignore name="ignore" text="グリッドリストにグリッドを追加" />
-    </form>
-    <tag>fail</tag>
-    <tag>opensim</tag>
-  </notification>
-
-  <notification name="SecondLifePasswordTooLong">[CURRENT_GRID]サインアッププロセスのバグにより、パスワードは１６文字を超えており、ログインできるように切り詰められています。</notification>
-
-  <notification name="ConfirmRemoveSkin">[SKIN]を削除してもよろしいですか？これにより、ハードディスクから完全に消去されます。
+  <notification name="ConfirmPickDebugSearchURL">現在の検索ＵＲＬをデバッグ検索のＵＲＬとして選んでよろしいですか？
     <tag>confirm</tag>
-    <usetemplate ignoretext="Confirm removing skins" name="okcancelignore" notext="キャンセル" yestext="ＯＫ" />
+    <usetemplate ignoretext="ピッキングしたデバッグ検索ＵＲＬの確認" name="okcancelignore" notext="キャンセル" yestext="ＯＫ"/>
   </notification>
-  <notification name="RemoveSkinSuccess">[SKIN]の削除に成功しました。
-    <tag>fail</tag>
-  </notification>
-  <notification name="RemoveSkinFailure">[SKIN]の削除に失敗しました。
-    <tag>fail</tag>
-  </notification>
-  <notification name="AddSkinNoManifest">[PACKAGE]にはマニフェストが含まれていないか、読み込むことができません。
-    <tag>fail</tag>
-  </notification>
-  <notification name="AddSkinCantParseManifest">[PACKAGE]は無効なマニフェストです。
-    <tag>fail</tag>
-  </notification>
-  <notification name="AddSkinUnpackFailed">スキンパッケージの解凍に失敗しました。詳細についてはログを参照してください。
-    <tag>fail</tag>
-  </notification>
-  <notification name="AddSkinSuccess">[PACKAGE]の追加に成功しました。
-    <tag>fail</tag>
-  </notification>
-
-  <notification icon="alert.tga" name="RegionTrackerAdd" type="alert">リージョン「[REGION]」にどのラベルを使用しますか?
+  <!-- </FS:AW>  opensim search support-->
+  <!-- <FS:AW  grid management-->
+  <notification name="ConfirmRemoveGrid">グリッドリストから[REMOVE_GRID]を本当に削除してもよろしいですか？
     <tag>confirm</tag>
-    <form name="form">
-      <input name="label" type="text">[LABEL]</input>
-      <button default="true" index="0" name="OK" text="ＯＫ" />
-      <button index="1" name="Cancel" text="キャンセル" />
-    </form>
+    <usetemplate ignoretext="グリッドの削除確認" name="okcancelignore" notext="キャンセル" yestext="ＯＫ"/>
   </notification>
-
-  <notification name="RadarAlertEnter">[REGION]に[AGENT]が入りました。
-    <tag>radar</tag>
+  <notification name="CanNotRemoveConnectedGrid">接続中は[REMOVE_GRID]を削除することはできません。
+    <tag>confirm</tag>
+    <usetemplate ignoretext="接続しているときはグリッドを削除することができないことの警告" name="okcancelignore" notext="キャンセル" yestext="ＯＫ"/>
   </notification>
-  <notification name="RadarAlertLeave">[REGION]から[AGENT]が去りました。
-    <tag>radar</tag>
-  </notification>
+  <!-- </FS:AW  grid management-->
 
-  <notification name="AutoAcceptedInventory">[NAME]が渡してきた[ITEM]は、自動的に受け入れられ、インベントリに配置されました。</notification>
-
+  <!-- ## Zi: Animation Overrider -->
   <notification name="NewAOSet">新しいＡＯセットの名前を指定します。
 （名前には、「:」または「|」を除く任意のASCII文字を含めることができます。）
     <form name="form">
-      <input name="message" type="text" default="true">新しいＡＯセット</input>
-      <button default="true" index="0" name="OK" text="ＯＫ" />
-      <button index="1" name="Cancel" text="キャンセル" />
+      <input name="message">新しいＡＯセット</input>
+      <button name="OK" text="ＯＫ" />
+      <button name="Cancel" text="キャンセル" />
     </form>
   </notification>
 
@@ -5450,7 +5373,7 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 移動されたアイテムがないか、「遺失物」フォルダーを確認してください。</notification>
   <notification name="AOImportSetAlreadyExists">この名前のアニメーションセットはすでに存在します。</notification>
   <notification name="AOImportPermissionDenied">ノートカードを読み取るための十分な権限がありません。</notification>
-  <notification name="AOImportCreateSetFailed">インポートセット作成中にエラーが発生しました。</notification>
+  <notification name="AOImportCreateSetFailed">インポートセット作成時にエラーが発生しました。</notification>
   <notification name="AOImportDownloadFailed">ノートカードをダウンロードできませんでした。</notification>
   <notification name="AOImportNoText">ノートカードが空であるか、読み取り不能です。</notification>
   <notification name="AOImportNoFolder">アニメーションを読み取るフォルダーが見つかりませんでした。</notification>
@@ -5496,61 +5419,267 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
     <tag>fail</tag>
   </notification>
 
-  <notification name="SnapshotDetected">[NAME]はスナップショットを撮影しました！٩(ˊᗜˋ*)و</notification>
+  <!-- <FS:Zi> Do not allow "Restore To Last Position" for no-copy items -->
+  <notification name="CantRestoreToWorldNoCopy">コンテンツが失われる可能性を防ぐため、コピーアイテムがない場合、最後の位置に復元することはできません。</notification>
+  <!-- <FS:Zi> Do not allow "Restore To Last Position" for no-copy items -->
 
-  <notification name="AlwaysRunEnabled">常時走行が有効になりました。</notification>
-  <notification name="AlwaysRunDisabled">常時走行が無効になりました。</notification>
+  <notification name="ConfirmRemoveCredential">保存された&lt;nolink&gt;[NAME]&lt;/nolink&gt;のログイン情報を削除してもよろしいですか？
+    <tag>confirm</tag>
+    <form name="form">
+      <button index="0" name="OK" text="ＯＫ" />
+      <button default="true" index="1" name="Cancel" text="キャンセル" />
+    </form>
+  </notification>
 
-  <notification name="CinematicConfirmHideUI" label="">シネマティックモードでは、ほとんどのＵＩ、ホバー テキスト、音声ドット、ＨＵＤが非表示になります。
-元に戻すには、[SHORTCUT]を押します。
+  <!-- <FS:TS> FIRE-5453: Flickr upload support (from Exodus) -->
+  <notification name="ExodusFlickrVerificationExplanation">Flickrのアップロード機能を使用するには、[APP_NAME]があなたのアカウントにアクセスすることを承認する必要があります。次に進むと、WebブラウザがFlickrのウェブサイトを開き、ログインと[APP_NAME]の認証を求められます。その後、[APP_NAME]に戻るためのコードが表示されます。
+
+Flickrアカウントへの投稿を[APP_NAME]に許可しますか？
+    <tag>fail</tag>
+    <usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい" />
+  </notification>
+
+  <notification name="ExodusFlickrVerificationPrompt">Webブラウザで[APP_NAME]があなたのFlickrアカウントに投稿することを許可し、以下のウェブサイトから指定されたコードを入力してください：
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="oauth_verifier" />
+      <button name="OK" text="ＯＫ" />
+      <button name="Cancel" text="キャンセル" />
+    </form>
+  </notification>
+
+  <notification name="ExodusFlickrVerificationFailed">Flickrの検証に失敗しました。認証コードを再度ご確認ください。
+    <tag>fail</tag>
+    <usetemplate name="okbutton" yestext="ＯＫ" />
+  </notification>
+
+  <notification name="ExodusFlickrUploadComplete">スナップショットは、[http://www.flickr.com/photos/upload/edit/?ids=[ID] ここ]から見ることができます。</notification>
+  <!-- </FS:TS> FIRE-5453 -->
+
+  <notification name="RegionTrackerAdd">リージョン「[REGION]」にどのラベルを使用しますか?
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="label">[LABEL]</input>
+      <button name="OK" text="ＯＫ" />
+      <button name="Cancel" text="キャンセル" />
+    </form>
+  </notification>
+
+  <notification name="SnoozeDuration">グループ チャットをスヌーズする時間 （秒単位）：
     <unique />
     <tag>confirm</tag>
-    <usetemplate name="okcancelignore" yestext="ＯＫ" notext="キャンセル" ignoretext="シネマティックモードを有効にする前の確認" />
+    <form name="form">
+      <input name="duration">[DURATION]</input>
+      <button name="OK" text="ＯＫ" />
+      <button name="Cancel" text="キャンセル" />
+    </form>
   </notification>
-
-  <notification name="AlchemyUnpoweredWizard">ごめんなさい、デイブ、残念ながらそれはできません。</notification>
-
-  <notification name="AlchemyExplosions">発破で～す！</notification>
-
-  <notification name="AlchemyDestroyObject">オブジェクトを取り消し不能に破壊します。それが必要なかったことを願っています。</notification>
-
-  <notification icon="notify" name="AskForDisplayPreferencesReset">グラフィックカードが変更されたようです。
-
-前回：[LAST_GPU]
-今回：[THIS_GPU]
-
-グラフィック設定をリセットしますか?
-    <usetemplate name="yesnocancelbuttons" yestext="リセットする" notext="このままにする" canceltext="リセットしない" />
+  <notification name="SnoozeDurationInvalidInput">スヌーズする時間には、有効な数値を入力してください！
+    <tag>fail</tag>
+    <usetemplate name="okbutton" yestext="ＯＫ"/>
   </notification>
-
-  <notification name="UpdateDownloadRequest">新しいバージョンが検出されました。
-次のアップデートを含む[VIEWER_VER]を今すぐダウンロードしてインストールしますか？
-
-[VIEWER_UPDATES]
+  <notification name="PickLimitReached" label="" type="alertmodal">最大数のピックがすでに作成されているため、別のピックを作成できません。
+    <unique />
+    <tag>fail</tag>
     <tag>confirm</tag>
-    <usetemplate name="okcancelbuttons" notext="あとで" yestext="ＯＫ" />
+    <usetemplate name="okbutton" yestext="ＯＫ" />
+  </notification>
+  <notification name="GlobalOnlineStatusToggle">サーバーの負荷により、オンラインステータスの表示の一括切り替えが有効になるまでに時間がかかる場合があります。しばらくお待ちください。
+    <usetemplate ignoretext="オンラインステータスの表示の切り替えには、時間がかかる場合がある事" name="okignore" yestext="ＯＫ" />
+  </notification>
+  <notification name="RenderVolumeLODFactorWarning">警告：現在指定されている詳細度（ＬｏＤ）係数が高すぎます。
+
+日常的な使用では、ＬｏＤ係数の値は１～３の範囲で十分です。
+以下の値で簡略化されたように見えるオブジェクトに置き換えることを検討してください。
+
+ＬｏＤ係数＞３：遅延が増えます。撮影時のみ推奨します。
+ＬｏＤ係数＞４：特別な状況で使用する。リログすると元に戻ります。
+ＬｏＤ係数＞８：実際の効果はありません。エラーの原因になります。
+    <usetemplate name="okbutton" yestext="ＯＫ"/>
+  </notification>
+  <notification name="CurrencyURIOverrideReceived">この地域は、サードパーティの通貨ポータルを指定することを選択しました。
+Firestorm Viewerを通じて行われる通貨購入は、お客様（ユーザー）と通貨の提供者または販売者との間の取引であることにご注意ください。
+Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.およびそのチームは、そのような取引から直接的または間接的に生じるいかなる費用や損害に対しても責任を負いません。
+これらの利用規約に同意されない場合は、このビューアを使用して金融取引を行わないでください。
+    <usetemplate ignoretext="リージョンが新しい通貨ヘルパーを設定しているとき" name="okignore" yestext="ＯＫ" />
+  </notification>
+  <notification name="EnableHiDPI">HiDPIサポートを有効にすると、パフォーマンスが低下する可能性があります。</notification>
+
+  <notification name="FailedToFindSettings">[NAME]の設定をデータベースから読み込むことができませんでした。
+    <tag>fail</tag>
   </notification>
 
-  <notification name="UpdateDownloaded">[VIEWER_VER]がダウンロードされました。
-以下のアップデートのために[VIEWER_VER]を今すぐインストールしますか？
+  <notification name="FailedToLoadSettingsApply">これらの自然環境の設定を反映させることができませんでした。
+    <tag>fail</tag>
+  </notification>
 
-[VIEWER_UPDATES]
+  <notification name="FailedToBuildSettingsDay">これらの自然環境の設定を反映させることができませんでした。
+    <tag>fail</tag>
+  </notification>
+
+  <notification name="NoEnvironmentSettings">このリージョンは、自然環境の設定をサポートしていません。
+    <tag>fail</tag>
+  </notification>
+
+  <notification label="設定を保存" name="SaveSettingAs">設定を以下のように保存します：
+    <unique />
     <tag>confirm</tag>
-    <usetemplate name="okcancelbuttons" notext="あとで" yestext="ＯＫ" />
+    <form name="form">
+      <input name="message">[DESC] (new)</input>
+      <button name="OK" text="ＯＫ" />
+      <button name="Cancel" text="キャンセル" />
+    </form>
   </notification>
 
-  <notification name="UpdateInstalledRestart">ビューアーは以下のバージョンに更新されました：
-[VIEWER_VER]⇨[VIEWER_UPDATES] 
+  <notification name="WLImportFail">過去のウィンドライトの設定[NAME]を[FILE]からインポートできませんでした。
 
-再起動しますか？
+[REASONS]
+    <tag>fail</tag>
+  </notification>
+
+  <notification name="WLParcelApplyFail">この区画に自然環境の設定をセットすることができませんでした。
+変更する権利がある区画を入力または選択してください。
+    <tag>fail</tag>
+  </notification>
+
+  <notification name="SettingsUnsuported">このリージョンでは自然環境の設定はサポートされていません。
+設定が有効なリージョンに移動し、操作をやり直してください。
+    <tag>fail</tag>
+  </notification>
+
+  <notification name="SettingsConfirmLoss">「[NAME]」で[TYPE]に加えた変更が失われようとしています。
+本当に続けてもよろしいですか？
     <tag>confirm</tag>
-    <usetemplate name="okcancelbuttons" notext="あとで" yestext="ＯＫ" />
+    <usetemplate ignoretext="変更が失われますがよろしいですか？" name="okcancelignore" notext="いいえ" yestext="はい" />
   </notification>
-  <notification name="UpdateInstalledRestartToast">ビューアーは以下のバージョンに更新されました：
-[VIEWER_VER]⇨[VIEWER_UPDATES] 
 
-再起動しますか？
+  <notification name="SettingsConfirmReset">適用されている設定をすべて削除しようとしています。
+本当に続けてもよろしいですか？
     <tag>confirm</tag>
-    <usetemplate name="okcancelbuttons" notext="あとで" yestext="ＯＫ" />
+    <usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい" />
   </notification>
+
+  <notification name="PersonalSettingsConfirmReset">適用されているすべての個人的光源設定を削除しようとしています。
+本当に続けてもよろしいですか？
+    <tag>confirm</tag>
+    <usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい" />
+  </notification>
+
+  <notification name="SettingsMakeNoTrans">譲渡不可な設定をこのデイサイクルにインポートしようとしています。続行すると、編集中の設定も譲渡不可になります。
+
+この変更を取り消すことはできません。
+
+本当に続けてもよろしいですか？
+    <tag>confirm</tag>
+    <usetemplate ignoretext="譲渡不可な自然環境の設定をインポートする前の確認" name="okcancelignore" notext="いいえ" yestext="はい" />
+  </notification>
+
+  <notification name="NoEditFromLibrary">ライブラリから直接設定を編集することはできません。 
+ご自身のインベントリにコピーして再度お試しください。
+    <tag>fail</tag>
+  </notification>
+
+  <notification name="EnvironmentApplyFailed">これらの自然環境の設定で問題が発生しました。現在、これらの自然環境の設定を保存または適用することはできません。
+    <tag>fail</tag>
+  </notification>
+
+  <notification name="TrackLoadFailed">トラック[TRACK]を読み込むことができませんでした。
+    <tag>fail</tag>
+  </notification>
+
+  <notification name="TrackLoadMismatch">トラック[TRACK1]を[TRACK2]に読み込むことができませんでした。
+    <tag>fail</tag>
+  </notification>
+
+  <notification name="CompressionTestResults">サイズ[SIZE]㎅のファイル[FILE]をgzipのレベル６で圧縮したテスト結果：
+圧縮：[PACK_TIME]秒　[PSIZE]㎅
+解凍：[UNPACK_TIME]秒　[USIZE]㎅
+    <tag>fail</tag>
+  </notification>
+
+  <notification label="二段階認証トークンプロンプト" name="PromptMFAToken">[MESSAGE]
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="token" />
+      <button name="continue" text="確認" />
+      <button name="cancel" text="キャンセル" />
+    </form>
+  </notification>
+
+  <notification label="Create subfolder" name="CreateSubfolder">新しいフォルダ名：
+    <unique />
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="message">[DESC]</input>
+      <button name="OK" text="ＯＫ" />
+      <button name="Cancel" text="キャンセル" />
+    </form>
+  </notification>
+  <notification name="SameFolderRequired">選択したアイテムは、同じフォルダー内に存在する必要があります。
+    <tag>fail</tag>
+    <usetemplate name="okbutton" yestext="ＯＫ" />
+  </notification>
+
+  <notification name="RiggedMeshAttachedToHUD">ＨＵＤポイント「[POINT]」にアタッチされたオブジェクト「[NAME]」にはリグメッシュが含まれています。
+
+リグメッシュオブジェクトは、アバターに取り付けるように設計されています。あなたにはこのオブジェクトが表示されますが、他の人には表示されません。
+
+他の人にこのオブジェクトを見てもらいたい場合は、オブジェクトを削除して、アバターのアタッチメントポイントに再度アタッチします。
+    <tag>confirm</tag>
+    <usetemplate ignoretext="リグメッシュがＨＵＤポイントにアタッチされている場合に警告" name="okignore" yestext="ＯＫ" />
+  </notification>
+
+  <notification name="EnableAutoFPSWarning">自動ＦＰＳを有効にしようとしています。保存されていないグラフィック設定はすべて失われます。
+
+まずそれらを保存しますか？
+    <tag>confirm</tag>
+    <usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい" />
+  </notification>
+
+  <notification name="NoValidEnvSettingFound">有効な自然環境の設定が選択されていません！
+
+なお、「共有された自然環境の設定」と「デイサイクルのベース」は選択できません！
+    <tag>fail</tag>
+  </notification>
+
+  <notification name="CantCreateInventoryName">以下のインベントリアイテムは作成できません：[NAME]
+    <tag>fail</tag>
+  </notification>
+
+  <notification name="WindlightBulkImportFinished">ウィンドライトの一括インポートが完了しました。</notification>
+
+  <notification name="FSAOScriptedNotification">
+    <unique combine="cancel_old">
+      <context>FSAOScriptedNotification</context>
+    </unique>
+Firestormアニメーションオーバーライダー：[AO_MESSAGE]
+    <usetemplate ignoretext="Firestormアニメーションオーバーライダーがスクリプト化されたオブジェクトからアクセスされたときに警告" name="notifyignore"/>
+  </notification>
+  <notification name="WarnForceLoginURL">ログインスプラッシュ画面のＵＲＬは、テスト用にオーバーライドされています。
+
+デフォルトのＵＲＬにリセットしますか？
+    <unique />
+    <usetemplate name="okcancelbuttons" notext="次回もリマインドする" yestext="リセット" />
+  </notification>
+
+  <notification name="WarnScriptedCamera">カメラのリセットは、以下のオブジェクトによって阻害される可能性があります：
+
+[SOURCES]
+  </notification>
+
+  <notification label="Ungroup folder" name="UngroupFolder">「[FOLDER_NAME]」フォルダのグループを解除しますか？
+    <unique />
+    <tag>confirm</tag>
+    <usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ" />
+  </notification>
+
+  <!-- <FS:Zi> detect and strip empty alpha layers from images on upload -->
+  <notification label="画像に空っぽのアルファチャンネルが含まれています" name="ImageEmptyAlphaLayer">アップロードしようとしている画像にアルファチャンネル（透明度情報）が含まれています。これはほとんどの場合好ましくないので、取り除くべきです。画像にアルファチャンネルを追加すると、異なるカメラアングルでテクスチャが互いに反転し、レンダリングが遅くなります。そのため、このテクスチャに空の／ほとんど空のアルファチャンネルが本当に必要でない限り、これを取り除くことを検討してください。
+    <tag>confirm_strip</tag>
+    <form name="form">
+      <button default="true" index="0" name="strip" text="アルファチャンネルを除外" />
+      <button index="1" name="use_as_is" text="このまま使用する" />
+    </form>
+  </notification>
+  <!-- </FS:Zi> -->
 </notifications>

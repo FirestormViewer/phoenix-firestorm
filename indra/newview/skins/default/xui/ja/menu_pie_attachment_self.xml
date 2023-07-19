@@ -5,7 +5,7 @@
   <pie_slice label="下に置く" name="Drop" />
   <pie_menu name="Attachment Pie More" label="続き　▶">
 
-    <pie_slice label="テスクチャのリフレッシュ" name="Texture Refresh" />
+    <pie_slice label="テクスチャのリフレッシュ" name="Texture Refresh" />
     <pie_slice label="スクリプト情報" name="ScriptInfo" />
     <pie_slice label="触る" name="Attachment Object Touch" />
     <pie_menu name="DerenderMenu" label="描画しない　▶">
@@ -21,7 +21,7 @@
     </pie_menu>
     <pie_slice label="インベントリを表示" name="Show original" />
     <pie_slice label="調査" name="Avatar Inspect" />
-    <pie_slice label="テスクチャ" name="Debug..." />
+    <pie_slice label="テクスチャ" name="Debug..." />
 
   </pie_menu>
   <pie_slice label="ここに座る" name="Sit Down Here" />
@@ -42,8 +42,8 @@
 
     <pie_slice label="アウトフィットを編集" name="Edit My Outfit" />
     <pie_separator />
-    <pie_slice label="ＸＭＬをダンプ" name="Dump XML" />
-    <pie_slice label="ホバー高さ" name="Hover Height" />
+    <pie_slice label="ＸＭＬダンプ" name="Dump XML" />
+    <pie_slice label="ホバー高" name="Hover Height" />
 
   </pie_menu>
 

@@ -25,8 +25,8 @@ that are returned from one component and may appear in many places
   <string name="StartupDetectingHardware">ハードウェアを検出しています…</string>
   <string name="StartupLoading">[APP_NAME]をインストールしています…</string>
   <string name="StartupClearingCache">キャッシュを消去しています…</string>
-  <string name="StartupClearingTextureCache">テスクチャキャッシュを消去しています…</string>
-  <string name="StartupInitializingTextureCache">テスクチャキャッシュを初期化しています…</string>
+  <string name="StartupInitializingTextureCache">テクスチャキャッシュを初期化しています…</string>
+  <string name="StartupInitializingTextureCache0">テクスチャキャッシュのフラッフィングをしています…</string>
   <string name="StartupRequireDriverUpdate">グラフィックを初期化できませんでした。グラフィックドライバを更新してください。</string>
 
   <!-- about dialog/support string-->
@@ -44,10 +44,10 @@ SLURL：&lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 [SERVER_RELEASE_NOTES_URL]</string>
   <string name="AboutPositionRLVShowLoc">あなたは、[REGION]にいます。
 [SERVER_VERSION]
-[SERVER_RELEASE_NOTES_URL]  </string>
+[SERVER_RELEASE_NOTES_URL]</string>
   <!-- *NOTE: Do not translate text like GPU, Graphics Card, etc -
-         Most PC users who know what these mean will be used to the English versions,
-         and this info sometimes gets sent to support. -->
+       Most PC users who know what these mean will be used to the English versions,
+       and this info sometimes gets sent to support. -->
   <string name="AboutSystem">ＣＰＵ：[CPU]
 メモリ：[MEMORY_MB]㎆
 ＯＳのバージョン：[OS_VERSION]
@@ -109,7 +109,7 @@ LibVLCのバージョン：[LIBVLC_VERSION]
   <string name="LoginConnectingToRegion">リージョンに接続しています…</string>
   <string name="LoginDownloadingClothing">服装をダウンロードしています…</string>
   <string name="InvalidCertificate">証明書が無効であるか、壊れています。グリッド管理者にご連絡ください。</string>
-  <string name="CertInvalidHostname">無効なホストネームがサーバーにアクセスしようとしています。SLURLかグリッドのホストネームをご確認ください。</string>
+  <string name="CertInvalidHostname">無効なホストネームがサーバーにアクセスしようとしています。SLUrlかグリッドのホストネームをご確認ください。</string>
   <string name="CertExpired">グリッドが返した証明書は、有効期限が過ぎていると考えられます。お使いのシステムクロックを確認するか、グリッドの管理者にお問い合わせください。</string>
   <string name="CertKeyUsage">SSL証明書のエラーが発生しました。グリッド管理者にご連絡ください。</string>
   <string name="CertBasicConstraints">サーバーの証明書チェーンに証明書が多すぎます。グリッド管理者にご連絡ください。</string>
@@ -125,13 +125,12 @@ LibVLCのバージョン：[LIBVLC_VERSION]
   <string name="AgniGridLabel">Second Lifeメイングリッド（Agni）</string>
   <string name="AditiGridLabel">Second Lifeベータテストグリッド（Aditi）</string>
 
-  <string name="ViewerDownloadURL">https://www.alchemyviewer.org/pages/downloads.html</string>
-  <string name="LoginFailedViewerNotPermitted">お使いの古いビューアーでは、[CURRENT_GRID]にアクセスできません。以下のページから新しいビューアーをダウンロードしてください： https://secondlife.com/support/downloads/?lang=ja
-
-詳細については、FAQ を参照してください：
-https://www.alchemyviewer.org/pages/downloads.html</string>
-  <string name="LoginIntermediateOptionalUpdateAvailable">ビューアーの更新（オプション）があります：[VERSION]</string>
-  <string name="LoginFailedRequiredUpdate">ビューアーの更新（必須）：[VERSION]</string>
+  <string name="ViewerDownloadURL">https://www.firestormviewer.org/choose-your-platform/</string>
+  <string name="LoginFailedViewerNotPermitted">お使いの古いビューアでは、[CURRENT_GRID]にアクセスできません。以下のページから新しいビューアをダウンロードしてください：https://www.firestormviewer.org/choose-your-platform/</string>
+  <string name="LoginFailed">"システムの問題により、ログインプロセスが完了しませんでした。数分後にもう一度試してください。
+これがエラーであると思われる場合は、サポートにお問い合わせください。</string>
+  <string name="LoginIntermediateOptionalUpdateAvailable">ビューアの更新（オプション）があります：[VERSION]</string>
+  <string name="LoginFailedRequiredUpdate">ビューアの更新（必須）：[VERSION]</string>
   <string name="LoginFailedAlreadyLoggedIn">このエージェントは既にログインしています。</string>
   <string name="LoginFailedAuthenticationFailed">申し訳ありませんが、ログインできませんでした。
 以下の情報が正しく入力されたことを確認してください：
@@ -201,7 +200,7 @@ support@secondlife.com にお問い合わせください。</string>
   <string name="ShuttingDown">シャットダウンしています…</string>
   <string name="YouHaveBeenDisconnected">あなたがいたリージョンへの接続が切れました。</string>
   <string name="SentToInvalidRegion">無効なリージョンにテレポートされました。</string>
-  <string name="TestingDisconnect">ビューアーの接続を切るテストをしています。</string>
+  <string name="TestingDisconnect">ビューアの接続を切るテストをしています。</string>
 
   <!-- SLShare: User Friendly Filter Names Translation -->
   <string name="BlackAndWhite">白黒</string>
@@ -217,7 +216,7 @@ support@secondlife.com にお問い合わせください。</string>
   <string name="Toycamera">トイカメラ</string>
 
   <!-- Tooltip -->
-  <string name="TooltipPerson">人</string>
+  <string name="TooltipPerson">人物</string>
   <string name="TooltipNoName">（名前なし）</string>
   <string name="TooltipOwner">所有者：</string>
   <string name="TooltipPublic">公共</string>
@@ -274,7 +273,7 @@ support@secondlife.com にお問い合わせください。</string>
   <string name="TooltipMapUrl">クリックしてこの場所をマップに表示します。</string>
   <string name="TooltipSLAPP">クリックして secondlife:// コマンドを出します。</string>
   <string name="CurrentURL" value="現在のＵＲＬ：[CurrentURL]" />
-  <string name="TooltipEmail">クリックして電子メールを作成します。</string>
+  <string name="TooltipEmail">クリックしてＥメールを作成します。</string>
 
   <!-- text for SLURL labels -->
   <string name="SLurlLabelTeleport">テレポート</string>
@@ -304,6 +303,9 @@ support@secondlife.com にお問い合わせください。</string>
   <string name="TooltipNotecardOwnerRestrictedDrop">制限のない「次の所有者」の
 許可のみノートカードに
 添付できます。</string>
+  <string name="TooltipTextureRestrictedDrop">無制限のコピーおよび
+譲渡可能権限を持つテクスチャのみが
+許可されます。</string>
 
   <!-- searching - generic -->
   <string name="Searching">検索しています…</string>
@@ -342,7 +344,7 @@ support@secondlife.com にお問い合わせください。</string>
   <string name="AssetErrorFileNotFound">ファイルが見つかりません</string>
   <string name="AssetErrorTCPTimeout">ファイルの転送タイムアウト</string>
   <string name="AssetErrorCircuitGone">サーキットエラー</string>
-  <string name="AssetErrorPriceMismatch">ビューアーとサーバー上の値段が一致していません。</string>
+  <string name="AssetErrorPriceMismatch">ビューアとサーバー上の値段が一致していません。</string>
   <string name="AssetErrorUnknownStatus">不明のステータス</string>
 
   <!-- Asset upload errors. -->
@@ -2933,22 +2935,16 @@ For AI Character: Get the closest navigable point to the point provided.
 続けますか？</string>
   <string name="MBWarning">警告</string>
   <string name="MBNoAutoUpdate">自動更新は現在 Linux には対応していません。
-https://www.alchemyviewer.org から最新バージョンをダウンロードしてください。</string>
+https://www.firestormviewer.org から最新バージョンをダウンロードしてください。</string>
   <string name="MBRegClassFailed">RegisterClass 失敗</string>
   <string name="MBError">エラー</string>
   <string name="MBFullScreenErr">[WIDTH]✕[HEIGHT]では全画面で実行することができません。
 ウィンドウモードで実行しています。</string>
   <string name="MBDestroyWinFailed">シャットダウンエラー（DestroyWindow() 失敗）</string>
   <string name="MBShutdownErr">シャットダウンエラー</string>
-  <string name="MBDevContextErr">GL ディバイスコンテキストが作れません</string>
+  <string name="MBDevContextErr">ＧＬデバイスのコンテキストが作れません</string>
   <string name="MBPixelFmtErr">適切なピクセル形式が見つかりません</string>
   <string name="MBPixelFmtDescErr">ピクセル形式情報が見つかりません</string>
-  <string name="MBTrueColorWindow">[APP_NAME]を実行するには、True Color（３２ビット）が必要です。
-お使いのコンピューターの「コントロールパネル」＞「画面」＞「設定」に行き、「最高 （３２ビット）」に設定してください。</string>
-  <string name="MBAlpha">[APP_NAME]は８ビットのアルファチャンネルを取得できないため実行できません。通常ビデオカードのドライバの問題で起こります。
-お使いのコンピューターに最新のビデオカードドライバがインストールされているかご確認ください。
-また、「コントロールパネル」＞「画面」＞「設定」内で、モニターが「最高 （３２ビット）」に設定されていることもご確認ください。
-このメッセージが何度も出る場合は、 [SUPPORT_SITE] へご連絡ください。</string>
   <string name="MBPixelFmtSetErr">ピクセル形式が設定できません。</string>
   <string name="MBGLContextErr">ＧＬレンダーコンテキストが作れません</string>
   <string name="MBGLContextActErr">ＧＬレンダーコンテキストを有効化できません。</string>
@@ -3545,14 +3541,14 @@ https://www.alchemyviewer.org から最新バージョンをダウンロード�
   <!-- Strings used by the (currently Linux) auto-updater app -->
   <string name="UpdaterWindowTitle">[APP_NAME]の更新</string>
   <string name="UpdaterNowUpdating">只今[APP_NAME]を更新しています…</string>
-  <string name="UpdaterNowInstalling">[APP_NAME]をインストール中です…</string>
-  <string name="UpdaterUpdatingDescriptive">お使いの[APP_NAME]ビューアーを最新バージョンに更新しています。数分かかることがありますのでしばらくお待ちください。</string>
-  <string name="UpdaterProgressBarTextWithEllipses">アップデートをダウンロード中です…</string>
+  <string name="UpdaterNowInstalling">[APP_NAME]をインストールしています…</string>
+  <string name="UpdaterUpdatingDescriptive">お使いの[APP_NAME]ビューアを最新バージョンに更新しています。数分かかることがありますのでしばらくお待ちください。</string>
+  <string name="UpdaterProgressBarTextWithEllipses">アップデートをダウンロードしています…</string>
   <string name="UpdaterProgressBarText">更新をダウンロードしています…</string>
   <string name="UpdaterFailDownloadTitle">更新のダウンロードに失敗しました。</string>
-  <string name="UpdaterFailUpdateDescriptive">[APP_NAME]の更新時にエラーが発生しました。www.secondlife.com から最新バージョンをダウンロードしてください。</string>
+  <string name="UpdaterFailUpdateDescriptive">[APP_NAME]の更新時にエラーが発生しました。firestormviewer.org から最新バージョンをダウンロードしてください。</string>
   <string name="UpdaterFailInstallTitle">更新のインストールに失敗しました。</string>
-  <string name="UpdaterFailStartTitle">ビューアーの起動に失敗しました。</string>
+  <string name="UpdaterFailStartTitle">ビューアの起動に失敗しました。</string>
 
   <!-- System Messages -->
   <string name="ItemsComingInTooFastFrom">[APP_NAME]：アイテムが[FROM_NAME]から同時にたくさん読み込まれているため、自動プレビューが[TIME]秒間無効となります。</string>
@@ -3603,8 +3599,8 @@ https://www.alchemyviewer.org から最新バージョンをダウンロード�
   In case of the EXT-3115 issue 'generic' is passed into the gIMMgr::showSessionStartError as a string name.
   Also there are some other places where "generic" is used.
   So, let add string with name="generic" with the same value as "generic_request_error" -->
-  <string name="generic">リクエスト中にエラーが発生しました。お手数ですが、もう一度やり直してください。</string>
-  <string name="generic_request_error">要求中にエラーが発生しました。お手数ですが、もう一度やり直してください。</string>
+  <string name="generic">リクエスト時にエラーが発生しました。お手数ですが、もう一度やり直してください。</string>
+  <string name="generic_request_error">リクエスト時にエラーが発生しました。お手数ですが、もう一度やり直してください。</string>
   <string name="insufficient_perms_error">あなたには充分な権限がありません。</string>
   <string name="session_does_not_exist_error">このセッションは既に切断されています。</string>
   <string name="no_ability_error">あなたにはその能力がありません。</string>
@@ -3623,7 +3619,7 @@ https://www.alchemyviewer.org から最新バージョンをダウンロード�
   So, let add string with name="message" with the same value as "message_session_event" -->
   <string name="message">[RECIPIENT]とのチャットセッションに、メッセージを送信することができません。</string>
   <string name="message_session_event">[RECIPIENT]とのチャットセッションにメッセージを送ることができません。</string>
-  <string name="mute">モデレート中にエラーが発生しました。</string>
+  <string name="mute">モデレート時にエラーが発生しました。</string>
   <!--Some times string name is getting from the body of server response.
   For ex.: from gIMMgr::showSessionStartError in the LLViewerChatterBoxSessionStartReply::post.
   In case of the EXT-3459 issue 'removed' is passed into the gIMMgr::showSessionStartError as a string name.
@@ -3635,7 +3631,7 @@ https://www.alchemyviewer.org から最新バージョンをダウンロード�
   <string name="unread_chat_multiple">[SOURCES]は、何か新しいことを言いました。</string>
   <string name="session_initialization_timed_out_error">セッションの初期化がタイムアウトしました。</string>
 
-  <string name="Home position set.">家の配置の設定。</string>
+  <string name="Home position set.">ホーム位置を設定しました。</string>
 
   <string name="voice_morphing_url">https://secondlife.com/destination/voice-island</string>
   <string name="premium_voice_morphing_url">https://secondlife.com/destination/voice-morphing-premium</string>
@@ -3992,10 +3988,11 @@ https://www.alchemyviewer.org から最新バージョンをダウンロード�
   <string name="ParticleHiding">パーティクルを非表示にします。</string>
 
   <!-- commands -->
-  <string name="Command_360_Capture_Label">３６０度Ｓショット</string>
+  <!-- 「360度スナップショット」だと文字が切れてしまうため -->
+  <string name="Command_360_Capture_Label">360度Ｓショット</string>
   <string name="Command_AboutLand_Label">土地情報</string>
   <string name="Command_Appearance_Label">容姿</string>
-  <string name="Command_Avatar_Label">アバター</string>
+  <string name="Command_Avatar_Label">アバター一式</string>
   <string name="Command_Build_Label">制作</string>
   <string name="Command_Chat_Label">チャット</string>
   <string name="Command_Conversations_Label">会話</string>
@@ -4003,19 +4000,20 @@ https://www.alchemyviewer.org から最新バージョンをダウンロード�
   <string name="Command_Destinations_Label">行き先</string>
   <string name="Command_Environments_Label">自然環境の設定</string>
   <string name="Command_Flickr_Label">Flickr</string>
-  <string name="Command_Gestures_Label">ゼスチャー</string>
+  <string name="Command_Gestures_Label">ジェスチャー</string>
   <string name="Command_Grid_Status_Label">グリッド状況</string>
-  <string name="Command_HowTo_Label">ガイドブック</string>
+  <string name="Command_HowTo_Label">ハウツー</string>
   <string name="Command_Inventory_Label">インベントリ</string>
-  <string name="Command_Map_Label">マップ</string>
-  <string name="Command_Marketplace_Label">マーケットプレイス</string>
-  <string name="Command_MarketplaceListings_Label">マーケットプレイス</string>
+  <string name="Command_Map_Label">ワールドマップ</string>
+  <string name="Command_Marketplace_Label">マーケット</string>
+  <string name="Command_MarketplaceListings_Label">マーケット</string>
   <string name="Command_MiniMap_Label">ミニマップ</string>
   <string name="Command_Move_Label">歩行／走行／飛行</string>
   <string name="Command_People_Label">人物</string>
-  <string name="Command_Performance_Label">グラフィックの最適化</string>
+  <!-- 字数制限のため「グラフィックの最適化」ではない -->
+  <string name="Command_Performance_Label">グラ最適化</string>
   <string name="Command_Picks_Label">ピック</string>
-  <string name="Command_Places_Label">場所</string>
+  <string name="Command_Places_Label">ランドマーク</string>
   <string name="Command_Preferences_Label">初期設定</string>
   <string name="Command_Profile_Label">プロフィール</string>
   <string name="Command_Report_Abuse_Label">嫌がらせの報告</string>
@@ -4030,17 +4028,21 @@ https://www.alchemyviewer.org から最新バージョンをダウンロード�
   <string name="Command_Quickprefs_Label">簡易設定</string>
   <string name="Command_AO_Label">ＡＯ</string>
   <string name="Command_Webbrowser_Label">Webブラウザ</string>
-  <string name="Command_Default_Chat_Bar_Label">チャット</string>
-  <string name="Command_Areasearch_Label">場所検索</string>
+  <string name="Command_Default_Chat_Bar_Label">チャットバー</string>
+  <string name="Command_Areasearch_Label">エリア検索</string>
   <string name="Command_Settings_Debug_Label">デバッグ設定</string>
   <string name="Command_Statistics_Label">統計情報</string>
-  <string name="Command_Region_Label">リージョン／不動産</string>
+  <!-- 字数制限のため「リージョン／不動産」ではない -->
+  <string name="Command_Region_Label">リージョン</string>
   <string name="Command_Fly_Label">飛行</string>
-  <string name="Command_Groundsit_Label">地面居座る</string>
-  <string name="Command_Sound_Explorer_Label">サウンドエクスプローラー</string>
-  <string name="Command_Asset_Blacklist_Label">アセットのブラックリスト</string>
+  <string name="Command_Groundsit_Label">地面に座る</string>
+  <!-- 字数制限のため「サウンドエクスプローラー」ではない -->
+  <string name="Command_Sound_Explorer_Label">サウンド</string>
+  <!-- 字数制限のため「アセットのブラックリスト」ではない -->
+  <string name="Command_Asset_Blacklist_Label">アセットのＢＬ</string>
   <string name="Command_Phototools_Label">撮影ツール</string>
-  <string name="Command_Phototools_View_Label">撮影ツールのカメラ</string>
+  <!-- 字数制限のため「撮影ツールのカメラ」ではない -->
+  <string name="Command_Phototools_View_Label">カメラ設定</string>
   <string name="Command_Contact_Sets_Label">連絡先セット</string>
   <string name="Command_Mouselook_Label">マウスルック</string>
   <string name="Command_Landmark_Here_Label">ランドマーク作成</string>
@@ -4052,9 +4054,11 @@ https://www.alchemyviewer.org から最新バージョンをダウンロード�
   <string name="Command_Conversation_Log_Label">会話ログ</string>
   <string name="Command_Move_Lock_Label">移動ロック</string>
   <string name="Command_Blocklist_Label">ブロックリスト</string>
-  <string name="Command_ResyncAnimations_Label">アニメーション再同期</string>
-  <string name="Command_RegionTracker_Label">リージョントラッカー</string>
-  <string name="Command_Group_Titles_Label">グループのタイトル</string>
+  <!-- 字数制限のため「アニメーション再同期」ではない -->
+  <string name="Command_ResyncAnimations_Label">アニメ再同期</string>
+  <!-- 字数制限のため「リージョントラッカー」ではない -->
+  <string name="Command_RegionTracker_Label">リージョン追跡</string>
+  <string name="Command_Group_Titles_Label">グループタイトル</string>
   <string name="Command_Wearable_Favorites_Label">お気に入りの服装</string>
   <string name="Command_RFO_Label">フレンドのみ表示</string>
   <string name="Command_DAO_Label">アニメッシュを描画しない</string>
@@ -4131,7 +4135,8 @@ https://www.alchemyviewer.org から最新バージョンをダウンロード�
   <string name="Toolbar_Right_Tooltip">現在、右のツールバーにあります。</string>
 
   <string name="Command_Fly_Tooltip">飛行モードのオン／オフ（HOME）</string>
-  <string name="Command_Stop_Animations_Label">アニメーションを停止します。</string>
+  <!-- 字数制限のため「アニメーション停止」でない -->
+  <string name="Command_Stop_Animations_Label">アニメ停止</string>
   <string name="Command_Stop_Animations_Tooltip">自分のアバターのアニメーションを停止します。</string>
 
   <string name="Command_Discord_Label">Discord</string>
@@ -4216,7 +4221,7 @@ https://www.alchemyviewer.org から最新バージョンをダウンロード�
 
   <!-- RLVa -->
   <string name="RLVaPendingRestart">（再起動待ち）</string>
-  <string name="RLVaToggleMessageLogin">ＲＬＶａは[STATE]状態です。（再起動は必要ありません）</string>
+  <string name="RLVaToggleMessageLogin">ＲＬＶａは[STATE]状態です。（再起動する必要はありません）</string>
   <string name="RLVaToggleMessageRestart">ＲＬＶａは再起動後に[STATE]になります。</string>
   <string name="RLVaToggleEnabled">有効</string>
   <string name="RLVaToggleDisabled">無効</string>
@@ -4279,7 +4284,7 @@ https://www.alchemyviewer.org から最新バージョンをダウンロード�
   <string name="Mav_Details_MAV_UNKNOWN_VERSION">物理形状のバージョンが正しくありません。物理モデルに正しいバージョンを設定してください。</string>
 
   <!-- CURL error messages -->
-  <string name="couldnt_resolve_host">DNSがホスト名 ([HOSTNAME]) を解決できませんでした。
+  <string name="couldnt_resolve_host">ＤＮＳがホスト名 ([HOSTNAME]) を解決できませんでした。
 www.secondlife.com のウェブサイトに接続できるかご確認ください。
 接続できても、このエラーが継続的に起こる場合は、サポートセクションから問題を報告してください。</string>
   <string name="ssl_peer_certificate">ログインサーバーがＳＳＬ経由で確認できませんでした。
@@ -4406,7 +4411,7 @@ Rez時間：[OBJECT_REZ_TIME]
   <string name="PS_Arms_upward_Legs_apart">両腕を上へ、両脚を開く</string>
   <string name="PS_Arms_upward_Legs_together">両腕を上へ、両脚を揃える</string>
 
-  <string name="QP_WL_Region_Default">巨熊された自薦環境</string>
+  <string name="QP_WL_Region_Default">共有された自然環境</string>
   <string name="QP_WL_Day_Cycle_Based">デイサイクル基準</string>
   <string name="QP_WL_None">なし</string>
 

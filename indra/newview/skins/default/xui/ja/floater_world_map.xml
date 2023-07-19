@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="worldmap" title="ワールドマップ">
-  <string name="collapse_icon" value="map_ui_collapse_icon.png" />
-  <string name="expand_icon" value="map_ui_expand_icon.png" />
-  <string name="collapse_tooltip" value="マップ操作パネルを隠す" />
-  <string name="expand_tooltip" value="マップ操作を表示" />
-  <layout_stack name="control_stack">
-    <layout_panel name="map_lp">
+  <floater.string name="UnnamedParcel">（不明な区画）</floater.string>
+  <layout_stack name="resizing_stack">
+    <layout_panel name="map_panel">
       <panel name="objects_mapview" />
+      <panel name="layout_panel_6">
+        <icon name="zoom_icon" />
+        <slider name="zoom slider" />
+      </panel>
     </layout_panel>
-    <layout_panel name="control_lp">
+    <!-- <FS:Zi> FIRE-31376: Splitter panel to show/hide map details -->
+    <layout_panel name="map_details_splitter">
+      <panel>
+        <panel />
+        <button name="Show Map details" />
+      </panel>
+    </layout_panel>
+    <!-- </FS:Zi> -->
+    <layout_panel name="map_details_panel">
       <panel name="layout_panel_1">
-        <text name="legends_label">凡例</text>
+        <text name="events_label">凡例</text>
       </panel>
       <panel name="layout_panel_2">
         <button name="Show My Location" tool_tip="現在、自分のアバターがいる場所をマップの中心にする。" />
@@ -28,29 +37,22 @@
         <text name="auction_label">オークション中</text>
         <icon name="square2" />
         <text name="by_owner_label">所有者で</text>
-
         <button name="Go Home" tool_tip="自分のホームの場所にテレポート" />
         <text name="Home_label">ホーム</text>
         <text name="events_label">イベント：</text>
-
         <check_box name="event_chk" />
         <icon name="event" />
         <text name="pg_label">General</text>
-
         <check_box name="events_mature_chk" />
         <icon name="events_mature_icon" />
         <text name="events_mature_label">Moderate</text>
-
         <check_box name="events_adult_chk" />
         <icon name="events_adult_icon" />
         <text name="events_adult_label">Adult</text>
-        <check_box name="AlchemyMapShowAgentCount" label="エージェント数"/>
       </panel>
-
       <panel name="layout_panel_3">
         <text name="find_on_map_label">マップから探す</text>
       </panel>
-
       <panel name="layout_panel_4">
         <icon name="friends_icon" />
         <combo_box label="オンラインのフレンド" name="friend combo" tool_tip="マップにフレンドを表示する。">
@@ -62,32 +64,20 @@
         </combo_box>
         <icon name="location_icon" />
         <search_editor label="リージョン名で" name="location" tool_tip="リージョン名を入力してください。" />
-
-        <button label="探す" name="DoSearch" tool_tip="リージョンを検索する。" />
-
-        <button name="Clear" tool_tip="追跡ラインをクリアしてマップをリセットする。" />
-
+        <button label="探す" name="DoSearch" tool_tip="リージョンを検索します。" />
         <scroll_list name="search_results">
-          <scroll_list.columns label="" name="icon" />
+          <scroll_list.columns label="" name="scroll_list_icon" />
           <scroll_list.columns label="" name="sim_name" />
         </scroll_list>
-        <text name="locations_label">場所：</text>
+        <text name="events_label">Location:</text>
         <spinner name="teleport_coordinate_x" />
         <spinner name="teleport_coordinate_y" />
         <spinner name="teleport_coordinate_z" />
-        <button label="テレポート" name="Teleport" tool_tip="選択した場所にテレポートする。" />
-
-        <button label="SLurlをコピー" name="copy_slurl" tool_tip="現在の場所をWebで使えるSLurlにしてコピーする。" />
-        <button label="選択を表示" name="Show Destination" tool_tip="選択した場所をマップの中心にする。" />
+        <button label="テレポート" name="Teleport" tool_tip="選択した場所にテレポートします。" />
+        <button label="SLurlをコピー" name="copy_slurl" tool_tip="現在の場所をWebで使えるSLurlにしてコピーします。" />
+        <button label="クリア" name="Clear" tool_tip="追跡ラインをクリアしてマップをリセットします。" />
+        <button label="選択を表示" name="Show Destination" tool_tip="選択した場所をマップの中心にします。" />
         <button label="リージョン追跡" name="track_region" tool_tip="このリージョンをリージョントラッカーに追加します。" />
-      </panel>
-      <panel name="layout_panel_5">
-        <text name="zoom_label">縮尺</text>
-      </panel>
-      <panel name="layout_panel_6">
-        <icon name="zoom_icon" />
-        <!-- NOTE: min_val for zoom slider is hardcoded for performance reasons -->
-        <slider name="zoom slider" />
       </panel>
     </layout_panel>
   </layout_stack>

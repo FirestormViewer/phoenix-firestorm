@@ -24,8 +24,8 @@
     <menu_item_check label="ユーザ名で並び替え" name="sort_by_username" />
     <menu_item_check label="表示名で並び替え" name="sort_by_displayname" />
     <menu_item_separator />
-    <menu_item_check label="フルネーム書式のユーザ名（表示名）" name="format_username_displayname" />
-    <menu_item_check label="フルネーム書式の表示名（ユーザ名）" name="format_displayname_username" />
+    <menu_item_check label="フルネームの書式を「ユーザ名（表示名）」にする" name="format_username_displayname" />
+    <menu_item_check label="フルネームの書式を「表示名（ユーザ名）」にする" name="format_displayname_username" />
     <menu_item_separator />
     <menu_item_check label="検索フィルタを表示" name="friend_filter" />
   </menu>

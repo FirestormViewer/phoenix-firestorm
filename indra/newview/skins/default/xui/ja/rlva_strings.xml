@@ -30,7 +30,7 @@
       <key>blocked_recvim</key>
       <map>
         <key>value</key>
-        <string>※ＩＭはビューアーによってブロックされています。</string>
+        <string>※ＩＭはビューアによってブロックされています。</string>
         <key>description</key>
         <string>ＩＭの受信がブロックされている場合、元のメッセージの代わりに表示されます。</string>
         <key>label</key>
@@ -41,7 +41,7 @@
       <key>blocked_sendim</key>
       <map>
         <key>value</key>
-        <string>※ＩＭは送信者のビューアーによってブロックされています。</string>
+        <string>※ＩＭは送信者のビューアによってブロックされています。</string>
         <key>description</key>
         <string>ＩＭの送信がブロックされている場合、かわりに表示（相手のパーティーには送信）されます。</string>
         <key>label</key>

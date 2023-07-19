@@ -35,7 +35,7 @@
   <menu_item_call label="自分のアニメーションを停止" name="Stop Animating My Avatar" />
   <menu_item_separator />
   <menu_item_call label="スケルトンをリセット" name="Reset Skeleton" />
-  <menu_item_call label="テスクチャをリフレシュ" name="Refresh Textures" />
+  <menu_item_call label="テクスチャをリフレシュ" name="Refresh Textures" />
   <menu_item_call label="スケルトンとアニメーションをリセット" name="Reset Skeleton And Animations" />
   <menu_item_call label="テクスチャのデバッグ…" name="Debug..." />
   <menu_item_call label="ＸＭＬとしてダンプ" name="Dump XML" />
