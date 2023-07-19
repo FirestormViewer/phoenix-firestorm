@@ -2465,6 +2465,9 @@ Czy chcesz je odtworzyć?
 		Twój kosz się przepełnia. Może to sprawić, że będziesz mieć problemy z zalogowaniem się.
 		<usetemplate name="okcancelbuttons" notext="Wyczyszczę kosz ręcznie później" yestext="Sprawdź kosz teraz" />
 	</notification>
+	<notification name="InventoryLimitReachedAIS">
+		W Twojej Szafie występują problemy. Skontaktuj się z pomocą techniczną swojego świata.
+	</notification>
 	<notification name="ConfirmClearBrowserCache">
 		Na pewno chcesz wyczyścić bufory przeglądarki internetowej, wyszukiwania i podróży?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />

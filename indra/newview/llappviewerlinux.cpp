@@ -128,8 +128,6 @@ int main( int argc, char **argv )
 
 	// install unexpected exception handler
 	gOldTerminateHandler = std::set_terminate(exceptionTerminateHandler);
-	// install crash handlers
-	viewer_app_ptr->setErrorHandler(LLAppViewer::handleViewerCrash);
 
 	unsetenv( "LD_PRELOAD" ); // <FS:ND/> Get rid of any preloading, we do not want this to happen during startup of plugins.
 	

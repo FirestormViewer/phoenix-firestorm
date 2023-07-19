@@ -1728,6 +1728,7 @@ BOOL LLViewerRegion::isViewerCameraStatic()
 
 void LLViewerRegion::killInvisibleObjects(F32 max_time)
 {
+	if(sFSAreaSearchActive){ return; } // <FS:Beq/> FIRE-32668 Area Search improvements
 	if(!sVOCacheCullingEnabled)
 	{
 		return;
@@ -3553,6 +3554,53 @@ void LLViewerRegion::logActiveCapabilities() const
 {
 	log_capabilities(mImpl->mCapabilities);
 }
+
+// <FS:Beq> Area Search improvement
+void LLViewerRegion::useFullUpdateInterestListMode(bool send_everything, bool force_update)
+{
+	static const char *FSLogTag = "InterestListMode";
+	U32 previousCount = mFullUpdateInUseCount;
+	LLSD body;
+	LL_DEBUGS(FSLogTag) << "useFullUpdateInterestListMode" << " send_everything:" << send_everything << " inUse: " << mFullUpdateInUseCount << LL_ENDL;
+	if (send_everything)
+	{
+		body["mode"] = LLSD::String("360");
+		mFullUpdateInUseCount++; // we increment irrespective of the actual success as we're really just tracking the attempts.
+	}
+	else
+	{
+		if(mFullUpdateInUseCount > 0)
+		{
+			mFullUpdateInUseCount--; // see above.
+		}
+		if(force_update)
+		{
+			mFullUpdateInUseCount=0; // when we are forcing the off state then we need to clear the count to zero.
+		}
+		body["mode"] = LLSD::String("default");
+	}
+	
+	if( force_update || ( send_everything && mFullUpdateInUseCount == 1 ) || ( ( !send_everything ) && mFullUpdateInUseCount == 0 && previousCount != 0) ) // Only send if this is the first enable or last disable.
+	{
+		if (gAgent.requestPostCapability("InterestList", body,
+										[](const LLSD &response)
+										{
+											LL_INFOS(FSLogTag) << "InterestList capability responded: \n"
+																	<< ll_pretty_print_sd(response) << LL_ENDL;
+										}))
+		{
+			LL_INFOS(FSLogTag) << "Successfully posted an InterestList capability request with payload: \n"
+									<< ll_pretty_print_sd(body) << LL_ENDL;
+		}
+		else
+		{
+			LL_INFOS(FSLogTag) << "Unable to post an InterestList capability request with payload: \n"
+									<< ll_pretty_print_sd(body) << LL_ENDL;
+		}
+	}
+	LL_DEBUGS(FSLogTag) << "useFullUpdateInterestListMode" << " (AFTER): inUse: " << mFullUpdateInUseCount << LL_ENDL;
+}
+// </FS:Beq>
 
 LLSpatialPartition* LLViewerRegion::getSpatialPartition(U32 type)
 {

@@ -311,7 +311,7 @@ bool LLThreadSafeQueue<ElementT, QueueT>::push_(lock_t& lock, T&& element)
     // <FS:Beq> Make thread queue capacity hangs visible
     //     return false;
     {
-        LL_WARNS("ThreadPool") << "Threadsafe queue push_(lockacquired) queue full " << mStorage.size() << " >= " << mCapacity << LL_ENDL;
+        LL_WARNS_ONCE("ThreadPool") << "Threadsafe queue push_(lockacquired) queue full " << mStorage.size() << " >= " << mCapacity << LL_ENDL;
         return false;
     }
     // </FS:Beq>

@@ -26,6 +26,30 @@
 [PAYMENTINFO]
 [FIRESTORM][FSDEV][FSSUPP][FSQA][FSGW]
   </string>
+
+  <!--Badges-->
+  <string
+    name="BadgeBeta"
+    value="Original Beta Tester" />
+  <string
+    name="BadgeBetaLifetime"
+    value="Beta Lifetime member" />
+  <string
+    name="BadgeLifetime"
+    value="Lifetime member" />
+  <string
+    name="BadgeLinden"
+    value="Linden Lab employee" />
+  <string
+    name="BadgePremiumLifetime"
+    value="Premium lifetime" />
+  <string
+    name="BadgePremiumPlusLifetime"
+    value="Premium Plus lifetime" />
+  <string
+    name="BadgeTeam"
+    value="[APP_NAME] member" />
+
   <string
     name="payment_update_link_url">
     http://www.secondlife.com/account/billing.php?lang=en
@@ -401,9 +425,33 @@
         name="info_border_acc_status_text"
         bevel_style="in" />
 
+      <panel
+        name="badge_layout"
+        follows="top|right"
+        layout="topleft"
+        width="24"
+        height="20"
+        top_delta="0"
+        right="-1"
+        visible="false">
+
+      <icon
+        name="badge_icon"
+        image_name=""
+        tool_tip=""
+        layout="topleft"
+        follows="left|top"
+        top="2"
+        left="0"
+        height="18"
+        width="18"/>
+
+      </panel>
+
       <text_editor
         name="account_info"
         top_delta="0"
+        left="0"
         right="-4"
         height="50"
         follows="top|left|right"
@@ -414,6 +462,7 @@
         h_pad="3"
         read_only="true"
         translate="false"
+        mouse_opaque="false"
         v_pad="2"
         word_wrap="true" />
 
