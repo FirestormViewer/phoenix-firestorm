@@ -9,12 +9,26 @@
 	<string name="status_unknown">
 		Inconnu
 	</string>
+	<string name="BadgeBeta" value="Bêta-testeur originel" />
+	<string name="BadgeBetaLifetime" value="Membre Beta à vie" />
+	<string name="BadgeLifetime" value="Membre à vie" />
+	<string name="BadgeLinden" value="Employé(e) de Linden Lab" />
+	<string name="BadgePremiumLifetime" value="Premium à vie" />
+	<string name="BadgePremiumPlusLifetime" value="Premium Plus à vie" />
+	<string name="BadgeTeam" value="membre de [APP_NAME]" />
+	<string name="payment_update_link_url">
+		http://www.secondlife.com/account/billing.php?lang=fr
+	</string>
+	<string name="partner_edit_link_url">
+		http://www.secondlife.com/account/partners.php?lang=fr
+	</string>
 	<string name="no_partner_text" value="Aucun"/>
 	<string name="no_group_text" value="Aucun"/>
 	<string name="FSDev" value="Développeur"/>
 	<string name="FSSupp" value="Assistance"/>
 	<string name="FSQualityAssurance" value="Suivi des anomalies"/>
 	<string name="FSGW" value="Portail"/>
+	<string name="texture_picker_label" value="Photo du profil" />
 	<text name="name_label" value="Nom :"/>
 	<panel name="name_holder">
 		<text_editor name="complete_name" value="(en cours de chargement...)"/>
@@ -37,6 +51,11 @@
 			<text name="label" value="Date de naissance:"/>
 			<text_editor name="user_age" value="(en cours de chargement...)"/>
 			<text name="label2" value="Compte :"/>
+			<layout_stack name="badgepositioner">
+				<layout_panel name="badge_layout">
+					<icon name="badge_icon" tool_tip="Employé(e) Linden Lab" />
+				</layout_panel>
+			</layout_stack>
 			<text name="partner_label" value="Partenaire :"/>
 		</layout_panel>
 	</layout_stack>

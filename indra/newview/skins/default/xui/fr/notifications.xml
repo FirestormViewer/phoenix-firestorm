@@ -2597,6 +2597,9 @@ Voulez-vous les jouer ?
 		Votre corbeille déborde. Cela risque de provoquer des problèmes lors de la connexion.
 		<usetemplate name="okcancelbuttons" notext="Je viderai la corbeille plus tard" yestext="Vérifier le dossier Corbeille"/>
 	</notification>
+	<notification name="InventoryLimitReachedAIS">
+		Votre inventaire rencontre des problèmes. Veuillez contacter le support de votre grille.
+	</notification>
 	<notification name="ConfirmClearBrowserCache">
 		Êtes-vous certain de vouloir supprimer l&apos;historique de vos visites et recherches ?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
