@@ -156,7 +156,7 @@
         <view_border name="physics_tab_border" />
         <panel name="physics geometry">
           <text name="first_step_name">ステップ１：物理モデルを指定：</text>
-          <combo_box name="physics_lod_combo" tool_tip="LOD to use for physics shape">
+          <combo_box name="physics_lod_combo" tool_tip="物理作用に使用するＬＯＤ">
             <combo_item name="choose_one">１つを選択…</combo_item>
             <combo_item name="physics_high">高</combo_item>
             <combo_item name="physics_medium">中</combo_item>
@@ -272,7 +272,7 @@
         <text name="price_breakdown_labels">ダウンロード：
 物理効果数：
 インスタンス数：
-テスクチャ数：
+テクスチャ数：
 モデル：</text>
         <text name="price_breakdown">[STREAMING]
 [PHYSICS]
@@ -320,7 +320,7 @@
     <text name="label_display">表示…</text>
     <check_box label="エッジ" name="show_edges" />
     <check_box label="物理効果" name="show_physics" />
-    <check_box label="テスクチャ数" name="show_textures" />
+    <check_box label="テクスチャ数" name="show_textures" />
     <check_box label="スキンのウエイト" name="show_skin_weight" />
     <check_box label="ジョイント位置のオーバーライド" name="show_joint_overrides" />
     <check_box label="ジョイント数" name="show_joint_positions" />

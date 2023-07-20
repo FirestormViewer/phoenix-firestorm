@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="fs_asset_blacklist" title="アセットのブラックリスト">
   <floater.string name="asset_object">オブジェクト</floater.string>
-  <floater.string name="asset_texture">テスクチャ</floater.string>
+  <floater.string name="asset_texture">テクスチャ</floater.string>
   <floater.string name="asset_sound">サウンド</floater.string>
   <floater.string name="asset_animation">アニメーション</floater.string>
   <floater.string name="asset_resident">住民</floater.string>

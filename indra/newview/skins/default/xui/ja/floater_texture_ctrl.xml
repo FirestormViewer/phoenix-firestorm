@@ -3,7 +3,7 @@
   <floater.string name="choose_picture">クリックして画像を選択</floater.string>
   <floater.string name="pick title">ピック：</floater.string>
   <floater.string name="pick_material">ピック：マテリアル</floater.string>
-  <floater.string name="pick_texture">ピック：テスクチャ</floater.string>
+  <floater.string name="pick_texture">ピック：テクスチャ</floater.string>
   <view name="preview_widget" />
   <text name="Multiple">複数のテクスチャ</text>
   <!-- mode selector -->
@@ -24,7 +24,7 @@
 
   <filter_editor label="テクスチャをフィルタ" name="inventory search editor" />
   <asset_filtered_inv_panel name="inventory panel" />
-  <line_editor name="uuid_editor" label="テスクチャのＵＵＩＤを入力" />
+  <line_editor name="uuid_editor" label="テクスチャのＵＵＩＤを入力" />
   <button name="apply_uuid_btn" label="キーを反映" />
 
   <!--  middle: local mode -->

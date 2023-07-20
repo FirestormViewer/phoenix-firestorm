@@ -6,8 +6,7 @@
   <floater.string name="navmesh_viewer_status_checking_version">ナビメッシュのステータスを確認しています。</floater.string>
   <floater.string name="navmesh_viewer_status_downloading">ナビメッシュをダウンロードしています。</floater.string>
   <floater.string name="navmesh_viewer_status_updating">サーバー上でナビメッシュが変わりました。最新のナビメッシュをダウンロードしています。</floater.string>
-  <floater.string name="navmesh_viewer_status_has_navmesh">最新のナビメッシュがダウンロードされました。
-  </floater.string>
+  <floater.string name="navmesh_viewer_status_has_navmesh">最新のナビメッシュがダウンロードされました。</floater.string>
   <floater.string name="navmesh_viewer_status_error">ナビメッシュが正しくダウンロードできませんでした。</floater.string>
   <floater.string name="navmesh_simulator_status_pending">ナビメッシュに保留中の変更があります。</floater.string>
   <floater.string name="navmesh_simulator_status_building">ナビメッシュを作成しています。</floater.string>
@@ -24,7 +23,7 @@
   <floater.string name="pathing_path_invalid">選択した２点間のパスが見つかりません。</floater.string>
   <floater.string name="pathing_error">パスの生成中にエラーが発生しました。</floater.string>
   <panel name="pathfinding_console_main">
-    <text name="viewer_status_label">ビューアーのステータス</text>
+    <text name="viewer_status_label">ビューアのステータス</text>
   </panel>
   <panel name="pathfinding_console_simulator">
     <text name="simulator_status_label">シミュレータのステータス</text>

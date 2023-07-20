@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="fs_import" title="オブジェクトのインポート">
   <floater.string name="floater_title">[FILENAME]のインポート</floater.string>
-  <floater.string name="file_status">[LINKSETS]件のリンクセット、[PRIMS]個のプリム、[TEXTURES]枚のテスクチャ、[SOUNDS]個のサウンド、[ANIMATIONS]個のアニメーション</floater.string>
+  <floater.string name="file_status">[LINKSETS]件のリンクセット、[PRIMS]個のプリム、[TEXTURES]枚のテクスチャ、[SOUNDS]個のサウンド、[ANIMATIONS]個のアニメーション</floater.string>
   <floater.string name="file_status_error">ファイルを読み込んでいるときにエラーが発生しました。他のファイルを選択してください。</floater.string>
   <floater.string name="file_version_error">ファイルのパース時にエラーが発生しました。フォーマットが正しくないバージョンが不正です。</floater.string>
   <floater.string name="file_status_running">全[LINKSETS]個中[LINKSET]個のリンクセット、全[PRIMS]個中[PRIM]個のプリム</floater.string>
   <floater.string name="file_status_done">インポートが完了しました。</floater.string>
-  <floater.string name="texture_uploading">全[TEXTURETOTAL]枚のテスクチャのうち、[TEXTURE]枚のテスクチャをアップロードしています。</floater.string>
+  <floater.string name="texture_uploading">全[TEXTURETOTAL]枚のテクスチャのうち、[TEXTURE]枚のテクスチャをアップロードしています。</floater.string>
   <floater.string name="sound_uploading">全[SOUNDTOTAL]個サウンドのうち、[SOUND]個のサウンドをアップロードしています。</floater.string>
   <floater.string name="animation_uploading">全[ANIMATIONTOTAL]個のアニメーションのうち、[ANIMATION]個のアニメーションをアップロードしています。</floater.string>
   <floater.string name="asset_uploading">全[ASSETTOTAL]件のアセットのうち、[ASSET]件のアセットをアップロードしています。</floater.string>

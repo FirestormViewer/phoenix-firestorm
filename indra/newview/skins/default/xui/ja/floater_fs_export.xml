@@ -4,12 +4,12 @@
   <floater.string name="title_working">[OBJECT]をバックアップしています－情報を収集しています…</floater.string>
   <floater.string name="title_inventory">[OBJECT]をバックアップしています－インベントリを取得しています…</floater.string>
   <floater.string name="title_assets">[OBJECT]をバックアップしています－アセットを取得しています…</floater.string>
-  <floater.string name="title_textures">[OBJECT]をバックアップしています－テスクチャを取得しています…</floater.string>
+  <floater.string name="title_textures">[OBJECT]をバックアップしています－テクスチャを取得しています…</floater.string>
   <layout_stack name="resizing_stack">
     <layout_panel name="control_panel">
       <text name="SelectionInfoText">選択情報</text>
       <text name="exportable_prims">エクスポート可能なプリム：全[TOTAL]個中[COUNT]個</text>
-      <text name="exportable_textures">エクスポート可能なテスクチャ：全[TOTAL]枚中[COUNT]枚</text>
+      <text name="exportable_textures">エクスポート可能なテクスチャ：全[TOTAL]枚中[COUNT]枚</text>
       <text name="OptionsText">オプション：</text>
       <check_box label="オブジェクトのコンテンツをディスクにバックアップ" name="contents_check" />
       <button label="別名で保存…" name="export_btn" />
@@ -22,7 +22,7 @@
             <columns name="name" />
           </scroll_list>
         </panel>
-        <panel label="テスクチャ" name="texture_panel">
+        <panel label="テクスチャ" name="texture_panel">
           <scroll_container name="selected_textures">
             <panel name="textures_panel" />
           </scroll_container>

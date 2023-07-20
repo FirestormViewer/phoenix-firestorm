@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="performance" title="Improve Graphics Speed">
-  <floater.string name="frame_stats">フレーム：[TOT_FRAME_TIME]ms - Scenery:[SCENERY_FRAME_PCT]% Avatars:[AV_FRAME_PCT]%
-UI:[UI_FRAME_PCT]% HUDs:[HUDS_FRAME_PCT]% Swap:[SWAP_FRAME_PCT]% Tasks:[IDLE_FRAME_PCT]%
+  <floater.string name="frame_stats">フレーム：[TOT_FRAME_TIME]㎳－背景：[SCENERY_FRAME_PCT]％　アバター：[AV_FRAME_PCT]％
+ＵＩ：[UI_FRAME_PCT]％　ＨＵＤ：[HUDS_FRAME_PCT]％　スワップ：[SWAP_FRAME_PCT]％　タスク：[IDLE_FRAME_PCT]％
   </floater.string>
-  <floater.string name="limit_fps">User Limited @ [FPSCAP] FPS</floater.string>
-  <floater.string name="tuning_fps">Target [FPSTARGET] FPS</floater.string>
-  <floater.string name="av_frame_pct">[AV_FRAME_PCT]%</floater.string>
-  <floater.string name="huds_frame_pct">[HUDS_FRAME_PCT]%</floater.string>
-  <floater.string name="focus_fps">In Background</floater.string>
-  <floater.string name="info_waitforit">Allow 5-10 seconds for changes to take effect.</floater.string>
-  <floater.string name="info_frozen">Stats pause when FPS is limited or in background.</floater.string>
-  <floater.string name="tot_av_template">Total: [TOT_AV] ([TOT_AV_TIME]μs)</floater.string>
-  <floater.string name="tot_att_template">Total: [TOT_ATT] ([TOT_ATT_TIME]μs)</floater.string>
-  <flaoter.string name="fps_text" value="frames per second" />
-  <floater.string name="max_fps" value="VSync @ [VSYNCFREQ] FPS" />
+  <floater.string name="limit_fps">ユーザのＦＰＳ制限＠[FPSCAP]</floater.string>
+  <floater.string name="tuning_fps">目標[FPSTARGET]ＦＰＳ</floater.string>
+  <floater.string name="av_frame_pct">[AV_FRAME_PCT]％</floater.string>
+  <floater.string name="huds_frame_pct">[HUDS_FRAME_PCT]％</floater.string>
+  <floater.string name="focus_fps">バックグラウンド時</floater.string>
+  <floater.string name="info_waitforit">変更が有効になるまで、５～１０秒程度かかります。</floater.string>
+  <floater.string name="info_frozen">ＦＰＳが制限されている場合や、バックグラウンドで動作している場合、統計は一時停止します。</floater.string>
+  <floater.string name="tot_av_template">合計：[TOT_AV]（[TOT_AV_TIME]㎲）</floater.string>
+  <floater.string name="tot_att_template">合計：[TOT_ATT]（[TOT_ATT_TIME]㎲）</floater.string>
+  <flaoter.string name="fps_text" value="フレーム毎秒" />
+  <floater.string name="max_fps" value="垂直同期＠[VSYNCFREQ]ＦＰＳ" />
   <panel name="panel_top">
     <panel name="fps_subpanel">
       <text name="fps_value">167</text>
@@ -25,10 +25,10 @@ UI:[UI_FRAME_PCT]% HUDs:[HUDS_FRAME_PCT]% Swap:[SWAP_FRAME_PCT]% Tasks:[IDLE_FRA
     <panel name="target_subpanel">
       <text name="settings_lbl" tool_tip="ＦＰＳを維持するために設定を自動的に調整します。ターゲットを希望のフレームレートに設定すると、ビューアは設定を動的に変更してこれに一致させようとします。">自動調整：</text>
       <text name="targetfps_desc">目標フレームレート（fps）</text>
-      <spinner name="target_fps" tool_tip="目標ＦＰＳ－目標のＦＰＳです。ビューアーは、グラフィック設定を調整することでこれを実現しようとします。" />
-      <button label="開始" label_selected="停止" name="AutoTuneFPS" tool_tip="ビューアーは、目標ＦＰＳを満たすように設定が調整されるまで停止します。">
+      <spinner name="target_fps" tool_tip="目標ＦＰＳ－目標のＦＰＳです。ビューアは、グラフィック設定を調整することでこれを実現しようとします。" />
+      <button label="開始" label_selected="停止" name="AutoTuneFPS" tool_tip="ビューアは、目標ＦＰＳを満たすように設定が調整されるまで停止します。">
       </button>
-      <check_box label="継続的" name="AutoTuneContinuous" tool_tip="ビューアーは、このフローターが閉じていても停止するまで、目標ＦＰＳを満たすように設定を継続的に調整します。無効にしたときは、自動調整ボタンを押したときにその時点の設定に合わせて調整されます。">
+      <check_box label="継続的" name="AutoTuneContinuous" tool_tip="ビューアは、このフローターが閉じていても停止するまで、目標ＦＰＳを満たすように設定を継続的に調整します。無効にしたときは、自動調整ボタンを押したときにその時点の設定に合わせて調整されます。">
       </check_box>
       <button name="PrefSaveButton" tool_tip="現在の設定を今後のデフォルトの設定として保存します。" />
       <button name="PrefLoadButton" tool_tip="プリセットを読み込みます。" />

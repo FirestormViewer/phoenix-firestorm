@@ -38,10 +38,10 @@
           <stat_bar label="ＵＩ" name="LLView" />
           <stat_bar label="フォント" name="LLFontFreetype" />
           <stat_bar label="インベントリ" name="LLInventoryObject" />
-          <stat_bar label="ビューアーオブジェクト" name="LLViewerObject" />
+          <stat_bar label="ビューアオブジェクト" name="LLViewerObject" />
           <stat_bar label="八分木グループデータ" name="LLViewerOctreeGroup" />
           <stat_bar label="八分木データ" name="LLViewerOctreeEntry" />
-          <stat_bar label="ビューアーのオブジェクトキャッシュ" name="LLVOCacheEntry" />
+          <stat_bar label="ビューアのオブジェクトキャッシュ" name="LLVOCacheEntry" />
           <stat_bar label="描画可能オブジェクト" name="LLDrawable" />
           <stat_bar label="顔データ" name="LLFace" />
           <stat_bar label="描画情報" name="LLDrawInfo" />
@@ -91,7 +91,7 @@
         <stat_view label="時間" name="simperf">
           <stat_bar label="フレーム時間合計" name="simframemsec" />
           <stat_bar label="総時間数" name="simnetmsec" />
-          <stat_bar label="物理的作用時間" name="simsimphysicsmsec" />
+          <stat_bar label="物理作用時間" name="simsimphysicsmsec" />
           <stat_bar label="シミュレーション時間" name="simsimothermsec" />
           <stat_bar label="エージェント時間" name="simagentmsec" />
           <stat_bar label="イメージ時間" name="simimagesmsec" />

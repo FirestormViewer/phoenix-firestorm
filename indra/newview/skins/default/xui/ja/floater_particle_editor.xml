@@ -45,9 +45,9 @@
             <slider name="omega_z" label="Ｚ：" />
           </panel>
         </accordion_tab>
-        <accordion_tab name="color_tab" title="色／テスクチャ">
+        <accordion_tab name="color_tab" title="色／テクスチャ">
           <panel name="color_panel">
-            <texture_picker name="texture_picker" label="テスクチャ" />
+            <texture_picker name="texture_picker" label="テクスチャ" />
             <color_swatch label="開始色" name="start_color_selector" />
             <color_swatch label="終了色" name="end_color_selector" />
 

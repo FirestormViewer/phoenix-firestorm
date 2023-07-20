@@ -9,15 +9,15 @@ https://www.firestormviewer.org</text>
       <button label="コピー" name="copy_btn" />
     </panel>
     <panel label="Linden Labのクレジット" name="credits_panel">
-      <text name="linden_intro">Firestormは、Second Life ビューアーのソースコードを公開するというLinden Lab の決定がなければ実現しなかったでしょう。
+      <text name="linden_intro">Firestormは、Second Life ビューアのソースコードを公開するというLinden Lab の決定がなければ実現しなかったでしょう。
 
 Second Lifeは、Linden Labがオープンソースで提供しているものです：</text>
-      <text_editor name="contrib_names">Dummy Name replaced at run time</text_editor>
+      <text_editor name="contrib_names">実行時に置き換えられるダミー名</text_editor>
     </panel>
     <panel label="Firestorm Credits" name="fs_credits_panel">
       <scroll_container name="fs_credits_scroll_container">
         <panel name="fs_credits_scroll_container_content_panel">
-          <text name="firestorm_intro">Firestorm is a community development project to improve the SecondLife(tm) Viewer experience. We package contributions from various community developers along with code from Linden Lab and ourselves to bring you a quality, feature-rich viewer experience backed up by a large volunteer support team. Firestorm is brought to you by The Phoenix Firestorm Project, Inc., a non-profit organization.
+          <text name="firestorm_intro">Firestormは、SecondLife™のビューア体験を向上させるためのコミュニティ開発プロジェクトです。様々なコミュニティ開発者からの貢献と、リンデンラボと私たち自身からのコードをパッケージ化し、大規模なボランティアサポートチームに支えられた、高品質で機能豊富なビューア体験をお届けします。Firestormは非営利団体Phoenix Firestorm Project, Inc.によって提供されています。
 
 Firestorm開発チーム：</text>
           <text name="firestorm_names">Ansariel Hiller, ArminWeatherHax, Arrehn Oberlander, Beq Janus, Cinder Roxley, Holy Gavenkrantz, Jessica Lyon, Kadah Coba, Kitty Barnett, Liny Odell, LordGregGreg Back, Mobius Ryba, Nicky Dasmijn, PanteraPolnocy, ScentualLust, Selo Jacobus, Tankmaster Finesmith, Techwolf Lupindo, Tonya Souther, Tozh Taurog, Vortex Saito, WoLf Loonie, Wolfspirit Magic and Zi Ree.</text>
@@ -58,7 +58,7 @@ xxHash Copyright (C) 2012-2020 Yann Collet.
 zlib Copyright (C) 1995-2012 Jean-loup Gailly and Mark Adler.
 Some icons by Joseph Wain / glyphish.com
 
-Second Lifeビューアーは、Havok (TM) Physicsが使用されています。(c)Copyright 1999-2010 Havok.com Inc. (and its Licensors). All Rights Reserved. 詳細につきましては www.havok.comをご覧ください。
+Second Lifeビューアは、Havok (TM) Physicsが使用されています。(c)Copyright 1999-2010 Havok.com Inc. (and its Licensors). All Rights Reserved. 詳細につきましては www.havok.comをご覧ください。
 
 このソフトウェアには、NVIDIA Corporationのソースコードが含まれます。
 

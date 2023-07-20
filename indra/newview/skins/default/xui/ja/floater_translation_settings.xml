@@ -54,7 +54,7 @@
   <text name="azure_api_key_label">Azureキー：</text>
   <line_editor default_text="翻訳キーを入力して「確認」ボタンをクリックしてください。" name="azure_api_key" />
   <text name="azure_api_region_label">リージョン：</text>
-  <line_editor default_text="グローバルサービスの場合は空のままにすることができます。" />
+  <line_editor default_text="グローバルサービスの場合は空のままにすることができます。" name="azure_api_region" />
   <button label="認証" name="verify_azure_api_key_btn" />
 
   <text name="google_api_key_label">Google [https://cloud.google.com/translate/docs/quickstarts?hl=ja#auth APIキー]：</text>

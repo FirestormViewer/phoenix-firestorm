@@ -2822,7 +2822,7 @@ Linden Lab</notification>
     <usetemplate name="okcancelbuttons" notext="後でゴミ箱を空にする" yestext="ごみ箱フォルダを確認する" />
   </notification>
 
-  <notification name="InventoryLimitReachedAIS">インベントリに問題が発生しています。お手数ですが、サポートにお問い合わせください。
+  <notification name="InventoryLimitReachedAIS">インベントリに問題が発生しています。お手数ですが、グリッドのサポートにお問い合わせください。
     <tag>fail</tag>
   </notification>
 

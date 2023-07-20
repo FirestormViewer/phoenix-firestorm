@@ -7,7 +7,7 @@
     <column name="faces" label="面数" />
     <column name="vertices" label="頂点数" />
     <column name="indices" label="指数" />
-    <column name="vram_usage" label="ＶＲＡＭ（テスクチャ）の㎅数" />
+    <column name="vram_usage" label="ＶＲＡＭ（テクスチャ）の㎅数" />
     <column name="vram_usage_vbo" label="ＶＲＡＭ（ＶＢＯ）の㎅数" />
   </scroll_list>
   <button label="リフレッシュ" label_selected="リフレッシュ" name="refresh_button">
