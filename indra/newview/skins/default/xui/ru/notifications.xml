@@ -2536,6 +2536,9 @@
 		Ваша корзина переполнена. Это может вызвать проблемы при входе.
 		<usetemplate name="okcancelbuttons" notext="Я очищу корзину позже" yestext="Очистить корзину сейчас"/>
 	</notification>
+	<notification name="InventoryLimitReachedAIS">
+		В вашем инвентаре возникли проблемы. Пожалуйста, обратитесь в службу поддержки вашей сетки.
+	</notification>
 	<notification name="ConfirmClearBrowserCache">
 		Вы действительно хотите удалить журнал своих перемещений, веб-страниц и поиска?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Да"/>

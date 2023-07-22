@@ -583,6 +583,7 @@
 			<menu_item_check label="Перекрытие солнца в симуляторе" name="Sim Sun Override"/>
 			<menu_item_check label="Фиксированная погода" name="Fixed Weather"/>
 			<menu_item_call label="Дамп кэша объектов региона" name="Dump Region Object Cache"/>
+			<menu_item_check label="Список интересов: полное обновление" name="Interest List: Full Update"/>
 			<menu_item_call label="Дамп возможностей симулятора в общий чат" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="Интерфейс пользователя" name="UI">

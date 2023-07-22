@@ -263,6 +263,7 @@ U64 LLMemory::getCurrentRSS()
 #include <filesystem>
 #include <unistd.h>
 
+// return the RSS in bytes. This value is converted to kilobytes implicitly elsewhere.
 U64 LLMemory::getCurrentRSS() {
     namespace fs = std::filesystem;
 
@@ -286,8 +287,8 @@ U64 LLMemory::getCurrentRSS() {
     long size, rss, shared, text, lib, data, dt;
     iss >> size >> rss >> shared >> text >> lib >> data >> dt;
 
-    // Convert pages to kilobytes and return RSS
-    return static_cast<U64>(rss * pageSize / 1024);
+    // Convert pages to bytes and return RSS
+    return static_cast<U64>( rss * pageSize );
 }
 // </FS:Beq>
 #else
