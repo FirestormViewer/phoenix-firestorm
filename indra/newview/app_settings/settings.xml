@@ -9970,7 +9970,7 @@
       <key>Type</key>
       <string>U32</string>
       <key>Value</key>
-			<integer>64</integer>
+			<integer>0</integer>
     </map>
     <key>NoPreload</key>
     <map>
@@ -14565,7 +14565,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>U32</string>
       <key>Value</key>
-      <integer>2048</integer>
+      <integer>4096</integer>
     </map>
     <key>SceneLoadLowMemoryBound</key>
     <map>
@@ -14576,7 +14576,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>U32</string>
       <key>Value</key>
-      <integer>750</integer>
+      <integer>2048</integer>
     </map>
     <key>SceneLoadMinRadius</key>
     <map>
