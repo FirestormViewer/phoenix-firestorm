@@ -533,6 +533,7 @@ void LLDrawPoolAlpha::renderPbrEmissives(std::vector<LLDrawInfo*>& emissives)
     for (LLDrawInfo* draw : emissives)
     {
         llassert(draw->mGLTFMaterial);
+        LLGLDisable cull_face(draw->mGLTFMaterial->mDoubleSided ? GL_CULL_FACE : 0);
         draw->mGLTFMaterial->bind(draw->mTexture);
         draw->mVertexBuffer->setBuffer();
         draw->mVertexBuffer->drawRange(LLRender::TRIANGLES, draw->mStart, draw->mEnd, draw->mCount, draw->mOffset);
@@ -588,6 +589,7 @@ void LLDrawPoolAlpha::renderRiggedPbrEmissives(std::vector<LLDrawInfo*>& emissiv
             lastMeshId = draw->mSkinInfo->mHash;
         }
 
+        LLGLDisable cull_face(draw->mGLTFMaterial->mDoubleSided ? GL_CULL_FACE : 0);
         draw->mGLTFMaterial->bind(draw->mTexture);
         draw->mVertexBuffer->setBuffer();
         draw->mVertexBuffer->drawRange(LLRender::TRIANGLES, draw->mStart, draw->mEnd, draw->mCount, draw->mOffset);
