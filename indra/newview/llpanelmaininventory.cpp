@@ -2238,7 +2238,7 @@ void LLPanelMainInventory::saveTexture(const LLSD& userdata)
     LLUUID item_id;
     if(mSingleFolderMode && isGalleryViewMode())
     {
-        item_id = mCombinationGalleryPanel->getSelectedItemID();
+        item_id = mCombinationGalleryPanel->getFirstSelectedItemID();
         if (item_id.isNull()) return;
     }
     else
@@ -2344,7 +2344,7 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 	{
         if(mSingleFolderMode && isGalleryViewMode())
         {
-            LLInventoryObject *obj = gInventory.getObject(mCombinationGalleryPanel->getSelectedItemID());
+            LLInventoryObject *obj = gInventory.getObject(mCombinationGalleryPanel->getFirstSelectedItemID());
             if (obj && obj->getIsLinkType())
             {
                 show_item_original(obj->getUUID());
@@ -2374,7 +2374,7 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
                     LLPanelMainInventory* main_inventory = sidepanel_inventory->getMainInventoryPanel();
                     if (main_inventory)
                     {
-                        LLInventoryObject *obj = gInventory.getObject(mCombinationGalleryPanel->getSelectedItemID());
+                        LLInventoryObject *obj = gInventory.getObject(mCombinationGalleryPanel->getFirstSelectedItemID());
                         if (obj)
                         {
                             main_inventory->findLinks(obj->getUUID(), obj->getName());
@@ -2401,7 +2401,7 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
         LLSD params;
         if(mSingleFolderMode && isGalleryViewMode())
         {
-            params = LLSD(mCombinationGalleryPanel->getSelectedItemID());
+            params = LLSD(mCombinationGalleryPanel->getFirstSelectedItemID());
         }
         else
         {
@@ -2461,7 +2461,7 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
     {
         if(mSingleFolderMode && isGalleryViewMode())
         {
-            std::set<LLUUID> uuids{ mCombinationGalleryPanel->getSelectedItemID()};
+            std::set<LLUUID> uuids{ mCombinationGalleryPanel->getFirstSelectedItemID()};
             LLAvatarActions::shareWithAvatars(uuids, gFloaterView->getParentFloater(this));
         }
         else
@@ -2512,7 +2512,7 @@ bool LLPanelMainInventory::isSaveTextureEnabled(const LLSD& userdata)
     LLViewerInventoryItem *inv_item = NULL;
     if(mSingleFolderMode && isGalleryViewMode())
     {
-        inv_item = gInventory.getItem(mCombinationGalleryPanel->getSelectedItemID());
+        inv_item = gInventory.getItem(mCombinationGalleryPanel->getFirstSelectedItemID());
     }
     else
     {
@@ -2564,7 +2564,7 @@ BOOL LLPanelMainInventory::isActionEnabled(const LLSD& userdata)
         LLUUID item_id;
         if(mSingleFolderMode && isGalleryViewMode())
         {
-            item_id = mCombinationGalleryPanel->getSelectedItemID();
+            item_id = mCombinationGalleryPanel->getFirstSelectedItemID();
         }
         else{
 		LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
@@ -2584,7 +2584,7 @@ BOOL LLPanelMainInventory::isActionEnabled(const LLSD& userdata)
         LLUUID item_id;
         if(mSingleFolderMode && isGalleryViewMode())
         {
-            item_id = mCombinationGalleryPanel->getSelectedItemID();
+            item_id = mCombinationGalleryPanel->getFirstSelectedItemID();
         }
         else{
 		LLFolderView* root = getActivePanel()->getRootFolder();
@@ -2619,7 +2619,7 @@ BOOL LLPanelMainInventory::isActionEnabled(const LLSD& userdata)
 	{
         if(mSingleFolderMode && isGalleryViewMode())
         {
-            return can_share_item(mCombinationGalleryPanel->getSelectedItemID());
+            return can_share_item(mCombinationGalleryPanel->getFirstSelectedItemID());
         }
         else{
 		LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
@@ -3328,7 +3328,7 @@ void LLPanelMainInventory::setGallerySelection(const LLUUID& item_id, bool new_w
 
 void LLPanelMainInventory::scrollToGallerySelection()
 {
-    mCombinationGalleryPanel->scrollToShowItem(mCombinationGalleryPanel->getSelectedItemID());
+    mCombinationGalleryPanel->scrollToShowItem(mCombinationGalleryPanel->getFirstSelectedItemID());
 }
 
 void LLPanelMainInventory::scrollToInvPanelSelection()
