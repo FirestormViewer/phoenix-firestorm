@@ -3,7 +3,7 @@
   <check_box label="両面に適用" name="double sided" />
   <panel name="base_color_texture_pnl">
     <text name="base_color_lbl">ベースカラー：</text>
-    <texture_picker name="base_color_texture" tool_tip="ベースカラー（ディフューズマップ）。アルファチャネルはオプションで透明度で使用されます。" />
+    <texture_picker name="base_color_texture" tool_tip="ベースカラー（アルベド）マップを指定します。アルファチャネルはオプションで透明度で使用されます。" />
     <text name="base_color_upload_fee">アップロード料金なし</text>
     <text name="base_color_tint_lbl">色彩</text>
     <color_swatch name="base color" />
@@ -20,7 +20,7 @@
   </panel>
   <panel name="metallic_texture_pnl">
     <text name="metallic_roughness_lbl">メタリック／ラフネス：</text>
-    <texture_picker name="metallic_roughness_texture" tool_tip="オプションのオクルージョンを備えたＧＬＴＦによるメタリック／ラフネスマップを指定します。赤チャンネルはオクルージョン、緑チャンネルはラフネス、青チャンネルはメタリックです。" />
+    <texture_picker name="metallic_roughness_texture" tool_tip="オプションでオクルージョンを備えたＧＬＴＦによるメタリック／ラフネスマップを指定できます。赤チャンネルはオクルージョン（環境遮蔽）、緑チャンネルはラフネス（粗度）、青チャンネルはメタリック（金属度）です。" />
     <text name="metallic_upload_fee">アップロード費用なし</text>
     <text name="metallic_factor_lbl">メタリック係数</text>
     <spinner name="metalness factor" />

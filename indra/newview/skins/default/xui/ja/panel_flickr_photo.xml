@@ -1,39 +1,39 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_flickr_photo">
-	<combo_box name="resolution_combobox" tool_tip="画像解像度">
-		<combo_box.item label="現在のウィンドウ" name="CurrentWindow"/>
-		<combo_box.item label="320x240" name="320x240" />
-		<combo_box.item label="640x480" name="640x480"/>
-		<combo_box.item label="800x600" name="800x600"/>
-		<combo_box.item label="1024x768" name="1024x768"/>
-		<combo_box.item label="1280x1024" name="1280x1024" />
-		<combo_box.item label="1600x1200" name="1600x1200" />
-		<combo_box.item label="カスタム" name="Custom" />
-	</combo_box>
-	<combo_box name="filters_combobox" tool_tip="画像フィルター">
-		<combo_box.item label="フィルターなし" name="NoFilter"/>
-	</combo_box>
-	<check_box label="縦横比を固定" name="keep_aspect_ratio" />
-	<text name="working_lbl">
-		更新中...
-	</text>
-	<button label="更新" name="new_snapshot_btn" tool_tip="クリックして更新"/>
-	<button label="プレビュー" name="big_preview_btn" tool_tip="クリックしてプレビューを切り替える"/>
-	<text name="title_label">
-		タイトル：
-	</text>
-	<text name="description_label">
-		説明：
-	</text>
-	<check_box initial_value="true" label="SL の場所を説明の最後に含める" name="add_location_cb"/>
-	<text name="tags_label" tool_tip="タグはスペースで区切って下さい。複数の単語から成るタグについては、&quot;&quot; で囲んで下さい。">
-		タグ:
-	</text>
-	<combo_box name="rating_combobox" tool_tip="Flickr コンテンツのレーティング区分">
-		<combo_box.item label="Flickr レーティング区分「Safe」" name="SafeRating"/>
-		<combo_box.item label="Flickr レーティング区分「Moderate」" name="ModerateRating"/>
-		<combo_box.item label="Flickr レーティング区分「Restricted」" name="RestrictedRating"/>
-	</combo_box>
-	<button label="共有" name="post_photo_btn"/>
-	<button label="取り消し" name="cancel_photo_btn"/>
+  <combo_box name="resolution_combobox" tool_tip="画像の解像度">
+    <combo_box.item label="現在のウィンドウ" name="CurrentWindow" value="[i0,i0]" />
+    <combo_box.item label="320✕240" name="320x240" value="[i320,i240]" />
+    <combo_box.item label="640✕480" name="640x480" value="[i640,i480]" />
+    <combo_box.item label="800✕600" name="800x600" value="[i800,i600]" />
+    <combo_box.item label="1024✕768" name="1024x768" value="[i1024,i768]" />
+    <combo_box.item label="1280✕1024" name="1280x1024" value="[i1280,i1024]" />
+    <combo_box.item label="1600✕1200" name="1600x1200" value="[i1600,i1200]" />
+    <combo_box.item label="Custom" name="Custom" value="[i-1,i-1]" />
+  </combo_box>
+  <combo_box tool_tip="画像フィルタ">
+    <combo_box.item label="フィルタなし" name="NoFilter" value="NoFilter" />
+  </combo_box>
+  <spinner name="custom_snapshot_width" />
+  <text name="spinner_x_lbl">✕</text>
+  <spinner label="" name="custom_snapshot_height" />
+  <check_box label="アスペクト比を保持" name="keep_aspect_ratio" />
+  <panel name="thumbnail_placeholder" />
+  <text name="working_lbl">リフレッシュしています…</text>
+  <view_border name="refresh_border" />
+  <button label="リフレッシュ" name="new_snapshot_btn" tool_tip="クリックでリフレッシュします。" />
+  <button label="プレビュー" name="big_preview_btn" tool_tip="クリックでプレビュー画像に切り替えます。" />
+  <text name="title_label">タイトル：</text>
+  <line_editor name="photo_title" />
+  <text name="description_label">説明：</text>
+  <text_editor name="photo_description" />
+  <check_box label="撮影した場所を説明の最後に含める" name="add_location_cb" />
+  <text name="tags_label" tool_tip="スペースでタグを区切ります。複数の単語からなるタグの場合は&quot;&quot;でくくってください。">タグ：</text>
+  <text_editor name="photo_tags" />
+  <combo_box name="rating_combobox" tool_tip="Flickrのコンテンツレーティング">
+    <combo_box.item label="Flickr「Safe」レーティング" name="SafeRating" value="1" />
+    <combo_box.item label="Flickr「Moderate」レーティング" name="ModerateRating" value="2" />
+    <combo_box.item label="Flickr「Restricted」レーティング" name="RestrictedRating" value="3" />
+  </combo_box>
+  <button label="シェア" name="post_photo_btn" />
+  <button label="キャンセル" name="cancel_photo_btn" />
 </panel>

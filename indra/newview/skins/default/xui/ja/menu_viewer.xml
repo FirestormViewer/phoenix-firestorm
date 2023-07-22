@@ -676,7 +676,7 @@
       <menu_item_check label="普通" name="Normals" />
       <menu_item_check label="八分木" name="Octree" />
       <menu_item_check label="シャドウ円錐" name="Shadow Frusta" />
-      <menu_item_check label="実像" name="Physics Shapes" />
+      <menu_item_check label="物理的形状" name="Physics Shapes" />
       <menu_item_check label="オクルージョン" name="Occlusion" />
       <menu_item_check label="バッチの描画" name="Render Batches" />
       <menu_item_check label="タイプを更新" name="Update Type" />
@@ -690,11 +690,11 @@
       <menu_item_check label="光源" name="Lights" />
       <menu_item_check label="反射プローブ" name="Reflection Probes" />
       <menu_item_check label="パーティクル" name="Particles" />
-      <menu_item_check label="骨組みの衝突判定" name="Collision Skeleton" />
+      <menu_item_check label="スケルトンの衝突判定" name="Collision Skeleton" />
       <menu_item_check label="ジョイント" name="Joints" />
       <menu_item_check label="レイキャスト" name="Raycast" />
       <menu_item_check label="風のベクトル" name="Wind Vectors" />
-      <menu_item_check label="彫刻" name="Sculpt" />
+      <menu_item_check label="スカルプト" name="Sculpt" />
       <menu_item_check label="テクスチャのサイズ" name="Texture Size" />
       <menu label="テクスチャの密度" name="Texture Density">
         <menu_item_check label="無し" name="None" />
