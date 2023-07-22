@@ -383,6 +383,21 @@ void LLVOCacheEntry::updateDebugSettings()
 	LLMemory::updateMemoryInfo() ;
 	U32 allocated_mem = LLMemory::getAllocatedMemKB().value();
     static const F32 KB_to_MB = 1.f / 1024.f;
+	// <FS:Beq> FIRE-32688 Area search and other visibility issues
+	// If this machine has limited RAM, then restore the LL defaults.
+	// So long as we have at least 8GB of RAM, then we will use our values.
+	if( LLMemory::getAvailableMemKB() * KB_to_MB < 8096 )
+	{
+		if( (U32)low_mem_bound_MB > 768 )
+		{
+			gSavedSettings.setU32("SceneLoadLowMemoryBound", 768);
+		}
+		if( (U32)high_mem_bound_MB > 2048 )
+		{
+			gSavedSettings.setU32("SceneLoadLowMemoryBound", 2048);
+		}
+	}
+	// </FS:Beq>
 	U32 clamped_memory = llclamp(allocated_mem * KB_to_MB, (F32) low_mem_bound_MB, (F32) high_mem_bound_MB);
     const F32 adjust_range = high_mem_bound_MB - low_mem_bound_MB;
     const F32 adjust_factor = (high_mem_bound_MB - clamped_memory) / adjust_range; // [0, 1]
@@ -404,7 +419,11 @@ void LLVOCacheEntry::updateDebugSettings()
     //the number of frames invisible objects stay in memory
     static LLCachedControl<U32> inv_obj_time(gSavedSettings,"NonvisibleObjectsInMemoryTime");
     static const U32 MIN_FRAMES = 10;
-    static const U32 MAX_FRAMES = 64;
+	// <FS:Beq> FIRE-32688 Area search and other visibility
+    // static const U32 MAX_FRAMES = 64;
+	// 64 frames for many users now is about a second. Having this as the longest we wait before purging leads to excessively aggressive purging.
+    static const U32 MAX_FRAMES = 1024;
+	// </FS:Beq>
     const U32 clamped_frames = inv_obj_time ? llclamp((U32) inv_obj_time, MIN_FRAMES, MAX_FRAMES) : MAX_FRAMES; // [10, 64], with zero => 64
     sMinFrameRange = MIN_FRAMES + ((clamped_frames - MIN_FRAMES) * adjust_factor);
 }

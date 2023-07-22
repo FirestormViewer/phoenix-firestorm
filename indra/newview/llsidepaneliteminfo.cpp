@@ -54,6 +54,7 @@
 #include "llexperiencecache.h"
 #include "lltrans.h"
 #include "llviewerregion.h"
+#include "llviewernetwork.h" // <FS:Beq/> for gridmanager
 // [RLVa:KB] - Checked: RLVa-2.0.1
 #include "rlvactions.h"
 #include "rlvcommon.h"
@@ -610,27 +611,37 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 		
 		std::string perm_string;
 
+// <FS:Beq> remove misleading X for export when not in OpenSim		
+		bool isOpenSim {false};
+#ifdef OPENSIM
+		if( LLGridManager::instance().isInOpenSim() )
+		{
+			isOpenSim = true;
+		}
+#endif
+// </FS:Beq>
+
 		perm_string = "B: ";
-		perm_string += mask_to_string(base_mask);
+		perm_string += mask_to_string(base_mask, isOpenSim); // <FS:Beq/> remove misleading X for export when not in OpenSim
 		getChild<LLUICtrl>("BaseMaskDebug")->setValue(perm_string);
 		
 		perm_string = "O: ";
-		perm_string += mask_to_string(owner_mask);
+		perm_string += mask_to_string(owner_mask, isOpenSim); // <FS:Beq/> remove misleading X for export when not in OpenSim
 		getChild<LLUICtrl>("OwnerMaskDebug")->setValue(perm_string);
 		
 		perm_string = "G";
 		perm_string += overwrite_group ? "*: " : ": ";
-		perm_string += mask_to_string(group_mask);
+		perm_string += mask_to_string(group_mask, isOpenSim); // <FS:Beq/> remove misleading X for export when not in OpenSim
 		getChild<LLUICtrl>("GroupMaskDebug")->setValue(perm_string);
 		
 		perm_string = "E";
 		perm_string += overwrite_everyone ? "*: " : ": ";
-		perm_string += mask_to_string(everyone_mask);
+		perm_string += mask_to_string(everyone_mask, isOpenSim); // <FS:Beq/> remove misleading X for export when not in OpenSim
 		getChild<LLUICtrl>("EveryoneMaskDebug")->setValue(perm_string);
 		
 		perm_string = "N";
 		perm_string += slam_perm ? "*: " : ": ";
-		perm_string += mask_to_string(next_owner_mask);
+		perm_string += mask_to_string(next_owner_mask, isOpenSim); // <FS:Beq/> remove misleading X for export when not in OpenSim
 		getChild<LLUICtrl>("NextMaskDebug")->setValue(perm_string);
 	}
 	else

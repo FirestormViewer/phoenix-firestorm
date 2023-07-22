@@ -947,7 +947,7 @@ std::ostream& operator<<(std::ostream &s, const LLAggregatePermissions &perm)
 }
 
 // This converts a permissions mask into a string for debugging use.
-void mask_to_string(U32 mask, char* str)
+void mask_to_string(U32 mask, char* str, bool isOpenSim /*=false*/) // <FS:Beq/> remove misleading X for export when not in OpenSim
 {
 	if (mask & PERM_MOVE)
 	{
@@ -990,23 +990,29 @@ void mask_to_string(U32 mask, char* str)
 	str++;
 	
 // <FS:CR> OpenSim export permission
-	if (mask & PERM_EXPORT)
+#ifdef OPENSIM
+	// The export permission is only available in OpenSim.
+	if (isOpenSim)
 	{
-		*str = 'X';
+		if (mask & PERM_EXPORT)
+		{
+			*str = 'X';
+		}
+		else
+		{
+			*str = ' ';
+		}
+		str++;
 	}
-	else
-	{
-		*str = ' ';
-	}
-	str++;
+#endif
 // </FS:CR>
 	*str = '\0';
 }
 
-std::string mask_to_string(U32 mask)
+std::string mask_to_string(U32 mask, bool isOpenSim /*=false*/) // <FS:Beq/> remove misleading X for export when not in OpenSim
 {
 	char str[16];
-	mask_to_string(mask, str);
+	mask_to_string(mask, str, isOpenSim); // <FS:Beq/> remove misleading X for export when not in OpenSim
 	return std::string(str);
 }
 
