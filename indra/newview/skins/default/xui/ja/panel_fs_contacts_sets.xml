@@ -1,35 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="contact_sets_panel">
-	<panel.string name="empty_list">
-		連絡先セットに何も登録がありません。
-	</panel.string>
-	<panel.string name="no_sets">
-		セット未登録
-	</panel.string>
-	<panel.string name="all_sets">
-		全てのセット
-	</panel.string>
-	<panel.string name="pseudonyms">
-		ニックネーム
-	</panel.string>
-	<panel.string name="non_friends">
-		フレンドでない人
-	</panel.string>
-	<combo_box name="combo_sets" />
-	<button name="config_btn" tool_tip="選択した連絡先セットの設定をします。" />
-	<button name="add_set_btn" tool_tip="新しい連絡先セットを追加します。" />
-	<button name="remove_set_btn" tool_tip="選択した連絡先セットを削除します。" />
-	<avatar_list name="contact_list" />
-    <!-- Action buttons -->
-	<button label="追加..." name="add_btn" tool_tip="アバターを現在の連絡先セットに追加します。" />
-	<button label="削除..." name="remove_btn" tool_tip="このアバターを現在の連絡先セットから削除します。" />
-	<button label="プロフィール..." name="profile_btn" tool_tip="このアバターのプロフィールを開きます。" />
-	<button label="IM..." name="start_im_btn" tool_tip="IMを開始します。" />
-	<button label="テレポート..." name="offer_teleport_btn" tool_tip="あなたが現在いる場所にテレポートで呼びます。" width="80" />
-	<button label="ニックネーム設定..." name="set_pseudonym_btn" tool_tip="このアバターのニックネームを設定します。" />
-	<button label="ニックネーム解除..." name="remove_pseudonym_btn" tool_tip="アバターのニックネームを削除します" />
-	<button label="表示名削除..." name="remove_displayname_btn" tool_tip="アバターの表示名を削除します。" />
-	<text name="member_count">
-		メンバー数: [COUNT]
-	</text>
+  <panel.string name="empty_list">この連絡先リストは空です。</panel.string>
+  <panel.string name="no_sets">セットがありません。</panel.string>
+  <panel.string name="all_sets">すべてのセット</panel.string>
+  <panel.string name="pseudonyms">エイリアス</panel.string>
+  <panel.string name="non_friends">フレンドなし</panel.string>
+  <combo_box name="combo_sets" />
+  <button name="config_btn" tool_tip="選択された連絡先セットの設定を行います。" />
+  <button name="add_set_btn" tool_tip="新しい連絡先セットを追加します。" />
+  <button name="remove_set_btn" tool_tip="選択された連絡先セットを削除します。" />
+  <view_border name="info_border" />
+  <avatar_list name="contact_list" />
+  <!-- Action buttons -->
+  <button label="追加…" name="add_btn" tool_tip="現在の連絡先セットにアバターを追加します。" />
+  <button label="削除…" name="remove_btn" tool_tip="現在の連絡先セットからこのアバターを削除する" />
+  <button label="プロフィール…" name="profile_btn" tool_tip="このアバターのプロフィールを表示します。" />
+  <button label="ＩＭ…" name="start_im_btn" tool_tip="インスタントメッセージ会話を開始します。" />
+  <button label="テレポート…" name="offer_teleport_btn" tool_tip="現在の位置へのテレポートのオファーを送ります。" />
+  <button label="エイリアスのセット…" name="set_pseudonym_btn" tool_tip="このアバターにペンネームをつけます。" />
+  <button label="エイリアス削除…" name="remove_pseudonym_btn" tool_tip="このアバターからペンネームを削除します。" />
+  <button label="表示名の削除…" name="remove_displayname_btn" tool_tip="このアバターの表示名を削除します。" />
+  <text name="member_count">メンバー数：[COUNT]人</text>
 </panel>
