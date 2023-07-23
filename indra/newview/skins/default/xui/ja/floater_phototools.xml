@@ -495,8 +495,7 @@
         <spinner name="S_Zoom_Speed" />
         <button name="Reset_Zoom_Speed" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
 
-        <text name="T_Feathering" tool_tip="スライダーを右いっぱいに設定すると、カメラは非常に硬くなり、ジョイスティックで完全にコントロールできるようになります。スライダーを左いっぱいに設定すると、カメラは非常に流動的になり、カメラの重量が重くなります。">
-          フェザリング</text>
+        <text name="T_Feathering" tool_tip="スライダーを右いっぱいに設定すると、カメラは非常に硬くなり、ジョイスティックで完全にコントロールできるようになります。スライダーを左いっぱいに設定すると、カメラは非常に流動的になり、カメラの重量が重くなります。">フェザリング</text>
         <slider_bar name="SB_Feathering" />
         <spinner name="S_Feathering" />
         <button name="Reset_Feathering" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
