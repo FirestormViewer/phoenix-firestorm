@@ -481,6 +481,13 @@ ERlvCmdRet RlvHandler::processCommand(std::reference_wrapper<const RlvCommand> r
 		case RLV_TYPE_ADD:		// Checked: 2009-11-26 (RLVa-1.1.0f) | Modified: RLVa-1.1.0f
 			{
 				ERlvBehaviour eBhvr = rlvCmd.get().getBehaviourType();
+				if(eBhvr == RLV_BHVR_UNKNOWN)
+				{
+					eRet = RLV_RET_FAILED_PARAM;
+					RLV_DEBUGS << "\t- " << rlvCmd.get().getBehaviour() << " is UNKNOWN => Call Kitty!" << RLV_ENDL;
+					break;
+				}
+
 				if ( (m_Behaviours[eBhvr]) && ( (RLV_BHVR_SETCAM == eBhvr) || (RLV_BHVR_SETDEBUG == eBhvr) || (RLV_BHVR_SETENV == eBhvr) ) )
 				{
 					// Some restrictions can only be held by one single object to avoid deadlocks
