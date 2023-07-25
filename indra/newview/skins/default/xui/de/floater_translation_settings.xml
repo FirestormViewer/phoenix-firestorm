@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_translation_settings" title="Übersetzungseinstellungen für Chats">
-	<string name="bing_api_key_not_verified">
-		Bing-AppID nicht verifiziert. Versuchen Sie es erneut.
+	<string name="azure_api_key_not_verified">
+		Azure-Service-Identifikator nicht verifiziert. Versuchen Sie es erneut.
 	</string>
 	<string name="google_api_key_not_verified">
 		Google-API-Schlüssel nicht verifiziert. Versuchen Sie es erneut.
 	</string>
-	<string name="bing_api_key_verified">
-		Bing-AppID verifiziert.
+	<string name="deepl_api_key_not_verified">
+		DeepL-Authentifizierungsschlüssel nicht verifiziert. Versuchen Sie es erneut.
+	</string>
+	<string name="azure_api_key_verified">
+		Azure-Service-Identifikator verifiziert.
 	</string>
 	<string name="google_api_key_verified">
 		Google-API-Schlüssel verifiziert.
+	</string>
+	<string name="deepl_api_key_verified">
+		DeepL-Authentifizierungsschlüssel verifiziert.
 	</string>
 	<check_box label="Maschinenübersetzung beim Chatten aktivieren" name="translate_chat_checkbox"/>
 	<text name="translate_language_label">
@@ -39,19 +45,43 @@
 		Übersetzungsservice auswählen:
 	</text>
 	<radio_group name="translation_service_rg">
-		<radio_item initial_value="bing" label="Bing Translator" name="bing"/>
-		<radio_item initial_value="google" label="Google Translate" name="google"/>
+		<radio_item label="Azure Translator" name="bing"/>
+		<radio_item label="Google Translate" name="google"/>
+		<radio_item label="DeepL Translator" name="deepl"/>
 	</radio_group>
-	<text name="bing_api_key_label">
-		Bing-[http://www.bing.com/developers/createapp.aspx AppID]:
+	<text name="google_links_text">
+		[https://learn.microsoft.com/de-de/azure/cognitive-services/translator/create-translator-resource Einrichtung]
 	</text>
-	<button label="Verifizieren" name="verify_bing_api_key_btn"/>
+	<text name="azure_api_endoint_label">
+		Endpunkt:
+	</text>
+	<text name="azure_api_key_label">
+		Azure-Key:
+	</text>
+	<line_editor default_text="API-Key eingeben &amp; &quot;Verifizieren&quot;" name="azure_api_key"/>
+	<text name="azure_api_region_label">
+		Region:
+	</text>
+	<line_editor default_text="Optional für globale Dienste" name="azure_api_region"/>
+	<button label="Verifizieren" name="verify_azure_api_key_btn"/>
 	<text name="google_api_key_label">
-		Google-[http://code.google.com/apis/language/translate/v2/getting_started.html#auth API-Schlüssel]:
+		Google-[http://code.google.com/apis/language/translate/v2/getting_started.html#auth API-Key]:
 	</text>
+	<line_editor default_text="API-Key eingeben &amp; &quot;Verifizieren&quot;" name="google_api_key"/>
 	<button label="Verifizieren" name="verify_google_api_key_btn"/>
 	<text name="google_links_text">
-		[http://code.google.com/apis/language/translate/v2/pricing.html Pricing] | [https://code.google.com/apis/console Statistik]
+		[http://code.google.com/apis/language/translate/v2/pricing.html Preise] | [https://code.google.com/apis/console Statistik]
+	</text>
+	<text name="deepl_api_domain_label">
+		Endpunkt:
+	</text>
+	<text name="deepl_api_key_label">
+		DeepL-API-Key:
+	</text>
+	<line_editor default_text="API-Key eingeben &amp; &quot;Verifizieren&quot;" name="deepl_api_key"/>
+	<button label="Verifizieren" name="verify_deepl_api_key_btn"/>
+	<text name="deepl_links_text">
+		[https://www.deepl.com/pro/select-country?cta=header-prices Preise]
 	</text>
 	<button label="OK" name="ok_btn"/>
 	<button label="Abbrechen" name="cancel_btn"/>

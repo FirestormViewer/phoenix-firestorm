@@ -1016,14 +1016,22 @@ BOOL LLToolPie::handleDoubleClick(S32 x, S32 y, MASK mask)
 	}
     
 	// <FS:Ansariel> FIRE-1765: Allow double-click walk/teleport to scripted objects
+	// modified for FIRE-32943 by Beq
 	//if (!mDoubleClickTimer.getStarted() || (mDoubleClickTimer.getElapsedTimeF32() > 0.3f))
+	// {
+	// 	mDoubleClickTimer.stop();
+	// 	return FALSE;
+	// }
+	bool canDoubleClickTP = gSavedSettings.getBOOL("DoubleClickTeleport");
 	bool allowDoubleClickOnScriptedObjects = gSavedSettings.getBOOL("FSAllowDoubleClickOnScriptedObjects");
-	if (!allowDoubleClickOnScriptedObjects && (!mDoubleClickTimer.getStarted() || (mDoubleClickTimer.getElapsedTimeF32() > 0.3f)))
-	// </FS:Ansariel>
+	if ( canDoubleClickTP && allowDoubleClickOnScriptedObjects )
 	{
 		mDoubleClickTimer.stop();
-		return FALSE;
+		teleportToClickedLocation();
+		return TRUE;
 	}
+	// </FS:Ansariel>
+
 	mDoubleClickTimer.stop();
 
 	return FALSE;

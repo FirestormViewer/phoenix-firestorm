@@ -74,6 +74,7 @@
 #include "rlvcommon.h"
 // [/RLVa:KB]
 // <FS:CR> For OpenSim export permisson
+#include "llviewernetwork.h" // <FS:Beq/> for gridmanager
 #include "lfsimfeaturehandler.h"
 #include "llinventoryfunctions.h"
 
@@ -630,7 +631,7 @@ void LLPanelPermissions::refresh()
 	}
 	else
 	{
-// FIRE-777: allow batch edit for name and description
+// FIRE-777:ï¿½allow batch edit for name and description
 //		getChild<LLUICtrl>("Object Name")->setValue(LLStringUtil::null);
 //		LineEditorObjectDesc->setText(LLStringUtil::null);
 		if (keyboard_focus_view != LineEditorObjectName)
@@ -650,7 +651,7 @@ void LLPanelPermissions::refresh()
 
 	// figure out the contents of the name, description, & category
 	BOOL edit_name_desc = FALSE;
-// FIRE-777: allow batch edit for name and description
+// FIRE-777:ï¿½allow batch edit for name and description
 //	if (is_one_object && objectp->permModify() && !objectp->isPermanentEnforced())
 	if (objectp->permModify())
 // /FIRE-777
@@ -811,20 +812,28 @@ void LLPanelPermissions::refresh()
 																			&next_owner_mask_on,
 																			&next_owner_mask_off);
 
-
 	if (gSavedSettings.getBOOL("DebugPermissions") )
 	{
+// <FS:Beq> remove misleading X for export when not in OpenSim		
+		bool isOpenSim {false};
+#ifdef OPENSIM
+		if( LLGridManager::instance().isInOpenSim() )
+		{
+			isOpenSim = true;
+		}
+#endif
+// </FS:Beq>
 		if (valid_base_perms)
 		{
-			getChild<LLUICtrl>("B:")->setValue("B: " + mask_to_string(base_mask_on));
+			getChild<LLUICtrl>("B:")->setValue("B: " + mask_to_string(base_mask_on, isOpenSim)); // <FS:Beq/> remove misleading X for export when not in OpenSim
 			getChildView("B:")->setVisible(TRUE);
-			getChild<LLUICtrl>("O:")->setValue("O: " + mask_to_string(owner_mask_on));
+			getChild<LLUICtrl>("O:")->setValue("O: " + mask_to_string(owner_mask_on, isOpenSim)); // <FS:Beq/> remove misleading X for export when not in OpenSim
 			getChildView("O:")->setVisible(TRUE);
-			getChild<LLUICtrl>("G:")->setValue("G: " + mask_to_string(group_mask_on));
+			getChild<LLUICtrl>("G:")->setValue("G: " + mask_to_string(group_mask_on, isOpenSim)); // <FS:Beq/> remove misleading X for export when not in OpenSim
 			getChildView("G:")->setVisible(TRUE);
-			getChild<LLUICtrl>("E:")->setValue("E: " + mask_to_string(everyone_mask_on));
+			getChild<LLUICtrl>("E:")->setValue("E: " + mask_to_string(everyone_mask_on, isOpenSim)); // <FS:Beq/> remove misleading X for export when not in OpenSim
 			getChildView("E:")->setVisible(TRUE);
-			getChild<LLUICtrl>("N:")->setValue("N: " + mask_to_string(next_owner_mask_on));
+			getChild<LLUICtrl>("N:")->setValue("N: " + mask_to_string(next_owner_mask_on, isOpenSim)); // <FS:Beq/> remove misleading X for export when not in OpenSim
 			getChildView("N:")->setVisible(TRUE);
 		}
 		else if(!root_selected)
@@ -834,15 +843,15 @@ void LLPanelPermissions::refresh()
 				LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstNode();
 				if (node && node->mValid)
 				{
-					getChild<LLUICtrl>("B:")->setValue("B: " + mask_to_string( node->mPermissions->getMaskBase()));
+					getChild<LLUICtrl>("B:")->setValue("B: " + mask_to_string( node->mPermissions->getMaskBase(), isOpenSim)); // <FS:Beq/> remove misleading X for export when not in OpenSim
 					getChildView("B:")->setVisible(TRUE);
-					getChild<LLUICtrl>("O:")->setValue("O: " + mask_to_string(node->mPermissions->getMaskOwner()));
+					getChild<LLUICtrl>("O:")->setValue("O: " + mask_to_string(node->mPermissions->getMaskOwner(), isOpenSim)); // <FS:Beq/> remove misleading X for export when not in OpenSim
 					getChildView("O:")->setVisible(TRUE);
-					getChild<LLUICtrl>("G:")->setValue("G: " + mask_to_string(node->mPermissions->getMaskGroup()));
+					getChild<LLUICtrl>("G:")->setValue("G: " + mask_to_string(node->mPermissions->getMaskGroup(), isOpenSim)); // <FS:Beq/> remove misleading X for export when not in OpenSim
 					getChildView("G:")->setVisible(TRUE);
-					getChild<LLUICtrl>("E:")->setValue("E: " + mask_to_string(node->mPermissions->getMaskEveryone()));
+					getChild<LLUICtrl>("E:")->setValue("E: " + mask_to_string(node->mPermissions->getMaskEveryone(), isOpenSim)); // <FS:Beq/> remove misleading X for export when not in OpenSim
 					getChildView("E:")->setVisible(TRUE);
-					getChild<LLUICtrl>("N:")->setValue("N: " + mask_to_string(node->mPermissions->getMaskNextOwner()));
+					getChild<LLUICtrl>("N:")->setValue("N: " + mask_to_string(node->mPermissions->getMaskNextOwner(), isOpenSim)); // <FS:Beq/> remove misleading X for export when not in OpenSim
 					getChildView("N:")->setVisible(TRUE);
 				}
 			}
@@ -864,7 +873,7 @@ void LLPanelPermissions::refresh()
 		
 		//if (objectp->permExport())		flag_mask |= PERM_EXPORT;	// <FS:CR> OpenSim export permissions
 
-		getChild<LLUICtrl>("F:")->setValue("F:" + mask_to_string(flag_mask));
+		getChild<LLUICtrl>("F:")->setValue("F:" + mask_to_string(flag_mask, isOpenSim)); // <FS:Beq/> remove misleading X for export when not in OpenSim
 		getChildView("F:")->setVisible(								TRUE);
 	}
 	else
@@ -910,7 +919,7 @@ void LLPanelPermissions::refresh()
 		getChildView("checkbox allow everyone copy")->setEnabled(FALSE);
 	}
 	
-	// <FS:CR> Opensim export permissions - Codeblock courtesy of Liru Færs.	
+	// <FS:CR> Opensim export permissions - Codeblock courtesy of Liru Fï¿½rs.	
 	// Is this user allowed to toggle export on this object?
 	if (LFSimFeatureHandler::instance().simSupportsExport()
 		&& self_owned && mCreatorID == mOwnerID
