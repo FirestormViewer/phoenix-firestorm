@@ -261,9 +261,9 @@
     <menu_item_check label="フレンドは常に完全描画する" name="Always show Friends normally" />
     <menu_item_check label="フレンドのみ表示" name="Render Friends Only" />
   </menu>
-  <menu label="制作" name="BuildTools">
-    <menu_item_check label="制作" name="Show Build Tools" />
-    <menu label="制作ツールを選択する" name="Select Tool">
+  <menu label="ビルド" name="BuildTools">
+    <menu_item_check label="ビルド" name="Show Build Tools" />
+    <menu label="ビルドツールを選択する" name="Select Tool">
       <menu_item_call label="フォーカスツール" name="Focus" />
       <menu_item_call label="移動ツール" name="Move" />
       <menu_item_call label="編集ツール" name="Edit" />
@@ -686,7 +686,7 @@
       <menu_item_check label="側面" name="Face Area" />
       <menu_item_check label="ＬｏＤ情報" name="LOD Info" />
       <menu_item_check label="三角形の数" name="Triangle Count" />
-      <menu_item_check label="制作・キュー" name="Build Queue" />
+      <menu_item_check label="ビルド・キュー" name="Build Queue" />
       <menu_item_check label="光源" name="Lights" />
       <menu_item_check label="反射プローブ" name="Reflection Probes" />
       <menu_item_check label="パーティクル" name="Particles" />

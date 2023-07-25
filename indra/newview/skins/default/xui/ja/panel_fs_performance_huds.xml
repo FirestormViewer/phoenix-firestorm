@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_performance_huds">
   <button name="back_btn" />
-  <text name="back_lbl">Back</text>
-  <text name="huds_title">Your active HUDs</text>
-  <text name="huds_desc1">Detaching HUDs you aren't using saves memory and can make the viewer run faster.</text>
-  <text name="huds_desc2">HUDs are often heavily scripted and also contribute to server-side lag.</text>
-  <text name="huds_desc3">Note: Using a HUD's minimize button does not detach it. Use the X to remove it.</text>
+  <text name="back_lbl">戻る</text>
+  <text name="huds_title">アクティブなＨＵＤ</text>
+  <text name="huds_desc1">使用していないＨＵＤを取り外すとメモリを節約でき、ビューアの動作が速くなります。</text>
+  <text name="huds_desc2">ＨＵＤではしばしばスクリプトが多用されており、サーバーサイドのラグの原因となります。</text>
+  <text name="huds_desc3">注意：ＨＵＤの最小化ボタンを使っても、ＨＵＤを取り外したことにはなりません。取り外すには☓を使います。</text>
   <name_list name="hud_list">
     <name_list.columns label="" name="art_visual" />
-    <name_list.columns label="Time (μs)" name="art_value"
-      tool_tip="Time taken to render this HUD (microseconds)" />
-    <name_list.columns label="Name" tool_tip="Click the 'X' to detach" name="name" />
+    <name_list.columns label="時間（㎲）" name="art_value" tool_tip="このＨＵＤの描画にかかった時間（マイクロ秒）" />
+    <name_list.columns label="名前" tool_tip="☓ボタンで取り外します。" name="name" />
   </name_list>
 </panel>

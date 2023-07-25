@@ -14,7 +14,7 @@
       </combo_box>
       <button label="Log In" name="connect_btn" />
       <text name="sign_up_text">サインアップ</text>
-      <check_box label="ユーザ名を保存" name="remember_name" tool_tip="Already remembered user can be forgotten from Me &gt; Preferences &gt; Advanced &gt; Remembered Usernames." />
+      <check_box label="ユーザ名を保存" name="remember_name" tool_tip="すでに記憶されているユーザー名は、「アバター」＞「初期設定」＞「拡張」＞「記録されたユーザ名」から消すことができます。" />
       <check_box label="パスワードを保存" name="remember_password" />
       <combo_box name="server_combo" />
       <text name="forgot_password_text">パスワードヘルプ</text>

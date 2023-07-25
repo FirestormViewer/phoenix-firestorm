@@ -3,7 +3,7 @@
   <menu_item_call label="触る" name="Object Touch" />
   <menu_item_call label="編集…" name="Edit..." />
   <menu_item_call label="ＰＢＲマテリアルを編集" name="EditGLTFMaterial" />
-  <menu_item_call label="制作" name="Build" />
+  <menu_item_call label="ビルド" name="Build" />
   <context_menu label="ツール" name="Tools">
     <menu_item_call label="テクスチャをリフレッシュ" name="RefreshTextures" />
     <menu_item_call label="パーティクルを編集" name="Menu Object Edit Particles" />

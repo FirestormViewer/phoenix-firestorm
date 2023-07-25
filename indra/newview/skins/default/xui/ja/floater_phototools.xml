@@ -70,8 +70,7 @@
       </panel>
 
       <panel name="P_R_Res">
-        <text name="T_R_Res" tool_tip="水面の反射の解像度／品質を設定します。解像度設定が「とても良い」以上に設定されている場合、「光源」タブで「高度な光源モデル」も有効にする必要があります。">
-          解像度</text>
+        <text name="T_R_Res" tool_tip="水面の反射の解像度／品質を設定します。解像度設定が「とても良い」以上に設定されている場合、「光源」タブで「高度な光源モデル」も有効にする必要があります。">解像度</text>
         <combo_box name="ReflectionRescombo">
           <combo_box.item label="最小限" name="0" value="256" />
           <combo_box.item label="よい" name="1" value="512" />
@@ -98,8 +97,7 @@
       </panel>
 
       <panel name="P_Shadows">
-        <text name="T_Shadow_Types" tool_tip="この設定は光源からレンダリングされる影にのみ影響し、それ以外のライトは通常通り機能します。ポイントライト（投影機能が有効になっていないライト）は、常に影の感覚を作り出しますが、いかなる表面にも影を投影しません。ここで選択した設定に関係なく、投影ライトから投影されたテクスチャは有効のままであることに注意してください。">
-          影タイプ</text>
+        <text name="T_Shadow_Types" tool_tip="この設定は光源からレンダリングされる影にのみ影響し、それ以外のライトは通常通り機能します。ポイントライト（投影機能が有効になっていないライト）は、常に影の感覚を作り出しますが、いかなる表面にも影を投影しません。ここで選択した設定に関係なく、投影ライトから投影されたテクスチャは有効のままであることに注意してください。">影タイプ</text>
         <combo_box name="ShadowDetail">
           <combo_box.item label="なし" name="0" value="0" />
           <combo_box.item label="太陽／月" name="1" value="1" />
@@ -108,40 +106,34 @@
       </panel>
 
       <panel name="P_Shadow_Res">
-        <text name="T_Shadow_Res" tool_tip="影の解像度： これは非常に重要な設定です。影の質を決定しますが、コンピュータへの負荷が非常に大きいです。撮影しないときは、この設定をできるだけ低くしておくことを推奨します。撮影するときは1.0に設定し、撮影の準備をしてください。撮影の準備ができたら、スライダーバーをゆっくりと右に上げていきます。この設定を上げる間、フレームレートに注意する必要があります。最初の数回は統計バー（タブ'Aids'の'Interface aids'にある）をオンにしておくと、自分のシステムに最適な影のレベルに慣れることができます。注意：これを高く設定しすぎたり、速く動かしすぎたりすると、ビューアがクラッシュします。">
-          影の解像度</text>
+        <text name="T_Shadow_Res" tool_tip="影の解像度： これは非常に重要な設定です。影の質を決定しますが、コンピュータへの負荷が非常に大きいです。撮影しないときは、この設定をできるだけ低くしておくことを推奨します。撮影するときは1.0に設定し、撮影の準備をしてください。撮影の準備ができたら、スライダーバーをゆっくりと右に上げていきます。この設定を上げる間、フレームレートに注意する必要があります。最初の数回は統計バー（タブ'Aids'の'Interface aids'にある）をオンにしておくと、自分のシステムに最適な影のレベルに慣れることができます。注意：これを高く設定しすぎたり、速く動かしすぎたりすると、ビューアがクラッシュします。">影の解像度</text>
         <slider_bar name="SB_Shadow_Res" />
         <spinner name="S_Shadow_Res" />
         <button name="Reset_Shadow_Res" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
 
         <!-- RenderShadowSplitExponent Y component -->
-        <text name="T_Shd_Clarity" tool_tip="これは非常に重要な設定です。 これは基本的に、太陽／月の影が全体的にどの程度鮮明に描画されるかを決定します。 以下の設定を調整する前に、この設定を最初に設定する必要があります。 「Shd」の値を使用します。 上記の「解像度」を 1.0 に設定し、「影」の値をスライドさせます。 可能な限り鮮明な結果が得られるまで、「影の明瞭度」を調整します。 影の明瞭さはカメラの位置と太陽／月に直接関係することに注意してください。 カメラまたは太陽/月を移動するたびに、この値を再度調整することをお勧めします。 また、この値の調整を容易にするために、「Shd.」を設定すると便利です。 まず「ぼかし」を 0.0 に設定します。">
-          影の明瞭度</text>
+        <text name="T_Shd_Clarity" tool_tip="これは非常に重要な設定です。 これは基本的に、太陽／月の影が全体的にどの程度鮮明に描画されるかを決定します。 以下の設定を調整する前に、この設定を最初に設定する必要があります。 「Shd」の値を使用します。 上記の「解像度」を 1.0 に設定し、「影」の値をスライドさせます。 可能な限り鮮明な結果が得られるまで、「影の明瞭度」を調整します。 影の明瞭さはカメラの位置と太陽／月に直接関係することに注意してください。 カメラまたは太陽/月を移動するたびに、この値を再度調整することをお勧めします。 また、この値の調整を容易にするために、「Shd.」を設定すると便利です。 まず「ぼかし」を 0.0 に設定します。">影の明瞭度</text>
         <slider_bar name="SB_Shd_Clarity" />
         <spinner name="S_Shd_Clarity" />
         <button name="Shd_Clarity_Reset" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
 
-        <text name="T_Blur_Size" tool_tip="数値が大きいほど、シャドウのエッジがソフトになります。可能な限りシャープなシャドウにするには「0」に設定します。この設定は、その下の設定とも直接関係しています。シャドウのぼかしの全体的な可能量を設定できます。4.00に設定すると、アンビエントオクルージョンとは無関係にシャドウブラーを調整するために「影の柔らかさ」を調整します。注意: この設定を有効にするには、アンビエントオクルージョンを有効にする必要があります。">
-          影のブラー</text>
+        <text name="T_Blur_Size" tool_tip="数値が大きいほど、シャドウのエッジがソフトになります。可能な限りシャープなシャドウにするには「0」に設定します。この設定は、その下の設定とも直接関係しています。シャドウのぼかしの全体的な可能量を設定できます。4.00に設定すると、アンビエントオクルージョンとは無関係にシャドウブラーを調整するために「影の柔らかさ」を調整します。注意: この設定を有効にするには、アンビエントオクルージョンを有効にする必要があります。">影のブラー</text>
         <slider_bar name="SB_Blur_Size" />
         <spinner name="S_Blur_Size" />
         <button name="Blur_Reset" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
 
         <!-- RenderShadowGaussian X component -->
-        <text name="T_Shd_Soften" tool_tip="太陽／月による影のソフト効果をコントロールします。特定のニーズに合わせてこの値を設定する簡単な方法の１つは、まず上記の「影のブラー」値を約3.0に設定します。その後、ここのスライダーでアンビエントオクルージョンをお好みの柔らかさにします。0.0に設定すると、すべての太陽/月の影が効果的にオフになります。また、プロジェクターライトによる影には効果がありません。">
-          影の柔らかさ</text>
+        <text name="T_Shd_Soften" tool_tip="太陽／月による影のソフト効果をコントロールします。特定のニーズに合わせてこの値を設定する簡単な方法の１つは、まず上記の「影のブラー」値を約3.0に設定します。その後、ここのスライダーでアンビエントオクルージョンをお好みの柔らかさにします。0.0に設定すると、すべての太陽/月の影が効果的にオフになります。また、プロジェクターライトによる影には効果がありません。">影の柔らかさ</text>
         <slider_bar name="SB_Shd_Soften" />
         <spinner name="S_Shd_Soften" />
         <button name="Shd_Soften_Reset" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
 
-        <text name="T_Blur_Dist" tool_tip="これは、カメラに対して影がぼやけ始めるポイントを決定します。値が低いほど、影がぼやけ始めるポイントが近くなります。注意：この設定を有効にするには、アンビエントオクルージョンを有効にする必要があります。">
-          ブラー距離</text>
+        <text name="T_Blur_Dist" tool_tip="これは、カメラに対して影がぼやけ始めるポイントを決定します。値が低いほど、影がぼやけ始めるポイントが近くなります。注意：この設定を有効にするには、アンビエントオクルージョンを有効にする必要があります。">ブラー距離</text>
         <slider_bar name="SB_Blur_Dist" />
         <spinner name="S_Blur_Dist" />
         <button name="Blur_Dist_Reset" tool_tip="デフォルト値にリセットします。" />
 
-        <text name="T_FOV_Cutoff" tool_tip="これは、ビューアが透視投影ではなく正投影（Ortho）に切り替わるＦＯＶカットオフを決定します。影が「ギザギザ」になっている場合は、この設定を調整して改善してください。また、デバッグ設定の「RenderShadowSplitExponent」のＸＹＺ値を調整することも非常に役立ちます。">
-          ＦＯＶカットオフ</text>
+        <text name="T_FOV_Cutoff" tool_tip="これは、ビューアが透視投影ではなく正投影（Ortho）に切り替わるＦＯＶカットオフを決定します。影が「ギザギザ」になっている場合は、この設定を調整して改善してください。また、デバッグ設定の「RenderShadowSplitExponent」のＸＹＺ値を調整することも非常に役立ちます。">ＦＯＶカットオフ</text>
         <slider_bar name="SB_FOV_Cutoff" />
         <spinner name="S_FOV_Cutoff" />
         <button name="FOV_Cutoff_Reset" tool_tip="デフォルト値にリセットします。" />
@@ -166,8 +158,7 @@
         <spinner name="S_Scale" />
         <button name="Reset_Scale" tool_tip="デフォルト値にリセットします。" />
 
-        <text name="T_Max_Scale" tool_tip="グラフィックス・カードのキャッシュ・ミスや、それに伴う大きなパフォーマンス・ペナルティを避けるために、サンプリング元の最大画面半径を制御する。これらの値を高く設定し、その効果を和らげるためにシャドウブラーを少し追加すると便利です。">
-          最大スケール</text>
+        <text name="T_Max_Scale" tool_tip="グラフィックス・カードのキャッシュ・ミスや、それに伴う大きなパフォーマンス・ペナルティを避けるために、サンプリング元の最大画面半径を制御する。これらの値を高く設定し、その効果を和らげるためにシャドウブラーを少し追加すると便利です。">最大スケール</text>
         <slider_bar name="SB_Max_Scale" />
         <spinner name="S_Max_Scale" />
         <button name="Reset_Max_Scale" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
@@ -178,22 +169,20 @@
         <button name="Reset_Scaling_Factor" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
 
         <!-- RenderSSAOEffect X component -->
-        <text name="T_Effect" tool_tip="アンビエントオクルージョンの全体的な暗くする効果をコントロールします。デフォルト値の0.8では、ほとんど知覚できない効果が得られます。0.0以下の値では、より現実的な結果が得られます。なお、アンビエントオクルージョンはノイズのようなエフェクトを発生させますが、これは下の「AO Soften」コントロールを使って和らげることができます。また、標準メッシュのアバターは、アバターのジオメトリの質が低いため、エフェクトの値が高いと魅力的に見えないことがあります。注意：スライダで設定できる最小値は0ですが、スピナーでは-10000までの負の値を入力できます。">
-          効果</text>
+        <text name="T_Effect" tool_tip="アンビエントオクルージョンの全体的な暗くする効果をコントロールします。デフォルト値の0.8では、ほとんど知覚できない効果が得られます。0.0以下の値では、より現実的な結果が得られます。なお、アンビエントオクルージョンはノイズのようなエフェクトを発生させますが、これは下の「AO Soften」コントロールを使って和らげることができます。また、標準メッシュのアバターは、アバターのジオメトリの質が低いため、エフェクトの値が高いと魅力的に見えないことがあります。注意：スライダで設定できる最小値は0ですが、スピナーでは-10000までの負の値を入力できます。">効果</text>
         <slider_bar name="SB_Effect" />
         <spinner name="S_Effect" />
         <button name="Reset_Effect" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
 
         <!-- RenderShadowGaussian Y component -->
-        <text name="T_AO_Soften" tool_tip="アンビエントオクルージョン効果のソフト化をコントロールします。特定のニーズに合わせてこの値を設定する簡単な方法の1つは、まず上記の「Std. Blur'値を4.0前後に設定します。次に、ここのスライダーでＡＯをお好みの柔らかさにします。0.0に設定すると、アンビエントオクルージョンのレンダリングは実質的にオフになります。">
-          ＡＯの柔らかさ</text>
+        <text name="T_AO_Soften" tool_tip="アンビエントオクルージョン効果のソフト化をコントロールします。特定のニーズに合わせてこの値を設定する簡単な方法の1つは、まず上記の「Std. Blur'値を4.0前後に設定します。次に、ここのスライダーでＡＯをお好みの柔らかさにします。0.0に設定すると、アンビエントオクルージョンのレンダリングは実質的にオフになります。">ＡＯの柔らかさ</text>
         <slider_bar name="SB_AO_Soften" />
         <spinner name="S_AO_Soften" />
         <button name="Reset_AO_Soften" tool_tip="デフォルト値にリセットします。" />
       </panel>
     </panel>
 
-    <panel name="P_DoF_Glow" label="DoF/Glow">
+    <panel name="P_DoF_Glow" label="ＤｏＦ／グロー">
       <panel name="PT_DoF_Glow">
         <text name="T_DoF">被写界深度の設定</text>
       </panel>
@@ -207,8 +196,7 @@
       </panel>
 
       <panel name="P_Zoom">
-        <text name="T_Zoom" tool_tip="実際の用語では、これはズーム機能です。これはビューアのウィンドウの視野を変更します。Ctrl＋0または Ctrl＋8を押すのと同じです。注意：フライカムを有効にしている場合、これは機能しません（3D SpaceNavigator）。">
-          画角</text>
+        <text name="T_Zoom" tool_tip="実際の用語では、これはズーム機能です。これはビューアのウィンドウの視野を変更します。Ctrl＋0または Ctrl＋8を押すのと同じです。注意：フライカムを有効にしている場合、これは機能しません（3D SpaceNavigator）。">画角</text>
         <slider_bar name="SB_Zoom" />
         <spinner name="S_Zoom" />
         <button name="Reset_Zoom" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
@@ -228,20 +216,17 @@
         <spinner name="S_Focal_Length" />
         <button name="Reset_Focal_Length" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
 
-        <text name="T_Foc_Time" tool_tip="フォーカス遷移時間：ビューアが1つのオブジェクトからフォーカスを変更するのにかかる時間を秒単位で設定します。">
-          焦点遷移時間</text>
+        <text name="T_Foc_Time" tool_tip="フォーカス遷移時間：ビューアが1つのオブジェクトからフォーカスを変更するのにかかる時間を秒単位で設定します。">焦点遷移時間</text>
         <slider_bar name="SB_Foc_Time" />
         <spinner name="S_Foc_Time" />
         <button name="Reset_Foc_Time" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
 
-        <text name="T_CoC" tool_tip="許容錯乱円径：これは非常に重要な設定です。ぼかしの強さを決めます。被写界深度を変えるのではなく、その外側にあるオブジェクトをどれだけぼかすかを調整します。また、スピナーに負の値を入力すると、面白い効果を得ることもできます。.">
-          散乱円</text>
+        <text name="T_CoC" tool_tip="許容錯乱円径：これは非常に重要な設定です。ぼかしの強さを決めます。被写界深度を変えるのではなく、その外側にあるオブジェクトをどれだけぼかすかを調整します。また、スピナーに負の値を入力すると、面白い効果を得ることもできます。.">散乱円</text>
         <slider_bar name="SB_CoC" />
         <spinner name="S_CoC" />
         <button name="Reset_CoC" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
 
-        <text name="T_Resolution" tool_tip="解像度： DOF効果の質を決定します。写真以外の用途では「.25」が良い。セットアップ撮影には「.50」や「.70」がとても良い。高画質の画像を撮影する場合は「1.00」が最適です。高い値はＦＰＳを遅くします！また、スピナーに負の値に入力すると面白い効果を得ることもできます。">
-          解像度</text>
+        <text name="T_Resolution" tool_tip="解像度： DOF効果の質を決定します。写真以外の用途では「.25」が良い。セットアップ撮影には「.50」や「.70」がとても良い。高画質の画像を撮影する場合は「1.00」が最適です。高い値はＦＰＳを遅くします！また、スピナーに負の値に入力すると面白い効果を得ることもできます。">解像度</text>
         <slider_bar name="SB_Resolution" />
         <spinner name="S_Resolution" />
         <button name="Reset_Resolution" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
@@ -296,7 +281,7 @@
       </panel>
     </panel>
 
-    <panel name="P_General" label="Gen">
+    <panel name="P_General" label="一般">
       <panel name="PT_General">
         <text name="T_General">一般的な描画設定</text>
       </panel>
@@ -307,8 +292,7 @@
         <spinner name="S_Draw_Distance" />
         <button name="Reset_Draw_Distance" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
 
-        <text name="T_Avi_Count" tool_tip="シーン内で描画する他のアバターの最大数。多くのアバターがＦＰＳを低下させるような状況で非常に役立ちます。">
-          アバター数</text>
+        <text name="T_Avi_Count" tool_tip="シーン内で描画する他のアバターの最大数。多くのアバターがＦＰＳを低下させるような状況で非常に役立ちます。">アバター数</text>
         <slider_bar name="SB_Avi_Count" />
         <spinner name="S_Avi_Count" />
         <button name="Reset_Avi_Count" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
@@ -388,9 +372,8 @@
 
       <!--view_border name="horiz_separator5" /-->
 
-      <panel name="P_Anti-aliasing">
-        <text name="T_Anti-aliasing" tool_tip="オブジェクトのエッジをどの程度シャープで滑らかにするかを決定します。ハイエンドのグラフィックカードでは、高い値を設定してもパフォーマンスへの影響はほとんどありません。ローエンドのグラフィックカードでは、高い値を設定するとパフォーマンスが低下する可能性があります。">
-          アンチエイリアス</text>
+      <panel name="P_Anti-aliasing" label="ＡＡ">
+        <text name="T_Anti-aliasing" tool_tip="オブジェクトのエッジをどの程度シャープで滑らかにするかを決定します。ハイエンドのグラフィックカードでは、高い値を設定してもパフォーマンスへの影響はほとんどありません。ローエンドのグラフィックカードでは、高い値を設定するとパフォーマンスが低下する可能性があります。">アンチエイリアス</text>
         <combo_box label="アンチエイリアス" name="fsaa">
           <combo_box.item label="無効（縁がギザギザ）" name="FSAADisabled" value="0" />
           <combo_box.item label="２倍（エッジが滑らかに）" name="2x" value="2" />
@@ -410,7 +393,7 @@
       </panel>
     </panel>
 
-    <panel name="P_Aids" label="Aids">
+    <panel name="P_Aids" label="修復">
       <panel name="PT_Aids">
         <text name="T_Aids">インターフェース修復</text>
       </panel>
@@ -435,8 +418,7 @@
       <!--view_border name="horiz_separator6" /-->
 
       <panel name="P_Quick_Stats">
-        <text name="T_Quick_Stats" tool_tip="ここでは、システムのパフォーマンスを測定するために非常に便利な統計情報を見つけることができます。下の項目のラベルをクリックすると、展開／折りたたみができます。">
-          簡易統計</text>
+        <text name="T_Quick_Stats" tool_tip="ここでは、システムのパフォーマンスを測定するために非常に便利な統計情報を見つけることができます。下の項目のラベルをクリックすると、展開／折りたたみができます。">簡易統計</text>
       </panel>
 
       <scroll_container name="statistics_scroll">
@@ -454,7 +436,7 @@
       </scroll_container>
     </panel>
 
-    <panel name="P_Cam" label="Cam">
+    <panel name="P_Cam" label="カメラ">
       <panel name="PT_Cam">
         <text name="T_Cam">３Ｄマウス（ジョイスティック）設定</text>
       </panel>

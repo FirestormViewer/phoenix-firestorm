@@ -3529,7 +3529,7 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="LocationCtrlVoiceTooltip">ここではボイスを利用できません。</string>
   <string name="LocationCtrlFlyTooltip">飛行は禁止されています。</string>
   <string name="LocationCtrlPushTooltip">プッシュ禁止</string>
-  <string name="LocationCtrlBuildTooltip">オブジェクトの制作や落とす事は禁止されています。</string>
+  <string name="LocationCtrlBuildTooltip">オブジェクトのビルドや落とす事は禁止されています。</string>
   <string name="LocationCtrlScriptsTooltip">スクリプト不可</string>
   <string name="LocationCtrlDamageTooltip">体力</string>
   <string name="LocationCtrlAdultIconTooltip">Adultリージョン</string>
@@ -3993,7 +3993,7 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Command_AboutLand_Label">土地情報</string>
   <string name="Command_Appearance_Label">容姿</string>
   <string name="Command_Avatar_Label">アバター一式</string>
-  <string name="Command_Build_Label">制作</string>
+  <string name="Command_Build_Label">ビルド</string>
   <string name="Command_Chat_Label">チャット</string>
   <string name="Command_Conversations_Label">会話</string>
   <string name="Command_Compass_Label">コンパス</string>
@@ -4069,7 +4069,7 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Command_AnimationOverride_Tooltip">アニメーションオーバーライド</string>
   <string name="Command_Appearance_Tooltip">アバターの外観を変更します。</string>
   <string name="Command_Avatar_Tooltip">アバター一式を選択します。</string>
-  <string name="Command_Build_Tooltip">オブジェクトの制作や地形の変形をします。</string>
+  <string name="Command_Build_Tooltip">オブジェクトのビルドや地形の変形をします。</string>
   <string name="Command_Chat_Tooltip">近くにいる人物とテキストチャットします。</string>
   <string name="Command_Conversations_Tooltip">全員との会話を表示します。</string>
   <string name="Command_Compass_Tooltip">コンパスを表示します。</string>

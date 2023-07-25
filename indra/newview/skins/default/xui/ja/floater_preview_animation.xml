@@ -9,7 +9,7 @@
   <line_editor name="desc" />
   <text name="adv_trigger">拡張</text>
   <text name="AdvancedStats">優先度：[PRIORITY]
-長さ：[DURATION]s
+長さ：[DURATION]秒
 イースイン：[EASE_IN]秒
 イースアウト：[EASE_OUT]秒
 ループ：[IS_LOOP]

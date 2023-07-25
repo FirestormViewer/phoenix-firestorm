@@ -14,7 +14,7 @@
     <button label="L$を購入" name="buyL" tool_tip="クリックしてL$を購入します" width="60" />
     <button label="ショップ" name="goShop" tool_tip="Second Lifeのマーケットプレイスを開きます。" width="70" />
   </panel>
-  <text name="TimeText" tool_tip="現在時刻（太平洋）">午前　24：00 PST</text>
+  <text name="TimeText" tool_tip="現在時刻（太平洋）">午前　24：00　PST</text>
   <icon image_name="Cam_FreeCam_Off" name="presets_icon_camera" tool_tip="カメラ" />
   <icon image_name="Presets_Icon" name="presets_icon_graphic" tool_tip="グラフィックのプリセット" />
   <button name="media_toggle_btn" tool_tip="すべてのメディアを開始・停止（音楽、ビデオ、Webページ）" />
