@@ -343,7 +343,8 @@ void FSAreaSearch::updateRlvRestrictions(ERlvBehaviour behavior)
 
 void FSAreaSearch::checkRegion()
 {
-	static LLViewerRegion *last_region = nullptr;
+	static LLUUID last_region_id = LLUUID::null;
+	auto last_region = LLWorld::instance().getRegionFromID(last_region_id);
 	// Check if we changed region, if so reset the interest list to full, 
 	LLViewerRegion* region = gAgent.getRegion();
     if( region && (region != last_region) )
@@ -359,7 +360,7 @@ void FSAreaSearch::checkRegion()
 				if( std::find( uniqueRegions.begin(), uniqueRegions.end(), last_region ) != uniqueRegions.end() )
 				{
 					// Crossed into a neighboring region, no need to clear everything.
-					last_region = region;
+					last_region_id = region->getRegionID();
 					return;
 				}
 				// else teleported into a new region
@@ -380,7 +381,7 @@ void FSAreaSearch::checkRegion()
 			last_region->clearFullUpdateInterestList();
 		}
 	}
-	last_region = region;
+	last_region_id = region->getRegionID();
 }
 
 void FSAreaSearch::refreshList(bool cache_clear)

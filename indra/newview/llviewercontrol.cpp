@@ -1485,7 +1485,7 @@ void settings_setup_listeners()
 
 	// <FS:Zi> Handle IME text input getting enabled or disabled
 #if LL_SDL2
-	gSavedSettings.getControl("SDL2IMEEnabled")->getSignal()->connect(boost::bind(&handleSDL2IMEEnabledChanged, _2));
+	setting_setup_signal_listener(gSavedSettings, "SDL2IMEEnabled", handleSDL2IMEEnabledChanged);
 #endif
 	// </FS:Zi>
 }
