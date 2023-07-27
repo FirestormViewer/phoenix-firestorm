@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="Wearing">
+  <panel.string name="no_attachments">着用可能なものがありません。</panel.string>
+  <accordion name="wearables_accordion">
+    <accordion_tab name="tab_wearables" title="服">
+      <wearable_items_list name="cof_items_list" />
+    </accordion_tab>
+    <accordion_tab name="tab_temp_attachments" title="一時的な装着物">
+      <scroll_list name="temp_attachments_list">
+        <scroll_list.columns name="icon" />
+        <scroll_list.columns name="text" />
+        <scroll_list.columns name="weight" />
+      </scroll_list>
+    </accordion_tab>
+  </accordion>
+  <panel name="bottom_panel">
+    <menu_button name="options_gear_btn" tool_tip="追加オプションを表示します。" />
+    <!--
+    <button name="copy_to_clipboard" label="Send to clipboard" tool_tip="Send current outfit names to clipboard" />
+    -->
+    <icon name="dummy_icon" />
+    <text name="avatar_complexity_label">複雑度：[WEIGHT]</text>
+  </panel>
+</panel>

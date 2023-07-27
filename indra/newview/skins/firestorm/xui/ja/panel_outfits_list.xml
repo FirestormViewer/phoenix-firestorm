@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="Outfits">
+  <accordion name="outfits_accordion">
+    <no_matched_tabs_text name="no_matched_outfits_msg" value="お探しのものは見つかりましたか？[secondlife:///app/search/all/[SEARCH_TERM] 検索]してみましょう。" />
+    <no_visible_tabs_text name="no_outfits_msg" value="あなたは、まだアウトフィットを持っていません。[secondlife:///app/search/all/ 検索]してみましょう。" />
+  </accordion>
+  <panel name="bottom_panel">
+    <menu_button tool_tip="追加オプションを表示します。" name="options_gear_btn" />
+    <icon name="dummy_icon" />
+    <text name="OutfitcountText">[COUNT]件のアウトフィット</text>
+    <text name="avatar_complexity_label">複雑度：[WEIGHT]</text>
+    <button name="trash_btn" tool_tip="選択されたアウトフィットを削除します。" />
+  </panel>
+</panel>

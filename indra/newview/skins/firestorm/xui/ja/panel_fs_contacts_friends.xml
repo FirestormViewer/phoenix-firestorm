@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="friends">
+  <layout_stack name="ls_friend_list">
+    <layout_panel name="lp_search">
+      <filter_editor label="フレンドをフィルタ" name="friend_filter_input" />
+    </layout_panel>
+    <layout_panel name="lp_friend_list">
+      <fs_scroll_list name="friend_list">
+        <fs_scroll_list.column name="icon_online_status" tool_tip="オンライン状況" />
+        <fs_scroll_list.column name="user_name" label="ユーザ名" tool_tip="連絡先のユーザ名です。" />
+        <fs_scroll_list.column name="display_name" label="表示名" tool_tip="連絡先の表示名です。" />
+        <fs_scroll_list.column name="full_name" label="名前" tool_tip="連絡先の選択された名前です。" />
+        <fs_scroll_list.column name="icon_visible_online" tool_tip="フレンドはあなたがオンラインになったことを知ることができます。" />
+        <fs_scroll_list.column name="icon_visible_map" tool_tip="フレンドはあなたがいる場所をマップから知ることができます。" />
+        <fs_scroll_list.column name="icon_edit_mine" tool_tip="フレンドはあなたのオブジェクトを編集したり、削除、取得することができます。" />
+        <fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="あなたは、それらをマップから場所を確認できます。" />
+        <fs_scroll_list.column name="icon_edit_theirs" tool_tip="あなたは、このフレンドのオブジェクトを編集できません。" />
+        <fs_scroll_list.column name="friend_last_update_generation" />
+      </fs_scroll_list>
+    </layout_panel>
+  </layout_stack>
+  <button label="ＩＭ／コール" name="im_btn" tool_tip="インスタントメッセージのセッションを開きます。" />
+  <button label="プロフィール" name="profile_btn" tool_tip="プロフィール画像やグループ、その他の情報を表示します。" />
+  <button label="テレポート…" name="offer_teleport_btn" tool_tip="フレンドに現在あなたがいる場所へのテレポートのオファーを送ります。" />
+  <button label="マップ…" name="map_btn" tool_tip="フレンドが現在いる場所をマップに表示します。" />
+  <button label="支払う…" name="pay_btn" tool_tip="このフレンドにリンデンドル（L$）を渡します。" />
+  <button label="削除…" name="remove_btn" tool_tip="この人物をあなたのフレンドリストから削除します。" />
+  <button label="追加…" name="add_btn" tool_tip="この住民にフレンドシップの申込みをします。" />
+  <text name="friend_count">フレンド数：[COUNT]人</text>
+</panel>
