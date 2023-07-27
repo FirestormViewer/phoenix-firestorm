@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="volumepulldown_floater">
+  <button name="prefs_btn" />
+  <slider label="マスター" name="System Volume" />
+  <button name="mute_audio" />
+  <slider label="ボタン" name="UI Volume" />
+  <button name="mute_audio" />
+  <slider label="周辺" name="Wind Volume" />
+  <button name="mute_audio" />
+  <check_box name="collisions_audio_play_btn" tool_tip="デフォルトのぶつかり音を有効化します。" />
+  <slider label="サウンド" name="SFX Volume" />
+
+  <button name="mute_audio" />
+
+  <check_box name="gesture_audio_play_btn" tool_tip="ジェスチャーのサウンドを有効化します。" />
+  <slider label="音楽" name="Music Volume" />
+  <button name="mute_audio" />
+  <check_box tool_tip="ストリーミングミュージックを有効化します。" name="enable_music" />
+  <slider label="メディア" name="Media Volume" />
+  <button name="mute_audio" />
+  <check_box tool_tip="ストリーミングメディアを有効化します。" name="enable_media" />
+  <slider label="ボイス" name="Voice Volume" />
+  <button name="mute_audio" />
+  <check_box tool_tip="ボイスチャットを有効化します。" name="enable_voice_check" />
+</panel>
