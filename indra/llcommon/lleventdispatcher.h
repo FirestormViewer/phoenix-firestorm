@@ -475,13 +475,9 @@ private:
         virtual LLSD getMetadata() const = 0;
 
         template <typename... ARGS>
-        LLSD callFail(ARGS&&... args) const
+        [[noreturn]] void callFail(ARGS&&... args) const
         {
             mParent->callFail<LLEventDispatcher::DispatchError>(std::forward<ARGS>(args)...);
-#ifndef _MSC_VER
-            // pacify the compiler
-            return {};
-#endif
         }
     };
     typedef std::map<std::string, std::unique_ptr<DispatchEntry> > DispatchMap;
@@ -584,9 +580,9 @@ private:
 protected:
     // raise specified EXCEPTION with specified stringize(ARGS)
     template <typename EXCEPTION, typename... ARGS>
-    void callFail(ARGS&&... args) const;
+    [[noreturn]] void callFail(ARGS&&... args) const;
     template <typename EXCEPTION, typename... ARGS>
-    static
+    [[noreturn]] static
     void sCallFail(ARGS&&... args);
 
     // Manage transient state, e.g. which registered callable we're attempting
@@ -724,10 +720,6 @@ template <typename Method, typename InstanceGetter>
 LLEventDispatcher::invoker_function
 LLEventDispatcher::make_invoker(Method f, const InstanceGetter& getter)
 {
-    // function_arity<member function> includes its implicit 'this' pointer
-    constexpr auto arity = LL::function_arity<
-        typename std::remove_reference<Method>::type>::value - 1;
-
     return [f, getter](const LLSD& args)
     {
         // always_return<LLSD>() immediately calls the lambda we pass, and
@@ -736,6 +728,10 @@ LLEventDispatcher::make_invoker(Method f, const InstanceGetter& getter)
             [f, getter, args]
             ()
             {
+                // function_arity<member function> includes its implicit 'this' pointer
+                constexpr auto arity = LL::function_arity<
+                    typename std::remove_reference<Method>::type>::value - 1;
+
                 // Use bind_front() to bind the method to (a pointer to) the object
                 // returned by getter(). It's okay to capture and bind a pointer
                 // because this bind_front() object will last only as long as this
