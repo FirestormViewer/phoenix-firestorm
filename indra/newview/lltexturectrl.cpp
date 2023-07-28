@@ -330,7 +330,8 @@ bool LLFloaterTexturePicker::updateImageStats()
         S32 height = mTexturep->getFullHeight();
 		if (width > 0 && height > 0)
 		{
-            if (width < mMinDim
+            if (width != height
+                || width < mMinDim
                 || width > mMaxDim
                 || height < mMinDim
                 || height > mMaxDim
@@ -792,11 +793,11 @@ void LLFloaterTexturePicker::commitIfImmediateSet()
 	if (!mNoCopyTextureSelected && mCanApply && mCanPreview)
 	// </FS:Ansariel>
 	{
-        commitCallback();
+        commitCallback(LLTextureCtrl::TEXTURE_CHANGE);
 	}
 }
 
-void LLFloaterTexturePicker::commitCallback()
+void LLFloaterTexturePicker::commitCallback(LLTextureCtrl::ETexturePickOp op)
 {
     if (!mOnFloaterCommitCallback)
     {
@@ -853,7 +854,7 @@ void LLFloaterTexturePicker::commitCallback()
             break;
     }
 
-    mOnFloaterCommitCallback(LLTextureCtrl::TEXTURE_CHANGE, mode, asset_id, inventory_id);
+    mOnFloaterCommitCallback(op, mode, asset_id, inventory_id);
 }
 void LLFloaterTexturePicker::commitCancel()
 {
@@ -943,7 +944,7 @@ void LLFloaterTexturePicker::onBtnCancel(void* userdata)
 void LLFloaterTexturePicker::onBtnSelect(void* userdata)
 {
 	LLFloaterTexturePicker* self = (LLFloaterTexturePicker*) userdata;
-	self->commitCallback();
+	self->commitCallback(LLTextureCtrl::TEXTURE_SELECT);
 	self->closeFloater();
 }
 
