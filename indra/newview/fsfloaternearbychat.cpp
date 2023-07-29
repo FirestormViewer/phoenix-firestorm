@@ -143,6 +143,7 @@ BOOL FSFloaterNearbyChat::postBuild()
 	mInputEditorPad = mChatLayoutPanelHeight - mInputEditor->getRect().getHeight();
 
 	mEmojiButton = getChild<LLButton>("emoji_panel_btn");
+	mEmojiButton->setLabel(LLUIString(LLWString(1, 128512)));
 	mEmojiButton->setClickedCallback(boost::bind(&FSFloaterNearbyChat::onEmojiPanelBtnClicked, this));
 
 	getChild<LLButton>("chat_history_btn")->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onHistoryButtonClicked, this));

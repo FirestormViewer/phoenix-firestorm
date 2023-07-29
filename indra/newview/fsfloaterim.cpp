@@ -951,6 +951,7 @@ BOOL FSFloaterIM::postBuild()
 	mInputEditor->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 
 	mEmojiButton = getChild<LLButton>("emoji_panel_btn");
+	mEmojiButton->setLabel(LLUIString(LLWString(1, 128512)));
 	mEmojiButton->setClickedCallback(boost::bind(&FSFloaterIM::onEmojiPanelBtnClicked, this));
 
 	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
