@@ -3,6 +3,13 @@
 	<string name="status_online">В сети</string>
 	<string name="status_offline">Не в сети</string>
 	<string name="status_unknown">Неизвестно</string>
+	<string name="BadgeBeta" value="Оригинальный бета-тестер" />
+	<string name="BadgeBetaLifetime" value="Участник бета-версии пожизненно" />
+	<string name="BadgeLifetime" value="Член пожизненно" />
+	<string name="BadgeLinden" value="Сотрудник лаборатории Линден" />
+	<string name="BadgePremiumLifetime" value="Премиум пожизненно" />
+	<string name="BadgePremiumPlusLifetime" value="Премиум Плюс пожизненно" />
+	<string name="BadgeTeam" value="Член [APP_NAME]" />
 	<string name="no_partner_text" value="Никто"/>
 	<string name="no_group_text" value="Никто"/>
 	<string name="FSDev" value=" Разработчик"/>
@@ -31,6 +38,11 @@
 			<text name="label" value="Возраст:"/>
 			<text_editor name="user_age" value="(загрузка...)"/>
 			<text name="label2" value="Аккаунт:"/>
+			<layout_stack name="badgepositioner">
+				<layout_panel name="badge_layout">
+					<icon name="badge_icon" tool_tip="Сотрудник лаборатории Линден"/>
+				</layout_panel>
+			</layout_stack>
 			<text name="partner_label" value="Партнер:"/>
 		</layout_panel>
 	</layout_stack>
