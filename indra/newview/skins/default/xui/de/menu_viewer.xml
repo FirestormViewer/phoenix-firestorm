@@ -553,7 +553,7 @@
 			<menu_item_check label="Sonnen-Override für Sim" name="Sim Sun Override"/>
 			<menu_item_check label="Festgelegtes Wetter" name="Fixed Weather"/>
 			<menu_item_call label="Regionsobjekt-Cache ausgeben" name="Dump Region Object Cache"/>
-			<menu_item_call label="Interest-Liste: Vollständiges Update" name="Interest List: Full Update"/>
+			<menu_item_check label="Interest-Liste: Vollständiges Update" name="Interest List: Full Update"/>
 			<menu_item_call label="Simulator-Features ausgeben" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="UI" name="UI">
