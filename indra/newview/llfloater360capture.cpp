@@ -48,15 +48,13 @@
 #include "llviewerregion.h"
 #include "llviewerwindow.h"
 #include "pipeline.h"
-#include "llworld.h" // </FS:Beq/> needed for getRegionByID();
+
 #include <iterator>
 
 // <FS:Beq> Fix 360 capture missing objects after TP
 void LLFloater360Capture::checkRegion()
 {
-	static LLUUID last_region_id = LLUUID::null;
-	auto last_region = LLWorld::instance().getRegionFromID(last_region_id);
-
+    static LLViewerRegion *last_region = nullptr;
     // Check if we changed region, if so reset the interest list to full, 
     LLViewerRegion* region = gAgent.getRegion();
     if( region && (region != last_region) )
@@ -69,7 +67,7 @@ void LLFloater360Capture::checkRegion()
             last_region->clearFullUpdateInterestList();
         }
 	}
-    last_region_id = region->getRegionID();
+    last_region = region;
 }
 
 // </FS:Beq>
