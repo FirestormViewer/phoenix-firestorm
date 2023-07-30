@@ -1,103 +1,80 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="セットアップ" name="Input panel">
-	<!-- Deleted Aug.21, 2012
-	<text name="Network:">
-		ネットワーク：
-	</text>
-	-->
-	<tab_container name="tabs" label="セットアップ">
-		<panel label="接続" name="tab-conn">
-			<text name="Maximum bandwidth">
-				最大帯域幅 ([https://wiki.firestormviewer.org/fs_speedtest 適正な値を設定するには？]):
-			</text>
-			<icon name="NetworkLowGraphicsDivet" />
-			<icon name="NetworkMidGraphicsDivet" />
-			<icon name="NetworkHighGraphicsDivet" />
-			<icon name="NetworkLimitGraphicsDivet" />
-			<icon name="NetworkScaleEndGraphicsDivet" />
-			<text name="text_box2">
-				Kbps
-			</text>
-			<text name="NetworkPrefText1">
-				Wi-Fi
-			</text>
-			<text name="NetworkPrefText2">
-				DSL
-			</text>
-			<text name="NetworkPrefText3">
-				ケーブル
-			</text>
-			<text name="NetworkPrefText4">
-				問題発生の可能性あり
-			</text>
-			<check_box label="カスタムポート" name="connection_port_enabled"/>
-			<spinner label="ポート番号：" name="connection_port"/>
-			<text name="Web:">
-				Web ブラウザ:
-			</text>
-			<radio_group name="preferred_browser_behavior">
-				<radio_item label="全てのリンクにシステムでデフォルトのブラウザを使用" name="new_external" tool_tip="デフォルトのシステム Web ブラウザでヘルプや Web リンク先などを見ます。全画面で起動中にはおすすめしません。" />
-				<radio_item label="SLのリンクにのみ内蔵ブラウザを使用" name="new_internal" tool_tip="デフォルトのシステム Web ブラウザでヘルプや Web リンク先などを見ます。リンデンラボやセカンドライフのリンクを見るのには内蔵のブラウザが使用されます。" />
-				<radio_item label="全てのリンクに内蔵ブラウザを使用" name="new_internal_all"/>
-			</radio_group>
-			<text name="numberwebfloaters_label">
-				Webブラウザの最大ウィンドウ数：
-			</text>
-			<combo_box tool_tip="Webコンテンツのパネルで一度に開けるブラウザウィンドウの最大数を設定" name="web_number_combobox">
-				<combo_box.item label="無制限" name="web_unlimited"/>
-				<combo_box.item label="１画面" name="web_1"/>
-				<combo_box.item label="５画面まで" name="web_5"/>
-				<combo_box.item label="10画面まで" name="web_10"/>
-			</combo_box>
-			<button label="ブラウザキャッシュをクリア" name="ClearWebBrowserCache" />
-			<!--
-			<check_box label="Cookie を受け入れる" name="cookies_enabled" />
-			-->
-			<check_box label="Javascript を有効にする" name="browser_javascript_enabled" />
-			<check_box label="メディアブラウザのポップアップを有効にする" name="media_popup_enabled" />
-			<button label="プロキシ設定を調整" name="set_proxy" />
-			<text name="home_page_label_l">
-				ブラウザのホームページ：
-			</text>
-		</panel>
-		
-		<panel label="ディレクトリ" name="tab-dir">
-			<text name="cache_size_label_l">
-				テクスチャのキャッシュサイズ ([https://wiki.firestormviewer.org/cache 推奨設定を確認しますか？])：
-			</text>
-			<text name="text_box5">
-				MB
-			</text>
-			<text name="asset_cache_size_label_l">
-				アセットキャッシュのサイズ：
-			</text>
-			<text name="asset_text_box5">
-				MB
-			</text>
-			<button label="持ち物のキャッシュクリア" name="ClearInventoryCache" />
-			<text name="Cache location">
-				キャッシュの場所：
-			</text>
-			<button label="開く" name="open_cache"/>
-			<button label="設定" name="set_cache"/>
-			<button label="初期化" name="reset_cache"/>
-			<button label="キャッシュクリア" name="clear_cache"/>
-			<text name="Sound Cache location">
-				サウンドキャッシュの場所：
-			</text>
-			<line_editor name="FSSoundCacheLocation" />
-			<button label="開く" name="open_sound_cache" />
-			<button label="設定" name="set_sound_cache" />
-			<button label="初期化"  name="reset_sound_cache" />
-			<check_box label="ログアウト時に展開されていないDSF（サウンド）キャッシュファイルを削除しない" tool_tip="ここにチェックを入れると、ログアウトする時に展開されていないサウンドファイルをビューワが削除しません。これによってインワールドでのサウンド再生の性能が向上するかもしれません。但し、これによってキャッシュディレクトリがあっと言う間に増大し、しかも最大キャッシュの設定は無視されます。結果的にディスクスペースを過剰に消費することとなります。デフォルトではこのチェックは外してあります。" name="keep_unpacked_cache" />
-			<text name="log_path_desc">
-				チャットログの場所：
-			</text>
-			<button label="開く" name="open_log_path_button-panelsetup"/>
-			<button label="設定" name="log_path_button-panelsetup"/>
-			<button label="初期化" name="reset_logpath"/>
-			<button label="ビューワログを開く" name="browse_crashlogs"/>
-			<button label="設定フォルダを開く" name="browse_settingsdir"/>
-		</panel>
-	</tab_container>
+  <tab_container name="tabs">
+
+    <panel label="接続" name="tab-conn">
+      <text name="Maximum bandwidth">最大帯域幅（[https://wiki.firestormviewer.org/fs_speedtest 候補はありますか？]）:</text>
+
+      <icon name="NetworkLowGraphicsDivet" />
+      <icon name="NetworkMidGraphicsDivet" />
+      <icon name="NetworkHighGraphicsDivet" />
+      <icon name="NetworkLimitGraphicsDivet" />
+      <icon name="NetworkScaleEndGraphicsDivet" />
+      <slider name="max_bandwidth" />
+      <text name="text_box2">Kbps</text>
+      <text name="NetworkPrefText1">Wi-Fi</text>
+      <text name="NetworkPrefText2">ＤＳＬ</text>
+      <text name="NetworkPrefText3">ケーブル</text>
+      <text name="NetworkPrefText4">問題の可能性あり</text>
+      <check_box label="カスタムポート" name="connection_port_enabled" />
+      <spinner label="ポート番号：" name="connection_port" />
+
+      <text name="Web:">Webブラウザ：</text>
+      <radio_group name="preferred_browser_behavior">
+        <radio_item label="すべてのリンクにデフォルトのシステムブラウザを使用する" name="new_external" value="0" tool_tip="ヘルプやウェブリンクなどには、デフォルトのシステムウェブブラウザを使用してください。フルスクリーンの場合は推奨しません。" />
+        <radio_item label="Second Life のリンクにのみ内蔵ブラウザを使用する" name="new_internal" value="1" tool_tip="ヘルプやウェブリンクなどには、デフォルトのシステムウェブブラウザを使用してください。内蔵ブラウザはリンデンラボ／セカンドライフのリンクにのみ使用されます。" />
+        <radio_item label="すべてのリンクに内蔵ブラウザーを使用する" name="new_internal_all" value="2" />
+      </radio_group>
+
+      <text name="numberwebfloaters_label">ウェブブラウザの最大ウィンドウ数：</text>
+      <combo_box tool_tip="ウェブコンテンツフローターで同時に開くことができるウェブブラウザウィンドウの最大数" name="web_number_combobox">
+        <combo_box.item label="無制限" name="web_unlimited" value="0" />
+        <combo_box.item label="１画面まで" name="web_1" value="1" />
+        <combo_box.item label="５画面まで" name="web_5" value="5" />
+        <combo_box.item label="１０画面まで" name="web_10" value="10" />
+      </combo_box>
+
+      <button label="ブラウザキャッシュのクリア" name="ClearWebBrowserCache" />
+      <check_box label="Javascriptの有効化" name="browser_javascript_enabled" />
+      <check_box label="メディアブラウザのポップアップを有効化" name="media_popup_enabled" />
+      <button label="プロクシ設定を調整" label_selected="プロクシ設定を調整" name="set_proxy" />
+
+      <text name="home_page_label_l">ブラウザのホームページ：</text>
+      <line_editor name="FSBrowserHomePage" />
+    </panel>
+
+    <panel label="ディレクトリ" name="tab-dir">
+      <text name="cache_size_label_l">テクスチャのキャッシュサイズ（[https://wiki.firestormviewer.org/cache 提案が必要ですか？]）：</text>
+      <slider name="cache_size" />
+      <text name="text_box5">㎆</text>
+
+      <text name="asset_cache_size_label_l">アセットのキャッシュサイズ：</text>
+      <slider name="asset_cache_size" />
+      <text name="asset_text_box5">㎆</text>
+      <button label="インベントリキャッシュを削除" name="ClearInventoryCache" />
+
+      <text name="Cache location">キャッシュの場所：</text>
+      <line_editor name="cache_location" />
+      <button label="開く" label_selected="開く" name="open_cache" />
+      <button label="セット" label_selected="セット" name="set_cache" />
+      <button label="リセット" label_selected="リセット" name="reset_cache" />
+      <button label="キャッシュクリア" label_selected="キャッシュクリア" name="clear_cache" />
+
+      <text name="Sound Cache location">サウンドキャッシュの場所：</text>
+      <line_editor name="FSSoundCacheLocation" />
+      <button label="開く" label_selected="開く" name="open_sound_cache" />
+      <button label="セット" label_selected="セット" name="set_sound_cache" />
+      <button label="リセット" label_selected="リセット" name="reset_sound_cache" />
+
+      <check_box label="ログアウト時に解凍されたＤＳＦ（サウンド）キャッシュファイルを削除しない" tool_tip="チェックすると、ログアウト時にキャッシュから解凍されたサウンドファイルを削除しないので、インワールドサウンドの再生がより快適になります。注意：これを有効にすると、キャッシュディレクトリがすぐにいっぱいになり、最大キャッシュの設定に従わなくなります。その結果、ディスクスペースを過剰に使用する可能性があります。デフォルトでは無効になっています。" name="keep_unpacked_cache" />
+
+      <text name="log_path_desc">会話ログと会話履歴の場所：</text>
+      <line_editor name="log_path_string-panelsetup" />
+      <button label="開く" label_selected="開く" name="open_log_path_button-panelsetup" />
+      <button label="セット" label_selected="セット" name="log_path_button-panelsetup" />
+      <button label="リセット" label_selected="リセット" name="reset_logpath" />
+      <button label="ビューアログを開く" label_selected="ビューアログを開く" name="browse_crashlogs" />
+      <button label="設定フォルダを開く" label_selected="設定フォルダを開く" name="browse_settingsdir" />
+    </panel>
+  </tab_container>
 </panel>
