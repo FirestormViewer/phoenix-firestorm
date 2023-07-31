@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater title="ビームカラーの周期">
+<floater name="BeamColor" title="ビームカラーの周期">
 	<floater.string name="start_hue">開始色相</floater.string>
 	<floater.string name="end_hue">終了色相</floater.string>
 	<panel name="BeamColor_Picker" />

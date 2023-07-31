@@ -7,9 +7,11 @@
   <string name="ItemsRemaining">残りリンク数：[NUM]件</string>
   <string name="ReplaceFinished">インベントリのリンクの置換えが完了しました。</string>
   <text name="source_label">置換元：</text>
-  <inventory_link_replace_drop_target name="source_uuid_editor" tool_tip="置換えたいインベントリ内のアイテムを、ここへドラッグ・アンド・ドロップしてください。" />
+  <inventory_link_replace_drop_target name="source_uuid_editor" tool_tip="置換えたいインベントリ内のアイテムを、ここへドラッグ＆ドロップしてください。" />
   <text name="target_label">置換先：</text>
-  <inventory_link_replace_drop_target name="target_uuid_editor" tool_tip="新しいインベントリ内のアイテムを、ここへドラッグ・アンド・ドロップしてください。" />
+  <text name="delete_text">このアイテムのリンクは削除されます。</text>
+  <inventory_link_replace_drop_target name="target_uuid_editor" tool_tip="新しいインベントリ内のアイテムを、ここへドラッグ＆ドロップしてください。" />
+  <check_box label="リンクのみ削除" name="delete_links_only" />
   <text name="status_text">準備中…</text>
   <button name="btn_refresh" label="リフレッシュ" />
   <button name="btn_start" label="開始" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="avatarrendersettings">
+<floater name="avatarrendersettings" title="アバター表示の例外">
   <floater.string name="av_render_never">表示しない</floater.string>
   <floater.string name="av_render_always">常に表示</floater.string>
   <filter_editor label="アバターをフィルタ" name="filter_input" />

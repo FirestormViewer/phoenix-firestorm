@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="group_titles">
+<floater name="group_titles" title="グループのタイトル">
   <floater.string name="NoGroupTitle" value="＜グループ名無し＞" />
   <filter_editor label="グループのタイトルでフィルタ" name="filter_input" />
   <scroll_list name="title_list">

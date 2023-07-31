@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_fs_contact_set_configure" title="Contact set settings">
+<floater name="floater_fs_contact_set_configure" title="連絡先セットの設定">
   <floater.string name="title">[NAME]の設定</floater.string>
   <panel name="top_panel">
     <text name="set_label">連絡先セットの設定：</text>

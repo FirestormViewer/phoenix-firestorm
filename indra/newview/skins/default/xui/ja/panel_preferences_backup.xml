@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="バックアップ" name="backup">
   <text name="backup_path_label">バックアップ先のパス：</text>
   <line_editor name="settings_backup_path" />
   <button label="設定" name="set_backup_settings_path" />
   <layout_stack name="ls_account_specific_label">
     <layout_panel name="lp_account_specific_label">
-      <text name="account_specific_label">Yあなたは現在ログアウトしています。アカウント固有の設定は、ログインしているときにのみバックアップおよび復元できることに注意してください。ただし、すべてのユーザーアカウントに適用される設定は、ログインしていなくてもバックアップできます。</text>
+      <text name="account_specific_label">あなたは現在ログアウトしています。アカウント固有の設定は、ログインしているときにのみバックアップおよび復元できることに注意してください。ただし、すべてのユーザーアカウントに適用される設定は、ログインしていなくてもバックアップできます。</text>
     </layout_panel>
     <layout_panel name="lp_buttons">
       <text name="settings_restored_label">リストアする設定グループ（バックアップは常にすべてを保存します）：</text>
@@ -27,7 +27,7 @@
             </row>
             <row name="restore_global_row_dialogs">
               <column name="restore_global_files_check" value="true" />
-              <column name="restore_global_files_label">虫可能なダイアログ</column>
+              <column name="restore_global_files_label">無視可能なダイアログ</column>
               <column name="value">ignorable_dialogs.xml</column>
             </row>
             <row name="restore_global_row_grids">

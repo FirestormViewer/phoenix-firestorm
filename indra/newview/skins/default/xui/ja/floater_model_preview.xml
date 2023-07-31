@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Model Preview" title="モデルのアップロード">
-
   <string name="status_idle" />
-  <string name="status_parse_error">エラー：DAEファイルに問題が見つかりました。─詳細につきましてはログをご確認ください。</string>
+  <string name="status_parse_error">エラー：ＤＡＥファイルに問題が見つかりました。─詳細につきましてはログをご確認ください。</string>
   <string name="status_bind_shape_orientation">警告：バインドシェイプマトリックスは、標準のＸ軸正方向にはありません。</string>
   <string name="status_material_mismatch">エラー：モデルの材料は参考モデルのサブセットではありません。</string>
   <string name="status_reading_file">読み込んでいます…</string>
@@ -23,7 +22,8 @@
   <string name="mesh_status_invalid_material_list">ＬｏＤ付きのマテリアルは、参考モデルのサブセットではありません。</string>
   <string name="phys_status_vertex_limit_exceeded">一部の物理的な外殻構造が、頂点の制限を超えます。</string>
   <string name="phys_status_degenerate_triangles">物理メッシュが密すぎるか、極小な三角形が含まれています。この問題を解決するには、分析／簡素化を使用します。</string>
-  <string name="layer_all">全て</string>  <!-- Text to display in physics layer combo box for "all layers" -->
+  <string name="layer_all">全て</string>
+  <!-- Text to display in physics layer combo box for "all layers" -->
   <string name="decomposing">分析しています…</string>
   <string name="simplifying">簡素化しています…</string>
   <string name="tbd">未計算</string>
@@ -249,9 +249,10 @@
       <!-- Log -->
       <panel label="ログ" name="logs_panel" title="ログ">
         <view_border name="log_tab_border" />
-        <text_editor name="log_text">
-        </text_editor>
+        <!-- FS:Beq Add control for vberbose logging -->
         <check_box label="詳細ログを有効にする（非常に遅くなる可能性があります）" name="verbose_logging" />
+        <!-- FS:Beq/ -->
+        <text_editor name="log_text"/>
       </panel>
     </tab_container>
     <panel name="weights_and_warning_panel">
@@ -267,18 +268,18 @@
       <text name="server_weight">サーバー負荷：[SIM]</text>
       <!-- =========== Cost breakdown ======== -->
       <panel name="price_breakdown_panel">
-        <text>費用の内訳</text>
+        <text name="price_breakdown_title">費用の内訳</text>
         <view_border name="price_breakdown_border" />
         <text name="price_breakdown_labels">ダウンロード：
 物理効果数：
 インスタンス数：
 テクスチャ数：
 モデル：</text>
-        <text name="price_breakdown">[STREAMING]
-[PHYSICS]
-[INSTANCES]
-[TEXTURES]
-[MODEL]</text>
+        <text name="price_breakdown">[STREAMING]回
+[PHYSICS]個
+[INSTANCES]個
+[TEXTURES]枚
+[MODEL]個</text>
       </panel>
       <!-- 
       Streaming breakdown numbers are available but not fully understood
@@ -299,32 +300,76 @@
         <text name="physics_breakdown_labels">基準の殻：
 メッシュ：
 分析済み：</text>
-        <text name="physics_breakdown">[PCH]
-[PM]
-[PHU]</text>
+        <text name="physics_breakdown">[PCH]個
+[PM]個
+[PHU]個</text>
       </panel>
-      <text name="warning_title">ご注意：</text>
-      <text name="warning_message">メッシュモデルをアップロードする権利がありません。権利の取得方法については[[VURL]]こちらを参照してください。</text>
-      <text name="status">[STATUS]</text>
+    </panel>
+    <panel label="プレビュー設定" name="mesh_preview_settings_panel">
+      <view_border name="mesh_preview_settings_tab_border" />
+      <text name="mesh_upload_behaviour_label">モデルアップロードの動作設定：</text>
+      <check_box label="Auto-enable weights" tool_tip="リギング情報を持つメッシュに有効なウェイトを自動的に設定する" name="mesh_preview_auto_weights"/>
+      <check_box label="Auto-preview weights" tool_tip="リギング情報を持つメッシュのプレビューにウェイトを自動的に表示する" name="mesh_preview_auto_show_weights"/>
+      <text name="lod_suffix_label">ＬｏＤサフィックス：</text>
+      <combo_box name="lod_suffix_combo" tool_tip="プリセットを選ぶか、自分で設定してください。">
+        <combo_item name="choose_one">標準を選択するか、手動で編集する…</combo_item>
+        <combo_item name="suff_sl">ＳＬ標準（最低＝ＬｏＤ０）</combo_item>
+        <combo_item name="suff_unity">ゲームエンジンの標準（最低＝ＬｏＤ３</combo_item>
+        <combo_item name="suff_descriptive">ワールド（高、中…）</combo_item>
+      </combo_box>
+      <text name="suf_lowest_lab">最低：</text>
+      <line_editor name="suf_lowest" tool_tip="ディスク上の最低のＬｏＤファイルとファイル内のモデルを識別するために使用されるサフィックスを指定します。" />
+      <text name="suf_low_lab">低：</text>
+      <line_editor name="suf_low" tool_tip="ディスク上の低ＬｏＤファイルとファイル内のモデルを識別するために使用されるサフィックスを指定します。" />
+      <text name="suf_medium_lab">中：</text>
+      <line_editor name="suf_medium" tool_tip="ディスク上の中ＬｏＤファイルとファイル内のモデルを識別するために使用されるサフィックスを指定します。" />
+      <text name="suf_high_lab">高：</text>
+      <line_editor name="suf_high" tool_tip="ディスク上の高ＬｏＤファイルとファイル内のモデルを識別するために使用されるサフィックスを指定します。" />
+      <text name="suf_physics_lab">物理：</text>
+      <line_editor name="suf_physics" tool_tip="ディスク上の物理ファイルおよびファイル内のモデルを識別するために使用されるサフィックスを指定します。" />
+      <text name="mesh_preview_ud_preset_label">ユーザ定義の物理のプリセット：</text>
+      <line_editor name="ud_physics" tool_tip="物理で使用される単純なColladaメッシュ定義へのフルシステムパスを指定してください。" />
+      <button label="ブラウズ" label_selected="ブラウズ" name="set_user_def_phys" />
+      <text name="mesh_preview_colors_label">アップロードするモデルのプレビューカラー：</text>
+      <text name="user_label">General:</text>
+      <color_swatch label="背景" tool_tip="メッシュアップローダーのキャンバスカラーを指定します。" name="mesh_preview_canvas_color"/>
+      <color_swatch label="モデルの縁" tool_tip="メッシュアップローダーのプレビューウィンドウのモデルの縁の色を指定します。" name="mesh_preview_edge_color"/>
+      <color_swatch label="環境光" tool_tip="プレビューウィンドウの環境光レベルを指定します。（アニメーションのプレビューなどにも影響します）" name="preview_ambient_color"/>
+      <text name="physics_settings_label">物理：</text>
+      <color_swatch label="物理的な縁" tool_tip="メッシュアップローダーのプレビューウィンドウで、物理的な三角形の縁の色を選択できるようにします。" name="mesh_preview_physics_edge_color"/>
+      <color_swatch label="物理的な塗りつぶし" tool_tip="メッシュアップローダーのプレビューウィンドウの物理モデルの塗りつぶし色を指定します。" name="mesh_preview_physics_fill_color"/>
+      <text name="physics_issues_setting_label">物理の問題：</text>
+      <color_swatch label="無効な三角形の縁" tool_tip="メッシュ・アップローダーのプレビュー・ウィンドウで、縮退した（薄い）三角形の縁の色を指定します。" name="mesh_preview_degenerate_edge_color"/>
+      <color_swatch label="無効な三角形の塗りつぶし" tool_tip="メッシュアップローダーのプレビューウィンドウで、縮退した（薄い）三角形の塗りつぶしの色を指定します。" name="mesh_degenerate_fill_color"/>
     </panel>
   </panel>
-  <text name="lod_label">プレビュー：</text>
-  <panel name="preview_panel" />
-  <panel name="right_panel">
-    <combo_box name="preview_lod_combo" tool_tip="プレビューレンダーで表示するＬｏＤ">
-      <combo_item name="high">高</combo_item>
-      <combo_item name="medium">中</combo_item>
-      <combo_item name="low">低</combo_item>
-      <combo_item name="lowest">最低</combo_item>
-    </combo_box>
-    <text name="label_display">表示…</text>
+  <!-- FS:Beq relocate the preview controls to be sensible -->
+  <panel name="preview_controls_panel">
+    <panel name="preview_controls_inner_panel">
+      <text name="preview_controls_title">プレビューコントロール</text>
+      <combo_box name="preview_lod_combo" tool_tip="プレビューレンダーで表示するＬｏＤ">
+        <combo_item name="high">高</combo_item>
+        <combo_item name="medium">中</combo_item>
+        <combo_item name="low">低</combo_item>
+        <combo_item name="lowest">最低</combo_item>
+      </combo_box>
+    </panel>
+    <view_border name="preview_controls_border"/>
     <check_box label="エッジ" name="show_edges" />
-    <check_box label="物理効果" name="show_physics" />
     <check_box label="テクスチャ数" name="show_textures" />
+    <check_box label="ＵＶガイド" name="show_uv_guide"/>
+    <check_box label="物理効果" name="show_physics" />
+    <text name="exploder_label">スプレッド：</text>
+    <slider name="physics_explode" />
     <check_box label="スキンのウエイト" name="show_skin_weight" />
     <check_box label="ジョイント位置のオーバーライド" name="show_joint_overrides" />
     <check_box label="ジョイント数" name="show_joint_positions" />
-    <text name="physics_explode_label">スプレッドのプレビュー：</text>
-    <slider name="physics_explode" />
   </panel>
+  <!-- ========== NOTE MESSAGE ========== -->
+  <text name="warning_title">ご注意：</text>
+  <text name="warning_message">メッシュモデルをアップロードする権利がありません。権利の取得方法については[[VURL]]こちらを参照してください。</text>
+  <text name="status">[STATUS]</text>
+  <!-- /FS:Beq -->
+  <text name="lod_label">プレビュー：</text>
+  <panel name="preview_panel" />
 </floater>

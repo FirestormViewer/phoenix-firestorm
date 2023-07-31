@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Firestorm" name="firestorm">
 
-  <panel.string name="BeamsOffLabel">＝＝切り＝＝</panel.string>
+  <panel.string name="BeamsOffLabel">＝＝なし＝＝</panel.string>
   <string name="EmbeddedItemNotSet">設定無し</string>
   <string name="EmbeddedItemNotAvailable">利用不可</string>
   <string name="EmbeddedItemNotLoggedIn">未ログイン</string>
@@ -132,7 +132,7 @@
         <combo_item name="Metal" value="Metal" label="金属" />
         <combo_item name="Glass" value="Glass" label="ガラス" />
         <combo_item name="Wood" value="Wood" label="木材" />
-        <combo_item name="Flesh" value="Flesh" label="肌" />
+        <combo_item name="Flesh" value="Flesh" label="肉" />
         <combo_item name="Plastic" value="Plastic" label="プラスチック" />
         <combo_item name="Rubber" value="Rubber" label="ゴム" />
       </combo_box>
@@ -159,18 +159,18 @@
       <spinner label="Ｘ位置" name="X pos" />
       <spinner label="Ｙ位置" name="Y pos" />
       <spinner label="Ｚ位置" name="Z pos" />
-      <check_box label="数値をパーセント表記にする" tool_tip="デフォルト設定はパーセント指定で、すべての軸が５０と設定されています。" name="FSPivotPercToggle" />
+      <check_box label="数値を％表記にする" tool_tip="デフォルト設定はパーセント指定で、すべての軸が５０と設定されています。" name="FSPivotPercToggle" />
 
       <button label="デフォルトの作成権限" name="fs_default_creation_permissions" />
 
       <text name="text_box_scripting_font">スクリプトエディタのフォント：</text>
       <combo_box name="FSScriptingFontName" tool_tip="ＬＳＬスクリプトエディタで使用するフォントの名前を指定します。">
-        <combo_item name="Monospace" value="Monospace" label="等幅" />
+        <combo_item name="Monospace" value="Monospace" label="Monospace" />
         <combo_item name="Scripting" value="Scripting" label="Scripting" />
         <combo_item name="Cascadia" value="Cascadia" label="Cascadia Code" />
       </combo_box>
       <combo_box name="FSScriptingFontSize" tool_tip="ＬＳＬスクリプトエディタで使用するフォントのサイズを指定します。">
-        <combo_item name="Monospace" value="Monospace" label="等幅" />
+        <combo_item name="Monospace" value="Monospace" label="Monospace" />
         <combo_item name="Scripting" value="Scripting" label="Scripting" />
         <combo_item name="Cascadia" value="Cascadia" label="Cascadia Code" />
         <combo_item name="Small" value="Small" label="小" />
@@ -181,8 +181,8 @@
       <check_box label="ＬＳＬプリプロセッサの使用" tool_tip="チェックすると、ＬＳＬプリプロセッサが有効になります。" name="preproc_checkbox" />
       <check_box label="スクリプトの最適化" tool_tip="チェックすると、ＬＳＬプリプロセッサはスクリプト容量を最適化します。" name="preprocoptimizer_checkbox" />
       <check_box label="switch()ステートメント" tool_tip="チェックすると、ＬＳＬプリプロセッサはスクリプトのフロー制御に switch() ステートメントを使用するようになります。" name="preprocswitch_checkbox" />
-      <check_box label="のろまなリスト" tool_tip="チェックすると、ＬＳＬプリプロセッサはリスト処理に構文拡張の使用を許可します。" name="preproclazy_checkbox" />
-      <check_box label="#includes文でローカルディスクから読み込む" tool_tip="チェックすると、ＬＳＬプリプロセッサはローカルディスク上のファイルを参照する#include文を許可します。" name="preprocinclude_checkbox" />
+      <check_box label="遅いリスト" tool_tip="チェックすると、ＬＳＬプリプロセッサはリスト処理に構文拡張の使用を許可します。" name="preproclazy_checkbox" />
+      <check_box label="#includes文でローカルから読み込む" tool_tip="チェックすると、ＬＳＬプリプロセッサはローカルディスク上のファイルを参照する#include文を許可します。" name="preprocinclude_checkbox" />
       <text name="lslpreprocinclude_textbox">プリプロセッサのインクルードパス：</text>
       <line_editor name="preprocinclude_location" />
       <button label="ブラウズ" label_selected="ブラウズ" name="SetPreprocInclude" />
@@ -200,9 +200,9 @@
       <spinner name="MaxSelectDistance" tool_tip="最大許容選択（アバターからのメートル単位）距離を指定します。［デフォルト：128.000］" />
       <check_box label="ドラッグの限界距離（メートル）：" name="LimitDragDistance" />
       <spinner name="MaxDragDistance" tool_tip="移動ツールの１回の動作における最大許容（開始位置からの移動）距離を指定します。［デフォルト：48.000］" />
-      <text name="RotationStepText1">Constrain rotations to multiples of</text>
+      <text name="RotationStepText1">「グリッドにスナップ」をしない場合、回転を</text>
       <spinner name="RotationStep" tool_tip="回転ツールによるすべての回転は、この単位の倍数に制限します。［デフォルト：1.0］" />
-      <text name="RotationStepText2">degrees, when not using 'snap to grid'</text>
+      <text name="RotationStepText2">度の倍数に制限する</text>
       <check_box label="リンクセットに最小値がある場合、リンク解除確認ダイアログを表示する" name="FSUnlinkConfirmEnabled" />
       <spinner name="MinObjectsForUnlinkConfirm" />
       <text name="MinObjectsForUnlinkConfirmText2">オブジェクト</text>
