@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Group Profile" name="GroupInfo">
+  <panel.string name="default_needs_apply_text">There are unsaved changes</panel.string>
+  <panel.string name="want_apply_text">Do you want to save these changes?</panel.string>
+  <panel.string name="group_join_btn">Join (L$[AMOUNT])</panel.string>
+  <panel.string name="group_join_free">Free</panel.string>
+
+  <layout_stack name="group_info_sidetray_main">
+    <layout_panel name="header_container">
+      <panel name="group_info_top">
+        <button name="back" />
+        <text_editor name="group_name" value="(Loading...)" />
+        <line_editor label="Type your new group name here" name="group_name_editor" />
+      </panel>
+    </layout_panel>
+
+    <layout_panel name="group_info_content">
+      <layout_stack name="layout">
+        <layout_panel name="group_accordions">
+          <accordion name="groups_accordion">
+            <accordion_tab name="group_general_tab" title="General">
+              <panel name="group_general_tab_panel" />
+            </accordion_tab>
+            <accordion_tab name="group_roles_tab" title="Roles &amp; Members">
+              <panel name="group_roles_tab_panel" />
+            </accordion_tab>
+            <accordion_tab name="group_notices_tab" title="Notices">
+              <panel name="group_notices_tab_panel" />
+            </accordion_tab>
+            <accordion_tab name="group_land_tab" title="Land/Assets">
+              <panel name="group_land_tab_panel" />
+            </accordion_tab>
+            <accordion_tab name="group_experiences_tab" title="Experiences">
+              <panel name="group_experiences_tab_panel" />
+            </accordion_tab>
+          </accordion>
+        </layout_panel>
+      </layout_stack>
+
+      <layout_stack name="layout">
+        <layout_panel name="button_row">
+          <button name="btn_refresh" />
+          <layout_stack name="button_row_ls">
+
+            <layout_panel name="btn_chat_lp">
+              <button label="Chat" name="btn_chat" />
+            </layout_panel>
+
+            <layout_panel name="call_btn_lp">
+              <button name="btn_call" label="Group Call" tool_tip="Call this group" />
+            </layout_panel>
+
+            <layout_panel name="btn_apply_lp">
+              <button label="Save" label_selected="Save" name="btn_apply" />
+            </layout_panel>
+          </layout_stack>
+          <!--
+          <button label="Cancel" label_selected="Cancel" name="btn_cancel" />
+          -->
+        </layout_panel>
+      </layout_stack>
+    </layout_panel>
+  </layout_stack>
+</panel>

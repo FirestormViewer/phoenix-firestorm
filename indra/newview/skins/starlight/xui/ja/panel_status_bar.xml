@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="status">
+  <!-- icon / -->
+
+  <panel name="parcel_info_panel">
+    <icon name="voice_icon" />
+    <icon name="fly_icon" />
+    <icon name="push_icon" />
+    <icon name="build_icon" />
+    <icon name="scripts_icon" />
+    <icon name="see_avs_icon" />
+    <icon name="pathfinding_dirty_icon" />
+    <icon name="pathfinding_disabled_icon" />
+    <button name="buy_land_btn" tool_tip="Parcel is for sale" />
+    <icon name="damage_icon" />
+    <text name="damage_text" />
+    <icon name="scriptout" />
+    <text tool_tip="Name of land parcel on which you are standing. Click for About Land." name="parcel_info_text" value="(loading...)" />
+  </panel>
+
+  <panel.string name="packet_loss_tooltip">Packet Loss</panel.string>
+  <panel.string name="bandwidth_tooltip">Bandwidth</panel.string>
+  <panel.string name="time">[ampm, datetime, slt]　[hour12, datetime, slt]：[min, datetime, slt]：[second, datetime, slt]　[timezone,datetime, slt]</panel.string>
+  <panel.string name="timeTooltip">[year, datetime, slt]年[month, datetime, slt]月[day, datetime, slt]日　[weekday, datetime, slt]</panel.string>
+  <panel.string name="buycurrencylabel">L$ [AMT]</panel.string>
+
+  <panel name="menu_search_panel">
+    <search_editor label="Search Menus" name="search_menu_edit" tool_tip="Type the search term you are interested in here. Results will be displayed for partial fulltext matches within the menu.">
+      <search_button />
+      <clear_button />
+    </search_editor>
+  </panel>
+
+  <panel name="balance_bg">
+    <text name="balance" value="L$???" />
+    <button label="BUY L$" name="buyL" tool_tip="Click to buy more L$" />
+  </panel>
+
+  <panel name="time_and_media_bg">
+
+    <!-- Draw distance widget here -->
+    <icon name="dd_icon" tool_tip="Draw Distance" />
+    <slider tool_tip="Maximum distance away from camera to be rezzed (meters)" name="drawdistance" />
+
+    <text name="TimeText" tool_tip="Current time (Pacific)">午後 24：00：00 PST</text>
+    <button name="presets_icon_camera" />
+    <button name="presets_icon_graphic" />
+    <button name="stream_toggle_btn" tool_tip="Start/Stop Parcel Audio Stream">
+    </button>
+    <button name="media_toggle_btn" tool_tip="Start/Stop All Media (Music, Video, Web pages)">
+    </button>
+    <button name="volume_btn" tool_tip="Global Volume Control" />
+    <text name="FPSText" tool_tip="Frames per second">200.0</text>
+  </panel>
+</panel>

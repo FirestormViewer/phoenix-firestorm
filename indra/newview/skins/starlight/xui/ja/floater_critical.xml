@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="modal container">
+  <button label="続ける" label_selected="続ける" name="Continue" />
+  <text name="tos_heading">以下のメッセージをよくお読みください。</text>
+  <text_editor name="tos_text">TOS_TEXT</text_editor>
+</floater>

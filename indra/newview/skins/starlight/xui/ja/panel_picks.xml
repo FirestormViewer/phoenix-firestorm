@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Picks" name="panel_picks">
+  <string name="no_picks" value="No Picks" />
+  <string name="no_classifieds" value="No Classifieds" />
+  <text name="picks_panel_text" />
+  <accordion name="accordion">
+    <accordion_tab name="tab_picks" title="Picks">
+      <flat_list_view name="picks_list" />
+    </accordion_tab>
+    <accordion_tab name="tab_classifieds" title="Classifieds">
+      <flat_list_view name="classifieds_list" />
+    </accordion_tab>
+  </accordion>
+  <panel label="bottom_panel" name="edit_panel">
+    <!-- Replaces LLs button panel as they had not put buttons in -->
+    <button tool_tip="Show additional options" name="gear_menu_btn" />
+    <button name="new_btn" tool_tip="Create a new pick or classified at the current location" />
+    <icon name="dummy_icon" />
+    <dnd_button name="trash_btn" />
+  </panel>
+  <panel name="buttons_cucks">
+    <layout_stack name="buttons_cucks_ls">
+      <layout_panel name="info_btn_lp">
+        <button label="Info" name="info_btn" tool_tip="Show pick information" />
+      </layout_panel>
+      <layout_panel name="teleport_btn_lp">
+        <button label="Teleport" name="teleport_btn" tool_tip="Teleport to the corresponding area" />
+      </layout_panel>
+      <layout_panel name="show_on_map_btn_lp">
+        <button label="Map" name="show_on_map_btn" tool_tip="Show the corresponding area on the World Map" />
+      </layout_panel>
+    </layout_stack>
+  </panel>
+</panel>

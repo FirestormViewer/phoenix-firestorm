@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="worldmap" title="World Map">
+  <floater.string name="UnnamedParcel">(Unnamed Parcel)</floater.string>
+  <layout_stack name="resizing_stack">
+    <layout_panel name="map_panel">
+      <panel name="objects_mapview" />
+      <panel name="layout_panel_6">
+        <icon name="zoom_icon" />
+        <slider name="zoom slider" />
+      </panel>
+    </layout_panel>
+
+    <!-- <FS:Zi> FIRE-31376: Splitter panel to show/hide map details -->
+    <layout_panel name="map_details_splitter">
+      <panel>
+        <panel />
+        <button name="Show Map details" />
+      </panel>
+    </layout_panel>
+    <!-- </FS:Zi> -->
+
+    <layout_panel name="map_details_panel">
+      <panel name="layout_panel_1">
+        <text name="events_label">Legend</text>
+      </panel>
+      <panel name="layout_panel_2">
+        <button name="Show My Location" tool_tip="Center map on my avatar&apos;s location" />
+        <text name="me_label">Me</text>
+        <check_box name="people_chk" />
+        <icon name="person" />
+        <text name="person_label">Person</text>
+        <check_box name="infohub_chk" />
+        <icon name="infohub" />
+        <text name="infohub_label">Infohub</text>
+        <check_box name="land_for_sale_chk" />
+        <icon name="landforsale" />
+        <text name="land_sale_label">Land Sale</text>
+        <icon name="square2" />
+        <text name="auction_label">land auction</text>
+        <icon name="square2" />
+        <text name="by_owner_label">by owner</text>
+
+        <button name="Go Home" tool_tip="Teleport to my home location" />
+        <text name="Home_label">Go Home</text>
+        <text name="events_label">Events:</text>
+
+        <check_box name="event_chk" />
+        <icon name="event" />
+        <text name="pg_label">General</text>
+
+        <check_box name="events_mature_chk" />
+        <icon image_name="Parcel_M_Dark" name="events_mature_icon" />
+        <text name="events_mature_label">Moderate</text>
+
+        <check_box name="events_adult_chk" />
+        <icon name="events_adult_icon" />
+        <text name="events_adult_label">Adult</text>
+      </panel>
+
+
+      <panel name="layout_panel_3">
+        <text name="find_on_map_label">Find on Map</text>
+      </panel>
+      <panel name="layout_panel_4">
+        <icon name="friends_icon" />
+        <combo_box label="Online Friends" name="friend combo" tool_tip="Show friends on map">
+          <combo_box.item label="My Friends Online" name="item1" value="None" />
+        </combo_box>
+        <icon name="landmark_icon" />
+        <combo_box label="My Landmarks" name="landmark combo" tool_tip="Landmark to show on map">
+          <combo_box.item label="My Landmarks" name="item1" value="None" />
+        </combo_box>
+        <icon name="location_icon" />
+        <search_editor label="Regions by Name" name="location" tool_tip="Type the name of a region" />
+        <button label="Find" name="DoSearch" tool_tip="Search for region" />
+        <scroll_list name="search_results">
+          <scroll_list.columns label="" name="scroll_list_icon" />
+          <scroll_list.columns label="" name="sim_name" />
+        </scroll_list>
+        <text name="events_label">Location:</text>
+        <spinner name="teleport_coordinate_x" />
+        <spinner name="teleport_coordinate_y" />
+        <spinner name="teleport_coordinate_z" />
+
+        <button label="Teleport" name="Teleport" tool_tip="Teleport to selected location" />
+        <button label="Copy SLurl" name="copy_slurl" tool_tip="Copies current location as SLurl to be used on the web." />
+        <button label="Clear" name="Clear" tool_tip="Clear tracking lines and reset map" />
+        <button label="Show Selection" name="Show Destination" tool_tip="Center map on selected location" />
+        <button label="Track Region" name="track_region" tool_tip="Add the region to the region tracker" />
+      </panel>
+    </layout_panel>
+  </layout_stack>
+</floater>

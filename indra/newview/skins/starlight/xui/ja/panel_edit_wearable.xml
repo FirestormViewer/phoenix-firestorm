@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Wearable" name="panel_edit_wearable">
+  <string name="edit_shape_title">Editing Shape</string>
+  <string name="edit_skin_title">Editing Skin</string>
+  <string name="edit_hair_title">Editing Hair</string>
+  <string name="edit_eyes_title">Editing Eyes</string>
+  <string name="edit_shirt_title">Editing Shirt</string>
+  <string name="edit_pants_title">Editing Pants</string>
+  <string name="edit_shoes_title">Editing Shoes</string>
+  <string name="edit_socks_title">Editing Socks</string>
+  <string name="edit_jacket_title">Editing Jacket</string>
+  <string name="edit_skirt_title">Editing Skirt</string>
+  <string name="edit_gloves_title">Editing Gloves</string>
+  <string name="edit_undershirt_title">Editing Undershirt</string>
+  <string name="edit_underpants_title">Editing Underpants</string>
+  <string name="edit_alpha_title">Editing Alpha Mask</string>
+  <string name="edit_tattoo_title">Editing Tattoo</string>
+  <string name="edit_universal_title">Editing Universal</string>
+  <string name="edit_physics_title">Editing Physics</string>
+  <string name="shape_desc_text">Shape:</string>
+  <string name="skin_desc_text">Skin:</string>
+  <string name="hair_desc_text">Hair:</string>
+  <string name="eyes_desc_text">Eyes:</string>
+  <string name="shirt_desc_text">Shirt:</string>
+  <string name="pants_desc_text">Pants:</string>
+  <string name="shoes_desc_text">Shoes:</string>
+  <string name="socks_desc_text">Socks:</string>
+  <string name="jacket_desc_text">Jacket:</string>
+  <string name="skirt_desc_text">Skirt:</string>
+  <string name="gloves_desc_text">Gloves:</string>
+  <string name="undershirt_desc_text">Undershirt:</string>
+  <string name="underpants_desc_text">Underpants:</string>
+  <string name="alpha_desc_text">Alpha Mask:</string>
+  <string name="tattoo_desc_text">Tattoo:</string>
+  <string name="universal_desc_text">Universal:</string>
+  <string name="physics_desc_text">Physics:</string>
+  <!-- Default width of the button should be to show it without label.
+  Button will be extedned in code to show whole label when wearable is being changed.
+  -->
+  <labeled_back_button label="Save" name="back_btn" tool_tip="Return to Edit Outfit" />
+  <text name="edit_wearable_title" value="Editing Shape" />
+  <panel label="Shirt" name="wearable_type_panel">
+    <text name="description_text" value="Shape:" />
+    <radio_group name="sex_radio">
+      <radio_item label="" name="sex_male" tool_tip="Male" />
+      <radio_item label="" name="sex_female" tool_tip="Female" />
+    </radio_group>
+    <!--  graphical labels for the radio buttons above -->
+    <icon name="male_icon" tool_tip="Male" />
+    <icon name="female_icon" tool_tip="Female" />
+    <line_editor name="description" />
+  </panel>
+  <panel name="edit_subpanel_container">
+    <!-- the shape editing panel is taller than the others
+		because it also displays avatar height -->
+    <panel name="edit_shape_panel" />
+    <panel name="edit_skin_panel" />
+    <panel name="edit_hair_panel" />
+    <panel name="edit_eyes_panel" />
+    <panel name="edit_shirt_panel" />
+    <panel name="edit_pants_panel" />
+    <panel name="edit_shoes_panel" />
+    <panel name="edit_socks_panel" />
+    <panel name="edit_jacket_panel" />
+    <panel name="edit_skirt_panel" />
+    <panel name="edit_gloves_panel" />
+    <panel name="edit_undershirt_panel" />
+    <panel name="edit_underpants_panel" />
+    <panel name="edit_alpha_panel" />
+    <panel name="edit_tattoo_panel" />
+    <panel name="edit_universal_panel" />
+    <panel name="edit_physics_panel" />
+  </panel>
+  <panel name="button_panel">
+    <layout_stack name="button_panel_ls">
+      <layout_panel name="save_as_btn_lp">
+        <button label="Save As" name="save_as_button" />
+      </layout_panel>
+      <layout_panel name="revert_btn_lp">
+        <button label="Undo Changes" name="revert_button" />
+      </layout_panel>
+      <layout_panel name="import_btn_lp">
+        <button label="Import" name="import_btn" />
+      </layout_panel>
+    </layout_stack>
+  </panel>
+</panel>

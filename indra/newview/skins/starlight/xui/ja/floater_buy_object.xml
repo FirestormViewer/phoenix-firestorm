@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="contents" title="Buy Copy Of Object">
+  <floater.string name="title_buy_text">購入</floater.string>
+  <floater.string name="title_buy_copy_text">以下のコピーを購入</floater.string>
+  <floater.string name="no_copy_text">（コピー不可）</floater.string>
+  <floater.string name="no_modify_text">（修正不可）</floater.string>
+  <floater.string name="no_transfer_text">（譲渡不可）</floater.string>
+  <floater.string name="multiple_selected">複数の選択</floater.string>
+  <scroll_list name="object_list">
+    <scroll_list.columns name="icon" />
+    <scroll_list.columns name="text" />
+  </scroll_list>
+  <text name="contents_text">コンテンツ：</text>
+  <scroll_list name="item_list">
+    <scroll_list.columns name="icon" />
+    <scroll_list.columns name="text" />
+  </scroll_list>
+  <text name="buy_text">以下からL$ [AMOUNT]で購入：</text>
+  <text name="buy_name_text">[NAME]？</text>
+  <button label="購入" label_selected="購入" name="buy_btn" />
+  <button label="キャンセル" label_selected="キャンセル" name="cancel_btn" />
+</floater>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel follows="all" height="532" label="Profile" layout="topleft" left="0" name="panel_profile" top="0" width="313">
+  <string name="CaptionTextAcctInfo">[ACCTTYPE]
+[PAYMENTINFO] [FIRESTORM][FSDEV][FSSUPP][FSQA][FSGW]</string>
+  <!-- The previous line was [PAYMENTINFO] [AGEVERIFICATION], but they're not
+    sending the latter any more. ...TS -->
+  <string name="FSDev" value=" Developer" />
+  <string name="FSSupp" value=" Support" />
+  <string name="FSQualityAssurance" value=" Bug Hunter" />
+  <string name="FSGW" value=" Gateway" />
+  <string name="payment_update_link_url">http://www.secondlife.com/account/billing.php?lang=en</string>
+  <string name="partner_edit_link_url">http://www.secondlife.com/account/partners.php?lang=en</string>
+  <string name="my_account_link_url" value="http://secondlife.com/account" />
+  <string name="no_partner_text" value="None" />
+  <string name="no_group_text" value="None" />
+  <string name="RegisterDateFormat">[REG_DATE] ([AGE])</string>
+  <string name="name_text_args">[NAME]</string>
+  <string name="display_name_text_args">[DISPLAY_NAME]</string>
+  <accordion name="profile_accordion">
+    <accordion_tab name="second_life_tab" title="Second Life">
+      <scroll_container name="profile_sl_scroll">
+        <panel name="scroll_content_sl_panel">
+          <texture_picker name="2nd_life_pic" />
+          <text name="title_member_text" value="Resident Since:" />
+          <text_editor name="register_date" value="05/31/2376" />
+          <text name="title_acc_status_text" value="Account Status:" />
+          <text_editor name="acc_status_text">Resident. No payment info on file.
+            Linden.</text_editor>
+          <text name="title_partner_text" value="Partner:" />
+          <panel name="partner_data_panel">
+            <text initial_value="(retrieving)" name="partner_text" />
+          </panel>
+          <text name="About_sl_text" value="About:" />
+          <expandable_text name="sl_description_edit">Lorem ipsum dolor sit amet, consectetur
+            adipiscing elit. Aenean viverra orci et justo sagittis aliquet.Nullamma lesuada mauris
+            sit amet ipsum. adipiscing elit. Ae nean viverra orci et justo sagittis aliquet. Nullam
+            malesuada mauris sit amet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis
+            aliquet. Nullam malesuada mauris sit amet ipsum.</expandable_text>
+          <text name="title_my_groups_text" value="Groups:" />
+          <group_list name="group_list" />
+          <text name="Key" value="Key:" />
+          <text_editor name="user_key" label="Your Key:" initial_value="(loading ...)" />
+          <button label="Copy URI" />
+        </panel>
+      </scroll_container>
+    </accordion_tab>
+    <accordion_tab title="Real World">
+      <scroll_container name="profile_rl_scroll">
+        <panel name="profile_rl_scroll_panel">
+          <texture_picker name="real_world_pic" />
+          <text name="About_rl_text" value="About:" />
+          <expandable_text name="fl_description_edit">Lorem ipsum dolor sit amet, consectetur
+            adipiscing elit. Aenean viverra orci et justo sagittis aliquet.Nullamma lesuada mauris
+            sit amet ipsum. adipiscing elit. Ae nean viverra orci et justo sagittis aliquet. Nullam
+            malesuada mauris sit amet ipsum. adipiscing elit. Aenean viverra orci et justo sagittis
+            aliquet. Nullam malesuada mauris sit amet ipsum.</expandable_text>
+          <text name="homepage_text" value="Homepage:" />
+          <text name="homepage_edit" value="blank" />
+        </panel>
+      </scroll_container>
+    </accordion_tab>
+  </accordion>
+  <panel name="profile_me_buttons_panel">
+    <button label="Edit Profile" name="edit_profile_btn" tool_tip="Edit your personal information" />
+  </panel>
+</panel>

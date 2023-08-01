@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Edit Pick" name="panel_edit_pick">
+  <panel.string name="location_notice">(will update after save)</panel.string>
+  <button name="back_btn" />
+  <text name="title">Edit Pick</text>
+
+  <scroll_container name="profile_scroll">
+    <panel name="scroll_content_panel">
+      <texture_picker name="pick_snapshot" />
+      <icon name="edit_icon" label="" tool_tip="Click to select an image" />
+      <text name="Name:">Title:</text>
+      <line_editor name="pick_name" />
+      <text name="description_label">Description:</text>
+      <text_editor name="pick_desc" />
+      <text name="location_label">Location:</text>
+      <text name="pick_location">loading...</text>
+      <button label="Set to Current Location" name="set_to_curr_location_btn" />
+    </panel>
+  </scroll_container>
+
+  <panel label="bottom_panel" name="bottom_panel">
+    <layout_stack name="layout_stack1">
+      <layout_panel name="layout_panel1">
+        <button label="Save Pick" name="save_changes_btn" />
+      </layout_panel>
+      <layout_panel name="layout_panel2">
+        <button label="Cancel" name="cancel_btn" />
+      </layout_panel>
+    </layout_stack>
+  </panel>
+</panel>

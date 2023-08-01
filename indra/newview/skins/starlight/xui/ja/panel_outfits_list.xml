@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="Outfits">
+  <accordion name="outfits_accordion">
+    <no_matched_tabs_text name="no_matched_outfits_msg" value="Didn't find what you're looking for? Try [secondlife:///app/search/all/[SEARCH_TERM] Search]." />
+    <no_visible_tabs_text name="no_outfits_msg" value="You don't have any outfits yet. Try [secondlife:///app/search/all/ Search]" />
+  </accordion>
+  <panel name="bottom_panel">
+    <menu_button tool_tip="Show additional options" name="options_gear_btn" />
+    <icon name="dummy_icon" />
+    <text name="OutfitcountText">[COUNT] Outfits</text>
+    <text name="avatar_complexity_label">Complexity: [WEIGHT]</text>
+    <button name="trash_btn" tool_tip="Delete selected outfit" />
+  </panel>
+</panel>

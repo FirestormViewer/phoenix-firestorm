@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="place_profile">
+  <string name="on" value="On" />
+  <string name="off" value="Off" />
+  <string name="anyone" value="Anyone" />
+  <string name="available" value="available" />
+  <string name="allocated" value="allocated" />
+  <string name="title_place" value="Place Profile" />
+  <string name="title_teleport_history" value="Teleport History" />
+  <string name="not_available" value="(N\A)" />
+  <string name="unknown" value="(unknown)" />
+  <string name="public" value="(public)" />
+  <string name="none_text" value="(none)" />
+  <string name="sale_pending_text" value="(Sale Pending)" />
+  <string name="group_owned_text" value="(Group Owned)" />
+  <string name="price_text" value="L$" />
+  <string name="area_text" value="m²" />
+  <string name="all_residents_text" value="All Residents" />
+  <string name="group_text" value="Group" />
+  <string name="can_resell">Purchased land in this region may be resold.</string>
+  <string name="can_not_resell">Purchased land in this region may not be resold.</string>
+  <string name="can_change">Purchased land in this region may be joined or subdivided.</string>
+  <string name="can_not_change">Purchased land in this region may not be joined or subdivided.</string>
+  <string name="server_update_text">Place information not available without server update.</string>
+  <string name="server_error_text">Information about this location is unavailable at this time, please try again later.</string>
+  <string name="server_forbidden_text">Information about this location is unavailable due to access restrictions. Please check your permissions with the parcel owner.</string>
+  <string name="acquired_date">[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]</string>
+  <!-- Texture names for parcel permissions icons -->
+  <string name="icon_PG" translate="false" value="Parcel_PG_Dark" />
+  <string name="icon_M" translate="false" value="Parcel_M_Dark" />
+  <string name="icon_R" translate="false" value="Parcel_R_Dark" />
+  <string name="icon_Voice" translate="false" value="Parcel_Voice_Dark" />
+  <string name="icon_VoiceNo" translate="false" value="Parcel_VoiceNo_Dark" />
+  <string name="icon_Fly" translate="false" value="Parcel_Fly_Dark" />
+  <string name="icon_FlyNo" translate="false" value="Parcel_FlyNo_Dark" />
+  <string name="icon_Push" translate="false" value="Parcel_Push_Dark" />
+  <string name="icon_PushNo" translate="false" value="Parcel_PushNo_Dark" />
+  <string name="icon_Build" translate="false" value="Parcel_Build_Dark" />
+  <string name="icon_BuildNo" translate="false" value="Parcel_BuildNo_Dark" />
+  <string name="icon_Scripts" translate="false" value="Parcel_Scripts_Dark" />
+  <string name="icon_ScriptsNo" translate="false" value="Parcel_ScriptsNo_Dark" />
+  <string name="icon_Damage" translate="false" value="Parcel_Damage_Dark" />
+  <string name="icon_DamageNo" translate="false" value="Parcel_DamageNo_Dark" />
+  <string name="icon_SeeAVs_Off" translate="false" value="Parcel_SeeAVsOff_Dark" />
+  <string name="icon_SeeAVs_On" translate="false" value="Parcel_SeeAVsOn_Dark" />
+
+  <layout_stack name="place_info_sidetray_main">
+    <layout_panel name="header_container">
+
+      <button name="back_btn" tool_tip="Back" />
+      <text name="title" value="Place Profile" />
+
+    </layout_panel>
+    <layout_panel name="place_info_content">
+
+      <scroll_container name="place_scroll">
+        <panel name="scrolling_panel">
+          <texture_picker name="logo" />
+          <layout_stack name="panel_stack">
+            <layout_panel name="here_panel">
+              <icon name="icon_you_are_here" />
+            </layout_panel>
+            <layout_panel name="for_sale_panel">
+              <icon name="icon_for_sale" />
+            </layout_panel>
+          </layout_stack>
+          <text name="parcel_title" value="Unknown" />
+          <text name="region_title">Region: [REGIONAMEPOS]</text>
+          <text name="owner_label" value="Owner:" />
+          <text name="parcel_owner" value="Unknown" />
+          <expandable_text name="description" />
+          <icon name="maturity_icon" />
+          <text name="maturity_value" value="unknown" />
+          <accordion name="advanced_info_accordion">
+            <accordion_tab name="parcel_characteristics_tab" title="Parcel">
+              <panel name="parcel_characteristics_panel">
+                <icon name="rating_icon" />
+                <text name="rating_label" value="Rating:" />
+                <text name="rating_value" value="unknown" />
+                <icon name="voice_icon" />
+                <text name="voice_label" value="Voice:" />
+                <text name="voice_value" value="On" />
+                <icon name="fly_icon" />
+                <text name="fly_label" value="Fly:" />
+                <text name="fly_value" value="On" />
+                <icon name="push_icon" />
+                <text name="push_label" value="Push:" />
+                <text name="push_value" value="Off" />
+                <icon name="build_icon" />
+                <text name="build_label" value="Build:" />
+                <text name="build_value" value="On" />
+                <icon name="scripts_icon" />
+                <text name="scripts_label" value="Scripts:" />
+                <text name="scripts_value" value="On" />
+                <icon name="damage_icon" />
+                <text name="damage_label" value="Damage:" />
+                <text name="damage_value" value="Off" />
+                <icon name="see_avatars_icon" />
+                <text name="see_avatars_label" value="See Avatars:" />
+                <text name="see_avatars_value" value="Off" />
+                <button label="About Land" name="about_land_btn" />
+              </panel>
+            </accordion_tab>
+            <accordion_tab name="region_information_tab" title="Region">
+              <panel name="region_information_panel">
+                <text name="region_name_label" value="Region:" />
+                <text name="region_name" value="Mooseland" />
+                <text name="region_type_label" value="Type:" />
+                <text name="region_type" value="Moose" />
+                <text name="region_rating_label" value="Rating:" />
+                <icon name="region_rating_icon" />
+                <text name="region_rating" value="Adult" />
+                <text name="region_owner_label" value="Owner:" />
+                <text name="region_owner" value="moose Van Moose extra long name moose" />
+                <text name="region_group_label" value="Group:" />
+                <text name="region_group">The Mighty Moose of mooseville soundvillemoose</text>
+                <button label="Region/Estate" name="region_info_btn" />
+              </panel>
+            </accordion_tab>
+            <accordion_tab name="estate_information_tab" title="Estate">
+              <panel name="estate_information_panel">
+                <text name="estate_name_label" value="Estate:" />
+                <text name="estate_name" />
+                <text name="estate_rating_label" value="Rating:" />
+                <text name="estate_rating" />
+                <text name="estate_owner_label" value="Owner:" />
+                <text name="estate_owner" value="Testing owner name length with long name" />
+                <text name="covenant_label" value="Covenant:" />
+                <text_editor name="covenant" />
+              </panel>
+            </accordion_tab>
+            <accordion_tab name="sales_tab" title="For Sale">
+              <panel name="sales_panel">
+                <text name="sales_price_label" value="Price:" />
+                <text name="sales_price" />
+                <text name="area_label" value="Area:" />
+                <text name="area" />
+                <text name="traffic_label" value="Traffic:" />
+                <text name="traffic" />
+                <text name="primitives_label" value="Primitives:" />
+                <text name="primitives" />
+                <text name="parcel_scripts_label" value="Scripts:" />
+                <text name="parcel_scripts" />
+                <text name="terraform_limits_label" value="Terraform limits:" />
+                <text name="terraform_limits" />
+                <text name="subdivide_label" value="Subdivide/Join ability:" />
+                <text_editor name="subdivide" />
+                <text name="resale_label" value="ReSale ability:" />
+                <text_editor left="10" name="resale" />
+                <text name="sale_to_label" value="For sale to:" />
+                <text name="sale_to" />
+              </panel>
+            </accordion_tab>
+          </accordion>
+        </panel>
+      </scroll_container>
+
+    </layout_panel>
+  </layout_stack>
+
+</panel>
