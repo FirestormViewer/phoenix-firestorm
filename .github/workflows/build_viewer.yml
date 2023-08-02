@@ -79,6 +79,8 @@ jobs:
             FS_RELEASE_TYPE=Release
           elif [[ "${{ github.ref_name }}" == *review* ]]; then
             FS_RELEASE_TYPE=Beta
+          elif [[ "${{ github.ref_name }}" == *alpha* ]]; then
+            FS_RELEASE_TYPE=Alpha
           elif [[ "${{ github.event_name }}" == 'schedule' ]]; then
             FS_RELEASE_TYPE=Nightly
           else
@@ -203,6 +205,10 @@ jobs:
         if: env.FS_BUILD_TYPE == 'Nightly'
         run: |
           echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}} --testbuild=14" >> $GITHUB_ENV
+      - name: make Alpha builds expire after 28 days
+        if: env.FS_BUILD_TYPE == 'Alpha'
+        run: |
+          echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}} --testbuild=28" >> $GITHUB_ENV
 
       - name: Clean up packages to give more space
         run: rm *${{ env.fallback_platform }}*bz2
@@ -261,6 +267,9 @@ jobs:
             FS_BUILD_WEBHOOK_URL=${{ secrets.RELEASE_WEBHOOK_URL }}
           elif [[ "${{ github.ref_name }}" == *review* ]]; then
             FS_RELEASE_FOLDER=preview
+            FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
+          elif [[ "${{ github.ref_name }}" == *alpha* ]]; then
+            FS_RELEASE_FOLDER=test
             FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
           elif [[ "${{ github.event_name }}" == 'schedule' ]]; then
             FS_RELEASE_FOLDER=nightly
