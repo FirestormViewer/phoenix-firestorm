@@ -27,6 +27,9 @@ jobs:
             addrsize: 32
           - os: macos-11
             addrsize: 32
+          - grid: sl
+          - grid: os
+            addrsize: 32
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
