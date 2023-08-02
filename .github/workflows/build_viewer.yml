@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - "Firestorm*.*.*"
+      - "*alpha"
     tags:
       - "preview"
   schedule:
