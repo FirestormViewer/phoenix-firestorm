@@ -836,11 +836,11 @@ void send_viewer_stats(bool include_preferences)
 
 
 	LL_INFOS("LogViewerStatsPacket") << "Sending viewer statistics: " << body << LL_ENDL;
-	LL_DEBUGS("LogViewerStatsPacket");
-	std::string filename("viewer_stats_packet.xml");
-	llofstream of(filename.c_str());
-	LLSDSerialize::toPrettyXML(body,of);
-	LL_ENDL;
+	// LL_DEBUGS("LogViewerStatsPacket");
+	// std::string filename("viewer_stats_packet.xml");
+	// llofstream of(filename.c_str());
+	// LLSDSerialize::toPrettyXML(body,of);
+	// LL_ENDL;
 
 	// The session ID token must never appear in logs
 	body["session_id"] = gAgentSessionID;
