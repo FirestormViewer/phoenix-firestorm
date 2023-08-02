@@ -36,6 +36,7 @@
 #include "llfloatergotoline.h"
 #include "lllivefile.h"
 #include "llsyntaxid.h"
+#include "llscripteditor.h"
 #include <boost/signals2.hpp>
 
 class LLLiveLSLFile;
@@ -167,7 +168,15 @@ public:
     void 			setAssetID( const LLUUID& asset_id){ mAssetID = asset_id; };
     LLUUID 			getAssetID() { return mAssetID; }
 
-private:
+    // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
+    //bool isFontSizeChecked(const LLSD &userdata);
+    //void onChangeFontSize(const LLSD &size_name);
+    // </FS:Ansarie>
+
+    virtual BOOL handleKeyHere(KEY key, MASK mask);
+    void selectAll() { mEditor->selectAll(); }
+
+  private:
 	// NaCl - LSL Preprocessor
 	void		onToggleProc();
 	boost::signals2::connection	mTogglePreprocConnection;
@@ -186,8 +195,6 @@ private: // <FS:Ansariel> Show keyword help on F1
 
 	void selectFirstError();
 
-	virtual BOOL handleKeyHere(KEY key, MASK mask);
-	
 	void enableSave(BOOL b) {mEnableSave = b;}
 	
 // <FS:CR> Advanced Script Editor
@@ -286,6 +293,8 @@ public:
 
 	// <FS:Ansariel> FIRE-16740: Color syntax highlighting changes don't immediately appear in script window
 	void updateStyle();
+
+    BOOL handleKeyHere(KEY key, MASK mask);
 
 protected:
 	std::string		getTmpFileName(const std::string& script_name);

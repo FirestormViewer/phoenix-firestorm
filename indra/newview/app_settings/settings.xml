@@ -7754,6 +7754,17 @@
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>LSLFontSizeName</key>
+    <map>
+        <key>Comment</key>
+        <string>UNUSED - Text font size in LSL editor</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>String</string>
+        <key>Value</key>
+        <string>Monospace</string>
+    </map>
     <key>GridStatusRSS</key>
     <map>
       <key>Comment</key>
