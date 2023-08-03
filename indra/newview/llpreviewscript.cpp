@@ -368,6 +368,38 @@ void LLFloaterScriptSearch::onSearchBoxCommit()
 // </FS>
 
 /// ---------------------------------------------------------------------------
+
+class LLScriptMovedObserver : public LLInventoryObserver
+{
+  public:
+    LLScriptMovedObserver(LLPreviewLSL *floater) : mPreview(floater) { gInventory.addObserver(this); }
+    virtual ~LLScriptMovedObserver() { gInventory.removeObserver(this); }
+    virtual void changed(U32 mask);
+
+  private:
+    LLPreviewLSL *mPreview;
+};
+
+void LLScriptMovedObserver::changed(U32 mask)
+{
+    const std::set<LLUUID> &mChangedItemIDs = gInventory.getChangedIDs();
+    std::set<LLUUID>::const_iterator it;
+
+    const LLUUID &item_id = mPreview->getScriptID();
+
+    for (it = mChangedItemIDs.begin(); it != mChangedItemIDs.end(); it++)
+    {
+        if (*it == item_id)
+        {
+            if ((mask & (LLInventoryObserver::STRUCTURE)) != 0)
+            {
+                mPreview->setDirty();
+            }
+        }
+    }
+}
+
+/// ---------------------------------------------------------------------------
 /// LLScriptEdCore
 /// ---------------------------------------------------------------------------
 
@@ -1278,7 +1310,7 @@ void LLScriptEdCore::setHelpPage(const std::string& help_string)
 
 	LLUIString url_string = gSavedSettings.getString("LSLHelpURL");
 
-	url_string.setArg("[LSL_STRING]", help_string);
+	url_string.setArg("[LSL_STRING]", help_string.empty() ? HELP_LSL_PORTAL_TOPIC : help_string);
 
 	addHelpItemToHistory(help_string);
 
@@ -2204,6 +2236,14 @@ LLPreviewLSL::LLPreviewLSL(const LLSD& key )
 	mPendingUploads(0)
 {
 	mFactoryMap["script panel"] = LLCallbackMap(LLPreviewLSL::createScriptEdPanel, this);
+
+    mItemObserver = new LLScriptMovedObserver(this);
+}
+
+LLPreviewLSL::~LLPreviewLSL() 
+{ 
+    delete mItemObserver;
+    mItemObserver = NULL;
 }
 
 // virtual
@@ -2217,9 +2257,20 @@ BOOL LLPreviewLSL::postBuild()
 		getChild<LLUICtrl>("desc")->setValue(item->getDescription());
 
         std::string item_path = get_category_path(item->getParentUUID());
-        getChild<LLUICtrl>("path_txt")->setValue(item_path);
-        getChild<LLUICtrl>("path_txt")->setToolTip(item_path);
+        // <FS:Ansariel> Make ugly location display better
+        //getChild<LLUICtrl>("path_txt")->setValue(item_path);
+        //getChild<LLUICtrl>("path_txt")->setToolTip(item_path);
+        getChild<LLUICtrl>("path_txt")->setTextArg("[PATH]", LLStringExplicit(item_path));
+        getChild<LLUICtrl>("path_txt")->setToolTipArg(LLStringExplicit("[PATH]"), LLStringExplicit(item_path));
+        // </FS:Ansariel>
 	}
+	// <FS:Ansariel> Make ugly location display better
+	else
+	{
+		getChild<LLUICtrl>("path_txt")->setTextArg("[PATH]", LLStringExplicit("-"));
+		getChild<LLUICtrl>("path_txt")->setToolTipArg(LLStringExplicit("[PATH]"), LLStringExplicit("-"));
+	}
+	// </FS:Ansariel>
 	childSetCommitCallback("desc", LLPreview::onText, this);
 	getChild<LLLineEditor>("desc")->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
  
@@ -2234,7 +2285,25 @@ void LLPreviewLSL::draw()
 		setTitle(LLTrans::getString("ScriptWasDeleted"));
 		mScriptEd->setItemRemoved(TRUE);
 	}
-
+    if (mDirty) 
+    {
+        // <FS:Ansariel> Make ugly location display better
+        //std::string item_path = get_category_path(item->getParentUUID());
+        //getChild<LLUICtrl>("path_txt")->setValue(item_path);
+        //getChild<LLUICtrl>("path_txt")->setToolTip(item_path);
+        if (item)
+        {
+            std::string item_path = get_category_path(item->getParentUUID());
+            getChild<LLUICtrl>("path_txt")->setTextArg("[PATH]", LLStringExplicit(item_path));
+            getChild<LLUICtrl>("path_txt")->setToolTipArg(LLStringExplicit("[PATH]"), LLStringExplicit(item_path));
+        }
+        else
+        {
+            getChild<LLUICtrl>("path_txt")->setTextArg("[PATH]", LLStringExplicit("-"));
+            getChild<LLUICtrl>("path_txt")->setToolTipArg(LLStringExplicit("[PATH]"), LLStringExplicit("-"));
+        }
+        // </FS:Ansariel>
+    }
 	LLPreview::draw();
 }
 // virtual
@@ -2625,7 +2694,8 @@ LLLiveLSLEditor::LLLiveLSLEditor(const LLSD& key) :
 	mPendingUploads(0),
 	mIsModifiable(FALSE),
 	mIsNew(false),
-	mIsSaving(FALSE)
+	mIsSaving(FALSE),
+    mObjectName("")
 {
 	mFactoryMap["script ed panel"] = LLCallbackMap(LLLiveLSLEditor::createScriptEdPanel, this);
 }
@@ -2790,6 +2860,10 @@ void LLLiveLSLEditor::loadAsset()
 			}
 
 			refreshFromItem();
+			// <FS:Ansariel> Make ugly location display better
+            //getChild<LLUICtrl>("obj_name")->setValue(mObjectName);
+			getChild<LLUICtrl>("obj_name")->setTextArg("[SOURCE_OBJECT]", LLStringExplicit(mObjectName) );
+			// </FS:Ansariel>
 			// This is commented out, because we don't completely
 			// handle script exports yet.
 			/*

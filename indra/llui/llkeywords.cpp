@@ -530,7 +530,7 @@ void LLKeywords::findSegments(std::vector<LLTextSegmentPtr>* seg_list, const LLW
 			if( *cur == '\n' )
 			{
 				// <FS:Ansariel> Script editor ignoring font selection
-				//LLTextSegmentPtr text_segment = new LLLineBreakTextSegment(cur-base);
+				//LLTextSegmentPtr text_segment = new LLLineBreakTextSegment(style, cur-base);
 				LLTextSegmentPtr text_segment = new LLLineBreakTextSegment(getDefaultStyle(editor), cur-base);
 				// </FS:Ansariel>
 				text_segment->setToken( 0 );
@@ -760,7 +760,7 @@ void LLKeywords::insertSegments(const LLWString& wtext, std::vector<LLTextSegmen
 		}
 
 		// <FS:Ansariel> Script editor ignoring font selection
-		//LLTextSegmentPtr text_segment = new LLLineBreakTextSegment(pos);
+		//LLTextSegmentPtr text_segment = new LLLineBreakTextSegment(style, pos);
 		LLTextSegmentPtr text_segment = new LLLineBreakTextSegment(getDefaultStyle(editor), pos);
 		// </FS:Ansariel>
 		text_segment->setToken( cur_token );
