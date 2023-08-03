@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="area_search" title="オブジェクトをエリアから検索">
   <tab_container name="area_searchtab">
-    <panel name="area_search_list_panel">
+    <panel label="一覧" name="area_search_list_panel">
       <panel.string name="ListedPendingTotalBlank">表示中｜取得中｜合計</panel.string>
       <panel.string name="ListedPendingTotalFilled">[LISTED]件表示｜[PENDING]件取得中｜全[TOTAL]件</panel.string>
       <fs_scroll_list name="result_list">

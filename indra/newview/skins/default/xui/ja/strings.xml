@@ -46,8 +46,8 @@ SLURL：&lt;nolink&gt;[SLURL]&lt;/nolink&gt;
 [SERVER_VERSION]
 [SERVER_RELEASE_NOTES_URL]</string>
   <!-- *NOTE: Do not translate text like GPU, Graphics Card, etc -
-       Most PC users who know what these mean will be used to the English versions,
-       and this info sometimes gets sent to support. -->
+      Most PC users who know what these mean will be used to the English versions,
+      and this info sometimes gets sent to support. -->
   <string name="AboutSystem">ＣＰＵ：[CPU]
 メモリ：[MEMORY_MB]㎆
 ＯＳのバージョン：[OS_VERSION]
@@ -297,6 +297,7 @@ support@secondlife.com にお問い合わせください。</string>
   <string name="BUTTON_TEAR_OFF">別ウィンドウで開く</string>
   <string name="BUTTON_DOCK">ドッキング</string>
   <string name="BUTTON_HELP">ヘルプを表示</string>
+  <string name="BUTTON_SNOOZE">スヌーズ</string>
 
   <!-- ToolTips for notecards -->
   <string name="TooltipNotecardNotAllowedTypeDrop">このタイプのアイテムは、このリージョンのノートカードに添付することができません。</string>
@@ -2255,7 +2256,7 @@ For AI Character: Get the closest navigable point to the point provided.
   <!-- LLGroupNotify -->
   <!-- used in the construction of a Group Notice blue dialog box, buttons, tooltip etc. Seems to be no longer utilized by code in Viewer 2.0 -->
   <string name="next">次へ</string>
-  <string name="ok">OK</string>
+  <string name="ok">ＯＫ</string>
   <string name="GroupNotifyGroupNotice">グループ通知</string>
   <string name="GroupNotifyGroupNotices">グループ通知</string>
   <string name="GroupNotifySentBy">送信者</string>
@@ -2398,6 +2399,12 @@ For AI Character: Get the closest navigable point to the point provided.
   <string name="Snapshots" value="スナップショット、" />
   <string name="No Filters" value="なし" />
   <string name="Since Logoff" value="–ログオフ以来" />
+  <!-- <FS:Zi> FIRE-1175 - Filter Permissions Menu -->
+  <string name="Modifiable" value="修正可能" />
+  <string name="Copyable" value="コピー可能" />
+  <string name="Transferable" value="譲渡可能" />
+  <string name="PermissionsFilter" value="–のみ[PERMISSIONS]" />
+  <!-- </FS:Zi> -->
 
   <!-- inventory folder -->
   <string name="InvFolder My Inventory">インベントリ</string>
@@ -2440,12 +2447,17 @@ For AI Character: Get the closest navigable point to the point provided.
   <string name="InvFolder Animation Overrides">アニメーションオーバーライド</string>
   <string name="InvFolder Settings">自然環境の設定</string>
   <string name="InvFolder Local Inventory">ローカルのインベントリ</string>
-  <string name="InvFolder #RLV">#RLV</string>
-  <string name="InvFolder #Firestorm">#Firestorm</string>
 
   <!-- are used for Friends and Friends/All folders in Inventory "Calling cards" folder. See EXT-694-->
   <string name="InvFolder Friends">フレンド</string>
   <string name="InvFolder All">全員</string>
+
+  <!-- Virtual Firestorm system folders -->
+  <string name="InvFolder #Firestorm">#Firestorm</string>
+  <string name="InvFolder #Phoenix">#Phoenix</string>
+  <string name="InvFolder #RLV">#RLV</string>
+
+  <string name="InvFolder My Suitcase">スーツケース</string>
 
   <string name="no_attachments">着用している装着物はありません</string>
   <string name="Attachments remain">装着物（残りのスロット数：[COUNT]箇所）</string>
@@ -2459,7 +2471,7 @@ For AI Character: Get the closest navigable point to the point provided.
   <string name="Metal">金属</string>
   <string name="Glass">ガラス</string>
   <string name="Wood">木</string>
-  <string name="Flesh">肌</string>
+  <string name="Flesh">肉</string>
   <string name="Plastic">プラスチック</string>
   <string name="Rubber">ゴム</string>
   <string name="Light">ライト</string>
@@ -2605,6 +2617,8 @@ For AI Character: Get the closest navigable point to the point provided.
   <string name="RunQueueStart">実行中に設定</string>
   <string name="NotRunQueueTitle">実行を停止するよう設定</string>
   <string name="NotRunQueueStart">実行停止に設定</string>
+  <string name="DeleteQueueTitle">削除処理をしています</string>
+  <string name="DeleteQueueStart">削除しています</string>
 
   <!-- compile comment text-->
   <string name="CompileSuccessful">コンパイルが完了しました！</string>
@@ -2744,6 +2758,12 @@ For AI Character: Get the closest navigable point to the point provided.
 
   <!-- panel preferences general -->
   <string name="DoNotDisturbModeResponseDefault">この住民が「取り込み中」をオンにすると、あなたのメッセージが後で表示されるようになります。</string>
+  <string name="AutoResponseModeDefault">あなたがメッセージを送った住人は、[APP_NAME]ビューアの「自動返信モード」を有効にしています。 あなたのメッセージはＩＭパネルに表示されます。</string>
+  <string name="AutoResponseModeNonFriendsDefault">あなたがメッセージを送った住人は、[APP_NAME]ビューアの「自動返信モード」を有効にしています。 あなたのメッセージはＩＭパネルに表示されます。</string>
+  <string name="RejectTeleportOffersResponseDefault">あなたがメッセージを送った住民は、[APP_NAME]ビューアの「すべてのテレポートのオファーとリクエストを拒否するモード」を有効にしています。手動でＩＭメッセージを送信することはできます。</string>
+  <string name="RejectFriendshipRequestsResponseDefault">あなたがメッセージを送った住人は、[APP_NAME]ビューアの「すべてのフレンドのリクエストを拒否するモード」を有効にしています。手動でＩＭメッセージを送信することはできます。</string>
+  <string name="MutedAvatarsResponseDefault">あなたがメッセージを送った住人は、その住人にメッセージを送ることをブロックしています。</string>
+  <string name="AwayAvatarResponseDefault">あなたがメッセージした住人は、現在離席状態です。あなたのメッセージはＩＭパネルに表示されます。</string>
 
   <!-- Mute -->
   <string name="MuteByName">（名前で）</string>
@@ -2767,8 +2787,8 @@ For AI Character: Get the closest navigable point to the point provided.
   <!-- Environment settings -->
   <string name="LocalSettings">ローカル設定</string>
   <string name="RegionSettings">リージョンの設定</string>
-
   <string name="NoEnvironmentSettings">このリージョンは自然環境の設定変更をサポートしていません。</string>
+
   <string name="EnvironmentSun">太陽</string>
   <string name="EnvironmentMoon">月</string>
   <string name="EnvironmentBloom">花</string>
@@ -2875,12 +2895,14 @@ For AI Character: Get the closest navigable point to the point provided.
   <string name="None">なし</string>
   <string name="Linden Location">Linden 所在地</string>
   <string name="Adult">成人向け</string>
+  <!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
   <string name="Arts&amp;Culture">芸術と文化</string>
   <string name="Business">ビジネス</string>
   <string name="Educational">教育</string>
   <string name="Gaming">ゲーム</string>
   <string name="Hangout">たまり場</string>
   <string name="Newcomer Friendly">新住民歓迎</string>
+  <!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
   <string name="Parks&amp;Nature">公園と自然</string>
   <string name="Residential">住宅用</string>
   <!--<string name="Shopping">Shopping</string>	-->
@@ -2904,6 +2926,7 @@ For AI Character: Get the closest navigable point to the point provided.
   <!-- media -->
   <string name="Multiple Media">複数のメディア</string>
   <string name="Play Media">メディアの再生／一時停止</string>
+  <string name="StreamtitleNowPlaying">現在再生中：</string>
 
   <!-- Drivers support/update pages -->
   <string name="IntelDriverPage">https://www.intel.co.jp/content/www/jp/ja/support/detect.html</string>
@@ -3572,6 +3595,11 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="not_online_msg">ユーザーがオンラインでありません－メッセージは保存され、後で配信されます。</string>
   <string name="not_online_inventory">ユーザーがオンラインでありません–インベントリに保存されました。</string>
 
+  <!-- Additional IM messages -->
+  <string name="IM_announce_incoming">[NAME]からの新しいメッセージが届いています。</string>
+  <string name="IM_autoresponse_sent">以下のメッセージを自動返答しました：[MESSAGE]</string>
+  <string name="IM_autoresponse_item_sent">以下のアイテムを自動返答しました：[ITEM_NAME]</string>
+
   <!-- voice calls -->
   <string name="answered_call">相手がコールを受けました。</string>
   <string name="you_started_call">ボイスコールを開始します。</string>
@@ -3588,7 +3616,7 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="inventory_item_offered-im">アイテム「[ITEM_NAME]」がインベントリに送られてきました。</string>
   <string name="inventory_folder_offered-im">フォルダ「[ITEM_NAME]」がインベントリに送られてきました。</string>
   <string name="share_alert">インベントリからここにアイテムをドラッグします。</string>
-
+  <string name="flickr_post_success">Flickrに投稿しました。</string>
   <string name="no_session_message">（ＩＭセッションが存在しません）</string>
   <string name="only_user_message">このセッションにいるユーザーはあなただけです。</string>
   <string name="offline_message">[NAME]はオフラインです。</string>
@@ -4165,6 +4193,7 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="snapshot_quality_medium">中</string>
   <string name="snapshot_quality_high">高</string>
   <string name="snapshot_quality_very_high">最高</string>
+  <string name="IMPrefix">ＩＭ：</string>
 
   <!-- Settings sanity checks -->
   <string name="SanityCheckEquals">設定「[CONTROL_NAME]」の値は、[VALUE_1]であるべきです。</string>
@@ -4182,7 +4211,7 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="MediaFilterConditionAlways">常に</string>
   <string name="MediaFilterConditionAlwaysLower">常に</string>
   <string name="MediaFilterConditionNever">無視</string>
-  <string name="MediaFilterConditionNeverLower">never</string>
+  <string name="MediaFilterConditionNeverLower">無視</string>
   <string name="MediaFilterMediaContentBlocked">[DOMAIN]ドメインのメディアはブロックされました。</string>
   <string name="MediaFilterMediaContentDomainAlwaysAllowed">[DOMAIN]ドメインのメディアは常に再生されます。</string>
   <string name="MediaFilterMediaContentDomainAlwaysBlocked">[DOMAIN]ドメインのメディアは常に再生されません。</string>

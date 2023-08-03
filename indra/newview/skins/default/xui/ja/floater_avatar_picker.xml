@@ -21,14 +21,18 @@
         <columns label="ユーザ名" name="username" />
       </scroll_list>
     </panel>
+
     <panel label="フレンド" name="FriendsPanel">
       <text name="InstructSelectFriend">人物を選択</text>
       <button name="RefreshFriends" />
-      <scroll_list name="Friends" />
+      <fs_scroll_list name="Friends">
+        <columns label="名前" name="name" />
+        <columns label="ユーザ名" name="username" />
+      </fs_scroll_list>
     </panel>
 
     <panel label="近くにいる人" name="NearMePanel">
-      <text name="InstructSelectResident">近くにいる人を選択：</text>
+      <text name="InstructSelectResident">近くにいる人物を選択：</text>
       <slider label="範囲" name="near_me_range" />
       <text name="meters">メートル</text>
       <button name="Refresh" />
@@ -36,6 +40,16 @@
         <columns label="名前" name="name" />
         <columns label="ユーザ名" name="username" />
       </scroll_list>
+
+      <panel label="ＵＵＩＤで検索" name="SearchPanelUUID">
+        <text name="SearchByUUIDLabel">人物のＵＵＩＤを入力：</text>
+        <line_editor name="EditUUID" />
+        <button label="実行" label_selected="実行" name="FindUUID" />
+        <fs_scroll_list name="SearchResultsUUID">
+          <columns label="名前" name="nameUUID" />
+          <columns label="ユーザ名" name="usernameUUID" />
+        </fs_scroll_list>
+      </panel>
     </panel>
   </tab_container>
   <button label="ＯＫ" label_selected="ＯＫ" name="ok_btn" />

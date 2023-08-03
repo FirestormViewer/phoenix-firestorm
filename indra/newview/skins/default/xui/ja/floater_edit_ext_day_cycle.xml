@@ -43,9 +43,7 @@
             <text name="p3" value="75％ [DSC]" />
             <text name="p4" value="100％ [DSC]" />
             <multi_slider name="WLTimeSlider" />
-
             <multi_slider name="WLDayCycleFrames" />
-
             <text name="current_time" value="[PRCNT]％ [DSC]" />
 
             <layout_stack name="track_options_ls">
@@ -53,27 +51,25 @@
                 <button label="以下から複製" name="copy_track" />
                 <button label="以下から読み込み" name="load_track" />
                 <button label="トラックを消去" name="clear_track" />
-
               </layout_panel>
+
               <layout_panel name="track_progress_lp">
                 <layout_stack name="progress_control">
-
                   <layout_panel name="skip_back">
                     <button name="skip_back_btn" tool_tip="後ろに移動" />
                   </layout_panel>
-
                   <layout_panel name="play_layout" />
-
                   <layout_panel name="pause_layout" />
-
                   <layout_panel name="skip_forward" />
                 </layout_stack>
               </layout_panel>
+
               <layout_panel name="frames_lp">
                 <button label="[FRAME]を追加" name="add_frame" />
                 <button label="[FRAME]を読み込む" name="btn_load_frame" />
                 <button label="[FRAME]を削除" name="delete_frame" />
               </layout_panel>
+
             </layout_stack>
           </panel>
         </layout_panel>
@@ -83,14 +79,14 @@
         </layout_panel>
         <layout_panel name="frame_settings_water">
           <tab_container name="water_tabs">
-            <panel filename="panel_settings_water.xml" label="水面" name="water_panel" />
+            <panel label="水面" name="water_panel" />
           </tab_container>
         </layout_panel>
         <layout_panel name="frame_settings_sky">
           <tab_container name="sky_tabs">
-            <panel filename="panel_settings_sky_atmos.xml" label="大気＆光源" name="atmosphere_panel" />
-            <panel filename="panel_settings_sky_clouds.xml" label="雲" name="clouds_panel" />
-            <panel filename="panel_settings_sky_sunmoon.xml" label="太陽＆月" name="moon_panel" />
+            <panel label="大気＆光源" name="atmosphere_panel" />
+            <panel label="雲" name="clouds_panel" />
+            <panel label="太陽＆月" name="moon_panel" />
             <!-- added programatically so it doesn't show up whether we want it or not
             <panel name="density_panel" label="密度" />
             -->
@@ -100,11 +96,8 @@
     </layout_panel>
     <layout_panel name="buttons">
       <button label="保存" name="save_btn" />
-
       <button label="" name="btn_flyout" />
-
       <button label="キャンセル" name="cancel_btn" />
-
     </layout_panel>
   </layout_stack>
 

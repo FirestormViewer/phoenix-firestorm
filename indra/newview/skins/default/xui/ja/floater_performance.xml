@@ -1,13 +1,39 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="performance" title="グラフィックの最適化">
-  <string name="fps_text" value="フレーム／秒" />
-  <string name="max_text" value="（最大）" />
+<floater name="performance" title="グラフィック最適化">
+  <floater.string name="frame_stats">フレーム：[TOT_FRAME_TIME]㎳‐風景：[SCENERY_FRAME_PCT]％　アバター：[AV_FRAME_PCT]％　ＵＩ：[UI_FRAME_PCT]％　ＨＵＤ：[HUDS_FRAME_PCT]％　スワップ：[SWAP_FRAME_PCT]％　タスク：[IDLE_FRAME_PCT]％ </floater.string>
+  <floater.string name="limit_fps">ユーザによる制限＠[FPSCAP]ＦＰＳ</floater.string>
+  <floater.string name="tuning_fps">目標[FPSTARGET]ＦＰＳ</floater.string>
+  <floater.string name="av_frame_pct">[AV_FRAME_PCT]％</floater.string>
+  <floater.string name="huds_frame_pct">[HUDS_FRAME_PCT]％</floater.string>
+  <floater.string name="focus_fps">バックグラウンド時</floater.string>
+  <floater.string name="info_waitforit">変更が完全に反映されるまで５～１０秒程度かかります。</floater.string>
+  <floater.string name="info_frozen">ＦＰＳが制限されている時やバックグラウンドでは統計が一時停止します。</floater.string>
+  <floater.string name="tot_av_template">トータル：[TOT_AV]（[TOT_AV_TIME]㎲）</floater.string>
+  <floater.string name="tot_att_template">トータル：[TOT_ATT]（[TOT_ATT_TIME]㎲）</floater.string>
   <panel name="panel_top">
     <panel name="fps_subpanel">
       <text name="fps_value">167</text>
       <text name="fps_lbl">フレーム／秒</text>
-      <text name="fps_desc1_lbl">変更が完全に反映されるまで</text>
-      <text name="fps_desc2_lbl">５～１０秒程度かかります。</text>
+      <text name="fps_warning">ユーザによる制限＠000ＦＰＳ</text>
+      <text name="fps_desc1_lbl">ＦＰＳが制限されている時やバックグラウンドでは統計が一時停止します。</text>
+      <text name="frame_breakdown">［─────────フレームの内訳はここに表示されます。─────────］</text>
+    </panel>
+    <panel name="target_subpanel">
+      <text name="settings_lbl" tool_tip="FPSを維持するために設定を自動的に調整します。ターゲットを希望のフレームレートに設定すると、ビューアは設定を動的に変更することによって、このフレームレートに合わせようとします。">自動調整：</text>
+      <text name="targetfps_desc">目標フレームレート（ｆｐｓ）</text>
+      <spinner name="target_fps" tool_tip="目標ＦＰＳ‐希望するFPSレベル。ビューアは、グラフィックス設定を調整することによって、これを達成しようとします。" />
+      <button label="開始" label_selected="停止" name="AutoTuneFPS" tool_tip="ビューアは、目標FPSを満たすように設定を調整しようとします。" />
+      <check_box label="継続" name="AutoTuneContinuous" tool_tip="ビューアは、フローターを閉じた状態でも、停止するまで目標 FPS を満たすように設定を調整し続けます。オートチューニングボタンを無効にすると、現在の設定を調整した後、停止します。" />
+      <button name="PrefSaveButton" tool_tip="現在の設定を、将来使用するためのデフォルトに保存します。" />
+      <button name="PrefLoadButton" tool_tip="存在するプリセットを読み込みます。" />
+      <!--Reset Button-->
+      <button tool_tip="Reload default graphics settings for your hardware." name="Defaults" />
+      <text name="settings_desc">調整方法</text>
+      <combo_box name="FSTuningFPSStrategy">
+        <combo_box.item label="アバターのみ" name="av_only" value="0" />
+        <combo_box.item label="アバターとシーン" name="av_and_scene" value="1" />
+      </combo_box>
+      <button name="target_btn" tool_tip="調整方法の動作を変更します。" />
     </panel>
   </panel>
   <panel name="panel_performance_main">
@@ -24,6 +50,10 @@
     <panel name="nearby_subpanel">
       <text name="avatars_nearby_lbl">近くのアバター</text>
       <text name="avatars_nearby_desc">近くにいるアバターのうち、どのタイプのアバターを完全に表示するかを管理します。</text>
+      <text name="avatars_frme_pct_lbl">アバターの描画
+にかかった
+時間</text>
+      <text name="av_frame_stats">00％</text>
       <icon name="icon_arrow2" />
     </panel>
     <panel name="complexity_subpanel">
@@ -34,12 +64,16 @@
     <panel name="huds_subpanel">
       <text name="huds_lbl">アクティブなＨＵＤ</text>
       <text name="huds_desc">使用していないＨＵＤを外すと、速度が向上する可能性があります。</text>
+      <text name="huds_frme_pct_lbl">ＨＵＤの描画
+にかかった
+時間</text>
+      <text name="huds_frame_stats">00％</text>
       <icon name="icon_arrow4" />
     </panel>
   </panel>
-  <panel filename="panel_performance_nearby.xml" name="panel_performance_nearby" />
-  <panel filename="panel_performance_complexity.xml" name="panel_performance_complexity" />
-  <panel filename="panel_performance_preferences.xml" name="panel_performance_preferences" />
-  <panel filename="panel_performance_huds.xml" name="panel_performance_huds" />
-  <panel filename="panel_performance_autoadjustments.xml" name="panel_performance_autoadjustments" />
+  <panel name="panel_performance_nearby" />
+  <panel name="panel_performance_complexity" />
+  <panel name="panel_performance_preferences" />
+  <panel name="panel_performance_huds" />
+  <panel name="panel_performance_autoadjustments" />
 </floater>

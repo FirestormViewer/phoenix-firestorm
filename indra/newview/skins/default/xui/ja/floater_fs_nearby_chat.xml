@@ -27,7 +27,7 @@
         </layout_panel>
         <layout_panel name="unread_messages_holder">
           <icon name="unread_messages_background" />
-          <text name="unread_messages_text">未読のメッセージ数：[NUM]</text>
+          <text name="unread_messages_text">未読のメッセージ：[NUM]件</text>
         </layout_panel>
         <layout_panel name="chat_layout_panel">
           <layout_stack name="input_panels">
@@ -44,8 +44,7 @@
                 <combo_box.item name="chat_type_say" value="say" label="喋る" />
                 <combo_box.item name="chat_type_shout" value="shout" label="シャウト" />
               </combo_box>
-              <!-- pad_bottom used to move the button text away so it's invisible under the combo
-              box -->
+              <!-- pad_bottom used to move the button text away so it's invisible under the combo box -->
               <button label="喋る" name="send_chat" tool_tip="ささやき＝１０ｍ、喋る＝２０ｍ、シャウト＝１００ｍ" />
               <icon name="chat_type_combo_arrow_icon" />
               <!-- Makeshift split button since LLSplitButton is broken -->

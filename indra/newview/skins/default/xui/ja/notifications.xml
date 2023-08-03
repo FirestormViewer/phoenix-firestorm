@@ -3333,8 +3333,10 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
     </form>
   </notification>
 
+  <!-- FS:Ansariel: WARNING: Read LLOfferInfo::forceResponse in llviewermessage.cpp before changing the button order!!! -->
   <notification name="UserGiveItem" label="[NAME_LABEL]からのインベントリのオファー">[NAME_SLURL] が、あなたに[OBJECTTYPE]を渡しました：
 [ITEM_SLURL]
+ミュートしてもよろしいですか？「ミュート」は、今後の[NAME_SLURL]からのオファーやメッセージをすべてブロックします。
     <form name="form">
       <button name="Show" text="表示" />
       <button name="Discard" text="破棄" />
@@ -3983,6 +3985,7 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 ルーターの SIP ALG 機能を無効にします。
 
 音声通話は利用できなくなります。
+https://wiki.firestormviewer.org/fs_voice
     <tag>voice</tag>
     <tag>fail</tag>
     <usetemplate name="okbutton" yestext="ＯＫ" />
@@ -3992,6 +3995,7 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
   
 ボイスチャットによるコミュニケーションが利用できません。
 お使いのネットワークやファイアウォールの設定を確認してください。
+[https://wiki.firestormviewer.org/fs_voice]
     <tag>voice</tag>
     <tag>fail</tag>
     <usetemplate name="okbutton" yestext="ＯＫ" />
@@ -4339,8 +4343,9 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 
   <global name="UnsupportedRAM">－あなたのシステムメモリは、必須動作環境の条件を満たしていません。</global>
 
+  <!-- these are alert strings from server. the name needs to match entire the server string, and needs to be changed
+	whenever the server string changes -->
   <global name="You can only set your 'Home Location' on your land or at a mainland Infohub.">自分の土地を持っている場合、そこを「ホーム」に設定できます。持っていない場合は、マップから「情報ハブ」をお探しください。</global>
-
   <global name="You died and have been teleported to your home location">死んでしまったので、ホームにテレポートされました。</global>
 
   <notification name="LocalBitmapsUpdateFileNotFound">[FNAME]が見つからなかったため、更新できませんでした。
@@ -4363,7 +4368,6 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
     <tag>confirm</tag>
     <usetemplate ignoretext="複数のアイテムを削除しますか？" name="okcancelignore" notext="いいえ" yestext="はい" />
   </notification>
-
 
   <notification name="AvatarFrozen">[AV_FREEZER]によってあなたはフリーズされています。世界を動かすことも、世界とインタラクションすることもできません。
     <tag>fail</tag>
@@ -4419,6 +4423,11 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
 
   <notification name="SitFailNotSameRegion">移動して近づけてみてください。オブジェクトが同じリージョンにないため、オブジェクトを配置できません。
     <tag>fail</tag>
+  </notification>
+
+  <notification name="ChatHistoryIsBusyAlert">チャット履歴ファイルが前の操作でビジーです。２、３分経ってからもう一度試すか、別の人とのチャットを選択してください。
+    <tag>fail</tag>
+    <usetemplate name="okbutton" yestext="ＯＫ" />
   </notification>
 
   <notification name="NoNewObjectRegionFull">新しいオブジェクトを作成できません。リージョンが埋まっています。
@@ -5248,21 +5257,37 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
     <tag>fail</tag>
   </notification>
 
+  <!-- RLVa -->
   <notification name="RLVaChangeStrings">[APP_NAME]を再起動するまで効果は現れません。</notification>
 
   <notification name="RLVaListRequested" label="[NAME_LABEL]からの制限要求">[NAME_SLURL]は、現在有効なＲＬＶ制限のリストを送信するよう要請しました。
     <tag>confirm</tag>
     <form name="form">
-      <button name="Allow" text="許可"/>
-      <button name="Always Allow" text="常に許可"/>
-      <button name="Deny" text="拒否"/>
-      <ignore text="現在のＲＬＶの制限のリストを誰かに送る前の確認"/>
+      <button name="Allow" text="許可" />
+      <button name="Always Allow" text="常に許可" />
+      <button name="Deny" text="拒否" />
+      <ignore text="現在のＲＬＶの制限のリストを誰かに送る前の確認" />
     </form>
+  </notification>
+  <!-- /RLVa -->
+
+  <notification name="InventoryValidationFailed" label="インベントリのバリデーションエラー">インベントリに破損が見つかりました。
+以下の問題リストを添えて [HELP] までお問い合わせください。
+http://opensimulator.org/wiki/inventory にて、この問題の解決方法を調べることができます。
+
+[ERRORS]
+    <tag>fail</tag>
+    <usetemplate ignoretext="インベントリのバリデーションでエラーが検知された時" name="okignore" yestext="ＯＫ" />
   </notification>
 
   <notification name="PreferenceChatClearLog">これにより、過去の会話のログ、およびそのファイルのすべてのバックアップが削除されます。
     <tag>confirm</tag>
     <usetemplate ignoretext="以前の会話のログを削除する前に確認してください。" name="okcancelignore" notext="キャンセル" yestext="ＯＫ" />
+  </notification>
+
+  <notification name="PreferenceControlsDefaults">コントロールのデフォルト値を復元してもよろしいですか?
+    <tag>confirm</tag>
+    <usetemplate canceltext="キャンセル" name="yesnocancelbuttons" notext="現在のモード" yestext="すべてのモード" />
   </notification>
 
   <notification name="PreferenceChatDeleteTranscripts">これにより、以前のすべての会話のテキストが削除されます。過去の会話のリストには影響しません。
@@ -5281,63 +5306,93 @@ UDP：3478, 3479, 5060, 5062, 6250, 12000-32000
     <usetemplate name="okbutton" yestext="ＯＫ" />
   </notification>
 
-  <notification name="ChatHistoryIsBusyAlert">チャット履歴ファイルが前の操作でビジーです。２、３分経ってからもう一度試すか、別の人とのチャットを選択してください。
-    <tag>fail</tag>
-    <usetemplate name="okbutton" yestext="ＯＫ" />
-  </notification>
-
   <notification name="OutfitPhotoLoadError">[REASON]
     <tag>fail</tag>
     <usetemplate name="okbutton" yestext="ＯＫ" />
   </notification>
 
-  <notification name="FailedToFindSettings">データベースから「[NAME]」の設定の読み込みができませんでした。
+  <notification name="AddPaymentMethod">次のページで、L$の金額を選択し、
+「注文」ボタンをクリックします。
+チェックアウト時に支払い方法を追加できます。
+    <tag>confirm</tag>
+    <form name="form">
+      <button default="true" index="0" name="Continue" text="続ける" />
+      <button index="1" name="Cancel" text="キャンセル" />
+    </form>
+  </notification>
+
+  <!-- <FS:Zi> Add float LSL color entry widgets -->
+  <notification name="LSLColorCopiedToClipboard">ＬＳＬカラー文字列としてクリップボードにコピーしました。これでスクリプトに貼り付けて使用できるようになります。
+    <form name="form">
+      <ignore name="ignore" text="ＬＳＬカラー文字列がクリップボードにコピーされた" />
+    </form>
+  </notification>
+  <!-- <FS:Zi> Add float LSL color entry widgets -->
+
+  <!-- <FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
+  <!-- <FS:TS> FIRE-6795: Remove warning at every login -->
+  <notification name="FSBWTooHigh">1500kbpsを超える帯域幅を設定しないことを強くお勧めします。これがうまく機能する可能性は低く、ほぼ確実にパフォーマンスが向上することはありません。
+    <usetemplate name="okbutton" yestext="ＯＫ" />
+  </notification>
+  <!-- </FS:TS> FIRE-6795 -->
+  <!-- </FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
+
+  <notification name="FirstUseFlyOverride">注意：飛行オーバーラドは責任を持って使用してください。土地所有者の許可なしに飛行オーバーライドを使用すると、飛行中の区画からアバターがバンされる可能性があります。
+    <usetemplate name="okbutton" yestext="ＯＫ" />
+  </notification>
+
+  <notification name="ServerVersionChanged">あなたが入ったリージョンでは別のシミュレーターのバージョンが実行されています。
+現在のシミュレータ：[NEWVERSION]
+前回のシミュレータ：[OLDVERSION]</notification>
+
+  <notification name="RegExFail">正規表現にエラーがあります：
+[EWHAT]
     <tag>fail</tag>
   </notification>
 
-  <notification name="FailedToLoadSettingsApply">環境にこれらの設定を適用することができません。
-    <tag>fail</tag>
+  <notification name="NoHavok">[FEATURE]などの一部の機能は、このバージョンの[APP_NAME]には含まれていません。[FEATURE]を使用したい場合は、Havokサポートを含む[APP_NAME]のバージョンを以下からダウンロードしてください。
+[DOWNLOAD_URL]
+    <form name="form">
+      <ignore name="ignore" text="Havokの警告を無視" />
+    </form>
   </notification>
 
-  <notification name="FailedToBuildSettingsDay">環境にこれらの設定を適用することができません。
-    <tag>fail</tag>
+  <notification name="StreamListExportSuccess">ＸＭＬのストリームリストを[FILENAME]へのエクスポートに成功しました。</notification>
+  <notification name="StreamListImportSuccess">ＸＭＬからストリームリストのインポートに成功しました。</notification>
+
+  <notification name="StreamMetadata">♫　再生中の曲：
+[TITLE]
+[ARTIST]　♫
+    <tag>StreamMetadata</tag>
+  </notification>
+  <notification name="StreamMetadataNoArtist">♫　再生中の曲：
+[TITLE]　♫
+    <tag>StreamMetadata</tag>
   </notification>
 
-  <notification name="NoEnvironmentSettings">このリージョンは初期設定をサポートしていません。
-    <tag>fail</tag>
-  </notification>
-
-  <notification name="MaterialCreated">マテリアルは正常に作成されました。アセットＩＤ：[ASSET_ID]</notification>
-
-  <notification name="ReflectionProbeApplied">警告：オブジェクトを反射プローブとしました。これにより、オブジェクトが暗黙的に反射量を模倣するように不可逆的な変更が加えられます。
-
-続けてもよろしいですか？
-    <usetemplate ignoretext="反射プローブのヒント" name="okcancelignore" notext="キャンセル" yestext="ＯＫ" />
-  </notification>
-
-  <notification name="AutoAdjustHDRSky">編集中の非ＨＤＲの空の設定は自動的にＨＤＲの設定に変換されます。ＨＤＲとトーンマッピングを削除する場合は、反射プローブ環境の値を０にしてください。
-    <usetemplate ignoretext="ＨＤＲの空の調整時の警告" name="okignore" yestext="ＯＫ" />
-  </notification>
+  <notification name="RadarAlert">[NAME]　[MESSAGE]</notification>
 
   <!-- these are alert strings from server. the name needs to match entire the server string, and needs to be changed
 	whenever the server string changes -->
   <global name="You can only set your 'Home Location' on your land or at a mainland Infohub.">土地を所有している場合は、そこをホーム位置とすることができます。
 そうでない場合は、マップから「情報ハブ」と書かれた場所を見つけてください。</global>
   <global name="You died and have been teleported to your home location">あなたは死亡したので、ホーム位置にテレポートされました。</global>
+
   <!-- <FS:AW>  opensim search support-->
   <notification name="ConfirmClearDebugSearchURL">本当にデバッグ検索ＵＲＬをクリアしてもよろしいですか？
     <tag>confirm</tag>
-    <usetemplate ignoretext="デバッグ検索ＵＲＬの削除確認" name="okcancelignore" notext="キャンセル" yestext="ＯＫ"/>
+    <usetemplate ignoretext="デバッグ検索ＵＲＬの削除確認" name="okcancelignore" notext="キャンセル" yestext="ＯＫ" />
   </notification>
   <notification name="ConfirmPickDebugSearchURL">現在の検索ＵＲＬをデバッグ検索のＵＲＬとして選んでよろしいですか？
     <tag>confirm</tag>
-    <usetemplate ignoretext="ピッキングしたデバッグ検索ＵＲＬの確認" name="okcancelignore" notext="キャンセル" yestext="ＯＫ"/>
+    <usetemplate ignoretext="ピッキングしたデバッグ検索ＵＲＬの確認" name="okcancelignore" notext="キャンセル" yestext="ＯＫ" />
   </notification>
   <!-- </FS:AW>  opensim search support-->
+
   <!-- <FS:AW  grid management-->
   <notification name="ConfirmRemoveGrid">グリッドリストから[REMOVE_GRID]を本当に削除してもよろしいですか？
     <tag>confirm</tag>
-    <usetemplate ignoretext="グリッドの削除確認" name="okcancelignore" notext="キャンセル" yestext="ＯＫ"/>
+    <usetemplate ignoretext="グリッドの削除確認" name="okcancelignore" notext="キャンセル" yestext="ＯＫ" />
   </notification>
   <notification name="CanNotRemoveConnectedGrid">接続中は[REMOVE_GRID]を削除することはできません。
     <tag>confirm</tag>
@@ -5438,7 +5493,6 @@ Flickrアカウントへの投稿を[APP_NAME]に許可しますか？
     <tag>fail</tag>
     <usetemplate name="okcancelbuttons" notext="いいえ" yestext="はい" />
   </notification>
-
   <notification name="ExodusFlickrVerificationPrompt">Webブラウザで[APP_NAME]があなたのFlickrアカウントに投稿することを許可し、以下のウェブサイトから指定されたコードを入力してください：
     <tag>confirm</tag>
     <form name="form">
@@ -5447,12 +5501,10 @@ Flickrアカウントへの投稿を[APP_NAME]に許可しますか？
       <button name="Cancel" text="キャンセル" />
     </form>
   </notification>
-
   <notification name="ExodusFlickrVerificationFailed">Flickrの検証に失敗しました。認証コードを再度ご確認ください。
     <tag>fail</tag>
     <usetemplate name="okbutton" yestext="ＯＫ" />
   </notification>
-
   <notification name="ExodusFlickrUploadComplete">スナップショットは、[http://www.flickr.com/photos/upload/edit/?ids=[ID] ここ]から見ることができます。</notification>
   <!-- </FS:TS> FIRE-5453 -->
 
@@ -5476,7 +5528,7 @@ Flickrアカウントへの投稿を[APP_NAME]に許可しますか？
   </notification>
   <notification name="SnoozeDurationInvalidInput">スヌーズする時間には、有効な数値を入力してください！
     <tag>fail</tag>
-    <usetemplate name="okbutton" yestext="ＯＫ"/>
+    <usetemplate name="okbutton" yestext="ＯＫ" />
   </notification>
   <notification name="PickLimitReached" label="" type="alertmodal">最大数のピックがすでに作成されているため、別のピックを作成できません。
     <unique />
@@ -5521,7 +5573,7 @@ Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.およびそのチーム
     <tag>fail</tag>
   </notification>
 
-  <notification label="設定を保存" name="SaveSettingAs">設定を以下のように保存します：
+  <notification label="設定の保存" name="SaveSettingAs">設定を以下のように保存します：
     <unique />
     <tag>confirm</tag>
     <form name="form">
@@ -5583,6 +5635,18 @@ Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.およびそのチーム
     <tag>fail</tag>
   </notification>
 
+  <notification name="MaterialCreated">マテリアルは正常に作成されました。アセットＩＤ：[ASSET_ID]</notification>
+
+  <notification name="ReflectionProbeApplied">警告：オブジェクトを反射プローブとしました。これにより、オブジェクトが暗黙的に反射量を模倣するように不可逆的な変更が加えられます。
+
+続けてもよろしいですか？
+    <usetemplate ignoretext="反射プローブのヒント" name="okcancelignore" notext="キャンセル" yestext="ＯＫ" />
+  </notification>
+
+  <notification name="AutoAdjustHDRSky">編集中の非ＨＤＲの空の設定は自動的にＨＤＲの設定に変換されます。ＨＤＲとトーンマッピングを削除する場合は、反射プローブ環境の値を０にしてください。
+    <usetemplate ignoretext="ＨＤＲの空の調整時の警告" name="okignore" yestext="ＯＫ" />
+  </notification>
+
   <notification name="TrackLoadFailed">トラック[TRACK]を読み込むことができませんでした。
     <tag>fail</tag>
   </notification>
@@ -5606,7 +5670,7 @@ Firestorm Viewer、Phoenix Firestorm Viewer Project Inc.およびそのチーム
     </form>
   </notification>
 
-  <notification label="Create subfolder" name="CreateSubfolder">新しいフォルダ名：
+  <notification label="サブフォルダ作成" name="CreateSubfolder">新しいフォルダ名：
     <unique />
     <tag>confirm</tag>
     <form name="form">

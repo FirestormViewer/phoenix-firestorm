@@ -5,17 +5,6 @@
   <floater.string name="move_tooltip">カメラを上下左右に移動</floater.string>
   <floater.string name="free_mode_title">オブジェクト視点</floater.string>
   <string name="inactive_combo_text">プリセットを使用</string>
-  <panel name="controls">
-    <!--TODO: replace + - images -->
-    <panel name="zoom">
-      <joystick_rotate name="cam_rotate_stick" tool_tip="対象にカメラを追尾" />
-      <button name="zoom_plus_btn" />
-      <slider_bar tool_tip="対象にカメラをズーム" />
-      <button name="zoom_minus_btn" />
-      <joystick_track tool_tip="カメラを上下左右に動かします。" />
-      <text name="precise_ctrs_label">数値で角度方位を指定</text>
-    </panel>
-  </panel>
   <panel name="buttons_panel">
     <panel_camera_item name="front_view" tool_tip="前方視界" />
     <panel_camera_item name="group_view" tool_tip="斜方視界" />
@@ -29,5 +18,29 @@
     </combo_box>
     <button name="gear_btn" tool_tip="カメラのプリセット" />
     <button label="プリセットを保存…" name="save_preset_btn" />
+  </panel>
+  <panel name="zoom">
+    <layout_stack name="camera_view_layout_stack">
+      <layout_panel name="camera_rotate_layout_panel">
+        <joystick_rotate name="cam_rotate_stick" tool_tip="対象にカメラを追尾させます。" />
+      </layout_panel>
+      <layout_panel name="camera_zoom_layout_panel">
+        <button name="zoom_plus_btn" />
+        <slider_bar name="zoom_slider" tool_tip="対象にカメラをズームします。" />
+        <button name="zoom_minus_btn" />
+      </layout_panel>
+      <layout_panel name="panel_track">
+        <joystick_track name="cam_track_stick" tool_tip="カメラを上下左右に動かします。" />
+      </layout_panel>
+    </layout_stack>
+  </panel>
+  <panel name="preset_buttons_panel">
+    <button label="位置…" name="camera_position_btn" />
+    <button name="save_preset_btn" tool_tip="プリセットを保存" />
+    <combo_box name="preset_combo">
+      <combo_list mouse_wheel_opaque="true" />
+      <combo_box.item label="プリセットを使用" name="Use preset" value="default" />
+    </combo_box>
+    <button name="gear_btn" tool_tip="カメラのプリセット" />
   </panel>
 </floater>

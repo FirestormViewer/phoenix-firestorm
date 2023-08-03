@@ -18,42 +18,93 @@
   <floater.string name="expcol_button_tearoff_and_expanded_tooltip" value="参加者リストを折りたたみます。"/>
   <floater.string name="expcol_button_tearoff_and_collapsed_tooltip" value="参加者リストを展開します。"/>
 
-  <view name="contents_view">
-    <layout_stack name="main_stack">
-      <layout_panel name="toolbar_panel">
-        <menu_button name="view_options_btn" tool_tip="表示／ソートオプション" />
-        <menu_button name="gear_btn" tool_tip="他の人物へのアクション" />
-        <button name="add_btn" tool_tip="この会話に誰かを追加します。" />
-        <button name="voice_call_btn" tool_tip="ボイスチャットを開きます。" />
-        <button name="close_btn" tool_tip="この会話を終えます。" />
-        <button name="expand_collapse_btn" tool_tip="このペインの折りたたみ／展開します。" />
-        <button name="tear_off_btn" />
-      </layout_panel>
-      <layout_panel name="body_panel">
-        <layout_stack name="im_panels">
-          <layout_panel name="speakers_list_panel" />
-          <layout_panel name="right_part_holder">
-            <layout_stack name="translate_and_chat_stack">
-              <layout_panel name="chat_holder">
-                <chat_history name="chat_history" />
-              </layout_panel>
-            </layout_stack>
-          </layout_panel>
-        </layout_stack>
-      </layout_panel>
-      <layout_panel name="chat_layout_panel">
-        <layout_stack name="input_panels">
-          <layout_panel name="input_editor_layout_panel">
-            <avatar_icon name="avatar_icon" />
-            <group_icon name="group_chat_icon" />
-            <icon name="nearby_chat_icon" />
-            <chat_editor name="chat_editor" />
-          </layout_panel>
-          <layout_panel name="input_button_layout_panel">
-            <button name="minz_btn" tool_tip="メッセージパネルの表示／非表示" />
-          </layout_panel>
-        </layout_stack>
-      </layout_panel>
-    </layout_stack>
-  </view>
+  <layout_stack name="ls_control_panel">
+    <layout_panel name="slide_panel">
+      <button name="slide_left_btn" />
+      <button name="slide_right_btn" />
+      <icon name="dummy_icon_slider" />
+    </layout_panel>
+    <layout_panel name="gprofile_panel">
+      <button name="group_info_btn" tool_tip="このグループのプロフィールを表示します。"/>
+    </layout_panel>
+    <layout_panel name="profile_panel">
+      <button name="view_profile_btn" tool_tip="この住民のプロフィールを表示します。"/>
+    </layout_panel>
+    <layout_panel name="friend_panel">
+      <button tool_tip="この住民をフレンドに追加します。" name="add_friend_btn" />
+    </layout_panel>
+    <layout_panel name="tp_panel">
+      <menu_button name="teleport_btn" tool_tip="この住民にテレポートのオファーかリクエストを送ります。" />
+    </layout_panel>
+    <layout_panel name="share_panel">
+      <button tool_tip="この住民にアイテムを送ります。" name="share_btn" />
+    </layout_panel>
+    <layout_panel name="pay_panel">
+      <button tool_tip="この住民にお金を支払います。" name="pay_btn" />
+    </layout_panel>
+    <layout_panel name="call_btn_panel">
+      <button tool_tip="ボイスをこのチャットに追加します。" name="call_btn" />
+    </layout_panel>
+    <layout_panel name="end_call_btn_panel">
+      <button tool_tip="ボイスコールを終了します。" name="end_call_btn" />
+    </layout_panel>
+    <layout_panel name="voice_ctrls_btn_panel">
+      <button tool_tip="ボイスのプロパティを表示します。" name="voice_ctrls_btn" />
+    </layout_panel>
+    <layout_panel name="im_history_btn_panel">
+      <button tool_tip="この会話の過去の会話履歴を開きます。" name="im_history_btn" />
+    </layout_panel>
+    <layout_panel name="add_participant_panel">
+      <button tool_tip="この会話に誰かを追加します。" name="add_participant_btn" />
+    </layout_panel>
+    <layout_panel name="send_sysinfo_btn_panel">
+      <button tool_tip="システム情報を送信します。" name="send_sysinfo_btn" />
+    </layout_panel>
+    <layout_panel name="lp_options_btn">
+      <menu_button tool_tip="チャットのオプションを表示します。" name="chat_options_btn"/>
+    </layout_panel>
+    <layout_panel name="lp_chat_search_btn">
+      <button tool_tip="チャットを検索します。" name="chat_search_btn" />
+    </layout_panel>
+    <!-- Checkbox for FS prefix on support groups -->
+    <layout_panel name="support_panel">
+      <icon name="dummy_icon_support_group" />
+      <check_box label="バージョンを指定する" name="FSSupportGroupChatPrefix_toggle" tool_tip="このグループに送信されたメッセージの先頭に、現在のビューアのバージョン、ビューアのスキン、オペレーティングシステム、ＲＬＶａのステータスを追加します。" />
+    </layout_panel>
+    <layout_panel name="testing_panel">
+      <icon name="dummy_icon_support_group_testing" />
+      <check_box label="ビルドを指定する" name="FSSupportGroupChatPrefixTesting_toggle" tool_tip="現在のビューアのバージョン、ビューアのスキン、オペレーティングシステム、およびＲＬＶａのステータスを、このグループに送信されたメッセージの先頭に追加します。（これはサポートグループとは別です）" />
+    </layout_panel>
+    <!-- END: FS Prefix -->
+    <layout_panel name="lp_bar">
+      <icon name="dummy_icon" />
+    </layout_panel>
+  </layout_stack>
+
+  <layout_stack name="chat_stack">
+    <layout_panel name="im_control_panel_holder">
+      <panel name="panel_im_control_panel" />
+    </layout_panel>
+    <layout_panel name="panel_im_control_lp">
+      <layout_stack name="im_panels">
+        <layout_panel name="chat_holder">
+          <fs_chat_history name="chat_history" />
+        </layout_panel>
+        <layout_panel name="unread_messages_holder">
+          <icon name="unread_messages_background" />
+          <text name="unread_messages_text">未読のメッセージ：[NUM]件</text>
+        </layout_panel>
+        <layout_panel name="chat_layout_panel">
+          <layout_stack name="input_panels">
+            <layout_panel name="input_editor_layout_panel">
+              <chat_editor name="chat_editor" />
+            </layout_panel>
+            <layout_panel name="input_button_layout_panel">
+              <button name="send_chat" label="送信" tool_tip="ＩＭを送信します。" />
+            </layout_panel>
+          </layout_stack>
+        </layout_panel>
+      </layout_stack>
+    </layout_panel>
+  </layout_stack>
 </floater>

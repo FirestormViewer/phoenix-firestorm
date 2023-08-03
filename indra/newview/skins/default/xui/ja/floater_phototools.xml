@@ -85,7 +85,7 @@
       </panel>
     </panel>
 
-    <panel name="P_Lighting">
+    <panel name="P_Lighting" label="光源">
       <panel name="PT_Light_Shadows">
         <text name="T_Light_Shadows">光と影の設定</text>
       </panel>

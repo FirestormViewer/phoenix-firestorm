@@ -9,6 +9,18 @@
       <panel name="panel_marketplace_listing" />
     </panel>
     <panel name="marketplace_panel_status" />
-    <layout_stack name="initialization_progress_indicator" />
+    <layout_stack name="initialization_progress_indicator">
+      <layout_panel />
+      <layout_panel>
+        <layout_stack>
+          <layout_panel />
+          <layout_panel>
+            <loading_indicator />
+          </layout_panel>
+          <layout_panel />
+        </layout_stack>
+      </layout_panel>
+      <layout_panel />
+    </layout_stack>
   </panel>
 </floater>

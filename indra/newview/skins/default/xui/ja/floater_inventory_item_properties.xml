@@ -13,10 +13,12 @@
   <button label="プロフィール…" label_selected="" name="BtnOwner" />
   <text name="LabelAcquiredTitle">入手日時：</text>
   <text name="LabelAcquiredDate">2006年5月24日水曜日　12：50：46</text>
+  <text name="LabelItemExperienceTitle">体験：</text>
   <text name="OwnerLabel">あなた：</text>
   <check_box label="編集" name="CheckOwnerModify" />
   <check_box label="コピー" name="CheckOwnerCopy" />
   <check_box label="再販・譲渡" name="CheckOwnerTransfer" />
+  <check_box label="エクスポート" name="CheckOwnerExport" />
   <text name="AnyoneLabel">全員：</text>
   <check_box label="コピー" name="CheckEveryoneCopy" />
   <text name="GroupLabel">グループ：</text>
@@ -28,7 +30,7 @@
   <check_box label="売り出し中" name="CheckPurchase" />
   <combo_box name="ComboBoxSaleType">
     <combo_box.item label="コピー" name="Copy" />
-    <combo_box.item label="コンテンツ" name="Contents" />
+    <combo_box.item label="中身" name="Contents" />
     <combo_box.item label="オリジナル" name="Original" />
   </combo_box>
   <spinner label="価格：" name="Edit Cost" />

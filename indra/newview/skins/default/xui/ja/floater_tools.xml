@@ -301,7 +301,7 @@
       </combo_box>
       <!-- FS:Beq adding Mesh Info support to Object panel-->
       <text name="mesh_info_label">メッシュ情報：</text>
-      <text name="lod_label" value="ＬＯＤ：" />
+      <text name="lod_label" value="ＬｏＤ：" />
       <text name="lod_num_tris" value="三角形の数" />
       <text name="mesh_lod_label">高：
 中：
@@ -319,19 +319,19 @@
         <combo_box.item label="低" name="Low" value="1" />
         <combo_box.item label="最低" name="Lowest/Imposter" value="0" />
       </combo_box>
-      <text name="ObjectLODbehaviourLabel" value="オブジェクトのＬＯＤ動作：" />
+      <text name="ObjectLODbehaviourLabel" value="オブジェクトのＬｏＤ動作：" />
       <text name="object_radius" value="オブジェクトの半径：" />
       <text name="object_radius_value" value="─" />
-      <text name="LOD_swap_factors_label" value="ＬＯＤ係数" />
-      <text name="LOD_swap_defaults_label" value="デフォルト" tool_tip="ほとんどのビューアに適用されるデフォルトのＬＯＤ係数を設定します。" />
+      <text name="LOD_swap_factors_label" value="ＬｏＤ係数" />
+      <text name="LOD_swap_defaults_label" value="デフォルト" tool_tip="ほとんどのビューアに適用されるデフォルトのＬｏＤ係数を設定します。" />
       <text name="LOD_swap_usr_label" tool_tip="RenderVolumeLODFactorから取得した現在の設定です。" value="あなたの" />
-      <text name="LOD_swap_label" value="ＬＯＤスワップ" />
+      <text name="LOD_swap_label" value="ＬｏＤスワップ" />
       <string name="ll_lod_tooltip_msg">Linden Lab Second Lifeビューアのデフォルト（[FACTOR]）</string>
       <text name="LOD_swap_ll_default" value="ＬＬ" />
       <string name="fs_lod_tooltip_msg">[APP_NAME]ビューアのデフォルト（[FACTOR]）</string>
       <text name="LOD_swap_fs_default">[APP_NAME_ABBR]</text>
       <string name="user_lod_label_string">[FACTOR]</string>
-      <text name="LOD_swap_usr_current" tool_tip="現在のあなたのＬＯＤ係数です。" value="[FACTOR]" />
+      <text name="LOD_swap_usr_current" tool_tip="現在のあなたのＬｏＤ係数です。" value="[FACTOR]" />
       <text name="LOD_swap_LOD_Change_label">高↔中
 中↔低
 低↔最低</text>
@@ -341,7 +341,7 @@
       <text name="LOD_swap_ll_values" />
       <text name="LOD_swap_fs_values" value="─" />
       <text name="LOD_swap_usr_values" value="─" />
-      <text name="LODSwapTableDscriptionsText" tool_tip="ベストプラクティス：制作者は、すべてのビューアに対してデフォルト設定で適切なＬＯＤ動作を保証する必要があります。">この表は、カメラからのＬＯＤ変更境界をメートル単位で示しています。</text>
+      <text name="LODSwapTableDscriptionsText" tool_tip="ベストプラクティス：制作者は、すべてのビューアに対してデフォルト設定で適切なＬｏＤ動作を保証する必要があります。">この表は、カメラからのＬｏＤ変更境界をメートル単位で示しています。</text>
       <!-- /FS:Beq end of Mesh info section-->
     </panel>
     <panel label="特徴" name="Features">
@@ -370,7 +370,7 @@
       <spinner label="焦点" name="Light Focus" />
       <spinner label="光の弱まり" name="Light Falloff" />
       <spinner label="光の雰囲気" name="Light Ambiance" />
-      <check_box label="反射プローブ" name="Reflection Probe" tool_tip="ＰＢＲが有効な場合に、このボリューム内のオブジェクトが光の反射をどのように受け取るかを調整します。" />
+      <check_box label="反射プローブ" name="Reflection Probe" tool_tip="ＰＢＲ（物理基準レンダリング）が有効な場合に、このボリューム内のオブジェクトが光の反射をどのように受け取るかを調整します。" />
       <combo_box name="Probe Volume Type" tool_tip="プローブの影響量を選択してください。">
         <combo_box.item label="球状" name="Sphere" value="Sphere" />
         <combo_box.item label="箱状" name="Box" value="Box" />
@@ -385,7 +385,7 @@
         <combo_box.item label="金属" name="Metal" />
         <combo_box.item label="ガラス" name="Glass" />
         <combo_box.item label="木" name="Wood" />
-        <combo_box.item label="肌" name="Flesh" />
+        <combo_box.item label="肉" name="Flesh" />
         <combo_box.item label="プラスチック" name="Plastic" />
         <combo_box.item label="ゴム" name="Rubber" />
       </combo_box>
