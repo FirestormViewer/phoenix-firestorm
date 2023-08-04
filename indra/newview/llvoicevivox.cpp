@@ -277,7 +277,6 @@ static void killGateway()
 
 bool LLVivoxVoiceClient::sShuttingDown = false;
 bool LLVivoxVoiceClient::sConnected = false;
-bool LLVivoxVoiceClient::sVoiceInstanceMuted = false;
 LLPumpIO *LLVivoxVoiceClient::sPump = nullptr;
 
 LLVivoxVoiceClient::LLVivoxVoiceClient() :
@@ -356,7 +355,6 @@ LLVivoxVoiceClient::LLVivoxVoiceClient() :
     sShuttingDown = false;
     sConnected = false;
     sPump = nullptr;
-    sVoiceInstanceMuted = LLAppViewer::instance()->isSecondInstance();
 
 	mSpeakerVolume = scale_speaker_volume(0);
 
@@ -5794,15 +5792,14 @@ bool LLVivoxVoiceClient::voiceEnabled(bool no_cache)
 	// <FS:Ansariel> Replace frequently called gSavedSettings
     //return gSavedSettings.getBOOL("EnableVoiceChat") &&
     //      !gSavedSettings.getBOOL("CmdLineDisableVoice") &&
-    //      !gNonInteractive &&
-    //      !sVoiceInstanceMuted;
+    //      !gNonInteractive;
 	if (no_cache)
 	{
-		return gSavedSettings.getBOOL("EnableVoiceChat") && !gSavedSettings.getBOOL("CmdLineDisableVoice") && !gNonInteractive && !sVoiceInstanceMuted;
+		return gSavedSettings.getBOOL("EnableVoiceChat") && !gSavedSettings.getBOOL("CmdLineDisableVoice") && !gNonInteractive;
 	}
 	static LLCachedControl<bool> sEnableVoiceChat(gSavedSettings, "EnableVoiceChat");
 	static LLCachedControl<bool> sCmdLineDisableVoice(gSavedSettings, "CmdLineDisableVoice");
-	return sEnableVoiceChat && !sCmdLineDisableVoice && !gNonInteractive && !sVoiceInstanceMuted;
+	return sEnableVoiceChat && !sCmdLineDisableVoice && !gNonInteractive;
 	// </FS:Ansariel>
 }
 // </FS:Ansariel>

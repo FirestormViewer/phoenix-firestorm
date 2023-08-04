@@ -2285,7 +2285,7 @@ void LLPreviewLSL::draw()
 		setTitle(LLTrans::getString("ScriptWasDeleted"));
 		mScriptEd->setItemRemoved(TRUE);
 	}
-    if (mDirty) 
+    else if (mDirty) 
     {
         // <FS:Ansariel> Make ugly location display better
         //std::string item_path = get_category_path(item->getParentUUID());
