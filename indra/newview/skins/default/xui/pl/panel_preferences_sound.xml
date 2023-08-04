@@ -110,7 +110,6 @@
 		<panel label="Głos" name="Media Voice tab">
 			<check_box label="Włącz rozmowy głosowe" name="enable_voice_check" width="155"/>
 			<button tool_tip="Resetuj rozmowy głosowe" name="reset_voice_button"/>
-			<check_box label="Gdy działa kilka kopii przeglądarki na raz, to zezwól na rozmowy głosowe w każdej z nich" name="VoiceMultiInstance" />
 			<radio_group name="ear_location">
 				<radio_item label="Odtwarzaj głos z pozycji kamery" name="0"/>
 				<radio_item label="Odtwarzaj głos z pozycji mojego awatara" name="1"/>

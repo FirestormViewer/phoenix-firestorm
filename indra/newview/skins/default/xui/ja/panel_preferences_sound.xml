@@ -122,12 +122,6 @@
 	<panel label="ボイス" name="Media Voice tab" >
 	
 		<check_box label="ボイスチャットを有効にする" name="enable_voice_check" width="155"/>
-		<check_box label="複数のビューワインスタンスで同時にボイスを有効にする"  name="VoiceMultiInstance" />
-<!--
-		<text name="Listen from">
-			方向：
-		</text>
--->
 		<radio_group name="ear_location">
 			<radio_item label="カメラの位置から聞く" name="0"/>
 			<radio_item label="アバターの位置から聞く" name="1"/>

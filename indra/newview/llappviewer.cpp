@@ -3473,20 +3473,19 @@ bool LLAppViewer::initConfiguration()
 		return false;
 	}
 
-	if (mSecondInstance)
-	{
-		// This is the second instance of SL. Turn off voice support,
-		// but make sure the setting is *not* persisted.
-		LLControlVariable* disable_voice = gSavedSettings.getControl("CmdLineDisableVoice");
-		// <FS:Ansariel> Voice in multiple instances; by Latif Khalifa
-		//if(disable_voice)
-		if(disable_voice && !gSavedSettings.getBOOL("VoiceMultiInstance"))
-		// </FS:Ansariel>
-		{
-			const BOOL DO_NOT_PERSIST = FALSE;
-			disable_voice->setValue(LLSD(TRUE), DO_NOT_PERSIST);
-		}
-	}
+	// <FS:Ansariel> Voice in multiple instances
+	//if (mSecondInstance)
+	//{
+	//	// This is the second instance of SL. Mute voice,
+	//	// but make sure the setting is *not* persisted.
+	//	LLControlVariable* enable_voice = gSavedSettings.getControl("EnableVoiceChat");
+	//	if(enable_voice)
+	//	{
+	//		const BOOL DO_NOT_PERSIST = FALSE;
+	//		enable_voice->setValue(LLSD(FALSE), DO_NOT_PERSIST);
+	//	}
+	//}
+	// </FS:Ansariel>
 
 	gLastRunVersion = gSavedSettings.getString("LastRunVersion");
 

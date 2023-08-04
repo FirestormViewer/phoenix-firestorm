@@ -67,6 +67,7 @@
 #include "llviewermenu.h"	// for gMenuBarView
 #include "llviewerparcelmgr.h"
 #include "llviewerthrottle.h"
+#include "llvoiceclient.h"
 #include "lluictrlfactory.h"
 
 #include "lltoolmgr.h"
@@ -350,6 +351,16 @@ BOOL LLStatusBar::postBuild()
 	LLHints::getInstance()->registerHintTarget("linden_balance", getChild<LLView>("balance_bg")->getHandle());
 
 	gSavedSettings.getControl("MuteAudio")->getSignal()->connect(boost::bind(&LLStatusBar::onVolumeChanged, this, _2));
+    gSavedSettings.getControl("EnableVoiceChat")->getSignal()->connect(boost::bind(&LLStatusBar::onVoiceChanged, this, _2));
+
+    if (gSavedSettings.getBOOL("EnableVoiceChat") && !LLVoiceClient::isMutedVoiceInstance())
+    {
+        mBtnVolume->setImageUnselected(LLUI::getUIImage("Audio_Off"));
+    }
+    else
+    {
+        mBtnVolume->setImageUnselected(LLUI::getUIImage("VoiceMute_Off"));
+    }
 
 	// <FS:Ansariel> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
 	gSavedSettings.getControl("FSStatusBarMenuButtonPopupOnRollover")->getSignal()->connect(boost::bind(&LLStatusBar::onPopupRolloverChanged, this, _2));
@@ -1123,6 +1134,19 @@ BOOL can_afford_transaction(S32 cost)
 void LLStatusBar::onVolumeChanged(const LLSD& newvalue)
 {
 	refresh();
+}
+
+void LLStatusBar::onVoiceChanged(const LLSD& newvalue)
+{
+    if (newvalue.asBoolean() && !LLVoiceClient::isMutedVoiceInstance())
+    {
+        mBtnVolume->setImageUnselected(LLUI::getUIImage("Audio_Off"));
+    }
+    else
+    {
+        mBtnVolume->setImageUnselected(LLUI::getUIImage("VoiceMute_Off"));
+    }
+    refresh();
 }
 
 void LLStatusBar::onUpdateFilterTerm()

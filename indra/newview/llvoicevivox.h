@@ -175,6 +175,8 @@ public:
 	virtual bool voiceEnabled(bool no_cache = false);
 	// </FS:Ansariel>
 	virtual void setVoiceEnabled(bool enabled);
+    static void unmuteVoiceInstance() { sVoiceInstanceMuted = false; }
+    static bool isMutedVoiceInstance() { return sVoiceInstanceMuted; }
 	virtual BOOL lipSyncEnabled();	
 	virtual void setLipSyncEnabled(BOOL enabled);
 	virtual void setMuteMic(bool muted);		// Set the mute state of the local mic.
@@ -931,6 +933,7 @@ private:
     // This variables can last longer than vivox in coroutines so we need them as static
     static bool sShuttingDown;
     static bool sConnected;
+    static bool sVoiceInstanceMuted; // Second+ instance of viewer starts muted
     static LLPumpIO* sPump;
 
     LLEventMailDrop mVivoxPump;

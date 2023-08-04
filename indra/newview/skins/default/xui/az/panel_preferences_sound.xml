@@ -98,7 +98,6 @@ Avtomatik oxutma
 		<panel label="Səs seçimləri" name="Media Voice tab">
 			<check_box label="Səsi aktivləşdir" name="enable_voice_check" width="155"/>
 			<button tool_tip="Səsi yenilə" name="reset_voice_button"/>
-			<check_box label="Eyni anda birdən çox klientdə səs istifadəsinə icazə verin" name="VoiceMultiInstance" />
 			<radio_group name="ear_location">
 				<radio_item label="Kameraların mövqeyindən səsi eşitmək" name="0"/>
 				<radio_item label="Avatarın mövqeyindən səsi eşitmək" name="1"/>
