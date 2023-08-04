@@ -90,8 +90,11 @@ void LLViewerAttachMenu::populateMenus(const std::string& attach_to_menu_name, c
 	}
 
 	// <FS:Ansariel> FIRE-21200: Attachment Points List in Alphabetical Order
-	attach_menu->getItems()->sort(LLViewerAttachMenu::sort());
-	attach_hud_menu->getItems()->sort(LLViewerAttachMenu::sort());
+	if (gSavedSettings.getBOOL("FSSortAttachmentSpotsAlphabetically"))
+	{
+		attach_menu->getItems()->sort(LLViewerAttachMenu::sort());
+		attach_hud_menu->getItems()->sort(LLViewerAttachMenu::sort());
+	}
 	// </FS:Ansariel>
 }
 
