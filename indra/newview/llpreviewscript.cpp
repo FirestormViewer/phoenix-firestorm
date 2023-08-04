@@ -2284,24 +2284,19 @@ void LLPreviewLSL::draw()
 	{
 		setTitle(LLTrans::getString("ScriptWasDeleted"));
 		mScriptEd->setItemRemoved(TRUE);
+		// <FS:Ansariel> Make ugly location display better
+		getChild<LLUICtrl>("path_txt")->setTextArg("[PATH]", LLStringExplicit("-"));
+		getChild<LLUICtrl>("path_txt")->setToolTipArg(LLStringExplicit("[PATH]"), LLStringExplicit("-"));
+		// </FS:Ansariel>
 	}
     else if (mDirty) 
     {
-        // <FS:Ansariel> Make ugly location display better
-        //std::string item_path = get_category_path(item->getParentUUID());
-        //getChild<LLUICtrl>("path_txt")->setValue(item_path);
+        std::string item_path = get_category_path(item->getParentUUID());
+		// <FS:Ansariel> Make ugly location display better
+		//getChild<LLUICtrl>("path_txt")->setValue(item_path);
         //getChild<LLUICtrl>("path_txt")->setToolTip(item_path);
-        if (item)
-        {
-            std::string item_path = get_category_path(item->getParentUUID());
-            getChild<LLUICtrl>("path_txt")->setTextArg("[PATH]", LLStringExplicit(item_path));
-            getChild<LLUICtrl>("path_txt")->setToolTipArg(LLStringExplicit("[PATH]"), LLStringExplicit(item_path));
-        }
-        else
-        {
-            getChild<LLUICtrl>("path_txt")->setTextArg("[PATH]", LLStringExplicit("-"));
-            getChild<LLUICtrl>("path_txt")->setToolTipArg(LLStringExplicit("[PATH]"), LLStringExplicit("-"));
-        }
+        getChild<LLUICtrl>("path_txt")->setTextArg("[PATH]", LLStringExplicit(item_path));
+        getChild<LLUICtrl>("path_txt")->setToolTipArg(LLStringExplicit("[PATH]"), LLStringExplicit(item_path));
         // </FS:Ansariel>
     }
 	LLPreview::draw();
