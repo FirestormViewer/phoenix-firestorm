@@ -7,8 +7,9 @@
   </panel>
   <panel name="tab_container_panel">
     <filter_editor label="マーケットプレイスのリストをフィルタ" name="filter_editor" />
+    <tab_container name="marketplace_filter_tabs" />
   </panel>
   <panel name="marketplace_drop_zone">
-    <text>ここにフォルダをドロップして新しいリストを作成</text>
+    <text name="drop_zone_label">ここにフォルダをドロップして新しいリストを作成</text>
   </panel>
 </panel>

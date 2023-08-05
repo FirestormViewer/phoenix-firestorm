@@ -43,8 +43,7 @@
       </panel>
 
       <panel name="P_WL_Presets">
-        <text name="T_WL_Presets" tool_tip="下記項目をクリックすると、新しいプリセットを作成したり、既存のプリセットを変更することができます。">
-          ウィンドライトのプリセット</text>
+        <text name="T_WL_Presets" tool_tip="下記項目をクリックすると、新しいプリセットを作成したり、既存のプリセットを変更することができます。">ウィンドライトのプリセット</text>
         <view_border name="horiz_separator2" />
         <button name="new_sky_preset" label="新しい空のプリセット" />
         <button name="edit_sky_preset" label="空のプリセットを編集" />
@@ -322,8 +321,7 @@
         <spinner name="S_Terrain_Quality" />
         <button name="Reset_Terrain_Quality" label="Ｄ" tool_tip="デフォルト値にリセットします。" />
 
-        <text name="T_Object_Detail" tool_tip="レンダリングコストを削減するために、低ディテールのオブジェクトを使用するタイミングを制御する。値を高くするとラグが発生するので、注意して使用してください。">
-          オブジェクト詳細</text>
+        <text name="T_Object_Detail" tool_tip="レンダリングコストを削減するために、低ディテールのオブジェクトを使用するタイミングを制御する。値を高くするとラグが発生するので、注意して使用してください。">オブジェクト詳細</text>
         <slider_bar name="SB_Object_Detail" />
         <spinner name="S_Object_Detail" />
         <button name="Reset_Object_Detail" label="Ｄ" tool_tip="デフォルト値にリセットします。" />

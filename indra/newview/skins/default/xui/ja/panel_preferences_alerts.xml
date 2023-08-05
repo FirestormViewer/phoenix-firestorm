@@ -55,8 +55,8 @@
     </panel>
 
     <!-- Alerts -->
-    <panel label="Alerts" name="tab-alerts">
-      <text tool_tip="ビューアのアラート一覧。左のマークをチェックするとアラートが有効になり、チェックを外すと非表示になります。" name="show_label">表示／非表示可能なビューアのアラート：</text>
+    <panel label="アラート" name="tab-alerts">
+      <text tool_tip="ビューアのアラート一覧です。左のマークをチェックするとアラートが有効になり、チェックを外すと非表示になります。" name="show_label">表示／非表示可能なビューアのアラート：</text>
       <filter_editor label="Filter Alerts" tool_tip="検索語を入力してください。検索結果は、全文の一部が一致した場合に表示されます。" name="popup_filter" />
       <!-- Making scroll lists follow="all" results in all kinds of havoc :( -Zi -->
       <scroll_list name="all_popups">

@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="リージョン" name="General">
   <text name="region_text_lbl">リージョン：</text>
-  <text left_delta="70" name="region_text">未知</text>
+  <text name="region_text">不明</text>
+  <text name="estate_id_lbl">不動産ＩＤ：</text>
+  <line_editor name="estate_id" initial_value="不明" />
   <text name="version_channel_text_lbl">バージョン：</text>
-  <text left_delta="70" name="version_channel_text">不明</text>
+  <text name="version_channel_text">不明</text>
   <text name="region_type_lbl">種類：</text>
-  <text left_delta="70" name="region_type">不明
-  </text>
+  <text name="region_type">不明</text>
+  <text name="grid_position_lbl">グリッド位置：</text>
+  <line_editor name="grid_position_x" default_text="なし" width="40" />
+  <line_editor name="grid_position_y" default_text="なし" />
   <check_box label="地形編集をブロック" name="block_terraform_check" />
   <check_box label="飛行をブロック" name="block_fly_check" />
   <check_box label="区画内の飛行をブロック" name="block_fly_over_check" tool_tip="アクセスチェックを高さ方向にも拡大し、区画を超える飛行を防ぎます" />

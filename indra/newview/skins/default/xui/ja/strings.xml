@@ -2592,13 +2592,13 @@ For AI Character: Get the closest navigable point to the point provided.
 
   <!-- HUD Position -->
   <string name="Center 2">中央２</string>
-  <string name="Top Right">右上</string>
-  <string name="Top">上部</string>
-  <string name="Top Left">左上</string>
+  <string name="Top Right">右上　↗</string>
+  <string name="Top">上部　↑</string>
+  <string name="Top Left">左上　↖</string>
   <string name="Center">中央</string>
-  <string name="Bottom Left">左下</string>
-  <string name="Bottom">下部</string>
-  <string name="Bottom Right">右下</string>
+  <string name="Bottom Left">左下　↙</string>
+  <string name="Bottom">下部　↓</string>
+  <string name="Bottom Right">右下　↘</string>
 
   <!-- compile queue-->
   <string name="CompileQueueDownloadedCompiling">ダウンロードが完了しました。コンパイルしています。</string>
@@ -2697,7 +2697,7 @@ For AI Character: Get the closest navigable point to the point provided.
   <string name="ATTACH_BACK">背骨</string>
   <string name="ATTACH_PELVIS">骨盤</string>
   <string name="ATTACH_MOUTH">口</string>
-  <string name="ATTACH_CHIN">あご</string>
+  <string name="ATTACH_CHIN">顎</string>
   <string name="ATTACH_LEAR">左耳</string>
   <string name="ATTACH_REAR">右耳</string>
   <string name="ATTACH_LEYE">左目</string>
@@ -2713,23 +2713,23 @@ For AI Character: Get the closest navigable point to the point provided.
   <string name="ATTACH_LHIP">左腰</string>
   <string name="ATTACH_LULEG">左脚（上）</string>
   <string name="ATTACH_LLLEG">左脚（下）</string>
-  <string name="ATTACH_BELLY">腹</string>
-  <string name="ATTACH_LEFT_PEC">左胸筋</string>
-  <string name="ATTACH_RIGHT_PEC">右胸筋</string>
-  <string name="ATTACH_HUD_CENTER_2">ＨＵＤ（中央 2）</string>
-  <string name="ATTACH_HUD_TOP_RIGHT">ＨＵＤ（右上）</string>
-  <string name="ATTACH_HUD_TOP_CENTER">ＨＵＤ（上・中央）</string>
-  <string name="ATTACH_HUD_TOP_LEFT">ＨＵＤ（左上）</string>
-  <string name="ATTACH_HUD_CENTER_1">ＨＵＤ（中央 1）</string>
-  <string name="ATTACH_HUD_BOTTOM_LEFT">ＨＵＤ（左下）</string>
-  <string name="ATTACH_HUD_BOTTOM">ＨＵＤ（下）</string>
-  <string name="ATTACH_HUD_BOTTOM_RIGHT">ＨＵＤ（右下）</string>
+  <string name="ATTACH_BELLY">腹部</string>
+  <string name="ATTACH_LEFT_PEC">左胸</string>
+  <string name="ATTACH_RIGHT_PEC">右胸</string>
+  <string name="ATTACH_HUD_CENTER_2">ＨＵＤ（中央２）</string>
+  <string name="ATTACH_HUD_TOP_RIGHT">ＨＵＤ（右上）↗</string>
+  <string name="ATTACH_HUD_TOP_CENTER">ＨＵＤ（上）↑</string>
+  <string name="ATTACH_HUD_TOP_LEFT">ＨＵＤ（左上）↖</string>
+  <string name="ATTACH_HUD_CENTER_1">ＨＵＤ（中央１）</string>
+  <string name="ATTACH_HUD_BOTTOM_LEFT">ＨＵＤ（左下）↙</string>
+  <string name="ATTACH_HUD_BOTTOM">ＨＵＤ（下）↓</string>
+  <string name="ATTACH_HUD_BOTTOM_RIGHT">ＨＵＤ（右下）↘</string>
   <string name="ATTACH_NECK">首</string>
   <string name="ATTACH_AVATAR_CENTER">アバターの中央</string>
   <string name="ATTACH_LHAND_RING1">左薬指</string>
   <string name="ATTACH_RHAND_RING1">右薬指</string>
-  <string name="ATTACH_TAIL_BASE">しっぽのベース</string>
-  <string name="ATTACH_TAIL_TIP">しっぽの先</string>
+  <string name="ATTACH_TAIL_BASE">尻尾の付け根</string>
+  <string name="ATTACH_TAIL_TIP">尻尾の先</string>
   <string name="ATTACH_LWING">左の翼</string>
   <string name="ATTACH_RWING">右の翼</string>
   <string name="ATTACH_FACE_JAW">顎</string>
@@ -2738,7 +2738,7 @@ For AI Character: Get the closest navigable point to the point provided.
   <string name="ATTACH_FACE_LEYE">代わりの左目</string>
   <string name="ATTACH_FACE_REYE">代わりの右目</string>
   <string name="ATTACH_FACE_TONGUE">舌</string>
-  <string name="ATTACH_GROIN">脚の付け根</string>
+  <string name="ATTACH_GROIN">股間</string>
   <string name="ATTACH_HIND_LFOOT">左後足</string>
   <string name="ATTACH_HIND_RFOOT">右後足</string>
 
@@ -2789,15 +2789,16 @@ For AI Character: Get the closest navigable point to the point provided.
   <string name="RegionSettings">リージョンの設定</string>
   <string name="NoEnvironmentSettings">このリージョンは自然環境の設定変更をサポートしていません。</string>
 
+  <string name="NoEnvironmentSettings">このリージョンは自然環境の設定変更をサポートしていません。</string>
   <string name="EnvironmentSun">太陽</string>
   <string name="EnvironmentMoon">月</string>
-  <string name="EnvironmentBloom">花</string>
+  <string name="EnvironmentBloom">ブルーム効果</string>
   <string name="EnvironmentCloudNoise">雲の音</string>
-  <string name="EnvironmentNormalMap">ノーマル・マップ</string>
+  <string name="EnvironmentNormalMap">法線マップ</string>
   <string name="EnvironmentTransparent">透過</string>
 
   <!-- panel classified -->
-  <string name="ClassifiedClicksTxt">クリック数：[TELEPORT]テレポート、[MAP]マップ、[PROFILE]プロフィール</string>
+  <string name="ClassifiedClicksTxt">クリック回数：[TELEPORT]テレポート、[MAP]マップ、[PROFILE]プロフィール</string>
   <string name="ClassifiedUpdateAfterPublish">（掲載後更新）</string>
 
   <!-- panel picks -->
@@ -2883,7 +2884,7 @@ For AI Character: Get the closest navigable point to the point provided.
   <string name="Any Category">全カテゴリ</string>
   <string name="Shopping">ショッピング</string>
   <string name="Land Rental">土地のレンタル</string>
-  <string name="Property Rental">プロパティのレンタル</string>
+  <string name="Property Rental">資産のレンタル</string>
   <string name="Special Attraction">特別なアトラクション</string>
   <string name="New Products">新製品</string>
   <string name="Employment">雇用</string>
@@ -2893,7 +2894,7 @@ For AI Character: Get the closest navigable point to the point provided.
 
   <!-- PARCEL_CATEGORY_UI_STRING -->
   <string name="None">なし</string>
-  <string name="Linden Location">Linden 所在地</string>
+  <string name="Linden Location">Linden所在地</string>
   <string name="Adult">成人向け</string>
   <!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
   <string name="Arts&amp;Culture">芸術と文化</string>
@@ -2977,7 +2978,7 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
 このメッセージが何度も出る場合は、[SUPPORT_SITE]へご連絡ください。</string>
 
   <!-- Avatar Shape Information -->
-  <string name="5 O'Clock Shadow">うっすらとしたヒゲ</string>
+  <string name="5 O'Clock Shadow">不精ひげ</string>
 
   <string name="All White">真っ白</string>
   <string name="Anime Eyes">アニメ風の目</string>
@@ -3006,32 +3007,32 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Black">黒</string>
   <string name="Blonde">ブロンド</string>
   <string name="Blonde Hair">ブロンドの髪</string>
-  <string name="Blush">チーク</string>
-  <string name="Blush Color">チークカラー</string>
-  <string name="Blush Opacity">チークの濃さ</string>
+  <string name="Blush">頬紅</string>
+  <string name="Blush Color">頬の色</string>
+  <string name="Blush Opacity">頬の濃さ</string>
   <string name="Body Definition">体の精細度</string>
-  <string name="Body Fat">体脂肪</string>
+  <string name="Body Fat">太っている</string>
   <string name="Body Freckles">体のしみ・そばかす</string>
   <string name="Body Thick">骨太</string>
   <string name="Body Thickness">体の厚み</string>
-  <string name="Body Thin">細め</string>
+  <string name="Body Thin">痩せている</string>
 
   <string name="Bow Legged">股</string>
-  <string name="Breast Buoyancy">胸の重力</string>
+  <string name="Breast Buoyancy">胸の弾み</string>
   <string name="Breast Cleavage">胸の谷間</string>
   <string name="Breast Size">胸の大きさ</string>
   <string name="Bridge Width">両目の間の幅</string>
   <string name="Broad">広</string>
   <string name="Brow Size">眉毛上の隆起</string>
-  <string name="Bug Eyes">Bug Eyes</string>
+  <string name="Bug Eyes">丸い目</string>
   <string name="Bugged Eyes">突き出た目</string>
   <string name="Bulbous">だんご</string>
   <string name="Bulbous Nose">だんご鼻</string>
 
-  <string name="Breast Physics Mass">胸の豊かさ</string>
-  <string name="Breast Physics Smoothing">胸の平滑化</string>
+  <string name="Breast Physics Mass">胸の動きの大きさ</string>
+  <string name="Breast Physics Smoothing">胸の動きの滑らかさ</string>
   <string name="Breast Physics Gravity">胸の垂れ具合</string>
-  <string name="Breast Physics Drag">胸の空気抵抗</string>
+  <string name="Breast Physics Drag">胸の揺れ具合</string>
 
   <string name="Breast Physics InOut Max Effect">最大エフェクト数</string>
   <string name="Breast Physics InOut Spring">振動速度</string>
@@ -3048,20 +3049,20 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Breast Physics LeftRight Gain">増加率</string>
   <string name="Breast Physics LeftRight Damping">減衰</string>
 
-  <string name="Belly Physics Mass">お腹の豊かさ</string>
-  <string name="Belly Physics Smoothing">お腹の平滑化</string>
-  <string name="Belly Physics Gravity">お腹の垂れ具合</string>
-  <string name="Belly Physics Drag">お腹の空気抵抗</string>
+  <string name="Belly Physics Mass">腹部の動きの大きさ</string>
+  <string name="Belly Physics Smoothing">腹部の動きの滑らかさ</string>
+  <string name="Belly Physics Gravity">腹部の垂れ具合</string>
+  <string name="Belly Physics Drag">腹部の揺れ具合</string>
 
   <string name="Belly Physics UpDown Max Effect">最大エフェクト数</string>
   <string name="Belly Physics UpDown Spring">振動速度</string>
   <string name="Belly Physics UpDown Gain">増加率</string>
   <string name="Belly Physics UpDown Damping">減衰</string>
 
-  <string name="Butt Physics Mass">お尻の豊かさ</string>
-  <string name="Butt Physics Smoothing">お尻の平滑化</string>
-  <string name="Butt Physics Gravity">お尻の垂れ具合</string>
-  <string name="Butt Physics Drag">お尻の空気抵抗</string>
+  <string name="Butt Physics Mass">尻の動きの大きさ</string>
+  <string name="Butt Physics Smoothing">尻の動きの滑らかさ</string>
+  <string name="Butt Physics Gravity">尻の垂れ具合</string>
+  <string name="Butt Physics Drag">尻の揺れ具合</string>
 
   <string name="Butt Physics UpDown Max Effect">最大エフェクト数</string>
   <string name="Butt Physics UpDown Spring">振動速度</string>
@@ -3075,24 +3076,24 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
 
   <string name="Bushy Eyebrows">太</string>
   <string name="Bushy Hair">ぼさぼさヘア</string>
-  <string name="Butt Size">お尻の大きさ</string>
-  <string name="Butt Gravity">お尻の垂れ具合</string>
+  <string name="Butt Size">尻の大きさ</string>
+  <string name="Butt Gravity">尻の垂れ具合</string>
   <string name="bustle skirt">後ろの膨らみ</string>
   <string name="no bustle">膨らみなし</string>
   <string name="more bustle">膨らみ大</string>
 
   <string name="Chaplin">チャップリン</string>
-  <string name="Cheek Bones">ほお骨</string>
-  <string name="Chest Size">胸部の大きさ</string>
-  <string name="Chin Angle">あごの角度</string>
-  <string name="Chin Cleft">あごの先の割れ</string>
-  <string name="Chin Curtains">あごに沿ったひげ</string>
+  <string name="Cheek Bones">頬骨</string>
+  <string name="Chest Size">胸の大きさ</string>
+  <string name="Chin Angle">顎の角度</string>
+  <string name="Chin Cleft">顎の先の割れ</string>
+  <string name="Chin Curtains">顎髭</string>
 
-  <string name="Chin Depth">あごの長さ</string>
-  <string name="Chin Heavy">あごを強調</string>
-  <string name="Chin In">ひいたあご</string>
-  <string name="Chin Out">突き出たあご</string>
-  <string name="Chin-Neck">あごと首</string>
+  <string name="Chin Depth">顎の長さ</string>
+  <string name="Chin Heavy">顎を強調</string>
+  <string name="Chin In">ひいた顎</string>
+  <string name="Chin Out">突き出た顎</string>
+  <string name="Chin-Neck">顎と首</string>
   <string name="Clear">クリア</string>
   <string name="Cleft">割れた</string>
   <string name="Close Set Eyes">顔の中心寄りの目</string>
@@ -3102,11 +3103,11 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Closed Left">左とじ</string>
   <string name="Closed Right">右とじ</string>
   <string name="Coin Purse">コイン入れ</string>
-  <string name="Collar Back">後ろえり</string>
+  <string name="Collar Back">後ろ襟</string>
 
 
 
-  <string name="Collar Front">前えり</string>
+  <string name="Collar Front">前襟</string>
 
 
 
@@ -3116,14 +3117,14 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Creased">重いまぶた</string>
   <string name="Crooked Nose">曲がった鼻</string>
 
-  <string name="Cuff Flare">袖口のフレア</string>
+  <string name="Cuff Flare">袖の広がり</string>
   <string name="Dark">ダーク</string>
   <string name="Dark Green">ダークグリーン</string>
   <string name="Darker">ダーク</string>
   <string name="Deep">尖った</string>
-  <string name="Default Heels">デフォルトのかかと</string>
+  <string name="Default Heels">デフォルトの踵</string>
 
-  <string name="Dense">濃</string>
+  <string name="Dense">濃さ</string>
 
   <string name="Double Chin">二重あご</string>
   <string name="Downturned">下向き</string>
@@ -3173,12 +3174,12 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Flared Cuffs">広がった袖口</string>
   <string name="Flat">平ら</string>
   <string name="Flat Butt">小</string>
-  <string name="Flat Head">絶壁頭</string>
-  <string name="Flat Toe">フラット</string>
+  <string name="Flat Head">平坦な頭</string>
+  <string name="Flat Toe">扁平足</string>
   <string name="Foot Size">足の大きさ</string>
-  <string name="Forehead Angle">ひたいの角度</string>
-  <string name="Forehead Heavy">ひたいを強調</string>
-  <string name="Freckles">しみ・そばかす</string>
+  <string name="Forehead Angle">額の角度</string>
+  <string name="Forehead Heavy">額の重さ</string>
+  <string name="Freckles">そばかす</string>
 
   <string name="Front Fringe">前髪の毛先</string>
 
@@ -3196,7 +3197,7 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Hair">髪</string>
   <string name="Hair Back">髪：後ろ</string>
   <string name="Hair Front">髪：前</string>
-  <string name="Hair Sides">髪：サイド</string>
+  <string name="Hair Sides">髪：横</string>
   <string name="Hair Sweep">流す</string>
   <string name="Hair Thickess">髪の量</string>
   <string name="Hair Thickness">髪の量</string>
@@ -3230,11 +3231,11 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Inner Shadow">内側のシャドウ</string>
 
 
-  <string name="Jacket Length">ジャケット丈</string>
-  <string name="Jacket Wrinkles">ジャケットのしわ</string>
-  <string name="Jaw Angle">あごの角度</string>
-  <string name="Jaw Jut">あごの突出</string>
-  <string name="Jaw Shape">あごの形</string>
+  <string name="Jacket Length">上着の丈</string>
+  <string name="Jacket Wrinkles">上着の皺</string>
+  <string name="Jaw Angle">顎の角度</string>
+  <string name="Jaw Jut">顎の突出</string>
+  <string name="Jaw Shape">顎の形</string>
   <string name="Join">寄せた胸</string>
   <string name="Jowls">えら</string>
   <string name="Knee Angle">膝の角度</string>
@@ -3260,9 +3261,9 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Less Square">小</string>
   <string name="Less Volume">ボリューム少な目</string>
   <string name="Less soul">小</string>
-  <string name="Lighter">ライト</string>
-  <string name="Lip Cleft">唇の山</string>
-  <string name="Lip Cleft Depth">唇の山の高さ</string>
+  <string name="Lighter">軽い</string>
+  <string name="Lip Cleft">唇の裂け目</string>
+  <string name="Lip Cleft Depth">唇の裂け目の深さ</string>
   <string name="Lip Fullness">唇の厚み</string>
   <string name="Lip Pinkness">唇の赤み</string>
   <string name="Lip Ratio">上下唇の大きさ</string>
@@ -3294,7 +3295,7 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Low and Loose">低めでゆったり</string>
   <string name="Lower">低</string>
   <string name="Lower Bridge">鼻筋</string>
-  <string name="Lower Cheeks">ほおの下部</string>
+  <string name="Lower Cheeks">下頬</string>
 
   <string name="Male">男性</string>
   <string name="Middle Part">真ん中分け</string>
@@ -3386,7 +3387,7 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
 
 
   <string name="Pants Waist">ウエスト</string>
-  <string name="Pants Wrinkles">ズボンのしわ</string>
+  <string name="Pants Wrinkles">ズボンの皺</string>
   <string name="Part">あり</string>
   <string name="Part Bangs">分けた前髪</string>
   <string name="Pectorals">胸筋</string>
@@ -3453,14 +3454,14 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Short hips">短</string>
   <string name="Shoulders">肩</string>
 
-  <string name="Side Fringe">サイドの毛先</string>
+  <string name="Side Fringe">横髪の毛先</string>
   <string name="Sideburns">もみあげ</string>
 
-  <string name="Sides Hair">サイドの髪</string>
-  <string name="Sides Hair Down">ダウン</string>
-  <string name="Sides Hair Up">アップ</string>
+  <string name="Sides Hair">横髪</string>
+  <string name="Sides Hair Down">下げる</string>
+  <string name="Sides Hair Up">揚げる</string>
 
-  <string name="Skinny Neck">細</string>
+  <string name="Skinny Neck">細い首</string>
   <string name="Skirt Fit">スカートのフィット感</string>
   <string name="Skirt Length">スカート丈</string>
   <string name="Slanted Forehead">傾斜した額</string>
@@ -3483,10 +3484,10 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
 
   <string name="Soulpatch">ソウルパッチ</string>
 
-  <string name="Sparse">薄</string>
+  <string name="Sparse">疎ら</string>
   <string name="Spiked Hair">とげとげヘア</string>
   <string name="Square">角張った</string>
-  <string name="Square Toe">スクエアトゥ</string>
+  <string name="Square Toe">つま先が四角い</string>
   <string name="Squash Head">カボチャ型</string>
 
   <string name="Stretch Head">縦長</string>
@@ -3496,18 +3497,18 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Sweep Back">後ろへ</string>
   <string name="Sweep Forward">前へ</string>
 
-  <string name="Tall">トール</string>
+  <string name="Tall">高い</string>
   <string name="Taper Back">後ろに先細</string>
   <string name="Taper Front">前に先細</string>
   <string name="Thick Heels">幅広</string>
-  <string name="Thick Neck">太</string>
-  <string name="Thick Toe">厚め</string>
+  <string name="Thick Neck">太い首</string>
+  <string name="Thick Toe">厚い足</string>
 
   <string name="Thin">薄い</string>
-  <string name="Thin Eyebrows">細</string>
+  <string name="Thin Eyebrows">細い眉</string>
   <string name="Thin Lips">小</string>
   <string name="Thin Nose">細い鼻</string>
-  <string name="Tight Chin">ひきしまったあご</string>
+  <string name="Tight Chin">引き締まった顎</string>
   <string name="Tight Cuffs">タイト</string>
   <string name="Tight Pants">タイト</string>
   <string name="Tight Shirt">タイト</string>
@@ -3524,8 +3525,8 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Underbite">受け口</string>
   <string name="Unnatural">ユニーク</string>
   <string name="Upper Bridge">両目のあいだ</string>
-  <string name="Upper Cheeks">ほおの上部</string>
-  <string name="Upper Chin Cleft">あご上部の割れ</string>
+  <string name="Upper Cheeks">上頬</string>
+  <string name="Upper Chin Cleft">上顎の割れ</string>
 
   <string name="Upper Eyelid Fold">二重の幅</string>
   <string name="Upturned">上向き</string>
@@ -3533,14 +3534,14 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Waist Height">ウエストの高さ</string>
 
 
-  <string name="Well-Fed">つまったほお</string>
+  <string name="Well-Fed">太った</string>
   <string name="White Hair">白髪</string>
   <string name="Wide">広</string>
   <string name="Wide Back">広</string>
   <string name="Wide Front">広</string>
-  <string name="Wide Lips">大きい口</string>
+  <string name="Wide Lips">広い唇</string>
   <string name="Wild">ワイルド</string>
-  <string name="Wrinkles">しわ</string>
+  <string name="Wrinkles">皺</string>
 
   <!-- Navigation bar location input control.
        Strings are here because widget xml is not localizable -->

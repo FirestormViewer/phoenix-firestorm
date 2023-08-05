@@ -10,42 +10,53 @@
   <string name="server_error_text">この位置の情報は現在ご利用いただけません。あとでもう一度お試しください。</string>
   <string name="server_forbidden_text">この位置の情報は、アクセス制限のためご利用いただけません。許可については区画所有者にお問い合わせください。</string>
   <string name="acquired_date">[year,datetime,local]年[mth,datetime,local]月[day,datetime,local]日（[wkday,datetime,local]）　[hour,datetime,local]：[min,datetime,local]：[second,datetime,local]</string>
+  <string name="information_text">トラフィック：[TRAFFIC]　エリア：[AREA]㎡</string>
   <string name="icon_PG" value="Parcel_PG_Dark" />
   <string name="icon_M" value="Parcel_M_Dark" />
   <string name="icon_R" value="Parcel_R_Dark" />
-  <button name="back_btn" tool_tip="戻る" />
-  <text name="title" value="場所のプロフィール" />
-  <scroll_container name="place_scroll">
-    <panel name="scrolling_panel">
+
+  <layout_stack name="place_info_sidetray_main">
+    <layout_panel name="header_container">
+      <button name="back_btn" tool_tip="戻る" />
+      <text name="title" value="場所のプロフィール" />
+    </layout_panel>
+
+    <layout_panel name="place_info_content">
       <texture_picker name="logo" />
       <!-- texture picker has an empty label section, compensate for it with negative top_pad-->
-      <text name="parcel_title" value="SampleParcel, Name Long" />
+      <text name="parcel_title" value="とても長い名前のサンプル区画" />
       <text name="region_title">リージョン：[REGIONAMEPOS]</text>
-      <text name="parcel_owner_label" value="所有者：" />
-      <text name="parcel_owner" value="一時的な所有者" />
-      <expandable_text name="description" value="Du waltz die spritz" />
       <icon name="maturity_icon" />
       <text name="maturity_value" value="不明" />
+      <text name="parcel_owner_label" value="所有者：" />
+      <text name="parcel_owner" value="不明" />
+
+      <panel name="description_panel">
+        <expandable_text name="description" value="（読み込んでいます…）" />
+      </panel>
+
       <panel name="landmark_info_panel">
-        <view_border name="lod_tab_border" />
-        <text name="this_landmark">ランドマーク：</text>
         <text name="owner_label" value="所有者：" />
         <text name="owner" />
         <text name="creator_label" value="作成者：" />
         <text name="creator" />
         <text name="created_label" value="作成日：" />
         <text name="created" />
+        <text name="information_label" value="情報：" />
+        <text name="information" />
       </panel>
+
       <panel name="landmark_edit_panel">
-        <text value="タイトル：" />
+        <text name="title_label" value="タイトル：" />
         <line_editor name="title_value" />
-        <button name="edit_btn" tool_tip="ランドマーク情報を編集" />
-        <line_editor name="title_editor"/>
+        <line_editor name="title_editor" />
         <text name="notes_label" value="ノート：" />
         <text_editor name="notes_editor" />
         <text name="folder_label" value="ランドマークの場所：" />
         <combo_box name="folder_combo" />
+        <button name="edit_btn" tool_tip="このランドマーク情報を編集します。" />
       </panel>
-    </panel>
-  </scroll_container>
+
+    </layout_panel>
+  </layout_stack>
 </panel>

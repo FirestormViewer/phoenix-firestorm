@@ -103,21 +103,17 @@
 
   <menu label="コミュニケーション" name="Communicate">
 
-    <menu label="Online Status" name="Status">
+    <menu label="オンラインステータス" name="Status">
       <menu_item_check name="Away" label="離席中" />
       <menu_item_check label="取り込み中" name="Do Not Disturb" />
       <menu_item_check label="自動返答" name="Set Autorespond" />
       <menu_item_check label="フレンド以外にも自動応答" name="Set Autorespond to non-friends" />
-
       <menu_item_separator />
       <menu_item_check label="テレポートのオファーとリクエストを拒否する" name="Automatically reject teleport offers" />
       <menu_item_check label="すべてのグループの招待を拒否する" name="Reject all group invites" />
       <menu_item_check label="すべてのフレンドのリクエストを拒否する" name="Reject all friendship requests" />
-
     </menu>
-
     <menu_item_separator />
-
     <menu_item_call label="フレンド" name="My Friends" />
     <menu_item_check label="連絡先" name="Contacts" />
     <menu_item_call label="連絡先セット" name="Contact Sets" />
@@ -125,9 +121,7 @@
     <menu_item_check label="チャット…" name="Nearby Chat" />
     <menu_item_check label="人物" name="People" />
     <menu_item_check label="会話" name="Conversations" />
-
     <menu_item_separator />
-
     <menu_item_check label="ジェスチャー" name="Gestures" />
     <menu_item_separator />
     <menu_item_call label="Flickr…" name="Flickr" />
@@ -140,7 +134,7 @@
       <menu_item_call label="購読…" name="Subscribe" />
       <menu_item_call label="プレミアム特典…" name="PremiumPerk" />
     </menu>
-    <menu_item_check name="会話ログ…" label="Conversation Log..." />
+    <menu_item_check name="Conversation Log..." label="会話ログ…" />
     <!--
     <menu_item_separator />
     <menu_item_check label="フレンド" name="My Friends" />
@@ -485,7 +479,7 @@
 
     <menu_item_separator />
 
-    <menu label="Performance Tools" name="Performance Tools">
+    <menu label="パフォーマンスツール" name="Performance Tools">
       <menu_item_call label="遅延メーター" name="Lag Meter" />
       <menu_item_check label="統計バー" name="Statistics Bar" />
       <menu_item_call label="シーン負荷の統計情報" name="Scene Load Statistics" />
@@ -834,7 +828,7 @@
       <menu_item_check label="見ているものを表示する" name="Show Look At" />
       <menu_item_check label="クリックした場所を表示する" name="Show Point At" />
       <menu_item_check label="結合部のアップデートのデバッグ" name="Debug Joint Updates" />
-      <menu_item_check label="被写体深度（ＬｏＤ）を無効にする" name="Disable LOD" />
+      <menu_item_check label="ＬｏＤを無効にする" name="Disable LOD" />
       <menu_item_check label="キャラクターVisのデバッグ" name="Debug Character Vis" />
       <menu_item_check label="スケルトンの衝突判定を表示する" name="Show Collision Skeleton" />
       <menu_item_check label="ボーンを表示" name="Show Bones" />

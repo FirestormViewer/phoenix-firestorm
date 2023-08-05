@@ -22,7 +22,7 @@
     <scroll_list.rows name="action_chat" value="チャット" />
     <scroll_list.rows name="action_wait" value="待機" />
   </scroll_list>
-  <button label="追加＞＞" name="add_btn" />
+  <button label="追加　》" name="add_btn" />
   <text name="steps_label">手順：</text>
   <button label="上" name="up_btn" />
   <button label="下" name="down_btn" />

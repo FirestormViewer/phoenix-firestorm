@@ -2297,7 +2297,7 @@ https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83
     <tag>fail</tag>
   </notification>
 
-  <notification name="RegionEntryAccessBlocked_Change">訪問しようとしているリ－ジョンは、[REGIONMATURITY]コンテンツが含まれていますが、現在の設定では[REGIONMATURITY]コンテンツを除外するように設定されています。ご希望を変更することも、キャンセルすることもできます。この設定を変更すると、そのリージョンに入ることができるようになります。
+  <notification name="RegionEntryAccessBlocked_Change">訪問しようとしているリージョンは、[REGIONMATURITY]コンテンツが含まれていますが、現在の設定では[REGIONMATURITY]コンテンツを除外するように設定されています。ご希望を変更することも、キャンセルすることもできます。この設定を変更すると、そのリージョンに入ることができるようになります。
     <tag>fail</tag>
     <tag>confirm</tag>
     <form name="form">
@@ -3325,7 +3325,6 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
   </notification>
 
   <notification name="OwnObjectGiveItem">オブジェクト「&lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt;」が、あなたに[OBJECTTYPE]を渡しました：
-
 &lt;nolink&gt;[ITEM_SLURL]&lt;/nolink&gt;
     <form name="form">
       <button name="Keep" text="キープ" />
@@ -3336,11 +3335,13 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
   <!-- FS:Ansariel: WARNING: Read LLOfferInfo::forceResponse in llviewermessage.cpp before changing the button order!!! -->
   <notification name="UserGiveItem" label="[NAME_LABEL]からのインベントリのオファー">[NAME_SLURL] が、あなたに[OBJECTTYPE]を渡しました：
 [ITEM_SLURL]
-ミュートしてもよろしいですか？「ミュート」は、今後の[NAME_SLURL]からのオファーやメッセージをすべてブロックします。
+
+「ミュート」を選択すると、今後の[NAME_SLURL]からのオファーやメッセージをすべてブロックします。
     <form name="form">
-      <button name="Show" text="表示" />
-      <button name="Discard" text="破棄" />
-      <button name="Mute" text="ブロック" />
+      <button index="3" name="Show" text="表示する" />
+      <button index="0" name="Keep" text="受け取る" />
+      <button index="1" name="Discard" text="辞退する" />
+      <button index="2" name="Mute" text="ミュート" />
     </form>
   </notification>
 
@@ -3351,39 +3352,74 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
   <notification name="JoinGroup">[MESSAGE]
     <tag>group</tag>
     <form name="form">
-      <button name="Join" text="参加" />
-      <button name="Decline" text="辞退" />
-      <button name="Info" text="情報" />
+      <button index="0" name="Join" text="参加する" />
+      <button index="1" name="Decline" text="辞退する" />
+      <button index="2" name="Info" text="情報" />
     </form>
   </notification>
 
   <notification name="TeleportOffered" label="[NAME_LABEL]からのテレポートのオファー">[NAME_SLURL] は、テレポートであなたを呼んでいます。
 [MESSAGE]
 
-&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;－[MATURITY_STR]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;‐[MATURITY_STR]
     <tag>confirm</tag>
     <form name="form">
-      <button name="Teleport" text="テレポート" />
-      <button name="Cancel" text="キャンセル" />
+      <button index="0" name="Teleport" text="テレポート" />
+      <button index="1" name="Cancel" text="キャンセル" />
     </form>
   </notification>
 
   <notification name="TeleportOffered_MaturityExceeded">[NAME_SLURL] は、テレポートであなたを呼んでいます。
 [MESSAGE]
 
-&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;－[MATURITY_STR]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;‐[MATURITY_STR]
 
 このリージョンには[REGION_CONTENT_MATURITY]コンテンツが含まれていますが、現在の初期設定は[REGION_CONTENT_MATURITY]コンテンツを除外するように設定されています。初期設定を変更してテレポートを続けるか、このテレポートを取り消すことができます。
     <tag>confirm</tag>
     <form name="form">
-      <button name="Teleport" text="変更して続ける" />
-      <button name="Cancel" text="キャンセル" />
+      <button index="0" name="Teleport" text="変更して続ける" />
+      <button index="1" name="Cancel" text="キャンセル" />
     </form>
   </notification>
   <notification name="TeleportOffered_MaturityBlocked">[NAME_SLURL] は、テレポートであなたを呼んでいます。
 [MESSAGE]
 
-&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;－[MATURITY_STR]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;‐[MATURITY_STR]
+
+ただし、このリージョンには成人のみアクセスできるコンテンツが含まれています。
+    <tag>fail</tag>
+  </notification>
+
+  <notification name="TeleportOffered_SLUrl" label="[NAME_LABEL]からのテレポートのオファー">[NAME_SLURL] は、テレポートであなたを呼んでいます（[POS_SLURL]）：
+
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;‐[MATURITY_STR]
+    <tag>confirm</tag>
+    <form name="form">
+      <button index="0" name="Teleport" text="テレポート" />
+      <button index="1" name="Cancel" text="キャンセル" />
+    </form>
+  </notification>
+
+  <notification name="TeleportOffered_MaturityExceeded_SLUrl">
+[NAME_SLURL] は、テレポートであなたを呼んでいます（[POS_SLURL]）：
+
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;‐[MATURITY_STR]
+
+このリージョンには[REGION_CONTENT_MATURITY]コンテンツが含まれていますが、現在の初期設定は[REGION_CONTENT_MATURITY]コンテンツを除外するように設定されています。初期設定を変更してテレポートを続けるか、このテレポートを取り消すことができます。
+    <tag>confirm</tag>
+    <form name="form">
+      <button index="0" name="Teleport" text="変更して続ける" />
+      <button index="1" name="Cancel" text="キャンセル" />
+    </form>
+  </notification>
+
+  <notification name="TeleportOffered_MaturityBlocked_SLUrl">
+[NAME_SLURL] は、テレポートであなたを呼んでいます（[POS_SLURL]）：
+
+[MESSAGE]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;‐[MATURITY_STR]
 
 ただし、このリージョンには成人のみアクセスできるコンテンツが含まれています。
     <tag>fail</tag>
@@ -3397,13 +3433,12 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 テレポートのオファーを受けますか？
     <tag>confirm</tag>
     <form name="form">
-      <button name="Yes" text="はい"/>
-      <button name="No" text="いいえ"/>
+      <button name="Yes" text="はい" />
+      <button name="No" text="いいえ "/>
     </form>
   </notification>
 
-  <notification name="GotoURL">
-[MESSAGE]
+  <notification name="GotoURL">[MESSAGE]
 [URL]
     <form name="form">
       <button name="Later" text="あとで" />
@@ -3629,7 +3664,7 @@ Your L$ balance is shown in the upper-right.
     </unique>
     <form name="form">
       <button name="Accept" text="受け入れる" />
-      <button name="Decline" text="拒否" />
+      <button name="Decline" text="却下する" />
       <button name="Mute" text="ブロック" />
     </form>
   </notification>
@@ -3651,7 +3686,7 @@ Your L$ balance is shown in the upper-right.
     </unique>
     <form name="form">
       <button name="Accept" text="受け入れる" />
-      <button name="Decline" text="拒否" />
+      <button name="Decline" text="却下する" />
       <button name="Mute" text="ブロック" />
     </form>
   </notification>
@@ -3660,7 +3695,7 @@ Your L$ balance is shown in the upper-right.
 受け入れるをクリックするか、断る場合は拒否をクリックしてください。ブロックをクリックすると、この発信者をブロックします。
     <form name="form">
       <button name="Accept" text="受け入れる" />
-      <button name="Decline" text="拒否" />
+      <button name="Decline" text="却下する" />
       <button name="Mute" text="ブロック" />
     </form>
   </notification>
@@ -3674,7 +3709,7 @@ Your L$ balance is shown in the upper-right.
     </unique>
     <form name="form">
       <button name="Accept" text="受け入れる" />
-      <button name="Decline" text="拒否" />
+      <button name="Decline" text="却下する" />
       <button name="Mute" text="ブロック" />
     </form>
   </notification>
@@ -4339,9 +4374,9 @@ https://wiki.firestormviewer.org/fs_voice
 
   <global name="UnsupportedRAMAmount">510</global>
 
-  <global name="UnsupportedGPU">－あなたのグラフィックカードは、必須動作環境の条件を満たしていません。</global>
+  <global name="UnsupportedGPU">‐あなたのグラフィックカードは、必須動作環境の条件を満たしていません。</global>
 
-  <global name="UnsupportedRAM">－あなたのシステムメモリは、必須動作環境の条件を満たしていません。</global>
+  <global name="UnsupportedRAM">‐あなたのシステムメモリは、必須動作環境の条件を満たしていません。</global>
 
   <!-- these are alert strings from server. the name needs to match entire the server string, and needs to be changed
 	whenever the server string changes -->
@@ -4742,39 +4777,39 @@ https://wiki.firestormviewer.org/fs_voice
     <tag>fail</tag>
   </notification>
 
-  <notification name="LinkFailedOwnersDiffer">リンクエラー－所有者が違います。
+  <notification name="LinkFailedOwnersDiffer">リンクエラー‐所有者が違います。
     <tag>fail</tag>
   </notification>
 
-  <notification name="LinkFailedNoModNavmeshAcrossRegions">リンクエラー－リージョンの境界をまたぐナビメッシュは変更できません。
+  <notification name="LinkFailedNoModNavmeshAcrossRegions">リンクエラー‐リージョンの境界をまたぐナビメッシュは変更できません。
     <tag>fail</tag>
   </notification>
 
-  <notification name="LinkFailedNoPermToEdit">リンクエラー－編集権限がありません。
+  <notification name="LinkFailedNoPermToEdit">リンクエラー‐編集権限がありません。
     <tag>fail</tag>
   </notification>
 
-  <notification name="LinkFailedTooManyPrims">リンクエラー－プリミティブが多すぎます。
+  <notification name="LinkFailedTooManyPrims">リンクエラー‐プリミティブが多すぎます。
     <tag>fail</tag>
   </notification>
 
-  <notification name="LinkFailedCantLinkNoCopyNoTrans">リンクエラー－コピーなしと転送なしをリンクできません。
+  <notification name="LinkFailedCantLinkNoCopyNoTrans">リンクエラー‐コピーなしと転送なしをリンクできません。
     <tag>fail</tag>
   </notification>
 
-  <notification name="LinkFailedNothingLinkable">リンクエラー－リンクできるものがありません。
+  <notification name="LinkFailedNothingLinkable">リンクエラー‐リンクできるものがありません。
     <tag>fail</tag>
   </notification>
 
-  <notification name="LinkFailedTooManyPathfindingChars">リンクエラー－経路探索の文字数が多すぎます。
+  <notification name="LinkFailedTooManyPathfindingChars">リンクエラー‐経路探索の文字数が多すぎます。
     <tag>fail</tag>
   </notification>
 
-  <notification name="LinkFailedInsufficientLand">リンクエラー－土地のリソースが足りません。
+  <notification name="LinkFailedInsufficientLand">リンクエラー‐土地のリソースが足りません。
     <tag>fail</tag>
   </notification>
 
-  <notification name="LinkFailedTooMuchPhysics">オブジェクトが使用する物理リソースが多すぎます－そのダイナミクスが無効になっています。
+  <notification name="LinkFailedTooMuchPhysics">オブジェクトが使用する物理リソースが多すぎます‐そのダイナミクスが無効になっています。
     <tag>fail</tag>
   </notification>
 
@@ -5530,7 +5565,7 @@ Flickrアカウントへの投稿を[APP_NAME]に許可しますか？
     <tag>fail</tag>
     <usetemplate name="okbutton" yestext="ＯＫ" />
   </notification>
-  <notification name="PickLimitReached" label="" type="alertmodal">最大数のピックがすでに作成されているため、別のピックを作成できません。
+  <notification name="PickLimitReached" label="">最大数のピックがすでに作成されているため、別のピックを作成できません。
     <unique />
     <tag>fail</tag>
     <tag>confirm</tag>

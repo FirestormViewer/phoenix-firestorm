@@ -8,8 +8,10 @@
   <text name="LabelItemNameTitle">名前：</text>
   <text name="LabelItemDescTitle">説明：</text>
   <text name="LabelCreatorTitle">制作者：</text>
+  <text name="LabelCreatorName">テスト文字列　無視してください</text>
   <button label="プロフィール…" label_selected="" name="BtnCreator" />
   <text name="LabelOwnerTitle">所有者：</text>
+  <text name="LabelOwnerName">テスト文字列　無視してください</text>
   <button label="プロフィール…" label_selected="" name="BtnOwner" />
   <text name="LabelAcquiredTitle">入手日時：</text>
   <text name="LabelAcquiredDate">2006年5月24日水曜日　12：50：46</text>
@@ -27,7 +29,7 @@
   <check_box label="編集" name="CheckNextOwnerModify" />
   <check_box label="コピー" name="CheckNextOwnerCopy" />
   <check_box label="再販・譲渡" name="CheckNextOwnerTransfer" />
-  <check_box label="売り出し中" name="CheckPurchase" />
+  <check_box label="販売中" name="CheckPurchase" />
   <combo_box name="ComboBoxSaleType">
     <combo_box.item label="コピー" name="Copy" />
     <combo_box.item label="中身" name="Contents" />
@@ -35,4 +37,11 @@
   </combo_box>
   <spinner label="価格：" name="Edit Cost" />
   <text name="CurrencySymbol">L$</text>
+  <!-- FS -->
+  <text name="BaseMaskDebug">Ｂ：</text>
+  <text name="OwnerMaskDebug">Ｏ：</text>
+  <text name="GroupMaskDebug">Ｇ：</text>
+  <text name="EveryoneMaskDebug">Ｅ：</text>
+  <text name="NextMaskDebug">Ｎ：</text>
+  <!-- /FS -->
 </floater>

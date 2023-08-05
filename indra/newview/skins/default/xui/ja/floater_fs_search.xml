@@ -4,11 +4,11 @@
   <floater.string name="string.location">位置：[LOCATION]</floater.string>
   <floater.string name="string.traffic">トラフィック：[DWELL]</floater.string>
   <floater.string name="string.area">場所：[AREA]</floater.string>
-  <floater.string name="string.members">メンバー数：[MEMBER_COUNT]</floater.string>
+  <floater.string name="string.members">メンバー数：[MEMBER_COUNT]名</floater.string>
   <floater.string name="string.founder">創設者：[FOUNDER]</floater.string>
   <floater.string name="string.age">年齢：[AGE]</floater.string>
   <floater.string name="string.partner">パートナー：[PARTNER]</floater.string>
-  <floater.string name="string.listing_price">Listing Price: [LISTING_PRICE]</floater.string>
+  <floater.string name="string.listing_price">掲載料：[LISTING_PRICE]</floater.string>
   <floater.string name="string.slurl">[SLURL]</floater.string>
   <floater.string name="string.duration">期間：[DURATION]</floater.string>
   <floater.string name="string.covercharge">サービス料：[COVERCHARGE]</floater.string>
@@ -24,11 +24,11 @@
   </tab_container>
   <!-- Details/Action Panes -->
   <panel name="panel_ls_details">
-    <text_editor name="title" value="未定義の名前e" />
+    <text_editor name="title" value="未定義の名前" />
     <texture_picker name="snapshot" />
     <texture_picker name="snapshot_parcel" />
-    <text_editor name="aux1" value="Auxilary info field 1" />
-    <text_editor name="aux2" value="Auxilary info field 2" />
+    <text_editor name="aux1" value="補助情報フィールド１" />
+    <text_editor name="aux2" value="補助情報フィールド２" />
     <icon name="maturity_icon" />
     <text_editor name="location" value="位置情報のフィールド" />
     <text_editor name="desc" value="想像力の鍵でこの扉を開けるのだ。音の次元、視覚の次元、心の次元。トワイライト・ゾーンに足を踏み入れたのだ。スクリーンに映し出される訴訟当事者たちは俳優ではない。彼らは本物の市民であり、本物の小額裁判所に訴えを起こした後、そこでの訴えを取り下げ、この場、つまり人民裁判所で解決するよう説得されているのだ。" />

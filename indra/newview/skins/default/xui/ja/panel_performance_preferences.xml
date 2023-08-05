@@ -7,7 +7,21 @@
   <button label="推奨設定にリセット" name="defaults_btn" />
   <view_border name="border0" />
   <text name="quality_lbl">品質と速度</text>
-  <text name="fastest_lbl">距離と速度</text>
+  <text name="FasterText">速度優先</text>
+  <icon name="LowGraphicsDivet" />
+  <icon name="LowMidGraphicsDivet" />
+  <icon name="MidGraphicsDivet" />
+  <icon name="MidHighGraphicsDivet" />
+  <icon name="HighGraphicsDivet" />
+  <icon name="HighUltraGraphicsDivet" />
+  <icon name="UltraGraphicsDivet" />
+  <text name="BetterText">品質優先</text>
+  <slider name="quality_vs_perf_selection" />
+  <text name="ShadersPrefText">低</text>
+  <text name="ShadersPrefText2">中</text>
+  <text name="ShadersPrefText3">高</text>
+  <text name="ShadersPrefText4">最高</text>
+  <text name="fastest_lbl">最高速度</text>
   <radio_group name="graphics_quality">
     <radio_item name="0" />
     <radio_item name="1" />
@@ -53,9 +67,13 @@
   </combo_box>
   <view_border name="border4" />
   <text name="photo_lbl">写真</text>
-  <text name="photo_desc">詳細度を最大にすると撮影に適した画像になりますが、フレームレートが下がります。</text>
+  <text name="photo_desc">詳細度を最大にすると撮影に適した画像になりますが、フレームレートが下がります。 
+[APP_NAME]フォトツールは適切なバランスを見つけるのに役立ちます。</text>
+  <button name="open_phototools" label="フォトツール" tool_tip="フォトツールを開いて、高度な写真設定を行います。" />
   <spinner label="距離の詳細：" name="render_volume_lod" />
-  <text name="photo_desc">（0.0～4.0の値を入れてください）</text>
+  <!--
+  <text name="photo_desc">（0.0～0.4の値を入れてください）</text>
+  -->
   <text name="1_lbl">1</text>
   <text name="2_lbl">2</text>
   <text name="3_lbl">3</text>

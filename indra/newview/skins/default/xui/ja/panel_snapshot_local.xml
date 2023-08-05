@@ -18,8 +18,11 @@
     <combo_box.item label="PNG（可逆圧縮）" name="PNG" />
     <combo_box.item label="JPEG" name="JPEG" />
     <combo_box.item label="BMP（可逆圧縮）" name="BMP" />
+    <combo_box.item label="WebP`（可逆圧縮）" name="WebP" />
   </combo_box>
   <slider label="品質：" name="image_quality_slider" />
+  <check_box name="local_remember_location_sessions" />
+  <text name="local_remember_location_sessions_text">セッション間で場所とファイル名を保存する</text>
   <button label="キャンセル" name="cancel_btn" />
   <flyout_button label="保存" name="save_btn" tool_tip="画像をファイルとして保存">
     <flyout_button.item label="保存" name="save_item" />

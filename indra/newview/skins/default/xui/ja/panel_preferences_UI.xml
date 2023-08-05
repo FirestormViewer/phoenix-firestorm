@@ -79,8 +79,8 @@
       <check_box label="Linuxで既に使用されているショートカットを再マップする（Linuxのみ）" name="FSRemapLinuxShortcuts" tool_tip="有効にすると、Linuxオペレーティング・システムですでに使用されているショートカット（CtrlーAltーFxなど）がリマップされます。" />
       <check_box label="統計ウィンドウにフォーカスが当たらないようにする" name="FSStatisticsNoFocus" tool_tip="有効にすると、他のウィンドウが閉じられているときに統計ウィンドウがフォーカスをしないようになります。（項目のグラフレイアウトを変更するなどのアクションは、有効になっていても可能です）" />
 
-      <slider label="Number of times IM tabs flash:" name="ButtonsFlashCount" />
-      <slider label="IM tab flash period:" tool_tip="Time in seconds a single flash of IM tabs takes - used for IM notifications" name="ButtonFlashRate" />
+      <slider label="ＩＭタブのフラッシュ回数：" name="ButtonsFlashCount" />
+      <slider label="ＩＭタブのフラッシュ期間：" tool_tip="ＩＭタブの1回のフラッシュにかかる時間（秒）‐ＩＭ通知に使用されます。" name="ButtonFlashRate" />
       <text name="ButtonFlashRateText">秒</text>
     </panel>
 
@@ -206,15 +206,18 @@
 
       <text name="tooltip_textbox5">フォントサイズの調整：</text>
       <spinner name="font_size_adj_slider" />
-      <text name="tooltip_textbox6">ポイント（再起動が必要です）デフォルトは０です。これより大きな値を指定すると、うまく動作しないことがあります。</text>
+      <text name="tooltip_textbox6">ポイント（再起動が必要です）デフォルトは０です。
+これより大きな値を指定すると、うまく動作しないことがあります。</text>
 
-      <text name="tooltip_textbox3">Chat Line spacing:</text>
+      <text name="tooltip_textbox3">チャットの行間隔：</text>
       <spinner name="chat_line_spacing_slider" />
-      <text name="tooltip_textbox4">ピクセル（再起動が必要です） [VIEWER_GENERATION]のデフォルトは０。ビューア１のデフォルトは２です。</text>
+      <text name="tooltip_textbox4">ピクセル（再起動が必要です） 
+[VIEWER_GENERATION]のデフォルトは０。ビューア１のデフォルトは２です。</text>
 
       <text name="Label_FolderItemViewHeight">フォルダ項目の高さ：</text>
       <spinner name="FSFolderViewItemHeight" />
-      <text name="Label_FolderItemViewHeight_Scale">ピクセル（再起動が必要です）[VIEWER_GENERATION]のデフォルトは２０です。ビューア１のデフォルトは１８です。</text>
+      <text name="Label_FolderItemViewHeight_Scale">ピクセル（再起動が必要です）
+[VIEWER_GENERATION]のデフォルトは２０です。ビューア１のデフォルトは１８です。</text>
 
       <text name="text_box_notecard_font">ノートカードエディタのフォント：</text>
       <combo_box name="FSNotecardFontName" tool_tip="ノートカードエディタで使用するフォントの名前">

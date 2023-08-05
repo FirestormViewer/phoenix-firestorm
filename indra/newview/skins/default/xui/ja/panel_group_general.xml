@@ -13,10 +13,10 @@
 
     <text name="prepend_founded_by">創設者：</text>
     <name_box initial_value="（読み込んでいます…）" name="founder_name" />
-    <button name="copy_name" label="Copy Name"/>
+    <button name="copy_name" label="名前をコピー"/>
 
     <button label="参加します！" name="btn_join" />
-    <texture_picker label="" name="insignia" tool_tip="クリックして画像を選択します。" />
+    <texture_picker label="" name="insignia" tool_tip="クリックで画像を選択してください。" />
     <text name="join_cost_text">無料</text>
 
     <text_editor name="charter">グループの理念、指針を記入してください。</text_editor>
@@ -32,7 +32,7 @@
         <check_box label="プロフィールに表示" name="list_groups_in_profile" tool_tip="あなたのプロフィールにこのグループを表示するかどうかの設定を行います。" />
         <check_box label="グループ通知を受信" name="receive_notices" tool_tip="このグループからの通知を受信するかどうかの設定を行います。グループからスパムが送られてくる場合は、このボックスのチェックを外してください。" />
         <!-- <exodus> -->
-        <check_box label="Receive group instant messages" name="receive_chat" tool_tip="Sets whether you want to participate in group chat for this group." />
+        <check_box label="グループのインスタントメッセージを受け取る" name="receive_chat" tool_tip="このグループのグループチャットに参加するかどうかを設定します。" />
         <!-- </exodus> -->
         <text name="active_title_label">タイトル：</text>
         <combo_box name="active_title" tool_tip="このグループをアクティブにしたときに、アバター名の上に表示されるタイトルを設定します。" />

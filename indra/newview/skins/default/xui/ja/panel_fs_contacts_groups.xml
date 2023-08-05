@@ -6,7 +6,7 @@
   <text name="groupcount" />
   <button label="ＩＭ／コール" name="chat_btn" tool_tip="インスタンスメッセージのセッションを開きます。" />
   <button label="プロフィール" name="info_btn" />
-  <button label="グループの肩書" name="titles_btn" />
+  <button label="タイトル" name="titles_btn" />
   <button label="有効化" name="activate_btn" />
   <button label="脱退" name="leave_btn" />
   <button label="作成…" name="create_btn" />

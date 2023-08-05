@@ -10,7 +10,7 @@
     <combo_box.item label="1600✕1200" name="1600x1200" value="[i1600,i1200]" />
     <combo_box.item label="Custom" name="Custom" value="[i-1,i-1]" />
   </combo_box>
-  <combo_box tool_tip="画像フィルタ">
+  <combo_box name="filters_combobox" tool_tip="画像フィルタ">
     <combo_box.item label="フィルタなし" name="NoFilter" value="NoFilter" />
   </combo_box>
   <spinner name="custom_snapshot_width" />

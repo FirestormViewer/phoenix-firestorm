@@ -46,7 +46,7 @@
         <combo_box.item label="開始色アルファ" name="blend_src_alpha" value="blend_src_alpha" />
         <combo_box.item label="ブレンド１─開始色アルファ" name="blend_one_minus_src_alpha" value="blend_one_minus_src_alpha" />
       </combo_box>
-      <text name="End_Glow_Label">End Glow:</text>
+      <text name="End_Glow_Label">終了グロー：</text>
       <spinner name="end_glow_spinner" />
       <combo_box name="blend_func_dest_combo">
         <combo_box.item label="ブレンド１" name="blend_one" value="blend_one" />

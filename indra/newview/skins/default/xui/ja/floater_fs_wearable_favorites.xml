@@ -3,7 +3,7 @@
   <floater.string name="empty_list">服装をここにドラッグしてリストに追加します。</floater.string>
   <floater.string name="search_no_items">そのようなアイテムは見つかりませんでした。</floater.string>
   <panel name="buttons_panel">
-    <filter_editor name="wearable_filter_input" />
+    <filter_editor name="wearable_filter_input" label="服装をフィルタ" />
     <menu_button name="options_btn" tool_tip="お気に入りの服装のオプション" />
     <button name="remove_btn" tool_tip="お気に入りの服装一覧から削除" />
   </panel>

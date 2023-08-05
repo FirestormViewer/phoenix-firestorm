@@ -15,7 +15,7 @@
       <menu_item_call label="ファイルから読み込む…" name="LoadFromFile" />
       <menu_item_call label="ファイルに保存…" name="SaveToFile" />
       <menu_item_separator />
-      <menu_item_call label="スクリプトの初期設定…" name="Colors" />
+      <menu_item_call label="スクリプトの初期設定…" name="ScriptPrefs" />
     </menu>
     <menu label="編集" name="Edit">
       <menu_item_call label="取り消し" name="Undo" />
@@ -32,9 +32,28 @@
       <menu_item_call label="指定行に移動…" name="Go to line..." />
     </menu>
     <menu label="ＬＳＬリファレンス" name="Help">
+      <menu_item_call label="ヘルプ…" name="Help..." />
       <menu_item_call label="キーワードヘルプ…" name="Keyword Help..." />
+      <menu_item_call label="スクリプトライブラリ…" name="Script Library" />
     </menu>
   </menu_bar>
+  <layout_stack name="script_editor_button_bar">
+    <layout_panel name="script_editor_buttons_panel">
+      <button tool_tip="スクリプトを保存" label="" name="save_btn" />
+      <button tool_tip="外部スクリプトエディタ" label="" layout="topleft" name="Edit_btn" />
+      <button tool_tip="ハードディスクからスクリプトを読み込む" label="" name="load_disk_btn" />
+      <button tool_tip="ハードディスクからスクリプトを保存" label="" name="save_disk_btn" />
+      <button tool_tip="カット" label="" name="cut_btn" />
+      <button tool_tip="コピー" label="" name="copy_btn" />
+      <button tool_tip="ペースト" label="" name="paste_btn" />
+      <button tool_tip="取り消し" label="" name="undo_btn" />
+      <button tool_tip="やり直し" label="" name="redo_btn" />
+      <button tool_tip="検索／置換" label="" name="search_btn" />
+      <button tool_tip="スクリプトエディタ初期設定" label="" name="prefs_btn" />
+      <loading_indicator name="progress_indicator" />
+      <icon name="status_indicator" />
+    </layout_panel>
+  </layout_stack>
   <tab_container name="Tabset">
     <panel name="Script" label="スクリプト">
       <script_editor name="Script Editor">読み込んでいます…</script_editor>
@@ -44,8 +63,8 @@
     </panel>
   </tab_container>
   <scroll_list name="lsl errors" />
-  <text name="line_col" />
   <combo_box label="挿入…" name="Insert..." />
-  <button label="保存" label_selected="保存" name="Save_btn" />
-  <button label="編集…" name="Edit_btn" />
+  <text name="line_col" value="0行目、0列目" />
+  <button label="編集…" name="edit_btn_2" />
+  <button label="保存" label_selected="保存" name="save_btn_2" />
 </panel>

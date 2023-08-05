@@ -11,7 +11,7 @@
 
 一緒に何かするフレンドをお探しですか？
 
-[secondlife:///app/floater/destinations 生き佐伯ガイド]からSecond Lifeスタッフによって選ばれた場所に行くことができます。
+[secondlife:///app/floater/destinations 行き先ガイド]からSecond Lifeスタッフによって選ばれた場所に行くことができます。
 [secondlife:///app/search/ 検索]でSecond Life上のキーワードから探してみるのもいいかもしれません。</string>
   <!--
   *WORKAROUND: for group_list.no_items_msg & group_list.no_filtered_items_msg attributes.
@@ -20,11 +20,19 @@
   <string name="no_filtered_groups_msg" value="お探しのフレンドは見つかりましたか？[secondlife:///app/search/groups/[SEARCH_TERM] 検索]をお試しください。" />
   <string name="no_groups_msg">あなたはどこのグループにも所属していません。
 
-[https://community.secondlife.com/knowledgebase/joining-and-participating-in-groups-r51/ Second Lifeのグループへの参加]を参考にグループを探してみまそう。</string>
+[https://community.secondlife.com/knowledgebase/joining-and-participating-in-groups-r51/ Second Lifeのグループへの参加]を参考にグループを探してみましょう。</string>
   <string name="no_groups_msg" value="グループをお探しですか？[secondlife:///app/search/groups 検索]をお試しください。" />
   <string name="MiniMapToolTipMsg" value="[REGION]（ダブルクリックでマップを開く。Shift‐ドラッグで水平・垂直移動）" />
   <string name="AltMiniMapToolTipMsg" value="[REGION]（ダブルクリックでテレポート。Shift‐ドラッグで水平・垂直移動）" />
   <string name="GroupCountWithInfo" value="あなたは現在、[COUNT]グループに属しています。あと[REMAINING]グループに参加することができます。[secondlife:/// 上限を増やす]" />
+  <!-- FS -->
+  <panel.string name="empty_list">この連絡先セットは空です。</panel.string>
+  <panel.string name="no_sets">セットがありません。</panel.string>
+  <panel.string name="all_sets">すべてのセット</panel.string>
+  <panel.string name="pseudonyms">エイリアス</panel.string>
+  <panel.string name="AllFriendsTitle">すべて（[ALL]人）</panel.string>
+  <panel.string name="OnlineFriendsTitle">オンライン（[ONLINE]人）</panel.string>
+  <!-- /FS -->
   <tab_container name="tabs">
     <!-- ================================= NEARBY tab =========================== -->
     <panel label="近隣" name="nearby_panel">
@@ -88,5 +96,11 @@
     <panel label="ブロック" name="blocked_panel">
       <panel label="ブロックした人物とオブジェクト" name="panel_block_list_sidetray" />
     </panel>
+    <!-- FS -->
+    <!-- ============================== CONTACT SETS tab ======================= -->
+    <panel name="contact_sets_panel">
+      <panel name="panel_people_contacts_sidetray" label="連絡先セット" />
+    </panel>
+    <!-- /FS -->
   </tab_container>
 </panel>

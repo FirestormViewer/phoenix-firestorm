@@ -50,7 +50,7 @@
       <scroll_list.columns label="説明（ルートプリム）" name="description" />
       <scroll_list.columns label="所有者" name="owner" />
       <scroll_list.columns label="スクリプト" name="scripted" />
-      <scroll_list.columns label="ランドインパクト" name="land_impact" />
+      <scroll_list.columns label="土地への負荷" name="land_impact" />
       <scroll_list.columns label="距離" name="dist_from_you" />
       <scroll_list.columns label="経路探索で使用" name="linkset_use" />
       <scroll_list.columns label="Ａ％" name="a_percent" />

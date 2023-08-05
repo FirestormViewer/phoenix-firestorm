@@ -17,6 +17,7 @@
   <button label="返却" name="return_btn" />
   <button label="上部コライダー取得" name="top_colliders_btn" tool_tip="衝突する可能性が最も高いオブジェクトのリスト" />
   <button label="リージョン再起動" name="restart_btn" tool_tip="２分間のカウントダウン後、リージョンを再起動します" />
+  <text name="label_restart_delay">秒：</text>
   <button label="上部スクリプト取得" name="top_scripts_btn" tool_tip="スクリプトの実行に最も時間を費やしているオブジェクトのリスト" />
   <button label="再起動をキャンセル" name="cancel_restart_btn" tool_tip="リージョンの再起動をキャンセル" />
   <button label="デバッグコンソール" name="region_debug_console_btn" tool_tip="リージョンデバッグコンソールを開く" />
