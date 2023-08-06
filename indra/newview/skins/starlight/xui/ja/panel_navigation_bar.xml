@@ -13,15 +13,15 @@
       <layout_stack name="location_search_layout">
         <!-- Contains the navigation buttons -->
         <layout_panel name="navigation_buttons_visibility_panel">
-          <pull_button name="back_btn" tool_tip="Go back to previous location" />
-          <pull_button name="forward_btn" tool_tip="Go forward one location" />
-          <button name="home_btn" tool_tip="Teleport to home location" />
+          <pull_button name="back_btn" tool_tip="前いた場所に戻る" />
+          <pull_button name="forward_btn" tool_tip="次の場所に行く" />
+          <button name="home_btn" tool_tip="ホームにてレポートする" />
           <!-- About Land Button here -->
-          <button name="About_Land" tool_tip="Opens Land Information window" />
+          <button name="About_Land" tool_tip="土地情報ウィンドウを開く" />
           <!-- end of About Land Button -->
 
           <!-- Windlight Button here -->
-          <button name="PersonalLighting" tool_tip="Opens the Personal Lighting window" />
+          <button name="PersonalLighting" tool_tip="個人の光源ウィンドウを開く" />
           <!-- end of Windlight Button -->
 
         </layout_panel>
@@ -29,8 +29,8 @@
 
         <!-- Contains the location bar -->
         <layout_panel name="location_bar_visibility_panel">
-          <location_input label="Location" name="location_combo">
-            <combo_list height="24" mouse_wheel_opaque="true" />
+          <location_input label="場所" name="location_combo">
+            <combo_list />
           </location_input>
         </layout_panel>
         <!-- Contains the location bar -->
@@ -38,8 +38,8 @@
         <!-- Contains the search bar, can be hidden by control values -->
         <!-- Contains the search bar, can be hidden by code -->
         <layout_panel name="search_bar_visibility_panel">
-          <search_combo_box name="search_combo_box" tool_tip="Search">
-            <combo_editor label="Search MetaVerse" name="search_combo_editor" />
+          <search_combo_box name="search_combo_box" tool_tip="検索">
+            <combo_editor label="メタバースを検索" name="search_combo_editor" />
           </search_combo_box>
         </layout_panel>
         <!-- Contains the search bar, can be hidden by control values -->
@@ -49,12 +49,12 @@
     <!-- Navigation Bar visibility panel -->
     <!-- Favorites Bar visibility panel -->
     <layout_panel name="favorites_bar_visibility_panel">
-      <favorites_bar name="favorite" tool_tip="Drag Landmarks here for quick access to your favorite places!">
+      <favorites_bar name="favorite" tool_tip="ランドマークをここにドラッグすれば、お気に入りの場所に素早くアクセスできます！">
         <!-- More button actually is a text box. -->
         <!-- FS:Ansariel: This widget has a different name because it is a more_button.
             Default skin uses a chevron_button and using the same name
             would result in the more button not being shown! -->
-        <more_button name="more_btn_stl">More &#9660;</more_button>
+        <more_button name="more_btn_stl">続き　▼</more_button>
       </favorites_bar>
     </layout_panel>
     <!-- Favorites Bar visibility panel -->

@@ -214,6 +214,7 @@
       <check_box label="アップロード中に自分のアバターでアニメーションをプレビュー" tool_tip="有効にすると、アップロード中に自分のアバターでアニメーションをプレビューできます。" name="FSUploadAnimationOnOwnAvatar" />
       <check_box label="アニメーションプレビューの詳細情報を常に展開" tool_tip="アニメーション・プレビューのフローターで、高度なアニメーション情報をデフォルトで展開します。" name="FSAnimationPreviewExpanded" />
       <check_box label="拡張スクリプト情報の詳細を有効にする" tool_tip="有効にすると、基本的なスクリプト情報機能が拡張され、ビルド使用時に役立つさまざまな詳細情報が追加されます。" name="FSScriptInfoExtended" />
+      <check_box label="「装着先」メニューの装着スポットをアルファベット順にソート（再起動が必要）" tool_tip="有効にすると、「装着先」メニューの装着物スポットのリストがアルファベット順にソートされます。" name="FSSortAttachmentSpotsAlphabetically" />
     </panel>
 
     <!--Uploads-->

@@ -1,34 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="Teleport History">
   <accordion name="history_accordion">
-    <no_matched_tabs_text name="no_matched_teleports_msg" value="Didn't find what you're looking for? Try [secondlife:///app/search/places/[SEARCH_TERM] Search]." />
-    <no_visible_tabs_text name="no_teleports_msg" value="Teleport history is empty. Try [secondlife:///app/search/places/ Search]." />
-    <accordion_tab name="today" title="Today">
-      <flat_list_view name="today_items" />
-    </accordion_tab>
-    <accordion_tab name="yesterday" title="Yesterday">
-      <flat_list_view name="yesterday_items" />
-    </accordion_tab>
-    <accordion_tab name="2_days_ago" title="2 days ago">
-      <flat_list_view name="2_days_ago" />
-    </accordion_tab>
-    <accordion_tab name="3_days_ago" title="3 days ago">
-      <flat_list_view name="3_days_ago" />
-    </accordion_tab>
-    <accordion_tab name="4_days_ago" title="4 days ago">
-      <flat_list_view name="4_days_ago" />
-    </accordion_tab>
-    <accordion_tab name="5_days_ago" title="5 days ago">
-      <flat_list_view name="5_days_ago_items" />
-    </accordion_tab>
-    <accordion_tab name="6_days_and_older" title="6 days and older">
-      <flat_list_view name="6_days_and_older_items" />
-    </accordion_tab>
-    <accordion_tab name="1_month_and_older" title="1 month and older">
-      <flat_list_view name="1_month_and_older_items" />
-    </accordion_tab>
-    <accordion_tab name="6_months_and_older" title="6 months and older">
-      <flat_list_view name="6_months_and_older_items" />
-    </accordion_tab>
+    <no_matched_tabs_text name="no_matched_teleports_msg" value="お探しのものは見つかりましたか？[secondlife:///app/search/places/[SEARCH_TERM] 検索]をお試しください。" />
+    <no_visible_tabs_text name="no_teleports_msg" value="テレポートの履歴には何も情報がありません。[secondlife:///app/search/places/ 検索]をお試しください。" />
+    <accordion_tab name="today" title="今日" />
+    <accordion_tab name="yesterday" title="昨日" />
+    <accordion_tab name="2_days_ago" title="一昨日" />
+    <accordion_tab name="3_days_ago" title="３日前" />
+    <accordion_tab name="4_days_ago" title="４日前" />
+    <accordion_tab name="5_days_ago" title="５日前" />
+    <accordion_tab name="6_days_and_older" title="６日以上前" />
+    <accordion_tab name="1_month_and_older" title="１ヶ月以上前" />
+    <accordion_tab name="6_months_and_older" title="半年以上前" />
   </accordion>
+  <panel label="bottom_panel" name="bottom_panel">
+    <button name="gear_btn" tool_tip="オプションを表示します" />
+  </panel>
 </panel>

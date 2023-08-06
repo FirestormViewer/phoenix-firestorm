@@ -1,90 +1,88 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel name="object properties" title="Object Profile">
-  <panel.string name="text deed continued">死亡</panel.string>
-  <panel.string name="text deed">死亡</panel.string>
-  <panel.string name="text modify info 1">You can modify this object</panel.string>
-  <panel.string name="text modify info 2">You can modify these objects</panel.string>
-  <panel.string name="text modify info 3">You can't modify this object</panel.string>
-  <panel.string name="text modify info 4">You can't modify these objects</panel.string>
-  <panel.string name="text modify info 5">You can't modify this object across a region boundary</panel.string>
-  <panel.string name="text modify info 6">You can't modify these objects across a region boundary</panel.string>
-  <panel.string name="text modify warning">This object has linked parts</panel.string>
-  <panel.string name="Cost Default">Price: L$</panel.string>
-  <panel.string name="Cost Total">Total Price: L$</panel.string>
-  <panel.string name="Cost Per Unit">Price Per: L$</panel.string>
-  <panel.string name="Cost Mixed">Mixed Price</panel.string>
-  <panel.string name="Sale Mixed">Mixed Sale</panel.string>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="object properties" title="オブジェクトのプロフィール">
+  <panel.string name="text deed continued">再譲渡</panel.string>
+  <panel.string name="text deed">譲渡</panel.string>
+  <panel.string name="text modify info 1">このオブジェクトは、修正することができます。</panel.string>
+  <panel.string name="text modify info 2">これらのオブジェクトは、修正することができます。</panel.string>
+  <panel.string name="text modify info 3">このオブジェクトは、修正することができません。</panel.string>
+  <panel.string name="text modify info 4">これらのオブジェクトは、修正することができません。</panel.string>
+  <panel.string name="text modify info 5">リージョンの境界を越えて、このオブジェクトを修正することはできません。</panel.string>
+  <panel.string name="text modify info 6">リージョンの境界を越えて、これらのオブジェクトを修正することはできません。</panel.string>
+  <panel.string name="text modify warning">このオブジェクトには、パーツがリンクされています。</panel.string>
+  <panel.string name="Cost Default">価格：L$</panel.string>
+  <panel.string name="Cost Total">合計価格：L$</panel.string>
+  <panel.string name="Cost Per Unit">単価：L$</panel.string>
+  <panel.string name="Cost Mixed">総額</panel.string>
+  <panel.string name="Sale Mixed">販売額</panel.string>
   <button name="back_btn" />
-  <text name="title" value="Object Profile" />
-  <text name="where" value="(Inworld)" />
+  <text name="title" value="オブジェクトのプロフィール" />
+  <text name="where" value="（インワールド）" />
   <scroll_container name="item_profile_scroll">
-    <panel name="properties_panel">
-      <text name="Name:">Name:</text>
-      <line_editor name="Object Name" tool_tip="The name is limited to 63 characters. Longer prim names are cut short. Names can only consist of printable characters found in the ASCII-7 (non-extended) character set, with the exception of the vertical bar/pipe &apos;|&apos;." />
-      <text name="Description:">Description:</text>
-      <line_editor name="Object Description" tool_tip="When people have &apos;Hover Tips on All Objects&apos; selected in the viewer's settings, they'll see the object description pop-up for any object under their mouse pointer. The prim description is limited to 127 bytes any string longer then that will be truncated." />
-      <text name="CreatorNameLabel">Creator:</text>
-      <text name="Creator Name">TestString PleaseIgnore</text>
-      <text name="Owner:">Owner:</text>
-      <text name="Owner Name">TestString PleaseIgnore</text>
-      <text name="Group_label">Group:</text>
-      <button name="button set group" tool_tip="Choose a group to share this object's permissions" />
-      <name_box initial_value="Loading..." name="Group Name Proxy" />
-      <button label="Deed" label_selected="Deed" name="button deed" tool_tip="Deeding gives this item away with next owner permissions. Group shared objects can be deeded by a group officer." />
-      <text name="label click action">Click to:</text>
-      <combo_box name="clickaction" tool_tip="A click action enables you to interact with an object with a single left click. Each click action has a special cursor indicating what it does. Some click actions have requirements to function. For example Touch and Pay require scripts">
-        <combo_box.item label="Touch  (default)" name="Touch/grab(default)" value="Touch/grab (default)" />
-        <combo_box.item label="Sit on object" name="Sitonobject" value="Sit on object" />
-        <combo_box.item label="Buy object" name="Buyobject" value="Buy object" />
-        <combo_box.item label="Pay object" name="Payobject" value="Pay object" />
-        <combo_box.item label="Open" name="Open" value="Open" />
-        <combo_box.item label="Zoom" name="Zoom" value="Zoom" />
-        <combo_box.item label="None" name="None" value="None" />
+    <panel label="" name="properties_panel">
+      <text name="Name:">名前：</text>
+      <line_editor name="Object Name" tool_tip="使用できる名前の文字数は最大６３文字までです。長いプリム名は短縮されます。名前に使用できる文字はASCII-7 （非拡張）に含まれる印字可能な文字のみです（縦線「|」は例外）。" />
+      <text name="Description:">説明：</text>
+      <line_editor name="Object Description" tool_tip="ビューアの設定で[すべてのオブジェクト上でヒントを表示]が選択されている場合、オブジェクトにマウスのポインタをかざすとそのオブジェクトの説明がポップアップ表示されます。プリムの説明は最大127バイトまでに制限されているため、それよりも長い文字列は切り捨てられます。" />
+      <text name="CreatorNameLabel">制作者：</text>
+      <text name="Creator Name">（読み込んでいます…）</text>
+      <text name="Owner:">所有者：</text>
+      <text name="Owner Name">（読み込んでいます…）</text>
+      <text name="Group_label">グループ：</text>
+      <button name="button set group" tool_tip="このオブジェクト権限を共有するグループを選択します" />
+      <name_box initial_value="読み込んでいます…" name="Group Name Proxy" />
+      <button label="譲渡" label_selected="譲渡" name="button deed" tool_tip="このアイテムを譲渡すると「次の所有者」の権限が適用されます。グループ共有オブジェクトは、グループのオフィサーが譲渡できます。" />
+      <text name="label click action">クリックで：</text>
+      <combo_box name="clickaction" tool_tip="マウスで１回左クリックすると、オブジェクトに対してアクションを起こせるようになります。各クリックアクションには、何ができるかを示す特別なカーソルがあります。クリックアクションによっては、動作要件が必要なものもあります。例えば、「触る」や「支払い」にはスクリプトが必要になります。">
+        <combo_box.item label="触る（デフォルト）" name="Touch/grab(default)" />
+        <combo_box.item label="オブジェクトに座る" name="Sitonobject" />
+        <combo_box.item label="オブジェクトを買う" name="Buyobject" />
+        <combo_box.item label="オブジェクトに支払う" name="Payobject" />
+        <combo_box.item label="開く" name="Open" />
+        <combo_box.item label="ズーム" name="Zoom" />
+        <combo_box.item label="なし" name="None" />
       </combo_box>
       <panel name="perms_inv">
-        <text name="perm_modify">You can modify this object</text>
-        <text name="Anyone can:">Anyone:</text>
-        <check_box label="Copy" name="checkbox allow everyone copy" tool_tip="Anyone can take a copy of the object. Object and all of its contents must be copy and transfer permissive." />
-        <check_box label="Move" name="checkbox allow everyone move" tool_tip="Anyone can move the object." />
-        <text name="GroupLabel">Group:</text>
-        <check_box label="Share" name="checkbox share with group" tool_tip="Allow all members of the set group to share your modify permissions for this object. You must Deed to enable role restrictions." />
-        <text name="NextOwnerLabel">Next owner:</text>
-        <check_box label="Modify" name="checkbox next owner can modify" tool_tip="Next owner can edit properties like item name or scale of this object." />
-        <check_box label="Copy" name="checkbox next owner can copy" tool_tip="Next owner can make unlimited copies of this object. Copies maintain creator information, and can never be more permissive than the item being copied." />
-        <check_box label="Transfer" name="checkbox next owner can transfer" tool_tip="Next owner can give away or resell this object"/>
+        <text name="perm_modify">このオブジェクトは以下の条件で修正することができます。</text>
+        <text name="Anyone can:">全員：</text>
+        <check_box label="コピー" name="checkbox allow everyone copy" tool_tip="オブジェクトのコピーは誰でも受け取ることができます。オブジェクトとそのオブジェクトの中身はすべて、コピーまたは譲渡できるように設定する必要があります。" />
+        <check_box label="移動" name="checkbox allow everyone move" tool_tip="オブジェクトは誰でも動かすことができます。" />
+        <check_box label="エクスポート" name="checkbox allow export" tool_tip="次の所有者は、このオブジェクトを他のグリッドにエクスポートできます。" />
+        <text name="GroupLabel">グループ：</text>
+        <check_box label="共有" name="checkbox share with group" tool_tip="設定したグループのメンバー全員にこのオブジェクトの修正権限を与えます。譲渡しない限り、役割制限を有効にはできません。" />
+        <text name="NextOwnerLabel">次の所有者：</text>
+        <check_box label="修正" name="checkbox next owner can modify" tool_tip="次の所有者は、アイテム名などのプロパティ内容を編集したり、このオブジェクトのサイズを変更することができます。" />
+        <check_box label="コピー" name="checkbox next owner can copy" tool_tip="次の所有者は、このオブジェクトを無制限にコピーできます。コピーには制作者の情報が含まれ、コピー元のアイテムと違って許可などに関し制限があります。" />
+        <check_box label="再販・譲渡" name="checkbox next owner can transfer" tool_tip="次の所有者は、このオブジェクトを他人に譲渡したり再販できます" />
       </panel>
-      <check_box label="For Sale" name="checkbox for sale" tool_tip="Lets people buy this object, its content or it copy inworld for specified price." />
-      <combo_box name="sale type" tool_tip="Select whether purchaser will receive a copy, copy of the content or item itself.">
-        <combo_box.item name="Copy" label="Copy" value="2" />
-        <combo_box.item name="Contents" label="Contents" value="3" />
-        <combo_box.item name="Original" label="Original" value="1" />
+      <check_box label="販売" name="checkbox for sale" tool_tip="このオブジェクトやオブジェクトの中身が購入できるようになるか、指定価格でインワールドにコピーできるようになります。" />
+      <combo_box name="sale type" tool_tip="購入者がコピーを受け取るのか、コピーの中身を受け取るのか、またはアイテム自体を受け取るのかを選択してください。">
+        <combo_box.item label="コピー" name="Copy" />
+        <combo_box.item label="中身" name="Contents" />
+        <combo_box.item label="オリジナル" name="Original" />
       </combo_box>
-      <spinner name="Edit Cost" label="Price: L$" tool_tip="Object cost." />
-      <check_box label="Show in search" name="search_check" tool_tip="Let people see this object in search results" />
-      <text name="pathfinding_attributes_label">Pathfinding attributes:</text>
-      <text name="pathfinding_attributes_value">
-      </text>
-      <text name="B:">B:</text>
-      <text name="O:">O:</text>
-      <text name="G:">G:</text>
-      <text name="E:">E:</text>
-      <text name="N:">N:</text>
-      <text name="F:">F:</text>
+      <spinner label="価格： L$" name="Edit Cost" tool_tip="オブジェクトの価格。" />
+      <check_box label="検索に表示" name="search_check" tool_tip="このオブジェクトを検索結果に表示します" />
+      <text name="pathfinding_attributes_label">経路探索属性：</text>
+      <text name="B:">Ｂ：</text>
+      <text name="O:">Ｏ：</text>
+      <text name="G:">Ｇ：</text>
+      <text name="E:">Ｅ：</text>
+      <text name="N:">Ｎ：</text>
+      <text name="F:">Ｆ：</text>
     </panel>
   </scroll_container>
-
-  <layout_stack name="buttons_ls" orientation="horizontal">
+  <layout_stack name="buttons_ls">
     <layout_panel name="open_btn_panel">
-      <button label="Open" name="open_btn" tool_tip="Open to view the Object Contents." />
+      <button label="開く" name="open_btn" tool_tip="「オブジェクトの中身」を開いて確認します。" />
     </layout_panel>
     <layout_panel name="pay_btn_panel">
-      <button label="Pay" name="pay_btn" tool_tip="Open Pay Window. Object must have pay script for this to work." />
+      <button label="支払う" name="pay_btn" tool_tip="「支払い」ウィンドウを開きます。オブジェクトでこの動作を実行するには、支払い用のスクリプトが必要です。" />
     </layout_panel>
     <layout_panel name="buy_btn_panel">
-      <button label="Buy" name="buy_btn" tool_tip="Open Buy Window. Requires the object to be set for sale." />
+      <button label="買う" name="buy_btn" tool_tip="「購入」ウィンドウを開きます。オブジェクトは販売用に設定する必要があります。" />
     </layout_panel>
     <layout_panel name="details_btn_panel">
-      <button label="Details" tool_tip="Open Inspect Object Window." />
+      <button label="詳細" name="details_btn" tool_tip="「オブジェクトを調べる」ウィンドウを開きます。" />
     </layout_panel>
   </layout_stack>
 </panel>

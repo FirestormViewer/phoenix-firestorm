@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="General" name="general_tab">
-  <panel.string name="help_text">The General tab contains general information about this group, a list of members, general Group Preferences and member options.
+<panel label="一般" name="general_tab">
+  <panel.string name="help_text">「一般」タブには、メンバー一覧、設定、メンバーのオプションなど、このグループに関する一般的な情報が記されています。
 
-Hover your mouse over the options for more help.</panel.string>
-  <panel.string name="group_info_unchanged">General group information has changed</panel.string>
-  <panel.string name="incomplete_member_data_str">Retrieving member data</panel.string>
+オプションにマウスカーソルを当てると詳しい説明が表示されます。</panel.string>
+  <panel.string name="group_info_unchanged">一般的なグループ情報が変更されました。</panel.string>
+  <panel.string name="incomplete_member_data_str">メンバーのデータを検索</panel.string>
   <panel name="group_info_top">
-    <texture_picker label="" name="insignia" tool_tip="Click to enlarge picture" />
-    <text name="prepend_founded_by">Founder:</text>
-    <text name="founder_name" />
-    <text name="join_cost_text">Free</text>
-    <button label="JOIN NOW!" name="btn_join" />
+    <texture_picker label="" name="insignia" tool_tip="クリックして画像を選択します。" />
+    <text name="prepend_founded_by">創設者：</text>
+    <name_box initial_value="（取得中）" name="founder_name" />
+    <text name="join_cost_text">無料</text>
+    <button label="参加します！" name="btn_join" />
   </panel>
-  <text_editor name="charter">Group Charter</text_editor>
+  <text_editor name="charter">グループの理念、指針を記入してください。</text_editor>
   <name_list name="visible_members">
-    <name_list.columns label="Member" name="name" />
-    <name_list.columns label="Title" name="title" />
-    <name_list.columns label="Status" name="status" />
+    <name_list.columns label="メンバー" name="name" />
+    <name_list.columns label="タイトル" name="title" />
+    <name_list.columns label="ステータス" name="status" />
   </name_list>
-  <text name="my_group_settngs_label">Me</text>
-  <text name="active_title_label">My title:</text>
-  <combo_box name="active_title" tool_tip="Sets the title that appears in your avatar&apos;s name tag when this group is active." />
-  <check_box label="Receive group notices" name="receive_notices" tool_tip="Sets whether you want to receive Notices from this group.  Uncheck this box if this group is spamming you." />
+  <text name="my_group_settngs_label">自分</text>
+  <text name="active_title_label">タイトル：</text>
+  <combo_box name="active_title" tool_tip="このグループをアクティブにしたときに、アバター名の上に表示されるタイトルを設定します。" />
+  <check_box label="グループ通知を受信" name="receive_notices" tool_tip="このグループからの通知を受信するかどうかの設定を行います。グループからスパムが送られてくる場合は、このボックスのチェックを外してください。" />
   <!-- <exodus> -->
-  <check_box label="Receive group instant messages" name="receive_chat" tool_tip="Sets whether you want to participate in group chat for this group." />
+  <check_box label="グループチャットを受け取る" name="receive_chat" tool_tip="このグループからのチャットを受信するかどうかを設定します。チャットセッションを手動で開始することもできます。" />
   <!-- </exodus> -->
-  <check_box label="Show in my profile" name="list_groups_in_profile" tool_tip="Sets whether you want to show this group in your profile" />
+  <check_box label="プロフィールに表示" name="list_groups_in_profile" tool_tip="あなたのプロフィールにこのグループを表示するかどうかの設定を行います。" />
   <panel name="preferences_container">
-    <text name="group_settngs_label">Group</text>
-    <check_box label="Anyone can join" name="open_enrollement" tool_tip="Sets whether this group allows new members to join without being invited." />
-    <check_box label="Cost to join" name="check_enrollment_fee" tool_tip="Sets whether to require an enrollment fee to join the group" />
-    <spinner label="L$" name="spin_enrollment_fee" tool_tip="New members must pay this fee to join the group when Enrollment Fee is checked." />
-    <combo_box name="group_mature_check" tool_tip="Maturity ratings designate the type of content and behavior allowed in a group">
-      <combo_item name="select_mature" value="Select">- Select maturity rating -</combo_item>
-      <combo_box.item label="Moderate Content" name="mature" value="Mature" />
-      <combo_box.item label="General Content" name="pg" value="Not Mature" />
+    <text name="group_settngs_label">グループ</text>
+    <check_box label="誰でも入会できます" name="open_enrollement" tool_tip="招待されなくても新規メンバーが加入できるかどうかを設定します。" />
+    <check_box label="入会費がかかります" name="check_enrollment_fee" tool_tip="入会費が必要かどうかを設定します。" />
+    <spinner label="L$" name="spin_enrollment_fee" tool_tip="「入会費」にチェックが入っている場合、新規メンバーは指定された入会費を支払わなければグループに入れません。" />
+    <combo_box name="group_mature_check" tool_tip="レーティング区分は、グループ内でどのようなコンテンツや行動が許されるかを指定するものです。">
+      <combo_item name="select_mature">─レーティング区分を指定─</combo_item>
+      <combo_box.item label="「Moderate」コンテンツ" name="mature" />
+      <combo_box.item label="「General」コンテンツ" name="pg" />
     </combo_box>
-    <check_box name="show_in_group_list" tool_tip="Let people see this group in search results" />
-    <text name="group_key_label">Group Key:</text>
-    <button name="copy_name" label="Copy Group Name" />
-    <text_editor name="group_key" label="Group Key:" initial_value="(loading ...)" />
-    <button name="copy_uri" label="Copy URI" />
+    <check_box label="検索に表示" name="show_in_group_list" tool_tip="このグループを検索結果に表示させます。" />
+    <text name="group_key_label">グループキー：</text>
+    <button name="copy_name" label="グループ名をコピー" />
+    <text_editor name="group_key" label="グループキー：" initial_value="（読み込んでいます…）" />
+    <button name="copy_uri" label="ＵＲＩをコピー" />
   </panel>
 </panel>

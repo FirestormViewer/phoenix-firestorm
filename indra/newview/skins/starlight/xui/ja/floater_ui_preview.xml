@@ -1,52 +1,49 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="gui_preview_tool" title="XUI Preview Tool">
-  <string name="ExternalEditorNotSet">Select an editor by setting the environment variable LL_XUI_EDITOR
-or the ExternalEditor setting
-or specifying its path in the "Editor Path" field.</string>
+<floater name="gui_preview_tool" title="ＸＵＩプレビューツール">
+  <string name="ExternalEditorNotSet">環境変数LL_XUI_EDITORまたはExternalEditor設定を設定するか、[EDITOR PATH]フィールドにそのパスを指定して、エディターを選択します。</string>
   <panel name="main_panel">
-    <text name="select_language_label">Primary Language:</text>
+    <text name="select_language_label">優先言語：</text>
     <combo_box name="language_select_combo">
-      <combo_box.item label="en" name="item1" value="en" />
+      <combo_box.item label="ja" name="item1" value="ja" />
     </combo_box>
-    <button label="Show" label_selected="Show" name="display_floater" tool_tip="Display the XUI floater defined by the selected XML file" />
-    <button label="Hide" label_selected="Hide" name="close_displayed_floater" tool_tip="Closes the currently-displayed floater, if one exists" />
-    <button label="Edit..." label_selected="Edit..." name="edit_floater" tool_tip="Edit the XUI floater defined by the selected XML file (opens external editor).  Opens en version if no localized version exists." />
-    <button label="Save" label_selected="Save" name="save_floater" tool_tip="Save the XUI floater defined by the selected XML file" />
-    <button label="Save All" label_selected="Save All" name="save_all_floaters" tool_tip="Save all XUI floaters defined by the selected language" />
-    <button label="&gt; &gt;" label_selected="&lt; &lt;" name="toggle_overlap_panel" tool_tip="Toggle highlighting and display panel for overlapping elements; right-click an element to select it for this feature.  The selected element is marked by a red rectangle." />
-    <text name="select_language_label_2">Secondary Language:</text>
+    <button label="表示" label_selected="表示" name="display_floater" tool_tip="選択したＸＭＬファイルで定義されたＸＵＩフロータを表示します。" />
+    <button label="非表示" label_selected="非表示" name="close_displayed_floater" tool_tip="現在表示されているフローターが存在する場合は、それを閉じます。" />
+    <button label="編集…" label_selected="編集…" name="edit_floater" tool_tip="選択したＸＭＬファイルによって定義されたＸＵＩフローターを編集します。（外部エディターを開きます）ローカライズされたバージョンが存在しない場合は、enバージョンを開きます。" />
+    <button label="保存" label_selected="保存" name="save_floater" tool_tip="選択したＸＭＬファイルで定義されたＸＵＩフロータを保存します。" />
+    <button label="全て保存" label_selected="全て保存" name="save_all_floaters" tool_tip="選択した言語で定義されたすべてのＸＵＩフロータを保存します。" />
+    <button label="≫" label_selected="≪" name="toggle_overlap_panel" tool_tip="重なっている要素の強調表示と表示パネルを切り替えます。要素を右クリックして、この機能用に選択します。選択した要素は、赤い四角形でマークされます。" />
+    <text name="select_language_label_2">二次言語：</text>
     <combo_box name="language_select_combo_2">
       <combo_box.item label="en" name="item1" value="en" />
     </combo_box>
-    <button label="Show" name="display_floater_2" tool_tip="Display the XUI floater defined by the selected XML file" />
-    <button label="Hide" name="close_displayed_floater_2" tool_tip="Closes the currently-displayed floater, if one exists" />
-    <button label="Export Schema" name="export_schema" />
-    <button label="Refresh" name="refresh_btn" />
-    <check_box label="Show Rectangles" name="show_rectangles" />
-
-    <scroll_list label="Name" name="name_list">
-      <scroll_list.columns label="Title" name="title_column" width="150" />
-      <scroll_list.columns label="File" name="file_column" width="150" />
-      <scroll_list.columns dynamic_width="true" label="Top-Level Node" name="top_level_node_column" />
+    <button label="表示" name="display_floater_2" tool_tip="選択したＸＭＬファイルで定義されたＸＵＩフロータを表示します。" />
+    <button enabled="false" label="非表示" name="close_displayed_floater_2" tool_tip="現在表示されているフローターが存在する場合は、それを閉じます。" />
+    <button label="スキーマをエクスポート" name="export_schema" />
+    <button label="リフレッシュ" name="refresh_btn" />
+    <check_box label="四角形を表示" name="show_rectangles" />
+    <scroll_list name="name_list">
+      <scroll_list.columns label="タイトル" name="title_column" />
+      <scroll_list.columns label="ファイル名" name="file_column" />
+      <scroll_list.columns label="トップレベルのノード" name="top_level_node_column" />
     </scroll_list>
     <panel name="editor_panel">
-      <text name="editor_path_label">Editor Path:</text>
-      <line_editor name="executable_path_field" tool_tip="The full path to an editor (executable) to edit floater XML files (quotes not necessary)" />
-      <button label="Browse..." label_selected="Browse..." name="browse_for_executable" tool_tip="Browse for an editor (executable) to edit floater XML files" />
-      <text name="executable_args_label">Editor Arguments:</text>
-      <line_editor name="executable_args_field" tool_tip="Command-line arguments to the editor; use &apos;%FILE%&apos; to refer to the target file; &apos;YourProgram.exe FileName.xml&apos; will be run if this field is empty" />
+      <text name="editor_path_label">エディタのパス：</text>
+      <line_editor name="executable_path_field" tool_tip="フローターＸＭＬファイルを編集するためのエディター（実行可能ファイル）へのフルパス。（引用符は必要ありません）" />
+      <button label="ブラウズ…" label_selected="ブラウズ…" name="browse_for_executable" tool_tip="フローターＸＭＬファイルを編集するためのエディター（実行可能ファイル）を参照します。" />
+      <text name="executable_args_label">エディタの引数：</text>
+      <line_editor name="executable_args_field" tool_tip="エディターへのコマンドライン引数。'%FILE%'を使用してターゲット ファイルを参照します。このフィールドが空の場合、「YourProgram.exe FileName.xml」が実行されます" />
     </panel>
     <panel name="vlt_panel">
-      <text name="diff_file_label">Delta File:</text>
-      <line_editor name="vlt_diff_path_field" tool_tip="The full path to an XML D0 or D1 localization difference file generated by the Viewer Localization Toolkit" />
-      <button label="Browse..." label_selected="Browse..." name="browse_for_vlt_diffs" tool_tip="Browse for a VLT-generated D0 or D1 difference file to highlight changed files and elements" />
-      <button label="Highlight Diffs" label_selected="Unhighlight Diffs" name="toggle_vlt_diff_highlight" tool_tip="Toggle highlighting of files and elements containing changed localization data" />
+      <text name="diff_file_label">差分ファイル：</text>
+      <line_editor name="vlt_diff_path_field" tool_tip="Viewer Localization Toolkitによって生成されたＸＭＬのD0、D1言語差分ファイルへのフルパス" />
+      <button label="ブラウズ…" label_selected="ブラウズ…" name="browse_for_vlt_diffs" tool_tip="VLTで生成されたD0、D1差分ファイルを参照して、変更されたファイルと要素を強調表示します。" />
+      <button label="差分をハイライト" label_selected="ハイライトを解除" name="toggle_vlt_diff_highlight" tool_tip="変更された言語データを含むファイルと要素の強調表示を切り替えます。" />
     </panel>
   </panel>
   <scroll_container name="overlap_scroll">
     <panel name="overlap_dummy_panel">
-      <overlap_panel label="Overlap Panel" name="overlap_panel" tool_tip="This panel displays the currently-selected element and all of the elements that overlap it, separated by horizontal lines" />
-      <text name="overlap_panel_label">Overlapping Elements:</text>
+      <overlap_panel label="オーバーラップパネル" ame="overlap_panel" tool_tip="このパネルには、現在選択されている要素と、それに重なっているすべての要素が水平線で区切られて表示されます。" />
+      <text name="overlap_panel_label">重なる要素：</text>
     </panel>
   </scroll_container>
 </floater>

@@ -396,8 +396,13 @@
     </panel>
     <panel label="テクスチャ" name="Texture" />
     <panel label="中身" name="Contents">
-      <button label="新規スクリプト" label_selected="新規スクリプト" name="button new script" />
+      <button label="新しいスクリプト" label_selected="新しいスクリプト" name="button new script" />
       <button label="権限" name="button permissions" />
+      <!-- FS -->
+      <button label="リフレッシュ" name="button refresh" />
+      <button label="スクリプトをリフレッシュ" name="btn_reset_scripts" />
+      <!-- /FS -->
+      <panel_inventory_object name="contents_inventory" />
     </panel>
   </tab_container>
   <panel name="land info panel">

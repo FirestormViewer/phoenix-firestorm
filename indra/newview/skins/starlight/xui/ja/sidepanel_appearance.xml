@@ -1,22 +1,22 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="アウトフィト" name="appearance panel">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="容姿" name="appearance panel">
   <string name="No Outfit" value="アウトフィットなし" />
-  <string name="Unsaved Changes" value="変更されていない保存" />
-  <string name="Now Wearing" value="着用中…" />
-  <string name="Changing outfits" value="アウトフィットを変更しています。" />
+  <string name="Unsaved Changes" value="保存されていない変更" />
+  <string name="Now Wearing" value="着用しています…" />
+  <string name="Changing outfits" value="アウトフィットの変更" />
   <panel name="panel_currentlook">
-    <button label="✏" name="editappearance_btn" />
-    <button name="openoutfit_btn" />
+    <button label="Ｅ" name="editappearance_btn" />
+    <button label="Ｏ" name="openoutfit_btn" />
     <icon name="outfit_icon" />
-    <text name="currentlook_status">（ステータス）</text>
-    <text name="currentlook_name">MOOSEみたいな長い名前のアウトフィット</text>
-    <button label="" name="edit_outfit_btn" tool_tip="このアウトフィットを編集する。" />
+    <text name="currentlook_status">（状態）</text>
+    <text name="currentlook_name">MOOSEみたいな長い名前の私のアウトフィット</text>
+    <button label="" name="edit_outfit_btn" tool_tip="このアウトフィットを編集" />
     <loading_indicator name="wearables_loading_indicator" />
   </panel>
-  <search_editor label="Filter Outfits" name="フィルタ"/>
+  <search_editor label="アウトフィットをフィルタ" name="Filter" />
   <panel name="panel_outfits_inventory" />
   <!--
-   <button label="New outfit" name="newlook_btn" />
+   <button label="新しいアウトフィット" name="newlook_btn" />
    -->
   <panel name="panel_outfit_edit" />
   <panel name="panel_edit_wearable" />

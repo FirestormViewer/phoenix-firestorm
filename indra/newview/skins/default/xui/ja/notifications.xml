@@ -3656,7 +3656,7 @@ Your L$ balance is shown in the upper-right.
   <notification name="MaxListSelectMessage">このリストから[MAX_SELECT]個までのアイテムを選択できます。</notification>
 
   <notification name="VoiceInviteP2P">[NAME]があなたをボイスチャットコールに招待しています。
-受け入れるをクリックするか、断る場合は拒否をクリックしてください。ブロックをクリックすると、この発信者をブロックします。
+    「受け入れる」をクリックするか、断る場合は「却下する」をクリックしてください。「ブロック」をクリックすると、この発信者をブロックします。
     <tag>confirm</tag>
     <tag>voice</tag>
     <unique>
@@ -3676,7 +3676,7 @@ Your L$ balance is shown in the upper-right.
   <notification name="AutoUnmuteByInventory">[NAME]はインベントリを受け取り、自動的にブロックが解除されました。</notification>
 
   <notification name="VoiceInviteGroup">[NAME]は &lt;nolink&gt;[GROUP]&lt;/nolink&gt;のボイスチャットコールに参加しました。
-受け入れるをクリックするか、断る場合は拒否をクリックしてください。ブロックをクリックすると、この発信者をブロックします。
+「受け入れる」をクリックするか、断る場合は「却下する」をクリックしてください。「ブロック」をクリックすると、この発信者をブロックします。
     <tag>group</tag>
     <tag>confirm</tag>
     <tag>voice</tag>
@@ -3692,7 +3692,7 @@ Your L$ balance is shown in the upper-right.
   </notification>
 
   <notification name="VoiceInviteAdHoc">[NAME]は、会話チャットでボイスチャットコールに参加しました。
-受け入れるをクリックするか、断る場合は拒否をクリックしてください。ブロックをクリックすると、この発信者をブロックします。
+「受け入れる」をクリックするか、断る場合は「却下する」をクリックしてください。「ブロック」をクリックすると、この発信者をブロックします。
     <form name="form">
       <button name="Accept" text="受け入れる" />
       <button name="Decline" text="却下する" />
@@ -3701,7 +3701,7 @@ Your L$ balance is shown in the upper-right.
   </notification>
 
   <notification name="InviteAdHoc">[NAME]があなたを会話チャットに招待しています。
-受け入れるをクリックするか、断る場合は拒否をクリックしてください。ブロックをクリックすると、この発信者をブロックします。
+「受け入れる」をクリックするか、断る場合は「却下する」をクリックしてください。「ブロック」をクリックすると、この発信者をブロックします。
     <tag>confirm</tag>
     <tag>voice</tag>
     <unique>
