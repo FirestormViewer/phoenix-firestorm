@@ -28,7 +28,6 @@ jobs:
           - os: macos-11
             addrsize: 32
           - grid: sl
-          - grid: os
             addrsize: 32
     runs-on: ${{ matrix.os }}
     steps:
@@ -273,7 +272,7 @@ jobs:
             FS_RELEASE_FOLDER=preview
             FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
           elif [[ "${{ github.ref_name }}" == *alpha* ]]; then
-            FS_RELEASE_FOLDER=test
+            FS_RELEASE_FOLDER=preview
             FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
           elif [[ "${{ github.event_name }}" == 'schedule' ]]; then
             FS_RELEASE_FOLDER=nightly
