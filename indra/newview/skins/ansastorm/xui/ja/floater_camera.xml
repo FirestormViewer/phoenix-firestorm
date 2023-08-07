@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="camera_floater" title="カメラのコントロール">
+  <floater.string name="rotate_tooltip">対象を中心にカメラを回転させます。</floater.string>
+  <floater.string name="zoom_tooltip">対象にカメラをズームさせます。</floater.string>
+  <floater.string name="move_tooltip">カメラを上下左右に移動させます。</floater.string>
+  <floater.string name="free_mode_title">オブジェクトを見る</floater.string>
+  <string name="inactive_combo_text">プリセットを使用</string>
+  <panel name="controls">
+    <!--TODO: replace + - images -->
+    <panel name="zoom">
+      <joystick_rotate name="cam_rotate_stick" tool_tip="対象を中心にカメラを周回させます。" />
+      <button name="zoom_plus_btn" />
+      <slider_bar name="zoom_slider" tool_tip="対象にカメラをズームさせます。" />
+      <button name="zoom_minus_btn" />
+      <joystick_track name="cam_track_stick" tool_tip="カメラを上下左右に移動させます。" />
+    </panel>
+  </panel>
+  <panel name="buttons_panel">
+    <panel_camera_item name="front_view" tool_tip="前方視界" />
+    <panel_camera_item name="group_view" tool_tip="斜方視界" />
+    <panel_camera_item name="rear_view" tool_tip="後方視界" />
+    <panel_camera_item name="object_view" tool_tip="オブジェクト視点" />
+    <panel_camera_item name="mouselook_view" tool_tip="マウスルックビュー" />
+    <panel_camera_item name="reset_view" tool_tip="視界のリセット" />
+  </panel>
+  <combo_box name="preset_combo">
+    <combo_box.item label="プリセットを使用" name="Use preset" value="default" />
+  </combo_box>
+  <button name="gear_btn" tool_tip="カメラのプリセット" />
+  <button label="位置…" name="camera_position_btn" />
+  <button label="保存" name="save_btn" />
+</floater>
