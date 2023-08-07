@@ -16,7 +16,7 @@
     <button name="copy_name" label="名前をコピー"/>
 
     <button label="参加します！" name="btn_join" />
-    <texture_picker label="" name="insignia" tool_tip="クリックで画像を選択してください。" />
+    <texture_picker label="" name="insignia" tool_tip="クリックで画像を選択します。" />
     <text name="join_cost_text">無料</text>
 
     <text_editor name="charter">グループの理念、指針を記入してください。</text_editor>
@@ -44,7 +44,7 @@
         <check_box label="入会費がかかります" name="check_enrollment_fee" tool_tip="入会費が必要かどうかを設定します。" />
         <spinner label="L$" name="spin_enrollment_fee" tool_tip="「入会費」にチェックが入っている場合、新規メンバーは指定された入会費を支払わなければグループに入れません。" />
         <combo_box name="group_mature_check" tool_tip="レーティング区分は、グループ内でどのようなコンテンツや行動が許されるかを指定するものです。">
-          <combo_item name="select_mature">─レーティング区分を指定─</combo_item>
+          <combo_item name="select_mature">‐レーティング区分を指定‐</combo_item>
           <combo_box.item label="「Moderate」コンテンツ" name="mature" />
           <combo_box.item label="「General」コンテンツ" name="pg" />
         </combo_box>

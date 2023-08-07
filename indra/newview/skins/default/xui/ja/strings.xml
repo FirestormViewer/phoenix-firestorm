@@ -2380,8 +2380,8 @@ For AI Character: Get the closest navigable point to the point provided.
   <string name="Wave" value="　手を振る" />
   <string name="GestureActionNone" value="なし" />
   <string name="HelloAvatar" value="　やあ、アバター！" />
-  <string name="ViewAllGestures" value="　すべて表示　》" />
-  <string name="GetMoreGestures" value="　ショッピング　》" />
+  <string name="ViewAllGestures" value="　すべて表示　≫" />
+  <string name="GetMoreGestures" value="　ショッピング　≫" />
 
   <!-- inventory filter -->
   <!-- use value="" because they have preceding spaces -->
@@ -2922,7 +2922,7 @@ For AI Character: Get the closest navigable point to the point provided.
   <string name=")">）</string>
   <string name=".">。</string>
   <string name="'">'</string>
-  <string name="---">─</string>
+  <string name="---">‐</string>
 
   <!-- media -->
   <string name="Multiple Media">複数のメディア</string>
@@ -3064,15 +3064,15 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Butt Physics Gravity">尻の垂れ具合</string>
   <string name="Butt Physics Drag">尻の揺れ具合</string>
 
-  <string name="Butt Physics UpDown Max Effect">最大エフェクト数</string>
-  <string name="Butt Physics UpDown Spring">振動速度</string>
-  <string name="Butt Physics UpDown Gain">増加率</string>
-  <string name="Butt Physics UpDown Damping">減衰</string>
+  <string name="Butt Physics UpDown Max Effect">上下の最大効果数</string>
+  <string name="Butt Physics UpDown Spring">上下の振動速度</string>
+  <string name="Butt Physics UpDown Gain">上下の増加率</string>
+  <string name="Butt Physics UpDown Damping">上下の減衰</string>
 
-  <string name="Butt Physics LeftRight Max Effect">最大エフェクト数</string>
-  <string name="Butt Physics LeftRight Spring">振動速度</string>
-  <string name="Butt Physics LeftRight Gain">増加率</string>
-  <string name="Butt Physics LeftRight Damping">減衰</string>
+  <string name="Butt Physics LeftRight Max Effect">左右の最大効果数</string>
+  <string name="Butt Physics LeftRight Spring">左右の振動速度</string>
+  <string name="Butt Physics LeftRight Gain">左右の増加率</string>
+  <string name="Butt Physics LeftRight Damping">左右の減衰</string>
 
   <string name="Bushy Eyebrows">太</string>
   <string name="Bushy Hair">ぼさぼさヘア</string>
@@ -3579,7 +3579,7 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="ItemsComingInTooFast">[APP_NAME]：アイテムが同時にたくさん読み込まれているため、自動プレビューが[TIME]秒間無効となります。</string>
 
   <!-- IM system messages -->
-  <string name="IM_logging_string">－インスタントメッセージの保存開始－</string>
+  <string name="IM_logging_string">‐インスタントメッセージの保存開始‐</string>
   <string name="IM_typing_start_string">[NAME]は入力しています…</string>
   <string name="Unnamed">（名前なし）</string>
   <string name="IM_moderated_chat_label">（モデレート：デフォルトでボイスはオフ）</string>
@@ -3593,7 +3593,7 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="IM_unblock_only_groups_friends">このメッセージを表示するには、「初期設定」の「プライバシー」で「フレンドとグループ以外からはコールとＩＭを受信しない」チェックボックスをオフにします。</string>
   <string name="OnlineStatus">オンライン</string>
   <string name="OfflineStatus">オフライン</string>
-  <string name="not_online_msg">ユーザーがオンラインでありません－メッセージは保存され、後で配信されます。</string>
+  <string name="not_online_msg">ユーザーがオンラインでありません‐メッセージは保存され、後で配信されます。</string>
   <string name="not_online_inventory">ユーザーがオンラインでありません–インベントリに保存されました。</string>
 
   <!-- Additional IM messages -->
@@ -3743,36 +3743,36 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="RlvRoot">#RLV</string>
   <string name="Local Inventory">ローカルインベントリ</string>
   <!-- gestures -->
-  <string name="Male - Excuse me">男性－すみません</string>
-  <string name="Male - Get lost">男性－あっち行けよ</string>
-  <string name="Male - Blow kiss">男性－投げキッス</string>
-  <string name="Male - Boo">男性－ぶー</string>
-  <string name="Male - Bored">男性－退屈</string>
-  <string name="Male - Hey">男性－–やぁ</string>
-  <string name="Male - Laugh">男性－笑う</string>
-  <string name="Male - Repulsed">男性－拒絶</string>
-  <string name="Male - Shrug">男性－肩をすくめる</string>
-  <string name="Male - Stick tougue out">男性－舌を出す</string>
-  <string name="Male - Wow">男性－わぁ</string>
+  <string name="Male - Excuse me">男性‐すみません</string>
+  <string name="Male - Get lost">男性‐あっち行けよ</string>
+  <string name="Male - Blow kiss">男性‐投げキッス</string>
+  <string name="Male - Boo">男性‐ぶー</string>
+  <string name="Male - Bored">男性‐退屈</string>
+  <string name="Male - Hey">男性‐–やぁ</string>
+  <string name="Male - Laugh">男性‐笑う</string>
+  <string name="Male - Repulsed">男性‐拒絶</string>
+  <string name="Male - Shrug">男性‐肩をすくめる</string>
+  <string name="Male - Stick tougue out">男性‐舌を出す</string>
+  <string name="Male - Wow">男性‐わぁ</string>
 
-  <string name="Female - Chuckle">女性－クスクス</string>
-  <string name="Female - Cry">女性－泣く</string>
-  <string name="Female - Embarrassed">女性－恥ずかしい</string>
-  <string name="Female - Excuse me">女性－すみません</string>
-  <string name="Female - Get lost">女性－あっち行ってよ</string>
+  <string name="Female - Chuckle">女性‐クスクス</string>
+  <string name="Female - Cry">女性‐泣く</string>
+  <string name="Female - Embarrassed">女性‐恥ずかしい</string>
+  <string name="Female - Excuse me">女性‐すみません</string>
+  <string name="Female - Get lost">女性‐あっち行ってよ</string>
   <string name="Female - Blow kiss">女性–投げキッス</string>
-  <string name="Female - Boo">女性－ぶー</string>
-  <string name="Female - Bored">女性－退屈</string>
-  <string name="Female - Hey">女性－やぁ</string>
-  <string name="Female - Hey baby">女性－ヘイ、ベィビー！</string>
-  <string name="Female - Laugh">女性－笑う</string>
-  <string name="Female - Looking good">女性－いい感じ</string>
-  <string name="Female - Over here">女性－こっちよ</string>
-  <string name="Female - Please">女性－プリーズ</string>
-  <string name="Female - Repulsed">女性－拒絶</string>
-  <string name="Female - Shrug">女性－肩をすくめる</string>
-  <string name="Female - Stick tougue out">女性－舌を出す</string>
-  <string name="Female - Wow">女性－わぁ</string>
+  <string name="Female - Boo">女性‐ぶー</string>
+  <string name="Female - Bored">女性‐退屈</string>
+  <string name="Female - Hey">女性‐やぁ</string>
+  <string name="Female - Hey baby">女性‐ヘイ、ベィビー！</string>
+  <string name="Female - Laugh">女性‐笑う</string>
+  <string name="Female - Looking good">女性‐いい感じ</string>
+  <string name="Female - Over here">女性‐こっちよ</string>
+  <string name="Female - Please">女性‐プリーズ</string>
+  <string name="Female - Repulsed">女性‐拒絶</string>
+  <string name="Female - Shrug">女性‐肩をすくめる</string>
+  <string name="Female - Stick tougue out">女性‐舌を出す</string>
+  <string name="Female - Wow">女性‐わぁ</string>
 
   <!-- settings -->
   <string name="New Daycycle">新しいデイサイクル</string>
@@ -4155,7 +4155,7 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Command_Group_Titles_Tooltip">有効なグループタグを変更します。</string>
   <string name="Command_Wearable_Favorites_Tooltip">お気に入りの服装一覧を表示します。</string>
   <string name="Command_RFO_Tooltip">ビューアーにフレンドだけを表示し、他のアバターは削除されます。一度有効にすると、他のアバターの表示を元に戻すにはＴＰが必要です。</string>
-  <string name="Command_DAO_Tooltip">アニメーションするオブジェクト（アニメッシュ）－現在表示されている全てのアニメッシュを一時的に描画しないようにします。ＴＰ後にアニメッシュ再び描画されるようになります。</string>
+  <string name="Command_DAO_Tooltip">アニメーションするオブジェクト（アニメッシュ）‐現在表示されている全てのアニメッシュを一時的に描画しないようにします。ＴＰ後にアニメッシュ再び描画されるようになります。</string>
   <string name="Command_Beacons_Tooltip">ビーコン（標識）を表示します。</string>
 
   <string name="Toolbar_Top_Tooltip">現在、上のツールバーにあります。</string>
@@ -4302,7 +4302,7 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="na">該当なし</string>
 
   <!-- Presets graphic/camera -->
-  <string name="preset_combo_label">－空のリスト－</string>
+  <string name="preset_combo_label">‐空のリスト‐</string>
   <string name="Default">デフォルト</string>
   <string name="none_paren_cap">（なし）</string>
   <string name="no_limit">無制限</string>
@@ -4358,11 +4358,11 @@ www.secondlife.com のウェブサイトに接続できるかご確認くださ�
   <string name="search_disabled">このリージョンでは、レガシー検索が無効になっています。</string>
 
   <string name="render_quality_low">低（１／７）</string>
-  <string name="render_quality_mediumlow">中－低（２／７）</string>
+  <string name="render_quality_mediumlow">中‐低（２／７）</string>
   <string name="render_quality_medium">中（３／７）</string>
-  <string name="render_quality_mediumhigh">中－高（４／７）</string>
+  <string name="render_quality_mediumhigh">中‐高（４／７）</string>
   <string name="render_quality_high">高</string>
-  <string name="render_quality_highultra">高－最高（６／７）</string>
+  <string name="render_quality_highultra">高‐最高（６／７）</string>
   <string name="render_quality_ultra">最高（７／７）</string>
   <string name="render_quality_unknown">不明、通常の範囲を超えている、RenderQualityPerformanceのデバッグ設定をチェックします。</string>
 

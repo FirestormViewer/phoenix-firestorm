@@ -491,7 +491,7 @@
       <menu_item_check label="パーティクルを非表示" name="Hide Particles" />
       <menu_item_check label="選択を非表示" name="Hide Selected" />
       <menu_item_check label="透明部分をハイライト" name="Highlight Transparent" />
-      <menu_item_check label="－リグされた透明部分を含む" name="Include Transparent Rigged" />
+      <menu_item_check label="‐リグされた透明部分を含む" name="Include Transparent Rigged" />
       <menu_item_check label="マウスルックのときに十字線を表示" name="ShowCrosshairs" />
       <menu label="ホバーでTips表示" name="Hover Tips">
         <menu_item_check label="Tips表示" name="Show Tips" />

@@ -6,7 +6,7 @@
     <panel label="３Ｄワールド" name="UI Prefs Panel">
 
       <text name="HoverTipText">ホバーヒント：</text>
-      <check_box label="ホバーでヒントを表示" name="ShowHoverTips" tool_tip="アバターやその他のものにホバーヒントを表示するように設定します－最初にこれを設定します。（Ctrl＋Shift＋T）" />
+      <check_box label="ホバーでヒントを表示" name="ShowHoverTips" tool_tip="アバターやその他のものにホバーヒントを表示するように設定します‐最初にこれを設定します。（Ctrl＋Shift＋T）" />
       <check_box label="すべてのオブジェクトで" tool_tip="インワールドのオブジェクトにホバーヒントを表示するように設定します。" name="ShowAllHoverTips" />
       <check_box label="土地で" tool_tip="土地でホバーヒントを表示するように設定します。" name="ShowLandHoverTips" />
       <check_box name="FSAdvancedTooltips" label="ホバーヒントに拡張情報を表示" />

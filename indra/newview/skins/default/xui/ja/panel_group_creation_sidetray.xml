@@ -4,7 +4,6 @@
   <panel name="group_info_top">
     <line_editor label="グループ名をここに入力してください。" name="group_name_editor" />
   </panel>
-
   <scroll_container name="content_scroll_container">
     <panel name="content_panel">
 
@@ -15,13 +14,13 @@
             <text_editor name="charter">グループ憲章</text_editor>
           </panel>
           <panel name="preferences_container">
-            <check_box label="誰でも加入可能" name="open_enrollement" tool_tip="このグループが招待なしで、新しいメンバーに加入できるようにするかどうかを設定します。" />
-            <check_box label="入会費" name="check_enrollment_fee" tool_tip="グループへの加入に入会費が必要かどうかを設定します。" />
+            <check_box label="誰でも入会可能" name="open_enrollement" tool_tip="このグループが招待なしで、新しいメンバーに入ることができるようにするかどうかを設定します。" />
+            <check_box label="入会費" name="check_enrollment_fee" tool_tip="グループに入るのに入会費が必要かどうかを設定します。" />
             <spinner name="spin_enrollment_fee" tool_tip="入会費にチェックされている場合、新しいメンバーはグループに加入するためにこの料金を支払う必要があります。" />
             <combo_box name="group_mature_check" tool_tip="レーティングは、グループで許可されるコンテンツと活動内容の種類を指定します。">
-              <combo_item name="select_mature" value="Select">－レーティングの選択－</combo_item>
-              <combo_box.item label="Moderateコンテンツ" name="mature" value="Mature" />
-              <combo_box.item label="Generalコンテンツ" name="pg" value="Not Mature" />
+              <combo_item name="select_mature" value="Select">‐レーティングの選択‐</combo_item>
+              <combo_box.item label="「Moderate」コンテンツ" name="mature" />
+              <combo_box.item label="「General」コンテンツ" name="pg" />
             </combo_box>
           </panel>
         </layout_panel>

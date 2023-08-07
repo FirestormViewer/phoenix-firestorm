@@ -20,7 +20,7 @@
       <view_border name="local_mesh_settings_tab_border" />
       <check_box name="local_mesh_scale_use_meters" label="スケールがメートルであると仮定します。" tool_tip="Mayaなどのツールで使用される㎝単位を無視します。" />
       <text name="lod_suffix_label">ＬＯＤのサフィックス：</text>
-      <combo_box name="lod_suffix_combo" tool_tip="標準を選択するか、手動で編集します…||ＳＬのデフォルト－（最低＝LOD0、最高はサフィックスなし)||ゲームエンジン－Unity／UE5など（最低＝LOD3、最高＝LOD0）||LOD名－英語のLOD名 (最低＝「LOWEST」、高＝「HIGH」)">
+      <combo_box name="lod_suffix_combo" tool_tip="標準を選択するか、手動で編集します…||ＳＬのデフォルト‐（最低＝LOD0、最高はサフィックスなし)||ゲームエンジン‐Unity／UE5など（最低＝LOD3、最高＝LOD0）||LOD名‐英語のLOD名 (最低＝「LOWEST」、高＝「HIGH」)">
         <combo_item name="choose_one">現在</combo_item>
         <combo_item name="suff_sl">ＳＬ標準</combo_item>
         <combo_item name="suff_unity">ゲームエンジンの標準</combo_item>

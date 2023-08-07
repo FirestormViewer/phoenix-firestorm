@@ -13,5 +13,5 @@
   <menu_item_call label="アイテムのプロフィール" name="object_profile" />
   <menu_item_call label="オリジナルを表示" name="show_original" />
   <menu_item_call label="新規作成" name="create_new"/>
-  <menu_item_call label="─オプションなし─" name="--no options--" />
+  <menu_item_call label="‐オプションなし‐" name="--no options--" />
 </context_menu>

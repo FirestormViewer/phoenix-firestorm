@@ -73,10 +73,10 @@
         <combo_box name="ReflectionRescombo">
           <combo_box.item label="最小限" name="0" value="256" />
           <combo_box.item label="よい" name="1" value="512" />
-          <combo_box.item label="とても良い　　－注意：「高度な照明モデル」（光源タブ）も有効にする必要があります。" name="2" value="1024" />
-          <combo_box.item label="すばらしい　　－注意：「高度な照明モデル」（光源タブ）も有効にする必要があります。" name="3" value="1536" />
-          <combo_box.item label="卓越した　　　－注意：「高度な照明モデル」（光源タブ）も有効にする必要があります。" name="4" value="2048" />
-          <combo_box.item label="本物そっくり　－注意：「高度な照明モデル」（光源タブ）も有効にする必要があります。" name="5" value="4096" />
+          <combo_box.item label="とても良い　　‐注意：「高度な照明モデル」（光源タブ）も有効にする必要があります。" name="2" value="1024" />
+          <combo_box.item label="すばらしい　　‐注意：「高度な照明モデル」（光源タブ）も有効にする必要があります。" name="3" value="1536" />
+          <combo_box.item label="卓越した　　　‐注意：「高度な照明モデル」（光源タブ）も有効にする必要があります。" name="4" value="2048" />
+          <combo_box.item label="本物そっくり　‐注意：「高度な照明モデル」（光源タブ）も有効にする必要があります。" name="5" value="4096" />
           <combo_box.commit_callback function="Quickprefs.ShaderChanged" />
         </combo_box>
         <check_box label="透明の水面" name="TransparentWater" tool_tip="水面を透明としてレンダリングします。無効にすると、単純なテクスチャが適用された不透明な水面がレンダリングされます。">
@@ -402,7 +402,7 @@
       <check_box label="統計バーの表示する" name="Statistics Bar" />
       <check_box label="詳細なカメラ位置データの表示する" name="Camera" />
       <check_box label="詳細なテクスチャ読み込み情報を表示する" name="Texture Console" />
-      <check_box label="カーソルの下にＲＧＢ－Ｉカラー値を表示する" name="Show Color Under Cursor" />
+      <check_box label="カーソルの下にＲＧＢ‐Ｉカラー値を表示する" name="Show Color Under Cursor" />
       <check_box label="透明なオブジェクトを赤くハイライトする" name="Highlight Transparent" />
 
       <check_box label="シーンをワイヤーフレームで表示する" name="Wireframe" />

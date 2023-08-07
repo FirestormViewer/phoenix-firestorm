@@ -40,8 +40,8 @@
   <floater.string name="server_agent_cause_msg">考えられる原因：リージョン内の人の移動が多すぎる</floater.string>
   <floater.string name="server_images_cause_msg">考えられる原因：画像計算が多すぎる</floater.string>
   <floater.string name="server_generic_cause_msg">考えられる原因：シミュレータのロードが重すぎる</floater.string>
-  <floater.string name="smaller_label">》</floater.string>
-  <floater.string name="bigger_label">《</floater.string>
+  <floater.string name="smaller_label">≫</floater.string>
+  <floater.string name="bigger_label">≪</floater.string>
   <button name="client_lagmeter" tool_tip="クライアントの遅延ステータス" />
   <text name="client">クライアント</text>
   <text name="client_text">標準</text>
@@ -51,5 +51,5 @@
   <button name="server_lagmeter" tool_tip="サーバーの遅延ステータス" />
   <text name="server">サーバー</text>
   <text name="server_text">標準</text>
-  <button label="》" name="minimize" tool_tip="フローターのサイズをトグル" />
+  <button label="≫" name="minimize" tool_tip="フローターのサイズをトグル" />
 </floater>

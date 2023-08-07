@@ -8,11 +8,11 @@
   <floater.string name="messaging_complete_available">全[NUM_TOTAL]個中[NUM_SELECTED]個のリンクセットが選択されました。</floater.string>
   <floater.string name="messaging_not_enabled">このリージョンは経路探索に対応していません。</floater.string>
   <floater.string name="linkset_terrain_name">[Terrain]</floater.string>
-  <floater.string name="linkset_terrain_description">－</floater.string>
-  <floater.string name="linkset_terrain_owner">－</floater.string>
-  <floater.string name="linkset_terrain_scripted">－</floater.string>
-  <floater.string name="linkset_terrain_land_impact">－</floater.string>
-  <floater.string name="linkset_terrain_dist_from_you">－</floater.string>
+  <floater.string name="linkset_terrain_description">‐</floater.string>
+  <floater.string name="linkset_terrain_owner">‐</floater.string>
+  <floater.string name="linkset_terrain_scripted">‐</floater.string>
+  <floater.string name="linkset_terrain_land_impact">‐</floater.string>
+  <floater.string name="linkset_terrain_dist_from_you">‐</floater.string>
   <floater.string name="linkset_owner_loading">[Loading]</floater.string>
   <floater.string name="linkset_owner_unknown">[Unknown]</floater.string>
   <floater.string name="linkset_owner_group">[group]</floater.string>

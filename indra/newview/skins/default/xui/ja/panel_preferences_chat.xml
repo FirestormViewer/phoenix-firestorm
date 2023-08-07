@@ -142,7 +142,7 @@
       <check_box name="FSLogImToChatConsole" label="ＩＭをチャットコンソールに表示" />
       <check_box name="FSLogGroupImToChatConsole" label="グループチャットをチャットコンソールに表示" />
       <text name="FSShowGroupNameLength_label">チャット記録に記載されるグループ名の長さ</text>
-      <spinner name="FSShowGroupNameLength" tool_tip="完全なグループ名の場合は－１、無効の場合は０" />
+      <spinner name="FSShowGroupNameLength" tool_tip="完全なグループ名の場合は‐１、無効の場合は０" />
       <check_box name="FSOpenIMContainerOnOfflineMessage" label="オフラインメッセージ受信時に会話を開く" />
       <check_box name="send_im_to_email" label="オフライン時にＩＭをメールで送る（[EMAIL]）" />
       <text name="email_settings">[https://accounts.secondlife.com/change_email?lang=ja-JP オフラインＩＭのメール通知設定を開く]</text>
@@ -197,7 +197,7 @@
       <check_box name="FSRadarEnhanceByBridge" label="ＬＳＬクライアントブリッジでレーダーを拡張" tool_tip="この機能を有効にすると、高高度でアバターの位置を特定するレーダー機能が、ＬＳＬクライアントブリッジによってサポートされます。" />
       <text name="AgeAlertLabel">年齢警報：</text>
       <text name="RadarAvatarAgeAlertValueLabel">しきい値：</text>
-      <spinner name="RadarAvatarAgeAlertValue" tool_tip="レーダーの年齢欄にも色をつけます。無効にしたい場合は－１と設定してください。" />
+      <spinner name="RadarAvatarAgeAlertValue" tool_tip="レーダーの年齢欄にも色をつけます。無効にしたい場合は‐１と設定してください。" />
       <text name="RadarAvatarAgeAlertValueLabelSuffix">日</text>
       <check_box name="RadarAvatarAgeAlert" label="レーダーは指定された年齢より若いアバターを報告します。" />
       <check_box name="PlayModeUISndRadarAgeAlert" label="再生するサウンドのＵＵＩＤ：" />
@@ -260,7 +260,7 @@
       <line_editor name="FSCmdLineKeyToName" tool_tip="" control_name="FSCmdLineKeyToName" />
       <!--dice-->
       <text name="FSCmdLineRollDice_txt">サイコロを振る（使用法：cmd dice faces mt mv）</text>
-      <line_editor tool_tip="サイコロを振る－cmd [サイコロの数] [面数] [修飾子の種別（オプション）] [修飾子の値（オプション）]. 例：cmd 1 20, cmd 2 40 + 5. パラメーターの不足はcmd 1 6（普通のサイコロ）と同じです。" name="FSCmdLineRollDice" />
+      <line_editor tool_tip="サイコロを振る‐cmd [サイコロの数] [面数] [修飾子の種別（オプション）] [修飾子の値（オプション）]. 例：cmd 1 20, cmd 2 40 + 5. パラメーターの不足はcmd 1 6（普通のサイコロ）と同じです。" name="FSCmdLineRollDice" />
       <!--gtp-->
       <text name="FSCmdLinePos_txt">リージョン内にテレポート（使用法：cmd x y z）</text>
       <line_editor name="FSCmdLinePos" tool_tip="" />

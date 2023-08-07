@@ -6,23 +6,23 @@
     <combo_box.item enabled="true" label="英語（English）" name="English" value="en" />
     <combo_box.item enabled="true" label="アゼルバイジャン語（Azərbaycanca）" name="Azerbaijani" value="az" />
     <!--
-    <combo_box.item enabled="true" label="デンマーク語（Dansk）－ベータ" name="Danish" value="da" />
+    <combo_box.item enabled="true" label="デンマーク語（Dansk）‐ベータ" name="Danish" value="da" />
     -->
     <combo_box.item enabled="true" label="ドイツ語（Deutsch）" name="Deutsch(German)" value="de" />
-    <combo_box.item enabled="true" label="スペイン語（Español）－ベータ" name="Spanish" value="es" />
-    <combo_box.item enabled="true" label="フランス語（Français）－ベータ" name="French" value="fr" />
-    <combo_box.item enabled="true" label="イタリア語（Italiano）－ベータ" name="Italian" value="it" />
+    <combo_box.item enabled="true" label="スペイン語（Español）‐ベータ" name="Spanish" value="es" />
+    <combo_box.item enabled="true" label="フランス語（Français）‐ベータ" name="French" value="fr" />
+    <combo_box.item enabled="true" label="イタリア語（Italiano）‐ベータ" name="Italian" value="it" />
     <combo_box.item enabled="true" label="ポーランド語（Polski）" name="Polish" value="pl" />
     <!--
-    <combo_box.item enabled="true" label="ポルトガル語（Português）－ベータ" name="Portugese" value="pt" />
+    <combo_box.item enabled="true" label="ポルトガル語（Português）‐ベータ" name="Portugese" value="pt" />
     -->
-    <combo_box.item enabled="true" label="ロシア語 (Русский)－ベータ" name="Russian" value="ru" />
+    <combo_box.item enabled="true" label="ロシア語 (Русский)‐ベータ" name="Russian" value="ru" />
     <!--
-    <combo_box.item enabled="true" label="トルコ語（Türkçe）－ベータ" name="Turkish" value="tr" />
+    <combo_box.item enabled="true" label="トルコ語（Türkçe）‐ベータ" name="Turkish" value="tr" />
     -->
-    <combo_box.item enabled="true" label="日本語 (Japanese)－ベータ" name="(Japanese)" value="ja" />
+    <combo_box.item enabled="true" label="日本語 (Japanese)‐ベータ" name="(Japanese)" value="ja" />
     <!--
-    <combo_box.item enabled="true" label="繁体字中国語（正體中文）－ベータ" name="Traditional Chinese" value="zh" />
+    <combo_box.item enabled="true" label="繁体字中国語（正體中文）‐ベータ" name="Traditional Chinese" value="zh" />
     -->
   </combo_box>
   <text name="language_textbox2">（再起動する必要があります）</text>

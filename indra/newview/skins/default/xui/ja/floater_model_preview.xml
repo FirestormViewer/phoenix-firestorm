@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Model Preview" title="モデルのアップロード">
   <string name="status_idle" />
-  <string name="status_parse_error">エラー：ＤＡＥファイルに問題が見つかりました。─詳細につきましてはログをご確認ください。</string>
+  <string name="status_parse_error">エラー：ＤＡＥファイルに問題が見つかりました。‐詳細につきましてはログをご確認ください。</string>
   <string name="status_bind_shape_orientation">警告：バインドシェイプマトリックスは、標準のＸ軸正方向にはありません。</string>
   <string name="status_material_mismatch">エラー：モデルの材料は参考モデルのサブセットではありません。</string>
   <string name="status_reading_file">読み込んでいます…</string>
@@ -42,7 +42,7 @@
   <string name="CantResolveGeometryUrl">ジオメトリＵＲＬを解決することができませんでした。</string>
   <string name="ParsingErrorBadElement">不正な要素です。</string>
   <string name="ParsingErrorCantParseScene">シーンを解析できませんでした。</string>
-  <string name="ParsingErrorCorrupt">DAEファイルでエラーが見つかりました。─ファイルが破損しているようです。</string>
+  <string name="ParsingErrorCorrupt">DAEファイルでエラーが見つかりました。‐ファイルが破損しているようです。</string>
   <string name="ParsingErrorNoController">コントローラーを確認できませんでした。</string>
   <string name="ParsingErrorNoDoc">内部ドキュメントが見つかりません。</string>
   <string name="ParsingErrorNoRoot">ドキュメントにルートがありません。</string>

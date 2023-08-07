@@ -7,8 +7,8 @@
   <string name="NotesColumnIcon" value="radarbox_n" />
   <string name="SittingColumnIcon" value="radarbox_s" />
   <string name="TypingColumnIcon" value="radarbox_t" />
-  <string name="MiniMapToolTipMsg" value="[REGION]（ダブルクリックでマップを開く。Shift‐ドラッグで水平・垂直移動）" />
-  <string name="AltMiniMapToolTipMsg" value="[REGION]（ダブルクリックでテレポート。Shift‐ドラッグで水平・垂直移動）" />
+  <string name="MiniMapToolTipMsg" value="[REGION]（ダブルクリックでマップを開を開きます。Shift‐ドラッグで水平・垂直移動）" />
+  <string name="AltMiniMapToolTipMsg" value="[REGION]（ダブルクリックでテレポートします。Shift‐ドラッグで水平・垂直移動）" />
   <string name="avatar_name_count" value="名前[[TOTAL]／[IN_REGION]／[IN_CHAT_RANGE]]" />
   <panel name="nearby_panel">
     <panel label="bottom_panel" name="nearby_buttons_panel">

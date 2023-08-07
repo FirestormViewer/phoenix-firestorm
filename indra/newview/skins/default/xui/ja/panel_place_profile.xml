@@ -134,7 +134,7 @@
           <panel name="sales_panel">
             <text name="sales_price_label" value="価格：" />
             <text name="sales_price" />
-            <text name="area_label" value="エリア：" />
+            <text name="area_label" value="面積：" />
             <text name="area" />
             <text name="traffic_label" value="トラフィック：" />
             <text name="traffic" />

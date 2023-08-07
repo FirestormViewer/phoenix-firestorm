@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_fs_export" title="オブジェクトのバックアップ…">
   <floater.string name="title_floater">[OBJECT]をローカルにバックアップしています…</floater.string>
-  <floater.string name="title_working">[OBJECT]をバックアップしています－情報を収集しています…</floater.string>
-  <floater.string name="title_inventory">[OBJECT]をバックアップしています－インベントリを取得しています…</floater.string>
-  <floater.string name="title_assets">[OBJECT]をバックアップしています－アセットを取得しています…</floater.string>
-  <floater.string name="title_textures">[OBJECT]をバックアップしています－テクスチャを取得しています…</floater.string>
+  <floater.string name="title_working">[OBJECT]をバックアップしています‐情報を収集しています…</floater.string>
+  <floater.string name="title_inventory">[OBJECT]をバックアップしています‐インベントリを取得しています…</floater.string>
+  <floater.string name="title_assets">[OBJECT]をバックアップしています‐アセットを取得しています…</floater.string>
+  <floater.string name="title_textures">[OBJECT]をバックアップしています‐テクスチャを取得しています…</floater.string>
   <layout_stack name="resizing_stack">
     <layout_panel name="control_panel">
       <text name="SelectionInfoText">選択情報</text>

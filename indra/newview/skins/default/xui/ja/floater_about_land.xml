@@ -176,7 +176,7 @@
       <button label="設定" label_selected="設定" name="Set" tool_tip="訪問者が最初に訪れる場所の設定を行います。この区画内に立って行ってください。" />
       <button label="クリア" label_selected="クリア" name="Clear" tool_tip="ランディング地点をクリアする。" />
       <text name="Teleport Routing: ">テレポート経路：</text>
-      <combo_box name="landing type" tool_tip="テレポート経路－あなたの土地へのテレポート経路を選択してください。">
+      <combo_box name="landing type" tool_tip="テレポート経路‐あなたの土地へのテレポート経路を選択してください。">
         <combo_box.item label="不可" name="Blocked" />
         <combo_box.item label="ランディング地点のみ" name="LandingPoint" />
         <combo_box.item label="どこでも可能" name="Anywhere" />
