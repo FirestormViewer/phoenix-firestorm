@@ -10,7 +10,7 @@
         <fs_scroll_list.column name="icon_online_status" tool_tip="現在のオンライン状況です。" />
         <fs_scroll_list.column name="user_name" label="ユーザ名" tool_tip="連絡先のユーザ名です。" />
         <fs_scroll_list.column name="display_name" label="表示名" tool_tip="連絡先の表示名です。" />
-        <fs_scroll_list.column name="full_name"  label="名前" tool_tip="連絡先で選択されている名前です。" />
+        <fs_scroll_list.column name="full_name" label="名前" tool_tip="連絡先で選択されている名前です。" />
         <fs_scroll_list.column name="icon_visible_online" tool_tip="フレンドは、あなたがオンラインであることを知ることができます。" />
         <fs_scroll_list.column name="icon_visible_map" tool_tip="フレンドは、あなたがマップのどこにいるかを知ることができます。" />
         <fs_scroll_list.column name="icon_edit_mine" tool_tip="フレンドは、あなたのオブジェクトをを編集したり削除したり取得することができます。" />
@@ -27,5 +27,5 @@
   <button label="支払い…" name="pay_btn" tool_tip="リンデンドル（L$）をこのフレンドに渡します。" />
   <button label="削除…" name="remove_btn" tool_tip="この人物をフレンドリストから削除します。" />
   <button label="追加…" name="add_btn" tool_tip="住民にフレンド追加のオファーを送ります。" />
-  <text name="friend_count">フレンドの数：[COUNT]人</text>
+  <text name="friend_count">フレンド：[COUNT]人</text>
 </panel>

@@ -48,6 +48,7 @@
         <combo_box.item label="Phoenix" name="Phoenix" value="settings_phoenix.xml" />
         <combo_box.item label="[VIEWER_GENERATION]" name="V3" value="settings_v3.xml" />
         <combo_box.item label="ハイブリッド" name="Hybrid" value="settings_hybrid.xml" />
+        <combo_box.item label="レイテンシー" name="Latency" value="settings_latency.xml" />
         <combo_box.item label="テキスト" name="Text" value="settings_text.xml" />
       </combo_box>
     </layout_panel>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="classified_item">
-  <icon name="hovered_icon" />
-  <icon name="selected_icon" />
-  <texture_picker name="picture" />
-  <text name="name" />
-  <expandable_text name="description" />
-  <button name="info_chevron" />
-</panel>

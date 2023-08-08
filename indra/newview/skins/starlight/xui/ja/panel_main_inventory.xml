@@ -46,11 +46,11 @@
       <button label="拡げる" name="collapse_btn" tool_tip="ス" />
     </panel>
     <panel name="expand_panel">
-      <button label="Expand All" name="expand_btn" tool_tip="Expand Folders" />
-      <!-- icon name="dummy_icon"
-        / -->
-    <panel name="trash_btn_panel">
-      <dnd_button name="trash_btn" tool_tip="選択したアイテムを削除します。" />
+      <button label="すべてを拡げる" name="expand_btn" tool_tip="すべてのフォルダを開きます。" />
+      <!--icon name="dummy_icon" /-->
+      <panel name="trash_btn_panel">
+        <dnd_button name="trash_btn" tool_tip="選択したアイテムを削除します。" />
+      </panel>
     </panel>
   </panel>
 </panel>

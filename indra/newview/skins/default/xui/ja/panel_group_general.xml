@@ -37,7 +37,9 @@
         <text name="active_title_label">タイトル：</text>
         <combo_box name="active_title" tool_tip="このグループをアクティブにしたときに、アバター名の上に表示されるタイトルを設定します。" />
       </layout_panel>
+
       <layout_panel name="preferences_divider" />
+
       <layout_panel name="group_preferences_container">
         <text name="group_settngs_label">グループの設定</text>
         <check_box label="誰でも入会できます" name="open_enrollement" tool_tip="招待されなくても新規メンバーが加入できるかどうかを設定します。" />

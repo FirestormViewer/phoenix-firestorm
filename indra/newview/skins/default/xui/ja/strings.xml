@@ -2318,7 +2318,7 @@ For AI Character: Get the closest navigable point to the point provided.
   <string name="InventoryMarketplaceError">マーケットプレイスのリストを開くときにエラーが発生しました。引き続きこのメッセージを受信するには、Second Lifeのサポート（http://support.secondlife.com）にお問い合わせください</string>
   <string name="InventoryMarketplaceListingsNoItemsTitle">マーケットプレイスのリストフォルダが空です。</string>
   <string name="InventoryMarketplaceListingsNoItems">[[MARKETPLACE_DASHBOARD_URL] マーケットプレイス]に販売するアイテムを一覧するには、フォルダをこのエリアにドラッグします。</string>
-  <string name="InventoryItemsCount">（[ITEMS_COUNT]個のアイテム）</string>
+  <string name="InventoryItemsCount">（全[CATEGORIES]個中[ITEMS]個の要素）</string>
   <string name="Marketplace Validation Warning Stock">バージョンフォルダには、在庫フォルダが含まれなければなりません。</string>
   <string name="Marketplace Validation Error Mixed Stock">エラー：在庫フォルダ内のすべてのアイテムは、コピー不可で同じ種類でなければなりません。</string>
   <string name="Marketplace Validation Error Subfolder In Stock">エラー：在庫フォルダにサブフォルダを含めることはできません。</string>
@@ -2644,7 +2644,8 @@ For AI Character: Get the closest navigable point to the point provided.
   <string name="Credits">収入</string>
   <string name="Debits">支出</string>
   <string name="Total">合計</string>
-  <string name="NoGroupDataFound">グループのデータが見つかりませんでした。</string>
+  <string name="NoGroupDataFound">グループのデータが見つかりませんでした：</string>
+  <string name="AlreadyInGroup">あなたはすでにこのグループに入っています：</string>
 
   <!-- floater IM bonus_info: When a Linden with Admin/god status receives a new IM this displays the estate (Mainland vs. teen grid) of the source avatar.
        This is to help Lindens when answering questions. -->
@@ -2789,7 +2790,6 @@ For AI Character: Get the closest navigable point to the point provided.
   <string name="RegionSettings">リージョンの設定</string>
   <string name="NoEnvironmentSettings">このリージョンは自然環境の設定変更をサポートしていません。</string>
 
-  <string name="NoEnvironmentSettings">このリージョンは自然環境の設定変更をサポートしていません。</string>
   <string name="EnvironmentSun">太陽</string>
   <string name="EnvironmentMoon">月</string>
   <string name="EnvironmentBloom">ブルーム効果</string>
@@ -2821,7 +2821,13 @@ For AI Character: Get the closest navigable point to the point provided.
   <string name="InvOfferOwnedBy">が、</string>
   <string name="InvOfferOwnedByUnknownUser">不明なユーザーが所有している</string>
   <string name="InvOfferGaveYou">から渡されました。</string>
-  <string name="InvOfferDecline">&lt;nolink&gt;[NAME]&lt;/nolink&gt;からの[DESC]を拒否しました。</string>
+  <string name="InvOfferDecline">&lt;nolink&gt;[NAME]&lt;/nolink&gt;からの[DESC]を却下しました。</string>
+  <string name="InvOfferYouDecline">あなたは、</string>
+  <!-- FS:Ansariel: Removed nolink-tags for console -->
+  <string name="InvOfferDecline">あなたは、[NAME]からの[DESC]を却下しました。</string>
+  <string name="InvOfferFrom">からの</string>
+  <string name="InvOfferAutoAcceptObject">オブジェクト名[OBJECT_NAME]は、あなたに[OBJECT_TYPE]を渡してきました：[DESC]</string>
+  <string name="InvOfferAutoAcceptUser">[USER_NAME]は、あなたに[OBJECT_TYPE]を渡してきました：[DESC]</string>
 
   <!-- group money -->
   <string name="GroupMoneyTotal">合計</string>
@@ -3865,13 +3871,13 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="MembershipPremiumText">プレミアムメンバーシップ</string>
 
   <!-- Question strings for delete items notifications -->
-  <string name="DeleteItems">選択したアイテムを削除しますか？</string>
-  <string name="DeleteItem">選択したアイテムを削除しますか？</string>
+  <string name="DeleteItems">選択した[COUNT_SELECTION]個のアイテムを削除しますか？（全[COUNT_TOTAL]個）</string>
+  <string name="DeleteItem">選択したアイテムを削除しますか？（全[COUNT_TOTAL]個）</string>
 
   <string name="EmptyOutfitText">このアウトフィットにはアイテムがありません。</string>
 
   <!-- External editor status codes -->
-  <string name="ExternalEditorNotSet">ExternalEditor 設定を使ってエディターを選択します。</string>
+  <string name="ExternalEditorNotSet">ExternalEditor設定を使ってエディターを選択します。</string>
   <string name="ExternalEditorNotFound">指定された外部エディターが見つかりません。
 エディターへのパスを二重引用符で囲んでみてください。（例："/path to my/editor" "%s"）</string>
   <string name="ExternalEditorCommandParseError">外部エディターのコマンドの解析中にエラーが見つかりました。</string>
@@ -4128,7 +4134,7 @@ https://www.firestormviewer.org から最新バージョンをダウンロード
   <string name="Command_Voice_Tooltip">インワールドでのコールや近くにいる人物の音量調整します。</string>
   <!-- Firestorm commands -->
   <string name="Command_Quickprefs_Tooltip">簡易初期設定を表示します。</string>
-  <string name="Command_AO_Tooltip">アニメーションオーバーラーダーを表示します。</string>
+  <string name="Command_AO_Tooltip">アニメーションオーバーライダーを表示します。</string>
   <string name="Command_Webbrowser_Tooltip">内蔵ブラウザを起動します。（CTRL＋SHIFT＋Z）</string>
   <string name="Command_Default_Chat_Bar_Tooltip">デフォルトのチャットバーを表示したり非表示にします。</string>
   <string name="Command_Areasearch_Tooltip">エリア内のオブジェクトを検索します。</string>
@@ -4325,7 +4331,7 @@ www.secondlife.com のウェブサイトに接続できるかご確認くださ�
 このエラーが継続的に起こる場合は、Secondlife.com のサポートセクションから問題を報告してください。
 [https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9/%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%A8%E3%83%A9%E3%83%BC-r1283/ ナレッジベース]</string>
 
-  <string name="LoadCameraPositionNoneSaved">メラビューはまだ保存されていません。</string>
+  <string name="LoadCameraPositionNoneSaved">カメラビューはまだ保存されていません。</string>
   <string name="LoadCameraPositionOutsideDrawDistance">カメラの位置が描画距離を超えているため、カメラビューを復元できませんでした。</string>
 
   <string name="DrawDistanceSteppingGestureObsolete">コードの変更により、このジェスチャーを使用する必要はなくなりました。プログレッシブ描画距離（Progressive Draw Distance）ステッピングが有効になりました。</string>
@@ -4503,4 +4509,100 @@ Rez時間：[OBJECT_REZ_TIME]
   <string name="fs_preprocessor_cache_unsafe">エラー：「[FILENAME]」という名前のスクリプトをファイルシステムにコピーするのは安全ではありません。このインクルードは失敗します。</string>
   <string name="fs_preprocessor_caching_err">エラー：インクルードされた「[FILENAME]」というファイルをキャッシュできませんでした。</string>
   <string name="fs_preprocessor_truncated">警告：スクリプトのテキストサイズが大きすぎるため、プリプロセッサの出力が切り詰められました。このスクリプトはおそらく機能しません。</string>
+
+  <!-- <FS:Zi> Notify user about preferences settings changes to skin defaults -->
+  <string name="skin_defaults_starlight_location">Starlightスキンシリーズのデフォルトでは、メニューバーに現在地を表示することはできません。</string>
+  <string name="skin_defaults_starlight_navbar">Starlightスキンシリーズでは、ナビゲーションバーの表示がデフォルトで有効になっています。</string>
+
+  <!-- Animation Explorer -->
+  <string name="animation_explorer_seconds_ago">[SECONDS]秒前</string>
+  <string name="animation_explorer_still_playing">ずっと再生中</string>
+  <string name="animation_explorer_unknown_priority">不明</string>
+
+  <string name="FriendOnlineNotification">はオンラインです。</string>
+  <string name="FriendOfflineNotification">はオフラインです。</string>
+
+  <string name="Inbox_Folderview_New">新着</string>
+
+  <string name="Mouselook_Unknown_Avatar">不明なエージェント</string>
+
+  <string name="groupcountstring">あなたは、[COUNT]グループに所属しています。（残り[REMAINING]グループ）</string>
+  <string name="groupcountunlimitedstring">あなたは、[COUNT]グループに所属しています。</string>
+
+  <string name="SLGridStatusInvalidMsg">ＳＬグリッドステータスエラー：無効なメッセージフォーマットです。お手数ですがもう一度やり直してください。</string>
+  <string name="SLGridStatusTimedOut">ＳＬグリッドステータスエラー：リクエストがタイム・アウトしました。</string>
+  <string name="SLGridStatusOtherError">ＳＬグリッドステータスエラー：[STATUS]（ https://ja.wikipedia.org/wiki/HTTP%E3%82%B9%E3%83%86%E3%83%BC%E3%82%BF%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%89 ）</string>
+
+  <string name="DoubleClickTeleportEnabled">ダブルクリックテレポートは有効です。</string>
+  <string name="DoubleClickTeleportDisabled">ダブルクリックテレポートは無効です。</string>
+
+  <string name="AlwaysRunEnabled">常時走行は有効です。</string>
+  <string name="AlwaysRunDisabled">常時走行は無効です。</string>
+
+  <string name="FSRegionRestartInLocalChat">あなたが今いるリージョンは、まもなく再起動されます。このリージョンに留まっているとログアウトされます。</string>
+
+  <string name="Mute_Add">「[NAME]」がブロックリストに追加されました。</string>
+  <string name="Mute_Remove">「[NAME]」がブロックリストから削除されました。</string>
+  <string name="Reqsysinfo_Chat_NoReason">あなたのシステムセットアップに関する情報を求めています。</string>
+  <string name="Reqsysinfo_Chat_Reason">以下の理由であなたのシステム設定について情報を求めています：[REASON]</string>
+  <string name="Reqsysinfo_Chat_Information_sent">以下の情報が送信されました：[DATA]</string>
+  <string name="Reqsysinfo_Chat_Request_Denied">リクエストは拒否されました。</string>
+  <string name="Reqsysinfo_Reason">この理由は以下の通りです：[REASON]</string>
+
+  <!-- Titles for inventory finder floater -->
+  <string name="All Items">全てのアイテム</string>
+  <string name="Recent Items">最近のアイテム</string>
+  <string name="Worn Items">装着アイテム</string>
+
+  <string name="InvOfferGroupNoticeName">グループメンバーは[NAME]と名付けられました。</string>
+  <string name="CallingCardOnlineLabelSuffix">（オンライン）</string>
+
+  <string name="GroupNoticesPanelDateString">[year,datetime,local]年[mthnum,datetime,local]月[day,datetime,local]日　[hour,datetime,local]：[min,datetime,local]：[second,datetime,local]</string>
+  <string name="GroupNoticesToastDateString">[year,datetime,slt]年[mth,datetime,slt]月[day,datetime,slt]日[wkday,datetime,slt]　[ampm,datetime,slt]　[hour12,datetime,slt]：[min,datetime,slt]：[second,datetime,slt]　[timezone,datetime,slt]</string>
+  <string name="NotificationItemDateStringLocal">[year,datetime,local]年[mthnum,datetime,local]月[day,datetime,local]日　[hour,datetime,local]：[min,datetime,local]</string>
+  <string name="NotificationItemDateStringUTC">[year,datetime,utc]年[mth,datetime,utc]月[day,datetime,utc]日　[hour,datetime,utc]：[min,datetime,utc]　[timezone,datetime,utc]</string>
+  <string name="NotificationItemDateStringSLT">[year,datetime,slt]年[mthnum,datetime,slt]月[day,datetime,slt]日　[hour,datetime,slt]：[min,datetime,slt]　[timezone,datetime,slt]</string>
+
+  <string name="Pie_av_render_normally">通常通り</string>
+  <string name="Pie_av_render_never">しない</string>
+  <string name="Pie_av_render_fully">完全</string>
+
+  <string name="Nametag_Complexity_Label">複雑度：[COMPLEXITY]</string>
+  <string name="Nametag_Texture_Area_Label">テクスチャ面積：[TEXTURE_AREA]㎡</string>
+
+  <string name="font_unknown">不明なフォント</string>
+  <string name="font_fonts.xml">Deja Vu</string>
+  <string name="font_fonts_ubuntu.xml">Ubuntu Font Family</string>
+  <string name="font_fonts_liberation.xml">Liberation</string>
+  <string name="font_fonts_droid.xml">Droid Sans</string>
+  <string name="font_fonts_mobi.xml">Mobi Sans</string>
+  <string name="font_fonts_roboto.xml">Roboto</string>
+  <string name="font_fonts_dyslexia.xml">OpenDyslexic</string>
+  <string name="font_fonts_deja_vu_all_caps.xml">Deja Vu All Caps</string>
+  <string name="font_fonts_noto.xml">Noto Sans</string>
+  <string name="font_fonts_celestia_medium_redux.xml">Celestia Medium Redux</string>
+  <string name="font_fonts_cascadia_code.xml">Cascadia Code</string>
+  <string name="mode_unknown">不明なモード</string>
+  <string name="mode_settings_firestorm.xml">[APP_NAME]</string>
+  <string name="mode_settings_phoenix.xml">Phoenix</string>
+  <string name="mode_settings_v3.xml">[VIEWER_GENERATION]</string>
+  <string name="mode_settings_hybrid.xml">ハイブリット</string>
+  <string name="mode_settings_text.xml">テキスト</string>
+
+  <string name="Asset_Uploading">アップロードしています…
+[ASSET_NAME]</string>
+  <string name="Yes">はい</string>
+  <string name="No">いいえ</string>
+  <string name="FSUrlEntryWearLabel">インベントリフォルダを着用</string>
+  <string name="TexturePickerOutfitHeader">アウトフィット用の画像</string>
+  <string name="unknown_script">（不明なスクリプト）</string>
+  <string name="FSAreaSearch_Cost_Label">L$ [COST]</string>
+
+  <string name="ImportingWindlightBulk">ウィンドライトをインポートしています…</string>
+
+  <!-- <FS:Zi> FIRE-24142 - Show number of elements in object inventory -->
+  <string name="FSObjectInventoryNoElements">要素がありません</string>
+  <string name="FSObjectInventoryOneElement">1個の要素</string>
+  <string name="FSObjectInventoryElements">[NUM_ELEMENTS]個の要素</string>
+  <string name="OpenSimInventoryValidationErrorGenericHelp">あなたのグリッドのオペレーターのサポートチーム</string>
 </strings>

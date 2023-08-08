@@ -26,5 +26,5 @@
   <button label="支払う…" name="pay_btn" tool_tip="このフレンドにリンデンドル（L$）を渡します。" />
   <button label="削除…" name="remove_btn" tool_tip="この人物をあなたのフレンドリストから削除します。" />
   <button label="追加…" name="add_btn" tool_tip="この住民にフレンドシップの申込みをします。" />
-  <text name="friend_count">フレンド数：[COUNT]人</text>
+  <text name="friend_count">フレンド：[COUNT]人</text>
 </panel>

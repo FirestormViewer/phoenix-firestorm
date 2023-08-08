@@ -112,6 +112,7 @@ Ctrlキーを押しながら、メンバー名をクリックすることで複�
     <text_editor name="action_description">これは「グループからメンバーを追放する」能力です。
 「所有者」を追放できるのは、別の「所有者」だけです。</text_editor>
     <text name="static2">この能力を持つ役割</text>
+    <scroll_list name="action_roles" />
     <text name="static3">この能力を持つメンバー</text>
     <name_list name="action_members" />
   </panel>

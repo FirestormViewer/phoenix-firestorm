@@ -20,5 +20,5 @@
   <button label="エイリアスのセット…" name="set_pseudonym_btn" tool_tip="このアバターにペンネームをつけます。" />
   <button label="エイリアス削除…" name="remove_pseudonym_btn" tool_tip="このアバターからペンネームを削除します。" />
   <button label="表示名の削除…" name="remove_displayname_btn" tool_tip="このアバターの表示名を削除します。" />
-  <text name="member_count">メンバー数：[COUNT]人</text>
+  <text name="member_count">メンバー：[COUNT]人</text>
 </panel>

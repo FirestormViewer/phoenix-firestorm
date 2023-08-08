@@ -321,7 +321,7 @@
       </combo_box>
       <text name="ObjectLODbehaviourLabel" value="オブジェクトのＬｏＤ動作：" />
       <text name="object_radius" value="オブジェクトの半径：" />
-      <text name="object_radius_value" value="─" />
+      <text name="object_radius_value" value="‐" />
       <text name="LOD_swap_factors_label" value="ＬｏＤ係数" />
       <text name="LOD_swap_defaults_label" value="デフォルト" tool_tip="ほとんどのビューアに適用されるデフォルトのＬｏＤ係数を設定します。" />
       <text name="LOD_swap_usr_label" tool_tip="RenderVolumeLODFactorから取得した現在の設定です。" value="あなたの" />
@@ -339,8 +339,8 @@
 [MED2LOW]
 [LOW2LOWEST]</string>
       <text name="LOD_swap_ll_values" />
-      <text name="LOD_swap_fs_values" value="─" />
-      <text name="LOD_swap_usr_values" value="─" />
+      <text name="LOD_swap_fs_values" value="‐" />
+      <text name="LOD_swap_usr_values" value="‐" />
       <text name="LODSwapTableDscriptionsText" tool_tip="ベストプラクティス：制作者は、すべてのビューアに対してデフォルト設定で適切なＬｏＤ動作を保証する必要があります。">この表は、カメラからのＬｏＤ変更境界をメートル単位で示しています。</text>
       <!-- /FS:Beq end of Mesh info section-->
     </panel>
