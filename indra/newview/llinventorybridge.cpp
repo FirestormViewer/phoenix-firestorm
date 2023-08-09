@@ -7479,8 +7479,11 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 					}
 
 					// <FS:Ansariel> FIRE-21200: Attachment Points List in Alphabetical Order
-					attach_menu->getItems()->sort(LLViewerAttachMenu::sort());
-					attach_hud_menu->getItems()->sort(LLViewerAttachMenu::sort());
+					if (gSavedSettings.getBOOL("FSSortAttachmentSpotsAlphabetically"))
+					{
+						attach_menu->getItems()->sort(LLViewerAttachMenu::sort());
+						attach_hud_menu->getItems()->sort(LLViewerAttachMenu::sort());
+					}
 					// </FS:Ansariel>
 				}
 			}
