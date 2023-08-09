@@ -119,7 +119,11 @@ jobs:
         shell: bash
 
       - name: rclone the private 3p packages for this platform (both 64 & 32)
-        run: 'rclone copy fs_bundles: --include "*${{ env.fallback_platform }}*bz2" .'
+        run: 'rclone copy fs_bundles: --filter "- Alpha/*" --filter "+ *${{ env.fallback_platform }}*bz2" .'
+        
+      - name: rclone any extra private 3p packages for Alpha (allows library updates not in the main repo)
+        if: env.FS_BUILD_TYPE == 'Alpha'
+        run: 'rclone copy fs_bundles:Alpha --include "*${{ env.fallback_platform }}*bz2" .'
 
       - name: set VSVER for Windows builds
         if: runner.os == 'Windows'
