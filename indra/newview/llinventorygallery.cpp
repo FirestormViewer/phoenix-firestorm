@@ -2382,6 +2382,9 @@ void LLInventoryGalleryItem::setSelected(bool value)
 
 BOOL LLInventoryGalleryItem::handleMouseDown(S32 x, S32 y, MASK mask)
 {
+    // call changeItemSelection directly, before setFocus
+    // to avoid autoscroll from LLInventoryGallery::onFocusReceived()
+    mGallery->changeItemSelection(mUUID, false);
     setFocus(TRUE);
     mGallery->claimEditHandler();
 
@@ -2452,7 +2455,19 @@ BOOL LLInventoryGalleryItem::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
     if (mIsFolder && mGallery)
     {
-        mGallery->setRootFolder(mUUID);
+        // setRootFolder can destroy this item.
+        // Delay it until handleDoubleClick processing is complete
+        // or make gallery handle doubleclicks.
+        LLHandle<LLPanel> handle = mGallery->getHandle();
+        LLUUID navigate_to = mUUID;
+        doOnIdleOneTime([handle, navigate_to]()
+                        {
+                            LLInventoryGallery* gallery = (LLInventoryGallery*)handle.get();
+                            if (gallery)
+                            {
+                                gallery->setRootFolder(navigate_to);
+                            }
+                        });
     }
     else
     {

@@ -4083,29 +4083,36 @@ void LLInventoryModel::processBulkUpdateInventory(LLMessageSystem* msg, void**)
 			LLViewerInventoryCategory* folderp = gInventory.getCategory(tfolder->getUUID());
 			if(folderp)
 			{
-				if(tfolder->getParentUUID() == folderp->getParentUUID())
-				{
+                if (folderp->getVersion() != LLViewerInventoryCategory::VERSION_UNKNOWN)
+                {
+                    if (tfolder->getParentUUID() == folderp->getParentUUID())
+                    {
 // [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
-					// NOTE-RLVa: not sure if this is a hack or a bug-fix :o
-					//		-> if we rename the folder on the first BulkUpdateInventory message subsequent messages will still contain
-					//         the old folder name and gInventory.updateCategory() below will "undo" the folder name change but on the
-					//         viewer-side *only* so the folder name actually becomes out of sync with what's on the inventory server
-					//      -> so instead we keep the name of the existing folder and only do it for #RLV/~ in case this causes issues
-					//		-> a better solution would be to only do the rename *after* the transaction completes but there doesn't seem
-					//		   to be any way to accomplish that either *sighs*
-					if ( (rlv_handler_t::isEnabled()) && (!folderp->getName().empty()) && (tfolder->getName() != folderp->getName()) &&
-						 ((tfolder->getName().find(RLV_PUTINV_PREFIX) == 0)) )
-					{
-						tfolder->rename(folderp->getName());
-					}
+                        // NOTE-RLVa: not sure if this is a hack or a bug-fix :o
+                        //      -> if we rename the folder on the first BulkUpdateInventory message subsequent messages will still contain
+                        //         the old folder name and gInventory.updateCategory() below will "undo" the folder name change but on the
+                        //         viewer-side *only* so the folder name actually becomes out of sync with what's on the inventory server
+                        //      -> so instead we keep the name of the existing folder and only do it for #RLV/~ in case this causes issues
+                        //      -> a better solution would be to only do the rename *after* the transaction completes but there doesn't seem
+                        //         to be any way to accomplish that either *sighs*
+                        if ( (rlv_handler_t::isEnabled()) && (!folderp->getName().empty()) && (tfolder->getName() != folderp->getName()) &&
+                            ((tfolder->getName().find(RLV_PUTINV_PREFIX) == 0)) )
+                        {
+                            tfolder->rename(folderp->getName());
+                        }
 // [/RLVa:KB]
-					update[tfolder->getParentUUID()];
-				}
-				else
-				{
-					++update[tfolder->getParentUUID()];
-					--update[folderp->getParentUUID()];
-				}
+                        update[tfolder->getParentUUID()];
+                    }
+                    else
+                    {
+                        ++update[tfolder->getParentUUID()];
+                        --update[folderp->getParentUUID()];
+                    }
+                }
+                else
+                {
+                    folderp->fetch();
+                }
 			}
 			else
 			{
@@ -4115,7 +4122,14 @@ void LLInventoryModel::processBulkUpdateInventory(LLMessageSystem* msg, void**)
 				folderp = gInventory.getCategory(tfolder->getParentUUID());
 				if(folderp)
 				{
-					++update[tfolder->getParentUUID()];
+                    if (folderp->getVersion() != LLViewerInventoryCategory::VERSION_UNKNOWN)
+                    {
+                        ++update[tfolder->getParentUUID()];
+                    }
+                    else
+                    {
+                        folderp->fetch();
+                    }
 				}
 			}
 		}
@@ -4161,7 +4175,14 @@ void LLInventoryModel::processBulkUpdateInventory(LLMessageSystem* msg, void**)
 				LLViewerInventoryCategory* folderp = gInventory.getCategory(titem->getParentUUID());
 				if(folderp)
 				{
-					++update[titem->getParentUUID()];
+                    if (folderp->getVersion() != LLViewerInventoryCategory::VERSION_UNKNOWN)
+                    {
+                        ++update[titem->getParentUUID()];
+                    }
+                    else
+                    {
+                        folderp->fetch();
+                    }
 				}
 			}
 		}
