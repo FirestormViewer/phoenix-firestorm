@@ -22,8 +22,8 @@
 
   <panel.string name="packet_loss_tooltip">パケット損失</panel.string>
   <panel.string name="bandwidth_tooltip">帯域幅</panel.string>
-  <panel.string name="time">[ampm, datetime, slt] [hour12, datetime, slt]：[min, datetime, slt]　[timezone,datetime, slt]</panel.string>
-  <panel.string name="timeTooltip">[year, datetime, slt]年[month, datetime, slt]月[day, datetime, slt]日（[weekday, datetime, slt]）</panel.string>
+  <panel.string name="time">[ampm, datetime, slt]　[hour12, datetime, slt]：[min, datetime, slt]　[timezone,datetime, slt]</panel.string>
+  <panel.string name="timeTooltip">[year, datetime, slt]年[month, datetime, slt]月[day, datetime, slt]日[weekday, datetime, slt]</panel.string>
   <panel.string name="buycurrencylabel">L$ [AMT]</panel.string>
 
   <panel name="menu_search_panel">
