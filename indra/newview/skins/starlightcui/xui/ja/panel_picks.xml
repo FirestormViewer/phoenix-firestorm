@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="ピック" name="panel_picks">
+  <string name="no_picks" value="ピックなし" />
+  <string name="no_classifieds" value="クラシファイド広告なし" />
+  <text name="picks_panel_text" />
+  <accordion name="accordion">
+    <accordion_tab name="tab_picks" title="ピック">
+      <flat_list_view name="picks_list" />
+    </accordion_tab>
+    <accordion_tab name="tab_classifieds" title="クラシファイド広告">
+      <flat_list_view name="classifieds_list" />
+    </accordion_tab>
+  </accordion>
+  <panel label="bottom_panel" name="edit_panel">
+    <!-- Replaces LLs button panel as they had not put buttons in -->
+    <button tool_tip="追加オプションを表示します。" name="gear_menu_btn" />
+    <button name="new_btn" tool_tip="現在地に新しいピックかクラシファイド広告を作成します。" />
+    <icon name="dummy_icon" />
+    <dnd_button name="trash_btn" />
+  </panel>
+  <panel name="buttons_cucks">
+    <layout_stack name="buttons_cucks_ls">
+      <layout_panel name="info_btn_lp">
+        <button label="情報" name="info_btn" tool_tip="ピック情報を表示します。" />
+      </layout_panel>
+      <layout_panel name="teleport_btn_lp">
+        <button label="テレポート" name="teleport_btn" tool_tip="当該エリアにテレポートします。" />
+      </layout_panel>
+      <layout_panel name="show_on_map_btn_lp">
+        <button label="マップ" name="show_on_map_btn" tool_tip="当該エリアをワールドマップ上で表示します。" />
+      </layout_panel>
+    </layout_stack>
+  </panel>
+</panel>

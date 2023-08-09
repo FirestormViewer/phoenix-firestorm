@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_login">
+  <panel.string name="forgot_password_url">https://secondlife.com/my/account/request.php?lang=ja-JP</panel.string>
+  <string name="ServerComboTooltip">存在するグリッドかグリッドＵＲＩを指定してください。</string>
+  <web_browser name="login_html" />
+  <layout_stack name="ui_stack">
+    <layout_panel name="ui_elastic_pad_left" />
+    <layout_panel name="ui_container">
+      <icon name="sl_logo_small" />
+      <layout_stack name="vert_stack_left">
+        <layout_panel name="1st_row">
+          <layout_stack name="1st_row_stack">
+            <layout_panel name="login">
+              <combo_box label="ユーザ名" tool_tip="登録時に自分で選んだユーザー名（例：bobsmith12、Steller Sunshineなど）を入力してください。" name="username_combo">
+                <combo_box.combo_editor />
+              </combo_box>
+              <check_box label="ユーザ名を保持" name="remember_username_check" />
+            </layout_panel>
+            <!-- login -->
+            <layout_panel name="delete_container">
+              <button tool_tip="ユーザ名を削除します。" label="" name="remove_user_btn" />
+            </layout_panel>
+            <!-- delete_container -->
+            <layout_panel name="password_container">
+              <!-- The max length might be changed in FSPanelLogin.cpp for Opensim! -->
+              <line_editor name="password_edit" label="パスワード" />
+              <check_box label="パスワードを保存" name="remember_check" />
+            </layout_panel>
+            <!-- password_container -->
+            <layout_panel name="start_location_panel">
+              <combo_box label="開始位置" name="start_location_combo">
+                <combo_box.combo_editor />
+                <combo_box.item label="最後にいた場所" name="MyLastLocation" value="last" />
+                <combo_box.item label="ホーム" name="MyHome" value="home" />
+                <combo_box.item label="＜リージョン名を入力＞" name="Typeregionname" value="" />
+              </combo_box>
+            </layout_panel>
+            <!-- start_location_panel -->
+          </layout_stack>
+          <!-- 1st_row_stack -->
+        </layout_panel>
+        <!-- 1st_row -->
+
+        <layout_panel name="2nd_row">
+          <layout_stack name="2nd_row_stack">
+            <layout_panel name="grid_panel">
+              <text name="grid_login_text">グリッド：</text>
+              <combo_box name="server_combo">
+                <combo_box.drop_down_button />
+              </combo_box>
+            </layout_panel>
+            <layout_panel name="mode_selection">
+              <text name="mode_selection_text">動作モード選択</text>
+              <combo_box tool_tip="あなたが最も慣れ親しんでいるビューアのスタイルを選択し、デフォルトを適切に設定してください。" name="mode_combo">
+                <combo_box.item label="Firestorm" name="Firestorm" value="settings_firestorm.xml" />
+                <combo_box.item label="Phoenix" name="Phoenix" value="settings_phoenix.xml" />
+                <combo_box.item label="[VIEWER_GENERATION]" name="V3" value="settings_v3.xml" />
+                <combo_box.item label="ハイブリッド" name="Hybrid" value="settings_hybrid.xml" />
+                <combo_box.item label="テキスト" name="Text" value="settings_text.xml" />
+              </combo_box>
+            </layout_panel>
+          </layout_stack>
+          <!-- 2nd_row_stack -->
+        </layout_panel>
+        <!-- 2nd_row -->
+      </layout_stack>
+      <!-- vert_stack -->
+      <button label="ログイン" name="connect_btn" />
+      <text name="create_new_account_text">アカウント作成</text>
+      <text name="forgot_password_text">パスワードを忘れましたか？</text>
+    </layout_panel>
+    <layout_panel name="ui_elastic_pad_right" />
+  </layout_stack>
+</panel>
