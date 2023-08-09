@@ -155,6 +155,7 @@
 			<check_box label="Prévisualiser les animations sur son avatar pendant le téléchargement sur le serveur" tool_tip="Si activé, vous pouvez prévisualiser les animations sur votre propre avatar pendant le téléchargement sur le serveur" name="FSUploadAnimationOnOwnAvatar"/>
 			<check_box label="Toujours développer les informations détaillées de la prévisualisation de l'animation" tool_tip="Développer par défaut les informations détaillées sur l'animation dans le flotteur de l'aperçu de l'animation" name="FSAnimationPreviewExpanded"/>
 			<check_box label="Active les informations détaillées pour les script" tool_tip="Activée, ajoute aux informations de base sur les scripts des détails utiles aux créateurs" name="FSScriptInfoExtended"/>
+			<check_box label="Trier par ordre alphabétique les points d'attachement dans les menus &quot;Attacher à&quot; (redémarrage requis)" tool_tip="Si cette option est activée, la liste des points d'attachement dans les menus &amp;Attacher à&amp; sera triée par ordre alphabétique." name="FSSortAttachmentSpotsAlphabetically"/>
 		</panel>
 		<panel label="Chargements" name="UploadsTab">
 			<text name="title">Dossiers de destination pour les chargements :</text>
