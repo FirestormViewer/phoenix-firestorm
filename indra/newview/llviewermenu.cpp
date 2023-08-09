@@ -10510,6 +10510,18 @@ class LLToolsSelectInvisibleObjects : public view_listener_t
     }
 };
 
+class LLToolsSelectReflectionProbes: public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        BOOL cur_val = gSavedSettings.getBOOL("SelectReflectionProbes");
+
+        gSavedSettings.setBOOL("SelectReflectionProbes", !cur_val);
+
+        return true;
+    }
+};
+
 class LLToolsSelectBySurrounding : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -12180,6 +12192,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLToolsSelectOnlyMyObjects(), "Tools.SelectOnlyMyObjects");
 	view_listener_t::addMenu(new LLToolsSelectOnlyMovableObjects(), "Tools.SelectOnlyMovableObjects");
     view_listener_t::addMenu(new LLToolsSelectInvisibleObjects(), "Tools.SelectInvisibleObjects");
+    view_listener_t::addMenu(new LLToolsSelectReflectionProbes(), "Tools.SelectReflectionProbes");
 	view_listener_t::addMenu(new LLToolsSelectBySurrounding(), "Tools.SelectBySurrounding");
 	view_listener_t::addMenu(new LLToolsShowHiddenSelection(), "Tools.ShowHiddenSelection");
 	view_listener_t::addMenu(new LLToolsShowSelectionLightRadius(), "Tools.ShowSelectionLightRadius");
