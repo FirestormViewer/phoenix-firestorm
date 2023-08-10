@@ -6,7 +6,7 @@
   <panel.string name="ItemcountUnknown">[ITEM_COUNT]個のアイテムと[CATEGORY_COUNT]個のフォルダーを取得しました。[FILTER]</panel.string>
 
   <menu_bar name="inventory_menu_bar">
-    <menu label="Inventory" name="inventory_inventory_menu">
+    <menu label="インベントリ" name="inventory_inventory_menu">
       <menu_item_call name="inventory_open" label="開く" />
       <menu_item_call name="inventory_share" label="共有" />
       <menu_item_call name="replace_links" label="リンク置き換え" />
@@ -89,7 +89,7 @@
   <filter_editor label="インベントリをフィルタ" name="inventory search editor" tool_tip="検索したい単語は「+」で区切って複数入力してください。" />
   <button name="collapse_btn" />
   <button name="expand_btn" />
-  <text name="filter_label" />
+  <text name="filter_label">フィルタ：</text>
   <combo_box name="filter_combo_box">
     <combo_box.item value="filter_type_all" label="すべての種別" />
     <combo_box.item value="filter_separator" label="──────" enabled="false" />

@@ -9,7 +9,7 @@
   <menu_item_separator />
   <!-- <FS:Zi> Add group moderation to agent URLs so we can moderate users that don't show
       in the participants list for some reason -->
-  <context_menu label="Moderator Options" name="GroupModerationSubmenu">
+  <context_menu label="モデレーターのオプション" name="GroupModerationSubmenu">
     <menu_item_call label="テキストチャットを許可" name="AllowGroupChat" />
     <!-- on_enable function="AvatarIcon.Enable" parameter="can_allow_text_chat" /-->
     <menu_item_call label="テキストチャットを禁止" name="ForbidGroupChat" />

@@ -137,8 +137,8 @@
         <combo_item name="Rubber" value="Rubber" label="ゴム" />
       </combo_box>
 
-      <texture_picker name="texture control" tool_tip="画像を選択してください。" />
-      <color_swatch name="colorswatch" tool_tip="クリックでカラーピッカーを開きます。" />
+      <texture_picker name="texture control" label="テクスチャ" tool_tip="画像を選択してください。" />
+      <color_swatch name="colorswatch" label="カラー" tool_tip="クリックでカラーピッカーを開きます。" />
       <spinner label="アルファ" name="alpha" />
       <spinner label="発光" name="glow" />
       <check_box label="明るさ全開" name="EmFBToggle" />

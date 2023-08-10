@@ -157,7 +157,7 @@
 
       <text name="textInventoryOptions">インベントリのオプション：</text>
       <check_box label="空のシステムフォルダをインベントリから隠す" name="DebugHideEmptySystemFolders" tool_tip="有効にすると、インベントリウィンドウは、お気に入り、ランドマークなどのすべての空のシステムフォルダを非表示にします。" />
-      <check_box label="受け取ったアイテムフォルダを通常のインベントリに表示" width="270" tool_tip="有効にすると、インベントリウィンドウにも受信済みアイテムフォルダが表示されます。" />
+      <check_box label="受け取ったアイテムフォルダを通常のインベントリに表示" control_name="FSShowInboxFolder" tool_tip="有効にすると、インベントリウィンドウにも受信済みアイテムフォルダが表示されます。" />
       <check_box label="受け取ったアイテムのボタンは常にインベントリの下部に表示する" name="FSAlwaysShowInboxButton" tool_tip="有効にすると、フォルダがインベントリに表示されている場合でも、「受け取ったアイテム」ボタンは常にインベントリウィンドウの下部に表示されます。" />
       <check_box label="インベントリのタブごとに別々の検索語を許可する" name="FSSplitInventorySearchOverTabs" tool_tip="有効にすると、インベントリの各タブに異なる検索語を入力することができます。" />
 

@@ -3,21 +3,20 @@
 <context_menu name="Avatar Pie">
   <menu_item_call label="プロフィールを見る" name="Profile..." />
   <menu_item_call label="フレンドに追加" name="Add Friend" />
+  <!-- FS -->
+  <menu_item_call label="Add to Set" name="Add to Set" />
+  <!-- /FS -->
   <menu_item_call label="ＩＭ" name="Send IM..." />
+  <!-- FS -->
+  <menu_item_call label="Give Calling Card" name="Give Calling Card" />
+  <!-- /FS -->
   <menu_item_call label="コール" name="Call" />
   <menu_item_call label="グループに招待…" name="Invite..." />
   <menu_item_separator />
-  <context_menu label="容姿" name="Appearance">
-    <menu_item_call label="テクスチャをリフレッシュ" name="Refresh Textures" />
-    <menu_item_call label="スケルトンをリセット" name="Reset Skeleton" />
-    <menu_item_call label="スケルトンとアニメーションをリセット" name="Reset Skeleton And Animations" />
-    <menu_item_separator />
-    <menu_item_call name="通常の描画設定" label="Remove from exceptions" />
-    <menu_item_check name="常に完全描画する" label="Always full detail" />
-    <menu_item_check name="描画しない" label="Never full detail" />
-    <menu_item_separator />
-    <menu_item_call label="描画の例外設定…" name="RenderExceptions" />
-  </context_menu>
+  <menu_item_call label="テクスチャをリフレッシュ" name="Refresh Textures" />
+  <menu_item_call label="スケルトンをリセット" name="Reset Skeleton" />
+  <menu_item_call label="スケルトンとアニメーションをリセット" name="Reset Skeleton And Animations" />
+
   <context_menu label="ユーティリティ" name="Utilities">
     <menu_item_call label="テクスチャのデバッグ" name="Debug..." />
     <menu_item_call label="ＸＭＬとしてダンプ" name="Dump XML" />
@@ -27,15 +26,14 @@
     <menu_item_call label="SLurlをコピー" name="Copy SLurl" />
     <menu_item_call label="ＩＤをコピー" name="Copy ID" />
   </context_menu>
-  <context_menu label="管理" name="Manage">
+  <context_menu label="迷惑行為" name="Annoyance">
     <menu_item_call label="ブロック" name="Avatar Mute" />
-    <menu_item_call label="パーティクル所有者をブロック" name="Mute Particle" />
+    <!-- <FS:Zi> Add unblock menu entry since renaming the context menu item doesn't seem to work -->
+    <menu_item_call label="ブロック解除" name="Avatar Unmute" />
+    <!-- </FS:Zi> -->
     <menu_item_call label="嫌がらせの報告" name="abuse" />
     <menu_item_call label="フリーズ" name="Freeze..." />
     <menu_item_call label="追放" name="Eject..." />
-    <menu_item_call label="ホームへテレポート" name="Teleport Home..." />
-    <menu_item_call label="不動産からキック" name="Estate Kick..." />
-    <menu_item_call label="不動産からバン" name="Estate Ban..." />
   </context_menu>
   <menu_item_separator />
   <menu_item_call label="ズームイン" name="Zoom In" />
@@ -44,4 +42,21 @@
   <menu_item_separator />
   <menu_item_call label="オブジェクトのプロフィール" name="Object Profile" />
   <menu_item_call label="オブジェクトの調査" name="Object Inspect" />
+  <!-- FS -->
+  <menu_item_separator />
+  <menu_item_check name="AlwaysRenderFully" label="常に完全描画する" />
+  <menu_item_check name="DoNotRender" label="常に完全描画しない"/>
+  <menu_item_check name="RenderNormally" label="描画の例外から削除"/>
+  <menu_item_call label="パーティクル所有者をブロック" name="Mute Particle" />
+  <menu_item_call label="調査" name="Object_Inspect_Floater" />
+  <menu_item_call label="スクリプト情報" name="ScriptInfo" />
+  <menu_item_call label="描画しない" name="Derender"/>
+  <menu_item_call label="描画しない＋ブラックリスト" name="DerenderPermanent" />
+  <menu_item_call label="テクスチャのデバッグ" name="Debug..." />
+  <menu_item_call label="テクスチャをリフレッシュ" name="Texture Refresh"/>
+  <context_menu label="名前をつけて保存" name="Export Menu">
+    <menu_item_call label="バックアップ" name="Backup" />
+    <menu_item_call label="Collada" name="Collada" />
+  </context_menu>
+  <!-- /FS -->
 </context_menu>

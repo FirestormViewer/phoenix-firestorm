@@ -3,6 +3,26 @@
   <menu_item_call label="編集…" name="Edit..." />
   <menu_item_call label="ＰＢＲマテリアルを編集" name="EditGLTFMaterial" />
   <menu_item_call label="取り外す" name="Detach" />
+  <!-- FS -->
+  <context_menu label="名前をつけて保存" name="Export Menu">
+    <menu_item_call label="バックアップ" name="Backup" />
+    <menu_item_call label="Collada" name="Collada" />
+  </context_menu>
+  <menu_item_separator />
+  <menu_item_call label="座る" name="Sit Down Here" />
+  <menu_item_call label="立つ" name="Stand Up" />
+  <context_menu label="容姿" name="AppearanceSubmenu">
+    <menu_item_call label="現在着用中…" name="NowWearing" />
+    <menu_item_call label="着替える" name="Change Outfit" />
+    <menu_item_call label="シェイプを編集" name="Edit Shape" />
+    <menu_item_call label="アウトフィットを編集" name="Edit Outfit Parts" />
+    <menu_item_call label="ホバー高さ" name="Hover Height" />
+    <menu_item_separator />
+    <menu_item_call label="スケルトンをリセット" name="Reset Skeleton" />
+    <menu_item_call label="スケルトンとアニメをリセット" name="Reset Skeleton And Animations" />
+    <menu_item_call label="メッシュのＬｏＤをリセット" name="Reset Mesh LOD" />
+  </context_menu>
+  <!-- /FS -->
   <menu_item_call label="触る" name="Attachment Object Touch" />
   <menu_item_call label="インベントリに表示" name="Show original" />
   <menu_item_separator />
@@ -41,12 +61,22 @@
   <menu_item_call label="飛行／着地" name="Fly land" />
   <menu_item_call label="アニメーションを停止" name="Stop Animating My Avatar" />
   <menu_item_separator />
-  <menu_item_call label="テクスチャをリフレッシュ" name="Refresh Textures" />
-  <menu_item_call label="スケルトンをリセット" name="Reset Skeleton" />
-  <menu_item_call label="スケルトンとアニメをリセット" name="Reset Skeleton And Animations" />
-  <menu_item_call label="テクスチャのデバッグ" name="Debug..." />
+  <!-- FS -->
+  <context_menu label="コミュニティ" name="CommunitySubmenu">
+    <menu_item_call label="プロフィール…" name="Profile..." />
+    <menu_item_call label="フレンド…" name="Friends..." />
+    <menu_item_call label="グループ…" name="Groups..." />
+  </context_menu>
   <menu_item_call label="ＸＭＬとしてダンプ" name="Dump XML" />
-  <menu_item_call label="パーティクル所有者をブロック" name="Mute Particle" />
+  <menu_item_call label="オブジェクトのプロフィール" name="Object Inspect" />
+  <menu_item_call label="調査" name="Object_Inspect_Floater" />
+  <menu_item_call label="スクリプト情報" name="ScriptInfo" />
+  <menu_item_call label="描画しない" name="Derender" />
+  <menu_item_call label="描画しない＋ブラックリスト" name="DerenderPermanent" />
+  <menu_item_call label="テクスチャのデバッグ" name="Debug..." />
+  <!-- /FS -->
   <menu_item_separator />
   <menu_item_call label="下に置く" name="Drop" />
+  <menu_item_separator />
+  <menu_item_call label="パーティクル所有者をブロック" name="Mute Particle" />
 </context_menu>

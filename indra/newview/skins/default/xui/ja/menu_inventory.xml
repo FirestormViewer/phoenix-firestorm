@@ -23,7 +23,7 @@
   <menu_item_call label="新しいスクリプト" name="New Script" />
   <menu_item_call label="新しいノートカード" name="New Note" />
   <menu_item_call label="新しいジェスチャー" name="New Gesture" />
-  <menu_item_call label="新しいマテリアル" name="New Material"/>
+  <menu_item_call label="新しいマテリアル" name="New Material" />
   <menu label="新しい服装" name="New Clothes">
     <menu_item_call label="新しいシャツ" name="New Shirt" />
     <menu_item_call label="新しいズボン" name="New Pants" />
@@ -85,22 +85,41 @@
   <menu_item_call label="プロパティ" name="Properties" />
   <menu_item_call label="名前を変更" name="Rename" />
   <menu_item_call label="アセットのＵＵＩＤをコピー" name="Copy Asset UUID" />
+  <!-- FS -->
+  <menu_item_call label="メインビューで表示" name="Show in Main Panel" />
+  <menu_item_call label="新しいウィンドウで表示" name="Show in new Window" />
+  <menu_item_call label="フォルダをリロード" name="ReloadFolder" />
+  <menu_item_call label="最後の位置に復元" name="Restore to Last Position" />
+  <!-- /FS -->
   <menu_item_call label="メインパネルで表示" name="Show in Main Panel" />
   <menu_item_call label="カット" name="Cut" />
   <menu_item_call label="コピー" name="Copy" />
   <menu_item_call label="ペースト" name="Paste" />
   <menu_item_call label="リンクとしてペースト" name="Paste As Link" />
+  <!-- FS -->
+  <menu_item_call label="すべてのリンクを探す" name="Find Links" />
+  <!-- /FS -->
   <menu_item_call label="リンクを置き換える" name="Replace Links" />
   <menu_item_separator name="Paste Separator" />
   <menu_item_call label="削除" name="Delete" />
+  <!-- FS -->
+  <menu_item_call label="破損したリンクをクリーンアップ" name="Cleanup broken Links" />
+  <menu_item_call label="デフォルトのフォルダに移動" name="Move to Default Folder" />
+  <menu_item_call label="遺失物に移動" name="Move to Lost And Found" />
+  <!-- /FS -->
   <menu_item_call label="システムフォルダを削除" name="Delete System Folder" />
+  <!-- FS -->
+  <menu_item_separator name="Subfolder Separator" />
+  <menu_item_call label="選択からフォルダを作成" name="New folder from selected" />
+  <menu_item_call label="フォルダアイテムのグループ解除" name="Ungroup folder items" />
   <menu_item_separator />
+  <menu_item_separator />
+  <!-- /FS -->
   <menu_item_call label="会話チャットを開始" name="Conference Chat Folder" />
   <menu_item_separator />
   <menu_item_call label="再生" name="Sound Play" />
   <menu_item_separator name="Landmark Separator" />
   <menu_item_call label="SLurlをコピー" name="url_copy" />
-
   <menu_item_call label="ランドマークの情報" name="About Landmark" />
   <menu_item_call label="マップに表示" name="show_on_map" />
   <menu_item_separator lname="Animation Separator" />
@@ -118,7 +137,7 @@
   <menu_item_call label="名前をつけて保存" name="Save As" />
 
   <menu_item_call label="選択を名前をつけて保存" name="Save Selected As" />
-  <menu_item_separator name="Wearable And Object Separator"/>
+  <menu_item_separator name="Wearable And Object Separator" />
   <!-- COMMENTED OUT for DEV-32347 -->
   <!--
   <menu_item_call label="最後の場所へリストア" name="Restore to Last Position" />
@@ -129,14 +148,17 @@
   <menu_item_call label="触る" name="Attachment Touch" />
   <menu_item_call label="編集" name="Wearable Edit" />
   <menu_item_call label="追加" name="Wearable Add" />
+  <!-- FS -->
+  <menu_item_call label="テクスチャのリフレッシュ" name="Texture Refresh Attachment"/>
+  <!-- /FS -->
   <menu_item_call label="取り外す" name="Detach From Yourself" />
   <menu_item_call label="脱ぐ" name="Take Off" />
   <menu_item_separator name="Settings Separator" />
   <menu_item_call label="自分にのみ適用" name="Settings Apply Local" />
   <menu_item_call label="区画に適用" name="Settings Apply Parcel" />
   <menu_item_separator name="Subfolder Separator" />
-  <menu_item_call label="選択項目からフォルダを作成" name="New folder from selected"/>
-  <menu_item_call label="フォルダ項目のグループを解除" name="Ungroup folder items"/>
+  <menu_item_call label="選択項目からフォルダを作成" name="New folder from selected" />
+  <menu_item_call label="フォルダ項目のグループを解除" name="Ungroup folder items" />
   <menu_item_separator name="Marketplace Separator" />
   <menu_item_call label="マーケットプレイスのリストにコピー" name="Marketplace Copy" />
   <menu_item_call label="マーケットプレイスのリストに移動" name="Marketplace Move" />

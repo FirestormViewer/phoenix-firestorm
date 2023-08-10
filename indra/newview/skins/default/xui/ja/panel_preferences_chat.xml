@@ -192,8 +192,8 @@
       <line_editor name="UISndRadarSimLeave" />
       <button name="Prev_UISndRadarSimLeave" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
       <button name="Def_UISndRadarSimLeave" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
-      <check_box name="RadarEnterChannelAlert" label="Report enter alerts to scripts" />
-      <check_box name="RadarLeaveChannelAlert" label="Report exit alerts to scripts" />
+      <check_box name="RadarEnterChannelAlert" label="警告をスクリプトに入力する" />
+      <check_box name="RadarLeaveChannelAlert" label="スクリプトに終了アラートを報告する" />
       <check_box name="FSRadarEnhanceByBridge" label="ＬＳＬクライアントブリッジでレーダーを拡張" tool_tip="この機能を有効にすると、高高度でアバターの位置を特定するレーダー機能が、ＬＳＬクライアントブリッジによってサポートされます。" />
       <text name="AgeAlertLabel">年齢警報：</text>
       <text name="RadarAvatarAgeAlertValueLabel">しきい値：</text>
@@ -277,13 +277,13 @@
       <text name="FSCmdLineOfferTp_txt">テレポートのオファーをアバターに送る（使用法：cmd key）</text>
       <line_editor name="FSCmdLineOfferTp" tool_tip="" />
       <!--tp2-->
-      <text name="FSCmdLineTP2_txt">アバターにてレポート（使用法：cmd name）</text>
+      <text name="FSCmdLineTP2_txt">アバターにテレポート（使用法：cmd name）</text>
       <line_editor tool_tip="このコマンドの構文では、部分的な名前を指定でき、大文字と小文字は区別されません。レーダーを開いているときに使用すると、よりよい結果が得られます。" name="FSCmdLineTP2" />
       <!--tphome-->
-      <text name="FSCmdLineTeleportHome_txt">ホームにてレポート（使用法：cmd）</text>
+      <text name="FSCmdLineTeleportHome_txt">ホームにテレポート（使用法：cmd）</text>
       <line_editor tool_tip="" name="FSCmdLineTeleportHome" />
       <!--mapto-->
-      <text name="FSCmdLineMapTo_txt">リージョンにてレポート（使用法：cmd regionname | x y z）</text>
+      <text name="FSCmdLineMapTo_txt">リージョンにテレポート（使用法：cmd regionname | x y z）</text>
       <line_editor name="FSCmdLineMapTo" tool_tip="" />
       <check_box label="Use same position between regions" name="toggle" />
     </panel>

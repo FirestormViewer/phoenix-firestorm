@@ -24,8 +24,8 @@
       <text name="ShadersPrefText2">中</text>
       <text name="ShadersPrefText3">高</text>
       <text name="ShadersPrefText4">最高</text>
-      <check_box label="フルスクリーンモード" name="Fullscreen Mode" tool_tip="Run Firestorm in Fullscreen mode. A restart is required to change mode." />
-      <text name="ShadersText">Shaders:</text>
+      <check_box label="フルスクリーンモード" name="Fullscreen Mode" tool_tip="Firestormをフルスクリーンモードで起動します。モードを変更するには再起動が必要です。" />
+      <text name="ShadersText">シェーダー：</text>
       <check_box label="透明な水面" name="TransparentWater" />
       <check_box label="バンプマップと光沢" name="BumpShiny" />
       <check_box label="ローカル光源" name="LocalLights" />
@@ -59,8 +59,7 @@
         <combo_box.item label="抑制" name="2" />
         <combo_box.item label="太陽／月のみ" name="1" />
       </combo_box>
-      <!--Top
-      of second column in General tab-->
+      <!--Top of second column in General tab-->
       <slider label="描画距離" name="DrawDistance" />
       <text name="DrawDistanceMeterText2">m</text>
       <slider label="最大パーティクル数" name="MaxParticleCount" />
@@ -70,11 +69,9 @@
       <text name="IndirectMaxNonImpostorsText">0</text>
       <slider label="ポストプロセス品質" name="RenderPostProcess" />
       <text name="PostProcessText">Low</text>
-
       <slider label="アバター物理" name="AvatarPhysicsDetail" />
 
       <text name="MeshDetailText">詳細レベル（ＬｏＤ）の距離係数：</text>
-
       <slider tool_tip="レンダリングコストを削減するために、低ディテールのオブジェクトを使用するタイミングを制御します。高い値を設定するとラグが発生するため、使用には注意が必要です。" label="　オブジェクトとスカルプトのＬｏＤ" name="ObjectMeshDetail" />
       <slider label="　フレックスプリム" name="FlexibleMeshDetail" />
       <slider label="　樹木" name="TreeMeshDetail" />
@@ -98,13 +95,11 @@
       <button label="読み込む" name="PrefLoadButton" />
       <button label="削除" name="PrefDeleteButton" />
 
-      <!--Reset
-      Button-->
+      <!--Reset Button-->
       <button tool_tip="デフォルトのグラフィック設定をリロード" name="Defaults" />
     </panel>
 
-    <!--Hardware
-    Settings-->
+    <!--Hardware Settings-->
     <panel label="ハードウェア設定" name="Hardware Settings">
       <check_box label="異方性フィルタリング（有効にすると遅くなります）" name="ani" tool_tip="このチェックボックスは異方性フィルタリングを有効にします。異方性フィルタリングは、テクスチャをカメラ位置に対して比較的大きな角度で見たときに、テクスチャの品質を向上させる方法です。通常、距離が離れてもぼやけて見えにくくなります。" />
       <check_box label="垂直同期を有効化" name="vsync" tool_tip="フレームレートをモニターのリフレッシュレートに同期させる。" />
@@ -124,11 +119,11 @@
       <text name="brightness text">（0／1.0＝デフォルトの輝度。低いほど明るくなります）</text>
       <slider label="ビューアのテクスチャのメモリーバッファ（㎆）：" name="GraphicsCardTextureMemory" tool_tip="テクスチャに割り当てるメモリの量。デフォルトはビデオカードのメモリで、３２ビットシステムでは最大５１２㎆、６４ビットシステムでは最大２０４８㎆です（ビデオカードの利用可能な専用ビデオメモリに依存します）。これを減らすとパフォーマンスが向上しますが、テクスチャが不鮮明になることがあります。" />
       <check_box label="動的テクスチャメモリを有効化" name="FSDynamicTextureMemory" tool_tip="動的テクスチャメモリ計算を有効にする（64bitビューアおよびビデオメモリが512㎆以上のAMD／NVIDIAのＧＰＵでのみ使用可能）" />
-      <slider label="ビューアの最小メモリバッファ（㎆）：" name="FSDynamicTextureMemoryMinTextureMemory" tool_tip="The minimum amount of memory to allocate for textures. This will make sure the specified amount will always be used for textures, even if it exceeds the amount of available video memory. If the specified amount plus the reserves exceed the amount of physical video memory, it will be capped accordingly." />
-      <slider label="追加のテクスチャメモリのキャッシュ確保率（％）：" name="FSDynamicTextureMemoryCacheReserve" tool_tip="The percentage of physical video memory reserved to cache loaded textures that are currently not being displayed." />
-      <slider label="物理ビデオメモリの確保率（％）：" name="FSDynamicTextureMemoryGPUReserve" tool_tip="The percentage of physical video memory reserved for other usage." />
-      <spinner label="フォグの距離比：" />
-      <spinner label="画像デコードの同時実行数：" name="image_decode_threads" tool_tip="The number of threads to use for decoding images. 0 = Auto, 1 = Synchronous, 2+ = user specified. (0 or 1 are recommended)" />
+      <slider label="ビューアの最小メモリバッファ（㎆）：" name="FSDynamicTextureMemoryMinTextureMemory" tool_tip="テクスチャ用に割り当てるメモリの最小量です。これにより、利用可能なビデオメモリの量を超えても、指定された量が常にテクスチャに使用されるようになります。指定された量とリザーブが物理的なビデオメモリの量を超えた場合、それに応じて上限が設定されます。" />
+      <slider label="追加のテクスチャメモリのキャッシュ確保率（％）：" name="FSDynamicTextureMemoryCacheReserve" tool_tip="現在表示されていないロードされたテクスチャをキャッシュするために確保された物理ビデオメモリの割合を指定します。" />
+      <slider label="物理ビデオメモリの確保率（％）：" name="FSDynamicTextureMemoryGPUReserve" tool_tip="他の用途のために予約されている物理ビデオメモリの割合。" />
+      <spinner label="フォグの距離比：" name="fog" />
+      <spinner label="画像デコードの同時実行数：" name="image_decode_threads" tool_tip="画像のデコードに使用するスレッド数。０＝自動、１＝同期、２≦ユーザー指定。（０か１を推奨します）" />
     </panel>
 
     <!--Rendering-->
@@ -139,7 +134,7 @@
 
       <text name="Texture Rendering">テクスチャの描画：</text>
 
-      <check_box label="テクスチャの最大解像度を512pxに制限（64ビットのみ）" tool_tip="Set this restrict the maximum display resolution for inworld textures to 512px. This allows displaying more textures before exceeding the available texture memory and observing blurry textures." name="FSRestrictMaxTextureSize" />
+      <check_box label="テクスチャの最大解像度を512pxに制限（６４ビットのみ）" tool_tip="インワールドテクスチャの最大表示解像度を512pxに制限します。これにより、使用可能なテクスチャメモリを超過してもテクスチャがぼやける代わりに、より多くのテクスチャが表示できるようになります。" name="FSRestrictMaxTextureSize" />
 
       <!-- New Texture detail 5 is lowest, 0 is highest -->
       <text name="TextureDetailLabel">テクスチャの最大品質：</text>
@@ -175,14 +170,14 @@
 
     <!--Depth
     of Field-->
-    <panel label="被写体深度" name="DOF panel">
+    <panel label="被写体深度（ＤｏＦ）" name="DOF panel">
       <check_box label="被写体深度を有効化 (カメラのピントが合っている場所以外の景色がぼかします）" name="UseDoF" />
       <check_box label="編集モードで有効にする" name="RenderDepthOfFieldInEditMode" />
       <check_box label="水中でも有効にする" name="FSRenderDoFUnderwater" />
       <check_box label="被写界深度の焦点はポインターに従う" name="FSFocusPointFollowsPointer" tool_tip="被写界深度（ＤｏＦ）の焦点はマウスに追従し、この動作はフライカム使用時に見られるものと同じです。ＤｏＦフォーカスロックと併用します。" />
       <slider label="カメラのＦ値：" name="CameraFNum" tool_tip="ＤｏＦ効果で使用するカメラのＦ値を指定します。" />
       <slider label="カメラの焦点距離㎜：" name="CameraFocal" tool_tip="ＤｏＦ効果を得るためのカメラの焦点距離（単位：ミリメートル）" />
-      <slider name="カメラのＦＯＶ" tool_tip="ＤｏＦ効果のためのカメラの垂直視野（単位：度）" />
+      <slider label="カメラのＦＯＶ角度：" name="Camera FOV" tool_tip="ＤｏＦ効果のためのカメラの垂直視野（単位：度）" />
       <slider label="ＤｏＦフォーカス遷移時間：" name="CameraFocusTrans" tool_tip="ある場所から次の場所にフォーカスを移すのにかかる時間を指定します。" />
       <slider label="ＤｏＦ描画品質：" name="CameraDoFResScale" tool_tip="ぼかしの質とレンダリングのパフォーマンスに影響します。（高い＝高品質、低い＝高パフォーマンス）" />
     </panel>

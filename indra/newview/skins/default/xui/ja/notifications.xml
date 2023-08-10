@@ -851,7 +851,7 @@ L$が不足しているので、このグループに参加することができ
     <usetemplate name="okcancelbuttons" notext="キャンセル" yestext="追放" />
   </notification>
 
-  <notification label="ホームにテレポートさせる確認" name="EstateTeleportHomeSingle">[AVATAR_NAMES]というアバターをホームにてレポートさせますか？
+  <notification label="ホームにテレポートさせる確認" name="EstateTeleportHomeSingle">[AVATAR_NAMES]というアバターをホームにテレポートさせますか？
     <tag>confirm</tag>
     <usetemplate name="okcancelbuttons" notext="キャンセル" yestext="ＯＫ" />
   </notification>

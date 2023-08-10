@@ -76,7 +76,7 @@
       <combo_box name="double_click_action_combo">
         <combo_box.item label="動作無し" name="0" value="0" />
         <combo_box.item label="クリックした場所に移動" name="1" value="1" />
-        <combo_box.item label="クリックした場所にてレポート" name="2" value="2" />
+        <combo_box.item label="クリックした場所にテレポート" name="2" value="2" />
       </combo_box>
       <check_box label="スクリプト化されたオブジェクトにダブルクリック動作を許可" name="FSAllowDoubleClickOnScriptedObjects" />
       <button label="ジョイスティック設定" name="joystick_setup_button" />
@@ -104,7 +104,7 @@
       <combo_box name="netmap_double_click_action_combo">
         <combo_box.item label="動作無し" name="0" value="0" />
         <combo_box.item label="ワールドマップを開く" name="1" value="1" />
-        <combo_box.item label="クリックした場所にてレポート" name="2" value="2" />
+        <combo_box.item label="クリックした場所にテレポート" name="2" value="2" />
       </combo_box>
 
       <slider label="ピック半径：" name="FSMinimapPickScale" tool_tip="ミニマップ上のピック範囲の半径をコントロールします。ピック範囲の不透明度と色は、ピック半径の色と不透明度の設定で調整できます。" />
