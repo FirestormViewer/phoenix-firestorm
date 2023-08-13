@@ -43,7 +43,7 @@
   </radio_group>
   <check_box label="リンク部分を編集" name="checkbox edit linked parts" />
   <button label="リンク" name="link_btn" />
-  <button label="リンクを外す" name="unlink_btn" />
+  <button label="リンク解除" name="unlink_btn" />
   <combo_box name="combobox grid mode" tool_tip="オブジェクトを配置するグリッドルーラーを選択します。">
     <combo_box.item label="ワールドグリッド" name="World" value="World" />
     <combo_box.item label="ローカルグリッド" name="Local" value="Local" />

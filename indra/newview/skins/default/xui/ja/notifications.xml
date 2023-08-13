@@ -2721,7 +2721,7 @@ https://community.secondlife.com/knowledgebase/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83
   <notification name="ConfirmUnlink">これは、リンクセットによる広範囲の選択です。リンクを解除すると、もう一度リンクできなくなる可能性があります。
 そのような場合に備えて、リンクセットを自分のインベントリにコピーできます。
     <tag>confirm</tag>
-    <usetemplate ignoretext="リンクセットのリンクを解除する前の確認" name="okcancelignore" notext="キャンセル" yestext="リンクを外す" />
+    <usetemplate ignoretext="リンクセットのリンクを解除する前の確認" name="okcancelignore" notext="キャンセル" yestext="リンク解除" />
   </notification>
 
   <notification name="HelpReportAbuseConfirm">この問題のご報告にお時間を割いていただきありがとうございます。

@@ -5,7 +5,7 @@
   <button label="ＯＫ" label_selected="ＯＫ" name="OK" />
   <button label="キャンセル" label_selected="キャンセル" name="Cancel" />
   <panel name="search_panel">
-    <search_editor label="設定を検索" name="search_prefs_edit" tool_tip="Type the search term you are interested in here. Results will be displayed for partial fulltext matches within the setting's name or comment." />
+    <search_editor label="設定を検索" name="search_prefs_edit" tool_tip="ここに検索語句を入力してください。検索結果は、設定名またはコメント内で部分的に全文一致した場合に表示されます。" />
     <button name="copy_search_slurl_btn" tool_tip="検索クエリをSUrlとしてコピーします。" />
   </panel>
   <tab_container name="pref core">
