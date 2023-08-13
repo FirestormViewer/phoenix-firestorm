@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="item properties" title="Inventory Item Properties">
+  <floater.string name="loading_experience">(loading)</floater.string>
+  <floater.string name="unknown">(unknown)</floater.string>
+  <floater.string name="public">(public)</floater.string>
+  <floater.string name="you_can">You can:</floater.string>
+  <floater.string name="owner_can">Owner can:</floater.string>
+  <floater.string name="acquiredDate">[year,datetime,local]年[mth,datetime,local]月[day,datetime,local]日[wkday,datetime,local]　[hour,datetime,local]：[min,datetime,local]：[second,datetime,local]</floater.string>
+  <icon name="IconLocked" />
+  <text name="LabelItemNameTitle">Name:</text>
+  <line_editor name="LabelItemName" />
+  <text name="LabelItemDescTitle">Description:</text>
+  <line_editor name="LabelItemDesc" />
+  <text name="LabelCreatorTitle">Creator:</text>
+  <text name="LabelCreatorName">TestString PleaseIgnore</text>
+  <button label="Profile..." name="BtnCreator" />
+  <text name="LabelOwnerTitle">Owner:</text>
+  <text name="LabelOwnerName">TestString PleaseIgnore</text>
+  <button label="Profile..." name="BtnOwner" />
+  <text name="LabelAcquiredTitle">Acquired:</text>
+  <text name="LabelAcquiredDate">Wed May 24 12:50:46 2006</text>
+  <text name="LabelItemExperienceTitle">Experience:</text>
+  <text name="LabelItemExperience" />
+  <text name="OwnerLabel">You:</text>
+  <check_box label="編集" name="CheckOwnerModify" />
+  <check_box label="コピー" name="CheckOwnerCopy" />
+  <check_box label="譲渡" name="CheckOwnerTransfer" />
+  <text name="BaseMaskDebug">Ｂ：</text>
+  <text name="OwnerMaskDebug">Ｏ：</text>
+  <text name="GroupMaskDebug">Ｇ：</text>
+  <text name="EveryoneMaskDebug">Ｅ：</text>
+  <text name="NextMaskDebug">Ｎ：</text>
+
+  <text name="GroupLabel">Group:</text>
+  <check_box label="Share" name="CheckShareWithGroup" />
+  <text name="AnyoneLabel">Anyone:</text>
+  <check_box label="Copy" name="CheckEveryoneCopy" />
+
+  <text name="NextOwnerLabel">Next owner:</text>
+  <check_box label="Modify" name="CheckNextOwnerModify" />
+  <check_box label="Copy" name="CheckNextOwnerCopy" />
+  <check_box label="Transfer" name="CheckNextOwnerTransfer" />
+
+  <check_box label="For Sale" name="CheckPurchase" />
+  <combo_box name="ComboSaleType">
+    <combo_box.item label="Original" name="Original" value="Original" />
+    <combo_box.item label="Copy" name="Copy" value="Copy" />
+    <combo_box.item label="Contents" name="Contents" value="Contents" />
+  </combo_box>
+  <spinner name="Edit Cost" label="Price:" />
+  <text name="CurrencySymbol">L$</text>
+
+</floater>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_profile" label="Profile">
+  <string name="status_online">Online</string>
+  <string name="status_offline">Offline</string>
+  <string name="status_unknown">Unknown</string>
+  <string name="CaptionTextAcctInfo">[ACCTTYPE]
+    [PAYMENTINFO]
+    [FIRESTORM][FSDEV][FSSUPP][FSQA][FSGW]</string>
+
+  <!--Badges-->
+  <string name="BadgeBeta" value="Original Beta Tester" />
+  <string name="BadgeBetaLifetime" value="Beta Lifetime member" />
+  <string name="BadgeLifetime" value="Lifetime member" />
+  <string name="BadgeLinden" value="Linden Lab employee" />
+  <string name="BadgePremiumLifetime" value="Premium lifetime" />
+  <string name="BadgePremiumPlusLifetime" value="Premium Plus lifetime" />
+  <string name="BadgeTeam" value="[APP_NAME] member" />
+
+  <string name="payment_update_link_url"> https://accounts.secondlife.com/billing_information/?lang=ja-JP</string>
+  <string name="partner_edit_link_url">https://www.secondlife.com/my/partners.php?lang=ja-JP</string>
+  <string name="my_account_link_url" value="https://www.secondlife.com/my/account/?lang=ja-JP" />
+  <string name="no_partner_text" value="None" />
+  <string name="no_group_text" value="None" />
+  <string name="age_format">Birthdate: [REG_DATE]
+    ([AGE])</string>
+  <string name="name_text_args">[NAME]</string>
+  <string name="display_name_text_args">[DISPLAY_NAME]</string>
+  <string name="FSDev" value=" Developer" />
+  <string name="FSSupp" value=" Support" />
+  <string name="FSQualityAssurance" value=" Bug Hunter" />
+  <string name="FSGW" value=" Gateway" />
+  <string name="texture_picker_label" value="Profile Picture" />
+
+  <text name="name_label" value="Name:" />
+  <button name="set_name" label="Name:" tool_tip="Set Display Name" />
+
+  <panel name="name_holder">
+    <view_border name="info_border" />
+    <text_editor name="complete_name" value="(loading...)" />
+    <menu_button name="copy_btn" tool_tip="Copy options" />
+  </panel>
+
+  <text name="Key:" value="Key:" />
+  <view_border name="info_border2" />
+  <text_editor name="user_key" value="" />
+
+  <layout_stack name="imagepositioner">
+    <layout_panel name="image_action_panel">
+      <menu_button name="image_action_btn" tool_tip="Perform profile picture related actions" />
+    </layout_panel>
+
+    <layout_panel name="image_panel">
+      <texture_picker name="2nd_life_pic" />
+      <loading_indicator name="image_upload_indicator" />
+    </layout_panel>
+
+    <layout_panel name="label_stack">
+      <panel name="indicator_stack">
+        <loading_indicator name="progress_indicator" />
+      </panel>
+      <text name="status" />
+      <icon tool_tip="Friend can see my online status" name="can_see_online" />
+      <icon tool_tip="Friend can not see my online status" name="cant_see_online" />
+      <icon tool_tip="Friend can see me on map" name="can_see_on_map" />
+      <icon tool_tip="Friend can not see me on map" name="cant_see_on_map" />
+      <icon tool_tip="Friend can edit my objects" name="can_edit_objects" />
+      <icon tool_tip="Friend can not edit my objects" name="cant_edit_objects" />
+      <text_editor name="user_age" value="(loading...)" />
+
+      <text name="label2" value="Account:" />
+      <view_border name="info_border_acc_status_text" />
+
+      <panel name="badge_layout">
+        <icon name="badge_icon" tool_tip="" />
+      </panel>
+
+      <text_editor name="account_info" />
+      <text name="partner_label" value="Partner:" />
+      <view_border name="info_border_partner_text" />
+      <text_editor name="partner_link" />
+    </layout_panel>
+  </layout_stack>
+
+  <text name="Groups:" value="Groups:" />
+  <button name="group_invite" label="+" tool_tip="Invite to Group" label_selected="+" />
+  <group_list name="group_list" />
+
+  <text name="About:" value="About:" />
+  <view_border name="info_border_sl_description_edit" />
+  <text_editor name="sl_description_edit" />
+
+  <text name="Give item:" value="Share:" />
+  <view_border name="drop_target_rect_vis" />
+  <text name="Give inventory" tool_tip="Drop inventory items here to give them to this person.">Drop inventory item here.</text>
+
+  <layout_stack name="buttonstack">
+    <layout_panel name="left_buttonstack">
+      <button name="show_on_map_btn" label="Find on Map" tool_tip="Locate the Resident on the map" label_selected="Find on Map" />
+      <button name="pay" label="Pay" tool_tip="Pay money to the Resident" label_selected="Pay" />
+    </layout_panel>
+
+    <layout_panel name="middle_buttonstack">
+      <button name="teleport" label="Offer Teleport" tool_tip="Offer a teleport to the Resident" label_selected="Offer Teleport" />
+      <button name="im" label="Instant Message" tool_tip="Open instant message session" label_selected="Instant Message" />
+    </layout_panel>
+
+    <layout_panel name="right_buttonstack">
+      <button name="add_friend" label="Add Friend" tool_tip="Offer friendship to the Resident" label_selected="Add Friend" />
+      <button name="remove_friend" label="Remove Friend" tool_tip="Terminate friendship with the Resident" label_selected="Remove Friend" />
+      <button name="block" label="Block" tool_tip="Block this Resident" />
+      <button name="unblock" label="Unblock" tool_tip="Unblock this Resident" />
+      <menu_button name="overflow_btn" />
+    </layout_panel>
+  </layout_stack>
+
+  <check_box name="show_in_search" label="Show in search" tool_tip="Let people see you in search results" />
+  <button name="save_description_changes" label="Save" />
+  <button name="discard_description_changes" label="Discard" />
+  <profile_drop_target name="drop_target" />
+</panel>

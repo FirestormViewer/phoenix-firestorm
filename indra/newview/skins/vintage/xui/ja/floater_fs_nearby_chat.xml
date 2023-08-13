@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="nearby_chat" title="Nearby Chat">
+  <floater.string name="chatbox_label">To nearby chat</floater.string>
+  <layout_stack name="ls_control_panel">
+    <layout_panel name="lp_chat_history_btn">
+      <button tool_tip="Open the nearby chat transcript." name="chat_history_btn" />
+    </layout_panel>
+    <layout_panel name="lp_chat_history_muted_btn">
+      <button tool_tip="Shows the muted chat in nearby chat transcript." name="chat_history_muted_btn">
+      </button>
+    </layout_panel>
+    <layout_panel name="lp_options_btn">
+      <menu_button tool_tip="Chat Options" name="chat_options_btn" />
+    </layout_panel>
+    <layout_panel name="lp_chat_search_btn">
+      <button name="chat_search_btn" tool_tip="Search nearby chat" />
+    </layout_panel>
+  </layout_stack>
+  <layout_stack name="ls_chat">
+    <layout_panel name="panel_im_control_lp">
+      <layout_stack name="im_panels">
+        <layout_panel name="chat_holder">
+          <fs_chat_history name="chat_history" />
+          <fs_chat_history name="chat_history_muted" />
+        </layout_panel>
+        <layout_panel name="unread_messages_holder">
+          <view_border name="unread_messages_background" />
+          <text name="unread_messages_text">Unread Messages: [NUM]</text>
+        </layout_panel>
+        <layout_panel name="chat_layout_panel">
+          <layout_stack name="input_panels">
+            <layout_panel name="input_editor_layout_panel">
+              <chat_editor name="chat_box" />
+            </layout_panel>
+            <layout_panel name="input_button_layout_panel">
+              <spinner label="" name="ChatChannel" tool_tip="Channel to send chat on. Enabled in Preferences -> Chat -> Firestorm -> Show channel selection in chat bar." />
+            </layout_panel>
+            <layout_panel name="chat_type_layout_panel">
+              <!-- Makeshift split button since LLSplitButton is broken -->
+              <combo_box name="chat_type" tool_tip="Whisper=10m, Say=20m, Shout=100m">
+                <combo_box.item name="chat_type_whisper" value="whisper" label="Whisper" />
+                <combo_box.item name="chat_type_say" value="say" label="Say" />
+                <combo_box.item name="chat_type_shout" value="shout" label="Shout" />
+              </combo_box>
+              <button name="send_chat" tool_tip="Whisper=10m, Say=20m, Shout=100m" />
+              <icon name="chat_type_combo_arrow_icon" />
+              <!-- Makeshift split button since LLSplitButton is broken -->
+            </layout_panel>
+          </layout_stack>
+        </layout_panel>
+      </layout_stack>
+    </layout_panel>
+  </layout_stack>
+</floater>

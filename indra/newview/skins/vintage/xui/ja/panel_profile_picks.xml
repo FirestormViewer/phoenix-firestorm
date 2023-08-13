@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_picks" label="Picks">
+  <string name="no_picks" value="No Picks" />
+  <layout_stack name="main_stack">
+    <layout_panel name="buttons_header">
+      <text name="header_text">Tell everyone about your favorite places in [GRID].</text>
+      <button name="new_btn" label="New..." tool_tip="Create a new pick at the current location" />
+      <button name="delete_btn" label="Delete..." tool_tip="Delete currently selected pick" />
+    </layout_panel>
+    <layout_panel name="main_body">
+      <tab_container name="tab_picks" />
+      <layout_stack name="indicator_stack">
+        <layout_panel name="indicator_spacer_left" />
+        <layout_panel name="buttons_header">
+          <loading_indicator name="progress_indicator" />
+        </layout_panel>
+        <layout_panel name="indicator_spacer_right" />
+      </layout_stack>
+      <text name="picks_panel_text">Loading...</text>
+    </layout_panel>
+  </layout_stack>
+</panel>

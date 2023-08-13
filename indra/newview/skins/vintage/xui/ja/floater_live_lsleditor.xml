@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="script ed float" title="Script: New script">
+  <floater.string name="not_allowed">You can not view or edit this script, since it has been set with restricted permissions. You need full permissions to view or edit a script inside an object.</floater.string>
+  <floater.string name="script_running">Running</floater.string>
+  <floater.string name="Title">Script: [NAME]</floater.string>
+  <floater.string name="experience_enabled">Uncheck to remove the current experience</floater.string>
+  <floater.string name="no_experiences">You are not authorized for any experiences</floater.string>
+  <floater.string name="add_experiences">Select to add an experience</floater.string>
+  <floater.string name="show_experience_profile">Click to view the experience profile</floater.string>
+  <floater.string name="loading">Loading...</floater.string>
+  <panel name="script ed panel" />
+  <check_box label="Running" name="running" />
+  <check_box label="Mono" name="mono" />
+  <button label="Reset" label_selected="Reset" name="Reset" />
+  <check_box label="Use Experience:" name="enable_xp" />
+  <combo_box label="" name="Experiences..." />
+  <button label="&gt;" name="view_profile" />
+</floater>

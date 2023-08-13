@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="group_list_item">
+  <icon name="hovered_icon" />
+  <icon name="selected_icon" />
+  <group_icon name="group_icon" />
+  <text name="group_name" value="不明" />
+
+  <!--
+  We don't want the "hover buttons" to appear, since they only waste space
+  and their function is redundant
+
+  <button name="info_btn" />
+  <button name="profile_btn" tool_tip="View profile" />
+-->
+</panel>

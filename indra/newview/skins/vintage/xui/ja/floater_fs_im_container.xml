@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<multi_floater name="floater_im_box" title="会話">
+  <tab_container name="im_box_tab_container">
+    <first_tab />
+    <middle_tab />
+    <last_tab />
+  </tab_container>
+</multi_floater>
