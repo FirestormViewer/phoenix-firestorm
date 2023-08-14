@@ -40,6 +40,9 @@
 		<context_menu label="Abnehmen" name="Detach Self"/>
 		<menu_item_call label="Alles abnehmen" name="Detach All"/>
 	</context_menu>
+	<menu_item_call label="Hinsetzen / Aufstehen" name="Sit stand"/>
+	<menu_item_call label="Fliegen / Landen" name="Fly land"/>
+	<menu_item_call label="Animationen stoppen" name="Stop Animating My Avatar"/>
 	<context_menu label="Gemeinschaft" name="CommunitySubmenu">
 		<menu_item_call label="Freunde" name="Friends..."/>
 		<menu_item_call label="Gruppen" name="Groups..."/>
