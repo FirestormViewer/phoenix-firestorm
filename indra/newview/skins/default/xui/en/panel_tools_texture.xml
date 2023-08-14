@@ -280,12 +280,26 @@
              label="Choose from inventory"
              width="140"/>
 -->
+            <text
+             visible="false"
+             type="string"
+             length="1"
+             follows="left|top"
+             height="10"
+             layout="topleft"
+             top_delta="40"
+             left_pad="10"
+             name="material_permissions_loading_label"
+             text_readonly_color="LabelDisabledColor"
+             width="160">
+                Loading contents...
+            </text>
             <button
              follows="left|top"
              height="23"
              layout="topleft"
-             left_pad="10"
-             top_delta="40"
+             left_delta="0"
+             top_delta="0"
              name="edit_selected_pbr"
              label="Edit"
              width="100"/>

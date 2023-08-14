@@ -35,6 +35,8 @@
 #include "lltextureentry.h"
 #include "llselectmgr.h"
 
+#include <memory>
+
 class LLButton;
 class LLCheckBoxCtrl;
 class LLColorSwatchCtrl;
@@ -51,6 +53,8 @@ class LLFloater;
 class LLMaterialID;
 class LLMediaCtrl;
 class LLMenuButton;
+
+class PBRPickerItemListener;
 
 // Represents an edit for use in replicating the op across one or more materials in the selection set.
 //
@@ -353,7 +357,7 @@ private:
 	//
 	// Do NOT call updateUI from within this function.
 	//
-	void updateVisibility();
+	void updateVisibility(LLViewerObject* objectp = nullptr);
 
 	// Hey look everyone, a type-safe alternative to copy and paste! :)
 	//
@@ -514,7 +518,7 @@ private:
     void onPbrSelectionChanged(LLInventoryItem* itemp);
 
     void updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, bool& has_faces_without_pbr, bool force_set_values);
-    void updateVisibilityGLTF();
+    void updateVisibilityGLTF(LLViewerObject* objectp = nullptr);
 
     void updateSelectedGLTFMaterials(std::function<void(LLGLTFMaterial*)> func);
     void updateGLTFTextureTransform(float value, U32 pbr_type, std::function<void(LLGLTFMaterial::TextureTransform*)> edit);
@@ -567,6 +571,8 @@ private:
     };
 
     static Selection sMaterialOverrideSelection;
+
+    std::unique_ptr<PBRPickerItemListener> mInventoryListener;
 
 public:
 	#if defined(DEF_GET_MAT_STATE)
@@ -648,7 +654,6 @@ public:
 		DEF_EDIT_MAT_STATE(LLUUID,const LLUUID&,setNormalID);
 		DEF_EDIT_MAT_STATE(LLUUID,const LLUUID&,setSpecularID);
 		DEF_EDIT_MAT_STATE(LLColor4U,	const LLColor4U&,setSpecularLightColor);
-		DEF_EDIT_MAT_STATE(LLUUID, const LLUUID&, setMaterialID);
 	};
 
 	class LLSelectedTE
