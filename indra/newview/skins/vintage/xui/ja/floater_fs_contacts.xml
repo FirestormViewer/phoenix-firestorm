@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="imcontacts" title="連絡先">
-  <string name="no_friends" value="フレンドがありません。" />
-  <string name="no_filtered_groups_msg" value="「SEARCH_TERM」を含むグループは見つかりませんでした。" />
-  <string name="no_groups_msg" value="参加できるグループを探していますか？ [secondlife:///app/search/groups 検索]してみましょう。" />
+  <string name="no_friends" value="フレンドがいません。" />
+  <string name="no_filtered_groups_msg" value="「[SEARCH_TERM]」を含むグループは見つかりませんでした。" />
+  <string name="no_groups_msg" value="参加できるグループをお探しですか？[secondlife:///app/search/groups 検索]してみましょう。" />
   <tab_container name="friends_and_groups">
     <first_tab />
     <middle_tab />

@@ -7,7 +7,7 @@
     <fs_scroll_list.columns name="item_mute_uuid" />
   </fs_scroll_list>
 
-  <text name="block_limit">ブロックしたエントリ：[LIMIT]件中[COUNT]件</text>
+  <text name="block_limit">ブロックしたエントリ：全[LIMIT]件中[COUNT]件</text>
 
   <layout_stack name="block_list_sidetray_main">
     <!-- will be shown or hidden in code, depending on whether this is a sub tab or standalone panel -Zi -->

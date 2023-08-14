@@ -1,77 +1,79 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel default_tab_group="1" follows="all" height="423" label="People" layout="topleft" left="0" min_height="350" name="people_panel" top="0" width="333">
+<panel label="人物" name="people_panel">
   <string name="FlagsColumnType" value="icon"/>
   <string name="FlagsColumnValue_0" value=""/>
   <string name="FlagsColumnValue_1" value="Payment_Info_Filled"/>
   <string name="FlagsColumnValue_2" value="Payment_Info_Used"/>
-  <string name="no_recent_people" value="No recent people. Looking for people to hang out with? Use the search box to find topics or content you might be interested in, then visit those places to meet people with similar interests." />
-  <string name="no_filtered_recent_people" value="Didn't find what you're looking for? Try [secondlife:///app/search/people/[SEARCH_TERM] Search]." />
-  <string name="no_one_near" value="No one nearby. Looking for people to hang out with? Use the search box to find topics or content you might be interested in, then visit those places to meet people with similar interests." />
-  <string name="no_one_filtered_near" value="Didn't find what you're looking for? Try [secondlife:///app/search/people/[SEARCH_TERM] Search]." />
-  <string name="no_friends_online" value="No friends online" />
-  <string name="no_friends" value="No friends" />
-  <string name="no_friends_msg">Find friends using [secondlife:///app/search/people Search] or right-click on a Resident to add them as a friend.
-Looking for people to hang out with? Use the search box to find topics or content you might be interested in, then visit those places to meet people with similar interests.</string>
-  <string name="no_filtered_friends_msg">Didn't find what you're looking for? Try [secondlife:///app/search/people/[SEARCH_TERM] Search].</string>
-  <string name="people_filter_label" value="Filter People" />
-  <string name="groups_filter_label" value="Filter Groups" />
+  <string name="no_recent_people" value="最近の人はいません。一緒に遊べる人をお探しですか？検索ボックスを使って、興味のありそうなトピックやコンテンツを見つけ、その場所を訪れて、同じような興味を持つ人と出会いましょう。" />
+  <string name="no_filtered_recent_people" value="お探しのものは見つかりませんでしたか？[secondlife:///app/search/people/[SEARCH_TERM] 検索]してみましょう。" />
+  <string name="no_one_near" value="近くには誰もいません。一緒に遊べる人をお探しですか？検索ボックスを使って、興味のありそうなトピックやコンテンツを見つけ、その場所を訪れて、同じような興味を持つ人と出会いましょう。" />
+  <string name="no_one_filtered_near" value="お探しのものは見つかりませんでしたか？[secondlife:///app/search/people/[SEARCH_TERM] 検索]してみましょう。" />
+  <string name="no_friends_online" value="オンラインのフレンドがいません。" />
+  <string name="no_friends" value="フレンドがいません。" />
+  <string name="no_friends_msg">[secondlife:///app/search/people 検索]を使ってフレンドを探すか、住民を右クリックしてフレンドに追加しましょう。
+一緒に遊ぶ仲間をお探しですか？検索ボックスを使って興味のありそうなトピックやコンテンツを探し、その場所を訪れて同じような興味を持つ人と出会いましょう。</string>
+  <string name="no_filtered_friends_msg">お探しのものは見つかりませんでしたか？[secondlife:///app/search/people/[SEARCH_TERM] 検索]してみましょう。</string>
+  <string name="people_filter_label" value="人物でフィルタ" />
+  <string name="groups_filter_label" value="グループでフィルタ" />
   <!--
-			*WORKAROUND: for group_list.no_items_msg & group_list.no_filtered_items_msg attributes.
-			They are not defined as translatable in VLT. See EXT-5931
-		-->
-  <string name="no_filtered_groups_msg" value="Didn't find what you're looking for? Try [secondlife:///app/search/groups/[SEARCH_TERM] Search]." />
-  <string name="no_groups_msg" value="Looking for Groups to join? Try [secondlife:///app/search/groups Search]." />
-  <string name="MiniMapToolTipMsg" value="[REGION](Double-click to open Map, shift-drag to pan)"/>
-  <string name="AltMiniMapToolTipMsg" value="[REGION] (Double-click to teleport, shift-drag to pan)"/>
-  <string name="avatar_name_count" value="Name [[TOTAL] / [IN_REGION] / [IN_CHAT_RANGE]]" />
-  <panel.string name="empty_list">This contact set is empty.</panel.string>
-  <panel.string name="no_sets">No sets</panel.string>
-  <panel.string name="all_sets">All sets</panel.string>
-  <panel.string name="pseudonyms">Aliases</panel.string>
+  *WORKAROUND: for group_list.no_items_msg & group_list.no_filtered_items_msg attributes.
+  They are not defined as translatable in VLT. See EXT-5931
+  -->
+  <string name="no_filtered_groups_msg" value="お探しのものは見つかりませんでしたか？[secondlife:///app/search/people/[SEARCH_TERM] 検索]してみましょう。" />
+  <string name="no_groups_msg" value="参加できるグループをお探しですか？[secondlife:///app/search/groups 検索]してみましょう。" />
+  <string name="MiniMapToolTipMsg" value="[REGION]（ダブルクリックでマップを開く。Shift‐ドラッグで水平・垂直移動）" />
+  <string name="AltMiniMapToolTipMsg" value="[REGION]（ダブルクリックでテレポート。Shift‐ドラッグで水平・垂直移動）" />
+  <string name="avatar_name_count" value="名前[[TOTAL]／[IN_REGION]／[IN_CHAT_RANGE]]" />
+
+  <panel.string name="empty_list">この連絡先セットは空です。</panel.string>
+  <panel.string name="no_sets">セットがありません。</panel.string>
+  <panel.string name="all_sets">すべてのセット</panel.string>
+  <panel.string name="pseudonyms">エイリアス</panel.string>
 
   <tab_container name="tabs">
-    <panel label="Nearby" name="nearby_panel">
+    <panel label="近く" name="nearby_panel">
       <tab_container name="tabcont_radarpeople_main">
-        <panel name="panel_radar" label="List" />
-        <panel name="radarmap_options_panel" label="Options">
-          <scroll_container label="Options" name="radarmap_options_scroll_container">
-            <container_view name="radarmap_options_container_view" label="Options">
+        <panel name="panel_radar" label="リスト" />
+        <panel name="radarmap_options_panel" label="オプション">
+          <scroll_container label="オプション" name="radarmap_options_scroll_container">
+            <container_view name="radarmap_options_container_view" label="オプション">
               <panel name="radarmap_options_scrolled_panel">
-                <check_box label="Show Minimap above Radar" name="ShowRadarMinimap" />
-                <check_box label="Show muted and blacklisted Avatars" name="FSRadarShowMutedAndDerendered" />
-                <check_box label="Report Entering Draw Range" name="RadarReportDrawRangeEnter" />
-                <check_box label="Report Leaving Draw Range" name="RadarReportDrawRangeLeaving" />
-                <check_box label="Report Entering Chat Range" name="RadarReportChatRangeEnter" />
-                <check_box label="Report Leaving Chat Range" name="RadarReportChatRangeLeave" />
-                <check_box label="Report Entering your Region" name="RadarReportSimRangeEnter" />
-                <check_box label="Report Leaving your Region" name="RadarReportSimRangeLeave" />
-                <check_box label="Report Enter Alerts to Scripts" name="RadarEnterChannelAlert" />
-                <check_box label="Report Exit Alerts to Scripts" name="RadarLeaveChannelAlert" />
-                <check_box label="Enhance radar with LSL-Client Bridge" tool_tip="If this is enabled, radar functions responsible for determining avatar locations at high altitudes are assisted by the LSL-Client Bridge, particularly when they're beyond draw distance." name="FSRadarEnhanceByBridge" />
-                <check_box label="Color names based on distance" name="FSRadarColorNamesByDistance" />
+                <check_box label="ミニマップ上の近くチャットが届く範囲のリング" name="MiniMapChatRing" />
+                <check_box label="ミュート及びブラックリストに入れているアバターを表示" name="FSRadarShowMutedAndDerendered" />
+                <check_box label="描画範囲に入ったときに報告" name="RadarReportDrawRangeEnter" />
+                <check_box label="描画範囲を外れたときに報告" name="RadarReportDrawRangeLeave" />
+                <check_box label="チャット範囲に入ったときに報告" name="RadarReportChatRangeEnter" />
+                <check_box label="チャット範囲を外れたときに報告" name="RadarReportChatRangeLeave" />
+                <check_box label="あなたのリージョンに入ったときに報告" name="RadarReportSimRangeEnter" />
+                <check_box label="あなたのリージョンを離れたときに報告" name="RadarReportSimRangeLeave" />
+                <check_box label="スクリプトの警告に入ったときに報告" name="RadarEnterChannelAlert" />
+                <check_box label="スクリプトの警告を離れたときに報告" name="RadarLeaveChannelAlert" />
 
-                <check_box label="Limit range to:" tool_tip="Limit Results to specific Radius" name="LimitRadarByRange" />
+                <check_box label="ＬＳＬクライアントブリッジによるレーダーの強化" tool_tip="この機能を有効にすると、超高度のアバターの位置を特定するレーダー機能が、ＬＳＬクライアントブリッジによってサポートされます。" name="FSRadarEnhanceByBridge" />
+                <check_box label="距離に応じた名前の色" name="FSRadarColorNamesByDistance" />
+
+                <check_box label="以下の半径で結果を絞る：" tool_tip="検索結果を指定の半径で絞り込みます。" name="LimitRadarByRange" />
                 <slider name="NearMeRangeVintage" />
-                <text name="m" value="m" />
+                <text name="m" value="ｍ" />
 
-                <text name="radarmap_range_label" value="Radar Name Format:" />
+                <text name="radarmap_range_label" value="レーダーの名前表示形式：" />
                 <combo_box name="RadarNameFormat">
-                  <combo_box.item name="RadarNameFormat_display" value="0" label="Display Name only" />
-                  <combo_box.item name="RadarNameFormat_user" value="1" label="Username only" />
-                  <combo_box.item name="RadarNameFormat_displayuser" value="2" label="Display Name (Username)" />
-                  <combo_box.item name="RadarNameFormat_userdisplay" value="3" label="Username (Display Name)" />
+                  <combo_box.item name="RadarNameFormat_display" value="0" label="表示名のみ" />
+                  <combo_box.item name="RadarNameFormat_user" value="1" label="ユーザ名のみ" />
+                  <combo_box.item name="RadarNameFormat_displayuser" value="2" label="表示名（ユーザ名）" />
+                  <combo_box.item name="RadarNameFormat_userdisplay" value="3" label="ユーザ名（表示名）" />
                 </combo_box>
 
-                <text name="columns_label" value="Displayed Columns:" />
-                <check_box label="Voice" name="column_voice" />
-                <check_box label="Time" name="column_seen" />
+                <text name="columns_label" value="表示する列：" />
+                <check_box label="ボイス" name="column_voice" />
+                <check_box label="時間" name="column_seen" />
 
-                <check_box label="Age" name="column_age" />
-                <check_box label="Same Region" name="column_region" />
-                <check_box label="Typing Status" name="column_typing_status" />
-                <check_box label="Sitting Status" name="column_sitting_status" />
-                <check_box label="Flags" name="column_flags" />
-                <check_box label="Notes" name="notes_flags" />
+                <check_box label="年齢" name="column_age" />
+                <check_box label="S同じリージョン" name="column_region" />
+                <check_box label="入力中か" name="column_typing_status" />
+                <check_box label="座っているか" name="column_sitting_status" />
+                <check_box label="フラグ" name="column_flags" />
+                <check_box label="ノート" name="notes_flags" />
               </panel>
             </container_view>
           </scroll_container>
@@ -86,7 +88,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
       <!-- Keep these controls so the code doesn't complain about them being missing -Zi -->
     </panel>
 
-    <panel label="Recent" name="recent_panel">
+    <panel label="最近" name="recent_panel">
       <avatar_list name="avatar_list" />
       <!-- Keep these controls so the code doesn't complain about them being missing -Zi -->
       <panel name="hide_controls">
@@ -94,7 +96,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
         <button name="add_friend_btn_recent" />
       </panel>
     </panel>
-    <panel name="blocked_panel" label="Blocked" />
+    <panel name="blocked_panel" label="ブロック済み" />
   </tab_container>
 
   <!-- Keep these controls so the code doesn't complain about them being missing -Zi -->

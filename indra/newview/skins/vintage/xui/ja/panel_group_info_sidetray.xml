@@ -10,7 +10,7 @@
         <panel name="group_info_top">
           <button name="back" />
           <text_editor name="group_name" value="（読み込んでいます…）" />
-          <line_editor label="ここに新しいグループ名を入力します" name="group_name_editor" />
+          <line_editor label="ここに新しいグループ名を入力します。" name="group_name_editor" />
         </panel>
       </layout_panel>
 

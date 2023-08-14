@@ -28,8 +28,8 @@
     <combo_box.item value="filter_type_custom" label="カスタム…" />
   </combo_box>
 
-  <menu_button tool_tip="Show search visibility options" name="options_visibility_btn" />
-  <filter_editor label="Filter Inventory" name="inventory search editor" tool_tip="Type in one or more words to search for, separated by '+' " />
+  <menu_button tool_tip="検索表示オプション" name="options_visibility_btn" />
+  <filter_editor label="検索用語を入力する" name="inventory search editor" tool_tip="検索したい単語は「+」で区切って複数入力してください。" />
 
   <tab_container name="inventory filter tabs">
     <inventory_panel label="インベントリ" name="All Items" />

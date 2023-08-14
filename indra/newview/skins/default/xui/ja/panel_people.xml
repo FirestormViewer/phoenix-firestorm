@@ -7,7 +7,7 @@
   <string name="no_one_filtered_near" value="お探しの人物は見つかりましたか？[secondlife:///app/search/people/[SEARCH_TERM] 検索]をお試しください。" />
   <string name="no_friends_online" value="オンラインのフレンドはいません。" />
   <string name="no_friends" value="フレンドはいません。" />
-  <string name="no_friends_msg">フレンドとして追加したい場合は、相手のアバターまたは名前を右クリックします。
+  <string name="no_friends_msg">フレンドを追加したい場合は、相手のアバターまたは名前を右クリックします。
 
 一緒に何かするフレンドをお探しですか？
 
@@ -21,7 +21,7 @@
   <string name="no_groups_msg">あなたはどこのグループにも所属していません。
 
 [https://community.secondlife.com/knowledgebase/joining-and-participating-in-groups-r51/ Second Lifeのグループへの参加]を参考にグループを探してみましょう。</string>
-  <string name="no_groups_msg" value="グループをお探しですか？[secondlife:///app/search/groups 検索]をお試しください。" />
+  <string name="no_groups_msg" value="参加できるグループをお探しですか？[secondlife:///app/search/groups 検索]してみましょう。" />
   <string name="MiniMapToolTipMsg" value="[REGION]（ダブルクリックでマップを開く。Shift‐ドラッグで水平・垂直移動）" />
   <string name="AltMiniMapToolTipMsg" value="[REGION]（ダブルクリックでテレポート。Shift‐ドラッグで水平・垂直移動）" />
   <string name="GroupCountWithInfo" value="あなたは現在、[COUNT]グループに属しています。あと[REMAINING]グループに参加することができます。[secondlife:/// 上限を増やす]" />
@@ -35,7 +35,7 @@
   <!-- /FS -->
   <tab_container name="tabs">
     <!-- ================================= NEARBY tab =========================== -->
-    <panel label="近隣" name="nearby_panel">
+    <panel label="近く" name="nearby_panel">
       <panel label="bottom_panel" name="nearby_buttons_panel">
         <filter_editor label="人物をフィルタ" name="nearby_filter_input" />
         <button name="gear_btn" tool_tip="選択した人物に対するアクション" />

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="block_list_panel">
-  <block_list name="blocked" tool_tip="List of currently blocked Residents" />
+  <block_list name="blocked" tool_tip="ブロックした住民を一覧表示しています。" />
   <layout_stack name="block_list_sidetray_main">
     <!-- will be shown or hidden in code, depending on whether this is a sub tab or standalone panel -Zi -->
     <!-- probably unused now so set visible to false initially -->

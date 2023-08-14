@@ -10,6 +10,6 @@
   and their function is redundant
 
   <button name="info_btn" />
-  <button name="profile_btn" tool_tip="View profile" />
+  <button name="profile_btn" tool_tip="プロフィールを閲覧します。" />
 -->
 </panel>

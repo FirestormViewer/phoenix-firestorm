@@ -13,7 +13,7 @@
           <button name="reload_received_items_btn" tool_tip="受け取ったアイテムリストをリロードします。" />
           <text name="inbox_fresh_new_count">新着[NUM]個</text>
           <panel name="inbox_inventory_placeholder_panel" tool_tip="アイテムをインベントリにドラッグアンドドロップして使用します。">
-            <text name="inbox_inventory_placeholder">マーケットプレイスで購入したものは、ここに配送される。</text>
+            <text name="inbox_inventory_placeholder">マーケットプレイスで購入したものは、ここに配送されます。</text>
           </panel>
         </panel>
       </layout_panel>

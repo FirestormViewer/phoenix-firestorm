@@ -3,8 +3,7 @@
   <string name="no_picks" value="ピックなし" />
   <layout_stack name="main_stack">
     <layout_panel name="buttons_header">
-      <text name="header_text">[CURRENT_GRID]のお気に入りの場所を紹介しましょう。
-      </text>
+      <text name="header_text">[CURRENT_GRID]でのお気に入りの場所を紹介しましょう。</text>
       <button name="new_btn" label="新規…" tool_tip="現在の場所に新しいピックを作成します。" />
       <button name="delete_btn" label="削除…" tool_tip="現在選択されているピックを削除します。" />
     </layout_panel>

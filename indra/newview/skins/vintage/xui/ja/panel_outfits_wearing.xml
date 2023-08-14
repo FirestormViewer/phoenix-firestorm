@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="Wearing">
-  <panel.string name="no_attachments">No attachments worn.</panel.string>
+  <panel.string name="no_attachments">何も着用していませせん。</panel.string>
   <accordion name="wearables_accordion">
-    <accordion_tab name="tab_wearables" title="Wearables">
+    <accordion_tab name="tab_wearables" title="服装">
       <wearable_items_list name="cof_items_list" />
     </accordion_tab>
-    <accordion_tab name="tab_temp_attachments" title="Temporary attachments">
+    <accordion_tab name="tab_temp_attachments" title="一時的な装着物">
       <scroll_list name="temp_attachments_list">
         <scroll_list.columns name="icon" />
         <scroll_list.columns name="text" />
@@ -14,11 +14,11 @@
     </accordion_tab>
   </accordion>
   <panel name="bottom_panel">
-    <menu_button name="options_gear_btn" tool_tip="Show additional options" />
+    <menu_button name="options_gear_btn" tool_tip="追加オブションを表示します。" />
     <!--
-    <button name="copy_to_clipboard" label="Send to clipboard" tool_tip="Send current outfit names to clipboard" />
+    <button name="copy_to_clipboard" label="クリップボードに送る" tool_tip="現在のアウトフィット名をクリップボードに送ります。" />
     -->
     <icon name="dummy_icon" />
-    <text name="avatar_complexity_label">Complexity: [WEIGHT]</text>
+    <text name="avatar_complexity_label">複雑度：[WEIGHT]</text>
   </panel>
 </panel>

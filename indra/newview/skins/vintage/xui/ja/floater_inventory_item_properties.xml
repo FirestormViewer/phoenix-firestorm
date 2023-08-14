@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="item properties" title="Inventory Item Properties">
-  <floater.string name="loading_experience">(loading)</floater.string>
-  <floater.string name="unknown">(unknown)</floater.string>
-  <floater.string name="public">(public)</floater.string>
-  <floater.string name="you_can">You can:</floater.string>
-  <floater.string name="owner_can">Owner can:</floater.string>
+<floater name="item properties" title="インベントリアイテムのプロパティ">
+  <floater.string name="loading_experience">（読み込んでいます）</floater.string>
+  <floater.string name="unknown">（不明）</floater.string>
+  <floater.string name="public">（公共）</floater.string>
+  <floater.string name="you_can">あなたができること：</floater.string>
+  <floater.string name="owner_can">所有者ができること：</floater.string>
   <floater.string name="acquiredDate">[year,datetime,local]年[mth,datetime,local]月[day,datetime,local]日[wkday,datetime,local]　[hour,datetime,local]：[min,datetime,local]：[second,datetime,local]</floater.string>
   <icon name="IconLocked" />
-  <text name="LabelItemNameTitle">Name:</text>
+  <text name="LabelItemNameTitle">名前：</text>
   <line_editor name="LabelItemName" />
-  <text name="LabelItemDescTitle">Description:</text>
+  <text name="LabelItemDescTitle">説明：</text>
   <line_editor name="LabelItemDesc" />
-  <text name="LabelCreatorTitle">Creator:</text>
-  <text name="LabelCreatorName">TestString PleaseIgnore</text>
+  <text name="LabelCreatorTitle">制作者：</text>
+  <text name="LabelCreatorName">テスト文字列 無視してください</text>
   <button label="Profile..." name="BtnCreator" />
-  <text name="LabelOwnerTitle">Owner:</text>
-  <text name="LabelOwnerName">TestString PleaseIgnore</text>
+  <text name="LabelOwnerTitle">所有者：</text>
+  <text name="LabelOwnerName">テスト文字列 無視してください</text>
   <button label="Profile..." name="BtnOwner" />
-  <text name="LabelAcquiredTitle">Acquired:</text>
-  <text name="LabelAcquiredDate">Wed May 24 12:50:46 2006</text>
-  <text name="LabelItemExperienceTitle">Experience:</text>
+  <text name="LabelAcquiredTitle">取得日：</text>
+  <text name="LabelAcquiredDate">2006年5月24日 12：50：46</text>
+  <text name="LabelItemExperienceTitle">体験：</text>
   <text name="LabelItemExperience" />
-  <text name="OwnerLabel">You:</text>
+  <text name="OwnerLabel">あなた：</text>
   <check_box label="編集" name="CheckOwnerModify" />
   <check_box label="コピー" name="CheckOwnerCopy" />
   <check_box label="譲渡" name="CheckOwnerTransfer" />
@@ -31,23 +31,23 @@
   <text name="EveryoneMaskDebug">Ｅ：</text>
   <text name="NextMaskDebug">Ｎ：</text>
 
-  <text name="GroupLabel">Group:</text>
-  <check_box label="Share" name="CheckShareWithGroup" />
-  <text name="AnyoneLabel">Anyone:</text>
-  <check_box label="Copy" name="CheckEveryoneCopy" />
+  <text name="GroupLabel">グループ：</text>
+  <check_box label="共有" name="CheckShareWithGroup" />
+  <text name="AnyoneLabel">誰でも：</text>
+  <check_box label="コピー" name="CheckEveryoneCopy" />
 
-  <text name="NextOwnerLabel">Next owner:</text>
-  <check_box label="Modify" name="CheckNextOwnerModify" />
-  <check_box label="Copy" name="CheckNextOwnerCopy" />
-  <check_box label="Transfer" name="CheckNextOwnerTransfer" />
+  <text name="NextOwnerLabel">次の所有者：</text>
+  <check_box label="編集" name="CheckNextOwnerModify" />
+  <check_box label="コピー" name="CheckNextOwnerCopy" />
+  <check_box label="譲渡" name="CheckNextOwnerTransfer" />
 
-  <check_box label="For Sale" name="CheckPurchase" />
+  <check_box label="販売物" name="CheckPurchase" />
   <combo_box name="ComboSaleType">
-    <combo_box.item label="Original" name="Original" value="Original" />
-    <combo_box.item label="Copy" name="Copy" value="Copy" />
-    <combo_box.item label="Contents" name="Contents" value="Contents" />
+    <combo_box.item label="オリジナル" name="Original" value="Original" />
+    <combo_box.item label="コピー" name="Copy" value="Copy" />
+    <combo_box.item label="中身" name="Contents" value="Contents" />
   </combo_box>
-  <spinner name="Edit Cost" label="Price:" />
+  <spinner name="Edit Cost" label="価格：" />
   <text name="CurrencySymbol">L$</text>
 
 </floater>

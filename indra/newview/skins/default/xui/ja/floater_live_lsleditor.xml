@@ -8,9 +8,10 @@
   <floater.string name="add_experiences">選択して、体験を追加する</floater.string>
   <floater.string name="show_experience_profile">クリックして、体験プロフィールを表示する</floater.string>
   <floater.string name="loading">読み込んでいます…</floater.string>
-  <button label="リセット" label_selected="リセット" name="Reset" />
+  <panel name="script ed panel" />
   <check_box label="実行中" name="running" />
   <check_box label="Ｍｏｎｏ" name="mono" />
+  <button label="リセット" label_selected="リセット" name="Reset" />
   <check_box label="体験を使用：" name="enable_xp" />
-  <button label="＞" name="view_profile" />
+  <button label="▶" name="view_profile" />
 </floater>

@@ -15,14 +15,17 @@
   <string name="BadgePremiumLifetime" value="プレミアム有効期限内" />
   <string name="BadgePremiumPlusLifetime" value="プレミアムプラス有効期限内" />
   <string name="BadgeTeam" value="[APP_NAME]メンバー" />
+
   <string name="payment_update_link_url">https://accounts.secondlife.com/billing_information/?lang=ja-JP</string>
   <string name="partner_edit_link_url">https://secondlife.com/my/partners.php?lang=ja-JP</string>
   <string name="my_account_link_url" value="https://secondlife.com/my/account/?lang=ja-JP" />
   <string name="no_partner_text" value="なし" />
   <string name="no_group_text" value="なし" />
-  <string name="age_format">[REG_DATE]（[AGE]）</string>
+  <string name="age_format">[REG_DATE]
+（[AGE]）</string>
   <string name="name_text_args">[NAME]</string>
   <string name="display_name_text_args">[DISPLAY_NAME]</string>
+
   <string name="FSDev" value="開発者" />
   <string name="FSSupp" value="サポート" />
   <string name="FSQualityAssurance" value="バグハンター" />
@@ -36,7 +39,7 @@
     <menu_button name="copy_btn" tool_tip="オプションをコピー" />
   </panel>
 
-  <button name="set_name" tool_tip="表示名を設定" />
+  <button name="set_name" label="名前：" tool_tip="表示名を設定" />
 
   <icon tool_tip="このフレンドは、あなたのオンラインステータスを見ることができます。" name="can_see_online" />
   <icon tool_tip="このフレンドは、あなたのオンラインステータスを見ることができません。" name="cant_see_online" />
@@ -89,22 +92,24 @@
   <text_editor name="sl_description_edit" />
 
   <text name="Groups:" value="グループ：" />
-  <button name="group_invite" label="＋" tool_tip="グループに招待" label_selected="＋" />
+  <button name="group_invite" label="＋" tool_tip="グループに招待します。" label_selected="＋" />
   <group_list name="group_list" />
 
   <text name="Give item:" value="共有：" />
   <view_border name="drop_target_rect_vis" />
-  <text name="Give inventory" tool_tip="この人に渡したいインベントリアイテムをここにドロップしてください。">ここにインベントリアイテムをドロップ</text>
+  <text name="Give inventory" tool_tip="この人に渡したいインベントリアイテムをここにドロップしてください。">ここにインベントリアイテムをドロップします。</text>
 
   <layout_stack name="buttonstack">
     <layout_panel name="left_buttonstack">
       <button name="show_on_map_btn" label="マップから検索" tool_tip="マップから住民を探します。" label_selected="マップから検索" />
       <button name="pay" label="支払う" tool_tip="この住民にお金を支払います。" label_selected="支払う" />
     </layout_panel>
+
     <layout_panel name="middle_buttonstack">
       <button name="teleport" label="テレポートのオファー" tool_tip="この住民にテレポートのファーを送ります。" label_selected="テレポートのオファー" />
       <button name="im" label="インスタントメッセージ" tool_tip="インスタントメッセージのセッションを開きます。" label_selected="インスタントメッセージ" />
     </layout_panel>
+
     <layout_panel name="right_buttonstack">
       <button name="add_friend" label="フレンドに追加" tool_tip="この住民にフレンドの申込みをします。" label_selected="フレンドに追加" />
       <button name="remove_friend" label="フレンド削除" tool_tip="この住民とのフレンドを解消します。" label_selected="フレンド削除" />
@@ -113,6 +118,7 @@
       <menu_button name="overflow_btn" />
     </layout_panel>
   </layout_stack>
+
   <check_box name="show_in_search" label="検索結果に表示" tool_tip="自分を検索結果に表示させます。" />
   <button name="save_description_changes" label="保存" />
   <button name="discard_description_changes" label="破棄" />

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_voice_controls" title="Voice Controls">
-  <string name="title_nearby">Nearby Voice</string>
-  <string name="title_group">Group Call with [GROUP]</string>
-  <string name="title_adhoc">Conference Call</string>
-  <string name="title_peer_2_peer">Call with [NAME]</string>
-  <string name="no_one_near">No one near has voice enabled</string>
+<floater name="floater_voice_controls" title="ボイスコントロール">
+  <string name="title_nearby">近くのボイス</string>
+  <string name="title_group">[GROUP]からのグループコール</string>
+  <string name="title_adhoc">会話コール</string>
+  <string name="title_peer_2_peer">[NAME]とのコール</string>
+  <string name="no_one_near">近くにボイスを有効化している人はいません。</string>
   <layout_stack name="my_call_stack">
     <layout_panel name="leave_call_panel">
       <layout_stack name="voice_effect_and_leave_call_stack">
@@ -12,7 +12,7 @@
           <panel name="panel_voice_effect" />
         </layout_panel>
         <layout_panel name="leave_call_btn_panel">
-          <button label="Leave Call" name="leave_call_btn" />
+          <button label="コールから退出" name="leave_call_btn" />
         </layout_panel>
       </layout_stack>
     </layout_panel>

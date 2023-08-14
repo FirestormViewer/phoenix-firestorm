@@ -45,17 +45,24 @@
           </layout_stack>
           <panel name="edit_panel">
             <text name="Name:">タイトル：</text>
+            <line_editor name="classified_name_edit" />
+
             <text name="description_label">説明：</text>
+            <text_editor name="classified_desc_edit" />
+
             <text name="location_label">場所：</text>
             <text name="classified_location_edit">読み込んでいます…</text>
             <button label="現在地に設定" name="set_to_curr_location_btn" />
+
             <text name="category_label" value="カテゴリ：" />
+            <combo_box name="category_edit" label="" />
+
             <text name="content_type_label" value="コンテンツの種類：" />
-            <icons_combo_box label="General コンテンツ" name="content_type_edit">
-              <icons_combo_box.item label="Moderate コンテンツ" name="mature_ci" value="Mature" />
-              <icons_combo_box.item label="General コンテンツ" name="pg_ci" value="PG" />
+            <icons_combo_box label="「General」コンテンツ" name="content_type_edit">
+              <icons_combo_box.item label="「Moderate」コンテンツ" name="mature_ci" value="Mature" />
+              <icons_combo_box.item label="「General」コンテンツ" name="pg_ci" value="PG" />
             </icons_combo_box>
-            <check_box label="毎週自動更新" name="auto_renew_edit" />
+
             <text name="price_for_listing_edit_label" value="掲載価格：" />
             <spinner label="L$" name="price_for_listing_edit" tool_tip="掲載価格。" value="50" />
           </panel>

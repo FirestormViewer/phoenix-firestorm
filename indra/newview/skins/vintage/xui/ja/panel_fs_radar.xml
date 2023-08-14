@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_radar" width="327" height="333">
+<panel name="panel_radar">
   <string name="FlagsColumnType" value="icon" />
   <string name="FlagsColumnValue_0" value="" />
   <string name="FlagsColumnValue_1" value="Payment_Info_Filled" />
@@ -7,9 +7,9 @@
   <string name="NotesColumnIcon" value="radarbox_n" />
   <string name="SittingColumnIcon" value="radarbox_s" />
   <string name="TypingColumnIcon" value="radarbox_t" />
-  <string name="MiniMapToolTipMsg" value="[REGION] (Double-click to open Map, shift-drag to pan)" />
-  <string name="AltMiniMapToolTipMsg" value="[REGION] (Double-click to teleport, shift-drag to pan)" />
-  <string name="avatar_name_count" value="Name [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]" />
+  <string name="MiniMapToolTipMsg" value="[REGION]（ダブルクリックでマップを開を開きます。Shift‐ドラッグで水平・垂直移動）" />
+  <string name="AltMiniMapToolTipMsg" value="[REGION]（ダブルクリックでテレポートします。Shift‐ドラッグで水平・垂直移動）" />
+  <string name="avatar_name_count" value="名前[[TOTAL]／[IN_REGION]／[IN_CHAT_RANGE]]" />
   <panel name="nearby_panel">
     <layout_stack name="radar_ls">
       <layout_panel name="minimaplayout">
@@ -18,16 +18,16 @@
 
       <layout_panel name="radarlayout">
         <radar_list name="radar_list">
-          <radar_list.columns label="Name" name="name" tool_tip="[TOTAL] avatars, [IN_REGION] in the same region, [IN_CHAT_RANGE] in chat range" />
-          <radar_list.columns label="" name="voice_level" tool_tip="Is talking on voice" />
-          <radar_list.columns label="Distance" name="range" />
-          <radar_list.columns label="Time" name="seen" sort_column="seen_sort" />
-          <radar_list.columns label="Age" name="age" />
-          <radar_list.columns label="" name="in_region" tool_tip="Is in the same region (green) or on the same parcel (green/yellow)" />
-          <radar_list.columns label="" name="typing_status" tool_tip="Is typing" />
-          <radar_list.columns label="" name="sitting_status" tool_tip="Is sitting" />
-          <radar_list.columns label="" name="flags" tool_tip="Payment info status" />
-          <radar_list.columns label="" name="has_notes" tool_tip="Avatar has notes" />
+          <radar_list.columns label="名前" name="name" tool_tip="全[TOTAL]人中、[IN_REGION]人が同じリージョンにいて、うち[IN_CHAT_RANGE]人がチャット可能な範囲内にいます。" />
+          <radar_list.columns label="" name="voice_level" tool_tip="ボイスチャットしています。" />
+          <radar_list.columns label="範囲" name="range" />
+          <radar_list.columns label="時間" name="seen" />
+          <radar_list.columns label="年齢" name="age" />
+          <radar_list.columns label="" name="in_region" tool_tip="同じリージョン（緑）か同じ区画では（緑／黄色）にいます。" />
+          <radar_list.columns label="" name="typing_status" tool_tip="入力しています。" />
+          <radar_list.columns label="" name="sitting_status" tool_tip="座っています。" />
+          <radar_list.columns label="" name="flags" tool_tip="支払い情報の状況を表示しています。" />
+          <radar_list.columns label="" name="has_notes" tool_tip="アバターにノートがあります。" />
           <radar_list.columns name="seen_sort" />
         </radar_list>
       </layout_panel>

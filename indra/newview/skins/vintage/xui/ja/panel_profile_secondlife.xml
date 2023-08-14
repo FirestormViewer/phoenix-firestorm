@@ -1,52 +1,54 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="panel_profile" label="Profile">
-  <string name="status_online">Online</string>
-  <string name="status_offline">Offline</string>
-  <string name="status_unknown">Unknown</string>
+<panel name="panel_profile" label="プロフィール">
+  <string name="status_online">オンライン</string>
+  <string name="status_offline">オフライン</string>
+  <string name="status_unknown">不明</string>
   <string name="CaptionTextAcctInfo">[ACCTTYPE]
-    [PAYMENTINFO]
-    [FIRESTORM][FSDEV][FSSUPP][FSQA][FSGW]</string>
+[PAYMENTINFO]
+[FIRESTORM][FSDEV][FSSUPP][FSQA][FSGW]</string>
 
   <!--Badges-->
-  <string name="BadgeBeta" value="Original Beta Tester" />
-  <string name="BadgeBetaLifetime" value="Beta Lifetime member" />
-  <string name="BadgeLifetime" value="Lifetime member" />
-  <string name="BadgeLinden" value="Linden Lab employee" />
-  <string name="BadgePremiumLifetime" value="Premium lifetime" />
-  <string name="BadgePremiumPlusLifetime" value="Premium Plus lifetime" />
-  <string name="BadgeTeam" value="[APP_NAME] member" />
+  <string name="BadgeBeta" value="オリジナルベータテスター" />
+  <string name="BadgeBetaLifetime" value="ベータの有効期限内のメンバー" />
+  <string name="BadgeLifetime" value="有効期限内のメンバー" />
+  <string name="BadgeLinden" value="Linden Lab従業員" />
+  <string name="BadgePremiumLifetime" value="プレミアム有効期限内" />
+  <string name="BadgePremiumPlusLifetime" value="プレミアムプラス有効期限内" />
+  <string name="BadgeTeam" value="[APP_NAME]メンバー" />
 
-  <string name="payment_update_link_url"> https://accounts.secondlife.com/billing_information/?lang=ja-JP</string>
-  <string name="partner_edit_link_url">https://www.secondlife.com/my/partners.php?lang=ja-JP</string>
-  <string name="my_account_link_url" value="https://www.secondlife.com/my/account/?lang=ja-JP" />
-  <string name="no_partner_text" value="None" />
-  <string name="no_group_text" value="None" />
-  <string name="age_format">Birthdate: [REG_DATE]
-    ([AGE])</string>
+  <string name="payment_update_link_url">https://accounts.secondlife.com/billing_information/?lang=ja-JP</string>
+  <string name="partner_edit_link_url">https://secondlife.com/my/partners.php?lang=ja-JP</string>
+  <string name="my_account_link_url" value="https://secondlife.com/my/account/?lang=ja-JP" />
+  <string name="no_partner_text" value="なし" />
+  <string name="no_group_text" value="なし" />
+  <string name="age_format">誕生日：[REG_DATE]
+（[AGE]）</string>
   <string name="name_text_args">[NAME]</string>
   <string name="display_name_text_args">[DISPLAY_NAME]</string>
-  <string name="FSDev" value=" Developer" />
-  <string name="FSSupp" value=" Support" />
-  <string name="FSQualityAssurance" value=" Bug Hunter" />
-  <string name="FSGW" value=" Gateway" />
-  <string name="texture_picker_label" value="Profile Picture" />
 
-  <text name="name_label" value="Name:" />
-  <button name="set_name" label="Name:" tool_tip="Set Display Name" />
+  <string name="FSDev" value="開発者" />
+  <string name="FSSupp" value="サポート" />
+  <string name="FSQualityAssurance" value="バグハンター" />
+  <string name="FSGW" value="ゲートウェイ" />
+
+  <string name="texture_picker_label" value="プロフィール画像" />
+
+  <text name="name_label" value="名前：" />
+  <button name="set_name" label="名前：" tool_tip="表示名を設定します。" />
 
   <panel name="name_holder">
     <view_border name="info_border" />
-    <text_editor name="complete_name" value="(loading...)" />
-    <menu_button name="copy_btn" tool_tip="Copy options" />
+    <text_editor name="complete_name" value="（読み込んでいます…）" />
+    <menu_button name="copy_btn" tool_tip="オプションをコピー" />
   </panel>
 
-  <text name="Key:" value="Key:" />
+  <text name="Key:" value="キー：" />
   <view_border name="info_border2" />
   <text_editor name="user_key" value="" />
 
   <layout_stack name="imagepositioner">
     <layout_panel name="image_action_panel">
-      <menu_button name="image_action_btn" tool_tip="Perform profile picture related actions" />
+      <menu_button name="image_action_btn" tool_tip="プロフィール画像関連のアクションを実行します。" />
     </layout_panel>
 
     <layout_panel name="image_panel">
@@ -59,15 +61,15 @@
         <loading_indicator name="progress_indicator" />
       </panel>
       <text name="status" />
-      <icon tool_tip="Friend can see my online status" name="can_see_online" />
-      <icon tool_tip="Friend can not see my online status" name="cant_see_online" />
-      <icon tool_tip="Friend can see me on map" name="can_see_on_map" />
-      <icon tool_tip="Friend can not see me on map" name="cant_see_on_map" />
-      <icon tool_tip="Friend can edit my objects" name="can_edit_objects" />
-      <icon tool_tip="Friend can not edit my objects" name="cant_edit_objects" />
-      <text_editor name="user_age" value="(loading...)" />
+      <icon tool_tip="このフレンドは、あなたのオンラインステータスを見ることができます。" name="can_see_online" />
+      <icon tool_tip="このフレンドは、あなたのオンラインステータスを見ることができません。" name="cant_see_online" />
+      <icon tool_tip="このフレンドは、あなたをマップから見つけることができます。" name="can_see_on_map" />
+      <icon tool_tip="このフレンドは、あなたをマップから見つけることができません。" name="cant_see_on_map" />
+      <icon tool_tip="このフレンドは、あなたのオブジェクトを編集することができます。" name="can_edit_objects" />
+      <icon tool_tip="このフレンドは、あなたのオブジェクトを編集することはできません。" name="cant_edit_objects" />
+      <text_editor name="user_age" value="（読み込んでいます…）" />
 
-      <text name="label2" value="Account:" />
+      <text name="label2" value="アカウント：" />
       <view_border name="info_border_acc_status_text" />
 
       <panel name="badge_layout">
@@ -75,46 +77,46 @@
       </panel>
 
       <text_editor name="account_info" />
-      <text name="partner_label" value="Partner:" />
+      <text name="partner_label" value="パートナー：" />
       <view_border name="info_border_partner_text" />
       <text_editor name="partner_link" />
     </layout_panel>
   </layout_stack>
 
-  <text name="Groups:" value="Groups:" />
-  <button name="group_invite" label="+" tool_tip="Invite to Group" label_selected="+" />
+  <text name="Groups:" value="グループ：" />
+  <button name="group_invite" label="＋" tool_tip="グループに招待します。" label_selected="＋" />
   <group_list name="group_list" />
 
-  <text name="About:" value="About:" />
+  <text name="About:" value="以下について：" />
   <view_border name="info_border_sl_description_edit" />
   <text_editor name="sl_description_edit" />
 
-  <text name="Give item:" value="Share:" />
+  <text name="Give item:" value="共有：" />
   <view_border name="drop_target_rect_vis" />
-  <text name="Give inventory" tool_tip="Drop inventory items here to give them to this person.">Drop inventory item here.</text>
+  <text name="Give inventory" tool_tip="この人に渡したいインベントリアイテムをここにドロップしてください。">ここにインベントリアイテムをドロップします。</text>
 
   <layout_stack name="buttonstack">
     <layout_panel name="left_buttonstack">
-      <button name="show_on_map_btn" label="Find on Map" tool_tip="Locate the Resident on the map" label_selected="Find on Map" />
-      <button name="pay" label="Pay" tool_tip="Pay money to the Resident" label_selected="Pay" />
+      <button name="show_on_map_btn" label="マップから検索" tool_tip="マップから住民を探します。" label_selected="マップから検索" />
+      <button name="pay" label="支払う" tool_tip="この住民にお金を支払います。" label_selected="支払う" />
     </layout_panel>
 
     <layout_panel name="middle_buttonstack">
-      <button name="teleport" label="Offer Teleport" tool_tip="Offer a teleport to the Resident" label_selected="Offer Teleport" />
-      <button name="im" label="Instant Message" tool_tip="Open instant message session" label_selected="Instant Message" />
+      <button name="teleport" label="テレポートのオファー" tool_tip="この住民にテレポートのファーを送ります。" label_selected="テレポートのオファー" />
+      <button name="im" label="インスタントメッセージ" tool_tip="インスタントメッセージのセッションを開きます。" label_selected="インスタントメッセージ" />
     </layout_panel>
 
     <layout_panel name="right_buttonstack">
-      <button name="add_friend" label="Add Friend" tool_tip="Offer friendship to the Resident" label_selected="Add Friend" />
-      <button name="remove_friend" label="Remove Friend" tool_tip="Terminate friendship with the Resident" label_selected="Remove Friend" />
-      <button name="block" label="Block" tool_tip="Block this Resident" />
-      <button name="unblock" label="Unblock" tool_tip="Unblock this Resident" />
+      <button name="add_friend" label="フレンドに追加" tool_tip="この住民にフレンドの申込みをします。" label_selected="フレンドに追加" />
+      <button name="remove_friend" label="フレンド削除" tool_tip="この住民とのフレンドを解消します。" label_selected="フレンド削除" />
+      <button name="block" label="ブロック" tool_tip="この住民をブロックします。" />
+      <button name="unblock" label="ブロック解除" tool_tip="この住民のブロックを解除します。" />
       <menu_button name="overflow_btn" />
     </layout_panel>
   </layout_stack>
 
-  <check_box name="show_in_search" label="Show in search" tool_tip="Let people see you in search results" />
-  <button name="save_description_changes" label="Save" />
-  <button name="discard_description_changes" label="Discard" />
+  <check_box name="show_in_search" label="検索結果に表示" tool_tip="自分を検索結果に表示させます。" />
+  <button name="save_description_changes" label="保存" />
+  <button name="discard_description_changes" label="破棄" />
   <profile_drop_target name="drop_target" />
 </panel>
