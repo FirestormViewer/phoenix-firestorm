@@ -3807,6 +3807,10 @@ Sie haben lokal eine [RESOLUTION]-gebackene Textur für „[BODYREGION]“ nach 
 		Wir können keine Vorschau dieser Textur anzeigen, da sie nicht kopier- und/oder übertragungsfähig ist.
 		<usetemplate ignoretext="Hinweis anzeigen, wenn bei nicht kopier- und/oder übertragungsfähigen Texturen keine Live-Vorschau möglich ist" name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="LivePreviewUnavailablePBR">
+		Wir können keine Vorschau dieses Materials anzeigen, da es nicht kopier- und/oder übertragungsfähig ist.
+		<usetemplate ignoretext="Hinweis anzeigen, wenn bei nicht kopier- und/oder übertragungsfähigen Materialien keine Live-Vorschau möglich ist" name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="FacePasteFailed">
 		Einfügen fehlgeschlagen. [REASON]
 		<usetemplate name="okbutton" yestext="OK"/>
