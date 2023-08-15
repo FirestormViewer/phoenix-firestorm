@@ -37,7 +37,7 @@
       <button label="ブラウザキャッシュのクリア" name="ClearWebBrowserCache" />
       <check_box label="Javascriptの有効化" name="browser_javascript_enabled" />
       <check_box label="メディアブラウザのポップアップを有効化" name="media_popup_enabled" />
-      <button label="プロクシ設定を調整" label_selected="プロクシ設定を調整" name="set_proxy" />
+      <button label="プロキシ設定を調整" label_selected="プロキシ設定を調整" name="set_proxy" />
 
       <text name="home_page_label_l">ブラウザのホームページ：</text>
       <line_editor name="FSBrowserHomePage" />

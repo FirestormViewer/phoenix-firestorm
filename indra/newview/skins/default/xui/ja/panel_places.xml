@@ -36,17 +36,24 @@
             <!--*********************** Teleport, Map buttons ***********************-->
             <layout_stack name="bottom_bar_ls1">
               <layout_panel name="teleport_btn_lp">
-                <button label="テレポート" name="teleport_btn" tool_tip="該当するエリアにテレポートする" />
+                <button label="テレポート" name="teleport_btn" tool_tip="該当するエリアにテレポートします。" />
               </layout_panel>
               <layout_panel name="chat_btn_lp">
-                <button label="マップ" name="map_btn" tool_tip="ワールドマップに該当するエリアを表示" />
+                <button label="マップ" name="map_btn" tool_tip="ワールドマップに該当するエリアを表示します。" />
               </layout_panel>
             </layout_stack>
           </layout_panel>
           <!--*********************** Options button ***********************-->
           <layout_panel name="lp_options">
-            <menu_button name="overflow_btn" tool_tip="追加オプションを表示" />
+            <menu_button name="overflow_btn" tool_tip="追加オプションを表示します。" />
           </layout_panel>
+          <!--*********************** Profile button ***********************-->
+
+          <layout_stack name="bottom_bar_profile_ls">
+            <layout_panel name="profile_btn_lp">
+              <button name="profile_btn" tool_tip="場所のプロフィールを表示します。" />
+            </layout_panel>
+          </layout_stack>
           <layout_panel name="lp2">
             <!--*********************** Close button ***********************-->
             <layout_stack name="bottom_bar_close_ls3">

@@ -53,6 +53,9 @@
   <check_box label="テクスチャを引き延ばす" name="checkbox stretch textures" />
   <check_box label="グリッドにスナップ" name="checkbox snap to grid" />
   <check_box label="ルートの軸を編集する" name="checkbox actual root" />
+  <!-- FS -->
+  <check_box label="ハイライトを表示" name="checkbox show highlight" />
+  <!-- /FS -->
   <check_box label="選択のアウトラインを表示する" name="checkbox selection" />
   <button name="Options..." tool_tip="グリッドオプションを表示します。" />
   <button name="ToolCube" tool_tip="立方体" />
@@ -127,6 +130,7 @@
       <!--
       <name_box initial_value="読み込んでいます…" name="Group Name Proxy" />
       -->
+      <text name="Group:">グループ：</text>
       <text name="Group Name">secondlife:///app/agent/00000000-0000-0000-0000-000000000000/inspect 読み込んでいます…</text>
       <name_box initial_value="読み込んでいます…" name="Group Name Proxy" />
       <button label="設定…" label_selected="設定…" name="button set group" tool_tip="このオブジェクト権限を共有したいグループを選択します。" />
@@ -307,10 +311,10 @@
 中：
 低：
 最低：</text>
-      <string name="mesh_lod_num_tris_values">[HIGHTRIS]
-[MIDTRIS]
-[LOWTRIS]
-[LOWESTTRIS]</string>
+      <string name="mesh_lod_num_tris_values">[HIGHTRIS]個
+[MIDTRIS]個
+[LOWTRIS]個
+[LOWESTTRIS]個</string>
       <text name="mesh_lod_num_tris" value="--" />
       <combo_box name="LOD_show_combo">
         <combo_box.item label="デフォルト" name="Default" value="-1" />
@@ -320,12 +324,14 @@
         <combo_box.item label="最低" name="Lowest/Imposter" value="0" />
       </combo_box>
       <text name="ObjectLODbehaviourLabel" value="オブジェクトのＬｏＤ動作：" />
-      <text name="object_radius" value="オブジェクトの半径：" />
+      <!-- 「オブジェクトの半径」だと収まらない -->
+      <text name="object_radius" value="半径：" />
       <text name="object_radius_value" value="‐" />
       <text name="LOD_swap_factors_label" value="ＬｏＤ係数" />
       <text name="LOD_swap_defaults_label" value="デフォルト" tool_tip="ほとんどのビューアに適用されるデフォルトのＬｏＤ係数を設定します。" />
       <text name="LOD_swap_usr_label" tool_tip="RenderVolumeLODFactorから取得した現在の設定です。" value="あなたの" />
-      <text name="LOD_swap_label" value="ＬｏＤスワップ" />
+      <!-- 「ＬｏＤスワップ」だと収まらない -->
+      <text name="LOD_swap_label" value="スワップ" />
       <string name="ll_lod_tooltip_msg">Linden Lab Second Lifeビューアのデフォルト（[FACTOR]）</string>
       <text name="LOD_swap_ll_default" value="ＬＬ" />
       <string name="fs_lod_tooltip_msg">[APP_NAME]ビューアのデフォルト（[FACTOR]）</string>

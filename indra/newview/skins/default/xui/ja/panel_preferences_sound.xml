@@ -261,7 +261,7 @@
       <text tool_tip="オブジェクトを削除したときに再生するサウンドＵＵＩＤを指定します。" name="textFSObjectDelete">オブジェクト削除時：</text>
       <line_editor name="UISndObjectDelete" />
       <button name="Prev_UISndObjectDelete" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
-      <button name="Def_UISndObjectDelete" tool_tip="Reset to the default UUID." />
+      <button name="Def_UISndObjectDelete" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
       <check_box label="このサウンドを再生" name="PlayModeUISndObjectDelete" />
 
       <text tool_tip="オブジェクトをRezしたときに再生するサウンドＵＵＩＤを指定します。" name="textFSObjectRezIn">オブジェクトをRezした時：</text>
@@ -355,7 +355,7 @@
       <text tool_tip="パイメニューを項目８を選択したときに再生するサウンドＵＵＩＤを指定します。" name="textFSPieMenuSliceHighlight7">パイメニューオプション８：</text>
       <line_editor name="UISndPieMenuSliceHighlight7" />
       <button name="Prev_UISndPieMenuSliceHighlight7" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
-      <button label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
+      <button name="Def_UISndPieMenuSliceHighlight7" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
       <check_box label="このサウンドを再生" name="PlayModeUISndPieMenuSliceHighlight7" />
 
       <text tool_tip="チャットメッセージを入力したときに再生するサウンドＵＵＩＤを指定します。この設定は「チャット」＞「一般」＞「近くのチャットでタイピング音を聞く」と共通です。" name="textFSTyping">メッセージのタイピング音：</text>
@@ -441,7 +441,7 @@
       <text tool_tip="新しい体験があったときに再生するサウンドＵＵＩＤを指定します。" name="textFSQuestionExperience">新しい体験：</text>
       <line_editor name="UISndQuestionExperience" />
       <button name="Prev_UISndQuestionExperience" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
-      <button name="Def_UISndQuestionExperience" tool_tip="Reset to the default UUID." />
+      <button name="Def_UISndQuestionExperience" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
       <check_box label="このサウンドを再生" name="PlayModeUISndQuestionExperience" />
 
       <text tool_tip="無効な操作があったときに再生するサウンドＵＵＩＤを指定します。" name="textFSInvalidOp">無効な操作：</text>
@@ -465,7 +465,7 @@
       <text tool_tip="トラッカービーコンが有効になったときに再生するサウンドＵＵＩＤを指定します。アバターが目的地に近いほど頻繁に鳴ります。" name="textFSTrackerBeacon">トラッカービーコン：</text>
       <line_editor name="UISndTrackerBeacon" />
       <button name="Prev_UISndTrackerBeacon" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
-      <button name="Def_UISndTrackerBeacon" tool_tip="Reset to the default UUID." />
+      <button name="Def_UISndTrackerBeacon" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
       <check_box label="このサウンドを再生" name="PlayModeUISndTrackerBeacon" />
 
       <text tool_tip="リージョン再起動時に再生するサウンドＵＵＩＤを指定します。" name="textFSRestart">リージョン再起動：</text>

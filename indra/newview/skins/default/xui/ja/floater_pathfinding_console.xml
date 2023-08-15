@@ -19,9 +19,9 @@
   <floater.string name="pathing_choose_start_and_end_points">開始点と終了点を選択してください。</floater.string>
   <floater.string name="pathing_choose_start_point">開始点を選択してください。</floater.string>
   <floater.string name="pathing_choose_end_point">終了点を選択してください。</floater.string>
-  <floater.string name="pathing_path_valid">パスはオレンジ色で表示されています。</floater.string>
-  <floater.string name="pathing_path_invalid">選択した２点間のパスが見つかりません。</floater.string>
-  <floater.string name="pathing_error">パスの生成中にエラーが発生しました。</floater.string>
+  <floater.string name="pathing_path_valid">経路はオレンジ色で表示されています。</floater.string>
+  <floater.string name="pathing_path_invalid">選択した２点間の経路が見つかりません。</floater.string>
+  <floater.string name="pathing_error">経路の生成中にエラーが発生しました。</floater.string>
   <panel name="pathfinding_console_main">
     <text name="viewer_status_label">ビューアのステータス</text>
   </panel>
@@ -49,7 +49,7 @@
       <check_box label="水上飛行機" name="show_water_plane" />
       <check_box label="Ｘ線表示" name="show_xray" />
     </panel>
-    <panel label="パスをテスト" name="test_panel">
+    <panel label="経路をテスト" name="test_panel">
       <text name="ctrl_click_label">Ctrlキーを押しながらクリックして、開始点を選択します。</text>
       <text name="shift_click_label">Shiftキーを押しながらクリックして、終了点を選択します。</text>
       <text name="character_width_label">キャラクターの幅</text>

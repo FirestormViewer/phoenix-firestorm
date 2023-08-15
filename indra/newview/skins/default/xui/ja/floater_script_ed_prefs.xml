@@ -48,7 +48,7 @@ default
   <check_box label="ＬＳＬプリプロセッサを有効化" tool_tip="チェックすると、ＬＳＬプリプロセッサが有効になります。" name="preproc_checkbox" />
   <check_box label="スクリプト最適化" tool_tip="チェックすると、ＬＳＬプリプロセッサはスクリプトによって使用されるスペースを最適化します。" name="preprocoptimizer_checkbox" />
   <check_box label="switch()ステートメント" tool_tip="チェックすると、ＬＳＬプリプロセッサはスクリプトフロー制御にswitch()ステートメントの使用を許可します。" name="preprocswitch_checkbox" />
-  <check_box label="怠けリスト" tool_tip="チェックすると、ＬＳＬプリプロセッサはリスト処理に構文拡張の使用を許可します。" name="preproclazy_checkbox" />
+  <check_box label="遅延リスト" tool_tip="チェックすると、ＬＳＬプリプロセッサは遅延リスト（Lazy list）の構文拡張の使用を許可します。" name="preproclazy_checkbox" />
   <check_box label="ローカルディスクから#includes" tool_tip="チェックすると、ＬＳＬプリプロセッサにより、#includeステートメントによるローカルディスク上のファイルの参照が許可されます。" name="preprocinclude_checkbox" />
   <text name="lslpreprocinclude_textbox">プリプロセッサのインクルードパス：</text>
   <line_editor name="preprocinclude_location" />

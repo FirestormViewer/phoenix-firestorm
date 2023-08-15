@@ -5,8 +5,9 @@
   <floater.string name="move_tooltip">カメラを上下左右に移動</floater.string>
   <floater.string name="free_mode_title">オブジェクトを表示</floater.string>
   <string name="inactive_combo_text">プリセットの使用</string>
+
   <tab_container name="tabs">
-    <panel name="P_Cam_Controls_1">
+    <panel name="P_Cam_Controls_1" label="カメラ操作１">
       <panel name="cameracontrolspanel">
         <panel name="controls1">
           <panel name="preset_views_list">
@@ -23,10 +24,11 @@
               <combo_list />
               <combo_box.item label="プリセットを使用" name="Use preset" value="default" />
             </combo_box>
+
             <button name="gear_btn" tool_tip="カメラのプリセット" />
             <button label="位置…" name="camera_position_btn" />
-
           </panel>
+
           <panel name="camera_modes_list">
             <panel_camera_item name="object_view">
               <panel_camera_item.text name="object_view_text">オブジェクト視点</panel_camera_item.text>
@@ -35,6 +37,7 @@
               <panel_camera_item.text name="mouselook_view_text">マウスルックビュー</panel_camera_item.text>
             </panel_camera_item>
           </panel>
+
           <!--TODO: replace + - images -->
           <panel name="zoom">
             <joystick_rotate name="cam_rotate_stick" tool_tip="フォーカスを中心にカメラの軌道を変えます。" />
@@ -44,6 +47,7 @@
             <joystick_track name="cam_track_stick" tool_tip="カメラを上下左右に動かします。" />
           </panel>
         </panel>
+
         <panel name="buttons">
           <button label="" name="presets_btn" tool_tip="プリセットのビュー" />
           <button label="" name="pan_btn" tool_tip="ズームの中心位置の起動" />
@@ -52,9 +56,11 @@
           <button label="" name="load_camera_view_btn" tool_tip="ストアされたカメラビューを読み込む" />
         </panel>
       </panel>
+
       <panel name="P_Cam_Mov_Settings">
         <text name="T_Cam_Mov_Settings">カメラの移動設定１</text>
       </panel>
+
       <panel name="P_Zoom">
         <text name="T_Zoom" tool_tip="実際の用語では、これはズーム機能です。これはビューアウィンドウの視野を変更します。Ctrl＋0またはCtrl＋8を押すのと同じです。注意：フライカムを有効にしている場合、この機能は使えません。（3D SpaceNavigator）">視野角</text>
         <slider name="SL_Zoom" />
@@ -74,10 +80,12 @@
         <button name="Reset_Camera_Smoothing" label="Ｄ" tool_tip="デフォルトの値にリセットします。" />
       </panel>
     </panel>
-    <panel name="P_Cam_Controls_2" label="Cam Controls 2">
+
+    <panel name="P_Cam_Controls_2" label="カメラ操作２">
       <panel name="P_Mouse_Movement">
         <text name="T_Mouse_Movement">マウスの移動設定２</text>
       </panel>
+
       <panel name="P_Mouse_Movement_Settings">
         <text name="T_Mouse_Sensitivity" tool_tip="マウスルックモード時のマウスの反応を制御します。">マウスの感度</text>
         <slider name="SL_Mouse_Sensitivity" />
@@ -85,9 +93,11 @@
         <check_box label="マウスルック時に自身のアバターを表示" tool_tip="マウスルック時に首から下のアバターと装着物を表示します。デフォルトはオフです。" name="first_person_avatar_visible" />
         <check_box label="マウスルック時の移動をスムーズにする" tool_tip="マウスルックモード時のマウスの動きを滑らかにします。" name="MouseSmooth" />
       </panel>
+
       <panel name="P_Additional_Camera_Options">
         <text name="T_Additional_Camera_Options">追加のカメラのオプション</text>
       </panel>
+
       <panel name="P_Add_Cam_Opt_Settings">
         <check_box label="アバタークリックでカメラの位置を保持する" name="clickonavatarkeepscamera" tool_tip="通常、アバターをクリックするとカメラの位置がリセットされます。このオプションはこの動作を抑止します。" />
         <check_box label="テレポート後にカメラ位置をリセット" name="FSResetCameraOnTP" tool_tip="通常、（リージョン内で）テレポートするとカメラの位置はリセットされます。このオプションはこの動作を抑止します。" />
@@ -96,7 +106,8 @@
         <check_box label="アバター移動時にカメラ位置をリセット" name="resetcameraonmovement" tool_tip="アバターを移動させると、カメラがデフォルトの位置にリセットされるようになります。" />
       </panel>
     </panel>
-    <panel name="P_3D_Mouse">
+
+    <panel name="P_3D_Mouse" label="３Ｄマウス">
       <panel name="P_3D_Mouse_Settings1">
         <slider label="左右移動" name="FlycamAxisScale1b" tool_tip="左右の動きの感度を調整します。正確に動かすのが難しい場合は、スケール値を小さくしてください。" />
         <slider label="上下移動" name="FlycamAxisScale2b" tool_tip="上下の動きの感度を調整します。正確に動かすのが難しい場合は、スケール値を小さくしてください。" />
@@ -107,6 +118,7 @@
         <slider label="ズーム速度" name="FlycamAxisScale6" tool_tip="ズームスピードの感度を調整します。正確なズームが難しい場合は、スケールの値を小さくしてください。" />
         <slider label="フェザリング" name="FlycamFeathering" tool_tip="スライダーを右いっぱいに設定すると、カメラは非常に硬くなり、ジョイスティックで完全にコントロールできるようになります。スライダーを左いっぱいに設定すると、カメラは非常に流動的になり、カメラの重量が重くなります。" />
       </panel>
+
       <panel name="P_3D_Mouse_Settings2">
         <spinner label="ズーム軸設定" name="JoystickAxis6" tool_tip="ズーム機能がどのマウス軸にマッピングされる（動作させる）かを設定します。" />
         <check_box name="CB_Zoom_Control" label="３Ｄマウスを有効化" tool_tip="３Ｄマウスをオンにします。" />

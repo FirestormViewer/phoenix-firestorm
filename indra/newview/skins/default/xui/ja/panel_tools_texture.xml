@@ -115,6 +115,11 @@
   <check_box label="平面を揃える" name="checkbox planar align" tool_tip="テクスチャを最後に選択された面を基準に揃えます。平面テクスチャのマッピングが必要です。" />
   <button label="揃える" label_selected="揃える" name="button align textures" tool_tip="現在のテクスチャレイヤーのオフセット値を基準に揃えます。" />
   <web_browser name="title_media" />
+  <!-- <FS:Zi> Find all faces with same texture -->
+  <button label="すべてを探す" name="btn_select_same_diff" tool_tip="この面と同じディフューズテクスチャを持つ面をすべて選択する。" />
+  <button label="すべてを探す" name="btn_select_same_norm" tool_tip="この面と同じ法線マップを持つ面をすべて選択する。" />
+  <button label="すべてを探す" name="btn_select_same_spec" tool_tip="この面と同じスペキュラマップを持つ面をすべて選択する。" />
+  <!-- </FS:Zi> -->
   <!-- BEGIN PBR Material texture transform parameters -->
   <spinner label="水平スケール" name="gltfTextureScaleU" />
   <spinner label="垂直スケール" name="gltfTextureScaleV" />

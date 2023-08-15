@@ -9,7 +9,7 @@
         <flyout_button.item label="全てのコンテンツをアウトフィットに追加" name="add" value="add" />
       </flyout_button>
     </layout_panel>
-    <layout_panel mouse_opaque="false" name="cancel_btn_lp">
+    <layout_panel name="cancel_btn_lp">
       <button label="キャンセル" label_selected="キャンセル" name="cancel_button" />
     </layout_panel>
   </layout_stack>

@@ -13,6 +13,9 @@
   </combo_box>
   <spinner label="単位（メートル）" name="GridResolution" />
   <spinner label="範囲（メートル）" name="GridDrawSize" />
+  <!-- FS -->
+  <spinner label="小数の精度" name="DecimalPrecision" />
+  <!-- /FS -->
   <spinner label="角度（度）" name="RotationStep" tool_tip="回転ツールによるすべての回転は、この単位の倍数に制限されます。［デフォルト：1.0］"/>
   <check_box label="より細かい単位でスナップフィット" name="GridSubUnit" />
   <check_box label="横断面を表示" name="GridCrossSection" />

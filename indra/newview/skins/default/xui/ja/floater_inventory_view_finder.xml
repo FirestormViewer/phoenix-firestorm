@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- <FS:Zi> Changed height from 512 to 528 in this block -->
-<floater name="Inventory Finder" title="インベントリの最近のアイテム">
+<floater name="Inventory Finder" title="最近のインベントリアイテム">
   <check_box label="アニメーション" name="check_animation" />
   <check_box label="コーリングカード" name="check_calling_card" />
   <check_box label="服装" name="check_clothing" />
