@@ -25,7 +25,7 @@
                     name="statistics_view"
                     top="20"
                     width="250" >
-     <stat_view name="basic"
+      <stat_view name="basic"
                  label="Basic"
                  setting="OpenDebugStatBasic">
         <stat_bar name="fps"
@@ -55,7 +55,7 @@
                   label="jitter"
                   decimal_digits="1"
                   stat="frametimejitter"/>
-       <stat_bar name="bandwidth"
+        <stat_bar name="bandwidth"
                   label="UDP Data Received"
                   stat="activemessagedatareceived"
                   decimal_digits="0"
@@ -72,7 +72,7 @@
                   setting="DebugStatModePingSim"/>
       </stat_view>
 
-     <stat_view name="advanced"
+      <stat_view name="advanced"
                  label="Advanced"
                  setting="OpenDebugStatAdvanced">
         <stat_view name="render"
@@ -338,7 +338,7 @@
                   setting="DebugStatModeSimScriptEvents"/>
         <stat_view name="simpathfinding"
                    label="Pathfinding"
-                   setting="OpenDebugStatSimPathfinding">
+                   setting="OpenDebugStatPathfinding">
           <stat_bar name="simsimaistepmsec"
                     label="AI Step Time"
                     stat="simsimaistepmsec"

@@ -10342,21 +10342,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>OpenDebugStatAdvanced</key>
-    <map>
-      <key>Comment</key>
-      <string>Expand advanced performance stats display</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
     <key>OpenDebugStatBasic</key>
     <map>
       <key>Comment</key>
-      <string>Expand basic performance stats display</string>
+      <string>Expand Basic performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10364,10 +10353,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>OpenDebugStatNet</key>
+    <key>OpenDebugStatAdvanced</key>
     <map>
       <key>Comment</key>
-      <string>Expand network stats display</string>
+      <string>Expand Advanced performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10378,18 +10367,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>OpenDebugStatRender</key>
     <map>
       <key>Comment</key>
-      <string>Expand render stats display</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>OpenDebugStatSim</key>
-    <map>
-      <key>Comment</key>
-      <string>Expand simulator performance stats display</string>
+      <string>Expand Render performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10408,10 +10386,43 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>OpenDebugStatSimPathfinding</key>
+    <key>OpenDebugStatMemory</key>
     <map>
       <key>Comment</key>
-      <string>Expand Pathfinding performance stats display</string>
+      <string>Expand Memory Usage stats display</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>OpenDebugStatNet</key>
+    <map>
+      <key>Comment</key>
+      <string>Expand Network performance stats display</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>OpenDebugStatSim</key>
+    <map>
+      <key>Comment</key>
+      <string>Expand Simulator performance stats display</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>OpenDebugStatPhysicsDetails</key>
+    <map>
+      <key>Comment</key>
+      <string>Expand Physics Details performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10419,10 +10430,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>OpenDebugStatPhysicsDetails</key>
+    <key>OpenDebugStatPathfinding</key>
     <map>
       <key>Comment</key>
-      <string>Expand Physics Details performance stats display</string>
+      <string>Expand Pathfinding performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10445,17 +10456,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Expand Simulator Time Details performance stats display</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>OpenDebugStatMemory</key>
-    <map>
-      <key>Comment</key>
-      <string>Expand Memory performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
