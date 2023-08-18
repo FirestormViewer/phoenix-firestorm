@@ -3315,7 +3315,7 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
     <tag>fail</tag>
   </notification>
 
-  <notification name="ObjectGiveItem">[NAME_SLURL] が所有する&lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt;という名前のオブジェクトが、あなたに[OBJECTTYPE]を渡しました：
+  <notification name="ObjectGiveItem">[NAME_SLURL] が所有する「&lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt;」という名前のオブジェクトが、あなたに[OBJECTTYPE]を渡しました：
 &lt;nolink&gt;[ITEM_SLURL]&lt;/nolink&gt;
     <form name="form">
       <button name="Keep" text="受け取る" />
@@ -3573,30 +3573,30 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 
   <notification name="RestrictedTermExperienceProfileMessage">次の条件により、体験プロフィール名および説明の更新ができませんでした：[extra_info]</notification>
 
-  <notification name="TeleportedHomeExperienceRemoved">体験 secondlife:///app/experience/[public_id]/profile を削除するために、[region_name]リージョンからテレポートされ、このリージョンに入ることはできなくなりました。
+  <notification name="TeleportedHomeExperienceRemoved">secondlife:///app/experience/[public_id]/profile 体験を削除したため、[region_name]リージョンからテレポートされ、このリージョンに入ることができなくなりました。
     <form name="form">
-      <ignore name="ignore" text="体験を削除したため、リージョンから追放された。" />
+      <ignore name="ignore" text="体験を削除した事により、リージョンから追放された" />
     </form>
   </notification>
 
-  <notification name="TrustedExperienceEntry">キー体験 secondlife:///app/experience/[public_id]/profile に参加することにより、[region_name]リージョンに入ることを許可されました。
+  <notification name="TrustedExperienceEntry">secondlife:///app/experience/[public_id]/profile 体験に参加したことにより、[region_name]リージョンに入ることを許可されました。
 この体験を削除すると、このリージョンから追放される可能性があります。
     <form name="form">
-      <ignore name="ignore" text="体験に参加した事によりｍリージョンに入ることを許可された。" />
+      <ignore name="ignore" text="体験に参加した事により、リージョンに入ることを許可された" />
     </form>
   </notification>
 
   <notification name="TrustedExperiencesAvailable">この目的地へのアクセス権がありません。下の体験を受け入れることにより、このリージョンに入ることができます：
 [EXPERIENCE_LIST]
 
-その他のキー体験を利用できます。</notification>
+その他のキー体験は利用できます。</notification>
 
-  <notification name="ExperienceEvent">[EventType]の secondlife:///app/experience/[public_id]/profile experience により、オブジェクトでアクション（[EventType]）を実行することが許可されました。
+  <notification name="ExperienceEvent">secondlife:///app/experience/[public_id]/profile 体験の[EventType]により、オブジェクトによるアクションの実行が許可されました。
 所有者：secondlife:///app/agent/[OwnerID]/inspect
 オブジェクト名：[ObjectName]
 区画名：[ParcelName]</notification>
 
-  <notification name="ExperienceEventAttachment">[EventType]の secondlife:///app/experience/[public_id]/profile experience により、添付ファイルでアクション（[EventType]）を実行することが許可されました。
+  <notification name="ExperienceEventAttachment">secondlife:///app/experience/[public_id]/profile 体験の[EventType]により、装着物によるアクションの実行が許可されました。
 所有者：secondlife:///app/agent/[OwnerID]/inspect</notification>
 
   <notification name="ScriptQuestionExperience">[NAME]が所有する「&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;」というオブジェクトが、[GRID_WIDE]体験への参加を要求しています：
@@ -3621,13 +3621,13 @@ Webページにリンクすると、他人がこの場所に簡単にアクセ�
 アカウントへのアクセスが必要な理由が十分に理解できない場合は、アクセスを許可しないでください。
     <tag>confirm</tag>
     <form name="form">
-      <button name="Grant" text="トータルアクセスを許可" />
+      <button name="Grant" text="全権付与" />
       <button name="Deny" text="拒否" />
     </form>
     <footer>[FOOTERTEXT]</footer>
   </notification>
 
-  <notification name="ScriptDialog">[CHANNEL]での[NAME]の「&lt;nolink&gt;[TITLE]&lt;/nolink&gt;」
+  <notification name="ScriptDialog">[NAME]の「&lt;nolink&gt;[TITLE]&lt;/nolink&gt;」
 [MESSAGE]
     <form name="form">
       <button name="Client_Side_Mute" text="ブロック" />
@@ -4069,7 +4069,11 @@ https://wiki.firestormviewer.org/fs_voice
   </notification>
 
   <notification name="LivePreviewUnavailable">コピー禁止／譲渡不可のため、このテクスチャを表示できません。
-    <usetemplate ignoretext="コピー禁止／譲渡不可テクスチャでライブプレビューモードを使用できないことを警告する" name="okignore" yestext="ＯＫ" />
+    <usetemplate ignoretext="コピー禁止／譲渡不可のテクスチャでライブプレビューモードを使用できないことを警告する" name="okignore" yestext="ＯＫ" />
+  </notification>
+
+  <notification name="LivePreviewUnavailablePBR">コピー禁止／譲渡不可のため、このマテリアルを表示できません。
+    <usetemplate ignoretext="コピー禁止／譲渡不可のマテリアルでライブプレビューモードを使用できないことを警告する" name="okignore" yestext="ＯＫ" />
   </notification>
 
   <notification name="FacePasteFailed">ペーストに失敗しました：[REASON]
@@ -4712,15 +4716,15 @@ https://wiki.firestormviewer.org/fs_voice
     <tag>fail</tag>
   </notification>
 
-  <notification name="NoCopyPermsNoObject">あなたには、オブジェクト&lt;nolink&gt;「[OBJ_NAME]」&lt;/nolink&gt;をコピーする権限がないため、コピーに失敗しました。
+  <notification name="NoCopyPermsNoObject">あなたには、オブジェクト「&lt;nolink&gt;[OBJ_NAME]&lt;/nolink&gt;」をコピーする権限がないため、コピーに失敗しました。
     <tag>fail</tag>
   </notification>
 
-  <notification name="NoTransPermsNoObject">あなたには、オブジェクト&lt;nolink&gt;「[OBJ_NAME]」&lt;/nolink&gt;を譲渡する権限がないため、コピーに失敗しました。
+  <notification name="NoTransPermsNoObject">あなたには、オブジェクト「&lt;nolink&gt;[OBJ_NAME]&lt;/nolink&gt;」を譲渡する権限がないため、コピーに失敗しました。
     <tag>fail</tag>
   </notification>
 
-  <notification name="AddToNavMeshNoCopy">オブジェクト&lt;nolink&gt;「[OBJ_NAME]」&lt;/nolink&gt; は、ナビメッシュに関連付けがあるため、コピーに失敗しました。
+  <notification name="AddToNavMeshNoCopy">オブジェクト「&lt;nolink&gt;[OBJ_NAME]&lt;/nolink&gt;」は、ナビメッシュに関連付けがあるため、コピーに失敗しました。
     <tag>fail</tag>
   </notification>
 
@@ -4784,43 +4788,43 @@ https://wiki.firestormviewer.org/fs_voice
     <tag>fail</tag>
   </notification>
 
-  <notification name="NoExistNoSaveToContents">「存在しません」からrezされたため、&lt;nolink&gt;「[OBJ_NAME]」&lt;/nolink&gt;をオブジェクトの中身に保存できませんでした。
+  <notification name="NoExistNoSaveToContents">「存在しません」からrezされたため、「&lt;nolink&gt;[OBJ_NAME]&lt;/nolink&gt;」をオブジェクトの中身に保存できませんでした。
     <tag>fail</tag>
   </notification>
 
-  <notification name="NoModNoSaveToContents">あなたには、オブジェクト &lt;nolink&gt;「[DEST_NAME]」&lt;/nolink&gt;を修正する権限がないため、&lt;nolink&gt;「[OBJ_NAME]」&lt;/nolink&gt;をオブジェクトの中身に保存できませんでした。
+  <notification name="NoModNoSaveToContents">あなたには、オブジェクト「&lt;nolink&gt;[DEST_NAME]&lt;/nolink&gt;」を修正する権限がないため、「&lt;nolink&gt;[OBJ_NAME]&lt;/nolink&gt;」をオブジェクトの中身に保存できませんでした。
     <tag>fail</tag>
   </notification>
 
-  <notification name="NoSaveBackToInvDisabled">オブジェクト&lt;nolink&gt;「[OBJ_NAME]」&lt;/nolink&gt;をインベントリに保存できません。この操作は無効になりました。
+  <notification name="NoSaveBackToInvDisabled">オブジェクト「&lt;nolink&gt;[OBJ_NAME]&lt;/nolink&gt;」をインベントリに保存できません。この操作は無効になりました。
     <tag>fail</tag>
   </notification>
 
-  <notification name="NoCopyNoSelCopy">あなたには、オブジェクト &lt;nolink&gt;「[OBJ_NAME]」&lt;/nolink&gt;をコピーする権限がないため、選択内容をコピーできません。
+  <notification name="NoCopyNoSelCopy">あなたには、オブジェクト「&lt;nolink&gt;[OBJ_NAME]&lt;/nolink&gt;」をコピーする権限がないため、選択内容をコピーできません。
     <tag>fail</tag>
   </notification>
 
-  <notification name="NoTransNoSelCopy">オブジェクト&lt;nolink&gt;「[OBJ_NAME]」&lt;/nolink&gt;は譲渡できないため、選択内容をコピーできません。
+  <notification name="NoTransNoSelCopy">オブジェクト「&lt;nolink&gt;[OBJ_NAME]&lt;/nolink&gt;」は譲渡できないため、選択内容をコピーできません。
     <tag>fail</tag>
   </notification>
 
-  <notification name="NoTransNoCopy">オブジェクト&lt;nolink&gt;「[OBJ_NAME]」&lt;/nolink&gt;は譲渡できないため、選択内容をコピーできません。
+  <notification name="NoTransNoCopy">オブジェクト「&lt;nolink&gt;[OBJ_NAME]&lt;/nolink&gt;」は譲渡できないため、選択内容をコピーできません。
     <tag>fail</tag>
   </notification>
 
-  <notification name="NoPermsNoRemoval">オブジェクト&lt;nolink&gt;「[OBJ_NAME]」&lt;/nolink&gt;をシミュレーターから削除することは、権限のシステムにより許可されていません。
+  <notification name="NoPermsNoRemoval">オブジェクト「&lt;nolink&gt;[OBJ_NAME]&lt;/nolink&gt;」をシミュレーターから削除することは、権限のシステムにより許可されていません。
     <tag>fail</tag>
   </notification>
 
-  <notification name="NoModNoSaveSelection">あなたには、オブジェクト&lt;nolink&gt;「[OBJ_NAME]」&lt;/nolink&gt;を修正する権限がないため、選択内容を保存できません。
+  <notification name="NoModNoSaveSelection">あなたには、オブジェクト「&lt;nolink&gt;[OBJ_NAME]&lt;/nolink&gt;」を修正する権限がないため、選択内容を保存できません。
     <tag>fail</tag>
   </notification>
 
-  <notification name="NoCopyNoSaveSelection">オブジェクト&lt;nolink&gt;「[OBJ_NAME]」&lt;/nolink&gt;はコピー不可なため、選択内容を保存できません。
+  <notification name="NoCopyNoSaveSelection">オブジェクト「&lt;nolink&gt;[OBJ_NAME]&lt;/nolink&gt;」はコピー不可なため、選択内容を保存できません。
     <tag>fail</tag>
   </notification>
 
-  <notification name="NoModNoTaking">あなたには、オブジェクト&lt;nolink&gt;「[OBJ_NAME]」&lt;/nolink&gt;を修正する権限がないため、選択内容を選ぶことはできません。
+  <notification name="NoModNoTaking">あなたには、オブジェクト「&lt;nolink&gt;[OBJ_NAME]&lt;/nolink&gt;」を修正する権限がないため、選択内容を選ぶことはできません。
     <tag>fail</tag>
   </notification>
 

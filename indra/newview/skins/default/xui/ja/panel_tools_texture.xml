@@ -25,9 +25,10 @@
     <radio_item label="放射（エミッシブ）マップ" name="Emissive" value="4" />
   </radio_group>
   <menu_button name="clipboard_texture_params_btn" tool_tip="ペースト時のオプション" />
-  <check_box label="繰り返しをロックする" name="checkbox_sync_settings" tool_tip="すべてのマップの繰り返しを調整する" />
-  <texture_picker label="マテリアル" name="pbr_control" tool_tip="クリックでＰＢＲマテリアルを選択できます。" />
+  <check_box label="繰り返しをロックする" name="checkbox_sync_settings" tool_tip="すべてのマップの繰り返しを同期させます。" />
+  <texture_picker label="マテリアル" name="pbr_control" tool_tip="クリックでＰＢＲマテリアルを選択します。" />
   <button name="pbr_from_inventory" label="インベントリから選択" />
+  <text name="material_permissions_loading_label">コンテンツを読み込んでいます…</text>
   <button name="edit_selected_pbr" label="選択を編集" />
   <button name="save_selected_pbr" label="インベントリに保存" />
   <texture_picker label="テクスチャ" name="texture control" tool_tip="クリックで画像を選択します。" />
@@ -116,7 +117,7 @@
   <button label="揃える" label_selected="揃える" name="button align textures" tool_tip="現在のテクスチャレイヤーのオフセット値を基準に揃えます。" />
   <web_browser name="title_media" />
   <!-- <FS:Zi> Find all faces with same texture -->
-  <button label="すべてを探す" name="btn_select_same_diff" tool_tip="この面と同じディフューズテクスチャを持つ面をすべて選択する。" />
+  <button label="すべてを探す" name="btn_select_same_diff" tool_tip="この面と同じディフューズマップを持つ面をすべて選択する。" />
   <button label="すべてを探す" name="btn_select_same_norm" tool_tip="この面と同じ法線マップを持つ面をすべて選択する。" />
   <button label="すべてを探す" name="btn_select_same_spec" tool_tip="この面と同じスペキュラマップを持つ面をすべて選択する。" />
   <!-- </FS:Zi> -->
