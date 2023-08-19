@@ -11,19 +11,46 @@
 	<menu_item_call label="S'asseoir" name="Sit Down Here"/>
 	<menu_item_call label="Se lever" name="Stand Up"/>
 	<context_menu label="Apparence" name="AppearanceSubmenu">
+		<menu_item_call label="Tenue actuelle" name="NowWearing" />
 		<menu_item_call label="Changer de tenue" name="Change Outfit" />
 		<menu_item_call label="Modifier la silhouette" name="Edit Shape" />
 		<menu_item_call label="Modifier la tenue" name="Edit Outfit Parts" />
 		<menu_item_call label="Voltigement" name="Hover Height"/>
 		<menu_item_call label="Réinitialiser le squelette" name="Reset Skeleton"/>
 		<menu_item_call label="Réinitialiser le squelette et les animations" name="Reset Skeleton And Animations"/>
+		<menu_item_call label="Réinitialiser le LOD du maillage" name="Reset Mesh LOD"/>
 	</context_menu>
+	<context_menu label="Enlever" name="Take Off &gt;">
+		<context_menu label="Vêtements" name="Clothes &gt;">
+			<menu_item_call label="Chemise" name="Shirt"/>
+			<menu_item_call label="Pantalon" name="Pants"/>
+			<menu_item_call label="Jupe" name="Skirt"/>
+			<menu_item_call label="Chaussures" name="Shoes"/>
+			<menu_item_call label="Chaussettes" name="Socks"/>
+			<menu_item_call label="Veste" name="Jacket"/>
+			<menu_item_call label="Gants" name="Gloves"/>
+			<menu_item_call label="Maillot de corps" name="Self Undershirt"/>
+			<menu_item_call label="Caleçon" name="Self Underpants"/>
+			<menu_item_call label="Tatouage" name="Self Tattoo"/>
+			<menu_item_call label="Physique" name="Self Physics"/>
+			<menu_item_call label="Alpha" name="Self Alpha"/>
+			<menu_item_call label="Tous les vêtements" name="All Clothes"/>
+		</context_menu>
+		<context_menu label="HUD" name="Detach Self HUD"/>
+		<context_menu label="Enlever" name="Detach Self"/>
+		<menu_item_call label="Tout enlever" name="Detach All"/>
+	</context_menu>
+	<menu_item_call label="S'asseoir / Se lever" name="Sit stand"/>
+	<menu_item_call label="Voler / Atterrir" name="Fly land"/>
+	<menu_item_call label="Arrêter les animations" name="Stop Animating My Avatar"/>
 	<context_menu label="Communauté" name="CommunitySubmenu">
 		<menu_item_call label="Amis" name="Friends..."/>
 		<menu_item_call label="Groupes" name="Groups..."/>
 		<menu_item_call label="Profil" name="Profile..."/>
 	</context_menu>
 	<menu_item_call label="Dump XML" name="Dump XML"/>
+	<menu_item_call label="Profil de l'objet" name="Object Inspect"/>
+	<menu_item_call label="Examiner" name="Object_Inspect_Floater"/>
 	<menu_item_call label="Informations sur les scripts" name="ScriptInfo"/>
 	<menu_item_call label="Faire disparaitre temporairement" name="Derender"/>
 	<menu_item_call label="Faire disparaitre &amp; Blacklister" name="DerenderPermanent"/>
