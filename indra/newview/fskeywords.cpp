@@ -120,9 +120,9 @@ bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
 
 	if (sFSKeywordMatchWholeWords)
 	{
-		for (std::vector<std::string>::iterator it = mWordList.begin(); it != mWordList.end(); ++it)
+		for (const auto& word : mWordList)
 		{
-			if (boost::regex_search(source, boost::regex("\\b" + (*it) + "\\b")))
+			if (boost::regex_search(source, boost::regex("\\b" + word + "\\b")))
 			{
 				return true;
 			}
@@ -130,9 +130,9 @@ bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
 	}
 	else
 	{
-		for (std::vector<std::string>::iterator it = mWordList.begin(); it != mWordList.end(); ++it)
+		for (const auto& word : mWordList)
 		{
-			if (source.find((*it)) != std::string::npos)
+			if (source.find(word) != std::string::npos)
 			{
 				return true;
 			}
@@ -145,30 +145,27 @@ bool FSKeywords::chatContainsKeyword(const LLChat& chat, bool is_local)
 // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 void FSKeywords::notify(const LLChat& chat)
 {
-	if (chat.mFromID != gAgentID || chat.mFromName == SYSTEM_FROM)
+	if ((chat.mFromID != gAgentID || chat.mFromName == SYSTEM_FROM) && !chat.mMuted && !LLMuteList::getInstance()->isMuted(chat.mFromID))
 	{
-		if (!chat.mMuted && !LLMuteList::getInstance()->isMuted(chat.mFromID))
+		static LLCachedControl<bool> PlayModeUISndFSKeywordSound(gSavedPerAccountSettings, "PlayModeUISndFSKeywordSound");
+		if (PlayModeUISndFSKeywordSound)
 		{
-			static LLCachedControl<bool> PlayModeUISndFSKeywordSound(gSavedPerAccountSettings, "PlayModeUISndFSKeywordSound");
-			if (PlayModeUISndFSKeywordSound)
-			{
-				LLUI::getInstance()->mAudioCallback(LLUUID(gSavedPerAccountSettings.getString("UISndFSKeywordSound")));
-			}
+			LLUI::getInstance()->mAudioCallback(LLUUID(gSavedPerAccountSettings.getString("UISndFSKeywordSound")));
+		}
 
-			static LLCachedControl<bool> FSEnableGrowl(gSavedSettings, "FSEnableGrowl");
-			if (FSEnableGrowl)
+		static LLCachedControl<bool> FSEnableGrowl(gSavedSettings, "FSEnableGrowl");
+		if (FSEnableGrowl)
+		{
+			std::string msg = chat.mFromName;
+			if (is_irc_me_prefix(chat.mText))
 			{
-				std::string msg = chat.mFromName;
-				if (is_irc_me_prefix(chat.mText))
-				{
-					msg = msg + chat.mText.substr(3);
-				}
-				else
-				{
-					msg = msg + ": " + chat.mText;
-				}
-				GrowlManager::notify("Keyword Alert", msg, GROWL_KEYWORD_ALERT_TYPE);
+				msg = msg + chat.mText.substr(3);
 			}
+			else
+			{
+				msg = msg + ": " + chat.mText;
+			}
+			GrowlManager::notify("Keyword Alert", msg, GROWL_KEYWORD_ALERT_TYPE);
 		}
 	}
 }
