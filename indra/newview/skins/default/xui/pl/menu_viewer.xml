@@ -542,7 +542,7 @@
 			<menu_item_check label="Domyślne ustawienia otoczenia Regionu" name="Sim Sun Override"/>
 			<menu_item_check label="Ustalona pogoda" name="Fixed Weather"/>
 			<menu_item_call label="Zrzut buforu pamięci obiektów regionu" name="Dump Region Object Cache"/>
-			<menu_item_call label="Interest List: Pełne odświeżenie" name="Interest List: Full Update"/>
+			<menu_item_check label="Interest List: Pełne odświeżenie" name="Interest List: Full Update"/>
 			<menu_item_call label="Zrzut właściwości symulatora do czatu w pobliżu" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="Interfejs" name="UI">

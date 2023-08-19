@@ -312,11 +312,6 @@ public:
 	
 	virtual BOOL	handleScrollWheel(S32 x, S32 y, S32 mask);
 
-	// <FS:Ansariel> FIRE-24125: Add option to close all floaters of a group
-	virtual BOOL	handleKeyHere(KEY key, MASK mask);
-	virtual BOOL	handleKeyUpHere(KEY key, MASK mask);
-	// </FS:Ansariel>
-
 	virtual void	draw();
 	virtual void	drawShadow(LLPanel* panel);
 	
@@ -564,9 +559,6 @@ private:
 
 	// <FS:Ansariel> MultiFloater without titlebar for hosted floater
 	bool			mHostedFloaterShowtitlebar;
-
-	// <FS:Ansariel> FIRE-24125: Add option to close all floaters of a group
-	bool			mShiftPressed;
 };
 
 

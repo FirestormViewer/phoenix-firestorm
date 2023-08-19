@@ -2047,6 +2047,15 @@
                      function="Tools.SelectInvisibleObjects"
                      parameter="invisible" />
                 </menu_item_check>
+            <menu_item_check
+                 label="Select Reflection Probes"
+                 name="Select Reflection Probes">
+                    <menu_item_check.on_check
+                     control="SelectReflectionProbes" />
+                    <menu_item_check.on_click
+                     function="Tools.SelectReflectionProbes"
+                     parameter="reflection_probes" />
+            </menu_item_check>
                 <menu_item_check
                  label="Select By Surrounding"
                  name="Select By Surrounding">
@@ -4757,13 +4766,15 @@
                  function="Advanced.DumpRegionObjectCache" />
             </menu_item_call>
         
-            <menu_item_call
+            <menu_item_check
              label="Interest List: Full Update"
              name="Interest List: Full Update"
              shortcut="alt|shift|I">
-                <menu_item_call.on_click
-                 function="Advanced.InterestListFullUpdate" />
-            </menu_item_call>
+                <menu_item_check.on_check
+                 function="Advanced.CheckInterestListFullUpdate" />
+                <menu_item_check.on_click
+                 function="Advanced.ToggleInterestListFullUpdate" />
+            </menu_item_check>
             <menu_item_call
              label="Dump Simulator Features to Nearby Chat"
              name="DumpSimFeaturesToChat">

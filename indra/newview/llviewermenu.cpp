@@ -1433,49 +1433,85 @@ class LLAdvancedDumpRegionObjectCache : public view_listener_t
 	}
 };
 
-class LLAdvancedInterestListFullUpdate : public view_listener_t
+// <FS:Beq> Handle InterestListFullUpdate as a proper state toggle
+// class LLAdvancedInterestListFullUpdate : public view_listener_t
+// {
+// 	bool handleEvent(const LLSD& userdata)
+// 	{
+// 		LLSD request;
+// 		LLSD body;
+// 		static bool using_360 = false;
+
+// 		if (using_360)
+// 		{
+// 			body["mode"] = LLSD::String("default");
+// 		}
+// 		else
+// 		{
+// 			body["mode"] = LLSD::String("360");
+// 		}
+// 		using_360 = !using_360;
+
+//         if (gAgent.requestPostCapability("InterestList", body, [](const LLSD& response)
+//         {
+//             LL_INFOS("Int") <<
+//                 "InterestList capability responded: \n" <<
+//                 ll_pretty_print_sd(response) <<
+//                 LL_ENDL;
+//         }))
+//         {
+//             LL_INFOS("360Capture") <<
+//                 "Successfully posted an InterestList capability request with payload: \n" <<
+//                 ll_pretty_print_sd(body) <<
+//                 LL_ENDL;
+//             return true;
+//         }
+//         else
+//         {
+//             LL_INFOS("360Capture") <<
+//                 "Unable to post an InterestList capability request with payload: \n" <<
+//                 ll_pretty_print_sd(body) <<
+//                 LL_ENDL;
+//             return false;
+//         }
+// 	}
+// };
+class LLAdvancedCheckInterestListFullUpdate : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		LLSD request;
-		LLSD body;
-		static bool using_360 = false;
-
-		if (using_360)
+		LLViewerRegion* regionp = gAgent.getRegion();
+		if (regionp)
 		{
-			body["mode"] = LLSD::String("default");
+			bool current_value = ( regionp->mFullUpdateInUseCount > 0 );
+			return current_value;
 		}
-		else
-		{
-			body["mode"] = LLSD::String("360");
-		}
-		using_360 = !using_360;
-
-        if (gAgent.requestPostCapability("InterestList", body, [](const LLSD& response)
-        {
-            LL_INFOS("360Capture") <<
-                "InterestList capability responded: \n" <<
-                ll_pretty_print_sd(response) <<
-                LL_ENDL;
-        }))
-        {
-            LL_INFOS("360Capture") <<
-                "Successfully posted an InterestList capability request with payload: \n" <<
-                ll_pretty_print_sd(body) <<
-                LL_ENDL;
-            return true;
-        }
-        else
-        {
-            LL_INFOS("360Capture") <<
-                "Unable to post an InterestList capability request with payload: \n" <<
-                ll_pretty_print_sd(body) <<
-                LL_ENDL;
-            return false;
-        }
+		return false;
 	}
 };
-
+class LLAdvancedToggleInterestListFullUpdate : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLViewerRegion* regionp = gAgent.getRegion();
+		if (regionp)
+		{
+			bool current_value = ( regionp->mFullUpdateInUseCount > 0 );
+			if(current_value)
+			{
+				regionp->useFullUpdateInterestListMode(false, true);
+				return false;
+			}
+			else
+			{
+				regionp->useFullUpdateInterestListMode(true);
+				return true;
+			}
+		}
+		return false;
+	}
+};
+// </FS:Beq>
 class LLAdvancedBuyCurrencyTest : public view_listener_t
 	{
 	bool handleEvent(const LLSD& userdata)
@@ -3469,7 +3505,12 @@ bool enable_object_inspect()
 
 struct LLSelectedTEGetmatIdAndPermissions : public LLSelectedTEFunctor
 {
-    LLSelectedTEGetmatIdAndPermissions() : mCanCopy(true), mCanModify(true), mCanTransfer(true) {}
+    LLSelectedTEGetmatIdAndPermissions()
+        : mCanCopy(true)
+        , mCanModify(true)
+        , mCanTransfer(true)
+        , mHasNonPbrFaces(false)
+    {}
     bool apply(LLViewerObject* objectp, S32 te_index)
     {
         mCanCopy &= (bool)objectp->permCopy();
@@ -3480,11 +3521,16 @@ struct LLSelectedTEGetmatIdAndPermissions : public LLSelectedTEFunctor
         {
             mMaterialId = mat_id;
         }
+        else
+        {
+            mHasNonPbrFaces = true;
+        }
         return true;
     }
     bool mCanCopy;
     bool mCanModify;
     bool mCanTransfer;
+    bool mHasNonPbrFaces;
     LLUUID mMaterialId;
 };
 
@@ -3497,7 +3543,7 @@ bool enable_object_edit_gltf_material()
 
     LLSelectedTEGetmatIdAndPermissions func;
     LLSelectMgr::getInstance()->getSelection()->applyToTEs(&func);
-    return func.mCanModify && func.mMaterialId.notNull();
+    return func.mCanModify && !func.mHasNonPbrFaces;
 }
 
 bool enable_object_open()
@@ -10464,6 +10510,18 @@ class LLToolsSelectInvisibleObjects : public view_listener_t
     }
 };
 
+class LLToolsSelectReflectionProbes: public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        BOOL cur_val = gSavedSettings.getBOOL("SelectReflectionProbes");
+
+        gSavedSettings.setBOOL("SelectReflectionProbes", !cur_val);
+
+        return true;
+    }
+};
+
 class LLToolsSelectBySurrounding : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -12134,6 +12192,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLToolsSelectOnlyMyObjects(), "Tools.SelectOnlyMyObjects");
 	view_listener_t::addMenu(new LLToolsSelectOnlyMovableObjects(), "Tools.SelectOnlyMovableObjects");
     view_listener_t::addMenu(new LLToolsSelectInvisibleObjects(), "Tools.SelectInvisibleObjects");
+    view_listener_t::addMenu(new LLToolsSelectReflectionProbes(), "Tools.SelectReflectionProbes");
 	view_listener_t::addMenu(new LLToolsSelectBySurrounding(), "Tools.SelectBySurrounding");
 	view_listener_t::addMenu(new LLToolsShowHiddenSelection(), "Tools.ShowHiddenSelection");
 	view_listener_t::addMenu(new LLToolsShowSelectionLightRadius(), "Tools.ShowSelectionLightRadius");
@@ -12229,7 +12288,12 @@ void initialize_menus()
 	// Advanced > World
 	view_listener_t::addMenu(new LLAdvancedDumpScriptedCamera(), "Advanced.DumpScriptedCamera");
 	view_listener_t::addMenu(new LLAdvancedDumpRegionObjectCache(), "Advanced.DumpRegionObjectCache");
-	view_listener_t::addMenu(new LLAdvancedInterestListFullUpdate(), "Advanced.InterestListFullUpdate");
+	
+	// <FS:Beq> Make InterestList a proper stateful toggle
+	// view_listener_t::addMenu(new LLAdvancedInterestListFullUpdate(), "Advanced.InterestListFullUpdate");
+	view_listener_t::addMenu(new LLAdvancedCheckInterestListFullUpdate(), "Advanced.CheckInterestListFullUpdate"); 
+	view_listener_t::addMenu(new LLAdvancedToggleInterestListFullUpdate(), "Advanced.ToggleInterestListFullUpdate");
+	// </FS:Beq>
 
 	// Advanced > UI
 	commit.add("Advanced.WebBrowserTest", boost::bind(&handle_web_browser_test,	_2));	// sigh! this one opens the MEDIA browser

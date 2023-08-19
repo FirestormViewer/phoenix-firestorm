@@ -2598,6 +2598,9 @@ Möchten Sie den Nicht-stören-Modus deaktivieren, bevor Sie diese Transaktion a
 		Ihr Papierkorb läuft über. Dies kann zu Anmeldeproblemen führen.
 		<usetemplate name="okcancelbuttons" notext="Papierkorb später leeren" yestext="Papierkorb ansehen"/>
 	</notification>
+	<notification name="InventoryLimitReachedAIS">
+		Es gibt Probleme mit Ihrem Inventar. Bitte kontaktieren Sie den Support Ihres Grids.
+	</notification>
 	<notification name="ConfirmClearBrowserCache">
 		Sind Sie sicher, dass Sie Ihren Reise-, Internet- und Suchverlauf löschen möchten?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
@@ -3804,8 +3807,20 @@ Sie haben lokal eine [RESOLUTION]-gebackene Textur für „[BODYREGION]“ nach 
 		Wir können keine Vorschau dieser Textur anzeigen, da sie nicht kopier- und/oder übertragungsfähig ist.
 		<usetemplate ignoretext="Hinweis anzeigen, wenn bei nicht kopier- und/oder übertragungsfähigen Texturen keine Live-Vorschau möglich ist" name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="LivePreviewUnavailablePBR">
+		Wir können keine Vorschau dieses Materials anzeigen, da es nicht kopier- und/oder übertragungsfähig ist.
+		<usetemplate ignoretext="Hinweis anzeigen, wenn bei nicht kopier- und/oder übertragungsfähigen Materialien keine Live-Vorschau möglich ist" name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="FacePasteFailed">
 		Einfügen fehlgeschlagen. [REASON]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="FailedToApplyTextureNoCopyToMultiple">
+		Textur konnte nicht angewandt werden. Sie können eine Textur ohne Kopier-Berechtigung nicht auf mehrere Objekte anwenden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="FailedToApplyGLTFNoCopyToMultiple">
+		GLTF-Textur konnte nicht angewandt werden. Sie können ein Material ohne Kopier-Berechtigung nicht auf mehrere Objekte anwenden.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="FacePasteTexturePermissions">
@@ -4934,9 +4949,6 @@ Falls Sie dieses Objekt sehen möchten, nehmen Sie es ab und hängen es an einem
 		<usetemplate ignoretext="Warnen, falls geriggtes Mesh an einem HUD-Punkt angehängt ist." name="okignore" yestext="OK"/>
 	</notification>
 
-	<notification name="MaterialCreated">
-		Material erfolggreich erstellt. Asset ID: [ASSET_ID]
-	</notification>
 	<notification name="ReflectionProbeApplied">
 		WARNUNG: Sie haben aus Ihrem Objekt einen Reflexionstest erzeugt. Dieser verändert implizit das Objekt, um dessen Einflusskörper nachzuahmen. Diese Änderungen sind nicht umkehrbar. Möchten Sie fortfahren?
 		<usetemplate ignoretext="Hinweis zum Reflexionstest" name="okcancelignore" yestext="OK" notext="Abbrechen"/>

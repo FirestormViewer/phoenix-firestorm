@@ -52,6 +52,9 @@
 	</radio_group>
 	<texture_picker label="Material" name="pbr_control" tool_tip="Klicken, um ein PBR-Material zu wählen"/>
 	<!-- <button name="pbr_from_inventory" label="Aus Inventory wählen"/> -->
+	<text name="material_permissions_loading_label">
+		Inhalt wird geladen...
+	</text>
 	<button name="edit_selected_pbr" label="Bearbeiten"/>
 	<button name="save_selected_pbr" label="Speichern"/>
 	<texture_picker label="Textur" name="texture control" tool_tip="Klicken, um ein Bild zu wählen"/>

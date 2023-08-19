@@ -1750,7 +1750,7 @@
     <key>TextureLivePreview</key>
     <map>
       <key>Comment</key>
-      <string>Preview selections in texture picker immediately</string>
+      <string>Preview selections in texture picker or material picker immediately</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -9970,7 +9970,7 @@
       <key>Type</key>
       <string>U32</string>
       <key>Value</key>
-			<integer>64</integer>
+			<integer>0</integer>
     </map>
     <key>NoPreload</key>
     <map>
@@ -12318,6 +12318,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>RenderPostProcessingHDR</key>
+  <map>
+    <key>Comment</key>
+    <string>Enable HDR for post processing buffer</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>RenderMaxOpenGLVersion</key>
   <map>
     <key>Comment</key>
@@ -12659,7 +12670,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>-0.001</real>
+    <real>-0.0002</real>
     <key>Backup</key>
     <integer>0</integer>
   </map>
@@ -13234,6 +13245,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>9</integer>
     </map>
+    <key>RenderGlowHDR</key>
+    <map>
+      <key>Comment</key>
+      <string>Enable HDR for glow map</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>RenderGlowStrength</key>
     <map>
       <key>Comment</key>
@@ -13281,6 +13303,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>F32</string>
       <key>Value</key>
       <real>1.3</real>
+    </map>
+    <key>RenderGlowNoise</key>
+    <map>
+      <key>Comment</key>
+      <string>Enables glow noise (dithering). Reduces banding from glow in certain cases.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <real>1</real>
     </map>
     <key>DisableAllRenderTypes</key>
     <map>
@@ -14532,7 +14565,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>U32</string>
       <key>Value</key>
-      <integer>2048</integer>
+      <integer>4096</integer>
     </map>
     <key>SceneLoadLowMemoryBound</key>
     <map>
@@ -14543,7 +14576,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>U32</string>
       <key>Value</key>
-      <integer>750</integer>
+      <integer>2048</integer>
     </map>
     <key>SceneLoadMinRadius</key>
     <map>
@@ -14676,6 +14709,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+  <key>SelectReflectionProbes</key>
+    <map>
+      <key>Comment</key>
+      <string>Select reflection probes</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
     <key>SelectOwnedOnly</key>
     <map>
@@ -16351,13 +16395,13 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>TranslationService</key>
     <map>
       <key>Comment</key>
-      <string>Translation API to use. (google|bing)</string>
+      <string>Translation API to use. (google|azure)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>bing</string>
+      <string>azure</string>
     </map>
     <key>GoogleTranslateAPIKey</key>
     <map>
@@ -16373,13 +16417,35 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>BingTranslateAPIKey</key>
     <map>
       <key>Comment</key>
-      <string>Bing AppID to use with the Microsoft Translator API</string>
+      <string>(Deprecated) Bing AppID to use with the Microsoft Translator API</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
       <string></string>
+    </map>
+    <key>AzureTranslateAPIKey</key>
+    <map>
+      <key>Comment</key>
+      <string>Azure Translation service data to use with the MS Azure Translator API</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>LLSD</string>
+      <key>Value</key>
+      <string></string>
+    </map>
+    <key>DeepLTranslateAPIKey</key>
+    <map>
+        <key>Comment</key>
+        <string>DeepL Translation service data to use with the DeepL Translator API</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>LLSD</string>
+        <key>Value</key>
+        <string></string>
     </map>
     <key>TutorialURL</key>
     <map>
@@ -26493,6 +26559,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>FSSortAttachmentSpotsAlphabetically</key>
+    <map>
+      <key>Comment</key>
+      <string>Sorts the attachment spots in the "Attach to" menus alphabetically</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
     </map>
 </map>
 </llsd>

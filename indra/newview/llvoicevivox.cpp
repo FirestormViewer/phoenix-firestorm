@@ -276,13 +276,13 @@ static void killGateway()
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 bool LLVivoxVoiceClient::sShuttingDown = false;
+bool LLVivoxVoiceClient::sConnected = false;
+LLPumpIO *LLVivoxVoiceClient::sPump = nullptr;
 
 LLVivoxVoiceClient::LLVivoxVoiceClient() :
 	mSessionTerminateRequested(false),
 	mRelogRequested(false),
-	mConnected(false),
 	mTerminateDaemon(false),
-	mPump(NULL),
 	mSpatialJoiningNum(0),
 
 	mTuningMode(false),
@@ -351,7 +351,11 @@ LLVivoxVoiceClient::LLVivoxVoiceClient() :
 	mIsProcessingChannels(false),
 	mIsCoroutineActive(false),
 	mVivoxPump("vivoxClientPump")
-{	
+{
+    sShuttingDown = false;
+    sConnected = false;
+    sPump = nullptr;
+
 	mSpeakerVolume = scale_speaker_volume(0);
 
 	mVoiceVersion.serverVersion = "";
@@ -393,7 +397,7 @@ LLVivoxVoiceClient::~LLVivoxVoiceClient()
 void LLVivoxVoiceClient::init(LLPumpIO *pump)
 {
 	// constructor will set up LLVoiceClient::getInstance()
-	mPump = pump;
+	sPump = pump;
 
 //     LLCoros::instance().launch("LLVivoxVoiceClient::voiceControlCoro",
 //         boost::bind(&LLVivoxVoiceClient::voiceControlCoro, LLVivoxVoiceClient::getInstance()));
@@ -414,10 +418,10 @@ void LLVivoxVoiceClient::terminate()
         logoutOfVivox(false);
     }
     
-	if(mConnected)
+	if(sConnected)
 	{
         breakVoiceConnection(false);
-		mConnected = false;
+        sConnected = false;
 	}
 	else
 	{
@@ -426,7 +430,7 @@ void LLVivoxVoiceClient::terminate()
 	}
 
     sShuttingDown = true;
-    mPump = NULL;
+    sPump = NULL;
 
 	// <FS:Ansariel> Delete useless Vivox logs on logout
 	if (gSavedSettings.getString("VivoxDebugLevel") == "0")
@@ -482,7 +486,7 @@ bool LLVivoxVoiceClient::writeString(const std::string &str)
 	bool result = false;
     LL_DEBUGS("LowVoice") << "sending:\n" << str << LL_ENDL;
 
-	if(mConnected)
+	if(sConnected)
 	{
 		apr_status_t err;
 		apr_size_t size = (apr_size_t)str.size();
@@ -1167,7 +1171,7 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
 
     int retryCount(0);
     LLVoiceVivoxStats::getInstance()->reset();
-    while (!mConnected && !sShuttingDown && retryCount++ <= DAEMON_CONNECT_RETRY_MAX)
+    while (!sConnected && !sShuttingDown && retryCount++ <= DAEMON_CONNECT_RETRY_MAX)
     {
         LLVoiceVivoxStats::getInstance()->connectionAttemptStart();
         LL_DEBUGS("Voice") << "Attempting to connect to vivox daemon: " << mDaemonHost << LL_ENDL;
@@ -1177,23 +1181,23 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
             mSocket = LLSocket::create(gAPRPoolp, LLSocket::STREAM_TCP);
         }
 
-        mConnected = mSocket->blockingConnect(mDaemonHost);
-        LLVoiceVivoxStats::getInstance()->connectionAttemptEnd(mConnected);
-        if (!mConnected)
+        sConnected = mSocket->blockingConnect(mDaemonHost);
+        LLVoiceVivoxStats::getInstance()->connectionAttemptEnd(sConnected);
+        if (!sConnected)
         {
             llcoro::suspendUntilTimeout(DAEMON_CONNECT_THROTTLE_SECONDS);
         }
     }
     
     //---------------------------------------------------------------------
-    if (sShuttingDown && !mConnected)
+    if (sShuttingDown && !sConnected)
     {
         return false;
     }
 
     llcoro::suspendUntilTimeout(UPDATE_THROTTLE_SECONDS);
 
-    while (!mPump && !sShuttingDown)
+    while (!sPump && !sShuttingDown)
     {   // Can't use the pump until we have it available.
         llcoro::suspend();
     }
@@ -1215,7 +1219,7 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
     readChain.push_back(LLIOPipe::ptr_t(new LLVivoxProtocolParser()));
 
 
-    mPump->addChain(readChain, NEVER_CHAIN_EXPIRY_SECS);
+    sPump->addChain(readChain, NEVER_CHAIN_EXPIRY_SECS);
 
 
     //---------------------------------------------------------------------
@@ -1437,9 +1441,9 @@ bool LLVivoxVoiceClient::breakVoiceConnection(bool corowait)
             // the message, yet we need to receive "connector shutdown response".
             // Either wait a bit and emulate it or check gMessageSystem for specific message
             _sleep(1000);
-            if (mConnected)
+            if (sConnected)
             {
-                mConnected = false;
+                sConnected = false;
                 LLSD vivoxevent(LLSDMap("connector", LLSD::Boolean(false)));
                 mVivoxPump.post(vivoxevent);
             }
@@ -1451,7 +1455,7 @@ bool LLVivoxVoiceClient::breakVoiceConnection(bool corowait)
     LL_DEBUGS("Voice") << "closing SLVoice socket" << LL_ENDL;
     closeSocket();		// Need to do this now -- bad things happen if the destructor does it later.
     cleanUp();
-    mConnected = false;
+    sConnected = false;
 
     return retval;
 }
@@ -2637,7 +2641,7 @@ bool LLVivoxVoiceClient::performMicTuning()
 void LLVivoxVoiceClient::closeSocket(void)
 {
 	mSocket.reset();
-	mConnected = false;
+    sConnected = false;
 	mConnectorEstablished = false;
 	mAccountLoggedIn = false;
 }
@@ -3144,7 +3148,7 @@ bool LLVivoxVoiceClient::deviceSettingsAvailable()
 {
 	bool result = true;
 	
-	if(!mConnected)
+	if(!sConnected)
 		result = false;
 	
 	if(mRenderDevices.empty())
@@ -3973,7 +3977,7 @@ void LLVivoxVoiceClient::connectorShutdownResponse(int statusCode, std::string &
 		// Should this ever fail?  do we care if it does?
 	}
 	
-	mConnected = false;
+	sConnected = false;
 	mShutdownComplete = true;
 	
     LLSD vivoxevent(LLSDMap("connector", LLSD::Boolean(false)));
@@ -7568,7 +7572,7 @@ LLIOPipe::EStatus LLVivoxProtocolParser::process_impl(
 	
 	LL_DEBUGS("VivoxProtocolParser") << "at end, mInput is: " << mInput << LL_ENDL;
 	
-	if(!LLVivoxVoiceClient::getInstance()->mConnected)
+	if(!LLVivoxVoiceClient::sConnected)
 	{
 		// If voice has been disabled, we just want to close the socket.  This does so.
 		LL_INFOS("Voice") << "returning STATUS_STOP" << LL_ENDL;

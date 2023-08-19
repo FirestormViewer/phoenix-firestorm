@@ -270,10 +270,18 @@ void LLFloaterTexturePicker::setImageID(const LLUUID& image_id, bool set_selecti
 				mInventoryPanel->setSelection(item_id, TAKE_FOCUS_NO);
 			}
 		}
-		
-
-		
 	}
+}
+
+void LLFloaterTexturePicker::setImageIDFromItem(const LLInventoryItem* itemp, bool set_selection)
+{
+    LLUUID asset_id = itemp->getAssetUUID();
+    if (mInventoryPickType == LLTextureCtrl::PICK_MATERIAL && asset_id.isNull())
+    {
+        // If an inventory item has a null asset, consider it a valid blank material(gltf)
+        asset_id = LLGLTFMaterialList::BLANK_MATERIAL_ASSET_ID;
+    }
+    setImageID(asset_id, set_selection);
 }
 
 void LLFloaterTexturePicker::setActive( BOOL active )					
@@ -429,7 +437,7 @@ BOOL LLFloaterTexturePicker::handleDragAndDrop(
 				// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
 				setCanApply(true, true);
 				// </FS:Ansariel>
-				setImageID( item->getAssetUUID() );
+                setImageIDFromItem(item);
 				commitIfImmediateSet();
 			}
 
@@ -746,6 +754,11 @@ void LLFloaterTexturePicker::draw()
 
 const LLUUID& LLFloaterTexturePicker::findItemID(const LLUUID& asset_id, BOOL copyable_only, BOOL ignore_library)
 {
+	if (asset_id.isNull())
+	{
+		return LLUUID::null;
+	}
+
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
 	LLAssetIDMatches asset_id_matches(asset_id);
@@ -956,7 +969,7 @@ void LLFloaterTexturePicker::onSelectionChange(const std::deque<LLFolderViewItem
 			// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
 			setCanApply(true, true);
 			// </FS:Ansariel>
-			setImageID(itemp->getAssetUUID(),false);
+            setImageIDFromItem(itemp, false);
 			
 			// <FS:Chaser> UUID texture picker permissions continued
 			//We also have to set this here because above passes the asset ID, not the inventory ID.

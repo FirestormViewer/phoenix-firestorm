@@ -5602,13 +5602,14 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 
 	if (mat)
 	{
+		BOOL is_alpha = (facep->getPoolType() == LLDrawPool::POOL_ALPHA) || (facep->getTextureEntry()->getColor().mV[3] < 0.999f) ? TRUE : FALSE;
 		if (type == LLRenderPass::PASS_ALPHA)
 		{
-			shader_mask = mat->getShaderMask(LLMaterial::DIFFUSE_ALPHA_MODE_BLEND);
+			shader_mask = mat->getShaderMask(LLMaterial::DIFFUSE_ALPHA_MODE_BLEND, is_alpha);
 		}
 		else
 		{
-			shader_mask = mat->getShaderMask();
+			shader_mask = mat->getShaderMask(LLMaterial::DIFFUSE_ALPHA_MODE_DEFAULT, is_alpha);
 		}
 	}
 
@@ -6146,18 +6147,23 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 						}
 						else
 						{
-                            // <FS:ND> Even more crash avoidance ...
-                            // if (te->getColor().mV[3] > 0.f || te->getGlow() > 0.f)
-                            if (te && (te->getColor().mV[3] > 0.f || te->getGlow() > 0.f))
-                            // </FS:ND>
-                            { //only treat as alpha in the pipeline if < 100% transparent
-                                drawablep->setState(LLDrawable::HAS_ALPHA);
-                                add_face(sAlphaFaces, alpha_count, facep);
-                            }
-                            else if (LLDrawPoolAlpha::sShowDebugAlpha)
-                            {
-                                add_face(sAlphaFaces, alpha_count, facep);
-                            }
+							// <FS:ND> Even more crash avoidance ...
+							//if (te->getColor().mV[3] > 0.f || te->getGlow() > 0.f)
+							if (te && (te->getColor().mV[3] > 0.f || te->getGlow() > 0.f))
+							// </FS:ND>
+							{ //only treat as alpha in the pipeline if < 100% transparent
+								drawablep->setState(LLDrawable::HAS_ALPHA);
+								add_face(sAlphaFaces, alpha_count, facep);
+							}
+							else if (LLDrawPoolAlpha::sShowDebugAlpha ||
+								(gPipeline.sRenderHighlight && !drawablep->getParent() &&
+								//only root objects are highlighted with red color in this case
+								drawablep->getVObj() && drawablep->getVObj()->flagScripted() &&
+								(LLPipeline::getRenderScriptedBeacons() ||
+								(LLPipeline::getRenderScriptedTouchBeacons() && drawablep->getVObj()->flagHandleTouch()))))
+							{ //draw the transparent face for debugging purposes using a custom texture
+								add_face(sAlphaFaces, alpha_count, facep);
+							}
 						}
 					}
 					else
@@ -6513,7 +6519,6 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 	LLSpatialGroup::buffer_map_t buffer_map;
 
 	LLViewerTexture* last_tex = NULL;
-	S32 buffer_index = 0;
 
 	S32 texture_index_channels = 1;
 	
@@ -6525,8 +6530,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 	if (distance_sort)
 	{
 		texture_index_channels = gDeferredAlphaProgram.mFeatures.mIndexedTextureChannels;
-        buffer_index = -1;
-    }
+	}
 
 	texture_index_channels = LLGLSLShader::sIndexedTextureChannels;
 
@@ -6546,14 +6550,9 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 		// 	tex = NULL;
 		// }
 
-		if (last_tex == tex)
-		{
-			buffer_index++;
-		}
-		else
+		if (last_tex != tex)
 		{
 			last_tex = tex;
-			buffer_index = 0;
 		}
 
 		bool bake_sunlight = LLPipeline::sBakeSunlight && facep->getDrawable()->isStatic(); 
@@ -6811,12 +6810,15 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
                 }
             }
 
-            F32 te_alpha = te->getColor().mV[3]; 
+            F32 blinn_phong_alpha = te->getColor().mV[3];
 			bool use_legacy_bump = te->getBumpmap() && (te->getBumpmap() < 18) && (!mat || mat->getNormalID().isNull());
-			bool opaque = te_alpha >= 0.999f;
-            bool transparent = te_alpha < 0.999f;
+			bool blinn_phong_opaque = blinn_phong_alpha >= 0.999f;
+            bool blinn_phong_transparent = blinn_phong_alpha < 0.999f;
 
-            is_alpha = (is_alpha || transparent) ? TRUE : FALSE;
+            if (!gltf_mat)
+            {
+                is_alpha = (is_alpha || blinn_phong_transparent) ? TRUE : FALSE;
+            }
 
 			if (gltf_mat || (mat && !hud_group))
 			{
@@ -6846,7 +6848,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 				{
 					if (mat->getDiffuseAlphaMode() == LLMaterial::DIFFUSE_ALPHA_MODE_MASK)
 					{
-						if (opaque)
+						if (blinn_phong_opaque)
 						{
 							registerFace(group, facep, LLRenderPass::PASS_FULLBRIGHT_ALPHA_MASK);
 						}
@@ -6867,7 +6869,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 						}
 						else
 						{
-                            if (opaque)
+                            if (blinn_phong_opaque)
 						    {
 							    registerFace(group, facep, LLRenderPass::PASS_FULLBRIGHT);
                             }
@@ -6878,7 +6880,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 						}
 					}
 				}
-				else if (transparent)
+				else if (blinn_phong_transparent)
 				{
 					registerFace(group, facep, LLRenderPass::PASS_ALPHA);
 				}
@@ -6920,7 +6922,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
                     { // HACK - this should never happen, but sometimes we get a material that thinks it has alpha blending when it ought not
                         alpha_mode = LLMaterial::DIFFUSE_ALPHA_MODE_NONE;
                     }
-					U32 mask = mat->getShaderMask(alpha_mode);
+                    U32 mask = mat->getShaderMask(alpha_mode, is_alpha);
 
                     U32 vb_mask = facep->getVertexBuffer()->getTypeMask();
 

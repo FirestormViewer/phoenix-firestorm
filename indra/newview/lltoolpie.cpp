@@ -123,7 +123,7 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 	mMouseDownY = y;
 	LLTimer pick_timer;
 	BOOL pick_rigged = false; //gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
-	LLPickInfo transparent_pick = gViewerWindow->pickImmediate(x, y, TRUE /*includes transparent*/, pick_rigged);
+	LLPickInfo transparent_pick = gViewerWindow->pickImmediate(x, y, TRUE /*includes transparent*/, pick_rigged, FALSE, TRUE, FALSE);
 	LLPickInfo visible_pick = gViewerWindow->pickImmediate(x, y, FALSE, pick_rigged);
 	LLViewerObject *transp_object = transparent_pick.getObject();
 	LLViewerObject *visible_object = visible_pick.getObject();
@@ -198,11 +198,15 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 // an item.
 BOOL LLToolPie::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
+    BOOL pick_reflection_probe = gSavedSettings.getBOOL("SelectReflectionProbes");
+
 	// don't pick transparent so users can't "pay" transparent objects
 	mPick = gViewerWindow->pickImmediate(x, y,
                                          /*BOOL pick_transparent*/ gSavedSettings.getBOOL("FSEnableRightclickOnTransparentObjects"), // FALSE, // <FS:Ansariel> FIRE-1396: Allow selecting transparent objects
                                          /*BOOL pick_rigged*/ TRUE,
-                                         /*BOOL pick_particle*/ TRUE);
+                                         /*BOOL pick_particle*/ TRUE,
+                                         /*BOOL pick_unselectable*/ TRUE, 
+                                         pick_reflection_probe);
 	mPick.mKeyMask = mask;
 
 	// claim not handled so UI focus stays same
@@ -993,14 +997,22 @@ BOOL LLToolPie::handleDoubleClick(S32 x, S32 y, MASK mask)
 	}
     
 	// <FS:Ansariel> FIRE-1765: Allow double-click walk/teleport to scripted objects
+	// modified for FIRE-32943 by Beq
 	//if (!mDoubleClickTimer.getStarted() || (mDoubleClickTimer.getElapsedTimeF32() > 0.3f))
+	// {
+	// 	mDoubleClickTimer.stop();
+	// 	return FALSE;
+	// }
+	bool canDoubleClickTP = gSavedSettings.getBOOL("DoubleClickTeleport");
 	bool allowDoubleClickOnScriptedObjects = gSavedSettings.getBOOL("FSAllowDoubleClickOnScriptedObjects");
-	if (!allowDoubleClickOnScriptedObjects && (!mDoubleClickTimer.getStarted() || (mDoubleClickTimer.getElapsedTimeF32() > 0.3f)))
-	// </FS:Ansariel>
+	if ( canDoubleClickTP && allowDoubleClickOnScriptedObjects )
 	{
 		mDoubleClickTimer.stop();
-		return FALSE;
+		teleportToClickedLocation();
+		return TRUE;
 	}
+	// </FS:Ansariel>
+
 	mDoubleClickTimer.stop();
 
 	return FALSE;

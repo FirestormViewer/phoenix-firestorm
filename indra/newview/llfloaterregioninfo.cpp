@@ -336,7 +336,6 @@ void LLFloaterRegionInfo::onOpen(const LLSD& key)
 	}
 	refreshFromRegion(gAgent.getRegion());
 	requestRegionInfo();
-	requestMeshRezInfo();
 
 	if (!mGodLevelChangeSlot.connected())
 	{
@@ -1064,19 +1063,6 @@ bool LLPanelRegionGeneralInfo::onMessageCommit(const LLSD& notification, const L
 	LLUUID invoice(LLFloaterRegionInfo::getLastInvoice());
 	sendEstateOwnerMessage(gMessageSystem, "simulatormessage", invoice, strings);
 	return false;
-}
-
-void LLFloaterRegionInfo::requestMeshRezInfo()
-{
-	std::string sim_console_url = gAgent.getRegionCapability("SimConsoleAsync");
-
-	if (!sim_console_url.empty())
-	{
-		std::string request_str = "get mesh_rez_enabled";
-		
-        LLCoreHttpUtil::HttpCoroutineAdapter::messageHttpPost(sim_console_url, LLSD(request_str),
-            "Requested mesh_rez_enabled", "Error requesting mesh_rez_enabled");
-	}
 }
 
 // setregioninfo
@@ -3045,7 +3031,7 @@ BOOL LLPanelEstateAccess::postBuild()
 	if (banned_name_list)
 	{
 		banned_name_list->setCommitOnSelectionChange(TRUE);
-		banned_name_list->setMaxItemCount(ESTATE_MAX_ACCESS_IDS);
+		banned_name_list->setMaxItemCount(LLGridManager::instance().isInSecondLife() ? ESTATE_MAX_BANNED_IDS : ESTATE_MAX_BANNED_IDS_OS); // <FS:Ansariel> OpenSim
 	}
 
 	getChild<LLUICtrl>("banned_search_input")->setCommitCallback(boost::bind(&LLPanelEstateAccess::onBannedSearchEdit, this, _2));
@@ -3058,7 +3044,7 @@ BOOL LLPanelEstateAccess::postBuild()
 	if (manager_name_list)
 	{
 		manager_name_list->setCommitOnSelectionChange(TRUE);
-		manager_name_list->setMaxItemCount(ESTATE_MAX_MANAGERS * 4);	// Allow extras for dupe issue
+		manager_name_list->setMaxItemCount((LLGridManager::instance().isInSecondLife() ? ESTATE_MAX_MANAGERS : ESTATE_MAX_MANAGERS_OS) * 4);	// Allow extras for dupe issue // <FS:Ansariel> OpenSim
 	}
 
 	childSetAction("add_estate_manager_btn", boost::bind(&LLPanelEstateAccess::onClickAddEstateManager, this));
@@ -3189,10 +3175,10 @@ void LLPanelEstateAccess::onClickAddBannedAgent()
 {
 	LLCtrlListInterface *list = childGetListInterface("banned_avatar_name_list");
 	if (!list) return;
-	if (list->getItemCount() >= ESTATE_MAX_ACCESS_IDS)
+	if (list->getItemCount() >= (LLGridManager::instance().isInSecondLife() ? ESTATE_MAX_BANNED_IDS : ESTATE_MAX_BANNED_IDS_OS)) // <FS:Ansariel> OpenSim
 	{
 		LLSD args;
-		args["MAX_BANNED"] = llformat("%d", ESTATE_MAX_ACCESS_IDS);
+		args["MAX_BANNED"] = llformat("%d", (LLGridManager::instance().isInSecondLife() ? ESTATE_MAX_BANNED_IDS : ESTATE_MAX_BANNED_IDS_OS)); // <FS:Ansariel> OpenSim
 		LLNotificationsUtil::add("MaxBannedAgentsOnRegion", args);
 		return;
 	}
@@ -3224,10 +3210,10 @@ void LLPanelEstateAccess::onClickAddEstateManager()
 {
 	LLCtrlListInterface *list = childGetListInterface("estate_manager_name_list");
 	if (!list) return;
-	if (list->getItemCount() >= ESTATE_MAX_MANAGERS)
+	if (list->getItemCount() >= (LLGridManager::instance().isInSecondLife() ? ESTATE_MAX_MANAGERS : ESTATE_MAX_MANAGERS_OS)) // <FS:Ansariel> OpenSim
 	{	// Tell user they can't add more managers
 		LLSD args;
-		args["MAX_MANAGER"] = llformat("%d", ESTATE_MAX_MANAGERS);
+		args["MAX_MANAGER"] = llformat("%d", (LLGridManager::instance().isInSecondLife() ? ESTATE_MAX_MANAGERS : ESTATE_MAX_MANAGERS_OS)); // <FS:Ansariel> OpenSim
 		LLNotificationsUtil::add("MaxManagersOnRegion", args);
 	}
 	else
@@ -3430,13 +3416,13 @@ void LLPanelEstateAccess::accessAddCore3(const uuid_vec_t& ids, std::vector<LLAv
 		LLNameListCtrl* name_list = panel->getChild<LLNameListCtrl>("banned_avatar_name_list");
 		LLNameListCtrl* em_list = panel->getChild<LLNameListCtrl>("estate_manager_name_list");
 		int currentCount = (name_list ? name_list->getItemCount() : 0);
-		if (ids.size() + currentCount > ESTATE_MAX_ACCESS_IDS)
+		if (ids.size() + currentCount > (LLGridManager::instance().isInSecondLife() ? ESTATE_MAX_BANNED_IDS : ESTATE_MAX_BANNED_IDS_OS)) // <FS:Ansariel> OpenSim
 		{
 			LLSD args;
 			args["NUM_ADDED"] = llformat("%d", ids.size());
-			args["MAX_AGENTS"] = llformat("%d", ESTATE_MAX_ACCESS_IDS);
+			args["MAX_AGENTS"] = llformat("%d", (LLGridManager::instance().isInSecondLife() ? ESTATE_MAX_BANNED_IDS : ESTATE_MAX_BANNED_IDS_OS)); // <FS:Ansariel> OpenSim
 			args["LIST_TYPE"] = LLTrans::getString("RegionInfoListTypeBannedAgents");
-			args["NUM_EXCESS"] = llformat("%d", (ids.size() + currentCount) - ESTATE_MAX_ACCESS_IDS);
+			args["NUM_EXCESS"] = llformat("%d", (ids.size() + currentCount) - (LLGridManager::instance().isInSecondLife() ? ESTATE_MAX_BANNED_IDS : ESTATE_MAX_BANNED_IDS_OS)); // <FS:Ansariel> OpenSim
 			LLNotificationsUtil::add("MaxAgentOnRegionBatch", args);
 			delete change_info;
 			return;
@@ -3815,7 +3801,7 @@ void LLPanelEstateAccess::requestEstateGetAccessCoro(std::string url)
 	{
 		LLStringUtil::format_map_t args;
 		args["[BANNEDAGENTS]"] = llformat("%d", result["BannedAgents"].size());
-		args["[MAXBANNED]"] = llformat("%d", ESTATE_MAX_ACCESS_IDS);
+		args["[MAXBANNED]"] = llformat("%d", (LLGridManager::instance().isInSecondLife() ? ESTATE_MAX_BANNED_IDS : ESTATE_MAX_BANNED_IDS_OS)); // <FS:Ansariel> OpenSim
 		std::string msg = LLTrans::getString("RegionInfoBannedResidents", args);
 		panel->getChild<LLUICtrl>("ban_resident_label")->setValue(LLSD(msg));
 
@@ -3877,7 +3863,7 @@ void LLPanelEstateAccess::requestEstateGetAccessCoro(std::string url)
 	{
 		LLStringUtil::format_map_t args;
 		args["[ESTATEMANAGERS]"] = llformat("%d", result["Managers"].size());
-		args["[MAXMANAGERS]"] = llformat("%d", ESTATE_MAX_MANAGERS);
+		args["[MAXMANAGERS]"] = llformat("%d", (LLGridManager::instance().isInSecondLife() ? ESTATE_MAX_MANAGERS : ESTATE_MAX_MANAGERS_OS)); // <FS:Ansariel> OpenSim
 		std::string msg = LLTrans::getString("RegionInfoEstateManagers", args);
 		panel->getChild<LLUICtrl>("estate_manager_label")->setValue(LLSD(msg));
 

@@ -35,6 +35,8 @@
 #include "lltextureentry.h"
 #include "llselectmgr.h"
 
+#include <memory>
+
 class LLButton;
 class LLCheckBoxCtrl;
 class LLColorSwatchCtrl;
@@ -51,6 +53,8 @@ class LLFloater;
 class LLMaterialID;
 class LLMediaCtrl;
 class LLMenuButton;
+
+class PBRPickerItemListener;
 
 // Represents an edit for use in replicating the op across one or more materials in the selection set.
 //
@@ -294,7 +298,6 @@ public:
 	// </FS>
 
 private:
-
 	bool		isAlpha() { return mIsAlpha; }
 
 	// Convenience funcs to keep the visual flack to a minimum
@@ -303,10 +306,10 @@ private:
 	LLUUID	getCurrentSpecularMap();
 	U32		getCurrentShininess();
 	U32		getCurrentBumpiness();
-	U8			getCurrentDiffuseAlphaMode();
-	U8			getCurrentAlphaMaskCutoff();
-	U8			getCurrentEnvIntensity();
-	U8			getCurrentGlossiness();
+	U8		getCurrentDiffuseAlphaMode();
+	U8		getCurrentAlphaMaskCutoff();
+	U8		getCurrentEnvIntensity();
+	U8		getCurrentGlossiness();
 	F32		getCurrentBumpyRot();
 	F32		getCurrentBumpyScaleU();
 	F32		getCurrentBumpyScaleV();
@@ -354,7 +357,7 @@ private:
 	//
 	// Do NOT call updateUI from within this function.
 	//
-	void updateVisibility();
+	void updateVisibility(LLViewerObject* objectp = nullptr);
 
 	// Hey look everyone, a type-safe alternative to copy and paste! :)
 	//
@@ -409,7 +412,7 @@ private:
 
 					U32		new_alpha_mode			= new_material->getDiffuseAlphaMode();
 					LLUUID	new_normal_map_id		= new_material->getNormalID();
-					LLUUID	new_spec_map_id		= new_material->getSpecularID();
+					LLUUID	new_spec_map_id			= new_material->getSpecularID();
 
 					if ((new_alpha_mode == LLMaterial::DIFFUSE_ALPHA_MODE_BLEND) && !is_alpha_face)
 					{
@@ -514,8 +517,8 @@ private:
     void onTextureSelectionChanged(LLInventoryItem* itemp);
     void onPbrSelectionChanged(LLInventoryItem* itemp);
 
-    void updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, bool force_set_values);
-    void updateVisibilityGLTF();
+    void updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, bool& has_faces_without_pbr, bool force_set_values);
+    void updateVisibilityGLTF(LLViewerObject* objectp = nullptr);
 
     void updateSelectedGLTFMaterials(std::function<void(LLGLTFMaterial*)> func);
     void updateGLTFTextureTransform(float value, U32 pbr_type, std::function<void(LLGLTFMaterial::TextureTransform*)> edit);
@@ -548,7 +551,6 @@ private:
         // Prevents update() returning true until the provided object is
         // updated. Necessary to prevent controls updating when the mouse is
         // held down.
-        void setObjectUpdatePending(const LLUUID &object_id, S32 side);
         void setDirty() { mChanged = true; };
 
         // Callbacks
@@ -563,14 +565,14 @@ private:
         boost::signals2::scoped_connection mSelectConnection;
         bool mNeedsSelectionCheck = true;
         S32 mSelectedObjectCount = 0;
+        S32 mSelectedTECount = 0;
         LLUUID mSelectedObjectID;
-        S32 mSelectedSide = -1;
-
-        LLUUID mPendingObjectID;
-        S32 mPendingSide = -1;
+        S32 mLastSelectedSide = -1;
     };
 
     static Selection sMaterialOverrideSelection;
+
+    std::unique_ptr<PBRPickerItemListener> mInventoryListener;
 
 public:
 	#if defined(DEF_GET_MAT_STATE)
@@ -652,17 +654,15 @@ public:
 		DEF_EDIT_MAT_STATE(LLUUID,const LLUUID&,setNormalID);
 		DEF_EDIT_MAT_STATE(LLUUID,const LLUUID&,setSpecularID);
 		DEF_EDIT_MAT_STATE(LLColor4U,	const LLColor4U&,setSpecularLightColor);
-		DEF_EDIT_MAT_STATE(LLUUID, const LLUUID&, setMaterialID);
 	};
 
 	class LLSelectedTE
 	{
 	public:
-
 		static void getFace(class LLFace*& face_to_return, bool& identical_face);
 		static void getImageFormat(LLGLenum& image_format_to_return, bool& identical_face);
 		static void getTexId(LLUUID& id, bool& identical);
-        static void getPbrMaterialId(LLUUID& id, bool& identical);
+        static void getPbrMaterialId(LLUUID& id, bool& identical, bool& has_pbr, bool& has_faces_without_pbr);
 		static void getObjectScaleS(F32& scale_s, bool& identical);
 		static void getObjectScaleT(F32& scale_t, bool& identical);
 		static void getMaxDiffuseRepeats(F32& repeats, bool& identical);

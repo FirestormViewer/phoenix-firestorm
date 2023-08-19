@@ -489,6 +489,21 @@ void LLVOCacheEntry::updateDebugSettings()
 	LLMemory::updateMemoryInfo() ;
 	U32 allocated_mem = LLMemory::getAllocatedMemKB().value();
     static const F32 KB_to_MB = 1.f / 1024.f;
+	// <FS:Beq> FIRE-32688 Area search and other visibility issues
+	// If this machine has limited RAM, then restore the LL defaults.
+	// So long as we have at least 8GB of RAM, then we will use our values.
+	if( LLMemory::getAvailableMemKB() * KB_to_MB < 8096 )
+	{
+		if( (U32)low_mem_bound_MB > 768 )
+		{
+			gSavedSettings.setU32("SceneLoadLowMemoryBound", 768);
+		}
+		if( (U32)high_mem_bound_MB > 2048 )
+		{
+			gSavedSettings.setU32("SceneLoadLowMemoryBound", 2048);
+		}
+	}
+	// </FS:Beq>
 	U32 clamped_memory = llclamp(allocated_mem * KB_to_MB, (F32) low_mem_bound_MB, (F32) high_mem_bound_MB);
     const F32 adjust_range = high_mem_bound_MB - low_mem_bound_MB;
     const F32 adjust_factor = (high_mem_bound_MB - clamped_memory) / adjust_range; // [0, 1]
@@ -510,7 +525,11 @@ void LLVOCacheEntry::updateDebugSettings()
     //the number of frames invisible objects stay in memory
     static LLCachedControl<U32> inv_obj_time(gSavedSettings,"NonvisibleObjectsInMemoryTime");
     static const U32 MIN_FRAMES = 10;
-    static const U32 MAX_FRAMES = 64;
+	// <FS:Beq> FIRE-32688 Area search and other visibility
+    // static const U32 MAX_FRAMES = 64;
+	// 64 frames for many users now is about a second. Having this as the longest we wait before purging leads to excessively aggressive purging.
+    static const U32 MAX_FRAMES = 1024;
+	// </FS:Beq>
     const U32 clamped_frames = inv_obj_time ? llclamp((U32) inv_obj_time, MIN_FRAMES, MAX_FRAMES) : MAX_FRAMES; // [10, 64], with zero => 64
     sMinFrameRange = MIN_FRAMES + ((clamped_frames - MIN_FRAMES) * adjust_factor);
 }
@@ -539,6 +558,7 @@ F32 LLVOCacheEntry::getSquaredPixelThreshold(bool is_front)
 
 bool LLVOCacheEntry::isAnyVisible(const LLVector4a& camera_origin, const LLVector4a& local_camera_origin, F32 dist_threshold)
 {
+	if( LLViewerRegion::sFSAreaSearchActive ) { return true; } // <FS:Beq/> FIRE-32688 Area Search improvements
 	LLOcclusionCullingGroup* group = (LLOcclusionCullingGroup*)getGroup();
 	if(!group)
 	{
@@ -1036,7 +1056,10 @@ S32 LLVOCachePartition::cull(LLCamera &camera, bool do_occlusion)
 
 			//process back objects selection
 			selectBackObjects(camera, LLVOCacheEntry::getSquaredPixelThreshold(mFrontCull), 
-				do_occlusion && use_object_cache_occlusion);
+				// <FS:Beq> FIRE-32688 Area Search improvements
+				// do_occlusion && use_object_cache_occlusion);
+				do_occlusion && use_object_cache_occlusion && !LLViewerRegion::sFSAreaSearchActive);
+				// </FS:Beq>
 			return 0; //nothing changed, reduce frequency of culling
 		}
 	}
@@ -1050,7 +1073,10 @@ S32 LLVOCachePartition::cull(LLCamera &camera, bool do_occlusion)
 	camera.calcRegionFrustumPlanes(region_agent, gAgentCamera.mDrawDistance);
 
 	mFrontCull = TRUE;
-	LLVOCacheOctreeCull culler(&camera, mRegionp, region_agent, do_occlusion && use_object_cache_occlusion, 
+	// <FS:Beq> FIRE-32688 Area Search improvements
+	// LLVOCacheOctreeCull culler(&camera, mRegionp, region_agent, do_occlusion && use_object_cache_occlusion, 
+	LLVOCacheOctreeCull culler(&camera, mRegionp, region_agent, do_occlusion && use_object_cache_occlusion && !LLViewerRegion::sFSAreaSearchActive, 
+	// </FS:Beq>
 		LLVOCacheEntry::getSquaredPixelThreshold(mFrontCull), this);
 	culler.traverse(mOctree);	
 
@@ -1206,6 +1232,8 @@ void LLVOCache::initCache(ELLPath location, U32 size, U32 cache_version)
 
 	readCacheHeader();	
 
+	LL_INFOS() << "Viewer Object Cache Versions - expected: " << cache_version << " found: " << mMetaInfo.mVersion <<  LL_ENDL;
+
 	if( mMetaInfo.mVersion != cache_version
 		|| mMetaInfo.mAddressSize != expected_address) 
 	{
@@ -1216,7 +1244,8 @@ void LLVOCache::initCache(ELLPath location, U32 size, U32 cache_version)
 			clearCacheInMemory();
 		}
 		else //delete the current cache if the format does not match.
-		{			
+		{
+			LL_INFOS() << "Viewer Object Cache Versions unmatched.  clearing cache." <<  LL_ENDL;
 			removeCache();
 		}
 	}	
