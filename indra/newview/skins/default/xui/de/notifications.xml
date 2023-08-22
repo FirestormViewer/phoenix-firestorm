@@ -4899,6 +4899,9 @@ Geriggte Mesh-Objekte sind dafür gemacht, um am Avatar angehängt zu werden. We
 Falls Sie dieses Objekt sehen möchten, nehmen Sie es ab und hängen es an einem Avatar-Punkt an.
 		<usetemplate ignoretext="Warnen, falls geriggtes Mesh an einem HUD-Punkt angehängt ist." name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="IncorrectFormat">
+		Datei „[NAME]“ konnte nicht hochgeladen werden: Inkorrektes Bildformat.
+	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Keine gültige Einstellung für die Umgebung ausgewählt.
 		

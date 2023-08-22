@@ -90,6 +90,7 @@ bool LLImageDimensionsInfo::getImageDimensionsBmp()
 	if (signature[0] != 'B' || signature[1] != 'M')
 	{
 		LL_WARNS() << "Not a BMP" << LL_ENDL;
+        mWarning = "IncorrectFormat";
 		return false;
 	}
 
@@ -140,6 +141,7 @@ bool LLImageDimensionsInfo::getImageDimensionsPng()
 	if (memcmp(signature, png_magic, PNG_MAGIC_SIZE) != 0)
 	{
 		LL_WARNS() << "Not a PNG" << LL_ENDL;
+        mWarning = "IncorrectFormat";
 		return false;
 	}
 
@@ -184,6 +186,7 @@ bool LLImageDimensionsInfo::getImageDimensionsJpeg()
 	if (memcmp(signature, jpeg_magic, JPEG_MAGIC_SIZE) != 0)
 	{
 		LL_WARNS() << "Not a JPEG" << LL_ENDL;
+        mWarning = "IncorrectFormat";
 		fclose(fp); // <FS:ND/> Don't leak the file handle
 		return false;
 	}
