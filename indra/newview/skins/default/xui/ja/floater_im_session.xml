@@ -1,83 +1,83 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="panel_im">
-  <floater.string name="call_btn_start">Conv_toolbar_open_call</floater.string>
-  <floater.string name="call_btn_stop">Conv_toolbar_hang_up</floater.string>
-  <floater.string name="collapseline_icon" value="Conv_collapse_to_one_line" />
-  <floater.string name="expandline_icon" value="Conv_expand_one_line" />
-  <floater.string name="collapse_icon" value="Conv_toolbar_collapse" />
-  <floater.string name="expand_icon" value="Conv_toolbar_expand" />
-  <floater.string name="tear_off_icon" value="Conv_toolbar_arrow_ne" />
-  <floater.string name="return_icon" value="Conv_toolbar_arrow_sw" />
-  <floater.string name="participant_added" value="[NAME]から会話への参加を招待されました。" />
-  <floater.string name="multiple_participants_added" value="[NAME]が会話に招待されました。" />
-  <floater.string name="tooltip_to_separate_window" value="この会話を別のウィンドウへ移動する" />
-  <floater.string name="tooltip_to_main_window" value="この会話をメインウィンドウへ戻す" />
-  <floater.string name="start_call_button_tooltip" value="ボイスチャット接続を開く" />
-  <floater.string name="end_call_button_tooltip" value="ボイスチャット接続を閉じる" />
-  <floater.string name="expcol_button_not_tearoff_tooltip" value="このペインを閉じる" />
-  <floater.string name="expcol_button_tearoff_and_expanded_tooltip" value="参加者リストを閉じる" />
-  <floater.string name="expcol_button_tearoff_and_collapsed_tooltip" value="参加者リストを開く" />
-  <view name="contents_view">
-    <layout_stack name="main_stack">
-      <layout_panel name="toolbar_panel">
-        <menu_button name="view_options_btn" tool_tip="表示／並べ替えのオプション" />
-        <menu_button name="gear_btn" tool_tip="選択した人物に対する操作" />
-        <button name="add_btn" tool_tip="この会話に他の人物を追加する" />
-        <button name="voice_call_btn" tool_tip="ボイスチャット接続を開く" />
-        <panel name="nearby_toolbar">
-          <button name="chat_history_btn" tool_tip="チャット履歴を見る" />
-        </panel>
-        <panel name="p2p_toolbar">
-          <button name="profile_btn" tool_tip="プロフィールを見る" />
-          <flyout_button name="teleport_btn" tool_tip="テレポーのオファーかリクエストします。">
-            <flyout_button.item label="テレポートのオファー" value="offer_teleport" />
-            <flyout_button.item label="テレポートのリクエスト" value="request_teleport" />
-          </flyout_button>
-          <button name="chat_history_btn" tool_tip="チャット履歴を見る" />
-          <button name="pay_btn" tool_tip="このアバターに支払う" />
-        </panel>
-        <panel name="group_toolbar">
-          <button name="profile_btn" tool_tip="プロフィールを見る" />
-          <button name="chat_history_btn" tool_tip="チャット履歴を見る" />
-          <button name="view_notices_btn" tool_tip="グループ通知を表示" />
-          <flyout_button name="snooze_groupt_btn" tool_tip="グループチャットをスヌーズする">
-            <flyout_button.item label="次のメッセージまで" value="0" />
-            <flyout_button.item label="５分" value="5" />
-            <flyout_button.item label="１５分" value="15" />
-            <flyout_button.item label="３０分" value="30" />
-            <flyout_button.item label="４５分" value="45" />
-            <flyout_button.item label="１時間" value="60" />
-            <flyout_button.item label="リログするまで" value="-1" />
-          </flyout_button>
-        </panel>
-        <button name="close_btn" tool_tip="この会話を終了する" />
-        <button name="expand_collapse_btn" tool_tip="このペインを閉じる／開く" />
-        <button name="tear_off_btn" />
-      </layout_panel>
-      <layout_panel name="body_panel">
-        <layout_stack name="im_panels">
-          <layout_panel name="right_part_holder">
-            <layout_stack name="translate_and_chat_stack">
-              <layout_panel name="translate_chat_checkbox_lp">
-                <check_box label="チャットを翻訳" name="translate_chat_checkbox" />
-              </layout_panel>
-            </layout_stack>
-          </layout_panel>
-        </layout_stack>
-      </layout_panel>
-      <layout_panel name="chat_layout_panel">
-        <layout_stack name="input_panels">
-          <layout_panel name="input_editor_layout_panel">
-            <avatar_icon name="avatar_icon" />
-            <group_icon name="group_chat_icon" />
-            <icon name="nearby_chat_icon" />
-            <chat_editor name="chat_editor" />
-          </layout_panel>
-          <layout_panel name="input_button_layout_panel">
-            <button name="minz_btn" tool_tip="メッセージパネルの表示／非表示" />
-          </layout_panel>
-        </layout_stack>
-      </layout_panel>
-    </layout_stack>
-  </view>
+	<floater.string name="call_btn_start">Conv_toolbar_open_call</floater.string>
+	<floater.string name="call_btn_stop">Conv_toolbar_hang_up</floater.string>
+	<floater.string name="collapseline_icon" value="Conv_collapse_to_one_line" />
+	<floater.string name="expandline_icon" value="Conv_expand_one_line" />
+	<floater.string name="collapse_icon" value="Conv_toolbar_collapse" />
+	<floater.string name="expand_icon" value="Conv_toolbar_expand" />
+	<floater.string name="tear_off_icon" value="Conv_toolbar_arrow_ne" />
+	<floater.string name="return_icon" value="Conv_toolbar_arrow_sw" />
+	<floater.string name="participant_added" value="[NAME]から会話への参加を招待されました。" />
+	<floater.string name="multiple_participants_added" value="[NAME]が会話に招待されました。" />
+	<floater.string name="tooltip_to_separate_window" value="この会話を別のウィンドウへ移動する" />
+	<floater.string name="tooltip_to_main_window" value="この会話をメインウィンドウへ戻す" />
+	<floater.string name="start_call_button_tooltip" value="ボイスチャット接続を開く" />
+	<floater.string name="end_call_button_tooltip" value="ボイスチャット接続を閉じる" />
+	<floater.string name="expcol_button_not_tearoff_tooltip" value="このペインを閉じる" />
+	<floater.string name="expcol_button_tearoff_and_expanded_tooltip" value="参加者リストを閉じる" />
+	<floater.string name="expcol_button_tearoff_and_collapsed_tooltip" value="参加者リストを開く" />
+	<view name="contents_view">
+		<layout_stack name="main_stack">
+			<layout_panel name="toolbar_panel">
+				<menu_button name="view_options_btn" tool_tip="表示／並べ替えのオプション" />
+				<menu_button name="gear_btn" tool_tip="選択した人物に対する操作" />
+				<button name="add_btn" tool_tip="この会話に他の人物を追加する" />
+				<button name="voice_call_btn" tool_tip="ボイスチャット接続を開く" />
+				<panel name="nearby_toolbar">
+					<button name="chat_history_btn" tool_tip="チャット履歴を見る" />
+				</panel>
+				<panel name="p2p_toolbar">
+					<button name="profile_btn" tool_tip="プロフィールを見る" />
+					<flyout_button name="teleport_btn" tool_tip="テレポーのオファーかリクエストします。">
+						<flyout_button.item label="テレポートのオファー" value="offer_teleport" />
+						<flyout_button.item label="テレポートのリクエスト" value="request_teleport" />
+					</flyout_button>
+					<button name="chat_history_btn" tool_tip="チャット履歴を見る" />
+					<button name="pay_btn" tool_tip="このアバターに支払う" />
+				</panel>
+				<panel name="group_toolbar">
+					<button name="profile_btn" tool_tip="プロフィールを見る" />
+					<button name="chat_history_btn" tool_tip="チャット履歴を見る" />
+					<button name="view_notices_btn" tool_tip="グループ通知を表示" />
+					<flyout_button name="snooze_groupt_btn" tool_tip="グループチャットをスヌーズする">
+						<flyout_button.item label="次のメッセージまで" value="0" />
+						<flyout_button.item label="５分" value="5" />
+						<flyout_button.item label="１５分" value="15" />
+						<flyout_button.item label="３０分" value="30" />
+						<flyout_button.item label="４５分" value="45" />
+						<flyout_button.item label="１時間" value="60" />
+						<flyout_button.item label="リログするまで" value="-1" />
+					</flyout_button>
+				</panel>
+				<button name="close_btn" tool_tip="この会話を終了する" />
+				<button name="expand_collapse_btn" tool_tip="このペインを閉じる／開く" />
+				<button name="tear_off_btn" />
+			</layout_panel>
+			<layout_panel name="body_panel">
+				<layout_stack name="im_panels">
+					<layout_panel name="right_part_holder">
+						<layout_stack name="translate_and_chat_stack">
+							<layout_panel name="translate_chat_checkbox_lp">
+								<check_box label="チャットを翻訳" name="translate_chat_checkbox" />
+							</layout_panel>
+						</layout_stack>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+			<layout_panel name="chat_layout_panel">
+				<layout_stack name="input_panels">
+					<layout_panel name="input_editor_layout_panel">
+						<avatar_icon name="avatar_icon" />
+						<group_icon name="group_chat_icon" />
+						<icon name="nearby_chat_icon" />
+						<chat_editor name="chat_editor" />
+					</layout_panel>
+					<layout_panel name="input_button_layout_panel">
+						<button name="minz_btn" tool_tip="メッセージパネルの表示／非表示" />
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>
+	</view>
 </floater>

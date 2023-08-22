@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <!-- FS:Beq [timezone support for teleport history] -->
 <toggleable_menu name="menu_teleport_history_timezone">
-  <menu_item_check name="teleport_history_tz_utc" label="世界標準時"/>
-  <menu_item_check name="teleport_history_tz_slt" label="セカンドライフ時"/>
-  <menu_item_check name="teleport_history_tz_local" label="ローカル時"/>
+	<menu_item_check name="teleport_history_tz_utc" label="世界標準時"/>
+	<menu_item_check name="teleport_history_tz_slt" label="セカンドライフ時"/>
+	<menu_item_check name="teleport_history_tz_local" label="ローカル時"/>
 </toggleable_menu>
-
 <!-- /FS:Beq [timezone support for teleport history] -->

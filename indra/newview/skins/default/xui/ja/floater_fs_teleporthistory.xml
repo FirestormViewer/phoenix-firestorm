@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_tphistory" title="テレポート履歴">
-  <filter_editor label="テレポート履歴をフィルタ" name="Filter" />
-  <menu_button tool_tip="オプションを表示" name="options_gear_btn" />
-  <menu_button tool_tip="並び替えオプションを表示" name="sorting_menu_btn" />
-  <panel name="history_placeholder" />
-  <panel name="button_panel">
-    <layout_stack name="bottom_bar_ls0">
-      <layout_panel name="show_lm_panel">
-        <layout_stack name="bottom_bar_ls1">
-          <layout_panel name="teleport_btn_lp">
-            <button label="テレポート" name="teleport_btn" tool_tip="選択した地域にテレポートします。" />
-          </layout_panel>
-          <layout_panel name="chat_btn_lp">
-            <button label="マップ" name="map_btn" tool_tip="ワールドマップ上の対応する地域を表示します。" />
-          </layout_panel>
-          <layout_panel name="profile_btn_lp">
-            <button label="プロフィール表示" name="profile_btn" tool_tip="この場所のプロフィールを表示します。" />
-          </layout_panel>
-        </layout_stack>
-      </layout_panel>
-    </layout_stack>
-  </panel>
+	<filter_editor label="テレポート履歴をフィルタ" name="Filter" />
+	<menu_button tool_tip="オプションを表示" name="options_gear_btn" />
+	<menu_button tool_tip="並び替えオプションを表示" name="sorting_menu_btn" />
+	<panel name="history_placeholder" />
+	<panel name="button_panel">
+		<layout_stack name="bottom_bar_ls0">
+			<layout_panel name="show_lm_panel">
+				<layout_stack name="bottom_bar_ls1">
+					<layout_panel name="teleport_btn_lp">
+						<button label="テレポート" name="teleport_btn" tool_tip="選択した地域にテレポートします。" />
+					</layout_panel>
+					<layout_panel name="chat_btn_lp">
+						<button label="マップ" name="map_btn" tool_tip="ワールドマップ上の対応する地域を表示します。" />
+					</layout_panel>
+					<layout_panel name="profile_btn_lp">
+						<button label="プロフィール表示" name="profile_btn" tool_tip="この場所のプロフィールを表示します。" />
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>
+	</panel>
 </floater>

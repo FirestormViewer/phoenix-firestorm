@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="ColorPicker" title="カラーピッカー">
-  <tab_container name="scale_type_container">
-    <panel name="RGB" label="ＲＧＢ">
-      <text name="r_val_text">赤：</text>
-      <spinner name="rspin" />
-      <text name="g_val_text">緑：</text>
-      <spinner name="gspin" />
-      <text name="b_val_text">青：</text>
-      <spinner name="bspin" />
-    </panel>
-    <panel name="LSL" label="ＬＳＬ">
-      <!-- FS -->
-      <text name="r_val_text_lsl">赤：</text>
-      <spinner name="rspin_lsl" />
-      <text name="g_val_text_lsl">緑：</text>
-      <spinner name="gspin_lsl" />
-      <text name="b_val_text_lsl">青：</text>
-      <spinner name="bspin_lsl" />
-      <!-- /FS -->
-    </panel>
-    <panel name="Hex" label="ＨＥＸ">
-      <text name="hex_text">Hexコード（#rrggbb）：</text>
-      <text name="hex_hash_prefix">#</text>
-      <line_editor name="hex_value" />
-    </panel>
-  </tab_container>
-  <text name="h_val_text">色相：</text>
-  <spinner name="hspin" />
-  <text name="s_val_text">彩度：</text>
-  <spinner name="sspin" />
-  <text name="l_val_text">輝度：</text>
-  <spinner name="lspin" />
-  <text name="hex_text">Hex #</text>
-  <line_editor name="hex_value" />
-  <check_box label="すぐ適用" name="apply_immediate" />
-  <button name="color_pipette" />
-  <!-- FS -->
-  <button label="ＬＳＬをコピー" tool_tip="色の値を&lt;r, g, b&gt;形式のＬＳＬ色ベクトルとしてコピーします。" name="copy_lsl_btn" />
-  <!-- /FS -->
-  <button label="ＯＫ" name="select_btn" />
-  <button label="キャンセル" label_selected="キャンセル" name="cancel_btn" />
-  <text tool_tip="パレットの下にドラッグして保存します。" name="Current color:">現在の色：</text>
-  <menu_button menu_name="clipboard_color" tool_tip="色のコピー時のオプション" />
-  <text name="(Drag below to save.)">（以下にドラッグで保存します。）</text>
+	<tab_container name="scale_type_container">
+		<panel name="RGB" label="ＲＧＢ">
+			<text name="r_val_text">赤：</text>
+			<spinner name="rspin" />
+			<text name="g_val_text">緑：</text>
+			<spinner name="gspin" />
+			<text name="b_val_text">青：</text>
+			<spinner name="bspin" />
+		</panel>
+		<panel name="LSL" label="ＬＳＬ">
+			<!-- FS -->
+			<text name="r_val_text_lsl">赤：</text>
+			<spinner name="rspin_lsl" />
+			<text name="g_val_text_lsl">緑：</text>
+			<spinner name="gspin_lsl" />
+			<text name="b_val_text_lsl">青：</text>
+			<spinner name="bspin_lsl" />
+			<!-- /FS -->
+		</panel>
+		<panel name="Hex" label="ＨＥＸ">
+			<text name="hex_text">Hexコード（#rrggbb）：</text>
+			<text name="hex_hash_prefix">#</text>
+			<line_editor name="hex_value" />
+		</panel>
+	</tab_container>
+	<text name="h_val_text">色相：</text>
+	<spinner name="hspin" />
+	<text name="s_val_text">彩度：</text>
+	<spinner name="sspin" />
+	<text name="l_val_text">輝度：</text>
+	<spinner name="lspin" />
+	<text name="hex_text">Hex #</text>
+	<line_editor name="hex_value" />
+	<check_box label="すぐ適用" name="apply_immediate" />
+	<button name="color_pipette" />
+	<!-- FS -->
+	<button label="ＬＳＬをコピー" tool_tip="色の値を&lt;r, g, b&gt;形式のＬＳＬ色ベクトルとしてコピーします。" name="copy_lsl_btn" />
+	<!-- /FS -->
+	<button label="ＯＫ" name="select_btn" />
+	<button label="キャンセル" label_selected="キャンセル" name="cancel_btn" />
+	<text tool_tip="パレットの下にドラッグして保存します。" name="Current color:">現在の色：</text>
+	<menu_button menu_name="clipboard_color" tool_tip="色のコピー時のオプション" />
+	<text name="(Drag below to save.)">（以下にドラッグで保存します。）</text>
 </floater>

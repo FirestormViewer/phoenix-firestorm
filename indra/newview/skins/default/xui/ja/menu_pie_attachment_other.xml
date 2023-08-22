@@ -2,73 +2,73 @@
 <!-- *NOTE: See also menu_pie_avatar_other.xml -->
 
 <pie_menu name="Avatar Pie">
-  <pie_slice label="プロフィール…" name="Profile..." />
-  <pie_menu name="mute_menu" label="Mute &gt;">
-    <pie_slice label="ミュート" name="Avatar Mute" />
-    <pie_slice label="パーティクルをミュート" name="Mute Particle" />
-  </pie_menu>
-  <pie_slice label="ここに向かう" name="Go to" />
-  <pie_slice label="嫌がらせの報告…" name="abuse" />
-  <pie_menu label="追加　▶" name="add_avatar">
-    <pie_separator />
-    <pie_separator />
-    <pie_separator />
-    <pie_separator />
-    <pie_slice label="フレンド…" name="Add Friend" />
-    <pie_slice label="セット…" name="Add to set" />
-  </pie_menu>
-  <pie_slice label="支払う…" name="Pay..." />
-  <pie_menu name="Avatar Pie More 1" label="続き　▶">
+	<pie_slice label="プロフィール…" name="Profile..." />
+	<pie_menu name="mute_menu" label="Mute &gt;">
+		<pie_slice label="ミュート" name="Avatar Mute" />
+		<pie_slice label="パーティクルをミュート" name="Mute Particle" />
+	</pie_menu>
+	<pie_slice label="ここに向かう" name="Go to" />
+	<pie_slice label="嫌がらせの報告…" name="abuse" />
+	<pie_menu label="追加　▶" name="add_avatar">
+		<pie_separator />
+		<pie_separator />
+		<pie_separator />
+		<pie_separator />
+		<pie_slice label="フレンド…" name="Add Friend" />
+		<pie_slice label="セット…" name="Add to set" />
+	</pie_menu>
+	<pie_slice label="支払う…" name="Pay..." />
+	<pie_menu name="Avatar Pie More 1" label="続き　▶">
 
-    <pie_slice label="フリーズ" name="Freeze..." />
-    <pie_slice label="カードを渡す" name="Give Calling Card" />
-    <pie_slice label="グループに招待" name="Group Invite..." />
-    <pie_separator />
-    <pie_slice label="追い出す…" name="Eject..." />
+		<pie_slice label="フリーズ" name="Freeze..." />
+		<pie_slice label="カードを渡す" name="Give Calling Card" />
+		<pie_slice label="グループに招待" name="Group Invite..." />
+		<pie_separator />
+		<pie_slice label="追い出す…" name="Eject..." />
 
-    <pie_menu name="Avatar Pie More 2" label="続き　▶">
-      <!-- ## Zi: Is this the right thing to use for avatar textures? -->
-      <pie_slice label="テクスチャ" name="Debug..." />
-      <pie_slice label="スクリプト情報" name="ScriptInfo" />
-      <pie_slice label="コール" name="Call" />
-      <pie_slice label="ズームイン" name="Zoom In" />
-      <pie_slice label="テクスチャのリフレッシュ" name="Texture Refresh" />
-      <pie_menu name="ResetMenu" label="リセット　▶">
-        <pie_slice label="スケルトンとアニメ" name="Reset Skeleton And Animations" />
-        <pie_slice label="スケルトン" name="Reset Skeleton" />
-        <pie_slice label="ＬＯＤメッシュ" name="Reset Mesh LOD" />
-      </pie_menu>
-      <pie_menu name="ExportMenu" label="Save as &gt;">
-        <pie_slice label="バックアップ" name="Backup" />
-        <pie_slice label="Collada" name="Collada" />
-        <pie_separator />
-        <pie_separator />
-        <pie_separator />
-        <pie_separator />
-        <pie_slice label="ＸＭＬダンプ" name="Dump XML" />
-      </pie_menu>
-      <pie_menu name="RenderMenu" label="描画　▶">
-        <pie_slice name="RenderNormally" label="通常" />
-        <pie_slice name="DoNotRender" label="しない" />
-        <pie_slice name="AlwaysRenderFully" label="完全" />
-      </pie_menu>
-    </pie_menu>
+		<pie_menu name="Avatar Pie More 2" label="続き　▶">
+			<!-- ## Zi: Is this the right thing to use for avatar textures? -->
+			<pie_slice label="テクスチャ" name="Debug..." />
+			<pie_slice label="スクリプト情報" name="ScriptInfo" />
+			<pie_slice label="コール" name="Call" />
+			<pie_slice label="ズームイン" name="Zoom In" />
+			<pie_slice label="テクスチャのリフレッシュ" name="Texture Refresh" />
+			<pie_menu name="ResetMenu" label="リセット　▶">
+				<pie_slice label="スケルトンとアニメ" name="Reset Skeleton And Animations" />
+				<pie_slice label="スケルトン" name="Reset Skeleton" />
+				<pie_slice label="ＬＯＤメッシュ" name="Reset Mesh LOD" />
+			</pie_menu>
+			<pie_menu name="ExportMenu" label="Save as &gt;">
+				<pie_slice label="バックアップ" name="Backup" />
+				<pie_slice label="Collada" name="Collada" />
+				<pie_separator />
+				<pie_separator />
+				<pie_separator />
+				<pie_separator />
+				<pie_slice label="ＸＭＬダンプ" name="Dump XML" />
+			</pie_menu>
+			<pie_menu name="RenderMenu" label="描画　▶">
+				<pie_slice name="RenderNormally" label="通常" />
+				<pie_slice name="DoNotRender" label="しない" />
+				<pie_slice name="AlwaysRenderFully" label="完全" />
+			</pie_menu>
+		</pie_menu>
 
-    <pie_slice label="調査" name="Avatar Inspect" />
+		<pie_slice label="調査" name="Avatar Inspect" />
 
-    <pie_menu name="DerenderMenu" label="描画しない　▶">
-      <pie_separator />
-      <pie_separator />
-      <pie_separator />
-      <pie_separator />
-      <pie_separator />
-      <pie_separator />
-      <pie_slice label="ブラックリスト" name="DerenderPermanent" />
-      <pie_slice label="一時的" name="Derender" />
-    </pie_menu>
+		<pie_menu name="DerenderMenu" label="描画しない　▶">
+			<pie_separator />
+			<pie_separator />
+			<pie_separator />
+			<pie_separator />
+			<pie_separator />
+			<pie_separator />
+			<pie_slice label="ブラックリスト" name="DerenderPermanent" />
+			<pie_slice label="一時的" name="Derender" />
+		</pie_menu>
 
-  </pie_menu>
+	</pie_menu>
 
-  <pie_slice label="ＩＭ" name="Send IM..." />
+	<pie_slice label="ＩＭ" name="Send IM..." />
 
 </pie_menu>

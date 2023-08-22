@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="拡張" name="advanced">
-  <panel.string name="aspect_ratio_text">[NUM]：[DEN]</panel.string>
-  <panel.string name="middle_mouse">中央ボタン</panel.string>
-  <check_box label="ビューアの多重起動を許可（安定性とパフォーマンスが劣化する恐れがあります）" name="allow_multiple_viewer_check" />
-  <check_box label="他のグリッドへのログイン許可（すべてのグリッドがFirestormがサポートしているとは限りません）" name="show_grid_selection_check" />
-  <check_box label="拡張メニューを表示（自己責任で！）" name="show_advanced_menu_check" />
-  <check_box label="開発メニューを表示（自己責任で！）" name="show_develop_menu_check" />
+	<panel.string name="aspect_ratio_text">[NUM]：[DEN]</panel.string>
+	<panel.string name="middle_mouse">中央ボタン</panel.string>
+	<check_box label="ビューアの多重起動を許可（安定性とパフォーマンスが劣化する恐れがあります）" name="allow_multiple_viewer_check" />
+	<check_box label="他のグリッドへのログイン許可（すべてのグリッドがFirestormがサポートしているとは限りません）" name="show_grid_selection_check" />
+	<check_box label="拡張メニューを表示（自己責任で！）" name="show_advanced_menu_check" />
+	<check_box label="開発メニューを表示（自己責任で！）" name="show_develop_menu_check" />
 
-  <check_box label="WindowsシステムでＷＭＩプロービングによるＶＲＡＭ検出を無効にする" name="FSDisableWMIProbing" />
-  <!-- Ansa: Timesteps are currently disabled in the viewer
+	<check_box label="WindowsシステムでＷＭＩプロービングによるＶＲＡＭ検出を無効にする" name="FSDisableWMIProbing" />
+	<!-- Ansa: Timesteps are currently disabled in the viewer
   <check_box control_name="UseAnimationTimeSteps" tool_tip="この設定により、遠くのアバターのレンダリング負荷が軽減されますが、アニメーションが不正な速度で再生される可能性があります。" label="アニメーションのタイムステップを有効化（実験的）" name="UseAnimationTimeSteps" />
   -->
-  <text name="BackgroundYieldTimeText">[APP_NAME]がアクティブでないときに、他のアプリケーションに毎フレームを提供する時間（ミリ秒単位）（デフォルト：４０、１秒＝１０００ミリ秒）：</text>
-  <slider name="BackgroundYieldTime" />
+	<text name="BackgroundYieldTimeText">[APP_NAME]がアクティブでないときに、他のアプリケーションに毎フレームを提供する時間（ミリ秒単位）（デフォルト：４０、１秒＝１０００ミリ秒）：</text>
+	<slider name="BackgroundYieldTime" />
 
-  <button label="すべての設定をリセット" label_selected="すべての設定をリセット…" name="clear_settings" />
+	<button label="すべての設定をリセット" label_selected="すべての設定をリセット…" name="clear_settings" />
 </panel>

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_performance_complexity">
-  <button name="back_btn"/>
-  <text name="back_lbl">戻る</text>
-  <text name="attachments_title">現在のアバターの複雑度</text>
-  <!-- FS -->
-  <text name="tot_att_count">トータル：50（120000.10㎲）</text>
-  <!-- /FS -->
-  <text name="attachments_desc1">装着物を付けるとアバターがより複雑になります。アバターの複雑度が高い場合、</text>
-  <text name="attachments_desc2">他の人からあなたの詳細が見えず、グラフィック速度が低下する可能性があります。</text>
-  <text name="attachments_desc3">「☓」をクリックすることで不要な装着物を簡単に削除できます。</text>
-  <name_list name="obj_list">
-    <name_list.columns label="" name="art_visual" />
-    <name_list.columns label="時間（㎲）" name="art_value" tool_tip="描画にかかった時間（マイクロ秒）" />
-    <name_list.columns label="ＡＲＣ" name="complex_value" tool_tip="アイテムの複雑度（ＡＲＣ）" />
-    <name_list.columns label="装着物名" name="name" tool_tip="「☓」をクリックで取り外します。" />
-  </name_list>
+	<button name="back_btn"/>
+	<text name="back_lbl">戻る</text>
+	<text name="attachments_title">現在のアバターの複雑度</text>
+	<!-- FS -->
+	<text name="tot_att_count">トータル：50（120000.10㎲）</text>
+	<!-- /FS -->
+	<text name="attachments_desc1">装着物を付けるとアバターがより複雑になります。アバターの複雑度が高い場合、</text>
+	<text name="attachments_desc2">他の人からあなたの詳細が見えず、グラフィック速度が低下する可能性があります。</text>
+	<text name="attachments_desc3">「☓」をクリックすることで不要な装着物を簡単に削除できます。</text>
+	<name_list name="obj_list">
+		<name_list.columns label="" name="art_visual" />
+		<name_list.columns label="時間（㎲）" name="art_value" tool_tip="描画にかかった時間（マイクロ秒）" />
+		<name_list.columns label="ＡＲＣ" name="complex_value" tool_tip="アイテムの複雑度（ＡＲＣ）" />
+		<name_list.columns label="装着物名" name="name" tool_tip="「☓」をクリックで取り外します。" />
+	</name_list>
 </panel>

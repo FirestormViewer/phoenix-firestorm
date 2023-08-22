@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="imcontacts" title="連絡先">
-  <string name="no_friends" value="フレンドがいません。" />
-  <string name="no_filtered_groups_msg" value="「[SEARCH_TERM]」という極を含むグループは見つかりませんでした。" />
-  <string name="no_groups_msg" value="入れるグループを探していますか？[secondlife:///app/search/groups 検索]してみてください。" />
-  <tab_container name="friends_and_groups">
-    <first_tab tab_bottom_image_flash="Toolbar_Left_Flash" />
-    <middle_tab tab_bottom_image_flash="Toolbar_Middle_Flash" />
-    <last_tab tab_bottom_image_flash="Toolbar_Right_Flash" />
-    <panel label="フレンド" name="friends_panel" />
-    <panel label="グループ" name="groups_panel" />
-    <panel label="連絡先セット" name="contact_sets_panel" />
-  </tab_container>
-  <icon name="dummy_icon" />
+	<string name="no_friends" value="フレンドがいません。" />
+	<string name="no_filtered_groups_msg" value="「[SEARCH_TERM]」という極を含むグループは見つかりませんでした。" />
+	<string name="no_groups_msg" value="入れるグループを探していますか？[secondlife:///app/search/groups 検索]してみてください。" />
+	<tab_container name="friends_and_groups">
+		<first_tab tab_bottom_image_flash="Toolbar_Left_Flash" />
+		<middle_tab tab_bottom_image_flash="Toolbar_Middle_Flash" />
+		<last_tab tab_bottom_image_flash="Toolbar_Right_Flash" />
+		<panel label="フレンド" name="friends_panel" />
+		<panel label="グループ" name="groups_panel" />
+		<panel label="連絡先セット" name="contact_sets_panel" />
+	</tab_container>
+	<icon name="dummy_icon" />
 </floater>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <context_menu name="Settings">
-  <menu_item_check label="常に詳細まで描画" name="always_render"/>
-  <menu_item_check label="詳細まで描画しない" name="never_render"/>
-  <menu_item_check label="例外から削除" name="default"/>
-  <menu_item_separator />
-  <menu_item_call label="アバターの調査" name="inspect"/>
-  <menu_item_call label="アバターをズーム" tool_tip="このアバターにカメラを向けます。" name="zoom"/>
+	<menu_item_check label="常に詳細まで描画" name="always_render"/>
+	<menu_item_check label="詳細まで描画しない" name="never_render"/>
+	<menu_item_check label="例外から削除" name="default"/>
+	<menu_item_separator />
+	<menu_item_call label="アバターの調査" name="inspect"/>
+	<menu_item_call label="アバターをズーム" tool_tip="このアバターにカメラを向けます。" name="zoom"/>
 </context_menu>

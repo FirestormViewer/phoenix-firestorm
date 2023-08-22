@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_fs_wearable_favorites" title="お気に入りの服装">
-  <floater.string name="empty_list">服装をここにドラッグしてリストに追加します。</floater.string>
-  <floater.string name="search_no_items">そのようなアイテムは見つかりませんでした。</floater.string>
-  <panel name="buttons_panel">
-    <filter_editor name="wearable_filter_input" label="服装をフィルタ" />
-    <menu_button name="options_btn" tool_tip="お気に入りの服装のオプション" />
-    <button name="remove_btn" tool_tip="お気に入りの服装一覧から削除" />
-  </panel>
-  <panel name="panel_fs_wearable_favorites">
-    <fs_wearable_favorites_items_list name="favorites_list" />
-  </panel>
+	<floater.string name="empty_list">服装をここにドラッグしてリストに追加します。</floater.string>
+	<floater.string name="search_no_items">そのようなアイテムは見つかりませんでした。</floater.string>
+	<panel name="buttons_panel">
+		<filter_editor name="wearable_filter_input" label="服装をフィルタ" />
+		<menu_button name="options_btn" tool_tip="お気に入りの服装のオプション" />
+		<button name="remove_btn" tool_tip="お気に入りの服装一覧から削除" />
+	</panel>
+	<panel name="panel_fs_wearable_favorites">
+		<fs_wearable_favorites_items_list name="favorites_list" />
+	</panel>
 </floater>

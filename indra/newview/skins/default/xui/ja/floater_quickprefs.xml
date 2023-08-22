@@ -1,79 +1,77 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="quickprefs" title="クイック設定">
-  <panel name="quickprefs">
-    <layout_stack name="options_stack">
-      <!-- <FS:Zi> dummy panel to make XUI validation happy -->
-      <layout_panel name="dummy_options_panel">
-      </layout_panel>
-    </layout_stack>
-    <view_border name="divider_line_dynamic_to_static" />
-    <layout_stack name="wl_options_stack">
-      <layout_panel name="wl_options_panel">
-        <text name="HoverHeightLabel" tool_tip="アバターのホバー高さを設定します。">ホバー高さ：</text>
-        <slider name="HoverHeightSlider" />
-        <!--<FS:HG>
-        FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
-        <text name="Maximum bandwidth" tool_tip="ネットワーク帯域幅をKbps（キロビット／秒）で設定します。">最大帯域：</text>
-        <slider name="max_bandwidth" />
-        <text name="Maximum complexity" tool_tip="視覚的に複雑なアバターをどの時点でJelly Dollとして描画するかを制御します。">最大複雑度：</text>
-        <slider name="IndirectMaxComplexity" />
-        <text name="IndirectMaxComplexityText">無制限</text>
-        <!--</FS:HG>
-        FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
-        <text name="WL Sky" tool_tip="自分の空のプリセット">空：</text>
-        <combo_box name="WLPresetsCombo" />
-        <button name="WLPrevPreset" label="" label_selected="" />
-        <button name="WLNextPreset" label="" label_selected="" />
-        <text name="WL Water" tool_tip="自分の水面のプリセット">水面：</text>
-        <combo_box name="WaterPresetsCombo" />
-        <button name="WWPrevPreset" label="" label_selected="" />
-        <button name="WWNextPreset" label="" label_selected="" />
-        <text name="Day Cycle" tool_tip="自分のデイサイクルのプリセット">デイサイクル：</text>
-        <combo_box name="DCPresetsCombo" />
-        <button name="DCPrevPreset" label="" label_selected="" />
-        <button name="DCNextPreset" label="" label_selected="" />
-        <button name="btn_personal_lighting" label="個人的な光源…" />
-        <button name="ResetToRegionDefault" label="" tool_tip="自然環境オプションを共有された自然環境にリセットします。" />
-        <!-- <FS:Zi> floater titlebar button to edit dynamic quickprefs -->
-        <button name="button_edit" label="" tool_tip="クイック設定コントロールを構成するには、ここをクリックしてください。" />
-        <!-- </FS:Zi> -->
-      </layout_panel>
-    </layout_stack>
-  </panel>
+	<panel name="quickprefs">
+		<layout_stack name="options_stack">
+			<!-- <FS:Zi> dummy panel to make XUI validation happy -->
+			<layout_panel name="dummy_options_panel">
+			</layout_panel>
+		</layout_stack>
+		<view_border name="divider_line_dynamic_to_static" />
+		<layout_stack name="wl_options_stack">
+			<layout_panel name="wl_options_panel">
+				<text name="HoverHeightLabel" tool_tip="アバターのホバー高さを設定します。">ホバー高さ：</text>
+				<slider name="HoverHeightSlider" />
+				<!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
+				<text name="Maximum bandwidth" tool_tip="ネットワーク帯域幅をKbps（キロビット／秒）で設定します。">最大帯域：</text>
+				<slider name="max_bandwidth" />
+				<text name="Maximum complexity" tool_tip="視覚的に複雑なアバターをどの時点でJelly Dollとして描画するかを制御します。">最大複雑度：</text>
+				<slider name="IndirectMaxComplexity" />
+				<text name="IndirectMaxComplexityText">無制限</text>
+				<!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
+				<text name="WL Sky" tool_tip="自分の空のプリセット">空：</text>
+				<combo_box name="WLPresetsCombo" />
+				<button name="WLPrevPreset" label="" label_selected="" />
+				<button name="WLNextPreset" label="" label_selected="" />
+				<text name="WL Water" tool_tip="自分の水面のプリセット">水面：</text>
+				<combo_box name="WaterPresetsCombo" />
+				<button name="WWPrevPreset" label="" label_selected="" />
+				<button name="WWNextPreset" label="" label_selected="" />
+				<text name="Day Cycle" tool_tip="自分のデイサイクルのプリセット">デイサイクル：</text>
+				<combo_box name="DCPresetsCombo" />
+				<button name="DCPrevPreset" label="" label_selected="" />
+				<button name="DCNextPreset" label="" label_selected="" />
+				<button name="btn_personal_lighting" label="個人的な光源…" />
+				<button name="ResetToRegionDefault" label="" tool_tip="自然環境オプションを共有された自然環境にリセットします。" />
+				<!-- <FS:Zi> floater titlebar button to edit dynamic quickprefs -->
+				<button name="button_edit" label="" tool_tip="クイック設定コントロールを構成するには、ここをクリックしてください。" />
+				<!-- </FS:Zi> -->
+			</layout_panel>
+		</layout_stack>
+	</panel>
 
-  <!-- <FS:Zi> Dynamic quick prefs: edit overlay -->
-  <panel name="edit_overlay_panel">
-    <view_border name="divider_line_edit_options" />
-    <button name="move_up_button" tool_tip="選択したコントロールを１スロット上に移動します。" />
-    <button name="add_new_button" tool_tip="新しいクイック設定コントロールを追加する。" />
-    <line_editor name="label_edit" tool_tip="Type the label for the control here" label="Control label:" />
-    <button name="move_down_button" tool_tip="Move selected control one slot down" />
-    <combo_box name="control_name_combo" tool_tip="Select control from the list of debug settings">
-      <combo_box.item label="=== Choose ===" name="control_name_list_header" value="" />
-    </combo_box>
+	<!-- <FS:Zi> Dynamic quick prefs: edit overlay -->
+	<panel name="edit_overlay_panel">
+		<view_border name="divider_line_edit_options" />
+		<button name="move_up_button" tool_tip="選択したコントロールを１スロット上に移動します。" />
+		<button name="add_new_button" tool_tip="新しいクイック設定コントロールを追加する。" />
+		<line_editor name="label_edit" tool_tip="ここにコントロールのラベルを入力します。" label="コントロールのラベル：" />
+		<button name="move_down_button" tool_tip="選択したコントロールを１スロット下に移動します。" />
+		<combo_box name="control_name_combo" tool_tip="デバッグ設定リストからコントロールを選択します。">
+			<combo_box.item label="＝　選択　＝" name="control_name_list_header" value="" />
+		</combo_box>
 
-    <text name="control_type_label">種類：</text>
+		<text name="control_type_label">種類：</text>
 
-    <combo_box name="control_type_combo_box" tool_tip="この設定に使用するユーザー インターフェイス コントロールのタイプを選択します。">
-      <!-- do not use <combo_item>Foo</combo_item>, it doesn't work -->
-      <combo_box.item label="チェックボックス" name="Checkbox" value="0" />
-      <combo_box.item label="テキスト" name="Text" value="1" />
-      <combo_box.item label="スピナー" name="Spinner" value="2" />
-      <combo_box.item label="スライダー" name="Slider" value="3" />
-      <combo_box.item label="ラジオ" name="Radio" value="4" />
-      <combo_box.item label="色３" name="Color 3" value="5" />
-      <combo_box.item label="色４" name="Color 4" value="6" />
-    </combo_box>
+		<combo_box name="control_type_combo_box" tool_tip="この設定に使用するユーザー インターフェイス コントロールのタイプを選択します。">
+			<!-- do not use <combo_item>Foo</combo_item>, it doesn't work -->
+			<combo_box.item label="チェックボックス" name="Checkbox" value="0" />
+			<combo_box.item label="テキスト" name="Text" value="1" />
+			<combo_box.item label="スピナー" name="Spinner" value="2" />
+			<combo_box.item label="スライダー" name="Slider" value="3" />
+			<combo_box.item label="ラジオ" name="Radio" value="4" />
+			<combo_box.item label="色３" name="Color 3" value="5" />
+			<combo_box.item label="色４" name="Color 4" value="6" />
+		</combo_box>
 
-    <!-- enable/disable done in code depending on the type of control chosen -->
-    <check_box name="control_integer_checkbox" tool_tip="設定が整数値の場合、つまり整数のみが含まれる場合は、このチェックボックスをオンにします。" label="数値" />
+		<!-- enable/disable done in code depending on the type of control chosen -->
+		<check_box name="control_integer_checkbox" tool_tip="設定が整数値の場合、つまり整数のみが含まれる場合は、このチェックボックスをオンにします。" label="数値" />
 
-    <!-- enable/disable additionally done in code depending on the type of control chosen -->
-    <spinner name="control_min_edit" tool_tip="選択できる最小値" label="最小：" />
-    <spinner name="control_max_edit" tool_tip="選択できる最大値" label="最大：" />
-    <spinner name="control_increment_edit" tool_tip="スピナーの▲か▼をクリックするか、スライダーのカーソルキーを使用したときの値の増分" label="増分：" />
-    <button name="Restore_Btn" tool_tip="デフォルト設定を復元する。" label="リセット" />
-    <!-- reverse the image names here beause we have a toggle ON button -->
-    <button name="button_close" tool_tip="編集オーバーレイパネルを閉じます。" />
-  </panel>
+		<!-- enable/disable additionally done in code depending on the type of control chosen -->
+		<spinner name="control_min_edit" tool_tip="選択できる最小値" label="最小：" />
+		<spinner name="control_max_edit" tool_tip="選択できる最大値" label="最大：" />
+		<spinner name="control_increment_edit" tool_tip="スピナーの▲か▼をクリックするか、スライダーのカーソルキーを使用したときの値の増分" label="増分：" />
+		<button name="Restore_Btn" tool_tip="デフォルト設定を復元する。" label="リセット" />
+		<!-- reverse the image names here beause we have a toggle ON button -->
+		<button name="button_close" tool_tip="編集オーバーレイパネルを閉じます。" />
+	</panel>
 </floater>

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Groups" name="panel_ls_groups">
-  <panel name="panel_ls_input">
-    <text name="search_text">検索語句を入力：</text>
-    <search_combo_box name="groups_edit">
-    </search_combo_box>
-    <check_box label="" name="pg_all" />
-    <icon name="rating_icon_general" />
-    <check_box label="" name="mature_all" />
-    <icon name="rating_icon_moderate" />
-    <check_box name="adult_all" />
-    <icon name="rating_icon_adult" />
-  </panel>
-  <!-- Search Pane -->
-  <panel name="panel_ls_scrolllist">
-    <scroll_list name="search_results_groups">
-      <columns label="" name="icon" />
-      <columns label="グループ名" name="group_name" />
-      <columns label="メンバー数" name="members" />
-      <columns label="スコア" name="score" />
-    </scroll_list>
-    <button label="前へ" name="groups_back" />
-    <button label="次へ" name="groups_next" />
-  </panel>
+	<panel name="panel_ls_input">
+		<text name="search_text">検索語句を入力：</text>
+		<search_combo_box name="groups_edit">
+		</search_combo_box>
+		<check_box label="" name="pg_all" />
+		<icon name="rating_icon_general" />
+		<check_box label="" name="mature_all" />
+		<icon name="rating_icon_moderate" />
+		<check_box name="adult_all" />
+		<icon name="rating_icon_adult" />
+	</panel>
+	<!-- Search Pane -->
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_groups">
+			<columns label="" name="icon" />
+			<columns label="グループ名" name="group_name" />
+			<columns label="メンバー数" name="members" />
+			<columns label="スコア" name="score" />
+		</scroll_list>
+		<button label="前へ" name="groups_back" />
+		<button label="次へ" name="groups_next" />
+	</panel>
 </panel>

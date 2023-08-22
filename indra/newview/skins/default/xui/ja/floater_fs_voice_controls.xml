@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_voice_controls" title="ボイスコントロール">
-  <string name="title_nearby">近くのボイス</string>
-  <string name="title_group">[GROUP]からのグループコール</string>
-  <string name="title_adhoc">会話コール</string>
-  <string name="title_peer_2_peer">[NAME]とのコール</string>
-  <string name="no_one_near">近くにボイスを有効化している人はいません。</string>
-  <layout_stack name="my_call_stack">
-    <layout_panel name="my_panel">
-      <avatar_icon name="user_icon" />
-      <text name="user_text" value="自分のアバター：" />
-      <output_monitor name="speaking_indicator" />
-    </layout_panel>
-    <layout_panel name="leave_call_panel">
-      <layout_stack name="voice_effect_and_leave_call_stack">
-        <layout_panel>
-          <panel name="panel_voice_effect" />
-        </layout_panel>
-        <layout_panel name="leave_call_btn_panel">
-          <button label="コールから退出" name="leave_call_btn" />
-        </layout_panel>
-      </layout_stack>
-    </layout_panel>
-    <layout_panel name="callers_panel">
-      <avatar_list name="speakers_list" />
-      <text name="rlv_restricted" />
-    </layout_panel>
-  </layout_stack>
+	<string name="title_nearby">近くのボイス</string>
+	<string name="title_group">[GROUP]からのグループコール</string>
+	<string name="title_adhoc">会話コール</string>
+	<string name="title_peer_2_peer">[NAME]とのコール</string>
+	<string name="no_one_near">近くにボイスを有効化している人はいません。</string>
+	<layout_stack name="my_call_stack">
+		<layout_panel name="my_panel">
+			<avatar_icon name="user_icon" />
+			<text name="user_text" value="自分のアバター：" />
+			<output_monitor name="speaking_indicator" />
+		</layout_panel>
+		<layout_panel name="leave_call_panel">
+			<layout_stack name="voice_effect_and_leave_call_stack">
+				<layout_panel>
+					<panel name="panel_voice_effect" />
+				</layout_panel>
+				<layout_panel name="leave_call_btn_panel">
+					<button label="コールから退出" name="leave_call_btn" />
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="callers_panel">
+			<avatar_list name="speakers_list" />
+			<text name="rlv_restricted" />
+		</layout_panel>
+	</layout_stack>
 </floater>

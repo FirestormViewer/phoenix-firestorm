@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="animation_overrider" title="アニメーションオーバーライダー">
-  <floater.string name="ao_no_sets_loaded">セットは読み込まれていません。</floater.string>
-  <floater.string name="ao_no_animations_loaded">アニメーションは読み込まれていません。</floater.string>
-  <panel name="animation_overrider_outer_panel"  />
+	<floater.string name="ao_no_sets_loaded">セットは読み込まれていません。</floater.string>
+	<floater.string name="ao_no_animations_loaded">アニメーションは読み込まれていません。</floater.string>
+	<panel name="animation_overrider_outer_panel" />
 </floater>

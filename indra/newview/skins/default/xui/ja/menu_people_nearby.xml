@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Avatar Context Menu">
-  <menu_item_call label="プロフィールを表示" name="view_profile" />
-  <menu_item_call label="ＩＭ" name="im" />
-  <menu_item_call label="テレポートを送る" name="offer_teleport" />
-  <menu_item_call label="ボイスコール" name="voice_call" />
-  <menu_item_call label="チャットの履歴を表示…" name="chat_history" />
-  <menu_item_call label="フレンド登録" name="add_friend" />
-  <menu_item_call label="フレンド削除" name="remove_friend" />
-  <menu_item_call label="グループに招待…" name="invite_to_group" />
-  <menu_item_call label="ズームイン" name="zoom_in" />
-  <menu_item_call label="テレポート" name="teleport_to"/>
-  <menu_item_call label="マップ" name="map" />
-  <menu_item_call label="共有" name="share" />
-  <menu_item_call label="支払う" name="pay" />
-  <menu_item_separator name="separator_utils" />
-  <context_menu label="管理" name="manage_menu">
-    <menu_item_check label="ブロック／解除" name="block_unblock" />
-    <menu_item_call label="嫌がらせの報告" name="abuse" />
-    <menu_item_call label="フリーズ" name="freeze" />
-    <menu_item_call label="追放" name="eject" />
-    <menu_item_call label="ホームにテレポート" name="teleporthome" />
-    <menu_item_call label="不動産からキック" name="estatekick" />
-    <menu_item_call label="不動産からバン" name="estateban" />
-  </context_menu>
-  <context_menu label="ユーティリティ" name="utils_menu">
-    <menu_item_call label="ユーザ名をコピー" name="copy_username" />
-    <menu_item_call label="表示名をコピー" name="copy_display_name" />
-    <menu_item_call label="アカウント名をコピー" name="copy_account_name" />
-    <menu_item_call label="SLurlをコピー" name="copy_slurl" />
-    <menu_item_call label="ＩＤをコピー" name="copy_uuid" />
-  </context_menu>
+	<menu_item_call label="プロフィールを表示" name="view_profile" />
+	<menu_item_call label="ＩＭ" name="im" />
+	<menu_item_call label="テレポートを送る" name="offer_teleport" />
+	<menu_item_call label="ボイスコール" name="voice_call" />
+	<menu_item_call label="チャットの履歴を表示…" name="chat_history" />
+	<menu_item_call label="フレンド登録" name="add_friend" />
+	<menu_item_call label="フレンド削除" name="remove_friend" />
+	<menu_item_call label="グループに招待…" name="invite_to_group" />
+	<menu_item_call label="ズームイン" name="zoom_in" />
+	<menu_item_call label="テレポート" name="teleport_to"/>
+	<menu_item_call label="マップ" name="map" />
+	<menu_item_call label="共有" name="share" />
+	<menu_item_call label="支払う" name="pay" />
+	<menu_item_separator name="separator_utils" />
+	<context_menu label="管理" name="manage_menu">
+		<menu_item_check label="ブロック／解除" name="block_unblock" />
+		<menu_item_call label="嫌がらせの報告" name="abuse" />
+		<menu_item_call label="フリーズ" name="freeze" />
+		<menu_item_call label="追放" name="eject" />
+		<menu_item_call label="ホームにテレポート" name="teleporthome" />
+		<menu_item_call label="不動産からキック" name="estatekick" />
+		<menu_item_call label="不動産からバン" name="estateban" />
+	</context_menu>
+	<context_menu label="ユーティリティ" name="utils_menu">
+		<menu_item_call label="ユーザ名をコピー" name="copy_username" />
+		<menu_item_call label="表示名をコピー" name="copy_display_name" />
+		<menu_item_call label="アカウント名をコピー" name="copy_account_name" />
+		<menu_item_call label="SLurlをコピー" name="copy_slurl" />
+		<menu_item_call label="ＩＤをコピー" name="copy_uuid" />
+	</context_menu>
 </context_menu>

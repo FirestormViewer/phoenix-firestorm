@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="queue" title="進行のリセット">
-  <floater.string name="Starting">[COUNT]個のアイテムの[START]を開始します。</floater.string>
-  <floater.string name="Done">完了しました。</floater.string>
-  <floater.string name="Resetting">リセットしています…</floater.string>
-  <floater.string name="Running">実行中です。</floater.string>
-  <floater.string name="NotRunning">実行されていません。</floater.string>
-  <floater.string name="Timeout">タイムアウト：[OBJECT_NAME]</floater.string>
-  <floater.string name="LoadingObjInv">以下のインベントリを読み込んでいます：[OBJECT_NAME]</floater.string>
-  <button label="閉じる" label_selected="閉じる" name="close" />
+	<floater.string name="Starting">[COUNT]個のアイテムの[START]を開始します。</floater.string>
+	<floater.string name="Done">完了しました。</floater.string>
+	<floater.string name="Resetting">リセットしています…</floater.string>
+	<floater.string name="Running">実行中です。</floater.string>
+	<floater.string name="NotRunning">実行されていません。</floater.string>
+	<floater.string name="Timeout">タイムアウト：[OBJECT_NAME]</floater.string>
+	<floater.string name="LoadingObjInv">以下のインベントリを読み込んでいます：[OBJECT_NAME]</floater.string>
+	<button label="閉じる" label_selected="閉じる" name="close" />
 </floater>

@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="イベント" name="panel_ls_events">
-  <panel name="panel_ls_input">
-    <text name="search_text">検索語句を入力：</text>
-    <radio_group name="events_search_mode">
-      <radio_item label="進行中および今後の予定" name="current" value="current" />
-      <radio_item label="日付で" name="date" value="date" />
-    </radio_group>
-    <text name="events_date">4/20</text>
-    <search_combo_box name="events_edit" />
-    <combo_box name="events_category">
-      <combo_box.item label="すべてのカテゴリ" name="any" value="0" />
-      <combo_box.item label="" value="filter_separator" enabled="false" />
-      <combo_box.item label="ディスカッション" name="discussion" value="18" />
-      <combo_box.item label="スポーツ" name="sports" value="19" />
-      <combo_box.item label="ライブＤＪ" name="dj" value="30" />
-      <combo_box.item label="ライブ音楽" name="music" value="20" />
-      <!-- <combo_box.item label="???" name="mystery_category" value="21" /> -->
-      <combo_box.item label="商業" name="commercial" value="22" />
-      <combo_box.item label="夜の生活／エンターテインメント" name="nightlife" value="23" />
-      <combo_box.item label="ゲーム／コンテスト" name="games" value="24" />
-      <combo_box.item label="野外劇" name="pageants" value="25" />
-      <combo_box.item label="教育的" name="education" value="26" />
-      <combo_box.item label="芸術と文化" name="arts" value="27" />
-      <combo_box.item label="チャリティー／サポートグループ" name="charity" value="28" />
-      <combo_box.item label="その他" name="misc" value="29" />
-    </combo_box>
-    <check_box label="" />
-    <icon name="rating_icon_general" />
-    <check_box label="" name="mature_all" />
-    <icon name="rating_icon_moderate" />
-    <check_box label="" name="adult_all" />
-    <icon name="rating_icon_adult" />
-  </panel>
-  <!-- Search Pane -->
-  <panel name="panel_ls_scrolllist">
-    <scroll_list name="search_results_events">
-      <columns label="" name="icon" />
-      <columns label="イベント名" name="name" />
-      <columns label="日時" name="date" />
-      <columns label="時刻" name="time" />
-    </scroll_list>
-    <button label="昨日" name="events_yesterday" />
-    <button label="今日" name="events_today" />
-    <button label="明日" name="events_tomorrow" />
-    <button label="前へ" name="events_back" />
-    <button label="次へ" name="events_next" />
-  </panel>
+	<panel name="panel_ls_input">
+		<text name="search_text">検索語句を入力：</text>
+		<radio_group name="events_search_mode">
+			<radio_item label="進行中および今後の予定" name="current" value="current" />
+			<radio_item label="日付で" name="date" value="date" />
+		</radio_group>
+		<text name="events_date">4/20</text>
+		<search_combo_box name="events_edit" />
+		<combo_box name="events_category">
+			<combo_box.item label="すべてのカテゴリ" name="any" value="0" />
+			<combo_box.item label="" value="filter_separator" enabled="false" />
+			<combo_box.item label="ディスカッション" name="discussion" value="18" />
+			<combo_box.item label="スポーツ" name="sports" value="19" />
+			<combo_box.item label="ライブＤＪ" name="dj" value="30" />
+			<combo_box.item label="ライブ音楽" name="music" value="20" />
+			<!-- <combo_box.item label="???" name="mystery_category" value="21" /> -->
+			<combo_box.item label="商業" name="commercial" value="22" />
+			<combo_box.item label="夜の生活／エンターテインメント" name="nightlife" value="23" />
+			<combo_box.item label="ゲーム／コンテスト" name="games" value="24" />
+			<combo_box.item label="野外劇" name="pageants" value="25" />
+			<combo_box.item label="教育的" name="education" value="26" />
+			<combo_box.item label="芸術と文化" name="arts" value="27" />
+			<combo_box.item label="チャリティー／サポートグループ" name="charity" value="28" />
+			<combo_box.item label="その他" name="misc" value="29" />
+		</combo_box>
+		<check_box label="" />
+		<icon name="rating_icon_general" />
+		<check_box label="" name="mature_all" />
+		<icon name="rating_icon_moderate" />
+		<check_box label="" name="adult_all" />
+		<icon name="rating_icon_adult" />
+	</panel>
+	<!-- Search Pane -->
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_events">
+			<columns label="" name="icon" />
+			<columns label="イベント名" name="name" />
+			<columns label="日時" name="date" />
+			<columns label="時刻" name="time" />
+		</scroll_list>
+		<button label="昨日" name="events_yesterday" />
+		<button label="今日" name="events_today" />
+		<button label="明日" name="events_tomorrow" />
+		<button label="前へ" name="events_back" />
+		<button label="次へ" name="events_next" />
+	</panel>
 </panel>

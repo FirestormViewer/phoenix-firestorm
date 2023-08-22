@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Toolbars Popup">
-  <menu_item_call label="このボタンを削除" name="Remove button" />
-  <menu_item_separator  />
-  <menu_item_call label="ツールバーのボタン…" name="Choose Buttons" />
-  <menu_item_separator  />
-  <menu_item_check label="アイコンとラベル" name="icons_with_text" />
-  <menu_item_check label="アイコンのみ" name="icons_only" />
-  <menu_item_check label="小アイコンのみ" name="icons_only_small"/>
-  <menu_item_check label="テキストのみ" name="text_only"/>
-  <menu_item_separator name="layout_separator" />
-  <menu_item_check label="ボタンを自動配置" name="autolayout" />
-  <menu_item_check label="ボタンの幅を全面に広げる　⟷" name="filllayout" />
-  <menu_item_check label="ボタンを左に寄せる　⭰" name="left_align" />
-  <menu_item_check label="ボタンを右に寄せる　⭲" name="right_align" />
-  <menu_item_check label="ボタンを上に寄せる　⭱" name="top_align" />
-  <menu_item_check label="ボタンを下に寄せる　⭳" name="bottom_align"/>
+	<menu_item_call label="このボタンを削除" name="Remove button" />
+	<menu_item_separator  />
+	<menu_item_call label="ツールバーのボタン…" name="Choose Buttons" />
+	<menu_item_separator  />
+	<menu_item_check label="アイコンとラベル" name="icons_with_text" />
+	<menu_item_check label="アイコンのみ" name="icons_only" />
+	<menu_item_check label="小アイコンのみ" name="icons_only_small"/>
+	<menu_item_check label="テキストのみ" name="text_only"/>
+	<menu_item_separator name="layout_separator" />
+	<menu_item_check label="ボタンを自動配置" name="autolayout" />
+	<menu_item_check label="ボタンの幅を全面に広げる　⟷" name="filllayout" />
+	<menu_item_check label="ボタンを左に寄せる　⭰" name="left_align" />
+	<menu_item_check label="ボタンを右に寄せる　⭲" name="right_align" />
+	<menu_item_check label="ボタンを上に寄せる　⭱" name="top_align" />
+	<menu_item_check label="ボタンを下に寄せる　⭳" name="bottom_align"/>
 </context_menu>

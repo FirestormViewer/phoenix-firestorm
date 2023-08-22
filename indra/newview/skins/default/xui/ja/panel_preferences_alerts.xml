@@ -1,71 +1,71 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="ポップアップ" name="popups">
-  <tab_container label="アラート" name="tabs">
+	<tab_container label="アラート" name="tabs">
 
-    <!-- World -->
-    <panel label="ワールド" name="tab-world">
-      <check_box label="L$を使用または取得したときに通知する" name="notify_money_change_checkbox" />
-      <check_box label="トーストの代わりに、L$の取引を近くのチャットで報告する。" name="FSPaymentInfoInChat" />
-      <check_box label="リージョン変更中にシミュレータのバージョンが変更された場合の通知" name="FSShowServerVersionChangeNotice" tool_tip="テレポート中やリージョン横断中にシミュレータのバージョンが変更された場合、通知を表示します。" />
-      <check_box label="ログイン時の最新ニュースをstatus.secondlifegrid.netに問い合わせる" name="AutoQueryGridStatus" />
+		<!-- World -->
+		<panel label="ワールド" name="tab-world">
+			<check_box label="L$を使用または取得したときに通知する" name="notify_money_change_checkbox" />
+			<check_box label="トーストの代わりに、L$の取引を近くのチャットで報告する。" name="FSPaymentInfoInChat" />
+			<check_box label="リージョン変更中にシミュレータのバージョンが変更された場合の通知" name="FSShowServerVersionChangeNotice" tool_tip="テレポート中やリージョン横断中にシミュレータのバージョンが変更された場合、通知を表示します。" />
+			<check_box label="ログイン時の最新ニュースをstatus.secondlifegrid.netに問い合わせる" name="AutoQueryGridStatus" />
 
-      <check_box label="Growl通知を有効にする" name="notify_growl_checkbox" />
-      <check_box label="FirestormがアクティブでもGrowl通知を表示する" name="notify_growl_always_checkbox" />
-      <check_box label="重複するＩＭがキーワードアラートの一部として既に表示されている場合、フィルタリングする" name="FSFilterGrowlKeywordDuplicateIMs" />
-    </panel>
+			<check_box label="Growl通知を有効にする" name="notify_growl_checkbox" />
+			<check_box label="FirestormがアクティブでもGrowl通知を表示する" name="notify_growl_always_checkbox" />
+			<check_box label="重複するＩＭがキーワードアラートの一部として既に表示されている場合、フィルタリングする" name="FSFilterGrowlKeywordDuplicateIMs" />
+		</panel>
 
-    <!-- People -->
-    <panel label="人物" name="tab-people">
-      <check_box label="[APP_NAME]がフォーカスされていない状態でメッセージを受信したときに、アプリアイコンが点滅させる" name="FSFlashOnMessage" />
-      <check_box label="オブジェクトからインスタントメッセージを受信したときに、アプリアイコンを点滅させる" name="FSFlashOnObjectIM" />
-      <check_box label="誰かが表示名を変更したら通知する" name="FSShowDisplayNameUpdateNotification" />
-      <check_box label="誰かをブロックまたはブロック解除したら通知する" name="FSReportBlockToNearbyChat" />
-      <text name="friends_logon_label">フレンドがログインまたはログアウトしたときに通知する：</text>
-      <check_box label="トーストで" name="friends_online_notify_checkbox" />
-      <check_box name="OnlineOfflinetoNearbyChat" label="近くのチャットとコンソールで" />
-      <check_box label="近くのチャットでのみ" name="OnlineOfflinetoNearbyChatHistory" />
-    </panel>
+		<!-- People -->
+		<panel label="人物" name="tab-people">
+			<check_box label="[APP_NAME]がフォーカスされていない状態でメッセージを受信したときに、アプリアイコンが点滅させる" name="FSFlashOnMessage" />
+			<check_box label="オブジェクトからインスタントメッセージを受信したときに、アプリアイコンを点滅させる" name="FSFlashOnObjectIM" />
+			<check_box label="誰かが表示名を変更したら通知する" name="FSShowDisplayNameUpdateNotification" />
+			<check_box label="誰かをブロックまたはブロック解除したら通知する" name="FSReportBlockToNearbyChat" />
+			<text name="friends_logon_label">フレンドがログインまたはログアウトしたときに通知する：</text>
+			<check_box label="トーストで" name="friends_online_notify_checkbox" />
+			<check_box name="OnlineOfflinetoNearbyChat" label="近くのチャットとコンソールで" />
+			<check_box label="近くのチャットでのみ" name="OnlineOfflinetoNearbyChatHistory" />
+		</panel>
 
-    <!-- Objects & Scripts -->
-    <panel label="オブジェクトとスクリプト" name="tab-objects">
-      <check_box label="[APP_NAME]がフォーカスされていない状態でスクリプトダイアログを受信したときに、アプリアイコンを点滅させる" name="FSFlashOnScriptDialog" />
-      <check_box label="ぶつかったときの通知を近くのチャットに報告" name="FSCollisionMessagesInChat" />
-      <check_box label="スクリプトエラーの報告先：" name="show_script_errors" />
-      <radio_group name="show_script_errors_location">
-        <radio_item label="近くのチャット" name="script_0" />
-        <radio_item label="別ウィンドウ" name="script_1" />
-      </radio_group>
+		<!-- Objects & Scripts -->
+		<panel label="オブジェクトとスクリプト" name="tab-objects">
+			<check_box label="[APP_NAME]がフォーカスされていない状態でスクリプトダイアログを受信したときに、アプリアイコンを点滅させる" name="FSFlashOnScriptDialog" />
+			<check_box label="ぶつかったときの通知を近くのチャットに報告" name="FSCollisionMessagesInChat" />
+			<check_box label="スクリプトエラーの報告先：" name="show_script_errors" />
+			<radio_group name="show_script_errors_location">
+				<radio_item label="近くのチャット" name="script_0" />
+				<radio_item label="別ウィンドウ" name="script_1" />
+			</radio_group>
 
-      <check_box label="リージョンのスクリプト総数の変更を報告する：" name="FSReportTotalScriptCountChanges" />
-      <spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="スクリプト総数のしきい値は、報告前に変更される。［デフォルト：100］" />
+			<check_box label="リージョンのスクリプト総数の変更を報告する：" name="FSReportTotalScriptCountChanges" />
+			<spinner name="FSReportTotalScriptCountChangesThreshold" tool_tip="スクリプト総数のしきい値は、報告前に変更される。［デフォルト：100］" />
 
-      <check_box label="チャンネル上のスクリプトにぶつかったときの通知を報告する：" name="FSReportCollisionMessages" />
-      <spinner name="FSReportCollisionMessagesChannel" tool_tip="スクリプトへの衝突メッセージの報告に使用するチャンネルを指定します。［デフォルト：-25000］" />
-    </panel>
+			<check_box label="チャンネル上のスクリプトにぶつかったときの通知を報告する：" name="FSReportCollisionMessages" />
+			<spinner name="FSReportCollisionMessagesChannel" tool_tip="スクリプトへの衝突メッセージの報告に使用するチャンネルを指定します。［デフォルト：-25000］" />
+		</panel>
 
-    <!-- Inventory -->
-    <panel label="インベントリ" name="tab-inventory">
-      <check_box label="アップロード料金が請求されたら通知する" name="FSShowUploadPaymentToast" />
-      <check_box label="ランドマークが作成されたら通知する" name="landmark_created_checkbox" />
-      <check_box label="「オブジェクトがインベントリに返却されました」通知を無効にする" name="FSDisableReturnObjectNotification" />
-      <check_box label="保存されたスナップショットのファイル名をチャット履歴に記録する" name="FSLogSnapshotsToLocal" />
-      <check_box label="高速で進入してくるオブジェクトからのアイテムに関する通知" name="FSNotifyIncomingObjectSpam" />
-      <check_box label="他の居住者からの物品があまりにも早く入ってくることについての通知" name="FSNotifyIncomingObjectSpamFrom" />
-      <slider label="受け取ったオブジェクトの通知のしきい値：" tool_tip="受信したオブジェクトのオファーが制限されるまでの１０秒までのしきい値を設定する。デフォルトは５" name="FSOfferThrottleMaxCount" />
-    </panel>
+		<!-- Inventory -->
+		<panel label="インベントリ" name="tab-inventory">
+			<check_box label="アップロード料金が請求されたら通知する" name="FSShowUploadPaymentToast" />
+			<check_box label="ランドマークが作成されたら通知する" name="landmark_created_checkbox" />
+			<check_box label="「オブジェクトがインベントリに返却されました」通知を無効にする" name="FSDisableReturnObjectNotification" />
+			<check_box label="保存されたスナップショットのファイル名をチャット履歴に記録する" name="FSLogSnapshotsToLocal" />
+			<check_box label="高速で進入してくるオブジェクトからのアイテムに関する通知" name="FSNotifyIncomingObjectSpam" />
+			<check_box label="他の居住者からの物品があまりにも早く入ってくることについての通知" name="FSNotifyIncomingObjectSpamFrom" />
+			<slider label="受け取ったオブジェクトの通知のしきい値：" tool_tip="受信したオブジェクトのオファーが制限されるまでの１０秒までのしきい値を設定する。デフォルトは５" name="FSOfferThrottleMaxCount" />
+		</panel>
 
-    <!-- Alerts -->
-    <panel label="アラート" name="tab-alerts">
-      <text tool_tip="ビューアのアラート一覧です。左のマークをチェックするとアラートが有効になり、チェックを外すと非表示になります。" name="show_label">表示／非表示可能なビューアのアラート：</text>
-      <filter_editor label="Filter Alerts" tool_tip="検索語を入力してください。検索結果は、全文の一部が一致した場合に表示されます。" name="popup_filter" />
-      <!-- Making scroll lists follow="all" results in all kinds of havoc :( -Zi -->
-      <scroll_list name="all_popups">
-        <!-- using a blank padding column to make things look prettier, since "halign" doesn't seem to work for checkboxes -Zi -->
-        <column label="" name="make_pretty" />
-        <column label="表示" name="alert_enabled_check" />
-        <column label="アラート" name="alert_label" />
-      </scroll_list>
-    </panel>
+		<!-- Alerts -->
+		<panel label="アラート" name="tab-alerts">
+			<text tool_tip="ビューアのアラート一覧です。左のマークをチェックするとアラートが有効になり、チェックを外すと非表示になります。" name="show_label">表示／非表示可能なビューアのアラート：</text>
+			<filter_editor label="フィルタするアラート" tool_tip="検索語を入力してください。検索結果は、全文の一部が一致した場合に表示されます。" name="popup_filter" />
+			<!-- Making scroll lists follow="all" results in all kinds of havoc :( -Zi -->
+			<scroll_list name="all_popups">
+				<!-- using a blank padding column to make things look prettier, since "halign" doesn't seem to work for checkboxes -Zi -->
+				<column label="" name="make_pretty" />
+				<column label="表示" name="alert_enabled_check" />
+				<column label="アラート" name="alert_label" />
+			</scroll_list>
+		</panel>
 
-  </tab_container>
+	</tab_container>
 </panel>

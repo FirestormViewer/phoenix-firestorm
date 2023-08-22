@@ -1,79 +1,79 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <pie_menu name="Object Pie">
-  <pie_slice label="開く" name="Open" />
-  <pie_slice label="閉じる" name="Build" />
-  <pie_slice label="触る" name="Pie Object Touch" />
-  <pie_slice label="ここに座る" name="Pie Object Sit" />
-  <pie_slice label="立ち上がる" name="Object Stand Up" />
-  <pie_slice label="買う" name="Buy..." />
-  <pie_slice label="取る" name="Pie Object Take" />
-  <pie_slice label="支払う" name="Pay..." />
+	<pie_slice label="開く" name="Open" />
+	<pie_slice label="閉じる" name="Build" />
+	<pie_slice label="触る" name="Pie Object Touch" />
+	<pie_slice label="ここに座る" name="Pie Object Sit" />
+	<pie_slice label="立ち上がる" name="Object Stand Up" />
+	<pie_slice label="買う" name="Buy..." />
+	<pie_slice label="取る" name="Pie Object Take" />
+	<pie_slice label="支払う" name="Pay..." />
 
-  <pie_menu label="続き　▶" name="Object Pie More 1">
-    <pie_slice label="削除" name="Delete" />
-    <pie_slice label="着る" name="Wear" />
-    <pie_slice label="コピーを取る" name="Take Copy" />
-    <pie_menu label="ＨＵＤを装着　▶" name="Pie Object Attach HUD" />
-    <pie_menu label="装着　▶" name="Pie Object Attach">
-      <pie_menu label="拡張スケルトン　▶" name="Enhanced Skeleton">
-        <pie_slice label="右の翼" name="Right Wing" />
-        <pie_slice label="股間" name="Groin" />
-        <pie_slice label="尻尾の根本" name="Tail Base" />
-        <pie_slice label="尻尾の先端" name="Tail Tip" />
-        <pie_slice label="左の翼" name="Left Wing" />
-        <pie_slice label="右後ろ足" name="Left Hind Foot" />
-        <pie_menu label="続き　▶" name="Enhanced Skeleton More" />
-        <pie_slice label="左後ろ足" name="Right Hind Foot" />
-      </pie_menu>
-    </pie_menu>
-    <pie_slice label="返却" name="Return..." />
+	<pie_menu label="続き　▶" name="Object Pie More 1">
+		<pie_slice label="削除" name="Delete" />
+		<pie_slice label="着る" name="Wear" />
+		<pie_slice label="コピーを取る" name="Take Copy" />
+		<pie_menu label="ＨＵＤを装着　▶" name="Pie Object Attach HUD" />
+		<pie_menu label="装着　▶" name="Pie Object Attach">
+			<pie_menu label="拡張スケルトン　▶" name="Enhanced Skeleton">
+				<pie_slice label="右の翼" name="Right Wing" />
+				<pie_slice label="股間" name="Groin" />
+				<pie_slice label="尻尾の根本" name="Tail Base" />
+				<pie_slice label="尻尾の先端" name="Tail Tip" />
+				<pie_slice label="左の翼" name="Left Wing" />
+				<pie_slice label="右後ろ足" name="Left Hind Foot" />
+				<pie_menu label="続き　▶" name="Enhanced Skeleton More" />
+				<pie_slice label="左後ろ足" name="Right Hind Foot" />
+			</pie_menu>
+		</pie_menu>
+		<pie_slice label="返却" name="Return..." />
 
-    <pie_menu label="続き　▶" name="Object Pie More 2">
-      <pie_menu name="ResetMenu" label="リセット　▶">
-        <pie_slice label="テクスチャのリフレシュ" name="Texture Refresh" />
-        <pie_slice label="スケルトン" name="Reset Skeleton" />
-      </pie_menu>
-      <pie_menu name="DerenderMenu" label="描画しない　▶">
-        <pie_slice label="ブラックリスト" name="DerenderPermanent" />
-        <pie_slice label="一時的" name="Derender" />
-      </pie_menu>
-      <pie_slice label="嫌がらせの報告…" name="Report Abuse..." />
-      <pie_menu name="ExportMenu" label="別名で保存　▶">
-        <pie_slice label="バックアップ" name="Backup" />
-        <pie_slice label="Collada" name="Collada" />
-        <pie_slice label="ＸＭＬダンプ" name="Dump XML" />
-      </pie_menu>
+		<pie_menu label="続き　▶" name="Object Pie More 2">
+			<pie_menu name="ResetMenu" label="リセット　▶">
+				<pie_slice label="テクスチャのリフレシュ" name="Texture Refresh" />
+				<pie_slice label="スケルトン" name="Reset Skeleton" />
+			</pie_menu>
+			<pie_menu name="DerenderMenu" label="描画しない　▶">
+				<pie_slice label="ブラックリスト" name="DerenderPermanent" />
+				<pie_slice label="一時的" name="Derender" />
+			</pie_menu>
+			<pie_slice label="嫌がらせの報告…" name="Report Abuse..." />
+			<pie_menu name="ExportMenu" label="別名で保存　▶">
+				<pie_slice label="バックアップ" name="Backup" />
+				<pie_slice label="Collada" name="Collada" />
+				<pie_slice label="ＸＭＬダンプ" name="Dump XML" />
+			</pie_menu>
 
-      <!-- Phoenix has "Disable" here, which we haven't implemented yet.
+			<!-- Phoenix has "Disable" here, which we haven't implemented yet.
      Might get interesting when we finally do ... -->
-      <!-- <pie_separator name="disable_placeholder" /> -->
-      <pie_menu label="経路探索　▶" name="Pathfinding">
-        <pie_slice label="リンクセットを表示" name="show_in_linksets" />
-        <pie_slice label="キャラクターを表示" name="show_in_characters" />
-        <!-- FIXME: pie menu crashes if the last item in a pie_menu is an autohide item -Zi -->
-        <pie_separator name="autohide_end_crash_protection" />
-      </pie_menu>
+			<!-- <pie_separator name="disable_placeholder" /> -->
+			<pie_menu label="経路探索　▶" name="Pathfinding">
+				<pie_slice label="リンクセットを表示" name="show_in_linksets" />
+				<pie_slice label="キャラクターを表示" name="show_in_characters" />
+				<!-- FIXME: pie menu crashes if the last item in a pie_menu is an autohide item -Zi -->
+				<pie_separator name="autohide_end_crash_protection" />
+			</pie_menu>
 
-      <pie_menu name="mute_menu" label="ミュート　▶">
-        <pie_slice label="ミュート" name="Object Mute" />
-        <pie_slice label="パーティクル" name="Mute Particle" />
-      </pie_menu>
+			<pie_menu name="mute_menu" label="ミュート　▶">
+				<pie_slice label="ミュート" name="Object Mute" />
+				<pie_slice label="パーティクル" name="Mute Particle" />
+			</pie_menu>
 
-      <pie_menu label="スクリプト　▶" name="ScriptsMenu">
-        <pie_slice label="コンパイル（Ｍｏｎｏ）" name="CompileMono" />
-        <pie_slice label="コンパイル（ＬＳＬ）" name="CompileLSL" />
-        <pie_slice label="スクリプトをリセット" name="Object Reset Scripts" />
-        <pie_slice label="スクリプトを走らせる" name="Object Set Scripts to Running" />
-        <pie_slice label="スクリプトを停止" name="Object Set Scripts to Not Running" />
-        <pie_slice label="スクリプトを削除" name="Remove Scripts From Selection" />
-        <pie_slice label="スクリプト情報" name="ScriptInfo" />
-      </pie_menu>
+			<pie_menu label="スクリプト　▶" name="ScriptsMenu">
+				<pie_slice label="コンパイル（Ｍｏｎｏ）" name="CompileMono" />
+				<pie_slice label="コンパイル（ＬＳＬ）" name="CompileLSL" />
+				<pie_slice label="スクリプトをリセット" name="Object Reset Scripts" />
+				<pie_slice label="スクリプトを走らせる" name="Object Set Scripts to Running" />
+				<pie_slice label="スクリプトを停止" name="Object Set Scripts to Not Running" />
+				<pie_slice label="スクリプトを削除" name="Remove Scripts From Selection" />
+				<pie_slice label="スクリプト情報" name="ScriptInfo" />
+			</pie_menu>
 
-      <pie_slice label="調査" name="Object Inspect" />
-    </pie_menu>
+			<pie_slice label="調査" name="Object Inspect" />
+		</pie_menu>
 
-    <pie_slice label="購入" name="Buy..." />
-  </pie_menu>
+		<pie_slice label="購入" name="Buy..." />
+	</pie_menu>
 
-  <pie_slice label="編集" name="Edit..." />
+	<pie_slice label="編集" name="Edit..." />
 </pie_menu>

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
-  <panel label="ボトムパネル" name="blocked_buttons_panel">
-    <filter_editor label="フィルタ" name="blocked_filter_input" />
-    <menu_button name="blocked_gear_btn" tool_tip="選択した人物かオブジェクトに対する操作をします。" />
-    <menu_button name="view_btn" tool_tip="並び替えオプション" />
-    <menu_button name="plus_btn" tool_tip="ブロックしたい住民かオブジェクトを選択します。" />
-    <button name="unblock_btn" tool_tip="ブロックリストから住民かオブジェクトを削除します。" />
-  </panel>
-  <text name="block_limit">ブロックされたエントリ：全[LIMIT]件中[COUNT]件</text>
-  <fs_scroll_list name="block_list">
-    <fs_scroll_list.columns name="item_name" label="名前" />
-    <fs_scroll_list.columns name="item_type" label="種類" />
-    <fs_scroll_list.columns name="item_mute_type" />
-    <fs_scroll_list.columns name="item_mute_uuid"/>
-  </fs_scroll_list>
+	<panel label="ボトムパネル" name="blocked_buttons_panel">
+		<filter_editor label="フィルタ" name="blocked_filter_input" />
+		<menu_button name="blocked_gear_btn" tool_tip="選択した人物かオブジェクトに対する操作をします。" />
+		<menu_button name="view_btn" tool_tip="並び替えオプション" />
+		<menu_button name="plus_btn" tool_tip="ブロックしたい住民かオブジェクトを選択します。" />
+		<button name="unblock_btn" tool_tip="ブロックリストから住民かオブジェクトを削除します。" />
+	</panel>
+	<text name="block_limit">ブロックされたエントリ：全[LIMIT]件中[COUNT]件</text>
+	<fs_scroll_list name="block_list">
+		<fs_scroll_list.columns name="item_name" label="名前" />
+		<fs_scroll_list.columns name="item_type" label="種類" />
+		<fs_scroll_list.columns name="item_mute_type" />
+		<fs_scroll_list.columns name="item_mute_uuid"/>
+	</fs_scroll_list>
 </panel>

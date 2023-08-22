@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_placedetails" title="ランドマーク">
-  <string name="title_place">場所の詳細</string>
-  <string name="title_remote_place">場所の詳細</string>
-  <string name="title_remote_place_detail">場所の詳細：[NAME]</string>
-  <string name="title_landmark">ランドマーク</string>
-  <string name="title_landmark_detail">ランドマーク：[NAME]</string>
-  <string name="title_create_landmark">ランドマーク作成</string>
-  <string name="title_teleport_history_item">テレポート履歴の詳細：[NAME]</string>
-  <panel name="panel_landmark_info" />
-  <panel name="panel_place_profile" />
-  <panel name="button_panel">
-    <layout_stack name="bottom_bar_ls0">
-      <layout_panel name="lp1">
-        <layout_stack name="bottom_bar_ls1">
-          <layout_panel name="teleport_btn_lp">
-            <button label="テレポート" name="teleport_btn" tool_tip="選択したエリアにテレポート" />
-          </layout_panel>
-          <layout_panel name="map_btn_lp">
-            <button label="マップ" name="map_btn" tool_tip="ワールドマップ上の対応するエリアを表示します。" />
-          </layout_panel>
-          <layout_panel name="overflow_btn_lp">
-            <menu_button name="overflow_btn" tool_tip="追加設定を表示します。" />
-          </layout_panel>
-        </layout_stack>
-      </layout_panel>
-    </layout_stack>
-    <layout_stack name="bottom_bar_ls1">
-      <layout_panel name="lp2">
-        <layout_stack name="bottom_bar_close_ls3">
-          <layout_panel name="close_btn_lp">
-            <button label="閉じる" name="close_btn" />
-          </layout_panel>
-        </layout_stack>
-      </layout_panel>
-    </layout_stack>
-    <layout_stack name="bottom_bar_ls2">
-      <layout_panel name="save_btn_lp">
-        <button label="保存" name="save_btn" />
-      </layout_panel>
-      <layout_panel name="cancel_btn_lp">
-        <button label="キャンセル" name="cancel_btn" />
-      </layout_panel>
-    </layout_stack>
-  </panel>
+	<string name="title_place">場所の詳細</string>
+	<string name="title_remote_place">場所の詳細</string>
+	<string name="title_remote_place_detail">場所の詳細：[NAME]</string>
+	<string name="title_landmark">ランドマーク</string>
+	<string name="title_landmark_detail">ランドマーク：[NAME]</string>
+	<string name="title_create_landmark">ランドマーク作成</string>
+	<string name="title_teleport_history_item">テレポート履歴の詳細：[NAME]</string>
+	<panel name="panel_landmark_info" />
+	<panel name="panel_place_profile" />
+	<panel name="button_panel">
+		<layout_stack name="bottom_bar_ls0">
+			<layout_panel name="lp1">
+				<layout_stack name="bottom_bar_ls1">
+					<layout_panel name="teleport_btn_lp">
+						<button label="テレポート" name="teleport_btn" tool_tip="選択したエリアにテレポート" />
+					</layout_panel>
+					<layout_panel name="map_btn_lp">
+						<button label="マップ" name="map_btn" tool_tip="ワールドマップ上の対応するエリアを表示します。" />
+					</layout_panel>
+					<layout_panel name="overflow_btn_lp">
+						<menu_button name="overflow_btn" tool_tip="追加設定を表示します。" />
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>
+		<layout_stack name="bottom_bar_ls1">
+			<layout_panel name="lp2">
+				<layout_stack name="bottom_bar_close_ls3">
+					<layout_panel name="close_btn_lp">
+						<button label="閉じる" name="close_btn" />
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>
+		<layout_stack name="bottom_bar_ls2">
+			<layout_panel name="save_btn_lp">
+				<button label="保存" name="save_btn" />
+			</layout_panel>
+			<layout_panel name="cancel_btn_lp">
+				<button label="キャンセル" name="cancel_btn" />
+			</layout_panel>
+		</layout_stack>
+	</panel>
 </floater>

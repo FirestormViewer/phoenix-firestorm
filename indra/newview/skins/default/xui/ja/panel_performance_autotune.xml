@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_performance_autotune">
-  <button name="back_btn" />
-  <text name="back_lbl">戻る</text>
-  <text name="settings_title">自動調整の初期設定</text>
-  <view_border name="border1" />
-  <text name="quality_lbl">アバターの距離</text>
-  <check_box label="距離基準の最適化を有効化" name="FSAutoTuneImpostorByDistEnabled" tool_tip="有効にすると、ビューアはMaxNonImpostors設定を自動調整し、完全にレンダリングされたアバターを定義された半径内のアバターに制限します。" />
-  <spinner label="最も遠いフルアバター" name="ffa_autotune"/>
-  <text name="distant_av_advice">遠くのアバターは、レンダリングコストに関係なく自動的に最適化されます。
+	<button name="back_btn" />
+	<text name="back_lbl">戻る</text>
+	<text name="settings_title">自動調整の初期設定</text>
+	<view_border name="border1" />
+	<text name="quality_lbl">アバターの距離</text>
+	<check_box label="距離基準の最適化を有効化" name="FSAutoTuneImpostorByDistEnabled" tool_tip="有効にすると、ビューアはMaxNonImpostors設定を自動調整し、完全にレンダリングされたアバターを定義された半径内のアバターに制限します。" />
+	<spinner label="最も遠いフルアバター" name="ffa_autotune" />
+	<text name="distant_av_advice">遠くのアバターは、レンダリングコストに関係なく自動的に最適化されます。
 アバターが最適化されるカメラからの距離を設定します。
 注意：近くに誰もいない場合、このMaxNonImpostorsの設定を強制的に１にします。</text>
-  <view_border name="border2" />
-  <text name="distance_lbl">視認距離チューニングの限界</text>
-  <spinner label="最小距離" name="min_dd_autotune"/>
-  <spinner label="推奨距離" name="pref_dd_autotune"/>
-  <text name="distance_desc1">シーンパラメーターを調整する際、自動調整機能は最小描画距離と推奨描画距離の間の値を選択します。</text>
-  <view_border name="border2" />
-  <text name="sundry_lbl">各種設定</text>
-  <check_box label="自分のアバターを最適化できるようにする" name="alow_self_impostor" tool_tip="有効にすると、ビューアーは自分のアバターをインポスターとして表示することができます。" />
-  <check_box label="最適化されたレンダリング時間を表示する" name="show_tuned_art" tool_tip="有効にすると、[時間]カラムは、チューニング前のレンダリング時間ではなく、現在のレンダリング時間を表示するようになります。" />
-  <text name="sundry_desc1">これらのオプションは、より微妙な設定をコントロールします。オンラインヘルプページを使用して、これらのオプションの詳細情報を入手してください。</text>
+	<view_border name="border2" />
+	<text name="distance_lbl">視認距離チューニングの限界</text>
+	<spinner label="最小距離" name="min_dd_autotune" />
+	<spinner label="推奨距離" name="pref_dd_autotune" />
+	<text name="distance_desc1">シーンパラメーターを調整する際、自動調整機能は最小描画距離と推奨描画距離の間の値を選択します。</text>
+	<view_border name="border2" />
+	<text name="sundry_lbl">各種設定</text>
+	<check_box label="自分のアバターを最適化できるようにする" name="alow_self_impostor" tool_tip="有効にすると、ビューアーは自分のアバターをインポスターとして表示することができます。" />
+	<check_box label="最適化されたレンダリング時間を表示する" name="show_tuned_art" tool_tip="有効にすると、[時間]カラムは、チューニング前のレンダリング時間ではなく、現在のレンダリング時間を表示するようになります。" />
+	<text name="sundry_desc1">これらのオプションは、より微妙な設定をコントロールします。オンラインヘルプページを使用して、これらのオプションの詳細情報を入手してください。</text>
 </panel>

@@ -1,95 +1,95 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="general_panel" label="一般">
-  <!--language-->
-  <text name="language_textbox">言語：</text>
-  <combo_box name="language_combobox">
-    <combo_box.item enabled="true" label="英語（English）" name="English" value="en" />
-    <combo_box.item enabled="true" label="アゼルバイジャン語（Azərbaycanca）" name="Azerbaijani" value="az" />
-    <!--
-    <combo_box.item enabled="true" label="デンマーク語（Dansk）‐ベータ" name="Danish" value="da" />
+	<!--language-->
+	<text name="language_textbox">言語：</text>
+	<combo_box name="language_combobox">
+		<combo_box.item enabled="true" label="英語（English）" name="English" value="en" />
+		<combo_box.item enabled="true" label="アゼルバイジャン語（Azərbaycanca）" name="Azerbaijani" value="az" />
+		<!--
+		<combo_box.item enabled="true" label="デンマーク語（Dansk）‐ベータ" name="Danish" value="da" />
     -->
-    <combo_box.item enabled="true" label="ドイツ語（Deutsch）" name="Deutsch(German)" value="de" />
-    <combo_box.item enabled="true" label="スペイン語（Español）‐ベータ" name="Spanish" value="es" />
-    <combo_box.item enabled="true" label="フランス語（Français）‐ベータ" name="French" value="fr" />
-    <combo_box.item enabled="true" label="イタリア語（Italiano）‐ベータ" name="Italian" value="it" />
-    <combo_box.item enabled="true" label="ポーランド語（Polski）" name="Polish" value="pl" />
-    <!--
-    <combo_box.item enabled="true" label="ポルトガル語（Português）‐ベータ" name="Portugese" value="pt" />
+		<combo_box.item enabled="true" label="ドイツ語（Deutsch）" name="Deutsch(German)" value="de" />
+		<combo_box.item enabled="true" label="スペイン語（Español）‐ベータ" name="Spanish" value="es" />
+		<combo_box.item enabled="true" label="フランス語（Français）‐ベータ" name="French" value="fr" />
+		<combo_box.item enabled="true" label="イタリア語（Italiano）‐ベータ" name="Italian" value="it" />
+		<combo_box.item enabled="true" label="ポーランド語（Polski）" name="Polish" value="pl" />
+		<!--
+		<combo_box.item enabled="true" label="ポルトガル語（Português）‐ベータ" name="Portugese" value="pt" />
     -->
-    <combo_box.item enabled="true" label="ロシア語 (Русский)‐ベータ" name="Russian" value="ru" />
-    <!--
-    <combo_box.item enabled="true" label="トルコ語（Türkçe）‐ベータ" name="Turkish" value="tr" />
-    -->
-    <combo_box.item enabled="true" label="日本語 (Japanese)‐ベータ" name="(Japanese)" value="ja" />
-    <!--
-    <combo_box.item enabled="true" label="繁体字中国語（正體中文）‐ベータ" name="Traditional Chinese" value="zh" />
-    -->
-  </combo_box>
-  <text name="language_textbox2">（再起動する必要があります）</text>
-  <check_box label="ＩＭＥテキスト入力を使用" name="use_ime" tool_tip="日本語、中国語などの特定の言語にのみ必要な国際的な入力メソッドエディタを使用します。" />
-  <!--maturity-->
-  <text name="maturity_desired_prompt">アクセスしたいコンテンツのレーティング区分：</text>
-  <combo_box name="maturity_desired_combobox">
-    <combo_box.item label="General, Moderate, Adult" name="Desired_Adult" value="42" />
-    <combo_box.item label="General and Moderate" name="Desired_Mature" value="21" />
-    <combo_box.item label="General" name="Desired_PG" value="13" />
-  </combo_box>
-  <!-- this text will never show at the same time as the above combo, they can overlap -->
-  <text name="maturity_desired_textbox" />
-  <icon name="rating_icon_general" />
-  <icon name="rating_icon_moderate" />
-  <icon name="rating_icon_adult" />
+		<combo_box.item enabled="true" label="ロシア語 (Русский)‐ベータ" name="Russian" value="ru" />
+		<!--
+		<combo_box.item enabled="true" label="トルコ語（Türkçe）‐ベータ" name="Turkish" value="tr" />
+		-->
+		<combo_box.item enabled="true" label="日本語 (Japanese)‐ベータ" name="(Japanese)" value="ja" />
+		<!--
+		<combo_box.item enabled="true" label="繁体字中国語（正體中文）‐ベータ" name="Traditional Chinese" value="zh" />
+		-->
+	</combo_box>
+	<text name="language_textbox2">（再起動する必要があります）</text>
+	<check_box label="ＩＭＥテキスト入力を使用" name="use_ime" tool_tip="日本語、中国語などの特定の言語にのみ必要な国際的な入力メソッドエディタを使用します。" />
+	<!--maturity-->
+	<text name="maturity_desired_prompt">アクセスしたいコンテンツのレーティング区分：</text>
+	<combo_box name="maturity_desired_combobox">
+		<combo_box.item label="General、Moderateおよび、Adult" name="Desired_Adult" value="42" />
+		<combo_box.item label="GeneralとModerate" name="Desired_Mature" value="21" />
+		<combo_box.item label="General" name="Desired_PG" value="13" />
+	</combo_box>
+	<!-- this text will never show at the same time as the above combo, they can overlap -->
+	<text name="maturity_desired_textbox" />
+	<icon name="rating_icon_general" />
+	<icon name="rating_icon_moderate" />
+	<icon name="rating_icon_adult" />
 
-  <!--start location-->
-  <text name="start_location_textbox">開始位置：</text>
-  <combo_box name="start_location_combo">
-    <combo_box.item label="最後にいた場所" name="MyLastLocation" value="last" />
-    <combo_box.item label="ホーム" name="MyHome" value="home" />
-  </combo_box>
-  <check_box label="ログイン時に表示" name="show_location_checkbox" tool_tip="" />
+	<!--start location-->
+	<text name="start_location_textbox">開始位置：</text>
+	<combo_box name="start_location_combo">
+		<combo_box.item label="最後にいた場所" name="MyLastLocation" value="last" />
+		<combo_box.item label="ホーム" name="MyHome" value="home" />
+	</combo_box>
+	<check_box label="ログイン時に表示" name="show_location_checkbox" tool_tip="" />
 
-  <!--name tags-->
-  <text name="name_tags_textbox">名前タグ：</text>
-  <radio_group name="Name_Tag_Preference">
-    <radio_item label="オフ" name="radio" />
-    <radio_item label="オン" name="radio2" />
-    <radio_item label="簡易表示" name="radio3" />
-  </radio_group>
-  <text name="RenderNameShowTime_LabelPrefix">（</text>
-  <spinner name="RenderNameShowTime" />
-  <text name="RenderNameShowTime_LabelSuffix">秒）</text>
-  <check_box label="自分の名前" name="show_my_name_checkbox1" tool_tip="" />
-  <check_box label="ユーザ名" name="show_slids" tool_tip="bobsmith123のようなユーザ名を表示します。" />
-  <check_box label="グループのタイトル" name="show_all_title_checkbox1" tool_tip="オフィサーやメンバーなどのグループタイトルを表示します。" />
-  <check_box label="自分のグループのタイトルを隠す" name="RenderHideGroupTitle" tool_tip="自分のグループタイトルの表示／非表示を設定できます。" />
-  <check_box label="表示名を表示" name="display_names_check" tool_tip="チャット、ＩＭ、名前タグなどで表示名を使用するかチェックします。" />
-  <check_box label="ユーザー名の代わりにレガシー名を表示" name="FSshow_legacyun" tool_tip="ユーザー名（firstname.lastname）の代わりにレガシー名（Firstname Lastname）で表示する。" />
-  <check_box label="フレンドをハイライトする" name="show_friends" tool_tip="フレンドの名前タグを強調表示する。" />
-  <check_box label="レガシー名から「Resident」を隠す" name="legacy_trim_check" tool_tip="レガシー名から「Resident」を取り除く" />
-  <check_box label="レガシーの名前タグの位置の使用" name="FSLegacyNametagPosition" tool_tip="有効にすると、名前タグはアバターの位置に固定され、アニメーションによってアバターの頭部が動いても追従しません。" />
-  <check_box label="名前タグに自動返信モードを表示する" name="FSShowAutorespondInNameTag" tool_tip="これにより、自分の名前タグに自動応答が有効になっているかどうかが表示されます。" />
-  <check_box label="アバターの複雑度を表示" name="FSTagShowARW" tool_tip="有効にすると、名前タグに現在のアバターの複雑度が表示されます。" />
-  <check_box label="複雑すぎる場合のみ" name="FSTagShowTooComplexOnlyARW" tool_tip="有効にすると、アバターの複雑度が高すぎてJellyDollとして表示されている場合のみ、名前タグに現在のアバターの複雑度が表示されます。" />
-  <check_box label="自分の複雑度を表示" name="FSTagShowOwnARW" tool_tip="有効にすると、自分の名前タグが現在のアバターの複雑度になります。" />
+	<!--name tags-->
+	<text name="name_tags_textbox">名前タグ：</text>
+	<radio_group name="Name_Tag_Preference">
+		<radio_item label="オフ" name="radio" />
+		<radio_item label="オン" name="radio2" />
+		<radio_item label="簡易表示" name="radio3" />
+	</radio_group>
+	<text name="RenderNameShowTime_LabelPrefix">（</text>
+	<spinner name="RenderNameShowTime" />
+	<text name="RenderNameShowTime_LabelSuffix">秒）</text>
+	<check_box label="自分の名前" name="show_my_name_checkbox1" tool_tip="" />
+	<check_box label="ユーザ名" name="show_slids" tool_tip="bobsmith123のようなユーザ名を表示します。" />
+	<check_box label="グループのタイトル" name="show_all_title_checkbox1" tool_tip="オフィサーやメンバーなどのグループタイトルを表示します。" />
+	<check_box label="自分のグループのタイトルを隠す" name="RenderHideGroupTitle" tool_tip="自分のグループタイトルの表示／非表示を設定できます。" />
+	<check_box label="表示名を表示" name="display_names_check" tool_tip="チャット、ＩＭ、名前タグなどで表示名を使用するかチェックします。" />
+	<check_box label="ユーザー名の代わりにレガシー名を表示" name="FSshow_legacyun" tool_tip="ユーザー名（firstname.lastname）の代わりにレガシー名（Firstname Lastname）で表示する。" />
+	<check_box label="フレンドをハイライトする" name="show_friends" tool_tip="フレンドの名前タグを強調表示する。" />
+	<check_box label="レガシー名から「Resident」を隠す" name="legacy_trim_check" tool_tip="レガシー名から「Resident」を取り除く" />
+	<check_box label="レガシーの名前タグの位置の使用" name="FSLegacyNametagPosition" tool_tip="有効にすると、名前タグはアバターの位置に固定され、アニメーションによってアバターの頭部が動いても追従しません。" />
+	<check_box label="名前タグに自動返信モードを表示する" name="FSShowAutorespondInNameTag" tool_tip="これにより、自分の名前タグに自動応答が有効になっているかどうかが表示されます。" />
+	<check_box label="アバターの複雑度を表示" name="FSTagShowARW" tool_tip="有効にすると、名前タグに現在のアバターの複雑度が表示されます。" />
+	<check_box label="複雑すぎる場合のみ" name="FSTagShowTooComplexOnlyARW" tool_tip="有効にすると、アバターの複雑度が高すぎてJellyDollとして表示されている場合のみ、名前タグに現在のアバターの複雑度が表示されます。" />
+	<check_box label="自分の複雑度を表示" name="FSTagShowOwnARW" tool_tip="有効にすると、自分の名前タグが現在のアバターの複雑度になります。" />
 
-  <!--away/logout-->
-  <text name="title_afk_text">離席までの時間：</text>
-  <text name="title_afk_quit_text">マークが消えたらログアウトする：</text>
-  <combo_box label="離席までの時間：" top_delta="0" name="afk" tool_tip="">
-    <combo_box.item label="２分" name="item0" value="120" />
-    <combo_box.item label="５分" name="item1" value="300" />
-    <combo_box.item label="１０分" name="item2" value="600" />
-    <combo_box.item label="３０分" name="item3" value="1800" />
-    <combo_box.item label="１時間" name="item4" value="3600" />
-    <combo_box.item label="しない" name="item5" value="0" />
-  </combo_box>
-  <check_box name="AvatarSitOnAway" label="離席時は座る" tool_tip="" />
-  <combo_box name="quitafk" tool_tip="">
-    <combo_box.item label="２分" name="item0" value="120" />
-    <combo_box.item label="５分" name="item1" value="300" />
-    <combo_box.item label="１０分" name="item2" value="600" />
-    <combo_box.item label="３０分" name="item3" value="1800" />
-    <combo_box.item label="しない" name="item4" value="0" />
-  </combo_box>
-  <text name="text_box3">利用できないメッセージと自動応答メッセージは、プライバシー／自動応答の下にあります。</text>
+	<!--away/logout-->
+	<text name="title_afk_text">離席までの時間：</text>
+	<text name="title_afk_quit_text">マークが消えたらログアウトする：</text>
+	<combo_box label="離席までの時間：" top_delta="0" name="afk" tool_tip="">
+		<combo_box.item label="２分" name="item0" value="120" />
+		<combo_box.item label="５分" name="item1" value="300" />
+		<combo_box.item label="１０分" name="item2" value="600" />
+		<combo_box.item label="３０分" name="item3" value="1800" />
+		<combo_box.item label="１時間" name="item4" value="3600" />
+		<combo_box.item label="しない" name="item5" value="0" />
+	</combo_box>
+	<check_box name="AvatarSitOnAway" label="離席時は座る" tool_tip="" />
+	<combo_box name="quitafk" tool_tip="">
+		<combo_box.item label="２分" name="item0" value="120" />
+		<combo_box.item label="５分" name="item1" value="300" />
+		<combo_box.item label="１０分" name="item2" value="600" />
+		<combo_box.item label="３０分" name="item3" value="1800" />
+		<combo_box.item label="しない" name="item4" value="0" />
+	</combo_box>
+	<text name="text_box3">利用できないメッセージと自動応答メッセージは、プライバシー／自動応答の下にあります。</text>
 </panel>

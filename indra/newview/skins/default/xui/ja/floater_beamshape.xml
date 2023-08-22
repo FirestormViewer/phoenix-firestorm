@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="BeamCreator" title="ビームシェイプクリエイター">
-  <text name="beamcreator_text">新しいビームを作成するには、下のパネルを左クリックして選択した
+	<text name="beamcreator_text">新しいビームを作成するには、下のパネルを左クリックして選択した
 色のビーム光線を定義するか、右クリックして光線を削除します。
 完了したら保存ボタンを押します。</text>
-  <color_swatch name="beam_color_swatch" tool_tip="ここをクリックでカラーピッカーが開き、ドットの色を変更できます。" />
-  <panel name="beamshape_draw" />
-  <button label="保存" name="beamshape_save" />
-  <button label="読み込む" name="beamshape_load" />
-  <button label="クリア" name="beamshape_clear" />
-  <button label="キャンセル" name="cancel" />
+	<color_swatch name="beam_color_swatch" tool_tip="ここをクリックでカラーピッカーが開き、ドットの色を変更できます。" />
+	<panel name="beamshape_draw" />
+	<button label="保存" name="beamshape_save" />
+	<button label="読み込む" name="beamshape_load" />
+	<button label="クリア" name="beamshape_clear" />
+	<button label="キャンセル" name="cancel" />
 </floater> 

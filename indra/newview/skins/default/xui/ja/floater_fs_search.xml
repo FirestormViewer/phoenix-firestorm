@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_fs_search" title="Firestorm検索">
-  <!-- Strings -->
-  <floater.string name="string.location">位置：[LOCATION]</floater.string>
-  <floater.string name="string.traffic">トラフィック：[DWELL]</floater.string>
-  <floater.string name="string.area">場所：[AREA]</floater.string>
-  <floater.string name="string.members">メンバー数：[MEMBER_COUNT]名</floater.string>
-  <floater.string name="string.founder">創設者：[FOUNDER]</floater.string>
-  <floater.string name="string.age">年齢：[AGE]</floater.string>
-  <floater.string name="string.partner">パートナー：[PARTNER]</floater.string>
-  <floater.string name="string.listing_price">掲載料：[LISTING_PRICE]</floater.string>
-  <floater.string name="string.slurl">[SLURL]</floater.string>
-  <floater.string name="string.duration">期間：[DURATION]</floater.string>
-  <floater.string name="string.covercharge">サービス料：[COVERCHARGE]</floater.string>
-  <!-- Tab time -->
-  <tab_container name="ls_tabs">
-    <panel label="Web検索" name="panel_ls_web" />
-    <panel label="人物" name="panel_ls_people" />
-    <panel label="グループ" name="panel_ls_groups" />
-    <panel label="場所" name="panel_ls_places" />
-    <panel label="不動産販売" name="panel_ls_land" />
-    <panel label="イベント" name="panel_ls_events" />
-    <panel label="クラシファイド広告" name="panel_ls_classifieds" />
-  </tab_container>
-  <!-- Details/Action Panes -->
-  <panel name="panel_ls_details">
-    <text_editor name="title" value="未定義の名前" />
-    <texture_picker name="snapshot" />
-    <texture_picker name="snapshot_parcel" />
-    <text_editor name="aux1" value="補助情報フィールド１" />
-    <text_editor name="aux2" value="補助情報フィールド２" />
-    <icon name="maturity_icon" />
-    <text_editor name="location" value="位置情報のフィールド" />
-    <text_editor name="desc" value="想像力の鍵でこの扉を開けるのだ。音の次元、視覚の次元、心の次元。トワイライト・ゾーンに足を踏み入れたのだ。スクリーンに映し出される訴訟当事者たちは俳優ではない。彼らは本物の市民であり、本物の小額裁判所に訴えを起こした後、そこでの訴えを取り下げ、この場、つまり人民裁判所で解決するよう説得されているのだ。" />
-    <button label="プロフィールを表示" name="people_profile_btn" />
-    <button label="メッセージを送る" name="people_message_btn" />
-    <button label="フレンドに追加" name="people_friend_btn" />
-    <!-- 原文がOpen Profile -->
-    <button label="プロフィールを表示" name="group_profile_btn" />
-    <button label="チャットに参加" name="group_message_btn" />
-    <button label="グループに参加" name="group_join_btn" />
-    <button label="テレポート" name="teleport_btn" />
-    <button label="マップ上に表示" name="map_btn" />
-    <button label="通知" name="event_reminder_btn" />
-    <loading_indicator name="loading">
-      <images>
-        <image name="ProgressLarge_1" />
-        <image name="ProgressLarge_2" />
-        <image name="ProgressLarge_3" />
-        <image name="ProgressLarge_4" />
-        <image name="ProgressLarge_5" />
-        <image name="ProgressLarge_6" />
-        <image name="ProgressLarge_7" />
-        <image name="ProgressLarge_8" />
-        <image name="ProgressLarge_9" />
-        <image name="ProgressLarge_10" />
-        <image name="ProgressLarge_11" />
-        <image name="ProgressLarge_12" />
-      </images>
-    </loading_indicator>
-  </panel>
+	<!-- Strings -->
+	<floater.string name="string.location">位置：[LOCATION]</floater.string>
+	<floater.string name="string.traffic">トラフィック：[DWELL]</floater.string>
+	<floater.string name="string.area">場所：[AREA]</floater.string>
+	<floater.string name="string.members">メンバー数：[MEMBER_COUNT]名</floater.string>
+	<floater.string name="string.founder">創設者：[FOUNDER]</floater.string>
+	<floater.string name="string.age">年齢：[AGE]</floater.string>
+	<floater.string name="string.partner">パートナー：[PARTNER]</floater.string>
+	<floater.string name="string.listing_price">掲載料：[LISTING_PRICE]</floater.string>
+	<floater.string name="string.slurl">[SLURL]</floater.string>
+	<floater.string name="string.duration">期間：[DURATION]</floater.string>
+	<floater.string name="string.covercharge">サービス料：[COVERCHARGE]</floater.string>
+	<!-- Tab time -->
+	<tab_container name="ls_tabs">
+		<panel label="Web検索" name="panel_ls_web" />
+		<panel label="人物" name="panel_ls_people" />
+		<panel label="グループ" name="panel_ls_groups" />
+		<panel label="場所" name="panel_ls_places" />
+		<panel label="不動産販売" name="panel_ls_land" />
+		<panel label="イベント" name="panel_ls_events" />
+		<panel label="クラシファイド広告" name="panel_ls_classifieds" />
+	</tab_container>
+	<!-- Details/Action Panes -->
+	<panel name="panel_ls_details">
+		<text_editor name="title" value="未定義の名前" />
+		<texture_picker name="snapshot" />
+		<texture_picker name="snapshot_parcel" />
+		<text_editor name="aux1" value="補助情報フィールド１" />
+		<text_editor name="aux2" value="補助情報フィールド２" />
+		<icon name="maturity_icon" />
+		<text_editor name="location" value="位置情報のフィールド" />
+		<text_editor name="desc" value="想像力の鍵でこの扉を開けるのだ。音の次元、視覚の次元、心の次元。トワイライト・ゾーンに足を踏み入れたのだ。スクリーンに映し出される訴訟当事者たちは俳優ではない。彼らは本物の市民であり、本物の小額裁判所に訴えを起こした後、そこでの訴えを取り下げ、この場、つまり人民裁判所で解決するよう説得されているのだ。" />
+		<button label="プロフィールを表示" name="people_profile_btn" />
+		<button label="メッセージを送る" name="people_message_btn" />
+		<button label="フレンドに追加" name="people_friend_btn" />
+		<!-- 原文がOpen Profile -->
+		<button label="プロフィールを表示" name="group_profile_btn" />
+		<button label="チャットに参加" name="group_message_btn" />
+		<button label="グループに参加" name="group_join_btn" />
+		<button label="テレポート" name="teleport_btn" />
+		<button label="マップ上に表示" name="map_btn" />
+		<button label="通知" name="event_reminder_btn" />
+		<loading_indicator name="loading">
+			<images>
+				<image name="ProgressLarge_1" />
+				<image name="ProgressLarge_2" />
+				<image name="ProgressLarge_3" />
+				<image name="ProgressLarge_4" />
+				<image name="ProgressLarge_5" />
+				<image name="ProgressLarge_6" />
+				<image name="ProgressLarge_7" />
+				<image name="ProgressLarge_8" />
+				<image name="ProgressLarge_9" />
+				<image name="ProgressLarge_10" />
+				<image name="ProgressLarge_11" />
+				<image name="ProgressLarge_12" />
+			</images>
+		</loading_indicator>
+	</panel>
 </floater>

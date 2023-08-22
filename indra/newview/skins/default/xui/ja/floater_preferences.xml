@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Preferences" title="初期設定">
-  <button label="ＯＫ" label_selected="ＯＫ" name="OK" />
-  <button label="キャンセル" label_selected="キャンセル" name="Cancel" />
-  <panel name="search_panel">
-    <search_editor label="設定を検索" name="search_prefs_edit" tool_tip="ここに検索語句を入力してください。検索結果は、設定名またはコメント内で部分的に全文一致した場合に表示されます。" />
-    <button name="copy_search_slurl_btn" tool_tip="検索クエリをSurlにしてコピーします。" />
-  </panel>
-  <tab_container name="pref core">
-    <panel label="一般" name="general" />
-    <panel label="チャット" name="chat" />
-    <panel label="色" name="colors" />
-    <panel label="グラフィック" name="display" />
-    <panel label="サウンドとメディア" name="audio" />
-    <panel label="ネットとファイル" name="input" />
-    <panel label="移動と表示" name="move" />
-    <panel label="操作" name="controls" />
-    <panel label="通知" name="msgs" />
-    <panel label="プライバシー" name="im" />
-    <panel label="拡張" name="advanced1" />
-    <panel label="ＵＩ" name="ui" />
-    <panel label="スキン" name="skins" />
-    <panel label="クラッシュ報告" name="crashreports" />
-    <panel label="Firestorm" name="firestorm" />
-    <panel label="Opensim" name="opensim" />
-    <panel label="バックアップと復元" name="backup" />
-  </tab_container>
+	<button label="ＯＫ" label_selected="ＯＫ" name="OK" />
+	<button label="キャンセル" label_selected="キャンセル" name="Cancel" />
+	<panel name="search_panel">
+		<search_editor label="設定を検索" name="search_prefs_edit" tool_tip="ここに検索語句を入力してください。検索結果は、設定名またはコメント内で部分的に全文一致した場合に表示されます。" />
+		<button name="copy_search_slurl_btn" tool_tip="検索クエリをSurlにしてコピーします。" />
+	</panel>
+	<tab_container name="pref core">
+		<panel label="一般" name="general" />
+		<panel label="チャット" name="chat" />
+		<panel label="色" name="colors" />
+		<panel label="グラフィック" name="display" />
+		<panel label="サウンドとメディア" name="audio" />
+		<panel label="ネットとファイル" name="input" />
+		<panel label="移動と表示" name="move" />
+		<panel label="操作" name="controls" />
+		<panel label="通知" name="msgs" />
+		<panel label="プライバシー" name="im" />
+		<panel label="拡張" name="advanced1" />
+		<panel label="ＵＩ" name="ui" />
+		<panel label="スキン" name="skins" />
+		<panel label="クラッシュ報告" name="crashreports" />
+		<panel label="Firestorm" name="firestorm" />
+		<panel label="Opensim" name="opensim" />
+		<panel label="バックアップと復元" name="backup" />
+	</tab_container>
 </floater>

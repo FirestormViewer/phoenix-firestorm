@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="edit_hair_panel">
-  <panel name="avatar_hair_color_panel">
-    <texture_picker label="テクスチャ" name="Texture" tool_tip="クリックで画像を選択してください。" />
-  </panel>
-  <panel name="accordion_panel">
-    <accordion name="wearable_accordion">
-      <accordion_tab name="hair_color_tab" title="髪色">
-        <scrolling_panel_list name="hair_color_param_list" />
-      </accordion_tab>
-      <accordion_tab name="hair_style_tab" title="スタイル">
-        <scrolling_panel_list name="hair_style_param_list"/>
-      </accordion_tab>
-      <accordion_tab name="hair_eyebrows_tab" title="眉毛">
-        <scrolling_panel_list name="hair_eyebrows_param_list" />
-      </accordion_tab>
-      <accordion_tab name="hair_facial_tab" title="フェイシャル">
-        <scrolling_panel_list name="hair_facial_param_list" />
-      </accordion_tab>
-    </accordion>
-  </panel>
+	<panel name="avatar_hair_color_panel">
+		<texture_picker label="テクスチャ" name="Texture" tool_tip="クリックで画像を選択してください。" />
+	</panel>
+	<panel name="accordion_panel">
+		<accordion name="wearable_accordion">
+			<accordion_tab name="hair_color_tab" title="髪色">
+				<scrolling_panel_list name="hair_color_param_list" />
+			</accordion_tab>
+			<accordion_tab name="hair_style_tab" title="スタイル">
+				<scrolling_panel_list name="hair_style_param_list"/>
+			</accordion_tab>
+			<accordion_tab name="hair_eyebrows_tab" title="眉毛">
+				<scrolling_panel_list name="hair_eyebrows_param_list" />
+			</accordion_tab>
+			<accordion_tab name="hair_facial_tab" title="フェイシャル">
+				<scrolling_panel_list name="hair_facial_param_list" />
+			</accordion_tab>
+		</accordion>
+	</panel>
 </panel>

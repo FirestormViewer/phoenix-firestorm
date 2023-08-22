@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_performance_nearby">
-  <button name="back_btn" />
-  <text name="back_lbl">戻る</text>
-  <text name="av_nearby_title">近くのアバター</text>
-  <text name="tot_av_count">合計：50（120000.10㎲）</text>
-  <text name="av_nearby_desc">最も複雑なアバターを非表示にしてスピードアップ。</text>
-  <slider tool_tip="視覚的に複雑なアバターが、どの時点でインポスターとして描画されるかを制御します。" label="最大複雑度（Ｋ）" name="IndirectMaxComplexity" />
-  <text name="IndirectMaxComplexityText">0</text>
-  <slider tool_tip="視覚的に複雑なアバターの描画に時間がかかり過ぎると判断した場合制御します。（単位：マイクロ秒）" label="最大描画時間（㎲）" name="FSRenderAvatarMaxART" />
-  <text name="FSRenderAvatarMaxARTText">no limit</text>
-  <name_list name="nearby_list">
-    <name_list.columns label="" tool_tip="現在の描画時間（自動チューニングを含む）を、最も遅い時間に対する割合で示す棒グラフです。" name="art_visual" />
-    <name_list.columns label="時間（㎲）" tool_tip="アバターの描画時間。自動チューニングを行う前に、このアバターの描画にかかった実際の時間です。（マイクロ秒で）" name="art_value" />
-    <name_list.columns label="調整後の時間（㎲）" tool_tip="アバターの描画時間。調整後、このアバターの描画にかかった実際の時間です。 (in microseconds)." name="adj_art_value" />
-    <name_list.columns label="ＡＲＣ" tool_tip="通常のルールの複雑度（ＡＲＣ）基準の値です。" name="complex_value" />
-    <name_list.columns label="" tool_tip="任意の調整を示します。Ｉ＝インポスター、Ｓ＝影なし" name="state" />
-    <name_list.columns label="名前" name="name" />
-    <name_list.columns label="内訳" tool_tip="レンダリング時間が費やされる場所（ジオメトリ／シェーダー／その他）" name="breakdown" />
-  </name_list>
-  <text name="av_nearby_desc2">また、インワールドでアバターを右クリックして表示をコントロールすることもできます。</text>
-  <text name="av_nearby_desc3">注：自分のアバターには、ビューアのオーバーヘッドが含まれています。他の人にどのような影響を与えるかは、装着物タブを使用してください。</text>
-  <check_box label="フレンドは常に詳細に表示" name="display_friends">
-  </check_box>
-  <button label="例外…" name="exceptions_btn" />
-  <view_border name="border" />
-  <check_box label="アバターの複雑度を隠す" name="hide_avatars" />
-  <text name="name_tags_textbox">名札：</text>
-  <radio_group name="name_tag_mode">
-    <radio_item label="オフ" name="radio" />
-    <radio_item label="オン" name="radio2" />
-    <radio_item label="簡易表示" name="radio3" />
-  </radio_group>
+	<button name="back_btn" />
+	<text name="back_lbl">戻る</text>
+	<text name="av_nearby_title">近くのアバター</text>
+	<text name="tot_av_count">合計：50（120000.10㎲）</text>
+	<text name="av_nearby_desc">最も複雑なアバターを非表示にしてスピードアップ。</text>
+	<slider tool_tip="視覚的に複雑なアバターが、どの時点でインポスターとして描画されるかを制御します。" label="最大複雑度（Ｋ）" name="IndirectMaxComplexity" />
+	<text name="IndirectMaxComplexityText">0</text>
+	<slider tool_tip="視覚的に複雑なアバターの描画に時間がかかり過ぎると判断した場合制御します。（単位：マイクロ秒）" label="最大描画時間（㎲）" name="FSRenderAvatarMaxART" />
+	<text name="FSRenderAvatarMaxARTText">no limit</text>
+	<name_list name="nearby_list">
+		<name_list.columns label="" tool_tip="現在の描画時間（自動チューニングを含む）を、最も遅い時間に対する割合で示す棒グラフです。" name="art_visual" />
+		<name_list.columns label="時間（㎲）" tool_tip="アバターの描画時間。自動チューニングを行う前に、このアバターの描画にかかった実際の時間です。（マイクロ秒で）" name="art_value" />
+		<name_list.columns label="調整後の時間（㎲）" tool_tip="アバターの描画時間。調整後、このアバターの描画にかかった実際の時間です。 (in microseconds)." name="adj_art_value" />
+		<name_list.columns label="ＡＲＣ" tool_tip="通常のルールの複雑度（ＡＲＣ）基準の値です。" name="complex_value" />
+		<name_list.columns label="" tool_tip="任意の調整を示します。Ｉ＝インポスター、Ｓ＝影なし" name="state" />
+		<name_list.columns label="名前" name="name" />
+		<name_list.columns label="内訳" tool_tip="レンダリング時間が費やされる場所（ジオメトリ／シェーダー／その他）" name="breakdown" />
+	</name_list>
+	<text name="av_nearby_desc2">また、インワールドでアバターを右クリックして表示をコントロールすることもできます。</text>
+	<text name="av_nearby_desc3">注：自分のアバターには、ビューアのオーバーヘッドが含まれています。他の人にどのような影響を与えるかは、装着物タブを使用してください。</text>
+	<check_box label="フレンドは常に詳細に表示" name="display_friends">
+	</check_box>
+	<button label="例外…" name="exceptions_btn" />
+	<view_border name="border" />
+	<check_box label="アバターの複雑度を隠す" name="hide_avatars" />
+	<text name="name_tags_textbox">名札：</text>
+	<radio_group name="name_tag_mode">
+		<radio_item label="オフ" name="radio" />
+		<radio_item label="オン" name="radio2" />
+		<radio_item label="簡易表示" name="radio3" />
+	</radio_group>
 </panel>

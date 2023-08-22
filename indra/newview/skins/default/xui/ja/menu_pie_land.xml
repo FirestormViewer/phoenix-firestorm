@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <pie_menu name="Land Pie">
-  <pie_slice label="この土地について…" name="Place Information..."/>
-  <pie_slice label="作成" name="Create"/>
-  <pie_slice label="ここに向かう" name="Go Here"/>
-  <pie_slice label="ここに座る" name="Sit Here"/>
-  <pie_slice label="自身のパーツをミュート" name="Mute Particle"/>
-  <pie_slice label="入場パスを購入" name="Land Buy Pass Pie"/>
-  <pie_slice label="地形を編集" name="Edit Terrain"/>
-  <pie_slice label="この土地を購入" name="Land Buy Pie"/>
+	<pie_slice label="この土地について…" name="Place Information..."/>
+	<pie_slice label="作成" name="Create"/>
+	<pie_slice label="ここに向かう" name="Go Here"/>
+	<pie_slice label="ここに座る" name="Sit Here"/>
+	<pie_slice label="自身のパーツをミュート" name="Mute Particle"/>
+	<pie_slice label="入場パスを購入" name="Land Buy Pass Pie"/>
+	<pie_slice label="地形を編集" name="Edit Terrain"/>
+	<pie_slice label="この土地を購入" name="Land Buy Pie"/>
 </pie_menu>

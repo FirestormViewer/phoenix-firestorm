@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="土地販売" name="panel_ls_land">
-  <panel name="panel_ls_input">
-    <check_box label="" name="pg_all" />
-    <icon name="rating_icon_general" />
-    <check_box label="" name="mature_all" />
-    <icon follows="right|top" name="rating_icon_moderate" />
-    <check_box label="" name="adult_all" />
-    <icon name="rating_icon_adult" />
-    <text name="search_text">検索語句を入力：</text>
-    <combo_box name="land_category">
-      <combo_box.item label="すべてのカテゴリ" name="All" value="All" />
-      <combo_box.item label="オークション" name="Auction" value="Auction" />
-      <combo_box.item label="メインランド販売" name="Mainland" value="Mainland" />
-      <combo_box.item label="不動産販売" name="Estate" value="Estate" />
-    </combo_box>
-    <check_box label="価格　＜" name="price_check" />
-    <line_editor name="edit_price" />
-    <check_box label="エリア　＞" name="area_check" />
+	<panel name="panel_ls_input">
+		<check_box label="" name="pg_all" />
+		<icon name="rating_icon_general" />
+		<check_box label="" name="mature_all" />
+		<icon follows="right|top" name="rating_icon_moderate" />
+		<check_box label="" name="adult_all" />
+		<icon name="rating_icon_adult" />
+		<text name="search_text">検索語句を入力：</text>
+		<combo_box name="land_category">
+			<combo_box.item label="すべてのカテゴリ" name="All" value="All" />
+			<combo_box.item label="オークション" name="Auction" value="Auction" />
+			<combo_box.item label="メインランド販売" name="Mainland" value="Mainland" />
+			<combo_box.item label="不動産販売" name="Estate" value="Estate" />
+		</combo_box>
+		<check_box label="価格　＜" name="price_check" />
+		<line_editor name="edit_price" />
+		<check_box label="エリア　＞" name="area_check" />
 
-    <line_editor name="edit_area" />
-    <text name="sort_text">結果のソート順：</text>
-    <check_box label="昇順" name="ascending_check" />
-    <combo_box name="land_sort_combo">
-      <combo_box.item label="名前" name="Name_item" value="Name" />
-      <combo_box.item label="価格" name="Price_item" value="Price" />
-      <combo_box.item label="メートルあたりの価格" name="PPM_item" value="PPM" />
-      <combo_box.item label="エリア" name="Area_item" value="Area" />
-    </combo_box>
-    <button label="検索" name="land_find" />
-  </panel>
-  <!-- Search Pane -->
-  <panel name="panel_ls_scrolllist">
-    <scroll_list name="search_results_land">
-      <columns label="" name="icon" width="20" />
-      <columns label="名前" name="land_name" relwidth="0.45" />
-      <columns label="価格" name="price" relwidth="0.1" />
-      <columns label="エリア" name="area" relwidth="0.1" />
-      <columns label="L$／ｍ" name="ppm" relwidth="0.1" />
-      <columns label="種類" name="land_type" relwidth="0.2" />
-    </scroll_list>
-    <button label="前へ" name="land_back" />
-    <button label="次へ" name="land_next" />
-  </panel>
+		<line_editor name="edit_area" />
+		<text name="sort_text">結果のソート順：</text>
+		<check_box label="昇順" name="ascending_check" />
+		<combo_box name="land_sort_combo">
+			<combo_box.item label="名前" name="Name_item" value="Name" />
+			<combo_box.item label="価格" name="Price_item" value="Price" />
+			<combo_box.item label="メートルあたりの価格" name="PPM_item" value="PPM" />
+			<combo_box.item label="エリア" name="Area_item" value="Area" />
+		</combo_box>
+		<button label="検索" name="land_find" />
+	</panel>
+	<!-- Search Pane -->
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_land">
+			<columns label="" name="icon" width="20" />
+			<columns label="名前" name="land_name" relwidth="0.45" />
+			<columns label="価格" name="price" relwidth="0.1" />
+			<columns label="エリア" name="area" relwidth="0.1" />
+			<columns label="L$／ｍ" name="ppm" relwidth="0.1" />
+			<columns label="種類" name="land_type" relwidth="0.2" />
+		</scroll_list>
+		<button label="前へ" name="land_back" />
+		<button label="次へ" name="land_next" />
+	</panel>
 </panel>

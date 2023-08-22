@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="fs_asset_blacklist" title="アセットのブラックリスト">
-  <floater.string name="asset_object">オブジェクト</floater.string>
-  <floater.string name="asset_texture">テクスチャ</floater.string>
-  <floater.string name="asset_sound">サウンド</floater.string>
-  <floater.string name="asset_animation">アニメーション</floater.string>
-  <floater.string name="asset_resident">住民</floater.string>
-  <floater.string name="asset_unknown">不明</floater.string>
-  <floater.string name="unknown_object">不明なオブジェクト</floater.string>
-  <floater.string name="unknown_region">不明なリージョン</floater.string>
-  <floater.string name="asset_permanent">✔</floater.string>
-  <floater.string name="DateFormatString">[year,datetime,local]年[mthnum,datetime,local]月[day,datetime,local]日　[hour,datetime,local]：[min,datetime,local]：[second,datetime,local]</floater.string>
-  <filter_editor label="アセットのブラックリストのフィルタ" name="filter_input" />
-  <fs_scroll_list name="result_list">
-    <columns name="name" label="名前" />
-    <columns name="region" label="リージョン" />
-    <columns name="type" label="種別" />
-    <columns name="date" label="日付" />
-    <columns name="permanent" label="永続的" />
-    <columns name="date_sort" />
-    <columns name="asset_type" />
-    <row>
-      <column column="name">[UNKNOWN]テンプレート項目</column>
-      <column column="region">[UNKNOWN]テンプレート項目</column>
-      <column column="type">不明</column>
-      <column column="date">2012年12月11日 13：37：00</column>
-      <column column="permanent">&#x2714;</column>
-    </row>
-  </fs_scroll_list>
-  <button name="remove_btn" label="選択を削除" />
-  <button name="remove_temp_btn" label="一時知的にクリア" />
-  <button name="play_btn" label="サウンド再生" tool_tip="選択したサウンドを再生します。一度に再生できるサウンドエントリは１つだけです。" />
-  <button name="stop_btn" label="サウンド停止" tool_tip="再生中のサウンドを停止します。" />
-  <button name="close_btn" label="閉じる" />
+	<floater.string name="asset_object">オブジェクト</floater.string>
+	<floater.string name="asset_texture">テクスチャ</floater.string>
+	<floater.string name="asset_sound">サウンド</floater.string>
+	<floater.string name="asset_animation">アニメーション</floater.string>
+	<floater.string name="asset_resident">住民</floater.string>
+	<floater.string name="asset_unknown">不明</floater.string>
+	<floater.string name="unknown_object">不明なオブジェクト</floater.string>
+	<floater.string name="unknown_region">不明なリージョン</floater.string>
+	<floater.string name="asset_permanent">✔</floater.string>
+	<floater.string name="DateFormatString">[year,datetime,local]年[mthnum,datetime,local]月[day,datetime,local]日　[hour,datetime,local]：[min,datetime,local]：[second,datetime,local]</floater.string>
+	<filter_editor label="アセットのブラックリストのフィルタ" name="filter_input" />
+	<fs_scroll_list name="result_list">
+		<columns name="name" label="名前" />
+		<columns name="region" label="リージョン" />
+		<columns name="type" label="種別" />
+		<columns name="date" label="日付" />
+		<columns name="permanent" label="永続的" />
+		<columns name="date_sort" />
+		<columns name="asset_type" />
+		<row>
+			<column column="name">[UNKNOWN]テンプレート項目</column>
+			<column column="region">[UNKNOWN]テンプレート項目</column>
+			<column column="type">不明</column>
+			<column column="date">2012年12月11日 13：37：00</column>
+			<column column="permanent">&#x2714;</column>
+		</row>
+	</fs_scroll_list>
+	<button name="remove_btn" label="選択を削除" />
+	<button name="remove_temp_btn" label="一時知的にクリア" />
+	<button name="play_btn" label="サウンド再生" tool_tip="選択したサウンドを再生します。一度に再生できるサウンドエントリは１つだけです。" />
+	<button name="stop_btn" label="サウンド停止" tool_tip="再生中のサウンドを停止します。" />
+	<button name="close_btn" label="閉じる" />
 </floater>

@@ -1,88 +1,88 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="グラフィック" name="Display panel">
-  <tab_container label="グラフィクの初期設定" name="tabs">
+	<tab_container label="グラフィクの初期設定" name="tabs">
 
-    <!--General-->
-    <panel label="一般" name="General">
-      <text name="preset_label">使用するプリセット：</text>
+		<!--General-->
+		<panel label="一般" name="General">
+			<text name="preset_label">使用するプリセット：</text>
 
-      <text name="preset_text">（なし）</text>
+			<text name="preset_text">（なし）</text>
 
-      <text name="QualitySpeed">品質と速度：</text>
-      <text name="FasterText">パフォーマンス</text>
-      <text name="BetterText">品質</text>
-      <icon name="LowGraphicsDivet" />
-      <icon name="LowMidGraphicsDivet" />
-      <icon name="MidGraphicsDivet" />
-      <icon name="MidHighGraphicsDivet" />
-      <icon name="HighGraphicsDivet" />
-      <icon name="HighUltraGraphicsDivet" />
-      <icon name="UltraGraphicsDivet" />
-      <slider name="QualityPerformanceSelection" />
+			<text name="QualitySpeed">品質と速度：</text>
+			<text name="FasterText">パフォーマンス</text>
+			<text name="BetterText">品質</text>
+			<icon name="LowGraphicsDivet" />
+			<icon name="LowMidGraphicsDivet" />
+			<icon name="MidGraphicsDivet" />
+			<icon name="MidHighGraphicsDivet" />
+			<icon name="HighGraphicsDivet" />
+			<icon name="HighUltraGraphicsDivet" />
+			<icon name="UltraGraphicsDivet" />
+			<slider name="QualityPerformanceSelection" />
 
-      <text name="ShadersPrefText">低</text>
-      <text name="ShadersPrefText2">中</text>
-      <text name="ShadersPrefText3">高</text>
-      <text name="ShadersPrefText4">最高</text>
-      <check_box label="フルスクリーンモード" name="Fullscreen Mode" tool_tip="Firestormをフルスクリーンモードで起動します。モードを変更するには再起動が必要です。" />
-      <text name="ShadersText">シェーダー：</text>
-      <check_box label="透明な水面" name="TransparentWater" />
-      <check_box label="バンプマップと光沢" name="BumpShiny" />
-      <check_box label="ローカル光源" name="LocalLights" />
-      <check_box label="周辺シェーダー" name="WindLightUseAtmosShaders" />
-      <check_box label="高度な光源モデル" tool_tip="高度な光源レンダリングモデルを有効化します。" name="UseLightShaders" />
+			<text name="ShadersPrefText">低</text>
+			<text name="ShadersPrefText2">中</text>
+			<text name="ShadersPrefText3">高</text>
+			<text name="ShadersPrefText4">最高</text>
+			<check_box label="フルスクリーンモード" name="Fullscreen Mode" tool_tip="Firestormをフルスクリーンモードで起動します。モードを変更するには再起動が必要です。" />
+			<text name="ShadersText">シェーダー：</text>
+			<check_box label="透明な水面" name="TransparentWater" />
+			<check_box label="バンプマップと光沢" name="BumpShiny" />
+			<check_box label="ローカル光源" name="LocalLights" />
+			<check_box label="周辺シェーダー" name="WindLightUseAtmosShaders" />
+			<check_box label="高度な光源モデル" tool_tip="高度な光源レンダリングモデルを有効化します。" name="UseLightShaders" />
 
-      <check_box label="アンビエントオクルージョン" name="UseSSAO" />
+			<check_box label="アンビエントオクルージョン" name="UseSSAO" />
 
-      <text name="shadows_label">影：</text>
-      <combo_box name="ShadowDetail">
-        <combo_box.item label="なし" name="0" />
-        <combo_box.item label="太陽／月" name="1" />
-        <combo_box.item label="太陽／月＋プロジェクター" name="2" />
-      </combo_box>
+			<text name="shadows_label">影：</text>
+			<combo_box name="ShadowDetail">
+				<combo_box.item label="なし" name="0" />
+				<combo_box.item label="太陽／月" name="1" />
+				<combo_box.item label="太陽／月＋プロジェクター" name="2" />
+			</combo_box>
 
-      <text name="reflection_label">水面の反射：</text>
-      <combo_box name="Reflections">
-        <combo_box.item label="なし（不透明）" name="-2" />
-        <combo_box.item label="なし（透明）" name="-1" />
-        <combo_box.item label="最小限" name="0" />
-        <combo_box.item label="地形と樹木" name="1" />
-        <combo_box.item label="すべての静的オブジェクト" name="2" />
-        <combo_box.item label="すべてのアバターとオブジェクト" name="3" />
-        <combo_box.item label="すべて" name="4" />
-      </combo_box>
-      <!-- FS:TM Avatar Physics was moved down to LOD section-->
-      <!-- FS:TM Point Lighting added instead of above-->
-      <text name="local lights_label" tool_tip="高度な光源モデルが無効の場合、レンダリングされる光源の数に影響します。モードを変更するには再起動が必要です。">ポイント光源（再起動する必要があります）</text>
-      <combo_box name="LocalLightsDetail">
-        <combo_box.item label="すべて（デフォルト）" name="3" />
-        <combo_box.item label="抑制" name="2" />
-        <combo_box.item label="太陽／月のみ" name="1" />
-      </combo_box>
-      <!--Top of second column in General tab-->
-      <slider label="描画距離" name="DrawDistance" />
-      <text name="DrawDistanceMeterText2">m</text>
-      <slider label="最大パーティクル数" name="MaxParticleCount" />
-      <slider tool_tip="視覚的に複雑なアバターがどの時点でJellyDollとして描画されるかを制御します。" label="最大複雑度" name="IndirectMaxComplexity" />
-      <text name="IndirectMaxComplexityText">0</text>
-      <slider label="インポスターでないアバターの最大数" name="IndirectMaxNonImpostors" />
-      <text name="IndirectMaxNonImpostorsText">0</text>
-      <slider label="ポストプロセス品質" name="RenderPostProcess" />
-      <text name="PostProcessText">Low</text>
-      <slider label="アバター物理" name="AvatarPhysicsDetail" />
+			<text name="reflection_label">水面の反射：</text>
+			<combo_box name="Reflections">
+				<combo_box.item label="なし（不透明）" name="-2" />
+				<combo_box.item label="なし（透明）" name="-1" />
+				<combo_box.item label="最小限" name="0" />
+				<combo_box.item label="地形と樹木" name="1" />
+				<combo_box.item label="すべての静的オブジェクト" name="2" />
+				<combo_box.item label="すべてのアバターとオブジェクト" name="3" />
+				<combo_box.item label="すべて" name="4" />
+			</combo_box>
+			<!-- FS:TM Avatar Physics was moved down to LOD section-->
+			<!-- FS:TM Point Lighting added instead of above-->
+			<text name="local lights_label" tool_tip="高度な光源モデルが無効の場合、レンダリングされる光源の数に影響します。モードを変更するには再起動が必要です。">ポイント光源（再起動する必要があります）</text>
+			<combo_box name="LocalLightsDetail">
+				<combo_box.item label="すべて（デフォルト）" name="3" />
+				<combo_box.item label="抑制" name="2" />
+				<combo_box.item label="太陽／月のみ" name="1" />
+			</combo_box>
+			<!--Top of second column in General tab-->
+			<slider label="描画距離" name="DrawDistance" />
+			<text name="DrawDistanceMeterText2">m</text>
+			<slider label="最大パーティクル数" name="MaxParticleCount" />
+			<slider tool_tip="視覚的に複雑なアバターがどの時点でJellyDollとして描画されるかを制御します。" label="最大複雑度" name="IndirectMaxComplexity" />
+			<text name="IndirectMaxComplexityText">0</text>
+			<slider label="インポスターでないアバターの最大数" name="IndirectMaxNonImpostors" />
+			<text name="IndirectMaxNonImpostorsText">0</text>
+			<slider label="ポストプロセス品質" name="RenderPostProcess" />
+			<text name="PostProcessText">Low</text>
+			<slider label="アバター物理" name="AvatarPhysicsDetail" />
 
-      <text name="MeshDetailText">詳細レベル（ＬｏＤ）の距離係数：</text>
-      <slider tool_tip="レンダリングコストを削減するために、低ディテールのオブジェクトを使用するタイミングを制御します。高い値を設定するとラグが発生するため、使用には注意が必要です。" label="　オブジェクトとスカルプトのＬｏＤ" name="ObjectMeshDetail" />
-      <slider label="　フレックスプリム" name="FlexibleMeshDetail" />
-      <slider label="　樹木" name="TreeMeshDetail" />
-      <slider label="　アバター" name="AvatarMeshDetail" />
-      <slider label="　地形" name="TerrainMeshDetail" />
-      <slider label="　空" name="SkyMeshDetail" />
-      <text name="AvatarPhysicsDetailText" />
+			<text name="MeshDetailText">詳細レベル（ＬｏＤ）の距離係数：</text>
+			<slider tool_tip="レンダリングコストを削減するために、低ディテールのオブジェクトを使用するタイミングを制御します。高い値を設定するとラグが発生するため、使用には注意が必要です。" label="　オブジェクトとスカルプトのＬｏＤ" name="ObjectMeshDetail" />
+			<slider label="　フレックスプリム" name="FlexibleMeshDetail" />
+			<slider label="　樹木" name="TreeMeshDetail" />
+			<slider label="　アバター" name="AvatarMeshDetail" />
+			<slider label="　地形" name="TerrainMeshDetail" />
+			<slider label="　空" name="SkyMeshDetail" />
+			<text name="AvatarPhysicsDetailText" />
 
-      <text name="AvatarRenderingText">アバター描画：</text>
-      <check_box label="アバターの布" name="AvatarCloth" />
-      <!-- <FS:LO> remove orphaned code left over from EEP
+			<text name="AvatarRenderingText">アバター描画：</text>
+			<check_box label="アバターの布" name="AvatarCloth" />
+			<!-- <FS:LO> remove orphaned code left over from EEP
       <text name="TerrainDetailText">地形の詳細：</text>
       <radio_group name="TerrainDetailRadio">
         <radio_item label="低" name="0" />
@@ -90,100 +90,96 @@
       </radio_group>
       -->
 
-      <text name="Presets_Label">プリセット：</text>
-      <button label="保存" name="PrefSaveButton" />
-      <button label="読み込む" name="PrefLoadButton" />
-      <button label="削除" name="PrefDeleteButton" />
+			<text name="Presets_Label">プリセット：</text>
+			<button label="保存" name="PrefSaveButton" />
+			<button label="読み込む" name="PrefLoadButton" />
+			<button label="削除" name="PrefDeleteButton" />
 
-      <!--Reset Button-->
-      <button tool_tip="デフォルトのグラフィック設定をリロード" name="Defaults" />
-    </panel>
+			<!--Reset Button-->
+			<button tool_tip="デフォルトのグラフィック設定をリロード" name="Defaults" />
+		</panel>
 
-    <!--Hardware Settings-->
-    <panel label="ハードウェア設定" name="Hardware Settings">
-      <check_box label="異方性フィルタリング（有効にすると遅くなります）" name="ani" tool_tip="このチェックボックスは異方性フィルタリングを有効にします。異方性フィルタリングは、テクスチャをカメラ位置に対して比較的大きな角度で見たときに、テクスチャの品質を向上させる方法です。通常、距離が離れてもぼやけて見えにくくなります。" />
-      <check_box label="垂直同期を有効化" name="vsync" tool_tip="フレームレートをモニターのリフレッシュレートに同期させる。" />
-      <check_box label="ストリーム化されたＶＢＯを有効化" name="vbo_stream" tool_tip="これを無効にすると、ＶＢＯが有効になっているときのパフォーマンスが向上する可能性があります。無効にすると、AMDとIntelのさまざまなＧＰＵで観測可能な改善が見られました。" />
-      <check_box label="非可逆テクスチャ圧縮を有効にする（再起動が必要）" name="texture compression" tool_tip="ビデオメモリ内のテクスチャを圧縮し、より高解像度のテクスチャやより多くのテクスチャをロードできるようにします。" />
-      <check_box label="HiDPIディスプレイのサポート（Mac OSXのみ；再起動が必要）" name="use HiDPI" tool_tip="高解像度描画のためにOpenGLを有効にします。" />
-      <text name="Antialiasing:" tool_tip="この設定を変更すると、ハードウェアによっては再起動が必要になる場合があります。">アンチエイリアス（再起動が必要）：</text>
-      <combo_box label="アンチエイリアス" name="fsaa">
-        <combo_box.item label="無効" name="FSAADisabled" value="0" />
-        <combo_box.item label="２倍" name="2x" value="2" />
-        <combo_box.item label="４倍" name="4x" value="4" />
-        <combo_box.item label="８倍" name="8x" value="8" />
-        <combo_box.item label="１６倍" name="16x" value="16" />
-      </combo_box>
+		<!--Hardware Settings-->
+		<panel label="ハードウェア設定" name="Hardware Settings">
+			<check_box label="異方性フィルタリング（有効にすると遅くなります）" name="ani" tool_tip="このチェックボックスは異方性フィルタリングを有効にします。異方性フィルタリングは、テクスチャをカメラ位置に対して比較的大きな角度で見たときに、テクスチャの品質を向上させる方法です。通常、距離が離れてもぼやけて見えにくくなります。" />
+			<check_box label="垂直同期を有効化" name="vsync" tool_tip="フレームレートをモニターのリフレッシュレートに同期させる。" />
+			<check_box label="ストリーム化されたＶＢＯを有効化" name="vbo_stream" tool_tip="これを無効にすると、ＶＢＯが有効になっているときのパフォーマンスが向上する可能性があります。無効にすると、AMDとIntelのさまざまなＧＰＵで観測可能な改善が見られました。" />
+			<check_box label="非可逆テクスチャ圧縮を有効にする（再起動が必要）" name="texture compression" tool_tip="ビデオメモリ内のテクスチャを圧縮し、より高解像度のテクスチャやより多くのテクスチャをロードできるようにします。" />
+			<check_box label="HiDPIディスプレイのサポート（Mac OSXのみ；再起動が必要）" name="use HiDPI" tool_tip="高解像度描画のためにOpenGLを有効にします。" />
+			<text name="Antialiasing:" tool_tip="この設定を変更すると、ハードウェアによっては再起動が必要になる場合があります。">アンチエイリアス（再起動が必要）：</text>
+			<combo_box label="アンチエイリアス" name="fsaa">
+				<combo_box.item label="無効" name="FSAADisabled" value="0" />
+				<combo_box.item label="２倍" name="2x" value="2" />
+				<combo_box.item label="４倍" name="4x" value="4" />
+				<combo_box.item label="８倍" name="8x" value="8" />
+				<combo_box.item label="１６倍" name="16x" value="16" />
+			</combo_box>
 
-      <spinner label="ガンマ：" name="gamma" />
-      <text name="brightness text">（0／1.0＝デフォルトの輝度。低いほど明るくなります）</text>
-      <slider label="ビューアのテクスチャのメモリーバッファ（㎆）：" name="GraphicsCardTextureMemory" tool_tip="テクスチャに割り当てるメモリの量。デフォルトはビデオカードのメモリで、３２ビットシステムでは最大５１２㎆、６４ビットシステムでは最大２０４８㎆です（ビデオカードの利用可能な専用ビデオメモリに依存します）。これを減らすとパフォーマンスが向上しますが、テクスチャが不鮮明になることがあります。" />
-      <check_box label="動的テクスチャメモリを有効化" name="FSDynamicTextureMemory" tool_tip="動的テクスチャメモリ計算を有効にする（64bitビューアおよびビデオメモリが512㎆以上のAMD／NVIDIAのＧＰＵでのみ使用可能）" />
-      <slider label="ビューアの最小メモリバッファ（㎆）：" name="FSDynamicTextureMemoryMinTextureMemory" tool_tip="テクスチャ用に割り当てるメモリの最小量です。これにより、利用可能なビデオメモリの量を超えても、指定された量が常にテクスチャに使用されるようになります。指定された量とリザーブが物理的なビデオメモリの量を超えた場合、それに応じて上限が設定されます。" />
-      <slider label="追加のテクスチャメモリのキャッシュ確保率（％）：" name="FSDynamicTextureMemoryCacheReserve" tool_tip="現在表示されていないロードされたテクスチャをキャッシュするために確保された物理ビデオメモリの割合を指定します。" />
-      <slider label="物理ビデオメモリの確保率（％）：" name="FSDynamicTextureMemoryGPUReserve" tool_tip="他の用途のために予約されている物理ビデオメモリの割合。" />
-      <spinner label="フォグの距離比：" name="fog" />
-      <spinner label="画像デコードの同時実行数：" name="image_decode_threads" tool_tip="画像のデコードに使用するスレッド数。０＝自動、１＝同期、２≦ユーザー指定。（０か１を推奨します）" />
-    </panel>
+			<spinner label="ガンマ：" name="gamma" />
+			<text name="brightness text">（0／1.0＝デフォルトの輝度。低いほど明るくなります）</text>
+			<slider label="ビューアのテクスチャのメモリーバッファ（㎆）：" name="GraphicsCardTextureMemory" tool_tip="テクスチャに割り当てるメモリの量。デフォルトはビデオカードのメモリで、３２ビットシステムでは最大５１２㎆、６４ビットシステムでは最大２０４８㎆です（ビデオカードの利用可能な専用ビデオメモリに依存します）。これを減らすとパフォーマンスが向上しますが、テクスチャが不鮮明になることがあります。" />
+			<check_box label="動的テクスチャメモリを有効化" name="FSDynamicTextureMemory" tool_tip="動的テクスチャメモリ計算を有効にする（64bitビューアおよびビデオメモリが512㎆以上のAMD／NVIDIAのＧＰＵでのみ使用可能）" />
+			<slider label="ビューアの最小メモリバッファ（㎆）：" name="FSDynamicTextureMemoryMinTextureMemory" tool_tip="テクスチャ用に割り当てるメモリの最小量です。これにより、利用可能なビデオメモリの量を超えても、指定された量が常にテクスチャに使用されるようになります。指定された量とリザーブが物理的なビデオメモリの量を超えた場合、それに応じて上限が設定されます。" />
+			<slider label="追加のテクスチャメモリのキャッシュ確保率（％）：" name="FSDynamicTextureMemoryCacheReserve" tool_tip="現在表示されていないロードされたテクスチャをキャッシュするために確保された物理ビデオメモリの割合を指定します。" />
+			<slider label="物理ビデオメモリの確保率（％）：" name="FSDynamicTextureMemoryGPUReserve" tool_tip="他の用途のために予約されている物理ビデオメモリの割合。" />
+			<spinner label="フォグの距離比：" name="fog" />
+			<spinner label="画像デコードの同時実行数：" name="image_decode_threads" tool_tip="画像のデコードに使用するスレッド数。０＝自動、１＝同期、２≦ユーザー指定。（０か１を推奨します）" />
+		</panel>
 
-    <!--Rendering-->
-    <panel label="レンダリング" name="Rendering">
-      <!-- world pauser -->
-      <text name="World Updating">ワールドの更新：</text>
-      <check_box label="ワールドの更新をフリーズする（すべてを一時停止する）" tool_tip="サーバーからのすべての更新をフリーズするように設定します。インワールドでのすべてのアクションが停止されますが、チャット、ＩＭ、ボイスには影響しません。" name="WorldPause" />
+		<!--Rendering-->
+		<panel label="レンダリング" name="Rendering">
+			<!-- world pauser -->
+			<text name="World Updating">ワールドの更新：</text>
+			<check_box label="ワールドの更新をフリーズする（すべてを一時停止する）" tool_tip="サーバーからのすべての更新をフリーズするように設定します。インワールドでのすべてのアクションが停止されますが、チャット、ＩＭ、ボイスには影響しません。" name="WorldPause" />
 
-      <text name="Texture Rendering">テクスチャの描画：</text>
+			<text name="Texture Rendering">テクスチャの描画：</text>
+			<check_box label="テクスチャの最大解像度を512pxに制限（６４ビットのみ）" tool_tip="インワールドテクスチャの最大表示解像度を512pxに制限します。これにより、使用可能なテクスチャメモリを超過してもテクスチャがぼやける代わりに、より多くのテクスチャが表示できるようになります。" name="FSRestrictMaxTextureSize" />
 
-      <check_box label="テクスチャの最大解像度を512pxに制限（６４ビットのみ）" tool_tip="インワールドテクスチャの最大表示解像度を512pxに制限します。これにより、使用可能なテクスチャメモリを超過してもテクスチャがぼやける代わりに、より多くのテクスチャが表示できるようになります。" name="FSRestrictMaxTextureSize" />
+			<!-- New Texture detail 5 is lowest, 0 is highest -->
+			<text name="TextureDetailLabel">テクスチャの最大品質：</text>
+			<combo_box name="TextureDetail" tool_tip="TextureDiscardLevelの設定に依存します。">
+				<!-- To translators, do not try to translate the word TextureDiscardLevel -->
+				<combo_box.item label="通常の品質（０）" name="0" value="0" />
+				<combo_box.item label="中程度の品質（３）" name="3" value="3" />
+				<combo_box.item label="低品質（４）" name="4" value="4" />
+				<combo_box.item label="テクスチャなし（５）" name="5" value="5" />
+			</combo_box>
 
-      <!-- New Texture detail 5 is lowest, 0 is highest -->
-      <text name="TextureDetailLabel">テクスチャの最大品質：</text>
-      <combo_box name="TextureDetail" tool_tip="TextureDiscardLevelの設定に依存します。">
-        <!-- To translators, do not try to translate the word TextureDiscardLevel -->
-        <combo_box.item label="通常の品質（０）" name="0" value="0" />
-        <combo_box.item label="中程度の品質（３）" name="3" value="3" />
-        <combo_box.item label="低品質（４）" name="4" value="4" />
-        <combo_box.item label="テクスチャなし（５）" name="5" value="5" />
-      </combo_box>
+			<text name="Alpha Mask Rendering">アルファマスクのレンダリング：</text>
+			<check_box label="「高度な光源モデル」が有効でない場合に、アルファマスクをレンダリングする。" tool_tip="チェックを入れると、ＡＬＭ（高度な光源モデル）が選択されていないときでもアルファマスク（シースルービット）が正しくレンダリングされます。" name="RenderAutoMaskAlphaNonDeferred" />
+			<check_box label="「高度な光源モデル」が有効な場合にアルファマスクをレンダリングする" tool_tip="チェックを入れると、ＡＬＭ（高度な光源モデル）選択時にアルファマスク（シースルービット）が正しくレンダリングされます。" name="RenderAutoMaskAlphaDeferred" />
 
-      <text name="Alpha Mask Rendering">アルファマスクのレンダリング：</text>
+			<text name="Miscellaneous Rendering">その他のレンダリング設定：</text>
+			<check_box label="発光を描画" tool_tip="発光をレンダリングします。影が有効なときに発光を無効にするには、強度を０に設定する必要があることに突いてご留意下さい。" name="RenderGlow" />
+			<slider label="強度：" tool_tip="発光強度を指定します。高い値は広範囲かつ滑らかになります。（デフォルトは２）" name="glow_strength" />
+			<check_box label="読み込みが完了していないアバターを表示する" name="RenderUnloadedAvatars" />
+			<check_box label="フレームレート制限" name="FSLimitFramerate" />
+			<slider label="ＦＰＳ：" name="MaxFPS" />
+			<check_box label="シーンをワイヤーフレームで表示" name="Wireframe" />
 
-      <check_box label="「高度な光源モデル」が有効でない場合に、アルファマスクをレンダリングする。" tool_tip="チェックを入れると、ＡＬＭ（高度な光源モデル）が選択されていないときでもアルファマスク（シースルービット）が正しくレンダリングされます。" name="RenderAutoMaskAlphaNonDeferred" />
-      <check_box label="「高度な光源モデル」が有効な場合にアルファマスクをレンダリングする" tool_tip="チェックを入れると、ＡＬＭ（高度な光源モデル）選択時にアルファマスク（シースルービット）が正しくレンダリングされます。" name="RenderAutoMaskAlphaDeferred" />
+			<check_box label="装着光源を有効化（フェイスライト）" tool_tip="アバターが装着しているフェイスライトなどのライトを有効にします。必要に応じてフェイスライトをオフにするのに便利です。" name="Render Attached Lights" />
+			<check_box label="装着パーティクルを描画" name="Render Attached Particles" />
+			<slider label="ワールドを表示する前にプリキャッシングする際の遅延時間" tool_tip="あなたが他の人にオンラインであることを示した後、あなたにワールドに表示されるまでの遅延時間（デフォルトは６秒）" name="PrecachingDelay" />
+			<text name="PrecachingDelayText">秒</text>
+			<slider label="影の品質" tool_tip="影の品質とは（デフォルトは１）" name="ShadowResolution" />
+			<slider label="地形テクスチャ・レンダリングのスケール（再起動が必要）" name="RenderTerrainScale" tool_tip="地形テクスチャのスケールを決定します。低いほど圧縮されます。（ビューアの再起動が必要）" />
+		</panel>
 
-      <text name="Miscellaneous Rendering">その他のレンダリング設定：</text>
+		<!--Depth of Field-->
+		<panel label="被写体深度（ＤｏＦ）" name="DOF panel">
+			<check_box label="被写体深度を有効化 (カメラのピントが合っている場所以外の景色がぼかします）" name="UseDoF" />
+			<check_box label="編集モードで有効にする" name="RenderDepthOfFieldInEditMode" />
+			<check_box label="水中でも有効にする" name="FSRenderDoFUnderwater" />
+			<check_box label="被写界深度の焦点はポインターに従う" name="FSFocusPointFollowsPointer" tool_tip="被写界深度（ＤｏＦ）の焦点はマウスに追従し、この動作はフライカム使用時に見られるものと同じです。ＤｏＦフォーカスロックと併用します。" />
+			<slider label="カメラのＦ値：" name="CameraFNum" tool_tip="ＤｏＦ効果で使用するカメラのＦ値を指定します。" />
+			<slider label="カメラの焦点距離㎜：" name="CameraFocal" tool_tip="ＤｏＦ効果を得るためのカメラの焦点距離（単位：ミリメートル）" />
+			<slider label="カメラのＦＯＶ角度：" name="Camera FOV" tool_tip="ＤｏＦ効果のためのカメラの垂直視野（単位：度）" />
+			<slider label="ＤｏＦフォーカス遷移時間：" name="CameraFocusTrans" tool_tip="ある場所から次の場所にフォーカスを移すのにかかる時間を指定します。" />
+			<slider label="ＤｏＦ描画品質：" name="CameraDoFResScale" tool_tip="ぼかしの質とレンダリングのパフォーマンスに影響します。（高い＝高品質、低い＝高パフォーマンス）" />
+		</panel>
+	</tab_container>
 
-      <check_box label="発光を描画" tool_tip="発光をレンダリングします。影が有効なときに発光を無効にするには、強度を０に設定する必要があることに突いてご留意下さい。" name="RenderGlow" />
-      <slider label="強度：" tool_tip="発光強度を指定します。高い値は広範囲かつ滑らかになります。（デフォルトは２）" name="glow_strength" />
-      <check_box label="読み込みが完了していないアバターを表示する" name="RenderUnloadedAvatars" />
-      <check_box label="フレームレート制限" name="FSLimitFramerate" />
-      <slider label="ＦＰＳ：" name="MaxFPS" />
-      <check_box label="シーンをワイヤーフレームで表示" name="Wireframe" />
-
-      <check_box label="装着光源を有効化（フェイスライト）" tool_tip="アバターが装着しているフェイスライトなどのライトを有効にします。必要に応じてフェイスライトをオフにするのに便利です。" name="Render Attached Lights" />
-      <check_box label="装着パーティクルを描画" name="Render Attached Particles" />
-      <slider label="ワールドを表示する前にプリキャッシングする際の遅延時間" tool_tip="あなたが他の人にオンラインであることを示した後、あなたにワールドに表示されるまでの遅延時間（デフォルトは６秒）" name="PrecachingDelay" />
-      <text name="PrecachingDelayText">秒</text>
-      <slider label="影の品質" tool_tip="影の品質とは（デフォルトは１）" name="ShadowResolution" />
-      <slider label="地形テクスチャ・レンダリングのスケール（再起動が必要）" name="RenderTerrainScale" tool_tip="地形テクスチャのスケールを決定します。低いほど圧縮されます。（ビューアの再起動が必要）" />
-    </panel>
-
-    <!--Depth
-    of Field-->
-    <panel label="被写体深度（ＤｏＦ）" name="DOF panel">
-      <check_box label="被写体深度を有効化 (カメラのピントが合っている場所以外の景色がぼかします）" name="UseDoF" />
-      <check_box label="編集モードで有効にする" name="RenderDepthOfFieldInEditMode" />
-      <check_box label="水中でも有効にする" name="FSRenderDoFUnderwater" />
-      <check_box label="被写界深度の焦点はポインターに従う" name="FSFocusPointFollowsPointer" tool_tip="被写界深度（ＤｏＦ）の焦点はマウスに追従し、この動作はフライカム使用時に見られるものと同じです。ＤｏＦフォーカスロックと併用します。" />
-      <slider label="カメラのＦ値：" name="CameraFNum" tool_tip="ＤｏＦ効果で使用するカメラのＦ値を指定します。" />
-      <slider label="カメラの焦点距離㎜：" name="CameraFocal" tool_tip="ＤｏＦ効果を得るためのカメラの焦点距離（単位：ミリメートル）" />
-      <slider label="カメラのＦＯＶ角度：" name="Camera FOV" tool_tip="ＤｏＦ効果のためのカメラの垂直視野（単位：度）" />
-      <slider label="ＤｏＦフォーカス遷移時間：" name="CameraFocusTrans" tool_tip="ある場所から次の場所にフォーカスを移すのにかかる時間を指定します。" />
-      <slider label="ＤｏＦ描画品質：" name="CameraDoFResScale" tool_tip="ぼかしの質とレンダリングのパフォーマンスに影響します。（高い＝高品質、低い＝高パフォーマンス）" />
-    </panel>
-  </tab_container>
-
-  <!-- These two check boxes are dummies and will never be displayed. They are here so the control variables are saved in a preset file. -->
-  <check_box label="RenderAvatarMaxComplexity" name="RenderAvatarMaxNonImpostors" />
-  <check_box label="RenderAvatarMaxNonImpostors" name="RenderAvatarMaxNonImpostors" />
+	<!-- These two check boxes are dummies and will never be displayed. They are here so the control variables are saved in a preset file. -->
+	<check_box label="RenderAvatarMaxComplexity" name="RenderAvatarMaxNonImpostors" />
+	<check_box label="RenderAvatarMaxNonImpostors" name="RenderAvatarMaxNonImpostors" />
 </panel>

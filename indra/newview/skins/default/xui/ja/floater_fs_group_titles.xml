@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="group_titles" title="グループのタイトル">
-  <floater.string name="NoGroupTitle" value="＜グループ名無し＞" />
-  <filter_editor label="グループのタイトルでフィルタ" name="filter_input" />
-  <scroll_list name="title_list">
-    <column name="grouptitle" label="タイトル" />
-    <column name="groupname" label="グループ名" />
-    <column name="role_id" />
-    <column name="group_id" />
-    <column name="title_sort_column" />
-    <column name="name_sort_column" />
-  </scroll_list>
-  <button tool_tip="利用可能なグループのタイトル一覧をリフレッシュ" name="btnRefresh" />
-  <button name="btnInfo" label="情報" tool_tip="選択したグループのタイトル情報を表示" />
-  <button name="btnActivate" label="有効化" tool_tip="選択したグループのタイトルを有効化" />
+	<floater.string name="NoGroupTitle" value="＜グループ名無し＞" />
+	<filter_editor label="グループのタイトルでフィルタ" name="filter_input" />
+	<scroll_list name="title_list">
+		<column name="grouptitle" label="タイトル" />
+		<column name="groupname" label="グループ名" />
+		<column name="role_id" />
+		<column name="group_id" />
+		<column name="title_sort_column" />
+		<column name="name_sort_column" />
+	</scroll_list>
+	<button tool_tip="利用可能なグループのタイトル一覧をリフレッシュ" name="btnRefresh" />
+	<button name="btnInfo" label="情報" tool_tip="選択したグループのタイトル情報を表示" />
+	<button name="btnActivate" label="有効化" tool_tip="選択したグループのタイトルを有効化" />
 </floater>

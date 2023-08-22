@@ -1,291 +1,292 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Text Chat" name="chat">
-  <tab_container label="Firestorm初期設定" name="tabs">
-    <!-- Chat: Visuals -->
-    <panel label="ビジュアル" name="ChatVisuals">
-      <text name="console_font_size">オンスクリーンコンソールのフォントサイズ：</text>
-      <radio_group name="chat_console_font_size">
-        <radio_item label="小" name="consradio" />
-        <radio_item label="中" name="consradio2" />
-        <radio_item label="大" name="consradio3" />
-        <radio_item label="特大" name="consradio4" />
-      </radio_group>
-      <check_box name="play_avatar_animations" label="アバター・アニメーションを再生する（シャウトなど）" />
-      <check_box name="FSIMSystemMessageBrackets" label="システムチャットメッセージを括弧で囲む（Ｖ１スタイルのチャットヘッダのみ）" />
-      <check_box name="FSChatHistoryShowYou" label="チャットのログに名前の代わりに「あなた」を表示する" />
-      <check_box name="EmotesUseItalic" label="エモートはイタリックにする" />
-      <check_box name="FSEmphasizeShoutWhisper" label="シャウトはボールドにし、ささやきはイタリックにする" />
-      <check_box name="FSMarkObjects" label="なりすましを避けるために、オブジェクトが話すときに（名前なし）でマークする。" />
-      <check_box name="FSllOwnerSayToScriptDebugWindow_checkbox" label="llOwnerSayをスクリプトのデバッグウィンドウにルーティングする" />
-      <check_box name="bubble_text_chat" label="アバターの上に吹き出しチャットを表示する" />
-      <check_box name="FSBubblesHideConsoleAndToasts" label="近くのチャットコンソールとトーストにチャットを表示しない" />
-      <check_box name="bubble_text_typing" label="アバターの上の吹き出しに入力中インジケーターを表示する" />
-      <check_box name="FSShowTypingStateInNameTag" label="アバターの上のネームタグに入力中インジケータを表示する" />
-      <check_box name="FSSecondsinChatTimestamps" label="タイムスタンプに秒を表示する［HH：MM：SS］" />
-      <text name="show_timestamps_label">タイムスタンプの表示先：</text>
-      <check_box label="近くのチャット" top_delta="0" name="show_timestamps_nearby_chat" />
-      <check_box label="ＩＭ" name="show_timestamps_im" />
-      <check_box label="ログ" name="show_timestamps_transcripts" />
-      <check_box name="FSConsoleClassicDrawMode" label="コンソールにクラシック描画モードを使用する" tool_tip="クラシック描画モードでは、コンソールの背景は、最も長い行の幅で、すべての行の上に単一のブロックとして描画されます。" />
-      <check_box name="ChatFullWidth" label="コンソールに画面の全幅を使用する" />
-      <spinner label="チャット後のフェード：" name="fade_chat_time" />
-      <text name="text_box4">（秒）</text>
-      <spinner name="max_chat_count" />
-      <text name="text_box5">（＃行）</text>
-    </panel>
-    <!-- Chat: Chat Windows -->
-    <panel label="チャットウィンドウ" name="ChatWindows">
-      <text name="font_size">チャットウィンドウサイズ：</text>
-      <radio_group name="chat_font_size">
-        <radio_item name="radio" label="小" value="0" />
-        <radio_item name="radio2" label="中" value="1" />
-        <radio_item name="radio3" label="大" value="2" />
-        <radio_item name="radio4" label="特大" value="3" />
-      </radio_group>
-      <check_box name="IMShowNamesForP2PConv" label="直接ＩＭで名前を表示" />
-      <check_box name="plain_text_chat_history" label="Ｖ１スタイルのチャットヘッダー" />
-      <check_box name="ShowChatMiniIcons" label="[SHORT_VIEWER_GENERATION]スタイルのチャットヘッダを使用している場合、ミニアイコンを表示" />
-      <check_box name="LogShowHistory" label="最後の会話の終わりを表示する" />
-      <check_box name="FSTypingChevronPrefix" label="ＩＭセッションに入力インジケータとしてシェブロン（＞）を追加する" />
-      <text name="show_unread_messages_label">新着メッセージ通知を表示：</text>
-      <check_box name="FSNotifyUnreadChatMessages" label="近くのチャット" tool_tip="チャット履歴を読んでいる最中に画面をスクロールバックした際に新しいメッセージが届いた場合、近くのチャットウィンドウに新しい未読メッセージの数を示す通知を表示します。" />
-      <check_box name="FSNotifyUnreadIMMessages" label="インスタント／グループチャット" tool_tip="チャット履歴を読んでいる最中に画面をスクロールバックした際にに新しいメッセージが届いた場合、インスタント／グループメッセージウィンドウに新しい未読メッセージの数を示す通知を表示します。" />
-      <text name="show_ims_in_label">ＩＭの表示先：</text>
-      <radio_group name="chat_window" tool_tip="インスタントメッセージを個別のフローターで表示するか、連結タブで表示するかを指定します。（再起動が必要です）">
-        <radio_item name="radio" label="個別のウィンドウ" value="0" />
-        <radio_item name="radio2" label="タブ" value="1" />
-      </radio_group>
-      <text name="req_restart_ims">（再起動が必要です）</text>
-      <text name="tab_direction_label">チャットタブモードの向き：</text>
-      <radio_group name="chat_tab_direction" tool_tip="連結タブモードが有効なとき、チャット／ＩＭタブの向きを水平と垂直の間で変更します。（再起動が必要です）">
-        <radio_item name="radio_horizontal" label="横並び" value="0" />
-        <radio_item name="radio_vertical" label="縦並び" value="1" />
-      </radio_group>
-      <text name="req_restart_chattabs">（再起動が必要です）</text>
-      <text name="FSIMTabNameFormat_label">ＩＭタブの名前の書式：</text>
-      <combo_box name="FSIMTabNameFormat">
-        <combo_box.item name="display_name" label="表示名" value="0" />
-        <combo_box.item name="user_name" label="ユーザ名" value="1" />
-        <combo_box.item name="display_user_name" label="表示名（ユーザ名）" value="2" />
-        <combo_box.item name="user_display_name" label="ユーザ名（表示名）" value="3" />
-      </combo_box>
-      <!--<FS:HG>
+	<tab_container label="Firestorm初期設定" name="tabs">
+		<!-- Chat: Visuals -->
+		<panel label="ビジュアル" name="ChatVisuals">
+			<text name="console_font_size">オンスクリーンコンソールのフォントサイズ：</text>
+			<radio_group name="chat_console_font_size">
+				<radio_item label="小" name="consradio" />
+				<radio_item label="中" name="consradio2" />
+				<radio_item label="大" name="consradio3" />
+				<radio_item label="特大" name="consradio4" />
+			</radio_group>
+			<check_box name="play_avatar_animations" label="アバター・アニメーションを再生する（シャウトなど）" />
+			<check_box name="FSIMSystemMessageBrackets" label="システムチャットメッセージを括弧で囲む（Ｖ１スタイルのチャットヘッダのみ）" />
+			<check_box name="FSChatHistoryShowYou" label="チャットのログに名前の代わりに「あなた」を表示する" />
+			<check_box name="EmotesUseItalic" label="エモートはイタリックにする" />
+			<check_box name="FSEmphasizeShoutWhisper" label="シャウトはボールドにし、ささやきはイタリックにする" />
+			<check_box name="FSMarkObjects" label="なりすましを避けるために、オブジェクトが話すときに（名前なし）でマークする。" />
+			<check_box name="FSllOwnerSayToScriptDebugWindow_checkbox" label="llOwnerSayをスクリプトのデバッグウィンドウにルーティングする" />
+			<check_box name="bubble_text_chat" label="アバターの上に吹き出しチャットを表示する" />
+			<check_box name="FSBubblesHideConsoleAndToasts" label="近くのチャットコンソールとトーストにチャットを表示しない" />
+			<check_box name="bubble_text_typing" label="アバターの上の吹き出しに入力中インジケーターを表示する" />
+			<check_box name="FSShowTypingStateInNameTag" label="アバターの上のネームタグに入力中インジケータを表示する" />
+			<check_box name="FSSecondsinChatTimestamps" label="タイムスタンプに秒を表示する［HH：MM：SS］" />
+			<text name="show_timestamps_label">タイムスタンプの表示先：</text>
+			<check_box label="近くのチャット" name="show_timestamps_nearby_chat" />
+			<check_box label="ＩＭ" name="show_timestamps_im" />
+			<check_box label="ログ" name="show_timestamps_transcripts" />
+			<check_box name="FSConsoleClassicDrawMode" label="コンソールにクラシック描画モードを使用する" tool_tip="クラシック描画モードでは、コンソールの背景は、最も長い行の幅で、すべての行の上に単一のブロックとして描画されます。" />
+			<check_box name="ChatFullWidth" label="コンソールに画面の全幅を使用する" />
+			<spinner label="チャット後のフェード：" name="fade_chat_time" />
+			<text name="text_box4">（秒）</text>
+			<spinner name="max_chat_count" />
+			<text name="text_box5">（＃行）</text>
+		</panel>
+		<!-- Chat: Chat Windows -->
+		<panel label="チャットウィンドウ" name="ChatWindows">
+			<text name="font_size">チャットウィンドウサイズ：</text>
+			<radio_group name="chat_font_size">
+				<radio_item name="radio" label="小" value="0" />
+				<radio_item name="radio2" label="中" value="1" />
+				<radio_item name="radio3" label="大" value="2" />
+				<radio_item name="radio4" label="特大" value="3" />
+			</radio_group>
+			<check_box name="IMShowNamesForP2PConv" label="直接ＩＭで名前を表示" />
+			<check_box name="plain_text_chat_history" label="Ｖ１スタイルのチャットヘッダー" />
+			<check_box name="ShowChatMiniIcons" label="[SHORT_VIEWER_GENERATION]スタイルのチャットヘッダを使用している場合、ミニアイコンを表示" />
+			<check_box name="LogShowHistory" label="最後の会話の終わりを表示する" />
+			<check_box name="FSTypingChevronPrefix" label="ＩＭセッションに入力インジケータとしてシェブロン（＞）を追加する" />
+			<text name="show_unread_messages_label">新着メッセージ通知を表示：</text>
+			<check_box name="FSNotifyUnreadChatMessages" label="近くのチャット" tool_tip="チャット履歴を読んでいる最中に画面をスクロールバックした際に新しいメッセージが届いた場合、近くのチャットウィンドウに新しい未読メッセージの数を示す通知を表示します。" />
+			<check_box name="FSNotifyUnreadIMMessages" label="インスタント／グループチャット" tool_tip="チャット履歴を読んでいる最中に画面をスクロールバックした際にに新しいメッセージが届いた場合、インスタント／グループメッセージウィンドウに新しい未読メッセージの数を示す通知を表示します。" />
+			<text name="show_ims_in_label">ＩＭの表示先：</text>
+			<radio_group name="chat_window" tool_tip="インスタントメッセージを個別のフローターで表示するか、連結タブで表示するかを指定します。（再起動が必要です）">
+				<radio_item name="radio" label="個別のウィンドウ" value="0" />
+				<radio_item name="radio2" label="タブ" value="1" />
+			</radio_group>
+			<text name="req_restart_ims">（再起動が必要です）</text>
+			<text name="tab_direction_label">チャットタブモードの向き：</text>
+			<radio_group name="chat_tab_direction" tool_tip="連結タブモードが有効なとき、チャット／ＩＭタブの向きを水平と垂直の間で変更します。（再起動が必要です）">
+				<radio_item name="radio_horizontal" label="横並び" value="0" />
+				<radio_item name="radio_vertical" label="縦並び" value="1" />
+			</radio_group>
+			<text name="req_restart_chattabs">（再起動が必要です）</text>
+			<text name="FSIMTabNameFormat_label">ＩＭタブの名前の書式：</text>
+			<combo_box name="FSIMTabNameFormat">
+				<combo_box.item name="display_name" label="表示名" value="0" />
+				<combo_box.item name="user_name" label="ユーザ名" value="1" />
+				<combo_box.item name="display_user_name" label="表示名（ユーザ名）" value="2" />
+				<combo_box.item name="user_display_name" label="ユーザ名（表示名）" value="3" />
+			</combo_box>
+			<!--<FS:HG>
       FS-1734 seperate name and text styles for moderator-->
-      <check_box name="FSHighlightGroupMods" label="グループのモデレーターのメッセージハイライトする" />
-      <text name="Moderator Name Style">名前：</text>
-      <combo_box name="mod_name_style">
-        <combo_box.item label="通常" name="normal" value="0" />
-        <combo_box.item label="ボールド" name="BOLD" value="1" />
-        <combo_box.item label="イタリック" name="ITALIC" value="2" />
-        <combo_box.item label="ボールド＆イタリック" name="BOLDITALIC" value="3" />
-        <combo_box.item label="下線" name="UNDERLINE" value="4" />
-        <combo_box.item label="ボールド＆下線" name="BOLDUNDERLINE" value="5" />
-        <combo_box.item label="イタリック＆下線" name="ITALICUNDERLINE" value="6" />
-        <combo_box.item label="ボールド＆イタリック＆下線" name="BOLDITALICUNDERLINE" value="7" />
-      </combo_box>
-      <text name="Moderator Text Style">テキスト：</text>
-      <combo_box name="mod_text_style">
-        <combo_box.item label="通常" name="normal" value="0" />
-        <combo_box.item label="ボールド" name="BOLD" value="1" />
-        <combo_box.item label="イタリック" name="ITALIC" value="2" />
-        <combo_box.item label="ボールド＆イタリック" name="BOLDITALIC" value="3" />
-        <combo_box.item label="下線" name="UNDERLINE" value="4" />
-        <combo_box.item label="ボールド＆下線" name="BOLDUNDERLINE" value="5" />
-        <combo_box.item label="イタリック＆下線" name="ITALICUNDERLINE" value="6" />
-        <combo_box.item label="ボールド＆イタリック＆下線" name="BOLDITALICUNDERLINE" value="7" />
-      </combo_box>
-      <!--</FS:HG>
+			<check_box name="FSHighlightGroupMods" label="グループのモデレーターのメッセージハイライトする" />
+			<text name="Moderator Name Style">名前：</text>
+			<combo_box name="mod_name_style">
+				<combo_box.item label="通常" name="normal" value="0" />
+				<combo_box.item label="ボールド" name="BOLD" value="1" />
+				<combo_box.item label="イタリック" name="ITALIC" value="2" />
+				<combo_box.item label="ボールド＆イタリック" name="BOLDITALIC" value="3" />
+				<combo_box.item label="下線" name="UNDERLINE" value="4" />
+				<combo_box.item label="ボールド＆下線" name="BOLDUNDERLINE" value="5" />
+				<combo_box.item label="イタリック＆下線" name="ITALICUNDERLINE" value="6" />
+				<combo_box.item label="ボールド＆イタリック＆下線" name="BOLDITALICUNDERLINE" value="7" />
+			</combo_box>
+			<text name="Moderator Text Style">テキスト：</text>
+			<combo_box name="mod_text_style">
+				<combo_box.item label="通常" name="normal" value="0" />
+				<combo_box.item label="ボールド" name="BOLD" value="1" />
+				<combo_box.item label="イタリック" name="ITALIC" value="2" />
+				<combo_box.item label="ボールド＆イタリック" name="BOLDITALIC" value="3" />
+				<combo_box.item label="下線" name="UNDERLINE" value="4" />
+				<combo_box.item label="ボールド＆下線" name="BOLDUNDERLINE" value="5" />
+				<combo_box.item label="イタリック＆下線" name="ITALICUNDERLINE" value="6" />
+				<combo_box.item label="ボールド＆イタリック＆下線" name="BOLDITALICUNDERLINE" value="7" />
+			</combo_box>
+			<!--</FS:HG>
       FS-1734 seperate name and text styles for moderator-->
-      <check_box name="FSMuteAllGroups" label="すべてのグループチャットで無効化" />
-      <check_box name="FSMuteGroupWhenNoticesDisabled" label="「グループ通知を受け取る」を無効にした場合、グループチャットも無効にする" />
-      <check_box name="FSIgnoreAdHocSessions" label="すべての会話（アドホック）チャットを自動的に無視し退出する" />
-      <check_box name="FSReportIgnoredAdHocSession" label="無視された会話チャットを近くのチャットで報告" />
-      <check_box name="FSDontIgnoreAdHocFromFriends" label="フレンドからの会話チャットの誘いを無視しない" />
-      <text name="group_snooze_time_label" tool_tip="「スヌーズ」ボタンを押した時にグループチャットがミュートされる時間。０と設定すると、次のグループメッセージが来るまでウィンドウを閉じます。">グループチャットのスヌーズ時間：</text>
-      <spinner name="GroupSnoozeTime" tool_tip="「スヌーズ」ボタンを押した時にグループチャットがミュートされる時間。０と設定すると、次のグループメッセージが来るまでウィンドウを閉じます。" />
-      <text name="group_snooze_time_seconds_label" tool_tip="「スヌーズ」ボタンを押した時にグループチャットがミュートされる時間。０と設定すると、次のグループメッセージが来るまでウィンドウを閉じます。">秒</text>
-      <check_box name="FSEnablePerGroupSnoozeDuration" label="グループチャットのスヌーズ時間をグループごとに設定可能にする" />
-    </panel>
-    <!-- Chat: Typing -->
-    <panel label="入力" name="ChatTyping">
-      <button name="autoreplace_showgui" label="自動置換…" />
-      <button name="spellcheck_showgui" label="スペルチェック…" />
-      <button name="translation_settings_btn" label="翻訳…" />
-      <check_box name="play_typing_animation" label="チャット入力中のアニメーションを再生する" />
-      <check_box name="play_typing_animation_emote" label="チャット入力中のアニメーションをエモート時も再生する" />
-      <check_box name="play_typing_sound" label="近くのチャットでタイピング音を聞けるようにする" />
-      <check_box name="FSSendTypingState" label="ＩＭセッション中に他のアバターにタイピング通知を送る" />
-      <check_box name="FSChatbarGestureAutoCompleteEnable" label="近くのチャットバーでジェスチャーの自動入力を有効にする" />
-      <check_box name="FSChatbarNamePrediction" label="近くのチャットバーで名前の自動予測を有効にする" />
-      <check_box name="AllowMUpose" label="「:」を「/me」の代わりに使えるようにする" />
-      <check_box name="AutoCloseOOC" label="ＯＯＣチャットを自動的にカッコで囲む" />
-      <check_box name="FSShowIMSendButton" label="ＩＭセッションのチャットバーにチャット送信ボタンを表示する" />
-      <check_box name="FSNearbyChatbar" label="近くのチャットウィンドウにチャットバーを追加する" />
-      <check_box name="FSShowChatChannel" label="チャットバーにチャンネル選択を表示する" />
-      <check_box name="FSShowChatType" label="チャットバーにチャットの種類／送信ボタンを表示する" />
-      <check_box name="AutohideChatBar" label="メインチャットバーを自動的に隠す" tool_tip="下のボタンバーからチャットバーを非表示にし、必要なときだけオーバーレイで表示します。" />
-      <check_box name="CloseChatOnReturn" label="メッセージ送信後にチャットの選択を解除する" />
-      <check_box name="FSUnfocusChatHistoryOnReturn" label="チャット履歴もフォーカス解除する" />
-      <text name="textUseKeyboardShortcuts">キーボードのショートカット：</text>
-      <check_box name="FSUseCtrlShout" label="Ctrl＋Enter（シャウト）" tool_tip="有効にすること、近くのチャットでCtrl＋Enterのキーボードショートカットで、シャウトすることができるようになります。" />
-      <check_box name="FSUseShiftWhisper" label="Shift＋Enter（ささやき）" tool_tip="有効にすること、近くのチャットでShift＋Enterのキーボードショートカットで、ささやくことができるようになります。" />
-      <check_box name="FSUseAltOOC" label="Alt＋Enter（ＯＯＣ）" tool_tip="有効にすること、近くのチャットでAlt＋EnterのキーボードショートカットでＯＯＣ（その人らしくないキャラクター）メッセージを送信することができるようになります。" />
-    </panel>
-    <!-- Chat: Notices -->
-    <!-- This tab is only for notifications related directly to chat and not for notification
+			<check_box name="FSMuteAllGroups" label="すべてのグループチャットで無効化" />
+			<check_box name="FSMuteGroupWhenNoticesDisabled" label="「グループ通知を受け取る」を無効にした場合、グループチャットも無効にする" />
+			<check_box name="FSIgnoreAdHocSessions" label="すべての会話（アドホック）チャットを自動的に無視し退出する" />
+			<check_box name="FSReportIgnoredAdHocSession" label="無視された会話チャットを近くのチャットで報告" />
+			<check_box name="FSDontIgnoreAdHocFromFriends" label="フレンドからの会話チャットの誘いを無視しない" />
+			<text name="group_snooze_time_label" tool_tip="「スヌーズ」ボタンを押した時にグループチャットがミュートされる時間。０と設定すると、次のグループメッセージが来るまでウィンドウを閉じます。">
+				グループチャットのスヌーズ時間：</text>
+			<spinner name="GroupSnoozeTime" tool_tip="「スヌーズ」ボタンを押した時にグループチャットがミュートされる時間。０と設定すると、次のグループメッセージが来るまでウィンドウを閉じます。" />
+			<text name="group_snooze_time_seconds_label" tool_tip="「スヌーズ」ボタンを押した時にグループチャットがミュートされる時間。０と設定すると、次のグループメッセージが来るまでウィンドウを閉じます。">秒</text>
+			<check_box name="FSEnablePerGroupSnoozeDuration" label="グループチャットのスヌーズ時間をグループごとに設定可能にする" />
+		</panel>
+		<!-- Chat: Typing -->
+		<panel label="入力" name="ChatTyping">
+			<button name="autoreplace_showgui" label="自動置換…" />
+			<button name="spellcheck_showgui" label="スペルチェック…" />
+			<button name="translation_settings_btn" label="翻訳…" />
+			<check_box name="play_typing_animation" label="チャット入力中のアニメーションを再生する" />
+			<check_box name="play_typing_animation_emote" label="チャット入力中のアニメーションをエモート時も再生する" />
+			<check_box name="play_typing_sound" label="近くのチャットでタイピング音を聞けるようにする" />
+			<check_box name="FSSendTypingState" label="ＩＭセッション中に他のアバターにタイピング通知を送る" />
+			<check_box name="FSChatbarGestureAutoCompleteEnable" label="近くのチャットバーでジェスチャーの自動入力を有効にする" />
+			<check_box name="FSChatbarNamePrediction" label="近くのチャットバーで名前の自動予測を有効にする" />
+			<check_box name="AllowMUpose" label="「:」を「/me」の代わりに使えるようにする" />
+			<check_box name="AutoCloseOOC" label="ＯＯＣ（その人らしくないキャラクター）チャットを自動的にカッコで囲む" />
+			<check_box name="FSShowIMSendButton" label="ＩＭセッションのチャットバーにチャット送信ボタンを表示する" />
+			<check_box name="FSNearbyChatbar" label="近くのチャットウィンドウにチャットバーを追加する" />
+			<check_box name="FSShowChatChannel" label="チャットバーにチャンネル選択を表示する" />
+			<check_box name="FSShowChatType" label="チャットバーにチャットの種類／送信ボタンを表示する" />
+			<check_box name="AutohideChatBar" label="メインチャットバーを自動的に隠す" tool_tip="下のボタンバーからチャットバーを非表示にし、必要なときだけオーバーレイで表示します。" />
+			<check_box name="CloseChatOnReturn" label="メッセージ送信後にチャットの選択を解除する" />
+			<check_box name="FSUnfocusChatHistoryOnReturn" label="チャット履歴もフォーカス解除する" />
+			<text name="textUseKeyboardShortcuts">キーボードのショートカット：</text>
+			<check_box name="FSUseCtrlShout" label="Ctrl＋Enter（シャウト）" tool_tip="有効にすること、近くのチャットでCtrl＋Enterのキーボードショートカットで、シャウトすることができるようになります。" />
+			<check_box name="FSUseShiftWhisper" label="Shift＋Enter（ささやき）" tool_tip="有効にすること、近くのチャットでShift＋Enterのキーボードショートカットで、ささやくことができるようになります。" />
+			<check_box name="FSUseAltOOC" label="Alt＋Enter（ＯＯＣ）" tool_tip="有効にすること、近くのチャットでAlt＋EnterのキーボードショートカットでＯＯＣ（その人らしくないキャラクター）メッセージを送信することができるようになります。" />
+		</panel>
+		<!-- Chat: Notices -->
+		<!-- This tab is only for notifications related directly to chat and not for notification
     options that simply use nearby chat -->
-    <panel name="ChatNotices" label="お知らせ">
-      <text name="disable_toast_label">有効にする着信チャットのポップアップ：</text>
-      <check_box name="EnableGroupChatPopups" label="グループチャット" tool_tip="グループチャットにメッセージが届いたときにポップアップが表示されるようにします。" />
-      <check_box name="EnableIMChatPopups" label="ＩＭチャット" tool_tip="インスタントメッセージが届いたときにポップアップが表示されるようにします。" />
-      <check_box name="FSUseNearbyChatConsole" label="フローティングトーストの代わりにコンソールをチャットポップアップに使用（Viewer 1.xスタイル）" />
-      <check_box name="FSLogImToChatConsole" label="ＩＭをチャットコンソールに表示" />
-      <check_box name="FSLogGroupImToChatConsole" label="グループチャットをチャットコンソールに表示" />
-      <text name="FSShowGroupNameLength_label">チャット記録に記載されるグループ名の長さ</text>
-      <spinner name="FSShowGroupNameLength" tool_tip="完全なグループ名の場合は‐１、無効の場合は０" />
-      <check_box name="FSOpenIMContainerOnOfflineMessage" label="オフラインメッセージ受信時に会話を開く" />
-      <check_box name="send_im_to_email" label="オフライン時にＩＭをメールで送る（[EMAIL]）" />
-      <text name="email_settings">[https://accounts.secondlife.com/change_email?lang=ja-JP オフラインＩＭのメール通知設定を開く]</text>
-      <text name="email_settings_login_to_change">オフラインＩＭをＥメールに転送するためにはログインする必要があります。</text>
-      <check_box name="FSShowIMInChatHistory" label="近くのチャットウィンドウにＩＭとグループチャットを表示する" />
-      <check_box name="FSLogIMInChatHistory" label="ＩＭとグループチャットを「近くのチャット」に保存" />
-      <text name="FSIMChatHistoryFade_label">ＩＭテキストをチャット記録ウィンドウの背景にフェードインする</text>
-      <spinner name="FSIMChatHistoryFade" />
-      <check_box name="FSShowMessageCountInWindowTitle" label="Firestormのウィンドウタイトルに未読ＩＭの数を表示する" />
-      <check_box name="FSAnnounceIncomingIM" label="送信者が入力を始めると同時に、着信ＩＭをアナウンスする" />
-      <check_box name="FSIMChatFlashOnFriendStatusChange" label="フレンドがオンラインまたはオフラインになったときに、ＩＭタブをフラッシュ表示する" />
-      <check_box name="FSNotifyNearbyChatFlash" label="新しい近くのチャットが来たときに、チャットツールバーボタンをフラッシュさせる" tool_tip="新しい近くのチャットが来たときに、チャットツールバーボタンを点滅させます。ボタンを点滅させるには、近くのチャットウィンドウが会話ウィンドウにドッキングされ、会話ウィンドウが閉じられている必要があります。" />
-      <check_box name="FSNotifyIMFlash" label="新しいＩＭが来たときに、チャットツールバーボタンをフラッシュさせる" tool_tip="新しい（グループ）ＩＭが届いたときにチャットツールバーのボタンを点滅させます。ボタンを点滅させるには、ＩＭウィンドウが会話ウィンドウにドッキングされ、会話ウィンドウが閉じられている必要があります。このオプションはＩＭが別ウィンドウではなくタブで表示になっている場合のみ利用可能です（「一般」タブ参照）" />
-      <check_box name="FSReportMutedGroupChat" label="近くのチャットでミュートされたグループチャットを報告する" />
-      <check_box name="FSGroupNoticesToIMLog" label="グループチャットで、トーストに加えてグループ通知を表示する" />
-      <check_box name="FSBetterGroupNoticesToIMLog" label="被写体と作者も表示する" />
-    </panel>
-    <!-- Chat: Radar -->
-    <panel name="ChatRadar" label="レーダー">
-      <check_box name="reportChatRangeEnter" label="アバターがチャット範囲に入るとレーダーが報告" />
-      <check_box name="PlayModeUISndRadarChatEnter" label="再生するサウンドのＵＵＩＤ：" />
-      <line_editor name="UISndRadarChatEnter" />
-      <button name="Prev_UISndRadarChatEnter" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
-      <button name="Def_UISndRadarChatEnter" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
-      <check_box name="reportChatRangeLeave" label="アバターがチャット範囲から離れるとレーダーが報告" />
-      <check_box name="PlayModeUISndRadarChatLeave" label="再生するサウンドのＵＵＩＤ：" />
-      <line_editor name="UISndRadarChatLeave" />
-      <button name="Prev_UISndRadarChatLeave" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
-      <button name="Def_UISndRadarChatLeave" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
-      <check_box name="reportDrawRangeEnter" label="アバターが描画距離に入るとレーダーが報告" />
-      <check_box name="PlayModeUISndRadarDrawEnter" label="再生するサウンドのＵＵＩＤ：" />
-      <line_editor name="UISndRadarDrawEnter" />
-      <button name="Prev_UISndRadarDrawEnter" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
-      <button name="Def_UISndRadarDrawEnter" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
-      <check_box name="reportDrawRangeLeaave" label="アバターが描画距離から離れるとレーダーが報告" />
-      <check_box name="PlayModeUISndRadarDrawLeave" label="再生するサウンドのＵＵＩＤ：" />
-      <line_editor name="UISndRadarDrawLeave" />
-      <button name="Prev_UISndRadarDrawLeave" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
-      <button name="Def_UISndRadarDrawLeave" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
-      <check_box name="RadarReportSimRangeEnter" label="アバターがリージョンに入るとレーダーが報告" />
-      <check_box name="PlayModeUISndRadarSimEnter" label="再生するサウンドのＵＵＩＤ：" />
-      <line_editor name="UISndRadarSimEnter" />
-      <button name="Prev_UISndRadarSimEnter" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
-      <button name="Def_UISndRadarSimEnter" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
-      <check_box name="RadarReportSimRangeLeave" label="アバターがリージョンから離れるとレーダーが報告" />
-      <check_box name="PlayModeUISndRadarSimLeave" label="再生するサウンドのＵＵＩＤ：" />
-      <line_editor name="UISndRadarSimLeave" />
-      <button name="Prev_UISndRadarSimLeave" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
-      <button name="Def_UISndRadarSimLeave" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
-      <check_box name="RadarEnterChannelAlert" label="警告をスクリプトに入力する" />
-      <check_box name="RadarLeaveChannelAlert" label="スクリプトに終了アラートを報告する" />
-      <check_box name="FSRadarEnhanceByBridge" label="ＬＳＬクライアントブリッジでレーダーを拡張" tool_tip="この機能を有効にすると、高高度でアバターの位置を特定するレーダー機能が、ＬＳＬクライアントブリッジによってサポートされます。" />
-      <text name="AgeAlertLabel">年齢警報：</text>
-      <text name="RadarAvatarAgeAlertValueLabel">しきい値：</text>
-      <spinner name="RadarAvatarAgeAlertValue" tool_tip="レーダーの年齢欄にも色をつけます。無効にしたい場合は‐１と設定してください。" />
-      <text name="RadarAvatarAgeAlertValueLabelSuffix">日</text>
-      <check_box name="RadarAvatarAgeAlert" label="レーダーは指定された年齢より若いアバターを報告します。" />
-      <check_box name="PlayModeUISndRadarAgeAlert" label="再生するサウンドのＵＵＩＤ：" />
-      <line_editor name="UISndRadarAgeAlert" />
-      <button name="Prev_UISndRadarAgeAlert" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
-      <button name="Def_UISndRadarAgeAlert" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
-    </panel>
-    <!-- Chat: Keyword Alerts -->
-    <panel name="ChatKeywordAlerts" label="キーワードアラート">
-      <check_box name="FSKeywordOn" label="キーワードアラートを有効化" />
-      <check_box name="FSKeywordInChat" label="近くのチャットでキーワードを探す" />
-      <check_box name="FSKeywordInIM" label="ＩＭやグループチャットでキーワードを探す" />
-      <check_box name="FSKeywordSpeakersName" label="送信者名をキーワードでチェック" />
-      <check_box name="FSKeywordCaseSensitive" label="すべてのキーワードで大文字と小文字を区別する" />
-      <check_box name="FSKeywordMatchWholeWords" label="単語全体のマッチングのみ" />
-      <text name="textFSKeywords">キーワード（カンマ区切り）：</text>
-      <text_editor name="FSKeywords" />
-      <check_box name="FSKeywordChangeColor" label="カラーアラートを有効にする" />
-      <color_swatch name="colorswatch" tool_tip="カラーピッカーを開きます。" />
-      <check_box name="FSKeywordPlaySound" label="アラート音を再生" />
-      <text name="textFSKeywordSound">アラート音のＵＵＩＤ：</text>
-      <line_editor name="FSKeywordSound" />
-      <button name="Prev_UISndFSKeywordSound" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
-      <button name="Def_UISndFSKeywordSound" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
-    </panel>
-    <!-- Chat: CmdLine -->
-    <panel label="コマンドライン" name="tab-CmdLine">
-      <check_box label="チャットバーをコマンドラインとして使用可能にする" name="chat_cmd_toggle" />
-      <!--calc-->
-      <text name="FSCmdLineCalc_txt">計算式（使用法: cmd SIN(2+2)）</text>
-      <line_editor name="FSCmdLineCalc" tool_tip="" />
-      <!--drawdistance-->
-      <text name="FSCmdLineDrawDistance_txt">描画距離の変更（使用法：cmd meters）</text>
-      <line_editor name="FSCmdLineDrawDistance" tool_tip="" />
-      <!--bandwidth-->
-      <text name="FSCmdLineBandWidth_txt">最大帯域幅の変更（使用法：cmd kbps）</text>
-      <line_editor name="FSCmdLineBandWidth" tool_tip="" />
-      <!--cpcampos-->
-      <text name="FSCmdLineCopyCam_txt">カメラ石をクリップボードにコピー</text>
-      <line_editor name="FSCmdLineCopyCam" tool_tip="" />
-      <!--cao-->
-      <text name="FSCmdLineAO_txt">ＡＯのオン／オフ（使用法：cmd on/off）</text>
-      <line_editor name="FSCmdLineAO" tool_tip="" />
-      <!--clrchat-->
-      <text name="FSCmdLineClearChat_txt">チャット記録を消去（使用法：cmd）</text>
-      <line_editor tool_tip="チャットスパマーによるラグの影響を防ぐため、チャットのトランスクリプトをクリアします。" name="FSCmdLineClearChat" />
-      <!--media-->
-      <text name="FSCmdLineMedia_txt">メディアＵＲＬをセット（使用法：cmd url type）</text>
-      <line_editor tool_tip="入力されたＵＲＬをメディアストリームとして設定し、再生します。" name="FSCmdLineMedia" />
-      <!--music-->
-      <text name="FSCmdLineMusic_txt">音楽ストリームＵＲＬをセット（使用法：cmd url）</text>
-      <line_editor tool_tip="入力されたＵＲＬを音楽ストリームとして設定し、再生します。" name="FSCmdLineMusic" />
-      <!--rezplat-->
-      <text name="FSCmdLineRezPlatform_txt">プラットフォームをRez（使用法：cmd 0 - 64）</text>
-      <line_editor name="FSCmdLineRezPlatform" tool_tip="" />
-      <slider name="FSCmdLinePlatformSize" label="幅" tool_tip="プラットフォームはどれくらいの大きさにしますか？" />
-      <view_border name="EmDivisor" />
-      <!--key2name-->
-      <text name="FSCmdLineKeyToName_txt">キーからアバター名を取得（使用法：cmd key）</text>
-      <line_editor name="FSCmdLineKeyToName" tool_tip="" control_name="FSCmdLineKeyToName" />
-      <!--dice-->
-      <text name="FSCmdLineRollDice_txt">サイコロを振る（使用法：cmd dice faces mt mv）</text>
-      <line_editor tool_tip="サイコロを振る‐cmd [サイコロの数] [面数] [修飾子の種別（オプション）] [修飾子の値（オプション）]. 例：cmd 1 20, cmd 2 40 + 5. パラメーターの不足はcmd 1 6（普通のサイコロ）と同じです。" name="FSCmdLineRollDice" />
-      <!--gtp-->
-      <text name="FSCmdLinePos_txt">リージョン内にテレポート（使用法：cmd x y z）</text>
-      <line_editor name="FSCmdLinePos" tool_tip="" />
-      <!--flr-->
-      <text name="FSCmdLineGround_txt">地面にテレポート（使用法：cmd）</text>
-      <line_editor name="FSCmdLineGround" tool_tip="" />
-      <!--gth-->
-      <text name="FSCmdLineHeight_txt">指定された高さにテレポート（使用法：cmd z）</text>
-      <line_editor name="FSCmdLineHeight" />
-      <!--tp2cam-->
-      <text name="FSCmdTeleportToCam_txt">カメラ位置にテレポート（使用法：cmd）</text>
-      <line_editor name="FSCmdTeleportToCam" tool_tip="" />
-      <!--offertp-->
-      <text name="FSCmdLineOfferTp_txt">テレポートのオファーをアバターに送る（使用法：cmd key）</text>
-      <line_editor name="FSCmdLineOfferTp" tool_tip="" />
-      <!--tp2-->
-      <text name="FSCmdLineTP2_txt">アバターにテレポート（使用法：cmd name）</text>
-      <line_editor tool_tip="このコマンドの構文では、部分的な名前を指定でき、大文字と小文字は区別されません。レーダーを開いているときに使用すると、よりよい結果が得られます。" name="FSCmdLineTP2" />
-      <!--tphome-->
-      <text name="FSCmdLineTeleportHome_txt">ホームにテレポート（使用法：cmd）</text>
-      <line_editor tool_tip="" name="FSCmdLineTeleportHome" />
-      <!--mapto-->
-      <text name="FSCmdLineMapTo_txt">リージョンにテレポート（使用法：cmd regionname | x y z）</text>
-      <line_editor name="FSCmdLineMapTo" tool_tip="" />
-      <check_box label="Use same position between regions" name="toggle" />
-    </panel>
-  </tab_container>
+		<panel name="ChatNotices" label="お知らせ">
+			<text name="disable_toast_label">有効にする着信チャットのポップアップ：</text>
+			<check_box name="EnableGroupChatPopups" label="グループチャット" tool_tip="グループチャットにメッセージが届いたときにポップアップが表示されるようにします。" />
+			<check_box name="EnableIMChatPopups" label="ＩＭチャット" tool_tip="インスタントメッセージが届いたときにポップアップが表示されるようにします。" />
+			<check_box name="FSUseNearbyChatConsole" label="フローティングトーストの代わりにコンソールをチャットポップアップに使用（Viewer 1.xスタイル）" />
+			<check_box name="FSLogImToChatConsole" label="ＩＭをチャットコンソールに表示" />
+			<check_box name="FSLogGroupImToChatConsole" label="グループチャットをチャットコンソールに表示" />
+			<text name="FSShowGroupNameLength_label">チャット記録に記載されるグループ名の長さ</text>
+			<spinner name="FSShowGroupNameLength" tool_tip="完全なグループ名の場合は‐１、無効の場合は０" />
+			<check_box name="FSOpenIMContainerOnOfflineMessage" label="オフラインメッセージ受信時に会話を開く" />
+			<check_box name="send_im_to_email" label="オフライン時にＩＭをメールで送る（[EMAIL]）" />
+			<text name="email_settings">[https://accounts.secondlife.com/change_email?lang=ja-JP オフラインＩＭのメール通知設定を開く]</text>
+			<text name="email_settings_login_to_change">オフラインＩＭをＥメールに転送するためにはログインする必要があります。</text>
+			<check_box name="FSShowIMInChatHistory" label="近くのチャットウィンドウにＩＭとグループチャットを表示する" />
+			<check_box name="FSLogIMInChatHistory" label="ＩＭとグループチャットを「近くのチャット」に保存" />
+			<text name="FSIMChatHistoryFade_label">ＩＭテキストをチャット記録ウィンドウの背景にフェードインする</text>
+			<spinner name="FSIMChatHistoryFade" />
+			<check_box name="FSShowMessageCountInWindowTitle" label="Firestormのウィンドウタイトルに未読ＩＭの数を表示する" />
+			<check_box name="FSAnnounceIncomingIM" label="送信者が入力を始めると同時に、着信ＩＭをアナウンスする" />
+			<check_box name="FSIMChatFlashOnFriendStatusChange" label="フレンドがオンラインまたはオフラインになったときに、ＩＭタブをフラッシュ表示する" />
+			<check_box name="FSNotifyNearbyChatFlash" label="新しい近くのチャットが来たときに、チャットツールバーボタンをフラッシュさせる" tool_tip="新しい近くのチャットが来たときに、チャットツールバーボタンを点滅させます。ボタンを点滅させるには、近くのチャットウィンドウが会話ウィンドウにドッキングされ、会話ウィンドウが閉じられている必要があります。" />
+			<check_box name="FSNotifyIMFlash" label="新しいＩＭが来たときに、チャットツールバーボタンをフラッシュさせる" tool_tip="新しい（グループ）ＩＭが届いたときにチャットツールバーのボタンを点滅させます。ボタンを点滅させるには、ＩＭウィンドウが会話ウィンドウにドッキングされ、会話ウィンドウが閉じられている必要があります。このオプションはＩＭが別ウィンドウではなくタブで表示になっている場合のみ利用可能です（「一般」タブ参照）" />
+			<check_box name="FSReportMutedGroupChat" label="近くのチャットでミュートされたグループチャットを報告する" />
+			<check_box name="FSGroupNoticesToIMLog" label="グループチャットで、トーストに加えてグループ通知を表示する" />
+			<check_box name="FSBetterGroupNoticesToIMLog" label="被写体と作者も表示する" />
+		</panel>
+		<!-- Chat: Radar -->
+		<panel name="ChatRadar" label="レーダー">
+			<check_box name="reportChatRangeEnter" label="アバターがチャット範囲に入るとレーダーが報告" />
+			<check_box name="PlayModeUISndRadarChatEnter" label="再生するサウンドのＵＵＩＤ：" />
+			<line_editor name="UISndRadarChatEnter" />
+			<button name="Prev_UISndRadarChatEnter" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
+			<button name="Def_UISndRadarChatEnter" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
+			<check_box name="reportChatRangeLeave" label="アバターがチャット範囲から離れるとレーダーが報告" />
+			<check_box name="PlayModeUISndRadarChatLeave" label="再生するサウンドのＵＵＩＤ：" />
+			<line_editor name="UISndRadarChatLeave" />
+			<button name="Prev_UISndRadarChatLeave" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
+			<button name="Def_UISndRadarChatLeave" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
+			<check_box name="reportDrawRangeEnter" label="アバターが描画距離に入るとレーダーが報告" />
+			<check_box name="PlayModeUISndRadarDrawEnter" label="再生するサウンドのＵＵＩＤ：" />
+			<line_editor name="UISndRadarDrawEnter" />
+			<button name="Prev_UISndRadarDrawEnter" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
+			<button name="Def_UISndRadarDrawEnter" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
+			<check_box name="reportDrawRangeLeaave" label="アバターが描画距離から離れるとレーダーが報告" />
+			<check_box name="PlayModeUISndRadarDrawLeave" label="再生するサウンドのＵＵＩＤ：" />
+			<line_editor name="UISndRadarDrawLeave" />
+			<button name="Prev_UISndRadarDrawLeave" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
+			<button name="Def_UISndRadarDrawLeave" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
+			<check_box name="RadarReportSimRangeEnter" label="アバターがリージョンに入るとレーダーが報告" />
+			<check_box name="PlayModeUISndRadarSimEnter" label="再生するサウンドのＵＵＩＤ：" />
+			<line_editor name="UISndRadarSimEnter" />
+			<button name="Prev_UISndRadarSimEnter" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
+			<button name="Def_UISndRadarSimEnter" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
+			<check_box name="RadarReportSimRangeLeave" label="アバターがリージョンから離れるとレーダーが報告" />
+			<check_box name="PlayModeUISndRadarSimLeave" label="再生するサウンドのＵＵＩＤ：" />
+			<line_editor name="UISndRadarSimLeave" />
+			<button name="Prev_UISndRadarSimLeave" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
+			<button name="Def_UISndRadarSimLeave" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
+			<check_box name="RadarEnterChannelAlert" label="警告をスクリプトに入力する" />
+			<check_box name="RadarLeaveChannelAlert" label="スクリプトに終了アラートを報告する" />
+			<check_box name="FSRadarEnhanceByBridge" label="ＬＳＬクライアントブリッジでレーダーを拡張" tool_tip="この機能を有効にすると、高高度でアバターの位置を特定するレーダー機能が、ＬＳＬクライアントブリッジによってサポートされます。" />
+			<text name="AgeAlertLabel">年齢警報：</text>
+			<text name="RadarAvatarAgeAlertValueLabel">しきい値：</text>
+			<spinner name="RadarAvatarAgeAlertValue" tool_tip="レーダーの年齢欄にも色をつけます。無効にしたい場合は‐１と設定してください。" />
+			<text name="RadarAvatarAgeAlertValueLabelSuffix">日</text>
+			<check_box name="RadarAvatarAgeAlert" label="レーダーは指定された年齢より若いアバターを報告します。" />
+			<check_box name="PlayModeUISndRadarAgeAlert" label="再生するサウンドのＵＵＩＤ：" />
+			<line_editor name="UISndRadarAgeAlert" />
+			<button name="Prev_UISndRadarAgeAlert" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
+			<button name="Def_UISndRadarAgeAlert" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
+		</panel>
+		<!-- Chat: Keyword Alerts -->
+		<panel name="ChatKeywordAlerts" label="キーワードアラート">
+			<check_box name="FSKeywordOn" label="キーワードアラートを有効化" />
+			<check_box name="FSKeywordInChat" label="近くのチャットでキーワードを探す" />
+			<check_box name="FSKeywordInIM" label="ＩＭやグループチャットでキーワードを探す" />
+			<check_box name="FSKeywordSpeakersName" label="送信者名をキーワードでチェック" />
+			<check_box name="FSKeywordCaseSensitive" label="すべてのキーワードで大文字と小文字を区別する" />
+			<check_box name="FSKeywordMatchWholeWords" label="単語全体のマッチングのみ" />
+			<text name="textFSKeywords">キーワード（カンマ区切り）：</text>
+			<text_editor name="FSKeywords" />
+			<check_box name="FSKeywordChangeColor" label="カラーアラートを有効にする" />
+			<color_swatch name="colorswatch" tool_tip="カラーピッカーを開きます。" />
+			<check_box name="FSKeywordPlaySound" label="アラート音を再生" />
+			<text name="textFSKeywordSound">アラート音のＵＵＩＤ：</text>
+			<line_editor name="FSKeywordSound" />
+			<button name="Prev_UISndFSKeywordSound" label="Ｐ" tool_tip="このサウンドをプレビューします。" />
+			<button name="Def_UISndFSKeywordSound" label="Ｄ" tool_tip="デフォルトのＵＵＩＤにリセットします。" />
+		</panel>
+		<!-- Chat: CmdLine -->
+		<panel label="コマンドライン" name="tab-CmdLine">
+			<check_box label="チャットバーをコマンドラインとして使用可能にする" name="chat_cmd_toggle" />
+			<!--calc-->
+			<text name="FSCmdLineCalc_txt">計算式（使用法: cmd SIN(2+2)）</text>
+			<line_editor name="FSCmdLineCalc" tool_tip="" />
+			<!--drawdistance-->
+			<text name="FSCmdLineDrawDistance_txt">描画距離の変更（使用法：cmd meters）</text>
+			<line_editor name="FSCmdLineDrawDistance" tool_tip="" />
+			<!--bandwidth-->
+			<text name="FSCmdLineBandWidth_txt">最大帯域幅の変更（使用法：cmd kbps）</text>
+			<line_editor name="FSCmdLineBandWidth" tool_tip="" />
+			<!--cpcampos-->
+			<text name="FSCmdLineCopyCam_txt">カメラ石をクリップボードにコピー</text>
+			<line_editor name="FSCmdLineCopyCam" tool_tip="" />
+			<!--cao-->
+			<text name="FSCmdLineAO_txt">ＡＯのオン／オフ（使用法：cmd on/off）</text>
+			<line_editor name="FSCmdLineAO" tool_tip="" />
+			<!--clrchat-->
+			<text name="FSCmdLineClearChat_txt">チャット記録を消去（使用法：cmd）</text>
+			<line_editor tool_tip="チャットスパマーによるラグの影響を防ぐため、チャットのトランスクリプトをクリアします。" name="FSCmdLineClearChat" />
+			<!--media-->
+			<text name="FSCmdLineMedia_txt">メディアＵＲＬをセット（使用法：cmd url type）</text>
+			<line_editor tool_tip="入力されたＵＲＬをメディアストリームとして設定し、再生します。" name="FSCmdLineMedia" />
+			<!--music-->
+			<text name="FSCmdLineMusic_txt">音楽ストリームＵＲＬをセット（使用法：cmd url）</text>
+			<line_editor tool_tip="入力されたＵＲＬを音楽ストリームとして設定し、再生します。" name="FSCmdLineMusic" />
+			<!--rezplat-->
+			<text name="FSCmdLineRezPlatform_txt">プラットフォームをRez（使用法：cmd 0 - 64）</text>
+			<line_editor name="FSCmdLineRezPlatform" tool_tip="" />
+			<slider name="FSCmdLinePlatformSize" label="幅" tool_tip="プラットフォームはどれくらいの大きさにしますか？" />
+			<view_border name="EmDivisor" />
+			<!--key2name-->
+			<text name="FSCmdLineKeyToName_txt">キーからアバター名を取得（使用法：cmd key）</text>
+			<line_editor name="FSCmdLineKeyToName" tool_tip="" control_name="FSCmdLineKeyToName" />
+			<!--dice-->
+			<text name="FSCmdLineRollDice_txt">サイコロを振る（使用法：cmd dice faces mt mv）</text>
+			<line_editor tool_tip="サイコロを振る‐cmd [サイコロの数] [面数] [修飾子の種別（オプション）] [修飾子の値（オプション）]. 例：cmd 1 20, cmd 2 40 + 5. パラメーターの不足はcmd 1 6（普通のサイコロ）と同じです。" name="FSCmdLineRollDice" />
+			<!--gtp-->
+			<text name="FSCmdLinePos_txt">リージョン内にテレポート（使用法：cmd x y z）</text>
+			<line_editor name="FSCmdLinePos" tool_tip="" />
+			<!--flr-->
+			<text name="FSCmdLineGround_txt">地面にテレポート（使用法：cmd）</text>
+			<line_editor name="FSCmdLineGround" tool_tip="" />
+			<!--gth-->
+			<text name="FSCmdLineHeight_txt">指定された高さにテレポート（使用法：cmd z）</text>
+			<line_editor name="FSCmdLineHeight" />
+			<!--tp2cam-->
+			<text name="FSCmdTeleportToCam_txt">カメラ位置にテレポート（使用法：cmd）</text>
+			<line_editor name="FSCmdTeleportToCam" tool_tip="" />
+			<!--offertp-->
+			<text name="FSCmdLineOfferTp_txt">テレポートのオファーをアバターに送る（使用法：cmd key）</text>
+			<line_editor name="FSCmdLineOfferTp" tool_tip="" />
+			<!--tp2-->
+			<text name="FSCmdLineTP2_txt">アバターにテレポート（使用法：cmd name）</text>
+			<line_editor tool_tip="このコマンドの構文では、部分的な名前を指定でき、大文字と小文字は区別されません。レーダーを開いているときに使用すると、よりよい結果が得られます。" name="FSCmdLineTP2" />
+			<!--tphome-->
+			<text name="FSCmdLineTeleportHome_txt">ホームにテレポート（使用法：cmd）</text>
+			<line_editor tool_tip="" name="FSCmdLineTeleportHome" />
+			<!--mapto-->
+			<text name="FSCmdLineMapTo_txt">リージョンにテレポート（使用法：cmd regionname | x y z）</text>
+			<line_editor name="FSCmdLineMapTo" tool_tip="" />
+			<check_box label="Use same position between regions" name="toggle" />
+		</panel>
+	</tab_container>
 </panel>

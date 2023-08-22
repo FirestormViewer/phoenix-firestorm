@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="スキン" name="skin_panel">
-  <button name="skin_preview" />
-  <text name="skin_textbox">スキン：</text>
-  <combo_box name="skin_combobox" />
-  <text name="skin_textbox1">（再起動する必要があります）</text>
+	<button name="skin_preview" />
+	<text name="skin_textbox">スキン：</text>
+	<combo_box name="skin_combobox" />
+	<text name="skin_textbox1">（再起動する必要があります）</text>
 
-  <text name="theme_textbox">カラースキーム：</text>
-  <combo_box name="theme_combobox" />
-  <text name="theme_textbox2">（再起動する必要があります）</text>
+	<text name="theme_textbox">カラースキーム：</text>
+	<combo_box name="theme_combobox" />
+	<text name="theme_textbox2">（再起動する必要があります）</text>
 
-  <check_box label="スキンを変更したときに、ツールバーをスキンの好みのレイアウトにリセット" tool_tip="このオプションを有効にすると、スキンでデザインされたツールバーのボタンレイアウトが保持され、スキンを変更したときに選択したボタンカスタマイズが上書きされます。" name="reset_toolbar_settings" />
-  <check_box label="ログインモードを変更する際に、ツールバーをログインモードの優先レイアウトにリセット" tool_tip="このオプションを有効にすると、ログインモードのデザインされたツールバーのボタンレイアウトが保持され、ログインモードを変更したときに選択したボタンのカスタマイズが上書きされます。" name="FSToolbarsResetOnModeChange" />
-  <check_box label="ビューア１スタイルのカーソルの使用" name="use_legacy_cursors" />
-  <text name="theme_textbox3">（再起動する必要があります）</text>
+	<check_box label="スキンを変更したときに、ツールバーをスキンの好みのレイアウトにリセット" tool_tip="このオプションを有効にすると、スキンでデザインされたツールバーのボタンレイアウトが保持され、スキンを変更したときに選択したボタンカスタマイズが上書きされます。" name="reset_toolbar_settings" />
+	<check_box label="ログインモードを変更する際に、ツールバーをログインモードの優先レイアウトにリセット" tool_tip="このオプションを有効にすると、ログインモードのデザインされたツールバーのボタンレイアウトが保持され、ログインモードを変更したときに選択したボタンのカスタマイズが上書きされます。" name="FSToolbarsResetOnModeChange" />
+	<check_box label="ビューア１スタイルのカーソルの使用" name="use_legacy_cursors" />
+	<text name="theme_textbox3">（再起動する必要があります）</text>
 </panel>

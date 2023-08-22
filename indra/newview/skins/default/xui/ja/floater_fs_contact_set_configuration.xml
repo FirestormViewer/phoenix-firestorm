@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_fs_contact_set_configure" title="連絡先セットの設定">
-  <floater.string name="title">[NAME]の設定</floater.string>
-  <panel name="top_panel">
-    <text name="set_label">連絡先セットの設定：</text>
-    <line_editor name="set_name_editor" />
-    <button name="rename_btn" label="リネーム" />
-    <color_swatch label="色を選択" name="set_swatch" tool_tip="ここをクリックするとカラーピッカーを開きます。" />
-    <check_box label="通知を表示" name="show_set_notifications" />
-  </panel>
-  <panel name="bottom_panel">
-    <text name="global_label">グローバル設定：</text>
-    <color_swatch label="デフォルトのカラーセット" name="global_swatch" tool_tip="ここをクリックするとカラーピッカーを開きます。" />
-    <text name="label_online">オンライン通知：</text>
-    <check_box label="すべてのフレンドのオンライン通知をトーストで表示" name="ChatOnlineNotification" />
-    <check_box label="すべてのフレンドのオンライン通知を近くのチャットで表示" name="OnlineOfflinetoNearbyChat" />
-    <check_box label="特定の連絡先セットのオンライン通知をトーストで表示" name="FSContactSetsNotificationToast" />
-    <check_box label="特定の連絡先セットのオンライン通知を近くのチャットで表示" name="FSContactSetsNotificationNearbyChat" />
-    <text name="label_colors">カスタムカラー：</text>
-    <check_box label="ミニマップのアイコンの色を連絡先セットで設定されている色にする" name="FSContactSetsColorizeMiniMap" />
-    <check_box label="名前タグの色を連絡先セットで設定されている色にする" name="FSContactSetsColorizeNameTag" />
-    <check_box label="レーダーリストのエントリ名を連絡先セットで設定されている色にする" name="FSContactSetsColorizeRadar" />
-    <check_box label="チャットの色を連絡先セットで設定されている色にする" name="FSContactSetsColorizeChat" />
-  </panel>
+	<floater.string name="title">[NAME]の設定</floater.string>
+	<panel name="top_panel">
+		<text name="set_label">連絡先セットの設定：</text>
+		<line_editor name="set_name_editor" />
+		<button name="rename_btn" label="リネーム" />
+		<color_swatch label="色を選択" name="set_swatch" tool_tip="ここをクリックするとカラーピッカーを開きます。" />
+		<check_box label="通知を表示" name="show_set_notifications" />
+	</panel>
+	<panel name="bottom_panel">
+		<text name="global_label">グローバル設定：</text>
+		<color_swatch label="デフォルトのカラーセット" name="global_swatch" tool_tip="ここをクリックするとカラーピッカーを開きます。" />
+		<text name="label_online">オンライン通知：</text>
+		<check_box label="すべてのフレンドのオンライン通知をトーストで表示" name="ChatOnlineNotification" />
+		<check_box label="すべてのフレンドのオンライン通知を近くのチャットで表示" name="OnlineOfflinetoNearbyChat" />
+		<check_box label="特定の連絡先セットのオンライン通知をトーストで表示" name="FSContactSetsNotificationToast" />
+		<check_box label="特定の連絡先セットのオンライン通知を近くのチャットで表示" name="FSContactSetsNotificationNearbyChat" />
+		<text name="label_colors">カスタムカラー：</text>
+		<check_box label="ミニマップのアイコンの色を連絡先セットで設定されている色にする" name="FSContactSetsColorizeMiniMap" />
+		<check_box label="名前タグの色を連絡先セットで設定されている色にする" name="FSContactSetsColorizeNameTag" />
+		<check_box label="レーダーリストのエントリ名を連絡先セットで設定されている色にする" name="FSContactSetsColorizeRadar" />
+		<check_box label="チャットの色を連絡先セットで設定されている色にする" name="FSContactSetsColorizeChat" />
+	</panel>
 </floater>

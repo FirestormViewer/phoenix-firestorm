@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="volume_controls" title="ボリュームコントロール">
-  <panel name="global_volume_controls_panel" />
+	<panel name="global_volume_controls_panel" />
 </floater>

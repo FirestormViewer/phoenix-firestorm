@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="script_recover" title="スクリプトの復元">
-  <text name="txt2">[APP_NAME]は、最近のビューアのクラッシュで残った可能性のある復元可能なスクリプトを検出しました。
+ <text name="txt2">[APP_NAME]は、最近のビューアのクラッシュで残った可能性のある復元可能なスクリプトを検出しました。
 
 回収されたスクリプトは「遺失物」インベントリフォルダーに置かれます。</text>
-  <scroll_list name="script_list">
-    <scroll_list.columns label="" name="script_check" />
-    <scroll_list.columns label="スクリプト名" name="script_name" />
-  </scroll_list>
-  <button label="復元" name="recover_btn" />
-  <button label="キャンセル" name="cancel_btn" />
+ <scroll_list name="script_list">
+  <scroll_list.columns label="" name="script_check" />
+  <scroll_list.columns label="スクリプト名" name="script_name" />
+ </scroll_list>
+ <button label="復元" name="recover_btn" />
+ <button label="キャンセル" name="cancel_btn" />
 </floater>

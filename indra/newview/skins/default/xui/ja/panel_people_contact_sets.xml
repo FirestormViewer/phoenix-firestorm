@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="contact_sets_panel">
-  <panel name="contact_sets_buttons_panel">
-    <combo_box name="combo_sets" />
-    <menu_button name="contact_sets_gear_btn" tool_tip="選択したグループか、人物への操作を行います。" />
-    <menu_button name="contact_sets_plus_btn" tool_tip="グループもしくは住民を追加します。" />
-    <menu_button name="contact_sets_remove_btn" tool_tip="グループもしくは住民を削除します。" />
-  </panel>
-  <avatar_list name="contact_list" />
+	<panel name="contact_sets_buttons_panel">
+		<combo_box name="combo_sets" />
+		<menu_button name="contact_sets_gear_btn" tool_tip="選択したグループか、人物への操作を行います。" />
+		<menu_button name="contact_sets_plus_btn" tool_tip="グループもしくは住民を追加します。" />
+		<menu_button name="contact_sets_remove_btn" tool_tip="グループもしくは住民を削除します。" />
+	</panel>
+	<avatar_list name="contact_list" />
 </panel>

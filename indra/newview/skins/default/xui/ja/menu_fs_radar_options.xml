@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_group_plus">
-  <menu_item_check label="レーダー上にミニマップを表示" name="ShowRadarMinimap" />
-  <menu_item_check label="指定された半径に結果を絞る" name="LimitRadarByRange" />
-  <menu_item_check label="ブラックリスト入りとミュートされたアバターを表示" name="FSRadarShowMutedAndDerendered" />
-  <context_menu label="レーターの名前の書式" name="radarNameFormat">
-    <menu_item_check label="表示名" name="radarFmtDN" />
-    <menu_item_check label="ユーザ名" name="radarFmtUN" />
-    <menu_item_check label="表示名（ユーザ名）" name="radarFmtDNUN" />
-    <menu_item_check label="ユーザ名（表示名）" name="radarFmtUNDN" />
-  </context_menu>
-  <context_menu label="表示する列" name="visible_columns">
-    <menu_item_check label="ボイス" name="voice_level" />
-    <menu_item_check label="同じリージョン" name="in_region" />
-    <menu_item_check label="入力状況" name="typing_status" />
-    <menu_item_check label="着席状況" name="sitting_status" />
-    <menu_item_check label="フラグ" name="flags" />
-    <menu_item_check label="ノート" name="has_notes" />
-    <menu_item_check label="年齢" name="age" />
-    <menu_item_check label="見た" name="seen" />
-  </context_menu>
-  <menu_item_check label="距離に応じた名前の色" name="radarColorNamesBasedOnDistance" />
-  <menu_item_separator  />
-  <context_menu label="報告先" name="report_to_menu">
-    <menu_item_check label="近くのチャット" name="radar_nearby_chat" />
-    <menu_item_check label="通知トースト" name="radar_nearby_chat" />
-  </context_menu>
-  <menu_item_check label="ミニマップ上の近くチャットが届く範囲のリング" name="MiniMapChatRing" />
-  <menu_item_check label="描画範囲に入ったときに報告" name="RadarReportDrawRangeEnter" />
-  <menu_item_check label="描画範囲を外れたときに報告" name="RadarReportDrawRangeLeave" />
-  <menu_item_check label="チャット範囲に入ったときに報告" name="RadarReportChatRangeEnter" />
-  <menu_item_check label="チャット範囲を外れたときに報告" name="RadarReportChatRangeLeave" />
-  <menu_item_check label="あなたのリージョンに入ったときに報告" name="RadarReportSimRangeEnter" />
-  <menu_item_check label="あなたのリージョンを離れたときに報告" name="RadarReportSimRangeLeave" />
-  <menu_item_check label="アバターの年齢警告を報告" name="RadarReportAgeAlert" />
-  <menu_item_check label="スクリプトの警告に入ったときに報告" name="RadarEnterChannelAlert" />
-  <menu_item_check label="スクリプトの警告を離れたときに報告" name="RadarLeaveChannelAlert" />
-  <menu_item_check label="ＬＳＬクライアントブリッジによるレーダーの強化" name="FSRadarEnhanceByBridge" />
-  <menu_item_separator  />
-  <menu_item_call name="show_blocked_list" label="ブロックした住民とオブジェクトを表示" />
+	<menu_item_check label="レーダー上にミニマップを表示" name="ShowRadarMinimap" />
+	<menu_item_check label="指定された半径に結果を絞る" name="LimitRadarByRange" />
+	<menu_item_check label="ブラックリスト入りとミュートされたアバターを表示" name="FSRadarShowMutedAndDerendered" />
+	<context_menu label="レーターの名前の書式" name="radarNameFormat">
+		<menu_item_check label="表示名" name="radarFmtDN" />
+		<menu_item_check label="ユーザ名" name="radarFmtUN" />
+		<menu_item_check label="表示名（ユーザ名）" name="radarFmtDNUN" />
+		<menu_item_check label="ユーザ名（表示名）" name="radarFmtUNDN" />
+	</context_menu>
+	<context_menu label="表示する列" name="visible_columns">
+		<menu_item_check label="ボイス" name="voice_level" />
+		<menu_item_check label="同じリージョン" name="in_region" />
+		<menu_item_check label="入力状況" name="typing_status" />
+		<menu_item_check label="着席状況" name="sitting_status" />
+		<menu_item_check label="フラグ" name="flags" />
+		<menu_item_check label="ノート" name="has_notes" />
+		<menu_item_check label="年齢" name="age" />
+		<menu_item_check label="見た" name="seen" />
+	</context_menu>
+	<menu_item_check label="距離に応じた名前の色" name="radarColorNamesBasedOnDistance" />
+	<menu_item_separator  />
+	<context_menu label="報告先" name="report_to_menu">
+		<menu_item_check label="近くのチャット" name="radar_nearby_chat" />
+		<menu_item_check label="通知トースト" name="radar_nearby_chat" />
+	</context_menu>
+	<menu_item_check label="ミニマップ上の近くチャットが届く範囲のリング" name="MiniMapChatRing" />
+	<menu_item_check label="描画範囲に入ったときに報告" name="RadarReportDrawRangeEnter" />
+	<menu_item_check label="描画範囲を外れたときに報告" name="RadarReportDrawRangeLeave" />
+	<menu_item_check label="チャット範囲に入ったときに報告" name="RadarReportChatRangeEnter" />
+	<menu_item_check label="チャット範囲を外れたときに報告" name="RadarReportChatRangeLeave" />
+	<menu_item_check label="あなたのリージョンに入ったときに報告" name="RadarReportSimRangeEnter" />
+	<menu_item_check label="あなたのリージョンを離れたときに報告" name="RadarReportSimRangeLeave" />
+	<menu_item_check label="アバターの年齢警告を報告" name="RadarReportAgeAlert" />
+	<menu_item_check label="スクリプトの警告に入ったときに報告" name="RadarEnterChannelAlert" />
+	<menu_item_check label="スクリプトの警告を離れたときに報告" name="RadarLeaveChannelAlert" />
+	<menu_item_check label="ＬＳＬクライアントブリッジによるレーダーの強化" name="FSRadarEnhanceByBridge" />
+	<menu_item_separator  />
+	<menu_item_call name="show_blocked_list" label="ブロックした住民とオブジェクトを表示" />
 </toggleable_menu>

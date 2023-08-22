@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="Test Floater" title="フローターのテスト">
-  <text left="0" follows="left|top|bottom" top="5" clip_partial="true" bottom="-5" width="100" valign="top">
+	<text left="0" follows="left|top|bottom" top="5" clip_partial="true" bottom="-5" width="100" valign="top">
 ここに
 記載される
 なんらかの
@@ -8,7 +8,7 @@
 上部に
 寄せられて
 います</text>
-  <text left_pad="5" follows="left|top|bottom" top="5" bottom="-5" clip_partial="true" width="100" valign="center">
+	<text left_pad="5" follows="left|top|bottom" top="5" bottom="-5" clip_partial="true" width="100" valign="center">
 ここに
 記載される
 なんらかの
@@ -16,7 +16,7 @@
 中央に
 寄せられて
 います</text>
-  <text left_pad="5" follows="left|top|bottom" top="5" clip_partial="true" bottom="-5" width="100" valign="bottom">
+	<text left_pad="5" follows="left|top|bottom" top="5" clip_partial="true" bottom="-5" width="100" valign="bottom">
 ここに
 記載される
 なんらかの
@@ -24,7 +24,7 @@
 下部に
 寄せられて
 います</text>
-  <text_editor left_pad="5" follows="left|top|bottom" top="5" clip_partial="true" bottom="-5" width="100" valign="top">
+	<text_editor left_pad="5" follows="left|top|bottom" top="5" clip_partial="true" bottom="-5" width="100" valign="top">
 ここに
 記載される
 なんらかの
@@ -32,7 +32,7 @@
 上部に
 寄せられて
 います</text_editor>
-  <text_editor left_pad="5" follows="left|top|bottom" top="5" bottom="-5" clip_partial="true" width="100" valign="center">
+	<text_editor left_pad="5" follows="left|top|bottom" top="5" bottom="-5" clip_partial="true" width="100" valign="center">
 ここに
 記載される
 なんらかの
@@ -40,7 +40,7 @@
 中央に
 寄せられて
 います</text_editor>
-  <text_editor left_pad="5" follows="left|top|bottom" top="5" clip_partial="true" bottom="-5" width="100" valign="bottom">
+	<text_editor left_pad="5" follows="left|top|bottom" top="5" clip_partial="true" bottom="-5" width="100" valign="bottom">
 ここに
 記載される
 なんらかの

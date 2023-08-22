@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="クラッシュリポート" name="crash_reports">
-  <panel.string name="PrivacyPolicyUrl">https://www.firestormviewer.org/privacy-policy</panel.string>
-  <check_box label="firestormviewer.orgにクラッシュリポートを送る" name="checkSendCrashReports" />
+	<panel.string name="PrivacyPolicyUrl">https://www.firestormviewer.org/privacy-policy</panel.string>
+	<check_box label="firestormviewer.orgにクラッシュリポートを送る" name="checkSendCrashReports" />
 
-  <check_box label="常に送信前に確認する" name="checkSendCrashReportsAlwaysAsk" />
+	<check_box label="常に送信前に確認する" name="checkSendCrashReportsAlwaysAsk" />
 
-  <check_box label="設定ファイルを含む" name="checkSendSettings" />
-  <text name="textSendSettings">（ユーザ名を含む）</text>
+	<check_box label="設定ファイルを含む" name="checkSendSettings" />
+	<text name="textSendSettings">（ユーザ名を含む）</text>
 
-  <check_box label="ユーザ名を含む" name="checkSendName" />
-  <text name="textSendName">（必要に応じて追加情報を得るために使用します）</text>
+	<check_box label="ユーザ名を含む" name="checkSendName" />
+	<text name="textSendName">（必要に応じて追加情報を得るために使用します）</text>
 
-  <text name="textRestartRequired">設定を変更した場合、有効にするには再起動が必要です。</text>
+	<text name="textRestartRequired">設定を変更した場合、有効にするには再起動が必要です。</text>
 
-  <text name="textInformation1">上記のチェックがない限り、クラッシュリポートにはクラッシュに関連する情報しか含まれません。</text>
-  <text name="textInformation2">ログは送信されませんので、内容をご確認の上、追加情報が</text>
-  <text name="textInformation3">含まれていると思われる場合は、別途メールにてご連絡ください。</text>
+	<text name="textInformation1">上記のチェックがない限り、クラッシュリポートにはクラッシュに関連する情報しか含まれません。</text>
+	<text name="textInformation2">ログは送信されませんので、内容をご確認の上、追加情報が</text>
+	<text name="textInformation3">含まれていると思われる場合は、別途メールにてご連絡ください。</text>
 
-  <text name="textInformation4">プライバシーポリシー：[URL]</text>
+	<text name="textInformation4">プライバシーポリシー：[URL]</text>
 </panel>

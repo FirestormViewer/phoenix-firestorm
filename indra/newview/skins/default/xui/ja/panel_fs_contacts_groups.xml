@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="groups">
-  <filter_editor name="group_filter_input" label="グループをフィルタ" />
-  <view_border name="info_border" />
-  <group_list name="group_list" />
-  <text name="groupcount" />
-  <button label="ＩＭ／コール" name="chat_btn" tool_tip="インスタンスメッセージのセッションを開きます。" />
-  <button label="プロフィール" name="info_btn" />
-  <button label="タイトル" name="titles_btn" />
-  <button label="有効化" name="activate_btn" />
-  <button label="脱退" name="leave_btn" />
-  <button label="作成…" name="create_btn" />
-  <button label="検索…" name="search_btn" />
-  <button label="招待…" name="invite_btn" />
+	<filter_editor name="group_filter_input" label="グループをフィルタ" />
+	<view_border name="info_border" />
+	<group_list name="group_list" />
+	<text name="groupcount" />
+	<button label="ＩＭ／コール" name="chat_btn" tool_tip="インスタンスメッセージのセッションを開きます。" />
+	<button label="プロフィール" name="info_btn" />
+	<button label="タイトル" name="titles_btn" />
+	<button label="有効化" name="activate_btn" />
+	<button label="脱退" name="leave_btn" />
+	<button label="作成…" name="create_btn" />
+	<button label="検索…" name="search_btn" />
+	<button label="招待…" name="invite_btn" />
 </panel>

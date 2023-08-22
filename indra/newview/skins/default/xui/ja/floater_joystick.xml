@@ -1,140 +1,140 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Joystick" title="ジョイスティックの設定">
-  <floater.string name="JoystickDisabled">なし</floater.string>
-  <text name="joystick_lbl">ジョイスティック：</text>
-  <combo_box name="joystick_combo" />
-  <spinner label="Ｘ軸マッピング" name="JoystickAxis1" />
-  <spinner label="Ｙ軸マッピング" name="JoystickAxis2" />
-  <spinner label="Ｚ軸マッピング" name="JoystickAxis0" />
-  <spinner label="ピッチ・マッピング" name="JoystickAxis4" />
-  <spinner label="ヨー・マッピング" name="JoystickAxis5" />
-  <spinner label="ロール・マッピング" name="JoystickAxis3" />
-  <spinner label="ズーム・マッピング" name="JoystickAxis6" />
-  <check_box label="直接ズーム" name="ZoomDirect" />
-  <check_box label="3Dカーソル" name="Cursor3D" />
-  <check_box label="自動レベル" name="AutoLeveling" />
-  <text name="Control Modes:">制御モード：</text>
-  <check_box label="アバター" name="JoystickAvatarEnabled" />
-  <check_box label="ビルド" name="JoystickBuildEnabled" />
-  <check_box name="JoystickFlycamEnabled" />
+	<floater.string name="JoystickDisabled">なし</floater.string>
+	<text name="joystick_lbl">ジョイスティック：</text>
+	<combo_box name="joystick_combo" />
+	<spinner label="Ｘ軸マッピング" name="JoystickAxis1" />
+	<spinner label="Ｙ軸マッピング" name="JoystickAxis2" />
+	<spinner label="Ｚ軸マッピング" name="JoystickAxis0" />
+	<spinner label="ピッチ・マッピング" name="JoystickAxis4" />
+	<spinner label="ヨー・マッピング" name="JoystickAxis5" />
+	<spinner label="ロール・マッピング" name="JoystickAxis3" />
+	<spinner label="ズーム・マッピング" name="JoystickAxis6" />
+	<check_box label="直接ズーム" name="ZoomDirect" />
+	<check_box label="3Dカーソル" name="Cursor3D" />
+	<check_box label="自動レベル" name="AutoLeveling" />
+	<text name="Control Modes:">制御モード：</text>
+	<check_box label="アバター" name="JoystickAvatarEnabled" />
+	<check_box label="ビルド" name="JoystickBuildEnabled" />
+	<check_box name="JoystickFlycamEnabled" />
 
-  <!-- <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes -->
-  <text name="joystick_monitor_label">ジョイスティックモニタ</text>
+	<!-- <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes -->
+	<text name="joystick_monitor_label">ジョイスティックモニタ</text>
 
-  <icon name="button_light_0" tool_tip="ジョイスティックボタン０" />
-  <icon name="button_light_1" tool_tip="ジョイスティックボタン１" />
-  <icon name="button_light_2" tool_tip="ジョイスティックボタン２" />
-  <icon name="button_light_3" tool_tip="ジョイスティックボタン３" />
+	<icon name="button_light_0" tool_tip="ジョイスティックボタン０" />
+	<icon name="button_light_1" tool_tip="ジョイスティックボタン１" />
+	<icon name="button_light_2" tool_tip="ジョイスティックボタン２" />
+	<icon name="button_light_3" tool_tip="ジョイスティックボタン３" />
 
-  <icon name="button_light_4" tool_tip="ジョイスティックボタン４" />
-  <icon name="button_light_5" tool_tip="ジョイスティックボタン５" />
-  <icon name="button_light_6" tool_tip="ジョイスティックボタン６" />
-  <icon name="button_light_7" tool_tip="ジョイスティックボタン７" />
+	<icon name="button_light_4" tool_tip="ジョイスティックボタン４" />
+	<icon name="button_light_5" tool_tip="ジョイスティックボタン５" />
+	<icon name="button_light_6" tool_tip="ジョイスティックボタン６" />
+	<icon name="button_light_7" tool_tip="ジョイスティックボタン７" />
 
-  <icon name="button_light_8" tool_tip="ジョイスティックボタン８" />
-  <icon name="button_light_9" tool_tip="ジョイスティックボタン９" />
-  <icon name="button_light_10" tool_tip="ジョイスティックボタン１０" />
-  <icon name="button_light_11" tool_tip="ジョイスティックボタン１１" />
+	<icon name="button_light_8" tool_tip="ジョイスティックボタン８" />
+	<icon name="button_light_9" tool_tip="ジョイスティックボタン９" />
+	<icon name="button_light_10" tool_tip="ジョイスティックボタン１０" />
+	<icon name="button_light_11" tool_tip="ジョイスティックボタン１１" />
 
-  <icon name="button_light_12" tool_tip="ジョイスティックボタン１２" />
-  <icon name="button_light_13" tool_tip="ジョイスティックボタン１３" />
-  <icon name="button_light_14" tool_tip="ジョイスティックボタン１４" />
-  <icon name="button_light_15" tool_tip="ジョイスティックボタン１５" />
+	<icon name="button_light_12" tool_tip="ジョイスティックボタン１２" />
+	<icon name="button_light_13" tool_tip="ジョイスティックボタン１３" />
+	<icon name="button_light_14" tool_tip="ジョイスティックボタン１４" />
+	<icon name="button_light_15" tool_tip="ジョイスティックボタン１５" />
 
-  <scroll_container name="joystick_monitor_axes_scroller">
-    <container_view name="joystick_monitor_axes_container">
-      <!-- Zi: One stat_view for each 軸so we can hide them individually -->
-      <stat_view name="axis_view_0">
-        <stat_bar label="軸０" name="axis0" />
-      </stat_view>
+	<scroll_container name="joystick_monitor_axes_scroller">
+		<container_view name="joystick_monitor_axes_container">
+			<!-- Zi: One stat_view for each 軸so we can hide them individually -->
+			<stat_view name="axis_view_0">
+				<stat_bar label="軸０" name="axis0" />
+			</stat_view>
 
-      <stat_view name="axis_view_1">
-        <stat_bar label="軸１" name="axis1" />
-      </stat_view>
+			<stat_view name="axis_view_1">
+				<stat_bar label="軸１" name="axis1" />
+			</stat_view>
 
-      <stat_view name="axis_view_2">
-        <stat_bar label="軸２" name="axis2" />
-      </stat_view>
+			<stat_view name="axis_view_2">
+				<stat_bar label="軸２" name="axis2" />
+			</stat_view>
 
-      <stat_view name="axis_view_3">
-        <stat_bar label="軸３" name="axis3" />
-      </stat_view>
+			<stat_view name="axis_view_3">
+				<stat_bar label="軸３" name="axis3" />
+			</stat_view>
 
-      <stat_view name="axis_view_4">
-        <stat_bar label="軸４" name="axis4" />
-      </stat_view>
+			<stat_view name="axis_view_4">
+				<stat_bar label="軸４" name="axis4" />
+			</stat_view>
 
-      <stat_view name="axis_view_5">
-        <stat_bar label="軸５" name="axis5" />
-      </stat_view>
+			<stat_view name="axis_view_5">
+				<stat_bar label="軸５" name="axis5" />
+			</stat_view>
 
-      <stat_view name="axis_view_6">
-        <stat_bar label="軸６" name="axis6" />
-      </stat_view>
+			<stat_view name="axis_view_6">
+				<stat_bar label="軸６" name="axis6" />
+			</stat_view>
 
-      <stat_view name="axis_view_7">
-        <stat_bar label="軸７" name="axis7" />
-      </stat_view>
+			<stat_view name="axis_view_7">
+				<stat_bar label="軸７" name="axis7" />
+			</stat_view>
 
-    </container_view>
-  </scroll_container>
-  <!-- </FS:Zi> -->
+		</container_view>
+	</scroll_container>
+	<!-- </FS:Zi> -->
 
-  <text name="XScale">Ｘスケール</text>
-  <spinner name="AvatarAxisScale1" />
-  <spinner name="BuildAxisScale1" />
-  <spinner name="FlycamAxisScale1" />
-  <text name="YScale">Ｙスケール</text>
-  <spinner name="AvatarAxisScale2" />
-  <spinner name="BuildAxisScale2" />
-  <spinner name="FlycamAxisScale2" />
-  <text name="ZScale">Ｚスケール</text>
-  <spinner name="AvatarAxisScale0" />
-  <spinner name="BuildAxisScale0" />
-  <spinner name="FlycamAxisScale0" />
-  <text name="PitchScale">ピッチ・スケール</text>
-  <spinner name="AvatarAxisScale4" />
-  <spinner name="BuildAxisScale4" />
-  <spinner name="FlycamAxisScale4" />
-  <text name="YawScale">ヨー・スケール</text>
-  <spinner name="AvatarAxisScale5" />
-  <spinner name="BuildAxisScale5" />
-  <spinner name="FlycamAxisScale5" />
-  <text name="RollScale">ロール・スケール</text>
-  <spinner name="BuildAxisScale3" />
-  <spinner name="FlycamAxisScale3" />
-  <text name="XDeadZone">Ｘデッド・ゾーン</text>
-  <spinner name="AvatarAxisDeadZone1" />
-  <spinner name="BuildAxisDeadZone1" />
-  <spinner name="FlycamAxisDeadZone1" />
-  <text name="YDeadZone">Ｙデッド・ゾーン</text>
-  <spinner name="AvatarAxisDeadZone2" />
-  <spinner name="BuildAxisDeadZone2" />
-  <spinner name="FlycamAxisDeadZone2" />
-  <text name="ZDeadZone">Ｚデッド・ゾーン</text>
-  <spinner name="AvatarAxisDeadZone0" />
-  <spinner name="BuildAxisDeadZone0" />
-  <spinner name="FlycamAxisDeadZone0" />
-  <text name="PitchDeadZone">ピッチ・デッド・ゾーン</text>
-  <spinner name="AvatarAxisDeadZone4" />
-  <spinner name="BuildAxisDeadZone4" />
-  <spinner name="FlycamAxisDeadZone4" />
-  <text name="YawDeadZone">ヨー・デッド・ゾーン</text>
-  <spinner name="AvatarAxisDeadZone5" />
-  <spinner name="BuildAxisDeadZone5" />
-  <spinner name="FlycamAxisDeadZone5" />
-  <text name="RollDeadZone">ロール・デッド・ゾーン</text>
-  <spinner name="BuildAxisDeadZone3" />
-  <spinner name="FlycamAxisDeadZone3" />
-  <text name="Feathering">感度調整</text>
-  <slider name="AvatarFeathering" />
-  <slider name="BuildFeathering" />
-  <slider name="FlycamFeathering" />
-  <text name="ZoomScale2">ズーム・スケール</text>
-  <spinner name="FlycamAxisScale6" />
-  <text name="ZoomDeadZone">ズーム・デッド・ゾーン</text>
-  <spinner name="FlycamAxisDeadZone6" />
-  <button label="SpaceNavigatorのデフォルト設定" name="SpaceNavigatorDefaults" />
-  <button label="ＯＫ" label_selected="ＯＫ" name="ok_btn" />
-  <button label="キャンセル" label_selected="キャンセル" name="cancel_btn" />
+	<text name="XScale">Ｘスケール</text>
+	<spinner name="AvatarAxisScale1" />
+	<spinner name="BuildAxisScale1" />
+	<spinner name="FlycamAxisScale1" />
+	<text name="YScale">Ｙスケール</text>
+	<spinner name="AvatarAxisScale2" />
+	<spinner name="BuildAxisScale2" />
+	<spinner name="FlycamAxisScale2" />
+	<text name="ZScale">Ｚスケール</text>
+	<spinner name="AvatarAxisScale0" />
+	<spinner name="BuildAxisScale0" />
+	<spinner name="FlycamAxisScale0" />
+	<text name="PitchScale">ピッチ・スケール</text>
+	<spinner name="AvatarAxisScale4" />
+	<spinner name="BuildAxisScale4" />
+	<spinner name="FlycamAxisScale4" />
+	<text name="YawScale">ヨー・スケール</text>
+	<spinner name="AvatarAxisScale5" />
+	<spinner name="BuildAxisScale5" />
+	<spinner name="FlycamAxisScale5" />
+	<text name="RollScale">ロール・スケール</text>
+	<spinner name="BuildAxisScale3" />
+	<spinner name="FlycamAxisScale3" />
+	<text name="XDeadZone">Ｘデッド・ゾーン</text>
+	<spinner name="AvatarAxisDeadZone1" />
+	<spinner name="BuildAxisDeadZone1" />
+	<spinner name="FlycamAxisDeadZone1" />
+	<text name="YDeadZone">Ｙデッド・ゾーン</text>
+	<spinner name="AvatarAxisDeadZone2" />
+	<spinner name="BuildAxisDeadZone2" />
+	<spinner name="FlycamAxisDeadZone2" />
+	<text name="ZDeadZone">Ｚデッド・ゾーン</text>
+	<spinner name="AvatarAxisDeadZone0" />
+	<spinner name="BuildAxisDeadZone0" />
+	<spinner name="FlycamAxisDeadZone0" />
+	<text name="PitchDeadZone">ピッチ・デッド・ゾーン</text>
+	<spinner name="AvatarAxisDeadZone4" />
+	<spinner name="BuildAxisDeadZone4" />
+	<spinner name="FlycamAxisDeadZone4" />
+	<text name="YawDeadZone">ヨー・デッド・ゾーン</text>
+	<spinner name="AvatarAxisDeadZone5" />
+	<spinner name="BuildAxisDeadZone5" />
+	<spinner name="FlycamAxisDeadZone5" />
+	<text name="RollDeadZone">ロール・デッド・ゾーン</text>
+	<spinner name="BuildAxisDeadZone3" />
+	<spinner name="FlycamAxisDeadZone3" />
+	<text name="Feathering">感度調整</text>
+	<slider name="AvatarFeathering" />
+	<slider name="BuildFeathering" />
+	<slider name="FlycamFeathering" />
+	<text name="ZoomScale2">ズーム・スケール</text>
+	<spinner name="FlycamAxisScale6" />
+	<text name="ZoomDeadZone">ズーム・デッド・ゾーン</text>
+	<spinner name="FlycamAxisDeadZone6" />
+	<button label="SpaceNavigatorのデフォルト設定" name="SpaceNavigatorDefaults" />
+	<button label="ＯＫ" label_selected="ＯＫ" name="ok_btn" />
+	<button label="キャンセル" label_selected="キャンセル" name="cancel_btn" />
 </floater>

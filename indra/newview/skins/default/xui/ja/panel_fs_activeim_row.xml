@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_activeim_row">
-  <fs_chiclet_im_p2p name="p2p_chiclet" />
-  <fs_chiclet_im_group name="group_chiclet" />
-  <fs_chiclet_im_adhoc name="adhoc_chiclet" />
-  <text name="contact_name">テスト文字列。無視してください。</text>
-  <button name="hide_btn" label="" />
+	<fs_chiclet_im_p2p name="p2p_chiclet" />
+	<fs_chiclet_im_group name="group_chiclet" />
+	<fs_chiclet_im_adhoc name="adhoc_chiclet" />
+	<text name="contact_name">テスト文字列。無視してください。</text>
+	<button name="hide_btn" label="" />
 </panel>

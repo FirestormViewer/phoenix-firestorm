@@ -1,187 +1,187 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="バックアップ" name="backup">
-  <text name="backup_path_label">バックアップ先のパス：</text>
-  <line_editor name="settings_backup_path" />
-  <button label="設定" name="set_backup_settings_path" />
-  <layout_stack name="ls_account_specific_label">
-    <layout_panel name="lp_account_specific_label">
-      <text name="account_specific_label">あなたは現在ログアウトしています。アカウント固有の設定は、ログインしているときにのみバックアップおよび復元できることに注意してください。ただし、すべてのユーザーアカウントに適用される設定は、ログインしていなくてもバックアップできます。</text>
-    </layout_panel>
-    <layout_panel name="lp_buttons">
-      <text name="settings_restored_label">リストアする設定グループ（バックアップは常にすべてを保存します）：</text>
-      <layout_stack name="ls_list_view_stack">
-        <layout_panel name="lp_restore_global_files">
-          <scroll_list name="restore_global_files_list">
-            <column label="" name="restore_global_files_check" />
-            <column label="グローバルのファイル：" name="restore_global_files_label" />
-            <column label="値" name="value" />
-            <row name="restore_global_row_login">
-              <column name="restore_global_files_check" value="true" />
-              <column name="restore_global_files_label">ログイン認証</column>
-              <column name="value">bin_conf.dat</column>
-            </row>
-            <row name="restore_global_row_colors">
-              <column name="restore_global_files_check" value="true" />
-              <column name="restore_global_files_label">色</column>
-              <column name="value">colors.xml</column>
-            </row>
-            <row name="restore_global_row_dialogs">
-              <column name="restore_global_files_check" value="true" />
-              <column name="restore_global_files_label">無視可能なダイアログ</column>
-              <column name="value">ignorable_dialogs.xml</column>
-            </row>
-            <row name="restore_global_row_grids">
-              <column name="restore_global_files_check" value="true" />
-              <column name="restore_global_files_label">ユーザ定義のグリッド</column>
-              <column name="value">grids.user.xml</column>
-            </row>
-            <row name="restore_global_row_autoreplace">
-              <column name="restore_global_files_check" value="true" />
-              <column name="restore_global_files_label">自動置換</column>
-              <column name="value">autoreplace.xml</column>
-            </row>
-            <row name="restore_global_row_quickprefs">
-              <column name="restore_global_files_check" value="true" />
-              <column name="restore_global_files_label">簡易初期設定</column>
-              <column name="value">quick_preferences.xml</column>
-            </row>
-            <row name="restore_global_row_favorites">
-              <column name="restore_global_files_check" value="true" />
-              <column name="restore_global_files_label">お気に入り</column>
-              <column name="value">stored_favorites.xml</column>
-            </row>
-            <row name="restore_global_row_controls">
-              <column name="restore_global_files_check" value="true" />
-              <column name="restore_global_files_label">操作設定</column>
-              <column name="value">key_bindings.xml</column>
-            </row>
-          </scroll_list>
-        </layout_panel>
+	<text name="backup_path_label">バックアップ先のパス：</text>
+	<line_editor name="settings_backup_path" />
+	<button label="設定" name="set_backup_settings_path" />
+	<layout_stack name="ls_account_specific_label">
+		<layout_panel name="lp_account_specific_label">
+			<text name="account_specific_label">あなたは現在ログアウトしています。アカウント固有の設定は、ログインしているときにのみバックアップおよび復元できることに注意してください。ただし、すべてのユーザーアカウントに適用される設定は、ログインしていなくてもバックアップできます。</text>
+		</layout_panel>
+		<layout_panel name="lp_buttons">
+			<text name="settings_restored_label">リストアする設定グループ（バックアップは常にすべてを保存します）：</text>
+			<layout_stack name="ls_list_view_stack">
+				<layout_panel name="lp_restore_global_files">
+					<scroll_list name="restore_global_files_list">
+						<column label="" name="restore_global_files_check" />
+						<column label="グローバルのファイル：" name="restore_global_files_label" />
+						<column label="値" name="value" />
+						<row name="restore_global_row_login">
+							<column name="restore_global_files_check" value="true" />
+							<column name="restore_global_files_label">ログイン認証</column>
+							<column name="value">bin_conf.dat</column>
+						</row>
+						<row name="restore_global_row_colors">
+							<column name="restore_global_files_check" value="true" />
+							<column name="restore_global_files_label">色</column>
+							<column name="value">colors.xml</column>
+						</row>
+						<row name="restore_global_row_dialogs">
+							<column name="restore_global_files_check" value="true" />
+							<column name="restore_global_files_label">無視可能なダイアログ</column>
+							<column name="value">ignorable_dialogs.xml</column>
+						</row>
+						<row name="restore_global_row_grids">
+							<column name="restore_global_files_check" value="true" />
+							<column name="restore_global_files_label">ユーザ定義のグリッド</column>
+							<column name="value">grids.user.xml</column>
+						</row>
+						<row name="restore_global_row_autoreplace">
+							<column name="restore_global_files_check" value="true" />
+							<column name="restore_global_files_label">自動置換</column>
+							<column name="value">autoreplace.xml</column>
+						</row>
+						<row name="restore_global_row_quickprefs">
+							<column name="restore_global_files_check" value="true" />
+							<column name="restore_global_files_label">簡易初期設定</column>
+							<column name="value">quick_preferences.xml</column>
+						</row>
+						<row name="restore_global_row_favorites">
+							<column name="restore_global_files_check" value="true" />
+							<column name="restore_global_files_label">お気に入り</column>
+							<column name="value">stored_favorites.xml</column>
+						</row>
+						<row name="restore_global_row_controls">
+							<column name="restore_global_files_check" value="true" />
+							<column name="restore_global_files_label">操作設定</column>
+							<column name="value">key_bindings.xml</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
 
-        <layout_panel name="lp_restore_per_account_files">
-          <scroll_list name="restore_per_account_files_list">
-            <column label="" name="restore_per_account_files_check" width="16" />
-            <column label="アカウント別ファイル：" name="restore_per_account_files_label" />
-            <column label="値" name="value" width="-1" />
-            <row name="restore_per_account_row_blacklist">
-              <column name="restore_per_account_files_check" value="true" />
-              <column name="restore_per_account_files_label">アセットのブラックリスト</column>
-              <column name="value">asset_blacklist.xml</column>
-            </row>
-            <row name="restore_per_account_row_contactsets">
-              <column name="restore_per_account_files_check" value="true" />
-              <column name="restore_per_account_files_label">連絡先セット</column>
-              <column name="value">settings_friends_groups.xml</column>
-            </row>
-            <row name="restore_per_account_row_invfilters">
-              <column name="restore_per_account_files_check" value="true" />
-              <column name="restore_per_account_files_label">インベントリのフィルタ</column>
-              <column name="value">filters.xml</column>
-            </row>
-            <row name="restore_per_account_row_medialists">
-              <column name="restore_per_account_files_check" value="true" />
-              <column name="restore_per_account_files_label">メディアのブラック／ホワイトリスト</column>
-              <column name="value">medialist.xml</column>
-            </row>
-            <row name="restore_per_account_row_toolbars">
-              <column name="restore_per_account_files_check" value="true" />
-              <column name="restore_per_account_files_label">ツールバー</column>
-              <column name="value">toolbars.xml</column>
-            </row>
-            <row name="restore_per_account_row_volumes">
-              <column name="restore_per_account_files_check" value="true" />
-              <column name="restore_per_account_files_label">ボイスチャットのボリューム</column>
-              <column name="value">volume_settings.xml</column>
-            </row>
-            <row name="restore_per_account_row_tphistory">
-              <column name="restore_per_account_files_check" value="true" />
-              <column name="restore_per_account_files_label">テレポート履歴</column>
-              <column name="value">teleport_history.txt</column>
-            </row>
-            <row name="restore_per_account_row_regiontracker">
-              <column name="restore_per_account_files_check" value="true" />
-              <column name="restore_per_account_files_label">リージョントラッカー</column>
-              <column name="value">tracked_regions.json</column>
-            </row>
-            <row name="restore_per_account_row_groupmutes" value="groupmutes">
-              <column name="restore_per_account_files_check" value="true" />
-              <column name="restore_per_account_files_label">無効化したグループチャット</column>
-              <column name="value">muted_groups.xml</column>
-            </row>
-            <row name="restore_per_account_row_avatar_render_settings" value="avatar_render_settings">
-              <column name="restore_per_account_files_check" value="true" />
-              <column name="restore_per_account_files_label">アバター描画設定</column>
-              <column name="value">avatar_render_settings.xml</column>
-            </row>
-          </scroll_list>
-          <!-- since enabled_control does not work properly on scroll list items and
+				<layout_panel name="lp_restore_per_account_files">
+					<scroll_list name="restore_per_account_files_list">
+						<column label="" name="restore_per_account_files_check" />
+						<column label="アカウント別ファイル：" name="restore_per_account_files_label" />
+						<column label="値" name="value" />
+						<row name="restore_per_account_row_blacklist">
+							<column name="restore_per_account_files_check" value="true" />
+							<column name="restore_per_account_files_label">アセットのブラックリスト</column>
+							<column name="value">asset_blacklist.xml</column>
+						</row>
+						<row name="restore_per_account_row_contactsets">
+							<column name="restore_per_account_files_check" value="true" />
+							<column name="restore_per_account_files_label">連絡先セット</column>
+							<column name="value">settings_friends_groups.xml</column>
+						</row>
+						<row name="restore_per_account_row_invfilters">
+							<column name="restore_per_account_files_check" value="true" />
+							<column name="restore_per_account_files_label">インベントリのフィルタ</column>
+							<column name="value">filters.xml</column>
+						</row>
+						<row name="restore_per_account_row_medialists">
+							<column name="restore_per_account_files_check" value="true" />
+							<column name="restore_per_account_files_label">メディアのブラック／ホワイトリスト</column>
+							<column name="value">medialist.xml</column>
+						</row>
+						<row name="restore_per_account_row_toolbars">
+							<column name="restore_per_account_files_check" value="true" />
+							<column name="restore_per_account_files_label">ツールバー</column>
+							<column name="value">toolbars.xml</column>
+						</row>
+						<row name="restore_per_account_row_volumes">
+							<column name="restore_per_account_files_check" value="true" />
+							<column name="restore_per_account_files_label">ボイスチャットのボリューム</column>
+							<column name="value">volume_settings.xml</column>
+						</row>
+						<row name="restore_per_account_row_tphistory">
+							<column name="restore_per_account_files_check" value="true" />
+							<column name="restore_per_account_files_label">テレポート履歴</column>
+							<column name="value">teleport_history.txt</column>
+						</row>
+						<row name="restore_per_account_row_regiontracker">
+							<column name="restore_per_account_files_check" value="true" />
+							<column name="restore_per_account_files_label">リージョントラッカー</column>
+							<column name="value">tracked_regions.json</column>
+						</row>
+						<row name="restore_per_account_row_groupmutes" value="groupmutes">
+							<column name="restore_per_account_files_check" value="true" />
+							<column name="restore_per_account_files_label">無効化したグループチャット</column>
+							<column name="value">muted_groups.xml</column>
+						</row>
+						<row name="restore_per_account_row_avatar_render_settings" value="avatar_render_settings">
+							<column name="restore_per_account_files_check" value="true" />
+							<column name="restore_per_account_files_label">アバター描画設定</column>
+							<column name="value">avatar_render_settings.xml</column>
+						</row>
+					</scroll_list>
+					<!-- since enabled_control does not work properly on scroll list items and
               enabling/disabling in code did not show any visual difference, we just use
               an overlay panel when the control is disabled -->
-          <panel name="restore_per_account_disable_cover" />
-        </layout_panel>
+					<panel name="restore_per_account_disable_cover" />
+				</layout_panel>
 
-        <layout_panel name="lp_restore_folders">
-          <scroll_list name="restore_global_folders_list">
-            <column label="" name="restore_global_folders_check" width="16" />
-            <column label="フォルダ：" name="restore_global_folders_label" />
-            <column label="値" name="value" width="-1" />
-            <row name="restore_folders_row_beams">
-              <column name="restore_global_folders_check" value="true" />
-              <column name="restore_global_folders_label">選択ビーム</column>
-              <column name="value">beams</column>
-            </row>
-            <row name="restore_folders_row_beamcolors">
-              <column name="restore_global_folders_check" value="true" />
-              <column name="restore_global_folders_label">選択ビームの色</column>
-              <column name="value">beamsColors</column>
-            </row>
-            <row name="restore_folders_row_spellcheck">
-              <column name="restore_global_folders_check" value="true" />
-              <column name="restore_global_folders_label">カスタムスペルチェック</column>
-              <column name="value">dictionaries</column>
-            </row>
-            <!-- We must have this entry before the other windlight entries to have the
+				<layout_panel name="lp_restore_folders">
+					<scroll_list name="restore_global_folders_list">
+						<column label="" name="restore_global_folders_check" />
+						<column label="フォルダ：" name="restore_global_folders_label" />
+						<column label="値" name="value" />
+						<row name="restore_folders_row_beams">
+							<column name="restore_global_folders_check" value="true" />
+							<column name="restore_global_folders_label">選択ビーム</column>
+							<column name="value">beams</column>
+						</row>
+						<row name="restore_folders_row_beamcolors">
+							<column name="restore_global_folders_check" value="true" />
+							<column name="restore_global_folders_label">選択ビームの色</column>
+							<column name="value">beamsColors</column>
+						</row>
+						<row name="restore_folders_row_spellcheck">
+							<column name="restore_global_folders_check" value="true" />
+							<column name="restore_global_folders_label">カスタムスペルチェック</column>
+							<column name="value">dictionaries</column>
+						</row>
+						<!-- We must have this entry before the other windlight entries to have the
                 windlight/ base folder created. Since we can't hide rows make it so the
                 user can't deselect it at least -->
-            <row enabled="false" name="restore_folders_row_windlight" value="windlight">
-              <column name="restore_global_folders_check" value="true" enabled="false" />
-              <column name="restore_global_folders_label">ウィンドライト（必須）</column>
-              <column name="value">windlight</column>
-            </row>
-            <row name="restore_folders_row_daycycles" value="windlight_daycycles">
-              <column name="restore_global_folders_check" value="true" />
-              <column name="restore_global_folders_label">ウィンドライトのデイサイクル</column>
-              <column name="value">windlight/days</column>
-            </row>
-            <row name="restore_folders_row_skies" value="windlight_skies">
-              <column name="restore_global_folders_check" value="true" />
-              <column name="restore_global_folders_label">ウィンドライトの空</column>
-              <column name="value">windlight/skies</column>
-            </row>
-            <row name="restore_folders_row_waters" value="windlight_water">
-              <column name="restore_global_folders_check" value="true" />
-              <column name="restore_global_folders_label">ウィンドライトの水面</column>
-              <column name="value">windlight/water</column>
-            </row>
-            <row name="restore_folders_row_presets" value="presets">
-              <column name="restore_global_folders_check" value="true" />
-              <column name="restore_global_folders_label">プリセット</column>
-              <column name="value">presets</column>
-            </row>
-          </scroll_list>
-        </layout_panel>
-      </layout_stack>
+						<row enabled="false" name="restore_folders_row_windlight" value="windlight">
+							<column name="restore_global_folders_check" value="true" enabled="false" />
+							<column name="restore_global_folders_label">ウィンドライト（必須）</column>
+							<column name="value">windlight</column>
+						</row>
+						<row name="restore_folders_row_daycycles" value="windlight_daycycles">
+							<column name="restore_global_folders_check" value="true" />
+							<column name="restore_global_folders_label">デイサイクル</column>
+							<column name="value">windlight/days</column>
+						</row>
+						<row name="restore_folders_row_skies" value="windlight_skies">
+							<column name="restore_global_folders_check" value="true" />
+							<column name="restore_global_folders_label">空</column>
+							<column name="value">windlight/skies</column>
+						</row>
+						<row name="restore_folders_row_waters" value="windlight_water">
+							<column name="restore_global_folders_check" value="true" />
+							<column name="restore_global_folders_label">水面</column>
+							<column name="value">windlight/water</column>
+						</row>
+						<row name="restore_folders_row_presets" value="presets">
+							<column name="restore_global_folders_check" value="true" />
+							<column name="restore_global_folders_label">プリセット</column>
+							<column name="value">presets</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+			</layout_stack>
 
-      <button label="すべてを選択" name="select_all_button" />
-      <button label="選択解除" name="deselect_all_button" />
-      <check_box label="グローバル設定を復元" name="restore_global_settings_checkbox" />
-      <check_box label="アカウント毎の設定を復元" name="restore_per_account_settings_checkbox" />
-      <button label="設定をバックアップ" name="backup_settings" />
-      <button label="設定をリストア" name="restore_settings" />
-    </layout_panel>
-  </layout_stack>
-  <!-- Enable only for debugging of show/hide warning text -->
-  <!--
+			<button label="すべてを選択" name="select_all_button" />
+			<button label="選択解除" name="deselect_all_button" />
+			<check_box label="グローバル設定を復元" name="restore_global_settings_checkbox" />
+			<check_box label="アカウント毎の設定を復元" name="restore_per_account_settings_checkbox" />
+			<button label="設定をバックアップ" name="backup_settings" />
+			<button label="設定をリストア" name="restore_settings" />
+		</layout_panel>
+	</layout_stack>
+	<!-- Enable only for debugging of show/hide warning text -->
+	<!--
   <check_box label="Hide Warning" name="Debug Show/Hide - Don't use in production" />
   -->
 </panel>

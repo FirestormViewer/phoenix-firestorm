@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu label="ツールバー" name="Toolbars Popup">
-  <menu_item_call label="このボタンを削除" name="Remove button" />
-  <menu_item_separator />
-  <menu_item_call label="ツールバーのボタン…" name="Choose Buttons" />
-  <menu_item_separator />
-  <menu_item_check label="左寄せ　⇤" name="left_aligned" />
-  <menu_item_check label="中央寄せ" name="center_aligned" />
-  <menu_item_check label="右寄せ　⇥" name="right_aligned" />
-  <menu_item_separator />
-  <menu_item_check label="アイコンとラベル" name="icons_with_text" />
-  <menu_item_check label="アイコンのみ" name="icons_only" />
-  <menu_item_check label="ラベルのみ" name="text_only" />
-  <menu_item_separator />
-  <menu_item_check label="ボタンサイズを自動調整" name="layout_style_none" />
-  <menu_item_check label="ボタンサイズを固定" name="layout_style_equalize" />
-  <menu_item_check label="バー全体にボタンを合わせる　⟷" name="layout_style_fill" />
-  <menu_item_separator />
-  <menu_item_check label="ロック" name="toolbars_locked" />
+	<menu_item_call label="このボタンを削除" name="Remove button" />
+	<menu_item_separator />
+	<menu_item_call label="ツールバーのボタン…" name="Choose Buttons" />
+	<menu_item_separator />
+	<menu_item_check label="左寄せ　⇤" name="left_aligned" />
+	<menu_item_check label="中央寄せ" name="center_aligned" />
+	<menu_item_check label="右寄せ　⇥" name="right_aligned" />
+	<menu_item_separator />
+	<menu_item_check label="アイコンとラベル" name="icons_with_text" />
+	<menu_item_check label="アイコンのみ" name="icons_only" />
+	<menu_item_check label="ラベルのみ" name="text_only" />
+	<menu_item_separator />
+	<menu_item_check label="ボタンサイズを自動調整" name="layout_style_none" />
+	<menu_item_check label="ボタンサイズを固定" name="layout_style_equalize" />
+	<menu_item_check label="バー全体にボタンを合わせる　⟷" name="layout_style_fill" />
+	<menu_item_separator />
+	<menu_item_check label="ロック" name="toolbars_locked" />
 </context_menu>

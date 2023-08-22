@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="リージョン設定" name="RegionSettings">
-  <spinner label="デフォルトの描画距離" name="draw_distance" tool_tip="デフォルトのリージョンの描画距離を指定します。" />
-  <check_box label="強制的に描画距離を決める" name="force_draw_distance" tool_tip="このリージョンのすべてのエージェントの描画距離をロックする。注意: これは、性能の低いコンピュータを使用しているユーザを遅らせる可能性があります。(デフォルト: オフ)" />
-  <spinner label="最大ドラッグ距離" name="max_drag_distance" tool_tip="このリージョンでプリムをドラッグできる最大距離を指定します。" />
-  <spinner label="最大プリムスケール" name="max_prim_scale" tool_tip="このリージョンで作成できるプリムの最大サイズを指定します。" />
-  <spinner label="最小プリムスケール" name="min_prim_scale" tool_tip="このリージョンで作成できるプリムの最小サイズを指定します。" />
-  <spinner label="最大物理プリムサイズ" name="max_phys_prim_scale" tool_tip="このリージョンで作成できる物理プリムの最大サイズを指定します。" />
-  <spinner label="最大中空サイズ" name="max_hollow_size" tool_tip="このリージョンで作成できるプリムに開けられる穴の最大サイズを指定します。" />
-  <spinner label="最小穴サイズ" name="min_hole_size" tool_tip="このリージョンで作成できるプリムに開けられる穴の最小サイズを指定します。" />
-  <spinner label="最大リンク数" name="max_link_count" tool_tip="このリージョンでリンクできる物理でないプリムの最大数を指定します。" />
-  <spinner label="最大物理リンク数" name="max_link_count_phys" tool_tip="このリージョンでリンクできる物理プリムの最大数を指定します。" />
-  <spinner label="インベントリアイテムの最大送付数" name="max_inventory_items_transfer" tool_tip="クライアント間で一度に転送できるオブジェクトの数を指定します。‐１はオブジェクト数に制限をかけません。（デフォルト：‐１）" />
-  <spinner label="地形の詳細スケール" name="terrain_detail_scale" tool_tip="リージョンの地形の詳細スケールです。" />
-  <spinner label="タグを表示" name="show_tags" tool_tip="このリージョンでの名前タグモードを指定します。（名前タグを表示＝２、一時的に表示＝１、名前タグをブロック＝０）" />
-  <spinner label="最大グループ数" name="max_groups" tool_tip="エージェントが参加できるグループの数を指定します。‐１は無制限に設定します。（デフォルト：‐１）" />
-  <check_box label="水面の描画" name="render_water" tool_tip="リージョン内の水のレンダリングを有効にする。（デフォルト：オン）" />
-  <check_box label="ミニマップを許可" name="allow_minimap" tool_tip="このリージョンでミニマップを許可する。（デフォルト：オン）" />
-  <check_box label="物理プリムの許可" name="allow_physical_prims" tool_tip="このリージョンでの物理プリムの作成を許可する。（デフォルト：オン）" />
-  <check_box label="最大ビルド数制限の適用" name="enforce_max_build" tool_tip="この領域で最大ビルド数の制約を強制する。(デフォルト：オン）" />
-  <check_box label="区画のウィンドライトの許可" name="allow_parcel_windlight" tool_tip="このリージョンの区画に対して各々のウィンドライト設定を許可します。（デフォルト：オン）" />
-  <button label="適用" name="apply_ors_btn" />
+	<spinner label="デフォルトの描画距離" name="draw_distance" tool_tip="デフォルトのリージョンの描画距離を指定します。" />
+	<check_box label="強制的に描画距離を決める" name="force_draw_distance" tool_tip="このリージョンのすべてのエージェントの描画距離をロックする。注意: これは、性能の低いコンピュータを使用しているユーザを遅らせる可能性があります。(デフォルト: オフ)" />
+	<spinner label="最大ドラッグ距離" name="max_drag_distance" tool_tip="このリージョンでプリムをドラッグできる最大距離を指定します。" />
+	<spinner label="最大プリムスケール" name="max_prim_scale" tool_tip="このリージョンで作成できるプリムの最大サイズを指定します。" />
+	<spinner label="最小プリムスケール" name="min_prim_scale" tool_tip="このリージョンで作成できるプリムの最小サイズを指定します。" />
+	<spinner label="最大物理プリムサイズ" name="max_phys_prim_scale" tool_tip="このリージョンで作成できる物理プリムの最大サイズを指定します。" />
+	<spinner label="最大中空サイズ" name="max_hollow_size" tool_tip="このリージョンで作成できるプリムに開けられる穴の最大サイズを指定します。" />
+	<spinner label="最小穴サイズ" name="min_hole_size" tool_tip="このリージョンで作成できるプリムに開けられる穴の最小サイズを指定します。" />
+	<spinner label="最大リンク数" name="max_link_count" tool_tip="このリージョンでリンクできる物理でないプリムの最大数を指定します。" />
+	<spinner label="最大物理リンク数" name="max_link_count_phys" tool_tip="このリージョンでリンクできる物理プリムの最大数を指定します。" />
+	<spinner label="インベントリアイテムの最大送付数" name="max_inventory_items_transfer" tool_tip="クライアント間で一度に転送できるオブジェクトの数を指定します。‐１はオブジェクト数に制限をかけません。（デフォルト：‐１）" />
+	<spinner label="地形の詳細スケール" name="terrain_detail_scale" tool_tip="リージョンの地形の詳細スケールです。" />
+	<spinner label="タグを表示" name="show_tags" tool_tip="このリージョンでの名前タグモードを指定します。（名前タグを表示＝２、一時的に表示＝１、名前タグをブロック＝０）" />
+	<spinner label="最大グループ数" name="max_groups" tool_tip="エージェントが参加できるグループの数を指定します。‐１は無制限に設定します。（デフォルト：‐１）" />
+	<check_box label="水面の描画" name="render_water" tool_tip="リージョン内の水のレンダリングを有効にする。（デフォルト：オン）" />
+	<check_box label="ミニマップを許可" name="allow_minimap" tool_tip="このリージョンでミニマップを許可する。（デフォルト：オン）" />
+	<check_box label="物理プリムの許可" name="allow_physical_prims" tool_tip="このリージョンでの物理プリムの作成を許可する。（デフォルト：オン）" />
+	<check_box label="最大ビルド数制限の適用" name="enforce_max_build" tool_tip="この領域で最大ビルド数の制約を強制する。(デフォルト：オン）" />
+	<check_box label="区画のウィンドライトの許可" name="allow_parcel_windlight" tool_tip="このリージョンの区画に対して各々のウィンドライト設定を許可します。（デフォルト：オン）" />
+	<button label="適用" name="apply_ors_btn" />
 </panel>
