@@ -1500,25 +1500,23 @@ void LLPanelObject::deactivateStandardFields()
 	getChildView("advanced_slice")->setVisible(FALSE);
 }
 
-void LLPanelObject::activateMeshFields(LLViewerObject * objectp)
+void LLPanelObject::activateMeshFields(LLViewerObject* objectp)
 {
 	LLStringUtil::format_map_t args;
 	static const char * dataFields[4] = { "LOWESTTRIS", "LOWTRIS", "MIDTRIS", "HIGHTRIS" };
 
-	LLTextBox *num_tris = getChild<LLTextBox>("mesh_lod_num_tris");
-	if (num_tris)
+	LLTextBox* num_tris = getChild<LLTextBox>("mesh_lod_num_tris");
+	for (int i = 0; i < 4; i++)
 	{
-		for (int i = 0; i < 4; i++)
-		{
-			args[dataFields[i]] = llformat("%d", objectp->mDrawable->getVOVolume()->getLODTriangleCount(i));
-		}
-		num_tris->setText(getString("mesh_lod_num_tris_values",args));
-		num_tris->setVisible(TRUE);
+		args[dataFields[i]] = llformat("%d", objectp->mDrawable->getVOVolume()->getLODTriangleCount(i));
 	}
-	childSetVisible("mesh_info_label", TRUE);
-	childSetVisible("lod_label", TRUE);
-	childSetVisible("lod_num_tris", TRUE);
-	childSetVisible("mesh_lod_label", TRUE);
+	num_tris->setText(getString("mesh_lod_num_tris_values",args));
+	num_tris->setVisible(TRUE);
+
+	childSetVisible("mesh_info_label", true);
+	childSetVisible("lod_label", true);
+	childSetVisible("lod_num_tris", true);
+	childSetVisible("mesh_lod_label", true);
 	// Mesh specific display
 	mComboLOD->setEnabled(TRUE);
 	mComboLOD->setVisible(TRUE);
@@ -1541,7 +1539,7 @@ void LLPanelObject::activateMeshFields(LLViewerObject * objectp)
 		radius = objectp->getVolume() ? objectp->getVolume()->mLODScaleBias.scaledVec(objectp->getScale()).length() : objectp->getScale().length();
 	}
 
-	static const F32 max_distance = 512.f;
+	constexpr F32 max_distance = 512.f;
 	F32 factor;
 	F32 dlowest = llmin(radius / 0.03f, max_distance);
 	F32 dlow = llmin(radius / 0.06f, max_distance);
@@ -1591,7 +1589,7 @@ void LLPanelObject::activateMeshFields(LLViewerObject * objectp)
 	setLODDistValues(tb, factor, dmid, dlow, dlowest);
 }
 
-void LLPanelObject::setLODDistValues(LLTextBox * tb, F32 factor, F32 dmid, F32 dlow, F32 dlowest)
+void LLPanelObject::setLODDistValues(LLTextBox* tb, F32 factor, F32 dmid, F32 dlow, F32 dlowest)
 {
 	if (tb)
 	{
@@ -1607,11 +1605,11 @@ void LLPanelObject::setLODDistValues(LLTextBox * tb, F32 factor, F32 dmid, F32 d
 
 void LLPanelObject::deactivateMeshFields()
 {
-	childSetVisible("mesh_info_label", FALSE);
-	childSetVisible("lod_label", FALSE);
-	childSetVisible("lod_num_tris", FALSE);
-	childSetVisible("mesh_lod_num_tris", FALSE);
-	childSetVisible("mesh_lod_label", FALSE);
+	childSetVisible("mesh_info_label", false);
+	childSetVisible("lod_label", false);
+	childSetVisible("lod_num_tris", false);
+	childSetVisible("mesh_lod_num_tris", false);
+	childSetVisible("mesh_lod_label", false);
 	// reset the debug setting as we are editing a new object
 	gSavedSettings.setS32("ShowSpecificLODInEdit", -1);
 	// </FS:Beq>
@@ -1620,7 +1618,7 @@ void LLPanelObject::deactivateMeshFields()
 	mComboLOD->setEnabled(FALSE);
 	mComboLOD->setVisible(FALSE);
 
-	childSetVisible("object_radius", FALSE);
+	childSetVisible("object_radius", false);
 	LLTextBox* tb = getChild<LLTextBox>("object_radius_value");
 	tb->setVisible(FALSE);
 

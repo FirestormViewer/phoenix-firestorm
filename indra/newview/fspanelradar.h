@@ -92,7 +92,7 @@ private:
 
 	LLHandle<LLView>		mOptionsMenuHandle;
 
-	FSRadar::Updater*		mButtonsUpdater;
+	std::unique_ptr<FSRadar::Updater>	mButtonsUpdater;
 
 	std::string				mFilterSubString;
 	std::string				mFilterSubStringOrig;
