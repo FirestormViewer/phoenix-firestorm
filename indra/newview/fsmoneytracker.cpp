@@ -148,16 +148,13 @@ void FSMoneyTrackerListMenu::onContextMenuItemClick(const LLSD& userdata)
 
 	if (option == "copy")
 	{
-		FSMoneyTracker* floater = LLFloaterReg::findTypedInstance<FSMoneyTracker>("money_tracker");
-		if (floater)
+		if (FSMoneyTracker* floater = LLFloaterReg::findTypedInstance<FSMoneyTracker>("money_tracker"); floater)
 		{
 			std::string copy_text;
 			LLNameListCtrl* list = floater->getChild<LLNameListCtrl>("payment_list");
 
-			std::vector<LLScrollListItem*> selected = list->getAllSelected();
-			for (std::vector<LLScrollListItem*>::iterator it = selected.begin(); it != selected.end(); ++it)
+			for (auto item : list->getAllSelected())
 			{
-				const LLScrollListItem* item = *it;
 				copy_text += ( (copy_text.empty() ? "" : "\n")
 								+ item->getColumn(0)->getValue().asString() + ";"
 								+ item->getColumn(1)->getValue().asString() + ";"

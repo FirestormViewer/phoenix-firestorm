@@ -135,8 +135,7 @@ BOOL FSFloaterWearableFavorites::postBuild()
 
 	mOptionsButton = getChild<LLMenuButton>("options_btn");
 
-	LLToggleableMenu* options_menu  = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_fs_wearable_favorites.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-	if (options_menu)
+	if (LLToggleableMenu* options_menu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_fs_wearable_favorites.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance()); options_menu)
 	{
 		mOptionsMenuHandle = options_menu->getHandle();
 		mOptionsButton->setMenu(options_menu, LLMenuButton::MP_BOTTOM_LEFT);
@@ -204,8 +203,7 @@ BOOL FSFloaterWearableFavorites::handleKeyHere(KEY key, MASK mask)
 // static
 std::optional<LLUUID> FSFloaterWearableFavorites::getWearableFavoritesFolderID()
 {
-	LLUUID fs_root_cat_id = gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER);
-	if (!fs_root_cat_id.isNull())
+	if (LLUUID fs_root_cat_id = gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER); !fs_root_cat_id.isNull())
 	{
 		LLInventoryModel::item_array_t* items;
 		LLInventoryModel::cat_array_t* cats;
@@ -339,8 +337,7 @@ bool FSFloaterWearableFavorites::onOptionsMenuItemChecked(const LLSD& userdata)
 
 void FSFloaterWearableFavorites::onDoubleClick()
 {
-	LLUUID selected_item_id = mItemsList->getSelectedUUID();
-	if (selected_item_id.notNull())
+	if (LLUUID selected_item_id = mItemsList->getSelectedUUID(); selected_item_id.notNull())
 	{
 		uuid_vec_t ids;
 		ids.push_back(selected_item_id);

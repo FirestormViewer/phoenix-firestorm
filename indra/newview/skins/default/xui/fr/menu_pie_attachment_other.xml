@@ -23,10 +23,20 @@
 			<pie_slice label="Appel audio" name="Call"/>
 			<pie_slice label="Zoomer" name="Zoom In"/>
 			<pie_slice label="Actualiser les textures" name="Texture Refresh"/>
+			<pie_menu name="ResetMenu" label="Réinitialiser &gt;">
+				<pie_slice label="Squelette et animations" name="Reset Skeleton And Animations"/>
+				<pie_slice label="Squelette" name="Reset Skeleton"/>
+				<pie_slice label="LOD du mesh" name="Reset Mesh LOD" />
+			</pie_menu>
 			<pie_menu name="ExportMenu" label="Enregistrer sous &gt;">
 				<pie_slice label="Sauvegarde" name="Backup"/>
 				<pie_slice label="Collada" name="Collada"/>
 				<pie_slice label="Dump XML" name="Dump XML"/>
+			</pie_menu>
+			<pie_menu name="RenderMenu" label="Afficher &gt;">
+				<pie_slice name="RenderNormally" label="Normalement" />
+				<pie_slice name="DoNotRender" label="Jamais" />
+				<pie_slice name="AlwaysRenderFully" label="Complètement" />
 			</pie_menu>
 		</pie_menu>
 		<pie_slice label="Inspecter" name="Avatar Inspect"/>
