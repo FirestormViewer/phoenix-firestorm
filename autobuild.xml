@@ -3497,6 +3497,26 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>RelWithDebInfo</string>
             </map>
+            <key>Debug</key>
+            <map>
+              <key>build</key>
+              <map>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>command</key>
+                <string>cmake</string>
+                <key>options</key>
+                <array>
+                  <string>-DCMAKE_BUILD_TYPE:STRING=Debug</string>
+                  <string>-DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE</string>
+                  <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
+                  <string>-DINSTALL_PROPRIETARY=TRUE</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>Debug</string>
+            </map>
             <key>RelWithDebInfoOS</key>
             <map>
               <key>configure</key>
@@ -3517,6 +3537,27 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               </map>
               <key>name</key>
               <string>RelWithDebInfoOS</string>
+            </map>
+            <key>DebugOS</key>
+            <map>
+              <key>configure</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>../indra</string>
+                </array>
+                <key>command</key>
+                <string>cmake</string>
+                <key>options</key>
+                <array>
+                  <string>-DCMAKE_BUILD_TYPE:STRING=Debug</string>
+                  <string>-DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE</string>
+                  <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
+                  <string>-DINSTALL_PROPRIETARY=FALSE</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>DebugOS</string>
             </map>
             <key>Release</key>
             <map>
@@ -3710,6 +3751,37 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>RelWithDebInfoFS</string>
             </map>
+            <key>DebugFS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>bash</string>
+                <key>options</key>
+                <array>
+                  <string>../scripts/configure_firestorm.sh</string>
+                  <string>--btype Debug</string>
+                  <string>--build</string>
+                  <string>--version</string>
+                  <string>--opensim</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>command</key>
+                <string>bash</string>
+                <key>options</key>
+                <array>
+                  <string>../scripts/configure_firestorm.sh</string>
+                  <string>--btype Debug</string>
+                  <string>--config</string>
+                  <string>--version</string>
+                  <string>--opensim</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>DebugFS</string>
+            </map>
             <key>RelWithDebInfoFS_open</key>
             <map>
               <key>build</key>
@@ -3740,6 +3812,37 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               </map>
               <key>name</key>
               <string>RelWithDebInfoFS_open</string>
+            </map>
+            <key>DebugFS_open</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>bash</string>
+                <key>options</key>
+                <array>
+                  <string>../scripts/configure_firestorm.sh</string>
+                  <string>--btype Debug</string>
+                  <string>--build</string>
+                  <string>--version</string>
+                  <string>--opensim</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>command</key>
+                <string>bash</string>
+                <key>options</key>
+                <array>
+                  <string>../scripts/configure_firestorm.sh</string>
+                  <string>--btype Debug</string>
+                  <string>--config</string>
+                  <string>--version</string>
+                  <string>--opensim</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>DebugFS_open</string>
             </map>
           </map>
           <key>name</key>
@@ -3784,6 +3887,39 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>RelWithDebInfo</string>
             </map>
+            <key>Debug</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>xcodebuild</string>
+                <key>options</key>
+                <array>
+                  <string>-configuration</string>
+                  <string>Debug</string>
+                  <string>-project</string>
+                  <string>SecondLife.xcodeproj</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>../indra</string>
+                </array>
+                <key>options</key>
+                <array>
+                  <string>-G</string>
+                  <string>Xcode</string>
+                </array>
+              </map>
+              <!-- FS:Ansariel: This will cause packages being installed twice
+              <key>default</key>
+              <string>True</string>
+              -->
+              <key>name</key>
+              <string>Debug</string>
+            </map>
             <key>RelWithDebInfoOS</key>
             <map>
               <key>build</key>
@@ -3808,6 +3944,31 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               </map>
               <key>name</key>
               <string>RelWithDebInfoOS</string>
+            </map>
+            <key>DebugOS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>xcodebuild</string>
+                <key>options</key>
+                <array>
+                  <string>-configuration</string>
+                  <string>Debug</string>
+                  <string>-project</string>
+                  <string>SecondLife.xcodeproj</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>-G</string>
+                  <string>Xcode</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>DebugOS</string>
             </map>
             <key>Release</key>
             <map>
@@ -3894,6 +4055,33 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>RelWithDebInfoFS</string>
             </map>
+            <key>DebugFS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--package</string>
+                  <string>--platform darwin</string>
+                  <string>--fmodstudio</string>
+                  <string>--kdu</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--platform darwin</string>
+                  <string>--package</string>
+                  <string>--fmodstudio</string>
+                  <string>--kdu</string>
+                </array>
+              </map>
+              <key>default</key>
+              <string>True</string>
+              <key>name</key>
+              <string>DebugFS</string>
+            </map>
             <key>RelWithDebInfoFS_open</key>
             <map>
               <key>build</key>
@@ -3914,6 +4102,27 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               </map>
               <key>name</key>
               <string>RelWithDebInfoFS_open</string>
+            </map>
+            <key>DebugFS_open</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--package</string>
+                  <string>--platform darwin</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--platform darwin</string>
+                  <string>--package</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>DebugFS_open</string>
             </map>
             <key>ReleaseFS</key>
             <map>
@@ -4046,6 +4255,31 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>RelWithDebInfoFS</string>
             </map>
+            <key>DebugFS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--platform linux</string>
+                  <string>--package</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--kdu</string>
+                  <string>--fmodstudio</string>
+                  <string>--platform linux</string>
+                  <string>--package</string>
+                </array>
+              </map>
+              <key>default</key>
+              <string>True</string>
+              <key>name</key>
+              <string>DebugFS</string>
+            </map>
             <key>RelWithDebInfoFS_open</key>
             <map>
               <key>build</key>
@@ -4066,6 +4300,27 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               </map>
               <key>name</key>
               <string>RelWithDebInfoFS_open</string>
+            </map>
+            <key>DebugFS_open</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--platform linux</string>
+                  <string>--package</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--platform linux</string>
+                  <string>--package</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>DebugFS_open</string>
             </map>
             <key>ReleaseFS</key>
             <map>
@@ -4158,6 +4413,43 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>RelWithDebInfo</string>
             </map>
+            <key>Debug</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>SecondLife.sln</string>
+                </array>
+                <key>command</key>
+                <string>devenv</string>
+                <key>options</key>
+                <array>
+                  <string>/build</string>
+                  <string>Debug|${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>..\indra</string>
+                </array>
+                <key>options</key>
+                <array>
+                  <string>-G</string>
+                  <string>${AUTOBUILD_WIN_CMAKE_GEN|NOTWIN}</string>
+                  <string>-A</string>
+                  <string>${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
+                </array>
+              </map>
+              <!-- FS:Ansariel: This will cause packages being installed twice
+              <key>default</key>
+              <string>True</string>
+              -->
+              <key>name</key>
+              <string>Debug</string>
+            </map>
             <key>RelWithDebInfoOS</key>
             <map>
               <key>build</key>
@@ -4197,6 +4489,47 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               </map>
               <key>name</key>
               <string>RelWithDebInfoOS</string>
+            </map>
+            <key>DebugOS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>SecondLife.sln</string>
+                </array>
+                <key>command</key>
+                <string>msbuild.exe</string>
+                <key>options</key>
+                <array>
+                  <string>/p:Configuration=Debug</string>
+                  <string>/p:Platform=${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
+                  <string>/t:Build</string>
+                  <string>/p:useenv=true</string>
+                  <string>/verbosity:minimal</string>
+                  <string>/toolsversion:4.0</string>
+                  <string>/p:VCBuildAdditionalOptions= /incremental</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>..\indra</string>
+                </array>
+                <key>options</key>
+                <array>
+                  <string>-G</string>
+                  <string>${AUTOBUILD_WIN_CMAKE_GEN|NOTWIN}</string>
+                  <string>-A</string>
+                  <string>${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
+                  <string>-DINSTALL_PROPRIETARY=FALSE</string>
+                  <string>-DUSE_KDU=FALSE</string>
+                  <string>-DUSE_OPENAL:BOOL=ON</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>DebugOS</string>
             </map>
             <key>Release</key>
             <map>
@@ -4299,6 +4632,33 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>name</key>
               <string>RelWithDebInfoFS</string>
             </map>
+            <key>DebugFS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--fmodstudio</string>
+                  <string>--kdu</string>
+                  <string>--version</string>
+                  <string>--platform windows</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--fmodstudio</string>
+                  <string>--kdu</string>
+                  <string>--version</string>
+                  <string>--platform windows</string>
+                </array>
+              </map>
+              <key>default</key>
+              <string>True</string>
+              <key>name</key>
+              <string>DebugFS</string>
+            </map>
             <key>RelWithDebInfoFS_open</key>
             <map>
               <key>build</key>
@@ -4321,6 +4681,29 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               </map>
               <key>name</key>
               <string>RelWithDebInfoFS_open</string>
+            </map>
+            <key>DebugFS_open</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--version</string>
+                  <string>--btype Debug</string>
+                  <string>--platform windows</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--version</string>
+                  <string>--btype Debug</string>
+                  <string>--platform windows</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>DebugFS_open</string>
             </map>
             <key>ReleaseFS</key>
             <map>

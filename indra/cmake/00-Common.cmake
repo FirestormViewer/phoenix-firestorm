@@ -151,8 +151,10 @@ if (LINUX)
      )
 
 
-  if ( ${FORTIFY_SOURCE_RES} EQUAL 0 )
-   add_definitions(-D_FORTIFY_SOURCE=2)
+  if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug") # Can't use _FORTIFY_SOURCE=2 without optimization.
+    if ( ${FORTIFY_SOURCE_RES} EQUAL 0 )
+      add_definitions(-D_FORTIFY_SOURCE=2)
+    endif()
   endif()
 
   # gcc 4.3 and above don't like the LL boost and also
@@ -184,8 +186,10 @@ if (LINUX)
     add_compile_options(-march=pentium4)
   endif (ADDRESS_SIZE EQUAL 32)
 
-  # this stops us requiring a really recent glibc at runtime
-  add_compile_options(-fno-stack-protector)
+  if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+    # this stops us requiring a really recent glibc at runtime
+    add_compile_options(-fno-stack-protector)
+  endif (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
   # linking can be very memory-hungry, especially the final viewer link
   #set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory")
   set(CMAKE_CXX_LINK_FLAGS "-Wl,--no-keep-memory -Wl,--build-id -Wl,-rpath,'$ORIGIN:$ORIGIN/../lib' -Wl,--exclude-libs,ALL")
