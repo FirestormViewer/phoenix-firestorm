@@ -632,7 +632,6 @@ void LLPanelNearByMedia::refreshList()
 	LLViewerMedia::impl_list impls = media_inst->getPriorityList();
 	LLViewerMedia::impl_list::iterator priority_iter;
 	
-	U32 enabled_count = 0;
 	U32 disabled_count = 0;
 	
 	// iterate over the impl list, creating rows as necessary.
@@ -675,13 +674,10 @@ void LLPanelNearByMedia::refreshList()
 			{
 				disabled_count++;
 			}
-			else {
-				enabled_count++;
 		}
 	}
-	}	
 	mDisableAllCtrl->setEnabled((gSavedSettings.getBOOL("AudioStreamingMusic") || 
-		                         gSavedSettings.getBOOL("AudioStreamingMedia")) &&
+								 gSavedSettings.getBOOL("AudioStreamingMedia")) &&
 								(media_inst->isAnyMediaShowing() || 
 								 media_inst->isParcelMediaPlaying() ||
 								 media_inst->isParcelAudioPlaying()));

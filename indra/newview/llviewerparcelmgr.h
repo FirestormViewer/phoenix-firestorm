@@ -219,6 +219,11 @@ public:
 	void	renderHighlightSegments(const U8* segments, LLViewerRegion* regionp);
 	void	renderCollisionSegments(U8* segments, BOOL use_pass, LLViewerRegion* regionp);
 
+    static S32 PARCEL_BAN_LINES_HIDE;
+    static S32 PARCEL_BAN_LINES_ON_COLLISION;
+    static S32 PARCEL_BAN_LINES_ON_PROXIMITY;
+    void	resetCollisionTimer(); // Ban lines visibility timer
+
 	void	sendParcelGodForceOwner(const LLUUID& owner_id);
 
 	// make the selected parcel a content parcel. 
@@ -380,7 +385,7 @@ private:
 	collision_update_signal_t*	mCollisionUpdateSignal;
 // [/SL:KB]
 	U8*							mCollisionSegments;
-	BOOL						mRenderCollision; 
+	bool						mRenderCollision; 
 	BOOL						mRenderSelection;
 	S32							mCollisionBanned;     
 	LLFrameTimer				mCollisionTimer;

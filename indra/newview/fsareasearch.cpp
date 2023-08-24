@@ -174,11 +174,6 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mRlvBehaviorCallbackConnection()
 {
 	LLViewerRegion::sFSAreaSearchActive = true;
-	if( LLViewerRegion* region = gAgent.getRegion() )
-	{
-		checkRegion();
-	}
-
 	mFactoryMap["area_search_list_panel"] = LLCallbackMap(createPanelList, this);
 	mFactoryMap["area_search_find_panel"] = LLCallbackMap(createPanelFind, this);
 	mFactoryMap["area_search_filter_panel"] = LLCallbackMap(createPanelFilter, this);
@@ -190,24 +185,11 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 
 	mParcelChangedObserver = std::make_unique<FSParcelChangeObserver>(this);
 	LLViewerParcelMgr::getInstance()->addObserver(mParcelChangedObserver.get());
-	mRegionChangeConnection = gAgent.addRegionChangedCallback(boost::bind(&FSAreaSearch::checkRegion, this));
 }
 
 FSAreaSearch::~FSAreaSearch()
 {
 	LLViewerRegion::sFSAreaSearchActive = false;
-
-    // Tell the Simulator not to send us everything anymore
-    // and revert to the regular "keyhole" frustum of interest
-    // list updates.
-    if( !LLApp::isExiting() )
-    {
-		if( LLViewerRegion* region = gAgent.getRegion() )
-		{
-			region->useFullUpdateInterestListMode(false);
-		}
-	}
-
 	if (!gIdleCallbacks.deleteFunction(idle, this))
 	{
 		LL_WARNS("FSAreaSearch") << "FSAreaSearch::~FSAreaSearch() failed to delete callback" << LL_ENDL;
@@ -231,11 +213,6 @@ FSAreaSearch::~FSAreaSearch()
 	{
 		LLViewerParcelMgr::getInstance()->removeObserver(mParcelChangedObserver.get());
 		mParcelChangedObserver = nullptr;
-	}
-
-	if (mRegionChangeConnection.connected())
-	{
-		mRegionChangeConnection.disconnect();
 	}
 }
 
@@ -343,28 +320,24 @@ void FSAreaSearch::updateRlvRestrictions(ERlvBehaviour behavior)
 
 void FSAreaSearch::checkRegion()
 {
-	static LLUUID last_region_id = LLUUID::null;
-	auto last_region = LLWorld::instance().getRegionFromID(last_region_id);
-	// Check if we changed region, if so reset the interest list to full, 
-	LLViewerRegion* region = gAgent.getRegion();
-    if( region && (region != last_region) )
-    {
-		region->useFullUpdateInterestListMode(true, true); // we force this because we want a true count
-		if ( mActive )
+	if (mActive)
+	{
+		// Check if we changed region, and if we did, clear the object details cache.
+		if (LLViewerRegion* region = gAgent.getRegion(); region && (region != mLastRegion))
 		{
-			// and if we did and are active, clear the object details cache.
-			if( !mExcludeNeighborRegions )
+			if (!mExcludeNeighborRegions)
 			{
 				std::vector<LLViewerRegion*> uniqueRegions;
 				region->getNeighboringRegions(uniqueRegions);
-				if( std::find( uniqueRegions.begin(), uniqueRegions.end(), last_region ) != uniqueRegions.end() )
+				if (std::find(uniqueRegions.begin(), uniqueRegions.end(), mLastRegion) != uniqueRegions.end())
 				{
 					// Crossed into a neighboring region, no need to clear everything.
-					last_region_id = region->getRegionID();
+					mLastRegion = region;
 					return;
 				}
 				// else teleported into a new region
 			}
+			mLastRegion = region;
 			mRequested = 0;
 			mObjectDetails.clear();
 			mRegionRequests.clear();
@@ -374,14 +347,7 @@ void FSAreaSearch::checkRegion()
 			mPanelList->setAgentLastPosition(gAgent.getPositionGlobal());
 			mRefresh = true;
 		}
-		if( last_region )
-		{
-			// we clear the old region status, because the instance may persist for us
-			// but the region itself will have reset when we left.
-			last_region->clearFullUpdateInterestList();
-		}
 	}
-	last_region_id = region->getRegionID();
 }
 
 void FSAreaSearch::refreshList(bool cache_clear)

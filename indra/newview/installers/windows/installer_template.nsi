@@ -564,16 +564,13 @@ StrCpy $INSTSHORTCUT "${SHORTCUT}"
 # MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_KEY
 # MULTIUSER_INSTALLMODE_DEFAULT_REGISTRY_VALUENAME
 # Couldn't get NSIS to expand $MultiUser.InstallMode into the function name at Call time
-# <FS:Ansariel> Replaced this with Call un.CheckIfAdministrator since there currently is no InstallMode
-##${If} $MultiUser.InstallMode == 'AllUsers'
+${If} $MultiUser.InstallMode == 'AllUsers'
 ##MessageBox MB_OK "Uninstalling for all users"
-##  Call un.MultiUser.InstallMode.AllUsers
-##${Else}
+  Call un.MultiUser.InstallMode.AllUsers
+${Else}
 ##MessageBox MB_OK "Uninstalling for current user"
-##  Call un.MultiUser.InstallMode.CurrentUser
-##${EndIf}
-Call un.CheckIfAdministrator
-# </FS:Ansariel>
+  Call un.MultiUser.InstallMode.CurrentUser
+${EndIf}
 
 # Make sure we're not running
 Call un.CloseSecondLife
@@ -603,7 +600,7 @@ Call un.UserSettingsFiles
 SectionEnd
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Make sure the user can install
+;; Make sure the user can install/uninstall
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckIfAdministrator
     DetailPrint $(CheckAdministratorInstDP)
@@ -611,21 +608,6 @@ Function CheckIfAdministrator
     Pop $R0
     StrCmp $R0 "Admin" lbl_is_admin
         MessageBox MB_OK $(CheckAdministratorInstMB)
-        Quit
-lbl_is_admin:
-    Return
-
-FunctionEnd
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Make sure the user can uninstall
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Function un.CheckIfAdministrator
-    DetailPrint $(CheckAdministratorUnInstDP)
-    UserInfo::GetAccountType
-    Pop $R0
-    StrCmp $R0 "Admin" lbl_is_admin
-        MessageBox MB_OK $(CheckAdministratorUnInstMB)
         Quit
 lbl_is_admin:
     Return

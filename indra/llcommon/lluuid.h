@@ -171,6 +171,14 @@ public:
 	U16 getCRC16() const;
 	U32 getCRC32() const;
 
+	// Returns a 64 bits digest of the UUID, by XORing its two 64 bits long
+	// words. HB
+	inline U64 getDigest64() const
+	{
+		U64* tmp = (U64*)mData;
+		return tmp[0] ^ tmp[1];
+	}
+
 	static BOOL validate(const std::string& in_string); // Validate that the UUID string is legal.
 
 	static const LLUUID null;
@@ -222,29 +230,23 @@ public:
 	LLAssetID makeAssetID(const LLUUID& session) const;
 };
 
-// Generate a hash of an LLUUID object using the boost hash templates. 
-
-// <FS:ND> GCC 4.9 does not like the specialization in form of boost::hash but rather wants a namespace
-// template <>
-// struct boost::hash<LLUUID>
-namespace boost { template <> struct hash<LLUUID>
-// </FS:ND>
+// std::hash implementation for LLUUID
+namespace std
 {
-    typedef LLUUID argument_type;
-    typedef std::size_t result_type;
-    result_type operator()(argument_type const& s) const
-    {
-        result_type seed(0);
+	template<> struct hash<LLUUID>
+	{
+		inline size_t operator()(const LLUUID& id) const noexcept
+		{
+			return (size_t)id.getDigest64();
+		}
+	};
+}
 
-        for (S32 i = 0; i < UUID_BYTES; ++i)
-        {
-            boost::hash_combine(seed, s.mData[i]);
-        }
-
-        return seed;
-    }
-};
-} // <FS:ND/> close namespace
+// For use with boost containers.
+inline size_t hash_value(const LLUUID& id) noexcept
+{
+	return (size_t)id.getDigest64();
+}
 
 // <FS:Ansariel> UUID hash calculation
 struct FSUUIDHash
@@ -256,17 +258,4 @@ struct FSUUIDHash
 };
 // </FS:Ansariel> UUID hash calculation
 
-// Adapt boost hash to std hash
-namespace std
-{
-    template<> struct hash<LLUUID>
-    {
-        std::size_t operator()(LLUUID const& s) const noexcept
-        {
-            return boost::hash<LLUUID>()(s);
-        }
-    };
-}
-#endif
-
-
+#endif // LL_LLUUID_H

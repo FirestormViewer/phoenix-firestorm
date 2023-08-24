@@ -3681,9 +3681,6 @@ void LLModelPreview::clearBuffers()
 
 void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
 {
-    U32 mesh_count = 0;
-
-
     LLModelLoader::model_list* model = NULL;
 
     if (lod < 0 || lod > 4)
@@ -3818,8 +3815,6 @@ void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
             vb->flush();
 
             mVertexBuffer[lod][mdl].push_back(vb);
-
-            ++mesh_count;
         }
     }
 }
