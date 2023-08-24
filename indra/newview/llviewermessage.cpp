@@ -103,6 +103,7 @@
 #include "llviewerobjectlist.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerstats.h"
+#include "llviewerstatsrecorder.h"
 #include "llviewertexteditor.h"
 #include "llviewerthrottle.h"
 #include "llviewerwindow.h"
@@ -4675,68 +4676,71 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 			continue;
 		}
 
-			LLViewerObject *objectp = gObjectList.findObject(id);
-			if (objectp)
+		LLViewerObject *objectp = gObjectList.findObject(id);
+		if (objectp)
+		{
+			// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
+			static LLCachedControl<bool> fsExperimentalLostAttachmentsFix(gSavedSettings, "FSExperimentalLostAttachmentsFix");
+			static LLCachedControl<F32> fsExperimentalLostAttachmentsFixKillDelay(gSavedSettings, "FSExperimentalLostAttachmentsFixKillDelay");
+			if (fsExperimentalLostAttachmentsFix &&
+				isAgentAvatarValid() &&
+				(gAgent.getTeleportState() != LLAgent::TELEPORT_NONE || gPostTeleportFinishKillObjectDelayTimer.getElapsedTimeF32() <= fsExperimentalLostAttachmentsFixKillDelay || gAgentAvatarp->isCrossingRegion()) && 
+				(objectp->isAttachment() || objectp->isTempAttachment()) &&
+				objectp->permYouOwner())
 			{
-				// <FS:Ansariel> FIRE-12004: Attachments getting lost on TP
-				static LLCachedControl<bool> fsExperimentalLostAttachmentsFix(gSavedSettings, "FSExperimentalLostAttachmentsFix");
-				static LLCachedControl<F32> fsExperimentalLostAttachmentsFixKillDelay(gSavedSettings, "FSExperimentalLostAttachmentsFixKillDelay");
-				if (fsExperimentalLostAttachmentsFix &&
-					isAgentAvatarValid() &&
-					(gAgent.getTeleportState() != LLAgent::TELEPORT_NONE || gPostTeleportFinishKillObjectDelayTimer.getElapsedTimeF32() <= fsExperimentalLostAttachmentsFixKillDelay || gAgentAvatarp->isCrossingRegion()) && 
-					(objectp->isAttachment() || objectp->isTempAttachment()) &&
-					objectp->permYouOwner())
+				// Simply ignore the request and don't kill the object - this should work...
+
+				std::string reason;
+				if (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE)
 				{
-					// Simply ignore the request and don't kill the object - this should work...
-
-					std::string reason;
-					if (gAgent.getTeleportState() != LLAgent::TELEPORT_NONE)
-					{
-						reason = "tp";
-					}
-					else if (gAgentAvatarp->isCrossingRegion())
-					{
-						reason = "crossing";
-					}
-					else
-					{
-						reason = "timer";
-						gFSRefreshAttachmentsTimer.triggerRefresh();
-					}
-					std::string message = "Region \"" + regionp->getName() + "\" tried to kill attachment: " + objectp->getAttachmentItemName() + " (" + reason + ") - Agent region: \"" + gAgent.getRegion()->getName() + "\"";
-					LL_WARNS("Messaging") << message << LL_ENDL;
-
-					if (gSavedSettings.getBOOL("FSExperimentalLostAttachmentsFixReport"))
-					{
-						report_to_nearby_chat(message);
-					}
-
-					continue;
+					reason = "tp";
 				}
-				// </FS:Ansariel>
-
-				// Display green bubble on kill
-				if ( gShowObjectUpdates )
+				else if (gAgentAvatarp->isCrossingRegion())
 				{
-					LLColor4 color(0.f,1.f,0.f,1.f);
-					gPipeline.addDebugBlip(objectp->getPositionAgent(), color);
-					LL_DEBUGS("MessageBlip") << "Kill blip for local " << local_id << " at " << objectp->getPositionAgent() << LL_ENDL;
+					reason = "crossing";
+				}
+				else
+				{
+					reason = "timer";
+					gFSRefreshAttachmentsTimer.triggerRefresh();
+				}
+				std::string message = "Region \"" + regionp->getName() + "\" tried to kill attachment: " + objectp->getAttachmentItemName() + " (" + reason + ") - Agent region: \"" + gAgent.getRegion()->getName() + "\"";
+				LL_WARNS("Messaging") << message << LL_ENDL;
+
+				if (gSavedSettings.getBOOL("FSExperimentalLostAttachmentsFixReport"))
+				{
+					report_to_nearby_chat(message);
 				}
 
-				// Do the kill
-				gObjectList.killObject(objectp);
+				continue;
+			}
+			// </FS:Ansariel>
+
+			// Display green bubble on kill
+			if ( gShowObjectUpdates )
+			{
+				LLColor4 color(0.f,1.f,0.f,1.f);
+				gPipeline.addDebugBlip(objectp->getPositionAgent(), color);
+				LL_DEBUGS("MessageBlip") << "Kill blip for local " << local_id << " at " << objectp->getPositionAgent() << LL_ENDL;
 			}
 
-			if(delete_object)
-			{
-				regionp->killCacheEntry(local_id);
+			// Do the kill
+			gObjectList.killObject(objectp);
+		}
+
+		if(delete_object)
+		{
+			regionp->killCacheEntry(local_id);
 		}
 
 		// We should remove the object from selection after it is marked dead by gObjectList to make LLToolGrab,
         // which is using the object, release the mouse capture correctly when the object dies.
         // See LLToolGrab::handleHoverActive() and LLToolGrab::handleHoverNonPhysical().
 		LLSelectMgr::getInstance()->removeObjectFromSelections(id);
-	}
+
+	}	// end for loop
+
+    LLViewerStatsRecorder::instance().recordObjectKills(num_objects);
 }
 
 // <FS:Techwolf Lupindo> area search
@@ -6459,6 +6463,11 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
 				LandBuyAccessBlocked_AdultsOnlyContent
 			 
 			-----------------------------------------------------------------------*/ 
+            static LLCachedControl<S32> ban_lines_mode(gSavedSettings , "ShowBanLines" , LLViewerParcelMgr::PARCEL_BAN_LINES_ON_COLLISION);
+            if (ban_lines_mode == LLViewerParcelMgr::PARCEL_BAN_LINES_ON_COLLISION)
+            {
+                LLViewerParcelMgr::getInstance()->resetCollisionTimer();
+            }
 			if (handle_special_notification(notificationID, llsdBlock))
 			{
 				return true;
@@ -6664,6 +6673,13 @@ void process_alert_message(LLMessageSystem *msgsystem, void **user_data)
 	{
 		BOOL modal = FALSE;
 		process_alert_core(message, modal);
+
+        static LLCachedControl<S32> ban_lines_mode(gSavedSettings , "ShowBanLines" , LLViewerParcelMgr::PARCEL_BAN_LINES_ON_COLLISION);
+        if (ban_lines_mode == LLViewerParcelMgr::PARCEL_BAN_LINES_ON_COLLISION
+            && message.find("Cannot enter parcel") != std::string::npos)
+        {
+            LLViewerParcelMgr::getInstance()->resetCollisionTimer();
+        }
 	}
 }
 

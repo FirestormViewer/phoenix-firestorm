@@ -110,13 +110,13 @@ BOOL LLPanelWearableOutfitItem::postBuild()
 {
     LLPanelWearableListItem::postBuild();
     
-    LLViewerInventoryItem* inv_item = getItem();
-    mShowWidgets &= (inv_item->getType() != LLAssetType::AT_BODYPART);
     //if(mShowWidgets) // <FS:Ansariel> Make Add/Remove buttons work
     {
         // <FS:Ansariel> Make Add/Remove buttons work
         //addWidgetToRightSide("add_wearable");
         //addWidgetToRightSide("remove_wearable");
+        LLViewerInventoryItem* inv_item = getItem();
+        mShowWidgets &= (inv_item->getType() != LLAssetType::AT_BODYPART);
         addWidgetToRightSide("add_wearable", mShowWidgets);
         addWidgetToRightSide("remove_wearable", mShowWidgets);
         // </FS:Ansariel>
@@ -255,7 +255,15 @@ void LLPanelWearableOutfitItem::updateItem(const std::string& name,
     if(mShowWidgets)
     {
         setShowWidget("add_wearable", !is_worn);
+
+        // <FS:Ansariel> Make Add/Remove buttons work
+        //// Body parts can't be removed, only replaced
+        //LLViewerInventoryItem* inv_item = getItem();
+        //bool show_remove = is_worn && inv_item && (inv_item->getType() != LLAssetType::AT_BODYPART);
+        //setShowWidget("remove_wearable", show_remove);
         setShowWidget("remove_wearable", is_worn);
+        // </FS:Ansariel>
+
         if(mHovered)
         {
             setWidgetsVisible(true);

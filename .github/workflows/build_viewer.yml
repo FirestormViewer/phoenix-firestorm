@@ -2,8 +2,9 @@ name: Build viewer
 on:
   push:
     branches:
-      - "*release"
-      - master
+      - "Firestorm*.*.*"
+    tags:
+      - "preview"
   schedule:
     - cron: '00 03 * * *' # Run every day at 3am UTC
 env:    
@@ -74,14 +75,14 @@ jobs:
 
       - name: find channel from Branch name
         run: | 
-          if [[ "${{ github.ref_name }}" == *Release* ]]; then
+          if [[ "${{ github.ref_name }}" == Firestorm* ]]; then
             FS_RELEASE_TYPE=Release
+          elif [[ "${{ github.ref_name }}" == *review* ]]; then
+            FS_RELEASE_TYPE=Beta
+          elif [[ "${{ github.event_name }}" == 'schedule' ]]; then
+            FS_RELEASE_TYPE=Nightly
           else
-            if [[ "${{github.event_name}}" == 'schedule' ]]; then
-              FS_RELEASE_TYPE=Nightly
-            else
-              FS_RELEASE_TYPE=Beta
-            fi
+            FS_RELEASE_TYPE=Unknown
           fi
           if [[ "${{ matrix.addrsize }}" == "64" ]]; then
             FS_RELEASE_CHAN="${FS_RELEASE_TYPE}x64"
@@ -118,7 +119,11 @@ jobs:
         shell: bash
 
       - name: rclone the private 3p packages for this platform (both 64 & 32)
-        run: 'rclone copy fs_bundles: --include "*${{ env.fallback_platform }}*bz2" .'
+        run: 'rclone copy fs_bundles: --filter "- Alpha/*" --filter "+ *${{ env.fallback_platform }}*bz2" .'
+        
+      - name: rclone any extra private 3p packages for Alpha (allows library updates not in the main repo)
+        if: env.FS_BUILD_TYPE == 'Alpha'
+        run: 'rclone copy fs_bundles:Alpha --include "*${{ env.fallback_platform }}*bz2" .'
 
       - name: set VSVER for Windows builds
         if: runner.os == 'Windows'
@@ -255,17 +260,17 @@ jobs:
 
       - name: find channel and webhook from Branch name
         run: | 
-          if [[ "${{ github.ref_name }}" == *Release* ]]; then
+          if [[ "${{ github.ref_name }}" == Firestorm* ]]; then
             FS_RELEASE_FOLDER=release
             FS_BUILD_WEBHOOK_URL=${{ secrets.RELEASE_WEBHOOK_URL }}
-            else
-            if [[ "${{github.event_name}}" == 'schedule' ]]; then
-            FS_RELEASE_FOLDER=nightly
-            FS_BUILD_WEBHOOK_URL=${{ secrets.NIGHTLY_WEBHOOK_URL }}
-            else
+          elif [[ "${{ github.ref_name }}" == *review* ]]; then
             FS_RELEASE_FOLDER=preview
             FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
-            fi
+          elif [[ "${{ github.event_name }}" == 'schedule' ]]; then
+            FS_RELEASE_FOLDER=nightly
+            FS_BUILD_WEBHOOK_URL=${{ secrets.NIGHTLY_WEBHOOK_URL }}
+          else
+            FS_RELEASE_TYPE=Unknown
           fi
           echo "FS_RELEASE_FOLDER=${FS_RELEASE_FOLDER}" >> $GITHUB_ENV
           echo "FS_BUILD_WEBHOOK_URL=${FS_BUILD_WEBHOOK_URL}" >> $GITHUB_ENV

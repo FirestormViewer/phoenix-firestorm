@@ -31,6 +31,7 @@
 #include "llavatarname.h"
 
 class LLUICtrl;
+class LLScrollListCtrl;
 
 // Bits for simulator performance query flags
 enum LAND_STAT_FLAGS
@@ -76,6 +77,7 @@ private:
 	void initColumns(LLCtrlListInterface *list);
 
 	void onCommitObjectsList();
+    void onSelectionChanged();
 	static void onDoubleClickObjectsList(void* data);
 	void onClickShowBeacon();
 
@@ -103,6 +105,8 @@ private:
 	void onGetByParcelName();
 
 	void showBeacon();
+	// <FS:Ansariel> TP to object
+    //void teleportToSelectedObject();
 
 private:
 	std::string mMethod;
@@ -119,6 +123,7 @@ private:
 	F32 mtotalScore;
 
 	static LLFloaterTopObjects* sInstance;
+    LLScrollListCtrl* mObjectsScrollList;
 };
 
 #endif

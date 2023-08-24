@@ -132,12 +132,11 @@ BOOL FSPanelBlockList::handleKeyHere(KEY key, MASK mask)
 void FSPanelBlockList::selectBlocked(const LLUUID& mute_id)
 {
 	mBlockedList->deselectAllItems();
-	std::vector<LLScrollListItem*> items = mBlockedList->getAllData();
-	for (std::vector<LLScrollListItem*>::iterator it = items.begin(); it != items.end(); it++)
+	for (auto item : mBlockedList->getAllData())
 	{
-		if ((*it)->getColumn(3)->getValue().asUUID() == mute_id)
+		if (item->getColumn(3)->getValue().asUUID() == mute_id)
 		{
-			(*it)->setSelected(TRUE);
+			item->setSelected(TRUE);
 			break;
 		}
 	}
@@ -171,17 +170,15 @@ void FSPanelBlockList::refreshBlockedList()
 {
 	mBlockedList->deleteAllItems();
 
-	std::vector<LLMute> mutes = LLMuteList::getInstance()->getMutes();
-	std::vector<LLMute>::iterator it;
-	for (it = mutes.begin(); it != mutes.end(); ++it)
+	for (const auto& mute : LLMuteList::getInstance()->getMutes())
 	{
 		LLScrollListItem::Params item_p;
-		item_p.enabled(TRUE);
+		item_p.enabled(true);
 		item_p.value(LLUUID::generateNewID()); // can't link UUID of blocked item directly because of mutes by name
-		item_p.columns.add().column("item_name").value(it->mName);
-		item_p.columns.add().column("item_type").value(it->getDisplayType());
-		item_p.columns.add().column("item_mute_type").value(it->mType);
-		item_p.columns.add().column("item_mute_uuid").value(it->mID);
+		item_p.columns.add().column("item_name").value(mute.mName);
+		item_p.columns.add().column("item_type").value(mute.getDisplayType());
+		item_p.columns.add().column("item_mute_type").value(mute.mType);
+		item_p.columns.add().column("item_mute_uuid").value(mute.mID);
 
 		mBlockedList->addRow(item_p, ADD_BOTTOM);
 	}
@@ -208,11 +205,10 @@ void FSPanelBlockList::removeMutes()
 	// list after each removal, sending us straight into a crash!
 	LLMuteList::getInstance()->removeObserver(this);
 
-	std::vector<LLScrollListItem*> selected_items = mBlockedList->getAllSelected();
-	for (std::vector<LLScrollListItem*>::iterator it = selected_items.begin(); it != selected_items.end(); it++)
+	for (auto item : mBlockedList->getAllSelected())
 	{
-		std::string name = (*it)->getColumn(COL_NAME)->getValue().asString();
-		LLUUID id = (*it)->getColumn(COL_UUID)->getValue().asUUID();
+		std::string name = item->getColumn(COL_NAME)->getValue().asString();
+		LLUUID id = item->getColumn(COL_UUID)->getValue().asUUID();
 		LLMute mute(id, name);
 		LLMuteList::getInstance()->remove(mute);
 	}
