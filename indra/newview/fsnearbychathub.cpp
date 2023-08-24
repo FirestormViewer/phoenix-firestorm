@@ -48,10 +48,10 @@
 #include "rlvactions.h"
 #include "rlvhandler.h"
 
-static const U32 NAME_PREDICTION_MINIMUM_LENGTH = 3;
+constexpr U32 NAME_PREDICTION_MINIMUM_LENGTH = 3;
 
 // *HACK* chat bar cannot return its correct height for some reason
-static const S32 MAGIC_CHAT_BAR_PAD = 5;
+constexpr S32 MAGIC_CHAT_BAR_PAD = 5;
 
 struct LLChatTypeTrigger {
 	std::string name;
@@ -237,8 +237,8 @@ bool matchChatTypeTrigger(const std::string& in_str, std::string* out_str)
 S32 FSNearbyChat::sLastSpecialChatChannel = 0;
 
 FSNearbyChat::FSNearbyChat() :
-	mDefaultChatBar(NULL),
-	mFocusedInputEditor(NULL)
+	mDefaultChatBar(nullptr),
+	mFocusedInputEditor(nullptr)
 {
 	gSavedSettings.getControl("MainChatbarVisible")->getSignal()->connect(boost::bind(&FSNearbyChat::onDefaultChatBarButtonClicked, this));
 }
@@ -847,7 +847,7 @@ public:
 	LLChatCommandHandler() : LLCommandHandler("chat", UNTRUSTED_THROTTLE) { }
 
 	// Your code here
-	bool handle(const LLSD& tokens, const LLSD& query_map,
+	bool handle(const LLSD& tokens, const LLSD& query_map, const std::string& grid,
 				LLMediaCtrl* web)
 	{
 		bool retval = false;

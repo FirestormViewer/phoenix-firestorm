@@ -23,7 +23,7 @@
 
 FSFloaterPoseStand::FSFloaterPoseStand(const LLSD& key)
 :	LLFloater(key),
-	mComboPose(NULL),
+	mComboPose(nullptr),
 	mPoseStandLock(false),
 	mAOPaused(false)
 {

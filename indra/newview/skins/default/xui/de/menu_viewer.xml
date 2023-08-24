@@ -133,7 +133,9 @@
 		<menu_item_call label="Mein Land" name="My Land"/>
 		<menu_item_call label="Mein Linden Home" name="Linden Home"/>
 		<menu label="Anzeigen" name="LandShow">
-			<menu_item_check label="Bannlinien" name="Ban Lines"/>
+			<menu_item_check label="Bannlinien nicht anzeigen" name="Hide Ban Lines"/>
+			<menu_item_check label="Bannlinien bei Kollision anzeigen" name="Show Ban Lines On Collision"/>
+			<menu_item_check label="Bannlinien bei Annäherung anzeigen" name="Show Ban Lines On Proximity"/>
 			<menu_item_check label="Ortungssignale" name="beacons"/>
 			<menu_item_check label="Grundstücksgrenzen" name="Property Lines"/>
 			<menu_item_check label="Landeigentümer" name="Land Owners"/>
@@ -553,7 +555,9 @@
 			<menu_item_check label="Sonnen-Override für Sim" name="Sim Sun Override"/>
 			<menu_item_check label="Festgelegtes Wetter" name="Fixed Weather"/>
 			<menu_item_call label="Regionsobjekt-Cache ausgeben" name="Dump Region Object Cache"/>
-			<menu_item_check label="Interest-Liste: Vollständiges Update" name="Interest List: Full Update"/>
+			<menu_item_check label="Statistiken in Datei ausgeben" name="Stats Recorder File"/>
+			<menu_item_check label="Interest-Liste 360 Modus" name="Interest List: 360 Mode"/>
+			<menu_item_call label="Interest-Liste zurücksetzen" name="Reset Interest Lists"/>
 			<menu_item_call label="Simulator-Features ausgeben" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="UI" name="UI">
