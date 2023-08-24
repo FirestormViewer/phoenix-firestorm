@@ -4638,7 +4638,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		std::string flag = login_flags["ever_logged_in"];
 		if(!flag.empty())
 		{
-			gAgent.setFirstLogin((flag == "N") ? TRUE : FALSE);
+			gAgent.setFirstLogin(flag == "N");
 		}
 
 		/*  Flag is currently ignored by the viewer.
@@ -4760,7 +4760,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	std::string fake_initial_outfit_name = gSavedSettings.getString("FakeInitialOutfitName");
 	if (!fake_initial_outfit_name.empty())
 	{
-		gAgent.setFirstLogin(TRUE);
+		gAgent.setFirstLogin(true);
 		sInitialOutfit = fake_initial_outfit_name;
 		if (sInitialOutfitGender.empty())
 		{
