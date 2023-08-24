@@ -663,9 +663,7 @@ const LLUUID LLInventoryModel::findCategoryUUIDForTypeInRoot(
 	
 	if(rv.isNull() 
        && root_id.notNull()
-       && create_folder
-       && preferred_type != LLFolderType::FT_MARKETPLACE_LISTINGS
-       && preferred_type != LLFolderType::FT_OUTBOX)
+       && create_folder)
 	{
 
 		if (isInventoryUsable())
