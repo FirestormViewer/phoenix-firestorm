@@ -1437,7 +1437,7 @@ public:
 		}
 	}
 
-	bool handle(const LLSD& params, const LLSD& query_map, LLMediaCtrl* web)
+	bool handle(const LLSD& params, const LLSD& query_map, const std::string& grid, LLMediaCtrl* web)
 	{
 		if (params.size() < 2)
 		{

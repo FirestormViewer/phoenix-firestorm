@@ -69,6 +69,7 @@ LLDragHandle::LLDragHandle(const LLDragHandle::Params& p)
 
 LLDragHandle::~LLDragHandle()
 {
+    gFocusMgr.removeKeyboardFocusWithoutCallback(this);
 	removeChild(mTitleBox);
 	delete mTitleBox;
 }
