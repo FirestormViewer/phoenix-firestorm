@@ -32,7 +32,7 @@
 #include "llsaleinfo.h"
 #include "llwearabletype.h"
 
-class LLMD5;
+class LLMD5; // <FS:Ansariel> [Legacy Bake]
 class LLVisualParam;
 class LLTexGlobalColorInfo;
 class LLTexGlobalColor;
@@ -131,6 +131,7 @@ public:
 	// Something happened that requires the wearable to be updated (e.g. worn/unworn).
 	virtual void		setUpdated() const = 0;
 
+	// <FS:Ansariel> [Legacy Bake]
 	// Update the baked texture hash.
 	virtual void		addToBakedTextureHash(LLMD5& hash) const = 0;
 

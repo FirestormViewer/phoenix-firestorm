@@ -278,7 +278,6 @@ void LLCircuitData::ackReliablePacket(TPACKETID packet_num)
 
 S32 LLCircuitData::resendUnackedPackets(const F64Seconds now)
 {
-	S32 resent_packets = 0;
 	LLReliablePacket *packetp;
 
 
@@ -382,7 +381,6 @@ S32 LLCircuitData::resendUnackedPackets(const F64Seconds now)
 				// Don't remove it yet, it still gets to try to resend at least once.
 				++iter;
 			}
-			resent_packets++;
 		}
 		else
 		{

@@ -3195,9 +3195,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9e1b5515ab59b4e9cfeef6626d65d03d</string>
+              <string>6ba629ff34c4b14a1f851de707bc35041df8b6a9</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/108609/945996/viewer_manager-3.0.577252-darwin64-577252.tar.bz2</string>
+              <string>https://github.com/secondlife/viewer-manager/releases/download/v3.0-bd3aec2/viewer_manager-3.0-bd3aec2-darwin64-bd3aec2.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -3207,24 +3209,28 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>129b80dd47b53bfa02fc21ab1eb1901c</string>
+              <string>7e086a28db17b0c086a5460e9d62f0c6584560b3</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/viewer_manager-1.0.180861311-linux64-180861311.tar.bz2</string>
+              <string>https://github.com/secondlife/viewer-manager/releases/download/v3.0-bd3aec2/viewer_manager-3.0-bd3aec2-linux64-bd3aec2.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
           </map>
-          <key>windows</key>
+          <key>windows64</key>
           <map>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a3c599595ecc8fb987a5499fca42520a</string>
+              <string>1eab994c0c1df5b2c057878a4071a88320cec978</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/108610/946003/viewer_manager-3.0.577252-windows-577252.tar.bz2</string>
+              <string>https://github.com/secondlife/viewer-manager/releases/download/v3.0-bd3aec2/viewer_manager-3.0-bd3aec2-windows64-bd3aec2.tar.zst</string>
             </map>
             <key>name</key>
-            <string>windows</string>
+            <string>windows64</string>
           </map>
         </map>
         <key>source</key>
@@ -3232,7 +3238,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>source_type</key>
         <string>hg</string>
         <key>version</key>
-        <string>3.0.577252</string>
+        <string>3.0-bd3aec2</string>
       </map>
       <key>vlc-bin</key>
       <map>
@@ -4169,7 +4175,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>/t:Build</string>
                   <string>/p:useenv=true</string>
                   <string>/verbosity:minimal</string>
-                  <string>/toolsversion:4.0</string>
                   <string>/p:VCBuildAdditionalOptions= /incremental</string>
                 </array>
               </map>
@@ -4243,7 +4248,6 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>/t:Build</string>
                   <string>/p:useenv=true</string>
                   <string>/verbosity:minimal</string>
-                  <string>/toolsversion:4.0</string>
                   <string>/p:VCBuildAdditionalOptions= /incremental</string>
                 </array>
               </map>

@@ -1789,6 +1789,11 @@ bool LLAppViewer::doFrame()
                     LLFloaterSimpleSnapshot::update();
                     gGLActive = FALSE;
                 }
+
+                if (LLViewerStatsRecorder::instanceExists())
+                {
+                    LLViewerStatsRecorder::instance().idle();
+                }
             }
 		}
 

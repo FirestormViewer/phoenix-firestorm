@@ -43,25 +43,23 @@ BOOL FSRadarListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	BOOL handled = LLUICtrl::handleRightMouseDown(x, y, mask);
 	if ( (mContextMenu) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
 	{
-		std::vector<LLScrollListItem*> selected_items = getAllSelected();
-		if (selected_items.size() > 1)
+		if (std::vector<LLScrollListItem*> selected_items = getAllSelected(); selected_items.size() > 1)
 		{
 			uuid_vec_t selected_uuids;
-			for (std::vector<LLScrollListItem*>::iterator it = selected_items.begin(); it != selected_items.end(); ++it)
+			for (auto selected_item : selected_items)
 			{
-				selected_uuids.push_back((*it)->getUUID());
+				selected_uuids.emplace_back(selected_item->getUUID());
 			}
 			mContextMenu->show(this, selected_uuids, x, y);
 		}
 		else
 		{
-			LLScrollListItem* hit_item = hitItem(x, y);
-			if (hit_item)
+			if (LLScrollListItem* hit_item = hitItem(x, y); hit_item)
 			{
 				selectByID(hit_item->getValue());
 				LLUUID av = hit_item->getValue();
 				uuid_vec_t selected_uuids;
-				selected_uuids.push_back(av);
+				selected_uuids.emplace_back(av);
 				mContextMenu->show(this, selected_uuids, x, y);
 			}
 		}

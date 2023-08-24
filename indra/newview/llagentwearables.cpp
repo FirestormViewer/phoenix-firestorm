@@ -41,7 +41,7 @@
 #include "llinventoryobserver.h"
 #include "llinventorypanel.h"
 #include "lllocaltextureobject.h"
-#include "llmd5.h"
+#include "llmd5.h" // <FS:Ansariel> [Legacy Bake]
 #include "llnotificationsutil.h"
 #include "lloutfitobserver.h"
 #include "llsidepanelappearance.h"
