@@ -431,7 +431,7 @@ public:
 		
 		std::string region_name = LLURI::unescape(tokens[0]);
 
-		std::string callback_url = LLSLURL(url_grid, region_name, coords).getSLURLString();
+		std::string callback_url = LLSLURL(grid, region_name, coords).getSLURLString();
 #endif // OPENSIM
 // </FS:AW optional opensim support>
 
