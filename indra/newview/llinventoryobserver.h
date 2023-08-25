@@ -274,7 +274,7 @@ protected:
 	struct LLCategoryData
 	{
 		LLCategoryData(const LLUUID& cat_id, const LLUUID& thumbnail_id, callback_t cb, S32 version, S32 num_descendents);
-		LLCategoryData(const LLUUID& cat_id, const LLUUID& thumbnail_id, callback_t cb, S32 version, S32 num_descendents, digest_t& name_hash);
+		LLCategoryData(const LLUUID& cat_id, const LLUUID& thumbnail_id, callback_t cb, S32 version, S32 num_descendents, const digest_t& name_hash);
 		callback_t	mCallback;
 		S32			mVersion;
 		S32			mDescendentsCount;

@@ -303,8 +303,8 @@ void LLInventoryFetchItemsObserver::startFetch()
 
 	LLSD items_llsd;
 
-    typedef std::map<LLUUID, uuid_vec_t> requests_by_fodlers_t;
-    requests_by_fodlers_t requests;
+    typedef std::map<LLUUID, uuid_vec_t> requests_by_folders_t;
+    requests_by_folders_t requests;
 	for (uuid_vec_t::const_iterator it = mIDs.begin(); it < mIDs.end(); ++it)
 	{
         LLViewerInventoryItem* item = gInventory.getItem(*it);
@@ -372,12 +372,19 @@ void LLInventoryFetchItemsObserver::startFetch()
     if (aisv3)
     {
         const S32 MAX_INDIVIDUAL_REQUESTS = 10;
-        for (requests_by_fodlers_t::value_type &folder : requests)
+        for (requests_by_folders_t::value_type &folder : requests)
         {
+            LLViewerInventoryCategory* cat = gInventory.getCategory(folder.first);
             if (folder.second.size() > MAX_INDIVIDUAL_REQUESTS)
             {
                 // requesting one by one will take a while
                 // do whole folder
+                if (cat)
+                {
+                    // Either drop version or use scheduleFolderFetch to force-fetch
+                    // otherwise background fetch will ignore folders with set version
+                    cat->setVersion(LLViewerInventoryCategory::VERSION_UNKNOWN);
+                }
                 LLInventoryModelBackgroundFetch::getInstance()->start(folder.first);
             }
             else
@@ -392,7 +399,8 @@ void LLInventoryFetchItemsObserver::startFetch()
                     }
                     else if (cat->getViewerDescendentCount() <= folder.second.size())
                     {
-                        // start fetching whole folder since we need all items
+                        // Start fetching whole folder since we need all items
+                        // Drop version or use scheduleFolderFetch
                         cat->setVersion(LLViewerInventoryCategory::VERSION_UNKNOWN);
                         cat->fetch();
 
@@ -831,7 +839,7 @@ bool LLInventoryCategoriesObserver::addCategory(const LLUUID& cat_id, callback_t
 	{
 		if(init_name_hash)
 		{
-			digest_t item_name_hash = gInventory.hashDirectDescendentNames(cat_id);
+			digest_t item_name_hash = gInventory.hashDirectDescendentNames(cat_id);			
 			mCategoryMap.insert(category_map_value_t(cat_id,LLCategoryData(cat_id, thumbnail_id, cb, version, current_num_known_descendents,item_name_hash)));
 		}
 		else
@@ -861,7 +869,7 @@ LLInventoryCategoriesObserver::LLCategoryData::LLCategoryData(
 }
 
 LLInventoryCategoriesObserver::LLCategoryData::LLCategoryData(
-	const LLUUID& cat_id, const LLUUID& thumbnail_id, callback_t cb, S32 version, S32 num_descendents, digest_t& name_hash)
+	const LLUUID& cat_id, const LLUUID& thumbnail_id, callback_t cb, S32 version, S32 num_descendents, const digest_t& name_hash)
 
 	: mCatID(cat_id)
 	, mCallback(cb)

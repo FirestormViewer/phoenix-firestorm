@@ -477,7 +477,7 @@ void LLSidepanelInventory::onOpen(const LLSD& key)
 	}
 #endif
 
-    gAgent.showLatestFeatureNotification();
+    gAgent.showLatestFeatureNotification("inventory");
 
 	if(key.size() == 0)
 	{

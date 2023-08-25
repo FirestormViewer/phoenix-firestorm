@@ -994,6 +994,7 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
                 }
                 else if (result.has("item_id"))
                 {
+                    // Error message might contain an item_id!!!
                     ids.emplace(result["item_id"]);
                 }
                 break;
@@ -1044,6 +1045,7 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
         //case FETCHITEM:
         //    if (result.has("item_id"))
         //    {
+        //        // Error message might contain an item_id!!!
         //        id = result["item_id"];
         //    }
         //    if (result.has("linked_id"))
@@ -1225,11 +1227,15 @@ void AISUpdate::parseMeta(const LLSD& update)
 
 void AISUpdate::parseContent(const LLSD& update)
 {
-	if (update.has("linked_id"))
+    // Errors from a fetch request might contain id without
+    // full item or folder.
+    // Todo: Depending on error we might want to do something,
+    // like removing a 404 item or refetching parent folder
+	if (update.has("linked_id") && update.has("parent_id"))
 	{
 		parseLink(update, mFetchDepth);
 	}
-	else if (update.has("item_id"))
+	else if (update.has("item_id") && update.has("parent_id"))
 	{
 		parseItem(update);
 	}
@@ -1243,7 +1249,7 @@ void AISUpdate::parseContent(const LLSD& update)
             parseEmbedded(update["_embedded"], mFetchDepth - 1);
         }
     }
-    else if (update.has("category_id"))
+    else if (update.has("category_id") && update.has("parent_id"))
     {
         parseCategory(update, mFetchDepth);
     }
@@ -1699,7 +1705,7 @@ void AISUpdate::doUpdate()
 		gInventory.updateCategory(new_category, LLInventoryObserver::CREATE);
 		LL_DEBUGS("Inventory") << "created category " << category_id << LL_ENDL;
 
-        // fetching can receive massive amount of items and fodlers
+        // fetching can receive massive amount of items and folders
         if (gInventory.getChangedIDs().size() > MAX_UPDATE_BACKLOG)
         {
             gInventory.notifyObservers();
@@ -1760,7 +1766,7 @@ void AISUpdate::doUpdate()
 		LL_DEBUGS("Inventory") << "created item " << item_id << LL_ENDL;
 		gInventory.updateItem(new_item, LLInventoryObserver::CREATE);
 
-        // fetching can receive massive amount of items and fodlers
+        // fetching can receive massive amount of items and folders
         if (gInventory.getChangedIDs().size() > MAX_UPDATE_BACKLOG)
         {
             gInventory.notifyObservers();
