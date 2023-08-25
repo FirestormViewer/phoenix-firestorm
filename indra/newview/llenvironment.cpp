@@ -1644,6 +1644,14 @@ void LLEnvironment::updateEnvironment(LLSettingsBase::Seconds transition, bool f
     }
     // </FS:Beq>
 
+    // <FS:PR-Aleric>
+    // This call uses gGLModelView from llrender (in LLSettingsVOWater::applySpecial).
+    // If at that point that is still filled with all zeroes then we divide by zero or assert on assert(w != GLH_ZERO);
+    // in mult_matrix_vec (glh/glh_linear.h). A work around is to set it to the identity.
+    glh::matrix4f const identity;
+    set_current_modelview(identity);
+    // </FS:PR-Aleric>
+
     if ((mCurrentEnvironment != pinstance) || forced)
     {
         if (transition != TRANSITION_INSTANT)
