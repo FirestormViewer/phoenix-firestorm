@@ -118,7 +118,7 @@ void LLSceneView::draw()
 				U32 idx = object->isAttachment() ? 1 : 0;
 
 				LLVolume* volume = object->getVolume();
-				
+
 				F32 radius = object->getScale().magVec();
 				size[idx].push_back(radius);
 

@@ -30,7 +30,7 @@
 
 FSFloaterRadar::FSFloaterRadar(const LLSD& key)
 	:	LLFloater(key),
-		mRadarPanel(NULL)
+		mRadarPanel(nullptr)
 {
 }
 

@@ -77,11 +77,9 @@ if (WINDOWS)
   # CP changed to only append the flag for 32bit builds - on 64bit builds,
   # locally at least, the build output is spammed with 1000s of 'D9002'
   # warnings about this switch being ignored.
-  # <FS:ND> Remove this, it's no option to cl.exe and causes a massive amount of warnings.
-  #if( ADDRESS_SIZE EQUAL 32 )
-    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /p:PreferredToolArchitecture=x64")  
-  #endif()
-  
+  if(ADDRESS_SIZE EQUAL 32 AND DEFINED ENV{"TEAMCITY_PROJECT_NAME"})
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /p:PreferredToolArchitecture=x64")  
+  endif()
   # zlib has assembly-language object files incompatible with SAFESEH
   add_link_options(/LARGEADDRESSAWARE
           /SAFESEH:NO
@@ -216,6 +214,10 @@ if (DARWIN)
 
 set(ENABLE_SIGNING TRUE)
 set(SIGNING_IDENTITY "Developer ID Application: The Phoenix Firestorm Project, Inc." )
+
+  # required for clang-15/xcode-15 since our boost package still uses deprecated std::unary_function/binary_function
+  # see https://developer.apple.com/documentation/xcode-release-notes/xcode-15-release-notes#C++-Standard-Library
+  add_compile_definitions(_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION)
 endif (DARWIN)
 
 if (LINUX OR DARWIN)

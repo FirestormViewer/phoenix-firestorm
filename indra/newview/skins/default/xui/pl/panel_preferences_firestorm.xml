@@ -213,6 +213,7 @@
         <check_box label="Podgląd animacji na własnym awatarze podczas przesyłania ich na serwer" tool_tip="Gdy zaznaczysz tą opcję, to będziesz w stanie oglądać animacje na swoim własnym awatarze podczas przesyłania ich na serwer" name="FSUploadAnimationOnOwnAvatar" />
 		<check_box label="Zawsze rozwijaj zaawansowane informacje o podglądzie animacji" tool_tip="Domyślnie rozwiń zaawansowane informacje o animacji w oknie podglądu animacji" name="FSAnimationPreviewExpanded" />
         <check_box label="Włącz rozszerzanie funkcjonalności informacji o skryptach" tool_tip="Gdy zaznaczysz tą opcję, to podstawowa funkcjonalność informacji o skryptach zostanie rozszerzona za pomocą różnych szczegółów przydatnych dla budowniczych" name="FSScriptInfoExtended" />
+		<check_box label="Sortuj miejsca dodatków w sekcjach menu &quot;Dołącz do&quot; alfabetycznie (wymaga restartu)" tool_tip="Jeśli ta opcja jest włączona, to lista miejsc dla doczepienia dodatków pojawiająca się w menusach &quot;Dołącz do&quot; będzie posortowana alfabetycznie" name="FSSortAttachmentSpotsAlphabetically" />
     </panel>
     <panel label="Nowe pliki" name="UploadsTab">
         <text name="title">

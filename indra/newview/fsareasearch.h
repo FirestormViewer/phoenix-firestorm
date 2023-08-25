@@ -213,8 +213,7 @@ private:
 	typedef std::map<LLUUID, boost::signals2::connection> name_cache_connection_map_t;
 	name_cache_connection_map_t mNameCacheConnections;
 
-	boost::signals2::connection mRegionChangeConnection; // reset interest list verbosity after TP
-
+	LLViewerRegion* mLastRegion;
 	
 	class FSParcelChangeObserver;
 	friend class FSParcelChangeObserver;

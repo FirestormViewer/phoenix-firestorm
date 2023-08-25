@@ -3,7 +3,7 @@
 	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Abbrechen" label_selected="Abbrechen" name="Cancel"/>
 	<panel name="search_panel">
-		<search_editor label="Sucheinstellungen" name="search_prefs_edit" tool_tip="Geben Sie hier den gewünschten Suchbegriff ein. Die Ergebnisse werden für teilweise Volltext-Treffer innerhalb des Einstellungsnamens oder Kommentars angezeigt."/>
+		<search_editor label="Einstellungen durchsuchen" name="search_prefs_edit" tool_tip="Geben Sie hier den gewünschten Suchbegriff ein. Die Ergebnisse werden für teilweise Volltext-Treffer innerhalb des Einstellungsnamens oder Kommentars angezeigt."/>
 		<button name="copy_search_slurl_btn" tool_tip="Suchbegriff als SLURL kopieren"/>
 	</panel>
 	<tab_container name="pref core">

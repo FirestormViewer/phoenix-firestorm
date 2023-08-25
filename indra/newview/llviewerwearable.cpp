@@ -40,6 +40,7 @@
 #include "llviewerwearable.h"
 #include "llviewercontrol.h"
 #include "llviewerregion.h"
+#include "llmd5.h" // <FS:Ansariel> [Legacy Bake]
 
 using namespace LLAvatarAppearanceDefines;
 

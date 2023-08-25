@@ -50,14 +50,9 @@ class LLFloater360Capture:
         void onOpen(const LLSD& key) override;
         void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event) override;
 
-        // void changeInterestListMode(bool send_everything); // <FS:Beq/> Area search improvements - code relocated to LLViewerRegion
-
         const std::string getHTMLBaseFolder();
         void capture360Images();
-        // <FS:Beq/> make 360 work properly after region crossing/TP
-        void checkRegion(); 
-		boost::signals2::connection mRegionChangeConnection;
-        // </FS:Beq> 
+
         const std::string makeFullPathToJS(const std::string filename);
         void writeDataURLHeader(const std::string filename);
         void writeDataURLFooter(const std::string filename);
@@ -96,6 +91,8 @@ class LLFloater360Capture:
         std::string mImageSaveDir;
 
         LLPointer<LLImageRaw> mRawImages[6];
+
+        std::string mStartILMode;
 };
 
 #endif  // LL_FLOATER_360CAPTURE_H

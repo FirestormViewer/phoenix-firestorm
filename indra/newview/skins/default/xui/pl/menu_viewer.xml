@@ -122,7 +122,9 @@
 		<menu_item_call label="Moje działki" name="My Land"/>
 		<menu_item_call label="Mój dom (Linden Home)" name="Linden Home" />
 		<menu label="Pokaż więcej" name="LandShow">
-			<menu_item_check label="Linie zakazu" name="Ban Lines"/>
+			<menu_item_check label="Ukryj linie zakazu" name="Hide Ban Lines" />
+			<menu_item_check label="Linie zakazu przy kolizji" name="Show Ban Lines On Collision" />
+			<menu_item_check label="Linie zakazu przy zbliżaniu" name="Show Ban Lines On Proximity" />
 			<menu_item_check label="Emitery" name="beacons" shortcut=""/>
 			<menu_item_check label="Granice działek" name="Property Lines"/>
 			<menu_item_check label="Właściciele działek" name="Land Owners" shortcut="control|alt|W"/>
@@ -542,14 +544,15 @@
 			<menu_item_check label="Domyślne ustawienia otoczenia Regionu" name="Sim Sun Override"/>
 			<menu_item_check label="Ustalona pogoda" name="Fixed Weather"/>
 			<menu_item_call label="Zrzut buforu pamięci obiektów regionu" name="Dump Region Object Cache"/>
-			<menu_item_check label="Interest List: Pełne odświeżenie" name="Interest List: Full Update"/>
+			<menu_item_check label="Rejestruj statystyki do pliku" name="Stats Recorder File" />
+			<menu_item_check label="Interest List: Tryb 360" name="Interest List: 360 Mode" />
+			<menu_item_call label="Interest List: Resetowanie" name="Reset Interest Lists" />
 			<menu_item_call label="Zrzut właściwości symulatora do czatu w pobliżu" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="Interfejs" name="UI">
 			<menu_item_call label="Test przeglądarki mediów" name="Web Browser Test"/>
 			<menu_item_check label="Test restartu regionu" name="Region Restart Test"/>
 			<menu_item_call label="Przeglądarka treści internetowych" name="Web Content Browser"/>
-			<menu_item_call label="Test połączenia z Facebookiem" name="FB Connect Test"/>
 			<menu_item_call label="Zrzut SelectMgr" name="Dump SelectMgr"/>
 			<menu_item_call label="Zrzut Szafy" name="Dump Inventory"/>
 			<menu_item_call label="Zrzut liczników" name="Dump Timers"/>
