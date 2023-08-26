@@ -229,7 +229,7 @@
             <pie_slice.on_click
                 function="Object.EditGLTFMaterial" />
             <pie_slice.on_enable
-                function="EnableEditGLTFMaterial"/>
+                function="Object.EnableEditGLTFMaterial"/>
         </pie_slice>
 
         <pie_separator/>

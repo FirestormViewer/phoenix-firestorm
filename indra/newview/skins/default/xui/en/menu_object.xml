@@ -26,7 +26,7 @@
       name="EditGLTFMaterial">
     <menu_item_call.on_click
         function="Object.EditGLTFMaterial" />
-    <menu_item_call.on_visible
+    <menu_item_call.on_enable
         function="Object.EnableEditGLTFMaterial"/>
   </menu_item_call>
   <menu_item_call
@@ -52,7 +52,7 @@
       name="Object Sit">
     <menu_item_call.on_click
         function="Object.SitOrStand" />
-    <menu_item_call.on_visible
+    <menu_item_call.on_enable
         function="Object.EnableSit" />
   </menu_item_call>
 <menu_item_separator layout="topleft" />
@@ -61,7 +61,7 @@
       name="Object Stand Up">
     <menu_item_call.on_click
         function="Object.SitOrStand" />
-    <menu_item_call.on_visible
+    <menu_item_call.on_enable
         function="Object.EnableStandUp" />
   </menu_item_call>
 <menu_item_separator layout="topleft" />
