@@ -154,6 +154,9 @@ protected:
 	// I am unsure if this is always the same as mObjectUUID, or why it exists
 	// at the LLPreview level.  JC 2009-06-24
 	LLUUID mNotecardObjectID;
+
+	// <FS:Ansariel> FIRE-33196: Fix materials upload conflicting with embedded items in notecards fix
+	bool mIsMaterialPreview{ false };
 };
 
 

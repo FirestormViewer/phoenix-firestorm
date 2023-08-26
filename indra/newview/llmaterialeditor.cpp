@@ -356,6 +356,9 @@ LLMaterialEditor::LLMaterialEditor(const LLSD& key)
     , mUploadingTexturesCount(0)
     , mUploadingTexturesFailure(false)
 {
+    // <FS:Ansariel> FIRE-33196: Fix materials upload conflicting with embedded items in notecards fix
+    mIsMaterialPreview = true;
+
     const LLInventoryItem* item = getItem();
     if (item)
     {

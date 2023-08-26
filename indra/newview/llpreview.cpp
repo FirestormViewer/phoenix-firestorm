@@ -129,7 +129,7 @@ const LLInventoryItem *LLPreview::getItem() const
 // [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-11 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
 		if (LLInventoryType::IT_NONE == mAuxItem->getInventoryType() && mItemUUID.notNull())
 			item = gInventory.getItem(mItemUUID);
-		else
+		else if (!mIsMaterialPreview) // <FS:Ansariel> FIRE-33196: Fix materials upload conflicting with embedded items in notecards fix
 			item = mAuxItem;
 // [/SL:KB]
         //if (mItemUUID.notNull())
