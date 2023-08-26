@@ -42,7 +42,6 @@
 		<string>RenderShadowDetail</string>
 		<string>RenderShadowResolutionScale</string>
 		<string>RenderSkyAutoAdjustLegacy</string>
-		<string>RenderSkyHDRScale</string>
 		<string>RenderSSAOIrradianceScale</string>
 		<string>RenderSSAOIrradianceMax</string>
 		<string>RenderSunDynamicRange</string>
