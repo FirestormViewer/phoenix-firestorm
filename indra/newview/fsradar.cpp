@@ -98,8 +98,6 @@ FSRadar::FSRadar() :
 		mNameFormatCallbackConnection(),
 		mAgeAlertCallbackConnection()
 {
-	mRadarListUpdater = std::make_unique<FSRadarListUpdater>(std::bind(&FSRadar::updateRadarList, this));
-
 	// Use the callback from LLAvatarNameCache here or we might update the names too early!
 	LLAvatarNameCache::getInstance()->addUseDisplayNamesCallback(boost::bind(&FSRadar::updateNames, this));
 	mShowUsernamesCallbackConnection = gSavedSettings.getControl("NameTagShowUsernames")->getSignal()->connect(boost::bind(&FSRadar::updateNames, this));
@@ -124,6 +122,11 @@ FSRadar::~FSRadar()
 	{
 		mAgeAlertCallbackConnection.disconnect();
 	}
+}
+
+void FSRadar::initSingleton()
+{
+	mRadarListUpdater = std::make_unique<FSRadarListUpdater>(std::bind(&FSRadar::updateRadarList, this));
 }
 
 void FSRadar::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name, std::string_view postMsg)
