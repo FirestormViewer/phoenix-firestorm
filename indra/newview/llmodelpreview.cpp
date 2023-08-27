@@ -2523,7 +2523,7 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
         out << "Invalid level of detail: " << which_lod;
         LL_WARNS() << out.str() << LL_ENDL;
         LLFloaterModelPreview::addStringToLog(out, true); // <FS:Beq/> if you don't flash the log tab on error when do you?
-        assert(which_lod >= -1 && which_lod < LLModel::NUM_LODS); // <FS:Ale/> use the correct variable (which_lod).
+        assert(which_lod >= -1 && which_lod < LLModel::NUM_LODS); // <FS:PR-Aleric/> use the correct variable (which_lod).
         return;
     }
 
