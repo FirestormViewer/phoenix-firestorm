@@ -86,7 +86,7 @@ viewer_copyright = copyrights.readline() # first line is the copyright for the v
 # Two different autobuild outputs, but we treat them essentially the same way:
 # populating each into a dict; each a subdict of 'info'.
 for key, rawdata in ("versions", versions), ("copyrights", copyrights):
-# <FS:Al> The trick with re-entering `for line in lines:` doesn't work: it causes all lines to be read twice (on my machine).
+# <FS:PR-Aleric> The trick with re-entering `for line in lines:` doesn't work: it causes all lines to be read twice (on my machine).
     # Just read the output once and use simple(r) logic.
     lines = rawdata.readlines();
     first_line = True
@@ -108,7 +108,7 @@ for key, rawdata in ("versions", versions), ("copyrights", copyrights):
         if not first_line:
             add_info(key, pkg, pkg_lines)
         first_line = False;
-# </FS:Al>
+# </FS:PR-Aleric>
 
 # Now that we've run through all of both outputs -- are there duplicates?
 if any(pkgs for pkgs in list(dups.values())):
