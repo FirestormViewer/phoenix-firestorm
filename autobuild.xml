@@ -1111,11 +1111,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c1bce2b362c31345200297a4010626e9</string>
+              <string>fb5a3f97091028859ffa8c2768536b52</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.15-windows-231741106.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.17-windows-232401332.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1125,18 +1125,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>cd0e8f58fece3eac0b5ebe21f354bf8c</string>
+              <string>f8e4fdd3eafbd54c01f5f78d04b95bf8</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.15-windows64-231741113.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.17-windows64-232401329.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.02.15</string>
+        <string>2.02.17</string>
       </map>
       <key>fontconfig</key>
       <map>
@@ -1750,7 +1750,7 @@
           </map>
         </map>
         <key>version</key>
-        <string>8.0.6</string>
+        <string>8.3</string>
       </map>
       <key>libhunspell</key>
       <map>
