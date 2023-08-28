@@ -1141,7 +1141,18 @@ void LLEnvironment::onRegionChange()
     }
     if (!cur_region->capabilitiesReceived())
     {
+// <FS:PR-Aleric> GCC13 warning: maybe-uninitialized - probably bogus
+#if defined(__GNUC__) && (__GNUC__ >= 13)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+// </FS:PR-Aleric>
         cur_region->setCapabilitiesReceivedCallback([](const LLUUID &region_id, LLViewerRegion* regionp) {  LLEnvironment::instance().requestRegion(); });
+// <FS:PR-Aleric> GCC13 warning: maybe-uninitialized - probably bogus
+#if defined(__GNUC__) && (__GNUC__ >= 13)
+#pragma GCC diagnostic pop
+#endif
+// </FS:PR-Aleric>
         return;
     }
     requestRegion();
