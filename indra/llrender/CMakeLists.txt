@@ -88,6 +88,8 @@ endif (BUILD_HEADLESS)
 add_library (llrender ${llrender_SOURCE_FILES})
 target_include_directories( llrender  INTERFACE   ${CMAKE_CURRENT_SOURCE_DIR})
 
+set_property(TARGET llrender PROPERTY POSITION_INDEPENDENT_CODE ON)
+
 # Libraries on which this library depends, needed for Linux builds
 # Sort by high-level to low-level
 target_link_libraries(llrender
