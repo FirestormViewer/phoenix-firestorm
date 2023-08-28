@@ -4936,7 +4936,7 @@ void LLWindowWin32::LLWindowWin32Thread::updateVRAMUsage()
 
         mAvailableVRAM = cu_mb < target_mb ? target_mb - cu_mb : 0;
 
-#if 0
+#if 1
         
         F32 eu_error = (F32)((S32)eu_mb - (S32)cu_mb) / (F32)cu_mb;
         LL_INFOS("Window") << "\nLocal\nAFR: " << info.AvailableForReservation / 1024 / 1024
