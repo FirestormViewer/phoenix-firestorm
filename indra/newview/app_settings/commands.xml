@@ -654,6 +654,6 @@
          execute_parameters="performance"
          is_running_function="Floater.IsOpen"
          is_running_parameters="performance"
-         checkbox_control="FSAutoTuneFPS"
+         checkbox_control="AutoTuneFPS"
            />
 </commands>
