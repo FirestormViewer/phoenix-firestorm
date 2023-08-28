@@ -1707,7 +1707,7 @@
               <key>hash</key>
               <string>e99b86fc3ed48a778580dd1449f8f33b</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.2-darwin-212431232.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.3-darwin64-232392239.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1719,7 +1719,7 @@
               <key>hash</key>
               <string>c4dd59fbb0709fc4c7b5ab69b20246f8</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.2-linux64_bionic-220911445.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.3-linux64-232392238.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1731,7 +1731,7 @@
               <key>hash</key>
               <string>e88372fa10b83c6900443dcc12c12338</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-8.2-windows-212351246.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.3-windows-232392239.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1743,7 +1743,7 @@
               <key>hash</key>
               <string>e88372fa10b83c6900443dcc12c12338</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-8.2-windows-212351246.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.3-windows64-232392239.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
