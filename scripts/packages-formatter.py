@@ -109,7 +109,7 @@ for key, rawdata in ("versions", versions), ("copyrights", copyrights):
                     # we hit the start of the next package data
                     add_info(key, pkg, pkg_lines)
                     break
-                else:
+                elif line != viewer_copyright:  # <FS:PR-Aleric> skip possibly repeated viewer copyright line(s).
                     # no package prefix: additional line for same package
                     pkg_lines.append(line.rstrip())
             else:
