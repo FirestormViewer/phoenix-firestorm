@@ -26,21 +26,32 @@ jobs:
             addrsize: 32
           - os: macos-11
             addrsize: 32
-          - grid: sl
-            addrsize: 32
+          # - grid: sl
+          #   addrsize: 32
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
-        if: runner.os != 'Windows'
         id: py311
         with:
           python-version: '3.11'
           cache: 'pip'
-      - run: pip3 install -r requirements.txt
+      - run: |
+          python3 -m pip install -r requirements.txt --user
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Check python version
         run: python -V
+      - name: Check python3 version
+        run: python3 -V
+
+      - name: Test python llsd
+        run: |
+          python - <<EOF
+          import llsd
+          print("Hello from inline Python script!")
+          EOF
+        shell: bash
 
       - name: Free Disk Space (Ubuntu)
         if: runner.os == 'Linux'
@@ -277,7 +288,7 @@ jobs:
           elif [[ "${{ github.ref_name }}" == *alpha* ]]; then
             FS_RELEASE_FOLDER=preview
             FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
-          elif [[ "${{ github.event_name }}" == 'schedule' ]]; then
+          elif [[ "${{ github.ref_name }}" == *nightly* ]] || [[ "${{ github.event_name }}" == 'schedule' ]]; then
             FS_RELEASE_FOLDER=nightly
             FS_BUILD_WEBHOOK_URL=${{ secrets.NIGHTLY_WEBHOOK_URL }}
           else
