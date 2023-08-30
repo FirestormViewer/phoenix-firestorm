@@ -346,9 +346,11 @@ void LLFloaterEmojiPicker::fillGroups()
     rect.mTop = mGroups->getRect().getHeight();
     rect.mBottom = mBadge->getRect().getHeight();
 
+    int group_nr{ 0 }; // <FS:Ansariel> Fix mandatory name missing (XUI parser warning)
     const std::vector<LLEmojiGroup>& groups = LLEmojiDictionary::instance().getGroups();
     for (const LLEmojiGroup& group : groups)
     {
+        params.name = "emojigroup_" + std::to_string(group_nr++); // <FS:Ansariel> Fix mandatory name missing (XUI parser warning)
         LLButton* button = LLUICtrlFactory::create<LLButton>(params);
         button->setClickedCallback([this](LLUICtrl* ctrl, const LLSD&) { onGroupButtonClick(ctrl); });
         button->setMouseEnterCallback([this](LLUICtrl* ctrl, const LLSD&) { onGroupButtonMouseEnter(ctrl); });
