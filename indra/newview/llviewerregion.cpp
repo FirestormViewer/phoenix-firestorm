@@ -1736,6 +1736,7 @@ BOOL LLViewerRegion::isViewerCameraStatic()
 
 void LLViewerRegion::killInvisibleObjects(F32 max_time)
 {
+	if(gAgent.getFSAreaSearchActive()){ return; } // <FS:Beq/> FIRE-32668 Area Search improvements (again)
 	if(!sVOCacheCullingEnabled)
 	{
 		return;

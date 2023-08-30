@@ -1491,10 +1491,17 @@ public:
         // Toggle the mode - regions will get updated
         if (gAgent.getInterestListMode() == LLViewerRegion::IL_MODE_360)
         {
+			// <FS:Beq> we need to force the 360 mode "users" to false or this override will fail
+			gAgent.setFSAreaSearchActive(false);
+			gAgent.set360CaptureActive(false);
+			// <FS:Beq/>
 			gAgent.changeInterestListMode(LLViewerRegion::IL_MODE_DEFAULT);
 		}
 		else
 		{
+			// <FS:Beq> we need to force the 360 mode user flag to true or this override will fail. Don;t set area search though as that can have other effects.
+			gAgent.set360CaptureActive(false);
+			// <FS:Beq/>
 			gAgent.changeInterestListMode(LLViewerRegion::IL_MODE_360);
 		}
         return true;

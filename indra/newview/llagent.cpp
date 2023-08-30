@@ -3506,8 +3506,13 @@ void LLAgent::changeInterestListMode(const std::string &new_mode)
 {
     if (new_mode != mInterestListMode)
     {
+	// <FS:Beq> Fix area search again
+		if ( (new_mode == LLViewerRegion::IL_MODE_DEFAULT && (!mFSAreaSearchActive && !m360CaptureActive))  ||
+		     (new_mode == LLViewerRegion::IL_MODE_360) )
+		{
+		LL_DEBUGS("360Capture") << "Setting Agent interest list mode to " << mInterestListMode << " and updating regions" << LL_ENDL;
+	// </FS:Beq>
         mInterestListMode = new_mode;
-
         // Change interest list mode for all regions.  If they are already set for the current mode,
         // the setting will have no effect.
         for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
@@ -3520,6 +3525,7 @@ void LLAgent::changeInterestListMode(const std::string &new_mode)
                 regionp->setInterestListMode(mInterestListMode);
             }
         }
+		} // <FS:Beq/>
     }
 	else
 	{

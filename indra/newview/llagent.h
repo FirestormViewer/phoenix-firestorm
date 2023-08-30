@@ -307,6 +307,10 @@ private:
 	region_changed_signal_t		            mRegionChangedSignal;
 
     std::string								mInterestListMode;	// How agent wants regions to send updates
+	// <FS:Beq> Area search fixes
+	bool mFSAreaSearchActive;
+	bool m360CaptureActive;
+	// </FS:Beq>
 
 	//--------------------------------------------------------------------
 	// History
@@ -315,6 +319,12 @@ public:
 	S32				getRegionsVisited() const;
 	F64				getDistanceTraveled() const;	
 	void			setDistanceTraveled(F64 dist) { mDistanceTraveled = dist; }
+	// <FS:Beq> Area search fixes
+	void			setFSAreaSearchActive(BOOL enabled) { mFSAreaSearchActive = enabled; }
+	void			set360CaptureActive(BOOL enabled) { m360CaptureActive = enabled; }
+	bool			getFSAreaSearchActive() { return mFSAreaSearchActive; }
+	bool			get360CaptureActive() { return m360CaptureActive; }
+	// </FS:Beq>
 	
 	const LLVector3d &getLastPositionGlobal() const { return mLastPositionGlobal; }
 	void			setLastPositionGlobal(const LLVector3d &pos) { mLastPositionGlobal = pos; }
