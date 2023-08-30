@@ -109,6 +109,9 @@ public:
 		return mUpdateSignal.connect(cb);
 	}
 
+protected:
+	void initSingleton() override;
+
 private:
 	void updateRadarList();
 	void updateTracking();

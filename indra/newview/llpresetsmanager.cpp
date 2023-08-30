@@ -370,12 +370,16 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
 
 		// <FS:Ansariel> Graphic preset controls independent from XUI
 		// Add the controls not in feature table to the default preset with their current value
-		for (std::vector<std::string>::iterator it = mGraphicPresetControls.begin(); it != mGraphicPresetControls.end(); ++it)
+		for (const auto& ctrl_name : mGraphicPresetControls)
 		{
-			std::string ctrl_name = *it;
 			if (!paramsData.has(ctrl_name))
 			{
 				LLControlVariable* ctrl = gSavedSettings.getControl(ctrl_name).get();
+				if (!ctrl)
+				{
+					LL_WARNS() << "Presets setting list contains non-existing setting: " << ctrl_name << LL_ENDL;
+					continue;
+				}
 				std::string comment = ctrl->getComment();
 				std::string type = LLControlGroup::typeEnumToString(ctrl->type());
 				LLSD value = ctrl->getValue();

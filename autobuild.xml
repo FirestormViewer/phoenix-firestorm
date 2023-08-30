@@ -1140,11 +1140,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9d9f72f50cffe7443e4b58f009ffc1f4</string>
+              <string>8ee7c21f3f109cf4e1709e4af0b4bebf</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.15-darwin64-9.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.17-darwin64-232401806.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1154,11 +1154,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>79fb2f09d2c81ed6464e11af36566910</string>
+              <string>8c82bd0fd9b544d02c8da1f9d921e964</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.15-linux64-231741426.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.17-linux64-232401431.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1168,11 +1168,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c1bce2b362c31345200297a4010626e9</string>
+              <string>fb5a3f97091028859ffa8c2768536b52</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.15-windows-231741106.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.17-windows-232401332.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1182,18 +1182,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>cd0e8f58fece3eac0b5ebe21f354bf8c</string>
+              <string>f8e4fdd3eafbd54c01f5f78d04b95bf8</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.15-windows64-231741113.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.17-windows64-232401329.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>2.02.15</string>
+        <string>2.02.17</string>
       </map>
       <key>fontconfig</key>
       <map>
@@ -1818,9 +1818,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e99b86fc3ed48a778580dd1449f8f33b</string>
+              <string>3142fccbcc0e2c5a019e3177ef364290</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.2-darwin-212431232.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.3-darwin64-232392239.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1830,9 +1830,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c4dd59fbb0709fc4c7b5ab69b20246f8</string>
+              <string>e13d6fe708613bb3a5d630c4cdd97a3b</string>
               <key>url</key>
-              <string>file:///opt/firestorm/kdu-8.2-linux64_bionic-220911445.tar.bz2</string>
+              <string>file:///opt/firestorm/kdu-8.3-linux64-232392238.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1842,9 +1842,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e88372fa10b83c6900443dcc12c12338</string>
+              <string>4aa7df19125708580055b42190d2511e</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-8.2-windows-212351246.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.3-windows-232392239.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -1854,16 +1854,16 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e88372fa10b83c6900443dcc12c12338</string>
+              <string>4aa7df19125708580055b42190d2511e</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/kdu-8.2-windows-212351246.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/kdu-8.3-windows-232392239.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>8.0.6</string>
+        <string>8.3</string>
       </map>
       <key>libhunspell</key>
       <map>
