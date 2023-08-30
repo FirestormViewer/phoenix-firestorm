@@ -54,13 +54,18 @@ public:
 
     virtual void closeFloater(bool app_quitting = false) override;
 
+    static std::list<llwchar>& getRecentlyUsed();
+    static void onEmojiUsed(llwchar emoji);
+    static void loadState();
+    static void saveState();
+
 private:
     void fillGroups();
     void moveGroups();
     void fillEmojis(bool fromResize = false);
 
     void onGroupButtonClick(LLUICtrl* ctrl);
-    void onSearchKeystroke();
+    void onFilterChanged();
     void onGridMouseEnter();
     void onGridMouseLeave();
     void onGroupButtonMouseEnter(LLUICtrl* ctrl);
@@ -75,13 +80,9 @@ private:
 
     virtual BOOL handleKeyHere(KEY key, MASK mask) override;
 
-    void onEmojiUsed(llwchar emoji);
-    void loadState();
-    void saveState();
-
     class LLPanel* mGroups { nullptr };
     class LLPanel* mBadge { nullptr };
-    class LLLineEditor* mFilter { nullptr };
+    class LLFilterEditor* mFilter { nullptr };
     class LLScrollContainer* mEmojiScroll { nullptr };
     class LLScrollingPanelList* mEmojiGrid { nullptr };
     class LLEmojiPreviewPanel* mPreview { nullptr };

@@ -33,6 +33,8 @@
 #include "llagentbenefits.h"
 #include "llavataractions.h"
 #include "llavatarnamecache.h"
+#include "llemojidictionary.h"
+#include "llfloateremojipicker.h"
 #include "llfloaterperms.h"
 #include "llgroupactions.h"
 #include "llgroupmgr.h"
@@ -518,4 +520,17 @@ LLUUID FSCommon::getGroupForRezzing()
 	}
 
 	return group_id;
+}
+
+void FSCommon::updateUsedEmojis(LLWString text)
+{
+	LLEmojiDictionary* dictionary = LLEmojiDictionary::getInstance();
+
+	for (llwchar& c : text)
+	{
+		if (dictionary->isEmoji(c))
+		{
+			LLFloaterEmojiPicker::onEmojiUsed(c);
+		}
+	}
 }

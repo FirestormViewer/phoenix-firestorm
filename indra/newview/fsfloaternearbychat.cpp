@@ -61,6 +61,7 @@
 #include "lllogchat.h"
 #include "llmenugl.h"
 #include "llmultigesture.h"
+#include "llpanelemojicomplete.h"
 #include "llresizebar.h"
 #include "llresizehandle.h"
 #include "llrootview.h"
@@ -142,9 +143,22 @@ BOOL FSFloaterNearbyChat::postBuild()
 	mChatLayoutPanelHeight = mChatLayoutPanel->getRect().getHeight();
 	mInputEditorPad = mChatLayoutPanelHeight - mInputEditor->getRect().getHeight();
 
-	mEmojiButton = getChild<LLButton>("emoji_panel_btn");
-	mEmojiButton->setLabel(LLUIString(LLWString(1, 128512)));
-	mEmojiButton->setClickedCallback(boost::bind(&FSFloaterNearbyChat::onEmojiPanelBtnClicked, this));
+	mEmojiRecentPanelToggleBtn = getChild<LLButton>("emoji_recent_panel_toggle_btn");
+	mEmojiRecentPanelToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiRecentPanelToggleBtnClicked(this); });
+
+	mEmojiRecentPanel = getChild<LLLayoutPanel>("emoji_recent_layout_panel");
+	mEmojiRecentPanel->setVisible(false);
+
+	mEmojiRecentEmptyText = getChildView("emoji_recent_empty_text");
+	mEmojiRecentEmptyText->setVisible(false);
+
+	mEmojiRecentIconsCtrl = getChild<LLPanelEmojiComplete>("emoji_recent_icons_ctrl");
+	mEmojiRecentIconsCtrl->setCommitCallback([this](LLUICtrl*, const LLSD& value) { onRecentEmojiPicked(value); });
+	mEmojiRecentIconsCtrl->setVisible(false);
+
+	mEmojiPickerToggleBtn = getChild<LLButton>("emoji_picker_toggle_btn");
+	mEmojiPickerToggleBtn->setLabel(LLUIString(LLWString(1, 128512)));
+	mEmojiPickerToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiPickerToggleBtnClicked(this); });
 
 	getChild<LLButton>("chat_history_btn")->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onHistoryButtonClicked, this));
 	getChild<LLButton>("chat_search_btn")->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onSearchButtonClicked, this));
@@ -766,6 +780,8 @@ void FSFloaterNearbyChat::sendChat( EChatType type )
 		LLWStringUtil::replaceChar(text,182,'\n'); // Convert paragraph symbols back into newlines.
 		if (!text.empty())
 		{
+			FSCommon::updateUsedEmojis(text);
+
 			if(type == CHAT_TYPE_OOC)
 			{
 				std::string tempText = wstring_to_utf8str( text );
@@ -947,7 +963,54 @@ void FSFloaterNearbyChat::handleMinimized(bool minimized)
 	}
 }
 
-void FSFloaterNearbyChat::onEmojiPanelBtnClicked(FSFloaterNearbyChat* self)
+void FSFloaterNearbyChat::onEmojiRecentPanelToggleBtnClicked(FSFloaterNearbyChat* self)
+{
+	BOOL show = !self->mEmojiRecentPanel->getVisible();
+	if (show)
+	{
+		self->onEmojiRecentPanelOpening();
+	}
+	self->mEmojiRecentPanel->setVisible(show);
+	self->mEmojiRecentPanelToggleBtn->setImageOverlay(show ? "Arrow_Up" : "Arrow_Down");
+}
+
+void FSFloaterNearbyChat::onEmojiRecentPanelOpening()
+{
+	std::list<llwchar>& recentlyUsed = LLFloaterEmojiPicker::getRecentlyUsed();
+	if (recentlyUsed.empty())
+	{
+		mEmojiRecentEmptyText->setVisible(true);
+		mEmojiRecentIconsCtrl->setVisible(false);
+	}
+	else
+	{
+		LLWString emojis;
+		for (llwchar emoji : recentlyUsed)
+		{
+			emojis += emoji;
+		}
+		mEmojiRecentIconsCtrl->setEmojis(emojis);
+		mEmojiRecentEmptyText->setVisible(false);
+		mEmojiRecentIconsCtrl->setVisible(true);
+		mEmojiRecentIconsCtrl->setFocus(true);
+	}
+}
+
+void FSFloaterNearbyChat::onRecentEmojiPicked(const LLSD& value)
+{
+	LLSD::String str = value.asString();
+	if (str.size())
+	{
+		LLWString wstr = utf8string_to_wstring(str);
+		if (wstr.size())
+		{
+			llwchar emoji = wstr[0];
+			onEmojiPicked(emoji);
+		}
+	}
+}
+
+void FSFloaterNearbyChat::onEmojiPickerToggleBtnClicked(FSFloaterNearbyChat* self)
 {
 	if (LLFloaterEmojiPicker* picker = LLFloaterEmojiPicker::getInstance())
 	{

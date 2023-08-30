@@ -39,6 +39,7 @@ class LLChatEntry;
 class LLComboBox;
 class LLLayoutStack;
 class LLLayoutPanel;
+class LLPanelEmojiComplete;
 class LLResizeBar;
 class LLTextBox;
 
@@ -120,7 +121,10 @@ private:
 	bool onChatOptionsVisibleContextMenuItem(const LLSD& userdata);
 	bool onChatOptionsEnableContextMenuItem(const LLSD& userdata);
 
-	static void onEmojiPanelBtnClicked(FSFloaterNearbyChat* self);
+	static void onEmojiRecentPanelToggleBtnClicked(FSFloaterNearbyChat* self);
+	static void onEmojiPickerToggleBtnClicked(FSFloaterNearbyChat* self);
+	void onEmojiRecentPanelOpening();
+	void onRecentEmojiPicked(const LLSD& value);
 	void onEmojiPicked(llwchar emoji);
 	void onEmojiPickerClosed();
 
@@ -129,7 +133,11 @@ private:
 	LLChatEntry*		mInputEditor;
 
 	// chat type selector and send chat buttons
-	LLButton*			mEmojiButton;
+	LLButton*			mEmojiRecentPanelToggleBtn;
+	LLButton*			mEmojiPickerToggleBtn;
+	LLLayoutPanel*		mEmojiRecentPanel;
+	LLView*				mEmojiRecentEmptyText;
+	LLPanelEmojiComplete* mEmojiRecentIconsCtrl;
 	LLButton*			mSendChatButton;
 	LLComboBox*			mChatTypeCombo;
 

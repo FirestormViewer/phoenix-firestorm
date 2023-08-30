@@ -47,9 +47,9 @@ class LLInventoryCategory;
 class LLInventoryItem;
 class LLLayoutPanel;
 class LLLayoutStack;
+class LLPanelEmojiComplete;
 class LLTextBox;
 class LLTextEditor;
-
 
 typedef boost::signals2::signal<void(const LLUUID& session_id)> floater_showed_signal_t;
 
@@ -239,7 +239,10 @@ private:
 	bool onChatOptionsVisibleContextMenuItem(const LLSD& userdata);
 	bool onChatOptionsEnableContextMenuItem(const LLSD& userdata);
 
-	static void onEmojiPanelBtnClicked(FSFloaterIM* self);
+	static void onEmojiRecentPanelToggleBtnClicked(FSFloaterIM* self);
+	static void onEmojiPickerToggleBtnClicked(FSFloaterIM* self);
+	void onEmojiRecentPanelOpening();
+	void onRecentEmojiPicked(const LLSD& value);
 	void onEmojiPicked(llwchar emoji);
 	void onEmojiPickerClosed();
 
@@ -256,7 +259,11 @@ private:
 	LLLayoutStack* mInputPanels;
 	LLLayoutPanel* mUnreadMessagesNotificationPanel;
 	LLTextBox* mUnreadMessagesNotificationTextBox;
-	LLButton* mEmojiButton;
+	LLButton* mEmojiRecentPanelToggleBtn;
+	LLButton* mEmojiPickerToggleBtn;
+	LLLayoutPanel* mEmojiRecentPanel;
+	LLView* mEmojiRecentEmptyText;
+	LLPanelEmojiComplete* mEmojiRecentIconsCtrl;
 
 	std::string mSavedTitle;
 	LLUIString mTypingStart;

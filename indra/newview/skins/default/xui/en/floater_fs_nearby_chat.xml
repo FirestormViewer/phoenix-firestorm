@@ -276,7 +276,7 @@
               auto_resize="false"
               user_resize="false"
               name="emoji_button_layout_panel"
-              width="25">
+              width="35">
               <button
                follows="right|bottom"
                bottom="-1"
@@ -286,10 +286,25 @@
                image_hover_unselected="Toolbar_Middle_Over"
                image_selected="Toolbar_Middle_Selected"
                image_unselected="Toolbar_Middle_Off"
-               right="-1"
-               name="emoji_panel_btn"
+               right="-11"
+               name="emoji_picker_toggle_btn"
                tool_tip="Show/hide emoji panel"
                width="24"/>
+              <button
+               follows="right|bottom"
+               bottom="-1"
+               height="22"
+               use_font_color="true"
+               font="EmojiLarge"
+               image_hover_unselected="Toolbar_Middle_Over"
+               image_selected="Toolbar_Middle_Selected"
+               image_unselected="Toolbar_Middle_Off"
+               image_overlay="Arrow_Down"
+               right="-1"
+               name="emoji_recent_panel_toggle_btn"
+               tool_tip="Shows/hides recent emojis"
+               left_pad="0"
+               width="10"/>
             </layout_panel>
             <layout_panel
               visibility_control="FSShowChatChannel"
@@ -383,6 +398,33 @@
 
             </layout_panel>
           </layout_stack>
+        </layout_panel>
+        <layout_panel
+         name="emoji_recent_layout_panel"
+         height="28"
+         auto_resize="false">
+            <text
+             name="emoji_recent_empty_text"
+             follows="top|left|right"
+             layout="topleft"
+             auto_resize="false"
+             h_pad="20"
+             v_pad="5"
+             top="0"
+             left="5"
+             right="-1"
+             height="25"
+            >Recently used emojis will appear here</text>
+            <emoji_complete
+             name="emoji_recent_icons_ctrl"
+             follows="top|left|right"
+             layout="topleft"
+             noscroll="true"
+             max_emoji="20"
+             top="0"
+             left="5"
+             right="-1"
+             height="25"/>
         </layout_panel>
       </layout_stack>
     </layout_panel>
