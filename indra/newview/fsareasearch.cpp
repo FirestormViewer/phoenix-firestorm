@@ -173,7 +173,8 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mRequestNeedsSent(false),
 	mRlvBehaviorCallbackConnection()
 {
-	LLViewerRegion::sFSAreaSearchActive = true;
+	gAgent.setFSAreaSearchActive(true);
+	gAgent.changeInterestListMode(LLViewerRegion::IL_MODE_360);
 	mFactoryMap["area_search_list_panel"] = LLCallbackMap(createPanelList, this);
 	mFactoryMap["area_search_find_panel"] = LLCallbackMap(createPanelFind, this);
 	mFactoryMap["area_search_filter_panel"] = LLCallbackMap(createPanelFilter, this);
@@ -189,7 +190,16 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 
 FSAreaSearch::~FSAreaSearch()
 {
-	LLViewerRegion::sFSAreaSearchActive = false;
+	gAgent.setFSAreaSearchActive(false);
+
+    // Tell the Simulator not to send us everything anymore
+    // and revert to the regular "keyhole" frustum of interest
+    // list updates.
+    if( !LLApp::isExiting() )
+    {
+        gAgent.changeInterestListMode(LLViewerRegion::IL_MODE_DEFAULT);
+	}
+
 	if (!gIdleCallbacks.deleteFunction(idle, this))
 	{
 		LL_WARNS("FSAreaSearch") << "FSAreaSearch::~FSAreaSearch() failed to delete callback" << LL_ENDL;

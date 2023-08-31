@@ -1883,7 +1883,6 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 #pragma GCC diagnostic pop
 #endif
 // </FS:Zi>
-						
 						//VECTORIZE THIS
 						if (mDrawablep->isActive())
 						{

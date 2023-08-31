@@ -1793,6 +1793,7 @@ void LLViewerRegion::killInvisibleObjects(F32 max_time)
         // because of this, every time you turn around the simulator sends a swarm of full object update messages from cache
     // probe misses and objects have to be reloaded from scratch.  From some reason, disabling this causes holes to 
     // appear in the scene when flying back and forth between regions
+	if(gAgent.getFSAreaSearchActive()){ return; } // <FS:Beq/> FIRE-32668 Area Search improvements (again)
 	if(!sVOCacheCullingEnabled)
 	{
 		return;

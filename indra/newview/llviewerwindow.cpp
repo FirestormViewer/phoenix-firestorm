@@ -224,7 +224,8 @@
 // </FS:Ansariel> [FS communication UI]
 #include "llwindowlistener.h"
 #include "llviewerwindowlistener.h"
-#include "llpaneltopinfobar.h"
+// <FS:Zi> We don't use the mini location panel in Firestorm
+// #include "llpaneltopinfobar.h"
 #include "llcleanup.h"
 #include "llimview.h"
 #include "llviewermenufile.h"

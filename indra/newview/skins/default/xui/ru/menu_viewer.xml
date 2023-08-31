@@ -137,7 +137,9 @@
 		<menu_item_call label="Показать собственные земли" name="My Land"/>
 		<menu_item_call label="Мой Линден Дом..." name="Linden Home"/>
 		<menu label="Показать больше" name="LandShow">
-			<menu_item_check label="Запрещающие линии" name="Ban Lines"/>
+			<menu_item_check label="Скрыть Запрещающие линии" name="Hide Ban Lines"/>
+			<menu_item_check label="Показать Запрещающие линии при столкновении" name="Show Ban Lines On Collision"/>
+			<menu_item_check label="Показать Запрещающие линии при приближении" name="Show Ban Lines On Proximity"/>
 			<menu_item_check label="Маяки" name="beacons"/>
 			<menu_item_check label="Линии собственности" name="Property Lines"/>
 			<menu_item_check label="Владельцев земли" name="Land Owners"/>

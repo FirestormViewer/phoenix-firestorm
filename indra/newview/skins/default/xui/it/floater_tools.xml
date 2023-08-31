@@ -296,16 +296,15 @@
 			<text name="label size">
 				Dimensioni (metri)
 			</text>
-			<button name="copy_rot_btn" tool_tip="Copia dimensioni"/>
-			<button name="paste_rot_btn" tool_tip="Incolla dimensioni"/>
-			<button name="paste_rot_clip_btn" tool_tip="Incolla dim da appunti"/>
-			<text name="label rotation">
-				Rotazione (gradi)
-			</text>
 			<button name="copy_size_btn" tool_tip="Copia rotazione"/>
 			<button name="paste_size_btn" tool_tip="Incolla rotazione"/>
 			<button name="paste_size_clip_btn" tool_tip="Incolla dim da appunti"/>
 			<text name="label rotation">
+				Rotazione (gradi)
+			</text>
+			<button name="copy_rot_btn" tool_tip="Copia dimensioni"/>
+			<button name="paste_rot_btn" tool_tip="Incolla dimensioni"/>
+			<button name="paste_rot_clip_btn" tool_tip="Incolla dim da appunti"/>
 			<button label="Copia" name="copy_params_btn" tool_tip="Copia i parametri dell'&apos;oggetto negli appunti"/>
 			<button label="Incolla" name="paste_params_btn" tool_tip="Incolla i parametri dagli appunti"/>
 			<combo_box name="comboBaseType">
@@ -407,31 +406,31 @@ Alto:
 Medio:
 Basso:
 Min:
-        </text>
-        <combo_box name="LOD_show_combo">
-          <combo_box.item label="Predef" name="Default"/>
-          <combo_box.item label="Alto" name="High"/>
-          <combo_box.item label="Medio" name="Medium"/>
-          <combo_box.item label="Basso" name="Low"/>
-          <combo_box.item label="Minimo" name="Lowest/Imposter"/>
-        </combo_box>
-        <text name="ObjectLODbehaviourLabel" value="Comportamento LOD oggetto:"/>
-        <text name="object_radius" value="Raggio oggetto:" width="90"/>
-        <text name="LOD_swap_factors_label" value="Fattori LOD"/>
-        <text name="LOD_swap_defaults_label" value="Predef" tool_tip="Il fattore LOD che verrà applicato dalla maggioranza dei viewer."/>
-        <text name="LOD_swap_usr_label" tool_tip="L&apos;impostazione attuale, presa da RenderVolumeLODFactor" value="Attuale" width="38"/>
-        <text name="LOD_swap_label" value="Soglia"/>
-        <string name="ll_lod_tooltip_msg">Predefinito per Linden Lab Second Life Viewer ([FACTOR])</string>
-        <string name="fs_lod_tooltip_msg">Predefinito per [APP_NAME] Viewer ([FACTOR])</string>
-        <text name="LOD_swap_usr_current" tool_tip="Your current LOD Factor"/>
-        <text name="LOD_swap_LOD_Change_label">
+        	</text>
+        	<combo_box name="LOD_show_combo">
+				<combo_box.item label="Predef" name="Default"/>
+				<combo_box.item label="Alto" name="High"/>
+				<combo_box.item label="Medio" name="Medium"/>
+				<combo_box.item label="Basso" name="Low"/>
+				<combo_box.item label="Minimo" name="Lowest/Imposter"/>
+        	</combo_box>
+        	<text name="ObjectLODbehaviourLabel" value="Comportamento LOD oggetto:"/>
+        	<text name="object_radius" value="Raggio oggetto:" width="90"/>
+        	<text name="LOD_swap_factors_label" value="Fattori LOD"/>
+        	<text name="LOD_swap_defaults_label" value="Predef" tool_tip="Il fattore LOD che verrà applicato dalla maggioranza dei viewer."/>
+        	<text name="LOD_swap_usr_label" tool_tip="L&apos;impostazione attuale, presa da RenderVolumeLODFactor" value="Attuale" width="38"/>
+        	<text name="LOD_swap_label" value="Soglia"/>
+        	<string name="ll_lod_tooltip_msg">Predefinito per Linden Lab Second Life Viewer ([FACTOR])</string>
+        	<string name="fs_lod_tooltip_msg">Predefinito per [APP_NAME] Viewer ([FACTOR])</string>
+        	<text name="LOD_swap_usr_current" tool_tip="Your current LOD Factor"/>
+        	<text name="LOD_swap_LOD_Change_label">
 Alt ↔ Med
 Med ↔ Bas
 Bas ↔ Min         
-        </text>
-        <text name="LODSwapTableDscriptionsText" tool_tip="Per i migliori risultati, i creatori dovrebbero cercare una buona resa dei LOD con le impostazioni predefinite per tutti i viewer.">
-         	La tabella mostra i limiti di cambio dei LOD, espressi in metri di distanza dalla camera.
-        </text>
+        	</text>
+        	<text name="LODSwapTableDscriptionsText" tool_tip="Per i migliori risultati, i creatori dovrebbero cercare una buona resa dei LOD con le impostazioni predefinite per tutti i viewer.">
+				La tabella mostra i limiti di cambio dei LOD, espressi in metri di distanza dalla camera.
+        	</text>
 		</panel>
 		<panel label="Caratteristiche" name="Features">
 			<panel.string name="None">
