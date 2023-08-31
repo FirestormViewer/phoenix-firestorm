@@ -42,12 +42,10 @@
 #include "llpanelpeoplemenus.h"
 #include "llslurl.h"
 
-const U32 MAX_SELECTIONS = 20;
+constexpr U32 MAX_SELECTIONS = 20;
 static LLPanelInjector<FSPanelContactSets> t_panel_contact_sets("contact_sets_panel");
 
 FSPanelContactSets::FSPanelContactSets() : LLPanel()
-, mContactSetCombo(NULL)
-, mAvatarList(NULL)
 {
 	mContactSetChangedConnection = LGGContactSets::getInstance()->setContactSetChangeCallback(boost::bind(&FSPanelContactSets::updateSets, this, _1));
 }
@@ -130,7 +128,7 @@ void FSPanelContactSets::generateAvatarList(const std::string& contact_set)
 			 ++buddy)
 		{
 			// Only show our buddies who aren't in a set, by request.
-			if (!LGGContactSets::getInstance()->isFriendInSet(buddy->first))
+			if (!LGGContactSets::getInstance()->isFriendInAnySet(buddy->first))
 				avatars.push_back(buddy->first);
 		}
 	}
@@ -144,10 +142,12 @@ void FSPanelContactSets::generateAvatarList(const std::string& contact_set)
 	}
 	else if (!LGGContactSets::getInstance()->isInternalSetName(contact_set))
 	{
-		LGGContactSets::ContactSet* group = LGGContactSets::getInstance()->getContactSet(contact_set);	// UGLY!
-		for (auto const& id : group->mFriends)
+		if (LGGContactSets::ContactSet* group = LGGContactSets::getInstance()->getContactSet(contact_set); group)// UGLY!
 		{
-			avatars.push_back(id);
+			for (auto const& id : group->mFriends)
+			{
+				avatars.push_back(id);
+			}
 		}
 	}
 	getChild<LLTextBox>("member_count")->setTextArg("[COUNT]", llformat("%d", avatars.size()));
@@ -198,7 +198,7 @@ void FSPanelContactSets::refreshContactSets()
 	std::vector<std::string> contact_sets = LGGContactSets::getInstance()->getAllContactSets();
 	if (!contact_sets.empty())
 	{
-		for(auto const& set_name : contact_sets)
+		for (auto const& set_name : contact_sets)
 		{
 			mContactSetCombo->add(set_name);
 		}
