@@ -320,10 +320,10 @@ public:
 	F64				getDistanceTraveled() const;	
 	void			setDistanceTraveled(F64 dist) { mDistanceTraveled = dist; }
 	// <FS:Beq> Area search fixes
-	void			setFSAreaSearchActive(BOOL enabled) { mFSAreaSearchActive = enabled; }
-	void			set360CaptureActive(BOOL enabled) { m360CaptureActive = enabled; }
-	bool			getFSAreaSearchActive() { return mFSAreaSearchActive; }
-	bool			get360CaptureActive() { return m360CaptureActive; }
+	void			setFSAreaSearchActive(bool enabled) { mFSAreaSearchActive = enabled; }
+	void			set360CaptureActive(bool enabled) { m360CaptureActive = enabled; }
+	bool			getFSAreaSearchActive() const { return mFSAreaSearchActive; }
+	bool			get360CaptureActive() const { return m360CaptureActive; }
 	// </FS:Beq>
 	
 	const LLVector3d &getLastPositionGlobal() const { return mLastPositionGlobal; }
