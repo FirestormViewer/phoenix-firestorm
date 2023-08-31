@@ -1210,7 +1210,7 @@ LLSD LLInventoryCategory::asLLSD() const
     return sd;
 }
 
-LLSD LLInventoryCategory::asAISLLSD() const
+LLSD LLInventoryCategory::asAISCreateCatLLSD() const
 {
     LLSD sd                 = LLSD();
     sd[INV_FOLDER_ID_LABEL_WS]  = mUUID;
@@ -1221,10 +1221,6 @@ LLSD LLInventoryCategory::asAISLLSD() const
     if (mThumbnailUUID.notNull())
     {
         sd[INV_THUMBNAIL_LABEL] = LLSD().with(INV_ASSET_ID_LABEL, mThumbnailUUID);
-    }
-    else
-    {
-        sd[INV_THUMBNAIL_LABEL] = LLSD();
     }
 
     return sd;
