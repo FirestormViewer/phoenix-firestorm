@@ -36,9 +36,15 @@ jobs:
         with:
           python-version: '3.11'
           cache: 'pip'
-      - run: |
+
+      - if: runner.os == 'Windows'
+        run: |
           python3 -m pip install -r requirements.txt --user
           echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - if: runner.os != 'Windows'
+        run: |
+          python3 -m pip install -r requirements.txt
 
       - name: Check python version
         run: python -V
