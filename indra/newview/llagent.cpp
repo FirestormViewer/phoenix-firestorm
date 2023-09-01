@@ -1068,7 +1068,10 @@ void LLAgent::capabilityReceivedCallback(const LLUUID &region_id, LLViewerRegion
 
         if (gAgent.getInterestListMode() == LLViewerRegion::IL_MODE_360)
         {
-            gAgent.changeInterestListMode(LLViewerRegion::IL_MODE_360);
+			// <FS:Beq> make this actually work
+            // gAgent.changeInterestListMode(LLViewerRegion::IL_MODE_360);
+            regionp->setInterestListMode(LLViewerRegion::IL_MODE_360);
+			// </FS:Beq>
         }
     }
 }
@@ -1124,6 +1127,14 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
             {
                 regionp->requestSimulatorFeatures();
                 LLAppViewer::instance()->updateNameLookupUrl(regionp);
+                // <FS:Beq> move the interestlist update to a place where it is safe.
+                // Set the region to the desired interest list mode
+                if (getInterestListMode() == LLViewerRegion::IL_MODE_360)
+                {
+                    changeInterestListMode(LLViewerRegion::IL_MODE_360);
+                     regionp->setCapabilitiesReceivedCallback(LLAgent::capabilityReceivedCallback);
+                }
+                // </FS:Beq>
             }
             else
             {
@@ -3510,7 +3521,7 @@ void LLAgent::changeInterestListMode(const std::string &new_mode)
 		if ( (new_mode == LLViewerRegion::IL_MODE_DEFAULT && (!mFSAreaSearchActive && !m360CaptureActive))  ||
 		     (new_mode == LLViewerRegion::IL_MODE_360) )
 		{
-		LL_DEBUGS("360Capture") << "Setting Agent interest list mode to " << mInterestListMode << " and updating regions" << LL_ENDL;
+		LL_DEBUGS("360Capture") << "Setting Agent interest list mode to " << new_mode << " and updating regions" << LL_ENDL;
 	// </FS:Beq>
         mInterestListMode = new_mode;
         // Change interest list mode for all regions.  If they are already set for the current mode,
