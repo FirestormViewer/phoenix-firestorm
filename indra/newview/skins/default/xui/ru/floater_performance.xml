@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="performance" title="УЛУЧШИТЬ СКОРОСТЬ ГРАФИКИ">
+	<string name="fps_text" value="кадров в секунду"/>
+	<string name="max_text" value=" (максимум)"/>
+	<panel name="panel_top">
+		<panel name="fps_subpanel">
+			<text name="fps_lbl">кадров в секунду</text>
+			<text name="fps_desc1_lbl">Подождите 5–10 секунд,</text>
+			<text name="fps_desc2_lbl">чтобы изменения произошли.</text>
+		</panel>
+	</panel>
+	<panel name="panel_performance_main">
+		<panel name="autoadjustments_subpanel">
+			<text name="auto_adj_lbl">Автоподстройка настройки (рекомендуется)</text>
+			<text name="auto_adj_desc">Разрешите автонастройку для достижения желаемой частоты кадров.</text>
+		</panel>
+		<panel name="settings_subpanel">
+			<text name="settings_lbl">Настройки графики</text>
+			<text name="settings_desc">Выбирайте настройки расстояния, воды, освещения и многого другого.</text>
+		</panel>
+		<panel name="nearby_subpanel">
+			<text name="avatars_nearby_lbl">Аватары поблизости</text>
+			<text name="avatars_nearby_desc">Управляйте полным отображением ближайших аватаров.</text>
+		</panel>
+		<panel name="complexity_subpanel">
+			<text name="complexity_lbl">Сложность вашего аватара</text>
+			<text name="complexity_info">Уменьшите сложность вашего аватара, если вас не устраивает текущий FPS.</text>
+		</panel>
+		<panel name="huds_subpanel">
+			<text name="huds_lbl" width="135">Ваши активные HUD</text>
+			<text name="huds_desc" width="395">Удаление неиспользуемых HUD может повысить скорость.</text>
+		</panel>
+	</panel>
+</floater>
