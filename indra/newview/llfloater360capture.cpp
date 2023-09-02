@@ -83,12 +83,18 @@ LLFloater360Capture::~LLFloater360Capture()
     // Normally LLFloater360Capture tells the Simulator send everything
     // and now reverts to the regular "keyhole" frustum of interest
     // list updates.
-    if (!LLApp::isExiting() && 
-        // gSavedSettings.getBOOL("360CaptureUseInterestListCap") && // <FS:Beq/> Invalid dependency - This is not used anywhere else now.
-        mStartILMode != gAgent.getInterestListMode())
+    // <FS:Beq> This whole thing is wrong because it is not a simple before/after state states can overlap.
+    // if (!LLApp::isExiting() && 
+    //     // gSavedSettings.getBOOL("360CaptureUseInterestListCap") && // <FS:Beq/> Invalid dependency - This is not used anywhere else now.
+    //     mStartILMode != gAgent.getInterestListMode())
+    // {
+    //     gAgent.set360CaptureActive(false); // <FS:Beq/> make FS Area search work again
+    //     gAgent.changeInterestListMode(mStartILMode);
+	// }
+    if ( !LLApp::isExiting() )
     {
         gAgent.set360CaptureActive(false); // <FS:Beq/> make FS Area search work again
-        gAgent.changeInterestListMode(mStartILMode);
+        gAgent.changeInterestListMode(LLViewerRegion::IL_MODE_DEFAULT);// The Change Interest Mode target mode is indicative only. If something else is holding the 360 mode open then this will be ignored.
 	}
 }
 
