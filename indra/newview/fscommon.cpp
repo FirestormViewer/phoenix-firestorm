@@ -333,67 +333,67 @@ bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionAct
 {
 	bool isSelf = (av_id == gAgentID);
 
-	if (action == FS_RGSTR_ACT_ADD_FRIEND)
+	if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ADD_FRIEND)
 	{
 		return (!isSelf && !LLAvatarActions::isFriend(av_id));
 	}
-	else if (action == FS_RGSTR_ACT_REMOVE_FRIEND)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REMOVE_FRIEND)
 	{
 		return (!isSelf && LLAvatarActions::isFriend(av_id));
 	}
-	else if (action == FS_RGSTR_ACT_SEND_IM)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_SEND_IM)
 	{
 		return (!isSelf && RlvActions::canStartIM(av_id));
 	}
-	else if (action == FS_RGSTR_ACT_VIEW_TRANSCRIPT)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_VIEW_TRANSCRIPT)
 	{
 		return (!isSelf && LLLogChat::isTranscriptExist(av_id));
 	}
-	else if (action == FS_RGSTR_ACT_ZOOM_IN)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ZOOM_IN)
 	{
 		return (!isSelf && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES) && LLAvatarActions::canZoomIn(av_id));
 	}
-	else if (action == FS_RGSTR_ACT_OFFER_TELEPORT)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_OFFER_TELEPORT)
 	{
 		return (!isSelf && LLAvatarActions::canOfferTeleport(av_id));
 	}
-	else if (action == FS_RGSTR_ACT_REQUEST_TELEPORT)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REQUEST_TELEPORT)
 	{
 		return (!isSelf && LLAvatarActions::canRequestTeleport(av_id));
 	}
-	else if (action == FS_RGSTR_ACT_SHOW_PROFILE)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_SHOW_PROFILE)
 	{
 		return (isSelf || !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
 	}
-	else if (action == FS_RGSTR_ACT_TRACK_AVATAR)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TRACK_AVATAR)
 	{
 		return (!isSelf && FSRadar::getInstance()->getEntry(av_id) != NULL);
 	}
-	else if (action == FS_RGSTR_ACT_TELEPORT_TO)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TELEPORT_TO)
 	{
 		return (!isSelf && FSRadar::getInstance()->getEntry(av_id) != NULL);
 	}
-	else if (action == FS_RGSTR_CHK_AVATAR_BLOCKED)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_CHK_AVATAR_BLOCKED)
 	{
 		return (!isSelf && LLMuteList::getInstance()->isMuted(av_id));
 	}
-	else if (action == FS_RGSTR_CHK_IS_SELF)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_CHK_IS_SELF)
 	{
 		return isSelf;
 	}
-	else if (action == FS_RGSTR_CHK_IS_NOT_SELF)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_CHK_IS_NOT_SELF)
 	{
 		return !isSelf;
 	}
-	else if (action == FS_RGSTR_CHK_WAITING_FOR_GROUP_DATA)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_CHK_WAITING_FOR_GROUP_DATA)
 	{
 		return !requestGroupData(av_id);
 	}
-	else if (action == FS_RGSTR_CHK_HAVE_GROUP_DATA)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_CHK_HAVE_GROUP_DATA)
 	{
 		return requestGroupData(av_id);
 	}
-	else if (action == FS_RGSTR_CHK_CAN_LEAVE_GROUP)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_CHK_CAN_LEAVE_GROUP)
 	{
 		if (gAgent.getGroupID() == av_id && !RlvActions::canChangeActiveGroup())
 		{
@@ -402,7 +402,7 @@ bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionAct
 
 		return gAgent.isInGroup(av_id);
 	}
-	else if (action == FS_RGSTR_CHK_CAN_JOIN_GROUP)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_CHK_CAN_JOIN_GROUP)
 	{
 		if (!gAgent.canJoinGroups())
 		{
@@ -422,7 +422,7 @@ bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionAct
 
 		return !gAgent.isInGroup(av_id);
 	}
-	else if (action == FS_RGSTR_CHK_GROUP_NOT_ACTIVE)
+	else if (action == EFSRegistrarFunctionActionType::FS_RGSTR_CHK_GROUP_NOT_ACTIVE)
 	{
 		if (!RlvActions::canChangeActiveGroup())
 		{
