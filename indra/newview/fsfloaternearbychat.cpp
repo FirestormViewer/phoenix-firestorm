@@ -1025,9 +1025,26 @@ void FSFloaterNearbyChat::onEmojiPickerToggleBtnClicked(FSFloaterNearbyChat* sel
 			picker->show(
 				[self](llwchar emoji) { self->onEmojiPicked(emoji); },
 				[self]() { self->onEmojiPickerClosed(); });
-			if (LLFloater* root_floater = gFloaterView->getParentFloater(self))
+			self->addDependentFloater(picker, TRUE, TRUE);
+
+			// Adjust size and position to the conversations floater the nearby chat floater is hosted in
+			if (self->getHost())
 			{
-				root_floater->addDependentFloater(picker, TRUE, TRUE);
+				LLRect rect = gFloaterView->findNeighboringPosition(self->getHost(), picker);
+				const LLRect& base = self->getHost()->getRect();
+				if (rect.mTop == base.mTop)
+					rect.mBottom = base.mBottom;
+				else if (rect.mLeft == base.mLeft)
+					rect.mRight = base.mRight;
+				picker->reshape(rect.getWidth(), rect.getHeight(), FALSE);
+				picker->setRect(rect);
+				picker->setSnapTarget(self->getHost()->getHandle());
+				gFloaterView->adjustToFitScreen(picker, FALSE, TRUE);
+				if (picker->isFrontmost())
+				{
+					// make sure to bring self and sibling floaters to front
+					gFloaterView->bringToFront(picker);
+				}
 			}
 		}
 		else
