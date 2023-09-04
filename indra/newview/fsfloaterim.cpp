@@ -603,6 +603,11 @@ FSFloaterIM::~FSFloaterIM()
 	{
 		mAvatarNameCacheConnection.disconnect();
 	}
+
+	if (mRecentEmojisUpdatedCallbackConnection.connected())
+	{
+		mRecentEmojisUpdatedCallbackConnection.disconnect();
+	}
 }
 
 void FSFloaterIM::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state)
@@ -969,6 +974,8 @@ BOOL FSFloaterIM::postBuild()
 	mEmojiPickerToggleBtn = getChild<LLButton>("emoji_picker_toggle_btn");
 	mEmojiPickerToggleBtn->setLabel(LLUIString(LLWString(1, 128512)));
 	mEmojiPickerToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiPickerToggleBtnClicked(this); });
+
+	mRecentEmojisUpdatedCallbackConnection = LLFloaterEmojiPicker::setRecentEmojisUpdatedCallback([this](const std::list<llwchar>& recent_emojis_list) { onEmojiRecentPanelOpening(); });
 
 	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 	getChild<LLButton>("chat_search_btn")->setCommitCallback(boost::bind(&FSFloaterIM::onChatSearchButtonClicked, this));

@@ -104,6 +104,10 @@ FSFloaterNearbyChat::FSFloaterNearbyChat(const LLSD& key)
 
 FSFloaterNearbyChat::~FSFloaterNearbyChat()
 {
+	if (mRecentEmojisUpdatedCallbackConnection.connected())
+	{
+		mRecentEmojisUpdatedCallbackConnection.disconnect();
+	}
 }
 
 void FSFloaterNearbyChat::updateFSUseNearbyChatConsole(const LLSD &data)
@@ -159,6 +163,8 @@ BOOL FSFloaterNearbyChat::postBuild()
 	mEmojiPickerToggleBtn = getChild<LLButton>("emoji_picker_toggle_btn");
 	mEmojiPickerToggleBtn->setLabel(LLUIString(LLWString(1, 128512)));
 	mEmojiPickerToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiPickerToggleBtnClicked(this); });
+
+	mRecentEmojisUpdatedCallbackConnection = LLFloaterEmojiPicker::setRecentEmojisUpdatedCallback([this](const std::list<llwchar>& recent_emojis_list) { onEmojiRecentPanelOpening(); });
 
 	getChild<LLButton>("chat_history_btn")->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onHistoryButtonClicked, this));
 	getChild<LLButton>("chat_search_btn")->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onSearchButtonClicked, this));

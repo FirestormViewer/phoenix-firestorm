@@ -295,6 +295,8 @@ private:
 	bool mApplyRect;
 
 	FSFloaterIMTimer*	mIMFloaterTimer;
+
+	boost::signals2::connection mRecentEmojisUpdatedCallbackConnection{};
 };
 
 class FSFloaterIMTimer : public LLEventTimer

@@ -156,6 +156,8 @@ private:
 	std::vector<LLChat> mMessageArchive;
 
 	BOOL FSUseNearbyChatConsole;
+
+	boost::signals2::connection mRecentEmojisUpdatedCallbackConnection{};
 };
 
 #endif // FS_FLOATERNEARBYCHAT_H

@@ -42,6 +42,8 @@
 #include "lltextbox.h" 
 #include "llviewerchat.h" 
 
+LLFloaterEmojiPicker::recent_emojis_updated_callback_t LLFloaterEmojiPicker::sRecentEmojisUpdatedCallback{}; // <FS:Ansariel> Live-update recently used emojis
+
 namespace {
 // The following variables and constants are used for storing the floater state
 // between different lifecycles of the floater and different sissions of the viewer
@@ -771,6 +773,9 @@ void LLFloaterEmojiPicker::onEmojiUsed(llwchar emoji)
     // Append new if not found
     if (itf == sFrequentlyUsed.end())
         sFrequentlyUsed.push_back(std::make_pair(emoji, 1));
+
+    // <FS:Ansariel> Live-update recently used emojis
+    sRecentEmojisUpdatedCallback(sRecentlyUsed);
 }
 
 // static

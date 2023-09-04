@@ -59,6 +59,14 @@ public:
     static void loadState();
     static void saveState();
 
+    // <FS:Ansariel> Live-update recently used emojis
+    using recent_emojis_updated_callback_t = boost::signals2::signal<void(const std::list<llwchar>& recent_emojis_list)>;
+    static boost::signals2::connection setRecentEmojisUpdatedCallback(const recent_emojis_updated_callback_t::slot_type& cb)
+    {
+        return sRecentEmojisUpdatedCallback.connect(cb);
+    }
+    // </FS:Ansariel>
+
 private:
     void fillGroups();
     void moveGroups();
@@ -96,6 +104,9 @@ private:
     S32 mRecentGridWidth { 0 };
     S32 mRecentMaxIcons { 0 };
     LLUICtrl* mHoveredIcon { nullptr };
+
+    // <FS:Ansariel> Live-update recently used emojis
+    static recent_emojis_updated_callback_t sRecentEmojisUpdatedCallback;
 };
 
 #endif
