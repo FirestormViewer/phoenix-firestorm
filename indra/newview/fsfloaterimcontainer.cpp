@@ -37,6 +37,7 @@
 #include "llfloaterreg.h"
 #include "llchiclet.h"
 #include "llchicletbar.h"
+#include "llfloateremojipicker.h"
 #include "lltoolbarview.h"
 #include "llvoiceclient.h"
 
@@ -580,4 +581,10 @@ void FSFloaterIMContainer::sessionIDUpdated(const LLUUID& old_session_id, const 
 	}
 }
 
+void FSFloaterIMContainer::tabOpen(LLFloater* opened_floater, bool from_click)
+{
+	auto picker = LLFloaterEmojiPicker::getInstance();
+	if (picker && picker->isShown() && picker->isDependent() && (picker->getDependee() == this || picker->getDependee() == opened_floater))
+		picker->closeFloater();
+}
 // EOF

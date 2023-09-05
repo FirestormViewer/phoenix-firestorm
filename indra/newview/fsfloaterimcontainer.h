@@ -76,6 +76,8 @@ public:
 
 	void addFlashingSession(const LLUUID& session_id);
 
+	void tabOpen(LLFloater* opened_floater, bool from_click);
+
 private:
 	enum eVoiceState
 	{

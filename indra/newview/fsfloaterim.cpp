@@ -2522,31 +2522,19 @@ void FSFloaterIM::onEmojiPickerToggleBtnClicked(FSFloaterIM* self)
 {
 	if (LLFloaterEmojiPicker* picker = LLFloaterEmojiPicker::getInstance())
 	{
-		if (!picker->isShown())
+		if (!picker->isShown() || (picker->isDependent() && picker->getDependee() && picker->getDependee() != self && picker->getDependee() != self->getHost()))
 		{
 			picker->show(
 				[self](llwchar emoji) { self->onEmojiPicked(emoji); },
 				[self]() { self->onEmojiPickerClosed(); });
-			self->addDependentFloater(picker, TRUE, TRUE);
 
-			// Adjust size and position to the conversations floater the IM floater is hosted in
 			if (self->getHost())
 			{
-				LLRect rect = gFloaterView->findNeighboringPosition(self->getHost(), picker);
-				const LLRect& base = self->getHost()->getRect();
-				if (rect.mTop == base.mTop)
-					rect.mBottom = base.mBottom;
-				else if (rect.mLeft == base.mLeft)
-					rect.mRight = base.mRight;
-				picker->reshape(rect.getWidth(), rect.getHeight(), FALSE);
-				picker->setRect(rect);
-				picker->setSnapTarget(self->getHost()->getHandle());
-				gFloaterView->adjustToFitScreen(picker, FALSE, TRUE);
-				if (picker->isFrontmost())
-				{
-					// make sure to bring self and sibling floaters to front
-					gFloaterView->bringToFront(picker);
-				}
+				self->getHost()->addDependentFloater(picker, TRUE, TRUE);
+			}
+			else
+			{
+				self->addDependentFloater(picker, TRUE, TRUE);
 			}
 		}
 		else

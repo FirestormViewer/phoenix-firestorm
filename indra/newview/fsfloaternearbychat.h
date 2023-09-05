@@ -101,6 +101,8 @@ public:
 
 	void handleMinimized(bool minimized);
 
+	static void onEmojiPickerToggleBtnClicked(FSFloaterNearbyChat* self);
+
 protected:
 	void onChatBoxKeystroke();
 	void onChatBoxFocusLost();
@@ -122,7 +124,6 @@ private:
 	bool onChatOptionsEnableContextMenuItem(const LLSD& userdata);
 
 	static void onEmojiRecentPanelToggleBtnClicked(FSFloaterNearbyChat* self);
-	static void onEmojiPickerToggleBtnClicked(FSFloaterNearbyChat* self);
 	void onEmojiRecentPanelOpening();
 	void onRecentEmojiPicked(const LLSD& value);
 	void onEmojiPicked(llwchar emoji);

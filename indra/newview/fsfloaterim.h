@@ -161,6 +161,8 @@ public:
 
 	void timedUpdate();
 
+	static void onEmojiPickerToggleBtnClicked(FSFloaterIM* self);
+
 protected:
 	/* virtual */
 	void	onClickCloseBtn(bool app_quitting = false);
@@ -240,7 +242,6 @@ private:
 	bool onChatOptionsEnableContextMenuItem(const LLSD& userdata);
 
 	static void onEmojiRecentPanelToggleBtnClicked(FSFloaterIM* self);
-	static void onEmojiPickerToggleBtnClicked(FSFloaterIM* self);
 	void onEmojiRecentPanelOpening();
 	void onRecentEmojiPicked(const LLSD& value);
 	void onEmojiPicked(llwchar emoji);
