@@ -5,6 +5,7 @@ on:
       - "Firestorm*.*.*"
       - "*alpha"
       - "*nightly"
+      - "*preview"
   schedule:
     - cron: '00 03 * * *' # Run every day at 3am UTC
 env:    
