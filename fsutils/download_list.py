@@ -129,9 +129,11 @@ dirs = ["windows", "mac", "linux"]
 
 # build_types is a map from Beta, Release and Nightly to folder names preview release and nightly
 build_types = {
+    "Alpha": "test",
     "Beta": "preview",
     "Release": "release",
-    "Nightly": "nightly"
+    "Nightly": "nightly",
+    "Unknown": "test"
 }
 
 target_folder = {
@@ -155,10 +157,10 @@ for file in zips:
 
     # print(f"build_type is {build_type}")
     if build_type not in build_types:
-        print(f"Invalid build_type {build_type} using file {file}")
-        continue
-    else:
-        build_folder = build_types[build_type]
+        print(f"Invalid build_type {build_type} from file {file} using 'Unknown'")
+        build_type = "Unknown"
+
+    build_folder = build_types[build_type]
     
     build_types_created.add(build_type)
 

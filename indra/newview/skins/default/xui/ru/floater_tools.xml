@@ -222,6 +222,7 @@
 				<combo_box.item label="Заплатить за объект" name="Payobject"/>
 				<combo_box.item label="Открыть" name="Open"/>
 				<combo_box.item label="Увеличить" name="Zoom"/>
+				<combo_box.item label="Игнорировать" name="Ignoreobject" />
 				<combo_box.item label="Ничего" name="None"/>
 			</combo_box>
 			<check_box label="Для продажи:" name="checkbox for sale" tool_tip="Позволяет людям покупать этот объект, его содержимое или копировать в мире по указанной цене." />

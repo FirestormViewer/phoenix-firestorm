@@ -7495,11 +7495,19 @@ void LLObjectBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 						std::string submenu_name = attachment->getName();
 						if (LLTrans::getString(submenu_name) != "")
 						{
-						    p.name = (" ")+LLTrans::getString(submenu_name)+" ";
+							// <FS:Ansariel> Add attachment point ID to non-HUD attachment spots
+							if (attachment->getIsHUDAttachment())
+								p.name = (" ")+LLTrans::getString(submenu_name)+" ";
+							else
+								p.name = (" ") + LLTrans::getString(submenu_name) + " (" + std::to_string(curiter->first) + ")" + " ";
 						}
 						else
 						{
-							p.name = submenu_name;
+							if (attachment->getIsHUDAttachment())
+								p.name = submenu_name;
+							else
+								p.name = submenu_name + " (" + std::to_string(curiter->first) + ")";
+							// </FS:Ansariel>
 						}
 						LLSD cbparams;
 						cbparams["index"] = curiter->first;

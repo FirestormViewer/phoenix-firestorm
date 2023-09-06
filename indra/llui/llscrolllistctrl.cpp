@@ -2216,44 +2216,44 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 			registrar.add("Url.CopyUrl", boost::bind(&LLScrollListCtrl::copySLURLToClipboard, id, is_group));
 
 			// <FS:Ansariel> Additional convenience options
-			registrar.add("FS.ZoomIn", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/zoom", true));
-			registrar.add("FS.TeleportToTarget", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/teleportto", true));
-			registrar.add("FS.OfferTeleport", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/offerteleport", true));
-			registrar.add("FS.RequestTeleport", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/requestteleport", true));
-			registrar.add("FS.TrackAvatar", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/track", true));
-			registrar.add("FS.AddToContactSet", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/addtocontactset", true));	// [FS:CR]
-			registrar.add("FS.BlockAvatar", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/blockavatar", true));
-			registrar.add("FS.ViewLog", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/viewlog", true));
+			registrar.add("FS.ZoomIn", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/zoom", true));
+			registrar.add("FS.TeleportToTarget", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/teleportto", true));
+			registrar.add("FS.OfferTeleport", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/offerteleport", true));
+			registrar.add("FS.RequestTeleport", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/requestteleport", true));
+			registrar.add("FS.TrackAvatar", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/track", true));
+			registrar.add("FS.AddToContactSet", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/addtocontactset", true));	// [FS:CR]
+			registrar.add("FS.BlockAvatar", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/blockavatar", true));
+			registrar.add("FS.ViewLog", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/viewlog", true));
 			// </FS:Ansariel> Additional convenience options
 
 			// <FS:Ansariel> Add enable checks for menu items
 			LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
-			enable_registrar.add("Url.EnableShowProfile", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_SHOW_PROFILE));
-			enable_registrar.add("Url.EnableAddFriend", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_ADD_FRIEND));
-			enable_registrar.add("Url.EnableRemoveFriend", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_REMOVE_FRIEND));
-			enable_registrar.add("Url.EnableSendIM", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_SEND_IM));
-			enable_registrar.add("FS.EnableZoomIn", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_ZOOM_IN));
-			enable_registrar.add("FS.EnableOfferTeleport", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_OFFER_TELEPORT));
-			enable_registrar.add("FS.EnableTrackAvatar", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_TRACK_AVATAR));
-			enable_registrar.add("FS.EnableTeleportToTarget", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_TELEPORT_TO));
-			enable_registrar.add("FS.EnableRequestTeleport", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_REQUEST_TELEPORT));
-			enable_registrar.add("FS.CheckIsAgentBlocked", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_AVATAR_BLOCKED));
-			enable_registrar.add("FS.EnableBlockAvatar", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_IS_NOT_SELF));
-			enable_registrar.add("FS.EnableViewLog", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_ACT_VIEW_TRANSCRIPT));
+			enable_registrar.add("Url.EnableShowProfile", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_SHOW_PROFILE));
+			enable_registrar.add("Url.EnableAddFriend", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ADD_FRIEND));
+			enable_registrar.add("Url.EnableRemoveFriend", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REMOVE_FRIEND));
+			enable_registrar.add("Url.EnableSendIM", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_SEND_IM));
+			enable_registrar.add("FS.EnableZoomIn", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ZOOM_IN));
+			enable_registrar.add("FS.EnableOfferTeleport", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_OFFER_TELEPORT));
+			enable_registrar.add("FS.EnableTrackAvatar", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TRACK_AVATAR));
+			enable_registrar.add("FS.EnableTeleportToTarget", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TELEPORT_TO));
+			enable_registrar.add("FS.EnableRequestTeleport", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REQUEST_TELEPORT));
+			enable_registrar.add("FS.CheckIsAgentBlocked", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_AVATAR_BLOCKED));
+			enable_registrar.add("FS.EnableBlockAvatar", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_IS_NOT_SELF));
+			enable_registrar.add("FS.EnableViewLog", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_VIEW_TRANSCRIPT));
 			// </FS:Ansariel>
 
 			// <FS:Zi> FIRE-30725 - Add more group functions to group URL context menu
 			std::string uuid_str = uuid.asString();
 
-			registrar.add("FS.JoinGroup", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + uuid_str + "/groupjoin", true));
-			registrar.add("FS.LeaveGroup", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + uuid_str + "/groupleave", true));
-			registrar.add("FS.ActivateGroup", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + uuid_str + "/groupactivate", true));
+			registrar.add("FS.JoinGroup", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + uuid_str + "/groupjoin", true));
+			registrar.add("FS.LeaveGroup", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + uuid_str + "/groupleave", true));
+			registrar.add("FS.ActivateGroup", std::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + uuid_str + "/groupactivate", true));
 
-			enable_registrar.add("FS.WaitingForGroupData", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_WAITING_FOR_GROUP_DATA));
-			enable_registrar.add("FS.HaveGroupData", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_HAVE_GROUP_DATA));
-			enable_registrar.add("FS.EnableJoinGroup", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_CAN_JOIN_GROUP));
-			enable_registrar.add("FS.EnableLeaveGroup", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_CAN_LEAVE_GROUP));
-			enable_registrar.add("FS.EnableActivateGroup", boost::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, FS_RGSTR_CHK_GROUP_NOT_ACTIVE));
+			enable_registrar.add("FS.WaitingForGroupData", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_WAITING_FOR_GROUP_DATA));
+			enable_registrar.add("FS.HaveGroupData", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_HAVE_GROUP_DATA));
+			enable_registrar.add("FS.EnableJoinGroup", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_CAN_JOIN_GROUP));
+			enable_registrar.add("FS.EnableLeaveGroup", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_CAN_LEAVE_GROUP));
+			enable_registrar.add("FS.EnableActivateGroup", std::bind(&FSRegistrarUtils::checkIsEnabled, gFSRegistrarUtils, uuid, EFSRegistrarFunctionActionType::FS_RGSTR_CHK_GROUP_NOT_ACTIVE));
 			// </FS:Zi>
 
 			// create the context menu from the XUI file and display it

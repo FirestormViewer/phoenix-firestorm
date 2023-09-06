@@ -123,7 +123,9 @@
 		<menu_item_call label="Mes terrains..." name="My Land"/>
 		<menu_item_call label="Ma maison (Linden Home)" name="Linden Home"/>
 		<menu label="Afficher" name="LandShow">
-			<menu_item_check label="Lignes d&apos;interdiction" name="Ban Lines"/>
+			<menu_item_check label="Cacher les lignes d'interdiction" name="Hide Ban Lines"/>
+			<menu_item_check label="Lignes d'interdiction suite à une collision" name="Show Ban Lines On Collision"/>
+			<menu_item_check label="Lignes d'interdiction à proximité" name="Show Ban Lines On Proximity"/>
 			<menu_item_check label="Balises" name="beacons"/>
 			<menu_item_check label="Limites du terrain" name="Property Lines"/>
 			<menu_item_check label="Propriétaires de terrains" name="Land Owners"/>

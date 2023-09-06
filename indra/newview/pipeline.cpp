@@ -2592,7 +2592,7 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, LLPlane* pla
 		LLVOCachePartition* vo_part = region->getVOCachePartition();
 		if(vo_part)
 		{
-            bool do_occlusion_cull = can_use_occlusion && use_occlusion && !gUseWireframe;
+            bool do_occlusion_cull = can_use_occlusion && use_occlusion && !gUseWireframe && !gAgent.getFSAreaSearchActive();
 			vo_part->cull(camera, do_occlusion_cull);
 		}
 	}

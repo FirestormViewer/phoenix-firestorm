@@ -69,11 +69,19 @@ void LLViewerAttachMenu::populateMenus(const std::string& attach_to_menu_name, c
 
 		if (LLTrans::findString(translated_submenu_name, submenu_name))
 		{
-			p.name = (" ") + translated_submenu_name + " ";
+			// <FS:Ansariel> Add attachment point ID to non-HUD attachment spots
+			if (attachment->getIsHUDAttachment())
+				p.name = (" ") + translated_submenu_name + " ";
+			else
+				p.name = (" ") + translated_submenu_name + " (" + std::to_string(curiter->first) + ")" + " ";
 		}
 		else
 		{
-			p.name = submenu_name;
+			if (attachment->getIsHUDAttachment())
+				p.name = submenu_name;
+			else
+				p.name = submenu_name + " (" + std::to_string(curiter->first) + ")";
+			// </FS:Ansariel>
 		}
 
 		LLSD cbparams;
