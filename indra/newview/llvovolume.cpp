@@ -5368,7 +5368,10 @@ void LLControlAVBridge::updateSpatialExtents()
 	// disappear when root goes off-screen"
 	//
 	// Expand extents to include Control Avatar placed outside of the bounds
-	if (controlAvatar && (rootWasDirty || controlAvatar->mPlaying))
+	// <FS:Beq> mDrawable crash reported by Aleric Inglewood	
+	// if (controlAvatar && (rootWasDirty || controlAvatar->mPlaying))
+	if (controlAvatar && controlAvatar->mDrawable.notNull() && (rootWasDirty || controlAvatar->mPlaying)) 
+	// </FS:Beq>
 	{
 		root->expandExtents(controlAvatar->mDrawable->getSpatialExtents(), *mDrawable->getXform());
 	}

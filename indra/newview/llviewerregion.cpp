@@ -107,7 +107,6 @@
 const S32 MAX_CAP_REQUEST_ATTEMPTS = 30;
 const U32 DEFAULT_MAX_REGION_WIDE_PRIM_COUNT = 15000;
 
-bool LLViewerRegion::sFSAreaSearchActive = false; // <FS:Beq/> FIRE-32688 Area Search improvements
 BOOL LLViewerRegion::sVOCacheCullingEnabled = FALSE;
 S32  LLViewerRegion::sLastCameraUpdated = 0;
 S32  LLViewerRegion::sNewObjectCreationThrottle = -1;
@@ -3615,8 +3614,10 @@ void LLViewerRegion::setCapabilitiesReceived(bool received)
 		// This is a single-shot signal. Forget callbacks to save resources.
 		mCapabilitiesReceivedSignal.disconnect_all_slots();
 
-		// Set the region to the desired interest list mode
-        setInterestListMode(gAgent.getInterestListMode());
+		// <FS:Beq> 360/AreaSearch fix - Move this to agent callback to avoid premature triggere with null region
+		// // Set the region to the desired interest list mode
+        // setInterestListMode(gAgent.getInterestListMode());
+		// </FS:Beq>
 	}
 }
 

@@ -2441,7 +2441,9 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, bool hud_att
 		LLVOCachePartition* vo_part = region->getVOCachePartition();
 		if(vo_part)
 		{
-			vo_part->cull(camera, sUseOcclusion > 0);
+			// <FS:Beq> Fix area search again
+			//vo_part->cull(camera, sUseOcclusion > 0);
+			vo_part->cull(camera, sUseOcclusion > 0 && !gAgent.getFSAreaSearchActive());
 		}
 	}
 

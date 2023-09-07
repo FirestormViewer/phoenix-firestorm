@@ -28,9 +28,7 @@
 #ifndef FS_REGISTRARUTILS_H
 #define FS_REGISTRARUTILS_H
 
-#include <boost/function.hpp>
-
-enum EFSRegistrarFunctionActionType
+enum class EFSRegistrarFunctionActionType
 {
 	FS_RGSTR_ACT_ADD_FRIEND,
 	FS_RGSTR_ACT_REMOVE_FRIEND,
@@ -55,10 +53,10 @@ enum EFSRegistrarFunctionActionType
 class FSRegistrarUtils
 {
 public:
-	FSRegistrarUtils();
-	~FSRegistrarUtils() { };
+	FSRegistrarUtils() = default;
+	~FSRegistrarUtils() = default;
 
-	typedef boost::function<bool(const LLUUID&, EFSRegistrarFunctionActionType)> enable_check_function_t;
+	using enable_check_function_t = std::function<bool(const LLUUID&, EFSRegistrarFunctionActionType)>;
 	void setEnableCheckFunction(const enable_check_function_t& func)
 	{
 		mEnableCheckFunction = func;
@@ -67,7 +65,7 @@ public:
 	bool checkIsEnabled(LLUUID av_id, EFSRegistrarFunctionActionType action);
 
 private:
-	enable_check_function_t mEnableCheckFunction;
+	enable_check_function_t mEnableCheckFunction{ nullptr };
 };
 
 extern FSRegistrarUtils gFSRegistrarUtils;
