@@ -3,8 +3,9 @@ on:
   push:
     branches:
       - "Firestorm*.*.*"
-    tags:
-      - "preview"
+      - "*alpha"
+      - "*nightly"
+      - "*preview"
   schedule:
     - cron: '00 03 * * *' # Run every day at 3am UTC
 env:    
@@ -26,19 +27,38 @@ jobs:
             addrsize: 32
           - os: macos-11
             addrsize: 32
+          # - grid: sl
+          #   addrsize: 32
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
-        if: runner.os != 'Windows'
         id: py311
         with:
           python-version: '3.11'
           cache: 'pip'
-      - run: pip3 install -r requirements.txt
+
+      - if: runner.os == 'Windows'
+        run: |
+          python3 -m pip install -r requirements.txt --user
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - if: runner.os != 'Windows'
+        run: |
+          python3 -m pip install -r requirements.txt
 
       - name: Check python version
         run: python -V
+      - name: Check python3 version
+        run: python3 -V
+
+      - name: Test python llsd
+        run: |
+          python - <<EOF
+          import llsd
+          print("Hello from inline Python script!")
+          EOF
+        shell: bash
 
       - name: Free Disk Space (Ubuntu)
         if: runner.os == 'Linux'
@@ -79,7 +99,9 @@ jobs:
             FS_RELEASE_TYPE=Release
           elif [[ "${{ github.ref_name }}" == *review* ]]; then
             FS_RELEASE_TYPE=Beta
-          elif [[ "${{ github.event_name }}" == 'schedule' ]]; then
+          elif [[ "${{ github.ref_name }}" == *alpha* ]]; then
+            FS_RELEASE_TYPE=Alpha
+          elif [[ "${{ github.ref_name }}" == *nightly* ]] || [[ "${{ github.event_name }}" == 'schedule' ]]; then
             FS_RELEASE_TYPE=Nightly
           else
             FS_RELEASE_TYPE=Unknown
@@ -122,7 +144,7 @@ jobs:
         run: 'rclone copy fs_bundles: --filter "- Alpha/*" --filter "+ *${{ env.fallback_platform }}*bz2" .'
         
       - name: rclone any extra private 3p packages for Alpha (allows library updates not in the main repo)
-        if: env.FS_BUILD_TYPE == 'Alpha'
+        if: env.FS_RELEASE_TYPE == 'Alpha'
         run: 'rclone copy fs_bundles:Alpha --include "*${{ env.fallback_platform }}*bz2" .'
 
       - name: set VSVER for Windows builds
@@ -204,9 +226,13 @@ jobs:
         shell: bash
 
       - name: make Nightly builds expire after 14 days
-        if: env.FS_BUILD_TYPE == 'Nightly'
+        if: env.FS_RELEASE_TYPE == 'Nightly'
         run: |
           echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}} --testbuild=14" >> $GITHUB_ENV
+      - name: make Alpha builds expire after 28 days
+        if: env.FS_RELEASE_TYPE == 'Alpha'
+        run: |
+          echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}} --testbuild=28" >> $GITHUB_ENV
 
       - name: Clean up packages to give more space
         run: rm *${{ env.fallback_platform }}*bz2
@@ -266,7 +292,10 @@ jobs:
           elif [[ "${{ github.ref_name }}" == *review* ]]; then
             FS_RELEASE_FOLDER=preview
             FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
-          elif [[ "${{ github.event_name }}" == 'schedule' ]]; then
+          elif [[ "${{ github.ref_name }}" == *alpha* ]]; then
+            FS_RELEASE_FOLDER=preview
+            FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
+          elif [[ "${{ github.ref_name }}" == *nightly* ]] || [[ "${{ github.event_name }}" == 'schedule' ]]; then
             FS_RELEASE_FOLDER=nightly
             FS_BUILD_WEBHOOK_URL=${{ secrets.NIGHTLY_WEBHOOK_URL }}
           else

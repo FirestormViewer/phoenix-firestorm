@@ -76,6 +76,7 @@
 			<combo_box.item label="Zapłać obiektowi" name="Payobject"/>
 			<combo_box.item label="Otwórz" name="Open"/>
 			<combo_box.item label="Przybliż" name="Zoom"/>
+			<combo_box.item label="Ignoruj obiekt" name="Ignoreobject" />
 			<combo_box.item label="Brak" name="None"/>
 		</combo_box>
 		<panel name="perms_inv">

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_login">
 	<panel.string name="forgot_password_url">
 		http://secondlife.com/account/request.php?lang=fr
@@ -17,7 +17,7 @@
 			<button label="Connexion" name="connect_btn"/>
 			<check_box label="Se souvenir de moi" name="remember_check"/>
 			<text name="forgot_password_text">
-				Mot de passe oublié
+				Mot de passe oubliÃ©
 			</text>
 			<combo_box label="Sélectionner la grille" left_pad="20" name="server_combo"/>
 			<text name="sign_up_text">

@@ -1852,7 +1852,7 @@ void LLPanelPeople::generateContactList(const std::string& contact_set)
 			 ++buddy)
 		{
 			// Only show our buddies who aren't in a set, by request.
-			if (!LGGContactSets::getInstance()->isFriendInSet(buddy->first))
+			if (!LGGContactSets::getInstance()->isFriendInAnySet(buddy->first))
 				avatars.push_back(buddy->first);
 		}
 	}
@@ -1862,10 +1862,12 @@ void LLPanelPeople::generateContactList(const std::string& contact_set)
 	}
 	else if (!LGGContactSets::getInstance()->isInternalSetName(contact_set))
 	{
-		LGGContactSets::ContactSet* group = LGGContactSets::getInstance()->getContactSet(contact_set);
-		for (auto const& id : group->mFriends)
+		if (LGGContactSets::ContactSet* group = LGGContactSets::getInstance()->getContactSet(contact_set); group)
 		{
-			avatars.push_back(id);
+			for (auto const& id : group->mFriends)
+			{
+				avatars.push_back(id);
+			}
 		}
 	}
 	mContactSetList->setDirty();

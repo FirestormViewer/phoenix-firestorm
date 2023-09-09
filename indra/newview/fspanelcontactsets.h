@@ -70,8 +70,8 @@ private:
 
 	uuid_vec_t mAvatarSelections;
 
-	LLComboBox* mContactSetCombo;
-	LLAvatarList* mAvatarList;
+	LLComboBox* mContactSetCombo{ nullptr };
+	LLAvatarList* mAvatarList{ nullptr };
 };
 
 #endif // FS_PANELCONTACTSETS_H
