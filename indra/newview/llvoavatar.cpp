@@ -4320,6 +4320,10 @@ bool LLVOAvatar::isVisuallyMuted()
         //    muted = true;
         //}
 		// </FS:Ansariel>
+        else if (mIsControlAvatar)
+        {
+            muted = isTooSlow();
+        }
 		else 
 		{
 			muted = isTooComplex(); // <FS:Beq/> this should not trigger based on perfstats
