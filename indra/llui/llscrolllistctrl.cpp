@@ -2816,12 +2816,9 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
 			switch (key)
 			{
 			case KEY_UP:
-				if (mAllowKeyboardMovement || hasFocus())
+				if (auto selected_items = getAllSelected(); !selected_items.empty() && (mAllowKeyboardMovement || hasFocus()))
 				{
-					auto selected_items = getAllSelected();
-					auto last = selected_items.back();
-
-					if (mLastSelected == last && selected_items.size() > 1)
+					if (auto last = selected_items.back(); mLastSelected == last && selected_items.size() > 1)
 					{
 						deselectItem(last);
 						mLastSelected = getAllSelected().back(); // Use updated selection
@@ -2841,12 +2838,9 @@ BOOL LLScrollListCtrl::handleKeyHere(KEY key,MASK mask )
 				
 				break;
 			case KEY_DOWN:
-				if (mAllowKeyboardMovement || hasFocus())
+				if (auto selected_items = getAllSelected(); !selected_items.empty() && (mAllowKeyboardMovement || hasFocus()))
 				{
-					auto selected_items = getAllSelected();
-					auto first = selected_items.front();
-
-					if (mLastSelected == first && selected_items.size() > 1)
+					if (auto first = selected_items.front(); mLastSelected == first && selected_items.size() > 1)
 					{
 						deselectItem(first);
 						mLastSelected = getAllSelected().front(); // Use updated selection

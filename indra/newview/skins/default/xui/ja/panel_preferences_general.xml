@@ -20,6 +20,7 @@
 	<text name="language_textbox2">
 		（再起動後に反映）
 	</text>
+	<check_box label="IMEの入力テキストを表示" name="use_ime" />
 	<text name="maturity_desired_prompt">
 		アクセスしたいコンテンツ：
 	</text>
