@@ -14,7 +14,7 @@
 		<combo_box.item label="日本語 (Japonais) - Beta" name="(Japanese)"/>
 	</combo_box>
 	<text name="language_textbox2">(Redémarrage requis)</text>
-	<check_box label="Utiliser la saisie de texte IME" name="use_ime" tool_tip="Utilisez l'éditeur de méthodes de saisie internationale (IME), nécessaire uniquement pour des langues spécifiques comme le japonais ou le chinois, etc." />
+	<check_box label="Afficher la saisie de texte IME" name="use_ime" tool_tip="Utilisez l'éditeur de méthodes de saisie internationale (IME), nécessaire uniquement pour des langues spécifiques comme le japonais ou le chinois, etc." />
 	<text name="maturity_desired_prompt">Accéder au contenu classé :</text>
 	<combo_box name="maturity_desired_combobox">
 		<combo_box.item label="Général, Modéré et Adulte" name="Desired_Adult"/>

@@ -122,7 +122,7 @@
     <check_box
      control_name="SDL2IMEEnabled"
      height="16"
-     label="Use IME Text Input"
+     label="Show IME Text Input"
      layout="topleft"
      left_pad="5"
      name="use_ime"
