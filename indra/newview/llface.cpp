@@ -1192,22 +1192,32 @@ void push_for_transform(LLVertexBuffer* buff, U32 source_count, U32 dest_count)
 }
 
 BOOL LLFace::getGeometryVolume(const LLVolume& volume,
-							   const S32 &f,
-								const LLMatrix4& mat_vert_in, const LLMatrix3& mat_norm_in,
-								const U16 &index_offset,
-								bool force_rebuild)
+                                S32 face_index,
+                                const LLMatrix4& mat_vert_in,
+                                const LLMatrix3& mat_norm_in,
+                                U16 index_offset,
+                                bool force_rebuild,
+                                bool no_debug_assert)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_FACE;
 	llassert(verify());
 
-	if (volume.getNumVolumeFaces() <= f) {
-        LL_WARNS() << "Attempt get volume face out of range! Total Faces: " << volume.getNumVolumeFaces() << " Attempt get access to: " << f << LL_ENDL;
-		return FALSE;
-	}
+    if (face_index < 0 || face_index >= volume.getNumVolumeFaces())
+    {
+        if (gDebugGL)
+        {
+            LL_WARNS() << "Face index is out of bounds!" << LL_ENDL;
+            LL_WARNS() << "Attempt get volume face out of range!"
+                " Total Faces: " << volume.getNumVolumeFaces() <<
+                " Attempt get access to: " << face_index << LL_ENDL;
+            llassert(no_debug_assert);
+        }
+        return FALSE;
+    }
 
     bool rigged = isState(RIGGED);
 
-    const LLVolumeFace &vf = volume.getVolumeFace(f);
+    const LLVolumeFace &vf = volume.getVolumeFace(face_index);
 	S32 num_vertices = (S32)vf.mNumVertices;
 	S32 num_indices = (S32) vf.mNumIndices;
 	
@@ -1236,14 +1246,14 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 		{
 			if (gDebugGL)
 			{
-				LL_WARNS()	<< "Index buffer overflow!" << LL_ENDL;
+				LL_WARNS() << "Index buffer overflow!" << LL_ENDL;
 				LL_WARNS() << "Indices Count: " << mIndicesCount
 						<< " VF Num Indices: " << num_indices
 						<< " Indices Index: " << mIndicesIndex
 						<< " VB Num Indices: " << mVertexBuffer->getNumIndices() << LL_ENDL;
-				LL_WARNS()	<< " Face Index: " << f
+				LL_WARNS()	<< " Face Index: " << face_index
 						<< " Pool Type: " << mPoolType << LL_ENDL;
-				llassert(false);
+				llassert(no_debug_assert);
 			}
 			return FALSE;
 		}
@@ -1253,7 +1263,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			if (gDebugGL)
 			{
 				LL_WARNS() << "Vertex buffer overflow!" << LL_ENDL;
-				llassert(false);
+				llassert(no_debug_assert);
 			}
 			return FALSE;
 		}
@@ -1292,7 +1302,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 	bool rebuild_tangent = rebuild_pos && mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_TANGENT);
 	bool rebuild_weights = rebuild_pos && mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_WEIGHT4);
 
-	const LLTextureEntry *tep = mVObjp->getTE(f);
+	const LLTextureEntry *tep = mVObjp->getTE(face_index);
 	const U8 bump_code = tep ? tep->getBumpmap() : 0;
 
 	BOOL is_static = mDrawablep->isStatic();
@@ -1513,7 +1523,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 		
 			if (bump_code)
 			{
-				mVObjp->getVolume()->genTangents(f);
+				mVObjp->getVolume()->genTangents(face_index);
 				F32 offset_multiple; 
 				switch( bump_code )
 				{
@@ -1566,7 +1576,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			
 			if (rebuild_tcoord && texgen != LLTextureEntry::TEX_GEN_DEFAULT)
 			{ //planar texgen needs binormals
-				mVObjp->getVolume()->genTangents(f);
+				mVObjp->getVolume()->genTangents(face_index);
 			}
 
 			U8 tex_mode = 0;
@@ -1856,7 +1866,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 				{
 					mVertexBuffer->getTexCoord1Strider(tex_coords1, mGeomIndex, mGeomCount);
 		
-                    mVObjp->getVolume()->genTangents(f);
+                    mVObjp->getVolume()->genTangents(face_index);
 
 					for (S32 i = 0; i < num_vertices; i++)
 					{
@@ -1997,7 +2007,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			mVertexBuffer->getTangentStrider(tangent, mGeomIndex, mGeomCount);
 			F32* tangents = (F32*) tangent.get();
 			
-            mVObjp->getVolume()->genTangents(f);
+            mVObjp->getVolume()->genTangents(face_index);
 			
 			LLVector4Logical mask;
 			mask.clear();

@@ -125,7 +125,7 @@ const std::string LLFloaterPermsDefault::sCategoryNames[CAT_LAST] =
 	"Notecards",
 	"Gestures",
 	"Wearables",
-	"Settings"
+	"Settings",
 	"Materials"
 };
 

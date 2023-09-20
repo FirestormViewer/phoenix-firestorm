@@ -77,6 +77,7 @@ enum Categories
 	CAT_GESTURES,
 	CAT_WEARABLES,
 	CAT_SETTINGS,
+    CAT_MATERIALS,
 	CAT_LAST
 };
 

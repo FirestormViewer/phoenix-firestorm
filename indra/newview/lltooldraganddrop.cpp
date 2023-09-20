@@ -1688,6 +1688,8 @@ EAcceptance LLToolDragAndDrop::willObjectAcceptInventory(LLViewerObject* obj, LL
 
 	if(attached && !unrestricted)
 	{
+        // Attachments are in world and in inventory simultaneously,
+        // at the moment server doesn't support such a situation.
 		return ACCEPT_NO_LOCKED;
 	}
 	else if(modify && transfer && volume && !worn)
