@@ -655,6 +655,7 @@ BOOL LLTabContainer::handleMouseDown( S32 x, S32 y, MASK mask )
 					pActiveTabBtn->setFocus(TRUE);
 			}
 // [/SL:KB]
+            mMouseDownTimer.start();
 		}
 	}
 	if (handled) {
@@ -703,7 +704,11 @@ BOOL LLTabContainer::handleHover( S32 x, S32 y, MASK mask )
 		handled = LLPanel::handleHover(x, y, mask);
 	}
 
-	commitHoveredButton(x, y);
+    F32 drag_delay = 0.25f; // filter out clicks from dragging
+    if (mMouseDownTimer.getElapsedTimeF32() > drag_delay)
+    {
+        commitHoveredButton(x, y);
+    }
 	return handled;
 }
 
@@ -749,6 +754,7 @@ BOOL LLTabContainer::handleMouseUp( S32 x, S32 y, MASK mask )
 	}
 
 	commitHoveredButton(x, y);
+    mMouseDownTimer.stop();
 	LLPanel* cur_panel = getCurrentPanel();
 	if (hasMouseCapture())
 	{

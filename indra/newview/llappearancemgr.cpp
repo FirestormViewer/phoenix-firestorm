@@ -5016,7 +5016,7 @@ public:
         {
             LLViewerInventoryCategory* cat = gInventory.getCategory(*it);
             if (!cat) continue;
-            if (!isCategoryComplete(cat))
+            if (cat->getVersion() == LLViewerInventoryCategory::VERSION_UNKNOWN)
             {
                 // CHECK IT: isCategoryComplete() checks both version and descendant count but
                 // fetch() only works for Unknown version and doesn't care about descentants,
@@ -5025,6 +5025,12 @@ public:
                 // Likely either both should use only version or both should check descendants.
                 cat->fetch();		//blindly fetch it without seeing if anything else is fetching it.
                 mIncomplete.push_back(*it);	//Add to list of things being downloaded for this observer.
+            }
+            else if (!isCategoryComplete(cat))
+            {
+                LL_DEBUGS("Inventory") << "Categoty " << *it << " incomplete despite having version" << LL_ENDL;
+                LLInventoryModelBackgroundFetch::instance().scheduleFolderFetch(*it, true);
+                mIncomplete.push_back(*it);
             }
             else if (ais3)
             {
@@ -5050,14 +5056,10 @@ public:
                     // AIS can fetch couple items, but if there
                     // is more than a dozen it will be very slow
                     // it's faster to get whole folder in such case
-                    const S32 MAX_INDIVIDUAL_FETCH = 10;
-                    if (incomplete_count > MAX_INDIVIDUAL_FETCH
+                    if (incomplete_count > LLInventoryFetchItemsObserver::MAX_INDIVIDUAL_ITEM_REQUESTS
                         || (incomplete_count > 1 && complete_count == 0))
                     {
-                        // To prevent premature removal from mIncomplete and
-                        // since we are doing a full refetch anyway, mark unknown
-                        cat->setVersion(LLViewerInventoryCategory::VERSION_UNKNOWN);
-                        cat->fetch();
+                        LLInventoryModelBackgroundFetch::instance().scheduleFolderFetch(*it, true);
                         mIncomplete.push_back(*it);
                     }
                     else
@@ -5066,6 +5068,7 @@ public:
                         mComplete.push_back(*it);
                     }
                 }
+                // else should have been handled by isCategoryComplete
             }
             else
             {
@@ -5089,13 +5092,11 @@ public:
 		// What we do here is get the complete information on the
 		// items in the requested category, and set up an observer
 		// that will wait for that to happen.
-		LLInventoryModel::cat_array_t cat_array;
-		LLInventoryModel::item_array_t item_array;
-		gInventory.collectDescendents(mComplete.front(),
-									  cat_array,
-									  item_array,
-									  LLInventoryModel::EXCLUDE_TRASH);
-		S32 count = item_array.size();
+        LLInventoryModel::cat_array_t* cats;
+        LLInventoryModel::item_array_t* items;
+        gInventory.getDirectDescendentsOf(mComplete.front(), cats, items);
+
+		S32 count = items->size();
 		if(!count)
 		{
 			LL_WARNS() << "Nothing fetched in category " << mComplete.front()
@@ -5107,11 +5108,13 @@ public:
 			return;
 		}
 
-		LL_INFOS() << "stage1 got " << item_array.size() << " items, passing to stage2 " << LL_ENDL;
+        LLViewerInventoryCategory* cat = gInventory.getCategory(mComplete.front());
+        S32 version = cat ? cat->getVersion() : -2;
+		LL_INFOS() << "stage1, category " << mComplete.front() << " got " << count << " items, version " << version << " passing to stage2 " << LL_ENDL;
 		uuid_vec_t ids;
 		for(S32 i = 0; i < count; ++i)
 		{
-			ids.push_back(item_array.at(i)->getUUID());
+			ids.push_back(items->at(i)->getUUID());
 		}
 		
 		gInventory.removeObserver(this);
@@ -5140,14 +5143,14 @@ void callAfterCOFFetch(nullary_func_t cb)
 {
     LLUUID cat_id = LLAppearanceMgr::instance().getCOF();
     LLViewerInventoryCategory* cat = gInventory.getCategory(cat_id);
-    if (cat->getVersion() == LLViewerInventoryCategory::VERSION_UNKNOWN)
+
+    if (AISAPI::isAvailable())
     {
-        if (AISAPI::isAvailable())
-        {
-            // Mark cof (update timer) so that background fetch won't request it
-            cat->setFetching(LLViewerInventoryCategory::FETCH_RECURSIVE);
-            // Assume that we have no relevant cache. Fetch cof, and items cof's links point to.
-            AISAPI::FetchCOF([cb](const LLUUID& id)
+        // Mark cof (update timer) so that background fetch won't request it
+        cat->setFetching(LLViewerInventoryCategory::FETCH_RECURSIVE);
+        // For reliability assume that we have no relevant cache, so
+        // fetch cof along with items cof's links point to.
+        AISAPI::FetchCOF([cb](const LLUUID& id)
                          {
                              cb();
                              LLUUID cat_id = LLAppearanceMgr::instance().getCOF();
@@ -5157,18 +5160,12 @@ void callAfterCOFFetch(nullary_func_t cb)
                                  cat->setFetching(LLViewerInventoryCategory::FETCH_NONE);
                              }
                          });
-        }
-        else
-        {
-            LL_WARNS() << "AIS API v3 not available, can't use AISAPI::FetchCOF" << LL_ENDL;
-            // startup should have marked folder as fetching, remove that
-            cat->setFetching(LLViewerInventoryCategory::FETCH_NONE);
-            callAfterCategoryFetch(cat_id, cb);
-        }
     }
     else
     {
-        // Assume that cache is present. Process like a normal folder.
+        LL_INFOS() << "AIS API v3 not available, using callAfterCategoryFetch" << LL_ENDL;
+        // startup should have marked folder as fetching, remove that
+        cat->setFetching(LLViewerInventoryCategory::FETCH_NONE);
         callAfterCategoryFetch(cat_id, cb);
     }
 }

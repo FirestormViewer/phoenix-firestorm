@@ -4900,6 +4900,14 @@ Entpacken: [UNPACK_TIME]s [USIZE]KB
 			<button name="cancel" text="Abbrechen"/>
 		</form>
 	</notification>
+	<notification label="Eingabe MFA-Token" name="PromptMFATokenWithSave">
+		[MESSAGE]
+		<form name="form">
+			<ignore name="ignore" text="Diesen Computer für 30 Tage merken."/>
+			<button name="continue" text="Fortsetzen"/>
+			<button name="cancel" text="Abbrechen"/>
+		</form>
+	</notification>
 	<notification label="Unterordner erstellen" name="CreateSubfolder">
 		Name des neuen Ordners:
 		<form name="form">

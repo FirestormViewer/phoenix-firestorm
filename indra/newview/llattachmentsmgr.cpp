@@ -308,6 +308,7 @@ void LLAttachmentsMgr::linkRecentlyArrivedAttachments()
         if (LLAppearanceMgr::instance().getCOFVersion() == LLViewerInventoryCategory::VERSION_UNKNOWN)
         {
             // Wait for cof to load
+            LL_DEBUGS_ONCE("Avatar") << "Received atachments, but cof isn't loaded yet, postponing processing" << LL_ENDL;
             return;
         }
 

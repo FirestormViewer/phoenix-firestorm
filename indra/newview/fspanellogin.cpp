@@ -1319,7 +1319,21 @@ void FSPanelLogin::onRemoveCallback(const LLSD& notification, const LLSD& respon
 			{
 				gSavedSettings.getControl("UserLoginInfo")->resetToDefault();
 			}
+
 			LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credName);
+
+			if (size_t arobase = credName.find("@"); arobase != std::string::npos && arobase + 1 < credName.length() && arobase > 1)
+			{
+				auto gridname = credName.substr(arobase + 1, credName.length() - arobase - 1);
+				std::string grid_id = LLGridManager::getInstance()->getGridId(gridname);
+				if (grid_id.empty())
+				{
+					grid_id = gridname;
+				}
+				gSecAPIHandler->removeFromProtectedMap("mfa_hash", grid_id, credential->userID()); // doesn't write
+				gSecAPIHandler->syncProtectedMap();
+			}
+
 			gSecAPIHandler->deleteCredential(credential);
 			sInstance->addUsersToCombo(gSavedSettings.getBOOL("ForceShowGrid"));
 
