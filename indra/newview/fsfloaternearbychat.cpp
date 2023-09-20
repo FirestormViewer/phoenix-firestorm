@@ -1045,6 +1045,7 @@ void FSFloaterNearbyChat::onEmojiPickerToggleBtnClicked(FSFloaterNearbyChat* sel
 void FSFloaterNearbyChat::onEmojiPicked(llwchar emoji)
 {
 	mInputEditor->insertEmoji(emoji);
+	mInputEditor->setFocus(TRUE);
 }
 
 void FSFloaterNearbyChat::onEmojiPickerClosed()

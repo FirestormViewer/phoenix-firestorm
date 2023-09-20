@@ -2547,6 +2547,7 @@ void FSFloaterIM::onEmojiPickerToggleBtnClicked(FSFloaterIM* self)
 void FSFloaterIM::onEmojiPicked(llwchar emoji)
 {
 	mInputEditor->insertEmoji(emoji);
+	mInputEditor->setFocus(TRUE);
 }
 
 void FSFloaterIM::onEmojiPickerClosed()

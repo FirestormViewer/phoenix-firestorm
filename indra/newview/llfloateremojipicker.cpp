@@ -195,7 +195,7 @@ public:
 
         F32 centerX = 0.5f * iconWidth;
         F32 centerY = 0.5f * clientHeight;
-        drawIcon(centerX, centerY, iconWidth);
+        drawIcon(centerX, centerY - 1, iconWidth);
 
         static LLColor4 defaultColor(0.75f, 0.75f, 0.75f, 1.0f);
         LLColor4 textColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", defaultColor);
@@ -293,6 +293,8 @@ BOOL LLFloaterEmojiPicker::postBuild()
     mPreview->setVisible(FALSE);
     addChild(mPreview);
 
+    mDummy = getChild<LLTextBox>("Dummy");
+
     mGroups = getChild<LLPanel>("Groups");
     mBadge = getChild<LLPanel>("Badge");
 
@@ -320,8 +322,9 @@ void LLFloaterEmojiPicker::dirtyRect()
     if (!mFilter)
         return;
 
-    const S32 PADDING = 4;
-    LLRect rect(PADDING, mFilter->getRect().mTop, getRect().getWidth() - PADDING * 2, PADDING);
+    const S32 HPADDING = 4;
+    const S32 VOFFSET = 12;
+    LLRect rect(HPADDING, mDummy->getRect().mTop + 6, getRect().getWidth() - HPADDING, VOFFSET);
     if (mPreview->getRect() != rect)
     {
         mPreview->setRect(rect);
@@ -465,7 +468,7 @@ void LLFloaterEmojiPicker::fillEmojis(bool fromResize)
         bool showDivider = true;
         bool mixedFolder = maxRows;
         LLEmojiGridRow* row = nullptr;
-        if (!mixedFolder)
+        if (!mixedFolder && !isupper(category.front()))
         {
             LLStringUtil::capitalize(category);
         }
@@ -602,7 +605,7 @@ void LLFloaterEmojiPicker::onFilterChanged()
 
 void LLFloaterEmojiPicker::onGridMouseEnter()
 {
-    mFilter->setVisible(FALSE);
+    mDummy->setVisible(FALSE);
     mPreview->setEmoji(nullptr);
     mPreview->setVisible(TRUE);
 }
@@ -610,8 +613,7 @@ void LLFloaterEmojiPicker::onGridMouseEnter()
 void LLFloaterEmojiPicker::onGridMouseLeave()
 {
     mPreview->setVisible(FALSE);
-    mFilter->setVisible(TRUE);
-    mFilter->setFocus(TRUE);
+    mDummy->setVisible(TRUE);
 }
 
 void LLFloaterEmojiPicker::onGroupButtonMouseEnter(LLUICtrl* ctrl)
