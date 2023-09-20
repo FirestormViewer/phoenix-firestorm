@@ -2226,12 +2226,12 @@ void LLNetMap::performDoubleClickAction(LLVector3d pos_global)
 
 bool LLNetMap::canAddFriend()
 {
-	return FSCommon::checkIsActionEnabled(mClosestAgentRightClick, FS_RGSTR_ACT_ADD_FRIEND);
+	return FSCommon::checkIsActionEnabled(mClosestAgentRightClick, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ADD_FRIEND);
 }
 
 bool LLNetMap::canRemoveFriend()
 {
-	return FSCommon::checkIsActionEnabled(mClosestAgentRightClick, FS_RGSTR_ACT_REMOVE_FRIEND);
+	return FSCommon::checkIsActionEnabled(mClosestAgentRightClick, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REMOVE_FRIEND);
 }
 
 bool LLNetMap::canCall()
@@ -2251,13 +2251,13 @@ bool LLNetMap::canShare()
 
 bool LLNetMap::canOfferTeleport()
 {
-	return FSCommon::checkIsActionEnabled(mClosestAgentRightClick, FS_RGSTR_ACT_OFFER_TELEPORT);
+	return FSCommon::checkIsActionEnabled(mClosestAgentRightClick, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_OFFER_TELEPORT);
 }
 
 // <FS:Ansariel> Extra request teleport
 bool LLNetMap::canRequestTeleport()
 {
-	return FSCommon::checkIsActionEnabled(mClosestAgentRightClick, FS_RGSTR_ACT_REQUEST_TELEPORT);
+	return FSCommon::checkIsActionEnabled(mClosestAgentRightClick, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_REQUEST_TELEPORT);
 }
 // </FS:Ansariel>
 

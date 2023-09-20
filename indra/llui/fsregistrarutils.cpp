@@ -28,11 +28,6 @@
 #include "linden_common.h"
 #include "fsregistrarutils.h"
 
-FSRegistrarUtils::FSRegistrarUtils() :
-	mEnableCheckFunction(NULL)
-{
-}
-
 bool FSRegistrarUtils::checkIsEnabled(LLUUID av_id, EFSRegistrarFunctionActionType action)
 {
 	if (mEnableCheckFunction)
