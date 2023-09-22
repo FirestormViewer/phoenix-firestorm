@@ -975,7 +975,7 @@ BOOL FSFloaterIM::postBuild()
 	mEmojiPickerToggleBtn->setLabel(LLUIString(LLWString(1, 128512)));
 	mEmojiPickerToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiPickerToggleBtnClicked(this); });
 
-	mRecentEmojisUpdatedCallbackConnection = LLFloaterEmojiPicker::setRecentEmojisUpdatedCallback([this](const std::list<llwchar>& recent_emojis_list) { onEmojiRecentPanelOpening(); });
+	mRecentEmojisUpdatedCallbackConnection = LLFloaterEmojiPicker::setRecentEmojisUpdatedCallback([this](const std::list<llwchar>& recent_emojis_list) { initEmojiRecentPanel(false); });
 
 	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 	getChild<LLButton>("chat_search_btn")->setCommitCallback(boost::bind(&FSFloaterIM::onChatSearchButtonClicked, this));
@@ -2476,13 +2476,13 @@ void FSFloaterIM::onEmojiRecentPanelToggleBtnClicked(FSFloaterIM* self)
 	BOOL show = !self->mEmojiRecentPanel->getVisible();
 	if (show)
 	{
-		self->onEmojiRecentPanelOpening();
+		self->initEmojiRecentPanel(true);
 	}
 	self->mEmojiRecentPanel->setVisible(show);
 	self->mEmojiRecentPanelToggleBtn->setImageOverlay(show ? "Arrow_Up" : "Arrow_Down");
 }
 
-void FSFloaterIM::onEmojiRecentPanelOpening()
+void FSFloaterIM::initEmojiRecentPanel(bool moveFocus)
 {
 	std::list<llwchar>& recentlyUsed = LLFloaterEmojiPicker::getRecentlyUsed();
 	if (recentlyUsed.empty())
@@ -2500,7 +2500,10 @@ void FSFloaterIM::onEmojiRecentPanelOpening()
 		mEmojiRecentIconsCtrl->setEmojis(emojis);
 		mEmojiRecentEmptyText->setVisible(false);
 		mEmojiRecentIconsCtrl->setVisible(true);
-		mEmojiRecentIconsCtrl->setFocus(true);
+		if (moveFocus)
+		{
+			mEmojiRecentIconsCtrl->setFocus(true);
+		}
 	}
 }
 

@@ -242,7 +242,7 @@ private:
 	bool onChatOptionsEnableContextMenuItem(const LLSD& userdata);
 
 	static void onEmojiRecentPanelToggleBtnClicked(FSFloaterIM* self);
-	void onEmojiRecentPanelOpening();
+	void initEmojiRecentPanel(bool moveFocus);
 	void onRecentEmojiPicked(const LLSD& value);
 	void onEmojiPicked(llwchar emoji);
 	void onEmojiPickerClosed();
