@@ -278,10 +278,6 @@ void LLPresetsManager::getControlNames(std::vector<std::string>& names)
 		// From panel_preferences_move.xml
 		("CameraAngle")
 		("CameraOffsetScale")
-		// <FS:Ansariel> FIRE-29930: Don't include these settings as it might be confusing why settings suddenly reset
-		//("EditCameraMovement")
-		//("AppearanceCameraMovement")
-		// </FS:Ansariel>
 		// From llagentcamera.cpp
 		("CameraOffsetBuild")
 		("TrackFocusObject")
