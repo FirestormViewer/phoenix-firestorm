@@ -526,11 +526,18 @@ void FSCommon::updateUsedEmojis(LLWString text)
 {
 	LLEmojiDictionary* dictionary = LLEmojiDictionary::getInstance();
 
+	bool emojiSent = false;
 	for (llwchar& c : text)
 	{
 		if (dictionary->isEmoji(c))
 		{
 			LLFloaterEmojiPicker::onEmojiUsed(c);
+			emojiSent = true;
 		}
+	}
+
+	if (emojiSent)
+	{
+		LLFloaterEmojiPicker::onRecentlyUsedChanged();
 	}
 }
