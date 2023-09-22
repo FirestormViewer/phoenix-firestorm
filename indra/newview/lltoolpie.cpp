@@ -95,8 +95,8 @@ LLToolPie::LLToolPie()
 	mMouseSteerX(-1),
 	mMouseSteerY(-1),
 	mClickAction(0),
-	mClickActionBuyEnabled( gSavedSettings.getBOOL("ClickActionBuyEnabled") ),
-	mClickActionPayEnabled( gSavedSettings.getBOOL("ClickActionPayEnabled") ),
+	mClickActionBuyEnabled( TRUE ),
+	mClickActionPayEnabled( TRUE ),
 	mDoubleClickTimer()
 {
 }
@@ -882,8 +882,7 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 	{
 		S32 delta_x = x - mMouseDownX;
 		S32 delta_y = y - mMouseDownY;
-		S32 threshold = gSavedSettings.getS32("DragAndDropDistanceThreshold");
-		if (delta_x * delta_x + delta_y * delta_y > threshold * threshold)
+		if (delta_x * delta_x + delta_y * delta_y > DRAG_N_DROP_DISTANCE_THRESHOLD * DRAG_N_DROP_DISTANCE_THRESHOLD)
 		{
 			startCameraSteering();
 			steerCameraWithMouse(x, y);
@@ -1334,6 +1333,8 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			     ( (RlvActions::canInteract(hover_object, mHoverPick.mObjectOffset)) && (RlvActions::canShowName(RlvActions::SNC_DEFAULT, hover_object->getID())) ) )
 			{
 // [/RLVa:KB]
+                //const F32 INSPECTOR_TOOLTIP_DELAY = 0.35f; // <FS:Ansariel> Keep customizable tooltip delay
+
 				LLInspector::Params p;
 				p.fillFrom(LLUICtrlFactory::instance().getDefaultParams<LLInspector>());
 				p.message(final_name);
@@ -1347,6 +1348,8 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				p.click_callback(boost::bind(showAvatarInspector, hover_object->getID()));
 				p.visible_time_near(6.f);
 				p.visible_time_far(3.f);
+				// <FS:Ansariel> Keep customizable tooltip delay
+				//p.delay_time(INSPECTOR_TOOLTIP_DELAY);
 				p.delay_time(gSavedSettings.getF32("AvatarInspectorTooltipDelay"));
 				p.wrap(false);
 				

@@ -631,12 +631,10 @@ void LLFolderView::setDragStart(S32 screen_x, S32 screen_y)
 
 bool LLFolderView::isOverDragThreshold(S32 screen_x, S32 screen_y)
 {
-	static LLCachedControl<S32> drag_and_drop_threshold(*LLUI::getInstance()->mSettingGroups["config"], "DragAndDropDistanceThreshold", 3);
-	
 	S32 dX = screen_x - mDragStartX;
 	S32 dY = screen_y - mDragStartY;
 	
-	return (dX * dX) + (dY * dY) > drag_and_drop_threshold * drag_and_drop_threshold;
+	return (dX * dX) + (dY * dY) > DRAG_N_DROP_DISTANCE_THRESHOLD * DRAG_N_DROP_DISTANCE_THRESHOLD;
 }
 // [/SL:KB]
 

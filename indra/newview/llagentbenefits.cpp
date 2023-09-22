@@ -122,20 +122,13 @@ S32 LLAgentBenefits::getAnimatedObjectLimit() const
 	else
 	{
 		S32 max_attach = 0;
-		if (gSavedSettings.getBOOL("AnimatedObjectsIgnoreLimits"))
+		if (gAgent.getRegion())
 		{
-			max_attach = getAttachmentLimit();
-		}
-		else
-		{
-			if (gAgent.getRegion())
+			LLSD features;
+			gAgent.getRegion()->getSimulatorFeatures(features);
+			if (features.has("AnimatedObjects"))
 			{
-				LLSD features;
-				gAgent.getRegion()->getSimulatorFeatures(features);
-				if (features.has("AnimatedObjects"))
-				{
-					max_attach = features["AnimatedObjects"]["MaxAgentAnimatedObjectAttachments"].asInteger();
-				}
+				max_attach = features["AnimatedObjects"]["MaxAgentAnimatedObjectAttachments"].asInteger();
 			}
 		}
 		return max_attach;

@@ -481,6 +481,7 @@ static bool handleChatFontSizeChanged(const LLSD& newvalue)
 	return true;
 }
 
+// <FS:Ansariel> Keep custom chat persist time
 static bool handleChatPersistTimeChanged(const LLSD& newvalue)
 {
 	if(gConsole)
@@ -489,6 +490,7 @@ static bool handleChatPersistTimeChanged(const LLSD& newvalue)
 	}
 	return true;
 }
+// </FS:Ansariel>
 
 static bool handleConsoleMaxLinesChanged(const LLSD& newvalue)
 {
@@ -1276,7 +1278,7 @@ void settings_setup_listeners()
 	setting_setup_signal_listener(gSavedSettings, "RenderHiDPI", handleRenderHiDPIChanged);
     setting_setup_signal_listener(gSavedSettings, "TextureMemory", handleVideoMemoryChanged);
     setting_setup_signal_listener(gSavedSettings, "ChatConsoleFontSize", handleChatFontSizeChanged);
-    setting_setup_signal_listener(gSavedSettings, "ChatPersistTime", handleChatPersistTimeChanged);
+    setting_setup_signal_listener(gSavedSettings, "ChatPersistTime", handleChatPersistTimeChanged); // <FS:Ansariel> Keep custom chat persist time
     setting_setup_signal_listener(gSavedSettings, "ConsoleMaxLines", handleConsoleMaxLinesChanged);
     setting_setup_signal_listener(gSavedSettings, "UploadBakedTexOld", handleUploadBakedTexOldChanged);
     setting_setup_signal_listener(gSavedSettings, "UseOcclusion", handleUseOcclusionChanged);
@@ -1287,9 +1289,6 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "AudioLevelMusic", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "AudioLevelMedia", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "AudioLevelVoice", handleAudioVolumeChanged);
-    setting_setup_signal_listener(gSavedSettings, "AudioLevelDoppler", handleAudioVolumeChanged);
-    setting_setup_signal_listener(gSavedSettings, "AudioLevelRolloff", handleAudioVolumeChanged);
-    setting_setup_signal_listener(gSavedSettings, "AudioLevelUnderwaterRolloff", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "MuteAudio", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "MuteMusic", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "MuteMedia", handleAudioVolumeChanged);
@@ -1509,8 +1508,6 @@ DECL_LLCC(LLColor4U, LLColor4U(255, 200, 100, 255));
 LLSD test_llsd = LLSD()["testing1"] = LLSD()["testing2"];
 DECL_LLCC(LLSD, test_llsd);
 
-static LLCachedControl<std::string> test_BrowserHomePage("BrowserHomePage", "hahahahahha", "Not the real comment");
-
 void test_cached_control()
 {
 #define do { TEST_LLCC(T, V) if((T)mySetting_##T != V) LL_ERRS() << "Fail "#T << LL_ENDL; } while(0)
@@ -1527,9 +1524,6 @@ void test_cached_control()
 	TEST_LLCC(LLColor3, LLColor3(1.0f, 0.f, 0.5f));
 	TEST_LLCC(LLColor4U, LLColor4U(255, 200, 100, 255));
 //There's no LLSD comparsion for LLCC yet. TEST_LLCC(LLSD, test_llsd); 
-
-	// AO - Phoenixviewer doesn't want to send unecessary noise to secondlife.com
-	//if((std::string)test_BrowserHomePage != "http://www.secondlife.com") LL_ERRS() << "Fail BrowserHomePage" << LL_ENDL;
 }
 #endif // TEST_CACHED_CONTROL
 

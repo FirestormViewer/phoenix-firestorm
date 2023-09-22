@@ -116,7 +116,7 @@ void LLPersistentNotificationStorage::loadNotifications()
 
 	using namespace LLNotificationsUI;
 	LLScreenChannel* notification_channel = dynamic_cast<LLScreenChannel*>(LLChannelManager::getInstance()->
-		findChannelByID(LLUUID(gSavedSettings.getString("NotificationChannelUUID"))));
+		findChannelByID(LLNotificationsUI::NOTIFICATION_CHANNEL_UUID));
 
 	LLNotifications& instance = LLNotifications::instance();
 	startBulkUpdate(); // <FS:ND>

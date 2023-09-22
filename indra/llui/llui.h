@@ -61,6 +61,7 @@ void make_ui_sound(const char* name, bool force_sound = false);
 //void make_ui_sound_deferred(const char * name);
 void make_ui_sound_deferred(const char* name, bool force_sound = false);
 
+const S32 DRAG_N_DROP_DISTANCE_THRESHOLD = 3;
 // this enum is used by the llview.h (viewer) and the llassetstorage.h (viewer and sim) 
 enum EDragAndDropType
 {

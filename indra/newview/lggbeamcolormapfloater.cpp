@@ -40,13 +40,10 @@ S32 convertHueToX(F32 place)
 
 lggBeamColorMapFloater::lggBeamColorMapFloater(const LLSD& seed) : LLFloater(seed),
 	mContextConeOpacity(0.f),
-	mContextConeInAlpha(0.f),
-	mContextConeOutAlpha(0.f),
-	mContextConeFadeTime(0.f)
+	mContextConeInAlpha(CONTEXT_CONE_IN_ALPHA),
+	mContextConeOutAlpha(CONTEXT_CONE_OUT_ALPHA),
+	mContextConeFadeTime(CONTEXT_CONE_FADE_TIME)
 {
-	mContextConeInAlpha = gSavedSettings.getF32("ContextConeInAlpha");
-	mContextConeOutAlpha = gSavedSettings.getF32("ContextConeOutAlpha");
-	mContextConeFadeTime = gSavedSettings.getF32("ContextConeFadeTime");
 }
 
 lggBeamColorMapFloater::~lggBeamColorMapFloater()
