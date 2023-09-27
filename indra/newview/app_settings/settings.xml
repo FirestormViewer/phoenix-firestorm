@@ -1933,7 +1933,7 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-  <key>AutoAcceptNewInventory</key>
+    <key>AutoAcceptNewInventory</key>
     <map>
       <key>Comment</key>
       <string>Automatically accept new notecards/textures/landmarks</string>
@@ -2282,17 +2282,6 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>BrowserProxyExclusions</key>
-    <map>
-      <key>Comment</key>
-      <string>[NOT USED]</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string />
-    </map>
     <key>BrowserProxyPort</key>
     <map>
       <key>Comment</key>
@@ -2303,17 +2292,6 @@
       <string>S32</string>
       <key>Value</key>
       <integer>3128</integer>
-    </map>
-    <key>BrowserProxySocks45</key>
-    <map>
-      <key>Comment</key>
-      <string>[NOT USED]</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>5</integer>
     </map>
     <key>Socks5ProxyEnabled</key>
     <map>
@@ -2853,51 +2831,6 @@
     <map>
       <key>Comment</key>
       <string>Initial camera offset from avatar in Rear View</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Vector3</string>
-      <key>Value</key>
-      <array>
-        <real>-3.0</real>
-        <real>0.0</real>
-        <real>0.75</real>
-      </array>
-    </map>
-    <key>CameraOffsetFrontView</key>
-    <map>
-      <key>Comment</key>
-      <string>Initial camera offset from avatar in Front View</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Vector3</string>
-      <key>Value</key>
-      <array>
-        <real>2.2</real>
-        <real>0.0</real>
-        <real>0.0</real>
-      </array>
-    </map>
-    <key>CameraOffsetGroupView</key>
-    <map>
-      <key>Comment</key>
-      <string>Initial camera offset from avatar in Group View</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Vector3</string>
-      <key>Value</key>
-      <array>
-        <real>-1.0</real>
-        <real>0.7</real>
-        <real>0.5</real>
-      </array>
-    </map>
-    <key>CameraOffsetCustomPreset</key>
-    <map>
-      <key>Comment</key>
-      <string>Initial camera offset from avatar for the custom camera preset</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -3454,17 +3387,6 @@
       <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>ChatBarCustomWidth</key>
-    <map>
-      <key>Comment</key>
-      <string>Stores customized width of chat bar.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
       <key>Value</key>
       <integer>0</integer>
     </map>
@@ -5145,17 +5067,6 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>IncludeEnhancedSkeleton</key>
-    <map>
-      <key>Comment</key>
-      <string>Include extended skeleton joints when rendering skinned meshes.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
     <key>FSUnlinkConfirmEnabled</key>
     <map>
       <key>Comment</key>
@@ -5301,39 +5212,6 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>EnergyFromTop</key>
-    <map>
-      <key>Comment</key>
-      <string />
-      <key>Persist</key>
-      <integer>0</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>20</integer>
-    </map>
-    <key>EnergyHeight</key>
-    <map>
-      <key>Comment</key>
-      <string />
-      <key>Persist</key>
-      <integer>0</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>40</integer>
-    </map>
-    <key>EnergyWidth</key>
-    <map>
-      <key>Comment</key>
-      <string />
-      <key>Persist</key>
-      <integer>0</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>175</integer>
-    </map>
     <key>EventURL</key>
     <map>
       <key>Comment</key>
@@ -5356,32 +5234,6 @@
       <key>Value</key>
       <string>1</string>
     </map>
-	<key>FeatureManagerHTTPTable</key>
-      <map>
-        <key>Comment</key>
-        <string>Deprecated</string>
-        <key>Persist</key>
-        <integer>0</integer>
-        <key>Type</key>
-        <string>String</string>
-        <key>Value</key>
-        <string></string>
-        <key>Backup</key>
-        <integer>0</integer>
-    </map>
-    <key>FPSLogFrequency</key>
-        <map>
-        <key>Comment</key>
-        <string>Seconds between display of FPS in log (0 for never)</string>
-        <key>Persist</key>
-        <integer>1</integer>
-        <key>Type</key>
-        <string>F32</string>
-        <key>Value</key>
-        <real>10.0</real>
-        <key>Backup</key>
-            <integer>0</integer>
-        </map>
     <key>FilterItemsMaxTimePerFrameVisible</key>
     <map>
         <key>Comment</key>
@@ -5395,17 +5247,6 @@
         <key>Backup</key>
         <integer>0</integer>
     </map>
-    <key>FilterItemsMaxTimePerFrameUnvisible</key>
-    <map>
-      <key>Comment</key>
-        <string>Max time devoted to items filtering per frame for non visible inventory listings (in milliseconds)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-        <integer>1</integer>
-    </map>
     <key>MainWorkTime</key>
     <map>
         <key>Comment</key>
@@ -5416,17 +5257,6 @@
         <string>F32</string>
         <key>Value</key>
         <real>0.1</real>
-    </map>
-    <key>QueueInventoryFetchTimeout</key>
-    <map>
-        <key>Comment</key>
-        <string>Max time llcompilequeue will wait for inventory fetch to complete (in seconds)</string>
-        <key>Persist</key>
-        <integer>1</integer>
-        <key>Type</key>
-        <string>F32</string>
-        <key>Value</key>
-        <real>300.0</real>
     </map>
     <key>FindLandArea</key>
     <map>
@@ -5460,28 +5290,6 @@
       <string>String</string>
       <key>Value</key>
       <string>All</string>
-    </map>
-    <key>FindPeopleOnline</key>
-    <map>
-      <key>Comment</key>
-      <string>Limits people search to only users who are logged on</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>FindPlacesPictures</key>
-    <map>
-      <key>Comment</key>
-      <string>Display only results of find places that have pictures</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
     </map>
     <key>FirstName</key>
     <map>
@@ -5878,17 +5686,6 @@
       <key>Value</key>
       <real>2.75</real>
     </map>
-    <key>FlycamZoomDirect</key>
-    <map>
-      <key>Comment</key>
-      <string>Map flycam zoom axis directly to camera zoom.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <key>FlyingAtExit</key>
     <map>
       <key>Comment</key>
@@ -5906,51 +5703,6 @@
     <map>
       <key>Comment</key>
       <string>Initial focus point offset relative to avatar for the camera preset Rear View (x-axis is forward)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Vector3D</string>
-      <key>Value</key>
-      <array>
-        <real>1.0</real>
-        <real>0.0</real>
-        <real>1.0</real>
-      </array>
-    </map>
-    <key>FocusOffsetFrontView</key>
-    <map>
-      <key>Comment</key>
-      <string>Initial focus point offset relative to avatar for the camera preset Front View</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Vector3D</string>
-      <key>Value</key>
-      <array>
-        <real>0.0</real>
-        <real>0.0</real>
-        <real>0.0</real>
-      </array>
-    </map>
-    <key>FocusOffsetGroupView</key>
-    <map>
-      <key>Comment</key>
-      <string>Initial focus point offset relative to avatar for the camera preset Group View</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Vector3D</string>
-      <key>Value</key>
-      <array>
-        <real>1.5</real>
-        <real>0.7</real>
-        <real>1.0</real>
-      </array>
-    </map>
-    <key>FocusOffsetCustomPreset</key>
-    <map>
-      <key>Comment</key>
-      <string>Initial focus point offset relative to avatar for the custom camera preset (x-axis is forward)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -6005,19 +5757,6 @@
       <string>F32</string>
       <key>Value</key>
       <real>0.75</real>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
-    <key>FolderLoadingMessageWaitTime</key>
-    <map>
-      <key>Comment</key>
-      <string>Seconds to wait before showing the LOADING... text in folder views</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>0.5</real>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -6088,19 +5827,6 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
-    </map>
-    <key>ForceMandatoryUpdate</key>
-    <map>
-      <key>Comment</key>
-      <string>For QA: On next startup, forces the auto-updater to run</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>ForceMissingType</key>
     <map>
@@ -6258,28 +5984,6 @@
       <key>Value</key>
       <integer>32</integer>
     </map>
-    <key>GroupNotifyBoxHeight</key>
-    <map>
-      <key>Comment</key>
-      <string>Height of group notice messages</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>260</integer>
-    </map>
-    <key>GroupNotifyBoxWidth</key>
-    <map>
-      <key>Comment</key>
-      <string>Width of group notice messages</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>305</integer>
-    </map>
     <key>HelpURLFormat</key>
     <map>
       <key>Comment</key>
@@ -6381,19 +6085,6 @@
       <key>Value</key>
       <string />
     </map>
-    <key>HtmlHelpLastPage</key>
-    <map>
-      <key>Comment</key>
-      <string>Last URL visited via help system</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string />
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
     <key>HttpPipelining</key>
     <map>
       <key>Comment</key>
@@ -6416,32 +6107,10 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>IMShowTimestamps</key>
-    <map>
-      <key>Comment</key>
-      <string>Show timestamps in IM</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
     <key>IMShowControlPanel</key>
     <map>
       <key>Comment</key>
       <string>Show IM Control Panel</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-     <key>IMShowContentPanel</key>
-    <map>
-      <key>Comment</key>
-      <string>Show Toolbar and Body Panels</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -6527,28 +6196,6 @@
       <key>Value</key>
       <real>0.0</real>
     </map>
-     <key>InspectorFadeTime</key>
-    <map>
-      <key>Comment</key>
-      <string>Fade out timing for inspectors</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>0.5</real>
-    </map>
-	<key>InspectorShowTime</key>
-    <map>
-      <key>Comment</key>
-      <string>Stay timing for inspectors</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>3.0</real>
-    </map>
     <key>InstallLanguage</key>
     <map>
       <key>Comment</key>
@@ -6628,17 +6275,6 @@
 		<key>Backup</key>
 		<integer>0</integer>
 	</map>
-    <key>InventoryOutboxDisplayBoth</key>
-    <map>
-        <key>Comment</key>
-        <string>(Deprecated) Show the legacy Merchant Outbox UI as well as the Marketplace Listings UI</string>
-        <key>Persist</key>
-        <integer>1</integer>
-        <key>Type</key>
-        <string>Boolean</string>
-        <key>Value</key>
-        <integer>0</integer>
-    </map>
 	<key>InventoryOutboxLogging</key>
 	<map>
 		<key>Comment</key>
@@ -7041,17 +6677,6 @@
       <key>Value</key>
         <real>2.0</real>
     </map>
-    <key>LCDDestination</key>
-    <map>
-      <key>Comment</key>
-      <string>Which LCD to use</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <key>LeapCommand</key>
     <map>
       <key>Comment</key>
@@ -7198,19 +6823,6 @@
       <string>S32</string>
       <key>Value</key>
       <integer>0</integer>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
-    <key>LastFindPanel</key>
-    <map>
-      <key>Comment</key>
-      <string>Controls which find operation appears by default when clicking "Find" button </string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string>find_all_panel</string>
       <key>Backup</key>
       <integer>0</integer>
     </map>
@@ -7430,19 +7042,6 @@
       <key>Value</key>
       <integer>2</integer>
     </map>
-    <key>LeftClickShowMenu</key>
-    <map>
-      <key>Comment</key>
-      <string>Unused obsolete setting</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-      <key>Backup</key>
-      <integer>0</integer>
-    </map>
     <key>LimitDragDistance</key>
     <map>
       <key>Comment</key>
@@ -7611,17 +7210,6 @@
     <key>Value</key>
     <real>40.0</real>
   </map>
-  <key>LoginSRVPump</key>
-  <map>
-    <key>Comment</key>
-    <string>(Deprecated) Name of the message pump that handles SRV request)</string>
-    <key>Persist</key>
-    <integer>0</integer>
-    <key>Type</key>
-    <string>String</string>
-    <key>Value</key>
-    <string>LLAres</string>
-  </map>
   <key>LogMessages</key>
     <map>
       <key>Comment</key>
@@ -7712,17 +7300,6 @@
       <key>Value</key>
       <real>60.0</real>
       <key>Backup</key>
-      <integer>0</integer>
-    </map>
-    <key>MapOverlayIndex</key>
-    <map>
-      <key>Comment</key>
-      <string>Currently selected world map type</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
       <integer>0</integer>
     </map>
     <key>MapScale</key>
@@ -9327,28 +8904,6 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>NotifyBoxHeight</key>
-    <map>
-      <key>Comment</key>
-      <string>Height of notification messages</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>200</integer>
-    </map>
-    <key>NotifyBoxWidth</key>
-    <map>
-      <key>Comment</key>
-      <string>Width of notification messages</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>305</integer>
-    </map>
     <key>NotificationCanEmbedInIM</key>
     <map>
       <key>Comment</key>
@@ -10716,17 +10271,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>RadioLandBrushSize</key>
-    <map>
-      <key>Comment</key>
-      <string>Size of land modification brush (0 = small, 1 = medium, 2 = large)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <key>RezUnderLandGroup</key>
     <map>
       <key>Comment</key>
@@ -10749,17 +10293,6 @@ Change of this parameter will affect the layout of buttons in notification toast
         <key>Value</key>
             <real>1.0</real>
         </map>
-    <key>MediaBrowserWindowLimit</key>
-    <map>
-      <key>Comment</key>
-      <string>Maximum number of media brower windows that can be open at once in the media browser floater (0 for no limit)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>5</integer>
-    </map>
     <key>WebContentWindowLimit</key>
     <map>
       <key>Comment</key>
@@ -11049,17 +10582,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
-  <key>RenderAvatar</key>
-    <map>
-      <key>Comment</key>
-      <string>Render Avatars</string>
-      <key>Persist</key>
-      <integer>0</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
     </map>
   <key>RenderAvatarCloth</key>
     <map>
@@ -13727,17 +13249,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>SecondLifeEnterprise</key>
-    <map>
-      <key>Comment</key>
-      <string>Enables Second Life Enterprise features</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <key>SelectMovableOnly</key>
     <map>
       <key>Comment</key>
@@ -13976,17 +13487,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>0</integer>
       <key>Backup</key>
       <integer>0</integer>
-    </map>
-    <key>ShowEmptyFoldersWhenSearching</key>
-    <map>
-      <key>Comment</key>
-      <string>Shows folders that do not have any visible contents when applying a filter to inventory</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
     </map>
     <key>ShowEventRecorderMenuItems</key>
     <map>
@@ -14299,45 +13799,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
-    </map>
-    <key>ShowPGSearchAll</key>
-    <map>
-      <key>Comment</key>
-      <string>Display results of search All that are flagged as general</string>
-      <key>Persist</key>
-      <integer>1</integer>
-	  <key>HideFromEditor</key>
-	  <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>ShowMatureSearchAll</key>
-    <map>
-      <key>Comment</key>
-      <string>Display results of search All that are flagged as moderate</string>
-      <key>Persist</key>
-      <integer>1</integer>
-	  <key>HideFromEditor</key>
-	  <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>ShowAdultSearchAll</key>
-    <map>
-      <key>Comment</key>
-      <string>Display results of search All that are flagged as adult</string>
-      <key>Persist</key>
-      <integer>1</integer>
-	  <key>HideFromEditor</key>
-	  <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
     </map>
     <key>ShowPGGroups</key>
     <map>
@@ -15365,28 +14826,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
-    <key>TexturePickerShowFolders</key>
-    <map>
-      <key>Comment</key>
-      <string>Show folders with no textures in texture picker</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>TexturePickerSortOrder</key>
-    <map>
-      <key>Comment</key>
-      <string>Specifies sort key for textures in texture picker (+0 = name, +1 = date, +2 = folders always by name, +4 = system folders to top)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>U32</string>
-      <key>Value</key>
-      <integer>2</integer>
-    </map>
     <key>TextureReverseByteRange</key>
     <map>
       <key>Comment</key>
@@ -15429,17 +14868,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Maximum allowable downstream bandwidth (kilo bits per second)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>500.0</real>
-    </map>
-    <key>UpdaterMaximumBandwidth</key>
-    <map>
-      <key>Comment</key>
-      <string>Obsolete: this parameter is no longer used.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -15644,28 +15072,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>S32</string>
       <key>Value</key>
       <integer>6</integer>
-    </map>
-    <key>UICheckboxctrlBtnSize</key>
-    <map>
-      <key>Comment</key>
-      <string>UI Checkbox Control Button Size</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>13</integer>
-    </map>
-    <key>UICheckboxctrlHeight</key>
-    <map>
-      <key>Comment</key>
-      <string>UI Checkbox Control Height</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>16</integer>
     </map>
     <key>UICheckboxctrlHPad</key>
     <map>
@@ -16091,17 +15497,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Size of UI relative to default layout on 1024x768 screen</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>1.0</real>
-    </map>
-    <key>LastSystemUIScaleFactor</key>
-    <map>
-      <key>Comment</key>
-      <string>OBSOLETE: System UI scale factor is now automatically and independently from UIScaleFactor applied</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -16751,17 +16146,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>16</integer>
     </map>
-    <key>UISpinctrlDefaultLabelWidth</key>
-    <map>
-      <key>Comment</key>
-      <string>UI spin control default label width</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>10</integer>
-    </map>
     <key>UISpinctrlSpacing</key>
     <map>
       <key>Comment</key>
@@ -16882,39 +16266,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>U32</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
-    <key>UpdaterServiceCheckPeriod</key>
-    <map>
-      <key>Comment</key>
-      <string>Obsolete; no longer used.</string>
-      <key>Persist</key>
-      <integer>0</integer>
-      <key>Type</key>
-      <string>U32</string>
-      <key>Value</key>
-      <integer>3600</integer>
-    </map>
-    <key>UpdaterServiceURL</key>
-    <map>
-      <key>Comment</key>
-      <string>Obsolete; no longer used.</string>
-      <key>Persist</key>
-      <integer>0</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string>https://update.phoenixviewer.com</string>
-    </map>
-    <key>UpdaterServicePath</key>
-    <map>
-      <key>Comment</key>
-      <string>Obsolete: no longer used</string>
-      <key>Persist</key>
-      <integer>0</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string>update</string>
     </map>
     <key>UpdaterWillingToTest</key>
     <map>
@@ -17195,17 +16546,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>-1</string>
       <key>Backup</key>
       <integer>0</integer>
-    </map>
-    <key>SocialPhotoResolution</key>
-    <map>
-      <key>Comment</key>
-      <string>Default resolution when sharing photo using the social floaters</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string>[i800,i600]</string>
     </map>
     <key>sourceid</key>
     <map>
@@ -19266,17 +18606,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>EnableGroupInfo</key>
-    <map>
-      <key>Comment</key>
-      <string>Enable viewing and editing of group info from web link</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
     <key>EnablePlaceProfile</key>
     <map>
       <key>Comment</key>
@@ -19288,43 +18617,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>EnablePicks</key>
-    <map>
-      <key>Comment</key>
-      <string>Enable editing of picks from web link</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>EnableWorldMap</key>
-    <map>
-      <key>Comment</key>
-      <string>Enable opening world map from web link</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
   <key>EnableAvatarPay</key>
   <map>
     <key>Comment</key>
     <string>Enable paying other avatars from web link</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>1</integer>
-  </map>
-  <key>EnableVoiceCall</key>
-  <map>
-    <key>Comment</key>
-    <string>Enable voice calls from web link</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -19347,17 +18643,6 @@ Change of this parameter will affect the layout of buttons in notification toast
   <map>
     <key>Comment</key>
     <string>Enable opening inventory from web link</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>1</integer>
-  </map>
-  <key>EnableSearch</key>
-  <map>
-    <key>Comment</key>
-    <string>Enable opening search from web link</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -20262,28 +19547,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
     </map>
-  <key>FMODDecodeBufferSize</key>
-  <map>
-    <key>Comment</key>
-    <string>Sets the streaming decode buffer size (in milliseconds) for FMOD Studio</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>U32</string>
-    <key>Value</key>
-    <integer>1000</integer>
-    </map>
-  <key>FMODStreamBufferSize</key>
-  <map>
-    <key>Comment</key>
-    <string>Sets the streaming buffer size (in milliseconds) for FMOD Studio</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>U32</string>
-    <key>Value</key>
-    <integer>7000</integer>
-  </map>
   <key>FMODResampleMethod</key>
   <map>
     <key>Comment</key>

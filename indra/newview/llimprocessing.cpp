@@ -229,9 +229,15 @@ void inventory_offer_handler(LLOfferInfo* info)
     }
 
 
-    // <FS:Ansariel> Keep auto-accept option
     bool bAutoAccept(false);
     // Avoid the Accept/Discard dialog if the user so desires. JC
+    // <FS:Ansariel> Auto-accept any kind of inventory (FIRE-4128)
+    //if (gSavedSettings.getBOOL("AutoAcceptNewInventory")
+    //  && (info->mType == LLAssetType::AT_NOTECARD
+    //      || info->mType == LLAssetType::AT_LANDMARK
+    //      || info->mType == LLAssetType::AT_TEXTURE))
+//  if (gSavedSettings.getBOOL("AutoAcceptNewInventory"))
+    // </FS:Ansariel> Auto-accept any kind of inventory (FIRE-4128)
 // [RLVa:KB]
     // Don't auto-accept give-to-RLV inventory offers
     if ( (gSavedSettings.getBOOL("AutoAcceptNewInventory")) &&
@@ -242,7 +248,6 @@ void inventory_offer_handler(LLOfferInfo* info)
         // and possibly open them on receipt depending upon "ShowNewInventory".
         bAutoAccept = true;
     }
-    // </FS:Ansariel>
 
     // Strip any SLURL from the message display. (DEV-2754)
     std::string msg = info->mDesc;
@@ -312,7 +317,7 @@ void inventory_offer_handler(LLOfferInfo* info)
     LLNotification::Params p;
 
     // Object -> Agent Inventory Offer
-    if (info->mFromObject && !bAutoAccept) // <FS:Ansariel> Keep auto-accept option
+    if (info->mFromObject && !bAutoAccept)
     {
 // [RLVa:KB] - Checked: RLVa-1.2.2
         // Only filter if the object owner is a nearby agent
@@ -397,7 +402,6 @@ void inventory_offer_handler(LLOfferInfo* info)
             send_do_not_disturb_message(gMessageSystem, info->mFromID);
         }
 
-        // <FS:Ansariel> Keep auto-accept option
         if (!bAutoAccept) // if we auto accept, do not pester the user
         {
             // Inform user that there is a script floater via toast system
@@ -405,7 +409,6 @@ void inventory_offer_handler(LLOfferInfo* info)
             p.payload = payload;
             LLPostponedNotification::add<LLPostponedOfferNotification>(p, info->mFromID, false);
         }
-        // </FS:Ansariel>
         // <FS:Ansariel> FIRE-19540: Log auto-accepted inventory to nearby chat
         else if (gSavedSettings.getBOOL("FSLogAutoAcceptInventoryToChat"))
         {

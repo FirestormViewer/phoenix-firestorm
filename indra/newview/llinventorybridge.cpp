@@ -113,6 +113,7 @@ typedef std::pair<LLUUID, LLUUID> two_uuids_t;
 typedef std::list<two_uuids_t> two_uuids_list_t;
 
 const F32 SOUND_GAIN = 1.0f;
+const F32 FOLDER_LOADING_MESSAGE_DELAY = 0.5f; // Seconds to wait before showing the LOADING... text in folder views
 
 struct LLMoveInv
 {
@@ -2509,9 +2510,7 @@ void LLFolderBridge::buildDisplayName() const
 
 std::string LLFolderBridge::getLabelSuffix() const
 {
-    static LLCachedControl<F32> folder_loading_message_delay(gSavedSettings, "FolderLoadingMessageWaitTime", 0.5f);
-    
-    if (mIsLoading && mTimeSinceRequestStart.getElapsedTimeF32() >= folder_loading_message_delay())
+    if (mIsLoading && mTimeSinceRequestStart.getElapsedTimeF32() >= FOLDER_LOADING_MESSAGE_DELAY)
     {
         return llformat(" (%s) ", LLTrans::getString("LoadingData").c_str());
     }
@@ -5236,9 +5235,7 @@ LLUIImagePtr LLMarketplaceFolderBridge::getMarketplaceFolderIcon(BOOL is_open) c
 
 std::string LLMarketplaceFolderBridge::getLabelSuffix() const
 {
-    static LLCachedControl<F32> folder_loading_message_delay(gSavedSettings, "FolderLoadingMessageWaitTime", 0.5f);
-    
-    if (mIsLoading && mTimeSinceRequestStart.getElapsedTimeF32() >= folder_loading_message_delay())
+    if (mIsLoading && mTimeSinceRequestStart.getElapsedTimeF32() >= FOLDER_LOADING_MESSAGE_DELAY)
     {
         return llformat(" (%s) ", LLTrans::getString("LoadingData").c_str());
     }

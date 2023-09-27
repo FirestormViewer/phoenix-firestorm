@@ -837,22 +837,7 @@ void LLFloaterPreference::onShowGroupNoticesTopRightChanged()
 
 void LLFloaterPreference::updateDeleteTranscriptsButton()
 {
-	// <FS:ND> LLLogChat::getListOfTranscriptFiles will go through the whole chatlog dir, reach a bit of each file,
-	// then append this file to the return-list if it seems to be valid.
-	// All this only to see if there is at least one item.
-	// There's two ways to make this faster:
-	//   1. Make a new function which returns just true/false and exist with true as soon as one valid file is found.
-	//   2. Always enable this button.
-	// There seems to be little reason why this button should ever be disabled, so 2. it is, unless someone knows 
-	// a good reason why 1. is the better way to handle this.
-	
-	// std::vector<std::string> list_of_transcriptions_file_names;
-	// LLLogChat::getListOfTranscriptFiles(list_of_transcriptions_file_names);
-	// getChild<LLButton>("delete_transcripts")->setEnabled(list_of_transcriptions_file_names.size() > 0);
-
-	getChild<LLButton>("delete_transcripts")->setEnabled( true );
-
-	// </FS:ND>
+	getChild<LLButton>("delete_transcripts")->setEnabled(LLLogChat::transcriptFilesExist());
 }
 
 void LLFloaterPreference::onDoNotDisturbResponseChanged()
@@ -2226,12 +2211,6 @@ void LLFloaterPreference::refreshEnabledState()
 	LLCheckBoxCtrl* bumpshiny_ctrl = getChild<LLCheckBoxCtrl>("BumpShiny");
 	bool bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump");
 	bumpshiny_ctrl->setEnabled(bumpshiny ? TRUE : FALSE);
-	
-    // <FS:Ansariel> Does not exist
-    //LLCheckBoxCtrl* ctrl_enhanced_skel = getChild<LLCheckBoxCtrl>("AvatarEnhancedSkeleton");
-    //bool enhanced_skel_enabled = gSavedSettings.getBOOL("IncludeEnhancedSkeleton");
-    //ctrl_enhanced_skel->setValue(enhanced_skel_enabled);
-    // </FS:Ansariel>
 
 	// Avatar Mode
 	// Avatar Render Mode
