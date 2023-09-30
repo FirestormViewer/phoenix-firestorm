@@ -6,6 +6,14 @@
 	<string name="status_offline">
 		Offline
 	</string>
+	<string name="status_unknown">
+		Sconosciuto
+	</string>
+	<string name="CaptionTextAcctInfo">
+[ACCTTYPE]
+[PAYMENTINFO]
+[FSDEV][FSSUPP][FSQA][FSGW][FIRESTORM]
+	</string>
 	<string name="payment_update_link_url">
 		http://www.secondlife.com/account/billing.php?lang=en
 	</string>
@@ -21,10 +29,10 @@
 	<string name="display_name_text_args">
 		[DISPLAY_NAME]
 	</string>
-	<string name="FSDev" value="Sviluppatore"/>
-	<string name="FSSupp" value="Assistenza"/>
-	<string name="FSQualityAssurance" value="Bug Hunter"/>
-	<string name="FSGW" value="Gateway"/>
+	<string name="FSDev" value="Sviluppatore "/>
+	<string name="FSSupp" value="Supporto "/>
+	<string name="FSQualityAssurance" value="Bug Hunter "/>
+	<string name="FSGW" value="Gateway "/>
 	<text name="name_label" value="Nome:"/>
 	<button label="Nome:" name="set_name" tool_tip="Imposta nome visualizzato"/>
 	<panel name="name_holder">
