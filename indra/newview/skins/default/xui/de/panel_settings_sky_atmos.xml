@@ -6,6 +6,9 @@
 	<string name="brightness_string">
 		Helligkeit:
 	</string>
+	<string name="hdr_tooltip">
+		Intensität von von Belichtungseffekten wie realistischer strahlender Himmel und dynamische Belichtung. 1.0 ist Standard, 0 ist aus, Werte zwuschen 0 und 1 mischen Umgebung mit HDR.
+	</string>
 	<layout_stack name="main_ls">
 		<layout_panel name="top_lp">
 			<text name="ambient_color_label">
@@ -53,7 +56,7 @@
 					<text name="probe_ambiance_label" tool_tip="Strahlungsintensität. Aktiviert HDR-Beleuchtungsmodell, falls nicht 0." width="120">
 						Umgebung Reflexionstest (HDR):
 					</text>
-					<slider name="probe_ambiance" width="187"/>
+					<slider name="probe_ambiance" tool_tip="Intensität von umgebungsbasierter indirekter Beleuchtung. Bei 0 HDR wird die Skala zu Helligkeit." width="187"/>
 					<text name="scene_gamma_label" width="120">
 						Helligkeit:
 					</text>
