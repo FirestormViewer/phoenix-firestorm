@@ -865,9 +865,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bacaa5403be0f1cba52b2250c2c227d9</string>
+              <string>8e92fc9ec2b3be6d2a5387fc283f954f</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/curl-7.81.0.222121724-linux64-222121724.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/curl-8.3.0.232750741-linux64-232750741.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2457,9 +2457,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b460d5bac2d20b38cb73b54d0ab1b6e3</string>
+              <string>57670eaa6333d9127b8ba88f120e56dd</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/nghttp2-1.25.0.180841549-linux64-180841549.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/nghttp2-1.56.0.232750738-linux64-232750738.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2785,9 +2785,9 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>cdd9c6c484542a2e1be99149c4f0e75f</string>
+              <string>a3b2dbffa28a2b2a63c5d3ce2c12bc85</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/openssl-1.1.1l.222121440-linux64-222121440.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/openssl-1.1.1w.232750656-linux64-232750656.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
