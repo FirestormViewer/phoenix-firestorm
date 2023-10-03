@@ -65,8 +65,10 @@ void pushVerts(LLVolume* volume);
 void drawBoxOutline(const LLVector3& pos, const LLVector3& size);
 void drawBox(const LLVector3& c, const LLVector3& r);
 S32 get_physics_detail(const LLVolumeParams& volume_params, const LLVector3& scale);
+void renderMeshBaseHullWithOutline(LLVOVolume* volume, U32 data_mask, LLColor4& color, LLColor4& line_color);// <FS:Beq/> restore physics shape display in edit mode
 void renderMeshBaseHull(LLVOVolume* volume, U32 data_mask, LLColor4& color);
 void render_hull(LLModel::PhysicsMesh& mesh, const LLColor4& color);
+void render_hull_with_outline(LLModel::PhysicsMesh& mesh, const LLColor4& color, const LLColor4& line_color); // <FS:Beq/> restore physics shape display in edit mode
 //</FS:BEQ>
 
 /*

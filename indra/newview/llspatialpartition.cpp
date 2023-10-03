@@ -2102,6 +2102,43 @@ S32 get_physics_detail(const LLVolumeParams& volume_params, const LLVector3& sca
 	return detail;
 }
 
+// <FS:Beq> Restore physics shape rendering in edit view.
+void renderMeshBaseHull(LLVOVolume* volume, U32 data_mask, LLColor4& color, LLColor4& line_color)
+{
+	LLUUID mesh_id = volume->getVolume()->getParams().getSculptID();
+	LLModel::Decomposition* decomp = gMeshRepo.getDecomposition(mesh_id);
+
+	const LLVector3 center(0,0,0);
+	const LLVector3 size(0.25f,0.25f,0.25f);
+
+	if (decomp)
+	{		
+		if (!decomp->mBaseHullMesh.empty())
+		{
+			gGL.diffuseColor4fv(color.mV);
+			LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mBaseHullMesh.mPositions);
+
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            gGL.diffuseColor4fv(line_color.mV);
+            LLVertexBuffer::drawArrays(LLRender::TRIANGLES, decomp->mBaseHullMesh.mPositions);
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+		else
+		{
+			gMeshRepo.buildPhysicsMesh(*decomp);
+			gGL.diffuseColor4f(0,1,1,1);
+			drawBoxOutline(center, size);
+		}
+
+	}
+	else
+	{
+		gGL.diffuseColor3f(1,0,1);
+		drawBoxOutline(center, size);
+	}
+}
+// </FS:Beq>
+
 void renderMeshBaseHull(LLVOVolume* volume, U32 data_mask, LLColor4& color)
 {
 	LLUUID mesh_id = volume->getVolume()->getParams().getSculptID();
@@ -2131,6 +2168,20 @@ void renderMeshBaseHull(LLVOVolume* volume, U32 data_mask, LLColor4& color)
 		drawBoxOutline(center, size);
 	}
 }
+
+// <FS:Beq> restore physics shape in edit view display
+void render_hull_with_outline(LLModel::PhysicsMesh& mesh, const LLColor4& color, const LLColor4& line_color)
+{
+	gGL.diffuseColor4fv(color.mV);
+	LLVertexBuffer::drawArrays(LLRender::TRIANGLES, mesh.mPositions);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	gGL.setLineWidth(3.f); // <FS> Line width OGL core profile fix by Rye Mutt
+	gGL.diffuseColor4fv(line_color.mV);
+	LLVertexBuffer::drawArrays(LLRender::TRIANGLES, mesh.mPositions);
+	gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+// </FS:Beq>
 
 void render_hull(LLModel::PhysicsMesh& mesh, const LLColor4& color)
 {
