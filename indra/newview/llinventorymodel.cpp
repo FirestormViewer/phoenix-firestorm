@@ -3559,7 +3559,7 @@ void LLInventoryModel::createCommonSystemCategories()
 	gInventory.ensureCategoryForTypeExists(LLFolderType::FT_CURRENT_OUTFIT);
 	gInventory.ensureCategoryForTypeExists(LLFolderType::FT_LANDMARK); // folder should exist before user tries to 'landmark this'
     gInventory.ensureCategoryForTypeExists(LLFolderType::FT_SETTINGS);
-    gInventory.findCategoryUUIDForType(LLFolderType::FT_MATERIAL, true); // probably should be server created
+    gInventory.ensureCategoryForTypeExists(LLFolderType::FT_MATERIAL); // probably should be server created
     gInventory.ensureCategoryForTypeExists(LLFolderType::FT_INBOX);
 }
 

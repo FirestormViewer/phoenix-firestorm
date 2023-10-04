@@ -3099,11 +3099,19 @@ void LLEnvironment::DayTransition::animate()
                 setWater(mNextInstance->getWater());
     });
 
+
+    // pause probe updates and reset reflection maps on sky change
+    gPipeline.mReflectionMapManager.pause();
+    gPipeline.mReflectionMapManager.reset();
+
     mSky = mStartSky->buildClone();
     mBlenderSky = std::make_shared<LLSettingsBlenderTimeDelta>(mSky, mStartSky, mNextInstance->getSky(), mTransitionTime);
     mBlenderSky->setOnFinished(
         [this](LLSettingsBlender::ptr_t blender) {
         mBlenderSky.reset();
+
+        // resume reflection probe updates
+        gPipeline.mReflectionMapManager.resume();
 
         if (!mBlenderSky && !mBlenderWater)
             LLEnvironment::instance().mCurrentEnvironment = mNextInstance;
@@ -3695,12 +3703,19 @@ namespace
             LLSettingsSky::ptr_t target_sky(start_sky->buildClone());
             mInjectedSky->setSource(target_sky);
 
+            // clear reflection probes and pause updates during sky change
+            gPipeline.mReflectionMapManager.pause();
+            gPipeline.mReflectionMapManager.reset();
+
             mBlenderSky = std::make_shared<LLSettingsBlenderTimeDelta>(target_sky, start_sky, psky, transition);
             mBlenderSky->setOnFinished(
                 [this, psky](LLSettingsBlender::ptr_t blender) 
                 {
                     mBlenderSky.reset();
                     mInjectedSky->setSource(psky);
+
+                    // resume updating reflection probes when done animating sky
+                    gPipeline.mReflectionMapManager.resume();
                     setSky(mInjectedSky);
                     if (!mBlenderWater && (countExperiencesActive() == 0))
                     {

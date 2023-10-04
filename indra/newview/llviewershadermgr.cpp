@@ -2300,12 +2300,12 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
         if (local_light_kill)
         {
             gDeferredSoftenWaterProgram.addPermutation("LOCAL_LIGHT_KILL", "1");
-            gDeferredSoftenWaterProgram.addPermutation("HAS_SSAO", "1");
         }
 
 		if (gSavedSettings.getBOOL("RenderDeferredSSAO"))
 		{ //if using SSAO, take screen space light map into account as if shadows are enabled
 			gDeferredSoftenWaterProgram.mShaderLevel = llmax(gDeferredSoftenWaterProgram.mShaderLevel, 2);
+            gDeferredSoftenWaterProgram.addPermutation("HAS_SSAO", "1");
 		}
 
 		success = gDeferredSoftenWaterProgram.createShader(NULL, NULL);

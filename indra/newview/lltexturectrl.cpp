@@ -724,8 +724,8 @@ void LLFloaterTexturePicker::draw()
 
 		mDefaultBtn->setEnabled(mImageAssetID != mDefaultImageAssetID || mTentative);
 		mBlankBtn->setEnabled((mImageAssetID != mBlankImageAssetID && mBlankImageAssetID.notNull()) || mTentative);
-		mNoneBtn->setEnabled(mImageAssetID != mTransparentImageAssetID || mTentative); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
-		mTransparentBtn->setEnabled(mAllowNoTexture && (!mImageAssetID.isNull() || mTentative));
+		mNoneBtn->setEnabled(mAllowNoTexture && (!mImageAssetID.isNull() || mTentative));
+		mTransparentBtn->setEnabled((mImageAssetID != mTransparentImageAssetID && mTransparentImageAssetID.notNull()) || mTentative); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 
 		LLFloater::draw();
 
@@ -1119,7 +1119,6 @@ void LLFloaterTexturePicker::onModeSelect(LLUICtrl* ctrl, void *userdata)
 	self->mDefaultBtn->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
 	self->mBlankBtn->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
 	self->mNoneBtn->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
-	self->mPipetteBtn->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
 	self->mTransparentBtn->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
 	self->getChild<LLFilterEditor>("inventory search editor")->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
 	self->getChild<LLInventoryPanel>("inventory panel")->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
@@ -1989,11 +1988,12 @@ BOOL LLTextureCtrl::handleMouseDown(S32 x, S32 y, MASK mask)
                 //grab textures first...
                 LLInventoryModelBackgroundFetch::instance().start(gInventory.findCategoryUUIDForType(LLFolderType::FT_TEXTURE));
             }
-			//...then start full inventory fetch (should have been done on startup, but just in case.
+			//...then start full inventory fetch.
             if (!LLInventoryModelBackgroundFetch::instance().inventoryFetchStarted())
             {
                 LLInventoryModelBackgroundFetch::instance().start();
             }
+			handled = TRUE;
 		}
 		// <FS:Ansariel> Texture preview mode
 		//else

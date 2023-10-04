@@ -2099,7 +2099,6 @@ void create_new_item(const std::string& name,
             next_owner_perm = LLFloaterPerms::getNextOwnerPerms("Materials");
             break;
         }
-
         default:
         {
             cb = new LLBoostFuncInventoryCallback();
@@ -2344,12 +2343,13 @@ void menu_create_inventory_item(LLInventoryPanel* panel, LLUUID dest_id, const L
     }
     else if ("material" == type_name)
     {
-        const LLUUID parent_id = bridge ? bridge->getUUID() : gInventory.findCategoryUUIDForType(LLFolderType::FT_MATERIAL);
+        const LLUUID parent_id = dest_id.notNull() ? dest_id : gInventory.findCategoryUUIDForType(LLFolderType::FT_MATERIAL);
         create_new_item(NEW_MATERIAL_NAME,
             parent_id,
             LLAssetType::AT_MATERIAL,
             LLInventoryType::IT_MATERIAL,
-            PERM_ALL);	// overridden in create_new_item
+            PERM_ALL,
+            created_cb);	// overridden in create_new_item
     }
     else if (("sky" == type_name) || ("water" == type_name) || ("daycycle" == type_name))
     {
