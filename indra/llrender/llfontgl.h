@@ -198,6 +198,8 @@ public:
 	static LLFontGL* getFontEmojiHuge();
 	static LLFontGL* getFontMonospace();
 	static LLFontGL* getFontSansSerifSmall();
+    static LLFontGL* getFontSansSerifSmallBold();
+    static LLFontGL* getFontSansSerifSmallItalic();
 	static LLFontGL* getFontSansSerif();
 	static LLFontGL* getFontSansSerifBig();
 	static LLFontGL* getFontSansSerifHuge();

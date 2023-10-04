@@ -940,39 +940,55 @@ namespace action_give_inventory
 	/**
 	 * Checks My Inventory visibility.
 	 */
+    static bool is_give_inventory_acceptable_ids(const std::set<LLUUID> inventory_selected_uuids)
+    {
+        if (inventory_selected_uuids.empty()) return false; // nothing selected
+
+        bool acceptable = false;
+        std::set<LLUUID>::const_iterator it = inventory_selected_uuids.begin();
+        const std::set<LLUUID>::const_iterator it_end = inventory_selected_uuids.end();
+        for (; it != it_end; ++it)
+        {
+            LLViewerInventoryCategory* inv_cat = gInventory.getCategory(*it);
+            // any category can be offered.
+            if (inv_cat)
+            {
+                acceptable = true;
+                continue;
+            }
+
+            LLViewerInventoryItem* inv_item = gInventory.getItem(*it);
+            // check if inventory item can be given
+            if (LLGiveInventory::isInventoryGiveAcceptable(inv_item))
+            {
+                acceptable = true;
+                continue;
+            }
+
+            // there are neither item nor category in inventory
+            acceptable = false;
+            break;
+        }
+    return acceptable;
+    }
 
 	static bool is_give_inventory_acceptable(LLInventoryPanel* panel = NULL)
 	{
 		// check selection in the panel
-		const std::set<LLUUID> inventory_selected_uuids = LLAvatarActions::getInventorySelectedUUIDs(panel);
-		if (inventory_selected_uuids.empty()) return false; // nothing selected
+        std::set<LLUUID> inventory_selected_uuids = LLAvatarActions::getInventorySelectedUUIDs(panel);
+		if (inventory_selected_uuids.empty())
+        {
+            if(panel && panel->getRootFolder() && panel->getRootFolder()->isSingleFolderMode())
+            {
+                inventory_selected_uuids.insert(panel->getRootFolderID());
+            }
+            else
+            {
+                return false; // nothing selected
+            }
+        }
 
-		bool acceptable = false;
-		std::set<LLUUID>::const_iterator it = inventory_selected_uuids.begin();
-		const std::set<LLUUID>::const_iterator it_end = inventory_selected_uuids.end();
-		for (; it != it_end; ++it)
-		{
-			LLViewerInventoryCategory* inv_cat = gInventory.getCategory(*it);
-			// any category can be offered.
-			if (inv_cat)
-			{
-				acceptable = true;
-				continue;
-			}
-
-			LLViewerInventoryItem* inv_item = gInventory.getItem(*it);
-			// check if inventory item can be given
-			if (LLGiveInventory::isInventoryGiveAcceptable(inv_item))
-			{
-				acceptable = true;
-				continue;
-			}
-
-			// there are neither item nor category in inventory
-			acceptable = false;
-			break;
-		}
-		return acceptable;
+        return is_give_inventory_acceptable_ids(inventory_selected_uuids);
 	}
 
 	static void build_items_string(const std::set<LLUUID>& inventory_selected_uuids , std::string& items_string)
@@ -1100,70 +1116,89 @@ namespace action_give_inventory
 	 * @param avatar_names - avatar names request to be sent.
 	 * @param avatar_uuids - avatar names request to be sent.
 	 */
-//	static void give_inventory(const uuid_vec_t& avatar_uuids, const std::vector<LLAvatarName> avatar_names, LLInventoryPanel* panel = NULL)
+
+    //static void give_inventory_ids(const uuid_vec_t& avatar_uuids, const std::vector<LLAvatarName> avatar_names, const uuid_set_t inventory_selected_uuids)
 // [RLVa:KB] - @share
-	static void give_inventory(uuid_vec_t avatar_uuids, std::vector<LLAvatarName> avatar_names, LLInventoryPanel* panel = NULL)
+    static void give_inventory_ids(uuid_vec_t avatar_uuids, std::vector<LLAvatarName> avatar_names, const uuid_set_t inventory_selected_uuids)
 // [/RLVa:KB]
-	{
-		llassert(avatar_names.size() == avatar_uuids.size());
+    {
+        llassert(avatar_names.size() == avatar_uuids.size());
 
 // [RLVa:KB] - @share
-		if ( (RlvActions::isRlvEnabled()) && (RlvActions::hasBehaviour(RLV_BHVR_SHARE)) )
-		{
-			for (int idxAvatar = avatar_uuids.size() - 1; idxAvatar >= 0; idxAvatar--)
-			{
-				if (!RlvActions::canGiveInventory(avatar_uuids[idxAvatar]))
-				{
-					RlvUtil::notifyBlocked(RlvStringKeys::Blocked::Share, LLSD().with("RECIPIENT", LLSLURL("agent", avatar_uuids[idxAvatar], "completename").getSLURLString()));
+        if ( (RlvActions::isRlvEnabled()) && (RlvActions::hasBehaviour(RLV_BHVR_SHARE)) )
+        {
+            for (int idxAvatar = avatar_uuids.size() - 1; idxAvatar >= 0; idxAvatar--)
+            {
+                if (!RlvActions::canGiveInventory(avatar_uuids[idxAvatar]))
+                {
+                    RlvUtil::notifyBlocked(RlvStringKeys::Blocked::Share, LLSD().with("RECIPIENT", LLSLURL("agent", avatar_uuids[idxAvatar], "completename").getSLURLString()));
 
-					avatar_uuids.erase(avatar_uuids.begin() + idxAvatar);
-					avatar_names.erase(avatar_names.begin() + idxAvatar);
-				}
-			}
-		}
+                    avatar_uuids.erase(avatar_uuids.begin() + idxAvatar);
+                    avatar_names.erase(avatar_names.begin() + idxAvatar);
+                }
+            }
+        }
 
-		if (avatar_uuids.empty())
-		{
-			return;
-		}
+        if (avatar_uuids.empty())
+        {
+            return;
+        }
 // [/RLVa:KB]
 
-		const std::set<LLUUID> inventory_selected_uuids = LLAvatarActions::getInventorySelectedUUIDs(panel);
-		if (inventory_selected_uuids.empty())
-		{
-			return;
-		}
+        if (inventory_selected_uuids.empty())
+        {
+            return;
+        }
 
-		std::string residents;
-		LLAvatarActions::buildResidentsString(avatar_names, residents, true);
+        std::string residents;
+        LLAvatarActions::buildResidentsString(avatar_names, residents, true);
 
-		std::string items;
-		build_items_string(inventory_selected_uuids, items);
+        std::string items;
+        build_items_string(inventory_selected_uuids, items);
 
-		int folders_count = 0;
-		std::set<LLUUID>::const_iterator it = inventory_selected_uuids.begin();
+        int folders_count = 0;
+        std::set<LLUUID>::const_iterator it = inventory_selected_uuids.begin();
 
-		//traverse through selected inventory items and count folders among them
-		for ( ; it != inventory_selected_uuids.end() && folders_count <=1 ; ++it)
-		{
-			LLViewerInventoryCategory* inv_cat = gInventory.getCategory(*it);
-			if (NULL != inv_cat)
-			{
-				folders_count++;
-			}
-		}
+        //traverse through selected inventory items and count folders among them
+        for ( ; it != inventory_selected_uuids.end() && folders_count <=1 ; ++it)
+        {
+            LLViewerInventoryCategory* inv_cat = gInventory.getCategory(*it);
+            if (NULL != inv_cat)
+            {
+                folders_count++;
+            }
+        }
 
-		// EXP-1599
-		// In case of sharing multiple folders, make the confirmation
-		// dialog contain a warning that only one folder can be shared at a time.
-		std::string notification = (folders_count > 1) ? "ShareFolderConfirmation" : "ShareItemsConfirmation";
-		LLSD substitutions;
-		substitutions["RESIDENTS"] = residents;
-		substitutions["ITEMS"] = items;
-		LLShareInfo::instance().mAvatarNames = avatar_names;
-		LLShareInfo::instance().mAvatarUuids = avatar_uuids;
-		LLNotificationsUtil::add(notification, substitutions, LLSD(), boost::bind(&give_inventory_cb, _1, _2, inventory_selected_uuids));
-	}
+        // EXP-1599
+        // In case of sharing multiple folders, make the confirmation
+        // dialog contain a warning that only one folder can be shared at a time.
+        std::string notification = (folders_count > 1) ? "ShareFolderConfirmation" : "ShareItemsConfirmation";
+        LLSD substitutions;
+        substitutions["RESIDENTS"] = residents;
+        substitutions["ITEMS"] = items;
+        LLShareInfo::instance().mAvatarNames = avatar_names;
+        LLShareInfo::instance().mAvatarUuids = avatar_uuids;
+        LLNotificationsUtil::add(notification, substitutions, LLSD(), boost::bind(&give_inventory_cb, _1, _2, inventory_selected_uuids));
+    }
+
+    static void give_inventory(const uuid_vec_t& avatar_uuids, const std::vector<LLAvatarName> avatar_names, LLInventoryPanel* panel = NULL)
+    {
+        llassert(avatar_names.size() == avatar_uuids.size());
+        std::set<LLUUID> inventory_selected_uuids = LLAvatarActions::getInventorySelectedUUIDs(panel);;
+
+        if (inventory_selected_uuids.empty())
+        {
+            if(panel && panel->getRootFolder() && panel->getRootFolder()->isSingleFolderMode())
+            {
+                inventory_selected_uuids.insert(panel->getRootFolderID());
+            }
+            else
+            {
+                return;
+            }
+        }
+        give_inventory_ids(avatar_uuids, avatar_names, inventory_selected_uuids);
+    }
 }
 
 // static
@@ -1282,6 +1317,28 @@ void LLAvatarActions::shareWithAvatars(LLView * panel)
         root_floater->addDependentFloater(picker);
     }
 	LLNotificationsUtil::add("ShareNotification");
+}
+
+//static
+void LLAvatarActions::shareWithAvatars(const uuid_set_t inventory_selected_uuids, LLFloater* root_floater)
+{
+    using namespace action_give_inventory;
+
+    LLFloaterAvatarPicker* picker =
+        LLFloaterAvatarPicker::show(boost::bind(give_inventory_ids, _1, _2, inventory_selected_uuids), TRUE, FALSE, FALSE, root_floater->getName());
+    if (!picker)
+    {
+        return;
+    }
+
+    picker->setOkBtnEnableCb(boost::bind(is_give_inventory_acceptable_ids, inventory_selected_uuids));
+    picker->openFriendsTab();
+    
+    if (root_floater)
+    {
+        root_floater->addDependentFloater(picker);
+    }
+    LLNotificationsUtil::add("ShareNotification");
 }
 
 // static

@@ -19,7 +19,7 @@
 		Eigentümer kann:
 	</panel.string>
 	<panel.string name="acquiredDate">
-		[wkday,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [year,datetime,slt]
+		[wkday,datetime,slt]. [day,datetime,slt]. [mth,datetime,slt]. [year,datetime,slt], [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
 	</panel.string>
 	<panel.string name="origin_inventory">
 		(Inventar)
@@ -27,52 +27,59 @@
 	<panel.string name="origin_inworld">
 		(Inworld)
 	</panel.string>
-	<text name="title" value="Objektprofil"/>
-	<text name="origin" value="(Inventar)"/>
-	<scroll_container name="item_profile_scroll">
-		<panel label="" name="item_profile">
-			<text name="LabelItemNameTitle">
-				Name:
-			</text>
-			<line_editor name="LabelItemName" tool_tip="Der Name ist auf 63 Zeichen begrenzt. Längere formelle Namen werden gekürzt. Die Namen dürfen ausschließlich aus druckbaren Zeichen des (nicht erweiterten) ASCII-7-Zeichensatzes bestehen, mit Ausnahme des Senkrechtstrichs &quot;|&quot;."/>
-			<text name="LabelItemDescTitle">
-				Beschreibung:
-			</text>
-			<line_editor name="LabelItemDesc" tool_tip="Bei Auswahl der Option „Schwebe-Tipps für alle Objekte“ in den Viewer-Einstellungen wird für alle Objekte das Popup mit der Objektbeschreibung unter dem Mauszeiger eingeblendet. Die formelle Beschreibung ist auf 127 Byte begrenzt, und alle längeren Zeichenketten werden gekürzt."/>
-			<text name="LabelCreatorTitle">
-				Ersteller:
-			</text>
+
+	<layout_stack name="main_stack">
+		<layout_panel name="layout_item_name">
+				<line_editor name="LabelItemName" tool_tip="Der Name ist auf 63 Zeichen begrenzt. Längere formelle Namen werden gekürzt. Die Namen dürfen ausschließlich aus druckbaren Zeichen des (nicht erweiterten) ASCII-7-Zeichensatzes bestehen, mit Ausnahme des Senkrechtstrichs &quot;|&quot;."/>
+		</layout_panel>
+		<layout_panel name="layout_item_details">
 			<text name="LabelOwnerTitle">
 				Eigentümer:
+			</text>
+			<text name="LabelCreatorTitle">
+				Ersteller:
 			</text>
 			<text name="LabelAcquiredTitle">
 				Erworben:
 			</text>
+			<button label="Abbildung..." name="change_thumbnail_btn"/>
+		</layout_panel>
+
+		<layout_panel name="layout_item_description">
+			<text name="LabelItemDescTitle">
+				Beschreibung:
+			</text>
+			<line_editor name="LabelItemDesc" tool_tip="Bei Auswahl der Option „Schwebe-Tipps für alle Objekte“ in den Viewer-Einstellungen wird für alle Objekte das Popup mit der Objektbeschreibung unter dem Mauszeiger eingeblendet. Die formelle Beschreibung ist auf 127 Byte begrenzt, und alle längeren Zeichenketten werden gekürzt."/>
 			<text name="LabelItemExperienceTitle">
 				Erlebnis:
 			</text>
-			<panel name="perms_inv">
-				<text name="perm_modify">
-					Sie können:
-				</text>
-				<check_box label="Bearbeiten" name="CheckOwnerModify"/>
-				<check_box label="Kopieren" name="CheckOwnerCopy"/>
-				<check_box label="Übertragen" name="CheckOwnerTransfer"/>
-				<text name="AnyoneLabel">
-					Jeder:
-				</text>
-				<check_box label="Kopieren" name="CheckEveryoneCopy" tool_tip="Jeder Benutzer kann eine Kopie des Objekts erhalten. Das Objekt sowie alle seine Inhalte müssen kopier- und übertragbar sein."/>
-				<text name="GroupLabel">
-					Gruppe:
-				</text>
-				<check_box label="Teilen" name="CheckShareWithGroup" tool_tip="Mit allen Mitgliedern der zugeordneten Gruppe, Ihre Berechtigungen dieses Objekt zu ändern, teilen. Sie müssen eine Übereignung durchführen, um Rollenbeschränkungen zu aktivieren."/>
-				<text name="NextOwnerLabel">
-					Nächster Eigentümer:
-				</text>
-				<check_box label="Bearbeiten" name="CheckNextOwnerModify" tool_tip="Der nächste Eigentümer kann Eigenschaften wie den Artikelnamen oder den Maßstab dieses Objekts bearbeiten."/>
-				<check_box label="Kopieren" name="CheckNextOwnerCopy" tool_tip="Der nächste Eigentümer kann unbegrenzt viele Kopien dieses Objekts erstellen. Die Kopien enthalten Informationen zum Ersteller und können niemals mehr Berechtigungen enthalten als der kopierte Artikel."/>
-				<check_box label="Übertragen" name="CheckNextOwnerTransfer" tool_tip="Der nächste Eigentümer kann dieses Objekt weitergeben oder verkaufen."/>
-			</panel>
+		</layout_panel>
+
+		<layout_panel name="layout_item_permissions_sale">
+			<text name="permissions_label">
+				Berechtigungen
+			</text>
+			<text name="perm_modify">
+				Sie können:
+			</text>
+			<check_box label="Bearbeiten" name="CheckOwnerModify"/>
+			<check_box label="Kopieren" name="CheckOwnerCopy"/>
+			<check_box label="Übertragen" name="CheckOwnerTransfer"/>
+			<text name="AnyoneLabel">
+				Jeder:
+			</text>
+			<check_box label="Kopieren" name="CheckEveryoneCopy" tool_tip="Jeder Benutzer kann eine Kopie des Objekts erhalten. Das Objekt sowie alle seine Inhalte müssen kopier- und übertragbar sein."/>
+			<text name="GroupLabel">
+				Gruppe:
+			</text>
+			<check_box label="Teilen" name="CheckShareWithGroup" tool_tip="Mit allen Mitgliedern der zugeordneten Gruppe, Ihre Berechtigungen dieses Objekt zu ändern, teilen. Sie müssen eine Übereignung durchführen, um Rollenbeschränkungen zu aktivieren."/>
+			<text name="NextOwnerLabel">
+				Nächster Eigentümer:
+			</text>
+			<check_box label="Bearbeiten" name="CheckNextOwnerModify" tool_tip="Der nächste Eigentümer kann Eigenschaften wie den Artikelnamen oder den Maßstab dieses Objekts bearbeiten."/>
+			<check_box label="Kopieren" name="CheckNextOwnerCopy" tool_tip="Der nächste Eigentümer kann unbegrenzt viele Kopien dieses Objekts erstellen. Die Kopien enthalten Informationen zum Ersteller und können niemals mehr Berechtigungen enthalten als der kopierte Artikel."/>
+			<check_box label="Übertragen" name="CheckNextOwnerTransfer" tool_tip="Der nächste Eigentümer kann dieses Objekt weitergeben oder verkaufen."/>
+
 			<check_box label="Zum Verkauf" name="CheckPurchase" tool_tip="Ermöglicht, dass Einwohner dieses Objekt, seine Inhalte oder eine Kopie zum angegebenen Preis inworld erwerben."/>
 			<combo_box name="ComboBoxSaleType" tool_tip="Wählen Sie aus, ob der Käufer eine Kopie, eine Kopie der Inhalte oder den Artikel selbst erhält.">
 				<combo_box.item label="Kopie" name="Copy"/>
@@ -80,9 +87,24 @@
 				<combo_box.item label="Original" name="Original"/>
 			</combo_box>
 			<spinner label="Preis: L$" name="Edit Cost" tool_tip="Objektkosten."/>
-		</panel>
-	</scroll_container>
-	<panel name="button_panel">
-		<button label="Abbrechen" name="cancel_btn"/>
-	</panel>
+		</layout_panel>
+
+		<layout_panel name="layout_debug_permissions">
+			<text name="BaseMaskDebug">
+				B:
+			</text>
+			<text name="OwnerMaskDebug">
+				O:
+			</text>
+			<text name="GroupMaskDebug">
+				G:
+			</text>
+			<text name="EveryoneMaskDebug">
+				E:
+			</text>
+			<text name="NextMaskDebug">
+				N:
+			</text>
+		</layout_panel>
+	</layout_stack>
 </panel>

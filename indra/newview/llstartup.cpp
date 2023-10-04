@@ -300,7 +300,7 @@ static bool mLoginStatePastUI = false;
 static bool mBenefitsSuccessfullyInit = false;
 
 const F32 STATE_AGENT_WAIT_TIMEOUT = 240; //seconds
-const S32 MAX_SEED_CAP_ATTEMPTS_BEFORE_LOGIN = 3; // Give region 3 chances
+const S32 MAX_SEED_CAP_ATTEMPTS_BEFORE_ABORT = 4; // Give region 4 chances
 
 std::unique_ptr<LLEventPump> LLStartUp::sStateWatcher(new LLEventStream("StartupState"));
 std::unique_ptr<LLStartupListener> LLStartUp::sListener(new LLStartupListener());
@@ -2077,11 +2077,18 @@ bool idle_startup()
 		else
 		{
 			U32 num_retries = regionp->getNumSeedCapRetries();
-            if (num_retries > MAX_SEED_CAP_ATTEMPTS_BEFORE_LOGIN)
+            if (num_retries > MAX_SEED_CAP_ATTEMPTS_BEFORE_ABORT)
             {
-                // Region will keep trying to get capabilities,
-                // but for now continue as if caps were granted
-                LLStartUp::setStartupState(STATE_SEED_CAP_GRANTED);
+                LL_WARNS("AppInit") << "Failed to get capabilities. Backing up to login screen!" << LL_ENDL;
+                if (gRememberPassword)
+                {
+                    LLNotificationsUtil::add("LoginPacketNeverReceived", LLSD(), LLSD(), login_alert_status);
+                }
+                else
+                {
+                    LLNotificationsUtil::add("LoginPacketNeverReceivedNoTP", LLSD(), LLSD(), login_alert_status);
+                }
+                reset_login();
             }
 			else if (num_retries > 0)
 			{
@@ -2663,6 +2670,34 @@ bool idle_startup()
 		
         LLInventoryModelBackgroundFetch::instance().start();
 		gInventory.createCommonSystemCategories();
+        LLStartUp::setStartupState(STATE_INVENTORY_CALLBACKS );
+        display_startup();
+
+        return FALSE;
+    }
+
+    //---------------------------------------------------------------------
+    // STATE_INVENTORY_CALLBACKS 
+    //---------------------------------------------------------------------
+    if (STATE_INVENTORY_CALLBACKS  == LLStartUp::getStartupState())
+    {
+        if (!LLInventoryModel::isSysFoldersReady())
+        {
+            display_startup();
+            return FALSE;
+        }
+        LLInventoryModelBackgroundFetch::instance().start();
+        LLUUID cof_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT);
+        LLViewerInventoryCategory* cof = gInventory.getCategory(cof_id);
+        if (cof
+            && cof->getVersion() == LLViewerInventoryCategory::VERSION_UNKNOWN)
+        {
+            // Special case, dupplicate request prevention.
+            // Cof folder will be requested via FetchCOF
+            // in appearance manager, prevent recursive fetch
+            cof->setFetching(LLViewerInventoryCategory::FETCH_RECURSIVE);
+        }
+
 
 		// It's debatable whether this flag is a good idea - sets all
 		// bits, and in general it isn't true that inventory
@@ -2998,7 +3033,7 @@ bool idle_startup()
 				gAgentWearables.sendDummyAgentWearablesUpdate();
 			}
 // </FS:Ansariel> [Legacy Bake]
-			callAfterCategoryFetch(LLAppearanceMgr::instance().getCOF(), set_flags_and_update_appearance);
+            callAfterCOFFetch(set_flags_and_update_appearance);
 		}
 
 		display_startup();
@@ -3707,7 +3742,7 @@ void LLStartUp::loadInitialOutfit( const std::string& outfit_folder_name,
 	// Not going through the processAgentInitialWearables path, so need to set this here.
 	LLAppearanceMgr::instance().setAttachmentInvLinkEnable(true);
 	// Initiate creation of COF, since we're also bypassing that.
-	gInventory.findCategoryUUIDForType(LLFolderType::FT_CURRENT_OUTFIT);
+	gInventory.ensureCategoryForTypeExists(LLFolderType::FT_CURRENT_OUTFIT);
 	
 	ESex gender;
 	if (gender_name == "male")
@@ -3760,8 +3795,15 @@ void LLStartUp::loadInitialOutfit( const std::string& outfit_folder_name,
 		bool do_append = false;
 		LLViewerInventoryCategory *cat = gInventory.getCategory(cat_id);
 		// Need to fetch cof contents before we can wear.
-		callAfterCategoryFetch(LLAppearanceMgr::instance().getCOF(),
+        if (do_copy)
+        {
+            callAfterCategoryFetch(LLAppearanceMgr::instance().getCOF(),
 							   boost::bind(&LLAppearanceMgr::wearInventoryCategory, LLAppearanceMgr::getInstance(), cat, do_copy, do_append));
+        }
+        else
+        {
+            callAfterCategoryLinksFetch(cat_id, boost::bind(&LLAppearanceMgr::wearInventoryCategory, LLAppearanceMgr::getInstance(), cat, do_copy, do_append));
+        }
 		LL_DEBUGS() << "initial outfit category id: " << cat_id << LL_ENDL;
 	}
 
@@ -3819,6 +3861,7 @@ std::string LLStartUp::startupStateToString(EStartupState state)
 		RTNENUM( STATE_AGENT_SEND );
 		RTNENUM( STATE_AGENT_WAIT );
 		RTNENUM( STATE_INVENTORY_SEND );
+        RTNENUM(STATE_INVENTORY_CALLBACKS );
 		RTNENUM( STATE_MISC );
 		RTNENUM( STATE_PRECACHE );
 		RTNENUM( STATE_WEARABLES_WAIT );
@@ -3883,6 +3926,11 @@ void reset_login()
 	}
 	LLFloaterReg::hideVisibleInstances();
     LLStartUp::setStartupState( STATE_BROWSER_INIT );
+
+    if (LLVoiceClient::instanceExists())
+    {
+        LLVoiceClient::getInstance()->terminate();
+    }
 
     // Clear any verified certs and verify them again on next login
     // to ensure cert matches server instead of just getting reused
@@ -4639,7 +4687,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		std::string flag = login_flags["ever_logged_in"];
 		if(!flag.empty())
 		{
-			gAgent.setFirstLogin((flag == "N") ? TRUE : FALSE);
+			gAgent.setFirstLogin(flag == "N");
 		}
 
 		/*  Flag is currently ignored by the viewer.
@@ -4761,7 +4809,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	std::string fake_initial_outfit_name = gSavedSettings.getString("FakeInitialOutfitName");
 	if (!fake_initial_outfit_name.empty())
 	{
-		gAgent.setFirstLogin(TRUE);
+		gAgent.setFirstLogin(true);
 		sInitialOutfit = fake_initial_outfit_name;
 		if (sInitialOutfitGender.empty())
 		{
@@ -4796,9 +4844,10 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		LLViewerMedia::getInstance()->openIDSetup(openid_url, openid_token);
 	}
 
-
 	// Only save mfa_hash for future logins if the user wants their info remembered.
-	if(response.has("mfa_hash") && gSavedSettings.getBOOL("RememberUser") && gSavedSettings.getBOOL("RememberPassword"))
+	if(response.has("mfa_hash")
+       && gSavedSettings.getBOOL("RememberUser")
+       && LLLoginInstance::getInstance()->saveMFA())
 	{
 		std::string grid(LLGridManager::getInstance()->getGridId());
 		std::string user_id(gUserCredential->userID());
@@ -4806,6 +4855,13 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		// TODO(brad) - related to SL-17223 consider building a better interface that sync's automatically
 		gSecAPIHandler->syncProtectedMap();
 	}
+    else if (!LLLoginInstance::getInstance()->saveMFA())
+    {
+        std::string grid(LLGridManager::getInstance()->getGridId());
+        std::string user_id(gUserCredential->userID());
+        gSecAPIHandler->removeFromProtectedMap("mfa_hash", grid, user_id);
+        gSecAPIHandler->syncProtectedMap();
+    }
 
 	// <FS:Ansariel> OpenSim legacy economy support
 #ifdef OPENSIM

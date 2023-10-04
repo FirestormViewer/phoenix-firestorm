@@ -22,22 +22,6 @@
 					</panel>
 				</panel>
 			</layout_panel>
-         </layout_stack>
-		<panel name="button_panel">
-			<layout_stack name="button_panel_ls">
-				<layout_panel name="info_btn_lp">
-					<button label="Profil" name="info_btn" tool_tip="Objektprofil anzeigen"/>
-				</layout_panel>
-				<layout_panel name="share_btn_lp">
-					<button label="Freigeben" name="share_btn" tool_tip="Inventarobjekt freigeben"/>
-				</layout_panel>
-				<layout_panel name="shop_btn_lp">
-					<button label="Einkaufen" name="shop_btn" tool_tip="Marktplatz-Webseite öffnen"/>
-					<button label="Anziehen" name="wear_btn" tool_tip="Ausgewähltes Outfit tragen"/>
-					<button label="Spielen" name="play_btn"/>
-					<button label="Teleportieren" name="teleport_btn" tool_tip="Zu ausgewähltem Standort teleportieren"/>
-				</layout_panel>
-			</layout_stack>
-		</panel>
+		</layout_stack>
 	</panel>
 </panel>

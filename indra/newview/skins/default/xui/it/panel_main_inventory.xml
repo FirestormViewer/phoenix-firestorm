@@ -9,6 +9,7 @@
 	<panel.string name="ItemcountUnknown">
 		Recuperati [ITEM_COUNT] elementi [FILTER]
 	</panel.string>
+    <panel.string name="inventory_title">INVENTARIO</panel.string>
 	<text name="ItemcountText">
 		Elementi:
 	</text>

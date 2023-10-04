@@ -538,9 +538,19 @@ void ParticleEditor::onInjectButtonClicked()
 	// if no #Firestorm folder was found, create one
 	if (categoryID.isNull())
 	{
-		categoryID = gInventory.createNewCategory(gInventory.getRootFolderID(), LLFolderType::FT_NONE, ROOT_FIRESTORM_FOLDER);
+		gInventory.createNewCategory(gInventory.getRootFolderID(), LLFolderType::FT_NONE, ROOT_FIRESTORM_FOLDER, [this](const LLUUID& new_cat_id)
+			{
+				createScriptInventoryItem(new_cat_id);
+			});
 	}
+	else
+	{
+		createScriptInventoryItem(categoryID);
+	}
+}
 
+void ParticleEditor::createScriptInventoryItem(LLUUID categoryID)
+{
 	// if still no #Firestorm folder was found, try to find the default "Scripts" folder
 	if (categoryID.isNull())
 	{

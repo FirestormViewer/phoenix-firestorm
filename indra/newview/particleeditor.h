@@ -58,6 +58,7 @@ class ParticleEditor : public LLFloater
 		void updateUI();
 
 		std::string createScript();
+		void createScriptInventoryItem(LLUUID categoryID);
 
 		void onParameterChange();
 		void onCopyButtonClicked();

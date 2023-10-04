@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
-	 height="570"
+	 height="590"
 	 layout="topleft"
 	 name="object properties"
 	 help_topic="object_properties"
 	 title="Object Profile"
-    follows="all"
+	 follows="all"
 	 width="333">
 	 <panel.string
 	  name="text deed continued">
@@ -32,14 +32,14 @@
                 You can't modify these objects
             </panel.string>
             <panel.string
-      name="text modify info 5">
-    You can't modify this object across a region boundary
-  </panel.string>
-  <panel.string
-      name="text modify info 6">
-    You can't modify these objects across a region boundary
-  </panel.string>
-  <panel.string
+             name="text modify info 5">
+                You can't modify this object across a region boundary
+            </panel.string>
+            <panel.string
+             name="text modify info 6">
+                You can't modify these objects across a region boundary
+            </panel.string>
+            <panel.string
              name="text modify warning">
                 This object has linked parts
             </panel.string>
@@ -49,7 +49,7 @@
             </panel.string>
             <panel.string
              name="Cost Total">
-                Sum Price: L$
+                Total Price: L$
             </panel.string>
             <panel.string
              name="Cost Per Unit">
@@ -63,20 +63,7 @@
              name="Sale Mixed">
                 Mixed Sale
             </panel.string>
-    <button
-     follows="top|left"
-     height="24"
-     image_hover_unselected="BackButton_Over"
-     image_pressed="BackButton_Press"
-     image_unselected="BackButton_Off"
-     layout="topleft"
-     left="8"
-     name="back_btn"
-     tab_stop="false"
-     top="0"
-     width="30"
-     use_draw_context_alpha="false" />
-        <text
+    <text
      follows="top|left|right"
      font="SansSerifHuge"
      height="26"
@@ -98,18 +85,18 @@
      value="(Inworld)"
      right="-10" />
     <scroll_container
-     color="SL-Background"
+     color="SL-Background_Light"
      follows="all"
      layout="topleft"
      left="9"
      name="item_profile_scroll"
      opaque="true"
-     height="490"
+     height="493"
      width="313"
      top="45">
 	<panel
          follows="left|top|right"
-         height="490"
+         height="450"
          label=""
          layout="topleft"
          left="10"
@@ -118,7 +105,7 @@
          top="45"
          right="-10"
    background_visible="true"
-   bg_alpha_color="SL-Background">
+   bg_alpha_color="SL-Background_Light">
 	    	    <text
 		     type="string"
 		     length="1"
@@ -192,7 +179,6 @@
 		     translate="false"
          use_ellipses="true" 
 		     width="225">
-	        (loading ...)
 	     </text>
 	    <text
 			 type="string"
@@ -218,7 +204,6 @@
 			    translate="false"
           use_ellipses="true" 
 			    width="225">
-			    (loading ...)
 	     </text>
 	    	    <text
 			 type="string"
@@ -330,11 +315,11 @@
          left="0"
          top_pad="15"
          height="135"
-         width="303">
+         width="313">
 	  <text
              type="string"
              length="1"
-          left="5"
+             left="10"
              top_pad="15"
              text_color="EmphasisColor"
 	     height="15"
@@ -471,7 +456,7 @@
         left="120"
         name="Edit Cost"
         label="Price: L$"
-        label_width="73"				
+        label_width="65"
         width="150"
         min_val="0"
         height="20"
@@ -486,29 +471,29 @@
 	   left="120"
        name="search_check"
        tool_tip="Let people see this object in search results" />
-            <text
-             type="string"
+      <text
+        type="string"
         follows="left|top"
         name="pathfinding_attributes_label"
         top_pad="6"
         width="150"
         left="5">
       Pathfinding attributes:
-    </text>
-    <text
+      </text>
+      <text
         type="string"
         follows="left|top"
-             text_color="EmphasisColor"
+        text_color="EmphasisColor"
         name="pathfinding_attributes_value"
         width="130"
         word_wrap="false"
         left_pad="0">
-    </text>
-    <text
-        type="string"
-        text_color="EmphasisColor"
+      </text>
+            <text
+             type="string"
+             text_color="EmphasisColor"
              length="1"
-        top_pad="10"
+             top_pad="15"
              follows="left|top"
              layout="topleft"
              left="10"
@@ -580,13 +565,14 @@
 		</panel>
 	</scroll_container>
       <layout_stack
+		  top_pad="-1"
 		  follows="bottom|left|right"
 		  height="28"
 		  layout="topleft"
 		  left="5"
 		  name="buttons_ls"
 		  orientation="horizontal"
-		  width="311">
+		  width="313">
       <layout_panel
 	  follows="bottom|left"
        auto_resize="false"

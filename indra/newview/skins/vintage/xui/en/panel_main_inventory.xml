@@ -609,7 +609,9 @@
 			layout="topleft"
 			name="All Items"
 			sort_order_setting="InventorySortOrder"
-			show_item_link_overlays="true" />
+			show_item_link_overlays="true" >
+				<folder double_click_override="true"/>
+		</inventory_panel>
 		<recent_inventory_panel
 			border="true"
 			bevel_style="in"
@@ -619,7 +621,9 @@
 			help_topic="recent_inventory_tab"
 			layout="topleft"
 			name="Recent Items"
-			show_item_link_overlays="true" />
+			show_item_link_overlays="true" >
+				<folder double_click_override="true"/>
+		</recent_inventory_panel>
 		<worn_inventory_panel
 			border="true"
 			bevel_style="in"
@@ -628,7 +632,9 @@
 			help_topic="worn_inventory_tab"
 			layout="topleft"
 			name="Worn Items"
-			show_item_link_overlays="true" />
+			show_item_link_overlays="true" >
+				<folder double_click_override="true"/>
+		</worn_inventory_panel>
 	</tab_container>
 
 	<text

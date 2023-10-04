@@ -31,6 +31,7 @@
 #include "llpanel.h"
 #include "llinventoryfilter.h"
 #include "llinventoryobserver.h"
+#include "llinventorypanel.h"
 #include "lldndbutton.h"
 
 #include "llfolderview.h"
@@ -38,14 +39,17 @@
 class LLComboBox;
 class LLFolderViewItem;
 class LLInventoryPanel;
+class LLInventoryGallery;
 class LLSaveFolderState;
 class LLFilterEditor;
 class LLTabContainer;
 class LLFloaterInventoryFinder;
 class LLMenuButton;
 class LLMenuGL;
+class LLSidepanelInventory;
 class LLToggleableMenu;
 class LLFloater;
+class LLFloaterSidePanelContainer;
 class LLComboBox;	// <FS:Zi> Filter dropdown
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -64,6 +68,13 @@ public:
 	~LLPanelMainInventory();
 
 	BOOL postBuild();
+
+    enum EViewModeType
+    {
+        MODE_LIST,
+        MODE_GALLERY,
+        MODE_COMBINATION
+    };
 
 	virtual BOOL handleKeyHere(KEY key, MASK mask);
 
@@ -87,6 +98,7 @@ public:
 	// <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel
 	void showAllItemsPanel();
 	// </FS:Ansariel>
+    void setActivePanel();
 
 	bool isRecentItemsPanelSelected();
 
@@ -98,12 +110,39 @@ public:
 
 	void setFocusFilterEditor();
 
-	static void newWindow();
+	static LLFloaterSidePanelContainer* newWindow();
+    static void newFolderWindow(LLUUID folder_id = LLUUID(), LLUUID item_to_select = LLUUID());
 
 	void toggleFindOptions();
 
     void resetFilters();
     void resetAllItemsFilters();
+
+    void findLinks(const LLUUID& item_id, const std::string& item_name);
+
+    void onViewModeClick();
+    void toggleViewMode();
+    void initSingleFolderRoot(const LLUUID& start_folder_id = LLUUID::null);
+    void initInventoryViews();
+    void onUpFolderClicked();
+    void onBackFolderClicked();
+    void onForwardFolderClicked();
+    void setSingleFolderViewRoot(const LLUUID& folder_id, bool clear_nav_history = true);
+    void setGallerySelection(const LLUUID& item_id, bool new_window = false);
+    LLUUID getSingleFolderViewRoot();
+    bool isSingleFolderMode() { return mSingleFolderMode; }
+
+    void scrollToGallerySelection();
+    void scrollToInvPanelSelection();
+
+    void setViewMode(EViewModeType mode);
+    bool isListViewMode() { return (mViewMode == MODE_LIST); }
+    bool isGalleryViewMode() { return (mViewMode == MODE_GALLERY); }
+    bool isCombinationViewMode() { return (mViewMode == MODE_COMBINATION); }
+    LLUUID getCurrentSFVRoot();
+    std::string getLocalizedRootName();
+
+    LLInventoryFilter& getCurrentFilter();
 
 	// <FS:Zi> Filter dropdown
 	void onFilterTypeSelected(const std::string& filter_type_name);
@@ -149,6 +188,9 @@ protected:
 	bool isSaveTextureEnabled(const LLSD& userdata);
 	void updateItemcountText();
 
+    void updatePanelVisibility();
+    void updateCombinationVisibility();
+
 	// <FS:Zi> Inventory Collapse and Expand Buttons
 	void onCollapseButtonClicked();
 	void onExpandButtonClicked();
@@ -156,6 +198,9 @@ protected:
 	void onFocusReceived();
 	void onSelectSearchType();
 	void updateSearchTypeCombo();
+    void setSearchType(LLInventoryFilter::ESearchType type);
+
+    LLSidepanelInventory* getParentSidepanelInventory();
 
 private:
 	LLFloaterInventoryFinder* getFinder();
@@ -176,12 +221,32 @@ private:
 	std::string					mCategoryCountString;
 	LLComboBox*					mSearchTypeCombo;
 
+    LLButton* mBackBtn;
+    LLButton* mForwardBtn;
+    LLButton* mUpBtn;
+    LLButton* mViewModeBtn;
+    LLLayoutPanel* mNavigationBtnsPanel;
+
+    LLPanel* mDefaultViewPanel;
+    LLPanel* mCombinationViewPanel;
+
+    bool mSingleFolderMode;
+    EViewModeType mViewMode;
+
+    LLInventorySingleFolderPanel* mCombinationInventoryPanel;
+    LLInventoryGallery* mCombinationGalleryPanel;
+    LLPanel* mCombinationGalleryLayoutPanel;
+    LLLayoutPanel* mCombinationListLayoutPanel;
+    LLLayoutStack* mCombinationLayoutStack;
+
 	// <FS:Zi> Filter dropdown
 	LLComboBox*					mFilterComboBox;
 	std::map<std::string,U64>	mFilterMap;			// contains name-to-number mapping for dropdown filter types
 	U64							mFilterMask;		// contains the cumulated bit filter for all dropdown filter types
 	// </FS:Zi> Filter dropdown
 
+    boost::signals2::connection mListViewRootUpdatedConnection;
+    boost::signals2::connection mGalleryRootUpdatedConnection;
 
 	//////////////////////////////////////////////////////////////////////////////////
 	// List Commands                                                                //
@@ -190,11 +255,12 @@ protected:
 	void updateListCommands();
 	void onAddButtonClick();
 	void showActionMenu(LLMenuGL* menu, std::string spawning_view_name);
-	void onTrashButtonClick();
+	void onTrashButtonClick(); // <FS:Ansariel> Keep better inventory layout
 	void onClipboardAction(const LLSD& userdata);
 	BOOL isActionEnabled(const LLSD& command_name);
 	BOOL isActionChecked(const LLSD& userdata);
 	void onCustomAction(const LLSD& command_name);
+    bool isActionVisible(const LLSD& userdata);
 
 	// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
 	void onCoalescedObjectsToggled(const LLSD& userdata);
@@ -216,17 +282,27 @@ protected:
 	void onSearchTypeChecked(const LLSD& userdata);
 	// </FS:Zi> Extended Inventory Search
 
+	// <FS:Ansariel> Keep better inventory layout
 	bool handleDragAndDropToTrash(BOOL drop, EDragAndDropType cargo_type, EAcceptance* accept);
     static bool hasSettingsInventory();
+    void updateTitle();
+    void updateNavButtons();
+    
+    void onCombinationRootChanged(bool gallery_clicked);
+    void onCombinationGallerySelectionChanged(const LLUUID& category_id);
+    void onCombinationInventorySelectionChanged(const std::deque<LLFolderViewItem*>& items, BOOL user_action);
 	/**
 	 * Set upload cost in "Upload" sub menu.
 	 */
 	void setUploadCostIfNeeded();
+    void disableAddIfNeeded();
 private:
-	LLDragAndDropButton*		mTrashButton;
+	LLDragAndDropButton*		mTrashButton; // <FS:Ansariel> Keep better inventory layout
 	LLToggleableMenu*			mMenuGearDefault;
+    LLToggleableMenu*           mMenuViewDefault;
 	LLToggleableMenu*			mMenuVisibility;
 	LLMenuButton*				mGearMenuButton;
+    LLMenuButton*               mViewMenuButton;
 	LLMenuButton*				mVisibilityMenuButton;
 	LLHandle<LLView>			mMenuAddHandle;
 
@@ -236,6 +312,10 @@ private:
 	// </FS:Zi> Inventory Collapse and Expand Buttons
 
 	bool						mNeedUploadCost;
+
+    bool                        mForceShowInvLayout;
+    bool                        mReshapeInvLayout;
+    LLUUID                      mCombInvUUIDNeedsRename;
 	// List Commands                                                              //
 	////////////////////////////////////////////////////////////////////////////////
 };
