@@ -291,6 +291,8 @@ void LLToolTip::initFromParams(const LLToolTip::Params& p)
 		mTextBox->setText(p.message());
 	}
 
+	mIsTooltipPastable = p.allow_paste_tooltip;
+
 	updateTextBox();
 	snapToChildren();
 }
@@ -321,8 +323,6 @@ void LLToolTip::snapToChildren()
 	}
 
 	setShape(tooltip_rect);
-
-    mIsTooltipPastable = p.allow_paste_tooltip;
 }
 
 void LLToolTip::setVisible(BOOL visible)

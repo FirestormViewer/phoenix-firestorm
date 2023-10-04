@@ -3310,7 +3310,6 @@ void LLViewerObject::unlinkControlAvatar()
         if (mControlAvatar)
         {
             mControlAvatar->markForDeath();
-            mControlAvatar->mRootVolp = NULL;
             mControlAvatar = NULL;
         }
     }
@@ -5109,7 +5108,7 @@ void LLViewerObject::setTEImage(const U8 te, LLViewerTexture *imagep)
 S32 LLViewerObject::setTETextureCore(const U8 te, LLViewerTexture *image)
 {
 	LLUUID old_image_id = getTEref(te).getID();
-	const LLUUID& uuid = image->getID();
+	const LLUUID& uuid = image ? image->getID() : LLUUID::null;
 	S32 retval = 0;
 	if (uuid != getTEref(te).getID() ||
 		uuid == LLUUID::null)

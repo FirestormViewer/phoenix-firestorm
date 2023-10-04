@@ -54,14 +54,14 @@ void LLDrawPoolGround::prerender()
 void LLDrawPoolGround::render(S32 pass)
 {
 	// <FS:PP> Attempt to speed up things a little
-	// if (mDrawFace.empty() || !gSavedSettings.getBOOL("RenderGround"))
+	// if (mDrawFace.empty() || !LLGLSLShader::sCurBoundShaderPtr || !gSavedSettings.getBOOL("RenderGround"))
 	static LLCachedControl<bool> RenderGround(gSavedSettings, "RenderGround");
-	if (mDrawFace.empty() || !RenderGround)
+	if (mDrawFace.empty() || !LLGLSLShader::sCurBoundShaderPtr || !RenderGround)
 	// </FS:PP>
 	{
 		return;
-	}	
-	
+	}
+
 	LLGLSPipelineDepthTestSkyBox gls_skybox(true, false);
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
