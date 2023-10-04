@@ -971,13 +971,20 @@ void FSFloaterNearbyChat::handleMinimized(bool minimized)
 
 void FSFloaterNearbyChat::onEmojiRecentPanelToggleBtnClicked(FSFloaterNearbyChat* self)
 {
+	bool restore_focus = (gFocusMgr.getLastKeyboardFocus() == self->mInputEditor);
+
 	BOOL show = !self->mEmojiRecentPanel->getVisible();
 	if (show)
 	{
-		self->initEmojiRecentPanel(true);
+		self->initEmojiRecentPanel(!restore_focus);
 	}
 	self->mEmojiRecentPanel->setVisible(show);
 	self->mEmojiRecentPanelToggleBtn->setImageOverlay(show ? "Arrow_Up" : "Arrow_Down");
+
+	if (restore_focus)
+	{
+		self->mInputEditor->setFocus(true);
+	}
 }
 
 void FSFloaterNearbyChat::initEmojiRecentPanel(bool moveFocus)
