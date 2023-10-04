@@ -7134,6 +7134,7 @@ void LLGestureBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		{
 			items.push_back(std::string("Activate"));
 		}
+        items.push_back(std::string("PlayGesture"));
 		// <FS:Ansariel> FIRE-5913: Selecting a mix of active and inactive gestures disables both "Activate" / "Deactivate" menu options
 		}
 		// </FS:Ansariel>

@@ -3618,6 +3618,12 @@ void LLViewerObject::doInventoryCallback()
 
 void LLViewerObject::removeInventory(const LLUUID& item_id)
 {
+    // close associated floater properties
+    LLSD params;
+    params["id"] = item_id;
+    params["object"] = mID;
+    LLFloaterReg::hideInstance("item_properties", params);
+
 	// <FS:Ansariel> Keep legacy properties floater
 	// close any associated floater properties
 	LLFloaterReg::hideInstance("properties", item_id);
