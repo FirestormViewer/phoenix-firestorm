@@ -534,11 +534,10 @@ bool FloaterAO::newSetCallback(const LLSD& notification, const LLSD& response)
 
 	if (option == 0)
 	{
-		if (AOEngine::instance().addSet(newSetName).notNull())
+		return AOEngine::instance().addSet(newSetName, [this](const LLUUID& new_cat_id)
 		{
 			reloading(true);
-			return true;
-		}
+		});
 	}
 	return false;
 }

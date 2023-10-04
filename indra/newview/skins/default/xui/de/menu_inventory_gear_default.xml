@@ -2,6 +2,10 @@
 <toggleable_menu name="menu_gear_default">
 	<menu_item_call label="Neues Inventar-Fenster" name="new_window"/>
 	<menu_item_check label="Geschützte Ordner" name="Protected Folders"/>
+	<menu_item_check label="Inventar-Einstellungen..." name="inv_settings"/>
+	<menu_item_check label="Listen-Ansicht" name="list_view"/>
+	<menu_item_check label="Galerie-Ansicht" name="gallery_view"/>
+	<menu_item_check label="Kombinierte Ansicht" name="combination_view"/>
 	<menu_item_check label="Nach Name sortieren" name="sort_by_name"/>
 	<menu_item_check label="Nach aktuellsten Objekten sortieren" name="sort_by_recent"/>
 	<menu_item_check label="Ordner immer nach Namen sortieren" name="sort_folders_by_name"/>
@@ -22,7 +26,8 @@
 	<menu_item_check label="Kleidung hinzufügen per Doppelklick" name="add_invclothing_toggle"/>
 	<menu_item_call label="Filter anzeigen..." name="show_filters"/>
 	<menu_item_call label="Filter zurücksetzen" name="reset_filters"/>
-	<menu_item_call label="Alle Ordner schließen" name="close_folders"/>
+	<menu_item_call label="Alle Ordner einklappen" name="close_folders"/>
+	<menu_item_call label="Alle Fenster schließen" name="close_windows"/>
 	<menu_item_call label="Fundbüro ausleeren" name="empty_lostnfound"/>
 	<menu_item_call label="Textur speichern als" name="Save Texture As"/>
 	<menu_item_call label="Teilen" name="Share"/>

@@ -613,6 +613,14 @@
          parameter="rename" />
     </menu_item_call>
     <menu_item_call
+     label="Image..."
+     layout="topleft"
+     name="thumbnail">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="thumbnail" />
+    </menu_item_call>
+    <menu_item_call
      label="Protect"
      layout="topleft"
      name="ProtectFolder">
@@ -629,12 +637,28 @@
          parameter="unprotect_folder" />
     </menu_item_call>
     <menu_item_call
+     label="Reload Folder"
+     layout="topleft"
+     name="ReloadFolder">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="reload_folder" />
+    </menu_item_call>
+    <menu_item_call
      label="Copy Asset UUID"
      layout="topleft"
      name="Copy Asset UUID">
         <menu_item_call.on_click
          function="Inventory.DoToSelected"
          parameter="copy_uuid" />
+    </menu_item_call>
+    <menu_item_call
+     label="Restore to Last Position"
+     layout="topleft"
+     name="Restore to Last Position">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="restoreToWorld" />
     </menu_item_call>
     <menu_item_call
      label="Show in Main View"
@@ -652,25 +676,27 @@
          function="Inventory.DoToSelected"
          parameter="show_in_new_window" />
     </menu_item_call>
-    <menu_item_call
-     label="Reload Folder"
-     layout="topleft"
-     name="ReloadFolder">
-        <menu_item_call.on_click
-         function="Inventory.DoToSelected"
-         parameter="reload_folder" />
-    </menu_item_call>
-    <menu_item_call
-     label="Restore to Last Position"
-     layout="topleft"
-     name="Restore to Last Position">
-        <menu_item_call.on_click
-         function="Inventory.DoToSelected"
-         parameter="restoreToWorld" />
-    </menu_item_call>
     <menu_item_separator
      layout="topleft" 
      name="Copy Separator" />
+    <menu_item_call
+     label="Open"
+     layout="topleft"
+     name="open_in_current_window">
+        <menu_item_call.on_click
+         function="Inventory.DoToSelected"
+         parameter="open_in_current_window" />
+    </menu_item_call>
+    <menu_item_call
+     label="Open in new window"
+     layout="topleft"
+     name="open_in_new_window">
+        <menu_item_call.on_click
+         function="Inventory.OpenNewFolderWindow"/>
+    </menu_item_call>
+    <menu_item_separator
+     layout="topleft"
+     name="Open Folder Separator" />
     <menu_item_call
      label="Copy"
      layout="topleft"

@@ -28,7 +28,6 @@
 #define LL_LLINVENTORYBRIDGE_H
 
 #include "llcallingcard.h"
-#include "llfloaterproperties.h"
 #include "llfolderviewmodel.h"
 #include "llinventorymodel.h"
 #include "llinventoryobserver.h"
@@ -47,9 +46,11 @@ class LLMenuGL;
 class LLCallingCardObserver;
 class LLViewerJointAttachment;
 class LLFolderView;
+struct LLMoveInv;
 
 typedef std::vector<std::string> menuentry_vec_t;
-
+typedef std::pair<LLUUID, LLUUID> two_uuids_t;
+typedef std::list<two_uuids_t> two_uuids_list_t;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLInvFVBridge
 //
@@ -84,6 +85,7 @@ public:
 	// LLInvFVBridge functionality
 	//--------------------------------------------------------------------
 	virtual const LLUUID& getUUID() const { return mUUID; }
+    virtual const LLUUID& getThumbnailUUID() const { return LLUUID::null; }
 	virtual void clearDisplayName() { mDisplayName.clear(); }
 	virtual void restoreItem() {}
 	virtual void restoreToWorld() {}
@@ -108,6 +110,7 @@ public:
 	virtual std::string getLabelSuffix() const { return LLStringUtil::null; }
 	virtual void openItem() {}
 	virtual void closeItem() {}
+    virtual void navigateToFolder(bool new_window = false, bool change_mode = false);
 	virtual void showProperties();
 	virtual BOOL isItemRenameable() const { return TRUE; }
 	virtual BOOL isMultiPreviewAllowed() { return TRUE; }
@@ -115,6 +118,7 @@ public:
 	virtual BOOL isItemRemovable() const;
 	virtual BOOL isItemMovable() const;
 	virtual BOOL isItemInTrash() const;
+    virtual bool isItemInOutfits() const;
 	virtual BOOL isLink() const;
 	virtual BOOL isLibraryItem() const;
 	//virtual BOOL removeItem() = 0;
@@ -122,7 +126,7 @@ public:
 	virtual void move(LLFolderViewModelItem* new_parent_bridge) {}
     virtual bool isItemCopyable(bool can_copy_as_link = true) const { return false; }
 // [SL:KB] - Patch: Inventory-Links | Checked: 2013-09-19 (Catznip-3.6)
-	virtual bool isItemLinkable() const { return FALSE; }
+	virtual bool isItemLinkable() const { return false; }
 // [/SL:KB]
 	virtual BOOL copyToClipboard() const;
 	virtual BOOL cutToClipboard();
@@ -269,6 +273,7 @@ public:
 	virtual LLUIImagePtr getIconOverlay() const;
 
 	LLViewerInventoryItem* getItem() const;
+    virtual const LLUUID& getThumbnailUUID() const;
 
 protected:
 	BOOL confirmRemoveItem(const LLSD& notification, const LLSD& response);
@@ -293,8 +298,8 @@ public:
 		mShowDescendantsCount(false)
 	{}
 		
-	BOOL dragItemIntoFolder(LLInventoryItem* inv_item, BOOL drop, std::string& tooltip_msg, BOOL user_confirm = TRUE);
-	BOOL dragCategoryIntoFolder(LLInventoryCategory* inv_category, BOOL drop, std::string& tooltip_msg, BOOL is_link = FALSE, BOOL user_confirm = TRUE);
+	BOOL dragItemIntoFolder(LLInventoryItem* inv_item, BOOL drop, std::string& tooltip_msg, BOOL user_confirm = TRUE, LLPointer<LLInventoryCallback> cb = NULL);
+	BOOL dragCategoryIntoFolder(LLInventoryCategory* inv_category, BOOL drop, std::string& tooltip_msg, BOOL is_link = FALSE, BOOL user_confirm = TRUE, LLPointer<LLInventoryCallback> cb = NULL);
     void callback_dropItemIntoFolder(const LLSD& notification, const LLSD& response, LLInventoryItem* inv_item);
     void callback_dropCategoryIntoFolder(const LLSD& notification, const LLSD& response, LLInventoryCategory* inv_category);
 
@@ -314,6 +319,7 @@ public:
 	static LLUIImagePtr getIcon(LLFolderType::EType preferred_type);
 	virtual std::string getLabelSuffix() const;
 	virtual LLFontGL::StyleFlags getLabelStyle() const;
+    virtual const LLUUID& getThumbnailUUID() const;
 
 	void setShowDescendantsCount(bool show_count) {mShowDescendantsCount = show_count;}
 
@@ -362,6 +368,7 @@ public:
 protected:
 	void buildContextMenuOptions(U32 flags, menuentry_vec_t& items,   menuentry_vec_t& disabled_items);
 	void buildContextMenuFolderOptions(U32 flags, menuentry_vec_t& items,   menuentry_vec_t& disabled_items);
+    void addOpenFolderMenuOptions(U32 flags, menuentry_vec_t& items);
 
 	//--------------------------------------------------------------------
 	// Menu callbacks
@@ -387,9 +394,9 @@ protected:
 	void copyOutfitToClipboard();
 	void determineFolderType();
 
-	void dropToFavorites(LLInventoryItem* inv_item);
-	void dropToOutfit(LLInventoryItem* inv_item, BOOL move_is_into_current_outfit);
-	void dropToMyOutfits(LLInventoryCategory* inv_cat);
+	void dropToFavorites(LLInventoryItem* inv_item, LLPointer<LLInventoryCallback> cb = NULL);
+	void dropToOutfit(LLInventoryItem* inv_item, BOOL move_is_into_current_outfit, LLPointer<LLInventoryCallback> cb = NULL);
+	void dropToMyOutfits(LLInventoryCategory* inv_cat, LLPointer<LLInventoryCallback> cb = NULL);
 
 	//--------------------------------------------------------------------
 	// Messy hacks for handling folder options
@@ -399,7 +406,7 @@ public:
 	static void staticFolderOptionsMenu();
 
 protected:
-    void outfitFolderCreatedCallback(LLUUID cat_source_id, LLUUID cat_dest_id);
+    void outfitFolderCreatedCallback(LLUUID cat_source_id, LLUUID cat_dest_id, LLPointer<LLInventoryCallback> cb);
     void callback_pasteFromClipboard(const LLSD& notification, const LLSD& response);
     void perform_pasteFromClipboard();
     void gatherMessage(std::string& message, S32 depth, LLError::ELevel log_level);
@@ -804,7 +811,7 @@ void rez_attachment(LLViewerInventoryItem* item,
 BOOL move_inv_category_world_to_agent(const LLUUID& object_id, 
 									  const LLUUID& category_id,
 									  BOOL drop,
-									  void (*callback)(S32, void*) = NULL,
+									  std::function<void(S32, void*, const LLMoveInv *)> callback = NULL,
 									  void* user_data = NULL,
 									  LLInventoryFilter* filter = NULL);
 
@@ -829,5 +836,17 @@ public:
     virtual void groupFilterContextMenu(folder_view_item_deque& selected_items, LLMenuGL& menu);
     bool canWearSelected(const uuid_vec_t& item_ids) const;
 };
+
+struct LLMoveInv
+{
+    LLUUID mObjectID;
+    LLUUID mCategoryID;
+    two_uuids_list_t mMoveList;
+    std::function<void(S32, void*, const LLMoveInv*)> mCallback;
+    void* mUserData;
+};
+
+void warn_move_inventory(LLViewerObject* object, boost::shared_ptr<LLMoveInv> move_inv);
+bool move_task_inventory_callback(const LLSD& notification, const LLSD& response, boost::shared_ptr<LLMoveInv>);
 
 #endif // LL_LLINVENTORYBRIDGE_H

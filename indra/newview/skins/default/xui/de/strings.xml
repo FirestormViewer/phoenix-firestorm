@@ -1731,6 +1731,12 @@ https://www.firestormviewer.org/support für Hilfe zum Lösen des Problems.
 	<string name="MarketplaceNoMatchingItems">
 		Keine übereinstimmenden Objekte gefunden. Überprüfen Sie die Schreibweise des Suchbegriffs und versuchen Sie es noch einmal.
 	</string>
+	<string name="InventorySingleFolderEmpty">
+		Ordner ist leer.
+	</string>
+	<string name="InventorySingleFolderNoMatches">
+		Keine Treffer.
+	</string>
 	<string name="InventoryNoTexture">
 		Sie haben keine Kopie dieser Textur in Ihrem Inventar.
 	</string>
@@ -1898,6 +1904,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	<string name="Unconstrained">
 		Unbegrenzt
 	</string>
+	<string name="active" value=" (aktiv)"/>
 	<string name="no_transfer" value=" (kein Transferieren)"/>
 	<string name="no_modify" value=" (kein Bearbeiten)"/>
 	<string name="no_copy" value=" (kein Kopieren)"/>
@@ -7204,7 +7211,7 @@ Ihre aktuelle Position: [AVATAR_POS]
 		Inventar-Ordner anziehen
 	</string>
 	<string name="TexturePickerOutfitHeader">
-		Foto für Outfit
+		Foto für Gegenstand
 	</string>
 	<string name="unknown_script">
 		(Unbekanntes Skript)

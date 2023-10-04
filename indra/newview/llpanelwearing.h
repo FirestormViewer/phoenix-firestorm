@@ -97,7 +97,6 @@ private:
 	// <FS:Ansariel> FIRE-22484: Double-click wear in outfits list
 	void onDoubleClick();
 
-	LLInventoryCategoriesObserver* 	mCategoriesObserver;
 	LLWearableItemsList* 			mCOFItemsList;
 	LLScrollListCtrl*				mTempItemsList;
 	LLWearingGearMenu*				mGearMenu;
