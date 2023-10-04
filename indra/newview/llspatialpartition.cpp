@@ -2103,7 +2103,7 @@ S32 get_physics_detail(const LLVolumeParams& volume_params, const LLVector3& sca
 }
 
 // <FS:Beq> Restore physics shape rendering in edit view.
-void renderMeshBaseHull(LLVOVolume* volume, U32 data_mask, LLColor4& color, LLColor4& line_color)
+void renderMeshBaseHullWithOutline(LLVOVolume* volume, U32 data_mask, LLColor4& color, LLColor4& line_color)
 {
 	LLUUID mesh_id = volume->getVolume()->getParams().getSculptID();
 	LLModel::Decomposition* decomp = gMeshRepo.getDecomposition(mesh_id);
