@@ -855,6 +855,43 @@ void LLSpatialGroup::handleChildAddition(const OctreeNode* parent, OctreeNode* c
 	assert_states_valid(this);
 }
 
+//virtual
+void LLSpatialGroup::rebound()
+{
+    if (!isDirty())
+        return;
+
+    super::rebound();
+
+    if (mSpatialPartition->mDrawableType == LLPipeline::RENDER_TYPE_CONTROL_AV)
+    {
+        llassert(mSpatialPartition->mPartitionType == LLViewerRegion::PARTITION_CONTROL_AV);
+
+        LLSpatialBridge* bridge = getSpatialPartition()->asBridge();
+        if (bridge &&
+            bridge->mDrawable &&
+            bridge->mDrawable->getVObj() &&
+            bridge->mDrawable->getVObj()->isRoot())
+        {
+            LLControlAvatar* controlAvatar = bridge->mDrawable->getVObj()->getControlAvatar();
+            if (controlAvatar &&
+                controlAvatar->mDrawable &&
+                controlAvatar->mControlAVBridge)
+            {
+                llassert(controlAvatar->mControlAVBridge->mOctree);
+
+                LLSpatialGroup* root = (LLSpatialGroup*)controlAvatar->mControlAVBridge->mOctree->getListener(0);
+                if (this == root)
+                {
+                    const LLVector4a* addingExtents = controlAvatar->mDrawable->getSpatialExtents();
+                    const LLXformMatrix* currentTransform = bridge->mDrawable->getXform();
+                    expandExtents(addingExtents, *currentTransform);
+                }
+            }
+        }
+    }
+}
+
 void LLSpatialGroup::destroyGL(bool keep_occlusion) 
 {
 	// <FS:Ansariel> Reset VB during TP
@@ -1639,6 +1676,7 @@ void pushVertsColorCoded(LLSpatialGroup* group, U32 mask)
 //  - a linked rigged drawable face has the wrong draw order index
 bool check_rigged_group(LLDrawable* drawable)
 {
+#if 0
     if (drawable->isState(LLDrawable::RIGGED))
     {
         LLSpatialGroup* group = drawable->getSpatialGroup();
@@ -1694,7 +1732,7 @@ bool check_rigged_group(LLDrawable* drawable)
             }
         }
     }
-
+#endif
     return true;
 }
 
