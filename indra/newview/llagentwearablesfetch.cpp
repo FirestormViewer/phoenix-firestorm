@@ -338,7 +338,7 @@ void LLLibraryOutfitsFetch::folderDone()
 	}
 
 	mClothingID = gInventory.findCategoryUUIDForType(LLFolderType::FT_CLOTHING);
-	mLibraryClothingID = gInventory.findLibraryCategoryUUIDForType(LLFolderType::FT_CLOTHING, false);
+	mLibraryClothingID = gInventory.findLibraryCategoryUUIDForType(LLFolderType::FT_CLOTHING);
 
 	// If Library->Clothing->Initial Outfits exists, use that.
 	LLNameCategoryCollector matchFolderFunctor("Initial Outfits");
@@ -461,46 +461,50 @@ void LLLibraryOutfitsFetch::libraryDone()
 	gInventory.removeObserver(this);
 	
 	LLPointer<LLInventoryCallback> copy_waiter = new LLLibraryOutfitsCopyDone(this);
-	mImportedClothingID = gInventory.createNewCategory(mClothingID,
-													   LLFolderType::FT_NONE,
-													   mImportedClothingName);
-	// Copy each folder from library into clothing unless it already exists.
-	for (uuid_vec_t::const_iterator iter = mLibraryClothingFolders.begin();
-		 iter != mLibraryClothingFolders.end();
-		 ++iter)
-	{
-		const LLUUID& src_folder_id = (*iter); // Library clothing folder ID
-		const LLViewerInventoryCategory *cat = gInventory.getCategory(src_folder_id);
-		if (!cat)
+	gInventory.createNewCategory(mClothingID, LLFolderType::FT_NONE,
+			mImportedClothingName, [this, copy_waiter](const LLUUID& new_cat_id)
 		{
-			LL_WARNS() << "Library folder import for uuid:" << src_folder_id << " failed to find folder." << LL_ENDL;
-			continue;
-		}
+			mImportedClothingID = new_cat_id;
+			// Copy each folder from library into clothing unless it already exists.
+			for (uuid_vec_t::const_iterator iter = mLibraryClothingFolders.begin();
+				 iter != mLibraryClothingFolders.end();
+				 ++iter)
+			{
+				const LLUUID& src_folder_id = (*iter); // Library clothing folder ID
+				const LLViewerInventoryCategory *cat = gInventory.getCategory(src_folder_id);
+				if (!cat)
+				{
+					LL_WARNS() << "Library folder import for uuid:" << src_folder_id << " failed to find folder." << LL_ENDL;
+					continue;
+				}
 		
-		if (!LLAppearanceMgr::getInstance()->getCanMakeFolderIntoOutfit(src_folder_id))
-		{
-			LL_INFOS() << "Skipping non-outfit folder name:" << cat->getName() << LL_ENDL;
-			continue;
-		}
+				if (!LLAppearanceMgr::getInstance()->getCanMakeFolderIntoOutfit(src_folder_id))
+				{
+					LL_INFOS() << "Skipping non-outfit folder name:" << cat->getName() << LL_ENDL;
+					continue;
+				}
 		
-		// Don't copy the category if it already exists.
-		LLNameCategoryCollector matchFolderFunctor(cat->getName());
-		LLInventoryModel::cat_array_t cat_array;
-		LLInventoryModel::item_array_t wearable_array;
-		gInventory.collectDescendentsIf(mImportedClothingID, 
-										cat_array, wearable_array, 
-										LLInventoryModel::EXCLUDE_TRASH,
-										matchFolderFunctor);
-		if (cat_array.size() > 0)
-		{
-			continue;
-		}
+				// Don't copy the category if it already exists.
+				LLNameCategoryCollector matchFolderFunctor(cat->getName());
+				LLInventoryModel::cat_array_t cat_array;
+				LLInventoryModel::item_array_t wearable_array;
+				gInventory.collectDescendentsIf(mImportedClothingID, 
+												cat_array, wearable_array, 
+												LLInventoryModel::EXCLUDE_TRASH,
+												matchFolderFunctor);
+				if (cat_array.size() > 0)
+				{
+					continue;
+				}
 
-		LLUUID dst_folder_id = gInventory.createNewCategory(mImportedClothingID,
-															LLFolderType::FT_NONE,
-															cat->getName());
-		LLAppearanceMgr::getInstance()->shallowCopyCategoryContents(src_folder_id, dst_folder_id, copy_waiter);
-	}
+				gInventory.createNewCategory(mImportedClothingID,
+																	LLFolderType::FT_NONE,
+																	cat->getName(),
+																	[src_folder_id, copy_waiter](const LLUUID& new_cat_id) {
+						LLAppearanceMgr::getInstance()->shallowCopyCategoryContents(src_folder_id, new_cat_id, copy_waiter);
+					});
+			}
+		});
 }
 
 void LLLibraryOutfitsFetch::importedFolderFetch()
@@ -556,8 +560,6 @@ void LLLibraryOutfitsFetch::contentsDone()
 {		
 	LL_INFOS() << "start" << LL_ENDL;
 
-	LLInventoryModel::cat_array_t cat_array;
-	LLInventoryModel::item_array_t wearable_array;
 	
 	LLPointer<LLInventoryCallback> order_myoutfits_on_destroy = new LLBoostFuncInventoryCallback(no_op_inventory_func, order_my_outfits_cb);
 
@@ -577,24 +579,26 @@ void LLLibraryOutfitsFetch::contentsDone()
 		if (cat->getName() == LLStartUp::getInitialOutfitName()) continue;
 		
 		// First, make a folder in the My Outfits directory.
-		LLUUID new_outfit_folder_id = gInventory.createNewCategory(mMyOutfitsID, LLFolderType::FT_OUTFIT, cat->getName());
-		
-		cat_array.clear();
-		wearable_array.clear();
-		// Collect the contents of each imported clothing folder, so we can create new outfit links for it
-		gInventory.collectDescendents(folder_id, cat_array, wearable_array, 
-									  LLInventoryModel::EXCLUDE_TRASH);
-		
-		LLInventoryObject::const_object_list_t item_array;
-		for (LLInventoryModel::item_array_t::const_iterator wearable_iter = wearable_array.begin();
-			 wearable_iter != wearable_array.end();
-			 ++wearable_iter)
+		gInventory.createNewCategory(mMyOutfitsID, LLFolderType::FT_OUTFIT, cat->getName(), [folder_id, order_myoutfits_on_destroy](const LLUUID&)
 		{
-			LLConstPointer<LLInventoryObject> item = wearable_iter->get();
-			item_array.push_back(item);
-		}
+			LLInventoryModel::cat_array_t cat_array;
+			LLInventoryModel::item_array_t wearable_array;
 
-		link_inventory_array(LLAppearanceMgr::instance().getCOF(), item_array, order_myoutfits_on_destroy);
+			// Collect the contents of each imported clothing folder, so we can create new outfit links for it
+			gInventory.collectDescendents(folder_id, cat_array, wearable_array,
+				LLInventoryModel::EXCLUDE_TRASH);
+
+			LLInventoryObject::const_object_list_t item_array;
+			for (LLInventoryModel::item_array_t::const_iterator wearable_iter = wearable_array.begin();
+				wearable_iter != wearable_array.end();
+				++wearable_iter)
+			{
+				LLConstPointer<LLInventoryObject> item = wearable_iter->get();
+				item_array.push_back(item);
+			}
+
+			link_inventory_array(LLAppearanceMgr::instance().getCOF(), item_array, order_myoutfits_on_destroy);
+		});
 	}
 
 	mOutfitsPopulated = true;

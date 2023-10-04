@@ -172,6 +172,9 @@ LLFloaterTexturePicker::LLFloaterTexturePicker(
 	mSelectedItemPinned( FALSE ),
 	mCanApply(true),
 	mCanPreview(true),
+    mLimitsSet(false),
+    mMaxDim(S32_MAX),
+    mMinDim(0),
 	mPreviewSettingChanged(false),
 	mOnFloaterCommitCallback(NULL),
 	mOnFloaterCloseCallback(NULL),
@@ -310,8 +313,9 @@ void LLFloaterTexturePicker::stopUsingPipette()
 	}
 }
 
-void LLFloaterTexturePicker::updateImageStats()
+bool LLFloaterTexturePicker::updateImageStats()
 {
+    bool result = true;
     if (mGLTFMaterial.notNull())
     {
         S32 width = 0;
@@ -367,14 +371,31 @@ void LLFloaterTexturePicker::updateImageStats()
 	else if (mTexturep.notNull())
 	{
 		//RN: have we received header data for this image?
-		if (mTexturep->getFullWidth() > 0 && mTexturep->getFullHeight() > 0)
+        S32 width = mTexturep->getFullWidth();
+        S32 height = mTexturep->getFullHeight();
+		if (width > 0 && height > 0)
 		{
-			std::string formatted_dims = llformat("%d x %d", mTexturep->getFullWidth(),mTexturep->getFullHeight());
-			mResolutionLabel->setTextArg("[DIMENSIONS]", formatted_dims);
-			if (mOnUpdateImageStatsCallback)
-			{
-				mOnUpdateImageStatsCallback(mTexturep);
-			}
+            if ((mLimitsSet && (width != height))
+                || width < mMinDim
+                || width > mMaxDim
+                || height < mMinDim
+                || height > mMaxDim
+                )
+            {
+                std::string formatted_dims = llformat("%dx%d", width, height);
+                mResolutionWarning->setTextArg("[TEXDIM]", formatted_dims);
+                result = false;
+            }
+            else
+            {
+                std::string formatted_dims = llformat("%d x %d", width, height);
+                mResolutionLabel->setTextArg("[DIMENSIONS]", formatted_dims);
+            }
+
+            if (mOnUpdateImageStatsCallback)
+            {
+                mOnUpdateImageStatsCallback(mTexturep);
+            }
 		}
 		else
 		{
@@ -385,6 +406,23 @@ void LLFloaterTexturePicker::updateImageStats()
 	{
 		mResolutionLabel->setTextArg("[DIMENSIONS]", std::string(""));
 	}
+    mResolutionLabel->setVisible(result);
+    mResolutionWarning->setVisible(!result);
+
+    // Hide buttons and pipete to make space for mResolutionWarning
+    // Hiding buttons is suboptimal, but at the moment limited to inventory thumbnails
+    // may be this should be an info/warning icon with a tooltip?
+    S32 index = mModeSelector->getValue().asInteger();
+    if (index == 0)
+    {
+        mDefaultBtn->setVisible(result);
+        mNoneBtn->setVisible(result);
+        mBlankBtn->setVisible(result);
+        mPipetteBtn->setVisible(result);
+        // <FS> Special additions
+        mTransparentBtn->setVisible(result);
+    }
+    return result;
 }
 
 // virtual
@@ -530,12 +568,29 @@ BOOL LLFloaterTexturePicker::postBuild()
 	mTentativeLabel = getChild<LLTextBox>("Multiple");
 
 	mResolutionLabel = getChild<LLTextBox>("size_lbl");
+    mResolutionWarning = getChild<LLTextBox>("over_limit_lbl");
 
 
-	childSetAction("Default",LLFloaterTexturePicker::onBtnSetToDefault,this);
-	childSetAction("None", LLFloaterTexturePicker::onBtnNone,this);
-	childSetAction("Blank", LLFloaterTexturePicker::onBtnBlank,this);
-	childSetAction("Transparent", LLFloaterTexturePicker::onBtnTransparent,this); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
+    mDefaultBtn = getChild<LLButton>("Default");
+    mNoneBtn = getChild<LLButton>("None");
+    mBlankBtn = getChild<LLButton>("Blank");
+    mPipetteBtn = getChild<LLButton>("Pipette");
+    mSelectBtn = getChild<LLButton>("Select");
+    mCancelBtn = getChild<LLButton>("Cancel");
+    // <FS> Special additions
+    mTransparentBtn = getChild<LLButton>("Transparent");
+    mUUIDBtn = getChild<LLButton>("TextureKeyApply");
+    mUUIDEditor = getChild<LLLineEditor>("TextureKey");
+
+    mDefaultBtn->setClickedCallback(boost::bind(LLFloaterTexturePicker::onBtnSetToDefault,this));
+    mNoneBtn->setClickedCallback(boost::bind(LLFloaterTexturePicker::onBtnNone, this));
+    mBlankBtn->setClickedCallback(boost::bind(LLFloaterTexturePicker::onBtnBlank, this));
+    mPipetteBtn->setCommitCallback(boost::bind(&LLFloaterTexturePicker::onBtnPipette, this));
+    mSelectBtn->setClickedCallback(boost::bind(LLFloaterTexturePicker::onBtnSelect, this));
+    mCancelBtn->setClickedCallback(boost::bind(LLFloaterTexturePicker::onBtnCancel, this));
+    // <FS> Special additions
+    mTransparentBtn->setClickedCallback(boost::bind(LLFloaterTexturePicker::onBtnTransparent, this));
+    mUUIDBtn->setClickedCallback(boost::bind(LLFloaterTexturePicker::onBtnApplyTexture, this));
 
     mFilterEdit = getChild<LLFilterEditor>("inventory search editor");
     mFilterEdit->setCommitCallback(boost::bind(&LLFloaterTexturePicker::onFilterEdit, this, _2));
@@ -599,13 +654,6 @@ BOOL LLFloaterTexturePicker::postBuild()
 	childSetCommitCallback("apply_immediate_check", onApplyImmediateCheck, this);
     getChildView("apply_immediate_check")->setEnabled(mCanApplyImmediately);
 
-	getChild<LLUICtrl>("Pipette")->setCommitCallback( boost::bind(&LLFloaterTexturePicker::onBtnPipette, this));
-	//<FS:Chaser> UUID picker
-	childSetAction("TextureKeyApply", LLFloaterTexturePicker::onBtnApplyTexture,this);
-	//</FS:Chaser>
-	childSetAction("Cancel", LLFloaterTexturePicker::onBtnCancel,this);
-	childSetAction("Select", LLFloaterTexturePicker::onBtnSelect,this);
-
 	mSavedFolderState.setApply(FALSE);
 
 	LLToolPipette::getInstance()->setToolSelectCallback(boost::bind(&LLFloaterTexturePicker::onTextureSelect, this, _1));
@@ -624,12 +672,12 @@ void LLFloaterTexturePicker::draw()
 
     // This is going to spam mOnUpdateImageStatsCallback,
     // either move elsewhere or fix to cause update once per image
-	updateImageStats();
+	bool valid_dims = updateImageStats();
 
 	// if we're inactive, gray out "apply immediate" checkbox
-	getChildView("Select")->setEnabled(mActive && mCanApply);
-	getChildView("Pipette")->setEnabled(mActive);
-	getChild<LLUICtrl>("Pipette")->setValue(LLToolMgr::getInstance()->getCurrentTool() == LLToolPipette::getInstance());
+	mSelectBtn->setEnabled(mActive && mCanApply && valid_dims);
+	mPipetteBtn->setEnabled(mActive);
+    mPipetteBtn->setValue(LLToolMgr::getInstance()->getCurrentTool() == LLToolPipette::getInstance());
 
 	//BOOL allow_copy = FALSE;
 	if( mOwner ) 
@@ -674,10 +722,10 @@ void LLFloaterTexturePicker::draw()
 			mTentativeLabel->setVisible( FALSE  );
 		}
 
-		getChildView("Default")->setEnabled(mImageAssetID != mDefaultImageAssetID || mTentative);
-		getChildView("Blank")->setEnabled((mImageAssetID != mBlankImageAssetID && mBlankImageAssetID.notNull()) || mTentative);
-		getChildView("Transparent")->setEnabled(mImageAssetID != mTransparentImageAssetID || mTentative); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
-		getChildView("None")->setEnabled(mAllowNoTexture && (!mImageAssetID.isNull() || mTentative));
+		mDefaultBtn->setEnabled(mImageAssetID != mDefaultImageAssetID || mTentative);
+		mBlankBtn->setEnabled((mImageAssetID != mBlankImageAssetID && mBlankImageAssetID.notNull()) || mTentative);
+		mNoneBtn->setEnabled(mImageAssetID != mTransparentImageAssetID || mTentative); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
+		mTransparentBtn->setEnabled(mAllowNoTexture && (!mImageAssetID.isNull() || mTentative));
 
 		LLFloater::draw();
 
@@ -803,19 +851,88 @@ const LLUUID& LLFloaterTexturePicker::findItemID(const LLUUID& asset_id, BOOL co
 void LLFloaterTexturePicker::commitIfImmediateSet()
 {
 	// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
-	//if (!mNoCopyTextureSelected && mOnFloaterCommitCallback && mCanApply)
-	if (!mNoCopyTextureSelected && mOnFloaterCommitCallback && mCanApply && mCanPreview)
+	//if (!mNoCopyTextureSelected && mCanApply)
+	if (!mNoCopyTextureSelected && mCanApply && mCanPreview)
 	// </FS:Ansariel>
 	{
-		mOnFloaterCommitCallback(LLTextureCtrl::TEXTURE_CHANGE, LLUUID::null);
+        commitCallback(LLTextureCtrl::TEXTURE_CHANGE);
 	}
 }
 
+void LLFloaterTexturePicker::commitCallback(LLTextureCtrl::ETexturePickOp op)
+{
+    if (!mOnFloaterCommitCallback)
+    {
+        return;
+    }
+    LLUUID asset_id = mImageAssetID;
+    LLUUID inventory_id;
+    LLPickerSource mode = (LLPickerSource)mModeSelector->getValue().asInteger();
+
+    switch (mode)
+    {
+        case PICKER_INVENTORY:
+            {
+                LLFolderView* root_folder = mInventoryPanel->getRootFolder();
+                if (root_folder && root_folder->getCurSelectedItem())
+                {
+                    LLFolderViewItem* last_selected = root_folder->getCurSelectedItem();
+                    LLFolderViewModelItemInventory* inv_view = static_cast<LLFolderViewModelItemInventory*>(last_selected->getViewModelItem());
+
+                    LLInventoryItem* itemp = gInventory.getItem(inv_view->getUUID());
+                    if (itemp && itemp->getAssetUUID() == mImageAssetID)
+                    {
+                        inventory_id = inv_view->getUUID();
+                    }
+                    else
+                    {
+                        mode = PICKER_UNKNOWN; // source of id unknown
+                    }
+                }
+                else
+                {
+                    mode = PICKER_UNKNOWN; // source of id unknown
+                }
+                break;
+            }
+        case PICKER_LOCAL:
+            {
+                if (!mLocalScrollCtrl->getAllSelected().empty())
+                {
+                    LLSD data = mLocalScrollCtrl->getFirstSelected()->getValue();
+                    LLUUID temp_id = data["id"];
+                    S32 asset_type = data["type"].asInteger();
+
+                    if (LLAssetType::AT_MATERIAL == asset_type)
+                    {
+                        asset_id = LLLocalGLTFMaterialMgr::getInstance()->getWorldID(temp_id);
+                    }
+                    else
+                    {
+                        asset_id = LLLocalBitmapMgr::getInstance()->getWorldID(temp_id);
+                    }
+                }
+                else
+                {
+                    asset_id = mImageAssetID;
+                    mode = PICKER_UNKNOWN; // source of id unknown
+                }
+                break;
+            }
+        case PICKER_BAKE:
+            break;
+        default:
+            mode = PICKER_UNKNOWN; // source of id unknown
+            break;
+    }
+
+    mOnFloaterCommitCallback(op, mode, asset_id, inventory_id);
+}
 void LLFloaterTexturePicker::commitCancel()
 {
 	if (!mNoCopyTextureSelected && mOnFloaterCommitCallback && mCanApply)
 	{
-		mOnFloaterCommitCallback(LLTextureCtrl::TEXTURE_CANCEL, LLUUID::null);
+		mOnFloaterCommitCallback(LLTextureCtrl::TEXTURE_CANCEL, PICKER_UNKNOWN, mOriginalImageAssetID, LLUUID::null);
 	}
 }
 
@@ -890,7 +1007,7 @@ void LLFloaterTexturePicker::onBtnCancel(void* userdata)
 	self->setImageID( self->mOriginalImageAssetID );
 	if (self->mOnFloaterCommitCallback)
 	{
-		self->mOnFloaterCommitCallback(LLTextureCtrl::TEXTURE_CANCEL, LLUUID::null);
+		self->mOnFloaterCommitCallback(LLTextureCtrl::TEXTURE_CANCEL, PICKER_UNKNOWN, self->mOriginalImageAssetID, LLUUID::null);
 	}
 	self->mViewModel->resetDirty();
 	self->closeFloater();
@@ -899,30 +1016,10 @@ void LLFloaterTexturePicker::onBtnCancel(void* userdata)
 // static
 void LLFloaterTexturePicker::onBtnSelect(void* userdata)
 {
-	LLFloaterTexturePicker* self = (LLFloaterTexturePicker*) userdata;
-	LLUUID local_id = LLUUID::null;
-	if (self->mOwner)
-	{
-		if (self->mLocalScrollCtrl->getVisible() && !self->mLocalScrollCtrl->getAllSelected().empty())
-		{
-            LLSD data = self->mLocalScrollCtrl->getFirstSelected()->getValue();
-            LLUUID temp_id = data["id"];
-            S32 asset_type = data["type"].asInteger();
-
-            if (LLAssetType::AT_MATERIAL == asset_type)
-            {
-                local_id = LLLocalGLTFMaterialMgr::getInstance()->getWorldID(temp_id);
-            }
-            else
-            {
-                local_id = LLLocalBitmapMgr::getInstance()->getWorldID(temp_id);
-            }
-		}
-	}
-	
+	LLFloaterTexturePicker* self = (LLFloaterTexturePicker*) userdata;	
 	if (self->mOnFloaterCommitCallback)
 	{
-		self->mOnFloaterCommitCallback(LLTextureCtrl::TEXTURE_SELECT, local_id);
+		self->commitCallback(LLTextureCtrl::TEXTURE_SELECT);
 	}
 	self->closeFloater();
 }
@@ -986,7 +1083,7 @@ void LLFloaterTexturePicker::onSelectionChange(const std::deque<LLFolderViewItem
 			// </FS:Chaser>
 			
 			mViewModel->setDirty(); // *TODO: shouldn't we be using setValue() here?
-			
+
 			if(!mPreviewSettingChanged)
 			{
 				mCanPreview = mCanApplyImmediately && gSavedSettings.getBOOL("TextureLivePreview");
@@ -1019,25 +1116,26 @@ void LLFloaterTexturePicker::onModeSelect(LLUICtrl* ctrl, void *userdata)
     //int index = self->mModeSelector->getValue().asInteger();
 	int index = self->mModeSelector->getSelectedIndex();
 
-	self->getChild<LLButton>("Default")->setVisible(index == 0 ? TRUE : FALSE);
-	self->getChild<LLButton>("Blank")->setVisible(index == 0 ? TRUE : FALSE);
-	self->getChild<LLButton>("Transparent")->setVisible(index == 0 ? TRUE : FALSE); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
-	self->getChild<LLButton>("None")->setVisible(index == 0 ? TRUE : FALSE);
-	self->getChild<LLFilterEditor>("inventory search editor")->setVisible(index == 0 ? TRUE : FALSE);
-	self->getChild<LLInventoryPanel>("inventory panel")->setVisible(index == 0 ? TRUE : FALSE);
+	self->mDefaultBtn->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
+	self->mBlankBtn->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
+	self->mNoneBtn->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
+	self->mPipetteBtn->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
+	self->mTransparentBtn->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
+	self->getChild<LLFilterEditor>("inventory search editor")->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
+	self->getChild<LLInventoryPanel>("inventory panel")->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
 
-	self->getChild<LLButton>("l_add_btn")->setVisible(index == 1 ? TRUE : FALSE);
-	self->getChild<LLButton>("l_rem_btn")->setVisible(index == 1 ? TRUE : FALSE);
-	self->getChild<LLButton>("l_upl_btn")->setVisible(index == 1 ? TRUE : FALSE);
-	self->getChild<LLScrollListCtrl>("l_name_list")->setVisible(index == 1 ? TRUE : FALSE);
+	self->getChild<LLButton>("l_add_btn")->setVisible(index == PICKER_LOCAL ? TRUE : FALSE);
+	self->getChild<LLButton>("l_rem_btn")->setVisible(index == PICKER_LOCAL ? TRUE : FALSE);
+	self->getChild<LLButton>("l_upl_btn")->setVisible(index == PICKER_LOCAL ? TRUE : FALSE);
+	self->getChild<LLScrollListCtrl>("l_name_list")->setVisible(index == PICKER_LOCAL ? TRUE : FALSE);
 
-	self->getChild<LLComboBox>("l_bake_use_texture_combo_box")->setVisible(index == 2 ? TRUE : FALSE);
+	self->getChild<LLComboBox>("l_bake_use_texture_combo_box")->setVisible(index == PICKER_BAKE ? TRUE : FALSE);
 
-    bool pipette_visible = (index == 0)
+    bool pipette_visible = (index == PICKER_INVENTORY)
         && (self->mInventoryPickType != LLTextureCtrl::PICK_MATERIAL);
-	self->getChild<LLButton>("Pipette")->setVisible(pipette_visible);
+	self->mPipetteBtn->setVisible(pipette_visible);
 
-	if (index == 2)
+	if (index == PICKER_BAKE)
 	{
 		self->stopUsingPipette();
 
@@ -1226,7 +1324,7 @@ void LLFloaterTexturePicker::onLocalScrollCommit(LLUICtrl* ctrl, void* userdata)
 		{
 			if (self->mOnFloaterCommitCallback)
 			{
-				self->mOnFloaterCommitCallback(LLTextureCtrl::TEXTURE_CHANGE, inworld_id);
+				self->mOnFloaterCommitCallback(LLTextureCtrl::TEXTURE_CHANGE, PICKER_LOCAL, inworld_id, LLUUID::null);
 			}
 		}
 	}
@@ -1318,15 +1416,24 @@ void LLFloaterTexturePicker::onBakeTextureSelect(LLUICtrl* ctrl, void *user_data
 	}
 }
 
-void LLFloaterTexturePicker::setCanApply(bool can_preview, bool can_apply)
+void LLFloaterTexturePicker::setCanApply(bool can_preview, bool can_apply, bool inworld_image)
 {
-	getChildRef<LLUICtrl>("Select").setEnabled(can_apply);
-	getChildRef<LLUICtrl>("preview_disabled").setVisible(!can_preview);
+	mSelectBtn->setEnabled(can_apply);
+	getChildRef<LLUICtrl>("preview_disabled").setVisible(!can_preview && inworld_image);
 	getChildRef<LLUICtrl>("apply_immediate_check").setVisible(can_preview);
 
 	mCanApply = can_apply;
 	mCanPreview = can_preview ? (mCanApplyImmediately && gSavedSettings.getBOOL("TextureLivePreview")) : false;
 	mPreviewSettingChanged = true;
+}
+
+void LLFloaterTexturePicker::setMinDimentionsLimits(S32 min_dim)
+{
+    mMinDim = min_dim;
+    mLimitsSet = true;
+
+    std::string formatted_dims = llformat("%dx%d", mMinDim, mMinDim);
+    mResolutionWarning->setTextArg("[MINTEXDIM]", formatted_dims);
 }
 
 void LLFloaterTexturePicker::onFilterEdit(const std::string& search_string )
@@ -1805,7 +1912,7 @@ void LLTextureCtrl::showPicker(BOOL take_focus)
 		}
 		if (texture_floaterp)
 		{
-			texture_floaterp->setOnFloaterCommitCallback(boost::bind(&LLTextureCtrl::onFloaterCommit, this, _1, _2));
+			texture_floaterp->setOnFloaterCommitCallback(boost::bind(&LLTextureCtrl::onFloaterCommit, this, _1, _2, _3, _4));
 			texture_floaterp->setSetImageAssetIDCallback(boost::bind(&LLTextureCtrl::setImageAssetID, this, _1));
 
 			texture_floaterp->setBakeTextureEnabled(mBakeTextureEnabled);
@@ -1882,8 +1989,11 @@ BOOL LLTextureCtrl::handleMouseDown(S32 x, S32 y, MASK mask)
                 //grab textures first...
                 LLInventoryModelBackgroundFetch::instance().start(gInventory.findCategoryUUIDForType(LLFolderType::FT_TEXTURE));
             }
-			//...then start full inventory fetch.
-			LLInventoryModelBackgroundFetch::instance().start();
+			//...then start full inventory fetch (should have been done on startup, but just in case.
+            if (!LLInventoryModelBackgroundFetch::instance().inventoryFetchStarted())
+            {
+                LLInventoryModelBackgroundFetch::instance().start();
+            }
 		}
 		// <FS:Ansariel> Texture preview mode
 		//else
@@ -1934,7 +2044,7 @@ void LLTextureCtrl::onFloaterClose()
 	mFloaterHandle.markDead();
 }
 
-void LLTextureCtrl::onFloaterCommit(ETexturePickOp op, LLUUID id)
+void LLTextureCtrl::onFloaterCommit(ETexturePickOp op, LLPickerSource source, const LLUUID& asset_id, const LLUUID& inv_id)
 {
     LLFloaterTexturePicker* floaterp = (LLFloaterTexturePicker*)mFloaterHandle.get();
 
@@ -1948,22 +2058,29 @@ void LLTextureCtrl::onFloaterCommit(ETexturePickOp op, LLUUID id)
 		else if (mCommitOnSelection || op == TEXTURE_SELECT)
 			mViewModel->setDirty(); // *TODO: shouldn't we be using setValue() here?
 			
-		if(floaterp->isDirty() || id.notNull()) // mModelView->setDirty does not work.
+		if(floaterp->isDirty() || asset_id.notNull()) // mModelView->setDirty does not work.
 		{
 			setTentative( FALSE );
 
-			if (id.notNull())
-			{
-				mImageItemID = id;
-				mImageAssetID = id;
-			}
-			else
-			{
-			    mImageItemID = floaterp->findItemID(floaterp->getAssetID(), FALSE);
-			    LL_DEBUGS() << "mImageItemID: " << mImageItemID << LL_ENDL;
-			    mImageAssetID = floaterp->getAssetID();
-			    LL_DEBUGS() << "mImageAssetID: " << mImageAssetID << LL_ENDL;
-			}
+            switch(source)
+            {
+                case PICKER_INVENTORY:
+                    mImageItemID = inv_id;
+                    mImageAssetID = asset_id;
+                    break;
+                case PICKER_BAKE:
+                case PICKER_LOCAL:
+                    mImageItemID = LLUUID::null;
+                    mImageAssetID = asset_id;
+                    break;
+                case PICKER_UNKNOWN:
+                default:
+                    mImageItemID = floaterp->findItemID(asset_id, FALSE);
+                    mImageAssetID = asset_id;
+                    break;
+            }
+
+            LL_DEBUGS() << "mImageAssetID: " << mImageAssetID << ", mImageItemID: " << mImageItemID << LL_ENDL;
 
 			if (op == TEXTURE_SELECT && mOnSelectCallback)
 			{

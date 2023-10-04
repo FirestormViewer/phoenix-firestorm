@@ -89,6 +89,7 @@ private:
 FSLSLBridge::FSLSLBridge():
 					mBridgeCreating(false),
 					mpBridge(nullptr),
+					mBridgeFolderID(LLUUID::null),
 					mIsFirstCallDone(false),
 					mAllowDetach(false),
 					mFinishCreation(false),
@@ -176,7 +177,7 @@ bool FSLSLBridge::lslToViewer(std::string_view message, const LLUUID& fromID, co
 		return false;
 	}
 	std::string_view tag = message.substr(0, tagend + 1);
-	std::string ourBridge = findFSCategory().asString();
+	std::string ourBridge = getBridgeFolder().asString();
 	//</FS:TS> FIRE-962
 	
 	bool bridgeIsEnabled = gSavedSettings.getBOOL("UseLSLBridge");
@@ -213,7 +214,7 @@ bool FSLSLBridge::lslToViewer(std::string_view message, const LLUUID& fromID, co
 			
 			
 			// If something that looks like our current bridge is attached but failed auth, detach and recreate.
-			const LLUUID catID = findFSCategory();
+			const LLUUID catID = getBridgeFolder();
 			LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID);
 			if (fsBridge && get_is_item_worn(fsBridge->getUUID()))
 			{
@@ -251,7 +252,7 @@ bool FSLSLBridge::lslToViewer(std::string_view message, const LLUUID& fromID, co
 		
 		if (!mpBridge)
 		{
-			LLUUID catID = findFSCategory();
+			LLUUID catID = getBridgeFolder();
 			LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID);
 			mpBridge = fsBridge;
 		}
@@ -642,7 +643,7 @@ void FSLSLBridge::recreateBridge()
 	//announce yourself
 	report_to_nearby_chat(LLTrans::getString("fsbridge_creating"));
 
-	LLUUID catID = findFSCategory();
+	LLUUID catID = getBridgeFolder();
 
 	FSLSLBridgeInventoryPreCreationCleanupObserver* bridgeInventoryObserver = new FSLSLBridgeInventoryPreCreationCleanupObserver(catID);
 	bridgeInventoryObserver->startFetch();
@@ -663,7 +664,7 @@ void FSLSLBridge::cleanUpPreCreation()
 	LLInventoryModel::cat_array_t cats;
 	LLInventoryModel::item_array_t items;
 	NameCollectFunctor namefunctor(mCurrentFullName);
-	gInventory.collectDescendentsIf(findFSCategory(), cats, items, FALSE, namefunctor);
+	gInventory.collectDescendentsIf(getBridgeFolder(), cats, items, FALSE, namefunctor);
 
 	mAllowedDetachables.clear();
 	for (const auto& item : items)
@@ -699,7 +700,7 @@ void FSLSLBridge::finishCleanUpPreCreation()
 	LLInventoryModel::cat_array_t cats;
 	LLInventoryModel::item_array_t items;
 	NameCollectFunctor namefunctor(mCurrentFullName);
-	gInventory.collectDescendentsIf(findFSCategory(), cats, items, FALSE, namefunctor);
+	gInventory.collectDescendentsIf(getBridgeFolder(), cats, items, FALSE, namefunctor);
 
 	for (const auto& item : items)
 	{
@@ -743,26 +744,26 @@ void FSLSLBridge::initBridge()
 		return;
 	}
 
-	LLUUID catID = findFSCategory();
-	LLUUID libCatID = findFSBridgeContainerCategory();
+	setupFSCategory([this](const LLUUID& bridge_folder_id)
+		{
+			LLUUID libCatID = findFSBridgeContainerCategory();
 
-	//check for inventory load
-	// AH: Use overloaded LLInventoryFetchDescendentsObserver to check for load of
-	// bridge and bridge rock category before doing anything!
-	LL_INFOS("FSLSLBridge") << "initBridge called. gInventory.isInventoryUsable = " << (gInventory.isInventoryUsable() ? "true" : "false") << LL_ENDL;
-	uuid_vec_t cats;
-	cats.push_back(catID);
-	cats.push_back(libCatID);
-	FSLSLBridgeInventoryObserver* bridgeInventoryObserver = new FSLSLBridgeInventoryObserver(cats);
-	bridgeInventoryObserver->startFetch();
-	if (bridgeInventoryObserver->isFinished())
-	{
-		bridgeInventoryObserver->done();
-	}
-	else
-	{
-		gInventory.addObserver(bridgeInventoryObserver);
-	}
+			//check for inventory load
+			// AH: Use overloaded LLInventoryFetchDescendentsObserver to check for load of
+			// bridge and bridge rock category before doing anything!
+			LL_INFOS("FSLSLBridge") << "initBridge called. gInventory.isInventoryUsable = " << (gInventory.isInventoryUsable() ? "true" : "false") << LL_ENDL;
+			uuid_vec_t cats{ bridge_folder_id, libCatID };
+			FSLSLBridgeInventoryObserver* bridgeInventoryObserver = new FSLSLBridgeInventoryObserver(cats);
+			bridgeInventoryObserver->startFetch();
+			if (bridgeInventoryObserver->isFinished())
+			{
+				bridgeInventoryObserver->done();
+			}
+			else
+			{
+				gInventory.addObserver(bridgeInventoryObserver);
+			}
+		});
 }
 
 
@@ -786,7 +787,7 @@ void FSLSLBridge::startCreation()
 	LL_INFOS("FSLSLBridge") << "startCreation called. gInventory.isInventoryUsable = " << (gInventory.isInventoryUsable() ? "true" : "false") << LL_ENDL;
 
 	//if bridge object doesn't exist - create and attach it, update script.
-	const LLUUID catID = findFSCategory();
+	const LLUUID catID = getBridgeFolder();
 	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID);
 
 	//detach everything else
@@ -836,7 +837,7 @@ void FSLSLBridge::startCreation()
 void FSLSLBridge::createNewBridge()
 {
 	//check if user has a bridge
-	const LLUUID catID = findFSCategory();
+	const LLUUID catID = getBridgeFolder();
 
 	//attach the Linden rock from the library (will resize as soon as attached)
 	const LLUUID libID = gInventory.getLibraryRootFolderID();
@@ -1193,7 +1194,7 @@ void FSLSLBridge::create_script_inner()
 		return;
 	}
 
-	const LLUUID catID = findFSCategory();
+	const LLUUID catID = getBridgeFolder();
 
 	LLPointer<LLInventoryCallback> cb = new FSLSLBridgeScriptCallback();
 	create_inventory_item(gAgentID,
@@ -1378,7 +1379,7 @@ std::string FSLSLBridgeScriptCallback::prepUploadFile(std::string &aBuffer)
 		LL_WARNS("FSLSLBridge") << "Invalid bridge script" << LL_ENDL;
 		return std::string();
 	}
-	aBuffer.replace(pos, bridgekey.length(), FSLSLBridge::getInstance()->findFSCategory().asString());
+	aBuffer.replace(pos, bridgekey.length(), FSLSLBridge::getInstance()->getBridgeFolder().asString());
 
 	LLFILE *fpOut = LLFile::fopen(fNew, "wt");
 	if (!fpOut)
@@ -1483,18 +1484,9 @@ bool FSLSLBridge::isItemAttached(const LLUUID& iID)
 	return (isAgentAvatarValid() && gAgentAvatarp->isWearingAttachment(iID));
 }
 
-LLUUID FSLSLBridge::findFSCategory()
+void FSLSLBridge::setupFSCategory(inventory_func_type callback)
 {
-	if (!mBridgeFolderID.isNull())
-	{
-		return mBridgeFolderID;
-	}
-
-	LLUUID fsCatID;
-	LLUUID bridgeCatID;
-
-	fsCatID = gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER);
-	if (!fsCatID.isNull())
+	if (LLUUID fsCatID = gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER); !fsCatID.isNull())
 	{
 		LLInventoryModel::item_array_t* items;
 		LLInventoryModel::cat_array_t* cats;
@@ -1505,25 +1497,64 @@ LLUUID FSLSLBridge::findFSCategory()
 			{
 				if (cat->getName() == FS_BRIDGE_FOLDER)
 				{
-					bridgeCatID = cat->getUUID();
-					break;
+					mBridgeFolderID = cat->getUUID();
+					callback(mBridgeFolderID);
+					return;
+				}
+			}
+		}
+
+		gInventory.createNewCategory(fsCatID, LLFolderType::FT_NONE, FS_BRIDGE_FOLDER, [this, callback](const LLUUID& new_cat_id)
+			{
+				mBridgeFolderID = new_cat_id;
+				callback(mBridgeFolderID);
+			});
+	}
+	else
+	{
+		gInventory.createNewCategory(gInventory.getRootFolderID(), LLFolderType::FT_NONE, ROOT_FIRESTORM_FOLDER, [this, callback](const LLUUID& new_cat_id)
+			{
+				gInventory.createNewCategory(new_cat_id, LLFolderType::FT_NONE, FS_BRIDGE_FOLDER, [this, callback](const LLUUID& new_cat_id)
+					{
+						mBridgeFolderID = new_cat_id;
+						callback(mBridgeFolderID);
+					});
+			});
+	}
+}
+
+// This used to be the place where the bridge folder was also created before it got moved to setupFSCategory.
+// We still need this method because it is used in processAttach / processDetach, which (unfortunately) might be called
+// before initBridge is called that sets up the bridge folder. But since apparently a bridge is already attached,
+// we can assume the folder already exists and we do not need to create it here anymore. And if something is attached
+// to where we attach the bridge and also has the same name as the bridge but is in a different folder, it won't make
+// any difference if we return the actual category ID or a null UUID for the check performed in processAttach.
+LLUUID FSLSLBridge::findFSCategory()
+{
+	if (!mBridgeFolderID.isNull())
+	{
+		return mBridgeFolderID;
+	}
+
+	if (LLUUID fsCatID = gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER); !fsCatID.isNull())
+	{
+		LLInventoryModel::item_array_t* items;
+		LLInventoryModel::cat_array_t* cats;
+		gInventory.getDirectDescendentsOf(fsCatID, cats, items);
+		if (cats)
+		{
+			for (const auto& cat : *cats)
+			{
+				if (cat->getName() == FS_BRIDGE_FOLDER)
+				{
+					mBridgeFolderID = cat->getUUID();
+					return mBridgeFolderID;
 				}
 			}
 		}
 	}
-	else
-	{
-		fsCatID = gInventory.createNewCategory(gInventory.getRootFolderID(), LLFolderType::FT_NONE, ROOT_FIRESTORM_FOLDER);
-	}
 
-	if (bridgeCatID.isNull())
-	{
-		bridgeCatID = gInventory.createNewCategory(fsCatID, LLFolderType::FT_NONE, FS_BRIDGE_FOLDER);
-	}
-
-	mBridgeFolderID = bridgeCatID;
-
-	return mBridgeFolderID;
+	return LLUUID::null;
 }
 
 LLUUID FSLSLBridge::findFSBridgeContainerCategory()
@@ -1613,7 +1644,7 @@ void FSLSLBridge::cleanUpBridgeFolder(const std::string& nameToCleanUp)
 		return;
 	}
 
-	LLUUID catID = findFSCategory();
+	LLUUID catID = getBridgeFolder();
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
 
@@ -1665,7 +1696,7 @@ void FSLSLBridge::cleanUpOldVersions()
 
 void FSLSLBridge::detachOtherBridges()
 {
-	LLUUID catID = findFSCategory();
+	LLUUID catID = getBridgeFolder();
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
 

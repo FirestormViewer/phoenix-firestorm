@@ -75,9 +75,16 @@ public:
 		typedef boost::shared_ptr<TransferStats> ptr_t;
 
 		TransferStats() : mSizeDownload(0.0), mTotalTime(0.0), mSpeedDownload(0.0) {}
+
+#if LL_LINUX
+		curl_off_t mSizeDownload;
+		curl_off_t mSpeedDownload;
+		F64 mTotalTime;
+#else
 		F64 mSizeDownload;
 		F64 mTotalTime;
 		F64 mSpeedDownload;
+#endif
 	};
 
 

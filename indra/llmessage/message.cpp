@@ -3413,6 +3413,7 @@ typedef std::map<const char*, LLMessageBuilder*> BuilderMap;
 
 void LLMessageSystem::newMessageFast(const char *name)
 {
+	//LL_DEBUGS("Messaging") << "creating new message: " << name << LL_ENDL;
 	LLMessageConfig::Flavor message_flavor =
 		LLMessageConfig::getMessageFlavor(name);
 	LLMessageConfig::Flavor server_flavor =

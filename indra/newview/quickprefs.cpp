@@ -63,7 +63,7 @@ class FSSettingsCollector : public LLInventoryCollectFunctor
 public:
 	FSSettingsCollector()
 	{
-		mMarketplaceFolderUUID = gInventory.findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS, false);
+		mMarketplaceFolderUUID = gInventory.findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
 	}
 
 	virtual ~FSSettingsCollector() {}
