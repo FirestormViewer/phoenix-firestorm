@@ -479,12 +479,7 @@ void RlvRenameOnWearObserver::doneIdle()
 					{
 						// "No modify" item with a non-renameable parent: create a new folder named and move the item into it
 						inventory_func_type f = boost::bind(RlvRenameOnWearObserver::onCategoryCreate, _1, pItem->getUUID());
-						LLUUID idFolder = gInventory.createNewCategory(pFolder->getUUID(), LLFolderType::FT_NONE, strFolderName, f);
-						if (idFolder.notNull())
-						{
-							// Not using the new 'CreateInventoryCategory' cap so manually invoke the callback
-							RlvRenameOnWearObserver::onCategoryCreate(idFolder, pItem->getUUID());
-						}
+						gInventory.createNewCategory(pFolder->getUUID(), LLFolderType::FT_NONE, strFolderName, f);
 					}
 				}
 			}
@@ -532,9 +527,7 @@ bool RlvGiveToRLVOffer::createDestinationFolder(const std::string& strPath)
 			else
 			{
 				inventory_func_type f = boost::bind(RlvGiveToRLVOffer::onCategoryCreateCallback, _1, this);
-				const LLUUID idTemp = gInventory.createNewCategory(gInventory.getRootFolderID(), LLFolderType::FT_NONE, RLV_ROOT_FOLDER, f);
-				if (idTemp.notNull())
-					onCategoryCreateCallback(idTemp, this);
+				gInventory.createNewCategory(gInventory.getRootFolderID(), LLFolderType::FT_NONE, RLV_ROOT_FOLDER, f);
 			}
 			return true;
 		}
@@ -567,9 +560,7 @@ void RlvGiveToRLVOffer::onCategoryCreateCallback(LLUUID idFolder, RlvGiveToRLVOf
 		{
 			LLInventoryObject::correctInventoryName(strFolder);
 			inventory_func_type f = boost::bind(RlvGiveToRLVOffer::onCategoryCreateCallback, _1, pInstance);
-			const LLUUID idTemp = gInventory.createNewCategory(idFolder, LLFolderType::FT_NONE, strFolder, f);
-			if (idTemp.notNull())
-				onCategoryCreateCallback(idTemp, pInstance);
+			gInventory.createNewCategory(idFolder, LLFolderType::FT_NONE, strFolder, f);
 			return;
 		}
 	}

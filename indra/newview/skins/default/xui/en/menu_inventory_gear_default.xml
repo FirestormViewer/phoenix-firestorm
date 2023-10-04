@@ -25,6 +25,63 @@
          function="Floater.Toggle"
          parameter="fs_protectedfolders" />
     </menu_item_check>
+    <menu_item_check
+     label="Inventory settings..."
+     name="inv_settings">
+        <menu_item_check.on_check
+         function="Floater.Visible"
+         parameter="inventory_settings" />
+        <menu_item_check.on_click
+         function="Floater.Toggle"
+         parameter="inventory_settings" />
+    </menu_item_check>
+    <menu_item_separator>
+        <menu_item_separator.on_visible
+         function="Inventory.GearDefault.Visible"
+         parameter="single_folder_view" />
+    </menu_item_separator>
+    <menu_item_check
+     label="List view"
+     layout="topleft"
+     name="list_view">
+        <on_click
+         function="Inventory.GearDefault.Custom.Action"
+         parameter="list_view" />
+        <on_check
+         function="Inventory.GearDefault.Check"
+         parameter="list_view" />
+        <on_visible
+         function="Inventory.GearDefault.Visible"
+         parameter="single_folder_view" />
+    </menu_item_check>
+    <menu_item_check
+     label="Gallery view"
+     layout="topleft"
+     name="gallery_view">
+        <on_click
+         function="Inventory.GearDefault.Custom.Action"
+         parameter="gallery_view" />
+        <on_check
+         function="Inventory.GearDefault.Check"
+         parameter="gallery_view" />
+        <on_visible
+         function="Inventory.GearDefault.Visible"
+         parameter="single_folder_view" />
+    </menu_item_check>
+    <menu_item_check
+     label="Combination view"
+     layout="topleft"
+     name="combination_view">
+        <on_click
+         function="Inventory.GearDefault.Custom.Action"
+         parameter="combination_view" />
+        <on_check
+         function="Inventory.GearDefault.Check"
+         parameter="combination_view" />
+        <on_visible
+         function="Inventory.GearDefault.Visible"
+         parameter="single_folder_view" />
+    </menu_item_check>
     <menu_item_separator
      layout="topleft" />
     <menu_item_check
@@ -70,6 +127,9 @@
         <on_check
          function="Inventory.GearDefault.Check"
          parameter="sort_system_folders_to_top" />
+        <on_visible
+         function="Inventory.GearDefault.Visible"
+         parameter="multi_folder_view" />
     </menu_item_check>
     <menu_item_separator
      layout="topleft" />
@@ -176,15 +236,29 @@
          parameter="reset_filters" />
     </menu_item_call>
     <menu_item_call
-     label="Close All Folders"
+     label="Collapse All Folders"
      layout="topleft"
      name="close_folders">
         <on_click
          function="Inventory.GearDefault.Custom.Action"
          parameter="close_folders" />
+        <on_visible
+         function="Inventory.GearDefault.Visible"
+         parameter="multi_folder_view" />
     </menu_item_call>
-    <menu_item_separator
-     layout="topleft" />
+    <menu_item_call
+     label="Close All Windows"
+     layout="topleft"
+     name="close_windows">
+        <on_click
+         function="Inventory.GearDefault.Custom.Action"
+         parameter="close_inv_windows" />
+    </menu_item_call>
+    <menu_item_separator>
+        <menu_item_separator.on_visible
+         function="Inventory.GearDefault.Visible"
+         parameter="multi_folder_view" />
+    </menu_item_separator>
     <menu_item_call
      label="Empty Lost and Found"
      layout="topleft"
@@ -195,6 +269,9 @@
         <on_enable
          function="Inventory.GearDefault.Enable"
          parameter="empty_lostnfound" />
+        <on_visible
+         function="Inventory.GearDefault.Visible"
+         parameter="multi_folder_view" />
     </menu_item_call>
     <menu_item_separator
      layout="topleft" />
@@ -215,7 +292,8 @@
      name="Share"
      visible="true">
      <on_click
-         function="Inventory.Share" />
+         function="Inventory.GearDefault.Custom.Action"
+         parameter="share" />
      <on_enable
          function="Inventory.GearDefault.Enable"
          parameter="share" />
@@ -332,7 +410,11 @@
 			function="Inventory.CoalescedObjects.Check"
 			parameter="coalesced_objects_only" />
 	</menu_item_check>
-	<menu_item_separator />
+    <menu_item_separator>
+        <menu_item_separator.on_visible
+         function="Inventory.GearDefault.Visible"
+         parameter="multi_folder_view" />
+    </menu_item_separator>
 	<!-- </FS:Zi> -->
 
 	<menu_item_call
@@ -345,5 +427,8 @@
         <on_enable
          function="Inventory.GearDefault.Enable"
          parameter="empty_trash" />
+        <on_visible
+         function="Inventory.GearDefault.Visible"
+         parameter="multi_folder_view" />
     </menu_item_call>
 </toggleable_menu>

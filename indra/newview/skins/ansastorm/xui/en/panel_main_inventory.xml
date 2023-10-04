@@ -7,8 +7,7 @@
  layout="topleft"
  min_height="300"
  min_width="240"
- name="main inventory panel"
- width="330">
+ name="main inventory panel">
   <panel.string
    name="Itemcount">
   </panel.string>
@@ -24,6 +23,9 @@
    name="ItemcountUnknown">
     Fetched [ITEM_COUNT] Elements [FILTER]
   </panel.string>
+  <panel.string name="inventory_title">Inventory</panel.string>
+  <panel.string name="default_mode_btn">Multi_Folder_Mode</panel.string>
+  <panel.string name="single_folder_mode_btn">Single_Folder_Mode</panel.string>
   
 	<menu_bar
 		follows="left|top"
@@ -50,7 +52,8 @@
 			name="inventory_share"
 			label="Share">
 			<menu_item_call.on_click
-				function="Inventory.Share" />
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="share" />
 		</menu_item_call>
 		<menu_item_call
 			name="replace_links"
@@ -75,6 +78,63 @@
 			<menu_item_check.on_click
 				function="Floater.Toggle"
 				parameter="fs_protectedfolders" />
+		</menu_item_check>
+		<menu_item_check
+			label="Inventory settings..."
+			name="inv_settings">
+			<menu_item_check.on_check
+				function="Floater.Visible"
+				parameter="inventory_settings" />
+			<menu_item_check.on_click
+				function="Floater.Toggle"
+				parameter="inventory_settings" />
+		</menu_item_check>
+		<menu_item_separator>
+			<menu_item_separator.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="single_folder_view" />
+			</menu_item_separator>
+		<menu_item_check
+			label="List view"
+			layout="topleft"
+			name="list_view">
+			<menu_item_check.on_click
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="list_view" />
+			<menu_item_check.on_check
+				function="Inventory.GearDefault.Check"
+				parameter="list_view" />
+			<menu_item_check.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="single_folder_view" />
+		</menu_item_check>
+		<menu_item_check
+			label="Gallery view"
+			layout="topleft"
+			name="gallery_view">
+			<menu_item_check.on_click
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="gallery_view" />
+			<menu_item_check.on_check
+				function="Inventory.GearDefault.Check"
+				parameter="gallery_view" />
+			<menu_item_check.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="single_folder_view" />
+		</menu_item_check>
+		<menu_item_check
+			label="Combination view"
+			layout="topleft"
+			name="combination_view">
+			<menu_item_check.on_click
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="combination_view" />
+			<menu_item_check.on_check
+				function="Inventory.GearDefault.Check"
+				parameter="combination_view" />
+			<menu_item_check.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="single_folder_view" />
 		</menu_item_check>
 		<menu_item_separator />
 		<menu_item_check
@@ -112,16 +172,26 @@
 		</menu_item_call>
 		<menu_item_call
 			name="inventory_close_all_folders"
-			label="Close All Folders">
+			label="Collapse All Folders">
 			<menu_item_call.on_click
 				function="Inventory.CloseAllFolders" />
+			<menu_item_call.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="multi_folder_view" />
 		</menu_item_call>
-		<menu_item_separator />
+		<menu_item_separator>
+			<menu_item_separator.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="multi_folder_view" />
+		</menu_item_separator>
 		<menu_item_call
 			name="inventory_empty_trash"
 			label="Empty Trash">
 			<menu_item_call.on_click
 				function="Inventory.EmptyTrash" />
+			<menu_item_call.on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="multi_folder_view" />
 		</menu_item_call>
 	</menu>
 
@@ -363,6 +433,9 @@
 			<on_check
 				function="Inventory.SortBy.Check"
 				parameter="systemfolderstotop" />
+			<on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="multi_folder_view" />
 		</menu_item_check>
 	</menu>
 
@@ -498,175 +571,353 @@
 	</menu>
 	</menu_bar>
   
-  
-  <filter_editor
-   text_pad_left="4"
+  <layout_stack
    follows="left|top|right"
-   height="23"
-   label="Filter Inventory"
-   layout="topleft"
+   height="25"
+   animate="false"
+   top_pad="0"
    left="4"
-   max_length_chars="300"
-   highlight_text_field="true"
-   name="inventory search editor"
-   tool_tip="Type in one or more words to search for, separated by '+' "
-   top_pad="4"
-   right="-6" />
+   right="-5"
+   name="nav_stack"
+   orientation="horizontal">
+    <layout_panel
+     border="false"
+     bevel_style="in"
+     user_resize="false"
+     auto_resize="false"
+     height="25"
+     width="62"
+     name="nav_buttons"
+     visible="false">
+     <button
+      follows="top|left"
+      height="23"
+      image_selected="Single_Folder_Back"
+      image_pressed="Single_Folder_Back"
+      image_unselected="Single_Folder_Back"
+      scale_image="false"
+      layout="topleft"
+      left="0"
+      top="2"
+      name="back_btn"
+      tool_tip="Back"
+      width="20" />
+     <button
+      follows="top|left"
+      height="23"
+      image_selected="Single_Folder_Forward"
+      image_pressed="Single_Folder_Forward"
+      image_unselected="Single_Folder_Forward"
+      scale_image="false"
+      layout="topleft"
+      left_pad="1"
+      name="forward_btn"
+      tool_tip="Forward"
+      width="20" />
+     <button
+      follows="top|left"
+      height="23"
+      image_selected="Single_Folder_Up"
+      image_pressed="Single_Folder_Up"
+      image_unselected="Single_Folder_Up"
+      scale_image="false"
+      layout="topleft"
+      left_pad="1"
+      name="up_btn"
+      tool_tip="Go up one level"
+      width="20" />
+    </layout_panel>
+    <layout_panel
+      border="false"
+      bevel_style="in"
+      user_resize="false"
+      height="25"
+      width="324"
+      name="filter_panel"
+      visible="true">
+      <filter_editor
+       text_pad_left="4"
+       follows="left|top|right"
+       height="23"
+       label="Filter Inventory"
+       layout="topleft"
+       left="0"
+       max_length_chars="300"
+       highlight_text_field="true"
+       name="inventory search editor"
+       tool_tip="Type in one or more words to search for, separated by '+' "
+       top_pad="0"
+       right="-1" />
+    </layout_panel>
+  </layout_stack>
 
-  <button
-   name="collapse_btn"
-   image_overlay="MinusItem_Off"
-   width="18"
+  <layout_stack
+   follows="left|top|right"
    height="18"
+   animate="false"
+   top_pad="0"
    left="4"
-   top_pad="4"
-   follows="top|left"
-   layout="topleft"/>
+   right="-5"
+   name="ctrl_stack"
+   orientation="horizontal">
+    <layout_panel
+     border="false"
+     bevel_style="in"
+     user_resize="false"
+     auto_resize="false"
+     height="18"
+     width="38"
+     name="collapse_expand_buttons">
 
-  <button
-   name="expand_btn"
-   image_overlay="AddItem_Off"
-   width="18"
-   height="18"
-   left_pad="2"
-   follows="top|left"
-   layout="topleft" />
+      <button
+       name="collapse_btn"
+       image_overlay="MinusItem_Off"
+       width="18"
+       height="18"
+       left="0"
+       top="0"
+       follows="top|left"
+       layout="topleft"/>
 
-  <text
-   name="filter_label"
-   value="Filter:"
-   width="40"
-   height="18"
-   left_pad="4"
-   top_delta="2"
-   follows="top|left"
-   layout="topleft" />
+      <button
+       name="expand_btn"
+       image_overlay="AddItem_Off"
+       width="18"
+       height="18"
+       left_pad="2"
+       follows="top|left"
+       layout="topleft" />
 
-  <combo_box
-   name="filter_combo_box"
-   right="-79"
-   height="18"
-   left_pad="4"
-   top_delta="-2"
-   follows="top|left|right"
-   layout="topleft">
+    </layout_panel>
 
-  <combo_box.item value="filter_type_all" label="All Types" />
-  <combo_box.item value="filter_separator" label="------------" enabled="false" />
-  <combo_box.item value="filter_type_animations" label="Animations" />
-  <combo_box.item value="filter_type_calling_cards" label="Calling Cards" />
-  <combo_box.item value="filter_type_clothing" label="Clothing / Body Parts" />
-  <combo_box.item value="filter_type_gestures" label="Gestures" />
-  <combo_box.item value="filter_type_landmarks" label="Landmarks" />
-  <combo_box.item value="filter_type_notecards" label="Notecards" />
-  <combo_box.item value="filter_type_objects" label="Objects" />
-  <combo_box.item value="filter_type_scripts" label="Scripts" />
-  <combo_box.item value="filter_type_sounds" label="Sounds" />
-  <combo_box.item value="filter_type_textures" label="Textures" />
-  <combo_box.item value="filter_type_snapshots" label="Snapshots" />
-  <combo_box.item value="filter_type_meshes" label="Meshes" />
-  <combo_box.item value="filter_type_settings" label="Settings" />
-  <combo_box.item value="filter_separator" label="------------" enabled="false" />
-  <combo_box.item value="filter_type_custom" label="Custom..." />
-  </combo_box>
+    <layout_panel
+     border="false"
+     bevel_style="in"
+     user_resize="false"
+     height="18"
+     width="200"
+     name="filter_ctrls">
 
-  <button
-   commit_callback.function="Inventory.ShowFilters"
-   name="filteroptions_btn"
-   image_overlay="Script_Config"
-   width="18"
-   height="18"
-   right="-59"
-   top_delta="0"
-   follows="top|right"
-   layout="topleft"/>
+      <text
+       name="filter_label"
+       value="Filter:"
+       width="40"
+       height="18"
+       left="2"
+       top="2"
+       follows="top|left"
+       layout="topleft" />
 
-  <menu_button
-   follows="top|right"
-   tool_tip="Show search visibility options"
-   height="18"
-   image_overlay="Inv_Toolbar_SearchVisibility"
+      <combo_box
+       name="filter_combo_box"
+       right="-75"
+       height="18"
+       left_pad="4"
+       top_delta="-2"
+       follows="top|left|right"
+       layout="topleft">
+        <combo_box.item value="filter_type_all" label="All Types" />
+        <combo_box.item value="filter_separator" label="------------" enabled="false" />
+        <combo_box.item value="filter_type_animations" label="Animations" />
+        <combo_box.item value="filter_type_calling_cards" label="Calling Cards" />
+        <combo_box.item value="filter_type_clothing" label="Clothing / Body Parts" />
+        <combo_box.item value="filter_type_gestures" label="Gestures" />
+        <combo_box.item value="filter_type_landmarks" label="Landmarks" />
+        <combo_box.item value="filter_type_notecards" label="Notecards" />
+        <combo_box.item value="filter_type_objects" label="Objects" />
+        <combo_box.item value="filter_type_scripts" label="Scripts" />
+        <combo_box.item value="filter_type_sounds" label="Sounds" />
+        <combo_box.item value="filter_type_textures" label="Textures" />
+        <combo_box.item value="filter_type_snapshots" label="Snapshots" />
+        <combo_box.item value="filter_type_meshes" label="Meshes" />
+        <combo_box.item value="filter_type_settings" label="Settings" />
+        <combo_box.item value="filter_separator" label="------------" enabled="false" />
+        <combo_box.item value="filter_type_custom" label="Custom..." />
+      </combo_box>
+
+      <button
+       commit_callback.function="Inventory.ShowFilters"
+       name="filteroptions_btn"
+       image_overlay="Script_Config"
+       width="18"
+       height="18"
+       right="-54"
+       top_delta="0"
+       follows="top|right"
+       layout="topleft"/>
+
+      <menu_button
+       follows="top|right"
+       tool_tip="Show search visibility options"
+       height="18"
+       image_overlay="Inv_Toolbar_SearchVisibility"
+       layout="topleft"
+       right="-21"
+       top_delta="0"
+       name="options_visibility_btn"
+       width="31" />
+
+      <button
+       commit_callback.function="Inventory.ResetFilters"
+       name="resetfilters_btn"
+       image_overlay="StopReload_Off"
+       width="18"
+       height="18"
+       right="-1"
+       top_delta="0"
+       follows="top|right"
+       layout="topleft"/>
+    </layout_panel>
+  </layout_stack>
+
+  <panel
+   follows="all"
+   halign="center"
+   height="314"
    layout="topleft"
-   right="-26"
-   top_delta="0"
-   name="options_visibility_btn"
-   width="31" />
-
-  <button
-   commit_callback.function="Inventory.ResetFilters"
-   name="resetfilters_btn"
-   image_overlay="StopReload_Off"
-   width="18"
-   height="18"
-   right="-6"
-   top_delta="0"
-   follows="top|right"
-   layout="topleft"/>
-
-  <tab_container
-     bg_alpha_color="DkGray"
-     bg_opaque_color="DkGray"
-     background_visible="false"
-     background_opaque="false"
+   left="2"
+   right="-3"
+   name="default_inventory_panel"
+   top_pad="4">
+    <tab_container
+       bg_alpha_color="DkGray"
+       bg_opaque_color="DkGray"
+       background_visible="false"
+       background_opaque="false"
+       follows="all"
+       halign="center"
+       height="314"
+       layout="topleft"
+       left="0"
+       name="inventory filter tabs"
+       open_tabs_on_drag_and_drop="true"
+       tab_group="1"
+       tab_position="top"
+       top="0">
+      <inventory_panel
+       border="false"
+       bevel_style="none"
+       follows="all"
+       label="Inventory"
+       help_topic="my_inventory_tab"
+       layout="topleft"
+       name="All Items"
+       sort_order_setting="InventorySortOrder"
+       show_item_link_overlays="true"
+       preinitialize_views="false"
+       scroll.reserve_scroll_corner="false">
+          <folder double_click_override="true"/>
+      </inventory_panel>
+      <recent_inventory_panel
+       border="false"
+       bevel_style="none"
+       follows="all"
+       label="Recent"
+       sort_order_setting="RecentItemsSortOrder"
+       help_topic="recent_inventory_tab"
+       layout="topleft"
+       name="Recent Items"
+       show_item_link_overlays="true"
+       preinitialize_views="false"
+       scroll.reserve_scroll_corner="false">
+          <folder double_click_override="true"/>
+      </recent_inventory_panel>
+      <worn_inventory_panel
+       border="false"
+       bevel_style="none"
+       follows="all"
+       label="Worn"
+       help_topic="worn_inventory_tab"
+       layout="topleft"
+       name="Worn Items"
+       show_item_link_overlays="true"
+       preinitialize_views="false"
+       scroll.reserve_scroll_corner="false">
+          <folder double_click_override="true"/>
+      </worn_inventory_panel>
+    </tab_container>
+  </panel>
+    <panel
      follows="all"
      halign="center"
-     height="322"
+     height="313"
      layout="topleft"
-     left="2"
-     name="inventory filter tabs"
-     open_tabs_on_drag_and_drop="true"
-     tab_group="1"
-     tab_position="top"
-     top_pad="4"
-     width="326">
-    <inventory_panel
-     border="false"
-     bevel_style="none"
-     follows="all"
-     height="338"
-     label="Inventory"
-     help_topic="my_inventory_tab"
-     layout="topleft"
-     left="0"
-     name="All Items"
-     sort_order_setting="InventorySortOrder"
-     show_item_link_overlays="true"
-     top="16"
-     width="288" />
-    <recent_inventory_panel
-     border="false"
-     bevel_style="none"
-     follows="all"
-     height="338"
-     label="Recent"
-     sort_order_setting="RecentItemsSortOrder"
-     help_topic="recent_inventory_tab"
-     layout="topleft"
-     left_delta="0"
-     name="Recent Items"
-     show_item_link_overlays="true"
-     width="290" />
-    <worn_inventory_panel
-     border="false"
-     bevel_style="none"
-     follows="all"
-     height="338"
-     label="Worn"
-     help_topic="worn_inventory_tab"
-     layout="topleft"
-     left_delta="0"
-     name="Worn Items"
-     show_item_link_overlays="true"
-     width="290" />
-  </tab_container>
+     left="4"
+     right="-4"
+     name="combination_view_inventory"
+     top_delta="0"
+     visible="false">
+     <layout_stack
+      follows="all"
+      height="313"
+      name="combination_view_stack"
+      animate="false"
+      drag_handle_thickness="6"
+      drag_handle_first_indent="18"
+      drag_handle_second_indent="18"
+      drag_handle_color="PanelGray"
+      drag_handle_shift="5"
+      show_drag_handle="true"
+      top="0"
+      left="0"
+      orientation="vertical">
+       <layout_panel
+        border="false"
+        bevel_style="in"
+        user_resize="true"
+        auto_resize="true"
+        height="203"
+        min_width="150"
+        name="comb_gallery_layout">
+        <panel
+         class="inventory_gallery"
+         filename="panel_inventory_gallery.xml"
+         left="0"
+         top_pad="0"
+         height="203"
+         name="comb_gallery_view_inv"
+         background_visible="true"
+         follows="all"
+         layout="topleft">
+        </panel>
+       </layout_panel>
+       <layout_panel
+        border="false"
+        bevel_style="in"
+        user_resize="true"
+        auto_resize="true"
+        height="110"
+        name="comb_inventory_layout">
+        <single_folder_inventory_panel
+         name="comb_single_folder_inv"
+         follows="all"
+         left="0"
+         top="0"
+         height="110"
+         layout="topleft"
+         show_item_link_overlays="true"
+         background_visible="true"
+         border="false"
+         bevel_style="none"
+         scroll.reserve_scroll_corner="false">
+         <item
+          single_folder_mode="true"
+          folder_indentation="-8"/>
+         <folder
+          single_folder_mode="true"
+          folder_indentation="-8"/>
+        </single_folder_inventory_panel>
+       </layout_panel>
+     </layout_stack>
+    </panel>
   <panel
    follows="left|right|bottom"
-   height="25"
+   height="33"
    layout="topleft"
-   top_pad="-3"
+   bottom="-5"
    left="4"
    name="bottom_panel"
-   width="322">
+   right="-4">
       <panel
        visible="false"
        follows="top|left"
@@ -721,10 +972,10 @@
           <button
            follows="top|left"
            height="25"
-           image_hover_unselected="Toolbar_Middle_Over"
+           image_hover_unselected="Toolbar_Left_Over"
            image_overlay="inventory_18"
-           image_selected="Toolbar_Middle_Selected"
-           image_unselected="Toolbar_Middle_Off"
+           image_selected="Toolbar_Left_Selected"
+           image_unselected="Toolbar_Left_Off"
            layout="topleft"
            left="0"
            name="new_inv_btn"
@@ -735,6 +986,27 @@
                  function="Button.SetDockableFloaterToggle"
                  parameter="secondary_inventory" />
            </button>
+      </panel>
+      <panel
+       follows="top|left"
+       height="25"
+       layout="topleft"
+       left_pad="0"
+       name="view_mode_panel"
+       width="32">
+          <button
+           follows="top|left"
+           height="25"
+           image_hover_unselected="Toolbar_Middle_Over"
+           image_overlay="Single_Folder_Mode"
+           image_selected="Toolbar_Middle_Selected"
+           image_unselected="Toolbar_Middle_Off"
+           layout="topleft"
+           left="0"
+           name="view_mode_btn"
+           tool_tip="Switch between views"
+           top="0"
+           width="31"/>
       </panel>
       <panel
        follows="top|left|right"

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Gallery">
+	<menu_item_call label="Teilen" name="Share"/>
+	<menu_item_call label="Papierkorb ausleeren" name="Empty Trash"/>
+	<menu_item_call label="Fundstücke ausleeren" name="Empty Lost And Found"/>
+	<menu_item_call label="Teleportieren" name="Landmark Open"/>
+	<menu_item_call label="Aktuelles Outfit ersetzen" name="Replace Outfit"/>
+	<menu_item_call label="Zum aktuellen Outfit hinzufügen" name="Add To Outfit"/>
+	<menu_item_call label="Vom aktuellen Outfit entfernen" name="Remove From Outfit"/>
+	<menu_item_call label="Outfitliste in Zwischenablage kopieren" name="Copy outfit list to clipboard"/>
+	<menu_item_call label="Original suchen" name="Find Original"/>
+	<menu_item_call label="Objekt löschen" name="Purge Item"/>
+	<menu_item_call label="Objekt wiederherstellen" name="Restore Item"/>
+	<menu_item_call label="Öffnen" name="Open"/>
+	<menu_item_call label="Original öffnen" name="Open Original"/>
+	<menu_item_call label="Eigenschaften" name="Properties"/>
+	<menu_item_call label="Abbildung..." name="thumbnail"/>
+	<menu_item_call label="Asset-UUID kopieren" name="Copy Asset UUID"/>
+	<menu_item_call label="Öffnen" name="open_in_current_window"/>
+	<menu_item_call label="In neuem Fenster öffnen" name="open_in_new_window"/>
+	<menu_item_call label="Umbenennen" name="Rename"/>
+	<menu_item_call label="Ausschneiden" name="Cut"/>
+	<menu_item_call label="Kopieren" name="Copy"/>
+	<menu_item_call label="Einfügen" name="Paste"/>
+	<menu_item_call label="Als Link einfügen" name="Paste As Link"/>
+	<menu_item_call label="Links ersetzen" name="Replace Links"/>
+	<menu_item_call label="Löschen" name="Delete"/>
+	<menu_item_call label="Systemordner löschen" name="Delete System Folder"/>
+	<menu_item_call label="Wiedergeben/Abspielen" name="Sound Play"/>
+	<menu_item_call label="SLurl kopieren" name="url_copy"/>
+	<menu_item_call label="Landmarken-Info" name="About Landmark"/>
+	<menu_item_call label="Auf Karte anzeigen" name="show_on_map"/>
+	<menu_item_call label="Inworld abspielen" name="Animation Play"/>
+	<menu_item_call label="Lokal abspielen" name="Animation Audition"/>
+	<menu_item_call label="Instant Message senden" name="Send Instant Message"/>
+	<menu_item_call label="Teleport anbieten..." name="Offer Teleport..."/>
+	<menu_item_call label="Teleport anfordern..." name="Request Teleport..."/>
+	<menu_item_call label="Aktivieren" name="Activate"/>
+	<menu_item_call label="Deaktivieren" name="Deactivate"/>
+	<menu_item_call label="Speichern unter" name="Save As"/>
+	<menu_item_call label="Speichern nach" name="Save Selected As"/>
+	<menu_item_call label="Anziehen" name="Wearable And Object Wear"/>
+	<menu label="Anhängen an" name="Attach To"/>
+	<menu label="An HUD hängen" name="Attach To HUD"/>
+	<menu_item_call label="Berühren" name="Attachment Touch" />
+	<menu_item_call label="Bearbeiten" name="Wearable Edit"/>
+	<menu_item_call label="Hinzufügen" name="Wearable Add"/>
+	<menu_item_call label="Von Körper abnehmen" name="Detach From Yourself"/>
+	<menu_item_call label="Ausziehen" name="Take Off"/>
+	<menu_item_call label="Nur auf mich anwenden" name="Settings Apply Local"/>
+	<menu_item_call label="Auf Parzelle anwenden" name="Settings Apply Parcel"/>
+	<menu_item_call label="Neuen Ordner aus Auswahl erstellen" name="New folder from selected"/>
+	<menu_item_call label="Gruppierung durch den Ordner aufheben" name="Ungroup folder items"/>
+	<menu label="Als Standard verwenden für" name="upload_def">
+		<menu_item_call label="Hochgeladene Bilder" name="Image uploads"/>
+		<menu_item_call label="Hochgeladene Sounds" name="Sound uploads"/>
+		<menu_item_call label="Hochgeladene Animationen" name="Animation uploads"/>
+		<menu_item_call label="Hochgeladene Modelle" name="Model uploads"/>
+	</menu>
+	<menu_item_call label="In Marktplatz-Auflistungen kopieren" name="Marketplace Copy"/>
+	<menu_item_call label="In Marktplatz-Auflistungen verschieben" name="Marketplace Move"/>
+	<menu_item_call label="--keine Optionen--" name="--no options--"/>
+</context_menu>

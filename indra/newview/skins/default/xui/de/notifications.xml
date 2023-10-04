@@ -1341,6 +1341,13 @@ nach
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
+	<notification label="Gegenstand umbenennen" name="RenameItem">
+		Neuer Name für [NAME]
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
 	<notification name="RemoveFromFriends">
 		Möchten Sie &lt;nolink&gt;[NAME]&lt;/nolink&gt; aus Ihrer Freundesliste entfernen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
@@ -2512,6 +2519,16 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 Möchten Sie diese Objekte wirklich löschen?
 		<usetemplate ignoretext="Vor dem Löschen gefilterter Objekte bestätigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="DeleteThumbnail">
+		Soll die Abbildung für dieses Objekt gelöscht werden?
+
+Diese Aktion kann nicht rückgängig gemacht werden.
+		<usetemplate ignoretext="Vor dem Löschen von Abbildungen bestätigen" name="okcancelignore" notext="Abbrechen" yestext="Löschen"/>
+	</notification>
+	<notification name="ThumbnailDimantionsLimit">
+		Es sind nur quadratische Bilder zwischen 64 und 256 Pixel pro Seite erlaubt.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmUnlink">
 		Soll das ausgewählte Objekt wirklich getrennt werden?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Trennen"/>
@@ -2597,6 +2614,9 @@ Möchten Sie den Nicht-stören-Modus deaktivieren, bevor Sie diese Transaktion a
 	<notification name="TrashIsFull">
 		Ihr Papierkorb läuft über. Dies kann zu Anmeldeproblemen führen.
 		<usetemplate name="okcancelbuttons" notext="Papierkorb später leeren" yestext="Papierkorb ansehen"/>
+	</notification>
+	<notification name="InventoryLimitReachedAISAlert">
+		Es gibt Probleme mit Ihrem Inventar. Bitte kontaktieren Sie den Support.
 	</notification>
 	<notification name="InventoryLimitReachedAIS">
 		Es gibt Probleme mit Ihrem Inventar. Bitte kontaktieren Sie den Support Ihres Grids.
@@ -4876,6 +4896,14 @@ Entpacken: [UNPACK_TIME]s [USIZE]KB
 	<notification label="Eingabe MFA-Token" name="PromptMFAToken">
 		[MESSAGE]
 		<form name="form">
+			<button name="continue" text="Fortsetzen"/>
+			<button name="cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification label="Eingabe MFA-Token" name="PromptMFATokenWithSave">
+		[MESSAGE]
+		<form name="form">
+			<ignore name="ignore" text="Diesen Computer für 30 Tage merken."/>
 			<button name="continue" text="Fortsetzen"/>
 			<button name="cancel" text="Abbrechen"/>
 		</form>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="simple_outfit_snapshot" title="Outfit-Foto">
+<floater name="simple_outfit_snapshot" title="Abbildung">
 	<button label="Foto erstellen" name="new_snapshot_btn"/>
-	<button label="Speichern ([UPLOAD_COST]L$)" name="save_btn"/>
+	<button label="Speichern" name="save_btn"/>
 	<button label="Abbrechen" name="cancel_btn"/>
 </floater>

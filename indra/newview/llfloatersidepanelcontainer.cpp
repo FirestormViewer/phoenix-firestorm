@@ -97,6 +97,39 @@ void LLFloaterSidePanelContainer::closeFloater(bool app_quitting)
 	}
 }
 
+LLFloater* LLFloaterSidePanelContainer::getTopmostInventoryFloater()
+{
+    LLFloater* topmost_floater = NULL;
+    S32 z_min = S32_MAX;
+    
+    LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("inventory");
+    // <FS:Ansariel> Fix for sharing inventory when multiple inventory floaters are open:
+    //               For the secondary floaters, we have registered those as
+    //               "secondary_inventory" in LLFloaterReg, so we have to add those
+    //               instances to the instance list!
+    //for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin(); iter != inst_list.end(); ++iter)
+    LLFloaterReg::const_instance_list_t& inst_list_secondary = LLFloaterReg::getFloaterList("secondary_inventory");
+    LLFloaterReg::instance_list_t combined_list;
+    combined_list.insert(combined_list.end(), inst_list.begin(), inst_list.end());
+    combined_list.insert(combined_list.end(), inst_list_secondary.begin(), inst_list_secondary.end());
+    for (LLFloaterReg::instance_list_t::const_iterator iter = combined_list.begin(); iter != combined_list.end(); ++iter)
+    // </FS:Ansariel>
+    {
+        LLFloater* inventory_floater = (*iter);
+
+        if (inventory_floater && inventory_floater->getVisible())
+        {
+            S32 z_order = gFloaterView->getZOrder(inventory_floater);
+            if (z_order < z_min)
+            {
+                z_min = z_order;
+                topmost_floater = inventory_floater;
+            }
+        }
+    }
+    return topmost_floater;
+}
+
 LLPanel* LLFloaterSidePanelContainer::openChildPanel(const std::string& panel_name, const LLSD& params)
 {
 	LLView* view = findChildView(panel_name, true);

@@ -124,6 +124,7 @@ private:
 
 protected:
 	LLViewerInventoryItem* findInvObject(const std::string& obj_name, const LLUUID& catID);
+	void setupFSCategory(inventory_func_type callback);
 	LLUUID findFSCategory();
 	LLUUID findFSBridgeContainerCategory();
 

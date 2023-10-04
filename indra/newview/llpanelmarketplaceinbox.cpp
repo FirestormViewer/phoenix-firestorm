@@ -78,9 +78,6 @@ BOOL LLPanelMarketplaceInbox::postBuild()
 void LLPanelMarketplaceInbox::onSelectionChange(const std::deque<LLFolderViewItem*>& items, BOOL user_action)
 // </FS:Ansariel>
 {
-	LLSidepanelInventory* sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
-		
-	sidepanel_inventory->updateVerbs();
 
 	// <FS:Ansariel> FIRE-21948: Show element count in Received Items folder
 	mInventoryPanel->onSelectionChange(items, user_action);

@@ -31,16 +31,23 @@
 
 #include "llagent.h"
 #include "llavataractions.h"
+#include "llavatarnamecache.h"
 #include "llbutton.h"
+#include "llcallbacklist.h"
 #include "llcombobox.h"
+#include "llfloater.h"
 #include "llfloaterreg.h"
 #include "llgroupactions.h"
+#include "llgroupmgr.h"
+#include "lliconctrl.h"
 #include "llinventorydefines.h"
+#include "llinventoryicon.h"
 #include "llinventorymodel.h"
 #include "llinventoryobserver.h"
 #include "lllineeditor.h"
 #include "llradiogroup.h"
 #include "llslurl.h"
+#include "lltexteditor.h"
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
 #include "llviewerobjectlist.h"
@@ -75,49 +82,6 @@ private:
     LLUUID mItemId;
     S32 mId;
 };
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Class LLItemPropertiesObserver
-//
-// Helper class to watch for changes to the item.
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-class LLItemPropertiesObserver : public LLInventoryObserver
-{
-public:
-	LLItemPropertiesObserver(LLSidepanelItemInfo* floater)
-		: mFloater(floater)
-	{
-		gInventory.addObserver(this);
-	}
-	virtual ~LLItemPropertiesObserver()
-	{
-		gInventory.removeObserver(this);
-	}
-	virtual void changed(U32 mask);
-private:
-	LLSidepanelItemInfo* mFloater; // Not a handle because LLSidepanelItemInfo is managing LLItemPropertiesObserver
-};
-
-void LLItemPropertiesObserver::changed(U32 mask)
-{
-	const std::set<LLUUID>& mChangedItemIDs = gInventory.getChangedIDs();
-	std::set<LLUUID>::const_iterator it;
-
-	const LLUUID& item_id = mFloater->getItemID();
-
-	for (it = mChangedItemIDs.begin(); it != mChangedItemIDs.end(); it++)
-	{
-		// set dirty for 'item profile panel' only if changed item is the item for which 'item profile panel' is shown (STORM-288)
-		if (*it == item_id)
-		{
-			// if there's a change we're interested in.
-			if((mask & (LLInventoryObserver::LABEL | LLInventoryObserver::INTERNAL | LLInventoryObserver::REMOVE)) != 0)
-			{
-				mFloater->dirty();
-			}
-		}
-	}
-}
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLObjectInventoryObserver
@@ -162,36 +126,48 @@ static LLPanelInjector<LLSidepanelItemInfo> t_item_info("sidepanel_item_info");
 
 // Default constructor
 LLSidepanelItemInfo::LLSidepanelItemInfo(const LLPanel::Params& p)
-	: LLSidepanelInventorySubpanel(p)
+	: LLPanel(p)
 	, mItemID(LLUUID::null)
 	, mObjectInventoryObserver(NULL)
 	, mUpdatePendingId(-1)
+    , mIsDirty(false) /*Not ready*/
+    , mParentFloater(NULL)
 {
-	mPropertiesObserver = new LLItemPropertiesObserver(this);
+    gInventory.addObserver(this);
+    gIdleCallbacks.addFunction(&LLSidepanelItemInfo::onIdle, (void*)this);
 }
 
 // Destroys the object
 LLSidepanelItemInfo::~LLSidepanelItemInfo()
 {
-	delete mPropertiesObserver;
-	mPropertiesObserver = NULL;
+    gInventory.removeObserver(this);
+    gIdleCallbacks.deleteFunction(&LLSidepanelItemInfo::onIdle, (void*)this);
 
 	stopObjectInventoryObserver();
+    
+    if (mOwnerCacheConnection.connected())
+    {
+        mOwnerCacheConnection.disconnect();
+    }
+    if (mCreatorCacheConnection.connected())
+    {
+        mCreatorCacheConnection.disconnect();
+    }
 }
 
 // virtual
 BOOL LLSidepanelItemInfo::postBuild()
 {
-	LLSidepanelInventorySubpanel::postBuild();
-
+    mChangeThumbnailBtn = getChild<LLUICtrl>("change_thumbnail_btn");
+    mItemTypeIcon = getChild<LLIconCtrl>("item_type_icon");
+    mLabelOwnerName = getChild<LLTextBox>("LabelOwnerName");
+    mLabelCreatorName = getChild<LLTextBox>("LabelCreatorName");
+    
 	getChild<LLLineEditor>("LabelItemName")->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
 	getChild<LLUICtrl>("LabelItemName")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitName,this));
-	getChild<LLLineEditor>("LabelItemDesc")->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
 	getChild<LLUICtrl>("LabelItemDesc")->setCommitCallback(boost::bind(&LLSidepanelItemInfo:: onCommitDescription, this));
-	// Creator information
-	getChild<LLUICtrl>("BtnCreator")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onClickCreator,this));
-	// owner information
-	getChild<LLUICtrl>("BtnOwner")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onClickOwner,this));
+    // Thumnail edition
+    mChangeThumbnailBtn->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onEditThumbnail, this));
 	// acquired date
 	// owner permissions
 	// Permissions debug text
@@ -230,6 +206,12 @@ void LLSidepanelItemInfo::setItemID(const LLUUID& item_id)
         mItemID = item_id;
         mUpdatePendingId = -1;
     }
+    dirty();
+}
+
+void LLSidepanelItemInfo::setParentFloater(LLFloater* parent)
+{
+    mParentFloater = parent;
 }
 
 const LLUUID& LLSidepanelItemInfo::getObjectID() const
@@ -253,12 +235,11 @@ void LLSidepanelItemInfo::onUpdateCallback(const LLUUID& item_id, S32 received_u
 
 void LLSidepanelItemInfo::reset()
 {
-	LLSidepanelInventorySubpanel::reset();
-
 	mObjectID = LLUUID::null;
 	mItemID = LLUUID::null;
 
 	stopObjectInventoryObserver();
+    dirty();
 }
 
 void LLSidepanelItemInfo::refresh()
@@ -266,60 +247,37 @@ void LLSidepanelItemInfo::refresh()
 	LLViewerInventoryItem* item = findItem();
 	if(item)
 	{
-		refreshFromItem(item);
-		updateVerbs();
+        const LLUUID trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
+        bool in_trash = (item->getUUID() == trash_id) || gInventory.isObjectDescendentOf(item->getUUID(), trash_id);
+        if (in_trash && mParentFloater)
+        {
+            // Close properties when moving to trash
+            // Aren't supposed to view properties from trash
+            mParentFloater->closeFloater();
+        }
+        else
+        {
+            refreshFromItem(item);
+        }
 		return;
 	}
-	else
-	{
-		if (getIsEditing())
-		{
-			setIsEditing(FALSE);
-		}
-	}
 
-	if (!getIsEditing())
-	{
-		const std::string no_item_names[]={
-			"LabelItemName",
-			"LabelItemDesc",
-			"LabelCreatorName",
-			"LabelOwnerName"
-		};
-
-		for(size_t t=0; t<LL_ARRAY_SIZE(no_item_names); ++t)
-		{
-			getChildView(no_item_names[t])->setEnabled(false);
-		}
-
-		setPropertiesFieldsEnabled(false);
-
-		const std::string hide_names[]={
-			"BaseMaskDebug",
-			"OwnerMaskDebug",
-			"GroupMaskDebug",
-			"EveryoneMaskDebug",
-			"NextMaskDebug"
-		};
-		for(size_t t=0; t<LL_ARRAY_SIZE(hide_names); ++t)
-		{
-			getChildView(hide_names[t])->setVisible(false);
-		}
-	}
-
-	if (!item)
-	{
-		const std::string no_edit_mode_names[]={
-			"BtnCreator",
-			"BtnOwner",
-		};
-		for(size_t t=0; t<LL_ARRAY_SIZE(no_edit_mode_names); ++t)
-		{
-			getChildView(no_edit_mode_names[t])->setEnabled(false);
-		}
-	}
-
-	updateVerbs();
+    if (mObjectID.notNull())
+    {
+        LLViewerObject* object = gObjectList.findObject(mObjectID);
+        if (object)
+        {
+            // Object exists, but object's content is not nessesary
+            // loaded, so assume item exists as well
+            return;
+        }
+    }
+    
+    if (mParentFloater)
+    {
+        // if we failed to get item, it likely no longer exists
+        mParentFloater->closeFloater();
+    }
 }
 
 void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
@@ -337,7 +295,7 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
     }
 
 	// do not enable the UI for incomplete items.
-	BOOL is_complete = item->isFinished();
+	bool is_complete = item->isFinished();
 	const BOOL cannot_restrict_permissions = LLInventoryType::cannotRestrictPermissions(item->getInventoryType());
 	const BOOL is_calling_card = (item->getInventoryType() == LLInventoryType::IT_CALLINGCARD);
 	const BOOL is_settings = (item->getInventoryType() == LLInventoryType::IT_SETTINGS);
@@ -389,8 +347,22 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 	getChild<LLUICtrl>("LabelItemName")->setValue(item->getName());
 	getChildView("LabelItemDescTitle")->setEnabled(TRUE);
 	getChildView("LabelItemDesc")->setEnabled(is_modifiable);
-	getChildView("IconLocked")->setVisible(!is_modifiable);
 	getChild<LLUICtrl>("LabelItemDesc")->setValue(item->getDescription());
+    getChild<LLUICtrl>("item_thumbnail")->setValue(item->getThumbnailUUID());
+
+    LLUIImagePtr icon_img = LLInventoryIcon::getIcon(item->getType(), item->getInventoryType(), item->getFlags(), FALSE);
+    mItemTypeIcon->setImage(icon_img);
+ 
+    // Style for creator and owner links
+    LLStyle::Params style_params;
+    LLColor4 link_color = LLUIColorTable::instance().getColor("HTMLLinkColor");
+    style_params.color = link_color;
+    style_params.readonly_color = link_color;
+    style_params.is_link = true; // link will be added later
+    const LLFontGL* fontp = mLabelCreatorName->getFont();
+    style_params.font.name = LLFontGL::nameFromFont(fontp);
+    style_params.font.size = LLFontGL::sizeFromFont(fontp);
+    style_params.font.style = "UNDERLINE";
 
 	//////////////////
 	// CREATOR NAME //
@@ -401,9 +373,8 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 	if (item->getCreatorUUID().notNull())
 	{
 		LLUUID creator_id = item->getCreatorUUID();
-//		std::string name =
-//			LLSLURL("agent", creator_id, "completename").getSLURLString();
-//		getChildView("BtnCreator")->setEnabled(TRUE);
+//		std::string slurl =
+//			LLSLURL("agent", creator_id, "inspect").getSLURLString();
 // [RLVa:KB] - Checked: RLVa-2.0.1
 		// If the object creator matches the object owner we need to anonymize the creator field as well
 		bool fRlvCanShowCreator = true;
@@ -412,19 +383,43 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 		{
 			fRlvCanShowCreator = false;
 		}
-		std::string name = LLSLURL("agent", creator_id, (fRlvCanShowCreator) ? "completename" : "rlvanonym").getSLURLString();
-		getChildView("BtnCreator")->setEnabled(fRlvCanShowCreator);
+		std::string slurl = LLSLURL("agent", creator_id, (fRlvCanShowCreator) ? "inspect" : "rlvanonym").getSLURLString();
+// [/RLVa:KB]        
+
+        style_params.link_href = slurl;
+
+        LLAvatarName av_name;
+        if (LLAvatarNameCache::get(creator_id, &av_name))
+        {
+//            updateCreatorName(creator_id, av_name, style_params);
+// [RLVa:KB] - Checked: RLVa-2.0.1
+            updateCreatorName(creator_id, av_name, style_params, !fRlvCanShowCreator);
 // [/RLVa:KB]
+        }
+        else
+        {
+            if (mCreatorCacheConnection.connected())
+            {
+                mCreatorCacheConnection.disconnect();
+            }
+            mLabelCreatorName->setText(LLTrans::getString("None"));
+//            mCreatorCacheConnection = LLAvatarNameCache::get(creator_id, boost::bind(&LLSidepanelItemInfo::updateCreatorName, this, _1, _2, style_params));
+// [RLVa:KB] - Checked: RLVa-2.0.1
+            mCreatorCacheConnection = LLAvatarNameCache::get(creator_id, boost::bind(&LLSidepanelItemInfo::updateCreatorName, this, _1, _2, style_params, !fRlvCanShowCreator));
+// [/RLVa:KB]
+        }
+        
 		getChildView("LabelCreatorTitle")->setEnabled(TRUE);
-		getChildView("LabelCreatorName")->setEnabled(FALSE);
-		getChild<LLUICtrl>("LabelCreatorName")->setValue(name);
+//        mLabelCreatorName->setEnabled(TRUE);
+// [RLVa:KB] - Checked: RLVa-2.0.1
+        mLabelCreatorName->setEnabled(fRlvCanShowCreator);
+// [/RLVa:KB]
 	}
 	else
 	{
-		getChildView("BtnCreator")->setEnabled(FALSE);
 		getChildView("LabelCreatorTitle")->setEnabled(FALSE);
-		getChildView("LabelCreatorName")->setEnabled(FALSE);
-		getChild<LLUICtrl>("LabelCreatorName")->setValue(getString("unknown_multiple"));
+        mLabelCreatorName->setEnabled(FALSE);
+        mLabelCreatorName->setValue(getString("unknown_multiple"));
 	}
 
 	////////////////
@@ -435,35 +430,73 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 // [RLVa:KB] - Checked: RVLa-2.0.1
 		bool fRlvCanShowOwner = true;
 // [/RLVa:KB]
-		std::string name;
+		std::string slurl;
 		if (perm.isGroupOwned())
 		{
-			gCacheName->getGroupName(perm.getGroup(), name);
+            LLGroupMgrGroupData* group_data = LLGroupMgr::getInstance()->getGroupData(perm.getGroup());
+            
+            slurl = LLSLURL("group", perm.getGroup(), "inspect").getSLURLString();
+            style_params.link_href = slurl;
+            if (group_data && group_data->isGroupPropertiesDataComplete())
+            {
+                mLabelOwnerName->setText(group_data->mName, style_params);
+            }
+            else
+            {
+                // Triggers refresh
+                LLGroupMgr::getInstance()->sendGroupPropertiesRequest(perm.getGroup());
+                
+                std::string name;
+                gCacheName->getGroupName(perm.getGroup(), name);
+                mLabelOwnerName->setText(name, style_params);
+            }
 		}
 		else
 		{
 			LLUUID owner_id = perm.getOwner();
-//			name = LLSLURL("agent", owner_id, "completename").getSLURLString();
+//            slurl = LLSLURL("agent", owner_id, "inspect").getSLURLString();
 // [RLVa:KB] - Checked: RLVa-2.0.1
 			fRlvCanShowOwner = RlvActions::canShowName(RlvActions::SNC_DEFAULT, owner_id);
-			name = LLSLURL("agent", owner_id, (fRlvCanShowOwner) ? "completename" : "rlvanonym").getSLURLString();
+			slurl = LLSLURL("agent", owner_id, (fRlvCanShowOwner) ? "inspect" : "rlvanonym").getSLURLString();
 // [/RLVa:KB]
-		}
-//		getChildView("BtnOwner")->setEnabled(TRUE);
+            
+            style_params.link_href = slurl;
+            LLAvatarName av_name;
+            if (LLAvatarNameCache::get(owner_id, &av_name))
+            {
+//                updateOwnerName(owner_id, av_name, style_params);
 // [RLVa:KB] - Checked: RLVa-2.0.1
-		getChildView("BtnOwner")->setEnabled(fRlvCanShowOwner);
+                updateOwnerName(owner_id, av_name, style_params, !fRlvCanShowOwner);
 // [/RLVa:KB]
+            }
+            else
+            {
+                if (mOwnerCacheConnection.connected())
+                {
+                    mOwnerCacheConnection.disconnect();
+                }
+                mLabelOwnerName->setText(LLTrans::getString("None"));
+//                mOwnerCacheConnection = LLAvatarNameCache::get(owner_id, boost::bind(&LLSidepanelItemInfo::updateOwnerName, this, _1, _2, style_params));
+// [RLVa:KB] - Checked: RLVa-2.0.1
+                mOwnerCacheConnection = LLAvatarNameCache::get(owner_id, boost::bind(&LLSidepanelItemInfo::updateOwnerName, this, _1, _2, style_params, !fRlvCanShowOwner));
+// [/RLVa:KB]
+            }
+		}
 		getChildView("LabelOwnerTitle")->setEnabled(TRUE);
-		getChildView("LabelOwnerName")->setEnabled(FALSE);
-		getChild<LLUICtrl>("LabelOwnerName")->setValue(name);
+//        mLabelOwnerName->setEnabled(TRUE);
+// [RLVa:KB] - Checked: RLVa-2.0.1
+		mLabelOwnerName->setEnabled(fRlvCanShowOwner);
+// [/RLVa:KB]
 	}
 	else
 	{
-		getChildView("BtnOwner")->setEnabled(FALSE);
 		getChildView("LabelOwnerTitle")->setEnabled(FALSE);
-		getChildView("LabelOwnerName")->setEnabled(FALSE);
-		getChild<LLUICtrl>("LabelOwnerName")->setValue(getString("public"));
+        mLabelOwnerName->setEnabled(FALSE);
+        mLabelOwnerName->setValue(getString("public"));
 	}
+
+    // Not yet supported for task inventories
+    mChangeThumbnailBtn->setEnabled(mObjectID.isNull() && ALEXANDRIA_LINDEN_ID != perm.getOwner());
 	
 	////////////
 	// ORIGIN //
@@ -573,6 +606,8 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 
 	if( gSavedSettings.getBOOL("DebugPermissions") )
 	{
+        childSetVisible("layout_debug_permissions", true);
+        
 		BOOL slam_perm 			= FALSE;
 		BOOL overwrite_group	= FALSE;
 		BOOL overwrite_everyone	= FALSE;
@@ -600,38 +635,29 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 		perm_string = "B: ";
 		perm_string += mask_to_string(base_mask, isOpenSim); // <FS:Beq/> remove misleading X for export when not in OpenSim
 		getChild<LLUICtrl>("BaseMaskDebug")->setValue(perm_string);
-		getChildView("BaseMaskDebug")->setVisible(TRUE);
 		
 		perm_string = "O: ";
 		perm_string += mask_to_string(owner_mask, isOpenSim); // <FS:Beq/> remove misleading X for export when not in OpenSim
 		getChild<LLUICtrl>("OwnerMaskDebug")->setValue(perm_string);
-		getChildView("OwnerMaskDebug")->setVisible(TRUE);
 		
 		perm_string = "G";
 		perm_string += overwrite_group ? "*: " : ": ";
 		perm_string += mask_to_string(group_mask, isOpenSim); // <FS:Beq/> remove misleading X for export when not in OpenSim
 		getChild<LLUICtrl>("GroupMaskDebug")->setValue(perm_string);
-		getChildView("GroupMaskDebug")->setVisible(TRUE);
 		
 		perm_string = "E";
 		perm_string += overwrite_everyone ? "*: " : ": ";
 		perm_string += mask_to_string(everyone_mask, isOpenSim); // <FS:Beq/> remove misleading X for export when not in OpenSim
 		getChild<LLUICtrl>("EveryoneMaskDebug")->setValue(perm_string);
-		getChildView("EveryoneMaskDebug")->setVisible(TRUE);
 		
 		perm_string = "N";
 		perm_string += slam_perm ? "*: " : ": ";
 		perm_string += mask_to_string(next_owner_mask, isOpenSim); // <FS:Beq/> remove misleading X for export when not in OpenSim
 		getChild<LLUICtrl>("NextMaskDebug")->setValue(perm_string);
-		getChildView("NextMaskDebug")->setVisible(TRUE);
 	}
 	else
 	{
-		getChildView("BaseMaskDebug")->setVisible(FALSE);
-		getChildView("OwnerMaskDebug")->setVisible(FALSE);
-		getChildView("GroupMaskDebug")->setVisible(FALSE);
-		getChildView("EveryoneMaskDebug")->setVisible(FALSE);
-		getChildView("NextMaskDebug")->setVisible(FALSE);
+        childSetVisible("layout_debug_permissions", false);
 	}
 
 	/////////////
@@ -766,6 +792,80 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 	}
 }
 
+//void LLSidepanelItemInfo::updateCreatorName(const LLUUID& creator_id, const LLAvatarName& creator_name, const LLStyle::Params& style_params)
+// [RLVa:KB] - Checked: RLVa-2.0.1
+void LLSidepanelItemInfo::updateCreatorName(const LLUUID& creator_id, const LLAvatarName& creator_name, const LLStyle::Params& style_params, bool rlv_restricted)
+// [/RLVa:KB]
+{
+    if (mCreatorCacheConnection.connected())
+    {
+        mCreatorCacheConnection.disconnect();
+    }
+//    std::string name = creator_name.getCompleteName();
+// [RLVa:KB] - Checked: RLVa-2.0.1
+    std::string name = rlv_restricted ? RlvStrings::getAnonym(creator_name) : creator_name.getCompleteName();
+// [/RLVa:KB]
+    mLabelCreatorName->setText(name, style_params);
+}
+
+//void LLSidepanelItemInfo::updateOwnerName(const LLUUID& owner_id, const LLAvatarName& owner_name, const LLStyle::Params& style_params)
+// [RLVa:KB] - Checked: RLVa-2.0.1
+void LLSidepanelItemInfo::updateOwnerName(const LLUUID& owner_id, const LLAvatarName& owner_name, const LLStyle::Params& style_params, bool rlv_restricted)
+// [/RLVa:KB]
+{
+    if (mOwnerCacheConnection.connected())
+    {
+        mOwnerCacheConnection.disconnect();
+    }
+//    std::string name = owner_name.getCompleteName();
+// [RLVa:KB] - Checked: RLVa-2.0.1
+    std::string name = rlv_restricted ? RlvStrings::getAnonym(owner_name) : owner_name.getCompleteName();
+// [/RLVa:KB]
+    mLabelOwnerName->setText(name, style_params);
+}
+
+void LLSidepanelItemInfo::changed(U32 mask)
+{
+    const LLUUID& item_id = getItemID();
+    if (getObjectID().notNull() || item_id.isNull())
+    {
+        // Task inventory or not set up yet
+        return;
+    }
+    
+    const std::set<LLUUID>& mChangedItemIDs = gInventory.getChangedIDs();
+    std::set<LLUUID>::const_iterator it;
+
+    for (it = mChangedItemIDs.begin(); it != mChangedItemIDs.end(); it++)
+    {
+        // set dirty for 'item profile panel' only if changed item is the item for which 'item profile panel' is shown (STORM-288)
+        if (*it == item_id)
+        {
+            // if there's a change we're interested in.
+            if((mask & (LLInventoryObserver::LABEL | LLInventoryObserver::INTERNAL | LLInventoryObserver::REMOVE)) != 0)
+            {
+                dirty();
+            }
+        }
+    }
+}
+
+void LLSidepanelItemInfo::dirty()
+{
+    mIsDirty = true;
+}
+
+// static
+void LLSidepanelItemInfo::onIdle( void* user_data )
+{
+    LLSidepanelItemInfo* self = reinterpret_cast<LLSidepanelItemInfo*>(user_data);
+
+    if( self->mIsDirty )
+    {
+        self->refresh();
+        self->mIsDirty = false;
+    }
+}
 
 void LLSidepanelItemInfo::setAssociatedExperience( LLHandle<LLSidepanelItemInfo> hInfo, const LLSD& experience )
 {
@@ -903,7 +1003,7 @@ void LLSidepanelItemInfo::onCommitDescription()
 	LLViewerInventoryItem* item = findItem();
 	if(!item) return;
 
-	LLLineEditor* labelItemDesc = getChild<LLLineEditor>("LabelItemDesc");
+    LLTextEditor* labelItemDesc = getChild<LLTextEditor>("LabelItemDesc");
 	if(!labelItemDesc)
 	{
 		return;
@@ -1016,7 +1116,14 @@ void LLSidepanelItemInfo::updatePermissions()
 	}
 }
 
-// static
+void LLSidepanelItemInfo::onEditThumbnail()
+{
+    LLSD data;
+    data["task_id"] = mObjectID;
+    data["item_id"] = mItemID;
+    LLFloaterReg::showInstance("change_item_thumbnail", data);
+}
+
 void LLSidepanelItemInfo::onCommitSaleInfo(LLUICtrl* ctrl)
 {
     if (ctrl)
