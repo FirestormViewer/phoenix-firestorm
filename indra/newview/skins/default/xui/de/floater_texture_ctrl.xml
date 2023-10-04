@@ -18,6 +18,9 @@
 		Größe:
 [DIMENSIONS]
 	</text>
+	<text name="over_limit_lbl">
+		Ausgewählte Textur ist [TEXDIM]. Inventar-Abbildung muss quadratisch und zwischen [MINTEXDIM] und [MAXTEXDIM] sein.
+	</text>
 	<button label="Standard" label_selected="Standard" name="Default"/>
 	<button label="Keine" label_selected="Keine" name="None"/>
 	<button label="Leer" label_selected="Leer" name="Blank"/>

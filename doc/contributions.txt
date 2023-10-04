@@ -239,6 +239,7 @@ Ansariel Hiller
 	SL-15227
 	SL-15398
 	SL-18432
+	SL-19140
 	SL-4126
 Aralara Rajal
 Arare Chantilly
@@ -900,6 +901,7 @@ Kitty Barnett
 	STORM-2149
 	MAINT-7581
 	MAINT-7081
+    SL-18988
 Kolor Fall
 Komiko Okamoto
 Korvel Noh

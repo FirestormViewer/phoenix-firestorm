@@ -72,6 +72,8 @@ public:
                                                     text_pad_right,
                                                     arrow_size,
                                                     max_folder_item_overlap;
+        Optional<bool>                              single_folder_mode,
+                                                    double_click_override;
 
 		// <FS:Ansariel> Inventory specials
 		Optional<bool>								for_inventory;
@@ -125,6 +127,8 @@ protected:
 								mIsMouseOverTitle,
 								mAllowWear,
                                 mAllowDrop,
+                                mSingleFolderMode,
+                                mDoubleClickOverride,
 								mSelectPending,
 								mIsItemCut;
 
@@ -184,7 +188,7 @@ public:
 	// Finds width and height of this object and it's children.  Also
 	// makes sure that this view and it's children are the right size.
 	virtual S32 arrange( S32* width, S32* height );
-	virtual S32 getItemHeight();
+	virtual S32 getItemHeight() const;
     virtual S32 getLabelXPos();
     S32 getIconPad();
     S32 getTextPad();
@@ -223,9 +227,9 @@ public:
 
 	void setIsCurSelection(BOOL select) { mIsCurSelection = select; }
 
-	BOOL getIsCurSelection() { return mIsCurSelection; }
+	BOOL getIsCurSelection() const { return mIsCurSelection; }
 
-	BOOL hasVisibleChildren() { return mHasVisibleChildren; }
+	BOOL hasVisibleChildren() const { return mHasVisibleChildren; }
 
 	// true if object can't have children
 	virtual bool isFolderComplete() { return true; }
@@ -274,7 +278,7 @@ public:
 	virtual LLFolderView*	getRoot();
 	virtual const LLFolderView*	getRoot() const;
 	BOOL			isDescendantOf( const LLFolderViewFolder* potential_ancestor );
-	S32				getIndentation() { return mIndentation; }
+	S32				getIndentation() const { return mIndentation; }
 
 	virtual BOOL	passedFilter(S32 filter_generation = -1);
 	virtual BOOL	isPotentiallyVisible(S32 filter_generation = -1);
@@ -286,6 +290,8 @@ public:
     // refreshes suffixes and sets icons. Expensive!
     // Does not need filter update
 	virtual void refreshSuffix();
+
+    bool isSingleFolderMode() { return mSingleFolderMode; }
 
 	// LLView functionality
 	virtual BOOL handleRightMouseDown( S32 x, S32 y, MASK mask );
@@ -402,6 +408,7 @@ public:
 
 	// destroys this folder, and all children
 	virtual void destroyView();
+    void destroyRoot();
 
     // whether known children are fully loaded (arrange sets to true)
     virtual bool isFolderComplete() { return mIsFolderComplete; }

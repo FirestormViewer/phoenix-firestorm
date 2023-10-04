@@ -29,6 +29,7 @@
 #define FS_FLOATERWEARABLEFAVORITES_H
 
 #include "llfloater.h"
+#include "llviewerinventory.h"
 #include "llwearableitemslist.h"
 #include <optional>
 
@@ -79,10 +80,14 @@ public:
 	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
 	/*virtual*/ bool hasAccelerators() const { return true; }
 
-	static void initCategory();
+	static void initCategory(inventory_func_type callback = no_op_inventory_func);
 	static LLUUID getFavoritesFolder();
 
+	static LLUUID sFolderID;
+
 private:
+	void initialize();
+
 	void updateList(const LLUUID& folder_id);
 
 	void onItemDAD(const LLUUID& item_id);
@@ -106,8 +111,6 @@ private:
 	LLFilterEditor*					mFilterEditor;
 	LLMenuButton*					mOptionsButton;
 	LLHandle<LLView>				mOptionsMenuHandle;
-
-	static LLUUID sFolderID;
 };
 
 #endif // FS_FLOATERWEARABLEFAVORITES_H

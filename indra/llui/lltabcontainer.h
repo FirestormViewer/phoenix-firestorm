@@ -353,6 +353,7 @@ private:
 	LLUIColor						mTabsFlashingColor;
 	S32								mTabIconCtrlPad;
 	bool							mUseTabEllipses;
+    LLFrameTimer					mMouseDownTimer;
 };
 
 #endif  // LL_TABCONTAINER_H

@@ -184,6 +184,7 @@ public:
 	bool setControlValue(const LLSD& value);
 	void setControlVariable(LLControlVariable* control);
 	virtual void setControlName(const std::string& control, LLView *context = NULL);
+    void removeControlVariable();
 	
 	LLControlVariable* getControlVariable() { return mControlVariable; } 
 	// <FS:Ansariel> Accessors for other ControlVariables

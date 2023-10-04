@@ -9,6 +9,7 @@
 	<panel.string name="ItemcountUnknown">
 		Pobrano [ITEM_COUNT] elementów [FILTER]
 	</panel.string>
+    <panel.string name="inventory_title">MOJA SZAFA</panel.string>
 	<text name="ItemcountText">
 		Obiekty:
 	</text>
