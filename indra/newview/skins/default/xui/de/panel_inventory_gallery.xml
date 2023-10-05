@@ -2,4 +2,5 @@
 <panel name="Inventory Gallery">
 	<text name="empty_txt">
 		Ordner ist leer.
+	</text>
 </panel>
