@@ -2,7 +2,7 @@
 <emoji_complete
   autosize="false"
   selected_image="ListItem_Select"
-  max_emoji="7"
+  max_visible="7"
   padding="8"
   >
 </emoji_complete>
