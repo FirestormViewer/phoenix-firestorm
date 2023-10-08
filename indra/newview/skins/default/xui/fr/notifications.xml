@@ -1344,6 +1344,14 @@ vers
 			<button name="Cancel" text="Annuler"/>
 		</form>
 	</notification>
+	<notification label="Renommer l'élément sélectionné" name="RenameItem">
+		Choisissez un nouveau nom pour :
+		[NAME]
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
 	<notification name="RemoveFromFriends">
 		Voulez-vous supprimer &lt;nolink&gt;[NAME]&lt;/nolink&gt; de votre liste d&apos;amis ?
 		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
@@ -2499,6 +2507,22 @@ Vous ne pouvez pas l&apos;annuler.
 Voulez-vous vraiment les supprimer ?
 		<usetemplate ignoretext="Confirmer avant de supprimer des articles filtrés." name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
+	<notification name="DeleteThumbnail">
+		Supprimer l'image de cet élément ? Il n'y a pas d'annulation possible.
+		<usetemplate ignoretext="Confirmer la suppression d'une vignette." name="okcancelignore" notext="Annuler" yestext="Supprimer"/>
+	</notification>
+	<notification name="ThumbnailDimentionsLimit">
+		Seules les images carrées de 64 à 256 pixels par côté sont autorisées.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="ThumbnailInsufficientPermissions">
+		Seules les images copiables et transferables peuvent être assignées comme vignettes.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="ThumbnailOutfitPhoto">
+		Pour ajouter une image à une tenue, utilisez la fenêtre Galerie des tenues ou cliquez avec le bouton droit de la souris sur le dossier de la tenue et sélectionnez "Image..."
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmUnlink">
 		C’est une vaste sélection avec des groupes de liens. Si vous annulez les liens, vous risquez de ne pas pouvoir les rétablir. Vous devriez peut-être faire des copies des groupes de liens dans votre inventaire par mesure de précaution.
 		<usetemplate ignoretext="Confirmer l’annulation des liens d’un groupe de liens" name="okcancelignore" notext="Annuler" yestext="Annuler le lien"/>
@@ -2597,8 +2621,11 @@ Voulez-vous les jouer ?
 		Votre corbeille déborde. Cela risque de provoquer des problèmes lors de la connexion.
 		<usetemplate name="okcancelbuttons" notext="Je viderai la corbeille plus tard" yestext="Vérifier le dossier Corbeille"/>
 	</notification>
+	<notification name="InventoryLimitReachedAISAlert">
+		Votre inventaire rencontre des problèmes. Veuillez contacter l'assistance de votre grille.
+	</notification>
 	<notification name="InventoryLimitReachedAIS">
-		Votre inventaire rencontre des problèmes. Veuillez contacter le support de votre grille.
+		Votre inventaire rencontre des problèmes. Veuillez contacter l'assistance de votre grille.
 	</notification>
 	<notification name="ConfirmClearBrowserCache">
 		Êtes-vous certain de vouloir supprimer l&apos;historique de vos visites et recherches ?
@@ -5386,9 +5413,17 @@ Résultat du test de compression de fichier pour gzip au niveau 6 avec [FILE] de
 Compression : [PACK_TIME]s [PSIZE]KB
 Décompression : [UNPACK_TIME]s [USIZE]KB
 	</notification>
-	<notification name="PromptMFAToken">
+	<notification label="Demande de jeton MFA" name="PromptMFAToken">
 		[MESSAGE]
 		<form name="form">
+			<button name="continue" text="Continuer"/>
+			<button name="cancel" text="Annuler"/>
+		</form>
+	</notification>
+	<notification label="Demande de jeton MFA" name="PromptMFATokenWithSave">
+		[MESSAGE]
+		<form name="form">
+			<ignore name="ignore" text="Mémoriser cet ordinateur pendant 30 jours."/>
 			<button name="continue" text="Continuer" />
 			<button name="cancel" text="Annuler" />
 		</form>

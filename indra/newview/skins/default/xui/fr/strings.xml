@@ -1643,6 +1643,12 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	<string name="MarketplaceNoMatchingItems">
 		Aucun article trouvé. Vérifiez l&apos;orthographe de votre chaîne de recherche et réessayez.
 	</string>
+	<string name="InventorySingleFolderEmpty">
+		Le dossier est vide.
+	</string>
+	<string name="InventorySingleFolderNoMatches">
+		Aucune correspondance.
+	</string>
 	<string name="InventoryNoTexture">
 		Vous n&apos;avez pas de copie de cette texture dans votre inventaire
 	</string>
