@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="inventory_settings" title="Ustawienia zawartości">
+	<text name="multi_folder_txt">
+		Dwuklik folderu w widoku wielu folderów:
+	</text>
+	<radio_group name="multi_double_click_setting">
+		<radio_item label="Rozwija i zwija folder" name="0" />
+		<radio_item label="Otwiera nowe okno" name="1" />
+		<radio_item label="Przełącza widok" name="2" />
+	</radio_group>
+	<text name="single_folder_txt">
+		Dwuklik folderu w widoku pojedynczego folderu:
+	</text>
+	<radio_group name="single_double_click_setting">
+		<radio_item label="Pozostaje w bieżącym oknie" name="false" />
+		<radio_item label="Otwiera nowe okno" name="true" />
+	</radio_group>
+	<text name="find_original_txt">
+		Kliknięcie "Pokaż w szafie" lub "Znajdź oryginał"
+	</text>
+	<radio_group name="find_original_settings">
+		<radio_item label="Używa głównego okna szafy" name="false" />
+		<radio_item label="Nowe okno z pojedynczym folderem" name="true" />
+	</radio_group>
+</floater>

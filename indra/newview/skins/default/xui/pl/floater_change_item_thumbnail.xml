@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="change_item_thumbnail" title="Zmień zdjęcie przedmiotu">
+	<floater.string name="title_item_thumbnail">
+		Zmień zdjęcie przedmiotu
+	</floater.string>
+	<floater.string name="title_folder_thumbnail">
+		Zmień zdjęcie folderu
+	</floater.string>
+	<floater.string name="tooltip_upload_local">
+		Prześlij z komputera
+	</floater.string>
+	<floater.string name="tooltip_upload_snapshot">
+		Zrób zdjęcie
+	</floater.string>
+	<floater.string name="tooltip_use_texture">
+		Wybierz teksturę
+	</floater.string>
+	<floater.string name="tooltip_copy_to_clipboard">
+		Skopiuj do schowka
+	</floater.string>
+	<floater.string name="tooltip_paste_from_clipboard">
+		Wklej ze schowka
+	</floater.string>
+	<floater.string name="tooltip_remove_image">
+		Usuń zdjęcie
+	</floater.string>
+	<text name="tooltip_text">
+		podpowiedź
+	</text>
+</floater>

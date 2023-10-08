@@ -2,6 +2,10 @@
 <toggleable_menu name="menu_gear_default">
 	<menu_item_call label="Nowe okno Szafy" name="new_window"/>
 	<menu_item_check label="Foldery chronione" name="Protected Folders" />
+	<menu_item_check label="Ustawienia..." name="inv_settings" />
+	<menu_item_check label="Widok listy" name="list_view" />
+	<menu_item_check label="Widok galerii" name="gallery_view" />
+	<menu_item_check label="Widok kombinowany" name="combination_view" />
 	<menu_item_check label="Porządkuj według nazw" name="sort_by_name"/>
 	<menu_item_check label="Porządkuj według dat" name="sort_by_recent"/>
 	<menu_item_check label="Sortuj foldery zawsze wg. nazwy" name="sort_folders_by_name"/>
@@ -17,7 +21,8 @@
 	<menu_item_check label="Dodawaj ubrania po dwukliku" name="add_invclothing_toggle"/>
 	<menu_item_call label="Pokaż filtry" name="show_filters"/>
 	<menu_item_call label="Zresetuj filtry" name="reset_filters"/>
-	<menu_item_call label="Zamknij wszystkie foldery" name="close_folders"/>
+	<menu_item_call label="Zwiń wszystkie foldery" name="close_folders"/>
+	<menu_item_call label="Zamknij wszystkie okna" name="close_windows" />
 	<menu_item_call label="Opróżnij Zagubione i odnalezione" name="empty_lostnfound"/>
 	<menu_item_call label="Zapisz teksturę jako" name="Save Texture As"/>
 	<menu_item_call label="Udostępnij" name="Share"/>

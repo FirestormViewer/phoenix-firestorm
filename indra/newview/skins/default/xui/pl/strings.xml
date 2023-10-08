@@ -1633,6 +1633,12 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	<string name="MarketplaceNoMatchingItems">
 		Niczego nie znaleziono. Sprawdź pisownię i spróbuj ponownie.
 	</string>
+	<string name="InventorySingleFolderEmpty">
+		Folder jest pusty.
+	</string>
+	<string name="InventorySingleFolderNoMatches">
+		Brak wyników.
+	</string>
 	<string name="InventoryNoTexture">
 		Nie posiadasz kopii tej tekstury w swojej Szafie.
 	</string>
@@ -1786,11 +1792,15 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	<string name="Open landmarks">
 		Otwórz landmarki
 	</string>
+	<string name="active" value=" (aktywne)"/>
 	<string name="no_transfer" value=" (bez transferowania)"/>
 	<string name="no_modify" value=" (bez modyfikowania)"/>
 	<string name="no_copy" value=" (bez kopiowania)"/>
 	<string name="worn" value=" (założone)"/>
 	<string name="broken_link" value=" (zepsuty_link)"/>
+    <string name="no_transfer_lbl" value=" bez transferowania" />
+    <string name="no_modify_lbl"   value=" bez modyfikowania" />
+    <string name="no_copy_lbl"     value=" bez kopiowania" />
 	<string name="LoadingContents">
 		Ładowanie zawartości...
 	</string>
@@ -6498,7 +6508,7 @@ Twoja aktualna pozycja: [AVATAR_POS]
 		Załóż folder z Szafy
 	</string>
 	<string name="TexturePickerOutfitHeader">
-		Zdjęcie dla Stroju
+		Zdjęcie elementu
 	</string>
 	<string name="unknown_script">
 		(Nieznany skrypt)
