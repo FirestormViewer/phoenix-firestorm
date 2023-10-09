@@ -232,7 +232,7 @@ void LLToastGroupNotifyPanel::onClickOk()
 
 void LLToastGroupNotifyPanel::onClickGroupNotices()
 {
-	LLGroupActions::show(mGroupID, "group_notices_tab_panel");
+	LLGroupActions::show(mGroupID, true);
 }
 
 void LLToastGroupNotifyPanel::onClickAttachment()

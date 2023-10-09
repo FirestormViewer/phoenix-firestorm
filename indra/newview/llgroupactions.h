@@ -57,8 +57,7 @@ public:
 	/**
 	 * Show group information panel.
 	 */
-	static void show(const LLUUID& group_id);
-	static void show(const LLUUID& group_id, const std::string& tab_name);
+	static void show(const LLUUID& group_id, bool expand_notices_tab = false);
 
 	/**
 	 * Show group inspector floater.

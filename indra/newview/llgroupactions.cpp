@@ -463,7 +463,7 @@ void LLGroupActions::inspect(const LLUUID& group_id)
 }
 
 // static
-void LLGroupActions::show(const LLUUID& group_id)
+void LLGroupActions::show(const LLUUID &group_id, bool expand_notices_tab)
 {
 	if (group_id.isNull())
 		return;
@@ -471,6 +471,10 @@ void LLGroupActions::show(const LLUUID& group_id)
 	LLSD params;
 	params["group_id"] = group_id;
 	params["open_tab_name"] = "panel_group_info_sidetray";
+    if (expand_notices_tab) 
+    {
+        params["action"] = "show_notices";
+    }
 
 	// <FS:Ansariel> Standalone group floaters
 	//LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
@@ -479,10 +483,13 @@ void LLGroupActions::show(const LLUUID& group_id)
     //{
     //    floater->setVisibleAndFrontmost(TRUE, params);
     //}
-	LLFloater* floater = NULL;
+	LLFloater* floater = nullptr;
 	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater")) 
 	{
-		floater = FSFloaterGroup::openGroupFloater(group_id);
+		if (expand_notices_tab)
+			floater = FSFloaterGroup::openGroupFloater(params);
+		else
+			floater = FSFloaterGroup::openGroupFloater(group_id);
 	}
 	else
 	{
@@ -508,44 +515,6 @@ void LLGroupActions::show(const LLUUID& group_id)
 		{
 			floater->setFocus(TRUE);
 		}
-	}
-	// </FS:Ansariel>
-}
-
-// static
-void LLGroupActions::show(const LLUUID& group_id, const std::string& tab_name)
-{
-	if (group_id.isNull())
-		return;
-
-	LLSD params;
-	params["group_id"] = group_id;
-	params["open_tab_name"] = tab_name;
-
-	// <FS:Ansariel> Standalone group floaters
-	//LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
-	LLFloater* floater = NULL;
-	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater")) 
-	{
-		floater = FSFloaterGroup::openGroupFloater(params);
-	}
-	else
-	{
-		LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
-		LLFloaterSidePanelContainer* floater_people = LLFloaterReg::findTypedInstance<LLFloaterSidePanelContainer>("people");
-		if (floater_people)
-		{
-			LLPanel* group_info_panel = floater_people->getPanel("people", "panel_group_info_sidetray");
-			if (group_info_panel && group_info_panel->getVisible())
-			{
-				floater = floater_people;
-			}
-		}
-	}
-
-	if (floater && floater->isMinimized())
-	{
-		floater->setMinimized(FALSE);
 	}
 	// </FS:Ansariel>
 }

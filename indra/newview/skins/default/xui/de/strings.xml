@@ -5486,6 +5486,7 @@ Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und F
 	</string>
 	<string name="ExternalEditorNotSet">
 		Wählen Sie über die Umgebungsvariable „LL_SCRIPT_EDITOR“ oder die Einstellung „ExternalEditor“ einen Editor aus.
+Siehe https://wiki.secondlife.com/wiki/LSL_Alternate_Editors
 	</string>
 	<string name="ExternalEditorNotFound">
 		Angegebener externer Editor nicht gefunden.

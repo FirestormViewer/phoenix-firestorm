@@ -127,6 +127,8 @@ public:
 	void	setComparator(const LLTabComparator* comp) { mTabComparator = comp; }
 	void	sort();
 
+    void collapseAllTabs();
+
 	/**
 	 * Sets filter substring as a search_term for help text when there are no any visible tabs.
 	 */

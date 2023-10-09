@@ -190,6 +190,24 @@ void LLPanelGroup::onOpen(const LLSD& key)
 		if(panel_notices)
 			panel_notices->refreshNotices();
 	}
+    if (str_action == "show_notices")
+    {
+        setGroupID(group_id);
+
+        // <FS:Ansariel> TabContainer switch
+        if (mIsUsingTabContainer)
+        {
+            getChild<LLTabContainer>("groups_accordion")->selectTabByName("group_notices_tab_panel");
+        }
+        else
+        {
+        // </FS:Ansariel>
+            LLAccordionCtrl *tab_ctrl = getChild<LLAccordionCtrl>("groups_accordion");
+            tab_ctrl->collapseAllTabs();
+            getChild<LLAccordionCtrlTab>("group_notices_tab")->setDisplayChildren(true);
+            tab_ctrl->arrange();
+        } // <FS:Ansariel> TabContainer switch
+    }
 
 }
 
