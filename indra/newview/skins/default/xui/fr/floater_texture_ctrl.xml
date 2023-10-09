@@ -18,6 +18,9 @@
 		Taille:
 [DIMENSIONS]
 	</text>
+	<text name="over_limit_lbl">
+		La texture sélectionnée est [TEXDIM]. L'image d'inventaire doit être carrée et pas moins de [MINTEXDIM].
+	</text>
 	<button label="Défaut" label_selected="Défaut" name="Default" />
 	<button label="Vierge" label_selected="Vierge" name="Blank" />
 	<button label="Aucune" label_selected="Aucune" name="None" />

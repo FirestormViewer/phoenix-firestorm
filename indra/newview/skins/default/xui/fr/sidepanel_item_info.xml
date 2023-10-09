@@ -35,15 +35,11 @@
 				Nom :
 			</text>
 			<line_editor name="LabelItemName" tool_tip="Le nom est limité à 63 caractères. Les noms de prim plus longs sont écourtés. Les noms ne peuvent contenir que des caractères imprimables trouvés dans le jeu de caractères ASCII-7 (non étendu), à l&apos;exception de la barre / pipe verticale &apos;|&apos;."/>
-			<text name="LabelItemDescTitle">
-				Description :
-			</text>
-			<line_editor name="LabelItemDesc" tool_tip="Lorsque les utilisateurs sélectionnent &apos;Conseils de survol sur tous les objets&apos; dans les paramètres de la visionneuse, la description contextuelle de chaque objet apparaît sous le pointeur de la souris. La description de la prim est limitée à 127 octets, toute chaîne supérieure à cette limite sera tronquée."/>
-			<text name="LabelCreatorTitle">
-				Créateur :
-			</text>
 			<text name="LabelOwnerTitle">
-				Propriétaire :
+				Propriétaire :
+			</text>
+			<text name="LabelCreatorTitle">
+				Créateur :
 			</text>
 			<text name="LabelAcquiredTitle">
 				Acquis le :

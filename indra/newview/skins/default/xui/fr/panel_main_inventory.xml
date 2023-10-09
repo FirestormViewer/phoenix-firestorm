@@ -3,39 +3,71 @@
 	<panel.string name="ItemcountFetching">Récupération de [ITEM_COUNT] objets... [FILTER]</panel.string>
 	<panel.string name="ItemcountCompleted">[ITEM_COUNT] objets [FILTER]</panel.string>
 	<panel.string name="ItemcountUnknown">[ITEM_COUNT] objets extraits [FILTER]</panel.string>
-	<filter_editor label="Filtrer l'inventaire" name="inventory search editor" tool_tip="Saisir un ou plusieurs mots à rechercher, séparés par '+' "/>
-	<button name="collapse_btn" label="Réduire"/>
-	<button name="expand_btn" label="Développer"/>
-	<text name="filter_label" value="Filtrer :"/>
-	<combo_box name="filter_combo_box">
-		<combo_box.item value="filter_type_all" label="Tout"/>
-		<combo_box.item value="filter_type_animations" label="Animations"/>
-		<combo_box.item value="filter_type_calling_cards" label="Cartes de visite"/>
-		<combo_box.item value="filter_type_clothing" label="Vêtements / Éléments du corps"/>
-		<combo_box.item value="filter_type_gestures" label="Gestes"/>
-		<combo_box.item value="filter_type_landmarks" label="Repères"/>
-		<combo_box.item value="filter_type_notecards" label="Notes"/>
-		<combo_box.item value="filter_type_objects" label="Objets"/>
-		<combo_box.item value="filter_type_scripts" label="Scripts"/>
-		<combo_box.item value="filter_type_sounds" label="Sons"/>
-		<combo_box.item value="filter_type_textures" label="Textures"/>
-		<combo_box.item value="filter_type_snapshots" label="Photos"/>
-		<combo_box.item value="filter_type_meshes" label="Meshs"/>
-		<combo_box.item value="filter_type_settings" label="Paramètres" />
-		<combo_box.item value="filter_type_custom" label="Personnalisé..."/>
-	</combo_box>	
-	<tab_container name="inventory filter tabs">
-		<inventory_panel label="Inventaire" name="All Items" sort_order_setting="InventorySortOrder"/>
-		<recent_inventory_panel label="Récent" sort_order_setting="RecentItemsSortOrder" name="Recent Items"/>
-		<worn_inventory_panel label="Porté" name="Worn Items"/>
-	</tab_container>
+	<panel.string name="inventory_title">Inventaire</panel.string>
+	<layout_stack name="nav_stack">
+		<layout_panel name="nav_buttons">
+			<button name="back_btn" tool_tip="Précédent"/>
+			<button name="forward_btn" tool_tip="Suivant"/>
+			<button name="up_btn" tool_tip="Eine Niveau supérieur"/>
+		</layout_panel>
+		<layout_panel name="filter_panel">
+			<filter_editor label="Filtrer l'inventaire" name="inventory search editor" tool_tip="Tapez un ou plusieurs mots à rechercher, séparés par des '+' "/>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="ctrl_stack">
+		<layout_panel name="collapse_expand_buttons">
+			<button name="collapse_btn" label="Réduire"/>
+			<button name="expand_btn" label="Développer"/>
+		</layout_panel>
+		<layout_panel name="filter_ctrls">
+			<text name="filter_label" value="Filtrer :"/>
+			<combo_box name="filter_combo_box">
+				<combo_box.item value="filter_type_all" label="Tout"/>
+				<combo_box.item value="filter_type_animations" label="Animations"/>
+				<combo_box.item value="filter_type_calling_cards" label="Cartes de visite"/>
+				<combo_box.item value="filter_type_clothing" label="Vêtements / Éléments du corps"/>
+				<combo_box.item value="filter_type_gestures" label="Gestes"/>
+				<combo_box.item value="filter_type_landmarks" label="Repères"/>
+				<combo_box.item value="filter_type_notecards" label="Notes"/>
+				<combo_box.item value="filter_type_objects" label="Objets"/>
+				<combo_box.item value="filter_type_scripts" label="Scripts"/>
+				<combo_box.item value="filter_type_sounds" label="Sons"/>
+				<combo_box.item value="filter_type_textures" label="Textures"/>
+				<combo_box.item value="filter_type_snapshots" label="Photos"/>
+				<combo_box.item value="filter_type_meshes" label="Meshs"/>
+				<combo_box.item value="filter_type_settings" label="Paramètres" />
+				<combo_box.item value="filter_type_custom" label="Personnalisé..."/>
+			</combo_box>
+			<menu_button name="options_visibility_btn" tool_tip="Afficher les paramètres de visibilité des résultats de recherche"/>
+		</layout_panel>
+	</layout_stack>
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs">
+			<inventory_panel label="Inventaire" name="All Items" sort_order_setting="InventorySortOrder"/>
+			<recent_inventory_panel label="Récent" sort_order_setting="RecentItemsSortOrder" name="Recent Items"/>
+			<worn_inventory_panel label="Porté" name="Worn Items"/>
+		</tab_container>
+	</panel>
 	<panel name="bottom_panel">
-		<panel name="options_gear_btn_panel"><menu_button tool_tip="Afficher des options supplémentaires" name="options_gear_btn"/></panel>
-		<panel name="add_btn_panel"><button name="add_btn" tool_tip="Créer un nouvel objet"/></panel>
-		<panel name="new_inventory_panel"><button name="new_inv_btn" tool_tip="Ajouter une Fenêtre d'inventaire"/></panel>
-		<panel name="dummy_panel">
-			<text name="ItemcountText">Objets</text>
+		<panel name="options_gear_btn_panel">
+			<menu_button tool_tip="Afficher des options supplémentaires" name="options_gear_btn"/>
 		</panel>
-		<panel name="trash_btn_panel"><dnd_button name="trash_btn" tool_tip="Supprimer l'objet sélectionné"/></panel>
+		<panel name="add_btn_panel">
+			<button name="add_btn" tool_tip="Créer un nouvel objet"/>
+		</panel>
+		<panel name="new_inventory_panel">
+			<button name="new_inv_btn" tool_tip="Ajouter une Fenêtre d'inventaire"/>
+		</panel>
+		<panel name="view_mode_panel">
+			<button name="view_mode_btn" tool_tip="Passer d'une vue à l'autre"/>
+		</panel>
+		<panel name="dummy_panel">
+			<text name="ItemcountText" tool_tip="Objets [ITEMS], dossiers [CATEGORIES]">
+				Objets
+			</text>
+		</panel>
+		<panel name="trash_btn_panel">
+			<dnd_button name="trash_btn" tool_tip="Supprimer l'objet sélectionné"/>
+		</panel>
 	</panel>
 </panel>
