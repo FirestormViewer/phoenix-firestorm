@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Gallery">
+	<menu_item_call label="Partager" name="Share"/>
+	<menu_item_call label="Vider la corbeille" name="Empty Trash"/>
+	<menu_item_call label="Jeter les objets trouvés" name="Empty Lost And Found"/>
+	<menu_item_call label="Se téléporter" name="Landmark Open"/>
+	<menu_item_call label="Remplacer la tenue actuelle" name="Replace Outfit"/>
+	<menu_item_call label="Ajouter à la tenue actuelle" name="Add To Outfit"/>
+	<menu_item_call label="Enlever de la tenue actuelle" name="Remove From Outfit"/>
+	<menu_item_call label="Copier la liste des tenues dans le presse-papiers" name="Copy outfit list to clipboard"/>
+	<menu_item_call label="Trouver l'original" name="Find Original"/>
+	<menu_item_call label="Supprimer l'objet" name="Purge Item"/>
+	<menu_item_call label="Restaurer l'objet" name="Restore Item"/>
+	<menu_item_call label="Ouvrir" name="Open"/>
+	<menu_item_call label="Ouvrir l'original" name="Open Original"/>
+	<menu_item_call label="Propriétés" name="Properties"/>
+	<menu_item_call label="Vignette..." name="thumbnail"/>
+	<menu_item_call label="Copier l'UUID de l'objet" name="Copy Asset UUID"/>
+	<menu_item_call label="Ouvrir" name="open_in_current_window"/>
+	<menu_item_call label="Ouvrir dans une nouvelle fenêtre" name="open_in_new_window"/>
+	<menu_item_call label="Renommer" name="Rename"/>
+	<menu_item_call label="Couper" name="Cut"/>
+	<menu_item_call label="Copier" name="Copy"/>
+	<menu_item_call label="Coller" name="Paste"/>
+	<menu_item_call label="Coller en tant que lien" name="Paste As Link"/>
+	<menu_item_call label="Remplacer les liens" name="Replace Links"/>
+	<menu_item_call label="Supprimer" name="Delete"/>
+	<menu_item_call label="Supprimer le dossier système" name="Delete System Folder"/>
+	<menu_item_call label="Jouer" name="Sound Play"/>
+	<menu_item_call label="Copier le SLurl" name="url_copy"/>
+	<menu_item_call label="Infos sur le repères" name="About Landmark"/>
+	<menu_item_call label="Afficher sur la carte" name="show_on_map"/>
+	<menu_item_call label="Jouer en ligne" name="Animation Play"/>
+	<menu_item_call label="Jouer en local" name="Animation Audition"/>
+	<menu_item_call label="Envoyer un message instantané" name="Send Instant Message"/>
+	<menu_item_call label="Proposer une téléportation..." name="Offer Teleport..."/>
+	<menu_item_call label="Demander une téléportation..." name="Request Teleport..."/>
+	<menu_item_call label="Activer" name="Activate"/>
+	<menu_item_call label="Désactiver" name="Deactivate"/>
+	<menu_item_call label="Enregistrer" name="Save As"/>
+	<menu_item_call label="Enregistrer la sélection" name="Save Selected As"/>
+	<menu_item_call label="Porter" name="Wearable And Object Wear"/>
+	<menu label="Attacher à" name="Attach To"/>
+	<menu label="Attacher au HUD" name="Attach To HUD"/>
+	<menu_item_call label="Toucher" name="Attachment Touch" />
+	<menu_item_call label="Modifier" name="Wearable Edit"/>
+	<menu_item_call label="Ajouter" name="Wearable Add"/>
+	<menu_item_call label="Détacher de soit" name="Detach From Yourself"/>
+	<menu_item_call label="Enlever" name="Take Off"/>
+	<menu_item_call label="Appliquer uniquement à moi" name="Settings Apply Local"/>
+	<menu_item_call label="Appliquer à la parcelle" name="Settings Apply Parcel"/>
+	<menu_item_call label="Nouveau dossier à partir de la sélection" name="New folder from selected"/>
+	<menu_item_call label="Annuler le regroupement par dossier" name="Ungroup folder items"/>
+	<menu label="Utiliser par défaut pour" name="upload_def">
+		<menu_item_call label="Le chargement d'images" name="Image uploads"/>
+		<menu_item_call label="Le chargement de sons" name="Sound uploads"/>
+		<menu_item_call label="Le chargement d'animations" name="Animation uploads"/>
+		<menu_item_call label="Le chargement de modèles" name="Model uploads"/>
+	</menu>
+	<menu_item_call label="Copier dans la liste de Marketplace" name="Marketplace Copy"/>
+	<menu_item_call label="Déplacer vers la liste de Marketplace" name="Marketplace Move"/>
+	<menu_item_call label="--pas d'options--" name="--no options--"/>
+</context_menu>
