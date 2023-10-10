@@ -63,7 +63,7 @@
 #include <boost/date_time/local_time_adjustor.hpp>
 #include "llstartup.h"
 
-const S32 LOG_RECALL_SIZE = 2048;
+const S32 LOG_RECALL_SIZE = 20480;
 
 const std::string LL_IM_TIME("time");
 const std::string LL_IM_DATE_TIME("datetime");
