@@ -255,6 +255,7 @@ BOOL LLPanelGroupNotices::postBuild()
 	mNoticesList = getChild<LLScrollListCtrl>("notice_list",recurse);
 	mNoticesList->setCommitOnSelectionChange(TRUE);
 	mNoticesList->setCommitCallback(onSelectNotice, this);
+    // mNoticesList->sortByColumn("date", false); // <FS:Ansariel> Done in XUI
 
 	mBtnNewMessage = getChild<LLButton>("create_new_notice",recurse);
 	mBtnNewMessage->setClickedCallback(onClickNewMessage, this);

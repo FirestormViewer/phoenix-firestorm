@@ -906,7 +906,6 @@ void LLOutfitListBase::onOpen(const LLSD& info)
         // arrive.
         category->fetch();
         refreshList(outfits);
-        highlightBaseOutfit();
 
         mIsInitialized = true;
     }
@@ -914,12 +913,14 @@ void LLOutfitListBase::onOpen(const LLSD& info)
 
 void LLOutfitListBase::refreshList(const LLUUID& category_id)
 {
+    bool wasNull = mRefreshListState.CategoryUUID.isNull();
+    mRefreshListState.CategoryUUID.setNull();
+
     LLInventoryModel::cat_array_t cat_array;
     LLInventoryModel::item_array_t item_array;
 
     // Collect all sub-categories of a given category.
 	// <FS:ND> FIRE-6958/VWR-2862; Make sure to only collect folders of type FT_OUTFIT
-
 	class ndOutfitsCollector: public LLIsType
 	{
 	public:
@@ -941,8 +942,8 @@ void LLOutfitListBase::refreshList(const LLUUID& category_id)
 
 	//	LLIsType is_category(LLAssetType::AT_CATEGORY);
 	ndOutfitsCollector is_category;
-
 	// </FS:ND>
+
     gInventory.collectDescendentsIf(
         category_id,
         cat_array,
@@ -950,22 +951,41 @@ void LLOutfitListBase::refreshList(const LLUUID& category_id)
         LLInventoryModel::EXCLUDE_TRASH,
         is_category);
 
-    uuid_vec_t vadded;
-    uuid_vec_t vremoved;
+    // Memorize item names for each UUID
+    std::map<LLUUID, std::string> names;
+    for (const LLPointer<LLViewerInventoryCategory>& cat : cat_array)
+    {
+        names.emplace(std::make_pair(cat->getUUID(), cat->getName()));
+    }
 
-    // Create added and removed items vectors.
-    computeDifference(cat_array, vadded, vremoved);
-    
+    // Fill added and removed items vectors.
+    mRefreshListState.Added.clear();
+    mRefreshListState.Removed.clear();
+    computeDifference(cat_array, mRefreshListState.Added, mRefreshListState.Removed);
+    // Sort added items vector by item name.
+    std::sort(mRefreshListState.Added.begin(), mRefreshListState.Added.end(),
+        [names](const LLUUID& a, const LLUUID& b)
+        {
+            return LLStringUtil::compareDict(names.at(a), names.at(b)) < 0;
+        });
+    // Initialize iterators for added and removed items vectors.
+    mRefreshListState.AddedIterator = mRefreshListState.Added.begin();
+    mRefreshListState.RemovedIterator = mRefreshListState.Removed.begin();
+
+    LL_INFOS() << "added: " << mRefreshListState.Added.size() <<
+        ", removed: " << mRefreshListState.Removed.size() <<
+        ", changed: " << gInventory.getChangedIDs().size() <<
+        LL_ENDL;
+
+    mRefreshListState.CategoryUUID = category_id;
+    if (wasNull)
+    {
+        gIdleCallbacks.addFunction(onIdle, this);
+    }
+
 	// <FS:ND> FIRE-6958/VWR-2862; Handle large amounts of outfits, write a least a warning into the logs.
-	if( vadded.size() > 128 )
-		LL_WARNS() << "Large amount of outfits found: " << vadded.size() << " this may cause hangs and disconnects" << LL_ENDL;
-
-	U32 nCap = gSavedSettings.getU32( "FSDisplaySavedOutfitsCap" );
-	if( nCap && nCap < vadded.size() )
-	{
-		vadded.resize( nCap );
-		LL_WARNS() << "Capped outfits to " << nCap << " due to debug setting FSDisplaySavedOutfitsCap" << LL_ENDL;
-	}
+	if (mRefreshListState.Added.size() > 128)
+		LL_WARNS() << "Large amount of outfits found: " << mRefreshListState.Added.size() << " this may cause hangs and disconnects" << LL_ENDL;
 	// </FS:ND>
 
 	// <FS:Ansariel> FIRE-12939: Add outfit count to outfits list
@@ -976,25 +996,53 @@ void LLOutfitListBase::refreshList(const LLUUID& category_id)
 		getChild<LLTextBox>("OutfitcountText")->setTextArg("COUNT", count_string);
 	}
 	// </FS:Ansariel>
+}
+
+// static
+void LLOutfitListBase::onIdle(void* userdata)
+{
+    LLOutfitListBase* self = (LLOutfitListBase*)userdata;
+
+    self->onIdleRefreshList();
+}
+
+void LLOutfitListBase::onIdleRefreshList()
+{
+    if (mRefreshListState.CategoryUUID.isNull())
+        return;
+
+    const F64 MAX_TIME = 0.05f;
+    F64 curent_time = LLTimer::getTotalSeconds();
+    const F64 end_time = curent_time + MAX_TIME;
 
     // Handle added tabs.
-    for (uuid_vec_t::const_iterator iter = vadded.begin();
-        iter != vadded.end();
-        ++iter)
+    while (mRefreshListState.AddedIterator < mRefreshListState.Added.end())
     {
-        const LLUUID cat_id = (*iter);
+        const LLUUID cat_id = (*mRefreshListState.AddedIterator++);
         updateAddedCategory(cat_id);
+
+        curent_time = LLTimer::getTotalSeconds();
+        if (curent_time >= end_time)
+            return;
     }
+    mRefreshListState.Added.clear();
+    mRefreshListState.AddedIterator = mRefreshListState.Added.end();
 
     // <FS:ND> We called mAccordion->addCollapsibleCtrl with false as second paramter and did not let it arrange itself each time. Do this here after all is said and done.
     arrange();
 
     // Handle removed tabs.
-    for (uuid_vec_t::const_iterator iter = vremoved.begin(); iter != vremoved.end(); ++iter)
+    while (mRefreshListState.RemovedIterator < mRefreshListState.Removed.end())
     {
-        const LLUUID cat_id = (*iter);
+        const LLUUID cat_id = (*mRefreshListState.RemovedIterator++);
         updateRemovedCategory(cat_id);
+
+        curent_time = LLTimer::getTotalSeconds();
+        if (curent_time >= end_time)
+            return;
     }
+    mRefreshListState.Removed.clear();
+    mRefreshListState.RemovedIterator = mRefreshListState.Removed.end();
 
     // Get changed items from inventory model and update outfit tabs
     // which might have been renamed.
@@ -1007,9 +1055,9 @@ void LLOutfitListBase::refreshList(const LLUUID& category_id)
         if (!cat)
         {
             LLInventoryObject* obj = gInventory.getObject(*items_iter);
-            if(!obj || (obj->getType() != LLAssetType::AT_CATEGORY))
+            if (!obj || (obj->getType() != LLAssetType::AT_CATEGORY))
             {
-                return;
+                break;
             }
             cat = (LLViewerInventoryCategory*)obj;
         }
@@ -1019,6 +1067,12 @@ void LLOutfitListBase::refreshList(const LLUUID& category_id)
     }
 
     sortOutfits();
+    highlightBaseOutfit();
+
+    gIdleCallbacks.deleteFunction(onIdle, this);
+    mRefreshListState.CategoryUUID.setNull();
+
+    LL_INFOS() << "done" << LL_ENDL;
 }
 
 void LLOutfitListBase::computeDifference(
@@ -1055,7 +1109,6 @@ void LLOutfitListBase::highlightBaseOutfit()
         mHighlightedOutfitUUID = base_id;
         onHighlightBaseOutfit(base_id, prev_id);
     }
-
 }
 
 void LLOutfitListBase::removeSelected()
