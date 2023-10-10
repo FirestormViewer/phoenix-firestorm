@@ -210,8 +210,6 @@ TestString PleaseIgnore
       <text_editor
         text_type="ascii_printable_no_pipe"
         commit_on_focus_lost="true"
-        border_style="line"
-        border_thickness="1"
         word_wrap="true"
         use_ellipses="false"
         follows="all"
@@ -438,7 +436,6 @@ TestString PleaseIgnore
         follows="left|top"
         decimal_digits="0"
         increment="1"
-        control_name="Edit Cost"
         name="Edit Cost"
         label="Price: L$"
         label_width="75"

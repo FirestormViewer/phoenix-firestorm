@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_view_default">
+	<menu_item_check label="Sortuj według nazwy" name="sort_by_name" />
+	<menu_item_check label="Sortuj według najnowszych" name="sort_by_recent" />
+	<menu_item_check label="Sortuj foldery zawsze według nazwy" name="sort_folders_by_name" />
+	<menu_item_check label="Foldery systemowe zawsze na górze" name="sort_system_folders_to_top" />
+	<menu_item_check label="Widok listy" name="list_view" />
+	<menu_item_check label="Widok galerii" name="gallery_view" />
+	<menu_item_check label="Widok kombinowany" name="combination_view" />
+	<menu_item_check label="Ustawienia..." name="inv_settings" />
+</toggleable_menu>

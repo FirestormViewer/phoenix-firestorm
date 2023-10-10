@@ -1003,8 +1003,8 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
             case COPYINVENTORY:
             case CREATEINVENTORY:
                 {
-                    AISUpdate::parseUUIDArray(result, "_created_items", ids);
-                    AISUpdate::parseUUIDArray(result, "_created_categories", ids);
+                AISUpdate::parseUUIDArray(result, "_created_categories", ids);
+                AISUpdate::parseUUIDArray(result, "_created_items", ids);
                 }
                 break;
             case UPDATECATEGORY:

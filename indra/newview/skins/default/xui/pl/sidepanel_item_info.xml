@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="item properties" title="Profil obiektu">
 	<panel.string name="loading_experience">
 		(wczytywanie)
@@ -24,62 +24,62 @@
 	<panel.string name="origin_inworld">
 		(W świecie)
 	</panel.string>
-	<text name="title" value="Profil obiektu"/>
-	<text name="origin" value="(Szafa)"/>
-	<scroll_container name="item_profile_scroll">
-		<panel name="item_profile">
-			<text name="LabelItemNameTitle">
-				Nazwa:
-			</text>
+	<layout_stack name="main_stack">
+		<layout_panel name="layout_item_name">
 			<line_editor name="LabelItemName" tool_tip="Nazwa jest ograniczona do 63 znaków. Dłuższe nazwy prim są skracane. Nazwy mogą składać się tylko z widocznych znaków znajdujących się w zestawie ASCII-7 (bez rozszerzenia), z wyjątkiem pionowej kreski &apos;|&apos;." />
-			<text name="LabelItemDescTitle">
-				Opis:
-			</text>
-			<line_editor name="LabelItemDesc" tool_tip="Kiedy ludzie mają &apos;Pokaż chmurki pomocy na wszystkich obiektach&apos; włączone w ustawieniach przeglądarki, to zobaczą wyskakujący opis obiektu dla dowolnego obiektu pod ich wskaźnikiem myszy. Opis primy jest ograniczony do 127 bajtów, ciąg znaków dłuższy niż ten limit zostanie obcięty." />
-			<text name="LabelCreatorTitle">
-				Twórca:
-			</text>
+		</layout_panel>
+		<layout_panel name="layout_item_details">
 			<text name="LabelOwnerTitle">
 				Właściciel:
+			</text>
+			<text name="LabelCreatorTitle">
+				Twórca:
 			</text>
 			<text name="LabelAcquiredTitle">
 				Nabyte:
 			</text>
+			<button label="Zdjęcie..." name="change_thumbnail_btn" />
+		</layout_panel>
+		<layout_panel name="layout_item_description">
+			<text name="LabelItemDescTitle">
+				Opis:
+			</text>
+			<text_editor name="LabelItemDesc" tool_tip="Kiedy ludzie mają &apos;Pokaż chmurki pomocy na wszystkich obiektach&apos; włączone w ustawieniach przeglądarki, to zobaczą wyskakujący opis obiektu dla dowolnego obiektu pod ich wskaźnikiem myszy. Opis primy jest ograniczony do 127 bajtów, ciąg znaków dłuższy niż ten limit zostanie obcięty." />
 			<text name="LabelItemExperienceTitle">
 				Przygoda:
 			</text>
-			<panel name="perms_inv">
-				<text name="perm_modify">
-					Możesz:
-				</text>
-				<check_box label="Modyfikacja" name="CheckOwnerModify"/>
-				<check_box label="Kopiowanie" name="CheckOwnerCopy"/>
-				<check_box label="Transferowanie" name="CheckOwnerTransfer"/>
-				<text name="AnyoneLabel">
-					Każdy:
-				</text>
-				<check_box label="Kopiowanie" name="CheckEveryoneCopy" tool_tip="Każdy może wziąć kopię obiektu. Obiekt i cała jego zawartość muszą być kopiowalne i transferowalne." />
-				<text name="GroupLabel">
-					Grupa:
-				</text>
-				<check_box label="Udostępnij" name="CheckShareWithGroup" tool_tip="Pozwól wszystkim osobom z ustawionej grupy na dzielenie prawa do modyfikacji dla tego obiektu. Musisz przypisać obiekt grupie aby aktywować ograniczenia wynikające z funkcji."/>
-				<text name="NextOwnerLabel">
-					Nast. właściciel:
-				</text>
-				<check_box label="Modyfikacja" name="CheckNextOwnerModify" tool_tip="Następny właściciel może edytować właściwości, takie jak nazwa lub rozmiar tego obiektu." />
-				<check_box label="Kopiowanie" name="CheckNextOwnerCopy" tool_tip="Następny właściciel może wykonać nieograniczoną liczbę kopii tego obiektu. Kopie przechowują informacje o twórcy i nigdy nie mogą mieć większych zezwoleń niż kopiowany element." />
-				<check_box label="Transferowanie" name="CheckNextOwnerTransfer" tool_tip="Następny właściciel może oddać lub sprzedać ten obiekt." />
-			</panel>
+		</layout_panel>
+		<layout_panel name="layout_item_permissions_sale">
+			<text name="permissions_label">
+				Zezwolenia
+			</text>
+			<text name="perm_modify">
+				Możesz:
+			</text>
+			<check_box label="Modyfikacja" name="CheckOwnerModify" />
+			<check_box label="Kopiowanie" name="CheckOwnerCopy" />
+			<check_box label="Transferowanie" name="CheckOwnerTransfer" />
+			<text name="AnyoneLabel">
+				Każdy:
+			</text>
+			<check_box label="Kopiowanie" name="CheckEveryoneCopy" tool_tip="Każdy może wziąć kopię obiektu. Obiekt i cała jego zawartość muszą być kopiowalne i transferowalne." />
+			<text name="GroupLabel">
+				Grupa:
+			</text>
+			<check_box label="Udostępnij" name="CheckShareWithGroup" tool_tip="Pozwól wszystkim osobom z ustawionej grupy na dzielenie prawa do modyfikacji dla tego obiektu. Musisz przypisać obiekt grupie aby aktywować ograniczenia wynikające z funkcji." />
+			<text name="NextOwnerLabel">
+				Nast. właściciel:
+			</text>
+			<check_box label="Modyfikacja" name="CheckNextOwnerModify" tool_tip="Następny właściciel może edytować właściwości, takie jak nazwa lub rozmiar tego obiektu." />
+			<check_box label="Kopiowanie" name="CheckNextOwnerCopy" tool_tip="Następny właściciel może wykonać nieograniczoną liczbę kopii tego obiektu. Kopie przechowują informacje o twórcy i nigdy nie mogą mieć większych zezwoleń niż kopiowany element." />
+			<check_box label="Transferowanie" name="CheckNextOwnerTransfer" tool_tip="Następny właściciel może oddać lub sprzedać ten obiekt." />
 			<check_box label="Na sprzedaż" name="CheckPurchase" tool_tip="Pozwala ludziom kupować ten obiekt, jego zawartość lub kopię w świecie za określoną cenę." />
 			<combo_box name="ComboBoxSaleType" tool_tip="Wybierz, czy kupujący otrzyma kopię przedmiou, kopię samej zawartości przedmiou lub oryginalny przedmiot w ogóle.">
-				<combo_box.item label="Kopia" name="Copy"/>
-				<combo_box.item label="Zawartość" name="Contents"/>
-				<combo_box.item label="Oryginał" name="Original"/>
+				<combo_box.item name="Copy" label="Kopia" />
+				<combo_box.item name="Contents" label="Zawartość" />
+				<combo_box.item name="Original" label="Oryginał" />
 			</combo_box>
-			<spinner label="Cena: L$" name="Edit Cost" tool_tip="Koszt obiektu." />
-		</panel>
-	</scroll_container>
-	<panel name="button_panel">
-		<button label="Anuluj" name="cancel_btn"/>
-	</panel>
+			<spinner name="Edit Cost" label="Cena: L$" tool_tip="Koszt obiektu." />
+		</layout_panel>
+	</layout_stack>
 </panel>

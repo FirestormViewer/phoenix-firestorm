@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_new_feature_notification" title="NOWA FUNKCJA">
+	<floater.string name="title_txt_inventory">
+		Nowe funkcje szafy
+	</floater.string>
+	<floater.string name="description_txt_inventory">
+		Możesz teraz dodawać zdjęcia podglądu do elementów szafy i przeglądać foldery w osobnych oknach.
+Dowiedz się więcej w tym [https://community.secondlife.com/blogs/entry/13637-new-features-inventory-item-preview-and-single-folder-view/ poście].
+	</floater.string>
+	<text name="title_txt">
+		Nowa funkcja
+	</text>
+	<text name="description_txt">
+		Opis funkcji
+	</text>
+	<button label="Rozumiem" name="close_btn" />
+</floater>
