@@ -11,5 +11,5 @@
 		<button label="" name="edit_outfit_btn" tool_tip="Editar este look"/>
 		<text name="currentlook_name">MinhaRoupa Com um Nome muito Longo como ALCE</text>
 	</panel>
-	<search_editor label="Filtrar looks" name="Filter"/>
+	<filter_editor label="Filtrar looks" name="Filter"/>
 </panel>

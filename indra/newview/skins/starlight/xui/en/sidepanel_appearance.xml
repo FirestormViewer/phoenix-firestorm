@@ -108,8 +108,7 @@ width="333">
       top="6"
       width="24" />
    </panel>
-   <search_editor
-   clear_button_visible="true"
+   <filter_editor
    height="23"
    follows="left|top|right"
    layout="topleft"
