@@ -1045,21 +1045,17 @@ const LLUUID LLInventoryModel::findLibraryCategoryUUIDForType(LLFolderType::ETyp
 	return findCategoryUUIDForTypeInRoot(preferred_type, gInventory.getLibraryRootFolderID());
 }
 
-LLUUID LLInventoryModel::findCategoryByName(std::string name)
+LLUUID LLInventoryModel::findCategoryByName(std::string_view name)
 {
-	LLUUID root_id = gInventory.getRootFolderID();
-	if(root_id.notNull())
+	if (LLUUID root_id = gInventory.getRootFolderID(); root_id.notNull())
 	{
-		cat_array_t* cats = NULL;
-		cats = get_ptr_in_map(mParentChildCategoryTree, root_id);
-		if(cats)
+		if (auto cats = get_ptr_in_map(mParentChildCategoryTree, root_id); cats)
 		{
-			S32 count = cats->size();
-			for(S32 i = 0; i < count; ++i)
+			for (const auto& cat : *cats)
 			{
-				if(cats->at(i)->getName() == name)
+				if (cat->getName() == name)
 				{
-					return cats->at(i)->getUUID();
+					return cat->getUUID();
 				}
 			}
 		}

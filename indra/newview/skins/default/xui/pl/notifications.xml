@@ -137,7 +137,7 @@ Inicjalizacja Marketplace nieudana z powodu błędu sieci lub systemu. Spróbuj 
 		<usetemplate ignoretext="Potwierdź, zanim usunę z listy rzecz na Marketplace" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="ConfirmMerchantClearVersion">
-		Jeśli kontynuujesz, to folder wersji tej rzeczy zostanie zdeaktywowany. Czy chcesz kontynuować?
+		Jeśli kontynuujesz, to folder wersji tej rzeczy zostanie dezaktywowany. Czy chcesz kontynuować?
 		<usetemplate ignoretext="Potwierdź przed wyłączeniem folderu wersji dla rzeczy na Marketplace" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="AlertMerchantListingNotUpdated">
@@ -1258,6 +1258,13 @@ do
 			<button name="Cancel" text="Anuluj" />
 		</form>
 	</notification>
+	<notification label="Zmień nazwę wybranego elementu" name="RenameItem">
+		Wybierz nową nazwę dla:
+[NAME]
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
 	<notification name="RemoveFromFriends">
 		Czy chcesz usunąć &lt;nolink&gt;[NAME]&lt;/nolink&gt; z listy znajomych?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" />
@@ -2369,6 +2376,19 @@ Nie możesz tego cofnąć.
 Czy na pewno chcesz je skasować?
 		<usetemplate ignoretext="Potwierdź przed kasowaniem filtrowanych obiektów" name="okcancelignore" notext="Anuluj" />
 	</notification>
+	<notification name="DeleteThumbnail">
+		Usunąć obraz tego elementu? Nie można tego cofnąć.
+		<usetemplate ignoretext="Potwierdź przed usunięciem miniatury" name="okcancelignore" notext="Anuluj" yestext="Usuń" />
+	</notification>
+	<notification name="ThumbnailDimentionsLimit">
+		Dozwolone są tylko obrazy kwadratowe o wielkości od 64 do 256 pikseli na stronę.
+	</notification>
+	<notification name="ThumbnailInsufficientPermissions">
+		Jako miniatury można przypisywać wyłącznie obrazy kopiowalne i transferowalne.
+	</notification>
+	<notification name="ThumbnailOutfitPhoto">
+		Aby dodać obraz do stroju, użyj okna galerii strojów lub kliknij prawym przyciskiem myszy na folderze stroju i wybierz "zdjęcie..."
+	</notification>
 	<notification name="ConfirmUnlink">
 		Na pewno chcesz rozłączyć zaznaczony obiekt?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Rozłącz"/>
@@ -2464,6 +2484,9 @@ Czy chcesz je odtworzyć?
 	<notification name="TrashIsFull">
 		Twój kosz się przepełnia. Może to sprawić, że będziesz mieć problemy z zalogowaniem się.
 		<usetemplate name="okcancelbuttons" notext="Wyczyszczę kosz ręcznie później" yestext="Sprawdź kosz teraz" />
+	</notification>
+	<notification name="InventoryLimitReachedAISAlert">
+		W Twojej Szafie występują problemy. Skontaktuj się z pomocą techniczną swojego świata.
 	</notification>
 	<notification name="InventoryLimitReachedAIS">
 		W Twojej Szafie występują problemy. Skontaktuj się z pomocą techniczną swojego świata.
@@ -5184,6 +5207,14 @@ Rozpakowywanie: [UNPACK_TIME]s [USIZE]KB
 	<notification name="PromptMFAToken">
 		[MESSAGE]
 		<form name="form">
+			<button name="continue" text="Kontynuuj" />
+			<button name="cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="PromptMFATokenWithSave">
+		[MESSAGE]
+		<form name="form">
+			<ignore name="ignore" text="Pamiętaj ten komputer przez 30 dni" />
 			<button name="continue" text="Kontynuuj" />
 			<button name="cancel" text="Anuluj" />
 		</form>

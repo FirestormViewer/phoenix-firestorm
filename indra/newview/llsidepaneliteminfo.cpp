@@ -342,7 +342,7 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 											   GP_OBJECT_MANIPULATE)
 		&& is_obj_modify && is_complete && not_in_trash;
 
-	getChildView("LabelItemNameTitle")->setEnabled(TRUE);
+	//getChildView("LabelItemNameTitle")->setEnabled(TRUE); // <FS:Ansariel> Doesn't exist as of 04-10-2023
 	getChildView("LabelItemName")->setEnabled(is_modifiable && !is_calling_card); // for now, don't allow rename of calling cards
 	getChild<LLUICtrl>("LabelItemName")->setValue(item->getName());
 	getChildView("LabelItemDescTitle")->setEnabled(TRUE);
@@ -502,14 +502,15 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 	// ORIGIN //
 	////////////
 
-	if (object)
-	{
-		getChild<LLUICtrl>("origin")->setValue(getString("origin_inworld"));
-	}
-	else
-	{
-		getChild<LLUICtrl>("origin")->setValue(getString("origin_inventory"));
-	}
+	// <FS:Ansariel> Doesn't exist as of 04-10-2023
+	//if (object)
+	//{
+	//	getChild<LLUICtrl>("origin")->setValue(getString("origin_inworld"));
+	//}
+	//else
+	//{
+	//	getChild<LLUICtrl>("origin")->setValue(getString("origin_inventory"));
+	//}
 
 	//////////////////
 	// ACQUIRE DATE //
@@ -534,7 +535,7 @@ void LLSidepanelItemInfo::refreshFromItem(LLViewerInventoryItem* item)
 	//////////////////////////////////////
 	
 	const std::string perm_and_sale_items[]={
-		"perms_inv",
+		//"perms_inv", // <FS:Ansariel> Doesn't exist as of 04-10-2023
 		"perm_modify",
 		"CheckOwnerModify",
 		"CheckOwnerCopy",

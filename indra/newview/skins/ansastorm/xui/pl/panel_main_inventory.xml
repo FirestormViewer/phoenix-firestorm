@@ -9,9 +9,9 @@
 	<panel.string name="ItemcountUnknown">
 		Pobrano [ITEM_COUNT] elementów [FILTER]
 	</panel.string>
-	<text name="ItemcountText">
-		Obiekty:
-	</text>
+	<panel.string name="inventory_title">
+		Szafa
+	</panel.string>
 	<menu_bar name="inventory_menu_bar">
 		<menu label="Szafa" name="inventory_inventory_menu">
 			<menu_item_call name="inventory_open" label="Otwórz" />
@@ -19,11 +19,15 @@
 			<menu_item_call name="replace_links" label="Zastąp linki" />
 			<menu_item_call name="inventory_new_window" label="Nowe okno" />
 			<menu_item_check name="Protected Folders" label="Foldery chronione" />
+			<menu_item_check label="Ustawienia..." name="inv_settings" />
+			<menu_item_check label="Widok listy" name="list_view" />
+			<menu_item_check label="Widok galerii" name="gallery_view" />
+			<menu_item_check label="Widok kombinowany" name="combination_view" />
 			<menu_item_check name="add_inv_toggle" label="Dodawaj obiekty po dwukliku" />
 			<menu_item_check name="add_invclothing_toggle" label="Dodawaj ubrania po dwukliku" />
 			<menu_item_call name="inventory_show_filters" label="Pokaż filtry" />
 			<menu_item_call name="inventory_reset_filters" label="Resetuj filtry" />
-			<menu_item_call name="inventory_close_all_folders" label="Zamknij wszystkie foldery" />
+			<menu_item_call name="inventory_close_all_folders" label="Zwiń wszystkie foldery" />
 			<menu_item_call name="inventory_empty_trash" label="Opróżnij kosz" />
 		</menu>
 		<menu label="Stwórz" name="inventory_create_menu">
@@ -77,34 +81,48 @@
 			<menu_item_check name="inventory_filter_only_copy" label="Tylko kopiowalne" />
 			<menu_item_check name="inventory_filter_only_transfer" label="Tylko transferowalne" />
 			<menu_item_check name="inventory_filter_coalesced_objects_only" label="Tylko podniesione razem" />
-			<menu_item_check name="inventory_show_partial_results" label="Pokaż częściowe wyniki wyszukiwania" />
 		</menu>
 	</menu_bar>
-	<filter_editor label="Filtruj Szafę" name="inventory search editor" tool_tip="Wpisz jedno lub więcej słów które chcesz wyszukać, oddzielonych za pomocą '+' "/>
-	<text name="filter_label" value="Filtruj:"/>
-	<combo_box name="filter_combo_box">
-		<combo_box.item value="filter_type_all" label="Wszystkie typy" />
-		<combo_box.item value="filter_type_animations" label="Animacje" />
-		<combo_box.item value="filter_type_calling_cards" label="Wizytówki" />
-		<combo_box.item value="filter_type_clothing" label="Ubrania / części ciała" />
-		<combo_box.item value="filter_type_gestures" label="Gesty" />
-		<combo_box.item value="filter_type_landmarks" label="Landmarki" />
-		<combo_box.item value="filter_type_notecards" label="Noty" />
-		<combo_box.item value="filter_type_objects" label="Obiekty" />
-		<combo_box.item value="filter_type_scripts" label="Skrypty" />
-		<combo_box.item value="filter_type_sounds" label="Dźwięki" />
-		<combo_box.item value="filter_type_textures" label="Tekstury" />
-		<combo_box.item value="filter_type_snapshots" label="Zdjęcia" />
-		<combo_box.item value="filter_type_meshes" label="Mesze" />
-		<combo_box.item value="filter_type_settings" label="Otoczenia" />
-		<combo_box.item value="filter_type_custom" label="Własny filtr..." />
-	</combo_box>
-	<menu_button tool_tip="Pokaż opcje widoczności wyszukiwania" name="options_visibility_btn" />
-	<tab_container name="inventory filter tabs">
-		<inventory_panel label="Wszystkie" name="All Items"/>
-		<recent_inventory_panel label="Ostatnie" name="Recent Items"/>
-		<worn_inventory_panel label="Założone" name="Worn Items"/>
-	</tab_container>
+	<layout_stack name="nav_stack">
+		<layout_panel name="nav_buttons">
+			<button name="back_btn" tool_tip="Wstecz" />
+			<button name="forward_btn" tool_tip="Naprzód" />
+			<button name="up_btn" tool_tip="Przejdź o jeden poziom wyżej" />
+		</layout_panel>
+		<layout_panel name="filter_panel">
+			<filter_editor label="Filtruj" name="inventory search editor" tool_tip="Wpisz jedno lub więcej słów które chcesz wyszukać, oddzielonych za pomocą '+' " />
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="ctrl_stack">
+		<layout_panel name="filter_ctrls">
+			<text name="filter_label" value="Filtruj:" />
+			<combo_box name="filter_combo_box">
+				<combo_box.item value="filter_type_all" label="Wszystkie typy" />
+				<combo_box.item value="filter_type_animations" label="Animacje" />
+				<combo_box.item value="filter_type_calling_cards" label="Wizytówki" />
+				<combo_box.item value="filter_type_clothing" label="Ubrania / części ciała" />
+				<combo_box.item value="filter_type_gestures" label="Gesty" />
+				<combo_box.item value="filter_type_landmarks" label="Landmarki" />
+				<combo_box.item value="filter_type_notecards" label="Noty" />
+				<combo_box.item value="filter_type_objects" label="Obiekty" />
+				<combo_box.item value="filter_type_scripts" label="Skrypty" />
+				<combo_box.item value="filter_type_sounds" label="Dźwięki" />
+				<combo_box.item value="filter_type_textures" label="Tekstury" />
+				<combo_box.item value="filter_type_snapshots" label="Zdjęcia" />
+				<combo_box.item value="filter_type_meshes" label="Mesze" />
+				<combo_box.item value="filter_type_settings" label="Otoczenia" />
+				<combo_box.item value="filter_type_custom" label="Własny filtr..." />
+			</combo_box>
+			<menu_button tool_tip="Pokaż opcje widoczności wyszukiwania" name="options_visibility_btn" />
+		</layout_panel>
+	</layout_stack>
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs">
+			<inventory_panel label="Wszystkie" name="All Items" />
+			<recent_inventory_panel label="Ostatnie" name="Recent Items" />
+			<worn_inventory_panel label="Założone" name="Worn Items" />
+		</tab_container>
+	</panel>
 	<panel name="bottom_panel">
 		<panel name="options_gear_btn_panel">
 			<menu_button name="options_gear_btn" tool_tip="Pokaż dodatkowe opcje"/>
@@ -114,6 +132,9 @@
 		</panel>
 		<panel name="new_inventory_panel">
 			<button name="new_inv_btn" tool_tip="Otwórz dodatkowe okno Szafy"/>
+		</panel>
+		<panel name="view_mode_panel">
+			<button name="view_mode_btn" tool_tip="Przełącz między widokami" />
 		</panel>
 		<panel name="dummy_panel">
 			<text name="ItemcountText" tool_tip="[ITEMS] przedmiotów, [CATEGORIES] folderów">

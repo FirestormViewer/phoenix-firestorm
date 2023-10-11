@@ -81,13 +81,16 @@
 	<menu_item_call label="Otwórz oryginał" name="Open Original"/>
 	<menu_item_call label="Właściwości" name="Properties"/>
 	<menu_item_call label="Zmień nazwę" name="Rename"/>
+	<menu_item_call label="Zdjęcie..." name="thumbnail" />
 	<menu_item_call label="Chroń" name="ProtectFolder" />
 	<menu_item_call label="Nie chroń" name="UnprotectFolder" />
+	<menu_item_call label="Przeładuj folder" name="ReloadFolder" />
 	<menu_item_call label="Kopiuj identyfikator UUID" name="Copy Asset UUID"/>
+	<menu_item_call label="Przywróć na ostatnią pozycję" name="Restore to Last Position" />
 	<menu_item_call label="Znajdź w widoku ogólnym" name="Show in Main Panel"/>
 	<menu_item_call label="Pokaż w nowym oknie" name="Show in new Window" />
-	<menu_item_call label="Przeładuj folder" name="ReloadFolder" />
-	<menu_item_call label="Przywróć na ostatnią pozycję" name="Restore to Last Position"/>
+	<menu_item_call label="Otwórz" name="open_in_current_window" />
+	<menu_item_call label="Otwórz w nowym oknie" name="open_in_new_window" />
 	<menu_item_call label="Kopiuj" name="Copy"/>
 	<menu_item_call label="Wytnij" name="Cut"/>
 	<menu_item_call label="Wklej" name="Paste"/>
@@ -113,7 +116,7 @@
 	<menu_item_call label="Poproś o teleport" name="Request Teleport..."/>
 	<menu_item_call label="Rozpocznij konferencję czatową" name="Conference Chat"/>
 	<menu_item_call label="Aktywuj" name="Activate"/>
-	<menu_item_call label="Deaktywuj" name="Deactivate"/>
+	<menu_item_call label="Dezaktywuj" name="Deactivate"/>
 	<menu_item_call label="Zapisz jako" name="Save As"/>
 	<menu_item_call label="Zapisz do" name="Save Selected As" />
 	<menu_item_call label="Załóż" name="Wearable And Object Wear"/>

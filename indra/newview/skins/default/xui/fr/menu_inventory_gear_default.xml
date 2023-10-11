@@ -2,6 +2,10 @@
 <toggleable_menu name="menu_gear_default">
 	<menu_item_call label="Nouvelle fenêtre d'inventaire" name="new_window"/>
 	<menu_item_check label="Dossiers protégés" name="Protected Folders"/>
+	<menu_item_check label="Paramètres de l'inventaire..." name="inv_settings"/>
+	<menu_item_check label="Vue liste" name="list_view"/>
+	<menu_item_check label="Vue galerie" name="gallery_view"/>
+	<menu_item_check label="Vue combinée" name="combination_view"/>
 	<menu_item_check label="Trier par nom" name="sort_by_name"/>
 	<menu_item_check label="Trier par date" name="sort_by_recent"/>
 	<menu_item_check label="Toujours trier les dossiers par nom" name="sort_folders_by_name"/>
@@ -18,6 +22,7 @@
 	<menu_item_call label="Afficher les filtres" name="show_filters"/>
 	<menu_item_call label="Réinitialiser les filtres" name="reset_filters"/>
 	<menu_item_call label="Réduire tous les dossiers" name="close_folders"/>
+	<menu_item_call label="Fermer toutes les fenêtres" name="close_windows"/>
 	<menu_item_call label="Vider le dossier Objets trouvés" name="empty_lostnfound"/>
 	<menu_item_call label="Enregistrer la texture" name="Save Texture As"/>
 	<menu_item_call label="Partager" name="Share"/>
