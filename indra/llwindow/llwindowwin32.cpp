@@ -37,6 +37,7 @@
 #include "llwindowcallbacks.h"
 
 // Linden library includes
+#include "llapp.h" // <FS:Beq/> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
 #include "llerror.h"
 #include "llexception.h"
 #include "llfasttimer.h"
@@ -88,6 +89,7 @@ const UINT WM_DUMMY_(WM_USER + 0x0017);
 const UINT WM_POST_FUNCTION_(WM_USER + 0x0018);
 
 extern BOOL gDebugWindowProc;
+extern BOOL gDisconnected; // <FS:Beq/> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
 
 static std::thread::id sWindowThreadId;
 static std::thread::id sMainThreadId;
@@ -346,6 +348,7 @@ struct LLWindowWin32::LLWindowWin32Thread : public LL::ThreadPool
     LLWindowWin32Thread();
 
     void run() override;
+    void close() override; // <FS:Beq/> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
 
     /// called by main thread to post work to this window thread
     template <typename CALLABLE>
@@ -898,9 +901,12 @@ void LLWindowWin32::close()
                 // This causes WM_DESTROY to be sent *immediately*
                 if (!destroy_window_handler(mWindowHandle))
                 {
-                    OSMessageBox(mCallbacks->translateString("MBDestroyWinFailed"),
-                        mCallbacks->translateString("MBShutdownErr"),
-                        OSMB_OK);
+                    // <FS:Beq> Can't use a message box here because we're about to stop servicing the events.
+                    // OSMessageBox(mCallbacks->translateString("MBDestroyWinFailed"),
+                    //     mCallbacks->translateString("MBShutdownErr"),
+                    //     OSMB_OK);
+                    LL_INFOS("Window") << "Destroying Window failed" << LL_ENDL;
+                    // </FS:Beq>
                 }
             }
             else
@@ -919,6 +925,10 @@ void LLWindowWin32::close()
     // operations we're asking. That's the last time WE should touch it.
     mhDC = NULL;
     mWindowHandle = NULL;
+    // <FS:Beq> [FIRE-32453][BUG-232971] close the related queues first to prevent spinning.
+    mFunctionQueue.close();
+    mMouseQueue.close();
+    // </FS:Beq>
     mWindowThread->close();
 }
 
@@ -3736,7 +3746,6 @@ void LLWindowWin32::swapBuffers()
     LL_PROFILER_GPU_COLLECT
 }
 
-
 //
 // LLSplashScreenImp
 //
@@ -4768,10 +4777,45 @@ private:
     std::string mPrev;
 };
 
+// <FS:Beq> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
+// Provide a close() override that ignores the initial close triggered by the threadpool detecting "quit"
+// but waits for the viewer to be disconected and the second close call triggered by the app window destructor
+void LLWindowWin32::LLWindowWin32Thread::close()
+{
+	assert_main_thread();
+    if (! mQueue.isClosed() && gDisconnected)
+    {
+        LL_DEBUGS("ThreadPool") << mName << " closing queue and joining threads" << LL_ENDL;
+        mQueue.close();
+        for (auto& pair: mThreads)
+        {
+            LL_DEBUGS("ThreadPool") << mName << " waiting on thread " << pair.first << LL_ENDL;
+            // As we cannot seem to rely on the clean and timely exit of the windows thread in ALL situations we apply a timeout.
+            std::future<void> f = std::async(std::launch::async, [&] { pair.second.join(); });
+            if (f.wait_until(std::chrono::steady_clock::now() + std::chrono::seconds(5)) == std::future_status::ready) {
+                LL_DEBUGS("ThreadPool") << mName << " joined normally." << LL_ENDL;
+            } else {
+                LL_WARNS("ThreadPool") << mName << " join timed out." << LL_ENDL;
+                // the specified time point was reached before the thread finished execution and could be joined
+            }
+        }
+        LL_DEBUGS("ThreadPool") << mName << " shutdown complete" << LL_ENDL;
+    }
+	else
+	{
+        LL_DEBUGS("ThreadPool") << mName << " shutdown request ignored - not yet disconneced." << LL_ENDL;
+	}
+}
+// </FS:Beq>
+
 void LLWindowWin32::LLWindowWin32Thread::run()
 {
     sWindowThreadId = std::this_thread::get_id();
     LogChange logger("Window");
+    // <FS:Beq> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
+    try
+    {
+    // </FS:Beq>
     while (! getQueue().done())
     {
         LL_PROFILE_ZONE_SCOPED_CATEGORY_WIN32;
@@ -4798,7 +4842,21 @@ void LLWindowWin32::LLWindowWin32Thread::run()
                               ", ", msg.wParam, ")");
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
-                mMessageQueue.pushFront(msg);
+				// <FS:Beq> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
+                // mMessageQueue.pushFront(msg);
+                try
+                {
+                    // <FS:Beq> Nobody is reading this queue once we are quitting. Writing to it causes a hang.
+                    if(!LLApp::isQuitting()) 
+                    mMessageQueue.pushFront(msg);
+                }
+                catch (const LLThreadSafeQueueInterrupt&)
+                {
+                    // Shutdown timing is tricky. The main thread can end up trying
+                    // to post a cursor position after having closed the WorkQueue.
+                    logger.always("Message procesing tried to push() to closed MessageQueue - caught");
+                }
+                // </FS:Beq>
             }
         }
 
@@ -4817,6 +4875,18 @@ void LLWindowWin32::LLWindowWin32Thread::run()
         }
 #endif
     }
+    // <FS:Beq> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
+    }
+    catch (const std::exception& e)
+    {
+        logger.always("Windows thread exiting - Exception: ", e.what());
+    }
+    catch (...)
+    {
+        logger.always("Windows thread exiting - Exception: Unknown");
+    }
+	logger.always("done - queue closed on windows thread.");
+    // </FS:Beq>
 }
 
 void LLWindowWin32::post(const std::function<void()>& func)
