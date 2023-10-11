@@ -76,7 +76,6 @@ protected:
 
 private:
 	LLTabContainer*			mAppearanceTabs;
-	std::string 			mFilterSubString;
 
 	// <FS:Ansariel> FIRE-17626: Attachment count in appearance floater
 	LLInventoryCategoriesObserver* mCategoriesObserver;

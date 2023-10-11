@@ -832,7 +832,6 @@ void LLWindowWin32::close()
 	// Is window is already closed?
 	if (!mWindowHandle)
 	{
-        mWindowThread->close();
 		return;
 	}
 
@@ -4718,7 +4717,7 @@ void LLWindowWin32::getWindowChrome( U32 &aChromeW, U32 &aChromeH )
 #endif // LL_WINDOWS
 
 inline LLWindowWin32::LLWindowWin32Thread::LLWindowWin32Thread()
-    : ThreadPool("Window Thread", 1, MAX_QUEUE_SIZE, false)
+    : ThreadPool("Window Thread", 1, MAX_QUEUE_SIZE)
 {
     ThreadPool::start();
 }
