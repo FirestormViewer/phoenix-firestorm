@@ -242,6 +242,10 @@ static const S32 HTTP_NONPIPE_REQUESTS_LOW_WATER = 20;
 // request (e.g. 'Range: <start>-') which seems to fix the problem.
 static const S32 HTTP_REQUESTS_RANGE_END_MAX = 20000000;
 
+// stop after 720 seconds, might be overkill, but cap request can keep going forever.
+static const S32 MAX_CAP_MISSING_RETRIES = 720;
+static const S32 CAP_MISSING_EXPIRATION_DELAY = 1; // seconds
+
 //////////////////////////////////////////////////////////////////////////////
 namespace
 {
@@ -541,6 +545,7 @@ private:
 
 	e_state mState;
 	void setState(e_state new_state);
+    LLViewerRegion* getRegion();
 
 	e_write_to_cache_state mWriteToCacheState;
 	LLTextureFetch* mFetcher;
@@ -595,6 +600,10 @@ private:
 	LLCore::HttpStatus mGetStatus;
 	std::string mGetReason;
 	LLAdaptiveRetryPolicy mFetchRetryPolicy;
+    bool mCanUseCapability;
+    LLTimer mRegionRetryTimer;
+    S32 mRegionRetryAttempt;
+    LLUUID mLastRegionId;
 
 	
 	// Work Data
@@ -945,7 +954,9 @@ LLTextureFetchWorker::LLTextureFetchWorker(LLTextureFetch* fetcher,
 	  mCacheReadCount(0U),
 	  mCacheWriteCount(0U),
 	  mResourceWaitCount(0U),
-	  mFetchRetryPolicy(10.f,3600.f,2.f,10)
+      mFetchRetryPolicy(10.f,3600.f,2.f,10),
+      mCanUseCapability(true),
+      mRegionRetryAttempt(0)
 {
 	// <FS:Ansariel> OpenSim compatibility
 	mCanUseNET = !LLGridManager::instance().isInSecondLife() && mUrl.empty() ;
@@ -1147,6 +1158,18 @@ bool LLTextureFetchWorker::doWork(S32 param)
 			return true; // abort
 		}
 	}
+    if (mState > CACHE_POST && !mCanUseCapability && mCanUseHTTP)
+    {
+        if (mRegionRetryAttempt > MAX_CAP_MISSING_RETRIES)
+        {
+            mCanUseHTTP = false;
+        }
+        else if (!mRegionRetryTimer.hasExpired())
+        {
+            return false;
+        }
+        // else retry
+    }
 	// <FS:Ansariel> OpenSim compatibility
 	//if(mState > CACHE_POST && !mCanUseHTTP)
 	if(mState > CACHE_POST && !mCanUseNET && !mCanUseHTTP)
@@ -1364,16 +1387,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 		if ( use_http_textures() && mCanUseHTTP && mUrl.empty())//get http url.
 		// </FS:Ansariel>
 		{
-			LLViewerRegion* region = NULL;
-            if (mHost.isInvalid())
-            {
-                region = gAgent.getRegion();
-            }
-            else if (LLWorld::instanceExists())
-            {
-                region = LLWorld::getInstance()->getRegion(mHost);
-            }
-
+			LLViewerRegion* region = getRegion();
 			if (region)
 			{
 				std::string http_url = region->getViewerAssetUrl();
@@ -1392,19 +1406,27 @@ bool LLTextureFetchWorker::doWork(S32 param)
 					setUrl(http_url + "/?texture_id=" + mID.asString().c_str());
 					LL_DEBUGS(LOG_TXT) << "Texture URL: " << mUrl << LL_ENDL;
 					mWriteToCacheState = CAN_WRITE ; //because this texture has a fixed texture id.
+                    mCanUseCapability = true;
+                    mRegionRetryAttempt = 0;
+                    mLastRegionId = region->getRegionID();
 				}
 				else
 				{
-					mCanUseHTTP = false ;
-					LL_DEBUGS(LOG_TXT) << "Texture not available via HTTP: empty URL." << LL_ENDL;
+					mCanUseCapability = false;
+                    mRegionRetryAttempt++;
+                    mRegionRetryTimer.setTimerExpirySec(CAP_MISSING_EXPIRATION_DELAY);
+                    // ex: waiting for caps
+					LL_INFOS_ONCE(LOG_TXT) << "Texture not available via HTTP: empty URL." << LL_ENDL;
 				}
 			}
 			else
 			{
+                mCanUseCapability = false;
+                mRegionRetryAttempt++;
+                mRegionRetryTimer.setTimerExpirySec(CAP_MISSING_EXPIRATION_DELAY);
 				// This will happen if not logged in or if a region deoes not have HTTP Texture enabled
 				//LL_WARNS(LOG_TXT) << "Region not found for host: " << mHost << LL_ENDL;
-				LL_DEBUGS(LOG_TXT) << "Texture not available via HTTP: no region " << mUrl << LL_ENDL;
-				mCanUseHTTP = false;
+                LL_INFOS_ONCE(LOG_TXT) << "Texture not available via HTTP: no region " << mUrl << LL_ENDL;
 			}
 		}
 		else if (mFTType == FTT_SERVER_BAKE)
@@ -1412,7 +1434,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 			mWriteToCacheState = CAN_WRITE;
 		}
 
-		if (mCanUseHTTP && !mUrl.empty())
+		if (mCanUseCapability && mCanUseHTTP && !mUrl.empty())
 		{
 			setState(WAIT_HTTP_RESOURCE);
 			if(mWriteToCacheState != NOT_WRITE)
@@ -1422,7 +1444,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 			// don't return, fall through to next state
 		}
 		// <FS:Ansariel> OpenSim compatibility
-		else if (mSentRequest == UNSENT && mCanUseNET)
+		else if (mSentRequest == UNSENT && !mCanUseHTTP && mCanUseNET)
 		{
 			// Add this to the network queue and sit here.
 			// LLTextureFetch::update() will send off a request which will change our state
@@ -1684,9 +1706,22 @@ bool LLTextureFetchWorker::doWork(S32 param)
 						return true; 
 					}
 
+                    if (mCanUseHTTP && !mUrl.empty() && cur_size <= 0)
+                    {
+                        LLViewerRegion* region = getRegion();
+                        if (!region || mLastRegionId != region->getRegionID())
+                        {
+                            // cap failure? try on new region.
+                            mUrl.clear();
+                            ++mRetryAttempt;
+                            mLastRegionId.setNull();
+                            setState(INIT);
+                            return false;
+                        }
+                    }
 					// <FS:Ansariel> OpenSim compatibility
 					// roll back to try UDP
-					if (mCanUseNET)
+					else if (mCanUseNET)
 					{
 						setState(INIT);
 						mCanUseHTTP = false;
@@ -1700,6 +1735,19 @@ bool LLTextureFetchWorker::doWork(S32 param)
 				else if (http_service_unavail == mGetStatus)
 				{
 					LL_INFOS_ONCE(LOG_TXT) << "Texture server busy (503): " << mUrl << LL_ENDL;
+                    if (mCanUseHTTP && !mUrl.empty() && cur_size <= 0)
+                    {
+                        LLViewerRegion* region = getRegion();
+                        if (!region || mLastRegionId != region->getRegionID())
+                        {
+                            // try on new region.
+                            mUrl.clear();
+                            ++mRetryAttempt;
+                            mLastRegionId.setNull();
+                            setState(INIT);
+                            return false;
+                        }
+                    }
 				}
 				else if (http_not_sat == mGetStatus)
 				{
@@ -3532,6 +3580,20 @@ void LLTextureFetchWorker::setState(e_state new_state)
 
 	mStateTimer.reset();
 	mState = new_state;
+}
+
+LLViewerRegion* LLTextureFetchWorker::getRegion()
+{
+    LLViewerRegion* region = NULL;
+    if (mHost.isInvalid())
+    {
+        region = gAgent.getRegion();
+    }
+    else if (LLWorld::instanceExists())
+    {
+        region = LLWorld::getInstance()->getRegion(mHost);
+    }
+    return region;
 }
 
 // <FS:Ansariel> OpenSim compatibility

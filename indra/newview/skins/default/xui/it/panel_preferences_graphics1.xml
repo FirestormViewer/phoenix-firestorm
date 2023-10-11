@@ -32,7 +32,6 @@
 			</text>
 			<check_box label="Acqua Trasparente" name="TransparentWater"/>
 			<check_box label="Rilievi (tex.) e brillantezza" name="BumpShiny"/>
-			<check_box label="Luci Locali" name="LocalLights"/>
 			<check_box label="Effetti grafici atmosferici" name="WindLightUseAtmosShaders"/>
 			<check_box label="Illuminazione Avanzata" name="UseLightShaders" tool_tip="Abilita la gestione avanzata delle luci"/>
 			<check_box label="Occlusione Ambiente" name="UseSSAO"/>

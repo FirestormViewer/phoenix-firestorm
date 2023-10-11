@@ -35,7 +35,6 @@
 			</text>
 			<check_box label="Прозрачная вода" name="TransparentWater"/>
 			<check_box label="Рельеф и блеск" name="BumpShiny"/>
-			<check_box label="Локальный свет" name="LocalLights"/>
 			<check_box label="Атмосферные шейдеры" name="WindLightUseAtmosShaders"/>
 			<check_box label="Расшир. модель освещения" tool_tip="Включить расширенную прорисовку освещения." name="UseLightShaders"/>
 			<check_box label="Окклюзия окружения" name="UseSSAO"/>
