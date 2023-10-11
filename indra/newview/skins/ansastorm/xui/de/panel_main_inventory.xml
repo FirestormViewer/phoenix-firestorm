@@ -17,7 +17,7 @@
 			<menu_item_call name="replace_links" label="Links ersetzen"/>
 			<menu_item_call name="inventory_new_window" label="Neues Inventar-Fenster"/>
 			<menu_item_check name="Protected Folders" label="Geschützte Ordner"/>
-			<menu_item_call label="Inventar-Einstellungen..." name="inv_settings"/>
+			<menu_item_check label="Inventar-Einstellungen..." name="inv_settings"/>
 			<menu_item_check label="Listen-Ansicht" name="list_view"/>
 			<menu_item_check label="Galerie-Ansicht" name="gallery_view"/>
 			<menu_item_check label="Kombinierte Ansicht" name="combination_view"/>

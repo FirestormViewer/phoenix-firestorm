@@ -80,12 +80,16 @@
 	<menu_item_call label="Ouvrir l&apos;original" name="Open Original"/>
 	<menu_item_call label="Propriétés" name="Properties"/>
 	<menu_item_call label="Renommer" name="Rename"/>
+	<menu_item_call label="Image..." name="thumbnail"/>
 	<menu_item_call label="Protéger" name="ProtectFolder"/>
+	<menu_item_call label="Déprotéger" name="UnprotectFolder"/>
+	<menu_item_call label="Recharger le dossier" name="ReloadFolder"/>
 	<menu_item_call label="Copier l&apos;UUID (identifiant universel unique)" name="Copy Asset UUID"/>
+	<menu_item_call label="Remettre à la dernière position" name="Restore to Last Position"/>
 	<menu_item_call label="Affiche le Panneau principal" name="Show in Main Panel"/>
 	<menu_item_call label="Afficher dans une nouvelle fenêtre" name="Show in new Window"/>
-	<menu_item_call label="Recharger le dossier" name="ReloadFolder"/>
-	<menu_item_call label="Remettre à la dernière position" name="Restore to Last Position"/>
+	<menu_item_call label="Ouvrir" name="open_in_current_window"/>
+	<menu_item_call label="Ouvrir dans une nouvelle fenêtre" name="open_in_new_window"/>
 	<menu_item_call label="Couper" name="Cut"/>
 	<menu_item_call label="Copier" name="Copy"/>
 	<menu_item_call label="Coller" name="Paste"/>

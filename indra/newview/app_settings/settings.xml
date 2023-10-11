@@ -2972,7 +2972,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <integer>95.0</integer>
+      <real>95.0</real>
     </map>
     <key>FSDiskCacheLowWaterPercent</key>
     <map>
@@ -2983,7 +2983,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <integer>70.0</integer>
+      <real>70.0</real>
     </map>
     <key>CacheLocation</key>
     <map>
