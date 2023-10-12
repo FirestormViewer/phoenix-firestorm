@@ -4704,6 +4704,14 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 		}
 
 		disabled_items.push_back(std::string("New Folder"));
+		// <FS:Ansariel> Undo weird menu design
+		disabled_items.push_back(std::string("New Script"));
+		disabled_items.push_back(std::string("New Note"));
+		disabled_items.push_back(std::string("New Settings"));
+		disabled_items.push_back(std::string("New Gesture"));
+		disabled_items.push_back(std::string("New Clothes"));
+		disabled_items.push_back(std::string("New Body Parts"));
+		// <FS:Ansariel>
 		disabled_items.push_back(std::string("upload_def"));
 	}
 	if (favorites == mUUID)
@@ -4726,6 +4734,13 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
     if (getPreferredType() == LLFolderType::FT_MARKETPLACE_STOCK)
     {
         disabled_items.push_back(std::string("New Folder"));
+		// <FS:Ansariel> Undo weird menu design
+		disabled_items.push_back(std::string("New Script"));
+		disabled_items.push_back(std::string("New Note"));
+		disabled_items.push_back(std::string("New Gesture"));
+		disabled_items.push_back(std::string("New Clothes"));
+		disabled_items.push_back(std::string("New Body Parts"));
+		// <FS:Ansariel>
 		disabled_items.push_back(std::string("upload_def"));
     }
     if (marketplace_listings_id == mUUID)
@@ -4796,7 +4811,23 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                 if (!isMarketplaceListingsFolder() && !model->isObjectDescendentOf(mUUID, outfits_id))
                 // </FS:Ansariel>
                 {
+                    // <FS:Ansariel> Undo weird menu design
+                    items.push_back(std::string("New Script"));
+                    items.push_back(std::string("New Note"));
+                    items.push_back(std::string("New Gesture"));
+                    items.push_back(std::string("New Clothes"));
+                    items.push_back(std::string("New Body Parts"));
+                    items.push_back(std::string("New Settings"));
+                    // </FS:Ansariel>
                     items.push_back(std::string("upload_def"));
+
+                    // <FS:Ansariel> Undo weird menu design
+                    if (!LLEnvironment::instance().isInventoryEnabled())
+                    {
+                        disabled_items.push_back("New Settings");
+                    }
+                    // </FS:Ansariel>
+
                 }
                 if (menu_items_added)
                 {
