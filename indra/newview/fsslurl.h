@@ -60,7 +60,8 @@ public:
 		HOME_LOCATION,
 		LAST_LOCATION,
 		APP,
-		HELP
+		HELP,
+		EMPTY
 	};
 
 	LLSLURL(): mType(INVALID)  { }
