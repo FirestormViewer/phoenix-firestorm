@@ -154,6 +154,13 @@ LLSLURL::LLSLURL(const std::string& slurl)
 		if(slurl_uri.scheme() == LLSLURL::SLURL_SECONDLIFE_SCHEME)
 		{
 			LL_DEBUGS("SLURL") << "secondlife scheme" << LL_ENDL;
+			if (path_array.size() == 0)
+			{
+				// um, we need a path...
+				mType = EMPTY;
+				return;
+			}
+
 			// parse a maingrid style slurl.  We know the grid is maingrid
 			// so grab it.
 			// A location slurl for maingrid (with the special schemes) can be in the form

@@ -1914,7 +1914,7 @@ void LLItemBridge::performAction(LLInventoryModel* model, std::string action)
 	}
 	else if ("show_in_main_panel" == action)
 	{
-		LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, mUUID, TRUE);
+		LLInventoryPanel::openInventoryPanelAndSetSelection(true, mUUID, true);
 		return;
 	}
 	else if ("cut" == action)
@@ -3703,7 +3703,7 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 // </FS:TT>
 	else if ("show_in_main_panel" == action)
 	{
-		LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, mUUID, TRUE);
+		LLInventoryPanel::openInventoryPanelAndSetSelection(true, mUUID, true);
 		return;
 	}
 	else if ("cut" == action)
