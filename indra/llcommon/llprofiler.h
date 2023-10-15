@@ -95,7 +95,7 @@ namespace LLProfiler
 // <FS:Beq> Fixed mutual exclusion issues with RAM and GPU. NOTE: This might still break on Apple in which case we'll need to restrict that platform
         //// GPU Mutually exclusive with detailed memory tracing
         // #define LL_PROFILER_ENABLE_TRACY_OPENGL 0
-        #define LL_PROFILER_ENABLE_TRACY_MEMORY 1
+        #define LL_PROFILER_ENABLE_TRACY_MEMORY 0
         #define LL_PROFILER_ENABLE_TRACY_OPENGL 0
 
         // Enable RenderDoc labeling
