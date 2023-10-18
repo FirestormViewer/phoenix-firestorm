@@ -92,6 +92,7 @@
 		</layout_panel>
 	</layout_stack>
 	<check_box label="In Suche anzeigen" tool_tip="Erlaubt es anderen Einwohnern, Sie in Suchergebnissen zu finden" name="show_in_search"/>
+	<check_box label="Vollständiges Geburtsdatum anzeigen" tool_tip="Erlaubt es anderen Einwohnern, Ihr exaktes Geburtsdatum zu sehen" name="hide_sl_age"/>
 	<button name="save_description_changes" label="Speichern"/>
 	<button name="discard_description_changes" label="Verwerfen"/>
 </panel>

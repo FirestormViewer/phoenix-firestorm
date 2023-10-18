@@ -5372,6 +5372,9 @@ Missbrauchsbericht
 	<string name="AvatarBirthDateFormat_legacy">
 		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]
 	</string>
+	<string name="AvatarBirthDateFormat_short">
+		[day,datetime,utc].[mthnum,datetime,utc]
+	</string>
 	<string name="DefaultMimeType">
 		Keine/Keiner
 	</string>

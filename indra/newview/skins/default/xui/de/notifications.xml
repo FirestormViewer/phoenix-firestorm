@@ -2519,6 +2519,16 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 Möchten Sie diese Objekte wirklich löschen?
 		<usetemplate ignoretext="Vor dem Löschen gefilterter Objekte bestätigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="DeleteWornItems">
+		Einige Objekte, die Sie löschen möchten, werden gerade von Ihrem Avatar getragen.
+Sollen diese Objekte von Ihrem Avatar entfernt werden?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Objekte entfernen und löschen"/>
+	</notification>
+	<notification name="CantDeleteRequiredClothing">
+		Einige Objekte, die Sie löschen möchten, sind notwendige Körperteile (Haut, Körperform, Haar, Augen).
+Sie müssen diese vor dem Löschen ersetzen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="DeleteThumbnail">
 		Soll die Abbildung für dieses Objekt gelöscht werden?
 
