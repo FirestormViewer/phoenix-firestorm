@@ -4698,7 +4698,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 		disabled_items.push_back(std::string("New Body Parts"));
 		// <FS:Ansariel>
 		disabled_items.push_back(std::string("upload_def"));
-        disabled_items.push_back(std::string("create_new"));
+        //disabled_items.push_back(std::string("create_new")); // <FS:Ansariel> Undo weird menu design
 	}
 	if (favorites == mUUID)
 	{
@@ -4728,7 +4728,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 		disabled_items.push_back(std::string("New Body Parts"));
 		// <FS:Ansariel>
 		disabled_items.push_back(std::string("upload_def"));
-        disabled_items.push_back(std::string("create_new"));
+        //disabled_items.push_back(std::string("create_new")); // <FS:Ansariel> Undo weird menu design
     }
     if (marketplace_listings_id == mUUID)
     {
