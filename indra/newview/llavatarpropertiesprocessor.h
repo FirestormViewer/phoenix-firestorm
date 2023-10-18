@@ -85,9 +85,10 @@ struct LLAvatarData
 	std::string	profile_url;
 	U8			caption_index;
 	std::string	caption_text;
-    std::string	customer_type;
+	std::string	customer_type;
+	bool		hide_age;
 	U32			flags;
-	BOOL		allow_publish;
+	BOOL		allow_publish; // <FS:Ansariel> UDP profiles
 };
 
 struct LLAvatarPicks
@@ -226,7 +227,7 @@ public:
 
 	void sendClassifiedInfoRequest(const LLUUID& classified_id);
 
-	void sendAvatarPropertiesUpdate(const LLAvatarData* avatar_props);
+	void sendAvatarPropertiesUpdate(const LLAvatarData* avatar_props); // <FS:Ansariel> UDP profiles
 
 	void sendPickInfoUpdate(const LLPickData* new_pick);
 

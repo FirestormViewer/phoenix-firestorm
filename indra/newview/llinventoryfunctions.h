@@ -51,11 +51,12 @@ BOOL get_is_parent_to_worn_item(const LLUUID& id);
 
 // Is this item or its baseitem is worn, attached, etc...
 BOOL get_is_item_worn(const LLUUID& id);
+BOOL get_is_item_worn(const LLViewerInventoryItem* item);
 
 // Could this item be worn (correct type + not already being worn)
 BOOL get_can_item_be_worn(const LLUUID& id);
 
-BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id);
+bool get_is_item_removable(const LLInventoryModel* model, const LLUUID& id, bool check_worn);
 
 // Performs the appropiate edit action (if one exists) for this item
 bool get_is_item_editable(const LLUUID& inv_item_id);

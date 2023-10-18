@@ -597,9 +597,8 @@ BOOL get_is_parent_to_worn_item(const LLUUID& id)
 	return FALSE;
 }
 
-BOOL get_is_item_worn(const LLUUID& id)
+BOOL get_is_item_worn(const LLUUID& id, const LLViewerInventoryItem* item)
 {
-	const LLViewerInventoryItem* item = gInventory.getItem(id);
 	if (!item)
 		return FALSE;
 
@@ -636,6 +635,21 @@ BOOL get_is_item_worn(const LLUUID& id)
 			break;
 	}
 	return FALSE;
+}
+
+BOOL get_is_item_worn(const LLUUID& id)
+{
+    const LLViewerInventoryItem* item = gInventory.getItem(id);
+    return get_is_item_worn(item);
+}
+
+BOOL get_is_item_worn(const LLViewerInventoryItem* item)
+{
+    if (!item)
+    {
+        return FALSE;
+    }
+    return get_is_item_worn(item->getUUID(), item);
 }
 
 BOOL get_can_item_be_worn(const LLUUID& id)
@@ -701,17 +715,17 @@ BOOL get_can_item_be_worn(const LLUUID& id)
 	return FALSE;
 }
 
-BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
+bool get_is_item_removable(const LLInventoryModel* model, const LLUUID& id, bool check_worn)
 {
 	if (!model)
 	{
-		return FALSE;
+		return false;
 	}
 
 	// Can't delete an item that's in the library.
 	if (!model->isObjectDescendentOf(id, gInventory.getRootFolderID()))
 	{
-		return FALSE;
+		return false;
 	}
 
 	// <FS> Locked Folders
@@ -736,7 +750,7 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 	{
 		if (get_is_item_worn(id))
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -751,13 +765,13 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 	const LLInventoryObject *obj = model->getItem(id);
 	if (obj && obj->getIsLinkType())
 	{
-		return TRUE;
+		return true;
 	}
-	if (get_is_item_worn(id))
+	if (check_worn && get_is_item_worn(id))
 	{
-		return FALSE;
+		return false;
 	}
-	return TRUE;
+	return true;
 }
 
 bool get_is_item_editable(const LLUUID& inv_item_id)
@@ -2913,7 +2927,7 @@ bool LLFindNonRemovableObjects::operator()(LLInventoryCategory* cat, LLInventory
 {
 	if (item)
 	{
-		return !get_is_item_removable(&gInventory, item->getUUID());
+		return !get_is_item_removable(&gInventory, item->getUUID(), true);
 	}
 	if (cat)
 	{
@@ -3207,6 +3221,8 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 	{
 		const LLUUID &marketplacelistings_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
 		bool marketplacelistings_item = false;
+        bool has_worn = false;
+        bool needs_replacement = false;
 		LLAllDescendentsPassedFilter f;
 		for (std::set<LLFolderViewItem*>::iterator it = selected_items.begin(); (it != selected_items.end()) && (f.allDescendentsPassedFilter()); ++it)
 		{
@@ -3215,14 +3231,69 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
 				folder->applyFunctorRecursively(f);
 			}
 			LLFolderViewModelItemInventory * viewModel = dynamic_cast<LLFolderViewModelItemInventory *>((*it)->getViewModelItem());
-			if (viewModel && gInventory.isObjectDescendentOf(viewModel->getUUID(), marketplacelistings_id))
+            LLUUID obj_id = viewModel->getUUID();
+			if (viewModel && gInventory.isObjectDescendentOf(obj_id, marketplacelistings_id))
 			{
 				marketplacelistings_item = true;
 				break;
 			}
+
+            LLViewerInventoryCategory* cat = gInventory.getCategory(obj_id);
+            if (cat)
+            {
+                LLInventoryModel::cat_array_t categories;
+                LLInventoryModel::item_array_t items;
+
+                gInventory.collectDescendents(obj_id, categories, items, FALSE);
+
+                for (LLInventoryModel::item_array_t::value_type& item : items)
+                {
+                    if (get_is_item_worn(item))
+                    {
+                        has_worn = true;
+                        LLWearableType::EType type = item->getWearableType();
+                        if (type == LLWearableType::WT_SHAPE
+                            || type == LLWearableType::WT_SKIN
+                            || type == LLWearableType::WT_HAIR
+                            || type == LLWearableType::WT_EYES)
+                        {
+                            needs_replacement = true;
+                            break;
+                        }
+                    }
+                }
+                if (needs_replacement)
+                {
+                    break;
+                }
+            }
+            LLViewerInventoryItem* item = gInventory.getItem(obj_id);
+            if (item && get_is_item_worn(item))
+            {
+                has_worn = true;
+                LLWearableType::EType type = item->getWearableType();
+                if (type == LLWearableType::WT_SHAPE
+                    || type == LLWearableType::WT_SKIN
+                    || type == LLWearableType::WT_HAIR
+                    || type == LLWearableType::WT_EYES)
+                {
+                    needs_replacement = true;
+                    break;
+                }
+            }
 		}
 		// Fall through to the generic confirmation if the user choose to ignore the specialized one
-		if ( (!f.allDescendentsPassedFilter()) && !marketplacelistings_item && (!LLNotifications::instance().getIgnored("DeleteFilteredItems")) )
+        if (needs_replacement)
+        {
+            LLNotificationsUtil::add("CantDeleteRequiredClothing");
+        }
+        else if (has_worn)
+        {
+            LLSD payload;
+            payload["has_worn"] = true;
+            LLNotificationsUtil::add("DeleteWornItems", LLSD(), payload, boost::bind(&LLInventoryAction::onItemsRemovalConfirmation, _1, _2, root->getHandle()));
+        }
+		else if ( (!f.allDescendentsPassedFilter()) && !marketplacelistings_item && (!LLNotifications::instance().getIgnored("DeleteFilteredItems")) )
 		{
 			LLNotificationsUtil::add("DeleteFilteredItems", LLSD(), LLSD(), boost::bind(&LLInventoryAction::onItemsRemovalConfirmation, _1, _2, root->getHandle()));
 		}
@@ -3690,11 +3761,81 @@ void LLInventoryAction::onItemsRemovalConfirmation(const LLSD& notification, con
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if (option == 0 && !root.isDead() && !root.get()->isDead())
 	{
+        bool has_worn = notification["payload"]["has_worn"].asBoolean();
 		LLFolderView* folder_root = root.get();
 		//Need to remove item from DND before item is removed from root folder view
 		//because once removed from root folder view the item is no longer a selected item
 		removeItemFromDND(folder_root);
-		folder_root->removeSelectedItems();
+
+        // removeSelectedItems will change selection, collect worn items beforehand
+        uuid_vec_t worn;
+        uuid_vec_t item_deletion_list;
+        uuid_vec_t cat_deletion_list;
+        if (has_worn)
+        {
+            //Get selected items
+            LLFolderView::selected_items_t selectedItems = folder_root->getSelectedItems();
+
+            //If user is in DND and deletes item, make sure the notification is not displayed by removing the notification
+            //from DND history and .xml file. Once this is done, upon exit of DND mode the item deleted will not show a notification.
+            for (LLFolderView::selected_items_t::iterator it = selectedItems.begin(); it != selectedItems.end(); ++it)
+            {
+                LLFolderViewModelItemInventory* viewModel = dynamic_cast<LLFolderViewModelItemInventory*>((*it)->getViewModelItem());
+
+                LLUUID obj_id = viewModel->getUUID();
+                LLViewerInventoryCategory* cat = gInventory.getCategory(obj_id);
+                bool cat_has_worn = false;
+                if (cat)
+                {
+                    LLInventoryModel::cat_array_t categories;
+                    LLInventoryModel::item_array_t items;
+
+                    gInventory.collectDescendents(obj_id, categories, items, FALSE);
+
+                    for (LLInventoryModel::item_array_t::value_type& item : items)
+                    {
+                        if (get_is_item_worn(item))
+                        {
+                            worn.push_back(item->getUUID());
+                            cat_has_worn = true;
+                        }
+                    }
+                    if (cat_has_worn)
+                    {
+                        cat_deletion_list.push_back(obj_id);
+                    }
+                }
+                LLViewerInventoryItem* item = gInventory.getItem(obj_id);
+                if (item && get_is_item_worn(item))
+                {
+                    worn.push_back(obj_id);
+                    item_deletion_list.push_back(obj_id);
+                }
+            }
+        }
+
+        // removeSelectedItems will check if items are worn before deletion,
+        // don't 'unwear' yet to prevent race conditions from unwearing
+        // and removing simultaneously
+        folder_root->removeSelectedItems();
+
+        // unwear then delete the rest
+        if (!worn.empty())
+        {
+            // should fire once after every item gets detached
+            LLAppearanceMgr::instance().removeItemsFromAvatar(worn,
+                                                              [item_deletion_list, cat_deletion_list]()
+                                                              {
+                                                                  for (const LLUUID& id : item_deletion_list)
+                                                                  {
+                                                                      remove_inventory_item(id, NULL);
+                                                                  }
+                                                                  for (const LLUUID& id : cat_deletion_list)
+                                                                  {
+                                                                      remove_inventory_category(id, NULL);
+                                                                  }
+                                                              }, NULL, false);
+        }
 
 		// Update the marketplace listings that have been affected by the operation
 		updateMarketplaceFolders();

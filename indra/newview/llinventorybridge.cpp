@@ -342,9 +342,9 @@ void LLInvFVBridge::setCreationDate(time_t creation_date_utc)
 
 
 // Can be destroyed (or moved to trash)
-BOOL LLInvFVBridge::isItemRemovable() const
+BOOL LLInvFVBridge::isItemRemovable(bool check_worn) const
 {
-	return get_is_item_removable(getInventoryModel(), mUUID);
+	return get_is_item_removable(getInventoryModel(), mUUID, check_worn);
 }
 
 // Can be moved to another folder
@@ -810,7 +810,7 @@ void hide_context_entries(LLMenuGL& menu,
 
 		// descend into split menus:
 		LLMenuItemBranchGL* branchp = dynamic_cast<LLMenuItemBranchGL*>(menu_item);
-		if ((name == "More") && branchp)
+        if (((name == "More") || (name == "create_new")) && branchp)
 		{
 			hide_context_entries(*branchp->getBranch(), entries_to_show, disabled_entries);
 		}
@@ -865,7 +865,7 @@ void hide_context_entries(LLMenuGL& menu,
 			// so that some other UI element from multi-select doesn't later set this invisible.
 			menu_item->pushVisible(TRUE);
 
-			bool enabled = (menu_item->getEnabled() == TRUE);
+			bool enabled = true;
 			for (itor2 = disabled_entries.begin(); enabled && (itor2 != disabled_entries.end()); ++itor2)
 			{
 				enabled &= (*itor2 != name);
@@ -1146,7 +1146,7 @@ void LLInvFVBridge::addDeleteContextMenuOptions(menuentry_vec_t &items,
 
 	items.push_back(std::string("Delete"));
 
-	if (!isItemRemovable() || isPanelActive("Favorite Items"))
+	if (!isItemRemovable(false) || isPanelActive("Favorite Items"))
 	{
 		disabled_items.push_back(std::string("Delete"));
 	}
@@ -2669,20 +2669,21 @@ void LLFolderBridge::update()
 class LLIsItemRemovable : public LLFolderViewFunctor
 {
 public:
-	LLIsItemRemovable() : mPassed(TRUE) {}
+	LLIsItemRemovable(bool check_worn = true) : mPassed(TRUE), mCheckWorn(check_worn) {}
 	virtual void doFolder(LLFolderViewFolder* folder)
 	{
-		mPassed &= folder->getViewModelItem()->isItemRemovable();
+		mPassed &= folder->getViewModelItem()->isItemRemovable(mCheckWorn);
 	}
 	virtual void doItem(LLFolderViewItem* item)
 	{
-		mPassed &= item->getViewModelItem()->isItemRemovable();
+		mPassed &= item->getViewModelItem()->isItemRemovable(mCheckWorn);
 	}
 	BOOL mPassed;
+    bool mCheckWorn;
 };
 
 // Can be destroyed (or moved to trash)
-BOOL LLFolderBridge::isItemRemovable() const
+BOOL LLFolderBridge::isItemRemovable(bool check_worn) const
 {
 	if (!get_is_category_removable(getInventoryModel(), mUUID))
 	{
@@ -2700,7 +2701,7 @@ BOOL LLFolderBridge::isItemRemovable() const
 	LLFolderViewFolder* folderp = dynamic_cast<LLFolderViewFolder*>(panel ?   panel->getItemByID(mUUID) : NULL);
 	if (folderp)
 	{
-		LLIsItemRemovable folder_test;
+		LLIsItemRemovable folder_test(check_worn);
 		folderp->applyFunctorToChildren(folder_test);
 		if (!folder_test.mPassed)
 		{
@@ -4697,6 +4698,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 		disabled_items.push_back(std::string("New Body Parts"));
 		// <FS:Ansariel>
 		disabled_items.push_back(std::string("upload_def"));
+        disabled_items.push_back(std::string("create_new"));
 	}
 	if (favorites == mUUID)
 	{
@@ -4726,6 +4728,7 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 		disabled_items.push_back(std::string("New Body Parts"));
 		// <FS:Ansariel>
 		disabled_items.push_back(std::string("upload_def"));
+        disabled_items.push_back(std::string("create_new"));
     }
     if (marketplace_listings_id == mUUID)
     {
@@ -4793,23 +4796,18 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                 if (!isMarketplaceListingsFolder() && !model->isObjectDescendentOf(mUUID, outfits_id))
                 // </FS:Ansariel>
                 {
-                    // <FS:Ansariel> Undo weird menu design
+                    items.push_back(std::string("upload_def"));
+                    //items.push_back(std::string("create_new")); // <FS:Ansariel> Undo weird menu design
                     items.push_back(std::string("New Script"));
                     items.push_back(std::string("New Note"));
                     items.push_back(std::string("New Gesture"));
                     items.push_back(std::string("New Clothes"));
                     items.push_back(std::string("New Body Parts"));
                     items.push_back(std::string("New Settings"));
-                    // </FS:Ansariel>
-                    items.push_back(std::string("upload_def"));
-
-                    // <FS:Ansariel> Undo weird menu design
                     if (!LLEnvironment::instance().isInventoryEnabled())
                     {
                         disabled_items.push_back("New Settings");
                     }
-                    // </FS:Ansariel>
-
                 }
 			}
 			getClipboardEntries(false, items, disabled_items, flags);
@@ -5003,7 +5001,7 @@ void LLFolderBridge::buildContextMenuFolderOptions(U32 flags,   menuentry_vec_t&
         return;
     }
 
-	if (!isItemRemovable())
+	if (!isItemRemovable(false))
 	{
 		disabled_items.push_back(std::string("Delete"));
 	}
@@ -7310,6 +7308,26 @@ LLInventoryObject* LLObjectBridge::getObject() const
 		object = (LLInventoryObject*)model->getObject(mUUID);
 	}
 	return object;
+}
+
+LLViewerInventoryItem* LLObjectBridge::getItem() const
+{
+    LLInventoryModel* model = getInventoryModel();
+    if (model)
+    {
+       return model->getItem(mUUID);
+    }
+    return NULL;
+}
+
+LLViewerInventoryCategory* LLObjectBridge::getCategory() const
+{
+    LLInventoryModel* model = getInventoryModel();
+    if (model)
+    {
+        return model->getCategory(mUUID);
+    }
+    return NULL;
 }
 
 // <FS:Zi> Texture Refresh on worn attachments

@@ -143,7 +143,10 @@ protected:
 
 		registrar.add("Attachment.Touch", boost::bind(handleMultiple, handle_attachment_touch, mUUIDs));
 		registrar.add("Attachment.Edit", boost::bind(handleMultiple, handle_item_edit, mUUIDs));
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-05-05 (Catznip-3.7)
+		//registrar.add("Attachment.Detach", boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), mUUIDs, no_op));
 		registrar.add("Attachment.Detach", boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), mUUIDs));
+// [/SL:KB]
 
 		LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
 		enable_registrar.add("Attachment.OnEnable", boost::bind(&CofAttachmentContextMenu::onEnable, this, _2));
@@ -196,7 +199,10 @@ protected:
 		LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
 		LLUUID selected_id = mUUIDs.back();
 
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2015-05-05 (Catznip-3.7)
+		//registrar.add("Clothing.TakeOff", boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), mUUIDs, no_op));
 		registrar.add("Clothing.TakeOff", boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), mUUIDs));
+// [/SL:KB]
 		registrar.add("Clothing.Replace", boost::bind(replaceWearable, selected_id));
 		registrar.add("Clothing.Edit", boost::bind(LLAgentWearables::editWearable, selected_id));
 		registrar.add("Clothing.Create", boost::bind(&CofClothingContextMenu::createNew, this, selected_id));

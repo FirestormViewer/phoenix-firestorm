@@ -163,7 +163,7 @@ protected:
     /**
      * Fills user name, display name, age.
      */
-    void fillAgeData(const LLDate &born_on);
+    void fillAgeData(const LLAvatarData* avatar_data);
 
     void onImageLoaded(BOOL success, LLViewerFetchedTexture *imagep);
     static void onImageLoaded(BOOL success,
@@ -199,6 +199,7 @@ private:
     void setDescriptionText(const std::string &text);
     void onSetDescriptionDirty();
     void onShowInSearchCallback();
+    void onHideAgeCallback();
     void onSaveDescriptionChanges();
     void onDiscardDescriptionChanges();
     void onShowAgentPermissionsDialog();
@@ -220,7 +221,9 @@ private:
 	LLGroupList*		mGroupList;
 	// <FS:Ansariel> Fix LL UI/UX design accident
     //LLComboBox*			mShowInSearchCombo;
+    //LLComboBox*			mHideAgeCombo;
 	LLCheckBoxCtrl*		mShowInSearchCheckbox;
+    LLCheckBoxCtrl*		mHideAgeCheckbox;
 	// </FS:Ansariel>
     // <FS:Zi> Allow proper texture swatch handling
 	// LLThumbnailCtrl*			mSecondLifePic;
@@ -261,6 +264,7 @@ private:
 	bool				mVoiceStatus;
     bool				mWaitingForImageUpload;
     bool				mAllowPublish;
+    bool				mHideAge;
     std::string			mDescriptionText;
     LLUUID				mImageId;
 

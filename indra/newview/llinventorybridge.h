@@ -115,7 +115,7 @@ public:
 	virtual BOOL isItemRenameable() const { return TRUE; }
 	virtual BOOL isMultiPreviewAllowed() { return TRUE; }
 	//virtual BOOL renameItem(const std::string& new_name) {}
-	virtual BOOL isItemRemovable() const;
+	virtual BOOL isItemRemovable(bool check_worn = true) const;
 	virtual BOOL isItemMovable() const;
 	virtual BOOL isItemInTrash() const;
     virtual bool isItemInOutfits() const;
@@ -339,7 +339,7 @@ public:
 							void* cargo_data,
 							std::string& tooltip_msg);
 
-	virtual BOOL isItemRemovable() const;
+	virtual BOOL isItemRemovable(bool check_worn = true) const;
 	virtual BOOL isItemMovable() const ;
 	virtual BOOL isUpToDate() const;
     virtual bool isItemCopyable(bool can_copy_as_link = true) const;
@@ -551,6 +551,8 @@ public:
 	virtual void			buildContextMenu(LLMenuGL& menu, U32 flags);
 	virtual BOOL renameItem(const std::string& new_name);
 	LLInventoryObject* getObject() const;
+    LLViewerInventoryItem* getItem() const;
+    LLViewerInventoryCategory* getCategory() const;
 protected:
 	static LLUUID sContextMenuItemID;  // Only valid while the context menu is open.
 	U32 mAttachPt;

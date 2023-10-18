@@ -400,6 +400,43 @@ bool is_inbox_folder(LLUUID item_id)
     return gInventory.isObjectDescendentOf(item_id, inbox_id);
 }
 
+bool is_category_removable(const LLUUID &folder_id, bool check_worn)
+{
+    if (!get_is_category_removable(&gInventory, folder_id))
+    {
+        return false;
+    }
+
+    // check children
+    LLInventoryModel::cat_array_t* cat_array;
+    LLInventoryModel::item_array_t* item_array;
+    gInventory.getDirectDescendentsOf(folder_id, cat_array, item_array);
+
+    for (LLInventoryModel::item_array_t::value_type& item : *item_array)
+    {
+        if (!get_is_item_removable(&gInventory, item->getUUID(), check_worn))
+        {
+            return false;
+        }
+    }
+
+    for (LLInventoryModel::cat_array_t::value_type& cat : *cat_array)
+    {
+        if (!is_category_removable(cat->getUUID(), check_worn))
+        {
+            return false;
+        }
+    }
+
+    const LLUUID mp_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
+    if (mp_id.notNull() && gInventory.isObjectDescendentOf(folder_id, mp_id))
+    {
+        return false;
+    }
+
+    return true;
+}
+
 void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* menu)
 {
     LLUUID selected_id = mUUIDs.front();
@@ -507,7 +544,7 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
             }
         }
         items.push_back(std::string("Purge Item"));
-        if (is_folder && !get_is_category_removable(&gInventory, selected_id))
+        if (is_folder && !is_category_removable(selected_id, true))
         {
             disabled_items.push_back(std::string("Purge Item"));
         }
@@ -554,9 +591,14 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
                 }
                 items.push_back(std::string("Cut"));
                 items.push_back(std::string("Delete"));
-                if(!get_is_category_removable(&gInventory, selected_id))
+
+                if(!is_category_removable(selected_id, false))
                 {
                     disabled_items.push_back(std::string("Delete"));
+                    disabled_items.push_back(std::string("Cut"));
+                }
+                else if (!is_category_removable(selected_id, true))
+                {
                     disabled_items.push_back(std::string("Cut"));
                 }
 
@@ -592,9 +634,13 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
                 {
                     items.push_back(std::string("Delete"));
                 }
-                if(!get_is_item_removable(&gInventory, selected_id))
+                if (!get_is_item_removable(&gInventory, selected_id, false))
                 {
                     disabled_items.push_back(std::string("Delete"));
+                    disabled_items.push_back(std::string("Cut"));
+                }
+                else if(!get_is_item_removable(&gInventory, selected_id, true))
+                {
                     disabled_items.push_back(std::string("Cut"));
                 }
 

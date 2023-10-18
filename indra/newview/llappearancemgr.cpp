@@ -4636,7 +4636,7 @@ void LLAppearanceMgr::wearBaseOutfit()
 
 //void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2015-05-05 (Catznip-3.7)
-void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove, LLPointer<LLInventoryCallback> cb /*= NULL*/, bool immediate_delete /*= false*/)
+void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove, nullary_func_t post_update_func, LLPointer<LLInventoryCallback> cb /*= NULL*/, bool immediate_delete /*= false*/)
 // [/SL:KB]
 {
 	LL_DEBUGS("UIUsage") << "removeItemsFromAvatar" << LL_ENDL;
@@ -4648,7 +4648,7 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove, LLP
 		return;
 	}
 // [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
-//	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy;
+//	LLPointer<LLInventoryCallback> cb = new LLUpdateAppearanceOnDestroy(true, true, post_update_func);
 	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
 	{
 		const LLUUID& id_to_remove = *it;
@@ -4677,7 +4677,7 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove, LLP
 		}
 
 		if (!cb)
-			cb = new LLUpdateAppearanceOnDestroy();
+			cb = new LLUpdateAppearanceOnDestroy(true, true, post_update_func);
 		removeCOFItemLinks(linked_item_id, cb, immediate_delete);
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: Catznip-3.7
 		LLAttachmentsMgr::instance().clearPendingAttachmentLink(linked_item_id);
@@ -4704,15 +4704,15 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove, LLP
 //	}
 }
 
-//void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
+//void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove, nullary_func_t post_update_func)
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2015-05-05 (Catznip-3.7)
-void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove, LLPointer<LLInventoryCallback> cb /*= NULL*/, bool immediate_delete /*= false*/)
+void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove, nullary_func_t post_update_func, LLPointer<LLInventoryCallback> cb /*= NULL*/, bool immediate_delete /*= false*/)
 // [/SL:KB]
 {
 	uuid_vec_t ids_to_remove;
 	ids_to_remove.push_back(id_to_remove);
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2015-05-05 (Catznip-3.7)
-	removeItemsFromAvatar(ids_to_remove, cb, immediate_delete);
+	removeItemsFromAvatar(ids_to_remove, post_update_func, cb, immediate_delete);
 // [/SL:KB]
 //	removeItemsFromAvatar(ids_to_remove);
 }

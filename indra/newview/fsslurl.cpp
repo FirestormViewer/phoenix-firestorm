@@ -66,13 +66,13 @@ LLSLURL::LLSLURL(const std::string& slurl)
 	// by default we go to agni.
 	mType = INVALID;
 	LL_DEBUGS("AppInit", "SLURL") << "SLURL: " << slurl << LL_ENDL;
-	if(slurl == SIM_LOCATION_HOME)
-	{
-		mType = HOME_LOCATION;
-	}
-	else if(slurl.empty() || (slurl == SIM_LOCATION_LAST))
+	if (slurl.empty() || (slurl == SIM_LOCATION_LAST))
 	{
 		mType = LAST_LOCATION;
+	}
+	else if (slurl == SIM_LOCATION_HOME)
+	{
+		mType = HOME_LOCATION;
 	}
 	else
 	{
@@ -156,6 +156,10 @@ LLSLURL::LLSLURL(const std::string& slurl)
 			LL_DEBUGS("SLURL") << "secondlife scheme" << LL_ENDL;
 			if (path_array.size() == 0)
 			{
+				if (slurl_uri.authority().empty() && slurl_uri.escapedQuery().empty())
+				{
+					mType = EMPTY;
+				}
 				// um, we need a path...
 				mType = EMPTY;
 				return;
@@ -683,28 +687,24 @@ std::string LLSLURL::asString() const
 // <AW: opensim>
 std::string LLSLURL::getTypeHumanReadable(SLURL_TYPE type)
 {
-	std::string ret;
 	switch(type)
 	{
 	case INVALID:
-		ret = "INVALID";
-		break;
+		return "INVALID";
 	case LOCATION:
-		ret = "LOCATION";
-		break;
+		return "LOCATION";
 	case HOME_LOCATION:
-		ret = "HOME_LOCATION";
-		break;
+		return "HOME_LOCATION";
 	case LAST_LOCATION:
-		ret = "LAST_LOCATION";
-		break;
+		return "LAST_LOCATION";
 	case APP:
-		ret = "APP";
-		break;
+		return "APP";
 	case HELP:
-		ret = "HELP";
+		return "HELP";
+	case EMPTY:
+		return "EMPTY";
+	default:
+		return{};
 	}
-
-	return ret;
 }
 // </AW: opensim>
