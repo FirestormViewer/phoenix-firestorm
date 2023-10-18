@@ -371,6 +371,60 @@
 		name="inventory_search_menu"
 		tear_off="true"
 		top="0">
+
+		<!-- search visibility settings -->
+		<menu_item_check
+			label="Search outfit folders"
+			layout="topleft"
+			name="search_outfits">
+		<on_click
+			function="Inventory.GearDefault.Custom.Action"
+			parameter="toggle_search_outfits" />
+		<on_check
+			function="Inventory.GearDefault.Check"
+			parameter="toggle_search_outfits" />
+		</menu_item_check>
+		<menu_item_check
+			label="Search Trash"
+			layout="topleft"
+			name="search_trash">
+		<on_click
+			function="Inventory.GearDefault.Custom.Action"
+			parameter="toggle_search_trash" />
+		<on_check
+			function="Inventory.GearDefault.Check"
+			parameter="toggle_search_trash" />
+		</menu_item_check>
+		<menu_item_check
+			label="Search Library"
+			layout="topleft"
+			name="search_library">
+		<on_click
+			function="Inventory.GearDefault.Custom.Action"
+			parameter="toggle_search_library" />
+		<on_check
+			function="Inventory.GearDefault.Check"
+			parameter="toggle_search_library" />
+		</menu_item_check>
+
+		<!-- this is already in our menu, further down
+		<menu_item_separator
+			layout="topleft" />
+		<menu_item_check
+			label="Include links"
+			layout="topleft"
+			name="include_links">
+		<on_click
+			function="Inventory.GearDefault.Custom.Action"
+			parameter="include_links" />
+		<on_check
+			function="Inventory.GearDefault.Check"
+			parameter="include_links" />
+		</menu_item_check>
+		-->
+
+		<menu_item_separator />
+
 		<menu_item_check
 			name="inventory_search_by_name"
 			label="By Name">
@@ -556,7 +610,7 @@
 		left_pad="4"
 		follows="top|left"
 		layout="topleft"
-		right="-34"
+		right="-1"
 		top_delta="-2">
 
 		<combo_box.item value="filter_type_all" label="All Types" />
@@ -577,6 +631,8 @@
 		<combo_box.item value="filter_separator" label="------------" enabled="false" />
 		<combo_box.item value="filter_type_custom" label="Custom..." />
 	</combo_box>
+
+	<!-- this should be in the main inventory menu instead of ading another button
 	<menu_button
 		follows="top|left"
 		tool_tip="Show search visibility options"
@@ -587,6 +643,7 @@
 		name="options_visibility_btn"
 		width="31"
 		top_delta="0"/>
+	-->
 
 	<tab_container
 		follows="all"
