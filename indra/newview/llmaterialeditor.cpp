@@ -1574,7 +1574,11 @@ void LLMaterialEditor::onSaveAsMsgCallback(const LLSD& notification, const LLSD&
         }
         else
         {
-            LLNotificationsUtil::add("InvalidMaterialName");
+            LLNotificationsUtil::add("InvalidMaterialName", LLSD(), LLSD(), [this](const LLSD& notification, const LLSD& response) 
+                {
+                    LLNotificationsUtil::add("SaveMaterialAs", LLSD().with("DESC", mMaterialName), LLSD(),
+                        boost::bind(&LLMaterialEditor::onSaveAsMsgCallback, this, _1, _2));
+                });
         }
     }
 }
@@ -3209,7 +3213,11 @@ S32 LLMaterialEditor::saveTextures()
     {
         mUploadingTexturesCount++;
         work_count++;
-        saveTexture(mBaseColorJ2C, mBaseColorName, mBaseColorTextureUploadId, [key](LLUUID newAssetId, LLSD response)
+
+        // For ease of inventory management, we prepend the material name.
+        std::string name = mMaterialName + ": " + mBaseColorName;
+
+        saveTexture(mBaseColorJ2C, name, mBaseColorTextureUploadId, [key](LLUUID newAssetId, LLSD response)
         {
             LLMaterialEditor* me = LLFloaterReg::findTypedInstance<LLMaterialEditor>("material_editor", key);
             if (me)
@@ -3247,7 +3255,11 @@ S32 LLMaterialEditor::saveTextures()
     {
         mUploadingTexturesCount++;
         work_count++;
-        saveTexture(mNormalJ2C, mNormalName, mNormalTextureUploadId, [key](LLUUID newAssetId, LLSD response)
+
+        // For ease of inventory management, we prepend the material name.
+        std::string name = mMaterialName + ": " + mNormalName;
+
+        saveTexture(mNormalJ2C, name, mNormalTextureUploadId, [key](LLUUID newAssetId, LLSD response)
         {
             LLMaterialEditor* me = LLFloaterReg::findTypedInstance<LLMaterialEditor>("material_editor", key);
             if (me)
@@ -3285,7 +3297,11 @@ S32 LLMaterialEditor::saveTextures()
     {
         mUploadingTexturesCount++;
         work_count++;
-        saveTexture(mMetallicRoughnessJ2C, mMetallicRoughnessName, mMetallicTextureUploadId, [key](LLUUID newAssetId, LLSD response)
+
+        // For ease of inventory management, we prepend the material name.
+        std::string name = mMaterialName + ": " + mMetallicRoughnessName;
+
+        saveTexture(mMetallicRoughnessJ2C, name, mMetallicTextureUploadId, [key](LLUUID newAssetId, LLSD response)
         {
             LLMaterialEditor* me = LLFloaterReg::findTypedInstance<LLMaterialEditor>("material_editor", key);
             if (me)
@@ -3324,7 +3340,11 @@ S32 LLMaterialEditor::saveTextures()
     {
         mUploadingTexturesCount++;
         work_count++;
-        saveTexture(mEmissiveJ2C, mEmissiveName, mEmissiveTextureUploadId, [key](LLUUID newAssetId, LLSD response)
+
+        // For ease of inventory management, we prepend the material name.
+        std::string name = mMaterialName + ": " + mEmissiveName;
+
+        saveTexture(mEmissiveJ2C, name, mEmissiveTextureUploadId, [key](LLUUID newAssetId, LLSD response)
         {
             LLMaterialEditor* me = LLFloaterReg::findTypedInstance<LLMaterialEditor>("material_editor", LLSD(key));
             if (me)

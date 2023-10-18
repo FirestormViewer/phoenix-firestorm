@@ -233,6 +233,7 @@
 			<menu_item_check label="Gruppen-Objekte einschließen" name="Include Group-Owned Objects"/>
 			<menu_item_check label="Unsichtbare Objekte auswählen" name="Select Invisible Objects"/>
 			<menu_item_check label="Reflexionstests auswählen" name="Select Reflection Probes"/>
+			<menu_item_check label="Updates Reflexionstests" name="Probe Updates"/>
 			<menu_item_check label="Nach Umgebung auswählen" name="Select By Surrounding"/>
 			<menu_item_check label="Physische Form beim Editieren anzeigen" name="Show Physics Shape"/>
 			<menu_item_check label="Auswahlumrandung anzeigen" name="Show Selection Outlines"/>

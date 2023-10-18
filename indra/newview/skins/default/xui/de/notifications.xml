@@ -2446,6 +2446,13 @@ Geben Sie Ihr Kennwort erneut ein und klicken Sie auf OK.
 Sie haben die Position dieser Auswahl aktualisiert, aber die anderen Daten behalten ihre ursprünglichen Werte.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="ApplyInventoryToObject">
+		Sie wenden „kein Kopieren“ auf einen Gegenstand im Inventar an.
+Dieser Gegegstand wird in das Objekt-Inventar verschoben und nicht kopiert.
+
+Gegenstand verschieben?
+		<usetemplate ignoretext="Warnhinweis anzeigen, bevor ich „kein Kopieren“-Gegenstände auf ein Objekt anwende." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
+	</notification>
 	<notification name="MoveInventoryFromObject">
 		Sie haben „nicht kopierfähige“ Inventarobjekte ausgewählt.
 Diese Objekte werden nicht kopiert, sondern in Ihr Inventar verschoben.

@@ -327,8 +327,8 @@ void LLReflectionMap::doOcclusion(const LLVector4a& eye)
     if (mOcclusionQuery == 0)
     { // no query was previously issued, allocate one and issue
         LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("rmdo - glGenQueries");
-        glGenQueries(1, &mOcclusionQuery);
-        do_query = true;
+        //glGenQueries(1, &mOcclusionQuery);
+        do_query = false;
     }
     else
     { // query was previously issued, check it and only issue a new query
