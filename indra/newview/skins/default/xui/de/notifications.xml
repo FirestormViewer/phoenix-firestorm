@@ -1793,13 +1793,13 @@ Fortfahren?
 		<usetemplate ignoretext="Bestätigen, bevor Objekte an Ihre Eigentümer zurückgegeben werden" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="GroupLeaveConfirmMember">
-		Sie sind gegenwärtig Mitglied der Gruppe &lt;nolink&gt;[GROUP]&lt;/nolink&gt;.
-Diese Gruppe verlassen?
+		Möchten Sie die Gruppe &lt;nolink&gt;[GROUP]&lt;/nolink&gt; verlassen?
+Ein erneutes Beitreten kostet aktuell [COST] L$.
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
-	<notification name="GroupLeaveConfirmMemberWithFee">
-		Sie sind gegenwärtig Mitglied der Gruppe „&lt;nolink&gt;[GROUP]&lt;/nolink&gt;“. Erneutes Beitreten kostet [AMOUNT] L$.
-Diese Gruppe verlassen?
+	<notification name="GroupLeaveConfirmMemberNoFee">
+		Möchten Sie die Gruppe &lt;nolink&gt;[GROUP]&lt;/nolink&gt; verlassen?
+Ein erneutes Beitreten ist aktuell kostenlos.
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="OwnerCannotLeaveGroup">

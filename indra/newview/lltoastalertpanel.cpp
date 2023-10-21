@@ -93,6 +93,7 @@ LLToastAlertPanel::LLToastAlertPanel( LLNotificationPtr notification, bool modal
 	std::string edit_text_contents;
 	S32 edit_text_max_chars = 0;
 	bool is_password = false;
+	bool allow_emoji = false;
 	bool defaultText = false;
 
 	LLToastPanel::setBackgroundVisible(FALSE);
@@ -139,6 +140,7 @@ LLToastAlertPanel::LLToastAlertPanel( LLNotificationPtr notification, bool modal
 			edit_text_contents = (*it)["value"].asString();
 			edit_text_name = (*it)["name"].asString();
 			edit_text_max_chars = (*it)["max_length_chars"].asInteger();
+			allow_emoji = (*it)["allow_emoji"].asBoolean();
 		}
 		else if (type == "password")
 		{
@@ -298,6 +300,7 @@ LLToastAlertPanel::LLToastAlertPanel( LLNotificationPtr notification, bool modal
 			mLineEditor->reshape(leditor_rect.getWidth(), leditor_rect.getHeight());
 			mLineEditor->setRect(leditor_rect);
 			mLineEditor->setMaxTextChars(edit_text_max_chars);
+			mLineEditor->setAllowEmoji(allow_emoji);
 			mLineEditor->setText(edit_text_contents);
 
 			std::string notif_name = mNotification->getName();

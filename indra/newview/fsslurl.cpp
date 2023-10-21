@@ -154,14 +154,12 @@ LLSLURL::LLSLURL(const std::string& slurl)
 		if(slurl_uri.scheme() == LLSLURL::SLURL_SECONDLIFE_SCHEME)
 		{
 			LL_DEBUGS("SLURL") << "secondlife scheme" << LL_ENDL;
-			if (path_array.size() == 0)
+			if (path_array.size() == 0
+				&& slurl_uri.authority().empty()
+				&& slurl_uri.escapedQuery().empty())
 			{
-				if (slurl_uri.authority().empty() && slurl_uri.escapedQuery().empty())
-				{
-					mType = EMPTY;
-				}
-				// um, we need a path...
 				mType = EMPTY;
+				// um, we need a path...
 				return;
 			}
 
@@ -184,7 +182,7 @@ LLSLURL::LLSLURL(const std::string& slurl)
 			LL_DEBUGS("SLURL") << "path_array[0]: " << path_array[0].asString() << LL_ENDL;
 
 			if ((path_array[0].asString() == LLSLURL::SLURL_SECONDLIFE_PATH) ||
-			        (path_array[0].asString() == LLSLURL::SLURL_APP_PATH))
+					(path_array[0].asString() == LLSLURL::SLURL_APP_PATH))
 			{
 				// it's in the form secondlife://<grid>/(app|secondlife)
 				// so parse the grid name to derive the grid ID
@@ -251,14 +249,14 @@ LLSLURL::LLSLURL(const std::string& slurl)
 			}
 		}
 		else if((slurl_uri.scheme() == LLSLURL::SLURL_HTTP_SCHEME)
-		        || (slurl_uri.scheme() == LLSLURL::SLURL_HTTPS_SCHEME)
-		        || (slurl_uri.scheme() == LLSLURL::SLURL_X_GRID_LOCATION_INFO_SCHEME)
-		        || (slurl_uri.scheme() == LLSLURL::HOP_SCHEME))
+				|| (slurl_uri.scheme() == LLSLURL::SLURL_HTTPS_SCHEME)
+				|| (slurl_uri.scheme() == LLSLURL::SLURL_X_GRID_LOCATION_INFO_SCHEME)
+				|| (slurl_uri.scheme() == LLSLURL::HOP_SCHEME))
 		{
 			// We're dealing with either a Standalone style slurl or slurl.com slurl
 			if ((slurl_uri.hostName() == LLSLURL::SLURL_COM) ||
-			        (slurl_uri.hostName() == LLSLURL::WWW_SLURL_COM) ||
-			        (slurl_uri.hostName() == LLSLURL::MAPS_SECONDLIFE_COM))
+					(slurl_uri.hostName() == LLSLURL::WWW_SLURL_COM) ||
+					(slurl_uri.hostName() == LLSLURL::MAPS_SECONDLIFE_COM))
 			{
 				LL_DEBUGS("SLURL") << "slurl style slurl.com"  << LL_ENDL;
 				if (slurl_uri.hostName() == LLSLURL::MAPS_SECONDLIFE_COM)
@@ -592,8 +590,8 @@ std::string LLSLURL::getSLURLString() const
 		std::ostringstream app_url;
 		app_url << LLGridManager::getInstance()->getAppSLURLBase() << "/" << mAppCmd;
 		for(LLSD::array_const_iterator i = mAppPath.beginArray();
-		        i != mAppPath.endArray();
-		        i++)
+				i != mAppPath.endArray();
+				i++)
 		{
 			app_url << "/" << i->asString();
 		}
@@ -617,10 +615,10 @@ std::string LLSLURL::getLoginString() const
 	{
 	case LOCATION:
 		unescaped_start << "uri:"
-		                << mRegion << "&"
-		                << ll_round(mPosition[VX]) << "&"
-		                << ll_round(mPosition[VY]) << "&"
-		                << ll_round(mPosition[VZ]);
+						<< mRegion << "&"
+						<< ll_round(mPosition[VX]) << "&"
+						<< ll_round(mPosition[VY]) << "&"
+						<< ll_round(mPosition[VZ]);
 		break;
 	case HOME_LOCATION:
 		unescaped_start << "home";
@@ -642,8 +640,8 @@ bool LLSLURL::operator==(const LLSLURL& rhs)
 	{
 	case LOCATION:
 		return ((mGrid == rhs.mGrid) &&
-		        (mRegion == rhs.mRegion) &&
-		        (mPosition == rhs.mPosition));
+				(mRegion == rhs.mRegion) &&
+				(mPosition == rhs.mPosition));
 	case APP:
 		return getSLURLString() == rhs.getSLURLString();
 
@@ -663,24 +661,24 @@ bool LLSLURL::operator !=(const LLSLURL& rhs)
 std::string LLSLURL::getLocationString() const
 {
 	return llformat("%s/%d/%d/%d",
-	                mRegion.c_str(),
-	                (S32)ll_round(mPosition[VX]),
-	                (S32)ll_round(mPosition[VY]),
-	                (S32)ll_round(mPosition[VZ]));
+					mRegion.c_str(),
+					(S32)ll_round(mPosition[VX]),
+					(S32)ll_round(mPosition[VY]),
+					(S32)ll_round(mPosition[VZ]));
 }
 std::string LLSLURL::asString() const
 {
 	std::ostringstream result;
 	result << 	" mAppCmd:" << getAppCmd() <<
-	       " mAppPath:" + getAppPath().asString() <<
-	       " mAppQueryMap:" + getAppQueryMap().asString() <<
-	       " mAppQuery: " + getAppQuery() <<
-	       " mGrid: " + getGrid() <<
-	       " mRegion: " + getRegion() <<
-	       " mPosition: " <<
-	       " mType: " << mType <<
-	       " mPosition: " << mPosition <<
-	       " mHypergrid: " << mHypergrid;
+		   " mAppPath:" + getAppPath().asString() <<
+		   " mAppQueryMap:" + getAppQueryMap().asString() <<
+		   " mAppQuery: " + getAppQuery() <<
+		   " mGrid: " + getGrid() <<
+		   " mRegion: " + getRegion() <<
+		   " mPosition: " <<
+		   " mType: " << mType <<
+		   " mPosition: " << mPosition <<
+		   " mHypergrid: " << mHypergrid;
 	return result.str();
 }
 

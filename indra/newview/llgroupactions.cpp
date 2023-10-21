@@ -416,15 +416,16 @@ void LLGroupActions::processLeaveGroupDataResponse(const LLUUID group_id)
 	args["GROUP"] = gdatap->mName;
 	LLSD payload;
 	payload["group_id"] = group_id;
-	// <FS:Ansariel> FIRE-17676: Add special group leave notification in case of join fees
-	if (gdatap->mMembershipFee > 0)
-	{
-		args["AMOUNT"] = LLResMgr::getInstance()->getMonetaryString(gdatap->mMembershipFee);
-		LLNotificationsUtil::add("GroupLeaveConfirmMemberWithFee", args, payload, onLeaveGroup);
-		return;
-	}
-	// </FS:Ansariel>
-	LLNotificationsUtil::add("GroupLeaveConfirmMember", args, payload, onLeaveGroup);
+    if (gdatap->mMembershipFee > 0) 
+    {
+        args["COST"] = gdatap->mMembershipFee;
+        LLNotificationsUtil::add("GroupLeaveConfirmMember", args, payload, onLeaveGroup);
+    }
+    else 
+    {
+        LLNotificationsUtil::add("GroupLeaveConfirmMemberNoFee", args, payload, onLeaveGroup);
+    }
+
 }
 
 // static

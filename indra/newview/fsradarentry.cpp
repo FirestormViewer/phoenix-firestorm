@@ -111,7 +111,7 @@ void FSRadarEntry::processProperties(void* data, EAvatarProcessorType type)
 {
 	if (data)
 	{
-		if (type == APT_PROPERTIES)
+		if (type == APT_PROPERTIES_LEGACY)
 		{
 			LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
 			if (avatar_data && avatar_data->agent_id == gAgentID && avatar_data->avatar_id == mID)

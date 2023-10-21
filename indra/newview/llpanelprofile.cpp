@@ -151,9 +151,7 @@ void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id)
         return;
     }
 
-
     // Avatar Data
-
     LLAvatarData *avatar_data = &panel_profile->mAvatarData;
     std::string birth_date;
 
@@ -204,7 +202,11 @@ void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id)
         avatar_data->caption_text = result["caption"].asString();
     }
 
-    avatar_data->hide_age = result["hide_age"].asBoolean();
+    // TODO: SL-20163 Remove the "has" check when SRV-684 is done
+    // and the field "hide_age" is included to the http response
+    avatar_data->hide_age = result.has("hide_age") ?
+        result["hide_age"].asBoolean() :  // Server option value provided by resident
+        !panel_profile->getSelfProfile(); // Fallback temporary value (to be removed)
 
     panel = floater_profile->findChild<LLPanel>(PANEL_SECONDLIFE, TRUE);
     LLPanelProfileSecondLife *panel_sl = dynamic_cast<LLPanelProfileSecondLife*>(panel);
@@ -228,7 +230,6 @@ void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id)
     }
 
     // Picks
-
     LLSD picks_array = result["picks"];
     LLAvatarPicks avatar_picks;
     avatar_picks.agent_id = agent_id; // Not in use?
@@ -250,7 +251,6 @@ void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id)
     }
 
     // Groups
-
     LLSD groups_array = result["groups"];
     LLAvatarGroups avatar_groups;
     avatar_groups.agent_id = agent_id; // Not in use?
@@ -325,7 +325,6 @@ LLUUID post_profile_image(std::string cap_url, const LLSD &first_data, std::stri
     }
 
     // Upload the image
-
     LLCore::HttpRequest::ptr_t uploaderhttpRequest(new LLCore::HttpRequest);
     LLCore::HttpHeaders::ptr_t uploaderhttpHeaders(new LLCore::HttpHeaders);
     LLCore::HttpOptions::ptr_t uploaderhttpOpts(new LLCore::HttpOptions);
@@ -1114,7 +1113,7 @@ void LLPanelProfileSecondLife::updateData()
         if (!cap_url.empty())
         {
             LLCoros::instance().launch("requestAgentUserInfoCoro",
-                boost::bind(request_avatar_properties_coro, cap_url, avatar_id));
+                [cap_url, avatar_id]() { request_avatar_properties_coro(cap_url, avatar_id); });
         }
         else
         {
@@ -1164,7 +1163,7 @@ void LLPanelProfileSecondLife::processProperties(void* data, EAvatarProcessorTyp
 		return;
 	}
 
-	if (APT_PROPERTIES == type)
+	if (APT_PROPERTIES_LEGACY == type)
 	{
 		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
 		if(avatar_data && getAvatarId() == avatar_data->avatar_id)
@@ -1310,7 +1309,6 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
 
 void LLPanelProfileSecondLife::processGroupProperties(const LLAvatarGroups* avatar_groups)
 {
-
     LLAvatarGroups::group_list_t::const_iterator it = avatar_groups->group_list.begin();
     const LLAvatarGroups::group_list_t::const_iterator it_end = avatar_groups->group_list.end();
 
@@ -1714,7 +1712,7 @@ void LLPanelProfileSecondLife::fillAgeData(const LLAvatarData* avatar_data)
 
     std::string register_date = getString((!getSelfProfile() && avatar_data->hide_age) ? "age_format_short" : "age_format_full");
     LLSD args_age;
-    std::string birth_date = LLTrans::getString(!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty() ? ((!getSelfProfile() && avatar_data->hide_age) ? "AvatarBirthDateFormat_short" : "AvatarBirthDateFormat") : "AvatarBirthDateFormat_legacy");
+    std::string birth_date = LLTrans::getString(!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty() ? ((!getSelfProfile() && avatar_data->hide_age) ? "AvatarBirthDateFormatShort" : "AvatarBirthDateFormatFull") : "AvatarBirthDateFormat_legacy");
     LLStringUtil::format(birth_date, LLSD().with("datetime", (S32)avatar_data->born_on.secondsSinceEpoch()));
     args_age["[REG_DATE]"] = birth_date;
     args_age["[AGE]"] = LLDateUtil::ageFromDate(avatar_data->born_on, LLDate::now());
@@ -3175,7 +3173,7 @@ void LLPanelProfileNotes::updateData()
         if (!cap_url.empty())
         {
             LLCoros::instance().launch("requestAgentUserInfoCoro",
-                boost::bind(request_avatar_properties_coro, cap_url, avatar_id));
+                [cap_url, avatar_id]() { request_avatar_properties_coro(cap_url, avatar_id); });
         }
 // <FS:Beq> Restore UDO profiles
 #ifdef OPENSIM
@@ -3402,7 +3400,7 @@ void LLPanelProfile::updateData()
         if (!cap_url.empty())
         {
             LLCoros::instance().launch("requestAgentUserInfoCoro",
-                boost::bind(request_avatar_properties_coro, cap_url, avatar_id));
+                [cap_url, avatar_id]() { request_avatar_properties_coro(cap_url, avatar_id); });
         }
 // <FS:Beq> Restore UDP profiles
 #ifdef OPENSIM
@@ -3509,7 +3507,7 @@ FSPanelPropertiesObserver::FSPanelPropertiesObserver() : LLAvatarPropertiesObser
 
 void FSPanelPropertiesObserver::processProperties(void* data, EAvatarProcessorType type)
 {
-    if (type == APT_PROPERTIES && mPanelProfile)
+    if (type == APT_PROPERTIES_LEGACY && mPanelProfile)
     {
         mPanelProfile->onAvatarProperties(static_cast<const LLAvatarData*>(data));
     }

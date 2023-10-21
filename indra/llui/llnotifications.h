@@ -202,6 +202,7 @@ public:
 		Mandatory<std::string>	type;
 		Optional<S32>			width;
 		Optional<S32>			max_length_chars;
+		Optional<bool>			allow_emoji;
 		Optional<std::string>	text;
 		Optional<bool>			is_default;
 

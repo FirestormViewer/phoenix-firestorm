@@ -4535,8 +4535,8 @@ Are you sure you want to return the selected objects to their owners? Transferab
    icon="alert.tga"
    name="GroupLeaveConfirmMember"
    type="alert">
-You are currently a member of the group &lt;nolink&gt;[GROUP]&lt;/nolink&gt;.
-Leave Group?
+Leave the group &apos;&lt;nolink&gt;[GROUP]&lt;/nolink&gt;&apos;?
+Currently, the fee to join this group again is L$[COST].
     <tag>group</tag>
     <tag>confirm</tag>
     <usetemplate
@@ -4545,13 +4545,12 @@ Leave Group?
      yestext="OK"/>
   </notification>
 
-
   <notification
    icon="alert.tga"
-   name="GroupLeaveConfirmMemberWithFee"
+   name="GroupLeaveConfirmMemberNoFee"
    type="alert">
-You are currently a member of the group &lt;nolink&gt;[GROUP]&lt;/nolink&gt;. Joining again will cost L$[AMOUNT].
-Leave Group?
+Leave the group &apos;&lt;nolink&gt;[GROUP]&lt;/nolink&gt;&apos;?
+There is currently no fee to join this group again.
     <tag>group</tag>
     <tag>confirm</tag>
     <usetemplate

@@ -62,6 +62,7 @@
 		<radio_item label="Start" name="start"/>
 		<radio_item label="Stopp" name="stop"/>
 	</radio_group>
+	<check_box label="bis Taste losgelassen wird" name="wait_key_release_check"/>
 	<check_box label="bis alle Animationen beendet sind" name="wait_anim_check"/>
 	<check_box label="Zeit in Sekunden:" name="wait_time_check"/>
 	<line_editor name="wait_time_editor"/>

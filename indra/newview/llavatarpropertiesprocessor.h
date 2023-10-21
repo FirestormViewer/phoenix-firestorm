@@ -50,7 +50,8 @@ class LLMessageSystem;
 
 enum EAvatarProcessorType
 {
-	APT_PROPERTIES,
+	APT_PROPERTIES_LEGACY, // APT_PROPERTIES via udp request
+	APT_PROPERTIES,        // APT_PROPERTIES via http request
 	APT_NOTES,
 	APT_GROUPS,
 	APT_PICKS,
@@ -86,8 +87,8 @@ struct LLAvatarData
 	U8			caption_index;
 	std::string	caption_text;
 	std::string	customer_type;
-	bool		hide_age;
 	U32			flags;
+	bool		hide_age;
 	BOOL		allow_publish; // <FS:Ansariel> UDP profiles
 };
 
@@ -211,16 +212,12 @@ public:
 
 	// Request various types of avatar data.  Duplicate requests will be
 	// suppressed while waiting for a response from the network.
-	void sendAvatarPropertiesRequest(const LLUUID& avatar_id);
+	void sendAvatarPropertiesRequest(const LLUUID& avatar_id, bool use_cap = false);
 	void sendAvatarPicksRequest(const LLUUID& avatar_id);
 	void sendAvatarNotesRequest(const LLUUID& avatar_id);
 	void sendAvatarGroupsRequest(const LLUUID& avatar_id);
 	void sendAvatarTexturesRequest(const LLUUID& avatar_id);
 	void sendAvatarClassifiedsRequest(const LLUUID& avatar_id);
-	// <FS:Beq> enable legacy profile access for OpenSim to work with new profile
-	void sendGenericRequestLegacy(const LLUUID& avatar_id, EAvatarProcessorType type, const std::string method);
-	void sendAvatarPropertiesRequestLegacy(const LLUUID& avatar_id);
-	// </FS:Beq>
 
 	// Duplicate pick info requests are not suppressed.
 	void sendPickInfoRequest(const LLUUID& creator_id, const LLUUID& pick_id);
@@ -254,7 +251,7 @@ public:
 
 	static bool hasPaymentInfoOnFile(const LLAvatarData* avatar_data);
 
-    static void requestAvatarPropertiesCoro(std::string cap_url, LLUUID agent_id);
+    static void requestAvatarPropertiesCoro(std::string cap_url, LLUUID agent_id, EAvatarProcessorType type);
 
 	static void processAvatarPropertiesReply(LLMessageSystem* msg, void**);
 
@@ -274,10 +271,10 @@ public:
 
 protected:
 
-	void sendRequest(const LLUUID& avatar_id, EAvatarProcessorType type, const std::string &method);
+    void sendRequest(const LLUUID& avatar_id, EAvatarProcessorType type, const std::string &method);
     void sendGenericRequest(const LLUUID& avatar_id, EAvatarProcessorType type, const std::string &method);
     void sendAvatarPropertiesRequestMessage(const LLUUID& avatar_id);
-    void initAgentProfileCapRequest(const LLUUID& avatar_id, const std::string& cap_url);
+    void initAgentProfileCapRequest(const LLUUID& avatar_id, const std::string& cap_url, EAvatarProcessorType type);
 
 	void notifyObservers(const LLUUID& id,void* data, EAvatarProcessorType type);
 

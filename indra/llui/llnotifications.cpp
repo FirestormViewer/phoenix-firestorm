@@ -89,6 +89,7 @@ LLNotificationForm::FormInput::FormInput()
 	text("text"),
 	is_default("default"),
 	max_length_chars("max_length_chars"),
+	allow_emoji("allow_emoji"),
 	width("width", 0),
 	value("value")
 {}
