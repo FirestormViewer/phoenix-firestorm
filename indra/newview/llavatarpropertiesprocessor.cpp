@@ -355,7 +355,10 @@ void LLAvatarPropertiesProcessor::requestAvatarPropertiesCoro(std::string cap_ur
 
         std::string birth_date;
 
-        avatar_data.agent_id = agent_id;
+        // <FS:Ansariel> Fix protocol bug
+        //avatar_data.agent_id = agent_id;
+        avatar_data.agent_id = gAgentID;
+        // </FS:Ansariel>
         avatar_data.avatar_id = agent_id;
         avatar_data.image_id = result["sl_image_id"].asUUID();
         avatar_data.fl_image_id = result["fl_image_id"].asUUID();
