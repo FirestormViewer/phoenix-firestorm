@@ -90,6 +90,7 @@ private:
 
 	LLAvatarNameCache::callback_connection_t mAvatarNameCallbackConnection;
 	boost::signals2::connection mRegionCapabilitiesReceivedCallbackConnection;
+	boost::signals2::connection mRegionChangedCallbackConnection;
 };
 
 #endif // FS_RADARENTRY_H

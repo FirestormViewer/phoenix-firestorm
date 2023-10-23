@@ -54,7 +54,8 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	mAlertAge(false),
 	mAgeAlertPerformed(false),
 	mAvatarNameCallbackConnection(),
-	mRegionCapabilitiesReceivedCallbackConnection()
+	mRegionCapabilitiesReceivedCallbackConnection(),
+	mRegionChangedCallbackConnection()
 {
 	if (mID.notNull())
 	{
@@ -67,22 +68,47 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 
 		if (auto region = gAgent.getRegion(); region)
 		{
-			const bool use_cap = LLGridManager::instance().isInSecondLife() ? true : region->isCapabilityAvailable("AgentProfile");
 			if (region->capabilitiesReceived())
 			{
+				const bool use_cap = LLGridManager::instance().isInSecondLife() ? true : region->isCapabilityAvailable("AgentProfile");
 				processor->sendAvatarPropertiesRequest(mID, use_cap);
 			}
 			else
 			{
-				mRegionCapabilitiesReceivedCallbackConnection = region->setCapabilitiesReceivedCallback(
-					[this, use_cap](const LLUUID &, LLViewerRegion *)
+				auto capsReceivedCb = [this](const LLUUID&, LLViewerRegion* reg)
 					{
 						if (mRegionCapabilitiesReceivedCallbackConnection.connected())
 						{
 							mRegionCapabilitiesReceivedCallbackConnection.disconnect();
 						}
+						gAgent.removeRegionChangedCallback(mRegionChangedCallbackConnection);
+						const bool use_cap = LLGridManager::instance().isInSecondLife() ? true : (reg && reg->isCapabilityAvailable("AgentProfile"));
 						LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(mID, use_cap);
+					};
+
+				mRegionChangedCallbackConnection = gAgent.addRegionChangedCallback([this, capsReceivedCb]()
+					{
+						if (mRegionCapabilitiesReceivedCallbackConnection.connected())
+						{
+							mRegionCapabilitiesReceivedCallbackConnection.disconnect();
+						}
+
+						if (auto newregion = gAgent.getRegion(); newregion)
+						{
+							if (newregion->capabilitiesReceived())
+							{
+								gAgent.removeRegionChangedCallback(mRegionChangedCallbackConnection);
+								const bool use_cap = LLGridManager::instance().isInSecondLife() ? true : newregion->isCapabilityAvailable("AgentProfile");
+								LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(mID, use_cap);
+							}
+							else
+							{
+								mRegionCapabilitiesReceivedCallbackConnection = newregion->setCapabilitiesReceivedCallback(capsReceivedCb);
+							}
+						}
 					});
+
+				mRegionCapabilitiesReceivedCallbackConnection = region->setCapabilitiesReceivedCallback(capsReceivedCb);
 			}
 		}
 	}
@@ -104,6 +130,7 @@ FSRadarEntry::~FSRadarEntry()
 	{
 		mRegionCapabilitiesReceivedCallbackConnection.disconnect();
 	}
+	gAgent.removeRegionChangedCallback(mRegionChangedCallbackConnection);
 }
 
 void FSRadarEntry::updateName()
