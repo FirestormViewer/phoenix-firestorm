@@ -215,7 +215,7 @@ public:
 		if (data
 			// <FS:Ansariel> OpenSim
 			//&& type == APT_PROPERTIES)
-			&& (type == APT_PROPERTIES || type == APT_PROPERTIES_LEGACY)
+			&& (type == APT_PROPERTIES || type == APT_PROPERTIES_LEGACY))
 			// </FS:Ansariel>
 		{
 			LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
