@@ -195,7 +195,11 @@ public:
 		processor->addObserver(mAvatarID, this);
 		// send a request (duplicates will be suppressed inside the avatar
 		// properties processor)
-		processor->sendAvatarPropertiesRequest(mAvatarID, true);
+		// <FS:Ansariel> OpenSim
+		//processor->sendAvatarPropertiesRequest(mAvatarID, true);
+		const bool use_cap = LLGridManager::instance().isInSecondLife() ? true : !gAgent.getRegionCapability("AgentProfile").empty();
+		processor->sendAvatarPropertiesRequest(mAvatarID, use_cap);
+		// </FS:Ansariel>
 	}
 	
 	~LLFetchAvatarData()
@@ -209,7 +213,10 @@ public:
 	{
 		// route the data to the inspector
 		if (data
-			&& type == APT_PROPERTIES)
+			// <FS:Ansariel> OpenSim
+			//&& type == APT_PROPERTIES)
+			&& (type == APT_PROPERTIES || type == APT_PROPERTIES_LEGACY)
+			// </FS:Ansariel>
 		{
 			LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
 			mInspector->processAvatarData(avatar_data);
