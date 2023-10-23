@@ -89,6 +89,7 @@ private:
 	bool		mAgeAlertPerformed;
 
 	LLAvatarNameCache::callback_connection_t mAvatarNameCallbackConnection;
+	boost::signals2::connection mRegionCapabilitiesReceivedCallbackConnection;
 };
 
 #endif // FS_RADARENTRY_H

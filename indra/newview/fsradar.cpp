@@ -191,6 +191,7 @@ void FSRadar::updateRadarList()
 	static const std::string str_region_entering_distance =	LLTrans::getString("entering_region_distance");
 	static const std::string str_region_leaving =			LLTrans::getString("leaving_region");
 	static const std::string str_avatar_age_alert =			LLTrans::getString("avatar_age_alert");
+	static const std::string str_avatar_age_hidden =		LLTrans::getString("avatar_age_not_available");
 
 	static LLCachedControl<bool> sRadarReportChatRangeEnter(gSavedSettings, "RadarReportChatRangeEnter");
 	static LLCachedControl<bool> sRadarReportChatRangeLeave(gSavedSettings, "RadarReportChatRangeLeave");
@@ -518,7 +519,12 @@ void FSRadar::updateRadarList()
 		if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 		{
 			entry["notes"] = ent->getNotes();
-			entry["age"] = (avAge > -1 ? llformat("%d", avAge) : "");
+			if (avAge > -1)
+				entry["age"] = llformat("%d", avAge);
+			else if (avAge == -2)
+				entry["age"] = str_avatar_age_hidden;
+			else
+				entry["age"] = "";
 			if (ent->hasAlertAge())
 			{
 				entry_options["age_color"] = colortable.getColor("AvatarListItemAgeAlert", LLColor4::red).get().getValue();

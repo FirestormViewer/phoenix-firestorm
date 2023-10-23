@@ -31,6 +31,8 @@
 #include "fscommon.h"
 #include "fsradar.h"
 #include "llagent.h"
+#include "llviewernetwork.h"
+#include "llviewerregion.h"
 #include "rlvhandler.h"
 
 FSRadarEntry::FSRadarEntry(const LLUUID& avid)
@@ -51,7 +53,8 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	mNotes(LLStringUtil::null),
 	mAlertAge(false),
 	mAgeAlertPerformed(false),
-	mAvatarNameCallbackConnection()
+	mAvatarNameCallbackConnection(),
+	mRegionCapabilitiesReceivedCallbackConnection()
 {
 	if (mID.notNull())
 	{
@@ -60,8 +63,28 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 		LLAvatarPropertiesProcessor* processor = LLAvatarPropertiesProcessor::getInstance();
 
 		processor->addObserver(mID, this);
-		processor->sendAvatarPropertiesRequest(mID);
 		processor->sendAvatarNotesRequest(mID);
+
+		if (auto region = gAgent.getRegion(); region)
+		{
+			const bool use_cap = LLGridManager::instance().isInSecondLife() ? true : region->isCapabilityAvailable("AgentProfile");
+			if (region->capabilitiesReceived())
+			{
+				processor->sendAvatarPropertiesRequest(mID, use_cap);
+			}
+			else
+			{
+				mRegionCapabilitiesReceivedCallbackConnection = region->setCapabilitiesReceivedCallback(
+					[this, use_cap](const LLUUID &, LLViewerRegion *)
+					{
+						if (mRegionCapabilitiesReceivedCallbackConnection.connected())
+						{
+							mRegionCapabilitiesReceivedCallbackConnection.disconnect();
+						}
+						LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(mID, use_cap);
+					});
+			}
+		}
 	}
 
 	updateName();
@@ -76,6 +99,10 @@ FSRadarEntry::~FSRadarEntry()
 	if (mAvatarNameCallbackConnection.connected())
 	{
 		mAvatarNameCallbackConnection.disconnect();
+	}
+	if (mRegionCapabilitiesReceivedCallbackConnection.connected())
+	{
+		mRegionCapabilitiesReceivedCallbackConnection.disconnect();
 	}
 }
 
@@ -111,13 +138,16 @@ void FSRadarEntry::processProperties(void* data, EAvatarProcessorType type)
 {
 	if (data)
 	{
-		if (type == APT_PROPERTIES_LEGACY)
+		if (type == APT_PROPERTIES || type == APT_PROPERTIES_LEGACY)
 		{
 			LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
 			if (avatar_data && avatar_data->agent_id == gAgentID && avatar_data->avatar_id == mID)
 			{
-				mAge = ((LLDate::now().secondsSinceEpoch() - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
 				mStatus = avatar_data->flags;
+				if (avatar_data->hide_age)
+					mAge = -2;
+				else
+					mAge = ((LLDate::now().secondsSinceEpoch() - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
 				checkAge();
 			}
 		}

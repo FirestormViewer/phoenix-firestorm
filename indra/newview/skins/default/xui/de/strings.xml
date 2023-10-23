@@ -6961,6 +6961,9 @@ Ihre aktuelle Position: [AVATAR_POS]
 	<string name="avatar_age_alert">
 		hat den Alters-Alarm ausgelöst. Alter: [AGE] Tag(e)
 	</string>
+	<string name="avatar_age_not_available">
+		n.v.
+	</string>
 
 	<string name="TotalScriptCountChangeIncrease">
 		Skriptanzahl in Region hat sich von [OLD_VALUE] auf [NEW_VALUE] erhöht ([DIFFERENCE]).
