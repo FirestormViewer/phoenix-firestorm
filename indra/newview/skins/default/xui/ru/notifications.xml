@@ -2536,6 +2536,9 @@
 		Ваша корзина переполнена. Это может вызвать проблемы при входе.
 		<usetemplate name="okcancelbuttons" notext="Я очищу корзину позже" yestext="Очистить корзину сейчас"/>
 	</notification>
+	<notification name="InventoryLimitReachedAISAlert">
+		В вашем инвентаре возникли проблемы. Пожалуйста, обратитесь в службу поддержки вашей сетки.
+	</notification>
 	<notification name="InventoryLimitReachedAIS">
 		В вашем инвентаре возникли проблемы. Пожалуйста, обратитесь в службу поддержки вашей сетки.
 	</notification>
@@ -5301,9 +5304,17 @@ https://wiki.firestormviewer.org/fs_voice
 Упаковка: [PACK_TIME]с [PSIZE]КБ
 Распаковка: [UNPACK_TIME]с [USIZE]КБ
 	</notification>
-	<notification name="PromptMFAToken">
+	<notification name="PromptMFAToken" label="Запрос на ввод токена MFA">
 		[MESSAGE]
 		<form name="form">
+			<button name="continue" text="Продолжить"/>
+			<button name="cancel" text="Отмена"/>
+		</form>
+	</notification>
+	<notification name="PromptMFATokenWithSave" label="Запрос на ввод токена MFA">
+		[MESSAGE]
+		<form name="form">
+			<ignore name="ignore" text="Запомнить этот компьютер на 30 дней."/>
 			<button name="continue" text="Продолжить"/>
 			<button name="cancel" text="Отмена"/>
 		</form>
