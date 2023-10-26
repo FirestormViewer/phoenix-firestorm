@@ -342,7 +342,7 @@ public:
 	void onSelectedEvent(const S32 selected_event);
 	void displayParcelDetails(const LLParcelData& parcel_data);
 	void displayClassifiedDetails(LLAvatarClassifiedInfo*& c_info);
-	void displayAvatarDetails(LLAvatarData*& avatar_data);
+	void displayAvatarDetails(LLAvatarData* avatar_data);
 	void displayGroupDetails(LLGroupMgrGroupData*& group_data);
 	void displayEventDetails(U32 eventId,
 							 F64 eventEpoch,

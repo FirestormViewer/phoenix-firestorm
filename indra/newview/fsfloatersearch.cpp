@@ -160,7 +160,10 @@ public:
 
 	void processProperties(void* data, EAvatarProcessorType type)
 	{
-		if (APT_PROPERTIES_LEGACY == type)
+		if (!data)
+			return;
+
+		if (APT_PROPERTIES == type)
 		{
 			LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
 			if (avatar_data)
@@ -168,6 +171,12 @@ public:
 				mParent->displayAvatarDetails(avatar_data);
 				LLAvatarPropertiesProcessor::getInstance()->removeObserver(avatar_data->avatar_id, this);
 			}
+		}
+		else if (APT_PROPERTIES_LEGACY == type)
+		{
+			LLAvatarData avatar_data(*static_cast<LLAvatarLegacyData*>(data));
+			mParent->displayAvatarDetails(&avatar_data);
+			LLAvatarPropertiesProcessor::getInstance()->removeObserver(avatar_data.avatar_id, this);
 		}
 		if (APT_CLASSIFIED_INFO == type)
 		{
@@ -388,7 +397,10 @@ void FSFloaterSearch::onSelectedItem(const LLUUID& selected_item, ESearchCategor
 		{
 			case SC_AVATAR:
 				LLAvatarPropertiesProcessor::getInstance()->addObserver(selected_item, mAvatarPropertiesObserver);
-				LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(selected_item);
+				if (!gAgent.getRegionCapability("AgentProfile").empty())
+					LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(selected_item);
+				else
+					LLAvatarPropertiesProcessor::getInstance()->sendAvatarLegacyPropertiesRequest(selected_item);
 				break;
 			case SC_GROUP:
 				mGroupPropertiesRequest = new FSSearchGroupInfoObserver(selected_item, this);
@@ -463,7 +475,7 @@ void FSFloaterSearch::displayParcelDetails(const LLParcelData& parcel_data)
 	setLoadingProgress(false);
 }
 
-void FSFloaterSearch::displayAvatarDetails(LLAvatarData*& avatar_data)
+void FSFloaterSearch::displayAvatarDetails(LLAvatarData* avatar_data)
 {
 	if (avatar_data)
 	{
@@ -480,7 +492,7 @@ void FSFloaterSearch::displayAvatarDetails(LLAvatarData*& avatar_data)
 		mDetailTitle->setValue(LLTrans::getString("LoadingData"));
 		mDetailDesc->setValue(avatar_data->about_text);
 		mDetailSnapshot->setValue(avatar_data->image_id);
-		mDetailAux1->setValue(getString("string.age", map));
+		mDetailAux1->setValue(avatar_data->hide_age ? "" : getString("string.age", map));
 		LLAvatarNameCache::get(avatar_data->avatar_id, boost::bind(&FSFloaterSearch::avatarNameUpdatedCallback,this, _1, _2));
 		childSetVisible("people_profile_btn", true);
 		childSetVisible("people_message_btn", true);

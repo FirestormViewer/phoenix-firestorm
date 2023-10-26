@@ -202,11 +202,14 @@ void FSRadarEntry::processProperties(void* data, EAvatarProcessorType type)
 		}
 		else if (type == APT_PROPERTIES_LEGACY)
 		{
-			LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
+			LLAvatarLegacyData* avatar_data = static_cast<LLAvatarLegacyData*>(data);
 			if (avatar_data && avatar_data->agent_id == gAgentID && avatar_data->avatar_id == mID)
 			{
 				mStatus = avatar_data->flags;
-				mAge = ((LLDate::now().secondsSinceEpoch() - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
+				if (avatar_data->hide_age)
+					mAge = -2;
+				else
+					mAge = ((LLDate::now().secondsSinceEpoch() - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
 				checkAge();
 			}
 		}

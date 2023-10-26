@@ -84,6 +84,7 @@ struct LLAvatarLegacyData
     std::string	caption_text;
     std::string	customer_type;
     U32			flags;
+    bool		hide_age; // <FS> OpenSim
 };
 
 struct LLAvatarData
@@ -111,7 +112,28 @@ struct LLAvatarData
     typedef std::pair<LLUUID, std::string> pick_data_t;
     typedef std::list< pick_data_t> picks_list_t;
     picks_list_t picks_list;
-	BOOL		allow_publish; // <FS:Ansariel> UDP profiles
+    BOOL		allow_publish; // <FS:Ansariel> UDP profiles
+
+    // <FS:Ansariel> Convenient initialization
+    LLAvatarData() = default;
+    LLAvatarData(const LLAvatarLegacyData& legacy_data)
+    {
+        agent_id = legacy_data.agent_id;
+        avatar_id = legacy_data.avatar_id;
+        image_id = legacy_data.image_id;
+        fl_image_id = legacy_data.fl_image_id;
+        partner_id = legacy_data.partner_id;
+        about_text = legacy_data.about_text;
+        fl_about_text = legacy_data.fl_about_text;
+        born_on = legacy_data.born_on;
+        profile_url = legacy_data.profile_url;
+        caption_index = legacy_data.caption_index;
+        caption_text = legacy_data.caption_text;
+        customer_type = legacy_data.customer_type;
+        flags = legacy_data.flags;
+        hide_age = legacy_data.hide_age;
+    }
+    // </FS:Ansariel>
 };
 
 struct LLAvatarData::LLGroupData

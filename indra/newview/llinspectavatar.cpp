@@ -215,14 +215,19 @@ public:
 	{
 		// route the data to the inspector
 		if (data
-			// <FS:Ansariel> OpenSim
-			//&& type == APT_PROPERTIES)
-			&& (type == APT_PROPERTIES || type == APT_PROPERTIES_LEGACY))
-			// </FS:Ansariel>
+			&& type == APT_PROPERTIES)
 		{
 			LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
 			mInspector->processAvatarData(avatar_data);
 		}
+		// <FS:Ansariel> OpenSim
+		if (data
+			&& type == APT_PROPERTIES_LEGACY)
+		{
+			LLAvatarData avatar_data(*static_cast<LLAvatarLegacyData*>(data));
+			mInspector->processAvatarData(&avatar_data);
+		}
+		// </FS:Ansariel>
 	}
 	
 	// Store avatar ID so we can un-register the observer on destruction

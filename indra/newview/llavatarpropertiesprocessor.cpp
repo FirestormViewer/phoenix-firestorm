@@ -422,7 +422,7 @@ void LLAvatarPropertiesProcessor::requestAvatarPropertiesCoro(std::string cap_ur
 
 void LLAvatarPropertiesProcessor::processAvatarLegacyPropertiesReply(LLMessageSystem* msg, void**)
 {
-	LLAvatarData avatar_data;
+    LLAvatarLegacyData avatar_data;
 	std::string birth_date;
 
 	msg->getUUIDFast(	_PREHASH_AgentData,			_PREHASH_AgentID, 		avatar_data.agent_id);
@@ -439,7 +439,6 @@ void LLAvatarPropertiesProcessor::processAvatarLegacyPropertiesReply(LLMessageSy
 	LLDateUtil::dateFromPDTString(avatar_data.born_on, birth_date);
 	// Since field 'hide_age' is not supported by msg system we'd better hide the age here
 	// <FS:Ansariel> OpenSim
-	//avatar_data.hide_age = true;
 	avatar_data.hide_age = LLGridManager::instance().isInSecondLife();
 	// </FS:Ansariel>
 	avatar_data.caption_index = 0;
@@ -835,5 +834,5 @@ void LLAvatarPropertiesProcessor::sendNotes(const LLUUID& avatar_id, const std::
 		gAgent.sendReliableMessage();
 	}
 }
-
 // </FS>
+

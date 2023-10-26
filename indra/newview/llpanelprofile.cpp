@@ -1050,18 +1050,18 @@ void LLPanelProfileSecondLife::processProperties(void* data, EAvatarProcessorTyp
 		return;
 	}
 
-	if (APT_PROPERTIES_LEGACY == type)
+	if (data && APT_PROPERTIES_LEGACY == type)
 	{
-		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
-		if(avatar_data && getAvatarId() == avatar_data->avatar_id)
+		const LLAvatarData avatar_data(*static_cast<const LLAvatarLegacyData*>(data));
+		if (getAvatarId() == avatar_data.avatar_id)
 		{
-			processProfileProperties(avatar_data);
+			processProfileProperties(&avatar_data);
 		}
 	}
 	else if (APT_GROUPS == type)
 	{
 		LLAvatarGroups* avatar_groups = static_cast<LLAvatarGroups*>(data);
-		if(avatar_groups && getAvatarId() == avatar_groups->avatar_id)
+		if (avatar_groups && getAvatarId() == avatar_groups->avatar_id)
 		{
 			processGroupProperties(avatar_groups);
 		}
@@ -3338,9 +3338,10 @@ FSPanelPropertiesObserver::FSPanelPropertiesObserver() : LLAvatarPropertiesObser
 
 void FSPanelPropertiesObserver::processProperties(void* data, EAvatarProcessorType type)
 {
-    if (type == APT_PROPERTIES_LEGACY && mPanelProfile)
+    if (data && type == APT_PROPERTIES_LEGACY && mPanelProfile)
     {
-        mPanelProfile->onAvatarProperties(static_cast<const LLAvatarData*>(data));
+        LLAvatarData avatardata(*static_cast<LLAvatarLegacyData*>(data));
+        mPanelProfile->onAvatarProperties(&avatardata);
     }
 }
 // </FS:Zi>
