@@ -57,7 +57,6 @@ if(WINDOWS)
         #openjp2.dll # <FS:Ansariel> Only copy OpenJPEG dll if needed
         libapr-1.dll
         libaprutil-1.dll
-        libapriconv-1.dll
         nghttp2.dll
         glod.dll # <FS:Beq> restore GLOD
         libhunspell.dll
@@ -205,7 +204,6 @@ elseif(DARWIN)
         libndofdev.dylib
         libnghttp2.dylib
         libnghttp2.14.dylib
-        libnghttp2.14.19.0.dylib
         liburiparser.dylib
         liburiparser.1.dylib
         liburiparser.1.0.27.dylib

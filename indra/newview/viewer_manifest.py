@@ -35,13 +35,13 @@ import os.path
 import plistlib
 import random
 import re
+import secrets
 import shutil
-import stat
 import subprocess
 import sys
 import tarfile
+import tempfile
 import time
-import zipfile
 
 sys.dont_write_bytecode = True # <FS:Ansariel> Prevents creating __pycache__ directory
 
@@ -494,11 +494,30 @@ class ViewerManifest(LLManifest,FSViewerManifest):
 
         return os.path.relpath(abspath(path), abspath(base))
 
+    # <FS:Ansariel> Undo Github-Build stuff - I don't think we need this
+    #def set_github_output_path(self, variable, path):
+    #    self.set_github_output(variable,
+    #                           os.path.normpath(os.path.join(self.get_dst_prefix(), path)))
 
-class WindowsManifest(ViewerManifest):
+    #def set_github_output(self, variable, *values):
+    #    GITHUB_OUTPUT = os.getenv('GITHUB_OUTPUT')
+    #    if GITHUB_OUTPUT and values:
+    #        with open(GITHUB_OUTPUT, 'a') as outf:
+    #            if len(values) == 1:
+    #                print('='.join((variable, values[0])), file=outf)
+    #            else:
+    #                delim = secrets.token_hex(8)
+    #                print('<<'.join((variable, delim)), file=outf)
+    #                for value in values:
+    #                    print(value, file=outf)
+    #                print(delim, file=outf)
+    # </FS:Ansariel>
+
+class Windows_x86_64_Manifest(ViewerManifest):
     # We want the platform, per se, for every Windows build to be 'win'. The
     # VMP will concatenate that with the address_size.
     build_data_json_platform = 'win'
+    address_size = 64
 
     def final_exe(self):
         return self.exec_name()+".exe"
@@ -559,7 +578,7 @@ class WindowsManifest(ViewerManifest):
             print("Doesn't exist:", src)
         
     def construct(self):
-        super(WindowsManifest, self).construct()
+        super().construct()
 
         pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
         relpkgdir = os.path.join(pkgdir, "lib", "release")
@@ -568,6 +587,32 @@ class WindowsManifest(ViewerManifest):
         if self.is_packaging_viewer():
             # Find firestorm-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
             self.path(src='%s/firestorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
+            # Emit the whole app image as one of the GitHub step outputs. We
+            # want the whole app -- but NOT the extraneous build products that
+            # get tossed into the same directory, such as the installer and
+            # the symbols tarball, so add exclusions. When we feed
+            # upload-artifact multiple absolute pathnames, even just for
+            # exclusion, it ends up creating several extraneous directory
+            # levels within the artifact -- so try using only relative paths.
+            # One problem: as of right now, our current directory os.getcwd()
+            # is not the same as the initial working directory for this job
+            # step, meaning paths relative to our os.getcwd() won't work for
+            # the subsequent upload-artifact step. We're a couple directory
+            # levels down. Try adjusting for those when specifying the base
+            # for self.relpath().
+            # <FS:Ansariel> Undo Github-Build stuff - I don't think we need this
+            #appbase = self.relpath(
+            #    self.get_dst_prefix(),
+            #    base=os.path.join(os.getcwd(), os.pardir, os.pardir))
+            #self.set_github_output('viewer_app', appbase,
+            #                       # except for this stuff
+            #                       *(('!' + os.path.join(appbase, pattern))
+            #                         for pattern in (
+            #                                 'secondlife-bin.*',
+            #                                 '*_Setup.exe',
+            #                                 '*.bat',
+            #                                 '*.tar.bz2')))
+            # </FS:Ansariel>
 
             # <FS:Ansariel> Remove VMP
             #with self.prefix(src=os.path.join(pkgdir, "VMP")):
@@ -631,20 +676,12 @@ class WindowsManifest(ViewerManifest):
                 self.path("SLVoice.exe")
 
             # Vivox libraries
-            if (self.address_size == 64):
-                self.path("vivoxsdk_x64.dll")
-                self.path("ortp_x64.dll")
-            else:
-                self.path("vivoxsdk.dll")
-                self.path("ortp.dll")
+            self.path("vivoxsdk_x64.dll")
+            self.path("ortp_x64.dll")
             
             # OpenSSL
-            if (self.address_size == 64):
-                self.path("libcrypto-1_1-x64.dll")
-                self.path("libssl-1_1-x64.dll")
-            else:
-                self.path("libcrypto-1_1.dll")
-                self.path("libssl-1_1.dll")
+            self.path("libcrypto-1_1-x64.dll")
+            self.path("libssl-1_1-x64.dll")
 
             # HTTP/2
             self.path("nghttp2.dll")
@@ -654,14 +691,9 @@ class WindowsManifest(ViewerManifest):
 
             # BugSplat
             if self.args.get('bugsplat'):
-                if(self.address_size == 64):
-                    self.path("BsSndRpt64.exe")
-                    self.path("BugSplat64.dll")
-                    self.path("BugSplatRc64.dll")
-                else:
-                    self.path("BsSndRpt.exe")
-                    self.path("BugSplat.dll")
-                    self.path("BugSplatRc.dll")
+                self.path("BsSndRpt64.exe")
+                self.path("BugSplat64.dll")
+                self.path("BugSplatRc64.dll")
 
             # Growl
             self.path("growl.dll")
@@ -793,6 +825,48 @@ class WindowsManifest(ViewerManifest):
         self.fs_copy_windows_manifest( )
 
     def nsi_file_commands(self, install=True):
+        # <FS:Ansariel> Undo Github-Build stuff - I don't think we need this
+        #def INSTDIR(path):
+        #    # Note that '$INSTDIR' is purely textual here: we write
+        #    # exactly that into the .nsi file for NSIS to interpret.
+        #    # Pass the result through normpath() to handle the case in which
+        #    # path is the empty string. On Windows, that produces "$INSTDIR\".
+        #    # Unfortunately, if that's the last item on a line, NSIS takes
+        #    # that as line continuation and misinterprets the following line.
+        #    # Ensure we don't emit a trailing backslash.
+        #    return os.path.normpath(os.path.join('$INSTDIR', path))
+
+        #result = []
+        #dest_files = [pair[1] for pair in self.file_list if pair[0] and os.path.isfile(pair[1])]
+        ## sort deepest hierarchy first
+        #dest_files.sort(key=lambda f: (f.count(os.path.sep), f), reverse=True)
+        #out_path = None
+        #for pkg_file in dest_files:
+        #    pkg_file = os.path.normpath(pkg_file)
+        #    rel_file = self.relpath(pkg_file)
+        #    installed_dir = INSTDIR(os.path.dirname(rel_file))
+        #    if install and installed_dir != out_path:
+        #        out_path = installed_dir
+        #        # emit SetOutPath every time it changes
+        #        result.append('SetOutPath ' + out_path)
+        #    if install:
+        #        result.append('File ' + rel_file)
+        #    else:
+        #        result.append('Delete ' + INSTDIR(rel_file))
+
+        ## at the end of a delete, just rmdir all the directories
+        #if not install:
+        #    deleted_file_dirs = [os.path.dirname(self.relpath(f)) for f in dest_files]
+        #    # find all ancestors so that we don't skip any dirs that happened
+        #    # to have no non-dir children
+        #    deleted_dirs = set(itertools.chain.from_iterable(path_ancestors(d)
+        #                                                     for d in deleted_file_dirs))
+        #    # sort deepest hierarchy first
+        #    for d in sorted(deleted_dirs, key=lambda f: (f.count(os.path.sep), f), reverse=True):
+        #        result.append('RMDir ' + INSTDIR(d))
+
+        #return '\n'.join(result)
+
         def wpath(path):
             if path.endswith('/') or path.endswith(os.path.sep):
                 path = path[:-1]
@@ -833,6 +907,7 @@ class WindowsManifest(ViewerManifest):
                 prev = d
 
         return result
+        # </FS:Ansariel>
 
     def package_finish(self):
         # a standard map of strings for replacing in the templates
@@ -840,8 +915,7 @@ class WindowsManifest(ViewerManifest):
             'version' : '.'.join(self.args['version']),
             'version_short' : '.'.join(self.args['version'][:-1]),
             'version_dashes' : '-'.join(self.args['version']),
-            'version_registry' : '%s(%s)' %
-            ('.'.join(self.args['version']), self.address_size),
+            'version_registry' : '%s(64)' % '.'.join(self.args['version']),
             'final_exe' : self.final_exe(),
             'flags':'',
             'app_name':self.app_name(),
@@ -887,12 +961,18 @@ class WindowsManifest(ViewerManifest):
             Caption "%(caption)s"
             """
 
-        if(self.address_size == 64):
-            engage_registry="SetRegView 64"
-            program_files="!define MULTIUSER_USE_PROGRAMFILES64"
-        else:
-            engage_registry="SetRegView 32"
-            program_files=""
+        engage_registry="SetRegView 64"
+        program_files="!define MULTIUSER_USE_PROGRAMFILES64"
+
+        # Dump the installers/windows directory into the raw app image tree
+        # because NSIS needs those files. But don't use path() because we
+        # don't want them installed with the viewer - they're only for use by
+        # the installer itself.
+        # <FS:Ansariel> Undo Github-Build stuff - I don't think we need this
+        #shutil.copytree(os.path.join(self.get_src_prefix(), 'installers', 'windows'),
+        #                os.path.join(self.get_dst_prefix(), 'installers', 'windows'),
+        #                dirs_exist_ok=True)
+        # </FS:Ansariel>
 
         tempfile = "firestorm_setup_tmp.nsi"
 
@@ -902,6 +982,10 @@ class WindowsManifest(ViewerManifest):
         # it also does python-style % substitution
         self.replace_in("installers/windows/installer_template.nsi", tempfile, {
                 "%%VERSION%%":version_vars,
+                # The template references "%%SOURCE%%\installers\windows\...".
+                # Now that we've copied that directory into the app image
+                # tree, we can just replace %%SOURCE%% with '.'.
+                #"%%SOURCE%%":'.', <FS:Ansariel> Undo Github-Build stuff
                 "%%SOURCE%%":self.get_src_prefix(),
                 "%%INST_VARS%%":inst_vars_template % substitution_strings,
                 "%%INSTALL_FILES%%":self.nsi_file_commands(True),
@@ -909,16 +993,7 @@ class WindowsManifest(ViewerManifest):
                 "%%ENGAGEREGISTRY%%":engage_registry,
                 "%%DELETE_FILES%%":self.nsi_file_commands(False)})
 
-        # If we're on a build machine, sign the code using our Authenticode certificate. JC
-        # note that the enclosing setup exe is signed later, after the makensis makes it.
-        # Unlike the viewer binary, the VMP filenames are invariant with respect to version, os, etc.
-        #for exe in (
-        #    self.final_exe(),
-        #    "SLVersionChecker.exe",
-        #    "llplugin/dullahan_host.exe",
-        #    ):
-        #    self.sign(exe)
-            
+        # <FS:Ansariel> Undo Github-Build stuff
         # Check two paths, one for Program Files, and one for Program Files (x86).
         # Yay 64bit windows.
         nsis_path = "makensis.exe"
@@ -936,6 +1011,7 @@ class WindowsManifest(ViewerManifest):
 
         self.created_path(self.dst_path_of(installer_file))
         self.package_file = installer_file
+        # </FS:Ansariel>
 
     def sign(self, exe):
         sign_py = os.environ.get('SIGN', r'C:\buildscripts\code-signing\sign.py')
@@ -950,17 +1026,9 @@ class WindowsManifest(ViewerManifest):
     def escape_slashes(self, path):
         return path.replace('\\', '\\\\\\\\')
 
-class Windows_i686_Manifest(WindowsManifest):
-    # Although we aren't literally passed ADDRESS_SIZE, we can infer it from
-    # the passed 'arch', which is used to select the specific subclass.
-    address_size = 32
-
-class Windows_x86_64_Manifest(WindowsManifest):
-    address_size = 64
-
-
-class DarwinManifest(ViewerManifest):
+class Darwin_x86_64_Manifest(ViewerManifest):
     build_data_json_platform = 'mac'
+    address_size = 64
 
     def finish_build_data_dict(self, build_data_dict):
         build_data_dict.update({'Bundle Id':self.args['bundleid']})
@@ -1311,8 +1379,9 @@ class DarwinManifest(ViewerManifest):
                             # self.path( "plugins.dat" )
 
     def construct(self):
-        # copy over the build result (this is a no-op if run within the xcode script)
-        # self.path(os.path.join(self.args['configuration'], self.channel()+".app"), dst="")
+        # copy over the build result (this is a no-op if run within the xcode
+        # script)
+        #self.path(os.path.join(self.args['configuration'], self.channel() + ".app"), dst="")
         self.path(os.path.join(self.args['configuration'], "Firestorm.app"), dst="")
 
         pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
@@ -1358,7 +1427,7 @@ class DarwinManifest(ViewerManifest):
 
             # most everything goes in the Resources directory
             with self.prefix(dst="Resources"):
-                super(DarwinManifest, self).construct()
+                super().construct()
 
                 with self.prefix(src_dst="cursors_mac"):
                     self.path("*.tif")
@@ -1837,18 +1906,6 @@ class DarwinManifest(ViewerManifest):
         self.package_file = finalname
         self.remove(sparsename)
         self.fs_save_osx_symbols()
-
-class Darwin_i386_Manifest(DarwinManifest):
-    address_size = 32
-
-
-class Darwin_i686_Manifest(DarwinManifest):
-    """alias in case arch is passed as i686 instead of i386"""
-    pass
-
-
-class Darwin_x86_64_Manifest(DarwinManifest):
-    address_size = 64
 
 
 class LinuxManifest(ViewerManifest):
