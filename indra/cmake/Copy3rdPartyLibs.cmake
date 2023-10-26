@@ -95,7 +95,7 @@ if(WINDOWS)
     set(release_files ${release_files} growl++.dll growl.dll )
     if (TARGET ll::fmodstudio)
         # fmodL is included for logging, only one should be picked by manifest
-        set(release_files ${release_files} fmodL.dll)
+        #set(release_files ${release_files} fmodL.dll)
         set(release_files ${release_files} fmod.dll)
     endif ()
 
