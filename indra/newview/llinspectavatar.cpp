@@ -196,9 +196,11 @@ public:
 		// send a request (duplicates will be suppressed inside the avatar
 		// properties processor)
 		// <FS:Ansariel> OpenSim
-		//processor->sendAvatarPropertiesRequest(mAvatarID, true);
-		const bool use_cap = LLGridManager::instance().isInSecondLife() ? true : !gAgent.getRegionCapability("AgentProfile").empty();
-		processor->sendAvatarPropertiesRequest(mAvatarID, use_cap);
+		//processor->sendAvatarPropertiesRequest(mAvatarID);
+		if (LLGridManager::instance().isInSecondLife() || !gAgent.getRegionCapability("AgentProfile").empty())
+			processor->sendAvatarPropertiesRequest(mAvatarID);
+		else
+			processor->sendAvatarLegacyPropertiesRequest(mAvatarID);
 		// </FS:Ansariel>
 	}
 	

@@ -69,7 +69,7 @@ void LLAvatarPropertiesProcessor::addObserver(const LLUUID& avatar_id, LLAvatarP
 	// IAN BUG this should update the observer's UUID if this is a dupe - sent to PE
 	if (it == end)
 	{
-		mObservers.insert(pair(avatar_id, observer));
+		mObservers.emplace(avatar_id, observer);
 	}
 }
 
@@ -117,21 +117,19 @@ void LLAvatarPropertiesProcessor::sendRequest(const LLUUID& avatar_id, EAvatarPr
 	}
 
     // Try to send HTTP request if cap_url is available
-    if (type == APT_PROPERTIES || type == APT_PICKS || type == APT_GROUPS || type == APT_NOTES)
+    if (type == APT_PROPERTIES)
     {
-        std::string cap_url(gAgent.getRegionCapability("AgentProfile"));
+        std::string cap_url = gAgent.getRegionCapability("AgentProfile");
         if (!cap_url.empty())
         {
             initAgentProfileCapRequest(avatar_id, cap_url, type);
-            return;
         }
-
-        // Don't sent UDP request for APT_PROPERTIES
-        if (type == APT_PROPERTIES)
+        else
         {
-            LL_WARNS() << "No cap_url for APT_PROPERTIES, request is not sent" << LL_ENDL;
-            return;
+            // Don't sent UDP request for APT_PROPERTIES
+            LL_WARNS() << "No cap_url for APT_PROPERTIES, request for " << avatar_id << " is not sent" << LL_ENDL;
         }
+        return;
     }
 
     // Send UDP request
@@ -158,8 +156,7 @@ void LLAvatarPropertiesProcessor::sendGenericRequest(const LLUUID& avatar_id, EA
 	// indicate we're going to make a request
 	addPendingRequest(avatar_id, type);
 
-    std::vector<std::string> strings;
-    strings.push_back(avatar_id.asString());
+    std::vector<std::string> strings{ avatar_id.asString() };
     send_generic_message(method, strings);
 }
 
@@ -171,8 +168,8 @@ void LLAvatarPropertiesProcessor::sendAvatarPropertiesRequestMessage(const LLUUI
 
     msg->newMessageFast(_PREHASH_AvatarPropertiesRequest);
     msg->nextBlockFast(_PREHASH_AgentData);
-    msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-    msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+    msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+    msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
     msg->addUUIDFast(_PREHASH_AvatarID, avatar_id);
     gAgent.sendReliableMessage();
 }
@@ -183,24 +180,14 @@ void LLAvatarPropertiesProcessor::initAgentProfileCapRequest(const LLUUID& avata
     LLCoros::instance().launch("requestAgentUserInfoCoro",
         [cap_url, avatar_id, type]() { requestAvatarPropertiesCoro(cap_url, avatar_id, type); });
 }
-void LLAvatarPropertiesProcessor::sendAvatarPropertiesRequest(const LLUUID& avatar_id, bool use_cap)
+void LLAvatarPropertiesProcessor::sendAvatarPropertiesRequest(const LLUUID& avatar_id)
 {
-    sendRequest(avatar_id, use_cap ? APT_PROPERTIES : APT_PROPERTIES_LEGACY, "AvatarPropertiesRequest");
+    sendRequest(avatar_id, APT_PROPERTIES, "AvatarPropertiesRequest");
 }
 
-void LLAvatarPropertiesProcessor::sendAvatarPicksRequest(const LLUUID& avatar_id)
+void LLAvatarPropertiesProcessor::sendAvatarLegacyPropertiesRequest(const LLUUID& avatar_id)
 {
-    sendGenericRequest(avatar_id, APT_PICKS, "avatarpicksrequest");
-}
-
-void LLAvatarPropertiesProcessor::sendAvatarNotesRequest(const LLUUID& avatar_id)
-{
-	sendGenericRequest(avatar_id, APT_NOTES, "avatarnotesrequest");
-}
-
-void LLAvatarPropertiesProcessor::sendAvatarGroupsRequest(const LLUUID& avatar_id)
-{
-	sendGenericRequest(avatar_id, APT_GROUPS, "avatargroupsrequest");
+    sendRequest(avatar_id, APT_PROPERTIES_LEGACY, "AvatarPropertiesRequest");
 }
 
 void LLAvatarPropertiesProcessor::sendAvatarTexturesRequest(const LLUUID& avatar_id)
@@ -276,19 +263,21 @@ std::string LLAvatarPropertiesProcessor::accountType(const LLAvatarData* avatar_
 std::string LLAvatarPropertiesProcessor::paymentInfo(const LLAvatarData* avatar_data)
 {
 	// Special accounts like M Linden don't have payment info revealed.
-	if (!avatar_data->caption_text.empty()) return "";
+	if (!avatar_data->caption_text.empty())
+		return "";
 
 	// Linden employees don't have payment info revealed
-	const S32 LINDEN_EMPLOYEE_INDEX = 3;
-	if (avatar_data->caption_index == LINDEN_EMPLOYEE_INDEX) return "";
+	constexpr S32 LINDEN_EMPLOYEE_INDEX = 3;
+	if (avatar_data->caption_index == LINDEN_EMPLOYEE_INDEX)
+		return "";
 
-	BOOL transacted = (avatar_data->flags & AVATAR_TRANSACTED);
-	BOOL identified = (avatar_data->flags & AVATAR_IDENTIFIED);
+	bool transacted = (avatar_data->flags & AVATAR_TRANSACTED);
+	bool identified = (avatar_data->flags & AVATAR_IDENTIFIED);
 	// Not currently getting set in dataserver/lldataavatar.cpp for privacy considerations
 	//BOOL age_verified = (avatar_data->flags & AVATAR_AGEVERIFIED); 
 
 	const char* payment_text;
-	if(transacted)
+	if (transacted)
 	{
 		payment_text = "PaymentInfoUsed";
 	}
@@ -307,17 +296,19 @@ std::string LLAvatarPropertiesProcessor::paymentInfo(const LLAvatarData* avatar_
 bool LLAvatarPropertiesProcessor::hasPaymentInfoOnFile(const LLAvatarData* avatar_data)
 {
 	// Special accounts like M Linden don't have payment info revealed.
-	if (!avatar_data->caption_text.empty()) return true;
+	if (!avatar_data->caption_text.empty())
+		return true;
 
 	// Linden employees don't have payment info revealed
-	const S32 LINDEN_EMPLOYEE_INDEX = 3;
-	if (avatar_data->caption_index == LINDEN_EMPLOYEE_INDEX) return true;
+	constexpr S32 LINDEN_EMPLOYEE_INDEX = 3;
+	if (avatar_data->caption_index == LINDEN_EMPLOYEE_INDEX)
+		return true;
 
 	return ((avatar_data->flags & AVATAR_TRANSACTED) || (avatar_data->flags & AVATAR_IDENTIFIED));
 }
 
 // static
-void LLAvatarPropertiesProcessor::requestAvatarPropertiesCoro(std::string cap_url, LLUUID agent_id, EAvatarProcessorType type)
+void LLAvatarPropertiesProcessor::requestAvatarPropertiesCoro(std::string cap_url, LLUUID avatar_id, EAvatarProcessorType type)
 {
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
@@ -328,132 +319,108 @@ void LLAvatarPropertiesProcessor::requestAvatarPropertiesCoro(std::string cap_ur
     LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
     httpOpts->setFollowRedirects(true);
 
-    std::string finalUrl = cap_url + "/" + agent_id.asString();
+    std::string finalUrl = cap_url + "/" + avatar_id.asString();
 
     LLSD result = httpAdapter->getAndSuspend(httpRequest, finalUrl, httpOpts, httpHeaders);
 
     // Response is being processed, no longer pending is required
-    getInstance()->removePendingRequest(agent_id, type);
+    getInstance()->removePendingRequest(avatar_id, type);
 
     LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
     LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
 
     if (!status
         || !result.has("id")
-        || agent_id != result["id"].asUUID())
+        || avatar_id != result["id"].asUUID())
     {
-        LL_WARNS("AvatarProperties") << "Failed to get agent information for id " << agent_id
+        LL_WARNS("AvatarProperties") << "Failed to get agent information for id " << avatar_id
             << (!status ? " (no HTTP status)" : !result.has("id") ? " (no result.id)" :
                 std::string(" (result.id=") + result["id"].asUUID().asString() + ")")
             << LL_ENDL;
         return;
     }
 
-    if (type == APT_PROPERTIES)
+    LLAvatarData avatar_data;
+
+    std::string birth_date;
+
+    avatar_data.agent_id = gAgentID;
+    avatar_data.avatar_id = avatar_id;
+    avatar_data.image_id = result["sl_image_id"].asUUID();
+    avatar_data.fl_image_id = result["fl_image_id"].asUUID();
+    avatar_data.partner_id = result["partner_id"].asUUID();
+    avatar_data.about_text = result["sl_about_text"].asString();
+    avatar_data.fl_about_text = result["fl_about_text"].asString();
+    avatar_data.born_on = result["member_since"].asDate();
+    // TODO: SL-20163 Remove the "has" check when SRV-684 is done
+    // and the field "hide_age" is included to the http response
+    avatar_data.hide_age = !result.has("hide_age") || result["hide_age"].asBoolean();
+    avatar_data.profile_url = getProfileURL(avatar_id.asString());
+    avatar_data.customer_type = result["customer_type"].asString();
+    avatar_data.notes = result["notes"].asString();
+
+    avatar_data.flags = 0;
+    // <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
+    // if (result["online"].asBoolean())
+    if (result["online"].isUndefined())
     {
-        LLAvatarData avatar_data;
-
-        std::string birth_date;
-
-        // <FS:Ansariel> Fix protocol bug
-        //avatar_data.agent_id = agent_id;
-        avatar_data.agent_id = gAgentID;
-        // </FS:Ansariel>
-        avatar_data.avatar_id = agent_id;
-        avatar_data.image_id = result["sl_image_id"].asUUID();
-        avatar_data.fl_image_id = result["fl_image_id"].asUUID();
-        avatar_data.partner_id = result["partner_id"].asUUID();
-        avatar_data.about_text = result["sl_about_text"].asString();
-        avatar_data.fl_about_text = result["fl_about_text"].asString();
-        avatar_data.born_on = result["member_since"].asDate();
-        // TODO: SL-20163 Remove the "has" check when SRV-684 is done
-        // and the field "hide_age" is included to the http response
-        avatar_data.hide_age = !result.has("hide_age") || result["hide_age"].asBoolean();
-        avatar_data.profile_url = getProfileURL(agent_id.asString());
-        avatar_data.customer_type = result["customer_type"].asString();
-
-        avatar_data.flags = 0;
-        if (result["online"].asBoolean())
-        {
-            avatar_data.flags |= AVATAR_ONLINE;
-        }
-        if (result["allow_publish"].asBoolean())
-        {
-            avatar_data.flags |= AVATAR_ALLOW_PUBLISH;
-        }
-        if (result["identified"].asBoolean())
-        {
-            avatar_data.flags |= AVATAR_IDENTIFIED;
-        }
-        if (result["transacted"].asBoolean())
-        {
-            avatar_data.flags |= AVATAR_TRANSACTED;
-        }
-
-        avatar_data.caption_index = 0;
-        if (result.has("charter_member")) // won't be present if "caption" is set
-        {
-            avatar_data.caption_index = result["charter_member"].asInteger();
-        }
-        else if (result.has("caption"))
-        {
-            avatar_data.caption_text = result["caption"].asString();
-        }
-
-        getInstance()->notifyObservers(agent_id, &avatar_data, type);
+        avatar_data.flags |= AVATAR_ONLINE_UNDEFINED;
     }
-    else if (type == APT_PICKS)
+    else if (result["online"].asBoolean())
+    // </FS:Zi>
     {
-        LLAvatarPicks avatar_picks;
-
-        avatar_picks.agent_id = agent_id; // Not in use?
-        avatar_picks.target_id = agent_id;
-
-        LLSD picks_array = result["picks"];
-        for (LLSD::array_const_iterator it = picks_array.beginArray(); it != picks_array.endArray(); ++it)
-        {
-            const LLSD& pick_data = *it;
-            avatar_picks.picks_list.emplace_back(pick_data["id"].asUUID(), pick_data["name"].asString());
-        }
-
-        getInstance()->notifyObservers(agent_id, &avatar_picks, type);
+        avatar_data.flags |= AVATAR_ONLINE;
     }
-    else if (type == APT_GROUPS)
+    if (result["allow_publish"].asBoolean())
     {
-        LLAvatarGroups avatar_groups;
-
-        avatar_groups.agent_id = agent_id; // Not in use?
-        avatar_groups.avatar_id = agent_id; // target_id
-
-        LLSD groups_array = result["groups"];
-        for (LLSD::array_const_iterator it = groups_array.beginArray(); it != groups_array.endArray(); ++it)
-        {
-            const LLSD& group_info = *it;
-            LLAvatarGroups::LLGroupData group_data;
-            group_data.group_powers = 0; // Not in use?
-            group_data.group_title = group_info["name"].asString(); // Missing data, not in use?
-            group_data.group_id = group_info["id"].asUUID();
-            group_data.group_name = group_info["name"].asString();
-            group_data.group_insignia_id = group_info["image_id"].asUUID();
-
-            avatar_groups.group_list.push_back(group_data);
-        }
-
-        getInstance()->notifyObservers(agent_id, &avatar_groups, type);
+        avatar_data.flags |= AVATAR_ALLOW_PUBLISH;
     }
-    else if (type == APT_NOTES)
+    if (result["identified"].asBoolean())
     {
-        LLAvatarNotes avatar_notes;
-
-        avatar_notes.agent_id = agent_id;
-        avatar_notes.target_id = agent_id;
-        avatar_notes.notes = result["notes"].asString();
-
-        getInstance()->notifyObservers(agent_id, &avatar_notes, type);
+        avatar_data.flags |= AVATAR_IDENTIFIED;
     }
+    if (result["transacted"].asBoolean())
+    {
+        avatar_data.flags |= AVATAR_TRANSACTED;
+    }
+
+    avatar_data.caption_index = 0;
+    if (result.has("charter_member")) // won't be present if "caption" is set
+    {
+        avatar_data.caption_index = result["charter_member"].asInteger();
+    }
+    else if (result.has("caption"))
+    {
+        avatar_data.caption_text = result["caption"].asString();
+    }
+
+    // Groups
+    LLSD groups_array = result["groups"];
+    for (LLSD::array_const_iterator it = groups_array.beginArray(); it != groups_array.endArray(); ++it)
+    {
+        const LLSD& group_info = *it;
+        LLAvatarData::LLGroupData group_data;
+        group_data.group_powers = 0; // Not in use?
+        group_data.group_title = group_info["name"].asString(); // Missing data, not in use?
+        group_data.group_id = group_info["id"].asUUID();
+        group_data.group_name = group_info["name"].asString();
+        group_data.group_insignia_id = group_info["image_id"].asUUID();
+
+        avatar_data.group_list.push_back(group_data);
+    }
+
+    // Picks
+    LLSD picks_array = result["picks"];
+    for (LLSD::array_const_iterator it = picks_array.beginArray(); it != picks_array.endArray(); ++it)
+    {
+        const LLSD& pick_data = *it;
+        avatar_data.picks_list.emplace_back(pick_data["id"].asUUID(), pick_data["name"].asString());
+    }
+
+    getInstance()->notifyObservers(avatar_id, &avatar_data, type);
 }
 
-void LLAvatarPropertiesProcessor::processAvatarPropertiesReply(LLMessageSystem* msg, void**)
+void LLAvatarPropertiesProcessor::processAvatarLegacyPropertiesReply(LLMessageSystem* msg, void**)
 {
 	LLAvatarData avatar_data;
 	std::string birth_date;
@@ -472,7 +439,7 @@ void LLAvatarPropertiesProcessor::processAvatarPropertiesReply(LLMessageSystem* 
 	LLDateUtil::dateFromPDTString(avatar_data.born_on, birth_date);
 	// Since field 'hide_age' is not supported by msg system we'd better hide the age here
 	// <FS:Ansariel> OpenSim
-	//avatar_data.hide_age = TRUE;
+	//avatar_data.hide_age = true;
 	avatar_data.hide_age = LLGridManager::instance().isInSecondLife();
 	// </FS:Ansariel>
 	avatar_data.caption_index = 0;
@@ -493,33 +460,6 @@ void LLAvatarPropertiesProcessor::processAvatarPropertiesReply(LLMessageSystem* 
 	self->notifyObservers(avatar_data.avatar_id, &avatar_data, APT_PROPERTIES_LEGACY);
 }
 
-void LLAvatarPropertiesProcessor::processAvatarInterestsReply(LLMessageSystem* msg, void**)
-{
-/*
-	AvatarInterestsReply is automatically sent by the server in response to the 
-	AvatarPropertiesRequest sent when the panel is opened (in addition to the AvatarPropertiesReply message). 
-	If the interests panel is no longer part of the design (?) we should just register the message 
-	to a handler function that does nothing. 
-	That will suppress the warnings and be compatible with old server versions.
-	WARNING: LLTemplateMessageReader::decodeData: Message from 216.82.37.237:13000 with no handler function received: AvatarInterestsReply
-*/
-
-    LLInterestsData interests_data;
-    
-    msg->getUUIDFast(   _PREHASH_AgentData,         _PREHASH_AgentID,       interests_data.agent_id );
-    msg->getUUIDFast(   _PREHASH_AgentData,         _PREHASH_AvatarID,      interests_data.avatar_id );
-    msg->getU32Fast(    _PREHASH_PropertiesData,	_PREHASH_WantToMask,    interests_data.want_to_mask );
-    msg->getStringFast( _PREHASH_PropertiesData,    _PREHASH_WantToText,    interests_data.want_to_text );
-    msg->getU32Fast(    _PREHASH_PropertiesData,	_PREHASH_SkillsMask,    interests_data.skills_mask );
-    msg->getStringFast( _PREHASH_PropertiesData,    _PREHASH_SkillsText,    interests_data.skills_text );
-    msg->getString(     _PREHASH_PropertiesData,    _PREHASH_LanguagesText, interests_data.languages_text );
-    
-    LLAvatarPropertiesProcessor* self = getInstance();
-    // Request processed, no longer pending
-    self->removePendingRequest(interests_data.avatar_id, APT_INTERESTS_INFO);
-    self->notifyObservers(interests_data.avatar_id, &interests_data, APT_INTERESTS_INFO);
-}
-
 void LLAvatarPropertiesProcessor::processAvatarClassifiedsReply(LLMessageSystem* msg, void**)
 {
 	LLAvatarClassifieds classifieds;
@@ -536,7 +476,7 @@ void LLAvatarPropertiesProcessor::processAvatarClassifiedsReply(LLMessageSystem*
 		msg->getUUID(_PREHASH_Data, _PREHASH_ClassifiedID, data.classified_id, n);
 		msg->getString(_PREHASH_Data, _PREHASH_Name, data.name, n);
 
-		classifieds.classifieds_list.push_back(data);
+		classifieds.classifieds_list.emplace_back(data);
 	}
 
 	LLAvatarPropertiesProcessor* self = getInstance();
@@ -577,6 +517,241 @@ void LLAvatarPropertiesProcessor::processClassifiedInfoReply(LLMessageSystem* ms
 // </FS:CR>
 }
 
+void LLAvatarPropertiesProcessor::processPickInfoReply(LLMessageSystem* msg, void**)
+{
+	LLPickData pick_data;
+
+	// Extract the agent id and verify the message is for this
+	// client.
+	msg->getUUID(_PREHASH_AgentData, _PREHASH_AgentID, pick_data.agent_id );
+	msg->getUUID(_PREHASH_Data, _PREHASH_PickID, pick_data.pick_id);
+	msg->getUUID(_PREHASH_Data, _PREHASH_CreatorID, pick_data.creator_id);
+
+	// ** top_pick should be deleted, not being used anymore - angela
+	msg->getBOOL(_PREHASH_Data, _PREHASH_TopPick, pick_data.top_pick);
+	msg->getUUID(_PREHASH_Data, _PREHASH_ParcelID, pick_data.parcel_id);
+	msg->getString(_PREHASH_Data, _PREHASH_Name, pick_data.name);
+	msg->getString(_PREHASH_Data, _PREHASH_Desc, pick_data.desc);
+	msg->getUUID(_PREHASH_Data, _PREHASH_SnapshotID, pick_data.snapshot_id);
+
+	msg->getString(_PREHASH_Data, _PREHASH_User, pick_data.user_name);
+	msg->getString(_PREHASH_Data, _PREHASH_OriginalName, pick_data.original_name);
+	msg->getString(_PREHASH_Data, _PREHASH_SimName, pick_data.sim_name);
+	msg->getVector3d(_PREHASH_Data, _PREHASH_PosGlobal, pick_data.pos_global);
+
+	msg->getS32(_PREHASH_Data, _PREHASH_SortOrder, pick_data.sort_order);
+	msg->getBOOL(_PREHASH_Data, _PREHASH_Enabled, pick_data.enabled);
+
+	LLAvatarPropertiesProcessor* self = getInstance();
+	// don't need to remove pending request as we don't track pick info
+	self->notifyObservers(pick_data.creator_id, &pick_data, APT_PICK_INFO);
+}
+
+void LLAvatarPropertiesProcessor::notifyObservers(const LLUUID& id, void* data, EAvatarProcessorType type)
+{
+	// Copy the map (because observers may delete themselves when updated?)
+	LLAvatarPropertiesProcessor::observer_multimap_t observers = mObservers;
+
+	for (const auto& [agent_id, observer] : observers)
+	{
+		// only notify observers for the same agent, or if the observer
+		// didn't know the agent ID and passed a NULL id.
+		if (agent_id == id || agent_id.isNull())
+		{
+			observer->processProperties(data, type);
+		}
+	}
+}
+
+void LLAvatarPropertiesProcessor::sendFriendRights(const LLUUID& avatar_id, S32 rights)
+{
+	if(!avatar_id.isNull())
+	{
+		LLMessageSystem* msg = gMessageSystem;
+
+		// setup message header
+		msg->newMessageFast(_PREHASH_GrantUserRights);
+		msg->nextBlockFast(_PREHASH_AgentData);
+		msg->addUUID(_PREHASH_AgentID, gAgentID);
+		msg->addUUID(_PREHASH_SessionID, gAgentSessionID);
+
+		msg->nextBlockFast(_PREHASH_Rights);
+		msg->addUUID(_PREHASH_AgentRelated, avatar_id);
+		msg->addS32(_PREHASH_RelatedRights, rights);
+
+		gAgent.sendReliableMessage();
+	}
+}
+
+void LLAvatarPropertiesProcessor::sendPickDelete( const LLUUID& pick_id )
+{
+	LLMessageSystem* msg = gMessageSystem; 
+	msg->newMessage(_PREHASH_PickDelete);
+	msg->nextBlock(_PREHASH_AgentData);
+	msg->addUUID(_PREHASH_AgentID, gAgentID);
+	msg->addUUID(_PREHASH_SessionID, gAgentSessionID);
+	msg->nextBlock(_PREHASH_Data);
+	msg->addUUID(_PREHASH_PickID, pick_id);
+	gAgent.sendReliableMessage();
+
+	LLAgentPicksInfo::getInstance()->requestNumberOfPicks();
+	LLAgentPicksInfo::getInstance()->decrementNumberOfPicks();
+}
+
+void LLAvatarPropertiesProcessor::sendClassifiedDelete(const LLUUID& classified_id)
+{
+	LLMessageSystem* msg = gMessageSystem; 
+
+	msg->newMessage(_PREHASH_ClassifiedDelete);
+
+	msg->nextBlock(_PREHASH_AgentData);
+	msg->addUUID(_PREHASH_AgentID, gAgentID);
+	msg->addUUID(_PREHASH_SessionID, gAgentSessionID);
+
+	msg->nextBlock(_PREHASH_Data);
+	msg->addUUID(_PREHASH_ClassifiedID, classified_id);
+
+	gAgent.sendReliableMessage();
+}
+
+void LLAvatarPropertiesProcessor::sendPickInfoUpdate(const LLPickData* new_pick)
+{
+	if (!new_pick)
+		return;
+
+	LLMessageSystem* msg = gMessageSystem;
+
+	msg->newMessage(_PREHASH_PickInfoUpdate);
+	msg->nextBlock(_PREHASH_AgentData);
+	msg->addUUID(_PREHASH_AgentID, gAgentID);
+	msg->addUUID(_PREHASH_SessionID, gAgentSessionID);
+
+	msg->nextBlock(_PREHASH_Data);
+	msg->addUUID(_PREHASH_PickID, new_pick->pick_id);
+	msg->addUUID(_PREHASH_CreatorID, new_pick->creator_id);
+
+	//legacy var need to be deleted
+	msg->addBOOL(_PREHASH_TopPick, FALSE);	
+
+	// fills in on simulator if null
+	msg->addUUID(_PREHASH_ParcelID, new_pick->parcel_id);
+	msg->addString(_PREHASH_Name, new_pick->name);
+	msg->addString(_PREHASH_Desc, new_pick->desc);
+	msg->addUUID(_PREHASH_SnapshotID, new_pick->snapshot_id);
+	msg->addVector3d(_PREHASH_PosGlobal, new_pick->pos_global);
+
+	// Only top picks have a sort order
+	msg->addS32(_PREHASH_SortOrder, 0);
+
+	msg->addBOOL(_PREHASH_Enabled, new_pick->enabled);
+	gAgent.sendReliableMessage();
+
+	LLAgentPicksInfo::getInstance()->requestNumberOfPicks();
+}
+
+void LLAvatarPropertiesProcessor::sendClassifiedInfoUpdate(const LLAvatarClassifiedInfo* c_data)
+{
+	if(!c_data)
+	{
+		return;
+	}
+
+	LLMessageSystem* msg = gMessageSystem;
+
+	msg->newMessage(_PREHASH_ClassifiedInfoUpdate);
+
+	msg->nextBlock(_PREHASH_AgentData);
+	msg->addUUID(_PREHASH_AgentID, gAgentID);
+	msg->addUUID(_PREHASH_SessionID, gAgentSessionID);
+
+	msg->nextBlock(_PREHASH_Data);
+	msg->addUUID(_PREHASH_ClassifiedID, c_data->classified_id);
+	msg->addU32(_PREHASH_Category, c_data->category);
+	msg->addString(_PREHASH_Name, c_data->name);
+	msg->addString(_PREHASH_Desc, c_data->description);
+	msg->addUUID(_PREHASH_ParcelID, c_data->parcel_id);
+	msg->addU32(_PREHASH_ParentEstate, 0);
+	msg->addUUID(_PREHASH_SnapshotID, c_data->snapshot_id);
+	msg->addVector3d(_PREHASH_PosGlobal, c_data->pos_global);
+	msg->addU8(_PREHASH_ClassifiedFlags, c_data->flags);
+	msg->addS32(_PREHASH_PriceForListing, c_data->price_for_listing);
+
+	gAgent.sendReliableMessage();
+}
+
+void LLAvatarPropertiesProcessor::sendPickInfoRequest(const LLUUID& creator_id, const LLUUID& pick_id)
+{
+	// Must ask for a pick based on the creator id because
+	// the pick database is distributed to the inventory cluster. JC
+	std::vector<std::string> request_params{ creator_id.asString(), pick_id.asString() };
+	send_generic_message("pickinforequest", request_params);
+}
+
+void LLAvatarPropertiesProcessor::sendClassifiedInfoRequest(const LLUUID& classified_id)
+{
+	LLMessageSystem* msg = gMessageSystem;
+
+	msg->newMessage(_PREHASH_ClassifiedInfoRequest);
+	msg->nextBlock(_PREHASH_AgentData);
+	
+	msg->addUUID(_PREHASH_AgentID, gAgentID);
+	msg->addUUID(_PREHASH_SessionID, gAgentSessionID);
+
+	msg->nextBlock(_PREHASH_Data);
+	msg->addUUID(_PREHASH_ClassifiedID, classified_id);
+
+	gAgent.sendReliableMessage();
+}
+
+bool LLAvatarPropertiesProcessor::isPendingRequest(const LLUUID& avatar_id, EAvatarProcessorType type)
+{
+	timestamp_map_t::key_type key = std::make_pair(avatar_id, type);
+	timestamp_map_t::iterator it = mRequestTimestamps.find(key);
+
+	// Is this a new request?
+	if (it == mRequestTimestamps.end()) return false;
+
+	// We found a request, check if it has timed out
+	U32 now = time(nullptr);
+	const U32 REQUEST_EXPIRE_SECS = 5;
+	U32 expires = it->second + REQUEST_EXPIRE_SECS;
+
+	// Request is still pending if it hasn't expired yet
+	// *NOTE: Expired requests will accumulate in this map, but they are rare,
+	// the data is small, and they will be updated if the same data is
+	// re-requested
+	return (now < expires);
+}
+
+void LLAvatarPropertiesProcessor::addPendingRequest(const LLUUID& avatar_id, EAvatarProcessorType type)
+{
+	timestamp_map_t::key_type key = std::make_pair(avatar_id, type);
+	U32 now = time(nullptr);
+	// Add or update existing (expired) request
+	mRequestTimestamps[ key ] = now;
+}
+
+void LLAvatarPropertiesProcessor::removePendingRequest(const LLUUID& avatar_id, EAvatarProcessorType type)
+{
+	timestamp_map_t::key_type key = std::make_pair(avatar_id, type);
+	mRequestTimestamps.erase(key);
+}
+
+// <FS> OpenSim
+void LLAvatarPropertiesProcessor::sendAvatarPicksRequest(const LLUUID& avatar_id)
+{
+    sendGenericRequest(avatar_id, APT_PICKS, "avatarpicksrequest");
+}
+
+void LLAvatarPropertiesProcessor::sendAvatarNotesRequest(const LLUUID& avatar_id)
+{
+	sendGenericRequest(avatar_id, APT_NOTES, "avatarnotesrequest");
+}
+
+void LLAvatarPropertiesProcessor::sendAvatarGroupsRequest(const LLUUID& avatar_id)
+{
+	sendGenericRequest(avatar_id, APT_GROUPS, "avatargroupsrequest");
+}
 
 void LLAvatarPropertiesProcessor::processAvatarNotesReply(LLMessageSystem* msg, void**)
 {
@@ -615,36 +790,6 @@ void LLAvatarPropertiesProcessor::processAvatarPicksReply(LLMessageSystem* msg, 
 	self->notifyObservers(avatar_picks.target_id,&avatar_picks,APT_PICKS);
 }
 
-void LLAvatarPropertiesProcessor::processPickInfoReply(LLMessageSystem* msg, void**)
-{
-	LLPickData pick_data;
-
-	// Extract the agent id and verify the message is for this
-	// client.
-	msg->getUUID(_PREHASH_AgentData, _PREHASH_AgentID, pick_data.agent_id );
-	msg->getUUID(_PREHASH_Data, _PREHASH_PickID, pick_data.pick_id);
-	msg->getUUID(_PREHASH_Data, _PREHASH_CreatorID, pick_data.creator_id);
-
-	// ** top_pick should be deleted, not being used anymore - angela
-	msg->getBOOL(_PREHASH_Data, _PREHASH_TopPick, pick_data.top_pick);
-	msg->getUUID(_PREHASH_Data, _PREHASH_ParcelID, pick_data.parcel_id);
-	msg->getString(_PREHASH_Data, _PREHASH_Name, pick_data.name);
-	msg->getString(_PREHASH_Data, _PREHASH_Desc, pick_data.desc);
-	msg->getUUID(_PREHASH_Data, _PREHASH_SnapshotID, pick_data.snapshot_id);
-
-	msg->getString(_PREHASH_Data, _PREHASH_User, pick_data.user_name);
-	msg->getString(_PREHASH_Data, _PREHASH_OriginalName, pick_data.original_name);
-	msg->getString(_PREHASH_Data, _PREHASH_SimName, pick_data.sim_name);
-	msg->getVector3d(_PREHASH_Data, _PREHASH_PosGlobal, pick_data.pos_global);
-
-	msg->getS32(_PREHASH_Data, _PREHASH_SortOrder, pick_data.sort_order);
-	msg->getBOOL(_PREHASH_Data, _PREHASH_Enabled, pick_data.enabled);
-
-	LLAvatarPropertiesProcessor* self = getInstance();
-	// don't need to remove pending request as we don't track pick info
-	self->notifyObservers(pick_data.creator_id, &pick_data, APT_PICK_INFO);
-}
-
 void LLAvatarPropertiesProcessor::processAvatarGroupsReply(LLMessageSystem* msg, void**)
 {
 	LLAvatarGroups avatar_groups;
@@ -670,44 +815,6 @@ void LLAvatarPropertiesProcessor::processAvatarGroupsReply(LLMessageSystem* msg,
 	self->notifyObservers(avatar_groups.avatar_id,&avatar_groups,APT_GROUPS);
 }
 
-void LLAvatarPropertiesProcessor::notifyObservers(const LLUUID& id, void* data, EAvatarProcessorType type)
-{
-	// Copy the map (because observers may delete themselves when updated?)
-	LLAvatarPropertiesProcessor::observer_multimap_t observers = mObservers;
-
-	observer_multimap_t::iterator oi = observers.begin();
-	observer_multimap_t::iterator end = observers.end();
-	for (; oi != end; ++oi)
-	{
-		// only notify observers for the same agent, or if the observer
-		// didn't know the agent ID and passed a NULL id.
-		const LLUUID &agent_id = oi->first;
-		if (agent_id == id || agent_id.isNull())
-		{
-			oi->second->processProperties(data, type);
-		}
-	}
-}
-
-void LLAvatarPropertiesProcessor::sendFriendRights(const LLUUID& avatar_id, S32 rights)
-{
-	if(!avatar_id.isNull())
-	{
-		LLMessageSystem* msg = gMessageSystem;
-
-		// setup message header
-		msg->newMessageFast(_PREHASH_GrantUserRights);
-		msg->nextBlockFast(_PREHASH_AgentData);
-		msg->addUUID(_PREHASH_AgentID, gAgent.getID());
-		msg->addUUID(_PREHASH_SessionID, gAgent.getSessionID());
-
-		msg->nextBlockFast(_PREHASH_Rights);
-		msg->addUUID(_PREHASH_AgentRelated, avatar_id);
-		msg->addS32(_PREHASH_RelatedRights, rights);
-
-		gAgent.sendReliableMessage();
-	}
-}
 
 void LLAvatarPropertiesProcessor::sendNotes(const LLUUID& avatar_id, const std::string notes)
 {
@@ -729,181 +836,4 @@ void LLAvatarPropertiesProcessor::sendNotes(const LLUUID& avatar_id, const std::
 	}
 }
 
-
-void LLAvatarPropertiesProcessor::sendPickDelete( const LLUUID& pick_id )
-{
-	LLMessageSystem* msg = gMessageSystem; 
-	msg->newMessage(_PREHASH_PickDelete);
-	msg->nextBlock(_PREHASH_AgentData);
-	msg->addUUID(_PREHASH_AgentID, gAgent.getID());
-	msg->addUUID(_PREHASH_SessionID, gAgent.getSessionID());
-	msg->nextBlock(_PREHASH_Data);
-	msg->addUUID(_PREHASH_PickID, pick_id);
-	gAgent.sendReliableMessage();
-
-	LLAgentPicksInfo::getInstance()->requestNumberOfPicks();
-	LLAgentPicksInfo::getInstance()->decrementNumberOfPicks();
-}
-
-void LLAvatarPropertiesProcessor::sendClassifiedDelete(const LLUUID& classified_id)
-{
-	LLMessageSystem* msg = gMessageSystem; 
-
-	msg->newMessage(_PREHASH_ClassifiedDelete);
-
-	msg->nextBlock(_PREHASH_AgentData);
-	msg->addUUID(_PREHASH_AgentID, gAgent.getID());
-	msg->addUUID(_PREHASH_SessionID, gAgent.getSessionID());
-
-	msg->nextBlock(_PREHASH_Data);
-	msg->addUUID(_PREHASH_ClassifiedID, classified_id);
-
-	gAgent.sendReliableMessage();
-}
-
-void LLAvatarPropertiesProcessor::sendInterestsInfoUpdate(const LLInterestsData* interests_data)
-{
-    if(!interests_data)
-    {
-        return;
-    }
-
-    LLMessageSystem* msg = gMessageSystem;
-
-    msg->newMessage(_PREHASH_AvatarInterestsUpdate);
-    msg->nextBlockFast( _PREHASH_AgentData);
-    msg->addUUIDFast(	_PREHASH_AgentID,       gAgent.getID() );
-    msg->addUUIDFast(   _PREHASH_SessionID,     gAgent.getSessionID() );
-    msg->nextBlockFast( _PREHASH_PropertiesData);
-    msg->addU32Fast(	_PREHASH_WantToMask,    interests_data->want_to_mask);
-    msg->addStringFast(	_PREHASH_WantToText,    interests_data->want_to_text);
-    msg->addU32Fast(	_PREHASH_SkillsMask,    interests_data->skills_mask);
-    msg->addStringFast(	_PREHASH_SkillsText,    interests_data->skills_text);
-    msg->addString(     _PREHASH_LanguagesText, interests_data->languages_text);
-    
-    gAgent.sendReliableMessage();
-}
-
-void LLAvatarPropertiesProcessor::sendPickInfoUpdate(const LLPickData* new_pick)
-{
-	if (!new_pick) return;
-
-	LLMessageSystem* msg = gMessageSystem;
-
-	msg->newMessage(_PREHASH_PickInfoUpdate);
-	msg->nextBlock(_PREHASH_AgentData);
-	msg->addUUID(_PREHASH_AgentID, gAgent.getID());
-	msg->addUUID(_PREHASH_SessionID, gAgent.getSessionID());
-
-	msg->nextBlock(_PREHASH_Data);
-	msg->addUUID(_PREHASH_PickID, new_pick->pick_id);
-	msg->addUUID(_PREHASH_CreatorID, new_pick->creator_id);
-
-	//legacy var need to be deleted
-	msg->addBOOL(_PREHASH_TopPick, FALSE);	
-
-	// fills in on simulator if null
-	msg->addUUID(_PREHASH_ParcelID, new_pick->parcel_id);
-	msg->addString(_PREHASH_Name, new_pick->name);
-	msg->addString(_PREHASH_Desc, new_pick->desc);
-	msg->addUUID(_PREHASH_SnapshotID, new_pick->snapshot_id);
-	msg->addVector3d(_PREHASH_PosGlobal, new_pick->pos_global);
-
-	// Only top picks have a sort order
-	msg->addS32(_PREHASH_SortOrder, 0);
-
-	msg->addBOOL(_PREHASH_Enabled, new_pick->enabled);
-	gAgent.sendReliableMessage();
-
-	LLAgentPicksInfo::getInstance()->requestNumberOfPicks();
-}
-
-void LLAvatarPropertiesProcessor::sendClassifiedInfoUpdate(const LLAvatarClassifiedInfo* c_data)
-{
-	if(!c_data)
-	{
-		return;
-	}
-
-	LLMessageSystem* msg = gMessageSystem;
-
-	msg->newMessage(_PREHASH_ClassifiedInfoUpdate);
-
-	msg->nextBlock(_PREHASH_AgentData);
-	msg->addUUID(_PREHASH_AgentID, gAgent.getID());
-	msg->addUUID(_PREHASH_SessionID, gAgent.getSessionID());
-
-	msg->nextBlock(_PREHASH_Data);
-	msg->addUUID(_PREHASH_ClassifiedID, c_data->classified_id);
-	msg->addU32(_PREHASH_Category, c_data->category);
-	msg->addString(_PREHASH_Name, c_data->name);
-	msg->addString(_PREHASH_Desc, c_data->description);
-	msg->addUUID(_PREHASH_ParcelID, c_data->parcel_id);
-	msg->addU32(_PREHASH_ParentEstate, 0);
-	msg->addUUID(_PREHASH_SnapshotID, c_data->snapshot_id);
-	msg->addVector3d(_PREHASH_PosGlobal, c_data->pos_global);
-	msg->addU8(_PREHASH_ClassifiedFlags, c_data->flags);
-	msg->addS32(_PREHASH_PriceForListing, c_data->price_for_listing);
-
-	gAgent.sendReliableMessage();
-}
-
-void LLAvatarPropertiesProcessor::sendPickInfoRequest(const LLUUID& creator_id, const LLUUID& pick_id)
-{
-	// Must ask for a pick based on the creator id because
-	// the pick database is distributed to the inventory cluster. JC
-	std::vector<std::string> request_params;
-	request_params.push_back(creator_id.asString() );
-	request_params.push_back(pick_id.asString() );
-	send_generic_message("pickinforequest", request_params);
-}
-
-void LLAvatarPropertiesProcessor::sendClassifiedInfoRequest(const LLUUID& classified_id)
-{
-	LLMessageSystem* msg = gMessageSystem;
-
-	msg->newMessage(_PREHASH_ClassifiedInfoRequest);
-	msg->nextBlock(_PREHASH_AgentData);
-	
-	msg->addUUID(_PREHASH_AgentID, gAgent.getID());
-	msg->addUUID(_PREHASH_SessionID, gAgent.getSessionID());
-
-	msg->nextBlock(_PREHASH_Data);
-	msg->addUUID(_PREHASH_ClassifiedID, classified_id);
-
-	gAgent.sendReliableMessage();
-}
-
-bool LLAvatarPropertiesProcessor::isPendingRequest(const LLUUID& avatar_id, EAvatarProcessorType type)
-{
-	timestamp_map_t::key_type key = std::make_pair(avatar_id, type);
-	timestamp_map_t::iterator it = mRequestTimestamps.find(key);
-
-	// Is this a new request?
-	if (it == mRequestTimestamps.end()) return false;
-
-	// We found a request, check if it has timed out
-	U32 now = time(NULL);
-	const U32 REQUEST_EXPIRE_SECS = 5;
-	U32 expires = it->second + REQUEST_EXPIRE_SECS;
-
-	// Request is still pending if it hasn't expired yet
-	// *NOTE: Expired requests will accumulate in this map, but they are rare,
-	// the data is small, and they will be updated if the same data is
-	// re-requested
-	return (now < expires);
-}
-
-void LLAvatarPropertiesProcessor::addPendingRequest(const LLUUID& avatar_id, EAvatarProcessorType type)
-{
-	timestamp_map_t::key_type key = std::make_pair(avatar_id, type);
-	U32 now = time(NULL);
-	// Add or update existing (expired) request
-	mRequestTimestamps[ key ] = now;
-}
-
-void LLAvatarPropertiesProcessor::removePendingRequest(const LLUUID& avatar_id, EAvatarProcessorType type)
-{
-	timestamp_map_t::key_type key = std::make_pair(avatar_id, type);
-	mRequestTimestamps.erase(key);
-}
+// </FS>

@@ -210,3 +210,16 @@ void LLPanelProfilePropertiesProcessorTab::setAvatarId(const LLUUID & avatar_id)
         LLAvatarPropertiesProcessor::getInstance()->addObserver(getAvatarId(), this);
     }
 }
+
+void LLPanelProfilePropertiesProcessorTab::updateData()
+{
+    LLUUID avatar_id = getAvatarId();
+    // <FS> OpenSim
+    //if (!getStarted() && avatar_id.notNull())
+    if (!getStarted() && avatar_id.notNull() && !gAgent.getRegionCapability("AgentProfile").empty())
+    // </FS>
+    {
+        setIsLoading();
+        LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(getAvatarId());
+    }
+}

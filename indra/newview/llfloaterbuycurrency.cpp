@@ -404,7 +404,13 @@ LLFetchAvatarPaymentInfo::LLFetchAvatarPaymentInfo(bool has_target, const std::s
 	processor->addObserver(mAvatarID, this);
 	// send a request (duplicates will be suppressed inside the avatar
 	// properties processor)
-	processor->sendAvatarPropertiesRequest(mAvatarID);
+	// <FS> OpenSim
+	//processor->sendAvatarPropertiesRequest(mAvatarID);
+	if (!gAgent.getRegionCapability("AgentProfile").empty())
+		processor->sendAvatarPropertiesRequest(mAvatarID);
+	else
+		processor->sendAvatarLegacyPropertiesRequest(mAvatarID);
+	// </FS>
 }
 
 LLFetchAvatarPaymentInfo::~LLFetchAvatarPaymentInfo()
@@ -414,7 +420,7 @@ LLFetchAvatarPaymentInfo::~LLFetchAvatarPaymentInfo()
 
 void LLFetchAvatarPaymentInfo::processProperties(void* data, EAvatarProcessorType type)
 {
-	if (data && type == APT_PROPERTIES_LEGACY)
+	if (data && (type == APT_PROPERTIES || type == APT_PROPERTIES_LEGACY))
 	{
 		LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
 		LLFloaterBuyCurrency::handleBuyCurrency(LLAvatarPropertiesProcessor::hasPaymentInfoOnFile(avatar_data), mHasTarget, mName, mPrice);

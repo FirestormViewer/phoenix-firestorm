@@ -40,6 +40,7 @@ const U32 AVATAR_IDENTIFIED				= 0x1 << 2;	// whether avatar has provided paymen
 const U32 AVATAR_TRANSACTED				= 0x1 << 3;	// whether avatar has actively used payment info
 const U32 AVATAR_ONLINE					= 0x1 << 4; // the online status of this avatar, if known.
 const U32 AVATAR_AGEVERIFIED			= 0x1 << 5;	// whether avatar has been age-verified
+const U32 AVATAR_ONLINE_UNDEFINED		= 0x1 << 31; // <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
 
 /*
 *TODO Vadim: This needs some refactoring:
@@ -50,56 +51,77 @@ class LLMessageSystem;
 
 enum EAvatarProcessorType
 {
-	APT_PROPERTIES_LEGACY, // APT_PROPERTIES via udp request
+	APT_PROPERTIES_LEGACY, // APT_PROPERTIES via udp request (Truncates data!!!)
 	APT_PROPERTIES,        // APT_PROPERTIES via http request
+	// <FS> OpenSim
 	APT_NOTES,
 	APT_GROUPS,
 	APT_PICKS,
+	// </FS>
 	APT_PICK_INFO,
 	APT_TEXTURES,
-    APT_INTERESTS_INFO,
 	APT_CLASSIFIEDS,
 	APT_CLASSIFIED_INFO
 };
 
-struct LLInterestsData
+// legacy data is supposed to match AvatarPropertiesReply,
+// but it is obsolete, fields like about_text will truncate
+// data, if you need them, use AgenProfile cap.
+// Todo: remove it once once icon ids get moved elsewhere,
+// since AgentProfile is too large for bulk icon requests
+struct LLAvatarLegacyData
 {
-    LLUUID      agent_id;
-    LLUUID      avatar_id; //target id
-    U32         want_to_mask;
-    std::string want_to_text;
-    U32         skills_mask;
-    std::string skills_text;
-    std::string languages_text;
+    LLUUID 		agent_id;
+    LLUUID		avatar_id; //target id
+    LLUUID		image_id;
+    LLUUID		fl_image_id;
+    LLUUID		partner_id;
+    std::string	about_text;
+    std::string	fl_about_text;
+    LLDate		born_on;
+    std::string	profile_url;
+    U8			caption_index;
+    std::string	caption_text;
+    std::string	customer_type;
+    U32			flags;
 };
 
 struct LLAvatarData
 {
-	LLUUID 		agent_id;
-	LLUUID		avatar_id; //target id
-	LLUUID		image_id;
-	LLUUID		fl_image_id;
-	LLUUID		partner_id;
-	std::string	about_text;
-	std::string	fl_about_text;
-	LLDate		born_on;
-	std::string	profile_url;
-	U8			caption_index;
-	std::string	caption_text;
-	std::string	customer_type;
-	U32			flags;
-	bool		hide_age;
+    LLUUID 		agent_id;
+    LLUUID		avatar_id; //target id
+    LLUUID		image_id;
+    LLUUID		fl_image_id;
+    LLUUID		partner_id;
+    std::string	about_text;
+    std::string	fl_about_text;
+    LLDate		born_on;
+    std::string	profile_url;
+    U8			caption_index;
+    std::string	caption_text;
+    std::string	customer_type;
+    U32			flags;
+    bool		hide_age;
+    std::string	notes;
+
+    struct LLGroupData;
+    typedef std::list<LLGroupData> group_list_t;
+    group_list_t group_list;
+
+    typedef std::pair<LLUUID, std::string> pick_data_t;
+    typedef std::list< pick_data_t> picks_list_t;
+    picks_list_t picks_list;
 	BOOL		allow_publish; // <FS:Ansariel> UDP profiles
 };
 
-struct LLAvatarPicks
+struct LLAvatarData::LLGroupData
 {
-	LLUUID agent_id;
-	LLUUID target_id; //target id
-
-	typedef std::pair<LLUUID,std::string> pick_data_t;
-	typedef std::list< pick_data_t> picks_list_t;
-	picks_list_t picks_list;
+    U64 group_powers;
+    BOOL accept_notices;
+    std::string group_title;
+    LLUUID group_id;
+    std::string group_name;
+    LLUUID group_insignia_id;
 };
 
 struct LLPickData
@@ -123,7 +145,17 @@ struct LLPickData
 
 	//used only in write (update) requests
 	LLUUID session_id;
+};
 
+// <FS> OpenSim
+struct LLAvatarPicks
+{
+	LLUUID agent_id;
+	LLUUID target_id; //target id
+
+	typedef std::pair<LLUUID,std::string> pick_data_t;
+	typedef std::list< pick_data_t> picks_list_t;
+	picks_list_t picks_list;
 };
 
 struct LLAvatarNotes
@@ -154,6 +186,7 @@ struct LLAvatarGroups
 		LLUUID group_insignia_id;
 	};
 };
+// </FS>
 
 struct LLAvatarClassifieds
 {
@@ -212,12 +245,16 @@ public:
 
 	// Request various types of avatar data.  Duplicate requests will be
 	// suppressed while waiting for a response from the network.
-	void sendAvatarPropertiesRequest(const LLUUID& avatar_id, bool use_cap = false);
+	void sendAvatarPropertiesRequest(const LLUUID& avatar_id);
+    void sendAvatarLegacyPropertiesRequest(const LLUUID& avatar_id);
+	void sendAvatarTexturesRequest(const LLUUID& avatar_id);
+	void sendAvatarClassifiedsRequest(const LLUUID& avatar_id);
+
+	// <FS> OpenSim
 	void sendAvatarPicksRequest(const LLUUID& avatar_id);
 	void sendAvatarNotesRequest(const LLUUID& avatar_id);
 	void sendAvatarGroupsRequest(const LLUUID& avatar_id);
-	void sendAvatarTexturesRequest(const LLUUID& avatar_id);
-	void sendAvatarClassifiedsRequest(const LLUUID& avatar_id);
+	// </FS>
 
 	// Duplicate pick info requests are not suppressed.
 	void sendPickInfoRequest(const LLUUID& creator_id, const LLUUID& pick_id);
@@ -232,13 +269,11 @@ public:
 
 	void sendFriendRights(const LLUUID& avatar_id, S32 rights);
 
+	// <FS> OpenSim
 	void sendNotes(const LLUUID& avatar_id, const std::string notes);
-
 	void sendPickDelete(const LLUUID& pick_id);
 
 	void sendClassifiedDelete(const LLUUID& classified_id);
-
-    void sendInterestsInfoUpdate(const LLInterestsData* interests_data);
 
 	// Returns translated, human readable string for account type, such
 	// as "Resident" or "Linden Employee".  Used for profiles, inspectors.
@@ -251,22 +286,20 @@ public:
 
 	static bool hasPaymentInfoOnFile(const LLAvatarData* avatar_data);
 
-    static void requestAvatarPropertiesCoro(std::string cap_url, LLUUID agent_id, EAvatarProcessorType type);
+    static void requestAvatarPropertiesCoro(std::string cap_url, LLUUID avatar_id, EAvatarProcessorType type);
 
-	static void processAvatarPropertiesReply(LLMessageSystem* msg, void**);
-
-	static void processAvatarInterestsReply(LLMessageSystem* msg, void**);
+    // Processing of UDP variant of properties, truncates certain fields!
+    static void processAvatarLegacyPropertiesReply(LLMessageSystem* msg, void**);
 
 	static void processAvatarClassifiedsReply(LLMessageSystem* msg, void**);
 
 	static void processClassifiedInfoReply(LLMessageSystem* msg, void**);
 
+	// <FS> OpenSim
 	static void processAvatarGroupsReply(LLMessageSystem* msg, void**);
-
 	static void processAvatarNotesReply(LLMessageSystem* msg, void**);
-
 	static void processAvatarPicksReply(LLMessageSystem* msg, void**);
-
+	// </FS>
 	static void processPickInfoReply(LLMessageSystem* msg, void**);
 
 protected:

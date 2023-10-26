@@ -103,191 +103,7 @@ static const std::string PANEL_PROFILE_VIEW = "panel_profile_view";
 static const std::string PROFILE_PROPERTIES_CAP = "AgentProfile";
 static const std::string PROFILE_IMAGE_UPLOAD_CAP = "UploadAgentProfileImage";
 
-// <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
-const U32 AVATAR_ONLINE_UNDEFINED			= 0x1 << 31;
-
 //////////////////////////////////////////////////////////////////////////
-
-void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id)
-{
-    LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
-    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
-        httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("request_avatar_properties_coro", httpPolicy));
-    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
-    LLCore::HttpHeaders::ptr_t httpHeaders;
-
-    LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
-    httpOpts->setFollowRedirects(true);
-
-    std::string finalUrl = cap_url + "/" + agent_id.asString();
-
-    LLSD result = httpAdapter->getAndSuspend(httpRequest, finalUrl, httpOpts, httpHeaders);
-
-    LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
-    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
-
-    LL_DEBUGS("AvatarProperties") << "Agent id: " << agent_id << " Result: " << httpResults << LL_ENDL;
-
-    if (!status
-        || !result.has("id")
-        || agent_id != result["id"].asUUID())
-    {
-        LL_WARNS("AvatarProperties") << "Failed to get agent information for id " << agent_id << LL_ENDL;
-        return;
-    }
-
-    LLFloater* floater_profile = LLFloaterReg::findInstance("profile", LLSD().with("id", agent_id));
-    if (!floater_profile)
-    {
-        // floater is dead, so panels are dead as well
-        return;
-    }
-
-    LLPanel *panel = floater_profile->findChild<LLPanel>(PANEL_PROFILE_VIEW, TRUE);
-    LLPanelProfile *panel_profile = dynamic_cast<LLPanelProfile*>(panel);
-    if (!panel_profile)
-    {
-        LL_WARNS() << PANEL_PROFILE_VIEW << " not found" << LL_ENDL;
-        return;
-    }
-
-    // Avatar Data
-    LLAvatarData *avatar_data = &panel_profile->mAvatarData;
-    std::string birth_date;
-
-    avatar_data->agent_id = agent_id;
-    avatar_data->avatar_id = agent_id;
-    avatar_data->image_id = result["sl_image_id"].asUUID();
-    avatar_data->fl_image_id = result["fl_image_id"].asUUID();
-    avatar_data->partner_id = result["partner_id"].asUUID();
-    avatar_data->about_text = result["sl_about_text"].asString();
-    avatar_data->fl_about_text = result["fl_about_text"].asString();
-    avatar_data->born_on = result["member_since"].asDate();
-    avatar_data->profile_url = getProfileURL(agent_id.asString());
-    avatar_data->customer_type = result["customer_type"].asString();
-
-    avatar_data->flags = 0;
-
-    // <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
-    // if (result["online"].asBoolean())
-    if (result["online"].isUndefined())
-    {
-        avatar_data->flags |= AVATAR_ONLINE_UNDEFINED;
-    }
-    else if (result["online"].asBoolean())
-    // </FS:Zi>
-    {
-        avatar_data->flags |= AVATAR_ONLINE;
-    }
-    if (result["allow_publish"].asBoolean())
-    {
-        avatar_data->flags |= AVATAR_ALLOW_PUBLISH;
-    }
-    if (result["identified"].asBoolean())
-    {
-        avatar_data->flags |= AVATAR_IDENTIFIED;
-    }
-    if (result["transacted"].asBoolean())
-    {
-        avatar_data->flags |= AVATAR_TRANSACTED;
-    }
-
-    avatar_data->caption_index = 0;
-    if (result.has("charter_member")) // won't be present if "caption" is set
-    {
-        avatar_data->caption_index = result["charter_member"].asInteger();
-    }
-    else if (result.has("caption"))
-    {
-        avatar_data->caption_text = result["caption"].asString();
-    }
-
-    // TODO: SL-20163 Remove the "has" check when SRV-684 is done
-    // and the field "hide_age" is included to the http response
-    avatar_data->hide_age = result.has("hide_age") ?
-        result["hide_age"].asBoolean() :  // Server option value provided by resident
-        !panel_profile->getSelfProfile(); // Fallback temporary value (to be removed)
-
-    panel = floater_profile->findChild<LLPanel>(PANEL_SECONDLIFE, TRUE);
-    LLPanelProfileSecondLife *panel_sl = dynamic_cast<LLPanelProfileSecondLife*>(panel);
-    if (panel_sl)
-    {
-        panel_sl->processProfileProperties(avatar_data);
-    }
-
-    panel = floater_profile->findChild<LLPanel>(PANEL_WEB, TRUE);
-    LLPanelProfileWeb *panel_web = dynamic_cast<LLPanelProfileWeb*>(panel);
-    if (panel_web)
-    {
-        panel_web->setLoaded();
-    }
-
-    panel = floater_profile->findChild<LLPanel>(PANEL_FIRSTLIFE, TRUE);
-    LLPanelProfileFirstLife *panel_first = dynamic_cast<LLPanelProfileFirstLife*>(panel);
-    if (panel_first)
-    {
-        panel_first->processProperties(avatar_data);
-    }
-
-    // Picks
-    LLSD picks_array = result["picks"];
-    LLAvatarPicks avatar_picks;
-    avatar_picks.agent_id = agent_id; // Not in use?
-    avatar_picks.target_id = agent_id;
-
-    for (LLSD::array_const_iterator it = picks_array.beginArray(); it != picks_array.endArray(); ++it)
-    {
-        const LLSD& pick_data = *it;
-        avatar_picks.picks_list.emplace_back(pick_data["id"].asUUID(), pick_data["name"].asString());
-    }
-
-    panel = floater_profile->findChild<LLPanel>(PANEL_PICKS, TRUE);
-    LLPanelProfilePicks *panel_picks = dynamic_cast<LLPanelProfilePicks*>(panel);
-    if (panel_picks)
-    {
-        // Refresh pick limit before processing
-        LLAgentPicksInfo::getInstance()->onServerRespond(&avatar_picks);
-        panel_picks->processProperties(&avatar_picks);
-    }
-
-    // Groups
-    LLSD groups_array = result["groups"];
-    LLAvatarGroups avatar_groups;
-    avatar_groups.agent_id = agent_id; // Not in use?
-    avatar_groups.avatar_id = agent_id; // target_id
-
-    for (LLSD::array_const_iterator it = groups_array.beginArray(); it != groups_array.endArray(); ++it)
-    {
-        const LLSD& group_info = *it;
-        LLAvatarGroups::LLGroupData group_data;
-        group_data.group_powers = 0; // Not in use?
-        group_data.group_title = group_info["name"].asString(); // Missing data, not in use?
-        group_data.group_id = group_info["id"].asUUID();
-        group_data.group_name = group_info["name"].asString();
-        group_data.group_insignia_id = group_info["image_id"].asUUID();
-
-        avatar_groups.group_list.push_back(group_data);
-    }
-
-    if (panel_sl)
-    {
-        panel_sl->processGroupProperties(&avatar_groups);
-    }
-
-    // Notes
-    LLAvatarNotes avatar_notes;
-
-    avatar_notes.agent_id = agent_id;
-    avatar_notes.target_id = agent_id;
-    avatar_notes.notes = result["notes"].asString();
-
-    panel = floater_profile->findChild<LLPanel>(PANEL_NOTES, TRUE);
-    LLPanelProfileNotes *panel_notes = dynamic_cast<LLPanelProfileNotes*>(panel);
-    if (panel_notes)
-    {
-        panel_notes->processProperties(&avatar_notes);
-    }
-}
 
 LLUUID post_profile_image(std::string cap_url, const LLSD &first_data, std::string path_to_image, LLHandle<LLPanel> *handle)
 {
@@ -885,7 +701,7 @@ void LLFloaterProfilePermissions::onCancel()
 // LLPanelProfileSecondLife
 
 LLPanelProfileSecondLife::LLPanelProfileSecondLife()
-    : LLPanelProfilePropertiesProcessorTab() // <FS:Beq/> alter ancestry to re-enable UDP
+    : LLPanelProfilePropertiesProcessorTab()
     , mAvatarNameCacheConnection()
     , mHasUnsavedDescriptionChanges(false)
     , mWaitingForImageUpload(false)
@@ -1004,11 +820,11 @@ BOOL LLPanelProfileSecondLife::postBuild()
 }
 
 // <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
-void LLPanelProfileSecondLife::onAvatarProperties(const LLAvatarData* d)
+void LLPanelProfileSecondLife::onAvatarProperties(const LLAvatarData* data)
 {
     // only update the "unknown" status if they are showing as online, otherwise
     // we still don't know their true status
-    if (d->agent_id == gAgentID && d->flags & AVATAR_ONLINE)
+    if (data->agent_id == gAgentID && data->flags & AVATAR_ONLINE)
     {
         processOnlineStatus(false, true, true);
     }
@@ -1102,34 +918,26 @@ void LLPanelProfileSecondLife::onOpen(const LLSD& key)
     mAvatarNameCacheConnection = LLAvatarNameCache::get(getAvatarId(), boost::bind(&LLPanelProfileSecondLife::onAvatarNameCache, this, _1, _2));
 }
 
+// <FS:Beq> restore UDP profiles for opensim that does not support the cap
 void LLPanelProfileSecondLife::updateData()
 {
-    LLUUID avatar_id = getAvatarId();
-    if (!getStarted() && avatar_id.notNull())
-    {
-        setIsLoading();
-
-        std::string cap_url = gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP);
-        if (!cap_url.empty())
-        {
-            LLCoros::instance().launch("requestAgentUserInfoCoro",
-                [cap_url, avatar_id]() { request_avatar_properties_coro(cap_url, avatar_id); });
-        }
-        else
-        {
-            // <FS:Beq> restore UDP profiles for opensim that does not support the cap
 #ifdef OPENSIM
-            if (LLGridManager::instance().isInOpenSim() && !(getSelfProfile() /* TODO(Beq):No longer neeed? && !getEmbedded()*/))
-            {
-                LLAvatarPropertiesProcessor::getInstance()->sendAvatarGroupsRequest(avatar_id);
-            }
-            else
-#endif
-            // </FS:Beq>
-            LL_WARNS() << "Failed to update profile data, no cap found" << LL_ENDL;
+    if (LLGridManager::instance().isInOpenSim() && gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
+    {
+        LLUUID avatar_id = getAvatarId();
+        if (!getStarted() && avatar_id.notNull() && gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty() && !getSelfProfile())
+        {
+            setIsLoading();
+            LLAvatarPropertiesProcessor::getInstance()->sendAvatarGroupsRequest(avatar_id);
         }
     }
+    else
+#endif
+    {
+        LLPanelProfilePropertiesProcessorTab::updateData();
+    }
 }
+// </FS:Beq>
 
 void LLPanelProfileSecondLife::refreshName()
 {
@@ -1152,34 +960,6 @@ void LLPanelProfileSecondLife::apply(LLAvatarData* data)
 		LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesUpdate(data);
 	}
 #endif
-}
-
-void LLPanelProfileSecondLife::processProperties(void* data, EAvatarProcessorType type)
-{
-	// discard UDP replies for profile data if profile capability is available
-	// otherwise we will truncate profile descriptions to the old UDP limits
-	if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
-	{
-		return;
-	}
-
-	if (APT_PROPERTIES_LEGACY == type)
-	{
-		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
-		if(avatar_data && getAvatarId() == avatar_data->avatar_id)
-		{
-			processProfileProperties(avatar_data);
-			setLoaded();
-		}
-	}
-	else if (APT_GROUPS == type)
-	{
-		LLAvatarGroups* avatar_groups = static_cast<LLAvatarGroups*>(data);
-		if(avatar_groups && getAvatarId() == avatar_groups->avatar_id)
-		{
-			processGroupProperties(avatar_groups);
-		}
-	}
 }
 // </FS:Beq>
 
@@ -1251,6 +1031,44 @@ void LLPanelProfileSecondLife::resetData()
     // </FS:Ansariel>
 }
 
+void LLPanelProfileSecondLife::processProperties(void* data, EAvatarProcessorType type)
+{
+    if (APT_PROPERTIES == type)
+    {
+        LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
+        if (avatar_data && getAvatarId() == avatar_data->avatar_id)
+        {
+            processProfileProperties(avatar_data);
+        }
+    }
+
+	// <FS:Beq> Restore UDP profiles
+	// discard UDP replies for profile data if profile capability is available
+	// otherwise we will truncate profile descriptions to the old UDP limits
+	if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
+	{
+		return;
+	}
+
+	if (APT_PROPERTIES_LEGACY == type)
+	{
+		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
+		if(avatar_data && getAvatarId() == avatar_data->avatar_id)
+		{
+			processProfileProperties(avatar_data);
+		}
+	}
+	else if (APT_GROUPS == type)
+	{
+		LLAvatarGroups* avatar_groups = static_cast<LLAvatarGroups*>(data);
+		if(avatar_groups && getAvatarId() == avatar_groups->avatar_id)
+		{
+			processGroupProperties(avatar_groups);
+		}
+	}
+	// </FS:Beq>
+}
+
 void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avatar_data)
 {
     const LLRelationship* relationship = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
@@ -1277,6 +1095,19 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
     fillPartnerData(avatar_data);
 
     fillAccountStatus(avatar_data);
+
+    if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty()) { // <FS>
+    LLAvatarData::group_list_t::const_iterator it = avatar_data->group_list.begin();
+    const LLAvatarData::group_list_t::const_iterator it_end = avatar_data->group_list.end();
+
+    for (; it_end != it; ++it)
+    {
+        LLAvatarData::LLGroupData group_data = *it;
+        mGroups[group_data.group_name] = group_data.group_id;
+    }
+
+    mGroupList->setGroups(mGroups);
+    } // </FS>
 
 // <FS:Beq> Restore UDP profiles
 #ifdef OPENSIM
@@ -1307,6 +1138,7 @@ void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avat
     updateButtons();
 }
 
+// <FS> OpenSim
 void LLPanelProfileSecondLife::processGroupProperties(const LLAvatarGroups* avatar_groups)
 {
     LLAvatarGroups::group_list_t::const_iterator it = avatar_groups->group_list.begin();
@@ -1320,6 +1152,7 @@ void LLPanelProfileSecondLife::processGroupProperties(const LLAvatarGroups* avat
 
     mGroupList->setGroups(mGroups);
 }
+// </FS>
 
 void LLPanelProfileSecondLife::openGroupProfile()
 {
@@ -1690,14 +1523,15 @@ void LLPanelProfileSecondLife::fillAgeData(const LLAvatarData* avatar_data)
     // <FS:Ansariel> Fix LL UI/UX design accident
     //// Date from server comes already converted to stl timezone,
     //// so display it as an UTC + 0
-    //std::string name_and_date = getString(avatar_data->hide_age ? "date_format_short" : "date_format_full");
+    //bool hide_age = avatar_data->hide_age && !getSelfProfile();
+    //std::string name_and_date = getString(hide_age ? "date_format_short" : "date_format_full");
     //LLSD args_name;
     //args_name["datetime"] = (S32)avatar_data->born_on.secondsSinceEpoch();
     //LLStringUtil::format(name_and_date, args_name);
     //getChild<LLUICtrl>("sl_birth_date")->setValue(name_and_date);
 
     //LLUICtrl* userAgeCtrl = getChild<LLUICtrl>("user_age");
-    //if (avatar_data->hide_age)
+    //if (hide_age)
     //{
     //    userAgeCtrl->setVisible(FALSE);
     //}
@@ -1831,7 +1665,7 @@ void LLPanelProfileSecondLife::setAvatarId(const LLUUID& avatar_id)
             LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
         }
 
-        LLPanelProfilePropertiesProcessorTab::setAvatarId(avatar_id); // <FS:Beq/> Change ancestry to restore UDP profiles
+        LLPanelProfilePropertiesProcessorTab::setAvatarId(avatar_id);
 
         if (LLAvatarActions::isFriend(getAvatarId()))
         {
@@ -1874,7 +1708,7 @@ void LLPanelProfileSecondLife::processOnlineStatus(bool is_friend, bool show_onl
         mPropertiesObserver.mPanelProfile = this;
         mPropertiesObserver.mRequester = gAgentID;
         LLAvatarPropertiesProcessor::getInstance()->addObserver(getAvatarId(), &mPropertiesObserver);
-        LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(getAvatarId());
+        LLAvatarPropertiesProcessor::getInstance()->sendAvatarLegacyPropertiesRequest(getAvatarId());
 
         return;
     }
@@ -2771,6 +2605,8 @@ void LLPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent e
             LLStringUtil::format_map_t args;
             args["[TIME]"] = llformat("%.2f", mPerformanceTimer.getElapsedTimeF32());
             childSetValue("status_text", LLSD( getString("LoadTime", args)) );
+
+            setLoaded();
         }
         break;
 
@@ -2786,7 +2622,7 @@ void LLPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent e
 //////////////////////////////////////////////////////////////////////////
 
 LLPanelProfileFirstLife::LLPanelProfileFirstLife()
- : LLPanelProfilePropertiesProcessorTab()  // <FS:Beq/> alter ancestry to re-enable UDP
+ : LLPanelProfilePropertiesProcessorTab()
  , mHasUnsavedChanges(false)
 {
 }
@@ -3058,16 +2894,8 @@ void LLPanelProfileFirstLife::onDiscardDescriptionChanges()
     setDescriptionText(mCurrentDescription);
 }
 
-// <FS:Beq> Restore UDP profiles
 void LLPanelProfileFirstLife::processProperties(void * data, EAvatarProcessorType type)
 {
-	// discard UDP replies for profile data if profile capability is available
-	// otherwise we will truncate profile first life descriptions to the old UDP limits
-	if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
-	{
-		return;
-	}
-
     if (APT_PROPERTIES == type)
 	{
         const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
@@ -3076,8 +2904,17 @@ void LLPanelProfileFirstLife::processProperties(void * data, EAvatarProcessorTyp
             processProperties(avatar_data);
         }
     }
+	// <FS:Beq> Restore UDP profiles
+    else if (gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty() && APT_PROPERTIES_LEGACY == type)
+	{
+        const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
+		if (avatar_data && getAvatarId() == avatar_data->avatar_id)
+		{
+            processProperties(avatar_data);
+        }
+    }
+	// </FS:Beq>
 }
-// </FS:Beq>
 
 void LLPanelProfileFirstLife::processProperties(const LLAvatarData* avatar_data)
 {
@@ -3152,7 +2989,7 @@ void LLPanelProfileFirstLife::setLoaded()
 //////////////////////////////////////////////////////////////////////////
 
 LLPanelProfileNotes::LLPanelProfileNotes()
-: LLPanelProfilePropertiesProcessorTab()  // <FS:Beq/> alter ancestry to re-enable UDP
+: LLPanelProfilePropertiesProcessorTab()
  , mHasUnsavedChanges(false)
 {
 
@@ -3162,29 +2999,26 @@ LLPanelProfileNotes::~LLPanelProfileNotes()
 {
 }
 
+// <FS:Beq> Restore UDP profiles
 void LLPanelProfileNotes::updateData()
 {
-    LLUUID avatar_id = getAvatarId();
-    if (!getStarted() && avatar_id.notNull())
-    {
-        setIsLoading();
-
-        std::string cap_url = gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP);
-        if (!cap_url.empty())
-        {
-            LLCoros::instance().launch("requestAgentUserInfoCoro",
-                [cap_url, avatar_id]() { request_avatar_properties_coro(cap_url, avatar_id); });
-        }
-// <FS:Beq> Restore UDO profiles
 #ifdef OPENSIM
-        else if(LLGridManager::instance().isInOpenSim())
+    if (LLGridManager::instance().isInOpenSim() && gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
+    {
+        LLUUID avatar_id = getAvatarId();
+        if (!getStarted() && avatar_id.notNull() && gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty() && !getSelfProfile())
         {
+            setIsLoading();
             LLAvatarPropertiesProcessor::getInstance()->sendAvatarNotesRequest(avatar_id);
         }
+    }
+    else
 #endif
-// </FS:Beq>
+    {
+        LLPanelProfilePropertiesProcessorTab::updateData();
     }
 }
+// </FS:Beq>
 
 void LLPanelProfileNotes::commitUnsavedChanges()
 {
@@ -3267,45 +3101,42 @@ void LLPanelProfileNotes::onDiscardNotesChanges()
     setNotesText(mCurrentNotes);
 }
 
-void LLPanelProfileNotes::processProperties(LLAvatarNotes* avatar_notes)
+void LLPanelProfileNotes::processProperties(void* data, EAvatarProcessorType type)
 {
-    setNotesText(avatar_notes->notes);
+    if (APT_PROPERTIES == type)
+    {
+        LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
+        if (avatar_data && getAvatarId() == avatar_data->avatar_id)
+        {
+            processProperties(avatar_data);
+        }
+    }
+
+    // <FS:Beq> Restore UDP profiles
+    else if (gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty() && APT_NOTES == type)
+    {
+        LLAvatarNotes* avatar_notes = static_cast<LLAvatarNotes*>(data);
+        if (avatar_notes && getAvatarId() == avatar_notes->target_id)
+        {
+            LLAvatarData avatardata;
+            avatardata.notes = avatar_notes->notes;
+            processProperties(&avatardata);
+        }
+    }
+    // </FS:Beq>
+}
+
+void LLPanelProfileNotes::processProperties(const LLAvatarData* avatar_data)
+{
+    setNotesText(avatar_data->notes);
     mNotesEditor->setEnabled(TRUE);
     setLoaded();
 }
-// <FS:Beq> Restore UDP profiles
-void LLPanelProfileNotes::processProperties(void * data, EAvatarProcessorType type)
-{
-	// discard UDP replies for profile data if profile capability is available
-	// otherwise we will truncate profile notes to the old UDP limits
-	if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
-	{
-		return;
-	}
-
-    if (APT_NOTES == type)
-	{
-		LLAvatarNotes* avatar_notes = static_cast<LLAvatarNotes*>(data);
-		if (avatar_notes && getAvatarId() == avatar_notes->target_id)
-        {
-            processProperties(avatar_notes);
-        }
-    }
-}
-// </FS:Beq>
 
 void LLPanelProfileNotes::resetData()
 {
     resetLoading();
     setNotesText(std::string());
-}
-
-void LLPanelProfileNotes::setAvatarId(const LLUUID& avatar_id)
-{
-    if (avatar_id.notNull())
-    {
-        LLPanelProfilePropertiesProcessorTab::setAvatarId(avatar_id); // <FS:Beq/> alter ancestry to re-enable UDP
-    }
 }
 
 
@@ -3396,17 +3227,17 @@ void LLPanelProfile::updateData()
         mPanelFirstlife->setIsLoading();
         mPanelNotes->setIsLoading();
         } // <FS:Beq/> restore udp profiles
-        std::string cap_url = gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP);
-        if (!cap_url.empty())
-        {
-            LLCoros::instance().launch("requestAgentUserInfoCoro",
-                [cap_url, avatar_id]() { request_avatar_properties_coro(cap_url, avatar_id); });
-        }
+
 // <FS:Beq> Restore UDP profiles
+        //LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(getAvatarId());
+        if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
+        {
+            LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(getAvatarId());
+        }
 #ifdef OPENSIM
         else if (LLGridManager::instance().isInOpenSim())
         {
-            LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(avatar_id);
+            LLAvatarPropertiesProcessor::getInstance()->sendAvatarLegacyPropertiesRequest(avatar_id);
         }
 #endif
 // </FS:Beq>

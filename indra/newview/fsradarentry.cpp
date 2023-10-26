@@ -35,6 +35,8 @@
 #include "llviewerregion.h"
 #include "rlvhandler.h"
 
+static constexpr char* CAPNAME = "AgentProfile";
+
 FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 	: mID(avid),
 	mName(LLTrans::getString("AvatarNameWaiting")),
@@ -62,16 +64,21 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 		// NOTE: typically we request these once on creation to avoid excess traffic/processing. 
 		//This means updates to these properties won't typically be seen while target is in nearby range.
 		LLAvatarPropertiesProcessor* processor = LLAvatarPropertiesProcessor::getInstance();
-
 		processor->addObserver(mID, this);
-		processor->sendAvatarNotesRequest(mID);
 
 		if (auto region = gAgent.getRegion(); region)
 		{
 			if (region->capabilitiesReceived())
 			{
-				const bool use_cap = LLGridManager::instance().isInSecondLife() ? true : region->isCapabilityAvailable("AgentProfile");
-				processor->sendAvatarPropertiesRequest(mID, use_cap);
+				if (LLGridManager::instance().isInSecondLife() || region->isCapabilityAvailable(CAPNAME))
+				{
+					processor->sendAvatarPropertiesRequest(mID);
+				}
+				else
+				{
+					processor->sendAvatarLegacyPropertiesRequest(mID);
+					processor->sendAvatarNotesRequest(mID);
+				}
 			}
 			else
 			{
@@ -82,8 +89,15 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 							mRegionCapabilitiesReceivedCallbackConnection.disconnect();
 						}
 						gAgent.removeRegionChangedCallback(mRegionChangedCallbackConnection);
-						const bool use_cap = LLGridManager::instance().isInSecondLife() ? true : (reg && reg->isCapabilityAvailable("AgentProfile"));
-						LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(mID, use_cap);
+						if (LLGridManager::instance().isInSecondLife() || (reg && reg->isCapabilityAvailable(CAPNAME)))
+						{
+							LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(mID);
+						}
+						else
+						{
+							LLAvatarPropertiesProcessor::getInstance()->sendAvatarLegacyPropertiesRequest(mID);
+							LLAvatarPropertiesProcessor::getInstance()->sendAvatarNotesRequest(mID);
+						}
 					};
 
 				mRegionChangedCallbackConnection = gAgent.addRegionChangedCallback([this, capsReceivedCb]()
@@ -98,8 +112,15 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
 							if (newregion->capabilitiesReceived())
 							{
 								gAgent.removeRegionChangedCallback(mRegionChangedCallbackConnection);
-								const bool use_cap = LLGridManager::instance().isInSecondLife() ? true : newregion->isCapabilityAvailable("AgentProfile");
-								LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(mID, use_cap);
+								if (LLGridManager::instance().isInSecondLife() || newregion->isCapabilityAvailable(CAPNAME))
+								{
+									LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(mID);
+								}
+								else
+								{
+									LLAvatarPropertiesProcessor::getInstance()->sendAvatarLegacyPropertiesRequest(mID);
+									LLAvatarPropertiesProcessor::getInstance()->sendAvatarNotesRequest(mID);
+								}
 							}
 							else
 							{
@@ -165,7 +186,7 @@ void FSRadarEntry::processProperties(void* data, EAvatarProcessorType type)
 {
 	if (data)
 	{
-		if (type == APT_PROPERTIES || type == APT_PROPERTIES_LEGACY)
+		if (type == APT_PROPERTIES)
 		{
 			LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
 			if (avatar_data && avatar_data->agent_id == gAgentID && avatar_data->avatar_id == mID)
@@ -175,6 +196,17 @@ void FSRadarEntry::processProperties(void* data, EAvatarProcessorType type)
 					mAge = -2;
 				else
 					mAge = ((LLDate::now().secondsSinceEpoch() - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
+				checkAge();
+				setNotes(avatar_data->notes);
+			}
+		}
+		else if (type == APT_PROPERTIES_LEGACY)
+		{
+			LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
+			if (avatar_data && avatar_data->agent_id == gAgentID && avatar_data->avatar_id == mID)
+			{
+				mStatus = avatar_data->flags;
+				mAge = ((LLDate::now().secondsSinceEpoch() - (avatar_data->born_on).secondsSinceEpoch()) / 86400);
 				checkAge();
 			}
 		}

@@ -112,8 +112,7 @@ public:
 	 * Sends update data request to server.
 	 */
     void apply(LLAvatarData* data);
-    void processProperties(void* data, EAvatarProcessorType type) override;
-	void updateData() override;
+	void updateData() override; // <FS> OpenSim
     void refreshName();
 
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
@@ -124,10 +123,10 @@ public:
     bool hasUnsavedChanges() override;
     void commitUnsavedChanges() override;
 
-    friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
+    void processProperties(void* data, EAvatarProcessorType type) override;
 
     // <FS:Zi> FIRE-32184: Online/Offline status not working for non-friends
-    void onAvatarProperties(const LLAvatarData* d);
+    void onAvatarProperties(const LLAvatarData* data);
 
 protected:
 	/**
@@ -138,6 +137,7 @@ protected:
 	/**
 	 * Processes group related data received from server.
 	 */
+	// <FS> OpenSim
 	void processGroupProperties(const LLAvatarGroups* avatar_groups);
 
 	/**
@@ -307,8 +307,6 @@ public:
 
 	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 
-    friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
-
 protected:
 	void onCommitLoad(LLUICtrl* ctrl);
 
@@ -337,8 +335,8 @@ public:
 
 	BOOL postBuild() override;
 
+    void processProperties(void* data, EAvatarProcessorType type) override;
     void processProperties(const LLAvatarData* avatar_data);
-    void processProperties(void * data, EAvatarProcessorType type) override;
     void apply(LLAvatarData* data);
 	void resetData() override;
 
@@ -347,8 +345,6 @@ public:
 
     bool hasUnsavedChanges() override { return mHasUnsavedChanges; }
     void commitUnsavedChanges() override;
-
-    friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
 
 protected:
 	void setLoaded() override;
@@ -391,16 +387,15 @@ public:
 	LLPanelProfileNotes();
 	/*virtual*/ ~LLPanelProfileNotes();
 
-	void setAvatarId(const LLUUID& avatar_id) override;
-
 	void onOpen(const LLSD& key) override;
 
 	BOOL postBuild() override;
 
-    void processProperties(LLAvatarNotes* avatar_notes);
-    void processProperties(void * data, EAvatarProcessorType type) override;
+    void processProperties(void* data, EAvatarProcessorType type) override;
+    void processProperties(const LLAvatarData* avatar_data);
 	void resetData() override;
 
+	// <FS> OpenSim
 	void updateData() override;
 
     bool hasUnsavedChanges() override { return mHasUnsavedChanges; }
@@ -452,8 +447,6 @@ public:
     LLAvatarData getAvatarData() { return mAvatarData; };
     void setAvatarData(const LLAvatarData* avatar_data){ mAvatarData = *avatar_data; };
 
-    friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
-
 private:
     void onTabChange();
 
@@ -465,6 +458,7 @@ private:
     LLPanelProfileNotes*        mPanelNotes;
     LLTabContainer*             mTabContainer;
 
+    // <FS> OpenSim
     // Todo: due to server taking minutes to update this needs a more long term storage
     // to reuse recently saved values if user opens floater again
     // Storage implementation depends onto how a cap will be implemented, if cap will be

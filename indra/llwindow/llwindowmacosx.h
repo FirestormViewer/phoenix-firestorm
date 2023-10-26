@@ -114,6 +114,11 @@ public:
 	F32 getSystemUISize() override;
 	void openFile(const std::string& file_name) override;
 	void setTitle(const std::string& title) override;
+    
+    bool getInputDevices(U32 device_type_filter,
+                         std::function<bool(std::string&, LLSD&, void*)> osx_callback,
+                         void* win_callback,
+                         void* userdata) override;
 
 	static std::vector<std::string> getDisplaysResolutionList();
 

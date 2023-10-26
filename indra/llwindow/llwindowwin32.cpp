@@ -4612,7 +4612,10 @@ void* LLWindowWin32::getDirectInput8()
     return &gDirectInput8;
 }
 
-bool LLWindowWin32::getInputDevices(U32 device_type_filter, void * di8_devices_callback, void* userdata)
+bool LLWindowWin32::getInputDevices(U32 device_type_filter,
+                                    std::function<bool(std::string&, LLSD&, void*)> osx_callback,
+                                    void * di8_devices_callback,
+                                    void* userdata)
 {
     if (gDirectInput8 != NULL)
     {
