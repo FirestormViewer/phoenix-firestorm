@@ -117,7 +117,6 @@
 #include "rlvactions.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
-#include "exopostprocess.h" // <FS:CR> Import Vignette from Exodus
 
 #include "llenvironment.h"
 
@@ -204,6 +203,7 @@ F32 LLPipeline::RenderShadowFOVCutoff;
 bool LLPipeline::CameraOffset;
 F32 LLPipeline::CameraMaxCoF;
 F32 LLPipeline::CameraDoFResScale;
+LLVector3 LLPipeline::RenderVignette;
 F32 LLPipeline::RenderAutoHideSurfaceAreaLimit;
 bool LLPipeline::RenderScreenSpaceReflections;
 S32 LLPipeline::RenderScreenSpaceReflectionIterations;
@@ -1132,7 +1132,7 @@ void LLPipeline::refreshCachedSettings()
 	CameraOffset = gSavedSettings.getBOOL("CameraOffset");
 	CameraMaxCoF = gSavedSettings.getF32("CameraMaxCoF");
 	CameraDoFResScale = gSavedSettings.getF32("CameraDoFResScale");
-	exoPostProcess::instance().ExodusRenderPostSettingsUpdate();	// <FS:CR> Import Vignette from Exodus
+	RenderVignette = gSavedSettings.getVector3("FSRenderVignette"); // <FS:Beq/> redo the vignette
 
 	RenderAutoHideSurfaceAreaLimit = gSavedSettings.getF32("RenderAutoHideSurfaceAreaLimit");
     RenderScreenSpaceReflections = gSavedSettings.getBOOL("RenderScreenSpaceReflections");
@@ -1145,8 +1145,6 @@ void LLPipeline::refreshCachedSettings()
 	RenderBufferVisualization = gSavedSettings.getS32("RenderBufferVisualization");
     sReflectionProbesEnabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderReflectionsEnabled") && gSavedSettings.getBOOL("RenderReflectionsEnabled");
 	RenderSpotLight = nullptr;
-
-	exoPostProcess::instance().ExodusRenderPostUpdate(); // <FS:CR> Import Vignette from Exodus
 
 	if (gNonInteractive)
 	{
@@ -1253,7 +1251,6 @@ void LLPipeline::createGLBuffers()
     stop_glerror();
 	assertInitialized();
 
-	exoPostProcess::instance().ExodusRenderPostUpdate(); // <FS:CR> Import Vignette from Exodus
     // Use FBO for bake tex
     // <FS:Ansariel> Allow higher resolution rendering in mesh render preview
     //mBake.allocate(512, 512, GL_RGBA, true); // SL-12781 Build > Upload > Model; 3D Preview
@@ -7233,6 +7230,51 @@ void LLPipeline::combineGlow(LLRenderTarget* src, LLRenderTarget* dst)
 	dst->flush();
 }
 
+// <FS:Beq> updated Vignette code (based on original Exo Vignette)
+void LLPipeline::renderVignette(LLRenderTarget* src, LLRenderTarget* dst)
+{
+	if (RenderVignette.mV[0] > 0.f)
+	{
+		LL_PROFILE_GPU_ZONE("Vignette");
+		dst->bindTarget();
+		LLGLSLShader *shader = &gPostVignetteProgram;
+
+		// bind the progam and output to screentriangle VBO		
+		shader->bind();
+
+		S32 channel = shader->enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, src->getUsage());
+		if (channel > -1)
+		{
+			src->bindTexture(0, channel, LLTexUnit::TFO_POINT);
+		}
+		else
+		{
+			LL_ERRS("vignette") << "Failed to bind diffuse texture" << LL_ENDL;
+		}
+
+		shader->uniform2f(
+			LLShaderMgr::DEFERRED_SCREEN_RES,
+			dst->getWidth(),
+			dst->getHeight() );
+		shader->uniform3fv(
+			LLShaderMgr::RENDER_VIGNETTE, 
+			1, 
+			RenderVignette.mV);
+
+		mScreenTriangleVB->setBuffer();
+		mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
+		stop_glerror();
+
+		shader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, src->getUsage());
+		shader->unbind();
+		dst->flush();
+	}
+	else
+	{
+		copyRenderTarget(src, dst);
+	}
+}
+// </FS:Beq>
 void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
 {
 	{
@@ -7472,7 +7514,7 @@ void LLPipeline::renderFinalize()
     gGL.setColorMask(true, true);
     glClearColor(0, 0, 0, 0);
 
-    
+
     copyScreenSpaceReflections(&mRT->screen, &mSceneMap);
 
     generateLuminance(&mRT->screen, &mLuminanceMap);
@@ -7494,8 +7536,12 @@ void LLPipeline::renderFinalize()
 	glViewport(gGLViewport[0], gGLViewport[1], gGLViewport[2], gGLViewport[3]);
 
 	renderDoF(&mRT->screen, &mPostMap);
-
 	applyFXAA(&mPostMap, &mRT->screen);
+	// <FS:Beq> Restore shader post proc for Vignette
+	// LLRenderTarget* finalBuffer = &mRT->screen;
+    renderVignette(&mRT->screen, &mPostMap); // <FS:Beq/> Restore shader post proc.
+	copyRenderTarget(&mPostMap, &mRT->screen);
+	// </FS:Beq>
 	LLRenderTarget* finalBuffer = &mRT->screen;
 	if (RenderBufferVisualization > -1)
     {

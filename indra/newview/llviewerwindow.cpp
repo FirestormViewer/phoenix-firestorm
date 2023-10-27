@@ -242,7 +242,6 @@
 #endif
 
 #include "utilitybar.h"		// <FS:Zi> Support for the classic V1 style buttons in some skins
-#include "exopostprocess.h"	// <FS:Ansariel> Exodus Vignette
 #include "llnetmap.h"
 #include "lggcontactsets.h"
 #include "fspanellogin.h"
@@ -2070,7 +2069,6 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	LL_INFOS("RenderInit") << "LLVertexBuffer initialization done." << LL_ENDL ;
 	gGL.init(true);
 	// <FS:Ansariel> Exodus vignette
-	exoPostProcess::getInstance(); // Make sure we've created one of these
 
 	if (LLFeatureManager::getInstance()->isSafe()
 		|| (gSavedSettings.getS32("LastFeatureVersion") != LLFeatureManager::getInstance()->getVersion())
@@ -2688,11 +2686,6 @@ void LLViewerWindow::shutdownGL()
 
 	gGL.shutdown();
 	
-	// <FS:Ansariel> Exodus vignette
-	// This must die before LLVertexBuffer does
-	exoPostProcess::deleteSingleton();
-	// </FS:Ansariel> Exodus vignette
-
 	SUBSYSTEM_CLEANUP(LLVertexBuffer);
 
 	LL_INFOS() << "LLVertexBuffer cleaned." << LL_ENDL ;

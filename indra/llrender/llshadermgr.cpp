@@ -1402,8 +1402,7 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("translationPalette");
 	
 // <FS:CR> Import Vignette from Exodus
-	mReservedUniforms.push_back("exo_vignette");
-	mReservedUniforms.push_back("exo_screen");
+	mReservedUniforms.push_back("vignette");
 // </FS:CR> Import Vignette from Exodus
 	
 	mReservedUniforms.push_back("screenTex");

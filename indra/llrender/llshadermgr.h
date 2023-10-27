@@ -217,8 +217,7 @@ public:
         AVATAR_TRANSLATION,                 //  "translationPalette"
 
         // <FS:CR> Import Vignette from Exodus
-        EXO_RENDER_VIGNETTE,                //  "exo_vignette"
-        EXO_RENDER_SCREEN,                  //  "exo_screen"
+        RENDER_VIGNETTE,                    //  "vignette"
         // </FS:CR> Import Vignette from Exodus
 
         WATER_SCREENTEX,                    //  "screenTex"
