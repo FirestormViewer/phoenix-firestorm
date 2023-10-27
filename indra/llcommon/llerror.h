@@ -397,11 +397,9 @@ typedef LLError::NoClassInfo _LL_CLASS_TO_LOG;
 #define LL_NEWLINE '\n'
 
 // Use this only in LL_ERRS or in a place that LL_ERRS may not be used
-#define LLERROR_CRASH         \
-{                             \
-    int* make_me_crash = NULL;\
-    *make_me_crash = 0;       \
-    exit(*make_me_crash);     \
+#define LLERROR_CRASH                                   \
+{                                                       \
+    crashdriver([](int* ptr){ *ptr = 0; exit(*ptr); }); \
 }
 
 #define LL_ENDL                                         \
@@ -483,6 +481,8 @@ typedef LLError::NoClassInfo _LL_CLASS_TO_LOG;
 Resist the temptation to add a function like this because it incurs the
 expense of locking and map-searching every time control reaches it.
 bool debugLoggingEnabled(const std::string& tag);
+// used by LLERROR_CRASH
+void crashdriver(void (*)(int*));
 
 Instead of:
 

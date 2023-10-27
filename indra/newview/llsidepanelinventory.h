@@ -39,6 +39,7 @@ class LLLayoutPanel;
 class LLPanelMainInventory;
 class LLSidepanelItemInfo;
 class LLSidepanelTaskInfo;
+class LLFloater; // <FS:Ansariel> Secondary inventory window
 
 class LLSidepanelInventory : public LLPanel
 {
@@ -86,6 +87,9 @@ public:
 	bool isInboxEnabled() const { return mInboxEnabled; }
 
 	static void cleanup();
+
+	// <FS:Ansariel> Secondary inventory window
+	static LLFloater* createSecondaryInventoryWindow(const LLSD& key);
 
 protected:
 	// Tracks highlighted (selected) item in inventory panel.

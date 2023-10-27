@@ -260,7 +260,10 @@ BOOL LLSidepanelInventory::postBuild()
 	//gSavedSettings.getControl("InventoryDisplayInbox")->getCommitSignal()->connect(boost::bind(&handleInventoryDisplayInboxChanged));
 
     LLFloater *floater = dynamic_cast<LLFloater*>(getParent());
-    if (floater && floater->getKey().isUndefined() && !sLoginCompleted)
+    // <FS:Ansariel> Secondary inventory window
+    //if (floater && floater->getKey().isUndefined() && !sLoginCompleted)
+    if (floater && ((floater->getKey().isUndefined() && !sLoginCompleted) || (floater->getKey().has("is_secondary") && floater->getKey()["is_secondary"].asBoolean())))
+    // </FS:Ansariel>
     {
         // Prefill inventory for primary inventory floater
         // Other floaters should fill on visibility change
@@ -702,3 +705,11 @@ void LLSidepanelInventory::onReloadInboxClicked()
 	}
 }
 // </FS:Zi>
+
+// <FS:Ansariel> Secondary inventory window
+//static
+LLFloater* LLSidepanelInventory::createSecondaryInventoryWindow(const LLSD& key)
+{
+	return LLFloaterReg::build<LLFloaterSidePanelContainer>(LLSD().with("is_secondary", true));
+}
+// </FS:Ansariel>

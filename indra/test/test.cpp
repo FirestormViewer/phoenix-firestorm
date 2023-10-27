@@ -102,10 +102,10 @@ public:
 class RecordToTempFile : public LLError::Recorder, public boost::noncopyable
 {
 public:
-	RecordToTempFile(apr_pool_t* pPool)
+	RecordToTempFile()
 		: LLError::Recorder(),
 		boost::noncopyable(),
-		mTempFile("log", "", pPool),
+		mTempFile("log", ""),
 		mFile(mTempFile.getName().c_str())
 	{
 	}
@@ -146,11 +146,11 @@ private:
 class LLReplayLogReal: public LLReplayLog, public boost::noncopyable
 {
 public:
-	LLReplayLogReal(LLError::ELevel level, apr_pool_t* pool)
+	LLReplayLogReal(LLError::ELevel level)
 		: LLReplayLog(),
 		boost::noncopyable(),
 		mOldSettings(LLError::saveAndResetSettings()),
-		mRecorder(new RecordToTempFile(pool))
+		mRecorder(new RecordToTempFile())
 	{
 		LLError::setFatalFunction(wouldHaveCrashed);
 		LLError::setDefaultLevel(level);
@@ -636,7 +636,7 @@ int main(int argc, char **argv)
 		if (LOGFAIL && *LOGFAIL)
 		{
 			LLError::ELevel level = LLError::decodeLevel(LOGFAIL);
-			replayer.reset(new LLReplayLogReal(level, gAPRPoolp));
+			replayer.reset(new LLReplayLogReal(level));
 		}
 	}
 	LLError::setFatalFunction(wouldHaveCrashed);
