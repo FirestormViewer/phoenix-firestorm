@@ -137,11 +137,9 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 	// left mouse down always picks transparent (but see handleMouseUp).
 	// Also see LLToolPie::handleHover() - priorities are a bit different there.
 	// Todo: we need a more consistent set of rules to work with
-	if (transp_object == visible_object || !visible_object)
+	if (transp_object == visible_object || !visible_object || 
+        !transp_object) // avoid potential for null dereference below, don't make assumptions about behavior of pickImmediate
 	{
-		// Note: if transparent object is null, then visible object is also null
-		// since transparent pick includes non-tranpsarent one.
-		// !transparent_object check will be covered by transparent_object == visible_object.
 		mPick = transparent_pick;
 	}
 	// <FS:ND> FIRE-29031; Handle transparent being nullptr (due to RLVa?). visible_object cannot be invalid here or the if above had been entered

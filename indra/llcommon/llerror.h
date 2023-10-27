@@ -481,8 +481,6 @@ typedef LLError::NoClassInfo _LL_CLASS_TO_LOG;
 Resist the temptation to add a function like this because it incurs the
 expense of locking and map-searching every time control reaches it.
 bool debugLoggingEnabled(const std::string& tag);
-// used by LLERROR_CRASH
-void crashdriver(void (*)(int*));
 
 Instead of:
 
@@ -502,5 +500,8 @@ LL_ENDL;
 LL_DEBUGS("SomeTag") performs the locking and map-searching ONCE, then caches
 the result in a static variable.
 */ 
+
+// used by LLERROR_CRASH
+void crashdriver(void (*)(int*));
 
 #endif // LL_LLERROR_H

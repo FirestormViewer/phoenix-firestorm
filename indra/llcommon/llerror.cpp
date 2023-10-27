@@ -1621,8 +1621,6 @@ namespace LLError
     }
 }
 
-
-
 void crashdriver(void (*callback)(int*))
 {
     // The LLERROR_CRASH macro used to have inline code of the form:

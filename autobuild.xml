@@ -2814,7 +2814,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash</key>
               <string>05b72ae5d733aed7d3bf142287601cc6</string>
               <key>hash_algorithm</key>
-              <string>sha1</string>
+              <string>md5</string>
               <key>url</key>
               <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/110586/960637/tracy-v0.8.1.578241-windows64-578241.tar.bz2</string>
             </map>
