@@ -1037,10 +1037,12 @@ LLFolderViewFolder * LLInventoryPanel::createFolderViewFolder(LLInvFVBridge * br
 	//	params.tool_tip = params.name; // <ND/> Don't bother with tooltips in inventory
     params.allow_drop = allow_drop;
 
-	params.font_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultColor);
-	params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultHighlightColor);
-
 	// <FS:Ansariel> Inventory specials
+	//params.font_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultColor);
+	//params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultHighlightColor);
+	params.font_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultColor));
+	params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultHighlightColor));
+	
 	params.for_inventory = true;
 
 	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::getInstance()->mSettingGroups["config"], "FSFolderViewItemHeight");
@@ -1063,10 +1065,12 @@ LLFolderViewItem * LLInventoryPanel::createFolderViewItem(LLInvFVBridge * bridge
 	params.rect = LLRect (0, 0, 0, 0);
 	//	params.tool_tip = params.name; // <ND/> Don't bother with tooltips in inventory
 
-	params.font_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultColor);
-	params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultHighlightColor);
-
 	// <FS:Ansariel> Inventory specials
+	//params.font_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultColor);
+	//params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultHighlightColor);
+	params.font_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultColor));
+	params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultHighlightColor));
+
 	params.for_inventory = true;
 
 	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::getInstance()->mSettingGroups["config"], "FSFolderViewItemHeight");
