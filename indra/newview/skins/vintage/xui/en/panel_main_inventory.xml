@@ -81,6 +81,16 @@
 				function="Floater.Toggle"
 				parameter="fs_protectedfolders" />
 		</menu_item_check>
+		<menu_item_check
+			label="Inventory settings..."
+			name="inv_settings">
+		<menu_item_check.on_check
+			function="Floater.Visible"
+			parameter="inventory_settings" />
+		<menu_item_check.on_click
+			function="Floater.Toggle"
+			parameter="inventory_settings" />
+		</menu_item_check>
 		<menu_item_separator />
 		<menu_item_check
 			label="Add objects on double click"
