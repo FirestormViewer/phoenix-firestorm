@@ -377,7 +377,7 @@
          text_readonly_color="LabelDisabledColor"
          top_pad="4"
          width="170">
-          Reflection Detail:
+          Reflection Coverage:
         </text>
         <combo_box
          control_name="RenderReflectionProbeLevel"
