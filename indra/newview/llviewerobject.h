@@ -513,6 +513,7 @@ public:
 	void getInventoryContents(LLInventoryObject::object_list_t& objects);
 	LLInventoryObject* getInventoryRoot();
 	LLViewerInventoryItem* getInventoryItemByAsset(const LLUUID& asset_id);
+    LLViewerInventoryItem* getInventoryItemByAsset(const LLUUID& asset_id, LLAssetType::EType type);
 	S16 getInventorySerial() const { return mInventorySerialNum; }
 
 	// These functions does viewer-side only object inventory modifications
@@ -656,7 +657,7 @@ public:
 
 private:
     void setObjectCostStale();
-    bool isAssetInInventory(LLViewerInventoryItem* item);
+    bool isAssetInInventory(LLViewerInventoryItem* item, LLAssetType::EType type);
 
 	ExtraParameter* createNewParameterEntry(U16 param_type);
 	ExtraParameter* getExtraParameterEntry(U16 param_type) const;

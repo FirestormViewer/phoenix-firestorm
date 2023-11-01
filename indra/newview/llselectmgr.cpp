@@ -6016,6 +6016,8 @@ void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data
 		}
 		else
 		{
+            // save texture data as soon as we get texture perms first time
+            bool save_textures = !node->mValid;
 			// <FS:Beq> FIRE-19738 Object content caching improvement
 			// if (node->mInventorySerial != inv_serial && node->getObject())
 			// {
@@ -6028,10 +6030,14 @@ void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data
 					obj->dirtyInventory();
 				}
 			// </FS:Beq>
+
+                // Even if this isn't object's first udpate, inventory changed
+                // and some of the applied textures might have been in inventory
+                // so update texture list.
+                save_textures = true;
 			}
 
-			// save texture data as soon as we get texture perms first time
-			if (!node->mValid)
+			if (save_textures)
 			{
 				BOOL can_copy = FALSE;
 				BOOL can_transfer = FALSE;
