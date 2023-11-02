@@ -2959,11 +2959,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ad0c8b41ee4b4de216382bec46ee1c25962a3f12</string>
+              <string>71a9c7c03a2c26cdb21fa476de485d9c</string>
               <key>hash_algorithm</key>
-              <string>sha1</string>
+              <string>md5</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-xmlrpc-epi/releases/download/v0.54.1.8a05acf/xmlrpc_epi-0.54.1.8a05acf-linux64-8a05acf.tar.zst</string>
+              <string>http://3p.firestormviewer.org/xmlrpc_epi-0.54.2.230940042-linux64-230940042.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
