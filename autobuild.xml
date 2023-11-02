@@ -948,8 +948,6 @@
           <map>
             <key>archive</key>
             <map>
-              <key>creds</key>
-              <string>github</string>
               <key>hash</key>
               <string>bfcc4acbe6b8dddaf10f0f7a47e4aad8</string>
               <key>hash_algorithm</key>
@@ -964,8 +962,6 @@
           <map>
             <key>archive</key>
             <map>
-              <key>creds</key>
-              <string>github</string>
               <key>hash</key>
               <string>14846f1a55274399362db4b674fcded6</string>
               <key>hash_algorithm</key>
@@ -980,8 +976,6 @@
           <map>
             <key>archive</key>
             <map>
-              <key>creds</key>
-              <string>github</string>
               <key>hash</key>
               <string>7b38bd83eb63f25df7c5a20070a05732</string>
               <key>hash_algorithm</key>
@@ -1484,8 +1478,6 @@
           <map>
             <key>archive</key>
             <map>
-              <key>creds</key>
-              <string>github</string>
               <key>hash</key>
               <string>3142fccbcc0e2c5a019e3177ef364290</string>
               <key>url</key>
@@ -1498,8 +1490,6 @@
           <map>
             <key>archive</key>
             <map>
-              <key>creds</key>
-              <string>github</string>
               <key>hash</key>
               <string>e13d6fe708613bb3a5d630c4cdd97a3b</string>
               <key>url</key>
@@ -1512,8 +1502,6 @@
           <map>
             <key>archive</key>
             <map>
-              <key>creds</key>
-              <string>github</string>
               <key>hash</key>
               <string>4aa7df19125708580055b42190d2511e</string>
               <key>url</key>
