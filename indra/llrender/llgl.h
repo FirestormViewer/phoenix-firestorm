@@ -79,7 +79,9 @@ public:
 	bool initGL();
 	void shutdownGL();
 
+#if LL_WINDOWS
 	void initWGL(); // Initializes stupid WGL extensions
+#endif
 
 	std::string getRawGLString(); // For sending to simulator
 
@@ -106,6 +108,8 @@ public:
 	
 	// Vendor-specific extensions
     bool mHasAMDAssociations = false;
+	bool mHasNVXMemInfo = false;
+	bool mHasATIMemInfo = false;
 
 	BOOL mIsAMD;
 	BOOL mIsNVIDIA;

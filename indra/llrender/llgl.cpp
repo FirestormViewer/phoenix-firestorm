@@ -54,6 +54,13 @@
 #include "lldxhardware.h"
 #endif
 
+#if LL_SDL
+#include "SDL2/SDL_video.h"
+
+#define GLH_EXT_GET_PROC_ADDRESS SDL_GL_GetProcAddress
+#define ExtensionExists(exten, unused) SDL_GL_ExtensionSupported(exten);
+#endif
+
 #ifdef _DEBUG
 //#define GL_STATE_VERIFY
 #endif
@@ -1003,9 +1010,9 @@ LLGLManager::LLGLManager() :
 //---------------------------------------------------------------------
 // Global initialization for GL
 //---------------------------------------------------------------------
+#if LL_WINDOWS && !LL_MESA_HEADLESS
 void LLGLManager::initWGL()
 {
-#if LL_WINDOWS && !LL_MESA_HEADLESS
 	if (!glh_init_extensions("WGL_ARB_pixel_format"))
 	{
 		LL_WARNS("RenderInit") << "No ARB pixel format extensions" << LL_ENDL;
@@ -1043,8 +1050,8 @@ void LLGLManager::initWGL()
 	{
 		LL_WARNS("RenderInit") << "No ARB WGL render texture extensions" << LL_ENDL;
 	}
-#endif
 }
+#endif
 
 // return false if unable (or unwilling due to old drivers) to init GL
 bool LLGLManager::initGL()
@@ -1133,7 +1140,7 @@ bool LLGLManager::initGL()
 	// Trailing space necessary to keep "nVidia Corpor_ati_on" cards
 	// from being recognized as ATI.
     // NOTE: AMD has been pretty good about not breaking this check, do not rename without good reason
-	if (mGLVendor.substr(0,4) == "ATI ")
+	if (mGLVendor.substr(0,4) == "ATI " || mGLVendor.find("AMD") != std::string::npos)
 	{
 		mGLVendorShort = "AMD";
 		// *TODO: Fix this?
@@ -1213,6 +1220,24 @@ bool LLGLManager::initGL()
 		}
 	}
 #endif
+
+	// Ultimate fallbacks for linux and mesa
+	if (mHasNVXMemInfo && mVRAM == 0)
+	{
+		S32 dedicated_memory;
+		glGetIntegerv(GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &dedicated_memory);
+		mVRAM = dedicated_memory/1024;
+		LL_INFOS("RenderInit") << "VRAM Detected (NVXMemInfo):" << mVRAM << LL_ENDL;
+	}
+
+	if (mHasATIMemInfo && mVRAM == 0)
+	{ //ask the gl how much vram is free at startup and attempt to use no more than half of that
+		S32 meminfo[4];
+		glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI, meminfo);
+
+		mVRAM = meminfo[0] / 1024;
+		LL_INFOS("RenderInit") << "VRAM Detected (ATIMemInfo):" << mVRAM << LL_ENDL;
+	}
 
 	if (mVRAM < 256 && old_vram > 0)
 	{
@@ -1412,9 +1437,13 @@ void LLGLManager::initExtensions()
 
 // <FS:Zi> Linux support
 //#if (LL_WINDOWS || LL_LINUX) && !LL_MESA_HEADLESS
+	mHasATIMemInfo = ExtensionExists("GL_ATI_meminfo", gGLHExts.mSysExts); //Basic AMD method, also see mHasAMDAssociations
+	mHasNVXMemInfo = ExtensionExists("GL_NVX_gpu_memory_info", gGLHExts.mSysExts);
+
+	LL_DEBUGS("RenderInit") << "GL Probe: Getting symbols" << LL_ENDL;
+
 #if LL_WINDOWS
 // </FS:Zi>
-	LL_DEBUGS("RenderInit") << "GL Probe: Getting symbols" << LL_ENDL;
 
 // <FS:Zi> Linux support
 // #if LL_WINDOWS
