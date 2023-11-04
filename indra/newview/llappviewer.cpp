@@ -2571,8 +2571,7 @@ bool LLAppViewer::initThreads()
     // The only configurable thread count right now is ImageDecode
     // The viewer typically starts around 8 threads not including image decode, 
     // so try to leave at least one core free
-    //S32 image_decode_count = llclamp(cores - 9, 1, 8);
-    S32 image_decode_count = llclamp(cores - 2, 1, 8); // <FS:Ansariel> Make this a bit more sane
+    S32 image_decode_count = llclamp(cores - 9, 1, 8);
 	threadCounts["ImageDecode"] = image_decode_count;
     gSavedSettings.setLLSD("ThreadPoolSizes", threadCounts);
 
