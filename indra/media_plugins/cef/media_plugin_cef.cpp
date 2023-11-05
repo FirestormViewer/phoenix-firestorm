@@ -1081,8 +1081,7 @@ void MediaPluginCEF::keyEvent(dullahan::EKeyEvent key_event, LLSD native_key_dat
 			keypad = true;
 		}
 
-		// yes, we send native_virtual_key_win twice because native_virtual_key breaks it
-		mCEFLib->nativeKeyboardEventSDL2(key_event, native_virtual_key_win, native_virtual_key_win, native_modifiers, keypad);
+		mCEFLib->nativeKeyboardEventSDL2(key_event, native_virtual_key_win, native_modifiers, keypad);
 	}
 
 #else
