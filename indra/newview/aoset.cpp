@@ -117,7 +117,7 @@ AOSet::AOSet(const LLUUID inventoryID)
 		mStates[index].mRandom = false;
 		mStates[index].mCycleTime = 0.0f;
 		mStates[index].mDirty = false;
-		mStateNames.push_back(stateNameList[0]);
+		mStateNames.emplace_back(stateNameList[0]);
 	}
 	stopTimer();
 }
@@ -137,7 +137,7 @@ AOSet::AOState* AOSet::getStateByName(const std::string& name)
 	for (S32 index = 0; index < AOSTATES_MAX; ++index)
 	{
 		AOState* state = &mStates[index];
-		for (U32 names = 0; names < state->mAlternateNames.size(); ++names)
+		for (auto names = 0; names < state->mAlternateNames.size(); ++names)
 		{
 			if (state->mAlternateNames[names].compare(name) == 0)
 			{
@@ -170,7 +170,7 @@ const LLUUID& AOSet::getAnimationForState(AOState* state) const
 {
 	if (state)
 	{
-		S32 numOfAnimations = state->mAnimations.size();
+		auto numOfAnimations = state->mAnimations.size();
 		if (numOfAnimations)
 		{
 			if (state->mCycle)
