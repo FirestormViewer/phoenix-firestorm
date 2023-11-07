@@ -156,7 +156,7 @@
              top="80"
              width="100">
                 <combo_box.item
-                 label="Blinn-Phong"
+                 label="Textures"
                  name="Materials"
                  value="Materials" />
                 <combo_box.item
