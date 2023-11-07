@@ -847,9 +847,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ad7b9fc10184e8145731f45ae400bfd1</string>
+              <string>c539c58aee1d010928ae29ad344656a5</string>
               <key>url</key>
-              <string>http://3p.firestormviewer.org/dullahan-1.12.2.202210012157_92.0.27_g274abcf_chromium-92.0.4515.159-linux64-222741156.tar.bz2</string>
+              <string>http://3p.firestormviewer.org/dullahan-1.14.0.202311061750_118.6.8_ge44bee1_chromium-118.0.5993.117-linux64-233100650.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -948,14 +948,12 @@
           <map>
             <key>archive</key>
             <map>
-              <key>creds</key>
-              <string>github</string>
               <key>hash</key>
-              <string>8ee7c21f3f109cf4e1709e4af0b4bebf</string>
+              <string>bfcc4acbe6b8dddaf10f0f7a47e4aad8</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.17-darwin64-232401806.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.18-darwin64-232960129.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -964,8 +962,6 @@
           <map>
             <key>archive</key>
             <map>
-              <key>creds</key>
-              <string>github</string>
               <key>hash</key>
               <string>14846f1a55274399362db4b674fcded6</string>
               <key>hash_algorithm</key>
@@ -980,8 +976,6 @@
           <map>
             <key>archive</key>
             <map>
-              <key>creds</key>
-              <string>github</string>
               <key>hash</key>
               <string>7b38bd83eb63f25df7c5a20070a05732</string>
               <key>hash_algorithm</key>
@@ -1484,8 +1478,6 @@
           <map>
             <key>archive</key>
             <map>
-              <key>creds</key>
-              <string>github</string>
               <key>hash</key>
               <string>3142fccbcc0e2c5a019e3177ef364290</string>
               <key>url</key>
@@ -1498,8 +1490,6 @@
           <map>
             <key>archive</key>
             <map>
-              <key>creds</key>
-              <string>github</string>
               <key>hash</key>
               <string>e13d6fe708613bb3a5d630c4cdd97a3b</string>
               <key>url</key>
@@ -1512,8 +1502,6 @@
           <map>
             <key>archive</key>
             <map>
-              <key>creds</key>
-              <string>github</string>
               <key>hash</key>
               <string>4aa7df19125708580055b42190d2511e</string>
               <key>url</key>
@@ -2959,11 +2947,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ad0c8b41ee4b4de216382bec46ee1c25962a3f12</string>
+              <string>71a9c7c03a2c26cdb21fa476de485d9c</string>
               <key>hash_algorithm</key>
-              <string>sha1</string>
+              <string>md5</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-xmlrpc-epi/releases/download/v0.54.1.8a05acf/xmlrpc_epi-0.54.1.8a05acf-linux64-8a05acf.tar.zst</string>
+              <string>http://3p.firestormviewer.org/xmlrpc_epi-0.54.2.230940042-linux64-230940042.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

@@ -105,9 +105,9 @@ void FloaterAO::updateAnimationList()
 		return;
 	}
 
-	for (U32 index = 0; index < mSelectedSet->mStateNames.size(); ++index)
+	for (auto index = 0; index < mSelectedSet->mStateNames.size(); ++index)
 	{
-		std::string stateName = mSelectedSet->mStateNames[index];
+		const std::string& stateName = mSelectedSet->mStateNames[index];
 		AOSet::AOState* state = mSelectedSet->getStateByName(stateName);
 		mStateSelector->add(stateName, state, ADD_BOTTOM, TRUE);
 	}
@@ -178,8 +178,8 @@ void FloaterAO::updateList()
 		}
 	}
 
-	U32 selected_index = 0;
-	for (U32 index = 0; index < mSetList.size(); ++index)
+	size_t selected_index = 0;
+	for (auto index = 0; index < mSetList.size(); ++index)
 	{
 		std::string setName = mSetList[index]->getName();
 		mSetSelector->add(setName, &mSetList[index], ADD_BOTTOM, TRUE);
@@ -280,7 +280,7 @@ BOOL FloaterAO::postBuild()
 	onChangeAnimationSelection();
 	mMainInterfacePanel->setVisible(TRUE);
 	mSmallInterfacePanel->setVisible(FALSE);
-	reloading(TRUE);
+	reloading(true);
 
 	updateList();
 
@@ -464,7 +464,7 @@ void FloaterAO::onSelectState()
 	mSelectedState = (AOSet::AOState*)mStateSelector->getCurrentUserdata();
 	if (mSelectedState->mAnimations.size())
 	{
-		for (U32 index = 0; index < mSelectedState->mAnimations.size(); ++index)
+		for (auto index = 0; index < mSelectedState->mAnimations.size(); ++index)
 		{
 			LLScrollListItem* item = addAnimation(mSelectedState->mAnimations[index].mName);
 			if (item)
@@ -558,7 +558,7 @@ bool FloaterAO::removeSetCallback(const LLSD& notification, const LLSD& response
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 
-	if (option ==0 )
+	if (option ==0)
 	{
 		if (AOEngine::instance().removeSet(mSelectedSet))
 		{
@@ -638,7 +638,7 @@ void FloaterAO::onChangeAnimationSelection()
 		mAnimationList->deselectAllItems();
 		LL_DEBUGS("AOEngine") << "Selection count now: " << list.size() << LL_ENDL;
 	}
-	else if (list.size() > 0)
+	else if (!list.empty())
 	{
 		if (list.size() == 1)
 		{
@@ -715,7 +715,7 @@ void FloaterAO::onClickTrash()
 		return;
 	}
 
-	for (S32 index = list.size() - 1; index != -1; --index)
+	for (auto index = list.size() - 1; index != -1; --index)
 	{
 		AOEngine::instance().removeAnimation(mSelectedSet, mSelectedState, mAnimationList->getItemIndex(list[index]));
 	}
@@ -833,11 +833,8 @@ void FloaterAO::onAnimationChanged(const LLUUID& animation)
 	}
 
 	// why do we have no LLScrollListCtrl::getItemByUserdata() ? -Zi
-	std::vector<LLScrollListItem*> item_list = mAnimationList->getAllData();
-	std::vector<LLScrollListItem*>::const_iterator iter;
-	for (iter = item_list.begin(); iter != item_list.end(); ++iter)
+	for (auto item : mAnimationList->getAllData())
 	{
-		LLScrollListItem* item = *iter;
 		LLUUID* id = (LLUUID*)item->getUserdata();
 
 		if (id == &animation)
