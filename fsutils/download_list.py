@@ -226,10 +226,7 @@ DOWNLOADS - {build_type}
                 full_file = os.path.join(build_type_dir, dir, file)
                 md5 = get_md5(full_file)
                 base_name = os.path.basename(file)
-                if "x64" in base_name:
-                    wordsize = "64"
-                else:
-                    wordsize = "32"
+                wordsize = "64"
                 
                 if "FirestormOS-" in base_name:
                     grid = "OS"
@@ -258,15 +255,6 @@ DOWNLOADS - {build_type}
                 output += "\n"
                 output += f"MD5: {md5_dict[f'{grid}{dir}{wordsize}']}\n"
                 output += "\n"
-                if dir == "windows":
-                    # Need to do 32 bit as well
-                    wordsize = "32"
-                    output += f"{platform} for {grid_printable} ({wordsize}-bit)\n"
-                    output += f"{download_root}/{dir}/{os.path.basename(file_dict[f'{grid}{dir}{wordsize}'])}\n"
-                    output += "\n"
-                    output += f"MD5: {md5_dict[f'{grid}{dir}{wordsize}']}\n"
-                    output += "\n"
-                    wordsize = "64"
             except KeyError:
                 output += f"{platform} for {grid_printable} ({wordsize}-bit) - NOT AVAILABLE\n"
                 output += "\n"

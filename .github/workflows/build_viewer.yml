@@ -1,5 +1,6 @@
 name: Build viewer
 on:
+  workflow_dispatch:
   push:
     branches:
       - "Firestorm*.*.*"
