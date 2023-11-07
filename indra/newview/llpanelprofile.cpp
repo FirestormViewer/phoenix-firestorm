@@ -743,7 +743,7 @@ BOOL LLPanelProfileSecondLife::postBuild()
     mGroupList              = getChild<LLGroupList>("group_list");
     // <FS:Ansariel> Fix LL UI/UX design accident
     //mShowInSearchCombo      = getChild<LLComboBox>("show_in_search");
-    //mHideAgeCombo         = getChild<LLComboBox>("hide_age");
+    //mHideAgeCombo           = getChild<LLComboBox>("hide_age");
     mShowInSearchCheckbox   = getChild<LLCheckBoxCtrl>("show_in_search");
     mHideAgeCheckbox        = getChild<LLCheckBoxCtrl>("hide_sl_age");
     // </FS:Ansariel>
@@ -1554,35 +1554,26 @@ void LLPanelProfileSecondLife::fillAgeData(const LLAvatarData* avatar_data)
     getChild<LLUICtrl>("user_age")->setValue(register_date);
     // </FS:Ansariel>
 
+    BOOL showHideAgeCombo = FALSE;
     if (getSelfProfile())
     {
-        // <FS:Ansariel> OpenSim
-#ifdef OPENSIM
-        if (gAgent.getRegionCapability(PROFILE_IMAGE_UPLOAD_CAP).empty() && LLGridManager::instance().isInOpenSim())
+        if (LLAvatarPropertiesProcessor::getInstance()->isHideAgeSupportedByServer())
         {
-            mHideAgeCheckbox->setVisible(FALSE);
-            return;
-        }
-#endif
-        // </FS:Ansariel>
-
-        F64 birth = avatar_data->born_on.secondsSinceEpoch();
-        F64 now = LLDate::now().secondsSinceEpoch();
-        if (now - birth > 365 * 24 * 60 * 60)
-        {
-            mHideAge = avatar_data->hide_age;
-            // <FS:Ansariel> Fix LL UI/UX design accident
-            //mHideAgeCombo->setValue(mHideAge ? TRUE : FALSE);
-            mHideAgeCheckbox->setVisible(TRUE);
-            mHideAgeCheckbox->setValue(mHideAge ? FALSE : TRUE);
-        }
-        else
-        {
-            // <FS:Ansariel> Fix LL UI/UX design accident
-            //mHideAgeCombo->setVisible(FALSE);
-            mHideAgeCheckbox->setVisible(FALSE);
+            F64 birth = avatar_data->born_on.secondsSinceEpoch();
+            F64 now = LLDate::now().secondsSinceEpoch();
+            if (now - birth > 365 * 24 * 60 * 60)
+            {
+                mHideAge = avatar_data->hide_age;
+                // <FS:Ansariel> Fix LL UI/UX design accident
+                //mHideAgeCombo->setValue(mHideAge ? TRUE : FALSE);
+                mHideAgeCheckbox->setValue(mHideAge ? FALSE : TRUE);
+                showHideAgeCombo = TRUE;
+            }
         }
     }
+    // <FS:Ansariel> Fix LL UI/UX design accident
+    //mHideAgeCombo->setVisible(showHideAgeCombo);
+    mHideAgeCheckbox->setVisible(showHideAgeCombo);
 }
 
 void LLPanelProfileSecondLife::onImageLoaded(BOOL success, LLViewerFetchedTexture *imagep)
