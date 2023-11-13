@@ -778,7 +778,10 @@ void LLDrawable::movePartition()
 		if (mRenderType == LLPipeline::RENDER_TYPE_CONTROL_AV && isRoot())
 		{
 			LLControlAvatar* controlAvatar = dynamic_cast<LLControlAvatar*>(getVObj().get());
-			if (controlAvatar && controlAvatar->mControlAVBridge)
+			// <FS:Beq> FIRE-33367 toggling animesh state off causes a crash
+			// if (controlAvatar && controlAvatar->mControlAVBridge )
+			if (controlAvatar && controlAvatar->mControlAVBridge && controlAvatar->mControlAVBridge->mOctree)
+			// </FS:Beq>
 			{
 				((LLSpatialGroup*)controlAvatar->mControlAVBridge->mOctree->getListener(0))->setState(LLViewerOctreeGroup::DIRTY);
 			}
