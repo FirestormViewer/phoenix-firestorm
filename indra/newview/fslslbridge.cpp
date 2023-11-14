@@ -643,7 +643,7 @@ void FSLSLBridge::recreateBridge()
 	//announce yourself
 	report_to_nearby_chat(LLTrans::getString("fsbridge_creating"));
 
-	setupFSCategory([this](const LLUUID& bridge_folder_id)
+	setupFSCategory([](const LLUUID& bridge_folder_id)
 		{
 			FSLSLBridgeInventoryPreCreationCleanupObserver* bridgeInventoryObserver = new FSLSLBridgeInventoryPreCreationCleanupObserver(bridge_folder_id);
 			bridgeInventoryObserver->startFetch();
