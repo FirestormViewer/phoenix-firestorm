@@ -876,7 +876,8 @@ void LLSpatialGroup::rebound()
             LLControlAvatar* controlAvatar = bridge->mDrawable->getVObj()->getControlAvatar();
             if (controlAvatar &&
                 controlAvatar->mDrawable &&
-                controlAvatar->mControlAVBridge)
+                controlAvatar->mControlAVBridge &&
+                controlAvatar->mControlAVBridge->mOctree)// <FS:Beq> FIRE-33367 toggling animesh state off causes a crash
             {
                 llassert(controlAvatar->mControlAVBridge->mOctree);
 

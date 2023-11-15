@@ -37,14 +37,14 @@ class StreamTitleDisplay : public LLSingleton<StreamTitleDisplay>
 	LLSINGLETON_EMPTY_CTOR(StreamTitleDisplay);
 
 public:
-	~StreamTitleDisplay() { }
+	~StreamTitleDisplay();
 
 protected:
 	void initSingleton() /*override*/;
 	void checkMetadata(const LLSD& metadata);
 	void sendStreamTitleToChat(std::string_view Title);
 
-	boost::signals2::connection mMetadataUpdateConnection;
+	boost::signals2::connection mMetadataUpdateConnection{};
 };
 
 #endif // STREAMTITLEDISPLAY_H

@@ -20,6 +20,9 @@
 			<menu_item_call name="inventory_new_window" label="Nowe okno" />
 			<menu_item_check name="Protected Folders" label="Foldery chronione" />
 			<menu_item_check label="Ustawienia..." name="inv_settings" />
+			<menu_item_check label="Widok listy" name="list_view" />
+			<menu_item_check label="Widok galerii" name="gallery_view" />
+			<menu_item_check label="Widok kombinowany" name="combination_view" />
 			<menu_item_check name="add_inv_toggle" label="Dodawaj obiekty po dwukliku" />
 			<menu_item_check name="add_invclothing_toggle" label="Dodawaj ubrania po dwukliku" />
 			<menu_item_call name="inventory_show_filters" label="Pokaż filtry" />

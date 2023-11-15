@@ -43,6 +43,14 @@
 #include "message.h"
 #include <functional>
 
+StreamTitleDisplay::~StreamTitleDisplay()
+{
+	if (mMetadataUpdateConnection.connected())
+	{
+		mMetadataUpdateConnection.disconnect();
+	}
+}
+
 void StreamTitleDisplay::initSingleton()
 {
 	if (!gAudiop || !gAudiop->getStreamingAudioImpl())

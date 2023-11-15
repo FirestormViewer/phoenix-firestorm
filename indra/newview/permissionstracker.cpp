@@ -43,7 +43,7 @@
 
 #include "permissionstracker.h"
 
-#define PERMISSION_ENTRY_EXPIRY_TIME	3600.0
+constexpr F64 PERMISSION_ENTRY_EXPIRY_TIME{ 3600.0 };
 
 PermissionsTracker::PermissionsTracker()
 :	LLSingleton<PermissionsTracker>()
@@ -63,18 +63,13 @@ void PermissionsTracker::addPermissionsEntry(const LLUUID& source_id, Permission
 		mPermissionsList[source_id].objectName = LLTrans::getString("LoadingData");
 
 		// find out if the object is still in reach
-		LLViewerObject* vo = gObjectList.findObject(source_id);
-		if (!vo)
-		{
-			mPermissionsList[source_id].objectName = LLTrans::getString("ObjectOutOfRange");
-		}
-		else
+		if (LLViewerObject* vo = gObjectList.findObject(source_id); vo && isAgentAvatarValid() && gAgentAvatarp->getRegion())
 		{
 			mPermissionsList[source_id].attachmentID = vo->getAttachmentItemID();
 			LL_DEBUGS("PermissionsTracker") << "Requesting ObjectProperties for source " << source_id << LL_ENDL;
 
 			// remember which object names we already requested
-			mRequestedIDs.push_back(source_id);
+			mRequestedIDs.emplace_back(source_id);
 
 			// send a request out to get this object's details
 			LLMessageSystem* msg = gMessageSystem;
@@ -94,6 +89,10 @@ void PermissionsTracker::addPermissionsEntry(const LLUUID& source_id, Permission
 			msg->nextBlockFast(_PREHASH_ObjectData);
 			msg->addU32Fast(_PREHASH_ObjectLocalID, vo->getLocalID());
 			msg->sendReliable(gAgentAvatarp->getRegion()->getHost());
+		}
+		else
+		{
+			mPermissionsList[source_id].objectName = LLTrans::getString("ObjectOutOfRange");
 		}
 	}
 
@@ -141,7 +140,7 @@ void PermissionsTracker::purgePermissionsEntries()
 void PermissionsTracker::warnFollowcam()
 {
 	std::string followcamList;
-	for (auto entry : mPermissionsList)
+	for (const auto& entry : mPermissionsList)
 	{
 		if (entry.second.type & PermissionsTracker::PERM_FOLLOWCAM)
 		{
@@ -167,8 +166,7 @@ void PermissionsTracker::warnFollowcam()
 				std::string slurl = args["slurl"].asString();
 				if (slurl.empty())
 				{
-					LLViewerRegion* region = LLWorld::instance().getRegionFromPosAgent(gAgentAvatarp->getPositionAgent());
-					if(region)
+					if (LLViewerRegion* region = LLWorld::instance().getRegionFromPosAgent(gAgentAvatarp->getPositionAgent()); region)
 					{
 						LLSLURL region_slurl(region->getName(), gAgentAvatarp->getPositionAgent());
 						slurl = region_slurl.getLocationString();
@@ -208,9 +206,8 @@ void PermissionsTracker::objectPropertiesCallback(LLMessageSystem* msg)
 		LLUUID source_id;
 		msg->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, source_id, index);
 
-		auto iter = std::find(mRequestedIDs.begin(), mRequestedIDs.end(), source_id);
 		// if this is one of the objects we were looking for, process the data
-		if (iter != mRequestedIDs.end())
+		if (auto iter = std::find(mRequestedIDs.begin(), mRequestedIDs.end(), source_id); iter != mRequestedIDs.end())
 		{
 			// get the name of the object
 			std::string object_name;
@@ -235,15 +232,12 @@ void PermissionsTracker::objectPropertiesCallback(LLMessageSystem* msg)
 					<< ": " << avatar_name.getCompleteName() << LL_ENDL;
 				mPermissionsList[source_id].ownerName = avatar_name.getCompleteName();
 			}
-			else
+			else if (mAvatarNameCacheConnections.find(object_owner) != mAvatarNameCacheConnections.end())
 			{
-				if (mAvatarNameCacheConnections.find(object_owner) != mAvatarNameCacheConnections.end())
-				{
-					boost::signals2::connection cb_connection = LLAvatarNameCache::get(object_owner, boost::bind(&PermissionsTracker::avatarNameCallback, this, _1, _2));
-					mAvatarNameCacheConnections.insert(std::make_pair(object_owner, cb_connection));
+				boost::signals2::connection cb_connection = LLAvatarNameCache::get(object_owner, boost::bind(&PermissionsTracker::avatarNameCallback, this, _1, _2));
+				mAvatarNameCacheConnections.insert(std::make_pair(object_owner, cb_connection));
 
-					LL_DEBUGS("PermissionsTracker") << "Requesting avatar name for owner " << object_owner.asString() << LL_ENDL;
-				}
+				LL_DEBUGS("PermissionsTracker") << "Requesting avatar name for owner " << object_owner.asString() << LL_ENDL;
 			}
 		}
 	}
@@ -253,8 +247,7 @@ void PermissionsTracker::avatarNameCallback(const LLUUID& avatar_id, const LLAva
 {
 	LL_DEBUGS("PermissionsTracker") << "Received avatar name " << avatar_name.getCompleteName() << LL_ENDL;
 
-	auto iter = mAvatarNameCacheConnections.find(avatar_id);
-	if (iter != mAvatarNameCacheConnections.end())
+	if (auto iter = mAvatarNameCacheConnections.find(avatar_id); iter != mAvatarNameCacheConnections.end())
 	{
 		if (iter->second.connected())
 		{
@@ -263,7 +256,7 @@ void PermissionsTracker::avatarNameCallback(const LLUUID& avatar_id, const LLAva
 		mAvatarNameCacheConnections.erase(iter);
 	}
 
-	for (auto entry : mPermissionsList)
+	for (auto& entry : mPermissionsList)
 	{
 		if (entry.second.ownerID == avatar_id)
 		{
