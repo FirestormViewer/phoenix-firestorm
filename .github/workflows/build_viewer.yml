@@ -13,8 +13,6 @@ env:
   EXTRA_ARGS: -DUSE_FMODSTUDIO=ON -DUSE_KDU=ON --crashreporting
   build_secrets_checkout: ${{github.workspace}}/signing
   XZ_DEFAULTS: -T0
-
-
 jobs:
   build_matrix:
     strategy:
@@ -31,21 +29,28 @@ jobs:
           #   addrsize: 32
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Install Bash 4 and GNU sed on Mac
+        if: runner.os == 'macOS'
+        run: |
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          brew update
+          brew install bash
+          brew install gnu-sed
+
+          echo "/usr/local/bin" >> $GITHUB_PATH
+          echo "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
+
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
-        id: py311
+        id: py312
         with:
-          python-version: '3.11'
+          python-version: '3.11.6'
           cache: 'pip'
 
-      - if: runner.os == 'Windows'
-        run: |
-          python3 -m pip install -r requirements.txt --user
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-
-      - if: runner.os != 'Windows'
+      - name: Install python requirements
         run: |
           python3 -m pip install -r requirements.txt
+          python -m pip install -r requirements.txt
 
       - name: Check python version
         run: python -V
@@ -55,6 +60,14 @@ jobs:
       - name: Test python llsd
         run: |
           python - <<EOF
+          import llsd
+          print("Hello from inline Python script!")
+          EOF
+        shell: bash
+
+      - name: Test python3 llsd
+        run: |
+          python3 - <<EOF
           import llsd
           print("Hello from inline Python script!")
           EOF
@@ -72,17 +85,6 @@ jobs:
           echo "CC=gcc-10" >> $GITHUB_ENV
           echo "CXX=g++-10" >> $GITHUB_ENV
 
-      - name: Install Bash 4 and GNU sed on Mac
-        if: runner.os == 'macOS'
-        run: |
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          brew update
-
-          brew install bash
-          brew install gnu-sed
-
-          echo "/usr/local/bin" >> $GITHUB_PATH
-          echo "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
 
       - name: Setup rclone and download the folder
         uses: beqjanus/setup-rclone@main
