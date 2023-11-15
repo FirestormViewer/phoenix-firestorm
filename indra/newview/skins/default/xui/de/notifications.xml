@@ -1795,12 +1795,12 @@ Fortfahren?
 	<notification name="GroupLeaveConfirmMember">
 		Möchten Sie die Gruppe &lt;nolink&gt;[GROUP]&lt;/nolink&gt; verlassen?
 Ein erneutes Beitreten kostet aktuell [COST] L$.
-		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Verlassen"/>
 	</notification>
 	<notification name="GroupLeaveConfirmMemberNoFee">
 		Möchten Sie die Gruppe &lt;nolink&gt;[GROUP]&lt;/nolink&gt; verlassen?
 Ein erneutes Beitreten ist aktuell kostenlos.
-		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Verlassen"/>
 	</notification>
 	<notification name="OwnerCannotLeaveGroup">
 		Sie können die Gruppe nicht verlassen, da Sie der letzte Besitzer der Gruppe sind. Weisen Sie die Besitzerrolle zuerst einem anderen Mitglied zu.
