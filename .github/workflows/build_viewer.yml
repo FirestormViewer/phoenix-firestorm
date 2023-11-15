@@ -1,5 +1,6 @@
 name: Build viewer
 on:
+  workflow_dispatch:
   push:
     branches:
       - "Firestorm*.*.*"
@@ -21,14 +22,7 @@ jobs:
       matrix:
         os: [macos-11,ubuntu-20.04,windows-2022]
         grid: [sl,os]
-        addrsize: [64,32]
-        exclude:
-          - os: ubuntu-20.04
-            addrsize: 32
-          - os: macos-11
-            addrsize: 32
-          # - grid: sl
-          #   addrsize: 32
+        addrsize: [64]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -322,5 +316,5 @@ jobs:
           rclone_config: ${{ secrets.RCLONE_CONFIG }}
 
       - name: Copy files to remote host
-        run: rclone copy ${{steps.download.outputs.download-path}}/${{ env.FS_RELEASE_FOLDER }} fs_deploy:${{ env.FS_RELEASE_FOLDER }}
+        run: rclone copy ${{steps.download.outputs.download-path}}/${{ env.FS_RELEASE_FOLDER }} fs_r2_deploy:viewerdownloads/${{ env.FS_RELEASE_FOLDER }}
 
