@@ -174,7 +174,7 @@ protected:
 	LLLayoutPanel* mToolbarPanel;
 	LLLayoutPanel* mInputButtonPanel;
 	LLLayoutPanel* mEmojiRecentPanel;
-	LLView* mEmojiRecentEmptyText;
+	LLTextBox* mEmojiRecentEmptyText;
 	LLPanelEmojiComplete* mEmojiRecentIconsCtrl;
 	LLParticipantList* getParticipantList();
 	conversations_widgets_map mConversationsWidgets;
@@ -218,11 +218,11 @@ private:
 	void onInputEditorClicked();
 
 	static void onEmojiRecentPanelToggleBtnClicked(LLFloaterIMSessionTab* self);
-	static void onEmojiPickerToggleBtnClicked(LLFloaterIMSessionTab* self);
+	static void onEmojiPickerToggleBtnClicked();
 	void initEmojiRecentPanel(bool moveFocus);
 	void onRecentEmojiPicked(const LLSD& value);
-	void onEmojiPicked(llwchar emoji);
-	void onEmojiPickerClosed();
+	static void onEmojiPicked(llwchar emoji);
+	static void onEmojiPickerClosed();
 
 	bool checkIfTornOff();
 	bool mIsHostAttached;

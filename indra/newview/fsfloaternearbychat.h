@@ -137,7 +137,7 @@ private:
 	LLButton*			mEmojiRecentPanelToggleBtn;
 	LLButton*			mEmojiPickerToggleBtn;
 	LLLayoutPanel*		mEmojiRecentPanel;
-	LLView*				mEmojiRecentEmptyText;
+	LLTextBox*			mEmojiRecentEmptyText;
 	LLPanelEmojiComplete* mEmojiRecentIconsCtrl;
 	LLButton*			mSendChatButton;
 	LLComboBox*			mChatTypeCombo;

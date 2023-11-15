@@ -964,7 +964,8 @@ BOOL FSFloaterIM::postBuild()
 	mEmojiRecentPanel = getChild<LLLayoutPanel>("emoji_recent_layout_panel");
 	mEmojiRecentPanel->setVisible(false);
 
-	mEmojiRecentEmptyText = getChildView("emoji_recent_empty_text");
+	mEmojiRecentEmptyText = getChild<LLTextBox>("emoji_recent_empty_text");
+	mEmojiRecentEmptyText->setToolTip(mEmojiRecentEmptyText->getText());
 	mEmojiRecentEmptyText->setVisible(false);
 
 	mEmojiRecentIconsCtrl = getChild<LLPanelEmojiComplete>("emoji_recent_icons_ctrl");
@@ -2473,14 +2474,15 @@ bool FSFloaterIM::applyRectControl()
 
 void FSFloaterIM::onEmojiRecentPanelToggleBtnClicked(FSFloaterIM* self)
 {
-	bool restore_focus = (gFocusMgr.getLastKeyboardFocus() == self->mInputEditor);
+	bool show = !self->mEmojiRecentPanel->getVisible();
+	bool restore_focus = !show || (gFocusMgr.getLastKeyboardFocus() == self->mInputEditor);
 
-	BOOL show = !self->mEmojiRecentPanel->getVisible();
 	if (show)
 	{
 		self->initEmojiRecentPanel(!restore_focus);
 	}
-	self->mEmojiRecentPanel->setVisible(show);
+
+	self->mEmojiRecentPanel->setVisible(show ? TRUE : FALSE);
 	self->mEmojiRecentPanelToggleBtn->setImageOverlay(show ? "Arrow_Up" : "Arrow_Down");
 
 	if (restore_focus)
@@ -2494,8 +2496,8 @@ void FSFloaterIM::initEmojiRecentPanel(bool moveFocus)
 	std::list<llwchar>& recentlyUsed = LLFloaterEmojiPicker::getRecentlyUsed();
 	if (recentlyUsed.empty())
 	{
-		mEmojiRecentEmptyText->setVisible(true);
-		mEmojiRecentIconsCtrl->setVisible(false);
+		mEmojiRecentEmptyText->setVisible(TRUE);
+		mEmojiRecentIconsCtrl->setVisible(FALSE);
 	}
 	else
 	{
@@ -2505,11 +2507,11 @@ void FSFloaterIM::initEmojiRecentPanel(bool moveFocus)
 			emojis += emoji;
 		}
 		mEmojiRecentIconsCtrl->setEmojis(emojis);
-		mEmojiRecentEmptyText->setVisible(false);
-		mEmojiRecentIconsCtrl->setVisible(true);
+		mEmojiRecentEmptyText->setVisible(FALSE);
+		mEmojiRecentIconsCtrl->setVisible(TRUE);
 		if (moveFocus)
 		{
-			mEmojiRecentIconsCtrl->setFocus(true);
+			mEmojiRecentIconsCtrl->setFocus(TRUE);
 		}
 	}
 }

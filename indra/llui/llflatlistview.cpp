@@ -1210,7 +1210,7 @@ void LLFlatListView::onFocusReceived()
 {
 	if (size())
 	{
-	mSelectedItemsBorder->setVisible(TRUE);
+		mSelectedItemsBorder->setVisible(TRUE);
 	}
 	gEditMenuHandler = this;
 }
@@ -1219,7 +1219,7 @@ void LLFlatListView::onFocusLost()
 {
 	mSelectedItemsBorder->setVisible(FALSE);
 	// Route menu back to the default
- 	if( gEditMenuHandler == this )
+	if (gEditMenuHandler == this)
 	{
 		gEditMenuHandler = NULL;
 	}
@@ -1228,16 +1228,16 @@ void LLFlatListView::onFocusLost()
 //virtual 
 S32 LLFlatListView::notify(const LLSD& info)
 {
-	if(info.has("action"))
+	if (info.has("action"))
 	{
 		std::string str_action = info["action"];
-		if(str_action == "select_first")
+		if (str_action == "select_first")
 		{
 			setFocus(true);
 			selectFirstItem();
 			return 1;
 		}
-		else if(str_action == "select_last")
+		else if (str_action == "select_last")
 		{
 			setFocus(true);
 			selectLastItem();
@@ -1250,6 +1250,7 @@ S32 LLFlatListView::notify(const LLSD& info)
 		notifyParentItemsRectChanged();
 		return 1;
 	}
+
 	return 0;
 }
 
@@ -1261,10 +1262,8 @@ void LLFlatListView::detachItems(std::vector<LLPanel*>& detached_items)
 	detached_items.clear();
 	// Go through items and detach valid items, remove them from items panel
 	// and add to detached_items.
-	for (pairs_iterator_t
-			 iter = mItemPairs.begin(),
-			 iter_end = mItemPairs.end();
-		 iter != iter_end; ++iter)
+	pairs_iterator_t iter = mItemPairs.begin(), iter_end = mItemPairs.end();
+	while (iter != iter_end)
 	{
 		LLPanel* pItem = (*iter)->first;
 		if (1 == pItem->notify(action))
@@ -1273,6 +1272,7 @@ void LLFlatListView::detachItems(std::vector<LLPanel*>& detached_items)
 			mItemsPanel->removeChild(pItem);
 			detached_items.push_back(pItem);
 		}
+		iter++;
 	}
 	if (!detached_items.empty())
 	{
@@ -1280,13 +1280,12 @@ void LLFlatListView::detachItems(std::vector<LLPanel*>& detached_items)
 		if (detached_items.size() == mItemPairs.size())
 		{
 			// This way will be faster if all items were disconnected
-			for (pairs_iterator_t
-					 iter = mItemPairs.begin(),
-					 iter_end = mItemPairs.end();
-				 iter != iter_end; ++iter)
+			pairs_iterator_t iter = mItemPairs.begin(), iter_end = mItemPairs.end();
+			while (iter != iter_end)
 			{
 				(*iter)->first = NULL;
 				delete *iter;
+				iter++;
 			}
 			mItemPairs.clear();
 			// Also set items panel height to zero.
@@ -1299,16 +1298,14 @@ void LLFlatListView::detachItems(std::vector<LLPanel*>& detached_items)
 		}
 		else
 		{
-			for (std::vector<LLPanel*>::const_iterator
-					 detached_iter = detached_items.begin(),
-					 detached_iter_end = detached_items.end();
-				 detached_iter != detached_iter_end; ++detached_iter)
+			std::vector<LLPanel*>::const_iterator
+				detached_iter = detached_items.begin(),
+				detached_iter_end = detached_items.end();
+			while (detached_iter < detached_iter_end)
 			{
 				LLPanel* pDetachedItem = *detached_iter;
-				for (pairs_iterator_t
-						 iter = mItemPairs.begin(),
-						 iter_end = mItemPairs.end();
-					 iter != iter_end; ++iter)
+				pairs_iterator_t iter = mItemPairs.begin(), iter_end = mItemPairs.end();
+				while (iter != iter_end)
 				{
 					item_pair_t* item_pair = *iter;
 					if (item_pair->first == pDetachedItem)
@@ -1318,7 +1315,9 @@ void LLFlatListView::detachItems(std::vector<LLPanel*>& detached_items)
 						delete item_pair;
 						break;
 					}
+					iter++;
 				}
+				detached_iter++;
 			}
 			rearrangeItems();
 		}
@@ -1334,7 +1333,6 @@ LLFlatListViewEx::Params::Params()
 : no_items_msg("no_items_msg")
 , no_filtered_items_msg("no_filtered_items_msg")
 {
-
 }
 
 LLFlatListViewEx::LLFlatListViewEx(const Params& p)
@@ -1344,7 +1342,6 @@ LLFlatListViewEx::LLFlatListViewEx(const Params& p)
 , mForceShowingUnmatchedItems(false)
 , mHasMatchedItems(false)
 {
-
 }
 
 void LLFlatListViewEx::updateNoItemsMessage(const std::string& filter_string)
@@ -1364,7 +1361,6 @@ void LLFlatListViewEx::updateNoItemsMessage(const std::string& filter_string)
 		// list does not contain any items at all
 		setNoItemsCommentText(mNoItemsMsg);
 	}
-
 }
 
 bool LLFlatListViewEx::getForceShowingUnmatchedItems()
@@ -1423,12 +1419,10 @@ void LLFlatListViewEx::filterItems()
 	getItems(items);
 
 	mHasMatchedItems = false;
-	for (item_panel_list_t::iterator
-			 iter = items.begin(),
-			 iter_end = items.end();
-		 iter != iter_end; ++iter)
+    item_panel_list_t::iterator iter = items.begin(), iter_end = items.end();
+	while (iter < iter_end)
 	{
-		LLPanel* pItem = (*iter);
+		LLPanel* pItem = *(iter++);
 		updateItemVisibility(pItem, action);
 	}
 

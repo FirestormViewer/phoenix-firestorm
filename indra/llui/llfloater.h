@@ -113,8 +113,6 @@ struct LLCoordFloater : LLCoord<LL_COORD_FLOATER>
 	bool operator!=(const LLCoordFloater& other) const { return !(*this == other); }
 
 	void setFloater(LLFloater& floater);
-
-	
 };
 
 class LLFloater : public LLPanel, public LLInstanceTracker<LLFloater>
@@ -247,6 +245,7 @@ public:
 	virtual void	closeHostedFloater();
 
 	/*virtual*/ void reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
+	/*virtual*/ void translate(S32 x, S32 y);
 	
 	// Release keyboard and mouse focus
 	void			releaseFocus();
@@ -268,7 +267,11 @@ public:
 	void			addDependentFloater(LLFloater* dependent, BOOL reposition = TRUE, BOOL resize = FALSE);
 	void			addDependentFloater(LLHandle<LLFloater> dependent_handle, BOOL reposition = TRUE, BOOL resize = FALSE);
 	LLFloater*		getDependee() { return (LLFloater*)mDependeeHandle.get(); }
-	void		removeDependentFloater(LLFloater* dependent);
+	void			removeDependentFloater(LLFloater* dependent);
+	// <FS:Ansariel> Fix floater relocation
+	//void			fitWithDependentsOnScreen(const LLRect& left, const LLRect& bottom, const LLRect& right, const LLRect& constraint, S32 min_overlap_pixels);
+	void			fitWithDependentsOnScreen(const LLRect& left, const LLRect& bottom, const LLRect& right, const LLRect& chatbar, const LLRect& utilitybar, const LLRect& constraint, S32 min_overlap_pixels);
+	// </FS:Ansariel>
 	BOOL			isMinimized() const				{ return mMinimized; }
 	/// isShown() differs from getVisible() in that isShown() also considers
 	/// isMinimized(). isShown() is true only if visible and not minimized.
@@ -531,6 +534,7 @@ private:
 	typedef std::set<LLHandle<LLFloater> > handle_set_t;
 	typedef std::set<LLHandle<LLFloater> >::iterator handle_set_iter_t;
 	handle_set_t	mDependents;
+	bool			mTranslateWithDependents { false };
 
 	bool			mButtonsEnabled[BUTTON_COUNT];
 	F32				mButtonScale;
