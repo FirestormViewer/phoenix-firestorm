@@ -177,7 +177,7 @@ bool FSLSLBridge::lslToViewer(std::string_view message, const LLUUID& fromID, co
 		return false;
 	}
 	std::string_view tag = message.substr(0, tagend + 1);
-	std::string ourBridge = getBridgeFolder().asString();
+	std::string ourBridge = findFSCategory().asString();
 	//</FS:TS> FIRE-962
 	
 	bool bridgeIsEnabled = gSavedSettings.getBOOL("UseLSLBridge");
@@ -214,7 +214,7 @@ bool FSLSLBridge::lslToViewer(std::string_view message, const LLUUID& fromID, co
 			
 			
 			// If something that looks like our current bridge is attached but failed auth, detach and recreate.
-			const LLUUID catID = getBridgeFolder();
+			const LLUUID catID = findFSCategory();
 			LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID);
 			if (fsBridge && get_is_item_worn(fsBridge->getUUID()))
 			{
@@ -252,7 +252,7 @@ bool FSLSLBridge::lslToViewer(std::string_view message, const LLUUID& fromID, co
 		
 		if (!mpBridge)
 		{
-			LLUUID catID = getBridgeFolder();
+			LLUUID catID = findFSCategory();
 			LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID);
 			mpBridge = fsBridge;
 		}
@@ -643,18 +643,19 @@ void FSLSLBridge::recreateBridge()
 	//announce yourself
 	report_to_nearby_chat(LLTrans::getString("fsbridge_creating"));
 
-	LLUUID catID = getBridgeFolder();
-
-	FSLSLBridgeInventoryPreCreationCleanupObserver* bridgeInventoryObserver = new FSLSLBridgeInventoryPreCreationCleanupObserver(catID);
-	bridgeInventoryObserver->startFetch();
-	if (bridgeInventoryObserver->isFinished())
-	{
-		bridgeInventoryObserver->done();
-	}
-	else
-	{
-		gInventory.addObserver(bridgeInventoryObserver);
-	}
+	setupFSCategory([](const LLUUID& bridge_folder_id)
+		{
+			FSLSLBridgeInventoryPreCreationCleanupObserver* bridgeInventoryObserver = new FSLSLBridgeInventoryPreCreationCleanupObserver(bridge_folder_id);
+			bridgeInventoryObserver->startFetch();
+			if (bridgeInventoryObserver->isFinished())
+			{
+				bridgeInventoryObserver->done();
+			}
+			else
+			{
+				gInventory.addObserver(bridgeInventoryObserver);
+			}
+		});
 }
 
 void FSLSLBridge::cleanUpPreCreation()
@@ -787,51 +788,53 @@ void FSLSLBridge::startCreation()
 	LL_INFOS("FSLSLBridge") << "startCreation called. gInventory.isInventoryUsable = " << (gInventory.isInventoryUsable() ? "true" : "false") << LL_ENDL;
 
 	//if bridge object doesn't exist - create and attach it, update script.
-	const LLUUID catID = getBridgeFolder();
-	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID);
-
-	//detach everything else
-	LL_INFOS("FSLSLBridge") << "Detaching other bridges..." << LL_ENDL;
-	detachOtherBridges();
-
-	if (!fsBridge)
-	{
-		LL_INFOS("FSLSLBridge") << "Bridge not found in inventory, creating new one..." << LL_ENDL;
-		// Don't create on OpenSim. We need to fallback to another creation process there, unfortunately.
-		// There is no way to ensure a rock object will ever be in a grid's Library.
-#if OPENSIM
-		if (LLGridManager::getInstance()->isInOpenSim())
+	setupFSCategory([this](const LLUUID& bridge_folder_id)
 		{
-			return;
-		}
-#endif
-		setBridgeCreating(true);
-		mFinishCreation = false;
-		//announce yourself
-		report_to_nearby_chat(LLTrans::getString("fsbridge_creating"));
+			LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, bridge_folder_id);
 
-		createNewBridge();
-	}
-	else
-	{
-		//TODO need versioning - see isOldBridgeVersion()
-		mpBridge = fsBridge;
-		if (!isItemAttached(mpBridge->getUUID()))
-		{
-			if (!LLAppearanceMgr::instance().getIsInCOF(mpBridge->getUUID()))
+			//detach everything else
+			LL_INFOS("FSLSLBridge") << "Detaching other bridges..." << LL_ENDL;
+			detachOtherBridges();
+
+			if (!fsBridge)
 			{
-				LL_INFOS("FSLSLBridge") << "Bridge not attached but found in inventory, reattaching..." << LL_ENDL;
+				LL_INFOS("FSLSLBridge") << "Bridge not found in inventory, creating new one..." << LL_ENDL;
+				// Don't create on OpenSim. We need to fallback to another creation process there, unfortunately.
+				// There is no way to ensure a rock object will ever be in a grid's Library.
+#if OPENSIM
+				if (LLGridManager::getInstance()->isInOpenSim())
+				{
+					return;
+				}
+#endif
+				setBridgeCreating(true);
+				mFinishCreation = false;
+				//announce yourself
+				report_to_nearby_chat(LLTrans::getString("fsbridge_creating"));
 
-				//Is this a valid bridge - wear it.
-				LLAttachmentsMgr::instance().addAttachmentRequest(mpBridge->getUUID(), FS_BRIDGE_POINT, TRUE, TRUE);
-				//from here, the attach should report to ProcessAttach and make sure bridge is valid.
+				createNewBridge();
 			}
 			else
 			{
-				LL_INFOS("FSLSLBridge") << "Bridge not found but in CoF. Waiting for automatic attach..." << LL_ENDL;
+				//TODO need versioning - see isOldBridgeVersion()
+				mpBridge = fsBridge;
+				if (!isItemAttached(mpBridge->getUUID()))
+				{
+					if (!LLAppearanceMgr::instance().getIsInCOF(mpBridge->getUUID()))
+					{
+						LL_INFOS("FSLSLBridge") << "Bridge not attached but found in inventory, reattaching..." << LL_ENDL;
+
+						//Is this a valid bridge - wear it.
+						LLAttachmentsMgr::instance().addAttachmentRequest(mpBridge->getUUID(), FS_BRIDGE_POINT, TRUE, TRUE);
+						//from here, the attach should report to ProcessAttach and make sure bridge is valid.
+					}
+					else
+					{
+						LL_INFOS("FSLSLBridge") << "Bridge not found but in CoF. Waiting for automatic attach..." << LL_ENDL;
+					}
+				}
 			}
-		}
-	}
+		});
 }
 
 void FSLSLBridge::createNewBridge()

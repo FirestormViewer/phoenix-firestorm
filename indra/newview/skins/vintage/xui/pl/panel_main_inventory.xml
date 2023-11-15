@@ -9,6 +9,9 @@
 	<panel.string name="ItemcountUnknown">
 		Pobrano [ITEM_COUNT] elementów [FILTER]
 	</panel.string>
+	<panel.string name="inventory_title">
+		Szafa
+	</panel.string>
 	<menu_bar name="inventory_menu_bar">
 		<menu label="Szafa" name="inventory_inventory_menu">
 			<menu_item_call name="inventory_open" label="Otwórz" />
@@ -16,6 +19,10 @@
 			<menu_item_call name="replace_links" label="Zastąp linki" />
 			<menu_item_call name="inventory_new_window" label="Nowe okno" />
 			<menu_item_check name="Protected Folders" label="Foldery chronione" />
+			<menu_item_check label="Ustawienia..." name="inv_settings" />
+			<menu_item_check label="Widok listy" name="list_view" />
+			<menu_item_check label="Widok galerii" name="gallery_view" />
+			<menu_item_check label="Widok kombinowany" name="combination_view" />
 			<menu_item_check name="add_inv_toggle" label="Dodawaj obiekty po dwukliku" />
 			<menu_item_check name="add_invclothing_toggle" label="Dodawaj ubrania po dwukliku" />
 			<menu_item_call name="inventory_show_filters" label="Pokaż filtry" />
@@ -62,6 +69,9 @@
 			<menu_item_check name="inventory_sort_system_on_top" label="Foldery systemowe na górze" />
 		</menu>
 		<menu label="Szukanie" name="inventory_search_menu">
+			<menu_item_check label="W strojach" name="search_outfits" />
+			<menu_item_check label="W koszu" name="search_trash" />
+			<menu_item_check label="W Bibliotece" name="search_library" />
 			<menu_item_check name="inventory_search_by_name" label="Po nazwie" />
 			<menu_item_check name="inventory_search_by_creator" label="Po twórcy" />
 			<menu_item_check name="inventory_search_by_description" label="Po opisie" />
@@ -77,7 +87,17 @@
 			<menu_item_check name="inventory_show_partial_results" label="Pokaż częściowe wyniki wyszukiwania" />
 		</menu>
 	</menu_bar>
-	<filter_editor label="Filtruj Szafę" name="inventory search editor" tool_tip="Wpisz jedno lub więcej słów które chcesz wyszukać, oddzielonych za pomocą '+' "/>
+	<layout_stack name="nav_stack">
+		<layout_panel name="nav_buttons">
+			<button name="back_btn" tool_tip="Wstecz" />
+			<button name="forward_btn" tool_tip="Naprzód" />
+			<button name="up_btn" tool_tip="Przejdź o jeden poziom wyżej" />
+		</layout_panel>
+		<layout_panel name="filter_panel">
+			<filter_editor label="Filtruj Szafę" name="inventory search editor" tool_tip="Wpisz jedno lub więcej słów które chcesz wyszukać, oddzielonych za pomocą '+' "/>
+			<button name="view_mode_btn" tool_tip="Przełącz między widokami" />
+		</layout_panel>
+	</layout_stack>
 	<button name="collapse_btn" label="Zwiń"/>
 	<button name="expand_btn" label="Rozwiń" />
 	<text name="filter_label" value="Filtruj:"/>
@@ -98,12 +118,14 @@
 		<combo_box.item value="filter_type_settings" label="Otoczenia" />
 		<combo_box.item value="filter_type_custom" label="Własny filtr..." />
 	</combo_box>
-	<menu_button tool_tip="Pokaż opcje widoczności wyszukiwania" name="options_visibility_btn" />
-	<tab_container name="inventory filter tabs">
-		<inventory_panel label="Wszystkie" name="All Items"/>
-		<recent_inventory_panel label="Ostatnie" name="Recent Items"/>
-		<worn_inventory_panel label="Założone" name="Worn Items"/>
-	</tab_container>
+	<!-- <menu_button tool_tip="Pokaż opcje widoczności wyszukiwania" name="options_visibility_btn" /> -->
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs">
+			<inventory_panel label="Wszystkie" name="All Items"/>
+			<recent_inventory_panel label="Ostatnie" name="Recent Items"/>
+			<worn_inventory_panel label="Założone" name="Worn Items"/>
+		</tab_container>
+	</panel>
 	<text name="ItemcountText" tool_tip="[ITEMS] przedmiotów, [CATEGORIES] folderów">
 		Elementy
 	</text>

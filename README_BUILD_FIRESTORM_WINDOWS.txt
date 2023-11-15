@@ -2,11 +2,11 @@ Before you start configuring your Windows build system, be aware of our tested c
     Memory: You will need at least 2GB RAM, 4GB strongly recommended.
     CPU: Multiple CPUs are strongly recommended. 
       A build can take over an hour.
-    Visual Studio 2017 Community Edition.
+    Visual Studio 2017/2022 Community Edition.
 
 Ensure you can build a stock viewer-development try as described in the SL wiki. Before asking for any help
 compiling Firestorm, make sure you can build the Second Life viewer first. If you try and skip this step, you may
-receive much less help. http://wiki.secondlife.com/wiki/Visual_Studio_2013_Viewer_Builds
+receive much less help. https://wiki.secondlife.com/wiki/Build_the_Viewer_on_Windows
 
 If you want to use licensed FMOD or KDU build libraries (they are optional) you have to provision these yourself.
 If you're licensing these with Phoenix/Firestorm, ask for the libraries for fmod and kdu. Put them into:
@@ -20,11 +20,11 @@ mailing list. We've created a non-KDU build target to make this easier. Everywhe
 "ReleaseFS_open" instead. This will perform the same build, using OpenJpeg instead of KDU.
 
 
-To build Firestorm:
+To build Firestorm - a more detailed instruction can be found at https://wiki.firestormviewer.org/fs_compiling_firestorm_windows:
 
 Open a CMD shell and navigating to your firestorm code repo:
 
-        autobuild build -c ReleaseFS
+        autobuild build -A 64 -c ReleaseFS
 
 Other build targets you may use are:
 
@@ -33,22 +33,18 @@ Other build targets you may use are:
     RelWithDebInfoFS_open (no KDU, no FMOD)
 
 Other examples:
-        autobuild configure -c ReleaseFS                    # basic configuration step, don't build, just configure
-        autobuild configure -c ReleaseFS -- --clean         # clean the output area first, then configure
-        autobuild configure -c ReleaseFS -- --chan Private-Yourname   # configure with a custom channel
+        autobuild configure -A 64 -c ReleaseFS                    # basic configuration step, don't build, just configure
+        autobuild configure -A 64 -c ReleaseFS -- --clean         # clean the output area first, then configure
+        autobuild configure -A 64 -c ReleaseFS -- --chan Private-Yourname   # configure with a custom channel
 
-        autobuild build -c ReleaseFS --no-configure              # default quick rebuild
+        autobuild build -A 64 -c ReleaseFS --no-configure              # default quick rebuild
 
 If you want to set custom configuration, do this in the configure step separately from build, then run "autobuild
-build -c ReleaseFS --no-configure" as a secondary step.
-
-If you want to build the 64bit version, add the parameter -A 64 to the autobuild commands, e.g.:
-        autobuild configure -A 64 -c ReleaseFS
-        autobuild build -A 64 -c ReleaseFS --no-configure
+build -A 64 -c ReleaseFS --no-configure" as a secondary step.
 
 
 Logs:
-    Look for logs in build-vc150-32/logs for 32bit builds and build-vc150-64/logs for 64bit
+    Look for logs in build-vc1x0-64/logs
 
 Output:
-    Look for output in build-vc150-32/newview/Release for 32bit builds and build-vc150-64/newview/Release for 64bit
+    Look for output in build-vc1x0-32/newview/Release
