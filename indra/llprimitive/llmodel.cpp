@@ -56,6 +56,7 @@ const int MODEL_NAMES_LENGTH = sizeof(model_names) / sizeof(std::string);
 LLModel::LLModel(LLVolumeParams& params, F32 detail)
 	: LLVolume(params, detail), 
       mNormalizedScale(1,1,1), 
+      mNormalizedTranslation(0, 0, 0), // <FS> Mesh upload fix by Rye Mutt
       mPelvisOffset( 0.0f ), 
       mStatus(NO_ERRORS), 
       mSubmodelID(0)

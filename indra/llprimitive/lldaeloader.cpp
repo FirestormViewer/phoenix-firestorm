@@ -2731,6 +2731,7 @@ bool LLDAELoader::loadModelsFromDomMesh(domMesh* mesh, std::vector<LLModel*>& mo
 			// </FS:Beq>
 			next->getVolumeFaces() = remainder;
 			next->mNormalizedScale = ret->mNormalizedScale;
+			next->mNormalizedTranslation = ret->mNormalizedTranslation; // <FS> Mesh upload fix by Rye Mutt
 			
 			if ( ret->mMaterialList.size() > LL_SCULPT_MESH_MAX_FACES)
 			{
