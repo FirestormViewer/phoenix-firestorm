@@ -1943,8 +1943,6 @@ void LLPipeline::updateMoveNormalAsync(LLDrawable* drawablep)
 void LLPipeline::updateMovedList(LLDrawable::drawable_vector_t& moved_list)
 {
     LL_PROFILE_ZONE_SCOPED;
-	LLDrawable::drawable_vector_t newList; // <FS:ND> removing elements in the middle of a vector is a really bad idea. I'll just create a new one and swap it at the end.
-
 	for (LLDrawable::drawable_vector_t::iterator iter = moved_list.begin();
 		 iter != moved_list.end(); )
 	{
@@ -1973,15 +1971,9 @@ void LLPipeline::updateMovedList(LLDrawable::drawable_vector_t& moved_list)
 					drawablep->getVObj()->dirtySpatialGroup();
 				}
 			}
-		// <FS:ND> removing elements in the middle of a vector is a really bad idea. I'll just create a new one and swap it at the end.
-			// iter = moved_list.erase(curiter); // <FS:ND> removing elements in the middle of a vector is a really bad idea. I'll just create a new one and swap it at the end.
+			iter = moved_list.erase(curiter);
 		}
-		else
-			newList.push_back( drawablep );
-		// </FS:ND>
 	}
-
-	moved_list.swap( newList ); // <FS:ND> removing elements in the middle of a vector is a really bad idea. I'll just create a new one and swap it at the end.
 }
 
 void LLPipeline::updateMove()
