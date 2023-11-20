@@ -76,6 +76,7 @@ void LL::ThreadPoolBase::start()
         mThreads.emplace_back(tname, [this, tname]()
             {
                 LL_PROFILER_SET_THREAD_NAME(tname.c_str());
+                LL_INFOS("THREAD") << "Started thread " << tname << LL_ENDL;
                 run(tname);
             });
     }
