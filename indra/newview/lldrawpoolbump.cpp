@@ -81,8 +81,7 @@ static BOOL shiny = FALSE;
 
 // Enabled after changing LLViewerTexture::mNeedsCreateTexture to an
 // LLAtomicBool; this should work just fine, now. HB
-// #define LL_BUMPLIST_MULTITHREADED 1 // <FS:Beq/> Enabling this causes issues on some machines
-#define LL_BUMPLIST_MULTITHREADED 0 
+#define LL_BUMPLIST_MULTITHREADED 1
 
 
 // static 
