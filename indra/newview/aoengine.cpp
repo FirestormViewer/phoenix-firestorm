@@ -55,7 +55,6 @@ AOEngine::AOEngine() :
 	mInMouselook(false),
 	mUnderWater(false),
 	mImportSet(nullptr),
-	mImportCategory(LLUUID::null),
 	mAOFolder(LLUUID::null),
 	mLastMotion(ANIM_AGENT_STAND),
 	mLastOverriddenMotion(ANIM_AGENT_STAND)
@@ -976,13 +975,13 @@ void AOEngine::updateSortOrder(AOSet::AOState* state)
 	}
 }
 
-bool AOEngine::addSet(const std::string& name, inventory_func_type callback, bool reload)
+void AOEngine::addSet(const std::string& name, inventory_func_type callback, bool reload)
 {
 	if (mAOFolder.isNull())
 	{
 		LL_WARNS("AOEngine") << ROOT_AO_FOLDER << " folder not there yet. Requesting recreation." << LL_ENDL;
 		tick();
-		return false;
+		return;
 	}
 
 	BOOL wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
@@ -992,45 +991,19 @@ bool AOEngine::addSet(const std::string& name, inventory_func_type callback, boo
 	{
 		gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
 
-		if (reload)
-		{
-			mTimerCollection.enableReloadTimer(true);
-		}
-
 		callback(new_cat_id);
 	});
-	return true;
+
+	if (reload)
+	{
+		mTimerCollection.enableReloadTimer(true);
+	}
 }
 
 bool AOEngine::createAnimationLink(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item)
 {
 	LL_DEBUGS("AOEngine") << "Asset ID " << item->getAssetUUID() << " inventory id " << item->getUUID() << " category id " << state->mInventoryUUID << LL_ENDL;
-	if (state->mInventoryUUID.isNull())
-	{
-		LL_DEBUGS("AOEngine") << "no " << state->mName << " folder yet. Creating ..." << LL_ENDL;
-		gInventory.createNewCategory(set->getInventoryUUID(), LLFolderType::FT_NONE, state->mName);
-
-		LL_DEBUGS("AOEngine") << "looking for folder to get UUID ..." << LL_ENDL;
-		LLUUID newStateFolderUUID;
-
-		LLInventoryModel::item_array_t* items;
-		LLInventoryModel::cat_array_t* cats;
-		gInventory.getDirectDescendentsOf(set->getInventoryUUID(), cats, items);
-
-		if (cats)
-		{
-			for (const auto& cat : *cats)
-			{
-				if (cat->getName().compare(state->mName) == 0)
-				{
-					LL_DEBUGS("AOEngine") << "UUID found!" << LL_ENDL;
-					newStateFolderUUID = cat->getUUID();
-					state->mInventoryUUID = newStateFolderUUID;
-					break;
-				}
-			}
-		}
-	}
+	LL_DEBUGS("AOEngine") << "state " << state->mName << " item " << item->getName() << LL_ENDL;
 
 	if (state->mInventoryUUID.isNull())
 	{
@@ -1965,6 +1938,8 @@ bool AOEngine::importNotecard(const LLInventoryItem* item)
 
 		if (item->getAssetUUID().notNull())
 		{
+			// create the new set with the folder UUID where the notecard is in, so we can reference it
+			// in the notecard reader, this will later be cleared to make room for the real #AO subfolder
 			mImportSet = new AOSet(item->getParentUUID());
 			mImportSet->setName(item->getName());
 
@@ -2033,7 +2008,7 @@ void AOEngine::parseNotecard(const char* buffer)
 		LL_WARNS("AOEngine") << "buffer==NULL - aborting import" << LL_ENDL;
 		// NOTE: cleanup is always the same, needs streamlining
 		delete mImportSet;
-		mImportSet = 0;
+		mImportSet = nullptr;
 		mUpdatedSignal();
 		return;
 	}
@@ -2044,31 +2019,34 @@ void AOEngine::parseNotecard(const char* buffer)
 	std::vector<std::string> lines;
 	LLStringUtil::getTokens(text, lines, "\n");
 
-	bool found{ false };
+	S32 found = 0;
+	std::size_t index = 0;
 	for (const auto& line : lines)
 	{
 		if (line.find("Text length ") == 0)
 		{
-			found = true;
+			found = index + 1;
 			break;
 		}
+		index++;
 	}
 
 	if (!found)
 	{
 		LLNotificationsUtil::add("AOImportNoText", LLSD());
 		delete mImportSet;
-		mImportSet = 0;
+		mImportSet = nullptr;
 		mUpdatedSignal();
 		return;
 	}
 
+	// mImportSet->getInventoryUUID() right now contains the folder UUID where the notecard is in
 	LLViewerInventoryCategory* importCategory = gInventory.getCategory(mImportSet->getInventoryUUID());
 	if (!importCategory)
 	{
 		LLNotificationsUtil::add("AOImportNoFolder", LLSD());
 		delete mImportSet;
-		mImportSet = 0;
+		mImportSet = nullptr;
 		mUpdatedSignal();
 		return;
 	}
@@ -2078,7 +2056,7 @@ void AOEngine::parseNotecard(const char* buffer)
 	LLInventoryModel::item_array_t* items;
 
 	gInventory.getDirectDescendentsOf(mImportSet->getInventoryUUID(), dummy, items);
-	for (auto index = 0; index < items->size(); ++index)
+	for (index = 0; index < items->size(); ++index)
 	{
 		animationMap[items->at(index)->getName()] = items->at(index)->getUUID();
 		LL_DEBUGS("AOEngine")	<<	"animation " << items->at(index)->getName() <<
@@ -2086,7 +2064,7 @@ void AOEngine::parseNotecard(const char* buffer)
 	}
 
 	// [ State ]Anim1|Anim2|Anim3
-	for (auto index = found + 1; index < lines.size(); ++index)
+	for (index = found; index < lines.size(); ++index)
 	{
 		std::string line = lines[index];
 
@@ -2169,6 +2147,8 @@ void AOEngine::parseNotecard(const char* buffer)
 		return;
 	}
 
+	// clear out set UUID so processImport() knows we need to create a new folder for it
+	mImportSet->setInventoryUUID(LLUUID::null);
 	mTimerCollection.enableImportTimer(true);
 	mImportRetryCount = 0;
 	processImport(false);
@@ -2176,74 +2156,87 @@ void AOEngine::parseNotecard(const char* buffer)
 
 void AOEngine::processImport(bool from_timer)
 {
-	if (mImportCategory.isNull())
+	if (mImportSet->getInventoryUUID().isNull())
 	{
-		bool success = addSet(mImportSet->getName(), [this, from_timer](const LLUUID& new_cat_id)
+		// create new inventory folder for this AO set, the next timer tick should pick it up
+		addSet(mImportSet->getName(), [this, from_timer](const LLUUID& new_cat_id)
 		{
-			mImportCategory = new_cat_id;
-			mImportSet->setInventoryUUID(mImportCategory);
-
-			bool allComplete = true;
-			for (S32 index = 0; index < AOSet::AOSTATES_MAX; ++index)
-			{
-				AOSet::AOState* state = mImportSet->getState(index);
-				if (!state->mAnimations.empty())
-				{
-					allComplete = false;
-					LL_DEBUGS("AOEngine") << "state " << state->mName << " still has animations to link." << LL_ENDL;
-
-					for (auto animationIndex = state->mAnimations.size() - 1; animationIndex >= 0; --animationIndex)
-					{
-						LL_DEBUGS("AOEngine") << "linking animation " << state->mAnimations[animationIndex].mName << LL_ENDL;
-						if (createAnimationLink(mImportSet, state, gInventory.getItem(state->mAnimations[animationIndex].mInventoryUUID)))
-						{
-							LL_DEBUGS("AOEngine") << "link success, size " << state->mAnimations.size() << ", removing animation "
-								<< (*(state->mAnimations.begin() + animationIndex)).mName << " from import state" << LL_ENDL;
-							state->mAnimations.erase(state->mAnimations.begin() + animationIndex);
-							LL_DEBUGS("AOEngine") << "deleted, size now: " << state->mAnimations.size() << LL_ENDL;
-						}
-						else
-						{
-							LLSD args;
-							args["NAME"] = state->mAnimations[animationIndex].mName;
-							LLNotificationsUtil::add("AOImportLinkFailed", args);
-						}
-					}
-				}
-			}
-
-			if (allComplete)
-			{
-				mTimerCollection.enableImportTimer(false);
-				mOldImportSets.push_back(mImportSet); //<ND/> FIRE-3801; Cannot delete here, or LLInstanceTracker gets upset. Just remember and delete mOldImportSets once we can. 
-				mImportSet = nullptr;
-				mImportCategory.setNull();
-				reload(from_timer);
-			}
+			mImportSet->setInventoryUUID(new_cat_id);
 		}, false);
 
-		if (!success)
+		mImportRetryCount++;
+
+		// if it takes this long to create a new inventoey category, there might be something wrong,
+		// so give some user feedback at first
+		if (mImportRetryCount == 2)
 		{
-			mImportRetryCount++;
-			if (mImportRetryCount == 5)
-			{
-				// NOTE: cleanup is the same as at the end of this function. Needs streamlining.
-				mTimerCollection.enableImportTimer(false);
-				delete mImportSet;
-				mImportSet = nullptr;
-				mImportCategory.setNull();
-				mUpdatedSignal();
-				LLSD args;
-				args["NAME"] = mImportSet->getName();
-				LLNotificationsUtil::add("AOImportAbortCreateSet", args);
-			}
-			else
-			{
-				LLSD args;
-				args["NAME"] = mImportSet->getName();
-				LLNotificationsUtil::add("AOImportRetryCreateSet", args);
-			}
+			LLSD args;
+			args["NAME"] = mImportSet->getName();
+			LLNotificationsUtil::add("AOImportRetryCreateSet", args);
+			return;
 		}
+		// by now there clearly is something wrong, so stop trying
+		else if (mImportRetryCount == 5)
+		{
+			// NOTE: cleanup is the same as at the end of this function. Needs streamlining.
+			mTimerCollection.enableImportTimer(false);
+			delete mImportSet;
+			mImportSet = nullptr;
+			mUpdatedSignal();
+			LLSD args;
+			args["NAME"] = mImportSet->getName();
+			LLNotificationsUtil::add("AOImportAbortCreateSet", args);
+		}
+
+		return;
+	}
+
+	bool allComplete = true;
+	for (S32 index = 0; index < AOSet::AOSTATES_MAX; ++index)
+	{
+		AOSet::AOState* state = mImportSet->getState(index);
+		if (!state->mAnimations.empty())
+		{
+			allComplete = false;
+			LL_DEBUGS("AOEngine") << "state " << state->mName << " still has animations to link." << LL_ENDL;
+
+			gInventory.createNewCategory(mImportSet->getInventoryUUID(), LLFolderType::FT_NONE, state->mName, [this, state](const LLUUID& new_cat_id)
+			{
+				LL_DEBUGS("AOEngine") << "new_cat_id: " << new_cat_id << LL_ENDL;
+				state->mInventoryUUID = new_cat_id;
+
+				S32 animationIndex = state->mAnimations.size() - 1;
+				while (!state->mAnimations.empty())
+				{
+					LL_DEBUGS("AOEngine") << "linking animation " << state->mAnimations[animationIndex].mName << LL_ENDL;
+					if (createAnimationLink(mImportSet, state, gInventory.getItem(state->mAnimations[animationIndex].mInventoryUUID)))
+					{
+						LL_DEBUGS("AOEngine") << "link success, size " << state->mAnimations.size() << ", removing animation "
+							<< state->mAnimations[animationIndex].mName << " from import state" << LL_ENDL;
+						state->mAnimations.pop_back();
+						LL_DEBUGS("AOEngine") << "deleted, size now: " << state->mAnimations.size() << LL_ENDL;
+					}
+					else
+					{
+						LLSD args;
+						args["NAME"] = state->mAnimations[animationIndex].mName;
+						LLNotificationsUtil::add("AOImportLinkFailed", args);
+					}
+					animationIndex--;
+				}
+
+				LL_DEBUGS("AOEngine") << "exiting lambda" << LL_ENDL;
+			});
+		}
+	}
+
+	if (allComplete)
+	{
+		mTimerCollection.enableImportTimer(false);
+		mOldImportSets.push_back(mImportSet); //<ND/> FIRE-3801; Cannot delete here, or LLInstanceTracker gets upset. Just remember and delete mOldImportSets once we can. 
+		mImportSet = nullptr;
+		reload(from_timer);
+		LLNotificationsUtil::add("AOImportComplete");
 	}
 }
 
