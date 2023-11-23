@@ -106,7 +106,7 @@ class AOEngine
 
 		const LLUUID& getAOFolder() const;
 
-		bool addSet(const std::string& name, inventory_func_type callback, bool reload = true);
+		void addSet(const std::string& name, inventory_func_type callback, bool reload = true);
 		bool removeSet(AOSet* set);
 
 		bool addAnimation(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item, bool reload = true);
@@ -217,7 +217,6 @@ class AOEngine
 
 		AOSet* mImportSet;
 		std::vector<AOSet*> mOldImportSets;
-		LLUUID mImportCategory;
 		S32 mImportRetryCount;
 
 		boost::signals2::connection mRegionChangeConnection;
