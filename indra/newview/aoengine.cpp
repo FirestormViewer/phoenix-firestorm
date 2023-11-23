@@ -988,7 +988,7 @@ void AOEngine::addSet(const std::string& name, inventory_func_type callback, boo
 	BOOL wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
 	gSavedPerAccountSettings.setBOOL("LockAOFolders", FALSE);
 	LL_DEBUGS("AOEngine") << "adding set folder " << name << LL_ENDL;
-	gInventory.createNewCategory(mAOFolder, LLFolderType::FT_NONE, name, [callback, wasProtected, reload, this](const LLUUID &new_cat_id)
+	gInventory.createNewCategory(mAOFolder, LLFolderType::FT_NONE, name, [callback, wasProtected](const LLUUID &new_cat_id)
 	{
 		gSavedPerAccountSettings.setBOOL("LockAOFolders", wasProtected);
 
@@ -2021,26 +2021,21 @@ void AOEngine::parseNotecard(const char* buffer)
 	std::vector<std::string> lines;
 	LLStringUtil::getTokens(text, lines, "\n");
 
-	S32 found = 0;
-	std::size_t index = 0;
-	for (const auto& line : lines)
-	{
-		if (lines[index].find("Text length ") == 0)
-		{
-			found = index + 1;
-			break;
-		}
-		index++;
-	}
+	auto it = std::find_if(lines.begin(), lines.end(), [](const std::string& line) {
+		return line.find("Text length ") == 0;
+	});
 
-	if (found == -1)
-	{
+	if (it == lines.end()) {
+		// Line not found
 		LLNotificationsUtil::add("AOImportNoText", LLSD());
 		delete mImportSet;
 		mImportSet = nullptr;
 		mUpdatedSignal();
 		return;
 	}
+
+	// Line found, 'it' points to the found element
+	std::size_t found = std::distance(lines.begin(), it) + 1;
 
 	// mImportSet->getInventoryUUID() right now contains the folder UUID where the notecard is in
 	LLViewerInventoryCategory* importCategory = gInventory.getCategory(mImportSet->getInventoryUUID());
@@ -2057,16 +2052,15 @@ void AOEngine::parseNotecard(const char* buffer)
 	LLInventoryModel::cat_array_t* dummy;
 	LLInventoryModel::item_array_t* items;
 
-	gInventory.getDirectDescendentsOf(mImportSet->getInventoryUUID(), dummy, items);
-	for (index = 0; index < items->size(); ++index)
-	{
-		animationMap[items->at(index)->getName()] = items->at(index)->getUUID();
-		LL_DEBUGS("AOEngine")	<<	"animation " << items->at(index)->getName() <<
-						" has inventory UUID " << animationMap[items->at(index)->getName()] << LL_ENDL;
-	}
+    gInventory.getDirectDescendentsOf(mImportSet->getInventoryUUID(), dummy, items);
+    for (auto& item : *items)
+    {
+        animationMap[item->getName()] = item->getUUID();
+        LL_DEBUGS("AOEngine") << "animation " << item->getName() << " has inventory UUID " << animationMap[item->getName()] << LL_ENDL;
+    }
 
 	// [ State ]Anim1|Anim2|Anim3
-	for (index = found; index < lines.size(); ++index)
+	for (auto index = found; index < lines.size(); ++index)
 	{
 		std::string line = lines[index];
 
@@ -2161,7 +2155,7 @@ void AOEngine::processImport(bool from_timer)
 	if (mImportSet->getInventoryUUID().isNull())
 	{
 		// create new inventory folder for this AO set, the next timer tick should pick it up
-		addSet(mImportSet->getName(), [this, from_timer](const LLUUID& new_cat_id)
+		addSet(mImportSet->getName(), [this](const LLUUID& new_cat_id)
 		{
 			mImportSet->setInventoryUUID(new_cat_id);
 		}, false);
