@@ -888,7 +888,7 @@ BOOL LLViewerShaderMgr::loadShadersEffects()
 // <FS:CR> Import Vignette from Exodus
 	if (success)
 	{
-		gPostVignetteProgram.mName = "Exodus Vignette Post";
+		gPostVignetteProgram.mName = "Vignette Post";
 		gPostVignetteProgram.mShaderFiles.clear();
 		gPostVignetteProgram.mShaderFiles.push_back(make_pair("post/exoPostBaseV.glsl", GL_VERTEX_SHADER));
 		gPostVignetteProgram.mShaderFiles.push_back(make_pair("post/exoVignetteF.glsl", GL_FRAGMENT_SHADER));

@@ -328,6 +328,7 @@ public:
 	
 	void renderShadow(glh::matrix4f& view, glh::matrix4f& proj, LLCamera& camera, LLCullResult& result, bool depth_clamp);
 	void renderHighlights();
+	void renderVignette(LLRenderTarget* src, LLRenderTarget* dst);
 	void renderDebug();
 	void renderPhysicsDisplay();
 
@@ -1053,6 +1054,7 @@ public:
 	static bool CameraOffset;
 	static F32 CameraMaxCoF;
 	static F32 CameraDoFResScale;
+	static LLVector3 RenderVignette; // <FS:Beq/> refresh of vignette support
 	static F32 RenderAutoHideSurfaceAreaLimit;
 	static bool RenderScreenSpaceReflections;
     static S32 RenderScreenSpaceReflectionIterations;
