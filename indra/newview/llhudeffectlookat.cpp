@@ -674,6 +674,7 @@ void LLHUDEffectLookAt::render()
 			return;
 
 		//LLGLDisable gls_stencil(GL_STENCIL_TEST);
+		LLGLDepthTest depth(GL_TRUE, GL_FALSE);  // <FS:Zi> Reduce screen clutter
 
 		LLVector3 target = mTargetPos + ((LLVOAvatar*)(LLViewerObject*)mSourceObject)->mHeadp->getWorldPosition();
 		LLColor3 lookAtColor = (*mAttentions)[mTargetType].mColor;
