@@ -109,7 +109,7 @@ class AOEngine
 		void addSet(const std::string& name, inventory_func_type callback, bool reload = true);
 		bool removeSet(AOSet* set);
 
-		bool addAnimation(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item, bool reload = true);
+		void addAnimation(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item, bool reload = true);
 		bool removeAnimation(const AOSet* set, AOSet::AOState* state, S32 index);
 		void checkSitCancel();
 		void checkBelowWater(bool check_underwater);
@@ -176,7 +176,7 @@ class AOEngine
 		void saveSet(const AOSet* set);
 		void saveState(const AOSet::AOState* state);
 
-		bool createAnimationLink(const AOSet* set, AOSet::AOState* state, const LLInventoryItem* item);
+		bool createAnimationLink(AOSet::AOState* state, const LLInventoryItem* item);
 		bool findForeignItems(const LLUUID& uuid) const;
 		void purgeFolder(const LLUUID& uuid) const;
 
