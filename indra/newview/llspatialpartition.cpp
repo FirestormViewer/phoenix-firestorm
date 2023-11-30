@@ -877,10 +877,8 @@ void LLSpatialGroup::rebound()
             if (controlAvatar &&
                 controlAvatar->mDrawable &&
                 controlAvatar->mControlAVBridge &&
-                controlAvatar->mControlAVBridge->mOctree)// <FS:Beq> FIRE-33367 toggling animesh state off causes a crash
+                controlAvatar->mControlAVBridge->mOctree)
             {
-                llassert(controlAvatar->mControlAVBridge->mOctree);
-
                 LLSpatialGroup* root = (LLSpatialGroup*)controlAvatar->mControlAVBridge->mOctree->getListener(0);
                 if (this == root)
                 {
