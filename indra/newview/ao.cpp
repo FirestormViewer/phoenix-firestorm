@@ -534,7 +534,7 @@ bool FloaterAO::newSetCallback(const LLSD& notification, const LLSD& response)
 
 	if (option == 0)
 	{
-		return AOEngine::instance().addSet(newSetName, [this](const LLUUID& new_cat_id)
+		AOEngine::instance().addSet(newSetName, [this](const LLUUID& new_cat_id)
 		{
 			reloading(true);
 		});
@@ -891,14 +891,12 @@ BOOL FloaterAO::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDr
 		*accept = ACCEPT_YES_MULTI;
 		if (item && drop)
 		{
-			if (AOEngine::instance().addAnimation(mSelectedSet, mSelectedState, item))
-			{
-				addAnimation(item->getName());
+			AOEngine::instance().addAnimation(mSelectedSet, mSelectedState, item);
+			addAnimation(item->getName());
 
-				// TODO: this would be the right thing to do, but it blocks multi drop
-				// before final release this must be resolved
-				reloading(true);
-			}
+			// TODO: this would be the right thing to do, but it blocks multi drop
+			// before final release this must be resolved
+			reloading(true);
 		}
 	}
 	else

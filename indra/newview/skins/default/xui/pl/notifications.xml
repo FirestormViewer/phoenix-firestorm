@@ -3967,6 +3967,9 @@ Nazwa może zawierać tylko znaki ASCII, za wyjątkiem ":" oraz "|".
 		Usunąć zestaw AO "[AO_SET_NAME]" z listy?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Usuń"/>
 	</notification>
+	<notification name="AOImportComplete">
+		Importowanie notki dla Animatora zakończone!
+	</notification>
 	<notification name="AOImportSetAlreadyExists">
 		Zestaw animacji o tej nazwie już istnieje.
 	</notification>

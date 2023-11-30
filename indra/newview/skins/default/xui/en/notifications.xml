@@ -10676,6 +10676,13 @@ The animation overrider found at least one item that did not belong in the confi
 
   <notification
    icon="notifytip.tga"
+   name="AOImportComplete"
+   type="notifytip">
+Animation Overrider notecard import complete!
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
    name="AOImportSetAlreadyExists"
    type="notifytip">
 An animation set with this name already exists.
