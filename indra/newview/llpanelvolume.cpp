@@ -803,6 +803,30 @@ void LLPanelVolume::doSendIsReflectionProbe(const LLSD & notification, const LLS
         { // has become a reflection probe, slam to a 10m sphere and pop up a message
             // warning people about the pitfalls of reflection probes
 
+            // <FS:Zi> Let's not just slam a sphere on it if the original prim was a box-type
+            //         prim, but instead keep its shape and update the interface accordingly.
+            U8 probe_path_type = LL_PCODE_PATH_CIRCLE;
+            U8 probe_profile_type = LL_PCODE_PROFILE_CIRCLE_HALF;
+
+            std::string volume_type;
+
+            if (objectp->getVolume()->getPathType() == LL_PCODE_PATH_LINE)
+            {
+                volobjp->setReflectionProbeIsBox(true);
+
+                probe_path_type = LL_PCODE_PATH_LINE;
+                probe_profile_type = LL_PCODE_PROFILE_SQUARE;
+
+                volume_type = "Box";
+            }
+            else
+            {
+                volume_type = "Sphere";
+            }
+
+            getChild<LLComboBox>("Probe Volume Type", true)->setValue(volume_type);
+            // </FS:Zi>
+
             auto* select_mgr = LLSelectMgr::getInstance();
 
             select_mgr->selectionUpdatePhantom(true);
@@ -810,8 +834,12 @@ void LLPanelVolume::doSendIsReflectionProbe(const LLSD & notification, const LLS
             select_mgr->selectionSetAlphaOnly(0.f);
 
             LLVolumeParams params;
-            params.getPathParams().setCurveType(LL_PCODE_PATH_CIRCLE);
-            params.getProfileParams().setCurveType(LL_PCODE_PROFILE_CIRCLE_HALF);
+            // <FS:Zi> Don't change prim boxes to spheres when turning it into a reflection probe
+            // params.getPathParams().setCurveType(LL_PCODE_PATH_CIRCLE);
+            // params.getProfileParams().setCurveType(LL_PCODE_PROFILE_CIRCLE_HALF);
+            params.getPathParams().setCurveType(probe_path_type);
+            params.getProfileParams().setCurveType(probe_profile_type);
+            // </FS:Zi>
             mObject->updateVolume(params);
         }
     }
