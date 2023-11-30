@@ -110,9 +110,13 @@
 #include "llavatarname.h"
 #include "llavatarnamecache.h"
 #include "llcorehttputil.h"
+#include "llfloater.h"
 #include "llformat.h"
 #include "llmatrix4a.h"
+#include "llpanel.h"
+#include "lluictrl.h"
 #include "llvector4a.h"
+#include "llview.h"
 #include <boost/array.hpp>
 #include <boost/bind.hpp>
 #include <boost/filesystem.hpp>
@@ -131,6 +135,6 @@
 #include <boost/function/function1.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
-
+#include <vector>
 
 #endif
