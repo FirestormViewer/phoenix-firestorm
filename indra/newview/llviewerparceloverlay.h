@@ -71,8 +71,8 @@ public:
 // [/SL:KB]
 
 	// Returns the number of vertices drawn
-	S32				renderPropertyLines();
-    void			renderPropertyLinesOnMinimap(F32 scale_pixels_per_meter, const F32* parcel_outline_color);
+	void			renderPropertyLines();
+	void			renderPropertyLinesOnMinimap(F32 scale_pixels_per_meter, const F32* parcel_outline_color);
 
 	U8				ownership( const LLVector3& pos) const;
 	U8				parcelLineFlags( const LLVector3& pos) const;
@@ -86,7 +86,7 @@ public:
 
 	void	idleUpdate(bool update_now = false);
 	void	updateGL();
-    
+
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 	typedef boost::signals2::signal<void (const LLViewerRegion*)> update_signal_t;
 	static boost::signals2::connection setUpdateCallback(const update_signal_t::slot_type & cb);
@@ -100,12 +100,7 @@ private:
 
     U8		parcelFlags(S32 row, S32 col, U8 flags) const;
 
-	void	addPropertyLine(std::vector<LLVector3>& vertex_array,
-				std::vector<LLColor4U>& color_array,
-				std::vector<LLVector2>& coord_array,
-				const F32 start_x, const F32 start_y, 
-				const U32 edge, 
-				const LLColor4U& color);
+	void	addPropertyLine(F32 start_x, F32 start_y, F32 dx, F32 dy, F32 tick_dx, F32 tick_dy, const LLColor4U& color);
 
 	void 	updateOverlayTexture();
 	void	updatePropertyLines();
@@ -131,10 +126,14 @@ private:
 	BOOL			mDirty;
 	LLFrameTimer	mTimeSinceLastUpdate;
 	S32				mOverlayTextureIdx;
-	
-	S32				mVertexCount;
-	F32*			mVertexArray;
-	U8*				mColorArray;
+
+    struct Edge
+    {
+        std::vector<LLVector3> vertices;
+        LLColor4U color;
+    };
+
+    std::vector<Edge> mEdges;
 
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
 	static update_signal_t* mUpdateSignal;
