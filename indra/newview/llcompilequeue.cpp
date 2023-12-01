@@ -144,7 +144,7 @@ public:
     LLQueuedScriptAssetUpload(LLUUID taskId, LLUUID itemId, LLUUID assetId, TargetType_t targetType,
             bool isRunning, std::string scriptName, LLUUID queueId, LLUUID exerienceId, taskUploadFinish_f finish) :
         LLScriptAssetUpload(taskId, itemId, targetType, isRunning, 
-            exerienceId, std::string(), finish),
+            exerienceId, std::string(), finish, nullptr),
         mScriptName(scriptName),
         mQueueId(queueId)
     {
@@ -1048,8 +1048,8 @@ class LLScriptAssetUploadWithId: public LLScriptAssetUpload
 {
 public:
 	LLScriptAssetUploadWithId(	LLUUID taskId, LLUUID itemId, TargetType_t targetType, 
-		bool isRunning, std::string scriptName, LLUUID queueId, LLUUID exerienceId, std::string buffer, taskUploadFinish_f finish )
-		:  LLScriptAssetUpload( taskId, itemId, targetType,  isRunning, exerienceId, buffer, finish),
+		bool isRunning, std::string scriptName, LLUUID queueId, LLUUID exerienceId, std::string buffer, taskUploadFinish_f finish, uploadFailed_f failed)
+		:  LLScriptAssetUpload( taskId, itemId, targetType,  isRunning, exerienceId, buffer, finish, failed),
 		mScriptName(scriptName),
         mQueueId(queueId)
 	{
@@ -1144,7 +1144,8 @@ void LLFloaterCompileQueue::scriptPreprocComplete(LLScriptQueueData* data, LLAss
 					data->mQueueID,
 					data->mExperienceId,
 					script_text,
-					proc));
+					proc,
+					nullptr));
 
 				LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
 			}

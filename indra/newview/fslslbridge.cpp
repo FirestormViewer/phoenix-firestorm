@@ -1184,7 +1184,7 @@ void FSLSLBridge::setupBridgePrim(LLViewerObject* object)
 	object->updateFlags();
 
 	object->setChanged(LLXform::MOVED | LLXform::SILHOUETTE | LLXform::TEXTURE);
-	object->markForUpdate(TRUE);
+	object->markForUpdate();
 
 	LL_DEBUGS("FSLSLBridge") << "End bridge container setup." << LL_ENDL;
 }
@@ -1316,7 +1316,7 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 			LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLScriptAssetUpload>(obj->getID(), inv_item, LLScriptAssetUpload::MONO, true, LLUUID::null, buffer, 
 				[](LLUUID, LLUUID, LLUUID, LLSD) {
 					FSLSLBridge::getInstance()->setTimerResult(FSLSLBridge::SCRIPT_UPLOAD_FINISHED);
-				}));
+				}, nullptr));
 			LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
 		}
 		else

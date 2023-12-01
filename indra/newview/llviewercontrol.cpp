@@ -57,7 +57,6 @@
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llvoiceclient.h"
-#include "llvosky.h"
 #include "llvotree.h"
 #include "llvovolume.h"
 #include "llworld.h"
@@ -227,15 +226,6 @@ static bool handleAvatarHoverOffsetChanged(const LLSD& newvalue)
 bool handleSetShaderChanged(const LLSD& newvalue)
 // </FS:Ansariel>
 {
-// [RLVa:KB] - @setenv and @setsphere
-	if ( (RlvActions::isRlvEnabled()) && (!RlvActions::canChangeEnvironment() || (LLVfxManager::instance().hasEffect(EVisualEffect::RlvSphere))) &&
-		 (LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))&& (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")) )
-	{
-		gSavedSettings.setBOOL("WindLightUseAtmosShaders", TRUE);
-		return true;
-	}
-// [/RLVa:KB]
-
 	// changing shader level may invalidate existing cached bump maps, as the shader type determines the format of the bump map it expects - clear and repopulate the bump cache
 	gBumpImageList.destroyGL();
 	gBumpImageList.restoreGL();
@@ -243,26 +233,12 @@ bool handleSetShaderChanged(const LLSD& newvalue)
     if (gPipeline.isInit())
     {
         // ALM depends onto atmospheric shaders, state might have changed
-        bool old_state = LLPipeline::sRenderDeferred;
         LLPipeline::refreshCachedSettings();
-        gPipeline.updateRenderDeferred();
-        if (old_state != LLPipeline::sRenderDeferred)
-        {
-            gPipeline.releaseGLBuffers();
-            gPipeline.createGLBuffers();
-            gPipeline.resetVertexBuffers();
-        }
     }
 
 	// else, leave terrain detail as is
 	LLViewerShaderMgr::instance()->setShaders();
 	return true;
-}
-
-static bool handleShadowDetailChanged(const LLSD& newvalue)
-{
-    gPipeline.handleShadowDetailChanged();
-    return true;
 }
 
 static bool handleRenderPerfTestChanged(const LLSD& newvalue)
@@ -271,8 +247,7 @@ static bool handleRenderPerfTestChanged(const LLSD& newvalue)
        if (!status)
        {
                gPipeline.clearRenderTypeMask(LLPipeline::RENDER_TYPE_WL_SKY,
-                                                                         LLPipeline::RENDER_TYPE_GROUND,
-                                                                        LLPipeline::RENDER_TYPE_TERRAIN,
+                                                                         LLPipeline::RENDER_TYPE_TERRAIN,
                                                                          LLPipeline::RENDER_TYPE_GRASS,
                                                                          LLPipeline::RENDER_TYPE_TREE,
                                                                          LLPipeline::RENDER_TYPE_WATER,
@@ -286,7 +261,6 @@ static bool handleRenderPerfTestChanged(const LLSD& newvalue)
        else 
        {
                gPipeline.setRenderTypeMask(LLPipeline::RENDER_TYPE_WL_SKY,
-                                                                         LLPipeline::RENDER_TYPE_GROUND,
                                                                          LLPipeline::RENDER_TYPE_TERRAIN,
                                                                          LLPipeline::RENDER_TYPE_GRASS,
                                                                          LLPipeline::RENDER_TYPE_TREE,
@@ -307,10 +281,8 @@ bool handleRenderTransparentWaterChanged(const LLSD& newvalue)
 	if (gPipeline.isInit())
 	{
 		gPipeline.updateRenderTransparentWater();
-		gPipeline.updateRenderDeferred();
 		gPipeline.releaseGLBuffers();
 		gPipeline.createGLBuffers();
-		gPipeline.resetVertexBuffers();
 		LLViewerShaderMgr::instance()->setShaders();
 	}
 	LLWorld::getInstance()->updateWaterObjects();
@@ -455,23 +427,6 @@ static bool handleMaxPartCountChanged(const LLSD& newvalue)
 	return true;
 }
 
-static bool handleVideoMemoryChanged(const LLSD& newvalue)
-{
-	gTextureList.updateMaxResidentTexMem(S32Megabytes(newvalue.asInteger()));
-	return true;
-}
-
-// <FS:Ansariel> Dynamic texture memory calculation
-static bool handleDynamicTextureMemoryChanged(const LLSD& newvalue)
-{
-	if (!newvalue.asBoolean())
-	{
-		gTextureList.updateMaxResidentTexMem(S32Megabytes(gSavedSettings.getS32("TextureMemory")));
-	}
-	return true;
-}
-// </FS:Ansariel>
-
 static bool handleChatFontSizeChanged(const LLSD& newvalue)
 {
 	if(gConsole)
@@ -514,7 +469,7 @@ static bool handleJoystickChanged(const LLSD& newvalue)
 
 static bool handleUseOcclusionChanged(const LLSD& newvalue)
 {
-	LLPipeline::sUseOcclusion = (newvalue.asBoolean() && gGLManager.mHasOcclusionQuery
+	LLPipeline::sUseOcclusion = (newvalue.asBoolean()
 		&& LLFeatureManager::getInstance()->isFeatureAvailable("UseOcclusion") && !gUseWireframe) ? 2 : 0;
 	return true;
 }
@@ -531,15 +486,6 @@ static bool handleWLSkyDetailChanged(const LLSD&)
 	if (gSky.mVOWLSkyp.notNull())
 	{
 		gSky.mVOWLSkyp->updateGeometry(gSky.mVOWLSkyp->mDrawable);
-	}
-	return true;
-}
-
-static bool handleResetVertexBuffersChanged(const LLSD&)
-{
-	if (gPipeline.isInit())
-	{
-		gPipeline.resetVertexBuffers();
 	}
 	return true;
 }
@@ -561,47 +507,17 @@ static bool handleRenderDynamicLODChanged(const LLSD& newvalue)
 	return true;
 }
 
-static bool handleRenderLocalLightsChanged(const LLSD& newvalue)
+static bool handleReflectionProbeDetailChanged(const LLSD& newvalue)
 {
-	gPipeline.setLightingDetail(-1);
-	return true;
-}
-
-static bool handleRenderDeferredChanged(const LLSD& newvalue)
-{
-	LLRenderTarget::sUseFBO = newvalue.asBoolean();
-	if (gPipeline.isInit())
-	{
-		LLPipeline::refreshCachedSettings();
-		gPipeline.updateRenderDeferred();
-		gPipeline.releaseGLBuffers();
-		gPipeline.createGLBuffers();
-		gPipeline.resetVertexBuffers();
-		if (LLPipeline::sRenderDeferred == (BOOL)LLRenderTarget::sUseFBO)
-		{
-			LLViewerShaderMgr::instance()->setShaders();
-		}
-	}
-	return true;
-}
-
-// This looks a great deal like handleRenderDeferredChanged because
-// Advanced Lighting (Materials) implies bumps and shiny so disabling
-// bumps should further disable that feature.
-//
-static bool handleRenderBumpChanged(const LLSD& newval)
-{
-    LLRenderTarget::sUseFBO = newval.asBoolean() && gSavedSettings.getBOOL("RenderDeferred");
-	if (gPipeline.isInit())
-	{
-		gPipeline.updateRenderBump();
-		gPipeline.updateRenderDeferred();
-		gPipeline.releaseGLBuffers();
-		gPipeline.createGLBuffers();
-		gPipeline.resetVertexBuffers();
-		LLViewerShaderMgr::instance()->setShaders();
-	}
-	return true;
+    if (gPipeline.isInit())
+    {
+        LLPipeline::refreshCachedSettings();
+        gPipeline.releaseGLBuffers();
+        gPipeline.createGLBuffers();
+        LLViewerShaderMgr::instance()->setShaders();
+        gPipeline.mReflectionMapManager.reset();
+    }
+    return true;
 }
 
 static bool handleRenderDebugPipelineChanged(const LLSD& newvalue)
@@ -795,8 +711,6 @@ bool toggle_show_object_render_cost(const LLSD& newvalue)
 	LLFloaterTools::sShowObjectCost = newvalue.asBoolean();
 	return true;
 }
-
-void handleRenderAutoMuteByteLimitChanged(const LLSD& new_value);
 
 // <FS:Ansariel> Change visibility of main chatbar if autohide setting is changed
 static void handleAutohideChatbarChanged(const LLSD& new_value)
@@ -1153,12 +1067,6 @@ void handleUserMinDrawDistanceChanged(const LLSD &newValue)
     LLPerfStats::tunables.userMinDrawDistance = newval;
 }
 
-void handleUserTargetReflectionsChanged(const LLSD& newValue)
-{
-    const auto newval = gSavedSettings.getS32("UserTargetReflections");
-    LLPerfStats::tunables.userTargetReflections = newval;
-}
-
 void handlePerformanceStatsEnabledChanged(const LLSD& newValue)
 {
     const auto newval = gSavedSettings.getBOOL("PerfStatsCaptureEnabled");
@@ -1239,10 +1147,10 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "OctreeAlphaDistanceFactor", handleRepartition);
     setting_setup_signal_listener(gSavedSettings, "OctreeAttachmentSizeFactor", handleRepartition);
     setting_setup_signal_listener(gSavedSettings, "RenderMaxTextureIndex", handleSetShaderChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderUseTriStrips", handleResetVertexBuffersChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderUIBuffer", handleWindowResized);
     setting_setup_signal_listener(gSavedSettings, "RenderDepthOfField", handleReleaseGLBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderFSAASamples", handleReleaseGLBufferChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderPostProcessingHDR", handleReleaseGLBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderSpecularResX", handleLUTBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderSpecularResY", handleLUTBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderSpecularExponent", handleLUTBufferChanged);
@@ -1251,8 +1159,8 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleReleaseGLBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderGlowResolutionPow", handleReleaseGLBufferChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderAvatarCloth", handleSetShaderChanged);
-    setting_setup_signal_listener(gSavedSettings, "WindLightUseAtmosShaders", handleSetShaderChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderGlowHDR", handleReleaseGLBufferChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderGlowNoise", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderGammaFull", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderVolumeLODFactor", handleVolumeLODChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderAvatarLODFactor", handleAvatarLODChanged);
@@ -1264,25 +1172,20 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "RenderFogRatio", handleFogRatioChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderMaxPartCount", handleMaxPartCountChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderDynamicLOD", handleRenderDynamicLODChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderLocalLights", handleRenderLocalLightsChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderDebugTextureBind", handleResetVertexBuffersChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderAutoMaskAlphaDeferred", handleResetVertexBuffersChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderAutoMaskAlphaNonDeferred", handleResetVertexBuffersChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderObjectBump", handleRenderBumpChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderMaxVBOSize", handleResetVertexBuffersChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderVSyncEnable", handleVSyncChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderDeferredNoise", handleReleaseGLBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderDebugPipeline", handleRenderDebugPipelineChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderResolutionDivisor", handleRenderResolutionDivisorChanged);
 // [SL:KB] - Patch: Settings-RenderResolutionMultiplier | Checked: Catznip-5.4
-	setting_setup_signal_listener(gSavedSettings, "RenderResolutionMultiplier", handleRenderResolutionDivisorChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderResolutionMultiplier", handleRenderResolutionDivisorChanged);
 // [/SL:KB]
-    setting_setup_signal_listener(gSavedSettings, "RenderDeferred", handleRenderDeferredChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderShadowDetail", handleShadowDetailChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderReflectionProbeLevel", handleReflectionProbeDetailChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderReflectionProbeDetail", handleReflectionProbeDetailChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderReflectionsEnabled", handleReflectionProbeDetailChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderScreenSpaceReflections", handleReflectionProbeDetailChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderShadowDetail", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderDeferredSSAO", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderPerformanceTest", handleRenderPerfTestChanged);
-	setting_setup_signal_listener(gSavedSettings, "RenderHiDPI", handleRenderHiDPIChanged);
-    setting_setup_signal_listener(gSavedSettings, "TextureMemory", handleVideoMemoryChanged);
     setting_setup_signal_listener(gSavedSettings, "ChatConsoleFontSize", handleChatFontSizeChanged);
     setting_setup_signal_listener(gSavedSettings, "ChatPersistTime", handleChatPersistTimeChanged); // <FS:Ansariel> Keep custom chat persist time
     setting_setup_signal_listener(gSavedSettings, "ConsoleMaxLines", handleConsoleMaxLinesChanged);
@@ -1301,11 +1204,6 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "MuteVoice", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "MuteAmbient", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "MuteUI", handleAudioVolumeChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderVBOEnable", handleResetVertexBuffersChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderUseVAO", handleResetVertexBuffersChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderVBOMappingDisable", handleResetVertexBuffersChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderUseStreamVBO", handleResetVertexBuffersChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderPreferStreamDraw", handleResetVertexBuffersChanged);
     setting_setup_signal_listener(gSavedSettings, "WLSkyDetail", handleWLSkyDetailChanged);
     setting_setup_signal_listener(gSavedSettings, "JoystickAxis0", handleJoystickChanged);
     setting_setup_signal_listener(gSavedSettings, "JoystickAxis1", handleJoystickChanged);
@@ -1369,30 +1267,28 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "QAMode", show_debug_menus);
     setting_setup_signal_listener(gSavedSettings, "UseDebugMenus", show_debug_menus);
     setting_setup_signal_listener(gSavedSettings, "AgentPause", toggle_agent_pause);
-	// <FS:Zi> Is done inside XUI now, using visibility_control
-	// setting_setup_signal_listener(gSavedSettings, "ShowNavbarNavigationPanel", toggle_show_navigation_panel);
-	// </FS:Zi>
-	// <FS:Zi> We don't have the mini location bar
-	// setting_setup_signal_listener(gSavedSettings, "ShowMiniLocationPanel", toggle_show_mini_location_panel);
-	// </FS: Zi>
-	setting_setup_signal_listener(gSavedSettings, "ShowMenuBarLocation", toggle_show_menubar_location_panel);
+    // <FS:Zi> Is done inside XUI now, using visibility_control
+    // setting_setup_signal_listener(gSavedSettings, "ShowNavbarNavigationPanel", toggle_show_navigation_panel);
+    // </FS:Zi>
+    // <FS:Zi> We don't have the mini location bar
+    // setting_setup_signal_listener(gSavedSettings, "ShowMiniLocationPanel", toggle_show_mini_location_panel);
+    // </FS: Zi>
+    setting_setup_signal_listener(gSavedSettings, "ShowMenuBarLocation", toggle_show_menubar_location_panel);
     setting_setup_signal_listener(gSavedSettings, "ShowObjectRenderingCost", toggle_show_object_render_cost);
     setting_setup_signal_listener(gSavedSettings, "ForceShowGrid", handleForceShowGrid);
-	// <FS:Ansariel> Show start location setting has no effect on login
-	setting_setup_signal_listener(gSavedSettings, "ShowStartLocation", handleForceShowGrid);
+    // <FS:Ansariel> Show start location setting has no effect on login
+    setting_setup_signal_listener(gSavedSettings, "ShowStartLocation", handleForceShowGrid);
     setting_setup_signal_listener(gSavedSettings, "RenderTransparentWater", handleRenderTransparentWaterChanged);
     setting_setup_signal_listener(gSavedSettings, "SpellCheck", handleSpellCheckChanged);
     setting_setup_signal_listener(gSavedSettings, "SpellCheckDictionary", handleSpellCheckChanged);
     setting_setup_signal_listener(gSavedSettings, "LoginLocation", handleLoginLocationChanged);
     setting_setup_signal_listener(gSavedSettings, "DebugAvatarJoints", handleDebugAvatarJointsChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderAutoMuteByteLimit", handleRenderAutoMuteByteLimitChanged);
 
     setting_setup_signal_listener(gSavedSettings, "TargetFPS", handleTargetFPSChanged);
     setting_setup_signal_listener(gSavedSettings, "AutoTuneFPS", handleAutoTuneFPSChanged);
     setting_setup_signal_listener(gSavedSettings, "AutoTuneLock", handleAutoTuneLockChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderAvatarMaxART", handleRenderAvatarMaxARTChanged);
     setting_setup_signal_listener(gSavedSettings, "PerfStatsCaptureEnabled", handlePerformanceStatsEnabledChanged);
-    setting_setup_signal_listener(gSavedSettings, "UserTargetReflections", handleUserTargetReflectionsChanged);
     setting_setup_signal_listener(gSavedSettings, "AutoTuneRenderFarClipTarget", handleUserTargetDrawDistanceChanged);
     setting_setup_signal_listener(gSavedSettings, "AutoTuneRenderFarClipMin", handleUserMinDrawDistanceChanged);
     setting_setup_signal_listener(gSavedSettings, "AutoTuneImpostorFarAwayDistance", handleUserImpostorDistanceChanged);
@@ -1469,9 +1365,6 @@ void settings_setup_listeners()
 
 	// <FS:Ansariel> Output device selection
 	setting_setup_signal_listener(gSavedSettings, "FSOutputDeviceUUID", handleOutputDeviceChanged);
-
-	// <FS:Ansariel> Dynamic texture memory calculation
-	setting_setup_signal_listener(gSavedSettings, "FSDynamicTextureMemory", handleDynamicTextureMemoryChanged);
 
 	// <FS:Ansariel> Optional small camera floater
 	setting_setup_signal_listener(gSavedSettings, "FSUseSmallCameraFloater", handleSmallCameraFloaterChanged);

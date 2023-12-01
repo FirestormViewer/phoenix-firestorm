@@ -176,6 +176,8 @@ typedef enum e_selection_type
 	SELECT_TYPE_HUD
 }ESelectType;
 
+typedef std::vector<LLPointer<LLGLTFMaterial> > gltf_materials_vec_t;
+
 const S32 TE_SELECT_MASK_ALL = 0xFFFFFFFF;
 
 //<FS:Beq> Physics view in edit mode changes
@@ -202,10 +204,18 @@ public:
 	LLViewerObject* getObject();
 	void setObject(LLViewerObject* object);
 	// *NOTE: invalidate stored textures and colors when # faces change
+    // Used by tools floater's color/texture pickers to restore changes
 	void saveColors();
 	void saveShinyColors();
 	void saveTextures(const uuid_vec_t& textures);
 	void saveTextureScaleRatios(LLRender::eTexIndex index_to_query);
+
+    // GLTF materials are applied to objects by ids,
+    // overrides get applied on top of materials resulting in
+    // final gltf material that users see.
+    // Ids get applied and restored by tools floater,
+    // overrides get applied in live material editor
+    void saveGLTFMaterials(const uuid_vec_t& materials, const gltf_materials_vec_t& override_materials);
 
 	BOOL allowOperationOnNode(PermissionBit op, U64 group_proxy_power) const;
 
@@ -242,6 +252,8 @@ public:
 	std::vector<LLColor4>	mSavedColors;
 	std::vector<LLColor4>	mSavedShinyColors;
 	uuid_vec_t		mSavedTextures;
+    uuid_vec_t		mSavedGLTFMaterialIds;
+    gltf_materials_vec_t mSavedGLTFOverrideMaterials;
 	std::vector<LLVector3>  mTextureScaleRatios;
 	std::vector<LLVector3>	mSilhouetteVertices;	// array of vertices to render silhouette of object
 	std::vector<LLVector3>	mSilhouetteNormals;	// array of normals to render silhouette of object
@@ -389,6 +401,17 @@ public:
 	 * Then this only texture is used for all selected faces.
 	 */
 	void applyNoCopyTextureToTEs(LLViewerInventoryItem* item);
+    /*
+     * Multi-purpose function for applying PBR materials to the
+     * selected object or faces, any combination of copy/mod/transfer
+     * permission restrictions. This method moves the restricted
+     * material to the object's inventory and doesn't make a copy of the
+     * material for each face. Then this only material is used for
+     * all selected faces.
+     * Returns false if applying the material failed on one or more selected
+     * faces.
+     */
+    bool applyRestrictedPbrMaterialToTEs(LLViewerInventoryItem* item);
 
 	ESelectType getSelectType() const { return mSelectType; }
 
@@ -678,11 +701,6 @@ public:
 	void saveSelectedShinyColors();
 	void saveSelectedObjectTextures();
 
-	// Sets which texture channel to query for scale and rot of display
-	// and depends on UI state of LLPanelFace when editing
-	void setTextureChannel(LLRender::eTexIndex texIndex) { mTextureChannel = texIndex; }
-	LLRender::eTexIndex getTextureChannel() { return mTextureChannel; }
-
 	void selectionUpdatePhysics(BOOL use_physics);
 	void selectionUpdateTemporary(BOOL is_temporary);
 	void selectionUpdatePhantom(BOOL is_ghost);
@@ -699,13 +717,15 @@ public:
 	void selectionSetDensity(F32 density);
 	void selectionSetRestitution(F32 restitution);
 	void selectionSetMaterial(U8 material);
-	void selectionSetImage(const LLUUID& imageid); // could be item or asset id
+	bool selectionSetImage(const LLUUID& imageid); // could be item or asset id
+    bool selectionSetGLTFMaterial(const LLUUID& mat_id); // material id only
 	void selectionSetColor(const LLColor4 &color);
 	void selectionSetColorOnly(const LLColor4 &color); // Set only the RGB channels
 	void selectionSetAlphaOnly(const F32 alpha); // Set only the alpha channel
 	void selectionRevertColors();
 	void selectionRevertShinyColors();
 	BOOL selectionRevertTextures();
+    void selectionRevertGLTFMaterials();
 	void selectionSetBumpmap( U8 bumpmap, const LLUUID &image_id );
 	void selectionSetTexGen( U8 texgen );
 	void selectionSetShiny( U8 shiny, const LLUUID &image_id );

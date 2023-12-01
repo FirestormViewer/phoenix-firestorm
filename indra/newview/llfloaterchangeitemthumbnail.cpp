@@ -751,7 +751,6 @@ void LLFloaterChangeItemThumbnail::showTexturePicker(const LLUUID &thumbnail_id)
             LLTrans::getString("TexturePickerOutfitHeader"), // "SELECT PHOTO", // <FS:Ansariel> Localizable floater header
             PERM_NONE,
             PERM_NONE,
-            PERM_NONE,
             FALSE,
             NULL);
 
@@ -762,7 +761,7 @@ void LLFloaterChangeItemThumbnail::showTexturePicker(const LLUUID &thumbnail_id)
         {
             //texture_floaterp->setTextureSelectedCallback();
             //texture_floaterp->setOnUpdateImageStatsCallback();
-            texture_floaterp->setOnFloaterCommitCallback([this](LLTextureCtrl::ETexturePickOp op, LLPickerSource, const LLUUID&, const LLUUID&)
+            texture_floaterp->setOnFloaterCommitCallback([this](LLTextureCtrl::ETexturePickOp op, LLPickerSource, const LLUUID&, const LLUUID&, const LLUUID&)
             {
                 if (op == LLTextureCtrl::TEXTURE_SELECT)
                 {

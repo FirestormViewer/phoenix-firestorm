@@ -617,7 +617,7 @@ void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
 		LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLScriptAssetUpload>(mObject->getID(), inventoryItemID, LLScriptAssetUpload::MONO, true, LLUUID::null, script,
 			[this](LLUUID itemId, LLUUID, LLUUID, LLSD response) {
 				this->scriptInjectReturned();
-			}));
+			}, nullptr));
 		LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
 
 		mMainPanel->setEnabled(FALSE);

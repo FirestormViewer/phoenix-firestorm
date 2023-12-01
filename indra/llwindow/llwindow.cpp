@@ -416,8 +416,10 @@ LLWindow* LLWindowManager::createWindow(
 	BOOL enable_vsync,
 	BOOL use_gl,
 	BOOL ignore_pixel_depth,
-	//U32 fsaa_samples)
 	U32 fsaa_samples,
+    U32 max_cores,
+    U32 max_vram,
+    F32 max_gl_version,
 	BOOL useLegacyCursors) // <FS:LO> Legacy cursor setting from main program
 {
 	LLWindow* new_window;
@@ -436,8 +438,8 @@ LLWindow* LLWindowManager::createWindow(
 #elif LL_WINDOWS
 		new_window = new LLWindowWin32(callbacks,
 			title, name, x, y, width, height, flags, 
-			//fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples);
-			fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
+			//fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, max_cores, max_vram, max_gl_version);
+			fullscreen, clearBg, enable_vsync, use_gl, ignore_pixel_depth, fsaa_samples, max_cores, max_vram, max_gl_version, useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 #elif LL_DARWIN
 		new_window = new LLWindowMacOSX(callbacks,
 			title, name, x, y, width, height, flags, 

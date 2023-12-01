@@ -42,7 +42,6 @@
 		</text>
 		<check_box label="透明な水" name="TransparentWater"/>
 		<check_box label="バンプマッピングと光沢" name="BumpShiny"/>
-		<check_box label="近くの光" name="LocalLights"/>
 		<check_box label="環境（大気）シェーダー" name="WindLightUseAtmosShaders"/>
 		<check_box label="高度な照明モデル" name="UseLightShaders"/>
 		<check_box label="アンビエントオクルージョン" name="UseSSAO"/>
@@ -136,7 +135,6 @@
 	
         <check_box label="異方性フィルタリング（有効にすると速度が低下します）" name="ani" tool_tip="ここにチェックを入れると、異方性フィルタリングが有効になります。これは、自分のカメラの位置に対して、正面ではない角度で見えているテクスチャの品質を向上させるものです。通常、より遠くにある部分がぼやけて見えるのを防ぎます。" />
         <check_box label="OpenGL Vertex Buffer Objectsを有効化" name="vbo" tool_tip="最新のハードウェアでこの設定を有効にすると、パフォーマンスが向上します。しかし、旧型のハードウェアではVBOの実装が貧弱な場合が多く、この設定を有効にすることでクラッシュにつながるおそれがあります。" />
-        <check_box label="VBOのストリームを有効にする" name="vbo_stream" tool_tip="VBOを有効にしている時に、このオプションをオフにするとパフォーマンスが向上する可能性があります。多くのAMDのGPUにおいて、このオプションをオフにしたことで顕著なパフォーマンスの向上が見られました。" />
         <check_box label="テクスチャの不可逆圧縮（再起動が必要）" name="texture compression" tool_tip="ビデオメモリ内のテクスチャを圧縮することで、色の品質が低下する代わりに、より高解像度のテクスチャやより多くのテクスチャを読み込むことを可能にします。" />
         <check_box label="HiDPI 表示対応を有効にする（Mac OSX のみ。再起動が必要。）" name="use HiDPI" tool_tip="高解像度描画のための OpenGL を有効にします" />
         <text name="Antialiasing:" tool_tip="ハードウェアによってはこの設定の変更を適用するには再起動が必要な場合があります。" >
@@ -160,7 +158,6 @@
         <slider label="追加テクスチャメモリキャッシュのリザーブ (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="読み込みはされたもののまだ表示されていないテクスチャををキャッシュするためにリザーブしておく物理ビデオメモリのパーセンテージを設定します。" />
         <slider label="物理ビデオメモリ・リザーブ (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="物理ビデオメモリを他の用途で使用するために何パーセント確保しておくかを設定します。" />
         <spinner label="フォグの距離比率" name="fog" />
-        <spinner label="画像デコードの同時実行数:" name="image_decode_threads" tool_tip="画像をデコードする際に使用するスレッドの数を設定します。０＝自動、１＝同期、２＋＝ユーザー設定で、０か１が推奨されます。" />
 		
     </panel>
 	
@@ -229,7 +226,6 @@
 	
 		<check_box label="被写体深度を利用する（この設定をすると、カメラのフォーカスが当たっていない部分がぼやけます。）" name="UseDoF" />
 		<check_box label="編集モード中でも有効にする" name="RenderDepthOfFieldInEditMode" />
-		<check_box label="水中でも有効にする" name="FSRenderDoFUnderwater" />
 		<check_box label="DOF フォーカスがポインタに追随" name="FSFocusPointFollowsPointer" tool_tip="被写界深度（DOF）のフォーカスが、マウスを追いかけるようになります。この動きはフライカムを使用している時に見られるものに対応しています。「DOF フォーカスのロック」機能と合わせてお使い下さい。" />
         <slider label="カメラのF値（絞り）：" name="CameraFNum" tool_tip="DOF効果を得るためのカメラのF値（絞り）" />
         <slider label="カメラの焦点距離（mm）：" name="CameraFocal" tool_tip="DOF効果を得るための焦点距離（単位はミリ）" />

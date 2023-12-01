@@ -836,12 +836,14 @@ bool LLAppViewerWin32::init()
                     // </FS:ND>
 
                     //bool needs_log_file = !isSecondInstance() && debugLoggingEnabled("BUGSPLAT");
+                    //LL_DEBUGS("BUGSPLAT");
                     //if (needs_log_file)
                     //{
                     //    // Startup only!
                     //    LL_INFOS("BUGSPLAT") << "Engaged BugSplat logging to bugsplat.log" << LL_ENDL;
                     //    dwFlags |= MDSF_LOGFILE | MDSF_LOG_VERBOSE;
                     //}
+                    //LL_ENDL;
 
                     // have to convert normal wide strings to strings of __wchar_t
                     sBugSplatSender = new MiniDmpSender(
@@ -853,12 +855,14 @@ bool LLAppViewerWin32::init()
 
                     sBugSplatSender->setCallback(bugsplatSendLog);
 
+                    //LL_DEBUGS("BUGSPLAT");
                     //if (needs_log_file)
                     //{
                     //    // Log file will be created in %TEMP%, but it will be moved into logs folder in case of crash
                     //    std::string log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "bugsplat.log");
                     //    sBugSplatSender->setLogFilePath(WCSTR(log_file));
                     //}
+                    //LL_ENDL;
 
                     // engage stringize() overload that converts from wstring
                     LL_INFOS("BUGSPLAT") << "Engaged BugSplat(" << LL_TO_STRING(LL_VIEWER_CHANNEL)

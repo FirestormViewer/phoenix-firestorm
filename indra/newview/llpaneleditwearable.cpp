@@ -587,7 +587,6 @@ static void init_texture_ctrl(LLPanelEditWearable* self, LLPanel* panel, const L
                 // Don't allow (no copy) or (notransfer) textures to be selected.
                 texture_ctrl->setImmediateFilterPermMask(PERM_NONE);
                 texture_ctrl->setDnDFilterPermMask(PERM_NONE);
-                texture_ctrl->setNonImmediateFilterPermMask(PERM_NONE);
         }
 }
 
@@ -1810,7 +1809,7 @@ void LLPanelEditWearable::initPreviousAlphaTextureEntry(LLAvatarAppearanceDefine
 // [FS:CR] FIRE-10986
 void LLPanelEditWearable::onClickedImportBtn()
 {
-	(new LLFilePickerReplyThread(boost::bind(&LLPanelEditWearable::onClickedImportBtnCallback, this, _1), LLFilePicker::FFLOAD_XML, false))->getFile();
+	LLFilePickerReplyThread::startPicker(boost::bind(&LLPanelEditWearable::onClickedImportBtnCallback, this, _1), LLFilePicker::FFLOAD_XML, false);
 }
 
 void LLPanelEditWearable::onClickedImportBtnCallback(const std::vector<std::string>& filenames)

@@ -553,7 +553,7 @@ class FSTexlayerUpload: public LLBufferedAssetUploadInfo
 	LLBakedUploadData *mBakdedUploadData;
 public:
 	FSTexlayerUpload( LLUUID aAssetId, LLBakedUploadData *aBakdedUploadData, std::string aTexture )
-		: LLBufferedAssetUploadInfo( LLUUID::null, LLAssetType::AT_TEXTURE, aTexture, nullptr )
+		: LLBufferedAssetUploadInfo( LLUUID::null, LLAssetType::AT_TEXTURE, aTexture, nullptr, nullptr)
 		, mBakdedUploadData( aBakdedUploadData )
 	{
 		setAssetId( aAssetId );

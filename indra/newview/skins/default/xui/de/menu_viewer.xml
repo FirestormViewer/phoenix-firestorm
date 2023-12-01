@@ -150,6 +150,7 @@
 		<menu label="Umgebung" name="Environment">
 			<menu_item_check label="Sonnenaufgang" name="Sunrise"/>
 			<menu_item_check label="Mittag" name="Noon"/>
+			<menu_item_check label="Mittag (historisch)" name="legacy noon"/>
 			<menu_item_check label="Sonnenuntergang" name="Sunset"/>
 			<menu_item_check label="Mitternacht" name="Midnight"/>
 			<menu_item_check label="Gemeinsame Umgebung verwenden" name="Use Shared Environment"/>
@@ -231,12 +232,18 @@
 			<menu_item_check label="Nur gesperrte Objekte auswählen" name="Select Only Locked Objects"/>
 			<menu_item_check label="Nur kopierbare Objekte auswählen" name="Select Only Copyable Objects"/>
 			<menu_item_check label="Gruppen-Objekte einschließen" name="Include Group-Owned Objects"/>
+			<menu_item_check label="Unsichtbare Objekte auswählen" name="Select Invisible Objects"/>
+			<menu_item_check label="Reflexionstests auswählen" name="Select Reflection Probes"/>
+			<menu_item_check label="Updates Reflexionstests" name="Probe Updates"/>
 			<menu_item_check label="Nach Umgebung auswählen" name="Select By Surrounding"/>
 			<menu_item_check label="Physische Form beim Editieren anzeigen" name="Show Physics Shape"/>
 			<menu_item_check label="Auswahlumrandung anzeigen" name="Show Selection Outlines"/>
 			<menu_item_check label="Ausgeblendete Auswahl anzeigen" name="Show Hidden Selection"/>
 			<menu_item_check label="Lichtradius für Auswahl anzeigen" name="Show Light Radius for Selection"/>
+			<menu_item_check label="Körper für Reflexionstests anzeigen" name="Show Reflection Probe Volumes"/>
 			<menu_item_check label="Auswahlstrahl anzeigen" name="Show Selection Beam"/>
+			<menu_item_check label="Durchsichtig hervorheben" name="Highlight Transparent"/>
+			<menu_item_check label="Kein Post-Processing" name="No Post"/>
 			<menu_item_check label="An Raster ausrichten" name="Snap to Grid"/>
 			<menu_item_call label="Objekt-XY an Raster ausrichten" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Auswahl für Raster verwenden" name="Use Selection for Grid"/>
@@ -248,13 +255,14 @@
 			<menu_item_call label="Sound ([COST] L$)..." name="Upload Sound"/>
 			<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
 			<menu_item_call label="Modell..." name="Upload Model"/>
+			<menu_item_call label="Material..." name="Upload Material"/>
 			<menu_item_call label="Mehrfach-Upload..." name="Bulk Upload"/>
 			<menu_item_call label="Linkset importieren..." name="import linkset"/>
 		</menu>
 		<menu_item_call label="Lokales Mesh" name="local_mesh" />
 		<menu_item_call label="Rückgängig" name="Undo"/>
 		<menu_item_call label="Wiederholen" name="Redo"/>
-        <menu_item_call label="Lokaler Bitmap-Browser" name="Local Bitmap Browser"/>
+		<menu_item_call label="Lokaler Bitmap-Browser" name="Local Bitmap Browser"/>
 	</menu>
 	<menu label="Inhalt" name="Content">
 		<menu_item_check label="Suchen" name="Search"/>
@@ -324,7 +332,6 @@
 			<menu_item_check label="Pulsierende Ortungssignale" name="Cheesy Beacon"/>
 			<menu_item_check label="Partikel ausblenden" name="Hide Particles"/>
 			<menu_item_check label="Auswahl ausblenden" name="Hide Selected"/>
-			<menu_item_check label="Durchsichtig hervorheben" name="Highlight Transparent"/>
 			<menu_item_check label="- Durchsichtige geriggte Netze einschließen" name="Include Transparent Rigged"/>
 			<menu_item_check label="Fadenkreuz für Mouselook anzeigen" name="ShowCrosshairs"/>
 			<menu label="Schwebe-Tipps" name="Hover Tips">
@@ -342,7 +349,6 @@
 			<menu_item_check label="Flächenpatch" name="Rendering Type Surface Patch"/>
 			<menu_item_check label="Himmel" name="Rendering Type Sky"/>
 			<menu_item_check label="Wasser" name="Rendering Type Water"/>
-			<menu_item_check label="Boden" name="Rendering Type Ground"/>
 			<menu_item_check label="Volumen" name="Rendering Type Volume"/>
 			<menu_item_check label="Gras" name="Rendering Type Grass"/>
 			<menu_item_check label="Wolken" name="Rendering Type Clouds"/>
@@ -421,7 +427,6 @@
 			<menu_item_check label="Speicher" name="Memory"/>
 			<menu_item_check label="Szenestatistiken" name="Scene Statistics"/>
 			<menu_item_check label="Monitor zum Laden von Szenen" name="Scene Loading Monitor"/>
-			<menu_item_call label="Texture-Fetch-Debug-Konsole" name="Texture Fetch Debug Console"/>
 			<menu_item_check label="Region-Debug-Konsole" name="Region Debug Console"/>
 			<menu_item_call label="Info zu Region in Debug-Fenster" name="Region Info to Debug Console"/>
 			<menu_item_call label="Gruppeninfo in Debug-Fenster" name="Group Info to Debug Console"/>
@@ -464,7 +469,6 @@
 			<menu_item_check label="Kamera-Versatz" name="Camera Offset"/>
 			<menu_item_check label="Framerate randomisieren" name="Randomize Framerate"/>
 			<menu_item_check label="Periodischer langsamer Frame" name="Periodic Slow Frame"/>
-			<menu_item_check label="Frame-Test" name="Frame Test"/>
 			<menu_item_check label="Rahmenprofil" name="Frame Profile"/>
 			<menu_item_call label="Benchmark" name="Benchmark"/>
 		</menu>
@@ -484,7 +488,6 @@
 			<menu_item_check label="Oberflächenbereich" name="Face Area"/>
 			<menu_item_check label="Detailstufeninfos" name="LOD Info"/>
 			<menu_item_check label="Dreieckszähler" name="Triangle Count"/>
-			<menu_item_check label="Konstruktionswarteschlange" name="Build Queue"/>
 			<menu_item_check label="Lichter" name="Lights"/>
 			<menu_item_check label="Partikel" name="Particles"/>
 			<menu_item_check label="Gelenkpunkte" name="Collision Skeleton"/>
@@ -513,13 +516,9 @@
 			<menu_item_check label="Globale Beleuchtung (experimentell)" name="Global Illumination"/>
 			<menu_item_check label="GL beim nächsten Start debuggen" name="Debug GL"/>
 			<menu_item_check label="Pipeline debuggen" name="Debug Pipeline"/>
-			<menu_item_check label="Automatische Alpha-Masken (aufgeschoben)" name="Automatic Alpha Masks (deferred)"/>
-			<menu_item_check label="Automatische Alpha-Masken (nicht aufgeschoben)" name="Automatic Alpha Masks (non-deferred)"/>
+			<menu_item_check label="Automatische Alpha-Masken" name="Automatic Alpha Masks (deferred)"/>
 			<menu_item_check label="Animationstexturen" name="Animation Textures"/>
 			<menu_item_check label="Texturen deaktivieren" name="Disable Textures"/>
-			<menu_item_check label="Umgebung deaktivieren" name="Disable Ambient"/>
-			<menu_item_check label="Sonnenlicht deaktivieren" name="Disable Sunlight"/>
-			<menu_item_check label="Lokale Lichtquellen deaktivieren" name="Disable Local Lights"/>
 			<menu_item_call label="Animesh nicht anzeigen" name="Derender Animesh"/>
 			<menu_item_check label="Umgebungsbeleuchtung deaktivieren" name="Disable Ambient"/>
 			<menu_item_check label="Sonnenlicht deaktivieren" name="Disable Sunlight"/>
@@ -527,8 +526,8 @@
 			<menu_item_check label="Texturen in Vollauflösung (gefährlich)" name="Full Res Textures"/>
 			<menu_item_check label="Angehängte Lichter rendern" name="Render Attached Lights"/>
 			<menu_item_check label="Angehängte Partikel rendern" name="Render Attached Particles"/>
-			<menu_item_check label="Leucht-Objekte schweben lassen" name="Hover Glow Objects"/>
-			<menu_item_call label="Cache sofort leeren" name="Cache Clear"/>
+			<menu_item_check label="Shader-Cache aktivieren" name="Enable Shader Cache"/>
+			<menu_item_call label="Shader-Cache bereinigen" name="Shader Cache Clear"/>
 		</menu>
 		<menu label="Netzwerk" name="Network">
 			<menu_item_check label="Agent pausieren" name="AgentPause"/>

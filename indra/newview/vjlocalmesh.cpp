@@ -779,12 +779,12 @@ void LLLocalMeshFile::applyToVObject(LLUUID viewer_object_id, int object_index, 
 	// force refresh (selected/edit mode won't let it redraw otherwise)
 	auto& target_drawable = target_object->mDrawable;
 
-	if( target_drawable.notNull() )
+	if (target_drawable.notNull())
 	{
-		target_object->markForUpdate(true);
+		target_object->markForUpdate();
 		// target_drawable->updateSpatialExtents();
 		// target_drawable->movePartition();
-		gPipeline.markRebuild(target_drawable, LLDrawable::REBUILD_ALL, true);
+		gPipeline.markRebuild(target_drawable, LLDrawable::REBUILD_ALL);
 		if(auto floater_ptr = LLLocalMeshSystem::getInstance()->getFloaterPointer(); floater_ptr != nullptr)
 		{
 			floater_ptr->toggleSelectTool(false);

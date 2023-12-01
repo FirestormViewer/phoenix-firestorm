@@ -109,7 +109,7 @@ void LLHUDText::render()
 	if (!mOnHUDAttachment && sDisplayText)
 	{
 		LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE);
-		LLGLDisable gls_stencil(GL_STENCIL_TEST);
+		//LLGLDisable gls_stencil(GL_STENCIL_TEST);
 		renderText();
 	}
 }
@@ -124,7 +124,6 @@ void LLHUDText::renderText()
 	gGL.getTexUnit(0)->enable(LLTexUnit::TT_TEXTURE);
 
 	LLGLState gls_blend(GL_BLEND, TRUE);
-	LLGLState gls_alpha(GL_ALPHA_TEST, TRUE);
 	
 	LLColor4 shadow_color(0.f, 0.f, 0.f, 1.f);
 	F32 alpha_factor = 1.f;
@@ -240,6 +239,10 @@ void LLHUDText::renderText()
 			}
 
 			text_color = segment_iter->mColor;
+            if (mOnHUDAttachment)
+            {
+                text_color = linearColor4(text_color);
+            }
 			text_color.mV[VALPHA] *= alpha_factor;
 
 			hud_render_text(segment_iter->getText(), render_position, *fontp, style, shadow, x_offset, y_offset, text_color, mOnHUDAttachment);
@@ -610,10 +613,8 @@ void LLHUDText::markDead()
 void LLHUDText::renderAllHUD()
 {
 	LLGLState::checkStates();
-	LLGLState::checkTextureChannels();
 
 	{
-		LLGLEnable color_mat(GL_COLOR_MATERIAL);
 		LLGLDepthTest depth(GL_FALSE, GL_FALSE);
 		
 		VisibleTextObjectIterator text_it;
@@ -627,7 +628,6 @@ void LLHUDText::renderAllHUD()
 	LLVertexBuffer::unbind();
 
 	LLGLState::checkStates();
-	LLGLState::checkTextureChannels();
 }
 
 void LLHUDText::shiftAll(const LLVector3& offset)

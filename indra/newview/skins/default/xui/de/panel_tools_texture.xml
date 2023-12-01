@@ -32,8 +32,12 @@
 	<button name="copy_face_btn" tool_tip="Textur-Parameter in Zwischenablage kopieren"/>
 	<button name="paste_face_btn" tool_tip="Textur-Parameter aus Zwischenablage einfügen"/>
 	<menu_button name="paste_face_gear_btn" tool_tip="Einfüge-Optionen"/>
+	<text name="label_matmedia">
+		Material
+	</text>
 	<combo_box name="combobox matmedia">
-		<combo_box.item label="Material" name="Materials"/>
+		<combo_box.item label="Texturen" name="Materials"/>
+		<combo_box.item label="PBR metallische Unebenheit" name="PBR"/>
 		<combo_box.item label="Medien" name="Media"/>
 	</combo_box>
 	<radio_group name="radio_material_type">
@@ -41,6 +45,18 @@
 		<radio_item label="Holprigkeit (normal)" name="Bumpiness (normal)"/>
 		<radio_item label="Glanz (specular)" name="Shininess (specular)"/>
 	</radio_group>
+	<radio_group name="radio_pbr_type">
+		<radio_item label="Farbe/ausstrahlend" name="Color/emissive"/>
+		<radio_item label="Normal" name="Normal"/>
+		<radio_item label="Metallisch/Unenbenheit" name="Metallic/roughness"/>
+	</radio_group>
+	<texture_picker label="Material" name="pbr_control" tool_tip="Klicken, um ein PBR-Material zu wählen"/>
+	<!-- <button name="pbr_from_inventory" label="Aus Inventory wählen"/> -->
+	<text name="material_permissions_loading_label">
+		Inhalt wird geladen...
+	</text>
+	<button name="edit_selected_pbr" label="Bearbeiten"/>
+	<button name="save_selected_pbr" label="Speichern"/>
 	<texture_picker label="Textur" name="texture control" tool_tip="Klicken, um ein Bild zu wählen"/>
 	<text name="label alphamode">
 		Alpha-Modus
@@ -131,6 +147,11 @@
 	<spinner label="Rotation˚" name="shinyRot"/>
 	<spinner label="Versatz Horizontal" name="shinyOffsetU"/>
 	<spinner label="Versatz Vertikal" name="shinyOffsetV"/>
+	<spinner label="Skalierung u" name="gltfTextureScaleU"/>
+	<spinner label="Skalierung v" name="gltfTextureScaleV"/>
+	<spinner label="Rotation˚" name="gltfTextureRotation"/>
+	<spinner label="Versatz u" name="gltfTextureOffsetU"/>
+	<spinner label="Versatz v" name="gltfTextureOffsetV"/>
 	<check_box label="Planare Oberflächen ausrichten" name="checkbox planar align" tool_tip="Richtet Texturen auf allen ausgewählten Flächen wie die zuletzt ausgewählte Fläche aus. Erfordert planares Textur-Mapping."/>
 	<check_box label="Materialien synchronisieren" name="checkbox_sync_settings" tool_tip="Synchronisiere Texture-Mapping-Parameter"/>
 	<button name="button align textures" label="Ausrichten" tool_tip="Aktuelle Textur-Schicht ausrichten"/>

@@ -70,7 +70,10 @@ BOOL LLToolSelect::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	// do immediate pick query
     BOOL pick_rigged = false; //gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
-	mPick = gViewerWindow->pickImmediate(x, y, TRUE, pick_rigged);
+    BOOL pick_transparent = gSavedSettings.getBOOL("SelectInvisibleObjects");
+    BOOL pick_reflection_probe = gSavedSettings.getBOOL("SelectReflectionProbes");
+
+	mPick = gViewerWindow->pickImmediate(x, y, pick_transparent, pick_rigged, FALSE, TRUE, pick_reflection_probe);
 
 	// Pass mousedown to agent
 	LLTool::handleMouseDown(x, y, mask);
@@ -132,7 +135,7 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 	// <FS:Ansariel> FIRE-17696: Option to select only locked objects
 	BOOL select_locked = gSavedSettings.getBOOL("FSSelectLockedOnly");
 	
-	// *NOTE: These settings must be cleaned up at bottom of function.
+    // *NOTE: These settings must be cleaned up at bottom of function.
 	if (temp_select || LLSelectMgr::getInstance()->mAllowSelectAvatar)
 	{
 		gSavedSettings.setBOOL("SelectOwnedOnly", FALSE);

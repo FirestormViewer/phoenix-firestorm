@@ -3,6 +3,7 @@
 	<menu_item_call label="Berühren" name="Attachment Object Touch"/>
 	<menu_item_call label="In Inventar anzeigen" name="Show original"/>
 	<menu_item_call label="Bearbeiten" name="Edit..."/>
+	<menu_item_call label="PBR-Material bearbeiten" name="EditGLTFMaterial"/>
 	<menu_item_call label="Abnehmen" name="Detach"/>
 	<context_menu label="Speichern als" name="Export Menu">
 		<menu_item_call label="Backup" name="Backup"/>
