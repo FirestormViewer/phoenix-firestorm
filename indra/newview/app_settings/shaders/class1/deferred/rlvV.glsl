@@ -16,8 +16,6 @@
 
 in vec3 position;
 
-uniform vec2 screen_res;
-
 out vec2 vary_fragcoord;
 
 void main()
@@ -27,5 +25,5 @@ void main()
 	gl_Position = pos; 
 
 
-	vary_fragcoord = (pos.xy*0.5+0.5)*screen_res;
+	vary_fragcoord = (pos.xy*0.5+0.5);
 }
