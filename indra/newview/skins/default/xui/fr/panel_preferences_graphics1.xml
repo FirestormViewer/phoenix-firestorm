@@ -14,7 +14,6 @@
 			<text name="ShadersText">Shaders :</text>
 			<check_box label="Transparence de l'eau" name="TransparentWater"/>
 			<check_box label="Relief &amp; Brillance" name="BumpShiny"/>
-			<check_box label="Éclairage local" name="LocalLights"/>
 			<check_box label="Shaders atmosphériques" name="WindLightUseAtmosShaders"/>
 			<check_box label="Éclairage avancé" tool_tip="Permet un rendu de lumière avancé" name="UseLightShaders"/>
 			<check_box label="Occlusion ambiante" name="UseSSAO"/>
@@ -69,7 +68,6 @@
 		<panel label="Paramètres matériels" name="Hardware Settings">
 			<check_box label="Filtrage Anisotrope (plus lent lorsqu'il est activé)" name="ani"/>
 			<check_box label="Activer VSync" name="vsync" tool_tip="Synchronise la fréquence d'images avec la fréquence de rafraîchissement du moniteur, ce qui peut entraîner une augmentation du lag et des images saccadées."/>
-			<check_box label="Activer les Streamed VBOs" name="vbo_stream" tool_tip="Désactiver cette option peut améliorer les performances lorsque les VBO sont activés. La désactivation de ce paramètre améliore grandement les performances sur certaines cartes graphiques Intel et AMD."/>
 			<check_box label="Activer la compression de textures sans pertes (Redémarrage requis)" name="texture compression" tool_tip="Activer la compression des textures dans la mémoire graphique permet de charger des textures de résolution supérieure et une prise en charge d'un nombre de textures plus élevé pour le même cout mémoire."/>
 			<check_box label="Active la prise en charge des écrans HiDPI (Mac OSX seulement; Redémarrage requis)" name="use HiDPI" tool_tip="Active OpenGL pour l'affichage haute résolution."/>
 			<text name="Antialiasing:">Anticrénelage :</text>
@@ -88,7 +86,6 @@
 			<slider label="Réserve supplémentaire de mémoire tampon (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="Le pourcentage de mémoire vidéo physique réservé aux textures chargées en cache qui ne sont actuellement pas affichées."/>
 			<slider label="Réserve de mémoire vidéo physique (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="Le pourcentage de mémoire vidéo physique réservé à un autre usage."/>
 			<spinner label="Ratio de distance du brouillard :" name="fog"/>
-			<spinner label="Décodage des images :" name="image_decode_threads" tool_tip="Le nombre de threads à utiliser pour le décodage des images. 0 = Auto, 1 = Synchrone, 2+ = spécifié par l'utilisateur. (0 ou 1 sont recommandés)"/>
 		</panel>
 		<panel label="Rendu" name="Rendering">
 			<text name="World Updating">Actualisation de l'univers :</text>
@@ -123,7 +120,6 @@
 		<panel label="Profondeur de champ" name="DOF panel">
 			<check_box label="Activer la profondeur de champ (Floutera la vue sauf au point de focalisation de la caméra)" name="UseDoF"/>
 			<check_box label="Activer pendant la modification d'objets ou de terrain" name="RenderDepthOfFieldInEditMode"/>
-			<check_box label="Activer sous l'eau" name="FSRenderDoFUnderwater"/>
 			<check_box label="La mise au point de la profondeur de champ suit le pointeur" name="FSFocusPointFollowsPointer" tool_tip="La mise au point de la profondeur de champ (PdC) suivra votre curseur, ce comportement correspond à celui observé lors de l'utilisation de flycam. Utilisation en conjonction avec le verrouillage de la mise au point PdC"/>
 			<slider label="Indice d'ouverture :" name="CameraFNum" tool_tip="Indice d'ouverture de la caméra pour les effets de profondeur"/>
 			<slider label="Distance focale :" name="CameraFocal" tool_tip="Distance focale de la caméra pour les effets de profondeur (en millimètres)"/>

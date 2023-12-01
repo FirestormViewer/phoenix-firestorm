@@ -120,8 +120,8 @@ public:
 	void updateClickActionViews();
     void updateSearchableItems();
 
-    void		onBtnOK(const LLSD& userdata);
-    void		onBtnCancel(const LLSD& userdata);
+	void		onBtnOK(const LLSD& userdata);
+	void		onBtnCancel(const LLSD& userdata);
 
 protected:	
 
@@ -176,8 +176,6 @@ protected:
 
 	// <FS:Zi> Group Notices and chiclets location setting conversion BOOL => S32
 	void onShowGroupNoticesTopRightChanged();
-	// <FS:Ansariel> Dynamic texture memory calculation
-	void handleDynamicTextureMemoryChanged();
 
 public:
 	// This function squirrels away the current values of the controls so that
@@ -267,6 +265,7 @@ public:
 	void applyResolution();
 	void onChangeMaturity();
 	void onChangeModelFolder();
+    void onChangePBRFolder();
 	void onChangeTextureFolder();
 	void onChangeSoundFolder();
 	void onChangeAnimationFolder();

@@ -8,10 +8,13 @@ include(LLCoreHttp)
 include(LLPhysicsExtensions)
 include(LLPrimitive)
 include(GLH)
+include(TinyGLTF)
 include(ColladaDom)
 
 set(llprimitive_SOURCE_FILES
     lldaeloader.cpp
+    llgltfloader.cpp
+    llgltfmaterial.cpp
     llmaterialid.cpp
     llmaterial.cpp
     llmaterialtable.cpp
@@ -30,6 +33,9 @@ set(llprimitive_SOURCE_FILES
 set(llprimitive_HEADER_FILES
     CMakeLists.txt
     lldaeloader.h
+    llgltfloader.h
+    llgltfmaterial.h
+    llgltfmaterial_templates.h
     legacy_object_types.h
     llmaterial.h
     llmaterialid.h
@@ -61,6 +67,7 @@ target_link_libraries(llprimitive
         llcorehttp
         llxml
         llcharacter
+        llrender
         llphysicsextensions_impl
         ll::colladadom
         ll::pcre
@@ -72,6 +79,10 @@ if (LL_TESTS)
     INCLUDE(LLAddBuildTest)
     SET(llprimitive_TEST_SOURCE_FILES
       llmediaentry.cpp
+      llprimitive.cpp
+      llgltfmaterial.cpp
       )
+
+    set_property(SOURCE llprimitive.cpp PROPERTY LL_TEST_ADDITIONAL_LIBRARIES llmessage)
     LL_ADD_PROJECT_UNIT_TESTS(llprimitive "${llprimitive_TEST_SOURCE_FILES}")
 endif (LL_TESTS)

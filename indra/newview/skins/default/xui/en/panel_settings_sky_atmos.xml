@@ -7,6 +7,9 @@
         left="0"
         name="panel_settings_sky_atmos"
         top="0">
+  <string name="hdr_string">HDR Scale:</string>
+  <string name="brightness_string">Brightness:</string>
+  <string name="hdr_tooltip">Intensity of lightning effects such as realistically bright skies and dynamic exposure. 1.0 is the default, 0 is off, values between 0 and 1 are mixing Ambient with HDR.</string>
     <layout_stack
             name="main_ls"
             follows="all"
@@ -169,7 +172,7 @@
                      <slider
                             decimal_digits="3"
                             follows="left|top"
-                            height="14"
+                            height="16"
                             increment="0.001"
                             initial_value="0"
                             left_pad="5"
@@ -193,7 +196,7 @@
                     <slider
                             decimal_digits="2"
                             follows="left|top"
-                            height="14"
+                            height="16"
                             increment="0.01"
                             initial_value="0"
                             left_pad="5"
@@ -217,7 +220,7 @@
                     <slider
                             decimal_digits="3"
                             follows="left|top"
-                            height="14"
+                            height="16"
                             increment="0.001"
                             initial_value="0"
                             left_pad="5"
@@ -309,7 +312,34 @@
                             top_delta="0"
                             width="219"
                             can_edit_text="true"/>
-                            <text
+                  <text
+                            name="probe_ambiance_label"
+                            follows="left|top"
+                            height="40"
+                            layout="topleft"
+                            left="5"
+                            top_pad="12"
+                            width="105"
+                            tooltip="Irradiance control.  When not zero, enables HDR lighting model."
+                            wrap="true">
+                    Reflection Probe Ambiance (HDR):
+                  </text>
+                  <slider
+                          decimal_digits="2"
+                          follows="left|top"
+                          height="16"
+                          increment="0.01"
+                          initial_value="0"
+                          layout="topleft"
+                          left_pad="5"
+                          min_val="0"
+                          max_val="10"
+                          name="probe_ambiance"
+                          tool_tip="Intensity of environment based indirect lighting. At zero HDR scale becomes Brightness"
+                          top_delta="3"
+                          width="219"
+                          can_edit_text="true"/>
+                    <text
                             name="scene_gamma_label"
                             follows="left|top"
                             height="10"
@@ -317,7 +347,7 @@
                             left="5"
                             top_pad="15"
                             width="105">
-                        Scene Gamma:
+                        Brightness:
                     </text>
                     <slider
                             decimal_digits="2"

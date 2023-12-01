@@ -32,6 +32,7 @@
 			<menu_item_call name="inventory_new_script" label="Neues Skript"/>
 			<menu_item_call name="inventory_new_note" label="Neue Notizkarten"/>
 			<menu_item_call name="inventory_new_gesture" label="Neue Geste"/>
+			<menu_item_call name="inventory_new_material" label="Neues Material"/>
 			<menu name="inventory_new_clothes" label="Neue Kleidung">
 				<menu_item_call name="inventory_new_shirt" label="Neues Hemd"/>
 				<menu_item_call name="inventory_new_pants" label="Neue Hose"/>

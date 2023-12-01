@@ -690,7 +690,7 @@ void FSFloaterObjectExport::fetchTextureFromCache(LLViewerFetchedTexture* src_vi
 	const LLUUID& texture_id = src_vi->getID();
 	LLImageJ2C* mFormattedImage = new LLImageJ2C;
 	FSFloaterObjectExport::FSExportCacheReadResponder* responder = new FSFloaterObjectExport::FSExportCacheReadResponder(texture_id, mFormattedImage, this);
-	LLAppViewer::getTextureCache()->readFromCache(texture_id, LLWorkerThread::PRIORITY_HIGH, 0, 999999, responder);
+	LLAppViewer::getTextureCache()->readFromCache(texture_id, 0, 999999, responder);
 	LL_DEBUGS("export") << "Fetching " << texture_id << " from the TextureCache" << LL_ENDL;
 }
 
@@ -1091,8 +1091,8 @@ void FSFloaterObjectExport::updateUI()
 
 void FSFloaterObjectExport::onClickExport()
 {
-	(new LLFilePickerReplyThread(boost::bind(&FSFloaterObjectExport::onExportFileSelected, this, _1),
-		LLFilePicker::FFSAVE_EXPORT, LLDir::getScrubbedFileName(mObjectName + ".oxp")))->getFile();
+	LLFilePickerReplyThread::startPicker(boost::bind(&FSFloaterObjectExport::onExportFileSelected, this, _1),
+		LLFilePicker::FFSAVE_EXPORT, LLDir::getScrubbedFileName(mObjectName + ".oxp"));
 }
 
 void FSFloaterObjectExport::onExportFileSelected(const std::vector<std::string>& filenames)

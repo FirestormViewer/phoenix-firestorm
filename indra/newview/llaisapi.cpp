@@ -878,26 +878,9 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
     LLSD httpResults;
     LLCore::HttpStatus status;
 
-    if (debugLoggingEnabled("Inventory"))
-    {
-        LLTimer ais_timer;
-        ais_timer.start();
-        result = invoke(httpAdapter , httpRequest , url , body , httpOptions , httpHeaders);
-        httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
-        status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
-        F32MillisecondsImplicit elapsed_time = ais_timer.getElapsedTimeF32();
-
-        LL_DEBUGS("Inventory") << "Request type: " << (S32)type
-            << " \nRequest target: " << targetId
-            << " \nElapsed time since request: " << elapsed_time
-            << " \nstatus: " << status.toULong() << LL_ENDL;
-    }
-    else
-    {
-        result = invoke(httpAdapter , httpRequest , url , body , httpOptions , httpHeaders);
-        httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
-        status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
-    }
+    result = invoke(httpAdapter , httpRequest , url , body , httpOptions , httpHeaders);
+    httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+    status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
 
     if (!status || !result.isMap())
     {
@@ -1112,7 +1095,7 @@ AISUpdate::AISUpdate(const LLSD& update, AISAPI::COMMAND_TYPE type, const LLSD& 
         mFetchDepth = request_body["depth"].asInteger();
     }
 
-    mTimer.setTimerExpirySec(debugLoggingEnabled("Inventory") ? EXPIRY_SECONDS_DEBUG : EXPIRY_SECONDS_LIVE);
+    mTimer.setTimerExpirySec(AIS_EXPIRY_SECONDS);
     mTimer.start();
 	parseUpdate(update);
 }
@@ -1138,7 +1121,7 @@ void AISUpdate::checkTimeout()
     {
         llcoro::suspend();
         LLCoros::checkStop();
-        mTimer.setTimerExpirySec(debugLoggingEnabled("Inventory") ? EXPIRY_SECONDS_DEBUG : EXPIRY_SECONDS_LIVE);
+        mTimer.setTimerExpirySec(AIS_EXPIRY_SECONDS);
     }
 }
 

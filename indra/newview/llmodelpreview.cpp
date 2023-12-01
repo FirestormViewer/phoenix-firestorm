@@ -30,6 +30,7 @@
 
 #include "llmodelloader.h"
 #include "lldaeloader.h"
+#include "llgltfloader.h"
 #include "llfloatermodelpreview.h"
 
 #include "llagent.h"
@@ -970,29 +971,54 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
     std::map<std::string, std::string> joint_alias_map;
     getJointAliases(joint_alias_map);
 
-    std::array<std::string, LLModel::NUM_LODS> lod_suffix;
-	for(int i=0; i < LLModel::NUM_LODS; i++)
-	{
-		lod_suffix[i] = gSavedSettings.getString(sSuffixVarNames[i]);
-	}
+    // three possible file extensions, .dae .gltf .glb
+    // check for .dae and if not then assume one of the .gl??
+    std::string filename_lc(filename);
+    LLStringUtil::toLower(filename_lc);
+    if (std::string::npos != filename_lc.rfind(".dae"))
+    {
+        // <FS> allow LOD suffix configuration
+        std::array<std::string, LLModel::NUM_LODS> lod_suffix;
+        for (int i = 0; i < LLModel::NUM_LODS; i++)
+        {
+            lod_suffix[i] = gSavedSettings.getString(sSuffixVarNames[i]);
+        }
+        // </FS>
 
-    mModelLoader = new LLDAELoader(
-        filename,
-        lod,
-        &LLModelPreview::loadedCallback,
-        &LLModelPreview::lookupJointByName,
-        &LLModelPreview::loadTextures,
-        &LLModelPreview::stateChangedCallback,
-        this,
-        mJointTransformMap,
-        mJointsFromNode,
-        joint_alias_map,
-        LLSkinningUtil::getMaxJointCount(),
-        gSavedSettings.getU32("ImporterModelLimit"),
-        // <FS:Beq> allow LOD suffix configuration
-        // gSavedSettings.getBOOL("ImporterPreprocessDAE"));
-        gSavedSettings.getBOOL("ImporterPreprocessDAE"),
-        lod_suffix);
+        mModelLoader = new LLDAELoader(
+            filename,
+            lod,
+            &LLModelPreview::loadedCallback,
+            &LLModelPreview::lookupJointByName,
+            &LLModelPreview::loadTextures,
+            &LLModelPreview::stateChangedCallback,
+            this,
+            mJointTransformMap,
+            mJointsFromNode,
+            joint_alias_map,
+            LLSkinningUtil::getMaxJointCount(),
+            gSavedSettings.getU32("ImporterModelLimit"),
+            // <FS:Beq> allow LOD suffix configuration
+            //gSavedSettings.getBOOL("ImporterPreprocessDAE"));
+            gSavedSettings.getBOOL("ImporterPreprocessDAE"),
+            lod_suffix);
+    }
+    else
+    {
+        mModelLoader = new LLGLTFLoader(
+            filename,
+            lod,
+            &LLModelPreview::loadedCallback,
+            &LLModelPreview::lookupJointByName,
+            &LLModelPreview::loadTextures,
+            &LLModelPreview::stateChangedCallback,
+            this,
+            mJointTransformMap,
+            mJointsFromNode,
+            joint_alias_map,
+            LLSkinningUtil::getMaxJointCount(),
+            gSavedSettings.getU32("ImporterModelLimit"));
+    }
 
     if (force_disable_slm)
     {
@@ -1709,7 +1735,7 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
             for (U32 i = 0; i < mVertexBuffer[5][mdl].size(); ++i)
             {
                 LLVertexBuffer* buff = mVertexBuffer[5][mdl][i];
-                buff->setBuffer(type_mask & buff->getTypeMask());
+                buff->setBuffer();
 
                 U32 num_indices = mVertexBuffer[5][mdl][i]->getNumIndices();
                 if (num_indices > 2)
@@ -1863,18 +1889,18 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
             {
                 type_mask = mVertexBuffer[5][base][i]->getTypeMask();
 
-                LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(type_mask, 0);
+                LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(type_mask);
 
                 if (sizes[i * 2 + 1] > 0 && sizes[i * 2] > 0)
                 {
-                    if (!buff->allocateBuffer(sizes[i * 2 + 1], sizes[i * 2], true))
+                    if (!buff->allocateBuffer(sizes[i * 2 + 1], sizes[i * 2]))
                     {
                         // Todo: find a way to stop preview in this case instead of crashing
                         LL_ERRS() << "Failed buffer allocation during preview LOD generation."
                             << " Vertices: " << sizes[i * 2 + 1]
                             << " Indices: " << sizes[i * 2] << LL_ENDL;
                     }
-                    buff->setBuffer(type_mask);
+                    buff->setBuffer();
                     // <FS:ND> Fix glod so it works when just using the opengl core profile
                     //glodFillElements(mObject[base], names[i], GL_UNSIGNED_SHORT, (U8*)buff->getIndicesPointer());
                     LLStrider<LLVector3> vertex_strider;
@@ -1918,7 +1944,7 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
                 {
                     // This face was eliminated or we failed to allocate buffer,
                     // attempt to create a dummy triangle (one vertex, 3 indices, all 0)
-                    buff->allocateBuffer(1, 3, true);
+                    buff->allocateBuffer(1, 3);
                     memset((U8*)buff->getMappedData(), 0, buff->getSize());
                     // <FS:ND> Fix when running with opengl core profile
                     //memset((U8*)buff->getIndicesPointer(), 0, buff->getIndicesSize());
@@ -2041,7 +2067,7 @@ F32 LLModelPreview::genMeshOptimizerPerModel(LLModel *base_model, LLModel *targe
 
     // extra space for normals and text coords
     S32 tc_bytes_size = ((size_vertices * sizeof(LLVector2)) + 0xF) & ~0xF;
-    LLVector4a* combined_positions = (LLVector4a*)ll_aligned_malloc<64>(sizeof(LLVector4a) * 2 * size_vertices + tc_bytes_size);
+    LLVector4a* combined_positions = (LLVector4a*)ll_aligned_malloc<64>(sizeof(LLVector4a) * 3 * size_vertices + tc_bytes_size);
     LLVector4a* combined_normals = combined_positions + size_vertices;
     LLVector2* combined_tex_coords = (LLVector2*)(combined_normals + size_vertices);
 
@@ -2183,7 +2209,7 @@ F32 LLModelPreview::genMeshOptimizerPerModel(LLModel *base_model, LLModel *targe
 
     // IV. Repack back into individual faces
 
-    LLVector4a* buffer_positions = (LLVector4a*)ll_aligned_malloc<64>(sizeof(LLVector4a) * 2 * size_vertices + tc_bytes_size);
+    LLVector4a* buffer_positions = (LLVector4a*)ll_aligned_malloc<64>(sizeof(LLVector4a) * 3 * size_vertices + tc_bytes_size);
     LLVector4a* buffer_normals = buffer_positions + size_vertices;
     LLVector2* buffer_tex_coords = (LLVector2*)(buffer_normals + size_vertices);
     S32 buffer_idx_size = (size_indices * sizeof(U16) + 0xF) & ~0xF;
@@ -2316,7 +2342,7 @@ F32 LLModelPreview::genMeshOptimizerPerModel(LLModel *base_model, LLModel *targe
         {
             new_face.resizeIndices(buf_indices_copied);
             new_face.resizeVertices(buf_positions_copied);
-
+            new_face.allocateTangents(buf_positions_copied);
             S32 idx_size = (buf_indices_copied * sizeof(U16) + 0xF) & ~0xF;
             LLVector4a::memcpyNonAliased16((F32*)new_face.mIndices, (F32*)buffer_indices, idx_size);
 
@@ -2525,7 +2551,7 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
         out << "Invalid level of detail: " << which_lod;
         LL_WARNS() << out.str() << LL_ENDL;
         LLFloaterModelPreview::addStringToLog(out, true); // <FS:Beq/> if you don't flash the log tab on error when do you?
-        assert(which_lod >= -1 && which_lod < LLModel::NUM_LODS); // <FS:PR-Aleric/> use the correct variable (which_lod).
+        llassert(which_lod >= -1 && which_lod < LLModel::NUM_LODS);
         return;
     }
 
@@ -2649,6 +2675,14 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
             mModel[lod][mdl_idx]->setNumVolumeFaces(base->getNumVolumeFaces());
 
             LLModel* target_model = mModel[lod][mdl_idx];
+
+            // carry over normalized transform into simplified model
+            for (int i = 0; i < base->getNumVolumeFaces(); ++i)
+            {
+                LLVolumeFace& src = base->getVolumeFace(i);
+                LLVolumeFace& dst = target_model->getVolumeFace(i);
+                dst.mNormalizedScale = src.mNormalizedScale;
+            }
 
             S32 model_meshopt_mode = meshopt_mode;
 
@@ -3714,6 +3748,16 @@ void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
 
         base_iter++;
 
+        bool skinned = include_skin_weights && !mdl->mSkinWeights.empty();
+
+        LLMatrix4a mat_normal;
+        if (skinned)
+        {
+            glh::matrix4f m((F32*)mdl->mSkinInfo.mBindShapeMatrix.getF32ptr());
+            m = m.inverse().transpose();
+            mat_normal.loadu(m.m);
+        }
+
         S32 num_faces = mdl->getNumVolumeFaces();
         for (S32 i = 0; i < num_faces; ++i)
         {
@@ -3728,7 +3772,7 @@ void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
 
             LLVertexBuffer* vb = NULL;
 
-            bool skinned = include_skin_weights && !mdl->mSkinWeights.empty();
+            
 
             U32 mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_TEXCOORD0;
 
@@ -3737,9 +3781,9 @@ void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
                 mask |= LLVertexBuffer::MAP_WEIGHT4;
             }
 
-            vb = new LLVertexBuffer(mask, 0);
+            vb = new LLVertexBuffer(mask);
 
-            if (!vb->allocateBuffer(num_vertices, num_indices, TRUE))
+            if (!vb->allocateBuffer(num_vertices, num_indices))
             {
                 // We are likely to crash due this failure, if this happens, find a way to gracefully stop preview
                 std::ostringstream out;
@@ -3768,6 +3812,15 @@ void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
 
             LLVector4a::memcpyNonAliased16((F32*)vertex_strider.get(), (F32*)vf.mPositions, num_vertices * 4 * sizeof(F32));
 
+            if (skinned)
+            {
+                for (U32 i = 0; i < num_vertices; ++i)
+                {
+                    LLVector4a* v = (LLVector4a*)vertex_strider.get();
+                    mdl->mSkinInfo.mBindShapeMatrix.affineTransform(*v, *v);
+                    vertex_strider++;
+                }
+            }
             if (vf.mTexCoords)
             {
                 vb->getTexCoord0Strider(tc_strider);
@@ -3778,7 +3831,36 @@ void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
             if (vf.mNormals)
             {
                 vb->getNormalStrider(normal_strider);
-                LLVector4a::memcpyNonAliased16((F32*)normal_strider.get(), (F32*)vf.mNormals, num_vertices * 4 * sizeof(F32));
+
+                if (skinned)
+                {
+                    F32* normals = (F32*)normal_strider.get();
+                    LLVector4a* src = vf.mNormals;
+                    LLVector4a* end = src + num_vertices;
+
+                    while (src < end)
+                    {
+                        LLVector4a normal;
+// <FS:Zi> GCC specific warning
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+// </FS:Zi>
+                        mat_normal.rotate(*src++, normal);
+// <FS:Zi> GCC specific warning
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic pop
+#endif
+// </FS:Zi>
+                        normal.store4a(normals);
+                        normals += 4;
+                    }
+                }
+                else
+                {
+                    LLVector4a::memcpyNonAliased16((F32*)normal_strider.get(), (F32*)vf.mNormals, num_vertices * 4 * sizeof(F32));
+                }
             }
 
             if (skinned)
@@ -3814,7 +3896,7 @@ void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
                 *(index_strider++) = vf.mIndices[i];
             }
 
-            vb->flush();
+            vb->unmapBuffer();
 
             mVertexBuffer[lod][mdl].push_back(vb);
         }
@@ -4034,19 +4116,11 @@ void LLModelPreview::addEmptyFace(LLModel* pTarget)
 {
     U32 type_mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_TEXCOORD0;
 
-    LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(type_mask, 0);
+    LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(type_mask);
 
-    buff->allocateBuffer(1, 3, true);
+    buff->allocateBuffer(1, 3);
     memset((U8*)buff->getMappedData(), 0, buff->getSize());
-    // <FS:ND> Fix when running with opengl core profile
-    //memset((U8*)buff->getIndicesPointer(), 0, buff->getIndicesSize());
-    {
-    LLStrider< U16 > index_strider;
-    buff->getIndexStrider( index_strider );
-
-    memset( (U8*)index_strider.get(), 0, buff->getIndicesSize() );
-    }
-    // </FS:ND>
+    memset((U8*)buff->getMappedIndices(), 0, buff->getIndicesSize());
 
     buff->validateRange(0, buff->getNumVerts() - 1, buff->getNumIndices(), 0);
 
@@ -4116,12 +4190,11 @@ BOOL LLModelPreview::render()
     S32 width = getWidth();
     S32 height = getHeight();
 
-    LLGLSUIDefault def; // GL_BLEND, GL_ALPHA_TEST, GL_CULL_FACE, depth test
+    LLGLSUIDefault def;
     LLGLDisable no_blend(GL_BLEND);
     LLGLEnable cull(GL_CULL_FACE);
     LLGLDepthTest depth(GL_FALSE); // SL-12781 disable z-buffer to render background color
-    LLGLDisable fog(GL_FOG);
-
+    
     {
         gUIProgram.bind();
 
@@ -4325,7 +4398,7 @@ BOOL LLModelPreview::render()
         refresh();
     }
 
-    gObjectPreviewProgram.bind();
+    gObjectPreviewProgram.bind(skin_weight);
 
     gGL.loadIdentity();
     gPipeline.enableLightsPreview();
@@ -4350,10 +4423,6 @@ BOOL LLModelPreview::render()
 
     gGL.pushMatrix();
     gGL.color4fv(edge_col().mV); // <FS:Beq/> restore changes removed by the lab
-
-    const U32 type_mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_TEXCOORD0;
-
-    LLGLEnable normalize(GL_NORMALIZE);
 
     if (!mBaseModel.empty() && mVertexBuffer[5].empty())
     {
@@ -4405,17 +4474,17 @@ BOOL LLModelPreview::render()
                 }
 
                 gGL.pushMatrix();
+
                 LLMatrix4 mat = instance.mTransform;
 
                 gGL.multMatrix((GLfloat*)mat.mMatrix);
-
-
+        
                 U32 num_models = mVertexBuffer[mPreviewLOD][model].size();
                 for (U32 i = 0; i < num_models; ++i)
                 {
                     LLVertexBuffer* buffer = mVertexBuffer[mPreviewLOD][model][i];
 
-                    buffer->setBuffer(type_mask & buffer->getTypeMask());
+                    buffer->setBuffer();
 
                     if (textures)
                     {
@@ -4466,7 +4535,7 @@ BOOL LLModelPreview::render()
                         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
                         gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
                     }
-                    buffer->flush();
+                    buffer->unmapBuffer();
                 }
                 gGL.popMatrix();
             }
@@ -4580,7 +4649,7 @@ BOOL LLModelPreview::render()
                                     gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
                                     gGL.diffuseColor4fv(phys_fill_col().mV); // <FS:Beq/> restore changes removed by the lab
 
-                                    buffer->setBuffer(type_mask & buffer->getTypeMask());
+                                    buffer->setBuffer();
                                     buffer->drawRange(LLRender::TRIANGLES, 0, buffer->getNumVerts() - 1, buffer->getNumIndices(), 0);
                                     // <FS:Beq> restore changes removed by the lab
                                     // gGL.diffuseColor4fv(PREVIEW_PSYH_EDGE_COL.mV);
@@ -4594,7 +4663,7 @@ BOOL LLModelPreview::render()
                                     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
                                     gGL.setLineWidth(1.f); // <FS> Line width OGL core profile fix by Rye Mutt
 
-                                    buffer->flush();
+                                    buffer->unmapBuffer();
                                 }
                             }
                         }
@@ -4650,7 +4719,7 @@ BOOL LLModelPreview::render()
                                     {
                                         LLVertexBuffer* buffer = mVertexBuffer[LLModel::LOD_PHYSICS][model][v];
 
-                                        buffer->setBuffer(type_mask & buffer->getTypeMask());
+                                        buffer->setBuffer();
 
                                         LLStrider<LLVector3> pos_strider;
                                         buffer->getVertexStrider(pos_strider, 0);
@@ -4680,7 +4749,7 @@ BOOL LLModelPreview::render()
                                             }
                                         }
 
-                                        buffer->flush();
+                                        buffer->unmapBuffer();
                                     }
                                 }
                             }
@@ -4770,78 +4839,43 @@ BOOL LLModelPreview::render()
                         {
                             LLVertexBuffer* buffer = mVertexBuffer[mPreviewLOD][model][i];
 
-                            const LLVolumeFace& face = model->getVolumeFace(i);
+                            model->mSkinInfo.updateHash();
+                            LLRenderPass::uploadMatrixPalette(mPreviewAvatar, &model->mSkinInfo);
 
-                            LLStrider<LLVector3> position;
-                            buffer->getVertexStrider(position);
-
-                            // <FS:Ansariel> Vectorized Weight4Strider and ClothWeightStrider by Drake Arconis
-                            //LLStrider<LLVector4> weight;
-                            LLStrider<LLVector4a> weight;
-                            buffer->getWeight4Strider(weight);
-
-                            //quick 'n dirty software vertex skinning
-
-                            //build matrix palette
-
-                            LLMatrix4a mat[LL_MAX_JOINTS_PER_MESH_OBJECT];
-                            LLSkinningUtil::initSkinningMatrixPalette(mat, joint_count,
-                                skin, getPreviewAvatar());
-
-                            const LLMatrix4a& bind_shape_matrix = skin->mBindShapeMatrix;
-                            U32 max_joints = LLSkinningUtil::getMaxJointCount();
-                            for (U32 j = 0; j < buffer->getNumVerts(); ++j)
-                            {
-                                LLMatrix4a final_mat;
-                                // <FS:Ansariel> Vectorized Weight4Strider and ClothWeightStrider by Drake Arconis
-                                //F32 *wptr = weight[j].mV;
-                                F32 *wptr = weight[j].getF32ptr();
-                                // </FS:Ansariel>
-                                LLSkinningUtil::getPerVertexSkinMatrix(wptr, mat, true, final_mat, max_joints);
-
-                                //VECTORIZE THIS
-                                LLVector4a& v = face.mPositions[j];
-
-                                LLVector4a t;
-                                LLVector4a dst;
-                                bind_shape_matrix.affineTransform(v, t);
-                                final_mat.affineTransform(t, dst);
-
-                                position[j][0] = dst[0];
-                                position[j][1] = dst[1];
-                                position[j][2] = dst[2];
-                            }
-
-                            // <FS:ND> FIRE-13465 Make sure there's a material set before dereferencing it
-                            if( instance.mModel->mMaterialList.size() > i &&
-                                instance.mMaterial.end() != instance.mMaterial.find( instance.mModel->mMaterialList[ i ] ) )
-                            {
-                            // </FS:ND>
-                            llassert(model->mMaterialList.size() > i);
-                            const std::string& binding = instance.mModel->mMaterialList[i];
-                            const LLImportMaterial& material = instance.mMaterial[binding];
-
-                            buffer->setBuffer(type_mask & buffer->getTypeMask());
-                            gGL.diffuseColor4fv(material.mDiffuseColor.mV);
                             gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
-                            // Find the tex for this material, bind it, and add it to our set
-                            //
-                            LLViewerFetchedTexture* tex = bindMaterialDiffuseTexture(material);
-                            if (tex)
+                            if (textures)
                             {
-                                mTextureSet.insert(tex);
-                            }
-                            } else  // <FS:ND> FIRE-13465 Make sure there's a material set before dereferencing it, if none, set buffer type and unbind texture.
-                            {
-                                buffer->setBuffer(type_mask & buffer->getTypeMask());
-                                gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-                            } // </FS:ND>
+                                int materialCnt = instance.mModel->mMaterialList.size();
+                                if (i < materialCnt)
+                                {
+                                    const std::string& binding = instance.mModel->mMaterialList[i];
+                                    const LLImportMaterial& material = instance.mMaterial[binding];
 
+                                    gGL.diffuseColor4fv(material.mDiffuseColor.mV);
+
+                                    // Find the tex for this material, bind it, and add it to our set
+                                    //
+                                    LLViewerFetchedTexture* tex = bindMaterialDiffuseTexture(material);
+                                    if (tex)
+                                    {
+                                        mTextureSet.insert(tex);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                // <FS:Beq> restore behaviour removed by lab
+                                //gGL.diffuseColor4fv(PREVIEW_BASE_COL.mV);
+                                gGL.diffuseColor4fv(base_col().mV);
+                            }
+
+                            buffer->setBuffer();
                             buffer->draw(LLRender::TRIANGLES, buffer->getNumIndices(), 0);
 
                             if (edges)
                             {
+                                gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
                                 // <FS:Beq> restore behaviour removed by lab
                                 // gGL.diffuseColor4fv(PREVIEW_EDGE_COL.mV);
                                 // gGL.setLineWidth(PREVIEW_EDGE_WIDTH);

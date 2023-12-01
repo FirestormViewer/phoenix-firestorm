@@ -3,7 +3,7 @@
 <floater
  legacy_header_height="18"
  can_minimize="false"
- height="528"
+ height="548"
  layout="topleft"
  name="Inventory Finder"
  help_topic="inventory_finder"
@@ -96,12 +96,29 @@
      width="126" />
     <icon
      height="16"
+     image_name="Inv_Material"
+     layout="topleft"
+     left="8"
+     mouse_opaque="true"
+     name="icon_material"
+     top="122"
+     width="16" />
+    <check_box
+     height="16"
+     label="Materials"
+     layout="topleft"
+     left_pad="2"
+     name="check_material"
+     top_delta="0"
+     width="126" />
+    <icon
+     height="16"
      image_name="Inv_Notecard"
      layout="topleft"
      left="8"
      mouse_opaque="true"
      name="icon_notecard"
-     top="122"
+     top="142"
      width="16" />
     <check_box
      height="16"
@@ -118,7 +135,7 @@
      left="8"
      mouse_opaque="true"
      name="icon_object"
-     top="142"
+     top="162"
      width="16" />
     <check_box
      height="16"
@@ -135,7 +152,7 @@
      left="8"
      mouse_opaque="true"
      name="icon_script"
-     top="162"
+     top="182"
      width="16" />
     <check_box
      height="16"
@@ -152,7 +169,7 @@
      left="8"
      mouse_opaque="true"
      name="icon_sound"
-     top="182"
+     top="202"
      width="16" />
     <check_box
      height="16"
@@ -169,7 +186,7 @@
      left="8"
      mouse_opaque="true"
      name="icon_texture"
-     top="202"
+     top="222"
      width="16" />
     <check_box
      height="16"
@@ -186,7 +203,7 @@
      left="8"
      mouse_opaque="true"
      name="icon_snapshot"
-     top="222"
+     top="242"
      width="16" />
     <check_box
      height="16"
@@ -203,7 +220,7 @@
      left="8"
      mouse_opaque="true"
      name="icon_settings"
-     top="242"
+     top="262"
      width="16" />
     <check_box
      height="16"
@@ -221,7 +238,7 @@
      layout="topleft"
      left="8"
      name="All"
-     top="262"
+     top="282"
      width="100" />
     <button
      height="20"

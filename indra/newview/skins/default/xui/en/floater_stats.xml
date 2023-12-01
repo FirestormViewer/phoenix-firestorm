@@ -155,6 +155,13 @@
                     stat="glboundmemstat"
                     setting="DebugStatModeBoundMem"/>
         </stat_view>
+       <stat_view name="material"
+                  setting="DebugStatModeMaterials">
+                  label="Material">
+         <stat_bar name="nummaterials"
+                   label="Count"
+                   stat="nummaterials"/>
+       </stat_view>
         <stat_view name="network"
                    label="Network"
                    setting="OpenDebugStatNet">

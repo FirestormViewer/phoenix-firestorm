@@ -40,6 +40,9 @@
 		<text name="label_13" tool_tip="Standardberechtigungen für die Erstellung von Umgebungseinstellungen festlegen">
 			Einstellungen
 		</text>
+		<text name="label_14" tool_tip="Standardberechtigungen für die Erstellung von GLTF-Materialien festlegen">
+			Materialien
+		</text>
 	</panel>
 	<button label="OK" label_selected="OK" name="ok"/>
 	<button label="Abbrechen" label_selected="Abbrechen" name="cancel"/>
