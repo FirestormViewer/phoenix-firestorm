@@ -2446,6 +2446,13 @@ Geben Sie Ihr Kennwort erneut ein und klicken Sie auf OK.
 Sie haben die Position dieser Auswahl aktualisiert, aber die anderen Daten behalten ihre ursprünglichen Werte.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="ApplyInventoryToObject">
+		Sie wenden „kein Kopieren“ auf einen Gegenstand im Inventar an.
+Dieser Gegegstand wird in das Objekt-Inventar verschoben und nicht kopiert.
+
+Gegenstand verschieben?
+		<usetemplate ignoretext="Warnhinweis anzeigen, bevor ich „kein Kopieren“-Gegenstände auf ein Objekt anwende." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
+	</notification>
 	<notification name="MoveInventoryFromObject">
 		Sie haben „nicht kopierfähige“ Inventarobjekte ausgewählt.
 Diese Objekte werden nicht kopiert, sondern in Ihr Inventar verschoben.
@@ -2811,6 +2818,12 @@ Dies kann die Eingabe Ihres Passworts beeinflussen.
 	<notification name="NotecardNoPermissions">
 		Ihnen fehlt die Berechtigung zur Anzeige dieser Notizkarte.
 	</notification>
+	<notification name="MaterialMissing">
+		Material wurde nicht in der Datenbank gefunden.
+	</notification>
+	<notification name="MaterialNoPermissions">
+		Ihnen fehlt die Berechtigung zur Anzeige dieses Materials.
+	</notification>
 	<notification name="RezItemNoPermissions">
 		Keine Berechtigung zum Rezzen von Objekten.
 	</notification>
@@ -2822,6 +2835,13 @@ Dies kann die Eingabe Ihres Passworts beeinflussen.
 	</notification>
 	<notification name="UnableToLoadNotecard">
 		Notizkarten-Asset konnte nicht geladen werden.
+	</notification>
+	<notification name="UnableToLoadMaterial">
+		Material konnte nicht geladen werden.
+Bitte erneut versuchen.
+	</notification>
+	<notification name="MissingMaterialCaps">
+		Nicht mit einer Region verbunden, die Material unterstützt.
 	</notification>
 	<notification name="ScriptMissing">
 		Skript fehlt in Datenbank.
@@ -3790,12 +3810,44 @@ Sie haben lokal eine [RESOLUTION]-gebackene Textur für „[BODYREGION]“ nach 
 		Texture konnte nicht hochgeladen werden.
 [REASON]
 	</notification>
+	<notification name="CannotUploadMaterial">
+		Es ist ein Problem beim Hochladen der Datei aufgetreten.
+	</notification>
+	<notification label="Material speichern" name="SaveMaterialAs">
+		Material benennen:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+	<notification name="InvalidMaterialName">
+		Bitte geben Sie einen Namen ein!
+	</notification>
+	<notification name="UsavedMaterialChanges">
+		Es existieren ungespeicherte Änderungen.
+		<form name="form">
+			<button name="discard" text="Änderungen verwerfen"/>
+			<button name="keep" text="Bearbeiten fortsetzen"/>
+		</form>
+	</notification>
 	<notification name="LivePreviewUnavailable">
 		Wir können keine Vorschau dieser Textur anzeigen, da sie nicht kopier- und/oder übertragungsfähig ist.
 		<usetemplate ignoretext="Hinweis anzeigen, wenn bei nicht kopier- und/oder übertragungsfähigen Texturen keine Live-Vorschau möglich ist" name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="LivePreviewUnavailablePBR">
+		Wir können keine Vorschau dieses Materials anzeigen, da es nicht kopier- und/oder übertragungsfähig ist.
+		<usetemplate ignoretext="Hinweis anzeigen, wenn bei nicht kopier- und/oder übertragungsfähigen Materialien keine Live-Vorschau möglich ist" name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="FacePasteFailed">
 		Einfügen fehlgeschlagen. [REASON]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="FailedToApplyTextureNoCopyToMultiple">
+		Textur konnte nicht angewandt werden. Sie können eine Textur ohne Kopier-Berechtigung nicht auf mehrere Objekte anwenden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="FailedToApplyGLTFNoCopyToMultiple">
+		GLTF-Textur konnte nicht angewandt werden. Sie können ein Material ohne Kopier-Berechtigung nicht auf mehrere Objekte anwenden.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="FacePasteTexturePermissions">
@@ -4077,6 +4129,10 @@ Zukünftige Aktualisierungen dieser Datei werden deaktiviert.
 	</notification>
 	<notification name="LocalBitmapsVerifyFail">
 		Versuch, eine ungültige oder nicht lesbare Bilddatei ([FNAME]) hinzuzufügen, die nicht geöffnet oder decodiert werden konnte.
+Versuch abgebrochen.
+	</notification>
+	<notification name="LocalGLTFVerifyFail">
+		Versuch, eine ungültige oder nicht lesbare GFLTF-Materialdatei ([FNAME]) hinzuzufügen, die nicht geöffnet oder decodiert werden konnte.
 Versuch abgebrochen.
 	</notification>
 	<notification name="PathfindingReturnMultipleItems">
@@ -4927,6 +4983,16 @@ Geriggte Mesh-Objekte sind dafür gemacht, um am Avatar angehängt zu werden. We
 Falls Sie dieses Objekt sehen möchten, nehmen Sie es ab und hängen es an einem Avatar-Punkt an.
 		<usetemplate ignoretext="Warnen, falls geriggtes Mesh an einem HUD-Punkt angehängt ist." name="okignore" yestext="OK"/>
 	</notification>
+
+	<notification name="ReflectionProbeApplied">
+		WARNUNG: Sie haben aus Ihrem Objekt einen Reflexionstest erzeugt. Dieser verändert implizit das Objekt, um dessen Einflusskörper nachzuahmen. Diese Änderungen sind nicht umkehrbar. Möchten Sie fortfahren?
+		<usetemplate ignoretext="Hinweis zum Reflexionstest" name="okcancelignore" yestext="OK" notext="Abbrechen"/>
+	</notification>
+	<notification name="AutoAdjustHDRSky">
+		Sie bearbeiten einen Himmel, der automatisch zu HDR konvertiert wurde. Um HDR und Tone Mapping zu entfernen, setzen Sie „Umgebung Reflexionstest (HDR)“ auf 0.
+		<usetemplate ignoretext="Warnung für HDR-Himmel-Anpassung" name="okignore" yestext="OK"/>
+</notification>
+
 	<notification name="NoValidEnvSettingFound">
 		Keine gültige Einstellung für die Umgebung ausgewählt.
 		

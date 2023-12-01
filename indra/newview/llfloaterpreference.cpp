@@ -89,7 +89,6 @@
 #include "llviewerthrottle.h"
 #include "llvoavatarself.h"
 #include "llvotree.h"
-#include "llvosky.h"
 #include "llfloaterpathfindingconsole.h"
 // linden library includes
 #include "llavatarnamecache.h"
@@ -586,9 +585,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 
 	// <FS:Ansariel> FIRE-2912: Reset voice button
 	mCommitCallbackRegistrar.add("Pref.ResetVoice",						boost::bind(&LLFloaterPreference::onClickResetVoice, this));
-
-	// <FS:Ansariel> Dynamic texture memory calculation
-	gSavedSettings.getControl("FSDynamicTextureMemory")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::handleDynamicTextureMemoryChanged, this));
 }
 
 void LLFloaterPreference::processProperties( void* pData, EAvatarProcessorType type )
@@ -667,6 +663,7 @@ BOOL LLFloaterPreference::postBuild()
 	gSavedSettings.getControl("PreferredMaturity")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeMaturity, this));
 
 	gSavedPerAccountSettings.getControl("ModelUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeModelFolder, this));
+    gSavedPerAccountSettings.getControl("PBRUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangePBRFolder, this));
 	gSavedPerAccountSettings.getControl("TextureUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeTextureFolder, this));
 	gSavedPerAccountSettings.getControl("SoundUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeSoundFolder, this));
 	gSavedPerAccountSettings.getControl("AnimationUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeAnimationFolder, this));
@@ -1191,6 +1188,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	onChangeMaturity();
 
 	onChangeModelFolder();
+    onChangePBRFolder();
 	onChangeTextureFolder();
 	onChangeSoundFolder();
 	onChangeAnimationFolder();
@@ -1942,7 +1940,7 @@ void LLFloaterPreference::setExternalEditor()
 	std::string cur_name(gSavedSettings.getString("ExternalEditor"));
 	std::string proposed_name(cur_name);
 
-	(new LLFilePickerReplyThread(boost::bind(&LLFloaterPreference::changeExternalEditorPath, this, _1), LLFilePicker::FFLOAD_EXE, false))->getFile();
+	LLFilePickerReplyThread::startPicker(boost::bind(&LLFloaterPreference::changeExternalEditorPath, this, _1), LLFilePicker::FFLOAD_EXE, false);
 }
 
 void LLFloaterPreference::changeExternalEditorPath(const std::vector<std::string>& filenames)
@@ -2165,152 +2163,45 @@ void LLFloaterPreference::onUpdatePopupFilter()
 
 void LLFloaterPreference::refreshEnabledState()
 {
-	// <FS:Ansariel> Improved graphics preferences
-	//LLCheckBoxCtrl* ctrl_wind_light = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
-	//LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
-
-	//// if vertex shaders off, disable all shader related products
-	//if (!LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))
-	//{
-	//	ctrl_wind_light->setEnabled(FALSE);
-	//	ctrl_wind_light->setValue(FALSE);
-	//}
-	//else
-	//{
-	//	ctrl_wind_light->setEnabled(TRUE);
-	//}
-
-	////Deferred/SSAO/Shadows
-	//BOOL bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump") && gSavedSettings.getBOOL("RenderObjectBump");
-	//BOOL shaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders");
-	//BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
-	//					bumpshiny &&
-	//					shaders && 
-	//					(ctrl_wind_light->get()) ? TRUE : FALSE;
-
-	//ctrl_deferred->setEnabled(enabled);
-
-	F32 mem_multiplier = gSavedSettings.getF32("RenderTextureMemoryMultiple");
-	
-	S32Megabytes min_tex_mem = LLViewerTextureList::getMinVideoRamSetting();
-	S32Megabytes max_tex_mem = LLViewerTextureList::getMaxVideoRamSetting(false, mem_multiplier);
-	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem.value());
-	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem.value());
-
-	// <FS:Ansariel> Dynamic texture memory calculation
-	handleDynamicTextureMemoryChanged();
-
 #if ADDRESS_SIZE == 32
 	childSetEnabled("FSRestrictMaxTextureSize", false);
 #endif
 
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderVBOEnable") ||
-		!gGLManager.mHasVertexBufferObject)
-	{
-		getChildView("vbo")->setEnabled(FALSE);
-		getChildView("vbo_stream")->setEnabled(FALSE);
-	}
-	else
-#if LL_DARWIN
-		getChildView("vbo_stream")->setEnabled(FALSE);  //Hardcoded disable on mac
-		getChild<LLUICtrl>("vbo_stream")->setValue((LLSD::Boolean) FALSE);
-#else
-		getChildView("vbo_stream")->setEnabled(LLVertexBuffer::sEnableVBOs);
-#endif
-
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures") ||
-		!gGLManager.mHasVertexBufferObject)
+	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures"))
 	{
 		getChildView("texture compression")->setEnabled(FALSE);
 	}
 
-	// if no windlight shaders, turn off nighttime brightness, gamma, and fog distance
-	LLSpinCtrl* gamma_ctrl = getChild<LLSpinCtrl>("gamma");
-	gamma_ctrl->setEnabled(!gPipeline.canUseWindLightShaders());
-	getChildView("fog")->setEnabled(!gPipeline.canUseWindLightShaders());
-
 	// anti-aliasing
-	{
-		LLUICtrl* fsaa_ctrl = getChild<LLUICtrl>("fsaa");
-		
-		// Enable or disable the control, the "Antialiasing:" label and the restart warning
-		// based on code support for the feature on the current hardware.
+	LLUICtrl* fsaa_ctrl = getChild<LLUICtrl>("fsaa");
 
-		if (gPipeline.canUseAntiAliasing())
-		{
-			fsaa_ctrl->setEnabled(TRUE);
-		}
-		else
-		{
-			fsaa_ctrl->setEnabled(FALSE);
-			fsaa_ctrl->setValue((LLSD::Integer) 0);
-		}
+	// Enable or disable the control, the "Antialiasing:" label and the restart warning
+	// based on code support for the feature on the current hardware.
+
+	if (gPipeline.canUseAntiAliasing())
+	{
+		fsaa_ctrl->setEnabled(TRUE);
+	}
+	else
+	{
+		fsaa_ctrl->setEnabled(FALSE);
+		fsaa_ctrl->setValue((LLSD::Integer) 0);
 	}
 
-	LLComboBox* ctrl_reflections = getChild<LLComboBox>("Reflections");
-
-// [RLVa:KB] - Checked: 2013-05-11 (RLVa-1.4.9)
-	if (RlvActions::isRlvEnabled())
+	if (!LLFeatureManager::instance().isFeatureAvailable("RenderFSAASamples"))
 	{
-		getChild<LLUICtrl>("do_not_disturb_response")->setEnabled(!RlvActions::hasBehaviour(RLV_BHVR_SENDIM));
+		fsaa_ctrl->setEnabled(FALSE);
 	}
-// [/RLVa:KB]
 
-	// Reflections
-	BOOL reflections = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps;
-	ctrl_reflections->setEnabled(reflections);
-	
-	// Bump & Shiny
-	LLCheckBoxCtrl* bumpshiny_ctrl = getChild<LLCheckBoxCtrl>("BumpShiny");
-	bool bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump");
-	bumpshiny_ctrl->setEnabled(bumpshiny ? TRUE : FALSE);
-	
-    // <FS:Ansariel> Does not exist
-    //LLCheckBoxCtrl* ctrl_enhanced_skel = getChild<LLCheckBoxCtrl>("AvatarEnhancedSkeleton");
-    //bool enhanced_skel_enabled = gSavedSettings.getBOOL("IncludeEnhancedSkeleton");
-    //ctrl_enhanced_skel->setValue(enhanced_skel_enabled);
-    // </FS:Ansariel>
-
-	// Avatar Mode
-	// Avatar Render Mode
-    getChild<LLCheckBoxCtrl>("AvatarCloth")->setEnabled(TRUE);
-
-	/* <FS:LO> remove orphaned code left over from EEP
-	// Vertex Shaders, Global Shader Enable
-	LLRadioGroup* terrain_detail = getChild<LLRadioGroup>("TerrainDetailRadio");   // can be linked with control var
-
-	terrain_detail->setEnabled(FALSE);
-	*/
-	
 	// WindLight
-	LLCheckBoxCtrl* ctrl_wind_light = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
 	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
-
-// [RLVa:KB] - Checked: 2010-03-18 (RLVa-1.2.0a) | Modified: RLVa-0.2.0a
-	// "Atmospheric Shaders" can't be disabled - but can be enabled - under @setenv=n
-	ctrl_wind_light->setEnabled( ((RlvActions::canChangeEnvironment()) && (!RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE))) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")));
-// [/RLVa:KB]
-//    ctrl_wind_light->setEnabled(TRUE);
-
 	sky->setEnabled(TRUE);
-
-	//Deferred/SSAO/Shadows
-	LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
-
-	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
-						((bumpshiny_ctrl && bumpshiny_ctrl->get()) ? TRUE : FALSE) &&
-						(ctrl_wind_light->get()) ? TRUE : FALSE;
-
-	ctrl_deferred->setEnabled(enabled);
 
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
 	LLComboBox* ctrl_shadow = getChild<LLComboBox>("ShadowDetail");
 
-	// note, okay here to get from ctrl_deferred as it's twin, ctrl_deferred2 will alway match it
-	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO") && (ctrl_deferred->get() ? TRUE : FALSE);
-	
-	ctrl_deferred->set(gSavedSettings.getBOOL("RenderDeferred"));
+	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO");
 
 	ctrl_ssao->setEnabled(enabled);
 	ctrl_dof->setEnabled(enabled);
@@ -2318,6 +2209,19 @@ void LLFloaterPreference::refreshEnabledState()
 	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail");
 
 	ctrl_shadow->setEnabled(enabled);
+
+	enabled = FALSE;
+	if (!LLFeatureManager::instance().isFeatureAvailable("RenderReflectionsEnabled"))
+	{
+		getChildView("ReflectionsEnabled")->setEnabled(FALSE);
+	}
+	else
+	{
+		enabled = gSavedSettings.getBOOL("RenderReflectionsEnabled");
+	}
+	getChildView("ReflectionDetail")->setEnabled(enabled);
+	//getChildView("ReflectionDetailText")->setEnabled(enabled);
+	getChildView("ScreenSpaceReflections")->setEnabled(enabled);
 
 	// now turn off any features that are unavailable
 	disableUnavailableSettings();
@@ -2327,30 +2231,14 @@ void LLFloaterPreference::refreshEnabledState()
 	getChild<LLButton>("fs_default_creation_permissions")->setEnabled(LLStartUp::getStartupState() < STATE_STARTED ? false : true);
 
 	getChildView("block_list")->setEnabled(LLLoginInstance::getInstance()->authSuccess());
-}
 
-// <FS:Ansariel> Dynamic texture memory calculation
-void LLFloaterPreference::handleDynamicTextureMemoryChanged()
-{
-	if (LLViewerTextureList::canUseDynamicTextureMemory())
+	// [RLVa:KB] - Checked: 2013-05-11 (RLVa-1.4.9)
+	if (RlvActions::isRlvEnabled())
 	{
-		bool dynamic_tex_mem_enabled = gSavedSettings.getBOOL("FSDynamicTextureMemory");
-		childSetEnabled("FSDynamicTextureMemory", true);
-		childSetEnabled("FSDynamicTextureMemoryMinTextureMemory", dynamic_tex_mem_enabled);
-		childSetEnabled("FSDynamicTextureMemoryCacheReserve", dynamic_tex_mem_enabled);
-		childSetEnabled("FSDynamicTextureMemoryGPUReserve", dynamic_tex_mem_enabled);
-		childSetEnabled("GraphicsCardTextureMemory", !dynamic_tex_mem_enabled);
+		getChild<LLUICtrl>("do_not_disturb_response")->setEnabled(!RlvActions::hasBehaviour(RLV_BHVR_SENDIM));
 	}
-	else
-	{
-		childSetEnabled("FSDynamicTextureMemory", false);
-		childSetEnabled("FSDynamicTextureMemoryMinTextureMemory", false);
-		childSetEnabled("FSDynamicTextureMemoryCacheReserve", false);
-		childSetEnabled("FSDynamicTextureMemoryGPUReserve", false);
-		childSetEnabled("GraphicsCardTextureMemory", true);
-	}
+	// [/RLVa:KB]
 }
-// </FS:Ansariel>
 
 // <FS:Zi> Support preferences search SLURLs
 void LLFloaterPreference::onCopySearch()
@@ -2405,80 +2293,22 @@ void LLAvatarComplexityControls::setIndirectMaxArc()
 
 void LLFloaterPreference::disableUnavailableSettings()
 {	
-	LLComboBox* ctrl_reflections   = getChild<LLComboBox>("Reflections");
-	LLCheckBoxCtrl* ctrl_avatar_cloth  = getChild<LLCheckBoxCtrl>("AvatarCloth");
-	LLCheckBoxCtrl* ctrl_wind_light    = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
-	LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
 	LLComboBox* ctrl_shadows = getChild<LLComboBox>("ShadowDetail");
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
-	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
-	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
-
-	// disabled windlight
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))
-	{
-		ctrl_wind_light->setEnabled(FALSE);
-		ctrl_wind_light->setValue(FALSE);
-
-		sky->setEnabled(FALSE);
-
-		//deferred needs windlight, disable deferred
-		ctrl_shadows->setEnabled(FALSE);
-		ctrl_shadows->setValue(0);
-
-		ctrl_ssao->setEnabled(FALSE);
-		ctrl_ssao->setValue(FALSE);
-
-		ctrl_dof->setEnabled(FALSE);
-		ctrl_dof->setValue(FALSE);
-
-		ctrl_deferred->setEnabled(FALSE);
-		ctrl_deferred->setValue(FALSE);
-	}
-
-	// disabled deferred
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred"))
-	{
-		ctrl_shadows->setEnabled(FALSE);
-		ctrl_shadows->setValue(0);
-
-		ctrl_ssao->setEnabled(FALSE);
-		ctrl_ssao->setValue(FALSE);
-
-		ctrl_dof->setEnabled(FALSE);
-		ctrl_dof->setValue(FALSE);
-
-		ctrl_deferred->setEnabled(FALSE);
-		ctrl_deferred->setValue(FALSE);
-	}
 	
-	// disabled deferred SSAO
+    // disabled deferred SSAO
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO"))
 	{
-		ctrl_ssao->setEnabled(FALSE);
+		ctrl_ssao->setEnabled(FALSE);   
 		ctrl_ssao->setValue(FALSE);
 	}
 	
 	// disabled deferred shadows
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail"))
-	{
-		ctrl_shadows->setEnabled(FALSE);
-		ctrl_shadows->setValue(0);
-	}
-
-	// disabled reflections
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderReflectionDetail"))
-	{
-		ctrl_reflections->setEnabled(FALSE);
-		ctrl_reflections->setValue(FALSE);
-	}
-	
-	// disabled cloth
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderAvatarCloth"))
-	{
-		ctrl_avatar_cloth->setEnabled(FALSE);
-		ctrl_avatar_cloth->setValue(FALSE);
-	}
+    if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail"))
+    {
+        ctrl_shadows->setEnabled(FALSE);
+        ctrl_shadows->setValue(0);
+    }
 }
 
 void LLFloaterPreference::refresh()
@@ -3041,6 +2871,14 @@ void LLFloaterPreference::onChangeModelFolder()
     }
 }
 
+void LLFloaterPreference::onChangePBRFolder()
+{
+    if (gInventory.isInventoryUsable())
+    {
+        getChild<LLTextBox>("upload_pbr")->setText(get_category_path(LLFolderType::FT_MATERIAL));
+    }
+}
+
 void LLFloaterPreference::onChangeTextureFolder()
 {
     if (gInventory.isInventoryUsable())
@@ -3143,7 +2981,7 @@ void LLFloaterPreference::onAtmosShaderChange()
     if(ctrl_alm)
     {
         //Deferred/SSAO/Shadows
-        BOOL bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump") && gSavedSettings.getBOOL("RenderObjectBump");
+        BOOL bumpshiny = LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump") && gSavedSettings.getBOOL("RenderObjectBump");
         BOOL shaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders");
         BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
                         bumpshiny &&

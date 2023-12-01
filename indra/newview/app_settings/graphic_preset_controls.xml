@@ -7,12 +7,7 @@
 		<string>CameraFocusTransitionTime</string>
 		<string>CameraFNumber</string>
 		<string>FramePerSecondLimit</string>
-		<string>FSDynamicTextureMemory</string>
-		<string>FSDynamicTextureMemoryCacheReserve</string>
-		<string>FSDynamicTextureMemoryGPUReserve</string>
-		<string>FSDynamicTextureMemoryMinTextureMemory</string>
 		<string>FSLimitFramerate</string>
-		<string>FSRenderDoFUnderwater</string>
 		<string>FSRenderVignette</string>
 		<string>FullScreen</string>
 		<string>RenderAnisotropic</string>
@@ -20,32 +15,36 @@
 		<string>RenderAttachedParticles</string>
 		<string>RenderAutoMaskAlphaDeferred</string>
 		<string>RenderAutoMaskAlphaNonDeferred</string>
-		<string>RenderAvatarCloth</string>
 		<string>RenderAvatarLODFactor</string>
 		<string>RenderAvatarMaxComplexity</string>
 		<string>RenderAvatarMaxNonImpostors</string>
 		<string>RenderAvatarPhysicsLODFactor</string>
 		<string>RenderCompressTextures</string>
-		<string>RenderDeferred</string>
 		<string>RenderDeferredSSAO</string>
 		<string>RenderDepthOfField</string>
 		<string>RenderDepthOfFieldInEditMode</string>
+		<string>RenderDynamicExposureCoefficient</string>
+		<string>RenderExposure</string>
 		<string>RenderFarClip</string>
 		<string>RenderFlexTimeFactor</string>
-		<string>RenderFogRatio</string>
 		<string>RenderFSAASamples</string>
-		<string>RenderGamma</string>
 		<string>RenderGlow</string>
 		<string>RenderGlowIterations</string>
 		<string>RenderGlowResolutionPow</string>
-		<string>RenderLocalLights</string>
+		<string>RenderLocalLightCount</string>
 		<string>RenderMaxPartCount</string>
-		<string>RenderObjectBump</string>
 		<string>RenderQualityPerformance</string>
-		<string>RenderReflectionDetail</string>
+		<string>RenderReflectionsEnabled</string>
+		<string>RenderReflectionProbeDetail</string>
+		<string>RenderReflectionProbeLevel</string>
+		<string>RenderScreenSpaceReflections</string>
 		<string>RenderShaderLightingMaxLevel</string>
 		<string>RenderShadowDetail</string>
 		<string>RenderShadowResolutionScale</string>
+		<string>RenderSkyAutoAdjustLegacy</string>
+		<string>RenderSSAOIrradianceScale</string>
+		<string>RenderSSAOIrradianceMax</string>
+		<string>RenderSunDynamicRange</string>
 		<string>RenderTerrainDetail</string>
 		<string>RenderTerrainLODFactor</string>
 		<string>RenderTerrainScale</string>
@@ -54,11 +53,10 @@
 		<string>RenderUnloadedAvatar</string>
 		<string>RenderUseStreamVBO</string>
 		<string>RenderVBOEnable</string>
+		<string>RenderVSyncEnable</string>
 		<string>RenderVolumeLODFactor</string>
 		<string>RenderWaterRefResolution</string>
 		<string>TextureDiscardLevel</string>
-		<string>TextureMemory</string>
-		<string>WindLightUseAtmosShaders</string>
 		<string>WLSkyDetail</string>
 	</array>
 </llsd>

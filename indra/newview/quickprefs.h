@@ -119,13 +119,10 @@ private:
 	LLComboBox*			mDayCyclePresetsCombo;
 
 	// Phototools additions
-	LLCheckBoxCtrl*		mCtrlWindLight;
-	LLCheckBoxCtrl*		mCtrlDeferred;
 	LLCheckBoxCtrl*		mCtrlUseSSAO;
 	LLCheckBoxCtrl*		mCtrlUseDoF;
 	LLComboBox*			mCtrlShadowDetail;
-	LLComboBox*			mCtrlReflectionDetail;
-	
+
 	// Vignette UI controls
 	LLSpinCtrl*			mSpinnerVignetteX;
 	LLSpinCtrl*			mSpinnerVignetteY;

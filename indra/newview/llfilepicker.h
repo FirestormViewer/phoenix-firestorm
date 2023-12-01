@@ -84,6 +84,7 @@ public:
 		FFLOAD_WAV = 2,
 		FFLOAD_IMAGE = 3,
 		FFLOAD_ANIM = 4,
+		FFLOAD_GLTF = 5,
 		FFLOAD_XML = 6,
 		FFLOAD_SLOBJECT = 7,
 		FFLOAD_RAW = 8,
@@ -91,9 +92,11 @@ public:
 		FFLOAD_COLLADA = 10,
 		FFLOAD_SCRIPT = 11,
 		FFLOAD_DICTIONARY = 12,
-		FFLOAD_DIRECTORY = 13,   //To call from lldirpicker.
-		FFLOAD_EXE = 14,         // Note: EXE will be treated as ALL on Windows and Linux but not on Darwin
-		
+        FFLOAD_DIRECTORY = 13,   // To call from lldirpicker.
+        FFLOAD_EXE = 14,          // Note: EXE will be treated as ALL on Windows and Linux but not on Darwin
+        FFLOAD_MATERIAL = 15,
+        FFLOAD_MATERIAL_TEXTURE = 16,
+
 		// Firestorm additions
 		FFLOAD_IMPORT = 50
 	};
@@ -106,6 +109,7 @@ public:
 		FFSAVE_BMP = 5,
 		FFSAVE_AVI = 6,
 		FFSAVE_ANIM = 7,
+		FFSAVE_GLTF = 8,
 		FFSAVE_XML = 9,
 		FFSAVE_COLLADA = 10,
 		FFSAVE_RAW = 11,

@@ -93,10 +93,12 @@ public:
 
         FT_SETTINGS = 56,
 
+        FT_MATERIAL = 57,
+
 		// <FS:Ansariel> Folder types for our own virtual system folders
-		FT_FIRESTORM = 57,		
-		FT_PHOENIX = 58,
-		FT_RLV = 59,
+		FT_FIRESTORM = 58,		
+		FT_PHOENIX = 59,
+		FT_RLV = 60,
 		// </FS:Ansariel> Folder types for our own virtual system folders
 
 		FT_MY_SUITCASE = 100, // <FS:Ansariel> OpenSim HG-support
@@ -104,6 +106,8 @@ public:
 		FT_COUNT,
 
 		FT_NONE = -1
+
+        // When adding, see note at bottom of LLAssetType::Etype
 	};
 
 	static EType 				lookup(const std::string& type_name);

@@ -147,7 +147,7 @@ LLSD lggBeamMapFloater::getDataSerialized()
 void lggBeamMapFloater::onClickSave()
 {
 	std::string filename(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "beams", "NewBeam.xml"));
-	(new LLFilePickerReplyThread(boost::bind(&lggBeamMapFloater::onSaveCallback, this, _1), LLFilePicker::FFSAVE_BEAM, filename))->getFile();
+	LLFilePickerReplyThread::startPicker(boost::bind(&lggBeamMapFloater::onSaveCallback, this, _1), LLFilePicker::FFSAVE_BEAM, filename);
 }
 
 void lggBeamMapFloater::onSaveCallback(const std::vector<std::string>& filenames)
@@ -177,7 +177,7 @@ void lggBeamMapFloater::onClickClear()
 
 void lggBeamMapFloater::onClickLoad()
 {
-	(new LLFilePickerReplyThread(boost::bind(&lggBeamMapFloater::onLoadCallback, this, _1), LLFilePicker::FFLOAD_XML, false))->getFile();
+	LLFilePickerReplyThread::startPicker(boost::bind(&lggBeamMapFloater::onLoadCallback, this, _1), LLFilePicker::FFLOAD_XML, false);
 }
 
 void lggBeamMapFloater::onLoadCallback(const std::vector<std::string>& filenames)

@@ -35,7 +35,6 @@
 			</text>
 			<check_box label="Şəffaf su" name="TransparentWater"/>
 			<check_box label="Qabarıqlıq və parıltı" name="BumpShiny"/>
-			<check_box label="Yerli işıqlar" name="LocalLights"/>
 			<check_box label="Atmosfer şeyderləri" name="WindLightUseAtmosShaders"/>
 			<check_box label="Əlavə işıqlandırma modeli" tool_tip="İşıqlandırmanın genişləndirilməsini aktivləşdirin." name="UseLightShaders"/>
 			<check_box label="Əlavə kölgələr" name="UseSSAO"/>

@@ -52,7 +52,6 @@
 #include "llviewerpartsim.h"
 #include "llviewercontrol.h" // for gSavedSettings
 #include "llviewertexturelist.h"
-#include "llperfstats.h"
 
 // <FS:Zi> Add avatar hitbox debug
 #include "llviewercontrol.h"
@@ -62,8 +61,6 @@
 #include "llnetmap.h"
 
 
-static U32 sDataMask = LLDrawPoolAvatar::VERTEX_DATA_MASK;
-static U32 sBufferUsage = GL_STREAM_DRAW_ARB;
 static U32 sShaderLevel = 0;
 
 LLGLSLShader* LLDrawPoolAvatar::sVertexProgram = NULL;
@@ -152,15 +149,6 @@ void LLDrawPoolAvatar::prerender()
 	mShaderLevel = LLViewerShaderMgr::instance()->getShaderLevel(LLViewerShaderMgr::SHADER_AVATAR);
 	
 	sShaderLevel = mShaderLevel;
-	
-	if (sShaderLevel > 0)
-	{
-		sBufferUsage = GL_DYNAMIC_DRAW_ARB;
-	}
-	else
-	{
-		sBufferUsage = GL_STREAM_DRAW_ARB;
-	}
 }
 
 LLMatrix4& LLDrawPoolAvatar::getModelView()
@@ -389,10 +377,9 @@ void LLDrawPoolAvatar::renderShadow(S32 pass)
 	{
 		return;
 	}
-    LLPerfStats::RecordAvatarTime T(avatarp->getID(), LLPerfStats::StatType_t::RENDER_SHADOWS);
 
-	LLVOAvatar::AvatarOverallAppearance oa = avatarp->getOverallAppearance();
-	BOOL impostor = !LLPipeline::sImpostorRender && avatarp->isImpostor();    
+    LLVOAvatar::AvatarOverallAppearance oa = avatarp->getOverallAppearance();
+	BOOL impostor = !LLPipeline::sImpostorRender && avatarp->isImpostor();
     // no shadows if the shadows are causing this avatar to breach the limit.
     if (avatarp->isTooSlow() || impostor || (oa == LLVOAvatar::AOA_INVISIBLE))
 	{
@@ -543,14 +530,6 @@ void LLDrawPoolAvatar::beginRigid()
 		{	//eyeballs render with the specular shader
 			sVertexProgram->bind();
 			sVertexProgram->setMinimumAlpha(LLDrawPoolAvatar::sMinimumAlpha);
-            if (LLPipeline::sRenderingHUDs)
-	        {
-		        sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
-	        }
-	        else
-	        {
-		        sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
-	        }
 		}
 	}
 	else
@@ -609,14 +588,6 @@ void LLDrawPoolAvatar::beginDeferredRigid()
 	sDiffuseChannel = sVertexProgram->enableTexture(LLViewerShaderMgr::DIFFUSE_MAP);
 	sVertexProgram->bind();
 	sVertexProgram->setMinimumAlpha(LLDrawPoolAvatar::sMinimumAlpha);
-    if (LLPipeline::sRenderingHUDs)
-	{
-		sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
-	}
-	else
-	{
-		sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
-	}
 }
 
 void LLDrawPoolAvatar::endDeferredRigid()
@@ -634,65 +605,14 @@ void LLDrawPoolAvatar::beginSkinned()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
 
-	if (sShaderLevel > 0)
-	{
-		if (LLPipeline::sUnderWaterRender)
-		{
-			sVertexProgram = &gAvatarWaterProgram;
-			sShaderLevel = llmin((U32) 1, sShaderLevel);
-		}
-		else
-		{
-			sVertexProgram = &gAvatarProgram;
-		}
-	}
-	else
-	{
-		if (LLPipeline::sUnderWaterRender)
-		{
-			sVertexProgram = &gObjectAlphaMaskNoColorWaterProgram;
-		}
-		else
-		{
-			sVertexProgram = &gObjectAlphaMaskNoColorProgram;
-		}
-	}
+    // used for preview only
+
+	sVertexProgram = &gAvatarProgram;
 	
-	if (sShaderLevel > 0)  // for hardware blending
-	{
-		sRenderingSkinned = TRUE;
+	sRenderingSkinned = TRUE;
 
-		sVertexProgram->bind();
-		sVertexProgram->enableTexture(LLViewerShaderMgr::BUMP_MAP);
-        if (LLPipeline::sRenderingHUDs)
-	    {
-		    sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
-	    }
-	    else
-	    {
-		    sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
-	    }
-		gGL.getTexUnit(0)->activate();
-	}
-	else
-	{
-		if(gPipeline.shadersLoaded())
-		{
-			// software skinning, use a basic shader for windlight.
-			// TODO: find a better fallback method for software skinning.
-			sVertexProgram->bind();
-            if (LLPipeline::sRenderingHUDs)
-	        {
-		        sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
-	        }
-	        else
-	        {
-		        sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
-	        }
-		}
-	}
-
-		sVertexProgram->setMinimumAlpha(LLDrawPoolAvatar::sMinimumAlpha);
+	sVertexProgram->bind();
+    sVertexProgram->setMinimumAlpha(LLDrawPoolAvatar::sMinimumAlpha);
 }
 
 void LLDrawPoolAvatar::endSkinned()
@@ -731,15 +651,6 @@ void LLDrawPoolAvatar::beginDeferredSkinned()
 
 	sVertexProgram->bind();
 	sVertexProgram->setMinimumAlpha(LLDrawPoolAvatar::sMinimumAlpha);
-	if (LLPipeline::sRenderingHUDs)
-	{
-		sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 1);
-	}
-	else
-	{
-		sVertexProgram->uniform1i(LLShaderMgr::NO_ATMO, 0);
-	}
-
 	sDiffuseChannel = sVertexProgram->enableTexture(LLViewerShaderMgr::DIFFUSE_MAP);
 	gGL.getTexUnit(0)->activate();
 }
@@ -767,7 +678,7 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	{
 		LL_PROFILE_ZONE_NAMED_CATEGORY_AVATAR("pass -1"); // <FS:Beq/> Tracy markup
 		for (S32 i = 1; i < getNumPasses(); i++)
-		{ //skip foot shadows
+		{ //skip impostor pass
 			prerender();
 			beginRenderPass(i);
 			renderAvatars(single_avatar, i);
@@ -803,7 +714,6 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 	{
 		return;
 	}
-    LLPerfStats::RecordAvatarTime T(avatarp->getID(), LLPerfStats::StatType_t::RENDER_GEOMETRY);
 
 	// <FS:Zi> Add avatar hitbox debug
 	static LLCachedControl<bool> render_hitbox(gSavedSettings, "DebugRenderHitboxes", false);
@@ -1045,14 +955,6 @@ LLViewerTexture *LLDrawPoolAvatar::getDebugTexture()
 LLColor3 LLDrawPoolAvatar::getDebugColor() const
 {
 	return LLColor3(0.f, 1.f, 0.f);
-}
-
-
-LLVertexBufferAvatar::LLVertexBufferAvatar()
-: LLVertexBuffer(sDataMask, 
-	GL_STREAM_DRAW_ARB) //avatars are always stream draw due to morph targets
-{
-    LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR
 }
 
 
