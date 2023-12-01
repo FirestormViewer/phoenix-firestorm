@@ -876,7 +876,7 @@ void LLSpatialGroup::rebound()
     }
 }
 
-void LLSpatialGroup::destroyGLState(bool keep_occlusion) 
+void LLSpatialGroup::destroyGLState(bool keep_occlusion)
 {
 	// <FS:Ansariel> Reset VB during TP
 	bool is_tree_group = getSpatialPartition()->mPartitionType == LLViewerRegion::PARTITION_TREE;
