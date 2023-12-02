@@ -6,31 +6,49 @@
 	<panel.string name="ItemcountCompleted">
 		[ITEM_COUNT] Objetos y [CATEGORY_COUNT] Carpetas [FILTER]
 	</panel.string>
-	<filter_editor label="Filtrar" name="inventory search editor" tool_tip="Escribe uno o más términos a buscar, separados por '+' "/>
-	<button name="collapse_btn" label="Contraer"/>
-	<button name="expand_btn" label="Expandir"/>
-	<text name="filter_label" value="Filtrar:"/>
-	<combo_box name="filter_combo_box">
-		<combo_box.item value="filter_type_all" label="Todo"/>
-		<combo_box.item value="filter_type_animations" label="Animaciones"/>
-		<combo_box.item value="filter_type_calling_cards" label="Tarjetas de visita"/>
-		<combo_box.item value="filter_type_clothing" label="Ropa / Partes del cuerpo"/>
-		<combo_box.item value="filter_type_gestures" label="Gestos"/>
-		<combo_box.item value="filter_type_landmarks" label="Hitos"/>
-		<combo_box.item value="filter_type_notecards" label="Notas"/>
-		<combo_box.item value="filter_type_objects" label="Objetos"/>
-		<combo_box.item value="filter_type_scripts" label="Scripts"/>
-		<combo_box.item value="filter_type_sounds" label="Sonidos"/>
-		<combo_box.item value="filter_type_textures" label="Texturas"/>
-		<combo_box.item value="filter_type_snapshots" label="Fotografías"/>
-		<combo_box.item value="filter_type_meshes" label="Modelos mesh"/>
-		<combo_box.item value="filter_type_custom" label="Personalizado..."/>
-	</combo_box>
-	<tab_container name="inventory filter tabs">
-		<inventory_panel label="INVENTARIO" name="All Items"/>
-		<recent_inventory_panel label="RECIENTE" name="Recent Items"/>
-		<worn_inventory_panel label="EN USO" name="Worn Items"/>
-	</tab_container>
+	<layout_stack name="nav_stack">
+		<layout_panel name="nav_buttons">
+			<button name="back_btn" tool_tip="Regresa" />
+			<button name="forward_btn" tool_tip="Avanzar" />
+			<button name="up_btn" tool_tip="Sube un nivel" />
+		</layout_panel>
+		<layout_panel name="filter_panel">
+			<filter_editor label="Filtrar" name="inventory search editor" tool_tip="Escribe uno o más términos a buscar, separados por '+' "/>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="ctrl_stack">
+		<layout_panel name="collapse_expand_buttons">
+			<button name="collapse_btn" label="Contraer"/>
+			<button name="expand_btn" label="Expandir"/>
+		</layout_panel>
+		<layout_panel name="filter_ctrls">
+			<text name="filter_label" value="Filtrar:"/>
+			<combo_box name="filter_combo_box">
+				<combo_box.item value="filter_type_all" label="Todo"/>
+				<combo_box.item value="filter_type_animations" label="Animaciones"/>
+				<combo_box.item value="filter_type_calling_cards" label="Tarjetas de visita"/>
+				<combo_box.item value="filter_type_clothing" label="Ropa / Partes del cuerpo"/>
+				<combo_box.item value="filter_type_gestures" label="Gestos"/>
+				<combo_box.item value="filter_type_landmarks" label="Hitos"/>
+				<combo_box.item value="filter_type_notecards" label="Notas"/>
+				<combo_box.item value="filter_type_objects" label="Objetos"/>
+				<combo_box.item value="filter_type_scripts" label="Scripts"/>
+				<combo_box.item value="filter_type_sounds" label="Sonidos"/>
+				<combo_box.item value="filter_type_textures" label="Texturas"/>
+				<combo_box.item value="filter_type_snapshots" label="Fotografías"/>
+				<combo_box.item value="filter_type_meshes" label="Modelos mesh"/>
+				<combo_box.item value="filter_type_custom" label="Personalizado..."/>
+			</combo_box>
+			<menu_button tool_tip="Mostrar opciones de visibilidad de búsqueda" name="options_visibility_btn" />
+		</layout_panel>
+	</layout_stack>
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs">
+			<inventory_panel label="INVENTARIO" name="All Items"/>
+			<recent_inventory_panel label="RECIENTE" name="Recent Items"/>
+			<worn_inventory_panel label="EN USO" name="Worn Items"/>
+		</tab_container>
+	</panel>
 	<panel name="bottom_panel">
 		<panel name="options_gear_btn_panel">
 			<menu_button name="options_gear_btn" tool_tip="Ver más opciones"/>

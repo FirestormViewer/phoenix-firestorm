@@ -6,7 +6,7 @@
 	<!-- 一般 -->
 	
 	<panel label="一般" name="General">
-		<text name="preset_label" width="95">
+		<text name="preset_label">
 			使用中のプリセット:
 		</text>
 
