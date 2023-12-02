@@ -1697,6 +1697,12 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="MarketplaceNoMatchingItems">
 		Предметы не найдены. Проверьте правильность строки поиска и повторите попытку.
 	</string>
+	<string name="InventorySingleFolderEmpty">
+		Папка пустая.
+	</string>
+	<string name="InventorySingleFolderNoMatches">
+		Нет совпадений.
+	</string>
 	<string name="InventoryNoTexture">
 		Вы не имеете копию этой текстуры в инвентаре
 	</string>
@@ -1862,12 +1868,16 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="Unconstrained">
 		Несвязанные
 	</string>
+	<string name="active" value=" (активный)"/>
 	<string name="no_transfer" value=" (не передается)"/>
 	<string name="no_modify" value=" (не изменяется)"/>
 	<string name="no_copy" value=" (не копируется)"/>
 	<string name="worn" value=" (надето)"/>
 	<string name="link" value=" (ссылка)"/>
 	<string name="broken_link" value=" (неработающая ссылка)"/>
+	<string name="no_transfer_lbl" value=" не передается" />
+	<string name="no_modify_lbl"   value=" не изменяется" />
+	<string name="no_copy_lbl"     value=" не копируется" />
 	<string name="LoadingContents">
 		Загрузка содержимого...
 	</string>

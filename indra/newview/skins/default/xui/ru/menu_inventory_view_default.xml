@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_view_default">
+    <menu_item_check label="Сортировать по названию" name="sort_by_name"/>
+    <menu_item_check label="Сортировать по самым последним" name="sort_by_recent"/>
+    <menu_item_check label="Сортировать папки всегда по имени" name="sort_folders_by_name"/>
+    <menu_item_check label="Сортировать системные папки вверху" name="sort_system_folders_to_top"/>
+    <menu_item_check label="Посмотреть список" name="list_view"/>
+    <menu_item_check label="Просмотр галереи" name="gallery_view"/>
+    <menu_item_check label="Комбинированный вид" name="combination_view"/>
+    <menu_item_check label="Настройки инвентаря..." name="inv_settings"/>
+</toggleable_menu>
