@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="item properties" title="Профиль объекта">
 	<panel.string name="loading_experience">
 		(загрузка)
@@ -27,62 +27,67 @@
 	<panel.string name="origin_inworld">
 		(в мире)
 	</panel.string>
-	<text name="title" value="Профиль объекта"/>
-	<text name="origin" value="(инвентарь)"/>
-	<scroll_container name="item_profile_scroll">
-		<panel label="" name="item_profile">
-			<text name="LabelItemNameTitle">
-				Название:
-			</text>
+
+	<layout_stack name="main_stack">
+		<layout_panel name="layout_item_name">
 			<line_editor name="LabelItemName" tool_tip="Название ограничено 63 символами. Более длинные имена примитива сокращаются. Имена могут состоять только из печатаемых символов, содержащихся в ASCII-7 (нерасширенном) наборе символов, за исключением вертикальной черты/линии &quot;|&quot;."/>
-			<text name="LabelItemDescTitle">
-				Описание:
-			</text>
-			<line_editor name="LabelItemDesc" tool_tip="Когда в настройках окна просмотра выбрано &apos;Всплывающие подсказки на всех объектах&apos;, у игроков появляется всплывающее окошко с описанием объекта при наведении мыши на любой объект. Описание примитива ограничивается 127 байтами и строка со значением, превышающим этот размер, усекается."/>
-			<text name="LabelCreatorTitle">
-				Создатель:
-			</text>
+		</layout_panel>
+
+		<layout_panel name="layout_item_details">
 			<text name="LabelOwnerTitle">
 				Владелец:
+			</text>
+			<text name="LabelCreatorTitle">
+				Создатель:
 			</text>
 			<text name="LabelAcquiredTitle">
 				Приобретено:
 			</text>
+			<button label="Изображение..." name="change_thumbnail_btn"/>
+		</layout_panel>
+
+		<layout_panel name="layout_item_description">
+			<text name="LabelItemDescTitle">
+				Описание:
+			</text>
+ 			<text_editor name="LabelItemDesc" tool_tip="Когда в настройках окна просмотра выбрано &apos;Всплывающие подсказки на всех объектах&apos;, у игроков появляется всплывающее окошко с описанием объекта при наведении мыши на любой объект. Описание примитива ограничивается 127 байтами и строка со значением, превышающим этот размер, усекается."/>
 			<text name="LabelItemExperienceTitle">
 				Приключение:
 			</text>
-			<panel name="perms_inv">
-				<text name="perm_modify">
-					Вы можете:
-				</text>
-				<check_box label="Изменять" name="CheckOwnerModify"/>
-				<check_box label="Копировать" name="CheckOwnerCopy"/>
-				<check_box label="Передать" name="CheckOwnerTransfer"/>
-				<text name="AnyoneLabel">
-					Все:
-				</text>
-				<check_box label="Копировать" name="CheckEveryoneCopy" tool_tip="Копию объекта может взять любой желающий. Объект и все его содержимое должны копироваться и передаваться."/>
-				<text name="GroupLabel">
-					Группа:
-				</text>
-				<check_box label="Поделиться" name="CheckShareWithGroup" tool_tip="Позволить всем участникам выбранной группы получить установленные вам права на этот объект. Для включения ролевых ограничений необходимо произвести сделку."/>
-				<text name="NextOwnerLabel">
-					Следующий владелец:
-				</text>
-				<check_box label="Изменять" name="CheckNextOwnerModify" tool_tip="Следующий владелец может отредактировать свойства, такие как имя отдельного предмета или масштаб этого объекта."/>
-				<check_box label="Копировать" name="CheckNextOwnerCopy" tool_tip="Следующий владелец может сделать неограниченное количество копий этого объекта. Копии содержат информацию о создателе и никогда не могут быть более разрешительными, чем копируемый предмет."/>
-				<check_box label="Передать" name="CheckNextOwnerTransfer" tool_tip="Следующий владелец может отдать или перепродать этот объект."/>
-			</panel>
+		</layout_panel>
+
+		<layout_panel name="layout_item_permissions_sale" >
+			<text name="permissions_label">
+				Разрешения
+			</text>
+			<text name="perm_modify">
+				Вы можете:
+			</text>
+			<check_box label="Изменять" name="CheckOwnerModify"/>
+			<check_box label="Копировать" name="CheckOwnerCopy"/>
+			<check_box label="Передать" name="CheckOwnerTransfer"/>
+			<text name="AnyoneLabel">
+				Все:
+			</text>
+			<check_box label="Копировать" name="CheckEveryoneCopy" tool_tip="Копию объекта может взять любой желающий. Объект и все его содержимое должны копироваться и передаваться."/>
+			<text name="GroupLabel">
+				Группа:
+			</text>
+			<check_box label="Поделиться" name="CheckShareWithGroup" tool_tip="Позволить всем участникам выбранной группы получить установленные вам права на этот объект. Для включения ролевых ограничений необходимо произвести сделку."/>
+			<text name="NextOwnerLabel">
+				Следующий владелец:
+			</text>
+			<check_box label="Изменять" name="CheckNextOwnerModify" tool_tip="Следующий владелец может отредактировать свойства, такие как имя отдельного предмета или масштаб этого объекта."/>
+			<check_box label="Копировать" name="CheckNextOwnerCopy" tool_tip="Следующий владелец может сделать неограниченное количество копий этого объекта. Копии содержат информацию о создателе и никогда не могут быть более разрешительными, чем копируемый предмет."/>
+			<check_box label="Передать" name="CheckNextOwnerTransfer" tool_tip="Следующий владелец может отдать или перепродать этот объект."/>
 			<check_box label="Для продажи" name="CheckPurchase" tool_tip="Позволяет игрокам покупать этот объект, его содержимое или копировать его в игровом мире по указанной цене."/>
 			<combo_box name="ComboBoxSaleType" tool_tip="Выберите, получит ли покупатель копию, копию содержимого или сам предмет.">
-				<combo_box.item label="Копировать" name="Copy"/>
-				<combo_box.item label="Содержимое" name="Contents"/>
-				<combo_box.item label="Оригинал" name="Original"/>
+				<combo_box.item name="Copy" label="Копировать"/>
+				<combo_box.item name="Contents" label="Содержимое"/>
+				<combo_box.item name="Original" label="Оригинал"/>
 			</combo_box>
-			<spinner label="Цена: L$" name="Edit Cost" tool_tip="Стоимость объекта."/>
-		</panel>
-	</scroll_container>
-	<panel name="button_panel">
-		<button label="Отмена" name="cancel_btn"/>
-	</panel>
+			<spinner name="Edit Cost" label="Цена: L$" tool_tip="Стоимость объекта."/>
+		</layout_panel>
+
+	</layout_stack>
 </panel>

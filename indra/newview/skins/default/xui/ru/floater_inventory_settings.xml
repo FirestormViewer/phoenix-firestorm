@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="inventory_settings" title="Настройка инвентаря">
+	<text name="multi_folder_txt" width="300">
+		Дважды щелкните папку в режиме просмотра нескольких папок:
+	</text>
+	<radio_group name="multi_double_click_setting">
+		<radio_item label="Раскрыть &amp; свернуть папку" name="0" width="200"/>
+		<radio_item label="Открыть новое окно" name="1" width="200" />
+		<radio_item label="Переключить вид" name="2" width="200" />
+	</radio_group>
+	<text name="single_folder_txt" width="300">
+		Дважды щелкните папку в режиме просмотра одной папки:
+	</text>
+	<radio_group name="single_double_click_setting">
+		<radio_item label="Остается в текущем окне" name="false" width="200"/>
+		<radio_item label="Открыть новое окно name" name="true" width="200" />
+	</radio_group>
+	<text name="find_original_txt" width="300">
+		Нажимите «Показать в инвентаре» или «Найти оригинал».
+	</text>
+	<radio_group name="find_original_settings">
+		<radio_item label="Показывать предмет в главном окне инвентаря." name="false" width="200"/>
+		<radio_item label="Открывать новое окно с одной папкой." name="true" width="200" />
+	</radio_group>
+	<button label="OK" name="ok_btn" width="90" />
+</floater>
