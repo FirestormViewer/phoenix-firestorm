@@ -1882,8 +1882,7 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
             LLVolumeParams volume_params;
             volume_params.setType(LL_PCODE_PROFILE_SQUARE, LL_PCODE_PATH_LINE);
             mModel[lod][mdl_idx] = new LLModel(volume_params, 0.f);
-
-            std::string name = base->mLabel + getLodSuffix(lod);
+            std::string name = stripSuffix(base->mLabel) + getLodSuffix(lod);
 
             mModel[lod][mdl_idx]->mLabel = name;
             mModel[lod][mdl_idx]->mSubmodelID = base->mSubmodelID;
