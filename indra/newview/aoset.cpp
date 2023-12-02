@@ -27,6 +27,7 @@
 #include "aoengine.h"
 #include "aoset.h"
 #include "llanimationstates.h"
+#include "llinventorymodel.h"
 
 AOSet::AOSet(const LLUUID inventoryID)
 :	LLEventTimer(10000.0f),
@@ -190,7 +191,25 @@ const LLUUID& AOSet::getAnimationForState(AOState* state) const
 					LL_DEBUGS("AOEngine") << "cycle " << state->mCurrentAnimation << " of " << numOfAnimations << LL_ENDL;
 				}
 			}
-			return state->mAnimations[state->mCurrentAnimation].mAssetUUID;
+
+			AOAnimation& anim = state->mAnimations[state->mCurrentAnimation];
+
+			if (anim.mAssetUUID.isNull())
+			{
+				LL_DEBUGS("AOEngine") << "Asset UUID for chosen animation " << anim.mName << " not yet known, try to find it." << LL_ENDL;
+
+				if(LLViewerInventoryItem* item = gInventory.getItem(anim.mInventoryUUID) ; item)
+				{
+					LL_DEBUGS("AOEngine") << "Found asset UUID for chosen animation: " << item->getAssetUUID() << " - Updating AOAnimation.mAssetUUID" << LL_ENDL;
+					anim.mAssetUUID = item->getAssetUUID();
+				}
+				else
+				{
+					LL_DEBUGS("AOEngine") << "Inventory UUID " << anim.mInventoryUUID << " for chosen animation " << anim.mName << " still returns no asset." << LL_ENDL;
+				}
+			}
+
+			return anim.mAssetUUID;
 		}
 		else
 		{

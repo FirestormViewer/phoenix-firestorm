@@ -2,7 +2,7 @@
 <panel label="Grafik" name="Display panel">
 <tab_container label="Graphics Prefs" name="tabs">
 	<panel label="Allgemein" name="General">
-		<text name="preset_label" width="130">
+		<text name="preset_label">
 			Aktuelle Voreinstellung:
 		</text>
 		<text name="QualitySpeed">

@@ -911,7 +911,25 @@ void AOEngine::cycle(eCycleMode cycleMode)
 				state->mCurrentAnimation = 0;
 			}
 		}
-		animation = state->mAnimations[state->mCurrentAnimation].mAssetUUID;
+
+		AOSet::AOAnimation& anim = state->mAnimations[state->mCurrentAnimation];
+
+		if (anim.mAssetUUID.isNull())
+		{
+			LL_DEBUGS("AOEngine") << "Asset UUID for cycled animation " << anim.mName << " not yet known, try to find it." << LL_ENDL;
+
+			if(LLViewerInventoryItem* item = gInventory.getItem(anim.mInventoryUUID) ; item)
+			{
+				LL_DEBUGS("AOEngine") << "Found asset UUID for cycled animation: " << item->getAssetUUID() << " - Updating AOAnimation.mAssetUUID" << LL_ENDL;
+				anim.mAssetUUID = item->getAssetUUID();
+			}
+			else
+			{
+				LL_DEBUGS("AOEngine") << "Inventory UUID " << anim.mInventoryUUID << " for cycled animation " << anim.mName << " still returns no asset." << LL_ENDL;
+			}
+		}
+
+		animation = anim.mAssetUUID;
 	}
 
 	// don't do anything if the animation didn't change
@@ -1308,15 +1326,17 @@ void AOEngine::reloadStateAnimations(AOSet::AOState* state)
 				<< " asset " << item->getAssetUUID() << LL_ENDL;
 
 			AOSet::AOAnimation anim;
-			anim.mAssetUUID = item->getAssetUUID();
-			LLViewerInventoryItem* linkedItem = item->getLinkedItem();
-			if (!linkedItem)
+			anim.mName = item->LLInventoryItem::getName();
+			anim.mInventoryUUID = item->getLinkedUUID();
+
+			anim.mAssetUUID = LLUUID::null;
+
+			// if we can find the original animation already right here, save its asset ID, otherwise this will
+			// be tried again in AOSet::getAnimationForState() and/or AOEngine::cycle()
+			if (item->getLinkedItem())
 			{
-				LL_WARNS("AOEngine") << "linked item for link " << item->LLInventoryItem::getName() << " not found (broken link). Skipping." << LL_ENDL;
-				continue;
+				anim.mAssetUUID = item->getAssetUUID();
 			}
-			anim.mName = linkedItem->LLInventoryItem::getName();
-			anim.mInventoryUUID = item->getUUID();
 
 			S32 sortOrder;
 			if (!LLStringUtil::convertToS32(item->LLInventoryItem::getDescription(), sortOrder))
@@ -1362,6 +1382,13 @@ void AOEngine::update()
 {
 	if (mAOFolder.isNull())
 	{
+		return;
+	}
+
+	if (!gInventory.isCategoryComplete(mAOFolder))
+	{
+		LL_DEBUGS("AOEngine") << "#AO folder hasn't fully fetched yet, try again next timer tick." << LL_ENDL;
+		gInventory.fetchDescendentsOf(mAOFolder);
 		return;
 	}
 
