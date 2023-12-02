@@ -1733,7 +1733,6 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
             for (U32 i = 0; i < mVertexBuffer[5][mdl].size(); ++i)
             {
                 LLVertexBuffer* buff = mVertexBuffer[5][mdl][i];
-                buff->setBuffer();
 
                 U32 num_indices = mVertexBuffer[5][mdl][i]->getNumIndices();
                 if (num_indices > 2)
@@ -1898,7 +1897,6 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
                             << " Vertices: " << sizes[i * 2 + 1]
                             << " Indices: " << sizes[i * 2] << LL_ENDL;
                     }
-                    buff->setBuffer();
                     // <FS:ND> Fix glod so it works when just using the opengl core profile
                     //glodFillElements(mObject[base], names[i], GL_UNSIGNED_SHORT, (U8*)buff->getIndicesPointer());
                     LLStrider<LLVector3> vertex_strider;
