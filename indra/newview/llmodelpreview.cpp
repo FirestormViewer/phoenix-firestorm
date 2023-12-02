@@ -682,9 +682,24 @@ void LLModelPreview::rebuildUploadData()
                     if (mImporterDebug)
                     {
                         std::ostringstream out;
-                        out << "LOD" << i << ": List of models does not include " << instance.mLabel;
-                        LL_INFOS() << out.str() << LL_ENDL;
-                        LLFloaterModelPreview::addStringToLog(out, false);
+                        // <FS:Beq> Make the logging a little less esoteric
+                        // out << "LOD" << i << ": List of models does not include " << instance.mLabel;
+                        // LL_INFOS() << out.str() << LL_ENDL;
+                        // LLFloaterModelPreview::addStringToLog(out, false);
+                        if(i != LLModel::LOD_PHYSICS || mWarnOfUnmatchedPhyicsMeshes)
+                        {
+                            if(i == LLModel::LOD_PHYSICS)
+                            {
+                                out << "No physics model found for " << instance.mLabel;
+                            }
+                            else
+                            {
+                                out << "No corresponding model for " << instance.mLabel << " found in LOD" << i << "scene/dae";
+                            }
+                            LL_INFOS() << out.str() << LL_ENDL;
+                            LLFloaterModelPreview::addStringToLog(out, false);
+                        }
+                        // </FS:Beq>
                     }
                 }
             }
@@ -762,7 +777,10 @@ void LLModelPreview::rebuildUploadData()
                 // if (mImporterDebug) 
                 {
                     std::ostringstream out;
-                    out << "Model " << mModel[lod][model_ind]->mLabel << " was not used - mismatching lod models.";
+                    // <FS:Beq> Make the logging less confusing hopefully.
+                    //out << "Model " << mModel[lod][model_ind]->mLabel << " was not used - mismatching lod models.";
+                    out << " A model " << mModel[lod][model_ind]->mLabel << " in the scene for LOD" << lod << " was not used - orphaned/mismatching lod models are not supported";
+                    // </FS:Beq>
                     LL_INFOS() << out.str() << LL_ENDL;
                     LLFloaterModelPreview::addStringToLog(out, true);
                 }
