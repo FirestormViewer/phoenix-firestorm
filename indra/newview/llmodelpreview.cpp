@@ -3667,8 +3667,17 @@ void LLModelPreview::updateLodControls(S32 lod)
     }
     else // auto generate, the default case for all LoDs except High
     {
-        fmp->mLODMode[lod] = MESH_OPTIMIZER_AUTO;
-
+        // <FS:Beq> FIRE-32267 - Allow GLOD to be default
+        // fmp->mLODMode[lod] = MESH_OPTIMIZER_AUTO;
+        if( lod_mode == GENERATE )
+        {
+            fmp->mLODMode[lod] = GENERATE;
+        }
+        else
+        {
+            fmp->mLODMode[lod] = MESH_OPTIMIZER_AUTO;
+        }
+        // </FS:Beq>
         //don't actually regenerate lod when refreshing UI
         mLODFrozen = true;
 
@@ -3693,7 +3702,7 @@ void LLModelPreview::updateLodControls(S32 lod)
 
         mFMP->getChild<LLComboBox>("lod_mode_" + lod_name[lod])->selectNthItem(mRequestedLoDMode[lod]);
 
-        if (mRequestedLoDMode[lod] == 0)
+        if (mRequestedLoDMode[lod] == 0 || mRequestedLoDMode[lod] == GENERATE) // <FS:Beq/> FIRE-32267 - Allow GLOD to be default
         {
             limit->setVisible(true);
             threshold->setVisible(false);
@@ -5077,11 +5086,15 @@ bool LLModelPreview::lodQueryCallback()
             S32 lod = preview->mLodsQuery.back();
             preview->mLodsQuery.pop_back();
 // <FS:Beq> Improved LOD generation
-#ifdef USE_GLOD_AS_DEFAULT
-            preview->genGlodLODs(lod, 3, false);
-#else
-            preview->genMeshOptimizerLODs(lod, MESH_OPTIMIZER_AUTO, 3, false);
-#endif
+            static LLCachedControl<bool> default_to_glod(gSavedSettings, "FSMeshUploadUseGLODAsDefault");
+            if (default_to_glod())
+            {
+                preview->genGlodLODs(lod, 3, false);
+            }
+            else
+            {
+                preview->genMeshOptimizerLODs(lod, MESH_OPTIMIZER_AUTO, 3, false);
+            }
 // </FS:Beq>
             if (preview->mLookUpLodFiles && (lod == LLModel::LOD_HIGH))
             {

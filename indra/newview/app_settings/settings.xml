@@ -9361,6 +9361,17 @@
     <key>Value</key>
     <integer>1</integer>
   </map>
+  <key>FSMeshUploadUseGLODAsDefault</key>
+  <map>
+    <key>Comment</key>
+    <string>Use the 'reliable' (GLOD) method for LODs as the default when opening Collada files.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>MeshPreviewCanvasColor</key>
   <map>
     <key>Comment</key>

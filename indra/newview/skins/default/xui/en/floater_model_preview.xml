@@ -1475,7 +1475,7 @@
          follows="top|left"
          top_pad="8"
          left="24"
-         width="300"
+         width="200"
          label="Auto-enable weights"
          tool_tip="Automatically set weights enabled for meshes with rigging info"
          name="mesh_preview_auto_weights"/>
@@ -1483,10 +1483,18 @@
          control_name="FSMeshUploadAutoShowWeightsWhenEnabled"
          follows="top|left"
          left_pad="5"
-         width="300"
+         width="200"
          label="Auto-preview weights"
          tool_tip="Automatically show weights in preview for meshes with rigging info"
          name="mesh_preview_auto_show_weights"/>
+         <check_box
+         control_name="FSMeshUploadUseGLODAsDefault"
+         follows="top|left"
+         left_pad="5"
+         width="200"
+         label="Default to 'Reliable' LODs"
+         tool_tip="Use the 'Reliable' method (GLOD) by default"
+         name="mesh_upload_default_to_reliable"/>
          <text
            follows="left|top"
            layout="topleft"
