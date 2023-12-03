@@ -77,16 +77,16 @@
 			<menu_item_check name="inventory_filter_coalesced_objects_only" label="Nur verbundene Objekte"/>
 		</menu>
 	</menu_bar>
-
-	<filter_editor label="Inventar Filter" name="inventory search editor" right="-6" tool_tip="Gebe einen oder mehrere Suchbegriffe ein, getrennt durch '+' " top_pad="4">
-		<filter_editor.clear_button rect.height="14" rect.width="14" rect.bottom="3" />
-	</filter_editor>
-	
+	<layout_stack name="nav_stack">
+		<layout_panel name="filter_panel">
+			<filter_editor label="Inventar Filter" name="inventory search editor" right="-6" tool_tip="Gebe einen oder mehrere Suchbegriffe ein, getrennt durch '+' " top_pad="4">
+				<filter_editor.clear_button rect.height="14" rect.width="14" rect.bottom="3" />
+			</filter_editor>
+		</layout_panel>
+	</layout_stack>
 	<button name="collapse_btn" label="Einklappen" width="70" />
 	<button name="expand_btn" label="Ausklappen" width="70" />
-	
 	<text name="filter_label" value="Filter:" width="30" />
-
 	<combo_box name="filter_combo_box" height="16" left_pad="4" follows="top|left|right" layout="topleft" right="-6" top_delta="-2">
 		<combo_box.item value="filter_type_all" label="Alle Typen" />
 		<combo_box.item value="filter_separator" label="------------" enabled="false" />
@@ -106,15 +106,14 @@
 		<combo_box.item value="filter_separator" label="------------" />
 		<combo_box.item value="filter_type_custom" label="Benutzerdefiniert..." />
 	</combo_box>
-
 	<menu_button name="options_visibility_btn" tool_tip="Sichtbarkeitseinstellungen für Suchergebnisse anzeigen"/>
-
-	<tab_container name="inventory filter tabs" width="322">
-		<inventory_panel label="Alle Objekte" name="All Items" width="288" />
-		<recent_inventory_panel label="Letzte Objekte" name="Recent Items" width="290" />
-		<worn_inventory_panel label="Angezogene Objekte" name="Worn Items" width="290" />
-	</tab_container>
-
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs" width="322">
+			<inventory_panel label="Alle Objekte" name="All Items" width="288" />
+			<recent_inventory_panel label="Letzte Objekte" name="Recent Items" width="290" />
+			<worn_inventory_panel label="Angezogene Objekte" name="Worn Items" width="290" />
+		</tab_container>
+	</panel>
 	<text name="ItemcountText" tool_tip="[ITEMS] Objekte, [CATEGORIES] Ordner">
 		Elemente
 	</text>
