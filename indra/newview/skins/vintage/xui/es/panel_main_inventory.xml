@@ -61,7 +61,11 @@
 			<menu_item_check name="inventory_show_partial_results" label="Mostrar resultados parciales de búsqueda"/>
 		</menu>
 	</menu_bar>
-	<filter_editor label="Filtrar" name="inventory search editor" tool_tip="Escribe una o más palabras a buscar, separadas por '+'"/>
+	<layout_stack name="nav_stack">
+		<layout_panel name="filter_panel">
+			<filter_editor label="Filtrar" name="inventory search editor" tool_tip="Escribe una o más palabras a buscar, separadas por '+'"/>
+		</layout_panel>
+	</layout_stack>
 	<button name="collapse_btn" label="Colapsar"/>
 	<button name="expand_btn" label="Expandir"/>
 	<text name="filter_label" value="Filtro:"/>
@@ -81,11 +85,13 @@
 		<combo_box.item value="filter_type_meshes" label="Modelos mesh"/>
 		<combo_box.item value="filter_type_custom" label="Personalizar..."/>
 	</combo_box>
-	<tab_container name="inventory filter tabs">
-		<inventory_panel label="Todo" name="All Items"/>
-		<recent_inventory_panel label="Reciente" name="Recent Items"/>
-		<worn_inventory_panel label="En uso" name="Worn Items"/>
-	</tab_container>
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs">
+			<inventory_panel label="Todo" name="All Items"/>
+			<recent_inventory_panel label="Reciente" name="Recent Items"/>
+			<worn_inventory_panel label="En uso" name="Worn Items"/>
+		</tab_container>
+	</panel>
 	<text name="ItemcountText">
 		Items:
 	</text>
