@@ -353,7 +353,7 @@ void LLStreamingAudio_FMODSTUDIO::stop()
     }
 }
 
-void LLStreamingAudio_FMODSTUDIO::pause(int pauseopt)
+void LLStreamingAudio_FMODSTUDIO::pause(S32 pauseopt)
 {
     if (pauseopt < 0)
     {
