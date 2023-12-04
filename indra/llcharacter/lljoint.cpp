@@ -36,24 +36,20 @@
 #include <boost/algorithm/string.hpp>
 
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
-boost::unordered_map< std::string, U32 > mpStringToKeys;
+std::unordered_map<std::string, U32> mpStringToKeys;
 
-JointKey JointKey::construct( std::string aName )
+JointKey JointKey::construct(const std::string& aName)
 {
-	boost::unordered_map< std::string, U32 >::iterator itr = mpStringToKeys.find( aName );
-
-	if( mpStringToKeys.end() == itr )
+	if (const auto itr = mpStringToKeys.find(aName); itr != mpStringToKeys.end())
 	{
-		U32 size = mpStringToKeys.size() + 1;
-		JointKey key{ aName, size };
-		mpStringToKeys[ aName ] = size;
-		return key;
+		return { aName, itr->second };
 	}
 
-	return JointKey{ aName, itr->second };
-
+	U32 size = mpStringToKeys.size() + 1;
+	mpStringToKeys.try_emplace(aName, size);
+	return { aName, size };
 }
 // </FS:ND>
 
