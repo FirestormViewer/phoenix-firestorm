@@ -119,18 +119,17 @@
 		</menu_item_check>
 	</menu>
 	</menu_bar>
-	
-	<filter_editor label="Filtro Inventario" name="inventory search editor" right="-6" tool_tip="Scrivere una o più parole chiave, da cercare, separate da un '+'" top_pad="4">
-		<filter_editor.clear_button rect.height="14" rect.width="14" rect.bottom="3" />
-	</filter_editor>
-	
+	<layout_stack name="nav_stack">
+		<layout_panel name="filter_panel">
+			<filter_editor label="Filtro Inventario" name="inventory search editor" right="-6" tool_tip="Scrivere una o più parole chiave, da cercare, separate da un '+'" top_pad="4">
+				<filter_editor.clear_button rect.height="14" rect.width="14" rect.bottom="3" />
+			</filter_editor>
+		</layout_panel>
+	</layout_stack>
 	<button name="collapse_btn" label="Comprimi" width="65" />
 	<button name="expand_btn" label="Espandi" width="65" />
-	
 	<text name="filter_label" value="Filtro:" width="30" />
-
 	<combo_box name="filter_combo_box" height="16" left_pad="4" follows="top|left|right" layout="topleft" right="-6" top_delta="-2">
-		
 		<combo_box.item value="filter_type_all" label="Tutti i Tipi" />
 		<combo_box.item value="filter_separator" label="------------" enabled="false" />
 		<combo_box.item value="filter_type_animations" label="Animazioni" />
@@ -147,17 +146,15 @@
 		<combo_box.item value="filter_type_meshes" label="Mesh" />
 		<combo_box.item value="filter_separator" label="------------" enabled="false" />
 		<combo_box.item value="filter_type_custom" label="Personalizzato..." />
-
 	</combo_box>
-
-	<tab_container name="inventory filter tabs" width="322">
-		<inventory_panel label="Tutti gli elementi" name="All Items" width="288" />
-		<recent_inventory_panel label="Elementi recenti" name="Recent Items" width="290" />
-		<worn_inventory_panel label="Indossati" name="Worn Items" width="290" />
-	</tab_container>
-
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs" width="322">
+			<inventory_panel label="Tutti gli elementi" name="All Items" width="288" />
+			<recent_inventory_panel label="Elementi recenti" name="Recent Items" width="290" />
+			<worn_inventory_panel label="Indossati" name="Worn Items" width="290" />
+		</tab_container>
+	</panel>
 	<text name="ItemcountText" >
 		Oggetti
 	</text>
-
 </panel>

@@ -272,10 +272,13 @@ LLJoint *LLJoint::findJoint( const std::string &name )
 
 	for (LLJoint* joint : mChildren)
 	{
-		LLJoint *found = joint->findJoint(name);
-		if (found)
-		{
-			return found;
+		if(joint)
+ 		{
+			LLJoint *found = joint->findJoint(name);
+			if (found)
+			{
+				return found;
+			}
 		}
 	}
 

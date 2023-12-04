@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_new_feature_notification" title="НОВЫЕ ФУНКЦИИ">
+	<floater.string name="title_txt_inventory">Новые функции инвентаря</floater.string>
+	<floater.string name="description_txt_inventory">
+		Теперь вы можете добавлять изображения для предварительного просмотра к элементам инвентаря и просматривать папку в отдельном окне.
+Узнайте больше здесь [https://community.secondlife.com/blogs/entry/13637-new-features-inventory-item-preview-and-single-folder-view/ blogpost]
+	</floater.string>
+	<text name="title_txt">Новая функция</text>
+	<text name="description_txt">Описание функции</text>
+	<button label="Понятно!" name="close_btn" width="90"/>
+</floater>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="change_item_thumbnail" title="Изменить изображение элемента">
+	<floater.string name="title_item_thumbnail">Изменить изображение элемента</floater.string>
+	<floater.string name="title_folder_thumbnail">Изменить изображение папки</floater.string>
+	<floater.string name="tooltip_upload_local">Загрузить с компьютера</floater.string>
+	<floater.string name="tooltip_upload_snapshot">Использовать инструмент снимков</floater.string>
+	<floater.string name="tooltip_use_texture">Выбрать текстуру</floater.string>
+	<floater.string name="tooltip_copy_to_clipboard">Скопировать в буфер обмена</floater.string>
+	<floater.string name="tooltip_paste_from_clipboard">Вставить из буфера обмена</floater.string>
+	<floater.string name="tooltip_remove_image">Удалить изображение</floater.string>
+	<text name="tooltip_text">подсказка</text>
+</floater>
