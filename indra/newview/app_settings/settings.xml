@@ -19462,7 +19462,6 @@ Change of this parameter will affect the layout of buttons in notification toast
           <string>world_map</string>
           <string>preferences</string>
           <string>flickr</string>
-          <string>twitter</string>
       </array>
       <key>Backup</key>
       <integer>0</integer>
