@@ -1465,6 +1465,18 @@ BOOL LLInventoryPanel::handleHover(S32 x, S32 y, MASK mask)
 
 BOOL LLInventoryPanel::handleToolTip(S32 x, S32 y, MASK mask)
 {
+	// <FS:Ansariel> FIRE-33356: Option to turn off thumbnail tooltips
+	static LLCachedControl<bool> showInventoryThumbnailTooltips(gSavedSettings, "FSShowInventoryThumbnailTooltips");
+	if (!showInventoryThumbnailTooltips)
+		return LLPanel::handleToolTip(x, y, mask);
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> FIRE-33285: Explicit timeout for inventory thumbnail tooltips
+	static LLCachedControl<F32> inventoryThumbnailTooltipsDelay(gSavedSettings, "FSInventoryThumbnailTooltipsDelay");
+	static LLCachedControl<F32> tooltip_fast_delay(gSavedSettings, "ToolTipFastDelay");
+	F32 tooltipDelay = LLToolTipMgr::instance().toolTipVisible() ? tooltip_fast_delay() : inventoryThumbnailTooltipsDelay();
+	// </FS:Ansariel>
+
 	if (const LLFolderViewItem* hover_item_p = (!mFolderRoot.isDead()) ? mFolderRoot.get()->getHoveredItem() : nullptr)
 	{
 		if (const LLFolderViewModelItemInventory* vm_item_p = static_cast<const LLFolderViewModelItemInventory*>(hover_item_p->getViewModelItem()))
@@ -1474,7 +1486,7 @@ BOOL LLInventoryPanel::handleToolTip(S32 x, S32 y, MASK mask)
             //params["thumbnail_id"] = vm_item_p->getThumbnailUUID();
             params["item_id"] = vm_item_p->getUUID();
 
-			// <FS:Ansariel> Only show tooltip for inventory items with thumbnail or if it exceeds the width of the window
+			// <FS:Ansariel> FIRE-33423: Only show tooltip for inventory items with thumbnail or if it exceeds the width of the window
 			// This is more or less copied from LLInspectTextureUtil::createInventoryToolTip
 			LLUUID thumbnailUUID = vm_item_p->getThumbnailUUID();
 			if (thumbnailUUID.isNull() && vm_item_p->getInventoryType() == LLInventoryType::IT_CATEGORY)
@@ -1521,7 +1533,9 @@ BOOL LLInventoryPanel::handleToolTip(S32 x, S32 y, MASK mask)
 			LLToolTipMgr::instance().show(LLToolTip::Params()
 					.message(hover_item_p->getToolTip())
 					.sticky_rect(actionable_rect)
-					.delay_time(LLView::getTooltipTimeout())
+					// <FS:Ansariel> FIRE-33285: Explicit timeout for inventory thumbnail tooltips
+					//.delay_time(LLView::getTooltipTimeout())
+					.delay_time(tooltipDelay)
 					.create_callback(boost::bind(&LLInspectTextureUtil::createInventoryToolTip, _1))
 					.create_params(params));
 			return TRUE;
