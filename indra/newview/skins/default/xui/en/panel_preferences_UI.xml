@@ -576,6 +576,45 @@
          tool_tip="If enabled, the statistics window will never receive focus when another window is closed (actions such as changing graph layout for items are still possible when enabled)."
          top_pad="3"
          width="256" />
+        <check_box
+         control_name="FSShowInventoryThumbnailTooltips"
+         height="16"
+         label="Show thumbnails of inventory items in tooltips"
+         layout="topleft"
+         left="5"
+         name="FSShowInventoryThumbnailTooltips"
+         tool_tip="If enabled, hovering over inventory items containing a thumbnail will show the thumbnail in a tooltip."
+         top_pad="3"
+         width="256" />
+        <slider
+         control_name="FSInventoryThumbnailTooltipsDelay"
+         enabled_control="FSShowInventoryThumbnailTooltips"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         label="Thumbnail tooltip delay:"
+         tool_tip="The delay for tooltips showing thumbnails of inventory item"
+         label_width="200"
+         layout="topleft"
+         left="20"
+         min_val="0.1"
+         max_val="5"
+         name="FSInventoryThumbnailTooltipsDelay"
+         top_pad="2"
+         width="457" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="490"
+         name="FSInventoryThumbnailTooltipsDelayText"
+         top_delta="0"
+         width="50">
+            sec
+        </text>
 
         <slider
          control_name="FlashCount"

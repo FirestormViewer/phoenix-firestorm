@@ -51,9 +51,9 @@ public:
 
     /*virtual*/ void start(const std::string& url);
     /*virtual*/ void stop();
-    /*virtual*/ void pause(S32 pause);
+    /*virtual*/ void pause(int pause);
     /*virtual*/ void update();
-    /*virtual*/ S32 isPlaying();
+    /*virtual*/ int isPlaying();
     /*virtual*/ void setGain(F32 vol);
     /*virtual*/ F32 getGain();
     /*virtual*/ std::string getURL();

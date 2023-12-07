@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="simple_snapshot" title="Снимок элемента">
+	<button label="Сделать фото" name="new_snapshot_btn" width="90" />
+	<button label="Сохранить" name="save_btn" width="90" />
+	<button label="Отмена" name="cancel_btn" width="90" />
+</floater>

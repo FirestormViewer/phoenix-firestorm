@@ -2065,6 +2065,7 @@ set(viewer_APPSETTINGS_FILES
     packages-info.txt
     featuretable.txt
     featuretable_mac.txt
+    featuretable_linux.txt
     )
 	
 if (WINDOWS)

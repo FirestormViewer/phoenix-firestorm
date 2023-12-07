@@ -12,32 +12,44 @@
 	<text name="ItemcountText">
 		Obyektlər:
 	</text>
-	<filter_editor label="Filtr" name="inventory search editor" tool_tip="Axtarış üçün bir neçə söz yazın. Bölüşmək üçün '+' simvolundan istifadə edin."/>
-	<button name="collapse_btn" label="Minimallaşdır"/>
-	<button name="expand_btn" label="Genişləndir" />
-	<text name="filter_label" width="60" value="Süzgəc:"/>
-	<combo_box name="filter_combo_box">
-		<combo_box.item value="filter_type_all" label="Hər növ" />
-		<combo_box.item value="filter_type_animations" label="Animasiya" />
-		<combo_box.item value="filter_type_calling_cards" label="Vizit kartları" />
-		<combo_box.item value="filter_type_clothing" label="Paltar / Bədən hissələri" />
-		<combo_box.item value="filter_type_gestures" label="Jestlər" />
-		<combo_box.item value="filter_type_landmarks" label="Əlfəcinlər" />
-		<combo_box.item value="filter_type_notecards" label="Qeydlər" />
-		<combo_box.item value="filter_type_objects" label="Obyektlər" />
-		<combo_box.item value="filter_type_scripts" label="Skriptlər" />
-		<combo_box.item value="filter_type_sounds" label="Səslər" />
-		<combo_box.item value="filter_type_textures" label="Teksturlar" />
-		<combo_box.item value="filter_type_snapshots" label="Şəkillər" />
-		<combo_box.item value="filter_type_meshes" label="Meş" />
-		<combo_box.item value="filter_type_settings" label="Seçimlər" />
-		<combo_box.item value="filter_type_custom" label="Ayrı..." />
-	</combo_box>
-	<tab_container name="inventory filter tabs">
-		<inventory_panel label="Avadanlıq siyahısı" name="All Items"/>
-		<recent_inventory_panel label="Son" name="Recent Items"/>
-		<worn_inventory_panel label="Daşınılan" name="Worn Items"/>
-	</tab_container>
+	<layout_stack name="nav_stack">
+		<layout_panel name="filter_panel">
+			<filter_editor label="Filtr" name="inventory search editor" tool_tip="Axtarış üçün bir neçə söz yazın. Bölüşmək üçün '+' simvolundan istifadə edin."/>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="ctrl_stack">
+		<layout_panel name="collapse_expand_buttons">
+			<button name="collapse_btn" label="Minimallaşdır"/>
+			<button name="expand_btn" label="Genişləndir" />
+		</layout_panel>
+		<layout_panel name="filter_ctrls">
+			<text name="filter_label" width="60" value="Süzgəc:"/>
+			<combo_box name="filter_combo_box">
+				<combo_box.item value="filter_type_all" label="Hər növ" />
+				<combo_box.item value="filter_type_animations" label="Animasiya" />
+				<combo_box.item value="filter_type_calling_cards" label="Vizit kartları" />
+				<combo_box.item value="filter_type_clothing" label="Paltar / Bədən hissələri" />
+				<combo_box.item value="filter_type_gestures" label="Jestlər" />
+				<combo_box.item value="filter_type_landmarks" label="Əlfəcinlər" />
+				<combo_box.item value="filter_type_notecards" label="Qeydlər" />
+				<combo_box.item value="filter_type_objects" label="Obyektlər" />
+				<combo_box.item value="filter_type_scripts" label="Skriptlər" />
+				<combo_box.item value="filter_type_sounds" label="Səslər" />
+				<combo_box.item value="filter_type_textures" label="Teksturlar" />
+				<combo_box.item value="filter_type_snapshots" label="Şəkillər" />
+				<combo_box.item value="filter_type_meshes" label="Meş" />
+				<combo_box.item value="filter_type_settings" label="Seçimlər" />
+				<combo_box.item value="filter_type_custom" label="Ayrı..." />
+			</combo_box>
+		</layout_panel>
+	</layout_stack>
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs">
+			<inventory_panel label="Avadanlıq siyahısı" name="All Items"/>
+			<recent_inventory_panel label="Son" name="Recent Items"/>
+			<worn_inventory_panel label="Daşınılan" name="Worn Items"/>
+		</tab_container>
+	</panel>
 	<panel name="bottom_panel">
 		<panel name="options_gear_btn_panel">
 			<menu_button name="options_gear_btn" tool_tip="Əlavə seçimləri göstər"/>

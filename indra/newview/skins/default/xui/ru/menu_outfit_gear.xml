@@ -3,10 +3,7 @@
 	<menu_item_call label="Заменить текущий комплект" name="wear"/>
 	<menu_item_call label="Добавить в текущий комплект" name="wear_add"/>
 	<menu_item_call label="Удалить из текущего комплекта" name="take_off"/>
-	<menu_item_call label="Загрузить фото (L$[UPLOAD_COST])" name="upload_photo"/>
-	<menu_item_call label="Выбрать фото" name="select_photo"/>
-	<menu_item_call label="Сделать снимок" name="take_snapshot"/>
-	<menu_item_call label="Удалить фото" name="remove_photo"/>
+	<menu_item_call label="Изображение" name="thumbnail"/>
 	<context_menu label="Новая одежда" name="New Clothes">
 		<menu_item_call label="Новая рубашка" name="New Shirt"/>
 		<menu_item_call label="Новые штаны" name="New Pants"/>
