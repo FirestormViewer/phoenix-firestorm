@@ -1378,7 +1378,8 @@ void AISUpdate::parseCategory(const LLSD& category_map, S32 depth)
     {
         LL_WARNS() << "Got stale folder, known: " << curr_cat->getVersion()
             << ", received: " << version << LL_ENDL;
-        // <FS:Beq> workaround for rename issue until proper fix is in place
+        // <FS:Beq> FIRE-33337 workaround for rename issue until proper fix is in place and tested
+        // Also servers a general handler for version de-sync bugs in the future.
         if( version < curr_cat->getVersion() )
         {
             // AIS version is considered canonical, so we need to refetch
