@@ -422,7 +422,7 @@ void LLPanelInventoryListItemBase::setTitle(const std::string& title,
 
 BOOL LLPanelInventoryListItemBase::handleToolTip( S32 x, S32 y, MASK mask)
 {
-	LLRect text_box_rect = mTitleCtrl->getRect();
+	const LLRect& text_box_rect = mTitleCtrl->getRect();
 
 	// <FS:Ansariel> Make inventory thumbnail tooltips work with inventory lists
 	static LLCachedControl<bool> showInventoryThumbnailTooltips(gSavedSettings, "FSShowInventoryThumbnailTooltips");
