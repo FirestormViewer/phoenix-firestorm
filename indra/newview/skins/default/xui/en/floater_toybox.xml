@@ -81,11 +81,11 @@
   <panel
     bevel_style="none"
     border="true"
-    bottom="445"
+    bottom="485"
     follows="left|bottom|right"
     left="20"
     right="-20"
-    top="445" />
+    top="485" />
   <button
     follows="left|bottom|right"
     height="23"
@@ -95,7 +95,7 @@
     layout="topleft"
     left="185"
     name="btn_clear_all"
-    top="462"
+    top="495"
     width="130">
     <button.commit_callback function="Toybox.ClearAll" />
   </button>
@@ -108,7 +108,7 @@
     layout="topleft"
     left="335"
     name="btn_restore_defaults"
-    top="462"
+    top="495"
     width="130">
     <button.commit_callback function="Toybox.RestoreDefaults" />
   </button>

@@ -78,8 +78,8 @@ public:
     
     void setConnectionState(EConnectionState connection_state);
 	void setConnected(bool connected);
-	bool isConnected() { return mConnected; }
-	bool isTransactionOngoing() { return ((mConnectionState == FLICKR_CONNECTION_IN_PROGRESS) || (mConnectionState == FLICKR_POSTING) || (mConnectionState == FLICKR_DISCONNECTING)); }
+	bool isConnected() const { return mConnected; }
+	bool isTransactionOngoing() const { return ((mConnectionState == FLICKR_CONNECTION_IN_PROGRESS) || (mConnectionState == FLICKR_POSTING) || (mConnectionState == FLICKR_DISCONNECTING)); }
     EConnectionState getConnectionState() { return mConnectionState; }
     
     void openFlickrWeb(std::string url);
@@ -94,9 +94,8 @@ private:
 	bool mRefreshInfo;
 	bool mReadFromMaster;
 	
-	static boost::scoped_ptr<LLEventPump> sStateWatcher;
-	static boost::scoped_ptr<LLEventPump> sInfoWatcher;
-	static boost::scoped_ptr<LLEventPump> sContentWatcher;
+	static std::unique_ptr<LLEventPump> sStateWatcher;
+	static std::unique_ptr<LLEventPump> sInfoWatcher;
 
     bool testShareStatus(LLSD &result);
     void flickrConnectCoro(std::string requestToken, std::string oauthVerifier);
