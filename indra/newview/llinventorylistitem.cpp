@@ -430,12 +430,12 @@ BOOL LLPanelInventoryListItemBase::handleToolTip( S32 x, S32 y, MASK mask)
 	{
 		if (auto inventoryItem = gInventory.getItem(mInventoryItemUUID); inventoryItem)
 		{
-			static LLCachedControl<F32> inventoryThumbnailTooltipsDelay(gSavedSettings, "FSInventoryThumbnailTooltipsDelay");
-			static LLCachedControl<F32> tooltip_fast_delay(gSavedSettings, "ToolTipFastDelay");
-			F32 tooltipDelay = LLToolTipMgr::instance().toolTipVisible() ? tooltip_fast_delay() : inventoryThumbnailTooltipsDelay();
-
 			if (const LLUUID& thumbnailUUID = inventoryItem->getThumbnailUUID(); !thumbnailUUID.isNull())
 			{
+				static LLCachedControl<F32> inventoryThumbnailTooltipsDelay(gSavedSettings, "FSInventoryThumbnailTooltipsDelay");
+				static LLCachedControl<F32> tooltip_fast_delay(gSavedSettings, "ToolTipFastDelay");
+				F32 tooltipDelay = LLToolTipMgr::instance().toolTipVisible() ? tooltip_fast_delay() : inventoryThumbnailTooltipsDelay();
+
 				LLSD params;
 				params["thumbnail_id"] = thumbnailUUID;
 
