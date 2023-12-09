@@ -57,6 +57,11 @@
 			<check_box label="Redimensionnement automatique des listes de conversations et de notifications de style V1" name="FSLegacyNotificationWellAutoResize" tool_tip="Si cette case est cochée, Firestorm redimensionnera toujours automatiquement les listes de conversations et de notifications de style V1 lorsque des éléments sont ajoutés ou supprimés."/>
 			<check_box label="Redéfinit les réccourcis déjà utilisés par Linux (Linux seul; requires restart)" name="FSRemapLinuxShortcuts" tool_tip="Activée, cette option redéfinit les raccourcis déjà utilisés par Linux (par exemple : CTRL-ALT-Fx)."/>
 			<check_box label="Empêche le fenêtre de statistiques d'obtenir le focus" name="FSStatisticsNoFocus" tool_tip="Si cette option est activée, la fenêtre de statistiques n'obtiendra jamais le focus quand une autre fenêtre est fermée (des actions telles que la modification de la présentation des graphiques sont toujours possibles)."/>
+			<check_box label="Afficher les vignettes des articles d'inventaire dans les infobulles" name="FSShowInventoryThumbnailTooltips" tool_tip="Si cette option est activée, le survol d'éléments d'inventaire contenant une vignette affichera cette dernière dans une infobulle."/>
+			<slider label="Délai d'affichage de l'infobulle :" tool_tip="Délai d'affichage des vignettes des éléments d'inventaire dans les infobulles" name="FSInventoryThumbnailTooltipsDelay"/>
+			<text name="FSInventoryThumbnailTooltipsDelayText">
+				sec
+			</text>
 			<slider label="Nombre de flashs sur les onglets d'IM :" label_width="210" name="ButtonsFlashCount"/>
 			<slider label="Durée de flash de l'avertissement :" label_width="210" tool_tip="Durée en secondes d'un flash utilisé pour notifier les notifications de message manqué" name="ButtonFlashRate"/>
 			<text name="ButtonFlashRateText">sec</text>

@@ -44,21 +44,20 @@
 
 #include "llfloaterreg.h"
 
-#include "discord-rpc/discord_rpc.h"
-
-#include "boost/algorithm/string/case_conv.hpp"
+#include <discord-rpc/discord_rpc.h>
+#include <boost/algorithm/string/case_conv.hpp>
 
 #include "fsdiscordkey.h"
 
 #include "llviewernetwork.h"
 
-boost::scoped_ptr<LLEventPump> FSDiscordConnect::sStateWatcher(new LLEventStream("DiscordConnectState"));
-boost::scoped_ptr<LLEventPump> FSDiscordConnect::sInfoWatcher(new LLEventStream("DiscordConnectInfo"));
+std::unique_ptr<LLEventPump> FSDiscordConnect::sStateWatcher = std::make_unique<LLEventStream>("DiscordConnectState");
+std::unique_ptr<LLEventPump> FSDiscordConnect::sInfoWatcher = std::make_unique<LLEventStream>("DiscordConnectInfo");
 
 
 // Returns false when the file exists and has not our UUID
 // Or, put simply, returns true if someone else is using it
-bool FSDiscordConnect::checkMarkerFile()
+bool FSDiscordConnect::checkMarkerFile() const
 {
 	if (!LLFile::isfile(mMarkerFilename))
 	{
@@ -94,7 +93,7 @@ void FSDiscordConnect::clearMarkerFile()
 	LLFile::remove(mMarkerFilename);
 }
 
-void handleDiscordReady(const DiscordUser *request)
+static void handleDiscordReady(const DiscordUser *request)
 {
 	LLSD info;
 	info["name"] = request->username;
@@ -102,12 +101,12 @@ void handleDiscordReady(const DiscordUser *request)
 	FSDiscordConnect::getInstance()->setConnectionState(FSDiscordConnect::DISCORD_CONNECTED);
 }
 
-void handleDiscordError(int errorCode, const char* message)
+static void handleDiscordError(int errorCode, const char* message)
 {
 	LL_WARNS("DiscordConnect") << "Discord error, errorCode: \"" << errorCode << "\", message: \"" << message << "\"" << LL_ENDL;
 }
 
-void handleDiscordDisconnected(int errorCode, const char* message)
+static void handleDiscordDisconnected(int errorCode, const char* message)
 {
 	LL_INFOS("DiscordConnect") << "Discord disconnected, errorCode: \"" << errorCode << "\", message: \"" << message << "\"" << LL_ENDL;
 	FSDiscordConnect::getInstance()->setConnectionState(FSDiscordConnect::DISCORD_NOT_CONNECTED);
@@ -157,7 +156,7 @@ void FSDiscordConnect::discordConnectedCoro(bool autoConnect)
 
 }
 
-bool isRegionVisible(LLViewerRegion* region)
+static bool isRegionVisible(LLViewerRegion* region)
 {
 	U8 rating = region->getSimAccess();
 	bool visible = true;
@@ -183,9 +182,9 @@ bool isRegionVisible(LLViewerRegion* region)
 	return visible;
 }
 
-void FSDiscordConnect::updateRichPresence()
+void FSDiscordConnect::updateRichPresence() const
 {
-	LLViewerRegion * region = gAgent.getRegion();
+	LLViewerRegion* region = gAgent.getRegion();
 	if (!isConnected() || !region)
 	{
 		return;
@@ -238,7 +237,8 @@ void FSDiscordConnect::updateRichPresence()
 	discordPresence.largeImageKey = "secondlife_512";
 #endif
 
-	discordPresence.largeImageText = LLGridManager::getInstance()->getGridLabel().c_str();
+	auto gridLabel = LLGridManager::getInstance()->getGridLabel();
+	discordPresence.largeImageText = gridLabel.c_str();
 	discordPresence.smallImageKey = "firestorm_512";
 	std::string appName = std::string("via " + APP_NAME);
 	discordPresence.smallImageText = appName.c_str();
@@ -256,10 +256,11 @@ FSDiscordConnect::FSDiscordConnect()
 :	mConnectionState(DISCORD_NOT_CONNECTED),
 	mConnected(false),
 	mInfo(),
-	mRefreshInfo(false)
+	mRefreshInfo(false),
+	mConnectTime(0)
 {
 	mMarkerFilename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "discord_in_use_marker");
-	LLEventPumps::instance().obtain("mainloop").listen("FSDiscordConnect", boost::bind(&FSDiscordConnect::Tick, this, _1));
+	LLEventPumps::instance().obtain("mainloop").listen("FSDiscordConnect", std::bind(&FSDiscordConnect::Tick, this, std::placeholders::_1));
 }
 
 FSDiscordConnect::~FSDiscordConnect()
@@ -270,7 +271,7 @@ FSDiscordConnect::~FSDiscordConnect()
 void FSDiscordConnect::connectToDiscord()
 {
 	LLCoros::instance().launch("FSDiscordConnect::discordConnectCoro",
-		boost::bind(&FSDiscordConnect::discordConnectCoro, this));
+		std::bind(&FSDiscordConnect::discordConnectCoro, this));
 }
 
 void FSDiscordConnect::disconnectFromDiscord()
@@ -278,13 +279,13 @@ void FSDiscordConnect::disconnectFromDiscord()
 	setConnectionState(FSDiscordConnect::DISCORD_DISCONNECTING);
 
 	LLCoros::instance().launch("FSDiscordConnect::discordDisconnectCoro",
-		boost::bind(&FSDiscordConnect::discordDisconnectCoro, this));
+		std::bind(&FSDiscordConnect::discordDisconnectCoro, this));
 }
 
 void FSDiscordConnect::checkConnectionToDiscord(bool auto_connect)
 {
 	LLCoros::instance().launch("FSDiscordConnect::discordConnectedCoro",
-		boost::bind(&FSDiscordConnect::discordConnectedCoro, this, auto_connect));
+		std::bind(&FSDiscordConnect::discordConnectedCoro, this, auto_connect));
 }
 
 bool FSDiscordConnect::Tick(const LLSD&)
