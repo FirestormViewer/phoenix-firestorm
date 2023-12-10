@@ -73,6 +73,7 @@ class AOSet
 			std::string mName;
 			LLUUID mAssetUUID;
 			LLUUID mInventoryUUID;
+			LLUUID mOriginalUUID;
 			S32 mSortOrder;
 		};
 
