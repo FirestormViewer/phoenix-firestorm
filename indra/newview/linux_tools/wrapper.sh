@@ -59,6 +59,13 @@ exportMutliArchDRIPath() {
 ## with Fontconfig error: Cannot load default config file
 # export FONTCONFIG_PATH=/etc/fonts
 
+## - Enable NVidia's threaded optimization by default. If you experience
+##   weird behavior starting with the 6.6.17 Firestorm release that you
+##   can verify not to be present in earlier versions, comment out the
+##   next line. Thanks to Jira user Pazako Karu on FIRE-33398 to make us
+##   aware of this option!
+export __GL_THREADED_OPTIMIZATIONS=1
+
 if [ "`uname -m`" = "x86_64" ]; then
     echo '64-bit Linux detected.'
 fi
