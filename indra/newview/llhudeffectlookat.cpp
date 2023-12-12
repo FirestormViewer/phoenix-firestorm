@@ -511,22 +511,14 @@ BOOL LLHUDEffectLookAt::setLookAt(ELookAtType target_type, LLViewerObject *objec
 	//}
 
 	
-	// <FS:TS> FIRE-24175: Fix look at target clamping
-	bool isLookingAtSelf = false;
-	if(object){
-		isLookingAtSelf = object->isAvatar() && ((LLVOAvatar*)(LLViewerObject*)object)->isSelf();
-	}
 	static LLCachedControl<bool> s_EnableLimiter(gSavedSettings, "FSLookAtTargetLimitDistance");
 	bool lookAtShouldClamp = s_EnableLimiter &&
-						//(*mAttentions)[mTargetType].mName != "None" &&
-						//(*mAttentions)[mTargetType].mName != "Idle" &&
+						(*mAttentions)[mTargetType].mName != "None" &&
+						(*mAttentions)[mTargetType].mName != "Idle" &&
 						(*mAttentions)[mTargetType].mName != "Respond" &&
 						(*mAttentions)[mTargetType].mName != "Conversation" &&
-						//(*mAttentions)[mTargetType].mName != "FreeLook" &&
-						//(*mAttentions)[mTargetType].mName != "AutoListen";
-						(*mAttentions)[mTargetType].mName != "AutoListen" &&
-						!isLookingAtSelf;
-	// </FS:TS> FIRE-24175
+						(*mAttentions)[mTargetType].mName != "FreeLook" &&
+						(*mAttentions)[mTargetType].mName != "AutoListen";
 
 	if (!lookAtShouldClamp) //We do a similar but seperate calculation if we are doing limited distances
 	{
@@ -558,20 +550,25 @@ BOOL LLHUDEffectLookAt::setLookAt(ELookAtType target_type, LLViewerObject *objec
 		{
 			if (lookAtShouldClamp)
 			{
-			// <FS:TS> FIRE-24175: Fix look at target clamping
-				//if (mTargetObject->isAvatar() && ((LLVOAvatar*)(LLViewerObject*)mTargetObject)->isSelf())
-				//{
-				//	//We use this branch and mimic our mouse/first person look pose.
-				//	mTargetOffsetGlobal.setVec(gAgent.getPosGlobalFromAgent(gAgentAvatarp->mHeadp->getWorldPosition() + position));
-				//	mTargetObject = NULL;
-				//}
-				//else
-				//{
-					//Otherwise, mimic looking at the object.
+				if (object->isAvatar())
+				{
+					if (auto avatar = static_cast<LLVOAvatar*>(object); !avatar->isSelf())
+					{
+						// Looking at another avatar, have to aim at its head here since calcTargetPosition() doesn't do it anymore because we clear mTargetObject
+						mTargetOffsetGlobal.setVec(gAgent.getPosGlobalFromAgent(avatar->mHeadp->getWorldPosition()));
+						mTargetObject = nullptr;
+					}
+					else
+					{
+						// Continue normal when looking at ourself - lookat will be within the limit anyway
+						mTargetOffsetGlobal.setVec(position);
+					}
+				}
+				else
+				{
 					mTargetOffsetGlobal.setVec(object->getPositionGlobal() + (LLVector3d)(position * object->getRotationRegion()));
-					mTargetObject = NULL;
-				//}
-			// </FS:TS> FIRE-24175
+					mTargetObject = nullptr;
+				}
 			}
 			else
 			{
@@ -583,7 +580,7 @@ BOOL LLHUDEffectLookAt::setLookAt(ELookAtType target_type, LLViewerObject *objec
 			mTargetOffsetGlobal = gAgent.getPosGlobalFromAgent(position);
 		}
 
-		if (lookAtShouldClamp)
+		if (lookAtShouldClamp && !mTargetObject)
 		{
 			static LLCachedControl<F32> s_Radius(gSavedSettings, "FSLookAtTargetMaxDistance");
 
@@ -850,8 +847,10 @@ bool LLHUDEffectLookAt::calcTargetPosition()
 			// if selecting self, stare forward
 			if (looking_at_self && mTargetOffsetGlobal.magVecSquared() < MIN_TARGET_OFFSET_SQUARED)
 			{
+				// <FS:Ansariel> 1m in front of the avatar should be enough; changed because of distance clamp
 				//sets the lookat point in front of the avatar
-				mTargetOffsetGlobal.setVec(5.0, 0.0, 0.0);
+				//mTargetOffsetGlobal.setVec(5.0, 0.0, 0.0);
+				mTargetOffsetGlobal.setVec(1.0, 0.0, 0.0);
 				local_offset.setVec(mTargetOffsetGlobal);
 			}
 
