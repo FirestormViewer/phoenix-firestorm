@@ -40,7 +40,7 @@
      name="lockout_text"
      top="55"
      use_ellipses="true"
-	 visible="true" 
+	 visible="false" 
      right="-10"
      wrap="true">
 		You cannot change your Display Name until:
