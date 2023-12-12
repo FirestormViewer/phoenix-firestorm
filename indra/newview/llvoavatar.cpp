@@ -8413,85 +8413,86 @@ void LLVOAvatar::cleanupAttachedMesh( LLViewerObject* pVO )
 		}
 	}
 }
+// <FS:Beq> remove mesh rezzing delay
+// bool LLVOAvatar::hasPendingAttachedMeshes()
+// {
+//     for (attachment_map_t::iterator iter = mAttachmentPoints.begin();
+//          iter != mAttachmentPoints.end();
+//          ++iter)
+//     {
+//         LLViewerJointAttachment* attachment = iter->second;
+//         if (attachment)
+//         {
+//             for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
+//                  attachment_iter != attachment->mAttachedObjects.end();
+//                  ++attachment_iter)
+//             {
+//                 LLViewerObject* objectp = attachment_iter->get();
+//                 if (objectp)
+//                 {
+//                     LLViewerObject::const_child_list_t& child_list = objectp->getChildren();
+//                     for (LLViewerObject::child_list_t::const_iterator iter1 = child_list.begin();
+//                          iter1 != child_list.end(); ++iter1)
+//                     {
+//                         LLViewerObject* objectchild = *iter1;
+//                         if (objectchild && objectchild->getVolume())
+//                         {
+//                             const LLUUID& mesh_id = objectchild->getVolume()->getParams().getSculptID();
+//                             if (mesh_id.isNull())
+//                             {
+//                                 // No mesh nor skin info needed
+//                                 continue;
+//                             }
 
-bool LLVOAvatar::hasPendingAttachedMeshes()
-{
-    for (attachment_map_t::iterator iter = mAttachmentPoints.begin();
-         iter != mAttachmentPoints.end();
-         ++iter)
-    {
-        LLViewerJointAttachment* attachment = iter->second;
-        if (attachment)
-        {
-            for (LLViewerJointAttachment::attachedobjs_vec_t::iterator attachment_iter = attachment->mAttachedObjects.begin();
-                 attachment_iter != attachment->mAttachedObjects.end();
-                 ++attachment_iter)
-            {
-                LLViewerObject* objectp = attachment_iter->get();
-                if (objectp)
-                {
-                    LLViewerObject::const_child_list_t& child_list = objectp->getChildren();
-                    for (LLViewerObject::child_list_t::const_iterator iter1 = child_list.begin();
-                         iter1 != child_list.end(); ++iter1)
-                    {
-                        LLViewerObject* objectchild = *iter1;
-                        if (objectchild && objectchild->getVolume())
-                        {
-                            const LLUUID& mesh_id = objectchild->getVolume()->getParams().getSculptID();
-                            if (mesh_id.isNull())
-                            {
-                                // No mesh nor skin info needed
-                                continue;
-                            }
+//                             if (objectchild->getVolume()->isMeshAssetUnavaliable())
+//                             {
+//                                 // Mesh failed to load, do not expect it
+//                                 continue;
+//                             }
 
-                            if (objectchild->getVolume()->isMeshAssetUnavaliable())
-                            {
-                                // Mesh failed to load, do not expect it
-                                continue;
-                            }
+//                             if (objectchild->mDrawable)
+//                             {
+//                                 LLVOVolume* pvobj = objectchild->mDrawable->getVOVolume();
+//                                 if (pvobj)
+//                                 {
+//                                     if (!pvobj->isMesh())
+//                                     {
+//                                         // Not a mesh
+//                                         continue;
+//                                     }
 
-                            if (objectchild->mDrawable)
-                            {
-                                LLVOVolume* pvobj = objectchild->mDrawable->getVOVolume();
-                                if (pvobj)
-                                {
-                                    if (!pvobj->isMesh())
-                                    {
-                                        // Not a mesh
-                                        continue;
-                                    }
+//                                     if (!objectchild->getVolume()->isMeshAssetLoaded())
+//                                     {
+//                                         // Waiting for mesh
+//                                         return true;
+//                                     }
 
-                                    if (!objectchild->getVolume()->isMeshAssetLoaded())
-                                    {
-                                        // Waiting for mesh
-                                        return true;
-                                    }
+//                                     const LLMeshSkinInfo* skin_data = pvobj->getSkinInfo();
+//                                     if (skin_data)
+//                                     {
+//                                         // Skin info present, done
+//                                         continue;
+//                                     }
 
-                                    const LLMeshSkinInfo* skin_data = pvobj->getSkinInfo();
-                                    if (skin_data)
-                                    {
-                                        // Skin info present, done
-                                        continue;
-                                    }
+//                                     if (pvobj->isSkinInfoUnavaliable())
+//                                     {
+//                                         // Load failed or info not present, don't expect it
+//                                         continue;
+//                                     }
+//                                 }
 
-                                    if (pvobj->isSkinInfoUnavaliable())
-                                    {
-                                        // Load failed or info not present, don't expect it
-                                        continue;
-                                    }
-                                }
-
-                                // objectchild is not ready
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return false;
-}
+//                                 // objectchild is not ready
+//                                 return true;
+//                             }
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//     }
+//     return false;
+// }
+// </FS:Beq>
 
 //-----------------------------------------------------------------------------
 // detachObject()
@@ -9152,7 +9153,7 @@ BOOL LLVOAvatar::updateIsFullyLoaded()
                    || (mLoadedCallbackTextures < mCallbackTextureList.size() && mLastTexCallbackAddedTime.getElapsedTimeF32() < MAX_TEXTURE_WAIT_TIME_SEC)
                    || !mPendingAttachment.empty()
                    || (rez_status < 3 && !isFullyBaked())
-                   || hasPendingAttachedMeshes()
+                //    || hasPendingAttachedMeshes() // <FS:Beq/>
                   );
 	}
 	updateRezzedStatusTimers(rez_status);

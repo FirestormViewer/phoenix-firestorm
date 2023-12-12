@@ -41,6 +41,10 @@
 #include "llinventorymodel.h"
 #include "llviewerinventory.h"
 
+#include "llinspecttexture.h"
+#include "lltooltip.h"
+#include "llviewercontrol.h"
+
 static LLWidgetNameRegistry::StaticRegistrar sRegisterPanelInventoryListItemBaseParams(&typeid(LLPanelInventoryListItemBase::Params), "inventory_list_item");
 
 static const S32 WIDGET_SPACING = 3;
@@ -418,7 +422,35 @@ void LLPanelInventoryListItemBase::setTitle(const std::string& title,
 
 BOOL LLPanelInventoryListItemBase::handleToolTip( S32 x, S32 y, MASK mask)
 {
-	LLRect text_box_rect = mTitleCtrl->getRect();
+	const LLRect& text_box_rect = mTitleCtrl->getRect();
+
+	// <FS:Ansariel> Make inventory thumbnail tooltips work with inventory lists
+	static LLCachedControl<bool> showInventoryThumbnailTooltips(gSavedSettings, "FSShowInventoryThumbnailTooltips");
+	if (showInventoryThumbnailTooltips && text_box_rect.pointInRect(x, y))
+	{
+		if (auto inventoryItem = gInventory.getItem(mInventoryItemUUID); inventoryItem)
+		{
+			if (const LLUUID& thumbnailUUID = inventoryItem->getThumbnailUUID(); !thumbnailUUID.isNull())
+			{
+				static LLCachedControl<F32> inventoryThumbnailTooltipsDelay(gSavedSettings, "FSInventoryThumbnailTooltipsDelay");
+				static LLCachedControl<F32> tooltip_fast_delay(gSavedSettings, "ToolTipFastDelay");
+				F32 tooltipDelay = LLToolTipMgr::instance().toolTipVisible() ? tooltip_fast_delay() : inventoryThumbnailTooltipsDelay();
+
+				LLSD params;
+				params["thumbnail_id"] = thumbnailUUID;
+
+				LLToolTipMgr::instance().show(LLToolTip::Params()
+					.message(inventoryItem->getName())
+					.sticky_rect(calcScreenRect())
+					.delay_time(tooltipDelay)
+					.create_callback(boost::bind(&LLInspectTextureUtil::createInventoryToolTip, _1))
+					.create_params(params));
+				return TRUE;
+			}
+		}
+	}
+	// </FS:Ansariel>
+
 	if (text_box_rect.pointInRect(x, y) &&
 		mTitleCtrl->getTextPixelWidth() <= text_box_rect.getWidth())
 	{

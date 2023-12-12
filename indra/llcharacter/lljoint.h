@@ -46,7 +46,7 @@ struct JointKey
 	std::string mName;
 	U32 mKey;
 
-	static JointKey construct( std::string aName );
+	static JointKey construct(const std::string& aName);
 };
 
 inline bool operator==(JointKey const &aLHS, JointKey const &aRHS)
@@ -63,7 +63,6 @@ inline std::ostream& operator<<(std::ostream &aLHS, JointKey const &aRHS)
 {
 	return aLHS << aRHS.mName << " (" << aRHS.mKey << ")";
 }
-
 // </FS:ND>
 
 const S32 LL_CHARACTER_MAX_JOINTS_PER_MESH = 15;

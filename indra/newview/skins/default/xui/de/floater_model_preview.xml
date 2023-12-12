@@ -400,6 +400,7 @@
 				</text>
 				<check_box label="Gewichte automatisch aktivieren" tool_tip="Automatisch die Gewichte für Netze mit Rigging-Informationen aktivieren" name="mesh_preview_auto_weights"/>
 				<check_box label="Automatische Vorschau für Gewichte" tool_tip="Zeigt automatisch die Gewichte für Netze mit Rigging-Informationen in der Vorschau" name="mesh_preview_auto_show_weights"/>
+				<check_box label="Standardmäßig „verlässliche“ LODs verwenden" tool_tip="Verwendet standardmäßig die „verlässliche“ Methode (GLOD)" name="mesh_upload_default_to_reliable"/>
 				<text name="lod_suffix_label">
 					LOD-Suffixe:
 				</text>

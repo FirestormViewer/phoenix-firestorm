@@ -44,23 +44,22 @@
 #include "llfloaterreg.h"
 #include "llcorehttputil.h"
 
-boost::scoped_ptr<LLEventPump> LLFlickrConnect::sStateWatcher(new LLEventStream("FlickrConnectState"));
-boost::scoped_ptr<LLEventPump> LLFlickrConnect::sInfoWatcher(new LLEventStream("FlickrConnectInfo"));
-boost::scoped_ptr<LLEventPump> LLFlickrConnect::sContentWatcher(new LLEventStream("FlickrConnectContent"));
+std::unique_ptr<LLEventPump> LLFlickrConnect::sStateWatcher = std::make_unique<LLEventStream>("FlickrConnectState");
+std::unique_ptr<LLEventPump> LLFlickrConnect::sInfoWatcher = std::make_unique<LLEventStream>("FlickrConnectInfo");
 
 // Local functions
-void log_flickr_connect_error(const std::string& request, U32 status, const std::string& reason, const std::string& code, const std::string& description)
+static void log_flickr_connect_error(const std::string& request, U32 status, const std::string& reason, const std::string& code, const std::string& description)
 {
     // Note: 302 (redirect) is *not* an error that warrants logging
     if (status != 302)
     {
-		LL_WARNS("FlickrConnect") << request << " request failed with a " << status << " " << reason << ". Reason: " << code << " (" << description << ")" << LL_ENDL;
+        LL_WARNS("FlickrConnect") << request << " request failed with a " << status << " " << reason << ". Reason: " << code << " (" << description << ")" << LL_ENDL;
     }
 }
 
-void toast_user_for_flickr_success()
+static void toast_user_for_flickr_success()
 {
-	LLSD args;
+    LLSD args;
     args["MESSAGE"] = LLTrans::getString("flickr_post_success");
     LLNotificationsUtil::add("FlickrConnect", args);
 }
@@ -437,19 +436,19 @@ std::string LLFlickrConnect::getFlickrConnectURL(const std::string& route, bool 
 void LLFlickrConnect::connectToFlickr(const std::string& request_token, const std::string& oauth_verifier)
 {
     LLCoros::instance().launch("LLFlickrConnect::flickrConnectCoro",
-        boost::bind(&LLFlickrConnect::flickrConnectCoro, this, request_token, oauth_verifier));
+        std::bind(&LLFlickrConnect::flickrConnectCoro, this, request_token, oauth_verifier));
 }
 
 void LLFlickrConnect::disconnectFromFlickr()
 {
     LLCoros::instance().launch("LLFlickrConnect::flickrDisconnectCoro",
-        boost::bind(&LLFlickrConnect::flickrDisconnectCoro, this));
+        std::bind(&LLFlickrConnect::flickrDisconnectCoro, this));
 }
 
 void LLFlickrConnect::checkConnectionToFlickr(bool auto_connect)
 {
     LLCoros::instance().launch("LLFlickrConnect::flickrConnectedCoro",
-        boost::bind(&LLFlickrConnect::flickrConnectedCoro, this, auto_connect));
+        std::bind(&LLFlickrConnect::flickrConnectedCoro, this, auto_connect));
 }
 
 void LLFlickrConnect::loadFlickrInfo()
@@ -457,7 +456,7 @@ void LLFlickrConnect::loadFlickrInfo()
 	if(mRefreshInfo)
 	{
         LLCoros::instance().launch("LLFlickrConnect::flickrInfoCoro",
-            boost::bind(&LLFlickrConnect::flickrInfoCoro, this));
+            std::bind(&LLFlickrConnect::flickrInfoCoro, this));
 	}
 }
 
@@ -473,7 +472,7 @@ void LLFlickrConnect::uploadPhoto(const std::string& image_url, const std::strin
     setConnectionState(LLFlickrConnect::FLICKR_POSTING);
 
     LLCoros::instance().launch("LLFlickrConnect::flickrShareCoro",
-        boost::bind(&LLFlickrConnect::flickrShareCoro, this, body));
+        std::bind(&LLFlickrConnect::flickrShareCoro, this, body));
 }
 
 void LLFlickrConnect::uploadPhoto(LLPointer<LLImageFormatted> image, const std::string& title, const std::string& description, const std::string& tags, int safety_level)
@@ -481,7 +480,7 @@ void LLFlickrConnect::uploadPhoto(LLPointer<LLImageFormatted> image, const std::
     setConnectionState(LLFlickrConnect::FLICKR_POSTING);
 
     LLCoros::instance().launch("LLFlickrConnect::flickrShareImageCoro",
-        boost::bind(&LLFlickrConnect::flickrShareImageCoro, this, image, 
+        std::bind(&LLFlickrConnect::flickrShareImageCoro, this, image, 
         title, description, tags, safety_level));
 }
 

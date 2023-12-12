@@ -1487,6 +1487,15 @@
          label="Auto-preview weights"
          tool_tip="Automatically show weights in preview for meshes with rigging info"
          name="mesh_preview_auto_show_weights"/>
+         <check_box
+         control_name="FSMeshUploadUseGLODAsDefault"
+         follows="top|left"
+         left="24"
+         top_pad="5"
+         width="300"
+         label="Default to 'Reliable' LODs"
+         tool_tip="Use the 'Reliable' method (GLOD) by default"
+         name="mesh_upload_default_to_reliable"/>
          <text
            follows="left|top"
            layout="topleft"

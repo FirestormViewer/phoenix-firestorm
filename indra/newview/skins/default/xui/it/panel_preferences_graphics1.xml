@@ -2,7 +2,7 @@
 <panel label="Grafica" name="Display panel">
 	<tab_container label="Impostazioni grafiche" name="tabs">
 		<panel label="Generale" name="General">
-			<text name="preset_label" width="130">
+			<text name="preset_label">
 				Preset in uso:
 			</text>
 			<text name="QualitySpeed">

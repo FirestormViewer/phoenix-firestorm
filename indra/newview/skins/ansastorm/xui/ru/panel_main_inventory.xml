@@ -9,7 +9,6 @@
 	<panel.string name="ItemcountUnknown">
 		Обнаружено [ITEM_COUNT] элементов [FILTER]
 	</panel.string>
-
 	<menu_bar name="inventory_menu_bar">
 		<menu label="Инвентарь" name="inventory_inventory_menu">
 			<menu_item_call name="inventory_open" label="Открыть" />
@@ -77,30 +76,40 @@
 			<menu_item_check name="inventory_filter_coalesced_objects_only" label="Только объединенные"/>
 		</menu>
 	</menu_bar>
-	<filter_editor label="Фильтр" name="inventory search editor" tool_tip="Напишите одно или несколько слов для поиска. Для разделения используйте '+' "/>
-	<text name="filter_label" width="60" value="Фильтр:"/>
-	<combo_box name="filter_combo_box">
-		<combo_box.item value="filter_type_all" label="Все типы" />
-		<combo_box.item value="filter_type_animations" label="Анимации" />
-		<combo_box.item value="filter_type_calling_cards" label="Визитные карточки" />
-		<combo_box.item value="filter_type_clothing" label="Одежда / Части тела" />
-		<combo_box.item value="filter_type_gestures" label="Жесты" />
-		<combo_box.item value="filter_type_landmarks" label="Закладки" />
-		<combo_box.item value="filter_type_notecards" label="Заметки" />
-		<combo_box.item value="filter_type_objects" label="Объекты" />
-		<combo_box.item value="filter_type_scripts" label="Скрипты" />
-		<combo_box.item value="filter_type_sounds" label="Звуки" />
-		<combo_box.item value="filter_type_textures" label="Текстуры" />
-		<combo_box.item value="filter_type_snapshots" label="Снимки" />
-		<combo_box.item value="filter_type_meshes" label="Меш" />
-		<combo_box.item value="filter_type_settings" label="Настройки" />
-		<combo_box.item value="filter_type_custom" label="Другое..." />
-	</combo_box>
-	<tab_container name="inventory filter tabs">
-		<inventory_panel label="Инвентарь" name="All Items"/>
-		<recent_inventory_panel label="Недавние" name="Recent Items"/>
-		<worn_inventory_panel label="Надетые" name="Worn Items"/>
-	</tab_container>
+	<layout_stack name="nav_stack">
+		<layout_panel name="filter_panel">
+			<filter_editor label="Фильтр" name="inventory search editor" tool_tip="Напишите одно или несколько слов для поиска. Для разделения используйте '+' "/>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="ctrl_stack">
+		<layout_panel name="filter_ctrls">
+			<text name="filter_label" width="60" value="Фильтр:"/>
+			<combo_box name="filter_combo_box">
+				<combo_box.item value="filter_type_all" label="Все типы" />
+				<combo_box.item value="filter_type_animations" label="Анимации" />
+				<combo_box.item value="filter_type_calling_cards" label="Визитные карточки" />
+				<combo_box.item value="filter_type_clothing" label="Одежда / Части тела" />
+				<combo_box.item value="filter_type_gestures" label="Жесты" />
+				<combo_box.item value="filter_type_landmarks" label="Закладки" />
+				<combo_box.item value="filter_type_notecards" label="Заметки" />
+				<combo_box.item value="filter_type_objects" label="Объекты" />
+				<combo_box.item value="filter_type_scripts" label="Скрипты" />
+				<combo_box.item value="filter_type_sounds" label="Звуки" />
+				<combo_box.item value="filter_type_textures" label="Текстуры" />
+				<combo_box.item value="filter_type_snapshots" label="Снимки" />
+				<combo_box.item value="filter_type_meshes" label="Меш" />
+				<combo_box.item value="filter_type_settings" label="Настройки" />
+				<combo_box.item value="filter_type_custom" label="Другое..." />
+			</combo_box>
+		</layout_panel>
+	</layout_stack>
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs">
+			<inventory_panel label="Инвентарь" name="All Items"/>
+			<recent_inventory_panel label="Недавние" name="Recent Items"/>
+			<worn_inventory_panel label="Надетые" name="Worn Items"/>
+		</tab_container>
+	</panel>
 	<panel name="bottom_panel">
 		<panel name="options_gear_btn_panel">
 			<menu_button name="options_gear_btn" tool_tip="Показать дополнительные настройки"/>

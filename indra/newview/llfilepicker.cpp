@@ -1861,7 +1861,7 @@ bool LLFilePicker::openFileDialog( int32_t filter, bool blocking, EType aType )
 			// <FS:Zi> Handle all enums in a switch, or you make GCC unhappy
 			case FFSAVE_GLTF:
 				file_type = "gltf_files";
-				file_dialog_filter = "*.gltf";
+				file_dialog_filter = "*.{gltf,glb}";
 				break;
 			// </FS:Zi>
 
@@ -1946,15 +1946,15 @@ bool LLFilePicker::openFileDialog( int32_t filter, bool blocking, EType aType )
 			// <FS:Zi> Handle all enums in a switch, or you make GCC unhappy
 			case FFLOAD_GLTF:
 				file_type = "gltf_files";
-				file_dialog_filter = "*.gltf";
+				file_dialog_filter = "*.{gltf,glb}";
 				break;
 			case FFLOAD_MATERIAL:
 				file_type = "material_files";
-				file_dialog_filter = "*";
+				file_dialog_filter = "*.{gltf,glb}";
 				break;
 			case FFLOAD_MATERIAL_TEXTURE:
 				file_type = "material_texture_files";
-				file_dialog_filter = "*";
+				file_dialog_filter = "*.{gltf,glb,tga,bmp,jpg,jpeg,png}";
 				break;
 			// </FS:Zi>
 

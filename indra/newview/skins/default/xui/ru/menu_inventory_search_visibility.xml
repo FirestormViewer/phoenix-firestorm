@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <toggleable_menu name="menu_search_visibility">
+	<menu_item_check label="Поиск в папках с нарядами" name="search_outfits"/>
 	<menu_item_check label="Искать в Корзине" name="search_trash"/>
 	<menu_item_check label="Искать в Библиотеке" name="search_library"/>
 	<menu_item_check label="Включая ссылки" name="include_links"/>

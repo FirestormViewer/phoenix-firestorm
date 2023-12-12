@@ -29,7 +29,7 @@
 
 #include "llpanelgroup.h"
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class LLLineEditor;
 class LLTextBox;
@@ -127,7 +127,7 @@ private:
 	S32 sortMembersList(S32,const LLScrollListItem*,const LLScrollListItem*);
 
 	LLGroupMgrGroupData::member_list_t::iterator mMemberProgress;
-	typedef boost::unordered_map<LLUUID, boost::signals2::connection, FSUUIDHash> avatar_name_cache_connection_map_t;
+	typedef std::unordered_map<LLUUID, boost::signals2::connection, FSUUIDHash> avatar_name_cache_connection_map_t;
 	avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
 
 	BOOL			mPendingMemberUpdate;

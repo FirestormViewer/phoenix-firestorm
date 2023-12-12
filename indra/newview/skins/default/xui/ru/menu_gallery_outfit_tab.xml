@@ -3,10 +3,7 @@
     <menu_item_call label="Надеть - Заменить текущий Костюм" name="wear_replace"/>
     <menu_item_call label="Надеть - Добавить к текущему Костюму" name="wear_add"/>
     <menu_item_call label="Снять - Удалить из текущего Костюма" name="take_off"/>
-    <menu_item_call label="Загрузить Фото (L$[UPLOAD_COST])" name="upload_photo"/>
-    <menu_item_call label="Выбрать Фото" name="select_photo"/>
-    <menu_item_call label="Сделать Снимок" name="take_snapshot"/>
-    <menu_item_call label="Удалить Фото" name="remove_photo"/>
+    <menu_item_call label="Изображение..." name="thumbnail"/>
     <menu label="Новая одежда" name="New Clothes">
         <menu_item_call label="Новая Рубашка" name="New Shirt"/>
         <menu_item_call label="Новые Штаны" name="New Pants"/>
