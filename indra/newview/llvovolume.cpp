@@ -5774,6 +5774,11 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
     LL_PROFILE_ZONE_SCOPED_CATEGORY_VOLUME;
     llassert(!gCubeSnapshot);
 
+    if (group->isDead())
+    {
+        return;
+    }
+
 	if (group->changeLOD())
 	{
 		group->mLastUpdateDistance = group->mDistance;
@@ -5861,7 +5866,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 	
 			LLVOVolume* vobj = drawablep->getVOVolume();
             
-			if (!vobj)
+			if (!vobj || vobj->isDead())
 			{
 				continue;
 			}

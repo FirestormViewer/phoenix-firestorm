@@ -1814,11 +1814,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e50ea94bbaa4ff41bf53b84b7192df1a694c5337</string>
+              <string>3a3e14563cd5fc019c3f139b82aa46ec79847709</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/llca/releases/download/v202310121525.0-d22bd98/llca-202310121530.0-common-d22bd98.tar.zst</string>
+              <string>https://github.com/secondlife/llca/releases/download/v202312051403.17-0f5d9c3/llca-202312051404.0-common-0f5d9c3.tar.zst</string>
             </map>
             <key>name</key>
             <string>common</string>
@@ -1832,7 +1832,7 @@
         <string>Copyright (c) 2016, Linden Research, Inc.; data provided by the Mozilla NSS Project.
       </string>
         <key>version</key>
-        <string>202310121530.0</string>
+        <string>202312051404.0</string>
         <key>name</key>
         <string>llca</string>
       </map>
@@ -3298,7 +3298,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE</string>
                   <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
                   <string>-DINSTALL_PROPRIETARY=TRUE</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3318,11 +3318,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE</string>
                   <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>../indra</string>
-</array>
+                </array>
               </map>
               <key>name</key>
               <string>RelWithDebInfoOS</string>
@@ -3339,7 +3339,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE</string>
                   <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
                   <string>-DINSTALL_PROPRIETARY=TRUE</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3359,11 +3359,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE</string>
                   <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>../indra</string>
-</array>
+                </array>
               </map>
               <key>name</key>
               <string>ReleaseOS</string>
@@ -3566,11 +3566,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>-G</string>
                   <string>Xcode</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>../indra</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3600,7 +3600,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>-G</string>
                   <string>Xcode</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3630,11 +3630,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>-G</string>
                   <string>Xcode</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>../indra</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3660,7 +3660,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>-G</string>
                   <string>Xcode</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3791,11 +3791,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-G</string>
                   <string>Ninja</string>
                   <string>-DLL_TESTS=Off</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>../indra</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3818,7 +3818,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-G</string>
                   <string>Ninja</string>
                   <string>-DLL_TESTS=Off</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3950,11 +3950,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>${AUTOBUILD_WIN_CMAKE_GEN|NOTWIN}</string>
                   <string>-A</string>
                   <string>${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>..\indra</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3964,11 +3964,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>/build</string>
                   <string>RelWithDebInfo|${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>SecondLife.sln</string>
-</array>
+                </array>
               </map>
               <!-- FS:Ansariel: This will cause packages being installed twice
               <key>default</key>
@@ -3990,11 +3990,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
                   <string>-DUSE_OPENAL:BOOL=ON</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>..\indra</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -4008,11 +4008,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>/p:useenv=true</string>
                   <string>/verbosity:minimal</string>
                   <string>/p:VCBuildAdditionalOptions= /incremental</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>SecondLife.sln</string>
-</array>
+                </array>
               </map>
               <key>name</key>
               <string>RelWithDebInfoOS</string>
@@ -4027,11 +4027,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>${AUTOBUILD_WIN_CMAKE_GEN|NOTWIN}</string>
                   <string>-A</string>
                   <string>${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>..\indra</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -4041,11 +4041,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>/build</string>
                   <string>Release|${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>SecondLife.sln</string>
-</array>
+                </array>
               </map>
               <key>name</key>
               <string>Release</string>
@@ -4064,11 +4064,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
                   <string>-DUSE_OPENAL:BOOL=ON</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>..\indra</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -4082,11 +4082,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>/p:useenv=true</string>
                   <string>/verbosity:minimal</string>
                   <string>/p:VCBuildAdditionalOptions= /incremental</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>SecondLife.sln</string>
-</array>
+                </array>
               </map>
               <key>name</key>
               <string>ReleaseOS</string>
