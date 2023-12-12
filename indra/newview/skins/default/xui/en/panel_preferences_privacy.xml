@@ -480,7 +480,7 @@
          initial_value="160"
          layout="topleft"
          max_val="32"
-         min_val="4"
+         min_val="1"
          name="LimitLookAtDistance"
          width="150" />
         <text
