@@ -554,8 +554,8 @@ void LLWearable::revertValues()
 		{
 			F32 value = vp_pair.second;
 			// <FS:Ansariel> [Legacy Bake]
-			//setVisualParamWeight(id, value);
-			setVisualParamWeight(id, value, TRUE);
+			//param->setWeight(value);
+			param->setWeight(value, TRUE);
 			mSavedVisualParamMap[id] = param->getWeight();
 		}
 	}
