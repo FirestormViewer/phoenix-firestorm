@@ -80,6 +80,11 @@
         <check_box label="Automatyczna zmiana rozmiaru list Rozmów i Powiadomień" name="FSLegacyNotificationWellAutoResize" tool_tip="Gdy zaznaczysz tą opcję, to Firestorm zawsze automatycznie zmieni rozmiar list Konwersacji i starszych Powiadomień, gdy elementy zostaną dodane lub usunięte." />
         <check_box label="Przemapuj skróty klawiszowe na nieużywane przez Linuksa (tylko Linux; wymaga restartu)" name="FSRemapLinuxShortcuts" tool_tip="Gdy zaznaczysz tą opcję, to skróty klawiszowe używane już przez system operacyjny Linux (takie jak CTRL-ALT-Fx) zostaną przemapowane w przeglądarce." />
         <check_box label="Zapobiegaj wysuwaniu okna statystyk na pierwszy plan" name="FSStatisticsNoFocus" tool_tip="Gdy zaznaczysz tą opcję, to okno statystyk nigdy nie wysunie się na pierwszy plan, gdy inne zostanie zamknięte. Akcje takie jak zmienianie ułożenia wykresów ciągle będą możliwe." />
+		<check_box label="Pokaż miniatury w dymkach podpowiedzi Szafy" name="FSShowInventoryThumbnailTooltips" tool_tip="Jeśli ta opcja jest włączona, to wskazanie kursorem elementu Szafy zawierającego miniaturę (zdjęcie) spowoduje jej wyświetlenie w dymku podpowiedzi - chmurce pomocy." />
+		<slider label="Opóźnienie dymku miniatury:" tool_tip="Opóźnienie dymku podpowiedzi - chmurki pomocy - pokazującego miniatury elementów w Szafie." name="FSInventoryThumbnailTooltipsDelay" />
+		<text name="FSInventoryThumbnailTooltipsDelayText">
+			sek
+		</text>
         <slider label="Ile razy mrugają karty IM:" name="ButtonsFlashCount" />
         <slider label="Czas mrugnięcia karty IM:" tool_tip="Czas w sekundach, jaki jest potrzebny karcie wiadomości IM na mrugnięcie - używane przy powiadomieniach IM" name="ButtonFlashRate" />
         <text name="ButtonFlashRateText">

@@ -81,13 +81,16 @@
 	<menu_item_call label="Открыть оригинал" name="Open Original"/>
 	<menu_item_call label="Свойства" name="Properties"/>
 	<menu_item_call label="Переименовать" name="Rename"/>
+	<menu_item_call label="Изображение..." name="thumbnail"/>
 	<menu_item_call label="Защитить папку" name="ProtectFolder"/>
 	<menu_item_call label="Снять защиту папки" name="UnprotectFolder"/>
+	<menu_item_call label="Перезагрузить папку" name="ReloadFolder"/>
 	<menu_item_call label="Копировать идентификатор UUID" name="Copy Asset UUID"/>
+	<menu_item_call label="Возврат к последней позиции" name="Restore to Last Position"/>
 	<menu_item_call label="Показать в главной панели" name="Show in Main Panel"/>
 	<menu_item_call label="Показать в новом окне" name="Show in new Window"/>
-	<menu_item_call label="Перезагрузить папку" name="ReloadFolder"/>
-	<menu_item_call label="Возврат к последней позиции" name="Restore to Last Position"/>
+	<menu_item_call label="Открыть" name="open_in_current_window"/>
+	<menu_item_call label="Открыть в новом окне" name="open_in_new_window"/>
 	<menu_item_call label="Копировать" name="Copy"/>
 	<menu_item_call label="Вырезать" name="Cut"/>
 	<menu_item_call label="Вставить" name="Paste"/>

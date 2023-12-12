@@ -191,8 +191,10 @@ LLTextureToolTip::LLTextureToolTip(const LLToolTip::Params& p)
 	mMaxWidth = llmax(mMaxWidth, mPreviewSize);
 
     // Currently has to share params with LLToolTip, override values
-    setBackgroundColor(LLColor4::black);
-    setTransparentColor(LLColor4::black);
+    // <FS:Ansariel> Make the texture tooltip not look ugly
+    //setBackgroundColor(LLColor4::black);
+    //setTransparentColor(LLColor4::black);
+    // </FS:Ansariel>
     setBorderVisible(true);
 }
 
@@ -226,22 +228,27 @@ void LLTextureToolTip::initFromParams(const LLToolTip::Params& p)
 
     // Currently has to share params with LLToolTip, override values manually
     // Todo: provide from own params instead, may be like object inspector does it
-    LLViewBorder::Params border_params;
-    border_params.border_thickness(LLPANEL_BORDER_WIDTH);
-    border_params.highlight_light_color(LLColor4::white);
-    border_params.highlight_dark_color(LLColor4::white);
-    border_params.shadow_light_color(LLColor4::white);
-    border_params.shadow_dark_color(LLColor4::white);
-    addBorder(border_params);
-    setBorderVisible(true);
+    // <FS:Ansariel> Make the texture tooltip not look ugly
+    //LLViewBorder::Params border_params;
+    //border_params.border_thickness(LLPANEL_BORDER_WIDTH);
+    //border_params.highlight_light_color(LLColor4::white);
+    //border_params.highlight_dark_color(LLColor4::white);
+    //border_params.shadow_light_color(LLColor4::white);
+    //border_params.shadow_dark_color(LLColor4::white);
+    //addBorder(border_params);
+    //setBorderVisible(true);
+    // <FS:Ansariel>
 
-    setBackgroundColor(LLColor4::black);
+    // <FS:Ansariel> Make the texture tooltip not look ugly
+    // setBackgroundColor(LLColor4::black);
     setBackgroundVisible(true);
     setBackgroundOpaque(true);
-    setBackgroundImage(nullptr);
+    // <FS:Ansariel> Make the texture tooltip not look ugly
+    //setBackgroundImage(nullptr);
     setTransparentImage(nullptr);
 
-    mTextBox->setColor(LLColor4::white);
+    // <FS:Ansariel> Make the texture tooltip not look ugly
+    //mTextBox->setColor(LLColor4::white);
 
 	snapToChildren();
 }

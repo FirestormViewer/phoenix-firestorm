@@ -97,7 +97,6 @@ set(viewer_SOURCE_FILES
     exoflickr.cpp
     exoflickrauth.cpp
     exogroupmutelist.cpp
-    # exopostprocess.cpp
     floatermedialists.cpp
     fsareasearch.cpp
     fsareasearchmenu.cpp
@@ -885,7 +884,6 @@ set(viewer_HEADER_FILES
     exoflickr.h
     exoflickrauth.h
     exogroupmutelist.h
-    # exopostprocess.h
     floatermedialists.h
     fsareasearch.h
     fsareasearchmenu.h
@@ -2067,6 +2065,7 @@ set(viewer_APPSETTINGS_FILES
     packages-info.txt
     featuretable.txt
     featuretable_mac.txt
+    featuretable_linux.txt
     )
 	
 if (WINDOWS)

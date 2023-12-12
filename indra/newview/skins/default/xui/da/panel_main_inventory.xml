@@ -9,11 +9,17 @@
 	<text name="ItemcountText">
 		Genstande:
 	</text>
-	<filter_editor label="Filter" name="inventory search editor"/>
-	<tab_container name="inventory filter tabs">
-		<inventory_panel label="Alle ting" name="All Items"/>
-		<recent_inventory_panel label="Nye ting" name="Recent Items"/>
-	</tab_container>
+	<layout_stack name="nav_stack">
+		<layout_panel name="filter_panel">
+			<filter_editor label="Filter" name="inventory search editor"/>
+		</layout_panel>
+	</layout_stack>
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs">
+			<inventory_panel label="Alle ting" name="All Items"/>
+			<recent_inventory_panel label="Nye ting" name="Recent Items"/>
+		</tab_container>
+	</panel>
 	<layout_stack name="bottom_panel">
 		<layout_panel name="options_gear_btn_panel">
 			<button name="options_gear_btn" tool_tip="Vis yderligere valg"/>

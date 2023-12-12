@@ -22,6 +22,9 @@
 Размер:
 [DIMENSIONS]
 	</text>
+	<text name="over_limit_lbl">
+		Выбрана текстура [TEXDIM]. Изображение инвентаря должно быть квадратным, не меньше [MINTEXDIM].
+	</text>
 
 	<!--  middle: inventory mode -->
 	<button label="По умолч." label_selected="По умолч." name="Default"/>
