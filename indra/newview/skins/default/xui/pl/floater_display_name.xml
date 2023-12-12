@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Display Name" title="Zmień Wyświetlane Imię">
+	<floater.string name="LockOutDateFormat">
+		[day,datetime,slt] [month,datetime,slt] [year,datetime,slt], [hour24,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+	</floater.string>
 	<text name="info_text">
 		Twoje Wyświetlane Imię to takie, które inni widzą nad Twoją głową. Możesz je zmienić raz w tygodniu.
 	</text>
 	<text name="lockout_text">
-		Nie możesz zmienić swojego Imienia do: [TIME].
+		Nie możesz zmienić swojego Imienia do:
+[TIME].
 	</text>
 	<text name="set_name_label">
 		Nowe Wyświetlane Imię:
