@@ -309,6 +309,12 @@ Saisissez son UUID ou passez votre souris sur le champ pour voir sa valeur par d
 			<button name="Prev_UISndTrackerBeacon" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndTrackerBeacon" label="↻" tool_tip="Réinitialiser."/>
 			<check_box label="Activer" name="PlayModeUISndTrackerBeacon"/>
+			<text tool_tip="UUID du son émis lorsque le microphone est allumé ou éteint." name="textFSMicToggle">
+				Commutation du micro :
+			</text>
+			<button name="Prev_UISndMicToggle" label="P" tool_tip="Aperçu de ce son."/>
+			<button name="Def_UISndMicToggle" label="D" tool_tip="Rétablir l'UUID par défaut."/>
+			<check_box label="Jouer ce son" name="PlayModeUISndMicToggle"/>
 			<text tool_tip="UUID du son joué quand l'alerte de redémarrage de la région apparait." width="180" name="textFSRestart">Redémarrage région :</text>
 			<button name="Prev_UISndRestart" label="▶" tool_tip="Jouer ce son."/>
 			<button name="Def_UISndRestart" label="↻" tool_tip="Réinitialiser."/>
