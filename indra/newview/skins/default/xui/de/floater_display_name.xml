@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Display Name" title="Anzeigenamen ändern">
+	<floater.string name="LockOutDateFormat">
+		[day,datetime,slt]. [month,datetime,slt] [year,datetime,slt], [hour24,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+	</floater.string>
 	<text name="info_text">
 		Der Anzeigename ist der Name, den Sie Ihrem Avatar geben. Sie können ihn einmal pro Woche ändern.
 	</text>
 	<text name="lockout_text">
-		Früheste Änderung möglich ab: [TIME].
+		Früheste Änderung möglich ab:
+[TIME].
 	</text>
 	<text name="set_name_label">
 		Neuer Anzeigename:

@@ -32,8 +32,8 @@
    animate="false"
    top_pad="4"
    left="10"
-   name="nav_stack"
-   orientation="horizontal">
+   orientation="horizontal"
+   name="top_stack">
     <layout_panel
      border="false"
      bevel_style="in"
@@ -88,7 +88,8 @@
       height="25"
       width="324"
       name="filter_panel"
-      visible="true">
+      visible="true"
+      name="filter_layout_panel">
       <filter_editor
        text_pad_left="10"
        follows="left|top|right"

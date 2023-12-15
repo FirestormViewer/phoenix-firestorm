@@ -772,17 +772,6 @@
 				 top_pad="2"
 				 follows="left|top"
 				 height="16"
-				 label="Disable minimum camera zoom distance"
-				 layout="topleft"
-				 left="5"
-				 name="disableminzoomdist"
-				 width="250"
-				 control_name="FSDisableMinZoomDist"
-				 tool_tip="Disable the constraint on the closest distance the camera is allowed to get to an object."/>
-				<check_box
-				 top_pad="2"
-				 follows="left|top"
-				 height="16"
 				 label="Allow the camera to move w/o constraints"
 				 layout="topleft"
 				 left="5"

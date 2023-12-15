@@ -10,6 +10,9 @@
  save_rect="false"
  title="Change Display Name"
  width="445">
+    <floater.string name="LockOutDateFormat">
+        [month,datetime,slt] [day,datetime,slt] [year,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [ampm,datetime,slt] [timezone,datetime,slt]
+    </floater.string>
     <text
      type="string"
      length="1"
@@ -17,11 +20,11 @@
      font="SansSerif"
      height="40"
      layout="topleft"
-     left="25"
+     left="15"
      name="info_text"
      top="20"
      use_ellipses="true"
-     width="380"
+     right="-10"
      wrap="true">
       Your display name is what other people see above your head. It is different from your login name. You can change it once a week.
     </text>
@@ -30,20 +33,21 @@
      length="1"
      follows="left|top"
      font="SansSerif"
-     height="20"
+     height="30"
      layout="topleft"
-     left="25"
+     left="15"
 	 text_color="EmphasisColor" 
      name="lockout_text"
-     top="65"
+     top="55"
      use_ellipses="true"
 	 visible="false" 
-     width="410"
+     right="-10"
      wrap="true">
-		You cannot change your Display Name until: [TIME].
+		You cannot change your Display Name until:
+[TIME].
 	</text>
     <text
-      top_pad="0"
+      top_pad="5"
       width="150"
       height="20"
       font="SansSerif"
@@ -59,7 +63,7 @@
       left_delta="0" />
 	<text
        top_pad="8"
-       left="25"
+       left="15"
        width="380"
        height="20"
        font="SansSerif"
@@ -79,7 +83,7 @@
      font="SansSerif"
      width="120"
      height="23"
-     top_pad="10"
+     top_pad="8"
      left_delta="0"
      name="reset_btn"
      tool_tip="Use Username as a Display Name" />
@@ -88,7 +92,7 @@
      label="Save"
      layout="topleft"
      font="SansSerif"
-     left_pad="35"
+     left_pad="50"
      name="save_btn"
      tool_tip="Save your new Display Name" 
      top_delta="0"

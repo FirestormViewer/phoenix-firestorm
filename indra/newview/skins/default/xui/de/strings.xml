@@ -2972,8 +2972,8 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich unter http://suppo
 	<string name="GroupMoneyDebits">
 		Soll
 	</string>
-	<string name="GroupMoneyDate">
-		[weekday,datetime,utc], [day,datetime,utc]. [mth,datetime,utc] [year,datetime,utc]
+	<string name="GroupMoneyStartDate">
+		Transaktionen seit [weekday,datetime,utc], [day,datetime,utc]. [mth,datetime,utc] [year,datetime,utc]
 	</string>
 	<string name="AcquiredItems">
 		Erworbene Artikel

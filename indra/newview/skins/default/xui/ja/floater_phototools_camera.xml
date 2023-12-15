@@ -148,7 +148,6 @@
 			<panel name="P_Add_Cam_Opt_Settings">
 				<check_box label="アバタークリックでカメラ位置をリセットしない" name="clickonavatarkeepscamera" tool_tip="通常は、自分自身のアバターをクリックするとカメラ位置がリセットされます。このオプションはこの動作を回避します。" />
 				<check_box label="テレポート後にカメラ位置をリセット" name="FSResetCameraOnTP" tool_tip="通常は、同一SIM内では、テレポートした後にカメラ位置はリセットされませんが、このオプションはリセットを有効にします。" />
-				<check_box label="最小カメラ距離を無効化" name="disableminzoomdist" tool_tip="オブジェクトに対して許容されている最小距離の制約を無効にします。" />
 				<check_box label="カメラが制限なく動くのを許可" name="ignorecameraconstraints" tool_tip="通常はSIMによってオブジェクトの外側にしかカメラを当てられませんが、この制限を無視してオブジェクトの中に入ることができるようになります。再起動が必要です！" />
 				<check_box label="アバターが動いたらカメラ位置をリセット" name="resetcameraonmovement" tool_tip="自分自身のアバターを動かしたらカメラ位置をデフォルトの位置に戻します。" />
 			</panel>
