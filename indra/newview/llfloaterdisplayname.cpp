@@ -76,12 +76,16 @@ void LLFloaterDisplayName::onOpen(const LLSD& key)
 	if (now_secs < av_name.mNextUpdate)
 	{
 		// ...can't update until some time in the future
-		F64 next_update_local_secs =
-			av_name.mNextUpdate - LLStringOps::getLocalTimeOffset();
-		LLDate next_update_local(next_update_local_secs);
-		// display as "July 18 12:17 PM"
-		std::string next_update_string =
-		next_update_local.toHTTPDateString("%B %d %I:%M %p");
+		// <FS:Ansariel> Display lock out date in SLT
+		//F64 next_update_local_secs =
+		//	av_name.mNextUpdate - LLStringOps::getLocalTimeOffset();
+		//LLDate next_update_local(next_update_local_secs);
+		//// display as "July 18 12:17 PM"
+		//std::string next_update_string =
+		//next_update_local.toHTTPDateString("%B %d %I:%M %p");
+		std::string next_update_string = getString("LockOutDateFormat");
+		LLStringUtil::format(next_update_string, LLSD().with("datetime", (S32)av_name.mNextUpdate));
+		// </FS:Ansariel>
 		getChild<LLUICtrl>("lockout_text")->setTextArg("[TIME]", next_update_string);
 		getChild<LLUICtrl>("lockout_text")->setVisible(true);
 		getChild<LLUICtrl>("save_btn")->setEnabled(false);
@@ -160,26 +164,38 @@ void LLFloaterDisplayName::onCancel()
 
 void LLFloaterDisplayName::onReset()
 {
-    LLAvatarName av_name;
-    if (!LLAvatarNameCache::get(gAgent.getID(), &av_name))
-    {
-        return;
-    }
-    getChild<LLUICtrl>("display_name_editor")->setValue(av_name.getUserName());
+    // <FS:Ansariel> FIRE-33330: Can't reset display name within the first week
+    //LLAvatarName av_name;
+    //if (!LLAvatarNameCache::get(gAgent.getID(), &av_name))
+    //{
+    //    return;
+    //}
+    //getChild<LLUICtrl>("display_name_editor")->setValue(av_name.getUserName());
 
-    if (getChild<LLUICtrl>("display_name_editor")->getEnabled())
+    //if (getChild<LLUICtrl>("display_name_editor")->getEnabled())
+    //{
+    //    // UI is enabled, fill the first field
+    //    getChild<LLUICtrl>("display_name_confirm")->clear();
+    //    getChild<LLUICtrl>("display_name_confirm")->setFocus(TRUE);
+    //}
+    //else
+    //{
+    //    // UI is disabled, looks like we should allow resetting
+    //    // even if user already set a display name, enable save button
+    //    getChild<LLUICtrl>("display_name_confirm")->setValue(av_name.getUserName());
+    //    getChild<LLUICtrl>("save_btn")->setEnabled(true);
+    //}
+    if (LLAvatarNameCache::getInstance()->hasNameLookupURL())
     {
-        // UI is enabled, fill the first field
-        getChild<LLUICtrl>("display_name_confirm")->clear();
-        getChild<LLUICtrl>("display_name_confirm")->setFocus(TRUE);
+        LLViewerDisplayName::set("", boost::bind(&LLFloaterDisplayName::onCacheSetName, this, _1, _2, _3));
     }
     else
     {
-        // UI is disabled, looks like we should allow resetting
-        // even if user already set a display name, enable save button
-        getChild<LLUICtrl>("display_name_confirm")->setValue(av_name.getUserName());
-        getChild<LLUICtrl>("save_btn")->setEnabled(true);
+        LLNotificationsUtil::add("SetDisplayNameFailedGeneric");
     }
+
+    setVisible(false);
+    // </FS:Ansariel>
 }
 
 
