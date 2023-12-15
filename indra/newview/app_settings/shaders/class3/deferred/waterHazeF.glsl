@@ -35,15 +35,31 @@ float getDepth(vec2 pos_screen);
 
 vec4 getWaterFogView(vec3 pos);
 
+uniform int above_water;
+
 void main()
 {
     vec2  tc           = vary_fragcoord.xy/vary_fragcoord.w*0.5+0.5;
     float depth        = getDepth(tc.xy);
+
+    if (above_water > 0)
+    { 
+        // we want to depth test when the camera is above water, but some GPUs have a hard time
+        // with depth testing against render targets that are bound for sampling in the same shader
+        // so we do it manually here
+
+        float cur_depth = vary_fragcoord.z/vary_fragcoord.w*0.5+0.5;
+        if (cur_depth > depth)
+        {
+            discard;
+        }
+    }
+
     vec4  pos          = getPositionWithDepth(tc, depth);
     vec4  norm         = texture(normalMap, tc);
 
     vec4 fogged = getWaterFogView(pos.xyz);
 
-    frag_color.rgb = max(fogged.rgb, vec3(0)); //output linear since local lights will be added to this shader's results
-    frag_color.a = fogged.a;
+    frag_color = max(fogged, vec4(0)); //output linear since local lights will be added to this shader's results
+    
 }

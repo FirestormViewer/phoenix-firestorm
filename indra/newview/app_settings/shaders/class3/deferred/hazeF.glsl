@@ -78,13 +78,12 @@ void main()
         do_atmospherics = true;
     }
     
-
     vec3  irradiance = vec3(0);
     vec3  radiance  = vec3(0);
 
     if (depth >= 1.0)
     {
-        //should only be true of WL sky, just port over base color value
+        //should only be true of sky, clouds, sun/moon, and stars
         discard;
     }
 
@@ -102,6 +101,6 @@ void main()
         alpha = 1.0;
     }
 
-    frag_color.rgb = max(color.rgb, vec3(0)); //output linear since local lights will be added to this shader's results
-    frag_color.a = alpha;
+    frag_color = max(vec4(color.rgb, alpha), vec4(0)); //output linear since local lights will be added to this shader's results
+    
 }

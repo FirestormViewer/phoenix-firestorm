@@ -4474,6 +4474,7 @@ void LLPanelFace::onCopyTexture()
                 te_data["te"]["bumpmap"] = tep->getBumpmap();
                 te_data["te"]["bumpshiny"] = tep->getBumpShiny();
                 te_data["te"]["bumpfullbright"] = tep->getBumpShinyFullbright();
+                te_data["te"]["texgen"] = tep->getTexGen();
                 te_data["te"]["pbr"] = objectp->getRenderMaterialID(te);
                 if (tep->getGLTFMaterialOverride() != nullptr)
                 {
@@ -4869,6 +4870,11 @@ void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
             {
                 objectp->setTEBumpShinyFullbright(te, (U8)te_data["te"]["bumpfullbright"].asInteger());
             }
+            if (te_data["te"].has("texgen"))
+            {
+                objectp->setTETexGen(te, (U8)te_data["te"]["texgen"].asInteger());
+            }
+
             // PBR/GLTF
             if (te_data["te"].has("pbr"))
             {
@@ -4937,8 +4943,6 @@ void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
         {
             LLUUID object_id = objectp->getID();
 
-            LLSelectedTEMaterial::setAlphaMaskCutoff(this, (U8)te_data["material"]["SpecRot"].asInteger(), te, object_id);
-
             // Normal
             // Replace placeholders with target's
             if (te_data["material"].has("NormMapNoCopy"))
@@ -4984,7 +4988,8 @@ void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
             LLSelectedTEMaterial::setSpecularLightColor(this, spec_color, te);
             LLSelectedTEMaterial::setSpecularLightExponent(this, (U8)te_data["material"]["SpecExp"].asInteger(), te, object_id);
             LLSelectedTEMaterial::setEnvironmentIntensity(this, (U8)te_data["material"]["EnvIntensity"].asInteger(), te, object_id);
-            LLSelectedTEMaterial::setDiffuseAlphaMode(this, (U8)te_data["material"]["SpecRot"].asInteger(), te, object_id);
+            LLSelectedTEMaterial::setDiffuseAlphaMode(this, (U8)te_data["material"]["DiffuseAlphaMode"].asInteger(), te, object_id);
+            LLSelectedTEMaterial::setAlphaMaskCutoff(this, (U8)te_data["material"]["AlphaMaskCutoff"].asInteger(), te, object_id);
             if (te_data.has("te") && te_data["te"].has("shiny"))
             {
                 objectp->setTEShiny(te, (U8)te_data["te"]["shiny"].asInteger());
