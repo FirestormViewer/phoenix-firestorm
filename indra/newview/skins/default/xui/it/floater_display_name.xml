@@ -4,7 +4,8 @@
 		Il nome che assegni al tuo avatar è il Nome visualizzato. Puoi cambiarlo una volta alla settimana.
 	</text>
 	<text name="lockout_text">
-		Non puoi cambiare il nome visualizzato fino a: [TIME].
+		Non puoi cambiare il nome visualizzato fino a:
+[TIME].
 	</text>
 	<text name="set_name_label">
 		Nuovo nome visualizzato:

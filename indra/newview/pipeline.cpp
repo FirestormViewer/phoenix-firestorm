@@ -905,8 +905,11 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
 	{
 		mRT->fxaaBuffer.release();
 	}
-		
-	if (shadow_detail > 0 || ssao || RenderDepthOfField || samples > 0)
+
+	// <FS:Beq> restore setSphere
+	// if (shadow_detail > 0 || ssao || RenderDepthOfField || samples > 0))
+	if (shadow_detail > 0 || ssao || RenderDepthOfField || samples > 0 || RlvActions::hasPostProcess())
+	// </FS:Beq>
 	{ //only need mRT->deferredLight for shadows OR ssao OR dof OR fxaa
 		if (!mRT->deferredLight.allocate(resX, resY, GL_RGBA16F)) return false;
 	}
@@ -7539,10 +7542,21 @@ void LLPipeline::renderFinalize()
 	applyFXAA(&mPostMap, &mRT->screen);
 	// <FS:Beq> Restore shader post proc for Vignette
 	// LLRenderTarget* finalBuffer = &mRT->screen;
-    renderVignette(&mRT->screen, &mPostMap); // <FS:Beq/> Restore shader post proc.
-	copyRenderTarget(&mPostMap, &mRT->screen);
+	LLRenderTarget* activeBuffer = &mRT->screen;
+	LLRenderTarget* targetBuffer = &mPostMap;
+// [RLVa:KB] - @setsphere
+	if (RlvActions::hasBehaviour(RLV_BHVR_SETSPHERE))
+	{
+		LLShaderEffectParams params(activeBuffer, targetBuffer, false);
+		LLVfxManager::instance().runEffect(EVisualEffect::RlvSphere, &params);
+		// flip the buffers round
+		activeBuffer = params.m_pDstBuffer;
+		targetBuffer = params.m_pSrcBuffer;
+	}
+// [/RLVa:KB]
+    renderVignette(activeBuffer, targetBuffer);
+	LLRenderTarget* finalBuffer = targetBuffer;
 	// </FS:Beq>
-	LLRenderTarget* finalBuffer = &mRT->screen;
 	if (RenderBufferVisualization > -1)
     {
 		finalBuffer = &mPostMap;

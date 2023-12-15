@@ -1378,6 +1378,15 @@ void AISUpdate::parseCategory(const LLSD& category_map, S32 depth)
     {
         LL_WARNS() << "Got stale folder, known: " << curr_cat->getVersion()
             << ", received: " << version << LL_ENDL;
+        // <FS:Beq> FIRE-33337 workaround for rename issue until proper fix is in place and tested
+        // Also servers a general handler for version de-sync bugs in the future.
+        if( version < curr_cat->getVersion() )
+        {
+            // AIS version is considered canonical, so we need to refetch
+            curr_cat->setVersion(LLViewerInventoryCategory::VERSION_UNKNOWN);
+            curr_cat->fetch();
+        }
+        // </FS:Beq>
         return;
     }
 
@@ -1644,7 +1653,7 @@ void AISUpdate::doUpdate()
     checkTimeout();
 
 	// Do version/descendant accounting.
-	for (std::map<LLUUID,S32>::const_iterator catit = mCatDescendentDeltas.begin();
+ 	for (std::map<LLUUID,S32>::const_iterator catit = mCatDescendentDeltas.begin();
 		 catit != mCatDescendentDeltas.end(); ++catit)
 	{
 		LL_DEBUGS("Inventory") << "descendant accounting for " << catit->first << LL_ENDL;

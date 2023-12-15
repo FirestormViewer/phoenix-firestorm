@@ -91,6 +91,7 @@
 	<text name="RenderingCost" tool_tip="Zeigt die errechneten Wiedergabekosten für dieses Objekt">
 		þ: [COUNT]
 	</text>
+	<check_box label="Beide Seiten dehnen" name="checkbox uniform"/>
 	<check_box label="Texturen dehnen" name="checkbox stretch textures"/>
 	<check_box label="Einrasten" name="checkbox snap to grid"/>
     <check_box label="Achse an Wurzel edit." name="checkbox actual root"/>

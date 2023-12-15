@@ -2,7 +2,7 @@
 <panel label="Qrafika" name="Display panel">
 	<tab_container label="Qrafika seçimləri" name="tabs">
 		<panel label="Ümumi" name="General">
-			<text name="preset_label" width="90">
+			<text name="preset_label">
 				Öntəyinlər:
 			</text>
 			<text name="preset_text">

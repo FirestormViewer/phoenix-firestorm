@@ -2155,15 +2155,14 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SETSPHERE>::onCommand(const RlvCommand& 
 		return RLV_RET_FAILED_LOCK;
 
 	ERlvCmdRet eRet = RlvBehaviourGenericHandler<RLV_OPTION_NONE_OR_MODIFIER>::onCommand(rlvCmd, fRefCount);
-	// KITTYFIXME
-	//if ( (RLV_RET_SUCCESS == eRet) && (!rlvCmd.isModifier()) )
-	//{
-	//	if (gRlvHandler.hasBehaviour(rlvCmd.getObjectID(), rlvCmd.getBehaviourType()))
-	//	{
-	//		LLVfxManager::instance().addEffect(new RlvSphereEffect(rlvCmd.getObjectID()));
+	if ( (RLV_RET_SUCCESS == eRet) && (!rlvCmd.isModifier()) )
+	{
+		if (gRlvHandler.hasBehaviour(rlvCmd.getObjectID(), rlvCmd.getBehaviourType()))
+		{
+			LLVfxManager::instance().addEffect(new RlvSphereEffect(rlvCmd.getObjectID()));
 
-	//		Rlv::forceAtmosphericShadersIfAvailable();
-
+			// Rlv::forceAtmosphericShadersIfAvailable();
+	// <FS:Beq> Note to Kitty, this can all go I think.
 	//		// If we're not using deferred but are using Windlight shaders we need to force use of FBO and depthmap texture
 	//		if ( (!LLPipeline::sRenderDeferred) && (LLPipeline::WindLightUseAtmosShaders) && (!LLPipeline::sUseDepthTexture) )
 	//		{
@@ -2175,19 +2174,20 @@ ERlvCmdRet RlvBehaviourHandler<RLV_BHVR_SETSPHERE>::onCommand(const RlvCommand& 
 	//			gPipeline.resetVertexBuffers();
 	//			LLViewerShaderMgr::instance()->setShaders();
 	//		}
-	//		else if (!gPipeline.mRT->deferredLight.isComplete())
-	//		{
-	//			// In case of deferred with no shadows, no ambient occlusion, no depth of field, and no antialiasing
-	//			gPipeline.releaseGLBuffers();
-	//			gPipeline.createGLBuffers();
-	//			RLV_ASSERT(gPipeline.mRT->deferredLight.isComplete());
-	//		}
-	//	}
-	//	else
-	//	{
-	//		LLVfxManager::instance().removeEffect<RlvSphereEffect>(gRlvHandler.getCurrentObject());
-	//	}
-	//}
+	//		else 
+			if (!gPipeline.mRT->deferredLight.isComplete())
+			{
+				// In case of deferred with no shadows, no ambient occlusion, no depth of field, and no antialiasing
+				gPipeline.releaseGLBuffers();
+				gPipeline.createGLBuffers();
+				RLV_ASSERT(gPipeline.mRT->deferredLight.isComplete());
+			}
+		}
+		else
+		{
+			LLVfxManager::instance().removeEffect<RlvSphereEffect>(gRlvHandler.getCurrentObject());
+		}
+	}
 	return eRet;
 }
 
@@ -2506,7 +2506,7 @@ void RlvBehaviourToggleHandler<RLV_BHVR_SETENV>::onCommandToggle(ERlvBehaviour e
 
 	if (fHasBhvr)
 	{
-		Rlv::forceAtmosphericShadersIfAvailable();
+		// Rlv::forceAtmosphericShadersIfAvailable(); // <FS:Beq/> this is no longer a thing
 
 		// Usurp the 'edit' environment for RLVa locking so TPV tools like quick prefs and phototools are automatically locked out as well
 		// (these needed per-feature awareness of RLV in the previous implementation which often wasn't implemented)

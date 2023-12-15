@@ -682,9 +682,24 @@ void LLModelPreview::rebuildUploadData()
                     if (mImporterDebug)
                     {
                         std::ostringstream out;
-                        out << "LOD" << i << ": List of models does not include " << instance.mLabel;
-                        LL_INFOS() << out.str() << LL_ENDL;
-                        LLFloaterModelPreview::addStringToLog(out, false);
+                        // <FS:Beq> Make the logging a little less esoteric
+                        // out << "LOD" << i << ": List of models does not include " << instance.mLabel;
+                        // LL_INFOS() << out.str() << LL_ENDL;
+                        // LLFloaterModelPreview::addStringToLog(out, false);
+                        if(i != LLModel::LOD_PHYSICS || mWarnOfUnmatchedPhyicsMeshes)
+                        {
+                            if(i == LLModel::LOD_PHYSICS)
+                            {
+                                out << "No physics model found for " << instance.mLabel;
+                            }
+                            else
+                            {
+                                out << "No corresponding model for " << instance.mLabel << " found in LOD" << i << "scene/dae";
+                            }
+                            LL_INFOS() << out.str() << LL_ENDL;
+                            LLFloaterModelPreview::addStringToLog(out, false);
+                        }
+                        // </FS:Beq>
                     }
                 }
             }
@@ -762,7 +777,10 @@ void LLModelPreview::rebuildUploadData()
                 // if (mImporterDebug) 
                 {
                     std::ostringstream out;
-                    out << "Model " << mModel[lod][model_ind]->mLabel << " was not used - mismatching lod models.";
+                    // <FS:Beq> Make the logging less confusing hopefully.
+                    //out << "Model " << mModel[lod][model_ind]->mLabel << " was not used - mismatching lod models.";
+                    out << " A model " << mModel[lod][model_ind]->mLabel << " in the scene for LOD" << lod << " was not used - orphaned/mismatching lod models are not supported";
+                    // </FS:Beq>
                     LL_INFOS() << out.str() << LL_ENDL;
                     LLFloaterModelPreview::addStringToLog(out, true);
                 }
@@ -1733,7 +1751,6 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
             for (U32 i = 0; i < mVertexBuffer[5][mdl].size(); ++i)
             {
                 LLVertexBuffer* buff = mVertexBuffer[5][mdl][i];
-                buff->setBuffer();
 
                 U32 num_indices = mVertexBuffer[5][mdl][i]->getNumIndices();
                 if (num_indices > 2)
@@ -1865,8 +1882,7 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
             LLVolumeParams volume_params;
             volume_params.setType(LL_PCODE_PROFILE_SQUARE, LL_PCODE_PATH_LINE);
             mModel[lod][mdl_idx] = new LLModel(volume_params, 0.f);
-
-            std::string name = base->mLabel + getLodSuffix(lod);
+            std::string name = stripSuffix(base->mLabel) + getLodSuffix(lod);
 
             mModel[lod][mdl_idx]->mLabel = name;
             mModel[lod][mdl_idx]->mSubmodelID = base->mSubmodelID;
@@ -1898,7 +1914,6 @@ void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri
                             << " Vertices: " << sizes[i * 2 + 1]
                             << " Indices: " << sizes[i * 2] << LL_ENDL;
                     }
-                    buff->setBuffer();
                     // <FS:ND> Fix glod so it works when just using the opengl core profile
                     //glodFillElements(mObject[base], names[i], GL_UNSIGNED_SHORT, (U8*)buff->getIndicesPointer());
                     LLStrider<LLVector3> vertex_strider;
@@ -3652,8 +3667,17 @@ void LLModelPreview::updateLodControls(S32 lod)
     }
     else // auto generate, the default case for all LoDs except High
     {
-        fmp->mLODMode[lod] = MESH_OPTIMIZER_AUTO;
-
+        // <FS:Beq> FIRE-32267 - Allow GLOD to be default
+        // fmp->mLODMode[lod] = MESH_OPTIMIZER_AUTO;
+        if( lod_mode == GENERATE )
+        {
+            fmp->mLODMode[lod] = GENERATE;
+        }
+        else
+        {
+            fmp->mLODMode[lod] = MESH_OPTIMIZER_AUTO;
+        }
+        // </FS:Beq>
         //don't actually regenerate lod when refreshing UI
         mLODFrozen = true;
 
@@ -3678,7 +3702,7 @@ void LLModelPreview::updateLodControls(S32 lod)
 
         mFMP->getChild<LLComboBox>("lod_mode_" + lod_name[lod])->selectNthItem(mRequestedLoDMode[lod]);
 
-        if (mRequestedLoDMode[lod] == 0)
+        if (mRequestedLoDMode[lod] == 0 || mRequestedLoDMode[lod] == GENERATE) // <FS:Beq/> FIRE-32267 - Allow GLOD to be default
         {
             limit->setVisible(true);
             threshold->setVisible(false);
@@ -5062,11 +5086,15 @@ bool LLModelPreview::lodQueryCallback()
             S32 lod = preview->mLodsQuery.back();
             preview->mLodsQuery.pop_back();
 // <FS:Beq> Improved LOD generation
-#ifdef USE_GLOD_AS_DEFAULT
-            preview->genGlodLODs(lod, 3, false);
-#else
-            preview->genMeshOptimizerLODs(lod, MESH_OPTIMIZER_AUTO, 3, false);
-#endif
+            static LLCachedControl<bool> default_to_glod(gSavedSettings, "FSMeshUploadUseGLODAsDefault");
+            if (default_to_glod())
+            {
+                preview->genGlodLODs(lod, 3, false);
+            }
+            else
+            {
+                preview->genMeshOptimizerLODs(lod, MESH_OPTIMIZER_AUTO, 3, false);
+            }
 // </FS:Beq>
             if (preview->mLookUpLodFiles && (lod == LLModel::LOD_HIGH))
             {

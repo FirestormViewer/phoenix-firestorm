@@ -2,7 +2,7 @@
 <panel label="Графика" name="Display panel">
 	<tab_container label="Настройки графики" name="tabs">
 		<panel label="Общее" name="General">
-			<text name="preset_label" width="90">
+			<text name="preset_label">
 				Предустановка:
 			</text>
 			<text name="preset_text">

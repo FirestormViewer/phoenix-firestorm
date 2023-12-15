@@ -289,7 +289,7 @@ jobs:
             FS_RELEASE_FOLDER=preview
             FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
           elif [[ "${{ github.ref_name }}" == *alpha* ]]; then
-            FS_RELEASE_FOLDER=preview
+            FS_RELEASE_FOLDER=test
             FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
           elif [[ "${{ github.ref_name }}" == *nightly* ]] || [[ "${{ github.event_name }}" == 'schedule' ]]; then
             FS_RELEASE_FOLDER=nightly

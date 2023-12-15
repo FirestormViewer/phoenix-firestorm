@@ -26,9 +26,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>535006965531b4a92e4951ee8dbe2745</string>
+              <string>bcf0f9d160231c52869b8d81014d0ad3afe537fd</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/SDL2-2.28.4-linux64-232750919.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/SDL2-2.28.5-linux64-233480131.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -702,11 +704,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>77c53daf558f51aec6e9f4bd9e930a103630ee7d</string>
+              <string>64210ab1d7c881dbe5c78ef8f6db5a6d2b27e5d2</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-cubemap_to_eqr_js/releases/download/v1.1.0-d7afe27/cubemaptoequirectangular-1.1.0-linux64-d7afe27.tar.zst</string>
+              <string>https://3p.firestormviewer.org/cubemaptoequirectangular-1.1.0-linux64-213500938.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2390,9 +2392,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b329ed955ac63da45957d39f601e85af</string>
+              <string>52c4622c76c773deba056eeb6b0dc726cb3100bd</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/open_libndofdev-0.13.232750923-linux64-232750923.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/open_libndofdev-0.14.233480318-linux64-233480318.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>

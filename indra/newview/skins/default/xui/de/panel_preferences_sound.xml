@@ -515,6 +515,13 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="S" name="Def_UISndTrackerBeacon" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndTrackerBeacon"/>
 
+		<text tool_tip="UUID des Klangs, wenn das Mikrofon ein- und ausgeschaltet wird." name="textFSMicToggle">
+			Mikrofon-Umschaltung:
+		</text>
+		<button label="V" name="Prev_UISndMicToggle" tool_tip="Vorschau zu diesem Klang."/>
+		<button label="S" name="Prev_UISndMicToggle" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndMicToggle"/>
+
 		<text tool_tip="UUID des Klangs bei der Warnung vor einem Neustart der Region." name="textFSRestart">
 			Regionsneustart:
 		</text>

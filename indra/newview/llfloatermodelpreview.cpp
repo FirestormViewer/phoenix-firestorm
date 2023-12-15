@@ -148,7 +148,18 @@ mAvatarTabIndex(0)
 	mLODMode[LLModel::LOD_HIGH] = LLModelPreview::LOD_FROM_FILE;
 	for (U32 i = 0; i < LLModel::LOD_HIGH; i++)
 	{
-		mLODMode[i] = LLModelPreview::MESH_OPTIMIZER_AUTO;
+		// <FS:Beq> FIRE-32267 - Set default LOD mode to GLOD
+		// mLODMode[i] = LLModelPreview::MESH_OPTIMIZER_AUTO;
+		static LLCachedControl<bool> default_to_glod(gSavedSettings, "FSMeshUploadUseGLODAsDefault");
+		if( default_to_glod )
+		{
+		    mLODMode[i] = LLModelPreview::GENERATE;
+		}
+		else
+		{
+			mLODMode[i] = LLModelPreview::MESH_OPTIMIZER_AUTO;
+		}
+		// </FS:Beq>
 	}
 }
 

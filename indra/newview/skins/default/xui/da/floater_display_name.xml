@@ -4,7 +4,8 @@
 		Det navn du giver din avatar kaldes dit visningsnavn. Du kan ændre dette en gang om ugen.
 	</text>
 	<text name="lockout_text">
-		Du kan ikke ændre dit visningsnavn før: [TIME].
+		Du kan ikke ændre dit visningsnavn før:
+[TIME].
 	</text>
 	<text name="set_name_label">
 		Nyt visningsnavn:

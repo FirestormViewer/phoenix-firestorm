@@ -2,7 +2,7 @@
 <panel label="Grafika" name="Display panel">
 	<tab_container label="Ustawienia graficzne" name="tabs">
 		<panel label="Ogólne" name="General">
-			<text name="preset_label" width="110">
+			<text name="preset_label">
 				Ustawienie w użyciu:
 			</text>
 			<text name="preset_text">

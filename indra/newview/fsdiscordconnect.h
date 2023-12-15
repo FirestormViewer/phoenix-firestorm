@@ -60,10 +60,10 @@ public:
 	
 	void setConnectionState(EConnectionState connection_state);
 	void setConnected(bool connected);
-	bool isConnected() { return mConnected; }
+	bool isConnected() const { return mConnected; }
 	EConnectionState getConnectionState() { return mConnectionState; }
 
-	void updateRichPresence();
+	void updateRichPresence() const;
 
 	bool Tick(const LLSD&);
 
@@ -74,15 +74,14 @@ private:
 	LLSD mInfo;
 	bool mRefreshInfo;
 	
-	static boost::scoped_ptr<LLEventPump> sStateWatcher;
-	static boost::scoped_ptr<LLEventPump> sInfoWatcher;
-	static boost::scoped_ptr<LLEventPump> sContentWatcher;
+	static std::unique_ptr<LLEventPump> sStateWatcher;
+	static std::unique_ptr<LLEventPump> sInfoWatcher;
 
 	void discordConnectCoro();
 	void discordDisconnectCoro();
 	void discordConnectedCoro(bool autoConnect);
 
-	bool checkMarkerFile();
+	bool checkMarkerFile() const;
 	void setMarkerFile();
 	void clearMarkerFile();
 
