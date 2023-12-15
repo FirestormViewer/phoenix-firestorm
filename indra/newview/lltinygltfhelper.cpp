@@ -201,11 +201,11 @@ bool LLTinyGLTFHelper::loadModel(const std::string& filename, tinygltf::Model& m
         bool decode_successful = false;
         if (std::string::npos == filename_lc.rfind(".gltf"))
         {  // file is binary
-            decode_successful = loader.LoadBinaryFromFile(&model_in, &error_msg, &warn_msg, filename_lc);
+            decode_successful = loader.LoadBinaryFromFile(&model_in, &error_msg, &warn_msg, filename);
         }
         else
         {  // file is ascii
-            decode_successful = loader.LoadASCIIFromFile(&model_in, &error_msg, &warn_msg, filename_lc);
+            decode_successful = loader.LoadASCIIFromFile(&model_in, &error_msg, &warn_msg, filename);
         }
 
         if (!decode_successful)

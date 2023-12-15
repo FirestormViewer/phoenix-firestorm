@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Display Name" title="Définir le nom d'affichage">
 	<text name="info_text">Le nom que vous choisissez d'utiliser pour votre avatar est appelé le nom d'affichage. Vous pouvez le changer une fois par semaine.</text>
-	<text name="lockout_text">Vous ne pouvez changer votre nom avant le [TIME].</text>
+	<text name="lockout_text">
+Vous ne pouvez changer votre nom avant le
+[TIME].
+	</text>
 	<text name="set_name_label">Nouveau nom :</text>
 	<text name="name_confirm_label">Réécrivez le nom :</text>
 	<button label="Réinitialiser" name="reset_btn" tool_tip="Utiliser le nom d'utilisateur comme nom d'affichage" />

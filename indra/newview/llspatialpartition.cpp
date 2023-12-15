@@ -841,8 +841,45 @@ void LLSpatialGroup::handleChildAddition(const OctreeNode* parent, OctreeNode* c
 	assert_states_valid(this);
 }
 
+//virtual
+void LLSpatialGroup::rebound()
+{
+    if (!isDirty())
+        return;
 
-void LLSpatialGroup::destroyGLState(bool keep_occlusion) 
+    super::rebound();
+
+    if (mSpatialPartition->mDrawableType == LLPipeline::RENDER_TYPE_CONTROL_AV)
+    {
+        llassert(mSpatialPartition->mPartitionType == LLViewerRegion::PARTITION_CONTROL_AV);
+
+        LLSpatialBridge* bridge = getSpatialPartition()->asBridge();
+        if (bridge &&
+            bridge->mDrawable &&
+            bridge->mDrawable->getVObj() &&
+            bridge->mDrawable->getVObj()->isRoot())
+        {
+            LLControlAvatar* controlAvatar = bridge->mDrawable->getVObj()->getControlAvatar();
+            if (controlAvatar &&
+                controlAvatar->mDrawable &&
+                controlAvatar->mControlAVBridge &&
+                controlAvatar->mControlAVBridge->mOctree)// <FS:Beq> FIRE-33367 toggling animesh state off causes a crash
+            {
+                llassert(controlAvatar->mControlAVBridge->mOctree);
+
+                LLSpatialGroup* root = (LLSpatialGroup*)controlAvatar->mControlAVBridge->mOctree->getListener(0);
+                if (this == root)
+                {
+                    const LLVector4a* addingExtents = controlAvatar->mDrawable->getSpatialExtents();
+                    const LLXformMatrix* currentTransform = bridge->mDrawable->getXform();
+                    expandExtents(addingExtents, *currentTransform);
+                }
+            }
+        }
+    }
+}
+
+void LLSpatialGroup::destroyGLState(bool keep_occlusion)
 {
 	// <FS:Ansariel> Reset VB during TP
 	bool is_tree_group = getSpatialPartition()->mPartitionType == LLViewerRegion::PARTITION_TREE;

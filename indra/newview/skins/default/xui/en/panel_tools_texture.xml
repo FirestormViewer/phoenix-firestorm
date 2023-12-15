@@ -331,7 +331,7 @@
              follows="left|top"
              height="10"
              layout="topleft"
-             left_pad="10"
+             left_pad="30"
              name="label alphamode"
              text_readonly_color="LabelDisabledColor"
              top_delta="0"
@@ -408,7 +408,7 @@
              follows="left|top"
              height="10"
              layout="topleft"
-             left_pad="10"
+             left_pad="30"
              name="label bumpiness"
              text_readonly_color="LabelDisabledColor"
              top_delta="0"
@@ -523,10 +523,10 @@
              height="10"
              layout="topleft"
              name="label shininess"
-             left_pad="10"
+             left_pad="30"
              text_readonly_color="LabelDisabledColor"
              top_delta="6"
-             width="90">
+             width="70">
                 Shininess
             </text>
             <combo_box
@@ -566,11 +566,11 @@
              follows="left|top"
              height="10"
              layout="topleft"
-             left_delta="-100"
+             left_delta="-80"
              name="label glossiness"
              text_readonly_color="LabelDisabledColor"
              top_pad="8"
-             width="116">
+             width="76">
                 Glossiness
             </text>
             <spinner
@@ -583,7 +583,7 @@
              increment="1"
              layout="topleft"
              top_delta="-4"
-             left_pad="10"
+             left_pad="30"
              name="glossiness"
              width="64" />
             <text
@@ -592,11 +592,11 @@
              follows="left|top"
              height="10"
              layout="topleft"
-             left_delta="-126"
+             left_delta="-106"
              name="label environment"
              text_readonly_color="LabelDisabledColor"
              top_pad="8"
-             width="116">
+             width="96">
                 Environment
             </text>
             <spinner
@@ -618,11 +618,11 @@
              follows="left|top"
              height="10"
              layout="topleft"
-             left_delta="-126"
+             left_delta="-106"
              name="label shinycolor"
              text_readonly_color="LabelDisabledColor"
              top_pad="8"
-             width="116">
+             width="96">
                 Color
             </text>
             <!-- label is blank because control places it below the box -->

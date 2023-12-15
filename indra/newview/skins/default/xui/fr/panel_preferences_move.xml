@@ -15,7 +15,6 @@
 			<check_box label="Cliquer sur votre avatar ne touche pas à la caméra" name="clickonavatarkeepscamera" tool_tip="Activer cette option empêche la caméra de se réinitialiser lorsque vous cliquez sur votre avatar."/>
 			<check_box label="Réinitialise la caméra après une téléportation dans la région" name="FSResetCameraOnTP" tool_tip="Activer cette option réinitialisera le niveau de zoom de la caméra après une téléportation au sein d'une même région."/>
 			<check_box label="Repositionner la caméra lors des déplacements de l'avatar" name="FSResetCameraOnMovement"/>
-			<check_box label="Désactiver les contraintes de limitation de zoom" name="disableminzoomdist" tool_tip="Désactive la limitation de distance pour zoomer."/>
 			<check_box label="Tourner l'avatar lorsque je réinitialise la caméra" name="resetviewturnsavatar" tool_tip="Activer cette option ne déplacera pas la caméra mais tournera votre avatar dans sa direction lorsque vous réinitialisez la caméra via le bouton ESC."/>
 			<check_box label="Permettre à la caméra de traverser les objets" name="ignorecameraconstraints" tool_tip="Ignore les déplacements de caméra que le simulateur effectue lorsque celle-ci s'approche trop près des objets."/>
 			<text name="ignorecameraconstraints_requires_restart">(Redémarrage requis)</text>

@@ -3954,6 +3954,62 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
+         tool_tip="Sound UUID played, when the microphone is toggled on or off."
+         name="textFSMicToggle">
+            Microphone toggle:
+        </text>
+        <line_editor
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndMicToggle"
+         control_name="UISndMicToggle"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndMicToggle"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         sound_flags="0"
+         tool_tip="Preview this sound.">
+            <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndMicToggle"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndMicToggle"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="17"
+         tool_tip="Reset to the default UUID.">
+            <button.commit_callback
+             function="ResetControl"
+             parameter="UISndMicToggle"/>
+        </button>
+        <check_box
+         control_name="PlayModeUISndMicToggle"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndMicToggle"
+         left_pad="1"
+         width="120" />
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
          tool_tip="Sound UUID played, when the region restart alert appears."
          name="textFSRestart">
             Region restart:

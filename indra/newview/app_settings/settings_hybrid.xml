@@ -366,18 +366,6 @@
       <integer>1</integer>
     </map>
 
-  <key>FSDisableMinZoomDist</key>
-  <map>
-    <key>Comment</key>
-    <string>Disable the constraint on the closest distance the camera is allowed to get to an object.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>1</integer>
-  </map>
-
   <key>FSIgnoreSimulatorCameraConstraints</key>
   <map>
     <key>Comment</key>

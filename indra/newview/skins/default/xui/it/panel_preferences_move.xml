@@ -17,7 +17,6 @@
 			<check_box label="Mantieni la posizione della camera cliccando l&apos;avatar" name="clickonavatarkeepscamera" tool_tip="Normalmente, cliccando sul tuo avatar la posizione della camera si resetta, spuntando questa opzione, si annulla tale effetto."/>
 			<check_box label="Ripristina posizione telecamera dopo il teleport (nella stessa regione)" name="FSResetCameraOnTP" tool_tip="Normalmente, la posizione della cam viene resettata quando ci si teletrasporta, togliendo la spunta da questa opzione, si annulla tale effetto."/>
 			<check_box label="Ripristina posizione camera quando si muove l&apos;avatar" name="FSResetCameraOnMovement"/>
-			<check_box label="Disabilita limite di zoom della telecamera" name="disableminzoomdist" tool_tip="Disabilita il limite di zoom nell&apos;avvicinarsi ad un&apos;oggetto"/>
 			<check_box label="Quando si ripristina la vista, gira l&apos;avatar verso la cam" name="resetviewturnsavatar" tool_tip="Mantiene la linea di vista della camera e ruota l&apos;avatar, se la visuale viene resettata (tasto ESC)."/>
 			<check_box label="Consente alla cam di spostarsi dentro ai prim" name="ignorecameraconstraints" tool_tip="Ignora la &apos;spinta&apos;, che riceve la cam dal simulatore, quando ci si avvicina troppo ad un prim."/>
 			<text name="ignorecameraconstraints_requires_restart">

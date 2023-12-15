@@ -117,7 +117,6 @@
 			<panel name="P_Add_Cam_Opt_Settings">
 				<check_box label="Clic sull&apos;avatar mantiene posizione cam" name="clickonavatarkeepscamera" tool_tip="Normalmente il clic sull&apos;avatar ripristina la camera. Questa opzione evita questo comportamento"/>
 				<check_box label="Ripristina cam dopo teleport" name="FSResetCameraOnTP" tool_tip="Normalmente la posizione della camera viene ripristinata dopo il TP (entro la regione). Questa opzione evita questo comportamento"/>
-				<check_box label="Disabilita distanza minima zoom" name="disableminzoomdist" tool_tip="Disabilita i limiti sulla distanza minima da un oggetto a cui la camera può arrivare"/>
 				<check_box label="Permette movimento senza limiti" name="ignorecameraconstraints" tool_tip="Ignora la &apos;spinta&apos; che il simulatore applica alla camera per tenerla fuori dagli oggetti. RICHIEDE RIAVVIO"/>
 				<check_box label="Ripristina cam al movimento avatar" name="resetcameraonmovement" tool_tip="Ripristina la camera alla posizione normale quando si muove l&apos;avatar"/>
 			</panel>

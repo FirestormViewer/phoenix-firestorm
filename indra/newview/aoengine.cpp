@@ -918,14 +918,14 @@ void AOEngine::cycle(eCycleMode cycleMode)
 		{
 			LL_DEBUGS("AOEngine") << "Asset UUID for cycled animation " << anim.mName << " not yet known, try to find it." << LL_ENDL;
 
-			if(LLViewerInventoryItem* item = gInventory.getItem(anim.mInventoryUUID) ; item)
+			if(LLViewerInventoryItem* item = gInventory.getItem(anim.mOriginalUUID) ; item)
 			{
 				LL_DEBUGS("AOEngine") << "Found asset UUID for cycled animation: " << item->getAssetUUID() << " - Updating AOAnimation.mAssetUUID" << LL_ENDL;
 				anim.mAssetUUID = item->getAssetUUID();
 			}
 			else
 			{
-				LL_DEBUGS("AOEngine") << "Inventory UUID " << anim.mInventoryUUID << " for cycled animation " << anim.mName << " still returns no asset." << LL_ENDL;
+				LL_DEBUGS("AOEngine") << "Inventory UUID " << anim.mOriginalUUID << " for cycled animation " << anim.mName << " still returns no asset." << LL_ENDL;
 			}
 		}
 
@@ -1042,6 +1042,7 @@ void AOEngine::addAnimation(const AOSet* set, AOSet::AOState* state, const LLInv
 	AOSet::AOAnimation anim;
 	anim.mAssetUUID = item->getAssetUUID();
 	anim.mInventoryUUID = item->getUUID();
+	anim.mOriginalUUID = item->getLinkedUUID();
 	anim.mName = item->getName();
 	anim.mSortOrder = state->mAnimations.size() + 1;
 	state->mAnimations.emplace_back(std::move(anim));
@@ -1327,7 +1328,8 @@ void AOEngine::reloadStateAnimations(AOSet::AOState* state)
 
 			AOSet::AOAnimation anim;
 			anim.mName = item->LLInventoryItem::getName();
-			anim.mInventoryUUID = item->getLinkedUUID();
+			anim.mInventoryUUID = item->getUUID();
+			anim.mOriginalUUID = item->getLinkedUUID();
 
 			anim.mAssetUUID = LLUUID::null;
 

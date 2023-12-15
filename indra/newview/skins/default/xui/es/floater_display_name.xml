@@ -4,7 +4,8 @@
 		El nombre que le has dado a tu avatar se denomina Nombre mostrado. Puedes cambiarlo una vez a la semana.
 	</text>
 	<text name="lockout_text">
-		No puedes cambiar el nombre mostrado hasta: [TIME].
+		No puedes cambiar el nombre mostrado hasta:
+[TIME].
 	</text>
 	<text name="set_name_label">
 		Nuevo nombre mostrado:

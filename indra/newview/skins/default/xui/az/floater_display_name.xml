@@ -4,7 +4,8 @@
 		Avatar verdiyiniz ad göstərilən ad adlanır. Həftədə bir dəfə dəyişə bilərsiniz.
 	</text>
 	<text name="lockout_text">
-		Adınızı [TIME] tarixinə qədər dəyişə bilməzsiniz.
+		Adınızı tarixinə qədər dəyişə bilməzsiniz.
+[TIME]
 	</text>
 	<text name="set_name_label">
 		Yeni ad:

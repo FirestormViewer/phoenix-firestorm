@@ -2387,58 +2387,59 @@ void LLTabContainer::commitHoveredButton(S32 x, S32 y)
 {
 	if (!getTabsHidden() && hasMouseCapture())
 	{
-		for(tuple_list_t::iterator iter = mTabList.begin(); iter != mTabList.end(); ++iter)
+		for (tuple_list_t::iterator iter = mTabList.begin(); iter != mTabList.end(); ++iter)
 		{
-			LLTabTuple* tuple = *iter;
-			S32 local_x = x - tuple->mButton->getRect().mLeft;
-			S32 local_y = y - tuple->mButton->getRect().mBottom;
-			// <FS:Ansariel> FIRE-16498: Only commit visible button
-			//if (tuple->mButton->pointInView(local_x, local_y) && tuple->mButton->getEnabled() && !tuple->mTabPanel->getVisible())
-			if (tuple->mButton->pointInView(local_x, local_y) && tuple->mButton->getEnabled() && tuple->mButton->getVisible() && !tuple->mTabPanel->getVisible())
-			// </FS:Ansariel>
+			LLButton* button = (*iter)->mButton;
+			LLPanel* panel = (*iter)->mTabPanel;
+			if (button->getEnabled() && button->getVisible() && !panel->getVisible())
 			{
-//				tuple->mButton->onCommit();
-// [SL:KB] - Patch: UI-TabRearrange | Checked: 2010-06-05 (Catznip-2.5)
-				if ( (mAllowRearrange) && (mCurrentTabIdx >= 0) && (mTabList[mCurrentTabIdx]->mButton->hasFocus()) )
+				S32 local_x = x - button->getRect().mLeft;
+				S32 local_y = y - button->getRect().mBottom;
+				if (button->pointInView(local_x, local_y))
 				{
-					S32 idxHover = iter - mTabList.begin();
-					if ( (mCurrentTabIdx >= mLockedTabCount) && (idxHover >= mLockedTabCount) && (mCurrentTabIdx != idxHover) )
+//					button->onCommit();
+// [SL:KB] - Patch: UI-TabRearrange | Checked: 2010-06-05 (Catznip-2.5)
+					if ((mAllowRearrange) && (mCurrentTabIdx >= 0) && (mTabList[mCurrentTabIdx]->mButton->hasFocus()))
 					{
-						LLRect rctCurTab = mTabList[mCurrentTabIdx]->mButton->getRect();
-						LLRect rctHoverTab = mTabList[idxHover]->mButton->getRect();
-
-						// Only rearrange the tabs if the mouse pointer has cleared the overlap area
-						bool fClearedOverlap = 
-						  (mIsVertical) 
-							? ( (idxHover < mCurrentTabIdx) && (y > rctHoverTab.mTop - rctCurTab.getHeight()) ) ||
-							  ( (idxHover > mCurrentTabIdx) && (y < rctCurTab.mTop - rctHoverTab.getHeight()) )
-							: ( (idxHover < mCurrentTabIdx) && (x < rctHoverTab.mLeft + rctCurTab.getWidth()) ) ||
-							  ( (idxHover > mCurrentTabIdx) && (x > rctCurTab.mLeft + rctHoverTab.getWidth()) );
-						if (fClearedOverlap)
+						S32 idxHover = iter - mTabList.begin();
+						if ((mCurrentTabIdx >= mLockedTabCount) && (idxHover >= mLockedTabCount) && (mCurrentTabIdx != idxHover))
 						{
-							tuple = mTabList[mCurrentTabIdx];
+							LLRect rctCurTab = mTabList[mCurrentTabIdx]->mButton->getRect();
+							LLRect rctHoverTab = mTabList[idxHover]->mButton->getRect();
 
-							mTabList.erase(mTabList.begin() + mCurrentTabIdx);
-							mTabList.insert(mTabList.begin() + idxHover, tuple);
+							// Only rearrange the tabs if the mouse pointer has cleared the overlap area
+							bool fClearedOverlap =
+								(mIsVertical)
+								? ((idxHover < mCurrentTabIdx) && (y > rctHoverTab.mTop - rctCurTab.getHeight())) ||
+								((idxHover > mCurrentTabIdx) && (y < rctCurTab.mTop - rctHoverTab.getHeight()))
+								: ((idxHover < mCurrentTabIdx) && (x < rctHoverTab.mLeft + rctCurTab.getWidth())) ||
+								((idxHover > mCurrentTabIdx) && (x > rctCurTab.mLeft + rctHoverTab.getWidth()));
+							if (fClearedOverlap)
+							{
+								auto tuple = mTabList[mCurrentTabIdx];
 
-							if (mRearrangeSignal)
-								(*mRearrangeSignal)(idxHover, tuple->mTabPanel);
+								mTabList.erase(mTabList.begin() + mCurrentTabIdx);
+								mTabList.insert(mTabList.begin() + idxHover, tuple);
 
-							tuple->mButton->onCommit();
-							tuple->mButton->setFocus(TRUE);
+								if (mRearrangeSignal)
+									(*mRearrangeSignal)(idxHover, tuple->mTabPanel);
+
+								tuple->mButton->onCommit();
+								tuple->mButton->setFocus(TRUE);
+							}
 						}
 					}
-				}
-				else
-				{
-					tuple->mButton->onCommit();
-					tuple->mButton->setFocus(TRUE);
+					else
+					{
+						button->onCommit();
+						button->setFocus(TRUE);
 // [SL:KB] - Patch: Control-TabContainer | Checked: 2012-08-10 (Catznip-3.3)
-					return;
+						return;
+// [/SL:KB]
+					}
+					break;
 // [/SL:KB]
 				}
-				break;
-// [/SL:KB]
 			}
 		}
 	}

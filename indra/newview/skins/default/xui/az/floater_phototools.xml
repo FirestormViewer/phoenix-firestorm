@@ -539,8 +539,6 @@
 							 tool_tip="Adətən avatar üzərinə basmaqla kameranın yerləşməsi sıfırlanır. Bu seçim bu davranışı düzəldir."/>
 							<check_box label="Tp-dan sonra kamera yerləşməsini sıfırla" name="FSResetCameraOnTP"
 							 tool_tip="Bir qayda olaraq, teleportasiya zamanı (region daxilində) kamera yerləşməsi sıfırlanır. Bu seçim bu davranışın qarşısını alır."/>
-							<check_box label="Minimum kamera məsafəsini deaktiv edin" name="disableminzoomdist"
-							 tool_tip="Kamera və obyekt arasında ən yaxın məsafə məhdudiyyətini söndürür."/>
 							<check_box name="ignorecameraconstraints" label="Kameranın maneəsiz hərəkətinə icazə verin"
 							 tool_tip="Kameranın obyektlərdən kənara çıxarılmasına məhəl qoymur. YENİDƏN BAŞLAMA TƏLƏB EDİR!"/>
 							<check_box name="resetcamerapositiononmovement" label="Hərəkət edərkən kamera yerləşməsini sıfırlayın"

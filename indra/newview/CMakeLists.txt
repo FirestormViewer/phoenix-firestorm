@@ -2229,7 +2229,7 @@ if (WINDOWS)
     if (TARGET ll::fmodstudio)
       list(APPEND COPY_INPUT_DEPENDENCIES
            ${SHARED_LIB_STAGING_DIR}/fmod.dll
-           #${SHARED_LIB_STAGING_DIR}/Debug/fmodL.dll # <FS:Ansariel> Doesn't exist
+           #${SHARED_LIB_STAGING_DIR}/fmodL.dll # <FS:Ansariel> Doesn't exist
           )
     endif ()
 
