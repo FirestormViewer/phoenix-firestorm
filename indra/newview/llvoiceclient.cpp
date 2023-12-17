@@ -677,6 +677,7 @@ void LLVoiceClient::inputUserControlState(bool down)
 	else // set open-mic state as an absolute                                                                  
 	{
 		setUserPTTState(down);
+		make_ui_sound("UISndMicToggle"); // <FS:PP> FIRE-33249 Mic toggle
 	}
 }
 

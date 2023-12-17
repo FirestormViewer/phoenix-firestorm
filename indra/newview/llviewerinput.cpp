@@ -939,11 +939,13 @@ bool voice_follow_key(EKeystate s)
     {
         if (!LLAgent::isActionAllowed("speak")) return false;
         LLVoiceClient::getInstance()->setUserPTTState(true);
+        make_ui_sound("UISndMicToggle"); // <FS:PP> FIRE-33249 Mic toggle
         return true;
     }
     else if (KEYSTATE_UP == s && LLVoiceClient::getInstance()->getUserPTTState())
     {
         LLVoiceClient::getInstance()->setUserPTTState(false);
+        make_ui_sound("UISndMicToggle"); // <FS:PP> FIRE-33249 Mic toggle
         return true;
     }
     return false;
