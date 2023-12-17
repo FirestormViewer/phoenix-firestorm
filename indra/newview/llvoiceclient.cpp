@@ -628,7 +628,6 @@ void LLVoiceClient::setUserPTTState(bool ptt)
 	mUserPTTState = ptt;
 	updateMicMuteLogic();
 	mMicroChangedSignal();
-	make_ui_sound("UISndMicToggle"); // <FS:PP> FIRE-33249 Mic toggle
 }
 
 bool LLVoiceClient::getUserPTTState()
@@ -684,6 +683,7 @@ void LLVoiceClient::inputUserControlState(bool down)
 void LLVoiceClient::toggleUserPTTState(void)
 {
 	setUserPTTState(!getUserPTTState());
+	make_ui_sound("UISndMicToggle"); // <FS:PP> FIRE-33249 Mic toggle
 }
 
 
