@@ -156,8 +156,8 @@
                     setting="DebugStatModeBoundMem"/>
         </stat_view>
        <stat_view name="material"
+                  label="Material"
                   setting="DebugStatModeMaterials">
-                  label="Material">
          <stat_bar name="nummaterials"
                    label="Count"
                    stat="nummaterials"/>
