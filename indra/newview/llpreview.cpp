@@ -126,13 +126,28 @@ const LLInventoryItem *LLPreview::getItem() const
 	}
 	else if (mObjectUUID.isNull())
 	{
-		// it's an inventory item, so get the item.
 // [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-11 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
-		if (LLInventoryType::IT_NONE == mAuxItem->getInventoryType())
-			item = gInventory.getItem(mItemUUID);
+		if (mIsMaterialPreview)
+		{
+			if (mItemUUID.notNull())
+			{
+				// it's an inventory item, so get the item.
+				item = gInventory.getItem(mItemUUID);
+			}
+		}
 		else
-			item = mAuxItem;
+		{
+			if (LLInventoryType::IT_NONE == mAuxItem->getInventoryType())
+				item = gInventory.getItem(mItemUUID);
+			else
+				item = mAuxItem;
+		}
 // [/SL:KB]
+        //if (mItemUUID.notNull())
+        //{
+        //    // it's an inventory item, so get the item.
+        //    item = gInventory.getItem(mItemUUID);
+        //}
 	}
 	else
 	{
@@ -262,14 +277,22 @@ void LLPreview::refreshFromItem()
 // static
 BOOL LLPreview::canModify(const LLUUID taskUUID, const LLInventoryItem* item)
 {
+    const LLViewerObject* object = nullptr;
 	if (taskUUID.notNull())
 	{
-		LLViewerObject* object = gObjectList.findObject(taskUUID);
-		if(object && !object->permModify())
-		{
-			// No permission to edit in-world inventory
-			return FALSE;
-		}
+		object = gObjectList.findObject(taskUUID);
+	}
+
+	return canModify(object, item);
+}
+
+// static
+BOOL LLPreview::canModify(const LLViewerObject* object, const LLInventoryItem* item)
+{
+	if (object && !object->permModify())
+	{
+        // No permission to edit in-world inventory
+        return FALSE;
 	}
 
 	return item && gAgent.allowOperation(PERM_MODIFY, item->getPermissions(), GP_OBJECT_MANIPULATE);

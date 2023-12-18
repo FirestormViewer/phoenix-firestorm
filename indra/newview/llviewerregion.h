@@ -42,6 +42,7 @@
 #include "llcapabilityprovider.h"
 #include "m4math.h"					// LLMatrix4
 #include "llframetimer.h"
+#include "llreflectionmap.h"
 
 // Surface id's
 #define LAND  1
@@ -68,6 +69,7 @@ class LLHost;
 class LLBBox;
 class LLSpatialGroup;
 class LLDrawable;
+class LLGLTFOverrideCacheEntry;
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-07-26 (Catznip-3.3)
 class LLViewerTexture;
 // [/SL:KB]
@@ -386,7 +388,10 @@ public:
 
 	// handle a full update message
 	eCacheUpdateResult cacheFullUpdate(LLDataPackerBinaryBuffer &dp, U32 flags);
-	eCacheUpdateResult cacheFullUpdate(LLViewerObject* objectp, LLDataPackerBinaryBuffer &dp, U32 flags);	
+	eCacheUpdateResult cacheFullUpdate(LLViewerObject* objectp, LLDataPackerBinaryBuffer &dp, U32 flags);
+
+    void cacheFullUpdateGLTFOverride(const LLGLTFOverrideCacheEntry &override_data);
+
 	LLVOCacheEntry* getCacheEntryForOctree(U32 local_id);
 	LLVOCacheEntry* getCacheEntry(U32 local_id, bool valid = true);
 	bool probeCache(U32 local_id, U32 crc, U32 flags, U8 &cache_miss_type);
@@ -441,6 +446,9 @@ public:
 
 	static BOOL isNewObjectCreationThrottleDisabled() {return sNewObjectCreationThrottle < 0;}
 
+    // rebuild reflection probe list
+    void updateReflectionProbes();
+
 private:
 	void addToVOCacheTree(LLVOCacheEntry* entry);
 	LLViewerObject* addNewObject(LLVOCacheEntry* entry);
@@ -456,6 +464,10 @@ private:
 	bool isNonCacheableObjectCreated(U32 local_id);	
 
 public:
+	void loadCacheMiscExtras(U32 local_id);
+
+    void applyCacheMiscExtras(LLViewerObject* obj);
+
 	struct CompareDistance
 	{
 		bool operator()(const LLViewerRegion* const& lhs, const LLViewerRegion* const& rhs)
@@ -640,6 +652,10 @@ public:
 
 	// how the server interest list works
     std::string mInterestListMode;
+
+    // list of reflection maps being managed by this llviewer region
+    std::vector<LLPointer<LLReflectionMap> > mReflectionMaps;
+
 };
 
 inline BOOL LLViewerRegion::getRegionProtocol(U64 protocol) const

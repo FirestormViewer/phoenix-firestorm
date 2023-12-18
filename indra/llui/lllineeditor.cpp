@@ -167,6 +167,7 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 	mPreeditBgColor(p.preedit_bg_color()),
 	mGLFont(p.font),
 	mContextMenuHandle(),
+    mShowContextMenu(true),
 	mAutoreplaceCallback()
 {
 	llassert( mMaxLengthBytes > 0 );
@@ -830,7 +831,7 @@ BOOL LLLineEditor::handleMiddleMouseDown(S32 x, S32 y, MASK mask)
 BOOL LLLineEditor::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	setFocus(TRUE);
-	if (!LLUICtrl::handleRightMouseDown(x, y, mask))
+    if (!LLUICtrl::handleRightMouseDown(x, y, mask) && getShowContextMenu())
 	{
 		showContextMenu(x, y);
 	}

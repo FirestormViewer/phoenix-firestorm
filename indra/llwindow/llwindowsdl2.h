@@ -120,6 +120,8 @@ public:
 	/*virtual*/ F32 getPixelAspectRatio();
 	/*virtual*/ void setNativeAspectRatio(F32 ratio) { mOverrideAspectRatio = ratio; }
 
+    U32 getAvailableVRAMMegabytes() override;
+
 	/*virtual*/ void beforeDialog();
 	/*virtual*/ void afterDialog();
 

@@ -27,6 +27,8 @@
 
 #include "lleventtimer.h"
 
+class LLInventoryItem;
+
 class AOSet
 :	public LLEventTimer
 {
@@ -71,6 +73,7 @@ class AOSet
 			std::string mName;
 			LLUUID mAssetUUID;
 			LLUUID mInventoryUUID;
+			LLUUID mOriginalUUID;
 			S32 mSortOrder;
 		};
 
@@ -78,6 +81,7 @@ class AOSet
 		{
 			std::string mName;
 			std::vector<std::string> mAlternateNames;
+			std::vector<const LLInventoryItem*> mAddQueue;
 			LLUUID mRemapID;
 			bool mCycle;
 			bool mRandom;

@@ -9,10 +9,6 @@
 				</text>
 			</panel>
 
-			<panel name="P_WL_Settings">
-				<check_box name="WindLightUseAtmosShaders" label="Atmosphären-Shader aktivieren" tool_tip="Diese Einstellung aktiviert die komplette EEP-Funktionalität (Atmosphären-Shader)."/>
-			</panel>
-
 			<panel name="P_WL_Sky_Water">
 				<text name="WL Sky" tool_tip="Voreinstellungen für den Himmel.">
 					Himmel
@@ -93,7 +89,6 @@
 			</panel>
 
 			<panel name="P_L_S_Settings">
-				<check_box label="Erweitertes Beleuchtungsmodell aktivieren" name="RenderDeferred" tool_tip="Diese Einstellung aktiviert Schatten von Sonne und Mond sowie anderen Lichtquellen. Sie ist Voraussetzung für Schärfentiefe und andere Grafik-Features. Falls diese Einstellung nicht aktiviert werden kann oder keinen Effekt hat, bitte prüfen, ob „Atmosphären-Shader“ aktiviert sind (siehe Reiter „Umg.“)."/>
 				<check_box label="Alle Lokalen Lichtquellen aktivieren" name="LocalLights" tool_tip="Diese Einstellung aktiviert alle lokalen Lichtquellen innerhalb der Welt. Wird sie deaktiviert, wird weiterhin das von Sonne und Mond ausgestrahlte Licht angezeigt. Nützlich, falls lokale Lichtquellen nicht und nur noch von Sonne und Mond angezeigt werden soll."/>
 				<check_box label="Angehängte Lichter aktivieren (Facelights)" name="Render Attached Lights" tool_tip="Diese Einstellung aktiviert alle Lichter wie zum Beispiel Facelights, die von Avataren getragen werden. Nützlich, falls Facelights deaktiviert werden sollen."/>
 			</panel>
@@ -193,7 +188,6 @@
 
 			<panel name="P_DoF_Settings">
 				<check_box label="Schärfentiefe aktivieren" name="UseDepthofField" tool_tip="Diese Einstellung aktiviert die Schärfentiefe, die die Ausdehnung des Bildausschnitts festlegt, der noch scharf dargestellt wird. Falls diese Funktion nicht benötigt wird, sollte sie deaktiviert werden, um die Framerate zu erhöhen. Falls diese Funktion nicht aktiviert werden kann oder kein Effekt sichtbar ist, muss „Erweitertes Beleuchtungsmodell“ auf dem Reiter „Licht“ aktiviert werden."/>
-				<check_box label="Schärfentiefe unter Wasser aktivieren" tool_tip="Normalerweise ist die Schärfentiefe selbst bei aktivierter Einstellungen unter Wasser deaktiviert. Diese Einstellung hebt diese Restriktion auf. Hinweis: Es kann eventuell notwendig sein, unter Wasser den Kamerafokus auf das gewünschte Objekt neu zu setzen." name="UseDoFUnderwater"/>
 				<check_box label="Schärfentiefe-Fokus folgt Mauszeiger" name="FSFocusPointFollowsPointer" tool_tip="Der Fokus der Schärfentiefe folgt der Maus, ähnlich dem Verhalten bei der Verwendung einer Flycam. In Verbindung mit fixiertem Schärfentiefe-Fokus verwenden."/>
 				<check_box label="Aktuelles Kamera-Sichtfeld (FOV) anzeigen" name="MIC_Show_FOV" tool_tip="Zeigt das aktuelle vertikale Sichtfeld der Kamera an. Im Viewer ist es wie im echten Leben möglich, die Brennweite der Kameralinse zu verändern. Je kleiner der Sichtbereich, desto größer die Brennweite. Eine 50mm-Linse hat ein Sichtfeld von 27.0 Grad. Siehe auch http://de.wikipedia.org/wiki/Bildwinkel für weitergehende Informationen. ACHTUNG: DIESE EINSTELLUNG SOLLTE VOR DEM FOTOGRAFIEREN AUSGESCHALTET WERDEN, DA SIE SONST AUF DEM BILD ERSCHEINT!"/>
 			</panel>
@@ -556,7 +550,6 @@
 						<panel name="P_Misc_Settings">
 							<check_box label="Klick auf Avatar hält Kameraposition" name="clickonavatarkeepscamera" tool_tip="Normalerweise wird die Kameraposition beim Anklicken des Avatars zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
 							<check_box label="Kameraposition nach Teleport zurücksetzen" name="FSResetCameraOnTP" tool_tip="Normalerweise wird die Kameraposition beim Teleportieren zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
-							<check_box label="Minimale Zoomdistanz aufheben" name="disableminzoomdist" tool_tip="Deaktiviert die minimale Zoomdistanz der Kamera zu einem Objekt."/>
 							<check_box label="Kamerabewegung durch Primitiva erlauben" name="ignorecameraconstraints" tool_tip="Ignoriert die Beschränkung, dass die Kamera nicht durch primitive Objekte bewegt werden kann. ERFORDERT NEUSTART!"/>
 							<check_box label="Kamera bei Avatarbewegung zurücksetzen" name="resetcamerapositiononmovement" tool_tip="Setzt die Kameraposition zurück, sobald der Avatar bewegt wird."/>
 						</panel>

@@ -1746,7 +1746,7 @@ BOOL LLScriptEdCore::handleKeyHere(KEY key, MASK mask)
 
 void LLScriptEdCore::onBtnLoadFromFile( void* data )
 {
-	(new LLFilePickerReplyThread(boost::bind(&LLScriptEdCore::loadScriptFromFile, _1, data), LLFilePicker::FFLOAD_SCRIPT, false))->getFile();
+	LLFilePickerReplyThread::startPicker(boost::bind(&LLScriptEdCore::loadScriptFromFile, _1, data), LLFilePicker::FFLOAD_SCRIPT, false);
 }
 
 void LLScriptEdCore::loadScriptFromFile(const std::vector<std::string>& filenames, void* data)
@@ -1787,7 +1787,7 @@ void LLScriptEdCore::onBtnSaveToFile( void* userdata )
 
 	if( self->mSaveCallback )
 	{
-		(new LLFilePickerReplyThread(boost::bind(&LLScriptEdCore::saveScriptToFile, _1, userdata), LLFilePicker::FFSAVE_SCRIPT, self->mScriptName))->getFile();
+		LLFilePickerReplyThread::startPicker(boost::bind(&LLScriptEdCore::saveScriptToFile, _1, userdata), LLFilePicker::FFSAVE_SCRIPT, self->mScriptName);
 	}
 }
 
@@ -2372,13 +2372,39 @@ void LLPreviewLSL::finishedLSLUpload(LLUUID itemId, LLSD response)
     }
 }
 
+bool LLPreviewLSL::failedLSLUpload(LLUUID itemId, LLUUID taskId, LLSD response, std::string reason)
+{
+    LLSD floater_key;
+    if (taskId.notNull())
+    {
+        floater_key["taskid"] = taskId;
+        floater_key["itemid"] = itemId;
+    }
+    else
+    {
+        floater_key = LLSD(itemId);
+    }
+
+    LLPreviewLSL* preview = LLFloaterReg::findTypedInstance<LLPreviewLSL>("preview_script", floater_key);
+    if (preview)
+    {
+        // unfreeze floater
+        LLSD errors;
+        errors.append(LLTrans::getString("UploadFailed") + reason);
+        preview->callbackLSLCompileFailed(errors);
+        return true;
+    }
+
+    return false;
+}
+
 // <FS:ND> Asset uploader that can be used for LSL and Mono
 class FSScriptAssetUpload: public LLScriptAssetUpload
 {
 	bool m_bMono;
 public:
-	FSScriptAssetUpload(LLUUID itemId, std::string buffer, invnUploadFinish_f finish, bool a_bMono)
-	: LLScriptAssetUpload(itemId, buffer, finish)
+	FSScriptAssetUpload(LLUUID itemId, std::string buffer, invnUploadFinish_f finish, uploadFailed_f failure, bool a_bMono)
+	: LLScriptAssetUpload(itemId, buffer, finish, failure)
 	{
 		m_bMono = a_bMono;
 	}
@@ -2465,13 +2491,14 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
             //    [old_asset_id](LLUUID itemId, LLUUID, LLUUID, LLSD response) {
             //        LLFileSystem::removeFile(old_asset_id, LLAssetType::AT_LSL_TEXT);
             //        LLPreviewLSL::finishedLSLUpload(itemId, response);
-            //    }));
+            //    },
+            //LLPreviewLSL::failedLSLUpload));
             LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<FSScriptAssetUpload>(mItemUUID, buffer, 
                 [old_asset_id](LLUUID itemId, LLUUID, LLUUID, LLSD response) {
                     LLFileSystem::removeFile(old_asset_id, LLAssetType::AT_LSL_TEXT);
                     LLPreviewLSL::finishedLSLUpload(itemId, response);
                 },
-                domono));
+                LLPreviewLSL::failedLSLUpload, domono));
 
             LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
         }
@@ -3111,7 +3138,8 @@ void LLLiveLSLEditor::saveIfNeeded(bool sync /*= true*/)
                 [isRunning, old_asset_id](LLUUID itemId, LLUUID taskId, LLUUID newAssetId, LLSD response) { 
                         LLFileSystem::removeFile(old_asset_id, LLAssetType::AT_LSL_TEXT);
                         LLLiveLSLEditor::finishLSLUpload(itemId, taskId, newAssetId, response, isRunning);
-                }));
+                },
+                nullptr)); // needs failure handling?
 
         LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
     }

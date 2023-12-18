@@ -298,10 +298,8 @@ ERlvCmdRet RlvSphereEffect::onValueMaxChanged(const LLUUID& idRlvObj, const boos
 
 void RlvSphereEffect::setShaderUniforms(LLGLSLShader* pShader)
 {
-	pShader->uniformMatrix4fv(LLShaderMgr::INVERSE_PROJECTION_MATRIX, 1, FALSE, get_current_projection().inverse().m);
-	pShader->uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, gPipeline.mScreen.getWidth(), gPipeline.mScreen.getHeight());
+	pShader->uniform2f(LLShaderMgr::DEFERRED_SCREEN_RES, gPipeline.mRT->screen.getWidth(), gPipeline.mRT->screen.getHeight());
 	pShader->uniform1i(LLShaderMgr::RLV_EFFECT_MODE, llclamp((int)m_eMode, 0, (int)ESphereMode::Count));
-
 	// Pass the sphere origin to the shader
 	LLVector4 posSphereOrigin;
 	switch (m_eOrigin)
@@ -353,40 +351,20 @@ void RlvSphereEffect::renderPass(LLGLSLShader* pShader, const LLShaderEffectPara
 	if (nDiffuseChannel > -1)
 	{
 		pParams->m_pSrcBuffer->bindTexture(0, nDiffuseChannel);
-		gGL.getTexUnit(nDiffuseChannel)->setTextureFilteringOption(LLTexUnit::TFO_POINT);
+		gGL.getTexUnit(nDiffuseChannel)->setTextureFilteringOption(LLTexUnit::TFO_BILINEAR);
 	}
 
-	S32 nDepthChannel = pShader->enableTexture(LLShaderMgr::DEFERRED_DEPTH, gPipeline.mDeferredDepth.getUsage());
+	S32 nDepthChannel = pShader->enableTexture(LLShaderMgr::DEFERRED_DEPTH, gPipeline.mRT->deferredScreen.getUsage());
 	if (nDepthChannel > -1)
 	{
-		gGL.getTexUnit(nDepthChannel)->bind(&gPipeline.mDeferredDepth, TRUE);
+		gGL.getTexUnit(nDepthChannel)->bind(&gPipeline.mRT->deferredScreen, TRUE);
 	}
 
-	gGL.matrixMode(LLRender::MM_PROJECTION);
-	gGL.pushMatrix();
-	gGL.loadIdentity();
-	gGL.matrixMode(LLRender::MM_MODELVIEW);
-	gGL.pushMatrix();
-	gGL.loadMatrix(gGLModelView);
-
-	LLVector2 tc1(0, 0);
-	LLVector2 tc2((F32)gPipeline.mScreen.getWidth() * 2, (F32)gPipeline.mScreen.getHeight() * 2);
-	gGL.begin(LLRender::TRIANGLE_STRIP);
-	gGL.texCoord2f(tc1.mV[0], tc1.mV[1]);
-	gGL.vertex2f(-1, -1);
-	gGL.texCoord2f(tc1.mV[0], tc2.mV[1]);
-	gGL.vertex2f(-1, 3);
-	gGL.texCoord2f(tc2.mV[0], tc1.mV[1]);
-	gGL.vertex2f(3, -1);
-	gGL.end();
-
-	gGL.matrixMode(LLRender::MM_PROJECTION);
-	gGL.popMatrix();
-	gGL.matrixMode(LLRender::MM_MODELVIEW);
-	gGL.popMatrix();
+	gPipeline.mScreenTriangleVB->setBuffer();
+	gPipeline.mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
 
 	pShader->disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, pParams->m_pSrcBuffer->getUsage());
-	pShader->disableTexture(LLShaderMgr::DEFERRED_DEPTH, gPipeline.mDeferredDepth.getUsage());
+	pShader->disableTexture(LLShaderMgr::DEFERRED_DEPTH, gPipeline.mRT->deferredScreen.getUsage());
 
 	if (pParams->m_pDstBuffer)
 	{
@@ -399,31 +377,34 @@ LLTrace::BlockTimerStatHandle FTM_RLV_EFFECT_SPHERE("Post-process (RLVa sphere)"
 void RlvSphereEffect::run(const LLVisualEffectParams* pParams)
 {
 	LL_RECORD_BLOCK_TIME(FTM_RLV_EFFECT_SPHERE);
-	LLGLDepthTest depth(GL_FALSE, GL_FALSE);
-
-	gRlvSphereProgram.bind();
-	setShaderUniforms(&gRlvSphereProgram);
-
-	const LLShaderEffectParams* pShaderParams = static_cast<const LLShaderEffectParams*>(pParams);
-	switch (m_eMode)
+	if (gRlvSphereProgram.isComplete())
 	{
-		case ESphereMode::Blend:
-		case ESphereMode::ChromaticAberration:
-		case ESphereMode::Pixelate:
-			renderPass(&gRlvSphereProgram, pShaderParams);
-			break;
-		case ESphereMode::Blur:
-		case ESphereMode::BlurVariable:
-			gRlvSphereProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM5, 1.f, 0.f);
-			renderPass(&gRlvSphereProgram, pShaderParams);
-			gRlvSphereProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM5, 0.f, 1.f);
-			renderPass(&gRlvSphereProgram, pShaderParams);
-			break;
-		default:
-			llassert(true);
-	}
+		LLGLDepthTest depth(GL_FALSE, GL_FALSE);
 
-	gRlvSphereProgram.unbind();
+		gRlvSphereProgram.bind();
+		setShaderUniforms(&gRlvSphereProgram);
+
+		const LLShaderEffectParams* pShaderParams = static_cast<const LLShaderEffectParams*>(pParams);
+		switch (m_eMode)
+		{
+			case ESphereMode::Blend:
+			case ESphereMode::ChromaticAberration:
+			case ESphereMode::Pixelate:
+				renderPass(&gRlvSphereProgram, pShaderParams);
+				break;
+			case ESphereMode::Blur:
+			case ESphereMode::BlurVariable:
+				gRlvSphereProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM5, 1.f, 0.f);
+				renderPass(&gRlvSphereProgram, pShaderParams);
+				gRlvSphereProgram.uniform2f(LLShaderMgr::RLV_EFFECT_PARAM5, 0.f, 1.f);
+				renderPass(&gRlvSphereProgram, pShaderParams);
+				break;
+			default:
+				llassert(true);
+		}
+
+		gRlvSphereProgram.unbind();
+	}
 }
 
 // ====================================================================================

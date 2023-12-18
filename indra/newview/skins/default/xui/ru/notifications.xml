@@ -1281,10 +1281,18 @@
 			<button name="Cancel" text="Отмена"/>
 		</form>
 	</notification>
-	<notification label="Rename Landmark" name="RenameLandmark">
+	<notification label="Переименовать ориентир" name="RenameLandmark">
 		Выберите новое имя для [NAME]
 		<form name="form">
 			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Отмена"/>
+		</form>
+	</notification>
+	<notification label="Переименовать выбранный элемент" name="RenameItem">
+		Выберите новое имя для:
+[NAME]
+		<form name="form">
+			<button name="OK" text="Да"/>
 			<button name="Cancel" text="Отмена"/>
 		</form>
 	</notification>
@@ -2439,6 +2447,22 @@
 Вы уверены, что хотите удалить их?
 		<usetemplate ignoretext="Подтвердить удаление отфильтрованных элементов" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
+	<notification name="DeleteThumbnail">
+		Удалить изображение этого товара? Отмена невозможна.
+		<usetemplate ignoretext="Подтвердите перед удалением миниатюры." name="okcancelignore" notext="Отмена" yestext="Удалить"/>
+	</notification>
+	<notification name="ThumbnailDimentionsLimit">
+		Допускаются только квадратные изображения от 64 до 256 пикселей на сторону.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="ThumbnailInsufficientPermissions">
+		В качестве миниатюр можно назначить только изображения, не подлежащие копированию и передаче.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="ThumbnailOutfitPhoto">
+		Чтобы добавить изображение к наряду, используйте окно «Галерея нарядов» или щелкните правой кнопкой мыши папку наряда и выберите «Изображение...».
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmUnlink">
 		Вы действительно хотите разъеденить выбранные объекты?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Разъеденить"/>
@@ -2535,6 +2559,9 @@
 	<notification name="TrashIsFull">
 		Ваша корзина переполнена. Это может вызвать проблемы при входе.
 		<usetemplate name="okcancelbuttons" notext="Я очищу корзину позже" yestext="Очистить корзину сейчас"/>
+	</notification>
+	<notification name="InventoryLimitReachedAISAlert">
+		В вашем инвентаре возникли проблемы. Пожалуйста, обратитесь в службу поддержки вашей сетки.
 	</notification>
 	<notification name="InventoryLimitReachedAIS">
 		В вашем инвентаре возникли проблемы. Пожалуйста, обратитесь в службу поддержки вашей сетки.
@@ -4048,6 +4075,9 @@ https://wiki.firestormviewer.org/fs_voice
 	<notification name="AOForeignItemsFound">
 		В вашем наборе АО не найден как минимум один элемент, который указан в конфигурации. Пожалуйста, проверьте папку &quot;Найденные вещи&quot; и переместите недостающий элемент в вашу конфигурацию.
 	</notification>
+	<notification name="AOImportComplete">
+		Импорт заметок AO завершен!
+	</notification>
 	<notification name="AOImportSetAlreadyExists">
 		АО с данным именем уже существует.
 	</notification>
@@ -5301,9 +5331,17 @@ https://wiki.firestormviewer.org/fs_voice
 Упаковка: [PACK_TIME]с [PSIZE]КБ
 Распаковка: [UNPACK_TIME]с [USIZE]КБ
 	</notification>
-	<notification name="PromptMFAToken">
+	<notification name="PromptMFAToken" label="Запрос на ввод токена MFA">
 		[MESSAGE]
 		<form name="form">
+			<button name="continue" text="Продолжить"/>
+			<button name="cancel" text="Отмена"/>
+		</form>
+	</notification>
+	<notification name="PromptMFATokenWithSave" label="Запрос на ввод токена MFA">
+		[MESSAGE]
+		<form name="form">
+			<ignore name="ignore" text="Запомнить этот компьютер на 30 дней."/>
 			<button name="continue" text="Продолжить"/>
 			<button name="cancel" text="Отмена"/>
 		</form>

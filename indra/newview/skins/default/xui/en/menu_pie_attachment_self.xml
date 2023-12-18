@@ -219,14 +219,13 @@
 
     </pie_menu>
 
-    <pie_slice
-        enabled="false"
-        label="Edit"
-        name="Edit...">
-        <pie_slice.on_click
-            function="Object.Edit" />
-        <pie_slice.on_enable
-            function="EnableEdit" />
-    </pie_slice>
+	<pie_slice
+		label="Edit"
+		name="Edit...">
+		<pie_slice.on_click
+			function="Object.Edit" />
+		<pie_slice.on_enable
+			function="EnableEdit"/>
+	</pie_slice>
 
 </pie_menu>

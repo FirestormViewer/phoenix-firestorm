@@ -592,12 +592,9 @@ BOOL FloaterQuickPrefs::postBuild()
 	// Phototools additions
 	if (getIsPhototools())
 	{
-		mCtrlWindLight = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
-		mCtrlDeferred = getChild<LLCheckBoxCtrl>("RenderDeferred");
 		mCtrlUseSSAO = getChild<LLCheckBoxCtrl>("UseSSAO");
 		mCtrlUseDoF = getChild<LLCheckBoxCtrl>("UseDepthofField");
 		mCtrlShadowDetail = getChild<LLComboBox>("ShadowDetail");
-		mCtrlReflectionDetail = getChild<LLComboBox>("Reflections");
 
 		// Vignette UI controls
 		mSpinnerVignetteX = getChild<LLSpinCtrl>("VignetteSpinnerX");
@@ -1046,11 +1043,6 @@ void FloaterQuickPrefs::setSelectedDayCycle(const std::string& preset_name)
 // Phototools additions
 void FloaterQuickPrefs::refreshSettings()
 {
-	BOOL reflections = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps;
-	mCtrlReflectionDetail->setEnabled(reflections);
-
-	mCtrlWindLight->setEnabled((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV) && !gRlvHandler.hasBehaviour(RLV_BHVR_SETSPHERE)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders")) );
-
 	LLTextBox* sky_label = getChild<LLTextBox>("T_Sky_Detail");
 	LLSlider* sky_slider = getChild<LLSlider>("SB_Sky_Detail");
 	LLSpinCtrl* sky_spinner = getChild<LLSpinCtrl>("S_Sky_Detail");
@@ -1061,16 +1053,7 @@ void FloaterQuickPrefs::refreshSettings()
 	sky_spinner->setEnabled(TRUE);
 	sky_default_button->setEnabled(TRUE);
 
-	BOOL bumpshiny = gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump") && gSavedSettings.getBOOL("RenderObjectBump");
-	BOOL shaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders");
-	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
-						bumpshiny &&
-						shaders &&
-						(mCtrlWindLight->get()) ? TRUE : FALSE;
-
-	mCtrlDeferred->setEnabled(enabled);
-
-	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO") && (mCtrlDeferred->get() ? TRUE : FALSE);
+	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO");
 
 	mCtrlUseSSAO->setEnabled(enabled);
 	mCtrlUseDoF->setEnabled(enabled);
@@ -1078,47 +1061,6 @@ void FloaterQuickPrefs::refreshSettings()
 	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail");
 
 	mCtrlShadowDetail->setEnabled(enabled);
-
-	// disabled windlight
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))
-	{
-		mCtrlWindLight->setEnabled(FALSE);
-		mCtrlWindLight->setValue(FALSE);
-
-		sky_label->setEnabled(FALSE);
-		sky_slider->setEnabled(FALSE);
-		sky_spinner->setEnabled(FALSE);
-		sky_default_button->setEnabled(FALSE);
-
-		//deferred needs windlight, disable deferred
-		mCtrlShadowDetail->setEnabled(FALSE);
-		mCtrlShadowDetail->setValue(0);
-
-		mCtrlUseSSAO->setEnabled(FALSE);
-		mCtrlUseSSAO->setValue(FALSE);
-
-		mCtrlUseDoF->setEnabled(FALSE);
-		mCtrlUseDoF->setValue(FALSE);
-
-		mCtrlDeferred->setEnabled(FALSE);
-		mCtrlDeferred->setValue(FALSE);
-	}
-
-	// disabled deferred
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred"))
-	{
-		mCtrlShadowDetail->setEnabled(FALSE);
-		mCtrlShadowDetail->setValue(0);
-
-		mCtrlUseSSAO->setEnabled(FALSE);
-		mCtrlUseSSAO->setValue(FALSE);
-
-		mCtrlUseDoF->setEnabled(FALSE);
-		mCtrlUseDoF->setValue(FALSE);
-
-		mCtrlDeferred->setEnabled(FALSE);
-		mCtrlDeferred->setValue(FALSE);
-	}
 
 	// disabled deferred SSAO
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO"))
@@ -1132,13 +1074,6 @@ void FloaterQuickPrefs::refreshSettings()
 	{
 		mCtrlShadowDetail->setEnabled(FALSE);
 		mCtrlShadowDetail->setValue(0);
-	}
-
-	// disabled reflections
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderReflectionDetail"))
-	{
-		mCtrlReflectionDetail->setEnabled(FALSE);
-		mCtrlReflectionDetail->setValue(FALSE);
 	}
 
 	// <FS:CR> FIRE-9630 - Vignette UI controls

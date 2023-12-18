@@ -84,6 +84,11 @@
 		<check_box label="Größe des Unterhaltungen- und alten Benachrichtigungen-Fensters automatisch anpassen" name="FSLegacyNotificationWellAutoResize" tool_tip="Falls aktiviert, passt Firestorm die Größe der Unterhaltungen- und klassischen Benachrichtigungen-Fenster automatisch an, wenn Meldungen hinzugefügt oder entfernt werden."/>
 		<check_box label="Shortcuts anpassen, die von Linux verwendet werden (nur Linux; erfordert Neustart)" name="FSRemapLinuxShortcuts" tool_tip="Aktivieren, die Shortcuts umzudefinieren, die bereits durch das Linux-Betriebssystem verwendet werden, z.B. STRG-ALT-Fx."/>
 		<check_box label="Verhindern, dass Statistik-Fenster Fokus erhält" name="FSStatisticsNoFocus" tool_tip="Falls aktiviert, wird verhindert, dass das Statistik-Fenster den Fokus erhält, wenn ein anderes Fenster geschlossen wird (Aktionen wie das Ändern des Layouts sind auch weiterhin möglich)."/>
+		<check_box label="Abbildungen von Inventar-Objekten in Tooltips anzeigen" name="FSShowInventoryThumbnailTooltips" tool_tip="Falls aktiviert, werden die Abbildungen von Inventar-Objekten in Tooltips angezeigt."/>
+		<slider label_width="230" label="Verzögerung für Abbildung-Tooltips:" tool_tip="Legt die Verzögerung fest, nachdem Abbildungen von Inventar-Objekten in Tooltips angezeigt werden" name="FSInventoryThumbnailTooltipsDelay"/>
+		<text name="FSInventoryThumbnailTooltipsDelayText">
+			Sek.
+		</text>
 		<slider label_width="230" label="Wiederholungen für blinkende IM-Reiter:" name="ButtonsFlashCount"/>
 		<slider label_width="230" label="Aufblinkdauer für IM-Reiter:" tool_tip="Legt fest, wie lange in Sekunden ein einzelnes Aufblinken eines IM-Reiter dauert - verwendet für IM-Benachrichtungen" name="ButtonFlashRate"/>
 		<text name="ButtonFlashRateText">

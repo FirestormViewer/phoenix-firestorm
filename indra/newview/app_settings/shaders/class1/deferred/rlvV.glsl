@@ -14,12 +14,9 @@
  *
  */
 
-ATTRIBUTE vec3 position;
+in vec3 position;
 
-uniform vec2 screen_res;
-
-VARYING vec2 vary_fragcoord;
-VARYING vec3 vary_position;
+out vec2 vary_fragcoord;
 
 void main()
 {
@@ -28,6 +25,5 @@ void main()
 	gl_Position = pos; 
 
 
-	vary_fragcoord = (pos.xy*0.5+0.5)*screen_res;
-	vary_position = (vec4(1, 0, 0, 1.0)).xyz;
+	vary_fragcoord = (pos.xy*0.5+0.5);
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="material editor">
+	<string name="no_upload_fee_string">
+		Keine Upload-Geb.
+	</string>
+	<string name="upload_fee_string">
+		[FEE] L$ Upload-Geb.
+	</string>
+	<string name="material_selection_title">
+		Material-Auswahl
+	</string>
+	<string name="material_selection_text">
+		Material auswählen:
+	</string>
+	<string name="material_batch_import_text">
+		--- Alle hochladen ---
+	</string>
+	<string name="material_override_title">
+		Material bearbeiten
+	</string>
+
+	<panel name="button_panel">
+		<text name="unsaved_changes">
+			Ungespeicherte Änderungen
+		</text>
+		<button label="Speichern" name="save"/>
+		<button label="Speichern unter..." name="save_as"/>
+		<text name="total_upload_fee">
+			Gesamte Upload-Gebühr: [FEE] L$
+		</text>
+		<button label="Abbrechen" name="cancel"/>
+	</panel>
+</floater>

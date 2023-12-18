@@ -165,7 +165,6 @@
 			</panel>
 			<panel name="P_DoF_Settings">
 				<check_box label="Abilita Profondità di Campo (PdC)" name="UseDepthofField" tool_tip="In fotografia, la profondità di campo rappresenta la zona in cui gli oggetti nell'immagine appaiono ancora nitidi e sufficientemente focalizzati, nonostante il piano a fuoco sia uno soltanto (Wikipedia). Se spento aumenta il framerate. Se non riesci ad abilitare questa funzione o non ne vedi l'effetto, assicurati che sia attiva la funzione 'Illuminazione Avanzata' nella scheda 'Luce'."/>
-				<check_box label="Abilita PdC sott'acqua" tool_tip="Normalmente la profondità di campo è disattivata sott'acqua. Può essere necessario rimettere a fuoco manualmente gli oggetti con Alt-Clic quando si è sott'acqua." name="UseDoFUnderwater"/>
 				<check_box label="La messa a fuoco segue il cursore" name="FSFocusPointFollowsPointer" tool_tip="La messa a fuoco della profondità di campo (PdC) seguirà il tuo mouse, questo comportamento corrisponde a quello visto quando si utilizza flycam. Utilizzare in combinazione con il blocco della messa a fuoco PdC." />
 				<check_box label="Mostra angolo di vista sullo schermo" tool_tip="Mostra sullo schermo il campo di vista verticale della camera. Nel viewer è possibile cambiare la lunghezza focale dell'obiettivo come nella realtà. Una lunghezza focale maggiore corrisponde ad una lente più lunga. Una focale di 50mm ha un angolo di 27 gradi. Per regolare la focale spostare il cursore qui sotto. Vedi su https://it.wikipedia.org/wiki/Angolo_di_campo una tabella che mostra la relazione tra angolo di campo e lunghezza focale (mm). SPEGNERE PRIMA DI SCATTARE FOTOGRAFIE PER NON VEDERLO NELL'IMMAGINE." name="MIC_Show_FOV"/>
 			</panel>
@@ -468,7 +467,6 @@
 						<panel name="P_Misc_Settings">
 							<check_box label="Clic sull'avatar mantiene posizione cam" name="clickonavatarkeepscamera" tool_tip="Normalmente, cliccando sul tuo avatar la posizione della camera si resetta, spuntando questa opzione, si annulla tale effetto."/>
 							<check_box label="Ripristina cam dopo teleport (in regione)" name="FSResetCameraOnTP" tool_tip="Normalmente, la posizione della cam viene resettata quando ci si teletrasporta, togliendo la spunta da questa opzione, si annulla tale effetto."/>
-							<check_box label="Disabilita distanza minima zoom" name="disableminzoomdist" tool_tip="Disabilita i limiti sulla distanza minima da un oggetto a cui la camera può arrivare."/>
 							<check_box label="Permetti movimento senza limiti" name="ignorecameraconstraints" tool_tip="Ignora la 'spinta' che il simulatore applica alla camera per tenerla fuori dagli oggetti. RICHIEDE RIAVVIO."/>
 							<check_box label="Ripristina cam quando l'avatar si muove" name="resetcamerapositiononmovement" tool_tip="Ripristina la camera alla posizione predefinita quando l'avatar si muove."/>
 						</panel>

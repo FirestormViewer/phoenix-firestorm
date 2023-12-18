@@ -22,6 +22,7 @@
 	<menu_item_call label="Neues Skript" name="New Script"/>
 	<menu_item_call label="Neue Notizkarte" name="New Note"/>
 	<menu_item_call label="Neue Geste" name="New Gesture"/>
+	<menu_item_call label="Neues Material" name="New Material"/>
 	<menu label="Neue Kleider" name="New Clothes">
 		<menu_item_call label="Neues Hemd" name="New Shirt"/>
 		<menu_item_call label="Neue Hose" name="New Pants"/>
@@ -53,6 +54,7 @@
 		<menu_item_call label="Hochgeladene Sounds" name="Sound uploads"/>
 		<menu_item_call label="Hochgeladene Animationen" name="Animation uploads"/>
 		<menu_item_call label="Hochgeladene Modelle" name="Model uploads"/>
+		<menu_item_call label="Hochgeladene PBR-Materialien" name="PBR uploads"/>
 	</menu>
 	<menu_item_call label="Als Favoriten-Ordner verwenden" name="Set Favorites folder"/>
 	<menu_item_call label="Favoriten-Ordner zurücksetzen" name="Reset Favorites folder"/>
@@ -103,6 +105,7 @@
 	<menu_item_call label="Neuen Ordner aus Auswahl erstellen" name="New folder from selected"/>
 	<menu_item_call label="Gruppierung durch den Ordner aufheben" name="Ungroup folder items"/>
 	<menu_item_call label="Konferenz-Chat starten" name="Conference Chat Folder"/>
+	<menu_item_call label="Abspielen" name="PlayGesture"/>
 	<menu_item_call label="Wiedergeben/Abspielen" name="Sound Play"/>
 	<menu_item_call label="SLurl kopieren" name="url_copy"/>
 	<menu_item_call label="Landmarken-Info" name="About Landmark"/>

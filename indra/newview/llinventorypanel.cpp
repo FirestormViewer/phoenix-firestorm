@@ -1037,10 +1037,12 @@ LLFolderViewFolder * LLInventoryPanel::createFolderViewFolder(LLInvFVBridge * br
 	//	params.tool_tip = params.name; // <ND/> Don't bother with tooltips in inventory
     params.allow_drop = allow_drop;
 
-	params.font_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultColor);
-	params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultHighlightColor);
-
 	// <FS:Ansariel> Inventory specials
+	//params.font_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultColor);
+	//params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultHighlightColor);
+	params.font_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultColor));
+	params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultHighlightColor));
+	
 	params.for_inventory = true;
 
 	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::getInstance()->mSettingGroups["config"], "FSFolderViewItemHeight");
@@ -1063,10 +1065,12 @@ LLFolderViewItem * LLInventoryPanel::createFolderViewItem(LLInvFVBridge * bridge
 	params.rect = LLRect (0, 0, 0, 0);
 	//	params.tool_tip = params.name; // <ND/> Don't bother with tooltips in inventory
 
-	params.font_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultColor);
-	params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultHighlightColor);
-
 	// <FS:Ansariel> Inventory specials
+	//params.font_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultColor);
+	//params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : sDefaultHighlightColor);
+	params.font_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultColor));
+	params.font_highlight_color = (bridge->isLibraryItem() ? sLibraryColor : (bridge->isLink() ? sLinkColor : sDefaultHighlightColor));
+
 	params.for_inventory = true;
 
 	static LLCachedControl<S32> fsFolderViewItemHeight(*LLUI::getInstance()->mSettingGroups["config"], "FSFolderViewItemHeight");
@@ -1461,14 +1465,62 @@ BOOL LLInventoryPanel::handleHover(S32 x, S32 y, MASK mask)
 
 BOOL LLInventoryPanel::handleToolTip(S32 x, S32 y, MASK mask)
 {
+	// <FS:Ansariel> FIRE-33356: Option to turn off thumbnail tooltips
+	static LLCachedControl<bool> showInventoryThumbnailTooltips(gSavedSettings, "FSShowInventoryThumbnailTooltips");
+	if (!showInventoryThumbnailTooltips)
+		return LLPanel::handleToolTip(x, y, mask);
+	// </FS:Ansariel>
+
+	// <FS:Ansariel> FIRE-33285: Explicit timeout for inventory thumbnail tooltips
+	static LLCachedControl<F32> inventoryThumbnailTooltipsDelay(gSavedSettings, "FSInventoryThumbnailTooltipsDelay");
+	static LLCachedControl<F32> tooltip_fast_delay(gSavedSettings, "ToolTipFastDelay");
+	F32 tooltipDelay = LLToolTipMgr::instance().toolTipVisible() ? tooltip_fast_delay() : inventoryThumbnailTooltipsDelay();
+	// </FS:Ansariel>
+
 	if (const LLFolderViewItem* hover_item_p = (!mFolderRoot.isDead()) ? mFolderRoot.get()->getHoveredItem() : nullptr)
 	{
 		if (const LLFolderViewModelItemInventory* vm_item_p = static_cast<const LLFolderViewModelItemInventory*>(hover_item_p->getViewModelItem()))
 		{
             LLSD params;
             params["inv_type"] = vm_item_p->getInventoryType();
-            params["thumbnail_id"] = vm_item_p->getThumbnailUUID();
+            //params["thumbnail_id"] = vm_item_p->getThumbnailUUID();
             params["item_id"] = vm_item_p->getUUID();
+
+			// <FS:Ansariel> FIRE-33423: Only show tooltip for inventory items with thumbnail or if it exceeds the width of the window
+			// This is more or less copied from LLInspectTextureUtil::createInventoryToolTip
+			LLUUID thumbnailUUID = vm_item_p->getThumbnailUUID();
+			if (thumbnailUUID.isNull() && vm_item_p->getInventoryType() == LLInventoryType::IT_CATEGORY)
+			{
+				LLViewerInventoryCategory* cat = static_cast<LLViewerInventoryCategory*>(vm_item_p->getInventoryObject());
+				if (cat && cat->getPreferredType() == LLFolderType::FT_OUTFIT)
+				{
+					LLInventoryModel::cat_array_t cats;
+					LLInventoryModel::item_array_t items;
+					// Not LLIsOfAssetType, because we allow links
+					LLIsTextureType f;
+					gInventory.getDirectDescendentsOf(vm_item_p->getUUID(), cats, items, f);
+
+					// Exactly one texture found => show the texture tooltip
+					if (1 == items.size())
+					{
+						LLViewerInventoryItem* item = items.front();
+						if (item && item->getIsLinkType())
+						{
+							item = item->getLinkedItem();
+						}
+						if (item)
+						{
+							thumbnailUUID = item->getAssetUUID();
+						}
+					}
+				}
+			}
+			
+			if (thumbnailUUID.isNull())
+				return LLPanel::handleToolTip(x, y, mask);
+			else
+				params["thumbnail_id"] = thumbnailUUID;
+			// </FS:Ansariel>
 
             // tooltip should only show over folder, but screen
             // rect includes items under folder as well
@@ -1481,7 +1533,9 @@ BOOL LLInventoryPanel::handleToolTip(S32 x, S32 y, MASK mask)
 			LLToolTipMgr::instance().show(LLToolTip::Params()
 					.message(hover_item_p->getToolTip())
 					.sticky_rect(actionable_rect)
-					.delay_time(LLView::getTooltipTimeout())
+					// <FS:Ansariel> FIRE-33285: Explicit timeout for inventory thumbnail tooltips
+					//.delay_time(LLView::getTooltipTimeout())
+					.delay_time(tooltipDelay)
 					.create_callback(boost::bind(&LLInspectTextureUtil::createInventoryToolTip, _1))
 					.create_params(params));
 			return TRUE;
@@ -1545,45 +1599,6 @@ void LLInventoryPanel::onFocusReceived()
 {
 	// inventory now handles cut/copy/paste/delete
 	LLEditMenuHandler::gEditMenuHandler = mFolderRoot.get();
-
-    // Tab support, when tabbing into this view, select first item
-    // (ideally needs to account for scroll)
-    bool select_first = mSelectThisID.isNull() && mFolderRoot.get() && mFolderRoot.get()->getSelectedCount() == 0;
-
-    if (select_first)
-    {
-        LLFolderViewFolder::folders_t::const_iterator folders_it = mFolderRoot.get()->getFoldersBegin();
-        LLFolderViewFolder::folders_t::const_iterator folders_end = mFolderRoot.get()->getFoldersEnd();
-
-        for (; folders_it != folders_end; ++folders_it)
-        {
-            const LLFolderViewFolder* folder_view = *folders_it;
-            if (folder_view->getVisible())
-            {
-                const LLFolderViewModelItemInventory* modelp = static_cast<const LLFolderViewModelItemInventory*>(folder_view->getViewModelItem());
-                setSelectionByID(modelp->getUUID(), TRUE);
-                select_first = false;
-                break;
-            }
-        }
-    }
-
-    if (select_first)
-    {
-        LLFolderViewFolder::items_t::const_iterator items_it = mFolderRoot.get()->getItemsBegin();
-        LLFolderViewFolder::items_t::const_iterator items_end = mFolderRoot.get()->getItemsEnd();
-
-        for (; items_it != items_end; ++items_it)
-        {
-            const LLFolderViewItem* item_view = *items_it;
-            if (item_view->getVisible())
-            {
-                const LLFolderViewModelItemInventory* modelp = static_cast<const LLFolderViewModelItemInventory*>(item_view->getViewModelItem());
-                setSelectionByID(modelp->getUUID(), TRUE);
-                break;
-            }
-        }
-    }
 
 	LLPanel::onFocusReceived();
 }
@@ -1927,6 +1942,10 @@ void LLInventoryPanel::fileUploadLocation(const LLSD& userdata)
     else if (param == "animation")
     {
         gSavedPerAccountSettings.setString("AnimationUploadFolder", LLFolderBridge::sSelf.get()->getUUID().asString());
+    }
+    else if (param == "pbr_material")
+    {
+        gSavedPerAccountSettings.setString("PBRUploadFolder", LLFolderBridge::sSelf.get()->getUUID().asString());
     }
 }
 
@@ -2519,6 +2538,53 @@ void LLInventorySingleFolderPanel::initFromParams(const Params& p)
     LLPanel::initFromParams(mParams);
 }
 
+void LLInventorySingleFolderPanel::onFocusReceived()
+{
+    // Tab support, when tabbing into this view, select first item
+    // (ideally needs to account for scroll)
+    bool select_first = mSelectThisID.isNull() && mFolderRoot.get() && mFolderRoot.get()->getSelectedCount() == 0;
+
+    if (select_first)
+    {
+        LLFolderViewFolder::folders_t::const_iterator folders_it = mFolderRoot.get()->getFoldersBegin();
+        LLFolderViewFolder::folders_t::const_iterator folders_end = mFolderRoot.get()->getFoldersEnd();
+
+        for (; folders_it != folders_end; ++folders_it)
+        {
+            const LLFolderViewFolder* folder_view = *folders_it;
+            if (folder_view->getVisible())
+            {
+                const LLFolderViewModelItemInventory* modelp = static_cast<const LLFolderViewModelItemInventory*>(folder_view->getViewModelItem());
+                setSelectionByID(modelp->getUUID(), TRUE);
+                // quick and dirty fix: don't scroll on switching focus
+                // todo: better 'tab' support, one that would work for LLInventoryPanel
+                mFolderRoot.get()->stopAutoScollining();
+                select_first = false;
+                break;
+            }
+        }
+    }
+
+    if (select_first)
+    {
+        LLFolderViewFolder::items_t::const_iterator items_it = mFolderRoot.get()->getItemsBegin();
+        LLFolderViewFolder::items_t::const_iterator items_end = mFolderRoot.get()->getItemsEnd();
+
+        for (; items_it != items_end; ++items_it)
+        {
+            const LLFolderViewItem* item_view = *items_it;
+            if (item_view->getVisible())
+            {
+                const LLFolderViewModelItemInventory* modelp = static_cast<const LLFolderViewModelItemInventory*>(item_view->getViewModelItem());
+                setSelectionByID(modelp->getUUID(), TRUE);
+                mFolderRoot.get()->stopAutoScollining();
+                break;
+            }
+        }
+    }
+    LLInventoryPanel::onFocusReceived();
+}
+
 void LLInventorySingleFolderPanel::initFolderRoot(const LLUUID& start_folder_id)
 {
     if(mRootInited) return;
@@ -2686,14 +2752,49 @@ void LLInventorySingleFolderPanel::doShare()
 
 LLAssetFilteredInventoryPanel::LLAssetFilteredInventoryPanel(const Params& p)
     : LLInventoryPanel(p)
-    , mAssetType(LLAssetType::AT_NONE)
 {
 }
 
 
 void LLAssetFilteredInventoryPanel::initFromParams(const Params& p)
 {
-    mAssetType = LLAssetType::lookup(p.filter_asset_type.getValue());
+    // Init asset types
+    std::string types = p.filter_asset_types.getValue();
+
+    typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+    boost::char_separator<char> sep("|");
+    tokenizer tokens(types, sep);
+    tokenizer::iterator token_iter = tokens.begin();
+
+    memset(mAssetTypes, 0, LLAssetType::AT_COUNT * sizeof(bool));
+    while (token_iter != tokens.end())
+    {
+        const std::string& token_str = *token_iter;
+        LLAssetType::EType asset_type = LLAssetType::lookup(token_str);
+        if (asset_type > LLAssetType::AT_NONE && asset_type < LLAssetType::AT_COUNT)
+        {
+            mAssetTypes[asset_type] = true;
+        }
+        ++token_iter;
+    }
+
+    // Init drag types
+    memset(mDragTypes, 0, EDragAndDropType::DAD_COUNT * sizeof(bool));
+    for (S32 i = 0; i < LLAssetType::AT_COUNT; i++)
+    {
+        if (mAssetTypes[i])
+        {
+            EDragAndDropType drag_type = LLViewerAssetType::lookupDragAndDropType((LLAssetType::EType)i);
+            if (drag_type != DAD_NONE)
+            {
+                mDragTypes[drag_type] = true;
+            }
+        }
+    }
+    // Always show AT_CATEGORY, but it shouldn't get into mDragTypes
+    mAssetTypes[LLAssetType::AT_CATEGORY] = true;
+
+    // Init the panel
     LLInventoryPanel::initFromParams(p);
     U64 filter_cats = getFilter().getFilterCategoryTypes();
     filter_cats &= ~(1ULL << LLFolderType::FT_MARKETPLACE_LISTINGS);
@@ -2711,10 +2812,9 @@ BOOL LLAssetFilteredInventoryPanel::handleDragAndDrop(S32 x, S32 y, MASK mask, B
 
     if (mAcceptsDragAndDrop)
     {
-        EDragAndDropType allow_type = LLViewerAssetType::lookupDragAndDropType(mAssetType);
         // Don't allow DAD_CATEGORY here since it can contain other items besides required assets
         // We should see everything we drop!
-        if (allow_type == cargo_type)
+        if (mDragTypes[cargo_type])
         {
             result = LLInventoryPanel::handleDragAndDrop(x, y, mask, drop, cargo_type, cargo_data, accept, tooltip_msg);
         }
@@ -2730,8 +2830,14 @@ bool LLAssetFilteredInventoryPanel::typedViewsFilter(const LLUUID& id, LLInvento
     {
         return false;
     }
+    LLAssetType::EType asset_type = objectp->getType();
 
-    if (objectp->getType() != mAssetType && objectp->getType() != LLAssetType::AT_CATEGORY)
+    if (asset_type < 0 || asset_type >= LLAssetType::AT_COUNT)
+    {
+        return false;
+    }
+
+    if (!mAssetTypes[asset_type])
     {
         return false;
     }
@@ -2747,11 +2853,16 @@ void LLAssetFilteredInventoryPanel::itemChanged(const LLUUID& id, U32 mask, cons
         return;
     }
 
-    if (model_item
-        && model_item->getType() != mAssetType
-        && model_item->getType() != LLAssetType::AT_CATEGORY)
+    if (model_item)
     {
-        return;
+        LLAssetType::EType asset_type = model_item->getType();
+
+        if (asset_type < 0
+            || asset_type >= LLAssetType::AT_COUNT
+            || !mAssetTypes[asset_type])
+        {
+            return;
+        }
     }
 
     LLInventoryPanel::itemChanged(id, mask, model_item);
@@ -2814,6 +2925,7 @@ namespace LLInitParam
 		declare(LLFolderType::lookup(LLFolderType::FT_OUTBOX)           , LLFolderType::FT_OUTBOX);
 		declare(LLFolderType::lookup(LLFolderType::FT_BASIC_ROOT)       , LLFolderType::FT_BASIC_ROOT);
         declare(LLFolderType::lookup(LLFolderType::FT_SETTINGS)         , LLFolderType::FT_SETTINGS);
+        declare(LLFolderType::lookup(LLFolderType::FT_MATERIAL)         , LLFolderType::FT_MATERIAL);
 		declare(LLFolderType::lookup(LLFolderType::FT_MARKETPLACE_LISTINGS)   , LLFolderType::FT_MARKETPLACE_LISTINGS);
 		declare(LLFolderType::lookup(LLFolderType::FT_MARKETPLACE_STOCK), LLFolderType::FT_MARKETPLACE_STOCK);
 		declare(LLFolderType::lookup(LLFolderType::FT_MARKETPLACE_VERSION), LLFolderType::FT_MARKETPLACE_VERSION);

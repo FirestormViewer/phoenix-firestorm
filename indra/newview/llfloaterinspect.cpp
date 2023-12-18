@@ -572,26 +572,21 @@ void LLFloaterInspect::refresh()
 
 			attachment_volume_cost += volume->getRenderCost(textures);
 
-			LLViewerObject::const_child_list_t children = volume->getChildren();
-			for (LLViewerObject::const_child_list_t::const_iterator child_iter = children.begin();
-				child_iter != children.end();
-				++child_iter)
+			for (const auto& child_obj : volume->getChildren())
 			{
-				LLViewerObject* child_obj = *child_iter;
-				LLVOVolume *child = dynamic_cast<LLVOVolume*>(child_obj);
+				LLVOVolume *child = dynamic_cast<LLVOVolume*>(child_obj.get());
 				if (child)
 				{
 					attachment_children_cost += child->getRenderCost(textures);
 				}
 			}
 
-			for (LLVOVolume::texture_cost_t::iterator volume_texture = textures.begin();
-				volume_texture != textures.end();
-				++volume_texture)
+			for (auto texture : textures)
 			{
 				// add the cost of each individual texture in the linkset
-				attachment_texture_cost += volume_texture->second;
+				attachment_texture_cost += LLVOVolume::getTextureCost(texture);
 			}
+
 			attachment_total_cost = attachment_volume_cost + attachment_texture_cost + attachment_children_cost;
 
 			// Limit attachment complexity to avoid signed integer flipping of the wearer's ACI

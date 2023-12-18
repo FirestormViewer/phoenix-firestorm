@@ -141,7 +141,6 @@
 #include "llfloatertelehub.h"
 #include "llfloatertestinspectors.h"
 #include "llfloatertestlistview.h"
-#include "llfloatertexturefetchdebugger.h"
 #include "llfloatertools.h"
 #include "llfloatertopobjects.h"
 #include "llfloatertos.h"
@@ -160,6 +159,7 @@
 #include "llinspectobject.h"
 #include "llinspectremoteobject.h"
 #include "llinspecttoast.h"
+#include "llmaterialeditor.h"
 #include "llmoveview.h"
 // <FS:Ansariel> [FS communication UI]
 //#include "llfloaterimnearbychat.h
@@ -223,6 +223,7 @@
 #include "llfloaterscriptrecover.h"
 #include "llfloatersearchreplace.h"
 #include "llpanelgroup.h"
+#include "llsidepanelinventory.h"
 #include "NACLfloaterexploresounds.h"
 #include "particleeditor.h"
 #include "quickprefs.h"
@@ -250,7 +251,11 @@ public:
         
         std::string fl_name = params[0].asString();
 
-        if (nav_type == NAV_TYPE_CLICKED)
+        // External browsers explicitly ask user about opening links
+        // so treat "external" same as "clicked" in this case,
+        // despite it being treated as untrusted.
+        if (nav_type == NAV_TYPE_CLICKED
+            || nav_type == NAV_TYPE_EXTERNAL)
         {
             const std::list<std::string> blacklist_clicked = {
                 "camera_presets",
@@ -472,10 +477,6 @@ void LLViewerFloaterReg::registerFloaters()
 	
 	LLFloaterReg::add("mem_leaking", "floater_mem_leaking.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterMemLeak>);
 
-	if(gSavedSettings.getBOOL("TextureFetchDebuggerEnabled"))
-	{
-		LLFloaterReg::add("tex_fetch_debugger", "floater_texture_fetch_debugger.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterTextureFetchDebugger>);
-	}
 	LLFloaterReg::add("media_settings", "floater_media_settings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterMediaSettings>);	
 	LLFloaterReg::add("marketplace_listings", "floater_marketplace_listings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterMarketplaceListings>);
 	LLFloaterReg::add("marketplace_validation", "floater_marketplace_validation.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterMarketplaceValidation>);
@@ -536,6 +537,9 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("save_camera_preset", "floater_save_camera_preset.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSaveCameraPreset>);
 	LLFloaterReg::add("script_colors", "floater_script_ed_prefs.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterScriptEdPrefs>);
 
+    LLFloaterReg::add("material_editor", "floater_material_editor.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLMaterialEditor>);
+    LLFloaterReg::add("live_material_editor", "floater_live_material_editor.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLMaterialEditor>);
+    
 	LLFloaterReg::add("telehubs", "floater_telehub.xml",&LLFloaterReg::build<LLFloaterTelehub>);
 	LLFloaterReg::add("test_inspectors", "floater_test_inspectors.xml", &LLFloaterReg::build<LLFloaterTestInspectors>);
 	//LLFloaterReg::add("test_list_view", "floater_test_list_view.xml",&LLFloaterReg::build<LLFloaterTestListView>);
@@ -637,10 +641,10 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("quickprefs", "floater_quickprefs.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);
 	LLFloaterReg::add("region_tracker", "floater_region_tracker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<ALFloaterRegionTracker>);
 	LLFloaterReg::add("search_replace", "floater_search_replace.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSearchReplace>);
-	LLFloaterReg::add("secondary_inventory", "floater_my_inventory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSidePanelContainer>);
+	LLFloaterReg::add("secondary_inventory", "floater_my_inventory.xml", (LLFloaterBuildFunc)&LLSidepanelInventory::createSecondaryInventoryWindow);
 	LLFloaterReg::add("script_recover", "floater_script_recover.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterScriptRecover>);
 	LLFloaterReg::add("sound_explorer", "floater_NACL_explore_sounds.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<NACLFloaterExploreSounds>);
-	LLFloaterReg::add("vram_usage", "floater_fs_vram_usage.xml", static_cast<LLFloaterBuildFunc>( &LLFloaterReg::build< FSFloaterVRAMUsage >) );
+	LLFloaterReg::add("vram_usage", "floater_fs_vram_usage.xml", static_cast<LLFloaterBuildFunc>(&LLFloaterReg::build<FSFloaterVRAMUsage>));
 	LLFloaterReg::add("local_mesh_floater", "floater_vj_local_mesh.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterLocalMesh>); // local mesh
 
 	LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving

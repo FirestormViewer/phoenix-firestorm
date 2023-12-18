@@ -165,7 +165,6 @@
 			</panel>
 			<panel name="P_DoF_Settings">
 				<check_box label="Włącz głębię ostrości" name="UseDepthofField" tool_tip="Ta opcja włączy głębię ostrości, która służy do 'określania zakresu odległości, w którym obiekty obserwowane przez urządzenie optyczne sprawiają wrażenie ostrych' (Wikipedia). Jeśli nie korzystasz z tej funkcji - wyłącz ją, przyspieszy to wyświetlanie obrazu. Jeśli nie możesz włączyć tej funkcji lub zobaczyć żadnego z jej efektów włącz 'Zaawansowane oświetlenie' w karcie 'Światła'."/>
-				<check_box label="Włącz również pod wodą" tool_tip="Domyślnie głębia ostrości jest wyłączona pod wodą nawet z opcją powyżej zaznaczoną jako włączoną. To ustawienie usuwa to ograniczenie. Pamiętaj, że prawdopodobnie będzie trzeba ręcznie ustawiać punkt skupienia Twojej kamery na obserwowanych obiektach pod wodą za pomocą klikania na nich z klawiszem ALT." name="UseDoFUnderwater"/>
 				<check_box label="Głębia ostrości podąża za kursorem" name="FSFocusPointFollowsPointer" tool_tip="Głębia ostrości (DoF) będzie podążać za kursorem myszy - to zachowanie jest zgodne z tym, co widać podczas korzystania z Flycam. Używaj w połączeniu z blokadą ostrości DoF." />
 				<check_box label="Pokazuj pole widzenia w przeglądarce" name="MIC_Show_FOV" tool_tip="Ta opcja pokazuje pionowe pole widzenia kamery. W SL jest możliwe, aby zmienić długość ogniskowej tak, jak w realnym życiu - im mniejsze pole widzenia, tym większa ogniskowa obiektywu. Ogniskowa 50mm ma pole widzenia 27.0 stopni. Aby ustawić pole widzenia użyj suwaka poniżej. Zobacz: 'pl.wikipedia.org/wiki/Kąt_widzenia', aby wyświetlić tabelkę prezentującą stosunek pomiędzy polem widzenia, a ogniskową (mm). WYŁĄCZ TĘ FUNKCJĘ PRZED ROBIENIEM ZDJĘĆ, ALBO BĘDZIE ONA WIDOCZNA NA OBRAZIE!"/>
 			</panel>
@@ -468,7 +467,6 @@
 						<panel name="P_Misc_Settings">
 							<check_box label="Nie resetuj kamery, gdy kliknę na awatara" name="clickonavatarkeepscamera" tool_tip="Normalnie gdy klikniesz na swojego awatara pozycja kamery ulega zresetowaniu. Ta opcja usuwa to zachowanie."/>
 							<check_box label="Resetuj pozycję kamery po teleportacji" name="FSResetCameraOnTP" tool_tip="Normalnie pozycja kamery ulega zresetowaniu po teleportacji. Ta opcja zapobiega temu zachowaniu."/>
-							<check_box label="Wyłącz minimalną odl. przybliżenia" name="disableminzoomdist" tool_tip="Wyłącz ograniczenie w przybliżaniu obiektów."/>
 							<check_box label="Przenikaj przez primy bez ograniczeń" name="ignorecameraconstraints" tool_tip="Ignoruje 'pchnięcie' stosowane przez symulator, aby utrzymać kamerę na zewnątrz obiektów. WYMAGA RESTARTU!"/>
 							<check_box label="Resetuj pozycję kamery przy poruszaniu się" name="resetcamerapositiononmovement" tool_tip="Resetuje pozycję kamery do domyślnej pozycji, gdy poruszysz awatarem."/>
 						</panel>

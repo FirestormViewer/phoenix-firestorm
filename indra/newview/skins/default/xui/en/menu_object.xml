@@ -22,6 +22,14 @@
         function="EnableEdit"/>
   </menu_item_call>
   <menu_item_call
+      label="Edit PBR Material"
+      name="EditGLTFMaterial">
+    <menu_item_call.on_click
+        function="Object.EditGLTFMaterial" />
+    <menu_item_call.on_enable
+        function="Object.EnableEditGLTFMaterial"/>
+  </menu_item_call>
+  <menu_item_call
       label="Build"
       name="Build">
     <menu_item_call.on_click
@@ -29,7 +37,6 @@
     <menu_item_call.on_enable
         function="EnableEdit"/>
   </menu_item_call>
-
   <menu_item_call
       enabled="false"
       label="Open"
@@ -39,11 +46,9 @@
     <menu_item_call.on_enable
         function="Object.EnableOpen" />
   </menu_item_call>
-
-<menu_item_separator layout="topleft" />
+  <menu_item_separator layout="topleft" />
   <menu_item_call
-      enabled="false"
-      label="Sit Here"
+      label="Sit here"
       name="Object Sit">
     <menu_item_call.on_click
         function="Object.SitOrStand" />
@@ -52,8 +57,7 @@
   </menu_item_call>
 <menu_item_separator layout="topleft" />
   <menu_item_call
-      enabled="false"
-      label="Stand Up"
+      label="Stand up"
       name="Object Stand Up">
     <menu_item_call.on_click
         function="Object.SitOrStand" />
@@ -169,13 +173,13 @@
          </menu_item_call>
     </context_menu>
   <menu_item_call
-      label="Zoom In"
+      label="Zoom in"
       name="Zoom In">
     <menu_item_call.on_click
         function="Object.ZoomIn" />
   </menu_item_call>
   <menu_item_call
-      label="Show in linksets"
+      label="Show in Region Objects"
       name="show_in_linksets">
     <menu_item_call.on_click
         function="Pathfinding.Linksets.Select" />
@@ -196,7 +200,7 @@
   </menu_item_call>
   <menu_item_separator layout="topleft" />
   <context_menu
-      label="Put On"
+      label="Put on"
       name="Put On" >
     <menu_item_call
         enabled="false"
@@ -297,7 +301,7 @@
   </menu_item_call>
   <menu_item_call
       enabled="false"
-      label="Take Copy"
+      label="Take copy"
       name="Take Copy">
     <menu_item_call.on_click
         function="Tools.TakeCopy" />

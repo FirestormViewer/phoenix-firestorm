@@ -23,7 +23,12 @@
 	<panel.string
 	name="ItemcountUnknown">
 	Fetched [ITEM_COUNT] Elements [FILTER]
-  </panel.string>
+	</panel.string>
+
+	<!-- Inventory view modes -->
+	<panel.string name="inventory_title">Inventory</panel.string>
+	<panel.string name="default_mode_btn">Multi_Folder_Mode</panel.string>
+	<panel.string name="single_folder_mode_btn">Single_Folder_Mode</panel.string>
 
 	<menu_bar
 		follows="left|top"
@@ -75,6 +80,63 @@
 			<menu_item_check.on_click
 				function="Floater.Toggle"
 				parameter="fs_protectedfolders" />
+		</menu_item_check>
+		<menu_item_check
+			label="Inventory settings..."
+			name="inv_settings">
+		<menu_item_check.on_check
+			function="Floater.Visible"
+			parameter="inventory_settings" />
+		<menu_item_check.on_click
+			function="Floater.Toggle"
+			parameter="inventory_settings" />
+		</menu_item_check>
+		<menu_item_separator>
+		<menu_item_separator.on_visible
+			function="Inventory.GearDefault.Visible"
+			parameter="single_folder_view" />
+		</menu_item_separator>
+		<menu_item_check
+			label="List view"
+			layout="topleft"
+			name="list_view">
+			<on_click
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="list_view" />
+			<on_check
+				function="Inventory.GearDefault.Check"
+				parameter="list_view" />
+			<on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="single_folder_view" />
+		</menu_item_check>
+		<menu_item_check
+			label="Gallery view"
+			layout="topleft"
+			name="gallery_view">
+			<on_click
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="gallery_view" />
+			<on_check
+				function="Inventory.GearDefault.Check"
+				parameter="gallery_view" />
+			<on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="single_folder_view" />
+		</menu_item_check>
+		<menu_item_check
+			label="Combination view"
+			layout="topleft"
+			name="combination_view">
+			<on_click
+				function="Inventory.GearDefault.Custom.Action"
+				parameter="combination_view" />
+			<on_check
+				function="Inventory.GearDefault.Check"
+				parameter="combination_view" />
+			<on_visible
+				function="Inventory.GearDefault.Visible"
+				parameter="single_folder_view" />
 		</menu_item_check>
 		<menu_item_separator />
 		<menu_item_check
@@ -156,6 +218,13 @@
 			<menu_item_call.on_click
 				function="Inventory.DoCreate"
 				parameter="gesture" />
+		</menu_item_call>
+		<menu_item_call
+			name="inventory_new_material"
+			label="New Material">
+			<menu_item_call.on_click
+				function="Inventory.DoCreate"
+				parameter="material" />
 		</menu_item_call>
 		<menu
 			name="inventory_new_clothes"
@@ -371,6 +440,60 @@
 		name="inventory_search_menu"
 		tear_off="true"
 		top="0">
+
+		<!-- search visibility settings -->
+		<menu_item_check
+			label="Search outfit folders"
+			layout="topleft"
+			name="search_outfits">
+		<on_click
+			function="Inventory.GearDefault.Custom.Action"
+			parameter="toggle_search_outfits" />
+		<on_check
+			function="Inventory.GearDefault.Check"
+			parameter="toggle_search_outfits" />
+		</menu_item_check>
+		<menu_item_check
+			label="Search Trash"
+			layout="topleft"
+			name="search_trash">
+		<on_click
+			function="Inventory.GearDefault.Custom.Action"
+			parameter="toggle_search_trash" />
+		<on_check
+			function="Inventory.GearDefault.Check"
+			parameter="toggle_search_trash" />
+		</menu_item_check>
+		<menu_item_check
+			label="Search Library"
+			layout="topleft"
+			name="search_library">
+		<on_click
+			function="Inventory.GearDefault.Custom.Action"
+			parameter="toggle_search_library" />
+		<on_check
+			function="Inventory.GearDefault.Check"
+			parameter="toggle_search_library" />
+		</menu_item_check>
+
+		<!-- this is already in our menu, further down
+		<menu_item_separator
+			layout="topleft" />
+		<menu_item_check
+			label="Include links"
+			layout="topleft"
+			name="include_links">
+		<on_click
+			function="Inventory.GearDefault.Custom.Action"
+			parameter="include_links" />
+		<on_check
+			function="Inventory.GearDefault.Check"
+			parameter="include_links" />
+		</menu_item_check>
+		-->
+
+		<menu_item_separator />
+
 		<menu_item_check
 			name="inventory_search_by_name"
 			label="By Name">
@@ -501,6 +624,78 @@
 
 	</menu_bar>
 
+	<layout_stack
+		follows="left|top|right"
+		height="22"
+		animate="false"
+		top_pad="0"
+		layout="topleft"
+		left="0"
+		name="nav_stack"
+		width="330"
+		orientation="horizontal">
+
+	<layout_panel
+		border="false"
+		bevel_style="in"
+		user_resize="false"
+		auto_resize="false"
+		height="18"
+		width="50"
+		name="nav_buttons"
+		visible="false">
+
+	<button
+		follows="top|left"
+		height="16"
+		image_selected="Single_Folder_Back"
+		image_pressed="Single_Folder_Back"
+		image_unselected="Single_Folder_Back"
+		scale_image="false"
+		layout="topleft"
+		left="0"
+		top="2"
+		name="back_btn"
+		tool_tip="Back"
+		width="16" />
+
+	<button
+		follows="top|left"
+		height="16"
+		image_selected="Single_Folder_Forward"
+		image_pressed="Single_Folder_Forward"
+		image_unselected="Single_Folder_Forward"
+		scale_image="false"
+		layout="topleft"
+		left_pad="1"
+		name="forward_btn"
+		tool_tip="Forward"
+		width="16" />
+
+	<button
+		follows="top|left"
+		height="16"
+		image_selected="Single_Folder_Up"
+		image_pressed="Single_Folder_Up"
+		image_unselected="Single_Folder_Up"
+		scale_image="false"
+		layout="topleft"
+		left_pad="1"
+		name="up_btn"
+		tool_tip="Go up one level"
+		width="16" />
+
+	</layout_panel>
+
+	<layout_panel
+		border="false"
+		bevel_style="in"
+		user_resize="false"
+		height="18"
+		width="330"
+		name="filter_panel"
+		visible="true">
+
 	<filter_editor
 		text_pad_left="10"
 		follows="left|top|right"
@@ -511,7 +706,7 @@
 		max_length_chars="300"
 		highlight_text_field="true"
 		name="inventory search editor"
-		right="-1"
+		width="308"
 		tool_tip="Type in one or more words to search for, separated by '+' "
 		top_pad="4">
 		<filter_editor.clear_button
@@ -520,6 +715,23 @@
 			rect.bottom="3"
 			/>
 	</filter_editor>
+
+	<button
+		follows="top|right"
+		height="18"
+		image_hover_unselected="Toolbar_Middle_Over"
+		image_overlay="Single_Folder_Mode"
+		image_selected="Toolbar_Middle_Selected"
+		image_unselected="Toolbar_Middle_Off"
+		layout="topleft"
+		name="view_mode_btn"
+		tool_tip="Switch between views"
+		left_pad="4"
+		width="18"/>
+
+	</layout_panel>
+
+	</layout_stack>
 
 	<button
 		name="collapse_btn"
@@ -556,7 +768,7 @@
 		left_pad="4"
 		follows="top|left"
 		layout="topleft"
-		right="-34"
+		right="-1"
 		top_delta="-2">
 
 		<combo_box.item value="filter_type_all" label="All Types" />
@@ -577,6 +789,8 @@
 		<combo_box.item value="filter_separator" label="------------" enabled="false" />
 		<combo_box.item value="filter_type_custom" label="Custom..." />
 	</combo_box>
+
+	<!-- this should be in the main inventory menu instead of ading another button
 	<menu_button
 		follows="top|left"
 		tool_tip="Show search visibility options"
@@ -587,6 +801,18 @@
 		name="options_visibility_btn"
 		width="31"
 		top_delta="0"/>
+	-->
+
+	<!-- inventory display mode: default -->
+	<panel
+		follows="all"
+		halign="center"
+		height="212"
+		layout="topleft"
+		left="0"
+		right="-1"
+		name="default_inventory_panel"
+		top_pad="0">
 
 	<tab_container
 		follows="all"
@@ -637,12 +863,101 @@
 		</worn_inventory_panel>
 	</tab_container>
 
+	</panel>
+
+	<!-- inventory display mode: combination view -->
+
+	<panel
+		follows="all"
+		halign="center"
+		height="212"
+		layout="topleft"
+		left="0"
+		right="-1"
+		name="combination_view_inventory"
+		top_delta="0"
+		visible="false">
+
+		<layout_stack
+			follows="all"
+			height="212"
+			name="combination_view_stack"
+			animate="false"
+			drag_handle_thickness="6"
+			drag_handle_first_indent="18"
+			drag_handle_second_indent="18"
+			drag_handle_color="PanelGray"
+			drag_handle_shift="5"
+			layout="topleft"
+			show_drag_handle="true"
+			top="3"
+			left="3"
+			width="323"
+			orientation="vertical">
+
+			<layout_panel
+				border="false"
+				bevel_style="in"
+				user_resize="true"
+				auto_resize="true"
+				height="110"
+				min_width="150"
+				name="comb_gallery_layout">
+
+				<panel
+					class="inventory_gallery"
+					filename="panel_inventory_gallery.xml"
+					left="0"
+					top_pad="0"
+					height="110"
+					name="comb_gallery_view_inv"
+					follows="all"
+					layout="topleft" />
+
+			</layout_panel>
+
+			<layout_panel
+				border="false"
+				bevel_style="in"
+				user_resize="true"
+				auto_resize="true"
+				height="102"
+				name="comb_inventory_layout">
+
+				<single_folder_inventory_panel
+					name="comb_single_folder_inv"
+					follows="all"
+					left="0"
+					top="0"
+					height="102"
+					layout="topleft"
+					show_item_link_overlays="true"
+					border="false"
+					bevel_style="none"
+					scroll.reserve_scroll_corner="false">
+
+					<item
+						single_folder_mode="true"
+						folder_indentation="-8"/>
+
+					<folder
+						single_folder_mode="true"
+						folder_indentation="-8"/>
+
+				</single_folder_inventory_panel>
+
+			</layout_panel>
+
+		</layout_stack>
+
+	</panel>
+
 	<text
 		type="string"
 		length="1"
 		height="16"
 		layout="topleft"
-		top_pad="2"
+		top_pad="6"
 		tool_tip="[ITEMS] Items, [CATEGORIES] Folders"
 		left_delta="2"
 		name="ItemcountText"

@@ -98,7 +98,7 @@ private:
 };
 
 LLMeshFilePicker::LLMeshFilePicker(LLModelPreview* mp, S32 lod)
-: LLFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
+: LLFilePickerThread(LLFilePicker::FFLOAD_MODEL)
 	{
 		mMP = mp;
 		mLOD = lod;
@@ -148,7 +148,18 @@ mAvatarTabIndex(0)
 	mLODMode[LLModel::LOD_HIGH] = LLModelPreview::LOD_FROM_FILE;
 	for (U32 i = 0; i < LLModel::LOD_HIGH; i++)
 	{
-		mLODMode[i] = LLModelPreview::MESH_OPTIMIZER_AUTO;
+		// <FS:Beq> FIRE-32267 - Set default LOD mode to GLOD
+		// mLODMode[i] = LLModelPreview::MESH_OPTIMIZER_AUTO;
+		static LLCachedControl<bool> default_to_glod(gSavedSettings, "FSMeshUploadUseGLODAsDefault");
+		if( default_to_glod )
+		{
+		    mLODMode[i] = LLModelPreview::GENERATE;
+		}
+		else
+		{
+			mLODMode[i] = LLModelPreview::MESH_OPTIMIZER_AUTO;
+		}
+		// </FS:Beq>
 	}
 }
 
@@ -156,7 +167,7 @@ mAvatarTabIndex(0)
 //static
 void LLFloaterModelPreview::onSelectUDPhysics(LLUICtrl* ctrl, void* userdata)
 {
-	(new LLFilePickerReplyThread(boost::bind(&updateUDPhysics, _1, _2), LLFilePicker::FFLOAD_COLLADA, false))->getFile();
+	LLFilePickerReplyThread::startPicker(boost::bind(&updateUDPhysics, _1, _2), LLFilePicker::FFLOAD_COLLADA, false);
 }
 // </FS:Beq>
 
@@ -392,10 +403,10 @@ void LLFloaterModelPreview::initModelPreview()
 	S32 tex_width = 512;
 	S32 tex_height = 512;
 	// <FS:Beq> Fix up regressions from LL's merge of uploader changes
-	// S32 max_width = llmin(PREVIEW_RENDER_SIZE, (S32)gPipeline.mScreenWidth);
-	// S32 max_height = llmin(PREVIEW_RENDER_SIZE, (S32)gPipeline.mScreenHeight);
-	S32 max_width = llmin(gSavedSettings.getS32("PreviewRenderSize"), (S32)gPipeline.mScreenWidth);
-	S32 max_height = llmin(gSavedSettings.getS32("PreviewRenderSize"), (S32)gPipeline.mScreenHeight);
+	// S32 max_width = llmin(PREVIEW_RENDER_SIZE, (S32)gPipeline.mRT->width);
+	// S32 max_height = llmin(PREVIEW_RENDER_SIZE, (S32)gPipeline.mRT->height);
+	S32 max_width = llmin(gSavedSettings.getS32("PreviewRenderSize"), (S32)gPipeline.mRT->width);
+	S32 max_height = llmin(gSavedSettings.getS32("PreviewRenderSize"), (S32)gPipeline.mRT->height);
 	// </FS:Beq>
 	
 	while ((tex_width << 1) <= max_width) // <FS:Beq/> Fix up regressions from LL's merge of uploader changes

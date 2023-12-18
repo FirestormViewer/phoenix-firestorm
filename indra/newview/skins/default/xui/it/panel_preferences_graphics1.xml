@@ -2,7 +2,7 @@
 <panel label="Grafica" name="Display panel">
 	<tab_container label="Impostazioni grafiche" name="tabs">
 		<panel label="Generale" name="General">
-			<text name="preset_label" width="130">
+			<text name="preset_label">
 				Preset in uso:
 			</text>
 			<text name="QualitySpeed">
@@ -32,7 +32,6 @@
 			</text>
 			<check_box label="Acqua Trasparente" name="TransparentWater"/>
 			<check_box label="Rilievi (tex.) e brillantezza" name="BumpShiny"/>
-			<check_box label="Luci Locali" name="LocalLights"/>
 			<check_box label="Effetti grafici atmosferici" name="WindLightUseAtmosShaders"/>
 			<check_box label="Illuminazione Avanzata" name="UseLightShaders" tool_tip="Abilita la gestione avanzata delle luci"/>
 			<check_box label="Occlusione Ambiente" name="UseSSAO"/>
@@ -104,7 +103,6 @@
 		<panel label="Impostazioni Hardware" name="Hardware Settings">
 			<check_box label="Filtro Anisotropico (rallenta se attivo)" name="ani"/>
 			<check_box label="Abilita OpenGL Vertex Buffer sugli oggetti" name="vbo" tool_tip="Abilitare questo su computer con schede video di ultima generazione per aumentare le prestazioni della scheda video.  Tuttavia, gli hardware vecchi spesso hanno una scarsa implementazione dei VBOs e questo può provocare crash improvvisi quando questa opzione è abilitata."/>
-			<check_box label="Abilita Streamed VBO" name="vbo_stream" tool_tip="La disattivazione di questa opzione può migliorare le prestazioni quando le VBO sono abilitate. Disattivato mostra importanti miglioramenti su molte GPU AMD (es: Schede video ATI)."/>
 			<check_box label="Abilita compressione texture (richiede riavvio)" name="texture compression" tool_tip="Le texture vengono compresse nella memoria video, questo consente per le texture con una risoluzione alta di essere caricate più rapidamente perdendo qualità nel colore."/>
 			<check_box label="Abilita supporto display HiDPI (solo Mac OSX; richiede riavvio)" name="use HiDPI" tool_tip="Abilita OpenGL per il disegno ad alta risoluzione." />
 			<text name="Antialiasing:">
@@ -123,7 +121,6 @@
 			<slider label="Riserva aggiuntiva memoria cache texture (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="La percentuale di memoria video fisica riservata alle texture caricate nella cache che attualmente non vengono visualizzate." />
 			<slider label="Riserva di memoria video fisica (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="La percentuale di memoria video fisica riservata per altri usi." />
 			<spinner label="Distanza della nebbia:" name="fog" label_width="160" width="226"/>
-			<spinner label="Thread di decodifica immagine:" name="image_decode_threads" tool_tip="Il numero di thread da utilizzare per la decodifica delle immagini. 0 = Automatico, 1 = Sincrono, 2+ = specificato dall'utente. (consigliati 0 o 1)." />
 		</panel>
 		<panel label="Resa" name="Rendering">
 			<text name="World Updating">
@@ -169,7 +166,6 @@
 		<panel label="Profondità di Campo" name="DOF panel">
 			<check_box label="Abilita Profondità di Campo (PdC: sfoca la vista tranne che nella direzione della camera)" name="UseDoF"/>
 			<check_box label="Abilita in modalità Costruzione" name="RenderDepthOfFieldInEditMode"/>
-			<check_box label="Abilita sott'acqua" name="FSRenderDoFUnderwater"/>
 			<check_box label="La messa a fuoco della PdC segue il cursore" name="FSFocusPointFollowsPointer" tool_tip="La messa a fuoco della profondità di campo (PdC) seguirà il tuo mouse, questo comportamento corrisponde a quello visto quando si utilizza flycam. Utilizzare in combinazione con il blocco della messa a fuoco PdC." />
 			<slider label="F-Number Camera" name="CameraFNum" tool_tip="Il valore F è un valore della profondità di campo."/>
 			<slider label="Lunghezza focale (mm):" name="CameraFocal" tool_tip="A che distanza avviene la messa a fuoco (in millimetri)."/>

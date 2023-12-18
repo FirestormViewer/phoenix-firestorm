@@ -2,7 +2,7 @@
 <panel
          border="false"
          follows="all"
-         height="420"
+         height="500"
          label="Texture"
          layout="topleft"
          left="0"
@@ -136,17 +136,33 @@
              top_pad="5"
              width="25">
             </button>
+            <text
+             type="string"
+             length="1"
+             follows="left|top"
+             height="10"
+             layout="topleft"
+             left="12"
+             top_pad="8"
+             name="label_matmedia"
+             width="90">
+                Material
+            </text>
             <combo_box
              height="23"
              layout="topleft"
              left="10"
              name="combobox matmedia"
-             top="65"
-             width="90">
+             top="80"
+             width="100">
                 <combo_box.item
-                 label="Materials"
+                 label="Textures"
                  name="Materials"
                  value="Materials" />
+                <combo_box.item
+                 label="PBR Metallic Roughness"
+                 name="PBR"
+                 value="PBR" />
                 <combo_box.item
                  label="Media"
                  name="Media"
@@ -155,8 +171,8 @@
             <radio_group
             height="50"
             layout="topleft"
-            left_pad="20"
-            top_delta="-17"
+            left_pad="10"
+            top_delta="-30"
             width="150"
             visible = "false"
             name="radio_material_type">
@@ -182,6 +198,50 @@
                 top_pad="1"
                 value="2"/>
             </radio_group>
+            <radio_group
+            height="84"
+            layout="topleft"
+            left_delta="0"
+            top_delta="0"
+            width="150"
+            visible = "false"
+            name="radio_pbr_type">
+                <radio_item
+                label="Complete material"
+                name="Complete material"
+                top="0"
+                layout="topleft"
+                height="16"
+                value="0"/>
+                <radio_item
+                label="Base color"
+                name="Base color"
+                layout="topleft"
+                top_pad="1" 
+                height="16" 
+                value="1"/>
+                <radio_item
+                label="Metallic/roughness"
+                name="Metallic/roughness"
+                height="16"
+                layout="topleft"
+                top_pad="1"
+                value="2"/>
+                <radio_item
+                label="Emissive"
+                name="Emissive"
+                layout="topleft"
+                top_pad="1" 
+                height="16" 
+                value="3"/>
+                <radio_item
+                label="Normal"
+                layout="topleft"
+                top_pad="1" 
+                height="16" 
+                name="Normal"
+                value="4"/>
+            </radio_group>
             <!-- Removed (again) to prefer the name and location of the FS control
             <check_box
              control_name="SyncMaterialSettings"
@@ -198,16 +258,72 @@
              -->
             <texture_picker
              can_apply_immediately="true"
+             allow_no_texture="true"
+             follows="left|top"
+             height="80"
+             label="Material"
+             layout="topleft"
+             left="10"
+             name="pbr_control"
+             tool_tip="Click to choose a pbr material"
+             top_pad="-29"
+             width="64" />
+
+<!-- <FS:Zi> We don't need this button, clicking the texture picker does the same thing
+            <button
+             follows="left|top"
+             height="23"
+             layout="topleft"
+             left_pad="10"
+             top_delta="0"
+             name="pbr_from_inventory"
+             label="Choose from inventory"
+             width="140"/>
+-->
+            <text
+             visible="false"
+             type="string"
+             length="1"
+             follows="left|top"
+             height="10"
+             layout="topleft"
+             top_delta="40"
+             left_pad="10"
+             name="material_permissions_loading_label"
+             text_readonly_color="LabelDisabledColor"
+             width="160">
+                Loading contents...
+            </text>
+            <button
+             follows="left|top"
+             height="23"
+             layout="topleft"
+             left_delta="0"
+             top_delta="0"
+             name="edit_selected_pbr"
+             label="Edit"
+             width="100"/>
+            <button
+             follows="left|top"
+             height="23"
+             layout="topleft"
+             left_delta="0"
+             left_pad="4"
+             name="save_selected_pbr"
+             label="Save"
+             width="100"/>
+            <texture_picker
+             can_apply_immediately="true"
              default_image_name="Default"
              fallback_image="materials_ui_x_24.png"
              follows="left|top"
              height="80"
-             label="Texture"
+             label="Texture       "
              layout="topleft"
              left="10"
              name="texture control"
              tool_tip="Click to choose a picture"
-             top_pad="5"
+             top_delta="-40"
              width="64" />
             <text
              type="string"
@@ -215,7 +331,7 @@
              follows="left|top"
              height="10"
              layout="topleft"
-             left_pad="10"
+             left_pad="30"
              name="label alphamode"
              text_readonly_color="LabelDisabledColor"
              top_delta="0"
@@ -292,7 +408,7 @@
              follows="left|top"
              height="10"
              layout="topleft"
-             left_pad="10"
+             left_pad="30"
              name="label bumpiness"
              text_readonly_color="LabelDisabledColor"
              top_delta="0"
@@ -407,10 +523,10 @@
              height="10"
              layout="topleft"
              name="label shininess"
-             left_pad="10"
+             left_pad="30"
              text_readonly_color="LabelDisabledColor"
              top_delta="6"
-             width="90">
+             width="70">
                 Shininess
             </text>
             <combo_box
@@ -450,11 +566,11 @@
              follows="left|top"
              height="10"
              layout="topleft"
-             left_delta="-100"
+             left_delta="-80"
              name="label glossiness"
              text_readonly_color="LabelDisabledColor"
              top_pad="8"
-             width="116">
+             width="76">
                 Glossiness
             </text>
             <spinner
@@ -467,7 +583,7 @@
              increment="1"
              layout="topleft"
              top_delta="-4"
-             left_pad="10"
+             left_pad="30"
              name="glossiness"
              width="64" />
             <text
@@ -476,11 +592,11 @@
              follows="left|top"
              height="10"
              layout="topleft"
-             left_delta="-126"
+             left_delta="-106"
              name="label environment"
              text_readonly_color="LabelDisabledColor"
              top_pad="8"
-             width="116">
+             width="96">
                 Environment
             </text>
             <spinner
@@ -502,11 +618,11 @@
              follows="left|top"
              height="10"
              layout="topleft"
-             left_delta="-126"
+             left_delta="-106"
              name="label shinycolor"
              text_readonly_color="LabelDisabledColor"
              top_pad="8"
-             width="116">
+             width="96">
                 Color
             </text>
             <!-- label is blank because control places it below the box -->
@@ -843,6 +959,70 @@
              decimal_digits="5"
              name="shinyOffsetV"
              width="265" />
+            <!-- BEGIN PBR Material texture transform parameters -->
+            <spinner
+             follows="left|top"
+             height="19"
+             initial_value="1"
+             label="Scale u"
+             label_width="205"
+             layout="topleft"
+             left="10"
+             min_val="-100"
+             max_val="100"
+             name="gltfTextureScaleU"
+             top_delta="-115"
+             width="265" />
+            <spinner
+             follows="left|top"
+             height="19"
+             initial_value="1"
+             label="Scale v"
+             label_width="205"
+             layout="topleft"
+             left="10"
+             min_val="-100"
+             max_val="100"
+             name="gltfTextureScaleV"
+             width="265" />
+            <spinner
+             follows="left|top"
+             height="19"
+             initial_value="0"
+             label="Rotation"
+             label_width="205"
+             layout="topleft"
+             left="10"
+             min_val="-360"
+             max_val="360"
+             name="gltfTextureRotation"
+             top_pad="27"
+             width="265" />
+            <spinner
+             follows="left|top"
+             height="19"
+             initial_value="0"
+             label="Offset u"
+             label_width="205"
+             layout="topleft"
+             left="10"
+             min_val="-999"
+             max_val="999"
+             name="gltfTextureOffsetU"
+             width="265" />
+            <spinner
+             follows="left|top"
+             height="19"
+             initial_value="0"
+             label="Offset v"
+             label_width="205"
+             layout="topleft"
+             left="10"
+             min_val="-999"
+             max_val="999"
+             name="gltfTextureOffsetV"
+             width="265" />
+            <!-- END PBR Material texture transform parameters -->
             <check_box
              follows="top|left"
              height="16"
@@ -933,4 +1113,4 @@
                parameter="specular"/>
             </button>
             <!-- </FS:Zi> -->
-	   </panel>
+</panel>

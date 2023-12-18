@@ -36,6 +36,7 @@
 #include <map>
 
 class LLInventoryItem;
+class LLViewerObject;
 class LLLineEditor;
 class LLRadioGroup;
 class LLPreview;
@@ -83,7 +84,7 @@ public:
 	virtual BOOL handleHover(S32 x, S32 y, MASK mask);
 	virtual void onOpen(const LLSD& key);
 	
-	void setAuxItem( const LLInventoryItem* item );
+	virtual void setAuxItem( const LLInventoryItem* item );
 
 	static void			onBtnCopyToInv(void* userdata);
 
@@ -109,6 +110,7 @@ public:
 	// We can't modify Item or description in preview if either in-world Object
 	// or Item  itself is unmodifiable
 	static BOOL canModify(const LLUUID taskUUID, const LLInventoryItem* item);
+	static BOOL canModify(const LLViewerObject* object, const LLInventoryItem* item);
 
 protected:
 	virtual void onCommit();
@@ -152,6 +154,9 @@ protected:
 	// I am unsure if this is always the same as mObjectUUID, or why it exists
 	// at the LLPreview level.  JC 2009-06-24
 	LLUUID mNotecardObjectID;
+
+	// <FS:Ansariel> FIRE-33196: Fix materials upload conflicting with embedded items in notecards fix
+	bool mIsMaterialPreview{ false };
 };
 
 

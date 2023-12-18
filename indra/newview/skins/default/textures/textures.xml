@@ -341,6 +341,7 @@ with the same filename but different name
   <texture name="Inv_LostOpen" file_name="icons/Inv_LostOpen.png" preload="false" />
   <texture name="Inv_Landmark" file_name="icons/Inv_Landmark.png" preload="false" />
   <texture name="Inv_LandmarkVisited" file_name="icons/Inv_Landmark.png" preload="false" />
+  <texture name="Inv_Material" file_name="icons/Inv_Material.png" preload="false" />
   <texture name="Inv_Mesh" file_name="icons/Inv_Mesh.png" preload="false" />  
   <texture name="Inv_Notecard" file_name="icons/Inv_Notecard.png" preload="false" />
   <texture name="Inv_Object" file_name="icons/Inv_Object.png" preload="false" />
@@ -416,8 +417,10 @@ with the same filename but different name
   <texture name="Inv_OutboxClosed"		file_name="icons/Inv_SysClosed.png" />
   <texture name="Inv_SettingsOpen"		file_name="icons/Inv_SysOpen.png" />
   <texture name="Inv_SettingsClosed"	file_name="icons/Inv_SysClosed.png" />
-  
- <!-- Firstorm virtual system folders -->
+  <texture name="Inv_MaterialsClosed"	file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_MaterialsOpen"		file_name="icons/Inv_SysClosed.png" />
+
+	<!-- Firstorm virtual system folders -->
   <texture name="Inv_FirestormOpen"		file_name="icons/Inv_SysOpen.png" />
   <texture name="Inv_FirestormClosed"	file_name="icons/Inv_SysClosed.png" />
   <texture name="Inv_PhoenixOpen"		file_name="icons/Inv_SysOpen.png" />

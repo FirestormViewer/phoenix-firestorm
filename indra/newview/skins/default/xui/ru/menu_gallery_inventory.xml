@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Gallery">
+	<menu_item_call label="Поделиться" name="Share"/>
+	<menu_item_call label="Очистить Корзину" name="Empty Trash"/>
+	<menu_item_call label="Пустые потерянные и найденные" name="Empty Lost And Found"/>
+	<menu_item_call label="Телепорт" name="Landmark Open"/>
+	<menu_item_call label="Заменить текущий Костюм" name="Replace Outfit"/>
+	<menu_item_call label="Добавить в текущий Костюм" name="Add To Outfit"/>
+	<menu_item_call label="Удалить из текущего Костюма" name="Remove From Outfit"/>
+	<menu_item_call label="Скопировать список костюма в буфер обмена" name="Copy outfit list to clipboard"/>
+	<menu_item_call label="Найти оригинал" name="Find Original"/>
+	<menu_item_call label="Очистить элемент" name="Purge Item"/>
+	<menu_item_call label="Восстановить элемент" name="Restore Item"/>
+	<menu_item_call label="Открыть" name="Open"/>
+	<menu_item_call label="Открыть оригинал" name="Open Original"/>
+	<menu_item_call label="Характеристики" name="Properties"/>
+	<menu_item_call label="Изображение..." name="thumbnail"/>
+	<menu_item_call label="Скопировать UUID актива" name="Copy Asset UUID"/>
+	<menu_item_call label="Открыть" name="open_in_current_window"/>
+	<menu_item_call label="Открыть в новом окне" name="open_in_new_window"/>
+	<menu_item_call label="Переименовать" name="Rename"/>
+	<menu_item_call label="Вырезать" name="Cut"/>
+	<menu_item_call label="Копировать" name="Copy"/>
+	<menu_item_call label="Вставить" name="Paste"/>
+	<menu_item_call label="Вставить как ссылку" name="Paste As Link"/>
+	<menu_item_call label="Заменить ссылку" name="Replace Links"/>
+	<menu_item_call label="Удалить" name="Delete"/>
+	<menu_item_call label="Удалить Системную папку" name="Delete System Folder"/>
+	<menu_item_call label="Воспроизвести" name="Sound Play"/>
+	<menu_item_call label="Копировать SLurl" name="url_copy"/>
+	<menu_item_call label="О Landmark" name="About Landmark"/>
+	<menu_item_call label="Показать на Карте" name="show_on_map"/>
+	<menu_item_call label="Воспроизвести в мире" name="Animation Play"/>
+	<menu_item_call label="Воспроизвести локально" name="Animation Audition"/>
+	<menu_item_call label="Отправить мгновенное сообщение" name="Send Instant Message"/>
+	<menu_item_call label="Предложить телепорт..." name="Offer Teleport..."/>
+	<menu_item_call label="Запросить телепорт..." name="Request Teleport..."/>
+	<menu_item_call label="Активировать" name="Activate"/>
+	<menu_item_call label="Деактивировать" name="Deactivate"/>
+	<menu_item_call label="Сохранить как" name="Save As"/>
+	<menu_item_call label="Сохранить выбранное как" name="Save Selected As"/>
+	<menu_item_call label="Надеть" name="Wearable And Object Wear"/>
+	<menu label="Прикрепить к" name="Attach To" />
+	<menu label="Прикрепить к HUD" name="Attach To HUD" />
+	<menu_item_call label="Коснуться" name="Attachment Touch"/>
+	<menu_item_call label="Править" name="Wearable Edit"/>
+	<menu_item_call label="Добавить" name="Wearable Add"/>
+	<menu_item_call label="Открепить с себя" name="Detach From Yourself"/>
+	<menu_item_call label="Снять" name="Take Off"/>
+	<menu_item_call name="Настройки применить локально" label="Apply Only To Myself"/>
+	<menu_item_call name="Настройки применить к участку" label="Apply To Parcel"/>
+	<menu_item_call label="Создать папку из выбранных" name="New folder from selected"/>
+	<menu_item_call label="Разгруппировать элементы папки" name="Ungroup folder items"/>
+	<menu label="Использовать по умолчанию для" name="upload_def">
+		<menu_item_call label="Загрузки изображений" name="Image uploads"/>
+		<menu_item_call label="Загрузки звука" name="Sound uploads"/>
+		<menu_item_call label="Загрузки анимации" name="Animation uploads"/>
+		<menu_item_call label="Загрузки модели" name="Model uploads"/>
+	</menu>
+	<menu_item_call label="Копировать в списки торговой площадки" name="Marketplace Copy"/>
+	<menu_item_call label="Перейти в списки торговой площадки" name="Marketplace Move"/>
+	<menu_item_call label="--no options--" name="--no options--" />
+</context_menu>

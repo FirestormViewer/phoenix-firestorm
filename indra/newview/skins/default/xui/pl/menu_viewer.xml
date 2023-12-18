@@ -263,6 +263,7 @@
 		<menu_item_call label="Marketplace Second Life" name="SL Marketplace"/>
 		<menu_item_call label="Dane z rynku L$" name="LindenXchange"/>
 		<menu_item_call label="Biblioteka skryptów" name="Script Library"/>
+		<menu_item_call label="Społeczność SL (blogi, fora, aktualności)" name="SL Community Pages"/>
 		<menu_item_call label="Blog Firestorma" name="Firestorm Blog"/>
 		<menu_item_call label="Flickr Firestorma" name="Firestorm Flickr"/>
 		<menu_item_call label="Kanał YouTube Firestorma" name="Firestorm YouTube"/>

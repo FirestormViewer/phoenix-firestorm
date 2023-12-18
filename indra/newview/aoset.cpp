@@ -27,6 +27,7 @@
 #include "aoengine.h"
 #include "aoset.h"
 #include "llanimationstates.h"
+#include "llinventorymodel.h"
 
 AOSet::AOSet(const LLUUID inventoryID)
 :	LLEventTimer(10000.0f),
@@ -117,7 +118,7 @@ AOSet::AOSet(const LLUUID inventoryID)
 		mStates[index].mRandom = false;
 		mStates[index].mCycleTime = 0.0f;
 		mStates[index].mDirty = false;
-		mStateNames.push_back(stateNameList[0]);
+		mStateNames.emplace_back(stateNameList[0]);
 	}
 	stopTimer();
 }
@@ -137,7 +138,7 @@ AOSet::AOState* AOSet::getStateByName(const std::string& name)
 	for (S32 index = 0; index < AOSTATES_MAX; ++index)
 	{
 		AOState* state = &mStates[index];
-		for (U32 names = 0; names < state->mAlternateNames.size(); ++names)
+		for (auto names = 0; names < state->mAlternateNames.size(); ++names)
 		{
 			if (state->mAlternateNames[names].compare(name) == 0)
 			{
@@ -170,7 +171,7 @@ const LLUUID& AOSet::getAnimationForState(AOState* state) const
 {
 	if (state)
 	{
-		S32 numOfAnimations = state->mAnimations.size();
+		auto numOfAnimations = state->mAnimations.size();
 		if (numOfAnimations)
 		{
 			if (state->mCycle)
@@ -190,7 +191,25 @@ const LLUUID& AOSet::getAnimationForState(AOState* state) const
 					LL_DEBUGS("AOEngine") << "cycle " << state->mCurrentAnimation << " of " << numOfAnimations << LL_ENDL;
 				}
 			}
-			return state->mAnimations[state->mCurrentAnimation].mAssetUUID;
+
+			AOAnimation& anim = state->mAnimations[state->mCurrentAnimation];
+
+			if (anim.mAssetUUID.isNull())
+			{
+				LL_DEBUGS("AOEngine") << "Asset UUID for chosen animation " << anim.mName << " not yet known, try to find it." << LL_ENDL;
+
+				if(LLViewerInventoryItem* item = gInventory.getItem(anim.mInventoryUUID) ; item)
+				{
+					LL_DEBUGS("AOEngine") << "Found asset UUID for chosen animation: " << item->getAssetUUID() << " - Updating AOAnimation.mAssetUUID" << LL_ENDL;
+					anim.mAssetUUID = item->getAssetUUID();
+				}
+				else
+				{
+					LL_DEBUGS("AOEngine") << "Inventory UUID " << anim.mInventoryUUID << " for chosen animation " << anim.mName << " still returns no asset." << LL_ENDL;
+				}
+			}
+
+			return anim.mAssetUUID;
 		}
 		else
 		{

@@ -13,33 +13,45 @@
 	<text name="ItemcountText">
 		Elementi:
 	</text>
-	<filter_editor label="Filtro" name="inventory search editor" tool_tip="Scrivi una o più parole da cercare, separate dal carattere &apos;+&apos;"/>
-	<button name="collapse_btn" label="Comprimi" />
-	<button name="expand_btn" label="Espandi" />
-	<text name="filter_label" value="Filtro:"/>
-	<combo_box name="filter_combo_box" width="115">
-		<combo_box.item value="filter_type_all" label="Tutti" />
-		<combo_box.item value="filter_type_animations" label="Animazioni" />
-		<combo_box.item value="filter_type_calling_cards" label="Biglietti da visita" />
-		<combo_box.item value="filter_type_clothing" label="Vestiti / Parti del corpo" />
-		<combo_box.item value="filter_type_gestures" label="Gesti" />
-		<combo_box.item value="filter_type_landmarks" label="Segnaposto" />
-		<combo_box.item value="filter_type_notecards" label="Annotazioni" />
-		<combo_box.item value="filter_type_objects" label="Oggetti" />
-		<combo_box.item value="filter_type_scripts" label="Script" />
-		<combo_box.item value="filter_type_sounds" label="Suoni" />
-		<combo_box.item value="filter_type_textures" label="Texture" />
-		<combo_box.item value="filter_type_snapshots" label="Fotografie" />
-		<combo_box.item value="filter_type_meshes" label="Modelli mesh" />
-		<combo_box.item value="filter_type_settings" label="Ambienti" />
-		<combo_box.item value="filter_type_custom" label="Personalizzato..." />
-	</combo_box>
-	<menu_button tool_tip="Mostra opzioni di visibilità per la ricerca" name="options_visibility_btn" />
-	<tab_container name="inventory filter tabs">
-		<inventory_panel label="Tutti gli elementi" name="All Items"/>
-		<recent_inventory_panel label="Elementi recenti" name="Recent Items"/>
-		<worn_inventory_panel label="Indossati" name="Worn Items"/>
-	</tab_container>
+	<layout_stack name="nav_stack">
+		<layout_panel name="filter_panel">
+			<filter_editor label="Filtro" name="inventory search editor" tool_tip="Scrivi una o più parole da cercare, separate dal carattere &apos;+&apos;"/>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="ctrl_stack">
+		<layout_panel name="collapse_expand_buttons">
+			<button name="collapse_btn" label="Comprimi" />
+			<button name="expand_btn" label="Espandi" />
+		</layout_panel>
+		<layout_panel name="filter_ctrls">
+			<text name="filter_label" value="Filtro:"/>
+			<combo_box name="filter_combo_box" width="115">
+				<combo_box.item value="filter_type_all" label="Tutti" />
+				<combo_box.item value="filter_type_animations" label="Animazioni" />
+				<combo_box.item value="filter_type_calling_cards" label="Biglietti da visita" />
+				<combo_box.item value="filter_type_clothing" label="Vestiti / Parti del corpo" />
+				<combo_box.item value="filter_type_gestures" label="Gesti" />
+				<combo_box.item value="filter_type_landmarks" label="Segnaposto" />
+				<combo_box.item value="filter_type_notecards" label="Annotazioni" />
+				<combo_box.item value="filter_type_objects" label="Oggetti" />
+				<combo_box.item value="filter_type_scripts" label="Script" />
+				<combo_box.item value="filter_type_sounds" label="Suoni" />
+				<combo_box.item value="filter_type_textures" label="Texture" />
+				<combo_box.item value="filter_type_snapshots" label="Fotografie" />
+				<combo_box.item value="filter_type_meshes" label="Modelli mesh" />
+				<combo_box.item value="filter_type_settings" label="Ambienti" />
+				<combo_box.item value="filter_type_custom" label="Personalizzato..." />
+			</combo_box>
+			<menu_button tool_tip="Mostra opzioni di visibilità per la ricerca" name="options_visibility_btn" />
+		</layout_panel>
+	</layout_stack>
+	<panel name="default_inventory_panel">
+		<tab_container name="inventory filter tabs">
+			<inventory_panel label="Tutti gli elementi" name="All Items"/>
+			<recent_inventory_panel label="Elementi recenti" name="Recent Items"/>
+			<worn_inventory_panel label="Indossati" name="Worn Items"/>
+		</tab_container>
+	</panel>
 	<panel name="bottom_panel">
 		<panel name="options_gear_btn_panel">
 			<menu_button name="options_gear_btn" tool_tip="Mostra opzioni aggiuntive"/>

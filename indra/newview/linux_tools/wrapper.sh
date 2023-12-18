@@ -59,6 +59,13 @@ exportMutliArchDRIPath() {
 ## with Fontconfig error: Cannot load default config file
 # export FONTCONFIG_PATH=/etc/fonts
 
+## - Enable NVidia's threaded optimization by default. If you experience
+##   weird behavior starting with the 6.6.17 Firestorm release that you
+##   can verify not to be present in earlier versions, comment out the
+##   next line. Thanks to Jira user Pazako Karu on FIRE-33398 to make us
+##   aware of this option!
+export __GL_THREADED_OPTIMIZATIONS=1
+
 if [ "`uname -m`" = "x86_64" ]; then
     echo '64-bit Linux detected.'
 fi
@@ -173,17 +180,4 @@ LL_RUN_ERR=$?
 if [ $LL_RUN_ERR -ne 0 ]; then
 	# generic error running the binary
 	echo '*** Bad shutdown ($LL_RUN_ERR). ***'
-	if [ "$(uname -m)" = "x86_64" ] && [ "$(file bin/do-not-directly-run-firestorm-bin | grep -o 64-bit )" != "64-bit" ]; then
-		echo
-		cat << EOFMARKER
-You are running the Firestorm Viewer on a x86_64 platform.  The
-most common problems when launching the Viewer (particularly
-'bin/do-not-directly-run-firestorm-bin: not found' and 'error while
-loading shared libraries') may be solved by enabling 32-bit
-architecture and installing one or more 32-bit compatibility libraries.
-Consult the Firestorm wiki at
-http://wiki.firestormviewer.org/32-bit_viewer_in_64-bit_linux
-EOFMARKER
-	fi
 fi
-

@@ -1081,7 +1081,7 @@ void LLGroupMoneyDetailsTabEventHandler::processReply(LLMessageSystem* msg,
 	msg->getS32Fast(_PREHASH_MoneyData, _PREHASH_CurrentInterval, current_interval );
 	msg->getStringFast(_PREHASH_MoneyData, _PREHASH_StartDate, start_date);
 
-	std::string time_str = LLTrans::getString("GroupMoneyDate");
+	std::string time_str = LLTrans::getString("GroupMoneyStartDate");
 	LLSD substitution;
 
 	// We don't do time zone corrections of the calculated number of seconds
@@ -1239,7 +1239,7 @@ void LLGroupMoneySalesTabEventHandler::processReply(LLMessageSystem* msg,
 	// Start with the date.
 	if (text == mImplementationp->mLoadingText)
 	{
-		std::string time_str = LLTrans::getString("GroupMoneyDate");
+		std::string time_str = LLTrans::getString("GroupMoneyStartDate");
 		LLSD substitution;
 
 		// We don't do time zone corrections of the calculated number of seconds

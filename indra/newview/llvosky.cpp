@@ -531,7 +531,7 @@ void LLVOSky::initCubeMap()
 		images.push_back(mShinyTex[side].getImageRaw());
 	}
 
-	if (!mCubeMap && gSavedSettings.getBOOL("RenderWater") && gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps)
+	if (!mCubeMap && gSavedSettings.getBOOL("RenderWater") && LLCubeMap::sUseCubeMaps)
 	{
         mCubeMap = new LLCubeMap(false);
 	}
@@ -576,7 +576,7 @@ void LLVOSky::restoreGL()
 
 	updateDirections(psky);
 
-	if (gSavedSettings.getBOOL("RenderWater") && gGLManager.mHasCubeMap && LLCubeMap::sUseCubeMaps)
+	if (gSavedSettings.getBOOL("RenderWater") && LLCubeMap::sUseCubeMaps)
 	{
 		initCubeMap();
 	}
@@ -585,7 +585,7 @@ void LLVOSky::restoreGL()
 
 	if (mDrawable)
 	{
-		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, TRUE);
+		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME);
 	}
 
 }
@@ -694,7 +694,7 @@ bool LLVOSky::updateSky()
 	LLHeavenBody::setInterpVal( mInterpVal );
 	updateDirections(psky);
 
-    if (!mCubeMap)
+    if (!mCubeMap || LLPipeline::sReflectionProbesEnabled)
 	{
         mCubeMapUpdateStage = NUM_CUBEMAP_FACES;
         mForceUpdate = FALSE;
@@ -717,7 +717,7 @@ bool LLVOSky::updateSky()
             mForceUpdate = FALSE;
 		}
 	}
-    else if (mCubeMapUpdateStage == NUM_CUBEMAP_FACES)
+    else if (mCubeMapUpdateStage == NUM_CUBEMAP_FACES && !LLPipeline::sReflectionProbesEnabled)
 	{
 		LL_PROFILE_ZONE_NAMED_CATEGORY_ENVIRONMENT("updateSky - forced");
         LLSkyTex::stepCurrent();
@@ -769,16 +769,15 @@ bool LLVOSky::updateSky()
         mForceUpdate = FALSE;
 
         mForceUpdateThrottle.setTimerExpirySec(UPDATE_EXPRY);
-        gPipeline.markRebuild(gSky.mVOGroundp->mDrawable, LLDrawable::REBUILD_ALL, TRUE);
 
         if (mDrawable.notNull() && mDrawable->getFace(0) && !mDrawable->getFace(0)->getVertexBuffer())
         {
-            gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, TRUE);
+            gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME);
         }
         mCubeMapUpdateStage = -1;
     }
     // run 0 to 5 faces, each face in own frame
-    else if (mCubeMapUpdateStage >= 0 && mCubeMapUpdateStage < NUM_CUBEMAP_FACES)
+    else if (mCubeMapUpdateStage >= 0 && mCubeMapUpdateStage < NUM_CUBEMAP_FACES && !LLPipeline::sReflectionProbesEnabled)
 	{
 		LL_PROFILE_ZONE_NAMED_CATEGORY_ENVIRONMENT("updateSky - create");
         S32 side = mCubeMapUpdateStage;
@@ -1012,8 +1011,8 @@ BOOL LLVOSky::updateGeometry(LLDrawable *drawable)
 			face->setSize(4, 6);
 			face->setGeomIndex(0);
 			face->setIndicesIndex(0);
-			LLVertexBuffer* buff = new LLVertexBuffer(LLDrawPoolSky::VERTEX_DATA_MASK, GL_STREAM_DRAW_ARB);
-			buff->allocateBuffer(4, 6, TRUE);
+			LLVertexBuffer* buff = new LLVertexBuffer(LLDrawPoolSky::VERTEX_DATA_MASK);
+			buff->allocateBuffer(4, 6);
 			face->setVertexBuffer(buff);
 
 			index_offset = face->getGeometry(verticesp,normalsp,texCoordsp, indicesp);
@@ -1048,7 +1047,7 @@ BOOL LLVOSky::updateGeometry(LLDrawable *drawable)
 			*indicesp++ = index_offset + 3;
 			*indicesp++ = index_offset + 2;
 
-			buff->flush();
+			buff->unmapBuffer();
 		}
 	}
 
@@ -1144,8 +1143,8 @@ bool LLVOSky::updateHeavenlyBodyGeometry(LLDrawable *drawable, F32 scale, const 
 	if (!facep->getVertexBuffer())
 	{
 		facep->setSize(4, 6);
-		LLVertexBuffer* buff = new LLVertexBuffer(LLDrawPoolSky::VERTEX_DATA_MASK, GL_STREAM_DRAW_ARB);
-		if (!buff->allocateBuffer(facep->getGeomCount(), facep->getIndicesCount(), TRUE))
+		LLVertexBuffer* buff = new LLVertexBuffer(LLDrawPoolSky::VERTEX_DATA_MASK);
+		if (!buff->allocateBuffer(facep->getGeomCount(), facep->getIndicesCount()))
 		{
 			LL_WARNS() << "Failed to allocate Vertex Buffer for vosky to "
 				<< facep->getGeomCount() << " vertices and "
@@ -1184,7 +1183,7 @@ bool LLVOSky::updateHeavenlyBodyGeometry(LLDrawable *drawable, F32 scale, const 
 	*indicesp++ = index_offset + 2;
 	*indicesp++ = index_offset + 3;
 
-	facep->getVertexBuffer()->flush();
+	facep->getVertexBuffer()->unmapBuffer();
 
 	return TRUE;
 }
@@ -1384,8 +1383,8 @@ void LLVOSky::updateReflectionGeometry(LLDrawable *drawable, F32 H,
 	if (!face->getVertexBuffer() || quads*4 != face->getGeomCount())
 	{
 		face->setSize(quads * 4, quads * 6);
-		LLVertexBuffer* buff = new LLVertexBuffer(LLDrawPoolWater::VERTEX_DATA_MASK, GL_STREAM_DRAW_ARB);
-		if (!buff->allocateBuffer(face->getGeomCount(), face->getIndicesCount(), TRUE))
+		LLVertexBuffer* buff = new LLVertexBuffer(LLDrawPoolWater::VERTEX_DATA_MASK);
+		if (!buff->allocateBuffer(face->getGeomCount(), face->getIndicesCount()))
 		{
 			LL_WARNS() << "Failed to allocate Vertex Buffer for vosky to "
 				<< face->getGeomCount() << " vertices and "
@@ -1528,7 +1527,7 @@ void LLVOSky::updateReflectionGeometry(LLDrawable *drawable, F32 H,
 		}
 	}
 
-	face->getVertexBuffer()->flush();
+	face->getVertexBuffer()->unmapBuffer();
 }
 }
 

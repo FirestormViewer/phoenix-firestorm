@@ -73,7 +73,7 @@ void LLVersionInfo::initSingleton()
 	// fully constructed; such calls don't really belong in the constructor.
 
 	// cache the version string
-	version = STRINGIZE(getShortVersion() << "." << getBuild());
+	version = stringize(getShortVersion(), ".", getBuild());
 }
 
 LLVersionInfo::~LLVersionInfo()
@@ -95,7 +95,7 @@ S32 LLVersionInfo::getPatch()
 	return LL_VIEWER_VERSION_PATCH;
 }
 
-S32 LLVersionInfo::getBuild()
+U64 LLVersionInfo::getBuild()
 {
 	return LL_VIEWER_VERSION_BUILD;
 }

@@ -41,7 +41,7 @@ LLUrlRegistry::LLUrlRegistry()
 {
 //	mUrlEntry.reserve(20);
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-	mUrlEntry.reserve(29);
+	mUrlEntry.reserve(30);
 // [/RLVa:KB]
 
 	// Urls are matched in the order that they were registered
@@ -85,6 +85,8 @@ LLUrlRegistry::LLUrlRegistry()
 	registerUrl(new LLUrlEntryPlace());
 	registerUrl(new LLUrlEntryInventory());
     registerUrl(new LLUrlEntryExperienceProfile());
+    mUrlEntryKeybinding = new LLUrlEntryKeybinding();
+    registerUrl(mUrlEntryKeybinding);
 	registerUrl(new FSHelpDebugUrlEntrySL()); // <FS:Ansariel> FS Help SLUrl
 	// <FS:Ansariel> Wear folder SLUrl
 	mUrlEntryWear = new FSUrlEntryWear();
@@ -396,4 +398,10 @@ bool LLUrlRegistry::isUrl(const LLWString &text)
 		return (match.getStart() == 0 && match.getEnd() >= text.size()-1);
 	}
 	return false;
+}
+
+void LLUrlRegistry::setKeybindingHandler(LLKeyBindingToStringHandler* handler)
+{
+    LLUrlEntryKeybinding *entry = (LLUrlEntryKeybinding*)mUrlEntryKeybinding;
+    entry->setHandler(handler);
 }

@@ -1,10 +1,10 @@
 /** 
- * @file llviewertexturelinumimagest.h
+ * @file llviewertexturelist.h
  * @brief Object for managing the list of images within a region
  *
- * $LicenseInfo:firstyear=2000&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2022&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2022, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -34,7 +34,6 @@
 #include "llui.h"
 #include <list>
 #include <set>
-#include <deque>
 #include "lluiimage.h"
 
 const U32 LL_IMAGE_REZ_LOSSLESS_CUTOFF = 128;
@@ -105,7 +104,8 @@ public:
                                  bool force_square = false);
 	static LLPointer<LLImageJ2C> convertToUploadFile(LLPointer<LLImageRaw> raw_image,
                                                      const S32 max_image_dimentions = LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT,
-                                                     bool force_square = false);
+                                                     bool force_square = false,
+                                                     bool force_lossless = false);
 	static void processImageNotInDatabase( LLMessageSystem *msg, void **user_data );
 	// <FS:Ansariel> OpenSim compatibility
 	static void receiveImageHeader(LLMessageSystem *msg, void **user_data);
@@ -138,16 +138,9 @@ public:
 
 	void handleIRCallback(void **data, const S32 number);
 
-	S32Megabytes	getMaxResidentTexMem() const	{ return mMaxResidentTexMemInMegaBytes; }
-	S32Megabytes getMaxTotalTextureMem() const   { return mMaxTotalTextureMemInMegaBytes;}
 	S32 getNumImages()					{ return mImageList.size(); }
 
-	void updateMaxResidentTexMem(S32Megabytes mem);
-	// <FS:Ansariel> Dynamic texture memory calculation
-	void updateTexMemDynamic();
-	static bool canUseDynamicTextureMemory();
-	// </FS:Ansariel>
-	
+	// Local UI images
     // Local UI images
 	void doPreloadImages();
     // Network images. Needs caps and cache to work
@@ -156,17 +149,12 @@ public:
 	void clearFetchingRequests();
 	void setDebugFetching(LLViewerFetchedTexture* tex, S32 debug_level);
 
-	static S32Megabytes getMinVideoRamSetting();
-	// <FS:Ansariel> Proper texture memory calculation
-	//static S32Megabytes getMaxVideoRamSetting(bool get_recommended, float mem_multiplier);
-	static S32Megabytes getMaxVideoRamSetting(bool get_recommended, float mem_multiplier, bool clamp_upper_limit = true);
-
-	static bool isPrioRequestsFetched();
-	
 private:
-	void updateImagesDecodePriorities();
-	// <FS:Beq/> FIRE-30559 texture fetch speedup for user previews (based on patches from Oren Hurvitz)
-	void updateOneImageDecodePriority(LLPointer<LLViewerFetchedTexture> imagep);
+    // do some book keeping on the specified texture
+    // - updates decode priority
+    // - updates desired discard level
+    // - cleans up textures that haven't been referenced in awhile
+    void updateImageDecodePriority(LLViewerFetchedTexture* imagep);
 	F32  updateImagesCreateTextures(F32 max_time);
 	F32  updateImagesFetchTextures(F32 max_time);
 	void updateImagesUpdateStats();
@@ -239,31 +227,19 @@ public:
 
 	// <FS:Ansariel> Fast cache stats
 	static U32 sNumFastCacheReads;
-	// <FS:Beq> FIRE-30559 texture fetch speedup for user previews (based on patches from Oren Hurvitz)
-	// Recalculate the image's Decode Priority.
-	// (We'll get to the image eventually even if this method isn't called, but this way it goes
-	// to the head(-ish) of the line.)
-	void recalcImageDecodePriority(LLPointer<LLViewerFetchedTexture> image);
-	// </FS:Beq>
+
 private:
     typedef std::map< LLTextureKey, LLPointer<LLViewerFetchedTexture> > uuid_map_t;
     uuid_map_t mUUIDMap;
     LLTextureKey mLastUpdateKey;
-    LLTextureKey mLastFetchKey;
 	
-	typedef std::set<LLPointer<LLViewerFetchedTexture>, LLViewerFetchedTexture::Compare> image_priority_list_t;	
+    typedef std::set < LLPointer<LLViewerFetchedTexture> > image_priority_list_t;
 	image_priority_list_t mImageList;
-	// <FS:Beq> FIRE-30559 texture fetch speedup for user previews (based on patches from Oren Hurvitz)
-	// Images that should be handled first in updateImagesDecodePriorities()
-	image_list_t mImagesWithChangedPriorities;
-	// </FS:Beq>
-	
+
 	// simply holds on to LLViewerFetchedTexture references to stop them from being purged too soon
 	std::set<LLPointer<LLViewerFetchedTexture> > mImagePreloads;
 
 	BOOL mInitialized ;
-	S32Megabytes	mMaxResidentTexMemInMegaBytes;
-	S32Megabytes mMaxTotalTextureMemInMegaBytes;
 	LLFrameTimer mForceDecodeTimer;
 	
 private:

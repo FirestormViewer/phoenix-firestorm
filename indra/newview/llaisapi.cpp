@@ -878,26 +878,9 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
     LLSD httpResults;
     LLCore::HttpStatus status;
 
-    if (debugLoggingEnabled("Inventory"))
-    {
-        LLTimer ais_timer;
-        ais_timer.start();
-        result = invoke(httpAdapter , httpRequest , url , body , httpOptions , httpHeaders);
-        httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
-        status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
-        F32MillisecondsImplicit elapsed_time = ais_timer.getElapsedTimeF32();
-
-        LL_DEBUGS("Inventory") << "Request type: " << (S32)type
-            << " \nRequest target: " << targetId
-            << " \nElapsed time since request: " << elapsed_time
-            << " \nstatus: " << status.toULong() << LL_ENDL;
-    }
-    else
-    {
-        result = invoke(httpAdapter , httpRequest , url , body , httpOptions , httpHeaders);
-        httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
-        status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
-    }
+    result = invoke(httpAdapter , httpRequest , url , body , httpOptions , httpHeaders);
+    httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+    status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
 
     if (!status || !result.isMap())
     {
@@ -1112,7 +1095,7 @@ AISUpdate::AISUpdate(const LLSD& update, AISAPI::COMMAND_TYPE type, const LLSD& 
         mFetchDepth = request_body["depth"].asInteger();
     }
 
-    mTimer.setTimerExpirySec(debugLoggingEnabled("Inventory") ? EXPIRY_SECONDS_DEBUG : EXPIRY_SECONDS_LIVE);
+    mTimer.setTimerExpirySec(AIS_EXPIRY_SECONDS);
     mTimer.start();
 	parseUpdate(update);
 }
@@ -1138,7 +1121,7 @@ void AISUpdate::checkTimeout()
     {
         llcoro::suspend();
         LLCoros::checkStop();
-        mTimer.setTimerExpirySec(debugLoggingEnabled("Inventory") ? EXPIRY_SECONDS_DEBUG : EXPIRY_SECONDS_LIVE);
+        mTimer.setTimerExpirySec(AIS_EXPIRY_SECONDS);
     }
 }
 
@@ -1395,6 +1378,15 @@ void AISUpdate::parseCategory(const LLSD& category_map, S32 depth)
     {
         LL_WARNS() << "Got stale folder, known: " << curr_cat->getVersion()
             << ", received: " << version << LL_ENDL;
+        // <FS:Beq> FIRE-33337 workaround for rename issue until proper fix is in place and tested
+        // Also servers a general handler for version de-sync bugs in the future.
+        if( version < curr_cat->getVersion() )
+        {
+            // AIS version is considered canonical, so we need to refetch
+            curr_cat->setVersion(LLViewerInventoryCategory::VERSION_UNKNOWN);
+            curr_cat->fetch();
+        }
+        // </FS:Beq>
         return;
     }
 
@@ -1661,7 +1653,7 @@ void AISUpdate::doUpdate()
     checkTimeout();
 
 	// Do version/descendant accounting.
-	for (std::map<LLUUID,S32>::const_iterator catit = mCatDescendentDeltas.begin();
+ 	for (std::map<LLUUID,S32>::const_iterator catit = mCatDescendentDeltas.begin();
 		 catit != mCatDescendentDeltas.end(); ++catit)
 	{
 		LL_DEBUGS("Inventory") << "descendant accounting for " << catit->first << LL_ENDL;

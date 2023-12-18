@@ -26,12 +26,15 @@
 				<stat_view label="Textur" name="texture">
 					<stat_bar label="Cache-Trefferrate" name="texture_cache_hits"/>
 					<stat_bar label="Cache-Leselatenz" name="texture_cache_read_latency"/>
-					<stat_bar label="Zählen" name="numimagesstat"/>
+					<stat_bar label="Anzahl" name="numimagesstat"/>
 					<stat_bar label="Rohanzahl" name="numrawimagesstat"/>
 					<stat_bar label="GL Sp" name="gltexmemstat"/>
 					<stat_bar label="Formattierter Sp:" name="formattedmemstat"/>
 					<stat_bar label="Rohsp" name="rawmemstat"/>
 					<stat_bar label="Zugeteilter Sp" name="glboundmemstat"/>
+				</stat_view>
+				<stat_view label="Materialien" name="material">
+					<stat_bar label="Anzahl" name="nummaterials"/>
 				</stat_view>
 				<stat_view label="Speichernutzung" name="memory">
 					<stat_bar label="LLTrace" name="LLTrace"/>

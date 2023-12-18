@@ -60,6 +60,7 @@
 #include "llfloatergridstatus.h"
 #include "llfloaterimsession.h"
 #include "lllocationhistory.h"
+#include "llgltfmateriallist.h"
 #include "llimageworker.h"
 
 #include "llloginflags.h"
@@ -351,10 +352,22 @@ void callback_cache_name(const LLUUID& id, const std::string& full_name, bool is
 // exported functionality
 //
 
+void pump_idle_startup_network(void)
+{
+    {
+        LockMessageChecker lmc(gMessageSystem);
+        while (lmc.checkAllMessages(gFrameCount, gServicePump))
+        {
+            display_startup();
+        }
+        lmc.processAcks();
+    }
+    display_startup();
+}
+
 //
 // local classes
 //
-
 // <AW: opensim>
 static bool sGridListRequestReady = false;
 void downloadGridlistComplete( LLSD const &aData )
@@ -561,7 +574,7 @@ void update_texture_fetch()
 	LLAppViewer::getTextureFetch()->update(1); // unpauses the texture fetch thread
 	gTextureList.updateImages(0.10f);
 
-    if (LLImageGLThread::sEnabled)
+    if (LLImageGLThread::sEnabledTextures)
     {
         std::shared_ptr<LL::WorkQueue> main_queue = LL::WorkQueue::getInstance("mainloop");
         main_queue->runFor(std::chrono::milliseconds(1));
@@ -2163,6 +2176,9 @@ bool idle_startup()
 		gXferManager->registerCallbacks(gMessageSystem);
 		display_startup();
 
+		LLGLTFMaterialList::registerCallbacks();
+		display_startup();
+
 		LLStartUp::initNameCache();
 		display_startup();
 
@@ -2286,19 +2302,14 @@ bool idle_startup()
 		gAgentCamera.resetCamera();
 		display_startup();
 
-		// start up the ThreadPool we'll use for textures et al.
-        LLAppViewer::instance()->initGeneralThread();
-
 		// Initialize global class data needed for surfaces (i.e. textures)
 		LL_DEBUGS("AppInit") << "Initializing sky..." << LL_ENDL;
 		// Initialize all of the viewer object classes for the first time (doing things like texture fetches.
 		LLGLState::checkStates();
-		LLGLState::checkTextureChannels();
 
 		gSky.init();
 
 		LLGLState::checkStates();
-		LLGLState::checkTextureChannels();
 
 		display_startup();
 
@@ -2364,15 +2375,7 @@ bool idle_startup()
 		{
 			LLStartUp::setStartupState( STATE_AGENT_SEND );
 		}
-		{
-			LockMessageChecker lmc(gMessageSystem);
-			while (lmc.checkAllMessages(gFrameCount, gServicePump))
-			{
-				display_startup();
-			}
-			lmc.processAcks();
-		}
-		display_startup();
+		pump_idle_startup_network();
 		return FALSE;
 	}
 
@@ -2481,6 +2484,7 @@ bool idle_startup()
 	//---------------------------------------------------------------------
 	if (STATE_INVENTORY_SEND == LLStartUp::getStartupState())
 	{
+		LL_PROFILE_ZONE_NAMED("State inventory send")
 		display_startup();
 
         // request mute list
@@ -2517,7 +2521,7 @@ bool idle_startup()
 			}
 		}
 		display_startup();
- 		
+
 		LLSD inv_lib_owner = response["inventory-lib-owner"];
 		if(inv_lib_owner.isDefined())
 		{
@@ -2525,30 +2529,52 @@ bool idle_startup()
 			LLSD id = inv_lib_owner[0]["agent_id"];
 			if(id.isDefined())
 			{
-				gInventory.setLibraryOwnerID( LLUUID(id.asUUID()));
+				gInventory.setLibraryOwnerID(LLUUID(id.asUUID()));
 			}
 		}
 		display_startup();
-
-		LLSD inv_skel_lib = response["inventory-skel-lib"];
- 		if(inv_skel_lib.isDefined() && gInventory.getLibraryOwnerID().notNull())
- 		{
- 			if(!gInventory.loadSkeleton(inv_skel_lib, gInventory.getLibraryOwnerID()))
- 			{
- 				LL_WARNS("AppInit") << "Problem loading inventory-skel-lib" << LL_ENDL;
- 			}
- 		}
+		LLStartUp::setStartupState(STATE_INVENTORY_SKEL);
 		display_startup();
+		return FALSE;
+	}
 
-		LLSD inv_skeleton = response["inventory-skeleton"];
- 		if(inv_skeleton.isDefined())
- 		{
- 			if(!gInventory.loadSkeleton(inv_skeleton, gAgent.getID()))
- 			{
- 				LL_WARNS("AppInit") << "Problem loading inventory-skel-targets" << LL_ENDL;
- 			}
- 		}
-		display_startup();
+    if (STATE_INVENTORY_SKEL == LLStartUp::getStartupState())
+    {
+        LL_PROFILE_ZONE_NAMED("State inventory load skeleton")
+
+		LLSD response = LLLoginInstance::getInstance()->getResponse();
+
+        LLSD inv_skel_lib = response["inventory-skel-lib"];
+        if (inv_skel_lib.isDefined() && gInventory.getLibraryOwnerID().notNull())
+        {
+            LL_PROFILE_ZONE_NAMED("load library inv")
+            if (!gInventory.loadSkeleton(inv_skel_lib, gInventory.getLibraryOwnerID()))
+            {
+                LL_WARNS("AppInit") << "Problem loading inventory-skel-lib" << LL_ENDL;
+            }
+        }
+        display_startup();
+
+        LLSD inv_skeleton = response["inventory-skeleton"];
+        if (inv_skeleton.isDefined())
+        {
+            LL_PROFILE_ZONE_NAMED("load personal inv")
+            if (!gInventory.loadSkeleton(inv_skeleton, gAgent.getID()))
+            {
+                LL_WARNS("AppInit") << "Problem loading inventory-skel-targets" << LL_ENDL;
+            }
+        }
+        display_startup();
+        LLStartUp::setStartupState(STATE_INVENTORY_SEND2);
+        display_startup();
+        return FALSE;
+    }
+
+    if (STATE_INVENTORY_SEND2 == LLStartUp::getStartupState())
+    {
+        LL_PROFILE_ZONE_NAMED("State inventory send2")
+
+		LLSD response = LLLoginInstance::getInstance()->getResponse();
 
 		LLSD inv_basic = response["inventory-basic"];
  		if(inv_basic.isDefined())
@@ -3132,7 +3158,7 @@ bool idle_startup()
 
 	if (STATE_CLEANUP == LLStartUp::getStartupState())
 	{
-        set_startup_status(1.0, "", "");
+		set_startup_status(1.0, "", "");
 		display_startup();
 
 		if (!mBenefitsSuccessfullyInit)
@@ -3665,6 +3691,7 @@ void register_viewer_callbacks(LLMessageSystem* msg)
 	msg->setHandlerFunc("InitiateDownload", process_initiate_download);
 	msg->setHandlerFunc("LandStatReply", LLFloaterTopObjects::handle_land_reply);
     msg->setHandlerFunc("GenericMessage", process_generic_message);
+    msg->setHandlerFunc("GenericStreamingMessage", process_generic_streaming_message);
     msg->setHandlerFunc("LargeGenericMessage", process_large_generic_message);
 
 	msg->setHandlerFuncFast(_PREHASH_FeatureDisabled, process_feature_disabled_message);
@@ -3797,8 +3824,7 @@ void LLStartUp::loadInitialOutfit( const std::string& outfit_folder_name,
 		// Need to fetch cof contents before we can wear.
         if (do_copy)
         {
-            callAfterCategoryFetch(LLAppearanceMgr::instance().getCOF(),
-							   boost::bind(&LLAppearanceMgr::wearInventoryCategory, LLAppearanceMgr::getInstance(), cat, do_copy, do_append));
+            callAfterCOFFetch(boost::bind(&LLAppearanceMgr::wearInventoryCategory, LLAppearanceMgr::getInstance(), cat, do_copy, do_append));
         }
         else
         {

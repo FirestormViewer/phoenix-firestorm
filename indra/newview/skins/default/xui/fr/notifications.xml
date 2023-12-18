@@ -4176,6 +4176,9 @@ Le nom ne peut contenir que des caractères ASCII, sauf ":" et "|".
 	<notification name="AOForeignItemsFound">
 		L'AO a trouvé au moins un élément qui n'avait pas sa place dans la configuration. Veuillez vérifier dans votre dossier "Objets trouvés" les éléments qui ont été déplacés hors de la configuration de l'AO.
 	</notification>
+	<notification name="AOImportComplete">
+		L'importation de la notice d'AO est terminée !
+	</notification>
 	<notification name="AOImportSetAlreadyExists">
 		Un ensemble d'animations portant ce nom existe déjà.
 	</notification>

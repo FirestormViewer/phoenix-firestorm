@@ -6,6 +6,12 @@
 	<floater.string name="pick title">
 		Auswählen:
 	</floater.string>
+	<floater.string name="pick_material">
+		Auswählen: Material
+	</floater.string>
+	<floater.string name="pick_texture">
+		Auswählen: Textur
+	</floater.string>
 	<text name="Multiple">
 		Mehrere Texturen
 	</text>
@@ -29,8 +35,7 @@
 	<text name="preview_disabled">
 		Vorschau deaktiviert
 	</text>
-	<check_box label="Ordner anzeigen" name="show_folders_check"/>
-	<search_editor label="Texturen filtern" name="inventory search editor"/>
+	<filter_editor label="Texturen filtern" name="inventory search editor"/>
 	<button label="Hinzufügen" label_selected="Hinzufügen" name="l_add_btn"/>
 	<button label="Entfernen" label_selected="Entfernen" name="l_rem_btn"/>
 	<button label="Hochladen" label_selected="Hochladen" name="l_upl_btn"/>
@@ -52,7 +57,6 @@
 		<combo_box.item label="BAKED_AUX2" name="BAKED_AUX2"/>
 		<combo_box.item label="BAKED_AUX3" name="BAKED_AUX3"/>
 	</combo_box>
-	<check_box label="Basis-Mesh-Region verbergen" name="hide_base_mesh_region"/>
 	<line_editor name="TextureKey" tool_tip="Textur-UUID"/>
 	<button name="TextureKeyApply" label="UUID anwenden" tool_tip="Textur mit dieser UUID anwenden"/>
 	<button label="Abbrechen" label_selected="Abbrechen" name="Cancel"/>

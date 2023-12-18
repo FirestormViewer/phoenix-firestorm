@@ -21,7 +21,6 @@
 			<check_box label="アバターをクリックしてもカメラの位置を変更しない" name="clickonavatarkeepscamera" tool_tip="通常、アバターをクリックするとカメラの位置がリセットされます。このオプションはこの動作を回避します。"/>
 			<check_box label="（同じSIM内で）テレポートした後のカメラの位置を元に戻す" name="FSResetCameraOnTP" tool_tip="通常、テレポートする時にカメラの位置がリセットされます。このオプションはこの動作を回避します。"/>
 			<check_box label="アバターが動く時にカメラの位置を元に戻す" name="FSResetCameraOnMovement" />
-			<check_box label="至近距離の制限を解除" name="disableminzoomdist" tool_tip="オブジェクトにカメラが近づける距離には制限がありますが、この制限を解除して近づけます。"/>
 			<check_box label="カメラリセット時にアバターを振り返らせる" name="resetviewturnsavatar" tool_tip="Escキーでカメラをリセットすると、アバターがカメラの方を向きます。"/>
 			<check_box label="プリムの向こう側が見えるようにカメラ移動の制限を解除" name="ignorecameraconstraints" tool_tip="通常はプリムにぶつかるとそれより先にカメラを進めることはできないが、この制限を解除してプリムの向こう側にカメラを回ることができます。"/>
 			<text name="ignorecameraconstraints_requires_restart">
