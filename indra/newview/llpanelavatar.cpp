@@ -143,7 +143,7 @@ void LLPanelProfileTab::setApplyProgress(bool started)
     }
 }
 
-static void put_avatar_properties_coro(std::string cap_url, LLUUID agent_id, LLSD data)
+static void put_avatar_properties_coro(std::string cap_url, LLUUID agent_id, LLSD data, std::function<void(bool)> callback)
 {
     LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
     LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t
@@ -166,11 +166,18 @@ static void put_avatar_properties_coro(std::string cap_url, LLUUID agent_id, LLS
         LL_WARNS("AvatarProperties") << "Failed to put agent information " << data << " for id " << agent_id << LL_ENDL;
         return;
     }
+    else
+    {
+        LL_DEBUGS("AvatarProperties") << "Agent id: " << agent_id << " Data: " << data << " Result: " << httpResults << LL_ENDL;
+    }
 
-    LL_DEBUGS("AvatarProperties") << "Agent id: " << agent_id << " Data: " << data << " Result: " << httpResults << LL_ENDL;
+    if (callback)
+    {
+        callback(status);
+    }
 }
 
-bool LLPanelProfileTab::saveAgentUserInfoCoro(std::string name, LLSD value) const
+bool LLPanelProfileTab::saveAgentUserInfoCoro(std::string name, LLSD value, std::function<void(bool)> callback) const
 {
     std::string cap_url = gAgent.getRegionCapability("AgentProfile");
     if (cap_url.empty())
@@ -180,7 +187,7 @@ bool LLPanelProfileTab::saveAgentUserInfoCoro(std::string name, LLSD value) cons
     }
 
     LLCoros::instance().launch("putAgentUserInfoCoro",
-        boost::bind(put_avatar_properties_coro, cap_url, getAvatarId(), LLSD().with(name, value)));
+        boost::bind(put_avatar_properties_coro, cap_url, getAvatarId(), LLSD().with(name, value), callback));
 
     return true;
 }

@@ -2393,7 +2393,17 @@ void LLPanelProfileSecondLife::onCommitProfileImage(const LLUUID& id)
 
     if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
     {
-        if (!saveAgentUserInfoCoro("sl_image_id", id))
+        std::function<void(bool)> callback = [id](bool result)
+            {
+                if (result)
+                {
+                    LLAvatarIconIDCache::getInstance()->add(gAgentID, id);
+                    // Should trigger callbacks in icon controls
+                    LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(gAgentID);
+                }
+            };
+
+        if (!saveAgentUserInfoCoro("sl_image_id", id, callback))
             return;
 
         mImageId = id;
