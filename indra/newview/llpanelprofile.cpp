@@ -246,6 +246,13 @@ void post_profile_image_coro(std::string cap_url, EProfileImageType type, std::s
         }
     }
 
+    if (type == PROFILE_IMAGE_SL && result.notNull())
+    {
+        LLAvatarIconIDCache::getInstance()->add(gAgentID, result);
+        // Should trigger callbacks in icon controls
+        LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(gAgentID);
+    }
+
     // Cleanup
     LLFile::remove(path_to_image);
     delete handle;
@@ -297,7 +304,8 @@ public:
             return true; // don't block, will fail later
         }
 
-        if (nav_type == NAV_TYPE_CLICKED)
+        if (nav_type == NAV_TYPE_CLICKED
+            || nav_type == NAV_TYPE_EXTERNAL)
         {
             return true;
         }

@@ -4747,7 +4747,8 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 			|| is_recent_panel
 			|| !trash
 			|| trash->getVersion() == LLViewerInventoryCategory::VERSION_UNKNOWN
-			|| trash->getDescendentCount() == LLViewerInventoryCategory::VERSION_UNKNOWN)
+			|| trash->getDescendentCount() == LLViewerInventoryCategory::VERSION_UNKNOWN
+			|| gAgentAvatarp->hasAttachmentsInTrash())
 		{
 			disabled_items.push_back(std::string("Empty Trash"));
 		}
@@ -7367,6 +7368,7 @@ void LLGestureBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		{
 			items.push_back(std::string("Activate"));
 		}
+        items.push_back(std::string("PlayGesture"));
 		// <FS:Ansariel> FIRE-5913: Selecting a mix of active and inactive gestures disables both "Activate" / "Deactivate" menu options
 		}
 		// </FS:Ansariel>

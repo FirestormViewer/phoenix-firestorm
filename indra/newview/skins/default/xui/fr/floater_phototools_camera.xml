@@ -129,7 +129,6 @@
 			<panel name="P_Add_Cam_Opt_Settings">
 				<check_box label="Clic sur l'avatar garde la pos. de la caméra" name="clickonavatarkeepscamera" tool_tip="Normalement, la position de la caméra est réinitialisée lorsque l'on clique sur l'avatar. Cette option permet d'éviter ce comportement."/>
 				<check_box label="Réinit. la pos. de la cam. après téléportation" name="FSResetCameraOnTP" tool_tip="Normalement, la position de la caméra est réinitialisée lors de la téléportation. Cette option permet d'éviter ce comportement."/>
-				<check_box label="Désactive la dist. min. du zoom" name="disableminzoomdist" tool_tip="Désactive la distance maximale de zoom de l'appareil photo par rapport à un objet."/>
 				<check_box label="La caméra peut traverser les objets" name="ignorecameraconstraints" tool_tip="Ignore la règle empêchant la caméra de se déplacer à l'intérieur des objets. NÉCESSITE UN REDÉMARRAGE !"/>
 				<check_box label="Réinit. la pos. de la cam. quand l'avatar bouge" name="resetcameraonmovement" tool_tip="Réinitialise la caméra à sa position par défaut lorsque vous déplacez l'avatar."/>
 			</panel>

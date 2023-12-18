@@ -17,7 +17,6 @@
 			<check_box label="Avatarınızın üzərinə basanda kamera yerləşməsi saxlanılır" name="clickonavatarkeepscamera" tool_tip="Adətən, avatar üzərinə basdığınız zaman o, kameranın yerləşdirməsini sıfırlayır. Bu seçim bu davranışı aradan qaldırır."/>
 			<check_box label="Teleportasiyadan sonra kamera yerləşməsini saxlayın (region daxilində)" name="FSResetCameraOnTP" tool_tip="Bir qayda olaraq, teleportasiya zamanı kameranın yerləşməsi sıfırlanır. Bu seçim bu davranışın qarşısını alır."/>
 			<check_box label="Avatar hərəkət edərkən kamera yerləşməsini saxlayın" name="FSResetCameraOnMovement"/>
-			<check_box label="Minimal kamera yaxınlaşdırma məsafəsini söndürün" name="disableminzoomdist" tool_tip="Kameranın yaxın məsafə limitini söndürmək sizə obyektə daha çox yaxınlaşmağa imkan verəcək."/>
 			<check_box label="Baxışı sıfırlayan zaman avatarı kameraya doğru çevirin" name="resetviewturnsavatar" tool_tip="Baxış rejimi sıfırlandıqda (ESC düyməsini basmaqla) bu seçim avatarı kameraya doğru çevirir."/>
 			<check_box label="Kameranın primdən keçməsinə icazə verin" name="ignorecameraconstraints" tool_tip="Kameranın primitivlər arasında sərbəst hərəkət etməsinə icazə verin"/>
 			<text name="ignorecameraconstraints_requires_restart">
