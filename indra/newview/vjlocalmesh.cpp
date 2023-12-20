@@ -804,13 +804,26 @@ void LLLocalMeshFile::pushLog(const std::string& who, const std::string& what, b
 
 	log_msg += what;
 	mLoadingLog.push_back(log_msg);
+	LL_INFOS("LocalMesh") << log_msg << LL_ENDL;
 }
-
-
 /*==========================================*/
 /*  LLLocalMeshSystem:  Main Manager Class  */
 /*  user facing manager class               */
 /*==========================================*/
+
+void LLLocalMeshSystem::pushLog(const std::string& who, const std::string& what, bool is_error) 
+{
+	std::string log_msg = "[ " + who + " ] ";
+	if (is_error)
+	{
+		log_msg += "[ ERROR ] ";
+	}
+
+	log_msg += what;
+	mSystemLog.push_back(log_msg);
+	LL_INFOS("LocalMesh") << log_msg << LL_ENDL;
+}
+
 LLLocalMeshSystem::LLLocalMeshSystem()
 {
 	mLoadedFileList.clear();

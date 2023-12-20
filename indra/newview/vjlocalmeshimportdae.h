@@ -71,14 +71,13 @@ public:
 	loadFile_return loadFile(LLLocalMeshFile* data, LLLocalMeshFileLOD lod);
 	bool processObject(domMesh* current_mesh, LLLocalMeshObject* current_object);
 	bool processSkin(daeDatabase* collada_db, daeElement* collada_document_root, domMesh* current_mesh, domSkin* current_skin, std::unique_ptr<LLLocalMeshObject>& current_object);
-	void processSkeletonJoint(domNode* current_node, std::map<std::string, std::string>& joint_map, std::map<std::string, LLMatrix4>& joint_transforms);
+	bool processSkeletonJoint(domNode* current_node, std::map<std::string, std::string>& joint_map, std::map<std::string, LLMatrix4>& joint_transforms, bool recurse_children=false);
 
 	bool readMesh_CommonElements(const domInputLocalOffset_Array& inputs,
 		int& offset_position, int& offset_normals, int& offset_uvmap, int& index_stride,
 		domSource*& source_position, domSource*& source_normals, domSource*& source_uvmap);
 
 	std::string getElementName(daeElement* element_current, int fallback_index);
-	void pushLog(std::string who, std::string what);
 
 	// mesh data read functions, basically refactored from what's already in lldaeloader
 	// consolidating them into a single mega function makes for very sketchy readability.
@@ -87,6 +86,7 @@ public:
 	
 	// NOTE: polygon schema
 	//bool readMesh_Polygons(LLLocalMeshFace* data_out, const domPolygonsRef& data_in); 
+	void pushLog(const std::string& who, const std::string& what, bool is_error=false);
 	
 private:
 	LLLocalMeshFileLOD mLod;
