@@ -10,7 +10,7 @@
 		Genstande:
 	</text>
     <layout_stack name="top_stack">
-        <layout_panel name="filter_layout_panel">
+        <layout_panel name="filter_panel">
             <filter_editor label="Filter" name="inventory search editor"/>
             <button name="options_gear_btn" tool_tip="Vis yderligere valg"/>
             <button name="add_btn" tool_tip="Tilføj ny genstand"/>
