@@ -89,7 +89,7 @@
       width="324"
       name="filter_panel"
       visible="true"
-      name="filter_layout_panel">
+      >
       <filter_editor
        text_pad_left="10"
        follows="left|top|right"
