@@ -200,7 +200,16 @@ BOOL LLToolPlacer::raycastForNewObjPos( S32 x, S32 y, LLViewerObject** hit_obj, 
 	}
 	else
 	{
-		LLVector3d		ray_end_global = ray_start_global + (1.f + max_dist_from_camera) * mouse_direction;  // add an epsilon to the sim version of the ray to avoid rounding problems.
+		// <FS:Zi> Fix not being able to rez a box on top of a prim when MaxSelectDistance is shorter
+		//         than the surface distance, even though LimitSelectDistance is switched off.
+		// LLVector3d		ray_end_global = ray_start_global + (1.f + max_dist_from_camera) * mouse_direction;  // add an epsilon to the sim version of the ray to avoid rounding problems.
+		F32 max_raycast_dist = 129.0f;
+		if (limitSelectDistance)
+		{
+			max_raycast_dist = max_dist_from_camera;
+		}
+		LLVector3d ray_end_global = ray_start_global + max_raycast_dist * mouse_direction;  // add an epsilon to the sim version of the ray to avoid rounding problems.
+		// </FS:Zi>
 		*ray_end_region = regionp->getPosRegionFromGlobal( ray_end_global );
 	}
 
