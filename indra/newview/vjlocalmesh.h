@@ -71,6 +71,7 @@ class LLLocalMeshFace
 		std::vector<LLVector2>& getUVs()						{ return mUVs; };
 		std::vector<LLLocalMeshSkinUnit>& getSkin()				{ return mSkin; }
 		std::pair<LLVector4, LLVector4>& getFaceBoundingBox()	{ return mFaceBoundingBox; }
+		void logFaceInfo() const;
 
 	private:
 		std::vector<int>		mIndices;
@@ -115,6 +116,7 @@ class LLLocalMeshObject
 		void					 	setObjectMeshSkinInfo(LLPointer<LLMeshSkinInfo> skininfop ) 	{ mMeshSkinInfoPtr = skininfop; };
 		LLVolumeParams				getVolumeParams() const		{ return mVolumeParams; };
 		bool						getIsRiggedObject() const;
+		void logObjectInfo() const;
 
 	private:
 		// internal data keeping
