@@ -1052,24 +1052,20 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 bool LLLocalMeshImportDAE::processSkeletonJoint(domNode* current_node, std::map<std::string, std::string>& joint_map, std::map<std::string, LLMatrix4>& joint_transforms, bool recurse_children)
 {
 	// safety checks & name check
-	auto node_name = current_node->getName();
+	const auto node_name = current_node->getName();
 	if (!node_name)
 	{
 		LL_WARNS("LocalMesh") << "nameless node, can't process" << LL_ENDL;
 		return false;
 	}
 
-
-	auto jointmap_iter = joint_map.find(node_name);
-	if (jointmap_iter != joint_map.end())
+	if (auto jointmap_iter = joint_map.find(node_name); jointmap_iter != joint_map.end())
 	{
 		LL_DEBUGS("LocalMesh") << "processing joint: " << node_name << LL_ENDL;
 
 		// begin actual joint work
-		domTranslate* current_transformation = nullptr;
-
 		daeSIDResolver jointResolver_translation(current_node, "./translate");
-		current_transformation = daeSafeCast<domTranslate>(jointResolver_translation.getElement());
+		domTranslate* current_transformation = daeSafeCast<domTranslate>(jointResolver_translation.getElement());
 		if (current_transformation)
 		{
 			LL_DEBUGS("LocalMesh") << "Using ./translate for " << node_name << LL_ENDL;
@@ -1086,18 +1082,16 @@ bool LLLocalMeshImportDAE::processSkeletonJoint(domNode* current_node, std::map<
 
 		if (!current_transformation)
 		{
-			daeElement* child_translate_element = current_node->getChild("translate");
-			if (child_translate_element)
+			if (daeElement* child_translate_element = current_node->getChild("translate"); child_translate_element)
 			{
-				current_transformation = daeSafeCast<domTranslate>(child_translate_element);
-				if (current_transformation)
+				if (current_transformation = daeSafeCast<domTranslate>(child_translate_element); current_transformation)
 				{
 					LL_DEBUGS("LocalMesh") << "Using translate child for " << node_name << LL_ENDL;
 				}
 			}
 			else
 			{
-				LL_DEBUGS("Mesh")<< "Could not find a child [\"translate\"] for the element: \"" << child_translate_element->getAttribute("id") << "\"" << LL_ENDL;
+				LL_DEBUGS("Mesh")<< "Could not find a child [\"translate\"] for the element: \"" << node_name << "\"" << LL_ENDL;
 			}
 		} 	
 
@@ -1164,7 +1158,7 @@ bool LLLocalMeshImportDAE::processSkeletonJoint(domNode* current_node, std::map<
 		// return false; // still need to check the children
 	}
 
-	if(recurse_children)
+	if (recurse_children)
 	{
 		// get children to work on
 		auto current_node_children = current_node->getChildren();
