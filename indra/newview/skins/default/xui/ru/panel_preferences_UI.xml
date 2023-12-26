@@ -81,6 +81,15 @@
         <check_box label="Предотвращение фокуса окна статистики" name="FSStatisticsNoFocus"
         tool_tip="Если включено, окно статистики никогда не будет получать фокус при закрытии другого окна (такие действия, как изменение макета графа для элементов, по-прежнему возможны, если они включены)."
         width="256" />
+        <check_box label="Показывать миниатюры предметов инвентаря во всплывающих подсказках" name="FSShowInventoryThumbnailTooltips"
+        tool_tip="Если этот параметр включен, при наведении курсора на предметы инвентаря содержащие миниатюру, миниатюра будет отображаться во всплывающей подсказке."
+        width="256" />
+        <slider label="Задержка всплывающей подсказки миниатюр:"
+        tool_tip="Задержка появления всплывающих подсказок с миниатюрами предметов инвентаря."
+        label_width="200" name="FSInventoryThumbnailTooltipsDelay" width="457" />
+        <text name="FSInventoryThumbnailTooltipsDelayText" width="50">
+            сек
+        </text>
         <slider label="Количество миганий вкладки ЛС:" name="ButtonsFlashCount" />
         <slider label="Частота мигания вкладок ЛС:" tool_tip="Частота мигания вкладок личных сообщений:" name="ButtonFlashRate" />
         <text name="ButtonFlashRateText">
