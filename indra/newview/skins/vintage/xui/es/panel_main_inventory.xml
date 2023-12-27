@@ -82,7 +82,6 @@
 		<combo_box.item value="filter_type_sounds" label="Sonidos"/>
 		<combo_box.item value="filter_type_textures" label="Texturas"/>
 		<combo_box.item value="filter_type_snapshots" label="Fotos"/>
-		<combo_box.item value="filter_type_meshes" label="Modelos mesh"/>
 		<combo_box.item value="filter_type_custom" label="Personalizar..."/>
 	</combo_box>
 	<panel name="default_inventory_panel">
