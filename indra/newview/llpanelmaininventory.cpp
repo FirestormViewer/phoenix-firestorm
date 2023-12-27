@@ -208,6 +208,7 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	mFilterMap["filter_type_snapshots"]		= 0x01 << LLInventoryType::IT_SNAPSHOT;
 	mFilterMap["filter_type_meshes"]		= 0x01 << LLInventoryType::IT_MESH;
 	mFilterMap["filter_type_settings"]		= 0x01 << LLInventoryType::IT_SETTINGS;
+	mFilterMap["filter_type_materials"]		= 0x01 << LLInventoryType::IT_MATERIAL;
 
 	// initialize empty filter mask
 	mFilterMask = 0;
