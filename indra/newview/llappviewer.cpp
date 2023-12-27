@@ -1981,7 +1981,7 @@ bool LLAppViewer::cleanup()
     LLNotifications::instance().clear();
 
 	// workaround for DEV-35406 crash on shutdown
-	LLEventPumps::instance().reset();
+	LLEventPumps::instance().reset(true);
 
 	GrowlManager::destroyManager(); // <FS> Growl support
 

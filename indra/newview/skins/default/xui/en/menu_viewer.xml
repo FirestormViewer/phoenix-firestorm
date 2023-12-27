@@ -4836,6 +4836,14 @@
              function="Advanced.WebContentTest"
              parameter="HOME_PAGE"/>
           </menu_item_call>
+            <menu_item_call
+             label="Inventory Thumbnails Helper"
+             name="Inventory Thumbnails Helper"
+				shortcut="control|alt|shift|X">
+                <menu_item_call.on_click
+                 function="Floater.Show"
+                 parameter="inventory_thumbnails_helper" />
+            </menu_item_call>
           <menu_item_call
              label="Dump SelectMgr"
              name="Dump SelectMgr">

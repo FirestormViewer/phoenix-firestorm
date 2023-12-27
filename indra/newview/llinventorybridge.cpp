@@ -2538,8 +2538,11 @@ BOOL LLFolderBridge::isItemMovable() const
 
 void LLFolderBridge::selectItem()
 {
-	// Have no fear: the first thing start() does is to test if everything for that folder has been fetched...
-	LLInventoryModelBackgroundFetch::instance().start(getUUID(), true);
+    LLViewerInventoryCategory* cat = gInventory.getCategory(getUUID());
+    if (cat)
+    {
+        cat->fetch();
+    }
 }
 
 void LLFolderBridge::buildDisplayName() const
@@ -2927,8 +2930,7 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 	if (is_agent_inventory)
 	{
 		const LLUUID &trash_id = model->findCategoryUUIDForType(LLFolderType::FT_TRASH);
-		// <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
-		//const LLUUID &landmarks_id = model->findCategoryUUIDForType(LLFolderType::FT_LANDMARK);
+		const LLUUID &landmarks_id = model->findCategoryUUIDForType(LLFolderType::FT_LANDMARK);
 		const LLUUID &my_outifts_id = model->findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS);
 		const LLUUID &lost_and_found_id = model->findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND);
 
@@ -2936,8 +2938,7 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 		const BOOL move_is_into_my_outfits = (mUUID == my_outifts_id) || model->isObjectDescendentOf(mUUID, my_outifts_id);
 		const BOOL move_is_into_outfit = move_is_into_my_outfits || (getCategory() && getCategory()->getPreferredType()==LLFolderType::FT_OUTFIT);
 		const BOOL move_is_into_current_outfit = (getCategory() && getCategory()->getPreferredType()==LLFolderType::FT_CURRENT_OUTFIT);
-		// <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
-		//const BOOL move_is_into_landmarks = (mUUID == landmarks_id) || model->isObjectDescendentOf(mUUID, landmarks_id);
+		const BOOL move_is_into_landmarks = (mUUID == landmarks_id) || model->isObjectDescendentOf(mUUID, landmarks_id);
 		const BOOL move_is_into_lost_and_found = model->isObjectDescendentOf(mUUID, lost_and_found_id);
 
 		//--------------------------------------------------------------------------------
@@ -3099,7 +3100,7 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
             is_movable = can_move_folder_to_marketplace(master_folder, dest_folder, inv_cat, tooltip_msg, bundle_size);
 		}
 
-		if (is_movable)
+		if (is_movable && !move_is_into_landmarks)
 		{
 			LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel(FALSE);
 			is_movable = active_panel != NULL;

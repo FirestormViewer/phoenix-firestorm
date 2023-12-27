@@ -38,6 +38,7 @@
 #include <mach/mach_host.h>
 #elif LL_LINUX
 # include <unistd.h>
+# include <sys/resource.h>
 #endif
 
 #include "llmemory.h"
@@ -270,72 +271,21 @@ U64 LLMemory::getCurrentRSS()
 }
 
 #elif defined(LL_LINUX)
-// <FS:Beq> Linux RSS appears to have drifted from the implementation below.
-// U64 LLMemory::getCurrentRSS()
-// {
-// 	static const char statPath[] = "/proc/self/stat";
-// 	LLFILE *fp = LLFile::fopen(statPath, "r");
-// 	U64 rss = 0;
 
-// 	if (fp == NULL)
-// 	{
-// 		LL_WARNS() << "couldn't open " << statPath << LL_ENDL;
-// 		return 0;
-// 	}
+U64 LLMemory::getCurrentRSS()
+{
+	struct rusage usage;
 
-// 	// Eee-yew!	 See Documentation/filesystems/proc.txt in your
-// 	// nearest friendly kernel tree for details.
-	
-// 	{
-// 		int ret = fscanf(fp, "%*d (%*[^)]) %*c %*d %*d %*d %*d %*d %*d %*d "
-// 						 "%*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %Lu",
-// 						 &rss);
-// 		if (ret != 1)
-// 		{
-// 			LL_WARNS() << "couldn't parse contents of " << statPath << LL_ENDL;
-// 			rss = 0;
-// 		}
-// 	}
-	
-// 	fclose(fp);
+	if (getrusage(RUSAGE_SELF, &usage) != 0) {
+		// Error handling code could be here
+		return 0;
+	}
 
-// 	return rss;
-// }
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <filesystem>
-#include <unistd.h>
-
-// return the RSS in bytes. This value is converted to kilobytes implicitly elsewhere.
-U64 LLMemory::getCurrentRSS() {
-    namespace fs = std::filesystem;
-
-    // Get the page size (static variable)
-    static const long pageSize = sysconf(_SC_PAGESIZE);
-
-    // Open the /proc/self/statm file
-    static const auto statmPath = fs::path("/proc/self/statm");
-    std::ifstream statmFile(statmPath);
-    if (!statmFile.is_open()) {
-        return 0; // Return 0 if the file cannot be opened
-    }
-
-    // Read the entire line from statm file
-    std::string line;
-    std::getline(statmFile, line);
-    statmFile.close();
-
-    // Extract the values from the line
-    std::istringstream iss(line);
-    long size, rss, shared, text, lib, data, dt;
-    iss >> size >> rss >> shared >> text >> lib >> data >> dt;
-
-    // Convert pages to bytes and return RSS
-    return static_cast<U64>( rss * pageSize );
+	// ru_maxrss (since Linux 2.6.32)
+	// This is the maximum resident set size used (in kilobytes).
+	return usage.ru_maxrss * 1024;
 }
-// </FS:Beq>
+
 #else
 
 U64 LLMemory::getCurrentRSS()

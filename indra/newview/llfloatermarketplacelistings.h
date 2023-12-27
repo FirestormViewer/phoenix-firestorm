@@ -118,8 +118,8 @@ public:
 protected:
 	void setRootFolder();
 	void setPanels();
-	void fetchContents();
-    
+    bool fetchContents();
+
 	void setStatusString(const std::string& statusString);
 
 	void onClose(bool app_quitting);
