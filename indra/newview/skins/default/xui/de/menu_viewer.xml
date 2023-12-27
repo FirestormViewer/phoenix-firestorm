@@ -561,9 +561,10 @@
 			<menu_item_call label="Simulator-Features ausgeben" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="UI" name="UI">
+			<menu_item_call label="Medienbrowser-Test" name="Web Browser Test"/>
 			<menu_item_call label="Test Regionsneustart" name="Region Restart Test"/>
-			<menu_item_call label="Medienbrowser" name="Media Browser"/>
-			<menu_item_call label="Facebook Connection-Test" name="FB Connect Test"/>
+			<menu_item_call label="Web-Browser" name="Web Content Browser"/>
+			<menu_item_call label="Inventar-Abbildungshelfer" name="Inventory Thumbnails Helper"/>
 			<menu_item_call label="SelectMgr ausgeben" name="Dump SelectMgr"/>
 			<menu_item_call label="Inventarinfo ausgeben" name="Dump Inventory"/>
 			<menu_item_call label="Timer ausgeben" name="Dump Timers"/>
