@@ -1454,17 +1454,30 @@ void LLOutfitListGearMenu::onUpdateItemsVisibility()
 
 BOOL LLOutfitAccordionCtrlTab::handleToolTip(S32 x, S32 y, MASK mask)
 {
-    if (y >= getLocalRect().getHeight() - getHeaderHeight()) 
+    // <FS:Ansariel> Make thumbnail tooltip work properly
+    //if (y >= getLocalRect().getHeight() - getHeaderHeight())
+    static LLCachedControl<bool> showInventoryThumbnailTooltips(gSavedSettings, "FSShowInventoryThumbnailTooltips");
+    if (showInventoryThumbnailTooltips && y >= getLocalRect().getHeight() - getHeaderHeight() && gInventory.getCategory(mFolderID)->getThumbnailUUID().notNull())
     {
         LLSD params;
         params["inv_type"] = LLInventoryType::IT_CATEGORY;
         params["thumbnail_id"] = gInventory.getCategory(mFolderID)->getThumbnailUUID();
         params["item_id"] = mFolderID;
 
+        // <FS:Ansariel> Make thumbnail tooltip work properly
+        static LLCachedControl<F32> inventoryThumbnailTooltipsDelay(gSavedSettings, "FSInventoryThumbnailTooltipsDelay");
+        static LLCachedControl<F32> tooltip_fast_delay(gSavedSettings, "ToolTipFastDelay");
+        F32 tooltipDelay = LLToolTipMgr::instance().toolTipVisible() ? tooltip_fast_delay() : inventoryThumbnailTooltipsDelay();
+        // </FS:Ansariel>
+
         LLToolTipMgr::instance().show(LLToolTip::Params()
-                                    .message(getToolTip())
+                                    // <FS:Ansariel> Make thumbnail tooltip work properly
+                                    //.message(getToolTip())
+                                    .message(gInventory.getCategory(mFolderID)->getName())
                                     .sticky_rect(calcScreenRect())
-                                    .delay_time(LLView::getTooltipTimeout())
+                                    // <FS:Ansariel> Make thumbnail tooltip work properly
+                                    //.delay_time(LLView::getTooltipTimeout())
+                                    .delay_time(tooltipDelay)
                                     .create_callback(boost::bind(&LLInspectTextureUtil::createInventoryToolTip, _1))
                                     .create_params(params));
         return TRUE;
