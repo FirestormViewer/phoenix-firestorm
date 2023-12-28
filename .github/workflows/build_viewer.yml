@@ -54,6 +54,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           python3 -m pip install -r requirements.txt --user
+          python -m pip install -r requirements.txt --user
           echo "$HOME/.local/bin" >> $GITHUB_PATH
       - name: Install python requirements (non-windows)
         if: runner.os != 'Windows'
