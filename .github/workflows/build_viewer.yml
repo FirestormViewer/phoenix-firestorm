@@ -47,10 +47,16 @@ jobs:
       - uses: actions/setup-python@v4
         id: py311
         with:
-          python-version: '3.11'
+          python-version: '3.11.6'
           cache: 'pip'
 
-      - name: Install python requirements
+      - name: Install python requirements (windows only)
+        if: runner.os == 'Windows'
+        run: |
+          python3 -m pip install -r requirements.txt --user
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - name: Install python requirements (non-windows)
+        if: runner.os != 'Windows'
         run: |
           python3 -m pip install -r requirements.txt
           python -m pip install -r requirements.txt
