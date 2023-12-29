@@ -62,6 +62,10 @@ public:
 		
 		Optional<LLTextBox::Params>		caption_text;
 		Optional<LLViewBorder::Params>	border;
+
+		Optional<LLUIColor>		text_enabled_color;		// <FS:Zi> Add label/caption colors
+		Optional<LLUIColor>		text_disabled_color;	// <FS:Zi> Add label/caption colors
+
 		Params();
 	};
 
@@ -100,7 +104,12 @@ public:
 	static void		onColorChanged ( void* data, EColorPickOp pick_op = COLOR_CHANGE );
 	void			closeFloaterColorPicker();
 
+	void setLabelColor(const LLColor4& c)			{ mTextEnabledColor = c; updateLabelColor();  }	// <FS:Zi> Add label/caption colors
+	void setDisabledLabelColor(const LLColor4& c)	{ mTextDisabledColor = c; updateLabelColor(); }	// <FS:Zi> Add label/caption colors
+
 protected:
+	void updateLabelColor();	// <FS:Zi> Add label/caption colors
+
 	bool					mValid;
 	LLColor4				mColor;
 	LLUIColor				mBorderColor;
@@ -116,6 +125,9 @@ protected:
 
 	LLPointer<LLUIImage> mAlphaGradientImage;
 	LLPointer<LLUIImage> mFallbackImage;
+
+	LLUIColor				mTextEnabledColor;		// <FS:Zi> Add label/caption colors
+	LLUIColor				mTextDisabledColor;		// <FS:Zi> Add label/caption colors
 };
 
 #endif  // LL_LLBUTTON_H
