@@ -258,15 +258,15 @@ jobs:
         id: build
         run: autobuild build -c ReleaseFS -A${{matrix.addrsize}} --no-configure
         shell: bash
-      - name: Extract version number
-        id: version
-        shell: bash
-        run: |
-          if [ -r "indra/newview/viewer_version.txt" ]
-          then
-              viewer_version="$(<"$build_dir/newview/viewer_version.txt")"
-              echo "viewer_version=$viewer_version" >> "$GITHUB_OUTPUT"
-          fi
+      # - name: Extract version number
+      #   id: version
+      #   shell: bash
+      #   run: |
+      #     if [ -r "indra/newview/viewer_version.txt" ]
+      #     then
+      #         viewer_version="$(<"$build_dir/newview/viewer_version.txt")"
+      #         echo "viewer_version=$viewer_version" >> "$GITHUB_OUTPUT"
+      #     fi
       - name: Publish artifacts
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v3
