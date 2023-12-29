@@ -1759,6 +1759,8 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
 	mDefaultImageAssetID(p.default_image_id),
 	mDefaultImageName(p.default_image_name),
 	mFallbackImage(p.fallback_image),
+	mTextEnabledColor(p.text_enabled_color),      // <FS:Zi> Add label/caption colors
+	mTextDisabledColor(p.text_disabled_color),    // <FS:Zi> Add label/caption colors
 	// <FS:Ansariel> Mask texture if desired
 	mIsMasked(FALSE)
 {
@@ -1774,7 +1776,10 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
 
 	LLTextBox::Params params(p.caption_text);
 	params.name(p.label);
-	params.rect(LLRect( 0, BTN_HEIGHT_SMALL, getRect().getWidth(), 0 ));
+	// <FS:Zi> Fix label width
+	// params.rect(LLRect( 0, BTN_HEIGHT_SMALL, getRect().getWidth(), 0 ));
+	params.rect(LLRect( 0, BTN_HEIGHT_SMALL, p.label_width == -1 ? getRect().getWidth() : p.label_width, 0 ));
+	// <//FS:Zi>
 	params.initial_value(p.label());
 	params.follows.flags(FOLLOWS_LEFT | FOLLOWS_RIGHT | FOLLOWS_BOTTOM);
 	mCaption = LLUICtrlFactory::create<LLTextBox> (params);
@@ -1812,6 +1817,8 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
 	addChild(mBorder);
 
 	mLoadingPlaceholderString = LLTrans::getString("texture_loading");
+
+	updateLabelColor();	// <FS:Zi> Add label/caption colors
 }
 
 LLTextureCtrl::~LLTextureCtrl()
@@ -1896,7 +1903,10 @@ void LLTextureCtrl::setEnabled( BOOL enabled )
 		closeDependentFloater();
 	}
 
-	mCaption->setEnabled( enabled );
+	// <FS:Zi> Add label/caption colors
+	// mCaption->setEnabled( enabled );
+	mCaption->setEnabled(enabled && isInEnabledChain());
+	// </FS:Zi>
 
 	// <FS:Ansariel> Texture preview mode
 	//LLView::setEnabled( enabled );
@@ -2421,6 +2431,8 @@ void LLTextureCtrl::draw()
 		}
 	}
 
+	mCaption->setEnabled(getEnabled() && isInEnabledChain());	// <FS:Zi> Add label/caption colors
+
 	LLUICtrl::draw();
 }
 
@@ -2527,7 +2539,10 @@ LLSD LLTextureCtrl::getValue() const
 	return LLSD(getImageAssetID());
 }
 
-
-
-
-
+// <FS:Zi> Add label/caption colors
+void LLTextureCtrl::updateLabelColor()
+{
+	mCaption->setColor(mTextEnabledColor.get());
+	mCaption->setReadOnlyColor(mTextDisabledColor.get());
+}
+// </FS:Zi>
