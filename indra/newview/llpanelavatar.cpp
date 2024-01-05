@@ -164,7 +164,6 @@ static void put_avatar_properties_coro(std::string cap_url, LLUUID agent_id, LLS
     if (!status)
     {
         LL_WARNS("AvatarProperties") << "Failed to put agent information " << data << " for id " << agent_id << LL_ENDL;
-        return;
     }
     else
     {
