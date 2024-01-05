@@ -93,7 +93,6 @@
 		<combo_box.item value="filter_type_sounds" label="Sons" />
 		<combo_box.item value="filter_type_textures" label="Textures" />
 		<combo_box.item value="filter_type_snapshots" label="Photos" />
-		<combo_box.item value="filter_type_meshes" label="Meshes" />
 		<combo_box.item value="filter_type_settings" label="Environnements" />
 		<combo_box.item value="filter_type_custom" label="Filtres personnalisés..." />
 	</combo_box>

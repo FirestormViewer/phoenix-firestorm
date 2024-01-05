@@ -42,7 +42,6 @@
 #include "llbutton.h"
 #include "llcalc.h"
 #include "llcheckboxctrl.h"
-#include "llcolorswatch.h"
 #include "llcombobox.h"
 #include "llfocusmgr.h"
 #include "llmanipscale.h"

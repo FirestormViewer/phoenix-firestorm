@@ -37,7 +37,6 @@
 				<combo_box.item value="filter_type_sounds" label="Səslər" />
 				<combo_box.item value="filter_type_textures" label="Teksturlar" />
 				<combo_box.item value="filter_type_snapshots" label="Şəkillər" />
-				<combo_box.item value="filter_type_meshes" label="Meş" />
 				<combo_box.item value="filter_type_settings" label="Seçimlər" />
 				<combo_box.item value="filter_type_custom" label="Ayrı..." />
 			</combo_box>

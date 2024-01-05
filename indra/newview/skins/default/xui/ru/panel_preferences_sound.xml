@@ -503,6 +503,13 @@
 			<button name="Def_UISndTrackerBeacon" tool_tip="Сброс к UUID по умолчанию."/>
 			<check_box label="Включить звук" name="PlayModeUISndTrackerBeacon"/>
 
+			<text name="textFSMicToggle" tool_tip="Звуковой UUID воспроизводится при включении или выключении микрофона.">
+				Переключатель микрофона:
+			</text>
+			<button name="Prev_UISndMicToggle" tool_tip="Прослушать этот звук."/>
+			<button name="Def_UISndMicToggle" tool_tip="Сброс к UUID по умолчанию."/>
+			<check_box name="PlayModeUISndMicToggle" label="Воспроизведить этот звук"/>
+
 			<text tool_tip="UUID звука воспроизводимый, когда происходит перезагрузка региона." name="textFSRestart">
 				Перезагрузка региона:
 			</text>

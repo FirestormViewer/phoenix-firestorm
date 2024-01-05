@@ -122,6 +122,9 @@ public:
 		Optional<LLViewBorder::Params> border;
 		Optional<bool>			show_caption;			// <FS:Zi> leave some room underneath the image for the caption
 
+		Optional<LLUIColor>		text_enabled_color;		// <FS:Zi> Add label/caption colors
+		Optional<LLUIColor>		text_disabled_color;	// <FS:Zi> Add label/caption colors
+
 		Params()
 		:	image_id("image"),
 			default_image_id("default_image_id"),
@@ -134,6 +137,8 @@ public:
 			fallback_image("fallback_image"),
 			multiselect_text("multiselect_text"),
 			show_caption("show_caption", true),			// <FS:Zi> leave some room underneath the image for the caption
+			text_enabled_color("text_enabled_color"),	// <FS:Zi> Add label/caption colors
+			text_disabled_color("text_disabled_color"),	// <FS:Zi> Add label/caption colors
 			caption_text("caption_text"),
 			border("border")
 		{}
@@ -250,9 +255,14 @@ public:
 	// <FS:Ansariel> Mask texture if desired
 	void setIsMasked(BOOL masked) { mIsMasked = masked; }
 
+	void setLabelColor(const LLColor4& c)			{ mTextEnabledColor = c; updateLabelColor();  }	// <FS:Zi> Add label/caption colors
+	void setDisabledLabelColor(const LLColor4& c)	{ mTextDisabledColor = c; updateLabelColor(); }	// <FS:Zi> Add label/caption colors
+
 private:
 	BOOL allowDrop(LLInventoryItem* item, EDragAndDropType cargo_type, std::string& tooltip_msg);
 	BOOL doDrop(LLInventoryItem* item);
+
+	void updateLabelColor();	// <FS:Zi> Add label/caption colors
 
 private:
 	drag_n_drop_callback	 	mDragCallback;
@@ -293,6 +303,9 @@ private:
 
 	// <FS:Ansariel> Mask texture if desired
 	BOOL						mIsMasked;
+
+	LLUIColor					mTextEnabledColor;		// <FS:Zi> Add label/caption colors
+	LLUIColor					mTextDisabledColor;		// <FS:Zi> Add label/caption colors
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
