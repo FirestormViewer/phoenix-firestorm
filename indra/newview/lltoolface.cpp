@@ -43,8 +43,8 @@
 #include "rlvactions.h"
 // [/RLVa:KB]
 
+// #include "llpanelface.h"  // <FS:Zi> switchable edit texture/materials panel - include not needed
 // <FS:Zi> Add control to drag texture faces around
-#include "llpanelface.h"
 #include "llspinctrl.h"
 #include "llkeyboard.h"
 #include "llwindow.h"
@@ -290,11 +290,14 @@ void LLToolFace::render()
 	LLFloaterTools* toolsFloater=(LLFloaterTools*) LLFloaterReg::findInstance("build");
 	if(toolsFloater)
 	{
-		LLPanelFace* panelFace=toolsFloater->mPanelFace;
-		if(panelFace)
-		{
-			panelFace->refresh();
-		}
+		// <FS:Zi> switchable edit texture/materials panel
+		// LLPanelFace* panelFace=toolsFloater->mPanelFace;
+		// if(panelFace)
+		// {
+		// 	panelFace->refresh();
+		// }
+		toolsFloater->refreshPanelFace();
+		// </FS:Zi>
 	}
 
 #ifdef TEXTURE_GRAB_UPDATE_REGULARLY

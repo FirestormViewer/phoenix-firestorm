@@ -1,0 +1,2589 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+   border="false"
+   follows="all"
+   height="410"
+   label="Texture"
+   layout="topleft"
+   left="0"
+   mouse_opaque="false"
+   help_topic="toolbox_texture_tab"
+   name="Texture"
+   top="0"
+   width="295"
+>
+
+   <panel.string
+      name="paste_error_face_selection_mismatch">
+      When multiple faces are copied, the target object must have the same number of faces selected.
+   </panel.string>
+   <panel.string
+      name="paste_error_object_face_count_mismatch">
+      When all faces of an object are copied, the target object must have the same number of faces.
+   </panel.string>
+   <panel.string
+      name="paste_error_inventory_not_found">
+      One or more textures not found in inventory.
+   </panel.string>
+   <panel.string
+      name="paste_options">
+      Copy Texture Parameters to Clipboard
+   </panel.string>
+
+<tab_container
+   follows="all"
+   layout="topleft"
+   left="0"
+   top_pad="4"
+   halign="center"
+   name="tabs_material_type"
+   tab_max_width="100"
+   tab_min_width="40"
+   tab_position="top"
+   tab_height="20"
+   open_tabs_on_drag_and_drop="true"
+   width="295"
+   height="324"
+   visibility_control="FSInternalCanEditObjectFaces"
+>
+
+<panel
+   follows="all"
+   layout="topleft"
+   label="PBR"
+   mouse_opaque="false"
+   name="panel_material_type_pbr"
+>
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top="4"
+   width="160"
+   height="212"
+   mouse_opaque="false"
+   name="panel_material_maps"
+>
+
+<texture_picker
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top="0"
+   width="60"
+   height="76"
+   name="pbr_control"
+   label="Material"
+   can_apply_immediately="true"
+   allow_no_texture="true"
+   fallback_image="materials_ui_x_24.png"
+   tool_tip="Click to choose a pbr material"
+/>
+
+<texture_picker
+   follows="left|top"
+   layout="topleft"
+   left_pad="4"
+   width="60"
+   height="76"
+   name="base_color_picker"
+   label="Base Color"
+   label_width="64"
+   can_apply_immediately="true"
+   allow_no_texture="true"
+   fallback_image="materials_ui_x_24.png"
+   tool_tip="Click to choose the base color map (Albedo)"
+/>
+
+<color_swatch
+   follows="left|top"
+   layout="topleft"
+   left_pad="4"
+   width="30"
+   height="77"
+   name="base_color_tint_picker"
+   label="Tint"
+   can_apply_immediately="true"
+   allow_no_texture="true"
+   tool_tip="Click to choose the base color tint"
+/>
+
+<texture_picker
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="-6"
+   width="60"
+   height="76"
+   name="normal_map_picker"
+   label="Normal"
+   can_apply_immediately="true"
+   allow_no_texture="true"
+   fallback_image="materials_ui_x_24.png"
+   tool_tip="Click to choose the normal map"
+/>
+
+<texture_picker
+   follows="left|top"
+   layout="topleft"
+   left_pad="4"
+   width="60"
+   height="76"
+   name="emissive_map_picker"
+   label="Emissive"
+   can_apply_immediately="true"
+   allow_no_texture="true"
+   fallback_image="materials_ui_x_24.png"
+   tool_tip="Click to choose the emission map"
+/>
+
+<color_swatch
+   follows="left|top"
+   layout="topleft"
+   left_pad="4"
+   width="30"
+   height="77"
+   name="emissive_color_tint_picker"
+   label="Tint"
+   can_apply_immediately="true"
+   tool_tip="Click to choose the emissive color tint"
+/>
+
+<texture_picker
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="-6"
+   width="60"
+   height="76"
+   name="metallic_map_picker"
+   label="(O)RM"
+   can_apply_immediately="true"
+   allow_no_texture="true"
+   fallback_image="materials_ui_x_24.png"
+   tool_tip="Click to choose the metallic-roughness map, which may contain optional occlusion channel"
+/>
+
+</panel>	   <!-- panel_material_maps -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="165"
+   top="0"
+   width="120"
+   height="212"
+   mouse_opaque="false"
+   name="panel_material_parameters"
+>
+
+<check_box
+   follows="right|top"
+   layout="topleft"
+   label="Double Sided"
+   top="32"
+   right="-1"
+   name="double sided"
+   height="22"
+   width="96"
+/>
+
+<spinner
+   follows="right|top"
+   layout="topleft"
+   top_pad="5"
+   right="-1"
+   width="120"
+   height="22"
+   label="Alpha"
+   label_width="65"
+   initial_value="0"
+   name="transparency"
+   decimal_digits="3"
+>
+</spinner>
+
+<text
+   follows="top|left"
+   layout="topleft"
+   left="0"
+   top_pad="5"
+   width="50"
+   height="16"
+   type="string"
+   length="1"
+   name="blend mode label"
+>
+   Mode
+</text>
+
+<combo_box
+   height="22"
+   layout="topleft"
+   right="-1"
+   name="alpha mode"
+   top_delta="-3"
+   width="80">
+  <combo_box.item
+   label="Opaque"
+   name="None"
+   value="OPAQUE" />
+  <combo_box.item
+   label="Blend"
+   name="Alpha blending"
+   value="BLEND" />
+  <combo_box.item
+   label="Mask"
+   name="Alpha masking"
+   value="MASK" />
+</combo_box>
+
+<spinner
+   follows="right|top"
+   layout="topleft"
+   top_pad="3"
+   right="-1"
+   width="120"
+   height="22"
+   label="Cutoff"
+   label_width="65"
+   initial_value="0"
+   name="alpha cutoff"
+   decimal_digits="3"
+/>
+
+<spinner
+   follows="right|top"
+   layout="topleft"
+   top_pad="10"
+   right="-1"
+   width="120"
+   height="22"
+   label="Metallic"
+   label_width="65"
+   initial_value="0"
+   name="metalness factor"
+   decimal_digits="3"
+/>
+
+<spinner
+   follows="right|top"
+   layout="topleft"
+   top_pad="4"
+   right="-1"
+   width="120"
+   height="22"
+   label="Roughness"
+   label_width="65"
+   initial_value="0"
+   name="roughness factor"
+   decimal_digits="3"
+/>
+
+<button
+   follows="right|top"
+   layout="topleft"
+   height="22"
+   top_pad="4"
+   right="-1"
+   name="save_selected_pbr"
+   label="Save"
+   width="100"
+/>
+
+</panel>	<!-- panel_material_parameters -->
+
+<!-- BEGIN PBR Material texture transform parameters -->
+<tab_container
+   follows="all"
+   layout="topleft"
+   halign="center"
+   left="0"
+   top_pad="8"
+   name="tabs_pbr_transforms"
+   label_pad_left="0"
+   tab_max_width="100"
+   tab_min_width="30"
+   tab_position="top"
+   tab_height="20"
+   open_tabs_on_drag_and_drop="true"
+   width="295"
+   height="70"
+>
+
+<panel
+   follows="all"
+   layout="topleft"
+   label="All"
+   mouse_opaque="false"
+   name="panel_pbr_transforms_all"
+>
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top="0"
+   mouse_opaque="false"
+   name="pbr_transforms_all_scale"
+   width="90"
+   height="70"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Scale
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="0"
+   height="19"
+   right="-20"
+   name="gltfTextureScaleU_All"
+   initial_value="0"
+   min_val="-10000"
+   max_val="10000"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="all" />
+</spinner>
+
+<button
+   follows="top|left"
+   layout="topleft"
+   left_pad="4"
+   top_delta="1"
+   width="16"
+   height="18"
+   image_overlay="Edit_Flip_X"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="flipTextureScaleMU"
+   tool_tip="Flip"
+>
+<button.commit_callback
+   function="BuildTool.Flip"
+   parameter="gltfTextureScaleU_All" />
+</button>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="2"
+   height="19"
+   right="-20"
+   initial_value="0"
+   min_val="-10000"
+   max_val="10000"
+   decimal_digits="5"
+   name="gltfTextureScaleV_All"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="all" />
+</spinner>
+
+<button
+   follows="top|left"
+   layout="topleft"
+   left_pad="4"
+   top_delta="1"
+   width="16"
+   height="18"
+   image_overlay="Edit_Flip_X"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="flipTextureScaleMV"
+   tool_tip="Flip"
+>
+<button.commit_callback
+   function="BuildTool.Flip"
+   parameter="gltfTextureScaleV_All" />
+</button>
+
+</panel>	<!-- pbr_transforms_all_scale -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="98"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="pbr_transforms_all_offset"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Offset
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="0"
+   height="19"
+   right="-10"
+   name="gltfTextureOffsetU_All"
+   initial_value="0"
+   min_val="-1"
+   max_val="1"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="all" />
+</spinner>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="2"
+   height="19"
+   right="-10"
+   name="gltfTextureOffsetV_All"
+   initial_value="0"
+   min_val="-1"
+   max_val="1"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="all" />
+</spinner>
+
+</panel>	<!-- pbr_transforms_all_offset -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="194"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="pbr_transforms_all_rotation"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Rotation
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="0"
+   height="19"
+   right="-10"
+   name="gltfTextureRotation_All"
+   initial_value="0"
+   min_val="-360"
+   max_val="360"
+   decimal_digits="2"
+   increment="1"
+>
+
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="all" />
+</spinner>
+
+</panel>	<!-- pbr_transforms_all_rotation -->
+
+</panel>    <!-- panel_pbr_transforms_all -->
+
+<panel
+   follows="all"
+   layout="topleft"
+   label="Base Color"
+   mouse_opaque="false"
+   name="panel_pbr_transforms_base_color"
+>
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top="0"
+   mouse_opaque="false"
+   name="pbr_transforms_base_color_scale"
+   width="90"
+   height="70"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Scale
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="0"
+   height="19"
+   right="-20"
+   name="gltfTextureScaleU_Base"
+   initial_value="0"
+   min_val="-10000"
+   max_val="10000"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="base" />
+</spinner>
+
+<button
+   follows="top|left"
+   layout="topleft"
+   left_pad="4"
+   top_delta="1"
+   width="16"
+   height="18"
+   image_overlay="Edit_Flip_X"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="flipTextureScaleMU"
+   tool_tip="Flip"
+>
+<button.commit_callback
+   function="BuildTool.Flip"
+   parameter="gltfTextureScaleU_Base" />
+</button>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="2"
+   height="19"
+   right="-20"
+   name="gltfTextureScaleV_Base"
+   initial_value="0"
+   min_val="-10000"
+   max_val="10000"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="base" />
+</spinner>
+
+<button
+   follows="top|left"
+   layout="topleft"
+   left_pad="4"
+   top_delta="1"
+   width="16"
+   height="18"
+   image_overlay="Edit_Flip_X"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="flipTextureScaleMV"
+   tool_tip="Flip"
+>
+<button.commit_callback
+   function="BuildTool.Flip"
+   parameter="gltfTextureScaleV_Base" />
+</button>
+
+</panel>	<!-- pbr_transforms_base_color_scale -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="98"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="pbr_transforms_base_color_offset"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Offset
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="0"
+   height="19"
+   right="-10"
+   name="gltfTextureOffsetU_Base"
+   initial_value="0"
+   min_val="-1"
+   max_val="1"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="base" />
+</spinner>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="2"
+   height="19"
+   right="-10"
+   name="gltfTextureOffsetV_Base"
+   initial_value="0"
+   min_val="-1"
+   max_val="1"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="base" />
+</spinner>
+
+</panel>	<!-- pbr_transforms_base_color_offset -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="194"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="pbr_transforms_base_color_rotation"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Rotation
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="0"
+   height="19"
+   right="-10"
+   name="gltfTextureRotation_Base"
+   initial_value="0"
+   max_val="360"
+   min_val="-360"
+   decimal_digits="2"
+   increment="1"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="base" />
+</spinner>
+
+</panel>	<!-- pbr_transforms_base_color_rotation -->
+
+</panel>    <!-- panel_pbr_transforms_base_color -->
+
+<panel
+   follows="all"
+   layout="topleft"
+   label="Normal"
+   mouse_opaque="false"
+   name="panel_pbr_transforms_normal"
+>
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top="0"
+   mouse_opaque="false"
+   name="pbr_transforms_normal_scale"
+   width="90"
+   height="70"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Scale
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="0"
+   height="19"
+   right="-20"
+   name="gltfTextureScaleU_Normal"
+   initial_value="0"
+   min_val="-10000"
+   max_val="10000"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="normal" />
+</spinner>
+
+<button
+   follows="top|left"
+   layout="topleft"
+   left_pad="4"
+   top_delta="1"
+   width="16"
+   height="18"
+   image_overlay="Edit_Flip_X"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="flipTextureScaleMU"
+   tool_tip="Flip"
+>
+<button.commit_callback
+   function="BuildTool.Flip"
+   parameter="gltfTextureScaleU_Normal" />
+</button>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="2"
+   height="19"
+   right="-20"
+   name="gltfTextureScaleV_Normal"
+   initial_value="0"
+   min_val="-10000"
+   max_val="10000"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="normal" />
+</spinner>
+
+<button
+   follows="top|left"
+   layout="topleft"
+   left_pad="4"
+   top_delta="1"
+   width="16"
+   height="18"
+   image_overlay="Edit_Flip_X"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="flipTextureScaleMV"
+   tool_tip="Flip"
+>
+<button.commit_callback
+   function="BuildTool.Flip"
+   parameter="gltfTextureScaleV_Normal" />
+</button>
+
+</panel>	<!-- pbr_transforms_normal_scale -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="98"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="pbr_transforms_normal_offset"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Offset
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="0"
+   height="19"
+   right="-10"
+   name="gltfTextureOffsetU_Normal"
+   initial_value="0"
+   min_val="-1"
+   max_val="1"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="normal" />
+</spinner>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="2"
+   height="19"
+   right="-10"
+   name="gltfTextureOffsetV_Normal"
+   initial_value="0"
+   min_val="-1"
+   max_val="1"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="normal" />
+</spinner>
+
+</panel>	<!-- pbr_transforms_normal_offset -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="194"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="pbr_transforms_normal_rotation"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Rotation
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="0"
+   height="19"
+   right="-10"
+   name="gltfTextureRotation_Normal"
+   initial_value="0"
+   max_val="360"
+   min_val="-360"
+   decimal_digits="2"
+   increment="1"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="normal" />
+</spinner>
+
+</panel>	<!-- pbr_transforms_normal_rotation -->
+
+</panel>    <!-- panel_pbr_transforms_normal -->
+
+<panel
+   follows="all"
+   layout="topleft"
+   label="(O)RM"
+   mouse_opaque="false"
+   name="panel_pbr_transforms_metallic"
+>
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top="0"
+   mouse_opaque="false"
+   name="pbr_transforms_orm_scale"
+   width="90"
+   height="70"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Scale
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="0"
+   height="19"
+   right="-20"
+   name="gltfTextureScaleU_Metallic"
+   initial_value="0"
+   min_val="-10000"
+   max_val="10000"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="metallic" />
+</spinner>
+
+<button
+   follows="top|left"
+   layout="topleft"
+   left_pad="4"
+   top_delta="1"
+   width="16"
+   height="18"
+   image_overlay="Edit_Flip_X"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="flipTextureScaleMU"
+   tool_tip="Flip"
+>
+<button.commit_callback
+   function="BuildTool.Flip"
+   parameter="gltfTextureScaleU_Metallic" />
+</button>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="2"
+   height="19"
+   right="-20"
+   name="gltfTextureScaleV_Metallic"
+   initial_value="0"
+   min_val="-10000"
+   max_val="10000"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="metallic" />
+</spinner>
+
+<button
+   follows="top|left"
+   layout="topleft"
+   left_pad="4"
+   top_delta="1"
+   width="16"
+   height="18"
+   image_overlay="Edit_Flip_X"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="flipTextureScaleMV"
+   tool_tip="Flip"
+>
+<button.commit_callback
+   function="BuildTool.Flip"
+   parameter="gltfTextureScaleV_Metallic" />
+</button>
+
+</panel>	<!-- pbr_transforms_orm_scale -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="98"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="pbr_transforms_orm_offset"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Offset
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="0"
+   height="19"
+   right="-10"
+   name="gltfTextureOffsetU_Metallic"
+   initial_value="0"
+   min_val="-1"
+   max_val="1"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="metallic" />
+</spinner>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="2"
+   height="19"
+   right="-10"
+   name="gltfTextureOffsetV_Metallic"
+   initial_value="0"
+   min_val="-1"
+   max_val="1"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="metallic" />
+</spinner>
+
+</panel>	<!-- pbr_transforms_orm_offset -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="194"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="pbr_transforms_orm_rotation"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Rotation
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="0"
+   height="19"
+   right="-10"
+   name="gltfTextureRotation_Metallic"
+   initial_value="0"
+   max_val="360"
+   min_val="-360"
+   decimal_digits="2"
+   increment="1"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="metallic" />
+</spinner>
+
+</panel>	<!-- pbr_transforms_orm_rotation -->
+
+</panel>    <!-- panel_pbr_transforms_metallic -->
+
+<panel
+   follows="all"
+   layout="topleft"
+   label="Emissive"
+   mouse_opaque="false"
+   name="panel_pbr_transforms_emissive"
+>
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top="0"
+   mouse_opaque="false"
+   name="pbr_transforms_emissive_scale"
+   width="90"
+   height="70"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Scale
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="0"
+   height="19"
+   right="-20"
+   name="gltfTextureScaleU_Emissive"
+   initial_value="0"
+   min_val="-10000"
+   max_val="10000"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="emissive" />
+</spinner>
+
+<button
+   follows="top|left"
+   layout="topleft"
+   left_pad="4"
+   top_delta="1"
+   width="16"
+   height="18"
+   image_overlay="Edit_Flip_X"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="flipTextureScaleMU"
+   tool_tip="Flip"
+>
+<button.commit_callback
+   function="BuildTool.Flip"
+   parameter="gltfTextureScaleU_Emissive" />
+</button>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="2"
+   height="19"
+   right="-20"
+   name="gltfTextureScaleV_Emissive"
+   initial_value="0"
+   min_val="-10000"
+   max_val="10000"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="emissive" />
+</spinner>
+
+<button
+   follows="top|left"
+   layout="topleft"
+   left_pad="4"
+   top_delta="1"
+   width="16"
+   height="18"
+   image_overlay="Edit_Flip_X"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="flipTextureScaleMV"
+   tool_tip="Flip"
+>
+<button.commit_callback
+   function="BuildTool.Flip"
+   parameter="gltfTextureScaleV_Emissive" />
+</button>
+
+</panel>	<!-- pbr_transforms_emissive_scale -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="98"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="pbr_transforms_emissive_offset"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Offset
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="0"
+   height="19"
+   right="-10"
+   name="gltfTextureOffsetU_Emissive"
+   initial_value="0"
+   min_val="-1"
+   max_val="1"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="emissive" />
+</spinner>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="2"
+   height="19"
+   right="-10"
+   name="gltfTextureOffsetV_Emissive"
+   initial_value="0"
+   min_val="-1"
+   max_val="1"
+   decimal_digits="5"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="emissive" />
+</spinner>
+
+</panel>	<!-- pbr_transforms_emissive_offset -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="194"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="pbr_transforms_emissive_rotation"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Rotation
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="0"
+   height="19"
+   right="-10"
+   name="gltfTextureRotation_Emissive"
+   initial_value="0"
+   max_val="360"
+   min_val="-360"
+   decimal_digits="2"
+   increment="1"
+>
+<spinner.commit_callback
+   function="BuildTool.GLTFUVSpinner"
+   parameter="emissive" />
+</spinner>
+
+</panel>	<!-- pbr_transforms_emissive_rotation -->
+
+</panel>    <!-- panel_pbr_transforms_emissive -->
+
+</tab_container>
+
+<!-- END PBR Material texture transform parameters -->
+
+</panel>    <!-- panel_material_type_pbr -->
+
+<panel
+   follows="all"
+   layout="topleft"
+   label="Blinn-Phong"
+   mouse_opaque="false"
+   name="panel_material_type_blinn_phong"
+>
+
+<layout_stack
+   follows="all"
+   layout="topleft"
+   orientation="horizontal"
+   width="293"
+   height="212"
+>
+
+<layout_panel
+   follows="all"
+   layout="topleft"
+   width="110"
+   height="212"
+   name="panel_blinn_phong_maps"
+   auto_resize="false"
+>
+
+<texture_picker
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top="0"
+   width="60"
+   height="76"
+   name="texture control"
+   label="Diffuse"
+   can_apply_immediately="true"
+   allow_no_texture="false"
+   default_image_name="Default"
+   fallback_image="materials_ui_x_24.png"
+   tool_tip="Click to choose a picture"
+/>
+
+<color_swatch
+   follows="top|left"
+   layout="topleft"
+   left_pad="4"
+   top_delta="-1"
+   width="30"
+   height="77"
+   name="colorswatch"
+   label="Tint"
+   tool_tip="Click to open color picker"
+   can_apply_immediately="true"
+/>
+
+<texture_picker
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="-6"
+   width="60"
+   height="76"
+   allow_no_texture="true"
+   can_apply_immediately="true"
+   default_image_name="Default"
+   fallback_image="materials_ui_x_24.png"
+   label="Normal"
+   name="bumpytexture control"
+   tool_tip="Click to choose a picture"
+/>
+
+<texture_picker
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="-6"
+   width="60"
+   height="76"
+   allow_no_texture="true"
+   can_apply_immediately="true"
+   default_image_name="Default"
+   fallback_image="materials_ui_x_24.png"
+   label="Specular"
+   name="shinytexture control"
+   tool_tip="Click to choose a picture"
+/>
+
+<color_swatch
+   follows="left|top"
+   layout="topleft"
+   width="30"
+   height="77"
+   left_pad="4"
+   label="Color"
+   label_width="35"
+   can_apply_immediately="true"
+   name="shinycolorswatch"
+   tool_tip="Click to open color picker"
+   enabled_control="FSInternalFaceHasBPSpecularMap"
+/>
+
+</layout_panel>   <!-- panel_blinn_phong_maps -->
+
+<layout_panel
+   follows="all"
+   layout="topleft"
+   name="panel_blinn_phong_options"
+   left="140"
+   top="0"
+   width="172"
+   height="212"
+   auto_resize="false"
+>
+
+<check_box
+   follows="top|rileftght"
+   layout="topleft"
+   left="0"
+   top="6"
+   height="16"
+   right="-1"
+   label="Full Bright"
+   name="checkbox fullbright"
+   width="81"
+/>
+
+<spinner
+   follows="top|right"
+   layout="topleft"
+   right="-1"
+   top_pad="10"
+   width="150"
+   height="19"
+   name="ColorTrans"
+   label="Transparency"
+   label_width="80"
+   initial_value="0"
+   increment="2"
+   max_val="100"
+   decimal_digits="0"
+/>
+
+<text
+   follows="right|top|"
+   layout="topleft"
+   top_delta="4"
+   right="-1"
+   width="16"
+   height="16"
+   type="string"
+   length="1"
+   text_color="TextFgColor"
+   name="color trans percent"
+>
+   %
+</text>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   type="string"
+   left="0"
+   top_pad="8"
+   width="70"
+   height="16"
+   length="1"
+   name="label alphamode"
+   text_readonly_color="LabelDisabledColor"
+>
+   Alpha mode
+</text>
+
+<combo_box
+   follows="left|right|top"
+   layout="topleft"
+   left_pad="0"
+   top_delta="-4"
+   right="-1"
+   height="22"
+   name="combobox alphamode"
+>
+<combo_box.item
+   label="None"
+   name="None"
+   value="None" />
+<combo_box.item
+   label="Alpha blending"
+   name="Alpha blending"
+   value="Alpha blending" />
+<combo_box.item
+   label="Alpha masking"
+   name="Alpha masking"
+   value="Alpha masking" />
+<combo_box.item
+   label="Emissive mask"
+   name="Emissive mask"
+   value="Emissive mask" />
+</combo_box>
+
+<spinner
+   follows="right|top"
+   layout="topleft"
+   top_pad="2"
+   height="19"
+   width="150"
+   right="-1"
+   label="Mask cutoff"
+   label_width="80"
+   name="maskcutoff"
+   initial_value="127"
+   min_val="0"
+   max_val="255"
+   increment="1"
+   decimal_digits="0"
+/>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   type="string"
+   left="0"
+   top_pad="18"
+   width="70"
+   height="16"
+   length="1"
+   name="label bumpiness"
+   text_readonly_color="LabelDisabledColor"
+>
+   Bumpiness
+</text>
+
+<combo_box
+   follows="left|right|top"
+   layout="topleft"
+   left_pad="0"
+   top_delta="-6"
+   right="-1"
+   height="22"
+   name="combobox bumpiness"
+>
+<combo_box.item
+   label="None"
+   name="None"
+   value="None"
+/>
+<combo_box.item
+   label="Brightness"
+   name="Brightness"
+   value="Brightness" />
+<combo_box.item
+   label="Darkness"
+   name="Darkness"
+   value="Darkness" />
+<combo_box.item
+   label="woodgrain"
+   name="woodgrain"
+   value="woodgrain" />
+<combo_box.item
+   label="bark"
+   name="bark"
+   value="bark" />
+<combo_box.item
+   label="bricks"
+   name="bricks"
+   value="bricks" />
+<combo_box.item
+   label="checker"
+   name="checker"
+   value="checker" />
+<combo_box.item
+   label="concrete"
+   name="concrete"
+   value="concrete" />
+<combo_box.item
+   label="crustytile"
+   name="crustytile"
+   value="crustytile" />
+<combo_box.item
+   label="cutstone"
+   name="cutstone"
+   value="cutstone" />
+<combo_box.item
+   label="discs"
+   name="discs"
+   value="discs" />
+<combo_box.item
+   label="gravel"
+   name="gravel"
+   value="gravel" />
+<combo_box.item
+   label="petridish"
+   name="petridish"
+   value="petridish" />
+<combo_box.item
+   label="siding"
+   name="siding"
+   value="siding" />
+<combo_box.item
+   label="stonetile"
+   name="stonetile"
+   value="stonetile" />
+<combo_box.item
+   label="stucco"
+   name="stucco"
+   value="stucco" />
+<combo_box.item
+   label="suction"
+   name="suction"
+   value="suction" />
+<combo_box.item
+   label="weave"
+   name="weave"
+   value="weave" />
+
+<!--
+   NORSPEC-182, ensure item doesn't show up in menu until it should
+   <combo_box.item
+   label="Use texture"
+   name="Use texture"
+   value="Use texture" />
+-->
+
+</combo_box>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   type="string"
+   left="0"
+   top_pad="8"
+   width="70"
+   height="16"
+   length="1"
+   name="label shininess"
+   text_readonly_color="LabelDisabledColor"
+>
+   Shininess
+</text>
+
+<combo_box
+   follows="left|right|top"
+   layout="topleft"
+   left_pad="0"
+   top_delta="-6"
+   right="-1"
+   height="22"
+   name="combobox shininess"
+>
+<combo_box.item
+   label="None"
+   name="None"
+   value="None"
+/>
+<combo_box.item
+   label="Low"
+   name="Low"
+   value="Low"
+/>
+<combo_box.item
+   label="Medium"
+   name="Medium"
+   value="Medium"
+/>
+<combo_box.item
+   label="High"
+   name="High"
+   value="High"
+/>
+</combo_box>
+
+<spinner
+   follows="right|top"
+   layout="topleft"
+   top_pad="8"
+   width="150"
+   height="19"
+   right="-1"
+   name="glossiness"
+   label="Glossiness"
+   label_width="80"
+   initial_value="51"
+   min_val="0"
+   max_val="255"
+   increment="1"
+   decimal_digits="0"
+   text_readonly_color="LabelDisabledColor"
+   enabled_control="FSInternalFaceHasBPSpecularMap"
+/>
+
+<spinner
+   follows="right|top"
+   layout="topleft"
+   top_pad="4"
+   height="19"
+   width="150"
+   right="-1"
+   name="environment"
+   label="Environment"
+   label_width="80"
+   initial_value="0"
+   min_val="0"
+   max_val="255"
+   increment="1"
+   decimal_digits="0"
+   enabled_control="FSInternalFaceHasBPSpecularMap"
+/>
+
+</layout_panel>    <!-- panel_blinn_phong_options -->
+
+</layout_stack>
+
+<tab_container
+   follows="all"
+   layout="topleft"
+   halign="center"
+   left="0"
+   top_pad="4"
+   right="-2"
+   name="tabs_blinn_phong_uvs"
+   tab_max_width="100"
+   tab_min_width="40"
+   tab_position="top"
+   tab_height="20"
+   open_tabs_on_drag_and_drop="true"
+>
+
+<panel
+   follows="all"
+   layout="topleft"
+   label="Diffuse"
+   mouse_opaque="false"
+   name="panel_blinn_phong_diffuse"
+>
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="transforms_diffuse_scale"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Scale
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="0"
+   height="19"
+   right="-20"
+   name="TexScaleU"
+   initial_value="0"
+   min_val="-10000"
+   max_val="10000"
+   decimal_digits="5"
+/>
+
+<button
+   follows="left|top"
+   layout="topleft"
+   left_pad="4"
+   top_delta="1"
+   width="16"
+   height="18"
+   image_overlay="Edit_Flip_X"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="flipTextureScaleU"
+   tool_tip="Flip"
+>
+<button.commit_callback
+   function="BuildTool.Flip"
+   parameter="TexScaleU" />
+</button>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="2"
+   height="19"
+   right="-20"
+   name="TexScaleV"
+   initial_value="0"
+   min_val="-10000"
+   max_val="10000"
+   decimal_digits="5"
+/>
+
+<button
+   follows="top|left"
+   layout="topleft"
+   left_pad="4"
+   top_delta="1"
+   width="16"
+   height="18"
+   image_overlay="Edit_Flip_X"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="flipTextureScaleV"
+   tool_tip="Flip"
+>
+<button.commit_callback
+   function="BuildTool.Flip"
+   parameter="TexScaleV" />
+</button>
+
+</panel>	<!-- transforms_diffuse_scale -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="98"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="transforms_diffuse_offset"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Offset
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="0"
+   height="19"
+   right="-10"
+   name="TexOffsetU"
+   initial_value="0"
+   min_val="-1"
+   max_val="1"
+   decimal_digits="5"
+/>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="2"
+   height="19"
+   right="-10"
+   name="TexOffsetV"
+   initial_value="0"
+   min_val="-1"
+   max_val="1"
+   decimal_digits="5"
+/>
+
+</panel>	<!-- transforms_diffuse_offset -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="194"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="transforms_diffuse_rotation"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Rotation
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="0"
+   height="19"
+   right="-10"
+   name="TexRot"
+   initial_value="0"
+   min_val="-360"
+   max_val="360"
+   decimal_digits="2"
+   increment="1"
+/>
+
+</panel>    <!-- transforms_diffuse_rotation -->
+
+</panel>    <!-- panel_blinn_phong_diffuse -->
+
+<panel
+   follows="all"
+   layout="topleft"
+   label="Normal"
+   mouse_opaque="false"
+   name="panel_blinn_phong_normal"
+   enabled_control="FSInternalFaceHasBPNormalMap"
+>
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="transforms_normal_scale"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Scale
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="0"
+   height="19"
+   right="-20"
+   name="bumpyScaleU"
+   initial_value="0"
+   min_val="-10000"
+   max_val="10000"
+   decimal_digits="5"
+/>
+
+<button
+   follows="top|left"
+   layout="topleft"
+   left_pad="4"
+   top_delta="1"
+   width="16"
+   height="18"
+   image_overlay="Edit_Flip_X"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="flipTextureScaleNU"
+   tool_tip="Flip"
+>
+<button.commit_callback
+   function="BuildTool.Flip"
+   parameter="bumpyScaleU" />
+</button>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="2"
+   height="19"
+   right="-20"
+   name="bumpyScaleV"
+   initial_value="0"
+   min_val="-10000"
+   max_val="10000"
+   decimal_digits="5"
+/>
+
+<button
+   follows="top|left"
+   layout="topleft"
+   left_pad="4"
+   top_delta="1"
+   width="16"
+   height="18"
+   image_overlay="Edit_Flip_X"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="flipTextureScaleNV"
+   tool_tip="Flip"
+>
+<button.commit_callback
+   function="BuildTool.Flip"
+   parameter="bumpyScaleV" />
+</button>
+
+</panel>	<!-- transforms_normal_scale -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="98"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="transforms_normal_offset"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Offset
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="0"
+   height="19"
+   right="-10"
+   name="bumpyOffsetU"
+   initial_value="0"
+   min_val="-1"
+   max_val="1"
+   decimal_digits="5"
+/>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="2"
+   height="19"
+   right="-10"
+   name="bumpyOffsetV"
+   initial_value="0"
+   min_val="-1"
+   max_val="1"
+   decimal_digits="5"
+/>
+
+</panel>	<!-- transforms_normal_offset -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="194"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="transforms_normal_rotation"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Rotation
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="0"
+   height="19"
+   right="-10"
+   name="bumpyRot"
+   initial_value="0"
+   min_val="-360"
+   max_val="360"
+   decimal_digits="2"
+   increment="1"
+/>
+
+</panel>    <!-- transforms_normal_rotation -->
+
+</panel>    <!-- panel_blinn_phong_normal -->
+
+<panel
+   follows="all"
+   layout="topleft"
+   label="Specular"
+   mouse_opaque="false"
+   name="panel_blinn_phong_specular"
+   enabled_control="FSInternalFaceHasBPSpecularMap"
+>
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="transforms_specular_scale"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Scale
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="0"
+   height="19"
+   right="-20"
+   name="shinyScaleU"
+   initial_value="0"
+   min_val="-10000"
+   max_val="10000"
+   decimal_digits="5"
+/>
+
+<button
+   follows="top|left"
+   layout="topleft"
+   left_pad="4"
+   top_delta="1"
+   width="16"
+   height="18"
+   image_overlay="Edit_Flip_X"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="flipTextureScaleSU"
+   tool_tip="Flip"
+>
+<button.commit_callback
+   function="BuildTool.Flip"
+   parameter="shinyScaleU" />
+</button>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="0"
+   top_pad="2"
+   height="19"
+   right="-20"
+   name="shinyScaleV"
+   initial_value="0"
+   min_val="-10000"
+   max_val="10000"
+   decimal_digits="5"
+/>
+
+<button
+   follows="top|left"
+   layout="topleft"
+   left_pad="4"
+   top_delta="1"
+   width="16"
+   height="18"
+   image_overlay="Edit_Flip_X"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="flipTextureScaleSV"
+   tool_tip="Flip"
+>
+<button.commit_callback
+   function="BuildTool.Flip"
+   parameter="shinyScaleV" />
+</button>
+
+</panel>	<!-- transforms_specular_scale -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="98"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="transforms_specular_offset"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Offset
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="0"
+   height="19"
+   right="-10"
+   name="shinyOffsetU"
+   initial_value="0"
+   min_val="-1"
+   max_val="1"
+   decimal_digits="5"
+/>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="2"
+   height="19"
+   right="-10"
+   name="shinyOffsetV"
+   initial_value="0"
+   min_val="-1"
+   max_val="1"
+   decimal_digits="5"
+/>
+
+</panel>	<!-- transforms_specular_offset -->
+
+<panel
+   follows="left|top"
+   layout="topleft"
+   left="194"
+   top="0"
+   width="90"
+   height="70"
+   mouse_opaque="false"
+   name="transforms_specular_rotation"
+>
+
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="center"
+   left="0"
+   right="-1"
+   height="16">
+    Rotation
+</text>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   left="10"
+   top_pad="0"
+   height="19"
+   right="-10"
+   name="shinyRot"
+   initial_value="0"
+   min_val="-360"
+   max_val="360"
+   decimal_digits="2"
+   increment="1"
+/>
+
+</panel>    <!-- transforms_specular_rotation -->
+
+</panel>    <!-- panel_blinn_phong_specular -->
+
+</tab_container>  <!-- tabs_blinn_phong_uvs -->
+
+</panel> <!-- panel_material_type_blinn_phong -->
+
+<panel
+   follows="all"
+   label="Media"
+   layout="topleft"
+   mouse_opaque="false"
+   name="panel_material_type_media"
+>
+
+<text
+   follows="left|top|right"
+   layout="topleft"
+   left="4"
+   top="28"
+   right="-4"
+   height="16"
+   use_ellipses="true"
+   read_only="true"
+   name="media_info"
+>
+   URL of chosen media, if any, goes here
+</text>
+
+<web_browser
+   follows="left|top"
+   layout="topleft"
+   left="4"
+   top_pad="6"
+   right="-4"
+   height="200"
+   enabled="false"
+   border_visible="true"
+   name="title_media"
+   start_url="about:blank"
+   decouple_texture_size="true"
+/>
+
+<button
+   follows="bottom|left"
+   layout="topleft"
+   left="10"
+   bottom="-8"
+   width="85"
+   height="18"
+   name="add_media"
+   label="Choose..."
+   tool_tip="Add Media"
+/>
+
+<button
+   follows="bottom|left"
+   layout="topleft"
+   left_pad="5"
+   top_delta="0"
+   width="85"
+   height="18"
+   name="delete_media"
+   label="Remove"
+   tool_tip="Delete this media texture"
+/>
+
+<button
+   follows="bottom|left"
+   layout="topleft"
+   left_pad="5"
+   top_delta="0"
+   width="85"
+   height="18"
+   name="button align"
+   label="Align"
+   label_selected="Align Media"
+   tool_tip="Align media texture (must load first)"
+/>
+
+</panel> <!-- panel_material_type_media -->
+
+</tab_container>  <!-- tabs_material_type -->
+
+<view_border
+   follows="top|left|right"
+   layout="topleft"
+   left="4"
+   top_pad="5"
+   right="-4"
+   height="2"
+   visibility_control="FSInternalCanEditObjectFaces"
+/>
+
+<panel
+   follows="left|right|top"
+   layout="topleft"
+   left="0"
+   top_pad="0"
+   name="panel_face_params"
+   height="76"
+   visibility_control="FSInternalCanEditObjectFaces"
+>
+
+<spinner
+   follows="left|right|top"
+   layout="topleft"
+   left="6"
+   top="2"
+   width="180"
+   height="19"
+   name="rptctrl"
+   label="Repeats per meter"
+   label_width="108"
+   initial_value="0"
+   min_val="-100"
+   max_val="100"
+   decimal_digits="1"
+/>
+
+<check_box
+   follows="top|left"
+   layout="topleft"
+   control_name="SyncMaterialSettings"
+   height="16"
+   label="Synchronize materials"
+   left="2"
+   top_pad="10"
+   width="200"
+   name="checkbox_sync_settings"
+   tool_tip="Synchronize texture map parameters"
+/>
+
+<check_box
+   follows="left|top"
+   layout="topleft"
+   top_pad="4"
+   width="136"
+   height="16"
+   label="Align planar faces"
+   initial_value="false"
+   name="checkbox planar align"
+   tool_tip="Align textures on all selected faces with the last selected face. Requires Planar texture mapping."
+/>
+
+<text
+   follows="right|top"
+   layout="topleft"
+   top="0"
+   width="80"
+   right="-1"
+   height="16"
+   halign="center"
+   type="string"
+   length="1"
+   name="tex gen"
+>
+   Mapping
+</text>
+
+<combo_box
+   follows="right|top"
+   layout="topleft"
+   top_pad="1"
+   width="80"
+   height="23"
+   name="combobox texgen"
+>
+<combo_box.item
+   label="Default"
+   name="Default"
+   value="Default"
+/>
+<combo_box.item
+   label="Planar"
+   name="Planar"
+   value="Planar"
+/>
+</combo_box>
+
+<button
+   follows="right|top"
+   layout="topleft"
+   top_pad="4"
+   width="76"
+   height="23"
+   label="Align"
+   name="button align textures"
+   tool_tip="Align current texture layers"
+/>
+
+</panel>   <!-- panel_face_params -->
+
+<button
+   follows="top|right"
+   layout="topleft"
+   left_pad="-58"
+   top="4"
+   width="25"
+   height="23"
+   image_overlay="Copy"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="copy_face_btn"
+   tool_tip="Copy Texture Parameters to Clipboard"
+   visibility_control="FSInternalCanEditObjectFaces"
+/>
+
+<button
+   follows="top|right"
+   layout="topleft"
+   left_pad="4"
+   width="25"
+   height="23"
+   image_overlay="Paste"
+   image_hover_unselected="Toolbar_Middle_Over"
+   image_selected="Toolbar_Middle_Selected"
+   image_unselected="Toolbar_Middle_Off"
+   name="paste_face_btn"
+   tool_tip="Paste Texture Parameters from Clipboard"
+   visibility_control="FSInternalCanEditObjectFaces"
+/>
+
+<spinner
+   follows="left|top"
+   layout="topleft"
+   top_pad="5"
+   right="-8"
+   width="90"
+   height="19"
+   label="Glow"
+   label_width="35"
+   initial_value="0"
+   name="glow"
+   decimal_digits="3"
+   visibility_control="FSInternalCanEditObjectFaces"
+/>
+
+</panel>    <!-- Texture -->

@@ -60,7 +60,12 @@
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llworld.h"
-#include "llpanelface.h"
+// <FS:Zi> switchable edit texture/materials panel
+// #include "llpanelface.h"
+#include "llmaterial.h"
+#include "llmaterialmgr.h"
+// </FS:Zi>
+
 #include "lluiusage.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
 #include "rlvactions.h"
@@ -1324,11 +1329,14 @@ void LLToolDragAndDrop::dropTexture(LLViewerObject* hit_obj,
 
         // If user dropped a texture onto face it implies
         // applying texture now without cancel, save to selection
-        LLPanelFace* panel_face = gFloaterTools->getPanelFace();
+		// LLPanelFace* panel_face = gFloaterTools->getPanelFace();  // <FS:Zi> switchable edit texture/materials panel
         if (nodep
             && gFloaterTools->getVisible()
-            && panel_face
-            && panel_face->getTextureDropChannel() == 0 /*texture*/
+			// <FS:Zi> switchable edit texture/materials panel
+			// && panel_face
+			// && panel_face->getTextureDropChannel() == 0 /*texture*/
+			&& gFloaterTools->getTextureDropChannel() == 0 /*texture*/
+			// <FS:Zi>
             && nodep->mSavedTextures.size() > hit_face)
         {
             LLViewerTexture* tex = hit_obj->getTEImage(hit_face);
@@ -1373,11 +1381,16 @@ void LLToolDragAndDrop::dropTextureOneFace(LLViewerObject* hit_obj,
 
 	LLTextureEntry* tep = hit_obj ? (hit_obj->getTE(hit_face)) : NULL;
 
-	LLPanelFace* panel_face = gFloaterTools->getPanelFace();
+	// <FS:Zi> switchable edit texture/materials panel
+	// LLPanelFace* panel_face = gFloaterTools->getPanelFace();
 
-	if (gFloaterTools->getVisible() && panel_face)
+	// if (gFloaterTools->getVisible() && panel_face)
+	if (gFloaterTools->getVisible())
+	// </FS:Zi>
 	{
-        tex_channel = (tex_channel > -1) ? tex_channel : panel_face->getTextureDropChannel();
+		// <FS:Zi> switchable edit texture/materials panel
+		// tex_channel = (tex_channel > -1) ? tex_channel : panel_face->getTextureDropChannel();
+		tex_channel = (tex_channel > -1) ? tex_channel : gFloaterTools->getTextureDropChannel();
         switch (tex_channel)
 		{
 
@@ -1391,7 +1404,9 @@ void LLToolDragAndDrop::dropTextureOneFace(LLViewerObject* hit_obj,
 		case 1:
 			{
 				LLMaterialPtr old_mat = tep->getMaterialParams();
-				LLMaterialPtr new_mat = panel_face->createDefaultMaterial(old_mat);
+				// <FS:Zi> switchable edit texture/materials panel
+				// LLMaterialPtr new_mat = panel_face->createDefaultMaterial(old_mat);
+				LLMaterialPtr new_mat = gFloaterTools->createDefaultMaterial(old_mat);
 				new_mat->setNormalID(asset_id);
 				tep->setMaterialParams(new_mat);
 				hit_obj->setTENormalMap(hit_face, asset_id);
@@ -1402,7 +1417,9 @@ void LLToolDragAndDrop::dropTextureOneFace(LLViewerObject* hit_obj,
 		case 2:
 			{
 				LLMaterialPtr old_mat = tep->getMaterialParams();
-				LLMaterialPtr new_mat = panel_face->createDefaultMaterial(old_mat);
+				// <FS:Zi> switchable edit texture/materials panel
+				// LLMaterialPtr new_mat = panel_face->createDefaultMaterial(old_mat);
+				LLMaterialPtr new_mat = gFloaterTools->createDefaultMaterial(old_mat);
 				new_mat->setSpecularID(asset_id);
 				tep->setMaterialParams(new_mat);
 				hit_obj->setTESpecularMap(hit_face, asset_id);

@@ -97,7 +97,7 @@
 #include "llvovolume.h"
 #include "pipeline.h"
 #include "llviewershadermgr.h"
-#include "llpanelface.h"
+// #include "llpanelface.h"  // <FS:Zi> switchable edit texture/materials panel - include not needed
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvactions.h"
 #include "rlvhandler.h"
@@ -2251,7 +2251,9 @@ void LLSelectMgr::selectionRevertShinyColors()
 					LLMaterialPtr old_mat = object->getTEref(te).getMaterialParams();
 					if (!old_mat.isNull())
 					{
-						LLMaterialPtr new_mat = gFloaterTools->getPanelFace()->createDefaultMaterial(old_mat);
+						// <FS:Zi> switchable edit texture/materials panel
+						// LLMaterialPtr new_mat = gFloaterTools->getPanelFace()->createDefaultMaterial(old_mat);
+						LLMaterialPtr new_mat = gFloaterTools->createDefaultMaterial(old_mat);
 						new_mat->setSpecularLightColor(color);
 						object->getTEref(te).setMaterialParams(new_mat);
 						LLMaterialMgr::getInstance()->put(object->getID(), te, *new_mat);
@@ -3167,7 +3169,9 @@ void LLSelectMgr::adjustTexturesByScale(BOOL send_to_sim, BOOL stretch)
 					if (tep && !tep->getMaterialParams().isNull())
 					{
 						LLMaterialPtr orig = tep->getMaterialParams();
-						LLMaterialPtr p = gFloaterTools->getPanelFace()->createDefaultMaterial(orig);
+						// <FS:Zi> switchable edit texture/materials panel
+						// LLMaterialPtr p = gFloaterTools->getPanelFace()->createDefaultMaterial(orig);
+						LLMaterialPtr p = gFloaterTools->createDefaultMaterial(orig);
 						p->setNormalRepeat(normal_scale_s, normal_scale_t);
 						p->setSpecularRepeat(specular_scale_s, specular_scale_t);
 
@@ -3193,7 +3197,9 @@ void LLSelectMgr::adjustTexturesByScale(BOOL send_to_sim, BOOL stretch)
 					if (tep && !tep->getMaterialParams().isNull())
 					{
 						LLMaterialPtr orig = tep->getMaterialParams();
-						LLMaterialPtr p = gFloaterTools->getPanelFace()->createDefaultMaterial(orig);
+						// <FS:Zi> switchable edit texture/materials panel
+						// LLMaterialPtr p = gFloaterTools->getPanelFace()->createDefaultMaterial(orig);
+						LLMaterialPtr p = gFloaterTools->createDefaultMaterial(orig);
 
 						p->setNormalRepeat(normal_scale_s, normal_scale_t);
 						p->setSpecularRepeat(specular_scale_s, specular_scale_t);
