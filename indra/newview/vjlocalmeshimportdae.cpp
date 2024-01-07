@@ -541,7 +541,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 	extra_names.insert(extra_names.end(), more_extra_names.begin(), more_extra_names.end());
 
 	// add the extras to jointmap
-	for (auto extra_name : extra_names)
+	for (const auto& extra_name : extra_names)
 	{
 		joint_map[extra_name] = extra_name;
 	}
@@ -657,7 +657,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 			auto name_source = current_source->getName_array();
 			if (name_source)
 			{
-				auto list_of_names = name_source->getValue();
+				const auto& list_of_names = name_source->getValue();
 				for (size_t joint_name_iter = 0; joint_name_iter < list_of_names.getCount(); ++joint_name_iter)
 				{
 					std::string current_name = list_of_names.get(joint_name_iter);
@@ -674,7 +674,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 					continue;
 				}
 
-				auto list_of_names = id_source->getValue();
+				const auto& list_of_names = id_source->getValue();
 				for (size_t joint_name_iter = 0; joint_name_iter < list_of_names.getCount(); ++joint_name_iter)
 				{
 					std::string current_name = list_of_names.get(joint_name_iter).getID();
@@ -729,7 +729,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 		}
 
 		LLMatrix4 newinverse = LLMatrix4(skininfop->mInvBindMatrix[jointname_number_iter].getF32ptr());
-		auto joint_translation = joint_transforms[name_lookup].getTranslation();
+		const auto& joint_translation = joint_transforms[name_lookup].getTranslation();
 		newinverse.setTranslation(joint_translation);
 		skininfop->mAlternateBindMatrix.push_back( LLMatrix4a(newinverse) );
 	}
@@ -755,7 +755,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 	}
 
 	std::vector<LLVector4> transformed_positions;
-	auto vertex_input_array = raw_vertex_array->getInput_array();
+	const auto& vertex_input_array = raw_vertex_array->getInput_array();
 
 	for (size_t vertex_input_iterator = 0; vertex_input_iterator < vertex_input_array.getCount(); ++vertex_input_iterator)
 	{
@@ -820,7 +820,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 		return false;
 	}
 
-	auto weight_inputs = current_weights->getInput_array();
+	const auto& weight_inputs = current_weights->getInput_array();
 	domFloat_array* vertex_weights = nullptr;
 
 	for (size_t weight_input_iter = 0; weight_input_iter < weight_inputs.getCount(); ++weight_input_iter)
@@ -923,18 +923,18 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 	};
 
 	auto& faces = current_object->getFaces(mLod);
-	for (auto& current_face : faces)
+	for (const auto& current_face : faces)
 	{
-		auto& positions = current_face->getPositions();
+		const auto& positions = current_face->getPositions();
 		auto& weights = current_face->getSkin();
 
-		for (auto& current_position : positions)
+		for (const auto& current_position : positions)
 		{	
 			int found_iterator = -1;
 
 			for (size_t internal_position_iter = 0; internal_position_iter < transformed_positions.size(); ++internal_position_iter)
 			{
-				auto& internal_position = transformed_positions[internal_position_iter];
+				const auto& internal_position = transformed_positions[internal_position_iter];
 				if (soft_compare(current_position, internal_position, F_ALMOST_ZERO))
 				{
 					found_iterator = internal_position_iter;
@@ -947,9 +947,9 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 				continue;
 			}
 
-			auto cjoints = skinweight_data[transformed_positions[found_iterator]];
+			const auto& cjoints = skinweight_data[transformed_positions[found_iterator]];
 
-			LLLocalMeshFace::LLLocalMeshSkinUnit new_wght;
+			LLLocalMeshFace::LLLocalMeshSkinUnit new_wght{};
 
 			// first init all joints to -1, in case below we get less than 4 influences.
 			for (size_t tjidx = 0; tjidx < 4; ++tjidx)
@@ -966,13 +966,13 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 			*/
 			for (size_t jidx = 0; jidx < cjoints.size(); ++jidx)
 			{
-				auto cjoint = cjoints[jidx];
+				const auto& cjoint = cjoints[jidx];
 				
 				new_wght.mJointIndices[jidx] = cjoint.mJointIdx;
 				new_wght.mJointWeights[jidx] = llclamp((F32)cjoint.mWeight, 0.f, 0.999f);
 			}
 
-			weights.push_back(new_wght);
+			weights.emplace_back(new_wght);
 		}
 	}
 	skininfop->updateHash();
@@ -1019,8 +1019,7 @@ void LLLocalMeshImportDAE::processSkeletonJoint(domNode* current_node, std::map<
 	if (!current_transformation) // no queries worked
 	{
 		daeSIDResolver jointResolver_matrix(current_node, "./matrix");
-		auto joint_transform_matrix = daeSafeCast<domMatrix>(jointResolver_matrix.getElement());
-		if (joint_transform_matrix)
+		if (auto joint_transform_matrix = daeSafeCast<domMatrix>(jointResolver_matrix.getElement()); joint_transform_matrix)
 		{
 			LLMatrix4 workingTransform;
 			domFloat4x4 domArray = joint_transform_matrix->getValue();
@@ -1332,7 +1331,7 @@ bool LLLocalMeshImportDAE::readMesh_Triangle(LLLocalMeshFace* data_out, const do
 		{
 			// compare to check if you find one with matching normal and uv values
 			size_t seeker_index = std::distance(repeat_map_position_iterable.begin(), seeker_position);
-			for (auto repeat_vtx_data : repeat_map_data[seeker_index])
+			for (const auto& repeat_vtx_data : repeat_map_data[seeker_index])
 			{
 				if (repeat_vtx_data.vtx_normal_data != attr_normal)
 				{
@@ -1563,7 +1562,7 @@ bool LLLocalMeshImportDAE::readMesh_Polylist(LLLocalMeshFace* data_out, const do
 			{
 				// compare to check if you find one with matching normal and uv values
 				int seeker_index = std::distance(repeat_map_position_iterable.begin(), seeker_position);
-				for (auto repeat_vtx_data : repeat_map_data[seeker_index])
+				for (const auto& repeat_vtx_data : repeat_map_data[seeker_index])
 				{
 					if (repeat_vtx_data.vtx_normal_data != attr_normal)
 					{
