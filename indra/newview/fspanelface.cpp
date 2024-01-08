@@ -2177,16 +2177,55 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
 	}
 }
 
+// One-off listener that updates the build floater UI when the agent inventory adds or removes an item
+// TODO: CHECK - Why do we even have this? -Zi
+class PBRPickerAgentListener : public LLInventoryObserver
+{
+protected:
+    bool mChangePending = true;
+public:
+        PBRPickerAgentListener() : LLInventoryObserver()
+    {
+        gInventory.addObserver(this);
+    }
+
+    const bool isListening()
+    {
+        return mChangePending;
+    }
+
+        void changed(U32 mask) override
+    {
+        if (!(mask & (ADD | REMOVE)))
+        {
+            return;
+        }
+
+        if (gFloaterTools)
+        {
+            gFloaterTools->dirty();
+        }
+        gInventory.removeObserver(this);
+        mChangePending = false;
+    }
+
+    ~PBRPickerAgentListener() override
+    {
+        gInventory.removeObserver(this);
+        mChangePending = false;
+    }
+};
+
 // One-off listener that updates the build floater UI when the prim inventory updates
 // TODO: CHECK - Why do we even have this? -Zi
-class PBRPickerItemListener : public LLVOInventoryListener
+class PBRPickerObjectListener : public LLVOInventoryListener
 {
 	protected:
 		LLViewerObject* mObjectp;
 		bool mChangePending = true;
 
 	public:
-		PBRPickerItemListener(LLViewerObject* object)
+		PBRPickerObjectListener(LLViewerObject* object)
 		: mObjectp(object)
 		{
 			registerVOInventoryListener(mObjectp, nullptr);
@@ -2210,7 +2249,7 @@ class PBRPickerItemListener : public LLVOInventoryListener
 			mChangePending = false;
 		}
 
-		~PBRPickerItemListener()
+		~PBRPickerObjectListener()
 		{
 			removeVOInventoryListener();
 			mChangePending = false;
@@ -2314,7 +2353,10 @@ void FSPanelFace::updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, 
 
 	if (objectp->isAttachment())
 	{
-		mMaterialCtrlPBR->setImmediateFilterPermMask(PERM_COPY | PERM_TRANSFER | PERM_MODIFY);
+		// TODO: coming in from latest patch, seems broken?
+		mMaterialCtrlPBR->setFilterPermissionMasks(PERM_COPY | PERM_TRANSFER | PERM_MODIFY);
+		// TODO: before:
+		// mMaterialCtrlPBR->setImmediateFilterPermMask(PERM_COPY | PERM_TRANSFER | PERM_MODIFY);
 	}
 	else
 	{
@@ -2325,18 +2367,29 @@ void FSPanelFace::updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, 
 	LL_DEBUGS("ENABLEDISABLETOOLS") << "mBtnSavePBR " << saveable << LL_ENDL;
 
 	// TODO: CHECK - Find out if we need this at all -Zi
-	if (objectp->isInventoryPending())
-	{
-		// Reuse the same listener when possible
-		if (!mInventoryListener || !mInventoryListener->isListeningFor(objectp))
-		{
-			mInventoryListener = std::make_unique<PBRPickerItemListener>(objectp);
-		}
-	}
-	else
-	{
-		mInventoryListener = nullptr;
-	}
+    if (objectp->isInventoryPending())
+    {
+        // Reuse the same listener when possible
+        if (!mVOInventoryListener || !mVOInventoryListener->isListeningFor(objectp))
+        {
+            mVOInventoryListener = std::make_unique<PBRPickerObjectListener>(objectp);
+        }
+    }
+    else
+    {
+        mVOInventoryListener = nullptr;
+    }
+    if (!func.mIdenticalMaterial || func.mMaterialId.isNull() || func.mMaterialId == LLGLTFMaterialList::BLANK_MATERIAL_ASSET_ID)
+    {
+        mAgentInventoryListener = nullptr;
+    }
+    else
+    {
+        if (!mAgentInventoryListener || !mAgentInventoryListener->isListening())
+        {
+            mAgentInventoryListener = std::make_unique<PBRPickerAgentListener>();
+        }
+    }
 
 	// Control values will be set once per frame in setMaterialOverridesFromSelection
 	sMaterialOverrideSelection.setDirty();
@@ -4430,6 +4483,7 @@ void FSPanelFace::onCopyTexture()
 				te_data["te"]["bumpmap"] = tep->getBumpmap();
 				te_data["te"]["bumpshiny"] = tep->getBumpShiny();
 				te_data["te"]["bumpfullbright"] = tep->getBumpShinyFullbright();
+                te_data["te"]["texgen"] = tep->getTexGen();
 				te_data["te"]["pbr"] = objectp->getRenderMaterialID(te);
 				if (tep->getGLTFMaterialOverride() != nullptr)
 				{
@@ -4829,6 +4883,10 @@ void FSPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
 			{
 				objectp->setTEBumpShinyFullbright(te, (U8)te_data["te"]["bumpfullbright"].asInteger());
 			}
+			if (te_data["te"].has("texgen"))
+			{
+				objectp->setTETexGen(te, (U8)te_data["te"]["texgen"].asInteger());
+			}
 
 			// PBR/GLTF
 			if (te_data["te"].has("pbr"))
@@ -4948,6 +5006,7 @@ void FSPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
 			LLSelectedTEMaterial::setSpecularLightExponent(this, (U8)te_data["material"]["SpecExp"].asInteger(), te, object_id);
 			LLSelectedTEMaterial::setEnvironmentIntensity(this, (U8)te_data["material"]["EnvIntensity"].asInteger(), te, object_id);
 			LLSelectedTEMaterial::setDiffuseAlphaMode(this, (U8)te_data["material"]["DiffuseAlphaMode"].asInteger(), te, object_id);
+            LLSelectedTEMaterial::setAlphaMaskCutoff(this, (U8)te_data["material"]["AlphaMaskCutoff"].asInteger(), te, object_id);
 
 			if (te_data.has("te") && te_data["te"].has("shiny"))
 			{

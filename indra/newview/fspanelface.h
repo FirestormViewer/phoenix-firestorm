@@ -55,7 +55,8 @@ class LLMaterialID;
 class LLMediaCtrl;
 class LLMenuButton;
 
-class PBRPickerItemListener;
+class PBRPickerAgentListener;
+class PBRPickerObjectListener;
 
 class LLTabContainer;
 
@@ -688,7 +689,8 @@ private:
 
 	static Selection sMaterialOverrideSelection;
 
-	std::unique_ptr<PBRPickerItemListener> mInventoryListener;
+	std::unique_ptr<PBRPickerAgentListener> mAgentInventoryListener;
+	std::unique_ptr<PBRPickerObjectListener> mVOInventoryListener;
 
 public:
 	#if defined(FS_DEF_GET_MAT_STATE)
