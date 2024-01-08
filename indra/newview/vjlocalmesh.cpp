@@ -346,7 +346,7 @@ void LLLocalMeshObject::fillVolume(LLLocalMeshFileLOD lod)
 			new_face.allocateWeights(current_submesh->getSkin().size());
 			for (size_t weight_iter = 0; weight_iter < current_submesh->getSkin().size(); ++weight_iter)
 			{
-				auto current_local_weight = current_submesh->getSkin()[weight_iter];
+				const auto& current_local_weight = current_submesh->getSkin()[weight_iter];
 				LLVector4 current_v4_weight;
 
 				for (int joint_iter = 0; joint_iter < 4; ++joint_iter)
@@ -513,10 +513,9 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
 		// clear it first just in case
 		mSavedObjectSculptIDs.clear();
 
-		for (auto& local_object : mLoadedObjectList)
+		for (const auto& local_object : mLoadedObjectList)
 		{
-			auto id = local_object->getVolumeParams().getSculptID();
-			mSavedObjectSculptIDs.push_back(id);
+			mSavedObjectSculptIDs.emplace_back(local_object->getVolumeParams().getSculptID());
 		}
 	}
 
@@ -625,7 +624,7 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
 						change_happened = true;
 					}
 
-					auto importer_log = importer_result.second;
+					const auto& importer_log = importer_result.second;
 					log.reserve(log.size() + importer_log.size());
 					log.insert(log.end(), importer_log.begin(), importer_log.end());
 					break;
@@ -787,9 +786,9 @@ void LLLocalMeshFile::updateVObjects()
 {
 	for (size_t object_iter = 0; object_iter < mSavedObjectSculptIDs.size(); ++object_iter)
 	{
-		auto local_obj_sculpt_id = mSavedObjectSculptIDs[object_iter];
+		const auto& local_obj_sculpt_id = mSavedObjectSculptIDs[object_iter];
 		auto affected_vobject_ids = gObjectList.findMeshObjectsBySculptID(local_obj_sculpt_id);
-		for (auto current_vobject_id : affected_vobject_ids)
+		for (const auto& current_vobject_id : affected_vobject_ids)
 		{
 			auto target_object_ptr = static_cast<LLVOVolume*>(gObjectList.findObject(current_vobject_id));
 			
