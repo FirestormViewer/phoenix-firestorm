@@ -269,7 +269,7 @@ protected:
 
 	// Convenience func to determine if all faces in selection have
 	// identical planar texgen settings during edits
-	// 
+	//
 	bool isIdenticalPlanarTexgen();
 
 	// Callback funcs for individual controls
