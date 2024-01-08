@@ -831,6 +831,15 @@ BOOL FSPanelFace::postBuild()
 	// PBR Save material button
 	mBtnSavePBR->setCommitCallback(boost::bind(&FSPanelFace::onClickBtnSavePBR, this));
 
+	// Only allow fully permissive textures
+	if (!gAgent.isGodlike())
+	{
+		mBaseTexturePBR->setFilterPermissionMasks(PERM_COPY | PERM_TRANSFER);
+		mNormalTexturePBR->setFilterPermissionMasks(PERM_COPY | PERM_TRANSFER);
+		mORMTexturePBR->setFilterPermissionMasks(PERM_COPY | PERM_TRANSFER);
+		mEmissiveTexturePBR->setFilterPermissionMasks(PERM_COPY | PERM_TRANSFER);
+	}
+
 	//
 	// set up user interface
 	//
