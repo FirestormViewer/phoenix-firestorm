@@ -1995,7 +1995,18 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 			while (src < end)
 			{	
 				LLVector4a normal;
+// <FS:Zi> GCC12 warning: maybe-uninitialized - probably bogus
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+// </FS:Zi>
 				mat_normal.rotate(*src++, normal);
+// <FS:Zi> GCC12 warning: maybe-uninitialized - probably bogus
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic pop
+#endif
+// </FS:Zi>
 				normal.store4a(normals);
 				normals += 4;
 			}

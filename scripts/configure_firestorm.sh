@@ -594,6 +594,11 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         echo "Setting startup project via vstool"
         ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
     fi
+        # Check the return code of the build command
+    if [ $? -ne 0 ]; then
+        echo "Configure failed!"
+        exit 1
+    fi    
 fi
 if [ $WANTS_BUILD -eq $TRUE ] ; then
     echo "Building $TARGET_PLATFORM..."
@@ -625,6 +630,12 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
                 -verbosity:normal -toolsversion:15.0 -p:"VCBuildAdditionalOptions= /incremental"
         fi
     fi
+    # Check the return code of the build command
+    if [ $? -ne 0 ]; then
+        echo "Build failed!"
+        exit 1
+    fi    
 fi
 echo "finished"
+exit 0
 

@@ -300,6 +300,7 @@
 		<menu_item_call label="Торговая площадка SL (Marketplace)" name="SL Marketplace"/>
 		<menu_item_call label="Торговые данные L$" name="LindenXchange"/>
 		<menu_item_call label="Библиотека скриптов" name="Script Library"/>
+		<menu_item_call label="SL Сообщество (блоги, форумы, новости)" name="SL Community Pages"/>
 		<menu_item_call label="Блог Firestorm" name="Firestorm Blog"/>
 		<menu_item_call label="Firestorm Flickr" name="Firestorm Flickr"/>
 		<menu_item_call label="Firestorm YouTube" name="Firestorm YouTube"/>

@@ -572,7 +572,8 @@ void LLGLTexMemBar::draw()
 
 	// <FS:Ansariel> Texture memory bars
 	S32 bar_left = 0;
-	S32 bar_width = 200;
+	constexpr S32 bar_width = 200;
+	constexpr S32 bar_space = 10;
 	S32 top = line_height*6 - 2 + v_offset;
 	S32 bottom = top - 6;
 	S32 left = bar_left;
@@ -585,7 +586,7 @@ void LLGLTexMemBar::draw()
 	text = "VRAM";
 	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*6,
 									 text_color, LLFontGL::LEFT, LLFontGL::TOP);
-	left = left + 35;
+	left += 35;
 	right = left + bar_width;
 	
 	gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f);
@@ -601,6 +602,29 @@ void LLGLTexMemBar::draw()
 
 	gl_rect_2d(left, top, right, bottom, color);
 	// </FS:Ansariel>
+	// <FS:Beq> Texture cache bars
+	bar_left = left + bar_width + bar_space;
+	left = bar_left;
+	// VRAM Mem Bar
+	text = "CACHE";
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*6,
+									 text_color, LLFontGL::LEFT, LLFontGL::TOP);
+
+	left += 35;
+	right = left + bar_width;
+	
+	gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f);
+	gl_rect_2d(left, top, right, bottom);
+
+    color = (cache_usage < cache_max_usage * 0.8f)? LLColor4::green :
+	    (cache_usage < cache_max_usage)? LLColor4::yellow : LLColor4::red;
+	color[VALPHA] = .75f;
+
+	bar_scale = (F32)bar_width / cache_max_usage;
+	right = left + llfloor(cache_usage * bar_scale);
+
+	gl_rect_2d(left, top, right, bottom, color);
+	// </FS:Beq>
 
 	U32 cache_read(0U), cache_write(0U), res_wait(0U);
 	LLAppViewer::getTextureFetch()->getStateStats(&cache_read, &cache_write, &res_wait);

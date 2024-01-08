@@ -37,7 +37,6 @@
 
 // STL headers
 #include <chrono>
-
 // boost headers
 #include "fix_macros.h"
 #include <boost/filesystem.hpp>
@@ -72,6 +71,61 @@ void LLLocalMeshFace::setFaceBoundingBox(LLVector4 data_in, bool initial_values)
 	}
 }
 
+void LLLocalMeshFace::logFaceInfo() const
+{
+	// log all of the attribute of the face using LL_DEBUGS("LocalMesh")
+	LL_DEBUGS("LocalMesh") << "LLLocalMeshFace: " << LL_ENDL;
+	LL_DEBUGS("LocalMesh") << "  mFaceBoundingBox: [" << mFaceBoundingBox.first << "," << mFaceBoundingBox.second << LL_ENDL;
+	// create a string stream from mIndices then output it to the log
+	std::stringstream ss;
+	for (const auto& index : mIndices)
+	{
+		ss << "[";
+		ss << index << ",";
+		ss << "]";
+	}
+	LL_DEBUGS("LocalMesh") << "  mFaceIndices: " << ss.str() << LL_ENDL;
+	// create a local string stream for the vertex positions in mPositions then log it
+	std::stringstream ss_pos;
+	ss_pos << "[";
+	for (const auto& pos : mPositions)
+	{
+		ss_pos << pos << ",";
+	}
+	ss_pos << "]";
+	LL_DEBUGS("LocalMesh") << "  mFacePositions: " << ss_pos.str() << LL_ENDL;
+	// create a local string stream for the UVcoords in mUVs then log it
+	std::stringstream ss_uv;
+	ss_uv << "[";
+	for (const auto& uv : mUVs)
+	{
+		ss_uv << uv << ",";
+	}
+	ss_uv << "]";
+	LL_DEBUGS("LocalMesh") << "  mFaceUVs: " << ss_uv.str() << LL_ENDL;
+	// create a local string stream for the normals in mNormals then log it
+	std::stringstream ss_norm;
+	ss_norm << "[";
+	for (const auto& norm : mNormals)
+	{
+		ss_norm << norm << ",";
+	}
+	ss_norm << "]";
+	LL_DEBUGS("LocalMesh") << "  mFaceNormals: " << ss_norm.str() << LL_ENDL;
+	int i = 0;
+	for (const auto& skinUnit : mSkin)
+	{
+		// log the mJointIncdices and mJointWeights as "num: idx = weight" for each entry in th skinUnit vector
+		LL_DEBUGS("LocalMesh") << "  mSkin[" << i << "]: " << LL_ENDL;
+		for (auto j=0; j<4;j++)
+		{
+			auto index =skinUnit.mJointIndices[j];
+			auto weight = skinUnit.mJointWeights[j];
+			LL_DEBUGS("LocalMesh") << "    " << j <<": [" << index << "] = " << weight << LL_ENDL;
+		}
+		++i;
+	}	
+}
 
 /*==========================================*/
 /*  LLLocalMeshObject: collection of faces  */
@@ -87,6 +141,31 @@ LLLocalMeshObject::LLLocalMeshObject(std::string_view name):
 }
 
 LLLocalMeshObject::~LLLocalMeshObject() = default;
+
+void LLLocalMeshObject::logObjectInfo() const
+{
+	// log all of the attribute of the object using LL_DEBUGS("LocalMesh")
+	LL_DEBUGS("LocalMesh") << "LLLocalMeshObject: " << mObjectName << LL_ENDL;
+	LL_DEBUGS("LocalMesh") << "  mSculptID: " << mSculptID << LL_ENDL;
+	LL_DEBUGS("LocalMesh") << "  mVolumeParams: " << mVolumeParams << LL_ENDL;
+	LL_DEBUGS("LocalMesh") << "  mObjectTranslation: " << mObjectTranslation << LL_ENDL;
+	LL_DEBUGS("LocalMesh") << "  mMeshSkinInfo: " << std::hex << std::showbase << (void *)mMeshSkinInfoPtr << LL_ENDL;
+	LL_DEBUGS("LocalMesh") << "    asLLSD: " << mMeshSkinInfoPtr->asLLSD(true, true) << LL_ENDL;
+	LL_DEBUGS("LocalMesh") << "  mFaceBoundingBox: [" << mObjectBoundingBox.first << "," << mObjectBoundingBox.second << LL_ENDL;
+	LL_DEBUGS("LocalMesh") << "  mObjectSize: " << mObjectSize << LL_ENDL;
+	LL_DEBUGS("LocalMesh") << "  mObjectScale: " << mObjectScale << LL_ENDL;
+	// Log the number of faces in mFaces and dump each one to the Log
+	// LL_DEBUGS("LocalMesh") << "  num faces: " << mFaces.size() << LL_ENDL;
+	// int i=0;
+	// for (const auto& face : mFaces)
+	// {
+	// 	LL_DEBUGS("LocalMesh") << "    face: " << i << LL_ENDL;
+	// 	face.logFaceInfo();
+	// 	i++
+	// }
+}
+
+
 
 void LLLocalMeshObject::computeObjectBoundingBox()
 {
@@ -267,7 +346,7 @@ void LLLocalMeshObject::fillVolume(LLLocalMeshFileLOD lod)
 			new_face.allocateWeights(current_submesh->getSkin().size());
 			for (size_t weight_iter = 0; weight_iter < current_submesh->getSkin().size(); ++weight_iter)
 			{
-				auto current_local_weight = current_submesh->getSkin()[weight_iter];
+				const auto& current_local_weight = current_submesh->getSkin()[weight_iter];
 				LLVector4 current_v4_weight;
 
 				for (int joint_iter = 0; joint_iter < 4; ++joint_iter)
@@ -434,10 +513,9 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
 		// clear it first just in case
 		mSavedObjectSculptIDs.clear();
 
-		for (auto& local_object : mLoadedObjectList)
+		for (const auto& local_object : mLoadedObjectList)
 		{
-			auto id = local_object->getVolumeParams().getSculptID();
-			mSavedObjectSculptIDs.push_back(id);
+			mSavedObjectSculptIDs.emplace_back(local_object->getVolumeParams().getSculptID());
 		}
 	}
 
@@ -546,7 +624,7 @@ void LLLocalMeshFile::reloadLocalMeshObjects(bool initial_load)
 						change_happened = true;
 					}
 
-					auto importer_log = importer_result.second;
+					const auto& importer_log = importer_result.second;
 					log.reserve(log.size() + importer_log.size());
 					log.insert(log.end(), importer_log.begin(), importer_log.end());
 					break;
@@ -708,9 +786,9 @@ void LLLocalMeshFile::updateVObjects()
 {
 	for (size_t object_iter = 0; object_iter < mSavedObjectSculptIDs.size(); ++object_iter)
 	{
-		auto local_obj_sculpt_id = mSavedObjectSculptIDs[object_iter];
+		const auto& local_obj_sculpt_id = mSavedObjectSculptIDs[object_iter];
 		auto affected_vobject_ids = gObjectList.findMeshObjectsBySculptID(local_obj_sculpt_id);
-		for (auto current_vobject_id : affected_vobject_ids)
+		for (const auto& current_vobject_id : affected_vobject_ids)
 		{
 			auto target_object_ptr = static_cast<LLVOVolume*>(gObjectList.findObject(current_vobject_id));
 			
@@ -804,13 +882,26 @@ void LLLocalMeshFile::pushLog(const std::string& who, const std::string& what, b
 
 	log_msg += what;
 	mLoadingLog.push_back(log_msg);
+	LL_INFOS("LocalMesh") << log_msg << LL_ENDL;
 }
-
-
 /*==========================================*/
 /*  LLLocalMeshSystem:  Main Manager Class  */
 /*  user facing manager class               */
 /*==========================================*/
+
+void LLLocalMeshSystem::pushLog(const std::string& who, const std::string& what, bool is_error) 
+{
+	std::string log_msg = "[ " + who + " ] ";
+	if (is_error)
+	{
+		log_msg += "[ ERROR ] ";
+	}
+
+	log_msg += what;
+	mSystemLog.push_back(log_msg);
+	LL_INFOS("LocalMesh") << log_msg << LL_ENDL;
+}
+
 LLLocalMeshSystem::LLLocalMeshSystem()
 {
 	mLoadedFileList.clear();

@@ -49,7 +49,7 @@
 // [/RLVa:KB]
 // PoundLife - Improved Object Inspect
 #include "llresmgr.h"
-#include "lltexturectrl.h"
+#include "lltextbase.h"
 #include "llviewerobjectlist.h" //gObjectList
 #include "llviewertexturelist.h"
 // PoundLife END
