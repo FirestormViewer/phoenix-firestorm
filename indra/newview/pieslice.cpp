@@ -135,21 +135,21 @@ std::string PieSlice::getLabel() const
 }
 
 // accessor
-void PieSlice::setLabel(const std::string& newLabel)
+void PieSlice::setLabel(std::string_view newLabel)
 {
 	mLabel = newLabel;
 }
 
 // accessor
-bool PieSlice::getStartAutohide()
+bool PieSlice::getStartAutohide() const
 {
 	return mStartAutohide;
 }
 
 // accessor
-bool PieSlice::getAutohide()
+bool PieSlice::getAutohide() const
 {
-	return mStartAutohide | mAutohide;
+	return mStartAutohide || mAutohide;
 }
 
 void PieSlice::resetUpdateEnabledCheck()
