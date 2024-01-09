@@ -36,6 +36,7 @@
 #include "llmodelloader.h"
 #include "llvoavatarself.h"
 #include "lldaeloader.h" // for preProcessDAE
+#include "llerror.h"
 
 /* dae headers*/
 #if LL_MSVC
@@ -59,6 +60,7 @@
 LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMeshFile* data, LLLocalMeshFileLOD lod)
 {
 	pushLog("DAE Importer", "Starting");
+	LL_DEBUGS("LocalMesh") << "DAE Importer: Starting" << LL_ENDL;
 
 	// instantiate collada objects
 	DAE			 collada_core;
@@ -73,6 +75,7 @@ LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMesh
 	// open file and check if opened
 	if (gSavedSettings.getBOOL("ImporterPreprocessDAE"))
 	{
+		LL_DEBUGS("LocalMesh") << "Performing dae preprocessing" << LL_ENDL;
 		collada_dom = collada_core.openFromMemory(filename, LLDAELoader::preprocessDAE(filename).c_str());
 	}
 	else
@@ -83,7 +86,7 @@ LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMesh
 
 	if (!collada_dom)
 	{
-		pushLog("DAE Importer", "Collada DOM instance could not initialize.");
+		pushLog("DAE Importer", "Collada DOM instance could not initialize.", true);
 		return loadFile_return(false, mLoadingLog);
 	}
 
@@ -111,10 +114,10 @@ LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMesh
 
 	static auto always_use_meter_scale = LLUICachedControl<bool>("FSLocalMeshScaleAlwaysMeters", false);
 
+	scene_transform_base.setIdentity();
 	if(!always_use_meter_scale)
 	{
 		domAsset::domUnit* unit = daeSafeCast<domAsset::domUnit>(collada_document_root->getDescendant(daeElement::matchType(domAsset::domUnit::ID())));
-		scene_transform_base.setIdentity();
 		if (unit)
 		{
 			F32 meter = unit->getMeter();
@@ -123,34 +126,37 @@ LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMesh
 			scene_transform_base.mMatrix[2][2] = meter;
 		}
 	}
-	else
-	{
-		scene_transform_base.setIdentity();
-	}
+
 	//get up axis rotation
 	LLMatrix4 rotation;
 	
 	domUpAxisType up = UPAXISTYPE_Y_UP;  // default in Collada is Y_UP
 	domAsset::domUp_axis* up_axis =
-	daeSafeCast<domAsset::domUp_axis>(collada_document_root->getDescendant(daeElement::matchType(domAsset::domUp_axis::ID())));
+		daeSafeCast<domAsset::domUp_axis>(collada_document_root->getDescendant(daeElement::matchType(domAsset::domUp_axis::ID())));
 	
 	if (up_axis)
 	{
 		up = up_axis->getValue();
-		
-		if (up == UPAXISTYPE_X_UP)
-		{
-			rotation.initRotation(0.0f, 90.0f * DEG_TO_RAD, 0.0f);
-		}
-		else if (up == UPAXISTYPE_Y_UP)
-		{
-			rotation.initRotation(90.0f * DEG_TO_RAD, 0.0f, 0.0f);
-		}
-		
 	}
+		
+	if (up == UPAXISTYPE_X_UP)
+	{
+		LL_DEBUGS("LocalMesh") << "Up axis is X_UP, setting up axis to Z" << LL_ENDL;
+		rotation.initRotation(0.0f, 90.0f * DEG_TO_RAD, 0.0f);
+	}
+	else if (up == UPAXISTYPE_Y_UP)
+	{
+		LL_DEBUGS("LocalMesh") << "Up axis is Y_UP, setting up axis to Z" << LL_ENDL;
+		rotation.initRotation(90.0f * DEG_TO_RAD, 0.0f, 0.0f);
+	}
+	else if (up == UPAXISTYPE_Z_UP)
+	{
+		LL_DEBUGS("LocalMesh") << "Up axis is Z_UP, not changed" << LL_ENDL;
+	}
+
 	rotation *= scene_transform_base;
 	scene_transform_base = rotation;
-	scene_transform_base.condition();	
+	scene_transform_base.condition();
 
 	size_t mesh_amount = collada_db->getElementCount(NULL, COLLADA_TYPE_MESH);
 	size_t skin_amount = collada_db->getElementCount(NULL, COLLADA_TYPE_SKIN);
@@ -160,6 +166,11 @@ LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMesh
 		pushLog("DAE Importer", "Collada document contained no MESH instances.");
 		return loadFile_return(false, mLoadingLog);
 	}
+	else
+	{
+		LL_DEBUGS("LocalMesh") << "Collada document contained " << mesh_amount << " MESH instances." << LL_ENDL;
+	}
+	LL_DEBUGS("LocalMesh") << "Collada document contained " << skin_amount << " SKIN instances." << LL_ENDL;
 
 	std::vector<domMesh*> mesh_usage_tracker;
 
@@ -200,7 +211,6 @@ LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMesh
 				object_vector.push_back(std::move(current_object));
 				mesh_usage_tracker.push_back(mesh_current);
 			}
-
 			else
 			{
 				pushLog("DAE Importer", "Object loading failed, skipping this one.");
@@ -274,7 +284,7 @@ LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMesh
 		domMesh* skin_current_mesh = skin_current_geom->getMesh();
 		if (!skin_current_mesh)
 		{
-			pushLog("DAE Importer", "Skin associated geometry continer has no mesh, skipping.");
+			pushLog("DAE Importer", "Skin associated geometry container has no mesh, skipping.");
 			continue;
 		}
 
@@ -314,7 +324,7 @@ LLLocalMeshImportDAE::loadFile_return LLLocalMeshImportDAE::loadFile(LLLocalMesh
 		{
 			pushLog("DAE Importer", "Skin idx " + std::to_string(skin_index) + " loading unsuccessful.");
 		}
-
+		current_object->logObjectInfo();
 	}
 
 	if (skin_amount)
@@ -470,6 +480,27 @@ bool LLLocalMeshImportDAE::processObject(domMesh* current_mesh, LLLocalMeshObjec
 	return !submesh_failure_found;
 }
 
+// Function to load the JointMap
+JointMap loadJointMap()
+{
+    JointMap joint_map = gAgentAvatarp->getJointAliases();
+
+    // unfortunately getSortedJointNames clears the ref vector, and we need two extra lists.
+    std::vector<std::string> extra_names, more_extra_names;
+    gAgentAvatarp->getSortedJointNames(1, extra_names);
+    gAgentAvatarp->getSortedJointNames(2, more_extra_names);
+    extra_names.reserve(more_extra_names.size());
+    extra_names.insert(extra_names.end(), more_extra_names.begin(), more_extra_names.end());
+
+    // add the extras to jointmap
+    for (auto extra_name : extra_names)
+    {
+        joint_map[extra_name] = extra_name;
+    }
+
+    return joint_map;
+}
+
 // this function is a mess even after refactoring, omnissiah help whichever tech priest delves into this mess.
 bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* collada_document_root, domMesh* current_mesh, domSkin* current_skin, 
 	std::unique_ptr<LLLocalMeshObject>& current_object)
@@ -488,6 +519,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 	LLPointer<LLMeshSkinInfo> skininfop = current_object->getObjectMeshSkinInfo();
 	if (skininfop == nullptr)
 	{
+		LL_DEBUGS("LocalMesh") << "Object mesh skin info is nullptr. allocate a new skininfo." << LL_ENDL;
 		try
 		{
 			skininfop = new LLMeshSkinInfo();
@@ -514,6 +546,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 	domSkin::domBind_shape_matrix* skin_current_bind_matrix = current_skin->getBind_shape_matrix();
 	if (skin_current_bind_matrix)
 	{
+		LL_DEBUGS("LocalMesh") << "Bind shape matrix found. Applying..." << LL_ENDL;
 		auto& bind_matrix_value = skin_current_bind_matrix->getValue();
 
         LLMatrix4 mat4_proxy;
@@ -530,22 +563,9 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 		matMul(transform, skininfop->mBindShapeMatrix, skininfop->mBindShapeMatrix);
 	}
 
+	LL_DEBUGS("LocalMesh") << "Loading Joint Map." << LL_ENDL;
 	// setup joint map
-	JointMap joint_map = gAgentAvatarp->getJointAliases();
-
-	// unfortunately getSortedJointNames clears the ref vector, and we need two extra lists.
-	std::vector<std::string> extra_names, more_extra_names;
-	gAgentAvatarp->getSortedJointNames(1, extra_names);
-	gAgentAvatarp->getSortedJointNames(2, more_extra_names);
-	extra_names.reserve(more_extra_names.size());
-	extra_names.insert(extra_names.end(), more_extra_names.begin(), more_extra_names.end());
-
-	// add the extras to jointmap
-	for (auto extra_name : extra_names)
-	{
-		joint_map[extra_name] = extra_name;
-	}
-
+	JointMap joint_map = loadJointMap();
 	
 	//=======================================================
 	// find or re-create a skeleton, deal with joint offsets
@@ -555,65 +575,98 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 
 	// try to find a regular skeleton
 	size_t skeleton_count = collada_db->getElementCount(NULL, "skeleton");
-	bool use_alternative_joint_search = true;
+	std::vector<domInstance_controller::domSkeleton*> skeletons;
+
 	JointTransformMap joint_transforms;
-	for (size_t skeleton_iterator = 0; skeleton_iterator < skeleton_count; ++skeleton_iterator)
+	for (size_t skeleton_index = 0; skeleton_index < skeleton_count; ++skeleton_index)
 	{
 		daeElement* current_element = nullptr;
-		collada_db->getElement(&current_element, skeleton_iterator, 0, "skeleton");
+		daeElement* current_skeleton_root = nullptr;
+		collada_db->getElement(&current_element, skeleton_index, 0, "skeleton");
+		
 		auto current_skeleton = daeSafeCast<domInstance_controller::domSkeleton>(current_element);
-		if (!current_skeleton)
+		if (current_skeleton)
 		{
-			continue;
+			current_skeleton_root = current_skeleton->getValue().getElement();
 		}
 
-		auto current_skeleton_root = current_skeleton->getValue().getElement();
-		if (!current_skeleton_root)
+		if (current_skeleton && current_skeleton_root)
 		{
-			continue;
+			skeletons.push_back(current_skeleton);
 		}
 
 		// we found at least one proper sekeleton
-		use_alternative_joint_search = false;
-		pushLog("DAE Importer", "Skeleton data found, attempting to process..");
-
-		auto skeleton_nodes = current_skeleton_root->getChildrenByType<domNode>();
-		for (size_t skeleton_node_iterator = 0; skeleton_node_iterator < skeleton_nodes.getCount(); ++skeleton_node_iterator)
-		{
-			auto current_node = daeSafeCast<domNode>(skeleton_nodes[skeleton_node_iterator]);
-			if (!current_node)
-			{
-				continue;
-			}
-
-			// work with node here
-			processSkeletonJoint(current_node, joint_map, joint_transforms);
-		}
 	}
 
-	// no skeletons found, recreate one from joints
-	if (use_alternative_joint_search)
+	if (skeletons.empty())
 	{
 		pushLog("DAE Importer", "No conventional skeleton data found, attempting to recreate from joints...");
+	
 		daeElement* document_scene = collada_document_root->getDescendant("visual_scene");
 		if (!document_scene)
 		{
-			// TODO: ERROR
-			// missing skeleton set?
+			LL_WARNS() << "Could not find visual_scene element in DAE document. Skipping skinning" << LL_ENDL;
+			return false;
 		}
 		else
 		{
 			auto scene_children = document_scene->getChildren();
-			for (size_t scene_child_iterator = 0; scene_child_iterator < scene_children.getCount(); ++scene_child_iterator)
-			{
-				auto current_node = daeSafeCast<domNode>(scene_children[scene_child_iterator]);
-				if (!current_node)
-				{
-					continue;
-				}
+			auto childCount = scene_children.getCount();
 
-				// work with node here
-				processSkeletonJoint(current_node, joint_map, joint_transforms);
+			// iterate through all the visual_scene and recursively through children and process any that are joints
+			auto all_ok = false;
+			for (size_t scene_child_index = 0; scene_child_index < childCount; ++scene_child_index)
+			{
+				auto current_node = daeSafeCast<domNode>(scene_children[scene_child_index]);
+				if (current_node)
+				{
+					all_ok = processSkeletonJoint(current_node, joint_map, joint_transforms, true);
+					if(!all_ok)
+					{
+						LL_DEBUGS("LocalMesh") << "failed to process joint: " << current_node->getName() << LL_ENDL;
+                        continue;
+					}
+				}
+			}
+			LL_DEBUGS("LocalMesh") << "All joints processed, all_ok = " << all_ok << LL_ENDL;
+		}
+	}
+	else{
+		pushLog("DAE Importer", "Found " + std::to_string(skeletons.size()) + " skeletons.");
+
+		for( domInstance_controller::domSkeleton* current_skeleton : skeletons)
+		{
+			bool workingSkeleton = false;
+			daeElement* current_skeleton_root = current_skeleton->getValue().getElement();
+			if( current_skeleton_root )
+			{
+				std::stringstream ss;
+				//Build a joint for the resolver to work with
+				for (auto jointIt = joint_map.begin(); jointIt != joint_map.end(); ++jointIt)
+				{
+					// Using stringstream to concatenate strings
+					ss << "./" << jointIt->first;
+					//Setup the resolver
+					daeSIDResolver resolver( current_skeleton_root, ss.str().c_str() );
+
+					//Look for the joint
+					domNode* current_joint = daeSafeCast<domNode>( resolver.getElement() );
+					if ( current_joint )
+					{
+						workingSkeleton = processSkeletonJoint(current_joint, joint_map, joint_transforms);
+						if( !workingSkeleton )
+						{
+							break;
+						}
+					}
+					ss.str("");
+				}
+			}
+			//If anything failed in regards to extracting the skeleton, joints or translation id,
+			//mention it
+			if ( !workingSkeleton )
+			{
+				LL_WARNS("LocalMesh")<< "Partial jointmap found in asset - did you mean to just have a partial map?" << LL_ENDL;
 			}
 		}
 	}
@@ -628,6 +681,7 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 		// seems weird, but ok.
 		if (joint_map.find(joint_name) != joint_map.end())
 		{
+			LL_DEBUGS("LocalMesh") << "Found internal joint name: " << joint_name << LL_ENDL;
 			joint_name = joint_map[joint_name];
 			skininfo.mJointNames.push_back(JointKey::construct(joint_name));
 			skininfo.mJointNums.push_back(-1);
@@ -635,18 +689,18 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 	};
 
 	auto& list_of_jointinputs = current_skin->getJoints()->getInput_array();
-	for (size_t joint_input_iterator = 0; joint_input_iterator < list_of_jointinputs.getCount(); ++joint_input_iterator)
+	for (size_t joint_input_loop_idx = 0; joint_input_loop_idx < list_of_jointinputs.getCount(); ++joint_input_loop_idx)
 	{
 
-		auto current_element = list_of_jointinputs[joint_input_iterator]->getSource().getElement();
+		auto current_element = list_of_jointinputs[joint_input_loop_idx]->getSource().getElement();
 		auto current_source = daeSafeCast<domSource>(current_element);
 		if (!current_source)
 		{
-			pushLog("DAE Importer", "WARNING: Joint data number " + std::to_string(joint_input_iterator) + " could not be read, skipping.");
+			pushLog("DAE Importer", "WARNING: Joint data number " + std::to_string(joint_input_loop_idx) + " could not be read, skipping.");
 			continue;
 		}
 
-		std::string current_semantic = list_of_jointinputs[joint_input_iterator]->getSemantic();
+		std::string current_semantic = list_of_jointinputs[joint_input_loop_idx]->getSemantic();
 		if (current_semantic.compare(COMMON_PROFILE_INPUT_JOINT) == 0)
 		{
 			// we got a list of the active joints this mesh uses
@@ -657,10 +711,10 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 			auto name_source = current_source->getName_array();
 			if (name_source)
 			{
-				auto list_of_names = name_source->getValue();
-				for (size_t joint_name_iter = 0; joint_name_iter < list_of_names.getCount(); ++joint_name_iter)
+				const auto& list_of_names = name_source->getValue();
+				for (size_t joint_name_loop_index = 0; joint_name_loop_index < list_of_names.getCount(); ++joint_name_loop_index)
 				{
-					std::string current_name = list_of_names.get(joint_name_iter);
+					std::string current_name = list_of_names.get(joint_name_loop_index);
 					lambda_process_joint_name(current_name);
 				}
 			}
@@ -670,14 +724,14 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 				auto id_source = current_source->getIDREF_array();
 				if (!id_source)
 				{
-					pushLog("DAE Importer", "WARNING: Joint number " + std::to_string(joint_input_iterator) + " did not provide name or ID, skipping.");
+					pushLog("DAE Importer", "WARNING: Joint number " + std::to_string(joint_input_loop_idx) + " did not provide name or ID, skipping.");
 					continue;
 				}
 
-				auto list_of_names = id_source->getValue();
-				for (size_t joint_name_iter = 0; joint_name_iter < list_of_names.getCount(); ++joint_name_iter)
+				const auto& list_of_names = id_source->getValue();
+				for (size_t joint_name_loop_index = 0; joint_name_loop_index < list_of_names.getCount(); ++joint_name_loop_index)
 				{
-					std::string current_name = list_of_names.get(joint_name_iter).getID();
+					std::string current_name = list_of_names.get(joint_name_loop_index).getID();
 					lambda_process_joint_name(current_name);
 				}
 			}
@@ -694,25 +748,24 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 			}
 
 			auto& current_transform = float_array->getValue();
-			for (size_t transform_matrix_iterator = 0; transform_matrix_iterator < (current_transform.getCount() / 16); ++transform_matrix_iterator)
+			for (size_t matrix_index = 0; matrix_index < (current_transform.getCount() / 16); ++matrix_index)
 			{
-				LLMatrix4 current_matrix;
-				for (size_t matrix_pos_i = 0; matrix_pos_i < 4; matrix_pos_i++)
+				LLMatrix4 mat;
+				for (size_t i = 0; i < 4; i++)
 				{
-					for (size_t matrix_pos_j = 0; matrix_pos_j < 4; matrix_pos_j++)
+					for (size_t j = 0; j < 4; j++)
 					{
-						current_matrix.mMatrix[matrix_pos_i][matrix_pos_j] = current_transform
-							[(transform_matrix_iterator * 16) + matrix_pos_i + (matrix_pos_j * 4)];
+						mat.mMatrix[i][j] = current_transform[(matrix_index * 16) + i + (j * 4)];
 					}
 				}
 
-				skininfop->mInvBindMatrix.push_back(LLMatrix4a(current_matrix));
+				skininfop->mInvBindMatrix.push_back(LLMatrix4a(mat));
 			}
 		}
 	}
 
-	int jointname_number_iter = 0;
-	for (auto jointname_iterator = skininfop->mJointNames.begin(); jointname_iterator != skininfop->mJointNames.end(); ++jointname_iterator, ++jointname_number_iter)
+	int jointname_idx = 0;
+	for (auto jointname_iterator = skininfop->mJointNames.begin(); jointname_iterator != skininfop->mJointNames.end(); ++jointname_iterator, ++jointname_idx)
 	{
 		std::string name_lookup = jointname_iterator->mName;
 		if (joint_map.find(name_lookup) == joint_map.end())
@@ -720,16 +773,20 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 			pushLog("DAE Importer", "WARNING: Unknown joint named " + name_lookup + " found, skipping over it.");
 			continue;
 		}
+		else
+		{
+			LL_DEBUGS("LocalMesh") << "Calc invBindMat for joint name: " << name_lookup << LL_ENDL;
+		}
 
-		if (skininfop->mInvBindMatrix.size() <= jointname_number_iter)
+		if (skininfop->mInvBindMatrix.size() <= jointname_idx)
 		{
 			// doesn't seem like a critical fail that should invalidate the entire skin, just break and move on?
 			pushLog("DAE Importer", "WARNING: Requesting out of bounds joint named  " + name_lookup);
 			break;
 		}
 
-		LLMatrix4 newinverse = LLMatrix4(skininfop->mInvBindMatrix[jointname_number_iter].getF32ptr());
-		auto joint_translation = joint_transforms[name_lookup].getTranslation();
+		LLMatrix4 newinverse = LLMatrix4(skininfop->mInvBindMatrix[jointname_idx].getF32ptr());
+		const auto& joint_translation = joint_transforms[name_lookup].getTranslation();
 		newinverse.setTranslation(joint_translation);
 		skininfop->mAlternateBindMatrix.push_back( LLMatrix4a(newinverse) );
 	}
@@ -740,6 +797,10 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 		// different number of binds vs jointnames, i hestiate to fail the entire skinmap over this
 		// because it can just be a case of a few additional joints being ignored, unless i'm missing something?
 		pushLog("DAE Importer", "WARNING: " + std::to_string(skininfop->mJointNames.size()) + " joints were found, but " + std::to_string(bind_count) + " binds matrices were made.");
+	}
+	else
+	{
+		LL_DEBUGS("LocalMesh") << "Found " << bind_count << " bind matrices" << LL_ENDL;
 	}
 
 	//==============================
@@ -754,25 +815,25 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 		return false;
 	}
 
-	std::vector<LLVector4> transformed_positions;
-	auto vertex_input_array = raw_vertex_array->getInput_array();
+	std::vector<LLVector4> transformed_positions; // equates to the model->mPosition vector in full loader
+	const auto& vertex_input_array = raw_vertex_array->getInput_array();
 
-	for (size_t vertex_input_iterator = 0; vertex_input_iterator < vertex_input_array.getCount(); ++vertex_input_iterator)
+	for (size_t vertex_input_index = 0; vertex_input_index < vertex_input_array.getCount(); ++vertex_input_index)
 	{
-		std::string current_semantic = vertex_input_array[vertex_input_iterator]->getSemantic();
+		std::string current_semantic = vertex_input_array[vertex_input_index]->getSemantic();
 		if (current_semantic.compare(COMMON_PROFILE_INPUT_POSITION) != 0)
 		{
 			// if what we got isn't a position array - skip.
 			continue;
 		}
 
-		if (!transformed_positions.empty())
-		{
-			// just in case we somehow got multiple valid position arrays
-			break;
-		}
+		// if (!transformed_positions.empty())
+		// {
+		// 	// just in case we somehow got multiple valid position arrays
+		// 	break;
+		// }
 
-		auto pos_source = daeSafeCast<domSource>(vertex_input_array[vertex_input_iterator]->getSource().getElement());
+		auto pos_source = daeSafeCast<domSource>(vertex_input_array[vertex_input_index]->getSource().getElement());
 		if (!pos_source)
 		{
 			// not a valid position array, no need to bother the user wit it though.
@@ -785,26 +846,25 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 			continue;
 		}
 
-		auto& vertex_positions = pos_array->getValue();
-		for (size_t vtx_position_iterator = 0; vtx_position_iterator < vertex_positions.getCount(); vtx_position_iterator += 3)
+		auto& vtx_pos_list = pos_array->getValue();
+		auto vtx_pos_count = vtx_pos_list.getCount();
+		for (size_t vtx_pos_index = 0; vtx_pos_index < vtx_pos_count; vtx_pos_index += 3)
 		{
-			if (vertex_positions.getCount() <= (vtx_position_iterator + 2))
+			if (vtx_pos_count <= (vtx_pos_index + 2))
 			{
 				pushLog("DAE Importer", "ERROR: Position array request out of bound.");
 				break;
 			}
 
-			LLVector3 temp_pos
-			(
-				vertex_positions[vtx_position_iterator],
-				vertex_positions[vtx_position_iterator + 1],
-				vertex_positions[vtx_position_iterator + 2]
-			);
+			LLVector3 pos_vec(
+				vtx_pos_list[vtx_pos_index],
+				vtx_pos_list[vtx_pos_index + 1],
+				vtx_pos_list[vtx_pos_index + 2] );
 
-			temp_pos = temp_pos * inverse_normalized_transformation;
+			pos_vec = pos_vec * inverse_normalized_transformation;
 
 			LLVector4 new_vector;
-			new_vector.set(temp_pos[0], temp_pos[1], temp_pos[2]);
+			new_vector.set(pos_vec[0], pos_vec[1], pos_vec[2]);
 			transformed_positions.push_back(new_vector);
 		}
 
@@ -820,22 +880,19 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 		return false;
 	}
 
-	auto weight_inputs = current_weights->getInput_array();
+	const auto& weight_inputs = current_weights->getInput_array();
 	domFloat_array* vertex_weights = nullptr;
-
-	for (size_t weight_input_iter = 0; weight_input_iter < weight_inputs.getCount(); ++weight_input_iter)
+	auto num_weight_inputs = weight_inputs.getCount();
+	for (size_t weight_input_idx = 0; weight_input_idx < num_weight_inputs; ++weight_input_idx)
 	{
-		std::string current_semantic = weight_inputs[weight_input_iter]->getSemantic();
+		std::string current_semantic = weight_inputs[weight_input_idx]->getSemantic();
 		if (current_semantic.compare(COMMON_PROFILE_INPUT_WEIGHT) == 0)
 		{
-			auto weights_source = daeSafeCast<domSource>(weight_inputs[weight_input_iter]->getSource().getElement());
-			if (!weights_source)
+			auto weights_source = daeSafeCast<domSource>(weight_inputs[weight_input_idx]->getSource().getElement());
+			if (weights_source)
 			{
-				continue;
+				vertex_weights = weights_source->getFloat_array();
 			}
-
-			vertex_weights = weights_source->getFloat_array();
-			break;
 		}
 	}
 
@@ -849,45 +906,45 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 	// v - joint indices
 
 	auto& weight_values = vertex_weights->getValue();
-	auto& joint_influence_count = current_weights->getVcount()->getValue();
+	auto& vtx_influence_count = current_weights->getVcount()->getValue();
 	auto& joint_weight_indices = current_weights->getV()->getValue();
+
 	std::map<LLVector4, std::vector<LLModel::JointWeight> > skinweight_data;
 
 	size_t joint_weight_strider = 0;
-	for (size_t joint_iterator = 0; joint_iterator < joint_influence_count.getCount(); ++joint_iterator)
+	for (size_t joint_idx = 0; joint_idx < vtx_influence_count.getCount(); ++joint_idx)
 	{
-		auto influencees_count = joint_influence_count[joint_iterator];
-		LLModel::weight_list full_weight_list;
+		auto influences_count = vtx_influence_count[joint_idx];
+		LLModel::weight_list weight_list;
 		LLModel::weight_list sorted_weight_list;
 
 		// extract all of the weights
-		for (size_t influence_iter = 0; influence_iter < influencees_count; ++influence_iter)
+		for (size_t influence_idx = 0; influence_idx < influences_count; ++influence_idx)
 		{
-			int joint_idx = joint_weight_indices[joint_weight_strider++];
-			int weight_idx = joint_weight_indices[joint_weight_strider++];
+			int vtx_idx = joint_weight_indices[joint_weight_strider++];
+			int this_weight_idx = joint_weight_indices[joint_weight_strider++];
 
-			if (joint_idx == -1)
+			if (vtx_idx == -1)
 			{
 				continue;
 			}
 
-			float weight_value = weight_values[weight_idx];
-			full_weight_list.push_back(LLModel::JointWeight(joint_idx, weight_value));
+			float weight_value = weight_values[this_weight_idx];
+			weight_list.push_back(LLModel::JointWeight(vtx_idx, weight_value));
 		}
 
 		// sort by large-to-small
-		std::sort(full_weight_list.begin(), full_weight_list.end(), LLModel::CompareWeightGreater());
-
+		std::sort(weight_list.begin(), weight_list.end(), LLModel::CompareWeightGreater());
 		
 		// limit to 4, and normalize the result
 		F32 total = 0.f;
 
-		for (U32 i = 0; i < llmin((U32)4, (U32)full_weight_list.size()); ++i)
+		for (U32 i = 0; i < llmin((U32)4, (U32)weight_list.size()); ++i)
 		{ //take up to 4 most significant weights
-			if (full_weight_list[i].mWeight > 0.f)
+			if (weight_list[i].mWeight > 0.f)
 			{
-				sorted_weight_list.push_back(full_weight_list[i]);
-				total += full_weight_list[i].mWeight;
+				sorted_weight_list.push_back(weight_list[i]);
+				total += weight_list[i].mWeight;
 			}
 		}
 
@@ -899,8 +956,18 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 				sorted_weight_list[i].mWeight *= scale;
 			}
 		}
-
-		skinweight_data[transformed_positions[joint_iterator]] = sorted_weight_list;
+		// log the weights for this joint_idx
+		LL_DEBUGS("LocalMesh") 	<< "Vertex "
+								<< joint_idx 
+								<< " has " << sorted_weight_list.size() << " weights (" << 
+								sorted_weight_list[0].mJointIdx << "=" << 
+								sorted_weight_list[0].mWeight << ", " << 
+								sorted_weight_list[1].mJointIdx << "=" << 
+								sorted_weight_list[1].mWeight << ", " << 
+								sorted_weight_list[2].mJointIdx << "=" << 
+								sorted_weight_list[3].mWeight << ")"
+								<< LL_ENDL;
+		skinweight_data[transformed_positions[joint_idx]] = sorted_weight_list;
 	}
 
 	//==============================
@@ -923,33 +990,34 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 	};
 
 	auto& faces = current_object->getFaces(mLod);
-	for (auto& current_face : faces)
+	for (const auto& current_face : faces)
 	{
-		auto& positions = current_face->getPositions();
+		const auto& positions = current_face->getPositions();
 		auto& weights = current_face->getSkin();
 
-		for (auto& current_position : positions)
+		for (const auto& current_position : positions)
 		{	
-			int found_iterator = -1;
+			int found_idx = -1;
 
-			for (size_t internal_position_iter = 0; internal_position_iter < transformed_positions.size(); ++internal_position_iter)
+			for (size_t internal_position_idx = 0; internal_position_idx < transformed_positions.size(); ++internal_position_idx)
 			{
-				auto& internal_position = transformed_positions[internal_position_iter];
+				const auto& internal_position = transformed_positions[internal_position_idx];
 				if (soft_compare(current_position, internal_position, F_ALMOST_ZERO))
 				{
-					found_iterator = internal_position_iter;
+					found_idx = internal_position_idx;
 					break;
 				}
 			}
 
-			if (found_iterator < 0)
+			if (found_idx < 0)
 			{
+				LL_DEBUGS("LocalMesh") << "Failed to find position " << current_position << " in transformed positions" << LL_ENDL;
 				continue;
 			}
 
-			auto cjoints = skinweight_data[transformed_positions[found_iterator]];
+			const auto& cjoints = skinweight_data[transformed_positions[found_idx]];
 
-			LLLocalMeshFace::LLLocalMeshSkinUnit new_wght;
+			LLLocalMeshFace::LLLocalMeshSkinUnit new_wght{};
 
 			// first init all joints to -1, in case below we get less than 4 influences.
 			for (size_t tjidx = 0; tjidx < 4; ++tjidx)
@@ -966,101 +1034,152 @@ bool LLLocalMeshImportDAE::processSkin(daeDatabase* collada_db, daeElement* coll
 			*/
 			for (size_t jidx = 0; jidx < cjoints.size(); ++jidx)
 			{
-				auto cjoint = cjoints[jidx];
+				const auto& cjoint = cjoints[jidx];
 				
 				new_wght.mJointIndices[jidx] = cjoint.mJointIdx;
 				new_wght.mJointWeights[jidx] = llclamp((F32)cjoint.mWeight, 0.f, 0.999f);
 			}
 
-			weights.push_back(new_wght);
+			weights.emplace_back(new_wght);
 		}
 	}
 	skininfop->updateHash();
+	LL_DEBUGS("LocalMesh") << "hash: " << skininfop->mHash << LL_ENDL;
 	current_object->setObjectMeshSkinInfo(skininfop);
 	return true;
 }
 
-void LLLocalMeshImportDAE::processSkeletonJoint(domNode* current_node, std::map<std::string, std::string>& joint_map, std::map<std::string, LLMatrix4>& joint_transforms)
+bool LLLocalMeshImportDAE::processSkeletonJoint(domNode* current_node, std::map<std::string, std::string>& joint_map, std::map<std::string, LLMatrix4>& joint_transforms, bool recurse_children)
 {
 	// safety checks & name check
-	auto node_name = current_node->getName();
+	const auto node_name = current_node->getName();
 	if (!node_name)
 	{
-		return;
+		LL_WARNS("LocalMesh") << "nameless node, can't process" << LL_ENDL;
+		return false;
 	}
 
-	auto jointmap_iter = joint_map.find(node_name);
-	if (jointmap_iter == joint_map.end())
+	if (auto jointmap_iter = joint_map.find(node_name); jointmap_iter != joint_map.end())
 	{
-		return;
-	}
+		LL_DEBUGS("LocalMesh") << "processing joint: " << node_name << LL_ENDL;
 
-	// begin actual joint work
-	domTranslate* current_transformation = nullptr;
-
-	daeSIDResolver jointResolver_translation(current_node, "./translate");
-	current_transformation = daeSafeCast<domTranslate>(jointResolver_translation.getElement());
-
-	if (!current_transformation)
-	{
-		daeSIDResolver jointResolver_location(current_node, "./location");
-		current_transformation = daeSafeCast<domTranslate>(jointResolver_location.getElement());
-	}
-
-	if (!current_transformation)
-	{
-		daeElement* child_translate_element = current_node->getChild("translate");
-		if (child_translate_element)
+		// begin actual joint work
+		daeSIDResolver jointResolver_translation(current_node, "./translate");
+		domTranslate* current_transformation = daeSafeCast<domTranslate>(jointResolver_translation.getElement());
+		if (current_transformation)
 		{
-			current_transformation = daeSafeCast<domTranslate>(child_translate_element);
+			LL_DEBUGS("LocalMesh") << "Using ./translate for " << node_name << LL_ENDL;
 		}
-	}
-
-	if (!current_transformation) // no queries worked
-	{
-		daeSIDResolver jointResolver_matrix(current_node, "./matrix");
-		auto joint_transform_matrix = daeSafeCast<domMatrix>(jointResolver_matrix.getElement());
-		if (joint_transform_matrix)
+		else
 		{
-			LLMatrix4 workingTransform;
-			domFloat4x4 domArray = joint_transform_matrix->getValue();
-			for (int i = 0; i < 4; i++)
+			daeSIDResolver jointResolver_location(current_node, "./location");
+			current_transformation = daeSafeCast<domTranslate>(jointResolver_location.getElement());
+			if (current_transformation)
 			{
-				for (int j = 0; j < 4; j++)
+				LL_DEBUGS("LocalMesh") << "Using ./location for " << node_name << LL_ENDL;
+			}
+		}
+
+		if (!current_transformation)
+		{
+			if (daeElement* child_translate_element = current_node->getChild("translate"); child_translate_element)
+			{
+				if (current_transformation = daeSafeCast<domTranslate>(child_translate_element); current_transformation)
 				{
-					workingTransform.mMatrix[i][j] = domArray[i + j * 4];
+					LL_DEBUGS("LocalMesh") << "Using translate child for " << node_name << LL_ENDL;
 				}
 			}
-			// LLVector3 trans = workingTransform.getTranslation();
-			joint_transforms[node_name] = workingTransform;
-		}
-	}
+			else
+			{
+				LL_DEBUGS("Mesh")<< "Could not find a child [\"translate\"] for the element: \"" << node_name << "\"" << LL_ENDL;
+			}
+		} 	
 
-	else // previous query worked
-	{
-		domFloat3 joint_transform = current_transformation->getValue();
-		LLVector3 singleJointTranslation(joint_transform[0], joint_transform[1], joint_transform[2]);
-		LLMatrix4 workingtransform;
-		workingtransform.setTranslation(singleJointTranslation);
-
-		joint_transforms[node_name] = workingtransform;
-	}
-	// end actual joint work
-
-	// get children to work on
-	auto current_node_children = current_node->getChildren();
-	for (size_t node_children_iter = 0; node_children_iter < current_node_children.getCount(); ++node_children_iter)
-	{
-		auto current_child_node = daeSafeCast<domNode>(current_node_children[node_children_iter]);
-		if (!current_child_node)
+		if (!current_transformation) // no queries worked
 		{
-			continue;
+			daeSIDResolver jointResolver_transform(current_node, "./transform");
+			
+			auto joint_transform_matrix = daeSafeCast<domMatrix>(jointResolver_transform.getElement());
+			if (joint_transform_matrix)
+			{
+				LLMatrix4 workingTransform;
+				domFloat4x4 domArray = joint_transform_matrix->getValue();
+				for (int i = 0; i < 4; i++)
+				{
+					for (int j = 0; j < 4; j++)
+					{
+						workingTransform.mMatrix[i][j] = domArray[i + j * 4];
+					}
+				}
+				joint_transforms[node_name].setTranslation(workingTransform.getTranslation());
+				LL_DEBUGS("LocalMesh") << "Using ./transform matrix for " << node_name << " = "<< joint_transforms[node_name] << LL_ENDL;
+			}
+			else
+			{
+				daeSIDResolver jointResolver_matrix(current_node, "./matrix");
+				joint_transform_matrix = daeSafeCast<domMatrix>(jointResolver_matrix.getElement());
+				if (joint_transform_matrix)
+				{
+					LL_DEBUGS("LocalMesh") << "Using ./matrix matrix for " << node_name << LL_ENDL;
+					LLMatrix4 workingTransform;
+					domFloat4x4 domArray = joint_transform_matrix->getValue();
+					for (int i = 0; i < 4; i++)
+					{
+						for (int j = 0; j < 4; j++)
+						{
+							workingTransform.mMatrix[i][j] = domArray[i + j * 4];
+						}
+					}
+					joint_transforms[node_name] = workingTransform;
+					LL_DEBUGS("LocalMesh") << "Using ./transform matrix for " << node_name << " = "<< workingTransform << LL_ENDL;
+				}
+				else
+				{
+					LL_WARNS() << "The found element for " << node_name << " is not a translate or matrix node - most likely a corrupt export!" << LL_ENDL;
+					// return false; // Beq - an unweighted bone? returning failure here can trigger problems with otherwise good mesh.
+				}
+			}
 		}
+		else // previous query worked
+		{
+			domFloat3 joint_transform = current_transformation->getValue();
+			LLVector3 singleJointTranslation(joint_transform[0], joint_transform[1], joint_transform[2]);
+			LLMatrix4 workingTransform;
+			workingTransform.setTranslation(singleJointTranslation);
 
-		processSkeletonJoint(current_child_node, joint_map, joint_transforms);
+			joint_transforms[node_name] = workingTransform;
+			LL_DEBUGS("LocalMesh") << "Applying translation from detected transform for " << node_name << " = "<< workingTransform << LL_ENDL;
+		}
+		// end actual joint work
 	}
-}
+	else
+	{
+		LL_DEBUGS("LocalMesh") << "unknown/unexpected joint: " << node_name << LL_ENDL;
+		// return false; // still need to check the children
+	}
 
+	if (recurse_children)
+	{
+		// get children to work on
+		auto current_node_children = current_node->getChildren();
+		auto child_count = current_node_children.getCount();
+		LL_DEBUGS("LocalMesh") << "Processing " << child_count << " children of " << current_node->getName() << LL_ENDL;
+		for (size_t node_children_iter = 0; node_children_iter < child_count; ++node_children_iter)
+		{
+			auto current_child_node = daeSafeCast<domNode>(current_node_children[node_children_iter]);
+			if (current_child_node)
+			{
+				if( !processSkeletonJoint(current_child_node, joint_map, joint_transforms, recurse_children) )
+				{
+					LL_DEBUGS("LocalMesh") << "failed to process joint (bad child): " << current_child_node->getName() << LL_ENDL;
+					continue;
+				};
+			}
+		}
+	}
+
+	return true;
+}
 
 bool LLLocalMeshImportDAE::readMesh_CommonElements(const domInputLocalOffset_Array& inputs, 
 	int& offset_position, int& offset_normals, int& offset_uvmap, int& index_stride, 
@@ -1196,15 +1315,6 @@ std::string LLLocalMeshImportDAE::getElementName(daeElement* element_current, in
 	return result;
 }
 
-void LLLocalMeshImportDAE::pushLog(std::string who, std::string what)
-{
-	std::string log_msg = "[ " + who + " ] ";
-
-	log_msg += what;
-	mLoadingLog.push_back(log_msg);
-}
-
-
 bool LLLocalMeshImportDAE::readMesh_Triangle(LLLocalMeshFace* data_out, const domTrianglesRef& data_in)
 {
 	if (!data_out)
@@ -1332,7 +1442,7 @@ bool LLLocalMeshImportDAE::readMesh_Triangle(LLLocalMeshFace* data_out, const do
 		{
 			// compare to check if you find one with matching normal and uv values
 			size_t seeker_index = std::distance(repeat_map_position_iterable.begin(), seeker_position);
-			for (auto repeat_vtx_data : repeat_map_data[seeker_index])
+			for (const auto& repeat_vtx_data : repeat_map_data[seeker_index])
 			{
 				if (repeat_vtx_data.vtx_normal_data != attr_normal)
 				{
@@ -1563,7 +1673,7 @@ bool LLLocalMeshImportDAE::readMesh_Polylist(LLLocalMeshFace* data_out, const do
 			{
 				// compare to check if you find one with matching normal and uv values
 				int seeker_index = std::distance(repeat_map_position_iterable.begin(), seeker_position);
-				for (auto repeat_vtx_data : repeat_map_data[seeker_index])
+				for (const auto& repeat_vtx_data : repeat_map_data[seeker_index])
 				{
 					if (repeat_vtx_data.vtx_normal_data != attr_normal)
 					{
@@ -1673,6 +1783,19 @@ bool LLLocalMeshImportDAE::readMesh_Polylist(LLLocalMeshFace* data_out, const do
 	}
 
 	return true;
+}
+
+void LLLocalMeshImportDAE::pushLog(const std::string& who, const std::string& what, bool is_error) 
+{
+	std::string log_msg = "[ " + who + " ] ";
+	if (is_error)
+	{
+		log_msg += "[ ERROR ] ";
+	}
+
+	log_msg += what;
+	mLoadingLog.push_back(log_msg);
+	LL_INFOS("LocalMesh") << log_msg << LL_ENDL;
 }
 
 //bool LLLocalMeshImportDAE::readMesh_Polygons(LLLocalMeshFace* data_out, const domPolygonsRef& data_in)

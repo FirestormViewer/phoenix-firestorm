@@ -143,7 +143,6 @@
 		<combo_box.item value="filter_type_sounds" label="Suoni" />
 		<combo_box.item value="filter_type_textures" label="Texture" />
 		<combo_box.item value="filter_type_snapshots" label="Foto" />
-		<combo_box.item value="filter_type_meshes" label="Mesh" />
 		<combo_box.item value="filter_separator" label="------------" enabled="false" />
 		<combo_box.item value="filter_type_custom" label="Personalizzato..." />
 	</combo_box>

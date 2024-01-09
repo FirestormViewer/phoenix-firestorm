@@ -1223,9 +1223,20 @@ void LLFastTimerView::drawLegend()
 		S32 scroll_offset = 0; // element's y offset from top of the inner scroll's rect
 		ft_display_idx.clear();
 		std::map<BlockTimerStatHandle*, S32> display_line;
+// <FS:Zi> GCC12 warning: nonnull - probably bogus
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnonnull"
+#endif
+// </FS:Zi>
 		for (LLTrace::block_timer_tree_df_iterator_t it = LLTrace::begin_block_timer_tree_df(FTM_FRAME);
 			it != LLTrace::end_block_timer_tree_df();
 			++it)
+// <FS:Zi> GCC12 warning: nonnull - probably bogus
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic pop
+#endif
+// </FS:Zi>
 		{
 			BlockTimerStatHandle* idp = (*it);
 			// Needed to figure out offsets and parenting
@@ -1338,10 +1349,20 @@ void LLFastTimerView::generateUniqueColors()
 		sTimerColors[FTM_FRAME.getIndex()] = LLColor4::grey;
 
 		F32 hue = 0.f;
-
+// <FS:Zi> GCC12 warning: nonnull - probably bogus
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnonnull"
+#endif
+// </FS:Zi>
 		for (LLTrace::block_timer_tree_df_iterator_t it = LLTrace::begin_block_timer_tree_df(FTM_FRAME);
 			it != LLTrace::end_block_timer_tree_df();
 			++it)
+// <FS:Zi> GCC12 warning: nonnull - probably bogus
+#if defined(__GNUC__) && (__GNUC__ >= 12)
+#pragma GCC diagnostic pop
+#endif
+// </FS:Zi>
 		{
 			BlockTimerStatHandle* idp = (*it);
 

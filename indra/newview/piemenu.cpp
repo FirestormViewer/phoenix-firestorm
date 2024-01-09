@@ -45,20 +45,23 @@ static PieChildRegistry::Register<PieSlice> pie_r2("pie_slice");
 static PieChildRegistry::Register<PieSeparator> pie_r3("pie_separator");
 
 // pie slice label text positioning
-const S32 PIE_X[] = {64, 45,  0, -45, -63, -45,   0,  45};
-const S32 PIE_Y[] = { 0, 44, 73,  44,   0, -44, -73, -44};
+constexpr S32 PIE_X[] = {64, 45,  0, -45, -63, -45,   0,  45};
+constexpr S32 PIE_Y[] = { 0, 44, 73,  44,   0, -44, -73, -44};
 
-const S32 PIE_INNER_SIZE = 20;				// radius of the inner pie circle
-const F32 PIE_POPUP_FACTOR = 1.7f;			// pie menu size factor on popup
-const F32 PIE_POPUP_TIME = 0.25f;			// time to shrink from popup size to regular size
-const S32 PIE_OUTER_SIZE = 96;				// radius of the outer pie circle
-const F32 PIE_OUTER_SHADE_FACTOR = 1.09f;	// size factor of the outer shading ring
-const F32 PIE_SLICE_DIVIDER_WIDTH = 0.04f;	// width of a slice divider in radians
-const F32 PIE_MAX_SLICES_F = F32(PIE_MAX_SLICES);
+constexpr S32 PIE_INNER_SIZE = 20;				// radius of the inner pie circle
+constexpr F32 PIE_POPUP_FACTOR = 1.7f;			// pie menu size factor on popup
+constexpr F32 PIE_POPUP_TIME = 0.25f;			// time to shrink from popup size to regular size
+constexpr S32 PIE_OUTER_SIZE = 96;				// radius of the outer pie circle
+constexpr F32 PIE_OUTER_SHADE_FACTOR = 1.09f;	// size factor of the outer shading ring
+constexpr F32 PIE_SLICE_DIVIDER_WIDTH = 0.04f;	// width of a slice divider in radians
+constexpr F32 PIE_MAX_SLICES_F = F32(PIE_MAX_SLICES);
 
 PieMenu::PieMenu(const LLMenuGL::Params& p) :
 	LLMenuGL(p),
-	mCurrentSegment(-1)
+	mCurrentSegment(-1),
+	mOldSlice(nullptr),
+	mSlice(nullptr),
+	mFirstClick(true)
 {
 	LL_DEBUGS("Pie") << "PieMenu::PieMenu()" << LL_ENDL;
 
@@ -75,12 +78,6 @@ PieMenu::PieMenu(const LLMenuGL::Params& p) :
 	
 	// set slices pointer to our own slices
 	mSlices = &mMySlices;
-	
-	// this will be the first click on the menu
-	mFirstClick = true;
-
-	// clean initialisation
-	mSlice = NULL;
 }
 
 bool PieMenu::addChild(LLView* child, S32 tab_group)
@@ -92,7 +89,7 @@ bool PieMenu::addChild(LLView* child, S32 tab_group)
 	}
 
 	// add a new slice to the menu
-	mSlices->push_back(child);
+	mSlices->emplace_back(child);
 
 	// tell the view that our menu has changed and reshape it back to correct size
 	LLUICtrl::addChild(child);
@@ -205,18 +202,17 @@ void PieMenu::show(S32 x, S32 y, LLView* spawning_view)
 	mSlices = &mMySlices;
 
 	// reset enable update checks for slices
-	for (slice_list_t::iterator it = mSlices->begin(); it != mSlices->end(); ++it)
+	for (auto slice : *mSlices)
 	{
-		PieSlice* resetSlice = dynamic_cast<PieSlice*>(*it);
-		if (resetSlice)
+		if (auto resetSlice = dynamic_cast<PieSlice*>(slice); resetSlice)
 		{
 			resetSlice->resetUpdateEnabledCheck();
 		}
 	}
 
 	// cleanup
-	mSlice = NULL;
-	mOldSlice = NULL;
+	mSlice = nullptr;
+	mOldSlice = nullptr;
 
 	// draw the menu on screen
 	setVisible(TRUE);
@@ -262,7 +258,7 @@ void PieMenu::draw()
 	gGL.pushMatrix();
 
 	// save the widget's rectangle for later use
-	LLRect r = getRect();
+	const LLRect& r = getRect();
 
 	// initialize pie scale factor for popup effect
 	F32 factor = getScaleFactor();
@@ -300,7 +296,7 @@ void PieMenu::draw()
 		borderColor %= 0.f;
 	}
 
-	S32 steps = 100;
+	constexpr S32 steps = 100;
 
 	// move origin point to the center of our rectangle
 	LLUI::instance().translate(r.getWidth() / 2.f, r.getHeight() / 2.f);
@@ -313,7 +309,7 @@ void PieMenu::draw()
 	cur_item_iter = mSlices->begin();
 
 	// clear current slice pointer
-	mSlice = NULL;
+	mSlice = nullptr;
 
 	// current slice number is 0
 	S32 num = 0;
@@ -539,10 +535,9 @@ BOOL PieMenu::handleMouseButtonUp(S32 x, S32 y, MASK mask)
 				// swap out the list of items for the ones in the submenu
 				mSlices = &currentSubmenu->mMySlices;
 				// reset enable update checks for slices
-				for (slice_list_t::iterator it = mSlices->begin(); it != mSlices->end(); ++it)
+				for (auto slice : *mSlices)
 				{
-					PieSlice* resetSlice = dynamic_cast<PieSlice*>(*it);
-					if (resetSlice)
+					if (auto resetSlice = dynamic_cast<PieSlice*>(slice); resetSlice)
 					{
 						resetSlice->resetUpdateEnabledCheck();
 					}
@@ -564,7 +559,7 @@ BOOL PieMenu::handleMouseButtonUp(S32 x, S32 y, MASK mask)
 	// release mouse capture after the first click if we still have it grabbed
 	if (hasMouseCapture())
 	{
-		gFocusMgr.setMouseCapture(NULL);
+		gFocusMgr.setMouseCapture(nullptr);
 	}
 
 	// give control back to the system

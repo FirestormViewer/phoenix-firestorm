@@ -938,12 +938,14 @@ bool voice_follow_key(EKeystate s)
     if (KEYSTATE_DOWN == s)
     {
         if (!LLAgent::isActionAllowed("speak")) return false;
+        if (!LLVoiceClient::getInstance()->getUserPTTState()) make_ui_sound("UISndMicToggle"); // <FS:PP> FIRE-33249 Mic toggle
         LLVoiceClient::getInstance()->setUserPTTState(true);
         return true;
     }
     else if (KEYSTATE_UP == s && LLVoiceClient::getInstance()->getUserPTTState())
     {
         LLVoiceClient::getInstance()->setUserPTTState(false);
+        make_ui_sound("UISndMicToggle"); // <FS:PP> FIRE-33249 Mic toggle
         return true;
     }
     return false;

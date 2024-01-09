@@ -784,17 +784,27 @@ void LLFloaterTexturePicker::draw()
 
 		// If the floater is focused, don't apply its alpha to the texture (STORM-677).
 		const F32 alpha = getTransparencyType() == TT_ACTIVE ? 1.0f : getCurrentTransparency();
-		if( mTexturep )
+        LLViewerTexture* texture = nullptr;
+        if (mGLTFMaterial)
+        {
+            texture = mGLTFMaterial->getUITexture();
+        }
+        else
+        {
+            texture = mTexturep.get();
+        }
+
+		if( texture )
 		{
-			if( mTexturep->getComponents() == 4 )
+			if( texture->getComponents() == 4 )
 			{
 				gl_rect_2d_checkerboard( interior, alpha );
 			}
 
-			gl_draw_scaled_image( interior.mLeft, interior.mBottom, interior.getWidth(), interior.getHeight(), mTexturep, UI_VERTEX_COLOR % alpha );
+			gl_draw_scaled_image( interior.mLeft, interior.mBottom, interior.getWidth(), interior.getHeight(), texture, UI_VERTEX_COLOR % alpha );
 
 			// Pump the priority
-			mTexturep->addTextureStats( (F32)(interior.getWidth() * interior.getHeight()) );
+			texture->addTextureStats( (F32)(interior.getWidth() * interior.getHeight()) );
 		}
 		else if (!mFallbackImage.isNull())
 		{
@@ -1759,6 +1769,8 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
 	mDefaultImageAssetID(p.default_image_id),
 	mDefaultImageName(p.default_image_name),
 	mFallbackImage(p.fallback_image),
+	mTextEnabledColor(p.text_enabled_color),      // <FS:Zi> Add label/caption colors
+	mTextDisabledColor(p.text_disabled_color),    // <FS:Zi> Add label/caption colors
 	// <FS:Ansariel> Mask texture if desired
 	mIsMasked(FALSE)
 {
@@ -1774,7 +1786,10 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
 
 	LLTextBox::Params params(p.caption_text);
 	params.name(p.label);
-	params.rect(LLRect( 0, BTN_HEIGHT_SMALL, getRect().getWidth(), 0 ));
+	// <FS:Zi> Fix label width
+	// params.rect(LLRect( 0, BTN_HEIGHT_SMALL, getRect().getWidth(), 0 ));
+	params.rect(LLRect( 0, BTN_HEIGHT_SMALL, p.label_width == -1 ? getRect().getWidth() : p.label_width, 0 ));
+	// <//FS:Zi>
 	params.initial_value(p.label());
 	params.follows.flags(FOLLOWS_LEFT | FOLLOWS_RIGHT | FOLLOWS_BOTTOM);
 	mCaption = LLUICtrlFactory::create<LLTextBox> (params);
@@ -1812,6 +1827,8 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
 	addChild(mBorder);
 
 	mLoadingPlaceholderString = LLTrans::getString("texture_loading");
+
+	updateLabelColor();	// <FS:Zi> Add label/caption colors
 }
 
 LLTextureCtrl::~LLTextureCtrl()
@@ -1866,6 +1883,12 @@ void LLTextureCtrl::setImmediateFilterPermMask(PermissionMask mask)
     }
 }
 
+void LLTextureCtrl::setFilterPermissionMasks(PermissionMask mask) 
+{
+    setImmediateFilterPermMask(mask);
+    setDnDFilterPermMask(mask);
+}
+
 void LLTextureCtrl::setVisible( BOOL visible ) 
 {
 	if( !visible )
@@ -1896,7 +1919,10 @@ void LLTextureCtrl::setEnabled( BOOL enabled )
 		closeDependentFloater();
 	}
 
-	mCaption->setEnabled( enabled );
+	// <FS:Zi> Add label/caption colors
+	// mCaption->setEnabled( enabled );
+	mCaption->setEnabled(enabled && isInEnabledChain());
+	// </FS:Zi>
 
 	// <FS:Ansariel> Texture preview mode
 	//LLView::setEnabled( enabled );
@@ -2317,11 +2343,21 @@ void LLTextureCtrl::draw()
 
 		if (texture.isNull())
 		{
-			texture = LLViewerTextureManager::getFetchedTexture(mImageAssetID, FTT_DEFAULT, MIPMAP_YES, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+            if (mInventoryPickType == LLTextureCtrl::PICK_MATERIAL)
+            {
+                LLPointer<LLFetchedGLTFMaterial> material = gGLTFMaterialList.getMaterial(mImageAssetID);
+                if (material)
+                {
+                    texture = material->getUITexture();
+                }
+            }
+            else
+            {
+                texture = LLViewerTextureManager::getFetchedTexture(mImageAssetID, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+                texture->setBoostLevel(LLGLTexture::BOOST_PREVIEW);
+                texture->forceToSaveRawImage(0);
+            }
 		}
-		
-		texture->setBoostLevel(LLGLTexture::BOOST_PREVIEW);
-		texture->forceToSaveRawImage(0) ;
 
 		mTexturep = texture;
 	}
@@ -2420,6 +2456,8 @@ void LLTextureCtrl::draw()
 							 LLColor4::white, LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::DROP_SHADOW);
 		}
 	}
+
+	mCaption->setEnabled(getEnabled() && isInEnabledChain());	// <FS:Zi> Add label/caption colors
 
 	LLUICtrl::draw();
 }
@@ -2527,7 +2565,10 @@ LLSD LLTextureCtrl::getValue() const
 	return LLSD(getImageAssetID());
 }
 
-
-
-
-
+// <FS:Zi> Add label/caption colors
+void LLTextureCtrl::updateLabelColor()
+{
+	mCaption->setColor(mTextEnabledColor.get());
+	mCaption->setReadOnlyColor(mTextDisabledColor.get());
+}
+// </FS:Zi>

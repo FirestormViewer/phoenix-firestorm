@@ -206,7 +206,7 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
 	//	}
 	//}
 
-	previewp->setFixedThumbnailSize(panel_width, 400);
+	previewp->setFixedThumbnailSize(panel_width, 420);
 	LLUICtrl* thumbnail_placeholder = floaterp->getChild<LLUICtrl>("thumbnail_placeholder");
 	floaterp->getChild<LLUICtrl>("image_res_text")->setVisible(mAdvanced);
 	floaterp->getChild<LLUICtrl>("file_size_label")->setVisible(mAdvanced);
@@ -221,12 +221,12 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
 		{
 			LLRect cc_rect = controls_container->getRect();
 
-			floaterp->reshape(floater_width, 463);
+			floaterp->reshape(floater_width, 483);
 
 			controls_container->setRect(cc_rect);
 			controls_container->updateBoundingRect();
 
-			thumbnail_placeholder->reshape(panel_width, 400);
+			thumbnail_placeholder->reshape(panel_width, 420);
 
 			LLRect tn_rect = thumbnail_placeholder->getRect();
 			tn_rect.setLeftTopAndSize(215, floaterp->getRect().getHeight() - 30, tn_rect.getWidth(), tn_rect.getHeight());
@@ -240,7 +240,7 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
 		{
 			LLRect cc_rect = controls_container->getRect();
 
-			floaterp->reshape(floater_width, 593);
+			floaterp->reshape(floater_width, 613);
 
 			controls_container->setRect(cc_rect);
 			controls_container->updateBoundingRect();
@@ -547,13 +547,24 @@ void LLFloaterSnapshotBase::ImplBase::onClickAutoSnap(LLUICtrl *ctrl, void* data
 {
 	LLCheckBoxCtrl *check = (LLCheckBoxCtrl *)ctrl;
 	gSavedSettings.setBOOL( "AutoSnapshot", check->get() );
-	
-	LLFloaterSnapshotBase *view = (LLFloaterSnapshotBase *)data;		
+
+	LLFloaterSnapshotBase *view = (LLFloaterSnapshotBase *)data;
 	if (view)
 	{
 		view->impl->checkAutoSnapshot(view->getPreviewView());
 		view->impl->updateControls(view);
 	}
+}
+
+// static
+void LLFloaterSnapshotBase::ImplBase::onClickNoPost(LLUICtrl *ctrl, void* data)
+{
+    BOOL no_post = ((LLCheckBoxCtrl*)ctrl)->get();
+    gSavedSettings.setBOOL("RenderSnapshotNoPost", no_post);
+
+    LLFloaterSnapshotBase* view = (LLFloaterSnapshotBase*)data;
+    view->getPreviewView()->updateSnapshot(TRUE, TRUE);
+    view->impl->updateControls(view);
 }
 
 // static
@@ -1133,6 +1144,9 @@ BOOL LLFloaterSnapshot::postBuild()
 
 	getChild<LLUICtrl>("auto_snapshot_check")->setValue(gSavedSettings.getBOOL("AutoSnapshot"));
 	childSetCommitCallback("auto_snapshot_check", ImplBase::onClickAutoSnap, this);
+
+    getChild<LLUICtrl>("no_post_check")->setValue(gSavedSettings.getBOOL("RenderSnapshotNoPost"));
+    childSetCommitCallback("no_post_check", ImplBase::onClickNoPost, this);
 
     getChild<LLButton>("retract_btn")->setCommitCallback(boost::bind(&LLFloaterSnapshot::onExtendFloater, this));
     getChild<LLButton>("extend_btn")->setCommitCallback(boost::bind(&LLFloaterSnapshot::onExtendFloater, this));
