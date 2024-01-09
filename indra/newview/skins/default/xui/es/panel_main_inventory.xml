@@ -36,7 +36,6 @@
 				<combo_box.item value="filter_type_sounds" label="Sonidos"/>
 				<combo_box.item value="filter_type_textures" label="Texturas"/>
 				<combo_box.item value="filter_type_snapshots" label="Fotografías"/>
-				<combo_box.item value="filter_type_meshes" label="Modelos mesh"/>
 				<combo_box.item value="filter_type_custom" label="Personalizado..."/>
 			</combo_box>
 			<menu_button tool_tip="Mostrar opciones de visibilidad de búsqueda" name="options_visibility_btn" />

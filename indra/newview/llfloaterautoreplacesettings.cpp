@@ -33,7 +33,6 @@
 #include "llagent.h"
 #include "llpanel.h"
 #include "llbutton.h"
-#include "llcolorswatch.h"
 #include "llcombobox.h"
 #include "llview.h"
 #include "llbufferstream.h"

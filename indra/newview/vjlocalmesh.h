@@ -71,6 +71,7 @@ class LLLocalMeshFace
 		std::vector<LLVector2>& getUVs()						{ return mUVs; };
 		std::vector<LLLocalMeshSkinUnit>& getSkin()				{ return mSkin; }
 		std::pair<LLVector4, LLVector4>& getFaceBoundingBox()	{ return mFaceBoundingBox; }
+		void logFaceInfo() const;
 
 	private:
 		std::vector<int>		mIndices;
@@ -115,6 +116,7 @@ class LLLocalMeshObject
 		void					 	setObjectMeshSkinInfo(LLPointer<LLMeshSkinInfo> skininfop ) 	{ mMeshSkinInfoPtr = skininfop; };
 		LLVolumeParams				getVolumeParams() const		{ return mVolumeParams; };
 		bool						getIsRiggedObject() const;
+		void logObjectInfo() const;
 
 	private:
 		// internal data keeping
@@ -198,7 +200,6 @@ class LLLocalMeshFile
 		void updateVObjects();
 		void applyToVObject(LLUUID viewer_object_id, int object_index, bool use_scale);
 
-		// misc
 		void pushLog(const std::string& who, const std::string& what, bool is_error = false);
 
 	private:
@@ -249,8 +250,11 @@ class LLLocalMeshSystem : public LLSingleton<LLLocalMeshSystem>
 		void triggerFloaterRefresh( bool keep_selection=true );
 		std::vector<LLLocalMeshFile::LLLocalMeshFileInfo> getFileInfoVector() const;
 		std::vector<std::string> getFileLog(LLUUID local_file_id) const;
+		// misc
+		void pushLog(const std::string& who, const std::string& what, bool is_error = false);
 
 	private:
+		std::vector<std::string> mSystemLog;
 		std::vector<std::unique_ptr<LLLocalMeshFile>> mLoadedFileList;
 		bool mFileAsyncsOngoing;
 		LLFloaterLocalMesh* mFloaterPtr;

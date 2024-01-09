@@ -413,10 +413,10 @@ void ll_nvapi_init(NvDRSSessionHandle hSession)
 		return;
 	}
 
-	// <FS:Ansariel> Enable Threaded Optimization
+	// enable Threaded Optimization instead of letting the driver decide
 	status = NvAPI_DRS_GetSetting(hSession, hProfile, OGL_THREAD_CONTROL_ID, &drsSetting);
 	if (status == NVAPI_SETTING_NOT_FOUND || (status == NVAPI_OK && drsSetting.u32CurrentValue != OGL_THREAD_CONTROL_ENABLE))
-	{ //only override if the user hasn't specifically set this setting
+	{
 		drsSetting.version = NVDRS_SETTING_VER;
 		drsSetting.settingId = OGL_THREAD_CONTROL_ID;
 		drsSetting.settingType = NVDRS_DWORD_TYPE;
@@ -441,7 +441,6 @@ void ll_nvapi_init(NvDRSSessionHandle hSession)
 		nvapi_error(status);
 		return;
 	}
-	// </FS:Ansariel>
 }
 
 //#define DEBUGGING_SEH_FILTER 1

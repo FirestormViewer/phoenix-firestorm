@@ -31,7 +31,7 @@
 #include "llmenugl.h"
 #include "llframetimer.h"
 
-const S32 PIE_MAX_SLICES = 8;
+constexpr S32 PIE_MAX_SLICES = 8;
 
 // PieChildRegistry contains a list of allowed child types for the XUI definition
 struct PieChildRegistry : public LLChildRegistry<PieChildRegistry>
@@ -76,7 +76,7 @@ public:
 	void hide();
 
 	// our item list type definition
-	typedef std::list<LLView*> slice_list_t;
+	typedef std::vector<LLView*> slice_list_t;
 	// the actual item list
 	slice_list_t mMySlices;
 	// pointer to the currently used list

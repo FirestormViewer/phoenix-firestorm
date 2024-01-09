@@ -52,6 +52,8 @@ LLColorSwatchCtrl::Params::Params()
 	border_color("border_color"),
     label_width("label_width", -1),
 	label_height("label_height", -1),
+	text_enabled_color("text_enabled_color"),	// <FS:Zi> Add label/caption colors
+	text_disabled_color("text_disabled_color"),	// <FS:Zi> Add label/caption colors
 	caption_text("caption_text"),
 	border("border")
 {
@@ -66,6 +68,8 @@ LLColorSwatchCtrl::LLColorSwatchCtrl(const Params& p)
 	mOnCancelCallback(p.cancel_callback()),
 	mOnSelectCallback(p.select_callback()),
 	mBorderColor(p.border_color()),
+	mTextEnabledColor(p.text_enabled_color),      // <FS:Zi> Add label/caption colors
+	mTextDisabledColor(p.text_disabled_color),    // <FS:Zi> Add label/caption colors
 	mLabelWidth(p.label_width),
 	mLabelHeight(p.label_height)
 {	
@@ -95,6 +99,8 @@ LLColorSwatchCtrl::LLColorSwatchCtrl(const Params& p)
 	params.rect(border_rect);
 	mBorder = LLUICtrlFactory::create<LLViewBorder> (params);
 	addChild(mBorder);
+
+	updateLabelColor();	// <FS:Zi> Add label/caption colors
 }
 
 LLColorSwatchCtrl::~LLColorSwatchCtrl ()
@@ -250,12 +256,18 @@ void LLColorSwatchCtrl::draw()
 		}
 	}
 
+	mCaption->setEnabled(getEnabled() && isInEnabledChain());	// <FS:Zi> Add label/caption colors
+
 	LLUICtrl::draw();
 }
 
 void LLColorSwatchCtrl::setEnabled( BOOL enabled )
 {
-	mCaption->setEnabled( enabled );
+	// <FS:Zi> Add label/caption colors
+	// mCaption->setEnabled( enabled );
+	mCaption->setEnabled(enabled && isInEnabledChain());
+	// </FS:Zi>
+
 	LLView::setEnabled( enabled );
 
 	if (!enabled)
@@ -374,3 +386,10 @@ void LLColorSwatchCtrl::showPicker(BOOL take_focus)
 	}
 }
 
+// <FS:Zi> Add label/caption colors
+void LLColorSwatchCtrl::updateLabelColor()
+{
+	mCaption->setColor(mTextEnabledColor.get());
+	mCaption->setReadOnlyColor(mTextDisabledColor.get());
+}
+// </FS:Zi>

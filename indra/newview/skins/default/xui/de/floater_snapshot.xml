@@ -64,6 +64,7 @@
 		<check_box label="HUDs" name="hud_check"/>
 		<check_box label="Standbild (Vollbild)" name="freeze_frame_check"/>
 		<check_box label="Automatisch aktualisieren" name="auto_snapshot_check"/>
+		<check_box label="Keine Nachverarbeitung" name="no_post_check"/>
 		<combo_box label="Filter" name="filters_combobox" tool_tip="Bildfilter">
 			<combo_box.item label="Kein Filter" name="NoFilter"/>
 		</combo_box>
