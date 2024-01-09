@@ -66,13 +66,13 @@ public:
 
 	// accessor to expose the label to the outside (value is the same as label)
 	std::string getLabel() const;
-	void setLabel(const std::string& newLabel);
+	void setLabel(std::string_view newLabel);
 	LLSD getValue() const;
 	void setValue(const LLSD& value);
 
 	// accessor to expose the autohide feature
-	bool getStartAutohide();
-	bool getAutohide();
+	bool getStartAutohide() const;
+	bool getAutohide() const;
 
 	// callback connection for the onCommit method to launch the specified function
 	boost::signals2::connection setClickCallback(const commit_signal_t::slot_type& cb)

@@ -40,7 +40,6 @@ class LLButton;
 class LLMenuButton;
 class LLViewerObject;
 class LLComboBox;
-class LLColorSwatchCtrl;
 class LLTextureCtrl;
 class LLInventoryItem;
 class LLUUID;

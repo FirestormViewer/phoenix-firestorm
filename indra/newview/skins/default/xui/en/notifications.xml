@@ -6487,7 +6487,7 @@ Are you sure you want to delete them?
     Delete the image for this item? There is no undo.
     <tag>confirm</tag>
     <usetemplate
-     ignoretext="Confirm before deleting a thumbnail."
+     ignoretext="Warn me that thumbnail will be permanently removed"
      name="okcancelignore"
      notext="Cancel"
      yestext="Delete"/>
@@ -7506,6 +7506,19 @@ Please try again.
    type="notifytip">
     <tag>fail</tag>
     Not connected to a materials capable region.
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="CantSelectReflectionProbe"
+   type="alertmodal">
+    <unique/>
+    You have placed a reflection probe, but 'Select Reflection Probes' is disabled. To be able to select reflection probes, check Build &gt; Options &gt; Select Reflection Probes.
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Warn if Reflection Probes selection is disabled."
+     name="okignore"
+     yestext="OK"/>
   </notification>
 
   <notification
