@@ -473,7 +473,7 @@ void LLFloaterLocalMesh::showLog()
 	LLUUID file_id = scroll_ctrl_selected_column->getValue().asUUID();
 	auto log = LLLocalMeshSystem::getInstance()->getFileLog(file_id);
 
-	for (auto log_string : log)
+	for (const auto& log_string : log)
 	{
 		mLogPanel->appendText(log_string, true);
 	}
@@ -612,7 +612,7 @@ void LLFloaterLocalMesh::reloadLowerUI()
 	if (!selected_file_id.isNull())
 	{
 		const auto& fileinfo_vector = LLLocalMeshSystem::getInstance()->getFileInfoVector();
-		for (auto fileinfo : fileinfo_vector)
+		for (const auto& fileinfo : fileinfo_vector)
 		{
 			if (selected_file_id == fileinfo.mLocalID)
 			{
@@ -684,7 +684,7 @@ void LLFloaterLocalMesh::reloadLowerUI()
 		// and if it is loaded & active, fill object list
 		if (selected_file_active && (!selected_object_list.empty()))
 		{
-			for (auto object_name : selected_object_list)
+			for (const auto& object_name : selected_object_list)
 			{
 				objectlist_combo_box->addSimpleElement(object_name);
 			}

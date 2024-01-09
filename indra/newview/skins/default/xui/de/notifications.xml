@@ -2853,6 +2853,10 @@ Bitte erneut versuchen.
 	<notification name="MissingMaterialCaps">
 		Nicht mit einer Region verbunden, die Material unterstützt.
 	</notification>
+	<notification name="CantSelectReflectionProbe">
+		Sie haben einen Reflexionstest platziert, aber „Reflexionstests auswählen“ ist deaktiviert. Um Reflexionstests auswählen zu können, aktivieren Sie im Menü Bauen &gt; Optionen &gt; Reflexionstests auswählen.
+		<usetemplate ignoretext="Warnen, falls „Reflexionstests auswählen“ deaktiviert ist." name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="ScriptMissing">
 		Skript fehlt in Datenbank.
 	</notification>

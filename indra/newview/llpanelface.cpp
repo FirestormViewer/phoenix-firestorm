@@ -1217,7 +1217,21 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
                 prev_obj_id = objectp->getID();
             }
         }
-
+        else 
+        {
+            if (prev_obj_id != objectp->getID())
+            {
+                if (has_pbr_material && (mComboMatMedia->getCurrentIndex() == MATMEDIA_MATERIAL)) 
+                {
+                    mComboMatMedia->selectNthItem(MATMEDIA_PBR);
+                }
+                else if (!has_pbr_material && (mComboMatMedia->getCurrentIndex() == MATMEDIA_PBR))
+                {
+                    mComboMatMedia->selectNthItem(MATMEDIA_MATERIAL);
+                }
+                prev_obj_id = objectp->getID();
+            }
+        }
         mComboMatMedia->setEnabled(editable);
 
         //LLRadioGroup* radio_mat_type = getChild<LLRadioGroup>("radio_material_type");
@@ -2044,15 +2058,53 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 	}
 }
 
+// One-off listener that updates the build floater UI when the agent inventory adds or removes an item
+class PBRPickerAgentListener : public LLInventoryObserver
+{
+protected:
+    bool mChangePending = true;
+public:
+	PBRPickerAgentListener() : LLInventoryObserver()
+    {
+        gInventory.addObserver(this);
+    }
+
+    const bool isListening()
+    {
+        return mChangePending;
+    }
+
+	void changed(U32 mask) override
+    {
+        if (!(mask & (ADD | REMOVE)))
+        {
+            return;
+        }
+
+        if (gFloaterTools)
+        {
+            gFloaterTools->dirty();
+        }
+        gInventory.removeObserver(this);
+        mChangePending = false;
+    }
+
+    ~PBRPickerAgentListener() override
+    {
+        gInventory.removeObserver(this);
+        mChangePending = false;
+    }
+};
+
 // One-off listener that updates the build floater UI when the prim inventory updates
-class PBRPickerItemListener : public LLVOInventoryListener
+class PBRPickerObjectListener : public LLVOInventoryListener
 {
 protected:
     LLViewerObject* mObjectp;
     bool mChangePending = true;
 public:
 
-    PBRPickerItemListener(LLViewerObject* object)
+    PBRPickerObjectListener(LLViewerObject* object)
     : mObjectp(object)
     {
         registerVOInventoryListener(mObjectp, nullptr);
@@ -2076,7 +2128,7 @@ public:
         mChangePending = false;
     }
 
-    ~PBRPickerItemListener()
+    ~PBRPickerObjectListener()
     {
         removeVOInventoryListener();
         mChangePending = false;
@@ -2095,9 +2147,9 @@ void LLPanelFace::updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, 
 
     // pbr material
     LLTextureCtrl* pbr_ctrl = findChild<LLTextureCtrl>("pbr_control");
+    LLUUID pbr_id;
     if (pbr_ctrl)
     {
-        LLUUID pbr_id;
         LLSelectedTE::getPbrMaterialId(pbr_id, identical_pbr, has_pbr_material, has_faces_without_pbr);
 
         pbr_ctrl->setTentative(identical_pbr ? FALSE : TRUE);
@@ -2106,7 +2158,7 @@ void LLPanelFace::updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, 
 
         if (objectp->isAttachment())
         {
-            pbr_ctrl->setImmediateFilterPermMask(PERM_COPY | PERM_TRANSFER | PERM_MODIFY);
+            pbr_ctrl->setFilterPermissionMasks(PERM_COPY | PERM_TRANSFER | PERM_MODIFY);
         }
         else
         {
@@ -2120,14 +2172,25 @@ void LLPanelFace::updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, 
     if (objectp->isInventoryPending())
     {
         // Reuse the same listener when possible
-        if (!mInventoryListener || !mInventoryListener->isListeningFor(objectp))
+        if (!mVOInventoryListener || !mVOInventoryListener->isListeningFor(objectp))
         {
-            mInventoryListener = std::make_unique<PBRPickerItemListener>(objectp);
+            mVOInventoryListener = std::make_unique<PBRPickerObjectListener>(objectp);
         }
     }
     else
     {
-        mInventoryListener = nullptr;
+        mVOInventoryListener = nullptr;
+    }
+    if (!identical_pbr || pbr_id.isNull() || pbr_id == LLGLTFMaterialList::BLANK_MATERIAL_ASSET_ID)
+    {
+        mAgentInventoryListener = nullptr;
+    }
+    else
+    {
+        if (!mAgentInventoryListener || !mAgentInventoryListener->isListening())
+        {
+            mAgentInventoryListener = std::make_unique<PBRPickerAgentListener>();
+        }
     }
 
     const bool show_pbr = mComboMatMedia->getCurrentIndex() == MATMEDIA_PBR && mComboMatMedia->getEnabled();
@@ -4411,6 +4474,7 @@ void LLPanelFace::onCopyTexture()
                 te_data["te"]["bumpmap"] = tep->getBumpmap();
                 te_data["te"]["bumpshiny"] = tep->getBumpShiny();
                 te_data["te"]["bumpfullbright"] = tep->getBumpShinyFullbright();
+                te_data["te"]["texgen"] = tep->getTexGen();
                 te_data["te"]["pbr"] = objectp->getRenderMaterialID(te);
                 if (tep->getGLTFMaterialOverride() != nullptr)
                 {
@@ -4806,6 +4870,11 @@ void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
             {
                 objectp->setTEBumpShinyFullbright(te, (U8)te_data["te"]["bumpfullbright"].asInteger());
             }
+            if (te_data["te"].has("texgen"))
+            {
+                objectp->setTETexGen(te, (U8)te_data["te"]["texgen"].asInteger());
+            }
+
             // PBR/GLTF
             if (te_data["te"].has("pbr"))
             {
@@ -4874,8 +4943,6 @@ void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
         {
             LLUUID object_id = objectp->getID();
 
-            LLSelectedTEMaterial::setAlphaMaskCutoff(this, (U8)te_data["material"]["SpecRot"].asInteger(), te, object_id);
-
             // Normal
             // Replace placeholders with target's
             if (te_data["material"].has("NormMapNoCopy"))
@@ -4921,7 +4988,8 @@ void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
             LLSelectedTEMaterial::setSpecularLightColor(this, spec_color, te);
             LLSelectedTEMaterial::setSpecularLightExponent(this, (U8)te_data["material"]["SpecExp"].asInteger(), te, object_id);
             LLSelectedTEMaterial::setEnvironmentIntensity(this, (U8)te_data["material"]["EnvIntensity"].asInteger(), te, object_id);
-            LLSelectedTEMaterial::setDiffuseAlphaMode(this, (U8)te_data["material"]["SpecRot"].asInteger(), te, object_id);
+            LLSelectedTEMaterial::setDiffuseAlphaMode(this, (U8)te_data["material"]["DiffuseAlphaMode"].asInteger(), te, object_id);
+            LLSelectedTEMaterial::setAlphaMaskCutoff(this, (U8)te_data["material"]["AlphaMaskCutoff"].asInteger(), te, object_id);
             if (te_data.has("te") && te_data["te"].has("shiny"))
             {
                 objectp->setTEShiny(te, (U8)te_data["te"]["shiny"].asInteger());

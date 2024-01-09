@@ -1937,31 +1937,16 @@ void LLWindowWin32::destroySharedContext(void* contextPtr)
 
 void LLWindowWin32::toggleVSync(bool enable_vsync)
 {
-    // <FS:Ansariel> Fix null pointer guard
-    //if (!enable_vsync && wglSwapIntervalEXT)
-    //{
-    //    LL_INFOS("Window") << "Disabling vertical sync" << LL_ENDL;
-    //    wglSwapIntervalEXT(0);
-    //}
-    //else
-    //{
-    //    LL_INFOS("Window") << "Enabling vertical sync" << LL_ENDL;
-    //    wglSwapIntervalEXT(1);
-    //}
-    if (wglSwapIntervalEXT)
+    if (!enable_vsync && wglSwapIntervalEXT)
     {
-        if (!enable_vsync)
-        {
-            LL_INFOS("Window") << "Disabling vertical sync" << LL_ENDL;
-            wglSwapIntervalEXT(0);
-        }
-        else
-        {
-            LL_INFOS("Window") << "Enabling vertical sync" << LL_ENDL;
-            wglSwapIntervalEXT(1);
-        }
+        LL_INFOS("Window") << "Disabling vertical sync" << LL_ENDL;
+        wglSwapIntervalEXT(0);
     }
-    // </FS:Ansariel>
+    else if (wglSwapIntervalEXT)
+    {
+        LL_INFOS("Window") << "Enabling vertical sync" << LL_ENDL;
+        wglSwapIntervalEXT(1);
+    }
 }
 
 void LLWindowWin32::moveWindow( const LLCoordScreen& position, const LLCoordScreen& size )
