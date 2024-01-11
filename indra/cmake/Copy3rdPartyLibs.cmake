@@ -254,8 +254,8 @@ elseif(LINUX)
         libuuid.so.16.0.22
         #libfontconfig.so.1.10.1 # <FS:PC> fontconfig and freetype should be taken from the
         #libfontconfig.so.1      #         user's system, and not be packaged with the viewer
-        libaprutil-1.so.0
-        libapr-1.so.0
+        #libaprutil-1.so.0
+        #libapr-1.so.0
        )
     else (NOT USESYSTEMLIBS)
       set(release_files
@@ -265,8 +265,8 @@ elseif(LINUX)
 
      if( USE_AUTOBUILD_3P )
          list( APPEND release_files
-                 libapr-1.so.0
-                 libaprutil-1.so.0
+                 #libapr-1.so.0
+                 #libaprutil-1.so.0
 
 
                  libhunspell-1.3.so.0.0.0

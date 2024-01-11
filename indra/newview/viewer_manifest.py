@@ -2068,8 +2068,8 @@ class LinuxManifest(ViewerManifest):
             self.path("ca-bundle.crt")
 
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
-            self.path("libapr-1.so*")
-            self.path("libaprutil-1.so*")
+            #self.path("libapr-1.so*")
+            #self.path("libaprutil-1.so*")
             #self.path("libboost_context-mt.so*")
             #self.path("libboost_filesystem-mt.so*")
             #self.path("libboost_program_options-mt.so*")
@@ -2200,12 +2200,12 @@ class Linux_i686_Manifest(LinuxManifest):
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
         with self.prefix(src=relpkgdir, dst="lib"):
-            self.path("libapr-1.so")
-            self.path("libapr-1.so.0")
-            self.path("libapr-1.so.0.4.5")
-            self.path("libaprutil-1.so")
-            self.path("libaprutil-1.so.0")
-            self.path("libaprutil-1.so.0.4.1")
+            #self.path("libapr-1.so")
+            #self.path("libapr-1.so.0")
+            #self.path("libapr-1.so.0.4.5")
+            #self.path("libaprutil-1.so")
+            #self.path("libaprutil-1.so.0")
+            #self.path("libaprutil-1.so.0.4.1")
             self.path("libdb*.so")
             self.path("libexpat.so.*")
             self.path("libGLOD.so")
