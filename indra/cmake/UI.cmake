@@ -6,7 +6,7 @@ include(GLIB)
 add_library( ll::uilibraries INTERFACE IMPORTED )
 
 if (LINUX)
-  use_prebuilt_binary(fltk)
+  find_package(FLTK REQUIRED)
   target_compile_definitions(ll::uilibraries INTERFACE LL_FLTK=1 LL_X11=1 )
 
   if( USE_CONAN )
@@ -15,7 +15,7 @@ if (LINUX)
   endif()
   
   target_link_libraries( ll::uilibraries INTERFACE
-          fltk
+          ${FLTK_LIBRARIES}
           X11
           Xinerama
           glib-2.0
@@ -27,6 +27,7 @@ if (LINUX)
           )
     target_include_directories( ll::uilibraries SYSTEM INTERFACE
             ${GLIB_INCLUDE_DIRS}
+            ${FLTK_INCLUDE_DIR}
             )
 endif (LINUX)
 if( WINDOWS )
