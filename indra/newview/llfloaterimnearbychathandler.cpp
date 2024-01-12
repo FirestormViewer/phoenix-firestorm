@@ -511,7 +511,7 @@ void LLFloaterIMNearbyChatScreenChannel::arrangeToasts()
 //-----------------------------------------------------------------------------------------------
 //LLFloaterIMNearbyChatHandler
 //-----------------------------------------------------------------------------------------------
-boost::scoped_ptr<LLEventPump> LLFloaterIMNearbyChatHandler::sChatWatcher(new LLEventStream("LLChat"));
+std::unique_ptr<LLEventPump> LLFloaterIMNearbyChatHandler::sChatWatcher(new LLEventStream("LLChat"));
 
 LLFloaterIMNearbyChatHandler::LLFloaterIMNearbyChatHandler()
 {

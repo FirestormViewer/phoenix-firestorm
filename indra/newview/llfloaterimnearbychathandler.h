@@ -51,7 +51,7 @@ public:
 protected:
 	virtual void initChannel();
 
-	static boost::scoped_ptr<LLEventPump> sChatWatcher;
+	static std::unique_ptr<LLEventPump> sChatWatcher;
 
 	// <FS:Ansariel> Add notification callback for new chat
 	new_chat_signal_t mNewChatSignal;

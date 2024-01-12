@@ -36,7 +36,6 @@
 #include "fsfloaterim.h"
 // </FS:CR>
 
-#include <boost/foreach.hpp>
 #include "boost/lexical_cast.hpp"
 
 // <FS:CR> Commenting out, let the user decide
@@ -402,7 +401,7 @@ void LLConversationLog::deleteBackupLogs()
 	std::vector<std::string> backup_logs;
 	getListOfBackupLogs(backup_logs);
 
-	BOOST_FOREACH(const std::string& fullpath, backup_logs)
+	for (const std::string& fullpath : backup_logs)
 	{
 		LLFile::remove(fullpath);
 	}
@@ -444,7 +443,7 @@ bool LLConversationLog::moveLog(const std::string &originDirectory, const std::s
 			while(LLFile::isfile(backupFileName))
 			{
 				++backupFileCount;
-				backupFileName = targetDirectory + ".backup" + boost::lexical_cast<std::string>(backupFileCount);
+				backupFileName = targetDirectory + ".backup" + std::to_string(backupFileCount);
 			}
 
 			//Rename the file to its backup name so it is not overwritten

@@ -28,6 +28,7 @@
 #define LL_LLDAELOADER_H
 
 #include "llmodelloader.h"
+#include <array> // <FS:Beq/> configurable lod suffixes
 
 class DAE;
 class daeElement;
