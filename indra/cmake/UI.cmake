@@ -6,7 +6,11 @@ include(GLIB)
 add_library( ll::uilibraries INTERFACE IMPORTED )
 
 if (LINUX)
-  find_package(FLTK REQUIRED)
+  if (FLTK_USE_SYSTEMLIBS)
+    find_package(FLTK REQUIRED)
+  else ()
+    set(FLTK_LIBRARIES fltk)
+  endif ()
   target_compile_definitions(ll::uilibraries INTERFACE LL_FLTK=1 LL_X11=1 )
 
   if( USE_CONAN )

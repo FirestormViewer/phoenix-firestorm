@@ -135,6 +135,10 @@ endif (WINDOWS)
 if (LINUX)
   set(CMAKE_SKIP_RPATH TRUE)
 
+  # Configure whether to use the library or prebuilt library once installed on the system.
+  # fltk
+  set(FLTK_USE_SYSTEMLIBS FALSE)
+
   # <FS:ND/>
   # And another hack for FORTIFY_SOURCE. Some distributions (for example Gentoo) define FORTIFY_SOURCE by default.
   # Check if this is the case, if yes, do not define it again.
