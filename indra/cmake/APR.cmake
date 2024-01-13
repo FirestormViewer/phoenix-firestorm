@@ -5,14 +5,8 @@ include_guard()
 
 add_library( ll::apr INTERFACE IMPORTED )
 
-if (NOT LINUX)
-  use_system_binary( apr apr-util )
-  use_prebuilt_binary(apr_suite)
-else ()
-  find_package(PkgConfig REQUIRED)
-  pkg_check_modules(APR REQUIRED apr-1)
-  pkg_check_modules(APRUTIL REQUIRED apr-util-1)
-endif ()
+use_system_binary( apr apr-util )
+use_prebuilt_binary(apr_suite)
 
 if (WINDOWS)
   if (LLCOMMON_LINK_SHARED)
@@ -41,15 +35,10 @@ elseif (DARWIN)
 else (WINDOWS)
   # linux
   target_link_libraries( ll::apr INTERFACE
-          ${APR_LIBRARIES}
-          ${APRUTIL_LIBRARIES}
+          apr-1
+          aprutil-1
           uuid
           rt
           )
 endif (WINDOWS)
-
-if (NOT LINUX)
-  target_include_directories( ll::apr SYSTEM INTERFACE  ${LIBS_PREBUILT_DIR}/include/apr-1 )
-else ()
-  target_include_directories( ll::apr SYSTEM INTERFACE  ${APR_INCLUDE_DIRS} ${APRUTIL_INCLUDE_DIRS} )
-endif ()
+target_include_directories( ll::apr SYSTEM INTERFACE  ${LIBS_PREBUILT_DIR}/include/apr-1 )
