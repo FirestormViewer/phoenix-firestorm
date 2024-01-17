@@ -1205,25 +1205,27 @@ bool AOEngine::removeAnimation(const AOSet* set, AOSet::AOState* state, S32 inde
 	}
 
 	LLViewerInventoryItem* item = gInventory.getItem(state->mAnimations[index].mInventoryUUID);
-
-	// check if this item is actually an animation link
-	bool move = true;
-	if (item->getIsLinkType())
+	if (item)
 	{
-		if (item->getInventoryType() == LLInventoryType::IT_ANIMATION)
+		// check if this item is actually an animation link
+		bool move = true;
+		if (item->getIsLinkType())
 		{
-			// it is an animation link, so mark it to be purged
-			move = false;
+			if (item->getInventoryType() == LLInventoryType::IT_ANIMATION)
+			{
+				// it is an animation link, so mark it to be purged
+				move = false;
+			}
 		}
-	}
 
-	// this item was not an animation link, move it to lost and found
-	if (move)
-	{
-		gInventory.changeItemParent(item, gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND), false);
-		LLNotificationsUtil::add("AOForeignItemsFound", LLSD());
-		update();
-		return false;
+		// this item was not an animation link, move it to lost and found
+		if (move)
+		{
+			gInventory.changeItemParent(item, gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND), false);
+			LLNotificationsUtil::add("AOForeignItemsFound", LLSD());
+			update();
+			return false;
+		}
 	}
 
 	// purge the item from inventory
