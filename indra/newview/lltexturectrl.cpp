@@ -72,6 +72,7 @@
 
 #include "llradiogroup.h"
 #include "llfloaterreg.h"
+#include "llgltfmaterialpreviewmgr.h"
 #include "lllocalbitmaps.h"
 #include "lllocalgltfmaterials.h"
 #include "llerror.h"
@@ -721,6 +722,7 @@ void LLFloaterTexturePicker::draw()
 	if( mOwner ) 
 	{
 		mTexturep = NULL;
+        LLPointer<LLFetchedGLTFMaterial> old_material = mGLTFMaterial;
         mGLTFMaterial = NULL;
         if (mImageAssetID.notNull())
         {
@@ -728,10 +730,23 @@ void LLFloaterTexturePicker::draw()
             {
                 mGLTFMaterial = (LLFetchedGLTFMaterial*) gGLTFMaterialList.getMaterial(mImageAssetID);
                 llassert(mGLTFMaterial == nullptr || dynamic_cast<LLFetchedGLTFMaterial*>(gGLTFMaterialList.getMaterial(mImageAssetID)) != nullptr);
+                if (mGLTFPreview.isNull() || mGLTFMaterial.isNull() || (old_material.notNull() && (*old_material.get() != *mGLTFMaterial.get())))
+                {
+                    // Only update the preview if needed, since gGLTFMaterialPreviewMgr does not cache the preview.
+                    if (mGLTFMaterial.isNull())
+                    {
+                        mGLTFPreview = nullptr;
+                    }
+                    else
+                    {
+                        mGLTFPreview = gGLTFMaterialPreviewMgr.getPreview(mGLTFMaterial);
+                    }
+                }
             }
             else
             {
                 LLPointer<LLViewerFetchedTexture> texture = NULL;
+                mGLTFPreview = nullptr;
 
                 if (LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(mImageAssetID))
                 {
@@ -741,7 +756,7 @@ void LLFloaterTexturePicker::draw()
                     if (obj)
                     {
                         LLViewerTexture* viewerTexture = obj->getBakedTextureForMagicId(mImageAssetID);
-                        texture = viewerTexture ? dynamic_cast<LLViewerFetchedTexture*>(viewerTexture) : NULL;
+						texture = viewerTexture ? dynamic_cast<LLViewerFetchedTexture*>(viewerTexture) : NULL;
                     }
                 }
 
@@ -783,27 +798,29 @@ void LLFloaterTexturePicker::draw()
 
 		// If the floater is focused, don't apply its alpha to the texture (STORM-677).
 		const F32 alpha = getTransparencyType() == TT_ACTIVE ? 1.0f : getCurrentTransparency();
-        LLViewerTexture* texture = nullptr;
+        LLViewerTexture* preview = nullptr;
         if (mGLTFMaterial)
         {
-            texture = mGLTFMaterial->getUITexture();
+            preview = mGLTFPreview.get();
         }
         else
         {
-            texture = mTexturep.get();
+            preview = mTexturep.get();
+            if (mTexturep)
+            {
+                // Pump the priority
+				mTexturep->addTextureStats( (F32)(interior.getWidth() * interior.getHeight()) );
+            }
         }
 
-		if( texture )
+		if( preview )
 		{
-			if( texture->getComponents() == 4 )
+			if( preview->getComponents() == 4 )
 			{
 				gl_rect_2d_checkerboard( interior, alpha );
 			}
 
-			gl_draw_scaled_image( interior.mLeft, interior.mBottom, interior.getWidth(), interior.getHeight(), texture, UI_VERTEX_COLOR % alpha );
-
-			// Pump the priority
-			texture->addTextureStats( (F32)(interior.getWidth() * interior.getHeight()) );
+			gl_draw_scaled_image( interior.mLeft, interior.mBottom, interior.getWidth(), interior.getHeight(), preview, UI_VERTEX_COLOR % alpha );
 		}
 		else if (!mFallbackImage.isNull())
 		{
@@ -1786,7 +1803,7 @@ LLTextureCtrl::LLTextureCtrl(const LLTextureCtrl::Params& p)
 	mShowLoadingPlaceholder( TRUE ),
 	mOpenTexPreview(!p.enabled),  // <FS:Ansariel> For texture preview mode
     mBakeTextureEnabled(true),
-    mInventoryPickType(PICK_TEXTURE),
+    mInventoryPickType(p.pick_type),
 	mImageAssetID(p.image_id),
 	mDefaultImageAssetID(p.default_image_id),
 	mDefaultImageName(p.default_image_name),
@@ -2344,48 +2361,69 @@ void LLTextureCtrl::draw()
 {
 	mBorder->setKeyboardFocusHighlight(hasFocus());
 
+    LLPointer<LLViewerTexture> preview = NULL;
+
 	if (!mValid)
 	{
 		mTexturep = NULL;
+        mGLTFMaterial = NULL;
+        mGLTFPreview = NULL;
 	}
 	else if (!mImageAssetID.isNull())
 	{
-		LLPointer<LLViewerFetchedTexture> texture = NULL;
-
 		if (LLAvatarAppearanceDefines::LLAvatarAppearanceDictionary::isBakedImageId(mImageAssetID))
 		{
 			LLViewerObject* obj = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
 			if (obj)
 			{
 				LLViewerTexture* viewerTexture = obj->getBakedTextureForMagicId(mImageAssetID);
-				texture = viewerTexture ? dynamic_cast<LLViewerFetchedTexture*>(viewerTexture) : NULL;
+				mTexturep = viewerTexture ? dynamic_cast<LLViewerFetchedTexture*>(viewerTexture) : NULL;
+				mGLTFMaterial = NULL;
+				mGLTFPreview = NULL;
+
+                preview = mTexturep;
 			}
 			
 		}
 
-		if (texture.isNull())
+		if (preview.isNull())
 		{
+            LLPointer<LLFetchedGLTFMaterial> old_material = mGLTFMaterial;
+            mGLTFMaterial = NULL;
+            mTexturep = NULL;
             if (mInventoryPickType == PICK_MATERIAL)
             {
-                LLPointer<LLFetchedGLTFMaterial> material = gGLTFMaterialList.getMaterial(mImageAssetID);
-                if (material)
+                mGLTFMaterial = gGLTFMaterialList.getMaterial(mImageAssetID);
+                if (mGLTFPreview.isNull() || mGLTFMaterial.isNull() || (old_material.notNull() && (*old_material.get() != *mGLTFMaterial.get())))
                 {
-                    texture = material->getUITexture();
+                    // Only update the preview if needed, since gGLTFMaterialPreviewMgr does not cache the preview.
+                    if (mGLTFMaterial.isNull())
+                    {
+                        mGLTFPreview = nullptr;
+                    }
+                    else
+                    {
+                        mGLTFPreview = gGLTFMaterialPreviewMgr.getPreview(mGLTFMaterial);
+                    }
                 }
+
+                preview = mGLTFPreview;
             }
             else
             {
-                texture = LLViewerTextureManager::getFetchedTexture(mImageAssetID, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
-                texture->setBoostLevel(LLGLTexture::BOOST_PREVIEW);
-                texture->forceToSaveRawImage(0);
+				mTexturep = LLViewerTextureManager::getFetchedTexture(mImageAssetID, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+				mTexturep->setBoostLevel(LLGLTexture::BOOST_PREVIEW);
+				mTexturep->forceToSaveRawImage(0);
+
+				preview = mTexturep;
             }
 		}
-
-		mTexturep = texture;
 	}
 	else//mImageAssetID == LLUUID::null
 	{
 		mTexturep = NULL; 
+        mGLTFMaterial = NULL;
+        mGLTFPreview = NULL;
 	}
 	
 	// Border
@@ -2400,15 +2438,18 @@ void LLTextureCtrl::draw()
 
 	// If we're in a focused floater, don't apply the floater's alpha to the texture (STORM-677).
 	const F32 alpha = getTransparencyType() == TT_ACTIVE ? 1.0f : getCurrentTransparency();
-	if( mTexturep )
+	if( preview )
 	{
-		if( mTexturep->getComponents() == 4 )
+		if( preview->getComponents() == 4 )
 		{
 			gl_rect_2d_checkerboard( interior, alpha );
 		}
 		
-		gl_draw_scaled_image( interior.mLeft, interior.mBottom, interior.getWidth(), interior.getHeight(), mTexturep, UI_VERTEX_COLOR % alpha);
-		mTexturep->addTextureStats( (F32)(interior.getWidth() * interior.getHeight()) );
+		gl_draw_scaled_image( interior.mLeft, interior.mBottom, interior.getWidth(), interior.getHeight(), preview, UI_VERTEX_COLOR % alpha);
+        if (mTexturep)
+        {
+            mTexturep->addTextureStats( (F32)(interior.getWidth() * interior.getHeight()) );
+        }
 		// <FS:Ansariel> Mask texture if desired
 		if (mIsMasked)
 		{
@@ -2594,3 +2635,18 @@ void LLTextureCtrl::updateLabelColor()
 	mCaption->setReadOnlyColor(mTextDisabledColor.get());
 }
 // </FS:Zi>
+
+namespace LLInitParam
+{
+    void TypeValues<EPickInventoryType>::declareValues()
+    {
+        declare("texture_material", PICK_TEXTURE_MATERIAL);
+        declare("texture", PICK_TEXTURE);
+        declare("material", PICK_MATERIAL);
+    }
+}
+
+
+
+
+
