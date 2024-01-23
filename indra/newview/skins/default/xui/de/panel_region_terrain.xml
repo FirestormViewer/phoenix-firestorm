@@ -9,8 +9,12 @@
 	<spinner label="Wasserhöhe" name="water_height_spin"/>
 	<spinner label="Obere Terraingrenze" name="terrain_raise_spin"/>
 	<spinner label="Untere Terraingrenze" name="terrain_lower_spin"/>
+	<combo_box name="terrain_material_type">
+		<combo_box.item label="Terrain-Texturen" name="Textures"/>
+		<combo_box.item label="Terrain-PBR-Materialien" name="PBRMaterials"/>
+	</combo_box>
 	<text name="detail_texture_text">
-		Terraintexturen (erfordert 24-Bit-.tga-Dateien mit einer Größe von 1024x1024)
+		Maximale Größe: 1024x1024
 	</text>
 	<text name="height_text_lbl">
 		1 (niedrig)
