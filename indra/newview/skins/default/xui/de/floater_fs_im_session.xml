@@ -66,7 +66,7 @@
 				<layout_panel name="chat_layout_panel">
 					<layout_stack name="input_panels">
 						<layout_panel name="emoji_button_layout_panel">
-							<button name="emoji_picker_toggle_btn" tool_tip="Emoji-Auswahl öffnen/schliessen"/>
+							<button name="emoji_picker_toggle_btn" tool_tip="Emoji-Auswahl öffnen"/>
 							<button name="emoji_recent_panel_toggle_btn" tool_tip="Zuletzt verwendete Emoji-Auswahl öffnen/schliessen"/>
 						</layout_panel>
 						<layout_panel name="input_button_layout_panel">

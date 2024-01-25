@@ -762,12 +762,25 @@ void LLFontFreetype::renderGlyph(EFontGlyphType bitmap_type, U32 glyph_index) co
 		load_flags |= FT_LOAD_COLOR;
 	}
 
-	// <FS:ND> try to load given glyph, if that fails, fallback to ?. This can happen with invalid unicode codepoints.
-	if( 0 != FT_Load_Glyph(mFTFace, glyph_index, load_flags) )
-		glyph_index = FT_Get_Char_Index( mFTFace, L'?');
-	// </FS:ND>
+	FT_Error error = FT_Load_Glyph(mFTFace, glyph_index, load_flags);
+	if (FT_Err_Ok != error)
+	{
+		std::string message = llformat(
+			"Error %d (%s) loading glyph %u: bitmap_type=%u, load_flags=%d",
+			error, FT_Error_String(error), glyph_index, bitmap_type, load_flags);
+		LL_WARNS_ONCE() << message << LL_ENDL;
+		error = FT_Load_Glyph(mFTFace, glyph_index, load_flags ^ FT_LOAD_COLOR);
 
-	llassert_always(! FT_Load_Glyph(mFTFace, glyph_index, load_flags) );
+		// <FS:ND> try to load given glyph, if that fails, fallback to ?. This can happen with invalid unicode codepoints.
+		if (FT_Err_Ok != error)
+		{
+			glyph_index = FT_Get_Char_Index( mFTFace, L'?');
+			error = FT_Load_Glyph(mFTFace, glyph_index, load_flags ^ FT_LOAD_COLOR);
+		}
+		// </FS:ND>
+
+		llassert_always_msg(FT_Err_Ok == error, message.c_str());
+	}
 
 	llassert_always(! FT_Render_Glyph(mFTFace->glyph, gFontRenderMode) );
 

@@ -161,7 +161,7 @@ public:
 
 	void timedUpdate();
 
-	static void onEmojiPickerToggleBtnClicked(FSFloaterIM* self);
+	void onEmojiPickerToggleBtnClicked();
 
 protected:
 	/* virtual */
@@ -241,11 +241,9 @@ private:
 	bool onChatOptionsVisibleContextMenuItem(const LLSD& userdata);
 	bool onChatOptionsEnableContextMenuItem(const LLSD& userdata);
 
-	static void onEmojiRecentPanelToggleBtnClicked(FSFloaterIM* self);
-	void initEmojiRecentPanel(bool moveFocus);
+	void onEmojiRecentPanelToggleBtnClicked();
+	void initEmojiRecentPanel();
 	void onRecentEmojiPicked(const LLSD& value);
-	void onEmojiPicked(llwchar emoji);
-	void onEmojiPickerClosed();
 
 	FSPanelChatControlPanel* mControlPanel;
 	LLUUID mSessionID;

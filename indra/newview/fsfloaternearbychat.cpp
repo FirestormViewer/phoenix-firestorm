@@ -148,7 +148,7 @@ BOOL FSFloaterNearbyChat::postBuild()
 	mInputEditorPad = mChatLayoutPanelHeight - mInputEditor->getRect().getHeight();
 
 	mEmojiRecentPanelToggleBtn = getChild<LLButton>("emoji_recent_panel_toggle_btn");
-	mEmojiRecentPanelToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiRecentPanelToggleBtnClicked(this); });
+	mEmojiRecentPanelToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiRecentPanelToggleBtnClicked(); });
 
 	mEmojiRecentPanel = getChild<LLLayoutPanel>("emoji_recent_layout_panel");
 	mEmojiRecentPanel->setVisible(false);
@@ -163,9 +163,9 @@ BOOL FSFloaterNearbyChat::postBuild()
 
 	mEmojiPickerToggleBtn = getChild<LLButton>("emoji_picker_toggle_btn");
 	mEmojiPickerToggleBtn->setLabel(LLUIString(LLWString(1, 128512)));
-	mEmojiPickerToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiPickerToggleBtnClicked(this); });
+	mEmojiPickerToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiPickerToggleBtnClicked(); });
 
-	mRecentEmojisUpdatedCallbackConnection = LLFloaterEmojiPicker::setRecentEmojisUpdatedCallback([this](const std::list<llwchar>& recent_emojis_list) { initEmojiRecentPanel(false); });
+	mRecentEmojisUpdatedCallbackConnection = LLFloaterEmojiPicker::setRecentEmojisUpdatedCallback([this](const std::list<llwchar>& recent_emojis_list) { initEmojiRecentPanel(); });
 
 	getChild<LLButton>("chat_history_btn")->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onHistoryButtonClicked, this));
 	getChild<LLButton>("chat_search_btn")->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onSearchButtonClicked, this));
@@ -970,26 +970,19 @@ void FSFloaterNearbyChat::handleMinimized(bool minimized)
 	}
 }
 
-void FSFloaterNearbyChat::onEmojiRecentPanelToggleBtnClicked(FSFloaterNearbyChat* self)
+void FSFloaterNearbyChat::onEmojiRecentPanelToggleBtnClicked()
 {
-	bool show = !self->mEmojiRecentPanel->getVisible();
-	bool restore_focus = !show || (gFocusMgr.getLastKeyboardFocus() == self->mInputEditor);
-
+	BOOL show = mEmojiRecentPanel->getVisible() ? FALSE : TRUE;
 	if (show)
 	{
-		self->initEmojiRecentPanel(!restore_focus);
+		initEmojiRecentPanel();
 	}
 
-	self->mEmojiRecentPanel->setVisible(show ? TRUE : FALSE);
-	self->mEmojiRecentPanelToggleBtn->setImageOverlay(show ? "Arrow_Up" : "Arrow_Down");
-
-	if (restore_focus)
-	{
-		self->mInputEditor->setFocus(true);
-	}
+	mEmojiRecentPanel->setVisible(show);
+	mInputEditor->setFocus(TRUE);
 }
 
-void FSFloaterNearbyChat::initEmojiRecentPanel(bool moveFocus)
+void FSFloaterNearbyChat::initEmojiRecentPanel()
 {
 	std::list<llwchar>& recentlyUsed = LLFloaterEmojiPicker::getRecentlyUsed();
 	if (recentlyUsed.empty())
@@ -1007,10 +1000,6 @@ void FSFloaterNearbyChat::initEmojiRecentPanel(bool moveFocus)
 		mEmojiRecentIconsCtrl->setEmojis(emojis);
 		mEmojiRecentEmptyText->setVisible(FALSE);
 		mEmojiRecentIconsCtrl->setVisible(TRUE);
-		if (moveFocus)
-		{
-			mEmojiRecentIconsCtrl->setFocus(TRUE);
-		}
 	}
 }
 
@@ -1023,44 +1012,12 @@ void FSFloaterNearbyChat::onRecentEmojiPicked(const LLSD& value)
 		if (wstr.size())
 		{
 			llwchar emoji = wstr[0];
-			onEmojiPicked(emoji);
+			mInputEditor->insertEmoji(emoji);
 		}
 	}
 }
 
-void FSFloaterNearbyChat::onEmojiPickerToggleBtnClicked(FSFloaterNearbyChat* self)
+void FSFloaterNearbyChat::onEmojiPickerToggleBtnClicked()
 {
-	if (LLFloaterEmojiPicker* picker = LLFloaterEmojiPicker::getInstance())
-	{
-		if (!picker->isShown() || (picker->isDependent() && picker->getDependee() && picker->getDependee() != self && picker->getDependee() != self->getHost()))
-		{
-			picker->show(
-				[self](llwchar emoji) { self->onEmojiPicked(emoji); },
-				[self]() { self->onEmojiPickerClosed(); });
-
-			if (self->getHost())
-			{
-				self->getHost()->addDependentFloater(picker, TRUE, TRUE);
-			}
-			else
-			{
-				self->addDependentFloater(picker, TRUE, TRUE);
-			}
-		}
-		else
-		{
-			picker->closeFloater();
-		}
-	}
-}
-
-void FSFloaterNearbyChat::onEmojiPicked(llwchar emoji)
-{
-	mInputEditor->insertEmoji(emoji);
-	mInputEditor->setFocus(TRUE);
-}
-
-void FSFloaterNearbyChat::onEmojiPickerClosed()
-{
-	mInputEditor->setFocus(TRUE);
+	mInputEditor->showEmojiHelper();
 }

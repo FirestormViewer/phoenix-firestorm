@@ -191,7 +191,7 @@ protected:
 	LLButton* mExpandCollapseBtn;
 	LLButton* mTearOffBtn;
 	LLButton* mEmojiRecentPanelToggleBtn;
-	LLButton* mEmojiPickerToggleBtn;
+	LLButton* mEmojiPickerShowBtn;
 	LLButton* mCloseBtn;
 	LLButton* mGearBtn;
 	LLButton* mAddBtn;
@@ -217,12 +217,10 @@ private:
 
 	void onInputEditorClicked();
 
-	static void onEmojiRecentPanelToggleBtnClicked(LLFloaterIMSessionTab* self);
-	static void onEmojiPickerToggleBtnClicked();
-	void initEmojiRecentPanel(bool moveFocus);
+	void onEmojiRecentPanelToggleBtnClicked();
+	void onEmojiPickerShowBtnClicked();
+	void initEmojiRecentPanel();
 	void onRecentEmojiPicked(const LLSD& value);
-	static void onEmojiPicked(llwchar emoji);
-	static void onEmojiPickerClosed();
 
 	bool checkIfTornOff();
 	bool mIsHostAttached;

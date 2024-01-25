@@ -101,7 +101,7 @@ public:
 
 	void handleMinimized(bool minimized);
 
-	static void onEmojiPickerToggleBtnClicked(FSFloaterNearbyChat* self);
+	void onEmojiPickerToggleBtnClicked();
 
 protected:
 	void onChatBoxKeystroke();
@@ -123,11 +123,9 @@ private:
 	bool onChatOptionsVisibleContextMenuItem(const LLSD& userdata);
 	bool onChatOptionsEnableContextMenuItem(const LLSD& userdata);
 
-	static void onEmojiRecentPanelToggleBtnClicked(FSFloaterNearbyChat* self);
-	void initEmojiRecentPanel(bool moveFocus);
+	void onEmojiRecentPanelToggleBtnClicked();
+	void initEmojiRecentPanel();
 	void onRecentEmojiPicked(const LLSD& value);
-	void onEmojiPicked(llwchar emoji);
-	void onEmojiPickerClosed();
 
 	FSChatHistory*		mChatHistory;
 	FSChatHistory*		mChatHistoryMuted;

@@ -187,7 +187,7 @@ LLTextBase::Params::Params()
 	trusted_content("trusted_content", true),
 	always_show_icons("always_show_icons", false),
 	use_ellipses("use_ellipses", false),
-	use_color("use_color", false),
+	use_color("use_color", true),
 	// <FS:Ansariel> Optional icon position
 	icon_positioning("icon_positioning", LLTextBaseEnums::RIGHT),
 	// </FS:Ansariel> Optional icon position

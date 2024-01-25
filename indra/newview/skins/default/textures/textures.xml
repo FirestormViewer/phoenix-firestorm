@@ -222,6 +222,7 @@ with the same filename but different name
 
   <texture name="DropTarget" file_name="widgets/DropTarget.png" preload="false" />
 
+  <texture name="Emoji_Picker_Icon" file_name="icons/emoji_picker_icon.png" preload="true" />
   <texture name="ExternalBrowser_Off" file_name="icons/ExternalBrowser_Off.png" preload="false" />
   <texture name="ExternalBrowser_Over" file_name="icons/ExternalBrowser_Over.png" preload="false" />
   <texture name="ExternalBrowser_Press" file_name="icons/ExternalBrowser_Press.png" preload="false" />

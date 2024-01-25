@@ -536,8 +536,8 @@ void FSCommon::updateUsedEmojis(LLWString text)
 		}
 	}
 
-	if (emojiSent)
-	{
-		LLFloaterEmojiPicker::onRecentlyUsedChanged();
-	}
+	if (!emojiSent)
+		return;
+
+	LLFloaterEmojiPicker::saveState();
 }

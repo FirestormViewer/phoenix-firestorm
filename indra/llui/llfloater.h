@@ -168,7 +168,8 @@ public:
 								save_visibility,
 								save_dock_state,
 								can_dock,
-								show_title;
+								show_title,
+								auto_close;
 		
 		Optional<LLFloaterEnums::EOpenPositioning>	positioning;
 		
@@ -411,6 +412,7 @@ protected:
 	void		 	setInstanceName(const std::string& name);
 	
 	virtual void	bringToFront(S32 x, S32 y);
+	virtual void	goneFromFront();
 	
 	void			setExpandedRect(const LLRect& rect) { mExpandedRect = rect; } // size when not minimized
 	const LLRect&	getExpandedRect() const { return mExpandedRect; }
@@ -515,6 +517,7 @@ private:
     bool            mFocusStealsFrontmost = true;	// FALSE if we don't want the currently focused floater to cover this floater without user interaction
 	BOOL			mDragOnLeft;
 	BOOL			mResizable;
+	BOOL			mAutoClose;
 	BOOL			mCanSnooze;		// <FS:Ansariel> FIRE-11724: Snooze group chat
 
 	LLFloaterEnums::EOpenPositioning	mPositioning;
@@ -642,6 +645,7 @@ public:
 	// </FS:KC> Fix for bad edge snapping
 
 	void setToolbarRect(LLToolBarEnums::EToolBarLocation tb, const LLRect& toolbar_rect);
+	void onDestroyFloater(LLFloater* floater);
 
 	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
 	void setMainChatbarRect(LLLayoutPanel* panel, const LLRect& chatbar_rect);
@@ -666,7 +670,7 @@ private:
 	S32				mMinimizePositionVOffset;
 	typedef std::vector<std::pair<LLHandle<LLFloater>, boost::signals2::connection> > hidden_floaters_t;
 	hidden_floaters_t mHiddenFloaters;
-	LLHandle<LLFloater> mFrontChildHandle;
+	LLFloater *		mFrontChild;
 
 	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
 	LLRect			mMainChatbarRect;

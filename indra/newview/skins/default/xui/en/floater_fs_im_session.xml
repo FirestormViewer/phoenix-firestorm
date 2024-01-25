@@ -667,9 +667,11 @@
                image_hover_unselected="Toolbar_Middle_Over"
                image_selected="Toolbar_Middle_Selected"
                image_unselected="Toolbar_Middle_Off"
+               image_overlay="Emoji_Picker_Icon"
                right="-11"
                name="emoji_picker_toggle_btn"
-               tool_tip="Show/hide emoji panel"
+               tab_stop="false"
+               tool_tip="Show emoji panel"
                width="24"/>
               <button
                follows="right|bottom"
@@ -683,6 +685,7 @@
                image_overlay="Arrow_Down"
                right="-1"
                name="emoji_recent_panel_toggle_btn"
+               tab_stop="false"
                tool_tip="Shows/hides recent emojis"
                left_pad="0"
                width="10"/>
@@ -728,6 +731,7 @@
              follows="top|left|right"
              layout="topleft"
              max_visible="20"
+             tab_stop="false"
              top="0"
              left="5"
              right="-1"

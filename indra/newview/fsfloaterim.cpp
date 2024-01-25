@@ -959,7 +959,7 @@ BOOL FSFloaterIM::postBuild()
 	mInputEditor->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 
 	mEmojiRecentPanelToggleBtn = getChild<LLButton>("emoji_recent_panel_toggle_btn");
-	mEmojiRecentPanelToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiRecentPanelToggleBtnClicked(this); });
+	mEmojiRecentPanelToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiRecentPanelToggleBtnClicked(); });
 
 	mEmojiRecentPanel = getChild<LLLayoutPanel>("emoji_recent_layout_panel");
 	mEmojiRecentPanel->setVisible(false);
@@ -974,9 +974,9 @@ BOOL FSFloaterIM::postBuild()
 
 	mEmojiPickerToggleBtn = getChild<LLButton>("emoji_picker_toggle_btn");
 	mEmojiPickerToggleBtn->setLabel(LLUIString(LLWString(1, 128512)));
-	mEmojiPickerToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiPickerToggleBtnClicked(this); });
+	mEmojiPickerToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiPickerToggleBtnClicked(); });
 
-	mRecentEmojisUpdatedCallbackConnection = LLFloaterEmojiPicker::setRecentEmojisUpdatedCallback([this](const std::list<llwchar>& recent_emojis_list) { initEmojiRecentPanel(false); });
+	mRecentEmojisUpdatedCallbackConnection = LLFloaterEmojiPicker::setRecentEmojisUpdatedCallback([this](const std::list<llwchar>& recent_emojis_list) { initEmojiRecentPanel(); });
 
 	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 	getChild<LLButton>("chat_search_btn")->setCommitCallback(boost::bind(&FSFloaterIM::onChatSearchButtonClicked, this));
@@ -2472,26 +2472,19 @@ bool FSFloaterIM::applyRectControl()
 	return res;
 }
 
-void FSFloaterIM::onEmojiRecentPanelToggleBtnClicked(FSFloaterIM* self)
+void FSFloaterIM::onEmojiRecentPanelToggleBtnClicked()
 {
-	bool show = !self->mEmojiRecentPanel->getVisible();
-	bool restore_focus = !show || (gFocusMgr.getLastKeyboardFocus() == self->mInputEditor);
-
+	BOOL show = mEmojiRecentPanel->getVisible() ? FALSE : TRUE;
 	if (show)
 	{
-		self->initEmojiRecentPanel(!restore_focus);
+		initEmojiRecentPanel();
 	}
 
-	self->mEmojiRecentPanel->setVisible(show ? TRUE : FALSE);
-	self->mEmojiRecentPanelToggleBtn->setImageOverlay(show ? "Arrow_Up" : "Arrow_Down");
-
-	if (restore_focus)
-	{
-		self->mInputEditor->setFocus(true);
-	}
+	mEmojiRecentPanel->setVisible(show);
+	mInputEditor->setFocus(TRUE);
 }
 
-void FSFloaterIM::initEmojiRecentPanel(bool moveFocus)
+void FSFloaterIM::initEmojiRecentPanel()
 {
 	std::list<llwchar>& recentlyUsed = LLFloaterEmojiPicker::getRecentlyUsed();
 	if (recentlyUsed.empty())
@@ -2509,10 +2502,6 @@ void FSFloaterIM::initEmojiRecentPanel(bool moveFocus)
 		mEmojiRecentIconsCtrl->setEmojis(emojis);
 		mEmojiRecentEmptyText->setVisible(FALSE);
 		mEmojiRecentIconsCtrl->setVisible(TRUE);
-		if (moveFocus)
-		{
-			mEmojiRecentIconsCtrl->setFocus(TRUE);
-		}
 	}
 }
 
@@ -2525,44 +2514,12 @@ void FSFloaterIM::onRecentEmojiPicked(const LLSD& value)
 		if (wstr.size())
 		{
 			llwchar emoji = wstr[0];
-			onEmojiPicked(emoji);
+			mInputEditor->insertEmoji(emoji);
 		}
 	}
 }
 
-void FSFloaterIM::onEmojiPickerToggleBtnClicked(FSFloaterIM* self)
+void FSFloaterIM::onEmojiPickerToggleBtnClicked()
 {
-	if (LLFloaterEmojiPicker* picker = LLFloaterEmojiPicker::getInstance())
-	{
-		if (!picker->isShown() || (picker->isDependent() && picker->getDependee() && picker->getDependee() != self && picker->getDependee() != self->getHost()))
-		{
-			picker->show(
-				[self](llwchar emoji) { self->onEmojiPicked(emoji); },
-				[self]() { self->onEmojiPickerClosed(); });
-
-			if (self->getHost())
-			{
-				self->getHost()->addDependentFloater(picker, TRUE, TRUE);
-			}
-			else
-			{
-				self->addDependentFloater(picker, TRUE, TRUE);
-			}
-		}
-		else
-		{
-			picker->closeFloater();
-		}
-	}
-}
-
-void FSFloaterIM::onEmojiPicked(llwchar emoji)
-{
-	mInputEditor->insertEmoji(emoji);
-	mInputEditor->setFocus(TRUE);
-}
-
-void FSFloaterIM::onEmojiPickerClosed()
-{
-	mInputEditor->setFocus(TRUE);
+	mInputEditor->showEmojiHelper();
 }
