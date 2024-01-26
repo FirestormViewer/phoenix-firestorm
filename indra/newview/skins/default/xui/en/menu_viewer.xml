@@ -4033,6 +4033,14 @@
                  function="Advanced.ForceErrorSoftwareException" />
             </menu_item_call>
             <menu_item_call
+             label="Force OS Exception"
+             name="Force OS Exception">
+                <menu_item_call.on_click
+                 function="Advanced.ForceErrorOSException" />
+                <menu_item_call.on_visible
+                 function="Advanced.EnableErrorOSException" />
+            </menu_item_call>
+            <menu_item_call
              label="Force Software Exception in Coroutine"
              name="Force Software Exception in Coroutine">
                 <menu_item_call.on_click

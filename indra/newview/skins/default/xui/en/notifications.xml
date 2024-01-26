@@ -6764,17 +6764,17 @@ Your trash is overflowing. This may cause problems logging in.
   </notification>
 
   <notification
-   icon="alertmodal.tga"
-   name="InventoryLimitReachedAISAlert"
-   type="alertmodal">
+   icon="notifytip.tga"
+   name="InventoryLimitReachedAIS"
+   type="notifytip">
 Your inventory is experiencing issues. Please contact support of your grid.
   <tag>fail</tag>
   </notification>
 
   <notification
-   icon="notifytip.tga"
-   name="InventoryLimitReachedAIS"
-   type="notifytip">
+   icon="alertmodal.tga"
+   name="InventoryLimitReachedAISAlert"
+   type="alertmodal">
 Your inventory is experiencing issues. Please contact support of your grid.
   <tag>fail</tag>
   </notification>

@@ -273,7 +273,7 @@ TestString PleaseIgnore
         height="15"
         follows="left|top"
         layout="topleft"
-        name="permissions_label"
+        name="perm_modify"
         width="200">
         Permissions
       </text>
@@ -286,7 +286,7 @@ TestString PleaseIgnore
         height="15"
         follows="left|top"
         layout="topleft"
-        name="perm_modify"
+        name="you_perm_modify"
         width="200">
         You can:
       </text>

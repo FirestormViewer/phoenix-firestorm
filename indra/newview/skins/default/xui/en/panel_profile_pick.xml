@@ -138,11 +138,11 @@
     <layout_panel
      follows="all"
      layout="bottomleft"
-     name="actions_lp"
+     name="util_buttons_lp"
      auto_resize="false"
      height="25">
       <layout_stack
-       name="actions_stack"
+       name="util_buttons_stack"
        left="1"
        right="-1"
        top="0"
