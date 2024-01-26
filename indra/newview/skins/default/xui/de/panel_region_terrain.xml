@@ -14,6 +14,9 @@
 		<combo_box.item label="Terrain-PBR-Materialien" name="PBRMaterials"/>
 	</combo_box>
 	<text name="detail_texture_text">
+		Terrain-Texturen
+	</text>
+	<text name="detail_texture_text">
 		Maximale Größe: 1024x1024
 	</text>
 	<text name="height_text_lbl">

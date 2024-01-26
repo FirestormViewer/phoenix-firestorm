@@ -267,6 +267,9 @@ LLVOVolume::~LLVOVolume()
 	mTextureAnimp = NULL;
 	delete mVolumeImpl;
 	mVolumeImpl = NULL;
+    
+    if (mIsMirror)
+        gPipeline.mHeroProbeManager.unregisterHeroDrawable(this);
 
 	gMeshRepo.unregisterMesh(this);
 
@@ -1150,7 +1153,12 @@ LLDrawable *LLVOVolume::createDrawable(LLPipeline *pipeline)
     {
         updateReflectionProbePtr();
     }
-
+    
+    if (isMirror())
+    {
+        gPipeline.mHeroProbeManager.registerHeroDrawable(this);
+    }
+    
 	updateRadius();
 	bool force_update = true; // avoid non-alpha mDistance update being optimized away
 	mDrawable->updateDistance(*LLViewerCamera::getInstance(), force_update);
@@ -3515,6 +3523,48 @@ F32 LLVOVolume::getLightCutoff() const
 	}
 }
 
+bool LLVOVolume::setIsMirror(BOOL is_mirror)
+{
+    BOOL was_mirror = isMirror();
+    if (is_mirror != was_mirror)
+    {
+        if (is_mirror)
+        {
+            setParameterEntryInUse(LLNetworkData::PARAMS_MIRROR, TRUE, true);
+        }
+        else
+        {
+            setParameterEntryInUse(LLNetworkData::PARAMS_MIRROR, FALSE, true);
+        }
+    }
+    
+    updateMirrorDrawable();
+    
+    return was_mirror != is_mirror;
+}
+
+void LLVOVolume::updateMirrorDrawable()
+{
+    if (isMirror())
+    {
+        gPipeline.mHeroProbeManager.registerHeroDrawable(this);
+    }
+    else
+    {
+        gPipeline.mHeroProbeManager.unregisterHeroDrawable(this);
+    }
+}
+
+BOOL LLVOVolume::isMirror() const
+{
+    return mIsMirror;
+}
+
+U8 LLVOVolume::mirrorFace() const
+{
+    return mMirrorFace;
+}
+
 BOOL LLVOVolume::isReflectionProbe() const
 {
     return getParameterEntryInUse(LLNetworkData::PARAMS_REFLECTION_PROBE);
@@ -4605,6 +4655,11 @@ void LLVOVolume::parameterChanged(U16 param_type, LLNetworkData* data, BOOL in_u
 	}
    
     updateReflectionProbePtr();
+    
+    if (isMirror())
+        gPipeline.mHeroProbeManager.registerHeroDrawable(this);
+    else
+        gPipeline.mHeroProbeManager.unregisterHeroDrawable(this);
 }
 
 void LLVOVolume::updateReflectionProbePtr()

@@ -1932,6 +1932,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 					mCtrlShinyOffsetV->setValue(offset_y);
 					getChild<LLUICtrl>("glossiness")->setValue(material->getSpecularLightExponent());
 					getChild<LLUICtrl>("environment")->setValue(material->getEnvironmentIntensity());
+                    getChild<LLUICtrl>("mirror")->setValue(material->getEnvironmentIntensity());
 
 					updateShinyControls(!material->getSpecularID().isNull(), true);
 				}

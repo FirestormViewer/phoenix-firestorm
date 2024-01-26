@@ -2931,15 +2931,23 @@ Low ↔ Lwst
              name="FlexForceZ"
              top_pad="4"
              width="128" />
-
+            <check_box
+             height="16"
+             label="Mirror"
+             layout="topleft"
+             left="10"
+             name="Mirror Checkbox Ctrl"
+             tool_tip="Causes object to be a mirror"
+             top_pad="8"
+             width="60" />
             <check_box
              height="16"
              label="Light"
              layout="topleft"
-             left="10"
+             left_pad="10"
              name="Light Checkbox Ctrl"
              tool_tip="Causes object to emit light"
-             top_pad="10"
+             top_delta="0"
              width="60" />
             <color_swatch
              can_apply_immediately="true"

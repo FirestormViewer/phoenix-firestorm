@@ -39,6 +39,7 @@
 #include "lldrawable.h"
 #include "llrendertarget.h"
 #include "llreflectionmapmanager.h"
+#include "llheroprobemanager.h"
 
 #include <stack>
 
@@ -459,6 +460,7 @@ public:
     void handleShadowDetailChanged();
 
     LLReflectionMapManager mReflectionMapManager;
+    LLHeroProbeManager mHeroProbeManager;
 
 private:
 	void unloadShaders();
@@ -1076,6 +1078,7 @@ public:
 	static F32 RenderScreenSpaceReflectionAdaptiveStepMultiplier;
 	static S32 RenderScreenSpaceReflectionGlossySamples;
 	static S32 RenderBufferVisualization;
+	static bool RenderMirrors;
 };
 
 void render_bbox(const LLVector3 &min, const LLVector3 &max);
