@@ -3737,6 +3737,9 @@ void LLSplashScreenWin32::showImpl()
 		NULL,	// no parent
 		(DLGPROC) LLSplashScreenWin32::windowProc); 
 	ShowWindow(mWindow, SW_SHOW);
+
+    // Should set taskbar text without creating a header for the window (caption)
+    SetWindowTextA(mWindow, APP_NAME.c_str());
 }
 
 
