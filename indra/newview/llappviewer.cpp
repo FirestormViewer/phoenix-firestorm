@@ -158,7 +158,6 @@
 
 // Third party library includes
 #include <boost/bind.hpp>
-#include <boost/foreach.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
 #include <boost/throw_exception.hpp>
@@ -1401,7 +1400,7 @@ bool LLAppViewer::init()
 //            LLSD item(LeapCommand);
 //            LeapCommand.append(item);
 //        }
-//        BOOST_FOREACH(const std::string& leap, llsd::inArray(LeapCommand))
+//        for (const auto& leap : llsd::inArray(LeapCommand))
 //        {
 //            LL_INFOS("InitInfo") << "processing --leap \"" << leap << '"' << LL_ENDL;
 //            // We don't have any better description of this plugin than the
@@ -2755,7 +2754,7 @@ bool LLAppViewer::loadSettingsFromDirectory(const std::string& location_key,
 		LL_ERRS() << "Invalid settings location list" << LL_ENDL;
 	}
 
-	BOOST_FOREACH(const SettingsGroup& group, mSettingsLocationList->groups)
+	for (const SettingsGroup& group : mSettingsLocationList->groups)
 	{
 		// skip settings groups that aren't the one we requested
 		if (group.name() != location_key) continue;
@@ -2767,7 +2766,7 @@ bool LLAppViewer::loadSettingsFromDirectory(const std::string& location_key,
 			return false;
 		}
 
-		BOOST_FOREACH(const SettingsFile& file, group.files)
+		for (const SettingsFile& file : group.files)
 		{
 			// <FS:Ansariel> Skip quickprefs settings - we don't have a settings group
 			//               for it as it's not a regular settings file
@@ -2839,11 +2838,11 @@ bool LLAppViewer::loadSettingsFromDirectory(const std::string& location_key,
 std::string LLAppViewer::getSettingsFilename(const std::string& location_key,
 											 const std::string& file)
 {
-	BOOST_FOREACH(const SettingsGroup& group, mSettingsLocationList->groups)
+	for (const SettingsGroup& group : mSettingsLocationList->groups)
 	{
 		if (group.name() == location_key)
 		{
-			BOOST_FOREACH(const SettingsFile& settings_file, group.files)
+			for (const SettingsFile& settings_file : group.files)
 			{
 				if (settings_file.name() == file)
 				{
@@ -3561,7 +3560,7 @@ void LLAppViewer::initStrings()
 	// Now that we've set "[sourceid]", have to go back through
 	// default_trans_args and reinitialize all those other keys because some
 	// of them, in turn, reference "[sourceid]".
-	BOOST_FOREACH(std::string key, default_trans_args)
+	for (const std::string& key : default_trans_args)
 	{
 		std::string brackets(key), nobrackets(key);
 		// Invalid to inspect key[0] if key is empty(). But then, the entire
@@ -4945,8 +4944,9 @@ bool LLAppViewer::initCache()
 	const std::string cache_dir_name = gSavedSettings.getString("DiskCacheDirName");
 
 	const U32 MB = 1024 * 1024;
+	constexpr U32 GB = 1024 * MB; // <FS:Beq/> Readability constant
     const uintmax_t MIN_CACHE_SIZE = 256 * MB;
-	const uintmax_t MAX_CACHE_SIZE = 9984ll * MB;
+	const uintmax_t MAX_CACHE_SIZE = 100ULL * GB; // <FS:Beq/> raise the cap to 100GB, UI will limit to a more sensible level of 20GB.
     const uintmax_t setting_cache_total_size = uintmax_t(gSavedSettings.getU32("CacheSize")) * MB;
     const uintmax_t cache_total_size = llclamp(setting_cache_total_size, MIN_CACHE_SIZE, MAX_CACHE_SIZE);
     // <FS:Ansariel> Better cache size control
@@ -5530,17 +5530,24 @@ void LLAppViewer::idle()
 		// When appropriate, update agent location to the simulator.
 		F32 agent_update_time = agent_update_timer.getElapsedTimeF32();
 		F32 agent_force_update_time = mLastAgentForceUpdate + agent_update_time;
-		BOOL force_update = gAgent.controlFlagsDirty()
-							|| (mLastAgentControlFlags != gAgent.getControlFlags())
-							|| (agent_force_update_time > (1.0f / (F32) AGENT_FORCE_UPDATES_PER_SECOND));
-		if (force_update || (agent_update_time > (1.0f / (F32) AGENT_UPDATES_PER_SECOND)))
+        bool timed_out = agent_update_time > (1.0f / (F32)AGENT_UPDATES_PER_SECOND);
+        BOOL force_send =
+            // if there is something to send
+            (gAgent.controlFlagsDirty() && timed_out)
+            // if something changed
+            || (mLastAgentControlFlags != gAgent.getControlFlags())
+            // keep alive
+            || (agent_force_update_time > (1.0f / (F32) AGENT_FORCE_UPDATES_PER_SECOND));
+        // timing out doesn't warranty that an update will be sent,
+        // just that it will be checked.
+		if (force_send || timed_out)
 		{
 			LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
 			// Send avatar and camera info
 			mLastAgentControlFlags = gAgent.getControlFlags();
-			mLastAgentForceUpdate = force_update ? 0 : agent_force_update_time;
+			mLastAgentForceUpdate = force_send ? 0 : agent_force_update_time;
 			if(!gAgent.getPhantom())
-				send_agent_update(force_update);
+				send_agent_update(force_send);
 			agent_update_timer.reset();
 		}
 	}

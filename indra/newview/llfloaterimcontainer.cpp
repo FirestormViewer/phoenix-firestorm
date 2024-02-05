@@ -61,7 +61,6 @@
 // [RLVa:KB] - @pay
 #include "rlvactions.h"
 // [/RLVa:KB]
-#include "boost/foreach.hpp"
 
 
 const S32 EVENTS_PER_IDLE_LOOP_CURRENT_SESSION = 80;
@@ -809,12 +808,11 @@ void LLFloaterIMContainer::setVisible(BOOL visible)
 
 void LLFloaterIMContainer::getDetachedConversationFloaters(floater_list_t& floaters)
 {
-	typedef conversations_widgets_map::value_type conv_pair;
 	LLFloaterIMNearbyChat *nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
 
-	BOOST_FOREACH(conv_pair item, mConversationsWidgets)
+	for (const auto& [key, fvi] : mConversationsWidgets)
 	{
-		LLConversationViewSession* widget = dynamic_cast<LLConversationViewSession*>(item.second);
+		LLConversationViewSession* widget = dynamic_cast<LLConversationViewSession*>(fvi);
 		if (widget)
 		{
 			LLFloater* session_floater = widget->getSessionFloater();

@@ -327,7 +327,7 @@ protected:
     vv_LLVolumeFace_t mBaseModelFacesCopy;
 
     U32 mGroup;
-    std::map<LLPointer<LLModel>, U32> mObject;
+    std::map<LLPointer<LLModel>, U32> mObject; // <FS:Beq> Improved LOD generation
 
     // Amount of triangles in original(base) model
     U32 mMaxTriangleLimit;
