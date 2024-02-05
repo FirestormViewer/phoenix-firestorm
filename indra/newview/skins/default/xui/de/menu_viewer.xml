@@ -528,6 +528,7 @@
 			<menu_item_check label="Angehängte Partikel rendern" name="Render Attached Particles"/>
 			<menu_item_check label="Shader-Cache aktivieren" name="Enable Shader Cache"/>
 			<menu_item_call label="Shader-Cache bereinigen" name="Shader Cache Clear"/>
+			<menu_item_call label="Terrain neu erstellen" name="Rebuild Terrain"/>
 		</menu>
 		<menu label="Netzwerk" name="Network">
 			<menu_item_check label="Agent pausieren" name="AgentPause"/>

@@ -177,7 +177,6 @@ F32 LLPipeline::CameraFocusTransitionTime;
 F32 LLPipeline::CameraFNumber;
 F32 LLPipeline::CameraFocalLength;
 F32 LLPipeline::CameraFieldOfView;
-S32 LLPipeline::RenderLocalLightCount;
 F32 LLPipeline::RenderShadowNoise;
 F32 LLPipeline::RenderShadowBlurSize;
 F32 LLPipeline::RenderSSAOScale;
@@ -564,7 +563,6 @@ void LLPipeline::init()
 	connectRefreshCachedSettingsSafe("CameraFNumber");
 	connectRefreshCachedSettingsSafe("CameraFocalLength");
 	connectRefreshCachedSettingsSafe("CameraFieldOfView");
-	connectRefreshCachedSettingsSafe("RenderLocalLightCount");
 	connectRefreshCachedSettingsSafe("RenderShadowNoise");
 	connectRefreshCachedSettingsSafe("RenderShadowBlurSize");
 	connectRefreshCachedSettingsSafe("RenderSSAOScale");
@@ -1125,7 +1123,6 @@ void LLPipeline::refreshCachedSettings()
 	CameraFNumber = gSavedSettings.getF32("CameraFNumber");
 	CameraFocalLength = gSavedSettings.getF32("CameraFocalLength");
 	CameraFieldOfView = gSavedSettings.getF32("CameraFieldOfView");
-	RenderLocalLightCount = gSavedSettings.getS32("RenderLocalLightCount");
 	RenderShadowNoise = gSavedSettings.getF32("RenderShadowNoise");
 	RenderShadowBlurSize = gSavedSettings.getF32("RenderShadowBlurSize");
 	RenderSSAOScale = gSavedSettings.getF32("RenderSSAOScale");
@@ -5401,7 +5398,7 @@ void LLPipeline::calcNearbyLights(LLCamera& camera)
 		return;
 	}
 
-    const S32 local_light_count = LLPipeline::RenderLocalLightCount;
+    static LLCachedControl<S32> local_light_count(gSavedSettings, "RenderLocalLightCount", 256);
 
 	if (local_light_count >= 1)
 	{
@@ -5670,7 +5667,7 @@ void LLPipeline::setupHWLights()
 
 	mLightMovingMask = 0;
 	
-    const S32 local_light_count = LLPipeline::RenderLocalLightCount;
+    static LLCachedControl<S32> local_light_count(gSavedSettings, "RenderLocalLightCount", 256);
 
 	if (local_light_count >= 1)
 	{
@@ -8177,7 +8174,7 @@ void LLPipeline::renderDeferredLighting()
             unbindDeferredShader(gDeferredSoftenProgram);
         }
 
-        const S32 local_light_count = LLPipeline::RenderLocalLightCount;
+        static LLCachedControl<S32> local_light_count(gSavedSettings, "RenderLocalLightCount", 256);
 
         if (local_light_count > 0)
         {
@@ -8456,6 +8453,7 @@ void LLPipeline::renderDeferredLighting()
                           LLPipeline::RENDER_TYPE_CONTROL_AV,
                           LLPipeline::RENDER_TYPE_ALPHA_MASK,
                           LLPipeline::RENDER_TYPE_FULLBRIGHT_ALPHA_MASK,
+						  LLPipeline::RENDER_TYPE_TERRAIN,
                           LLPipeline::RENDER_TYPE_WATER,
                           END_RENDER_TYPES);
 
@@ -11136,6 +11134,16 @@ void LLPipeline::rebuildDrawInfo()
 
         part = region->getSpatialPartition(LLViewerRegion::PARTITION_BRIDGE);
         dirty.traverse(part->mOctree);
+    }
+}
+
+void LLPipeline::rebuildTerrain()
+{
+    for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
+        iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
+    {
+        LLViewerRegion* region = *iter;
+        region->dirtyAllPatches();
     }
 }
 

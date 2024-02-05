@@ -4599,6 +4599,13 @@
             <menu_item_call.on_click
              function="Advanced.ClearShaderCache" />
           </menu_item_call>
+          <menu_item_call
+            enabled="true"
+            label="Rebuild Terrain"
+            name="Rebuild Terrain">
+            <menu_item_call.on_click
+             function="Advanced.RebuildTerrain" />
+          </menu_item_call>
         </menu>
 
         <menu

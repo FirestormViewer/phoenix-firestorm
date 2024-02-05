@@ -2441,6 +2441,20 @@ class LLAdvancedPurgeShaderCache : public view_listener_t
 	}
 };
 
+/////////////////////
+// REBUILD TERRAIN //
+/////////////////////
+
+
+class LLAdvancedRebuildTerrain : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+        gPipeline.rebuildTerrain();
+		return true;
+	}
+};
+
 ////////////////////
 // EVENT Recorder //
 ///////////////////
@@ -12282,6 +12296,10 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAdvancedClickRenderProfile(), "Advanced.ClickRenderProfile");
 	view_listener_t::addMenu(new LLAdvancedClickRenderBenchmark(), "Advanced.ClickRenderBenchmark");
 	view_listener_t::addMenu(new LLAdvancedPurgeShaderCache(), "Advanced.ClearShaderCache");
+    if (gSavedSettings.get<bool>("RenderTerrainPBREnabled"))
+    {
+        view_listener_t::addMenu(new LLAdvancedRebuildTerrain(), "Advanced.RebuildTerrain");
+    }
 	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
 	view_listener_t::addMenu(new FSAdvancedToggleDoubleClickAction, "Advanced.SetDoubleClickAction");
 	view_listener_t::addMenu(new FSAdvancedCheckEnabledDoubleClickAction, "Advanced.CheckEnabledDoubleClickAction");

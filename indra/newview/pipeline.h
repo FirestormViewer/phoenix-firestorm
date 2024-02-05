@@ -134,6 +134,8 @@ public:
 
     // rebuild all LLVOVolume render batches
     void rebuildDrawInfo();
+    // Rebuild all terrain
+    void rebuildTerrain();
 
     // Clear LLFace mVertexBuffer pointers
 	void resetVertexBuffers(LLDrawable* drawable);
@@ -1041,7 +1043,6 @@ public:
 	static F32 CameraFNumber;
 	static F32 CameraFocalLength;
 	static F32 CameraFieldOfView;
-	static S32 RenderLocalLightCount;
 	static F32 RenderShadowNoise;
 	static F32 RenderShadowBlurSize;
 	static F32 RenderSSAOScale;
