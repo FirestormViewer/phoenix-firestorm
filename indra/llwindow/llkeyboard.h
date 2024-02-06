@@ -92,7 +92,7 @@ public:
     // </FS:ND>
 
 #ifdef LL_DARWIN
-	// We only actually use this for OS X.
+	// We only actually use this for macOS.
 	virtual void	handleModifier(MASK mask) = 0;
 #endif // LL_DARWIN
 

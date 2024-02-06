@@ -288,6 +288,8 @@ void transfer_bytes(kdu_byte *dest, kdu_line_buf &src, int gap, int precision);
 void LLImageJ2CKDU::setupCodeStream(LLImageJ2C &base, bool keep_codestream, ECodeStreamMode mode)
 {
 	LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;	// <FS:Beq> instrument image decodes
+	LLImageDataLock lock(&base);
+
 	S32 data_size = base.getDataSize();
 	S32 max_bytes = (base.getMaxBytes() ? base.getMaxBytes() : data_size);
 
@@ -528,8 +530,13 @@ bool LLImageJ2CKDU::initDecode(LLImageJ2C &base, LLImageRaw &raw_image, F32 deco
 bool LLImageJ2CKDU::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decode_time, S32 first_channel, S32 max_channel_count)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_TEXTURE;
+
+	LLImageDataLock lockIn(&base);
+	LLImageDataLock lockOut(&raw_image);
+
 	ECodeStreamMode mode = MODE_FAST;
 
+	bool limit_time = decode_time > 0.0f;
 	LLTimer decode_timer;
 
 	if (!mCodeStreamp->exists())
@@ -553,7 +560,7 @@ bool LLImageJ2CKDU::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 deco
 
 	// These can probably be grabbed from what's saved in the class.
 	kdu_dims dims;
-	mCodeStreamp->get_dims(0,dims);
+	mCodeStreamp->get_dims(0, dims);
 
 	// Now we are ready to walk through the tiles processing them one-by-one.
 	kdu_byte *buffer = raw_image.getData();
@@ -603,16 +610,18 @@ bool LLImageJ2CKDU::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 deco
 															mCodeStreamp.get()));
 				}
 				// Do the actual processing
-				F32 remaining_time = decode_time - decode_timer.getElapsedTimeF32();
+				F32 remaining_time = limit_time ? decode_time - decode_timer.getElapsedTimeF32().value() : 0.0f;
 				// This is where we do the actual decode.  If we run out of time, return false.
-				if (mDecodeState->processTileDecode(remaining_time, (decode_time > 0.0f)))
+				if (mDecodeState->processTileDecode(remaining_time, limit_time))
 				{
 					mDecodeState.reset();
 				}
 				else
 				{
 					// Not finished decoding yet.
-					//					setLastError("Ran out of time while decoding");
+					base.setLastError("Ran out of time while decoding");
+					base.decodeFailed();
+					cleanupCodeStream();
 					return false;
 				}
 			}

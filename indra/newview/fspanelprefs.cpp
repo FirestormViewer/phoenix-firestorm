@@ -121,9 +121,9 @@ void FSPanelPrefs::apply()
 	}
 }
 
-void FSPanelPrefs::cancel()
+void FSPanelPrefs::cancel(const std::vector<std::string> settings_to_skip)
 {
-	LLPanelPreference::cancel();
+	LLPanelPreference::cancel(settings_to_skip);
 }
 
 void FSPanelPrefs::refreshBeamLists()

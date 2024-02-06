@@ -1050,7 +1050,7 @@ void LLFloaterPreference::apply()
 	saveGraphicsPreset(gSavedSettings.getString("PresetGraphicActive"));
 }
 
-void LLFloaterPreference::cancel()
+void LLFloaterPreference::cancel(const std::vector<std::string> settings_to_skip)
 {
 	LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
 	// Call cancel() on all panels that derive from LLPanelPreference
@@ -1060,7 +1060,7 @@ void LLFloaterPreference::cancel()
 		LLView* view = *iter;
 		LLPanelPreference* panel = dynamic_cast<LLPanelPreference*>(view);
 		if (panel)
-			panel->cancel();
+            panel->cancel(settings_to_skip);
 	}
 	// hide joystick pref floater
 	LLFloaterReg::hideInstance("pref_joystick");
@@ -1627,14 +1627,16 @@ void LLFloaterPreference::onBtnCancel(const LLSD& userdata)
 		}
 		refresh();
 	}
-	cancel();
+	
 	if (userdata.asString() == "closeadvanced")
 	{
+        cancel({"RenderQualityPerformance"});
 		LLFloaterReg::hideInstance("prefs_graphics_advanced");
 		updateMaxComplexity();
 	}
 	else
 	{
+        cancel();
 		closeFloater();
 	}
 }
@@ -3630,7 +3632,7 @@ void LLPanelPreference::onCheckContactListColumnMode()
 }
 // </FS:Ansariel>
 
-void LLPanelPreference::cancel()
+void LLPanelPreference::cancel(const std::vector<std::string> settings_to_skip)
 {
 	LLPresetsManager::instance().setIsLoadingPreset(true); // <FS:Ansariel> Graphic preset controls independent from XUI
 
@@ -3644,6 +3646,12 @@ void LLPanelPreference::cancel()
 		{
 			continue;
 		}
+
+        auto found = std::find(settings_to_skip.begin(), settings_to_skip.end(), control->getName());
+        if (found != settings_to_skip.end())
+        {
+            continue;
+        }
 
 		control->set(ctrl_value);
 	}
@@ -4035,11 +4043,11 @@ void LLPanelPreferenceGraphics::resetDirtyChilds()
 	}	
 }
 
-void LLPanelPreferenceGraphics::cancel()
+void LLPanelPreferenceGraphics::cancel(const std::vector<std::string> settings_to_skip)
 {
 	// <FS:Ansariel> Improved graphics preferences
 	resetDirtyChilds();
-	LLPanelPreference::cancel();
+	LLPanelPreference::cancel(settings_to_skip);
 }
 void LLPanelPreferenceGraphics::saveSettings()
 {
@@ -4331,7 +4339,7 @@ void LLPanelPreferenceControls::apply()
     }
 }
 
-void LLPanelPreferenceControls::cancel()
+void LLPanelPreferenceControls::cancel(const std::vector<std::string> settings_to_skip)
 {
     for (U32 i = 0; i < LLKeyConflictHandler::MODE_COUNT - 1; ++i)
     {
@@ -5081,7 +5089,7 @@ void LLPanelPreferenceCrashReports::apply()
 	gCrashSettings.setBOOL("CrashSubmitName", pSendName->get());
 }
 
-void LLPanelPreferenceCrashReports::cancel()
+void LLPanelPreferenceCrashReports::cancel(const std::vector<std::string> settings_to_skip)
 {
 }
 // [/SL:KB]
@@ -5204,7 +5212,7 @@ void LLPanelPreferenceSkins::callbackRestart(const LLSD& notification, const LLS
 	}
 }
 
-void LLPanelPreferenceSkins::cancel()
+void LLPanelPreferenceSkins::cancel(const std::vector<std::string> settings_to_skip)
 {
 	m_Skin = gSavedSettings.getString("SkinCurrent");
 	m_SkinTheme = gSavedSettings.getString("SkinCurrentTheme");
@@ -6101,7 +6109,7 @@ void LLPanelPreferenceOpensim::apply()
 	FSPanelLogin::updateServer();
 }
 
-void LLPanelPreferenceOpensim::cancel()
+void LLPanelPreferenceOpensim::cancel(const std::vector<std::string> settings_to_skip)
 {
 	LLGridManager::getInstance()->resetGrids();
 	LLGridManager::getInstance()->setGridChoice(mCurrentGrid);

@@ -86,7 +86,7 @@ public:
 	~LLFloaterPreference();
 
 	void apply();
-	void cancel();
+	void cancel(const std::vector<std::string> settings_to_skip = {});
 	// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
 	// /*virtual*/ void draw();
 	// </FS:Zi>
@@ -353,7 +353,7 @@ public:
 	virtual ~LLPanelPreference();
 
 	virtual void apply();
-	virtual void cancel();
+    virtual void cancel(const std::vector<std::string> settings_to_skip = {});
 	// void setControlFalse(const LLSD& user_data);	//<FS:KC> Handled centrally now
 	virtual void setHardwareDefaults();
 
@@ -416,13 +416,11 @@ class LLPanelPreferenceGraphics : public LLPanelPreference
 public:
 	BOOL postBuild();
 	void draw();
-	void cancel();
+    void cancel(const std::vector<std::string> settings_to_skip = {});
 	void saveSettings();
 	void resetDirtyChilds();
 	void setHardwareDefaults();
 	void setPresetText();
-
-	static const std::string getPresetsPath();
 
 protected:
 	bool hasDirtyChilds();
@@ -443,7 +441,7 @@ public:
 	BOOL postBuild();
 
 	void apply();
-	void cancel();
+    void cancel(const std::vector<std::string> settings_to_skip = {});
 	void saveSettings();
 	void resetDirtyChilds();
 
@@ -508,7 +506,7 @@ public:
 	
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void apply();
-	/*virtual*/ void cancel();
+	/*virtual*/ void cancel(const std::vector<std::string> settings_to_skip = {});
 	void callbackRestart(const LLSD& notification, const LLSD& response);	// <FS:CR> Callback for restart dialogs
 protected:
 	void onSkinChanged();
@@ -540,7 +538,7 @@ public:
 
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void apply();
-	/*virtual*/ void cancel();
+	/*virtual*/ void cancel(const std::vector<std::string> settings_to_skip = {});
 
 	void refresh();
 
@@ -587,7 +585,7 @@ public:
 
 #ifdef OPENSIM
 	/*virtual*/ void apply();
-	/*virtual*/ void cancel();
+	/*virtual*/ void cancel(const std::vector<std::string> settings_to_skip = {});
 
 protected:
 	boost::signals2::connection mGridListChangedCallbackConnection;

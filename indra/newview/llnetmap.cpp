@@ -620,6 +620,7 @@ void LLNetMap::draw()
 // [/SL:KB]
 
 			// Create the base texture.
+			LLImageDataLock lock(mObjectRawImagep);
 			U8 *default_texture = mObjectRawImagep->getData();
 			memset( default_texture, 0, mObjectImagep->getWidth() * mObjectImagep->getHeight() * mObjectImagep->getComponents() );
 
@@ -1469,6 +1470,7 @@ void LLNetMap::renderPoint(const LLVector3 &pos_local, const LLColor4U &color,
 		return;
 	}
 
+	LLImageDataLock lock(mObjectRawImagep);
 	U8 *datap = mObjectRawImagep->getData();
 
 	S32 neg_radius = diameter / 2;

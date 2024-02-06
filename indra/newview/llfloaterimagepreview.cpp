@@ -981,6 +981,7 @@ void LLImagePreviewSculpted::setPreviewTarget(LLImageRaw* imagep, F32 distance)
 
 	if (imagep)
 	{
+		LLImageDataSharedLock lock(imagep);
 		mVolume->sculpt(imagep->getWidth(), imagep->getHeight(), imagep->getComponents(), imagep->getData(), 0, false);
 	}
 

@@ -40,7 +40,7 @@ public:
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ void apply();
-	/*virtual*/ void cancel();
+	/*virtual*/ void cancel(const std::vector<std::string> settings_to_skip = {});
 
 	void refreshBeamLists();
 

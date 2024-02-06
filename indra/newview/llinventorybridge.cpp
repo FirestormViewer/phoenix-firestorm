@@ -4804,12 +4804,10 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
 			if (!isInboxFolder() // don't allow creation in inbox
 				&& outfits_id != mUUID)
 			{
-				bool menu_items_added = false;
 				// Do not allow to create 2-level subfolder in the Calling Card/Friends folder. EXT-694.
 				if (!LLFriendCardsManager::instance().isCategoryInFriendFolder(cat))
 				{
 					items.push_back(std::string("New Folder"));
-					menu_items_added = true;
 				}
                 // <FS:Ansariel> Fix "outfits" context menu
                 //if (!isMarketplaceListingsFolder())
@@ -4829,10 +4827,6 @@ void LLFolderBridge::buildContextMenuOptions(U32 flags, menuentry_vec_t&   items
                     {
                         disabled_items.push_back("New Settings");
                     }
-                }
-                if (menu_items_added)
-                {
-                    items.push_back(std::string("Create Separator"));
                 }
 			}
 			getClipboardEntries(false, items, disabled_items, flags);
