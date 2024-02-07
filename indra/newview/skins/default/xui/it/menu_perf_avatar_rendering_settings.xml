@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Settings">
+	<menu_item_check label="Renderizza sempre" name="always_render" />
+	<menu_item_check label="Non renderizzare mai" name="never_render" />
+	<menu_item_check label="Rimuovi dalle eccezioni" name="default" />
+	<menu_item_call label="Ispeziona" name="inspect" />
+	<menu_item_call label="Inquadra" tool_tip="Muovi la camera per vedere questo avatar." name="zoom" />
+</context_menu>

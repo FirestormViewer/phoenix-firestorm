@@ -2,67 +2,70 @@
 <menu name="Popup" label="Mini-mappa">
 	<menu_item_call label="Vedi profilo" name="View Profile"/>
 	<menu label="Vedi profilo" name="View Profiles"></menu>
-	<menu_item_call label="Aggiungi a un set" name="Add to Set Multiple"/>
+	<menu_item_call label="Aggiungi ad un set" name="Add to Set Multiple"/>
 	<menu_item_call label="Inquadra" name="Cam"/>
-	<menu name="MarkAvatar" label="Marca...">
+	<menu name="MarkAvatar" label="Marca">
 		<menu_item_call label="Rosso" name="MarkRed"/>
 		<menu_item_call label="Verde" name="MarkGreen"/>
 		<menu_item_call label="Blu" name="MarkBlue"/>
 		<menu_item_call label="Viola" name="MarkPurple"/>
 		<menu_item_call label="Giallo" name="MarkYellow"/>
-		<menu_item_call label="Cancella marca/che" name="Clear Mark"/>
-		<menu_item_call label="Cancella tutte" name="Clear Marks"/>
+		<menu_item_call label="Rimuovi questa marcatura" name="Clear Mark"/>
+		<menu_item_call label="Rimuovi tutte le marcature" name="Clear Marks"/>
 	</menu>
-	<menu name="More Options" label="Altre opzioni...">
-		<menu_item_call label="Aggiungi amico" name="Add Friend"/>
-		<menu_item_call label="Aggiungi a un set" name="Add to Set"/>
-		<menu_item_call label="Cancella amico" name="Remove Friend"/>
-		<menu_item_call label="IM" name="IM"/>
+	<menu name="More Options" label="Altre opzioni">
+		<menu_item_call label="Aggiungi agli amici" name="Add Friend"/>
+		<menu_item_call label="Aggiungi ad un set" name="Add to Set"/>
+		<menu_item_call label="Rimuovi dagli amici" name="Remove Friend"/>
+		<menu_item_call label="Invia IM" name="IM"/>
 		<menu_item_call label="Chiama" name="Call"/>
 		<menu_item_call label="Mappa" name="Map"/>
 		<menu_item_call label="Condividi" name="Share"/>
 		<menu_item_call label="Paga" name="Pay"/>
 		<menu_item_call label="Offri teleport" name="teleport"/>
 		<menu_item_call label="Richiedi teleport" name="request_teleport"/>
-		<menu_item_call label="Teleport a" name="teleport_to"/>
-		<menu_item_call label="Invita a gruppo" name="GroupInvite"/>
-		<menu_item_call label="Info script" name="ScriptInfo"/>
-		<menu_item_check label="Blocca/sblocca" name="Block/Unblock"/>
-		<menu_item_call label="Segnala" name="report"/>
+		<menu_item_call label="TP alla sua posizione" name="teleport_to"/>
+		<menu_item_call label="Invita al gruppo" name="GroupInvite"/>
+		<menu_item_call label="Info sugli script" name="ScriptInfo"/>
+		<menu_item_check label="Blocca / Sblocca" name="Block/Unblock"/>
+		<menu_item_call label="Segnala abuso" name="report"/>
 		<menu_item_call label="Congela" name="freeze"/>
 		<menu_item_call label="Espelli dal lotto" name="eject"/>
-		<menu_item_call label="Espelli dalla regione" name="kick"/>
-		<menu_item_call label="Teleport a casa" name="teleport_home"/>
-		<menu_item_call label="Blocca" name="estate_ban"/>
-		<menu_item_call label="De-rendi" name="derender"/>
-		<menu_item_call label="De-rendi + lista nera" name="derender_permanent"/>
+		<menu_item_call label="Regione: Espelli" name="kick"/>
+		<menu_item_call label="Regione: Teleport home" name="teleport_home"/>
+		<menu_item_call label="Regione: Ban" name="estate_ban"/>
+		<menu_item_call label="De-renderizza" name="derender"/>
+		<menu_item_call label="De-renderizza + Lista nera" name="derender_permanent"/>
 	</menu>
 	<menu_item_call label="Inizia a seguire" name="Start Tracking"/>
 	<menu_item_call label="Smetti di seguire" name="Stop Tracking"/>
 	<menu label="Zoom" name="Minimap Zoom">
-		<menu_item_call label="Zoom vicino" name="Zoom Close"/>
-		<menu_item_call label="Zoom medio" name="Zoom Medium"/>
-		<menu_item_call label="Zoom lontano" name="Zoom Far"/>
-		<menu_item_call label="Zoom" name="Zoom Default"/>
+		<menu_item_check label="Molto vicino" name="Zoom very close" />
+		<menu_item_check label="Vicino" name="Zoom close"/>
+		<menu_item_check label="Medio (default)" name="Zoom medium"/>
+		<menu_item_check label="Lontano" name="Zoom far"/>
 	</menu>
 	<menu label="Mostra" name="Minimap Show">
 		<menu_item_check label="Oggetti" name="Objects"/>
 		<menu_item_check label="Oggetti fisici" name="Physical Objects"/>
 		<menu_item_check label="Oggetti scriptati" name="Scripted Objects"/>
 		<menu_item_check label="Oggetti temporanei" name="Temp On Rez Objects"/>
-		<menu_item_check label="Linee proprietà" name="Property Lines"/>
+		<menu_item_check label="Linee di proprietà" name="Property Lines"/>
 		<menu_item_check label="Terreni in vendita" name="Parcels for Sale"/>
 		<menu_item_check label="Texture terreno" name="Terrain Textures"/>
-		<menu_item_check label="Texture mappa" name="World Map Textures"/>
+		<menu_item_check label="Texture mappa del mondo" name="World Map Textures"/>
 	</menu>
-	<menu_item_check label="Ruota mappa" name="Rotate Map"/>
-	<menu_item_check label="Autocentra" name="Auto Center"/>
-	<menu label="Anelli distanza chat" name="Chat Distance Rings Menu">
-		<menu_item_check label="Mostra anelli distanza" name="Chat Distance Rings"/>
-		<menu_item_check label="Mostra anello sussurro" name="Whisper Distance Ring"/>
-		<menu_item_check label="Mostra anello chat" name="Chat Distance Ring"/>
-		<menu_item_check label="Mostra anello grido" name="Shout Distance Ring"/>
+	<menu_item_check label="Nord in alto" name="North at top" />
+	<menu_item_check label="Camera in alto" name="Camera at top" />
+	<menu_item_check label="Auto-centra mappa" name="Auto-center map" />
+	<menu_item_call label="Ri-centra mappa" name="Re-center map" />
+	<menu label="Anelli di distanza chat" name="Chat Distance Rings Menu">
+		<menu_item_check label="Mostra anelli di distanza" name="Chat Distance Rings"/>
+		<menu_item_check label="Anello di distanza sussurro" name="Whisper Distance Ring"/>
+		<menu_item_check label="Anello di distanza chat" name="Chat Distance Ring"/>
+		<menu_item_check label="Anello di distanza grido" name="Shout Distance Ring"/>
 	</menu>
-	<menu_item_call label="Profilo luogo" name="Place Profile"/>
-	<menu_item_call label="Mappa" name="World Map"/>
+	<menu_item_call label="Dettagli terreno" name="About Land" />
+	<menu_item_call label="Profilo del luogo" name="Place Profile"/>
+	<menu_item_call label="Mappa del mondo" name="World Map"/>
 </menu>

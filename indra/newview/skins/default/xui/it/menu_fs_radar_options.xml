@@ -4,10 +4,10 @@
 	<menu_item_check label="Limita i risultati a una distanza specifica" name="LimitRadarByRange"/>
 	<menu_item_check label="Mostra avatar bloccati e nella Lista Nera" name="FSRadarShowMutedAndDerendered"/>
 	<context_menu label="Formato del nome sul radar" name="radarNameFormat">
-		<menu_item_check label="Nome mostrato" name="radarFmtDN"/>
-		<menu_item_check label="Nome utente" name="radarFmtUN"/>
-		<menu_item_check label="Nome mostrato (Nome utente)" name="radarFmtDNUN"/>
-		<menu_item_check label="Nome utente (Nome mostrato)" name="radarFmtUNDN"/>
+		<menu_item_check label="Nome Visualizzato" name="radarFmtDN"/>
+		<menu_item_check label="Nome Utente" name="radarFmtUN"/>
+		<menu_item_check label="Nome Visualizzato (Nome Utente)" name="radarFmtDNUN"/>
+		<menu_item_check label="Nome Utente (Nome Visualizzato)" name="radarFmtUNDN"/>
 	</context_menu>
 	<context_menu label="Colonne visualizzate" name="visible_columns">
 		<menu_item_check label="Voce" name="voice_level"/>

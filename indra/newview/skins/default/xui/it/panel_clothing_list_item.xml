@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="wearable_item">
 	<button name="btn_delete" tool_tip="Rimuovi dall&apos;abito"/>
-	<panel name="btn_lock" tool_tip="Non hai diritti di modifica"/>
+	<panel name="btn_lock" tool_tip="Non hai il permesso di modifica"/>
 	<panel name="btn_edit_panel">
-		<button name="btn_edit" tool_tip="Modifica questo capo"/>
+		<button name="btn_edit" tool_tip="Modifica questo indumento"/>
 	</panel>
 </panel>

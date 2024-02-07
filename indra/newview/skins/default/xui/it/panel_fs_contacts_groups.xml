@@ -6,7 +6,7 @@
 	<button label="Titoli Gruppi" name="titles_btn"/>
 	<button label="Attiva" name="activate_btn"/>
 	<button label="Abbandona" name="leave_btn"/>
-	<button label="Crea..." name="create_btn"/>
-	<button label="Cerca..." name="search_btn"/>
-	<button label="Invita..." name="invite_btn"/>
+	<button label="Crea" name="create_btn"/>
+	<button label="Cerca" name="search_btn"/>
+	<button label="Invita" name="invite_btn"/>
 </panel>

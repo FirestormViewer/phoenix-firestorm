@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Texture" name="Texture">
+	<panel.string name="paste_error_face_selection_mismatch">
+		Quando vengono copiate più facce, l'oggetto di destinazione deve avere lo stesso numero di facce selezionate.
+	</panel.string>
+	<panel.string name="paste_error_object_face_count_mismatch">
+		Quando vengono copiate tutte le facce di un oggetto, l'oggetto di destinazione deve avere lo stesso numero di facce.
+	</panel.string>
+	<panel.string name="paste_error_inventory_not_found">
+		Una o più texture non sono state trovate nell'inventario.
+	</panel.string>
+	<panel.string name="paste_options">
+		Copia i parametri della texture negli appunti
+	</panel.string>
 	<text name="color label">
 		Colore
 	</text>
@@ -10,9 +22,9 @@
 	<text name="glow label">
 		Bagliore
 	</text>
-	<check_box label="Luminosità max" name="checkbox fullbright"/>
-	<button tool_tip="Copia" name="copy_face_btn"/>
-	<button tool_tip="Incolla" name="paste_face_btn"/>
+	<check_box label="Max luminosità" name="checkbox fullbright" />
+	<button name="copy_face_btn" tool_tip="Copia i parametri della texture negli appunti" />
+	<button name="paste_face_btn" tool_tip="Incolla i parametri della texture dagli appunti" />
 	<combo_box name="combobox matmedia">
 		<combo_box.item label="Materiali" name="Materials"/>
 		<combo_box.item label="Media" name="Media"/>
@@ -58,6 +70,7 @@
 		<combo_box.item label="stucco" name="stucco"/>
 		<combo_box.item label="suzione" name="suction"/>
 		<combo_box.item label="trama" name="weave"/>
+		<!-- <combo_box.item label="Usa texture" name="Use texture" /> -->
 	</combo_box>
 	<texture_picker label="Texture" name="shinytexture control" tool_tip="Clic per scegliere un&apos;immagine"/>
 	<text name="label shininess">
@@ -68,6 +81,7 @@
 		<combo_box.item label="Bassa" name="Low"/>
 		<combo_box.item label="Media" name="Medium"/>
 		<combo_box.item label="Alta" name="High"/>
+		<!-- <combo_box.item label="Usa texture" name="Use texture" /> -->
 	</combo_box>
 	<text name="label glossiness">
 		Patinatura
@@ -112,4 +126,8 @@
 	<spinner label="Spostamento verticale" name="shinyOffsetV"/>
 	<check_box label="Allinea facce planari" name="checkbox planar align" tool_tip="Allinea le texture su tutte le facce selezionate con l&apos;ultima faccia selezionata. È richiesta la mappatura planare delle texture."/>
 	<check_box label="Sincronizza materiali" name="checkbox_sync_settings" tool_tip="Sincronizza i parametri delle texture"/>
+	<button label="Allinea" name="button align textures" tool_tip="Allinea i livelli della texture corrente" />
+	<button label="Trova tutte" name="btn_select_same_diff" tool_tip="Seleziona tutte le facce con la stessa texture diffusa di questa" />
+	<button label="Trova tutte" name="btn_select_same_norm" tool_tip="Seleziona tutte le facce con la stessa mappa normale di questa" />
+	<button label="Trova tutte" name="btn_select_same_spec" tool_tip="Seleziona tutte le facce con la stessa mappa speculare di questa" />
 </panel>

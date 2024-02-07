@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_new_feature_notification" title="Nuova funzionalità">
+	<floater.string name="title_txt_inventory">
+		Nuove funzioni dell'inventario
+	</floater.string>
+	<floater.string name="description_txt_inventory">
+		Ora puoi aggiungere agli elementi dell'inventario delle immagini di anteprima e visualizzare l'inventario in modalità Cartella Singola.
+Scopri di più su questo [https://community.secondlife.com/blogs/entry/13637-new-features-inventory-item-preview-and-single-folder-view/ blogpost]
+	</floater.string>
+	<text name="title_txt">
+		Nuova funzionalità
+	</text>
+	<text name="description_txt">
+		Descrizione della funzione
+	</text>
+	<button label="Fatto!" name="close_btn" />
+</floater>

@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_translation_settings" title="Impostazioni traduzione chat">
-	<string name="bing_api_key_not_verified">
-		appID Bing non verificato. Riprova.
-	</string>
-	<string name="google_api_key_not_verified">
-		Chiave API Google non verificata. Riprova.
-	</string>
-	<string name="bing_api_key_verified">
-		appID Bing verificato.
-	</string>
-	<string name="google_api_key_verified">
-		Chiave API Google verificata.
-	</string>
-	<check_box label="Usa la traduzione automatica durante le chat" name="translate_chat_checkbox"/>
+<floater name="floater_translation_settings" title="Impostazioni Traduzione Chat">
+	<string name="azure_api_key_not_verified">Non è stato possibile verificare l'ID Azure. Riprova.</string>
+	<string name="google_api_key_not_verified">Non è stato possibile verificare la chiave API di Google. Riprova.</string>
+	<string name="deepl_api_key_not_verified">Impossibile verificare la chiave DeepL. Stato: [STATUS]. Riprova.</string>
+	<string name="azure_api_key_verified">ID di Azure verificato.</string>
+	<string name="google_api_key_verified">Chiave API di Google verificata.</string>
+	<string name="deepl_api_key_verified">Chiave di DeepL verificata.</string>
+	<check_box label="Attiva la traduzione automatica della chat" name="translate_chat_checkbox"/>
 	<text name="translate_language_label">
 		Traduci chat in:
 	</text>
@@ -38,16 +32,30 @@
 	<text name="tip">
 		Seleziona il servizio di traduzione:
 	</text>
-	<radio_group name="translation_service_rg">
-		<radio_item label="Bing Translator" name="bing"/>
-		<radio_item label="Google Translate" name="google"/>
-	</radio_group>
-	<line_editor default_text="Inserisci un AppID Bing e clicca su &quot;Verifica&quot;" name="bing_api_key" />
-	<button label="Verifica" name="verify_bing_api_key_btn"/>
-	<line_editor default_text="Inserisci una chiave Google API e clicca su &quot;Verifica&quot;" name="google_api_key" />
-	<button label="Verifica" name="verify_google_api_key_btn"/>
+	<text name="google_links_text">
+		[https://learn.microsoft.com/en-us/azure/cognitive-services/translator/create-translator-resource Setup]
+	</text>
+	<!-- <text name="azure_api_key_label">
+		Chiave Azure:
+	</text> -->
+	<line_editor default_text="Inserisci la tua chiave di Azure" name="azure_api_key" />
+	<text name="azure_api_region_label">
+		Regione:
+	</text>
+	<line_editor default_text="Puoi lasciare vuoto per i servizi globali" name="azure_api_region" />
+	<button label="Verifica" name="verify_azure_api_key_btn" />
+	<line_editor default_text="Inserisci la tua chiave API di Google" name="google_api_key" />
+	<button label="Verifica" name="verify_google_api_key_btn" />
 	<text name="google_links_text">
 		[http://code.google.com/apis/language/translate/v2/pricing.html Prezzi] | [https://code.google.com/apis/console Statistiche]
+	</text>
+	<!-- <text name="deepl_api_key_label">
+		Chiave DeepL:
+	</text> -->
+	<line_editor default_text="Inserisci la tua chiave di DeepL" name="deepl_api_key" />
+	<button label="Verifica" name="verify_deepl_api_key_btn" />
+	<text name="deepl_links_text">
+		[https://www.deepl.com/pro/select-country?cta=header-prices Prezzi]
 	</text>
 	<button label="Annulla" name="cancel_btn"/>
 </floater>

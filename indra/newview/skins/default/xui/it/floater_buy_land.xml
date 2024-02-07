@@ -20,7 +20,7 @@
 	</floater.string>
 	<floater.string name="multiple_parcels_selected">
 		Hai selezionato lotti diversi. 
-Prova a selezionare un&apos;area più piccola.
+Prova a selezionare un'area più piccola.
 	</floater.string>
 	<floater.string name="no_permission">
 		Non sei autorizzato ad acquistare terreno per il tuo gruppo attivo.
@@ -38,7 +38,7 @@ Prova a selezionare un&apos;area più piccola.
 		Il terreno selezionato è già impostato per la vendita ad un altro gruppo.
 	</floater.string>
 	<floater.string name="no_public_land">
-		L&apos;area selezionata non è pubblica.
+		L'area selezionata non è pubblica.
 	</floater.string>
 	<floater.string name="not_owned_by_you">
 		Hai selezionato terreno di proprietà di un altro residente. 
@@ -50,7 +50,7 @@ Prova a scegliere una superficie più piccola.
 (Potrebbe volerci un minuto o due.)
 	</floater.string>
 	<floater.string name="fetching_error">
-		Si &apos;e verificato un errore mentre si stavano ottenendo le informazioni sull&apos;acquisto del terreno.
+		Si è verificato un errore mentre si stavano ottenendo le informazioni sull'acquisto del terreno. 
 	</floater.string>
 	<floater.string name="buying_will">
 		Acquistando il terreno:
@@ -77,10 +77,10 @@ Prova a scegliere una superficie più piccola.
 		Sei proprietario di [BUYER] m² di terreno.
 	</floater.string>
 	<floater.string name="pay_to_for_land">
-		Paga [AMOUNT] L$ a [SELLER] per questa terra
+		Paga [AMOUNT]L$ a [SELLER] per questa terra
 	</floater.string>
 	<floater.string name="buy_for_US">
-		Acquista  L$ [AMOUNT] per circa [LOCAL_AMOUNT],
+		Acquista [AMOUNT]L$ per circa [LOCAL_AMOUNT],
 	</floater.string>
 	<floater.string name="parcel_meters">
 		Questo lotto è di [AMOUNT] m²
@@ -102,19 +102,19 @@ consente [AMOUNT2] oggetti
 		oggetti non inclusi nella vendita
 	</floater.string>
 	<floater.string name="insufficient_land_credits">
-		Il gruppo [GROUP] avrà bisogno di contributi di crediti di utilizzo terreno sufficienti a coprire il terreno prima che l&apos;acquisto sia completato.
+		Il gruppo [GROUP] avrà bisogno di contributi di crediti di utilizzo terreno sufficienti a coprire il terreno prima che l'acquisto sia completato.
 	</floater.string>
 	<floater.string name="have_enough_lindens">
-		Hai [AMOUNT] L$, che sono sufficienti per comprare questo terreno.
+		Hai [AMOUNT]L$, che sono sufficienti per comprare questo terreno.
 	</floater.string>
 	<floater.string name="not_enough_lindens">
-		Hai solo [AMOUNT] L$, ed hai bisogno di altri [AMOUNT2] L$.
+		Hai solo [AMOUNT]L$, ed hai bisogno di altri [AMOUNT2]L$.
 	</floater.string>
 	<floater.string name="balance_left">
-		Dopo l&apos;acquisto, ti rimarranno [AMOUNT] L$.
+		Dopo l'acquisto, ti rimarranno [AMOUNT]L$.
 	</floater.string>
 	<floater.string name="balance_needed">
-		Hai bisogno di acquistare almeno [AMOUNT] L$ per comprare questo terreno.
+		Hai bisogno di acquistare almeno [AMOUNT]L$ per comprare questo terreno.
 	</floater.string>
 	<floater.string name="no_parcel_selected">
 		(nessun terreno selezionato)
@@ -158,12 +158,12 @@ consente [AMOUNT2] oggetti
 	<text_editor name="covenant_editor">
 		Attendi...
 	</text_editor>
-	<check_box label="Accetto il regolamento succitato." name="agree_covenant"/>
+	<check_box label="Accetto il regolamento." name="agree_covenant"/>
 	<text name="info_parcel_label">
 		Terreno:
 	</text>
 	<text name="info_size_label">
-		Grandezza:
+		Area:
 	</text>
 	<text name="info_price_label">
 		Prezzo:
@@ -181,10 +181,10 @@ venduto con oggetti
 	</text>
 	<button label="Vai al sito" name="error_web"/>
 	<text name="account_action">
-		Aggiorna all&apos;abbonamento premium.
+		Aggiorna all'abbonamento premium.
 	</text>
 	<text name="account_reason">
-		Solo i membri premium possono possedere terra.
+		Solo i membri premium possono possedere terreno.
 	</text>
 	<combo_box name="account_level">
 		<combo_box.item label="US$ 9.95 al mese, addebitato mensilmente" name="US$9.95/month,billedmonthly"/>
@@ -199,13 +199,13 @@ venduto con oggetti
 Questo lotto consiste in 512 m² di terreno.
 	</text>
 	<text name="purchase_action">
-		Paga a Joe Resident 4000 L$ per la terra
+		Paga a Joe Resident 4000 L$ per il terreno
 	</text>
 	<text name="currency_reason">
 		Possiedi 2.100 L$.
 	</text>
 	<text name="currency_action" width="106">
-		Compra ulteriori L$
+		Compra ulter. L$
 	</text>
 	<text name="currency_est">
 		per circa [LOCAL_AMOUNT]

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="stream_info" title="In riproduzione:">
+	<floater.string name="NoStream">
+		Nessuna riproduzione in streaming
+	</floater.string>
+	<button name="btn_history" label="Cronologia" width="64" />
+</floater>

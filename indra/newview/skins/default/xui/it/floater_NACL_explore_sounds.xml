@@ -16,16 +16,16 @@
 	<check_box name="objects_chk" label="Oggetti" />
 	<check_box name="collision_chk" label="Suoni predef. di collisione"/>
 	<check_box name="repeated_asset_chk" label="Suoni ripetuti"/>
-	<check_box name="pause_chk" label="Pausa log"/>
+	<check_box name="pause_chk" label="Registro in pausa"/>
 	<scroll_list name="sound_list">
 		<columns label="Riproduzione" name="playing" width="100"/>
 		<columns label="Tipo" name="type"/>
 		<columns label="Proprietario" name="owner"/>
 		<columns label="Suono" name="sound"/>
 	</scroll_list>
-	<button label="Play in Locale" name="play_locally_btn"/>
-	<button label="Stop in Locale" name="stop_locally_btn" />
-	<button label="Guarda" name="look_at_btn"/>
+	<button label="Suona in locale" name="play_locally_btn"/>
+	<button label="Stop in locale" name="stop_locally_btn" />
+	<button label="Inquadra" name="look_at_btn"/>
 	<button label="Lista Nera" name="bl_btn"/>
 	<button label="Stop" name="stop_btn"/>
 </floater>

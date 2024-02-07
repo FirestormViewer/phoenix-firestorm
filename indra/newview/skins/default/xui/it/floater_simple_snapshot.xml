@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="simple_snapshot" title="Immagine elemento">
+	<button label="Scatta foto" name="new_snapshot_btn" />
+	<button label="Salva" name="save_btn" />
+	<button label="Annulla" name="cancel_btn" />
+</floater>

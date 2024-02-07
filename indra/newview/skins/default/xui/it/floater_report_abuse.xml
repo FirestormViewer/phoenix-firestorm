@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_report_abuse" title="Denuncia di abuso">
+<floater name="floater_report_abuse" title="Segnala Abuso">
 	<floater.string name="Screenshot">
 		Immagine
 	</floater.string>
@@ -83,6 +83,6 @@
 	<text name="incomplete_title">
 		* le segnalazioni incomplete non saranno esaminate
 	</text>
-	<button label="Segnala abuso" label_selected="Segnala abuso" name="send_btn"/>
+	<button label="Segnala Abuso" label_selected="Segnala Abuso" name="send_btn"/>
 	<button label="Annulla" label_selected="Annulla" name="cancel_btn"/>
 </floater>

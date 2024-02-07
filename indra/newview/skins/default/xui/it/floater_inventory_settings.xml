@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="inventory_settings" title="Impostazioni Inventario">
+	<text name="multi_folder_txt">
+		Doppio clic su cartella in modalità Multi-Cartella:
+	</text>
+	<radio_group name="multi_double_click_setting">
+		<radio_item label="Espandi e comprimi cartella" name="0" />
+		<radio_item label="Apri una nuova finestra" name="1" />
+		<radio_item label="Cambia modalità di visualizzazione" name="2" />
+	</radio_group>
+	<text name="single_folder_txt">
+		Doppio clic su cartella in modalità Cartella Singola:
+	</text>
+	<radio_group name="single_double_click_setting">
+		<radio_item label="Rimani nella finestra corrente" name="false" />
+		<radio_item label="Apri una nuova finestra" name="true" />
+	</radio_group>
+	<text name="find_original_txt">
+		Clic su "Mostra in inventario" o su "Trova originale":
+	</text>
+	<radio_group name="find_original_settings">
+		<radio_item label="Mostra nella finestra principale dell'inventario" name="false" />
+		<radio_item label="Apri nuova finestra in modalità Cartella Singola" name="true" />
+	</radio_group>
+</floater>

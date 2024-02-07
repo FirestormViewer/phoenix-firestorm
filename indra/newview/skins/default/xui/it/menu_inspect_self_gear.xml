@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="Gear Menu">
-	<menu_item_call label="Siedi" name="Sit Down Here"/>
+	<menu_item_call label="Siediti" name="Sit Down Here"/>
 	<menu_item_call label="Alzati" name="Stand Up"/>
 	<context_menu label="Togli" name="Take Off &gt;">
-		<context_menu label="Capi" name="Clothes &gt;">
+		<context_menu label="Indumenti" name="Clothes &gt;">
 			<menu_item_call label="Camicia" name="Shirt"/>
 			<menu_item_call label="Pantaloni" name="Pants"/>
 			<menu_item_call label="Gonna" name="Skirt"/>
@@ -14,18 +14,18 @@
 			<menu_item_call label="Canottiera" name="Self Undershirt"/>
 			<menu_item_call label="Slip" name="Self Underpants"/>
 			<menu_item_call label="Tatuaggio" name="Self Tattoo"/>
-			<menu_item_call label="Alfa (trasparenza)" name="Self Alpha"/>
-			<menu_item_call label="Tutti i capi" name="All Clothes"/>
+			<menu_item_call label="Alfa" name="Self Alpha"/>
+			<menu_item_call label="Tutti gli indumenti" name="All Clothes"/>
 		</context_menu>
 		<context_menu label="Accessori" name="Inspect Self Detach"/>
-		<menu_item_call label="Stacca tutto" name="Inspect Self All"/>
+		<menu_item_call label="Stacca tutto" name="Detach All"/>
 	</context_menu>
 	<menu_item_call label="Cambia abito" name="Chenge Outfit"/>
 	<menu_item_call label="Modifica abito" name="Edit Outfit"/>
 	<menu_item_call label="Modifica corpo" name="Edit My Shape"/>
-	<menu_item_call label="Amici..." name="Friends..."/>
-	<menu_item_call label="Gruppi..." name="Groups..."/>
-	<menu_item_call label="Profilo..." name="Profile..."/>
+	<menu_item_call label="Amici" name="Friends..."/>
+	<menu_item_call label="Gruppi" name="Groups..."/>
+	<menu_item_call label="Profilo" name="Profile..."/>
 	<menu_item_call label="Mostra texture" name="Debug..."/>
 	<menu_item_call label="Scarica XML" name="Dump XML"/>
 </toggleable_menu>

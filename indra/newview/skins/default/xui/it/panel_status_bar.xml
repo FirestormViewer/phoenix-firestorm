@@ -2,7 +2,7 @@
 <panel name="status">
     <panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="Il lotto è in vendita"/>
-		<text tool_tip="Nome del lotto su cui ti trovi. Clic per aprire le informazioni sul lotto." name="parcel_info_text" value="(caricamento...)"/>
+		<text tool_tip="Nome del lotto su cui ti trovi. Clicca per aprire le informazioni sul lotto." name="parcel_info_text" value="(caricamento...)"/>
 	</panel>
 	<panel.string name="packet_loss_tooltip">
 		Perdita di pacchetti
@@ -20,13 +20,13 @@
 		<search_editor label="Cerca nei menu" name="search_menu_edit" tool_tip="Scrivi qui i termini di ricerca. Verranno visualizzate anche corrispondenze parziali con le voci di menu." />
 	</panel>
 	<panel name="balance_bg" left="-380" width="100">
-		<text name="balance" tool_tip="Clicca per aggiornare il tuo saldo in L$"/>
-		<button label="Acquista L$" name="buyL" tool_tip="Clicca per acquistare più L$"/>
+		<text name="balance" tool_tip="Clicca per aggiornare il saldo dei tuoi L$"/>
+		<button label="Acquista L$" name="buyL" tool_tip="Clicca per acquistare L$"/>
 	</panel>
 	<panel name="time_and_media_bg">
 		<text name="TimeText" tool_tip="Orario attuale (Pacifico)"/>
-		<button name="stream_toggle_btn" tool_tip="Attiva/ferma musica nel lotto"/>
-		<button name="media_toggle_btn" tool_tip="Attiva/ferma tutti i media (musica, video, web)"/>
+		<button name="stream_toggle_btn" tool_tip="Accendi/Spegni la musica del lotto"/>
+		<button name="media_toggle_btn" tool_tip="Accendi/Spegni tutti i media"/>
 		<text name="FPSText" tool_tip="Fotogrammi al secondo (FPS)"/>
 	</panel>
 </panel>

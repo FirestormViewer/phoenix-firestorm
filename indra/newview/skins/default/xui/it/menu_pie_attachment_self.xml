@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <pie_menu name="Attachment Pie">
-    <pie_slice label="Profilo..." name="Profile..."/>
-    <pie_slice label="Posa" name="Drop"/>
+    <pie_slice label="Profilo" name="Profile..."/>
+    <pie_slice label="Rilascia" name="Drop"/>
     <pie_menu name="Attachment Pie More" label="Altro &gt;">
-        <pie_slice label="Aggiorna tex" name="Texture Refresh"/>
+        <pie_slice label="Ricar. texture" name="Texture Refresh"/>
         <pie_slice label="Info script" name="ScriptInfo"/>
         <pie_slice label="Tocca" name="Attachment Object Touch"/>
         <pie_menu name="DerenderMenu" label="De-rendi &gt;">
@@ -14,22 +14,24 @@
             <pie_slice label="Salva copia" name="Backup"/>
             <pie_slice label="Collada" name="Collada"/>
         </pie_menu>
-        <pie_slice label="Mostra texture" name="Debug..."/>
+        <pie_slice label="Mostra in invent." name="Show original" />
+        <pie_slice label="Ispeziona" name="Avatar Inspect" />
+        <pie_slice label="Vedi texture" name="Debug..."/>
     </pie_menu>
-    <pie_slice label="Siedi qui" name="Sit Down Here"/>
+    <pie_slice label="Siediti" name="Sit Down Here"/>
     <pie_slice label="Alzati" name="Stand Up"/>
     <pie_slice label="Stacca" name="Detach"/>
-    <pie_slice label="Gesti..." name="Gestures"/>
+    <pie_slice label="Gesti" name="Gestures"/>
     <pie_menu name="Appearance &gt;" label="Aspetto &gt;">
-        <pie_slice label="Modifica forma" name="Edit My Shape"/>
+        <pie_slice label="Modif. corpo" name="Edit My Shape"/>
         <pie_menu name="ResetMenu" label="Ripristina &gt;">
-            <pie_slice label="Schel. &amp; anim." name="Reset Skeleton And Animations"/>
+            <pie_slice label="Schel. e anim." name="Reset Skeleton And Animations"/>
             <pie_slice label="Scheletro" name="Reset Skeleton"/>
             <pie_slice label="LOD mesh" name="Reset Mesh LOD"/>
         </pie_menu>
-        <pie_slice label="Modifica abiti" name="Edit My Outfit"/>
+        <pie_slice label="Modif. abito" name="Edit My Outfit"/>
         <pie_slice label="Scarica XML" name="Dump XML"/>
-        <pie_slice label="Altezza" name="Hover Height"/>
+        <pie_slice label="Altezza da t." name="Hover Height"/>
     </pie_menu>
     <pie_slice label="Modifica" name="Edit..."/>
 </pie_menu>

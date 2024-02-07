@@ -3,7 +3,7 @@
 	<action_set description="Queste abilità permettono di aggiungere e rimuovere membri dal gruppo e consentono ai nuovi membri di aderire al gruppo senza invito." name="Membership">
 		<action description="Invita persone in questo gruppo" longdescription="Invita persone a questo gruppo usando il pulsante “Invita” nella sezione Ruoli e Membri &gt; scheda Membri." name="member invite"/>
 		<action description="Espelli dal gruppo membri appartenenti alla categoria “Tutti”." longdescription="Espelli membri dal gruppo usando il pulsante Espelli nella sezione Ruoli e Membri &gt; scheda Membri. Un proprietario può espellere chiunque tranne un altro proprietario. Se non sei un proprietario, un membro può essere espulso da un gruppo soltanto qualora abbia soltanto il ruolo Tutti, e nessun altro ruolo. Per rimuovere membri dai ruoli, devi avere l’Abilità corrispondente." name="member eject"/>
-		<action description="Gestisci lista espulsi" longdescription="Consenti ai membri del gruppo di espellere / riammettere i residenti nel gruppo." name="allow ban"/>
+		<action description="Gestisci la lista degli utenti bannati" longdescription="Concedi l'abilitazione a bannare/sbannare gli utenti dal gruppo." name="allow ban"/>
 		<action description="Seleziona Iscrizione libera e modifica la Quota d&apos;iscrizione" longdescription="Seleziona Iscrizione libera per permettere ai nuovi membri di aderire senza invito e modifica la quota d&apos;iscrizione nella scheda Generale." name="member options"/>
 	</action_set>
 	<action_set description="Queste Abilità permettono di aggiungere, rimuovere, cambiare i ruoli del gruppo, aggiungere e rimuovere membri dai ruoli, nonché assegnare abilità ai ruoli." name="Roles">
@@ -45,9 +45,9 @@
 	</action_set>
 	<action_set description="Queste Abilità consentono di concedere o limitare l&apos;accesso ad un lotto di un gruppo da parte di residenti, con le azioni Congela ed Espelli." name="Parcel Access">
 		<action description="Gestire la lista di accesso al lotto" longdescription="Gestisci la lista di accesso al lotto in Informazioni sul terreno &gt; Accesso." name="land manage allowed"/>
-		<action description="Gestire la lista dei residenti espulsi dal lotto" longdescription="Gestisci la lista Espulsi dal lotto in Informazioni sul terreno &gt; scheda Accesso." name="land manage banned"/>
+		<action description="Gestire la lista degli utenti bannati dal lotto" longdescription="Gestisci la lista bannati dal lotto in Informazioni sul terreno &gt; scheda Accesso." name="land manage banned"/>
 		<action description="Cambia le impostazioni del lotto in Vendi pass a" longdescription="Cambia le impostazioni Vendi pass a in Informazioni sul terreno &gt; scheda Accesso." name="land manage passes"/>
-		<action description="Espellere e Congelare i Residenti in un lotto" longdescription="Membri in un ruolo con questa Abilità possono occuparsi di un residente indesiderato in un lotto posseduto da un gruppo, facendo clic sul residente con il pulsante destro del mouse e selezionando Espelli o Congela." name="land admin"/>
+		<action description="Espellere e Congelare gli utenti in un lotto" longdescription="i membri in un ruolo con questa Abilità possono occuparsi di un utente indesiderato in un lotto posseduto da un gruppo, facendo clic sull'utente con il pulsante destro del mouse e selezionando Espelli o Congela." name="land admin"/>
 	</action_set>
 	<action_set description="Queste abilità consentono ai membri di restituire oggetti, collocare e spostare piante Linden. Questo è utile ai membri per ripulire da oggetti indesiderati e creare paesaggi, ma deve essere utilizzato con cura, perchè la restituzione degli oggetti non può essere annullata." name="Parcel Content">
 		<action description="Restituire oggetti di proprietà di un gruppo" longdescription="Restituisci gli oggetti di proprietà di un gruppo in un appezzamento di un gruppo in Informazioni sul terreno &gt; Oggetti." name="land return group owned"/>

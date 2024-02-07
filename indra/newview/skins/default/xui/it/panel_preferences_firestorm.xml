@@ -208,7 +208,9 @@
             <check_box label="Usa Ctrl+mouse per afferrare e manipolare oggetti" tool_tip="Permette di afferrare e spostare gli oggetti con il mouse e il tasto CTRL." name="FSEnableGrab"/>
             <check_box label="Permetti clic-trascina o clic-scala (Maiusc) di una texture in modalità costruzione" tool_tip="Permette di usare clic-trascina e clic-Maiusc-trascina sulla faccia di una texture in modo costruzione. Opzione sperimentale da usare con cautela." name="FSExperimentalDragTexture"/>
             <check_box label="Anteprima delle animazioni sull&apos;avatar durante il caricamento" tool_tip="Si possono vedere le animazioni durante il caricamento usando il proprio avatar" name="FSUploadAnimationOnOwnAvatar"/>
+            <check_box label="Espandi sempre le informazioni avanzate sull'anteprima dell'animazione" tool_tip="Espandi le informazioni avanzate sull'animazione nella finestra dell'anteprima dell'animazione per impostazione predefinita" name="FSAnimationPreviewExpanded" />
             <check_box label="Abilita i dettagli estesi sulle informazioni degli script" tool_tip="Estendi la funzionalità delle informazioni di base sugli script con vari dettagli utili per i costruttori." name="FSScriptInfoExtended" />
+            <check_box label="Elenca i punti di attacco nei menu &quot;Attacca a&quot; in ordine alfabetico (richiede riavvio)" tool_tip="Se abilitato, i punti di attacco nei menu &quot;Attacca a&quot; verranno elencati in ordine alfabetico" name="FSSortAttachmentSpotsAlphabetically" />
         </panel>
         <panel label="Caricamenti" name="UploadsTab">
             <text name="title">

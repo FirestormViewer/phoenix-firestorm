@@ -3,7 +3,7 @@
 	<pie_slice label="Apri" name="Open"/>
 	<pie_slice label="Crea" name="Build"/>
 	<pie_slice label="Tocca" name="Pie Object Touch"/>
-	<pie_slice label="Siedi qui" name="Pie Object Sit"/>
+	<pie_slice label="Siediti qui" name="Pie Object Sit"/>
 	<pie_slice label="Alzati" name="Object Stand Up"/>
 	<pie_slice label="Compra" name="Buy..."/>
 	<pie_slice label="Prendi" name="Pie Object Take"/>
@@ -14,7 +14,7 @@
 		<pie_slice label="Prendi copia" name="Take Copy"/>
 		<pie_menu label="Attacca HUD &gt;" name="Pie Object Attach HUD"/>
 		<pie_menu label="Attacca &gt;" name="Pie Object Attach">
-			<pie_menu label="Schel. esteso&gt;" name="Enhanced Skeleton">
+			<pie_menu label="Schel. avanz. &gt;" name="Enhanced Skeleton">
 				<pie_slice label="Ala dx" name="Right Wing"/>
 				<pie_slice label="Inguine" name="Groin"/>
 				<pie_slice label="Base coda" name="Tail Base"/>
@@ -36,21 +36,25 @@
 		</pie_menu>
 		<pie_slice label="Restituisci" name="Return..."/>
 		<pie_menu label="Altro &gt;" name="Object Pie More 2">
-			<pie_slice label="Aggiorna tex" name="Texture Refresh"/>
+			<pie_menu name="ResetMenu" label="Ripristina &gt;">
+				<pie_slice label="Ricar. texture" name="Texture Refresh"/>
+				<pie_slice label="Scheletro" name="Reset Skeleton" />
+			</pie_menu>
 			<pie_menu name="DerenderMenu" label="De-rendi &gt;">
 				<pie_slice label="Lista nera" name="DerenderPermanent"/>
 				<pie_slice label="Temporaneo" name="Derender"/>
 			</pie_menu>
-			<pie_slice label="Segnala..." name="Report Abuse..."/>
+			<pie_slice label="Segnala abuso" name="Report Abuse..."/>
 			<pie_menu name="ExportMenu" label="Esporta &gt;">
 				<pie_slice label="Salva copia" name="Backup"/>
 				<pie_slice label="Collada" name="Collada"/>
+				<pie_slice label="Scarica XML" name="Dump XML" />
 			</pie_menu>
 			<pie_menu label="Pathfinding &gt;" name="Pathfinding">
-				<pie_slice label="Mostra nei linkset" name="show_in_linksets"/>
-				<pie_slice label="Mostra nei caratteri" name="show_in_characters"/>
+				<pie_slice label="Mostra in Ogg." name="show_in_linksets"/>
+				<pie_slice label="Mostra in Pers." name="show_in_characters"/>
 			</pie_menu>
-			<pie_menu name="mute_menu" label="Muta &gt;">
+			<pie_menu name="mute_menu" label="Blocca &gt;">
 				<pie_slice label="Oggetto" name="Object Mute"/>
 				<pie_slice label="Particelle" name="Mute Particle"/>
 			</pie_menu>
