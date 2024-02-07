@@ -980,11 +980,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7b38bd83eb63f25df7c5a20070a05732</string>
+              <string>8672d21ae8382a5526f0e17358de8575</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.18-windows64-232801156.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.20-windows64-240381643.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -997,7 +997,7 @@
         <key>copyright</key>
         <string>FMOD Studio by Firelight Technologies Pty Ltd.</string>
         <key>version</key>
-        <string>2.02.18</string>
+        <string>2.02.20</string>
         <key>name</key>
         <string>fmodstudio</string>
         <key>description</key>
