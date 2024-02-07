@@ -17,9 +17,7 @@ Pre-built versions of the viewer releases for Windows, Mac and Linux can be down
 Build instructions for each operating system can be found in the official [wiki](https://wiki.firestormviewer.org/).
 
 - [Windows](https://wiki.firestormviewer.org/fs_compiling_firestorm_windows)
-
 - [Mac](https://wiki.firestormviewer.org/fs_compiling_firestorm_macos)
-
 - [Linux](https://wiki.firestormviewer.org/fs_compiling_firestorm_linux)
 
 > [!NOTE]
