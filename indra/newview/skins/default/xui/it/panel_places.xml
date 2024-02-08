@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Luoghi" name="places panel">
 	<string name="landmarks_tab_title" value="Segnaposto"/>
-	<string name="teleport_history_tab_title" value="Storico teleport"/>
+	<string name="teleport_history_tab_title" value="Storico Teleport"/>
 	<string name="favorites_tab_title" value="Preferiti" />
 	<string name="tooltip_trash_items" value="Elimina il segnaposto o la cartella selezionata" />
 	<string name="tooltip_trash_history" value="Elimina lo storico dei luoghi visitati" />

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_group_plus">
 	<menu_item_call label="Attiva" name="Activate"/>
-	<menu_item_call label="Mostra informazioni" name="View Info"/>
+	<menu_item_call label="Profilo del gruppo" name="View Info"/>
 	<menu_item_call label="Copia SLurl negli appunti" name="Copy SLurl to clipboard"/>
 	<menu_item_call label="Chat" name="Chat"/>
-	<menu_item_call label="Chiamata a voce" name="Call"/>
-	<menu_item_call label="Lascia" name="Leave"/>
+	<menu_item_call label="Chiamata vocale" name="Call"/>
+	<menu_item_call label="Abbandona gruppo" name="Leave"/>
 </toggleable_menu>

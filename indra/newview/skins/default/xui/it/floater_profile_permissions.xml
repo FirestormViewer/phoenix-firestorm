@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="profile_permissions">
+	<string name="description_string" value="Consenti a [AGENT_NAME] di:" />
+	<text name="perm_description" value="Consenti a questa persona:" />
+	<check_box name="online_check" label="Vedere quando sono online" />
+	<check_box name="map_check" label="Vedere la mia posizione sulla mappa" />
+	<check_box name="objects_check" label="Modificare, cancellare o prendere i miei oggetti" />
+	<button name="perms_btn_cancel" label="Annulla" />
+</floater>

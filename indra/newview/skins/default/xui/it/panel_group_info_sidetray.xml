@@ -24,9 +24,9 @@
 					<layout_panel name="group_accordions">
 						<accordion name="groups_accordion">
 							<accordion_tab name="group_general_tab" title="Generale"/>
-							<accordion_tab name="group_roles_tab" title="Ruoli e membri"/>
+							<accordion_tab name="group_roles_tab" title="Membri e ruoli"/>
 							<accordion_tab name="group_notices_tab" title="Avvisi"/>
-							<accordion_tab name="group_land_tab" title="Terreni/Beni"/>
+							<accordion_tab name="group_land_tab" title="Terreni 2 L$"/>
 							<accordion_tab name="group_experiences_tab" title="Esperienze"/>
 						</accordion>
 					</layout_panel>
@@ -36,11 +36,10 @@
 					<button label="Chat" name="btn_chat"/>
 				</layout_panel>
 				<layout_panel name="call_btn_lp">
-					<button label="Chiamata al gruppo" name="btn_call" tool_tip="Chiama questo gruppo"/>
+					<button label="Chiamata al gruppo" name="btn_call" tool_tip="Avvia una conferenza vocale in questo gruppo"/>
 				</layout_panel>
 				<layout_panel name="btn_apply_lp">
 					<button label="Salva" label_selected="Salva" name="btn_apply"/>
-					<button label="Crea un gruppo" name="btn_create" tool_tip="Crea un nuovo gruppo"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

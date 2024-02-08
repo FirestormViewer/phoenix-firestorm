@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <context_menu name="Avatar Context Menu">
-	<menu_item_call label="Visualizza profilo" name="View Profile" />
+	<menu_item_call label="Vedi profilo" name="View Profile" />
 	<menu_item_call label="Aggiungi agli amici" name="Add Friend" />
 	<menu_item_call label="Aggiungi ad un set" name="Add to Set" />
 	<menu_item_call label="Rimuovi dagli amici" name="Remove Friend" />

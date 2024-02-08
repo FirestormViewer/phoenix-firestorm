@@ -17,12 +17,11 @@ Pre-built versions of the viewer releases for Windows, Mac and Linux can be down
 Build instructions for each operating system can be found in the official [wiki](https://wiki.firestormviewer.org/).
 
 - [Windows](https://wiki.firestormviewer.org/fs_compiling_firestorm_windows)
-
 - [Mac](https://wiki.firestormviewer.org/fs_compiling_firestorm_macos)
-
 - [Linux](https://wiki.firestormviewer.org/fs_compiling_firestorm_linux)
 
-Please note that we do not provide support for compiling the viewer or issues resulting from using a self-compiled viewer. However, there is a self-compilers group within Second Life that can be joined to ask questions related to compiling the viewer: [Firestorm Self Compilers](secondlife:///app/group/2014ce4c-5393-fb67-83ac-910db84c273c/about)
+> [!NOTE]
+> We do not provide support for compiling the viewer or issues resulting from using a self-compiled viewer. However, there is a self-compilers group within Second Life that can be joined to ask questions related to compiling the viewer: [Firestorm Self Compilers](https://tinyurl.com/firestorm-self-compilers)
 
 ## Contribute
 

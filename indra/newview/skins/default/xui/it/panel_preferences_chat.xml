@@ -83,10 +83,10 @@
 				Formato nomi per linguette IM:
 			</text>
 			<combo_box name="FSIMTabNameFormat">
-				<combo_box.item label="Display Name" name="display_name"/>
-				<combo_box.item label="Username" name="user_name"/>
-				<combo_box.item label="Display Name (Username)"	 name="display_user_name"/>
-				<combo_box.item label="Username (Display Name)"	 name="user_display_name"/>
+				<combo_box.item label="Nome Visualizzato" name="display_name"/>
+				<combo_box.item label="Nome Utente" name="user_name"/>
+				<combo_box.item label="Nome Visualizzato (Nome Utente)"	 name="display_user_name"/>
+				<combo_box.item label="Nome Utente (Nome Visualizzato)"	 name="user_display_name"/>
 			</combo_box>
 			<check_box name="FSHighlightGroupMods" label="Evidenzia messaggi dal moderatore di gruppo"/>
 			<text name="Moderator Name Style">

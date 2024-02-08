@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Avatar Context Menu">
-	<menu_item_call label="Visualizza profilo" name="View Profile"/>
+	<menu_item_call label="Vedi profilo" name="View Profile"/>
 	<menu_item_call label="Aggiungi agli amici" name="Add Friend"/>
 	<menu_item_call label="Aggiungi ad un set" name="Add to Set"/>
 	<menu_item_call label="Rimuovi dagli amici" name="Remove Friend"/>
@@ -8,26 +8,26 @@
 	<menu_item_call label="Chiama" name="Call"/>
 	<menu_item_call label="Mappa" name="Map"/>
 	<menu_item_call label="Traccia" name="Track"/>
-	<menu name="MarkAvatar" label="Segna...">
+	<menu name="MarkAvatar" label="Marca">
 		<menu_item_call label="Rosso" name="MarkRed"/>
 		<menu_item_call label="Verde" name="MarkGreen"/>
 		<menu_item_call label="Blu" name="MarkBlue"/>
 		<menu_item_call label="Viola" name="MarkPurple"/>
 		<menu_item_call label="Giallo" name="MarkYellow"/>
-		<menu_item_call label="Rimuovi questo segno" name="Clear Mark"/>
-		<menu_item_call label="Rimuovi tutti i segni" name="Clear Marks"/>
+		<menu_item_call label="Rimuovi questa marcatura" name="Clear Mark"/>
+		<menu_item_call label="Rimuovi tutte le marcature" name="Clear Marks"/>
 	</menu>
 	<menu_item_call label="Condividi" name="Share"/>
 	<menu_item_call label="Paga" name="Pay"/>
 	<menu_item_call label="Offri teleport" name="teleport"/>
 	<menu_item_call label="Richiedi teleport" name="request_teleport"/>
-	<menu_item_call label="Teleport alla posizione" name="teleport_to"/>
-	<menu_item_call label="Guarda" name="zoom_in"/>
+	<menu_item_call label="TP alla sua posizione" name="teleport_to"/>
+	<menu_item_call label="Inquadra" name="zoom_in"/>
 	<menu_item_call label="Invita al gruppo" name="GroupInvite"/>
 	<menu_item_call label="Info sugli script" name="ScriptInfo"/>
 	<menu_item_check label="Blocca / Sblocca" name="Block/Unblock"/>
 	<menu_item_call label="Segnala abuso" name="report"/>
-	<menu_item_call label="Immobilizza" name="freeze"/>
+	<menu_item_call label="Congela" name="freeze"/>
 	<menu_item_call label="Espelli dal lotto" name="eject"/>
 	<menu_item_call label="Regione: Espelli" name="kick"/>
 	<menu_item_call label="Regione: Teleport home" name="teleport_home"/>

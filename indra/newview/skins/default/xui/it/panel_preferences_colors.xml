@@ -202,9 +202,28 @@
 		</text>
 		<color_swatch name="preferences_search_color" tool_tip="Scegli il colore"/>
 		<text name="area_search_beacon_color_label">
-			Colore raggio marcatore (ad esempio, Cerca oggetti nell'area):
+			Colore raggio marcatore (ad es. per ricerca oggetti):
 		</text>
 		<color_swatch name="area_search_beacon_color" tool_tip="Scegli il colore" />
+		<text name="notecard_editor_color_label">
+			Colori annotazioni:
+		</text>
+		<text name="notecard_editor_writable_text_color_label">
+			Testo:
+		</text>
+		<color_swatch name="notecard_editor_writable_text_color" tool_tip="Scegli il colore" />
+		<text name="notecard_editor_writable_bg_color_label" width="44">
+			Sfondo:
+		</text>
+		<color_swatch name="notecard_editor_writable_bg_color" tool_tip="Scegli il colore" />
+		<text name="notecard_editor_writable_cursor_color_label">
+			Cursore:
+		</text>
+		<color_swatch name="notecard_editor_writable_cursor_color" tool_tip="Scegli il colore" />
+		<text name="notecard_editor_writable_selection_color_label">
+			Selezione:
+		</text>
+		<color_swatch name="notecard_editor_writable_selection_color" tool_tip="Scegli il colore" />
 		<check_box name="FSScriptDialogNoTransparency" label="Finestre dialogo degli script sempre con sfondo opaco" />
 		<check_box name="FSGroupNotifyNoTransparency" label="Notizie di gruppo sempre con sfondo opaco" />
 		<check_box name="override_pie_color_checkbox" label="Reimposta colore di sfondo e opacità per menu circolare:" />

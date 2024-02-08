@@ -111,6 +111,7 @@ S32 cube_channel = -1;
 
 LLDrawPoolAvatar::LLDrawPoolAvatar(U32 type) : 
 	LLFacePool(type)	
+	, mAvatar(nullptr)       // <FS:Zi> Add avatar hitbox debug - remember avatar pointer in case avatar draw face breaks
 {
 }
 
@@ -681,36 +682,9 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		return;
 	}
 
-	if (mDrawFace.empty() && !single_avatar)
-	{
-		return;
-	}
-
-	LLVOAvatar *avatarp { nullptr };
-
-	if (single_avatar)
-	{
-		avatarp = single_avatar;
-	}
-	else
-	{
-		LL_PROFILE_ZONE_NAMED_CATEGORY_AVATAR("Find avatarp"); // <FS:Beq/> Tracy markup
-		const LLFace *facep = mDrawFace[0];
-		if (!facep->getDrawable())
-		{
-			return;
-		}
-		avatarp = (LLVOAvatar *)facep->getDrawable()->getVObj().get();
-	}
-
-    if (avatarp->isDead() || avatarp->mDrawable.isNull())
-	{
-		return;
-	}
-
 	// <FS:Zi> Add avatar hitbox debug
 	static LLCachedControl<bool> render_hitbox(gSavedSettings, "DebugRenderHitboxes", false);
-	if (render_hitbox && pass == 2)
+	if (render_hitbox && pass == 2 && mAvatar && !mAvatar->isControlAvatar())
 	{
 		LL_PROFILE_ZONE_NAMED_CATEGORY_AVATAR("render_hitbox");
 
@@ -722,13 +696,13 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		LLGLEnable blend(GL_BLEND);
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
-		LLColor4 avatar_color = LLNetMap::getAvatarColor(avatarp->getID());
+		LLColor4 avatar_color = LLNetMap::getAvatarColor(mAvatar->getID());
 		gGL.diffuseColor4f(avatar_color.mV[VRED], avatar_color.mV[VGREEN], avatar_color.mV[VBLUE], avatar_color.mV[VALPHA]);
 		gGL.setLineWidth(2.0f);
 
-		const LLQuaternion& rot = avatarp->getRotationRegion();
-		const LLVector3& pos = avatarp->getPositionAgent();
-		const LLVector3& size = avatarp->getScale();
+		const LLQuaternion& rot = mAvatar->getRotationRegion();
+		const LLVector3& pos = mAvatar->getPositionAgent();
+		const LLVector3& size = mAvatar->getScale();
 		
 		// drawBoxOutline partly copied from llspatialpartition.cpp below
 
@@ -785,6 +759,33 @@ void LLDrawPoolAvatar::renderAvatars(LLVOAvatar* single_avatar, S32 pass)
 		}
 	}
 	// </FS:Zi>
+
+	if (mDrawFace.empty() && !single_avatar)
+	{
+		return;
+	}
+
+	LLVOAvatar *avatarp { nullptr };
+
+	if (single_avatar)
+	{
+		avatarp = single_avatar;
+	}
+	else
+	{
+		LL_PROFILE_ZONE_NAMED_CATEGORY_AVATAR("Find avatarp"); // <FS:Beq/> Tracy markup
+		const LLFace *facep = mDrawFace[0];
+		if (!facep->getDrawable())
+		{
+			return;
+		}
+		avatarp = (LLVOAvatar *)facep->getDrawable()->getVObj().get();
+	}
+
+    if (avatarp->isDead() || avatarp->mDrawable.isNull())
+	{
+		return;
+	}
 
 // <FS:Beq> rendertime Tracy annotations
 {

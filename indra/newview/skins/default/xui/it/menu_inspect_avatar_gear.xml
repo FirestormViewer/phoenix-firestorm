@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <toggleable_menu name="Gear Menu">
 	<menu_item_call label="Vedi profilo" name="view_profile"/>
-	<menu_item_call label="Aggiungi amico" name="add_friend"/>
+	<menu_item_call label="Aggiungi agli amici" name="add_friend"/>
 	<menu_item_call label="Invia IM" name="im"/>
 	<menu_item_call label="Chiama" name="call"/>
 	<menu_item_call label="Offri teleport" name="teleport"/>
-	<menu_item_call label="Chiedi teleport" name="request_teleport"/>
+	<menu_item_call label="Richiedi teleport" name="request_teleport"/>
 	<menu_item_call label="Invita al gruppo" name="invite_to_group"/>
 	<menu_item_call label="Blocca" name="block"/>
 	<menu_item_call label="Sblocca" name="unblock"/>
-	<menu_item_call label="Segnala" name="report"/>
+	<menu_item_call label="Segnala abuso" name="report"/>
 	<menu_item_call label="Congela" name="freeze"/>
 	<menu_item_call label="Espelli (lotto)" name="eject"/>
 	<menu_item_call label="Espelli (regione)" name="kick"/>
 	<menu_item_call label="CSR" name="csr"/>
-	<menu_item_call label="Debug delle texture" name="debug"/>
+	<menu_item_call label="Mostra texture" name="debug"/>
 	<menu_item_call label="Scarica XML" name="Dump XML"/>
 	<menu_item_call label="Trova sulla mappa" name="find_on_map"/>
 	<menu_item_call label="Inquadra" name="zoom_in"/>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_view_default">
+	<menu_item_check label="Ordina in base al nome" name="sort_by_name" />
+	<menu_item_check label="Ordina in base ai più recenti" name="sort_by_recent" />
+	<menu_item_check label="Ordina sempre le cartelle in base al nome" name="sort_folders_by_name" />
+	<menu_item_check label="Mostra cartelle di sistema in alto" name="sort_system_folders_to_top" />
+	<menu_item_check label="Visualizza in modalità Elenco" name="list_view" />
+	<menu_item_check label="Visualizza in modalità Galleria" name="gallery_view" />
+	<menu_item_check label="Visualizza in modalità Combinata" name="combination_view" />
+	<menu_item_check label="Impostazioni Inventario..." name="inv_settings" />
+</toggleable_menu>

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Url Popup">
-	<menu_item_call label="Mostra informazioni gruppo" name="show_group"/>
-	<menu_item_call label="Copia gruppo negli appunti" name="url_copy_label"/>
+	<menu_item_call label="Profilo del gruppo" name="show_group"/>
+	<menu_item_call label="Download dei dati del gruppo in corso, riprova!" name="waiting_for_group_data" />
+	<menu_item_call label="Attiva gruppo" name="activate_group" />
+	<menu_item_call label="Entra nel gruppo" name="join_group" />
+	<menu_item_call label="Abbandona il gruppo" name="leave_group" />
+	<menu_item_call label="Copia nome negli appunti" name="url_copy_label"/>
 	<menu_item_call label="Copia SLurl negli appunti" name="url_copy"/>
 </context_menu>

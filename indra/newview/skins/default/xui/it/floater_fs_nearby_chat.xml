@@ -5,7 +5,7 @@
 	</floater.string>
 	<layout_stack name="ls_control_panel">
 		<layout_panel name="lp_chat_history_btn">
-			<button tool_tip="Apri il log della chat locale" name="chat_history_btn"/>
+			<button tool_tip="Cronologia chat locale" name="chat_history_btn"/>
 		</layout_panel>
 		<layout_panel name="lp_chat_history_muted_btn">
 			<button tool_tip="Mostra i messaggi bloccati nel log della chat locale" name="chat_history_muted_btn"/>

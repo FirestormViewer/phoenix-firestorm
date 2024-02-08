@@ -4,13 +4,10 @@
 		<tab_container name="panel_profile_tabs">
 			<panel label="Second Life" name="panel_profile_secondlife"/>
 			<panel label="Feed" name="panel_profile_web"/>
-			<panel label="Interessi" name="panel_profile_interests"/>
 			<panel label="Preferiti" name="panel_profile_picks"/>
-			<panel label="Annuncio" name="panel_profile_classifieds"/>
-			<panel label="Vita reale" name="panel_profile_firstlife"/>
+			<panel label="Inserzioni" name="panel_profile_classifieds"/>
+			<panel label="Vita Reale" name="panel_profile_firstlife"/>
 			<panel label="Note" name="panel_profile_notes"/>
 		</tab_container>
-		<button label="OK" name="ok_btn" tool_tip="Salva modifiche al profilo e chiudi"/>
-		<button label="Annulla" label_selected="Annulla" name="cancel_btn"/>
 	</panel>
 </floater>
