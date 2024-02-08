@@ -184,6 +184,9 @@
 			<panel.string name="Sale Mixed">
 				Vendita mista
 			</panel.string>
+			<panel.string name="multiple selection">
+				Selezione multipla
+			</panel.string>
 			<text name="Name:">
 				Nome:
 			</text>
@@ -208,24 +211,25 @@
 			<check_box label="Condividi" name="checkbox share with group" tool_tip="Consenti a tutti i membri del gruppo selezionato di condividere i tuoi diritti di modifica di questo oggetto. Per attivare le restrizioni per ruolo devi prima effettuare la cessione."/>
 			<button label="Cedi" label_selected="Cedi" name="button deed" tool_tip="Con una cessione si trasferisce il bene con i diritti al proprietario successivo. Gli oggetti in proprietà condivisa di gruppo possono essere ceduti soltanto da un funzionario del gruppo."/>
 			<text name="label click action">
-				Effetto del clic:
+				Azione del clic:
 			</text>
-			<combo_box name="clickaction" tool_tip="Con l&apos;azione &quot;clic singolo&quot; puoi interagire con un oggetto semplicemente cliccandolo una volta. Ogni azione &quot;clic singolo&quot; ha un cursore speciale che indica il suo effetto. Alcune azioni &quot;clic singolo&quot; hanno dei requisiti per funzionare. Ad esempio per il comando &quot;Touch and Pay&quot; sono necessari degli script.">
+			<combo_box name="clickaction" tool_tip="Con l&apos;azione &quot;clic singolo&quot; puoi interagire con un oggetto semplicemente cliccandolo una volta. Ogni azione &quot;clic singolo&quot; ha un cursore speciale che indica il suo effetto. Alcune azioni &quot;clic singolo&quot; hanno dei requisiti per funzionare. Ad esempio per i comandi Tocca e Paga sono necessari degli script.">
 				<combo_box.item label="Tocca (predefinito)" name="Touch/grab(default)"/>
 				<combo_box.item label="Siedi sull&apos;oggetto" name="Sitonobject"/>
 				<combo_box.item label="Compra oggetto" name="Buyobject"/>
 				<combo_box.item label="Paga oggetto" name="Payobject"/>
 				<combo_box.item label="Apri" name="Open"/>
 				<combo_box.item label="Inquadra" name="Zoom"/>
+				<combo_box.item label="Ignora oggetto" name="Ignoreobject" />
 				<combo_box.item label="Nessuna" name="None"/>
 			</combo_box>
-			<check_box label="In vendita:" name="checkbox for sale" tool_tip="Permette alla gente di comprare questo oggetto, il suo contenuto o la sua copia virtuale ad un prezzo stabilito."/>
-			<spinner label="L$" name="Edit Cost" tool_tip="Costo oggetto."/>
-			<combo_box name="sale type" tool_tip="Decidi se vuoi che il compratore riceva una copia, una copia del contenuto o l&apos;oggetto stesso.">
+			<check_box label="In vendita:" name="checkbox for sale" tool_tip="Permette alla gente di comprare questo oggetto, i suoi contenuti o la sua copia virtuale ad un prezzo stabilito."/>
+			<combo_box name="sale type" tool_tip="Decidi se vuoi che il compratore riceva una copia, una copia dei contenuti o l&apos;oggetto stesso.">
 				<combo_box.item label="Copia" name="Copy"/>
-				<combo_box.item label="Contenuto" name="Contents"/>
+				<combo_box.item label="Contenuti" name="Contents"/>
 				<combo_box.item label="Originale" name="Original"/>
 			</combo_box>
+			<spinner label="L$" name="Edit Cost" tool_tip="Costo oggetto."/>
 			<button label="Applica" name="button mark for sale" tool_tip="Applica impostazioni vendita."/>
 			<button label="Copia UUID" name="btnCopyKeys" tool_tip="Copia la chiave UUID dell&apos;oggetto principale nella clipboard. Con Maiuscolo copia tutte le chiavi dell&apos;oggetto."/>
 			<check_box label="Mostra nella ricerca" name="search_check" tool_tip="Permetti che l&apos;oggetto sia visibile nella ricerca"/>
@@ -236,33 +240,15 @@
 				<text name="Anyone can:">
 					Chiunque:
 				</text>
-				<check_box label="Sposta" name="checkbox allow everyone move" tool_tip="Chiunque può muovere l&apos;oggetto."/>
-				<check_box label="Copia" name="checkbox allow everyone copy" tool_tip="Chiunque può prendere una copia di questo oggetto. L&apos;oggetto e tutti i suoi contenuti devono avere il permesso di copia e trasferimento."/>
+				<check_box label="Spostare" name="checkbox allow everyone move" tool_tip="Chiunque può muovere l&apos;oggetto."/>
+				<check_box label="Copiare" name="checkbox allow everyone copy" tool_tip="Chiunque può prendere una copia di questo oggetto. L&apos;oggetto e tutti i suoi contenuti devono avere il permesso di copia e trasferimento."/>
 				<check_box label="Esportare" name="checkbox allow export"/>
 				<text name="Next owner can:">
 					Proprietario successivo:
 				</text>
 				<check_box label="Modificare" name="checkbox next owner can modify" tool_tip="Il prossimo proprietario può modificare le proprietà dell&apos;oggetto come il nome o la scala."/>
 				<check_box label="Copiare" name="checkbox next owner can copy" tool_tip="Il proprietario successivo può prendere infinite copie di questo oggetto. Le copie mantengono le informazioni sul creatore, e non possono avere permessi maggiori di quelli posseduti dall&apos;oggetto copiato."/>
-				<check_box label="Trasferisci" name="checkbox next owner can transfer" tool_tip="Il prossimo proprietario può regalare o rivendere questo oggetto."/>
-				<text name="B:">
-					B:
-				</text>
-				<text name="O:">
-					O:
-				</text>
-				<text name="G:">
-					G:
-				</text>
-				<text name="E:">
-					E:
-				</text>
-				<text name="N:">
-					N:
-				</text>
-				<text name="F:">
-					F:
-				</text>
+				<check_box label="Trasferire" name="checkbox next owner can transfer" tool_tip="Il prossimo proprietario può regalare o rivendere questo oggetto."/>
 			</panel>
 			<panel name="pathfinding_attrs_panel">
 				<text name="pathfinding_attributes_label">
@@ -305,8 +291,8 @@
 			<button name="copy_rot_btn" tool_tip="Copia dimensioni"/>
 			<button name="paste_rot_btn" tool_tip="Incolla dimensioni"/>
 			<button name="paste_rot_clip_btn" tool_tip="Incolla dim da appunti"/>
-			<button label="Copia" name="copy_params_btn" tool_tip="Copia i parametri dell'&apos;oggetto negli appunti"/>
-			<button label="Incolla" name="paste_params_btn" tool_tip="Incolla i parametri dagli appunti"/>
+			<button label="Copia" name="copy_params_btn" tool_tip="Copia i parametri dell'oggetto negli appunti"/>
+			<button label="Incolla" name="paste_params_btn" tool_tip="Incolla i parametri dell'oggetto dagli appunti"/>
 			<combo_box name="comboBaseType">
 				<combo_box.item label="Cubo" name="Box"/>
 				<combo_box.item label="Cilindro" name="Cylinder"/>
@@ -432,7 +418,7 @@ Bas ↔ Min
 				La tabella mostra i limiti di cambio dei LOD, espressi in metri di distanza dalla camera.
         	</text>
 		</panel>
-		<panel label="Caratteristiche" name="Features">
+		<panel label="Caratt." name="Features">
 			<panel.string name="None">
 				Nessuno
 			</panel.string>
@@ -450,6 +436,8 @@ Bas ↔ Min
 			</text>
 			<check_box label="Mesh animato" name="Animated Mesh Checkbox Ctrl" tool_tip="Permetti agli oggetti mesh con rig di essere animati in modo indipendente"/>
 			<check_box label="Flessibilità" name="Flexible1D Checkbox Ctrl" tool_tip="Consenti all&apos;oggetto di flettersi lungo l&apos;asse Z (solo lato client)"/>
+			<button name="copy_features_btn" tool_tip="Copia i parametri delle caratteristiche negli appunti" />
+			<button name="paste_features_btn" tool_tip="Incolla i parametri delle caratteristiche dagli appunti" />
 			<spinner label="Morbidezza" name="FlexNumSections"/>
 			<spinner label="Gravità" name="FlexGravity"/>
 			<spinner label="Elasticità" name="FlexFriction"/>
@@ -471,6 +459,7 @@ Bas ↔ Min
 				Tipo di forma fisica:
 			</text>
 			<combo_box name="Physics Shape Type Combo Ctrl" tool_tip="Selezionare il tipo di forma fisica"/>
+			<button name="PhysicsViewToggle" tool_tip="Attiva/disattiva la visibilità delle forme fisiche in modalità di modifica" />
 			<combo_box name="material">
 				<combo_box.item label="Pietra" name="Stone"/>
 				<combo_box.item label="Metallo" name="Metal"/>
@@ -486,7 +475,7 @@ Bas ↔ Min
 			<spinner label="Restituzione" name="Physics Restitution"/>
 		</panel>
 		<panel label="Texture" name="Texture"/>
-		<panel label="Contenuto" name="Contents">
+		<panel label="Conten." name="Contents">
 			<button label="Nuovo script" label_selected="Nuovo script" name="button new script"/>
 			<button label="Permessi" name="button permissions"/>
 			<button label="Ricarica" name="button refresh"/>

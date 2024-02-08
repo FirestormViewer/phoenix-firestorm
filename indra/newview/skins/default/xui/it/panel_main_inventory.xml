@@ -9,13 +9,17 @@
 	<panel.string name="ItemcountUnknown">
 		Recuperati [ITEM_COUNT] elementi [FILTER]
 	</panel.string>
-    <panel.string name="inventory_title">INVENTARIO</panel.string>
-	<text name="ItemcountText">
-		Elementi:
-	</text>
+	<panel.string name="inventory_title">
+		INVENTARIO
+	</panel.string>
 	<layout_stack name="nav_stack">
+		<layout_panel name="nav_buttons">
+			<button name="back_btn" tool_tip="Indietro" />
+			<button name="forward_btn" tool_tip="Avanti" />
+			<button name="up_btn" tool_tip="Sali di un livello" />
+		</layout_panel>
 		<layout_panel name="filter_panel">
-			<filter_editor label="Filtro" name="inventory search editor" tool_tip="Scrivi una o più parole da cercare, separate dal carattere &apos;+&apos;"/>
+			<filter_editor label="Filtro" name="inventory search editor" tool_tip="Scrivi una o più parole da cercare, separate dal carattere &apos;+&apos;" />
 		</layout_panel>
 	</layout_stack>
 	<layout_stack name="ctrl_stack">
@@ -61,11 +65,16 @@
 		<panel name="new_inventory_panel">
 			<button name="new_inv_btn" tool_tip="Apri una nuova finestra Inventario"/>
 		</panel>
+		<!-- Used by StarLight skins -->
 		<panel name="collapse_panel">
-			<button label="Comprimi" name="collapse_btn" tool_tip="Chiude tutte le cartelle" />
+			<button label="Comprimi" name="collapse_btn" tool_tip="Chiudi tutte le cartelle" />
 		</panel>
 		<panel name="expand_panel">
-			<button label="Espandi" name="expand_btn" tool_tip="Apre tutte le cartelle" />
+			<button label="Espandi" name="expand_btn" tool_tip="Apri tutte le cartelle" />
+		</panel>
+		<!-- / Used by StarLight skins -->
+		<panel name="view_mode_panel">
+			<button name="view_mode_btn" tool_tip="Cambia modalità di visualizzazione" />
 		</panel>
 		<panel name="dummy_panel">
 			<text name="ItemcountText" tool_tip="[ITEMS] oggetti, [CATEGORIES] cartelle">

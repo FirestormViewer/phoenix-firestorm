@@ -1,30 +1,58 @@
-<?xml version="1.0" ?>
-<panel name="GroupCreation" label="Creazione del gruppo">
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Creazione del gruppo" name="GroupCreation">
+	<panel.string name="current_membership">
+		(la tua iscrizione)
+	</panel.string>
 	<panel name="group_info_top">
-		<line_editor name="group_name_editor" label="Scrivi qui il nome del tuo nuovo gruppo"/>
+		<text name="group_name_label" width="75">
+			Nome gruppo:
+		</text>
+		<line_editor label="Scrivi qui il nome del nuovo gruppo" name="group_name_editor" />
 	</panel>
-	<layout_panel name="group_info"/>
-	<layout_stack name="layout">
-		<texture_picker name="insignia" tool_tip="Clicca e scegli un'immagine"/>
-		<text_editor name="charter">Noleggio di gruppo</text_editor>
-		<button name="back" label="Elimina" tool_tip="Ritorna alla lista dei gruppi"/>
-		<text name="info_deletion">NB: dopo 7 giorni, un gruppo senza membri ( oltre al creatore) sarà cancellato</text>
-		<check_box name="check_enrollment_fee" label="Costo di iscrizione" tool_tip="Stabilire se richiedere una quota di iscrizione per entrare a far parte del gruppo"/>
-		<combo_box.item name="pg" label="Contenuto generale"/>
-		<scroll_list.rows name="basic" value="Base (segnaposto)"/>
-		<button name="btn_create" label="Crea un gruppo per L$ [COST]" tool_tip="Crea un nuovo Gruppo"/>
-		<text name="fee_information">La quota per la creazione di un gruppo si basa sul livello di membership. [https://secondlife.com/my/account/membership.php Maggiori informazioni]</text>
-		<scroll_list.rows name="premium" value="Premium (segnaposto)"/>
-		<check_box name="open_enrollement" label="Chiunque può partecipare" tool_tip="Stabilisce se questo gruppo permette a nuovi membri di aderire senza essere invitati."/>
-		<combo_item name="select_mature">- Seleziona la classificazione del contenuto  -</combo_item>
-		<spinner name="spin_enrollment_fee" label="L$" tool_tip="Per entrare a far parte del gruppo, i nuovi membri devono pagare questa quota."/>
-		<combo_box.item name="mature" label="Contenuto moderato"/>
-	</layout_stack>
-	<layout_panel name="layout_crt"/>
-	<layout_stack name="button_row_ls"/>
-	<layout_panel name="create_actions"/>
-	<panel name="preferences_container"/>
-	<combo_box name="group_mature_check" tool_tip="La classificazione del contenuto designa il tipo di contenuto e di comportamento consentito in un gruppo"/>
-	<scroll_list name="membership_list"/>
-	<layout_panel name="create_info"/>
+	<scroll_container name="content_scroll_container">
+		<panel name="content_panel">
+			<layout_stack name="layout">
+				<layout_panel name="group_info">
+					<panel name="group_info_top2">
+						<texture_picker name="insignia" tool_tip="Clicca per selezionare un'immagine" />
+						<text_editor name="charter">
+							Statuto del gruppo
+						</text_editor>
+					</panel>
+					<panel name="preferences_container">
+						<check_box label="Chiunque può aderire" name="open_enrollement" tool_tip="Il gruppo è aperto a tutti e non necessita di invito." />
+						<check_box label="Quota di adesione" name="check_enrollment_fee" tool_tip="Per unirsi al gruppo è richiesta una quota di iscrizione." />
+						<spinner name="spin_enrollment_fee" tool_tip="Bisogna pagare questo importo per unirsi al gruppo se è selezionata la casella Quota di adesione." />
+						<combo_box name="group_mature_check" tool_tip="La maturità e le classificazioni per età determinano i tipi di contenuti e i comportamenti consentiti nel gruppo.">
+							<combo_item name="select_mature">
+								- Classificazione del contenuto -
+							</combo_item>
+							<combo_box.item label="Contenuto Moderato" name="mature" />
+							<combo_box.item label="Contenuto Generale" name="pg" />
+						</combo_box>
+					</panel>
+				</layout_panel>
+				<layout_panel name="create_info">
+					<text name="fee_information">
+						La tariffa per la creazione di un gruppo dipende dal tuo piano di abbonamento. [https://secondlife.com/my/account/membership.php Maggiori informazioni]
+					</text>
+					<scroll_list name="membership_list">
+						<scroll_list.rows name="basic" value="Basic (riempitivo)"/>
+						<scroll_list.rows name="premium" value="Premium (riempitivo)" />
+					</scroll_list>
+				</layout_panel>
+				<layout_panel name="create_actions">
+					<layout_stack name="button_row_ls">
+						<layout_panel name="layout_crt">
+							<button label="Crea gruppo per [COST] L$" name="btn_create" tool_tip="Crea un nuovo gruppo" />
+							<button name="back" label="Annulla" />
+						</layout_panel>
+					</layout_stack>
+					<text name="info_deletion">
+						Nota: un gruppo che ha meno di due membri per 48 ore viene eliminato!
+					</text>
+				</layout_panel>
+			</layout_stack>
+		</panel>
+	</scroll_container>
 </panel>

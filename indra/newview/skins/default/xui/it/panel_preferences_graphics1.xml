@@ -101,11 +101,11 @@
 			<button label="Reset" name="Defaults" tool_tip="Ricarica impostazioni predefinite"/>
 		</panel>
 		<panel label="Impostazioni Hardware" name="Hardware Settings">
-			<check_box label="Filtro Anisotropico (rallenta se attivo)" name="ani"/>
-			<check_box label="Abilita OpenGL Vertex Buffer sugli oggetti" name="vbo" tool_tip="Abilitare questo su computer con schede video di ultima generazione per aumentare le prestazioni della scheda video.  Tuttavia, gli hardware vecchi spesso hanno una scarsa implementazione dei VBOs e questo può provocare crash improvvisi quando questa opzione è abilitata."/>
+			<check_box label="Filtro Anisotropico (rallenta se attivo)" name="ani" tool_tip="Il filtro anisotropico è un metodo per migliorare la qualità delle texture quando vengono visualizzate ad angoli relativamente ampi rispetto alla posizione della fotocamera. Di solito le rende meno sfocate a distanze maggiori."/>
+			<check_box label="Abilita VSync" name="vsync" tool_tip="Sincronizza il numero di fotogrammi al secondo con la frequenza di aggiornamento del monitor, il che potrebbe comportare una riduzione della fluidità e del ritardo visibili."/>
 			<check_box label="Abilita compressione texture (richiede riavvio)" name="texture compression" tool_tip="Le texture vengono compresse nella memoria video, questo consente per le texture con una risoluzione alta di essere caricate più rapidamente perdendo qualità nel colore."/>
 			<check_box label="Abilita supporto display HiDPI (solo Mac OSX; richiede riavvio)" name="use HiDPI" tool_tip="Abilita OpenGL per il disegno ad alta risoluzione." />
-			<text name="Antialiasing:">
+			<text name="Antialiasing:" tool_tip="Le modifiche a questa impostazione potrebbero richiedere il riavvio di alcuni componenti hardware.">
 				Antialiasing:
 			</text>
 			<combo_box label="Antialiasing" name="fsaa">
