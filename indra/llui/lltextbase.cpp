@@ -1256,6 +1256,7 @@ void LLTextBase::insertSegment(LLTextSegmentPtr segment_to_insert)
 	needsReflow(reflow_start_index);
 }
 
+//virtual 
 BOOL LLTextBase::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	// handle triple click
@@ -1310,6 +1311,7 @@ BOOL LLTextBase::handleMouseDown(S32 x, S32 y, MASK mask)
 	return LLUICtrl::handleMouseDown(x, y, mask);
 }
 
+//virtual 
 BOOL LLTextBase::handleMouseUp(S32 x, S32 y, MASK mask)
 {
 	LLTextSegmentPtr cur_segment = getSegmentAtLocalPos(x, y);
@@ -1329,6 +1331,7 @@ BOOL LLTextBase::handleMouseUp(S32 x, S32 y, MASK mask)
 	return LLUICtrl::handleMouseUp(x, y, mask);
 }
 
+//virtual 
 BOOL LLTextBase::handleMiddleMouseDown(S32 x, S32 y, MASK mask)
 {
 	LLTextSegmentPtr cur_segment = getSegmentAtLocalPos(x, y);
@@ -1340,6 +1343,7 @@ BOOL LLTextBase::handleMiddleMouseDown(S32 x, S32 y, MASK mask)
 	return LLUICtrl::handleMiddleMouseDown(x, y, mask);
 }
 
+//virtual 
 BOOL LLTextBase::handleMiddleMouseUp(S32 x, S32 y, MASK mask)
 {
 	LLTextSegmentPtr cur_segment = getSegmentAtLocalPos(x, y);
@@ -1351,6 +1355,7 @@ BOOL LLTextBase::handleMiddleMouseUp(S32 x, S32 y, MASK mask)
 	return LLUICtrl::handleMiddleMouseUp(x, y, mask);
 }
 
+//virtual 
 BOOL LLTextBase::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	LLTextSegmentPtr cur_segment = getSegmentAtLocalPos(x, y);
@@ -1362,6 +1367,7 @@ BOOL LLTextBase::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	return LLUICtrl::handleRightMouseDown(x, y, mask);
 }
 
+//virtual 
 BOOL LLTextBase::handleRightMouseUp(S32 x, S32 y, MASK mask)
 {
 	LLTextSegmentPtr cur_segment = getSegmentAtLocalPos(x, y);
@@ -1373,6 +1379,7 @@ BOOL LLTextBase::handleRightMouseUp(S32 x, S32 y, MASK mask)
 	return LLUICtrl::handleRightMouseUp(x, y, mask);
 }
 
+//virtual 
 BOOL LLTextBase::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
 	//Don't start triple click timer if user have clicked on scrollbar
@@ -1392,6 +1399,7 @@ BOOL LLTextBase::handleDoubleClick(S32 x, S32 y, MASK mask)
 	return LLUICtrl::handleDoubleClick(x, y, mask);
 }
 
+//virtual 
 BOOL LLTextBase::handleHover(S32 x, S32 y, MASK mask)
 {
 	LLTextSegmentPtr cur_segment = getSegmentAtLocalPos(x, y);
@@ -1403,6 +1411,7 @@ BOOL LLTextBase::handleHover(S32 x, S32 y, MASK mask)
 	return LLUICtrl::handleHover(x, y, mask);
 }
 
+//virtual 
 BOOL LLTextBase::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
 	LLTextSegmentPtr cur_segment = getSegmentAtLocalPos(x, y);
@@ -1414,6 +1423,7 @@ BOOL LLTextBase::handleScrollWheel(S32 x, S32 y, S32 clicks)
 	return LLUICtrl::handleScrollWheel(x, y, clicks);
 }
 
+//virtual 
 BOOL LLTextBase::handleToolTip(S32 x, S32 y, MASK mask)
 {
 	LLTextSegmentPtr cur_segment = getSegmentAtLocalPos(x, y);
@@ -1425,7 +1435,20 @@ BOOL LLTextBase::handleToolTip(S32 x, S32 y, MASK mask)
 	return LLUICtrl::handleToolTip(x, y, mask);
 }
 
+//virtual 
+const std::string LLTextBase::getToolTip() const
+{
+    if (sDebugUnicode)
+    {
+        std::string text = getText();
+        std::string tooltip = utf8str_showBytesUTF8(text);
+        return tooltip;
+    }
 
+    return LLUICtrl::getToolTip();
+}
+
+//virtual 
 void LLTextBase::reshape(S32 width, S32 height, BOOL called_from_parent)
 {
 	if (width != getRect().getWidth() || height != getRect().getHeight() || LLView::sForceReshape)
@@ -1452,6 +1475,7 @@ void LLTextBase::reshape(S32 width, S32 height, BOOL called_from_parent)
 	}
 }
 
+//virtual 
 void LLTextBase::draw()
 {
 	// reflow if needed, on demand
