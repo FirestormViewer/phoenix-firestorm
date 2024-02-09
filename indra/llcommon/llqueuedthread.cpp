@@ -39,7 +39,7 @@ LLQueuedThread::LLQueuedThread(const std::string& name, bool threaded, bool shou
     LLThread(name),
     mIdleThread(true),
     mNextHandle(0),
-    mStarted(FALSE),
+    mStarted(false),
     mThreaded(threaded),
     mRequestQueue(name, 1024 * 1024)
 {
@@ -131,7 +131,7 @@ size_t LLQueuedThread::update(F32 max_time_ms)
 		if (!mThreaded)
 		{
 			startThread();
-			mStarted = TRUE;
+			mStarted = true;
 		}
 	}
 	return updateQueue(max_time_ms);
@@ -513,7 +513,7 @@ void LLQueuedThread::run()
 	// call checPause() immediately so we don't try to do anything before the class is fully constructed
 	checkPause();
 	startThread();
-	mStarted = TRUE;
+	mStarted = true;
 	
 
 	/*while (1)

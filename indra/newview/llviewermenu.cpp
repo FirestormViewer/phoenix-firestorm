@@ -6497,9 +6497,19 @@ bool visible_take_object()
 	return !is_selection_buy_not_take() && enable_take();
 }
 
-bool visible_take_objects() 
+bool is_multiple_selection() 
 {
-    return visible_take_object() && (LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() > 1);
+    return (LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() > 1);
+}
+
+bool is_single_selection() 
+{ 
+    return !is_multiple_selection();
+}
+
+bool enable_take_objects() 
+{ 
+    return visible_take_object() && is_multiple_selection(); 
 }
 
 bool tools_visible_buy_object()
@@ -10164,9 +10174,9 @@ bool enable_object_take_copy()
 	return all_valid;
 }
 
-bool visible_take_copy_objects() 
+bool enable_take_copy_objects() 
 { 
-    return enable_object_take_copy() && (LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() > 1);
+    return enable_object_take_copy() && is_multiple_selection();
 }
 
 class LLHasAsset : public LLInventoryCollectFunctor
@@ -12285,7 +12295,7 @@ void initialize_menus()
 	enable.add("Tools.EnableUnlink", boost::bind(&LLSelectMgr::enableUnlinkObjects, LLSelectMgr::getInstance()));
 	view_listener_t::addMenu(new LLToolsEnableBuyOrTake(), "Tools.EnableBuyOrTake");
 	enable.add("Tools.EnableTakeCopy", boost::bind(&enable_object_take_copy));
-    enable.add("Tools.VisibleCopySeparate", boost::bind(&visible_take_copy_objects));
+    enable.add("Tools.EnableCopySeparate", boost::bind(&enable_take_copy_objects));
 	enable.add("Tools.VisibleBuyObject", boost::bind(&tools_visible_buy_object));
 	enable.add("Tools.VisibleTakeObject", boost::bind(&tools_visible_take_object));
 	view_listener_t::addMenu(new LLToolsEnableSaveToObjectInventory(), "Tools.EnableSaveToObjectInventory");
@@ -12594,7 +12604,9 @@ void initialize_menus()
    	view_listener_t::addMenu(new LLEnableEditParticleSource(), "Object.EnableEditParticles");
 
 	enable.add("Object.VisibleTake", boost::bind(&visible_take_object));
-    enable.add("Object.VisibleTakeMultiple", boost::bind(&visible_take_objects));
+    enable.add("Object.VisibleTakeMultiple", boost::bind(&is_multiple_selection));
+    enable.add("Object.VisibleTakeSingle", boost::bind(&is_single_selection));
+    enable.add("Object.EnableTakeMultiple", boost::bind(&enable_take_objects));
 	enable.add("Object.VisibleBuy", boost::bind(&visible_buy_object));
 
 	commit.add("Object.Buy", boost::bind(&handle_buy));

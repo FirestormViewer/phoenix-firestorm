@@ -193,7 +193,7 @@ void LLThread::threadRun()
 }
 
 LLThread::LLThread(const std::string& name, apr_pool_t *poolp) :
-    mPaused(FALSE),
+    mPaused(false),
     mName(name),
     mThreadp(NULL),
     mStatus(STOPPED),

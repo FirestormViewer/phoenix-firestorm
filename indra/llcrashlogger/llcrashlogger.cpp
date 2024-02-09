@@ -50,16 +50,14 @@
 #include <curl/curl.h>
 #include <openssl/crypto.h>
 
-
 // [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
 #ifdef LL_WINDOWS
 	#include <shellapi.h>
 #endif // LL_WINDOWS
 // [/SL:KB]
 
-
-BOOL gBreak = false;
-BOOL gSent = false;
+bool gBreak = false;
+bool gSent = false;
 
 // <FS:CR> Various missing prototypes
 void trimSLLog(std::string& sllog);
