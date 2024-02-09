@@ -952,11 +952,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bfcc4acbe6b8dddaf10f0f7a47e4aad8</string>
+              <string>3f66914b7931a7e45b50c9f947eed3d1</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.18-darwin64-232960129.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.20-darwin64-240390127.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -966,11 +966,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>14846f1a55274399362db4b674fcded6</string>
+              <string>bbb978f21e690599aedcd44658dceeaf</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.18-linux64-232801304.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.20-linux64-240390132.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
