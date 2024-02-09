@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="material editor" title="[MATERIAL_NAME]">
+	<string name="no_upload_fee_string">pas de frais d'envoi</string>
+	<string name="upload_fee_string">Frais d'envoi L$[FEE]</string>
+	<string name="material_selection_title">Sélection des matériaux</string>
+	<string name="material_selection_text">Sélectionner un matériau l:</string>
+	<string name="material_batch_import_text">--- Les charger tous ---</string>
+	<string name="material_override_title">Modification du matériau</string>
+	<panel name="button_panel">
+		<text name="unsaved_changes">
+			Modifications non enregistrées
+		</text>
+		<button label="Enregistrer sous..." name="save_as"/>
+		<text name="total_upload_fee">
+			Total des frais d'envoi : [FEE] L$
+		</text>
+		<button label="Annuler" name="cancel"/>
+	</panel>
+</floater>
