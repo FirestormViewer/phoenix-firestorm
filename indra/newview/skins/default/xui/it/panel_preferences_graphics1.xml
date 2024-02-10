@@ -26,15 +26,14 @@
 			<text name="ShadersPrefText4">
 				Ultra
 			</text>
-			<check_box label="A schermo intero" name="Fullscreen Mode" tool_tip="Avvia Firestorm in modalità Schermo Intero (richiede riavvio)"/>
+			<check_box label="Schermo intero (richiede riavvio)" name="Fullscreen Mode" tool_tip="Avvia Firestorm in modalità Schermo Intero (richiede riavvio)"/>
 			<text name="ShadersText">
 				Effetti grafici:
 			</text>
-			<check_box label="Acqua Trasparente" name="TransparentWater"/>
-			<check_box label="Rilievi (tex.) e brillantezza" name="BumpShiny"/>
-			<check_box label="Effetti grafici atmosferici" name="WindLightUseAtmosShaders"/>
-			<check_box label="Illuminazione Avanzata" name="UseLightShaders" tool_tip="Abilita la gestione avanzata delle luci"/>
-			<check_box label="Occlusione Ambiente" name="UseSSAO"/>
+			<check_box label="Acqua trasparente" name="TransparentWater"/>
+			<check_box label="Occlusione ambientale" name="UseSSAO"/>
+			<check_box label="Riflessi" name="ReflectionsEnabled"/>
+			<check_box label="Riflessi Screen Space" name="ScreenSpaceReflections"/>  <!-- DA RIVEDERE: "Riflessi avanzati", "Riflessi realistici" -->
 			<text name="shadows_label">
 				Ombre:
 			</text>
@@ -43,10 +42,27 @@
 				<combo_box.item label="Sole/Luna" name="1"/>
 				<combo_box.item label="Sole/Luna + Proiettori" name="2"/>
 			</combo_box>
-			<text name="reflection_label">
+			<text name="ReflectionDetailText">
+				Dettaglio riflessi:
+			</text>
+			<combo_box name="ReflectionDetail">
+				<combo_box.item label="Solo statico" name="0"/>
+				<combo_box.item label="Statico e dinamico" name="1"/>
+				<combo_box.item label="In tempo reale" name="2"/>
+			</combo_box>
+			<text name="ReflectionProbeText">
+				Copertura riflessione:
+			</text>
+			<combo_box name="ReflectionLevel">
+				<combo_box.item label="Nessuno" name="0"/>
+				<combo_box.item label="Solo manuale" name="1"/>
+				<combo_box.item label="Manuale e terreno" name="2"/>
+				<combo_box.item label="Scena completa" name="3"/>
+			</combo_box>
+			<!-- <text name="reflection_label">
 				Riflesso sull’Acqua:
 			</text>
-			<combo_box name="Reflections">
+			combo_box name="Reflections">
 				<combo_box.item label="Nessuno (opaco)" name="-2"/>
 				<combo_box.item label="Nessuno (trasparente)" name="-1"/>
 				<combo_box.item label="Minimo" name="0"/>
@@ -54,7 +70,7 @@
 				<combo_box.item label="Tutti gli oggetti statici" name="2"/>
 				<combo_box.item label="Tutti gli avatar e gli oggetti" name="3"/>
 				<combo_box.item label="Tutto" name="4"/>
-			</combo_box>
+			</combo_box> -->
 			<text name="local lights_label" tool_tip="Imposta il numero di punti luce resi quando  &apos;Ombre ambiente&apos; non è attivo. Richiede riavvio per cambiare modalità">
 				Punti Luce (richiede riavvio):
 			</text>
@@ -72,6 +88,7 @@
 				Bassa
 			</text>
 			<slider label="Fisica Avatar" name="AvatarPhysicsDetail"/>
+			<slider label="Esposizione" name="RenderExposure"/>
 			<text name="MeshDetailText">
 				Livello dei dettagli (LOD):
 			</text>
@@ -103,6 +120,7 @@
 		<panel label="Impostazioni Hardware" name="Hardware Settings">
 			<check_box label="Filtro Anisotropico (rallenta se attivo)" name="ani" tool_tip="Il filtro anisotropico è un metodo per migliorare la qualità delle texture quando vengono visualizzate ad angoli relativamente ampi rispetto alla posizione della fotocamera. Di solito le rende meno sfocate a distanze maggiori."/>
 			<check_box label="Abilita VSync" name="vsync" tool_tip="Sincronizza il numero di fotogrammi al secondo con la frequenza di aggiornamento del monitor, il che potrebbe comportare una riduzione della fluidità e del ritardo visibili."/>
+			<check_box label="Abilita streaming VBO" name="vbo_stream" tool_tip="La disattivazione di questa opzione può migliorare le prestazioni quando le VBO sono abilitate. Disattivato mostra importanti miglioramenti su molte GPU AMD (es: Schede video ATI)."/>
 			<check_box label="Abilita compressione texture (richiede riavvio)" name="texture compression" tool_tip="Le texture vengono compresse nella memoria video, questo consente per le texture con una risoluzione alta di essere caricate più rapidamente perdendo qualità nel colore."/>
 			<check_box label="Abilita supporto display HiDPI (solo Mac OSX; richiede riavvio)" name="use HiDPI" tool_tip="Abilita OpenGL per il disegno ad alta risoluzione." />
 			<text name="Antialiasing:" tool_tip="Le modifiche a questa impostazione potrebbero richiedere il riavvio di alcuni componenti hardware.">
@@ -121,6 +139,7 @@
 			<slider label="Riserva aggiuntiva memoria cache texture (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="La percentuale di memoria video fisica riservata alle texture caricate nella cache che attualmente non vengono visualizzate." />
 			<slider label="Riserva di memoria video fisica (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="La percentuale di memoria video fisica riservata per altri usi." />
 			<spinner label="Distanza della nebbia:" name="fog" label_width="160" width="226"/>
+			<spinner label="Thread di decodifica immagine:" name="image_decode_threads" tool_tip="Il numero di thread da utilizzare per la decodifica delle immagini. 0 = Automatico, 1 = Sincrono, 2+ = specificato dall'utente. (consigliati 0 o 1)." />
 		</panel>
 		<panel label="Resa" name="Rendering">
 			<text name="World Updating">
@@ -166,6 +185,7 @@
 		<panel label="Profondità di Campo" name="DOF panel">
 			<check_box label="Abilita Profondità di Campo (PdC: sfoca la vista tranne che nella direzione della camera)" name="UseDoF"/>
 			<check_box label="Abilita in modalità Costruzione" name="RenderDepthOfFieldInEditMode"/>
+			<check_box label="Abilita sott'acqua" name="FSRenderDoFUnderwater"/>
 			<check_box label="La messa a fuoco della PdC segue il cursore" name="FSFocusPointFollowsPointer" tool_tip="La messa a fuoco della profondità di campo (PdC) seguirà il tuo mouse, questo comportamento corrisponde a quello visto quando si utilizza flycam. Utilizzare in combinazione con il blocco della messa a fuoco PdC." />
 			<slider label="F-Number Camera" name="CameraFNum" tool_tip="Il valore F è un valore della profondità di campo."/>
 			<slider label="Lunghezza focale (mm):" name="CameraFocal" tool_tip="A che distanza avviene la messa a fuoco (in millimetri)."/>

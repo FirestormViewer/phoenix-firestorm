@@ -42,6 +42,8 @@
 				<combo_box.item value="filter_type_sounds" label="Suoni" />
 				<combo_box.item value="filter_type_textures" label="Texture" />
 				<combo_box.item value="filter_type_snapshots" label="Fotografie" />
+				<combo_box.item value="filter_type_meshes" label="Modelli mesh" />
+				<combo_box.item value="filter_type_materials" label="Materiali" />
 				<combo_box.item value="filter_type_settings" label="Ambienti" />
 				<combo_box.item value="filter_type_custom" label="Personalizzato..." />
 			</combo_box>

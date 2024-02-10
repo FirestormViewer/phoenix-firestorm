@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="texture picker" title="Scelta texture">
+<floater name="texture picker" title="Scegli texture">
 	<floater.string name="choose_picture">
-		Clic per scegliere immagine
+		Clicca qui per scegliere un'immagine
 	</floater.string>
 	<floater.string name="pick title">
-		Scegliere:
+		Scegli:
+	</floater.string>
+	<floater.string name="pick_material">
+		Scegli: Materiale
+	</floater.string>
+	<floater.string name="pick_texture">
+		Scegli: Texture
 	</floater.string>
 	<text name="Multiple">
 		Texture multiple
@@ -25,21 +31,26 @@
 	<button label="Vuota" label_selected="Vuota" name="Blank"/>
 	<button label="Trasparente" label_selected="Trasparente" name="Transparent" tool_tip="Nota: Se si sceglie la texture trasparente o un'altra texture parzialmente trasparente, la luce non verrà riflessa." width="75" />
 	<button label="Nessuna" label_selected="Nessuna" name="None"/>
-	<text name="preview_disabled" value="Anteprima disattivata"/>
+	<button label="" label_selected="" name="Pipette"/>
+	<text name="preview_disabled">
+		Anteprima disabilitata
+	</text>
 	<filter_editor label="Filtra texture" name="inventory search editor"/>
-	<check_box label="Mostra cartelle" name="show_folders_check"/>
+	<!-- <check_box label="Mostra cartelle" name="show_folders_check"/> -->
 	<button label="Aggiungi" label_selected="Aggiungi" name="l_add_btn"/>
 	<button label="Rimuovi" label_selected="Rimuovi" name="l_rem_btn"/>
 	<button label="Carica" label_selected="Carica" name="l_upl_btn"/>
 	<scroll_list name="l_name_list">
-		<column label="Nome" name="unit_name"/>
+		<column name="unit_name" label="Nome"/>
+		<column name="unit_id_HIDDEN" label="ID"/>
 	</scroll_list>
 	<combo_box name="l_bake_use_texture_combo_box" tool_tip="Seleziona una texture per la sovrapposizione BOM">
 		<combo_box.item label="Nessuna" name="None" />
 	</combo_box>
-	<check_box label="Nascondi regione mesh di base" name="hide_base_mesh_region"/>
+	<!-- <check_box label="Nascondi regione mesh di base" name="hide_base_mesh_region"/> -->
 	<line_editor name="TextureKey" tool_tip="La chiave UUID della texture" />
 	<button name="TextureKeyApply" label="Applica UUID" tool_tip="Applica questa UUID" />
 	<button label="Annulla" label_selected="Annulla" name="Cancel"/>
+	<button label="Ok" label_selected="Ok" name="Select" />
 	<check_box label="Applica" name="apply_immediate_check"/>
 </floater>

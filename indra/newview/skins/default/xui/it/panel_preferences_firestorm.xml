@@ -228,6 +228,9 @@
             <text name="title_models">
                 Mesh
             </text>
+            <text name="title_pbr">
+                Materiali PBR
+            </text>
             <text name="upload_help">
                 Per assegnare una cartella destinazione, cliccare con il tasto destro in inventario e scegliere 
 "Usa come predefinita per"
