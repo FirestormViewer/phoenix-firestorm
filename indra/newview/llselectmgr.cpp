@@ -1966,7 +1966,8 @@ bool LLSelectMgr::selectionSetImage(const LLUUID& imageid)
                                                       te,
                                                       mItem,
                                                       LLToolDragAndDrop::SOURCE_AGENT,
-                                                      LLUUID::null);
+                                                      LLUUID::null,
+                                                      false);
 			}
 			else // not an inventory item
 			{
