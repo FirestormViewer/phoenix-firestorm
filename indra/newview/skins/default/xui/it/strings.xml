@@ -330,6 +330,10 @@ Provare ad accedere nuovamente tra un minuto.
 		Il sistema ha iniziato il logout dell&apos;ultima sessione.
 Provare ad accedere nuovamente tra un minuto.
 	</string>
+	<string name="LoginFailedAuthenticationMFARequired">
+		Per accedere, inserisci un nuovo token dalla tua app di autenticazione multi-fattore.
+Se ritieni che si tratti di un errore, contatta support@secondlife.com
+	</string>
 	<string name="AgentLostConnection">
 		Questa regione sta avendo problemi. Verificare la connessione a Internet.
 	</string>
@@ -885,15 +889,21 @@ https://www.firestormviewer.org/support per avere aiuto nella soluzione.
 	<string name="favorite">
 		preferiti
 	</string>
+	<string name="symbolic link">
+		link
+	</string>
 	<string name="symbolic folder link">
 		link alla cartella
 	</string>
-	<string name="mesh">
-		modello
+	<string name="settings blob">
+		impostazioni
 	</string>
-    <string name="settings">
-        impostazioni
-    </string>
+	<string name="render material">
+		materiale
+	</string>
+	<string name="mesh">
+		mesh
+	</string>
 	<string name="AvatarEditingAppearance">
 		(Modifica aspetto)
 	</string>
@@ -1402,10 +1412,13 @@ https://www.firestormviewer.org/support per avere aiuto nella soluzione.
 		Gonna
 	</string>
 	<string name="alpha">
-		Alfa (trasparenza)
+		Alfa
 	</string>
 	<string name="tattoo">
 		Tatuaggio
+	</string>
+	<string name="universal">
+		Universale
 	</string>
 	<string name="physics">
 		Fisica
@@ -1447,7 +1460,7 @@ https://www.firestormviewer.org/support per avere aiuto nella soluzione.
 		Canottiera non indossata
 	</string>
 	<string name="underpants_not_worn">
-		Slip non indossati
+		Slip non indossato
 	</string>
 	<string name="skirt_not_worn">
 		Gonna non indossata
@@ -1457,6 +1470,9 @@ https://www.firestormviewer.org/support per avere aiuto nella soluzione.
 	</string>
 	<string name="tattoo_not_worn">
 		Tatuaggio non indossato
+	</string>
+	<string name="universal_not_worn">
+		Universale non indossato
 	</string>
 	<string name="physics_not_worn">
 		Fisica non indossata
@@ -1498,7 +1514,7 @@ https://www.firestormviewer.org/support per avere aiuto nella soluzione.
 		Crea nuova canottiera
 	</string>
 	<string name="create_new_underpants">
-		Crea nuovi slip
+		Crea nuovo slip
 	</string>
 	<string name="create_new_skirt">
 		Crea nuova gonna
@@ -1508,6 +1524,9 @@ https://www.firestormviewer.org/support per avere aiuto nella soluzione.
 	</string>
 	<string name="create_new_tattoo">
 		Crea nuovo tatuaggio
+	</string>
+	<string name="create_new_universal">
+		Crea nuovo universale
 	</string>
 	<string name="create_new_physics">
 		Crea nuova fisica
@@ -1744,11 +1763,15 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 	<string name="Unconstrained">
 		Senza limitazioni
 	</string>
+	<string name="active" value=" (attivo)"/>
 	<string name="no_transfer" value=" (no trasferimento)"/>
 	<string name="no_modify" value=" (no modifica)"/>
 	<string name="no_copy" value=" (no copia)"/>
 	<string name="worn" value=" (indossato)"/>
-	<string name="broken_link" value=" (link rotto)"/>
+	<string name="broken_link" value=" (link corrotto)"/>
+	<string name="no_transfer_lbl" value=" no trasferimento" />
+	<string name="no_modify_lbl"   value=" no modifica" />
+	<string name="no_copy_lbl"     value=" no copia" />
 	<string name="LoadingContents">
 		Caricamento contenuti...
 	</string>
@@ -1778,6 +1801,7 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 	<string name="Clothing" value=" Vestiti,"/>
 	<string name="Gestures" value=" Gesti,"/>
 	<string name="Landmarks" value=" Segnaposto,"/>
+	<string name="Materials" value=" Materiali,"/>
 	<string name="Notecards" value=" Annotazioni,"/>
 	<string name="Objects" value=" Oggetti,"/>
 	<string name="Scripts" value=" Script,"/>
@@ -1878,6 +1902,12 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 	</string>
 	<string name="InvFolder Settings">
 		Ambienti
+	</string>
+	<string name="InvFolder Material">
+		Materiali
+	</string>
+	<string name="InvFolder Materials">
+		Materiali
 	</string>
 	<string name="InvFolder Friends">
 		Amici
@@ -2679,37 +2709,25 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 		(si aggiornerà dopo la pubblicazione)
 	</string>
 	<string name="NoPicksClassifiedsText">
-		Non hai creato luoghi preferiti né inserzioni. Clicca il pulsante + qui sotto per creare un luogo preferito o un&apos;inserzione.
+		Non hai creato luoghi preferiti né inserzioni. Clicca il pulsante Nuovo per creare un luogo preferito o un'inserzione.
 	</string>
 	<string name="NoPicksText">
-		Non hai creato Luoghi preferiti. Fai clic sul pulsante Nuovo per creare un Luogo preferito.
+		Non hai creato luoghi preferiti. Clicca il pulsante Nuovo per creare un luogo preferito.
 	</string>
 	<string name="NoClassifiedsText">
-		Non hai creato Annunci. Fai clic sul pulsante Nuovo per creare un Annuncio.
+		Non hai creato inserzioni. Clicca il pulsante Nuovo per creare un'inserzione.
 	</string>
 	<string name="NoAvatarPicksClassifiedsText">
-		L&apos;utente non ha luoghi preferiti né inserzioni
+		Nessun luogo preferito/inserzione
 	</string>
 	<string name="NoAvatarPicksText">
-		L&apos;utente non ha luoghi preferiti
+		Nessun luogo preferito
 	</string>
 	<string name="NoAvatarClassifiedsText">
-		L&apos;utente non ha annunci
+		Nessuna inserzione
 	</string>
 	<string name="PicksClassifiedsLoadingText">
 		Caricamento in corso...
-	</string>
-	<string name="NoPicksText">
-		Non è stato creato nessun luogo preferito.
-	</string>
-	<string name="NoAvatarPicksText">
-		L&apos;utente non ha preferiti.
-	</string>
-	<string name="NoClassifiedsText">
-		L&apos;utente non ha inserzioni. Clic sul pulsante + qui sotto per crearne una.
-	</string>
-	<string name="NoAvatarClassifiedsText">
-		L&apos;utente non ha inserzioni
 	</string>
 	<string name="MultiPreviewTitle">
 		Anteprima
@@ -4894,25 +4912,31 @@ Segnala abuso
 		Nuova canottiera
 	</string>
 	<string name="New Underpants">
-		Nuovi slip
+		Nuovo slip
 	</string>
 	<string name="New Skirt">
 		Nuova gonna
 	</string>
 	<string name="New Alpha">
-		Nuovo alfa (trasparenza)
+		Nuovo alfa
 	</string>
 	<string name="New Tattoo">
 		Nuovo tatuaggio
+	</string>
+	<string name="New Universal">
+		Nuovo universale
 	</string>
 	<string name="New Physics">
 		Nuova fisica
 	</string>
 	<string name="Invalid Wearable">
-		Capo da indossare non valido
+		Indumento da indossare non valido
 	</string>
 	<string name="New Gesture">
 		Nuovo gesto
+	</string>
+	<string name="New Material">
+		Nuovo materiale
 	</string>
 	<string name="New Script">
 		Nuovo script
@@ -4924,7 +4948,7 @@ Segnala abuso
 		Nuova cartella
 	</string>
 	<string name="Contents">
-		Contenuto
+		Contenuti
 	</string>
 	<string name="Gesture">
 		Gesto
@@ -5210,6 +5234,9 @@ Segnala abuso
 	</string>
 	<string name="BaseMembership">
 		Base
+	</string>
+	<string name="InternalMembership">
+		Interno
 	</string>
 	<string name="MembershipUpgradeText">
 		Passa a Premium
@@ -5625,7 +5652,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Crea un segnaposto alla posizione attuale
 	</string>
 	<string name="Command_Teleport_History_Tooltip">
-		Apre lo storico dei teleport (Alt+H)
+		Apre l'elenco dei teleport effetuati (Alt+H)
 	</string>
 	<string name="Command_Pose_Stand_Tooltip">
 		Pose statiche dell'avatar per sistemare gli attachments
@@ -5637,7 +5664,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Apre il radar per gli avatar vicini
 	</string>
 	<string name="Command_Conversation_Log_Tooltip">
-		Apre la lista delle conversazioni per leggere i messaggi passati
+		Apre l'elenco delle conversazioni effetuate
 	</string>
 	<string name="Command_Move_Lock_Tooltip">
 		Blocca l&apos;avatar nella posizione attuale (Ctrl+Alt+P)
@@ -5867,6 +5894,9 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	<string name="RLVaToggleDisabled">
 		disabilitato
 	</string>
+	<string name="RLVaStatusDisabled">
+		(disabilitato)
+	</string>
 	<string name="experience_tools_experience">
 		Esperienza
 	</string>
@@ -5924,6 +5954,12 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	<string name="ExperiencePermission12">
 		accettazione automatica delle autorizzazioni per le esperienze
 	</string>
+	<string name="ExperiencePermission16">
+		forzare l'avatar a sedersi
+	</string>
+	<string name="ExperiencePermission17">
+		Modifica delle impostazioni dell'ambiente
+	</string>
 	<string name="ExperiencePermissionShortUnknown">
 		ha eseguito un&apos;operazione sconosciuta: [Permission]
 	</string>
@@ -5947,6 +5983,15 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	</string>
 	<string name="ExperiencePermissionShort12">
 		Autorizzazione
+	</string>
+	<string name="ExperiencePermissionShort16">
+		Sedersi
+	</string>
+	<string name="ExperiencePermissionShort17">
+		Ambiente
+	</string>
+	<string name="Material Texture Name Header">
+		Texture esistenti nel materiale:
 	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Le conversazioni non vengono registrate. Per iniziare a registrare, seleziona &quot;Salva: Solo registro&quot; oppure &quot;Salva: Registri e trascrizioni&quot; in Preferenze &gt; Chat.
@@ -5981,8 +6026,32 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	<string name="Mav_Details_MAV_CONFIRMATION_DATA_MISMATCH">
 		La forma fisica contiene dati di conferma errati. Correggere il modello fisico.
 	</string>
+	<string name="Mav_Details_MAV_BLOCK_MISSING">
+		Dati mancanti. Assicurarsi che il LOD elevato sia presente e corretto. Imposta il modello fisico se non presente.
+	</string>
 	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
 		La forma fisica non ha la versione giusta. Impostare la giusta versione per il modello fisico.
+	</string>
+	<string name="couldnt_resolve_host">
+		Il DNS non ha potuto risolvere il nome dell’host([HOSTNAME]). 
+Verifica di riuscire a connetterti al sito web www.secondlife.com. 
+Se riesci ma continui a ricevere questo errore, visita la sezione 
+Assistenza e segnala il problema.
+	</string>
+	<string name="ssl_peer_certificate">
+		Il server per il login non ha potuto effettuare la verifica tramite SSL. 
+Se continui a ricevere questo errore, visita 
+la sezione Assistenza nel sito SecondLife.com 
+e segnala il problema.
+	</string>
+	<string name="ssl_connect_error">
+		Spesso l’errore è dovuto all’orologio del computer, impostato incorrettamente. 
+Vai al Pannello di Controllo e assicurati che data e ora siano 
+esatte. Controlla anche che il network e il firewall siano impostati 
+correttamente. Se continui a ricevere questo errore, visita la sezione 
+Assistenza nel sito SecondLife.com e segnala il problema. 
+
+[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 Base conoscenze]
 	</string>
 	<string name="LoadCameraPositionNoneSaved">
 		Non esiste ancora nessuna vista camera salvata.
@@ -6143,6 +6212,24 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	<string name="fsbridge_error_wrongvm">
 		NOTA: Lo script del bridge usa la vecchia macchina virtuale LSO (limite di memoria 16 KB) invece della nuova Mono (limite 64 KB). Ciò crea molta probabilità di collisioni stack-heap e di blocco del bridge per esaurimento memoria. Usare il comando di menu &apos;Avatar/Salute avatar/Ricrea LSL bridge&apos; per riavviarlo. Se il messaggio ricompare, riprovare in un&apos;altra regione.
 	</string>
+	<string name="FSAOEnabled">
+		Animatore del browser [APP_NAME] abilitato.
+	</string>
+	<string name="FSAODisabled">
+		Animatore del browser [APP_NAME] disabilitato.
+	</string>
+	<string name="FSAOPausedScript">
+		In pausa tramite oggetto scriptato indossato.
+	</string>
+	<string name="FSAOResumedScript">
+		Ripristinato tramite oggetto scriptato indossato.
+	</string>
+	<string name="FSAOStandsPausedScript">
+		Animazioni Standing in pausa tramite oggetto scriptato indossato.
+	</string>
+	<string name="FSAOStandsResumedScript">
+		Animazioni Standing ripristinate tramite oggetto scriptato indossato.
+	</string>
 	<string name="QP Draw Distance">
 		Distanza disegno
 	</string>
@@ -6272,6 +6359,12 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	<string name="fs_preprocessor_error">
 		[ERR_NAME] ([LINENUMBER]): eccezione inaspettata.
 	</string>
+	<string name="fs_preprocessor_lsl2_directive_override">
+		È stata rilevata una direttiva di compilazione LSL2 che sovrascrive le impostazioni delle preferenze.
+	</string>
+	<string name="fs_preprocessor_mono_directive_override">
+		È stata rilevata una direttiva di compilazione Mono che sovrascrive le impostazioni delle preferenze.
+	</string>
 	<string name="fs_preprocessor_optimizer_start">
 		Ottimizzazione delle funzioni utente e delle variabili globali.
 	</string>
@@ -6340,6 +6433,9 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	</string>
 	<string name="skin_defaults_starlight_navbar">
 		L&apos;attivazione della barra di navigazione è predefinita nella serie di impostazioni Starlight.
+	</string>
+	<string name="fs_preprocessor_truncated">
+		Nota: l'output del preprocessore è stato troncato perché il testo dello script è troppo grande e probabilmente non funzionerà.
 	</string>
 	<string name="animation_explorer_seconds_ago">
 		[SECONDS] secondi fa
@@ -6452,6 +6548,9 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	<string name="Nametag_Complexity_Label">
 		Complessità: [COMPLEXITY]
 	</string>
+	<string name="Nametag_Texture_Area_Label">
+		Texture: [TEXTURE_AREA] m²
+	</string>
 	<string name="font_unknown">
 		Font sconosciuto
 	</string>
@@ -6469,25 +6568,37 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 
 [ASSET_NAME]
 	</string>
-	<string name="couldnt_resolve_host">
-		Il DNS non ha potuto risolvere il nome dell’host([HOSTNAME]). 
-Verifica di riuscire a connetterti al sito web www.secondlife.com. 
-Se riesci ma continui a ricevere questo errore, visita la sezione 
-Assistenza e segnala il problema.
+	<string name="Yes">
+		Sì
 	</string>
-	<string name="ssl_peer_certificate">
-		Il server per il login non ha potuto effettuare la verifica tramite SSL. 
-Se continui a ricevere questo errore, visita 
-la sezione Assistenza nel sito SecondLife.com 
-e segnala il problema.
+	<string name="No">
+		No
 	</string>
-	<string name="ssl_connect_error">
-		Spesso l’errore è dovuto all’orologio del computer, impostato incorrettamente. 
-Vai al Pannello di Controllo e assicurati che data e ora siano 
-esatte. Controlla anche che il network e il firewall siano impostati 
-correttamente. Se continui a ricevere questo errore, visita la sezione 
-Assistenza nel sito SecondLife.com e segnala il problema. 
-
-[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 Base conoscenze]
+	<string name="FSUrlEntryWearLabel">
+		Indossa cartella dell'inventario
+	</string>
+	<string name="TexturePickerOutfitHeader">
+		Immagine dell'elemento
+	</string>
+	<string name="unknown_script">
+		(Script sconosciuto)
+	</string>
+	<string name="FSAreaSearch_Cost_Label">
+		[COST]L$
+	</string>
+	<string name="ImportingWindlightBulk">
+		Importazione Windlight...
+	</string>
+	<string name="FSObjectInventoryNoElements">
+		Nessun elemento
+	</string>
+	<string name="FSObjectInventoryOneElement">
+		1 elemento
+	</string>
+	<string name="FSObjectInventoryElements">
+		[NUM_ELEMENTS] elementi
+	</string>
+	<string name="OpenSimInventoryValidationErrorGenericHelp">
+		il team di supporto del tuo Grid Operator
 	</string>
 </strings>
