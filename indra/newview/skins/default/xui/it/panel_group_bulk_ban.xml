@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Espelli utenti" name="bulk_ban_panel">
+<panel label="Ban dal gruppo" name="bulk_ban_panel">
 	<panel.string name="loading">
 		(caricamento...)
 	</panel.string>
 	<panel.string name="ban_selection_too_large">
-		Espulsioni di gruppo non inviate: troppi utenti selezionati Le espulsioni di gruppo possono includere un massimo di 100 persone per ciascuna richiesta.
+		Ban dal gruppo non inviati: troppi utenti selezionati. I ban dal gruppo possono includere un massimo di 100 persone per ciascuna richiesta.
 	</panel.string>
 	<panel.string name="ban_not_permitted">
-		Espulsione di gruppo non inviata: non hai l&apos;abilità &apos;Gestisci lista espulsi&apos;.
+		Ban dal gruppo non inviati: non hai l&apos;abilità &apos;Gestisci lista bannati&apos;.
 	</panel.string>
 	<panel.string name="ban_limit_fail">
-		Espulsione di gruppo non inviata: il gruppo ha raggiunto il numero massimo di espulsioni consentite.
+		Ban dal gruppo non inviati: il gruppo ha raggiunto il numero massimo di bannati consentiti.
 	</panel.string>
 	<panel.string name="partial_ban">
-		Alcune espulsioni di gruppo non sono state inviate:
+		Alcuni ban dal gruppo non sono stati inviati:
 [REASONS]
 	</panel.string>
 	<panel.string name="ban_failed">
-		Le espulsioni di gruppo non sono state inviate:
+		I ban dal gruppo non sono stati inviati:
 [REASONS]
 	</panel.string>
 	<panel.string name="residents_already_banned">
-		- Gli utenti seguenti sono già stati espulsi: [RESIDENTS].
+		- I seguenti utenti sono già stati bannati: [RESIDENTS].
 	</panel.string>
 	<panel.string name="ban_limit_reached">
-		- È stato raggiunto il numero massimo di espulsioni; i seguenti utenti non sono stati espulsi: [RESIDENTS].
+		- È stato raggiunto il numero massimo di bannati; i seguenti utenti non sono stati bannati: [RESIDENTS].
 	</panel.string>
 	<panel.string name="cant_ban_yourself">
-		- Non puoi espellerti dal gruppo.
+		- Non puoi bannare te stesso dal gruppo.
 	</panel.string>
 	<text name="help_text">
-		Puoi selezionare più utenti da espellere dal gruppo. Per iniziare, fai clic su &apos;Apri il selettore di residenti&apos;.
+		Puoi selezionare più utenti da bannare dal gruppo. Per iniziare, fai clic sul pulsante qui sotto.
 	</text>
-	<button label="Apri il selettore di residenti" name="add_button"/>
-	<name_list name="banned_agent_list" tool_tip="Tieni premuto Ctrl e fai clic sui nomi degli utenti per selezionare più nomi"/>
-	<button label="Rimuovi i selezionati dalla lista" name="remove_button" tool_tip="Rimuove gli utenti selezionati dalla lista espulsi"/>
-	<button label="Espelli utenti" name="ban_button"/>
+	<button label="Seleziona utenti" name="add_button"/>
+	<name_list name="banned_agent_list" tool_tip="Tieni premuto Ctrl e clicca sui nomi degli utenti per selezionare più nomi"/>
+	<button label="Rimuovi i selezionati dall'elenco" name="remove_button" tool_tip="Rimuovi i nomi selezionati dall'elenco degli utenti da bannare"/>
+	<button label="Ban dal gruppo" name="ban_button"/>
 	<button label="Annulla" name="cancel_button"/>
 	<string name="GroupBulkBan">
-		Espulsione di gruppo
+		Ban dal gruppo
 	</string>
 </panel>

@@ -4,7 +4,7 @@
 		Indossa l&apos;abito selezionato
 	</panel.string>
 	<panel.string name="wear_items_tooltip">
-		Indossa capi selezionati
+		Indossa indumenti selezionati
 	</panel.string>
 	<panel.string name="cof_tab_label">
 		Indossati (ora: [COUNT]/[MAX])

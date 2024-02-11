@@ -44,7 +44,7 @@
 		<panel name="media_controls_panel">
 			<layout_stack name="media_controls">
 				<layout_panel name="stop">
-					<button name="stop_btn" tool_tip="Interrompi supporto selezionato"/>
+					<button name="stop_btn" tool_tip="Interrompi media selezionato"/>
 				</layout_panel>
 				<layout_panel name="play">
 					<button name="play_btn" tool_tip="Riproduci media selezionato"/>
@@ -56,7 +56,7 @@
 					<slider_bar name="volume_slider" tool_tip="Volume audio per il media selezionato"/>
 				</layout_panel>
 				<layout_panel name="mute">
-					<button name="mute_btn" tool_tip="Disattiva audio dei supporti selezionati"/>
+					<button name="mute_btn" tool_tip="Disattiva audio dei media selezionati"/>
 				</layout_panel>
 				<layout_panel name="zoom">
 					<button name="zoom_btn" tool_tip="Zoom nel media selezionato"/>

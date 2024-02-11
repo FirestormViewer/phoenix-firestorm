@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="wearable_item">
-	<panel name="btn_lock" tool_tip="Non hai diritti di modifica"/>
+	<panel name="btn_lock" tool_tip="Non hai il permesso di modifica"/>
 	<panel name="btn_edit_panel">
-		<button name="btn_edit" tool_tip="Modifica figura"/>
+		<button name="btn_edit" tool_tip="Modifica questa parte del corpo"/>
 	</panel>
 </panel>

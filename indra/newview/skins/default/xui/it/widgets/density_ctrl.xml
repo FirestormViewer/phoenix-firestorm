@@ -1,2 +1,21 @@
-<?xml version="1.0" ?>
-<densityctrl name="density_ctrl" label="Densità"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<densityctrl label="Densità" name="density_ctrl">
+	<text name="exponential_term_label">
+		Durata esponenziale
+	</text>
+	<text name="exponential_scale_factor_label">
+		Fattore di scala esponenziale
+	</text>
+	<text name="linear_term_label">
+		Durata lineare
+	</text>
+	<text name="constant_term_label">
+		Durata fissa
+	</text>
+	<text name="max_altitude_label">
+		Altitudine massima
+	</text>
+	<text name="aniso_factor_label">
+		Fattore di anisotropia
+	</text>
+</densityctrl>

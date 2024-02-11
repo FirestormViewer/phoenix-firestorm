@@ -1,6 +1,4 @@
-<picture>
-  <img alt="Firestorm Viewer Logo" src="doc/firestorm_256.png">
-</picture>
+![Firestorm Viewer Logo](doc/firestorm_256.png)
 
 **[Firestorm](https://www.firestormviewer.org/) is a free client for 3D virtual worlds such as Second Life and various OpenSim worlds where users can create, connect and chat with others from around the world.** This repository contains the official source code for the Firestorm viewer.
 
@@ -14,15 +12,14 @@ Pre-built versions of the viewer releases for Windows, Mac and Linux can be down
 
 ## Build Instructions
 
-Build instructions for each operating system can be found in the official [wiki](https://wiki.firestormviewer.org/).
+Build instructions for each operating system can be found using the links below and in the official [wiki](https://wiki.firestormviewer.org/).
 
-- [Windows](https://wiki.firestormviewer.org/fs_compiling_firestorm_windows)
+- [Windows](doc/building_windows.md)
+- [Mac](doc/building_macos.md)
+- [Linux](doc/building_linux.md)
 
-- [Mac](https://wiki.firestormviewer.org/fs_compiling_firestorm_macos)
-
-- [Linux](https://wiki.firestormviewer.org/fs_compiling_firestorm_linux)
-
-Please note that we do not provide support for compiling the viewer or issues resulting from using a self-compiled viewer. However, there is a self-compilers group within Second Life that can be joined to ask questions related to compiling the viewer: [Firestorm Self Compilers](secondlife:///app/group/2014ce4c-5393-fb67-83ac-910db84c273c/about)
+> [!NOTE]
+> We do not provide support for compiling the viewer or issues resulting from using a self-compiled viewer. However, there is a self-compilers group within Second Life that can be joined to ask questions related to compiling the viewer: [Firestorm Self Compilers](https://tinyurl.com/firestorm-self-compilers)
 
 ## Contribute
 

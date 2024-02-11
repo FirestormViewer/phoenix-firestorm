@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Preferiti" name="panel_picks">
-	<string name="no_picks" value="Nessun preferito"/>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_picks" label="Preferiti">
+	<string name="no_picks" value="Nessun luogo preferito" />
 	<layout_stack name="main_stack">
 		<layout_panel name="buttons_header">
 			<text name="header_text">
-				Comunica a tutti quali sono i tuoi posti preferiti in [GRID].
+				Mostra agli altri i tuoi luoghi preferiti in [GRID].
 			</text>
-			<button label="Nuovo..." name="new_btn"/>
-			<button label="Elimina..." name="delete_btn"/>
+			<button name="new_btn" label="Nuovo..." tool_tip="Crea un nuovo luogo preferito nella posizione attuale" />
+			<button name="delete_btn" label="Elimina..." tool_tip="Elimina il luogo preferito selezionato" />
 		</layout_panel>
 		<layout_panel name="main_body">
 			<text name="picks_panel_text">
-				Caricamento in corso...
+				Caricamento...
 			</text>
 		</layout_panel>
 	</layout_stack>

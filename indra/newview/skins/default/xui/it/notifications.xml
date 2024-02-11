@@ -494,9 +494,21 @@ Continuare?
 	<notification name="ClassifiedInsufficientFunds">
 		Denaro insufficiente per creare un&apos;inserzione.
 	</notification>
-	<notification name="DeleteAvatarPick">
-		Eliminare preferito &lt;nolink&gt;[PICK]&lt;/nolink&gt;?
+	<notification name="ProfileDeleteClassified">
+		Elimina inserzione &lt;nolink&gt;[CLASSIFIED]&lt;/nolink&gt;?
 		<usetemplate name="okcancelbuttons" notext="Annulla" />
+	</notification>
+	<notification name="ProfileDeletePick">
+		Elimina luogo preferito &lt;nolink&gt;[PICK]&lt;/nolink&gt;?
+		<usetemplate name="okcancelbuttons" notext="Annulla" />
+	</notification>
+	<notification name="ProfileUnpublishedClassified">
+		Hai degli annunci non pubblicati. Andranno persi se chiudi la finestra.
+		<usetemplate name="okcancelbuttons" notext="Annulla" />
+	</notification>
+	<notification name="ProfileUnsavedChanges">
+		Ci sono delle modifiche non salvate.
+		<usetemplate canceltext="Annulla" name="yesnocancelbuttons" notext="Ignora" yestext="Salva" />
 	</notification>
 	<notification name="DeleteOutfits">
 		Eliminare l&apos;abito selezionato?
@@ -536,7 +548,9 @@ Nota: questa operazione cancellerà la cache.
 		La modifica della impostazione di debug avrà effetto dopo il riavvio di [APP_NAME].
 	</notification>
 	<notification name="ChangeSkin">
-		Il nuovo aspetto comparirà dopo il riavvio di [APP_NAME].
+		La nuova skin apparirà dopo il riavvio di [APP_NAME].
+Vuoi riavviare il viewer adesso per applicare questa modifica?
+		<usetemplate name="okcancelbuttons" notext="Dopo" yestext="Riavvia"/>
 	</notification>
 	<notification name="ChangeLanguage">
 		La modifica della lingua avrà effetto dopo il riavvio di [APP_NAME].
@@ -551,7 +565,7 @@ Nota: questa operazione cancellerà la cache.
 	</notification>
 	<notification name="DeleteNotecard">
 		Eliminare l'annotazione?
-		<usetemplate name="okcancelbuttons" notext="Annulla" />
+		<usetemplate ignoretext="Conferma l'eliminazione di un'annotazione" name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="LoadPreviousReportScreenshot">
 		Usare la cattura schermo precedente per questo rapporto?
@@ -611,7 +625,7 @@ L&apos;oggetto potrebbe essere troppo lontano oppure essere stato cancellato.
 		Il computer non dispone dei requisiti minimi di sistema per [APP_NAME]. Il funzionamento può pertanto risultare ridotto. Purtroppo la pagina [SUPPORT_SITE] non può fornire assistenza tecnica in caso di problemi dovuti a configurazioni di sistema non compatibili.
 
 Visitare [_URL] per ulteriori informazioni?
-		<usetemplate ignoretext="L&apos;hardware di questo computer non è compatibile" name="okcancelignore" notext="No" yestext="Si"/>
+		<usetemplate ignoretext="L&apos;hardware di questo computer non è supportato" name="okcancelignore" notext="No" yestext="Si"/>
 	</notification>
 	<notification name="RunLauncher">
 		Non lanciare direttamente l&apos;eseguibile del viewer. Aggiornare i collegamenti esistenti per eseguire SL_Launcher.
@@ -842,6 +856,12 @@ Riprova più tardi.
 	</notification>
 	<notification name="CannotCreateLandmarkNotOwner">
 		Non puoi creare qui un segnaposto perchè il proprietario di questo terreno non lo consente.
+	</notification>
+	<notification label="Crea nuova cartella" name="CreateLandmarkFolder">
+		Scegli un nome per la cartella:
+		<form name="form">
+			<button name="Cancel" text="Annulla" />
+		</form>
 	</notification>
 	<notification name="CannotRecompileSelectObjectsNoScripts">
 		Impossibile fare la &apos;ricompilazione&apos;.
@@ -1182,7 +1202,7 @@ Vedi https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 			<button name="Cancel" text="Annulla"/>
 		</form>
 	</notification>
-	<notification label="Salva capo da indossare" name="SaveWearableAs">
+	<notification label="Salva elemento da indossare" name="SaveWearableAs">
 		Salva oggetto nel mio inventario come:
 		<form name="form">
 			<input name="message">
@@ -2224,6 +2244,13 @@ Ridigita la tua password e premi OK.
 		Nota:
 Hai aggiornato l&apos;ubicazione di questo preferito ma gli altri dettagli conserveranno il loro valore originale.
 	</notification>
+	<notification name="ApplyInventoryToObject">
+		Stai applicando l'opzione "nessuna copia" ad un elemento nell'inventario.
+Questo elemento verrà spostato nell'inventario dell'oggetto, non copiato.
+
+Spostare l'elemento?
+		<usetemplate ignoretext="Avvisami prima di applicare elementi non copiabili ad un oggetto." name="okcancelignore" notext="Annulla" yestext="On"/>
+	</notification>
 	<notification name="MoveInventoryFromObject">
 		Hai selezionato elementi dall&apos;inventario &apos;non copiabili&apos;.
 Questi elementi verranno trasferiti nel tuo inventario, ma non copiati.
@@ -2292,7 +2319,20 @@ Questa azione non può essere annullata.
 		L'inventario è filtrato e non tutti gli elementi che si stanno per cancellare sono visibili.
 
 Confermare la cancellazione?
-		<usetemplate ignoretext="Confirm before deleting filtered items" name="okcancelignore" notext="Annulla" />
+		<usetemplate ignoretext="Conferma prima di eliminare gli elementi filtrati" name="okcancelignore" notext="Annulla" />
+	</notification>
+	<notification name="DeleteThumbnail">
+		Eliminare l'immagine di questo elemento? Non sarà possibile annullare.
+		<usetemplate ignoretext="Conferma prima di eliminare l'immagine di un elemento in inventario." name="okcancelignore" notext="Annulla" yestext="Elimina" />
+	</notification>
+	<notification name="ThumbnailDimentionsLimit">
+		Sono consentite solo immagini quadrate da 64 a 256 pixel per lato.
+	</notification>
+	<notification name="ThumbnailInsufficientPermissions">
+		È possibile impostare come immagine di un elemento in inventario soltanto le immagini copiabili e trasferibili.
+	</notification>
+	<notification name="ThumbnailOutfitPhoto">
+		Per aggiungere l'immagine ad un abito, utilizza la finestra Aspetto - Galleria oppure clicca con il pulsante destro del mouse sulla cartella dell'abito e seleziona "Immagine..."
 	</notification>
 	<notification name="ConfirmUnlink">
 		Scollegare l&apos;oggetto selezionato?
@@ -2407,6 +2447,12 @@ Vuoi disattivare la modalità Non disturbare prima di completare questa transazi
 	<notification name="ConfirmEmptyLostAndFound">
 		Eliminare in modo definitivo il contenuto degli Oggetti smarriti?
 		<usetemplate ignoretext="Conferma prima di svuotare della cartella Oggetti smarriti" name="okcancelignore" notext="No" yestext="Si"/>
+	</notification>
+	<notification name="ConfirmReplaceLink">
+		Stai per sostituire un link a una parte del corpo di tipo "[TYPE]" con un elemento che non corrisponde a quel tipo.
+
+Sei sicuro di voler procedere?
+		<usetemplate ignoretext="Conferma prima di sostituire un link" name="okcancelignore" notext="No" yestext="Sì" />
 	</notification>
 	<notification name="CopySLURL">
 		Lo SLurl seguente è stato copiato negli appunti:
@@ -2613,6 +2659,12 @@ Questo potrebbe incidere sulla tua password.
 	<notification name="NotecardNoPermissions">
 		Non hai il permesso di vedere questa annotazione.
 	</notification>
+	<notification name="MaterialMissing">
+		Il materiale non è stato trovato nel database.
+	</notification>
+	<notification name="MaterialNoPermissions">
+		Non hai il permesso per visualizzare questo materiale.
+	</notification>
 	<notification name="RezItemNoPermissions">
 		Permessi insufficienti per creare un oggetto/i.
 	</notification>
@@ -2624,6 +2676,17 @@ Questo potrebbe incidere sulla tua password.
 	</notification>
 	<notification name="UnableToLoadNotecard">
 		Impossibile caricare l'annotazione. Riprovare.
+	</notification>
+	<notification name="UnableToLoadMaterial">
+		Impossibile caricare il materiale.
+Prova di nuovo.
+	</notification>
+	<notification name="MissingMaterialCaps">
+		Non sei connesso ad una regione che supporta i materiali.
+	</notification>
+	<notification name="CantSelectReflectionProbe">
+		Hai posizionato una sonda di riflessione, ma l'opzione 'Seleziona sonde di riflessione' è disabilitata. Per poter selezionare le sonde di riflessione, metti la spunta su: Costruisci > Opzioni > Seleziona sonde di riflessione.
+		<usetemplate ignoretext="Avvisami se l'opzione 'Seleziona sonde di riflessione' è disabilitata." name="okignore" yestext="Ok"/>
 	</notification>
 	<notification name="ScriptMissing">
 		Script non trovato nel database.
@@ -3388,8 +3451,8 @@ Per sicurezza, verranno bloccati per alcuni secondi.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="BulkUploadCostConfirmation">
-		Questo caricherà [COUNT] oggetti a un costo totale di [COST]L$. Vuoi continuare con il caricamento?
-		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="Carica"/>
+		Questo caricherà [COUNT] oggetti ad un costo totale di [COST]L$. Vuoi continuare con il caricamento?
+		<usetemplate name="okcancelignore" ignoretext="Conferma i caricamenti in blocco" notext="Annulla" yestext="Carica"/>
 	</notification>
 	<notification name="BulkUploadNoCompatibleFiles">
 		I file selezionati non possono essere caricati.
@@ -3433,7 +3496,7 @@ Per informazioni dettagliate, vedi il file del registro firestorm.log
 Con i seguenti residenti:
 
 &lt;nolink&gt;[RESIDENTS]&lt;/nolink&gt;
-		<usetemplate name="okcancelbuttons" notext="Annulla" />
+		<usetemplate ignoretext="Conferma prima di condividere un elemento" name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="ShareFolderConfirmation">
 		Si può condividere solo una cartella alla volta.
@@ -3542,9 +3605,50 @@ Hai aggiornato localmente una texture [RESOLUTION] completata per &apos;[BODYREG
 		Impossibile caricare la texture.
 [REASON]
 	</notification>
+	<notification name="CannotUploadMaterial">
+		Si è verificato un problema durante il caricamento del file.
+	</notification>
+	<notification label="Salva materiale" name="SaveMaterialAs">
+		Nome materiale:
+		<form name="form">
+			<button name="OK" text="Ok"/>
+			<button name="Cancel" text="Annulla"/>
+		</form>
+	</notification>
+	<notification name="InvalidMaterialName">
+		Inserisci un nome
+	</notification>
+	<notification name="UsavedMaterialChanges">
+		Sono presenti modifiche non salvate.
+		<form name="form">
+			<button name="discard" text="Ignora modifiche"/>
+			<button name="keep" text="Continua a modificare"/>
+		</form>
+	</notification>
 	<notification name="LivePreviewUnavailable">
-		Non possiamo mostrare un&apos;anteprima di questa texture perché non ne è consentita la copia e/o il trasferimento.
-		<usetemplate ignoretext="Avvisami se la modalità Anteprima dal vivo non è disponibile per texture per cui non è consentita la copia e/o il trasferimento." name="okignore" />
+		Non è possibile visualizzare l'anteprima di questa texture perché non ne è consentita la copia e/o il trasferimento.
+		<usetemplate ignoretext="Avvisami se la modalità Anteprima non è disponibile per le texture non copiabili e/o non trasferibili." name="okignore" yestext="Ok" />
+	</notification>
+	<notification name="LivePreviewUnavailablePBR">
+		Non è possibile visualizzare l'anteprima di questo materiale perché non è copiabile, trasferibile e/o modificabile.
+		<usetemplate ignoretext="Avvisami se la modalità Anteprima non è disponibile per i materiali non copiabili, non trasferibili e/o non modificabili." name="okignore" yestext="Ok"/>
+	</notification>
+	<notification name="FacePasteFailed">
+		Inserimento non riuscito. [REASON]
+		<usetemplate name="okbutton" yestext="Ok"/>
+	</notification>
+	<notification name="FailedToApplyTextureNoCopyToMultiple">
+		Impossibile applicare la texture. Non è possibile applicare una texture non copiabile a più oggetti.
+		<usetemplate name="okbutton" yestext="Ok"/>
+	</notification>
+	<notification name="FailedToApplyGLTFNoCopyToMultiple">
+		Impossibile applicare il materiale GLTF. Non è possibile applicare un materiale non copiabile a più oggetti.
+		<usetemplate name="okbutton" yestext="Ok"/>
+	</notification>
+	<notification name="FacePasteTexturePermissions">
+		Hai applicato una texture con permessi limitati, l'oggetto erediterà i permessi dalla texture.
+		<usetemplate ignoretext="Incolla: hai applicato una texture con permessi limitati" name="notifyignore"/>
+		<usetemplate name="okbutton" yestext="Ok"/>
 	</notification>
 	<notification name="ConfirmLeaveCall">
 		Uscire dalla chiamata?
@@ -3705,56 +3809,56 @@ Confermare l&apos;uscita?
 		<usetemplate ignoretext="Conferma prima di nascondere l&apos;interfaccia" name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="PathfindingLinksets_WarnOnPhantom">
-		L&apos;indicatore oggetto fantasma di alcuni set collegati verrà commutato.
+		Il flag oggetto fantasma di alcuni linkset verrà commutato.
 
 Continuare?
-		<usetemplate ignoretext="L&apos;indicatore oggetto fantasma di alcuni set collegati verrà commutato." name="okcancelignore" notext="Annulla" />
+		<usetemplate ignoretext="Il flag oggetto fantasma di alcuni linkset verrà commutato." name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="PathfindingLinksets_MismatchOnRestricted">
-		Alcuni set collegati selezionati non possono essere impostati su &apos;[REQUESTED_TYPE]&apos; a causa di limitazioni nelle autorizzazioni per i set collegati.  Questi set collegati verranno invece impostati su &apos;[RESTRICTED_TYPE]&apos;.
+		Alcuni linkset selezionati non possono essere impostati su &apos;[REQUESTED_TYPE]&apos; a causa di limitazioni nelle autorizzazioni per i linkset.  Questi linkset verranno invece impostati su &apos;[RESTRICTED_TYPE]&apos;.
 
 Continuare?
-		<usetemplate ignoretext="Alcuni set collegati selezionati non possono essere impostati a causa di limitazioni nelle autorizzazioni per i set collegati." name="okcancelignore" notext="Annulla" />
+		<usetemplate ignoretext="Alcuni linkset selezionati non possono essere impostati a causa di limitazioni nelle autorizzazioni per i linkset." name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="PathfindingLinksets_MismatchOnVolume">
-		Alcuni set collegati selezionati non possono essere impostati a &apos;[REQUESTED_TYPE]&apos; perché la forma è non-convessa.
+		Alcuni linkset selezionati non possono essere impostati a &apos;[REQUESTED_TYPE]&apos; perché la forma è non-convessa.
 
 Continuare?
-		<usetemplate ignoretext="Alcuni set collegati selezionati non possono essere impostati perché la forma è non-convessa." name="okcancelignore" notext="Annulla" />
+		<usetemplate ignoretext="Alcuni linkset selezionati non possono essere impostati perché la forma è non-convessa." name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted">
-		L&apos;indicatore oggetto fantasma di alcuni set collegati verrà commutato.
+		Il flag oggetto fantasma di alcuni linkset verrà commutato.
 
-Alcuni set collegati selezionati non possono essere impostati su &apos;[REQUESTED_TYPE]&apos; a causa di limitazioni nelle autorizzazioni per i set collegati.  Questi set collegati verranno invece impostati su &apos;[RESTRICTED_TYPE]&apos;.
+Alcuni linkset selezionati non possono essere impostati su &apos;[REQUESTED_TYPE]&apos; a causa di limitazioni nelle autorizzazioni per i linkset.  Questi linkset verranno invece impostati su &apos;[RESTRICTED_TYPE]&apos;.
 
 Continuare?
-		<usetemplate ignoretext="L&apos;indicatore oggetto fantasma per alcuni set collegati selezionati verrà commutato, mentre quello degli altri non può essere impostato a causa di limitazioni nelle autorizzazioni per i set collegati." name="okcancelignore" notext="Annulla" />
+		<usetemplate ignoretext="Il flag oggetto fantasma per alcuni linkset selezionati verrà commutato, mentre quello degli altri non può essere impostato a causa di limitazioni nelle autorizzazioni per i linkset." name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnVolume">
-		L&apos;indicatore oggetto fantasma di alcuni set collegati verrà commutato.
+		Il flag oggetto fantasma di alcuni linkset verrà commutato.
 
-Alcuni set collegati selezionati non possono essere impostati a &apos;[REQUESTED_TYPE]&apos; perché la forma è non-convessa.
+Alcuni linkset selezionati non possono essere impostati a &apos;[REQUESTED_TYPE]&apos; perché la forma è non-convessa.
 
 Continuare?
-		<usetemplate ignoretext="L&apos;indicatore oggetto fantasma per alcuni set collegati selezionati verrà commutato, mentre quello degli altri non può essere impostato perché la forma è non-convessa." name="okcancelignore" notext="Annulla" />
+		<usetemplate ignoretext="Il flag oggetto fantasma per alcuni linkset selezionati verrà commutato, mentre quello degli altri non può essere impostato perché la forma è non-convessa." name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="PathfindingLinksets_MismatchOnRestricted_MismatchOnVolume">
-		Alcuni set collegati selezionati non possono essere impostati su &apos;[REQUESTED_TYPE]&apos; a causa di limitazioni nelle autorizzazioni per i set collegati.  Questi set collegati verranno invece impostati su &apos;[RESTRICTED_TYPE]&apos;.
+		Alcuni linkset selezionati non possono essere impostati su &apos;[REQUESTED_TYPE]&apos; a causa di limitazioni nelle autorizzazioni per i linkset.  Questi linkset verranno invece impostati su &apos;[RESTRICTED_TYPE]&apos;.
 
-Alcuni set collegati selezionati non possono essere impostati a &apos;[REQUESTED_TYPE]&apos; perché la forma è non-convessa. Il tipo di utilizzo di questi set collegati non cambierà.
+Alcuni linkset selezionati non possono essere impostati a &apos;[REQUESTED_TYPE]&apos; perché la forma è non-convessa. Il tipo di utilizzo di questi linkset non cambierà.
 
 Continuare?
-		<usetemplate ignoretext="Alcuni set collegati selezionati non possono essere impostati a causa delle limitazioni nelle autorizzazioni per il set collegato e perché la forma è non-convessa." name="okcancelignore" notext="Annulla" />
+		<usetemplate ignoretext="Alcuni linkset selezionati non possono essere impostati a causa delle limitazioni nelle autorizzazioni per il linkset e perché la forma è non-convessa." name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted_MismatchOnVolume">
-		L&apos;indicatore oggetto fantasma di alcuni set collegati verrà commutato.
+		Il flag oggetto fantasma di alcuni linkset verrà commutato.
 
-Alcuni set collegati selezionati non possono essere impostati su &apos;[REQUESTED_TYPE]&apos; a causa di limitazioni nelle autorizzazioni per i set collegati.  Questi set collegati verranno invece impostati su &apos;[RESTRICTED_TYPE]&apos;.
+Alcuni linkset selezionati non possono essere impostati su &apos;[REQUESTED_TYPE]&apos; a causa di limitazioni nelle autorizzazioni per i linkset.  Questi linkset verranno invece impostati su &apos;[RESTRICTED_TYPE]&apos;.
 
-Alcuni set collegati selezionati non possono essere impostati a &apos;[REQUESTED_TYPE]&apos; perché la forma è non-convessa. Il tipo di utilizzo di questi set collegati non cambierà.
+Alcuni linkset selezionati non possono essere impostati a &apos;[REQUESTED_TYPE]&apos; perché la forma è non-convessa. Il tipo di utilizzo di questi linkset non cambierà.
 
 Continuare?
-		<usetemplate ignoretext="L&apos;indicatore oggetto fantasma per alcuni set collegati selezionati verrà commutato, mentre quello degli altri non può essere impostato a causa delle limitazioni nelle autorizzazioni per il set collegato e perché la forma è non-convessa." name="okcancelignore" notext="Annulla" />
+		<usetemplate ignoretext="Il flag oggetto fantasma per alcuni linkset selezionati verrà commutato, mentre quello degli altri non può essere impostato a causa delle limitazioni nelle autorizzazioni per il linkset e perché la forma è non-convessa." name="okcancelignore" notext="Annulla" />
 	</notification>
 	<notification name="PathfindingLinksets_ChangeToFlexiblePath">
 		L&apos;oggetto selezionato influenza il navmesh.  Se lo si trasforma in un percorso flessibile verrà rimosso dal navmesh.
@@ -3962,6 +4066,11 @@ Valore attuale: [CURRENT_VALUE]
 			<ignore name="ignore" text="Una impostazione non ha superato il controllo di correttezza."/>
 		</form>
 	</notification>
+	<notification name="DefaultLabelMissing">
+		<usetemplate ignoretext="Uno script LSL ha un'istruzione switch senza un'etichetta predefinita" name="notifyignore" />
+Il comportamento delle istruzioni switch() senza un caso predefinito era precedentemente errato ed è stato corretto.
+Per i dettagli vedere FIRE-17710.
+	</notification>
 	<notification name="TeleportToAvatarNotPossible">
 		Non è possibile teleportarsi verso questo avatar perché la sua esatta posizione è sconosciuta.
 	</notification>
@@ -3996,12 +4105,19 @@ Abilitare l&apos;invio automatico della versione?
 		[FNAME] non è stato aggiornato perché il file non è stato più trovato.
 Gli aggiornamenti futuri per questo file sono disattivati.
 	</notification>
+	<notification name="NoTransNoSaveToContents">
+		Impossibile salvare &lt;nolink&gt;„[OBJ_NAME]“&lt;/nolink&gt; nei contenuti dell'oggetto perché non disponi dell'autorizzazione per trasferire la proprietà dell'oggetto.
+	</notification>
 	<notification name="LocalBitmapsUpdateFailedFinal">
 		[FNAME] non è stato aperto o decodificato dopo [NRETRIES] tentativi, viene considerato danneggiato.
 Gli aggiornamenti futuri per questo file sono disattivati.
 	</notification>
 	<notification name="LocalBitmapsVerifyFail">
-		Tentativo di aggiungere un file immagine [FNAME] non valido o non leggibile che non è stato possibile aprire o decodificare.
+		Tentativo di aggiungere un file immagine ([FNAME]) non valido o illeggibile che non è stato possibile aprire o decodificare.
+Tentativo annullato.
+	</notification>
+	<notification name="LocalGLTFVerifyFail">
+		Tentativo di aggiungere un materiale GLTF ([FNAME]) non valido o illeggibile che non è stato possibile aprire o decodificare.
 Tentativo annullato.
 	</notification>
 	<notification name="PathfindingReturnMultipleItems">
@@ -4686,13 +4802,27 @@ Prova a selezionare un pezzo di terreno più piccolo.
 	<notification name="RLVaListRequested" label="Richiesta elenco restrizioni da [NAME_LABEL]">
 		[NAME_SLURL] ha richiesto la lista delle restrizioni RLV attive.
 		<form name="form">
-			<button name="Allow" text="Permetti"/>
+			<button name="Allow" text="Consenti"/>
+			<button name="Always Allow" text="Consenti sempre"/>
 			<button name="Deny" text="Nega"/>
+			<ignore name="ignore" text="Conferma prima di inviare a qualcuno l'elenco delle mie attuali restrizioni RLV."/>
 		</form>
+	</notification>
+	<notification name="InventoryValidationFailed" label="Errori di convalida dell'inventario">
+		Gli elementi nel tuo inventario sono stati corrotti.
+Contatta [HELP] con il seguente elenco di problemi.
+Potrai utilizzare http://opensimulator.org/wiki/inventory per risolvere i problemi.
+
+[ERRORS]
+		<usetemplate ignoretext="Avvisami se sono stati rilevati errori di convalida dell'inventario." name="okignore" />
 	</notification>
 	<notification name="PreferenceChatClearLog">
 		Verranno cancellati i registri delle conversazioni precedenti e tutti gli eventuali backup di quel file.
 		<usetemplate ignoretext="Conferma prima di cancellare il registro delle conversazioni precedenti." name="okcancelignore" notext="Annulla" />
+	</notification>
+	<notification name="PreferenceControlsDefaults">
+		Vuoi ripristinare i valori predefiniti per i controlli?
+		<usetemplate canceltext="Annulla" name="yesnocancelbuttons" notext="Modalità corrente" yestext="Tutte le modalità" />
 	</notification>
 	<notification name="PreferenceChatDeleteTranscripts">
 		Verranno cancellate le trascrizioni di tutte le conversazioni precedenti. L&apos;elenco delle conversazioni passate non cambierà. Tutti i file con i suffissi .txt e txt.backup nella cartella [FOLDER] verranno cancellati.
@@ -4704,6 +4834,15 @@ Prova a selezionare un pezzo di terreno più piccolo.
 	</notification>
 	<notification name="DefaultObjectPermissions">
 		Si è verificato un problema nel salvare le autorizzazioni predefinite dell&apos;oggetto: [REASON].  Riprovare più tardi.
+	</notification>
+	<notification name="AddPaymentMethod">
+		Nella pagina successiva, scegli 
+l'importo L$ e clicca su Ordina. Potrai 
+aggiungere un metodo di pagamento al checkout.
+		<form name="form">
+			<button name="Continue" text="Continua" />
+			<button name="Cancel" text="Annulla" />
+		</form>
 	</notification>
 	<notification name="LSLColorCopiedToClipboard">
 		Il codice colore LSL è stato copiato negli appunti. Ora può essere incollato nello script.it.
@@ -4725,6 +4864,13 @@ Simulatore precedente: [OLDVERSION]
 	<notification name="RegExFail">
 		Errore nella RegEx:
 [EWHAT]
+	</notification>
+	<notification name="NoHavok">
+		Alcune funzioni come [FEATURE] non sono incluse in questa versione di [APP_NAME]. Se desideri utilizzare [FEATURE], scarica una versione di [APP_NAME] contenente il supporto Havok da
+[DOWNLOAD_URL]
+		<form name="form">
+			<ignore name="ignore" text="Avviso sul supporto Havok mancante"/>
+		</form>
 	</notification>
 	<notification name="StreamListExportSuccess">
 		La lista degli stream è stata esportata in XML su [FILENAME].
@@ -4920,5 +5066,167 @@ Gli acquisti di valuta fatti attraverso Firestorm sono transazioni tra voi (l&ap
 Né Firestorm Viewer, né Phoenix Firestorm Viewer Project Inc. o la sua squadra possono essere ritenuti responsabili di spese o danni legati direttamente o indirettamente a queste transazioni.
 Se non si ritiene di aderire a questi termini d&apos;uso, non effettuare transazioni usando questo viewer.
 		<usetemplate ignoretext="La regione attiva un nuovo portale per la valuta." name="okignore" />
+	</notification>
+	<notification name="EnableHiDPI">
+		L'abilitazione del supporto HiDPI potrebbe avere effetti negativi e ridurre le prestazioni.
+	</notification>
+	<notification name="FailedToFindSettings">
+		Impossibile caricare le impostazioni per [NAME] dal database.
+	</notification>
+	<notification name="FailedToLoadSettingsApply">
+		Queste impostazioni non possono essere applicate all'ambiente.
+	</notification>
+	<notification name="FailedToBuildSettingsDay">
+		Nie można zastosować tych ustawień do otoczenia.
+	</notification>
+	<notification name="NoEnvironmentSettings">
+		Questa regione non supporta le impostazioni ambientali.
+	</notification>
+	<notification label="Salva impostazioni ambientali" name="SaveSettingAs">
+		Salva le impostazioni ambientali correnti come:
+		<form name="form">
+			<input name="message">
+				[DESC] (nuovo)
+			</input>
+			<button name="Cancel" text="Annulla" />
+		</form>
+	</notification>
+	<notification name="WLImportFail">
+		Impossibile importare le impostazioni legacy di Windlight [NAME] da
+[FILE].
+
+[REASONS]
+	</notification>
+	<notification name="WLParcelApplyFail">
+		Impossibile impostare l'ambiente per questo lotto.
+Inserisci o seleziona un lotto per il quale hai il permesso di modifica.
+	</notification>
+	<notification name="SettingsUnsuported">
+		Le impostazioni ambientali non sono supportate in questa regione.
+Spostati in una regione con le impostazioni ambientali abilitate e riprova.
+	</notification>
+	<notification name="SettingsConfirmLoss">
+		Stai per perdere le modifiche apportate a questo [TYPE] denominato "[NAME]".
+Sei sicuro di voler continuare?
+		<usetemplate ignoretext="Sei sicuro di voler perdere le modifiche?" name="okcancelignore" notext="No" yestext="Sì" />
+	</notification>
+	<notification name="SettingsConfirmReset">
+		Stai per rimuovere tutte le impostazioni ambientali applicate.
+Sei sicuro di voler continuare?
+		<usetemplate name="okcancelbuttons" notext="No" yestext="Sì" />
+	</notification>
+	<notification name="PersonalSettingsConfirmReset">
+		Stai per rimuovere tutte le impostazioni di Illuminazione personale applicate.
+Sei sicuro di voler continuare?
+		<usetemplate name="okcancelbuttons" notext="No" yestext="Sì" />
+	</notification>
+	<notification name="SettingsMakeNoTrans">
+		Stai per importare impostazioni ambientali non trasferibili in questo Ciclo Giornata. Continuando, anche le impostazioni ambientali che si stanno modificando diventeranno non trasferibili.
+
+Questa modifica non può essere annullata.
+
+Sei sicuro di voler continuare?
+		<usetemplate ignoretext="Sei sicuro di voler rendere le impostazioni ambientali non trasferibili?" name="okcancelignore" notext="No" yestext="Sì" />
+	</notification>
+	<notification name="NoEditFromLibrary">
+		Non puoi modificare le impostazioni ambientali direttamente dalla biblioteca.
+Copiale nel tuo inventario e riprova.
+	</notification>
+	<notification name="EnvironmentApplyFailed">
+		Sono stati riscontrati dei problemi con queste impostazioni ambientali. Non possono essere salvate o applicate in questo momento.
+	</notification>
+	<notification name="TrackLoadFailed">
+		Impossibile caricare la traccia in [TRACK].
+	</notification>
+	<notification name="TrackLoadMismatch">
+		Impossibile caricare la traccia da [TRACK1] a [TRACK2].
+	</notification>
+	<notification name="CompressionTestResults">
+Risultato del test per la compressione dei file gzip livello 6 con [FILE] di dimensioni [SIZE]KB:
+Packing: [PACK_TIME]s [PSIZE]KB
+Unpacking: [UNPACK_TIME]s [USIZE]KB
+	</notification>
+	<notification name="PromptMFAToken">
+		[MESSAGE]
+		<form name="form">
+			<button name="continue" text="Continua" />
+			<button name="cancel" text="Annulla" />
+		</form>
+	</notification>
+	<notification name="PromptMFATokenWithSave">
+		[MESSAGE]
+		<form name="form">
+			<ignore name="ignore" text="Ricorda questo computer per 30 giorni" />
+			<button name="continue" text="Continua" />
+			<button name="cancel" text="Annulla" />
+		</form>
+	</notification>
+	<notification label="Crea una sottocartella" name="CreateSubfolder">
+		Nome della nuova cartella:
+		<form name="form">
+			<button name="Cancel" text="Annulla" />
+		</form>
+	</notification>
+	<notification name="SameFolderRequired">
+		Gli elementi selezionati devono trovarsi nella stessa cartella.
+	</notification>
+	<notification name="RiggedMeshAttachedToHUD">
+		Un oggetto "[NAME]" indossato sul punto di attacco HUD "[POINT]" contiene mesh riggate.
+
+Gli oggetti mesh riggati sono progettati per essere attaccati all'avatar. Né tu né nessun altro vedrete questo oggetto.
+
+Se vuoi vedere questo oggetto, toglilo e indossalo su un punto di attacco dell'avatar.
+		<usetemplate ignoretext="Avvisami quando una mesh riggata viene indossata su un punto di attacco HUD." name="okignore" />
+	</notification>
+	<notification name="ReflectionProbeApplied">
+		ATTENZIONE: hai reso il tuo oggetto una sonda di riflessione. Ciò implicitamente cambia l'oggetto per imitare il suo volume di influenza. Questi cambiamenti sono irreversibili. Vuoi continuare?
+		<usetemplate ignoretext="Avvisi sulla sonda di riflessione" name="okcancelignore" yestext="Ok" notext="Annulla"/>
+	</notification>
+	<notification name="AutoAdjustHDRSky">
+		Stai modificando un cielo non HDR che è stato automaticamente convertito in HDR. Per rimuovere l'HDR e la mappatura dei toni, imposta l'ambiente della sonda di riflessione su zero.
+		<usetemplate ignoretext="Avvisi sulla regolazione del cielo HDR" name="okignore" yestext="Ok"/>
+	</notification>
+	<notification name="EnableAutoFPSWarning">
+		Stai per abilitare AutoFPS. Tutte le impostazioni grafiche non salvate andranno perse.
+
+Vuoi salvarle prima?
+		<usetemplate name="okcancelbuttons" notext="No" yestext="Sì" />
+	</notification>
+	<notification name="NoValidEnvSettingFound">
+		Non è stata selezionata l'impostazione ambientale corretta.
+
+Tieni presente che non è possibile selezionare "Ambiente condiviso" o "Basato sul ciclo giornaliero"!
+	</notification>
+	<notification name="CantCreateInventoryName">
+		Impossibile creare: [NAME]
+	</notification>
+	<notification name="WindlightBulkImportFinished">
+		L'importazione in blocco delle Windlight è terminata.
+	</notification>
+	<notification name="FSAOScriptedNotification">
+		Firestorm Animation Overrider (AO): [AO_MESSAGE]
+		<usetemplate ignoretext="Avvisami quando un oggetto scriptato richiede l'accesso all'AO di Firestorm" name="notifyignore" />
+	</notification>
+	<notification name="WarnForceLoginURL">
+		L'URL della schermata iniziale è stato sovrascritto a scopo di test.
+
+Reimpostare l'URL predefinito?
+		<usetemplate name="okcancelbuttons" notext="Ricordamelo la prossima volta" yestext="Ripristina" />
+	</notification>
+	<notification name="WarnScriptedCamera">
+		Il ripristino della camera potrebbe essere inibito dai seguenti oggetti:
+
+[SOURCES]
+	</notification>
+	<notification label="Separa elementi cartella" name="UngroupFolder">
+		Separa gli elementi della cartella "[FOLDER_NAME]"?
+		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="Ok" />
+	</notification>
+	<notification label="L'immagine contiene un canale alfa vuoto" name="ImageEmptyAlphaLayer">
+		L'immagine che stai tentando di caricare contiene un canale alfa vuoto o quasi vuoto (informazioni sulla trasparenza). Questo quasi sempre non è desiderato e dovrebbe essere rimosso. L'aggiunta di un canale alfa a un'immagine porterà le texture a ribaltarsi una sull'altra a diverse angolazioni della cam e renderà il rendering più lento. Quindi, a meno che tu non abbia davvero bisogno che questa texture abbia un canale alfa vuoto/quasi vuoto, considera di rimuoverlo.
+		<form name="form">
+			<button name="strip" text="Rimuovi alfa" />
+			<button name="use_as_is" text="Mantieni alfa" />
+		</form>
 	</notification>
 </notifications>
