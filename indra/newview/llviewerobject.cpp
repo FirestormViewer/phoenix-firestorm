@@ -332,9 +332,7 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mLastUpdateCached(FALSE),
 	mCachedMuteListUpdateTime(0),
 	mCachedOwnerInMuteList(false),
-	mRiggedAttachedWarned(false),
-	mIsMirror(false),
-	mMirrorFace(3)
+	mRiggedAttachedWarned(false)
 {
 	if (!is_global)
 	{
@@ -1203,39 +1201,6 @@ U32 LLViewerObject::extractSpatialExtents(LLDataPackerBinaryBuffer *dp, LLVector
 	return parent_id;
 }
 
-void detectMirror(const std::string &str, bool &mirror, U8 &mode)
-{
-    
-    std::stringstream ss(str);
-    std::string word;
-    while (ss >> word)
-    {
-        if (word == "IsMirror")
-        {
-            mirror = true;
-        }
-
-		if (mirror)
-		{
-			bool num = false;
-            std::string::const_iterator it = word.begin();
-            while (it != word.end())
-            {
-                num = std::isdigit(*it);
-                ++it;
-
-				if (!num)
-					break;
-            }
-
-			if (num)
-			{
-                mode = atoi(word.c_str());
-			}
-		}
-    }
-}
-
 U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 					 void **user_data,
 					 U32 block_num,
@@ -1614,8 +1579,6 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 
 					std::string temp_string;
 					mesgsys->getStringFast(_PREHASH_ObjectData, _PREHASH_Text, temp_string, block_num );
-					
-                    detectMirror(temp_string, mIsMirror, mMirrorFace);
                     
 					LLColor4U coloru;
 					mesgsys->getBinaryDataFast(_PREHASH_ObjectData, _PREHASH_TextColor, coloru.mV, 4, block_num);
@@ -2008,8 +1971,6 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 				{
 					std::string temp_string;
 					dp->unpackString(temp_string, "Text");
-                    
-                    detectMirror(temp_string, mIsMirror, mMirrorFace);
                     
 					LLColor4U coloru;
 					dp->unpackBinaryDataFixed(coloru.mV, 4, "Color");
@@ -6513,11 +6474,6 @@ LLViewerObject::ExtraParameter* LLViewerObject::createNewParameterEntry(U16 para
       case LLNetworkData::PARAMS_REFLECTION_PROBE:
       {
           new_block = new LLReflectionProbeParams();
-          break;
-      }
-      case LLNetworkData::PARAMS_MIRROR:
-      {
-          new_block = new LLMirrorParams();
           break;
       }
 	  default:

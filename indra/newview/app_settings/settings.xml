@@ -11626,7 +11626,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>OctreeAlphaDistanceFactor</key>
   <map>
     <key>Comment</key>
-    <string>Multiplier on alpha object distance for determining octree node size </string>
+    <string>Multiplier on alpha object distance for determining octree node size.  First two parameters are currently unused.  Third parameter is distance at which to perform detailed alpha sorting.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -11635,7 +11635,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <array>
       <real>0.1</real>
       <real>0.0</real>
-      <real>0.0</real>
+      <real>64.0</real>
     </array>
     <key>Backup</key>
     <integer>0</integer>
@@ -13482,18 +13482,7 @@ Change of this parameter will affect the layout of buttons in notification toast
 		<key>Type</key>
 		<string>F32</string>
 		<key>Value</key>
-		<real>16</real>
-	</map>
-	<key>RenderHeroProbeNearClipOffset</key>
-	<map>
-		<key>Comment</key>
-		<string>Distance offset in meters for hero probes to near clip.</string>
-		<key>Persist</key>
-		<integer>1</integer>
-		<key>Type</key>
-		<string>F32</string>
-		<key>Value</key>
-		<real>2.1</real>
+		<real>8</real>
 	</map>
     <key>RenderReflectionProbeVolumes</key>
     <map>
@@ -13961,10 +13950,21 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>RenderTerrainPBRForce</key>
+    <map>
+      <key>Comment</key>
+      <string>Force-load PBR terrain if enabled</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>RenderTerrainPBRDetail</key>
     <map>
       <key>Comment</key>
-      <string>Detail level for PBR terrain. 0 is full detail. Negative values drop rendering features in accordance with the GLTF specification, which reduces the number of texture binds. Some Intel and Mac graphics drivers do not support more than 16 texture binds. Because PBR terrain exceeds this limit at the highest detail level, reducing texture binds is necessary for compatibility.</string>
+      <string>Detail level for PBR terrain. 0 is full detail. Negative values drop rendering features, in accordance with the GLTF specification when possible, which reduces the number of texture binds.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -17076,6 +17076,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>S32</string>
       <key>Value</key>
       <integer>2</integer>
+    </map>
+    <key>UIPreviewMaterial</key>
+    <map>
+      <key>Comment</key>
+      <string>Whether or not PBR material swatch is enabled</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <real>0</real>
     </map>
     <key>UIResizeBarHeight</key>
     <map>
