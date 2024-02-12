@@ -242,11 +242,17 @@ jobs:
         if: env.FS_RELEASE_TYPE == 'Nightly'
         run: |
           echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}} --testbuild=14" >> $GITHUB_ENV
+        shell: bash
       - name: make Alpha builds expire after 28 days
         if: env.FS_RELEASE_TYPE == 'Alpha'
         run: |
           echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}} --testbuild=28" >> $GITHUB_ENV
-
+        shell: bash
+      - name: make Beta builds expire after 28 days
+        if: env.FS_RELEASE_TYPE == 'Beta'
+        run: |
+          echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}} --testbuild=60" >> $GITHUB_ENV
+        shell: bash
       - name: Clean up packages to give more space
         run: rm *${{ env.fallback_platform }}*bz2
         shell: bash
