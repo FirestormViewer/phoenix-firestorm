@@ -144,7 +144,7 @@ public:
     typedef boost::function<bool()> bool_func_t;
 public:
     LLCallbackTimer(F32 nPeriod, bool_func_t cb) : LLEventTimer(nPeriod), m_Callback(cb) {}
-    /*virtual*/ BOOL tick() { return m_Callback(); }
+    /*virtual*/ bool tick() { return m_Callback(); }
 protected:
     bool_func_t m_Callback;
 };

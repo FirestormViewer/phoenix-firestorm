@@ -133,7 +133,7 @@ public:
 													 const EObjectUpdateType update_type,
 													 LLDataPacker *dp);
 	virtual void   	 	 	idleUpdate(LLAgent &agent, const F64 &time);
-	/*virtual*/ BOOL   	 	 	updateLOD();
+	/*virtual*/ bool   	 	 	updateLOD();
 	BOOL  	 	 	 	 	updateJointLODs();
 	void					updateLODRiggedAttachments( void );
 	/*virtual*/ BOOL   	 	 	isActive() const; // Whether this object needs to do an idleUpdate.
@@ -479,7 +479,7 @@ public:
     void				debugBodySize() const;
 	void				postPelvisSetRecalc( void );
 
-	/*virtual*/ BOOL	loadSkeletonNode();
+	/*virtual*/ bool	loadSkeletonNode();
     void                initAttachmentPoints(bool ignore_hud_joints = false);
 	/*virtual*/ void	buildCharacter();
     void                resetVisualParams();
@@ -730,7 +730,7 @@ public:
 	// Loading status
 	//--------------------------------------------------------------------
 public:
-	virtual BOOL    isTextureDefined(LLAvatarAppearanceDefines::ETextureIndex type, U32 index = 0) const;
+	virtual bool    isTextureDefined(LLAvatarAppearanceDefines::ETextureIndex type, U32 index = 0) const;
 	virtual BOOL	isTextureVisible(LLAvatarAppearanceDefines::ETextureIndex type, U32 index = 0) const;
 	virtual BOOL	isTextureVisible(LLAvatarAppearanceDefines::ETextureIndex type, LLViewerWearable *wearable) const;
 
@@ -910,7 +910,7 @@ public:
 	// True if we are computing our appearance via local compositing
 	// instead of baked textures, as for example during wearable
 	// editing or when waiting for a subsequent server rebake.
-	/*virtual*/ BOOL	isUsingLocalAppearance() const { return mUseLocalAppearance; }
+	/*virtual*/ bool	isUsingLocalAppearance() const { return mUseLocalAppearance; }
 
 	// <FS:Ansariel> [Legacy Bake]
 	// True if this avatar should fetch its baked textures via the new
@@ -921,7 +921,7 @@ public:
 
 	// True if we are currently in appearance editing mode. Often but
 	// not always the same as isUsingLocalAppearance().
-	/*virtual*/ BOOL	isEditingAppearance() const { return mIsEditingAppearance; }
+	/*virtual*/ bool	isEditingAppearance() const { return mIsEditingAppearance; }
 	void setIsEditingAppearance(BOOL editing) { mIsEditingAppearance = editing; }	// <FS:CR> for Built-in Posestand
 	
 	// FIXME review isUsingLocalAppearance uses, some should be isEditing instead.
@@ -930,7 +930,7 @@ private:
 	BOOL			mAppearanceAnimating;
 	LLFrameTimer	mAppearanceMorphTimer;
 	F32				mLastAppearanceBlendTime;
-	BOOL			mIsEditingAppearance; // flag for if we're actively in appearance editing mode
+	bool			mIsEditingAppearance; // flag for if we're actively in appearance editing mode
 	BOOL			mUseLocalAppearance; // flag for if we're using a local composite
 	// <FS:Ansariel> [Legacy Bake]
 	BOOL			mUseServerBakes; // flag for if baked textures should be fetched from baking service (false if they're temporary uploads)
@@ -964,7 +964,7 @@ public:
 	void				cleanupAttachedMesh( LLViewerObject* pVO );
     // bool                hasPendingAttachedMeshes(); // <FS:Beq/> remove mesh rezzing delay
 	static LLVOAvatar*  findAvatarFromAttachment(LLViewerObject* obj);
-	/*virtual*/ BOOL	isWearingWearableType(LLWearableType::EType type ) const;
+	/*virtual*/ bool	isWearingWearableType(LLWearableType::EType type ) const;
 	LLViewerObject *	findAttachmentByID( const LLUUID & target_id ) const;
 	LLViewerJointAttachment* getTargetAttachmentPoint(LLViewerObject* viewer_object);
 

@@ -135,7 +135,7 @@ public:
 	virtual void selectItem() {}
     virtual void navigateToFolder(bool new_window = false, bool change_mode = false) {}
 	virtual BOOL isItemRenameable() const;
-	virtual BOOL renameItem(const std::string& new_name);
+	virtual bool renameItem(const std::string& new_name);
 	virtual BOOL isItemMovable() const;
 	virtual BOOL isItemRemovable() const;
 	virtual BOOL removeItem();
@@ -320,7 +320,7 @@ BOOL LLTaskInvFVBridge::isItemRenameable() const
 	return FALSE;
 }
 
-BOOL LLTaskInvFVBridge::renameItem(const std::string& new_name)
+bool LLTaskInvFVBridge::renameItem(const std::string& new_name)
 {
 // [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
 	LLViewerObject* object = gObjectList.findObject(mPanel->getTaskUUID());
@@ -346,7 +346,7 @@ BOOL LLTaskInvFVBridge::renameItem(const std::string& new_name)
 				false);
 		}
 	}
-	return TRUE;
+	return true;
 }
 
 BOOL LLTaskInvFVBridge::isItemMovable() const
@@ -365,17 +365,17 @@ BOOL LLTaskInvFVBridge::isItemMovable() const
 		{
 			if (gRlvAttachmentLocks.isLockedAttachment(pObj->getRootEdit()))
 			{
-				return FALSE;
+				return false;
 			}
 			else if ( (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) )
 			{
 				if ( (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && (gAgentAvatarp->getRoot() == pObj->getRootEdit()) )
-					return FALSE;
+					return false;
 			}
 		}
 	}
 // [/RLVa:KB]
-	return TRUE;
+	return true;
 }
 
 BOOL LLTaskInvFVBridge::isItemRemovable() const
@@ -679,7 +679,7 @@ public:
 	virtual const std::string& getDisplayName() const;
 	virtual BOOL isItemRenameable() const;
 	// virtual BOOL isItemCopyable() const { return FALSE; }
-	virtual BOOL renameItem(const std::string& new_name);
+	virtual bool renameItem(const std::string& new_name);
 	virtual BOOL isItemRemovable() const;
 	virtual void buildContextMenu(LLMenuGL& menu, U32 flags);
 	virtual bool hasChildren() const;
@@ -775,9 +775,9 @@ BOOL LLTaskCategoryBridge::isItemRenameable() const
 	return FALSE;
 }
 
-BOOL LLTaskCategoryBridge::renameItem(const std::string& new_name)
+bool LLTaskCategoryBridge::renameItem(const std::string& new_name)
 {
-	return FALSE;
+	return false;
 }
 
 BOOL LLTaskCategoryBridge::isItemRemovable() const
@@ -1055,7 +1055,7 @@ public:
 		LLTaskInvFVBridge(panel, uuid, name) {}
 
 	virtual BOOL isItemRenameable() const;
-	virtual BOOL renameItem(const std::string& new_name);
+	virtual bool renameItem(const std::string& new_name);
 };
 
 BOOL LLTaskCallingCardBridge::isItemRenameable() const
@@ -1063,9 +1063,9 @@ BOOL LLTaskCallingCardBridge::isItemRenameable() const
 	return FALSE;
 }
 
-BOOL LLTaskCallingCardBridge::renameItem(const std::string& new_name)
+bool LLTaskCallingCardBridge::renameItem(const std::string& new_name)
 {
-	return FALSE;
+	return false;
 }
 
 

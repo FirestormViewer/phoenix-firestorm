@@ -192,10 +192,10 @@ void ALFloaterRegionTracker::refresh()
 	mRegionScrollList->setScrollPos(saved_scroll_pos);
 }
 
-BOOL ALFloaterRegionTracker::tick()
+bool ALFloaterRegionTracker::tick()
 {
 	refresh();
-	return FALSE;
+	return false;
 }
 
 void ALFloaterRegionTracker::requestRegionData()

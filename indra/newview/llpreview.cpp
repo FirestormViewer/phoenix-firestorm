@@ -200,7 +200,7 @@ void LLPreview::onCommit()
 		}
 		else if(item->getPermissions().getOwner() == gAgent.getID())
 		{
-			new_item->updateServer(FALSE);
+			new_item->updateServer(false);
 			gInventory.updateItem(new_item);
 			gInventory.notifyObservers();
 
@@ -514,7 +514,7 @@ void LLPreview::onDiscardBtn(void* data)
 		new_item->setParent(trash_id);
 		// no need to restamp it though it's a move into trash because
 		// it's a brand new item already.
-		new_item->updateParentOnServer(FALSE);
+		new_item->updateParentOnServer(false);
 		gInventory.updateItem(new_item);
 		gInventory.notifyObservers();
 	}

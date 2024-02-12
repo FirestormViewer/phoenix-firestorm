@@ -146,7 +146,7 @@ BOOL LLKeyframeMotionParam::onActivate()
 			paramMotion.mMotion->activate(mActivationTimestamp);
 		}
 	}
-	return TRUE;
+	return true;
 }
 
 
@@ -265,7 +265,7 @@ BOOL LLKeyframeMotionParam::onUpdate(F32 time, U8* joint_mask)
 
 	LL_INFOS() << "Param Motion weight " << mPoseBlender.getBlendedPose()->getWeight() << LL_ENDL;
 
-	return TRUE;
+	return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -292,7 +292,7 @@ BOOL LLKeyframeMotionParam::addKeyframeMotion(char *name, const LLUUID &id, char
 	
 	if (!newMotion)
 	{
-		return FALSE;
+		return false;
 	}
 	
 	newMotion->setName(name);
@@ -300,7 +300,7 @@ BOOL LLKeyframeMotionParam::addKeyframeMotion(char *name, const LLUUID &id, char
 	// now add motion to this list
 	mParameterizedMotions[param].insert(ParameterizedMotion(newMotion, value));
 
-	return TRUE;
+	return true;
 }
 
 
@@ -352,7 +352,7 @@ BOOL LLKeyframeMotionParam::loadMotions()
 	if (!fp || fileSize == 0)
 	{
 		LL_INFOS() << "ERROR: can't open: " << path << LL_ENDL;
-		return FALSE;
+		return false;
 	}
 
 	// allocate a text buffer
@@ -391,7 +391,7 @@ BOOL LLKeyframeMotionParam::loadMotions()
 	if ( error )
 	{
 		LL_INFOS() << "ERROR: error while reading from " << path << LL_ENDL;
-		return FALSE;
+		return false;
 	}
 
 	LL_INFOS() << "Loading parametric keyframe data for: " << getName() << LL_ENDL;
@@ -418,7 +418,7 @@ BOOL LLKeyframeMotionParam::loadMotions()
 		if ((num != 3))
 		{
 			LL_INFOS() << "WARNING: can't read parametric motion" << LL_ENDL;
-			return FALSE;
+			return false;
 		}
 
 		addKeyframeMotion(strA, gAnimLibrary.stringToAnimState(std::string(strA)), strB, floatA);
@@ -438,7 +438,7 @@ BOOL LLKeyframeMotionParam::loadMotions()
 		num = sscanf(p, "%79s %79s %f", strA, strB, &floatA);	/* Flawfinder: ignore */
 	}
 
-	return TRUE;
+	return true;
 }
 
 // End

@@ -85,7 +85,7 @@ public:
 			perm.setMaskEveryone(LLFloaterPerms::getEveryonePerms("Gestures"));
 			perm.setMaskGroup(LLFloaterPerms::getGroupPerms("Gestures"));
 			item->setPermissions(perm);
-			item->updateServer(FALSE);
+			item->updateServer(false);
 		}
 	}
 };
@@ -719,7 +719,7 @@ void LLFloaterGesture::onDeleteSelected()
 			new_item->setParent(trash_id);
 			// no need to restamp it though it's a move into trash because
 			// it's a brand new item already.
-			new_item->updateParentOnServer(FALSE);
+			new_item->updateParentOnServer(false);
 			gInventory.updateItem(new_item);
 		}
 	}

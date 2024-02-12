@@ -884,7 +884,7 @@ void LLPanelPlaces::onSaveButtonClicked()
 		gInventory.accountForUpdate(update);
 
 		new_item->setParent(folder_id);
-		new_item->updateParentOnServer(FALSE);
+		new_item->updateParentOnServer(false);
 	}
 
 	gInventory.updateItem(new_item);

@@ -297,11 +297,11 @@ BOOL FSFloaterAssetBlacklist::handleKeyHere(KEY key, MASK mask)
 	return LLFloater::handleKeyHere(key, mask);
 }
 
-BOOL FSFloaterAssetBlacklist::tick()
+bool FSFloaterAssetBlacklist::tick()
 {
 	if (mAudioSourceID.isNull())
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (LLAudioSource* audio_source = gAudiop->findAudioSource(mAudioSourceID); !audio_source || audio_source->isDone())
@@ -313,7 +313,7 @@ BOOL FSFloaterAssetBlacklist::tick()
 		onSelectionChanged();
 	}
 
-	return FALSE;
+	return false;
 }
 
 void FSFloaterAssetBlacklist::closeFloater(bool /* app_quitting */)

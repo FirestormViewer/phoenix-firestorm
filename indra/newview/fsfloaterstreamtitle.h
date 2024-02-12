@@ -105,7 +105,7 @@ public:
 	void reshape(S32 width, S32 height, BOOL called_from_parent = TRUE) override;
 
 private:
-	BOOL tick() override;
+	bool tick() override;
 
 	void updateStreamTitle(std::string_view streamtitle) noexcept;
 	void toggleHistory() noexcept;

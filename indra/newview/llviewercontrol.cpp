@@ -155,7 +155,7 @@ public:
 	}
 
 protected:
-	BOOL tick()
+	bool tick()
 	{
 		gViewerThrottle.setMaxBandwidth(mNewValue);
 		mEventTimer.stop();
@@ -167,7 +167,7 @@ protected:
 			gWarningSettings.setBOOL("FSBandwidthTooHigh", TRUE);
 		}
 
-		return FALSE;
+		return false;
 	}
 
 private:

@@ -945,7 +945,7 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 	if (prim.has("sale_info"))
 	{
 		LLSaleInfo sale_info;
-		BOOL has_perm_mask;
+		bool has_perm_mask;
 		U32 perm_mask;
 		sale_info.fromLLSD(prim["sale_info"], has_perm_mask, perm_mask);
 		if (sale_info.isForSale())

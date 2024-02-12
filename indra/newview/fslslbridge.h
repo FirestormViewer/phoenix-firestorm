@@ -191,20 +191,20 @@ class FSLSLBridgeCleanupTimer : public LLEventTimer
 {
 public:
 	FSLSLBridgeCleanupTimer() : LLEventTimer(12.f) {}
-	BOOL tick();
+	bool tick();
 };
 
 class FSLSLBridgeReAttachTimer : public LLEventTimer
 {
 public:
 	FSLSLBridgeReAttachTimer() : LLEventTimer(5.f) {}
-	BOOL tick();
+	bool tick();
 };
 
 class FSLSLBridgeStartCreationTimer : public LLEventTimer
 {
 public:
 	FSLSLBridgeStartCreationTimer() : LLEventTimer(5.f) {}
-	BOOL tick();
+	bool tick();
 };
 #endif // FS_LSLBRIDGE_H

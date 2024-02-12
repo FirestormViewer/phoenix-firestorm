@@ -152,7 +152,7 @@ public:
 	}
 };
 
-BOOL NACLFloaterExploreSounds::tick()
+bool NACLFloaterExploreSounds::tick()
 {
 	static const std::string str_playing =  getString("Playing");
 	static const std::string str_not_playing = getString("NotPlaying");
@@ -340,7 +340,7 @@ BOOL NACLFloaterExploreSounds::tick()
 
 	childSetEnabled("stop_locally_btn", mLocalPlayingAudioSourceIDs.size() > 0);
 
-	return FALSE;
+	return false;
 }
 
 void NACLFloaterExploreSounds::handlePlayLocally()

@@ -86,11 +86,11 @@ void doZdCleanup();
 class JCZdrop : public LLEventTimer
 {
 public:
-	BOOL mRunning;
+	bool mRunning;
 	
 	JCZdrop(std::stack<LLViewerInventoryItem*> stack, LLUUID dest, std::string_view sFolder, std::string_view sUUID, bool package = false) 
 		: LLEventTimer(1.f),
-		mRunning(FALSE),
+		mRunning(false),
 		mPackage(package),
 		mStack(stack),
 		mDestination(dest),
@@ -123,7 +123,7 @@ public:
 		}
 	}
 
-	BOOL tick()
+	bool tick()
 	{
 		LLViewerInventoryItem* subj = mStack.top();
 		mStack.pop();
@@ -144,7 +144,7 @@ public:
 		else
 		{
 			mErrorCode = 1;
-			return TRUE;
+			return true;
 		}
 	}
 
@@ -167,10 +167,10 @@ public:
 
 	~ZdCleanup() {}
 
-	BOOL tick()
+	bool tick()
 	{
 		gZDrop = nullptr;
-		return TRUE;
+		return true;
 	}
 };
 
@@ -192,12 +192,12 @@ void doZtCleanup();
 class JCZtake : public LLEventTimer
 {
 public:
-	BOOL mRunning;
+	bool mRunning;
 
 	JCZtake(const LLUUID& target, bool package = false, const LLUUID& destination = LLUUID::null, std::string_view dtarget = "", EDeRezDestination dest = DRD_TAKE_INTO_AGENT_INVENTORY, bool use_selection = true, std::vector<U32> to_take = std::vector<U32>()) :
 		LLEventTimer(0.66f),
 		mTarget(target),
-		mRunning(FALSE),
+		mRunning(false),
 		mCountdown(5),
 		mPackage(package),
 		mPackageDest(destination),
@@ -234,7 +234,7 @@ public:
 		}
 	}
 
-	BOOL tick()
+	bool tick()
 	{
 		switch (mState)
 		{
@@ -403,12 +403,12 @@ public:
 
 	~LOZtCleanup() {}
 
-	BOOL tick()
+	bool tick()
 	{
-		gZTake->mRunning = TRUE;
+		gZTake->mRunning = true;
 		delete gZTake;
 		gZTake = nullptr;
-		return TRUE;
+		return true;
 	}
 };
 
@@ -420,9 +420,12 @@ void doZtCleanup()
 class TMZtake : public LLEventTimer
 {
 public:
-	BOOL mRunning;
+	bool mRunning;
 
-	TMZtake(const LLUUID& target) : LLEventTimer(0.33f), mTarget(target), mRunning(FALSE), mCountdown(5)
+	TMZtake(const LLUUID& target) : LLEventTimer(0.33f),
+		mTarget(target),
+		mRunning(false),
+		mCountdown(5)
 	{
 		report_to_nearby_chat("Mtake activated. Taking selected in-world objects into inventory in: ");
 	}
@@ -432,7 +435,7 @@ public:
 		report_to_nearby_chat("Mtake deactivated.");
 	}
 
-	BOOL tick()
+	bool tick()
 	{
 		LLMessageSystem* msg = gMessageSystem;
 		for (LLObjectSelection::iterator itr = LLSelectMgr::getInstance()->getSelection()->begin();
@@ -522,14 +525,14 @@ private:
 };
 TMZtake* gMTake;
 
-void invrepair()
+static void invrepair()
 {
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
 	gInventory.collectDescendents(gInventory.getRootFolderID(), cats, items, FALSE);
 }
 
-void key_to_name_callback(const LLUUID& id, const LLAvatarName& av_name)
+static void key_to_name_callback(const LLUUID& id, const LLAvatarName& av_name)
 {
 	std::string name = av_name.getCompleteName();
 	if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, id))
@@ -1128,7 +1131,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 						}
 						else
 						{
-							gZDrop->mRunning = TRUE;
+							gZDrop->mRunning = true;
 							delete gZDrop;
 							gZDrop = nullptr;
 						}
@@ -1195,7 +1198,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 						}
 						else
 						{
-							gZTake->mRunning = TRUE;
+							gZTake->mRunning = true;
 							delete gZTake;
 							gZTake = nullptr;
 						}
@@ -1518,7 +1521,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 						}
 						else
 						{
-							gMTake->mRunning = TRUE;
+							gMTake->mRunning = true;
 							delete gMTake;
 							gMTake = nullptr;
 						}

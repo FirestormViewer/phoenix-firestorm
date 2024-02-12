@@ -1506,7 +1506,7 @@ void BGFolderHttpHandler::processData(LLSD & content, LLCore::HttpResponse * res
                         gInventory.accountForUpdate(update);
 
                         titem->setParent(lost_uuid);
-                        titem->updateParentOnServer(FALSE);
+                        titem->updateParentOnServer(false);
                         gInventory.updateItem(titem);
                         // <FS:Ansariel> FIRE-21376: Inventory not loading properly on OpenSim
                         if (!LLGridManager::getInstance()->isInSecondLife())

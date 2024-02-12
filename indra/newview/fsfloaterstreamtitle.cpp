@@ -270,7 +270,7 @@ void FSFloaterStreamTitle::checkTitleWidth() noexcept
 	}
 }
 
-BOOL FSFloaterStreamTitle::tick()
+bool FSFloaterStreamTitle::tick()
 {
 	if (mResetTitle)
 	{
@@ -298,5 +298,5 @@ BOOL FSFloaterStreamTitle::tick()
 		mResetTitle = true;
 	}
 
-	return FALSE;
+	return false;
 }

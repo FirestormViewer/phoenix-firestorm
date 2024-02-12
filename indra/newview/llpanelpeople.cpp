@@ -333,9 +333,9 @@ public:
 		mEventTimer.stop();
 	}
 
-	virtual BOOL tick() // from LLEventTimer
+	virtual bool tick() // from LLEventTimer
 	{
-		return FALSE;
+		return false;
 	}
 };
 
@@ -389,9 +389,9 @@ public:
 	}
 
 
-	/*virtual*/ BOOL tick()
+	/*virtual*/ bool tick()
 	{
-		if (!mIsActive) return FALSE;
+		if (!mIsActive) return false;
 
 		if (mMask & (LLFriendObserver::ADD | LLFriendObserver::REMOVE | LLFriendObserver::ONLINE))
 		{
@@ -402,7 +402,7 @@ public:
 		mEventTimer.stop();
 		mMask = 0;
 
-		return FALSE;
+		return false;
 	}
 
 	// virtual
@@ -531,10 +531,10 @@ public:
 		}
 	}
 
-	/*virtual*/ BOOL tick()
+	/*virtual*/ bool tick()
 	{
 		update();
-		return FALSE;
+		return false;
 	}
 private:
 };
@@ -1114,25 +1114,6 @@ void LLPanelPeople::getCurrentItemIDs(uuid_vec_t& selected_uuids) const
 	else
 		llassert(0 && "unknown tab selected");
 
-}
-
-void LLPanelPeople::showGroupMenu(LLMenuGL* menu)
-{
-	// Shows the menu at the top of the button bar.
-
-	// Calculate its coordinates.
-	// (assumes that groups panel is the current tab)
-	LLPanel* bottom_panel = mTabContainer->getCurrentPanel()->getChild<LLPanel>("bottom_panel");
-	LLPanel* parent_panel = mTabContainer->getCurrentPanel();
-	menu->arrangeAndClear();
-	S32 menu_height = menu->getRect().getHeight();
-	S32 menu_x = -2; // *HACK: compensates HPAD in showPopup()
-	S32 menu_y = bottom_panel->getRect().mTop + menu_height;
-
-	// Actually show the menu.
-	menu->buildDrawLabels();
-	menu->updateParent(LLMenuGL::sMenuContainer);
-	LLMenuGL::showPopup(parent_panel, menu, menu_x, menu_y);
 }
 
 void LLPanelPeople::setSortOrder(LLAvatarList* list, ESortOrder order, bool save)

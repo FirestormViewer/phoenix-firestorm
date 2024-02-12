@@ -82,10 +82,10 @@ BOOL LLMotionRegistry::registerMotion( const LLUUID& id, LLMotionConstructor con
 	if (!is_in_map(mMotionTable, id))
 	{
 		mMotionTable[id] = constructor;
-		return TRUE;
+		return true;
 	}
 	
-	return FALSE;
+	return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -425,12 +425,12 @@ BOOL LLMotionController::startMotion(const LLUUID &id, F32 start_offset)
 
 	if (!motion)
 	{
-		return FALSE;
+		return false;
 	}
 	//if the motion is already active and allows deprecation, then let it keep playing
 	else if (motion->canDeprecate() && isMotionActive(motion))
 	{	
-		return TRUE;
+		return true;
 	}
 
 //	LL_INFOS() << "Starting motion " << name << LL_ENDL;
@@ -453,7 +453,7 @@ BOOL LLMotionController::stopMotionInstance(LLMotion* motion, BOOL stop_immediat
 {
 	if (!motion)
 	{
-		return FALSE;
+		return false;
 	}
 
 	
@@ -465,15 +465,15 @@ BOOL LLMotionController::stopMotionInstance(LLMotion* motion, BOOL stop_immediat
 		{
 			deactivateMotionInstance(motion);
 		}
-		return TRUE;
+		return true;
 	}
 	else if (isMotionLoading(motion))
 	{
 		motion->setStopped(TRUE);
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -939,7 +939,7 @@ BOOL LLMotionController::activateMotionInstance(LLMotion *motion, F32 time)
 	// hopefully this fixes it.
 	if (motion == NULL || motion->getPose() == NULL)
 	{
-		return FALSE;	
+		return false;
 	}
 
 	if (mLoadingMotions.find(motion) != mLoadingMotions.end())
@@ -947,7 +947,7 @@ BOOL LLMotionController::activateMotionInstance(LLMotion *motion, F32 time)
 		// we want to start this motion, but we can't yet, so flag it as started
 		motion->setStopped(FALSE);
 		// report pending animations as activated
-		return TRUE;
+		return true;
 	}
 
 	motion->mResidualWeight = motion->getPose()->getWeight();
@@ -991,7 +991,7 @@ BOOL LLMotionController::activateMotionInstance(LLMotion *motion, F32 time)
 		}
 	}
 	
-	return TRUE;
+	return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -1014,7 +1014,7 @@ BOOL LLMotionController::deactivateMotionInstance(LLMotion *motion)
 		mActiveMotions.remove(motion);
 	}
 
-	return TRUE;
+	return true;
 }
 
 void LLMotionController::deprecateMotionInstance(LLMotion* motion)

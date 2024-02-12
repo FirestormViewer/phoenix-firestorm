@@ -74,7 +74,7 @@ public:
 	LLVisualParamInfo();
 	virtual ~LLVisualParamInfo() {};
 
-	virtual BOOL parseXml(LLXmlTreeNode *node);
+	virtual bool parseXml(LLXmlTreeNode *node);
 
 	S32 getID() const { return mID; }
 
@@ -131,7 +131,7 @@ public:
 	virtual void			stopAnimating(BOOL upload_bake);
 	// </FS:Ansariel> [Legacy Bake]
 
-	virtual BOOL			linkDrivenParams(visual_param_mapper mapper, BOOL only_cross_params);
+	virtual bool			linkDrivenParams(visual_param_mapper mapper, bool only_cross_params);
 	virtual void			resetDrivenParams();
 
 	// Interface methods

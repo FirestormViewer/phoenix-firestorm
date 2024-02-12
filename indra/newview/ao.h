@@ -103,7 +103,7 @@ class FloaterAO
 		bool newSetCallback(const LLSD& notification, const LLSD& response);
 		bool removeSetCallback(const LLSD& notification, const LLSD& response);
 
-		virtual BOOL tick();
+		virtual bool tick();
 
 		std::vector<AOSet*> mSetList;
 		AOSet* mSelectedSet;

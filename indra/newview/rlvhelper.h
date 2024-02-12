@@ -655,7 +655,7 @@ class RlvGCTimer : public LLEventTimer
 {
 public:
 	RlvGCTimer() : LLEventTimer(30.0) {}
-	virtual BOOL tick();
+	virtual bool tick();
 };
 
 // NOTE: Unused as of SL-3.7.2
@@ -665,10 +665,10 @@ public:
 	typedef boost::function<void ()> nullary_func_t;
 public:
 	RlvCallbackTimerOnce(F32 nPeriod, nullary_func_t cb) : LLEventTimer(nPeriod), m_Callback(cb) {}
-	/*virtual*/ BOOL tick()
+	/*virtual*/ bool tick()
 	{
 		m_Callback();
-		return TRUE;
+		return true;
 	}
 protected:
 	nullary_func_t m_Callback;

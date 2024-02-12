@@ -71,12 +71,12 @@ void FloaterAO::reloading(bool reload)
 	enableStateControls(!reload);
 }
 
-BOOL FloaterAO::tick()
+bool FloaterAO::tick()
 {
 	// reloading took too long, probably missed the signal, so we hide the reload cover
 	LL_WARNS("AOEngine") << "AO reloading timeout." << LL_ENDL;
 	updateList();
-	return FALSE;
+	return false;
 }
 
 void FloaterAO::updateSetParameters()

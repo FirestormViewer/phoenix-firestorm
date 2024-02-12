@@ -91,14 +91,14 @@ FSFloaterIMTimer::FSFloaterIMTimer(FSFloaterIMTimer::callback_t callback) :
 	mCallback(callback)
 { }
 
-BOOL FSFloaterIMTimer::tick()
+bool FSFloaterIMTimer::tick()
 {
 	if (!mCallback.empty())
 	{
 		mCallback();
 	}
 
-	return FALSE;
+	return false;
 }
 
 
@@ -1907,7 +1907,7 @@ bool FSFloaterIM::dropPerson(LLUUID* person_id, bool drop)
 }
 
 //virtual
-BOOL FSFloaterIM::tick()
+bool FSFloaterIM::tick()
 {
 	// add people who were added via dropPerson()
 	if (!mPendingParticipants.empty())
@@ -1918,7 +1918,7 @@ BOOL FSFloaterIM::tick()
 
 	mEventTimer.stop();
 
-	return FALSE;
+	return false;
 }
 
 // virtual

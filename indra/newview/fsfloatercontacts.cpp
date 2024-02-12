@@ -191,10 +191,10 @@ void FSFloaterContacts::draw()
 	LLFloater::draw();
 }
 
-BOOL FSFloaterContacts::tick()
+bool FSFloaterContacts::tick()
 {
 	onDisplayNameChanged();
-	return FALSE;
+	return false;
 }
 
 BOOL FSFloaterContacts::handleKeyHere(KEY key, MASK mask)

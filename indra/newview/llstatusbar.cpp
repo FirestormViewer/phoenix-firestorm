@@ -133,10 +133,10 @@ public:
 	{
 		bakeTimeout=NULL;
 	}
-	BOOL tick()
+	bool tick()
 	{
 		mbar->setRebakeStuck(true);
-		return TRUE;
+		return true;
 	}
 private:
 	LLStatusBar *mbar;

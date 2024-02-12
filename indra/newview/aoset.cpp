@@ -233,10 +233,10 @@ void AOSet::stopTimer()
 	mEventTimer.stop();
 }
 
-BOOL AOSet::tick()
+bool AOSet::tick()
 {
 	AOEngine::instance().cycleTimeout(this);
-	return FALSE;
+	return false;
 }
 
 const LLUUID& AOSet::getInventoryUUID() const

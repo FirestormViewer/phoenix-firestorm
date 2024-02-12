@@ -127,7 +127,7 @@ public:
 	{
 	}
 
-	/*virtual*/ BOOL tick()
+	bool tick() override
 	{
 		LLViewerObject* objectp = gObjectList.findObject(mObjectID);
 		if (objectp)
@@ -135,7 +135,7 @@ public:
 			FSPanelAreaSearchList::touchObject(objectp);
 		}
 
-		return TRUE;
+		return true;
 	}
 
 private:

@@ -131,7 +131,7 @@ public:
 	LLTexLayerParamAlphaInfo();
 	/*virtual*/ ~LLTexLayerParamAlphaInfo() {};
 
-	/*virtual*/ BOOL parseXml(LLXmlTreeNode* node);
+	/*virtual*/ bool parseXml(LLXmlTreeNode* node);
 
 private:
 	std::string				mStaticImageFileName;
@@ -207,7 +207,7 @@ class LLTexLayerParamColorInfo : public LLViewerVisualParamInfo
 public:
 	LLTexLayerParamColorInfo();
 	virtual ~LLTexLayerParamColorInfo() {};
-	BOOL parseXml( LLXmlTreeNode* node );
+	bool parseXml( LLXmlTreeNode* node );
 	LLTexLayerParamColor::EColorOperation getOperation() const { return mOperation; }
 private:
 	enum { MAX_COLOR_VALUES = 20 };

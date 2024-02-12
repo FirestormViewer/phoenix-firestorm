@@ -2376,7 +2376,7 @@ void AOSitCancelTimer::stop()
 	mEventTimer.stop();
 }
 
-BOOL AOSitCancelTimer::tick()
+bool AOSitCancelTimer::tick()
 {
 	mTickCount++;
 	AOEngine::instance().checkSitCancel();
@@ -2384,7 +2384,7 @@ BOOL AOSitCancelTimer::tick()
 	{
 		mEventTimer.stop();
 	}
-	return FALSE;
+	return false;
 }
 
 // ----------------------------------------------------
@@ -2403,7 +2403,7 @@ AOTimerCollection::~AOTimerCollection()
 {
 }
 
-BOOL AOTimerCollection::tick()
+bool AOTimerCollection::tick()
 {
 	if (mInventoryTimer)
 	{
@@ -2427,7 +2427,7 @@ BOOL AOTimerCollection::tick()
 	}
 
 	// always return FALSE or the LLEventTimer will be deleted -> crash
-	return FALSE;
+	return false;
 }
 
 void AOTimerCollection::enableInventoryTimer(bool enable)

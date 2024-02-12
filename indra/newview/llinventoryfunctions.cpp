@@ -2197,7 +2197,7 @@ void change_item_parent(const LLUUID& item_id, const LLUUID& new_parent_id)
 
 		LLPointer<LLViewerInventoryItem> new_item = new LLViewerInventoryItem(inv_item);
 		new_item->setParent(new_parent_id);
-		new_item->updateParentOnServer(FALSE);
+		new_item->updateParentOnServer(false);
 		gInventory.updateItem(new_item);
 		gInventory.notifyObservers();
 	}

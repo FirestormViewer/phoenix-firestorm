@@ -90,7 +90,7 @@ public:
 	BOOL postBuild();
 	virtual void onOpen(const LLSD& key);
 
-	virtual BOOL tick();
+	virtual bool tick();
 
 private:
 	void checkEnableStart();

@@ -76,7 +76,7 @@ public:
 	/*virtual*/ void setDocked(bool docked, bool pop_on_undock = true);
 	/*virtual*/ void onSnooze();
 
-	/*virtual*/ BOOL tick();
+	/*virtual*/ bool tick();
 
 	// Make IM conversion visible and update the message history
 	static FSFloaterIM* show(const LLUUID& session_id);
@@ -291,7 +291,7 @@ public:
 	typedef boost::function<void()> callback_t;
 
 	FSFloaterIMTimer(callback_t callback);
-	/*virtual*/ BOOL tick();
+	/*virtual*/ bool tick();
 
 private:
 	callback_t mCallback;

@@ -1722,16 +1722,16 @@ void LLVOVolume::forceLOD(S32 lod)
 }
 //</FS:Beq>
 
-BOOL LLVOVolume::updateLOD()
+bool LLVOVolume::updateLOD()
 {
 	if (mDrawable.isNull())
 	{
-		return FALSE;
+		return false;
 	}
 
     LL_PROFILE_ZONE_SCOPED_CATEGORY_VOLUME;
 
-	BOOL lod_changed = FALSE;
+	bool lod_changed = false;
 
 	if (!LLSculptIDSize::instance().isUnloaded(getVolume()->getParams().getSculptID())) 
 	{
@@ -1739,13 +1739,13 @@ BOOL LLVOVolume::updateLOD()
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (lod_changed)
 	{
 		gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME);
-		mLODChanged = TRUE;
+		mLODChanged = true;
 	}
 	else
 	{

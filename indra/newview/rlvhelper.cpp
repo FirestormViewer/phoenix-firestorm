@@ -1968,7 +1968,7 @@ void RlvBehaviourNotifyHandler::onStand(const LLUUID& idObj, bool fAllowed)
 //
 
 // Checked: 2010-03-13 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-BOOL RlvGCTimer::tick()
+bool RlvGCTimer::tick()
 {
 	bool fContinue = gRlvHandler.onGC();
 	if (!fContinue)

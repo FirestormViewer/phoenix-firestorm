@@ -1718,21 +1718,21 @@ void FSLSLBridge::detachOtherBridges()
 	}
 }
 
-BOOL FSLSLBridgeCleanupTimer::tick()
+bool FSLSLBridgeCleanupTimer::tick()
 {
 	FSLSLBridge::instance().setTimerResult(FSLSLBridge::CLEANUP_FINISHED);
-	return TRUE;
+	return true;
 }
 
-BOOL FSLSLBridgeReAttachTimer::tick()
+bool FSLSLBridgeReAttachTimer::tick()
 {
 	LL_INFOS("FSLSLBridge") << "Re-attaching bridge after creation..." << LL_ENDL;
 	FSLSLBridge::instance().setTimerResult(FSLSLBridge::REATTACH_FINISHED);
-	return TRUE;
+	return true;
 }
 
-BOOL FSLSLBridgeStartCreationTimer::tick()
+bool FSLSLBridgeStartCreationTimer::tick()
 {
 	FSLSLBridge::instance().setTimerResult(FSLSLBridge::START_CREATION_FINISHED);
-	return TRUE;
+	return true;
 }

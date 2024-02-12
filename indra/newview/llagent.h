@@ -46,7 +46,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/signals2.hpp>
 
-extern const BOOL 	ANIMATE;
+extern const bool 	ANIMATE;
 extern const U8 	AGENT_STATE_TYPING;  // Typing indication
 extern const U8 	AGENT_STATE_EDITING; // Set when agent has objects selected
 
@@ -378,7 +378,7 @@ public:
 	void			setFlying(BOOL fly, BOOL fail_sound = FALSE);
 	static void		toggleFlying();
 	static bool		enableFlying();
-	BOOL			canFly(); 			// Does this parcel allow you to fly?
+	bool			canFly(); 			// Does this parcel allow you to fly?
 	static bool		isSitting();
 
 	//--------------------------------------------------------------------

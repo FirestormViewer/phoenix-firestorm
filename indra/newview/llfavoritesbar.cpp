@@ -151,7 +151,7 @@ public:
 		return mIsFailed;
 	}
 
-	/*virtual */ BOOL tick()
+	/*virtual */ bool tick()
 	{
 		mRetries++;
 		if (mRetries <= MAX_LANDMARK_REQUEST_RETRIES)
@@ -164,7 +164,7 @@ public:
 			mEventTimer.stop();
 		}
 
-		return FALSE;
+		return false;
 	}
 	// </FS:Ansariel>
 
@@ -482,8 +482,8 @@ public:
 		{
 			LLFavoritesOrderStorage::instance().setSortIndex(item, mSortField);
 
-			item->setComplete(TRUE);
-			item->updateServer(FALSE);
+			item->setComplete(true);
+			item->updateServer(false);
 
 			gInventory.updateItem(item);
 			gInventory.notifyObservers();
@@ -809,8 +809,8 @@ void LLFavoritesBarCtrl::handleNewFavoriteDragAndDrop(LLInventoryItem *item, con
 		{
 			LLFavoritesOrderStorage::instance().setSortIndex(currItem, ++sortField);
 
-			currItem->setComplete(TRUE);
-			currItem->updateServer(FALSE);
+			currItem->setComplete(true);
+			currItem->updateServer(false);
 
 			gInventory.updateItem(currItem);
 		}
@@ -1648,7 +1648,7 @@ bool LLFavoritesBarCtrl::onRenameCommit(const LLSD& notification, const LLSD& re
         {
             LLPointer<LLViewerInventoryItem> new_item = new LLViewerInventoryItem(item);
             new_item->rename(landmark_name);
-            new_item->updateServer(FALSE);
+            new_item->updateServer(false);
             gInventory.updateItem(new_item);
         }
     }
@@ -2232,8 +2232,8 @@ void LLFavoritesOrderStorage::saveItemsOrder( const LLInventoryModel::item_array
 
 		setSortIndex(item, ++sortField);
 
-		item->setComplete(TRUE);
-		item->updateServer(FALSE);
+		item->setComplete(true);
+		item->updateServer(false);
 
 		gInventory.updateItem(item);
 

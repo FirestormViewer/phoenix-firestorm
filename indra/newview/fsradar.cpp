@@ -80,10 +80,10 @@ public:
 		mEventTimer.start(); 
 	}
 
-	/*virtual*/ BOOL tick()
+	/*virtual*/ bool tick()
 	{
 		update();
-		return FALSE;
+		return false;
 	}
 };
 

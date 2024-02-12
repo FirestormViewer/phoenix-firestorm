@@ -1847,7 +1847,7 @@ public:
 	FSResetVoiceTimer() : LLEventTimer(5.f) { }
 	~FSResetVoiceTimer() { }
 
-	BOOL tick()
+	bool tick()
 	{
 		gSavedSettings.setBOOL("EnableVoiceChat", TRUE);
 		LLFloaterPreference* floater = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
@@ -1856,7 +1856,7 @@ public:
 			floater->childSetEnabled("enable_voice_check", true);
 			floater->childSetEnabled("enable_voice_check_volume", true);
 		}
-		return TRUE;
+		return true;
 	}
 };
 
@@ -3269,12 +3269,12 @@ void LLFloaterPreference::updateAnimatedScriptDialogs()
 
 //protected:
 
-//	BOOL tick()
+//	bool tick()
 //	{
 //		mCallback(mNewValue);
 //		mEventTimer.stop();
 
-//		return FALSE;
+//		return false;
 //	}
 
 //private:
