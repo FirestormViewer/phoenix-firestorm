@@ -339,7 +339,7 @@
 			<menu_item_check label="Raggio lampeggiante" name="Cheesy Beacon" />
 			<menu_item_check label="Nascondi particelle" name="Hide Particles" />
 			<menu_item_check label="Nascondi selezione" name="Hide Selected" />
-			<menu_item_check label="- includi trasparenze riggate" name="Include Transparent Rigged" />
+			<menu_item_check label="Includi trasparenze riggate" name="Include Transparent Rigged" />
 			<menu_item_check label="Mostra crocino Mouselook" name="ShowCrosshairs"/>
 			<menu label="Suggerimenti al passaggio" name="Hover Tips">
 				<menu_item_check label="Mostra" name="Show Tips" />

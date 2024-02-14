@@ -351,7 +351,7 @@
 			<menu_item_check label="Parçacıqları gizlətmək" name="Hide Particles"/>
 			<menu_item_check label="Seçilmiş obyekti gizlətmək" name="Hide Selected"/>
 			<menu_item_check label="Şəffaflığı vurğulamaq" name="Highlight Transparent"/>
-			<menu_item_check label="- riq ilə vurğulanmış şəffaflıq daxil olmaqla" name="Include Transparent Rigged"/>
+			<menu_item_check label="Riq ilə vurğulanmış şəffaflıq daxil olmaqla" name="Include Transparent Rigged"/>
 			<menu_item_check label="Birinci şəxs görüntüdə nişan göstərmək" name="ShowCrosshairs"/>
 			<menu label="Hover Tips" name="Hover Tips">
 				<menu_item_check label="Hover Tips göstərmək" name="Show Tips"/>

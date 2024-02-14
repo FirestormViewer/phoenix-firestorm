@@ -294,7 +294,7 @@
 			<menu_item_check label="Masquer les particules" name="Hide Particles"/>
 			<menu_item_check label="Masquer la sélection" name="Hide Selected"/>
 			<menu_item_check label="Mettre la transparence en surbrillance" name="Highlight Transparent"/>
-			<menu_item_check label="- Inclure les transparents riggés" name="Include Transparent Rigged"/>
+			<menu_item_check label="Inclure les transparents riggés" name="Include Transparent Rigged"/>
 			<menu_item_check label="Afficher le réticule de la vue subjective" name="ShowCrosshairs"/>
 			<menu label="Conseils" name="Hover Tips">
 				<menu_item_check label="Afficher les conseils" name="Show Tips"/>

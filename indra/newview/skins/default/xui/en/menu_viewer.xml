@@ -3073,7 +3073,7 @@
                  parameter="HideSelectedObjects" />
             </menu_item_check>
             <menu_item_check
-             label="- include Rigged Transparent"
+             label="Show Rigged Transparent"
              name="Include Transparent Rigged"
              shortcut="control|alt|shift|T"
              use_mac_ctrl="true">
