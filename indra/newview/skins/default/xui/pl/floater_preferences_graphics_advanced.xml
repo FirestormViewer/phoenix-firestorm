@@ -65,7 +65,7 @@
 	<text name="SkyMeshDetailText">
 		Nisko
 	</text>
-	<check_box label="Okluzja otoczenia ekranu (SSAO)" name="UseSSAO" />
+	<check_box label="Okluzja otoczenia (SSAO)" name="UseSSAO" />
 	<check_box label="Włącz głębię ostrości" name="UseDoF" />
 	<text name="RenderShadowDetailText">
 		Cienie:
@@ -75,7 +75,7 @@
 		<combo_box.item label="Słońce/Księżyc" name="1" />
 		<combo_box.item label="Słońce/Księżyc + inne źródła" name="2" />
 	</combo_box>
-	<check_box label="Odbicia Przestrzeni Ekranu (SSR)" name="ScreenSpaceReflections" />
+	<check_box label="Odbicia obszaru ekranu (SSR)" name="ScreenSpaceReflections" />
 	<text name="ReflectionDetailText">
 		Szczegóły odbić:
 	</text>

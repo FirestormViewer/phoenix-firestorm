@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<floater name="floater_combo">
+	<text name="combo_text">
+		Wybierz opcję:
+	</text>
+	<button label="Anuluj" name="combo_cancel" />
+</floater>

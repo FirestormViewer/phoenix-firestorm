@@ -31,8 +31,8 @@
 				Cieniowanie pikseli:
 			</text>
 			<check_box label="Przezroczysta woda" name="TransparentWater"/>
-			<check_box label="Okluzja otoczenia ekranu (SSAO)" name="UseSSAO"/>
-			<check_box label="Odbicia Przestrzeni Ekranu (SSR)" name="ScreenSpaceReflections"/>
+			<check_box label="Okluzja otoczenia (SSAO)" name="UseSSAO"/>
+			<check_box label="Odbicia obszaru ekranu (SSR)" name="ScreenSpaceReflections"/>
 			<text name="shadows_label">
 				Cienie:
 			</text>
@@ -59,7 +59,7 @@
 				<combo_box.item label="Pełna scena" name="3" />
 			</combo_box>
 			<text name="local lights_label" tool_tip="Wpływa na liczbę renderowanych źródeł światła, gdy 'zaawansowane oświetlenie' jest wyłączone. Aby zmienić tryb wymagany jest restart.">
-				Oświetlenie punktowe (wymagany restart):
+				Oświetlenie punktowe:
 			</text>
 			<combo_box name="LocalLightsDetail">
 				<combo_box.item label="Pełne (domyślne)" name="3"/>
