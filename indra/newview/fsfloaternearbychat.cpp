@@ -1019,5 +1019,6 @@ void FSFloaterNearbyChat::onRecentEmojiPicked(const LLSD& value)
 
 void FSFloaterNearbyChat::onEmojiPickerToggleBtnClicked()
 {
+	mInputEditor->setFocus(TRUE);
 	mInputEditor->showEmojiHelper();
 }

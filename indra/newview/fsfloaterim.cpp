@@ -2521,5 +2521,6 @@ void FSFloaterIM::onRecentEmojiPicked(const LLSD& value)
 
 void FSFloaterIM::onEmojiPickerToggleBtnClicked()
 {
+	mInputEditor->setFocus(TRUE);
 	mInputEditor->showEmojiHelper();
 }
