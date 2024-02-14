@@ -231,6 +231,9 @@
         <text name="title_models">
             Modele
         </text>
+		<text name="title_pbr">
+			Materiały PBR
+		</text>
         <text name="upload_help">
             Aby zmienić folder docelowy kliknij na nim prawym przyciskiem myszy w Szafie
 i użyj opcji "ustaw jako domyślne dla"

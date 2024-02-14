@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="env_adjust_snapshot" title="Własne oświetlenie">
+	<string name="hdr_string">
+		Skala HDR:
+	</string>
+	<string name="brightness_string">
+		Jasność:
+	</string>
+	<string name="hdr_tooltip">
+		Intensywność efektów świetlnych, takich jak realistycznie jasne niebo i dynamiczna ekspozycja. Wartość domyślna to 1.0, wartość 0 jest wyłączona, wartości od 0 do 1 mieszają tryb otoczenia z HDR.
+	</string>
 	<layout_stack name="outer_stack">
 		<layout_panel name="env_controls">
 			<layout_stack name="settings_stack">
@@ -40,8 +49,12 @@
 					<text name="cloud_scale_label">
 						Rozmiar chmur:
 					</text>
+					<text name="reflection_probe_ambiance_label">
+						Nastrój sondy refleksyjnej:
+					</text>
+					<slider name="probe_ambiance" tool_tip="Intensywność oświetlenia pośredniego opartego na środowisku. Po ustawieniu na zero HDR zmienia się w Jasność." />
 					<text name="scene_gamma_label">
-						Gamma sceny:
+						Jasność:
 					</text>
 				</layout_panel>
 				<layout_panel name="lp_3">

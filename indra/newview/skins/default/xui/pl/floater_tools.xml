@@ -451,6 +451,14 @@ Nis ↔ Najniż
 			<spinner label="Skupienie" name="Light Focus"/>
 			<spinner label="Obniż. siły" name="Light Falloff"/>
 			<spinner label="Nastrój" name="Light Ambiance"/>
+			<check_box label="Sonda refleksyjna" name="Reflection Probe" tool_tip="Reflection Probe; Reguluje sposób, w jaki obiekty wewnątrz tej primy odbierają odbicia, gdy włączona jest funkcja PBR" />
+			<combo_box name="Probe Volume Type" tool_tip="Wybierz typ objętości sondy">
+				<combo_box.item label="Kula" name="Sphere" />
+				<combo_box.item label="Pudełko" name="Box" />
+			</combo_box>
+			<check_box label="Dynamiczna" name="Probe Dynamic" tool_tip="Po włączeniu tej opcji, awatary będą pojawiać się w odbiciach wewnątrz obszaru wpływu tej sondy." />
+			<spinner label="Nastrój" name="Probe Ambiance" />
+			<spinner label="Przycinanie" name="Probe Near Clip" />
 			<text name="label physicsshapetype">
 				Typ kształtu fizycznego:
 			</text>

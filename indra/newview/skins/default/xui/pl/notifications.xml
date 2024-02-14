@@ -2305,6 +2305,13 @@ Wpisz hasło ponownie i kliknij na OK.
 		Uwaga:
 Lokalizacja tego miejsca została zaktualizowana, ale pozostałe szczegóły zachowają oryginalne wartości.
 	</notification>
+	<notification name="ApplyInventoryToObject">
+		Próbujesz dodać przedmiot bez praw kopiowania.
+Przedmiot ten zostanie przeniesiony do ekwipunku obiektu, a nie skopiowany.
+
+Przenieść przedmiot?
+		<usetemplate ignoretext="Ostrzegaj, gdy próbuję przenieść przedmiot bez praw kopiowania do obiektu" name="okcancelignore" notext="Anuluj" />
+	</notification>
 	<notification name="MoveInventoryFromObject">
 		Wybrane obiekty Szafy nie mają praw kopiowania.
 Obiekty zostaną przeniesione do Twojej Szafy, nie zostaną skopiowane.
@@ -2378,7 +2385,7 @@ Czy na pewno chcesz je skasować?
 	</notification>
 	<notification name="DeleteThumbnail">
 		Usunąć obraz tego elementu? Nie można tego cofnąć.
-		<usetemplate ignoretext="Potwierdź przed usunięciem miniatury" name="okcancelignore" notext="Anuluj" yestext="Usuń" />
+		<usetemplate ignoretext="Potwierdź przed permanentnym usunięciem miniatury" name="okcancelignore" notext="Anuluj" yestext="Usuń" />
 	</notification>
 	<notification name="ThumbnailDimentionsLimit">
 		Dozwolone są tylko obrazy kwadratowe o wielkości od 64 do 256 pikseli na stronę.
@@ -2739,6 +2746,12 @@ Ponieważ ma to wpływ na wpisywane hasło, możesz chcieć go wyłączyć.
 	<notification name="NotecardNoPermissions">
 		Nie masz uprawnień na zobaczenie notki.
 	</notification>
+	<notification name="MaterialMissing">
+		Brak materiału w bazie danych.
+	</notification>
+	<notification name="MaterialNoPermissions">
+		Nie masz uprawnień na zobaczenie tego materiału.
+	</notification>
 	<notification name="RezItemNoPermissions">
 		Nie masz uprawnień na stworzenie obiektu.
 	</notification>
@@ -2751,6 +2764,17 @@ Ponieważ ma to wpływ na wpisywane hasło, możesz chcieć go wyłączyć.
 	<notification name="UnableToLoadNotecard">
 		Nie można załadować notki w tym momencie.
 Spróbuj jeszcze raz.
+	</notification>
+	<notification name="UnableToLoadMaterial">
+		Nie można załadować materiału.
+Proszę spróbuj ponownie.
+	</notification>
+	<notification name="MissingMaterialCaps">
+		Brak połączenia z regionem obsługującym materiały.
+	</notification>
+	<notification name="CantSelectReflectionProbe">
+		Umieszczono sondę refleksyjną, ale opcja "wybierz sondy refleksyjne" jest wyłączona. Aby móc wybierać sondy refleksyjne, zaznacz opcję Buduj &gt; Opcje &gt; Wybierz sondy refleksyjne.
+		<usetemplate ignoretext="Ostrzegaj, jeśli wybieranie sond refleksyjnych jest wyłączone." name="okignore" />
 	</notification>
 	<notification name="ScriptMissing">
 		Skrypt nie został znaleziony w bazie danych.
@@ -3680,12 +3704,41 @@ Wstępnie przetworzone tekstury [RESOLUTION] zostały lokalnie zaktualizowane dl
 		Nie można przesłać tekstury.
 [REASON]
 	</notification>
+	<notification name="CannotUploadMaterial">
+		Wystąpił problem podczas przesyłania pliku
+	</notification>
+	<notification label="Zapisz materiał" name="SaveMaterialAs">
+		Nazwij ten materiał:
+		<form name="form">
+			<button name="Cancel" text="Anuluj" />
+		</form>
+	</notification>
+	<notification name="InvalidMaterialName">
+		Proszę wpisać nazwę, która nie jest pusta
+	</notification>
+	<notification name="UsavedMaterialChanges">
+		Masz niezapisane zmiany.
+		<form name="form">
+			<button name="discard" text="Odrzuć zmiany" />
+			<button name="keep" text="Kontynuuj edycję" />
+		</form>
+	</notification>
 	<notification name="LivePreviewUnavailable">
 		Nie można wyświetlić podglądu tej tekstury - jest niekopiowalna lub/oraz nietransferowalna.
 		<usetemplate ignoretext="Ostrzegaj, gdy podgląd na żywo nie może wyświetlić niekopiowalnych/nietransferowalnych tekstur" name="okignore" />
 	</notification>
+	<notification name="LivePreviewUnavailablePBR">
+		Nie można wyświetlić podglądu tego materiału, ponieważ nie można go kopiować, transferować i/lub modyfikować.
+		<usetemplate ignoretext="Ostrzegaj, że tryb podglądu nie jest dostępny dla materiałów, których nie można kopiować, transferować i/lub modyfikować" name="okignore" />
+	</notification>
 	<notification name="FacePasteFailed">
 		Wklejanie nie powiodło się. [REASON]
+	</notification>
+	<notification name="FailedToApplyTextureNoCopyToMultiple">
+		Nie udało się zaaplikować tekstury. Nie można zastosować tekstury bez praw kopiowania do wielu obiektów.
+	</notification>
+	<notification name="FailedToApplyGLTFNoCopyToMultiple">
+		Nie udało się zaaplikować materiału GLTF. Nie można zastosować materiału bez praw kopiowania do wielu obiektów.
 	</notification>
 	<notification name="FacePasteTexturePermissions">
 		Zastosowano teksturę z ograniczonymi uprawnieniami, obiekt odziedziczy więc te uprawnienia.
@@ -4169,6 +4222,10 @@ Aktualizacje dla tego pliku wyłączone.
 	</notification>
 	<notification name="LocalBitmapsVerifyFail">
 		Próba dodania niewłaściwego lub niemożliwego do odczytania pliku graficznego [FNAME], który nie może zostać otwarty lub zdekodowany.
+Anulowano.
+	</notification>
+	<notification name="LocalGLTFVerifyFail">
+		Próba dodania niewłaściwego lub niemożliwego do odczytania materiału [FNAME], który nie może zostać otwarty lub zdekodowany.
 Anulowano.
 	</notification>
 	<notification name="PathfindingReturnMultipleItems">
@@ -5238,6 +5295,14 @@ Riggowane mesze są przeznaczone do dodawania do samego awatara. Ani ty, ani nik
 
 Jeśli chcesz zobaczyć ten obiekt, to usuń go i ponownie dołącz do punktu doczepienia na awatarze.
 		<usetemplate ignoretext="Ostrzegaj, gdy dodatek z riggowanym meszem jest dołączany do punktu HUD" name="okignore" />
+	</notification>
+	<notification name="ReflectionProbeApplied">
+		UWAGA: Ten obiekt stanie się sondą refleksyjną - nastąpią w nim nieodwracalne zmiany. Sprawią one, że obiekt będzie naśladować wpływ sondy na otoczenie. Czy chcesz kontynuować?
+		<usetemplate ignoretext="Wskazówki sond refleksyjnych" name="okcancelignore" notext="Cancel" />
+	</notification>
+	<notification name="AutoAdjustHDRSky">
+		Edytujesz niebo inne niż HDR, które zostało automatycznie przekonwertowane na HDR. Aby usunąć HDR i mapowanie tonów, ustaw Nastrój Sondy Refleksyjnej na zero.
+		<usetemplate ignoretext="Ostrzeżenie dotyczące regulacji HDR nieba" name="okignore" />
 	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Zamierzasz włączyć funkcję AutoFPS. Wszystkie niezapisane ustawienia grafiki zostaną utracone.
