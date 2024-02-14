@@ -22,6 +22,7 @@
 	<icon name="icon_sound" tool_tip="Suoni"/>
 	<icon name="icon_texture" tool_tip="Texture"/>
 	<icon name="icon_setting" tool_tip="Ambienti"/>
+	<icon name="icon_materials" tool_tip="Materiali"/>
 	<button label="√ Tutti" name="check_all"/>
 	<button label="Nessuno" label_selected="Nessuno" name="check_none"/>
 	<text name="newperms">
@@ -35,7 +36,7 @@
 		Chiunque:
 	</text>
 	<check_box label="Copiare" name="everyone_copy" tool_tip="Chiunque può prendere una copia di questo oggetto. L&apos;oggetto e tutti i suoi contenuti devono avere il permesso di copia e trasferimento."/>
-	<text name="NextOwnerLabel" width="112">
+	<text name="NextOwnerLabel">
 		Propr. successivo:
 	</text>
 	<check_box label="Modificare" name="next_owner_modify" tool_tip="Il prossimo proprietario può modificare le proprietà dell&apos;oggetto come il nome o la scala."/>

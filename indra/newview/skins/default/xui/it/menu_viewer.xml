@@ -137,6 +137,7 @@
 		<menu label="Ambiente" name="Environment">
 			<menu_item_check label="Alba" name="Sunrise"/>
 			<menu_item_check label="Mezzogiorno" name="Noon"/>
+			<menu_item_check label="Mezzogiorno (vecchio stile)" name="legacy noon"/>
 			<menu_item_check label="Tramonto" name="Sunset"/>
 			<menu_item_check label="Mezzanotte" name="Midnight"/>
 			<menu_item_check label="Usa ambiente condiviso" name="Use Shared Environment"/>
@@ -233,13 +234,19 @@
 			<menu_item_check label="Seleziona solo oggetti spostabili" name="Select Only Movable Objects"/>
 			<menu_item_check label="Seleziona solo oggetti bloccati" name="Select Only Locked Objects"/>
 			<menu_item_check label="Seleziona solo oggetti copiabili" name="Select Only Copyable Objects"/>
+			<menu_item_check label="Seleziona oggetti invisibili" name="Select Invisible Objects"/>
+			<menu_item_check label="Seleziona sonde di riflessione" name="Select Reflection Probes"/>
+			<menu_item_check label="Aggiornamenti delle sonde" name="Probe Updates"/>
 			<menu_item_check label="Seleziona circondando" name="Select By Surrounding"/>
 			<menu_item_check label="Includi oggetti del gruppo" name="Include Group-Owned Objects"/>
 			<menu_item_check label="Mostra sagoma fisica in modifica" name="Show Physics Shape"/>
 			<menu_item_check label="Mostra contorni selezione" name="Show Selection Outlines"/>
-			<menu_item_check label="Mostra selezione nascosta" name="Show Hidden Selection"/>
-			<menu_item_check label="Mostra raggio per selezione" name="Show Light Radius for Selection"/>
-			<menu_item_check label="Mostra faro per selezione" name="Show Selection Beam"/>
+			<menu_item_check label="Mostra contorni nascosti selezione" name="Show Hidden Selection"/>
+			<menu_item_check label="Mostra aree illuminate nella selezione" name="Show Light Radius for Selection"/>
+			<menu_item_check label="Mostra volumi sonde di riflessione" name="Show Reflection Probe Volumes"/>
+			<menu_item_check label="Mostra raggio di selezione" name="Show Selection Beam"/>
+			<menu_item_check label="Evidenzia trasparenze" name="Highlight Transparent"/>
+			<menu_item_check label="Nessuna post-elaborazione" name="No Post"/>
 			<menu_item_check label="Fissa alla griglia" name="Snap to Grid"/>
 			<menu_item_call label="Fissa XY alla griglia" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Usa selezione per griglia" name="Use Selection for Grid"/>
@@ -251,6 +258,7 @@
 			<menu_item_call label="Suono (L$[COST])..." name="Upload Sound"/>
 			<menu_item_call label="Animazione (L$[COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modello mesh..." name="Upload Model"/>
+			<menu_item_call label="Materiale..." name="Upload Material"/>
 			<menu_item_call label="Importa in blocco..." name="Bulk Upload"/>
 			<menu_item_call label="Importa linkset..." name="import linkset"/>
 		</menu>
@@ -331,7 +339,6 @@
 			<menu_item_check label="Raggio lampeggiante" name="Cheesy Beacon" />
 			<menu_item_check label="Nascondi particelle" name="Hide Particles" />
 			<menu_item_check label="Nascondi selezione" name="Hide Selected" />
-			<menu_item_check label="Evidenzia trasparenze" name="Highlight Transparent"/>
 			<menu_item_check label="- includi trasparenze riggate" name="Include Transparent Rigged" />
 			<menu_item_check label="Mostra crocino Mouselook" name="ShowCrosshairs"/>
 			<menu label="Suggerimenti al passaggio" name="Hover Tips">

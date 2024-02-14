@@ -192,6 +192,7 @@
 		</text>
 		<slider label="Attive:" name="active"/>
 		<slider label="Inattive:" name="inactive"/>
+		<slider label="Camera / Movimento:" name="camera_movement" />
 		<text name="console_opacity">
 			Opacità console:
 		</text>

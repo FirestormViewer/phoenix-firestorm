@@ -5,6 +5,7 @@
 		<menu_item_call label="Suono (L$[COST])..." name="Upload Sound"/>
 		<menu_item_call label="Animazione (L$[COST])..." name="Upload Animation"/>
 		<menu_item_call label="Modello mesh..." name="Upload Model"/>
+		<menu_item_call label="Materiale..." name="Upload Material"/>
 		<menu_item_call label="Importa in blocco..." name="Bulk Upload"/>
 		<menu_item_call label="Importa linkset..." name="import linkset"/>
 	</menu>
@@ -12,6 +13,7 @@
 	<menu_item_call label="Nuovo script" name="New Script"/>
 	<menu_item_call label="Nuova annotazione" name="New Note"/>
 	<menu_item_call label="Nuovo gesto" name="New Gesture"/>
+	<menu_item_call label="Nuovo materiale" name="New Material"/>
 	<menu label="Nuovo indumento" name="New Clothes">
 		<menu_item_call label="Nuova camicia" name="New Shirt"/>
 		<menu_item_call label="Nuovi pantaloni" name="New Pants"/>

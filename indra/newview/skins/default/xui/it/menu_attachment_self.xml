@@ -3,6 +3,7 @@
 	<menu_item_call label="Tocca" name="Attachment Object Touch"/>
 	<menu_item_call label="Mostra in inventario" name="Show original"/>
 	<menu_item_call label="Modifica" name="Edit..."/>
+	<menu_item_call label="Modifica materiale PBR" name="EditGLTFMaterial"/>
 	<menu_item_call label="Stacca" name="Detach"/>
 	<context_menu label="Esporta" name="Export Menu">
 		<menu_item_call label="Salva copia" name="Backup"/>

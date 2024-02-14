@@ -22,6 +22,7 @@
 	<menu_item_call label="Nuovo script" name="New Script"/>
 	<menu_item_call label="Nuova annotazione" name="New Note"/>
 	<menu_item_call label="Nuovo gesto" name="New Gesture"/>
+	<menu_item_call label="Nuovo materiale" name="New Material"/>
 	<menu label="Nuovo indumento" name="New Clothes">
 		<menu_item_call label="Nuova camicia" name="New Shirt"/>
 		<menu_item_call label="Nuovi pantaloni" name="New Pants"/>
@@ -53,6 +54,7 @@
 		<menu_item_call label="Suoni caricati" name="Sound uploads"/>
 		<menu_item_call label="Animazioni caricate" name="Animation uploads"/>
 		<menu_item_call label="Modelli mesh caricati" name="Model uploads"/>
+		<menu_item_call label="Materiali PBR caricati" name="PBR uploads"/>
 	</menu>
 	<menu label="Cambia tipo" name="Change Type">
 		<menu_item_call label="Predefinito" name="Default"/>

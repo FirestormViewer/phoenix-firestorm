@@ -857,6 +857,12 @@ Riprova più tardi.
 	<notification name="CannotCreateLandmarkNotOwner">
 		Non puoi creare qui un segnaposto perchè il proprietario di questo terreno non lo consente.
 	</notification>
+	<notification label="Crea nuova cartella" name="CreateLandmarkFolder">
+		Scegli un nome per la cartella:
+		<form name="form">
+			<button name="Cancel" text="Annulla" />
+		</form>
+	</notification>
 	<notification name="CannotRecompileSelectObjectsNoScripts">
 		Impossibile fare la &apos;ricompilazione&apos;.
 
@@ -2238,6 +2244,13 @@ Ridigita la tua password e premi OK.
 		Nota:
 Hai aggiornato l&apos;ubicazione di questo preferito ma gli altri dettagli conserveranno il loro valore originale.
 	</notification>
+	<notification name="ApplyInventoryToObject">
+		Stai applicando l'opzione "nessuna copia" ad un elemento nell'inventario.
+Questo elemento verrà spostato nell'inventario dell'oggetto, non copiato.
+
+Spostare l'elemento?
+		<usetemplate ignoretext="Avvisami prima di applicare elementi non copiabili ad un oggetto." name="okcancelignore" notext="Annulla" yestext="On"/>
+	</notification>
 	<notification name="MoveInventoryFromObject">
 		Hai selezionato elementi dall&apos;inventario &apos;non copiabili&apos;.
 Questi elementi verranno trasferiti nel tuo inventario, ma non copiati.
@@ -2646,6 +2659,12 @@ Questo potrebbe incidere sulla tua password.
 	<notification name="NotecardNoPermissions">
 		Non hai il permesso di vedere questa annotazione.
 	</notification>
+	<notification name="MaterialMissing">
+		Il materiale non è stato trovato nel database.
+	</notification>
+	<notification name="MaterialNoPermissions">
+		Non hai il permesso per visualizzare questo materiale.
+	</notification>
 	<notification name="RezItemNoPermissions">
 		Permessi insufficienti per creare un oggetto/i.
 	</notification>
@@ -2657,6 +2676,17 @@ Questo potrebbe incidere sulla tua password.
 	</notification>
 	<notification name="UnableToLoadNotecard">
 		Impossibile caricare l'annotazione. Riprovare.
+	</notification>
+	<notification name="UnableToLoadMaterial">
+		Impossibile caricare il materiale.
+Prova di nuovo.
+	</notification>
+	<notification name="MissingMaterialCaps">
+		Non sei connesso ad una regione che supporta i materiali.
+	</notification>
+	<notification name="CantSelectReflectionProbe">
+		Hai posizionato una sonda di riflessione, ma l'opzione 'Seleziona sonde di riflessione' è disabilitata. Per poter selezionare le sonde di riflessione, metti la spunta su: Costruisci > Opzioni > Seleziona sonde di riflessione.
+		<usetemplate ignoretext="Avvisami se l'opzione 'Seleziona sonde di riflessione' è disabilitata." name="okignore" yestext="Ok"/>
 	</notification>
 	<notification name="ScriptMissing">
 		Script non trovato nel database.
@@ -3575,9 +3605,50 @@ Hai aggiornato localmente una texture [RESOLUTION] completata per &apos;[BODYREG
 		Impossibile caricare la texture.
 [REASON]
 	</notification>
+	<notification name="CannotUploadMaterial">
+		Si è verificato un problema durante il caricamento del file.
+	</notification>
+	<notification label="Salva materiale" name="SaveMaterialAs">
+		Nome materiale:
+		<form name="form">
+			<button name="OK" text="Ok"/>
+			<button name="Cancel" text="Annulla"/>
+		</form>
+	</notification>
+	<notification name="InvalidMaterialName">
+		Inserisci un nome
+	</notification>
+	<notification name="UsavedMaterialChanges">
+		Sono presenti modifiche non salvate.
+		<form name="form">
+			<button name="discard" text="Ignora modifiche"/>
+			<button name="keep" text="Continua a modificare"/>
+		</form>
+	</notification>
 	<notification name="LivePreviewUnavailable">
-		Non possiamo mostrare un&apos;anteprima di questa texture perché non ne è consentita la copia e/o il trasferimento.
-		<usetemplate ignoretext="Avvisami se la modalità Anteprima dal vivo non è disponibile per texture per cui non è consentita la copia e/o il trasferimento." name="okignore" />
+		Non è possibile visualizzare l'anteprima di questa texture perché non ne è consentita la copia e/o il trasferimento.
+		<usetemplate ignoretext="Avvisami se la modalità Anteprima non è disponibile per le texture non copiabili e/o non trasferibili." name="okignore" yestext="Ok" />
+	</notification>
+	<notification name="LivePreviewUnavailablePBR">
+		Non è possibile visualizzare l'anteprima di questo materiale perché non è copiabile, trasferibile e/o modificabile.
+		<usetemplate ignoretext="Avvisami se la modalità Anteprima non è disponibile per i materiali non copiabili, non trasferibili e/o non modificabili." name="okignore" yestext="Ok"/>
+	</notification>
+	<notification name="FacePasteFailed">
+		Inserimento non riuscito. [REASON]
+		<usetemplate name="okbutton" yestext="Ok"/>
+	</notification>
+	<notification name="FailedToApplyTextureNoCopyToMultiple">
+		Impossibile applicare la texture. Non è possibile applicare una texture non copiabile a più oggetti.
+		<usetemplate name="okbutton" yestext="Ok"/>
+	</notification>
+	<notification name="FailedToApplyGLTFNoCopyToMultiple">
+		Impossibile applicare il materiale GLTF. Non è possibile applicare un materiale non copiabile a più oggetti.
+		<usetemplate name="okbutton" yestext="Ok"/>
+	</notification>
+	<notification name="FacePasteTexturePermissions">
+		Hai applicato una texture con permessi limitati, l'oggetto erediterà i permessi dalla texture.
+		<usetemplate ignoretext="Incolla: hai applicato una texture con permessi limitati" name="notifyignore"/>
+		<usetemplate name="okbutton" yestext="Ok"/>
 	</notification>
 	<notification name="ConfirmLeaveCall">
 		Uscire dalla chiamata?
@@ -4034,12 +4105,19 @@ Abilitare l&apos;invio automatico della versione?
 		[FNAME] non è stato aggiornato perché il file non è stato più trovato.
 Gli aggiornamenti futuri per questo file sono disattivati.
 	</notification>
+	<notification name="NoTransNoSaveToContents">
+		Impossibile salvare &lt;nolink&gt;„[OBJ_NAME]“&lt;/nolink&gt; nei contenuti dell'oggetto perché non disponi dell'autorizzazione per trasferire la proprietà dell'oggetto.
+	</notification>
 	<notification name="LocalBitmapsUpdateFailedFinal">
 		[FNAME] non è stato aperto o decodificato dopo [NRETRIES] tentativi, viene considerato danneggiato.
 Gli aggiornamenti futuri per questo file sono disattivati.
 	</notification>
 	<notification name="LocalBitmapsVerifyFail">
-		Tentativo di aggiungere un file immagine [FNAME] non valido o non leggibile che non è stato possibile aprire o decodificare.
+		Tentativo di aggiungere un file immagine ([FNAME]) non valido o illeggibile che non è stato possibile aprire o decodificare.
+Tentativo annullato.
+	</notification>
+	<notification name="LocalGLTFVerifyFail">
+		Tentativo di aggiungere un materiale GLTF ([FNAME]) non valido o illeggibile che non è stato possibile aprire o decodificare.
 Tentativo annullato.
 	</notification>
 	<notification name="PathfindingReturnMultipleItems">
@@ -5099,6 +5177,14 @@ Gli oggetti mesh riggati sono progettati per essere attaccati all'avatar. Né tu
 
 Se vuoi vedere questo oggetto, toglilo e indossalo su un punto di attacco dell'avatar.
 		<usetemplate ignoretext="Avvisami quando una mesh riggata viene indossata su un punto di attacco HUD." name="okignore" />
+	</notification>
+	<notification name="ReflectionProbeApplied">
+		ATTENZIONE: hai reso il tuo oggetto una sonda di riflessione. Ciò implicitamente cambia l'oggetto per imitare il suo volume di influenza. Questi cambiamenti sono irreversibili. Vuoi continuare?
+		<usetemplate ignoretext="Avvisi sulla sonda di riflessione" name="okcancelignore" yestext="Ok" notext="Annulla"/>
+	</notification>
+	<notification name="AutoAdjustHDRSky">
+		Stai modificando un cielo non HDR che è stato automaticamente convertito in HDR. Per rimuovere l'HDR e la mappatura dei toni, imposta l'ambiente della sonda di riflessione su zero.
+		<usetemplate ignoretext="Avvisi sulla regolazione del cielo HDR" name="okignore" yestext="Ok"/>
 	</notification>
 	<notification name="EnableAutoFPSWarning">
 		Stai per abilitare AutoFPS. Tutte le impostazioni grafiche non salvate andranno perse.

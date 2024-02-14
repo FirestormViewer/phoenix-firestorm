@@ -889,15 +889,21 @@ https://www.firestormviewer.org/support per avere aiuto nella soluzione.
 	<string name="favorite">
 		preferiti
 	</string>
+	<string name="symbolic link">
+		link
+	</string>
 	<string name="symbolic folder link">
 		link alla cartella
 	</string>
-	<string name="mesh">
-		modello
+	<string name="settings blob">
+		impostazioni
 	</string>
-    <string name="settings">
-        impostazioni
-    </string>
+	<string name="render material">
+		materiale
+	</string>
+	<string name="mesh">
+		mesh
+	</string>
 	<string name="AvatarEditingAppearance">
 		(Modifica aspetto)
 	</string>
@@ -1795,6 +1801,7 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 	<string name="Clothing" value=" Vestiti,"/>
 	<string name="Gestures" value=" Gesti,"/>
 	<string name="Landmarks" value=" Segnaposto,"/>
+	<string name="Materials" value=" Materiali,"/>
 	<string name="Notecards" value=" Annotazioni,"/>
 	<string name="Objects" value=" Oggetti,"/>
 	<string name="Scripts" value=" Script,"/>
@@ -1895,6 +1902,12 @@ Se il messaggio persiste, contattare il supporto Second Life per assistenza http
 	</string>
 	<string name="InvFolder Settings">
 		Ambienti
+	</string>
+	<string name="InvFolder Material">
+		Materiali
+	</string>
+	<string name="InvFolder Materials">
+		Materiali
 	</string>
 	<string name="InvFolder Friends">
 		Amici
@@ -4922,6 +4935,9 @@ Segnala abuso
 	<string name="New Gesture">
 		Nuovo gesto
 	</string>
+	<string name="New Material">
+		Nuovo materiale
+	</string>
 	<string name="New Script">
 		Nuovo script
 	</string>
@@ -5878,6 +5894,9 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	<string name="RLVaToggleDisabled">
 		disabilitato
 	</string>
+	<string name="RLVaStatusDisabled">
+		(disabilitato)
+	</string>
 	<string name="experience_tools_experience">
 		Esperienza
 	</string>
@@ -5935,6 +5954,12 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	<string name="ExperiencePermission12">
 		accettazione automatica delle autorizzazioni per le esperienze
 	</string>
+	<string name="ExperiencePermission16">
+		forzare l'avatar a sedersi
+	</string>
+	<string name="ExperiencePermission17">
+		Modifica delle impostazioni dell'ambiente
+	</string>
 	<string name="ExperiencePermissionShortUnknown">
 		ha eseguito un&apos;operazione sconosciuta: [Permission]
 	</string>
@@ -5958,6 +5983,15 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	</string>
 	<string name="ExperiencePermissionShort12">
 		Autorizzazione
+	</string>
+	<string name="ExperiencePermissionShort16">
+		Sedersi
+	</string>
+	<string name="ExperiencePermissionShort17">
+		Ambiente
+	</string>
+	<string name="Material Texture Name Header">
+		Texture esistenti nel materiale:
 	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Le conversazioni non vengono registrate. Per iniziare a registrare, seleziona &quot;Salva: Solo registro&quot; oppure &quot;Salva: Registri e trascrizioni&quot; in Preferenze &gt; Chat.
