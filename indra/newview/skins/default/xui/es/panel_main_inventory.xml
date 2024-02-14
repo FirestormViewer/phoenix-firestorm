@@ -6,7 +6,7 @@
 	<panel.string name="ItemcountCompleted">
 		[ITEM_COUNT] Objetos y [CATEGORY_COUNT] Carpetas [FILTER]
 	</panel.string>
-	<layout_stack name="nav_stack">
+	<layout_stack name="top_stack">
 		<layout_panel name="nav_buttons">
 			<button name="back_btn" tool_tip="Regresa" />
 			<button name="forward_btn" tool_tip="Avanzar" />
