@@ -93,6 +93,8 @@ private:
     void onEmojiMouseUp(LLUICtrl* ctrl);
 
     void selectFocusedIcon();
+    bool moveFocusedIconUp();
+    bool moveFocusedIconDown();
     bool moveFocusedIconPrev();
     bool moveFocusedIconNext();
 
