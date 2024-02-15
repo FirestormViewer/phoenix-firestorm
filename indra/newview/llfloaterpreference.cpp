@@ -2215,13 +2215,14 @@ void LLFloaterPreference::refreshEnabledState()
 	enabled = FALSE;
 	if (!LLFeatureManager::instance().isFeatureAvailable("RenderReflectionsEnabled"))
 	{
-		getChildView("ReflectionsEnabled")->setEnabled(FALSE);
+		// getChildView("ReflectionsEnabled")->setEnabled(FALSE);
 	}
 	else
 	{
 		enabled = gSavedSettings.getBOOL("RenderReflectionsEnabled");
 	}
 	getChildView("ReflectionDetail")->setEnabled(enabled);
+	getChildView("ReflectionLevel")->setEnabled(enabled);
 	//getChildView("ReflectionDetailText")->setEnabled(enabled);
 	getChildView("ScreenSpaceReflections")->setEnabled(enabled);
 

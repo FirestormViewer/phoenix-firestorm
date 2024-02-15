@@ -15,7 +15,7 @@
 	<text name="color label">
 		Colore
 	</text>
-	<color_swatch label="" name="colorswatch" tool_tip="Clic per aprire il selettore dei colori"/>
+	<color_swatch label="" name="colorswatch" tool_tip="Clicca qui per scegliere il colore"/>
 	<text name="color trans">
 		Trasparenza %
 	</text>
@@ -25,8 +25,12 @@
 	<check_box label="Max luminosità" name="checkbox fullbright" />
 	<button name="copy_face_btn" tool_tip="Copia i parametri della texture negli appunti" />
 	<button name="paste_face_btn" tool_tip="Incolla i parametri della texture dagli appunti" />
+	<text name="label_matmedia">
+		Materiale
+	</text>
 	<combo_box name="combobox matmedia">
-		<combo_box.item label="Materiali" name="Materials"/>
+		<combo_box.item label="Texture" name="Materials"/>
+		<combo_box.item label="PBR" name="PBR"/>
 		<combo_box.item label="Media" name="Media"/>
 	</combo_box>
 	<radio_group name="radio_material_type">
@@ -34,7 +38,20 @@
 		<radio_item label="Superficie (normale)" name="Bumpiness (normal)" value="1"/>
 		<radio_item label="Lucentezza (speculare)" name="Shininess (specular)" value="2"/>
 	</radio_group>
-	<texture_picker label="Texture" name="texture control" tool_tip="Clic per scegliere un&apos;immagine"/>
+	<radio_group name="radio_pbr_type">
+		<radio_item label="Materiale completo" name="Complete material"/>
+		<radio_item label="Colore di base" name="Base color"/>
+		<radio_item label="Metallità/rugosità" name="Metallic/roughness"/>
+		<radio_item label="Emissiva" name="Emissive"/>
+		<radio_item label="Normale" name="Normal"/>
+	</radio_group>
+	<texture_picker label="Materiale" name="pbr_control" tool_tip="Clicca qui per scegliere un materiale PBR"/>
+	<text name="material_permissions_loading_label">
+		Caricamento contenuti...
+	</text>
+	<button name="edit_selected_pbr" label="Modifica"/>
+	<button name="save_selected_pbr" label="Salva"/>
+	<texture_picker label="Texture" name="texture control" tool_tip="Clicca qui per scegliere un&apos;immagine"/>
 	<text name="label alphamode">
 		Modalità alfa
 	</text>
@@ -45,9 +62,9 @@
 		<combo_box.item label="Maschera emissiva" name="Emissive mask"/>
 	</combo_box>
 	<text name="label maskcutoff">
-		Limite maschera
+		Ritaglio maschera
 	</text>
-	<texture_picker label="Texture" name="bumpytexture control" tool_tip="Clic per scegliere un&apos;immagine"/>
+	<texture_picker label="Texture" name="bumpytexture control" tool_tip="Clicca qui per scegliere un&apos;immagine"/>
 	<text name="label bumpiness">
 		Superficie
 	</text>
@@ -72,7 +89,7 @@
 		<combo_box.item label="trama" name="weave"/>
 		<!-- <combo_box.item label="Usa texture" name="Use texture" /> -->
 	</combo_box>
-	<texture_picker label="Texture" name="shinytexture control" tool_tip="Clic per scegliere un&apos;immagine"/>
+	<texture_picker label="Texture" name="shinytexture control" tool_tip="Clicca qui per scegliere un&apos;immagine"/>
 	<text name="label shininess">
 		Lucentezza
 	</text>
@@ -92,7 +109,7 @@
 	<text name="label shinycolor">
 		Colore
 	</text>
-	<color_swatch label="" name="shinycolorswatch" tool_tip="Clic per aprire il selettore dei colori"/>
+	<color_swatch label="" name="shinycolorswatch" tool_tip="Clicca qui per scegliere il colore"/>
 	<text name="media_info">
 		L&apos;URL dell&apos;elemento multimediale selezionato va qui
 	</text>
@@ -124,6 +141,11 @@
 	<spinner label="Rotazione" name="shinyRot"/>
 	<spinner label="Spostamento orizzontale" name="shinyOffsetU"/>
 	<spinner label="Spostamento verticale" name="shinyOffsetV"/>
+	<spinner label="Scala u" name="gltfTextureScaleU"/>
+	<spinner label="Scala v" name="gltfTextureScaleV"/>
+	<spinner label="Rotazione" name="gltfTextureRotation"/>
+	<spinner label="Spostamento u" name="gltfTextureOffsetU"/>
+	<spinner label="Spostamento v" name="gltfTextureOffsetV"/>
 	<check_box label="Allinea facce planari" name="checkbox planar align" tool_tip="Allinea le texture su tutte le facce selezionate con l&apos;ultima faccia selezionata. È richiesta la mappatura planare delle texture."/>
 	<check_box label="Sincronizza materiali" name="checkbox_sync_settings" tool_tip="Sincronizza i parametri delle texture"/>
 	<button label="Allinea" name="button align textures" tool_tip="Allinea i livelli della texture corrente" />

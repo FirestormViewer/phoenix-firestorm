@@ -137,6 +137,7 @@
 			<menu_item_check label="Gizli Seçimi Göster" name="Show Hidden Selection"/>
 			<menu_item_check label="Seçim İçin Işık Yarı Çapını Göster" name="Show Light Radius for Selection"/>
 			<menu_item_check label="Seçim Işınını Göster" name="Show Selection Beam"/>
+			<menu_item_check label="Saydamı Vurgula" name="Highlight Transparent"/>
 			<menu_item_check label="Ağa Uydur" name="Snap to Grid"/>
 			<menu_item_call label="XY Nesnesini Ağa Uydur" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Ağ İçin Seçimi Kullan" name="Use Selection for Grid"/>
@@ -185,7 +186,6 @@
 			<menu_item_check label="Yanıp Sönen İşaret" name="Cheesy Beacon"/>
 			<menu_item_check label="Parçacıkları Gizle" name="Hide Particles"/>
 			<menu_item_check label="Seçilenleri Gizle" name="Hide Selected"/>
-			<menu_item_check label="Saydamı Vurgula" name="Highlight Transparent"/>
 			<menu_item_check label="Fare Üzerinden Görünüm Artı İşaretini Göster" name="ShowCrosshairs"/>
 		</menu>
 		<menu label="İşleme Türleri" name="Rendering Types">

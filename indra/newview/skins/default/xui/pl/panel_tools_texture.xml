@@ -25,15 +25,31 @@
 	<check_box label="Pełna jasność" name="checkbox fullbright" />
 	<button name="copy_face_btn" tool_tip="Skopiuj parametry tekstury do schowka" />
 	<button name="paste_face_btn" tool_tip="Wklej parametry tekstury ze schowka" />
+	<text name="label_matmedia">
+		Materiał
+	</text>
 	<combo_box name="combobox matmedia">
-		<combo_box.item label="Materiały" name="Materials" />
-		<combo_box.item label="Media" name="Media" />
+		<combo_box.item label="Tekstury" name="Materials" />
+		<combo_box.item label="Metaliczność/chropowatość PBR" name="PBR" />
 	</combo_box>
 	<radio_group name="radio_material_type">
 		<radio_item label="Tekstura (diffuse)" name="Texture (diffuse)" />
 		<radio_item label="Powierzchnia (normal)" name="Bumpiness (normal)" />
 		<radio_item label="Lśnienie (specular)" name="Shininess (specular)" />
 	</radio_group>
+	<radio_group name="radio_pbr_type">
+		<radio_item label="Kompletny materiał" name="Complete material" />
+		<radio_item label="Kolor bazowy" name="Base color" />
+		<radio_item label="Metaliczność/chropowatość" name="Metallic/roughness" />
+		<radio_item label="Emisyjność" name="Emissive" />
+		<radio_item label="Normalne" name="Normal" />
+	</radio_group>
+	<texture_picker label="Materiał" name="pbr_control" tool_tip="Kliknij, aby wybrać materiał PBR" />
+	<text name="material_permissions_loading_label">
+		Ładowanie zawartości...
+	</text>
+	<button name="edit_selected_pbr" label="Edycja" />
+	<button name="save_selected_pbr" label="Zapisz" />
 	<texture_picker label="Tekstura" name="texture control" tool_tip="Kliknij, aby wybrać obraz" />
 	<text name="label alphamode">
 		Tryb alphy
@@ -124,6 +140,11 @@
 	<spinner label="Obrót w stopniach" name="shinyRot" />
 	<spinner label="Wyrównanie poziome" name="shinyOffsetU" />
 	<spinner label="Wyrównanie pionowe" name="shinyOffsetV" />
+	<spinner label="Skala u" name="gltfTextureScaleU" />
+	<spinner label="Skala v" name="gltfTextureScaleV" />
+	<spinner label="Obrót" name="gltfTextureRotation" />
+	<spinner label="Przesun. u" name="gltfTextureOffsetU" />
+	<spinner label="Przesun. v" name="gltfTextureOffsetV" />
 	<check_box label="Równaj powierzchnie planarne" name="checkbox planar align" tool_tip="Wyrównuj tekstury na wszystkich wybranych powierzchniach z powierzchnią wybraną jako ostatnia. Wymaga planarnego mapowania tekstur." />
 	<check_box label="Synchronizuj materiały" name="checkbox_sync_settings" tool_tip="Synchronizuj parametry map tekstur" />
 	<button label="Wyrównaj" name="button align textures" tool_tip="Wyrównaj bieżące warstwy tekstury" />

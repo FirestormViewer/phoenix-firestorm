@@ -354,6 +354,7 @@
 				</text>
 				<check_box label="Abilitazione automatica dei pesi" tool_tip="Imposta automaticamente i pesi abilitati per le mesh con informazioni sul rigging" name="mesh_preview_auto_weights" />
 				<check_box label="Anteprima automatica dei pesi" tool_tip="Mostra automaticamente i pesi in anteprima per le mesh con informazioni sul rigging" name="mesh_preview_auto_show_weights" />
+				<check_box label="Usa LOD 'affidabile' come impostazione predefinita" tool_tip="Per impostazione predefinita, utilizzare il metodo 'affidabile' (GLOD)" name="mesh_upload_default_to_reliable"/>
 				<text name="lod_suffix_label">
 					Suffissi LOD:
 				</text>

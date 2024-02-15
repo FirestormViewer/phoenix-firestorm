@@ -42,6 +42,9 @@
 			<text name="title" value="Profilo del luogo"/>
 		</layout_panel>
 		<layout_panel name="place_info_content">
+			<text name="region_title">
+				Regione: [REGIONAMEPOS]
+			</text>
 			<text name="owner_label" value="Proprietario:"/>
 			<text name="maturity_value" value="sconosciuto"/>
 			<accordion name="advanced_info_accordion">
