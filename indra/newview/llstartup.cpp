@@ -3951,6 +3951,13 @@ void reset_login()
 		chat_channel->removeToastsFromChannel();
 	}
 	LLFloaterReg::hideVisibleInstances();
+
+    // <FS:Ansariel> Improved menu and navigation bar
+    //if (LLStartUp::getStartupState() > STATE_WORLD_INIT)
+    //{
+    //    gViewerWindow->resetStatusBarContainer();
+    //}
+    // </FS:Ansariel>
     LLStartUp::setStartupState( STATE_BROWSER_INIT );
 
     if (LLVoiceClient::instanceExists())

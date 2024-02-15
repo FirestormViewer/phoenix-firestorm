@@ -121,6 +121,7 @@ public:
 	/*virtual*/ void setNativeAspectRatio(F32 ratio) { mOverrideAspectRatio = ratio; }
 
     U32 getAvailableVRAMMegabytes() override;
+    /*virtual*/ void setMaxVRAMMegabytes(U32 max_vram) {}
 
 	/*virtual*/ void beforeDialog();
 	/*virtual*/ void afterDialog();
@@ -166,14 +167,14 @@ protected:
 		const std::string& title, int x, int y, int width, int height, U32 flags,
 		BOOL fullscreen, BOOL clearBg, BOOL enable_vsync, BOOL use_gl,
 		//BOOL ignore_pixel_depth, U32 fsaa_samples);
-		BOOL ignore_pixel_depth, U32 fsaa_samples, BOOL useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
+		BOOL ignore_pixel_depth, U32 fsaa_samples, U32 max_vram, bool useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 	~LLWindowSDL();
 
 	/*virtual*/ BOOL	isValid();
 	/*virtual*/ LLSD    getNativeKeyData();
 
 	//void	initCursors();
-	void	initCursors(BOOL useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
+	void	initCursors(bool useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 	void	quitCursors();
 	void	moveWindow(const LLCoordScreen& position,const LLCoordScreen& size);
 
@@ -237,7 +238,7 @@ private:
 	U32 mKeyModifiers;
     std::string mInputType;
 
-	BOOL mUseLegacyCursors; // <FS:LO> Legacy cursor setting from main program
+	bool mUseLegacyCursors; // <FS:LO> Legacy cursor setting from main program
 
 public:
 #if LL_X11

@@ -166,6 +166,7 @@ public:
 
 	// query VRAM usage
 	virtual U32 getAvailableVRAMMegabytes() = 0;
+    virtual void setMaxVRAMMegabytes(U32 max_vram) = 0;
 
 	virtual void beforeDialog() {};	// prepare to put up an OS dialog (if special measures are required, such as in fullscreen mode)
 	virtual void afterDialog() {};	// undo whatever was done in beforeDialog()
@@ -317,7 +318,7 @@ public:
         U32 max_cores = 0,
         U32 max_vram = 0,
         F32 max_gl_version = 4.6f,
-		BOOL useLegacyCursors = FALSE); // <FS:LO> Legacy cursor setting from main program
+		bool useLegacyCursors = false); // <FS:LO> Legacy cursor setting from main program
 	static BOOL destroyWindow(LLWindow* window);
 	static BOOL isWindowValid(LLWindow *window);
 };

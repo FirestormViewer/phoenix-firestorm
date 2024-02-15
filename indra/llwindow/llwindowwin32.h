@@ -109,6 +109,7 @@ public:
 	/*virtual*/ void setNativeAspectRatio(F32 ratio) { mOverrideAspectRatio = ratio; }
 
     U32 getAvailableVRAMMegabytes() override;
+    /*virtual*/ void setMaxVRAMMegabytes(U32 max_vram) override;
 	
     /*virtual*/	BOOL dialogColorPicker(F32 *r, F32 *g, F32 *b );
 
@@ -141,11 +142,11 @@ protected:
 		const std::string& title, const std::string& name, int x, int y, int width, int height, U32 flags, 
 		BOOL fullscreen, BOOL clearBg, BOOL enable_vsync, BOOL use_gl,
 		//BOOL ignore_pixel_depth, U32 fsaa_samples, U32 max_cores, U32 max_vram, F32 max_gl_version);
-		BOOL ignore_pixel_depth, U32 fsaa_samples, U32 max_cores, U32 max_vram, F32 max_gl_version, BOOL useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
+		BOOL ignore_pixel_depth, U32 fsaa_samples, U32 max_cores, U32 max_vram, F32 max_gl_version, bool useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 	~LLWindowWin32();
 
 	//void	initCursors();
-	void	initCursors(BOOL useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
+	void	initCursors(bool useLegacyCursors); // <FS:LO> Legacy cursor setting from main program
 	void	initInputDevices();
 	HCURSOR loadColorCursor(LPCTSTR name);
 	BOOL	isValid();

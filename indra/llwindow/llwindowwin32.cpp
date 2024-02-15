@@ -442,7 +442,7 @@ LLWindowWin32::LLWindowWin32(LLWindowCallbacks* callbacks,
                              U32 max_cores,
                              U32 max_vram,
                              F32 max_gl_version,
-							 BOOL useLegacyCursors) // <FS:LO> Legacy cursor setting from main program
+							 bool useLegacyCursors) // <FS:LO> Legacy cursor setting from main program
 	: 
     LLWindow(callbacks, fullscreen, flags), 
     mMaxGLVersion(max_gl_version), 
@@ -2124,7 +2124,7 @@ HCURSOR LLWindowWin32::loadColorCursor(LPCTSTR name)
 }
 
 //void LLWindowWin32::initCursors()
-void LLWindowWin32::initCursors(BOOL useLegacyCursors) // <FS:LO> Legacy cursor setting from main program
+void LLWindowWin32::initCursors(bool useLegacyCursors) // <FS:LO> Legacy cursor setting from main program
 {
 	mCursor[ UI_CURSOR_ARROW ]		= LoadCursor(NULL, IDC_ARROW);
 	mCursor[ UI_CURSOR_WAIT ]		= LoadCursor(NULL, IDC_WAIT);
@@ -4683,6 +4683,14 @@ std::vector<std::string> LLWindowWin32::getDynamicFallbackFontList()
 U32 LLWindowWin32::getAvailableVRAMMegabytes()
 {
     return mWindowThread ? mWindowThread->getAvailableVRAMMegabytes() : 0;
+}
+
+void LLWindowWin32::setMaxVRAMMegabytes(U32 max_vram)
+{
+    if (mWindowThread)
+    {
+        mWindowThread->mMaxVRAM = max_vram;
+    }
 }
 
 // <FS:ND> Allow to query for window chrome sizes.

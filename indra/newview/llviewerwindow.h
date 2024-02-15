@@ -183,6 +183,8 @@ public:
 	void			handlePieMenu(S32 x, S32 y, MASK mask);
 
     void            reshapeStatusBarContainer();
+    // <FS:Ansariel> Improved menu and navigation bar
+    //void            resetStatusBarContainer(); // undo changes done by resetStatusBarContainer on initWorldUI()
 
 	BOOL handleAnyMouseClick(LLWindow *window, LLCoordGL pos, MASK mask, EMouseClickType clicktype, BOOL down, bool &is_toolmgr_action);
 
@@ -548,6 +550,8 @@ private:
 
 	// Object temporarily hovered over while dragging
 	LLPointer<LLViewerObject>	mDragHoveredObject;
+
+    boost::signals2::connection mMaxVRAMControlConnection;
 
 	static LLTrace::SampleStatHandle<>	sMouseVelocityStat;
 };

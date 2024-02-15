@@ -239,6 +239,9 @@ public:
 	static LLUUID sInvisiprimTexture1 ;
 	static LLUUID sInvisiprimTexture2 ;
 
+    // estimated free memory for textures, by bias calculation
+    static F32 sFreeVRAMMegabytes;
+
 	enum EDebugTexels
 	{
 		DEBUG_TEXELS_OFF,
