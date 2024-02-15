@@ -247,6 +247,8 @@
 			<menu_item_check label="Gizli seçimi göstərmək" name="Show Hidden Selection"/>
 			<menu_item_check label="Seçilmiş üçün işıq radiusunu göstərmək" name="Show Light Radius for Selection"/>
 			<menu_item_check label="Seçim işığı göstərmək" name="Show Selection Beam"/>
+			<menu_item_check label="Şəffaflığı vurğulamaq" name="Highlight Transparent"/>
+			<menu_item_check label="- riq ilə vurğulanmış şəffaflıq daxil olmaqla" name="Include Transparent Rigged"/>
 			<menu_item_check label="Qarışdırmağa bağlamaq" name="Snap to Grid"/>
 			<menu_item_call label="XY bağlamaq üçün obyektə qarışdırmaq" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Qarışdırmaq üçün seçimi istifadə etmək" name="Use Selection for Grid"/>
@@ -350,8 +352,6 @@
 			<menu_item_check label="Parlaq işıq" name="Cheesy Beacon"/>
 			<menu_item_check label="Parçacıqları gizlətmək" name="Hide Particles"/>
 			<menu_item_check label="Seçilmiş obyekti gizlətmək" name="Hide Selected"/>
-			<menu_item_check label="Şəffaflığı vurğulamaq" name="Highlight Transparent"/>
-			<menu_item_check label="Riq ilə vurğulanmış şəffaflıq daxil olmaqla" name="Include Transparent Rigged"/>
 			<menu_item_check label="Birinci şəxs görüntüdə nişan göstərmək" name="ShowCrosshairs"/>
 			<menu label="Hover Tips" name="Hover Tips">
 				<menu_item_check label="Hover Tips göstərmək" name="Show Tips"/>
