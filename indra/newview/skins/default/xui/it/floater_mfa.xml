@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater title="Token MFA richiesto" name="mfa_challenge">
-	<text name="token_prompt_text">
-		token
-	</text>
-	<button label="Continua" name="continue_btn" />
-	<button label="Annulla" name="cancel_btn" />
-</floater>

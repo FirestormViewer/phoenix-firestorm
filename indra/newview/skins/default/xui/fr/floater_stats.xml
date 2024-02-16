@@ -16,6 +16,7 @@
 					<stat_bar label="KTris par image" name="ktrisframe"/>
 					<stat_bar label="KTris par seconde" name="ktrissec"/>
 					<stat_bar label="Total d'objets" name="totalobjs"/>
+					<stat_bar label="Total des objets" name="objs"/>
 					<stat_bar label="Objets en cache" name="cachedobjs"/>
 					<stat_bar label="Nouveaux objets" name="newobjs"/>
 					<stat_bar label="Taux de réussite du cache des objets" name="object_cache_hits"/>
@@ -32,6 +33,9 @@
 					<stat_bar label="Mémoire formattée" name="formattedmemstat"/>
 					<stat_bar label="Mémoire brute" name="rawmemstat"/>
 					<stat_bar label="Mémoire liée" name="glboundmemstat"/>
+				</stat_view>
+				<stat_view label="Matériau" name="material">
+					<stat_bar label="Nombre" name="nummaterials"/>
 				</stat_view>
 				<stat_view label="Mémoire utilisée" name="memory">
 					<stat_bar label="Interface" name="LLView"/>

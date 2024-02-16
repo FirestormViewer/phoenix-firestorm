@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="env_adjust_snapshot" title="Éclairage personnel">
+	<string name="hdr_string">Échelle HDR :</string>
+	<string name="brightness_string">Luminosité :</string>
+	<string name="hdr_tooltip">Intensité des effets d'éclairage tels que les ciels lumineux réalistes et l'exposition dynamique. 1.0 est la valeur par défaut, 0 correspond à la désactivation, les valeurs entre 0 et 1 mélangent la lumière ambiante et la lumière HDR.</string>
 	<layout_stack name="outer_stack">
 		<layout_panel name="env_controls">
 			<layout_stack name="settings_stack">
@@ -40,23 +43,31 @@
 					<text name="cloud_scale_label">
 						Taille des nuages :
 					</text>
+					<text name="reflection_probe_ambiance_label">Ambiance de la sonde de réflexion :</text>
+					<slider name="probe_ambiance" tool_tip="L'intensité de l'éclairage indirect basé sur l'environnement. À zéro, l'échelle HDR devient Luminosité"/>
 					<text name="scene_gamma_label">
-						Gamma de la scène :
+						Luminosité :
 					</text>
 				</layout_panel>
 				<layout_panel name="lp_3">
 					<text name="label">
 						Soleil :
 					</text>
+					<text name="sun_azimuth_label">
+						Azimut :
+					</text>
+					<text name="sun_elevation_label">
+						Élévation :
+					</text>
 					<check_box label="Montrer la balise" name="sunbeacon"/>
 					<text name="scale_label">
 						Échelle :
 					</text>
 					<text name="glow_focus_label">
-						Glow Focus :
+						Netteté de l'éclat :
 					</text>
 					<text name="glow_size_label">
-						Taille de la lueur :
+						Taille de l'éclat :
 					</text>
 					<text name="star_brightness_label">
 						Brillance des étoiles :
@@ -65,6 +76,12 @@
 				<layout_panel name="lp_4">
 					<text name="label">
 						Lune :
+					</text>
+					<text name="moon_azimuth_label">
+						Azimut :
+					</text>
+					<text name="moon_elevation_label">
+						Élévation :
 					</text>
 					<check_box label="Montrer la balise" name="moonbeacon"/>
 				</layout_panel>
