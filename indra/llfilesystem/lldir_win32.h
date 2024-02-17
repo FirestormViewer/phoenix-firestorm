@@ -51,7 +51,7 @@ public:
 
 private:
     BOOL getNextFileInDir(const llutf16string &dirname, const std::string &mask, std::string &fname); //FS:LGG for LGG's particle beam
-	void* mDirSearch_h;
+	void* mDirSearch_h{ nullptr };
 	llutf16string mCurrentDir;
 };
 

@@ -4080,7 +4080,7 @@ BOOL LLAgent::allowOperation(PermissionBit op,
 	if (!perm.isOwned()) return FALSE;
 
 	// A group member with group_proxy_power can act as owner.
-	BOOL is_group_owned;
+	bool is_group_owned;
 	LLUUID owner_id;
 	perm.getOwnership(owner_id, is_group_owned);
 	LLUUID group_id(perm.getGroup());
@@ -4555,9 +4555,9 @@ void LLAgent::processScriptControlChange(LLMessageSystem *msg, void **)
 	S32 block_count = msg->getNumberOfBlocks("Data");
 	for (S32 block_index = 0; block_index < block_count; block_index++)
 	{
-		BOOL take_controls;
+		bool take_controls;
 		U32	controls;
-		BOOL passon;
+		bool passon;
 		U32 i;
 		msg->getBOOL("Data", "TakeControls", take_controls, block_index);
 		if (take_controls)
@@ -6624,17 +6624,17 @@ void LLAgent::sendAgentSetAppearance()
 		for (U8 baked_index = 0; baked_index < gAgentAvatarp->getNumBakes(); baked_index++)
 		//</FS:Beq>
 		{
-			BOOL generate_valid_hash = TRUE;
+			bool generate_valid_hash{ true };
 			if (isAgentAvatarValid() && !gAgentAvatarp->isBakedTextureFinal((LLAvatarAppearanceDefines::EBakedTextureIndex)baked_index))
 			{
-				generate_valid_hash = FALSE;
+				generate_valid_hash = false;
 				LL_DEBUGS("Avatar") << gAgentAvatarp->avString() << "Not caching baked texture upload for " << (U32)baked_index << " due to being uploaded at low resolution." << LL_ENDL;
 			}
 			// <FS:Beq> Exclude BAKED_SKIRT from being sent if no skirt is worn (should only reach here if it were already baked)
 			if (baked_index == BAKED_SKIRT && !gAgentAvatarp->isWearingWearableType(LLWearableType::WT_SKIRT))
 			{
 				LL_DEBUGS("Avatar") << "Not caching baked texture for unworn skirt." << LL_ENDL;
-				generate_valid_hash = FALSE;
+				generate_valid_hash = false;
 			}
 			// </FS:Beq>
 

@@ -391,7 +391,7 @@ public:
 	static void _makeASCII(string_type& string);
 
 	// Conversion to other data types
-	static bool	convertToBOOL(const string_type& string, BOOL& value);
+	static bool	convertToBOOL(const string_type& string, bool& value);
 	static bool	convertToU8(const string_type& string, U8& value);
 	static bool	convertToS8(const string_type& string, S8& value);
 	static bool	convertToS16(const string_type& string, S16& value);
@@ -696,7 +696,7 @@ LL_COMMON_API S32 utf16str_wstring_length(const llutf16string &utf16str, S32 len
 LL_COMMON_API S32 wstring_utf16_length(const LLWString & wstr, S32 woffset, S32 wlen);
 
 // Length in wstring (i.e., llwchar count) of a part of a wstring specified by utf16 length (i.e., utf16 units.)
-LL_COMMON_API S32 wstring_wstring_length_from_utf16_length(const LLWString & wstr, S32 woffset, S32 utf16_length, BOOL *unaligned = NULL);
+LL_COMMON_API S32 wstring_wstring_length_from_utf16_length(const LLWString & wstr, S32 woffset, S32 utf16_length, bool *unaligned = nullptr);
 
 /**
  * @brief Properly truncate a utf8 string to a maximum byte count.
@@ -1818,7 +1818,7 @@ auto LLStringUtilBase<T>::getenv(const std::string& key, const string_type& dflt
 }
 
 template<class T> 
-bool LLStringUtilBase<T>::convertToBOOL(const string_type& string, BOOL& value)
+bool LLStringUtilBase<T>::convertToBOOL(const string_type& string, bool& value)
 {
 	if( string.empty() )
 	{

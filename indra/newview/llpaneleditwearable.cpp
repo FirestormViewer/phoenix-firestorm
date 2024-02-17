@@ -992,15 +992,15 @@ void LLPanelEditWearable::onCommitSexChange()
         {
                 // <FS:Ansariel> [Legacy Bake]
                 //wearable->setVisualParamWeight(param->getID(), is_new_sex_male);
-                wearable->setVisualParamWeight(param->getID(), is_new_sex_male, FALSE);
+                wearable->setVisualParamWeight(param->getID(), is_new_sex_male, false);
         }
         // <FS:Ansariel> [Legacy Bake]
         //param->setWeight( is_new_sex_male);
 
         //gAgentAvatarp->updateSexDependentLayerSets();
-        param->setWeight( is_new_sex_male, FALSE);
+        param->setWeight( is_new_sex_male, false);
 
-        gAgentAvatarp->updateSexDependentLayerSets(FALSE);
+        gAgentAvatarp->updateSexDependentLayerSets(false);
         // </FS:Ansariel> [Legacy Bake]
 
         gAgentAvatarp->updateVisualParams();
@@ -1040,7 +1040,7 @@ void LLPanelEditWearable::onTexturePickerCommit(const LLUICtrl* ctrl)
 								LLVisualParamHint::requestHintUpdates();
 								// <FS:Ansariel> [Legacy Bake]
 								//gAgentAvatarp->wearableUpdated(type);
-								gAgentAvatarp->wearableUpdated(type, FALSE);
+								gAgentAvatarp->wearableUpdated(type, false);
 							}
 							else
 							{
@@ -1071,11 +1071,11 @@ void LLPanelEditWearable::onColorSwatchCommit(const LLUICtrl* ctrl)
                         {
                                 // <FS:Ansariel> [Legacy Bake]
                                 //getWearable()->setClothesColor(entry->mTextureIndex, new_color);
-                                getWearable()->setClothesColor(entry->mTextureIndex, new_color, TRUE);
+                                getWearable()->setClothesColor(entry->mTextureIndex, new_color, true);
                                 LLVisualParamHint::requestHintUpdates();
                                 // <FS:Ansariel> [Legacy Bake]
                                 //gAgentAvatarp->wearableUpdated(getWearable()->getType());
-                                gAgentAvatarp->wearableUpdated(getWearable()->getType(), FALSE);
+                                gAgentAvatarp->wearableUpdated(getWearable()->getType(), false);
                         }
                 }
                 else
@@ -1178,7 +1178,7 @@ void LLPanelEditWearable::saveChanges(bool force_save_as)
 			}
 			// <FS:Ansariel> [Legacy Bake]
 			//gAgentWearables.saveWearable(mWearablePtr->getType(), index, new_name);
-			gAgentWearables.saveWearable(mWearablePtr->getType(), index, TRUE, new_name);
+			gAgentWearables.saveWearable(mWearablePtr->getType(), index, true, new_name);
         }
 
 	
@@ -1198,7 +1198,7 @@ void LLPanelEditWearable::revertChanges()
         updateTypeSpecificControls(mWearablePtr->getType());
         // <FS:Ansariel> [Legacy Bake]
         //gAgentAvatarp->wearableUpdated(mWearablePtr->getType());
-        gAgentAvatarp->wearableUpdated(mWearablePtr->getType(), FALSE);
+        gAgentAvatarp->wearableUpdated(mWearablePtr->getType(), false);
 }
 
 void LLPanelEditWearable::showWearable(LLViewerWearable* wearable, BOOL show, BOOL disable_camera_switch)
@@ -1750,7 +1750,7 @@ void LLPanelEditWearable::onInvisibilityCommit(LLCheckBoxCtrl* checkbox_ctrl, LL
 				gAgentAvatarp->setLocalTexture(te, image, FALSE, index);
 				// <FS:Ansariel> [Legacy Bake]
 				//gAgentAvatarp->wearableUpdated(getWearable()->getType());
-				gAgentAvatarp->wearableUpdated(getWearable()->getType(), FALSE);
+				gAgentAvatarp->wearableUpdated(getWearable()->getType(), false);
         }
         else
         {
@@ -1768,7 +1768,7 @@ void LLPanelEditWearable::onInvisibilityCommit(LLCheckBoxCtrl* checkbox_ctrl, LL
                 gAgentAvatarp->setLocalTexture(te, image, FALSE, index);
                 // <FS:Ansariel> [Legacy Bake]
                 //gAgentAvatarp->wearableUpdated(getWearable()->getType());
-                gAgentAvatarp->wearableUpdated(getWearable()->getType(), FALSE);
+                gAgentAvatarp->wearableUpdated(getWearable()->getType(), false);
         }
 
         updatePanelPickerControls(getWearable()->getType());

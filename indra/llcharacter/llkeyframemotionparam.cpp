@@ -136,7 +136,7 @@ LLMotion::LLMotionInitStatus LLKeyframeMotionParam::onInitialize(LLCharacter *ch
 //-----------------------------------------------------------------------------
 // LLKeyframeMotionParam::onActivate()
 //-----------------------------------------------------------------------------
-BOOL LLKeyframeMotionParam::onActivate()
+bool LLKeyframeMotionParam::onActivate()
 {
 	for (motion_map_t::value_type& motion_pair : mParameterizedMotions)
 	{
@@ -153,7 +153,7 @@ BOOL LLKeyframeMotionParam::onActivate()
 //-----------------------------------------------------------------------------
 // LLKeyframeMotionParam::onUpdate()
 //-----------------------------------------------------------------------------
-BOOL LLKeyframeMotionParam::onUpdate(F32 time, U8* joint_mask)
+bool LLKeyframeMotionParam::onUpdate(F32 time, U8* joint_mask)
 {
     LL_PROFILE_ZONE_SCOPED;
 	F32 weightFactor = 1.f / (F32)mParameterizedMotions.size();
@@ -286,7 +286,7 @@ void LLKeyframeMotionParam::onDeactivate()
 //-----------------------------------------------------------------------------
 // LLKeyframeMotionParam::addKeyframeMotion()
 //-----------------------------------------------------------------------------
-BOOL LLKeyframeMotionParam::addKeyframeMotion(char *name, const LLUUID &id, char *param, F32 value)
+bool LLKeyframeMotionParam::addKeyframeMotion(char *name, const LLUUID &id, char *param, F32 value)
 {
 	LLMotion *newMotion = mCharacter->createMotion( id );
 	
@@ -325,7 +325,7 @@ void LLKeyframeMotionParam::setDefaultKeyframeMotion(char *name)
 //-----------------------------------------------------------------------------
 // loadMotions()
 //-----------------------------------------------------------------------------
-BOOL LLKeyframeMotionParam::loadMotions()
+bool LLKeyframeMotionParam::loadMotions()
 {
 	//-------------------------------------------------------------------------
 	// Load named file by concatenating the character prefix with the motion name.
@@ -409,7 +409,7 @@ BOOL LLKeyframeMotionParam::loadMotions()
 	//-------------------------------------------------------------------------
 	// get priority
 	//-------------------------------------------------------------------------
-	BOOL isFirstMotion = TRUE;
+	bool isFirstMotion = true;
 	num = sscanf(p, "%79s %79s %f", strA, strB, &floatA);	/* Flawfinder: ignore */
 
 	while(1)
@@ -424,7 +424,7 @@ BOOL LLKeyframeMotionParam::loadMotions()
 		addKeyframeMotion(strA, gAnimLibrary.stringToAnimState(std::string(strA)), strB, floatA);
 		if (isFirstMotion)
 		{
-			isFirstMotion = FALSE;
+			isFirstMotion = false;
 			setDefaultKeyframeMotion(strA);
 		}
 		

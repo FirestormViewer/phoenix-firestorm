@@ -97,12 +97,12 @@ public:
 // </FS:ND>
 
 	// <FS:Ansariel> [Legacy Bake]
-	///*virtual*/ BOOL setVisualParamWeight(const LLVisualParam *which_param, F32 weight);
-	///*virtual*/ BOOL setVisualParamWeight(const char* param_name, F32 weight);
-	///*virtual*/ BOOL setVisualParamWeight(S32 index, F32 weight);
-	/*virtual*/ BOOL setVisualParamWeight(const LLVisualParam *which_param, F32 weight, BOOL upload_bake = FALSE);
-	/*virtual*/ BOOL setVisualParamWeight(const char* param_name, F32 weight, BOOL upload_bake = FALSE);
-	/*virtual*/ BOOL setVisualParamWeight(S32 index, F32 weight, BOOL upload_bake = FALSE);
+	///*virtual*/ bool setVisualParamWeight(const LLVisualParam *which_param, F32 weight);
+	///*virtual*/ bool setVisualParamWeight(const char* param_name, F32 weight);
+	///*virtual*/ bool setVisualParamWeight(S32 index, F32 weight);
+	/*virtual*/ bool setVisualParamWeight(const LLVisualParam *which_param, F32 weight, bool upload_bake = false);
+	/*virtual*/ bool setVisualParamWeight(const char* param_name, F32 weight, bool upload_bake = false);
+	/*virtual*/ bool setVisualParamWeight(S32 index, F32 weight, bool upload_bake = false);
 	// </FS:Ansariel> [Legacy Bake]
 	/*virtual*/ void updateVisualParams();
 	void writeWearablesToAvatar();
@@ -120,7 +120,7 @@ private:
 	// helper function. Passed in param is assumed to be in avatar's parameter list.
 	// <FS:Ansariel> [Legacy Bake]
 	//BOOL setParamWeight(const LLViewerVisualParam *param, F32 weight);
-	BOOL setParamWeight(const LLViewerVisualParam *param, F32 weight, BOOL upload_bake = FALSE);
+	bool setParamWeight(const LLViewerVisualParam *param, F32 weight, bool upload_bake = false);
 
 /********************************************************************************
  **                                                                            **
@@ -208,7 +208,7 @@ public:
 	BOOL				isLocalTextureDataAvailable(const LLViewerTexLayerSet* layerset) const;
 	BOOL				isLocalTextureDataFinal(const LLViewerTexLayerSet* layerset) const;
 	// <FS:Ansariel> [Legacy Bake]
-	BOOL				isBakedTextureFinal(const LLAvatarAppearanceDefines::EBakedTextureIndex index) const;
+	bool				isBakedTextureFinal(const LLAvatarAppearanceDefines::EBakedTextureIndex index) const;
 	// If you want to check all textures of a given type, pass gAgentWearables.getWearableCount() for index
 	/*virtual*/ bool    isTextureDefined(LLAvatarAppearanceDefines::ETextureIndex type, U32 index) const;
 	/*virtual*/ BOOL	isTextureVisible(LLAvatarAppearanceDefines::ETextureIndex type, U32 index = 0) const;
@@ -273,7 +273,7 @@ public:
 public:
 	// <FS:Ansariel> [Legacy Bake]
 	///* virtual */ void	invalidateComposite(LLTexLayerSet* layerset);
-	/* virtual */ void	invalidateComposite(LLTexLayerSet* layerset, BOOL upload_result);
+	/* virtual */ void	invalidateComposite(LLTexLayerSet* layerset, bool upload_result);
 	/* virtual */ void	invalidateAll();
 	/* virtual */ void	setCompositeUpdatesEnabled(bool b); // only works for self
 	/* virtual */ void  setCompositeUpdatesEnabled(U32 index, bool b);
@@ -317,7 +317,7 @@ protected:
 public:
 	// <FS:Ansariel> [Legacy Bake]
 	//void				wearableUpdated(LLWearableType::EType type);
-	void				wearableUpdated(LLWearableType::EType type, BOOL upload_result);
+	void				wearableUpdated(LLWearableType::EType type, bool upload_result);
 protected:
 	U32 getNumWearables(LLAvatarAppearanceDefines::ETextureIndex i) const;
 

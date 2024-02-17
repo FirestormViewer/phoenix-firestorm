@@ -268,7 +268,7 @@ void LLScrollingPanelParam::onHintHeldDown( LLVisualParamHint* hint )
 			{
 				// <FS:Ansariel> [Legacy Bake]
 				//mWearable->setVisualParamWeight( hint->getVisualParam()->getID(), new_weight);
-				mWearable->setVisualParamWeight( hint->getVisualParam()->getID(), new_weight, FALSE);
+				mWearable->setVisualParamWeight( hint->getVisualParam()->getID(), new_weight, false);
 				mWearable->writeToAvatar(gAgentAvatarp);
 				gAgentAvatarp->updateVisualParams();
 
@@ -303,7 +303,7 @@ void LLScrollingPanelParam::onHintMinMouseUp( void* userdata )
 			{
 				// <FS:Ansariel> [Legacy Bake]
 				//self->mWearable->setVisualParamWeight(hint->getVisualParam()->getID(), new_weight);
-				self->mWearable->setVisualParamWeight(hint->getVisualParam()->getID(), new_weight, FALSE);
+				self->mWearable->setVisualParamWeight(hint->getVisualParam()->getID(), new_weight, false);
 				self->mWearable->writeToAvatar(gAgentAvatarp);
 				slider->setValue( self->weightToPercent( new_weight ) );
 			}
@@ -339,7 +339,7 @@ void LLScrollingPanelParam::onHintMaxMouseUp( void* userdata )
 				{
 					// <FS:Ansariel> [Legacy Bake]
 					//self->mWearable->setVisualParamWeight(hint->getVisualParam()->getID(), new_weight);
-					self->mWearable->setVisualParamWeight(hint->getVisualParam()->getID(), new_weight, FALSE);
+					self->mWearable->setVisualParamWeight(hint->getVisualParam()->getID(), new_weight, false);
 					self->mWearable->writeToAvatar(gAgentAvatarp);
 					slider->setValue( self->weightToPercent( new_weight ) );
 				}

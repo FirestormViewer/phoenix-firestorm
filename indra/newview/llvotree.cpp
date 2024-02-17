@@ -138,10 +138,7 @@ void LLVOTree::initClass()
 			// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 			std::string name;
 
-			BOOL success = TRUE;
-
-
-
+			bool success{ true };
 			S32 species;
 			static LLStdStringHandle species_id_string = LLXmlTree::addAttributeString("species_id");
 			if (!tree_def->getFastAttributeS32(species_id_string, species))
@@ -261,7 +258,7 @@ void LLVOTree::initClass()
 			}
 		}
 		
-		BOOL have_all_trees = TRUE;
+		bool have_all_trees {true};
 		std::string err;
 
 		for (S32 i=0;i<sMaxTreeSpecies;++i)
@@ -269,7 +266,7 @@ void LLVOTree::initClass()
 			if (!sSpeciesTable.count(i))
 			{
 				err.append(llformat(" %d",i));
-				have_all_trees = FALSE;
+				have_all_trees = false;
 			}
 		}
 

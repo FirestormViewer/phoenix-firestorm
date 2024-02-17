@@ -193,8 +193,8 @@ public:
 	/*virtual*/ LLVector3    	getCharacterAngularVelocity();
 
 	/*virtual*/ LLUUID			remapMotionID(const LLUUID& id);
-	/*virtual*/ BOOL			startMotion(const LLUUID& id, F32 time_offset = 0.f);
-	/*virtual*/ BOOL			stopMotion(const LLUUID& id, BOOL stop_immediate = FALSE);
+	/*virtual*/ bool			startMotion(const LLUUID& id, F32 time_offset = 0.f);
+	/*virtual*/ bool			stopMotion(const LLUUID& id, bool stop_immediate = FALSE);
 	virtual bool			hasMotionFromSource(const LLUUID& source_id);
 	virtual void			stopMotionFromSource(const LLUUID& source_id);
 	virtual void			requestStopMotion(LLMotion* motion);
@@ -624,7 +624,7 @@ public:
 public:
 	// <FS:Ansariel> [Legacy Bake]
 	///*virtual*/void onGlobalColorChanged(const LLTexGlobalColor* global_color);
-	/*virtual*/void onGlobalColorChanged(const LLTexGlobalColor* global_color, BOOL upload_bake);
+	/*virtual*/void onGlobalColorChanged(const LLTexGlobalColor* global_color, bool upload_bake);
 
 	//--------------------------------------------------------------------
 	// Visibility
@@ -794,7 +794,7 @@ protected:
 public:
 	// <FS:Ansariel> [Legacy Bake]
 	//virtual void	invalidateComposite(LLTexLayerSet* layerset);
-	virtual void	invalidateComposite(LLTexLayerSet* layerset, BOOL upload_result);
+	virtual void	invalidateComposite(LLTexLayerSet* layerset, bool upload_result);
 	virtual void	invalidateAll();
 	virtual void	setCompositeUpdatesEnabled(bool b) {}
 	virtual void 	setCompositeUpdatesEnabled(U32 index, bool b) {}
@@ -830,7 +830,7 @@ public:
 	virtual void 	updateMeshTextures();
 	// <FS:Ansariel> [Legacy Bake]
 	//void 			updateSexDependentLayerSets();
-	void 			updateSexDependentLayerSets(BOOL upload_bake);
+	void 			updateSexDependentLayerSets(bool upload_bake);
 	virtual void	dirtyMesh(); // Dirty the avatar mesh
 	void 			updateMeshData();
 	void			updateMeshVisibility();
@@ -915,14 +915,14 @@ public:
 	// <FS:Ansariel> [Legacy Bake]
 	// True if this avatar should fetch its baked textures via the new
 	// appearance mechanism.
-	BOOL				isUsingServerBakes() const;
-	void 				setIsUsingServerBakes(BOOL newval);
+	bool				isUsingServerBakes() const;
+	void 				setIsUsingServerBakes(bool newval);
 	// </FS:Ansariel> [Legacy Bake]
 
 	// True if we are currently in appearance editing mode. Often but
 	// not always the same as isUsingLocalAppearance().
 	/*virtual*/ bool	isEditingAppearance() const { return mIsEditingAppearance; }
-	void setIsEditingAppearance(BOOL editing) { mIsEditingAppearance = editing; }	// <FS:CR> for Built-in Posestand
+	void setIsEditingAppearance(bool editing) { mIsEditingAppearance = editing; }	// <FS:CR> for Built-in Posestand
 	
 	// FIXME review isUsingLocalAppearance uses, some should be isEditing instead.
 
@@ -933,7 +933,7 @@ private:
 	bool			mIsEditingAppearance; // flag for if we're actively in appearance editing mode
 	BOOL			mUseLocalAppearance; // flag for if we're using a local composite
 	// <FS:Ansariel> [Legacy Bake]
-	BOOL			mUseServerBakes; // flag for if baked textures should be fetched from baking service (false if they're temporary uploads)
+	bool			mUseServerBakes; // flag for if baked textures should be fetched from baking service (false if they're temporary uploads)
 
 	//--------------------------------------------------------------------
 	// Visibility

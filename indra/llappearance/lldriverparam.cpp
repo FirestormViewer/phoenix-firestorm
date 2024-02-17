@@ -198,7 +198,7 @@ bool LLDriverParam::setInfo(LLDriverParamInfo *info)
 
 	// <FS:Ansariel> [Legacy Bake]
 	//setWeight(getDefaultWeight());
-	setWeight(getDefaultWeight(), FALSE );
+	setWeight(getDefaultWeight(), false );
 
 	return true;
 }
@@ -211,7 +211,7 @@ bool LLDriverParam::setInfo(LLDriverParamInfo *info)
 
 // <FS:Ansariel> [Legacy Bake]
 //void LLDriverParam::setWeight(F32 weight)
-void LLDriverParam::setWeight(F32 weight, BOOL upload_bake)
+void LLDriverParam::setWeight(F32 weight, bool upload_bake)
 // </FS:Ansariel> [Legacy Bake]
 {
 	F32 min_weight = getMinWeight();
@@ -454,7 +454,7 @@ const LLViewerVisualParam* LLDriverParam::getDrivenParam(S32 index) const
 //void LLDriverParam::setAnimationTarget( F32 target_value)
 //{
 //	LLVisualParam::setAnimationTarget(target_value);
-void LLDriverParam::setAnimationTarget( F32 target_value, BOOL upload_bake )
+void LLDriverParam::setAnimationTarget( F32 target_value, bool upload_bake )
 {
 	LLVisualParam::setAnimationTarget(target_value, upload_bake);
 // </FS:Ansariel> [Legacy Bake]
@@ -480,21 +480,21 @@ void LLDriverParam::setAnimationTarget( F32 target_value, BOOL upload_bake )
 //void LLDriverParam::stopAnimating()
 //{
 //	LLVisualParam::stopAnimating();
-void LLDriverParam::stopAnimating(BOOL upload_bake)
+void LLDriverParam::stopAnimating(bool upload_bake)
 {
 	LLVisualParam::stopAnimating(upload_bake);
 // </FS:Ansariel> [Legacy Bake]
 
 	for(LLDrivenEntry& driven : mDriven)
 	{
-		driven.mParam->setAnimating(FALSE);
+		driven.mParam->setAnimating(false);
 	}
 }
 
 /*virtual*/ 
 bool LLDriverParam::linkDrivenParams(visual_param_mapper mapper, bool only_cross_params)
 {
-	BOOL success = true;
+	bool success = true;
 	for (LLDrivenEntryInfo& driven_info : getInfo()->mDrivenInfoList)
 	{
 		S32 driven_id = driven_info.mDrivenID;

@@ -256,7 +256,7 @@ void LLPolyMorphData::freeData()
 // LLPolyMorphTargetInfo()
 //-----------------------------------------------------------------------------
 LLPolyMorphTargetInfo::LLPolyMorphTargetInfo()
-	: mIsClothingMorph(FALSE)
+	: mIsClothingMorph(false)
 {
 }
 
@@ -362,7 +362,7 @@ bool LLPolyMorphTarget::setInfo(LLPolyMorphTargetInfo* info)
 	mID = info->mID;
 	// <FS:Ansariel> [Legacy Bake]
 	//setWeight(getDefaultWeight());
-	setWeight(getDefaultWeight(), FALSE);
+	setWeight(getDefaultWeight(), false);
 
 	LLAvatarAppearance* avatarp = mMesh->getAvatar();
 	for (LLPolyVolumeMorphInfo& volume_info : getInfo()->mVolumeInfoList)
@@ -661,7 +661,7 @@ void LLPolyMorphTarget::apply( ESex avatar_sex )
 //-----------------------------------------------------------------------------
 // applyMask()
 //-----------------------------------------------------------------------------
-void	LLPolyMorphTarget::applyMask(const U8 *maskTextureData, S32 width, S32 height, S32 num_components, BOOL invert)
+void	LLPolyMorphTarget::applyMask(const U8 *maskTextureData, S32 width, S32 height, S32 num_components, bool invert)
 {
 	LLVector4a *clothing_weights = getInfo()->mIsClothingMorph ? mMesh->getWritableClothingWeights() : NULL;
 
@@ -751,7 +751,7 @@ void LLPolyMorphTarget::applyVolumeChanges(F32 delta_weight)
 LLPolyVertexMask::LLPolyVertexMask(LLPolyMorphData* morph_data)
 	: mWeights(new F32[morph_data->mNumIndices]),
 	mMorphData(morph_data),
-	mWeightsGenerated(FALSE)
+	mWeightsGenerated(false)
 {
 	llassert(mMorphData != NULL);
 	llassert(mMorphData->mNumIndices > 0);
@@ -782,10 +782,10 @@ LLPolyVertexMask::~LLPolyVertexMask()
 //-----------------------------------------------------------------------------
 // generateMask()
 //-----------------------------------------------------------------------------
-void LLPolyVertexMask::generateMask(const U8 *maskTextureData, S32 width, S32 height, S32 num_components, BOOL invert, LLVector4a *clothing_weights)
+void LLPolyVertexMask::generateMask(const U8 *maskTextureData, S32 width, S32 height, S32 num_components, bool invert, LLVector4a *clothing_weights)
 {
 // RN debug output that uses Image Debugger (http://www.cs.unc.edu/~baxter/projects/imdebug/)
-//	BOOL debugImg = FALSE; 
+//	bool debugImg = false;
 //	if (debugImg)
 //	{
 //		if (invert)
@@ -829,7 +829,7 @@ void LLPolyVertexMask::generateMask(const U8 *maskTextureData, S32 width, S32 he
 			clothing_weights[vertIndex].getF32ptr()[VW] = mWeights[index];
 		}
 	}
-	mWeightsGenerated = TRUE;
+	mWeightsGenerated = true;
 }
 
 //-----------------------------------------------------------------------------

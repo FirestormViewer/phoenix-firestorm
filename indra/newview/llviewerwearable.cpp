@@ -275,7 +275,7 @@ void LLViewerWearable::setParamsToDefaults()
 		{
 			// <FS:Ansariel> [Legacy Bake]
 			//setVisualParamWeight(param->getID(),param->getDefaultWeight());
-			setVisualParamWeight(param->getID(),param->getDefaultWeight(), FALSE);
+			setVisualParamWeight(param->getID(),param->getDefaultWeight(), false);
 		}
 	}
 }
@@ -362,7 +362,7 @@ void LLViewerWearable::writeToAvatar(LLAvatarAppearance *avatarp)
 	{
 		// <FS:Ansariel> [Legacy Bake]
 		//viewer_avatar->updateSexDependentLayerSets();
-		viewer_avatar->updateSexDependentLayerSets(FALSE);
+		viewer_avatar->updateSexDependentLayerSets(false);
 	}	
 }
 
@@ -371,7 +371,7 @@ void LLViewerWearable::writeToAvatar(LLAvatarAppearance *avatarp)
 // static 
 // <FS:Ansariel> [Legacy Bake]
 //void LLViewerWearable::removeFromAvatar( LLWearableType::EType type)
-void LLViewerWearable::removeFromAvatar( LLWearableType::EType type, BOOL upload_bake)
+void LLViewerWearable::removeFromAvatar( LLWearableType::EType type, bool upload_bake)
 {
 	if (!isAgentAvatarValid()) return;
 
@@ -404,7 +404,7 @@ void LLViewerWearable::removeFromAvatar( LLWearableType::EType type, BOOL upload
 	gAgentAvatarp->updateVisualParams();
 	// <FS:Ansariel> [Legacy Bake]
 	//gAgentAvatarp->wearableUpdated(type);
-	gAgentAvatarp->wearableUpdated(type, FALSE);
+	gAgentAvatarp->wearableUpdated(type, false);
 }
 
 // Does not copy mAssetID.

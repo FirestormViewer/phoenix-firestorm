@@ -95,7 +95,7 @@ void LLScrollingPanelParamBase::onSliderMoved(LLUICtrl* ctrl, void* userdata)
 	{
 		// <FS:Ansariel> [Legacy Bake]
 		//self->mWearable->setVisualParamWeight( param->getID(), new_weight);
-		self->mWearable->setVisualParamWeight( param->getID(), new_weight, FALSE);
+		self->mWearable->setVisualParamWeight( param->getID(), new_weight, false);
 		self->mWearable->writeToAvatar(gAgentAvatarp);
 		gAgentAvatarp->updateVisualParams();
 	}

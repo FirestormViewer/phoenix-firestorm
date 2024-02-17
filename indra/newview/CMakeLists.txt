@@ -1733,7 +1733,6 @@ if (DARWIN)
   # Add resource files to the project.
   set(viewer_RESOURCE_FILES
     firestorm_icon.icns
-    macview.r
     Info-Firestorm.plist
     Firestorm.xib/
     # CMake doesn't seem to support Xcode language variants well just yet

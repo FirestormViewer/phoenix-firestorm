@@ -115,7 +115,7 @@ public:
 	bool isBuilt() const { return mIsBuilt; }
 
 	// <FS:Ansariel> [Legacy Bake]
-	virtual BOOL	isUsingServerBakes() const = 0;
+	virtual bool	isUsingServerBakes() const = 0;
 
 /**                    State
  **                                                                            **
@@ -259,7 +259,7 @@ public:
 public:
 	// <FS:Ansariel> [Legacy Bake]
 	//virtual void	invalidateComposite(LLTexLayerSet* layerset) = 0;
-	virtual void	invalidateComposite(LLTexLayerSet* layerset, BOOL upload_result) = 0;
+	virtual void	invalidateComposite(LLTexLayerSet* layerset, bool upload_result) = 0;
 
 /********************************************************************************
  **                                                                            **
@@ -296,7 +296,7 @@ protected:
 public:
 	// <FS:Ansariel> [Legacy Bake]
 	//void			setClothesColor(LLAvatarAppearanceDefines::ETextureIndex te, const LLColor4& new_color);
-	void			setClothesColor(LLAvatarAppearanceDefines::ETextureIndex te, const LLColor4& new_color, BOOL upload_bake);
+	void			setClothesColor(LLAvatarAppearanceDefines::ETextureIndex te, const LLColor4& new_color, bool upload_bake);
 	// </FS:Ansariel> [Legacy Bake]
 	LLColor4		getClothesColor(LLAvatarAppearanceDefines::ETextureIndex te);
 	static bool		teToColorParams(LLAvatarAppearanceDefines::ETextureIndex te, U32 *param_name);
@@ -308,7 +308,7 @@ public:
 	LLColor4		getGlobalColor(const std::string& color_name ) const;
 	// <FS:Ansariel> [Legacy Bake]
 	//virtual void	onGlobalColorChanged(const LLTexGlobalColor* global_color) = 0;
-	virtual void	onGlobalColorChanged(const LLTexGlobalColor* global_color, BOOL upload_bake) = 0;
+	virtual void	onGlobalColorChanged(const LLTexGlobalColor* global_color, bool upload_bake) = 0;
 	// </FS:Ansariel> [Legacy Bake]
 protected:
 	LLTexGlobalColor* mTexSkinColor;
@@ -404,7 +404,7 @@ protected:
 
 		struct LLAvatarMeshInfo
 		{
-			typedef std::pair<LLViewerVisualParamInfo*,BOOL> morph_info_pair_t; // LLPolyMorphTargetInfo stored here
+			typedef std::pair<LLViewerVisualParamInfo*,bool> morph_info_pair_t; // LLPolyMorphTargetInfo stored here
 			typedef std::vector<morph_info_pair_t> morph_info_list_t;
 
 			LLAvatarMeshInfo() : mLOD(0), mMinPixelArea(.1f) {}
@@ -433,8 +433,8 @@ protected:
 		struct LLAvatarAttachmentInfo
 		{
 			LLAvatarAttachmentInfo()
-				: mGroup(-1), mAttachmentID(-1), mPieMenuSlice(-1), mVisibleFirstPerson(FALSE),
-				  mIsHUDAttachment(FALSE), mHasPosition(FALSE), mHasRotation(FALSE) {}
+				: mGroup(-1), mAttachmentID(-1), mPieMenuSlice(-1), mVisibleFirstPerson(false),
+				  mIsHUDAttachment(false), mHasPosition(false), mHasRotation(false) {}
 			std::string mName;
 			std::string mJointName;
 			LLVector3 mPosition;
@@ -442,8 +442,8 @@ protected:
 			S32 mGroup;
 			S32 mAttachmentID;
 			S32 mPieMenuSlice;
-			BOOL mVisibleFirstPerson;
-			BOOL mIsHUDAttachment;
+			bool mVisibleFirstPerson;
+			bool mIsHUDAttachment;
 			bool mHasPosition;
 			bool mHasRotation;
 		};
@@ -463,11 +463,11 @@ protected:
 		struct LLAvatarMorphInfo
 		{
 			LLAvatarMorphInfo()
-				: mInvert(FALSE) {}
+				: mInvert(false) {}
 			std::string mName;
 			std::string mRegion;
 			std::string mLayer;
-			BOOL mInvert;
+			bool mInvert;
 		};
 
 		typedef std::vector<LLAvatarMorphInfo*> morph_info_list_t;
@@ -478,7 +478,7 @@ protected:
 	class LLMaskedMorph
 	{
 	public:
-		LLMaskedMorph(LLVisualParam *morph_target, BOOL invert, std::string layer);
+		LLMaskedMorph(LLVisualParam *morph_target, bool invert, std::string layer);
 
 		LLVisualParam	*mMorphTarget;
 		bool				mInvert;

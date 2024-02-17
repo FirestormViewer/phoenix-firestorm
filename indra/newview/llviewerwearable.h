@@ -65,8 +65,8 @@ public:
 	// <FS:Ansariel> [Legacy Bake]
 	//void				removeFromAvatar()	{ LLViewerWearable::removeFromAvatar( mType); }
 	//static void			removeFromAvatar( LLWearableType::EType type); 
-	void				removeFromAvatar( BOOL upload_bake )	{ LLViewerWearable::removeFromAvatar( mType, upload_bake ); }
-	static void			removeFromAvatar( LLWearableType::EType type, BOOL upload_bake ); 
+	void				removeFromAvatar( bool upload_bake )	{ LLViewerWearable::removeFromAvatar( mType, upload_bake ); }
+	static void			removeFromAvatar( LLWearableType::EType type, bool upload_bake ); 
 	// </FS:Ansariel> [Legacy Bake]
 
 	/*virtual*/ EImportResult	importStream( std::istream& input_stream, LLAvatarAppearance* avatarp );

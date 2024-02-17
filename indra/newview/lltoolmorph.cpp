@@ -157,8 +157,8 @@ void LLVisualParamHint::preRender(BOOL clear_depth)
 	// <FS:Ansariel> [Legacy Bake]
 	//mWearablePtr->setVisualParamWeight(mVisualParam->getID(), mVisualParamWeight);
 	//gAgentAvatarp->setVisualParamWeight(mVisualParam->getID(), mVisualParamWeight);
-	mWearablePtr->setVisualParamWeight(mVisualParam->getID(), mVisualParamWeight, FALSE);
-	gAgentAvatarp->setVisualParamWeight(mVisualParam->getID(), mVisualParamWeight, FALSE);
+	mWearablePtr->setVisualParamWeight(mVisualParam->getID(), mVisualParamWeight, false);
+	gAgentAvatarp->setVisualParamWeight(mVisualParam->getID(), mVisualParamWeight, false);
 	// </FS:Ansariel> [Legacy Bake]
 	gAgentAvatarp->setVisualParamWeight("Blink_Left", 0.f);
 	gAgentAvatarp->setVisualParamWeight("Blink_Right", 0.f);
@@ -256,7 +256,7 @@ BOOL LLVisualParamHint::render()
 	gAgentAvatarp->setVisualParamWeight(mVisualParam->getID(), mLastParamWeight);
 	// <FS:Ansariel> [Legacy Bake]
 	//mWearablePtr->setVisualParamWeight(mVisualParam->getID(), mLastParamWeight);
-	mWearablePtr->setVisualParamWeight(mVisualParam->getID(), mLastParamWeight, FALSE);
+	mWearablePtr->setVisualParamWeight(mVisualParam->getID(), mLastParamWeight, false);
 	LLViewerWearable* wearable = (LLViewerWearable*)mWearablePtr;
 	if (wearable)
 	{

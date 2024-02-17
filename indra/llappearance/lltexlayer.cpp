@@ -60,16 +60,16 @@ public:
 	~LLTexLayerInfo();
 
 	bool parseXml(LLXmlTreeNode* node);
-	BOOL createVisualParams(LLAvatarAppearance *appearance);
-	BOOL isUserSettable() { return mLocalTexture != -1;	}
+	bool createVisualParams(LLAvatarAppearance *appearance);
+	bool isUserSettable() { return mLocalTexture != -1;	}
 	S32  getLocalTexture() const { return mLocalTexture; }
-	BOOL getOnlyAlpha() const { return mUseLocalTextureAlphaOnly; }
+	bool getOnlyAlpha() const { return mUseLocalTextureAlphaOnly; }
 	std::string getName() const { return mName;	}
 
 private:
 	std::string				mName;
 	
-	BOOL					mWriteAllChannels; // Don't use masking.  Just write RGBA into buffer,
+	bool					mWriteAllChannels; // Don't use masking.  Just write RGBA into buffer,
 	LLTexLayerInterface::ERenderPass mRenderPass;
 
 	std::string				mGlobalColor;
@@ -77,11 +77,11 @@ private:
 
 	S32						mLocalTexture;
 	std::string				mStaticImageFileName;
-	BOOL					mStaticImageIsMask;
-	BOOL					mUseLocalTextureAlphaOnly; // Ignore RGB channels from the input texture.  Use alpha as a mask
-	BOOL					mIsVisibilityMask;
+	bool					mStaticImageIsMask;
+	bool					mUseLocalTextureAlphaOnly; // Ignore RGB channels from the input texture.  Use alpha as a mask
+	bool					mIsVisibilityMask;
 
-	typedef std::vector< std::pair< std::string,BOOL > > morph_name_list_t;
+	typedef std::vector< std::pair< std::string,bool > > morph_name_list_t;
 	morph_name_list_t		    mMorphNameList;
 	param_color_info_list_t		mParamColorInfoList;
 	param_alpha_info_list_t		mParamAlphaInfoList;
@@ -130,17 +130,17 @@ void LLTexLayerSetBuffer::preRenderTexLayerSet()
 }
 
 // virtual
-void LLTexLayerSetBuffer::postRenderTexLayerSet(BOOL success)
+void LLTexLayerSetBuffer::postRenderTexLayerSet(bool success)
 {
 	popProjection();
 }
 
-BOOL LLTexLayerSetBuffer::renderTexLayerSet(LLRenderTarget* bound_target)
+bool LLTexLayerSetBuffer::renderTexLayerSet(LLRenderTarget* bound_target)
 {
 	// Default color mask for tex layer render
 	gGL.setColorMask(true, true);
 
-	BOOL success = TRUE;
+	bool success = true;
 	
 	gAlphaMaskProgram.bind();
 	gAlphaMaskProgram.setMinimumAlpha(0.004f);
@@ -182,7 +182,7 @@ LLTexLayerSetInfo::LLTexLayerSetInfo() :
 	mWidth( 1024 ),
 	mHeight( 1024 ),
 // </FS:Beq>
-	mClearAlpha( TRUE )
+	mClearAlpha( true )
 {
 }
 
@@ -259,11 +259,11 @@ void LLTexLayerSetInfo::createVisualParams(LLAvatarAppearance *appearance)
 // An ordered set of texture layers that get composited into a single texture.
 //-----------------------------------------------------------------------------
 
-BOOL LLTexLayerSet::sHasCaches = FALSE;
+bool LLTexLayerSet::sHasCaches = false;
 
 LLTexLayerSet::LLTexLayerSet(LLAvatarAppearance* const appearance) :
 	mAvatarAppearance( appearance ),
-	mIsVisible( TRUE ),
+	mIsVisible( true ),
 	mBakedTexIndex(LLAvatarAppearanceDefines::BAKED_HEAD),
 	mInfo( NULL )
 {
@@ -284,7 +284,7 @@ LLTexLayerSet::~LLTexLayerSet()
 // setInfo
 //-----------------------------------------------------------------------------
 
-BOOL LLTexLayerSet::setInfo(const LLTexLayerSetInfo *info)
+bool LLTexLayerSet::setInfo(const LLTexLayerSetInfo *info)
 {
 	llassert(mInfo == NULL);
 	mInfo = info;
@@ -330,7 +330,7 @@ BOOL LLTexLayerSet::setInfo(const LLTexLayerSetInfo *info)
 // parseData
 //-----------------------------------------------------------------------------
 
-BOOL LLTexLayerSet::parseData(LLXmlTreeNode* node)
+bool LLTexLayerSet::parseData(LLXmlTreeNode* node)
 {
 	LLTexLayerSetInfo *info = new LLTexLayerSetInfo;
 
@@ -361,10 +361,10 @@ void LLTexLayerSet::deleteCaches()
 }
 
 
-BOOL LLTexLayerSet::render( S32 x, S32 y, S32 width, S32 height, LLRenderTarget* bound_target )
+bool LLTexLayerSet::render( S32 x, S32 y, S32 width, S32 height, LLRenderTarget* bound_target )
 {
-	BOOL success = TRUE;
-	mIsVisible = TRUE;
+	bool success = true;
+	mIsVisible = true;
 
 	if (mMaskLayerList.size() > 0)
 	{
@@ -372,7 +372,7 @@ BOOL LLTexLayerSet::render( S32 x, S32 y, S32 width, S32 height, LLRenderTarget*
 		{
 			if (layer->isInvisibleAlphaMask())
 			{
-				mIsVisible = FALSE;
+				mIsVisible = false;
 			}
 		}
 	}
@@ -432,8 +432,8 @@ BOOL LLTexLayerSet::render( S32 x, S32 y, S32 width, S32 height, LLRenderTarget*
 }
 
 
-BOOL LLTexLayerSet::isBodyRegion(const std::string& region) const 
-{ 
+bool LLTexLayerSet::isBodyRegion(const std::string& region) const
+{
 	return mInfo->mBodyRegion == region; 
 }
 
@@ -491,7 +491,7 @@ void LLTexLayerSet::renderAlphaMaskTextures(S32 x, S32 y, S32 width, S32 height,
 	{
 		gGL.flush();
 		{
-			LLGLTexture* tex = LLTexLayerStaticImageList::getInstance()->getTexture(info->mStaticAlphaFileName, TRUE);
+			LLGLTexture* tex = LLTexLayerStaticImageList::getInstance()->getTexture(info->mStaticAlphaFileName, true);
 			if( tex )
 			{
 				LLGLSUIDefault gls_ui;
@@ -540,7 +540,7 @@ void LLTexLayerSet::applyMorphMask(const U8* tex_data, S32 width, S32 height, S3
 	mAvatarAppearance->applyMorphMask(tex_data, width, height, num_components, mBakedTexIndex);
 }
 
-BOOL LLTexLayerSet::isMorphValid() const
+bool LLTexLayerSet::isMorphValid() const
 {
 	for(const LLTexLayerInterface* layer : mLayerList)
 	{
@@ -568,13 +568,13 @@ void LLTexLayerSet::invalidateMorphMasks()
 // LLTexLayerInfo
 //-----------------------------------------------------------------------------
 LLTexLayerInfo::LLTexLayerInfo() :
-	mWriteAllChannels( FALSE ),
+	mWriteAllChannels( false ),
 	mRenderPass(LLTexLayer::RP_COLOR),
 	mFixedColor( 0.f, 0.f, 0.f, 0.f ),
 	mLocalTexture( -1 ),
-	mStaticImageIsMask( FALSE ),
-	mUseLocalTextureAlphaOnly(FALSE),
-	mIsVisibilityMask(FALSE)
+	mStaticImageIsMask( false ),
+	mUseLocalTextureAlphaOnly(false),
+	mIsVisibilityMask(false)
 {
 }
 
@@ -616,7 +616,7 @@ bool LLTexLayerInfo::parseXml(LLXmlTreeNode* node)
 	node->getFastAttributeString( global_color_string, mGlobalColor );
 
 	// Visibility mask (optional)
-	BOOL is_visibility;
+	bool is_visibility;
 	static LLStdStringHandle visibility_mask_string = LLXmlTree::addAttributeString("visibility_mask");
 	if (node->getFastAttributeBOOL(visibility_mask_string, is_visibility))
 	{
@@ -682,10 +682,10 @@ bool LLTexLayerInfo::parseXml(LLXmlTreeNode* node)
 		static LLStdStringHandle morph_name_string = LLXmlTree::addAttributeString("morph_name");
 		if (maskNode->getFastAttributeString(morph_name_string, morph_name))
 		{
-			BOOL invert = FALSE;
+			bool invert = false;
 			static LLStdStringHandle invert_string = LLXmlTree::addAttributeString("invert");
 			maskNode->getFastAttributeBOOL(invert_string, invert);			
-			mMorphNameList.push_back(std::pair<std::string,BOOL>(morph_name,invert));
+			mMorphNameList.push_back(std::pair<std::string,bool>(morph_name,invert));
 		}
 	}
 
@@ -721,28 +721,28 @@ bool LLTexLayerInfo::parseXml(LLXmlTreeNode* node)
 	return true;
 }
 
-BOOL LLTexLayerInfo::createVisualParams(LLAvatarAppearance *appearance)
+bool LLTexLayerInfo::createVisualParams(LLAvatarAppearance *appearance)
 {
-	BOOL success = true;
+	bool success = true;
 	for (LLTexLayerParamColorInfo* color_info : mParamColorInfoList)
 	{
 		LLTexLayerParamColor* param_color = new LLTexLayerParamColor(appearance);
-		if (!param_color->setInfo(color_info, TRUE))
+		if (!param_color->setInfo(color_info, true))
 		{
 			LL_WARNS() << "NULL TexLayer Color Param could not be added to visual param list. Deleting." << LL_ENDL;
 			delete param_color;
-			success = FALSE;
+			success = false;
 		}
 	}
 
 	for (LLTexLayerParamAlphaInfo* alpha_info : mParamAlphaInfoList)
 	{
 		LLTexLayerParamAlpha* param_alpha = new LLTexLayerParamAlpha(appearance);
-		if (!param_alpha->setInfo(alpha_info, TRUE))
+		if (!param_alpha->setInfo(alpha_info, true))
 		{
 			LL_WARNS() << "NULL TexLayer Alpha Param could not be added to visual param list. Deleting." << LL_ENDL;
 			delete param_alpha;
-			success = FALSE;
+			success = false;
 		}
 	}
 
@@ -751,9 +751,9 @@ BOOL LLTexLayerInfo::createVisualParams(LLAvatarAppearance *appearance)
 
 LLTexLayerInterface::LLTexLayerInterface(LLTexLayerSet* const layer_set):
 	mTexLayerSet( layer_set ),
-	mMorphMasksValid( FALSE ),
+	mMorphMasksValid( false ),
 	mInfo(NULL),
-	mHasMorph(FALSE)
+	mHasMorph(false)
 {
 }
 
@@ -767,7 +767,7 @@ LLTexLayerInterface::LLTexLayerInterface(const LLTexLayerInterface &layer, LLWea
 	mHasMorph = layer.mHasMorph;
 }
 
-BOOL LLTexLayerInterface::setInfo(const LLTexLayerInfo *info, LLWearable* wearable  ) // This sets mInfo and calls initialization functions
+bool LLTexLayerInterface::setInfo(const LLTexLayerInfo *info, LLWearable* wearable  ) // This sets mInfo and calls initialization functions
 {
 	// setInfo should only be called once. Code is not robust enough to handle redefinition of a texlayer.
 	// Not a critical warning, but could be useful for debugging later issues. -Nyx
@@ -785,7 +785,7 @@ BOOL LLTexLayerInterface::setInfo(const LLTexLayerInfo *info, LLWearable* wearab
 		if (!wearable)
 			{
 				param_color = new LLTexLayerParamColor(this);
-				if (!param_color->setInfo(color_info, TRUE))
+				if (!param_color->setInfo(color_info, true))
 				{
 					mInfo = NULL;
 					return false;
@@ -810,7 +810,7 @@ BOOL LLTexLayerInterface::setInfo(const LLTexLayerInfo *info, LLWearable* wearab
 			if (!wearable)
 			{
 				param_alpha = new LLTexLayerParamAlpha( this );
-				if (!param_alpha->setInfo(alpha_info, TRUE))
+				if (!param_alpha->setInfo(alpha_info, true))
 				{
 					mInfo = NULL;
 					return false;
@@ -900,14 +900,14 @@ const std::string& LLTexLayerInterface::getGlobalColor() const
 	return mInfo->mGlobalColor; 
 }
 
-BOOL LLTexLayerInterface::isVisibilityMask() const
+bool LLTexLayerInterface::isVisibilityMask() const
 {
 	return mInfo->mIsVisibilityMask;
 }
 
 void LLTexLayerInterface::invalidateMorphMasks()
 {
-	mMorphMasksValid = FALSE;
+	mMorphMasksValid = false;
 }
 
 LLViewerVisualParam* LLTexLayerInterface::getVisualParamPtr(S32 index) const
@@ -987,7 +987,7 @@ void LLTexLayer::asLLSD(LLSD& sd) const
 // setInfo
 //-----------------------------------------------------------------------------
 
-BOOL LLTexLayer::setInfo(const LLTexLayerInfo* info, LLWearable* wearable  )
+bool LLTexLayer::setInfo(const LLTexLayerInfo* info, LLWearable* wearable  )
 {
 	return LLTexLayerInterface::setInfo(info, wearable);
 }
@@ -1027,14 +1027,14 @@ void LLTexLayer::calculateTexLayerColor(const param_color_list_t &param_list, LL
 	}
 }
 
-BOOL LLTexLayer::render(S32 x, S32 y, S32 width, S32 height, LLRenderTarget* bound_target)
+bool LLTexLayer::render(S32 x, S32 y, S32 width, S32 height, LLRenderTarget* bound_target)
 {
 	// *TODO: Is this correct?
 	//gPipeline.disableLights();
 	stop_glerror();
 
 	LLColor4 net_color;
-	BOOL color_specified = findNetColor(&net_color);
+	bool color_specified = findNetColor(&net_color);
 	
 	if (mTexLayerSet->getAvatarAppearance()->mIsDummy)
 	{
@@ -1042,7 +1042,7 @@ BOOL LLTexLayer::render(S32 x, S32 y, S32 width, S32 height, LLRenderTarget* bou
 		net_color = LLAvatarAppearance::getDummyColor();
 	}
 
-	BOOL success = TRUE;
+	bool success = true;
 	
 	// If you can't see the layer, don't render it.
 	if( is_approx_zero( net_color.mV[VW] ) )
@@ -1050,7 +1050,7 @@ BOOL LLTexLayer::render(S32 x, S32 y, S32 width, S32 height, LLRenderTarget* bou
 		return success;
 	}
 
-	BOOL alpha_mask_specified = FALSE;
+	bool alpha_mask_specified = false;
 	param_alpha_list_t::const_iterator iter = mParamAlphaList.begin();
 	if( iter != mParamAlphaList.end() )
 	{
@@ -1058,7 +1058,7 @@ BOOL LLTexLayer::render(S32 x, S32 y, S32 width, S32 height, LLRenderTarget* bou
 		// However, we can't do this optimization if we have morph masks that need updating.
 /*		if (!mHasMorph)
 		{
-			BOOL skip_layer = TRUE;
+			bool skip_layer = true;
 
 			while( iter != mParamAlphaList.end() )
 			{
@@ -1066,7 +1066,7 @@ BOOL LLTexLayer::render(S32 x, S32 y, S32 width, S32 height, LLRenderTarget* bou
 		
 				if( !param->getSkip() )
 				{
-					skip_layer = FALSE;
+					skip_layer = false;
 					break;
 				}
 
@@ -1081,7 +1081,7 @@ BOOL LLTexLayer::render(S32 x, S32 y, S32 width, S32 height, LLRenderTarget* bou
 
 		const bool force_render = true;
 		renderMorphMasks(x, y, width, height, net_color, bound_target, force_render);
-		alpha_mask_specified = TRUE;
+		alpha_mask_specified = true;
 		gGL.flush();
 		gGL.blendFunc(LLRender::BF_DEST_ALPHA, LLRender::BF_ONE_MINUS_DEST_ALPHA);
 	}
@@ -1122,7 +1122,7 @@ BOOL LLTexLayer::render(S32 x, S32 y, S32 width, S32 height, LLRenderTarget* bou
 					
 					LLTexUnit::eTextureAddressMode old_mode = tex->getAddressMode();
 					
-					gGL.getTexUnit(0)->bind(tex, TRUE);
+					gGL.getTexUnit(0)->bind(tex, true);
 					gGL.getTexUnit(0)->setTextureAddressMode(LLTexUnit::TAM_CLAMP);
 
 					gl_rect_2d_simple_tex( width, height );
@@ -1137,7 +1137,7 @@ BOOL LLTexLayer::render(S32 x, S32 y, S32 width, S32 height, LLRenderTarget* bou
 			}
 //			else
 //			{
-//				success = FALSE;
+//				success = false;
 //			}
 		}
 	}
@@ -1148,13 +1148,13 @@ BOOL LLTexLayer::render(S32 x, S32 y, S32 width, S32 height, LLRenderTarget* bou
 			LLGLTexture* tex = LLTexLayerStaticImageList::getInstance()->getTexture(getInfo()->mStaticImageFileName, getInfo()->mStaticImageIsMask);
 			if( tex )
 			{
-				gGL.getTexUnit(0)->bind(tex, TRUE);
+				gGL.getTexUnit(0)->bind(tex, true);
 				gl_rect_2d_simple_tex( width, height );
 				gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 			}
 			else
 			{
-				success = FALSE;
+				success = false;
 			}
 		}
 	}
@@ -1206,7 +1206,7 @@ const U8*	LLTexLayer::getAlphaData() const
 	return (iter2 == mAlphaCache.end()) ? 0 : iter2->second;
 }
 
-BOOL LLTexLayer::findNetColor(LLColor4* net_color) const
+bool LLTexLayer::findNetColor(LLColor4* net_color) const
 {
 	// Color is either:
 	//	* one or more color parameters (weighted colors)  (which may make use of a global color or fixed color)
@@ -1250,9 +1250,9 @@ BOOL LLTexLayer::findNetColor(LLColor4* net_color) const
 	return false; // No need to draw a separate colored polygon
 }
 
-BOOL LLTexLayer::blendAlphaTexture(S32 x, S32 y, S32 width, S32 height)
+bool LLTexLayer::blendAlphaTexture(S32 x, S32 y, S32 width, S32 height)
 {
-	BOOL success = true;
+	bool success = true;
 
 	gGL.flush();
 	
@@ -1262,14 +1262,14 @@ BOOL LLTexLayer::blendAlphaTexture(S32 x, S32 y, S32 width, S32 height)
 		if( tex )
 		{
 			gAlphaMaskProgram.setMinimumAlpha(0.f);
-			gGL.getTexUnit(0)->bind(tex, TRUE);
+			gGL.getTexUnit(0)->bind(tex, true);
 			gl_rect_2d_simple_tex( width, height );
 			gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 			gAlphaMaskProgram.setMinimumAlpha(0.004f);
 		}
 		else
 		{
-			success = FALSE;
+			success = false;
 		}
 	}
 	else
@@ -1304,7 +1304,7 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 		return;
 	}
     LL_PROFILE_ZONE_SCOPED;
-	BOOL success = TRUE;
+	bool success = true;
 
 	llassert( !mParamAlphaList.empty() );
 
@@ -1349,7 +1349,7 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 		{
 			LLTexUnit::eTextureAddressMode old_mode = tex->getAddressMode();
 			
-			gGL.getTexUnit(0)->bind(tex, TRUE);
+			gGL.getTexUnit(0)->bind(tex, true);
 			gGL.getTexUnit(0)->setTextureAddressMode(LLTexUnit::TAM_CLAMP);
 
 			gl_rect_2d_simple_tex( width, height );
@@ -1366,7 +1366,7 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 		{
 			if(	(tex->getComponents() == 4) || (tex->getComponents() == 1) )
 			{
-				gGL.getTexUnit(0)->bind(tex, TRUE);
+				gGL.getTexUnit(0)->bind(tex, true);
 				gl_rect_2d_simple_tex( width, height );
 				gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 			}
@@ -1547,7 +1547,7 @@ void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 		
 		getTexLayerSet()->getAvatarAppearance()->dirtyMesh();
 
-		mMorphMasksValid = TRUE;
+		mMorphMasksValid = true;
 		getTexLayerSet()->applyMorphMask(alpha_data, width, height, 1);
 	}
 }
@@ -1580,7 +1580,7 @@ void LLTexLayer::addAlphaMask(U8 *data, S32 originX, S32 originY, S32 width, S32
 	}
 }
 
-/*virtual*/ BOOL LLTexLayer::isInvisibleAlphaMask() const
+/*virtual*/ bool LLTexLayer::isInvisibleAlphaMask() const
 {
 	if (mLocalTextureObject)
 	{
@@ -1649,7 +1649,7 @@ LLTexLayerTemplate::~LLTexLayerTemplate()
 // setInfo
 //-----------------------------------------------------------------------------
 
-/*virtual*/ BOOL LLTexLayerTemplate::setInfo(const LLTexLayerInfo* info, LLWearable* wearable  )
+/*virtual*/ bool LLTexLayerTemplate::setInfo(const LLTexLayerInfo* info, LLWearable* wearable  )
 {
 	return LLTexLayerInterface::setInfo(info, wearable);
 }
@@ -1698,14 +1698,14 @@ LLTexLayer* LLTexLayerTemplate::getLayer(U32 i) const
 	return layer;
 }
 
-/*virtual*/ BOOL LLTexLayerTemplate::render(S32 x, S32 y, S32 width, S32 height, LLRenderTarget* bound_target)
+/*virtual*/ bool LLTexLayerTemplate::render(S32 x, S32 y, S32 width, S32 height, LLRenderTarget* bound_target)
 {
 	if(!mInfo)
 	{
-		return FALSE ;
+		return false ;
 	}
 
-	BOOL success = TRUE;
+	bool success = true;
 	updateWearableCache();
 	for (LLWearable* wearable : mWearableCache)
 	{
@@ -1730,9 +1730,9 @@ LLTexLayer* LLTexLayerTemplate::getLayer(U32 i) const
 	return success;
 }
 
-/*virtual*/ BOOL LLTexLayerTemplate::blendAlphaTexture( S32 x, S32 y, S32 width, S32 height) // Multiplies a single alpha texture against the frame buffer
+/*virtual*/ bool LLTexLayerTemplate::blendAlphaTexture( S32 x, S32 y, S32 width, S32 height) // Multiplies a single alpha texture against the frame buffer
 {
-	BOOL success = TRUE;
+	bool success = true;
 	U32 num_wearables = updateWearableCache();
 	for (U32 i = 0; i < num_wearables; i++)
 	{
@@ -1756,8 +1756,8 @@ LLTexLayer* LLTexLayerTemplate::getLayer(U32 i) const
 	}
 }
 
-/*virtual*/ void LLTexLayerTemplate::setHasMorph(BOOL newval)
-{ 
+/*virtual*/ void LLTexLayerTemplate::setHasMorph(bool newval)
+{
 	mHasMorph = newval;
 	U32 num_wearables = updateWearableCache();
 	for (U32 i = 0; i < num_wearables; i++)
@@ -1783,7 +1783,7 @@ LLTexLayer* LLTexLayerTemplate::getLayer(U32 i) const
 	}
 }
 
-/*virtual*/ BOOL LLTexLayerTemplate::isInvisibleAlphaMask() const
+/*virtual*/ bool LLTexLayerTemplate::isInvisibleAlphaMask() const
 {
 	U32 num_wearables = updateWearableCache();
 	for (U32 i = 0; i < num_wearables; i++)
@@ -1920,7 +1920,7 @@ LLImageTGA* LLTexLayerStaticImageList::getImageTGA(const std::string& file_name)
 
 // Returns a GL Image (without a backing ImageRaw) that contains the decoded data from a tga file named file_name.
 // Caches the result to speed identical subsequent requests.
-LLGLTexture* LLTexLayerStaticImageList::getTexture(const std::string& file_name, BOOL is_mask)
+LLGLTexture* LLTexLayerStaticImageList::getTexture(const std::string& file_name, bool is_mask)
 {
     LL_PROFILE_ZONE_SCOPED;
 	LLPointer<LLGLTexture> tex;
@@ -1934,7 +1934,7 @@ LLGLTexture* LLTexLayerStaticImageList::getTexture(const std::string& file_name,
 	else
 	{
 		llassert(gTextureManagerBridgep);
-		tex = gTextureManagerBridgep->getLocalTexture( FALSE );
+		tex = gTextureManagerBridgep->getLocalTexture( false );
 		LLPointer<LLImageRaw> image_raw = new LLImageRaw;
 		if( loadImageRaw( file_name, image_raw ) )
 		{
@@ -1950,7 +1950,7 @@ LLGLTexture* LLTexLayerStaticImageList::getTexture(const std::string& file_name,
 
 				image_raw->copyUnscaledAlphaMask(alpha_image_raw, LLColor4U::black);
 			}
-			tex->createGLTexture(0, image_raw, 0, TRUE, LLGLTexture::LOCAL);
+			tex->createGLTexture(0, image_raw, 0, true, LLGLTexture::LOCAL);
 
 			gGL.getTexUnit(0)->bind(tex);
 			tex->setAddressMode(LLTexUnit::TAM_CLAMP);
@@ -1968,11 +1968,11 @@ LLGLTexture* LLTexLayerStaticImageList::getTexture(const std::string& file_name,
 }
 
 // Reads a .tga file, decodes it, and puts the decoded data in image_raw.
-// Returns TRUE if successful.
-BOOL LLTexLayerStaticImageList::loadImageRaw(const std::string& file_name, LLImageRaw* image_raw)
+// Returns true if successful.
+bool LLTexLayerStaticImageList::loadImageRaw(const std::string& file_name, LLImageRaw* image_raw)
 {
     LL_PROFILE_ZONE_SCOPED;
-	BOOL success = FALSE;
+	bool success = false;
 	std::string path;
 	path = gDirUtilp->getExpandedFilename(LL_PATH_CHARACTER,file_name);
 	LLPointer<LLImageTGA> image_tga = new LLImageTGA( path );

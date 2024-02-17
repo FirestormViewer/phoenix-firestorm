@@ -87,7 +87,7 @@ void LLWearableData::setWearable(const LLWearableType::EType type, U32 index, LL
 	{
 		wearable_vec[index] = wearable;
 		old_wearable->setUpdated();
-		const BOOL removed = FALSE;
+		const bool removed = false;
 		wearableUpdated(wearable, removed);
 	}
 }
@@ -116,14 +116,14 @@ void LLWearableData::pushWearable(const LLWearableType::EType type,
 //		mWearableDatas[type].push_back(wearable);		mWearableDatas[type].push_back(wearable);
 		if (trigger_updated)
 		{
-			const BOOL removed = FALSE;
+			const bool removed = false;
 			wearableUpdated(wearable, removed);
 		}
 	}
 }
 
 // virtual
-void LLWearableData::wearableUpdated(LLWearable *wearable, BOOL removed)
+void LLWearableData::wearableUpdated(LLWearable *wearable, bool removed)
 {
 	wearable->setUpdated();
 	if (!removed)
@@ -155,7 +155,7 @@ void LLWearableData::eraseWearable(const LLWearableType::EType type, U32 index)
 	if (wearable)
 	{
 		mWearableDatas[type].erase(mWearableDatas[type].begin() + index);
-		const BOOL removed = TRUE;
+		const bool removed = true;
 		wearableUpdated(wearable, removed);
 	}
 }
@@ -211,7 +211,7 @@ void LLWearableData::pullCrossWearableValues(const LLWearableType::EType type)
 }
 
 
-BOOL LLWearableData::getWearableIndex(const LLWearable *wearable, U32& index_found) const
+bool LLWearableData::getWearableIndex(const LLWearable *wearable, U32& index_found) const
 {
 	if (wearable == NULL)
 	{
@@ -253,7 +253,7 @@ U32 LLWearableData::getClothingLayerCount() const
 	return count;
 }
 
-BOOL LLWearableData::canAddWearable(const LLWearableType::EType type) const
+bool LLWearableData::canAddWearable(const LLWearableType::EType type) const
 {
     LLAssetType::EType a_type = LLWearableType::getInstance()->getAssetType(type);
 	if (a_type==LLAssetType::AT_CLOTHING)
@@ -271,7 +271,7 @@ BOOL LLWearableData::canAddWearable(const LLWearableType::EType type) const
 	}
 }
 
-BOOL LLWearableData::isOnTop(LLWearable* wearable) const
+bool LLWearableData::isOnTop(LLWearable* wearable) const
 {
 	if (!wearable) return false;
 	const LLWearableType::EType type = wearable->getType();
@@ -357,7 +357,7 @@ U32 LLWearableData::getWearableCount(const U32 tex_index) const
 
 // <FS:Ansariel> [Legacy Bake]
 LLUUID LLWearableData::computeBakedTextureHash(LLAvatarAppearanceDefines::EBakedTextureIndex baked_index,
-												 BOOL generate_valid_hash) // Set to false if you want to upload the baked texture w/o putting it in the cache
+												 bool generate_valid_hash) // Set to false if you want to upload the baked texture w/o putting it in the cache
 {
 	LLUUID hash_id;
 	bool hash_computed = false;

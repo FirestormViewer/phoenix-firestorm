@@ -350,12 +350,12 @@ public:
 	// called when a motion is activated
 	// must return TRUE to indicate success, or else
 	// it will be deactivated
-	virtual BOOL onActivate() { return TRUE; }
+	virtual bool onActivate() { return true; }
 
 	// called per time step
 	// must return TRUE while it is active, and
 	// must return FALSE when the motion is completed.
-	virtual BOOL onUpdate(F32 time, U8* joint_mask)
+	virtual bool onUpdate(F32 time, U8* joint_mask)
 	{
         LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 		F32 nx[2];
@@ -373,7 +373,7 @@ public:
 		tQn.setQuat( rx, ry, 0.0f );
 		mTorsoState->setRotation( tQn );
 
-		return TRUE;
+		return true;
 	}
 
 	// called when a motion is deactivated
@@ -471,12 +471,12 @@ public:
 	// called when a motion is activated
 	// must return TRUE to indicate success, or else
 	// it will be deactivated
-	virtual BOOL onActivate() { return TRUE; }
+	virtual bool onActivate() { return true; }
 
 	// called per time step
 	// must return TRUE while it is active, and
 	// must return FALSE when the motion is completed.
-	virtual BOOL onUpdate(F32 time, U8* joint_mask)
+	virtual bool onUpdate(F32 time, U8* joint_mask)
 	{
         LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 		mBreatheRate = 1.f;
@@ -485,7 +485,7 @@ public:
 
 		mChestState->setRotation(LLQuaternion(breathe_amt, LLVector3(0.f, 1.f, 0.f)));
 
-		return TRUE;
+		return true;
 	}
 
 	// called when a motion is deactivated
@@ -573,17 +573,17 @@ public:
 	// called when a motion is activated
 	// must return TRUE to indicate success, or else
 	// it will be deactivated
-	virtual BOOL onActivate() { return TRUE; }
+	virtual bool onActivate() { return true; }
 
 	// called per time step
 	// must return TRUE while it is active, and
 	// must return FALSE when the motion is completed.
-	virtual BOOL onUpdate(F32 time, U8* joint_mask)
+	virtual bool onUpdate(F32 time, U8* joint_mask)
 	{
         LL_PROFILE_ZONE_SCOPED_CATEGORY_AVATAR;
 		mPelvisState->setPosition(LLVector3::zero);
 
-		return TRUE;
+		return true;
 	}
 
 	// called when a motion is deactivated
@@ -718,7 +718,7 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mIsEditingAppearance(FALSE),
 	mUseLocalAppearance(FALSE),
 	// <FS:Ansariel> [Legacy Bake]
-	mUseServerBakes(FALSE),
+	mUseServerBakes(false),
 	// </FS:Ansariel> [Legacy Bake]
 	mLastUpdateRequestCOFVersion(-1),
 	mLastUpdateReceivedCOFVersion(-1),
@@ -1167,7 +1167,7 @@ void LLVOAvatar::restoreGL()
 	{
 		// <FS:Ansariel> [Legacy Bake]
 		//gAgentAvatarp->invalidateComposite(gAgentAvatarp->getTexLayerSet(i));
-		gAgentAvatarp->invalidateComposite(gAgentAvatarp->getTexLayerSet(i), FALSE);
+		gAgentAvatarp->invalidateComposite(gAgentAvatarp->getTexLayerSet(i), false);
 	}
 	gAgentAvatarp->updateMeshTextures();
 }
@@ -2239,7 +2239,7 @@ void LLVOAvatar::applyDefaultParams()
 		F32 newWeight = U8_to_F32(value, param->getMinWeight(), param->getMaxWeight());
 		// <FS:Ansariel> [Legacy Bake]
 		//param->setWeight(newWeight);
-		param->setWeight(newWeight, FALSE); // Most likely FALSE is correct here because it's used in resetSkeleton, which is a local operation
+		param->setWeight(newWeight, false); // Most likely FALSE is correct here because it's used in resetSkeleton, which is a local operation
 	}
 }
 
@@ -2647,7 +2647,7 @@ LLViewerFetchedTexture *LLVOAvatar::getBakedTextureImage(const U8 te, const LLUU
 			LL_DEBUGS("Avatar") << avString() << "get old-bake image from host " << uuid << LL_ENDL;
 			LLHost host = getObjectHost();
 			result = LLViewerTextureManager::getFetchedTexture(
-				uuid, FTT_HOST_BAKE, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, host);
+				uuid, FTT_HOST_BAKE, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, host);
 			// </FS:Ansariel> [Legacy Bake]
 		}
 		LL_DEBUGS("Avatar") << avString() << "get server-bake image from URL " << url << LL_ENDL;
@@ -2968,8 +2968,8 @@ void LLVOAvatar::idleUpdateVoiceVisualizer(bool voice_enabled)
 					// <FS:Ansariel> [Legacy Bake]
 					//if( mOohMorph ) mOohMorph->setWeight(mOohMorph->getMinWeight());
 					//if( mAahMorph ) mAahMorph->setWeight(mAahMorph->getMinWeight());
-					if( mOohMorph ) mOohMorph->setWeight(mOohMorph->getMinWeight(), FALSE);
-					if( mAahMorph ) mAahMorph->setWeight(mAahMorph->getMinWeight(), FALSE);
+					if( mOohMorph ) mOohMorph->setWeight(mOohMorph->getMinWeight(), false);
+					if( mAahMorph ) mAahMorph->setWeight(mAahMorph->getMinWeight(), false);
 					// </FS:Ansariel> [Legacy Bake]
 					
 					mLipSyncActive = false;
@@ -3203,7 +3203,7 @@ void LLVOAvatar::idleUpdateAppearanceAnimation()
 				{
 					// <FS:Ansariel> [Legacy Bake]
 					//param->stopAnimating();
-					param->stopAnimating(FALSE);
+					param->stopAnimating(false);
 				}
 			}
 			updateVisualParams();
@@ -3230,7 +3230,7 @@ void LLVOAvatar::idleUpdateAppearanceAnimation()
 					{
 						// <FS:Ansariel> [Legacy Bake]
 						//param->animate(morph_amt);
-						param->animate(morph_amt, FALSE);
+						param->animate(morph_amt, false);
 					}
 				}
 			}
@@ -3288,7 +3288,7 @@ void LLVOAvatar::idleUpdateLipSync(bool voice_enabled)
 
 			// <FS:Ansariel> [Legacy Bake]
 			//mOohMorph->setWeight( ooh_weight);
-			mOohMorph->setWeight( ooh_weight, FALSE);
+			mOohMorph->setWeight( ooh_weight, false);
 		}
 
 		if( mAahMorph )
@@ -3298,7 +3298,7 @@ void LLVOAvatar::idleUpdateLipSync(bool voice_enabled)
 
 			// <FS:Ansariel> [Legacy Bake]
 			//mAahMorph->setWeight( aah_weight);
-			mAahMorph->setWeight( aah_weight, FALSE);
+			mAahMorph->setWeight( aah_weight, false);
 		}
 
 		mLipSyncActive = true;
@@ -6795,7 +6795,7 @@ LLUUID LLVOAvatar::remapMotionID(const LLUUID& id)
 // id is the asset if of the animation to start
 // time_offset is the offset into the animation at which to start playing
 //-----------------------------------------------------------------------------
-BOOL LLVOAvatar::startMotion(const LLUUID& id, F32 time_offset)
+bool LLVOAvatar::startMotion(const LLUUID& id, F32 time_offset)
 {
 	LL_DEBUGS("Motion") << "motion requested " << id.asString() << " " << gAnimLibrary.animationName(id) << LL_ENDL;
 
@@ -6841,7 +6841,7 @@ BOOL LLVOAvatar::startMotion(const LLUUID& id, F32 time_offset)
 //-----------------------------------------------------------------------------
 // stopMotion()
 //-----------------------------------------------------------------------------
-BOOL LLVOAvatar::stopMotion(const LLUUID& id, BOOL stop_immediate)
+bool LLVOAvatar::stopMotion(const LLUUID& id, bool stop_immediate)
 {
 	LL_DEBUGS("Motion") << "Motion requested " << id.asString() << " " << gAnimLibrary.animationName(id) << LL_ENDL;
 
@@ -8027,7 +8027,7 @@ BOOL LLVOAvatar::updateGeometry(LLDrawable *drawable)
 //	invalidateComposite( mBakedTextureDatas[BAKED_UPPER].mTexLayerSet);
 //	invalidateComposite( mBakedTextureDatas[BAKED_LOWER].mTexLayerSet);
 //}
-void LLVOAvatar::updateSexDependentLayerSets(BOOL upload_bake)
+void LLVOAvatar::updateSexDependentLayerSets(bool upload_bake)
 {
 	invalidateComposite( mBakedTextureDatas[BAKED_HEAD].mTexLayerSet, upload_bake);
 	invalidateComposite( mBakedTextureDatas[BAKED_UPPER].mTexLayerSet, upload_bake);
@@ -8864,7 +8864,7 @@ LLViewerObject *	LLVOAvatar::findAttachmentByID( const LLUUID & target_id ) cons
 // virtual
 // <FS:Ansariel> [Legacy Bake]
 //void LLVOAvatar::invalidateComposite( LLTexLayerSet* layerset)
-void LLVOAvatar::invalidateComposite( LLTexLayerSet* layerset, BOOL upload_result)
+void LLVOAvatar::invalidateComposite( LLTexLayerSet* layerset, bool upload_result)
 {
 }
 
@@ -8875,7 +8875,7 @@ void LLVOAvatar::invalidateAll()
 // virtual
 // <FS:Ansariel> [Legacy Bake]
 //void LLVOAvatar::onGlobalColorChanged(const LLTexGlobalColor* global_color)
-void LLVOAvatar::onGlobalColorChanged(const LLTexGlobalColor* global_color, BOOL upload_bake)
+void LLVOAvatar::onGlobalColorChanged(const LLTexGlobalColor* global_color, bool upload_bake)
 {
 	if (global_color == mTexSkinColor)
 	{
@@ -9132,7 +9132,7 @@ void LLVOAvatar::logMetricsTimerRecord(const std::string& phase_name, F32 elapse
 	record["grid_y"] = LLSD::Integer(grid_y);
 	// <FS:Ansariel> [Legacy Bake]
 	//record["is_using_server_bakes"] = true;
-	record["is_using_server_bakes"] = ((bool) isUsingServerBakes());
+	record["is_using_server_bakes"] = isUsingServerBakes();
 	record["is_self"] = isSelf();
 		
 	if (isAgentAvatarValid())
@@ -10624,14 +10624,14 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 					//LL_DEBUGS("Avatar") << "param slam " << i << " " << newWeight << LL_ENDL;
 					// <FS:Ansariel> [Legacy Bake]
 					//param->setWeight(newWeight);
-					param->setWeight(newWeight, FALSE);
+					param->setWeight(newWeight, false);
 				}
 				else
 				{
 					interp_params = TRUE;
 					// <FS:Ansariel> [Legacy Bake]
 					//param->setAnimationTarget(newWeight);
-					param->setAnimationTarget(newWeight, FALSE);
+					param->setAnimationTarget(newWeight, false);
 				}
 			}
 		}
@@ -10656,7 +10656,7 @@ void LLVOAvatar::applyParsedAppearanceMessage(LLAppearanceMessageContents& conte
 			{
 				// <FS:Ansariel> [Legacy Bake]
 				//updateSexDependentLayerSets();
-				updateSexDependentLayerSets(FALSE);
+				updateSexDependentLayerSets(false);
 			}	
 		}
 
@@ -12834,14 +12834,14 @@ void LLVOAvatar::bodySizeChanged()
 }
 }
 
-BOOL LLVOAvatar::isUsingServerBakes() const
+bool LLVOAvatar::isUsingServerBakes() const
 {
 #if 1
 	// Sanity check - visual param for appearance version should match mUseServerBakes
 	LLVisualParam* appearance_version_param = getVisualParam(11000);
 	llassert(appearance_version_param);
 	F32 wt = appearance_version_param->getWeight();
-	F32 expect_wt = mUseServerBakes ? 1.0 : 0.0;
+	F32 expect_wt = mUseServerBakes ? 1.0f : 0.0f;
 	if (!is_approx_equal(wt,expect_wt))
 	{
 		LL_WARNS() << "wt " << wt << " differs from expected " << expect_wt << LL_ENDL;
@@ -12851,11 +12851,11 @@ BOOL LLVOAvatar::isUsingServerBakes() const
 	return mUseServerBakes;
 }
 
-void LLVOAvatar::setIsUsingServerBakes(BOOL newval)
+void LLVOAvatar::setIsUsingServerBakes(bool newval)
 {
 	mUseServerBakes = newval;
 	LLVisualParam* appearance_version_param = getVisualParam(11000);
 	llassert(appearance_version_param);
-	appearance_version_param->setWeight(newval ? 1.0 : 0.0, false);
+	appearance_version_param->setWeight(newval ? 1.0f : 0.0f, false);
 }
 // </FS:Ansariel> [Legacy Bake]

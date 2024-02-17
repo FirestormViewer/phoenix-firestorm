@@ -60,7 +60,7 @@ bool LLScriptLibrary::loadLibrary(const std::string& filename)
 				std::string tool_tip;
 				F32 sleep_time;
 				F32 energy;
-				if (!pStringNode->getAttribute_bool("god-only", god_only))
+				if (!pStringNode->getAttributeBOOL("god-only", god_only))
 				{
 					god_only = false;
 				}

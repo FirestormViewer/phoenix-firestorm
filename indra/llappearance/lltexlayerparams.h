@@ -48,7 +48,7 @@ class LLTexLayerParam : public LLViewerVisualParam
 public: 
 	LLTexLayerParam(LLTexLayerInterface *layer);
 	LLTexLayerParam(LLAvatarAppearance *appearance);
-	/*virtual*/ BOOL setInfo(LLViewerVisualParamInfo *info, BOOL add_to_appearance);
+	/*virtual*/ bool setInfo(LLViewerVisualParamInfo *info, bool add_to_appearance);
 	/*virtual*/ LLViewerVisualParam* cloneParam(LLWearable* wearable) const = 0;
 
 protected:
@@ -74,15 +74,15 @@ public:
 	/*virtual*/ LLViewerVisualParam* cloneParam(LLWearable* wearable = NULL) const;
 
 	// LLVisualParam Virtual functions
-	///*virtual*/ BOOL		parseData(LLXmlTreeNode* node);
+	///*virtual*/ bool		parseData(LLXmlTreeNode* node);
 	/*virtual*/ void		apply( ESex avatar_sex ) {}
 	// <FS:Ansariel> [Legacy Bake]
 	///*virtual*/ void		setWeight(F32 weight);
 	///*virtual*/ void		setAnimationTarget(F32 target_value); 
 	///*virtual*/ void		animate(F32 delta);
-	/*virtual*/ void		setWeight(F32 weight, BOOL upload_bake);
-	/*virtual*/ void		setAnimationTarget(F32 target_value, BOOL upload_bake); 
-	/*virtual*/ void		animate(F32 delta, BOOL upload_bake);
+	/*virtual*/ void		setWeight(F32 weight, bool upload_bake);
+	/*virtual*/ void		setAnimationTarget(F32 target_value, bool upload_bake);
+	/*virtual*/ void		animate(F32 delta, bool upload_bake);
 	// </FS:Ansariel> [Legacy Bake]
 
 	// LLViewerVisualParam Virtual functions
@@ -100,10 +100,10 @@ public:
 	// </FS:ND>
 
 	// New functions
-	BOOL					render( S32 x, S32 y, S32 width, S32 height );
-	BOOL					getSkip() const;
+	bool					render( S32 x, S32 y, S32 width, S32 height );
+	bool					getSkip() const;
 	void					deleteCaches();
-	BOOL					getMultiplyBlend() const;
+	bool					getMultiplyBlend() const;
 
 private:
 	LLTexLayerParamAlpha(const LLTexLayerParamAlpha& pOther);
@@ -111,8 +111,8 @@ private:
 	LLPointer<LLGLTexture>	mCachedProcessedTexture;
 	LLPointer<LLImageTGA>	mStaticImageTGA;
 	LLPointer<LLImageRaw>	mStaticImageRaw;
-	std::atomic<BOOL>		mNeedsCreateTexture;
-	BOOL					mStaticImageInvalid;
+	std::atomic<bool>		mNeedsCreateTexture;
+	bool					mStaticImageInvalid;
 	LL_ALIGN_16(LLVector4a				mAvgDistortionVec);
 	F32						mCachedEffectiveWeight;
 
@@ -135,8 +135,8 @@ public:
 
 private:
 	std::string				mStaticImageFileName;
-	BOOL					mMultiplyBlend;
-	BOOL					mSkipIfZeroWeight;
+	bool					mMultiplyBlend;
+	bool					mSkipIfZeroWeight;
 	F32						mDomain;
 };
 //
@@ -168,15 +168,15 @@ public:
 	/*virtual*/ LLViewerVisualParam* cloneParam(LLWearable* wearable = NULL) const;
 
 	// LLVisualParam Virtual functions
-	///*virtual*/ BOOL			parseData(LLXmlTreeNode* node);
+	///*virtual*/ bool			parseData(LLXmlTreeNode* node);
 	/*virtual*/ void			apply( ESex avatar_sex ) {}
 	// <FS:Ansariel> [Legacy Bake]
 	///*virtual*/ void			setWeight(F32 weight);
 	///*virtual*/ void			setAnimationTarget(F32 target_value);
 	///*virtual*/ void			animate(F32 delta);
-	/*virtual*/ void			setWeight(F32 weight, BOOL upload_bake);
-	/*virtual*/ void			setAnimationTarget(F32 target_value, BOOL upload_bake);
-	/*virtual*/ void			animate(F32 delta, BOOL upload_bake);
+	/*virtual*/ void			setWeight(F32 weight, bool upload_bake);
+	/*virtual*/ void			setAnimationTarget(F32 target_value, bool upload_bake);
+	/*virtual*/ void			animate(F32 delta, bool upload_bake);
 	// </FS:Ansariel> [Legacy Bake]
 
 

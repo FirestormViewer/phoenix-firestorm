@@ -81,7 +81,7 @@ struct LLGroupData
 	LLUUID mID;
 	LLUUID mInsigniaID;
 	U64 mPowers;
-	BOOL mAcceptNotices;
+	bool mAcceptNotices;
 	BOOL mListInProfile;
 	S32 mContribution;
 	std::string mName;
@@ -1155,7 +1155,7 @@ public:
 	LLAgentQueryManager();
 	virtual ~LLAgentQueryManager();
 	
-	BOOL 			hasNoPendingQueries() const 	{ return getNumPendingQueries() == 0; }
+	bool 			hasNoPendingQueries() const 	{ return getNumPendingQueries() == 0; }
 	S32 			getNumPendingQueries() const 	{ return mNumPendingQueries; }
 private:
 	S32				mNumPendingQueries;

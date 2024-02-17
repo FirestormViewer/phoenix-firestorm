@@ -105,9 +105,9 @@ public:
     ///*virtual*/ void				setWeight(F32 weight);
     ///*virtual*/ void				setAnimationTarget(F32 target_value);
     ///*virtual*/ void				stopAnimating();
-    /*virtual*/ void				setWeight(F32 weight, BOOL upload_bake);
-    /*virtual*/ void				setAnimationTarget(F32 target_value, BOOL upload_bake);
-    /*virtual*/ void				stopAnimating(BOOL upload_bake);
+    /*virtual*/ void				setWeight(F32 weight, bool upload_bake);
+    /*virtual*/ void				setAnimationTarget(F32 target_value, bool upload_bake);
+    /*virtual*/ void				stopAnimating(bool upload_bake);
     // </FS:Ansariel> [Legacy Bake]
     /*virtual*/ bool				linkDrivenParams(visual_param_mapper mapper, bool only_cross_params);
     /*virtual*/ void				resetDrivenParams();

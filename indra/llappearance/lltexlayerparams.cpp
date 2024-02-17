@@ -69,7 +69,7 @@ LLTexLayerParam::LLTexLayerParam(const LLTexLayerParam& pOther)
 {
 }
 
-BOOL LLTexLayerParam::setInfo(LLViewerVisualParamInfo *info, BOOL add_to_appearance)
+bool LLTexLayerParam::setInfo(LLViewerVisualParamInfo *info, bool add_to_appearance)
 {
 	LLViewerVisualParam::setInfo(info);
 
@@ -123,8 +123,8 @@ LLTexLayerParamAlpha::LLTexLayerParamAlpha(LLTexLayerInterface* layer)
 	mCachedProcessedTexture(NULL),
 	mStaticImageTGA(),
 	mStaticImageRaw(),
-	mNeedsCreateTexture(FALSE),
-	mStaticImageInvalid(FALSE),
+	mNeedsCreateTexture(false),
+	mStaticImageInvalid(false),
 	mAvgDistortionVec(1.f, 1.f, 1.f),
 	mCachedEffectiveWeight(0.f)
 {
@@ -136,8 +136,8 @@ LLTexLayerParamAlpha::LLTexLayerParamAlpha(LLAvatarAppearance* appearance)
 	mCachedProcessedTexture(NULL),
 	mStaticImageTGA(),
 	mStaticImageRaw(),
-	mNeedsCreateTexture(FALSE),
-	mStaticImageInvalid(FALSE),
+	mNeedsCreateTexture(false),
+	mStaticImageInvalid(false),
 	mAvgDistortionVec(1.f, 1.f, 1.f),
 	mCachedEffectiveWeight(0.f)
 {
@@ -173,17 +173,17 @@ void LLTexLayerParamAlpha::deleteCaches()
 	mStaticImageTGA = NULL; // deletes image
 	mCachedProcessedTexture = NULL;
 	mStaticImageRaw = NULL;
-	mNeedsCreateTexture = FALSE;
+	mNeedsCreateTexture = false;
 }
 
-BOOL LLTexLayerParamAlpha::getMultiplyBlend() const
+bool LLTexLayerParamAlpha::getMultiplyBlend() const
 {
 	return ((LLTexLayerParamAlphaInfo *)getInfo())->mMultiplyBlend; 	
 }
 
 // <FS:Ansariel> [Legacy Bake]
 //void LLTexLayerParamAlpha::setWeight(F32 weight)
-void LLTexLayerParamAlpha::setWeight(F32 weight, BOOL upload_bake)
+void LLTexLayerParamAlpha::setWeight(F32 weight, bool upload_bake)
 // </FS:Ansariel> [Legacy Bake]
 {
 	if (mIsAnimating || mTexLayer == NULL)
@@ -213,7 +213,7 @@ void LLTexLayerParamAlpha::setWeight(F32 weight, BOOL upload_bake)
 
 // <FS:Ansariel> [Legacy Bake]
 //void LLTexLayerParamAlpha::setAnimationTarget(F32 target_value)
-void LLTexLayerParamAlpha::setAnimationTarget(F32 target_value, BOOL upload_bake)
+void LLTexLayerParamAlpha::setAnimationTarget(F32 target_value, bool upload_bake)
 { 
 	// do not animate dummy parameters
 	if (mIsDummy)
@@ -228,7 +228,7 @@ void LLTexLayerParamAlpha::setAnimationTarget(F32 target_value, BOOL upload_bake
 	// <FS:Ansariel> [Legacy Bake]
 	//setWeight(target_value); 
 	setWeight(target_value, upload_bake); 
-	mIsAnimating = TRUE;
+	mIsAnimating = true;
 	if (mNext)
 	{
 		// <FS:Ansariel> [Legacy Bake]
@@ -239,7 +239,7 @@ void LLTexLayerParamAlpha::setAnimationTarget(F32 target_value, BOOL upload_bake
 
 // <FS:Ansariel> [Legacy Bake]
 //void LLTexLayerParamAlpha::animate(F32 delta)
-void LLTexLayerParamAlpha::animate(F32 delta, BOOL upload_bake)
+void LLTexLayerParamAlpha::animate(F32 delta, bool upload_bake)
 {
 	if (mNext)
 	{
@@ -249,7 +249,7 @@ void LLTexLayerParamAlpha::animate(F32 delta, BOOL upload_bake)
 	}
 }
 
-BOOL LLTexLayerParamAlpha::getSkip() const
+bool LLTexLayerParamAlpha::getSkip() const
 {
 	if (!mTexLayer)
 	{
@@ -277,10 +277,10 @@ BOOL LLTexLayerParamAlpha::getSkip() const
 }
 
 
-BOOL LLTexLayerParamAlpha::render(S32 x, S32 y, S32 width, S32 height)
+bool LLTexLayerParamAlpha::render(S32 x, S32 y, S32 width, S32 height)
 {
     LL_PROFILE_ZONE_SCOPED;
-	BOOL success = true;
+	bool success = true;
 
 	if (!mTexLayer)
 	{
@@ -288,7 +288,7 @@ BOOL LLTexLayerParamAlpha::render(S32 x, S32 y, S32 width, S32 height)
 	}
 
 	F32 effective_weight = (mTexLayer->getTexLayerSet()->getAvatarAppearance()->getSex() & getSex()) ? mCurWeight : getDefaultWeight();
-	BOOL weight_changed = effective_weight != mCachedEffectiveWeight;
+	bool weight_changed = effective_weight != mCachedEffectiveWeight;
 	if (getSkip())
 	{
 		return success;
@@ -312,12 +312,12 @@ BOOL LLTexLayerParamAlpha::render(S32 x, S32 y, S32 width, S32 height)
 			// Don't load the image file until we actually need it the first time.  Like now.
 			mStaticImageTGA = LLTexLayerStaticImageList::getInstance()->getImageTGA(info->mStaticImageFileName);  
 			// We now have something in one of our caches
-			LLTexLayerSet::sHasCaches |= mStaticImageTGA.notNull() ? TRUE : FALSE;
+			LLTexLayerSet::sHasCaches |= mStaticImageTGA.notNull() ? true : false;
 
 			if (mStaticImageTGA.isNull())
 			{
 				LL_WARNS() << "Unable to load static file: " << info->mStaticImageFileName << LL_ENDL;
-				mStaticImageInvalid = TRUE; // don't try again.
+				mStaticImageInvalid = true; // don't try again.
 				return false;
 			}
 		}
@@ -334,10 +334,10 @@ BOOL LLTexLayerParamAlpha::render(S32 x, S32 y, S32 width, S32 height)
 			if (!mCachedProcessedTexture)
 			{
 				llassert(gTextureManagerBridgep);
-				mCachedProcessedTexture = gTextureManagerBridgep->getLocalTexture(image_tga_width, image_tga_height, 1, FALSE);
+				mCachedProcessedTexture = gTextureManagerBridgep->getLocalTexture(image_tga_width, image_tga_height, 1, false);
 
 				// We now have something in one of our caches
-				LLTexLayerSet::sHasCaches |= mCachedProcessedTexture ? TRUE : FALSE;
+				LLTexLayerSet::sHasCaches |= mCachedProcessedTexture ? true : false;
 
 				mCachedProcessedTexture->setExplicitFormat(GL_ALPHA8, GL_ALPHA);
 			}
@@ -346,7 +346,7 @@ BOOL LLTexLayerParamAlpha::render(S32 x, S32 y, S32 width, S32 height)
 			mStaticImageRaw = NULL;
 			mStaticImageRaw = new LLImageRaw;
 			mStaticImageTGA->decodeAndProcess(mStaticImageRaw, info->mDomain, effective_weight);
-			mNeedsCreateTexture = TRUE;			
+			mNeedsCreateTexture = true;
 			LL_DEBUGS() << "Built Cached Alpha: " << info->mStaticImageFileName << ": (" << mStaticImageRaw->getWidth() << ", " << mStaticImageRaw->getHeight() << ") " << "Domain: " << info->mDomain << " Weight: " << effective_weight << LL_ENDL;
 		}
 
@@ -357,7 +357,7 @@ BOOL LLTexLayerParamAlpha::render(S32 x, S32 y, S32 width, S32 height)
 				if (mNeedsCreateTexture)
 				{
 					mCachedProcessedTexture->createGLTexture(0, mStaticImageRaw);
-					mNeedsCreateTexture = FALSE;
+					mNeedsCreateTexture = false;
 					gGL.getTexUnit(0)->bind(mCachedProcessedTexture);
 					mCachedProcessedTexture->setAddressMode(LLTexUnit::TAM_CLAMP);
 				}
@@ -390,8 +390,8 @@ BOOL LLTexLayerParamAlpha::render(S32 x, S32 y, S32 width, S32 height)
 // LLTexLayerParamAlphaInfo
 //-----------------------------------------------------------------------------
 LLTexLayerParamAlphaInfo::LLTexLayerParamAlphaInfo() :
-	mMultiplyBlend(FALSE),
-	mSkipIfZeroWeight(FALSE),
+	mMultiplyBlend(false),
+	mSkipIfZeroWeight(false),
 	mDomain(0.f)
 {
 }
@@ -492,7 +492,7 @@ LLColor4 LLTexLayerParamColor::getNetColor() const
 
 // <FS:Ansariel> [Legacy Bake]
 //void LLTexLayerParamColor::setWeight(F32 weight)
-void LLTexLayerParamColor::setWeight(F32 weight, BOOL upload_bake)
+void LLTexLayerParamColor::setWeight(F32 weight, bool upload_bake)
 {
 	if (mIsAnimating)
 	{
@@ -535,14 +535,14 @@ void LLTexLayerParamColor::setWeight(F32 weight, BOOL upload_bake)
 
 // <FS:Ansariel> [Legacy Bake]
 //void LLTexLayerParamColor::setAnimationTarget(F32 target_value)
-void LLTexLayerParamColor::setAnimationTarget(F32 target_value, BOOL upload_bake)
+void LLTexLayerParamColor::setAnimationTarget(F32 target_value, bool upload_bake)
 { 
 	// set value first then set interpolating flag to ignore further updates
 	mTargetWeight = target_value; 
 	// <FS:Ansariel> [Legacy Bake]
 	//setWeight(target_value);
 	setWeight(target_value, upload_bake);
-	mIsAnimating = TRUE;
+	mIsAnimating = true;
 	if (mNext)
 	{
 		// <FS:Ansariel> [Legacy Bake]
@@ -553,7 +553,7 @@ void LLTexLayerParamColor::setAnimationTarget(F32 target_value, BOOL upload_bake
 
 // <FS:Ansariel> [Legacy Bake]
 //void LLTexLayerParamColor::animate(F32 delta)
-void LLTexLayerParamColor::animate(F32 delta, BOOL upload_bake)
+void LLTexLayerParamColor::animate(F32 delta, bool upload_bake)
 {
 	if (mNext)
 	{

@@ -61,12 +61,12 @@ LLViewerTexLayerSetBuffer::LLViewerTexLayerSetBuffer(LLTexLayerSet* const owner,
 	LLTexLayerSetBuffer(owner),
 	LLViewerDynamicTexture(width, height, 4, LLViewerDynamicTexture::ORDER_LAST, FALSE),
 	// <FS:Ansariel> [Legacy Bake]
-	mUploadPending(FALSE), // Not used for any logic here, just to sync sending of updates
-	mNeedsUpload(FALSE),
+	mUploadPending(false), // Not used for any logic here, just to sync sending of updates
+	mNeedsUpload(false),
 	mNumLowresUploads(0),
 	mUploadFailCount(0),
 	// </FS:Ansariel> [Legacy Bake]
-	mNeedsUpdate(TRUE),
+	mNeedsUpdate(true),
 	mNumLowresUpdates(0)
 {
 	mGLTexturep->setNeedsAlphaAndPickMask(FALSE);
@@ -114,7 +114,7 @@ void LLViewerTexLayerSetBuffer::dumpTotalByteCount()
 void LLViewerTexLayerSetBuffer::requestUpdate()
 {
 	restartUpdateTimer();
-	mNeedsUpdate = TRUE;
+	mNeedsUpdate = true;
 	mNumLowresUpdates = 0;
 	// <FS:Ansariel> [Legacy Bake]
 	// If we're in the middle of uploading a baked texture, we don't care about it any more.
@@ -136,8 +136,8 @@ BOOL LLViewerTexLayerSetBuffer::needsRender()
 	if (!isAgentAvatarValid()) return FALSE;
 
 	// <FS:Ansariel> [Legacy Bake]
-	const BOOL upload_now = mNeedsUpload && isReadyToUpload();
-	const BOOL update_now = mNeedsUpdate && isReadyToUpdate();
+	const bool upload_now = mNeedsUpload && isReadyToUpload();
+	const bool update_now = mNeedsUpdate && isReadyToUpdate();
 
 	// Don't render if we don't want to (or aren't ready to) update.
 	// <FS:Ansariel> [Legacy Bake]
@@ -176,7 +176,7 @@ void LLViewerTexLayerSetBuffer::preRenderTexLayerSet()
 }
 
 // virtual
-void LLViewerTexLayerSetBuffer::postRenderTexLayerSet(BOOL success)
+void LLViewerTexLayerSetBuffer::postRenderTexLayerSet(bool success)
 {
 
 	LLTexLayerSetBuffer::postRenderTexLayerSet(success);
@@ -186,15 +186,15 @@ void LLViewerTexLayerSetBuffer::postRenderTexLayerSet(BOOL success)
 // virtual
 // <FS:Ansariel> [Legacy Bake]
 //void LLViewerTexLayerSetBuffer::midRenderTexLayerSet(BOOL success)
-void LLViewerTexLayerSetBuffer::midRenderTexLayerSet(BOOL success, LLRenderTarget* bound_target)
+void LLViewerTexLayerSetBuffer::midRenderTexLayerSet(bool success, LLRenderTarget* bound_target)
 // </FS:Ansariel> [Legacy Bake]
 {
 	// <FS:Ansariel> [Legacy Bake]
 	// do we need to upload, and do we have sufficient data to create an uploadable composite?
 	// TODO: When do we upload the texture if gAgent.mNumPendingQueries is non-zero?
-	const BOOL upload_now = mNeedsUpload && isReadyToUpload();
+	const bool upload_now = mNeedsUpload && isReadyToUpload();
 	// </FS:Ansariel> [Legacy Bake]
-	const BOOL update_now = mNeedsUpdate && isReadyToUpdate();
+	const bool update_now = mNeedsUpdate && isReadyToUpdate();
 
 	// <FS:Ansariel> [Legacy Bake]
 	if(upload_now)
@@ -202,7 +202,7 @@ void LLViewerTexLayerSetBuffer::midRenderTexLayerSet(BOOL success, LLRenderTarge
 		if (!success)
 		{
 			LL_INFOS() << "Failed attempt to bake " << mTexLayerSet->getBodyRegionName() << LL_ENDL;
-			mUploadPending = FALSE;
+			mUploadPending = false;
 		}
 		else
 		{
@@ -210,12 +210,12 @@ void LLViewerTexLayerSetBuffer::midRenderTexLayerSet(BOOL success, LLRenderTarge
 			if (layer_set->isVisible())
 			{
 				//<FS:Beq> OpenSim BOM fallback
-				// layer_set->getAvatar()->debugBakedTextureUpload(layer_set->getBakedTexIndex(), FALSE); // FALSE for start of upload, TRUE for finish.
+				// layer_set->getAvatar()->debugBakedTextureUpload(layer_set->getBakedTexIndex(), false); // FALSE for start of upload, TRUE for finish.
 				//doUpload(bound_target);
 				auto bakedTexIdx = layer_set->getBakedTexIndex();
 				if(bakedTexIdx <= layer_set->getAvatar()->getNumBakes())
 				{
-					layer_set->getAvatar()->debugBakedTextureUpload(bakedTexIdx, FALSE); // FALSE for start of upload, TRUE for finish.
+					layer_set->getAvatar()->debugBakedTextureUpload(bakedTexIdx, false); // FALSE for start of upload, TRUE for finish.
 					doUpload(bound_target);
 				}
 				else
@@ -226,8 +226,8 @@ void LLViewerTexLayerSetBuffer::midRenderTexLayerSet(BOOL success, LLRenderTarge
 			}
 			else
 			{
-				mUploadPending = FALSE;
-				mNeedsUpload = FALSE;
+				mUploadPending = false;
+				mNeedsUpload = false;
 				mNeedsUploadTimer.pause();
 				layer_set->getAvatar()->setNewBakedTexture(layer_set->getBakedTexIndex(),IMG_INVISIBLE);
 			}
@@ -417,14 +417,14 @@ const std::string LLViewerTexLayerSetBuffer::dumpTextureInfo() const
 	if (!isAgentAvatarValid()) return "";
 
 	// <FS:Ansariel> [Legacy Bake]
-	//const BOOL is_high_res = TRUE; 
+	//const bool is_high_res = TRUE; 
 	//const U32 num_low_res = 0;
 	//const std::string local_texture_info = gAgentAvatarp->debugDumpLocalTextureDataInfo(getViewerTexLayerSet());
 
 	//std::string text = llformat("[HiRes:%d LoRes:%d] %s",
 	//							is_high_res, num_low_res,
 	//							local_texture_info.c_str());
-	const BOOL is_high_res = !mNeedsUpload;
+	const bool is_high_res = !mNeedsUpload;
 	const U32 num_low_res = mNumLowresUploads;
 	const U32 upload_time = (U32)mNeedsUploadTimer.getElapsedTimeF32();
 	const std::string local_texture_info = gAgentAvatarp->debugDumpLocalTextureDataInfo(getViewerTexLayerSet());
@@ -465,9 +465,9 @@ LLBakedUploadData::LLBakedUploadData(const LLVOAvatarSelf* avatar,
 void LLViewerTexLayerSetBuffer::requestUpload()
 {
 	conditionalRestartUploadTimer();
-	mNeedsUpload = TRUE;
+	mNeedsUpload = true;
 	mNumLowresUploads = 0;
-	mUploadPending = TRUE;
+	mUploadPending = true;
 }
 
 void LLViewerTexLayerSetBuffer::conditionalRestartUploadTimer()
@@ -488,39 +488,39 @@ void LLViewerTexLayerSetBuffer::conditionalRestartUploadTimer()
 
 void LLViewerTexLayerSetBuffer::cancelUpload()
 {
-	mNeedsUpload = FALSE;
-	mUploadPending = FALSE;
+	mNeedsUpload = false;
+	mUploadPending = false;
 	mNeedsUploadTimer.pause();
 	mUploadRetryTimer.reset();
 }
 
-BOOL LLViewerTexLayerSetBuffer::uploadPending() const
+bool LLViewerTexLayerSetBuffer::uploadPending() const
 {
 	return mUploadPending;
 }
 
-BOOL LLViewerTexLayerSetBuffer::uploadNeeded() const
+bool LLViewerTexLayerSetBuffer::uploadNeeded() const
 {
 	return mNeedsUpload;
 }
 
-BOOL LLViewerTexLayerSetBuffer::uploadInProgress() const
+bool LLViewerTexLayerSetBuffer::uploadInProgress() const
 {
 	return !mUploadID.isNull();
 }
 
-BOOL LLViewerTexLayerSetBuffer::isReadyToUpload() const
+bool LLViewerTexLayerSetBuffer::isReadyToUpload() const
 {
-	if (!gAgentQueryManager.hasNoPendingQueries()) return FALSE; // Can't upload if there are pending queries.
-	if (isAgentAvatarValid() && gAgentAvatarp->isEditingAppearance()) return FALSE; // Don't upload if avatar is being edited.
+	if (!gAgentQueryManager.hasNoPendingQueries()) return false; // Can't upload if there are pending queries.
+	if (isAgentAvatarValid() && gAgentAvatarp->isEditingAppearance()) return false; // Don't upload if avatar is being edited.
 
-	BOOL ready = FALSE;
+	bool ready{ false };
 	if (getViewerTexLayerSet()->isLocalTextureDataFinal())
 	{
 		// If we requested an upload and have the final LOD ready, upload (or wait a while if this is a retry)
 		if (mUploadFailCount == 0)
 		{
-			ready = TRUE;
+			ready = true;
 		}
 		else
 		{
@@ -539,8 +539,8 @@ BOOL LLViewerTexLayerSetBuffer::isReadyToUpload() const
 			const U32 texture_timeout_threshold = texture_timeout*(1 << mNumLowresUploads);
 
 			// If we hit our timeout and have textures available at even lower resolution, then upload.
-			const BOOL is_upload_textures_timeout = mNeedsUploadTimer.getElapsedTimeF32() >= texture_timeout_threshold;
-			const BOOL has_lower_lod = getViewerTexLayerSet()->isLocalTextureDataAvailable();
+			const bool is_upload_textures_timeout = mNeedsUploadTimer.getElapsedTimeF32() >= texture_timeout_threshold;
+			const bool has_lower_lod = getViewerTexLayerSet()->isLocalTextureDataAvailable();
 			ready = has_lower_lod && is_upload_textures_timeout;
 		}
 	}
@@ -586,15 +586,15 @@ public:
 
 			LL_INFOS() << "result: " << ll_pretty_print_sd( aResult ) << " new_id: " << newAssetId << LL_ENDL;
 			if (result == "complete"
-				&& mBakdedUploadData != NULL)
+				&& mBakdedUploadData != nullptr)
 			{// Invoke 
 				LLViewerTexLayerSetBuffer::onTextureUploadComplete(newAssetId, (void*) mBakdedUploadData, 0, LLExtStat::NONE);
-				mBakdedUploadData = NULL;// deleted in onTextureUploadComplete()
+				mBakdedUploadData = nullptr;// deleted in onTextureUploadComplete()
 			}
 			else
 			{// Invoke the original callback with an error result
 				LLViewerTexLayerSetBuffer::onTextureUploadComplete(newAssetId, (void*) mBakdedUploadData, -1, LLExtStat::NONE);
-				mBakdedUploadData = NULL;// deleted in onTextureUploadComplete()
+				mBakdedUploadData = nullptr;// deleted in onTextureUploadComplete()
 			}
 		}
 		else
@@ -602,7 +602,7 @@ public:
 			LL_WARNS() << "Uploading baked texture resulted in http " << status.getType() << ll_pretty_print_sd( aResult ) << LL_ENDL;
 			// Invoke the original callback with an error result
 			LLViewerTexLayerSetBuffer::onTextureUploadComplete(LLUUID(), (void*) mBakdedUploadData, -1, LLExtStat::NONE);
-			mBakdedUploadData = NULL;// deleted in onTextureUploadComplete()
+			mBakdedUploadData = nullptr;// deleted in onTextureUploadComplete()
 		}
 
 		return newAssetId;
@@ -664,7 +664,7 @@ void LLViewerTexLayerSetBuffer::doUpload(LLRenderTarget* bound_target)
 		if (up_file.write(compressedImage->getData(), compressedImage->getDataSize()))
 		{
 			// Read back the file and validate.
-			BOOL valid = FALSE;
+			bool valid{ false };
 			LLPointer<LLImageJ2C> integrity_test = new LLImageJ2C;
 			S32 file_size = 0;
 			LLFileSystem file(asset_id, LLAssetType::AT_TEXTURE);
@@ -713,9 +713,9 @@ void LLViewerTexLayerSetBuffer::doUpload(LLRenderTarget* bound_target)
 												  LLAssetType::AT_TEXTURE,
 												  LLViewerTexLayerSetBuffer::onTextureUploadComplete,
 												  baked_upload_data,
-												  TRUE,		// temp_file
-												  TRUE,		// is_priority
-												  TRUE);	// store_local
+												  true,		// temp_file
+												  true,		// is_priority
+												  true);	// store_local
 					LL_INFOS() << "Baked texture upload via Asset Store." <<  LL_ENDL;
 				}
 
@@ -723,7 +723,7 @@ void LLViewerTexLayerSetBuffer::doUpload(LLRenderTarget* bound_target)
 				{
 					// Sending the final LOD for the baked texture.  All done, pause 
 					// the upload timer so we know how long it took.
-					mNeedsUpload = FALSE;
+					mNeedsUpload = false;
 					mNeedsUploadTimer.pause();
 				}
 				else
@@ -750,7 +750,7 @@ void LLViewerTexLayerSetBuffer::doUpload(LLRenderTarget* bound_target)
 			else
 			{
 				// The read back and validate operation failed.  Remove the uploaded file.
-				mUploadPending = FALSE;
+				mUploadPending = false;
 				LLFileSystem::removeFile(asset_id, LLAssetType::AT_TEXTURE);
 				LL_INFOS() << "Unable to create baked upload file (reason: corrupted)." << LL_ENDL;
 			}
@@ -759,7 +759,7 @@ void LLViewerTexLayerSetBuffer::doUpload(LLRenderTarget* bound_target)
 	else
 	{
 		// The VFS write file operation failed.
-		mUploadPending = FALSE;
+		mUploadPending = false;
 		LL_INFOS() << "Unable to create baked upload file (reason: failed to write file)" << LL_ENDL;
 	}
 
@@ -802,7 +802,7 @@ void LLViewerTexLayerSetBuffer::onTextureUploadComplete(const LLUUID& uuid,
 			const std::string resolution = baked_upload_data->mIsHighestRes ? " full res " : " low res ";
 			if (result >= 0)
 			{
-				layerset_buffer->mUploadPending = FALSE; // Allows sending of AgentSetAppearance later
+				layerset_buffer->mUploadPending = false; // Allows sending of AgentSetAppearance later
 				LLAvatarAppearanceDefines::ETextureIndex baked_te = gAgentAvatarp->getBakedTE(layerset_buffer->getViewerTexLayerSet());
 				// Update baked texture info with the new UUID
 				U64 now = LLFrameTimer::getTotalTime();		// Record starting time

@@ -6221,7 +6221,7 @@ void LLSelectMgr::processObjectPropertiesFamily(LLMessageSystem* msg, void** use
 // static
 void LLSelectMgr::processForceObjectSelect(LLMessageSystem* msg, void**)
 {
-	BOOL reset_list;
+	bool reset_list;
 	msg->getBOOL("Header", "ResetList", reset_list);
 
 	if (reset_list)
@@ -7065,14 +7065,14 @@ void LLSelectNode::saveTextureScaleRatios(LLRender::eTexIndex index_to_query)
 BOOL LLSelectNode::allowOperationOnNode(PermissionBit op, U64 group_proxy_power) const
 {
 	// Extract ownership.
-	BOOL object_is_group_owned = FALSE;
+	bool object_is_group_owned = false;
 	LLUUID object_owner_id;
 	mPermissions->getOwnership(object_owner_id, object_is_group_owned);
 
 	// Operations on invalid or public objects is not allowed.
 	if (!mObject || (mObject->isDead()) || !mPermissions->isOwned())
 	{
-		return FALSE;
+		return false;
 	}
 
 	// The transfer permissions can never be given through proxy.
@@ -7082,7 +7082,7 @@ BOOL LLSelectNode::allowOperationOnNode(PermissionBit op, U64 group_proxy_power)
 		if ( !object_is_group_owned 
 			&& (gAgent.getID() == object_owner_id) )
 		{
-			return TRUE;
+			return true;
 		}
 		else
 		{
@@ -7098,7 +7098,7 @@ BOOL LLSelectNode::allowOperationOnNode(PermissionBit op, U64 group_proxy_power)
 		// no proxy allowed.
 		if (mObject->isAttachment() && object_owner_id != gAgent.getID())
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -7111,7 +7111,7 @@ BOOL LLSelectNode::allowOperationOnNode(PermissionBit op, U64 group_proxy_power)
 	// Gods can always operate.
 	if (gAgent.isGodlike())
 	{
-		return TRUE;
+		return true;
 	}
 
 	// Check if the agent is in the same group as the object.

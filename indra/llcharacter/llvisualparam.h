@@ -113,11 +113,11 @@ public:
 	// (They can not be virtual because they use specific derived Info classes)
 	LLVisualParamInfo*		getInfo() const { return mInfo; }
 	//   This sets mInfo and calls initialization functions
-	BOOL					setInfo(LLVisualParamInfo *info);
+	bool					setInfo(LLVisualParamInfo *info);
 
 	// Virtual functions
 	//  Pure virtuals
-	//virtual BOOL			parseData( LLXmlTreeNode *node ) = 0;
+	//virtual bool			parseData( LLXmlTreeNode *node ) = 0;
 	virtual void			apply( ESex avatar_sex ) = 0;
 	//  Default functions
 	// <FS:Ansariel> [Legacy Bake]
@@ -125,10 +125,10 @@ public:
 	//virtual void			setAnimationTarget( F32 target_value);
 	//virtual void			animate(F32 delta);
 	//virtual void			stopAnimating();
-	virtual void			setWeight(F32 weight, BOOL upload_bake);
-	virtual void			setAnimationTarget( F32 target_value, BOOL upload_bake);
-	virtual void			animate(F32 delta, BOOL upload_bake);
-	virtual void			stopAnimating(BOOL upload_bake);
+	virtual void			setWeight(F32 weight, bool upload_bake);
+	virtual void			setAnimationTarget( F32 target_value, bool upload_bake);
+	virtual void			animate(F32 delta, bool upload_bake);
+	virtual void			stopAnimating(bool upload_bake);
 	// </FS:Ansariel> [Legacy Bake]
 
 	virtual bool			linkDrivenParams(visual_param_mapper mapper, bool only_cross_params);
@@ -157,17 +157,17 @@ public:
 	F32						getCurrentWeight() const 	{ return mCurWeight; }
 	F32						getLastWeight() const	{ return mLastWeight; }
 	void					setLastWeight(F32 val) { mLastWeight = val; }
-	BOOL					isAnimating() const	{ return mIsAnimating; }
-	BOOL					isTweakable() const { return (getGroup() == VISUAL_PARAM_GROUP_TWEAKABLE)  || (getGroup() == VISUAL_PARAM_GROUP_TWEAKABLE_NO_TRANSMIT); }
+	bool					isAnimating() const	{ return mIsAnimating; }
+	bool					isTweakable() const { return (getGroup() == VISUAL_PARAM_GROUP_TWEAKABLE)  || (getGroup() == VISUAL_PARAM_GROUP_TWEAKABLE_NO_TRANSMIT); }
 
 	LLVisualParam*			getNextParam()		{ return mNext; }
 	void					setNextParam( LLVisualParam *next );
 	void					clearNextParam();
 	
-	virtual void			setAnimating(BOOL is_animating) { mIsAnimating = is_animating && !mIsDummy; }
-	BOOL					getAnimating() const { return mIsAnimating; }
+	virtual void			setAnimating(bool is_animating) { mIsAnimating = is_animating && !mIsDummy; }
+	bool					getAnimating() const { return mIsAnimating; }
 
-	void					setIsDummy(BOOL is_dummy) { mIsDummy = is_dummy; }
+	void					setIsDummy(bool is_dummy) { mIsDummy = is_dummy; }
 
 	void					setParamLocation(EParamLocation loc);
 	EParamLocation			getParamLocation() const { return mParamLocation; }
@@ -179,8 +179,8 @@ protected:
 	F32					mLastWeight;		// last weight
 	LLVisualParam*		mNext;				// next param in a shared chain
 	F32					mTargetWeight;		// interpolation target
-	BOOL				mIsAnimating;	// this value has been given an interpolation target
-	BOOL				mIsDummy;  // this is used to prevent dummy visual params from animating
+	bool				mIsAnimating;	// this value has been given an interpolation target
+	bool				mIsDummy;  // this is used to prevent dummy visual params from animating
 
 
 	S32					mID;				// id for storing weight/morphtarget compares compactly

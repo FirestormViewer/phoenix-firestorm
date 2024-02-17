@@ -225,7 +225,7 @@ struct LLGroupTitle
 {
 	std::string mTitle;
 	LLUUID		mRoleID;
-	BOOL		mSelected;
+	bool		mSelected;
 };
 
 class LLGroupMgrGroupData

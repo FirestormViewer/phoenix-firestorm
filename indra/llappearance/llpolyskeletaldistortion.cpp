@@ -68,7 +68,7 @@ bool LLPolySkeletalDistortionInfo::parseXml(LLXmlTreeNode* node)
                         std::string name;
                         LLVector3 scale;
                         LLVector3 pos;
-                        BOOL haspos = false;
+                        bool haspos = false;
                         
                         static LLStdStringHandle name_string = LLXmlTree::addAttributeString("name");
                         if (!bone->getFastAttributeString(name_string, name))
@@ -143,7 +143,7 @@ bool LLPolySkeletalDistortion::setInfo(LLPolySkeletalDistortionInfo *info)
     mID = info->mID;
     // <FS:Ansariel> [Legacy Bake]
     //setWeight(getDefaultWeight());
-    setWeight(getDefaultWeight(), FALSE);
+    setWeight(getDefaultWeight(), false);
 
     for (LLPolySkeletalBoneInfo& bone_info : getInfo()->mBoneInfoList)
     {

@@ -369,7 +369,7 @@ const char *LLAnimationLibrary::animStateToString( const LLUUID& state )
 //-----------------------------------------------------------------------------
 // Return the animation state for a given name
 //-----------------------------------------------------------------------------
-LLUUID LLAnimationLibrary::stringToAnimState( const std::string& name, BOOL allow_ids )
+LLUUID LLAnimationLibrary::stringToAnimState( const std::string& name, bool allow_ids )
 {
 	std::string lower_case_name(name);
 	LLStringUtil::toLower(lower_case_name);
@@ -393,7 +393,7 @@ LLUUID LLAnimationLibrary::stringToAnimState( const std::string& name, BOOL allo
 	else if (allow_ids)
 	{
 		// try to convert string to LLUUID
-		id.set(name, FALSE);
+		id.set(name, false);
 	}
 
 	return id;

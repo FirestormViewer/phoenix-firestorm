@@ -1069,12 +1069,12 @@ LLJoint *LLVOAvatarSelf::getJoint( const JointKey &name )
 
 // virtual
 // <FS:Ansariel> [Legacy Bake]
-//BOOL LLVOAvatarSelf::setVisualParamWeight(const LLVisualParam *which_param, F32 weight)
-BOOL LLVOAvatarSelf::setVisualParamWeight(const LLVisualParam *which_param, F32 weight, BOOL upload_bake)
+//bool LLVOAvatarSelf::setVisualParamWeight(const LLVisualParam *which_param, F32 weight)
+bool LLVOAvatarSelf::setVisualParamWeight(const LLVisualParam *which_param, F32 weight, bool upload_bake)
 {
 	if (!which_param)
 	{
-		return FALSE;
+		return false;
 	}
 	LLViewerVisualParam *param = (LLViewerVisualParam*) LLCharacter::getVisualParam(which_param->getID());
 	// <FS:Ansariel> [Legacy Bake]
@@ -1084,12 +1084,12 @@ BOOL LLVOAvatarSelf::setVisualParamWeight(const LLVisualParam *which_param, F32 
 
 // virtual
 // <FS:Ansariel> [Legacy Bake]
-//BOOL LLVOAvatarSelf::setVisualParamWeight(const char* param_name, F32 weight)
-BOOL LLVOAvatarSelf::setVisualParamWeight(const char* param_name, F32 weight, BOOL upload_bake)
+//bool LLVOAvatarSelf::setVisualParamWeight(const char* param_name, F32 weight)
+bool LLVOAvatarSelf::setVisualParamWeight(const char* param_name, F32 weight, bool upload_bake)
 {
 	if (!param_name)
 	{
-		return FALSE;
+		return false;
 	}
 	LLViewerVisualParam *param = (LLViewerVisualParam*) LLCharacter::getVisualParam(param_name);
 	// <FS:Ansariel> [Legacy Bake]
@@ -1099,8 +1099,8 @@ BOOL LLVOAvatarSelf::setVisualParamWeight(const char* param_name, F32 weight, BO
 
 // virtual
 // <FS:Ansariel> [Legacy Bake]
-//BOOL LLVOAvatarSelf::setVisualParamWeight(const LLViewerVisualParam *param, F32 weight)
-BOOL LLVOAvatarSelf::setVisualParamWeight(S32 index, F32 weight, BOOL upload_bake)
+//bool LLVOAvatarSelf::setVisualParamWeight(const LLViewerVisualParam *param, F32 weight)
+bool LLVOAvatarSelf::setVisualParamWeight(S32 index, F32 weight, bool upload_bake)
 {
 	LLViewerVisualParam *param = (LLViewerVisualParam*) LLCharacter::getVisualParam(index);
 	// <FS:Ansariel> [Legacy Bake]
@@ -1109,12 +1109,12 @@ BOOL LLVOAvatarSelf::setVisualParamWeight(S32 index, F32 weight, BOOL upload_bak
 }
 
 // <FS:Ansariel> [Legacy Bake]
-//BOOL LLVOAvatarSelf::setParamWeight(const LLViewerVisualParam *param, F32 weight)
-BOOL LLVOAvatarSelf::setParamWeight(const LLViewerVisualParam *param, F32 weight, BOOL upload_bake)
+//bool LLVOAvatarSelf::setParamWeight(const LLViewerVisualParam *param, F32 weight)
+bool LLVOAvatarSelf::setParamWeight(const LLViewerVisualParam *param, F32 weight, bool upload_bake)
 {
 	if (!param)
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (param->getCrossWearable())
@@ -1163,7 +1163,7 @@ void LLVOAvatarSelf::idleUpdateAppearanceAnimation()
 	// Animate all top-level wearable visual parameters
 	// <FS:Ansariel> [Legacy Bake]
 	//gAgentWearables.animateAllWearableParams(calcMorphAmount());
-	gAgentWearables.animateAllWearableParams(calcMorphAmount(), FALSE);
+	gAgentWearables.animateAllWearableParams(calcMorphAmount(), false);
 
 	// Apply wearable visual params to avatar
 	writeWearablesToAvatar();
@@ -1259,7 +1259,7 @@ void LLVOAvatarSelf::removeMissingBakedTextures()
 			layerset->setUpdatesEnabled(TRUE);
 			// <FS:Ansariel> [Legacy Bake]
 			//invalidateComposite(layerset);
-			invalidateComposite(layerset, FALSE);
+			invalidateComposite(layerset, false);
 		}
 		updateMeshTextures();
 		// <FS:Ansariel> [Legacy Bake]
@@ -1511,7 +1511,7 @@ void LLVOAvatarSelf::updateAttachmentVisibility(U32 camera_mode)
 //-----------------------------------------------------------------------------
 // <FS:Ansariel> [Legacy Bake]
 //void LLVOAvatarSelf::wearableUpdated(LLWearableType::EType type)
-void LLVOAvatarSelf::wearableUpdated(LLWearableType::EType type, BOOL upload_result)
+void LLVOAvatarSelf::wearableUpdated(LLWearableType::EType type, bool upload_result)
 {
 	for (LLAvatarAppearanceDictionary::BakedTextures::const_iterator baked_iter = sAvatarDictionary->getBakedTextures().begin();
 		 baked_iter != sAvatarDictionary->getBakedTextures().end();
@@ -2140,7 +2140,7 @@ bool LLVOAvatarSelf::areTexturesCurrent() const
 
 // <FS:Ansariel> [Legacy Bake]
 //void LLVOAvatarSelf::invalidateComposite( LLTexLayerSet* layerset)
-void LLVOAvatarSelf::invalidateComposite( LLTexLayerSet* layerset, BOOL upload_result)
+void LLVOAvatarSelf::invalidateComposite( LLTexLayerSet* layerset, bool upload_result)
 {
 	LLViewerTexLayerSet *layer_set = dynamic_cast<LLViewerTexLayerSet*>(layerset);
 	if( !layer_set || !layer_set->getUpdatesEnabled() )
@@ -2172,7 +2172,7 @@ void LLVOAvatarSelf::invalidateAll()
 		LLViewerTexLayerSet *layerset = getTexLayerSet(i);
 		// <FS:Ansariel> [Legacy Bake]
 		//invalidateComposite(layerset);
-		invalidateComposite(layerset, TRUE);
+		invalidateComposite(layerset, true);
 	}
 	//mDebugSelfLoadTimer.reset();
 }
@@ -3189,7 +3189,7 @@ void LLVOAvatarSelf::forceBakeAllTextures(bool slam_for_debug)
 
 			// <FS:Ansariel> [Legacy Bake]
 			//invalidateComposite(layer_set);
-			invalidateComposite(layer_set, TRUE);
+			invalidateComposite(layer_set, true);
 			add(LLStatViewer::TEX_REBAKES, 1);
 		}
 		else
@@ -3552,12 +3552,12 @@ U32  LLVOAvatarSelf::processUpdateMessage(LLMessageSystem *mesgsys,
 	return retval;
 }
 
-BOOL LLVOAvatarSelf::isBakedTextureFinal(const LLAvatarAppearanceDefines::EBakedTextureIndex index) const
+bool LLVOAvatarSelf::isBakedTextureFinal(const LLAvatarAppearanceDefines::EBakedTextureIndex index) const
 {
 	const LLViewerTexLayerSet *layerset = getLayerSet(index);
-	if (!layerset) return FALSE;
+	if (!layerset) return false;
 	const LLViewerTexLayerSetBuffer *layerset_buffer = layerset->getViewerComposite();
-	if (!layerset_buffer) return FALSE;
+	if (!layerset_buffer) return false;
 	return !layerset_buffer->uploadNeeded();
 }
 
@@ -3673,7 +3673,7 @@ void LLVOAvatarSelf::setNewBakedTexture( ETextureIndex te, const LLUUID& uuid )
 	const LLAvatarAppearanceDictionary::TextureEntry *texture_dict = LLAvatarAppearance::getDictionary()->getTexture(te);
 	if (texture_dict->mIsBakedTexture)
 	{
-		debugBakedTextureUpload(texture_dict->mBakedTextureIndex, TRUE); // FALSE for start of upload, TRUE for finish.
+		debugBakedTextureUpload(texture_dict->mBakedTextureIndex, true); // FALSE for start of upload, TRUE for finish.
 		LL_INFOS() << "New baked texture: " << texture_dict->mName << " UUID: " << uuid <<LL_ENDL;
 	}
 	else
@@ -3752,7 +3752,7 @@ void LLVOAvatarSelf::processRebakeAvatarTextures(LLMessageSystem* msg, void**)
 
 	// If this is a texture corresponding to one of our baked entries, 
 	// just rebake that layer set.
-	BOOL found = FALSE;
+	bool found{ false };
 
 	/* ETextureIndex baked_texture_indices[BAKED_NUM_INDICES] =
 			TEX_HEAD_BAKED,
@@ -3771,8 +3771,8 @@ void LLVOAvatarSelf::processRebakeAvatarTextures(LLMessageSystem* msg, void**)
 				if (layer_set)
 				{
 					LL_INFOS() << "TAT: rebake - matched entry " << (S32)index << LL_ENDL;
-					gAgentAvatarp->invalidateComposite(layer_set, TRUE);
-					found = TRUE;
+					gAgentAvatarp->invalidateComposite(layer_set, true);
+					found = true;
 					add(LLStatViewer::TEX_REBAKES, 1);
 				}
 			}

@@ -286,11 +286,11 @@ void LLTemplateMessageReader::getU8(const char *block, const char *var,
 }
 
 void LLTemplateMessageReader::getBOOL(const char *block, const char *var, 
-										  BOOL &b, S32 blocknum )
+										  bool &b, S32 blocknum )
 {
 	U8 value(0);
 	getData(block, var, &value, sizeof(U8), blocknum);
-	b = (BOOL) value;
+	b = (bool) value;
 }
 
 void LLTemplateMessageReader::getS16(const char *block, const char *var, 

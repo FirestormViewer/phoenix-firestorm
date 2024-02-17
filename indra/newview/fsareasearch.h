@@ -67,7 +67,7 @@ struct FSObjectProperties
 	LLUUID owner_id;
 	LLUUID group_id;
 	LLUUID ownership_id;
-	BOOL group_owned;  // used in LL function that uses BOOL instead of bool
+	bool group_owned;
 	U64 creation_date;
 	U32 base_mask, owner_mask, group_mask, everyone_mask, next_owner_mask;
 	LLSaleInfo sale_info;

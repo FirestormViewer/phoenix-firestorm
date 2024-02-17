@@ -1601,8 +1601,8 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 	LLUUID		query_id;
 	LLUUID		parcel_id;
 	std::string	name;
-	BOOL		for_sale;
-	BOOL		auction;
+	bool		for_sale;
+	bool		auction;
 	F32			dwell;
 
 	msg->getUUID("AgentData", "AgentID", agent_id);
@@ -1982,8 +1982,8 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 	std::string	name;
 	std::string	land_sku;
 	std::string	land_type;
-	BOOL		auction;
-	BOOL		for_sale;
+	bool		auction;
+	bool		for_sale;
 	S32			price;
 	S32			area;
 

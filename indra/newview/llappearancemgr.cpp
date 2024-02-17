@@ -4809,7 +4809,7 @@ bool LLAppearanceMgr::moveWearable(LLViewerInventoryItem* item, bool closer_to_b
 	{
 		// <FS:Ansariel> [Legacy Bake]
 		//gAgentAvatarp->wearableUpdated(item->getWearableType());
-		gAgentAvatarp->wearableUpdated(item->getWearableType(), FALSE);
+		gAgentAvatarp->wearableUpdated(item->getWearableType(), false);
 	}
 
 	setOutfitDirty(true);
