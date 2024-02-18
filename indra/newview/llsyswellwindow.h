@@ -231,8 +231,8 @@ private:
 		virtual ~RowPanel();
 		void onMouseEnter(S32 x, S32 y, MASK mask);
 		void onMouseLeave(S32 x, S32 y, MASK mask);
-		BOOL handleMouseDown(S32 x, S32 y, MASK mask);
-		BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+		bool handleMouseDown(S32 x, S32 y, MASK mask);
+		bool handleRightMouseDown(S32 x, S32 y, MASK mask);
 
 	private:
 		static const S32 CHICLET_HPAD = 10;
@@ -253,8 +253,8 @@ private:
 		virtual ~ObjectRowPanel();
 		/*virtual*/ void onMouseEnter(S32 x, S32 y, MASK mask);
 		/*virtual*/ void onMouseLeave(S32 x, S32 y, MASK mask);
-		/*virtual*/ BOOL handleMouseDown(S32 x, S32 y, MASK mask);
-		/*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+		/*virtual*/ bool handleMouseDown(S32 x, S32 y, MASK mask);
+		/*virtual*/ bool handleRightMouseDown(S32 x, S32 y, MASK mask);
 
 	private:
 		void onClosePanel();

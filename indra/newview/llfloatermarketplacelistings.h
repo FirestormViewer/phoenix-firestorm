@@ -108,7 +108,7 @@ public:
 	
 	void showNotification(const LLNotificationPtr& notification);
     
-	BOOL handleHover(S32 x, S32 y, MASK mask);
+	bool handleHover(S32 x, S32 y, MASK mask);
 	void onMouseLeave(S32 x, S32 y, MASK mask);
 	// <FS:Ansariel> CTRL-F focusses local search editor
 	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);

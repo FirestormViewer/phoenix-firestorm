@@ -294,11 +294,11 @@ public:
     bool isSingleFolderMode() { return mSingleFolderMode; }
 
 	// LLView functionality
-	virtual BOOL handleRightMouseDown( S32 x, S32 y, MASK mask );
-	virtual BOOL handleMouseDown( S32 x, S32 y, MASK mask );
-	virtual BOOL handleHover( S32 x, S32 y, MASK mask );
-	virtual BOOL handleMouseUp( S32 x, S32 y, MASK mask );
-	virtual BOOL handleDoubleClick( S32 x, S32 y, MASK mask );
+	virtual bool handleRightMouseDown( S32 x, S32 y, MASK mask );
+	virtual bool handleMouseDown( S32 x, S32 y, MASK mask );
+	virtual bool handleHover( S32 x, S32 y, MASK mask );
+	virtual bool handleMouseUp( S32 x, S32 y, MASK mask );
+	virtual bool handleDoubleClick( S32 x, S32 y, MASK mask );
 
 	virtual void onMouseLeave(S32 x, S32 y, MASK mask);
 
@@ -316,7 +316,7 @@ public:
 									std::string& tooltip_msg);
 
 	// <ND/> Don't bother with unneeded tooltips in inventor
-	/*virtual*/ BOOL handleToolTip(S32 x, S32 y, MASK mask);
+	/*virtual*/ bool handleToolTip(S32 x, S32 y, MASK mask);
 
 
 
@@ -462,10 +462,10 @@ public:
 	virtual void openItem( void );
 
 	// LLView functionality
-	virtual BOOL handleHover(S32 x, S32 y, MASK mask);
-	virtual BOOL handleRightMouseDown( S32 x, S32 y, MASK mask );
-	virtual BOOL handleMouseDown( S32 x, S32 y, MASK mask );
-	virtual BOOL handleDoubleClick( S32 x, S32 y, MASK mask );
+	virtual bool handleHover(S32 x, S32 y, MASK mask);
+	virtual bool handleRightMouseDown( S32 x, S32 y, MASK mask );
+	virtual bool handleMouseDown( S32 x, S32 y, MASK mask );
+	virtual bool handleDoubleClick( S32 x, S32 y, MASK mask );
 	virtual BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, 
 									BOOL drop,
 									EDragAndDropType cargo_type,

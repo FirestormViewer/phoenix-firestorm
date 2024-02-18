@@ -76,9 +76,9 @@ public:
 	LLManipScale( LLToolComposite* composite );
 	~LLManipScale();
 
-	virtual BOOL	handleMouseDown( S32 x, S32 y, MASK mask );
-	virtual BOOL	handleMouseUp( S32 x, S32 y, MASK mask );
-	virtual BOOL	handleHover( S32 x, S32 y, MASK mask );
+	virtual bool	handleMouseDown( S32 x, S32 y, MASK mask );
+	virtual bool	handleMouseUp( S32 x, S32 y, MASK mask );
+	virtual bool	handleHover( S32 x, S32 y, MASK mask );
 	virtual void	render();
 	virtual void	handleSelect();
 
@@ -177,8 +177,8 @@ private:
 
 // <FS:Zi> Add middle mouse control for switching uniform scaling on the fly
 public:
-	virtual BOOL	handleMiddleMouseDown( S32 x, S32 y, MASK mask );
-	virtual BOOL	handleMiddleMouseUp( S32 x, S32 y, MASK mask );
+	virtual bool	handleMiddleMouseDown( S32 x, S32 y, MASK mask );
+	virtual bool	handleMiddleMouseUp( S32 x, S32 y, MASK mask );
 
 private:
 	static BOOL mInvertUniform;

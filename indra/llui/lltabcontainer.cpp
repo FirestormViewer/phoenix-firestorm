@@ -582,11 +582,11 @@ void LLTabContainer::draw()
 
 
 // virtual
-BOOL LLTabContainer::handleMouseDown( S32 x, S32 y, MASK mask )
+bool LLTabContainer::handleMouseDown( S32 x, S32 y, MASK mask )
 {
 	static LLUICachedControl<S32> tabcntrv_pad ("UITabCntrvPad", 0);
-	BOOL handled = FALSE;
-	BOOL has_scroll_arrows = !mHideScrollArrows && (getMaxScrollPos() > 0) && !getTabsHidden();
+	bool handled = false;
+	bool has_scroll_arrows = !mHideScrollArrows && (getMaxScrollPos() > 0) && !getTabsHidden();
 
 	if (has_scroll_arrows)
 	{
@@ -667,10 +667,10 @@ BOOL LLTabContainer::handleMouseDown( S32 x, S32 y, MASK mask )
 }
 
 // virtual
-BOOL LLTabContainer::handleHover( S32 x, S32 y, MASK mask )
+bool LLTabContainer::handleHover( S32 x, S32 y, MASK mask )
 {
-	BOOL handled = FALSE;
-	BOOL has_scroll_arrows = !mHideScrollArrows && (getMaxScrollPos() > 0) && !getTabsHidden();
+	bool handled = false;
+	bool has_scroll_arrows = !mHideScrollArrows && (getMaxScrollPos() > 0) && !getTabsHidden();
 
 	if (has_scroll_arrows)
 	{
@@ -713,10 +713,10 @@ BOOL LLTabContainer::handleHover( S32 x, S32 y, MASK mask )
 }
 
 // virtual
-BOOL LLTabContainer::handleMouseUp( S32 x, S32 y, MASK mask )
+bool LLTabContainer::handleMouseUp( S32 x, S32 y, MASK mask )
 {
-	BOOL handled = FALSE;
-	BOOL has_scroll_arrows = !mHideScrollArrows && (getMaxScrollPos() > 0)  && !getTabsHidden();
+	bool handled = false;
+	bool has_scroll_arrows = !mHideScrollArrows && (getMaxScrollPos() > 0)  && !getTabsHidden();
 
 	S32 local_x = x - getRect().mLeft;
 	S32 local_y = y - getRect().mBottom;
@@ -760,11 +760,11 @@ BOOL LLTabContainer::handleMouseUp( S32 x, S32 y, MASK mask )
 	{
 		if (cur_panel)
 		{
-			if (!cur_panel->focusFirstItem(FALSE))
+			if (!cur_panel->focusFirstItem(false))
 			{
 				// if nothing in the panel gets focus, make sure the new tab does
 				// otherwise the last tab might keep focus
-				getTab(getCurrentPanelIndex())->mButton->setFocus(TRUE);
+				getTab(getCurrentPanelIndex())->mButton->setFocus(true);
 			}
 		}
 		gFocusMgr.setMouseCapture(NULL);
@@ -777,11 +777,11 @@ BOOL LLTabContainer::handleMouseUp( S32 x, S32 y, MASK mask )
 }
 
 // [SL:KB] - Patch: Control-TabContainer | Checked: 2014-04-06 (Catznip-3.6)
-BOOL LLTabContainer::handleScrollWheel(S32 x, S32 y, S32 clicks)
+bool LLTabContainer::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
 	// NOTE-Catznip: should match the code in LLTabContainer::handleMouseDown()
 	static LLUICachedControl<S32> tabcntrv_pad ("UITabCntrvPad", 0);
-	BOOL handled = FALSE;
+	bool handled = false;
 
 	S32 tab_count = getTabCount();
 	if ( (tab_count > 0) && (!getTabsHidden()) )
@@ -796,7 +796,7 @@ BOOL LLTabContainer::handleScrollWheel(S32 x, S32 y, S32 clicks)
 		if (tab_rect.pointInRect(x, y))
 		{
 			mScrollPos = llclamp(mScrollPos + clicks, 0, mMaxScrollPos);
-			handled = TRUE;
+			handled = true;
 		}
 	}
 
@@ -807,15 +807,15 @@ BOOL LLTabContainer::handleScrollWheel(S32 x, S32 y, S32 clicks)
 // [/SL:KB]
 
 // virtual
-BOOL LLTabContainer::handleToolTip( S32 x, S32 y, MASK mask)
+bool LLTabContainer::handleToolTip( S32 x, S32 y, MASK mask)
 {
 	static LLUICachedControl<S32> tabcntrv_pad ("UITabCntrvPad", 0);
-	BOOL handled = LLPanel::handleToolTip( x, y, mask);
+	bool handled = LLPanel::handleToolTip( x, y, mask);
 	if (!handled && getTabCount() > 0 && !getTabsHidden()) 
 	{
 		LLTabTuple* firsttuple = getTab(0);
 
-		BOOL has_scroll_arrows = !mHideScrollArrows && (getMaxScrollPos() > 0);
+		bool has_scroll_arrows = !mHideScrollArrows && (getMaxScrollPos() > 0);
 		LLRect clip;
 		if (mIsVertical)
 		{

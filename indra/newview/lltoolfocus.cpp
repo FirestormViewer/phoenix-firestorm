@@ -113,7 +113,7 @@ void LLToolCamera::handleDeselect()
 	}
 }
 
-BOOL LLToolCamera::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLToolCamera::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	// Ensure a mouseup
 	setMouseCapture(TRUE);
@@ -144,7 +144,7 @@ BOOL LLToolCamera::handleMouseDown(S32 x, S32 y, MASK mask)
 
 	gViewerWindow->pickAsync(x, y, mask, pickCallback, /*BOOL pick_transparent*/ FALSE, /*BOOL pick_rigged*/ FALSE, /*BOOL pick_unselectable*/ TRUE);
 
-	return TRUE;
+	return true;
 }
 
 void LLToolCamera::pickCallback(const LLPickInfo& pick_info)
@@ -290,7 +290,7 @@ void LLToolCamera::releaseMouse()
 }
 
 
-BOOL LLToolCamera::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLToolCamera::handleMouseUp(S32 x, S32 y, MASK mask)
 {
 	// Claim that we're mousing up somewhere
 	mMouseUpX = x;
@@ -338,12 +338,12 @@ BOOL LLToolCamera::handleMouseUp(S32 x, S32 y, MASK mask)
 		releaseMouse();
 	}
 
-	return TRUE;
+	return true;
 }
 
 static bool right_hold_mouse_walk = false;//<FS:JL> Mouse movement by Singularity
 
-BOOL LLToolCamera::handleHover(S32 x, S32 y, MASK mask)
+bool LLToolCamera::handleHover(S32 x, S32 y, MASK mask)
 {
 	//<FS:JL> Mouse movement by Singularity
 	if (right_hold_mouse_walk)
@@ -483,34 +483,35 @@ BOOL LLToolCamera::handleHover(S32 x, S32 y, MASK mask)
 		gViewerWindow->setCursor(UI_CURSOR_TOOLZOOMIN);
 	}
 	
-	return TRUE;
+	return true;
 }
+
 //<FS:JL> Mouse movement by Singularity
-BOOL LLToolCamera::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool LLToolCamera::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	if (mMouseSteering)
 	{
 		agent_push_forward(KEYSTATE_DOWN);
 		right_hold_mouse_walk = true;
-		return TRUE;
+		return true;
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 
-BOOL LLToolCamera::handleRightMouseUp(S32 x, S32 y, MASK mask)
+bool LLToolCamera::handleRightMouseUp(S32 x, S32 y, MASK mask)
 {
 	if (mMouseSteering || right_hold_mouse_walk)
 	{
 		agent_push_forward(KEYSTATE_UP);
 		right_hold_mouse_walk = false;
-		return TRUE;
+		return true;
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 //</FS:JL>

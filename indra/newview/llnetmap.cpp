@@ -1152,7 +1152,7 @@ LLVector3d LLNetMap::viewPosToGlobal( S32 x, S32 y )
 	return pos_global;
 }
 
-BOOL LLNetMap::handleScrollWheel(S32 x, S32 y, S32 clicks)
+bool LLNetMap::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
     // note that clicks are reversed from what you'd think: i.e. > 0  means zoom out, < 0 means zoom in
     F32 new_scale = mScale * pow(MAP_SCALE_ZOOM_FACTOR, -clicks);
@@ -1173,7 +1173,7 @@ BOOL LLNetMap::handleScrollWheel(S32 x, S32 y, S32 clicks)
     return true;
 }
 
-BOOL LLNetMap::handleToolTip(S32 x, S32 y, MASK mask)
+bool LLNetMap::handleToolTip(S32 x, S32 y, MASK mask)
 {
     if (gDisconnected)
     {
@@ -1700,10 +1700,10 @@ void LLNetMap::createParcelImage()
 }
 // [/SL:KB]
 
-BOOL LLNetMap::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLNetMap::handleMouseDown(S32 x, S32 y, MASK mask)
 {
     // <FS:Ansariel> FIRE-32339: Mini map can't be dragged anymore
-    if (!(mask & MASK_SHIFT)) return FALSE;
+    if (!(mask & MASK_SHIFT)) return false;
 
     // Start panning
     gFocusMgr.setMouseCapture(this);
@@ -1714,7 +1714,7 @@ BOOL LLNetMap::handleMouseDown(S32 x, S32 y, MASK mask)
     return true;
 }
 
-BOOL LLNetMap::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLNetMap::handleMouseUp(S32 x, S32 y, MASK mask)
 {
     if (abs(mMouseDown.mX - x) < 3 && abs(mMouseDown.mY - y) < 3)
     {
@@ -1820,7 +1820,7 @@ void LLNetMap::handleTextureType(const LLSD& sdParam) const
 }
 // [/SL:KB]
 
-BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
     auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
     if (menu)
@@ -1895,7 +1895,7 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 //		menu->setItemEnabled("Stop Tracking", LLTracker::isTracking(0));
 		LLMenuGL::showPopup(this, menu, x, y);
 	}
-	return TRUE;
+	return true;
 }
 
 BOOL LLNetMap::handleClick(S32 x, S32 y, MASK mask)
@@ -1908,7 +1908,7 @@ BOOL LLNetMap::handleClick(S32 x, S32 y, MASK mask)
 	return TRUE;
 }
 
-BOOL LLNetMap::handleDoubleClick(S32 x, S32 y, MASK mask)
+bool LLNetMap::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
 	LLVector3d pos_global = viewPosToGlobal(x, y);
 
@@ -1941,7 +1941,7 @@ BOOL LLNetMap::handleDoubleClick(S32 x, S32 y, MASK mask)
 	performDoubleClickAction(pos_global);
 	// </FS:Ansariel> Synchronize double click handling throughout instances
 
-	return TRUE;
+	return true;
 }
 
 F32 LLNetMap::getScaleForName(std::string scale_name)
@@ -1974,7 +1974,7 @@ bool LLNetMap::outsideSlop( S32 x, S32 y, S32 start_x, S32 start_y, S32 slop )
 	return (dx <= -slop || slop <= dx || dy <= -slop || slop <= dy);
 }
 
-BOOL LLNetMap::handleHover( S32 x, S32 y, MASK mask )
+bool LLNetMap::handleHover( S32 x, S32 y, MASK mask )
 {
 	if (hasMouseCapture())
 	{
@@ -2008,7 +2008,7 @@ BOOL LLNetMap::handleHover( S32 x, S32 y, MASK mask )
         gViewerWindow->setCursor( UI_CURSOR_CROSS );
     }
 
-	return TRUE;
+	return true;
 }
 
 bool LLNetMap::isZoomChecked(const LLSD &userdata)

@@ -274,7 +274,7 @@ void LLOutputMonitorCtrl::draw()
 }
 
 // virtual
-BOOL LLOutputMonitorCtrl::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLOutputMonitorCtrl::handleMouseUp(S32 x, S32 y, MASK mask)
 {
 	// <FS:Ansariel> Show voice volume instead of an empty floater
 	//if (mSpeakerId != gAgentID)
@@ -291,7 +291,7 @@ BOOL LLOutputMonitorCtrl::handleMouseUp(S32 x, S32 y, MASK mask)
 		LLFloaterReg::showInstance("chat_voice", LLSD());
 	}
 
-	return TRUE;
+	return true;
 }
 
 void LLOutputMonitorCtrl::setIsActiveChannel(bool val)

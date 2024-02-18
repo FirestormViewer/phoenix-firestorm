@@ -180,7 +180,7 @@ public:
 		}
 	}
 
-	BOOL handleMouseUp(S32 x, S32 y, MASK mask)
+	bool handleMouseUp(S32 x, S32 y, MASK mask)
 	{
 		return LLPanel::handleMouseUp(x,y,mask);
 	}
@@ -679,12 +679,12 @@ public:
 		return 	child->pointInView(local_x, local_y);
 	}
 
-	BOOL handleRightMouseDown(S32 x, S32 y, MASK mask)
+	bool handleRightMouseDown(S32 x, S32 y, MASK mask)
 	{
 		if(pointInChild("avatar_icon",x,y) || pointInChild("user_name",x,y))
 		{
 			showContextMenu(x,y);
-			return TRUE;
+			return true;
 		}
 
 		return LLPanel::handleRightMouseDown(x,y,mask);
@@ -1905,7 +1905,7 @@ void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 }
 
 // <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
-BOOL FSChatHistory::handleUnicodeCharHere(llwchar uni_char)
+bool FSChatHistory::handleUnicodeCharHere(llwchar uni_char)
 {
 	// do not change focus when the CTRL key is used to make copy/select all etc. possible
 	if(gKeyboard->currentMask(false) & MASK_CONTROL)

@@ -807,13 +807,13 @@ void LLComboBox::onItemSelected(const LLSD& data)
 	onCommit();
 }
 
-BOOL LLComboBox::handleToolTip(S32 x, S32 y, MASK mask)
+bool LLComboBox::handleToolTip(S32 x, S32 y, MASK mask)
 {
     std::string tool_tip;
 
 	if(LLUICtrl::handleToolTip(x, y, mask))
 	{
-		return TRUE;
+		return true;
 	}
 	
 	tool_tip = getToolTip();
@@ -828,7 +828,7 @@ BOOL LLComboBox::handleToolTip(S32 x, S32 y, MASK mask)
 			.message(tool_tip)
 			.sticky_rect(calcScreenRect()));
 	}
-	return TRUE;
+	return true;
 }
 
 BOOL LLComboBox::handleKeyHere(KEY key, MASK mask)
@@ -877,9 +877,9 @@ BOOL LLComboBox::handleKeyHere(KEY key, MASK mask)
 	return result;
 }
 
-BOOL LLComboBox::handleUnicodeCharHere(llwchar uni_char)
+bool LLComboBox::handleUnicodeCharHere(llwchar uni_char)
 {
-	BOOL result = FALSE;
+	bool result = false;
 	if (gFocusMgr.childHasKeyboardFocus(this))
 	{
 		// space bar just shows the list

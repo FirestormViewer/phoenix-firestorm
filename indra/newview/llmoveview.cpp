@@ -656,7 +656,7 @@ void LLPanelStandStopFlying::setVisible(BOOL visible)
 	LLPanel::setVisible(visible);
 }
 
-BOOL LLPanelStandStopFlying::handleToolTip(S32 x, S32 y, MASK mask)
+bool LLPanelStandStopFlying::handleToolTip(S32 x, S32 y, MASK mask)
 {
 	LLToolTipMgr::instance().unblockToolTips();
 

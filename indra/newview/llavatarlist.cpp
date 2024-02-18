@@ -595,9 +595,9 @@ void LLAvatarList::addNewItem(const LLUUID& id, const std::string& name, BOOL is
 }
 
 // virtual
-BOOL LLAvatarList::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool LLAvatarList::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
-	BOOL handled = LLUICtrl::handleRightMouseDown(x, y, mask);
+	bool handled = LLUICtrl::handleRightMouseDown(x, y, mask);
 //	if ( mContextMenu)
 // [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a) | Modified: RLVa-1.2.0d
 	if (mContextMenu && ((!mRlvCheckShowNames) || (!RlvActions::hasBehaviour(RLV_BHVR_SHOWNAMES))) )
@@ -610,7 +610,7 @@ BOOL LLAvatarList::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	return handled;
 }
 
-BOOL LLAvatarList::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLAvatarList::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	gFocusMgr.setMouseCapture(this);
 
@@ -622,7 +622,7 @@ BOOL LLAvatarList::handleMouseDown(S32 x, S32 y, MASK mask)
 	return LLFlatListViewEx::handleMouseDown(x, y, mask);
 }
 
-BOOL LLAvatarList::handleMouseUp( S32 x, S32 y, MASK mask )
+bool LLAvatarList::handleMouseUp( S32 x, S32 y, MASK mask )
 {
 	if(hasMouseCapture())
 	{
@@ -632,7 +632,7 @@ BOOL LLAvatarList::handleMouseUp( S32 x, S32 y, MASK mask )
 	return LLFlatListViewEx::handleMouseUp(x, y, mask);
 }
 
-BOOL LLAvatarList::handleHover(S32 x, S32 y, MASK mask)
+bool LLAvatarList::handleHover(S32 x, S32 y, MASK mask)
 {
 	bool handled = hasMouseCapture();
 	if(handled)

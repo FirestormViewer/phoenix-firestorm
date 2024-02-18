@@ -675,7 +675,7 @@ void LLFloaterBvhPreview::resetMotion()
 //-----------------------------------------------------------------------------
 // handleMouseDown()
 //-----------------------------------------------------------------------------
-BOOL LLFloaterBvhPreview::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLFloaterBvhPreview::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	// <FS> Preview on own avatar
 	if (mUseOwnAvatar) return LLFloater::handleMouseDown(x, y, mask);
@@ -687,7 +687,7 @@ BOOL LLFloaterBvhPreview::handleMouseDown(S32 x, S32 y, MASK mask)
 		gViewerWindow->hideCursor();
 		mLastMouseX = x;
 		mLastMouseY = y;
-		return TRUE;
+		return true;
 	}
 
 	return LLFloater::handleMouseDown(x, y, mask);
@@ -696,7 +696,7 @@ BOOL LLFloaterBvhPreview::handleMouseDown(S32 x, S32 y, MASK mask)
 //-----------------------------------------------------------------------------
 // handleMouseUp()
 //-----------------------------------------------------------------------------
-BOOL LLFloaterBvhPreview::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLFloaterBvhPreview::handleMouseUp(S32 x, S32 y, MASK mask)
 {
 	// <FS> Preview on own avatar
 	if (mUseOwnAvatar) return LLFloater::handleMouseUp(x, y, mask);
@@ -709,7 +709,7 @@ BOOL LLFloaterBvhPreview::handleMouseUp(S32 x, S32 y, MASK mask)
 //-----------------------------------------------------------------------------
 // handleHover()
 //-----------------------------------------------------------------------------
-BOOL LLFloaterBvhPreview::handleHover(S32 x, S32 y, MASK mask)
+bool LLFloaterBvhPreview::handleHover(S32 x, S32 y, MASK mask)
 {
 	// <FS> Preview on own avatar
 	if (!mUseOwnAvatar)
@@ -763,13 +763,13 @@ BOOL LLFloaterBvhPreview::handleHover(S32 x, S32 y, MASK mask)
 	// <FS> Preview on own avatar
 	}
 	// </FS>
-	return TRUE;
+	return true;
 }
 
 //-----------------------------------------------------------------------------
 // handleScrollWheel()
 //-----------------------------------------------------------------------------
-BOOL LLFloaterBvhPreview::handleScrollWheel(S32 x, S32 y, S32 clicks)
+bool LLFloaterBvhPreview::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
 	// <FS> Preview on own avatar
 	if (mUseOwnAvatar)
@@ -782,7 +782,7 @@ BOOL LLFloaterBvhPreview::handleScrollWheel(S32 x, S32 y, S32 clicks)
 	mAnimPreview->zoom((F32)clicks * -0.2f);
 	mAnimPreview->requestUpdate();
 
-	return TRUE;
+	return true;
 }
 
 //-----------------------------------------------------------------------------

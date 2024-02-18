@@ -1254,7 +1254,7 @@ LLVector3d LLWorldMapView::viewPosToGlobal( S32 x, S32 y )
 }
 
 
-BOOL LLWorldMapView::handleToolTip( S32 x, S32 y, MASK mask )
+bool LLWorldMapView::handleToolTip( S32 x, S32 y, MASK mask )
 {
 	LLVector3d pos_global = viewPosToGlobal(x, y);
 	U64 handle = to_region_handle(pos_global);
@@ -1312,7 +1312,7 @@ BOOL LLWorldMapView::handleToolTip( S32 x, S32 y, MASK mask )
 			.message(tooltip_msg)
 			.sticky_rect(sticky_rect_screen));
 	}
-	return TRUE;
+	return true;
 }
 
 // Pass relative Z of 0 to draw at same level.
@@ -1811,7 +1811,7 @@ void LLWorldMapView::handleClick(S32 x, S32 y, MASK mask,
 }
 
 
-BOOL LLWorldMapView::handleMouseDown( S32 x, S32 y, MASK mask )
+bool LLWorldMapView::handleMouseDown( S32 x, S32 y, MASK mask )
 {
 	gFocusMgr.setMouseCapture( this );
 
@@ -1820,10 +1820,10 @@ BOOL LLWorldMapView::handleMouseDown( S32 x, S32 y, MASK mask )
 	mMouseDownX = x;
 	mMouseDownY = y;
 	sHandledLastClick = TRUE;
-	return TRUE;
+	return true;
 }
 
-BOOL LLWorldMapView::handleMouseUp( S32 x, S32 y, MASK mask )
+bool LLWorldMapView::handleMouseUp( S32 x, S32 y, MASK mask )
 {
 	if (hasMouseCapture())
 	{
@@ -1853,9 +1853,9 @@ BOOL LLWorldMapView::handleMouseUp( S32 x, S32 y, MASK mask )
 		}
 		gViewerWindow->showCursor();
 		gFocusMgr.setMouseCapture( NULL );
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 void LLWorldMapView::updateVisibleBlocks()
@@ -1889,7 +1889,7 @@ void LLWorldMapView::updateVisibleBlocks()
 	LLWorldMap::getInstance()->updateRegions(world_left, world_bottom, world_right, world_top);
 }
 
-BOOL LLWorldMapView::handleHover( S32 x, S32 y, MASK mask )
+bool LLWorldMapView::handleHover( S32 x, S32 y, MASK mask )
 {
 	if (hasMouseCapture())
 	{
@@ -1916,7 +1916,7 @@ BOOL LLWorldMapView::handleHover( S32 x, S32 y, MASK mask )
 
 		// doesn't matter, cursor should be hidden
 		gViewerWindow->setCursor(UI_CURSOR_CROSS );
-		return TRUE;
+		return true;
 	}
 	else
 	{
@@ -1932,12 +1932,12 @@ BOOL LLWorldMapView::handleHover( S32 x, S32 y, MASK mask )
 			gViewerWindow->setCursor( UI_CURSOR_CROSS );
 		}
 		LL_DEBUGS("UserInput") << "hover handled by LLWorldMapView" << LL_ENDL;		
-		return TRUE;
+		return true;
 	}
 }
 
 
-BOOL LLWorldMapView::handleDoubleClick( S32 x, S32 y, MASK mask )
+bool LLWorldMapView::handleDoubleClick( S32 x, S32 y, MASK mask )
 {
 	if( sHandledLastClick )
 	{
@@ -2007,9 +2007,9 @@ BOOL LLWorldMapView::handleDoubleClick( S32 x, S32 y, MASK mask )
 			}
 		};
 
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 // static

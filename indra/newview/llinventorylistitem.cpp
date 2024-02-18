@@ -187,7 +187,7 @@ void LLPanelInventoryListItemBase::setValue(const LLSD& value)
 	mSelected = value["selected"];
 }
 
-BOOL LLPanelInventoryListItemBase::handleHover(S32 x, S32 y, MASK mask)
+bool LLPanelInventoryListItemBase::handleHover(S32 x, S32 y, MASK mask)
 {
 	mHovered = true;
 	return LLPanel::handleHover(x, y, mask);
@@ -420,7 +420,7 @@ void LLPanelInventoryListItemBase::setTitle(const std::string& title,
 		highlit_text);
 }
 
-BOOL LLPanelInventoryListItemBase::handleToolTip( S32 x, S32 y, MASK mask)
+bool LLPanelInventoryListItemBase::handleToolTip( S32 x, S32 y, MASK mask)
 {
 	const LLRect& text_box_rect = mTitleCtrl->getRect();
 
@@ -454,7 +454,7 @@ BOOL LLPanelInventoryListItemBase::handleToolTip( S32 x, S32 y, MASK mask)
 	if (text_box_rect.pointInRect(x, y) &&
 		mTitleCtrl->getTextPixelWidth() <= text_box_rect.getWidth())
 	{
-		return FALSE;
+		return false;
 	}
 	return LLPanel::handleToolTip(x, y, mask);
 }

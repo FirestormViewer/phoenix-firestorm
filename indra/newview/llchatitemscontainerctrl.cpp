@@ -349,12 +349,12 @@ void LLFloaterIMNearbyChatToastPanel::onMouseEnter				(S32 x, S32 y, MASK mask)
 		return;
 }
 
-BOOL	LLFloaterIMNearbyChatToastPanel::handleMouseDown	(S32 x, S32 y, MASK mask)
+bool	LLFloaterIMNearbyChatToastPanel::handleMouseDown	(S32 x, S32 y, MASK mask)
 {
 	return LLPanel::handleMouseDown(x,y,mask);
 }
 
-BOOL	LLFloaterIMNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
+bool	LLFloaterIMNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 {
 	/*
 	fix for request  EXT-4780
@@ -370,7 +370,7 @@ BOOL	LLFloaterIMNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 	if (mMsgText->pointInView(local_x, local_y) )
 	{
 		if (mMsgText->handleMouseUp(local_x,local_y,mask) == TRUE)
-			return TRUE;
+			return true;
 		else
 		{
 			// <FS:Ansariel> [FS communication UI]
@@ -384,7 +384,7 @@ BOOL	LLFloaterIMNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 				LLFloaterReg::showTypedInstance<FSFloaterIMContainer>("fs_im_container")->selectFloater(FSFloaterNearbyChat::getInstance());
 			}
 			// </FS:Ansariel> [FS communication UI]
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -418,7 +418,7 @@ bool	LLFloaterIMNearbyChatToastPanel::canAddText	()
 	return msg_text->getLineCount()<10;
 }
 
-BOOL	LLFloaterIMNearbyChatToastPanel::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool	LLFloaterIMNearbyChatToastPanel::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	LLUICtrl* avatar_icon = getChild<LLUICtrl>("avatar_icon", false);
 
@@ -427,7 +427,7 @@ BOOL	LLFloaterIMNearbyChatToastPanel::handleRightMouseDown(S32 x, S32 y, MASK ma
 
 	//eat message for avatar icon if msg was from object
 	if(avatar_icon->pointInView(local_x, local_y) && mSourceType != CHAT_SOURCE_AGENT)
-		return TRUE;
+		return true;
 	return LLPanel::handleRightMouseDown(x,y,mask);
 }
 void LLFloaterIMNearbyChatToastPanel::draw()

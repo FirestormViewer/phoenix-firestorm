@@ -82,7 +82,7 @@
 
 #include "llviewernetwork.h"	// <FS:CR> For prim equivilance hiding
 
-extern BOOL gDebugClicks;
+extern bool gDebugClicks;
 
 static void handle_click_action_play();
 static void handle_click_action_open_media(LLPointer<LLViewerObject> objectp);
@@ -101,9 +101,9 @@ LLToolPie::LLToolPie()
 {
 }
 
-BOOL LLToolPie::handleAnyMouseClick(S32 x, S32 y, MASK mask, EMouseClickType clicktype, BOOL down)
+bool LLToolPie::handleAnyMouseClick(S32 x, S32 y, MASK mask, EMouseClickType clicktype, bool down)
 {
-	BOOL result = LLMouseHandler::handleAnyMouseClick(x, y, mask, clicktype, down);
+	bool result = LLMouseHandler::handleAnyMouseClick(x, y, mask, clicktype, down);
 	
 	// This override DISABLES the keyboard focus reset that LLTool::handleAnyMouseClick adds.
 	// LLToolPie will do the right thing in its pick callback.
@@ -111,7 +111,7 @@ BOOL LLToolPie::handleAnyMouseClick(S32 x, S32 y, MASK mask, EMouseClickType cli
 	return result;
 }
 
-BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 {
     if (mDoubleClickTimer.getStarted())
     {
@@ -194,7 +194,7 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 
 // Spawn context menus on right mouse down so you can drag over and select
 // an item.
-BOOL LLToolPie::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool LLToolPie::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
     BOOL pick_reflection_probe = gSavedSettings.getBOOL("SelectReflectionProbes");
 
@@ -215,10 +215,10 @@ BOOL LLToolPie::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	{
 		handleRightClickPick();
 	}
-	return FALSE;
+	return false;
 }
 
-BOOL LLToolPie::handleRightMouseUp(S32 x, S32 y, MASK mask)
+bool LLToolPie::handleRightMouseUp(S32 x, S32 y, MASK mask)
 {
 	LLToolMgr::getInstance()->clearTransientTool();
 	return LLTool::handleRightMouseUp(x, y, mask);
@@ -241,12 +241,12 @@ BOOL LLToolPie::handleScrollWheelAny(S32 x, S32 y, S32 clicks_x, S32 clicks_y)
     return res;
 }
 
-BOOL LLToolPie::handleScrollWheel(S32 x, S32 y, S32 clicks)
+bool LLToolPie::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
     return handleScrollWheelAny(x, y, 0, clicks);
 }
 
-BOOL LLToolPie::handleScrollHWheel(S32 x, S32 y, S32 clicks)
+bool LLToolPie::handleScrollHWheel(S32 x, S32 y, S32 clicks)
 {
     return handleScrollWheelAny(x, y, clicks, 0);
 }
@@ -845,9 +845,9 @@ void LLToolPie::selectionPropertiesReceived()
 	LLToolPie::getInstance()->resetSelection();
 }
 
-BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
+bool LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 {
-    BOOL pick_rigged = false; //gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
+    bool pick_rigged = false; //gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
 	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE, pick_rigged);
 	LLViewerObject *parent = NULL;
 	LLViewerObject *object = mHoverPick.getObject();
@@ -945,7 +945,7 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 	return TRUE;
 }
 
-BOOL LLToolPie::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLToolPie::handleMouseUp(S32 x, S32 y, MASK mask)
 {
     if (!mDoubleClickTimer.getStarted())
     {
@@ -982,7 +982,7 @@ void LLToolPie::stopClickToWalk()
 	}
 }
 
-BOOL LLToolPie::handleDoubleClick(S32 x, S32 y, MASK mask)
+bool LLToolPie::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
 	if (gDebugClicks)
 	{
@@ -991,7 +991,7 @@ BOOL LLToolPie::handleDoubleClick(S32 x, S32 y, MASK mask)
 
 	if (handleMediaDblClick(mPick))
 	{
-		return TRUE;
+		return true;
 	}
     
 	// <FS:Ansariel> FIRE-1765: Allow double-click walk/teleport to scripted objects
@@ -999,7 +999,7 @@ BOOL LLToolPie::handleDoubleClick(S32 x, S32 y, MASK mask)
 	//if (!mDoubleClickTimer.getStarted() || (mDoubleClickTimer.getElapsedTimeF32() > 0.3f))
 	// {
 	// 	mDoubleClickTimer.stop();
-	// 	return FALSE;
+	// 	return false;
 	// }
 	bool canDoubleClickTP = gSavedSettings.getBOOL("DoubleClickTeleport");
 	bool allowDoubleClickOnScriptedObjects = gSavedSettings.getBOOL("FSAllowDoubleClickOnScriptedObjects");
@@ -1007,13 +1007,13 @@ BOOL LLToolPie::handleDoubleClick(S32 x, S32 y, MASK mask)
 	{
 		mDoubleClickTimer.stop();
 		teleportToClickedLocation();
-		return TRUE;
+		return true;
 	}
 	// </FS:Ansariel>
 
 	mDoubleClickTimer.stop();
 
-	return FALSE;
+	return false;
 }
 
 // <FS:PP> Restore "Hover Tips on All Objects" toggle
@@ -1606,11 +1606,11 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 	return TRUE;
 }
 
-BOOL LLToolPie::handleToolTip(S32 local_x, S32 local_y, MASK mask)
+bool LLToolPie::handleToolTip(S32 local_x, S32 local_y, MASK mask)
 {
 	static LLCachedControl<bool> show_hover_tips(*LLUI::getInstance()->mSettingGroups["config"], "ShowHoverTips", true);
-	if (!show_hover_tips) return TRUE;
-	if (!mHoverPick.isValid()) return TRUE;
+	if (!show_hover_tips) return true;
+	if (!mHoverPick.isValid()) return true;
 // [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
 #ifdef RLV_EXTENSION_CMD_INTERACT
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT)) return TRUE;
@@ -1643,7 +1643,7 @@ BOOL LLToolPie::handleToolTip(S32 local_x, S32 local_y, MASK mask)
 		handleTooltipLand(line, tooltip_msg);
 	}
 
-	return TRUE;
+	return true;
 }
 
 static void show_inspector(const char* inspector, const char* param, const LLUUID& source_id)

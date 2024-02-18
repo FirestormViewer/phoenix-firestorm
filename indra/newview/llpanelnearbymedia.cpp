@@ -248,7 +248,7 @@ void LLPanelNearByMedia::draw()
 }
 
 /*virtual*/
-BOOL LLPanelNearByMedia::handleHover(S32 x, S32 y, MASK mask)
+bool LLPanelNearByMedia::handleHover(S32 x, S32 y, MASK mask)
 {
 	LLPanelPulldown::handleHover(x, y, mask);
 	
@@ -262,7 +262,7 @@ BOOL LLPanelNearByMedia::handleHover(S32 x, S32 y, MASK mask)
 	return true;
 }
 
-BOOL LLPanelNearByMedia::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool LLPanelNearByMedia::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
     S32 x_list, y_list;
     localPointToOtherView(x, y, &x_list, &y_list, mMediaList);
@@ -275,7 +275,7 @@ BOOL LLPanelNearByMedia::handleRightMouseDown(S32 x, S32 y, MASK mask)
             mContextMenu->buildDrawLabels();
             mContextMenu->updateParent(LLMenuGL::sMenuContainer);
             LLMenuGL::showPopup(this, mContextMenu, x, y);
-            return TRUE;
+            return true;
         }
     }
 

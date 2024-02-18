@@ -1648,17 +1648,17 @@ BOOL LLFloater::offerClickToButton(S32 x, S32 y, MASK mask, EFloaterButton index
 	return FALSE;
 }
 
-BOOL LLFloater::handleScrollWheel(S32 x, S32 y, S32 clicks)
+bool LLFloater::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
 	LLPanel::handleScrollWheel(x,y,clicks);
-	return TRUE;//always
+	return true;//always
 }
 
 // virtual
-BOOL LLFloater::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLFloater::handleMouseUp(S32 x, S32 y, MASK mask)
 {
 	LL_DEBUGS() << "LLFloater::handleMouseUp calling LLPanel (really LLView)'s handleMouseUp (first initialized xui to: " << getPathname() << " )" << LL_ENDL;
-	BOOL handled = LLPanel::handleMouseUp(x,y,mask); // Not implemented in LLPanel so this actually calls LLView
+	bool handled = LLPanel::handleMouseUp(x,y,mask); // Not implemented in LLPanel so this actually calls LLView
 	if (handled) {
 		LLViewerEventRecorder::instance().updateMouseEventInfo(x,y,-55,-55,getPathname());
 	}
@@ -1666,7 +1666,7 @@ BOOL LLFloater::handleMouseUp(S32 x, S32 y, MASK mask)
 }
 
 // virtual
-BOOL LLFloater::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	if( mMinimized )
 	{
@@ -1674,21 +1674,21 @@ BOOL LLFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 		// Note: this block and the offerClickToButton helper method can be removed
 		// because the parent container will handle it for us but we'll keep it here
 		// for safety until after reworking the panel code to manage hidden children.
-		if(offerClickToButton(x, y, mask, BUTTON_CLOSE)) return TRUE;
-		if(offerClickToButton(x, y, mask, BUTTON_RESTORE)) return TRUE;
-		if(offerClickToButton(x, y, mask, BUTTON_TEAR_OFF)) return TRUE;
-		if(offerClickToButton(x, y, mask, BUTTON_DOCK)) return TRUE;
+		if(offerClickToButton(x, y, mask, BUTTON_CLOSE)) return true;
+		if(offerClickToButton(x, y, mask, BUTTON_RESTORE)) return true;
+		if(offerClickToButton(x, y, mask, BUTTON_TEAR_OFF)) return true;
+		if(offerClickToButton(x, y, mask, BUTTON_DOCK)) return true;
 		// <FS:Ansariel> FIRE-11724: Snooze group chat
 		if(offerClickToButton(x, y, mask, BUTTON_SNOOZE)) return TRUE;
 
-		setFrontmost(TRUE, FALSE);
+		setFrontmost(true, false);
 		// Otherwise pass to drag handle for movement
 		return mDragHandle->handleMouseDown(x, y, mask);
 	}
 	else
 	{
 		bringToFront( x, y );
-		BOOL handled = LLPanel::handleMouseDown( x, y, mask ); 
+		bool handled = LLPanel::handleMouseDown( x, y, mask );
 		if (handled) {
 			LLViewerEventRecorder::instance().updateMouseEventInfo(x,y,-55,-55,getPathname()); 
 		}
@@ -1697,14 +1697,14 @@ BOOL LLFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 }
 
 // virtual
-BOOL LLFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool LLFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
-	BOOL was_minimized = mMinimized;
+	bool was_minimized = mMinimized;
 	bringToFront( x, y );
 	return was_minimized || LLPanel::handleRightMouseDown( x, y, mask );
 }
 
-BOOL LLFloater::handleMiddleMouseDown(S32 x, S32 y, MASK mask)
+bool LLFloater::handleMiddleMouseDown(S32 x, S32 y, MASK mask)
 {
 	bringToFront( x, y );
 	return LLPanel::handleMiddleMouseDown( x, y, mask );
@@ -1712,10 +1712,10 @@ BOOL LLFloater::handleMiddleMouseDown(S32 x, S32 y, MASK mask)
 
 
 // virtual
-BOOL LLFloater::handleDoubleClick(S32 x, S32 y, MASK mask)
+bool LLFloater::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
-	BOOL was_minimized = mMinimized;
-	setMinimized(FALSE);
+	bool was_minimized = mMinimized;
+	setMinimized(false);
 	return was_minimized || LLPanel::handleDoubleClick(x, y, mask);
 }
 

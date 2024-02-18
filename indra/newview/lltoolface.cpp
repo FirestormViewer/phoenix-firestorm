@@ -49,8 +49,8 @@
 #include "llkeyboard.h"
 #include "llwindow.h"
 
-BOOL LLToolFace::mTextureGrabbed=FALSE;
-LLViewerObject* LLToolFace::mTextureObject=NULL;
+bool LLToolFace::mTextureGrabbed = false;
+LLViewerObject* LLToolFace::mTextureObject = nullptr;
 S32 LLToolFace::mFaceGrabbed=0;
 
 #undef TEXTURE_GRAB_UPDATE_REGULARLY	// continuous update of texture grabbing, might cause twitching
@@ -69,30 +69,30 @@ LLToolFace::~LLToolFace()
 { }
 
 
-BOOL LLToolFace::handleDoubleClick(S32 x, S32 y, MASK mask)
+bool LLToolFace::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
 	if (!LLSelectMgr::getInstance()->getSelection()->isEmpty())
 	{
 		// You should already have an object selected from the mousedown.
 		// If so, show its properties
 		LLFloaterReg::showInstance("build", "Texture");
-		return TRUE;
+		return true;
 	}
 	else
 	{
 		// Nothing selected means the first mouse click was probably
 		// bad, so try again.
-		return FALSE;
+		return false;
 	}
 }
 
 
-BOOL LLToolFace::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLToolFace::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	gViewerWindow->pickAsync(x, y, mask, pickCallback);
 	mGrabX = x;
 	mGrabY = y;
-	return TRUE;
+	return true;
 }
 
 void LLToolFace::pickCallback(const LLPickInfo& pick_info)
@@ -148,25 +148,25 @@ void LLToolFace::pickCallback(const LLPickInfo& pick_info)
 		}
 
 		// <FS:Zi> Add control to drag texture faces around
-		if(gSavedSettings.getBOOL("FSExperimentalDragTexture"))
+		if (gSavedSettings.getBOOL("FSExperimentalDragTexture"))
 		{
 			// if the same object and face was clicked as before, assume the user wants to grab it
-			if(LLToolFace::mTextureObject==hit_obj && LLToolFace::mFaceGrabbed==pick_info.mObjectFace)
+			if (LLToolFace::mTextureObject == hit_obj && LLToolFace::mFaceGrabbed == pick_info.mObjectFace)
 			{
-				LLToolFace::mTextureGrabbed=TRUE;
+				LLToolFace::mTextureGrabbed = true;
 				gViewerWindow->hideCursor();
 			}
 			else
 			{
-				LLToolFace::mTextureGrabbed=FALSE;
+				LLToolFace::mTextureGrabbed = false;
 				gViewerWindow->showCursor();
 			}
 		}
 
 		// remember the object being selected so we can check for grabbing later
-		LLToolFace::mTextureObject=hit_obj;
+		LLToolFace::mTextureObject = hit_obj;
 		// also remember the selected object face
-		LLToolFace::mFaceGrabbed=pick_info.mObjectFace;
+		LLToolFace::mFaceGrabbed = pick_info.mObjectFace;
 		// </FS:Zi>
 	}
 	else
@@ -357,26 +357,26 @@ void LLToolFace::render()
 
 void LLToolFace::stopGrabbing()
 {
-	if(mTextureObject)
+	if (mTextureObject)
 	{
 		mTextureObject->sendTEUpdate();
 	}
 	gViewerWindow->showCursor();
 
-	LLToolFace::mTextureGrabbed=FALSE;
-	LLToolFace::mTextureObject=NULL;
-	LLToolFace::mFaceGrabbed=0;
+	LLToolFace::mTextureGrabbed = false;
+	LLToolFace::mTextureObject = nullptr;
+	LLToolFace::mFaceGrabbed = 0;
 }
 
-BOOL LLToolFace::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLToolFace::handleMouseUp(S32 x, S32 y, MASK mask)
 {
-	if(mTextureObject)
+	if (mTextureObject)
 	{
 		mTextureObject->sendTEUpdate();
 	}
 	gViewerWindow->showCursor();
-	LLToolFace::mTextureGrabbed=FALSE;
+	LLToolFace::mTextureGrabbed = false;
 
-	return TRUE;
+	return true;
 }
 // </FS:Zi>

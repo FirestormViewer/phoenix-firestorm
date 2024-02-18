@@ -294,9 +294,9 @@ void LLManipTranslate::handleSelect()
 	LLManip::handleSelect();
 }
 
-BOOL LLManipTranslate::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLManipTranslate::handleMouseDown(S32 x, S32 y, MASK mask)
 {
-	BOOL	handled = FALSE;
+	bool	handled = false;
 
 	// didn't click in any UI object, so must have clicked in the world
 	if( (mHighlightedPart == LL_X_ARROW ||
@@ -407,7 +407,7 @@ BOOL LLManipTranslate::handleMouseDownOnPart( S32 x, S32 y, MASK mask )
 	return TRUE;
 }
 
-BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
+bool LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 {
 	// Translation tool only works if mouse button is down.
 	// Bail out if mouse not down.
@@ -419,7 +419,7 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 		gViewerWindow->setCursor(UI_CURSOR_TOOLTRANSLATE);
 
 		highlightManipulators(x, y);
-		return TRUE;
+		return true;
 	}
 	
 	// <FS:Zi> Warning when trying to duplicate while in edit linked parts/select face mode
@@ -463,7 +463,7 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 	{
 		LL_DEBUGS("UserInput") << "hover handled by LLManipTranslate (mouse unmoved)" << LL_ENDL;
 		gViewerWindow->setCursor(UI_CURSOR_TOOLTRANSLATE);
-		return TRUE;
+		return true;
 	}
 	mLastHoverMouseX = x;
 	mLastHoverMouseY = y;
@@ -476,7 +476,7 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 		{
 			LL_DEBUGS("UserInput") << "hover handled by LLManipTranslate (mouse inside slop)" << LL_ENDL;
 			gViewerWindow->setCursor(UI_CURSOR_TOOLTRANSLATE);
-			return TRUE;
+			return true;
 		}
 		else
 		{
@@ -510,7 +510,7 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 		// somehow we lost the object!
 		LL_WARNS() << "Translate manip lost the object, no selectNode" << LL_ENDL;
 		gViewerWindow->setCursor(UI_CURSOR_TOOLTRANSLATE);
-		return TRUE;
+		return true;
 	}
 
 	LLViewerObject* object = selectNode->getObject();
@@ -519,7 +519,7 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 		// somehow we lost the object!
 		LL_WARNS() << "Translate manip lost the object, no object in selectNode" << LL_ENDL;
 		gViewerWindow->setCursor(UI_CURSOR_TOOLTRANSLATE);
-		return TRUE;
+		return true;
 	}
 
 	// Compute unit vectors for arrow hit and a plane through that vector
@@ -551,7 +551,7 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 		{
 			LL_DEBUGS("UserInput") << "hover handled by LLManipTranslate (too far)" << LL_ENDL;
 			gViewerWindow->setCursor(UI_CURSOR_NOLOCKED);
-			return TRUE;
+			return true;
 		}
 	}
 
@@ -796,7 +796,7 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 
 	LL_DEBUGS("UserInput") << "hover handled by LLManipTranslate (active)" << LL_ENDL;
 	gViewerWindow->setCursor(UI_CURSOR_TOOLTRANSLATE);
-	return TRUE;
+	return true;
 }
 
 void LLManipTranslate::highlightManipulators(S32 x, S32 y)
@@ -1048,7 +1048,7 @@ F32 LLManipTranslate::getMinGridScale()
 }
 
 
-BOOL LLManipTranslate::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLManipTranslate::handleMouseUp(S32 x, S32 y, MASK mask)
 {
 	// first, perform normal processing in case this was a quick-click
 	handleHover(x, y, mask);

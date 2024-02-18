@@ -511,7 +511,7 @@ void LLAvatarListItem::onProfileBtnClick()
 	LLAvatarActions::showProfile(mAvatarId);
 }
 
-BOOL LLAvatarListItem::handleDoubleClick(S32 x, S32 y, MASK mask)
+bool LLAvatarListItem::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
 //	if(mInfoBtn->getRect().pointInRect(x, y))
 // [RVLa:KB] - Checked: RLVa-1.2.2
@@ -519,7 +519,7 @@ BOOL LLAvatarListItem::handleDoubleClick(S32 x, S32 y, MASK mask)
 // [/SL:KB]
 	{
 		onInfoBtnClick();
-		return TRUE;
+		return true;
 	}
 //	if(mProfileBtn->getRect().pointInRect(x, y))
 // [RLVa:KB] - Checked: RLVa-1.2.2
@@ -527,7 +527,7 @@ BOOL LLAvatarListItem::handleDoubleClick(S32 x, S32 y, MASK mask)
 // [/SL:KB]
 	{
 		onProfileBtnClick();
-		return TRUE;
+		return true;
 	}
 	return LLPanel::handleDoubleClick(x, y, mask);
 }

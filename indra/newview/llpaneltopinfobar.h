@@ -89,7 +89,7 @@ private:
 	 */
 	void initParcelIcons();
 
-	BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+	bool handleRightMouseDown(S32 x, S32 y, MASK mask);
 
 	/**
 	 * Handles clicks on the parcel icons.

@@ -1442,9 +1442,9 @@ void LLInventoryPanel::unSelectAll()
 }
 
 
-BOOL LLInventoryPanel::handleHover(S32 x, S32 y, MASK mask)
+bool LLInventoryPanel::handleHover(S32 x, S32 y, MASK mask)
 {
-	BOOL handled = LLView::handleHover(x, y, mask);
+	bool handled = LLView::handleHover(x, y, mask);
 	if(handled)
     {
         // getCursor gets current cursor, setCursor sets next cursor
@@ -1460,10 +1460,10 @@ BOOL LLInventoryPanel::handleHover(S32 x, S32 y, MASK mask)
 	{
 		getWindow()->setCursor(UI_CURSOR_ARROW);
 	}
-	return TRUE;
+	return true;
 }
 
-BOOL LLInventoryPanel::handleToolTip(S32 x, S32 y, MASK mask)
+bool LLInventoryPanel::handleToolTip(S32 x, S32 y, MASK mask)
 {
 	// <FS:Ansariel> FIRE-33356: Option to turn off thumbnail tooltips
 	static LLCachedControl<bool> showInventoryThumbnailTooltips(gSavedSettings, "FSShowInventoryThumbnailTooltips");
@@ -1538,7 +1538,7 @@ BOOL LLInventoryPanel::handleToolTip(S32 x, S32 y, MASK mask)
 					.delay_time(tooltipDelay)
 					.create_callback(boost::bind(&LLInspectTextureUtil::createInventoryToolTip, _1))
 					.create_params(params));
-			return TRUE;
+			return true;
 		}
 	}
 	return LLPanel::handleToolTip(x, y, mask);

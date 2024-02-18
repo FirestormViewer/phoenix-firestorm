@@ -154,7 +154,7 @@ void lggBeamColorMapFloater::draw()
 	gGL.popMatrix();
 }
 
-BOOL lggBeamColorMapFloater::handleMouseDown(S32 x, S32 y, MASK mask)
+bool lggBeamColorMapFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	F32 hue = getHueFromLocation(x, y);
 	if (hue != -1.f)
@@ -162,13 +162,13 @@ BOOL lggBeamColorMapFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 		mData.mStartHue = hue;
 		fixOrder();
 		
-		return TRUE;
+		return true;
 	}
 
 	return LLFloater::handleMouseDown(x, y, mask);
 }
 
-BOOL lggBeamColorMapFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool lggBeamColorMapFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	F32 hue = getHueFromLocation(x, y);
 	if (hue != -1.f)
@@ -176,7 +176,7 @@ BOOL lggBeamColorMapFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
 		mData.mEndHue = hue;
 		fixOrder();
 		
-		return TRUE;
+		return true;
 	}
 
 	return LLFloater::handleRightMouseDown(x, y, mask);

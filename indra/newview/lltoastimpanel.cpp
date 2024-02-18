@@ -125,18 +125,18 @@ LLToastIMPanel::~LLToastIMPanel()
 }
 
 //virtual
-BOOL LLToastIMPanel::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLToastIMPanel::handleMouseUp(S32 x, S32 y, MASK mask)
 {
 	if (LLPanel::handleMouseUp(x,y,mask) == FALSE)
 	{
 		mNotification->respond(mNotification->getResponseTemplate());
 	}
 
-	return TRUE;
+	return true;
 }
 
 //virtual
-BOOL LLToastIMPanel::handleToolTip(S32 x, S32 y, MASK mask)
+bool LLToastIMPanel::handleToolTip(S32 x, S32 y, MASK mask)
 {
 	// It's not our direct child, so parentPointInView() doesn't work.
 	LLRect ctrl_rect;
@@ -145,14 +145,14 @@ BOOL LLToastIMPanel::handleToolTip(S32 x, S32 y, MASK mask)
 	if (ctrl_rect.pointInRect(x, y))
 	{
 		spawnNameToolTip();
-		return TRUE;
+		return true;
 	}
 
 	mGroupIcon->localRectToOtherView(mGroupIcon->getLocalRect(), &ctrl_rect, this);
 	if(mGroupIcon->getVisible() && ctrl_rect.pointInRect(x, y))
 	{
 		spawnGroupIconToolTip();
-		return TRUE;
+		return true;
 	}
 
 	return LLToastPanel::handleToolTip(x, y, mask);

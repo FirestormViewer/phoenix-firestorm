@@ -482,7 +482,7 @@ void LLToolDragAndDrop::onMouseCaptureLost()
 	mCustomMsg.clear();
 }
 
-BOOL LLToolDragAndDrop::handleMouseUp( S32 x, S32 y, MASK mask )
+bool LLToolDragAndDrop::handleMouseUp( S32 x, S32 y, MASK mask )
 {
 	if (hasMouseCapture())
 	{
@@ -490,7 +490,7 @@ BOOL LLToolDragAndDrop::handleMouseUp( S32 x, S32 y, MASK mask )
 		dragOrDrop( x, y, mask, TRUE, &acceptance );
 		endDrag();
 	}
-	return TRUE;
+	return true;
 }
 
 ECursorType LLToolDragAndDrop::acceptanceToCursor( EAcceptance acceptance )
@@ -563,7 +563,7 @@ ECursorType LLToolDragAndDrop::acceptanceToCursor( EAcceptance acceptance )
 	return mCursor;
 }
 
-BOOL LLToolDragAndDrop::handleHover( S32 x, S32 y, MASK mask )
+bool LLToolDragAndDrop::handleHover( S32 x, S32 y, MASK mask )
 {
 	EAcceptance acceptance = ACCEPT_NO;
 	dragOrDrop( x, y, mask, FALSE, &acceptance );
@@ -572,7 +572,7 @@ BOOL LLToolDragAndDrop::handleHover( S32 x, S32 y, MASK mask )
 	gViewerWindow->getWindow()->setCursor( cursor );
 
 	LL_DEBUGS("UserInput") << "hover handled by LLToolDragAndDrop" << LL_ENDL;
-	return TRUE;
+	return true;
 }
 
 BOOL LLToolDragAndDrop::handleKey(KEY key, MASK mask)
@@ -587,7 +587,7 @@ BOOL LLToolDragAndDrop::handleKey(KEY key, MASK mask)
 	return FALSE;
 }
 
-BOOL LLToolDragAndDrop::handleToolTip(S32 x, S32 y, MASK mask)
+bool LLToolDragAndDrop::handleToolTip(S32 x, S32 y, MASK mask)
 {
 	if (!mToolTipMsg.empty())
 	{
@@ -595,9 +595,9 @@ BOOL LLToolDragAndDrop::handleToolTip(S32 x, S32 y, MASK mask)
 		LLToolTipMgr::instance().show(LLToolTip::Params()
 			.message(mToolTipMsg)
 			.delay_time(gSavedSettings.getF32( "DragAndDropToolTipDelay" )));
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 void LLToolDragAndDrop::handleDeselect()

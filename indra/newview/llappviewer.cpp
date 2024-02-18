@@ -319,7 +319,7 @@ extern BOOL gPeriodicSlowFrame;
 extern BOOL gDebugGL;
 
 #if LL_DARWIN
-extern BOOL gHiDPISupport;
+extern bool gHiDPISupport;
 #endif
 
 ////////////////////////////////////////////////////////////

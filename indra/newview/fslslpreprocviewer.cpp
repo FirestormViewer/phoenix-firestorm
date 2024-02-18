@@ -51,7 +51,7 @@ BOOL FSLSLPreProcViewer::handleKeyHere(KEY key, MASK mask )
 	return handled;
 }
 
-BOOL FSLSLPreProcViewer::handleUnicodeCharHere(llwchar uni_char)
+bool FSLSLPreProcViewer::handleUnicodeCharHere(llwchar uni_char)
 {
-	return FALSE;
+	return false;
 }

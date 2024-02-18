@@ -68,7 +68,7 @@ const S32 SLOP_DIST_SQ = 4;
 BOOL gGrabBtnVertical = FALSE;
 BOOL gGrabBtnSpin = FALSE;
 LLTool* gGrabTransientTool = NULL;
-extern BOOL gDebugClicks;
+extern bool gDebugClicks;
 
 //
 // Methods
@@ -127,17 +127,17 @@ void LLToolGrabBase::handleDeselect()
 
 }
 
-BOOL LLToolGrabBase::handleDoubleClick(S32 x, S32 y, MASK mask)
+bool LLToolGrabBase::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
 	if (gDebugClicks)
 	{
 		LL_INFOS() << "LLToolGrab handleDoubleClick (becoming mouseDown)" << LL_ENDL;
 	}
 
-	return FALSE;
+	return false;
 }
 
-BOOL LLToolGrabBase::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLToolGrabBase::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	if (gDebugClicks)
 	{
@@ -166,7 +166,7 @@ BOOL LLToolGrabBase::handleMouseDown(S32 x, S32 y, MASK mask)
         // Todo: LLToolGrabBase probably shouldn't consume the event if there is nothing
         // to grab in Mouselook, it intercepts handling in scanMouse
     }
-	return TRUE;
+	return true;
 }
 
 void LLToolGrabBase::pickCallback(const LLPickInfo& pick_info)
@@ -443,13 +443,13 @@ void LLToolGrabBase::startGrab()
 }
 
 
-BOOL LLToolGrabBase::handleHover(S32 x, S32 y, MASK mask)
+bool LLToolGrabBase::handleHover(S32 x, S32 y, MASK mask)
 {
 	if (!gViewerWindow->getLeftMouseDown())
 	{
 		gViewerWindow->setCursor(UI_CURSOR_TOOLGRAB);
 		setMouseCapture(FALSE);
-		return TRUE;
+		return true;
 	}
 
 // [RLVa:KB] - Checked: RLVa-1.1.0
@@ -492,7 +492,7 @@ BOOL LLToolGrabBase::handleHover(S32 x, S32 y, MASK mask)
 	mLastMouseX = x;
 	mLastMouseY = y;
 	
-	return TRUE;
+	return true;
 }
 
 const F32 GRAB_SENSITIVITY_X = 0.0075f;
@@ -991,7 +991,7 @@ void LLToolGrabBase::handleHoverFailed(S32 x, S32 y, MASK mask)
 
 
 
-BOOL LLToolGrabBase::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLToolGrabBase::handleMouseUp(S32 x, S32 y, MASK mask)
 {
 	LLTool::handleMouseUp(x, y, mask);
 
@@ -1034,7 +1034,7 @@ BOOL LLToolGrabBase::handleMouseUp(S32 x, S32 y, MASK mask)
 
 	//gAgent.setObjectTracking(gSavedSettings.getBOOL("TrackFocusObject"));
 
-	return TRUE;
+	return true;
 } 
 
 void LLToolGrabBase::stopEditing()

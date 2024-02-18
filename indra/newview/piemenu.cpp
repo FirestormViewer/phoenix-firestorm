@@ -112,7 +112,7 @@ void PieMenu::removeChild(LLView* child)
 	reshape(PIE_OUTER_SIZE * 2, PIE_OUTER_SIZE * 2, FALSE);
 }
 
-BOOL PieMenu::handleHover(S32 x, S32 y, MASK mask)
+bool PieMenu::handleHover(S32 x, S32 y, MASK mask)
 {
 	// initialize pie scale factor for popup effect
 	F32 factor = getScaleFactor();
@@ -143,7 +143,7 @@ BOOL PieMenu::handleHover(S32 x, S32 y, MASK mask)
 		mCurrentSegment = (S32) (PIE_MAX_SLICES_F * angle / (F_PI * 2.f)) % PIE_MAX_SLICES;
 	}
 
-	return TRUE;
+	return true;
 }
 
 void PieMenu::show(S32 x, S32 y, LLView* spawning_view)
@@ -488,20 +488,20 @@ BOOL PieMenu::appendContextSubMenu(PieMenu* menu)
 	return TRUE;
 }
 
-BOOL PieMenu::handleMouseUp(S32 x, S32 y, MASK mask)
+bool PieMenu::handleMouseUp(S32 x, S32 y, MASK mask)
 {
 	// left and right mouse buttons both do the same thing currently
 	return handleMouseButtonUp(x, y, mask);
 }
 
-BOOL PieMenu::handleRightMouseUp(S32 x, S32 y, MASK mask)
+bool PieMenu::handleRightMouseUp(S32 x, S32 y, MASK mask)
 {
 	// left and right mouse buttons both do the same thing currently
 	return handleMouseButtonUp(x, y, mask);
 }
 
 // left and right mouse buttons both do the same thing currently
-BOOL PieMenu::handleMouseButtonUp(S32 x, S32 y, MASK mask)
+bool PieMenu::handleMouseButtonUp(S32 x, S32 y, MASK mask)
 {
 	// if this was the first click and no slice is highlighted (no borderless click), start the popup timer
 	if (mFirstClick && !mSlice)
