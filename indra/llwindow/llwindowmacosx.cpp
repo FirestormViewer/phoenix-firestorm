@@ -49,7 +49,7 @@ bool gHiDPISupport = true;
 const S32	BITS_PER_PIXEL = 32;
 const S32	MAX_NUM_RESOLUTIONS = 32;
 // <FS:CR> Various missing prototypes
-BOOL check_for_card(const char* RENDERER, const char* bad_card);
+bool check_for_card(const char* RENDERER, const char* bad_card);
 const char* cursorIDToName(int id);
 // </FS:CR>
 
