@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Atmosphère et lumières" name="panel_settings_sky_atmos">
+	<string name="hdr_string">Échelle HDR :</string>
+	<string name="brightness_string">Luminosité :</string>
+	<string name="hdr_tooltip">Intensité des effets de luminosité tels que les ciels lumineux réalistes et l'exposition dynamique. 1.0 est la valeur par défaut, 0 est désactivé, les valeurs entre 0 et 1 mélangent la luminosité ambiante et le HDR.</string>
 	<layout_stack name="main_ls">
 		<layout_panel name="top_lp">
 			<text name="ambient_color_label">
@@ -41,6 +44,10 @@
 					<text name="maximum_altitude_label">
 						Altitude maximale :
 					</text>
+					<text name="probe_ambiance_label" tool_tip="Contrôle de l'irradiance.  Si différent de zéro, active le modèle d'éclairage HDR.">
+						Ambiance de la sonde de réflexion (HDR):
+					</text>
+					<slider name="probe_ambiance" tool_tip="Intensité de l'éclairage indirect basé sur l'environnement. À zéro, l'échelle HDR devient Luminosité"/>
 					<text name="scene_gamma_label">
 						Gamma de scène :
 					</text>
