@@ -134,7 +134,7 @@ std::string gLastRunVersion;
 
 extern BOOL gResizeScreenTexture;
 extern BOOL gResizeShadowTexture;
-extern BOOL gDebugGL;
+extern bool gDebugGL;
 
 // <FS:Ansariel> FIRE-6809: Quickly moving the bandwidth slider has no effect
 class BandwidthUpdater : public LLEventTimer

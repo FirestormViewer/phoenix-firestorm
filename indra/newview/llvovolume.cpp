@@ -2336,13 +2336,13 @@ void LLVOVolume::updateFaceSize(S32 idx)
 	}
 }
 
-BOOL LLVOVolume::isRootEdit() const
+bool LLVOVolume::isRootEdit() const
 {
 	if (mParent && !((LLViewerObject*)mParent)->isAvatar())
 	{
-		return FALSE;
+		return false;
 	}
-	return TRUE;
+	return true;
 }
 
 //virtual

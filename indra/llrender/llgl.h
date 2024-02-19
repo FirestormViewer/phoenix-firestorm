@@ -55,7 +55,7 @@
 #pragma GCC diagnostic push
 #endif
 
-extern BOOL gDebugGL;
+extern bool gDebugGL;
 extern BOOL gDebugSession;
 extern BOOL gDebugGLSession;
 extern llofstream gFailLog;

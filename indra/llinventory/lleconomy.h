@@ -117,7 +117,7 @@ public:
 
 	void print();
 
-	BOOL	hasData() const;
+	bool	hasData() const;
 	F32		getPriceObjectRent() const	{ return mPriceObjectRent; }
 	F32		getPriceObjectScaleFactor() const {return mPriceObjectScaleFactor;}
 	F32		getEnergyEfficiency() const	{ return mEnergyEfficiency; }

@@ -1124,7 +1124,7 @@ void FSAreaSearch::getNameFromUUID(const LLUUID& id, std::string& name, bool gro
 
 	if (group)
 	{
-		BOOL is_group;
+		bool is_group;
 		if (!gCacheName->getIfThere(id, name, is_group))
 		{
 			name = unknown_name;

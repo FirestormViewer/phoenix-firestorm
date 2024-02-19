@@ -363,7 +363,7 @@ public:
 		mUserData = user_data;
 	}
 
-	BOOL callHandlerFunc(LLMessageSystem *msgsystem) const
+	bool callHandlerFunc(LLMessageSystem *msgsystem) const
 	{
 		if (mHandlerFunc)
 		{
@@ -383,9 +383,9 @@ public:
 
 			// </FS:ND>
 
-			return TRUE;
+			return true;
 		}
-		return FALSE;
+		return false;
 	}
 
 	bool isUdpBanned() const

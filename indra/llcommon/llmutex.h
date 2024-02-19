@@ -86,6 +86,7 @@ public:
     bool trylockShared();
     bool trylockExclusive();
     template<bool SHARED> bool trylock();
+
     void unlockShared();
     void unlockExclusive();
     template<bool SHARED> void unlock();
@@ -99,7 +100,6 @@ private:
     using iterator = std::unordered_map<LLThread::id_t, U32>::iterator;
     using const_iterator = std::unordered_map<LLThread::id_t, U32>::const_iterator;
 };
-
 
 template<>
 inline void LLSharedMutex::lock<true>()
