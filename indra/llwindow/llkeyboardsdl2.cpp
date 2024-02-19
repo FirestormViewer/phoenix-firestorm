@@ -204,12 +204,12 @@ static U32 adjustNativekeyFromUnhandledMask(const U32 key, const U32 mask)
 }
 
 
-BOOL LLKeyboardSDL::handleKeyDown(const U32 key, const U32 mask)
+bool LLKeyboardSDL::handleKeyDown(const U32 key, const U32 mask)
 {
 	U32 adjusted_nativekey;
 	KEY	translated_key = 0;
 	U32	translated_mask = MASK_NONE;
-	BOOL handled = FALSE;
+	bool handled = false;
 
 	adjusted_nativekey = adjustNativekeyFromUnhandledMask(key, mask);
 
@@ -224,12 +224,12 @@ BOOL LLKeyboardSDL::handleKeyDown(const U32 key, const U32 mask)
 }
 
 
-BOOL LLKeyboardSDL::handleKeyUp(const U32 key, const U32 mask)
+bool LLKeyboardSDL::handleKeyUp(const U32 key, const U32 mask)
 {
 	U32 adjusted_nativekey;
 	KEY	translated_key = 0;
 	U32	translated_mask = MASK_NONE;
-	BOOL handled = FALSE;
+	bool handled = false;
 
 	adjusted_nativekey = adjustNativekeyFromUnhandledMask(key, mask);
 
@@ -243,7 +243,7 @@ BOOL LLKeyboardSDL::handleKeyUp(const U32 key, const U32 mask)
 	return handled;
 }
 
-MASK LLKeyboardSDL::currentMask(BOOL for_mouse_event)
+MASK LLKeyboardSDL::currentMask(bool for_mouse_event)
 {
 	MASK result = MASK_NONE;
 	SDL_Keymod mask = SDL_GetModState();
@@ -292,7 +292,7 @@ void LLKeyboardSDL::scanKeyboard()
 }
 
  
-BOOL LLKeyboardSDL::translateNumpadKey( const U32 os_key, KEY *translated_key)
+bool LLKeyboardSDL::translateNumpadKey( const U32 os_key, KEY *translated_key)
 {
 	return translateKey(os_key, translated_key);	
 }
