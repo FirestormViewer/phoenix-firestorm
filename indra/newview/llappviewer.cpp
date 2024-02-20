@@ -1134,7 +1134,7 @@ bool LLAppViewer::init()
 	//
 	// Initialize the window
 	//
-	gGLActive = TRUE;
+	gGLActive = true;
 	initWindow();
 	LL_INFOS("InitInfo") << "Window is initialized." << LL_ENDL ;
 
@@ -1322,7 +1322,7 @@ bool LLAppViewer::init()
 	  LLNotificationsUtil::add("CorruptedProtectedDataStore");
 	}
 
-	gGLActive = FALSE;
+	gGLActive = false;
 
     // <FS:Ansariel> Disable updater
 //#if LL_RELEASE_FOR_DOWNLOAD
@@ -1756,7 +1756,7 @@ bool LLAppViewer::doFrame()
             {
                 LL_PROFILE_ZONE_NAMED_CATEGORY_APP("df Display");
                 pingMainloopTimeout("Main:Display");
-                gGLActive = TRUE;
+                gGLActive = true;
 
                 display();
 
@@ -1767,7 +1767,7 @@ bool LLAppViewer::doFrame()
                     gPipeline.mReflectionMapManager.update();
                     LLFloaterSnapshot::update(); // take snapshots
                     LLFloaterSimpleSnapshot::update();
-                    gGLActive = FALSE;
+                    gGLActive = false;
                 }
 
                 if (LLViewerStatsRecorder::instanceExists())
@@ -3218,7 +3218,7 @@ bool LLAppViewer::initConfiguration()
 	std::string test_name(gSavedSettings.getString("LogMetrics"));
 	if (! test_name.empty())
  	{
-		LLTrace::BlockTimer::sMetricLog = TRUE;
+		LLTrace::BlockTimer::sMetricLog = true;
 		// '--logmetrics' is specified with a named test metric argument so the data gathering is done only on that test
 		// In the absence of argument, every metric would be gathered (makes for a rather slow run and hard to decipher report...)
 		LL_INFOS() << "'--logmetrics' argument : " << test_name << LL_ENDL;
@@ -3252,16 +3252,16 @@ bool LLAppViewer::initConfiguration()
 
 	if (gSavedSettings.getBOOL("DebugSession"))
 	{
-		gDebugSession = TRUE;
-		gDebugGL = TRUE;
+		gDebugSession = true;
+		gDebugGL = true;
 
 		ll_init_fail_log(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "test_failures.log"));
 	}
 
     if (gSavedSettings.getBOOL("RenderDebugGLSession"))
     {
-        gDebugGLSession = TRUE;
-        gDebugGL = TRUE;
+        gDebugGLSession = true;
+        gDebugGL = true;
         // gDebugGL can cause excessive logging
         // so it's limited to a single session
         gSavedSettings.setBOOL("RenderDebugGLSession", FALSE);
@@ -5490,13 +5490,13 @@ void LLAppViewer::idle()
 	if (LLStartUp::getStartupState() < STATE_STARTED)
 	{
 		// Skip rest if idle startup returns false (essentially, no world yet)
-		gGLActive = TRUE;
+		gGLActive = true;
 		if (!idle_startup())
 		{
-			gGLActive = FALSE;
+			gGLActive = false;
 			return;
 		}
-		gGLActive = FALSE;
+		gGLActive = false;
 	}
 
 
@@ -5850,7 +5850,7 @@ void LLAppViewer::idle()
 	// forcibly quit if it has taken too long
 	if (mQuitRequested)
 	{
-		gGLActive = TRUE;
+		gGLActive = true;
 		idleShutdown();
 	}
 }

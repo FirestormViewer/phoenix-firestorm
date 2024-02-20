@@ -115,7 +115,7 @@ LLFontFreetype::LLFontFreetype()
 	pFileStream(NULL),
 	pFtStream(NULL),
 #endif
-	mIsFallback(FALSE),
+	mIsFallback(false),
 	mFTFace(NULL),
 	mRenderGlyphCount(0),
 	mAddGlyphCount(0),
@@ -172,7 +172,7 @@ void ft_close_cb(FT_Stream stream) {
 }
 #endif
 
-BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, S32 components, BOOL is_fallback, S32 face_n)
+bool LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 vert_dpi, F32 horz_dpi, S32 components, bool is_fallback, S32 face_n)
 {
 	// Don't leak face objects.  This is also needed to deal with
 	// changed font file names.
@@ -214,7 +214,7 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 // 		clearFontStreams();
 // #endif
 // </FS:ND>
-		return FALSE;
+		return false;
 	}
 
 	mIsFallback = is_fallback;
@@ -236,7 +236,7 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 // #endif
 // </FS:ND>
 		mFTFace = NULL;
-		return FALSE;
+		return false;
 	}
 
 	F32 y_max, y_min, x_max, x_min;
@@ -283,7 +283,7 @@ BOOL LLFontFreetype::loadFace(const std::string& filename, F32 point_size, F32 v
 		mStyle |= LLFontGL::ITALIC;
 	}
 
-	return TRUE;
+	return true;
 }
 
 S32 LLFontFreetype::getNumFaces(const std::string& filename)
@@ -511,7 +511,7 @@ F32 LLFontFreetype::getXKerning(const LLFontGlyphInfo* left_glyph_info, const LL
 	return delta.x*(1.f/64.f);
 }
 
-BOOL LLFontFreetype::hasGlyph(llwchar wch) const
+bool LLFontFreetype::hasGlyph(llwchar wch) const
 {
 	llassert(!mIsFallback);
 	return(mCharGlyphInfoMap.find(wch) != mCharGlyphInfoMap.end());
@@ -520,7 +520,7 @@ BOOL LLFontFreetype::hasGlyph(llwchar wch) const
 LLFontGlyphInfo* LLFontFreetype::addGlyph(llwchar wch) const
 {
 	if (mFTFace == NULL)
-		return FALSE;
+		return NULL;
 
 	llassert(!mIsFallback);
 	//LL_DEBUGS() << "Adding new glyph for " << wch << " to font" << LL_ENDL;
@@ -626,7 +626,7 @@ LLFontGlyphInfo* LLFontFreetype::addGlyphFromFont(const LLFontFreetype *fontp, l
 																	height,
 																	buffer_data,
 																	buffer_row_stride,
-																	TRUE);
+																	true);
 			break;
 		case 2:
 			setSubImageLuminanceAlpha(pos_x,	

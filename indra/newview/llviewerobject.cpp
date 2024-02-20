@@ -4832,9 +4832,9 @@ void LLViewerObject::setMediaPassedWhitelist(BOOL passed)
 	}
 }
 
-BOOL LLViewerObject::setMaterial(const U8 material)
+bool LLViewerObject::setMaterial(const U8 material)
 {
-	BOOL res = LLPrimitive::setMaterial(material);
+	bool res = LLPrimitive::setMaterial(material);
 	if (res)
 	{
 		setChanged(TEXTURE);

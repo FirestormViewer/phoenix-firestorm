@@ -123,8 +123,8 @@ const F32 FLEXIBLE_OBJECT_MAX_WIND_SENSITIVITY = 10.0f;
 const F32 FLEXIBLE_OBJECT_MAX_INTERNAL_TENSION_FORCE = 0.99f; 
 
 const F32 FLEXIBLE_OBJECT_DEFAULT_LENGTH = 1.0f;
-const BOOL FLEXIBLE_OBJECT_DEFAULT_USING_COLLISION_SPHERE = FALSE;
-const BOOL FLEXIBLE_OBJECT_DEFAULT_RENDERING_COLLISION_SPHERE = FALSE;
+const bool FLEXIBLE_OBJECT_DEFAULT_USING_COLLISION_SPHERE = false;
+const bool FLEXIBLE_OBJECT_DEFAULT_RENDERING_COLLISION_SPHERE = false;
 
 const char *SCULPT_DEFAULT_TEXTURE = "be293869-d0d9-0a69-5989-ad27f1946fd4"; // old inverted texture: "7595d345-a24c-e7ef-f0bd-78793792133e";
 
@@ -180,7 +180,7 @@ void LLPrimitive::setVolumeManager( LLVolumeMgr* volume_manager )
 // static
 bool LLPrimitive::cleanupVolumeManager()
 {
-	BOOL res = FALSE;
+	bool res = false;
 	if (sVolumeManager) 
 	{
 		res = sVolumeManager->cleanup();
@@ -783,16 +783,16 @@ S32	face_index_from_id(LLFaceID face_ID, const std::vector<LLProfile::Face>& fac
 	return -1;
 }
 
-BOOL LLPrimitive::setVolume(const LLVolumeParams &volume_params, const S32 detail, bool unique_volume)
+bool LLPrimitive::setVolume(const LLVolumeParams &volume_params, const S32 detail, bool unique_volume)
 {
 	if (NO_LOD == detail)
 	{
 		// build the new object
 		setChanged(GEOMETRY);
 		sVolumeManager->unrefVolume(mVolumep);
-		mVolumep = new LLVolume(volume_params, 1, TRUE, TRUE);
+		mVolumep = new LLVolume(volume_params, 1, true, true);
 		setNumTEs(mVolumep->getNumFaces());
-		return FALSE;
+		return false;
 	}
 
 	LLVolume *volumep;
@@ -801,9 +801,9 @@ BOOL LLPrimitive::setVolume(const LLVolumeParams &volume_params, const S32 detai
 		F32 volume_detail = LLVolumeLODGroup::getVolumeScaleFromDetail(detail);
 		if (mVolumep.notNull() && volume_params == mVolumep->getParams() && (volume_detail == mVolumep->getDetail()))
 		{
-			return FALSE;
+			return false;
 		}
-		volumep = new LLVolume(volume_params, volume_detail, FALSE, TRUE);
+		volumep = new LLVolume(volume_params, volume_detail, false, true);
 	}
 	else
 	{
@@ -812,7 +812,7 @@ BOOL LLPrimitive::setVolume(const LLVolumeParams &volume_params, const S32 detai
 			F32 volume_detail = LLVolumeLODGroup::getVolumeScaleFromDetail(detail);
 			if (volume_params == mVolumep->getParams() && (volume_detail == mVolumep->getDetail()))
 			{
-				return FALSE;
+				return false;
 			}
 		}
 
@@ -820,7 +820,7 @@ BOOL LLPrimitive::setVolume(const LLVolumeParams &volume_params, const S32 detai
 		if (volumep == mVolumep)
 		{
 			sVolumeManager->unrefVolume( volumep );  // LLVolumeMgr::refVolume() creates a reference, but we don't need a second one.
-			return TRUE;
+			return true;
 		}
 	}
 
@@ -832,7 +832,7 @@ BOOL LLPrimitive::setVolume(const LLVolumeParams &volume_params, const S32 detai
 		mVolumep = volumep;
 		//mFaceMask = mVolumep->generateFaceMask();
 		setNumTEs(mVolumep->getNumFaces());
-		return TRUE;
+		return true;
 	}
 	
 #if 0 
@@ -884,14 +884,14 @@ BOOL LLPrimitive::setVolume(const LLVolumeParams &volume_params, const S32 detai
 	if (old_face_mask == new_face_mask) 
 	{
 		// nothing to do
-		return TRUE;
+		return true;
 	}
 
 	if (mVolumep->getNumFaces() == 0 && new_face_mask != 0)
 	{
 		LL_WARNS() << "Object with 0 faces found...INCORRECT!" << LL_ENDL;
 		setNumTEs(mVolumep->getNumFaces());
-		return TRUE;
+		return true;
 	}
 
 	// initialize face_mapping
@@ -1043,19 +1043,19 @@ BOOL LLPrimitive::setVolume(const LLVolumeParams &volume_params, const S32 detai
 
 	setNumTEs(mVolumep->getNumFaces());
 #endif
-	return TRUE;
+	return true;
 }
 
-BOOL LLPrimitive::setMaterial(U8 material)
+bool LLPrimitive::setMaterial(U8 material)
 {
 	if (material != mMaterial)
 	{
 		mMaterial = material;
-		return TRUE;
+		return true;
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 
@@ -1071,12 +1071,12 @@ S32 LLPrimitive::packTEField(U8 *cur_ptr, U8 *data_ptr, U8 data_size, U8 last_fa
 	
 	for (face_index = last_face_index-1; face_index >= 0; face_index--)
 	{
-		BOOL already_sent = FALSE;
+		bool already_sent = false;
 		for (i = face_index+1; i <= last_face_index; i++)
 		{ 
 			if (!memcmp(data_ptr+(data_size *face_index), data_ptr+(data_size *i), data_size))
 			{
-				already_sent = TRUE;
+				already_sent = true;
 				break;
 			}
 		}
@@ -1214,7 +1214,7 @@ namespace
 // Pack information about all texture entries into container:
 // { TextureEntry Variable 2 }
 // Includes information about image ID, color, scale S,T, offset S,T and rotation
-BOOL LLPrimitive::packTEMessage(LLMessageSystem *mesgsys) const
+bool LLPrimitive::packTEMessage(LLMessageSystem *mesgsys) const
 {
 	const U32 MAX_TES = 45;
 
@@ -1296,11 +1296,11 @@ BOOL LLPrimitive::packTEMessage(LLMessageSystem *mesgsys) const
 	}
    	mesgsys->addBinaryDataFast(_PREHASH_TextureEntry, packed_buffer, (S32)(cur_ptr - packed_buffer));
 
-	return FALSE;
+	return true;
 }
 
 
-BOOL LLPrimitive::packTEMessage(LLDataPacker &dp) const
+bool LLPrimitive::packTEMessage(LLDataPacker &dp) const
 {
 	const U32 MAX_TES = 45;
 
@@ -1381,7 +1381,7 @@ BOOL LLPrimitive::packTEMessage(LLDataPacker &dp) const
 	}
 
 	dp.packBinaryData(packed_buffer, (S32)(cur_ptr - packed_buffer), "TextureEntry");
-	return FALSE;
+	return true;
 }
 
 S32 LLPrimitive::parseTEMessage(LLMessageSystem* mesgsys, char const* block_name, const S32 block_num, LLTEContents& tec)
@@ -1498,12 +1498,12 @@ S32 LLPrimitive::unpackTEMessage(LLDataPacker &dp)
 {
 	// use a negative block_num to indicate a single-block read (a non-variable block)
 	S32 retval = 0;
-	const U32 MAX_TES = 45;
+	constexpr U32 MAX_TES = 45;
 
 	// Avoid construction of 32 UUIDs per call
 	static LLMaterialID material_ids[MAX_TES];
 
-    const U32 MAX_TE_BUFFER = 4096;
+	constexpr U32 MAX_TE_BUFFER = 4096;
     U8 packed_buffer[MAX_TE_BUFFER];
     memset((void*)packed_buffer, 0, MAX_TE_BUFFER);
 
@@ -1699,7 +1699,7 @@ bool LLPrimitive::getTESTAxes(const U8 face, U32* s_axis, U32* t_axis)
 //============================================================================
 
 //static 
-BOOL LLNetworkData::isValid(U16 param_type, U32 size)
+bool LLNetworkData::isValid(U16 param_type, U32 size)
 {
 	// ew - better mechanism needed
 	
@@ -1721,7 +1721,7 @@ BOOL LLNetworkData::isValid(U16 param_type, U32 size)
         return (size == 9);
 	}
 	
-	return FALSE;
+	return false;
 }
 
 //============================================================================
@@ -1736,17 +1736,17 @@ LLLightParams::LLLightParams()
 	mType = PARAMS_LIGHT;
 }
 
-BOOL LLLightParams::pack(LLDataPacker &dp) const
+bool LLLightParams::pack(LLDataPacker &dp) const
 {
 	LLColor4U color4u(mColor);
 	dp.packColor4U(color4u, "color");
 	dp.packF32(mRadius, "radius");
 	dp.packF32(mCutoff, "cutoff");
 	dp.packF32(mFalloff, "falloff");
-	return TRUE;
+	return true;
 }
 
-BOOL LLLightParams::unpack(LLDataPacker &dp)
+bool LLLightParams::unpack(LLDataPacker &dp)
 {
 	LLColor4U color;
 	dp.unpackColor4U(color, "color");
@@ -1764,7 +1764,7 @@ BOOL LLLightParams::unpack(LLDataPacker &dp)
 	dp.unpackF32(falloff, "falloff");
 	setFalloff(falloff);
 	
-	return TRUE;
+	return true;
 }
 
 bool LLLightParams::operator==(const LLNetworkData& data) const
@@ -1844,15 +1844,15 @@ LLReflectionProbeParams::LLReflectionProbeParams()
     mType = PARAMS_REFLECTION_PROBE;
 }
 
-BOOL LLReflectionProbeParams::pack(LLDataPacker &dp) const
+bool LLReflectionProbeParams::pack(LLDataPacker &dp) const
 {
 	dp.packF32(mAmbiance, "ambiance");
     dp.packF32(mClipDistance, "clip_distance");
     dp.packU8(mFlags, "flags");
-	return TRUE;
+	return true;
 }
 
-BOOL LLReflectionProbeParams::unpack(LLDataPacker &dp)
+bool LLReflectionProbeParams::unpack(LLDataPacker &dp)
 {
 	F32 ambiance;
     F32 clip_distance;
@@ -1865,7 +1865,7 @@ BOOL LLReflectionProbeParams::unpack(LLDataPacker &dp)
 	
     dp.unpackU8(mFlags, "flags");
 	
-	return TRUE;
+	return true;
 }
 
 bool LLReflectionProbeParams::operator==(const LLNetworkData& data) const
@@ -1963,7 +1963,7 @@ LLFlexibleObjectData::LLFlexibleObjectData()
 	mType = PARAMS_FLEXIBLE;
 }
 
-BOOL LLFlexibleObjectData::pack(LLDataPacker &dp) const
+bool LLFlexibleObjectData::pack(LLDataPacker &dp) const
 {
 	// Custom, uber-svelte pack "softness" in upper bits of tension & drag
 	U8 bit1 = (mSimulateLOD & 2) << 6;
@@ -1973,10 +1973,10 @@ BOOL LLFlexibleObjectData::pack(LLDataPacker &dp) const
 	dp.packU8((U8)((mGravity+10.f)*10.01f), "gravity");
 	dp.packU8((U8)(mWindSensitivity*10.01f), "wind");
 	dp.packVector3(mUserForce, "userforce");
-	return TRUE;
+	return true;
 }
 
-BOOL LLFlexibleObjectData::unpack(LLDataPacker &dp)
+bool LLFlexibleObjectData::unpack(LLDataPacker &dp)
 {
 	U8 tension, friction, gravity, wind;
 	U8 bit1, bit2;
@@ -1995,7 +1995,7 @@ BOOL LLFlexibleObjectData::unpack(LLDataPacker &dp)
 	{
 		mUserForce.setVec(0.f, 0.f, 0.f);
 	}
-	return TRUE;
+	return true;
 }
 
 bool LLFlexibleObjectData::operator==(const LLNetworkData& data) const
@@ -2091,15 +2091,15 @@ LLSculptParams::LLSculptParams()
 	mSculptType = LL_SCULPT_TYPE_SPHERE;
 }
 
-BOOL LLSculptParams::pack(LLDataPacker &dp) const
+bool LLSculptParams::pack(LLDataPacker &dp) const
 {
 	dp.packUUID(mSculptTexture, "texture");
 	dp.packU8(mSculptType, "type");
 	
-	return TRUE;
+	return true;
 }
 
-BOOL LLSculptParams::unpack(LLDataPacker &dp)
+bool LLSculptParams::unpack(LLDataPacker &dp)
 {
 	U8 type;
 	LLUUID id;
@@ -2107,7 +2107,7 @@ BOOL LLSculptParams::unpack(LLDataPacker &dp)
 	dp.unpackU8(type, "type");
 
 	setSculptTexture(id, type);
-	return TRUE;
+	return true;
 }
 
 bool LLSculptParams::operator==(const LLNetworkData& data) const
@@ -2191,20 +2191,20 @@ LLLightImageParams::LLLightImageParams()
 	mParams.setVec(F_PI*0.5f, 0.f, 0.f);
 }
 
-BOOL LLLightImageParams::pack(LLDataPacker &dp) const
+bool LLLightImageParams::pack(LLDataPacker &dp) const
 {
 	dp.packUUID(mLightTexture, "texture");
 	dp.packVector3(mParams, "params");
 
-	return TRUE;
+	return true;
 }
 
-BOOL LLLightImageParams::unpack(LLDataPacker &dp)
+bool LLLightImageParams::unpack(LLDataPacker &dp)
 {
 	dp.unpackUUID(mLightTexture, "texture");
 	dp.unpackVector3(mParams, "params");
 	
-	return TRUE;
+	return true;
 }
 
 bool LLLightImageParams::operator==(const LLNetworkData& data) const
@@ -2267,18 +2267,18 @@ LLExtendedMeshParams::LLExtendedMeshParams()
 	mFlags = 0;
 }
 
-BOOL LLExtendedMeshParams::pack(LLDataPacker &dp) const
+bool LLExtendedMeshParams::pack(LLDataPacker &dp) const
 {
 	dp.packU32(mFlags, "flags");
 
-	return TRUE;
+	return true;
 }
 
-BOOL LLExtendedMeshParams::unpack(LLDataPacker &dp)
+bool LLExtendedMeshParams::unpack(LLDataPacker &dp)
 {
 	dp.unpackU32(mFlags, "flags");
 	
-	return TRUE;
+	return true;
 }
 
 bool LLExtendedMeshParams::operator==(const LLNetworkData& data) const
@@ -2330,7 +2330,7 @@ LLRenderMaterialParams::LLRenderMaterialParams()
     mType = PARAMS_RENDER_MATERIAL;
 }
 
-BOOL LLRenderMaterialParams::pack(LLDataPacker& dp) const
+bool LLRenderMaterialParams::pack(LLDataPacker& dp) const
 {
     U8 count = (U8)llmin((S32)mEntries.size(), 14); //limited to 255 bytes, no more than 14 material ids
 
@@ -2341,10 +2341,10 @@ BOOL LLRenderMaterialParams::pack(LLDataPacker& dp) const
         dp.packUUID(entry.id, "id");
     }
 
-    return TRUE;
+    return true;
 }
 
-BOOL LLRenderMaterialParams::unpack(LLDataPacker& dp)
+bool LLRenderMaterialParams::unpack(LLDataPacker& dp)
 {
     U8 count;
     dp.unpackU8(count, "count");
@@ -2355,7 +2355,7 @@ BOOL LLRenderMaterialParams::unpack(LLDataPacker& dp)
         dp.unpackUUID(entry.id, "te_id");
     }
 
-    return TRUE;
+    return true;
 }
 
 bool LLRenderMaterialParams::operator==(const LLNetworkData& data) const

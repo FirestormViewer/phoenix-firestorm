@@ -371,9 +371,9 @@ U32 LLDir_Win32::countFilesInDir(const std::string &dirname, const std::string &
 
 // get the next file in the directory
 // AO: Used by LGG selection beams
-BOOL LLDir_Win32::getNextFileInDir(const std::string &dirname, const std::string &mask, std::string &fname)
+bool LLDir_Win32::getNextFileInDir(const std::string &dirname, const std::string &mask, std::string &fname)
 {
-    BOOL fileFound = FALSE;
+    bool fileFound = false;
 	fname = "";
 
 	WIN32_FIND_DATAW FileData;
@@ -392,7 +392,7 @@ BOOL LLDir_Win32::getNextFileInDir(const std::string &dirname, const std::string
 		// Check error opening Directory structure
 		if ((mDirSearch_h = FindFirstFile(pathname.c_str(), &FileData)) != INVALID_HANDLE_VALUE)   
 		{
-           fileFound = TRUE;
+           fileFound = true;
 		}
 	}
 
@@ -406,7 +406,7 @@ BOOL LLDir_Win32::getNextFileInDir(const std::string &dirname, const std::string
                )
            )
        {
-          fileFound = FALSE;
+          fileFound = false;
        }
     } while (   mDirSearch_h != INVALID_HANDLE_VALUE
              && !fileFound
