@@ -64,7 +64,7 @@ LLFloaterBulkPermission::LLFloaterBulkPermission(const LLSD& seed)
 	mCommitCallbackRegistrar.add("BulkPermission.CommitCopy",	boost::bind(&LLFloaterBulkPermission::onCommitCopy, this));
 }
 
-BOOL LLFloaterBulkPermission::postBuild()
+bool LLFloaterBulkPermission::postBuild()
 {
 	mBulkChangeIncludeAnimations = gSavedSettings.getBOOL("BulkChangeIncludeAnimations");
 	mBulkChangeIncludeBodyParts = gSavedSettings.getBOOL("BulkChangeIncludeBodyParts");
@@ -89,7 +89,7 @@ BOOL LLFloaterBulkPermission::postBuild()
 	{
 		mBulkChangeNextOwnerTransfer = true;
 	}
-	return TRUE;
+	return true;
 }
 
 void LLFloaterBulkPermission::doApply()
@@ -204,10 +204,10 @@ void LLFloaterBulkPermission::onCloseBtn()
 void LLFloaterBulkPermission::onCommitCopy()
 {
 	// Implements fair use
-	BOOL copyable = gSavedSettings.getBOOL("BulkChangeNextOwnerCopy");
+	bool copyable = gSavedSettings.getBOOL("BulkChangeNextOwnerCopy");
 	if(!copyable)
 	{
-		gSavedSettings.setBOOL("BulkChangeNextOwnerTransfer", TRUE);
+		gSavedSettings.setBOOL("BulkChangeNextOwnerTransfer", true);
 	}
 	LLCheckBoxCtrl* xfer =getChild<LLCheckBoxCtrl>("next_owner_transfer");
 	xfer->setEnabled(copyable);

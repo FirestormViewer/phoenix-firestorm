@@ -106,7 +106,7 @@ public:
 	/*virtual*/ void draw();
 
 	/*virtual*/ bool handleRightMouseDown(S32 x, S32 y, MASK mask);
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 
 	// MANIPULATORS
 	void		setBalance(S32 balance);
@@ -169,8 +169,6 @@ private:
 	void onMouseEnterPresets();
 	void onMouseEnterVolume();
 	void onMouseEnterNearbyMedia();
-	// <FS:Ansariel> Does not exist 15-02-2021
-	//void onClickScreen(S32 x, S32 y);
 
 	static void onClickStreamToggle(void* data);		// <FS:Zi> Media/Stream separation
 	static void onClickMediaToggle(void* data);

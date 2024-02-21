@@ -53,12 +53,12 @@ public:
 		// </FS:Zi>
 		Params()
 			: label("label"),
-			  show_label("show_label", FALSE),
+			  show_label("show_label", false),
 			  // <FS:Zi> Add background visible flag and color to container_view so we can have blank scrollview containers
 			  background_visible("background_visible", true),
 			  bg_color("bg_color", LLColor4(0.f, 0.f, 0.f, 0.25f)),
 			  // </FS:Zi>
-			  display_children("display_children", TRUE)
+			  display_children("display_children", true)
 		{
 			changeDefault(mouse_opaque, false);
 		}
@@ -73,7 +73,7 @@ protected:
 public:
 	~LLContainerView();
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	/*virtual*/ bool addChild(LLView* view, S32 tab_group = 0);
 	
 	/*virtual*/ bool handleDoubleClick(S32 x, S32 y, MASK mask);
@@ -81,22 +81,22 @@ public:
 	/*virtual*/ bool handleMouseUp(S32 x, S32 y, MASK mask);
 
 	/*virtual*/ void draw();
-	/*virtual*/ void reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
+	/*virtual*/ void reshape(S32 width, S32 height, bool called_from_parent = true);
 	/*virtual*/ LLRect getRequiredRect();	// Return the height of this object, given the set options.
 
 	void setLabel(const std::string& label);
-	void showLabel(BOOL show) { mShowLabel = show; }
-	void setDisplayChildren(const BOOL displayChildren);
-	BOOL getDisplayChildren() { return mDisplayChildren; }
+	void showLabel(bool show) { mShowLabel = show; }
+	void setDisplayChildren(const bool displayChildren);
+	bool getDisplayChildren() { return mDisplayChildren; }
 	void setScrollContainer(LLScrollContainer* scroll) {mScrollContainer = scroll;}
 
  private:
 	LLScrollContainer* mScrollContainer;
-	void arrange(S32 width, S32 height, BOOL called_from_parent = TRUE);
-	BOOL mShowLabel;
+	void arrange(S32 width, S32 height, bool called_from_parent = true);
+	bool mShowLabel;
 
 protected:
-	BOOL mDisplayChildren;
+	bool mDisplayChildren;
 	std::string mLabel;
 	// <FS:Zi> Add background visible flag and color to container_view so we can have blank scrollview containers
 	bool mBackgroundVisible;

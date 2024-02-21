@@ -41,14 +41,14 @@ public:
 	FSFloaterIMContainer(const LLSD& seed);
 	virtual ~FSFloaterIMContainer();
 	
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ void onClose(bool app_quitting);
 	void onCloseFloater(LLUUID& id);
 	/*virtual*/ void draw();
 	
 	/*virtual*/ void addFloater(LLFloater* floaterp, 
-								BOOL select_added_floater, 
+								bool select_added_floater, 
 								LLTabContainer::eInsertionPoint insertion_point = LLTabContainer::END);
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-12-11 (Catznip-3.2.0d) | Added: Catznip-3.2.0d
 	/*virtual*/ void removeFloater(LLFloater* floaterp);
@@ -60,8 +60,8 @@ public:
 	static FSFloaterIMContainer* findInstance();
 	static FSFloaterIMContainer* getInstance();
 
-	virtual void setVisible(BOOL b);
-	/*virtual*/ void setMinimized(BOOL b);
+	virtual void setVisible(bool b);
+	/*virtual*/ void setMinimized(bool b);
 
 	void onNewMessageReceived(const LLSD& data); // public so nearbychat can call it directly. TODO: handle via callback. -AO
 

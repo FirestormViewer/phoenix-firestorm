@@ -2971,7 +2971,7 @@ bool LLLinkedItemIDMatches::operator()(LLInventoryCategory* cat, LLInventoryItem
 			(item->getLinkedUUID() == mBaseItemID)); // A linked item's assetID will be the compared-to item's itemID.
 }
 
-void LLSaveFolderState::setApply(BOOL apply)
+void LLSaveFolderState::setApply(bool apply)
 {
 	mApply = apply; 
 	// before generating new list of open folders, clear the old one
@@ -3578,6 +3578,23 @@ void LLInventoryAction::doToSelected(LLInventoryModel* model, LLFolderView* root
         if (ids.size() == 1)
         {
             ungroup_folder_items(*ids.begin());
+        }
+    }
+    else if ("thumbnail" == action)
+    {
+        if (selected_items.size() > 0)
+        {
+            LLSD data;
+            std::set<LLFolderViewItem*>::iterator set_iter;
+            for (set_iter = selected_items.begin(); set_iter != selected_items.end(); ++set_iter)
+            {
+                LLFolderViewItem* folder_item = *set_iter;
+                if (!folder_item) continue;
+                LLInvFVBridge* bridge = (LLInvFVBridge*)folder_item->getViewModelItem();
+                if (!bridge) continue;
+                data.append(bridge->getUUID());
+            }
+            LLFloaterReg::showInstance("change_item_thumbnail", data);
         }
     }
     // <FS:Ansariel> FIRE-22851: Show texture "Save as" file picker subsequently instead all at once

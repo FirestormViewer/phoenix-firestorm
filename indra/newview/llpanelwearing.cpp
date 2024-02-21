@@ -271,7 +271,7 @@ LLPanelWearing::~LLPanelWearing()
 	}
 }
 
-BOOL LLPanelWearing::postBuild()
+bool LLPanelWearing::postBuild()
 {
 	mAccordionCtrl = getChild<LLAccordionCtrl>("wearables_accordion");
 	mWearablesTab = getChild<LLAccordionCtrlTab>("tab_wearables");
@@ -295,7 +295,7 @@ BOOL LLPanelWearing::postBuild()
 
 	menu_gear_btn->setMenu(mGearMenu->getMenu());
 
-	return TRUE;
+	return true;
 }
 
 //virtual

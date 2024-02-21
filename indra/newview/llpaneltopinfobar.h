@@ -37,7 +37,7 @@ class LLParcelChangeObserver;
 
 class LLPanelTopInfoBar : public LLPanel, public LLSingleton<LLPanelTopInfoBar>, private LLDestroyClass<LLPanelTopInfoBar>
 {
-	LLSINGLETON(LLPanelTopInfoBar);
+	LLSINGLETON_C11(LLPanelTopInfoBar);
 	~LLPanelTopInfoBar();
 	LOG_CLASS(LLPanelTopInfoBar);
 
@@ -46,8 +46,8 @@ class LLPanelTopInfoBar : public LLPanel, public LLSingleton<LLPanelTopInfoBar>,
 public:
 	typedef boost::signals2::signal<void ()> resize_signal_t;
 
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ void draw();
+	bool postBuild() override;
+	void draw() override;
 
 	/**
 	 * Updates location and parcel icons on login complete
@@ -89,7 +89,7 @@ private:
 	 */
 	void initParcelIcons();
 
-	bool handleRightMouseDown(S32 x, S32 y, MASK mask);
+	bool handleRightMouseDown(S32 x, S32 y, MASK mask) override;
 
 	/**
 	 * Handles clicks on the parcel icons.

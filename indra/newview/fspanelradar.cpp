@@ -121,7 +121,7 @@ FSPanelRadar::~FSPanelRadar()
 		mOptionsMenuHandle.get()->die();
 }
 
-BOOL FSPanelRadar::postBuild()
+bool FSPanelRadar::postBuild()
 {
 	mRadarList = getChild<FSRadarListCtrl>("radar_list");
 	mRadarList->setFilterColumn(0);
@@ -166,15 +166,15 @@ BOOL FSPanelRadar::postBuild()
 	// call this method in case some list is empty and buttons can be in inconsistent state
 	updateButtons();
 
-	return TRUE;
+	return true;
 }
 
-BOOL FSPanelRadar::handleKeyHere(KEY key, MASK mask)
+bool FSPanelRadar::handleKeyHere(KEY key, MASK mask)
 {
 	if (FSCommon::isFilterEditorKeyCombo(key, mask))
 	{
-		mFilterEditor->setFocus(TRUE);
-		return TRUE;
+		mFilterEditor->setFocus(true);
+		return true;
 	}
 
 	return LLPanel::handleKeyHere(key, mask);

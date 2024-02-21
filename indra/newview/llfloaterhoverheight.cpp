@@ -63,7 +63,7 @@ void LLFloaterHoverHeight::syncFromPreferenceSetting(void *user_data, bool updat
 	// </FS:Ansariel>
 }
 
-BOOL LLFloaterHoverHeight::postBuild()
+bool LLFloaterHoverHeight::postBuild()
 {
 	LLSliderCtrl* sldrCtrl = getChild<LLSliderCtrl>("HoverHeightSlider");
 	sldrCtrl->setMinValue(MIN_HOVER_Z);
@@ -93,7 +93,7 @@ BOOL LLFloaterHoverHeight::postBuild()
 	// Set up based on initial region.
 	onRegionChanged();
 
-	return TRUE;
+	return true;
 }
 
 void LLFloaterHoverHeight::onClose(bool app_quitting)

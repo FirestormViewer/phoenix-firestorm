@@ -63,7 +63,7 @@ LLPanelMarketplaceListings::LLPanelMarketplaceListings()
 	mEnableCallbackRegistrar.add("Marketplace.ViewSort.CheckItem",	boost::bind(&LLPanelMarketplaceListings::onViewSortMenuItemCheck,	this, _2));
 }
 
-BOOL LLPanelMarketplaceListings::postBuild()
+bool LLPanelMarketplaceListings::postBuild()
 {
 	childSetAction("add_btn", boost::bind(&LLPanelMarketplaceListings::onAddButtonClicked, this));
 	childSetAction("audit_btn", boost::bind(&LLPanelMarketplaceListings::onAuditButtonClicked, this));
@@ -77,14 +77,14 @@ BOOL LLPanelMarketplaceListings::postBuild()
     return LLPanel::postBuild();
 }
 
-BOOL LLPanelMarketplaceListings::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+bool LLPanelMarketplaceListings::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
                        EDragAndDropType cargo_type,
                        void* cargo_data,
                        EAcceptance* accept,
                        std::string& tooltip_msg)
 {
     LLView * handled_view = childrenHandleDragAndDrop(x, y, mask, drop, cargo_type, cargo_data, accept, tooltip_msg);
-    BOOL handled = (handled_view != NULL);
+    bool handled = (handled_view != NULL);
     // Special case the drop zone
     if (handled && (handled_view->getName() == "marketplace_drop_zone"))
     {
@@ -395,7 +395,7 @@ LLFloaterMarketplaceListings::~LLFloaterMarketplaceListings()
 	delete mCategoryAddedObserver;
 }
 
-BOOL LLFloaterMarketplaceListings::postBuild()
+bool LLFloaterMarketplaceListings::postBuild()
 {
 	mInventoryStatus = getChild<LLTextBox>("marketplace_status");
 	mInventoryInitializationInProgress = getChild<LLView>("initialization_progress_indicator");
@@ -414,7 +414,7 @@ BOOL LLFloaterMarketplaceListings::postBuild()
     // Fetch aggressively so we can interact with listings right onOpen()
 	fetchContents();
 
-	return TRUE;
+	return true;
 }
 
 void LLFloaterMarketplaceListings::onClose(bool app_quitting)
@@ -696,7 +696,7 @@ bool LLFloaterMarketplaceListings::isAccepted(EAcceptance accept)
     return (accept >= ACCEPT_YES_COPY_SINGLE);
 }
 
-BOOL LLFloaterMarketplaceListings::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+bool LLFloaterMarketplaceListings::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
 										EDragAndDropType cargo_type,
 										void* cargo_data,
 										EAcceptance* accept,
@@ -705,7 +705,7 @@ BOOL LLFloaterMarketplaceListings::handleDragAndDrop(S32 x, S32 y, MASK mask, BO
     // If there's no panel to accept drops or no existing marketplace listings folder, we refuse all drop
 	if (!mPanelListings || mRootFolderId.isNull())
 	{
-		return FALSE;
+		return false;
 	}
 	
     tooltip_msg = "";
@@ -754,12 +754,12 @@ void LLFloaterMarketplaceListings::onChanged()
 }
 
 // <FS:Ansariel> CTRL-F focusses local search editor
-BOOL LLFloaterMarketplaceListings::handleKeyHere(KEY key, MASK mask)
+bool LLFloaterMarketplaceListings::handleKeyHere(KEY key, MASK mask)
 {
 	if (FSCommon::isFilterEditorKeyCombo(key, mask))
 	{
-		getChild<LLFilterEditor>("filter_editor")->setFocus(TRUE);
-		return TRUE;
+		getChild<LLFilterEditor>("filter_editor")->setFocus(true);
+		return true;
 	}
 
 	return LLFloater::handleKeyHere(key, mask);
@@ -790,7 +790,7 @@ LLFloaterAssociateListing::~LLFloaterAssociateListing()
 	gFocusMgr.releaseFocusIfNeeded( this );
 }
 
-BOOL LLFloaterAssociateListing::postBuild()
+bool LLFloaterAssociateListing::postBuild()
 {
 	getChild<LLButton>("OK")->setCommitCallback(boost::bind(&LLFloaterAssociateListing::apply, this, TRUE));
 	getChild<LLButton>("Cancel")->setCommitCallback(boost::bind(&LLFloaterAssociateListing::cancel, this));
@@ -800,17 +800,17 @@ BOOL LLFloaterAssociateListing::postBuild()
 	return LLFloater::postBuild();
 }
 
-BOOL LLFloaterAssociateListing::handleKeyHere(KEY key, MASK mask)
+bool LLFloaterAssociateListing::handleKeyHere(KEY key, MASK mask)
 {
 	if (key == KEY_RETURN && mask == MASK_NONE)
 	{
 		apply();
-		return TRUE;
+		return true;
 	}
 	else if (key == KEY_ESCAPE && mask == MASK_NONE)
 	{
 		cancel();
-		return TRUE;
+		return true;
 	}
     
 	return LLFloater::handleKeyHere(key, mask);
@@ -881,17 +881,17 @@ mEditor(NULL)
 {
 }
 
-BOOL LLFloaterMarketplaceValidation::postBuild()
+bool LLFloaterMarketplaceValidation::postBuild()
 {
 	childSetAction("OK", onOK, this);
 	
     // This widget displays the validation messages
     mEditor = getChild<LLTextEditor>("validation_text");
-    mEditor->setEnabled(FALSE);
-    mEditor->setFocus(TRUE);
+    mEditor->setEnabled(false);
+    mEditor->setFocus(true);
     mEditor->setValue(LLSD());
     
-	return TRUE;
+	return true;
 }
 
 LLFloaterMarketplaceValidation::~LLFloaterMarketplaceValidation()
@@ -1026,7 +1026,7 @@ LLFloaterItemProperties::~LLFloaterItemProperties()
 {
 }
 
-BOOL LLFloaterItemProperties::postBuild()
+bool LLFloaterItemProperties::postBuild()
 {
 	return LLFloater::postBuild();
 }

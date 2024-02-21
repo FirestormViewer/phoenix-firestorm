@@ -251,8 +251,8 @@ public:
 	void applyToAll(ApplyFunctor* func);
 
 	// <FS:Zi> Backup Settings
-	//LLControlVariable* declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, LLControlVariable::ePersist persist, BOOL hidefromsettingseditor = FALSE);
-	LLControlVariable* declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, eSanityType sanity_type, LLSD sanity_value, const std::string& sanity_comment, LLControlVariable::ePersist persist, BOOL can_backup = TRUE, BOOL hidefromsettingseditor = FALSE);
+	//LLControlVariable* declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, LLControlVariable::ePersist persist, bool hidefromsettingseditor = false);
+	LLControlVariable* declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, eSanityType sanity_type, LLSD sanity_value, const std::string& sanity_comment, LLControlVariable::ePersist persist, bool can_backup = true, bool hidefromsettingseditor = false);
 	// </FS:Zi>
 
 	LLControlVariable* declareU32(const std::string& name, U32 initial_val, const std::string& comment, LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT);
@@ -270,7 +270,7 @@ public:
 
 	std::string getString(const std::string& name);
 	std::string getText(const std::string& name);
-	BOOL		getBOOL(const std::string& name);
+	bool		getBOOL(const std::string& name);
 	S32			getS32(const std::string& name);
 	F32			getF32(const std::string& name);
 	U32			getU32(const std::string& name);
@@ -309,7 +309,7 @@ public:
 		return convert_from_llsd<T>(value, type, name);
 	}
 
-	void	setBOOL(const std::string& name, BOOL val);
+	void	setBOOL(const std::string& name, bool val);
 	void	setS32(const std::string& name, S32 val);
 	void	setF32(const std::string& name, F32 val);
 	void	setU32(const std::string& name, U32 val);
@@ -339,13 +339,13 @@ public:
 		}
 	}
 	
-	BOOL    controlExists(const std::string& name);
+	bool    controlExists(const std::string& name);
 
 	// Returns number of controls loaded, 0 if failed
 	// If require_declaration is false, will auto-declare controls it finds
 	// as the given type.
-	U32	loadFromFileLegacy(const std::string& filename, BOOL require_declaration = TRUE, eControlType declare_as = TYPE_STRING);
- 	U32 saveToFile(const std::string& filename, BOOL nondefault_only);
+	U32	loadFromFileLegacy(const std::string& filename, bool require_declaration = true, eControlType declare_as = TYPE_STRING);
+ 	U32 saveToFile(const std::string& filename, bool nondefault_only);
  	U32	loadFromFile(const std::string& filename, bool default_values = false, bool save_values = true);
 	void	resetToDefaults();
 	void	incrCount(const std::string& name);
@@ -482,8 +482,6 @@ template <> eControlType get_control_type<U32>();
 template <> eControlType get_control_type<S32>();
 template <> eControlType get_control_type<F32>();
 template <> eControlType get_control_type<bool>(); 
-// Yay BOOL, its really an S32.
-//template <> eControlType get_control_type<BOOL> () 
 template <> eControlType get_control_type<std::string>();
 template <> eControlType get_control_type<LLVector3>();
 template <> eControlType get_control_type<LLVector3d>();

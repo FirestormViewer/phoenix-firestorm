@@ -329,8 +329,8 @@ bool FSLSLBridge::lslToViewer(std::string_view message, const LLUUID& fromID, co
 		{
 			// <FS:Zi> send appropriate enable/disable messages to nearby chat - FIRE-24160
 			// use BOOL to satisfy windows compiler
-			BOOL aoWasPaused = gSavedPerAccountSettings.getBOOL("PauseAO");
-			BOOL aoStandsWasEnabled = gSavedPerAccountSettings.getBOOL("UseAOStands");
+			bool aoWasPaused = gSavedPerAccountSettings.getBOOL("PauseAO");
+			bool aoStandsWasEnabled = gSavedPerAccountSettings.getBOOL("UseAOStands");
 			// </FS:Zi>
 
 			if (message.substr(valuepos + FS_STATE_ATTRIBUTE.size(), 2) == "on")

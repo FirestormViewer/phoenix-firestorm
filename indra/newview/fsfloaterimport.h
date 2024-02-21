@@ -44,7 +44,7 @@ class FSFloaterImport : public LLFloater
 public:
 	FSFloaterImport(const LLSD &filename);
 	virtual ~FSFloaterImport();
-	virtual BOOL postBuild();
+	virtual bool postBuild();
 	
 	static void onIdle(void *user_data);
 	

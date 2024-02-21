@@ -82,7 +82,7 @@ class AnimationExplorer
 		~AnimationExplorer();
 
 	public:
-		/*virtual*/ BOOL postBuild();
+		/*virtual*/ bool postBuild();
 		void addAnimation(const LLUUID& id, const LLUUID& playedBy, F64 time);	// called from RecentAnimationList
 
 		// copied from llfloaterbvhpreview.h

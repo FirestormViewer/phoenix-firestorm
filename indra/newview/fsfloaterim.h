@@ -66,10 +66,10 @@ public:
 	virtual ~FSFloaterIM();
 	
 	// LLView overrides
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ void setVisible(BOOL visible);
-	/*virtual*/ BOOL getVisible();
-	/*virtual*/ void setMinimized(BOOL b);
+	/*virtual*/ bool postBuild();
+	/*virtual*/ void setVisible(bool visible);
+	/*virtual*/ bool getVisible();
+	/*virtual*/ void setMinimized(bool b);
 
 	// LLFloater overrides
 	/*virtual*/ void onClose(bool app_quitting);
@@ -108,9 +108,9 @@ public:
 	void updateCallButton();
 	void changed(U32 mask);
 	// ## Zi: overridden to fix the IM focus bug - FIRE-3989 etc.
-	BOOL focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
+	bool focusFirstItem(bool prefer_text_fields = false, bool focus_flash = true );
 
-	void onVisibilityChange(BOOL new_visibility);
+	void onVisibilityChange(bool new_visibility);
 	void processIMTyping(const LLUUID& from_id, BOOL typing);
 	void processAgentListUpdates(const LLSD& body);
 
@@ -121,12 +121,12 @@ public:
 
 	void onChatSearchButtonClicked();
 
-	BOOL handleDragAndDrop(S32 x, S32 y, MASK mask,
-							   BOOL drop, EDragAndDropType cargo_type,
+	bool handleDragAndDrop(S32 x, S32 y, MASK mask,
+							   bool drop, EDragAndDropType cargo_type,
 							   void *cargo_data, EAcceptance *accept,
 							   std::string& tooltip_msg);
 
-	virtual BOOL handleKeyHere( KEY key, MASK mask );
+	virtual bool handleKeyHere( KEY key, MASK mask );
 
 	/**
 	 * Returns true if chat is displayed in multi tabbed floater

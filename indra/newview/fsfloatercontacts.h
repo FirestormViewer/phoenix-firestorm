@@ -48,11 +48,11 @@ public:
 	FSFloaterContacts(const LLSD& seed);
 	virtual ~FSFloaterContacts();
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ void draw();
 	/*virtual*/ bool tick();
-	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool handleKeyHere(KEY key, MASK mask);
 	/*virtual*/ bool hasAccelerators() const { return true; }
 
 	// LLFriendObserver implementation

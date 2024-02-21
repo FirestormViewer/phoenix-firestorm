@@ -152,7 +152,7 @@ public:
 	LLFloaterSnapshot(const LLSD& key);
 	/*virtual*/ ~LLFloaterSnapshot();
     
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ void onClose(bool app_quitting); 	// <FS:Ansariel> FIRE-16043: Remember last used snapshot option
 	/*virtual*/ S32 notify(const LLSD& info);
@@ -239,7 +239,7 @@ protected:
 public:
 	virtual ~LLSnapshotFloaterView();
 
-	/*virtual*/	BOOL handleKey(KEY key, MASK mask, BOOL called_from_parent);
+	/*virtual*/	bool handleKey(KEY key, MASK mask, bool called_from_parent);
 	/*virtual*/	bool handleMouseDown(S32 x, S32 y, MASK mask);
 	/*virtual*/	bool handleMouseUp(S32 x, S32 y, MASK mask);
 	/*virtual*/	bool handleHover(S32 x, S32 y, MASK mask);

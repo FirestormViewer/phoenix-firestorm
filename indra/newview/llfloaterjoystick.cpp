@@ -181,7 +181,7 @@ void LLFloaterJoystick::draw()
 	LLFloater::draw();
 }
 
-BOOL LLFloaterJoystick::postBuild()
+bool LLFloaterJoystick::postBuild()
 {		
 	center();
 	// <FS:CR> Micro Save on calls to gSavedSettings
@@ -232,7 +232,7 @@ BOOL LLFloaterJoystick::postBuild()
 	refresh();
 	refreshListOfDevices();
 	updateAxesAndButtons();	// <FS:Zi> FIRE-14344 - Add button preview and allow for more than 6 axes
-	return TRUE;
+	return true;
 }
 
 LLFloaterJoystick::~LLFloaterJoystick()

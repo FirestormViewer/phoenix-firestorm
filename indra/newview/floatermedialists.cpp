@@ -38,7 +38,7 @@ FloaterMediaLists::FloaterMediaLists(const LLSD& key) :
 {
 }
 
-BOOL FloaterMediaLists::postBuild()
+bool FloaterMediaLists::postBuild()
 {
 	mWhitelistSLC = getChild<LLScrollListCtrl>("whitelist");
 	mBlacklistSLC = getChild<LLScrollListCtrl>("blacklist");
@@ -66,10 +66,10 @@ BOOL FloaterMediaLists::postBuild()
 		}
 	}
 
-	mWhitelistSLC->sortByColumn("list", TRUE);
-	mBlacklistSLC->sortByColumn("list", TRUE);
+	mWhitelistSLC->sortByColumn("list", true);
+	mBlacklistSLC->sortByColumn("list", true);
 
-	return TRUE;
+	return true;
 }
 
 void FloaterMediaLists::onWhitelistAdd()
@@ -173,7 +173,7 @@ bool FloaterMediaLists::handleAddDomainCallback(const LLSD& notification, const 
 			element["columns"][0]["value"] = domain;
 		
 			list->addElement(element);
-			list->sortByColumn("list", TRUE);
+			list->sortByColumn("list", true);
 		}
 	}
 	return false;

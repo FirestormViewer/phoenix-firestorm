@@ -39,7 +39,7 @@ private:
 	ALFloaterRegionTracker(const LLSD& key);
 	virtual ~ALFloaterRegionTracker();
 public:
-	BOOL postBuild() override;
+	bool postBuild() override;
 	void onOpen(const LLSD& key) override;
 	void onClose(bool app_quitting) override;
 	void refresh() override;

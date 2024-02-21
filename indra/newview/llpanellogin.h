@@ -51,7 +51,7 @@ public:
 				void *callback_data);
 	~LLPanelLogin();
 
-	virtual void setFocus( BOOL b );
+	virtual void setFocus( bool b );
 
 	static void show(const LLRect &rect,
 		void (*callback)(S32 option, void* user_data), 
@@ -73,8 +73,6 @@ public:
 
 	static void closePanel();
 
-	void setSiteIsAlive( bool alive );
-
 	static void loadLoginPage();	
 	static void giveFocus();
 	static void setAlwaysRefresh(bool refresh); 
@@ -95,14 +93,12 @@ public:
 private:
 	friend class LLPanelLoginListener;
 	void addFavoritesToStartLocation();
-	void addUsersWithFavoritesToUsername();
 	void onSelectServer();
 	void onLocationSLURL();
 
 	static void setFields(LLPointer<LLCredential> credential);
 
 	static void onClickConnect(bool commit_fields = true);
-	static void onClickNewAccount(void*);
 	static void onClickVersion(void*);
 	static void onClickForgotPassword(void*);
 	static void onClickSignUp(void*);
@@ -111,7 +107,6 @@ private:
 	static void onRememberUserCheck(void*);
     static void onRememberPasswordCheck(void*);
 	static void onPassKey(LLLineEditor* caller, void* user_data);
-	static void updateServerCombo();
 
 private:
 	boost::scoped_ptr<LLPanelLoginListener> mListener;

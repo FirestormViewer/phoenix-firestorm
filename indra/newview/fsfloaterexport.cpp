@@ -68,9 +68,9 @@
 
 #include <boost/algorithm/string_regex.hpp>
 
-const F32 MAX_TEXTURE_WAIT_TIME = 30.0f;
-const F32 MAX_INVENTORY_WAIT_TIME = 30.0f;
-const F32 MAX_ASSET_WAIT_TIME = 60.0f;
+constexpr F32 MAX_TEXTURE_WAIT_TIME = 30.0f;
+constexpr F32 MAX_INVENTORY_WAIT_TIME = 30.0f;
+constexpr F32 MAX_ASSET_WAIT_TIME = 60.0f;
 
 // static
 void FSFloaterObjectExport::onIdle(void* user_data)
@@ -222,7 +222,7 @@ FSFloaterObjectExport::~FSFloaterObjectExport()
 	}
 }
 
-BOOL FSFloaterObjectExport::postBuild()
+bool FSFloaterObjectExport::postBuild()
 {
 	mObjectList = getChild<LLScrollListCtrl>("selected_objects");
 	mTexturePanel = getChild<LLPanel>("textures_panel");
@@ -230,7 +230,7 @@ BOOL FSFloaterObjectExport::postBuild()
 	
 	LLSelectMgr::getInstance()->mUpdateSignal.connect(boost::bind(&FSFloaterObjectExport::updateSelection, this));
 	
-	return TRUE;
+	return true;
 }
 
 void FSFloaterObjectExport::draw()

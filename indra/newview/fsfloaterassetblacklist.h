@@ -44,8 +44,8 @@ public:
 	virtual ~FSFloaterAssetBlacklist();
 
 	void onOpen(const LLSD& key) override;
-	BOOL postBuild() override;
-	BOOL handleKeyHere(KEY key, MASK mask) override;
+	bool postBuild() override;
+	bool handleKeyHere(KEY key, MASK mask) override;
 	bool hasAccelerators() const override { return true; }
 	bool tick() override;
 	void closeFloater(bool app_quitting = false) override;

@@ -106,7 +106,7 @@ LLPreviewNotecard::~LLPreviewNotecard()
 	// </FS:Ansariel>
 }
 
-BOOL LLPreviewNotecard::postBuild()
+bool LLPreviewNotecard::postBuild()
 {
 	mEditor = getChild<LLViewerTextEditor>("Notecard Editor");
 	mEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5)); // <FS:Ansariel> FIRE-22810: Add autoreplace to notecards
@@ -150,7 +150,7 @@ bool LLPreviewNotecard::saveItem()
 	return saveIfNeeded(item);
 }
 
-void LLPreviewNotecard::setEnabled( BOOL enabled )
+void LLPreviewNotecard::setEnabled(bool enabled)
 {
 	LLViewerTextEditor* editor = findChild<LLViewerTextEditor>("Notecard Editor");
 	// editor is part of xml, if it doesn't exists, nothing else does
@@ -182,12 +182,12 @@ bool LLPreviewNotecard::hasAccelerators() const
 // [/SL:KB]
 
 // virtual
-BOOL LLPreviewNotecard::handleKeyHere(KEY key, MASK mask)
+bool LLPreviewNotecard::handleKeyHere(KEY key, MASK mask)
 {
 	if(('S' == key) && (MASK_CONTROL == (mask & MASK_CONTROL)))
 	{
 		saveIfNeeded();
-		return TRUE;
+		return true;
 	}
 
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
@@ -202,13 +202,13 @@ BOOL LLPreviewNotecard::handleKeyHere(KEY key, MASK mask)
 }
 
 // virtual
-BOOL LLPreviewNotecard::canClose()
+bool LLPreviewNotecard::canClose()
 {
 	LLViewerTextEditor* editor = getChild<LLViewerTextEditor>("Notecard Editor");
 
 	if(mForceClose || editor->isPristine())
 	{
-		return TRUE;
+		return true;
 	}
 	else
 	{
@@ -218,7 +218,7 @@ BOOL LLPreviewNotecard::canClose()
 			// Bring up view-modal dialog: Save changes? Yes, No, Cancel
 			LLNotificationsUtil::add("SaveChanges", LLSD(), LLSD(), boost::bind(&LLPreviewNotecard::handleSaveChangesDialog,this, _1, _2));
 		}
-		return FALSE;
+		return false;
 	}
 }
 

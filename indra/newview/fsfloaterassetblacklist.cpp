@@ -42,7 +42,7 @@
 
 FSFloaterAssetBlacklist::FSFloaterAssetBlacklist(const LLSD& key)
  : LLFloater(key), LLEventTimer(0.25f),
-   mResultList(NULL),
+   mResultList(nullptr),
    mFilterSubString(LLStringUtil::null),
    mFilterSubStringOrig(LLStringUtil::null),
    mAudioSourceID(LLUUID::null),
@@ -58,7 +58,7 @@ FSFloaterAssetBlacklist::~FSFloaterAssetBlacklist()
 	}
 }
 
-BOOL FSFloaterAssetBlacklist::postBuild()
+bool FSFloaterAssetBlacklist::postBuild()
 {
 	mResultList = getChild<FSScrollListCtrl>("result_list");
 	mResultList->setContextMenu(&FSFloaterAssetBlacklistMenu::gFSAssetBlacklistMenu);
@@ -81,7 +81,7 @@ BOOL FSFloaterAssetBlacklist::postBuild()
 	childSetVisible("play_btn", true);
 	childSetVisible("stop_btn", false);
 
-	return TRUE;
+	return true;
 }
 
 void FSFloaterAssetBlacklist::onOpen(const LLSD& key)
@@ -286,12 +286,12 @@ void FSFloaterAssetBlacklist::onFilterEdit(const std::string& search_string)
 	onSelectionChanged();
 }
 
-BOOL FSFloaterAssetBlacklist::handleKeyHere(KEY key, MASK mask)
+bool FSFloaterAssetBlacklist::handleKeyHere(KEY key, MASK mask)
 {
 	if (FSCommon::isFilterEditorKeyCombo(key, mask))
 	{
-		getChild<LLFilterEditor>("filter_input")->setFocus(TRUE);
-		return TRUE;
+		getChild<LLFilterEditor>("filter_input")->setFocus(true);
+		return true;
 	}
 
 	return LLFloater::handleKeyHere(key, mask);

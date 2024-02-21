@@ -108,7 +108,7 @@ FSFloaterContacts::~FSFloaterContacts()
 	mAvatarNameCacheConnections.clear();
 }
 
-BOOL FSFloaterContacts::postBuild()
+bool FSFloaterContacts::postBuild()
 {
 	mTabContainer = getChild<LLTabContainer>("friends_and_groups");
 	mFriendsTab = getChild<LLPanel>(FRIENDS_TAB_NAME);
@@ -116,7 +116,7 @@ BOOL FSFloaterContacts::postBuild()
 
 	mFriendsList = mFriendsTab->getChild<FSScrollListCtrl>("friend_list");
 	mFriendsList->setMaxSelectable(MAX_FRIEND_SELECT);
-	mFriendsList->setCommitOnSelectionChange(TRUE);
+	mFriendsList->setCommitOnSelectionChange(true);
 	mFriendsList->setCommitCallback(boost::bind(&FSFloaterContacts::onSelectName, this));
 	mFriendsList->setDoubleClickCallback(boost::bind(&FSFloaterContacts::onImButtonClicked, this));
 	mFriendsList->setHandleDaDCallback(boost::bind(&FSFloaterContacts::handleFriendsListDragAndDrop, this, _1, _2, _3, _4, _5, _6, _7, _8));
@@ -170,14 +170,14 @@ BOOL FSFloaterContacts::postBuild()
 
 	LLAvatarNameCache::getInstance()->addUseDisplayNamesCallback(boost::bind(&FSFloaterContacts::onDisplayNameChanged, this));
 
-	return TRUE;
+	return true;
 }
 
 void FSFloaterContacts::draw()
 {
 	if (mResetLastColumnDisplayModeChanged)
 	{
-		gSavedSettings.setBOOL(mLastColumnDisplayModeChanged, TRUE);
+		gSavedSettings.setBOOL(mLastColumnDisplayModeChanged, true);
 		mResetLastColumnDisplayModeChanged = false;
 	}
 
@@ -197,14 +197,14 @@ bool FSFloaterContacts::tick()
 	return false;
 }
 
-BOOL FSFloaterContacts::handleKeyHere(KEY key, MASK mask)
+bool FSFloaterContacts::handleKeyHere(KEY key, MASK mask)
 {
 	if (FSCommon::isFilterEditorKeyCombo(key, mask))
 	{
 		if (getActiveTabName() == FRIENDS_TAB_NAME && gSavedSettings.getBOOL("FSContactListShowSearch"))
 		{
-			mFriendFilter->setFocus(TRUE);
-			return TRUE;
+			mFriendFilter->setFocus(true);
+			return true;
 		}
 		else if (getActiveTabName() == GROUP_TAB_NAME)
 		{
@@ -216,7 +216,7 @@ BOOL FSFloaterContacts::handleKeyHere(KEY key, MASK mask)
 	if (mask == MASK_CONTROL && key == 'W' && getHost())
 	{
 		getHost()->closeFloater();
-		return TRUE;
+		return true;
 	}
 
 	return LLFloater::handleKeyHere(key, mask);
@@ -251,7 +251,7 @@ void FSFloaterContacts::onOpen(const LLSD& key)
 	}
 	else
 	{
-		floater_container->addFloater(this, TRUE);
+		floater_container->addFloater(this, true);
 	}
 
 	openTab(key.asString());
@@ -282,12 +282,12 @@ void FSFloaterContacts::openTab(const std::string& name)
 	FSFloaterIMContainer* floater_container = dynamic_cast<FSFloaterIMContainer*>(getHost());
 	if (floater_container)
 	{
-		floater_container->setVisible(TRUE);
+		floater_container->setVisible(true);
 		floater_container->showFloater(this);
 	}
 	else
 	{
-		setVisible(TRUE);
+		setVisible(true);
 		setFrontmost();
 	}
 }

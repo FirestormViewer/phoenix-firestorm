@@ -93,7 +93,7 @@ public:
 
 	void onOpen(const LLSD& key) override;
 
-    BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+    bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
                                    EDragAndDropType cargo_type,
                                    void* cargo_data,
                                    EAcceptance* accept,
@@ -110,7 +110,7 @@ public:
 
 	void setAvatarId(const LLUUID& avatar_id) override;
 
-	BOOL postBuild() override;
+	bool postBuild() override;
 
 	void resetData() override;
 
@@ -295,7 +295,7 @@ public:
 
 	void onOpen(const LLSD& key) override;
 
-	BOOL postBuild() override;
+	bool postBuild() override;
 
 	void resetData() override;
 
@@ -337,7 +337,7 @@ public:
 
 	void onOpen(const LLSD& key) override;
 
-	BOOL postBuild() override;
+	bool postBuild() override;
 
     void processProperties(const LLAvatarData* avatar_data);
     void processProperties(void * data, EAvatarProcessorType type) override;
@@ -397,7 +397,7 @@ public:
 
 	void onOpen(const LLSD& key) override;
 
-	BOOL postBuild() override;
+	bool postBuild() override;
 
     void processProperties(LLAvatarNotes* avatar_notes);
     void processProperties(void * data, EAvatarProcessorType type) override;
@@ -433,7 +433,7 @@ public:
     LLPanelProfile();
     /*virtual*/ ~LLPanelProfile();
 
-    BOOL postBuild() override;
+    bool postBuild() override;
 
     void updateData() override;
     void refreshName();

@@ -115,9 +115,9 @@ enum {
 
 //static const std::string LEGACY_FULLBRIGHT_DESC =LLTrans::getString("Fullbright");
 
-BOOL	LLPanelObject::postBuild()
+bool	LLPanelObject::postBuild()
 {
-	setMouseOpaque(FALSE);
+	setMouseOpaque(false);
 	
 	//--------------------------------------------------------
 	// Top
@@ -343,7 +343,7 @@ BOOL	LLPanelObject::postBuild()
 	
 	changePrecision(gSavedSettings.getS32("FSBuildToolDecimalPrecision"));	// <FS:CR> Adjustable decimal precision
 
-	return TRUE;
+	return true;
 }
 
 LLPanelObject::LLPanelObject()

@@ -289,7 +289,7 @@ bool LLStatusBar::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	return true;
 }
 
-BOOL LLStatusBar::postBuild()
+bool LLStatusBar::postBuild()
 {
 	gMenuBarView->setRightMouseDownCallback(boost::bind(&show_navbar_context_menu, _1, _2, _3));
 
@@ -414,22 +414,22 @@ BOOL LLStatusBar::postBuild()
 	mPanelPresetsCameraPulldown = new LLPanelPresetsCameraPulldown();
 	addChild(mPanelPresetsCameraPulldown);
 	mPanelPresetsCameraPulldown->setFollows(FOLLOWS_TOP|FOLLOWS_RIGHT);
-	mPanelPresetsCameraPulldown->setVisible(FALSE);
+	mPanelPresetsCameraPulldown->setVisible(false);
 
 	mPanelPresetsPulldown = new LLPanelPresetsPulldown();
 	addChild(mPanelPresetsPulldown);
 	mPanelPresetsPulldown->setFollows(FOLLOWS_TOP|FOLLOWS_RIGHT);
-	mPanelPresetsPulldown->setVisible(FALSE);
+	mPanelPresetsPulldown->setVisible(false);
 
 	mPanelVolumePulldown = new LLPanelVolumePulldown();
 	addChild(mPanelVolumePulldown);
 	mPanelVolumePulldown->setFollows(FOLLOWS_TOP|FOLLOWS_RIGHT);
-	mPanelVolumePulldown->setVisible(FALSE);
+	mPanelVolumePulldown->setVisible(false);
 
 	mPanelNearByMedia = new LLPanelNearByMedia();
 	addChild(mPanelNearByMedia);
 	mPanelNearByMedia->setFollows(FOLLOWS_TOP|FOLLOWS_RIGHT);
-	mPanelNearByMedia->setVisible(FALSE);
+	mPanelNearByMedia->setVisible(false);
 
 	updateBalancePanelPosition();
 
@@ -437,7 +437,7 @@ BOOL LLStatusBar::postBuild()
 	mFilterEdit = getChild<LLSearchEditor>( "search_menu_edit" );
 	mSearchPanel = getChild<LLPanel>( "menu_search_panel" );
 
-	BOOL search_panel_visible = gSavedSettings.getBOOL("MenuSearch");
+	bool search_panel_visible = gSavedSettings.getBOOL("MenuSearch");
 	mSearchPanel->setVisible(search_panel_visible);
 	mFilterEdit->setKeystrokeCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
 	mFilterEdit->setCommitCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
@@ -502,21 +502,21 @@ BOOL LLStatusBar::postBuild()
 
 	if (!gSavedSettings.getBOOL("ShowNetStats"))
 	{
-		updateNetstatVisibility(LLSD(FALSE));
+		updateNetstatVisibility(LLSD(false));
 	}
 
 	// <FS:Ansariel> FIRE-14482: Show FPS in status bar
 	gSavedSettings.getControl("FSStatusBarShowFPS")->getSignal()->connect(boost::bind(&LLStatusBar::onShowFPSChanged, this, _2));
 	if (!gSavedSettings.getBOOL("FSStatusBarShowFPS"))
 	{
-		onShowFPSChanged(LLSD(FALSE));
+		onShowFPSChanged(LLSD(false));
 	}
 	// </FS:Ansariel>
 
 	// <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
 	if (!gSavedSettings.getBOOL("FSEnableVolumeControls"))
 	{
-		updateVolumeControlsVisibility(LLSD(FALSE));
+		updateVolumeControlsVisibility(LLSD(false));
 	}
 	// </FS:PP>
 
@@ -536,7 +536,7 @@ BOOL LLStatusBar::postBuild()
 	mClockFormat = gSavedSettings.getString("FSStatusBarTimeFormat");
 	// </FS:Zi>
 
-	return TRUE;
+	return true;
 }
 
 // <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display

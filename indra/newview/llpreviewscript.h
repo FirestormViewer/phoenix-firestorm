@@ -109,13 +109,11 @@ protected:
 public:
 	~LLScriptEdCore();
 	
-	void			initializeKeywords();
 	void			initMenu();
 	void			processKeywords();
-	void			processLoaded();
 
 	virtual void	draw();
-	/*virtual*/	BOOL	postBuild();
+	/*virtual*/	bool	postBuild();
 	BOOL			canClose();
 	void			setEnableEditing(bool enable);
 	bool			canLoadOrSaveToFile( void* userdata );
@@ -186,7 +184,7 @@ private: // <FS:Ansariel> Show keyword help on F1
 
 	void selectFirstError();
 
-	virtual BOOL handleKeyHere(KEY key, MASK mask);
+	virtual bool handleKeyHere(KEY key, MASK mask);
 	
 	void enableSave(BOOL b) {mEnableSave = b;}
 	
@@ -312,7 +310,7 @@ public:
 	virtual void callbackLSLCompileSucceeded();
 	virtual void callbackLSLCompileFailed(const LLSD& compile_errors);
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
 	LLScriptEditor* getEditor() { return (mScriptEd) ? mScriptEd->mEditor : NULL; }
@@ -320,7 +318,7 @@ public:
 
 protected:
 	virtual void draw();
-	virtual BOOL canClose();
+	virtual bool canClose();
 	void closeIfNeeded();
 
 	virtual void loadAsset();
@@ -365,7 +363,7 @@ public:
 											bool is_script_running);
 	virtual void callbackLSLCompileFailed(const LLSD& compile_errors);
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	
     void setIsNew() { mIsNew = TRUE; }
 
@@ -382,15 +380,13 @@ public:
 	void updateExperiencePanel();
 	void requestExperiences();
 	void experienceChanged();
-	void addAssociatedExperience(const LLSD& experience);
 	
 private:
-	virtual BOOL canClose();
+	virtual bool canClose();
 	void closeIfNeeded();
 	virtual void draw();
 
 	virtual void loadAsset();
-	void loadAsset(BOOL is_new);
 	/*virtual*/ void saveIfNeeded(bool sync = true);
 	BOOL monoChecked() const;
 
@@ -410,8 +406,6 @@ private:
 
 	void loadScriptText(const LLUUID &uuid, LLAssetType::EType type);
 
-	static void onErrorList(LLUICtrl*, void* user_data);
-
 	static void* createScriptEdPanel(void* userdata);
 
 	static void	onMonoCheckboxClicked(LLUICtrl*, void* userdata);
@@ -422,10 +416,10 @@ private:
 private:
 	bool				mIsNew;
 	//LLUUID mTransmitID;
-	LLCheckBoxCtrl*		mRunningCheckbox;
+	//LLCheckBoxCtrl*		mRunningCheckbox;
 	BOOL				mAskedForRunningInfo;
 	BOOL				mHaveRunningInfo;
-	LLButton*			mResetButton;
+	//LLButton*			mResetButton;
 	LLPointer<LLViewerInventoryItem> mItem;
 	BOOL				mCloseAfterSave;
 	// need to save both text and script, so need to decide when done

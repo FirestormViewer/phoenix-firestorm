@@ -291,7 +291,7 @@ bool callback_clear_cache(const LLSD& notification, const LLSD& response)
 	if ( option == 0 ) // YES
 	{
 		// flag client texture cache for clearing next time the client runs
-		gSavedSettings.setBOOL("PurgeCacheOnNextStartup", TRUE);
+		gSavedSettings.setBOOL("PurgeCacheOnNextStartup", true);
 		LLNotificationsUtil::add("CacheWillClear");
 	}
 
@@ -312,7 +312,7 @@ bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response
 		
 		// flag client texture cache for clearing next time the client runs
 		// <FS:AO> Don't clear main texture cache on browser cache clear - it's too expensive to be done except explicitly
-		//gSavedSettings.setBOOL("PurgeCacheOnNextStartup", TRUE);
+		//gSavedSettings.setBOOL("PurgeCacheOnNextStartup", true);
 		//LLNotificationsUtil::add("CacheWillClear");
 
 		LLSearchHistory::getInstance()->clearHistory();
@@ -649,7 +649,7 @@ void LLFloaterPreference::saveAvatarPropertiesCoro(const std::string cap_url, bo
     LL_DEBUGS("Preferences") << "Agent id: " << gAgentID << " Data: " << data << " Result: " << httpResults << LL_ENDL;
 }
 
-BOOL LLFloaterPreference::postBuild()
+bool LLFloaterPreference::postBuild()
 {
 	// <FS:Ansariel> [FS communication UI]
 	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLFloaterIMSessionTab::processChatHistoryStyleUpdate, false));
@@ -779,14 +779,14 @@ BOOL LLFloaterPreference::postBuild()
 	onPieColorsOverrideChanged();
 	// </FS:Zi> Pie menu
 
-	// <FS:Zi> Group Notices and chiclets location setting conversion BOOL => S32
+	// <FS:Zi> Group Notices and chiclets location setting conversion bool => S32
 	gSavedSettings.getControl("ShowGroupNoticesTopRight")->getSignal()->connect(boost::bind(&LLFloaterPreference::onShowGroupNoticesTopRightChanged, this));
 	onShowGroupNoticesTopRightChanged();
-	// </FS:Zi> Group Notices and chiclets location setting conversion BOOL => S32
+	// </FS:Zi> Group Notices and chiclets location setting conversion bool => S32
 
 	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
-	getChild<LLCheckBoxCtrl>("send_im_to_email")->setEnabled(FALSE);
-	getChild<LLCheckBoxCtrl>("send_im_to_email")->setVisible(FALSE);
+	getChild<LLCheckBoxCtrl>("send_im_to_email")->setEnabled(false);
+	getChild<LLCheckBoxCtrl>("send_im_to_email")->setVisible(false);
 	childSetVisible("email_settings", false);
 	childSetEnabled("email_settings", false);
 	childSetVisible("email_settings_login_to_change", true);
@@ -826,13 +826,13 @@ BOOL LLFloaterPreference::postBuild()
 
 	// <FS:Ansariel> Disable options only available on Windows and not on other platforms
 #ifndef LL_WINDOWS
-	childSetEnabled("FSDisableWMIProbing", FALSE);
+	childSetEnabled("FSDisableWMIProbing", false);
 #endif
 	// </FS:Ansariel>
 
 	// <FS:Ansariel> Disable options only available on Linux and not on other platforms
 #ifndef LL_LINUX
-	childSetEnabled("FSRemapLinuxShortcuts", FALSE);
+	childSetEnabled("FSRemapLinuxShortcuts", false);
 #endif
 	// </FS:Ansariel>
 
@@ -848,13 +848,13 @@ BOOL LLFloaterPreference::postBuild()
 #endif
 	// </FS:Zi>
 
-	return TRUE;
+	return true;
 }
 
 // <FS:Zi> Pie menu
 void LLFloaterPreference::onPieColorsOverrideChanged()
 {
-	BOOL enable = gSavedSettings.getBOOL("OverridePieColors");
+	bool enable = gSavedSettings.getBOOL("OverridePieColors");
 
 	getChild<LLColorSwatchCtrl>("pie_bg_color_override")->setEnabled(enable);
 	getChild<LLColorSwatchCtrl>("pie_selected_color_override")->setEnabled(enable);
@@ -863,12 +863,12 @@ void LLFloaterPreference::onPieColorsOverrideChanged()
 }
 // </FS:Zi> Pie menu
 
-// <FS:Zi> Group Notices and chiclets location setting conversion BOOL => S32
+// <FS:Zi> Group Notices and chiclets location setting conversion bool => S32
 void LLFloaterPreference::onShowGroupNoticesTopRightChanged()
 {
 	getChild<LLRadioGroup>("ShowGroupNoticesTopRight")->setValue(gSavedSettings.getBOOL("ShowGroupNoticesTopRight"));
 }
-// </FS:Zi> Group Notices and chiclets location setting conversion BOOL => S32
+// </FS:Zi> Group Notices and chiclets location setting conversion bool => S32
 
 void LLFloaterPreference::updateDeleteTranscriptsButton()
 {
@@ -1448,7 +1448,7 @@ void LLFloaterPreference::setRecommendedSettings()
 
 void LLFloaterPreference::resetAutotuneSettings()
 {
-    gSavedSettings.setBOOL("AutoTuneFPS", FALSE);
+    gSavedSettings.setBOOL("AutoTuneFPS", false);
 
     const std::string autotune_settings[] = {
         "AutoTuneLock",
@@ -2382,7 +2382,7 @@ void LLFloaterPreference::onClickPreviewUISound(const LLSD& ui_sound_id)
 // 		LLNotificationTemplatePtr templatep = LLNotifications::instance().getTemplate(*(std::string*)((*itor)->getUserdata()));
 // 		//gSavedSettings.setWarning(templatep->mName, TRUE);
 // 		std::string notification_name = templatep->mName;
-// 		LLUI::getInstance()->mSettingGroups["ignores"]->setBOOL(notification_name, TRUE);
+// 		LLUI::getInstance()->mSettingGroups["ignores"]->setBOOL(notification_name, true);
 // 	}
 //	
 // 	buildPopupLists();
@@ -3304,7 +3304,7 @@ LLPanelPreference::LLPanelPreference()
 }
 
 //virtual
-BOOL LLPanelPreference::postBuild()
+bool LLPanelPreference::postBuild()
 {
 	////////////////////// PanelGeneral ///////////////////
 	if (hasChild("display_names_check", TRUE))
@@ -3772,7 +3772,7 @@ public:
 	// </FS:Ansariel>
 
 	// <FS:Ansariel> DebugLookAt checkbox status not working properly
-	/*virtual*/ BOOL postBuild()
+	/*virtual*/ bool postBuild()
 	{
 		getChild<LLUICtrl>("showlookat")->setCommitCallback(boost::bind(&LLPanelPreferencePrivacy::onClickDebugLookAt, this, _2));
 		gSavedPerAccountSettings.getControl("DebugLookAt")->getSignal()->connect(boost::bind(&LLPanelPreferencePrivacy::onChangeDebugLookAt, this));
@@ -3790,7 +3790,7 @@ public:
 	/* virtual */ void onOpen(const LLSD& key)
 	{
 		LLButton* clear_item_btn = getChild<LLButton>("clear_autoresponse_item");
-		clear_item_btn->setEnabled(FALSE);
+		clear_item_btn->setEnabled(false);
 		if (LLStartUp::getStartupState() == STATE_STARTED)
 		{
 			mAutoresponseItem = gSavedPerAccountSettings.getString("FSAutoresponseItemUUID");
@@ -3801,7 +3801,7 @@ public:
 			}
 			else
 			{
-				clear_item_btn->setEnabled(TRUE);
+				clear_item_btn->setEnabled(true);
 				LLInventoryObject* item = gInventory.getObject(item_id);
 				if (item)
 				{
@@ -3863,7 +3863,7 @@ private:
 static LLPanelInjector<LLPanelPreferenceGraphics> t_pref_graph("panel_preference_graphics");
 static LLPanelInjector<LLPanelPreferencePrivacy> t_pref_privacy("panel_preference_privacy");
 
-BOOL LLPanelPreferenceGraphics::postBuild()
+bool LLPanelPreferenceGraphics::postBuild()
 {
 	// <FS:Ansariel> Improved graphics preferences
 	//LLFloaterReg::showInstance("prefs_graphics_advanced");
@@ -4093,7 +4093,7 @@ LLPanelPreferenceControls::~LLPanelPreferenceControls()
 {
 }
 
-BOOL LLPanelPreferenceControls::postBuild()
+bool LLPanelPreferenceControls::postBuild()
 {
     // populate list of controls
     pControlsTable = getChild<LLScrollListCtrl>("controls_list");
@@ -4103,7 +4103,7 @@ BOOL LLPanelPreferenceControls::postBuild()
     pKeyModeBox->setCommitCallback(boost::bind(&LLPanelPreferenceControls::onModeCommit, this));
     getChild<LLButton>("restore_defaults")->setCommitCallback(boost::bind(&LLPanelPreferenceControls::onRestoreDefaultsBtn, this));
 
-    return TRUE;
+    return true;
 }
 
 void LLPanelPreferenceControls::regenerateControls()
@@ -4695,12 +4695,12 @@ LLFloaterPreferenceProxy::~LLFloaterPreferenceProxy()
 {
 }
 
-BOOL LLFloaterPreferenceProxy::postBuild()
+bool LLFloaterPreferenceProxy::postBuild()
 {
 	LLRadioGroup* socksAuth = getChild<LLRadioGroup>("socks5_auth_type");
 	if (!socksAuth)
 	{
-		return FALSE;
+		return false;
 	}
 	if (socksAuth->getSelectedValue().asString() == "None")
 	{
@@ -4715,7 +4715,7 @@ BOOL LLFloaterPreferenceProxy::postBuild()
 		getChild<LLLineEditor>("socks5_password")->setValue(socks_cred->getAuthenticator()["creds"].asString());
 	}
 
-	return TRUE;
+	return true;
 }
 
 void LLFloaterPreferenceProxy::onOpen(const LLSD& key)
@@ -5035,7 +5035,7 @@ LLPanelPreferenceCrashReports::LLPanelPreferenceCrashReports()
 {
 }
 
-BOOL LLPanelPreferenceCrashReports::postBuild()
+bool LLPanelPreferenceCrashReports::postBuild()
 {
 	S32 nCrashSubmitBehavior = gCrashSettings.getS32("CrashSubmitBehavior");
 
@@ -5066,7 +5066,7 @@ BOOL LLPanelPreferenceCrashReports::postBuild()
 void LLPanelPreferenceCrashReports::refresh()
 {
 	LLCheckBoxCtrl* pSendCrashReports = getChild<LLCheckBoxCtrl>("checkSendCrashReports");
-	pSendCrashReports->setEnabled(TRUE);
+	pSendCrashReports->setEnabled(true);
 
 	bool fEnable = pSendCrashReports->get();
 	getChild<LLUICtrl>("checkSendCrashReportsAlwaysAsk")->setEnabled(fEnable);
@@ -5117,7 +5117,7 @@ LLPanelPreferenceSkins::LLPanelPreferenceSkins()
 	}
 }
 
-BOOL LLPanelPreferenceSkins::postBuild()
+bool LLPanelPreferenceSkins::postBuild()
 {
 	m_pSkinCombo = getChild<LLComboBox>("skin_combobox");
 	if (m_pSkinCombo)
@@ -5153,7 +5153,7 @@ void LLPanelPreferenceSkins::apply()
 		if (gSavedSettings.getBOOL("FSSkinClobbersToolbarPrefs"))
 		{
 			LL_INFOS() << "Clearing toolbar settings." << LL_ENDL;
-			gSavedSettings.setBOOL("ResetToolbarSettings", TRUE);
+			gSavedSettings.setBOOL("ResetToolbarSettings", true);
 		}
 
 		if (m_Skin == "starlight" || m_Skin == "starlightcui")
@@ -5163,7 +5163,7 @@ void LLPanelPreferenceSkins::apply()
 			if (gSavedSettings.getBOOL("ShowMenuBarLocation"))
 			{
 				noteMessage = LLTrans::getString("skin_defaults_starlight_location");
-				gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
+				gSavedSettings.setBOOL("ShowMenuBarLocation", false);
 			}
 
 			if (!gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
@@ -5173,7 +5173,7 @@ void LLPanelPreferenceSkins::apply()
 					noteMessage += "\n";
 				}
 				noteMessage += LLTrans::getString("skin_defaults_starlight_navbar");
-				gSavedSettings.setBOOL("ShowNavbarNavigationPanel", TRUE);
+				gSavedSettings.setBOOL("ShowNavbarNavigationPanel", true);
 			}
 
 			if (!noteMessage.empty())
@@ -5259,10 +5259,10 @@ void LLPanelPreferenceSkins::refreshSkinList()
 		}
 	}
 	
-	BOOL fFound = m_pSkinCombo->setSelectedByValue(m_Skin, TRUE);
+	bool fFound = m_pSkinCombo->setSelectedByValue(m_Skin, true);
 	if (!fFound)
 	{
-		m_pSkinCombo->setSelectedByValue("default", TRUE);
+		m_pSkinCombo->setSelectedByValue("default", true);
 	}
 
 	refreshSkinThemeList();
@@ -5297,7 +5297,7 @@ void LLPanelPreferenceSkins::refreshSkinThemeList()
 		}
 	}
 
-	BOOL fFound = m_pSkinThemeCombo->setSelectedByValue(m_SkinTheme, TRUE);
+	bool fFound = m_pSkinThemeCombo->setSelectedByValue(m_SkinTheme, true);
 	if (!fFound)
 	{
 		m_pSkinThemeCombo->selectFirstItem();
@@ -5360,7 +5360,7 @@ FSPanelPreferenceBackup::FSPanelPreferenceBackup() : LLPanelPreference()
 	mCommitCallbackRegistrar.add("Pref.BackupDeselectAll",		boost::bind(&FSPanelPreferenceBackup::onClickDeselectAll, this));
 }
 
-BOOL FSPanelPreferenceBackup::postBuild()
+bool FSPanelPreferenceBackup::postBuild()
 {
 	// <FS:Zi> Backup Settings
 	// Apparently, line editors don't update with their settings controls, so do that manually here
@@ -6050,7 +6050,7 @@ LLPanelPreferenceOpensim::~LLPanelPreferenceOpensim()
 	}
 }
 
-BOOL LLPanelPreferenceOpensim::postBuild()
+bool LLPanelPreferenceOpensim::postBuild()
 {
 	mEditorGridName = findChild<LLLineEditor>("name_edit");
 	mEditorGridURI = findChild<LLLineEditor>("grid_uri_edit");
@@ -6148,7 +6148,7 @@ void LLPanelPreferenceOpensim::addedGrid(bool success)
 		{
 			if (new_grid.find(row->getColumn(1)->getValue().asString()) != std::string::npos)
 			{
-				row->setSelected(TRUE);
+				row->setSelected(true);
 				mGridListControl->scrollToShowSelected();
 				onSelectGrid();
 				break;
@@ -6167,7 +6167,7 @@ void LLPanelPreferenceOpensim::onClickClearGrid()
 void LLPanelPreferenceOpensim::onClickRefreshGrid()
 {
 	std::string grid = mGridListControl->getSelectedValue();
-	getChild<LLUICtrl>("grid_management_panel")->setEnabled(FALSE);
+	getChild<LLUICtrl>("grid_management_panel")->setEnabled(false);
 	LLGridManager::getInstance()->reFetchGrid(grid, (grid == LLGridManager::getInstance()->getGrid()) );
 }
 
@@ -6195,7 +6195,7 @@ bool LLPanelPreferenceOpensim::removeGridCB(const LLSD& notification, const LLSD
 	if (0 == option)
 	{
 		std::string grid = notification["payload"].asString();
-		getChild<LLUICtrl>("grid_management_panel")->setEnabled(FALSE);
+		getChild<LLUICtrl>("grid_management_panel")->setEnabled(false);
 		mEditorGridName->clear();
 		mEditorGridURI->clear();
 		mEditorLoginPage->clear();
@@ -6225,7 +6225,7 @@ void LLPanelPreferenceOpensim::refreshGridList(bool success)
 	}
 
 	mGridListControl->operateOnAll(LLCtrlListInterface::OP_DELETE);
-	mGridListControl->sortByColumnIndex(0, TRUE);
+	mGridListControl->sortByColumnIndex(0, true);
 
 	std::map<std::string, std::string> known_grids = LLGridManager::getInstance()->getKnownGrids();
         std::map<std::string, std::string>::iterator grid_iter = known_grids.begin();
@@ -6308,7 +6308,7 @@ FSPanelPreferenceSounds::~FSPanelPreferenceSounds()
 	}
 }
 
-BOOL FSPanelPreferenceSounds::postBuild()
+bool FSPanelPreferenceSounds::postBuild()
 {
 	mOutputDevicePanel = findChild<LLPanel>("output_device_settings_panel");
 	mOutputDeviceComboBox = findChild<LLComboBox>("sound_output_device");
@@ -6326,7 +6326,7 @@ BOOL FSPanelPreferenceSounds::postBuild()
 #else
 	if (mOutputDevicePanel)
 	{
-		mOutputDevicePanel->setVisible(FALSE);
+		mOutputDevicePanel->setVisible(false);
 	}
 #endif
 
@@ -6335,7 +6335,7 @@ BOOL FSPanelPreferenceSounds::postBuild()
 
 void FSPanelPreferenceSounds::onOutputDeviceChanged(const LLSD& new_value)
 {
-	mOutputDeviceComboBox->setSelectedByValue(new_value.asUUID(), TRUE);
+	mOutputDeviceComboBox->setSelectedByValue(new_value.asUUID(), true);
 }
 
 void FSPanelPreferenceSounds::onOutputDeviceSelectionChanged(const LLSD& new_value)
@@ -6384,6 +6384,6 @@ void FSPanelPreferenceSounds::onOutputDeviceListChanged(LLAudioEngine::output_de
 		}
 	}
 
-	mOutputDeviceComboBox->setSelectedByValue(selected_device, TRUE);
+	mOutputDeviceComboBox->setSelectedByValue(selected_device, true);
 }
 // </FS:Ansariel>

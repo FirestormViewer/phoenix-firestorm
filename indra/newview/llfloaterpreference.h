@@ -90,7 +90,7 @@ public:
 	// <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
 	// /*virtual*/ void draw();
 	// </FS:Zi>
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/	void onClose(bool app_quitting);
 	/*virtual*/ void changed();
@@ -348,7 +348,7 @@ class LLPanelPreference : public LLPanel
 {
 public:
 	LLPanelPreference();
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	
 	virtual ~LLPanelPreference();
 
@@ -414,7 +414,7 @@ private:
 class LLPanelPreferenceGraphics : public LLPanelPreference
 {
 public:
-	BOOL postBuild();
+	bool postBuild();
 	void draw();
     void cancel(const std::vector<std::string> settings_to_skip = {});
 	void saveSettings();
@@ -438,7 +438,7 @@ public:
 	LLPanelPreferenceControls();
 	virtual ~LLPanelPreferenceControls();
 
-	BOOL postBuild();
+	bool postBuild();
 
 	void apply();
     void cancel(const std::vector<std::string> settings_to_skip = {});
@@ -504,7 +504,7 @@ class LLPanelPreferenceSkins : public LLPanelPreference
 public:
 	LLPanelPreferenceSkins();
 	
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	/*virtual*/ void apply();
 	/*virtual*/ void cancel(const std::vector<std::string> settings_to_skip = {});
 	void callbackRestart(const LLSD& notification, const LLSD& response);	// <FS:CR> Callback for restart dialogs
@@ -536,7 +536,7 @@ class LLPanelPreferenceCrashReports : public LLPanelPreference
 public:
 	LLPanelPreferenceCrashReports();
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	/*virtual*/ void apply();
 	/*virtual*/ void cancel(const std::vector<std::string> settings_to_skip = {});
 
@@ -552,7 +552,7 @@ class FSPanelPreferenceBackup : public LLPanelPreference
 {
 public:
 	FSPanelPreferenceBackup();
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	
 protected:
 	// <FS:Zi> Backup settings
@@ -592,7 +592,7 @@ protected:
 	boost::signals2::connection mGridAddedCallbackConnection;
 
 	void onOpen(const LLSD& key);
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 
 	void onClickAddGrid();
 	void addedGrid(bool success);
@@ -631,7 +631,7 @@ public:
 	FSPanelPreferenceSounds();
 	virtual ~FSPanelPreferenceSounds();
 
-	BOOL postBuild();
+	bool postBuild();
 
 private:
 	LLPanel*	mOutputDevicePanel;
@@ -657,7 +657,7 @@ public:
 	void cancel();
 	
 protected:
-	BOOL postBuild();
+	bool postBuild();
 	void onOpen(const LLSD& key);
 	void onClose(bool app_quitting);
 	void saveSettings();

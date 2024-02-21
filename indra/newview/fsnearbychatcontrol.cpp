@@ -45,13 +45,13 @@ FSNearbyChatControl::FSNearbyChatControl(const FSNearbyChatControl::Params& p) :
 	setKeystrokeCallback(onKeystroke, this);
 	FSNearbyChat::instance().registerChatBar(this);
 
-	setEnableLineHistory(TRUE);
-	setIgnoreArrowKeys(FALSE);
-	setCommitOnFocusLost(FALSE);
-	setRevertOnEsc(FALSE);
-	setIgnoreTab(TRUE);
-	setReplaceNewlinesWithSpaces(FALSE);
-	setPassDelete(TRUE);
+	setEnableLineHistory(true);
+	setIgnoreArrowKeys(false);
+	setCommitOnFocusLost(false);
+	setRevertOnEsc(false);
+	setIgnoreTab(true);
+	setReplaceNewlinesWithSpaces(false);
+	setPassDelete(true);
 	setFont(LLViewerChat::getChatFont());
 
 	// Register for font change notifications
@@ -70,17 +70,17 @@ void FSNearbyChatControl::onKeystroke(LLLineEditor* caller, void* userdata)
 // send our focus status to the LLNearbyChat hub
 void FSNearbyChatControl::onFocusReceived()
 {
-	FSNearbyChat::instance().setFocusedInputEditor(this, TRUE);
+	FSNearbyChat::instance().setFocusedInputEditor(this, true);
 	LLLineEditor::onFocusReceived();
 }
 
 void FSNearbyChatControl::onFocusLost()
 {
-	FSNearbyChat::instance().setFocusedInputEditor(this, FALSE);
+	FSNearbyChat::instance().setFocusedInputEditor(this, false);
 	LLLineEditor::onFocusLost();
 }
 
-void FSNearbyChatControl::setFocus(BOOL focus)
+void FSNearbyChatControl::setFocus(bool focus)
 {
 	FSNearbyChat::instance().setFocusedInputEditor(this, focus);
 	LLLineEditor::setFocus(focus);
@@ -92,18 +92,18 @@ void FSNearbyChatControl::autohide()
 	{
 		if (gSavedSettings.getBOOL("CloseChatOnReturn"))
 		{
-			setFocus(FALSE);
+			setFocus(false);
 		}
 
 		if (gAgentCamera.cameraMouselook() || gSavedSettings.getBOOL("AutohideChatBar"))
 		{
-			FSNearbyChat::instance().showDefaultChatBar(FALSE);
+			FSNearbyChat::instance().showDefaultChatBar(false);
 		}
 	}
 }
 
 // handle ESC key here
-BOOL FSNearbyChatControl::handleKeyHere(KEY key, MASK mask)
+bool FSNearbyChatControl::handleKeyHere(KEY key, MASK mask)
 {
 	bool handled = false;
 	EChatType type = CHAT_TYPE_NORMAL;
@@ -139,7 +139,7 @@ BOOL FSNearbyChatControl::handleKeyHere(KEY key, MASK mask)
 		{
 			// linefeed
 			addChar(llwchar(182));
-			return TRUE;
+			return true;
 		}
 		else
 		{
@@ -159,7 +159,7 @@ BOOL FSNearbyChatControl::handleKeyHere(KEY key, MASK mask)
 
 		setText(LLStringExplicit(""));
 		autohide();
-		return TRUE;
+		return true;
 	}
 
 	// let the line editor handle everything we don't handle

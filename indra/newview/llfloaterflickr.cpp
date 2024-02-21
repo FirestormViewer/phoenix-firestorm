@@ -105,7 +105,7 @@ LLFlickrPhotoPanel::~LLFlickrPhotoPanel()
 	// </FS:Ansariel>
 }
 
-BOOL LLFlickrPhotoPanel::postBuild()
+bool LLFlickrPhotoPanel::postBuild()
 {
 	setVisibleCallback(boost::bind(&LLFlickrPhotoPanel::onVisibilityChange, this, _2));
 	
@@ -250,7 +250,7 @@ LLSnapshotLivePreview* LLFlickrPhotoPanel::getPreviewView()
 	return previewp;
 }
 
-void LLFlickrPhotoPanel::onVisibilityChange(BOOL visible)
+void LLFlickrPhotoPanel::onVisibilityChange(bool visible)
 {
 	if (visible)
 	{
@@ -700,7 +700,7 @@ mDisconnectButton(NULL)
 	setVisibleCallback(boost::bind(&LLFlickrAccountPanel::onVisibilityChange, this, _2));
 }
 
-BOOL LLFlickrAccountPanel::postBuild()
+bool LLFlickrAccountPanel::postBuild()
 {
 	mAccountCaptionLabel = getChild<LLTextBox>("account_caption_label");
 	mAccountNameLabel = getChild<LLTextBox>("account_name_label");
@@ -726,7 +726,7 @@ void LLFlickrAccountPanel::draw()
 	LLPanel::draw();
 }
 
-void LLFlickrAccountPanel::onVisibilityChange(BOOL visible)
+void LLFlickrAccountPanel::onVisibilityChange(bool visible)
 {
 	if(visible)
 	{
@@ -797,8 +797,8 @@ void LLFlickrAccountPanel::showConnectButton()
 {
 	if(!mConnectButton->getVisible())
 	{
-		mConnectButton->setVisible(TRUE);
-		mDisconnectButton->setVisible(FALSE);
+		mConnectButton->setVisible(true);
+		mDisconnectButton->setVisible(false);
 	}
 }
 
@@ -806,8 +806,8 @@ void LLFlickrAccountPanel::hideConnectButton()
 {
 	if(mConnectButton->getVisible())
 	{
-		mConnectButton->setVisible(FALSE);
-		mDisconnectButton->setVisible(TRUE);
+		mConnectButton->setVisible(false);
+		mDisconnectButton->setVisible(true);
 	}
 }
 
@@ -869,7 +869,7 @@ void LLFloaterFlickr::onCancel()
     closeFloater();
 }
 
-BOOL LLFloaterFlickr::postBuild()
+bool LLFloaterFlickr::postBuild()
 {
     // Keep tab of the Photo Panel
 	mFlickrPhotoPanel = static_cast<LLFlickrPhotoPanel*>(getChild<LLUICtrl>("panel_flickr_photo"));

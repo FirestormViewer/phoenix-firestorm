@@ -41,7 +41,7 @@ public:
     FSFloaterPerformance(const LLSD& key);
     virtual ~FSFloaterPerformance();
 
-    /*virtual*/ BOOL postBuild();
+    /*virtual*/ bool postBuild();
     /*virtual*/ void draw();
 
     void showSelectedPanel(LLPanel* selected_panel);

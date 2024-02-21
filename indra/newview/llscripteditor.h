@@ -76,7 +76,7 @@ private:
 	//					 const std::string& filename_colors);
 
 	// <FS:Ansariel> Show keyword help on F1
-	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool handleKeyHere(KEY key, MASK mask);
 	
 	LLKeywords	mKeywords;
 	bool		mShowLineNumbers;

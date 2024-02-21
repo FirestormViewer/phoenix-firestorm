@@ -68,7 +68,7 @@ public:
 
 	virtual void clear();
 
-	virtual void setVisible(BOOL visible);
+	virtual void setVisible(bool visible);
 
 	void setNameFilter(const std::string& filter);
 	void setDirty(bool val = true, bool force_refresh = false);

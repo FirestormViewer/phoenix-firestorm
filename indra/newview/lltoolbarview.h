@@ -69,8 +69,8 @@ public:
 
 	// Derived methods
 	virtual ~LLToolBarView();
-	virtual BOOL postBuild();
-	virtual void draw();
+	bool postBuild() override;
+	void draw() override;
 
 	// Toolbar view interface with the rest of the world
 	// Checks if the commandId is being used somewhere in one of the toolbars, returns LLToolBarEnums::EToolBarLocation

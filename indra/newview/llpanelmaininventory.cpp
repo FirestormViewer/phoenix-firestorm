@@ -89,7 +89,7 @@ class LLFloaterInventoryFinder : public LLFloater
 public:
 	LLFloaterInventoryFinder( LLPanelMainInventory* inventory_view);
 	virtual void draw();
-	/*virtual*/	BOOL	postBuild();
+	/*virtual*/	bool	postBuild();
 	void changeFilter(LLInventoryFilter* filter);
 	void updateElementsFromFilter();
 	BOOL getCheckShowEmpty();
@@ -220,7 +220,7 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	// </FS:Zi> Filter dropdown
 }
 
-BOOL LLPanelMainInventory::postBuild()
+bool LLPanelMainInventory::postBuild()
 {
 	gInventory.addObserver(this);
 	
@@ -513,7 +513,7 @@ void LLPanelMainInventory::startSearch()
 	}
 }
 
-BOOL LLPanelMainInventory::handleKeyHere(KEY key, MASK mask)
+bool LLPanelMainInventory::handleKeyHere(KEY key, MASK mask)
 {
 	// <FS:Ansariel> CTRL-F focusses local search editor
 	if (FSCommon::isFilterEditorKeyCombo(key, mask))
@@ -534,7 +534,7 @@ BOOL LLPanelMainInventory::handleKeyHere(KEY key, MASK mask)
 		    && mask == MASK_NONE)
 		{
 			// move focus to inventory proper
-			mActivePanel->setFocus(TRUE);
+			mActivePanel->setFocus(true);
 			root_folder->scrollToShowSelection();
 			return TRUE;
 		}
@@ -1260,7 +1260,7 @@ void LLPanelMainInventory::setFilterSubString(const std::string& string)
 	mActivePanel->setFilterSubString(string); 
 }
 
-BOOL LLPanelMainInventory::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+bool LLPanelMainInventory::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
 										 EDragAndDropType cargo_type,
 										 void* cargo_data,
 										 EAcceptance* accept,
@@ -1268,7 +1268,7 @@ BOOL LLPanelMainInventory::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 {
 	// Check to see if we are auto scrolling from the last frame
 //	LLInventoryPanel* panel = (LLInventoryPanel*)this->getActivePanel();
-//	BOOL needsToScroll = panel->getScrollableContainer()->canAutoScroll(x, y);
+//	bool needsToScroll = panel->getScrollableContainer()->canAutoScroll(x, y);
 //	if(mFilterTabs)
 //	{
 //		if(needsToScroll)
@@ -1284,7 +1284,7 @@ BOOL LLPanelMainInventory::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 	}
 // [/SL:KB]
 
-	BOOL handled = LLPanel::handleDragAndDrop(x, y, mask, drop, cargo_type, cargo_data, accept, tooltip_msg);
+	bool handled = LLPanel::handleDragAndDrop(x, y, mask, drop, cargo_type, cargo_data, accept, tooltip_msg);
 
 	return handled;
 }
@@ -1498,7 +1498,7 @@ LLFloaterInventoryFinder::LLFloaterInventoryFinder(LLPanelMainInventory* invento
 	updateElementsFromFilter();
 }
 
-BOOL LLFloaterInventoryFinder::postBuild()
+bool LLFloaterInventoryFinder::postBuild()
 {
 	const LLRect& viewrect = mPanelMainInventory->getRect();
 	setRect(LLRect(viewrect.mLeft - getRect().getWidth(), viewrect.mTop, viewrect.mLeft, viewrect.mTop - getRect().getHeight()));
@@ -1530,7 +1530,7 @@ BOOL LLFloaterInventoryFinder::postBuild()
 	getChild<LLUICtrl>("check_transfer")->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
 	// </FS:Zi>
 
-	return TRUE;
+	return true;
 }
 void LLFloaterInventoryFinder::onTimeAgo(LLUICtrl *ctrl, void *user_data)
 {
@@ -2498,14 +2498,14 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
     }
 }
 
-void LLPanelMainInventory::onVisibilityChange( BOOL new_visibility )
+void LLPanelMainInventory::onVisibilityChange( bool new_visibility )
 {
 	if(!new_visibility)
 	{
 		LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
 		if (menu)
 		{
-			menu->setVisible(FALSE);
+			menu->setVisible(false);
 		}
 		// <FS:Ansariel> FIRE-20109: Crash at start using Vintage skin
 		//getActivePanel()->getRootFolder()->finishRenamingItem();

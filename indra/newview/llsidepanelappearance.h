@@ -49,10 +49,10 @@ public:
 	LLSidepanelAppearance();
 	virtual ~LLSidepanelAppearance();
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);	
 	// <FS:Ansariel> CTRL-F focusses local search editor
-	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool handleKeyHere(KEY key, MASK mask);
 	/*virtual*/ bool hasAccelerators() const { return true; }
 	// </FS:Ansariel>
 
@@ -91,9 +91,9 @@ private:
 	void onOpenOutfitButtonClicked();
 	void onEditAppearanceButtonClicked();
 
-	void toggleMyOutfitsPanel(BOOL visible, const std::string& tab_name);
-	void toggleOutfitEditPanel(BOOL visible, BOOL disable_camera_switch = FALSE);
-	void toggleWearableEditPanel(BOOL visible, LLViewerWearable* wearable = NULL, BOOL disable_camera_switch = FALSE);
+	void toggleMyOutfitsPanel(bool visible, const std::string& tab_name);
+	void toggleOutfitEditPanel(bool visible, bool disable_camera_switch = false);
+	void toggleWearableEditPanel(bool visible, LLViewerWearable* wearable = nullptr, bool disable_camera_switch = false);
 
 	// <FS:Ansariel> Don't filter outfits list on keypress
 	//LLFilterEditor*			mFilterEditor;

@@ -286,7 +286,7 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
 		}
 
 		// freeze everything else
-		gSavedSettings.setBOOL("FreezeTime", TRUE);
+		gSavedSettings.setBOOL("FreezeTime", true);
 
 		if (LLToolMgr::getInstance()->getCurrentToolset() != gCameraToolset)
 		{
@@ -309,7 +309,7 @@ void LLFloaterSnapshotBase::ImplBase::updateLayout(LLFloaterSnapshotBase* floate
 		floaterp->impl->mAvatarPauseHandles.clear();
 
 		// thaw everything else
-		gSavedSettings.setBOOL("FreezeTime", FALSE);
+		gSavedSettings.setBOOL("FreezeTime", false);
 
 		// restore last tool (e.g. pie menu, etc)
 		if (floaterp->impl->mLastToolset)
@@ -1089,7 +1089,7 @@ LLFloaterSnapshotBase::~LLFloaterSnapshotBase()
 	if (impl->mPreviewHandle.get()) impl->mPreviewHandle.get()->die();
 
 	//unfreeze everything else
-	gSavedSettings.setBOOL("FreezeTime", FALSE);
+	gSavedSettings.setBOOL("FreezeTime", false);
 
 	if (impl->mLastToolset)
 	{
@@ -1116,7 +1116,7 @@ LLFloaterSnapshot::~LLFloaterSnapshot()
 }
 
 // virtual
-BOOL LLFloaterSnapshot::postBuild()
+bool LLFloaterSnapshot::postBuild()
 {
 	mRefreshBtn = getChild<LLUICtrl>("new_snapshot_btn");
 	childSetAction("new_snapshot_btn", ImplBase::onClickNewSnapshot, this);
@@ -1206,7 +1206,7 @@ BOOL LLFloaterSnapshot::postBuild()
 
 	previewp->setThumbnailPlaceholderRect(getThumbnailPlaceholderRect());
 
-	return TRUE;
+	return true;
 }
 
 // virtual
@@ -1363,7 +1363,7 @@ void LLFloaterSnapshotBase::onClose(bool app_quitting)
 		previewp->setEnabled(FALSE);
 	}
 
-	gSavedSettings.setBOOL("FreezeTime", FALSE);
+	gSavedSettings.setBOOL("FreezeTime", false);
 	impl->mAvatarPauseHandles.clear();
 
 	if (impl->mLastToolset)
@@ -1644,7 +1644,7 @@ LLSnapshotFloaterView::~LLSnapshotFloaterView()
 }
 
 // virtual
-BOOL LLSnapshotFloaterView::handleKey(KEY key, MASK mask, BOOL called_from_parent)
+bool LLSnapshotFloaterView::handleKey(KEY key, MASK mask, bool called_from_parent)
 {
 	// use default handler when not in freeze-frame mode
 	if(!gSavedSettings.getBOOL("FreezeTime"))
@@ -1660,9 +1660,9 @@ BOOL LLSnapshotFloaterView::handleKey(KEY key, MASK mask, BOOL called_from_paren
 	else
 	{
 		// bounce keystrokes back down
-		LLFloaterView::handleKey(key, mask, TRUE);
+		LLFloaterView::handleKey(key, mask, true);
 	}
-	return TRUE;
+	return true;
 }
 
 // virtual

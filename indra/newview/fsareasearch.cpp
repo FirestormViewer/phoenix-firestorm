@@ -226,7 +226,7 @@ FSAreaSearch::~FSAreaSearch()
 	}
 }
 
-BOOL FSAreaSearch::postBuild()
+bool FSAreaSearch::postBuild()
 {
 	mTab = getChild<LLTabContainer>("area_searchtab");
 
@@ -1385,11 +1385,11 @@ FSPanelAreaSearchList::FSPanelAreaSearchList(FSAreaSearch* pointer)
 	mColumnBits["last_owner"] = 512;
 }
 
-BOOL FSPanelAreaSearchList::postBuild()
+bool FSPanelAreaSearchList::postBuild()
 {
 	mResultList = getChild<FSScrollListCtrl>("result_list");
 	mResultList->setDoubleClickCallback(boost::bind(&FSPanelAreaSearchList::onDoubleClick, this));
-	mResultList->sortByColumn("name", TRUE);
+	mResultList->sortByColumn("name", true);
 	mResultList->setContextMenu(&gFSAreaSearchMenu);
 
 	mCounterText = getChild<LLTextBox>("counter");
@@ -2029,7 +2029,7 @@ FSPanelAreaSearchFind::FSPanelAreaSearchFind(FSAreaSearch* pointer)
 {
 }
 
-BOOL FSPanelAreaSearchFind::postBuild()
+bool FSPanelAreaSearchFind::postBuild()
 {
 	mNameLineEditor = getChild<LLLineEditor>("name_search");
 	mNameLineEditor->setCommitCallback(boost::bind(&FSAreaSearch::onCommitLine, mFSAreaSearch));
@@ -2073,12 +2073,12 @@ void FSPanelAreaSearchFind::onButtonClickedClear()
 }
 
 // handle the "enter" key
-BOOL FSPanelAreaSearchFind::handleKeyHere(KEY key, MASK mask)
+bool FSPanelAreaSearchFind::handleKeyHere(KEY key, MASK mask)
 {
 	if (KEY_RETURN == key)
 	{
 		mFSAreaSearch->onButtonClickedSearch();
-		return TRUE;
+		return true;
 	}
 
 	return LLPanel::handleKeyHere(key, mask);
@@ -2095,17 +2095,17 @@ FSPanelAreaSearchFilter::FSPanelAreaSearchFilter(FSAreaSearch* pointer)
 {
 }
 
-BOOL FSPanelAreaSearchFilter::postBuild()
+bool FSPanelAreaSearchFilter::postBuild()
 {
 	mCheckboxLocked = getChild<LLCheckBoxCtrl>("filter_locked");
 	mCheckboxLocked->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
 	mCheckboxPhysical = getChild<LLCheckBoxCtrl>("filter_physical");
-	mCheckboxPhysical->setEnabled(FALSE);
+	mCheckboxPhysical->setEnabled(false);
 	mCheckboxPhysical->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
 	mCheckboxTemporary = getChild<LLCheckBoxCtrl>("filter_temporary");
-	mCheckboxTemporary->setEnabled(FALSE);
+	mCheckboxTemporary->setEnabled(false);
 	mCheckboxTemporary->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
 	mCheckboxPhantom = getChild<LLCheckBoxCtrl>("filter_phantom");
@@ -2115,7 +2115,7 @@ BOOL FSPanelAreaSearchFilter::postBuild()
 	mCheckboxForSale->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 	
 	mCheckboxAttachment = getChild<LLCheckBoxCtrl>("filter_attachment");
-	mCheckboxAttachment->setEnabled(FALSE);
+	mCheckboxAttachment->setEnabled(false);
 	mCheckboxAttachment->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 	
 	mSpinForSaleMinValue= getChild<LLSpinCtrl>("min_price");
@@ -2128,23 +2128,23 @@ BOOL FSPanelAreaSearchFilter::postBuild()
 	mComboClickAction->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCombo, this));
 	
 	mCheckboxExcludeAttachment = getChild<LLCheckBoxCtrl>("exclude_attachment");
-	mCheckboxExcludeAttachment->set(TRUE);
+	mCheckboxExcludeAttachment->set(true);
 	mCheckboxExcludeAttachment->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
 	mCheckboxExcludePhysics = getChild<LLCheckBoxCtrl>("exclude_physical");
-	mCheckboxExcludePhysics->set(TRUE);
+	mCheckboxExcludePhysics->set(true);
 	mCheckboxExcludePhysics->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
 	mCheckboxExcludetemporary = getChild<LLCheckBoxCtrl>("exclude_temporary");
-	mCheckboxExcludetemporary->set(TRUE);
+	mCheckboxExcludetemporary->set(true);
 	mCheckboxExcludetemporary->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
 	mCheckboxExcludeChildPrim = getChild<LLCheckBoxCtrl>("exclude_childprim");
-	mCheckboxExcludeChildPrim->set(TRUE);
+	mCheckboxExcludeChildPrim->set(true);
 	mCheckboxExcludeChildPrim->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
 	mCheckboxExcludeNeighborRegions = getChild<LLCheckBoxCtrl>("exclude_neighbor_region");
-	mCheckboxExcludeNeighborRegions->set(TRUE);
+	mCheckboxExcludeNeighborRegions->set(true);
 	mCheckboxExcludeNeighborRegions->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
 
 	mButtonApply = getChild<LLButton>("apply");
@@ -2295,7 +2295,7 @@ bool FSPanelAreaSearchOptions::onEnableColumnVisibilityChecked(const LLSD& userd
 // Advanced tab
 //---------------------------------------------------------------------------
 
-BOOL FSPanelAreaSearchAdvanced::postBuild()
+bool FSPanelAreaSearchAdvanced::postBuild()
 {
 	mCheckboxClickTouch = getChild<LLCheckBoxCtrl>("double_click_touch");
 	mCheckboxClickBuy = getChild<LLCheckBoxCtrl>("double_click_buy");

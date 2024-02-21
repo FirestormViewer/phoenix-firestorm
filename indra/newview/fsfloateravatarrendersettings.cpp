@@ -41,7 +41,7 @@
 
 FSFloaterAvatarRenderSettings::FSFloaterAvatarRenderSettings(const LLSD& key)
  : LLFloater(key),
- mAvatarList(NULL),
+ mAvatarList(nullptr),
  mRenderSettingChangedCallbackConnection(),
  mFilterSubString(LLStringUtil::null),
  mFilterSubStringOrig(LLStringUtil::null)
@@ -77,7 +77,7 @@ void FSFloaterAvatarRenderSettings::addElementToList(const LLUUID& avatar_id, LL
 	mAvatarList->addNameItemRow(item_params);
 }
 
-BOOL FSFloaterAvatarRenderSettings::postBuild()
+bool FSFloaterAvatarRenderSettings::postBuild()
 {
 	mAvatarList = getChild<LLNameListCtrl>("avatar_list");
 	mAvatarList->setContextMenu(&FSFloaterAvatarRenderPersistenceMenu::gFSAvatarRenderPersistenceMenu);
@@ -93,7 +93,7 @@ BOOL FSFloaterAvatarRenderSettings::postBuild()
 	
 	loadInitialList();
 
-	return TRUE;
+	return true;
 }
 
 void FSFloaterAvatarRenderSettings::removePicker()
@@ -146,12 +146,12 @@ void FSFloaterAvatarRenderSettings::onFilterEdit(const std::string& search_strin
 	mAvatarList->setFilterString(mFilterSubStringOrig);
 }
 
-BOOL FSFloaterAvatarRenderSettings::handleKeyHere(KEY key, MASK mask)
+bool FSFloaterAvatarRenderSettings::handleKeyHere(KEY key, MASK mask)
 {
 	if (FSCommon::isFilterEditorKeyCombo(key, mask))
 	{
-		getChild<LLFilterEditor>("filter_input")->setFocus(TRUE);
-		return TRUE;
+		getChild<LLFilterEditor>("filter_input")->setFocus(true);
+		return true;
 	}
 
 	return LLFloater::handleKeyHere(key, mask);

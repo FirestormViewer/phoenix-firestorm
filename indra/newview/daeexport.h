@@ -112,7 +112,7 @@ class ColladaExportFloater : public LLFloater
 {
 public:
 	ColladaExportFloater(const LLSD& key);
-	BOOL postBuild();
+	bool postBuild();
 	void updateSelection();
 	
 protected:

@@ -18,7 +18,7 @@ class NACLFloaterExploreSounds
 {
 public:
 	NACLFloaterExploreSounds(const LLSD& key);
-	BOOL postBuild() override;
+	bool postBuild() override;
 
 	bool tick() override;
 

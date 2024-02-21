@@ -605,7 +605,7 @@ LLObjectSelectionHandle LLSelectMgr::selectObjectAndFamily(LLViewerObject* obj, 
 	// leave component mode
 	if (gSavedSettings.getBOOL("EditLinkedParts"))
 	{
-		gSavedSettings.setBOOL("EditLinkedParts", FALSE);
+		gSavedSettings.setBOOL("EditLinkedParts", false);
 		promoteSelectionToRoot();
 	}
 
@@ -686,7 +686,7 @@ LLObjectSelectionHandle LLSelectMgr::selectObjectAndFamily(const std::vector<LLV
 	// leave component mode
 	if (gSavedSettings.getBOOL("EditLinkedParts"))
 	{		
-		gSavedSettings.setBOOL("EditLinkedParts", FALSE);
+		gSavedSettings.setBOOL("EditLinkedParts", false);
 		promoteSelectionToRoot();
 	}
 
@@ -7606,7 +7606,7 @@ LLBBox LLSelectMgr::getBBoxOfSelection() const
 //-----------------------------------------------------------------------------
 // canUndo()
 //-----------------------------------------------------------------------------
-BOOL LLSelectMgr::canUndo() const
+bool LLSelectMgr::canUndo() const
 {
 	// Can edit or can move
 	return const_cast<LLSelectMgr*>(this)->mSelectedObjects->getFirstUndoEnabledObject() != NULL; // HACK: casting away constness - MG;
@@ -7625,7 +7625,7 @@ void LLSelectMgr::undo()
 //-----------------------------------------------------------------------------
 // canRedo()
 //-----------------------------------------------------------------------------
-BOOL LLSelectMgr::canRedo() const
+bool LLSelectMgr::canRedo() const
 {
 	return const_cast<LLSelectMgr*>(this)->mSelectedObjects->getFirstEditableObject() != NULL; // HACK: casting away constness - MG
 }
@@ -7643,7 +7643,7 @@ void LLSelectMgr::redo()
 //-----------------------------------------------------------------------------
 // canDoDelete()
 //-----------------------------------------------------------------------------
-BOOL LLSelectMgr::canDoDelete() const
+bool LLSelectMgr::canDoDelete() const
 {
 	bool can_delete = false;
 	// This function is "logically const" - it does not change state in
@@ -7677,7 +7677,7 @@ void LLSelectMgr::doDelete()
 //-----------------------------------------------------------------------------
 // canDeselect()
 //-----------------------------------------------------------------------------
-BOOL LLSelectMgr::canDeselect() const
+bool LLSelectMgr::canDeselect() const
 {
 	return !mSelectedObjects->isEmpty();
 }
@@ -7692,7 +7692,7 @@ void LLSelectMgr::deselect()
 //-----------------------------------------------------------------------------
 // canDuplicate()
 //-----------------------------------------------------------------------------
-BOOL LLSelectMgr::canDuplicate() const
+bool LLSelectMgr::canDuplicate() const
 {
 //	return const_cast<LLSelectMgr*>(this)->mSelectedObjects->getFirstCopyableObject() != NULL; // HACK: casting away constness - MG
 // [RLVa:KB] - Checked: 2010-03-24 (RLVa-1.2.0e) | Added: RLVa-1.2.0a

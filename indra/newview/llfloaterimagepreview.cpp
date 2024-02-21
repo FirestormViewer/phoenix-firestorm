@@ -98,11 +98,11 @@ LLFloaterImagePreview::LLFloaterImagePreview(const std::string& filename) :
 //-----------------------------------------------------------------------------
 // postBuild()
 //-----------------------------------------------------------------------------
-BOOL LLFloaterImagePreview::postBuild()
+bool LLFloaterImagePreview::postBuild()
 {
 	if (!LLFloaterNameDesc::postBuild())
 	{
-		return FALSE;
+		return false;
 	}
 	
 	LLCtrlSelectionInterface* iface = childGetSelectionInterface("clothing_type_combo");
@@ -121,7 +121,7 @@ BOOL LLFloaterImagePreview::postBuild()
 	// </FS:Zi>
 	mPreviewImageRect.set(0.f, 1.f, 1.f, 0.f);
 
-	getChildView("bad_image_text")->setVisible(FALSE);
+	getChildView("bad_image_text")->setVisible(false);
 
 	// <FS:PP> FIRE-32944 - Hide some items if texture is invalid
 	LLCheckBoxCtrl* temp_check = getChild<LLCheckBoxCtrl>("temp_check");
@@ -148,19 +148,19 @@ BOOL LLFloaterImagePreview::postBuild()
         //}
 		if (mRawImagep->getWidth() * mRawImagep->getHeight () <= LL_IMAGE_REZ_LOSSLESS_CUTOFF * LL_IMAGE_REZ_LOSSLESS_CUTOFF)
 		{
-			lossless_check->setEnabled(TRUE);
-			lossless_check->setVisible(TRUE);
+			lossless_check->setEnabled(true);
+			lossless_check->setVisible(true);
 			lossless_check->setControlVariable(gSavedSettings.getControl("LosslessJ2CUpload"));
 		}
 		else
 		{
-			lossless_check->setEnabled(FALSE);
-			lossless_check->setVisible(FALSE);
+			lossless_check->setEnabled(false);
+			lossless_check->setVisible(false);
 		}
 		//</FS:Beq>
 		
 		// <FS:CR> Temporary texture uploads
-		BOOL enable_temp_uploads = (LLAgentBenefitsMgr::current().getTextureUploadCost() != 0
+		bool enable_temp_uploads = (LLAgentBenefitsMgr::current().getTextureUploadCost() != 0
 									&& gAgent.getRegion()->getCentralBakeVersion() == 0);
 		if (!enable_temp_uploads)
 		{
@@ -217,9 +217,9 @@ BOOL LLFloaterImagePreview::postBuild()
 	{
 		mAvatarPreview = NULL;
 		mSculptedPreview = NULL;
-		getChildView("bad_image_text")->setVisible(TRUE);
-		getChildView("clothing_type_combo")->setEnabled(FALSE);
-		getChildView("ok_btn")->setEnabled(FALSE);
+		getChildView("bad_image_text")->setVisible(true);
+		getChildView("clothing_type_combo")->setEnabled(false);
+		getChildView("ok_btn")->setEnabled(false);
 
 		// <FS:PP> FIRE-32944 - Hide some items if texture is invalid
 		uploaded_size_text->setVisible(FALSE);
@@ -235,7 +235,7 @@ BOOL LLFloaterImagePreview::postBuild()
 	
 	// <FS:Zi> detect and strip empty alpha layers from images on upload
 	// getChild<LLUICtrl>("ok_btn")->setCommitCallback(boost::bind(&LLFloaterNameDesc::onBtnOK, this));
-	return TRUE;
+	return true;
 }
 
 // <FS:Zi> detect and strip empty alpha layers from images on upload

@@ -226,7 +226,7 @@ std::map <std::string, std::string> LLFloaterBvhPreview::getJointAliases()
 //-----------------------------------------------------------------------------
 // postBuild()
 //-----------------------------------------------------------------------------
-BOOL LLFloaterBvhPreview::postBuild()
+bool LLFloaterBvhPreview::postBuild()
 {
 	// <FS> Reload animation from disk
 	//LLKeyframeMotion* motionp = NULL;
@@ -235,7 +235,7 @@ BOOL LLFloaterBvhPreview::postBuild()
 
 	if (!LLFloaterNameDesc::postBuild())
 	{
-		return FALSE;
+		return false;
 	}
 
 	getChild<LLUICtrl>("name_form")->setCommitCallback(boost::bind(&LLFloaterBvhPreview::onCommitName, this));
@@ -497,7 +497,7 @@ BOOL LLFloaterBvhPreview::loadBVH()
 
 	delete loaderp;
 
-	return TRUE;
+	return true;
 }
 
 // <FS> Reload animation from disk

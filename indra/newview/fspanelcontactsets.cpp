@@ -58,7 +58,7 @@ FSPanelContactSets::~FSPanelContactSets()
 	}
 }
 
-BOOL FSPanelContactSets::postBuild()
+bool FSPanelContactSets::postBuild()
 {
 	childSetAction("add_set_btn",			boost::bind(&FSPanelContactSets::onClickAddSet,				this));
 	childSetAction("remove_set_btn",		boost::bind(&FSPanelContactSets::onClickRemoveSet,			this));
@@ -83,7 +83,7 @@ BOOL FSPanelContactSets::postBuild()
 	mAvatarList->setContextMenu(&LLPanelPeopleMenus::gPeopleContextMenu);
 	generateAvatarList(mContactSetCombo->getValue().asString());
 
-	return TRUE;
+	return true;
 }
 
 void FSPanelContactSets::onSelectAvatar()

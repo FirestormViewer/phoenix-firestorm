@@ -452,7 +452,7 @@ bool LLUrlEntryInvalidSLURL::isSLURLvalid(const std::string &url) const
 
 		if((x>= 0 && x<= 256) && (y>= 0 && y<= 256) && (z>= 0))
 		{
-			return TRUE;
+			return true;
 		}
 	}
 	else if (path_parts == (actual_parts-1))
@@ -464,7 +464,7 @@ bool LLUrlEntryInvalidSLURL::isSLURLvalid(const std::string &url) const
 		;
 		if((x>= 0 && x<= 256) && (y>= 0 && y<= 256))
 		{
-				return TRUE;
+				return true;
 		}
 	}
 	else if (path_parts == (actual_parts-2))
@@ -473,11 +473,11 @@ bool LLUrlEntryInvalidSLURL::isSLURLvalid(const std::string &url) const
 		LLStringUtil::convertToS32(path_array[path_parts-1],x);
 		if(x>= 0 && x<= 256)
 		{
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 //

@@ -2990,7 +2990,7 @@ bool LLAppViewer::initConfiguration()
 		c->setValue(true, false);
 	}
 
-	gSavedSettings.setBOOL("QAMode", TRUE );
+	gSavedSettings.setBOOL("QAMode", true );
 	gSavedSettings.setS32("WatchdogEnabled", 0);
 #endif
 
@@ -3076,7 +3076,7 @@ bool LLAppViewer::initConfiguration()
 		// </FS>
 		
 		
-		gSavedSettings.setBOOL("FirstRunThisInstall", FALSE);
+		gSavedSettings.setBOOL("FirstRunThisInstall", false);
 	}
 	
 // <FS:Beq> FIRE-29819 Set ForceShowGrid to TRUE always, unless expressly disabled
@@ -3084,7 +3084,7 @@ bool LLAppViewer::initConfiguration()
 #if OPENSIM && !SINGLEGRID
 	if (!gSavedSettings.getBOOL("ForceShowGrid") && gSavedSettings.getBOOL("FSOpenSimAlwaysForceShowGrid"))
 	{
-		gSavedSettings.setBOOL("ForceShowGrid", TRUE);
+		gSavedSettings.setBOOL("ForceShowGrid", true);
 	}
 #endif
 // </FS:Beq>
@@ -3264,7 +3264,7 @@ bool LLAppViewer::initConfiguration()
         gDebugGL = true;
         // gDebugGL can cause excessive logging
         // so it's limited to a single session
-        gSavedSettings.setBOOL("RenderDebugGLSession", FALSE);
+        gSavedSettings.setBOOL("RenderDebugGLSession", false);
     }
 
 	// <FS:TT> Hacking to save the skin and theme for future use.
@@ -3700,8 +3700,8 @@ bool LLAppViewer::initWindow()
 	}
 
 	// Set this flag in case we crash while initializing GL
-	gSavedSettings.setBOOL("RenderInitError", TRUE);
-	gSavedSettings.saveToFile( gSavedSettings.getString("ClientSettingsFile"), TRUE );
+	gSavedSettings.setBOOL("RenderInitError", true);
+	gSavedSettings.saveToFile( gSavedSettings.getString("ClientSettingsFile"), true );
 
 	gPipeline.init();
 	LL_INFOS("AppInit") << "gPipeline Initialized" << LL_ENDL;
@@ -3709,8 +3709,8 @@ bool LLAppViewer::initWindow()
 	stop_glerror();
 	gViewerWindow->initGLDefaults();
 
-	gSavedSettings.setBOOL("RenderInitError", FALSE);
-	gSavedSettings.saveToFile( gSavedSettings.getString("ClientSettingsFile"), TRUE );
+	gSavedSettings.setBOOL("RenderInitError", false);
+	gSavedSettings.saveToFile( gSavedSettings.getString("ClientSettingsFile"), true );
 
 	//If we have a startup crash, it's usually near GL initialization, so simulate that.
 	if(gCrashOnStartup)
@@ -3725,7 +3725,7 @@ bool LLAppViewer::initWindow()
 	if (gSavedSettings.getBOOL("FirstLoginThisInstall") && meetsRequirementsForMaximizedStart())
 	{
 		LL_INFOS("AppInit") << "This client met the requirements for a maximized initial screen." << LL_ENDL;
-		gSavedSettings.setBOOL("WindowMaximized", TRUE);
+		gSavedSettings.setBOOL("WindowMaximized", true);
 	}
 
 	if (gSavedSettings.getBOOL("WindowMaximized"))
@@ -4234,9 +4234,9 @@ std::string LLAppViewer::getViewerInfoString(bool default_string) const
 
 void LLAppViewer::cleanupSavedSettings()
 {
-	gSavedSettings.setBOOL("MouseSun", FALSE);
+	gSavedSettings.setBOOL("MouseSun", false);
 
-	gSavedSettings.setBOOL("UseEnergy", TRUE);				// force toggle to turn off, since sends message to simulator
+	gSavedSettings.setBOOL("UseEnergy", true);				// force toggle to turn off, since sends message to simulator
 
 	gSavedSettings.setBOOL("DebugWindowProc", gDebugWindowProc);
 
@@ -4854,7 +4854,7 @@ void LLAppViewer::migrateCacheDirectory()
 	// Only do this once per fresh install of this version.
 	if (gSavedSettings.getBOOL("MigrateCacheDirectory"))
 	{
-		gSavedSettings.setBOOL("MigrateCacheDirectory", FALSE);
+		gSavedSettings.setBOOL("MigrateCacheDirectory", false);
 
 		std::string old_cache_dir = gDirUtilp->add(gDirUtilp->getOSUserAppDir(), "cache");
 		std::string new_cache_dir = gDirUtilp->getCacheDir(true);
@@ -5275,7 +5275,7 @@ void LLAppViewer::saveFinalSnapshot()
 		gSavedSettings.setVector3d("CameraPosOnLogout", gAgentCamera.calcCameraPositionTargetGlobal());
 		gViewerWindow->setCursor(UI_CURSOR_WAIT);
 		gAgentCamera.changeCameraToThirdPerson( FALSE );	// don't animate, need immediate switch
-		gSavedSettings.setBOOL("ShowParcelOwners", FALSE);
+		gSavedSettings.setBOOL("ShowParcelOwners", false);
 		idle();
 
 		std::string snap_filename = gDirUtilp->getLindenUserDir();

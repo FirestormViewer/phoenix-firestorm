@@ -118,7 +118,7 @@ void LLFloaterLocalMesh::onSelectionChangedCallback()
 	showLog();
 }
 
-BOOL LLFloaterLocalMesh::postBuild()
+bool LLFloaterLocalMesh::postBuild()
 {
 	childSetAction("btn_add", LLFloaterLocalMesh::onBtnAdd, this);
 	childSetAction("btn_reload", LLFloaterLocalMesh::onBtnReload, this);
@@ -139,7 +139,7 @@ BOOL LLFloaterLocalMesh::postBuild()
 	getChild<LLComboBox>("lod_suffix_combo")->setCommitCallback(boost::bind(&LLFloaterLocalMesh::onSuffixStandardSelected, this, (LLUICtrl*)this));
 
 	reloadLowerUI();
-	return TRUE;
+	return true;
 }
 
 void LLFloaterLocalMesh::update_selected_target(LLUUID selected_id)

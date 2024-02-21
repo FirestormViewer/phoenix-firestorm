@@ -261,7 +261,7 @@ void LLColorSwatchCtrl::draw()
 	LLUICtrl::draw();
 }
 
-void LLColorSwatchCtrl::setEnabled( BOOL enabled )
+void LLColorSwatchCtrl::setEnabled( bool enabled )
 {
 	// <FS:Zi> Add label/caption colors
 	// mCaption->setEnabled( enabled );

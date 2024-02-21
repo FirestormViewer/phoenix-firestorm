@@ -77,12 +77,12 @@ void LLFloaterScriptRecover::onOpen(const LLSD& sdKey)
 	}
 }
 
-BOOL LLFloaterScriptRecover::postBuild()
+bool LLFloaterScriptRecover::postBuild()
 {
 	findChild<LLUICtrl>("recover_btn")->setCommitCallback(boost::bind(&LLFloaterScriptRecover::onBtnRecover, this));
 	findChild<LLUICtrl>("cancel_btn")->setCommitCallback(boost::bind(&LLFloaterScriptRecover::onBtnCancel, this));
 
-	return TRUE;
+	return true;
 }
 
 void LLFloaterScriptRecover::onBtnCancel()

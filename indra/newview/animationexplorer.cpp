@@ -155,7 +155,7 @@ void AnimationExplorer::startMotion(const LLUUID& motionID)
 	}
 }
 
-BOOL AnimationExplorer::postBuild()
+bool AnimationExplorer::postBuild()
 {
 	mAnimationScrollList = getChild<LLScrollListCtrl>("animation_list");
 	mStopButton = getChild<LLButton>("stop_btn");
@@ -187,7 +187,7 @@ BOOL AnimationExplorer::postBuild()
 	// request list of recent animations
 	update();
 
-	return TRUE;
+	return true;
 }
 
 void AnimationExplorer::onSelectAnimation()

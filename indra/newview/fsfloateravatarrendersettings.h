@@ -42,9 +42,9 @@ public:
 	FSFloaterAvatarRenderSettings(const LLSD& key);
 	virtual ~FSFloaterAvatarRenderSettings();
 
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
-	/*virtual*/ bool hasAccelerators() const { return true; }
+	bool postBuild() override;
+	bool handleKeyHere(KEY key, MASK mask) override;
+	bool hasAccelerators() const override { return true; }
 
 private:
 	void onCloseBtn();

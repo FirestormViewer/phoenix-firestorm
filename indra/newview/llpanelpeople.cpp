@@ -662,7 +662,7 @@ void LLPanelPeople::removePicker()
     }
 }
 
-BOOL LLPanelPeople::postBuild()
+bool LLPanelPeople::postBuild()
 {
 	// <FS:Ansariel> Don't bother with "want more?" advertisement
 	//S32 max_premium = LLAgentBenefitsMgr::get("Premium").getGroupMembershipLimit();
@@ -835,7 +835,7 @@ BOOL LLPanelPeople::postBuild()
 	//mAllFriendList->setRefreshCompleteCallback(boost::bind(&LLPanelPeople::onFriendListRefreshComplete, this, _1, _2));
 	// </FS:Ansariel> Friend list accordion replacement
 
-	return TRUE;
+	return true;
 }
 
 // virtual
@@ -2058,7 +2058,7 @@ bool LLPanelPeople::onEnableColumnVisibilityChecked(const LLSD& userdata)
 // </FS:Ansariel>
 
 // <FS:Ansariel> CTRL-F focusses local search editor
-BOOL LLPanelPeople::handleKeyHere(KEY key, MASK mask)
+bool LLPanelPeople::handleKeyHere(KEY key, MASK mask)
 {
 	if (FSCommon::isFilterEditorKeyCombo(key, mask))
 	{
@@ -2066,18 +2066,18 @@ BOOL LLPanelPeople::handleKeyHere(KEY key, MASK mask)
 
 		if (cur_tab == FRIENDS_TAB_NAME)
 		{
-			getChild<LLFilterEditor>("friends_filter_input")->setFocus(TRUE);
-			return TRUE;
+			getChild<LLFilterEditor>("friends_filter_input")->setFocus(true);
+			return true;
 		}
 		else if (cur_tab == GROUP_TAB_NAME)
 		{
-			getChild<LLFilterEditor>("groups_filter_input")->setFocus(TRUE);
-			return TRUE;
+			getChild<LLFilterEditor>("groups_filter_input")->setFocus(true);
+			return true;
 		}
 		else if (cur_tab == RECENT_TAB_NAME)
 		{
-			getChild<LLFilterEditor>("recent_filter_input")->setFocus(TRUE);
-			return TRUE;
+			getChild<LLFilterEditor>("recent_filter_input")->setFocus(true);
+			return true;
 		}
 	}
 

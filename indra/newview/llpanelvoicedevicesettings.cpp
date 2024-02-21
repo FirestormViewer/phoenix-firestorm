@@ -62,7 +62,7 @@ LLPanelVoiceDeviceSettings::~LLPanelVoiceDeviceSettings()
 {
 }
 
-BOOL LLPanelVoiceDeviceSettings::postBuild()
+bool LLPanelVoiceDeviceSettings::postBuild()
 {
 	LLSlider* volume_slider = getChild<LLSlider>("mic_volume_slider");
 	// set mic volume tuning slider based on last mic volume setting
@@ -84,11 +84,11 @@ BOOL LLPanelVoiceDeviceSettings::postBuild()
 	mCtrlInputDevices->setMouseDownCallback(boost::bind(&LLPanelVoiceDeviceSettings::onInputDevicesClicked, this));
 	
 	
-	return TRUE;
+	return true;
 }
 
 // virtual
-void LLPanelVoiceDeviceSettings::onVisibilityChange ( BOOL new_visibility )
+void LLPanelVoiceDeviceSettings::onVisibilityChange ( bool new_visibility )
 {
 	if (new_visibility)
 	{
@@ -99,7 +99,7 @@ void LLPanelVoiceDeviceSettings::onVisibilityChange ( BOOL new_visibility )
 		cleanup();
 		// when closing this window, turn of visiblity control so that 
 		// next time preferences is opened we don't suspend voice
-		gSavedSettings.setBOOL("ShowDeviceSettings", FALSE);
+		gSavedSettings.setBOOL("ShowDeviceSettings", false);
 	}
 }
 void LLPanelVoiceDeviceSettings::draw()

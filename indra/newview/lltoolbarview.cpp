@@ -108,7 +108,7 @@ LLToolBarView::~LLToolBarView()
 	saveToolbars();
 }
 
-BOOL LLToolBarView::postBuild()
+bool LLToolBarView::postBuild()
 {
 	mToolbars[LLToolBarEnums::TOOLBAR_LEFT] = getChild<LLToolBar>("toolbar_left");
 	mToolbars[LLToolBarEnums::TOOLBAR_LEFT]->getCenterLayoutPanel()->setLocationId(LLToolBarEnums::TOOLBAR_LEFT);
@@ -136,7 +136,7 @@ BOOL LLToolBarView::postBuild()
 	// <FS:Ansariel> Added to determine if toolbar gets hidden when empty
 	mHideBottomOnEmpty = FSCommon::isLegacySkin();
 
-	return TRUE;
+	return true;
 }
 
 S32 LLToolBarView::hasCommand(const LLCommandId& commandId) const

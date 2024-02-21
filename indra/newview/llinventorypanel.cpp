@@ -414,7 +414,7 @@ void LLInventoryPanel::initializeViewBuilding()
 }
 
 /*virtual*/
-void LLInventoryPanel::onVisibilityChange(BOOL new_visibility)
+void LLInventoryPanel::onVisibilityChange(bool new_visibility)
 {
     if (new_visibility && mViewsInitialized == VIEWS_UNINITIALIZED)
     {
@@ -1544,13 +1544,13 @@ bool LLInventoryPanel::handleToolTip(S32 x, S32 y, MASK mask)
 	return LLPanel::handleToolTip(x, y, mask);
 }
 
-BOOL LLInventoryPanel::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+bool LLInventoryPanel::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
 								   EDragAndDropType cargo_type,
 								   void* cargo_data,
 								   EAcceptance* accept,
 								   std::string& tooltip_msg)
 {
-	BOOL handled = FALSE;
+	bool handled = false;
 
 	if (mAcceptsDragAndDrop)
 	{
@@ -2408,9 +2408,9 @@ void LLInventoryPanel::onCustomAction(const LLSD& userdata)
 }
 // </FS:Ansariel>
 
-BOOL LLInventoryPanel::handleKeyHere( KEY key, MASK mask )
+bool LLInventoryPanel::handleKeyHere( KEY key, MASK mask )
 {
-	BOOL handled = FALSE;
+	bool handled = false;
 	switch (key)
 	{
 	case KEY_RETURN:
@@ -2430,7 +2430,7 @@ BOOL LLInventoryPanel::handleKeyHere( KEY key, MASK mask )
 				}
 			}
 			LLInventoryAction::doToSelected(mInventory, mFolderRoot.get(), "open");
-			handled = TRUE;
+			handled = true;
 		}
 		break;
 	case KEY_DELETE:
@@ -2442,7 +2442,7 @@ BOOL LLInventoryPanel::handleKeyHere( KEY key, MASK mask )
 		if (isSelectionRemovable() && (mask == MASK_NONE))
 		{
 			LLInventoryAction::doToSelected(mInventory, mFolderRoot.get(), "delete");
-			handled = TRUE;
+			handled = true;
 		}
 		break;
 	}
@@ -2802,13 +2802,13 @@ void LLAssetFilteredInventoryPanel::initFromParams(const Params& p)
     getFilter().setFilterNoMarketplaceFolder();
 }
 
-BOOL LLAssetFilteredInventoryPanel::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+bool LLAssetFilteredInventoryPanel::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
     EDragAndDropType cargo_type,
     void* cargo_data,
     EAcceptance* accept,
     std::string& tooltip_msg)
 {
-    BOOL result = FALSE;
+    bool result = false;
 
     if (mAcceptsDragAndDrop)
     {

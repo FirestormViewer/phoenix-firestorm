@@ -94,10 +94,10 @@ private:
 	void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
 	void enableWindlightButtons(bool enable);
 
-	void setDefaultPresetsEnabled(BOOL enabled);
+	void setDefaultPresetsEnabled(bool enabled);
 
 public:
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	virtual void onOpen(const LLSD& key);
 
 	void setSelectedSky(const std::string& preset_name);

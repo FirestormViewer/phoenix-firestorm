@@ -30,7 +30,7 @@ public:
 	lggBeamColorMapFloater(const LLSD& seed);
 	virtual ~lggBeamColorMapFloater();
 
-	BOOL postBuild() override;
+	bool postBuild() override;
 	bool handleMouseDown(S32 x, S32 y, MASK mask) override;
 	bool handleRightMouseDown(S32 x, S32 y, MASK mask) override;
 

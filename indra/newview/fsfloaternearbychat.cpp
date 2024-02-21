@@ -120,9 +120,9 @@ void FSFloaterNearbyChat::updateFSUseNearbyChatConsole(const LLSD &data)
 }
 
 
-BOOL FSFloaterNearbyChat::postBuild()
+bool FSFloaterNearbyChat::postBuild()
 {
-	setIsSingleInstance(TRUE);
+	setIsSingleInstance(true);
 
 	mInputEditor = getChild<LLChatEntry>("chat_box");
 	mInputEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
@@ -131,7 +131,7 @@ BOOL FSFloaterNearbyChat::postBuild()
 	mInputEditor->setFocusLostCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxFocusLost, this));
 	mInputEditor->setFocusReceivedCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxFocusReceived, this));
 	mInputEditor->setTextExpandedCallback(boost::bind(&FSFloaterNearbyChat::reshapeChatLayoutPanel, this));
-	mInputEditor->setPassDelete(TRUE);
+	mInputEditor->setPassDelete(true);
 	mInputEditor->setFont(LLViewerChat::getChatFont());
 	mInputEditor->setLabel(getString("chatbox_label"));
 	mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
@@ -291,15 +291,15 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 }
 
 // virtual
-BOOL FSFloaterNearbyChat::focusFirstItem(BOOL prefer_text_fields, BOOL focus_flash)
+bool FSFloaterNearbyChat::focusFirstItem(bool prefer_text_fields, bool focus_flash)
 {
-	mInputEditor->setFocus(TRUE);
+	mInputEditor->setFocus(true);
 	onTabInto();
 	if (focus_flash)
 	{
 		gFocusMgr.triggerFocusFlash();
 	}
-	return TRUE;
+	return true;
 }
 
 void FSFloaterNearbyChat::onHistoryButtonClicked()
@@ -374,7 +374,7 @@ void FSFloaterNearbyChat::removeScreenChat()
 	}
 }
 
-void FSFloaterNearbyChat::setVisible(BOOL visible)
+void FSFloaterNearbyChat::setVisible(bool visible)
 {
 	if (visible)
 	{
@@ -382,7 +382,7 @@ void FSFloaterNearbyChat::setVisible(BOOL visible)
 	}
 	LLFloater::setVisible(visible);
 	
-	BOOL is_minimized = visible && isChatMultiTab()
+	bool is_minimized = visible && isChatMultiTab()
 		? FSFloaterIMContainer::getInstance()->isMinimized()
 		: !visible;
 
@@ -396,7 +396,7 @@ void FSFloaterNearbyChat::setVisible(BOOL visible)
 		bool is_active = im_container->getActiveFloater() == this && im_container->hasFocus();
 		if (!isChatMultiTab() || is_active || hasFocus())
 		{
-			mInputEditor->setFocus(TRUE);
+			mInputEditor->setFocus(true);
 		}
 	}
 
@@ -410,7 +410,7 @@ void FSFloaterNearbyChat::setVisible(BOOL visible)
 	}
 }
 
-void FSFloaterNearbyChat::setMinimized(BOOL b)
+void FSFloaterNearbyChat::setMinimized(bool b)
 {
 	handleMinimized(b);
 
@@ -433,7 +433,7 @@ void FSFloaterNearbyChat::onOpen(const LLSD& key )
 		}
 		else
 		{
-			floater_container->addFloater(this, FALSE);
+			floater_container->addFloater(this, false);
 		}
 	}
 
@@ -444,7 +444,7 @@ void FSFloaterNearbyChat::onOpen(const LLSD& key )
 		if (floater_container && !gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
 			// make sure to show our parent floater, too
-			floater_container->setVisible(TRUE);
+			floater_container->setVisible(true);
 			floater_container->showFloater(this, LLTabContainer::START);
 		}
 		setVisible(TRUE);
@@ -645,7 +645,7 @@ bool FSFloaterNearbyChat::isChatMultiTab()
 	return is_single_window;
 }
 
-BOOL FSFloaterNearbyChat::getVisible()
+bool FSFloaterNearbyChat::getVisible()
 {
 	FSFloaterIMContainer* im_container = FSFloaterIMContainer::getInstance();
 		
@@ -663,9 +663,9 @@ BOOL FSFloaterNearbyChat::getVisible()
 }
 
 // virtual
-BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
+bool FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 {
-	BOOL handled = FALSE;
+	bool handled = false;
 	
 	if (KEY_RETURN == key)
 	{
@@ -674,21 +674,21 @@ BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 			// shout
 			mInputEditor->updateHistory();
 			sendChat(CHAT_TYPE_SHOUT);
-			handled = TRUE;
+			handled = true;
 		}
 		else if (mask == MASK_SHIFT && gSavedSettings.getBOOL("FSUseShiftWhisper"))
 		{
 			// whisper
 			mInputEditor->updateHistory();
 			sendChat(CHAT_TYPE_WHISPER);
-			handled = TRUE;
+			handled = true;
 		}
 		else if (mask == MASK_ALT && gSavedSettings.getBOOL("FSUseAltOOC"))
 		{
 			// OOC
 			mInputEditor->updateHistory();
 			sendChat(CHAT_TYPE_OOC);
-			handled = TRUE;
+			handled = true;
 		}
 		else if (mask == (MASK_SHIFT | MASK_CONTROL))
 		{
@@ -717,7 +717,7 @@ BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 				}
 			}
 
-			handled = TRUE;
+			handled = true;
 		}
 	}
 

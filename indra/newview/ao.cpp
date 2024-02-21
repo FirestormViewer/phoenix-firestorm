@@ -85,7 +85,7 @@ void FloaterAO::updateSetParameters()
 	mOverrideSitsCheckBoxSmall->setValue(mSelectedSet->getSitOverride());
 	mSmartCheckBox->setValue(mSelectedSet->getSmart());
 	mDisableMouselookCheckBox->setValue(mSelectedSet->getMouselookStandDisable());
-	BOOL isDefault = (mSelectedSet == AOEngine::instance().getDefaultSet());
+	bool isDefault = (mSelectedSet == AOEngine::instance().getDefaultSet());
 	mDefaultCheckBox->setValue(isDefault);
 	mDefaultCheckBox->setEnabled(!isDefault);
 	updateSmart();
@@ -203,7 +203,7 @@ void FloaterAO::updateList()
 	}
 }
 
-BOOL FloaterAO::postBuild()
+bool FloaterAO::postBuild()
 {
 	LLPanel* aoPanel = getChild<LLPanel>("animation_overrider_outer_panel");
 	mMainInterfacePanel = aoPanel->getChild<LLPanel>("animation_overrider_panel");
@@ -278,8 +278,8 @@ BOOL FloaterAO::postBuild()
 	AOEngine::instance().setAnimationChangedCallback(boost::bind(&FloaterAO::onAnimationChanged, this, _1));
 
 	onChangeAnimationSelection();
-	mMainInterfacePanel->setVisible(TRUE);
-	mSmallInterfacePanel->setVisible(FALSE);
+	mMainInterfacePanel->setVisible(true);
+	mSmallInterfacePanel->setVisible(false);
 	reloading(true);
 
 	updateList();
@@ -296,7 +296,7 @@ BOOL FloaterAO::postBuild()
 	return LLDockableFloater::postBuild();
 }
 
-void FloaterAO::enableSetControls(BOOL enable)
+void FloaterAO::enableSetControls(bool enable)
 {
 	mSetSelector->setEnabled(enable);
 	mSetSelectorSmall->setEnabled(enable);
@@ -313,7 +313,7 @@ void FloaterAO::enableSetControls(BOOL enable)
 	}
 }
 
-void FloaterAO::enableStateControls(BOOL enable)
+void FloaterAO::enableStateControls(bool enable)
 {
 	mStateSelector->setEnabled(enable);
 	mAnimationList->setEnabled(enable);
@@ -850,7 +850,7 @@ void FloaterAO::onAnimationChanged(const LLUUID& animation)
 }
 
 // virtual
-BOOL FloaterAO::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDropType type, void* data,
+bool FloaterAO::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDropType type, void* data,
 									EAcceptance* accept, std::string& tooltipMsg)
 {
 	// no drag & drop on small interface
@@ -858,7 +858,7 @@ BOOL FloaterAO::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDr
 	{
 		tooltipMsg = getString("ao_dnd_only_on_full_interface");
 		*accept = ACCEPT_NO;
-		return TRUE;
+		return true;
 	}
 
 	LLInventoryItem* item = (LLInventoryItem*)data;
@@ -868,16 +868,16 @@ BOOL FloaterAO::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDr
 		if (mImportRunning)
 		{
 			*accept = ACCEPT_NO;
-			return TRUE;
+			return true;
 		}
 		*accept = ACCEPT_YES_SINGLE;
 		if (item && drop)
 		{
 			if (AOEngine::instance().importNotecard(item))
 			{
-				reloading(TRUE);
-				mReloadButton->setEnabled(FALSE);
-				mImportRunning = TRUE;
+				reloading(true);
+				mReloadButton->setEnabled(false);
+				mImportRunning = true;
 			}
 		}
 	}
@@ -886,7 +886,7 @@ BOOL FloaterAO::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDr
 		if (!drop && (!mSelectedSet || !mSelectedState || !mCanDragAndDrop))
 		{
 			*accept = ACCEPT_NO;
-			return TRUE;
+			return true;
 		}
 		*accept = ACCEPT_YES_MULTI;
 		if (item && drop)
@@ -904,5 +904,5 @@ BOOL FloaterAO::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDr
 		*accept = ACCEPT_NO;
 	}
 
-	return TRUE;
+	return true;
 }

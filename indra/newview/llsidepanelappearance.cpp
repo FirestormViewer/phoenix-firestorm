@@ -94,7 +94,7 @@ LLSidepanelAppearance::~LLSidepanelAppearance()
 }
 
 // virtual
-BOOL LLSidepanelAppearance::postBuild()
+bool LLSidepanelAppearance::postBuild()
 {
 	mOpenOutfitBtn = getChild<LLButton>("openoutfit_btn");
 	mOpenOutfitBtn->setClickedCallback(boost::bind(&LLSidepanelAppearance::onOpenOutfitButtonClicked, this));
@@ -147,7 +147,7 @@ BOOL LLSidepanelAppearance::postBuild()
 
 	setWearablesLoading(gAgentWearables.isCOFChangeInProgress());
 
-	return TRUE;
+	return true;
 }
 
 // virtual
@@ -340,7 +340,7 @@ void LLSidepanelAppearance::showWearableEditPanel(LLViewerWearable *wearable /* 
 	toggleWearableEditPanel(TRUE, wearable, disable_camera_switch);
 }
 
-void LLSidepanelAppearance::toggleMyOutfitsPanel(BOOL visible, const std::string& tab_name)
+void LLSidepanelAppearance::toggleMyOutfitsPanel(bool visible, const std::string& tab_name)
 {
     if (!mPanelOutfitsInventory
         || (mPanelOutfitsInventory->getVisible() == visible && tab_name.empty()))
@@ -366,7 +366,7 @@ void LLSidepanelAppearance::toggleMyOutfitsPanel(BOOL visible, const std::string
     }
 }
 
-void LLSidepanelAppearance::toggleOutfitEditPanel(BOOL visible, BOOL disable_camera_switch)
+void LLSidepanelAppearance::toggleOutfitEditPanel(bool visible, bool disable_camera_switch)
 {
 	if (!mOutfitEdit || mOutfitEdit->getVisible() == visible)
 	{
@@ -391,7 +391,7 @@ void LLSidepanelAppearance::toggleOutfitEditPanel(BOOL visible, BOOL disable_cam
 	}
 }
 
-void LLSidepanelAppearance::toggleWearableEditPanel(BOOL visible, LLViewerWearable *wearable, BOOL disable_camera_switch)
+void LLSidepanelAppearance::toggleWearableEditPanel(bool visible, LLViewerWearable *wearable, bool disable_camera_switch)
 {
 	if (!mEditWearable)
 	{
@@ -590,19 +590,19 @@ void LLSidepanelAppearance::updateAvatarComplexity(U32 complexity, const std::ma
 // </FS:Ansariel>
 
 // <FS:Ansariel> CTRL-F focusses local search editor
-BOOL LLSidepanelAppearance::handleKeyHere(KEY key, MASK mask)
+bool LLSidepanelAppearance::handleKeyHere(KEY key, MASK mask)
 {
 	if (FSCommon::isFilterEditorKeyCombo(key, mask))
 	{
 		if (mFilterEditor->getVisible())
 		{
-			mFilterEditor->setFocus(TRUE);
-			return TRUE;
+			mFilterEditor->setFocus(true);
+			return true;
 		}
 		else if (isOutfitEditPanelVisible() && getChildView("filter_panel")->getVisible())
 		{
-			getChild<LLFilterEditor>("look_item_filter")->setFocus(TRUE);
-			return TRUE;
+			getChild<LLFilterEditor>("look_item_filter")->setFocus(true);
+			return true;
 		}
 	}
 

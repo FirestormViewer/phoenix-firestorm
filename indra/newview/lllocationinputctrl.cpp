@@ -476,7 +476,7 @@ LLLocationInputCtrl::~LLLocationInputCtrl()
 	mLocationHistoryConnection.disconnect();
 }
 
-void LLLocationInputCtrl::setEnabled(BOOL enabled)
+void LLLocationInputCtrl::setEnabled(bool enabled)
 {
 	LLComboBox::setEnabled(enabled);
 	mAddLandmarkBtn->setEnabled(enabled);
@@ -523,9 +523,9 @@ bool LLLocationInputCtrl::handleToolTip(S32 x, S32 y, MASK mask)
 	return false;
 }
 
-BOOL LLLocationInputCtrl::handleKeyHere(KEY key, MASK mask)
+bool LLLocationInputCtrl::handleKeyHere(KEY key, MASK mask)
 {
-	BOOL result = LLComboBox::handleKeyHere(key, mask);
+	bool result = LLComboBox::handleKeyHere(key, mask);
 
 	if (key == KEY_DOWN && hasFocus() && mList->getItemCount() != 0 && !mList->getVisible())
 	{
@@ -581,13 +581,13 @@ void LLLocationInputCtrl::setText(const LLStringExplicit& text)
 	mHasAutocompletedText = FALSE;
 }
 
-void LLLocationInputCtrl::setFocus(BOOL b)
+void LLLocationInputCtrl::setFocus(bool b)
 {
 	LLComboBox::setFocus(b);
 
 	if (mTextEntry && b && !mList->getVisible())
 	{
-		mTextEntry->setFocus(TRUE);
+		mTextEntry->setFocus(true);
 	}
 }
 
@@ -634,7 +634,7 @@ void LLLocationInputCtrl::draw()
 	LLComboBox::draw();
 }
 
-void LLLocationInputCtrl::reshape(S32 width, S32 height, BOOL called_from_parent)
+void LLLocationInputCtrl::reshape(S32 width, S32 height, bool called_from_parent)
 {
 	LLComboBox::reshape(width, height, called_from_parent);
 

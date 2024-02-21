@@ -430,7 +430,7 @@ void LLPanelLogin::addFavoritesToStartLocation()
 		}
         if (update_password_setting)
         {
-            gSavedSettings.setBOOL("UpdateRememberPasswordSetting", TRUE);
+            gSavedSettings.setBOOL("UpdateRememberPasswordSetting", true);
         }
 		break;
 	}
@@ -453,7 +453,7 @@ LLPanelLogin::~LLPanelLogin()
 }
 
 // virtual
-void LLPanelLogin::setFocus(BOOL b)
+void LLPanelLogin::setFocus(bool b)
 {
 	if(b != hasFocus())
 	{
@@ -1103,7 +1103,7 @@ void LLPanelLogin::onRememberPasswordCheck(void*)
 {
     if (sInstance)
     {
-        gSavedSettings.setBOOL("UpdateRememberPasswordSetting", TRUE);
+        gSavedSettings.setBOOL("UpdateRememberPasswordSetting", true);
 
         LLPointer<LLCredential> cred;
         bool remember_user, remember_password;

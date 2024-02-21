@@ -43,7 +43,7 @@ FSMoneyTracker::FSMoneyTracker(const LLSD& key)
 {
 }
 
-BOOL FSMoneyTracker::postBuild()
+bool FSMoneyTracker::postBuild()
 {
 	mSummary = getChild<LLTextBox>("summary");
 	mTransactionHistory = getChild<LLNameListCtrl>("payment_list");
@@ -53,7 +53,7 @@ BOOL FSMoneyTracker::postBuild()
 	// Button Actions
 	childSetAction("Clear", boost::bind(&FSMoneyTracker::clear, this)); 
 
-	return TRUE;
+	return true;
 }
 
 void FSMoneyTracker::onClose(bool app_quitting)

@@ -51,7 +51,7 @@ private:
 public:
 	/*virtual*/ void onOpen(const LLSD& sdKey);
 	/*virtual*/ void onClose(bool fQuitting);
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 
 	/*
 	 * Member functions
@@ -87,7 +87,7 @@ private:
 public:
 	/*virtual*/ void onOpen(const LLSD& sdKey);
 	/*virtual*/ void onClose(bool fQuitting);
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 
 	/*
 	 * Member functions
@@ -116,7 +116,7 @@ private:
 	// LLFloater overrides
 public:
 	/*virtual*/ void onClose(bool fQuitting);
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 
 	// Member functions
 protected:
@@ -149,7 +149,7 @@ private:
 	 * LLFloater overrides
 	 */
 public:
-	BOOL postBuild() override;
+	bool postBuild() override;
 	void onClose(bool fQuitting) override;
 
 	/*

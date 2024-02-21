@@ -42,20 +42,20 @@ public:
 	static LLFloaterMap* getInstance();
 	virtual ~LLFloaterMap();
 	
-	/*virtual*/ BOOL 	postBuild();
-	/*virtual*/ bool	handleDoubleClick( S32 x, S32 y, MASK mask );
-	/*virtual*/ void	reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
-	/*virtual*/ void	draw();
+	bool 	postBuild() override;
+	bool	handleDoubleClick( S32 x, S32 y, MASK mask ) override;
+	void	reshape(S32 width, S32 height, bool called_from_parent = true) override;
+	void	draw() override;
 
 	// <FS:Ansariel> FIRE-1825: Minimap floater background transparency
-	/*virtual*/ F32 getCurrentTransparency();
+	F32 getCurrentTransparency() override;
 
 private:
 	void setDirectionPos( LLTextBox* text_box, F32 rotation );
 	void updateMinorDirections();
 
 	// <FS:Ansariel> Remove titlebar
-	void setMinimized( BOOL );
+	void setMinimized(bool) override;
 	void stretchMiniMap(S32 width,S32 height);
 	// </FS:Ansariel>
 

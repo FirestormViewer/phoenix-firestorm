@@ -63,7 +63,7 @@ LLFloaterAvatar::~LLFloaterAvatar()
 	// </FS:Ansariel>
 }
 
-BOOL LLFloaterAvatar::postBuild()
+bool LLFloaterAvatar::postBuild()
 {
     mAvatarPicker = findChild<LLMediaCtrl>("avatar_picker_contents");
     if (mAvatarPicker)
@@ -71,7 +71,7 @@ BOOL LLFloaterAvatar::postBuild()
         mAvatarPicker->clearCache();
     }
 	enableResizeCtrls(true, true, false);
-	return TRUE;
+	return true;
 }
 
 // <FS:Ansariel> Avatar chooser does not change between OpenSim grids

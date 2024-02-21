@@ -115,9 +115,9 @@ LLPanelGroupGeneral::~LLPanelGroupGeneral()
 	// </FS:Ansariel>
 }
 
-BOOL LLPanelGroupGeneral::postBuild()
+bool LLPanelGroupGeneral::postBuild()
 {
-	bool recurse = true;
+	constexpr bool recurse = true;
 
 	mEditCharter = getChild<LLTextEditor>("charter", recurse);
 	if(mEditCharter)
@@ -185,8 +185,8 @@ BOOL LLPanelGroupGeneral::postBuild()
 		mSpinEnrollmentFee->resetDirty();
 	}
 
-	BOOL accept_notices = FALSE;
-	BOOL list_in_profile = FALSE;
+	bool accept_notices = false;
+	bool list_in_profile = false;
 	LLGroupData data;
 	if(gAgent.getGroupData(mGroupID,data))
 	{
@@ -242,13 +242,13 @@ BOOL LLPanelGroupGeneral::postBuild()
 	// If the group_id is null, then we are creating a new group
 	if (mGroupID.isNull())
 	{
-		mEditCharter->setEnabled(TRUE);
+		mEditCharter->setEnabled(true);
 
-		mCtrlShowInGroupList->setEnabled(TRUE);
-		mComboMature->setEnabled(TRUE);
-		mCtrlOpenEnrollment->setEnabled(TRUE);
-		mCtrlEnrollmentFee->setEnabled(TRUE);
-		mSpinEnrollmentFee->setEnabled(TRUE);
+		mCtrlShowInGroupList->setEnabled(true);
+		mComboMature->setEnabled(true);
+		mCtrlOpenEnrollment->setEnabled(true);
+		mCtrlEnrollmentFee->setEnabled(true);
+		mSpinEnrollmentFee->setEnabled(true);
 
 	}
 

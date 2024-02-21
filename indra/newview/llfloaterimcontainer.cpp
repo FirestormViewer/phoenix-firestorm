@@ -187,7 +187,7 @@ void LLFloaterIMContainer::onCurrentChannelChanged(const LLUUID& session_id)
     }
 }
 
-BOOL LLFloaterIMContainer::postBuild()
+bool LLFloaterIMContainer::postBuild()
 {
 	mOrigMinWidth = getMinWidth();
 	mOrigMinHeight = getMinHeight();
@@ -299,7 +299,7 @@ BOOL LLFloaterIMContainer::postBuild()
     mParticipantRefreshTimer.setTimerExpirySec(0);
     mParticipantRefreshTimer.start();
 
-	return TRUE;
+	return true;
 }
 
 void LLFloaterIMContainer::onOpen(const LLSD& key)
@@ -314,7 +314,7 @@ void LLFloaterIMContainer::onOpen(const LLSD& key)
 
 // virtual
 void LLFloaterIMContainer::addFloater(LLFloater* floaterp,
-									  BOOL select_added_floater,
+									  bool select_added_floater,
 									  LLTabContainer::eInsertionPoint insertion_point)
 {
 	if(!floaterp) return;
@@ -377,7 +377,7 @@ void LLFloaterIMContainer::addFloater(LLFloater* floaterp,
 void LLFloaterIMContainer::onCloseFloater(LLUUID& id)
 {
 	mSessions.erase(id);
-	setFocus(TRUE);
+	setFocus(true);
 }
 
 void LLFloaterIMContainer::onNewMessageReceived(const LLSD& data)
@@ -723,7 +723,7 @@ void LLFloaterIMContainer::returnFloaterToHost()
 	floater->onTearOffClicked();
 }
 
-void LLFloaterIMContainer::setMinimized(BOOL b)
+void LLFloaterIMContainer::setMinimized(bool b)
 {
 	bool was_minimized = isMinimized();
 	LLMultiFloater::setMinimized(b);
@@ -746,7 +746,7 @@ void LLFloaterIMContainer::setMinimized(BOOL b)
 	}
 }
 
-void LLFloaterIMContainer::setVisible(BOOL visible)
+void LLFloaterIMContainer::setVisible(bool visible)
 {
     LLFloaterIMNearbyChat* nearby_chat;
 	if (visible)
@@ -829,7 +829,7 @@ void LLFloaterIMContainer::getDetachedConversationFloaters(floater_list_t& float
 	}
 }
 
-void LLFloaterIMContainer::setVisibleAndFrontmost(BOOL take_focus, const LLSD& key)
+void LLFloaterIMContainer::setVisibleAndFrontmost(bool take_focus, const LLSD& key)
 {
 	LLMultiFloater::setVisibleAndFrontmost(take_focus, key);
 	// Do not select "Nearby Chat" conversation, since it will bring its window to front
@@ -1782,6 +1782,7 @@ void LLFloaterIMContainer::setTimeNow(const LLUUID& session_id, const LLUUID& pa
 	LLConversationItemSession* item = dynamic_cast<LLConversationItemSession*>(getSessionModel(session_id));
 	if (item)
 	{
+        item->setTimeNow(participant_id);
 		mConversationViewModel.requestSortAll();
 		mConversationsRoot->arrangeAll();
 	}
@@ -2323,27 +2324,27 @@ bool LLFloaterIMContainer::isScrolledOutOfSight(LLConversationViewSession* conve
 	return !mConversationsRoot->getVisibleRect().overlaps(widget_rect);
 }
 
-BOOL LLFloaterIMContainer::handleKeyHere(KEY key, MASK mask )
+bool LLFloaterIMContainer::handleKeyHere(KEY key, MASK mask )
 {
-	BOOL handled = FALSE;
+	bool handled = false;
 
 	if(mask == MASK_ALT)
 	{
 		if (KEY_RETURN == key )
 		{
 			expandConversation();
-			handled = TRUE;
+			handled = true;
 		}
 
 		if ((KEY_DOWN == key ) || (KEY_RIGHT == key))
 		{
 			selectNextorPreviousConversation(true);
-			handled = TRUE;
+			handled = true;
 		}
 		if ((KEY_UP == key) || (KEY_LEFT == key))
 		{
 			selectNextorPreviousConversation(false);
-			handled = TRUE;
+			handled = true;
 		}
 	}
 	return handled;
@@ -2421,7 +2422,7 @@ bool LLFloaterIMContainer::isParticipantListExpanded()
 // Exclude "Nearby Chat" session from the check, as "Nearby Chat" window and "Conversations" floater can be brought
 // to front independently
 /*virtual*/
-BOOL LLFloaterIMContainer::isFrontmost()
+bool LLFloaterIMContainer::isFrontmost()
 {
 	LLFloaterIMSessionTab* selected_session = LLFloaterIMSessionTab::getConversation(mSelectedSession);
 	LLFloaterIMNearbyChat* nearby_chat = LLFloaterReg::findTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");

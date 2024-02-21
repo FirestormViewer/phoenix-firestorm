@@ -52,7 +52,7 @@ FSFloaterContactSetConfiguration::FSFloaterContactSetConfiguration(const LLSD& t
 	mContextConeFadeTime = gSavedSettings.getF32("ContextConeFadeTime");
 }
 
-BOOL FSFloaterContactSetConfiguration::postBuild()
+bool FSFloaterContactSetConfiguration::postBuild()
 {
 	updateTitle();
 
@@ -70,7 +70,7 @@ BOOL FSFloaterContactSetConfiguration::postBuild()
 
 	mNotificationCheckBox = getChild<LLCheckBoxCtrl>("show_set_notifications");
 	mNotificationCheckBox->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetNotifications, this));
-	return TRUE;
+	return true;
 }
 
 void FSFloaterContactSetConfiguration::draw()

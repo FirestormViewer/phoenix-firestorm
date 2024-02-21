@@ -138,8 +138,8 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
     // *NOTE: These settings must be cleaned up at bottom of function.
 	if (temp_select || LLSelectMgr::getInstance()->mAllowSelectAvatar)
 	{
-		gSavedSettings.setBOOL("SelectOwnedOnly", FALSE);
-		gSavedSettings.setBOOL("SelectMovableOnly", FALSE);
+		gSavedSettings.setBOOL("SelectOwnedOnly", false);
+		gSavedSettings.setBOOL("SelectMovableOnly", false);
 		// <FS:Ansariel> FIRE-14593: Option to select only copyable objects
 		gSavedSettings.setBOOL("FSSelectCopyableOnly", FALSE);
 		// <FS:Ansariel> FIRE-17696: Option to select only locked objects

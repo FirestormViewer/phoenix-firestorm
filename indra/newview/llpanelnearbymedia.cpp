@@ -124,7 +124,7 @@ LLPanelNearByMedia::~LLPanelNearByMedia()
 {
 }
 
-BOOL LLPanelNearByMedia::postBuild()
+bool LLPanelNearByMedia::postBuild()
 {
 	LLPanelPulldown::postBuild();
 
@@ -175,8 +175,8 @@ BOOL LLPanelNearByMedia::postBuild()
 	mPlayingString = getString("playing_suffix");
 	
 	mMediaList->setDoubleClickCallback(onZoomMedia, this);
-	mMediaList->sortByColumnIndex(PROXIMITY_COLUMN, TRUE);
-	mMediaList->sortByColumnIndex(VISIBILITY_COLUMN, FALSE);
+	mMediaList->sortByColumnIndex(PROXIMITY_COLUMN, true);
+	mMediaList->sortByColumnIndex(VISIBILITY_COLUMN, false);
 	
 	refreshList();
 	updateControls();
@@ -195,7 +195,7 @@ BOOL LLPanelNearByMedia::postBuild()
         gMenuHolder,
         LLViewerMenuHolderGL::child_registry_t::instance());
 	
-	return TRUE;
+	return true;
 }
 
 /* <FS:Zi> Media/Stream separation
@@ -218,7 +218,7 @@ void LLPanelNearByMedia::handleMediaAutoPlayChanged(const LLSD& newvalue)
 */
 
 /*virtual*/
-void LLPanelNearByMedia::reshape(S32 width, S32 height, BOOL called_from_parent)
+void LLPanelNearByMedia::reshape(S32 width, S32 height, bool called_from_parent)
 {
 	LLPanelPulldown::reshape(width, height, called_from_parent);
 
@@ -283,7 +283,7 @@ bool LLPanelNearByMedia::handleRightMouseDown(S32 x, S32 y, MASK mask)
 }
 
 
-void LLPanelNearByMedia::onVisibilityChange(BOOL new_visibility)
+void LLPanelNearByMedia::onVisibilityChange(bool new_visibility)
 {
     if (!new_visibility && mContextMenu->getVisible())
     {

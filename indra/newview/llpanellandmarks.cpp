@@ -182,7 +182,7 @@ LLLandmarksPanel::~LLLandmarksPanel()
 {
 }
 
-BOOL LLLandmarksPanel::postBuild()
+bool LLLandmarksPanel::postBuild()
 {
 	if (!gInventory.isInventoryUsable())
 		return FALSE;
@@ -191,7 +191,7 @@ BOOL LLLandmarksPanel::postBuild()
 	initListCommandsHandlers();
 	initLandmarksInventoryPanel();
 
-	return TRUE;
+	return true;
 }
 
 // virtual
@@ -1316,17 +1316,17 @@ LLFavoritesPanel::LLFavoritesPanel()
 	buildFromFile("panel_favorites.xml");
 }
 
-BOOL LLFavoritesPanel::postBuild()
+bool LLFavoritesPanel::postBuild()
 {
 	if (!gInventory.isInventoryUsable())
-		return FALSE;
+		return false;
 
 	// mast be called before any other initXXX methods to init Gear menu
 	LLLandmarksPanel::initListCommandsHandlers();
 
 	initFavoritesInventoryPanel();
 
-	return TRUE;
+	return true;
 }
 
 void LLFavoritesPanel::initFavoritesInventoryPanel()

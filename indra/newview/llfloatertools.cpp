@@ -227,10 +227,10 @@ LLPCode toolData[]={
 	LL_PCODE_LEGACY_TREE,
 	LL_PCODE_LEGACY_GRASS};
 
-BOOL	LLFloaterTools::postBuild()
+bool	LLFloaterTools::postBuild()
 {	
 	// Hide until tool selected
-	setVisible(FALSE);
+	setVisible(false);
 
 	// Since we constantly show and hide this during drags, don't
 	// make sounds on visibility changes.
@@ -339,18 +339,18 @@ BOOL	LLFloaterTools::postBuild()
 		mCollapsedHeight = mExpandedHeight - mTab->getRect().getHeight() + btnExpand->getRect().getHeight();
 		if (!gSavedSettings.getBOOL("FSToolboxExpanded"))
 		{
-			mTab->setVisible(FALSE);
+			mTab->setVisible(false);
 			reshape(getRect().getWidth(), mCollapsedHeight);
 			btnExpand->setImageOverlay("Arrow_Down", btnExpand->getImageOverlayHAlign());
 		}
 	}
 	else
 	{
-		gSavedSettings.setBOOL("FSToolboxExpanded", TRUE);
+		gSavedSettings.setBOOL("FSToolboxExpanded", true);
 	}
 	// </FS:KC>
 
-	return TRUE;
+	return true;
 }
 
 // <FS:CR> Aurora Sim
@@ -1092,7 +1092,7 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 
 
 // virtual
-BOOL LLFloaterTools::canClose()
+bool LLFloaterTools::canClose()
 {
 	// don't close when quitting, so camera will stay put
 	return !LLApp::isExiting();
@@ -1150,7 +1150,7 @@ void LLFloaterTools::onClose(bool app_quitting)
 	
 	// exit component selection mode
 	LLSelectMgr::getInstance()->promoteSelectionToRoot();
-	gSavedSettings.setBOOL("EditLinkedParts", FALSE);
+	gSavedSettings.setBOOL("EditLinkedParts", false);
 
 	// <FS:KC>
 	LLSelectMgr::instance().setFSShowHideHighlight(FS_SHOW_HIDE_HIGHLIGHT_NORMAL);
@@ -1378,7 +1378,7 @@ void commit_show_highlight(void *data)
 void LLFloaterTools::setObjectType( LLPCode pcode )
 {
 	LLToolPlacer::setObjectType( pcode );
-	gSavedSettings.setBOOL("CreateToolCopySelection", FALSE);
+	gSavedSettings.setBOOL("CreateToolCopySelection", false);
 	// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
 	gFloaterTools->buildTreeGrassCombo();
 	// </FS:Ansariel>

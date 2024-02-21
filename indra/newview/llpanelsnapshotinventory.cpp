@@ -56,7 +56,7 @@ class LLPanelSnapshotInventoryBase
 public:
     LLPanelSnapshotInventoryBase();
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 protected:
     void onSend();
     /*virtual*/ LLSnapshotModel::ESnapshotType getSnapshotType();
@@ -70,7 +70,7 @@ class LLPanelSnapshotInventory
 public:
 	LLPanelSnapshotInventory();
 	/*virtual*/ ~LLPanelSnapshotInventory(); // <FS:Ansariel> Store settings at logout
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 
 	void onResolutionCommit(LLUICtrl* ctrl);
@@ -92,7 +92,7 @@ class LLPanelOutfitSnapshotInventory
 
 public:
     LLPanelOutfitSnapshotInventory();
-    	/*virtual*/ BOOL postBuild();
+    	/*virtual*/ bool postBuild();
     	/*virtual*/ void onOpen(const LLSD& key);
         
 private:
@@ -114,7 +114,7 @@ LLPanelSnapshotInventoryBase::LLPanelSnapshotInventoryBase()
 {
 }
 
-BOOL LLPanelSnapshotInventoryBase::postBuild()
+bool LLPanelSnapshotInventoryBase::postBuild()
 {
     return LLPanelSnapshot::postBuild();
 }
@@ -131,10 +131,10 @@ LLPanelSnapshotInventory::LLPanelSnapshotInventory()
 }
 
 // virtual
-BOOL LLPanelSnapshotInventory::postBuild()
+bool LLPanelSnapshotInventory::postBuild()
 {
-	getChild<LLSpinCtrl>(getWidthSpinnerName())->setAllowEdit(FALSE);
-	getChild<LLSpinCtrl>(getHeightSpinnerName())->setAllowEdit(FALSE);
+	getChild<LLSpinCtrl>(getWidthSpinnerName())->setAllowEdit(false);
+	getChild<LLSpinCtrl>(getHeightSpinnerName())->setAllowEdit(false);
 
 	// <FS:Ansariel> Don't hide resolution spinners - they get disabled if needed
 	//getChild<LLUICtrl>(getImageSizeComboName())->setCommitCallback(boost::bind(&LLPanelSnapshotInventory::onResolutionCommit, this, _1));
@@ -215,7 +215,7 @@ LLPanelOutfitSnapshotInventory::LLPanelOutfitSnapshotInventory()
 }
 
 // virtual
-BOOL LLPanelOutfitSnapshotInventory::postBuild()
+bool LLPanelOutfitSnapshotInventory::postBuild()
 {
     return LLPanelSnapshotInventoryBase::postBuild();
 }

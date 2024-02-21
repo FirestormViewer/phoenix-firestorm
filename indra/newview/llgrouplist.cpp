@@ -445,7 +445,7 @@ LLGroupListItem::~LLGroupListItem()
 }
 
 //virtual
-BOOL  LLGroupListItem::postBuild()
+bool  LLGroupListItem::postBuild()
 {
 	mGroupIcon = getChild<LLGroupIconCtrl>("group_icon");
 	mGroupNameBox = getChild<LLTextBox>("group_name");
@@ -473,7 +473,7 @@ BOOL  LLGroupListItem::postBuild()
     // have icons of different sizes so we need to figure it per file.
     mIconWidth = mGroupNameBox->getRect().mLeft - mGroupIcon->getRect().mLeft;
 
-	return TRUE;
+	return true;
 }
 
 //virtual

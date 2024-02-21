@@ -39,8 +39,8 @@
 #include "llviewmodel.h"		// *TODO move dependency to .cpp file
 #include "llsearchablecontrol.h"
 
-const BOOL TAKE_FOCUS_YES = TRUE;
-const BOOL TAKE_FOCUS_NO  = FALSE;
+const bool TAKE_FOCUS_YES = true;
+const bool TAKE_FOCUS_NO  = false;
 
 class LLUICtrl
 	: public LLView, public boost::signals2::trackable
@@ -154,15 +154,15 @@ protected:
     // We shouldn't ever need to set this directly
     //virtual void    setViewModel(const LLViewModelPtr&);
 
-	/*virtual*/ BOOL	postBuild() override;
+	/*virtual*/ bool	postBuild() override;
 	
 public:
 	// LLView interface
-	/*virtual*/ BOOL	setLabelArg( const std::string& key, const LLStringExplicit& text ) override;
-	/*virtual*/ BOOL	isCtrl() const override;
+	/*virtual*/ bool	setLabelArg( const std::string& key, const LLStringExplicit& text ) override;
+	/*virtual*/ bool	isCtrl() const override;
 	/*virtual*/ void	onMouseEnter(S32 x, S32 y, MASK mask) override;
 	/*virtual*/ void	onMouseLeave(S32 x, S32 y, MASK mask) override;
-	/*virtual*/ BOOL	canFocusChildren() const override;
+	/*virtual*/ bool	canFocusChildren() const override;
 	/*virtual*/ bool 	handleMouseDown(S32 x, S32 y, MASK mask) override;
 	/*virtual*/ bool 	handleMouseUp(S32 x, S32 y, MASK mask) override;
 	/*virtual*/ bool	handleRightMouseDown(S32 x, S32 y, MASK mask) override;
@@ -170,8 +170,8 @@ public:
 	/*virtual*/ bool	handleDoubleClick(S32 x, S32 y, MASK mask) override;
 
 	// From LLFocusableElement
-	/*virtual*/ void	setFocus( BOOL b ) override;
-	/*virtual*/ BOOL	hasFocus() const override;
+	/*virtual*/ void	setFocus( bool b ) override;
+	/*virtual*/ bool	hasFocus() const override;
 	
 	// New virtuals
 
@@ -200,22 +200,22 @@ public:
 
 	void setFunctionName(const std::string& function_name);
 	
-	virtual void	setTentative(BOOL b);
-	virtual BOOL	getTentative() const;
+	virtual void	setTentative(bool b);
+	virtual bool	getTentative() const;
 	virtual void	setValue(const LLSD& value);
 	virtual LLSD	getValue() const;
     /// When two widgets are displaying the same data (e.g. during a skin
     /// change), share their ViewModel.
     virtual void    shareViewModelFrom(const LLUICtrl& other);
 
-	virtual BOOL	setTextArg(  const std::string& key, const LLStringExplicit& text );
-	virtual void	setIsChrome(BOOL is_chrome);
+	virtual bool	setTextArg(  const std::string& key, const LLStringExplicit& text );
+	virtual void	setIsChrome(bool is_chrome);
 
-	virtual BOOL	acceptsTextInput() const; // Defaults to false
+	virtual bool	acceptsTextInput() const; // Defaults to false
 
 	// A control is dirty if the user has modified its value.
 	// Editable controls should override this.
-	virtual BOOL	isDirty() const; // Defauls to false
+	virtual bool	isDirty() const; // Defauls to false
 	virtual void	resetDirty(); //Defaults to no-op
 	
 	// Call appropriate callback
@@ -236,18 +236,18 @@ public:
 	void				setTransparencyType(ETypeTransparency type);
 	ETypeTransparency	getTransparencyType() const {return mTransparencyType;}
 
-	BOOL	focusNextItem(BOOL text_entry_only);
-	BOOL	focusPrevItem(BOOL text_entry_only);
+	bool	focusNextItem(bool text_entry_only);
+	bool	focusPrevItem(bool text_entry_only);
 
 	// ## Zi: Made this virtual to be able to override it, so we can fix the IM focus issue
-	virtual BOOL 	focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
+	virtual bool 	focusFirstItem(bool prefer_text_fields = false, bool focus_flash = true );
 
 	// Non Virtuals
 	LLHandle<LLUICtrl> getHandle() const { return getDerivedHandle<LLUICtrl>(); }
-	BOOL			getIsChrome() const;
+	bool			getIsChrome() const;
 	
-	void			setTabStop( BOOL b );
-	BOOL			hasTabStop() const;
+	void			setTabStop( bool b );
+	bool			hasTabStop() const;
 
 	LLUICtrl*		getParentUICtrl() const;
 
@@ -282,7 +282,7 @@ public:
 		LLSINGLETON_EMPTY_CTOR(LLTextInputFilter);
 		/*virtual*/ filterResult_t operator() (const LLView* const view, const viewList_t & children) const 
 		{
-			return filterResult_t(view->isCtrl() && static_cast<const LLUICtrl *>(view)->acceptsTextInput(), TRUE);
+			return filterResult_t(view->isCtrl() && static_cast<const LLUICtrl *>(view)->acceptsTextInput(), true);
 		}
 	};
 
@@ -338,10 +338,10 @@ protected:
 	
 private:
 
-	BOOL			mIsChrome;
-	BOOL			mRequestsFront;
-	BOOL			mTabStop;
-	BOOL			mTentative;
+	bool			mIsChrome;
+	bool			mRequestsFront;
+	bool			mTabStop;
+	bool			mTentative;
 
 	ETypeTransparency mTransparencyType;
 
@@ -352,7 +352,7 @@ private:
 // Build time optimization, generate once in .cpp file
 #ifndef LLUICTRL_CPP
 extern template class LLUICtrl* LLView::getChild<class LLUICtrl>(
-	const std::string& name, BOOL recurse) const;
+	const std::string& name, bool recurse) const;
 #endif
 
 #endif  // LL_LLUICTRL_H

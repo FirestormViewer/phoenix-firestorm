@@ -140,7 +140,7 @@ S32 LLChicletBar::getTotalUnreadIMCount()
 }
 // </FS:Ansariel> [FS communication UI]
 
-BOOL LLChicletBar::postBuild()
+bool LLChicletBar::postBuild()
 {
 	mToolbarStack = getChild<LLLayoutStack>("toolbar_stack");
 	mChicletPanel = getChild<LLChicletPanel>("chiclet_list");
@@ -170,7 +170,7 @@ BOOL LLChicletBar::postBuild()
 	mChicletPanel->setVisible(!gSavedSettings.getBOOL("FSDisableIMChiclets"));
 	// </FS:PP> Option to hide IM/Group chat chiclets
 
-	return TRUE;
+	return true;
 }
 
 void LLChicletBar::showWellButton(const std::string& well_name, bool visible)
@@ -193,7 +193,7 @@ void LLChicletBar::log(LLView* panel, const std::string& descr)
 		<< LL_ENDL;
 }
 
-void LLChicletBar::reshape(S32 width, S32 height, BOOL called_from_parent)
+void LLChicletBar::reshape(S32 width, S32 height, bool called_from_parent)
 {
 	static S32 debug_calling_number = 0;
 	LL_DEBUGS() << "**************************************** " << ++debug_calling_number << LL_ENDL;

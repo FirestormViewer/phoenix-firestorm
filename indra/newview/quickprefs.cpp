@@ -441,7 +441,7 @@ void FloaterQuickPrefs::loadPresets()
 	loadDayCyclePresets(daycycle_map);
 }
 
-void FloaterQuickPrefs::setDefaultPresetsEnabled(BOOL enabled)
+void FloaterQuickPrefs::setDefaultPresetsEnabled(bool enabled)
 {
 	LLScrollListItem* item{ nullptr };
 
@@ -468,7 +468,7 @@ void FloaterQuickPrefs::setSelectedEnvironment()
 {
 	//LL_INFOS() << "EEP: getSelectedEnvironment: " << LLEnvironment::instance().getSelectedEnvironment() << LL_ENDL;
 
-	setDefaultPresetsEnabled(TRUE);
+	setDefaultPresetsEnabled(true);
 	mWLPresetsCombo->selectByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
 	mWaterPresetsCombo->selectByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
 	mDayCyclePresetsCombo->selectByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
@@ -584,10 +584,10 @@ void FloaterQuickPrefs::setSelectedEnvironment()
 		mDayCyclePresetsCombo->selectByValue(LLSD(PRESET_NAME_REGION_DEFAULT));
 	}
 
-	setDefaultPresetsEnabled(FALSE);
+	setDefaultPresetsEnabled(false);
 }
 
-BOOL FloaterQuickPrefs::postBuild()
+bool FloaterQuickPrefs::postBuild()
 {
 	// Phototools additions
 	if (getIsPhototools())

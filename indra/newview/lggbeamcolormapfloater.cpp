@@ -53,7 +53,7 @@ lggBeamColorMapFloater::~lggBeamColorMapFloater()
 {
 }
 
-BOOL lggBeamColorMapFloater::postBuild()
+bool lggBeamColorMapFloater::postBuild()
 {
 	getChild<LLUICtrl>("BeamColor_Save")->setCommitCallback(boost::bind(&lggBeamColorMapFloater::onClickSave, this));
 	getChild<LLUICtrl>("BeamColor_Load")->setCommitCallback(boost::bind(&lggBeamColorMapFloater::onClickLoad, this));
@@ -66,7 +66,7 @@ BOOL lggBeamColorMapFloater::postBuild()
 
 	fixOrder();
 
-	return TRUE;
+	return true;
 }
 
 void lggBeamColorMapFloater::draw()

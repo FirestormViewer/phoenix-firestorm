@@ -45,16 +45,16 @@ FSFloaterGroup::~FSFloaterGroup()
 {
 }
 
-BOOL FSFloaterGroup::postBuild()
+bool FSFloaterGroup::postBuild()
 {
 	mGroupPanel = findChild<LLPanelGroup>("panel_group_info_sidetray");
 	mGroupCreatePanel = findChild<LLPanelGroupCreate>("panel_group_creation_sidetray");
 	if (!mGroupPanel || !mGroupCreatePanel)
 	{
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 void FSFloaterGroup::onOpen(const LLSD& key)
@@ -66,16 +66,16 @@ void FSFloaterGroup::onOpen(const LLSD& key)
 	if (mIsCreateGroup)
 	{
 		mGroupCreatePanel->onOpen(key);
-		mGroupCreatePanel->setVisible(TRUE);
-		mGroupPanel->setVisible(FALSE);
+		mGroupCreatePanel->setVisible(true);
+		mGroupPanel->setVisible(false);
 		setTitle(getString("title_create_group"));
 	}
 	else
 	{
 		mGroupPanel->onOpen(key);
-		mGroupPanel->setVisible(TRUE);
-		mGroupCreatePanel->setVisible(FALSE);
-		mGroupPanel->getChildView("header_container")->setVisible(FALSE);
+		mGroupPanel->setVisible(true);
+		mGroupCreatePanel->setVisible(false);
+		mGroupPanel->getChildView("header_container")->setVisible(false);
 	}
 }
 

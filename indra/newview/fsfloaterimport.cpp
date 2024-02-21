@@ -123,19 +123,19 @@ FSFloaterImport::~FSFloaterImport()
 	gSavedSettings.setBOOL("ShowNewInventory", mSavedSettingShowNewInventory);
 }
 
-BOOL FSFloaterImport::postBuild()
+bool FSFloaterImport::postBuild()
 {
 	if (LLAgentBenefitsMgr::current().getTextureUploadCost() == 0 
 		|| gAgent.getRegion()->getCentralBakeVersion() > 0)
 	{
-		getChild<LLCheckBoxCtrl>("temp_asset")->setVisible(FALSE);   
-		getChild<LLCheckBoxCtrl>("temp_asset")->set(FALSE);
+		getChild<LLCheckBoxCtrl>("temp_asset")->setVisible(false);   
+		getChild<LLCheckBoxCtrl>("temp_asset")->set(false);
 	}
 	getChild<LLButton>("import_btn")->setCommitCallback(boost::bind(&FSFloaterImport::onClickBtnImport, this));
 	loadFile();
 	populateBackupInfo();
 	
-	return TRUE;
+	return true;
 }
 
 // static

@@ -401,7 +401,7 @@ FSPanelLogin::~FSPanelLogin()
 }
 
 // virtual
-void FSPanelLogin::setFocus(BOOL b)
+void FSPanelLogin::setFocus(bool b)
 {
 	if(b != hasFocus())
 	{
@@ -444,12 +444,12 @@ void FSPanelLogin::giveFocus()
 
 		if (edit)
 		{
-			edit->setFocus(TRUE);
+			edit->setFocus(true);
 			edit->selectAll();
 		}
 		else if (combo)
 		{
-			combo->setFocus(TRUE);
+			combo->setFocus(true);
 			combo->focusEditor();
 		}
 	}

@@ -92,10 +92,10 @@ public:
 		mSourceType(CHAT_SOURCE_AGENT),
 		mChatType(CHAT_TYPE_NORMAL),
 		mAudible(CHAT_AUDIBLE_FULLY),
-		mMuted(FALSE),
+		mMuted(false),
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.0.0a
-		mRlvLocFiltered(FALSE),
-		mRlvNamesFiltered(FALSE),
+		mRlvLocFiltered(false),
+		mRlvNamesFiltered(false),
 // [/RLVa:KB]
 		mTime(0.0),
 		mTimeStr(),
@@ -114,10 +114,10 @@ public:
 	EChatSourceType	mSourceType;
 	EChatType		mChatType;
 	EChatAudible	mAudible;
-	BOOL			mMuted;		// pass muted chat to maintain list of chatters
+	bool			mMuted;		// pass muted chat to maintain list of chatters
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.0.0a
-	BOOL			mRlvLocFiltered;
-	BOOL			mRlvNamesFiltered;
+	bool			mRlvLocFiltered;
+	bool			mRlvNamesFiltered;
 // [/RLVa:KB]
 	F64				mTime;		// viewer only, seconds from viewer start
 	std::string		mTimeStr;

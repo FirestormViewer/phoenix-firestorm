@@ -53,7 +53,7 @@ class FSFloaterObjectExport : public LLFloater, public LLVOInventoryListener
 	LOG_CLASS(FSFloaterObjectExport);
 public:
 	FSFloaterObjectExport(const LLSD& key);
-	BOOL postBuild();
+	bool postBuild();
 	void updateSelection();
 	
 	static void onImageLoaded(BOOL success,

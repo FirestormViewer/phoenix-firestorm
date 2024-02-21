@@ -138,7 +138,7 @@ LLFloaterIMSessionTab* LLFloaterIMSessionTab::getConversation(const LLUUID& uuid
 	return conv;
 };
 
-void LLFloaterIMSessionTab::setVisible(BOOL visible)
+void LLFloaterIMSessionTab::setVisible(bool visible)
 {
 	if(visible && !mHasVisibleBeenInitialized)
 	{
@@ -161,7 +161,7 @@ void LLFloaterIMSessionTab::setVisible(BOOL visible)
 }
 
 /*virtual*/
-void LLFloaterIMSessionTab::setFocus(BOOL focus)
+void LLFloaterIMSessionTab::setFocus(bool focus)
 {
 	LLTransientDockableFloater::setFocus(focus);
 
@@ -172,7 +172,7 @@ void LLFloaterIMSessionTab::setFocus(BOOL focus)
 
         if (mInputEditor)
         {
-    	    mInputEditor->setFocus(TRUE);
+    	    mInputEditor->setFocus(true);
         }
 	}
 }
@@ -235,9 +235,9 @@ void LLFloaterIMSessionTab::assignResizeLimits()
 	this->mParticipantListAndHistoryStack->updateLayout();
 }
 
-BOOL LLFloaterIMSessionTab::postBuild()
+bool LLFloaterIMSessionTab::postBuild()
 {
-	BOOL result;
+	bool result;
 
 	mBodyStack = getChild<LLLayoutStack>("main_stack");
     mParticipantListAndHistoryStack = getChild<LLLayoutStack>("im_panels");
@@ -285,8 +285,8 @@ BOOL LLFloaterIMSessionTab::postBuild()
 	
 	mInputEditor->setTextExpandedCallback(boost::bind(&LLFloaterIMSessionTab::reshapeChatLayoutPanel, this));
 	mInputEditor->setMouseUpCallback(boost::bind(&LLFloaterIMSessionTab::onInputEditorClicked, this));
-	mInputEditor->setCommitOnFocusLost( FALSE );
-	mInputEditor->setPassDelete(TRUE);
+	mInputEditor->setCommitOnFocusLost(false);
+	mInputEditor->setPassDelete(true);
 	mInputEditor->setFont(LLViewerChat::getChatFont());
 
 	mChatLayoutPanelHeight = mChatLayoutPanel->getRect().getHeight();
@@ -1021,8 +1021,7 @@ void LLFloaterIMSessionTab::onTearOffClicked()
 
 void LLFloaterIMSessionTab::updateGearBtn()
 {
-
-	BOOL prevVisibility = mGearBtn->getVisible();
+	bool prevVisibility = mGearBtn->getVisible();
 	mGearBtn->setVisible(checkIfTornOff() && mIsP2PChat);
 
 
@@ -1167,9 +1166,9 @@ LLView* LLFloaterIMSessionTab::getChatHistory()
 	return mChatHistory;
 }
 
-BOOL LLFloaterIMSessionTab::handleKeyHere(KEY key, MASK mask )
+bool LLFloaterIMSessionTab::handleKeyHere(KEY key, MASK mask )
 {
-	BOOL handled = FALSE;
+	bool handled = false;
 
 	if(mask == MASK_ALT)
 	{
@@ -1177,17 +1176,17 @@ BOOL LLFloaterIMSessionTab::handleKeyHere(KEY key, MASK mask )
 		if (KEY_RETURN == key && !isTornOff())
 		{
 			floater_container->expandConversation();
-			handled = TRUE;
+			handled = true;
 		}
 		if ((KEY_UP == key) || (KEY_LEFT == key))
 		{
 			floater_container->selectNextorPreviousConversation(false);
-			handled = TRUE;
+			handled = true;
 		}
 		if ((KEY_DOWN == key ) || (KEY_RIGHT == key))
 		{
 			floater_container->selectNextorPreviousConversation(true);
-			handled = TRUE;
+			handled = true;
 		}
 	}
 	return handled;

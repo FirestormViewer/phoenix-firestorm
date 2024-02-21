@@ -181,7 +181,7 @@ public:
 	virtual bool	handleMiddleMouseUp( S32 x, S32 y, MASK mask );
 
 private:
-	static BOOL mInvertUniform;
+	static bool mInvertUniform;
 // </FS:Zi>
 };
 

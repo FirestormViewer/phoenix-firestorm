@@ -214,14 +214,14 @@ void LLFloaterColorPicker::showUI ()
 
 //////////////////////////////////////////////////////////////////////////////
 // called after the dialog is rendered
-BOOL LLFloaterColorPicker::postBuild()
+bool LLFloaterColorPicker::postBuild()
 {
 	mCancelBtn = getChild<LLButton>( "cancel_btn" );
     mCancelBtn->setClickedCallback ( onClickCancel, this );
 
 	mSelectBtn = getChild<LLButton>( "select_btn");
     mSelectBtn->setClickedCallback ( onClickSelect, this );
-	mSelectBtn->setFocus ( TRUE );
+	mSelectBtn->setFocus ( true );
 
 	mPipetteBtn = getChild<LLButton>("color_pipette" );
 
@@ -252,7 +252,7 @@ BOOL LLFloaterColorPicker::postBuild()
 
 	LLToolPipette::getInstance()->setToolSelectCallback(boost::bind(&LLFloaterColorPicker::onColorSelect, this, _1));
 
-    return TRUE;
+    return true;
 }
 
 //////////////////////////////////////////////////////////////////////////////

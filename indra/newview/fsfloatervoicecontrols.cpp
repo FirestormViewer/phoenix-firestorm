@@ -107,7 +107,7 @@ FSFloaterVoiceControls::~FSFloaterVoiceControls()
 }
 
 // virtual
-BOOL FSFloaterVoiceControls::postBuild()
+bool FSFloaterVoiceControls::postBuild()
 {
 	mAvatarList = getChild<LLAvatarList>("speakers_list");
 	mAvatarListRefreshConnection = mAvatarList->setRefreshCompleteCallback(boost::bind(&FSFloaterVoiceControls::onAvatarListRefreshed, this));
@@ -134,7 +134,7 @@ BOOL FSFloaterVoiceControls::postBuild()
 	updateTransparency(TT_ACTIVE); // force using active floater transparency (STORM-730)
 	
 	updateSession();
-	return TRUE;
+	return true;
 }
 
 // virtual
@@ -171,7 +171,7 @@ void FSFloaterVoiceControls::draw()
 }
 
 // virtual
-void FSFloaterVoiceControls::setFocus( BOOL b )
+void FSFloaterVoiceControls::setFocus( bool b )
 {
 	LLFloater::setFocus(b);
 

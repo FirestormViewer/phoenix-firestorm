@@ -83,7 +83,7 @@ public:
         Params();
     };
 
-    BOOL postBuild();
+    bool postBuild();
 	bool handleDoubleClick(S32 x, S32 y, MASK mask);
 
 	static LLPanelWearableOutfitItem* create(LLViewerInventoryItem* item,
@@ -128,7 +128,7 @@ public:
 
 	virtual ~LLPanelDeletableWearableListItem() {};
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 
 	/**
 	 * Make button visible during mouse over event.
@@ -181,7 +181,7 @@ public:
 
 	virtual ~LLPanelClothingListItem();
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 
 	/**
 	 * Make button visible during mouse over event.
@@ -216,7 +216,7 @@ public:
 
 	virtual ~LLPanelBodyPartsListItem();
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 
 	/**
 	* Make button visible during mouse over event.
@@ -251,7 +251,7 @@ public:
 	static FSPanelCOFWearableOutfitListItem* create(LLViewerInventoryItem* item,
 											 bool worn_indication_enabled, bool show_widgets, U32 weight);
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 
 	void updateItemWeight(U32 item_weight);
 
@@ -287,7 +287,7 @@ public:
 	};
 	static LLPanelDummyClothingListItem* create(LLWearableType::EType w_type);
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	LLWearableType::EType getWearableType() const;
 
 protected:

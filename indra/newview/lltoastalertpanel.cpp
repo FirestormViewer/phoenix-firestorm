@@ -409,7 +409,7 @@ LLToastAlertPanel::LLToastAlertPanel( LLNotificationPtr notification, bool modal
 			LLTransientFloaterMgr::GLOBAL, this);
 }
 
-void LLToastAlertPanel::setVisible( BOOL visible )
+void LLToastAlertPanel::setVisible( bool visible )
 {
 	// only make the "ding" sound if it's newly visible
 	// <FS:PP> FIRE-4322: The "bing" system sound missing
@@ -470,7 +470,7 @@ BOOL LLToastAlertPanel::hasTitleBar() const
 	return false;
 }
 
-BOOL LLToastAlertPanel::handleKeyHere(KEY key, MASK mask )
+bool LLToastAlertPanel::handleKeyHere(KEY key, MASK mask )
 {
 	if( KEY_RETURN == key && mask == MASK_NONE )
 	{
@@ -480,31 +480,31 @@ BOOL LLToastAlertPanel::handleKeyHere(KEY key, MASK mask )
 			// If we have a default button, click it when return is pressed
 			defaultBtn->onCommit();
 		}
-		return TRUE;
+		return true;
 	}
 	else if (KEY_RIGHT == key)
 	{
-		LLToastPanel::focusNextItem(FALSE);
-		return TRUE;
+		LLToastPanel::focusNextItem(false);
+		return true;
 	}
 	else if (KEY_LEFT == key)
 	{
-		LLToastPanel::focusPrevItem(FALSE);
-		return TRUE;
+		LLToastPanel::focusPrevItem(false);
+		return true;
 	}
 	else if (KEY_TAB == key && mask == MASK_NONE)
 	{
-		LLToastPanel::focusNextItem(FALSE);
-		return TRUE;
+		LLToastPanel::focusNextItem(false);
+		return true;
 	}
 	else if (KEY_TAB == key && mask == MASK_SHIFT)
 	{
-		LLToastPanel::focusPrevItem(FALSE);
-		return TRUE;
+		LLToastPanel::focusPrevItem(false);
+		return true;
 	}
 	else
 	{
-		return TRUE;
+		return true;
 	}
 }
 

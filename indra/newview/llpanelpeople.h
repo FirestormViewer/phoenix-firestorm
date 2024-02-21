@@ -60,15 +60,15 @@ public:
 	LLPanelPeople();
 	virtual ~LLPanelPeople();
 
-	/*virtual*/ BOOL 	postBuild();
-	/*virtual*/ void	onOpen(const LLSD& key);
-	/*virtual*/ bool	notifyChildren(const LLSD& info);
+	bool postBuild() override;
+	void onOpen(const LLSD& key) override;
+	bool notifyChildren(const LLSD& info) override;
 	// Implements LLVoiceClientStatusObserver::onChange() to enable call buttons
 	// when voice is available
-	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
+	void onChange(EStatusType status, const std::string &channelURI, bool proximal) override;
 	// <FS:Ansariel> CTRL-F focusses local search editor
-	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
-	/*virtual*/ bool hasAccelerators() const { return true; }
+	bool handleKeyHere(KEY key, MASK mask) override;
+	bool hasAccelerators() const override { return true; }
 	// </FS:Ansariel>
 
 // [RLVa:KB] - Checked: RLVa-1.2.0

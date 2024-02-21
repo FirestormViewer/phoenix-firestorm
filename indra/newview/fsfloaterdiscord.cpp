@@ -46,7 +46,7 @@
 //FSFloaterDiscord///////
 ////////////////////////
 
-void FSFloaterDiscord::onVisibilityChange(BOOL visible)
+void FSFloaterDiscord::onVisibilityChange(bool visible)
 {
 	if (visible)
 	{
@@ -239,7 +239,7 @@ void FSFloaterDiscord::onClose(bool app_quitting)
 	LLFloater::onClose(app_quitting);
 }
 
-BOOL FSFloaterDiscord::postBuild()
+bool FSFloaterDiscord::postBuild()
 {
 	mAccountCaptionLabel = getChild<LLTextBox>("account_caption_label");
 	mAccountNameLabel = getChild<LLTextBox>("account_name_label");

@@ -41,7 +41,7 @@ class LLChicletBar
 	// <FS:Ansariel> [FS communication UI]
 	, public LLIMSessionObserver
 {
-	LLSINGLETON(LLChicletBar);
+	LLSINGLETON_C11(LLChicletBar);
 	LOG_CLASS(LLChicletBar);
 
 public:
@@ -63,11 +63,11 @@ public:
 	LLIMChiclet* createIMChiclet(const LLUUID& session_id);
 	// </FS:Ansariel> [FS communication UI]
 
-	BOOL postBuild();
+	bool postBuild() override;
 
 	LLChicletPanel*	getChicletPanel() { return mChicletPanel; }
 
-	/*virtual*/ void reshape(S32 width, S32 height, BOOL called_from_parent);
+	void reshape(S32 width, S32 height, bool called_from_parent) override;
 
 
 	/**

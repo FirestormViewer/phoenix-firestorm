@@ -287,14 +287,14 @@ void LLScriptEditor::startOfLine()
 // </FS>
 
 // <FS:Ansariel> Show keyword help on F1
-BOOL LLScriptEditor::handleKeyHere(KEY key, MASK mask)
+bool LLScriptEditor::handleKeyHere(KEY key, MASK mask)
 {
 	if (key == KEY_F1 && mask == MASK_NONE)
 	{
 		if (LLScriptEdCore* parent = getParentByType<LLScriptEdCore>(); parent != nullptr)
 		{
 			parent->onBtnDynamicHelp();
-			return TRUE;
+			return true;
 		}
 	}
 

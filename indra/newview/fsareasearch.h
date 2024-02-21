@@ -110,7 +110,7 @@ public:
 	FSAreaSearch(const LLSD &);
 	virtual ~FSAreaSearch();
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	virtual void draw();
 	virtual void onOpen(const LLSD& key);
 
@@ -282,7 +282,7 @@ public:
 	FSPanelAreaSearchList(FSAreaSearch* pointer);
 	virtual ~FSPanelAreaSearchList();
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	
 	void setCounterText();
 	void setCounterText(LLStringUtil::format_map_t args);
@@ -334,8 +334,8 @@ public:
 	FSPanelAreaSearchFind(FSAreaSearch* pointer);
 	virtual ~FSPanelAreaSearchFind() = default;
 
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ BOOL handleKeyHere(KEY key,MASK mask);
+	/*virtual*/ bool postBuild();
+	/*virtual*/ bool handleKeyHere(KEY key,MASK mask);
 
 	LLLineEditor* mNameLineEditor;
 	LLLineEditor* mDescriptionLineEditor;
@@ -367,7 +367,7 @@ public:
 	FSPanelAreaSearchFilter(FSAreaSearch* pointer);
 	virtual ~FSPanelAreaSearchFilter() = default;
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 
 private:
 	void onCommitCheckbox();
@@ -433,7 +433,7 @@ public:
 	FSPanelAreaSearchAdvanced() = default;
 	virtual ~FSPanelAreaSearchAdvanced() = default;
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 
 	LLCheckBoxCtrl* mCheckboxClickTouch;
 	LLCheckBoxCtrl* mCheckboxClickBuy;

@@ -131,7 +131,7 @@ public:
 	static bool canShowInstance(const std::string& name, const LLSD& key = LLSD());
 // [/RLVa:KB]
 	// return NULL if instance not found or can't create instance (no builder)
-	static LLFloater* showInstance(const std::string& name, const LLSD& key = LLSD(), BOOL focus = FALSE);
+	static LLFloater* showInstance(const std::string& name, const LLSD& key = LLSD(), bool focus = false);
 	// Close a floater (may destroy or set invisible)
 	// return false if can't find instance
 	static bool hideInstance(const std::string& name, const LLSD& key = LLSD());
@@ -174,7 +174,7 @@ public:
 	}
 
 	template <class T>
-	static T* showTypedInstance(const std::string& name, const LLSD& key = LLSD(), BOOL focus = FALSE)
+	static T* showTypedInstance(const std::string& name, const LLSD& key = LLSD(), bool focus = false)
 	{
 		return dynamic_cast<T*>(showInstance(name, key, focus));
 	}

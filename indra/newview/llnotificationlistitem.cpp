@@ -56,9 +56,9 @@ LLNotificationListItem::LLNotificationListItem(const Params& p) : LLPanel(p),
     mNotificationName = p.notification_name;
 }
 
-BOOL LLNotificationListItem::postBuild()
+bool LLNotificationListItem::postBuild()
 {
-    BOOL rv = LLPanel::postBuild();
+    bool rv = LLPanel::postBuild();
     mTitleBox = getChild<LLTextBox>("notification_title");
     mTitleBoxExp = getChild<LLTextBox>("notification_title_exp"); 
     mNoticeTextExp = getChild<LLChatEntry>("notification_text_exp");
@@ -290,12 +290,12 @@ LLGroupInviteNotificationListItem::LLGroupInviteNotificationListItem(const Param
     buildFromFile("panel_notification_list_item.xml");
 }
 
-BOOL LLGroupInviteNotificationListItem::postBuild()
+bool LLGroupInviteNotificationListItem::postBuild()
 {
-    BOOL rv = LLGroupNotificationListItem::postBuild();
+    bool rv = LLGroupNotificationListItem::postBuild();
     setFee(mParams.fee);
     mInviteButtonPanel = getChild<LLPanel>("button_panel");
-    mInviteButtonPanel->setVisible(TRUE);
+    mInviteButtonPanel->setVisible(true);
     mJoinBtn = getChild<LLButton>("join_btn");
     mDeclineBtn = getChild<LLButton>("decline_btn");
     mInfoBtn = getChild<LLButton>("info_btn");
@@ -375,9 +375,9 @@ LLGroupNotificationListItem::~LLGroupNotificationListItem()
 	LLGroupMgr::getInstance()->removeObserver(this);
 }
 
-BOOL LLGroupNoticeNotificationListItem::postBuild()
+bool LLGroupNoticeNotificationListItem::postBuild()
 {
-    BOOL rv = LLGroupNotificationListItem::postBuild();
+    bool rv = LLGroupNotificationListItem::postBuild();
 
     mAttachmentTextBox = getChild<LLTextBox>("attachment_text");
     mAttachmentIcon = getChild<LLIconCtrl>("attachment_icon");
@@ -422,9 +422,9 @@ BOOL LLGroupNoticeNotificationListItem::postBuild()
     return rv;
 }
 
-BOOL LLGroupNotificationListItem::postBuild()
+bool LLGroupNotificationListItem::postBuild()
 {
-    BOOL rv = LLNotificationListItem::postBuild();
+    bool rv = LLNotificationListItem::postBuild();
 
     mGroupIcon = getChild<LLGroupIconCtrl>("group_icon");
     mGroupIconExp = getChild<LLGroupIconCtrl>("group_icon_exp");
@@ -594,7 +594,7 @@ LLTransactionNotificationListItem::LLTransactionNotificationListItem(const Param
     buildFromFile("panel_notification_list_item.xml");
 }
 
-BOOL LLTransactionNotificationListItem::postBuild()
+bool LLTransactionNotificationListItem::postBuild()
 {
     // <FS:Ansariel> Unscrew avatar icon for transaction messages
     if (mParams.notification_name == "PaymentReceived" ||
@@ -604,7 +604,7 @@ BOOL LLTransactionNotificationListItem::postBuild()
     }
     // </FS:Ansariel>
 
-    BOOL rv = LLNotificationListItem::postBuild();
+    bool rv = LLNotificationListItem::postBuild();
 
     mAvatarIcon = getChild<LLAvatarIconCtrl>("avatar_icon");
     mAvatarIconExp = getChild<LLAvatarIconCtrl>("avatar_icon_exp");
@@ -685,9 +685,9 @@ LLSystemNotificationListItem::LLSystemNotificationListItem(const Params& p)
     }
 }
 
-BOOL LLSystemNotificationListItem::postBuild()
+bool LLSystemNotificationListItem::postBuild()
 {
-    BOOL rv = LLNotificationListItem::postBuild();
+    bool rv = LLNotificationListItem::postBuild();
     mSystemNotificationIcon = getChild<LLIconCtrl>("system_notification_icon");
     mSystemNotificationIconExp = getChild<LLIconCtrl>("system_notification_icon_exp");
     if (mSystemNotificationIcon)

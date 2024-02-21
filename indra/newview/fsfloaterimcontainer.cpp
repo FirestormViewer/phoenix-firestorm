@@ -70,7 +70,7 @@ FSFloaterIMContainer::~FSFloaterIMContainer()
 	}
 }
 
-BOOL FSFloaterIMContainer::postBuild()
+bool FSFloaterIMContainer::postBuild()
 {
 	mNewMessageConnection = LLIMModel::instance().mNewMsgSignal.connect(boost::bind(&FSFloaterIMContainer::onNewMessageReceived, this, _1));
 	// Do not call base postBuild to not connect to mCloseSignal to not close all floaters via Close button
@@ -84,7 +84,7 @@ BOOL FSFloaterIMContainer::postBuild()
 
 	gSavedSettings.getControl("FSShowConversationVoiceStateIndicator")->getSignal()->connect(boost::bind(&FSFloaterIMContainer::onVoiceStateIndicatorChanged, this, _2));
 
-	return TRUE;
+	return true;
 }
 
 void FSFloaterIMContainer::initTabs()
@@ -116,7 +116,7 @@ void FSFloaterIMContainer::initTabs()
 		}
 		else
 		{
-			addFloater(floater_contacts, TRUE);
+			addFloater(floater_contacts, true);
 		}
 	}
 
@@ -134,7 +134,7 @@ void FSFloaterIMContainer::initTabs()
 		}
 		else
 		{
-			addFloater(floater_chat, TRUE);
+			addFloater(floater_chat, true);
 		}
 	}
 }
@@ -183,7 +183,7 @@ void FSFloaterIMContainer::onClose(bool app_quitting)
 }
 
 void FSFloaterIMContainer::addFloater(LLFloater* floaterp, 
-									BOOL select_added_floater, 
+									bool select_added_floater, 
 									LLTabContainer::eInsertionPoint insertion_point)
 {
 	if (!floaterp)
@@ -207,7 +207,7 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
 		if (floaterp->getName() == "imcontacts")
 		{
 			LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::START);
-			gSavedSettings.setBOOL("ContactsTornOff", FALSE);
+			gSavedSettings.setBOOL("ContactsTornOff", false);
 		}
 		else
 		{
@@ -223,12 +223,12 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
 			{
 				LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::START);
 			}
-			gSavedSettings.setBOOL("ChatHistoryTornOff", FALSE);
+			gSavedSettings.setBOOL("ChatHistoryTornOff", false);
 		}
 		// make sure first two tabs are now locked
 		mTabContainer->lockTabs(num_locked_tabs + 1);
 		
-		floaterp->setCanClose(FALSE);
+		floaterp->setCanClose(false);
 		return;
 	}
 	else
@@ -279,7 +279,7 @@ void FSFloaterIMContainer::addNewSession(LLFloater* floaterp)
 {
 	// Make sure we don't do some strange re-arranging if we add a new IM floater due to a new session
 	mIsAddingNewSession = true;
-	addFloater(floaterp, FALSE, LLTabContainer::END);
+	addFloater(floaterp, false, LLTabContainer::END);
 	mIsAddingNewSession = false;
 }
 
@@ -372,7 +372,7 @@ FSFloaterIMContainer* FSFloaterIMContainer::getInstance()
 	return LLFloaterReg::getTypedInstance<FSFloaterIMContainer>("fs_im_container");
 }
 
-void FSFloaterIMContainer::setVisible(BOOL b)
+void FSFloaterIMContainer::setVisible(bool b)
 {
 	LLMultiFloater::setVisible(b);
 
@@ -382,7 +382,7 @@ void FSFloaterIMContainer::setVisible(BOOL b)
 	}
 }
 
-void FSFloaterIMContainer::setMinimized(BOOL b)
+void FSFloaterIMContainer::setMinimized(bool b)
 {
 	if (mTabContainer)
 	{

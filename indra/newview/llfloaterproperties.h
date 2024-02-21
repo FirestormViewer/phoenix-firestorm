@@ -55,11 +55,11 @@ public:
 	LLFloaterProperties(const LLSD& key);
 	/*virtual*/ ~LLFloaterProperties();
 	
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	void setObjectID(const LLUUID& object_id) { mObjectID = object_id; }
 
-	void dirty() { mDirty = TRUE; }
+	void dirty() { mDirty = true; }
 	void refresh();
 	
 	static void dirtyAll();
@@ -92,7 +92,7 @@ protected:
 	// inventory.
 	LLUUID mObjectID;
 
-	BOOL mDirty;
+	bool mDirty;
 
 	LLPropertiesObserver* mPropertiesObserver;
 

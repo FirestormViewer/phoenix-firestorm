@@ -383,7 +383,7 @@ void LLNavigationBar::setupPanel()
 	//mNavigationPanel->getResizeBar()->setResizeListener(boost::bind(&LLNavigationBar::onNavbarResized, this));
 	//mFavoritePanel->getResizeBar()->setResizeListener(boost::bind(&LLNavigationBar::onNavbarResized, this));
 
-	// return TRUE;
+	// return true;
 	LLHints::getInstance()->registerHintTarget("nav_bar",mView->getHandle());
 	// </FS:Zi>
 
@@ -392,7 +392,7 @@ void LLNavigationBar::setupPanel()
 }
 
 // <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
-// void LLNavigationBar::setVisible(BOOL visible)
+// void LLNavigationBar::setVisible(bool visible)
 // {
 // 	// change visibility of grandparent layout_panel to animate in and out
 // 	if (getParent()) 

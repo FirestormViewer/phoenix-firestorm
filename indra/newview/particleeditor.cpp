@@ -94,7 +94,7 @@ ParticleEditor::~ParticleEditor()
 	clearParticles();
 }
 
-BOOL ParticleEditor::postBuild()
+bool ParticleEditor::postBuild()
 {
 	mMainPanel = getChild<LLPanel>("particle_editor_panel");
 
@@ -215,7 +215,7 @@ BOOL ParticleEditor::postBuild()
 
 	onParameterChange();
 
-	return TRUE;
+	return true;
 }
 
 void ParticleEditor::clearParticles()

@@ -162,7 +162,7 @@ LLFloaterReporter::LLFloaterReporter(const LLSD& key)
 }
 
 // virtual
-BOOL LLFloaterReporter::postBuild()
+bool LLFloaterReporter::postBuild()
 {
 	LLSLURL slurl;
 	LLAgentUI::buildSLURL(slurl);
@@ -232,7 +232,7 @@ BOOL LLFloaterReporter::postBuild()
 
 	center();
 
-	return TRUE;
+	return true;
 }
 
 // virtual
@@ -608,7 +608,7 @@ void LLFloaterReporter::showFromMenu(EReportType report_type)
 	LLFloaterReporter* reporter_floater = LLFloaterReg::findTypedInstance<LLFloaterReporter>("reporter");
 	if(reporter_floater && reporter_floater->isInVisibleChain())
 	{
-		gSavedPerAccountSettings.setBOOL("PreviousScreenshotForReport", FALSE);
+		gSavedPerAccountSettings.setBOOL("PreviousScreenshotForReport", false);
 	}
 	reporter_floater = LLFloaterReg::showTypedInstance<LLFloaterReporter>("reporter", LLSD());
 	if (reporter_floater)
@@ -623,7 +623,7 @@ void LLFloaterReporter::show(const LLUUID& object_id, const std::string& avatar_
 	LLFloaterReporter* reporter_floater = LLFloaterReg::findTypedInstance<LLFloaterReporter>("reporter");
 	if(reporter_floater && reporter_floater->isInVisibleChain())
 	{
-		gSavedPerAccountSettings.setBOOL("PreviousScreenshotForReport", FALSE);
+		gSavedPerAccountSettings.setBOOL("PreviousScreenshotForReport", false);
 	}
 	reporter_floater = LLFloaterReg::showTypedInstance<LLFloaterReporter>("reporter");
 	if (avatar_name.empty())
@@ -651,7 +651,7 @@ void LLFloaterReporter::showFromExperience( const LLUUID& experience_id )
 	LLFloaterReporter* reporter_floater = LLFloaterReg::findTypedInstance<LLFloaterReporter>("reporter");
 	if(reporter_floater && reporter_floater->isInVisibleChain())
 	{
-		gSavedPerAccountSettings.setBOOL("PreviousScreenshotForReport", FALSE);
+		gSavedPerAccountSettings.setBOOL("PreviousScreenshotForReport", false);
 	}
 	reporter_floater = LLFloaterReg::showTypedInstance<LLFloaterReporter>("reporter");
 	reporter_floater->getExperienceInfo(experience_id);
@@ -887,7 +887,7 @@ void LLFloaterReporter::sendReportViaCaps(std::string url, std::string sshot_url
 
 void LLFloaterReporter::takeScreenshot(bool use_prev_screenshot)
 {
-	gSavedPerAccountSettings.setBOOL("PreviousScreenshotForReport", TRUE);
+	gSavedPerAccountSettings.setBOOL("PreviousScreenshotForReport", true);
 	if(!use_prev_screenshot)
 	{
 		std::string screenshot_filename(gDirUtilp->getLindenUserDir() + gDirUtilp->getDirDelimiter() + SCREEN_PREV_FILENAME);

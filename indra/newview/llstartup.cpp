@@ -1087,11 +1087,11 @@ bool idle_startup()
 		{
 			// Log into last account
 			// <FS:Ansariel> Option to not save password if using login cmdline switch;
-			//               gLoginHandler.initializeLoginInfo() sets AutoLogin to TRUE,
+			//               gLoginHandler.initializeLoginInfo() sets AutoLogin to true,
 			//               so we end up here!
 			//gRememberPassword = true;
 			//gRememberUser = true;
-			//gSavedSettings.setBOOL("RememberPassword", TRUE);                                                      
+			//gSavedSettings.setBOOL("RememberPassword", true);
 			//gRememberUser = gSavedSettings.getBOOL("RememberUser");
 			if (gSavedSettings.getBOOL("FSLoginDontSavePassword"))
 			{
@@ -1100,7 +1100,7 @@ bool idle_startup()
 			else
 			{
 				gRememberPassword = true;
-				gSavedSettings.setBOOL("RememberPassword", TRUE);
+				gSavedSettings.setBOOL("RememberPassword", true);
 			}
 			// </FS:Ansariel>
 
@@ -1807,7 +1807,7 @@ bool idle_startup()
                                 general_cert_done);
 
                             reset_login();
-                            gSavedSettings.setBOOL("AutoLogin", FALSE);
+                            gSavedSettings.setBOOL("AutoLogin", false);
                             show_connect_box = true;
                         }
 						if(certificate)
@@ -1836,7 +1836,7 @@ bool idle_startup()
 								
 								// <FS:Ansariel> Not needed here - done below & in transition_back_to_login_panel()
 								//reset_login();
-								//gSavedSettings.setBOOL("AutoLogin", FALSE);
+								//gSavedSettings.setBOOL("AutoLogin", false);
 								//show_connect_box = true;
 								// </FS:Ansariel>
 								
@@ -2807,12 +2807,12 @@ bool idle_startup()
 
 			if (gSavedSettings.getBOOL("ShowHelpOnFirstLogin"))
 			{
-				gSavedSettings.setBOOL("HelpFloaterOpen", TRUE);
+				gSavedSettings.setBOOL("HelpFloaterOpen", true);
 			}
 
 			// Set the show start location to true, now that the user has logged
 			// on with this install.
-			gSavedSettings.setBOOL("ShowStartLocation", TRUE);
+			gSavedSettings.setBOOL("ShowStartLocation", true);
 
 			// <FS:Ansariel> [FS Communication UI]
 			LLFloaterReg::toggleInstanceOrBringToFront("fs_im_container");
@@ -2856,7 +2856,7 @@ bool idle_startup()
 		display_startup();
 
 		// We're successfully logged in.
-		gSavedSettings.setBOOL("FirstLoginThisInstall", FALSE);
+		gSavedSettings.setBOOL("FirstLoginThisInstall", false);
 
 		LLFloaterReg::showInitialVisibleInstances();
 
@@ -4365,8 +4365,8 @@ void trust_cert_done(const LLSD& notification, const LLSD& response)
 		case OPT_CANCEL_TRUST:
 			// <FS:Ansariel> That's what transition_back_to_login_panel is for and does!
 			//reset_login();
-			//gSavedSettings.setBOOL("AutoLogin", FALSE);			
-			//LLStartUp::setStartupState( STATE_LOGIN_SHOW );				
+			//gSavedSettings.setBOOL("AutoLogin", false);
+			//LLStartUp::setStartupState( STATE_LOGIN_SHOW );
 			transition_back_to_login_panel(std::string());
 			// </FS:Ansariel>
 		default:
@@ -5017,7 +5017,7 @@ void transition_back_to_login_panel(const std::string& emsg)
 {
 	// Bounce back to the login screen.
 	reset_login(); // calls LLStartUp::setStartupState( STATE_LOGIN_SHOW );
-	gSavedSettings.setBOOL("AutoLogin", FALSE);
+	gSavedSettings.setBOOL("AutoLogin", false);
 }
 
 // <FS:KC> FIRE-18250: Option to disable default eye movement

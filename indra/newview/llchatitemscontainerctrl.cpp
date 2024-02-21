@@ -51,9 +51,9 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
-static const S32 msg_left_offset = 10;
-static const S32 msg_right_offset = 10;
-static const S32 msg_height_pad = 5;
+static constexpr S32 msg_left_offset = 10;
+static constexpr S32 msg_right_offset = 10;
+static constexpr S32 msg_height_pad = 5;
 
 //*******************************************************************************************************************
 // LLObjectHandler
@@ -101,7 +101,7 @@ LLFloaterIMNearbyChatToastPanel* LLFloaterIMNearbyChatToastPanel::createInstance
 	return item;
 }
 
-void	LLFloaterIMNearbyChatToastPanel::reshape		(S32 width, S32 height, BOOL called_from_parent )
+void	LLFloaterIMNearbyChatToastPanel::reshape		(S32 width, S32 height, bool called_from_parent )
 {
 	LLPanel::reshape(width, height,called_from_parent);
 
@@ -130,7 +130,7 @@ void	LLFloaterIMNearbyChatToastPanel::reshape		(S32 width, S32 height, BOOL call
 	msg_text->setRect(msg_text_rect);
 }
 
-BOOL LLFloaterIMNearbyChatToastPanel::postBuild()
+bool LLFloaterIMNearbyChatToastPanel::postBuild()
 {
 	return LLPanel::postBuild();
 }

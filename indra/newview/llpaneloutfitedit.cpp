@@ -447,7 +447,7 @@ LLPanelOutfitEdit::~LLPanelOutfitEdit()
 	}
 }
 
-BOOL LLPanelOutfitEdit::postBuild()
+bool LLPanelOutfitEdit::postBuild()
 {
 	// gInventory.isInventoryUsable() no longer needs to be tested per Richard's fix for race conditions between inventory and panels
 	
@@ -579,7 +579,7 @@ BOOL LLPanelOutfitEdit::postBuild()
 	mAvatarComplexityAddingLabel = getChild<LLTextBox>("avatar_complexity_adding_label");
 
 	onOutfitChanging(gAgentWearables.isCOFChangeInProgress());
-	return TRUE;
+	return true;
 }
 
 // virtual
@@ -1183,7 +1183,7 @@ void LLPanelOutfitEdit::update()
 	updateVerbs();
 }
 
-BOOL LLPanelOutfitEdit::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+bool LLPanelOutfitEdit::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
 										  EDragAndDropType cargo_type,
 										  void* cargo_data,
 										  EAcceptance* accept,
@@ -1230,7 +1230,7 @@ BOOL LLPanelOutfitEdit::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 void LLPanelOutfitEdit::displayCurrentOutfit()

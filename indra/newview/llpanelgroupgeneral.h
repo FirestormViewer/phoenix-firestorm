@@ -56,7 +56,7 @@ public:
 	
 	virtual void update(LLGroupChange gc);
 	
-	virtual BOOL postBuild();
+	virtual bool postBuild();
 	
 	virtual void draw();
 

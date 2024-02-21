@@ -59,7 +59,7 @@
 #include "llviewerinventory.h"
 #include "rlvactions.h"
 
-static const F32 FS_PLACE_INFO_UPDATE_INTERVAL = 3.0f;
+static constexpr F32 FS_PLACE_INFO_UPDATE_INTERVAL = 3.0f;
 
 static bool fs_is_agent_in_selected_parcel(LLParcel* parcel)
 {
@@ -220,14 +220,14 @@ FSFloaterPlaceDetails::~FSFloaterPlaceDetails()
 	}
 }
 
-BOOL FSFloaterPlaceDetails::postBuild()
+bool FSFloaterPlaceDetails::postBuild()
 {
 	mPanelLandmarkInfo = findChild<LLPanelLandmarkInfo>("panel_landmark_info");
 	mPanelPlaceInfo = findChild<LLPanelPlaceProfile>("panel_place_profile");
 
 	if (!mPanelLandmarkInfo || !mPanelPlaceInfo)
 	{
-		return FALSE;
+		return false;
 	}
 
 	getChild<LLButton>("teleport_btn")->setClickedCallback(boost::bind(&FSFloaterPlaceDetails::onTeleportButtonClicked, this));
@@ -268,7 +268,7 @@ BOOL FSFloaterPlaceDetails::postBuild()
 
 	updateVerbs();
 
-	return TRUE;
+	return true;
 }
 
 void FSFloaterPlaceDetails::onOpen(const LLSD& key)

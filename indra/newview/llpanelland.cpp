@@ -60,7 +60,7 @@ public:
 };
 
 
-BOOL	LLPanelLandInfo::postBuild()
+bool	LLPanelLandInfo::postBuild()
 {
 	childSetAction("button buy land",boost::bind(onClickClaim));
 	childSetAction("button abandon land", boost::bind(onClickRelease));
@@ -71,7 +71,7 @@ BOOL	LLPanelLandInfo::postBuild()
 	mCheckShowOwners = getChild<LLCheckBoxCtrl>("checkbox show owners");
 	getChild<LLUICtrl>("checkbox show owners")->setValue(gSavedSettings.getBOOL("ShowParcelOwners"));
 
-	return TRUE;
+	return true;
 }
 //
 // Methods

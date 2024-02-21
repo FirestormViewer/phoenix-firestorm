@@ -49,7 +49,7 @@ LLFlatListView::Params::Params()
 	magical_hacky_height_padding("magical_hacky_height_padding")
 {};
 
-void LLFlatListView::reshape(S32 width, S32 height, BOOL called_from_parent /* = TRUE */)
+void LLFlatListView::reshape(S32 width, S32 height, bool called_from_parent /* = true */)
 {
 	S32 delta = height - getRect().getHeight();
 	LLScrollContainer::reshape(width, height, called_from_parent);
@@ -538,7 +538,7 @@ void LLFlatListView::draw()
 }
 
 // virtual
-BOOL LLFlatListView::postBuild()
+bool LLFlatListView::postBuild()
 {
 	setTabStop(true);
 	return LLScrollContainer::postBuild();
@@ -620,7 +620,7 @@ void LLFlatListView::onItemMouseClick(item_pair_t* item_pair, MASK mask)
 		return;
 	}
 
-	setFocus(TRUE);
+	setFocus(true);
 	
 	bool select_item = !isSelected(item_pair);
 
@@ -724,10 +724,10 @@ void LLFlatListView::onItemRightMouseClick(item_pair_t* item_pair, MASK mask)
 	onItemMouseClick(item_pair, mask);
 }
 
-BOOL LLFlatListView::handleKeyHere(KEY key, MASK mask)
+bool LLFlatListView::handleKeyHere(KEY key, MASK mask)
 {
-	BOOL reset_selection = (mask != MASK_SHIFT);
-	BOOL handled = FALSE;
+	bool reset_selection = (mask != MASK_SHIFT);
+	bool handled = false;
 	switch (key)
 	{
 		case KEY_RETURN:
@@ -735,7 +735,7 @@ BOOL LLFlatListView::handleKeyHere(KEY key, MASK mask)
 			if (mSelectedItemPairs.size() && mask == MASK_NONE)
 			{
 				mOnReturnSignal(this, getValue());
-				handled = TRUE;
+				handled = true;
 			}
 			break;
 		}
@@ -763,7 +763,7 @@ BOOL LLFlatListView::handleKeyHere(KEY key, MASK mask)
 		{
 			if (mask == MASK_NONE)
 			{
-				setFocus(FALSE); // pass focus to the game area (EXT-8357)
+				setFocus(false); // pass focus to the game area (EXT-8357)
 			}
 			break;
 		}
@@ -789,7 +789,7 @@ BOOL LLFlatListView::handleKeyHere(KEY key, MASK mask)
 		localRectToScreen(selected_rc, &screen_rc);
 		notifyParent(LLSD().with("scrollToShowRect",screen_rc.getValue()));*/
 
-		handled = TRUE;
+		handled = true;
 	}
 
 	return handled ? handled : LLScrollContainer::handleKeyHere(key, mask);
@@ -1050,7 +1050,7 @@ bool LLFlatListView::selectNextItemPair(bool is_up_direction, bool reset_selecti
 	return false;
 }
 
-BOOL LLFlatListView::canSelectAll() const
+bool LLFlatListView::canSelectAll() const
 {
 	return 0 != size() && mAllowSelection && mMultipleSelection;
 }
@@ -1210,14 +1210,14 @@ void LLFlatListView::onFocusReceived()
 {
 	if (size())
 	{
-		mSelectedItemsBorder->setVisible(TRUE);
+		mSelectedItemsBorder->setVisible(true);
 	}
 	gEditMenuHandler = this;
 }
 // virtual
 void LLFlatListView::onFocusLost()
 {
-	mSelectedItemsBorder->setVisible(FALSE);
+	mSelectedItemsBorder->setVisible(false);
 	// Route menu back to the default
 	if (gEditMenuHandler == this)
 	{

@@ -60,10 +60,10 @@
 
 extern F32 gSavedDrawDistance;
 
-const F32 REFRESH_INTERVAL = 1.0f;
-const S32 BAR_LEFT_PAD = 2;
-const S32 BAR_RIGHT_PAD = 5;
-const S32 BAR_BOTTOM_PAD = 9;
+constexpr F32 REFRESH_INTERVAL = 1.0f;
+constexpr S32 BAR_LEFT_PAD = 2;
+constexpr S32 BAR_RIGHT_PAD = 5;
+constexpr S32 BAR_BOTTOM_PAD = 9;
 
 constexpr auto AvType       {LLPerfStats::ObjType_t::OT_AVATAR};
 constexpr auto SceneType    {LLPerfStats::ObjType_t::OT_GENERAL};
@@ -105,7 +105,7 @@ FSFloaterPerformance::~FSFloaterPerformance()
     delete mUpdateTimer;
 }
 
-BOOL FSFloaterPerformance::postBuild()
+bool FSFloaterPerformance::postBuild()
 {
     mMainPanel = getChild<LLPanel>("panel_performance_main");
     mNearbyPanel = getChild<LLPanel>("panel_performance_nearby");
@@ -175,7 +175,7 @@ BOOL FSFloaterPerformance::postBuild()
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 void FSFloaterPerformance::resetMaxArtSlider()

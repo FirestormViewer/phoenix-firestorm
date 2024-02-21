@@ -220,10 +220,10 @@ LLControlGroup gSavedSettings("Global");
 LLControlGroup::LLControlGroup(const std::string& name) :
 	LLInstanceTracker<LLControlGroup, std::string>(name){}
 LLControlGroup::~LLControlGroup() {}
-void LLControlGroup::setBOOL(const std::string& name, BOOL val) {}
-BOOL LLControlGroup::getBOOL(const std::string& name) { return FALSE; }
+void LLControlGroup::setBOOL(const std::string& name, bool val) {}
+bool LLControlGroup::getBOOL(const std::string& name) { return false; }
 F32 LLControlGroup::getF32(const std::string& name) { return 0.0f; }
-U32 LLControlGroup::saveToFile(const std::string& filename, BOOL nondefault_only) { return 1; }
+U32 LLControlGroup::saveToFile(const std::string& filename, bool nondefault_only) { return 1; }
 void LLControlGroup::setString(const std::string& name, const std::string& val) {}
 std::string LLControlGroup::getString(const std::string& name) { return "test_string"; }
 LLControlVariable* LLControlGroup::declareBOOL(const std::string& name, bool initial_val, const std::string& comment, LLControlVariable::ePersist persist) { return NULL; }
@@ -257,7 +257,7 @@ static LLEventPump * gTOSReplyPump = NULL;
 LLPointer<LLSecAPIHandler> gSecAPIHandler;
 
 //static
-LLFloater* LLFloaterReg::showInstance(const std::string& name, const LLSD& key, BOOL focus)
+LLFloater* LLFloaterReg::showInstance(const std::string& name, const LLSD& key, bool focus)
 {
 	gTOSType = name;
 	gTOSReplyPump = &LLEventPumps::instance().obtain(key["reply_pump"]);

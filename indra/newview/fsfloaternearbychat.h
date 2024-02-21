@@ -49,14 +49,14 @@ public:
 	FSFloaterNearbyChat(const LLSD& key);
 	~FSFloaterNearbyChat();
 
-	BOOL	postBuild();
+	bool	postBuild();
 
 	/** @param archive true - to save a message to the chat history log */
 	void	addMessage(const LLChat& message,bool archive = true, const LLSD &args = LLSD());
 
 	/*virtual*/ void onOpen(const LLSD& key);
-	/*virtual*/ void setVisible(BOOL visible);
-	/*virtual*/ void setMinimized(BOOL b);
+	/*virtual*/ void setVisible(bool visible);
+	/*virtual*/ void setMinimized(bool b);
 
 	void	openFloater(const LLSD& key);
 
@@ -75,14 +75,14 @@ public:
 
 	static bool isChatMultiTab();
 
-	BOOL getVisible();
+	bool getVisible();
 
 	void onHistoryButtonClicked();
 
 	void onSearchButtonClicked();
 
 	// overridden to fix the multitab focus bug -Zi
-	BOOL focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
+	bool focusFirstItem(bool prefer_text_fields = false, bool focus_flash = true );
 
 	void updateFSUseNearbyChatConsole(const LLSD &data);
 	static bool isWordsName(const std::string& name);
@@ -91,7 +91,7 @@ public:
 
 	S32 getMessageArchiveLength() {return mMessageArchive.size();}
 
-	virtual BOOL handleKeyHere( KEY key, MASK mask );
+	virtual bool handleKeyHere( KEY key, MASK mask );
 
 	static void startChat(const char* line);
 	static void stopChat();

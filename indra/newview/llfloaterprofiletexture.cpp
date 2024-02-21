@@ -63,7 +63,7 @@ LLFloaterProfileTexture::~LLFloaterProfileTexture()
 }
 
 // virtual
-BOOL LLFloaterProfileTexture::postBuild()
+bool LLFloaterProfileTexture::postBuild()
 {
     mProfileIcon = getChild<LLIconCtrl>("profile_pic");
 
@@ -73,11 +73,11 @@ BOOL LLFloaterProfileTexture::postBuild()
     // <FS:Ansariel> Add refresh function
     getChild<LLButton>("btn_refresh")->setCommitCallback([this](LLUICtrl*, void*) { refreshTexture(); }, nullptr);
 
-	return TRUE;
+	return true;
 }
 
 // virtual
-void LLFloaterProfileTexture::reshape(S32 width, S32 height, BOOL called_from_parent)
+void LLFloaterProfileTexture::reshape(S32 width, S32 height, bool called_from_parent)
 {
 	LLFloater::reshape(width, height, called_from_parent);
 }

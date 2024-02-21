@@ -38,8 +38,8 @@ class LLFloaterScriptDebug : public LLMultiFloater
 public:
 	LLFloaterScriptDebug(const LLSD& key);
 	virtual ~LLFloaterScriptDebug();
-	virtual BOOL postBuild();
-	//virtual void setVisible(BOOL visible); // <FS:Ansariel> Improved script debug floater
+	virtual bool postBuild();
+	//virtual void setVisible(bool visible); // <FS:Ansariel> Improved script debug floater
 	static void show(const LLUUID& object_id);
 
     /*virtual*/ //void closeFloater(bool app_quitting = false); // <FS:Ansariel> Improved script debug floater
@@ -71,7 +71,7 @@ public:
 	// void addLine(const std::string &utf8mesg, const std::string &user_name, const LLColor4& color);
 	void addLine(const LLChat& chat, const std::string &user_name);
 
-	virtual BOOL postBuild();
+	virtual bool postBuild();
 
 	// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow]
 	void clear();

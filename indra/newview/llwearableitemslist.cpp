@@ -106,7 +106,7 @@ LLPanelWearableOutfitItem::Params::Params()
 {
 }
 
-BOOL LLPanelWearableOutfitItem::postBuild()
+bool LLPanelWearableOutfitItem::postBuild()
 {
     LLPanelWearableListItem::postBuild();
     
@@ -127,8 +127,7 @@ BOOL LLPanelWearableOutfitItem::postBuild()
         setWidgetsVisible(false);
         reshapeWidgets();
     }
-
-    return TRUE;
+    return true;
 }
 
 bool LLPanelWearableOutfitItem::handleDoubleClick(S32 x, S32 y, MASK mask)
@@ -345,7 +344,7 @@ LLPanelClothingListItem::~LLPanelClothingListItem()
 {
 }
 
-BOOL LLPanelClothingListItem::postBuild()
+bool LLPanelClothingListItem::postBuild()
 {
 	LLPanelDeletableWearableListItem::postBuild();
 
@@ -357,7 +356,7 @@ BOOL LLPanelClothingListItem::postBuild()
 	setWidgetsVisible(false);
 	reshapeWidgets();
 
-	return TRUE;
+	return true;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -422,7 +421,7 @@ LLPanelBodyPartsListItem::~LLPanelBodyPartsListItem()
 {
 }
 
-BOOL LLPanelBodyPartsListItem::postBuild()
+bool LLPanelBodyPartsListItem::postBuild()
 {
 	LLPanelInventoryListItemBase::postBuild();
 
@@ -432,7 +431,7 @@ BOOL LLPanelBodyPartsListItem::postBuild()
 	setWidgetsVisible(false);
 	reshapeWidgets();
 
-	return TRUE;
+	return true;
 }
 
 static LLWidgetNameRegistry::StaticRegistrar sRegisterPanelDeletableWearableListItem(&typeid(LLPanelDeletableWearableListItem::Params), "deletable_wearable_list_item");
@@ -465,7 +464,7 @@ LLPanelDeletableWearableListItem::LLPanelDeletableWearableListItem(LLViewerInven
 	setSeparatorVisible(true);
 }
 
-BOOL LLPanelDeletableWearableListItem::postBuild()
+bool LLPanelDeletableWearableListItem::postBuild()
 {
 	LLPanelWearableListItem::postBuild();
 
@@ -478,7 +477,7 @@ BOOL LLPanelDeletableWearableListItem::postBuild()
 	setWidgetsVisible(false);
 	reshapeWidgets();
 
-	return TRUE;
+	return true;
 }
 
 
@@ -557,13 +556,13 @@ FSPanelCOFWearableOutfitListItem::FSPanelCOFWearableOutfitListItem(LLViewerInven
 	addChild(LLUICtrlFactory::create<LLTextBox>(weight_params));
 }
 
-BOOL FSPanelCOFWearableOutfitListItem::postBuild()
+bool FSPanelCOFWearableOutfitListItem::postBuild()
 {
 	mWeightCtrl = getChild<LLTextBox>("item_weight");
 
 	if (!LLPanelWearableOutfitItem::postBuild())
 	{
-		return FALSE;
+		return false;
 	}
 
 	addWidgetToRightSide(mWeightCtrl);
@@ -574,7 +573,7 @@ BOOL FSPanelCOFWearableOutfitListItem::postBuild()
 	setWidgetsVisible(true);
 	reshapeWidgets();
 
-	return TRUE;
+	return true;
 }
 
 void FSPanelCOFWearableOutfitListItem::updateItemWeight(U32 item_weight)
@@ -644,7 +643,7 @@ LLPanelDummyClothingListItem* LLPanelDummyClothingListItem::create(LLWearableTyp
 	return list_item;
 }
 
-BOOL LLPanelDummyClothingListItem::postBuild()
+bool LLPanelDummyClothingListItem::postBuild()
 {
 	addWidgetToRightSide("btn_add_panel");
 
@@ -657,7 +656,7 @@ BOOL LLPanelDummyClothingListItem::postBuild()
 	setWidgetsVisible(false);
 	reshapeWidgets();
 
-	return TRUE;
+	return true;
 }
 
 LLWearableType::EType LLPanelDummyClothingListItem::getWearableType() const

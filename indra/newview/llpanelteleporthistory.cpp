@@ -71,7 +71,7 @@ public:
 	// </FS:Ansariel>
 	virtual ~LLTeleportHistoryFlatItem();
 
-	virtual BOOL postBuild();
+	virtual bool postBuild();
 
 	/*virtual*/ S32 notify(const LLSD& info);
 
@@ -174,7 +174,7 @@ LLTeleportHistoryFlatItem::~LLTeleportHistoryFlatItem()
 }
 
 //virtual
-BOOL LLTeleportHistoryFlatItem::postBuild()
+bool LLTeleportHistoryFlatItem::postBuild()
 {
 	mTitle = getChild<LLTextBox>("region");
 
@@ -479,14 +479,14 @@ LLTeleportHistoryPanel::~LLTeleportHistoryPanel()
 	mTeleportHistoryChangedConnection.disconnect();
 }
 
-BOOL LLTeleportHistoryPanel::postBuild()
+bool LLTeleportHistoryPanel::postBuild()
 {
     mCommitCallbackRegistrar.add("TeleportHistory.GearMenu.Action", boost::bind(&LLTeleportHistoryPanel::onGearMenuAction, this, _2));
     mEnableCallbackRegistrar.add("TeleportHistory.GearMenu.Enable", boost::bind(&LLTeleportHistoryPanel::isActionEnabled, this, _2));
 
     // init menus before list, since menus are passed to list
     mGearItemMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_teleport_history_item.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-    mGearItemMenu->setAlwaysShowMenu(TRUE); // all items can be disabled if nothing is selected, show anyway
+    mGearItemMenu->setAlwaysShowMenu(true); // all items can be disabled if nothing is selected, show anyway
     mSortingMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_teleport_history_gear.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 
 	mTeleportHistory = LLTeleportHistoryStorage::getInstance();
@@ -540,7 +540,7 @@ BOOL LLTeleportHistoryPanel::postBuild()
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 // virtual

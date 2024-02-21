@@ -134,7 +134,7 @@ LLAvatarListItem::~LLAvatarListItem()
 	// </FS:Ansariel>
 }
 
-BOOL  LLAvatarListItem::postBuild()
+bool LLAvatarListItem::postBuild()
 {
 	mAvatarIcon = getChild<LLAvatarIconCtrl>("avatar_icon");
 	mAvatarName = getChild<LLTextBox>("avatar_name");
@@ -185,7 +185,7 @@ BOOL  LLAvatarListItem::postBuild()
 		sStaticInitialized = true;
 	}
 
-	return TRUE;
+	return true;
 }
 
 void LLAvatarListItem::onVolumeChange(const LLSD& data)
@@ -195,8 +195,8 @@ void LLAvatarListItem::onVolumeChange(const LLSD& data)
 }
 
 // <FS:Ansariel> LL refactoring error
-//void LLAvatarListItem::handleVisibilityChange ( BOOL new_visibility )
-void LLAvatarListItem::onVisibilityChange ( BOOL new_visibility )
+//void LLAvatarListItem::handleVisibilityChange ( bool new_visibility )
+void LLAvatarListItem::onVisibilityChange ( bool new_visibility )
 // </FS:Ansariel>
 {
     //Adjust positions of icons (info button etc) when 
@@ -533,7 +533,7 @@ bool LLAvatarListItem::handleDoubleClick(S32 x, S32 y, MASK mask)
 }
 
 // [SL:KB] - Patch: UI-AvatarListDndShare | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
-BOOL LLAvatarListItem::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDropType cargo_type, void *cargo_data, 
+bool LLAvatarListItem::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDropType cargo_type, void *cargo_data,
 	                                     EAcceptance *accept, std::string& tooltip_msg)
 {
 	notifyParent(LLSD().with("select", mAvatarId));

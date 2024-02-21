@@ -1080,7 +1080,7 @@ void LLTextureView::draw()
 
 }
 
-BOOL LLTextureView::addBar(LLViewerFetchedTexture *imagep, S32 hilite)
+bool LLTextureView::addBar(LLViewerFetchedTexture *imagep, S32 hilite)
 {
 	llassert(imagep);
 	
@@ -1100,7 +1100,7 @@ BOOL LLTextureView::addBar(LLViewerFetchedTexture *imagep, S32 hilite)
 	addChild(barp);
 	mTextureBars.push_back(barp);
 
-	return TRUE;
+	return true;
 }
 
 bool LLTextureView::handleMouseDown(S32 x, S32 y, MASK mask)
@@ -1133,9 +1133,9 @@ bool LLTextureView::handleMouseUp(S32 x, S32 y, MASK mask)
 	return false;
 }
 
-BOOL LLTextureView::handleKey(KEY key, MASK mask, BOOL called_from_parent)
+bool LLTextureView::handleKey(KEY key, MASK mask, bool called_from_parent)
 {
-	return FALSE;
+	return false;
 }
 
 

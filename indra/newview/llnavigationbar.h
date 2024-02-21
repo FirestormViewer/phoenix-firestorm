@@ -101,9 +101,9 @@ public:
 	// <FS:Zi> Make navigation bar part of the UI
 	// /*virtual*/ void	draw();
 	// /*virtual*/ bool handleRightMouseDown(S32 x, S32 y, MASK mask);
-	// /*virtual*/ BOOL	postBuild();
+	// /*virtual*/ bool	postBuild();
 	// </FS:Zi>
-//	/*virtual*/ void	setVisible(BOOL visible); // <FS:Zi> Is done inside XUI now, using visibility_control
+//	/*virtual*/ void	setVisible(bool visible); // <FS:Zi> Is done inside XUI now, using visibility_control
 
 	void handleLoginComplete();
 	void clearHistoryCache();

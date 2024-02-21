@@ -91,7 +91,7 @@ LLFloaterPerformance::~LLFloaterPerformance()
     delete mUpdateTimer;
 }
 
-BOOL LLFloaterPerformance::postBuild()
+bool LLFloaterPerformance::postBuild()
 {
     mMainPanel = getChild<LLPanel>("panel_performance_main");
     mNearbyPanel = getChild<LLPanel>("panel_performance_nearby");
@@ -154,7 +154,7 @@ BOOL LLFloaterPerformance::postBuild()
 
     gSavedPerAccountSettings.declareBOOL("HadEnabledAutoFPS", FALSE, "User had enabled AutoFPS at least once", LLControlVariable::PERSIST_ALWAYS);
 
-    return TRUE;
+    return true;
 }
 
 void LLFloaterPerformance::showSelectedPanel(LLPanel* selected_panel)
@@ -732,7 +732,7 @@ void LLFloaterPerformance::enableAutotuneWarning()
 {
     if (!gSavedPerAccountSettings.getBOOL("HadEnabledAutoFPS") && LLPerfStats::tunables.userAutoTuneEnabled)
     {
-        gSavedPerAccountSettings.setBOOL("HadEnabledAutoFPS", TRUE);
+        gSavedPerAccountSettings.setBOOL("HadEnabledAutoFPS", true);
 
         LLNotificationsUtil::add("EnableAutoFPSWarning", LLSD(), LLSD(),
             [](const LLSD& notif, const LLSD& resp)

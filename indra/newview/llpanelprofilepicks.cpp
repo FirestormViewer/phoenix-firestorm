@@ -239,7 +239,7 @@ void LLPanelProfilePicks::selectPick(const LLUUID& pick_id)
     }
 }
 
-BOOL LLPanelProfilePicks::postBuild()
+bool LLPanelProfilePicks::postBuild()
 {
     mTabContainer = getChild<LLTabContainer>("tab_picks");
     mNoItemsLabel = getChild<LLUICtrl>("picks_panel_text");
@@ -256,12 +256,12 @@ BOOL LLPanelProfilePicks::postBuild()
     LLTextBox* intro_txt = getChild<LLTextBox>("header_text");
     intro_txt->setTextArg("[GRID]", LLTrans::getString("SECOND_LIFE"));
     // </FS:Ansariel>
-    return TRUE;
+    return true;
 }
 
 void LLPanelProfilePicks::onClickNewBtn()
 {
-    mNoItemsLabel->setVisible(FALSE);
+    mNoItemsLabel->setVisible(false);
     LLPanelProfilePick* pick_panel = LLPanelProfilePick::create();
     pick_panel->setAvatarId(getAvatarId());
     mTabContainer->addTabPanel(
@@ -609,7 +609,7 @@ void LLPanelProfilePick::setAvatarId(const LLUUID& avatar_id)
     }
 }
 
-BOOL LLPanelProfilePick::postBuild()
+bool LLPanelProfilePick::postBuild()
 {
     mPickName = getChild<LLLineEditor>("pick_name");
     mPickDescription = getChild<LLTextEditor>("pick_desc");
@@ -630,14 +630,14 @@ BOOL LLPanelProfilePick::postBuild()
     mSetCurrentLocationButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickSetLocation, this));
 
     mPickName->setKeystrokeCallback(boost::bind(&LLPanelProfilePick::onPickChanged, this, _1), NULL);
-    mPickName->setEnabled(FALSE);
+    mPickName->setEnabled(false);
 
     mPickDescription->setKeystrokeCallback(boost::bind(&LLPanelProfilePick::onPickChanged, this, _1));
     mPickDescription->setFocusReceivedCallback(boost::bind(&LLPanelProfilePick::onDescriptionFocusReceived, this));
 
-    getChild<LLUICtrl>("pick_location")->setEnabled(FALSE);
+    getChild<LLUICtrl>("pick_location")->setEnabled(false);
 
-    return TRUE;
+    return true;
 }
 
 void LLPanelProfilePick::onDescriptionFocusReceived()
@@ -775,7 +775,7 @@ void LLPanelProfilePick::resetDirty()
     mLocationChanged = false;
 }
 
-BOOL LLPanelProfilePick::isDirty() const
+bool LLPanelProfilePick::isDirty() const
 {
     if (mNewPick
         || LLPanel::isDirty()
@@ -784,9 +784,9 @@ BOOL LLPanelProfilePick::isDirty() const
         || mPickName->isDirty()
         || mPickDescription->isDirty())
     {
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 void LLPanelProfilePick::onClickSetLocation()

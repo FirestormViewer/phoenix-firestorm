@@ -22,13 +22,13 @@ class FSFloaterPoseStand
 	LOG_CLASS(FSFloaterPoseStand);
 public:
 	FSFloaterPoseStand(const LLSD& key);
-	BOOL postBuild();
+	bool postBuild() override;
 	void setLock(bool enabled);
 	void onCommitCombo();
 private:
 	~FSFloaterPoseStand();
-	virtual void onOpen(const LLSD& key);
-	virtual void onClose(bool app_quitting);
+	void onOpen(const LLSD& key) override;
+	void onClose(bool app_quitting) override;
 	void loadPoses();
 	
 	bool mAOPaused;

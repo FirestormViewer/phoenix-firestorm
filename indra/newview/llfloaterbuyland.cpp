@@ -187,7 +187,7 @@ public:
 	
 	void tellUserError(const std::string& message, const std::string& uri);
 
-	virtual BOOL postBuild();
+	virtual bool postBuild();
 	
 	void startBuyPreConfirm();
 	void startBuyPostConfirm(const std::string& password);
@@ -197,7 +197,7 @@ public:
 	 void onClickErrorWeb();
 	
 	virtual void draw();
-	virtual BOOL canClose();
+	virtual bool canClose();
 
 	void onVisibilityChanged ( const LLSD& new_visibility );
 	
@@ -938,7 +938,7 @@ void LLFloaterBuyLandUI::tellUserError(
 
 
 // virtual
-BOOL LLFloaterBuyLandUI::postBuild()
+bool LLFloaterBuyLandUI::postBuild()
 {
 	setVisibleCallback(boost::bind(&LLFloaterBuyLandUI::onVisibilityChanged, this, _2));
 	
@@ -950,7 +950,7 @@ BOOL LLFloaterBuyLandUI::postBuild()
 
 	center();
 	
-	return TRUE;
+	return true;
 }
 
 void LLFloaterBuyLandUI::setParcel(LLViewerRegion* region, LLParcelSelectionHandle parcel)
@@ -1003,7 +1003,7 @@ void LLFloaterBuyLandUI::draw()
 }
 
 // virtual
-BOOL LLFloaterBuyLandUI::canClose()
+bool LLFloaterBuyLandUI::canClose()
 {
 	// mTransactionType check for pre-buy estimation stage and mCurrency to allow exit after transaction
 	bool can_close = !mTransaction && (mTransactionType != TransactionBuy || mCurrency.canCancel());

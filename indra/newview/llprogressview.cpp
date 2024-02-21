@@ -68,18 +68,18 @@ static LLPanelInjector<LLProgressViewMini> r_mini("progress_view_mini");
 
 LLProgressViewMini::LLProgressViewMini()
 {
-	sInstance=this;
+	sInstance = this;
 }
 
-BOOL LLProgressViewMini::postBuild()
+bool LLProgressViewMini::postBuild()
 {
 	mCancelBtn=getChild<LLButton>("cancel_btn");
-	mCancelBtn->setClickedCallback(LLProgressViewMini::onCancelButtonClicked,NULL);
+	mCancelBtn->setClickedCallback(LLProgressViewMini::onCancelButtonClicked, nullptr);
 
 	mProgressBar=getChild<LLProgressBar>("progress_bar_mini");
 	mProgressText=getChild<LLTextBox>("progress_text");
 
-	return TRUE;
+	return true;
 }
 
 void LLProgressViewMini::setPercent(const F32 percent)
@@ -88,8 +88,8 @@ void LLProgressViewMini::setPercent(const F32 percent)
 
 	// hide ourselves when 100% is reached. This is necessary because the login code
 	// expects the fullscreen panel to hide itself when login is completed
-	if(percent==100.0f)
-		setVisible(FALSE);
+	if (percent == 100.0f)
+		setVisible(false);
 }
 
 void LLProgressViewMini::setText(const std::string& text)
@@ -97,7 +97,7 @@ void LLProgressViewMini::setText(const std::string& text)
 	mProgressText->setValue(text);
 }
 
-void LLProgressViewMini::setCancelButtonVisible(BOOL b, const std::string& label)
+void LLProgressViewMini::setCancelButtonVisible(bool b, const std::string& label)
 {
 	mCancelBtn->setVisible(b);
 	mCancelBtn->setEnabled(b);
@@ -109,10 +109,10 @@ void LLProgressViewMini::setCancelButtonVisible(BOOL b, const std::string& label
 void LLProgressViewMini::onCancelButtonClicked(void* dummy)
 {
 	// code reuse is good, even if we have an unnecessary hiding of the full screen tp window there
-	// we might have to reconsider this in case we change setVisible(FALSE) to fade(FALSE) in there. -Zi
+	// we might have to reconsider this in case we change setVisible(false) to fade(false) in there. -Zi
 	LLProgressView::onCancelButtonClicked(dummy);
-	sInstance->mCancelBtn->setEnabled(FALSE);
-	sInstance->setVisible(FALSE);
+	sInstance->mCancelBtn->setEnabled(false);
+	sInstance->setVisible(false);
 }
 
 // XUI: Translate
@@ -131,7 +131,7 @@ LLProgressView::LLProgressView()
 	mFadeFromLoginTimer.stop();
 }
 
-BOOL LLProgressView::postBuild()
+bool LLProgressView::postBuild()
 {
 	mProgressBar = getChild<LLProgressBar>("login_progress_bar");
 
@@ -154,12 +154,12 @@ BOOL LLProgressView::postBuild()
 	getChild<LLTextBox>("message_text")->setClickedCallback(onClickMessage, this);
 
 	// hidden initially, until we need it
-	setVisible(FALSE);
+	setVisible(false);
 
 	LLNotifications::instance().getChannel("AlertModal")->connectChanged(boost::bind(&LLProgressView::onAlertModal, this, _1));
 
 	sInstance = this;
-	return TRUE;
+	return true;
 }
 
 
@@ -183,14 +183,14 @@ bool LLProgressView::handleHover(S32 x, S32 y, MASK mask)
 }
 
 
-BOOL LLProgressView::handleKeyHere(KEY key, MASK mask)
+bool LLProgressView::handleKeyHere(KEY key, MASK mask)
 {
 	// Suck up all keystokes except CTRL-Q.
 	if( ('Q' == key) && (MASK_CONTROL == mask) )
 	{
 		LLAppViewer::instance()->userQuit();
 	}
-	return TRUE;
+	return true;
 }
 
 void LLProgressView::revealIntroPanel()
@@ -210,7 +210,7 @@ void LLProgressView::revealIntroPanel()
 
 
 		// flag as having seen the new user post login intro
-		gSavedSettings.setBOOL("PostFirstLoginIntroViewed", TRUE );
+		gSavedSettings.setBOOL("PostFirstLoginIntroViewed", true );
 
 		mMediaCtrl->setFocus(TRUE);
 	}
@@ -235,7 +235,7 @@ void LLProgressView::setStartupComplete()
 	LLViewerMedia::getInstance()->setOnlyAudibleMediaTextureID(LLUUID::null);
 }
 
-void LLProgressView::setVisible(BOOL visible)
+void LLProgressView::setVisible(bool visible)
 {
     if (!visible && mFadeFromLoginTimer.getStarted())
     {
@@ -244,14 +244,14 @@ void LLProgressView::setVisible(BOOL visible)
 	// hiding progress view
 	if (getVisible() && !visible)
 	{
-		LLPanel::setVisible(FALSE);
+		LLPanel::setVisible(false);
 	}
 	// showing progress view
 	else if (visible && (!getVisible() || mFadeToWorldTimer.getStarted()))
 	{
 		setFocus(TRUE);
 		mFadeToWorldTimer.stop();
-		LLPanel::setVisible(TRUE);
+		LLPanel::setVisible(true);
 	} 
 }
 

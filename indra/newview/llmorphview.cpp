@@ -48,7 +48,7 @@
 
 LLMorphView *gMorphView = NULL;
 
-const F32 MORPH_NEAR_CLIP = 0.1f;
+constexpr F32 MORPH_NEAR_CLIP = 0.1f;
 
 //-----------------------------------------------------------------------------
 // LLMorphView()
@@ -105,7 +105,7 @@ void	LLMorphView::shutdown()
 //-----------------------------------------------------------------------------
 // setVisible()
 //-----------------------------------------------------------------------------
-void LLMorphView::setVisible(BOOL visible)
+void LLMorphView::setVisible(bool visible)
 {
 	if( visible != getVisible() )
 	{

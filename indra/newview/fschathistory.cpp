@@ -636,7 +636,7 @@ public:
 		return false;
 	}
 
-	BOOL postBuild()
+	bool postBuild()
 	{
 		setDoubleClickCallback(boost::bind(&FSChatHistoryHeader::showInspector, this));
 

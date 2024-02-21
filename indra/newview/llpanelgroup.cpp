@@ -84,9 +84,9 @@ BOOL LLPanelGroupTab::isVisibleByAgent(LLAgent* agentp)
 	return TRUE;
 }
 
-BOOL LLPanelGroupTab::postBuild()
+bool LLPanelGroupTab::postBuild()
 {
-	return TRUE;
+	return true;
 }
 
 LLPanelGroup::LLPanelGroup()
@@ -193,7 +193,7 @@ void LLPanelGroup::onOpen(const LLSD& key)
 
 }
 
-BOOL LLPanelGroup::postBuild()
+bool LLPanelGroup::postBuild()
 {
 	mDefaultNeedsApplyMesg = getString("default_needs_apply_text");
 	mWantApplyMesg = getString("want_apply_text");
@@ -246,7 +246,7 @@ BOOL LLPanelGroup::postBuild()
 	// <FS:Ansariel> TabContainer switch
 	mIsUsingTabContainer = (findChild<LLTabContainer>("groups_accordion") != NULL);
 
-	return TRUE;
+	return true;
 }
 
 void LLPanelGroup::reposButton(const std::string& name)
@@ -280,7 +280,7 @@ void LLPanelGroup::reposButtons()
 	reposButton("btn_call");
 }
 
-void LLPanelGroup::reshape(S32 width, S32 height, BOOL called_from_parent )
+void LLPanelGroup::reshape(S32 width, S32 height, bool called_from_parent )
 {
 	LLPanel::reshape(width, height, called_from_parent );
 
@@ -783,7 +783,7 @@ void LLPanelGroup::showNotice(const std::string& subject,
 }
 
 // <FS:Ansariel> CTRL-F focusses local search editor
-BOOL LLPanelGroup::handleKeyHere(KEY key, MASK mask)
+bool LLPanelGroup::handleKeyHere(KEY key, MASK mask)
 {
 	if (FSCommon::isFilterEditorKeyCombo(key, mask))
 	{
@@ -793,7 +793,7 @@ BOOL LLPanelGroup::handleKeyHere(KEY key, MASK mask)
 			if (panel)
 			{
 				panel->getCurrentTab()->setSearchFilterFocus(TRUE);
-				return TRUE;
+				return true;
 			}
 		}
 		else
@@ -802,7 +802,7 @@ BOOL LLPanelGroup::handleKeyHere(KEY key, MASK mask)
 			if (tab && tab->getName() == "group_roles_tab")
 			{
 				tab->findChild<LLPanelGroupRoles>("group_roles_tab_panel")->getCurrentTab()->setSearchFilterFocus(TRUE);
-				return TRUE;
+				return true;
 			}
 		}
 	}

@@ -68,7 +68,7 @@ NACLFloaterExploreSounds::~NACLFloaterExploreSounds()
 	mLocalPlayingAudioSourceIDs.clear();
 }
 
-BOOL NACLFloaterExploreSounds::postBuild()
+bool NACLFloaterExploreSounds::postBuild()
 {
 	getChild<LLButton>("play_locally_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handlePlayLocally, this));
 	getChild<LLButton>("look_at_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handleLookAt, this));
@@ -79,7 +79,7 @@ BOOL NACLFloaterExploreSounds::postBuild()
 	mHistoryScroller = getChild<LLScrollListCtrl>("sound_list");
 	mHistoryScroller->setCommitCallback(boost::bind(&NACLFloaterExploreSounds::handleSelection, this));
 	mHistoryScroller->setDoubleClickCallback(boost::bind(&NACLFloaterExploreSounds::handlePlayLocally, this));
-	mHistoryScroller->sortByColumn("playing", TRUE);
+	mHistoryScroller->sortByColumn("playing", true);
 
 	mCollisionSounds = getChild<LLCheckBoxCtrl>("collision_chk");
 	mRepeatedAssets = getChild<LLCheckBoxCtrl>("repeated_asset_chk");
@@ -87,7 +87,7 @@ BOOL NACLFloaterExploreSounds::postBuild()
 	mObjectSounds = getChild<LLCheckBoxCtrl>("objects_chk");
 	mPaused = getChild<LLCheckBoxCtrl>("pause_chk");
 
-	return TRUE;
+	return true;
 }
 
 void NACLFloaterExploreSounds::handleSelection()

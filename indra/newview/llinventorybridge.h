@@ -112,11 +112,11 @@ public:
 	virtual void closeItem() {}
     virtual void navigateToFolder(bool new_window = false, bool change_mode = false);
 	virtual void showProperties();
-	virtual BOOL isItemRenameable() const { return TRUE; }
+	virtual bool isItemRenameable() const { return true; }
 	virtual BOOL isMultiPreviewAllowed() { return TRUE; }
 	//virtual bool renameItem(const std::string& new_name) {}
-	virtual BOOL isItemRemovable() const;
-	virtual BOOL isItemMovable() const;
+	virtual bool isItemRemovable() const;
+	virtual bool isItemMovable() const;
 	virtual BOOL isItemInTrash() const;
     virtual bool isItemInOutfits() const;
 	virtual BOOL isLink() const;
@@ -128,10 +128,10 @@ public:
 // [SL:KB] - Patch: Inventory-Links | Checked: 2013-09-19 (Catznip-3.6)
 	virtual bool isItemLinkable() const { return false; }
 // [/SL:KB]
-	virtual BOOL copyToClipboard() const;
-	virtual BOOL cutToClipboard();
+	virtual bool copyToClipboard() const;
+	virtual bool cutToClipboard();
 	virtual bool isCutToClipboard();
-	virtual BOOL isClipboardPasteable() const;
+	virtual bool isClipboardPasteable() const;
 	virtual BOOL isClipboardPasteableAsLink() const;
 	virtual void pasteFromClipboard() {}
 	virtual void pasteLinkFromClipboard() {}
@@ -140,7 +140,7 @@ public:
 	virtual void buildContextMenu(LLMenuGL& menu, U32 flags);
     virtual LLToolDragAndDrop::ESource getDragSource() const;
 	virtual BOOL startDrag(EDragAndDropType* type, LLUUID* id) const;
-	virtual BOOL dragOrDrop(MASK mask, BOOL drop,
+	virtual bool dragOrDrop(MASK mask, bool drop,
 							EDragAndDropType cargo_type,
 							void* cargo_data,
 							std::string& tooltip_msg) { return FALSE; }
@@ -261,9 +261,9 @@ public:
 	virtual LLFontGL::StyleFlags getLabelStyle() const;
 	virtual PermissionMask getPermissionMask() const;
 	virtual time_t getCreationDate() const;
-	virtual BOOL isItemRenameable() const;
+	virtual bool isItemRenameable() const;
 	virtual bool renameItem(const std::string& new_name);
-	virtual BOOL removeItem();
+	virtual bool removeItem();
     virtual bool isItemCopyable(bool can_copy_as_link = true) const;
 // [SL:KB] - Patch: Inventory-Links | Checked: 2013-09-19 (Catznip-3.6)
 	/*virtual*/ bool isItemLinkable() const;
@@ -308,7 +308,7 @@ public:
 	virtual void performAction(LLInventoryModel* model, std::string action);
 	virtual void openItem();
 	virtual void closeItem();
-	virtual BOOL isItemRenameable() const;
+	virtual bool isItemRenameable() const;
 	virtual void selectItem();
 	virtual void restoreItem();
 
@@ -325,7 +325,7 @@ public:
 
 	virtual bool renameItem(const std::string& new_name);
 
-	virtual BOOL removeItem();
+	virtual bool removeItem();
 	BOOL removeSystemFolder();
 	bool removeItemResponse(const LLSD& notification, const LLSD& response);
     void updateHierarchyCreationDate(time_t date);
@@ -334,19 +334,19 @@ public:
 	virtual void pasteLinkFromClipboard();
 	virtual void buildContextMenu(LLMenuGL& menu, U32 flags);
 	virtual bool hasChildren() const;
-	virtual BOOL dragOrDrop(MASK mask, BOOL drop,
+	virtual bool dragOrDrop(MASK mask, bool drop,
 							EDragAndDropType cargo_type,
 							void* cargo_data,
 							std::string& tooltip_msg);
 
-	virtual BOOL isItemRemovable() const;
-	virtual BOOL isItemMovable() const ;
+	virtual bool isItemRemovable() const;
+	virtual bool isItemMovable() const ;
 	virtual BOOL isUpToDate() const;
     virtual bool isItemCopyable(bool can_copy_as_link = true) const;
 // [SL:KB] - Patch: Inventory-Links | Checked: 2013-09-19 (Catznip-3.6)
 	/*virtual*/ bool isItemLinkable() const;
 // [/SL:KB]
-	virtual BOOL isClipboardPasteable() const;
+	virtual bool isClipboardPasteable() const;
 	virtual BOOL isClipboardPasteableAsLink() const;
 	
 	EInventorySortGroup getSortGroup()  const;
@@ -483,7 +483,7 @@ public:
 	virtual void performAction(LLInventoryModel* model, std::string action);
 	virtual void openItem();
 	virtual void buildContextMenu(LLMenuGL& menu, U32 flags);
-	virtual BOOL dragOrDrop(MASK mask, BOOL drop,
+	virtual bool dragOrDrop(MASK mask, bool drop,
 							EDragAndDropType cargo_type,
 							void* cargo_data,
 							std::string& tooltip_msg);
@@ -518,7 +518,7 @@ public:
 	virtual std::string getLabelSuffix() const;
 	virtual void performAction(LLInventoryModel* model, std::string action);
 	virtual void openItem();
-	virtual BOOL removeItem();
+	virtual bool removeItem();
 	virtual void buildContextMenu(LLMenuGL& menu, U32 flags);
 	static void playGesture(const LLUUID& item_id);
 };
@@ -546,7 +546,7 @@ public:
 	virtual LLUIImagePtr	getIcon() const;
 	virtual void			performAction(LLInventoryModel* model, std::string action);
 	virtual void			openItem();
-    virtual BOOL isItemWearable() const { return TRUE; }
+    virtual bool isItemWearable() const { return true; }
 	virtual std::string getLabelSuffix() const;
 	virtual void			buildContextMenu(LLMenuGL& menu, U32 flags);
 	virtual bool renameItem(const std::string& new_name);
@@ -579,7 +579,7 @@ public:
 	virtual LLUIImagePtr getIcon() const;
 	virtual void	performAction(LLInventoryModel* model, std::string action);
 	virtual void	openItem();
-    virtual BOOL isItemWearable() const { return TRUE; }
+    virtual bool isItemWearable() const { return true; }
 	virtual void	buildContextMenu(LLMenuGL& menu, U32 flags);
 	virtual std::string getLabelSuffix() const;
 	virtual bool renameItem(const std::string& new_name);
@@ -598,7 +598,6 @@ public:
 	void			editOnAvatar();
 
 	static BOOL		canRemoveFromAvatar( void* userdata );
-	static void 	removeAllClothesFromAvatar();
 	void			removeFromAvatar();
 protected:
 	LLAssetType::EType mAssetType;
@@ -660,7 +659,7 @@ public:
     virtual BOOL	isMultiPreviewAllowed() { return FALSE; }
     virtual void	buildContextMenu(LLMenuGL& menu, U32 flags);
     virtual bool    renameItem(const std::string& new_name);
-    virtual BOOL    isItemRenameable() const;
+    virtual bool    isItemRenameable() const;
     virtual LLSettingsType::type_e getSettingsType() const { return mSettingsType; }
 
 protected:

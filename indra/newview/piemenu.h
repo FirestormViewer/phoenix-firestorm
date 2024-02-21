@@ -58,7 +58,7 @@ public:
 
 	PieMenu(const LLMenuGL::Params& p);
 
-	/*virtual*/ void setVisible(BOOL visible);
+	/*virtual*/ void setVisible(bool visible);
 
 	// adding and removing "child" slices to the pie
 	/*virtual*/ bool addChild(LLView* child, S32 tab_group = 0);
@@ -83,7 +83,7 @@ public:
 	slice_list_t* mSlices;
 
 	// appends a sub pie menu to the current pie
-	BOOL appendContextSubMenu(PieMenu* menu);
+	bool appendContextSubMenu(PieMenu* menu);
 
 	// we never rearrange our menu
 	void needsArrange() {};

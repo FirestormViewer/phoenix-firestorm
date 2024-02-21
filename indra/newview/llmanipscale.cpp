@@ -68,7 +68,7 @@ const F32 SNAP_GUIDE_SCREEN_LENGTH = 0.7f;
 const F32 SELECTED_MANIPULATOR_SCALE = 1.2f;
 const F32 MANIPULATOR_SCALE_HALF_LIFE = 0.07f;
 
-BOOL LLManipScale::mInvertUniform=FALSE;	// <FS:Zi> Add middle mouse control for switching uniform scaling on the fly
+bool LLManipScale::mInvertUniform = false;	// <FS:Zi> Add middle mouse control for switching uniform scaling on the fly
 
 const LLManip::EManipPart MANIPULATOR_IDS[LLManipScale::NUM_MANIPULATORS] = 
 {

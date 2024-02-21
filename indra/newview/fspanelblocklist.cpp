@@ -85,10 +85,10 @@ FSPanelBlockList::~FSPanelBlockList()
 	LLMuteList::getInstance()->removeObserver(this);
 }
 
-BOOL FSPanelBlockList::postBuild()
+bool FSPanelBlockList::postBuild()
 {
 	mBlockedList = getChild<FSScrollListCtrl>("block_list");
-	mBlockedList->setCommitOnSelectionChange(TRUE);
+	mBlockedList->setCommitOnSelectionChange(true);
 	mBlockedList->setCommitCallback(boost::bind(&FSPanelBlockList::onSelectionChanged, this));
 	mBlockedList->setDoubleClickCallback(boost::bind(&FSPanelBlockList::showProfile, this));
 	mBlockedList->setSearchColumn(mBlockedList->getColumn("item_name")->mIndex);
@@ -118,12 +118,12 @@ void FSPanelBlockList::onOpen(const LLSD& key)
 	}
 }
 
-BOOL FSPanelBlockList::handleKeyHere(KEY key, MASK mask)
+bool FSPanelBlockList::handleKeyHere(KEY key, MASK mask)
 {
 	if (FSCommon::isFilterEditorKeyCombo(key, mask))
 	{
-		getChild<LLFilterEditor>("blocked_filter_input")->setFocus(TRUE);
-		return TRUE;
+		getChild<LLFilterEditor>("blocked_filter_input")->setFocus(true);
+		return true;
 	}
 
 	return LLPanel::handleKeyHere(key, mask);
@@ -136,7 +136,7 @@ void FSPanelBlockList::selectBlocked(const LLUUID& mute_id)
 	{
 		if (item->getColumn(3)->getValue().asUUID() == mute_id)
 		{
-			item->setSelected(TRUE);
+			item->setSelected(true);
 			break;
 		}
 	}

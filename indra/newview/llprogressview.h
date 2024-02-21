@@ -49,15 +49,15 @@ public:
 	LLProgressView();
 	virtual ~LLProgressView();
 	
-	BOOL postBuild();
+	bool postBuild();
 
 	/*virtual*/ void draw();
 	void drawStartTexture(F32 alpha);
 	void drawLogos(F32 alpha);
 
 	/*virtual*/ bool handleHover(S32 x, S32 y, MASK mask);
-	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
-	/*virtual*/ void setVisible(BOOL visible);
+	/*virtual*/ bool handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ void setVisible(bool visible);
 
 	// inherited from LLViewerMediaObserver
 	/*virtual*/ void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event);
@@ -133,10 +133,10 @@ class LLProgressViewMini :
 	public:
 		LLProgressViewMini();
 
-		BOOL postBuild();
+		bool postBuild();
 		void setText(const std::string& text);
 		void setPercent(const F32 percent);
-		void setCancelButtonVisible(BOOL b, const std::string& label);
+		void setCancelButtonVisible(bool b, const std::string& label);
 
 		static void onCancelButtonClicked(void* dummy);
 

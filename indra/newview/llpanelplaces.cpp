@@ -288,7 +288,7 @@ LLPanelPlaces::~LLPanelPlaces()
 	}
 }
 
-BOOL LLPanelPlaces::postBuild()
+bool LLPanelPlaces::postBuild()
 {
 	mTeleportBtn = getChild<LLButton>("teleport_btn");
 	mTeleportBtn->setClickedCallback(boost::bind(&LLPanelPlaces::onTeleportButtonClicked, this));
@@ -341,7 +341,7 @@ BOOL LLPanelPlaces::postBuild()
 	mPlaceMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_place.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if (mPlaceMenu)
 	{
-		mPlaceMenu->setAlwaysShowMenu(TRUE);
+		mPlaceMenu->setAlwaysShowMenu(true);
 	}
 	else
 	{
@@ -379,7 +379,7 @@ BOOL LLPanelPlaces::postBuild()
 	mPlaceProfile = findChild<LLPanelPlaceProfile>("panel_place_profile");
 	mLandmarkInfo = findChild<LLPanelLandmarkInfo>("panel_landmark_info");
 	if (!mPlaceProfile || !mLandmarkInfo)
-		return FALSE;
+		return false;
 
 	mPlaceProfileBackBtn = mPlaceProfile->getChild<LLButton>("back_btn");
 	mPlaceProfileBackBtn->setClickedCallback(boost::bind(&LLPanelPlaces::onBackButtonClicked, this));
@@ -401,7 +401,7 @@ BOOL LLPanelPlaces::postBuild()
 	createTabs();
 	updateVerbs();
 
-	return TRUE;
+	return true;
 }
 
 void LLPanelPlaces::onOpen(const LLSD& key)
@@ -1175,7 +1175,7 @@ void LLPanelPlaces::togglePlaceInfoPanel(BOOL visible)
 }
 
 // virtual
-void LLPanelPlaces::onVisibilityChange(BOOL new_visibility)
+void LLPanelPlaces::onVisibilityChange(bool new_visibility)
 {
 	LLPanel::onVisibilityChange(new_visibility);
 
@@ -1440,12 +1440,12 @@ void LLPanelPlaces::resetFilter()
 // </FS:Ansariel>
 
 // <FS:Ansariel> CTRL-F focusses local search editor
-BOOL LLPanelPlaces::handleKeyHere(KEY key, MASK mask)
+bool LLPanelPlaces::handleKeyHere(KEY key, MASK mask)
 {
 	if (FSCommon::isFilterEditorKeyCombo(key, mask))
 	{
-		mFilterEditor->setFocus(TRUE);
-		return TRUE;
+		mFilterEditor->setFocus(true);
+		return true;
 	}
 
 	return LLPanel::handleKeyHere(key, mask);

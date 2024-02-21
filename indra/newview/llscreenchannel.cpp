@@ -126,7 +126,7 @@ LLScreenChannelBase::LLScreenChannelBase(const Params& p)
 	setVisible(FALSE);
 }
 
-BOOL LLScreenChannelBase::postBuild()
+bool LLScreenChannelBase::postBuild()
 {
 	if (mFloaterSnapRegion == NULL)
 	{
@@ -152,10 +152,10 @@ BOOL LLScreenChannelBase::postBuild()
 		// </FS:Ansariel>
 	}
 	
-	return TRUE;
+	return true;
 }
 
-void LLScreenChannelBase::reshape(S32 width, S32 height, BOOL called_from_parent)
+void LLScreenChannelBase::reshape(S32 width, S32 height, bool called_from_parent)
 {
 	if (mChannelAlignment == CA_CENTRE)
 	{

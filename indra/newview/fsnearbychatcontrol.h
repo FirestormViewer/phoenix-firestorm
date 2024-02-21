@@ -48,9 +48,9 @@ public:
 
 	virtual void onFocusReceived();
 	virtual void onFocusLost();
-	virtual void setFocus(BOOL focus);
+	virtual void setFocus(bool focus);
 
-	virtual BOOL handleKeyHere(KEY key, MASK mask);
+	virtual bool handleKeyHere(KEY key, MASK mask);
 
 	bool	isDefault() const { return mDefault; }
 

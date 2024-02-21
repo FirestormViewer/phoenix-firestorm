@@ -38,7 +38,7 @@ lggBeamMapFloater::~lggBeamMapFloater()
 {
 }
 
-BOOL lggBeamMapFloater::postBuild()
+bool lggBeamMapFloater::postBuild()
 {
 	getChild<LLUICtrl>("beamshape_save")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickSave, this));
 	getChild<LLUICtrl>("beamshape_clear")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickClear, this));
@@ -50,7 +50,7 @@ BOOL lggBeamMapFloater::postBuild()
 
 	mBeamshapePanel = getChild<LLPanel>("beamshape_draw");
 
-	return TRUE;
+	return true;
 }
 
 void lggBeamMapFloater::draw()

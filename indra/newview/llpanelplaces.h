@@ -57,10 +57,10 @@ public:
 	LLPanelPlaces();
 	virtual ~LLPanelPlaces();
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	// <FS:Ansariel> CTRL-F focusses local search editor
-	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool handleKeyHere(KEY key, MASK mask);
 	/*virtual*/ bool hasAccelerators() const { return true; }
 	// </FS:Ansariel>
 
@@ -111,7 +111,7 @@ private:
 
 	void togglePlaceInfoPanel(BOOL visible);
 
-	/*virtual*/ void onVisibilityChange(BOOL new_visibility);
+	/*virtual*/ void onVisibilityChange(bool new_visibility);
 
 	void updateVerbs();
 

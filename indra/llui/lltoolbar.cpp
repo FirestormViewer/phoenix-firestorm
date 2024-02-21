@@ -462,7 +462,7 @@ bool LLToolBar::flashCommand(const LLCommandId& commandId, bool flash, bool forc
 		if (it != mButtonMap.end())
 		{
 			command_button = it->second;
-			command_button->setFlashing((BOOL)(flash),(BOOL)(force_flashing));
+			command_button->setFlashing((bool)(flash),(bool)(force_flashing));
 		}
 	}
 
@@ -507,9 +507,9 @@ bool LLToolBar::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	return handle_it_here;
 }
 
-BOOL LLToolBar::isSettingChecked(const LLSD& userdata)
+bool LLToolBar::isSettingChecked(const LLSD& userdata)
 {
-	BOOL retval = FALSE;
+	bool retval = false;
 
 	const std::string setting_name = userdata.asString();
 
@@ -929,18 +929,18 @@ void LLToolBar::updateLayoutAsNeeded()
 	// <FS:Zi> Apply alignment settings
 	if (mAlignment == ALIGN_CENTER)
 	{
-		mStartCenteringPanel->setVisible(TRUE);
-		mEndCenteringPanel->setVisible(TRUE);
+		mStartCenteringPanel->setVisible(true);
+		mEndCenteringPanel->setVisible(true);
 	}
 	else if (mAlignment == ALIGN_START)
 	{
-		mStartCenteringPanel->setVisible(FALSE);
-		mEndCenteringPanel->setVisible(TRUE);
+		mStartCenteringPanel->setVisible(false);
+		mEndCenteringPanel->setVisible(true);
 	}
 	else if (mAlignment == ALIGN_END)
 	{
-		mStartCenteringPanel->setVisible(TRUE);
-		mEndCenteringPanel->setVisible(FALSE);
+		mStartCenteringPanel->setVisible(true);
+		mEndCenteringPanel->setVisible(false);
 	}
 	// <FS:Zi>
 	
@@ -961,8 +961,8 @@ void LLToolBar::updateLayoutAsNeeded()
 
 	if (!mButtons.empty())
 	{
-		mButtonPanel->setVisible(TRUE);
-		mButtonPanel->setMouseOpaque(TRUE);
+		mButtonPanel->setVisible(true);
+		mButtonPanel->setMouseOpaque(true);
 	}
 
 	// don't clear flag until after we've resized ourselves, to avoid laying out every frame
@@ -974,13 +974,13 @@ void LLToolBar::draw()
 {
 	if (mButtons.empty())
 	{
-		mButtonPanel->setVisible(FALSE);
-		mButtonPanel->setMouseOpaque(FALSE);
+		mButtonPanel->setVisible(false);
+		mButtonPanel->setMouseOpaque(false);
 	}
 	else
 	{
-		mButtonPanel->setVisible(TRUE);
-		mButtonPanel->setMouseOpaque(TRUE);
+		mButtonPanel->setVisible(true);
+		mButtonPanel->setMouseOpaque(true);
 	}
 
 	// Update enable/disable state and highlight state for editable toolbars
@@ -1018,7 +1018,7 @@ void LLToolBar::draw()
 	}
 
 	LLIconCtrl* caret = mCaretIcon;
-	caret->setVisible(FALSE);
+	caret->setVisible(false);
 	if (mDragAndDropTarget && !mButtonCommands.empty())
 	{
 		LLRect caret_rect = caret->getRect();
@@ -1036,15 +1036,15 @@ void LLToolBar::draw()
 								  mDragx+mDragGirth,
 								  mDragy-caret_rect.getHeight()/2));
 		}
-		caret->setVisible(TRUE);
+		caret->setVisible(true);
 	}
 		
 	LLUICtrl::draw();
-	caret->setVisible(FALSE);
+	caret->setVisible(false);
 	mDragAndDropTarget = false;
 }
 
-void LLToolBar::reshape(S32 width, S32 height, BOOL called_from_parent)
+void LLToolBar::reshape(S32 width, S32 height, bool called_from_parent)
 {
 	LLUICtrl::reshape(width, height, called_from_parent);
 	mNeedsLayout = true;
@@ -1119,7 +1119,7 @@ LLToolBarButton* LLToolBar::createButton(const LLCommandId& id)
 		{
 			// set up button's control name and make it a toggle, so it works properly
 			button_p.control_name = commandp->controlVariableName();
-			button_p.is_toggle = TRUE;
+			button_p.is_toggle = true;
 		}
 
 		if (!commandp->checkboxControlVariableName().empty())
@@ -1247,14 +1247,14 @@ boost::signals2::connection LLToolBar::setButtonRemoveCallback(const button_sign
 	return connectSignal(mButtonRemoveSignal, cb);
 }
 
-BOOL LLToolBar::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+bool LLToolBar::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
 										EDragAndDropType cargo_type,
 										void* cargo_data,
 										EAcceptance* accept,
 										std::string& tooltip_msg)
 {
 	// If we have a drop callback, that means that we can handle the drop
-	BOOL handled = (mHandleDropCallback ? TRUE : FALSE);
+	bool handled = (mHandleDropCallback ? true : false);
 	
 	// if drop is set, it's time to call the callback to get the operation done
 	if (handled && drop)
@@ -1288,7 +1288,7 @@ BOOL LLToolBar::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 		}
 		else
 		{
-			handled = FALSE;
+			handled = false;
 		}
 	}
 	
@@ -1373,7 +1373,7 @@ void LLToolBarButton::onMouseEnter(S32 x, S32 y, MASK mask)
 	// Always highlight toolbar buttons, even if they are disabled
 	if (!gFocusMgr.getMouseCapture() || gFocusMgr.getMouseCapture() == this)
 	{
-		mNeedsHighlight = TRUE;
+		mNeedsHighlight = true;
 	}
 
 	LLToolBar* parent_toolbar = getParentByType<LLToolBar>();
@@ -1409,7 +1409,7 @@ void LLToolBarButton::onCommit()
 	}
 }
 
-void LLToolBarButton::reshape(S32 width, S32 height, BOOL called_from_parent)
+void LLToolBarButton::reshape(S32 width, S32 height, bool called_from_parent)
 {
 	LLButton::reshape(mWidthRange.clamp(width), height, called_from_parent);
 	// <FS:Zi> Remember first width this button was set to, so we can calculate the equalized layout
@@ -1420,7 +1420,7 @@ void LLToolBarButton::reshape(S32 width, S32 height, BOOL called_from_parent)
 	// </FS:Zi>
 }
 
-void LLToolBarButton::setEnabled(BOOL enabled)
+void LLToolBarButton::setEnabled(bool enabled)
 {
 	if (enabled)
 	{
@@ -1497,9 +1497,9 @@ void LLToolBar::setAlignment(LLToolBarEnums::Alignment alignment)
 }
 
 // <FS:Zi> Context menu callback function to display checkmarks on alignment options
-BOOL LLToolBar::isAlignment(const LLSD& userdata)
+bool LLToolBar::isAlignment(const LLSD& userdata)
 {
-	BOOL retval = FALSE;
+	bool retval = false;
 
 	const std::string alignment = userdata.asString();
 
@@ -1552,9 +1552,9 @@ void LLToolBar::setLayoutStyle(LLToolBarEnums::LayoutStyle layout_style)
 }
 
 // <FS:Zi> Context menu callback function to display checkmarks on layout style options
-BOOL LLToolBar::isLayoutStyle(const LLSD& userdata)
+bool LLToolBar::isLayoutStyle(const LLSD& userdata)
 {
-	BOOL retval = FALSE;
+	bool retval = false;
 
 	const std::string layout_style = userdata.asString();
 

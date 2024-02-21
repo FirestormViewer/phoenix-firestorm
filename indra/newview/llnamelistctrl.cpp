@@ -47,7 +47,7 @@
 
 static LLDefaultChildRegistry::Register<LLNameListCtrl> r("name_list");
 
-static const S32 info_icon_size = 16;
+static constexpr S32 info_icon_size = 16;
 
 void LLNameListCtrl::NameTypeNames::declareValues()
 {
@@ -93,19 +93,19 @@ LLScrollListItem* LLNameListCtrl::addNameItem(const LLUUID& agent_id, EAddPositi
 }
 
 // virtual, public
-BOOL LLNameListCtrl::handleDragAndDrop( 
+bool LLNameListCtrl::handleDragAndDrop(
 		S32 x, S32 y, MASK mask,
-		BOOL drop,
+		bool drop,
 		EDragAndDropType cargo_type, void *cargo_data, 
 		EAcceptance *accept,
 		std::string& tooltip_msg)
 {
 	if (!mAllowCallingCardDrop)
 	{
-		return FALSE;
+		return false;
 	}
 
-	BOOL handled = FALSE;
+	bool handled = false;
 
 	if (cargo_type == DAD_CALLINGCARD)
 	{
@@ -134,7 +134,7 @@ BOOL LLNameListCtrl::handleDragAndDrop(
 		}
 	}
 
-	handled = TRUE;
+	handled = true;
 	LL_DEBUGS("UserInput") << "dragAndDrop handled by LLNameListCtrl " << getName() << LL_ENDL;
 
 	return handled;

@@ -60,17 +60,17 @@ LLSidepanelInventorySubpanel::~LLSidepanelInventorySubpanel()
 }
 
 // virtual
-BOOL LLSidepanelInventorySubpanel::postBuild()
+bool LLSidepanelInventorySubpanel::postBuild()
 {
 	mCancelBtn = findChild<LLButton>("cancel_btn");
 	if (mCancelBtn)
 	{
 		mCancelBtn->setClickedCallback(boost::bind(&LLSidepanelInventorySubpanel::onCancelButtonClicked, this));
 	}
-	return TRUE;
+	return true;
 }
 
-void LLSidepanelInventorySubpanel::setVisible(BOOL visible)
+void LLSidepanelInventorySubpanel::setVisible(bool visible)
 {
 	if (visible)
 	{

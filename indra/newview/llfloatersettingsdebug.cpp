@@ -141,7 +141,7 @@ void LLFloaterSettingsDebug::onUpdateFilter()
 	onSettingSelect();
 }
 
-BOOL LLFloaterSettingsDebug::postBuild()
+bool LLFloaterSettingsDebug::postBuild()
 {
 	mSearchSettingsInput = getChild<LLSearchEditor>("search_settings_input");
 	mSettingsScrollList = getChild<LLScrollListCtrl>("settings_scroll_list");
@@ -187,11 +187,11 @@ BOOL LLFloaterSettingsDebug::postBuild()
 	}
 
 	onUpdateFilter();
-	mSettingsScrollList->sortByColumnIndex(0,TRUE);
+	mSettingsScrollList->sortByColumnIndex(0,true);
 
 	LLNotificationsUtil::add("DebugSettingsWarning");
 
-	return TRUE;
+	return true;
 }
 
 LLControlVariable* LLFloaterSettingsDebug::getControlVariable()

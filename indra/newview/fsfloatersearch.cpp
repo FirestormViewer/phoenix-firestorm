@@ -287,7 +287,7 @@ void FSFloaterSearch::onClose(bool app_quitting)
 	}
 }
 
-BOOL FSFloaterSearch::postBuild()
+bool FSFloaterSearch::postBuild()
 {
 	childSetAction("people_profile_btn", boost::bind(&FSFloaterSearch::onBtnPeopleProfile, this));
 	childSetAction("people_message_btn", boost::bind(&FSFloaterSearch::onBtnPeopleIM, this));
@@ -332,7 +332,7 @@ BOOL FSFloaterSearch::postBuild()
 		mTabContainer->selectFirstTab();
 	}
 
-	return TRUE;
+	return true;
 }
 
 void FSFloaterSearch::onTabChange()
@@ -766,7 +766,7 @@ FSPanelSearchPeople::~FSPanelSearchPeople()
 	}
 }
 
-BOOL FSPanelSearchPeople::postBuild()
+bool FSPanelSearchPeople::postBuild()
 {
 	mSearchComboBox =	findChild<LLSearchComboBox>("people_edit");
 	mSearchResults =	findChild<FSScrollListCtrl>("search_results_people");
@@ -785,10 +785,10 @@ BOOL FSPanelSearchPeople::postBuild()
 
 	childSetAction("people_next", boost::bind(&FSPanelSearchPeople::onBtnNext, this));
 	childSetAction("people_back", boost::bind(&FSPanelSearchPeople::onBtnBack, this));
-	getChildView("people_next")->setEnabled(FALSE);
-	getChildView("people_back")->setEnabled(FALSE);
+	getChildView("people_next")->setEnabled(false);
+	getChildView("people_back")->setEnabled(false);
 
-	return TRUE;
+	return true;
 }
 
 void FSPanelSearchPeople::focusDefaultElement()
@@ -1106,7 +1106,7 @@ FSPanelSearchGroups::~FSPanelSearchGroups()
 {
 }
 
-BOOL FSPanelSearchGroups::postBuild()
+bool FSPanelSearchGroups::postBuild()
 {
 	mSearchComboBox =	findChild<LLSearchComboBox>("groups_edit");
 	mSearchResults =	findChild<LLScrollListCtrl>("search_results_groups");
@@ -1118,16 +1118,16 @@ BOOL FSPanelSearchGroups::postBuild()
 	if (mSearchResults)
 	{
 		mSearchResults->setCommitCallback(boost::bind(&FSPanelSearchGroups::onSelectItem, this));
-		mSearchResults->setEnabled(FALSE);
+		mSearchResults->setEnabled(false);
 		mSearchResults->setCommentText(LLTrans::getString("no_results"));
 	}
 
 	childSetAction("groups_next", boost::bind(&FSPanelSearchGroups::onBtnNext, this));
 	childSetAction("groups_back", boost::bind(&FSPanelSearchGroups::onBtnBack, this));
-	getChildView("groups_next")->setEnabled(FALSE);
-	getChildView("groups_back")->setEnabled(FALSE);
+	getChildView("groups_next")->setEnabled(false);
+	getChildView("groups_back")->setEnabled(false);
 
-	return TRUE;
+	return true;
 }
 
 void FSPanelSearchGroups::focusDefaultElement()
@@ -1415,7 +1415,7 @@ FSPanelSearchPlaces::~FSPanelSearchPlaces()
 {
 }
 
-BOOL FSPanelSearchPlaces::postBuild()
+bool FSPanelSearchPlaces::postBuild()
 {
 	mSearchComboBox =	findChild<LLSearchComboBox>("places_edit");
 	mSearchResults =	findChild<LLScrollListCtrl>("search_results_places");
@@ -1428,7 +1428,7 @@ BOOL FSPanelSearchPlaces::postBuild()
 	if (mSearchResults)
 	{
 		mSearchResults->setCommitCallback(boost::bind(&FSPanelSearchPlaces::onSelectItem, this));
-		mSearchResults->setEnabled(FALSE);
+		mSearchResults->setEnabled(false);
 		mSearchResults->setCommentText(LLTrans::getString("no_results"));
 	}
 	if (mPlacesCategory)
@@ -1443,10 +1443,10 @@ BOOL FSPanelSearchPlaces::postBuild()
 	}
 	childSetAction("places_next", boost::bind(&FSPanelSearchPlaces::onBtnNext, this));
 	childSetAction("places_back", boost::bind(&FSPanelSearchPlaces::onBtnBack, this));
-	getChildView("places_next")->setEnabled(FALSE);
-	getChildView("places_back")->setEnabled(FALSE);
+	getChildView("places_next")->setEnabled(false);
+	getChildView("places_back")->setEnabled(false);
 
-	return TRUE;
+	return true;
 }
 
 void FSPanelSearchPlaces::focusDefaultElement()
@@ -1768,7 +1768,7 @@ FSPanelSearchLand::~FSPanelSearchLand()
 {
 }
 
-BOOL FSPanelSearchLand::postBuild()
+bool FSPanelSearchLand::postBuild()
 {
 	mSearchResults	= getChild<LLScrollListCtrl>("search_results_land");
 	mPriceEditor	= findChild<LLLineEditor>("price_edit");
@@ -1776,7 +1776,7 @@ BOOL FSPanelSearchLand::postBuild()
 	if (mSearchResults)
 	{
 		mSearchResults->setCommitCallback(boost::bind(&FSPanelSearchLand::onSelectItem, this));
-		mSearchResults->setEnabled(FALSE);
+		mSearchResults->setEnabled(false);
 		mSearchResults->setCommentText(LLTrans::getString("no_results"));
 	}
 	if (mPriceEditor)
@@ -1793,10 +1793,10 @@ BOOL FSPanelSearchLand::postBuild()
 	childSetAction("land_next", boost::bind(&FSPanelSearchLand::onBtnNext, this));
 	childSetAction("land_back", boost::bind(&FSPanelSearchLand::onBtnBack, this));
 
-	getChildView("land_next")->setEnabled(FALSE);
-	getChildView("land_back")->setEnabled(FALSE);
+	getChildView("land_next")->setEnabled(false);
+	getChildView("land_back")->setEnabled(false);
 	
-	return TRUE;
+	return true;
 }
 
 void FSPanelSearchLand::find()
@@ -2167,7 +2167,7 @@ FSPanelSearchClassifieds::~FSPanelSearchClassifieds()
 {
 }
 
-BOOL FSPanelSearchClassifieds::postBuild()
+bool FSPanelSearchClassifieds::postBuild()
 {
 	mSearchComboBox = findChild<LLSearchComboBox>("classifieds_edit");
 	mSearchResults = getChild<LLScrollListCtrl>("search_results_classifieds");
@@ -2179,7 +2179,7 @@ BOOL FSPanelSearchClassifieds::postBuild()
 	if (mSearchResults)
 	{
 		mSearchResults->setCommitCallback(boost::bind(&FSPanelSearchClassifieds::onSelectItem, this));
-		mSearchResults->setEnabled(FALSE);
+		mSearchResults->setEnabled(false);
 		mSearchResults->setCommentText(LLTrans::getString("no_results"));
 	}
 
@@ -2199,10 +2199,10 @@ BOOL FSPanelSearchClassifieds::postBuild()
 	childSetAction("classifieds_next", boost::bind(&FSPanelSearchClassifieds::onBtnNext, this));
 	childSetAction("classifieds_back", boost::bind(&FSPanelSearchClassifieds::onBtnBack, this));
 
-	getChildView("classifieds_next")->setEnabled(FALSE);
-	getChildView("classifieds_back")->setEnabled(FALSE);
+	getChildView("classifieds_next")->setEnabled(false);
+	getChildView("classifieds_back")->setEnabled(false);
 	
-	return TRUE;
+	return true;
 }
 
 void FSPanelSearchClassifieds::focusDefaultElement()
@@ -2483,7 +2483,7 @@ FSPanelSearchEvents::~FSPanelSearchEvents()
 {
 }
 
-BOOL FSPanelSearchEvents::postBuild()
+bool FSPanelSearchEvents::postBuild()
 {
 	mSearchComboBox = findChild<LLSearchComboBox>("events_edit");
 	mSearchResults = getChild<LLScrollListCtrl>("search_results_events");
@@ -2496,7 +2496,7 @@ BOOL FSPanelSearchEvents::postBuild()
 	if (mSearchResults)
 	{
 		mSearchResults->setCommitCallback(boost::bind(&FSPanelSearchEvents::onSelectItem, this));
-		mSearchResults->setEnabled(FALSE);
+		mSearchResults->setEnabled(false);
 		mSearchResults->setCommentText(LLTrans::getString("no_results"));
 	}
 	if (mEventsMode)
@@ -2511,14 +2511,14 @@ BOOL FSPanelSearchEvents::postBuild()
 	childSetAction("events_yesterday", boost::bind(&FSPanelSearchEvents::onBtnYesterday, this));
 	childSetAction("events_today", boost::bind(&FSPanelSearchEvents::onBtnToday, this));
 
-	getChildView("events_next")->setEnabled(FALSE);
-	getChildView("events_back")->setEnabled(FALSE);
-	getChildView("events_tomorrow")->setEnabled(FALSE);
-	getChildView("events_yesterday")->setEnabled(FALSE);
-	getChildView("events_today")->setEnabled(FALSE);
+	getChildView("events_next")->setEnabled(false);
+	getChildView("events_back")->setEnabled(false);
+	getChildView("events_tomorrow")->setEnabled(false);
+	getChildView("events_yesterday")->setEnabled(false);
+	getChildView("events_today")->setEnabled(false);
 	setDay(0);
 
-	return TRUE;
+	return true;
 }
 
 void FSPanelSearchEvents::focusDefaultElement()
@@ -2948,10 +2948,10 @@ FSPanelSearchWeb::FSPanelSearchWeb() : FSSearchPanelBase()
 	}
 }
 
-BOOL FSPanelSearchWeb::postBuild()
+bool FSPanelSearchWeb::postBuild()
 {
 	mWebBrowser = getChild<LLMediaCtrl>("search_browser");
-	return TRUE;
+	return true;
 }
 
 void FSPanelSearchWeb::loadURL(const SearchQuery &p)

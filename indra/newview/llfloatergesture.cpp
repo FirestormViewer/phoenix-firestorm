@@ -189,7 +189,7 @@ LLFloaterGesture::~LLFloaterGesture()
 }
 
 // virtual
-BOOL LLFloaterGesture::postBuild()
+bool LLFloaterGesture::postBuild()
 {
 	std::string label;
 
@@ -227,9 +227,9 @@ BOOL LLFloaterGesture::postBuild()
 	{
 		buildGestureList();
 	
-		mGestureList->setFocus(TRUE);
+		mGestureList->setFocus(true);
 
-		const BOOL ascending = TRUE;
+		constexpr bool ascending = true;
 		mGestureList->sortByColumn(std::string("name"), ascending);
 		mGestureList->selectFirstItem();
 	}
@@ -237,7 +237,7 @@ BOOL LLFloaterGesture::postBuild()
 	// Update button labels
 	onCommitList();
 	
-	return TRUE;
+	return true;
 }
 
 // <FS:PP> FIRE-5646: Option to show only active gestures

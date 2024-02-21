@@ -113,7 +113,7 @@ void LLPropertiesObserver::changed(U32 mask)
 // Default constructor
 LLFloaterProperties::LLFloaterProperties(const LLSD& key)
   : LLFloater(key),
-	mDirty(TRUE)
+	mDirty(true)
 	// <FS:Ansariel> Avatar names often not showing on first open
 	,mCreatorNameCbConnection(),
 	mOwnerNameCbConnection(),
@@ -152,7 +152,7 @@ LLFloaterProperties::~LLFloaterProperties()
 }
 
 // virtual
-BOOL LLFloaterProperties::postBuild()
+bool LLFloaterProperties::postBuild()
 {
 	// build the UI
 	// item name & description
@@ -187,7 +187,7 @@ BOOL LLFloaterProperties::postBuild()
 	// The UI has been built, now fill in all the values
 	refresh();
 
-	return TRUE;
+	return true;
 }
 
 // virtual
@@ -208,7 +208,7 @@ void LLFloaterProperties::refresh()
 		//RN: it is possible that the container object is in the middle of an inventory refresh
 		// causing findItem() to fail, so just temporarily disable everything
 		
-		mDirty = TRUE;
+		mDirty = true;
 
 		const char* enableNames[]={
 			"LabelItemName",
@@ -253,7 +253,7 @@ void LLFloaterProperties::draw()
 	if (mDirty)
 	{
 		// RN: clear dirty first because refresh can set dirty to TRUE
-		mDirty = FALSE;
+		mDirty = false;
 		refresh();
 	}
 

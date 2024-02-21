@@ -398,9 +398,9 @@ void LLFloaterIMSession::initIMFloater()
 }
 
 //virtual
-BOOL LLFloaterIMSession::postBuild()
+bool LLFloaterIMSession::postBuild()
 {
-	BOOL result = LLFloaterIMSessionTab::postBuild();
+	bool result = LLFloaterIMSessionTab::postBuild();
 
 	mInputEditor->setMaxTextLength(1023);
 	mInputEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
@@ -724,7 +724,7 @@ void LLFloaterIMSession::setDocked(bool docked, bool pop_on_undock)
 	}
 }
 
-void LLFloaterIMSession::setMinimized(BOOL b)
+void LLFloaterIMSession::setMinimized(bool b)
 {
 	bool wasMinimized = isMinimized();
 	LLFloaterIMSessionTab::setMinimized(b);
@@ -741,7 +741,7 @@ void LLFloaterIMSession::setMinimized(BOOL b)
 	}
 }
 
-void LLFloaterIMSession::setVisible(BOOL visible)
+void LLFloaterIMSession::setVisible(bool visible)
 {
 	LLNotificationsUI::LLScreenChannel* channel = static_cast<LLNotificationsUI::LLScreenChannel*>
 		(LLNotificationsUI::LLChannelManager::getInstance()->
@@ -777,7 +777,7 @@ void LLFloaterIMSession::setVisible(BOOL visible)
 
 }
 
-BOOL LLFloaterIMSession::getVisible()
+bool LLFloaterIMSession::getVisible()
 {
 	bool visible;
 
@@ -809,7 +809,7 @@ BOOL LLFloaterIMSession::getVisible()
 	return visible;
 }
 
-void LLFloaterIMSession::setFocus(BOOL focus)
+void LLFloaterIMSession::setFocus(bool focus)
 {
 	LLFloaterIMSessionTab::setFocus(focus);
 
@@ -1186,7 +1186,7 @@ void LLFloaterIMSession::draw()
 }
 
 // virtual
-BOOL LLFloaterIMSession::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+bool LLFloaterIMSession::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
 									EDragAndDropType cargo_type,
 									void* cargo_data,
 									EAcceptance* accept,
@@ -1209,7 +1209,7 @@ BOOL LLFloaterIMSession::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 				cargo_type, cargo_data, accept);
 	}
 
-	return TRUE;
+	return true;
 }
 
 bool LLFloaterIMSession::dropPerson(LLUUID* person_id, bool drop)

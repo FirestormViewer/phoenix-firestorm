@@ -196,7 +196,7 @@ public:
 
 	LLViewerMenuHolderGL(const Params& p);
 
-	virtual BOOL hideMenus();
+	virtual bool hideMenus();
 	
 	void setParcelSelection(LLSafeHandle<LLParcelSelection> selection);
 	void setObjectSelection(LLSafeHandle<LLObjectSelection> selection);
