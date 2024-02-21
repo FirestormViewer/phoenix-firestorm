@@ -2536,6 +2536,10 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 		Es sind nur quadratische Bilder zwischen 64 und 256 Pixel pro Seite erlaubt.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="ThumbnailSelectionTooLarge">
+		Sie können nur bis zu 50 Abbildungen gleichzeitig ändern.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmUnlink">
 		Soll das ausgewählte Objekt wirklich getrennt werden?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Trennen"/>
