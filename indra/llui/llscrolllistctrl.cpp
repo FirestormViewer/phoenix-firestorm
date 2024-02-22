@@ -3968,7 +3968,7 @@ void LLScrollListCtrl::loadPersistedSortOrder()
 			for (LLSD::array_iterator it = sort_order.beginArray(); it != sort_order.endArray(); ++it)
 			{
 				S32 sort_val = (*it).asInteger();
-				BOOL ascending = sort_val > 0;
+				bool ascending = sort_val > 0;
 				sort_val = llabs(sort_val) - 1;
 
 				setSort(sort_val, ascending);
