@@ -250,6 +250,7 @@ extern LLGLSLShader			gDeferredPostGammaCorrectProgram;
 extern LLGLSLShader         gNoPostGammaCorrectProgram;
 extern LLGLSLShader         gLegacyPostGammaCorrectProgram;
 extern LLGLSLShader			gExposureProgram;
+extern LLGLSLShader			gExposureProgramNoFade;
 extern LLGLSLShader			gLuminanceProgram;
 extern LLGLSLShader			gDeferredAvatarShadowProgram;
 extern LLGLSLShader			gDeferredAvatarAlphaShadowProgram;

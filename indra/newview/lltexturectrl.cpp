@@ -593,6 +593,8 @@ void LLFloaterTexturePicker::onClose(bool app_quitting)
     // <FS:Ansariel> FIRE-30431: Keep radio button mode selection in texture selection
     //sLastPickerMode = mModeSelector->getValue().asInteger();
     sLastPickerMode = mModeSelector->getSelectedIndex();
+    // *NOTE: Vertex buffer for sphere preview is still cached
+    mGLTFPreview = nullptr;
 }
 
 // virtual
@@ -1927,6 +1929,19 @@ void LLTextureCtrl::setFilterPermissionMasks(PermissionMask mask)
 {
     setImmediateFilterPermMask(mask);
     setDnDFilterPermMask(mask);
+}
+
+void LLTextureCtrl::onVisibilityChange(BOOL new_visibility)
+{
+    if (!new_visibility)
+    {
+        // *NOTE: Vertex buffer for sphere preview is still cached
+        mGLTFPreview = nullptr;
+    }
+    else
+    {
+        llassert(!mGLTFPreview);
+    }
 }
 
 void LLTextureCtrl::setVisible( BOOL visible ) 
