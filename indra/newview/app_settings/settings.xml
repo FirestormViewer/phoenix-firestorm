@@ -13613,7 +13613,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderReflectionsEnabled</key>
   <map>
     <key>Comment</key>
-    <string>Enable/disable reflection probes</string>
+    <string>Enable/disable reflection probes - Deprecated, disabling this removes all sky ambiance, use RenderReflectionProbeLevel=0 instead</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>

@@ -35,6 +35,7 @@
 			<menu_item_call name="inventory_new_script" label="Nowy skrypt" />
 			<menu_item_call name="inventory_new_note" label="Nową notę" />
 			<menu_item_call name="inventory_new_gesture" label="Nowy gest" />
+			<menu_item_call name="inventory_new_material" label="Nowy materiał" />
 			<menu name="inventory_new_clothes" label="Nowe ubranie">
 				<menu_item_call name="inventory_new_shirt" label="Nową koszulę" />
 				<menu_item_call name="inventory_new_pants" label="Nowe spodnie" />
@@ -114,6 +115,7 @@
 		<combo_box.item value="filter_type_sounds" label="Dźwięki" />
 		<combo_box.item value="filter_type_textures" label="Tekstury" />
 		<combo_box.item value="filter_type_snapshots" label="Zdjęcia" />
+		<combo_box.item value="filter_type_materials" label="Materiały" />
 		<combo_box.item value="filter_type_settings" label="Otoczenia" />
 		<combo_box.item value="filter_type_custom" label="Własny filtr..." />
 	</combo_box>

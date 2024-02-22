@@ -519,6 +519,21 @@ static bool handleRenderDynamicLODChanged(const LLSD& newvalue)
 	return true;
 }
 
+// static bool handleReflectionsEnabled(const LLSD& newvalue)
+// {
+// 	// <FS:Beq> FIRE-33659 - everything is too dark when reflections are disabled.
+// 	if(newvalue.asBoolean())
+// 	{
+// 		// TODO(Beq): This setting level should probably be governed by render quality settings.
+// 		gSavedSettings.setS32("RenderReflectionProbeLevel", 3);
+// 	}
+// 	else
+// 	{
+// 		gSavedSettings.setS32("RenderReflectionProbeLevel", 0);
+// 	}
+//     return true;
+// }
+
 static bool handleReflectionProbeDetailChanged(const LLSD& newvalue)
 {
     if (gPipeline.isInit())
@@ -1201,7 +1216,7 @@ void settings_setup_listeners()
 // [/SL:KB]
     setting_setup_signal_listener(gSavedSettings, "RenderReflectionProbeLevel", handleReflectionProbeDetailChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderReflectionProbeDetail", handleReflectionProbeDetailChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderReflectionsEnabled", handleReflectionProbeDetailChanged);
+    // setting_setup_signal_listener(gSavedSettings, "RenderReflectionsEnabled", handleReflectionsEnabled); // <FS:Beq/> FIRE-33659 better way to enable/disable reflections
     setting_setup_signal_listener(gSavedSettings, "RenderScreenSpaceReflections", handleReflectionProbeDetailChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderShadowDetail", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderDeferredSSAO", handleSetShaderChanged);

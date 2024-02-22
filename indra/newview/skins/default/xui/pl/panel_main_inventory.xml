@@ -12,7 +12,7 @@
 	<panel.string name="inventory_title">
 		Szafa
 	</panel.string>
-	<layout_stack name="nav_stack">
+	<layout_stack name="top_stack">
 		<layout_panel name="nav_buttons">
 			<button name="back_btn" tool_tip="Wstecz" />
 			<button name="forward_btn" tool_tip="Naprzód" />
@@ -42,6 +42,7 @@
 				<combo_box.item value="filter_type_sounds" label="Dźwięki" />
 				<combo_box.item value="filter_type_textures" label="Tekstury" />
 				<combo_box.item value="filter_type_snapshots" label="Zdjęcia" />
+				<combo_box.item value="filter_type_materials" label="Materiały" />
 				<combo_box.item value="filter_type_settings" label="Otoczenia" />
 				<combo_box.item value="filter_type_custom" label="Własny filtr..." />
 			</combo_box>
