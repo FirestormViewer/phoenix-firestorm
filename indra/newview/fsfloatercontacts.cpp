@@ -208,7 +208,7 @@ bool FSFloaterContacts::handleKeyHere(KEY key, MASK mask)
 		}
 		else if (getActiveTabName() == GROUP_TAB_NAME)
 		{
-			mGroupFilter->setFocus(TRUE);
+			mGroupFilter->setFocus(true);
 			return true;
 		}
 	}
@@ -390,7 +390,7 @@ void FSFloaterContacts::onAvatarPicked(const uuid_vec_t& ids, const std::vector<
 void FSFloaterContacts::onAddFriendWizButtonClicked(LLUICtrl* ctrl)
 {
 	// Show add friend wizard.
-	LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&FSFloaterContacts::onAvatarPicked, _1, _2), FALSE, TRUE, TRUE, "", ctrl);
+	LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&FSFloaterContacts::onAvatarPicked, _1, _2), false, true, true, "", ctrl);
 	// Need to disable 'ok' button when friend occurs in selection
 	if (picker)
 	{
@@ -531,16 +531,16 @@ void FSFloaterContacts::sortFriendList()
 		mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
-		mFriendsList->sortByColumn(std::string("display_name"), TRUE);
+		mFriendsList->sortByColumn(std::string("display_name"), true);
 	}
 	else
 	{
 		mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
-		mFriendsList->sortByColumn(std::string("user_name"), TRUE);
+		mFriendsList->sortByColumn(std::string("user_name"), true);
 	}
-	mFriendsList->sortByColumn(std::string("icon_online_status"), FALSE);
+	mFriendsList->sortByColumn(std::string("icon_online_status"), false);
 }
 
 
@@ -778,7 +778,7 @@ void FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelatio
 	itemp->getColumn(LIST_FRIEND_UPDATE_GEN)->setValue(change_generation);
 
 	// enable this item, in case it was disabled after user input
-	itemp->setEnabled(TRUE);
+	itemp->setEnabled(true);
 }
 
 void FSFloaterContacts::updateFriendItem(const LLUUID& agent_id, const LLRelationship* relationship, const LLUUID& request_id)
@@ -1007,7 +1007,7 @@ void FSFloaterContacts::applyRightsToFriends()
 				rights &= ~LLRelationship::GRANT_ONLINE_STATUS;
 				rights &= ~LLRelationship::GRANT_MAP_LOCATION;
 				// propagate rights constraint to UI
-				(*itr)->getColumn(LIST_VISIBLE_MAP)->setValue(FALSE);
+				(*itr)->getColumn(LIST_VISIBLE_MAP)->setValue(false);
 			}
 		}
 		if (buddy_relationship->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION) != show_map_location)
@@ -1018,7 +1018,7 @@ void FSFloaterContacts::applyRightsToFriends()
 				// ONLINE_STATUS necessary for MAP_LOCATION
 				rights |= LLRelationship::GRANT_MAP_LOCATION;
 				rights |= LLRelationship::GRANT_ONLINE_STATUS;
-				(*itr)->getColumn(LIST_VISIBLE_ONLINE)->setValue(TRUE);
+				(*itr)->getColumn(LIST_VISIBLE_ONLINE)->setValue(false);
 			}
 			else 
 			{
@@ -1049,7 +1049,7 @@ void FSFloaterContacts::applyRightsToFriends()
 			rights_updates.insert(std::make_pair(id, rights));
 			// disable these ui elements until response from server
 			// to avoid race conditions
-			(*itr)->setEnabled(FALSE);
+			(*itr)->setEnabled(false);
 		}
 	}
 
@@ -1235,16 +1235,16 @@ void FSFloaterContacts::onColumnDisplayModeChanged(const std::string& settings_n
 		mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mName;
-		mFriendsList->sortByColumn(std::string("display_name"), TRUE);
+		mFriendsList->sortByColumn(std::string("display_name"), true);
 	}
 	else
 	{
 		mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_DISPLAY_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
 		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
-		mFriendsList->sortByColumn(std::string("user_name"), TRUE);
+		mFriendsList->sortByColumn(std::string("user_name"), true);
 	}
-	mFriendsList->sortByColumn(std::string("icon_online_status"), FALSE);
+	mFriendsList->sortByColumn(std::string("icon_online_status"), false);
 	mFriendsList->setSearchColumn(mFriendsList->getColumn("full_name")->mIndex);
 }
 
@@ -1309,7 +1309,7 @@ void FSFloaterContacts::disconnectAvatarNameCacheConnection(const LLUUID& reques
 	}
 }
 
-BOOL FSFloaterContacts::handleFriendsListDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+bool FSFloaterContacts::handleFriendsListDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
 														EDragAndDropType cargo_type,
 														void* cargo_data,
 														EAcceptance* accept,
@@ -1342,7 +1342,7 @@ BOOL FSFloaterContacts::handleFriendsListDragAndDrop(S32 x, S32 y, MASK mask, BO
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 void FSFloaterContacts::onFriendFilterEdit(const std::string& search_string)

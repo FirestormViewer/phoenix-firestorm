@@ -107,7 +107,7 @@ protected:
 	void onChatBoxFocusReceived();
 	
 	void sendChat( EChatType type );
-	void sendChatFromViewer(const std::string& utf8text, EChatType type, BOOL animate);
+	void sendChatFromViewer(const std::string& utf8text, EChatType type, bool animate);
 	void onChatBoxCommit();
 	void onChatTypeChanged();
 	
@@ -144,7 +144,7 @@ private:
 
 	std::vector<LLChat> mMessageArchive;
 
-	BOOL FSUseNearbyChatConsole;
+	bool FSUseNearbyChatConsole;
 };
 
 #endif // FS_FLOATERNEARBYCHAT_H

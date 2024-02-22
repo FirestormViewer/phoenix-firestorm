@@ -179,12 +179,12 @@ void LLTeleportHistoryMenuItem::draw()
 
 void LLTeleportHistoryMenuItem::onMouseEnter(S32 x, S32 y, MASK mask)
 {
-	mArrowIcon->setVisible(TRUE);
+	mArrowIcon->setVisible(true);
 }
 
 void LLTeleportHistoryMenuItem::onMouseLeave(S32 x, S32 y, MASK mask)
 {
-	mArrowIcon->setVisible(FALSE);
+	mArrowIcon->setVisible(false);
 }
 
 static LLDefaultChildRegistry::Register<LLPullButton> menu_button("pull_button");
@@ -306,7 +306,7 @@ LLNavigationBar::~LLNavigationBar()
 }
 
 // <FS:Zi> Make navigation bar part of the UI
-// BOOL LLNavigationBar::postBuild()
+// bool LLNavigationBar::postBuild()
 void LLNavigationBar::setupPanel()
 // </FS:Zi>
 {
@@ -336,14 +336,14 @@ void LLNavigationBar::setupPanel()
 
 	fillSearchComboBox();
 
-	mBtnBack->setEnabled(FALSE);
+	mBtnBack->setEnabled(false);
 	// [FS:CR] FIRE-12333
 	//mBtnBack->setClickedCallback(boost::bind(&LLNavigationBar::onBackButtonClicked, this));
 	mBtnBack->setClickedCallback(boost::bind(&LLNavigationBar::onBackButtonClicked, this, _1));
 	mBtnBack->setHeldDownCallback(boost::bind(&LLNavigationBar::onBackOrForwardButtonHeldDown, this,_1, _2));
 	mBtnBack->setClickDraggingCallback(boost::bind(&LLNavigationBar::showTeleportHistoryMenu, this,_1));
 	
-	mBtnForward->setEnabled(FALSE);
+	mBtnForward->setEnabled(false);
 	// [FS:CR] FIRE-12333
 	//mBtnForward->setClickedCallback(boost::bind(&LLNavigationBar::onForwardButtonClicked, this));
 	mBtnForward->setClickedCallback(boost::bind(&LLNavigationBar::onForwardButtonClicked, this, _1));
@@ -561,7 +561,7 @@ void LLNavigationBar::onLocationSelection()
 			{
 				LLInventoryModel::item_array_t landmark_items =
 						LLLandmarkActions::fetchLandmarksByName(typed_location,
-								FALSE);
+								false);
 				if (!landmark_items.empty())
 				{
 					gAgent.teleportViaLandmark( landmark_items[0]->getAssetUUID());

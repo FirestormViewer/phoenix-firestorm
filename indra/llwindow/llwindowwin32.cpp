@@ -94,7 +94,7 @@ const UINT WM_DUMMY_(WM_USER + 0x0017);
 const UINT WM_POST_FUNCTION_(WM_USER + 0x0018);
 
 extern bool gDebugWindowProc;
-extern BOOL gDisconnected; // <FS:Beq/> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
+extern bool gDisconnected; // <FS:Beq/> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
 
 static std::thread::id sWindowThreadId;
 static std::thread::id sMainThreadId;

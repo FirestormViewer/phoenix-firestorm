@@ -68,7 +68,7 @@ private:
 
 	// <FS:Ansariel> FIRE-21948: Show element count in Received Items folder
 	//void onSelectionChange();
-	void onSelectionChange(const std::deque<LLFolderViewItem*>& items, BOOL user_action);
+	void onSelectionChange(const std::deque<LLFolderViewItem*>& items, bool user_action);
 	// </FS:Ansariel>
 
 	void onFocusReceived() override;

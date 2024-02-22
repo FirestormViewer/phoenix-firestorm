@@ -484,7 +484,7 @@ void FSPanelRadar::onColumnDisplayModeChanged()
 	parent_floater->getResizeLimits(&min_width, &min_height);
 
 	std::string current_sort_col = mRadarList->getSortColumnName();
-	BOOL current_sort_asc = mRadarList->getSortAscending();
+	bool current_sort_asc = mRadarList->getSortAscending();
 	
 	mRadarList->clearRows();
 	mRadarList->clearColumns();
@@ -529,7 +529,7 @@ void FSPanelRadar::onColumnDisplayModeChanged()
 		(current_sort_col == "seen_sort" && mRadarList->getColumn("seen")->getWidth() == -1))
 	{
 		current_sort_col = "range";
-		current_sort_asc = TRUE;
+		current_sort_asc = true;
 	}
 	mRadarList->sortByColumn(current_sort_col, current_sort_asc);
 	mRadarList->setFilterColumn(0);

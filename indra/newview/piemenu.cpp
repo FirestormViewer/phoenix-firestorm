@@ -162,7 +162,7 @@ void PieMenu::show(S32 x, S32 y, LLView* spawning_view)
 	LL_DEBUGS("Pie") << "PieMenu::show(): " << x << " " << y << LL_ENDL;
 
 	// make sure the menu is always the correct size
-	reshape(PIE_OUTER_SIZE * 2, PIE_OUTER_SIZE * 2, FALSE);
+	reshape(PIE_OUTER_SIZE * 2, PIE_OUTER_SIZE * 2, false);
 
 	// get the 3D view rectangle
 	LLRect screen = LLMenuGL::sMenuContainer->getMenuRect();
@@ -265,7 +265,7 @@ void PieMenu::draw()
 
 #if PIE_DRAW_BOUNDING_BOX
 	// draw a bounding box around the menu for debugging purposes
-	gl_rect_2d(0, r.getHeight(), r.getWidth(), 0, LLColor4::white, FALSE);
+	gl_rect_2d(0, r.getHeight(), r.getWidth(), 0, LLColor4::white, false);
 #endif
 
 	LLUIColorTable& colortable = LLUIColorTable::instance();
@@ -342,7 +342,7 @@ void PieMenu::draw()
 				label = currentSlice->getLabel();
 				currentSlice->updateVisible();
 				// disable it if it's not visible, pie slices never really disappear
-				BOOL slice_visible = currentSlice->getVisible();
+				bool slice_visible = currentSlice->getVisible();
 				currentSlice->setEnabled(slice_visible);
 				if (!slice_visible)
 				{

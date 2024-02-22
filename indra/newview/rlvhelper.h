@@ -422,7 +422,7 @@ struct RlvCommandOptionGetPath : public RlvCommandOption
 	static bool getItemIDs(LLWearableType::EType wtType, uuid_vec_t& idItems);
 
 protected:
-	bool       m_fCallback; // TRUE if a callback is schedueled
+	bool       m_fCallback; // true if a callback is schedueled
 	uuid_vec_t m_idItems;
 };
 
@@ -482,7 +482,7 @@ protected:
 	S32                m_idxAttachPt;		// The object's attachment point (or 0 if it's not an attachment)
 	LLUUID             m_idObj;				// The object's UUID
 	LLUUID             m_idRoot;			// The UUID of the object's root (may or may not be different from m_idObj)
-	bool               m_fLookup;			// TRUE if the object existed in gObjectList at one point in time
+	bool               m_fLookup;			// true if the object existed in gObjectList at one point in time
 	S16                m_nLookupMisses;		// Count of unsuccessful lookups in gObjectList by the GC
 	rlv_command_list_t m_Commands;			// List of behaviours held by this object (in the order they were received)
 	typedef std::map<ERlvLocalBhvrModifier, RlvBehaviourModifierValue> bhvr_modifier_map_t;

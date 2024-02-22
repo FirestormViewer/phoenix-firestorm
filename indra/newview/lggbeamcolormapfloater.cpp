@@ -76,7 +76,7 @@ void lggBeamColorMapFloater::draw()
 
 	//set the color of the preview thing
 	LLColor4 bColor = LLColor4(lggBeamMaps::beamColorFromData(mData));
-	mBeamColorPreview->set(bColor, TRUE);
+	mBeamColorPreview->set(bColor, true);
 
 	static LLCachedControl<F32> max_opacity(gSavedSettings, "PickerContextOpacity", 0.4f);
 	drawConeToOwner(mContextConeOpacity, max_opacity, mFSPanel->getChild<LLButton>("BeamColor_new"), mContextConeFadeTime, mContextConeInAlpha, mContextConeOutAlpha);

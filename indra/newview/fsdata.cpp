@@ -943,7 +943,7 @@ void FSData::sendInfo(const LLUUID& destination, const LLUUID& sessionid, const 
 	pack_instant_message(
 		gMessageSystem,
 		gAgentID,
-		FALSE,
+		false,
 		gAgentSessionID,
 		destination,
 		my_name,
@@ -956,7 +956,7 @@ void FSData::sendInfo(const LLUUID& destination, const LLUUID& sessionid, const 
 	pack_instant_message(
 		gMessageSystem,
 		gAgentID,
-		FALSE,
+		false,
 		gAgentSessionID,
 		destination,
 		my_name,
@@ -992,7 +992,7 @@ void FSData::callbackReqInfo(const LLSD &notification, const LLSD &response)
 		pack_instant_message(
 			gMessageSystem,
 			gAgentID,
-			FALSE,
+			false,
 			gAgentSessionID,
 			from_id,
 			my_name,

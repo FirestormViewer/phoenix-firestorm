@@ -90,7 +90,7 @@ LLSurface::LLSurface(U32 type, LLViewerRegion *regionp) :
 	// One of each for each camera
 	mVisiblePatchCount = 0;
 
-	mHasZData = FALSE;
+	mHasZData = false;
 	// "uninitialized" min/max z
 	mMinZ = 10000.f;
 	mMaxZ = -10000.f;
@@ -256,7 +256,7 @@ void LLSurface::createSTexture()
 			}
 		}
 
-		mSTexturep = LLViewerTextureManager::getLocalTexture(raw.get(), FALSE);
+		mSTexturep = LLViewerTextureManager::getLocalTexture(raw.get(), false);
 		mSTexturep->dontDiscard();
 		gGL.getTexUnit(0)->bind(mSTexturep);
 		mSTexturep->setAddressMode(LLTexUnit::TAM_CLAMP);		
@@ -281,7 +281,7 @@ void LLSurface::createWaterTexture()
 			}
 		}		
 		
-		mWaterTexturep = LLViewerTextureManager::getLocalTexture(raw.get(), FALSE);
+		mWaterTexturep = LLViewerTextureManager::getLocalTexture(raw.get(), false);
 		mWaterTexturep->dontDiscard();
 		gGL.getTexUnit(0)->bind(mWaterTexturep);
 		mWaterTexturep->setAddressMode(LLTexUnit::TAM_CLAMP);
@@ -318,8 +318,8 @@ void LLSurface::initTextures()
 
 void LLSurface::rebuildWater()
 {
-	BOOL renderwater = gSavedSettings.getBOOL("RenderWater") && LLWorld::getInstance()->getAllowRenderWater();
-	BOOL prev_renderwater = !mWaterObjp.isNull();
+	bool renderwater = gSavedSettings.getBOOL("RenderWater") && LLWorld::getInstance()->getAllowRenderWater();
+	bool prev_renderwater = !mWaterObjp.isNull();
 
 	if(prev_renderwater && !renderwater)
 	{
@@ -827,17 +827,17 @@ void LLSurface::updatePatchVisibilities(LLAgent &agent)
 	}
 }
 
-BOOL LLSurface::idleUpdate(F32 max_update_time)
+bool LLSurface::idleUpdate(F32 max_update_time)
 {
 	if (!gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_TERRAIN))
 	{
-		return FALSE;
+		return false;
 	}
 	
 	// Perform idle time update of non-critical stuff.
 	// In this case, texture and normal updates.
 	LLTimer update_timer;
-	BOOL did_update = FALSE;
+	bool did_update = false;
 
 	// If the Z height data has changed, we need to rebuild our
 	// property line vertex arrays.
@@ -859,7 +859,7 @@ BOOL LLSurface::idleUpdate(F32 max_update_time)
 		{
 			if (patchp->updateTexture())
 			{
-				did_update = TRUE;
+				did_update = true;
 				patchp->clearDirty();
 				mDirtyPatchList.erase(curiter);
 			}
@@ -875,7 +875,7 @@ BOOL LLSurface::idleUpdate(F32 max_update_time)
 	return did_update;
 }
 
-void LLSurface::decompressDCTPatch(LLBitPack &bitpack, LLGroupHeader *gopp, BOOL b_large_patch) 
+void LLSurface::decompressDCTPatch(LLBitPack &bitpack, LLGroupHeader *gopp, bool b_large_patch) 
 {
 
 	LLPatchHeader  ph;
@@ -957,16 +957,16 @@ void LLSurface::decompressDCTPatch(LLBitPack &bitpack, LLGroupHeader *gopp, BOOL
 }
 
 
-// Retrurns TRUE if "position" is within the bounds of surface.
+// Retrurns true if "position" is within the bounds of surface.
 // "position" is region-local
-BOOL LLSurface::containsPosition(const LLVector3 &position)
+bool LLSurface::containsPosition(const LLVector3 &position)
 {
 	if (position.mV[VX] < 0.0f  ||  position.mV[VX] > mMetersPerEdge ||
 		position.mV[VY] < 0.0f  ||  position.mV[VY] > mMetersPerEdge)
 	{
-		return FALSE;
+		return false;
 	}
-	return TRUE;
+	return true;
 }
 
 
@@ -1229,8 +1229,8 @@ void LLSurface::createPatchData()
 		for (i=0; i<mPatchesPerEdge; i++) 
 		{
 			patchp = getPatch(i, j);
-			patchp->mHasReceivedData = FALSE;
-			patchp->mSTexUpdate = TRUE;
+			patchp->mHasReceivedData = false;
+			patchp->mSTexUpdate = true;
 
 			S32 data_offset = i * mGridsPerPatchEdge + j * mGridsPerPatchEdge * mGridsPerEdge;
 
@@ -1417,13 +1417,13 @@ F32 LLSurface::getWaterHeight() const
 }
 
 
-BOOL LLSurface::generateWaterTexture(const F32 x, const F32 y,
+bool LLSurface::generateWaterTexture(const F32 x, const F32 y,
 									 const F32 width, const F32 height)
 {
 	LL_PROFILE_ZONE_SCOPED
 	if (!getWaterTexture())
 	{
-		return FALSE;
+		return false;
 	}
 
 	S32 tex_width = mWaterTexturep->getWidth();
@@ -1512,5 +1512,5 @@ BOOL LLSurface::generateWaterTexture(const F32 x, const F32 y,
 	}
 
 	mWaterTexturep->setSubImage(raw, x_begin, y_begin, x_end - x_begin, y_end - y_begin);
-	return TRUE;
+	return true;
 }

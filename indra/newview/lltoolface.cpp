@@ -182,14 +182,14 @@ void LLToolFace::pickCallback(const LLPickInfo& pick_info)
 void LLToolFace::handleSelect()
 {
 	// From now on, draw faces
-	LLSelectMgr::getInstance()->setTEMode(TRUE);
+	LLSelectMgr::getInstance()->setTEMode(true);
 }
 
 
 void LLToolFace::handleDeselect()
 {
 	// Stop drawing faces
-	LLSelectMgr::getInstance()->setTEMode(FALSE);
+	LLSelectMgr::getInstance()->setTEMode(false);
 
 	stopGrabbing();	// <FS:Zi> Add control to drag texture faces around
 }
@@ -202,7 +202,7 @@ void LLToolFace::render()
 
 #ifdef TEXTURE_GRAB_UPDATE_REGULARLY
 	static S32 updateCounter=0;
-	static BOOL teDirty=FALSE;
+	static bool teDirty=false;
 #endif
 
 	// do nothing if no texture was grabbed or no associated object was found, or the object is no modify
@@ -238,7 +238,7 @@ void LLToolFace::render()
 	mTextureObject->getTE(mFaceGrabbed)->getScale(&scaleU,&scaleV);
 
 	// get the status of modifier keys
-	MASK mask=gKeyboard->currentMask(FALSE);
+	MASK mask=gKeyboard->currentMask(false);
 
 	// scale mode
 //	if(mask & MASK_ALT)
@@ -298,14 +298,14 @@ void LLToolFace::render()
 	}
 
 #ifdef TEXTURE_GRAB_UPDATE_REGULARLY
-	teDirty=TRUE;
+	teDirty=true;
 
 	updateCounter++;
 	if(updateCounter==10)
 	{
 		mTextureObject->sendTEUpdate();
 		updateCounter=0;
-		teDirty=FALSE;
+		teDirty=false;
 	}
 #endif
 	// this is one way I would rather do it than tracking mouse deltas, because it
@@ -314,7 +314,7 @@ void LLToolFace::render()
 	S32 x=gViewerWindow->getCurrentMouseX();
 	S32 y=gViewerWindow->getCurrentMouseY();
 
-	const LLPickInfo& pick=gViewerWindow->pickImmediate(x,y,TRUE);
+	const LLPickInfo& pick=gViewerWindow->pickImmediate(x,y,true);
 
 	if(pick.getObjectID()!=LLToolFace::mTextureObject->getID() || pick.mObjectFace!=LLToolFace::mFaceGrabbed)
 	{
@@ -338,7 +338,7 @@ void LLToolFace::render()
 	LLVector3 gDebugRaycastStart;
 	LLVector3 gDebugRaycastEnd;
 
-	gDebugRaycastObject = gViewerWindow->cursorIntersect(x,y, 512.f, mTextureObject, mFaceGrabbed, FALSE,
+	gDebugRaycastObject = gViewerWindow->cursorIntersect(x,y, 512.f, mTextureObject, mFaceGrabbed, false,
 										  &gDebugRaycastFaceHit,
 										  &gDebugRaycastIntersection,
 										  &gDebugRaycastTexCoord,

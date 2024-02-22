@@ -78,7 +78,7 @@ bool LLEmote::onActivate()
 {
 	// <FS:ND> mCharacter being 0 might be one of the reasons for FIRE-10737
 	if( !mCharacter )
-		return TRUE;
+		return true;
 	// </FS:ND>
 
 	LLVisualParam* default_param = mCharacter->getVisualParam( "Express_Closed_Mouth" );

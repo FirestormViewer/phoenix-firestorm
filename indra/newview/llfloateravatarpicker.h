@@ -46,9 +46,9 @@ public:
 	typedef boost::function<void (const uuid_vec_t&, const std::vector<LLAvatarName>&)> select_callback_t;
 	// Call this to select an avatar.	
 	static LLFloaterAvatarPicker* show(select_callback_t callback, 
-									   BOOL allow_multiple = FALSE,
-									   BOOL closeOnSelect = FALSE,
-									   BOOL skip_agent = FALSE,
+									   bool allow_multiple = false,
+									   bool closeOnSelect = false,
+									   bool skip_agent = false,
                                        const std::string& name = "",
                                        LLView * frustumOrigin = NULL);
 
@@ -68,7 +68,7 @@ public:
 						   std::string& tooltip_msg);
 
 	void openFriendsTab();
-	BOOL isExcludeAgentFromSearchResults() {return mExcludeAgentFromSearchResults;}
+	bool isExcludeAgentFromSearchResults() {return mExcludeAgentFromSearchResults;}
 
 	// <FS:Ansariel> FIRE-15194: Avatar picker doesn't work anymore when using legacy simulator messages
 	typedef std::map<LLUUID, std::string> query_id_name_map_t;
@@ -95,11 +95,11 @@ private:
 
 	void populateNearMe();
 	void populateFriend();
-	BOOL visibleItemsSelected() const; // Returns true if any items in the current tab are selected.
+	bool visibleItemsSelected() const; // Returns true if any items in the current tab are selected.
 
     static void findCoro(std::string url, LLUUID mQueryID, std::string mName);
 	void find();
-	void setAllowMultiple(BOOL allow_multiple);
+	void setAllowMultiple(bool allow_multiple);
 	LLScrollListCtrl* getActiveList();
 
     void drawFrustum();
@@ -108,9 +108,9 @@ private:
 
 	LLUUID				mQueryID;
 	int				    mNumResultsReturned;
-	BOOL				mNearMeListComplete;
-	BOOL				mCloseOnSelect;
-	BOOL                mExcludeAgentFromSearchResults;
+	bool				mNearMeListComplete;
+	bool				mCloseOnSelect;
+	bool                mExcludeAgentFromSearchResults;
     LLHandle <LLView>   mFrustumOrigin;
     F32		            mContextConeOpacity;
     F32                 mContextConeInAlpha;

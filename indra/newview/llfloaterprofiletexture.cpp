@@ -42,7 +42,7 @@
 
 LLFloaterProfileTexture::LLFloaterProfileTexture(LLView* owner)
     : LLFloater(LLSD())
-    , mUpdateDimensions(TRUE)
+    , mUpdateDimensions(true)
     , mLastHeight(0)
     , mLastWidth(0)
     , mImage(NULL)
@@ -104,7 +104,7 @@ void LLFloaterProfileTexture::updateDimensions()
     {
         mAssetStatus = LLPreview::PREVIEW_ASSET_LOADED;
         // Asset has been fully loaded
-        mUpdateDimensions = TRUE;
+        mUpdateDimensions = true;
     }
 
     mLastHeight = img_height;
@@ -113,7 +113,7 @@ void LLFloaterProfileTexture::updateDimensions()
     // Reshape the floater only when required
     if (mUpdateDimensions)
     {
-        mUpdateDimensions = FALSE;
+        mUpdateDimensions = false;
 
         LLRect old_floater_rect = getRect();
         LLRect old_image_rect = mProfileIcon->getRect();
@@ -133,7 +133,7 @@ void LLFloaterProfileTexture::updateDimensions()
         //reshape floater
         reshape(width, height);
 
-        gFloaterView->adjustToFitScreen(this, FALSE);
+        gFloaterView->adjustToFitScreen(this, false);
     }
 }
 
@@ -187,7 +187,7 @@ void LLFloaterProfileTexture::loadAsset(const LLUUID &image_id)
     if ((mImage->getFullWidth() * mImage->getFullHeight()) == 0)
     {
         mImage->setLoadedCallback(LLFloaterProfileTexture::onTextureLoaded,
-            0, TRUE, FALSE, new LLHandle<LLFloater>(getHandle()), &mCallbackTextureList);
+            0, true, false, new LLHandle<LLFloater>(getHandle()), &mCallbackTextureList);
 
         mImage->setBoostLevel(LLGLTexture::BOOST_PREVIEW);
         mAssetStatus = LLPreview::PREVIEW_ASSET_LOADING;
@@ -197,18 +197,18 @@ void LLFloaterProfileTexture::loadAsset(const LLUUID &image_id)
         mAssetStatus = LLPreview::PREVIEW_ASSET_LOADED;
     }
 
-    mUpdateDimensions = TRUE;
+    mUpdateDimensions = true;
     updateDimensions();
 }
 
 // static
 void LLFloaterProfileTexture::onTextureLoaded(
-    BOOL success,
+    bool success,
     LLViewerFetchedTexture *src_vi,
     LLImageRaw* src,
     LLImageRaw* aux_src,
     S32 discard_level,
-    BOOL final,
+    bool final,
     void* userdata)
 {
     LLHandle<LLFloater>* handle = (LLHandle<LLFloater>*)userdata;
@@ -218,7 +218,7 @@ void LLFloaterProfileTexture::onTextureLoaded(
         LLFloaterProfileTexture* floater = static_cast<LLFloaterProfileTexture*>(handle->get());
         if (floater && success)
         {
-            floater->mUpdateDimensions = TRUE;
+            floater->mUpdateDimensions = true;
             floater->updateDimensions();
         }
     }

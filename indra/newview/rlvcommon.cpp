@@ -70,7 +70,7 @@ void RlvNotifications::warnGiveToRLV()
 /*
 void RlvNotifications::onGiveToRLVConfirmation(const LLSD& notification, const LLSD& response)
 {
-	gSavedSettings.setWarning(RLV_SETTING_FIRSTUSE_GIVETORLV, FALSE);
+	gSavedSettings.setWarning(RLV_SETTING_FIRSTUSE_GIVETORLV, false);
 
 	S32 idxOption = LLNotification::getSelectedOption(notification, response);
 	if ( (0 == idxOption) || (1 == idxOption) )
@@ -144,7 +144,7 @@ void RlvSettings::updateLoginLastLocation()
 		if (gSavedPerAccountSettings.get<bool>(RlvSettingNames::LoginLastLocation) != fValue)
 		{
 			gSavedPerAccountSettings.set<bool>(RlvSettingNames::LoginLastLocation, fValue);
-			gSavedPerAccountSettings.saveToFile(gSavedSettings.getString("PerAccountSettingsFile"), TRUE);
+			gSavedPerAccountSettings.saveToFile(gSavedSettings.getString("PerAccountSettingsFile"), true);
 		}
 	}
 }
@@ -638,7 +638,7 @@ void RlvUtil::sendBusyMessage(const LLUUID& idTo, const std::string& strMsg, con
 	std::string strFullName;
 	LLAgentUI::buildFullname(strFullName);
 
-	pack_instant_message(gMessageSystem, gAgent.getID(), FALSE, gAgent.getSessionID(), idTo, strFullName,
+	pack_instant_message(gMessageSystem, gAgent.getID(), false, gAgent.getSessionID(), idTo, strFullName,
 		strMsg, IM_ONLINE, IM_DO_NOT_DISTURB_AUTO_RESPONSE, idSession);
 	gAgent.sendReliableMessage();
 }
@@ -729,9 +729,9 @@ void rlvMenuToggleVisible()
 	bool fTopLevel = rlvGetSetting(RlvSettingNames::TopLevelMenu, true);
 	bool fRlvEnabled = rlv_handler_t::isEnabled();
 
-	LLMenuGL* pRLVaMenuMain = gMenuBarView->findChildMenuByName("RLVa Main", FALSE);
-	LLMenuGL* pAdvancedMenu = gMenuBarView->findChildMenuByName("Advanced", FALSE);
-	LLMenuGL* pRLVaMenuEmbed = pAdvancedMenu->findChildMenuByName("RLVa Embedded", FALSE);
+	LLMenuGL* pRLVaMenuMain = gMenuBarView->findChildMenuByName("RLVa Main", false);
+	LLMenuGL* pAdvancedMenu = gMenuBarView->findChildMenuByName("Advanced", false);
+	LLMenuGL* pRLVaMenuEmbed = pAdvancedMenu->findChildMenuByName("RLVa Embedded", false);
 
 	gMenuBarView->setItemVisible("RLVa Main", (fRlvEnabled) && (fTopLevel));
 	pAdvancedMenu->setItemVisible("RLVa Embedded", (fRlvEnabled) && (!fTopLevel));
@@ -924,7 +924,7 @@ bool RlvPredIsEqualOrLinkedItem::operator()(const LLViewerInventoryItem* pItem) 
 
 // Checked: 2009-11-15 (RLVa-1.1.0c) | Added: RLVa-1.1.0c
 /*
-BOOL rlvEnableSharedWearEnabler(void* pParam)
+bool rlvEnableSharedWearEnabler(void* pParam)
 {
 	return false;
 	// Visually disable the "Enable Shared Wear" option when at least one attachment is non-detachable

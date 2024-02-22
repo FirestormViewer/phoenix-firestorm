@@ -309,17 +309,17 @@ bool	LLPanelObject::postBuild()
 		LLAggregatePermissions texture_perms;
 		if (LLSelectMgr::getInstance()->selectGetAggregateTexturePermissions(texture_perms))
 		{
-			BOOL can_copy =
+			bool can_copy =
 				texture_perms.getValue(PERM_COPY) == LLAggregatePermissions::AP_EMPTY ||
 				texture_perms.getValue(PERM_COPY) == LLAggregatePermissions::AP_ALL;
-			BOOL can_transfer =
+			bool can_transfer =
 				texture_perms.getValue(PERM_TRANSFER) == LLAggregatePermissions::AP_EMPTY ||
 				texture_perms.getValue(PERM_TRANSFER) == LLAggregatePermissions::AP_ALL;
 			mCtrlSculptTexture->setCanApplyImmediately(can_copy && can_transfer);
 		}
 		else
 		{
-			mCtrlSculptTexture->setCanApplyImmediately(FALSE);
+			mCtrlSculptTexture->setCanApplyImmediately(false);
 		}
 	}
 
@@ -338,7 +338,7 @@ bool	LLPanelObject::postBuild()
 	clearCtrls();
 
 // <FS:CR> Aurora Sim
-	updateLimits(FALSE);	// default to non-attachment
+	updateLimits(false);	// default to non-attachment
 // </FS:CR> Aurora Sim
 	
 	changePrecision(gSavedSettings.getS32("FSBuildToolDecimalPrecision"));	// <FS:CR> Adjustable decimal precision
@@ -348,16 +348,16 @@ bool	LLPanelObject::postBuild()
 
 LLPanelObject::LLPanelObject()
 :	LLPanel(),
-	mIsPhysical(FALSE),
-	mIsTemporary(FALSE),
-	mIsPhantom(FALSE),
+	mIsPhysical(false),
+	mIsTemporary(false),
+	mIsPhantom(false),
 	mSelectedType(MI_BOX),
 	mSculptTextureRevert(LLUUID::null),
 	mSculptTypeRevert(0),
     mHasClipboardPos(false),
     mHasClipboardSize(false),
     mHasClipboardRot(false),
-	mSizeChanged(FALSE)
+	mSizeChanged(false)
 {
     // <FS> Extended copy & paste buttons
     //mCommitCallbackRegistrar.add("PanelObject.menuDoToSelected", boost::bind(&LLPanelObject::menuDoToSelected, this, _2));
@@ -372,7 +372,7 @@ LLPanelObject::~LLPanelObject()
 }
 
 // <AW: opensim-limits>
-void LLPanelObject::updateLimits(BOOL attachment)
+void LLPanelObject::updateLimits(bool attachment)
 {
 // <FS:CR> Aurora Sim
 	//mRegionMaxHeight = LLWorld::getInstance()->getRegionMaxHeight();
@@ -498,7 +498,7 @@ void LLPanelObject::getState( )
 	}
 
 	S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
-	BOOL single_volume = (LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
+	bool single_volume = (LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
 						 && (selected_count == 1);
 
 //<FS:TS> FIRE-8205: Unable to edit attachment to negative coordinates
@@ -511,8 +511,8 @@ void LLPanelObject::getState( )
 
 	LLSelectMgr::getInstance()->selectGetEditMoveLinksetPermissions(enable_move, enable_modify);
 
-	BOOL enable_scale = enable_modify;
-	BOOL enable_rotate = enable_move; // already accounts for a case of children, which needs permModify() as well
+	bool enable_scale = enable_modify;
+	bool enable_rotate = enable_move; // already accounts for a case of children, which needs permModify() as well
 
 	LLVector3 vec;
 	if (enable_move)
@@ -623,20 +623,20 @@ void LLPanelObject::getState( )
 
 	// BUG? Check for all objects being editable?
 	S32 roots_selected = LLSelectMgr::getInstance()->getSelection()->getRootObjectCount();
-	BOOL editable = root_objectp->permModify();
+	bool editable = root_objectp->permModify();
 
-	BOOL is_flexible = volobjp && volobjp->isFlexible();
-	BOOL is_permanent = root_objectp->flagObjectPermanent();
-	BOOL is_permanent_enforced = root_objectp->isPermanentEnforced();
-	BOOL is_character = root_objectp->flagCharacter();
+	bool is_flexible = volobjp && volobjp->isFlexible();
+	bool is_permanent = root_objectp->flagObjectPermanent();
+	bool is_permanent_enforced = root_objectp->isPermanentEnforced();
+	bool is_character = root_objectp->flagCharacter();
 	llassert(!is_permanent || !is_character); // should never have a permanent object that is also a character
 
 	// Lock checkbox - only modifiable if you own the object.
-	BOOL self_owned = (gAgent.getID() == owner_id);
+	bool self_owned = (gAgent.getID() == owner_id);
 	mCheckLock->setEnabled( roots_selected > 0 && self_owned && !is_permanent_enforced);
 
 	// More lock and debit checkbox - get the values
-	BOOL valid;
+	bool valid;
 	U32 owner_mask_on;
 	U32 owner_mask_off;
 	valid = LLSelectMgr::getInstance()->selectGetPerm(PERM_OWNER, &owner_mask_on, &owner_mask_off);
@@ -646,20 +646,20 @@ void LLPanelObject::getState( )
 		if(owner_mask_on & PERM_MOVE)
 		{
 			// owner can move, so not locked
-			mCheckLock->set(FALSE);
-			mCheckLock->setTentative(FALSE);
+			mCheckLock->set(false);
+			mCheckLock->setTentative(false);
 		}
 		else if(owner_mask_off & PERM_MOVE)
 		{
 			// owner can't move, so locked
-			mCheckLock->set(TRUE);
-			mCheckLock->setTentative(FALSE);
+			mCheckLock->set(true);
+			mCheckLock->setTentative(false);
 		}
 		else
 		{
 			// some locked, some not locked
-			mCheckLock->set(FALSE);
-			mCheckLock->setTentative(TRUE);
+			mCheckLock->set(false);
+			mCheckLock->setTentative(true);
 		}
 	}
 
@@ -679,7 +679,7 @@ void LLPanelObject::getState( )
 	mCheckTemporary->setEnabled( roots_selected>0 && editable && !is_permanent);
 
 	mIsPhantom = root_objectp->flagPhantom();
-	BOOL is_volume_detect = root_objectp->flagVolumeDetect();
+	bool is_volume_detect = root_objectp->flagVolumeDetect();
 	llassert(!is_character || !mIsPhantom); // should never have a character that is also a phantom
 	mCheckPhantom->set( mIsPhantom );
 	mCheckPhantom->setEnabled( roots_selected>0 && editable && !is_flexible && !is_permanent_enforced && !is_character && !is_volume_detect);
@@ -688,10 +688,10 @@ void LLPanelObject::getState( )
 
 	S32 selected_item	= MI_BOX;
 	S32	selected_hole	= MI_HOLE_SAME;
-	BOOL enabled = FALSE;
-	BOOL hole_enabled = FALSE;
+	bool enabled = false;
+	bool hole_enabled = false;
 	F32 scale_x=1.f, scale_y=1.f;
-	BOOL isMesh = FALSE;
+	bool isMesh = false;
 	
 	if( !objectp || !objectp->getVolume() || !editable || !single_volume)
 	{
@@ -737,7 +737,7 @@ void LLPanelObject::getState( )
 		scale_x = volume_params.getRatioX();
 		scale_y = volume_params.getRatioY();
 
-		BOOL linear_path = (path == LL_PCODE_PATH_LINE) || (path == LL_PCODE_PATH_FLEXIBLE);
+		bool linear_path = (path == LL_PCODE_PATH_LINE) || (path == LL_PCODE_PATH_FLEXIBLE);
 		if ( linear_path && profile == LL_PCODE_PROFILE_CIRCLE )
 		{
 			selected_item = MI_CYLINDER;
@@ -891,7 +891,7 @@ void LLPanelObject::getState( )
 		else
 		{
 			mComboHoleType->setCurrentByIndex( MI_HOLE_SAME );
-			hole_enabled = FALSE;
+			hole_enabled = false;
 		}
 
 		// Cut interpretation varies based on base object type
@@ -1028,41 +1028,41 @@ void LLPanelObject::getState( )
 	// Compute control visibility, label names, and twist range.
 	// Start with defaults.
 	// <FS:Beq> FIRE-21772 mComboBaseType remians invisible after editing a mesh
-	mComboBaseType->setVisible(TRUE);
+	mComboBaseType->setVisible(true);
 	// </FS:Beq>
-	BOOL cut_visible                = TRUE;
-	BOOL hollow_visible             = TRUE;
-	BOOL top_size_x_visible			= TRUE;
-	BOOL top_size_y_visible			= TRUE;
-	BOOL top_shear_x_visible		= TRUE;
-	BOOL top_shear_y_visible		= TRUE;
-	BOOL twist_visible				= TRUE;
+	bool cut_visible                = true;
+	bool hollow_visible             = true;
+	bool top_size_x_visible			= true;
+	bool top_size_y_visible			= true;
+	bool top_shear_x_visible		= true;
+	bool top_shear_y_visible		= true;
+	bool twist_visible				= true;
 	//KC: Phoenix capability, allow all transforms
-	BOOL advanced_cut_visible		= TRUE;
-	BOOL taper_visible				= TRUE;
-	BOOL skew_visible				= TRUE;
-	BOOL radius_offset_visible		= TRUE;
-	BOOL revolutions_visible		= TRUE;
-	BOOL sculpt_texture_visible     = FALSE;
+	bool advanced_cut_visible		= true;
+	bool taper_visible				= true;
+	bool skew_visible				= true;
+	bool radius_offset_visible		= true;
+	bool revolutions_visible		= true;
+	bool sculpt_texture_visible     = false;
 	F32	 twist_min					= OBJECT_TWIST_LINEAR_MIN;
 	F32	 twist_max					= OBJECT_TWIST_LINEAR_MAX;
 	F32	 twist_inc					= OBJECT_TWIST_LINEAR_INC;
 
-	BOOL advanced_is_dimple = FALSE;
-	BOOL advanced_is_slice = FALSE;
-	BOOL size_is_hole = FALSE;
+	bool advanced_is_dimple = false;
+	bool advanced_is_slice = false;
+	bool size_is_hole = false;
 
 	// Tune based on overall volume type
 	switch (selected_item)
 	{
 	case MI_SPHERE:
-		top_size_x_visible		= TRUE;
-		top_size_y_visible		= TRUE;
-		top_shear_x_visible		= TRUE;
-		top_shear_y_visible		= TRUE;
-		twist_visible			= TRUE;
-		advanced_cut_visible	= TRUE;
-		advanced_is_dimple		= TRUE;
+		top_size_x_visible		= true;
+		top_size_y_visible		= true;
+		top_shear_x_visible		= true;
+		top_shear_y_visible		= true;
+		twist_visible			= true;
+		advanced_cut_visible	= true;
+		advanced_is_dimple		= true;
 		twist_min				= OBJECT_TWIST_MIN;
 		twist_max				= OBJECT_TWIST_MAX;
 		twist_inc				= OBJECT_TWIST_INC;
@@ -1071,14 +1071,14 @@ void LLPanelObject::getState( )
 	case MI_TORUS:
 	case MI_TUBE:	
 	case MI_RING:
-		//top_size_x_visible		= FALSE;
-		//top_size_y_visible		= FALSE;
-	  	size_is_hole 			= TRUE;
-		skew_visible			= TRUE;
-		advanced_cut_visible	= TRUE;
-		taper_visible			= TRUE;
-		radius_offset_visible	= TRUE;
-		revolutions_visible		= TRUE;
+		//top_size_x_visible		= false;
+		//top_size_y_visible		= false;
+	  	size_is_hole 			= true;
+		skew_visible			= true;
+		advanced_cut_visible	= true;
+		taper_visible			= true;
+		radius_offset_visible	= true;
+		revolutions_visible		= true;
 		twist_min				= OBJECT_TWIST_MIN;
 		twist_max				= OBJECT_TWIST_MAX;
 		twist_inc				= OBJECT_TWIST_INC;
@@ -1086,36 +1086,36 @@ void LLPanelObject::getState( )
 		break;
 
 	case MI_SCULPT:
-		cut_visible             = FALSE;
-		hollow_visible          = FALSE;
-		twist_visible           = FALSE;
-		top_size_x_visible      = FALSE;
-		top_size_y_visible      = FALSE;
-		top_shear_x_visible     = FALSE;
-		top_shear_y_visible     = FALSE;
-		skew_visible            = FALSE;
-		advanced_cut_visible    = FALSE;
-		taper_visible           = FALSE;
-		radius_offset_visible   = FALSE;
-		revolutions_visible     = FALSE;
-		sculpt_texture_visible  = TRUE;
+		cut_visible             = false;
+		hollow_visible          = false;
+		twist_visible           = false;
+		top_size_x_visible      = false;
+		top_size_y_visible      = false;
+		top_shear_x_visible     = false;
+		top_shear_y_visible     = false;
+		skew_visible            = false;
+		advanced_cut_visible    = false;
+		taper_visible           = false;
+		radius_offset_visible   = false;
+		revolutions_visible     = false;
+		sculpt_texture_visible  = true;
 
 		break;
 		
 	case MI_BOX:
-		advanced_cut_visible	= TRUE;
-		advanced_is_slice		= TRUE;
-		taper_visible			= FALSE; //KC: does nothing for boxes
+		advanced_cut_visible	= true;
+		advanced_is_slice		= true;
+		taper_visible			= false; //KC: does nothing for boxes
 		break;
 
 	case MI_CYLINDER:
-		advanced_cut_visible	= TRUE;
-		advanced_is_slice		= TRUE;
+		advanced_cut_visible	= true;
+		advanced_is_slice		= true;
 		break;
 
 	case MI_PRISM:
-		advanced_cut_visible	= TRUE;
-		advanced_is_slice		= TRUE;
+		advanced_cut_visible	= true;
+		advanced_is_slice		= true;
 		break;
 
 	default:
@@ -1225,18 +1225,18 @@ void LLPanelObject::getState( )
 	mLabelSkew		->setEnabled( enabled );
 	mSpinSkew		->setEnabled( enabled );
 
-	getChildView("scale_hole")->setVisible( FALSE);
-	getChildView("scale_taper")->setVisible( FALSE);
+	getChildView("scale_hole")->setVisible( false);
+	getChildView("scale_taper")->setVisible( false);
 	if (top_size_x_visible || top_size_y_visible)
 	{
 		if (size_is_hole)
 		{
-			getChildView("scale_hole")->setVisible( TRUE);
+			getChildView("scale_hole")->setVisible( true);
 			getChildView("scale_hole")->setEnabled(enabled);
 		}
 		else
 		{
-			getChildView("scale_taper")->setVisible( TRUE);
+			getChildView("scale_taper")->setVisible( true);
 			getChildView("scale_taper")->setEnabled(enabled);
 		}
 	}
@@ -1248,26 +1248,26 @@ void LLPanelObject::getState( )
 	mSpinShearX		->setEnabled( enabled );
 	mSpinShearY		->setEnabled( enabled );
 
-	getChildView("advanced_cut")->setVisible( FALSE);
-	getChildView("advanced_dimple")->setVisible( FALSE);
-	getChildView("advanced_slice")->setVisible( FALSE);
+	getChildView("advanced_cut")->setVisible( false);
+	getChildView("advanced_dimple")->setVisible( false);
+	getChildView("advanced_slice")->setVisible( false);
 
 	if (advanced_cut_visible)
 	{
 		if (advanced_is_dimple)
 		{
-			getChildView("advanced_dimple")->setVisible( TRUE);
+			getChildView("advanced_dimple")->setVisible( true);
 			getChildView("advanced_dimple")->setEnabled(enabled);
 		}
 
 		else if (advanced_is_slice)
 		{
-			getChildView("advanced_slice")->setVisible( TRUE);
+			getChildView("advanced_slice")->setVisible( true);
 			getChildView("advanced_slice")->setEnabled(enabled);
 		}
 		else
 		{
-			getChildView("advanced_cut")->setVisible( TRUE);
+			getChildView("advanced_cut")->setVisible( true);
 			getChildView("advanced_cut")->setEnabled(enabled);
 		}
 	}
@@ -1355,8 +1355,8 @@ void LLPanelObject::getState( )
 
 			U8 sculpt_type = sculpt_params->getSculptType();
 			U8 sculpt_stitching = sculpt_type & LL_SCULPT_TYPE_MASK;
-			BOOL sculpt_invert = sculpt_type & LL_SCULPT_FLAG_INVERT;
-			BOOL sculpt_mirror = sculpt_type & LL_SCULPT_FLAG_MIRROR;
+			bool sculpt_invert = sculpt_type & LL_SCULPT_FLAG_INVERT;
+			bool sculpt_mirror = sculpt_type & LL_SCULPT_FLAG_MIRROR;
 			isMesh = (sculpt_stitching == LL_SCULPT_TYPE_MESH);
 
 			// <FS:Beq> FIRE-21445 - Show specific LOD + Mesh Info in object panel
@@ -1375,7 +1375,7 @@ void LLPanelObject::getState( )
 				LLTextureCtrl*  mTextureCtrl = getChild<LLTextureCtrl>("sculpt texture control");
 				if (mTextureCtrl)
 				{
-					mTextureCtrl->setTentative(FALSE);
+					mTextureCtrl->setTentative(false);
 					mTextureCtrl->setEnabled(editable && !isMesh);
 					if (editable)
 						mTextureCtrl->setImageAssetID(sculpt_params->getSculptTexture());
@@ -1415,7 +1415,7 @@ void LLPanelObject::getState( )
 
 				if (mLabelSculptType)
 				{
-					mLabelSculptType->setEnabled(TRUE);
+					mLabelSculptType->setEnabled(true);
 				}
 			//<FS:Beq> FIRE-21445
 			}
@@ -1440,61 +1440,61 @@ void LLPanelObject::deactivateStandardFields()
 {
 
 	// Update field visibility
-	mComboBaseType->setEnabled(FALSE);
-	mComboBaseType->setVisible(FALSE);
+	mComboBaseType->setEnabled(false);
+	mComboBaseType->setVisible(false);
 
-	mLabelCut->setVisible(FALSE);
-	mSpinCutBegin->setVisible(FALSE);
-	mSpinCutEnd->setVisible(FALSE);
+	mLabelCut->setVisible(false);
+	mSpinCutBegin->setVisible(false);
+	mSpinCutEnd->setVisible(false);
 
-	mLabelHollow->setVisible(FALSE);
-	mSpinHollow->setVisible(FALSE);
-	mLabelHoleType->setVisible(FALSE);
-	mComboHoleType->setVisible(FALSE);
+	mLabelHollow->setVisible(false);
+	mSpinHollow->setVisible(false);
+	mLabelHoleType->setVisible(false);
+	mComboHoleType->setVisible(false);
 
-	mLabelTwist->setVisible(FALSE);
-	mSpinTwist->setVisible(FALSE);
-	mSpinTwistBegin->setVisible(FALSE);
-	mSpinTwist->setMinValue(FALSE);
-	mSpinTwist->setMaxValue(FALSE);
-	mSpinTwist->setIncrement(FALSE);
-	mSpinTwistBegin->setMinValue(FALSE);
-	mSpinTwistBegin->setMaxValue(FALSE);
-	mSpinTwistBegin->setIncrement(FALSE);
+	mLabelTwist->setVisible(false);
+	mSpinTwist->setVisible(false);
+	mSpinTwistBegin->setVisible(false);
+	mSpinTwist->setMinValue(false);
+	mSpinTwist->setMaxValue(false);
+	mSpinTwist->setIncrement(false);
+	mSpinTwistBegin->setMinValue(false);
+	mSpinTwistBegin->setMaxValue(false);
+	mSpinTwistBegin->setIncrement(false);
 
-	mSpinScaleX->setVisible(FALSE);
-	mSpinScaleY->setVisible(FALSE);
+	mSpinScaleX->setVisible(false);
+	mSpinScaleY->setVisible(false);
 
-	mLabelSkew->setVisible(FALSE);
-	mSpinSkew->setVisible(FALSE);
+	mLabelSkew->setVisible(false);
+	mSpinSkew->setVisible(false);
 
-	mLabelShear->setVisible(FALSE);
-	mSpinShearX->setVisible(FALSE);
-	mSpinShearY->setVisible(FALSE);
+	mLabelShear->setVisible(false);
+	mSpinShearX->setVisible(false);
+	mSpinShearY->setVisible(false);
 
-	mCtrlPathBegin->setVisible(FALSE);
-	mCtrlPathEnd->setVisible(FALSE);
+	mCtrlPathBegin->setVisible(false);
+	mCtrlPathEnd->setVisible(false);
 
-	mLabelTaper->setVisible(FALSE);
-	mSpinTaperX->setVisible(FALSE);
-	mSpinTaperY->setVisible(FALSE);
+	mLabelTaper->setVisible(false);
+	mSpinTaperX->setVisible(false);
+	mSpinTaperY->setVisible(false);
 
-	mLabelRadiusOffset->setVisible(FALSE);
-	mSpinRadiusOffset->setVisible(FALSE);
+	mLabelRadiusOffset->setVisible(false);
+	mSpinRadiusOffset->setVisible(false);
 
-	mLabelRevolutions->setVisible(FALSE);
-	mSpinRevolutions->setVisible(FALSE);
+	mLabelRevolutions->setVisible(false);
+	mSpinRevolutions->setVisible(false);
 
-	mCtrlSculptTexture->setVisible(FALSE);
-	mLabelSculptType->setVisible(FALSE);
-	mCtrlSculptType->setVisible(FALSE);
+	mCtrlSculptTexture->setVisible(false);
+	mLabelSculptType->setVisible(false);
+	mCtrlSculptType->setVisible(false);
 
-	getChildView("scale_hole")->setVisible(FALSE);
-	getChildView("scale_taper")->setVisible(FALSE);
+	getChildView("scale_hole")->setVisible(false);
+	getChildView("scale_taper")->setVisible(false);
 
-	getChildView("advanced_cut")->setVisible(FALSE);
-	getChildView("advanced_dimple")->setVisible(FALSE);
-	getChildView("advanced_slice")->setVisible(FALSE);
+	getChildView("advanced_cut")->setVisible(false);
+	getChildView("advanced_dimple")->setVisible(false);
+	getChildView("advanced_slice")->setVisible(false);
 }
 
 void LLPanelObject::activateMeshFields(LLViewerObject* objectp)
@@ -1508,15 +1508,15 @@ void LLPanelObject::activateMeshFields(LLViewerObject* objectp)
 		args[dataFields[i]] = llformat("%d", objectp->mDrawable->getVOVolume()->getLODTriangleCount(i));
 	}
 	num_tris->setText(getString("mesh_lod_num_tris_values",args));
-	num_tris->setVisible(TRUE);
+	num_tris->setVisible(true);
 
 	childSetVisible("mesh_info_label", true);
 	childSetVisible("lod_label", true);
 	childSetVisible("lod_num_tris", true);
 	childSetVisible("mesh_lod_label", true);
 	// Mesh specific display
-	mComboLOD->setEnabled(TRUE);
-	mComboLOD->setVisible(TRUE);
+	mComboLOD->setEnabled(true);
+	mComboLOD->setVisible(true);
 
 	F32 radius;
 
@@ -1545,7 +1545,7 @@ void LLPanelObject::activateMeshFields(LLViewerObject* objectp)
 	childSetVisible("object_radius", true);
 	LLTextBox* tb = getChild<LLTextBox>("object_radius_value");
 	tb->setText(llformat("%.3f", radius));
-	tb->setVisible(TRUE);
+	tb->setVisible(true);
 
 	childSetVisible("LOD_swap_defaults_label", true);
 	childSetVisible("LOD_swap_usr_label", true);
@@ -1560,7 +1560,7 @@ void LLPanelObject::activateMeshFields(LLViewerObject* objectp)
 	args["FACTOR"] = llformat("%.3f", factor);
 	tb = getChild<LLTextBox>("LOD_swap_ll_default");
 	tb->setToolTip(getString("ll_lod_tooltip_msg",args));
-	tb->setVisible(TRUE);
+	tb->setVisible(true);
 
 	tb = getChild<LLTextBox>("LOD_swap_ll_values");
 	setLODDistValues(tb, factor, dmid, dlow, dlowest);
@@ -1570,7 +1570,7 @@ void LLPanelObject::activateMeshFields(LLViewerObject* objectp)
 	args["FACTOR"] = llformat("%.3f", factor);
 	tb = getChild<LLTextBox>("LOD_swap_fs_default");
 	tb->setToolTip(getString("fs_lod_tooltip_msg", args));
-	tb->setVisible(TRUE);
+	tb->setVisible(true);
 
 	tb = getChild<LLTextBox>("LOD_swap_fs_values");
 	setLODDistValues(tb, factor, dmid, dlow, dlowest);
@@ -1580,7 +1580,7 @@ void LLPanelObject::activateMeshFields(LLViewerObject* objectp)
 	args["FACTOR"] = llformat("%.3f", factor);
 	tb = getChild<LLTextBox>("LOD_swap_usr_current");
 	tb->setText(getString("user_lod_label_string", args));// Note: here we are setting the label not the tooltip
-	tb->setVisible(TRUE);
+	tb->setVisible(true);
 
 	tb = getChild<LLTextBox>("LOD_swap_usr_values");
 	setLODDistValues(tb, factor, dmid, dlow, dlowest);
@@ -1595,8 +1595,8 @@ void LLPanelObject::setLODDistValues(LLTextBox* tb, F32 factor, F32 dmid, F32 dl
 		args["MED2LOW"] = llformat("%.1f", factor*dlow);
 		args["LOW2LOWEST"] = llformat("%.1f", factor*dlowest);
 		tb->setText(getString("LODSwapFormatString",args));
-		tb->setVisible(TRUE);
-		tb->setEnabled(TRUE);
+		tb->setVisible(true);
+		tb->setEnabled(true);
 	}
 }
 
@@ -1612,12 +1612,12 @@ void LLPanelObject::deactivateMeshFields()
 	// </FS:Beq>
 
 	mComboLOD->setCurrentByIndex(0);
-	mComboLOD->setEnabled(FALSE);
-	mComboLOD->setVisible(FALSE);
+	mComboLOD->setEnabled(false);
+	mComboLOD->setVisible(false);
 
 	childSetVisible("object_radius", false);
 	LLTextBox* tb = getChild<LLTextBox>("object_radius_value");
-	tb->setVisible(FALSE);
+	tb->setVisible(false);
 
 	childSetVisible("ObjectLODbehaviourLabel", false);
 	childSetVisible("LOD_swap_defaults_label", false);
@@ -1639,12 +1639,12 @@ void LLPanelObject::deactivateMeshFields()
 bool LLPanelObject::precommitValidate( const LLSD& data )
 {
 	// TODO: Richard will fill this in later.  
-	return TRUE; // FALSE means that validation failed and new value should not be commited.
+	return true; // false means that validation failed and new value should not be commited.
 }
 
 void LLPanelObject::sendIsPhysical()
 {
-	BOOL value = mCheckPhysics->get();
+	bool value = mCheckPhysics->get();
 	if( mIsPhysical != value )
 	{
 		LLSelectMgr::getInstance()->selectionUpdatePhysics(value);
@@ -1660,7 +1660,7 @@ void LLPanelObject::sendIsPhysical()
 
 void LLPanelObject::sendIsTemporary()
 {
-	BOOL value = mCheckTemporary->get();
+	bool value = mCheckTemporary->get();
 	if( mIsTemporary != value )
 	{
 		LLSelectMgr::getInstance()->selectionUpdateTemporary(value);
@@ -1677,7 +1677,7 @@ void LLPanelObject::sendIsTemporary()
 
 void LLPanelObject::sendIsPhantom()
 {
-	BOOL value = mCheckPhantom->get();
+	bool value = mCheckPhantom->get();
 	if( mIsPhantom != value )
 	{
 		LLSelectMgr::getInstance()->selectionUpdatePhantom(value);
@@ -1736,7 +1736,7 @@ void LLPanelObject::onCommitParametric( LLUICtrl* ctrl, void* userdata )
 
 	if (selected_type == MI_SCULPT)
 	{
-		self->mObject->setParameterEntryInUse(LLNetworkData::PARAMS_SCULPT, TRUE, TRUE);
+		self->mObject->setParameterEntryInUse(LLNetworkData::PARAMS_SCULPT, true, true);
 		LLSculptParams *sculpt_params = (LLSculptParams *)self->mObject->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
 		if (sculpt_params)
 			volume_params.setSculptID(sculpt_params->getSculptTexture(), sculpt_params->getSculptType());
@@ -1745,7 +1745,7 @@ void LLPanelObject::onCommitParametric( LLUICtrl* ctrl, void* userdata )
 	{
 		LLSculptParams *sculpt_params = (LLSculptParams *)self->mObject->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
 		if (sculpt_params)
-			self->mObject->setParameterEntryInUse(LLNetworkData::PARAMS_SCULPT, FALSE, TRUE);
+			self->mObject->setParameterEntryInUse(LLNetworkData::PARAMS_SCULPT, false, true);
 	}
 
 	// Update the volume, if necessary.
@@ -2130,7 +2130,7 @@ void LLPanelObject::getVolumeParams(LLVolumeParams& volume_params)
 }
 
 // BUG: Make work with multiple objects
-void LLPanelObject::sendRotation(BOOL btn_down)
+void LLPanelObject::sendRotation(bool btn_down)
 {
 	if (mObject.isNull()) return;
 
@@ -2201,7 +2201,7 @@ F32 llpanelobject_max_prim_scale()
 }
 
 // BUG: Make work with multiple objects
-void LLPanelObject::sendScale(BOOL btn_down)
+void LLPanelObject::sendScale(bool btn_down)
 {
 	if (mObject.isNull()) return;
 
@@ -2223,20 +2223,20 @@ void LLPanelObject::sendScale(BOOL btn_down)
 
 		// check to see if we aren't scaling the textures
 		// (in which case the tex coord's need to be recomputed)
-		BOOL dont_stretch_textures = !LLManipScale::getStretchTextures();
+		bool dont_stretch_textures = !LLManipScale::getStretchTextures();
 		if (dont_stretch_textures)
 		{
 			LLSelectMgr::getInstance()->saveSelectedObjectTransform(SELECT_ACTION_TYPE_SCALE);
 		}
 
-		mObject->setScale(newscale, TRUE);
+		mObject->setScale(newscale, true);
 
 		if(!btn_down)
 		{
 			LLSelectMgr::getInstance()->sendMultipleUpdate(UPD_SCALE | UPD_POSITION);
 		}
 
-		LLSelectMgr::getInstance()->adjustTexturesByScale(TRUE, !dont_stretch_textures);
+		LLSelectMgr::getInstance()->adjustTexturesByScale(true, !dont_stretch_textures);
 //		LL_INFOS() << "scale sent" << LL_ENDL;
 	}
 	else
@@ -2246,7 +2246,7 @@ void LLPanelObject::sendScale(BOOL btn_down)
 }
 
 
-void LLPanelObject::sendPosition(BOOL btn_down)
+void LLPanelObject::sendPosition(bool btn_down)
 {	
 	if (mObject.isNull()) return;
 
@@ -2343,7 +2343,7 @@ void LLPanelObject::sendPosition(BOOL btn_down)
 		if (mObject->isRootEdit())
 		{
 			// counter-translate child objects if we are moving the root as an individual
-			mObject->resetChildrenPosition(old_position_local - new_position_local, TRUE);
+			mObject->resetChildrenPosition(old_position_local - new_position_local, true);
 		}
 
 		if (!btn_down)
@@ -2379,7 +2379,7 @@ void LLPanelObject::sendPosition(BOOL btn_down)
 			if (mObject->isRootEdit())
 			{								
 				// only offset by parent's translation
-				mObject->resetChildrenPosition(LLVector3(-delta), TRUE, TRUE) ;
+				mObject->resetChildrenPosition(LLVector3(-delta), true, true) ;
 			}
 
 			if(!btn_down)
@@ -2420,11 +2420,11 @@ void LLPanelObject::sendSculpt()
 
 	if (mCtrlSculptMirror)
 	{
-		mCtrlSculptMirror->setEnabled(enabled ? TRUE : FALSE);
+		mCtrlSculptMirror->setEnabled(enabled ? true : false);
 	}
 	if (mCtrlSculptInvert)
 	{
-		mCtrlSculptInvert->setEnabled(enabled ? TRUE : FALSE);
+		mCtrlSculptInvert->setEnabled(enabled ? true : false);
 	}
 	
 	if ((mCtrlSculptMirror) && (mCtrlSculptMirror->get()))
@@ -2434,7 +2434,7 @@ void LLPanelObject::sendSculpt()
 		sculpt_type |= LL_SCULPT_FLAG_INVERT;
 	
 	sculpt_params.setSculptTexture(sculpt_id, sculpt_type);
-	mObject->setParameterEntry(LLNetworkData::PARAMS_SCULPT, sculpt_params, TRUE);
+	mObject->setParameterEntry(LLNetworkData::PARAMS_SCULPT, sculpt_params, true);
 }
 
 void LLPanelObject::refresh()
@@ -2538,34 +2538,34 @@ void LLPanelObject::clearCtrls()
 {
 	LLPanel::clearCtrls();
 
-	mCheckLock		->set(FALSE);
-	mCheckLock		->setEnabled( FALSE );
-	mCheckPhysics	->set(FALSE);
-	mCheckPhysics	->setEnabled( FALSE );
-	mCheckTemporary	->set(FALSE);
-	mCheckTemporary	->setEnabled( FALSE );
-	mCheckPhantom	->set(FALSE);
-	mCheckPhantom	->setEnabled( FALSE );
+	mCheckLock		->set(false);
+	mCheckLock		->setEnabled( false );
+	mCheckPhysics	->set(false);
+	mCheckPhysics	->setEnabled( false );
+	mCheckTemporary	->set(false);
+	mCheckTemporary	->setEnabled( false );
+	mCheckPhantom	->set(false);
+	mCheckPhantom	->setEnabled( false );
 	
 	// Disable text labels
-	mLabelPosition	->setEnabled( FALSE );
-	mLabelSize		->setEnabled( FALSE );
-	mLabelRotation	->setEnabled( FALSE );
-	mLabelCut		->setEnabled( FALSE );
-	mLabelHollow	->setEnabled( FALSE );
-	mLabelHoleType	->setEnabled( FALSE );
-	mLabelTwist		->setEnabled( FALSE );
-	mLabelSkew		->setEnabled( FALSE );
-	mLabelShear		->setEnabled( FALSE );
-	mLabelTaper		->setEnabled( FALSE );
-	mLabelRadiusOffset->setEnabled( FALSE );
-	mLabelRevolutions->setEnabled( FALSE );
+	mLabelPosition	->setEnabled( false );
+	mLabelSize		->setEnabled( false );
+	mLabelRotation	->setEnabled( false );
+	mLabelCut		->setEnabled( false );
+	mLabelHollow	->setEnabled( false );
+	mLabelHoleType	->setEnabled( false );
+	mLabelTwist		->setEnabled( false );
+	mLabelSkew		->setEnabled( false );
+	mLabelShear		->setEnabled( false );
+	mLabelTaper		->setEnabled( false );
+	mLabelRadiusOffset->setEnabled( false );
+	mLabelRevolutions->setEnabled( false );
 	
-	getChildView("scale_hole")->setEnabled(FALSE);
-	getChildView("scale_taper")->setEnabled(FALSE);
-	getChildView("advanced_cut")->setEnabled(FALSE);
-	getChildView("advanced_dimple")->setEnabled(FALSE);
-	getChildView("advanced_slice")->setVisible( FALSE);
+	getChildView("scale_hole")->setEnabled(false);
+	getChildView("scale_taper")->setEnabled(false);
+	getChildView("advanced_cut")->setEnabled(false);
+	getChildView("advanced_dimple")->setEnabled(false);
+	getChildView("advanced_slice")->setVisible( false);
 }
 
 //
@@ -2580,7 +2580,7 @@ void LLPanelObject::onCommitLock(LLUICtrl *ctrl, void *data)
 
 	if(self->mRootObject.isNull()) return;
 
-	BOOL new_state = self->mCheckLock->get();
+	bool new_state = self->mCheckLock->get();
 	
 	LLSelectMgr::getInstance()->selectionSetObjectPermissions(PERM_OWNER, !new_state, PERM_MOVE | PERM_MODIFY);
 }
@@ -2589,7 +2589,7 @@ void LLPanelObject::onCommitLock(LLUICtrl *ctrl, void *data)
 void LLPanelObject::onCommitPosition( LLUICtrl* ctrl, void* userdata )
 {
 	LLPanelObject* self = (LLPanelObject*) userdata;
-	BOOL btn_down = ((LLSpinCtrl*)ctrl)->isMouseHeldDown() ;
+	bool btn_down = ((LLSpinCtrl*)ctrl)->isMouseHeldDown() ;
 	self->sendPosition(btn_down);
 }
 
@@ -2597,7 +2597,7 @@ void LLPanelObject::onCommitPosition( LLUICtrl* ctrl, void* userdata )
 void LLPanelObject::onCommitScale( LLUICtrl* ctrl, void* userdata )
 {
 	LLPanelObject* self = (LLPanelObject*) userdata;
-	BOOL btn_down = ((LLSpinCtrl*)ctrl)->isMouseHeldDown() ;
+	bool btn_down = ((LLSpinCtrl*)ctrl)->isMouseHeldDown() ;
 	self->sendScale(btn_down);
 }
 
@@ -2605,7 +2605,7 @@ void LLPanelObject::onCommitScale( LLUICtrl* ctrl, void* userdata )
 void LLPanelObject::onCommitRotation( LLUICtrl* ctrl, void* userdata )
 {
 	LLPanelObject* self = (LLPanelObject*) userdata;
-	BOOL btn_down = ((LLSpinCtrl*)ctrl)->isMouseHeldDown() ;
+	bool btn_down = ((LLSpinCtrl*)ctrl)->isMouseHeldDown() ;
 	self->sendRotation(btn_down);
 }
 
@@ -2648,7 +2648,7 @@ void LLPanelObject::onCommitSculpt( const LLSD& data )
 	sendSculpt();
 }
 
-BOOL LLPanelObject::onDropSculpt(LLInventoryItem* item)
+bool LLPanelObject::onDropSculpt(LLInventoryItem* item)
 {
     LLTextureCtrl* mTextureCtrl = getChild<LLTextureCtrl>("sculpt texture control");
 
@@ -2660,7 +2660,7 @@ BOOL LLPanelObject::onDropSculpt(LLInventoryItem* item)
 		mSculptTextureRevert = asset;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -2748,7 +2748,7 @@ void LLPanelObject::onCommitSculptType(LLUICtrl *ctrl, void* userdata)
 //    if (command == "psr_paste")
 //    {
 //        S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
-//        BOOL single_volume = (LLSelectMgr::getInstance()->selectionAllPCode(LL_PCODE_VOLUME))
+//        bool single_volume = (LLSelectMgr::getInstance()->selectionAllPCode(LL_PCODE_VOLUME))
 //            && (selected_count == 1);
 //
 //        if (!single_volume)
@@ -2784,7 +2784,7 @@ void LLPanelObject::onCommitSculptType(LLUICtrl *ctrl, void* userdata)
 //    else if (command == "psr_copy")
 //    {
 //        S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
-//        BOOL single_volume = (LLSelectMgr::getInstance()->selectionAllPCode(LL_PCODE_VOLUME))
+//        bool single_volume = (LLSelectMgr::getInstance()->selectionAllPCode(LL_PCODE_VOLUME))
 //            && (selected_count == 1);
 //
 //        if (!single_volume)
@@ -2825,7 +2825,7 @@ void LLPanelObject::onCopyPos()
     args["VALUE"] = stringVec;
     mBtnPastePos->setToolTip(getString("paste_position", args));
 
-    mBtnPastePos->setEnabled(TRUE);
+    mBtnPastePos->setEnabled(true);
     // </FS>
 
     mHasClipboardPos = true;
@@ -2844,7 +2844,7 @@ void LLPanelObject::onCopySize()
     args["VALUE"] = stringVec;
     mBtnPasteSize->setToolTip(getString("paste_size", args));
 
-    mBtnPasteSize->setEnabled(TRUE);
+    mBtnPasteSize->setEnabled(true);
     // </FS>
 
     mHasClipboardSize = true;
@@ -2863,7 +2863,7 @@ void LLPanelObject::onCopyRot()
     args["VALUE"] = stringVec;
     mBtnPasteRot->setToolTip(getString("paste_rotation", args));
 
-    mBtnPasteRot->setEnabled(TRUE);
+    mBtnPasteRot->setEnabled(true);
     // </FS>
 
     mHasClipboardRot = true;
@@ -2894,7 +2894,7 @@ void LLPanelObject::onPastePos()
     mCtrlPosY->set( mClipboardPos.mV[VY] );
     mCtrlPosZ->set( mClipboardPos.mV[VZ] );
 
-    sendPosition(FALSE);
+    sendPosition(false);
 }
 
 void LLPanelObject::onPasteSize()
@@ -2914,7 +2914,7 @@ void LLPanelObject::onPasteSize()
     mCtrlScaleY->set(mClipboardSize.mV[VY]);
     mCtrlScaleZ->set(mClipboardSize.mV[VZ]);
 
-    sendScale(FALSE);
+    sendScale(false);
 }
 
 void LLPanelObject::onPasteRot()
@@ -2925,7 +2925,7 @@ void LLPanelObject::onPasteRot()
     mCtrlRotY->set(mClipboardRot.mV[VY]);
     mCtrlRotZ->set(mClipboardRot.mV[VZ]);
 
-    sendRotation(FALSE);
+    sendRotation(false);
 }
 
 void LLPanelObject::onCopyParams()
@@ -2981,14 +2981,14 @@ void LLPanelObject::onPasteParams()
         LLUUID sculpt_id = mClipboardParams["sculpt"]["id"].asUUID();
         U8 sculpt_type = (U8)mClipboardParams["sculpt"]["type"].asInteger();
         sculpt_params.setSculptTexture(sculpt_id, sculpt_type);
-        objectp->setParameterEntry(LLNetworkData::PARAMS_SCULPT, sculpt_params, TRUE);
+        objectp->setParameterEntry(LLNetworkData::PARAMS_SCULPT, sculpt_params, true);
     }
     else
     {
         LLSculptParams *sculpt_params = (LLSculptParams *)objectp->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
         if (sculpt_params)
         {
-            objectp->setParameterEntryInUse(LLNetworkData::PARAMS_SCULPT, FALSE, TRUE);
+            objectp->setParameterEntryInUse(LLNetworkData::PARAMS_SCULPT, false, true);
         }
     }
 

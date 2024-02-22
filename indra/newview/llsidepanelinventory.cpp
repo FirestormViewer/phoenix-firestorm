@@ -486,7 +486,7 @@ void LLSidepanelInventory::onOpen(const LLSD& key)
 	{
 		// set focus on filter editor when side tray inventory shows up
 		LLFilterEditor* filter_editor = mPanelMainInventory->getChild<LLFilterEditor>("inventory search editor");
-		filter_editor->setFocus(TRUE);
+		filter_editor->setFocus(true);
 		return;
 	}
 }
@@ -515,14 +515,14 @@ void LLSidepanelInventory::onBackButtonClicked()
 	showInventoryPanel();
 }
 
-void LLSidepanelInventory::onSelectionChange(const std::deque<LLFolderViewItem*> &items, BOOL user_action)
+void LLSidepanelInventory::onSelectionChange(const std::deque<LLFolderViewItem*> &items, bool user_action)
 {
 
 }
 
 void LLSidepanelInventory::showInventoryPanel()
 {
-	mInventoryPanel->setVisible(TRUE);
+	mInventoryPanel->setVisible(true);
 }
 
 void LLSidepanelInventory::initInventoryViews()
@@ -633,7 +633,7 @@ void LLSidepanelInventory::selectAllItemsPanel()
 
 }
 
-BOOL LLSidepanelInventory::isMainInventoryPanelActive() const
+bool LLSidepanelInventory::isMainInventoryPanelActive() const
 {
 	return mInventoryPanel->getVisible();
 }

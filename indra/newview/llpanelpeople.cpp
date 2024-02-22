@@ -959,7 +959,7 @@ void LLPanelPeople::updateNearbyList()
 	mNearbyList->setDirty();
 
 	DISTANCE_COMPARATOR.updateAvatarsPositions(positions, mNearbyList->getIDs());
-	LLActiveSpeakerMgr::instance().update(TRUE);
+	LLActiveSpeakerMgr::instance().update(true);
 }
 
 void LLPanelPeople::updateRecentList()
@@ -1022,9 +1022,9 @@ void LLPanelPeople::updateButtons()
 		if (cur_panel)
 		{
 			// <FS:Ansariel> RLVa check
-			//if (cur_panel->hasChild("add_friend_btn", TRUE))
+			//if (cur_panel->hasChild("add_friend_btn", true))
 			//	cur_panel->getChildView("add_friend_btn")->setEnabled(item_selected && !is_friend && !is_self);
-			if (!nearby_tab_active && cur_panel->hasChild("add_friend_btn", TRUE))
+			if (!nearby_tab_active && cur_panel->hasChild("add_friend_btn", true))
 				cur_panel->getChildView("add_friend_btn")->setEnabled(item_selected && !is_friend && !is_self && RlvActions::canShowName(RlvActions::SNC_DEFAULT, selected_id));
 			// </FS:Ansariel> RLVa check
 
@@ -1351,11 +1351,11 @@ bool LLPanelPeople::isItemsFreeOfFriends(const uuid_vec_t& uuids)
 void LLPanelPeople::onAddFriendWizButtonClicked()
 {
     LLPanel* cur_panel = mTabContainer->getCurrentPanel();
-    LLView * button = cur_panel->findChild<LLButton>("friends_add_btn", TRUE);
+    LLView * button = cur_panel->findChild<LLButton>("friends_add_btn", true);
 
 	// Show add friend wizard.
     LLFloater* root_floater = gFloaterView->getParentFloater(this);
-	LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&LLPanelPeople::onAvatarPicked, _1, _2), FALSE, TRUE, FALSE, root_floater->getName(), button);
+	LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&LLPanelPeople::onAvatarPicked, _1, _2), false, true, false, root_floater->getName(), button);
 	if (!picker)
 	{
 		return;
@@ -1921,7 +1921,7 @@ void LLPanelPeople::onContactSetsMenuItemClicked(const LLSD& userdata)
 	{
 		LLFloater* root_floater = gFloaterView->getParentFloater(this);
 		LLFloater* avatar_picker = LLFloaterAvatarPicker::show(boost::bind(&LLPanelPeople::handlePickerCallback, this, _1, mContactSetCombo->getValue().asString()),
-															   TRUE, TRUE, TRUE, root_floater->getName());
+															   true, true, true, root_floater->getName());
 		if (root_floater && avatar_picker)
 			root_floater->addDependentFloater(avatar_picker);
 	}

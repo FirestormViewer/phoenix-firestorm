@@ -87,7 +87,7 @@ LLSysWellChiclet::Params::Params()
 	, max_displayed_count("max_displayed_count", 99)
 {
 	button.name = "button";
-	button.tab_stop = FALSE;
+	button.tab_stop = false;
 	button.label = LLStringUtil::null;
 }
 
@@ -145,7 +145,7 @@ boost::signals2::connection LLSysWellChiclet::setClickCallback(
 	return mButton->setClickedCallback(cb);
 }
 
-void LLSysWellChiclet::setToggleState(BOOL toggled) {
+void LLSysWellChiclet::setToggleState(bool toggled) {
 	mButton->setToggleState(toggled);
 }
 
@@ -741,7 +741,7 @@ void LLIMChiclet::hidePopupMenu()
 	auto menu = mPopupMenuHandle.get();
 	if (menu)
 	{
-		menu->setVisible(FALSE);
+		menu->setVisible(false);
 	}
 }
 
@@ -941,7 +941,7 @@ void LLAdHocChiclet::switchToCurrentSpeaker()
 	LLUUID speaker_id;
 	LLSpeakerMgr::speaker_list_t speaker_list;
 
-	LLIMModel::getInstance()->findIMSession(getSessionId())->mSpeakers->getSpeakerList(&speaker_list, FALSE);
+	LLIMModel::getInstance()->findIMSession(getSessionId())->mSpeakers->getSpeakerList(&speaker_list, false);
 	for (LLSpeakerMgr::speaker_list_t::iterator i = speaker_list.begin(); i != speaker_list.end(); ++i)
 	{
 		LLPointer<LLSpeaker> s = *i;
@@ -1052,7 +1052,7 @@ void LLIMGroupChiclet::switchToCurrentSpeaker()
 	LLUUID speaker_id;
 	LLSpeakerMgr::speaker_list_t speaker_list;
 
-	LLIMModel::getInstance()->findIMSession(getSessionId())->mSpeakers->getSpeakerList(&speaker_list, FALSE);
+	LLIMModel::getInstance()->findIMSession(getSessionId())->mSpeakers->getSpeakerList(&speaker_list, false);
 	for (LLSpeakerMgr::speaker_list_t::iterator i = speaker_list.begin(); i != speaker_list.end(); ++i)
 	{
 		LLPointer<LLSpeaker> s = *i;

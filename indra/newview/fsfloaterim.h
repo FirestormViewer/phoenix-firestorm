@@ -111,7 +111,7 @@ public:
 	bool focusFirstItem(bool prefer_text_fields = false, bool focus_flash = true );
 
 	void onVisibilityChange(bool new_visibility);
-	void processIMTyping(const LLUUID& from_id, BOOL typing);
+	void processIMTyping(const LLUUID& from_id, bool typing);
 	void processAgentListUpdates(const LLSD& body);
 
 	void updateChatHistoryStyle();
@@ -171,7 +171,7 @@ protected:
 	LLButton* mSysinfoButton;
 	// support sysinfo button -Zi
 
-	BOOL enableViewerVersionCallback(const LLSD& notification,const LLSD& response);		// <FS:Zi> Viewer version popup
+	bool enableViewerVersionCallback(const LLSD& notification,const LLSD& response);		// <FS:Zi> Viewer version popup
 	void reshapeChatLayoutPanel();
 private:
 	// process focus events to set a currently active session
@@ -189,8 +189,8 @@ private:
 	bool dropCategory(LLInventoryCategory* category, bool drop);
 	bool dropPerson(LLUUID* person_id, bool drop);
 
-	BOOL isInviteAllowed() const;
-	BOOL inviteToSession(const uuid_vec_t& agent_ids);
+	bool isInviteAllowed() const;
+	bool inviteToSession(const uuid_vec_t& agent_ids);
 	
 	void onInputEditorFocusReceived();
 	void onInputEditorFocusLost();
@@ -201,7 +201,7 @@ private:
 
 	// support sysinfo button -Zi
 	void onSysinfoButtonClicked();
-	BOOL onSendSysinfo(const LLSD& notification,const LLSD& response);
+	bool onSendSysinfo(const LLSD& notification,const LLSD& response);
 	// support sysinfo button -Zi
 
 	// connection to voice channel state change signal

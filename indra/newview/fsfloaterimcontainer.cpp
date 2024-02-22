@@ -52,7 +52,7 @@ FSFloaterIMContainer::FSFloaterIMContainer(const LLSD& seed)
 	mForceVoiceStateUpdate(false),
 	mIsAddingNewSession(false)
 {
-	mAutoResize = FALSE;
+	mAutoResize = false;
 	LLTransientFloaterMgr::getInstance()->addControlView(LLTransientFloaterMgr::IM, this);
 
 	// Firstly add our self to IMSession observers, so we catch session events
@@ -163,7 +163,7 @@ void FSFloaterIMContainer::onOpen(const LLSD& key)
 	LLFloater* active_floater = getActiveFloater();
 	if (active_floater && !active_floater->hasFocus())
 	{
-		mTabContainer->setFocus(TRUE);
+		mTabContainer->setFocus(true);
 	}
 }
 
@@ -312,8 +312,8 @@ void FSFloaterIMContainer::removeFloater(LLFloater* floaterp)
 		{
 			mTabContainer->unlockTabs();
 		}
-		gSavedSettings.setBOOL(setting_name, TRUE);
-		floaterp->setCanClose(TRUE);
+		gSavedSettings.setBOOL(setting_name, true);
+		floaterp->setCanClose(true);
 	}
 	LLMultiFloater::removeFloater(floaterp);
 }
@@ -336,11 +336,11 @@ void FSFloaterIMContainer::onCloseFloater(LLUUID& id)
 	mSessions.erase(id);
 	if (isShown())
 	{
-		setFocus(TRUE);
+		setFocus(true);
 	}
 	else if (isMinimized())
 	{
-		setMinimized(TRUE); // Make sure console output that needs to be shown is still doing so 
+		setMinimized(true); // Make sure console output that needs to be shown is still doing so 
 	}
 }
 
@@ -356,9 +356,9 @@ void FSFloaterIMContainer::onNewMessageReceived(const LLSD& data)
 	{
 		if (LLMultiFloater::isFloaterFlashing(floaterp))
 		{
-			LLMultiFloater::setFloaterFlashing(floaterp, FALSE);
+			LLMultiFloater::setFloaterFlashing(floaterp, false);
 		}
-		LLMultiFloater::setFloaterFlashing(floaterp, TRUE);
+		LLMultiFloater::setFloaterFlashing(floaterp, true);
 	}
 }
 
@@ -401,7 +401,7 @@ void FSFloaterIMContainer::setMinimized(bool b)
 }
 
 //virtual
-void FSFloaterIMContainer::sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg)
+void FSFloaterIMContainer::sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, bool has_offline_msg)
 {
 	LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(session_id);
 	if (!session)

@@ -2063,7 +2063,7 @@ void LLAgentWearables::recoverMissingWearable(const LLWearableType::EType type, 
 	LLViewerWearable* new_wearable = LLWearableList::instance().createNewWearable(type, gAgentAvatarp);
 
 	setWearable(type,index,new_wearable);
-	//new_wearable->writeToAvatar(TRUE);
+	//new_wearable->writeToAvatar(true);
 
 	// Add a new one in the lost and found folder.
 	// (We used to overwrite the "not found" one, but that could potentially

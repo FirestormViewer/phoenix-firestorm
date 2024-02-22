@@ -162,7 +162,7 @@ void FloaterQuickPrefs::onOpen(const LLSD& key)
 	LLAvatarComplexityControls::setIndirectMaxArc();
 	LLAvatarComplexityControls::setText(gSavedSettings.getU32("RenderAvatarMaxComplexity"), mMaxComplexityLabel);
 
-	gSavedSettings.setBOOL("QuickPrefsEditMode", FALSE);
+	gSavedSettings.setBOOL("QuickPrefsEditMode", false);
 
 	// Scan widgets and reapply control variables because some control types
 	// (LLSliderCtrl for example) don't update their GUI when hidden
@@ -278,8 +278,8 @@ void FloaterQuickPrefs::initCallbacks()
 void FloaterQuickPrefs::loadDayCyclePresets(const std::multimap<std::string, LLUUID>& daycycle_map)
 {
 	mDayCyclePresetsCombo->operateOnAll(LLComboBox::OP_DELETE);
-	mDayCyclePresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT), EAddPosition::ADD_BOTTOM, FALSE);
-	mDayCyclePresetsCombo->add(LLTrans::getString("QP_WL_None"), LLSD(PRESET_NAME_NONE), EAddPosition::ADD_BOTTOM, FALSE);
+	mDayCyclePresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT), EAddPosition::ADD_BOTTOM, false);
+	mDayCyclePresetsCombo->add(LLTrans::getString("QP_WL_None"), LLSD(PRESET_NAME_NONE), EAddPosition::ADD_BOTTOM, false);
 	mDayCyclePresetsCombo->addSeparator();
 
 	// Add setting presets.
@@ -319,8 +319,8 @@ void FloaterQuickPrefs::loadDayCyclePresets(const std::multimap<std::string, LLU
 void FloaterQuickPrefs::loadSkyPresets(const std::multimap<std::string, LLUUID>& sky_map)
 {
 	mWLPresetsCombo->operateOnAll(LLComboBox::OP_DELETE);
-	mWLPresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT), EAddPosition::ADD_BOTTOM, FALSE);
-	mWLPresetsCombo->add(LLTrans::getString("QP_WL_Day_Cycle_Based"), LLSD(PRESET_NAME_DAY_CYCLE), EAddPosition::ADD_BOTTOM, FALSE);
+	mWLPresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT), EAddPosition::ADD_BOTTOM, false);
+	mWLPresetsCombo->add(LLTrans::getString("QP_WL_Day_Cycle_Based"), LLSD(PRESET_NAME_DAY_CYCLE), EAddPosition::ADD_BOTTOM, false);
 	mWLPresetsCombo->addSeparator();
 
 	// Add setting presets.
@@ -361,8 +361,8 @@ void FloaterQuickPrefs::loadSkyPresets(const std::multimap<std::string, LLUUID>&
 void FloaterQuickPrefs::loadWaterPresets(const std::multimap<std::string, LLUUID>& water_map)
 {
 	mWaterPresetsCombo->operateOnAll(LLComboBox::OP_DELETE);
-	mWaterPresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT), EAddPosition::ADD_BOTTOM, FALSE);
-	mWaterPresetsCombo->add(LLTrans::getString("QP_WL_Day_Cycle_Based"), LLSD(PRESET_NAME_DAY_CYCLE), EAddPosition::ADD_BOTTOM, FALSE);
+	mWaterPresetsCombo->add(LLTrans::getString("QP_WL_Region_Default"), LLSD(PRESET_NAME_REGION_DEFAULT), EAddPosition::ADD_BOTTOM, false);
+	mWaterPresetsCombo->add(LLTrans::getString("QP_WL_Day_Cycle_Based"), LLSD(PRESET_NAME_DAY_CYCLE), EAddPosition::ADD_BOTTOM, false);
 	mWaterPresetsCombo->addSeparator();
 
 	// Add setting presets.
@@ -1048,12 +1048,12 @@ void FloaterQuickPrefs::refreshSettings()
 	LLSpinCtrl* sky_spinner = getChild<LLSpinCtrl>("S_Sky_Detail");
 	LLButton* sky_default_button = getChild<LLButton>("Reset_Sky_Detail");
 
-	sky_label->setEnabled(TRUE);
-	sky_slider->setEnabled(TRUE);
-	sky_spinner->setEnabled(TRUE);
-	sky_default_button->setEnabled(TRUE);
+	sky_label->setEnabled(true);
+	sky_slider->setEnabled(true);
+	sky_spinner->setEnabled(true);
+	sky_default_button->setEnabled(true);
 
-	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO");
+	bool enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO");
 
 	mCtrlUseSSAO->setEnabled(enabled);
 	mCtrlUseDoF->setEnabled(enabled);
@@ -1065,14 +1065,14 @@ void FloaterQuickPrefs::refreshSettings()
 	// disabled deferred SSAO
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO"))
 	{
-		mCtrlUseSSAO->setEnabled(FALSE);
-		mCtrlUseSSAO->setValue(FALSE);
+		mCtrlUseSSAO->setEnabled(false);
+		mCtrlUseSSAO->setValue(false);
 	}
 
 	// disabled deferred shadows
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail"))
 	{
-		mCtrlShadowDetail->setEnabled(FALSE);
+		mCtrlShadowDetail->setEnabled(false);
 		mCtrlShadowDetail->setValue(0);
 	}
 
@@ -1186,8 +1186,8 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName, ControlEnt
 			{
 				// dummy to disable old control
 				widget->setControlName("QuickPrefsEditMode");
-				widget->setVisible(FALSE);
-				widget->setEnabled(FALSE);
+				widget->setVisible(false);
+				widget->setEnabled(false);
 			}
 		}
 	}
@@ -1203,8 +1203,8 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName, ControlEnt
 
 	// add the settings control to the widget and enable/show it
 	widget->setControlName(controlName);
-	widget->setVisible(TRUE);
-	widget->setEnabled(TRUE);
+	widget->setVisible(true);
+	widget->setEnabled(true);
 
 	// if no increment is given, try to guess a good number
 	if (entry.increment == 0.0f)
@@ -1240,7 +1240,7 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName, ControlEnt
 
 	// set up values for special case control widget types
 	LLUICtrl* alpha_widget = entry.panel->getChild<LLUICtrl>("option_color_alpha_control");
-	alpha_widget->setVisible(FALSE);
+	alpha_widget->setVisible(false);
 
 	// sadly, using LLF32UICtrl does not work properly, so we have to use a branch
 	// for each floating point type
@@ -1263,7 +1263,7 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName, ControlEnt
 	else if (entry.type == ControlTypeColor4)
 	{
 		LLColorSwatchCtrl* color_widget = (LLColorSwatchCtrl*)widget;
-		alpha_widget->setVisible(TRUE);
+		alpha_widget->setVisible(true);
 		alpha_widget->setValue(color_widget->get().mV[VALPHA]);
 	}
 
@@ -1310,7 +1310,7 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName, ControlEnt
 	}
 }
 
-LLUICtrl* FloaterQuickPrefs::addControl(const std::string& controlName, const std::string& controlLabel, LLView* slot, ControlType type, BOOL integer, F32 min_value, F32 max_value, F32 increment)
+LLUICtrl* FloaterQuickPrefs::addControl(const std::string& controlName, const std::string& controlLabel, LLView* slot, ControlType type, bool integer, F32 min_value, F32 max_value, F32 increment)
 {
 	// create a new controls panel
 	LLLayoutPanel* panel = LLUICtrlFactory::createFromFile<LLLayoutPanel>("panel_quickprefs_item.xml", NULL, LLLayoutStack::child_registry_t::instance());
@@ -1372,11 +1372,11 @@ LLUICtrl* FloaterQuickPrefs::addControl(const std::string& controlName, const st
 		// make the floater fit the newly added control panel
 		reshape(getRect().getWidth(), getRect().getHeight() + panel->getRect().getHeight());
 		// show the panel
-		panel->setVisible(TRUE);
+		panel->setVisible(true);
 	}
 
 	// hide the border
-	newControl.panel->setBorderVisible(FALSE);
+	newControl.panel->setBorderVisible(false);
 
 	return newControl.widget;
 }
@@ -1424,7 +1424,7 @@ void FloaterQuickPrefs::selectControl(std::string controlName)
 	// remove previously selected marker, if any
 	if (!mSelectedControl.empty() && hasControl(mSelectedControl))
 	{
-		mControlsList[mSelectedControl].panel->setBorderVisible(FALSE);
+		mControlsList[mSelectedControl].panel->setBorderVisible(false);
 	}
 
 	// save the currently selected name in a volatile settings control to
@@ -1448,13 +1448,13 @@ void FloaterQuickPrefs::selectControl(std::string controlName)
 	mControlNameCombo->selectNthItem(0);
 
 	// assume we don't need the min/max/increment/integer widgets by default
-	BOOL enable_floating_point = FALSE;
+	bool enable_floating_point = false;
 
 	// if actually a selection is present, set up the editor widgets
 	if (!mSelectedControl.empty())
 	{
 		// draw the new selection border
-		mControlsList[mSelectedControl].panel->setBorderVisible(TRUE);
+		mControlsList[mSelectedControl].panel->setBorderVisible(true);
 
 		// set up editor values
 		mControlLabelEdit->setValue(LLSD(mControlsList[mSelectedControl].label));
@@ -1472,7 +1472,7 @@ void FloaterQuickPrefs::selectControl(std::string controlName)
 			case ControlTypeSpinner:	// fall through
 			case ControlTypeSlider:		// fall through
 			{
-				enable_floating_point = TRUE;
+				enable_floating_point = true;
 
 				// assume we have floating point widgets
 				mControlIncrementSpinner->setIncrement(0.1f);
@@ -1519,7 +1519,7 @@ void FloaterQuickPrefs::onClickLabel(LLUICtrl* ctrl, LLPanel* panel)
 void FloaterQuickPrefs::onDoubleClickLabel(LLUICtrl* ctrl, LLPanel* panel)
 {
 	// toggle edit mode
-	BOOL edit_mode = !gSavedSettings.getBOOL("QuickPrefsEditMode");
+	bool edit_mode = !gSavedSettings.getBOOL("QuickPrefsEditMode");
 	gSavedSettings.setBOOL("QuickPrefsEditMode", edit_mode);
 
 	// select the double clicked control if we toggled edit on
@@ -1774,7 +1774,7 @@ void FloaterQuickPrefs::onRemoveClicked(LLUICtrl* ctrl, LLPanel* panel)
 	// then remove it from the internal list and from memory
 	removeControl(panel->getName());
 	// reinstate focus in case we lost it
-	setFocus(TRUE);
+	setFocus(true);
 }
 
 void FloaterQuickPrefs::onAlphaChanged(LLUICtrl* ctrl, LLColorSwatchCtrl* color_swatch)
@@ -1871,7 +1871,7 @@ void FloaterQuickPrefs::onClose(bool app_quitting)
 	}
 
 	// close edit mode and save settings
-	gSavedSettings.setBOOL("QuickPrefsEditMode", FALSE);
+	gSavedSettings.setBOOL("QuickPrefsEditMode", false);
 }
 // </FS:Zi>
 
@@ -2062,7 +2062,7 @@ void FloaterQuickPrefs::callbackRestoreDefaults(const LLSD& notification, const 
 		std::string settings_file = LLAppViewer::instance()->getSettingsFilename("Default", "QuickPreferences");
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, settings_file));
 		loadSavedSettingsFromFile(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, settings_file));
-		gSavedSettings.setBOOL("QuickPrefsEditMode", FALSE);
+		gSavedSettings.setBOOL("QuickPrefsEditMode", false);
 	}
 	else
 	{
@@ -2181,7 +2181,7 @@ void FloaterQuickPrefs::onSimulatorFeaturesReceived(const LLUUID &region_id)
 void FloaterQuickPrefs::syncAvatarZOffsetFromPreferenceSetting()
 {
 	F32 value = gSavedPerAccountSettings.getF32("AvatarHoverOffsetZ");
-	mAvatarZOffsetSlider->setValue(value, FALSE);
+	mAvatarZOffsetSlider->setValue(value, false);
 }
 
 void FloaterQuickPrefs::updateMaxNonImpostors(const LLSD& newvalue)

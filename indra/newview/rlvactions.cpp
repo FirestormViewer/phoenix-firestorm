@@ -651,7 +651,7 @@ bool RlvActions::canTouch(const LLViewerObject* pObj, const LLVector3& posOffset
 
 bool RlvActions::canStand()
 {
-	// NOTE: return FALSE only if we're @unsit=n restricted and the avie is currently sitting on something and TRUE for everything else
+	// NOTE: return false only if we're @unsit=n restricted and the avie is currently sitting on something and true for everything else
 	return (!gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) || ((isAgentAvatarValid()) && (!gAgentAvatarp->isSitting()));
 }
 

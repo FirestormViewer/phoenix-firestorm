@@ -118,8 +118,8 @@ void FSFloaterDiscord::showConnectButton()
 {
 	if (!mConnectButton->getVisible())
 	{
-		mConnectButton->setVisible(TRUE);
-		mDisconnectButton->setVisible(FALSE);
+		mConnectButton->setVisible(true);
+		mDisconnectButton->setVisible(false);
 	}
 }
 
@@ -127,8 +127,8 @@ void FSFloaterDiscord::hideConnectButton()
 {
 	if (mConnectButton->getVisible())
 	{
-		mConnectButton->setVisible(FALSE);
-		mDisconnectButton->setVisible(TRUE);
+		mConnectButton->setVisible(false);
+		mDisconnectButton->setVisible(true);
 	}
 }
 

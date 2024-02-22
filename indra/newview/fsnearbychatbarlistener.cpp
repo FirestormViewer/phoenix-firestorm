@@ -105,6 +105,6 @@ void FSNearbyChatBarListener::sendChat(LLSD const & chat_data) const
 	}
 
 	// Send it as if it was typed in
-	FSNearbyChat::instance().sendChatFromViewer(chat_to_send, type_o_chat, ((BOOL)(channel == 0)) && gSavedSettings.getBOOL("PlayChatAnim"));
+	FSNearbyChat::instance().sendChatFromViewer(chat_to_send, type_o_chat, (channel == 0) && gSavedSettings.getBOOL("PlayChatAnim"));
 }
 

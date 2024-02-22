@@ -773,7 +773,7 @@ void FSAreaSearch::processObjectProperties(LLMessageSystem* msg)
 			details.permissions.init(details.creator_id, details.owner_id, details.last_owner_id, details.group_id);
 			details.permissions.initMasks(details.base_mask, details.owner_mask, details.everyone_mask, details.group_mask, details.next_owner_mask);
 
-			// Sets the group owned BOOL and real owner id, group or owner depending if object is group owned.
+			// Sets the group owned bool and real owner id, group or owner depending if object is group owned.
 			details.permissions.getOwnership(details.ownership_id, details.group_owned);
 			
 			LL_DEBUGS("FSAreaSearch_spammy") << "Got properties for object: " << object_id << LL_ENDL;
@@ -1520,7 +1520,7 @@ void FSPanelAreaSearchList::updateResultListColumns()
 	U32 column_config = gSavedSettings.getU32("FSAreaSearchColumnConfig");
 	std::vector<LLScrollListColumn::Params> column_params = mResultList->getColumnInitParams();
 	std::string current_sort_col = mResultList->getSortColumnName();
-	BOOL current_sort_asc = mResultList->getSortAscending();
+	bool current_sort_asc = mResultList->getSortAscending();
 
 	mResultList->clearColumns();
 	mResultList->updateLayout();
@@ -1667,13 +1667,13 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 	if (action == "select_all")
 	{
 		std::vector<LLScrollListItem*> result_items = mResultList->getAllData();
-		std::for_each(result_items.begin(), result_items.end(), [](LLScrollListItem* item) { item->setSelected(TRUE); });
+		std::for_each(result_items.begin(), result_items.end(), [](LLScrollListItem* item) { item->setSelected(true); });
 		return true;
 	}
 	if (action == "clear_selection")
 	{
 		std::vector<LLScrollListItem*> selected_items = mResultList->getAllSelected();
-		std::for_each(selected_items.begin(), selected_items.end(), [](LLScrollListItem* item) { item->setSelected(FALSE); });
+		std::for_each(selected_items.begin(), selected_items.end(), [](LLScrollListItem* item) { item->setSelected(false); });
 		return true;
 	}
 	if (action == "filter_my_objects")
@@ -1785,7 +1785,7 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 
 					LLViewerJoystick::getInstance()->setCameraNeedsUpdate(true); // Fixes an edge case where if the user has JUST disabled flycam themselves, the camera gets stuck waiting for input.
 
-					gAgentCamera.setFocusOnAvatar(FALSE, ANIMATE);
+					gAgentCamera.setFocusOnAvatar(false, ANIMATE);
 
 					gAgentCamera.setLookAt(LOOKAT_TARGET_SELECT, objectp);
 
@@ -1921,7 +1921,7 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 					}
 
 					FSObjectProperties& details = mFSAreaSearch->mObjectDetails[object_id];
-					node->mValid = TRUE;
+					node->mValid = true;
 					node->mPermissions->init(details.creator_id, details.owner_id, details.last_owner_id, details.group_id);
 					node->mPermissions->initMasks(details.base_mask, details.owner_mask, details.everyone_mask, details.group_mask, details.next_owner_mask);
 					node->mAggregatePerm = details.ag_perms;
@@ -1977,7 +1977,7 @@ void FSPanelAreaSearchList::buyObject(FSObjectProperties& details, LLViewerObjec
 
 	if (node)
 	{
-		node->mValid = TRUE;
+		node->mValid = true;
 		node->mPermissions->init(details.creator_id, details.owner_id, details.last_owner_id, details.group_id);
 		node->mPermissions->initMasks(details.base_mask, details.owner_mask, details.everyone_mask, details.group_mask, details.next_owner_mask);
 		node->mSaleInfo = details.sale_info;
@@ -2188,13 +2188,13 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
 	if (mCheckboxExcludePhysics->get())
 	{
 		mFSAreaSearch->setFilterPhysical(false);
-		mCheckboxPhysical->set(FALSE);
-		mCheckboxPhysical->setEnabled(FALSE);
+		mCheckboxPhysical->set(false);
+		mCheckboxPhysical->setEnabled(false);
 		mFSAreaSearch->setExcludePhysics(true);
 	}
 	else
 	{
-		mCheckboxPhysical->setEnabled(TRUE);
+		mCheckboxPhysical->setEnabled(true);
 		mFSAreaSearch->setExcludePhysics(false);
 	}
 	mFSAreaSearch->setFilterPhysical(mCheckboxPhysical->get());
@@ -2202,13 +2202,13 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
 	if (mCheckboxExcludetemporary->get())
 	{
 		mFSAreaSearch->setFilterTemporary(false);
-		mCheckboxTemporary->set(FALSE);
-		mCheckboxTemporary->setEnabled(FALSE);
+		mCheckboxTemporary->set(false);
+		mCheckboxTemporary->setEnabled(false);
 		mFSAreaSearch->setExcludetemporary(true);
 	}
 	else
 	{
-		mCheckboxTemporary->setEnabled(TRUE);
+		mCheckboxTemporary->setEnabled(true);
 		mFSAreaSearch->setExcludetemporary(false);
 	}
 	mFSAreaSearch->setFilterTemporary(mCheckboxTemporary->get());
@@ -2216,13 +2216,13 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
 	if (mCheckboxExcludeAttachment->get())
 	{
 		mFSAreaSearch->setFilterAttachment(false);
-		mCheckboxAttachment->set(FALSE);
-		mCheckboxAttachment->setEnabled(FALSE);
+		mCheckboxAttachment->set(false);
+		mCheckboxAttachment->setEnabled(false);
 		mFSAreaSearch->setExcludeAttachment(true);
 	}
 	else
 	{
-		mCheckboxAttachment->setEnabled(TRUE);
+		mCheckboxAttachment->setEnabled(true);
 		mFSAreaSearch->setExcludeAttachment(false);
 	}
 	mFSAreaSearch->setFilterAttachment(mCheckboxAttachment->get());

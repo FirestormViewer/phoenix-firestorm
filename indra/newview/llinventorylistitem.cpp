@@ -168,7 +168,7 @@ bool LLPanelInventoryListItemBase::postBuild()
 	LLViewerInventoryItem* inv_item = getItem();
 	if (inv_item)
 	{
-		mIconImage = LLInventoryIcon::getIcon(inv_item->getType(), inv_item->getInventoryType(), inv_item->getFlags(), FALSE);
+		mIconImage = LLInventoryIcon::getIcon(inv_item->getType(), inv_item->getInventoryType(), inv_item->getFlags(), false);
 		updateItem(inv_item->getName());
 	}
 
@@ -445,7 +445,7 @@ bool LLPanelInventoryListItemBase::handleToolTip( S32 x, S32 y, MASK mask)
 					.delay_time(tooltipDelay)
 					.create_callback(boost::bind(&LLInspectTextureUtil::createInventoryToolTip, _1))
 					.create_params(params));
-				return TRUE;
+				return true;
 			}
 		}
 	}

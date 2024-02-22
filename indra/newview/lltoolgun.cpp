@@ -51,7 +51,7 @@
 
 LLToolGun::LLToolGun( LLToolComposite* composite )
 :	LLTool( std::string("gun"), composite ),
-		mIsSelected(FALSE)
+		mIsSelected(false)
 {
 	// <FS:Ansariel> Performance tweak
 	mCrosshairp = LLUI::getUIImage("crosshairs.tga");
@@ -65,8 +65,8 @@ void LLToolGun::handleSelect()
 // [/RLVa:KB]
 		gViewerWindow->hideCursor();
 		gViewerWindow->moveCursorToCenter();
-		gViewerWindow->getWindow()->setMouseClipping(TRUE);
-		mIsSelected = TRUE;
+		gViewerWindow->getWindow()->setMouseClipping(true);
+		mIsSelected = true;
 // [RLVa:KB] - Checked: 2014-02-24 (RLVa-1.4.10)
 	}
 // [/RLVa:KB]
@@ -76,8 +76,8 @@ void LLToolGun::handleDeselect()
 {
 	gViewerWindow->moveCursorToCenter();
 	gViewerWindow->showCursor();
-	gViewerWindow->getWindow()->setMouseClipping(FALSE);
-	mIsSelected = FALSE;
+	gViewerWindow->getWindow()->setMouseClipping(false);
+	mIsSelected = false;
 }
 
 bool LLToolGun::handleMouseDown(S32 x, S32 y, MASK mask)

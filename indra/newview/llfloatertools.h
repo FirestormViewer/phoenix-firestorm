@@ -206,9 +206,9 @@ public:
 	LLObjectSelectionHandle	mObjectSelection;
 
 private:
-	BOOL					mDirty;
-	BOOL                    mHasSelection;
-	BOOL					mOpen; //Phoenix:KC
+	bool					mDirty;
+	bool                    mHasSelection;
+	bool					mOpen; //Phoenix:KC
 
 	//Phoenix:KC
 	S32					mCollapsedHeight;

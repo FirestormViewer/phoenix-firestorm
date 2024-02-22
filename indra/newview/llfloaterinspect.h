@@ -65,7 +65,7 @@ public:
 	LLScrollListCtrl* mObjectList;
 protected:
 	// protected members
-	void setDirty() { mDirty = TRUE; }
+	void setDirty() { mDirty = true; }
 	bool mDirty;
 
 // [RLVa:KB] - Checked: RLVa-2.0.1

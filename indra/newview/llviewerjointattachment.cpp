@@ -283,7 +283,7 @@ void LLViewerJointAttachment::removeObject(LLViewerObject *object)
 		//if object is active, make it static
 		if(object->mDrawable->isActive())
 		{
-			object->mDrawable->makeStatic(FALSE);
+			object->mDrawable->makeStatic(false);
 		}
 
 		LLVector3 cur_position = object->getRenderPosition();
@@ -291,7 +291,7 @@ void LLViewerJointAttachment::removeObject(LLViewerObject *object)
 
 		object->mDrawable->mXform.setPosition(cur_position);
 		object->mDrawable->mXform.setRotation(cur_rotation);
-		gPipeline.markMoved(object->mDrawable, TRUE);
+		gPipeline.markMoved(object->mDrawable, true);
 		gPipeline.markTextured(object->mDrawable); // face may need to change draw pool to/from POOL_HUD
 
 		if (mIsHUDAttachment)
@@ -333,7 +333,7 @@ void LLViewerJointAttachment::removeObject(LLViewerObject *object)
 	{
 		if (object->mText.notNull())
 		{
-			object->mText->setOnHUDAttachment(FALSE);
+			object->mText->setOnHUDAttachment(false);
 		}
 		LLViewerObject::const_child_list_t& child_list = object->getChildren();
 		for (LLViewerObject::child_list_t::const_iterator iter = child_list.begin();
@@ -342,7 +342,7 @@ void LLViewerJointAttachment::removeObject(LLViewerObject *object)
 			LLViewerObject* childp = *iter;
 			if (childp->mText.notNull())
 			{
-				childp->mText->setOnHUDAttachment(FALSE);
+				childp->mText->setOnHUDAttachment(false);
 			}
 		}
 	}

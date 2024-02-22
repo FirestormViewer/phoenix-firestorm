@@ -114,7 +114,7 @@ bool UtilityBar::tick()
 	// initialize parcel media classes too early
 	if (LLStartUp::getStartupState() != STATE_STARTED)
 	{
-		return FALSE;
+		return false;
 	}
 
 	// NOTE: copied from llstatusbar.cpp
@@ -156,7 +156,7 @@ bool UtilityBar::tick()
 		mPTTButton->setEnabled(LLAgent::isActionAllowed(LLSD("speak")));
 	}
 
-	return FALSE;
+	return false;
 }
 
 void UtilityBar::setAOInterfaceButtonExpanded(bool expanded)

@@ -191,8 +191,8 @@ private:
 	// Populate the menu with items like "New Skin", "New Pants", etc.
 	static void populateCreateWearableSubmenus(LLMenuGL* menu)
 	{
-		LLView* menu_clothes	= gMenuHolder->getChildView("COF.Gear.New_Clothes", FALSE);
-		LLView* menu_bp			= gMenuHolder->getChildView("COF.Gear.New_Body_Parts", FALSE);
+		LLView* menu_clothes	= gMenuHolder->getChildView("COF.Gear.New_Clothes", false);
+		LLView* menu_bp			= gMenuHolder->getChildView("COF.Gear.New_Body_Parts", false);
 		LLWearableType * wearable_type_inst = LLWearableType::getInstance();
 
 		for (U8 i = LLWearableType::WT_SHAPE; i != (U8) LLWearableType::WT_COUNT; ++i)
@@ -414,7 +414,7 @@ LLPanelOutfitEdit::LLPanelOutfitEdit()
 	mAvatarComplexityAddingLabel(NULL)
 {
 	mSavedFolderState = new LLSaveFolderState();
-	mSavedFolderState->setApply(FALSE);
+	mSavedFolderState->setApply(false);
 	
 
 	LLOutfitObserver& observer = LLOutfitObserver::instance();
@@ -606,7 +606,7 @@ void LLPanelOutfitEdit::moveWearable(bool closer_to_body)
 
 void LLPanelOutfitEdit::toggleAddWearablesPanel()
 {
-	BOOL current_visibility = mAddWearablesPanel->getVisible();
+	bool current_visibility = mAddWearablesPanel->getVisible();
 	showAddWearablesPanel(!current_visibility);
 }
 
@@ -670,7 +670,7 @@ void LLPanelOutfitEdit::showWearablesFilter()
 	}
 	else
 	{
-		mSearchFilter->setFocus(TRUE);
+		mSearchFilter->setFocus(true);
 	}
 }
 
@@ -682,7 +682,7 @@ void LLPanelOutfitEdit::showWearablesListView()
 		updateFiltersVisibility();
 		mWearableListManager->populateIfNeeded();
 	}
-	mListViewBtn->setToggleState(TRUE);
+	mListViewBtn->setToggleState(true);
 }
 
 void LLPanelOutfitEdit::showWearablesFolderView()
@@ -692,7 +692,7 @@ void LLPanelOutfitEdit::showWearablesFolderView()
 		updateWearablesPanelVerbButtons();
 		updateFiltersVisibility();
 	}
-	mFolderViewBtn->setToggleState(TRUE);
+	mFolderViewBtn->setToggleState(true);
 }
 
 void LLPanelOutfitEdit::updateFiltersVisibility()
@@ -708,7 +708,7 @@ void LLPanelOutfitEdit::onFolderViewFilterCommitted(LLUICtrl* ctrl)
 
 	mInventoryItemsPanel->setFilterTypes(mFolderViewItemTypes[curr_filter_type].inventoryMask);
 
-	mSavedFolderState->setApply(TRUE);
+	mSavedFolderState->setApply(true);
 	mInventoryItemsPanel->getRootFolder()->applyFunctorRecursively(*mSavedFolderState);
 	
 	LLOpenFoldersWithSelection opener;
@@ -750,7 +750,7 @@ void LLPanelOutfitEdit::onSearchEdit(const std::string& string)
 		mInventoryItemsPanel->setFilterSubString(LLStringUtil::null);
 		mWearableItemsList->setFilterSubString(LLStringUtil::null);
 		// re-open folders that were initially open
-		mSavedFolderState->setApply(TRUE);
+		mSavedFolderState->setApply(true);
 		mInventoryItemsPanel->getRootFolder()->applyFunctorRecursively(*mSavedFolderState);
 		LLOpenFoldersWithSelection opener;
 		mInventoryItemsPanel->getRootFolder()->applyFunctorRecursively(opener);
@@ -772,7 +772,7 @@ void LLPanelOutfitEdit::onSearchEdit(const std::string& string)
 	// save current folder open state if no filter currently applied
 	if (mInventoryItemsPanel->getFilterSubString().empty())
 	{
-		mSavedFolderState->setApply(FALSE);
+		mSavedFolderState->setApply(false);
 		mInventoryItemsPanel->getRootFolder()->applyFunctorRecursively(*mSavedFolderState);
 	}
 	
@@ -1013,10 +1013,10 @@ void LLPanelOutfitEdit::updatePlusButton()
 					current_item->getLocalRect().mBottom);
 	
 	mAddToLookBtn->setRect(btn_rect);
-	mAddToLookBtn->setEnabled(TRUE);
+	mAddToLookBtn->setEnabled(true);
 	if (!mAddToLookBtn->getVisible())
 	{
-		mAddToLookBtn->setVisible(TRUE);
+		mAddToLookBtn->setVisible(true);
 	}
 	
 	current_item->addChild(mAddToLookBtn); */
@@ -1192,7 +1192,7 @@ bool LLPanelOutfitEdit::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
 	if (cargo_data == NULL)
 	{
 		LL_WARNS() << "cargo_data is NULL" << LL_ENDL;
-		return TRUE;
+		return true;
 	}
 
 	switch (cargo_type)
@@ -1237,7 +1237,7 @@ void LLPanelOutfitEdit::displayCurrentOutfit()
 {
 	if (!getVisible())
 	{
-		setVisible(TRUE);
+		setVisible(true);
 	}
 
 	updateCurrentOutfitName();
@@ -1280,8 +1280,8 @@ bool LLPanelOutfitEdit::switchPanels(LLPanel* switch_from_panel, LLPanel* switch
 {
 	if(switch_from_panel && switch_to_panel && !switch_to_panel->getVisible())
 	{
-		switch_from_panel->setVisible(FALSE);
-		switch_to_panel->setVisible(TRUE);
+		switch_from_panel->setVisible(false);
+		switch_to_panel->setVisible(true);
 		return true;
 	}
 	return false;
@@ -1399,13 +1399,13 @@ void LLPanelOutfitEdit::updateWearablesPanelVerbButtons()
 {
 	if(mWearablesListViewPanel->getVisible())
 	{
-		mFolderViewBtn->setToggleState(FALSE);
+		mFolderViewBtn->setToggleState(false);
 		mFolderViewBtn->setImageOverlay(getString("folder_view_off"), mFolderViewBtn->getImageOverlayHAlign());
 		mListViewBtn->setImageOverlay(getString("list_view_on"), mListViewBtn->getImageOverlayHAlign());
 	}
 	else if(mInventoryItemsPanel->getVisible())
 	{
-		mListViewBtn->setToggleState(FALSE);
+		mListViewBtn->setToggleState(false);
 		mListViewBtn->setImageOverlay(getString("list_view_off"), mListViewBtn->getImageOverlayHAlign());
 		mFolderViewBtn->setImageOverlay(getString("folder_view_on"), mFolderViewBtn->getImageOverlayHAlign());
 	}
@@ -1445,9 +1445,9 @@ void LLPanelOutfitEdit::saveListSelection()
 			LLFolderViewFolder* parent = item->getParentFolder();
 			if(parent)
 			{
-				parent->setOpenArrangeRecursively(TRUE, LLFolderViewFolder::RECURSE_UP);
+				parent->setOpenArrangeRecursively(true, LLFolderViewFolder::RECURSE_UP);
 			}
-			mInventoryItemsPanel->getRootFolder()->changeSelection(item, TRUE);
+			mInventoryItemsPanel->getRootFolder()->changeSelection(item, true);
 		}
 		mInventoryItemsPanel->getRootFolder()->scrollToShowSelection();
 	}

@@ -57,7 +57,7 @@ public:
 	void clearAndClose();
 
 	void updateControls();
-	void updateResolution(BOOL do_update);
+	void updateResolution(bool do_update);
 	void checkAspectRatio(S32 index);
 	LLUICtrl* getRefreshBtn();
 
@@ -72,7 +72,7 @@ private:
     void attachPreview();
 
 	// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
-	BOOL checkImageSize(LLSnapshotLivePreview* previewp, S32& width, S32& height, BOOL isWidthChanged, S32 max_value);
+	bool checkImageSize(LLSnapshotLivePreview* previewp, S32& width, S32& height, bool isWidthChanged, S32 max_value);
 
 	LLHandle<LLView> mPreviewHandle;
 

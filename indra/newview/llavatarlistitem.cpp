@@ -151,11 +151,11 @@ bool LLAvatarListItem::postBuild()
 	mBtnPermissionEditMine->setClickedCallback(boost::bind(&LLAvatarListItem::onPermissionEditMineClick, this));
 	
 	mBtnPermissionOnline->setVisible(false);
-	mBtnPermissionOnline->setIsChrome(TRUE);
+	mBtnPermissionOnline->setIsChrome(true);
 	mBtnPermissionMap->setVisible(false);
-	mBtnPermissionMap->setIsChrome(TRUE);
+	mBtnPermissionMap->setIsChrome(true);
 	mBtnPermissionEditMine->setVisible(false);
-	mBtnPermissionEditMine->setIsChrome(TRUE);
+	mBtnPermissionEditMine->setIsChrome(true);
 	mIconPermissionEditTheirs->setVisible(false);
 
 	mSpeakingIndicator = getChild<LLOutputMonitorCtrl>("speaking_indicator");
@@ -462,7 +462,7 @@ void LLAvatarListItem::setShowProfileBtn(bool show)
 void LLAvatarListItem::showSpeakingIndicator(bool visible)
 {
 	// Already done? Then do nothing.
-	if (mSpeakingIndicator->getVisible() == (BOOL)visible)
+	if (mSpeakingIndicator->getVisible() == (bool)visible)
 		return;
 // Disabled to not contradict with SpeakingIndicatorManager functionality. EXT-3976
 // probably this method should be totally removed.
@@ -473,7 +473,7 @@ void LLAvatarListItem::showSpeakingIndicator(bool visible)
 void LLAvatarListItem::setAvatarIconVisible(bool visible)
 {
 	// Already done? Then do nothing.
-	if (mAvatarIcon->getVisible() == (BOOL)visible)
+	if (mAvatarIcon->getVisible() == (bool)visible)
 	{
 		return;
 	}
@@ -924,7 +924,7 @@ void LLAvatarListItem::onPermissionOnlineClick()
 			mBtnPermissionOnline->setColor(LLUIColorTable::instance().getColor("White_10"));
 		}
 		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(),new_rights);
-		mBtnPermissionOnline->setFocus(FALSE);
+		mBtnPermissionOnline->setFocus(false);
 	}
 }
 
@@ -946,7 +946,7 @@ void LLAvatarListItem::onPermissionMapClick()
 			mBtnPermissionMap->setColor(LLUIColorTable::instance().getColor("White_10"));
 		}
 		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(),new_rights);
-		mBtnPermissionMap->setFocus(FALSE);
+		mBtnPermissionMap->setFocus(false);
 	}
 }
 
@@ -969,7 +969,7 @@ void LLAvatarListItem::onPermissionEditMineClick()
 			LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(),new_rights);
 		}
 		
-		mBtnPermissionEditMine->setFocus(FALSE);
+		mBtnPermissionEditMine->setFocus(false);
 	}
 }
 

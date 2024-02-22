@@ -316,7 +316,7 @@ void LLInspectAvatar::onOpen(const LLSD& data)
 	mAvatarID = data["avatar_id"];
 
 	// <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
-	BOOL self = mAvatarID == gAgentID;
+	bool self = mAvatarID == gAgentID;
 	
 	getChild<LLUICtrl>("gear_btn")->setVisible(!self);
 	LLMenuButton* gear_self_btn = getChild<LLMenuButton>("gear_self_btn");

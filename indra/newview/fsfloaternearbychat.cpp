@@ -111,11 +111,11 @@ void FSFloaterNearbyChat::updateFSUseNearbyChatConsole(const LLSD &data)
 	if (FSUseNearbyChatConsole)
 	{
 		removeScreenChat();
-		gConsole->setVisible(TRUE);
+		gConsole->setVisible(true);
 	}
 	else
 	{
-		gConsole->setVisible(FALSE);
+		gConsole->setVisible(false);
 	}
 }
 
@@ -191,7 +191,7 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 	LLChat& tmp_chat = const_cast<LLChat&>(chat);
 	bool use_plain_text_chat_history = gSavedSettings.getBOOL("PlainTextChatHistory");
 	bool show_timestamps_nearby_chat = gSavedSettings.getBOOL("FSShowTimestampsNearbyChat");
-	// [FIRE-1641 : SJ]: Option to hide timestamps in nearby chat - add Timestamp when show_timestamps_nearby_chat is TRUE
+	// [FIRE-1641 : SJ]: Option to hide timestamps in nearby chat - add Timestamp when show_timestamps_nearby_chat is true
 	if (show_timestamps_nearby_chat)
 	{
 		if (tmp_chat.mTimeStr.empty())
@@ -232,7 +232,7 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 		// KC: Don't flash tab on system messages
 		if (!isInVisibleChain() && hostp && (chat.mSourceType == CHAT_SOURCE_AGENT || chat.mSourceType == CHAT_SOURCE_OBJECT))
 		{
-			hostp->setFloaterFlashing(this, TRUE);
+			hostp->setFloaterFlashing(this, true);
 		}
 	}
 
@@ -360,7 +360,7 @@ void FSFloaterNearbyChat::openFloater(const LLSD& key)
 		{
 			floater_container->showFloater(this, LLTabContainer::START);
 		}
-		setVisible(TRUE);
+		setVisible(true);
 		LLFloater::openFloater(key);
 	}
 }
@@ -447,7 +447,7 @@ void FSFloaterNearbyChat::onOpen(const LLSD& key )
 			floater_container->setVisible(true);
 			floater_container->showFloater(this, LLTabContainer::START);
 		}
-		setVisible(TRUE);
+		setVisible(true);
 	}
 
 	LLFloater::onOpen(key);
@@ -658,7 +658,7 @@ bool FSFloaterNearbyChat::getVisible()
 		return LLFloater::getVisible();
 	}
 		
-	// getVisible() returns TRUE when Tabbed IM window is minimized.
+	// getVisible() returns true when Tabbed IM window is minimized.
 	return is_active && !im_container->isMinimized() && im_container->getVisible();
 }
 
@@ -750,7 +750,7 @@ void FSFloaterNearbyChat::onChatBoxFocusReceived()
 
 void FSFloaterNearbyChat::reshapeChatLayoutPanel()
 {
-	mChatLayoutPanel->reshape(mChatLayoutPanel->getRect().getWidth(), mInputEditor->getRect().getHeight() + mInputEditorPad, FALSE);
+	mChatLayoutPanel->reshape(mChatLayoutPanel->getRect().getWidth(), mInputEditor->getRect().getHeight() + mInputEditorPad, false);
 }
 
 void FSFloaterNearbyChat::sendChat( EChatType type )
@@ -864,7 +864,7 @@ void FSFloaterNearbyChat::onChatTypeChanged()
 	mSendChatButton->setLabel(mChatTypeCombo->getSelectedItemLabel());
 }
 
-void FSFloaterNearbyChat::sendChatFromViewer(const std::string &utf8text, EChatType type, BOOL animate)
+void FSFloaterNearbyChat::sendChatFromViewer(const std::string &utf8text, EChatType type, bool animate)
 {
 	LLWString wtext = utf8string_to_wstring(utf8text);
 	S32 channel = 0;
@@ -888,14 +888,14 @@ void FSFloaterNearbyChat::stopChat()
 	FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat");
 	if (nearby_chat)
 	{
-		nearby_chat->mInputEditor->setFocus(FALSE);
+		nearby_chat->mInputEditor->setFocus(false);
 		gAgent.stopTyping();
 	}
 }
 
 void FSFloaterNearbyChat::updateUnreadMessageNotification(S32 unread_messages, bool muted_history)
 {
-	BOOL show_muted_history = gSavedSettings.getBOOL("FSShowMutedChatHistory");
+	bool show_muted_history = gSavedSettings.getBOOL("FSShowMutedChatHistory");
 
 	if (muted_history)
 	{
@@ -916,12 +916,12 @@ void FSFloaterNearbyChat::updateUnreadMessageNotification(S32 unread_messages, b
 
 	if (unread_messages == 0 || !gSavedSettings.getBOOL("FSNotifyUnreadChatMessages"))
 	{
-		mUnreadMessagesNotificationPanel->setVisible(FALSE);
+		mUnreadMessagesNotificationPanel->setVisible(false);
 	}
 	else
 	{
 		mUnreadMessagesNotificationTextBox->setTextArg("[NUM]", llformat("%d", unread_messages));
-		mUnreadMessagesNotificationPanel->setVisible(TRUE);
+		mUnreadMessagesNotificationPanel->setVisible(true);
 	}
 }
 

@@ -138,7 +138,7 @@ void LLToastScriptQuestion::createButtons()
 			if (form_element.has("default") && form_element["default"].asBoolean() && (mNotification->getName() != "ScriptQuestionCaution" || gSavedSettings.getBOOL("FSPermissionDebitDefaultDeny")))
 			// </FS:Ansariel>
 			{
-				button->setFocus(TRUE);
+				button->setFocus(true);
 				setDefaultBtn(button);
 			}
 		}

@@ -80,7 +80,7 @@ protected:
 	void onCommitForSale();
 	void onCommitSaleInfo();
 	void setAllSaleInfo();
-	void showMarkForSale(BOOL show);
+	void showMarkForSale(bool show);
 
 	static void	onCommitClickAction(LLUICtrl* ctrl, void*);
 	static void onCommitIncludeInSearch(LLUICtrl* ctrl, void*);

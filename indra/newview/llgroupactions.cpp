@@ -152,7 +152,7 @@ public:
 		}
 
 		LLUUID group_id;
-		if (!group_id.set(tokens[0], FALSE))
+		if (!group_id.set(tokens[0], false))
 		{
 			return false;
 		}
@@ -220,7 +220,7 @@ public:
 			} 
 			else if (!gdatap->isMemberDataComplete())
 			{
-				LL_WARNS() << "LLGroupMgr::getInstance()->getGroupData()->isMemberDataComplete() was FALSE" << LL_ENDL;
+				LL_WARNS() << "LLGroupMgr::getInstance()->getGroupData()->isMemberDataComplete() was false" << LL_ENDL;
 				processGroupData();
 				mRequestProcessed = true;
 			}
@@ -484,7 +484,7 @@ void LLGroupActions::show(const LLUUID& group_id)
     //LLFloater *floater = LLFloaterReg::getTypedInstance<LLFloaterSidePanelContainer>("people");
     //if (!floater->isFrontmost())
     //{
-    //    floater->setVisibleAndFrontmost(TRUE, params);
+    //    floater->setVisibleAndFrontmost(true, params);
     //}
 	LLFloater* floater = NULL;
 	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater")) 
@@ -509,11 +509,11 @@ void LLGroupActions::show(const LLUUID& group_id)
 	{
 		if (floater->isMinimized())
 		{
-			floater->setMinimized(FALSE);
+			floater->setMinimized(false);
 		}
 		if (!floater->hasFocus())
 		{
-			floater->setFocus(TRUE);
+			floater->setFocus(true);
 		}
 	}
 	// </FS:Ansariel>
@@ -552,7 +552,7 @@ void LLGroupActions::show(const LLUUID& group_id, const std::string& tab_name)
 
 	if (floater && floater->isMinimized())
 	{
-		floater->setMinimized(FALSE);
+		floater->setMinimized(false);
 	}
 	// </FS:Ansariel>
 }

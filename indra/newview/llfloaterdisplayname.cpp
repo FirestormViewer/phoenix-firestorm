@@ -91,7 +91,7 @@ void LLFloaterDisplayName::onOpen(const LLSD& key)
 		getChild<LLUICtrl>("save_btn")->setEnabled(false);
 		getChild<LLUICtrl>("display_name_editor")->setEnabled(false);
 		getChild<LLUICtrl>("display_name_confirm")->setEnabled(false);
-		getChild<LLUICtrl>("cancel_btn")->setFocus(TRUE);
+		getChild<LLUICtrl>("cancel_btn")->setFocus(true);
 		
 	}
 	else
@@ -176,7 +176,7 @@ void LLFloaterDisplayName::onReset()
     //{
     //    // UI is enabled, fill the first field
     //    getChild<LLUICtrl>("display_name_confirm")->clear();
-    //    getChild<LLUICtrl>("display_name_confirm")->setFocus(TRUE);
+    //    getChild<LLUICtrl>("display_name_confirm")->setFocus(true);
     //}
     //else
     //{

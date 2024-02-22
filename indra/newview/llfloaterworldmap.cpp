@@ -236,7 +236,7 @@ public:
 		
 		//Get the ID
 		LLUUID id;
-		if (!id.set( params[0], FALSE ))
+		if (!id.set( params[0], false ))
 		{
 			return false;
 		}
@@ -348,9 +348,9 @@ LLFloaterWorldMap::LLFloaterWorldMap(const LLSD& key)
 	mFriendObserver(NULL),
 	mCompletingRegionName(),
 	mCompletingRegionPos(),
-	mWaitingForTracker(FALSE),
-	mIsClosing(FALSE),
-	mSetToUserPosition(TRUE),
+	mWaitingForTracker(false),
+	mIsClosing(false),
+	mSetToUserPosition(true),
 	mTrackedLocation(0,0,0),
 	mTrackedStatus(LLTracker::TRACKING_NOTHING),
 	mListFriendCombo(NULL),
@@ -468,7 +468,7 @@ void LLFloaterWorldMap::onOpen(const LLSD& key)
  
     bool center_on_target = (key.asString() == "center");
 	
-	mIsClosing = FALSE;
+	mIsClosing = false;
 	
     mMapView->clearLastClick();
 	
@@ -494,7 +494,7 @@ void LLFloaterWorldMap::onOpen(const LLSD& key)
 		const LLUUID landmark_folder_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_LANDMARK);
 		LLInventoryModelBackgroundFetch::instance().start(landmark_folder_id);
 		
-		getChild<LLUICtrl>("location")->setFocus( TRUE);
+		getChild<LLUICtrl>("location")->setFocus( true);
 		gFocusMgr.triggerFocusFlash();
 		
 		buildAvatarIDList();
@@ -506,7 +506,7 @@ void LLFloaterWorldMap::onOpen(const LLSD& key)
 	
 	if (center_on_target)
 	{
-		centerOnTarget(FALSE);
+		centerOnTarget(false);
 	}
 }
 
@@ -651,29 +651,29 @@ void LLFloaterWorldMap::draw()
 	// check for completion of tracking data
 	if (mWaitingForTracker)
 	{
-		centerOnTarget(TRUE);
+		centerOnTarget(true);
 	}
 	
 	// <FS:Ansariel> Performance improvement
-//	getChildView("Teleport")->setEnabled((BOOL)tracking_status);
-//	//	getChildView("Clear")->setEnabled((BOOL)tracking_status);
-//	getChildView("Show Destination")->setEnabled((BOOL)tracking_status || LLWorldMap::getInstance()->isTracking());
+//	getChildView("Teleport")->setEnabled((bool)tracking_status);
+//	//	getChildView("Clear")->setEnabled((bool)tracking_status);
+//	getChildView("Show Destination")->setEnabled((bool)tracking_status || LLWorldMap::getInstance()->isTracking());
 //	getChildView("copy_slurl")->setEnabled((mSLURL.isValid()) );
 //// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
 //	childSetEnabled("Go Home", 
 //		(!rlv_handler_t::isEnabled()) || !(gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)));
 //// [/RLVa:KB]
-	teleport_btn->setEnabled((BOOL)tracking_status);
-	//clear_btn->setEnabled((BOOL)tracking_status);
-	show_destination_btn->setEnabled((BOOL)tracking_status || LLWorldMap::getInstance()->isTracking());
+	teleport_btn->setEnabled((bool)tracking_status);
+	//clear_btn->setEnabled((bool)tracking_status);
+	show_destination_btn->setEnabled((bool)tracking_status || LLWorldMap::getInstance()->isTracking());
 	copy_slurl_btn->setEnabled((mSLURL.isValid()) );
 	go_home_btn->setEnabled((!rlv_handler_t::isEnabled()) || !(gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)));
 	// </FS:Ansariel> Performance improvement
 	// <FS:Ansariel> Alchemy region tracker
-	getChild<LLButton>("track_region")->setEnabled((BOOL) tracking_status || LLWorldMap::getInstance()->isTracking());
+	getChild<LLButton>("track_region")->setEnabled((bool) tracking_status || LLWorldMap::getInstance()->isTracking());
 
-	setMouseOpaque(TRUE);
-	getDragHandle()->setMouseOpaque(TRUE);
+	setMouseOpaque(true);
+	getDragHandle()->setMouseOpaque(true);
 
     mMapView->zoom((F32)getChild<LLUICtrl>("zoom slider")->getValue().asReal());
 	
@@ -798,7 +798,7 @@ void LLFloaterWorldMap::trackAvatar( const LLUUID& avatar_id, const std::string&
 			mTrackedStatus = LLTracker::TRACKING_AVATAR;
 			mTrackedAvatarID = avatar_id;
 			LLTracker::trackAvatar(avatar_id, name);
-			centerOnTarget(TRUE);
+			centerOnTarget(true);
 		}
 	}
 	else
@@ -815,13 +815,13 @@ void LLFloaterWorldMap::trackLandmark( const LLUUID& landmark_item_id )
 	if (!iface) return;
 	
 	buildLandmarkIDLists();
-	BOOL found = FALSE;
+	bool found = false;
 	S32 idx;
 	for (idx = 0; idx < mLandmarkItemIDList.size(); idx++)
 	{
 		if ( mLandmarkItemIDList.at(idx) == landmark_item_id)
 		{
-			found = TRUE;
+			found = true;
 			break;
 		}
 	}
@@ -1021,7 +1021,7 @@ void LLFloaterWorldMap::updateLocation()
 // [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
 			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 			{
-				mSetToUserPosition = FALSE;
+				mSetToUserPosition = false;
 
 				// Fill out the location field
 				getChild<LLUICtrl>("location")->setValue(RlvStrings::getString(RlvStringKeys::Hidden::Region));
@@ -1035,7 +1035,7 @@ void LLFloaterWorldMap::updateLocation()
 // [/RLVa:KB]
 //			if ( gotSimName )
 			{
-				mSetToUserPosition = FALSE;
+				mSetToUserPosition = false;
 				
 				// Fill out the location field
 				getChild<LLUICtrl>("location")->setValue(agent_sim_name);
@@ -1292,7 +1292,7 @@ void LLFloaterWorldMap::buildLandmarkIDLists()
 
 	// <FS:Ansariel> Filter duplicate landmarks on world map
 	std::set<LLUUID> used_landmarks;
-	BOOL filterLandmarks = gSavedSettings.getBOOL("WorldmapFilterDuplicateLandmarks");
+	bool filterLandmarks = gSavedSettings.getBOOL("WorldmapFilterDuplicateLandmarks");
 	// </FS:Ansariel>
 	S32 count = items.size();
 	for(S32 i = 0; i < count; ++i)
@@ -1332,7 +1332,7 @@ F32 LLFloaterWorldMap::getDistanceToDestination(const LLVector3d &destination,
 }
 
 
-void LLFloaterWorldMap::clearLocationSelection(BOOL clear_ui, BOOL dest_reached)
+void LLFloaterWorldMap::clearLocationSelection(bool clear_ui, bool dest_reached)
 {
 	LLCtrlListInterface *list = mListSearchResults;
 	if (list && (!dest_reached || (list->getItemCount() == 1)))
@@ -1344,7 +1344,7 @@ void LLFloaterWorldMap::clearLocationSelection(BOOL clear_ui, BOOL dest_reached)
 }
 
 
-void LLFloaterWorldMap::clearLandmarkSelection(BOOL clear_ui)
+void LLFloaterWorldMap::clearLandmarkSelection(bool clear_ui)
 {
 	if (clear_ui || !childHasKeyboardFocus("landmark combo"))
 	{
@@ -1357,7 +1357,7 @@ void LLFloaterWorldMap::clearLandmarkSelection(BOOL clear_ui)
 }
 
 
-void LLFloaterWorldMap::clearAvatarSelection(BOOL clear_ui)
+void LLFloaterWorldMap::clearAvatarSelection(bool clear_ui)
 {
 	if (clear_ui || !childHasKeyboardFocus("friend combo"))
 	{
@@ -1585,7 +1585,7 @@ void LLFloaterWorldMap::onLocationCommit()
 		return;
 	}
 	
-	clearLocationSelection(FALSE);
+	clearLocationSelection(false);
 	mCompletingRegionName = "";
 	mLastRegionName = "";
 	
@@ -1641,12 +1641,12 @@ void LLFloaterWorldMap::onClearBtn()
 	LLTracker::stopTracking(true);
 	LLWorldMap::getInstance()->cancelTracking();
 	mSLURL = LLSLURL();					// Clear the SLURL since it's invalid
-	mSetToUserPosition = TRUE;	// Revert back to the current user position
+	mSetToUserPosition = true;	// Revert back to the current user position
 }
 
 void LLFloaterWorldMap::onShowTargetBtn()
 {
-	centerOnTarget(TRUE);
+	centerOnTarget(true);
 }
 
 void LLFloaterWorldMap::onShowAgentBtn()
@@ -1722,7 +1722,7 @@ void LLFloaterWorldMap::onTrackRegion()
 // </FS:Ansariel>
 
 // protected
-void LLFloaterWorldMap::centerOnTarget(BOOL animate)
+void LLFloaterWorldMap::centerOnTarget(bool animate)
 {
 	LLVector3d pos_global;
 	if(LLTracker::getTrackingStatus() != LLTracker::TRACKING_NOTHING)
@@ -1732,7 +1732,7 @@ void LLFloaterWorldMap::centerOnTarget(BOOL animate)
 		// absolute zero, and keep trying in the draw loop
 		if (tracked_position.isExactlyZero())
 		{
-			mWaitingForTracker = TRUE;
+			mWaitingForTracker = true;
 			return;
 		}
 		else
@@ -1759,7 +1759,7 @@ void LLFloaterWorldMap::centerOnTarget(BOOL animate)
     mMapView->setPanWithInterpTime(-llfloor((F32)(pos_global.mdV[VX] * map_scale / REGION_WIDTH_METERS)),
                            -llfloor((F32)(pos_global.mdV[VY] * map_scale / REGION_WIDTH_METERS)),
                            !animate, 0.1f);
-	mWaitingForTracker = FALSE;
+	mWaitingForTracker = false;
 }
 
 // protected
@@ -1784,7 +1784,7 @@ void LLFloaterWorldMap::fly()
 // protected
 void LLFloaterWorldMap::teleport()
 {
-	BOOL teleport_home = FALSE;
+	bool teleport_home = false;
 	LLVector3d pos_global;
 	LLAvatarTracker& av_tracker = LLAvatarTracker::instance();
 	
@@ -1799,7 +1799,7 @@ void LLFloaterWorldMap::teleport()
 	{
 		if( LLTracker::getTrackedLandmarkAssetID() == sHomeID )
 		{
-			teleport_home = TRUE;
+			teleport_home = true;
 		}
 		else
 		{
@@ -1858,12 +1858,12 @@ void LLFloaterWorldMap::flyToLandmark()
 
 void LLFloaterWorldMap::teleportToLandmark()
 {
-	BOOL has_destination = FALSE;
+	bool has_destination = false;
 	LLUUID destination_id; // Null means "home"
 	
 	if( LLTracker::getTrackedLandmarkAssetID() == sHomeID )
 	{
-		has_destination = TRUE;
+		has_destination = true;
 	}
 	else
 	{
@@ -1872,7 +1872,7 @@ void LLFloaterWorldMap::teleportToLandmark()
 		if(landmark && landmark->getGlobalPos(global_pos))
 		{
 			destination_id = LLTracker::getTrackedLandmarkAssetID();
-			has_destination = TRUE;
+			has_destination = true;
 		}
 		else if(landmark)
 		{
@@ -1966,7 +1966,7 @@ void LLFloaterWorldMap::updateSims(bool found_null_sim)
 	if (num_results > 0)
 	{
 		// Ansariel: Let's sort the list to make it more user-friendly
-		list->sortByColumn("sim_name", TRUE);
+		list->sortByColumn("sim_name", true);
 
 		// if match found, highlight it and go
 		if (!match.isUndefined())
@@ -1978,7 +1978,7 @@ void LLFloaterWorldMap::updateSims(bool found_null_sim)
 		{
 			list->selectFirstItem();
 		}
-		getChild<LLUICtrl>("search_results")->setFocus(TRUE);
+		getChild<LLUICtrl>("search_results")->setFocus(true);
 		onCommitSearchResult();
 	}
 	else
@@ -1993,7 +1993,7 @@ void LLFloaterWorldMap::onTeleportFinished()
 {
     if(isInVisibleChain())
     {
-        mMapView->setPan(0, 0, TRUE);
+        mMapView->setPan(0, 0, true);
     }
 }
 

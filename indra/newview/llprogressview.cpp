@@ -199,20 +199,20 @@ void LLProgressView::revealIntroPanel()
 	std::string intro_url = gSavedSettings.getString("PostFirstLoginIntroURL");
 	if ( intro_url.length() > 0 && 
 			gSavedSettings.getBOOL("BrowserJavascriptEnabled") &&
-			gSavedSettings.getBOOL("PostFirstLoginIntroViewed" ) == FALSE )
+			gSavedSettings.getBOOL("PostFirstLoginIntroViewed" ) == false )
 	{
 		// hide the progress bar
 		getChild<LLView>("stack1")->setVisible(false);
 		
 		// navigate to intro URL and reveal widget 
 		mMediaCtrl->navigateTo( intro_url );	
-		mMediaCtrl->setVisible( TRUE );
+		mMediaCtrl->setVisible( true );
 
 
 		// flag as having seen the new user post login intro
 		gSavedSettings.setBOOL("PostFirstLoginIntroViewed", true );
 
-		mMediaCtrl->setFocus(TRUE);
+		mMediaCtrl->setFocus(true);
 	}
 
 	mFadeFromLoginTimer.start();
@@ -249,20 +249,20 @@ void LLProgressView::setVisible(bool visible)
 	// showing progress view
 	else if (visible && (!getVisible() || mFadeToWorldTimer.getStarted()))
 	{
-		setFocus(TRUE);
+		setFocus(true);
 		mFadeToWorldTimer.stop();
 		LLPanel::setVisible(true);
 	} 
 }
 
 // <FS:Zi> Fade teleport screens
-void LLProgressView::fade(BOOL in)
+void LLProgressView::fade(bool in)
 {
 	if(in)
 	{
 		mFadeFromLoginTimer.start();
 		mFadeToWorldTimer.stop();
-		setVisible(TRUE);
+		setVisible(true);
 	}
 	else
 	{
@@ -330,7 +330,7 @@ void LLProgressView::drawLogos(F32 alpha)
                              iter->mDrawRect.getHeight(),
                              iter->mTexturep.get(),
                              UI_VERTEX_COLOR % alpha,
-                             FALSE,
+                             false,
                              iter->mClipRect,
                              iter->mOffsetRect);
     }
@@ -377,7 +377,7 @@ void LLProgressView::draw()
 			gFocusMgr.releaseFocusIfNeeded( this );
 
 			// turn off panel that hosts intro so we see the world
-			setVisible(FALSE);
+			setVisible(false);
 
 			// stop observing events since we no longer care
 			mMediaCtrl->remObserver( this );
@@ -447,7 +447,7 @@ void LLProgressView::loadLogo(const std::string &path,
     raw->expandToPowerOfTwo();
 
     TextureData data;
-    data.mTexturep = LLViewerTextureManager::getLocalTexture(raw.get(), FALSE);
+    data.mTexturep = LLViewerTextureManager::getLocalTexture(raw.get(), false);
     data.mDrawRect = pos_rect;
     data.mClipRect = clip_rect;
     data.mOffsetRect = offset_rect;
@@ -584,7 +584,7 @@ void LLProgressView::initStartTexture(S32 location_id, bool is_in_production)
         {
             // HACK: getLocalTexture allows only power of two dimentions
             raw->expandToPowerOfTwo();
-            gStartTexture = LLViewerTextureManager::getLocalTexture(raw.get(), FALSE);
+            gStartTexture = LLViewerTextureManager::getLocalTexture(raw.get(), false);
         }
     }
 
@@ -601,8 +601,8 @@ void LLProgressView::initTextures(S32 location_id, bool is_in_production)
     initStartTexture(location_id, is_in_production);
     initLogos();
 
-    childSetVisible("panel_icons", mLogosList.empty() ? FALSE : TRUE);
-    childSetVisible("panel_top_spacer", mLogosList.empty() ? TRUE : FALSE);
+    childSetVisible("panel_icons", mLogosList.empty() ? false : true);
+    childSetVisible("panel_top_spacer", mLogosList.empty() ? true : false);
 }
 
 void LLProgressView::releaseTextures()
@@ -610,11 +610,11 @@ void LLProgressView::releaseTextures()
     gStartTexture = NULL;
     mLogosList.clear();
 
-    childSetVisible("panel_top_spacer", TRUE);
-    childSetVisible("panel_icons", FALSE);
+    childSetVisible("panel_top_spacer", true);
+    childSetVisible("panel_icons", false);
 }
 
-void LLProgressView::setCancelButtonVisible(BOOL b, const std::string& label)
+void LLProgressView::setCancelButtonVisible(bool b, const std::string& label)
 {
 	mCancelBtn->setVisible( b );
 	mCancelBtn->setEnabled( b );
@@ -636,8 +636,8 @@ void LLProgressView::onCancelButtonClicked(void*)
 	else
 	{
 		gAgent.teleportCancel();
-		sInstance->mCancelBtn->setEnabled(FALSE);
-		sInstance->setVisible(FALSE);
+		sInstance->mCancelBtn->setEnabled(false);
+		sInstance->setVisible(false);
 	}
 }
 

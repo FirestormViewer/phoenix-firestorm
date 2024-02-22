@@ -70,7 +70,7 @@ public:
 		if (params.size() < 2) return false;
 
 		LLUUID object_id;
-		if (!object_id.set(params[0], FALSE))
+		if (!object_id.set(params[0], false))
 		{
 			return false;
 		}
@@ -182,7 +182,7 @@ void LLFloaterIMNearbyChatToastPanel::addMessage(LLSD& notification)
 		{
 			style_params.font.style = "ITALIC";
 		}
-		mMsgText->appendText(messageText, TRUE, style_params);
+		mMsgText->appendText(messageText, true, style_params);
 	}
 
 	snapToMessageHeight();
@@ -257,7 +257,7 @@ void LLFloaterIMNearbyChatToastPanel::init(LLSD& notification)
 			}
 // [/RLVa:KB]
 
-			mMsgText->appendText(str_sender, FALSE, style_params_name);
+			mMsgText->appendText(str_sender, false, style_params_name);
 
 		}
 		else
@@ -316,7 +316,7 @@ void LLFloaterIMNearbyChatToastPanel::init(LLSD& notification)
 		{
 			style_params.font.style = "ITALIC";
 		}
-		mMsgText->appendText(messageText, FALSE, style_params);
+		mMsgText->appendText(messageText, false, style_params);
 	}
 
 
@@ -369,7 +369,7 @@ bool	LLFloaterIMNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 	//if text_box process mouse up (ussually this is click on url) - we didn't show nearby_chat.
 	if (mMsgText->pointInView(local_x, local_y) )
 	{
-		if (mMsgText->handleMouseUp(local_x,local_y,mask) == TRUE)
+		if (mMsgText->handleMouseUp(local_x,local_y,mask) == true)
 			return true;
 		else
 		{

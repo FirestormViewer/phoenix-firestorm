@@ -377,7 +377,7 @@ ColladaExportFloater::CacheReadResponder::CacheReadResponder(const LLUUID& id, L
 	setImage(image);
 }
 
-void ColladaExportFloater::CacheReadResponder::setData(U8* data, S32 datasize, S32 imagesize, S32 imageformat, BOOL imagelocal)
+void ColladaExportFloater::CacheReadResponder::setData(U8* data, S32 datasize, S32 imagesize, S32 imageformat, bool imagelocal)
 {
 	if (imageformat == IMG_CODEC_TGA && mFormattedImage->getCodec() == IMG_CODEC_J2C)
 	{

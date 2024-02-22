@@ -397,7 +397,7 @@ void LLFloaterCamera::onOpen(const LLSD& key)
 		updateState();
 	else
 		toPrevMode();
-	mClosed = FALSE;
+	mClosed = false;
 
 	// <FS:Ansariel> Optional small camera floater
 	if (mPresetCombo)
@@ -420,14 +420,14 @@ void LLFloaterCamera::onClose(bool app_quitting)
 		mPrevMode = CAMERA_CTRL_MODE_PAN;
 
 	switchMode(CAMERA_CTRL_MODE_PAN);
-	mClosed = TRUE;
+	mClosed = true;
 
-	gAgent.setMovementLocked(FALSE);
+	gAgent.setMovementLocked(false);
 }
 
 LLFloaterCamera::LLFloaterCamera(const LLSD& val)
 :	LLFloater(val),
-	mClosed(FALSE),
+	mClosed(false),
 	mCurrMode(CAMERA_CTRL_MODE_PAN),
 	mPrevMode(CAMERA_CTRL_MODE_PAN),
 	mPresetCombo(nullptr) // <FS:Ansariel> Optional small camera floater
@@ -435,7 +435,7 @@ LLFloaterCamera::LLFloaterCamera(const LLSD& val)
 	LLHints::getInstance()->registerHintTarget("view_popup", getHandle());
 	mCommitCallbackRegistrar.add("CameraPresets.ChangeView", boost::bind(&LLFloaterCamera::onClickCameraItem, _2));
 	mCommitCallbackRegistrar.add("CameraPresets.Save", boost::bind(&LLFloaterCamera::onSavePreset, this));
-	mCommitCallbackRegistrar.add("CameraPresets.ShowPresetsList", boost::bind(&LLFloaterReg::showInstance, "camera_presets", LLSD(), FALSE));
+	mCommitCallbackRegistrar.add("CameraPresets.ShowPresetsList", boost::bind(&LLFloaterReg::showInstance, "camera_presets", LLSD(), false));
 }
 
 // virtual
@@ -449,7 +449,7 @@ bool LLFloaterCamera::postBuild()
 	// <FS:Ansariel> Improved camera floater
 	//getChild<LLTextBox>("precise_ctrs_label")->setShowCursorHand(false);
 	//getChild<LLTextBox>("precise_ctrs_label")->setSoundFlags(LLView::MOUSE_UP);
-	//getChild<LLTextBox>("precise_ctrs_label")->setClickedCallback(boost::bind(&LLFloaterReg::showInstance, "prefs_view_advanced", LLSD(), FALSE));
+	//getChild<LLTextBox>("precise_ctrs_label")->setClickedCallback(boost::bind(&LLFloaterReg::showInstance, "prefs_view_advanced", LLSD(), false));
 	// </FS:Ansariel>
 
 	// <FS:Ansariel> Phototools support
@@ -578,7 +578,7 @@ void LLFloaterCamera::switchMode(ECameraControlMode mode)
 
 	default:
 		//normally we won't occur here
-		llassert_always(FALSE);
+		llassert_always(false);
 	}
 }
 
@@ -836,28 +836,28 @@ void LLFloaterCamera::switchViews(ECameraControlMode mode)
 	switch (mode)
 	{
 		case CAMERA_CTRL_MODE_PRESETS:
-			getChildView("preset_views_list")->setVisible(TRUE);
-			getChildView("camera_modes_list")->setVisible(FALSE);
-			getChildView("zoom")->setVisible(FALSE);
-			getChild<LLButton>("presets_btn")->setToggleState(TRUE);
-			getChild<LLButton>("avatarview_btn")->setToggleState(FALSE);
-			getChild<LLButton>("pan_btn")->setToggleState(FALSE);
+			getChildView("preset_views_list")->setVisible(true);
+			getChildView("camera_modes_list")->setVisible(false);
+			getChildView("zoom")->setVisible(false);
+			getChild<LLButton>("presets_btn")->setToggleState(true);
+			getChild<LLButton>("avatarview_btn")->setToggleState(false);
+			getChild<LLButton>("pan_btn")->setToggleState(false);
 			break;
 		case CAMERA_CTRL_MODE_MODES:
-			getChildView("preset_views_list")->setVisible(FALSE);
-			getChildView("camera_modes_list")->setVisible(TRUE);
-			getChildView("zoom")->setVisible(FALSE);
-			getChild<LLButton>("presets_btn")->setToggleState(FALSE);
-			getChild<LLButton>("avatarview_btn")->setToggleState(TRUE);
-			getChild<LLButton>("pan_btn")->setToggleState(FALSE);
+			getChildView("preset_views_list")->setVisible(false);
+			getChildView("camera_modes_list")->setVisible(true);
+			getChildView("zoom")->setVisible(false);
+			getChild<LLButton>("presets_btn")->setToggleState(false);
+			getChild<LLButton>("avatarview_btn")->setToggleState(true);
+			getChild<LLButton>("pan_btn")->setToggleState(false);
 			break;
 		case CAMERA_CTRL_MODE_PAN:
-			getChildView("preset_views_list")->setVisible(FALSE);
-			getChildView("camera_modes_list")->setVisible(FALSE);
-			getChildView("zoom")->setVisible(TRUE);
-			getChild<LLButton>("presets_btn")->setToggleState(FALSE);
-			getChild<LLButton>("avatarview_btn")->setToggleState(FALSE);
-			getChild<LLButton>("pan_btn")->setToggleState(TRUE);
+			getChildView("preset_views_list")->setVisible(false);
+			getChildView("camera_modes_list")->setVisible(false);
+			getChildView("zoom")->setVisible(true);
+			getChild<LLButton>("presets_btn")->setToggleState(false);
+			getChild<LLButton>("avatarview_btn")->setToggleState(false);
+			getChild<LLButton>("pan_btn")->setToggleState(true);
 			break;
 		default:
 			LL_WARNS() << "Tried to switch to unsupported mode: " << mode << LL_ENDL;

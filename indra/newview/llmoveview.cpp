@@ -83,7 +83,7 @@ LLFloaterMove::LLFloaterMove(const LLSD& key)
 LLFloaterMove::~LLFloaterMove()
 {
 	// Ensure LLPanelStandStopFlying panel is not among floater's children. See EXT-8458.
-	setVisible(FALSE);
+	setVisible(false);
 
 	// Otherwise it can be destroyed and static pointer in LLPanelStandStopFlying::getInstance() will become invalid.
 	// Such situation was possible when LLFloaterReg returns "dead" instance of floater.
@@ -197,7 +197,7 @@ F32 LLFloaterMove::getYawRate( F32 time )
 
 
 // static 
-void LLFloaterMove::setFlyingMode(BOOL fly)
+void LLFloaterMove::setFlyingMode(bool fly)
 {
 	LLFloaterMove* instance = LLFloaterReg::findTypedInstance<LLFloaterMove>("moveview");
 	if (instance)
@@ -229,7 +229,7 @@ void LLFloaterMove::setAlwaysRunMode(bool run)
 	}
 }
 
-void LLFloaterMove::setFlyingModeImpl(BOOL fly)
+void LLFloaterMove::setFlyingModeImpl(bool fly)
 {
 	updateButtonsWithMovementMode(fly ? MM_FLY : (gAgent.getAlwaysRun() ? MM_RUN : MM_WALK));
 }
@@ -243,7 +243,7 @@ void LLFloaterMove::setAlwaysRunModeImpl(bool run)
 }
 
 //static
-void LLFloaterMove::setSittingMode(BOOL bSitting)
+void LLFloaterMove::setSittingMode(bool bSitting)
 {
 	if (bSitting)
 	{
@@ -317,7 +317,7 @@ void LLFloaterMove::setMovementMode(const EMovementMode mode)
 	}
 	else
 	{
-		gAgent.setFlying(FALSE);
+		gAgent.setFlying(false);
 	}
 
 	// attempts to set avatar flying can not set it real flying in some cases.
@@ -493,7 +493,7 @@ void LLFloaterMove::enableInstance()
 	{
 		if (gAgent.getFlying())
 		{
-			instance->showModeButtons(FALSE);
+			instance->showModeButtons(false);
 		}
 		else
 		{
@@ -506,14 +506,14 @@ void LLFloaterMove::onOpen(const LLSD& key)
 {
 	if (gAgent.getFlying())
 	{
-		setFlyingMode(TRUE);
-		showModeButtons(FALSE);
+		setFlyingMode(true);
+		showModeButtons(false);
 	}
 
 	if (isAgentAvatarValid() && gAgentAvatarp->isSitting())
 	{
-		setSittingMode(TRUE);
-		showModeButtons(FALSE);
+		setSittingMode(true);
+		showModeButtons(false);
 	}
 
 //	sUpdateFlyingStatus();
@@ -529,10 +529,10 @@ void LLFloaterMove::setModeButtonToggleState(const EMovementMode mode)
 	mode_control_button_map_t::const_iterator it = mModeControlButtonMap.begin();
 	for (; it != mModeControlButtonMap.end(); ++it)
 	{
-		it->second->setToggleState(FALSE);
+		it->second->setToggleState(false);
 	}
 
-	mModeControlButtonMap[mode]->setToggleState(TRUE);
+	mModeControlButtonMap[mode]->setToggleState(true);
 }
 
 // <FS:Ansariel> Customizable floater transparency
@@ -572,7 +572,7 @@ void LLPanelStandStopFlying::setStandStopFlyingMode(EStandStopFlyingMode mode)
 
 	if (mode == SSFM_FLYCAM)
 	{
-		panel->mFlycamButton->setVisible(TRUE);
+		panel->mFlycamButton->setVisible(true);
 	}
 	else
 	{
@@ -585,7 +585,7 @@ void LLPanelStandStopFlying::setStandStopFlyingMode(EStandStopFlyingMode mode)
 		panel->mStopFlyingButton->setVisible(SSFM_STOP_FLYING == mode);
 	}
 	//visibility of it should be updated after updating visibility of the buttons
-	panel->setVisible(TRUE);
+	panel->setVisible(true);
 }
 
 //static
@@ -594,14 +594,14 @@ void LLPanelStandStopFlying::clearStandStopFlyingMode(EStandStopFlyingMode mode)
 	LLPanelStandStopFlying* panel = getInstance();
 	switch(mode) {
 	case SSFM_STAND:
-		panel->mStandButton->setVisible(FALSE);
+		panel->mStandButton->setVisible(false);
 		break;
 	case SSFM_STOP_FLYING:
-		panel->mStopFlyingButton->setVisible(FALSE);
+		panel->mStopFlyingButton->setVisible(false);
 		break;
 	case SSFM_FLYCAM:
-		panel->mFlycamButton->setVisible(FALSE);
-		panel->setFocus(FALSE);
+		panel->mFlycamButton->setVisible(false);
+		panel->setFocus(false);
 		break;
 	default:
 		LL_ERRS() << "Unexpected EStandStopFlyingMode is passed: " << mode << LL_ENDL;
@@ -618,7 +618,7 @@ bool LLPanelStandStopFlying::postBuild()
 	LLHints::getInstance()->registerHintTarget("stand_btn", mStandButton->getHandle());
 	
 	mStopFlyingButton = getChild<LLButton>("stop_fly_btn");
-	//mStopFlyingButton->setCommitCallback(boost::bind(&LLFloaterMove::setFlyingMode, FALSE));
+	//mStopFlyingButton->setCommitCallback(boost::bind(&LLFloaterMove::setFlyingMode, false));
 	mStopFlyingButton->setCommitCallback(boost::bind(&LLPanelStandStopFlying::onStopFlyingButtonClick, this));
 	mStopFlyingButton->setVisible(false);
 
@@ -634,7 +634,7 @@ bool LLPanelStandStopFlying::postBuild()
 void LLPanelStandStopFlying::setVisible(bool visible)
 {
 	//we dont need to show the panel if these buttons are not activated
-	// <FS:Ansariel> Stand/Fly button not showing if sitting/flying in mouselook with FSShowInterfaceInMouselook = TRUE
+	// <FS:Ansariel> Stand/Fly button not showing if sitting/flying in mouselook with FSShowInterfaceInMouselook = true
 	//if (gAgentCamera.getCameraMode() == CAMERA_MODE_MOUSELOOK) visible = false;
 	if (gAgentCamera.getCameraMode() == CAMERA_MODE_MOUSELOOK && !gSavedSettings.getBOOL("FSShowInterfaceInMouselook")) visible = false;
 	// </FS:Ansariel>
@@ -727,7 +727,7 @@ void LLPanelStandStopFlying::reparent(LLFloaterMove* move_view)
 	// <FS:Zi> Make sure to resize the panel to fit the new parent. Important for
 	//         proper layouting of the buttons. Skins should adapt the parent container.
 	if(getParent())
-		reshape(getParent()->getRect().getWidth(),getParent()->getRect().getHeight(),FALSE);
+		reshape(getParent()->getRect().getWidth(),getParent()->getRect().getHeight(), false);
 	// </FS:Zi>
 }
 
@@ -741,7 +741,7 @@ LLPanelStandStopFlying* LLPanelStandStopFlying::getStandStopFlyingPanel()
 	LLPanelStandStopFlying* panel = new LLPanelStandStopFlying();
 	panel->buildFromFile("panel_stand_stop_flying.xml");
 
-	panel->setVisible(FALSE);
+	panel->setVisible(false);
 	//LLUI::getInstance()->getRootView()->addChild(panel);
 
 	LL_INFOS() << "Build LLPanelStandStopFlying panel" << LL_ENDL;
@@ -764,14 +764,14 @@ void LLPanelStandStopFlying::onStandButtonClick()
 //	LLSelectMgr::getInstance()->deselectAllForStandingUp();
 //	gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
 
-	setFocus(FALSE); 
+	setFocus(false); 
 }
 
 void LLPanelStandStopFlying::onStopFlyingButtonClick()
 {
-	gAgent.setFlying(FALSE);
+	gAgent.setFlying(false);
 
-	setFocus(FALSE); // EXT-482
+	setFocus(false); // EXT-482
 }
 
 /**

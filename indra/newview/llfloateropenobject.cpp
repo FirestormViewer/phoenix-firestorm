@@ -55,7 +55,7 @@
 LLFloaterOpenObject::LLFloaterOpenObject(const LLSD& key)
 :	LLFloater(key),
 	mPanelInventoryObject(NULL),
-	mDirty(TRUE)
+	mDirty(true)
 {
 	// <FS:Ansariel> Cinder's fly-out button
 	//mCommitCallbackRegistrar.add("OpenObject.MoveToInventory",	boost::bind(&LLFloaterOpenObject::onClickMoveToInventory, this));
@@ -102,7 +102,7 @@ void LLFloaterOpenObject::refresh()
 	mPanelInventoryObject->refresh();
 
 	std::string name = "";
-	BOOL enabled = FALSE;
+	bool enabled = false;
 
 	LLSelectNode* node = mObjectSelection->getFirstRootNode();
 // [RLVa:KB] - @edit and @editobj
@@ -118,12 +118,12 @@ void LLFloaterOpenObject::refresh()
 	if (node) 
 	{
 		name = node->mName;
-		enabled = TRUE;
+		enabled = true;
 	}
 	else
 	{
 		name = "";
-		enabled = FALSE;
+		enabled = false;
 	}
 	
 	getChild<LLUICtrl>("object_name")->setTextArg("[DESC]", name);
@@ -140,14 +140,14 @@ void LLFloaterOpenObject::draw()
 	if (mDirty)
 	{
 		refresh();
-		mDirty = FALSE;
+		mDirty = false;
 	}
 	LLFloater::draw();
 }
 
 void LLFloaterOpenObject::dirty()
 {
-	mDirty = TRUE;
+	mDirty = true;
 }
 
 
@@ -201,9 +201,9 @@ void LLFloaterOpenObject::callbackCreateInventoryCategory(const LLUUID& category
 	
 	// Copy and/or move the items into the newly created folder.
 	// Ignore any "you're going to break this item" messages.
-	BOOL success = move_inv_category_world_to_agent(object_id,
+	bool success = move_inv_category_world_to_agent(object_id,
                                                     category_id,
-                                                    TRUE,
+                                                    true,
                                                     [](S32 result, void* data, const LLMoveInv*)
                                                     {
                                                         callbackMoveInventory(result, data);

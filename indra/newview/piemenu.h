@@ -105,7 +105,7 @@ protected:
 	// timer for visual popup effect
 	LLFrameTimer mPopupTimer;
 
-	// this is TRUE when the first mouseclick came to display the menu, used for borderless menu
+	// this is true when the first mouseclick came to display the menu, used for borderless menu
 	bool mFirstClick;
 
 	F32 getScaleFactor();

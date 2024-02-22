@@ -110,8 +110,8 @@ public:
 	{
 		Params()
 		{
-			changeDefault(draw_tooltip, FALSE);
-			changeDefault(mouse_opaque, FALSE);
+			changeDefault(draw_tooltip, false);
+			changeDefault(mouse_opaque, false);
 			changeDefault(default_icon_name, "Generic_Person");
 		};
 	};
@@ -854,7 +854,7 @@ public:
 
 	/*virtual*/ ~LLSysWellChiclet();
 
-	void setToggleState(BOOL toggled);
+	void setToggleState(bool toggled);
 
 	void setNewMessagesState(bool new_messages);
 	//this method should change a widget according to state of the SysWellWindow 
@@ -954,7 +954,7 @@ class LLIMWellChiclet : public LLSysWellChiclet, LLIMSessionObserver
 {
 	friend class LLUICtrlFactory;
 public:
-	/*virtual*/ void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg) {}
+	/*virtual*/ void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, bool has_offline_msg) {}
 	/*virtual*/ void sessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) {}
 	/*virtual*/ void sessionVoiceOrIMStarted(const LLUUID& session_id) {};
 	/*virtual*/ void sessionRemoved(const LLUUID& session_id) { messageCountChanged(LLSD()); }

@@ -56,9 +56,9 @@ LLFloaterScriptDebug::LLFloaterScriptDebug(const LLSD& key)
 {
 	// avoid resizing of the window to match 
 	// the initial size of the tabbed-childs, whenever a tab is opened or closed
-	mAutoResize = FALSE;
+	mAutoResize = false;
 	// enabled autocous blocks controling focus via  LLFloaterReg::showInstance
-	setAutoFocus(FALSE);
+	setAutoFocus(false);
 }
 
 LLFloaterScriptDebug::~LLFloaterScriptDebug()
@@ -169,14 +169,14 @@ void LLFloaterScriptDebug::addScriptLine(const LLChat& chat)
 			{
 				if (isAgentAvatarValid())
 				{
-					((LLViewerObject*)gAgentAvatarp)->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_UI));
+					((LLViewerObject*)gAgentAvatarp)->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, true, LLGLTexture::BOOST_UI));
 					// <FS:Ansariel> Mark script error icons
 					((LLViewerObject*)gAgentAvatarp)->getIcon()->setScriptError();
 				}
 			}
 			else
 			{
-				objectp->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_UI));
+				objectp->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", FTT_LOCAL_FILE, true, LLGLTexture::BOOST_UI));
 				// <FS:Ansariel> Mark script error icons
 				objectp->getIcon()->setScriptError();
 			}
@@ -312,8 +312,8 @@ void LLFloaterScriptDebugOutput::addLine(const LLChat& chat, const std::string &
 
 	if (mObjectID.isNull())
 	{
-		setCanTearOff(FALSE);
-		setCanClose(FALSE);
+		setCanTearOff(false);
+		setCanClose(false);
 	}
 	else
 	{

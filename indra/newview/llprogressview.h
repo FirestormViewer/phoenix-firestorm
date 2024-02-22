@@ -71,7 +71,7 @@ public:
 	// turns on (under certain circumstances) the into video after login
 	void revealIntroPanel();
 
-	void fade(BOOL in);		// ## Zi: Fade teleport screens
+	void fade(bool in);		// ## Zi: Fade teleport screens
 
 	void setStartupComplete();
 
@@ -79,7 +79,7 @@ public:
 	void initTextures(S32 location_id, bool is_in_production);
 	void releaseTextures();
 
-	void setCancelButtonVisible(BOOL b, const std::string& label);
+	void setCancelButtonVisible(bool b, const std::string& label);
 
 	static void onCancelButtonClicked( void* );
 	static void onClickMessage(void*);

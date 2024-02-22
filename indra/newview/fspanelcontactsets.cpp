@@ -222,7 +222,7 @@ void FSPanelContactSets::onClickAddAvatar(LLUICtrl* ctrl)
 {
 	LLFloater* root_floater = gFloaterView->getParentFloater(this);
 	LLFloater* avatar_picker = LLFloaterAvatarPicker::show(boost::bind(&FSPanelContactSets::handlePickerCallback, this, _1, mContactSetCombo->getValue().asString()),
-														   TRUE, TRUE, TRUE, root_floater->getName(), ctrl);
+														   true, true, true, root_floater->getName(), ctrl);
 	if (root_floater && avatar_picker)
 	{
 		root_floater->addDependentFloater(avatar_picker);

@@ -206,9 +206,9 @@ bool ParticleEditor::postBuild()
 	mStartColorSelector->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange, this));
 	mEndColorSelector->setCommitCallback(boost::bind(&ParticleEditor::onParameterChange, this));
 
-	mStartColorSelector->setCanApplyImmediately(TRUE);
-	mEndColorSelector->setCanApplyImmediately(TRUE);
-	mTexturePicker->setCanApplyImmediately(TRUE);
+	mStartColorSelector->setCanApplyImmediately(true);
+	mEndColorSelector->setCanApplyImmediately(true);
+	mTexturePicker->setCanApplyImmediately(true);
 
 	mBlendFuncSrcCombo->setValue("blend_src_alpha");
 	mBlendFuncDestCombo->setValue("blend_one_minus_src_alpha");
@@ -320,14 +320,14 @@ void ParticleEditor::onParameterChange()
 void ParticleEditor::updateUI()
 {
 	U8 pattern = mPatternMap[mPatternTypeCombo->getValue()];
-	BOOL dropPattern = (pattern == LLPartSysData::LL_PART_SRC_PATTERN_DROP);
-	BOOL explodePattern = (pattern == LLPartSysData::LL_PART_SRC_PATTERN_EXPLODE);
-	BOOL targetLinear = mTargetLinearCheckBox->getValue();
-	BOOL interpolateColor = mInterpolateColorCheckBox->getValue();
-	BOOL interpolateScale = mInterpolateScaleCheckBox->getValue();
-	BOOL targetEnabled = targetLinear | (mTargetPositionCheckBox->getValue().asBoolean() ? TRUE : FALSE);
+	bool dropPattern = (pattern == LLPartSysData::LL_PART_SRC_PATTERN_DROP);
+	bool explodePattern = (pattern == LLPartSysData::LL_PART_SRC_PATTERN_EXPLODE);
+	bool targetLinear = mTargetLinearCheckBox->getValue();
+	bool interpolateColor = mInterpolateColorCheckBox->getValue();
+	bool interpolateScale = mInterpolateScaleCheckBox->getValue();
+	bool targetEnabled = targetLinear | (mTargetPositionCheckBox->getValue().asBoolean() ? true : false);
 
-	mBurstRadiusSpinner->setEnabled(!(targetLinear | (mFollowSourceCheckBox->getValue().asBoolean() ? TRUE : FALSE) | dropPattern));
+	mBurstRadiusSpinner->setEnabled(!(targetLinear | (mFollowSourceCheckBox->getValue().asBoolean() ? true : false) | dropPattern));
 	mBurstSpeedMinSpinner->setEnabled(!(targetLinear | dropPattern));
 	mBurstSpeedMaxSpinner->setEnabled(!(targetLinear | dropPattern));
 
@@ -367,8 +367,8 @@ void ParticleEditor::onClearTargetButtonClicked()
 
 void ParticleEditor::onTargetPickerButtonClicked()
 {
-	mPickTargetButton->setToggleState(TRUE);
-	mPickTargetButton->setEnabled(FALSE);
+	mPickTargetButton->setToggleState(true);
+	mPickTargetButton->setEnabled(false);
 	startPicking(this);
 }
 
@@ -390,8 +390,8 @@ void ParticleEditor::onTargetPicked(void* userdata)
 
 	LLToolMgr::getInstance()->clearTransientTool();
 
-	self->mPickTargetButton->setEnabled(TRUE);
-	self->mPickTargetButton->setToggleState(FALSE);
+	self->mPickTargetButton->setEnabled(true);
+	self->mPickTargetButton->setToggleState(false);
 
 	if (picked.notNull())
 	{
@@ -585,12 +585,12 @@ void ParticleEditor::createScriptInventoryItem(LLUUID categoryID)
 		perm.getMaskNextOwner(),
 		callback);
 
-	setCanClose(FALSE);
+	setCanClose(false);
 }
 
 void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
 {
-	setCanClose(TRUE);
+	setCanClose(true);
 
 	if (inventoryItemID.isNull())
 	{
@@ -620,8 +620,8 @@ void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
 			}, nullptr));
 		LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
 
-		mMainPanel->setEnabled(FALSE);
-		setCanClose(FALSE);
+		mMainPanel->setEnabled(false);
+		setCanClose(false);
 	}
 	else
 	{
@@ -632,18 +632,18 @@ void ParticleEditor::callbackReturned(const LLUUID& inventoryItemID)
 
 void ParticleEditor::scriptInjectReturned()
 {
-	setCanClose(TRUE);
+	setCanClose(true);
 
 	// play it safe, because some time may have passed
 	LLViewerObject* object = gObjectList.findObject(mObject->getID());
 	if (!object || mObject->isDead())
 	{
 		LL_WARNS() << "Can't inject script - object is dead or went away!" << LL_ENDL;
-		mMainPanel->setEnabled(TRUE);
+		mMainPanel->setEnabled(true);
 		return;
 	}
 
-	mObject->saveScript(mParticleScriptInventoryItem, TRUE, FALSE);
+	mObject->saveScript(mParticleScriptInventoryItem, true, false);
 	LLNotificationsUtil::add("ParticleScriptInjected");
 
 	delete this;

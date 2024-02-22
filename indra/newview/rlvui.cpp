@@ -98,7 +98,7 @@ void RlvUIEnabler::onRefreshHoverText()
 void RlvUIEnabler::onToggleMovement()
 {
 	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_FLY)) && (gAgent.getFlying()) )
-		gAgent.setFlying(FALSE);
+		gAgent.setFlying(false);
 	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_ALWAYSRUN)) && (gAgent.getAlwaysRun()) )
 		gAgent.clearAlwaysRun();
 	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_TEMPRUN)) && (gAgent.getTempRun()) )
@@ -201,7 +201,7 @@ void RlvUIEnabler::onToggleShowMinimap()
 
 	// Break/reestablish the visibility connection for the nearby people panel embedded minimap instance
 	LLPanel* pPeoplePanel = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
-	LLPanel* pNetMapPanel = (pPeoplePanel) ? pPeoplePanel->getChild<LLPanel>("minimaplayout", TRUE) : NULL;  //AO: firestorm specific
+	LLPanel* pNetMapPanel = (pPeoplePanel) ? pPeoplePanel->getChild<LLPanel>("minimaplayout", true) : NULL;  //AO: firestorm specific
 	RLV_ASSERT( (pPeoplePanel) && (pNetMapPanel) );
 	if (pNetMapPanel)
 	{
@@ -213,7 +213,7 @@ void RlvUIEnabler::onToggleShowMinimap()
 
 	// Break/reestablish the visibility connection for the radar panel embedded minimap instance
 	LLFloater* pRadarFloater = LLFloaterReg::getInstance("fs_radar");
-	LLPanel* pRadarNetMapPanel = (pRadarFloater) ? pRadarFloater->getChild<LLPanel>("minimaplayout", TRUE) : NULL;  //AO: firestorm specific
+	LLPanel* pRadarNetMapPanel = (pRadarFloater) ? pRadarFloater->getChild<LLPanel>("minimaplayout", true) : NULL;  //AO: firestorm specific
 	RLV_ASSERT( (pRadarFloater) && (pRadarNetMapPanel) );
 	if (pRadarNetMapPanel)
 	{

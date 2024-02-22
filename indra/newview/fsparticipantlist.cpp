@@ -174,7 +174,7 @@ FSParticipantList::~FSParticipantList()
 	mAvatarList->setComparator(NULL);
 }
 
-void FSParticipantList::setSpeakingIndicatorsVisible(BOOL visible)
+void FSParticipantList::setSpeakingIndicatorsVisible(bool visible)
 {
 	mAvatarList->setSpeakingIndicatorsVisible(visible);
 };
@@ -263,10 +263,10 @@ void FSParticipantList::onAvatarListRefreshed(LLUICtrl* ctrl, const LLSD& param)
 		// update voice mute state of all items. See EXT-7235
 		LLSpeakerMgr::speaker_list_t speaker_list;
 
-		// Use also participants which are not in voice session now (the second arg is TRUE).
+		// Use also participants which are not in voice session now (the second arg is true).
 		// They can already have mModeratorMutedVoice set from the previous voice session
 		// and LLSpeakerVoiceModerationEvent will not be sent when speaker manager is updated next time.
-		mSpeakerMgr->getSpeakerList(&speaker_list, TRUE);
+		mSpeakerMgr->getSpeakerList(&speaker_list, true);
 		for(LLSpeakerMgr::speaker_list_t::iterator it = speaker_list.begin(); it != speaker_list.end(); it++)
 		{
 			const LLPointer<LLSpeaker>& speakerp = *it;
@@ -555,7 +555,7 @@ void FSParticipantList::FSParticipantListMenu::show(LLView* spawning_view, const
 	LLListContextMenu::show(spawning_view, uuids, x, y);
 
 	const LLUUID& speaker_id = mUUIDs.front();
-	BOOL is_muted = isMuted(speaker_id);
+	bool is_muted = isMuted(speaker_id);
 
 	if (is_muted)
 	{
@@ -593,7 +593,7 @@ void FSParticipantList::FSParticipantListMenu::allowTextChat(const LLSD& userdat
 void FSParticipantList::FSParticipantListMenu::toggleMute(const LLSD& userdata, U32 flags)
 {
 	const LLUUID speaker_id = mUUIDs.front();
-	BOOL is_muted = LLMuteList::getInstance()->isMuted(speaker_id, flags);
+	bool is_muted = LLMuteList::getInstance()->isMuted(speaker_id, flags);
 	std::string name;
 
 	//fill in name using voice client's copy of name cache

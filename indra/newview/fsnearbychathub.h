@@ -50,19 +50,19 @@ public:
 	void registerChatBar(FSNearbyChatControl* chatBar);
 
 	// set the contents of the chat bar to "text" if it was empty, otherwise just show it
-	void showDefaultChatBar(BOOL visible, const char* text = NULL) const;
+	void showDefaultChatBar(bool visible, const char* text = NULL) const;
 
 	void sendChat(LLWString text, EChatType type);
 	static LLWString stripChannelNumber(const LLWString &mesg, S32* channel, S32* last_channel, bool* is_set);
 	static EChatType processChatTypeTriggers(EChatType type, std::string &str);
-	void sendChatFromViewer(const std::string& utf8text, EChatType type, BOOL animate);
-	void sendChatFromViewer(const LLWString& wtext, EChatType type, BOOL animate);
-	static void sendChatFromViewer(const LLWString& wtext, const LLWString& out_text, EChatType type, BOOL animate, S32 channel);
+	void sendChatFromViewer(const std::string& utf8text, EChatType type, bool animate);
+	void sendChatFromViewer(const LLWString& wtext, EChatType type, bool animate);
+	static void sendChatFromViewer(const LLWString& wtext, const LLWString& out_text, EChatType type, bool animate, S32 channel);
 
-	void setFocusedInputEditor(FSNearbyChatControl* inputEditor, BOOL focus);
+	void setFocusedInputEditor(FSNearbyChatControl* inputEditor, bool focus);
 
-	BOOL defaultChatBarIsIdle() const;
-	BOOL defaultChatBarHasFocus() const;
+	bool defaultChatBarIsIdle() const;
+	bool defaultChatBarHasFocus() const;
 
 	static void handleChatBarKeystroke(LLUICtrl* source, S32 channel = 0);
 

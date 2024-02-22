@@ -85,7 +85,7 @@ public:
 
 	void toggleCollapsedMode(bool is_collapsed);
 
-	void setVisibleIfDetached(BOOL visible);
+	void setVisibleIfDetached(bool visible);
 	LLConversationViewParticipant* findParticipant(const LLUUID& participant_id);
 
 	void showVoiceIndicator(bool visible);

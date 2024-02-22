@@ -137,7 +137,7 @@ protected:
 	{
 		if (!toast) return;
 		LL_DEBUGS("NearbyChat") << "Pooling toast" << LL_ENDL;
-		toast->setVisible(FALSE);
+		toast->setVisible(false);
 		toast->stopTimer();
 		toast->setIsHidden(true);
 
@@ -207,7 +207,7 @@ private:
 void LLFloaterIMNearbyChatScreenChannel::reshapePanel(LLFloaterIMNearbyChatToastPanel* panel)
 {
 	S32 percentage = gSavedSettings.getS32("NearbyToastWidth");
-	panel->reshape(gViewerWindow->getWindowWidthScaled() * percentage / 100, panel->getRect().getHeight(), TRUE);
+	panel->reshape(gViewerWindow->getWindowWidthScaled() * percentage / 100, panel->getRect().getHeight(), true);
 }
 
 void LLFloaterIMNearbyChatScreenChannel::updateSize(LLRect old_world_rect, LLRect new_world_rect)
@@ -387,7 +387,7 @@ void LLFloaterIMNearbyChatScreenChannel::addChat(LLSD& chat)
 	
 	if( ((EChatType)chat_type == CHAT_TYPE_DEBUG_MSG))
 	{
-		if(gSavedSettings.getBOOL("ShowScriptErrors") == FALSE) 
+		if(gSavedSettings.getBOOL("ShowScriptErrors") == false) 
 			return;
 		if(gSavedSettings.getS32("ShowScriptErrorsLocation")== 1)
 			return;
@@ -500,7 +500,7 @@ void LLFloaterIMNearbyChatScreenChannel::arrangeToasts()
 		if (toast)
 		{
 		toast->setIsHidden(false);
-		toast->setVisible(TRUE);
+		toast->setVisible(true);
 		}
 	}
 
@@ -545,7 +545,7 @@ void LLFloaterIMNearbyChatHandler::initChannel()
 void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 									  const LLSD &args)
 {
-	if(chat_msg.mMuted == TRUE)
+	if(chat_msg.mMuted == true)
 	// <FS:Ansariel> Optional muted chat history
 		//return;
 	{
@@ -567,12 +567,12 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 		if ( (!RlvActions::canShowLocation()) && (!tmp_chat.mRlvLocFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
 		{
 			RlvUtil::filterLocation(tmp_chat.mText);
-			tmp_chat.mRlvLocFiltered = TRUE;
+			tmp_chat.mRlvLocFiltered = true;
 		}
 		if ( (!RlvActions::canShowName(RlvActions::SNC_DEFAULT)) && (!tmp_chat.mRlvNamesFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) && (!args.has("ONLINE_STATUS") || !args["ONLINE_STATUS"].asBoolean()) )
 		{
 			RlvUtil::filterNames(tmp_chat.mText);
-			tmp_chat.mRlvNamesFiltered = TRUE;
+			tmp_chat.mRlvNamesFiltered = true;
 		}
 	}
 // [/RLVa:KB]
@@ -620,8 +620,8 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
 	if (chat_msg.mChatType == CHAT_TYPE_DEBUG_MSG || (chat_msg.mChatType == CHAT_TYPE_OWNER && FSllOwnerSayToScriptDebugWindow))
 	{
 		// <FS:Kadah> [FSllOwnerSayToScriptDebugWindow] Show llOwnerSays in the script debug window instead of local chat
-		// if(gSavedSettings.getBOOL("ShowScriptErrors") == FALSE)
-		if(gSavedSettings.getBOOL("ShowScriptErrors") == FALSE && chat_msg.mChatType == CHAT_TYPE_DEBUG_MSG)
+		// if(gSavedSettings.getBOOL("ShowScriptErrors") == false)
+		if(gSavedSettings.getBOOL("ShowScriptErrors") == false && chat_msg.mChatType == CHAT_TYPE_DEBUG_MSG)
 			return;
 
 		// don't process debug messages from not owned objects, see EXT-7762

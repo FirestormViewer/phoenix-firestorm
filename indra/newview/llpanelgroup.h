@@ -112,7 +112,7 @@ protected:
 
 	LLTimer mRefreshTimer;
 
-	BOOL mSkipRefresh;
+	bool mSkipRefresh;
 
 	std::string mDefaultNeedsApplyMesg;
 	std::string mWantApplyMesg;
@@ -143,7 +143,7 @@ public:
 	virtual bool needsApply(std::string& mesg) { return false; }
 
 	// Asks if there is currently a modal dialog being shown.
-	virtual BOOL hasModal() { return mHasModal; }
+	virtual bool hasModal() { return mHasModal; }
 
 	// Request to apply current data.
 	// If returning fail, this function should modify the message to the user.
@@ -158,7 +158,7 @@ public:
 	// This just connects the help button callback.
 	virtual bool postBuild();
 
-	virtual BOOL isVisibleByAgent(LLAgent* agentp);
+	virtual bool isVisibleByAgent(LLAgent* agentp);
 
 	virtual void setGroupID(const LLUUID& id) {mGroupID = id;};
 
@@ -172,8 +172,8 @@ public:
 
 protected:
 	LLUUID	mGroupID;
-	BOOL mAllowEdit;
-	BOOL mHasModal;
+	bool mAllowEdit;
+	bool mHasModal;
 };
 
 #endif // LL_LLPANELGROUP_H

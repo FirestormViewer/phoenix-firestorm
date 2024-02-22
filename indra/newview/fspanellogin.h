@@ -59,9 +59,9 @@ public:
 
 	static void getFields(LLPointer<LLCredential>& credential, bool& remember);
 
-	static BOOL isCredentialSet() { return sCredentialSet; }
+	static bool isCredentialSet() { return sCredentialSet; }
 
-	static BOOL areCredentialFieldsDirty();
+	static bool areCredentialFieldsDirty();
 	static void setLocation(const LLSLURL& slurl);
 	static void autologinToLocation(const LLSLURL& slurl);
 	
@@ -91,7 +91,7 @@ public:
 	void gridListChanged(bool success);
 private:
 	void addFavoritesToStartLocation();
-	void addUsersToCombo(BOOL show_server);
+	void addUsersToCombo(bool show_server);
 	void onSelectUser();
 	void onModeChange(const LLSD& original_value, const LLSD& new_value);
 	void onModeChangeConfirm(const LLSD& original_value, const LLSD& new_value, const LLSD& notification, const LLSD& response);
@@ -119,13 +119,13 @@ private:
 	void			(*mCallback)(S32 option, void *userdata);
 	void*			mCallbackData;
 
-	BOOL            mPasswordModified;
+	bool            mPasswordModified;
 	bool			mShowFavorites;
 
 	static FSPanelLogin* sInstance;
-	static BOOL		sCapslockDidNotification;
+	static bool		sCapslockDidNotification;
 
-	static BOOL sCredentialSet;
+	static bool sCredentialSet;
 
 	unsigned int mUsernameLength;
 	unsigned int mPasswordLength;

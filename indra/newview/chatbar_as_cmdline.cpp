@@ -77,7 +77,7 @@ LLViewerInventoryItem::item_array_t findInventoryInFolder(std::string_view ifold
 	LLUUID folder = gInventory.findCategoryByName(static_cast<std::string>(ifolder));
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
-	gInventory.collectDescendents(folder, cats, items, FALSE);
+	gInventory.collectDescendents(folder, cats, items, false);
 
 	return items;
 }
@@ -529,7 +529,7 @@ static void invrepair()
 {
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
-	gInventory.collectDescendents(gInventory.getRootFolderID(), cats, items, FALSE);
+	gInventory.collectDescendents(gInventory.getRootFolderID(), cats, items, false);
 }
 
 static void key_to_name_callback(const LLUUID& id, const LLAvatarName& av_name)
@@ -598,7 +598,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 				if (from_gesture)
 				{
 					report_to_nearby_chat(LLTrans::getString("DrawDistanceSteppingGestureObsolete"));
-					gSavedSettings.setBOOL("FSRenderFarClipStepping", TRUE);
+					gSavedSettings.setBOOL("FSRenderFarClipStepping", true);
 					return false;
 				}
 				F32 drawDist;
@@ -683,7 +683,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 
 					if (status == "on")
 					{
-						gSavedPerAccountSettings.setBOOL("UseAO", TRUE);
+						gSavedPerAccountSettings.setBOOL("UseAO", true);
 
 						// <FS:Zi> send appropriate enable/disable messages to nearby chat - FIRE-24160
 						if (!aoWasEnabled)
@@ -693,7 +693,7 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 					}
 					else if (status == "off")
 					{
-						gSavedPerAccountSettings.setBOOL("UseAO", FALSE);
+						gSavedPerAccountSettings.setBOOL("UseAO", false);
 
 						// <FS:Zi> send appropriate enable/disable messages to nearby chat - FIRE-24160
 						if (aoWasEnabled)
@@ -709,11 +709,11 @@ bool cmd_line_chat(std::string_view revised_text, EChatType type, bool from_gest
 						{
 							if (status == "off")
 							{
-								AOEngine::instance().setOverrideSits(tmp, TRUE);
+								AOEngine::instance().setOverrideSits(tmp, true);
 							}
 							else if (status == "on")
 							{
-								AOEngine::instance().setOverrideSits(tmp, FALSE);
+								AOEngine::instance().setOverrideSits(tmp, false);
 							}
 						}
 						else
@@ -1815,7 +1815,7 @@ void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat(
 	msg->addVector3Fast(_PREHASH_RayStart, rezpos);
 	msg->addVector3Fast(_PREHASH_RayEnd, rezpos);
 	msg->addU8Fast(_PREHASH_BypassRaycast, (U8)1);
-	msg->addU8Fast(_PREHASH_RayEndIsIntersection, (U8)FALSE);
+	msg->addU8Fast(_PREHASH_RayEndIsIntersection, (U8)0);
 	msg->addU8Fast(_PREHASH_State, 0);
 	msg->addUUIDFast(_PREHASH_RayTargetID, LLUUID::null);
 	msg->sendReliable(gAgent.getRegionHost());

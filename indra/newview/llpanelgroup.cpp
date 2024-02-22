@@ -68,8 +68,8 @@ static LLPanelInjector<LLPanelGroup> t_panel_group("panel_group_info_sidetray");
 
 LLPanelGroupTab::LLPanelGroupTab()
 	: LLPanel(),
-	  mAllowEdit(TRUE),
-	  mHasModal(FALSE)
+	  mAllowEdit(true),
+	  mHasModal(false)
 {
 	mGroupID = LLUUID::null;
 }
@@ -78,10 +78,10 @@ LLPanelGroupTab::~LLPanelGroupTab()
 {
 }
 
-BOOL LLPanelGroupTab::isVisibleByAgent(LLAgent* agentp)
+bool LLPanelGroupTab::isVisibleByAgent(LLAgent* agentp)
 {
 	//default to being visible
-	return TRUE;
+	return true;
 }
 
 bool LLPanelGroupTab::postBuild()
@@ -92,7 +92,7 @@ bool LLPanelGroupTab::postBuild()
 LLPanelGroup::LLPanelGroup()
 :	LLPanel(),
 	LLGroupMgrObserver( LLUUID() ),
-	mSkipRefresh(FALSE),
+	mSkipRefresh(false),
 	mButtonJoin(NULL),
 	mIsUsingTabContainer(false) // <FS:Ansariel> TabContainer switch
 {
@@ -160,7 +160,7 @@ void LLPanelGroup::onOpen(const LLSD& key)
 				if (target_tab)
 				{
 					target_tab->changeOpenClose(false);
-					target_tab->setFocus(TRUE);
+					target_tab->setFocus(true);
 					target_tab->notifyParent(LLSD().with("action", "select_current"));
 				}
 			}
@@ -638,7 +638,7 @@ bool LLPanelGroup::apply(LLPanelGroupTab* tab)
 			}
 		}
 
-		mSkipRefresh = TRUE;
+		mSkipRefresh = true;
 		return true;
 	}
 		
@@ -700,7 +700,7 @@ void LLPanelGroup::refreshData()
 {
 	if(mSkipRefresh)
 	{
-		mSkipRefresh = FALSE;
+		mSkipRefresh = false;
 		return;
 	}
 	LLGroupMgr::getInstance()->clearGroupData(getID());
@@ -792,7 +792,7 @@ bool LLPanelGroup::handleKeyHere(KEY key, MASK mask)
 			LLPanelGroupRoles* panel = dynamic_cast<LLPanelGroupRoles*>(getChild<LLTabContainer>("groups_accordion")->getCurrentPanel());
 			if (panel)
 			{
-				panel->getCurrentTab()->setSearchFilterFocus(TRUE);
+				panel->getCurrentTab()->setSearchFilterFocus(true);
 				return true;
 			}
 		}
@@ -801,7 +801,7 @@ bool LLPanelGroup::handleKeyHere(KEY key, MASK mask)
 			LLAccordionCtrlTab* tab = getChild<LLAccordionCtrl>("groups_accordion")->getSelectedTab();
 			if (tab && tab->getName() == "group_roles_tab")
 			{
-				tab->findChild<LLPanelGroupRoles>("group_roles_tab_panel")->getCurrentTab()->setSearchFilterFocus(TRUE);
+				tab->findChild<LLPanelGroupRoles>("group_roles_tab_panel")->getCurrentTab()->setSearchFilterFocus(true);
 				return true;
 			}
 		}

@@ -278,7 +278,7 @@ bool callback_clear_web_browser_cache(const LLSD& notification, const LLSD& resp
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if ( option == 0 ) // YES
 	{
-		gSavedSettings.setBOOL("FSStartupClearBrowserCache", TRUE);
+		gSavedSettings.setBOOL("FSStartupClearBrowserCache", true);
 	}
 
 	return false;
@@ -672,14 +672,14 @@ bool LLFloaterPreference::postBuild()
 	if (!tabcontainer->selectTab(gSavedSettings.getS32("LastPrefTab")))
 		tabcontainer->selectFirstTab();
 	
-	getChild<LLUICtrl>("cache_location")->setEnabled(FALSE); // make it read-only but selectable (STORM-227)
-	// getChildView("log_path_string")->setEnabled(FALSE);// do the same for chat logs path - <FS:PP> Field removed from Privacy tab, we have it already in Network & Files tab along with few fancy buttons (03 Mar 2015)
-	getChildView("log_path_string-panelsetup")->setEnabled(FALSE);// and the redundant instance -WoLf
+	getChild<LLUICtrl>("cache_location")->setEnabled(false); // make it read-only but selectable (STORM-227)
+	// getChildView("log_path_string")->setEnabled(false);// do the same for chat logs path - <FS:PP> Field removed from Privacy tab, we have it already in Network & Files tab along with few fancy buttons (03 Mar 2015)
+	getChildView("log_path_string-panelsetup")->setEnabled(false);// and the redundant instance -WoLf
 	std::string cache_location = gDirUtilp->getExpandedFilename(LL_PATH_CACHE, "");
 	setCacheLocation(cache_location);
 	// <FS:Ansariel> Sound cache
 	setSoundCacheLocation(gSavedSettings.getString("FSSoundCacheLocation"));
-	getChild<LLUICtrl>("FSSoundCacheLocation")->setEnabled(FALSE);
+	getChild<LLUICtrl>("FSSoundCacheLocation")->setEnabled(false);
 	// </FS:Ansariel>
 
 	getChild<LLComboBox>("language_combobox")->setCommitCallback(boost::bind(&LLFloaterPreference::onLanguageChange, this));
@@ -892,7 +892,7 @@ void LLFloaterPreference::updateDeleteTranscriptsButton()
 
 void LLFloaterPreference::onDoNotDisturbResponseChanged()
 {
-	// set "DoNotDisturbResponseChanged" TRUE if user edited message differs from default, FALSE otherwise
+	// set "DoNotDisturbResponseChanged" true if user edited message differs from default, false otherwise
 	bool response_changed_flag =
 			LLTrans::getString("DoNotDisturbModeResponseDefault")
 					!= getChild<LLUICtrl>("do_not_disturb_response")->getValue().asString();
@@ -947,7 +947,7 @@ LLFloaterPreference::~LLFloaterPreference()
 // <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
 // void LLFloaterPreference::draw()
 // {
-//	BOOL has_first_selected = (getChildRef<LLScrollListCtrl>("disabled_popups").getFirstSelected()!=NULL);
+//	bool has_first_selected = (getChildRef<LLScrollListCtrl>("disabled_popups").getFirstSelected()!=NULL);
 //	gSavedSettings.setBOOL("FirstSelectedDisabledPopups", has_first_selected);
 //	
 //	has_first_selected = (getChildRef<LLScrollListCtrl>("enabled_popups").getFirstSelected()!=NULL);
@@ -1007,7 +1007,7 @@ void LLFloaterPreference::apply()
 	
 	//LLViewerMedia::getInstance()->setCookiesEnabled(getChild<LLUICtrl>("cookies_enabled")->getValue());
 	
-	if (hasChild("web_proxy_enabled", TRUE) &&hasChild("web_proxy_editor", TRUE) && hasChild("web_proxy_port", TRUE))
+	if (hasChild("web_proxy_enabled", true) &&hasChild("web_proxy_editor", true) && hasChild("web_proxy_port", true))
 	{
 		bool proxy_enable = getChild<LLUICtrl>("web_proxy_enabled")->getValue();
 		std::string proxy_address = getChild<LLUICtrl>("web_proxy_editor")->getValue();
@@ -1111,7 +1111,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 {
 
 	// this variable and if that follows it are used to properly handle do not disturb mode response message
-	static bool initialized = FALSE;
+	static bool initialized = false;
 	// if user is logged in and we haven't initialized do not disturb mode response yet, do it
 	if (!initialized && LLStartUp::getStartupState() == STATE_STARTED)
 	{
@@ -1120,8 +1120,8 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 		// To keep track of whether do not disturb response is default or changed by user additional setting DoNotDisturbResponseChanged
 		// was added into per account settings.
 
-		// initialization should happen once,so setting variable to TRUE
-		initialized = TRUE;
+		// initialization should happen once,so setting variable to true
+		initialized = true;
 		// this connection is needed to properly set "DoNotDisturbResponseChanged" setting when user makes changes in
 		// do not disturb response message.
 		gSavedPerAccountSettings.getControl("DoNotDisturbModeResponse")->getSignal()->connect(boost::bind(&LLFloaterPreference::onDoNotDisturbResponseChanged, this));
@@ -1135,7 +1135,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 		// </FS:Ansariel>
 
 		// <FS:Ansariel> FIRE-17630: Properly disable per-account settings backup list
-		getChildView("restore_per_account_disable_cover")->setVisible(FALSE);
+		getChildView("restore_per_account_disable_cover")->setVisible(false);
 
 		// <FS:Ansariel> Keyword settings are per-account; enable after logging in
 		LLPanel* keyword_panel = getChild<LLPanel>("ChatKeywordAlerts");
@@ -1144,7 +1144,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 		{
 			LLUICtrl* child = static_cast<LLUICtrl*>(*iter);
 			LLControlVariable* enabled_control = child->getEnabledControlVariable();
-			BOOL enabled = !enabled_control || enabled_control->getValue().asBoolean();
+			bool enabled = !enabled_control || enabled_control->getValue().asBoolean();
 			child->setEnabled(enabled);
 		}
 		// </FS:Ansariel>
@@ -1228,7 +1228,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	refresh();
 
 	
-	getChildView("plain_text_chat_history")->setEnabled(TRUE);
+	getChildView("plain_text_chat_history")->setEnabled(true);
 	getChild<LLUICtrl>("plain_text_chat_history")->setValue(gSavedSettings.getBOOL("PlainTextChatHistory"));
 	
 // <FS:CR> Show/hide Client Tag panel
@@ -1583,16 +1583,16 @@ void LLFloaterPreference::onBtnOK(const LLSD& userdata)
 		}
 
 		LLUIColorTable::instance().saveUserSettings();
-		gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), TRUE);
+		gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), true);
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2011-10-02 (Catznip-2.8.0e) | Added: Catznip-2.8.0e
 		// We need to save all crash settings, even if they're defaults [see LLCrashLogger::loadCrashBehaviorSetting()]
-		gCrashSettings.saveToFile(gSavedSettings.getString("CrashSettingsFile"), FALSE);
+		gCrashSettings.saveToFile(gSavedSettings.getString("CrashSettingsFile"), false);
 // [/SL:KB]
 		
 		//Only save once logged in and loaded per account settings
 		if(mGotPersonalInfo)
 		{
-			gSavedPerAccountSettings.saveToFile(gSavedSettings.getString("PerAccountSettingsFile"), TRUE);
+			gSavedPerAccountSettings.saveToFile(gSavedSettings.getString("PerAccountSettingsFile"), true);
 		}
 	}
 	else
@@ -1849,7 +1849,7 @@ public:
 
 	bool tick()
 	{
-		gSavedSettings.setBOOL("EnableVoiceChat", TRUE);
+		gSavedSettings.setBOOL("EnableVoiceChat", true);
 		LLFloaterPreference* floater = LLFloaterReg::findTypedInstance<LLFloaterPreference>("preferences");
 		if (floater)
 		{
@@ -1864,7 +1864,7 @@ void LLFloaterPreference::onClickResetVoice()
 {
 	if (gSavedSettings.getBOOL("EnableVoiceChat") && !gSavedSettings.getBOOL("CmdLineDisableVoice"))
 	{
-		gSavedSettings.setBOOL("EnableVoiceChat", FALSE);
+		gSavedSettings.setBOOL("EnableVoiceChat", false);
 		childSetEnabled("enable_voice_check", false);
 		childSetEnabled("enable_voice_check_volume", false);
 		new FSResetVoiceTimer();
@@ -1952,7 +1952,7 @@ void LLFloaterPreference::changeExternalEditorPath(const std::vector<std::string
 #if LL_DARWIN
 	// on Mac, if it's an application bundle, figure out the actual path from the Info.plist file
 	CFStringRef path_cfstr = CFStringCreateWithCString(kCFAllocatorDefault, chosen_path.c_str(), kCFStringEncodingMacRoman);		// get path as a CFStringRef
-	CFURLRef path_url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, path_cfstr, kCFURLPOSIXPathStyle, TRUE);			// turn it into a CFURLRef
+	CFURLRef path_url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, path_cfstr, kCFURLPOSIXPathStyle, true);			// turn it into a CFURLRef
 	CFBundleRef chosen_bundle = CFBundleCreate(kCFAllocatorDefault, path_url);												// get a handle for the bundle
 	CFRelease(path_url);	// [FS:CR] Don't leave a mess clean up our objects after we use them
 	LLSD args;
@@ -2171,7 +2171,7 @@ void LLFloaterPreference::refreshEnabledState()
 
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures"))
 	{
-		getChildView("texture compression")->setEnabled(FALSE);
+		getChildView("texture compression")->setEnabled(false);
 	}
 
 	// anti-aliasing
@@ -2182,28 +2182,28 @@ void LLFloaterPreference::refreshEnabledState()
 
 	if (gPipeline.canUseAntiAliasing())
 	{
-		fsaa_ctrl->setEnabled(TRUE);
+		fsaa_ctrl->setEnabled(true);
 	}
 	else
 	{
-		fsaa_ctrl->setEnabled(FALSE);
+		fsaa_ctrl->setEnabled(false);
 		fsaa_ctrl->setValue((LLSD::Integer) 0);
 	}
 
 	if (!LLFeatureManager::instance().isFeatureAvailable("RenderFSAASamples"))
 	{
-		fsaa_ctrl->setEnabled(FALSE);
+		fsaa_ctrl->setEnabled(false);
 	}
 
 	// WindLight
 	LLSliderCtrl* sky = getChild<LLSliderCtrl>("SkyMeshDetail");
-	sky->setEnabled(TRUE);
+	sky->setEnabled(true);
 
 	LLCheckBoxCtrl* ctrl_ssao = getChild<LLCheckBoxCtrl>("UseSSAO");
 	LLCheckBoxCtrl* ctrl_dof = getChild<LLCheckBoxCtrl>("UseDoF");
 	LLComboBox* ctrl_shadow = getChild<LLComboBox>("ShadowDetail");
 
-	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO");
+	bool enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO");
 
 	ctrl_ssao->setEnabled(enabled);
 	ctrl_dof->setEnabled(enabled);
@@ -2212,10 +2212,10 @@ void LLFloaterPreference::refreshEnabledState()
 
 	ctrl_shadow->setEnabled(enabled);
 
-	enabled = FALSE;
+	enabled = false;
 	if (!LLFeatureManager::instance().isFeatureAvailable("RenderReflectionsEnabled"))
 	{
-		// getChildView("ReflectionsEnabled")->setEnabled(FALSE);
+		// getChildView("ReflectionsEnabled")->setEnabled(false);
 	}
 	else
 	{
@@ -2302,14 +2302,14 @@ void LLFloaterPreference::disableUnavailableSettings()
     // disabled deferred SSAO
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO"))
 	{
-		ctrl_ssao->setEnabled(FALSE);   
-		ctrl_ssao->setValue(FALSE);
+		ctrl_ssao->setEnabled(false);
+		ctrl_ssao->setValue(false);
 	}
 	
 	// disabled deferred shadows
     if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail"))
     {
-        ctrl_shadows->setEnabled(FALSE);
+        ctrl_shadows->setEnabled(false);
         ctrl_shadows->setValue(0);
     }
 }
@@ -2380,7 +2380,7 @@ void LLFloaterPreference::onClickPreviewUISound(const LLSD& ui_sound_id)
 // 	for (itor = items.begin(); itor != items.end(); ++itor)
 // 	{
 // 		LLNotificationTemplatePtr templatep = LLNotifications::instance().getTemplate(*(std::string*)((*itor)->getUserdata()));
-// 		//gSavedSettings.setWarning(templatep->mName, TRUE);
+// 		//gSavedSettings.setWarning(templatep->mName, true);
 // 		std::string notification_name = templatep->mName;
 // 		LLUI::getInstance()->mSettingGroups["ignores"]->setBOOL(notification_name, true);
 // 	}
@@ -2459,7 +2459,7 @@ void LLFloaterPreference::changeLogPath(const std::vector<std::string>& filename
 		updateDeleteTranscriptsButton();
 	}
 	//[FIX FIRE-2765 : SJ] Enable Reset button when own Chatlogdirectory is set
-	getChildView("reset_logpath")->setEnabled(TRUE);
+	getChildView("reset_logpath")->setEnabled(true);
 }
 
 //[FIX FIRE-2765 : SJ] Making sure Reset button resets the chatlogdirectory to the default setting
@@ -2475,7 +2475,7 @@ void LLFloaterPreference::onClickResetLogPath()
 	// enable/disable 'Delete transcripts button
 	updateDeleteTranscriptsButton();
 
-	getChildView("reset_logpath")->setEnabled(FALSE);
+	getChildView("reset_logpath")->setEnabled(false);
 	// </FS:Ansariel>
 }
 
@@ -2556,37 +2556,37 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	if (visibility == VISIBILITY_DEFAULT)
 	{
 		mOriginalHideOnlineStatus = false;
-		getChildView("online_visibility")->setEnabled(TRUE); 	 
+		getChildView("online_visibility")->setEnabled(true); 	 
 	}
 	else if (visibility == VISIBILITY_HIDDEN)
 	{
 		mOriginalHideOnlineStatus = true;
-		getChildView("online_visibility")->setEnabled(TRUE); 	 
+		getChildView("online_visibility")->setEnabled(true); 	 
 	}
 	else
 	{
 		mOriginalHideOnlineStatus = true;
 	}
 	
-	getChild<LLUICtrl>("online_searchresults")->setEnabled(TRUE);
-	getChildView("friends_online_notify_checkbox")->setEnabled(TRUE);
+	getChild<LLUICtrl>("online_searchresults")->setEnabled(true);
+	getChildView("friends_online_notify_checkbox")->setEnabled(true);
 	getChild<LLUICtrl>("online_visibility")->setValue(mOriginalHideOnlineStatus); 	 
 	getChild<LLUICtrl>("online_visibility")->setLabelArg("[DIR_VIS]", mDirectoryVisibility);
-	getChildView("favorites_on_login_check")->setEnabled(TRUE);
-	//getChildView("log_path_button")->setEnabled(TRUE); // <FS:Ansariel> Does not exist as of 12-09-2014
-	getChildView("chat_font_size")->setEnabled(TRUE);
-	//getChildView("open_log_path_button")->setEnabled(TRUE); // <FS:Ansariel> Does not exist as of 12-09-2014
-	getChildView("log_path_button-panelsetup")->setEnabled(TRUE);// second set of controls for panel_preferences_setup  -WoLf
-	getChildView("open_log_path_button-panelsetup")->setEnabled(TRUE);
+	getChildView("favorites_on_login_check")->setEnabled(true);
+	//getChildView("log_path_button")->setEnabled(true); // <FS:Ansariel> Does not exist as of 12-09-2014
+	getChildView("chat_font_size")->setEnabled(true);
+	//getChildView("open_log_path_button")->setEnabled(true); // <FS:Ansariel> Does not exist as of 12-09-2014
+	getChildView("log_path_button-panelsetup")->setEnabled(true);// second set of controls for panel_preferences_setup  -WoLf
+	getChildView("open_log_path_button-panelsetup")->setEnabled(true);
 	std::string Chatlogsdir = gDirUtilp->getOSUserAppDir();
 	
-	getChildView("conversation_log_combo")->setEnabled(TRUE);	// <FS:CR>
-	getChildView("LogNearbyChat")->setEnabled(TRUE);	// <FS:CR>
-	//getChildView("log_nearby_chat")->setEnabled(TRUE); // <FS:Ansariel> Does not exist as of 12-09-2014
+	getChildView("conversation_log_combo")->setEnabled(true);	// <FS:CR>
+	getChildView("LogNearbyChat")->setEnabled(true);	// <FS:CR>
+	//getChildView("log_nearby_chat")->setEnabled(true); // <FS:Ansariel> Does not exist as of 12-09-2014
 	//[FIX FIRE-2765 : SJ] Set Chatlog Reset Button on enabled when Chatlogpath isn't the default folder
 	if (gSavedPerAccountSettings.getString("InstantMessageLogPath") != gDirUtilp->getOSUserAppDir())
 	{
-		getChildView("reset_logpath")->setEnabled(TRUE);
+		getChildView("reset_logpath")->setEnabled(true);
 	}
 	// <FS:Ansariel> Keep this for OpenSim
 	if (LLGridManager::instance().isInSecondLife())
@@ -2604,8 +2604,8 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 		}
 
 		LLCheckBoxCtrl* send_im_to_email = getChild<LLCheckBoxCtrl>("send_im_to_email");
-		send_im_to_email->setVisible(TRUE);
-		send_im_to_email->setEnabled(TRUE);
+		send_im_to_email->setVisible(true);
+		send_im_to_email->setEnabled(true);
 		send_im_to_email->setValue(im_via_email);
 		send_im_to_email->setLabelArg("[EMAIL]", display_email);
 	}
@@ -2613,21 +2613,21 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	// </FS:Ansariel>
 
 	// <FS:Ansariel> FIRE-420: Show end of last conversation in history
-	getChildView("LogShowHistory")->setEnabled(TRUE);
+	getChildView("LogShowHistory")->setEnabled(true);
 
 	// <FS:Ansariel> Clear inventory cache button
-	getChildView("ClearInventoryCache")->setEnabled(TRUE);
+	getChildView("ClearInventoryCache")->setEnabled(true);
 
 	// <FS:Ansariel> FIRE-18250: Option to disable default eye movement
-	getChildView("FSStaticEyes")->setEnabled(TRUE);
+	getChildView("FSStaticEyes")->setEnabled(true);
 
 	// <FS:Ansariel> FIRE-22564: Route llOwnerSay to scipt debug window
-	getChildView("FSllOwnerSayToScriptDebugWindow_checkbox")->setEnabled(TRUE);
+	getChildView("FSllOwnerSayToScriptDebugWindow_checkbox")->setEnabled(true);
 
 	// <FS:Ansariel> Clear Cache button actually clears per-account cache items
-	getChildView("clear_webcache")->setEnabled(TRUE);
+	getChildView("clear_webcache")->setEnabled(true);
 
-	getChild<LLUICtrl>("voice_call_friends_only_check")->setEnabled(TRUE);
+	getChild<LLUICtrl>("voice_call_friends_only_check")->setEnabled(true);
 	getChild<LLUICtrl>("voice_call_friends_only_check")->setValue(gSavedPerAccountSettings.getBOOL("VoiceCallsFriendsOnly"));
 }
 
@@ -2913,8 +2913,8 @@ void LLFloaterPreference::onClickBlockList()
 	// </FS:Ansariel> Optional standalone blocklist floater
 	//LLFloaterSidePanelContainer::showPanel("people", "panel_people",
 	//	LLSD().with("people_panel_tab_name", "blocked_panel"));
-	BOOL saved_setting = gSavedSettings.getBOOL("FSDisableBlockListAutoOpen");
-	gSavedSettings.setBOOL("FSDisableBlockListAutoOpen", FALSE);
+	bool saved_setting = gSavedSettings.getBOOL("FSDisableBlockListAutoOpen");
+	gSavedSettings.setBOOL("FSDisableBlockListAutoOpen", false);
 	LLPanelBlockedList::showPanelAndSelect();
 	gSavedSettings.setBOOL("FSDisableBlockListAutoOpen", saved_setting);
 	// </FS:Ansariel>
@@ -2984,9 +2984,9 @@ void LLFloaterPreference::onAtmosShaderChange()
     if(ctrl_alm)
     {
         //Deferred/SSAO/Shadows
-        BOOL bumpshiny = LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump") && gSavedSettings.getBOOL("RenderObjectBump");
-        BOOL shaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders");
-        BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
+        bool bumpshiny = LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump") && gSavedSettings.getBOOL("RenderObjectBump");
+        bool shaders = gSavedSettings.getBOOL("WindLightUseAtmosShaders");
+        bool enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
                         bumpshiny &&
                         shaders;
 
@@ -3048,11 +3048,11 @@ void LLFloaterPreference::updateUISoundsControls()
 		earPosGroup->setIndexEnabled(hearNearbyVoiceFullVolume, LLGridManager::instance().isInOpenSim());
 	}
 	// <FS:Beq>
-	getChild<LLTextBox>("textFSRestartOpenSim")->setVisible(TRUE);
-	getChild<LLLineEditor>("UISndRestartOpenSim")->setVisible(TRUE);
-	getChild<LLButton>("Prev_UISndRestartOpenSim")->setVisible(TRUE);
-	getChild<LLButton>("Def_UISndRestartOpenSim")->setVisible(TRUE);
-	getChild<LLCheckBoxCtrl>("PlayModeUISndRestartOpenSim")->setVisible(TRUE);
+	getChild<LLTextBox>("textFSRestartOpenSim")->setVisible(true);
+	getChild<LLLineEditor>("UISndRestartOpenSim")->setVisible(true);
+	getChild<LLButton>("Prev_UISndRestartOpenSim")->setVisible(true);
+	getChild<LLButton>("Def_UISndRestartOpenSim")->setVisible(true);
+	getChild<LLCheckBoxCtrl>("PlayModeUISndRestartOpenSim")->setVisible(true);
 #endif
 	getChild<LLComboBox>("UseLSLFlightAssist")->setValue((int)gSavedPerAccountSettings.getF32("UseLSLFlightAssist")); // Flight Assist combo box; Not sound-related, but better to place it here instead of creating whole new void
 
@@ -3307,14 +3307,14 @@ LLPanelPreference::LLPanelPreference()
 bool LLPanelPreference::postBuild()
 {
 	////////////////////// PanelGeneral ///////////////////
-	if (hasChild("display_names_check", TRUE))
+	if (hasChild("display_names_check", true))
 	{
-		BOOL use_people_api = gSavedSettings.getBOOL("UsePeopleAPI");
+		bool use_people_api = gSavedSettings.getBOOL("UsePeopleAPI");
 		LLCheckBoxCtrl* ctrl_display_name = getChild<LLCheckBoxCtrl>("display_names_check");
 		ctrl_display_name->setEnabled(use_people_api);
 		if (!use_people_api)
 		{
-			ctrl_display_name->setValue(FALSE);
+			ctrl_display_name->setValue(false);
 		}
 	}
 
@@ -3329,7 +3329,7 @@ bool LLPanelPreference::postBuild()
 	// </FS:Ansariel>
 
 	// <FS:Ansariel> Flash chat toolbar button notification
-	if (hasChild("FSNotifyIMFlash", TRUE))
+	if (hasChild("FSNotifyIMFlash", true))
 	{
 		gSavedSettings.getControl("FSChatWindow")->getSignal()->connect(boost::bind(&LLPanelPreference::onChatWindowChanged, this));
 		onChatWindowChanged();
@@ -3337,7 +3337,7 @@ bool LLPanelPreference::postBuild()
 	// </FS:Ansariel>
 
 	// <FS:Ansariel> Exodus' mouselook combat feature
-	if (hasChild("FSMouselookCombatFeatures", TRUE))
+	if (hasChild("FSMouselookCombatFeatures", true))
 	{
 		gSavedSettings.getControl("EnableMouselook")->getSignal()->connect(boost::bind(&LLPanelPreference::updateMouselookCombatFeatures, this));
 		gSavedSettings.getControl("FSMouselookCombatFeatures")->getSignal()->connect(boost::bind(&LLPanelPreference::updateMouselookCombatFeatures, this));
@@ -3347,9 +3347,9 @@ bool LLPanelPreference::postBuild()
 
 	////////////////////// PanelVoice ///////////////////
 	// <FS:Ansariel> Doesn't exist as of 25-07-2014
-	//if (hasChild("voice_unavailable", TRUE))
+	//if (hasChild("voice_unavailable", true))
 	//{
-	//	BOOL voice_disabled = gSavedSettings.getBOOL("CmdLineDisableVoice");
+	//	bool voice_disabled = gSavedSettings.getBOOL("CmdLineDisableVoice");
 	//	getChildView("voice_unavailable")->setVisible( voice_disabled);
 	//	getChildView("enable_voice_check")->setVisible( !voice_disabled);
 	//}
@@ -3358,7 +3358,7 @@ bool LLPanelPreference::postBuild()
 	//////////////////////PanelSkins ///////////////////
 	
 	/* <FS:CR> Handled below
-	if (hasChild("skin_selection", TRUE))
+	if (hasChild("skin_selection", true))
 	{
 		LLFloaterPreference::refreshSkin(this);
 
@@ -3373,14 +3373,14 @@ bool LLPanelPreference::postBuild()
 	 */
 
 	//////////////////////PanelPrivacy ///////////////////
-	if (hasChild("media_enabled", TRUE))
+	if (hasChild("media_enabled", true))
 	{
 		bool media_enabled = gSavedSettings.getBOOL("AudioStreamingMedia");
 		
 		getChild<LLCheckBoxCtrl>("media_enabled")->set(media_enabled);
 		getChild<LLCheckBoxCtrl>("autoplay_enabled")->setEnabled(media_enabled);
 	}
-	if (hasChild("music_enabled", TRUE))
+	if (hasChild("music_enabled", true))
 	{
 		getChild<LLCheckBoxCtrl>("music_enabled")->set(gSavedSettings.getBOOL("AudioStreamingMusic"));
 	}
@@ -3388,17 +3388,17 @@ bool LLPanelPreference::postBuild()
 	{
 		getChild<LLCheckBoxCtrl>("media_filter")->set(gSavedSettings.getBOOL("MediaEnableFilter"));
 	}
-	if (hasChild("voice_call_friends_only_check", TRUE))
+	if (hasChild("voice_call_friends_only_check", true))
 	{
 		getChild<LLCheckBoxCtrl>("voice_call_friends_only_check")->setCommitCallback(boost::bind(&showFriendsOnlyWarning, _1, _2));
 	}
 	// <FS:Ansariel> Disable running multiple viewers warning
-	//if (hasChild("allow_multiple_viewer_check", TRUE))
+	//if (hasChild("allow_multiple_viewer_check", true))
 	//{
 	//	getChild<LLCheckBoxCtrl>("allow_multiple_viewer_check")->setCommitCallback(boost::bind(&showMultipleViewersWarning, _1, _2));
 	//}
 	// </FS:Ansariel>
-	if (hasChild("favorites_on_login_check", TRUE))
+	if (hasChild("favorites_on_login_check", true))
 	{
 		getChild<LLCheckBoxCtrl>("favorites_on_login_check")->setCommitCallback(boost::bind(&handleFavoritesOnLoginChanged, _1, _2));
 		// <FS:Ansariel> [FS Login Panel]
@@ -3407,7 +3407,7 @@ bool LLPanelPreference::postBuild()
 		// </FS:Ansariel> [FS Login Panel]
 		getChild<LLCheckBoxCtrl>("favorites_on_login_check")->setValue(show_favorites_at_login);
 	}
-	if (hasChild("mute_chb_label", TRUE))
+	if (hasChild("mute_chb_label", true))
 	{
 		getChild<LLTextBox>("mute_chb_label")->setShowCursorHand(false);
 		getChild<LLTextBox>("mute_chb_label")->setSoundFlags(LLView::MOUSE_UP);
@@ -3423,7 +3423,7 @@ bool LLPanelPreference::postBuild()
 
 	//////////////////////PanelSetup ///////////////////
 	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-	//if (hasChild("max_bandwidth", TRUE))
+	//if (hasChild("max_bandwidth", true))
 	//{
 	//	mBandWidthUpdater = new LLPanelPreference::Updater(boost::bind(&handleBandwidthChanged, _1), BANDWIDTH_UPDATER_TIMEOUT);
 	//	gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&LLPanelPreference::Updater::update, mBandWidthUpdater, _2));
@@ -3441,15 +3441,15 @@ bool LLPanelPreference::postBuild()
 #endif
 
 	////////////////////// PanelAlerts ///////////////////
-	if (hasChild("OnlineOfflinetoNearbyChat", TRUE))
+	if (hasChild("OnlineOfflinetoNearbyChat", true))
 	{
 		getChildView("OnlineOfflinetoNearbyChatHistory")->setEnabled(getChild<LLUICtrl>("OnlineOfflinetoNearbyChat")->getValue().asBoolean());
 	}
 
 	// <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
-	if (hasChild("notify_growl_checkbox", TRUE))
+	if (hasChild("notify_growl_checkbox", true))
 	{
-		BOOL growl_enabled = gSavedSettings.getBOOL("FSEnableGrowl") && GrowlManager::isUsable();
+		bool growl_enabled = gSavedSettings.getBOOL("FSEnableGrowl") && GrowlManager::isUsable();
 		getChild<LLCheckBoxCtrl>("notify_growl_checkbox")->setCommitCallback(boost::bind(&LLPanelPreference::onEnableGrowlChanged, this));
 		getChild<LLCheckBoxCtrl>("notify_growl_checkbox")->setEnabled(GrowlManager::isUsable());
 		getChild<LLCheckBoxCtrl>("notify_growl_always_checkbox")->setEnabled(growl_enabled);
@@ -3459,7 +3459,7 @@ bool LLPanelPreference::postBuild()
 
 	////////////////////// PanelUI ///////////////////
 	// <FS:Ansariel> Customizable contact list columns
-	if (hasChild("textFriendlistColumns", TRUE))
+	if (hasChild("textFriendlistColumns", true))
 	{
 		onCheckContactListColumnMode();
 	}
@@ -3589,7 +3589,7 @@ void LLPanelPreference::toggleMuteWhenMinimized()
 // <FS:Ansariel> Only enable Growl checkboxes if Growl is usable
 void LLPanelPreference::onEnableGrowlChanged()
 {
-	BOOL growl_enabled = gSavedSettings.getBOOL("FSEnableGrowl") && GrowlManager::isUsable();
+	bool growl_enabled = gSavedSettings.getBOOL("FSEnableGrowl") && GrowlManager::isUsable();
 	getChild<LLCheckBoxCtrl>("notify_growl_always_checkbox")->setEnabled(growl_enabled);
 	getChild<LLCheckBoxCtrl>("FSFilterGrowlKeywordDuplicateIMs")->setEnabled(growl_enabled);
 }
@@ -3687,7 +3687,7 @@ void LLPanelPreference::setControlFalse(const LLSD& user_data)
 	LLControlVariable* control = findControl(control_name);
 	
 	if (control)
-		control->set(LLSD(FALSE));
+		control->set(LLSD(false));
 }
 */
 
@@ -3830,7 +3830,7 @@ private:
 	// <FS:Ansariel> DebugLookAt checkbox status not working properly
 	void onChangeDebugLookAt()
 	{
-		getChild<LLCheckBoxCtrl>("showlookat")->set(gSavedPerAccountSettings.getS32("DebugLookAt") == 0 ? FALSE : TRUE);
+		getChild<LLCheckBoxCtrl>("showlookat")->set(gSavedPerAccountSettings.getS32("DebugLookAt") == 0 ? false : true);
 	}
 
 	void onClickDebugLookAt(const LLSD& value)
@@ -3883,7 +3883,7 @@ bool LLPanelPreferenceGraphics::postBuild()
 	}
 
 	LLCheckBoxCtrl *use_HiDPI = getChild<LLCheckBoxCtrl>("use HiDPI");
-	use_HiDPI->setEnabled(FALSE);
+	use_HiDPI->setEnabled(false);
 #endif
 	// </FS:Ansariel>
 
@@ -3897,7 +3897,7 @@ bool LLPanelPreferenceGraphics::postBuild()
 
 // <FS:CR> Hide this until we have fullscreen mode functional on OSX again
 #ifdef LL_DARWIN
-	getChild<LLCheckBoxCtrl>("Fullscreen Mode")->setVisible(FALSE);
+	getChild<LLCheckBoxCtrl>("Fullscreen Mode")->setVisible(false);
 #endif // LL_DARWIN
 // </FS:CR>
 
@@ -4429,7 +4429,7 @@ void LLPanelPreferenceControls::onListCommit()
             if (root_floater)
                 root_floater->addDependentFloater(dialog);
             dialog->openFloater();
-            dialog->setFocus(TRUE);
+            dialog->setFocus(true);
         }
     }
     else
@@ -4867,9 +4867,9 @@ void LLFloaterPreferenceProxy::onChangeSocksSettings()
 	// Check for invalid states for the other HTTP proxy radio
 	LLRadioGroup* otherHttpProxy = getChild<LLRadioGroup>("other_http_proxy_type");
 	if ((otherHttpProxy->getSelectedValue().asString() == "Socks" &&
-			getChild<LLCheckBoxCtrl>("socks_proxy_enabled")->get() == FALSE )||(
+			getChild<LLCheckBoxCtrl>("socks_proxy_enabled")->get() == false )||(
 					otherHttpProxy->getSelectedValue().asString() == "Web" &&
-					getChild<LLCheckBoxCtrl>("web_proxy_enabled")->get() == FALSE ) )
+					getChild<LLCheckBoxCtrl>("web_proxy_enabled")->get() == false ) )
 	{
 		otherHttpProxy->selectFirstItem();
 	}
@@ -5501,12 +5501,12 @@ void FSPanelPreferenceBackup::doBackupSettings(const LLSD& notification, const L
 	LL_INFOS("SettingsBackup") << "saving UI color table" << LL_ENDL;
 	LLUIColorTable::instance().saveUserSettings();
 
-	// set it to save defaults, too (FALSE), because our declaration automatically
+	// set it to save defaults, too (false), because our declaration automatically
 	// makes the value default
 	std::string backup_global_name = gDirUtilp->getExpandedFilename(LL_PATH_NONE, dir_name,
 				LLAppViewer::instance()->getSettingsFilename("Default","Global"));
 	LL_INFOS("SettingsBackup") << "saving backup global settings" << LL_ENDL;
-	backup_global_controls.saveToFile(backup_global_name, FALSE);
+	backup_global_controls.saveToFile(backup_global_name, false);
 
 	// Get scroll list control that holds the list of global files
 	LLScrollListCtrl* globalScrollList = getChild<LLScrollListCtrl>("restore_global_files_list");
@@ -5551,9 +5551,9 @@ void FSPanelPreferenceBackup::doBackupSettings(const LLSD& notification, const L
 			// run backup on per-account controls
 			LL_INFOS("SettingsBackup") << "running functor on per account settings" << LL_ENDL;
 			gSavedPerAccountSettings.applyToAll(&func_per_account);
-			// save defaults here as well (FALSE)
+			// save defaults here as well (false)
 			LL_INFOS("SettingsBackup") << "saving backup per account settings" << LL_ENDL;
-			backup_per_account_controls.saveToFile(backup_per_account_name, FALSE);
+			backup_per_account_controls.saveToFile(backup_per_account_name, false);
 
 			// Get scroll list control that holds the list of per account files
 			LLScrollListCtrl* perAccountScrollList = getChild<LLScrollListCtrl>("restore_per_account_files_list");
@@ -5736,7 +5736,7 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 		LL_INFOS("SettingsBackup") << "restoring global settings from backup" << LL_ENDL;
 		gSavedSettings.loadFromFile(backup_global_name);
 		LL_INFOS("SettingsBackup") << "saving global settings" << LL_ENDL;
-		gSavedSettings.saveToFile(global_name, TRUE);
+		gSavedSettings.saveToFile(global_name, true);
 	}
 
 	// Get scroll list control that holds the list of global files
@@ -5781,7 +5781,7 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 			LL_INFOS("SettingsBackup") << "restoring per account settings" << LL_ENDL;
 			gSavedPerAccountSettings.loadFromFile(backup_per_account_name);
 			LL_INFOS("SettingsBackup") << "saving per account settings" << LL_ENDL;
-			gSavedPerAccountSettings.saveToFile(per_account_name, TRUE);
+			gSavedPerAccountSettings.saveToFile(per_account_name, true);
 		}
 
 		// Get scroll list control that holds the list of per account files
@@ -5814,7 +5814,7 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 		LL_INFOS("SettingsBackup") << "clearing toolbars" << LL_ENDL;
 		gToolBarView->clearToolbars();
 		LL_INFOS("SettingsBackup") << "reloading toolbars" << LL_ENDL;
-		gToolBarView->loadToolbars(FALSE);
+		gToolBarView->loadToolbars(false);
 #ifdef OPENSIM
 		if (LLGridManager::instance().isInOpenSim())
 		{
@@ -5917,7 +5917,7 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 		}
 	}
 	// <FS:CR> Set this true so we can update newer settings with their deprecated counterparts on next launch
-	gSavedSettings.setBOOL("FSFirstRunAfterSettingsRestore", TRUE);
+	gSavedSettings.setBOOL("FSFirstRunAfterSettingsRestore", true);
 	
 	// Tell the user we have finished restoring settings and the viewer must shut down
 	LLNotificationsUtil::add("RestoreFinished", LLSD(), LLSD(), boost::bind(&FSPanelPreferenceBackup::onQuitConfirmed, this, _1, _2));
@@ -5927,7 +5927,7 @@ void FSPanelPreferenceBackup:: doRestoreSettings(const LLSD& notification, const
 void FSPanelPreferenceBackup::onQuitConfirmed(const LLSD& notification,const LLSD& response)
 {
 	// Make sure the viewer will not save any settings on exit, so our copied files will survive
-	LLAppViewer::instance()->setSaveSettingsOnExit(FALSE);
+	LLAppViewer::instance()->setSaveSettingsOnExit(false);
 	// Quit the viewer so all gets saved immediately
 	LL_INFOS("SettingsBackup") << "setting to quit" << LL_ENDL;
 	LLAppViewer::instance()->requestQuit();
@@ -5935,15 +5935,15 @@ void FSPanelPreferenceBackup::onQuitConfirmed(const LLSD& notification,const LLS
 
 void FSPanelPreferenceBackup::onClickSelectAll()
 {
-	doSelect(TRUE);
+	doSelect(true);
 }
 
 void FSPanelPreferenceBackup::onClickDeselectAll()
 {
-	doSelect(FALSE);
+	doSelect(false);
 }
 
-void FSPanelPreferenceBackup::doSelect(BOOL all)
+void FSPanelPreferenceBackup::doSelect(bool all)
 {
 	// Get scroll list control that holds the list of global files
 	LLScrollListCtrl* globalScrollList = getChild<LLScrollListCtrl>("restore_global_files_list");
@@ -5957,7 +5957,7 @@ void FSPanelPreferenceBackup::doSelect(BOOL all)
 	applySelection(globalFoldersScrollList, all);
 }
 
-void FSPanelPreferenceBackup::applySelection(LLScrollListCtrl* control, BOOL all)
+void FSPanelPreferenceBackup::applySelection(LLScrollListCtrl* control, bool all)
 {
 	// Pull out all data
 	std::vector<LLScrollListItem*> itemList = control->getAllData();
@@ -6123,7 +6123,7 @@ void LLPanelPreferenceOpensim::onClickAddGrid()
 
 	if (!new_grid.empty())
 	{
-		getChild<LLUICtrl>("grid_management_panel")->setEnabled(FALSE);
+		getChild<LLUICtrl>("grid_management_panel")->setEnabled(false);
 		if (mGridAddedCallbackConnection.connected())
 		{
 			mGridAddedCallbackConnection.disconnect();
@@ -6216,7 +6216,7 @@ void LLPanelPreferenceOpensim::refreshGridList(bool success)
 {
 	FSPanelLogin::updateServer();
 
-	getChild<LLUICtrl>("grid_management_panel")->setEnabled(TRUE);
+	getChild<LLUICtrl>("grid_management_panel")->setEnabled(true);
 
 	if (!mGridListControl)
 	{

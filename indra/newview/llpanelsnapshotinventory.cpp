@@ -155,7 +155,7 @@ void LLPanelSnapshotInventory::onOpen(const LLSD& key)
 	if (LLAgentBenefitsMgr::current().getTextureUploadCost() == 0
 		|| gAgent.getRegion()->getCentralBakeVersion() > 0)
 	{
-		gSavedSettings.setBOOL("TemporaryUpload", FALSE);
+		gSavedSettings.setBOOL("TemporaryUpload", false);
 	}
 	getChild<LLCheckBoxCtrl>("inventory_temp_upload")->setVisible(LLAgentBenefitsMgr::current().getTextureUploadCost() > 0 && gAgent.getRegion()->getCentralBakeVersion() == 0);
 	// </FS:CR>
@@ -171,7 +171,7 @@ void LLPanelSnapshotInventory::updateControls(const LLSD& info)
 
 void LLPanelSnapshotInventory::onResolutionCommit(LLUICtrl* ctrl)
 {
-	BOOL current_window_selected = (getChild<LLComboBox>(getImageSizeComboName())->getCurrentIndex() == 3);
+	bool current_window_selected = (getChild<LLComboBox>(getImageSizeComboName())->getCurrentIndex() == 3);
 	getChild<LLSpinCtrl>(getWidthSpinnerName())->setVisible(!current_window_selected);
 	getChild<LLSpinCtrl>(getHeightSpinnerName())->setVisible(!current_window_selected);
 }

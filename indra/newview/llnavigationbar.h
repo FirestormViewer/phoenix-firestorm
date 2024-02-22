@@ -166,7 +166,7 @@ private:
 	// {
 	// 	if (LLNavigationBar::instanceExists())
 	// 	{
-	// 		LLNavigationBar::getInstance()->setEnabled(FALSE);
+	// 		LLNavigationBar::getInstance()->setEnabled(false);
 	// 	}
 	// }
 	// </FS:Zi>

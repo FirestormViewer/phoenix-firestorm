@@ -201,7 +201,7 @@ public:
 	virtual ~LLXmlTreeParser();
 
 	bool parseFile(const std::string &path, LLXmlTreeNode** root, bool keep_contents );
-	BOOL parseString(const std::string &string, LLXmlTreeNode** root, BOOL keep_contents);
+	bool parseString(const std::string &string, LLXmlTreeNode** root, bool keep_contents);
 
 protected:
 	const std::string& tabs();

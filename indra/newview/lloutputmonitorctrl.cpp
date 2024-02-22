@@ -262,7 +262,7 @@ void LLOutputMonitorCtrl::draw()
 	//	}
 
 	//	// Draw rectangle filled with the color.
-	//	gl_rect_2d(xpos, recttop, xpos+rectw, rectbtm, rect_color, TRUE);
+	//	gl_rect_2d(xpos, recttop, xpos+rectw, rectbtm, rect_color, true);
 	//	xpos += period;
 	//}
 
@@ -270,7 +270,7 @@ void LLOutputMonitorCtrl::draw()
 	// Draw bounding box.
 	//
 	if(mBorder)
-		gl_rect_2d(0, monh, monw, 0, sColorBound, FALSE);
+		gl_rect_2d(0, monh, monw, 0, sColorBound, false);
 }
 
 // virtual
@@ -304,8 +304,8 @@ void LLOutputMonitorCtrl::setChannelState(EChannelState state)
     mChannelState = state;
     if (state == INACTIVE_CHANNEL)
     {
-        // switchIndicator will set it to TRUE when channel becomes active
-        setVisible(FALSE);
+        // switchIndicator will set it to true when channel becomes active
+        setVisible(false);
     }
 }
 
@@ -365,8 +365,8 @@ void LLOutputMonitorCtrl::onChangeDetailed(const LLMute& mute)
 void LLOutputMonitorCtrl::switchIndicator(bool switch_on)
 {
     // <FS:Ansariel> [FS communication UI]
-    //if ((mChannelState != INACTIVE_CHANNEL) && (getVisible() != (BOOL)switch_on))
-    if (getVisible() != (BOOL)switch_on)
+    //if ((mChannelState != INACTIVE_CHANNEL) && (getVisible() != (bool)switch_on))
+    if (getVisible() != switch_on)
     // </FS:Ansariel> [FS communication UI]
     {
         setVisible(switch_on);
@@ -427,8 +427,8 @@ void NearbyVoiceMonitor::draw()
 	LLUUID id;
 	bool draw = false;
 
-	mSpeakerMgr->update(TRUE);
-	mSpeakerMgr->getSpeakerList(&speaker_list, FALSE);
+	mSpeakerMgr->update(true);
+	mSpeakerMgr->getSpeakerList(&speaker_list, false);
 
 	for (LLSpeakerMgr::speaker_list_t::const_iterator it = speaker_list.begin(); it != speaker_list.end(); ++it)
 	{

@@ -245,7 +245,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
 		if (msg["source_type"].asInteger() == CHAT_SOURCE_OBJECT)
 		{
 			user_preferences = gSavedSettings.getString("NotificationObjectIMOptions");
-			if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundObjectIM") == TRUE))
+			if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundObjectIM") == true))
 			{
 				make_ui_sound("UISndNewIncomingIMSession");
 			}
@@ -253,7 +253,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
 		else
 		{
     	user_preferences = gSavedSettings.getString("NotificationNearbyChatOptions");
-			if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNearbyChatIM") == TRUE))
+			if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNearbyChatIM") == true))
 			{
 				make_ui_sound("UISndNewIncomingIMSession");
     }
@@ -264,7 +264,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
         if (LLAvatarTracker::instance().isBuddy(participant_id))
         {
         	user_preferences = gSavedSettings.getString("NotificationFriendIMOptions");
-			if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundFriendIM") == TRUE))
+			if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundFriendIM") == true))
 			{
 				make_ui_sound("UISndNewIncomingIMSession");
 			}
@@ -272,7 +272,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
         else
         {
         	user_preferences = gSavedSettings.getString("NotificationNonFriendIMOptions");
-			if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNonFriendIM") == TRUE))
+			if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNonFriendIM") == true))
 			{
 				make_ui_sound("UISndNewIncomingIMSession");
         }
@@ -281,7 +281,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
     else if(session->isAdHocSessionType())
     {
     	user_preferences = gSavedSettings.getString("NotificationConferenceIMOptions");
-		if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundConferenceIM") == TRUE))
+		if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundConferenceIM") == true))
 		{
 			make_ui_sound("UISndNewIncomingIMSession");
     }
@@ -289,7 +289,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
     else if(session->isGroupSessionType())
     {
     	user_preferences = gSavedSettings.getString("NotificationGroupChatOptions");
-		if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundGroupChatIM") == TRUE))
+		if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundGroupChatIM") == true))
 		{
 			make_ui_sound("UISndNewIncomingIMSession");
 		}
@@ -853,7 +853,7 @@ LLIMModel::LLIMSession::LLIMSession(const LLUUID& session_id, const std::string&
 	}
 	else
 	{
-		//tick returns TRUE - timer will be deleted after the tick
+		//tick returns true - timer will be deleted after the tick
 		new LLSessionTimeoutTimer(mSessionID, SESSION_INITIALIZATION_TIMEOUT);
 	}
 
@@ -1072,7 +1072,7 @@ void LLIMModel::LLIMSession::addMessage(const std::string& from,
 	if (mSpeakers && from_id.notNull())
 	{
 		mSpeakers->speakerChatted(from_id);
-		mSpeakers->setSpeakerTyping(from_id, FALSE);
+		mSpeakers->setSpeakerTyping(from_id, false);
 	}
 }
 
@@ -1443,7 +1443,7 @@ bool LLIMModel::LLIMSession::isOutgoingAdHoc() const
 
 bool LLIMModel::LLIMSession::isAdHoc()
 {
-	return IM_SESSION_CONFERENCE_START == mType || (IM_SESSION_INVITE == mType && !gAgent.isInGroup(mSessionID, TRUE));
+	return IM_SESSION_CONFERENCE_START == mType || (IM_SESSION_INVITE == mType && !gAgent.isInGroup(mSessionID, true));
 }
 
 bool LLIMModel::LLIMSession::isP2P()
@@ -1453,7 +1453,7 @@ bool LLIMModel::LLIMSession::isP2P()
 
 bool LLIMModel::LLIMSession::isGroupChat()
 {
-	return IM_SESSION_GROUP_START == mType || (IM_SESSION_INVITE == mType && gAgent.isInGroup(mSessionID, TRUE));
+	return IM_SESSION_GROUP_START == mType || (IM_SESSION_INVITE == mType && gAgent.isInGroup(mSessionID, true));
 }
 
 LLUUID LLIMModel::LLIMSession::generateOutgoingAdHocHash() const
@@ -1985,7 +1985,7 @@ const std::string& LLIMModel::getHistoryFileName(const LLUUID& session_id) const
 
 
 // TODO get rid of other participant ID
-void LLIMModel::sendTypingState(LLUUID session_id, LLUUID other_participant_id, BOOL typing)
+void LLIMModel::sendTypingState(LLUUID session_id, LLUUID other_participant_id, bool typing)
 {
 	static LLCachedControl<bool> fsSendTypingState(gSavedSettings, "FSSendTypingState");
 	if (!fsSendTypingState)
@@ -1999,7 +1999,7 @@ void LLIMModel::sendTypingState(LLUUID session_id, LLUUID other_participant_id, 
 	pack_instant_message(
 		gMessageSystem,
 		gAgent.getID(),
-		FALSE,
+		false,
 		gAgent.getSessionID(),
 		other_participant_id,
 		name,
@@ -2019,7 +2019,7 @@ void LLIMModel::sendLeaveSession(const LLUUID& session_id, const LLUUID& other_p
 		pack_instant_message(
 			gMessageSystem,
 			gAgent.getID(),
-			FALSE,
+			false,
 			gAgent.getSessionID(),
 			other_participant_id,
 			name,
@@ -2069,7 +2069,7 @@ void deliverMessage(const std::string& utf8_text,
 		pack_instant_message(
 			gMessageSystem,
 			gAgent.getID(),
-			FALSE,
+			false,
 			gAgent.getSessionID(),
 			other_participant_id,
 			name.c_str(),
@@ -2186,7 +2186,7 @@ void LLIMModel::sendMessage(const std::string& utf8_text,
 		if (speaker_mgr)
 		{
 			speaker_mgr->speakerChatted(gAgentID);
-			speaker_mgr->setSpeakerTyping(gAgentID, FALSE);
+			speaker_mgr->setSpeakerTyping(gAgentID, false);
 		}
 	}
 
@@ -2252,7 +2252,7 @@ void session_starter_helper(
 	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
 
 	msg->nextBlockFast(_PREHASH_MessageBlock);
-	msg->addBOOLFast(_PREHASH_FromGroup, FALSE);
+	msg->addBOOLFast(_PREHASH_FromGroup, false);
 	msg->addUUIDFast(_PREHASH_ToAgentID, other_participant_id);
 	msg->addU8Fast(_PREHASH_Offline, IM_ONLINE);
 	msg->addU8Fast(_PREHASH_Dialog, im_type);
@@ -2406,7 +2406,7 @@ LLUUID LLIMMgr::computeSessionID(
 		}
 	}
 
-	if (gAgent.isInGroup(session_id, TRUE) && (session_id != other_participant_id))
+	if (gAgent.isInGroup(session_id, true) && (session_id != other_participant_id))
 	{
 		LL_WARNS() << "Group session id different from group id: IM type = " << dialog << ", session id = " << session_id << ", group id = " << other_participant_id << LL_ENDL;
 	}
@@ -2492,7 +2492,7 @@ LLIMMgr::onConfirmForceCloseError(
 	// </FS:Ansariel> [FS communication UI]
 	if ( floater )
 	{
-		floater->closeFloater(FALSE);
+		floater->closeFloater(false);
 	}
 	return false;
 }
@@ -2641,7 +2641,7 @@ LLCallDialog::LLCallDialog(const LLSD& payload)
 	  mPayload(payload),
 	  mLifetime(DEFAULT_LIFETIME)
 {
-	setAutoFocus(FALSE);
+	setAutoFocus(false);
 	// force docked state since this floater doesn't save it between recreations
 	setDocked(true);
 }
@@ -2732,7 +2732,7 @@ void LLCallDialog::setIcon(const LLSD& session_id, const LLSD& participant_id)
 {
 	bool participant_is_avatar = LLVoiceClient::getInstance()->isParticipantAvatar(session_id);
 
-	bool is_group = participant_is_avatar && gAgent.isInGroup(session_id, TRUE);
+	bool is_group = participant_is_avatar && gAgent.isInGroup(session_id, true);
 
 	LLAvatarIconCtrl* avatar_icon = getChild<LLAvatarIconCtrl>("avatar_icon");
 	LLGroupIconCtrl* group_icon = getChild<LLGroupIconCtrl>("group_icon");
@@ -3010,7 +3010,7 @@ bool LLIncomingCallDialog::postBuild()
 	}
 
 	std::string call_type;
-	if (gAgent.isInGroup(session_id, TRUE))
+	if (gAgent.isInGroup(session_id, true))
 	{
 		LLStringUtil::format_map_t args;
 		LLGroupData data;
@@ -3184,7 +3184,7 @@ void LLIncomingCallDialog::processCallResponse(S32 response, const LLSD &payload
 				case IM_SESSION_CONFERENCE_START:
 				case IM_SESSION_GROUP_START:
 				case IM_SESSION_INVITE:
-					if (gAgent.isInGroup(session_id, TRUE))
+					if (gAgent.isInGroup(session_id, true))
 					{
 						LLGroupData data;
 						if (!gAgent.getGroupData(session_id, data)) break;
@@ -3362,7 +3362,7 @@ LLIMMgr::LLIMMgr()
 	LLIMModel::getInstance()->addNewMsgCallback(boost::bind(&FSFloaterIM::sRemoveTypingIndicator, _1));
 	// </FS:Ansariel> [FS communication UI]
 
-	gSavedPerAccountSettings.declareBOOL("FetchGroupChatHistory", TRUE, "Fetch recent messages from group chat servers when a group window opens", LLControlVariable::PERSIST_ALWAYS);
+	gSavedPerAccountSettings.declareBOOL("FetchGroupChatHistory", true, "Fetch recent messages from group chat servers when a group window opens", LLControlVariable::PERSIST_ALWAYS);
 }
 
 // Add a message to a session.
@@ -3533,7 +3533,7 @@ void LLIMMgr::addMessage(
 
 			// <FS:PP> Configurable IM sounds
 			// //Play sound for new conversations
-			// if (!skip_message & !gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation") == TRUE))
+			// if (!skip_message & !gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation") == true))
 
 			// <FS:PP> Option to automatically ignore and leave all conference (ad-hoc) chats
 			static LLCachedControl<bool> ignoreAdHocSessions(gSavedSettings, "FSIgnoreAdHocSessions");
@@ -3945,7 +3945,7 @@ void LLIMMgr::inviteToSession(
 	// voice invite question is different from default only for group call (EXT-7118)
 	std::string question_type = "VoiceInviteQuestionDefault";
 
-	BOOL voice_invite = FALSE;
+	bool voice_invite = false;
 	bool is_linden = LLMuteList::isLinden(caller_name);
 
 
@@ -3953,21 +3953,21 @@ void LLIMMgr::inviteToSession(
 	{
 		//P2P is different...they only have voice invitations
 		notify_box_type = "VoiceInviteP2P";
-		voice_invite = TRUE;
+		voice_invite = true;
 	}
-	else if ( gAgent.isInGroup(session_id, TRUE) )
+	else if ( gAgent.isInGroup(session_id, true) )
 	{
 		//only really old school groups have voice invitations
 		notify_box_type = "VoiceInviteGroup";
 		question_type = "VoiceInviteQuestionGroup";
-		voice_invite = TRUE;
+		voice_invite = true;
 	}
 	else if ( inv_type == INVITATION_TYPE_VOICE )
 	{
 		//else it's an ad-hoc
 		//and a voice ad-hoc
 		notify_box_type = "VoiceInviteAdHoc";
-		voice_invite = TRUE;
+		voice_invite = true;
 	}
 	else if ( inv_type == INVITATION_TYPE_IMMEDIATE )
 	{
@@ -4064,7 +4064,7 @@ void LLIMMgr::inviteToSession(
 		}
 		else
 		{
-			LLFloaterReg::showInstance("incoming_call", payload, FALSE);
+			LLFloaterReg::showInstance("incoming_call", payload, false);
 		}
 
 		// Add the caller to the Recent List here (at this point
@@ -4086,7 +4086,7 @@ void LLIMMgr::onInviteNameLookup(LLSD payload, const LLUUID& id, const LLAvatarN
 
 	std::string notify_box_type = payload["notify_box_type"].asString();
 
-	LLFloaterReg::showInstance("incoming_call", payload, FALSE);
+	LLFloaterReg::showInstance("incoming_call", payload, false);
 }
 
 //*TODO disconnects all sessions
@@ -4095,7 +4095,7 @@ void LLIMMgr::disconnectAllSessions()
 	//*TODO disconnects all IM sessions
 }
 
-BOOL LLIMMgr::hasSession(const LLUUID& session_id)
+bool LLIMMgr::hasSession(const LLUUID& session_id)
 {
 	return LLIMModel::getInstance()->findIMSession(session_id) != NULL;
 }
@@ -4328,7 +4328,7 @@ bool LLIMMgr::endCall(const LLUUID& session_id)
 	if (im_session)
 	{
 		// need to update speakers' state
-		im_session->mSpeakers->update(FALSE);
+		im_session->mSpeakers->update(false);
 	}
 	return true;
 }
@@ -4458,12 +4458,12 @@ void LLIMMgr::noteMutedUsers(const LLUUID& session_id,
 
 void LLIMMgr::processIMTypingStart(const LLUUID& from_id, const EInstantMessage im_type)
 {
-	processIMTypingCore(from_id, im_type, TRUE);
+	processIMTypingCore(from_id, im_type, true);
 }
 
 void LLIMMgr::processIMTypingStop(const LLUUID& from_id, const EInstantMessage im_type)
 {
-	processIMTypingCore(from_id, im_type, FALSE);
+	processIMTypingCore(from_id, im_type, false);
 }
 
 // <FS:Ansariel> Announce incoming IMs
@@ -4472,7 +4472,7 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
 	LLStringUtil::format_map_t args;
 	args["[NAME]"] = av_name.getCompleteName();
 
-	BOOL is_muted = LLMuteList::getInstance()->isMuted(av_id, av_name.getCompleteName(), LLMute::flagTextChat);
+	bool is_muted = LLMuteList::getInstance()->isMuted(av_id, av_name.getCompleteName(), LLMute::flagTextChat);
 	bool is_friend = (LLAvatarTracker::instance().getBuddyInfo(av_id) == NULL) ? false : true;
 	static LLCachedControl<bool> VoiceCallsFriendsOnly(gSavedPerAccountSettings, "VoiceCallsFriendsOnly");
 
@@ -4500,12 +4500,12 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
 	// incoming IM announcement.
 	// The logic was originally copied from process_improved_im() in llviewermessage.cpp
 	bool is_busy = gAgent.isDoNotDisturb();
-	BOOL is_autorespond = gAgent.getAutorespond();
-	BOOL is_autorespond_nonfriends = gAgent.getAutorespondNonFriends();
-	BOOL is_autorespond_muted = gSavedPerAccountSettings.getBOOL("FSSendMutedAvatarResponse");
-	BOOL is_linden = LLMuteList::getInstance()->isLinden(av_name.getAccountName());
+	bool is_autorespond = gAgent.getAutorespond();
+	bool is_autorespond_nonfriends = gAgent.getAutorespondNonFriends();
+	bool is_autorespond_muted = gSavedPerAccountSettings.getBOOL("FSSendMutedAvatarResponse");
+	bool is_linden = LLMuteList::getInstance()->isLinden(av_name.getAccountName());
 	static LLCachedControl<bool> FSSendAwayAvatarResponse(gSavedPerAccountSettings, "FSSendAwayAvatarResponse");
-	BOOL is_afk = gAgent.getAFK();
+	bool is_afk = gAgent.getAFK();
 
 	if (RlvActions::canReceiveIM(av_id) && !is_linden &&
 		(!VoiceCallsFriendsOnly || is_friend) &&
@@ -4538,7 +4538,7 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
 		pack_instant_message(
 			gMessageSystem,
 			gAgent.getID(),
-			FALSE,
+			false,
 			gAgent.getSessionID(),
 			av_id,
 			my_name,
@@ -4595,7 +4595,7 @@ void typingNameCallback(const LLUUID& av_id, const LLAvatarName& av_name, const 
 }
 // </FS:Ansariel>
 
-void LLIMMgr::processIMTypingCore(const LLUUID& from_id, const EInstantMessage im_type, BOOL typing)
+void LLIMMgr::processIMTypingCore(const LLUUID& from_id, const EInstantMessage im_type, bool typing)
 {
 	LLUUID session_id = computeSessionID(im_type, from_id);
 
@@ -4810,7 +4810,7 @@ public:
 			time_t timestamp =
 				(time_t) message_params["timestamp"].asInteger();
 
-			BOOL is_do_not_disturb = gAgent.isDoNotDisturb();
+			bool is_do_not_disturb = gAgent.isDoNotDisturb();
 
 			//don't return if user is muted b/c proper way to ignore a muted user who
 			//initiated an adhoc/group conference is to create then leave the session (see STORM-1731)
@@ -4836,8 +4836,8 @@ public:
 			// <FS> Mute group chat port from Phoenix
 			if (from_id != gAgentID) // FIRE-14222: OpenSim routes agent's chat through here - don't mute it!
 			{
-				BOOL FSMuteAllGroups = gSavedSettings.getBOOL("FSMuteAllGroups");
-				BOOL FSMuteGroupWhenNoticesDisabled = gSavedSettings.getBOOL("FSMuteGroupWhenNoticesDisabled");
+				bool FSMuteAllGroups = gSavedSettings.getBOOL("FSMuteAllGroups");
+				bool FSMuteGroupWhenNoticesDisabled = gSavedSettings.getBOOL("FSMuteGroupWhenNoticesDisabled");
 				LLGroupData group_data;
 				if (gAgent.getGroupData(session_id, group_data))
 				{
@@ -4858,7 +4858,7 @@ public:
 						pack_instant_message(
 							gMessageSystem,
 							gAgentID,
-							FALSE,
+							false,
 							gAgentSessionID,
 							from_id,
 							aname,

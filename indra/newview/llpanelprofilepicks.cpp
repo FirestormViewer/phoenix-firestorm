@@ -121,7 +121,7 @@ public:
 
         // get the ID for the pick_id
         LLUUID pick_id;
-        if (!pick_id.set(params[0], FALSE))
+        if (!pick_id.set(params[0], false))
         {
             return false;
         }
@@ -176,11 +176,11 @@ void LLPanelProfilePicks::onOpen(const LLSD& key)
     bool own_profile = getSelfProfile();
     if (own_profile)
     {
-        mNewButton->setVisible(TRUE);
-        mNewButton->setEnabled(FALSE);
+        mNewButton->setVisible(true);
+        mNewButton->setEnabled(false);
 
-        mDeleteButton->setVisible(TRUE);
-        mDeleteButton->setEnabled(FALSE);
+        mDeleteButton->setVisible(true);
+        mDeleteButton->setEnabled(false);
     }
 
     childSetVisible("buttons_header", own_profile);
@@ -192,7 +192,7 @@ void LLPanelProfilePicks::createPick(const LLPickData &data)
     {
         if (canAddNewPick())
         {
-            mNoItemsLabel->setVisible(FALSE);
+            mNoItemsLabel->setVisible(false);
             LLPanelProfilePick* pick_panel = LLPanelProfilePick::create();
             pick_panel->setAvatarId(getAvatarId());
             pick_panel->processProperties(&data);
@@ -454,7 +454,7 @@ void LLPanelProfilePicks::updateData()
     if (!getIsLoaded())
     {
         mNoItemsLabel->setValue(LLTrans::getString("PicksClassifiedsLoadingText"));
-        mNoItemsLabel->setVisible(TRUE);
+        mNoItemsLabel->setVisible(true);
     }
 }
 
@@ -581,23 +581,23 @@ void LLPanelProfilePick::setAvatarId(const LLUUID& avatar_id)
         setSnapshotId(snapshot_id);
         setPickLocation(createLocationText(getLocationNotice(), pick_name, region_name, getPosGlobal()));
 
-        enableSaveButton(TRUE);
+        enableSaveButton(true);
     }
     else
     {
         LLAvatarPropertiesProcessor::getInstance()->sendPickInfoRequest(getAvatarId(), getPickId());
 
-        enableSaveButton(FALSE);
+        enableSaveButton(false);
     }
 
     resetDirty();
 
     if (getSelfProfile())
     {
-        mPickName->setEnabled(TRUE);
-        mPickDescription->setEnabled(TRUE);
+        mPickName->setEnabled(true);
+        mPickDescription->setEnabled(true);
         // <FS:Zi> Make sure the "Set Location"  button is only visible when viewing own picks
-        // mSetCurrentLocationButton->setVisible(TRUE);
+        // mSetCurrentLocationButton->setVisible(true);
         childSetVisible("set_to_curr_location_btn_lp", true);
         // </FS:Zi>
     }
@@ -605,7 +605,7 @@ void LLPanelProfilePick::setAvatarId(const LLUUID& avatar_id)
     {
         // <FS:Zi> Make sure the "Set Location"  button is only visible when viewing own picks
         childSetVisible("set_to_curr_location_btn_lp", false);
-        mSnapshotCtrl->setEnabled(FALSE);
+        mSnapshotCtrl->setEnabled(false);
     }
 }
 
@@ -675,7 +675,7 @@ void LLPanelProfilePick::processProperties(const LLPickData* pick_info)
     setSnapshotId(pick_info->snapshot_id);
     if (!getSelfProfile())
     {
-        mSnapshotCtrl->setEnabled(FALSE);
+        mSnapshotCtrl->setEnabled(false);
     }
     setPickName(pick_info->name);
     setPickDesc(pick_info->desc);
@@ -703,7 +703,7 @@ void LLPanelProfilePick::apply()
 void LLPanelProfilePick::setSnapshotId(const LLUUID& id)
 {
     mSnapshotCtrl->setImageAssetID(id);
-    mSnapshotCtrl->setValid(TRUE);
+    mSnapshotCtrl->setValid(true);
 }
 
 void LLPanelProfilePick::setPickName(const std::string& name)
@@ -741,7 +741,7 @@ void LLPanelProfilePick::onClickTeleport()
     }
 }
 
-void LLPanelProfilePick::enableSaveButton(BOOL enable)
+void LLPanelProfilePick::enableSaveButton(bool enable)
 {
     childSetVisible("save_changes_lp", enable);
 
@@ -752,7 +752,7 @@ void LLPanelProfilePick::enableSaveButton(BOOL enable)
 
 void LLPanelProfilePick::onSnapshotChanged()
 {
-    enableSaveButton(TRUE);
+    enableSaveButton(true);
 }
 
 void LLPanelProfilePick::onPickChanged(LLUICtrl* ctrl)
@@ -812,7 +812,7 @@ void LLPanelProfilePick::onClickSetLocation()
     setPickLocation(createLocationText(getLocationNotice(), parcel_name, region_name, getPosGlobal()));
 
     mLocationChanged = true;
-    enableSaveButton(TRUE);
+    enableSaveButton(true);
 }
 
 void LLPanelProfilePick::onClickSave()
@@ -826,7 +826,7 @@ void LLPanelProfilePick::onClickCancel()
 {
     LLAvatarPropertiesProcessor::getInstance()->sendPickInfoRequest(getAvatarId(), getPickId());
     mLocationChanged = false;
-    enableSaveButton(FALSE);
+    enableSaveButton(false);
 }
 
 std::string LLPanelProfilePick::getLocationNotice()
@@ -880,14 +880,14 @@ void LLPanelProfilePick::sendUpdate()
     pick_data.creator_id = gAgentID;;
 
     //legacy var  need to be deleted
-    pick_data.top_pick = FALSE;
+    pick_data.top_pick = false;
     pick_data.parcel_id = mParcelId;
     pick_data.name = getPickName();
     pick_data.desc = mPickDescription->getValue().asString();
     pick_data.snapshot_id = mSnapshotCtrl->getImageAssetID();
     pick_data.pos_global = getPosGlobal();
     pick_data.sort_order = 0;
-    pick_data.enabled = TRUE;
+    pick_data.enabled = true;
 
     LLAvatarPropertiesProcessor::getInstance()->sendPickInfoUpdate(&pick_data);
 

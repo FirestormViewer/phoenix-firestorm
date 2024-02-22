@@ -45,7 +45,7 @@ public:
 		// register an on_visible callback which does the same as on_enable
 		Optional<EnableCallbackParam > on_visible;
 
-		// autohide feature to hide a disabled pie slice (NOTE: <bool> is not <BOOL>)
+		// autohide feature to hide a disabled pie slice
 		Optional<bool> start_autohide;
 		// next item in an autohide chain
 		Optional<bool> autohide;

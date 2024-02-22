@@ -884,7 +884,7 @@ void LLGridManager::addSystemGrid(const std::string& label,
 	if (name == std::string(MAINGRID))
 	{
 		grid_entry->grid[GRID_SLURL_BASE] = MAIN_GRID_SLURL_BASE;
-		grid_entry->grid[GRID_IS_FAVORITE_VALUE] = TRUE;
+		grid_entry->grid[GRID_IS_FAVORITE_VALUE] = true;
 	}
 	else
 	{

@@ -69,7 +69,7 @@ LLHUDIcon::LLHUDIcon(const U8 type) :
 			LLHUDObject(type),
 			mImagep(NULL),
 			mScale(0.1f),
-			mHidden(FALSE),
+			mHidden(false),
 			mScriptError(false) // <FS:Ansariel> Mark script error icons
 {
 	sIconInstances.push_back(this);
@@ -210,15 +210,15 @@ void LLHUDIcon::markDead()
 	LLHUDObject::markDead();
 }
 
-BOOL LLHUDIcon::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, LLVector4a* intersection)
+bool LLHUDIcon::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& end, LLVector4a* intersection)
 {
 	if (mHidden)
-		return FALSE;
+		return false;
 
 	if (mSourceObject.isNull() || mImagep.isNull())
 	{
 		markDead();
-		return FALSE;
+		return false;
 	}
 
 	LLVector3 obj_position = mSourceObject->getRenderPosition();
@@ -257,7 +257,7 @@ BOOL LLHUDIcon::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& 
 	if (time_elapsed > MAX_VISIBLE_TIME)
 	{
 		markDead();
-		return FALSE;
+		return false;
 	}
 	
 	F32 image_aspect = (F32)mImagep->getFullWidth() / (F32)mImagep->getFullHeight() ;
@@ -296,10 +296,10 @@ BOOL LLHUDIcon::lineSegmentIntersect(const LLVector4a& start, const LLVector4a& 
 			dir.mul(t);
 			intersection->setAdd(start, dir);
 		}
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //static
@@ -336,7 +336,7 @@ void LLHUDIcon::updateAll()
 }
 
 //static
-BOOL LLHUDIcon::iconsNearby()
+bool LLHUDIcon::iconsNearby()
 {
 	return !sIconInstances.empty();
 }
@@ -393,7 +393,7 @@ void LLHUDIcon::setScriptError()
 }
 
 //static
-BOOL LLHUDIcon::scriptIconsNearby()
+bool LLHUDIcon::scriptIconsNearby()
 {
 	return !sScriptErrorIconInstances.empty();
 }

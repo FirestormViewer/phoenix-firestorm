@@ -85,7 +85,7 @@ constexpr F32 OCEAN_BLUE  = (F32)(0x5F)/255.f;
 
 constexpr F32 GODLY_TELEPORT_HEIGHT = 200.f;
 constexpr F32 BIG_DOT_RADIUS = 5.f;
-BOOL LLWorldMapView::sHandledLastClick = FALSE;
+bool LLWorldMapView::sHandledLastClick = false;
 
 LLUIImagePtr LLWorldMapView::sAvatarSmallImage = NULL;
 LLUIImagePtr LLWorldMapView::sAvatarYouImage = NULL;
@@ -189,12 +189,12 @@ void LLWorldMapView::cleanupClass()
 LLWorldMapView::LLWorldMapView() :
     LLPanel(),
     mBackgroundColor(LLColor4(OCEAN_RED, OCEAN_GREEN, OCEAN_BLUE, 1.f)),
-    mItemPicked(FALSE),
+    mItemPicked(false),
     mPanX(0.f),
     mPanY(0.f),
     mTargetPanX(0.f),
     mTargetPanY(0.f),
-    mPanning(FALSE),
+    mPanning(false),
     mMouseDownPanX(0),
     mMouseDownPanY(0),
     mMouseDownX(0),
@@ -340,7 +340,7 @@ void LLWorldMapView::translatePan(S32 delta_x, S32 delta_y)
 
 
 // static
-void LLWorldMapView::setPan(S32 x, S32 y, BOOL snap)
+void LLWorldMapView::setPan(S32 x, S32 y, bool snap)
 {
     mMapIterpTime = MAP_ITERP_TIME_CONSTANT;
     mTargetPanX = (F32) x;
@@ -354,7 +354,7 @@ void LLWorldMapView::setPan(S32 x, S32 y, BOOL snap)
 }
 
 // static
-void LLWorldMapView::setPanWithInterpTime(S32 x, S32 y, BOOL snap, F32 interp_time)
+void LLWorldMapView::setPanWithInterpTime(S32 x, S32 y, bool snap, F32 interp_time)
 {
     setPan(x, y, snap);
     mMapIterpTime = interp_time;
@@ -365,7 +365,7 @@ bool LLWorldMapView::showRegionInfo() { return (LLWorldMipmap::scaleToLevel(mMap
 ///////////////////////////////////////////////////////////////////////////////////
 // HELPERS
 
-BOOL is_agent_in_region(LLViewerRegion* region, LLSimInfo* info)
+bool is_agent_in_region(LLViewerRegion* region, LLSimInfo* info)
 {
 	return (region && info && info->isName(region->getName()));
 }
@@ -608,7 +608,7 @@ void LLWorldMapView::draw()
 					S32_MAX, //max_chars
 					mMapScale, //max_pixels
 					NULL,
-					TRUE); //use ellipses
+					true); //use ellipses
 
 				if (drawAdvancedRegionInfo)
 				{
@@ -639,7 +639,7 @@ void LLWorldMapView::draw()
 						S32_MAX, //max_chars
 						mMapScale, //max_pixels
 						NULL,
-						TRUE); //use ellipses
+						true); //use ellipses
 				}
 			}
 // <FS:CR> Show the grid coordinates (in units of regions)
@@ -682,7 +682,7 @@ void LLWorldMapView::draw()
 	{
 		drawTracking(pos_global,
 					 lerp(LLColor4::yellow, LLColor4::orange, 0.4f),
-					 TRUE,
+					 true,
 					 sStringsMap["agent_position"].c_str(),
 					 "",
 					 LLFontGL::getFontSansSerifSmall()->getLineHeight()); // offset vertically by one line, to avoid overlap with target tracking
@@ -702,7 +702,7 @@ void LLWorldMapView::draw()
 	LLTracker::ETrackingStatus tracking_status = LLTracker::getTrackingStatus();
 	if ( LLTracker::TRACKING_AVATAR == tracking_status )
 	{
-		drawTracking( LLAvatarTracker::instance().getGlobalPos(), map_track_color, TRUE, LLTracker::getLabel(), "" );
+		drawTracking( LLAvatarTracker::instance().getGlobalPos(), map_track_color, true, LLTracker::getLabel(), "" );
 	}
 	else if ( LLTracker::TRACKING_LANDMARK == tracking_status
 			  || LLTracker::TRACKING_LOCATION == tracking_status )
@@ -712,7 +712,7 @@ void LLWorldMapView::draw()
 		LLVector3d pos_global = LLTracker::getTrackedPositionGlobal();
 		if (!pos_global.isExactlyZero())
 		{
-			drawTracking( pos_global, map_track_color, TRUE, LLTracker::getLabel(), LLTracker::getToolTip() );
+			drawTracking( pos_global, map_track_color, true, LLTracker::getLabel(), LLTracker::getToolTip() );
 		}
 	}
 	else if (LLWorldMap::getInstance()->isTracking())
@@ -721,7 +721,7 @@ void LLWorldMapView::draw()
 		{
 			// We know this location to be invalid, draw a blue circle
 			LLColor4 loading_color(0.0, 0.5, 1.0, 1.0);
-			drawTracking( LLWorldMap::getInstance()->getTrackedPositionGlobal(), loading_color, TRUE, getString("InvalidLocation"), "");
+			drawTracking( LLWorldMap::getInstance()->getTrackedPositionGlobal(), loading_color, true, getString("InvalidLocation"), "");
 		}
 		else
 		{
@@ -729,7 +729,7 @@ void LLWorldMapView::draw()
 			double value = fmod(current_time, 2);
 			value = 0.5 + 0.5*cos(value * F_PI);
 			LLColor4 loading_color(0.0, F32(value/2), F32(value), 1.0);
-			drawTracking( LLWorldMap::getInstance()->getTrackedPositionGlobal(), loading_color, TRUE, getString("Loading"), "");
+			drawTracking( LLWorldMap::getInstance()->getTrackedPositionGlobal(), loading_color, true, getString("Loading"), "");
 		}
 	}
 
@@ -1162,7 +1162,7 @@ LLVector3 LLWorldMapView::globalPosToView( const LLVector3d& global_pos )
 }
 
 
-void LLWorldMapView::drawTracking(const LLVector3d& pos_global, const LLColor4& color, BOOL draw_arrow,
+void LLWorldMapView::drawTracking(const LLVector3d& pos_global, const LLColor4& color, bool draw_arrow,
 								  const std::string& label, const std::string& tooltip, S32 vert_offset )
 {
 	LLVector3 pos_local = globalPosToView( pos_global );
@@ -1727,7 +1727,7 @@ void LLWorldMapView::handleClick(S32 x, S32 y, MASK mask,
 						if (checkItemHit(x, y, event, id, false))
 						{
 							*hit_type = MAP_ITEM_PG_EVENT;
-							mItemPicked = TRUE;
+							mItemPicked = true;
 							gFloaterWorldMap->trackEvent(event);
 							return;
 						}
@@ -1743,7 +1743,7 @@ void LLWorldMapView::handleClick(S32 x, S32 y, MASK mask,
 						if (checkItemHit(x, y, event, id, false))
 						{
 							*hit_type = MAP_ITEM_MATURE_EVENT;
-							mItemPicked = TRUE;
+							mItemPicked = true;
 							gFloaterWorldMap->trackEvent(event);
 							return;
 						}
@@ -1759,7 +1759,7 @@ void LLWorldMapView::handleClick(S32 x, S32 y, MASK mask,
 						if (checkItemHit(x, y, event, id, false))
 						{
 							*hit_type = MAP_ITEM_ADULT_EVENT;
-							mItemPicked = TRUE;
+							mItemPicked = true;
 							gFloaterWorldMap->trackEvent(event);
 							return;
 						}
@@ -1775,7 +1775,7 @@ void LLWorldMapView::handleClick(S32 x, S32 y, MASK mask,
 						if (checkItemHit(x, y, event, id, true))
 						{
 							*hit_type = MAP_ITEM_LAND_FOR_SALE;
-							mItemPicked = TRUE;
+							mItemPicked = true;
 							return;
 						}
 						++it;
@@ -1792,7 +1792,7 @@ void LLWorldMapView::handleClick(S32 x, S32 y, MASK mask,
 							if (checkItemHit(x, y, event, id, true))
 							{
 								*hit_type = MAP_ITEM_LAND_FOR_SALE_ADULT;
-								mItemPicked = TRUE;
+								mItemPicked = true;
 								return;
 							}
 							++it;
@@ -1805,7 +1805,7 @@ void LLWorldMapView::handleClick(S32 x, S32 y, MASK mask,
 
 	// If we get here, we haven't clicked on anything
 	gFloaterWorldMap->trackLocation(pos_global);
-	mItemPicked = FALSE;
+	mItemPicked = false;
 	*id = LLUUID::null;
 	return;
 }
@@ -1819,7 +1819,7 @@ bool LLWorldMapView::handleMouseDown( S32 x, S32 y, MASK mask )
 	mMouseDownPanY = ll_round(mPanY);
 	mMouseDownX = x;
 	mMouseDownY = y;
-	sHandledLastClick = TRUE;
+	sHandledLastClick = true;
 	return true;
 }
 
@@ -1839,7 +1839,7 @@ bool LLWorldMapView::handleMouseUp( S32 x, S32 y, MASK mask )
 			LLUI::getInstance()->setMousePositionLocal(this, local_x, local_y);
 
 			// finish the pan
-			mPanning = FALSE;
+			mPanning = false;
 			
 			mMouseDownX = 0;
 			mMouseDownY = 0;
@@ -1898,7 +1898,7 @@ bool LLWorldMapView::handleHover( S32 x, S32 y, MASK mask )
 			// just started panning, so hide cursor
 			if (!mPanning)
 			{
-				mPanning = TRUE;
+				mPanning = true;
 				gViewerWindow->hideCursor();
 			}
 

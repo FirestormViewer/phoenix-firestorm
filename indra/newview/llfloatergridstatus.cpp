@@ -48,7 +48,7 @@ std::map<std::string, std::string> LLFloaterGridStatus::sItemsMap;
 
 LLFloaterGridStatus::LLFloaterGridStatus(const Params& key) :
     LLFloaterWebContent(key),
-    mIsFirstUpdate(TRUE)
+    mIsFirstUpdate(true)
 {
 }
 
@@ -185,7 +185,7 @@ void LLFloaterGridStatus::getGridStatusRSSCoro()
     {
         gToolBarView->flashCommand(LLCommandId("gridstatus"), true);
     }
-    getInstance()->setFirstUpdate(FALSE);
+    getInstance()->setFirstUpdate(false);
 }
 
 // virtual

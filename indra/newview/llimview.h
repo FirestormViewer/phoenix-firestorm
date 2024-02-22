@@ -339,7 +339,7 @@ public:
 	static void sendLeaveSession(const LLUUID& session_id, const LLUUID& other_participant_id);
 	static bool sendStartSession(const LLUUID& temp_session_id, const LLUUID& other_participant_id,
 						  const uuid_vec_t& ids, EInstantMessage dialog);
-	static void sendTypingState(LLUUID session_id, LLUUID other_participant_id, BOOL typing);
+	static void sendTypingState(LLUUID session_id, LLUUID other_participant_id, bool typing);
 	static void sendMessage(const std::string& utf8_text, const LLUUID& im_session_id,
 								const LLUUID& other_participant_id, EInstantMessage dialog);
 
@@ -375,7 +375,7 @@ class LLIMSessionObserver
 {
 public:
 	virtual ~LLIMSessionObserver() {}
-	virtual void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg) = 0;
+	virtual void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, bool has_offline_msg) = 0;
     virtual void sessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) = 0;
 	virtual void sessionVoiceOrIMStarted(const LLUUID& session_id) = 0;
 	virtual void sessionRemoved(const LLUUID& session_id) = 0;
@@ -487,7 +487,7 @@ public:
 	// good connection.
 	void disconnectAllSessions();
 
-	BOOL hasSession(const LLUUID& session_id);
+	bool hasSession(const LLUUID& session_id);
 
 // [SL:KB] - Patch: Chat-GroupSnooze | Checked: 2012-06-16 (Catznip-3.3)
 	bool checkSnoozeExpiration(const LLUUID& session_id) const;
@@ -553,7 +553,7 @@ private:
 	void noteOfflineUsers(const LLUUID& session_id, const std::vector<LLUUID>& ids);
 	void noteMutedUsers(const LLUUID& session_id, const std::vector<LLUUID>& ids);
 
-	void processIMTypingCore(const LLUUID& from_id, const EInstantMessage im_type, BOOL typing);
+	void processIMTypingCore(const LLUUID& from_id, const EInstantMessage im_type, bool typing);
 
 	static void onInviteNameLookup(LLSD payload, const LLUUID& id, const LLAvatarName& name);
 

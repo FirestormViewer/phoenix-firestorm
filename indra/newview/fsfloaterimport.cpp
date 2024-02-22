@@ -193,7 +193,7 @@ void FSFloaterImport::onIdle()
 		LL_DEBUGS("import") << "Dropping " << item_queue.item->getName() << " " << item_queue.item->getUUID() << " into " << item_queue.prim_name << " " << item_queue.object->getID() << LL_ENDL;
 		if (item_queue.item->getType() == LLAssetType::AT_LSL_TEXT)
 		{
-			LLToolDragAndDrop::dropScript(item_queue.object, item_queue.item, TRUE,
+			LLToolDragAndDrop::dropScript(item_queue.object, item_queue.item, true,
 						      LLToolDragAndDrop::SOURCE_AGENT,
 						      gAgentID);
 		}
@@ -298,17 +298,17 @@ void FSFloaterImport::loadFile()
 	LL_DEBUGS("import") << "Linkset size is " << mLinksetSize << LL_ENDL;
 	if (mLinksetSize != 0)
 	{
-		getChild<LLButton>("import_btn")->setEnabled(TRUE);
-		getChild<LLCheckBoxCtrl>("do_not_attach")->setEnabled(TRUE);
-		getChild<LLCheckBoxCtrl>("region_position")->setEnabled(TRUE);
-		getChild<LLCheckBoxCtrl>("upload_asset")->setEnabled(TRUE);
+		getChild<LLButton>("import_btn")->setEnabled(true);
+		getChild<LLCheckBoxCtrl>("do_not_attach")->setEnabled(true);
+		getChild<LLCheckBoxCtrl>("region_position")->setEnabled(true);
+		getChild<LLCheckBoxCtrl>("upload_asset")->setEnabled(true);
 	}
 	else
 	{
-		getChild<LLButton>("import_btn")->setEnabled(FALSE);
-		getChild<LLCheckBoxCtrl>("do_not_attach")->setEnabled(FALSE);
-		getChild<LLCheckBoxCtrl>("region_position")->setEnabled(FALSE);
-		getChild<LLCheckBoxCtrl>("upload_asset")->setEnabled(FALSE);
+		getChild<LLButton>("import_btn")->setEnabled(false);
+		getChild<LLCheckBoxCtrl>("do_not_attach")->setEnabled(false);
+		getChild<LLCheckBoxCtrl>("region_position")->setEnabled(false);
+		getChild<LLCheckBoxCtrl>("upload_asset")->setEnabled(false);
 	}
 }
 
@@ -506,11 +506,11 @@ void FSFloaterImport::onClickBtnImport()
 	LL_DEBUGS("import") << "mStartPosition is " << mStartPosition << LL_ENDL;
 
 	// don't allow change during a long upload/import
-	getChild<LLButton>("import_btn")->setEnabled(FALSE);
-	getChild<LLCheckBoxCtrl>("do_not_attach")->setEnabled(FALSE);
-	getChild<LLCheckBoxCtrl>("region_position")->setEnabled(FALSE);
-	getChild<LLCheckBoxCtrl>("upload_asset")->setEnabled(FALSE);
-	getChild<LLCheckBoxCtrl>("temp_asset")->setEnabled(FALSE);
+	getChild<LLButton>("import_btn")->setEnabled(false);
+	getChild<LLCheckBoxCtrl>("do_not_attach")->setEnabled(false);
+	getChild<LLCheckBoxCtrl>("region_position")->setEnabled(false);
+	getChild<LLCheckBoxCtrl>("upload_asset")->setEnabled(false);
+	getChild<LLCheckBoxCtrl>("temp_asset")->setEnabled(false);
 
 	if (((mTexturesTotal + mSoundsTotal + mAnimsTotal + mAssetsTotal) != 0) && getChild<LLCheckBoxCtrl>("upload_asset")->get())
 	{
@@ -527,10 +527,10 @@ void FSFloaterImport::onClickBtnImport()
 				LLBuyCurrencyHTML::openCurrencyFloater(LLTrans::getString("UploadingCosts", args), expected_upload_cost);
 
 				// re-enable the controls
-				getChild<LLButton>("import_btn")->setEnabled(TRUE);
-				getChild<LLCheckBoxCtrl>("do_not_attach")->setEnabled(TRUE);
-				getChild<LLCheckBoxCtrl>("region_position")->setEnabled(TRUE);
-				getChild<LLCheckBoxCtrl>("upload_asset")->setEnabled(TRUE);
+				getChild<LLButton>("import_btn")->setEnabled(true);
+				getChild<LLCheckBoxCtrl>("do_not_attach")->setEnabled(true);
+				getChild<LLCheckBoxCtrl>("region_position")->setEnabled(true);
+				getChild<LLCheckBoxCtrl>("upload_asset")->setEnabled(true);
 				getChild<LLCheckBoxCtrl>("temp_asset")->setEnabled(getChild<LLCheckBoxCtrl>("upload_asset")->get());
 				return;
 			}
@@ -587,15 +587,15 @@ void FSFloaterImport::onClickCheckBoxUploadAsset()
 {
 	if (getChild<LLCheckBoxCtrl>("upload_asset")->get())
 	{
-		getChild<LLCheckBoxCtrl>("temp_asset")->setEnabled(TRUE);
+		getChild<LLCheckBoxCtrl>("temp_asset")->setEnabled(true);
 		LLUIString stats = getString("upload_cost");
 		stats.setArg("[COST]", llformat("%u", (mTexturesTotal * LLAgentBenefitsMgr::current().getTextureUploadCost() + mSoundsTotal * LLAgentBenefitsMgr::current().getSoundUploadCost() + mAnimsTotal * LLAgentBenefitsMgr::current().getAnimationUploadCost())));
 		getChild<LLTextBox>("file_status_text")->setText(stats.getString());
 	}
 	else
 	{
-		getChild<LLCheckBoxCtrl>("temp_asset")->set(FALSE);
-		getChild<LLCheckBoxCtrl>("temp_asset")->setEnabled(FALSE);
+		getChild<LLCheckBoxCtrl>("temp_asset")->set(false);
+		getChild<LLCheckBoxCtrl>("temp_asset")->setEnabled(false);
 		std::string text;
 		getChild<LLTextBox>("file_status_text")->setText(text);
 	}
@@ -712,8 +712,8 @@ void FSFloaterImport::createPrim()
 	gMessageSystem->addVector3Fast(_PREHASH_RayStart, position);
 	gMessageSystem->addVector3Fast(_PREHASH_RayEnd, position);
 
-	gMessageSystem->addU8Fast(_PREHASH_BypassRaycast, (U8)TRUE);
-	gMessageSystem->addU8Fast(_PREHASH_RayEndIsIntersection, (U8)FALSE);
+	gMessageSystem->addU8Fast(_PREHASH_BypassRaycast, (U8)1);
+	gMessageSystem->addU8Fast(_PREHASH_RayEndIsIntersection, (U8)0);
 	gMessageSystem->addU8Fast(_PREHASH_State, (U8)0);
 	gMessageSystem->addUUIDFast(_PREHASH_RayTargetID, LLUUID::null);
 	gMessageSystem->sendReliable(gAgent.getRegion()->getHost());
@@ -727,7 +727,7 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 		return false;
 	}
 
-	LLSelectMgr::getInstance()->selectObjectAndFamily(object, TRUE);
+	LLSelectMgr::getInstance()->selectObjectAndFamily(object, true);
 
 	LLUUID prim_uuid = mManifest["linkset"][mLinkset][mObject].asUUID();
 	LLSD& prim = mManifest["prim"][prim_uuid.asString()];
@@ -890,7 +890,7 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
 		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 		gMessageSystem->nextBlockFast(_PREHASH_HeaderData);
-		gMessageSystem->addBOOLFast(_PREHASH_Override, (BOOL)FALSE);
+		gMessageSystem->addBOOLFast(_PREHASH_Override, false);
 
 		if (prim.has("group_mask"))
 		{
@@ -899,7 +899,7 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 			gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 			gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
 			gMessageSystem->addU8Fast(_PREHASH_Field, PERM_GROUP);
-			gMessageSystem->addBOOLFast(_PREHASH_Set, (BOOL)(group_mask & PERM_MODIFY) ? TRUE : FALSE);
+			gMessageSystem->addBOOLFast(_PREHASH_Set, (bool)(group_mask & PERM_MODIFY) ? true : false);
 			gMessageSystem->addU32Fast(_PREHASH_Mask, PERM_MODIFY | PERM_MOVE | PERM_COPY);
 		}
 		if (prim.has("everyone_mask"))
@@ -909,12 +909,12 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 			gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 			gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
 			gMessageSystem->addU8Fast(_PREHASH_Field, PERM_EVERYONE);
-			gMessageSystem->addBOOLFast(_PREHASH_Set, (BOOL)(everyone_mask & PERM_MOVE) ? TRUE : FALSE);
+			gMessageSystem->addBOOLFast(_PREHASH_Set, (bool)(everyone_mask & PERM_MOVE) ? true : false);
 			gMessageSystem->addU32Fast(_PREHASH_Mask, PERM_MOVE);
 			gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 			gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
 			gMessageSystem->addU8Fast(_PREHASH_Field, PERM_EVERYONE);
-			gMessageSystem->addBOOLFast(_PREHASH_Set, (BOOL)(everyone_mask & PERM_COPY) ? TRUE : FALSE);
+			gMessageSystem->addBOOLFast(_PREHASH_Set, (bool)(everyone_mask & PERM_COPY) ? true : false);
 			gMessageSystem->addU32Fast(_PREHASH_Mask, PERM_COPY);
 		}
 		if (prim.has("next_owner_mask"))
@@ -924,17 +924,17 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 			gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 			gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
 			gMessageSystem->addU8Fast(_PREHASH_Field, PERM_NEXT_OWNER);
-			gMessageSystem->addBOOLFast(_PREHASH_Set, (BOOL)(next_owner_mask & PERM_MODIFY) ? TRUE : FALSE);
+			gMessageSystem->addBOOLFast(_PREHASH_Set, (bool)(next_owner_mask & PERM_MODIFY) ? true : false);
 			gMessageSystem->addU32Fast(_PREHASH_Mask, PERM_MODIFY);
 			gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 			gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
 			gMessageSystem->addU8Fast(_PREHASH_Field, PERM_NEXT_OWNER);
-			gMessageSystem->addBOOLFast(_PREHASH_Set, (BOOL)(next_owner_mask & PERM_COPY) ? TRUE : FALSE);
+			gMessageSystem->addBOOLFast(_PREHASH_Set, (bool)(next_owner_mask & PERM_COPY) ? true : false);
 			gMessageSystem->addU32Fast(_PREHASH_Mask, PERM_COPY);
 			gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 			gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
 			gMessageSystem->addU8Fast(_PREHASH_Field, PERM_NEXT_OWNER);
-			gMessageSystem->addBOOLFast(_PREHASH_Set, (BOOL)(next_owner_mask & PERM_TRANSFER) ? TRUE : FALSE);
+			gMessageSystem->addBOOLFast(_PREHASH_Set, (bool)(next_owner_mask & PERM_TRANSFER) ? true : false);
 			gMessageSystem->addU32Fast(_PREHASH_Mask, PERM_TRANSFER);
 		}
 		
@@ -982,7 +982,7 @@ bool FSFloaterImport::processPrimCreated(LLViewerObject* object)
 			object->setPhysicsFriction(friction);
 			object->setPhysicsDensity(density);
 			object->setPhysicsRestitution(restitution);
-			object->updateFlags(TRUE);
+			object->updateFlags(true);
 		}
 	}
 
@@ -1636,7 +1636,7 @@ void FSFloaterImport::onAssetUploadComplete(const LLUUID& uuid, void* userdata, 
 				new_item->setDescription(data->mAssetInfo.getDescription());
 				new_item->setTransactionID(data->mAssetInfo.mTransactionID);
 				new_item->setAssetUUID(asset_id);
-				new_item->updateServer(FALSE);
+				new_item->updateServer(false);
 				gInventory.updateItem(new_item);
 				gInventory.notifyObservers();
 				LL_DEBUGS("import") << "Asset " << asset_id << " saved into "  << "inventory item " << item->getName() << LL_ENDL;

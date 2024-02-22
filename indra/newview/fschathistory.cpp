@@ -104,7 +104,7 @@ public:
 		}
 
 		LLUUID object_id;
-		if (!object_id.set(params[0], FALSE))
+		if (!object_id.set(params[0], false))
 		{
 			return false;
 		}
@@ -651,7 +651,7 @@ public:
 		if (mInfoCtrl)
 		{
 			mInfoCtrl->setCommitCallback(boost::bind(&FSChatHistoryHeader::onClickInfoCtrl, mInfoCtrl));
-			mInfoCtrl->setVisible(FALSE);
+			mInfoCtrl->setVisible(false);
 		}
 		else
 		{
@@ -777,7 +777,7 @@ public:
 			updateMinUserNameWidth();
 			LLColor4 sep_color = LLUIColorTable::instance().getColor("ChatTeleportSeparatorColor");
 			setTransparentColor(sep_color);
-			mTimeBoxTextBox->setVisible(FALSE);
+			mTimeBoxTextBox->setVisible(false);
 		}
 		else  if (chat.mFromName.empty()
 			//|| mSourceType == CHAT_SOURCE_SYSTEM
@@ -960,7 +960,7 @@ public:
 			mUserNameTextBox->reshape(user_name_rect.getWidth(), user_name_rect.getHeight());
 			mUserNameTextBox->setRect(user_name_rect);
 
-			mTimeBoxTextBox->setVisible(TRUE);
+			mTimeBoxTextBox->setVisible(true);
 		}
 
 		LLPanel::draw();
@@ -1142,7 +1142,7 @@ protected:
 
 	void hideInfoCtrl()
 	{
-		mInfoCtrl->setVisible(FALSE);
+		mInfoCtrl->setVisible(false);
 	}
 
 private:
@@ -1290,7 +1290,7 @@ void FSChatHistory::updateChatInputLine()
 }
 
 #if LL_SDL2
-void FSChatHistory::setFocus(BOOL b)
+void FSChatHistory::setFocus(bool b)
 {
 	LLTextEditor::setFocus(b);
 

@@ -196,7 +196,7 @@ void LLFilePickerThread::run()
 
 void LLFilePickerThread::runModeless()
 {
-    BOOL result = FALSE;
+    bool result = false;
     LLFilePicker picker;
 
     if (mIsSaveDialog)
@@ -448,7 +448,7 @@ const bool check_file_extension(const std::string& filename, LLFilePicker::ELoad
 		//now grab the set of valid file extensions
 		std::string valid_extensions = build_extensions_string(type);
 
-		BOOL ext_valid = FALSE;
+		bool ext_valid = false;
 
 		typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
 		boost::char_separator<char> sep(" ");
@@ -459,7 +459,7 @@ const bool check_file_extension(const std::string& filename, LLFilePicker::ELoad
 		//and compare them to the extension of the file
 		//to be uploaded
 		for (token_iter = tokens.begin();
-			token_iter != tokens.end() && ext_valid != TRUE;
+			token_iter != tokens.end() && ext_valid != true;
 			++token_iter)
 		{
 			const std::string& cur_token = *token_iter;
@@ -468,11 +468,11 @@ const bool check_file_extension(const std::string& filename, LLFilePicker::ELoad
 			{
 				//valid extension
 				//or the acceptable extension is any
-				ext_valid = TRUE;
+				ext_valid = true;
 			}
 		}//end for (loop over all tokens)
 
-		if (ext_valid == FALSE)
+		if (ext_valid == false)
 		{
 			//should only get here if the extension exists
 			//but is invalid
@@ -755,7 +755,7 @@ class LLFileUploadModel : public view_listener_t
 	bool handleEvent(const LLSD& userdata)
 	{
         LLFloaterModelPreview::showModelPreview();
-        return TRUE;
+        return true;
 	}
 };
 
@@ -764,7 +764,7 @@ class LLFileUploadMaterial : public view_listener_t
     bool handleEvent(const LLSD& userdata)
     {
         LLMaterialEditor::importMaterial();
-        return TRUE;
+        return true;
     }
 };
 
@@ -943,11 +943,11 @@ class LLFileTakeSnapshotToDisk : public view_listener_t
 		S32 width = gViewerWindow->getWindowWidthRaw();
 		S32 height = gViewerWindow->getWindowHeightRaw();
 
-		BOOL render_ui = gSavedSettings.getBOOL("RenderUIInSnapshot");
-		BOOL render_hud = gSavedSettings.getBOOL("RenderHUDInSnapshot");
-		BOOL render_no_post = gSavedSettings.getBOOL("RenderSnapshotNoPost");
+		bool render_ui = gSavedSettings.getBOOL("RenderUIInSnapshot");
+		bool render_hud = gSavedSettings.getBOOL("RenderHUDInSnapshot");
+		bool render_no_post = gSavedSettings.getBOOL("RenderSnapshotNoPost");
 
-		BOOL high_res = gSavedSettings.getBOOL("HighResSnapshot");
+		bool high_res = gSavedSettings.getBOOL("HighResSnapshot");
 		if (high_res)
 		{
 			width *= 2;
@@ -960,11 +960,11 @@ class LLFileTakeSnapshotToDisk : public view_listener_t
 		if (gViewerWindow->rawSnapshot(raw,
 									   width,
 									   height,
-									   TRUE,
-									   FALSE,
+									   true,
+									   false,
 									   render_ui,
 									   render_hud,
-                                       FALSE,
+                                       false,
 									   render_no_post,
 									   LLSnapshotModel::SNAPSHOT_TYPE_COLOR,
 									   high_res ? S32_MAX : MAX_SNAPSHOT_IMAGE_SIZE)) //per side
@@ -1017,7 +1017,7 @@ void handle_compress_image(void*)
 			LL_INFOS() << "Input:  " << infile << LL_ENDL;
 			LL_INFOS() << "Output: " << outfile << LL_ENDL;
 
-			BOOL success;
+			bool success;
 
 			success = LLViewerTextureList::createUploadFile(infile, outfile, IMG_CODEC_TGA);
 
@@ -1067,7 +1067,7 @@ void handle_compress_file_test(void*)
 
             S64Bytes initial_size = S64Bytes(get_file_size(infile));
 
-            BOOL success;
+            bool success;
 
             F64 total_seconds = LLTimer::getTotalSeconds();
             success = gzip_file(infile, packfile);
@@ -1161,7 +1161,7 @@ void upload_done_callback(
 	LLResourceData* data = (LLResourceData*)user_data;
 	S32 expected_upload_cost = data ? data->mExpectedUploadCost : 0;
 	//LLAssetType::EType pref_loc = data->mPreferredLocation;
-	BOOL is_balance_sufficient = TRUE;
+	bool is_balance_sufficient = true;
 
 	if(data)
 	{
@@ -1179,7 +1179,7 @@ void upload_done_callback(
 				if(!(can_afford_transaction(expected_upload_cost)))
 				{
 					LLBuyCurrencyHTML::openCurrencyFloater( "", expected_upload_cost );
-					is_balance_sufficient = FALSE;
+					is_balance_sufficient = false;
 				}
 				else if(region)
 				{
@@ -1340,7 +1340,7 @@ void upload_new_resource(
 			data->mAssetInfo.mType,
 			asset_callback,
 			(void*)data,
-			FALSE);
+			false);
 	}
 }
 

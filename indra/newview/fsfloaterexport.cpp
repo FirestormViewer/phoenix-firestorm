@@ -187,7 +187,7 @@ void FSFloaterObjectExport::onIdle()
 				LLViewerFetchedTexture* image = LLViewerTextureManager::getFetchedTexture(texture_id, FTT_DEFAULT, MIPMAP_TRUE);
 				image->setBoostLevel(LLViewerTexture::BOOST_MAX_LEVEL);
 				image->forceToSaveRawImage(0);
-				image->setLoadedCallback(FSFloaterObjectExport::onImageLoaded, 0, TRUE, FALSE, this, &mCallbackTextureList);
+				image->setLoadedCallback(FSFloaterObjectExport::onImageLoaded, 0, true, false, this, &mCallbackTextureList);
 
 				LL_DEBUGS("export") << "re-requested texture " << texture_id.asString() << LL_ENDL;
 			}
@@ -669,13 +669,13 @@ bool FSFloaterObjectExport::exportTexture(const LLUUID& texture_id)
 	LLViewerFetchedTexture* image = LLViewerTextureManager::getFetchedTexture(texture_id, FTT_DEFAULT, MIPMAP_TRUE);
 	image->setBoostLevel(LLViewerTexture::BOOST_MAX_LEVEL);
 	image->forceToSaveRawImage(0);
-	image->setLoadedCallback(FSFloaterObjectExport::onImageLoaded, 0, TRUE, FALSE, this, &mCallbackTextureList);
+	image->setLoadedCallback(FSFloaterObjectExport::onImageLoaded, 0, true, false, this, &mCallbackTextureList);
 
 	return true;
 }
 
 // static
-void FSFloaterObjectExport::onImageLoaded(BOOL success, LLViewerFetchedTexture* src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, BOOL final, void* userdata)
+void FSFloaterObjectExport::onImageLoaded(bool success, LLViewerFetchedTexture* src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, bool final, void* userdata)
 {
 	if(final && success)
 	{
@@ -822,7 +822,7 @@ void FSFloaterObjectExport::inventoryChanged(LLViewerObject* object, LLInventory
 							      item->getType(),
 							      onLoadComplete,
 							      data,
-							      TRUE);
+							      true);
 			}
 			else
 			{
@@ -830,7 +830,7 @@ void FSFloaterObjectExport::inventoryChanged(LLViewerObject* object, LLInventory
 							    item->getType(),
 							    onLoadComplete,
 							    data,
-							    TRUE);
+							    true);
 			}
 		}
 	}
@@ -936,7 +936,7 @@ void FSFloaterObjectExport::onLoadComplete(const LLUUID& asset_uuid, LLAssetType
 							    LLAssetType::AT_ANIMATION,
 							    onLoadComplete,
 							    anim_data,
-							    TRUE);
+							    true);
 			}
 				break;
 			case STEP_SOUND:
@@ -959,7 +959,7 @@ void FSFloaterObjectExport::onLoadComplete(const LLUUID& asset_uuid, LLAssetType
 							    LLAssetType::AT_SOUND,
 							    onLoadComplete,
 							    sound_data,
-							    TRUE);
+							    true);
 			}
 				break;
 			default:
@@ -1245,7 +1245,7 @@ mParent(parent)
 	setImage(image);
 }
 
-void FSFloaterObjectExport::FSExportCacheReadResponder::setData(U8* data, S32 datasize, S32 imagesize, S32 imageformat, BOOL imagelocal)
+void FSFloaterObjectExport::FSExportCacheReadResponder::setData(U8* data, S32 datasize, S32 imagesize, S32 imageformat, bool imagelocal)
 {
 	if (imageformat != IMG_CODEC_J2C)
 	{

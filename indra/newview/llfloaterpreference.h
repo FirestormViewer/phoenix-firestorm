@@ -174,7 +174,7 @@ protected:
 	// <FS:Ansariel> Correct enabled state of Animated Script Dialogs option
 	void updateAnimatedScriptDialogs();
 
-	// <FS:Zi> Group Notices and chiclets location setting conversion BOOL => S32
+	// <FS:Zi> Group Notices and chiclets location setting conversion bool => S32
 	void onShowGroupNoticesTopRightChanged();
 
 public:
@@ -563,8 +563,8 @@ protected:
 	void onClickBackupSettings();
 	void onClickRestoreSettings();
 	
-	void doSelect(BOOL all);												// calls applySelection for each list
-	void applySelection(LLScrollListCtrl* control, BOOL all);				// selects or deselects all items in a scroll list
+	void doSelect(bool all);												// calls applySelection for each list
+	void applySelection(LLScrollListCtrl* control, bool all);				// selects or deselects all items in a scroll list
 	void doBackupSettings(const LLSD& notification, const LLSD& response);	// callback for backup dialog
 	void doRestoreSettings(const LLSD& notification, const LLSD& response);	// callback for restore dialog
 	void onQuitConfirmed(const LLSD& notification, const LLSD& response);	// callback for finished restore dialog

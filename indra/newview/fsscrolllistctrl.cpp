@@ -177,7 +177,7 @@ bool FSScrollListCtrl::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
 		return mHandleDaDCallback(x, y, mask, drop, cargo_type, cargo_data, accept, tooltip_msg);
 	}
 
-	return FALSE;
+	return false;
 	
 }
 

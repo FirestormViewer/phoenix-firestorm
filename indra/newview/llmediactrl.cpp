@@ -69,7 +69,7 @@
 #include "llfloaterwebcontent.h"
 #include "llwindowshade.h"
 
-extern BOOL gRestoreGL;
+extern bool gRestoreGL;
 
 static LLDefaultChildRegistry::Register<LLMediaCtrl> r("web_browser");
 
@@ -172,7 +172,7 @@ LLMediaCtrl::~LLMediaCtrl()
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-void LLMediaCtrl::setBorderVisible( BOOL border_visible )
+void LLMediaCtrl::setBorderVisible( bool border_visible )
 {
 	if ( mBorder )
 	{
@@ -833,7 +833,7 @@ void LLMediaCtrl::draw()
 	if ( gRestoreGL == 1 || mUpdateScrolls)
 	{
 		LLRect r = getRect();
-		reshape( r.getWidth(), r.getHeight(), FALSE );
+		reshape( r.getWidth(), r.getHeight(), false );
 		mUpdateScrolls = false;
 		return;
 	}
@@ -1060,7 +1060,7 @@ void LLMediaCtrl::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event)
 		{
 			LL_DEBUGS("Media") <<  "Media event:  MEDIA_EVENT_SIZE_CHANGED " << LL_ENDL;
 			LLRect r = getRect();
-			reshape( r.getWidth(), r.getHeight(), FALSE );
+			reshape( r.getWidth(), r.getHeight(), false );
 		};
 		break;
 		

@@ -97,7 +97,7 @@ void LLFloaterIMNearbyChatListener::sendChat(LLSD const & chat_data) const
 	}
 
 	// Send it as if it was typed in
-	mChatbar.sendChatFromViewer(chat_to_send, type_o_chat, ((BOOL)(channel == 0)) && gSavedSettings.getBOOL("PlayChatAnim"));
+	mChatbar.sendChatFromViewer(chat_to_send, type_o_chat, ((bool)(channel == 0)) && gSavedSettings.getBOOL("PlayChatAnim"));
 }
 
 #endif

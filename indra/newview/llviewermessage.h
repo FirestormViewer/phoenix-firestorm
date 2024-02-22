@@ -70,8 +70,8 @@ enum InventoryOfferResponse
 	// </FS:Ansariel>
 };
 
-BOOL can_afford_transaction(S32 cost);
-void give_money(const LLUUID& uuid, LLViewerRegion* region, S32 amount, BOOL is_group = FALSE,
+bool can_afford_transaction(S32 cost);
+void give_money(const LLUUID& uuid, LLViewerRegion* region, S32 amount, bool is_group = false,
 				S32 trx_type = TRANS_GIFT, const std::string& desc = LLStringUtil::null);
 void send_join_group_response(LLUUID group_id,
 							  LLUUID transaction_id,
@@ -89,7 +89,7 @@ void process_script_question(LLMessageSystem *msg, void **user_data);
 void process_chat_from_simulator(LLMessageSystem *mesgsys, void **user_data);
 
 //void process_agent_to_new_region(LLMessageSystem *mesgsys, void **user_data);
-void send_agent_update(BOOL force_send, BOOL send_reliable = FALSE);
+void send_agent_update(bool force_send, bool send_reliable = false);
 void process_object_update(LLMessageSystem *mesgsys, void **user_data);
 void process_compressed_object_update(LLMessageSystem *mesgsys, void **user_data);
 void process_cached_object_update(LLMessageSystem *mesgsys, void **user_data);
@@ -132,7 +132,7 @@ void process_adjust_balance(LLMessageSystem* msg_system, void**);
 bool attempt_standard_notification(LLMessageSystem* msg);
 void process_alert_message(LLMessageSystem* msg, void**);
 void process_agent_alert_message(LLMessageSystem* msgsystem, void** user_data);
-void process_alert_core(const std::string& message, BOOL modal);
+void process_alert_core(const std::string& message, bool modal);
 
 // "Mean" or player-vs-player abuse
 typedef std::list<LLMeanCollisionData*> mean_collision_list_t;
@@ -255,8 +255,8 @@ public:
     static std::string mResponderType;
 	EInstantMessage mIM;
 	LLUUID mFromID;
-	BOOL mFromGroup;
-	BOOL mFromObject;
+	bool mFromGroup;
+	bool mFromObject;
 	LLUUID mTransactionID;
 	LLUUID mFolderID;
 	LLUUID mObjectID;
@@ -317,7 +317,7 @@ public:
 	{
 		// <FS:Ansariel> FIRE-3234: Don't need a check for ShowNewInventory here;
 		// This only gets called if the user explicity clicks "Show" or
-		// AutoAcceptNewInventory and ShowNewInventory are TRUE.
+		// AutoAcceptNewInventory and ShowNewInventory are true.
 		//open_inventory_offer(mComplete, mFromName);
 		open_inventory_offer(mComplete, mFromName, mIsManuallyAccepted);
 		gInventory.removeObserver(this);

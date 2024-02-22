@@ -252,7 +252,7 @@ void LLFloaterProperties::draw()
 {
 	if (mDirty)
 	{
-		// RN: clear dirty first because refresh can set dirty to TRUE
+		// RN: clear dirty first because refresh can set dirty to true
 		mDirty = false;
 		refresh();
 	}
@@ -268,23 +268,23 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 
 	// do not enable the UI for incomplete items.
 	LLViewerInventoryItem* i = (LLViewerInventoryItem*)item;
-	BOOL is_complete = i->isFinished();
-	const BOOL cannot_restrict_permissions = LLInventoryType::cannotRestrictPermissions(i->getInventoryType());
-	const BOOL is_calling_card = (i->getInventoryType() == LLInventoryType::IT_CALLINGCARD);
-	const BOOL is_settings = (item->getInventoryType() == LLInventoryType::IT_SETTINGS);
+	bool is_complete = i->isFinished();
+	const bool cannot_restrict_permissions = LLInventoryType::cannotRestrictPermissions(i->getInventoryType());
+	const bool is_calling_card = (i->getInventoryType() == LLInventoryType::IT_CALLINGCARD);
+	const bool is_settings = (item->getInventoryType() == LLInventoryType::IT_SETTINGS);
 	const LLPermissions& perm = item->getPermissions();
-	const BOOL can_agent_manipulate = gAgent.allowOperation(PERM_OWNER, perm, 
+	const bool can_agent_manipulate = gAgent.allowOperation(PERM_OWNER, perm,
 															GP_OBJECT_MANIPULATE);
-	const BOOL can_agent_sell = gAgent.allowOperation(PERM_OWNER, perm, 
+	const bool can_agent_sell = gAgent.allowOperation(PERM_OWNER, perm,
 													  GP_OBJECT_SET_SALE) &&
 		!cannot_restrict_permissions;
-	const BOOL is_link = i->getIsLinkType();
+	const bool is_link = i->getIsLinkType();
 
 	// You need permission to modify the object to modify an inventory
 	// item in it.
 	LLViewerObject* object = NULL;
 	if(!mObjectID.isNull()) object = gObjectList.findObject(mObjectID);
-	BOOL is_obj_modify = TRUE;
+	bool is_obj_modify = true;
 	if(object)
 	{
 		is_obj_modify = object->permOwnerModify();
@@ -293,10 +293,10 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 	// <FS:Ansariel> Experience info
 	if(item->getInventoryType() == LLInventoryType::IT_LSL)
 	{
-		getChildView("LabelItemExperienceTitle")->setVisible(TRUE);
+		getChildView("LabelItemExperienceTitle")->setVisible(true);
 		LLTextBox* tb = getChild<LLTextBox>("LabelItemExperience");
 		tb->setText(getString("loading_experience"));
-		tb->setVisible(TRUE);
+		tb->setVisible(true);
 		LLExperienceCache::instance().fetchAssociatedExperience(item->getParentUUID(), item->getUUID(), boost::bind(&LLFloaterProperties::setAssociatedExperience, getDerivedHandle<LLFloaterProperties>(), _1));
 	}
 	// </FS:Ansariel>
@@ -304,14 +304,14 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 	//////////////////////
 	// ITEM NAME & DESC //
 	//////////////////////
-	BOOL is_modifiable = gAgent.allowOperation(PERM_MODIFY, perm,
+	bool is_modifiable = gAgent.allowOperation(PERM_MODIFY, perm,
 											   GP_OBJECT_MANIPULATE)
 		&& is_obj_modify && is_complete;
 
-	getChildView("LabelItemNameTitle")->setEnabled(TRUE);
+	getChildView("LabelItemNameTitle")->setEnabled(true);
 	getChildView("LabelItemName")->setEnabled(is_modifiable && !is_calling_card); // for now, don't allow rename of calling cards
 	getChild<LLUICtrl>("LabelItemName")->setValue(item->getName());
-	getChildView("LabelItemDescTitle")->setEnabled(TRUE);
+	getChildView("LabelItemDescTitle")->setEnabled(true);
 	getChildView("LabelItemDesc")->setEnabled(is_modifiable);
 	getChildView("IconLocked")->setVisible(!is_modifiable);
 	getChild<LLUICtrl>("LabelItemDesc")->setValue(item->getDescription());
@@ -327,22 +327,22 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		// <FS:Ansariel> Avatar names often not showing on first open
 		//LLAvatarName av_name;
 		//LLAvatarNameCache::get(item->getCreatorUUID(), &av_name);
-		//getChildView("BtnCreator")->setEnabled(TRUE); 
+		//getChildView("BtnCreator")->setEnabled(true); 
 		// </FS:Ansariel>
-		getChildView("LabelCreatorTitle")->setEnabled(TRUE);
-		getChildView("LabelCreatorName")->setEnabled(TRUE);
+		getChildView("LabelCreatorTitle")->setEnabled(true);
+		getChildView("LabelCreatorName")->setEnabled(true);
 		// <FS:Ansariel> Avatar names often not showing on first open
 		//getChild<LLUICtrl>("LabelCreatorName")->setValue(av_name.getUserName());
-		getChildView("BtnCreator")->setEnabled(FALSE);
+		getChildView("BtnCreator")->setEnabled(false);
 		getChild<LLUICtrl>("LabelCreatorName")->setValue(LLTrans::getString("AvatarNameWaiting"));
 		mCreatorNameCbConnection = LLAvatarNameCache::get(item->getCreatorUUID(), boost::bind(&LLFloaterProperties::onCreatorNameCallback, this, _1, _2, perm));
 		// </FS:Ansariel>
 	}
 	else
 	{
-		getChildView("BtnCreator")->setEnabled(FALSE);
-		getChildView("LabelCreatorTitle")->setEnabled(FALSE);
-		getChildView("LabelCreatorName")->setEnabled(FALSE);
+		getChildView("BtnCreator")->setEnabled(false);
+		getChildView("LabelCreatorTitle")->setEnabled(false);
+		getChildView("LabelCreatorName")->setEnabled(false);
 		getChild<LLUICtrl>("LabelCreatorName")->setValue(getString("unknown"));
 	}
 
@@ -353,7 +353,7 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 	{
 		// <FS:Ansariel> Avatar names often not showing on first open
 		//std::string name;
-		getChildView("BtnOwner")->setEnabled(FALSE);
+		getChildView("BtnOwner")->setEnabled(false);
 		getChild<LLUICtrl>("LabelOwnerName")->setValue(LLTrans::getString("AvatarNameWaiting"));
 		// </FS:Ansariel>
 		if (perm.isGroupOwned())
@@ -372,16 +372,16 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 			mOwnerNameCbConnection = LLAvatarNameCache::get(perm.getOwner(), boost::bind(&LLFloaterProperties::onOwnerNameCallback, this, _1, _2));
 			// </FS:Ansariel>
 		}
-		//getChildView("BtnOwner")->setEnabled(TRUE); // <FS:Ansariel> Avatar names often not showing on first open
-		getChildView("LabelOwnerTitle")->setEnabled(TRUE);
-		getChildView("LabelOwnerName")->setEnabled(TRUE);
+		//getChildView("BtnOwner")->setEnabled(true); // <FS:Ansariel> Avatar names often not showing on first open
+		getChildView("LabelOwnerTitle")->setEnabled(true);
+		getChildView("LabelOwnerName")->setEnabled(true);
 		//getChild<LLUICtrl>("LabelOwnerName")->setValue(name); // <FS:Ansariel> Avatar names often not showing on first open
 	}
 	else
 	{
-		getChildView("BtnOwner")->setEnabled(FALSE);
-		getChildView("LabelOwnerTitle")->setEnabled(FALSE);
-		getChildView("LabelOwnerName")->setEnabled(FALSE);
+		getChildView("BtnOwner")->setEnabled(false);
+		getChildView("LabelOwnerTitle")->setEnabled(false);
+		getChildView("LabelOwnerName")->setEnabled(false);
 		getChild<LLUICtrl>("LabelOwnerName")->setValue(getString("public"));
 	}
 	
@@ -421,17 +421,17 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 	U32 everyone_mask	= perm.getMaskEveryone();
 	U32 next_owner_mask	= perm.getMaskNextOwner();
 
-	getChildView("OwnerLabel")->setEnabled(TRUE);
-	getChildView("CheckOwnerModify")->setEnabled(FALSE);
-	getChild<LLUICtrl>("CheckOwnerModify")->setValue(LLSD((BOOL)(owner_mask & PERM_MODIFY)));
-	getChildView("CheckOwnerCopy")->setEnabled(FALSE);
-	getChild<LLUICtrl>("CheckOwnerCopy")->setValue(LLSD((BOOL)(owner_mask & PERM_COPY)));
-	getChildView("CheckOwnerTransfer")->setEnabled(FALSE);
-	getChild<LLUICtrl>("CheckOwnerTransfer")->setValue(LLSD((BOOL)(owner_mask & PERM_TRANSFER)));
+	getChildView("OwnerLabel")->setEnabled(true);
+	getChildView("CheckOwnerModify")->setEnabled(false);
+	getChild<LLUICtrl>("CheckOwnerModify")->setValue(LLSD((bool)(owner_mask & PERM_MODIFY)));
+	getChildView("CheckOwnerCopy")->setEnabled(false);
+	getChild<LLUICtrl>("CheckOwnerCopy")->setValue(LLSD((bool)(owner_mask & PERM_COPY)));
+	getChildView("CheckOwnerTransfer")->setEnabled(false);
+	getChild<LLUICtrl>("CheckOwnerTransfer")->setValue(LLSD((bool)(owner_mask & PERM_TRANSFER)));
 	
 	// <FS:CR> OpenSim export permissions
-	getChildView("CheckOwnerExport")->setEnabled(FALSE);
-	getChild<LLUICtrl>("CheckOwnerExport")->setValue(LLSD((BOOL)(owner_mask & PERM_EXPORT)));
+	getChildView("CheckOwnerExport")->setEnabled(false);
+	getChild<LLUICtrl>("CheckOwnerExport")->setValue(LLSD((bool)(owner_mask & PERM_EXPORT)));
 	// </FS:CR>
 
 	///////////////////////
@@ -440,9 +440,9 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 
 	if( gSavedSettings.getBOOL("DebugPermissions") )
 	{
-		BOOL slam_perm 			= FALSE;
-		BOOL overwrite_group	= FALSE;
-		BOOL overwrite_everyone	= FALSE;
+		bool slam_perm 			= false;
+		bool overwrite_group	= false;
+		bool overwrite_everyone	= false;
 
 		if (item->getType() == LLAssetType::AT_OBJECT)
 		{
@@ -465,38 +465,38 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		perm_string = "B: ";
 		perm_string += mask_to_string(base_mask, isOpenSim); // <FS:Beq/> remove misleading X for export when not in OpenSim
 		getChild<LLUICtrl>("BaseMaskDebug")->setValue(perm_string);
-		getChildView("BaseMaskDebug")->setVisible(TRUE);
+		getChildView("BaseMaskDebug")->setVisible(true);
 		
 		perm_string = "O: ";
 		perm_string += mask_to_string(owner_mask, isOpenSim); // <FS:Beq/> remove misleading X for export when not in OpenSim
 		getChild<LLUICtrl>("OwnerMaskDebug")->setValue(perm_string);
-		getChildView("OwnerMaskDebug")->setVisible(TRUE);
+		getChildView("OwnerMaskDebug")->setVisible(true);
 		
 		perm_string = "G";
 		perm_string += overwrite_group ? "*: " : ": ";
 		perm_string += mask_to_string(group_mask, isOpenSim); // <FS:Beq/> remove misleading X for export when not in OpenSim
 		getChild<LLUICtrl>("GroupMaskDebug")->setValue(perm_string);
-		getChildView("GroupMaskDebug")->setVisible(TRUE);
+		getChildView("GroupMaskDebug")->setVisible(true);
 		
 		perm_string = "E";
 		perm_string += overwrite_everyone ? "*: " : ": ";
 		perm_string += mask_to_string(everyone_mask, isOpenSim); // <FS:Beq/> remove misleading X for export when not in OpenSim
 		getChild<LLUICtrl>("EveryoneMaskDebug")->setValue(perm_string);
-		getChildView("EveryoneMaskDebug")->setVisible(TRUE);
+		getChildView("EveryoneMaskDebug")->setVisible(true);
 		
 		perm_string = "N";
 		perm_string += slam_perm ? "*: " : ": ";
 		perm_string += mask_to_string(next_owner_mask, isOpenSim); // <FS:Beq/> remove misleading X for export when not in OpenSim
 		getChild<LLUICtrl>("NextMaskDebug")->setValue(perm_string);
-		getChildView("NextMaskDebug")->setVisible(TRUE);
+		getChildView("NextMaskDebug")->setVisible(true);
 	}
 	else
 	{
-		getChildView("BaseMaskDebug")->setVisible(FALSE);
-		getChildView("OwnerMaskDebug")->setVisible(FALSE);
-		getChildView("GroupMaskDebug")->setVisible(FALSE);
-		getChildView("EveryoneMaskDebug")->setVisible(FALSE);
-		getChildView("NextMaskDebug")->setVisible(FALSE);
+		getChildView("BaseMaskDebug")->setVisible(false);
+		getChildView("OwnerMaskDebug")->setVisible(false);
+		getChildView("GroupMaskDebug")->setVisible(false);
+		getChildView("EveryoneMaskDebug")->setVisible(false);
+		getChildView("NextMaskDebug")->setVisible(false);
 	}
 
 	/////////////
@@ -506,44 +506,44 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 	// Check for ability to change values.
 	if (is_link || cannot_restrict_permissions)
 	{
-		getChildView("CheckShareWithGroup")->setEnabled(FALSE);
-		getChildView("CheckEveryoneCopy")->setEnabled(FALSE);
+		getChildView("CheckShareWithGroup")->setEnabled(false);
+		getChildView("CheckEveryoneCopy")->setEnabled(false);
 	}
 	else if (is_obj_modify && can_agent_manipulate)
 	{
-		getChildView("CheckShareWithGroup")->setEnabled(TRUE);
+		getChildView("CheckShareWithGroup")->setEnabled(true);
 		getChildView("CheckEveryoneCopy")->setEnabled((owner_mask & PERM_COPY) && (owner_mask & PERM_TRANSFER));
 	}
 	else
 	{
-		getChildView("CheckShareWithGroup")->setEnabled(FALSE);
-		getChildView("CheckEveryoneCopy")->setEnabled(FALSE);
+		getChildView("CheckShareWithGroup")->setEnabled(false);
+		getChildView("CheckEveryoneCopy")->setEnabled(false);
 	}
 	
 	getChildView("CheckOwnerExport")->setEnabled(gAgentID == item->getCreatorUUID());	// <FS:CR> OpenSim export permissions
 
 	// Set values.
-	BOOL is_group_copy = (group_mask & PERM_COPY) ? TRUE : FALSE;
-	BOOL is_group_modify = (group_mask & PERM_MODIFY) ? TRUE : FALSE;
-	BOOL is_group_move = (group_mask & PERM_MOVE) ? TRUE : FALSE;
+	bool is_group_copy = (group_mask & PERM_COPY) ? true : false;
+	bool is_group_modify = (group_mask & PERM_MODIFY) ? true : false;
+	bool is_group_move = (group_mask & PERM_MOVE) ? true : false;
 
 	if (is_group_copy && is_group_modify && is_group_move)
 	{
-		getChild<LLUICtrl>("CheckShareWithGroup")->setValue(LLSD((BOOL)TRUE));
+		getChild<LLUICtrl>("CheckShareWithGroup")->setValue(LLSD(true));
 
 		LLCheckBoxCtrl* ctl = getChild<LLCheckBoxCtrl>("CheckShareWithGroup");
 		if(ctl)
 		{
-			ctl->setTentative(FALSE);
+			ctl->setTentative(false);
 		}
 	}
 	else if (!is_group_copy && !is_group_modify && !is_group_move)
 	{
-		getChild<LLUICtrl>("CheckShareWithGroup")->setValue(LLSD((BOOL)FALSE));
+		getChild<LLUICtrl>("CheckShareWithGroup")->setValue(LLSD(false));
 		LLCheckBoxCtrl* ctl = getChild<LLCheckBoxCtrl>("CheckShareWithGroup");
 		if(ctl)
 		{
-			ctl->setTentative(FALSE);
+			ctl->setTentative(false);
 		}
 	}
 	else
@@ -551,19 +551,19 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		LLCheckBoxCtrl* ctl = getChild<LLCheckBoxCtrl>("CheckShareWithGroup");
 		if(ctl)
 		{
-			ctl->setTentative(TRUE);
-			ctl->set(TRUE);
+			ctl->setTentative(true);
+			ctl->set(true);
 		}
 	}
 	
-	getChild<LLUICtrl>("CheckEveryoneCopy")->setValue(LLSD((BOOL)(everyone_mask & PERM_COPY)));
+	getChild<LLUICtrl>("CheckEveryoneCopy")->setValue(LLSD((bool)(everyone_mask & PERM_COPY)));
 
 	///////////////
 	// SALE INFO //
 	///////////////
 
 	const LLSaleInfo& sale_info = item->getSaleInfo();
-	BOOL is_for_sale = sale_info.isForSale();
+	bool is_for_sale = sale_info.isForSale();
 	LLComboBox* combo_sale_type = getChild<LLComboBox>("ComboBoxSaleType");
 	LLUICtrl* edit_cost = getChild<LLUICtrl>("Edit Cost");
 
@@ -573,7 +573,7 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 	{
 		getChildView("CheckPurchase")->setEnabled(is_complete);
 
-		getChildView("NextOwnerLabel")->setEnabled(TRUE);
+		getChildView("NextOwnerLabel")->setEnabled(true);
 		getChildView("CheckNextOwnerModify")->setEnabled((base_mask & PERM_MODIFY) && !cannot_restrict_permissions);
 		getChildView("CheckNextOwnerCopy")->setEnabled((base_mask & PERM_COPY) && !cannot_restrict_permissions && !is_settings);
 		getChildView("CheckNextOwnerTransfer")->setEnabled((next_owner_mask & PERM_COPY) && !cannot_restrict_permissions);
@@ -583,15 +583,15 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 	}
 	else
 	{
-		getChildView("CheckPurchase")->setEnabled(FALSE);
+		getChildView("CheckPurchase")->setEnabled(false);
 
-		getChildView("NextOwnerLabel")->setEnabled(FALSE);
-		getChildView("CheckNextOwnerModify")->setEnabled(FALSE);
-		getChildView("CheckNextOwnerCopy")->setEnabled(FALSE);
-		getChildView("CheckNextOwnerTransfer")->setEnabled(FALSE);
+		getChildView("NextOwnerLabel")->setEnabled(false);
+		getChildView("CheckNextOwnerModify")->setEnabled(false);
+		getChildView("CheckNextOwnerCopy")->setEnabled(false);
+		getChildView("CheckNextOwnerTransfer")->setEnabled(false);
 
-		combo_sale_type->setEnabled(FALSE);
-		edit_cost->setEnabled(FALSE);
+		combo_sale_type->setEnabled(false);
+		edit_cost->setEnabled(false);
 	}
 
 	// Hide any properties that are not relevant to settings
@@ -617,9 +617,9 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 
 	// Set values.
 	getChild<LLUICtrl>("CheckPurchase")->setValue(is_for_sale);
-	getChild<LLUICtrl>("CheckNextOwnerModify")->setValue(LLSD(BOOL(next_owner_mask & PERM_MODIFY)));
-	getChild<LLUICtrl>("CheckNextOwnerCopy")->setValue(LLSD(BOOL(next_owner_mask & PERM_COPY)));
-	getChild<LLUICtrl>("CheckNextOwnerTransfer")->setValue(LLSD(BOOL(next_owner_mask & PERM_TRANSFER)));
+	getChild<LLUICtrl>("CheckNextOwnerModify")->setValue(LLSD(bool(next_owner_mask & PERM_MODIFY)));
+	getChild<LLUICtrl>("CheckNextOwnerCopy")->setValue(LLSD(bool(next_owner_mask & PERM_COPY)));
+	getChild<LLUICtrl>("CheckNextOwnerTransfer")->setValue(LLSD(bool(next_owner_mask & PERM_TRANSFER)));
 
 	if (is_for_sale)
 	{
@@ -717,7 +717,7 @@ void LLFloaterProperties::onCommitName()
 		new_item->rename(labelItemName->getText());
 		if(mObjectID.isNull())
 		{
-			new_item->updateServer(FALSE);
+			new_item->updateServer(false);
 			gInventory.updateItem(new_item);
 			gInventory.notifyObservers();
 		}
@@ -754,7 +754,7 @@ void LLFloaterProperties::onCommitDescription()
 		new_item->setDescription(labelItemDesc->getText());
 		if(mObjectID.isNull())
 		{
-			new_item->updateServer(FALSE);
+			new_item->updateServer(false);
 			gInventory.updateItem(new_item);
 			gInventory.notifyObservers();
 		}
@@ -855,7 +855,7 @@ void LLFloaterProperties::onCommitPermissions()
 		new_item->setFlags(flags);
 		if(mObjectID.isNull())
 		{
-			new_item->updateServer(FALSE);
+			new_item->updateServer(false);
 			gInventory.updateItem(new_item);
 			gInventory.notifyObservers();
 		}
@@ -899,10 +899,10 @@ void LLFloaterProperties::updateSaleInfo()
 	LLSaleInfo sale_info(item->getSaleInfo());
 	if(!gAgent.allowOperation(PERM_TRANSFER, item->getPermissions(), GP_OBJECT_SET_SALE))
 	{
-		getChild<LLUICtrl>("CheckPurchase")->setValue(LLSD((BOOL)FALSE));
+		getChild<LLUICtrl>("CheckPurchase")->setValue(LLSD(false));
 	}
 
-	if((BOOL)getChild<LLUICtrl>("CheckPurchase")->getValue())
+	if((bool)getChild<LLUICtrl>("CheckPurchase")->getValue())
 	{
 		// turn on sale info
 		LLSaleInfo::EForSale sale_type = LLSaleInfo::FS_COPY;
@@ -956,7 +956,7 @@ void LLFloaterProperties::updateSaleInfo()
 		if(mObjectID.isNull())
 		{
 			// This is in the agent's inventory.
-			new_item->updateServer(FALSE);
+			new_item->updateServer(false);
 			gInventory.updateItem(new_item);
 			gInventory.notifyObservers();
 		}
@@ -1051,7 +1051,7 @@ void LLFloaterProperties::onOwnerNameCallback(const LLUUID& av_id, const LLAvata
 void LLFloaterProperties::onGroupOwnerNameCallback(const std::string& name)
 {
 	getChild<LLUICtrl>("LabelOwnerName")->setValue(name);
-	getChildView("BtnOwner")->setEnabled(TRUE);
+	getChildView("BtnOwner")->setEnabled(true);
 }
 // </FS:Ansariel>
 

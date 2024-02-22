@@ -1033,12 +1033,12 @@ void LLNetMap::drawRing(const F32 radius, const LLVector3 pos_map, const LLUICol
 	gGL.matrixMode(LLRender::MM_MODELVIEW);
 	gGL.pushMatrix();
 	gGL.translatef((F32)pos_map.mV[VX], (F32)pos_map.mV[VY], 0.f);
-	gl_ring(radius_pixels, WIDTH_PIXELS, color, color, CIRCLE_STEPS, FALSE);
+	gl_ring(radius_pixels, WIDTH_PIXELS, color, color, CIRCLE_STEPS, false);
 	gGL.popMatrix();
 }
 
 void LLNetMap::drawTracking(const LLVector3d& pos_global, const LLColor4& color, 
-							BOOL draw_arrow )
+							bool draw_arrow )
 {
 	LLVector3 pos_local = globalPosToView(pos_global);
 	if( (pos_local.mV[VX] < 0) ||
@@ -1188,7 +1188,7 @@ bool LLNetMap::handleToolTip(S32 x, S32 y, MASK mask)
     if ( (fRlvCanShowName) && (handleToolTipAgent(mClosestAgentToCursor)) )
 // [/RLVa:KB]
     {
-        return TRUE;
+        return true;
     }
 
     // The popup menu uses the hover parcel when it is open and the mouse is on
@@ -1335,12 +1335,12 @@ bool LLNetMap::handleToolTip(S32 x, S32 y, MASK mask)
     return true;
 }
 
-BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
+bool LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 {
 	LLAvatarName av_name;
 	if (avatar_id.isNull() || !LLAvatarNameCache::get(avatar_id, &av_name))
 	{
-		return FALSE;
+		return false;
 	}
 
 	// only show tooltip if same inspector not already open
@@ -1408,7 +1408,7 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 
 		LLToolTipMgr::instance().show(p);
 	}
-	return TRUE;
+	return true;
 }
 
 // static
@@ -1674,7 +1674,7 @@ bool LLNetMap::createImage(LLPointer<LLImageRaw>& rawimagep) const
 //		mObjectRawImagep = new LLImageRaw(img_size, img_size, 4);
 //		U8* data = mObjectRawImagep->getData();
 //		memset( data, 0, img_size * img_size * 4 );
-//		mObjectImagep = LLViewerTextureManager::getLocalTexture( mObjectRawImagep.get(), FALSE);
+//		mObjectImagep = LLViewerTextureManager::getLocalTexture( mObjectRawImagep.get(), false);
 //	}
 //	setScale(mScale);
 //	mUpdateNow = true;
@@ -1684,7 +1684,7 @@ bool LLNetMap::createImage(LLPointer<LLImageRaw>& rawimagep) const
 void LLNetMap::createObjectImage()
 {
 	if (createImage(mObjectRawImagep))
-		mObjectImagep = LLViewerTextureManager::getLocalTexture( mObjectRawImagep.get(), FALSE);
+		mObjectImagep = LLViewerTextureManager::getLocalTexture( mObjectRawImagep.get(), false);
 	// <FS:Ansariel> Synchronize scale throughout instances
 	//setScale(mScale);
 	setScale(sScale);
@@ -1695,7 +1695,7 @@ void LLNetMap::createObjectImage()
 void LLNetMap::createParcelImage()
 {
 	if (createImage(mParcelRawImagep))
-		mParcelImagep = LLViewerTextureManager::getLocalTexture( mParcelRawImagep.get(), FALSE);
+		mParcelImagep = LLViewerTextureManager::getLocalTexture( mParcelRawImagep.get(), false);
 	mUpdateParcelImage = true;
 }
 // [/SL:KB]
@@ -1763,7 +1763,7 @@ void LLNetMap::setAvatarProfileLabel(const LLUUID& av_id, const LLAvatarName& av
 	auto menu = static_cast<LLMenuGL*>(mPopupMenuHandle.get());
 	if (menu)
 	{
-		LLMenuItemGL* pItem = menu->findChild<LLMenuItemGL>(item_name, TRUE /*recurse*/);
+		LLMenuItemGL* pItem = menu->findChild<LLMenuItemGL>(item_name, true /*recurse*/);
 		if (pItem)
 		{
 			pItem->setLabel(avName.getCompleteName());
@@ -1776,7 +1776,7 @@ void LLNetMap::handleOverlayToggle(const LLSD& sdParam)
 {
 	// Toggle the setting
 	const std::string strControl = sdParam.asString();
-	BOOL fCurValue = gSavedSettings.getBOOL(strControl);
+	bool fCurValue = gSavedSettings.getBOOL(strControl);
 	gSavedSettings.setBOOL(strControl, !fCurValue);
 
 	// Force an overlay update

@@ -689,7 +689,7 @@ void LLGLTexMemBar::draw()
 	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*3,
 											 text_color, LLFontGL::LEFT, LLFontGL::TOP,
 											 LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, S32_MAX,
-											 &x_right, FALSE);
+											 &x_right, false);
 
 	// <FS:Ansariel> Move BW figures further to the right to prevent overlapping
 	left = 575;
@@ -783,7 +783,7 @@ public:
 	void setTop(S32 loaded, S32 bound, F32 scale) {mTopLoaded = loaded ; mTopBound = bound; mScale = scale ;}
 
 	void draw();	
-	BOOL handleHover(S32 x, S32 y, MASK mask, BOOL set_pick_size) ;
+	bool handleHover(S32 x, S32 y, MASK mask, bool set_pick_size) ;
 	
 private:
 	S32 mIndex ;
@@ -796,13 +796,13 @@ private:
 	F32 mScale ;
 };
 
-BOOL LLGLTexSizeBar::handleHover(S32 x, S32 y, MASK mask, BOOL set_pick_size) 
+bool LLGLTexSizeBar::handleHover(S32 x, S32 y, MASK mask, bool set_pick_size) 
 {
 	if(y > mBottom && (y < mBottom + (S32)(mTopLoaded * mScale) || y < mBottom + (S32)(mTopBound * mScale)))
 	{
 		LLImageGL::setCurTexSizebar(mIndex, set_pick_size);
 	}
-	return TRUE ;
+	return true ;
 }
 void LLGLTexSizeBar::draw()
 {
@@ -831,14 +831,14 @@ void LLGLTexSizeBar::draw()
 
 LLTextureView::LLTextureView(const LLTextureView::Params& p)
 	:	LLContainerView(p),
-		mFreezeView(FALSE),
-		mOrderFetch(FALSE),
-		mPrintList(FALSE),
+		mFreezeView(false),
+		mOrderFetch(false),
+		mPrintList(false),
 		mNumTextureBars(0)
 {
-	setVisible(FALSE);
+	setVisible(false);
 	
-	setDisplayChildren(TRUE);
+	setDisplayChildren(true);
 	mGLTexMemBar = 0;
 	mAvatarTexBar = 0;
 }
@@ -1010,7 +1010,7 @@ void LLTextureView::draw()
 		
 		if (mPrintList)
 		{
-			mPrintList = FALSE;
+			mPrintList = false;
 		}
 		
 		static S32 max_count = 50;
@@ -1059,7 +1059,7 @@ void LLTextureView::draw()
 		addChild(mAvatarTexBar);
 		sendChildToFront(mAvatarTexBar);
 
-		reshape(getRect().getWidth(), getRect().getHeight(), TRUE);
+		reshape(getRect().getWidth(), getRect().getHeight(), true);
 
 		LLUI::popMatrix();
 		LLUI::pushMatrix();
@@ -1071,7 +1071,7 @@ void LLTextureView::draw()
 			LLView *viewp = *child_iter;
 			if (viewp->getRect().mBottom < 0)
 			{
-				viewp->setVisible(FALSE);
+				viewp->setVisible(false);
 			}
 		}
 	}
@@ -1107,7 +1107,7 @@ bool LLTextureView::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	if ((mask & (MASK_CONTROL|MASK_SHIFT|MASK_ALT)) == (MASK_ALT|MASK_SHIFT))
 	{
-		mPrintList = TRUE;
+		mPrintList = true;
 		return true;
 	}
 	if ((mask & (MASK_CONTROL|MASK_SHIFT|MASK_ALT)) == (MASK_CONTROL|MASK_SHIFT))

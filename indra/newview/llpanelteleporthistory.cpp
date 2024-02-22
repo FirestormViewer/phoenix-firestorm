@@ -386,7 +386,7 @@ LLTeleportHistoryFlatItemStorage::getFlatItemForPersistentItem (
 			item->setLocalPos(local_pos);
 			// </FS:Ansariel>
 			item->setHighlightedText(hl);
-			item->setVisible(TRUE);
+			item->setVisible(true);
 			item->updateTitle();
 			item->updateTimestamp();
 		}

@@ -82,8 +82,8 @@ void FSFloaterContactSetConfiguration::draw()
 
 void FSFloaterContactSetConfiguration::onOpen(const LLSD& target_set)
 {
-	mSetSwatch->set(LGGContactSets::getInstance()->getSetColor(mContactSet), TRUE);
-	mGlobalSwatch->set(LGGContactSets::getInstance()->getDefaultColor(), TRUE);
+	mSetSwatch->set(LGGContactSets::getInstance()->getSetColor(mContactSet), true);
+	mGlobalSwatch->set(LGGContactSets::getInstance()->getDefaultColor(), true);
 	mNotificationCheckBox->set(LGGContactSets::getInstance()->getNotifyForSet(mContactSet));
 }
 

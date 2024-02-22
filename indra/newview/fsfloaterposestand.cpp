@@ -87,7 +87,7 @@ void FSFloaterPoseStand::onClose(bool app_quitting)
 		setLock(false);
 		gAgent.standUp();
 	}
-	gAgent.setCustomAnim(FALSE);
+	gAgent.setCustomAnim(false);
 	FSPose::getInstance()->stopPose();
 	gAgent.stopCurrentAnimations(true);
 	if (mAOPaused && !gSavedPerAccountSettings.getBOOL("UseAO"))

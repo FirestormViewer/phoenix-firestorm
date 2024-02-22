@@ -250,7 +250,7 @@ std::string RlvFloaterBehaviours::getFormattedBehaviourString(ERlvBehaviourFilte
 			}
 
 			std::string strOption; LLUUID idOption;
-			if ( (rlvCmd.hasOption()) && (idOption.set(rlvCmd.getOption(), FALSE)) && (idOption.notNull()) )
+			if ( (rlvCmd.hasOption()) && (idOption.set(rlvCmd.getOption(), false)) && (idOption.notNull()) )
 			{
 				LLAvatarName avName;
 				if (gObjectList.findObject(idOption))
@@ -333,7 +333,7 @@ void RlvFloaterBehaviours::refreshAll()
 		for (const RlvCommand& rlvCmd : rlvObjectEntry.second.getCommandList())
 		{
 			std::string strOption; LLUUID idOption;
-			if ( (rlvCmd.hasOption()) && (idOption.set(rlvCmd.getOption(), FALSE)) && (idOption.notNull()) )
+			if ( (rlvCmd.hasOption()) && (idOption.set(rlvCmd.getOption(), false)) && (idOption.notNull()) )
 			{
 				LLAvatarName avName;
 				if (gObjectList.findObject(idOption))
@@ -556,7 +556,7 @@ void RlvFloaterLocks::refreshAll()
 
 	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
 	LLFindWearablesEx f(true, true);
-	gInventory.collectDescendentsIf(LLAppearanceMgr::instance().getCOF(), folders, items, FALSE, f);
+	gInventory.collectDescendentsIf(LLAppearanceMgr::instance().getCOF(), folders, items, false, f);
 
 	for (LLInventoryModel::item_array_t::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
 	{
@@ -837,7 +837,7 @@ void RlvFloaterConsole::onInput(LLUICtrl* pCtrl, const LLSD& sdParam)
 
 void RlvFloaterConsole::reshapeLayoutPanel()
 {
-	m_pInputPanel->reshape(m_pInputPanel->getRect().getWidth(), m_pInputEdit->getRect().getHeight() + m_nInputEditPad, FALSE);
+	m_pInputPanel->reshape(m_pInputPanel->getRect().getWidth(), m_pInputEdit->getRect().getHeight() + m_nInputEditPad, false);
 }
 
 // ============================================================================

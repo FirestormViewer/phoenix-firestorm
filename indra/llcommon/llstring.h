@@ -28,8 +28,9 @@
 #define LL_LLSTRING_H
 
 #include <boost/call_traits.hpp>
-#include <boost/optional/optional.hpp>
+#include <optional>
 #include <string>
+#include <string_view>
 #include <cstdio>
 #include <cwchar>                   // std::wcslen()
 //#include <locale>
@@ -42,7 +43,6 @@
 // [RLVa:KB] - Checked: RLVa-2.1.0
 #include <list>
 // [/RLVa:KB]
-#include <string_view>
 
 #if LL_LINUX
 #include <wctype.h>
@@ -354,7 +354,7 @@ public:
 	 * (key is always UTF-8)
 	 * detect absence by (! return value)
 	 */
-	static boost::optional<string_type> getoptenv(const std::string& key);
+	static std::optional<string_type> getoptenv(const std::string& key);
 
 	static void	addCRLF(string_type& string);
 	static void	removeCRLF(string_type& string);
@@ -833,11 +833,11 @@ STRING windows_message() { return windows_message<STRING>(GetLastError()); }
 
 //@}
 
-LL_COMMON_API boost::optional<std::wstring> llstring_getoptenv(const std::string& key);
+LL_COMMON_API std::optional<std::wstring> llstring_getoptenv(const std::string& key);
 
 #else // ! LL_WINDOWS
 
-LL_COMMON_API boost::optional<std::string>  llstring_getoptenv(const std::string& key);
+LL_COMMON_API std::optional<std::string>  llstring_getoptenv(const std::string& key);
 
 #endif // ! LL_WINDOWS
 
@@ -1787,17 +1787,17 @@ bool LLStringUtilBase<T>::endsWith(
 
 // static
 template<class T>
-auto LLStringUtilBase<T>::getoptenv(const std::string& key) -> boost::optional<string_type>
+auto LLStringUtilBase<T>::getoptenv(const std::string& key) -> std::optional<string_type>
 {
     auto found(llstring_getoptenv(key));
     if (found)
     {
-        // return populated boost::optional
+        // return populated std::optional
         return { ll_convert<string_type>(*found) };
     }
     else
     {
-        // empty boost::optional
+        // empty std::optional
         return {};
     }
 }

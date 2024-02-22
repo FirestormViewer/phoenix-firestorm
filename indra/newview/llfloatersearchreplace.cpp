@@ -199,7 +199,7 @@ void LLFloaterSearchReplace::onSearchClick()
 	LLTextEditor* pEditor = getEditor();
 	if (pEditor)
 	{
-		pEditor->selectNext(m_pSearchEditor->getText(), m_pCaseInsensitiveCheck->get(), TRUE, m_pSearchUpCheck->get());
+		pEditor->selectNext(m_pSearchEditor->getText(), m_pCaseInsensitiveCheck->get(), true, m_pSearchUpCheck->get());
 	}
 }
 
@@ -208,7 +208,7 @@ void LLFloaterSearchReplace::onReplaceClick()
 	LLTextEditor* pEditor = getEditor();
 	if (pEditor)
 	{
-		pEditor->replaceText(m_pSearchEditor->getText(), m_pReplaceEditor->getText(), m_pCaseInsensitiveCheck->get(), TRUE, m_pSearchUpCheck->get());
+		pEditor->replaceText(m_pSearchEditor->getText(), m_pReplaceEditor->getText(), m_pCaseInsensitiveCheck->get(), true, m_pSearchUpCheck->get());
 	}
 }
 

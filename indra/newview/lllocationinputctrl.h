@@ -214,7 +214,7 @@ private:
 	std::string mMaturityHelpTopic;
 
 	// <FS:Zi> Pathfinding rebake functions
-	BOOL	rebakeRegionCallback(const LLSD& notification,const LLSD& response);
+	bool	rebakeRegionCallback(const LLSD& notification,const LLSD& response);
 	// </FS:Zi>
 
 	// <FS:ND> Prevent querying LLTrans each frame

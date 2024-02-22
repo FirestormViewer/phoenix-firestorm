@@ -426,7 +426,7 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
         // Unknown extension
         errorMessage = llformat(LLTrans::getString("UnknownFileExtension").c_str(), exten.c_str());
         errorLabel = "ErrorMessage";
-        error = TRUE;;
+        error = true;;
     }
     else if (assetType == LLAssetType::AT_TEXTURE)
     {
@@ -535,7 +535,7 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
         // Unknown extension
         errorMessage = llformat(LLTrans::getString("UnknownFileExtension").c_str(), exten.c_str());
         errorLabel = "ErrorMessage";
-        error = TRUE;;
+        error = true;;
     }
 
     if (error)
@@ -848,7 +848,7 @@ LLSD LLScriptAssetUpload::generatePostBody()
         body["item_id"] = getItemId();
         // <FS:Ansariel> OpenSim expects an integer here...
         //body["is_script_running"] = getIsRunning();
-        body["is_script_running"] = (BOOL)getIsRunning();
+        body["is_script_running"] = (S32)getIsRunning();
         // </FS:Ansariel>
         body["target"] = (getTargetType() == MONO) ? "mono" : "lsl2";
         body["experience"] = getExerienceId();
@@ -974,7 +974,7 @@ void LLViewerAssetUpload::AssetInventoryUploadCoproc(LLCoreHttpUtil::HttpCorouti
 
             // Show the preview panel for textures and sounds to let
             // user know that the image (or snapshot) arrived intact.
-            LLInventoryPanel* panel = LLInventoryPanel::getActiveInventoryPanel(FALSE);
+            LLInventoryPanel* panel = LLInventoryPanel::getActiveInventoryPanel(false);
             // <FS:Ansariel> Use correct inventory floater for showing the upload
             if (!panel)
             {
@@ -990,9 +990,9 @@ void LLViewerAssetUpload::AssetInventoryUploadCoproc(LLCoreHttpUtil::HttpCorouti
             // </FS:Ansariel>
 
             // <FS:Testy> FIRE-22943: Don't switch away from the "Recent Items" tab.
-            //LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, serverInventoryItem, FALSE, TAKE_FOCUS_NO, (panel == NULL));
-            BOOL show_main_panel = (!panel || panel->getName() != "Recent Items");
-            LLInventoryPanel::openInventoryPanelAndSetSelection(TRUE, serverInventoryItem, show_main_panel, TAKE_FOCUS_NO, (panel == NULL));
+            //LLInventoryPanel::openInventoryPanelAndSetSelection(true, serverInventoryItem, false, TAKE_FOCUS_NO, (panel == NULL));
+            bool show_main_panel = (!panel || panel->getName() != "Recent Items");
+            LLInventoryPanel::openInventoryPanelAndSetSelection(true, serverInventoryItem, show_main_panel, TAKE_FOCUS_NO, (panel == NULL));
             // </FS:Testy>
 
             // restore keyboard focus

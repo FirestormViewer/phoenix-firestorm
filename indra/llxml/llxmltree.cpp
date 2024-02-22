@@ -553,14 +553,14 @@ bool LLXmlTreeParser::parseFile(const std::string &path, LLXmlTreeNode** root, b
 	return success;
 }
 
-BOOL LLXmlTreeParser::parseString(const std::string &string, LLXmlTreeNode** root, BOOL keep_contents)
+bool LLXmlTreeParser::parseString(const std::string &string, LLXmlTreeNode** root, bool keep_contents)
 {
 	llassert( !mRoot );
 	llassert( !mCurrent );
 	
 	mKeepContents = keep_contents;
 	
-	BOOL success = LLXmlParser::parse(string.c_str(), string.length(), true);
+	bool success = LLXmlParser::parse(string.c_str(), string.length(), true);
 	
 	*root = mRoot;
 	mRoot = NULL;

@@ -541,7 +541,7 @@ bool AnimationExplorer::handleMouseDown(S32 x, S32 y, MASK mask)
 // Copied from llfloaterbvhpreview.cpp
 bool AnimationExplorer::handleMouseUp(S32 x, S32 y, MASK mask)
 {
-	gFocusMgr.setMouseCapture(FALSE);
+	gFocusMgr.setMouseCapture(nullptr);
 	gViewerWindow->showCursor();
 	return LLFloater::handleMouseUp(x, y, mask);
 }

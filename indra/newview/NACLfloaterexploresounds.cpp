@@ -400,9 +400,9 @@ void NACLFloaterExploreSounds::handleLookAt()
 	cam += pos_global;
 	cam += LLVector3d(0.0, 0.0, 3.0);
 
-	gAgentCamera.setFocusOnAvatar(FALSE, FALSE);
+	gAgentCamera.setFocusOnAvatar(false, false);
 	gAgentCamera.setCameraPosAndFocusGlobal(cam, pos_global, item.mSourceID);
-	gAgentCamera.setCameraAnimating(FALSE);
+	gAgentCamera.setCameraAnimating(false);
 }
 
 void NACLFloaterExploreSounds::handleStop()
