@@ -101,7 +101,6 @@ LLVOAvatar *LLControlAvatar::getAttachedAvatar()
 
 void LLControlAvatar::getNewConstraintFixups(LLVector3& new_pos_fixup, F32& new_scale_fixup) const
 {
-
     F32 max_legal_offset = MAX_LEGAL_OFFSET;
     if (gSavedSettings.getControl("AnimatedObjectsMaxLegalOffset"))
     {
@@ -364,6 +363,9 @@ LLControlAvatar *LLControlAvatar::createControlAvatar(LLVOVolume *obj)
 void LLControlAvatar::markForDeath()
 {
     mMarkedForDeath = true;
+    // object unlinked cav and might be dead already
+    // might need to clean mControlAVBridge here as well
+    mRootVolp = NULL;
 	mVolumep = nullptr;
 }
 
@@ -443,7 +445,7 @@ void LLControlAvatar::updateDebugText()
         F32 streaming_cost = 0.f;
         std::string cam_dist_string = "";
         S32 cam_dist_count = 0;
-        F32 lod_radius = mRootVolp->mLODRadius;
+        F32 lod_radius = mRootVolp ? mRootVolp->mLODRadius : 0.f;
 
         for (std::vector<LLVOVolume*>::iterator it = volumes.begin();
              it != volumes.end(); ++it)
