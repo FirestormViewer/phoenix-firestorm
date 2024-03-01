@@ -3,6 +3,7 @@
 	<string name="title_create_landmark" value="Crea segnaposto"/>
 	<string name="title_edit_landmark" value="Modifica segnaposto"/>
 	<string name="title_landmark" value="Segnaposto"/>
+	<string name="not_available" value="(N\D)"/>
 	<string name="unknown" value="(sconosciuto)"/>
 	<string name="public" value="(pubblico)"/>
 	<string name="server_update_text">
@@ -24,6 +25,9 @@
 		</layout_panel>
 		<layout_panel name="place_info_content">
 			<text name="parcel_title" value="sconosciuto" />
+			<text name="region_title">
+				Regione: [REGIONAMEPOS]
+			</text>
 			<text name="maturity_value" value="sconosciuto"/>
 			<text name="parcel_owner_label" value="Proprietario:" width="70" />
 			<text name="parcel_owner" value="sconosciuto" />

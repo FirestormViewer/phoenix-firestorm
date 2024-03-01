@@ -16,7 +16,7 @@
 			<button name="home_btn" tool_tip="Home page"/>
 		</layout_panel>
 		<layout_panel name="media_stop">
-			<button name="media_stop_btn" tool_tip="Interrompi supporto"/>
+			<button name="media_stop_btn" tool_tip="Interrompi media"/>
 		</layout_panel>
 		<layout_panel name="reload">
 			<button name="reload_btn" tool_tip="Ricarica"/>
@@ -28,7 +28,7 @@
 			<button name="play_btn" tool_tip="Riproduci media"/>
 		</layout_panel>
 		<layout_panel name="pause">
-			<button name="pause_btn" tool_tip="Pausa supporto"/>
+			<button name="pause_btn" tool_tip="Pausa media"/>
 		</layout_panel>
 		<layout_panel name="media_address">
 			<line_editor name="media_address_url" tool_tip="URL multimedia"/>

@@ -2973,7 +2973,23 @@ bool LLViewerRegion::probeCache(U32 local_id, U32 crc, U32 flags, U8 &cache_miss
 			
 			if(entry->isState(LLVOCacheEntry::ACTIVE))
 			{
-				((LLDrawable*)entry->getEntry()->getDrawable())->getVObj()->loadFlags(flags);
+				// <FS:Beq> Bugsplat-fix
+				// ((LLDrawable*)entry->getEntry()->getDrawable())->getVObj()->loadFlags(flags);
+				// split each get...() to include a !null check
+				const auto *octeeEntry = entry->getEntry();
+				if(octeeEntry)
+				{
+					LLDrawable * drawable = (LLDrawable *)octeeEntry->getDrawable();
+					if(drawable)
+					{
+						auto vobj = drawable->getVObj();
+						if(vobj)
+						{
+							vobj->loadFlags(flags);
+						}
+					}
+				}
+				// </FS:Beq>
 				return true;
 			}
 

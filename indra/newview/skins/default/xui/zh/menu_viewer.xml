@@ -149,6 +149,7 @@
 			<menu_item_check label="顯示隱藏的選取" name="Show Hidden Selection"/>
 			<menu_item_check label="顯示選擇的 Light 半徑" name="Show Light Radius for Selection"/>
 			<menu_item_check label="顯示選擇導引線" name="Show Selection Beam"/>
+			<menu_item_check label="高亮顯示透明物件" name="Highlight Transparent"/>
 			<menu_item_check label="貼齊格線" name="Snap to Grid"/>
 			<menu_item_call label="貼齊物件 XY 軸到格線" name="Snap Object XY to Grid"/>
 			<menu_item_call label="以所選擇作為格線" name="Use Selection for Grid"/>
@@ -196,7 +197,6 @@
 			<menu_item_check label="Cheesy 指標" name="Cheesy Beacon"/>
 			<menu_item_check label="隱藏粒子效果" name="Hide Particles"/>
 			<menu_item_check label="隱藏所選擇的" name="Hide Selected"/>
-			<menu_item_check label="高亮顯示透明物件" name="Highlight Transparent"/>
 			<menu_item_check label="顯示第一人稱視角準星" name="ShowCrosshairs"/>
 		</menu>
 		<menu label="呈像類型" name="Rendering Types">

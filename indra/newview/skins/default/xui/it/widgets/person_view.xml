@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<person_view>
+	<permission_edit_theirs_icon name="permission_edit_theirs_icon" tool_tip="Puoi modificare gli oggetti di questo amico" />
+	<permission_edit_mine_icon name="permission_edit_mine_icon" tool_tip="Questo amico può modificare, eliminare o prendere i tuoi oggetti" />
+	<permission_map_icon tool_tip="Questo amico può localizzarti sulla mappa" name="permission_map_icon" />
+	<permission_online_icon name="permission_online_icon" tool_tip="Questo amico può vedere quando sei online" />
+	<info_btn name="info_btn" tool_tip="Maggiori informazioni" />
+	<profile_btn name="profile_btn" tool_tip="Vedi profilo" />
+</person_view>

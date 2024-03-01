@@ -22,7 +22,7 @@
 		<text name="label_7" tool_tip="Imposta autorizzazioni predefinite per la creazione degli oggetti">
 			Oggetti
 		</text>
-		<text name="label_8" tool_tip="Imposta autorizzazioni predefinite per gli elementi caricati">
+		<text name="label_8" tool_tip="Imposta autorizzazioni predefinite per gli elementi caricati dal PC">
 			Caricamenti
 		</text>
 		<text name="label_9" tool_tip="Imposta autorizzazioni predefinite per la creazione degli script">
@@ -37,10 +37,12 @@
 		<text name="label_12" tool_tip="Imposta autorizzazioni predefinite per la creazione di vestiti o parti del corpo">
 			Indossabili
 		</text>
-		<text name="label_13" tool_tip="Imposta autorizzazioni predefinite per la creazione delle impostazioni dell’Ambiente">
-			Impostazioni
+		<text name="label_13" tool_tip="Imposta autorizzazioni predefinite per la creazione degli ambienti">
+			Ambienti
 		</text>
-		<check_box name="env_settings_c" value="true"/>
+		<text name="label_14" tool_tip="Imposta autorizzazioni predefinite per la creazione dei materiali GLTF">
+			Materiali
+		</text>
 	</panel>
 	<button label="Annulla" label_selected="Annulla" name="cancel"/>
 </floater>

@@ -253,6 +253,7 @@
 			<menu_item_check label="隠れた位置の選択も表示する" name="Show Hidden Selection"/>
 			<menu_item_check label="選択した光の半径範囲を表示する" name="Show Light Radius for Selection"/>
 			<menu_item_check label="選択ビームを表示する" name="Show Selection Beam"/>
+			<menu_item_check label="透明部分をハイライトする" name="Highlight Transparent"/>
 			<menu_item_check label="グリッドポイントにスナップする" name="Snap to Grid"/>
 			<menu_item_call label="オブジェクトの XY 軸をグリッドにスナップする" name="Snap Object XY to Grid"/>
 			<menu_item_call label="選択をグリッドに使用する" name="Use Selection for Grid"/>
@@ -342,7 +343,6 @@
 			<menu_item_check label="チージービーコン" name="Cheesy Beacon"/>
 			<menu_item_check label="パーティクルを非表示にする" name="Hide Particles"/>
 			<menu_item_check label="選択したものを非表示にする" name="Hide Selected"/>
-			<menu_item_check label="透明部分をハイライトする" name="Highlight Transparent"/>
 			<menu_item_check label="一人称視点のときに十字線を表示する" name="ShowCrosshairs"/>
 			<!-- added Mar.15, 2015 -->
 			<menu label="クイックヒント" name="Hover Tips">

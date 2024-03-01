@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Settings">
-	<menu_item_check label="Predefinito" name="default"/>
-	<menu_item_check label="Sempre" name="always_render"/>
-	<menu_item_check label="Mai" name="never_render"/>
+	<menu_item_check label="Renderizza sempre" name="always_render"/>
+	<menu_item_check label="Non renderizzare mai" name="never_render"/>
+	<menu_item_check label="Rimuovi dalle eccezioni" name="default"/>
 </context_menu>

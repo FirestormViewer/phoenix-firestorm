@@ -13459,7 +13459,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderReflectionsEnabled</key>
   <map>
     <key>Comment</key>
-    <string>Enable/disable reflection probes</string>
+    <string>Enable/disable reflection probes - Deprecated, disabling this removes all sky ambiance, use RenderReflectionProbeLevel=0 instead</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -26505,6 +26505,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>FSShowEmojiButton</key>
+    <map>
+      <key>Comment</key>
+      <string>Show or hide the emoji selection button in chat/IM windows</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
     </map>
     <key>FSAnimationPreviewExpanded</key>
     <map>
