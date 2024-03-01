@@ -12,7 +12,7 @@
 	<text name="ItemcountText">
 		Obyektlər:
 	</text>
-	<layout_stack name="nav_stack">
+	<layout_stack name="top_stack">
 		<layout_panel name="filter_panel">
 			<filter_editor label="Filtr" name="inventory search editor" tool_tip="Axtarış üçün bir neçə söz yazın. Bölüşmək üçün '+' simvolundan istifadə edin."/>
 		</layout_panel>

@@ -2164,6 +2164,16 @@
                   <menu_item_check.on_click
                    function="View.HighlightTransparent" />
                 </menu_item_check>
+                <menu_item_check
+                label="- include Rigged Transparent"
+                name="Include Transparent Rigged"
+                shortcut="control|alt|shift|T"
+                use_mac_ctrl="true">
+                   <menu_item_check.on_check
+                    function="View.CheckHighlightTransparentRigged" />
+                   <menu_item_check.on_click
+                    function="View.HighlightTransparentRigged" />
+               </menu_item_check>
         <menu_item_separator/>
           
           <menu_item_check
@@ -3071,16 +3081,6 @@
                 <menu_item_check.on_click
                  function="ToggleControl"
                  parameter="HideSelectedObjects" />
-            </menu_item_check>
-            <menu_item_check
-             label="- include Rigged Transparent"
-             name="Include Transparent Rigged"
-             shortcut="control|alt|shift|T"
-             use_mac_ctrl="true">
-                <menu_item_check.on_check
-                 function="View.CheckHighlightTransparentRigged" />
-                <menu_item_check.on_click
-                 function="View.HighlightTransparentRigged" />
             </menu_item_check>
             <menu_item_check
              label="Show Mouselook Crosshairs"

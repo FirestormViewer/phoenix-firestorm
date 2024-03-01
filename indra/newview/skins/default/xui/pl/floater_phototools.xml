@@ -7,9 +7,6 @@
 					Ustawienia otoczenia
 				</text>
 			</panel>
-			<panel name="P_WL_Settings">
-				<check_box label="Włącz shadery atmosfery" name="WindLightUseAtmosShaders" tool_tip="Ta opcja włącza pełną funkcjonalność systemu EEP (shadery atmosfery)."/>
-			</panel>
 			<panel name="P_WL_Sky_Water">
 				<text name="WL Sky" tool_tip="Zapisane ustawienia dla nieba.">
 					Niebo
@@ -48,18 +45,6 @@
 					Odbicia w wodzie
 				</text>
 			</panel>
-			<panel name="P_W_R_Types">
-				<text name="T_W_R_Types" tool_tip="Określa co pojawia się jako odbicie w wodzie.">
-					Typ
-				</text>
-				<combo_box name="Reflections">
-					<combo_box.item label="Minimalne" name="0"/>
-					<combo_box.item label="Teren i drzewa" name="1"/>
-					<combo_box.item label="Wszystkie obiekty statyczne" name="2"/>
-					<combo_box.item label="Wszystkie awatary i obiekty" name="3"/>
-					<combo_box.item label="Wszystko" name="4"/>
-				</combo_box>
-			</panel>
 			<panel name="P_R_Res">
 				<text name="T_R_Res" tool_tip="Określa rozdzielczość/jakość odbić w wodzie. Aby zmiany odniosły skutek musisz wyłączyć i włączyć 'podstawowe shadery'. Poza tym, gdy ustawienia rozdzielczości są w trybie 'bardzo dobrym' lub wyższym musisz także włączyć 'Zaawansowane oświetlenie' w karcie 'Światła'.">
 					Rozdzielczość
@@ -82,7 +67,6 @@
 				</text>
 			</panel>
 			<panel name="P_L_S_Settings">
-				<check_box label="Włącz zaawansowane oświetlenie" name="RenderDeferred" tool_tip="Ta opcja włącza oświetlenie i cienie od Słońca i Księżyca oraz innych źródeł światła w świecie, pozwala również na włączenie głębi ostrości i innych funkcji graficznych. Zasadniczo należy zaznaczyć to pole, żeby zobaczyć większość 'fajerwerek graficznych' w świecie. Jeśli nie możesz włączyć tej opcji lub zobaczyć żadnego jej efektu upewnij się najpierw, że atmosferyczne shadery są włączone w karcie 'Otocz.'."/>
 				<check_box label="Wszystkie lokalne światła" name="LocalLights" tool_tip="Ta opcja włącza wszystkie światła w świecie. Jeśli ją wyłączysz, to światło pochodzące od Słońca i Księżyca ciągle będzie widoczne. Przydatne, gdy chcesz wyeliminować oświetlenie pochodzące z regionu i użyć tylko światła słonecznego/księżycowego."/>
 				<check_box label="Włącz doczepiane światła (np. twarzy)" name="Render Attached Lights" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy."/>
 			</panel>

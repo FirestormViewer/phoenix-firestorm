@@ -3,6 +3,7 @@
 	<menu_item_call label="Dotknij" name="Attachment Object Touch"/>
 	<menu_item_call label="Pokaż w Szafie" name="Show original"/>
 	<menu_item_call label="Edytuj" name="Edit..."/>
+	<menu_item_call label="Edytuj materiał PBR" name="EditGLTFMaterial"/>
 	<menu_item_call label="Odłącz" name="Detach"/>
 	<context_menu label="Zapisz jako" name="Export Menu">
 		<menu_item_call label="Kopia zapasowa" name="Backup"/>

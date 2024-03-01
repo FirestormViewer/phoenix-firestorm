@@ -246,6 +246,7 @@
 			<menu_item_check label="Mostra volumi sonde di riflessione" name="Show Reflection Probe Volumes"/>
 			<menu_item_check label="Mostra raggio di selezione" name="Show Selection Beam"/>
 			<menu_item_check label="Evidenzia trasparenze" name="Highlight Transparent"/>
+			<menu_item_check label="- includi trasparenze riggate" name="Include Transparent Rigged" />
 			<menu_item_check label="Nessuna post-elaborazione" name="No Post"/>
 			<menu_item_check label="Fissa alla griglia" name="Snap to Grid"/>
 			<menu_item_call label="Fissa XY alla griglia" name="Snap Object XY to Grid"/>
@@ -339,7 +340,6 @@
 			<menu_item_check label="Raggio lampeggiante" name="Cheesy Beacon" />
 			<menu_item_check label="Nascondi particelle" name="Hide Particles" />
 			<menu_item_check label="Nascondi selezione" name="Hide Selected" />
-			<menu_item_check label="- includi trasparenze riggate" name="Include Transparent Rigged" />
 			<menu_item_check label="Mostra crocino Mouselook" name="ShowCrosshairs"/>
 			<menu label="Suggerimenti al passaggio" name="Hover Tips">
 				<menu_item_check label="Mostra" name="Show Tips" />
