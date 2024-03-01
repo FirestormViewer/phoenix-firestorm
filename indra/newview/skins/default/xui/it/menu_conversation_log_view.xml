@@ -3,5 +3,5 @@
 	<menu_item_check label="Ordina in base al nome" name="sort_by_name"/>
 	<menu_item_check label="Ordina in base alla data" name="sort_by_date"/>
 	<menu_item_check label="Amici in alto" name="sort_by_friends"/>
-	<menu_item_call label="Mostra cronologia chat locale..." name="view_nearby_chat_history"/>
+	<menu_item_call label="Cronologia chat locale" name="view_nearby_chat_history"/>
 </toggleable_menu>

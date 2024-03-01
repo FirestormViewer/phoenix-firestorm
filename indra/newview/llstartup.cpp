@@ -1532,7 +1532,7 @@ bool idle_startup()
 		LLFile::mkdir(user_fonts_path_name.c_str());
 
 		// <FS:WS> Initalize Account based asset_blacklist
-		FSAssetBlacklist::getInstance()->init();
+		FSAssetBlacklist::instance();
 
 		// <FS:Techwolf Lupindo> load per grid data
 		FSData::instance().downloadAgents();

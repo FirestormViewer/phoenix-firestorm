@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_export_collada" title="Salva come Collada...">
+	<floater.string name="texture_progress">
+		Salvataggio di [OBJECT] come Collada: Texture ([COUNT] rimanenti)
+	</floater.string>
+	<floater.string name="floater_title">
+		Salva [OBJECT] come Collada...
+	</floater.string>
+	<layout_stack name="resizing_stack">
+		<layout_panel name="control_panel">
+			<text name="ObjectInfoText">
+				Info sull'oggetto
+			</text>
+			<text name="NameText">
+				Nome: [NAME]
+			</text>
+			<text name="exportable_prims">
+				Prim esportabili: [COUNT]/[TOTAL]
+			</text>
+			<text name="exportable_textures">
+				Texture esportabili: [COUNT]/[TOTAL]
+			</text>
+			<text name="OptionsText">
+				Opzioni:
+			</text>
+			<check_box label="Salva texture" name="export_textures_check" />
+			<check_box label="Consolida texture" name="consolidate_check" />
+			<check_box label="Ignora trasparenza" name="skip_transparent_check" />
+			<check_box label="Usa parametri texture" name="texture_params_check" />
+			<check_box label="Mappa UV singola" name="single_uv_map_check" />
+			<text name="TextureFormatText">
+				Formato texture:
+			</text>
+			<button label="Salva come..." name="export_btn" />
+		</layout_panel>
+	</layout_stack>
+</floater>

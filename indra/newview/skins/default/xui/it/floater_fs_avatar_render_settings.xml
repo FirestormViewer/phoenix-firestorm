@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="avatarrendersettings" title="Impostazioni Resa Avatar">
+<floater name="avatarrendersettings" title="Eccezioni Rendering Avatar">
 	<floater.string name="av_render_never">
 		Mai
 	</floater.string>
@@ -7,10 +7,10 @@
 		Sempre
 	</floater.string>
 	<filter_editor label="Filtra avatar" name="filter_input" />
-	<menu_button name="plus_btn" tool_tip="Aggiungi persona alla lista" />
+	<menu_button name="plus_btn" tool_tip="Aggiungi un avatar alla lista" />
 	<name_list name="avatar_list">
 		<name_list.columns label="Nome" name="name" />
-		<name_list.columns label="Resa" name="render_setting" />
+		<name_list.columns label="Dettagli Completi" name="render_setting" />
 	</name_list>
 	<button name="close_btn" label="Chiudi" />
 </floater>

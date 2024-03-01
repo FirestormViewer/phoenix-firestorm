@@ -13,7 +13,7 @@
 	<panel label="Persone" name="tab-people">
 		<check_box label="Lampeggia l'icona se ricevo un messaggio e [APP_NAME] non è in primo piano" name="FSFlashOnMessage"/>
 		<check_box label="Lampeggia anche se l'IM arriva da un oggetto" name="FSFlashOnObjectIM"/>
-		<check_box label="Avvisami quando qualcuno cambia il suo Display Name" name="FSShowDisplayNameUpdateNotification"/>
+		<check_box label="Avvisami quando qualcuno cambia il suo Nome Visualizzato" name="FSShowDisplayNameUpdateNotification"/>
 		<check_box label="Avvisami quando blocco o sblocco qualcuno" name="FSReportBlockToNearbyChat"/>
 		<text name="friends_logon_label">
 			Avvisami quando gli amici entrano o escono da SL:

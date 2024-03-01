@@ -1,34 +1,61 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Attachment Pie">
 	<menu_item_call label="Tocca" name="Attachment Object Touch"/>
+	<menu_item_call label="Mostra in inventario" name="Show original"/>
 	<menu_item_call label="Modifica" name="Edit..."/>
+	<menu_item_call label="Modifica materiale PBR" name="EditGLTFMaterial"/>
 	<menu_item_call label="Stacca" name="Detach"/>
 	<context_menu label="Esporta" name="Export Menu">
 		<menu_item_call label="Salva copia" name="Backup"/>
 		<menu_item_call label="Collada" name="Collada"/>
 	</context_menu>
-	<menu_item_call label="Siedi" name="Sit Down Here"/>
+	<menu_item_call label="Siediti" name="Sit Down Here"/>
 	<menu_item_call label="Alzati" name="Stand Up"/>
 	<context_menu label="Aspetto" name="AppearanceSubmenu">
-		<menu_item_call label="Il mio aspetto" name="Change Outfit"/>
+	    <menu_item_call label="Indossati ora" name="NowWearing" />
+		<menu_item_call label="Cambia abito" name="Change Outfit"/>
 		<menu_item_call label="Modifica corpo" name="Edit Shape" />
 		<menu_item_call label="Modifica abito" name="Edit Outfit Parts" />
-		<menu_item_call label="Altezza di volo" name="Hover Height"/>
+		<menu_item_call label="Altezza da terra" name="Hover Height"/>
 		<menu_item_call label="Ripristina scheletro" name="Reset Skeleton"/>
 		<menu_item_call label="Ripristina scheletro e animazioni" name="Reset Skeleton And Animations"/>
 		<menu_item_call label="Ripristina LOD mesh" name="Reset Mesh LOD" />
 	</context_menu>
+	<context_menu label="Togli" name="Take Off &gt;">
+		<context_menu label="Indumenti" name="Clothes &gt;">
+			<menu_item_call label="Camicia" name="Shirt"/>
+			<menu_item_call label="Pantaloni" name="Pants"/>
+			<menu_item_call label="Gonna" name="Skirt"/>
+			<menu_item_call label="Scarpe" name="Shoes"/>
+			<menu_item_call label="Calze" name="Socks"/>
+			<menu_item_call label="Giacca" name="Jacket"/>
+			<menu_item_call label="Guanti" name="Gloves"/>
+			<menu_item_call label="Canottiera" name="Self Undershirt"/>
+			<menu_item_call label="Slip" name="Self Underpants"/>
+			<menu_item_call label="Tatuaggio" name="Self Tattoo"/>
+			<menu_item_call label="Fisica" name="Self Physics"/>
+			<menu_item_call label="Alfa" name="Self Alpha"/>
+			<menu_item_call label="Togli tutti" name="All Clothes"/>
+		</context_menu>
+		<context_menu label="Stacca" name="Detach Self"/>
+		<menu_item_call label="Stacca tutto" name="Detach All"/>
+	</context_menu>
+	<menu_item_call label="Siediti / Alzati" name="Sit stand" />
+	<menu_item_call label="Vola / Ferma volo" name="Fly land" />
+	<menu_item_call label="Ferma animazioni" name="Stop Animating My Avatar" />
 	<context_menu label="Comunità" name="CommunitySubmenu">
-		<menu_item_call label="I miei amici..." name="Friends..."/>
-		<menu_item_call label="I miei gruppi" name="Groups..."/>
-		<menu_item_call label="Il mio profilo" name="Profile..."/>
+		<menu_item_call label="Amici" name="Friends..."/>
+		<menu_item_call label="Gruppi" name="Groups..."/>
+		<menu_item_call label="Profilo" name="Profile..."/>
 	</context_menu>
 	<menu_item_call label="Scarica XML" name="Dump XML"/>
-	<menu_item_call label="Info script" name="ScriptInfo"/>
+	<menu_item_call label="Profilo dell'oggetto" name="Object Inspect"/>
+	<menu_item_call label="Ispeziona" name="Object_Inspect_Floater"/>
+	<menu_item_call label="Info sugli script" name="ScriptInfo"/>
 	<menu_item_call label="De-rendi" name="Derender"/>
 	<menu_item_call label="De-rendi + lista nera" name="DerenderPermanent"/>
 	<menu_item_call label="Mostra texture" name="Debug..."/>
-	<menu_item_call label="Ricarica tex" name="Texture Refresh"/>
-	<menu_item_call label="Lascia" name="Drop"/>
+	<menu_item_call label="Ricarica texture" name="Texture Refresh"/>
+	<menu_item_call label="Rilascia" name="Drop"/>
 	<menu_item_call label="Blocca proprietario particelle" name="Mute Particle"/>
 </context_menu>

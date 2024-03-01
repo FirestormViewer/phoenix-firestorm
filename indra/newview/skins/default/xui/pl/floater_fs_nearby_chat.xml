@@ -27,6 +27,10 @@
 				</layout_panel>
 				<layout_panel name="chat_layout_panel">
 					<layout_stack name="input_panels">
+						<layout_panel name="emoji_button_layout_panel">
+							<button name="emoji_picker_toggle_btn" tool_tip="Pokaż panel emoji" />
+							<button name="emoji_recent_panel_toggle_btn" tool_tip="Pokaż/ukryj ostatnie emoji" />
+						</layout_panel>
 						<layout_panel name="input_button_layout_panel">
 							<spinner name="ChatChannel" tool_tip="Kanał, na jaki wiadomość na zostać wysłana. Włączone w Ustawienia -> Czat -> Firestorm -> Oferuj ręczny wybór kanału w pasku czatu."/>
 						</layout_panel>
@@ -39,6 +43,11 @@
 							<button label="Wyślij" name="send_chat" tool_tip="Szept = 10m, Mów = 20m, Krzyk = 100m"/>
 						</layout_panel>
 					</layout_stack>
+				</layout_panel>
+				<layout_panel name="emoji_recent_layout_panel">
+					<text name="emoji_recent_empty_text">
+						Tutaj pojawią się ostatnio używane emoji
+					</text>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

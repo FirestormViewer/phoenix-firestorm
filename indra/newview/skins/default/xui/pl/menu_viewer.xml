@@ -137,6 +137,7 @@
 		<menu label="Otoczenie" name="Environment">
 			<menu_item_check label="Wschód Słońca" name="Sunrise"/>
 			<menu_item_check label="Południe" name="Noon"/>
+			<menu_item_check label="Południe (oryginalne)" name="legacy noon" />
 			<menu_item_check label="Zachód Słońca" name="Sunset"/>
 			<menu_item_check label="Północ" name="Midnight"/>
 			<menu_item_check label="Użyj otoczenia współdzielonego" name="Use Shared Environment" />
@@ -234,12 +235,18 @@
 			<menu_item_check label="Wybierz tylko obiekty zablokowane" name="Select Only Locked Objects"/>
 			<menu_item_check label="Wybierz tylko obiekty kopiowalne" name="Select Only Copyable Objects"/>
 			<menu_item_check label="Dołącz obiekty, których właścicielem jest grupa" name="Include Group-Owned Objects"/>
+			<menu_item_check label="Wybierz niewidoczne obiekty" name="Select Invisible Objects" />
+			<menu_item_check label="Wybierz sondy refleksyjne" name="Select Reflection Probes" />
 			<menu_item_check label="Wybierz przez otoczenie" name="Select By Surrounding"/>
 			<menu_item_check label="Pokaż kształty fizyczne w trybie edycji" name="Show Physics Shape" />
 			<menu_item_check label="Pokaż kontury selekcji" name="Show Selection Outlines"/>
 			<menu_item_check label="Zobacz ukrytą selekcję" name="Show Hidden Selection"/>
 			<menu_item_check label="Pokaż promień światła dla selekcji" name="Show Light Radius for Selection"/>
+			<menu_item_check label="Pokaż objętości sond refleksyjnych" name="Show Reflection Probe Volumes" />
 			<menu_item_check label="Pokaż promień selekcji" name="Show Selection Beam"/>
+			<menu_item_check label="Pokaż przezroczyste obiekty" name="Highlight Transparent" />
+			<menu_item_check label="- Pokaż riggowaną przezroczystość" name="Include Transparent Rigged" />
+			<menu_item_check label="Bez obróbki końcowej" name="No Post" />
 			<menu_item_check label="Przyciągaj do siatki" name="Snap to Grid"/>
 			<menu_item_call label="Przeciągnij obiekt XY do siatki" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Wybierz zaznaczenie siatki" name="Use Selection for Grid"/>
@@ -251,6 +258,7 @@
 			<menu_item_call label="Dźwięk ([COST]L$)..." name="Upload Sound"/>
 			<menu_item_call label="Animację ([COST]L$)..." name="Upload Animation"/>
 			<menu_item_call label="Model meszowy..." name="Upload Model"/>
+			<menu_item_call label="Materiał..." name="Upload Material" />
 			<menu_item_call label="Zbiór wielu plików..." name="Bulk Upload"/>
 			<menu_item_call label="Importuj zbiór części..." name="import linkset"/>
 		</menu>
@@ -340,8 +348,6 @@
 			<menu_item_check label="Mrugający emiter śledzenia" name="Cheesy Beacon"/>
 			<menu_item_check label="Ukryj cząsteczki" name="Hide Particles"/>
 			<menu_item_check label="Ukryj zaznaczone" name="Hide Selected"/>
-			<menu_item_check label="Pokaż przezroczyste obiekty" name="Highlight Transparent"/>
-			<menu_item_check label="- pokaż riggowaną przezroczystość" name="Include Transparent Rigged" />
 			<menu_item_check label="Pokaż celownik myszki" name="ShowCrosshairs"/>
 			<menu label="Chmurki pomocy" name="Hover Tips">
 				<menu_item_check label="Pokazuj chmurki pomocy" name="Show Tips"/>
@@ -358,7 +364,6 @@
 			<menu_item_check label="Płaszczyzna powierzchni" name="Rendering Type Surface Patch"/>
 			<menu_item_check label="Niebo" name="Rendering Type Sky"/>
 			<menu_item_check label="Woda" name="Rendering Type Water"/>
-			<menu_item_check label="Ziemia" name="Rendering Type Ground"/>
 			<menu_item_check label="Objętość" name="Rendering Type Volume"/>
 			<menu_item_check label="Trawa" name="Rendering Type Grass"/>
 			<menu_item_check label="Chmury" name="Rendering Type Clouds"/>
@@ -414,7 +419,6 @@
 			<menu_item_check label="Pamięć" name="Memory"/>
 			<menu_item_check label="Statystyki sceny" name="Scene Statistics"/>
 			<menu_item_check label="Monitor obciążenia sceny" name="Scene Loading Monitor"/>
-			<menu_item_call label="Konsola debugowania dla ładowania tekstur" name="Texture Fetch Debug Console"/>
 			<menu_item_check label="Konsola debugowania regionu" name="Region Debug Console"/>
 			<menu_item_call label="Info o regionie do konsoli debugowania" name="Region Info to Debug Console"/>
 			<menu_item_call label="Info o grupie do konsoli debugowania" name="Group Info to Debug Console"/>
@@ -458,7 +462,6 @@
 			<menu_item_check label="Kamera poza zasiegiem" name="Camera Offset"/>
 			<menu_item_check label="Losowa ilość klatek" name="Randomize Framerate"/>
 			<menu_item_check label="Okresowe spowolnienie" name="Periodic Slow Frame"/>
-			<menu_item_check label="Test klatek obrazu" name="Frame Test"/>
 			<menu_item_call label="Profil klatek obrazu" name="Frame Profile"/>
 			<menu_item_call label="Testowanie (benchmark)" name="Benchmark"/>
 		</menu>
@@ -478,8 +481,9 @@
 			<menu_item_check label="Obszary powierzchni" name="Face Area"/>
 			<menu_item_check label="Poziomy detali" name="LOD Info"/>
 			<menu_item_check label="Liczba trójkątów" name="Triangle Count" />
-			<menu_item_check label="Kolejka budowania" name="Build Queue"/>
 			<menu_item_check label="Światła" name="Lights"/>
+			<menu_item_check label="Sondy refleksyjne" name="Reflection Probes" />
+			<menu_item_check label="Aktualizacje sond" name="Probe Updates" />
 			<menu_item_check label="Cząsteczki" name="Particles"/>
 			<menu_item_check label="Szkielet kolizji" name="Collision Skeleton"/>
 			<menu_item_check label="Stawy" name="Joints"/>
@@ -501,23 +505,19 @@
 			<menu_item_call label="Informacje o zaznaczonym materiale" name="Selected Material Info"/>
 			<menu_item_check label="Tryb obrazu szkieletowego" name="Wireframe"/>
 			<menu_item_check label="Okluzja obiektu do obiektu" name="Object-Object Occlusion"/>
-			<menu_item_check label="Zaawansowane oświetlenie" name="Advanced Lighting Model"/>
 			<menu_item_check label="Cienie Słońca, Księżyca i innych źródeł" name="Shadows from Sun/Moon/Projectors"/>
 			<menu_item_check label="SSAO i wygładzanie cieni" name="SSAO and Shadow Smoothing"/>
 			<menu_item_check label="Debugowanie GL przy następnym uruchomieniu" name="Debug GL"/>
 			<menu_item_check label="Debugowanie potoków" name="Debug Pipeline"/>
-			<menu_item_check label="Automatyczne maski alpha (z opóźnianiem)" name="Automatic Alpha Masks (deferred)"/>
-			<menu_item_check label="Automatyczne maski alpha (bez opóźniania)" name="Automatic Alpha Masks (non-deferred)"/>
+			<menu_item_check label="Automatyczne maski alpha" name="Automatic Alpha Masks (deferred)"/>
 			<menu_item_check label="Tekstury animacji" name="Animation Textures"/>
 			<menu_item_check label="Wyłącz tekstury" name="Disable Textures"/>
 			<menu_item_call label="Derenderuj cały animowany mesz" name="Derender Animesh"/>
-			<menu_item_check label="Wyłącz światła otoczenia" name="Disable Ambient" />
-			<menu_item_check label="Wyłącz światło słoneczne" name="Disable Sunlight" />
-			<menu_item_check label="Wyłącz światła lokalne" name="Disable Local Lights" />
 			<menu_item_check label="Maksymalna rozdzielczość tekstur (niebezpieczne)" name="Full Res Textures"/>
 			<menu_item_check label="Renderowania przyłączonego światła" name="Render Attached Lights"/>
 			<menu_item_check label="Renderowanie przyłączonych cząsteczek" name="Render Attached Particles"/>
-			<menu_item_check label="Wyświetlaj obiekty odblaskowe" name="Hover Glow Objects"/>
+			<menu_item_check label="Pamięć podręczna modułu cieniującego" name="Enable Shader Cache" />
+			<menu_item_call label="Wyczyść pamięć podręczną modułu cieniującego" name="Shader Cache Clear" />
 		</menu>
 		<menu label="Sieć" name="Network">
 			<menu_item_check label="Zatrzymaj awatara" name="AgentPause"/>
@@ -554,6 +554,8 @@
 			<menu_item_call label="Test przeglądarki mediów" name="Web Browser Test"/>
 			<menu_item_check label="Test restartu regionu" name="Region Restart Test"/>
 			<menu_item_call label="Przeglądarka treści internetowych" name="Web Content Browser"/>
+			<menu_item_call label="Zrzuć czcionki" name="Dump Fonts" />
+			<menu_item_call label="Zrzuć tekstury czcionek" name="Dump Font Textures" />
 			<menu_item_call label="Zrzut SelectMgr" name="Dump SelectMgr"/>
 			<menu_item_call label="Zrzut Szafy" name="Dump Inventory"/>
 			<menu_item_call label="Zrzut liczników" name="Dump Timers"/>
@@ -565,6 +567,7 @@
 			<menu_item_check label="Debuguj SelectMgr" name="Debug SelectMgr"/>
 			<menu_item_check label="Debuguj kliknięcia" name="Debug Clicks"/>
 			<menu_item_check label="Debuguj widoki" name="Debug Views"/>
+			<menu_item_check label="Debuguj Unicode" name="Debug Unicode" />
 			<menu_item_check label="Debuguj chmurki dla podpowiedzi nazw" name="Debug Name Tooltips"/>
 			<menu_item_check label="Debuguj zdarzenia myszy" name="Debug Mouse Events"/>
 			<menu_item_check label="Debuguj klawisze" name="Debug Keys"/>

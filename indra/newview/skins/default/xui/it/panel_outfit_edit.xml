@@ -6,44 +6,45 @@
 	<panel.string name="unknown">
 		(sconosciuto)
 	</panel.string>
-	<string name="Filter.All" value="Tutto"/>
+	<string name="Filter.All" value="Tutti"/>
 	<string name="Filter.Clothes/Body" value="Vestiti/corpo"/>
 	<string name="Filter.Objects" value="Oggetti"/>
-	<string name="Filter.Clothing" value="Abiti"/>
+	<string name="Filter.Clothing" value="Indumenti"/>
 	<string name="Filter.Bodyparts" value="Parti del corpo"/>
 	<string name="replace_body_part" value="Fai clic per sostituire il corpo esistente"/>
 	<text name="title" value="Modifica abito"/>
 	<panel name="header_panel">
 		<panel name="outfit_name_and_status">
 			<text name="status" value="Modifica di..."/>
+			<text name="curr_outfit_name" value="[Abito attuale]" />
 		</panel>
 	</panel>
 	<layout_stack name="im_panels">
 		<layout_panel name="outfit_wearables_panel">
 			<layout_stack name="filter_panels">
 				<layout_panel name="add_button_and_combobox">
-					<button label="Aggiungi..." name="show_add_wearables_btn" tool_tip="Apri/chiudi"/>
+					<button label="Aggiungi" name="show_add_wearables_btn" tool_tip="Apri/chiudi"/>
 				</layout_panel>
 				<layout_panel name="filter_panel">
-					<filter_editor label="Filtra capi da indossare dall&apos;inventario" name="look_item_filter"/>
+					<filter_editor label="Filtra indumenti da indossare dall&apos;inventario" name="look_item_filter"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
 		<layout_panel name="add_wearables_panel">
-			<button label="Indossa capo" name="plus_btn"/>
+			<button label="Indossa selezionati" name="plus_btn"/>
 		</layout_panel>
 	</layout_stack>
 	<panel name="no_add_wearables_button_bar">
 		<text name="avatar_complexity_label">
 			Complessità: [WEIGHT]
 		</text>
-		<button name="shop_btn_1" tool_tip="Visita Marketplace di SL. In alternativa puoi scegliere un capo che stai indossando, poi fare clic qui per vedere altri capi simili"/>
+		<button name="shop_btn_1" tool_tip="Visita Marketplace di SL. In alternativa puoi scegliere un indumento che stai indossando, poi fare clic qui per vedere altri indumenti simili"/>
 	</panel>
 	<panel name="add_wearables_button_bar">
 		<text name="avatar_complexity_adding_label">
 			Complessità: [WEIGHT]
 		</text>
-		<button name="shop_btn_2" tool_tip="Visita Marketplace di SL. In alternativa puoi scegliere un capo che stai indossando, poi fare clic qui per vedere altri capi simili"/>
+		<button name="shop_btn_2" tool_tip="Visita Marketplace di SL. In alternativa puoi scegliere un indumento che stai indossando, poi fare clic qui per vedere altri indumenti simili"/>
 	</panel>
 	<panel name="save_revert_button_bar">
 		<layout_stack name="button_bar_ls">

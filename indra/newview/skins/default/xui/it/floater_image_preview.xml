@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Image Preview" title="Anteprima Immagine">
+	<string name="with_alpha" value="con alfa" />
+	<string name="no_alpha" value="senza alfa" />
 	<text name="name_label">
 		Nome:
 	</text>
@@ -9,9 +11,9 @@
 	<text name="preview_label">
 		Anteprima come:
 	</text>
-	<combo_box label="Tipo di capo" left="120" name="clothing_type_combo">
+	<combo_box label="Tipo di indumento" left="120" name="clothing_type_combo">
 		<item label="Immagine" name="Image"/>
-		<item label="Capigliature" name="Hair"/>
+		<item label="Capelli" name="Hair"/>
 		<item label="Testa femminile" name="FemaleHead"/>
 		<item label="Parte superiore del corpo femminile" name="FemaleUpperBody"/>
 		<item label="Parte inferiore del corpo femminile" name="FemaleLowerBody"/>
@@ -21,13 +23,20 @@
 		<item label="Gonna" name="Skirt"/>
 		<item label="Prim sculpted" name="SculptedPrim"/>
 	</combo_box>
+	<panel name="image_alpha_warning">
+		<check_box label="Il canale alfa vuoto verrà rimosso" name="strip_alpha_check" />
+	</panel>
 	<text name="bad_image_text">
-		Non è stato possibile leggere l&apos;immagine.
+		Impossibile caricare l'immagine.
 
 Prova a salvare in formato targa (.TGA) a 24 bit.
 	</text>
-	<check_box label="Usa compressione ottimizzata" name="lossless_check"/>
-	<check_box name="temp_check" label="Temporaneo (gratis)" tool_tip="Gratuito, ma in cambio valido soltanto per un breve periodo prima di essere distrutto." />
+	<text name="uploaded_size_text">
+		Dimensioni in SL: [X_RES]x[Y_RES], [ALPHA]
+	</text>
+	<check_box label="Compressione ottimizzata" name="lossless_check"/>
+	<check_box name="temp_check" label="Temporanea (gratis)" tool_tip="Imposta l'immagine sul server come temporanea e quindi gratuita, ma esisterà solo per un breve periodo, dopodiché verrà eliminata." />
 	<button label="Annulla" name="cancel_btn"/>
 	<button label="Carica ([AMOUNT] L$)" name="ok_btn"/>
+	<text name="info_text" value="= le info sul costo di caricamento appariranno qui =" />
 </floater>

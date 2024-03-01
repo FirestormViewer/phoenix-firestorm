@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Outfit">
-	<menu_item_call label="Indossa - Sostituisci l&apos;abito attuale" name="wear_replace"/>
-	<menu_item_call label="Indossa - Aggiungi all&apos;abito attuale" name="wear_add"/>
-	<menu_item_call label="Togli - Rimuovi dall&apos;abito attuale" name="take_off"/>
+	<menu_item_call label="Sostituisci abito attuale" name="wear_replace"/>
+	<menu_item_call label="Aggiungi all&apos;abito attuale" name="wear_add"/>
+	<menu_item_call label="Rimuovi dall&apos;abito attuale" name="take_off"/>
 	<menu_item_call label="Modifica abito" name="edit"/>
-	<menu_item_call label="Cambia nome dell&apos;abito" name="rename"/>
+	<menu_item_call label="Rinomina abito" name="rename"/>
 	<menu_item_call label="Elimina abito" name="delete"/>
 </context_menu>
