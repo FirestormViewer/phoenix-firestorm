@@ -214,6 +214,8 @@ F32 LLPipeline::RenderScreenSpaceReflectionAdaptiveStepMultiplier;
 S32 LLPipeline::RenderScreenSpaceReflectionGlossySamples;
 S32 LLPipeline::RenderBufferVisualization;
 bool LLPipeline::RenderMirrors;
+S32 LLPipeline::RenderHeroProbeUpdateRate;
+S32 LLPipeline::RenderHeroProbeConservativeUpdateMultiplier;
 LLTrace::EventStatHandle<S64> LLPipeline::sStatBatchSize("renderbatchsize");
 
 const U32 LLPipeline::MAX_BAKE_WIDTH = 512;
@@ -598,6 +600,8 @@ void LLPipeline::init()
     connectRefreshCachedSettingsSafe("RenderScreenSpaceReflectionGlossySamples");
 	connectRefreshCachedSettingsSafe("RenderBufferVisualization");
     connectRefreshCachedSettingsSafe("RenderMirrors");
+    connectRefreshCachedSettingsSafe("RenderHeroProbeUpdateRate");
+    connectRefreshCachedSettingsSafe("RenderHeroProbeConservativeUpdateMultiplier");
 	connectRefreshCachedSettingsSafe("RenderAutoHideSurfaceAreaLimit");
 	connectRefreshCachedSettingsSafe("FSRenderVignette");	// <FS:CR> Import Vignette from Exodus
 	// <FS:Ansariel> Make change to RenderAttachedLights & RenderAttachedParticles instant
@@ -852,9 +856,12 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
         U32 res = mReflectionMapManager.mProbeResolution * 4;  //multiply by 4 because probes will be 16x super sampled
         allocateScreenBuffer(res, res, samples);
 
-		res = mHeroProbeManager.mProbeResolution; // We also scale the hero probe RT to the probe res since we don't super sample it.
-        mRT = &mHeroProbeRT;
-        allocateScreenBuffer(res, res, samples);
+		if (RenderMirrors)
+        {
+            res = mHeroProbeManager.mProbeResolution;  // We also scale the hero probe RT to the probe res since we don't super sample it.
+            mRT = &mHeroProbeRT;
+            allocateScreenBuffer(res, res, samples);
+        }
 
         mRT = &mMainRT;
         gCubeSnapshot = FALSE;
@@ -1170,6 +1177,9 @@ void LLPipeline::refreshCachedSettings()
         LLViewerShaderMgr::instance()->clearShaderCache();
         LLViewerShaderMgr::instance()->setShaders();
     }
+    RenderHeroProbeUpdateRate = gSavedSettings.getS32("RenderHeroProbeUpdateRate");
+    RenderHeroProbeConservativeUpdateMultiplier = gSavedSettings.getS32("RenderHeroProbeConservativeUpdateMultiplier");
+
     sReflectionProbesEnabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderReflectionsEnabled") && gSavedSettings.getBOOL("RenderReflectionsEnabled");
 	RenderSpotLight = nullptr;
 
