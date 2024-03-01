@@ -44,8 +44,8 @@ jobs:
           echo "/usr/local/bin" >> $GITHUB_PATH
           echo "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
 
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         id: py311
         with:
           python-version: '3.11'
@@ -130,12 +130,12 @@ jobs:
         shell: bash
         
       - name: Get the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Checkout build vars (after the main code)
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: FirestormViewer/fs-build-variables
           path: build-variables
@@ -242,11 +242,17 @@ jobs:
         if: env.FS_RELEASE_TYPE == 'Nightly'
         run: |
           echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}} --testbuild=14" >> $GITHUB_ENV
+        shell: bash
       - name: make Alpha builds expire after 28 days
         if: env.FS_RELEASE_TYPE == 'Alpha'
         run: |
           echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}} --testbuild=28" >> $GITHUB_ENV
-
+        shell: bash
+      - name: make Beta builds expire after 28 days
+        if: env.FS_RELEASE_TYPE == 'Beta'
+        run: |
+          echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}} --testbuild=60" >> $GITHUB_ENV
+        shell: bash
       - name: Clean up packages to give more space
         run: rm *${{ env.fallback_platform }}*bz2
         shell: bash
@@ -269,7 +275,7 @@ jobs:
       #     fi
       - name: Publish artifacts
         if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{ matrix.addrsize }}-${{ matrix.grid }}-artifacts.zip
           path: |
@@ -278,7 +284,7 @@ jobs:
 
       - name: publish Linux artifacts
         if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{matrix.addrsize}}-${{matrix.grid}}-artifacts.zip
           path: | 
@@ -287,7 +293,7 @@ jobs:
 
       - name: publish MacOS artifacts
         if: runner.os == 'macOS'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.FS_RELEASE_TYPE }}-${{ matrix.os }}-${{matrix.addrsize}}-${{matrix.grid}}-artifacts.zip
           path: |
@@ -355,7 +361,7 @@ jobs:
           echo "FS_BUILD_WEBHOOK_URL=${FS_BUILD_WEBHOOK_URL}" >> $GITHUB_ENV
 
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         id: download
         with:
           path: to_deploy

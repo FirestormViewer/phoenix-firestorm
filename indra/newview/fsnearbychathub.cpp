@@ -253,6 +253,8 @@ void FSNearbyChat::sendChat(LLWString text, EChatType type)
 
 	if (!text.empty())
 	{
+		FSCommon::updateUsedEmojis(text);
+
 		if (type == CHAT_TYPE_OOC)
 		{
 			text = utf8string_to_wstring(gSavedSettings.getString("FSOOCPrefix") + " ") + text + utf8string_to_wstring(" " + gSavedSettings.getString("FSOOCPostfix"));

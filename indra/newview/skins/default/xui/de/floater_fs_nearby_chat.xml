@@ -30,6 +30,10 @@
 						<layout_panel name="input_editor_layout_panel">
 							<chat_editor name="chat_box"/>
 						</layout_panel>
+						<layout_panel name="emoji_button_layout_panel">
+							<button name="emoji_picker_toggle_btn" tool_tip="Emoji-Auswahl öffnen"/>
+							<button name="emoji_recent_panel_toggle_btn" tool_tip="Zuletzt verwendete Emoji-Auswahl öffnen/schliessen"/>
+						</layout_panel>
 						<layout_panel name="input_button_layout_panel">
 							<spinner name="ChatChannel" tool_tip="Kanal, an den der Chat gesendet werden soll. Kann unter Einstellungen -> Chat -> Firestorm -> Kanalauswahl in Eingabezeile anzeigen aktiviert werden." label_width="35"/>
 						</layout_panel>
@@ -42,6 +46,11 @@
 							<button label="Senden" name="send_chat" tool_tip="Flüstern = 10m, Sprechen = 20m, Rufen = 100m"/>
 						</layout_panel>
 					</layout_stack>
+				</layout_panel>
+				<layout_panel name="emoji_recent_layout_panel">
+					<text name="emoji_recent_empty_text">
+						Zuletzt verwendete Emojis erscheinen hier
+					</text>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

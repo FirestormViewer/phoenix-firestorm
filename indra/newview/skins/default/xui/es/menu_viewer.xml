@@ -193,6 +193,7 @@
 			<menu_item_check label="Al seleccionar, mostrar lo oculto" name="Show Hidden Selection"/>
 			<menu_item_check label="Al seleccionar, mostrar el radio de la luz" name="Show Light Radius for Selection"/>
 			<menu_item_check label="Mostrar el rayo indicador" name="Show Selection Beam"/>
+			<menu_item_check label="Realzar transparencias" name="Highlight Transparent"/>
 			<menu_item_check label="Ajustar a la rejilla" name="Snap to Grid"/>
 			<menu_item_call label="Ajustar a la rejilla los ejes X e Y" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Usar lo seleccionado como rejilla" name="Use Selection for Grid"/>
@@ -280,7 +281,6 @@
 			<menu_item_check label="Baliza con destellos" name="Cheesy Beacon"/>
 			<menu_item_check label="Ocultar partículas" name="Hide Particles"/>
 			<menu_item_check label="Ocultar lo seleccionado" name="Hide Selected"/>
-			<menu_item_check label="Realzar transparencias" name="Highlight Transparent"/>
 			<menu_item_check label="Mostrar HUDs anexados" name="Show HUD Attachments"/>
 			<menu_item_check label="Mostrar punto de mira en vista subjetiva" name="ShowCrosshairs"/>
 			<menu label="Bulas" name="Hover Tips">

@@ -130,7 +130,7 @@ void main()
 			break;
 		case 2:		// Blur (variable)
 			fragColor = texture(diffuseRect, fragTC).rgb;
-			fragColor = mix(fragColor, blurVariable(diffuseRect, fragTC, SPHERE_PARAMS.x, BLUR_DIRECTION, effectStrength), int(effectStrength > 0));
+			fragColor = mix(fragColor, blurVariable(diffuseRect, fragTC, SPHERE_PARAMS.x, BLUR_DIRECTION, effectStrength), bvec3(effectStrength > 0));
 			break;
 		case 3:		// ChromaticAberration
 			fragColor = chromaticAberration(diffuseRect, fragTC, SPHERE_PARAMS.xy, SPHERE_PARAMS.zw, effectStrength);

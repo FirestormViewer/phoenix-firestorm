@@ -40,6 +40,9 @@
 		<text name="label_13" tool_tip="Domyślne uprawnienia dla nowych ustawień otoczenia">
 			Otoczenia
 		</text>
+		<text name="label_14" tool_tip="Domyślne uprawnienia podczas tworzenia materiałów GLTF">
+			Materiały
+		</text>
 	</panel>
 	<button label="Anuluj" label_selected="Anuluj" name="cancel" />
 </floater>

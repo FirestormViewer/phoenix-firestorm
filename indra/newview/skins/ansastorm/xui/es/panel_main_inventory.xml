@@ -61,7 +61,7 @@
 			<menu_item_check name="inventory_show_partial_results" label="Mostrar resultados parciales"/>
 		</menu>
 	</menu_bar>
-	<layout_stack name="nav_stack">
+	<layout_stack name="top_stack">
 		<layout_panel name="filter_panel">
 			<filter_editor label="Filtrar" name="inventory search editor" tool_tip="Escribe una o más palabras a buscar, separadas por '+'"/>
 		</layout_panel>

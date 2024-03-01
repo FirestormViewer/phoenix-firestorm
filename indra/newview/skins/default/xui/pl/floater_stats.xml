@@ -33,6 +33,9 @@
 					<stat_bar label="Pamięć surowa" name="rawmemstat"/>
 					<stat_bar label="Pamięć przypisana" name="glboundmemstat"/>
 				</stat_view>
+				<stat_view name="material" label="Materiały">
+					<stat_bar name="nummaterials" label="Ilość" />
+				</stat_view>
 				<stat_view name="memory" label="Użycie pamięci">
 					<stat_bar name="LLView" label="Interfejs"/>
 					<stat_bar name="LLFontFreetype" label="Czcionki"/>

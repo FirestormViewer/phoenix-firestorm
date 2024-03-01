@@ -276,6 +276,8 @@
 			<menu_item_check label="Показать скрытый выбор" name="Show Hidden Selection"/>
 			<menu_item_check label="Показать радиус света для выбранных" name="Show Light Radius for Selection"/>
 			<menu_item_check label="Показать луч выбора" name="Show Selection Beam"/>
+			<menu_item_check label="Подсветка прозрачного" name="Highlight Transparent"/>
+			<menu_item_check label="- включая ригованное прозрачное" name="Include Transparent Rigged"/>
 			<menu_item_check label="Привязка к сетке" name="Snap to Grid"/>
 			<menu_item_call label="Привязка XY объекта к сетке" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Использовать выбранное для сетки" name="Use Selection for Grid"/>
@@ -380,8 +382,6 @@
 			<menu_item_check label="Мигающие маяки" name="Cheesy Beacon"/>
 			<menu_item_check label="Скрыть частицы" name="Hide Particles"/>
 			<menu_item_check label="Скрыть выбранное" name="Hide Selected"/>
-			<menu_item_check label="Подсветка прозрачного" name="Highlight Transparent"/>
-			<menu_item_check label="- включая ригованное прозрачное" name="Include Transparent Rigged"/>
 			<menu_item_check label="Показывать прицел при виде от первого лица" name="ShowCrosshairs"/>
 			<menu label="Всплывающие подсказки" name="Hover Tips">
 				<menu_item_check label="Показывать Подсказки" name="Show Tips"/>

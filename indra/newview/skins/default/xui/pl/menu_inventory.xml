@@ -22,6 +22,7 @@
 	<menu_item_call label="Nowy skrypt" name="New Script"/>
 	<menu_item_call label="Nowa nota" name="New Note"/>
 	<menu_item_call label="Nowy gest" name="New Gesture"/>
+	<menu_item_call label="Nowy materiał" name="New Material" />
 	<menu label="Nowe ubranie" name="New Clothes">
 		<menu_item_call label="Nowa koszula" name="New Shirt"/>
 		<menu_item_call label="Nowe spodnie" name="New Pants"/>
@@ -53,6 +54,7 @@
 		<menu_item_call label="Dla nowych dźwięków" name="Sound uploads" />
 		<menu_item_call label="Dla nowych animacji" name="Animation uploads" />
 		<menu_item_call label="Dla nowych modeli" name="Model uploads" />
+		<menu_item_call label="Dla nowych materiałów PBR" name="PBR uploads" />
 	</menu>
 	<menu label="Zmień typ" name="Change Type">
 		<menu_item_call label="Domyślny" name="Default"/>
@@ -115,6 +117,7 @@
 	<menu_item_call label="Proponuj teleport" name="Offer Teleport..."/>
 	<menu_item_call label="Poproś o teleport" name="Request Teleport..."/>
 	<menu_item_call label="Rozpocznij konferencję czatową" name="Conference Chat"/>
+	<menu_item_call label="Odtwarzaj" name="PlayGesture" />
 	<menu_item_call label="Aktywuj" name="Activate"/>
 	<menu_item_call label="Dezaktywuj" name="Deactivate"/>
 	<menu_item_call label="Zapisz jako" name="Save As"/>

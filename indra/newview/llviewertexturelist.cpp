@@ -922,10 +922,11 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     min_scale = llmax(min_scale*min_scale, 0.1f);
 
                     vsize /= min_scale;
-
-#if LL_DARWIN
-                    vsize /= 1.f + LLViewerTexture::sDesiredDiscardBias*(1.f+face->getDrawable()->mDistanceWRTCamera*bias_distance_scale);
-#else
+// <FS:Beq> Fix Blurry texture on Mac
+// #if LL_DARWIN
+//                     vsize /= 1.f + LLViewerTexture::sDesiredDiscardBias*(1.f+face->getDrawable()->mDistanceWRTCamera*bias_distance_scale);
+// #else
+// </FS:Beq>
                     vsize /= LLViewerTexture::sDesiredDiscardBias;
                     vsize /= llmax(1.f, (LLViewerTexture::sDesiredDiscardBias-1.f) * (1.f + face->getDrawable()->mDistanceWRTCamera * bias_distance_scale));
 
@@ -936,7 +937,7 @@ void LLViewerTextureList::updateImageDecodePriority(LLViewerFetchedTexture* imag
                     { // further reduce by discard bias when off screen or occluded
                         vsize /= LLViewerTexture::sDesiredDiscardBias;
                     }
-#endif
+// #endif // <FS:Beq/>
                     // if a GLTF material is present, ignore that face
                     // as far as this texture stats go, but update the GLTF material 
                     // stats

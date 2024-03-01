@@ -32,7 +32,6 @@
 			</text>
 			<check_box label="Acqua trasparente" name="TransparentWater"/>
 			<check_box label="Occlusione ambientale" name="UseSSAO"/>
-			<check_box label="Riflessi" name="ReflectionsEnabled"/>
 			<check_box label="Riflessi Screen Space" name="ScreenSpaceReflections"/>  <!-- DA RIVEDERE: "Riflessi avanzati", "Riflessi realistici" -->
 			<text name="shadows_label">
 				Ombre:
