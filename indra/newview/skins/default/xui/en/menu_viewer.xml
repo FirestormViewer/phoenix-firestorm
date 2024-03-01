@@ -4854,6 +4854,18 @@
              parameter="HOME_PAGE"/>
           </menu_item_call>
           <menu_item_call
+           label="Dump Fonts"
+           name="Dump Fonts">
+            <menu_item_call.on_click
+             function="Develop.Fonts.Dump" />
+          </menu_item_call>
+          <menu_item_call
+           label="Dump Font Textures"
+           name="Dump Font Textures">
+            <menu_item_call.on_click
+             function="Develop.Fonts.DumpTextures" />
+          </menu_item_call>
+          <menu_item_call
              label="Dump SelectMgr"
              name="Dump SelectMgr">
                 <menu_item_call.on_click
@@ -4940,6 +4952,14 @@
                  function="Advanced.CheckDebugViews" />
                 <menu_item_check.on_click
                  function="Advanced.ToggleDebugViews" />
+            </menu_item_check>
+            <menu_item_check
+             label="Debug Unicode"
+             name="Debug Unicode">
+                <menu_item_check.on_check
+                 function="Advanced.CheckDebugUnicode" />
+                <menu_item_check.on_click
+                 function="Advanced.ToggleDebugUnicode" />
             </menu_item_check>
             <menu_item_check
              label="Debug Name Tooltips"
@@ -5789,7 +5809,7 @@
                     <menu_item_call.on_click
                      function="PromptShowURL"
                      name="PublicIssueTracker_url"
-                     parameter="WebLaunchPublicIssue,http://jira.secondlife.com" />
+                     parameter="WebLaunchPublicIssue,https://feedback.secondlife.com/" />
                 </menu_item_call>
                 <menu_item_call
                  label="Public Issue Tracker Help"

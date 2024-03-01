@@ -77,8 +77,11 @@ void LLReflectionMap::autoAdjustOrigin()
     {
         const LLVector4a* bounds = mGroup->getBounds();
         auto* node = mGroup->getOctreeNode();
-
-        if (mGroup->getSpatialPartition()->mPartitionType == LLViewerRegion::PARTITION_VOLUME)
+        // <FS:Beq> Bugsplat-Fix 
+        // if (mGroup->getSpatialPartition()->mPartitionType == LLViewerRegion::PARTITION_VOLUME)
+        const auto* partition = mGroup->getSpatialPartition();
+        if (partition && partition->mPartitionType == LLViewerRegion::PARTITION_VOLUME)
+        // </FS:Beq>
         {
             mPriority = 0;
             // cast a ray towards 8 corners of bounding box

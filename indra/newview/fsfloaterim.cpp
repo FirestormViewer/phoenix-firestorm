@@ -53,6 +53,7 @@
 #include "llconsole.h"
 #include "llfloaterabout.h"		// for sysinfo button -Zi
 #include "llfloateravatarpicker.h"
+#include "llfloateremojipicker.h"
 #include "llfloaterreg.h"
 #include "llfloatersearchreplace.h"
 #include "llgroupactions.h"
@@ -63,6 +64,7 @@
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llnotificationtemplate.h"		// <FS:Zi> Viewer version popup
+#include "llpanelemojicomplete.h"
 #include "llrootview.h"
 #include "llscreenchannel.h"
 #include "llspeakers.h"
@@ -375,6 +377,8 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
 			LLWStringUtil::replaceChar(text,182,'\n'); // Convert paragraph symbols back into newlines.
 			if (!text.empty())
 			{
+				FSCommon::updateUsedEmojis(text);
+
 				if (type == CHAT_TYPE_OOC)
 				{
 					std::string tempText = wstring_to_utf8str( text );
@@ -598,6 +602,11 @@ FSFloaterIM::~FSFloaterIM()
 	if (mAvatarNameCacheConnection.connected())
 	{
 		mAvatarNameCacheConnection.disconnect();
+	}
+
+	if (mRecentEmojisUpdatedCallbackConnection.connected())
+	{
+		mRecentEmojisUpdatedCallbackConnection.disconnect();
 	}
 }
 
@@ -949,8 +958,27 @@ BOOL FSFloaterIM::postBuild()
 	mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
 	mInputEditor->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 
-	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
+	mEmojiRecentPanelToggleBtn = getChild<LLButton>("emoji_recent_panel_toggle_btn");
+	mEmojiRecentPanelToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiRecentPanelToggleBtnClicked(); });
 
+	mEmojiRecentPanel = getChild<LLLayoutPanel>("emoji_recent_layout_panel");
+	mEmojiRecentPanel->setVisible(false);
+
+	mEmojiRecentEmptyText = getChild<LLTextBox>("emoji_recent_empty_text");
+	mEmojiRecentEmptyText->setToolTip(mEmojiRecentEmptyText->getText());
+	mEmojiRecentEmptyText->setVisible(false);
+
+	mEmojiRecentIconsCtrl = getChild<LLPanelEmojiComplete>("emoji_recent_icons_ctrl");
+	mEmojiRecentIconsCtrl->setCommitCallback([this](LLUICtrl*, const LLSD& value) { onRecentEmojiPicked(value); });
+	mEmojiRecentIconsCtrl->setVisible(false);
+
+	mEmojiPickerToggleBtn = getChild<LLButton>("emoji_picker_toggle_btn");
+	mEmojiPickerToggleBtn->setLabel(LLUIString(LLWString(1, 128512)));
+	mEmojiPickerToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiPickerToggleBtnClicked(); });
+
+	mRecentEmojisUpdatedCallbackConnection = LLFloaterEmojiPicker::setRecentEmojisUpdatedCallback([this](const std::list<llwchar>& recent_emojis_list) { initEmojiRecentPanel(); });
+
+	getChild<LLButton>("send_chat")->setCommitCallback(boost::bind(&FSFloaterIM::sendMsgFromInputEditor, this, CHAT_TYPE_NORMAL));
 	getChild<LLButton>("chat_search_btn")->setCommitCallback(boost::bind(&FSFloaterIM::onChatSearchButtonClicked, this));
 
 	bool isFSSupportGroup = FSData::getInstance()->isFirestormGroup(mSessionID);
@@ -2442,4 +2470,57 @@ bool FSFloaterIM::applyRectControl()
 	}
 
 	return res;
+}
+
+void FSFloaterIM::onEmojiRecentPanelToggleBtnClicked()
+{
+	BOOL show = mEmojiRecentPanel->getVisible() ? FALSE : TRUE;
+	if (show)
+	{
+		initEmojiRecentPanel();
+	}
+
+	mEmojiRecentPanel->setVisible(show);
+	mInputEditor->setFocus(TRUE);
+}
+
+void FSFloaterIM::initEmojiRecentPanel()
+{
+	std::list<llwchar>& recentlyUsed = LLFloaterEmojiPicker::getRecentlyUsed();
+	if (recentlyUsed.empty())
+	{
+		mEmojiRecentEmptyText->setVisible(TRUE);
+		mEmojiRecentIconsCtrl->setVisible(FALSE);
+	}
+	else
+	{
+		LLWString emojis;
+		for (llwchar emoji : recentlyUsed)
+		{
+			emojis += emoji;
+		}
+		mEmojiRecentIconsCtrl->setEmojis(emojis);
+		mEmojiRecentEmptyText->setVisible(FALSE);
+		mEmojiRecentIconsCtrl->setVisible(TRUE);
+	}
+}
+
+void FSFloaterIM::onRecentEmojiPicked(const LLSD& value)
+{
+	LLSD::String str = value.asString();
+	if (str.size())
+	{
+		LLWString wstr = utf8string_to_wstring(str);
+		if (wstr.size())
+		{
+			llwchar emoji = wstr[0];
+			mInputEditor->insertEmoji(emoji);
+		}
+	}
+}
+
+void FSFloaterIM::onEmojiPickerToggleBtnClicked()
+{
+	mInputEditor->setFocus(TRUE);
+	mInputEditor->showEmojiHelper();
 }
