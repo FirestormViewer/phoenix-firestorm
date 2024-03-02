@@ -128,7 +128,7 @@ public:
 	void initCmdLineGrids();
 	void resetGrids();
 	// grid list management
-	bool isReadyToLogin(){return mReadyToLogin;}
+	bool isReadyToLogin() const {return mReadyToLogin;}
 
 	// add a grid to the list of grids
 	void addGrid(const std::string& loginuri);

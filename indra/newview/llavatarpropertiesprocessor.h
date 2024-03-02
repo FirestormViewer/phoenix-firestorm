@@ -216,10 +216,6 @@ public:
 	void sendAvatarGroupsRequest(const LLUUID& avatar_id);
 	void sendAvatarTexturesRequest(const LLUUID& avatar_id);
 	void sendAvatarClassifiedsRequest(const LLUUID& avatar_id);
-	// <FS:Beq> enable legacy profile access for OpenSim to work with new profile
-	void sendGenericRequestLegacy(const LLUUID& avatar_id, EAvatarProcessorType type, const std::string method);
-	void sendAvatarPropertiesRequestLegacy(const LLUUID& avatar_id);
-	// </FS:Beq>
 
 	// Duplicate pick info requests are not suppressed.
 	void sendPickInfoRequest(const LLUUID& creator_id, const LLUUID& pick_id);

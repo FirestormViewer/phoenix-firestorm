@@ -48,8 +48,8 @@ public:
 	static void pickCallback(const LLPickInfo& pick_info);
 
 	// <FS:Zi> Add control to drag texture faces around
-	virtual BOOL	handleMouseUp(S32 x, S32 y, MASK mask);
-	virtual void	stopGrabbing();
+	virtual BOOL	handleMouseUp(S32 x, S32 y, MASK mask) override;
+	void	stopGrabbing();
 
 	static BOOL mTextureGrabbed;
 	static LLViewerObject* mTextureObject;
