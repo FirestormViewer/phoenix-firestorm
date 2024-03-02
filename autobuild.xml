@@ -112,9 +112,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>80d157facdba399b3a59c400e29cb625</string>
+              <string>1e74b8cc3694150a7751aeb12f3456d414412c0e</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/glib-2.64.6.230870115-linux64-230870115.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/glib-2.64.6.240620740-linux64-240620740.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -544,9 +546,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8d96a9d1a9a208b1f48ac677edb7ca4d</string>
+              <string>5d1952e270a873d4587f7b943ed6e3f87d5023da</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/boost-1.72-linux64-222121224.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/boost-1.81-linux64-240621158.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -648,9 +652,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8b79711b4fa914c16f1284939d55dcc1</string>
+              <string>83f9c9aff5a7b96711c04bd33cb453c108dee3a5</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/colladadom-2.3.230940029-linux64-230940029.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/colladadom-2.3.240621210-linux64-240621210.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -762,9 +768,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>8e92fc9ec2b3be6d2a5387fc283f954f</string>
+              <string>7bb9bbadb44dd7490c3e6804395df01ab800bc18</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/curl-8.3.0.232750741-linux64-232750741.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-curl/releases/download/v7.54.1-513145c/curl-7.54.1-513145c-linux64-513145c.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -912,6 +920,20 @@
             </map>
             <key>name</key>
             <string>darwin64</string>
+          </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>c036cc042523fb6a3dafb7134f83e52c566c0765</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
+              <key>url</key>
+              <string>https://3p.firestormviewer.org/emoji_shortcodes-6.1.0.240620448-linux64-240620448.tar.zst</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
           </map>
           <key>windows64</key>
           <map>
@@ -1110,11 +1132,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4a999279562e8f3e4ba02d3e78a844ddf6fe18f1</string>
+              <string>bf2d2e4350caaea2b2fb6116d05548c80f402f81</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-freetype/releases/download/v.2.12.1.557becd/freetype-2.12.1.557becd-linux64-557becd.tar.zst</string>
+              <string>https://3p.firestormviewer.org/freetype-2.12.1.240620850-linux64-240620850.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1378,6 +1400,20 @@
             </map>
             <key>name</key>
             <string>darwin64</string>
+          </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>f5e5be3af96f1eb0842219a94765c04aa9c561c5</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
+              <key>url</key>
+              <string>https://3p.firestormviewer.org/icu4c-4.8.1-linux64-240621048.tar.zst</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
           </map>
           <key>windows64</key>
           <map>
@@ -1750,9 +1786,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>134089ec8c1eead9436b69c326790fc0</string>
+              <string>e646a9da0ddfe1dfbffc6600d7d35f78ac48c75e</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/libpng-1.6.38.222890126-linux64-222890126.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/libpng-1.6.38-240620624-linux64-240620624.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1838,9 +1876,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d72c6d8db827ce3d83c5703f519a2ac9</string>
+              <string>fda5d399c21c3ad29a78f29599523ca4ecf76bd2</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/libxml2-2.10.3.230940019-linux64-230940019.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-libxml2/releases/download/v2.9.4-2db4418/libxml2-2.9.4.2db4418-linux64-2db4418.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2279,9 +2319,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>ee4e3a02ad4669a4d84e9c32e509530e</string>
+              <string>d4f35ebcea53ab6e9f2e6cbc0d680b10d10b9c53</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/minizip_ng-3.0.2.222121607-linux64-222121607.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-minizip-ng/releases/download/v3.0.2.3e9876e/minizip_ng-3.0.2.3e9876e-linux64-3e9876e.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2395,9 +2437,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>57670eaa6333d9127b8ba88f120e56dd</string>
+              <string>5798b5f6c8579ad44f211a873c072ee8d3fd8c93</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/nghttp2-1.56.0.232750738-linux64-232750738.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-nghttp2/releases/download/v1.40.0.b1526c6/nghttp2-1.40.0.b1526c6-linux64-b1526c6.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2696,9 +2740,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a3b2dbffa28a2b2a63c5d3ce2c12bc85</string>
+              <string>5f6953db991ef6badb0525ecc98daf28d368e9e7</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/openssl-1.1.1w.232750656-linux64-232750656.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-openssl/releases/download/v1.1.1q.de53f55/openssl-1.1.1q.de53f55-linux64-de53f55.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2754,9 +2800,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>742a145c1518b9dc195ae0862828e6ae</string>
+              <string>3a722c508a9278a49317e3f749f3256768f1c50b</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/pcre-8.35.202021522-linux64-202021522.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-pcre/releases/download/v8.35-3c0eb51/pcre-8.35.3c0eb51-linux64-3c0eb51.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3103,6 +3151,20 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>name</key>
             <string>darwin64</string>
           </map>
+          <key>linux64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>0f648faa1aee4e233330b87ce7a31727a28dffc3</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
+              <key>url</key>
+              <string>https://3p.firestormviewer.org/viewer_fonts-1.240620521-linux64-240620521.tar.zst</string>
+            </map>
+            <key>name</key>
+            <string>linux64</string>
+          </map>
           <key>windows64</key>
           <map>
             <key>archive</key>
@@ -3438,9 +3500,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5ee7cda65cede06190c811e59b3880b0</string>
+              <string>fba88375e12454ae19f4528e11ffc7ddf7d879ec</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/zlib_ng-2.0.5.222121000-linux64-222121000.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-zlib-ng/releases/download/v1.2.11.zlib-ng.32fd361/zlib_ng-1.2.11.zlib-ng.32fd361-linux64-32fd361.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>

@@ -2263,7 +2263,7 @@ class Linux_i686_Manifest(LinuxManifest):
             # self.path("libfontconfig.so.*.*")    # <FS:PC> fontconfig and freetype should be taken from the user's system
 
             # Include libfreetype.so. but have it work as libfontconfig does.
-            # self.path("libfreetype.so.*.*")      # <FS:PC> fontconfig and freetype should be taken from the user's system
+            self.path("libfreetype.so.*.*")
 
             try:
                 self.path("libtcmalloc.so*") #formerly called google perf tools
