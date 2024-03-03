@@ -285,6 +285,7 @@
                image_hover_unselected="Toolbar_Middle_Over"
                image_selected="Toolbar_Middle_Selected"
                image_unselected="Toolbar_Middle_Off"
+               image_overlay="Emoji_Picker_Icon"
                right="-11"
                name="emoji_picker_toggle_btn"
                tool_tip="Show emoji panel"

@@ -162,7 +162,6 @@ BOOL FSFloaterNearbyChat::postBuild()
 	mEmojiRecentIconsCtrl->setVisible(false);
 
 	mEmojiPickerToggleBtn = getChild<LLButton>("emoji_picker_toggle_btn");
-	mEmojiPickerToggleBtn->setLabel(LLUIString(LLWString(1, 128512)));
 	mEmojiPickerToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiPickerToggleBtnClicked(); });
 
 	mRecentEmojisUpdatedCallbackConnection = LLFloaterEmojiPicker::setRecentEmojisUpdatedCallback([this](const std::list<llwchar>& recent_emojis_list) { initEmojiRecentPanel(); });
