@@ -148,6 +148,7 @@
 			<check_box name="AllowMUpose" label="„:“ als Synonym für &quot;/me&quot; verwenden"/>
 			<check_box name="AutoCloseOOC" label="((OOC))-Klammern automatisch schließen"/>
 			<check_box name="FSShowIMSendButton" label="Senden-Button in Eingabezeile für IM-Sitzungen anzeigen"/>
+			<check_box name="FSShowEmojiButton" label="Emoji-Button in Eingabezeile für Lokaler Chat IM-Sitzungen anzeigen"/>
 			<check_box name="FSNearbyChatbar" label="Eingabezeile zum Fenster Lokaler Chat hinzufügen"/>
 			<check_box name="FSShowChatChannel" label="Kanalauswahl in Eingabezeile anzeigen"/>
 			<check_box name="FSShowChatType" label="Chat-Typ/Senden-Button anzeigen"/>
