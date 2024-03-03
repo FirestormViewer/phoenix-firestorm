@@ -910,9 +910,9 @@
 		 top_pad="1"
 		 height="16"
 		 width="400"
-		 control_name="FSShowIMSendButton"
-		 name="FSShowIMSendButton"
-		 label="Show send chat button in chat bar for IM sessions"/>
+		 control_name="FSSuppressEmojiWindowPopupWhileTyping"
+		 name="FSSuppressEmojiWindowPopupWhileTyping"
+		 label="Suppress emoji chooser window from automatically popping up while typing in chat bars"/>
 		<check_box
 		 layout="topleft"
 		 top_pad="1"
@@ -921,6 +921,14 @@
 		 control_name="FSShowEmojiButton"
 		 name="FSShowEmojiButton"
 		 label="Show emoji button in chat bar for IM sessions and Nearby Chat"/>
+		<check_box
+		 layout="topleft"
+		 top_pad="1"
+		 height="16"
+		 width="400"
+		 control_name="FSShowIMSendButton"
+		 name="FSShowIMSendButton"
+		 label="Show send chat button in chat bar for IM sessions"/>
 		<check_box
 		 layout="topleft"
 		 top_pad="1"
