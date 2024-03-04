@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Avatar Pie">
 	<menu_item_call label="Vedi profilo" name="Profile..."/>
-	<menu_item_call label="Aggiungi amico" name="Add Friend"/>
-	<menu_item_call label="Dà biglietto da visita" name="Give Calling Card"/>
-	<menu_item_call label="Aggiungi a un set" name="Add to Set"/>
-	<menu_item_call label="Manda IM" name="Send IM..."/>
+	<menu_item_call label="Aggiungi agli amici" name="Add Friend"/>
+	<menu_item_call label="Invia biglietto da visita" name="Give Calling Card"/>
+	<menu_item_call label="Aggiungi ad un set" name="Add to Set"/>
+	<menu_item_call label="Invia IM" name="Send IM..."/>
 	<menu_item_call label="Chiama" name="Call"/>
-	<menu_item_call label="Invita a gruppo" name="Invite..."/>
+	<menu_item_call label="Invita al gruppo" name="Invite..."/>
 	<menu_item_call label="Ripristina scheletro" name="Reset Skeleton"/>
 	<menu_item_call label="Ripristina scheletro e animazioni" name="Reset Skeleton And Animations"/>
 	<menu_item_call label="Ripristina LOD mesh" name="Reset Mesh LOD" />
-	<context_menu label="Rimuovi" name="Remove">
+	<context_menu label="Gestisci" name="Remove">
 		<menu_item_call label="Blocca" name="Avatar Mute"/>
-		<menu_item_call label="Sblocca" name="Avatar Unute"/>
-		<menu_item_call label="Segnala" name="abuse"/>
+		<menu_item_call label="Sblocca" name="Avatar Unmute"/>
+		<menu_item_call label="Segnala abuso" name="abuse"/>
 		<menu_item_call label="Congela" name="Freeze..."/>
 		<menu_item_call label="Espelli" name="Eject..."/>
 	</context_menu>
@@ -24,9 +24,9 @@
 	<menu_item_call label="De-rendi + lista nera" name="DerenderPermanent"/>
 	<menu_item_call label="Info sugli script" name="ScriptInfo"/>
 	<menu_item_call label="Mostra texture" name="Debug..."/>
-	<menu_item_call label="Ricarica tex" name="Texture Refresh"/>
-	<menu_item_check label="Rendi normalmente" name="RenderNormally"/>
-	<menu_item_check label="Non rendere mai" name="DoNotRender"/>
-	<menu_item_check label="Rendi sempre" name="AlwaysRenderFully"/>
+	<menu_item_call label="Ricarica texture" name="Texture Refresh"/>
+	<menu_item_check label="Renderizza normalmente" name="RenderNormally"/>
+	<menu_item_check label="Non renderizzare mai" name="DoNotRender"/>
+	<menu_item_check label="Renderizza sempre completamente" name="AlwaysRenderFully"/>
 	<menu_item_call label="Blocca proprietario particelle" name="Mute Particle"/>
 </context_menu>

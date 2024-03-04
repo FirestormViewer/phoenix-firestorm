@@ -530,11 +530,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>59c1827cab82516504a2eb31e0aa7e38035b5085</string>
+              <string>8539775e0a0783bd252bc548b20b3472a8254c31</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-boost/releases/download/v1.81-90bb2df/boost-1.81-darwin64-90bb2df.tar.zst</string>
+              <string>https://github.com/secondlife/3p-boost/releases/download/v1.81-09d25a7/boost-1.81-darwin64-09d25a7.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -556,11 +556,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>26214a33c568929ffeeb3463ce183f2888ce4fe4</string>
+              <string>d40c86fbcb6ce064d546165cbabbf035ea80e07b</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-boost/releases/download/v1.81-90bb2df/boost-1.81-windows64-90bb2df.tar.zst</string>
+              <string>https://github.com/secondlife/3p-boost/releases/download/v1.81-09d25a7/boost-1.81-windows64-09d25a7.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -573,7 +573,7 @@
         <key>copyright</key>
         <string>(see individual source files)</string>
         <key>version</key>
-        <string>1.81</string>
+        <string>1.81-09d25a7</string>
         <key>name</key>
         <string>boost</string>
         <key>description</key>
@@ -634,11 +634,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7f447d30d7add80270a55cf3c53000392821a1cb</string>
+              <string>b1bb8a9c8d458d8842d79f9633fb61df12f1b0ad</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-colladadom/releases/download/v2.3.d1ef72a/colladadom-2.3.d1ef72a-darwin64-d1ef72a.tar.zst</string>
+              <string>https://github.com/secondlife/3p-colladadom/releases/download/v2.3.ab0c124/colladadom-2.3.ab0c124-darwin64-ab0c124.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -660,11 +660,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b32294a2f31f5b4ca49928e66832aad1bb4a88ac</string>
+              <string>0df4c05d4efa3019afa4cbf09599df60b586fc5c</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-colladadom/releases/download/v2.3.d1ef72a/colladadom-2.3.d1ef72a-windows64-d1ef72a.tar.zst</string>
+              <string>https://github.com/secondlife/3p-colladadom/releases/download/v2.3.ab0c124/colladadom-2.3.ab0c124-windows64-ab0c124.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -677,7 +677,7 @@
         <key>copyright</key>
         <string>Copyright 2006 Sony Computer Entertainment Inc.</string>
         <key>version</key>
-        <string>2.3.d1ef72a</string>
+        <string>2.3.ab0c124</string>
         <key>name</key>
         <string>colladadom</string>
       </map>
@@ -885,6 +885,50 @@
         <key>description</key>
         <string>A headless browser SDK that uses the Chromium Embedded Framework (CEF). It is designed to make it easier to write applications that render modern web content directly to a memory buffer, inject synthesized mouse and keyboard events as well as interact with web based features like JavaScript or cookies.</string>
       </map>
+      <key>emoji_shortcodes</key>
+      <map>
+        <key>canonical_repo</key>
+        <string>https://github.com/secondlife/3p-emoji-shortcodes</string>
+        <key>copyright</key>
+        <string>Copyright 2017-2019 Miles Johnson.</string>
+        <key>description</key>
+        <string>Emoji shortcodes</string>
+        <key>license</key>
+        <string>MIT</string>
+        <key>license_file</key>
+        <string>LICENSES/emojibase-license.txt</string>
+        <key>name</key>
+        <string>emoji_shortcodes</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>7ac35da9b1b5c9a05954edeef3fe8e54</string>
+              <key>url</key>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/113242/980233/emoji_shortcodes-6.1.0.579438-darwin64-579438.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>087ce7e6d93dcd88b477b10d8e1ab259</string>
+              <key>url</key>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/113243/980244/emoji_shortcodes-6.1.0.579438-windows64-579438.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>6.1.0.579438</string>
+      </map>
       <key>expat</key>
       <map>
         <key>platforms</key>
@@ -952,11 +996,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bfcc4acbe6b8dddaf10f0f7a47e4aad8</string>
+              <string>3f66914b7931a7e45b50c9f947eed3d1</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.18-darwin64-232960129.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.20-darwin64-240390127.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -966,11 +1010,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>14846f1a55274399362db4b674fcded6</string>
+              <string>bbb978f21e690599aedcd44658dceeaf</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///opt/firestorm/fmodstudio-2.02.18-linux64-232801304.tar.bz2</string>
+              <string>file:///opt/firestorm/fmodstudio-2.02.20-linux64-240390132.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -980,11 +1024,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7b38bd83eb63f25df7c5a20070a05732</string>
+              <string>8672d21ae8382a5526f0e17358de8575</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.18-windows64-232801156.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/fmodstudio-2.02.20-windows64-240381643.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -997,7 +1041,7 @@
         <key>copyright</key>
         <string>FMOD Studio by Firelight Technologies Pty Ltd.</string>
         <key>version</key>
-        <string>2.02.18</string>
+        <string>2.02.20</string>
         <key>name</key>
         <string>fmodstudio</string>
         <key>description</key>
@@ -1035,6 +1079,16 @@
       </map>
       <key>freetype</key>
       <map>
+        <key>copyright</key>
+        <string>Copyright 2006, 2007, 2008, 2009, 2010 by David Turner, Robert Wilhelm, and Werner Lemberg.</string>
+        <key>description</key>
+        <string>Font rendering library</string>
+        <key>license</key>
+        <string>FreeType</string>
+        <key>license_file</key>
+        <string>LICENSES/freetype.txt</string>
+        <key>name</key>
+        <string>freetype</string>
         <key>platforms</key>
         <map>
           <key>darwin64</key>
@@ -1042,11 +1096,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>912d122aae996483ba814fe8e569394ddca0d42e</string>
+              <string>d90a5c2fb4a729eeff3965ea6dd0a35cf146d379</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-freetype/releases/download/v2.4.4.4f739fa/freetype-2.4.4.4f739fa-darwin64-4f739fa.tar.zst</string>
+              <string>https://github.com/secondlife/3p-freetype/releases/download/v.2.12.1.557becd/freetype-2.12.1.557becd-darwin64-557becd.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1056,9 +1110,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>41db760508e6b48ae3a291ad2d1aef3d</string>
+              <string>4a999279562e8f3e4ba02d3e78a844ddf6fe18f1</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/freetype-2.8.1.223020901-linux64-223020901.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-freetype/releases/download/v.2.12.1.557becd/freetype-2.12.1.557becd-linux64-557becd.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1068,26 +1124,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>2c2151b439cf92e03d9573dddbbdd3b6</string>
+              <string>1837fdfd44204c78e79134944f824b0211817883</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/freetype-2.3.9.232991153-windows64-232991153.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-freetype/releases/download/v.2.12.1.557becd/freetype-2.12.1.557becd-windows64-557becd.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
-        <key>license</key>
-        <string>FreeType</string>
-        <key>license_file</key>
-        <string>LICENSES/freetype.txt</string>
-        <key>copyright</key>
-        <string>Copyright 2006, 2007, 2008, 2009, 2010 by David Turner, Robert Wilhelm, and Werner Lemberg.</string>
         <key>version</key>
-        <string>2.4.4.4f739fa</string>
-        <key>name</key>
-        <string>freetype</string>
-        <key>description</key>
-        <string>Font rendering library</string>
+        <string>2.12.1.557becd</string>
       </map>
       <key>glext</key>
       <map>
@@ -1162,11 +1210,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c016d7333a3ded88c060119b4e3a5847015a8711</string>
+              <string>dce3174b12136746f5f910e311e895c1b47bf8fb</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-googlemock/releases/download/v1.7.0.77bba00/googlemock-1.7.0.77bba00-darwin64-77bba00.tar.zst</string>
+              <string>https://github.com/secondlife/3p-googlemock/releases/download/v1.7.0.2b109d4/googlemock-1.7.0.2b109d4-darwin64-2b109d4.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1188,11 +1236,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>df51dff9a820fc96c18c2bc00b64467e541633a5</string>
+              <string>265813f84b04c3b03f3d7d33e149b3d5e3cf31db</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-googlemock/releases/download/v1.7.0.77bba00/googlemock-1.7.0.77bba00-windows64-77bba00.tar.zst</string>
+              <string>https://github.com/secondlife/3p-googlemock/releases/download/v1.7.0.2b109d4/googlemock-1.7.0.2b109d4-windows64-2b109d4.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -1205,7 +1253,7 @@
         <key>copyright</key>
         <string>Copyright 2008, Google Inc.</string>
         <key>version</key>
-        <string>1.7.0.77bba00</string>
+        <string>1.7.0.2b109d4</string>
         <key>name</key>
         <string>googlemock</string>
         <key>description</key>
@@ -1300,6 +1348,54 @@
         <string>havok-source</string>
         <key>description</key>
         <string>Havok source code for libs and demos</string>
+      </map>
+      <key>icu4c</key>
+      <map>
+        <key>canonical_repo</key>
+        <string>https://bitbucket.org/lindenlab/3p-icu4c</string>
+        <key>copyright</key>
+        <string>Copyright (c) 1995-2011 International Business Machines Corporation and others &lt;http://source.icu-project.org&gt;</string>
+        <key>description</key>
+        <string>ICU is a mature, widely used set of C/C++ and Java libraries providing Unicode and Globalization support for software applications. ICU is widely portable and gives applications the same results on all platforms and between C/C++ and Java software.</string>
+        <key>license</key>
+        <string>ICU, permissive non-copyleft free software license</string>
+        <key>license_file</key>
+        <string>LICENSES/icu.txt</string>
+        <key>name</key>
+        <string>icu4c</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>47bc32b991385f1a6530e4c6179b07f64ca6edc7</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
+              <key>url</key>
+              <string>https://github.com/secondlife/3p-icu4c/releases/download/v4.8.1-7d08d82/icu4c-4.8.1-darwin64-7d08d82.tar.zst</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>b7db881dac80302e4d9010af34c0bf6ca9897df9</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
+              <key>url</key>
+              <string>https://github.com/secondlife/3p-icu4c/releases/download/v4.8.1-7d08d82/icu4c-4.8.1-windows64-7d08d82.tar.zst</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>4.8.1-7d08d82</string>
       </map>
       <key>jpegencoderbasic</key>
       <map>
@@ -1963,9 +2059,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bc3d95f2663fd88465cd0ddaf794055f</string>
+              <string>17427ee51188be8aa55f072c215581f9</string>
               <key>url</key>
-              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.579391-darwin64-579391.tar.bz2</string>
+              <string>file:///opt/firestorm/llphysicsextensions_tpv-1.0.7493682926-darwin64-7493682926.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -1987,9 +2083,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>9b73549c68823ef1ced577ae05875f73</string>
+              <string>b7518a5be32a10e1b255de0f182b1bf2</string>
               <key>url</key>
-              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.579391-windows64-579391.tar.bz2</string>
+              <string>file:///c:/cygwin/opt/firestorm/llphysicsextensions_tpv-1.0.7493682926-windows64-7493682926.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
@@ -2219,6 +2315,62 @@
         <string>https://bitbucket.org/lindenlab/3p-minizip-ng</string>
         <key>description</key>
         <string>minizip-ng is a zip manipulation library. Based on work of Gilles Vollant.</string>
+      </map>
+      <key>nanosvg</key>
+      <map>
+        <key>canonical_repo</key>
+        <string>https://bitbucket.org/lindenlab/3p-nanosvg</string>
+        <key>copyright</key>
+        <string>Copyright (c) 2013-14 Mikko Mononen</string>
+        <key>description</key>
+        <string>NanoSVG is a simple single-header-file SVG parser and rasterizer</string>
+        <key>license</key>
+        <string>Zlib</string>
+        <key>license_file</key>
+        <string>LICENSES/nanosvg.txt</string>
+        <key>name</key>
+        <string>nanosvg</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>32ead724319c2ea6f65fc5be0e3157cc</string>
+              <key>url</key>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/115452/994130/nanosvg-2022.09.27-darwin64-580364.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
+          <key>linux</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>84698f044598ff79e255965f3d1c3e80</string>
+              <key>url</key>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/115397/993664/nanosvg-2022.09.27-linux-580337.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>linux</string>
+          </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>ee61ff8b866be04c325f1fe2db516d71</string>
+              <key>url</key>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/115454/994144/nanosvg-2022.09.27-windows64-580364.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>2022.09.27</string>
       </map>
       <key>nghttp2</key>
       <map>
@@ -2925,6 +3077,48 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
         <key>description</key>
         <string>uriparser is a strictly RFC 3986 compliant URI parsing and handling library written in C. uriparser is cross-platform, fast, supports Unicode and is licensed under the New BSD license.</string>
       </map>
+      <key>viewer-fonts</key>
+      <map>
+        <key>copyright</key>
+        <string>Copyright 2016-2022 Brad Erickson CC-BY-4.0/MIT, Copyright 2016-2022 Twitter, Inc. CC-BY-4.0, Copyright 2013 Joe Loughry and Terence Eden MIT</string>
+        <key>description</key>
+        <string>Viewer fonts</string>
+        <key>license</key>
+        <string>Various open source</string>
+        <key>license_file</key>
+        <string>LICENSES/fonts.txt</string>
+        <key>name</key>
+        <string>viewer-fonts</string>
+        <key>platforms</key>
+        <map>
+          <key>darwin64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>6041bbd4001e3951f96ac3456c7906da</string>
+              <key>url</key>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/113314/980656/viewer_fonts-1.579464-darwin64-579464.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>darwin64</string>
+          </map>
+          <key>windows64</key>
+          <map>
+            <key>archive</key>
+            <map>
+              <key>hash</key>
+              <string>1745ba6eec0108250446fe01d4aa065c</string>
+              <key>url</key>
+              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/113307/980631/viewer_fonts-1.579464-windows64-579464.tar.bz2</string>
+            </map>
+            <key>name</key>
+            <string>windows64</string>
+          </map>
+        </map>
+        <key>version</key>
+        <string>1.579464</string>
+      </map>
       <key>viewer-manager</key>
       <map>
         <key>platforms</key>
@@ -3302,7 +3496,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE</string>
                   <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
                   <string>-DINSTALL_PROPRIETARY=TRUE</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3322,11 +3516,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE</string>
                   <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>../indra</string>
-</array>
+                </array>
               </map>
               <key>name</key>
               <string>RelWithDebInfoOS</string>
@@ -3343,7 +3537,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE</string>
                   <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
                   <string>-DINSTALL_PROPRIETARY=TRUE</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3363,11 +3557,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE</string>
                   <string>-DROOT_PROJECT_NAME:STRING=SecondLife</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>../indra</string>
-</array>
+                </array>
               </map>
               <key>name</key>
               <string>ReleaseOS</string>
@@ -3570,11 +3764,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>-G</string>
                   <string>Xcode</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>../indra</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3604,7 +3798,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>-G</string>
                   <string>Xcode</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3634,11 +3828,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>-G</string>
                   <string>Xcode</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>../indra</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3664,7 +3858,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>-G</string>
                   <string>Xcode</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3795,11 +3989,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-G</string>
                   <string>Ninja</string>
                   <string>-DLL_TESTS=Off</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>../indra</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3822,7 +4016,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-G</string>
                   <string>Ninja</string>
                   <string>-DLL_TESTS=Off</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3954,11 +4148,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>${AUTOBUILD_WIN_CMAKE_GEN|NOTWIN}</string>
                   <string>-A</string>
                   <string>${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>..\indra</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -3968,11 +4162,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>/build</string>
                   <string>RelWithDebInfo|${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>SecondLife.sln</string>
-</array>
+                </array>
               </map>
               <!-- FS:Ansariel: This will cause packages being installed twice
               <key>default</key>
@@ -3994,11 +4188,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
                   <string>-DUSE_OPENAL:BOOL=ON</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>..\indra</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -4012,11 +4206,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>/p:useenv=true</string>
                   <string>/verbosity:minimal</string>
                   <string>/p:VCBuildAdditionalOptions= /incremental</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>SecondLife.sln</string>
-</array>
+                </array>
               </map>
               <key>name</key>
               <string>RelWithDebInfoOS</string>
@@ -4031,11 +4225,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>${AUTOBUILD_WIN_CMAKE_GEN|NOTWIN}</string>
                   <string>-A</string>
                   <string>${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>..\indra</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -4045,11 +4239,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                 <array>
                   <string>/build</string>
                   <string>Release|${AUTOBUILD_WIN_VSPLATFORM|NOTWIN}</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>SecondLife.sln</string>
-</array>
+                </array>
               </map>
               <key>name</key>
               <string>Release</string>
@@ -4068,11 +4262,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
                   <string>-DUSE_OPENAL:BOOL=ON</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>..\indra</string>
-</array>
+                </array>
               </map>
               <key>build</key>
               <map>
@@ -4086,11 +4280,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
                   <string>/p:useenv=true</string>
                   <string>/verbosity:minimal</string>
                   <string>/p:VCBuildAdditionalOptions= /incremental</string>
-</array>
+                </array>
                 <key>arguments</key>
                 <array>
                   <string>SecondLife.sln</string>
-</array>
+                </array>
               </map>
               <key>name</key>
               <string>ReleaseOS</string>

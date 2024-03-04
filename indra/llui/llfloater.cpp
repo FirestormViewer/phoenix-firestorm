@@ -194,6 +194,7 @@ LLFloater::Params::Params()
 	save_visibility("save_visibility", false),
 	can_dock("can_dock", false),
 	show_title("show_title", true),
+	auto_close("auto_close", false),
 	positioning("positioning", LLFloaterEnums::POSITIONING_RELATIVE),
 	header_height("header_height", 0),
 	legacy_header_height("legacy_header_height", 0),
@@ -271,6 +272,7 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	mCanSnooze(p.can_snooze),		// <FS:Ansariel> FIRE-11724: Snooze group chat
 	mDragOnLeft(p.can_drag_on_left),
 	mResizable(p.can_resize),
+	mAutoClose(p.auto_close),
 	mPositioning(p.positioning),
 	mMinWidth(p.min_width),
 	mMinHeight(p.min_height),
@@ -539,6 +541,7 @@ void LLFloater::enableResizeCtrls(bool enable, bool width, bool height)
 
 void LLFloater::destroy()
 {
+	gFloaterView->onDestroyFloater(this);
 	// LLFloaterReg should be synchronized with "dead" floater to avoid returning dead instance before
 	// it was deleted via LLMortician::updateClass(). See EXT-8458.
 	LLFloaterReg::removeInstance(mInstanceName, mKey);
@@ -737,7 +740,7 @@ void LLFloater::openFloater(const LLSD& key)
 	if (getHost() != NULL)
 	{
 		getHost()->setMinimized(FALSE);
-		getHost()->setVisibleAndFrontmost(mAutoFocus);
+		getHost()->setVisibleAndFrontmost(mAutoFocus && !getIsChrome());
 		getHost()->showFloater(this);
 		// <FS:Zi> Make sure the floater knows it's not torn off
 		mTornOff = false;
@@ -754,7 +757,7 @@ void LLFloater::openFloater(const LLSD& key)
 		}
 		applyControlsAndPosition(floater_to_stack);
 		setMinimized(FALSE);
-		setVisibleAndFrontmost(mAutoFocus);
+		setVisibleAndFrontmost(mAutoFocus && !getIsChrome());
 	}
 
 	mOpenSignal(this, key);
@@ -894,6 +897,24 @@ void LLFloater::closeHostedFloater()
 void LLFloater::reshape(S32 width, S32 height, BOOL called_from_parent)
 {
 	LLPanel::reshape(width, height, called_from_parent);
+}
+
+// virtual
+void LLFloater::translate(S32 x, S32 y)
+{
+    LLView::translate(x, y);
+
+    if (!mTranslateWithDependents || mDependents.empty())
+        return;
+
+    for (const LLHandle<LLFloater>& handle : mDependents)
+    {
+        LLFloater* floater = handle.get();
+        if (floater && floater->getSnapTarget() == getHandle())
+        {
+            floater->LLView::translate(x, y);
+        }
+    }
 }
 
 void LLFloater::releaseFocus()
@@ -1204,9 +1225,9 @@ BOOL LLFloater::canSnapTo(const LLView* other_view)
 
 	if (other_view != getParent())
 	{
-		const LLFloater* other_floaterp = dynamic_cast<const LLFloater*>(other_view);		
-		if (other_floaterp 
-			&& other_floaterp->getSnapTarget() == getHandle() 
+		const LLFloater* other_floaterp = dynamic_cast<const LLFloater*>(other_view);
+		if (other_floaterp
+			&& other_floaterp->getSnapTarget() == getHandle()
 			&& mDependents.find(other_floaterp->getHandle()) != mDependents.end())
 		{
 			// this is a dependent that is already snapped to us, so don't snap back to it
@@ -1596,30 +1617,40 @@ BOOL LLFloater::isFrontmost()
 				&& floater_view->getFrontmost() == this);
 }
 
-void LLFloater::addDependentFloater(LLFloater* floaterp, BOOL reposition)
+void LLFloater::addDependentFloater(LLFloater* floaterp, BOOL reposition, BOOL resize)
 {
 	mDependents.insert(floaterp->getHandle());
 	floaterp->mDependeeHandle = getHandle();
 
 	if (reposition)
 	{
-		floaterp->setRect(gFloaterView->findNeighboringPosition(this, floaterp));
+		LLRect rect = gFloaterView->findNeighboringPosition(this, floaterp);
+		if (resize)
+		{
+			const LLRect& base = getRect();
+			if (rect.mTop == base.mTop)
+				rect.mBottom = base.mBottom;
+			else if (rect.mLeft == base.mLeft)
+				rect.mRight = base.mRight;
+			floaterp->reshape(rect.getWidth(), rect.getHeight(), FALSE);
+		}
+		floaterp->setRect(rect);
 		floaterp->setSnapTarget(getHandle());
 	}
 	gFloaterView->adjustToFitScreen(floaterp, FALSE, TRUE);
 	if (floaterp->isFrontmost())
 	{
 		// make sure to bring self and sibling floaters to front
-		gFloaterView->bringToFront(floaterp);
+		gFloaterView->bringToFront(floaterp, floaterp->getAutoFocus() && !getIsChrome());
 	}
 }
 
-void LLFloater::addDependentFloater(LLHandle<LLFloater> dependent, BOOL reposition)
+void LLFloater::addDependentFloater(LLHandle<LLFloater> dependent, BOOL reposition, BOOL resize)
 {
 	LLFloater* dependent_floaterp = dependent.get();
 	if(dependent_floaterp)
 	{
-		addDependentFloater(dependent_floaterp, reposition);
+		addDependentFloater(dependent_floaterp, reposition, resize);
 	}
 }
 
@@ -1627,6 +1658,79 @@ void LLFloater::removeDependentFloater(LLFloater* floaterp)
 {
 	mDependents.erase(floaterp->getHandle());
 	floaterp->mDependeeHandle = LLHandle<LLFloater>();
+}
+
+// <FS:Ansariel> Fix floater relocation
+//void LLFloater::fitWithDependentsOnScreen(const LLRect& left, const LLRect& bottom, const LLRect& right, const LLRect& constraint, S32 min_overlap_pixels)
+void LLFloater::fitWithDependentsOnScreen(const LLRect& left, const LLRect& bottom, const LLRect& right, const LLRect& chatbar, const LLRect& utilitybar, const LLRect& constraint, S32 min_overlap_pixels)
+// </FS:Ansariel>
+{
+    LLRect total_rect = getRect();
+
+    for (const LLHandle<LLFloater>& handle : mDependents)
+    {
+        LLFloater* floater = handle.get();
+        if (floater && floater->getSnapTarget() == getHandle())
+        {
+            total_rect.unionWith(floater->getRect());
+        }
+    }
+
+	S32 delta_left = left.notEmpty() ? left.mRight - total_rect.mRight : 0;
+	S32 delta_bottom = bottom.notEmpty() ? bottom.mTop - total_rect.mTop : 0;
+	S32 delta_right = right.notEmpty() ? right.mLeft - total_rect.mLeft : 0;
+	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
+	S32 delta_bottom_chatbar = chatbar.notEmpty() ? chatbar.mTop - total_rect.mTop : 0;
+	S32 delta_utility_bar = utilitybar.notEmpty() ? utilitybar.mTop - total_rect.mTop : 0;
+
+	// <FS:Ansariel> Fix floater relocation for vertical toolbars; Only header guarantees that floater can be dragged!
+	S32 header_height = getHeaderHeight();
+
+	// move floater with dependings fully onscreen
+    mTranslateWithDependents = true;
+    if (translateRectIntoRect(total_rect, constraint, min_overlap_pixels))
+    {
+        clearSnapTarget();
+    }
+	// <FS:Ansariel> Fix floater relocation for vertical toolbars; Only header guarantees that floater can be dragged!
+	//else if (delta_left > 0 && total_rect.mTop < left.mTop && total_rect.mBottom > left.mBottom)
+	else if (delta_left > 0 && total_rect.mTop < left.mTop && (total_rect.mTop - header_height) > left.mBottom)
+	// </FS:Ansariel>
+	{
+        translate(delta_left, 0);
+    }
+	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
+	//else if (delta_bottom > 0 && total_rect.mLeft > bottom.mLeft && total_rect.mRight < bottom.mRight)
+	else if (delta_bottom > 0 && ((total_rect.mLeft > bottom.mLeft && total_rect.mRight < bottom.mRight) // floater completely within toolbar rect
+		|| (total_rect.mLeft > bottom.mLeft && total_rect.mLeft < bottom.mRight && bottom.mRight > constraint.mRight) // floater partially within toolbar rect, toolbar bound to right side
+		|| (delta_bottom_chatbar > 0 && total_rect.mLeft < chatbar.mRight && total_rect.mRight > bottom.mLeft && bottom.mLeft <= chatbar.mRight)) // floater within chatbar and toolbar rect
+		)
+	// </FS:Ansariel>
+	{
+        translate(0, delta_bottom);
+    }
+	// <FS:Ansariel> Fix floater relocation for vertical toolbars; Only header guarantees that floater can be dragged!
+	//else if (delta_right < 0 && total_rect.mTop < right.mTop    && total_rect.mBottom > right.mBottom)
+	else if (delta_right < 0 && total_rect.mTop < right.mTop && (total_rect.mTop - header_height) > right.mBottom)
+	// </FS:Ansariel>
+	{
+        translate(delta_right, 0);
+    }
+	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
+	else if (delta_bottom_chatbar > 0 && ((total_rect.mLeft > chatbar.mLeft && total_rect.mRight < chatbar.mRight) // floater completely within chatbar rect
+		|| (total_rect.mRight > chatbar.mLeft && total_rect.mRight < chatbar.mRight && chatbar.mLeft < constraint.mLeft) // floater partially within chatbar rect, chatbar bound to left side
+		|| (delta_bottom > 0 && total_rect.mRight > bottom.mLeft && total_rect.mLeft < chatbar.mRight && bottom.mLeft <= chatbar.mRight)) // floater within chatbar and toolbar rect
+		)
+	{
+		translate(0, delta_bottom_chatbar);
+	}
+	else if (delta_utility_bar > 0 && (total_rect.mLeft > utilitybar.mLeft && total_rect.mRight < utilitybar.mRight))
+	{
+		// Utility bar on legacy skins
+		translate(0, delta_utility_bar);
+	}
+	// </FS:Ansariel>
+	mTranslateWithDependents = false;
 }
 
 BOOL LLFloater::offerClickToButton(S32 x, S32 y, MASK mask, EFloaterButton index)
@@ -1719,6 +1823,7 @@ BOOL LLFloater::handleDoubleClick(S32 x, S32 y, MASK mask)
 	return was_minimized || LLPanel::handleDoubleClick(x, y, mask);
 }
 
+// virtual
 void LLFloater::bringToFront( S32 x, S32 y )
 {
 	if (getVisible() && pointInView(x, y))
@@ -1733,12 +1838,20 @@ void LLFloater::bringToFront( S32 x, S32 y )
 			LLFloaterView* parent = dynamic_cast<LLFloaterView*>( getParent() );
 			if (parent)
 			{
-				parent->bringToFront( this );
+				parent->bringToFront(this, !getIsChrome());
 			}
 		}
 	}
 }
 
+// virtual
+void LLFloater::goneFromFront()
+{
+    if (mAutoClose)
+    {
+        closeFloater();
+    }
+}
 
 // virtual
 void LLFloater::setVisibleAndFrontmost(BOOL take_focus,const LLSD& key)
@@ -2517,7 +2630,8 @@ LLFloaterView::LLFloaterView (const Params& p)
 	mSnapOffsetBottom(0),
 	mSnapOffsetChatBar(0),
 	mSnapOffsetLeft(0),
-	mSnapOffsetRight(0)
+	mSnapOffsetRight(0),
+	mFrontChild(NULL)
 {
 	mSnapView = getHandle();
 }
@@ -2673,16 +2787,21 @@ void LLFloaterView::bringToFront(LLFloater* child, BOOL give_focus, BOOL restore
 	if (!child)
 		return;
 
-	if (mFrontChildHandle.get() == child)
+	if (mFrontChild == child)
 	{
-		if (give_focus && !gFocusMgr.childHasKeyboardFocus(child))
+		if (give_focus && child->canFocusStealFrontmost() && !gFocusMgr.childHasKeyboardFocus(child))
 		{
 			child->setFocus(TRUE);
 		}
 		return;
 	}
 
-	mFrontChildHandle = child->getHandle();
+	if (mFrontChild && !mFrontChild->isDead())
+	{
+		mFrontChild->goneFromFront();
+	}
+
+	mFrontChild = child;
 
 	// *TODO: make this respect floater's mAutoFocus value, instead of
 	// using parameter
@@ -3113,10 +3232,17 @@ void LLFloaterView::adjustToFitScreen(LLFloater* floater, BOOL allow_partial_out
 		// floater is hosted elsewhere, so ignore
 		return;
 	}
+
+	if (floater->getDependee() &&
+		floater->getDependee() == floater->getSnapTarget().get())
+	{
+		// floater depends on other and snaps to it, so ignore
+		return;
+	}
+
 	LLRect::tCoordType screen_width = getSnapRect().getWidth();
 	LLRect::tCoordType screen_height = getSnapRect().getHeight();
 
-	
 	// only automatically resize non-minimized, resizable floaters
 	if( floater->isResizable() && !floater->isMinimized() )
 	{
@@ -3158,64 +3284,12 @@ void LLFloaterView::adjustToFitScreen(LLFloater* floater, BOOL allow_partial_out
 		}
 	}
 
-	const LLRect& left_toolbar_rect = mToolbarLeftRect;
-	const LLRect& bottom_toolbar_rect = mToolbarBottomRect;
-	const LLRect& right_toolbar_rect = mToolbarRightRect;
-	const LLRect& floater_rect = floater->getRect();
+    const LLRect& constraint = snap_in_toolbars ? getSnapRect() : gFloaterView->getRect();
+    S32 min_overlap_pixels = allow_partial_outside ? FLOATER_MIN_VISIBLE_PIXELS : S32_MAX;
 
-	S32 delta_left = left_toolbar_rect.notEmpty() ? left_toolbar_rect.mRight - floater_rect.mRight : 0;
-	S32 delta_bottom = bottom_toolbar_rect.notEmpty() ? bottom_toolbar_rect.mTop - floater_rect.mTop : 0;
-	S32 delta_right = right_toolbar_rect.notEmpty() ? right_toolbar_rect.mLeft - floater_rect.mLeft : 0;
-	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
-	S32 delta_bottom_chatbar = mMainChatbarRect.notEmpty() ? mMainChatbarRect.mTop - floater_rect.mTop : 0;
-	S32 delta_utility_bar = mUtilityBarRect.notEmpty() ? mUtilityBarRect.mTop - floater_rect.mTop : 0;
-
-	// <FS:Ansariel> Fix floater relocation for vertical toolbars; Only header guarantees that floater can be dragged!
-	S32 header_height = floater->getHeaderHeight();
-
-	// move window fully onscreen
-	if (floater->translateIntoRect( snap_in_toolbars ? getSnapRect() : gFloaterView->getRect(), allow_partial_outside ? FLOATER_MIN_VISIBLE_PIXELS : S32_MAX ))
-	{
-		floater->clearSnapTarget();
-	}
-	// <FS:Ansariel> Fix floater relocation for vertical toolbars; Only header guarantees that floater can be dragged!
-	//else if (delta_left > 0 && floater_rect.mTop < left_toolbar_rect.mTop && floater_rect.mBottom > left_toolbar_rect.mBottom)
-	else if (delta_left > 0 && floater_rect.mTop < left_toolbar_rect.mTop && (floater_rect.mTop - header_height) > left_toolbar_rect.mBottom)
-	// </FS:Ansariel>
-	{
-		floater->translate(delta_left, 0);
-	}
-	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
-	//else if (delta_bottom > 0 && floater_rect.mLeft > bottom_toolbar_rect.mLeft && floater_rect.mRight < bottom_toolbar_rect.mRight)
-	else if (delta_bottom > 0 && ((floater_rect.mLeft > bottom_toolbar_rect.mLeft && floater_rect.mRight < bottom_toolbar_rect.mRight) // floater completely within toolbar rect
-		|| (floater_rect.mLeft > bottom_toolbar_rect.mLeft && floater_rect.mLeft < bottom_toolbar_rect.mRight && bottom_toolbar_rect.mRight > gFloaterView->getRect().mRight) // floater partially within toolbar rect, toolbar bound to right side
-		|| (delta_bottom_chatbar > 0 && floater_rect.mLeft < mMainChatbarRect.mRight && floater_rect.mRight > bottom_toolbar_rect.mLeft && bottom_toolbar_rect.mLeft <= mMainChatbarRect.mRight)) // floater within chatbar and toolbar rect
-		)
-	// </FS:Ansariel>
-	{
-		floater->translate(0, delta_bottom);
-	}
-	// <FS:Ansariel> Fix floater relocation for vertical toolbars; Only header guarantees that floater can be dragged!
-	//else if (delta_right < 0 && floater_rect.mTop < right_toolbar_rect.mTop	&& floater_rect.mBottom > right_toolbar_rect.mBottom)
-	else if (delta_right < 0 && floater_rect.mTop < right_toolbar_rect.mTop && (floater_rect.mTop - header_height) > right_toolbar_rect.mBottom)
-	// </FS:Ansariel>
-	{
-		floater->translate(delta_right, 0);
-	}
-	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
-	else if (delta_bottom_chatbar > 0 && ((floater_rect.mLeft > mMainChatbarRect.mLeft && floater_rect.mRight < mMainChatbarRect.mRight) // floater completely within chatbar rect
-		|| (floater_rect.mRight > mMainChatbarRect.mLeft && floater_rect.mRight < mMainChatbarRect.mRight && mMainChatbarRect.mLeft < gFloaterView->getRect().mLeft) // floater partially within chatbar rect, chatbar bound to left side
-		|| (delta_bottom > 0 && floater_rect.mRight > bottom_toolbar_rect.mLeft && floater_rect.mLeft < mMainChatbarRect.mRight && bottom_toolbar_rect.mLeft <= mMainChatbarRect.mRight)) // floater within chatbar and toolbar rect
-		)
-	{
-		floater->translate(0, delta_bottom_chatbar);
-	}
-	else if (delta_utility_bar > 0 && (floater_rect.mLeft > mUtilityBarRect.mLeft && floater_rect.mRight < mUtilityBarRect.mRight))
-	{
-		// Utility bar on legacy skins
-		floater->translate(0, delta_utility_bar);
-	}
-	// </FS:Ansariel>
+	// <FS:Ansariel> Fix floater relocation
+	//floater->fitWithDependentsOnScreen(mToolbarLeftRect, mToolbarBottomRect, mToolbarRightRect, constraint, min_overlap_pixels);
+	floater->fitWithDependentsOnScreen(mToolbarLeftRect, mToolbarBottomRect, mToolbarRightRect, mMainChatbarRect, mUtilityBarRect, constraint, min_overlap_pixels);
 }
 
 void LLFloaterView::draw()
@@ -3314,6 +3388,9 @@ LLFloater *LLFloaterView::getBackmost() const
 
 void LLFloaterView::syncFloaterTabOrder()
 {
+	if (mFrontChild && !mFrontChild->isDead() && mFrontChild->getIsChrome())
+		return;
+
 	// look for a visible modal dialog, starting from first
 	LLModalDialog* modal_dialog = NULL;
 	for ( child_list_const_iter_t child_it = getChildList()->begin(); child_it != getChildList()->end(); ++child_it)
@@ -3349,7 +3426,34 @@ void LLFloaterView::syncFloaterTabOrder()
 			LLFloater* floaterp = dynamic_cast<LLFloater*>(*child_it);
 			if (gFocusMgr.childHasKeyboardFocus(floaterp))
 			{
-				bringToFront(floaterp, FALSE);
+                if (mFrontChild != floaterp)
+                {
+                    // Grab a list of the top floaters that want to stay on top of the focused floater
+					std::list<LLFloater*> listTop;
+					if (mFrontChild && !mFrontChild->canFocusStealFrontmost())
+                    {
+                        for (LLView* childp : *getChildList())
+                        {
+							LLFloater* child_floaterp = static_cast<LLFloater*>(childp);
+                            if (child_floaterp->canFocusStealFrontmost())
+                                break;
+							listTop.push_back(child_floaterp);
+                        }
+                    }
+
+                    bringToFront(floaterp, FALSE);
+
+                    // Restore top floaters
+					if (!listTop.empty())
+					{
+						for (LLView* childp : listTop)
+						{
+							sendChildToFront(childp);
+						}
+						mFrontChild = listTop.back();
+					}
+                }
+
 				break;
 			}
 		}
@@ -3440,6 +3544,14 @@ void LLFloaterView::setToolbarRect(LLToolBarEnums::EToolBarLocation tb, const LL
 		LL_WARNS() << "setToolbarRect() passed odd toolbar number " << (S32) tb << LL_ENDL;
 		break;
 	}
+}
+
+void LLFloaterView::onDestroyFloater(LLFloater* floater)
+{
+    if (mFrontChild == floater)
+    {
+        mFrontChild = nullptr;
+    }
 }
 
 // <FS:Ansariel> Prevent floaters being dragged under main chat bar
@@ -3566,6 +3678,7 @@ void LLFloater::initFromParams(const LLFloater::Params& p)
 	mDefaultRelativeY = p.rel_y;
 
 	mPositioning = p.positioning;
+	mAutoClose = p.auto_close;
 
 	mHostedFloaterShowtitlebar = p.hosted_floater_show_titlebar; // <FS:Ansariel> MultiFloater without titlebar for hosted floater
 

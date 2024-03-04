@@ -5431,6 +5431,39 @@ Décompression : [UNPACK_TIME]s [USIZE]KB
 			<button name="cancel" text="Annuler" />
 		</form>
 	</notification>
+	<notification label="Créer un sous-dossier" name="CreateSubfolder">
+		Nommez le nouveau dossier :
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Annuler"/>
+		</form>
+	</notification>
+	<notification name="SameFolderRequired">
+		Les éléments sélectionnés doivent être dans le même dossier.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="RiggedMeshAttachedToHUD">
+		Un objet "[NAME]" attaché au point du HUD "[POINT]" contient des mesh riggés.
+
+Les mesh riggés sont conçus pour être attachés à l'avatar. Ni vous ni personne d'autre ne verra cet objet.
+
+Si vous souhaitez voir cet objet, retirez-le et rattachez-le à un point d'attache de l'avatar.
+		<usetemplate ignoretext="M'avertir lorsqu'un mesh riggé est attaché à un point du HUD." name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="ReflectionProbeApplied">
+		ATTENTION : Vous avez fait de votre objet une sonde de réflexion.  Cela modifiera implicitement l'objet pour imiter son volume d'influence et entraînera des modifications irréversibles de cet objet.  Voulez-vous continuer ?
+		<usetemplate ignoretext="Conseils pour la sonde de réflexion" name="okcancelignore" notext="Annuler" yestext="OK"/>
+	</notification>
+	<notification name="AutoAdjustHDRSky">
+		Vous modifiez un ciel non HDR qui a été automatiquement converti en HDR. Pour supprimer le HDR et le mappage des tons, réglez l'Ambiance de la sonde de réflexion sur zéro.
+		<usetemplate ignoretext="Avertissement concernant l'ajustement du ciel HDR" name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="EnableAutoFPSWarning">
+		Vous êtes sur le point d'activer l'AutoFPS. Tous les paramètres graphiques non sauvegardés seront perdus.
+
+Voulez-vous d'abord les sauvegarder ?
+		<usetemplate name="okcancelbuttons" notext="No" yestext="Yes"/>
+	</notification>
 	<notification name="NoValidEnvSettingFound">
 		Aucun paramètre d'environnement valide n'a été sélectionné.
 

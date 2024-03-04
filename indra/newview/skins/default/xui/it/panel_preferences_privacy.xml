@@ -32,7 +32,7 @@
 			<check_box label="Mostra automaticamente annotazioni, texture e segnaposto dopo averli accettati" name="Show_New_Inventory"/>
 			<check_box label="Mostra automaticamente le foto in inventario dopo lo scatto" name="FSOpenInventoryAfterSnapshot" />
 			<check_box label="Crea flusso di particelle quando si offre un&apos;oggetto ad un altro residente" name="FSCreateGiveInventoryParticleEffect"/>
-			<button label="Organizza lista muti/bloccati" name="block_list"/>
+			<button label="Gestisci lista bloccati" name="block_list"/>
 		</panel>
 		<panel label="Log e Trascrizioni" name="tab-logging" >
 			<text name="logging_label">
@@ -57,10 +57,10 @@
 			</text>
 			<combo_box name="lookatshownames_combobox">
 				<combo_box.item label="Nessuno" name="None"/>
-				<combo_box.item label="Nome completo" name="Complete_Name"/>
-				<combo_box.item label="Display name" name="Display_Name"/>
-				<combo_box.item label="Legacy name" name="Legacy_Name"/>
-				<combo_box.item label="Nome utente" name="User_Name"/>
+				<combo_box.item label="Nome Completo" name="Complete_Name"/>
+				<combo_box.item label="Nome Visualizzato" name="Display_Name"/>
+				<combo_box.item label="Nome Utente" name="Legacy_Name"/>
+				<combo_box.item label="Username" name="User_Name"/>
 			</combo_box>
 			<check_box label="Non mostrarmi il mio sguardo" name="LookAtHideOwn" tool_tip="Non mostra il mio sguardo sul mio schermo"/>
 			<check_box label="Traccia linea allo sguardo" name="ExodusLookAtLines" tool_tip="Traccia una linea dall&apos;avatar al crocino che indica l&apos;obiettivo dello sguardo"/>
@@ -86,7 +86,7 @@
 				Risposta automatica per tutti i residenti che non sono amici:
 			</text>
 			<check_box label="Manda autorisposta quando Assente:" name="send_away_av_response" tool_tip="Inviare questo testo quando si riceve un IM in modalità assente."/>
-			<check_box label="Abilita risposta automatica agli avatar MUTI" name="send_muted_av_response" tool_tip="Send the text below when someone you&apos;ve muted sends you an IM."/>
+			<check_box label="Abilita risposta automatica agli avatar bloccati" name="send_muted_av_response" tool_tip="Invia il testo qui sotto quando qualcuno che hai bloccato ti invia un IM."/>
 		</panel>
 		<panel label="Autorisposte 2" name="tab-autoresponse-2">
 			<text name="autorespond_rto_response_label">

@@ -80,8 +80,13 @@
 		<check_box label="Ridimensionamento automatico elenchi Conversazioni e Notifiche legacy" name="FSLegacyNotificationWellAutoResize" tool_tip="Se selezionato, Firestorm ridimensionerà automaticamente gli elenchi delle conversazioni e delle notifiche legacy quando vengono aggiunti o rimossi elementi." />
 		<check_box label="Rimappa le scorciatoie usate da Linux (solo Linux; richiede riavvio)" name="FSRemapLinuxShortcuts" tool_tip="Le scorciatoie da tastiera usate dal sistema operativo Linux (come Ctrl-Alt-Fx) saranno spostate su altri tasti."/>
 		<check_box label="Impedisci alla finestra statistiche di andare in primo piano" name="FSStatisticsNoFocus" tool_tip="La finestra statistiche non andrà mai in primo piano quando un&apos;altra finestra viene chiusa (le azioni come cambiare la disposizione grafica degli elementi saranno sempre possibili)."/>
-		<slider label="Lampeggia pulsanti IM:" tool_tip="Quante volte deve lampeggiare un pulsante" name="ButtonsFlashCount"/>
-		<slider label="Velocità:" tool_tip="Con che velocità devono lampeggiare. Viene usata per le notifiche delle IM" name="ButtonFlashRate"/>
+		<check_box label="Mostra immagini delle cartelle e degli elementi dell'inventario" name="FSShowInventoryThumbnailTooltips" tool_tip="Se abilitato, passando il mouse sugli elementi dell'inventario con un'immagine di anteprima impostata, verrà mostrata l'immagine come suggerimento." />
+		<slider label="Mostra immagine dopo:" tool_tip="Il ritardo per i suggerimenti che mostrano le immagini degli elementi dell'inventario." name="FSInventoryThumbnailTooltipsDelay" />
+		<text name="FSInventoryThumbnailTooltipsDelayText">
+			sec
+		</text>
+		<slider label="Lampeggia linguette IM:" tool_tip="Quante volte deve lampeggiare la linguetta della scheda IM quando ricevi un messaggio" name="ButtonsFlashCount"/>
+		<slider label="Velocità di lampeggiamento:" tool_tip="Indica la durata in secondi di un singolo flash. Viene usato per le notifiche degli IM" name="ButtonFlashRate"/>
 	</panel>
 	<panel name="UI-interface-top-bars" label="Barra Superiore">
 		<text name="statusbar_textbox">
@@ -128,7 +133,7 @@
 		</text>
 		<check_box name="FSUseStandaloneGroupFloater" label="Profili gruppo" tool_tip="I profili dei gruppi si aprono in finestre separate."/>
 		<check_box name="FSUseStandaloneTeleportHistoryFloater" label="Storico teleport" tool_tip="Usando la scorciatoia per lo storico dei teleport si apre una finestra separata."/>
-		<check_box name="FSUseStandaloneBlocklistFloater" label="Liste blocco/muto" tool_tip="La lista dei residenti e oggetti bloccati/muti viene aperta in una finestra a parte."/>
+		<check_box name="FSUseStandaloneBlocklistFloater" label="Lista bloccati" tool_tip="La lista dei residenti e degli oggetti bloccati viene aperta in una finestra a parte."/>
 		<check_box name="FSUseStandalonePlaceDetailsFloater" label="Segnaposto, dettagli luogo e dettagli storico teleport" tool_tip="I segnaposto, i dettagli sul luogo e sullo storico dei teleport si aprono in finestre separate."/>
 		<text name="ExtendedTeleportHistoryLabel">
 			Completa storico teleport con:
@@ -141,22 +146,22 @@
 		<text name="textFriendlistColumns">
 			Colonne nome visibili:
 		</text>
-		<check_box label="Nome utente" name="FSFriendListColumnShowUserName" tool_tip="La lista dei contatti ha una colonna con il nome utente degli amici." width="80"/>
-		<check_box label="Nome mostrato" name="FSFriendListColumnShowDisplayName" tool_tip="La lista dei contatti ha una colonna con il nome mostrato (display name) degli amici." width="95"/>
-		<check_box label="Nome completo" name="FSFriendListColumnShowFullName" tool_tip="La lista dei contatti ha una colonna con il nome completo degli amici."/>
+		<check_box label="Nome Utente" name="FSFriendListColumnShowUserName" tool_tip="La lista dei contatti ha una colonna con il nome utente degli amici." width="80"/>
+		<check_box label="Nome Visualizzato" name="FSFriendListColumnShowDisplayName" tool_tip="La lista dei contatti ha una colonna con il nome visualizzato (display name) degli amici." width="95"/>
+		<check_box label="Nome Completo" name="FSFriendListColumnShowFullName" tool_tip="La lista dei contatti ha una colonna con il nome completo degli amici."/>
 		<text name="textFriendListSortOrder" width="100">
 			Ordina lista per:
 		</text>
 		<radio_group name="FSFriendListSortOrder">
-			<radio_item label="Nome utente" name="username" width="80"/>
-			<radio_item label="Nome mostrato" name="displayname"/>
+			<radio_item label="Nome Utente" name="username" width="80"/>
+			<radio_item label="Nome Visualizzato" name="displayname"/>
 		</radio_group>
 		<text name="textFriendListFullNameFormat" width="130">
-			Mostra nome completo:
+			Formato Nome Completo:
 		</text>
 		<radio_group name="FSFriendListFullNameFormat">
-			<radio_item label="Nome ut (Nome mos)" name="username_displayname"/>
-			<radio_item label="Nome mos (Nome ut)" name="displayname_username"/>
+			<radio_item label="Nome Ut. (Nome Vis.)" name="username_displayname"/>
+			<radio_item label="Nome Vis. (Nome Ut.)" name="displayname_username"/>
 		</radio_group>
 		<check_box label="Mostra colonna permessi" name="FSFriendListColumnShowPermissions" tool_tip="La lista dei contatti ha una colonna con i permessi concessi all&apos;avatar e da lui concessi."/>
 		<check_box label="Mostra filtro ricerca" name="FSContactListShowSearch" tool_tip="La lista dei contatti ha una casella di ricerca per filtrare l&apos;elenco."/>
@@ -248,6 +253,15 @@ cartelle inventario:
 			pixel (richiesto riavvio)
 [VIEWER_GENERATION]-Default 20. V1 Default 18.
 		</text>
+		<text name="text_box_notecard_font" width="135">
+			Carattere annotazioni:
+		</text>
+		<combo_box name="FSNotecardFontName" tool_tip="Il nome del carattere utilizzato nell'editor delle annotazioni" />
+		<combo_box name="FSNotecardFontSize" tool_tip="La dimensione del carattere utilizzato nell'editor delle annotazioni">
+			<combo_item name="Small" label="Piccolo" />
+			<combo_item name="Medium" label="Medio" />
+			<combo_item name="Large" label="Grande" />
+		</combo_box>
 	</panel>
 </tab_container>
 </panel>

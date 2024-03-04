@@ -404,7 +404,7 @@
 		</menu_item_check>
 		<menu_item_check
 			name="inventory_sort_by_date"
-			label="By Date">
+			label="By Most Recent">
 			<on_click
 				function="Inventory.SortBy.Set"
 				parameter="date" />

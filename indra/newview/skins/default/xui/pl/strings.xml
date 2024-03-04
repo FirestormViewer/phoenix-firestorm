@@ -67,12 +67,6 @@ Mnożnik poziomu detali (LOD Factor): [LOD]
 Jakość wyświetlania (Render quality): [RENDERQUALITY]
 Zaawansowane oświetlenie (Advanced Lighting Model): [ALMSTATUS]
 	</string>
-	<string name="AboutTextureMemory">
-		Pamięć tekstur (Texture memory): [TEXTUREMEMORY] MB ([TEXTUREMEMORYMULTIPLIER])
-	</string>
-	<string name="AboutTextureMemoryDynamic">
-		Pamięć tekstur (Texture memory): Dynamiczna ([TEXTUREMEMORYMIN] MB min / [TEXTUREMEMORYCACHERESERVE]% Cache / [TEXTUREMEMORYGPURESERVE]% VRAM)
-	</string>
 	<string name="AboutCache">
 		Pamięć podręczna dysku (disk cache): [DISK_CACHE_INFO]
 	</string>
@@ -744,6 +738,11 @@ Tylko przedmioty z nieograniczonymi
 uprawnieniami 'następnego właściciela'
 mogą być dołączane do notek.
 	</string>
+	<string name="TooltipTextureRestrictedDrop">
+Tylko tekstury z nieograniczonymi
+uprawnieniami kopii i transferu
+są dozwolone.
+	</string>
 	<string name="Searching">
 		Wyszukiwanie...
 	</string>
@@ -909,6 +908,9 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	</string>
 	<string name="settings blob">
 		otoczenie
+	</string>
+	<string name="render material">
+		materiał
 	</string>
 	<string name="mesh">
 		mesz
@@ -1826,6 +1828,7 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	<string name="Clothing" value=" Ubrania,"/>
 	<string name="Gestures" value=" Gesty,"/>
 	<string name="Landmarks" value=" Landmarki,"/>
+	<string name="Materials" value=" Materiały," />
 	<string name="Notecards" value=" Noty,"/>
 	<string name="Objects" value=" Obiekty,"/>
 	<string name="Scripts" value=" Skrypty,"/>
@@ -1931,6 +1934,12 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	</string>
 	<string name="InvFolder Settings">
 		Otoczenia
+	</string>
+	<string name="InvFolder Material">
+		Materiały
+	</string>
+	<string name="InvFolder Materials">
+		Materiały
 	</string>
 	<string name="InvFolder Friends">
 		Znajomi
@@ -2828,8 +2837,8 @@ Jeśli ciągle otrzymujesz tą wiadomość, to skontaktuj się z pomocą technic
 	<string name="GroupMoneyDebits">
 		Obciążenia
 	</string>
-	<string name="GroupMoneyDate">
-		[weekday,datetime,utc], [day,datetime,utc] [mth,datetime,utc] [year,datetime,utc]
+	<string name="GroupMoneyStartDate">
+		Transakcje od [weekday,datetime,utc], [day,datetime,utc] [mth,datetime,utc] [year,datetime,utc]
 	</string>
 	<string name="AcquiredItems">
 		Nabyte obiekty
@@ -3065,16 +3074,6 @@ Uruchomione w oknie.
 	</string>
 	<string name="MBPixelFmtDescErr">
 		Nie otrzymano opisu formatu pikselowego
-	</string>
-	<string name="MBTrueColorWindow">
-		Aplikacja [APP_NAME] wymaga ustawienia koloru na (32-bit) do uruchomienia.
-Ustaw tryb koloru swojego wyświetlacza na 32-bity.
-	</string>
-	<string name="MBAlpha">
-		Aplikacja [APP_NAME] nie może zostać uruchomiona, ponieważ nie może uzyskać dostępu do 8 bitowego kanału alpha. Najczęściej jest to spowodowane błędami sterowników karty video.
-Upewnij się, że posiadasz najnowsze aktualizacje sterowników karty video.
-Dodatkowo, sprawdź czy Twój monitor posiada poprawną konfigurację koloru (32-bity) w Panel Sterowania &gt; Ekran &gt; Ustawienia.
-Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	</string>
 	<string name="MBPixelFmtSetErr">
 		Nie można ustawić formatu pikselowego
@@ -4930,6 +4929,9 @@ Raport o Nadużyciu
 	<string name="New Gesture">
 		Nowy gest
 	</string>
+	<string name="New Material">
+		Nowy materiał
+	</string>
 	<string name="New Script">
 		Nowy skrypt
 	</string>
@@ -5900,6 +5902,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="ExperiencePermissionShort17">
 		Otoczenie
+	</string>
+	<string name="Material Texture Name Header">
+		Tekstury przedstawiają materiał:
 	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Rozmowy nie są zapisywane do dziennika. Jeśli chcesz zacząć je logować wybierz "Zapisywanie: tylko dziennik" lub "Zapisywanie: dziennik i logi rozmów" w Preferencje > Prywatność.

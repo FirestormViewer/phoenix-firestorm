@@ -83,10 +83,10 @@ static const S32 SECONDARY_FLOATER = 2;
 class LLOverlapPanel;
 static LLDefaultChildRegistry::Register<LLOverlapPanel> register_overlap_panel("overlap_panel");
 
-static std::string get_xui_dir()
+static std::string get_xui_dir(const char* skin = "default")         // <FS:Zi> FIRE-33642 - "Edit" button does not open skinned file name if exists
 {
 	std::string delim = gDirUtilp->getDirDelimiter();
-	return gDirUtilp->getSkinBaseDir() + delim + "default" + delim + "xui" + delim;
+	return gDirUtilp->getSkinBaseDir() + delim + skin + delim + "xui" + delim; 	// <FS:Zi> FIRE-33642 - "Edit" button does not open skinned file name if exists
 }
 
 // Forward declarations to avoid header dependencies
@@ -191,7 +191,9 @@ private:
 
 	// Internal functionality
 	static void popupAndPrintWarning(const std::string& warning);	// pop up a warning
-	std::string getLocalizedDirectory();							// build and return the path to the XUI directory for the currently-selected localization
+	// <FS:Zi> FIRE-33642 - "Edit" button does not open skinned file name if exists
+	// std::string getLocalizedDirectory();							// build and return the path to the XUI directory for the currently-selected localization
+	std::string getLocalizedDirectory(const char* skin = "default");// build and return the path to the XUI directory for the currently-selected localization
 	void scanDiffFile(LLXmlTreeNode* file_node);					// scan a given XML node for diff entries and highlight them in its associated file
 	void highlightChangedElements();								// look up the list of elements to highlight and highlight them in the current floater
 	void highlightChangedFiles();									// look up the list of changed files to highlight and highlight them in the scroll list
@@ -637,9 +639,9 @@ std::string LLFloaterUIPreview::getLocStr(S32 ID)
 }
 
 // Get localized directory (build path from data directory to XUI files, substituting localization string in for language)
-std::string LLFloaterUIPreview::getLocalizedDirectory()
+std::string LLFloaterUIPreview::getLocalizedDirectory(const char* skin)        // <FS:Zi> FIRE-33642 - "Edit" button does not open skinned file name if exists
 {
-	return get_xui_dir() + (getLocStr(1)) + mDelim; // e.g. "C:/Code/guipreview/indra/newview/skins/xui/en/";
+	return get_xui_dir(skin) + (getLocStr(1)) + mDelim; // e.g. "C:/Code/guipreview/indra/newview/skins/xui/en/";      // <FS:Zi> FIRE-33642 - "Edit" button does not open skinned file name if exists
 }
 
 // Refresh the list of floaters by doing a directory traverse for XML XUI floater files
@@ -994,10 +996,23 @@ void LLFloaterUIPreview::onClickEditFloater()
 			LL_WARNS() << "No file selected" << LL_ENDL;
 			return;															// ignore click
 		}
-		file_path = getLocalizedDirectory() + file_name;
+		// <FS:Zi> FIRE-33642 - "Edit" button does not open skinned file name if exists
+		// file_path = getLocalizedDirectory() + file_name;
+
+		// first try to use the skinned file name, if this is not found the code below will try the "default" skin
+		file_path = getLocalizedDirectory(gDirUtilp->getSkinFolder().c_str()) + file_name;
+		// </FS:Zi>
 
 		// stat file to see if it exists (some localized versions may not have it there are no diffs, and then we try to open an nonexistent file)
 		llstat dummy;
+
+		// <FS:Zi> FIRE-33642 - "Edit" button does not open skinned file name if exists
+		if (LLFile::stat(file_path.c_str(), &dummy))
+		{
+			file_path = getLocalizedDirectory() + file_name;
+		}
+		// </FS:Zi>
+
 		if(LLFile::stat(file_path.c_str(), &dummy))								// if the file does not exist
 		{
 			popupAndPrintWarning("No file for this floater exists in the selected localization.  Opening the EN version instead.");
@@ -1632,7 +1647,7 @@ void LLOverlapPanel::draw()
 		LLUI::translate(5,getRect().getHeight()-20);	// translate to top-5,left-5
 		LLView::sDrawPreviewHighlights = FALSE;
 		LLFontGL::getFontSansSerifSmall()->renderUTF8(current_selection_text, 0, 0, 0, text_color,
-				LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, S32_MAX, NULL, FALSE);
+				LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::NO_SHADOW);
 	}
 	else
 	{
@@ -1650,7 +1665,7 @@ void LLOverlapPanel::draw()
 			std::string current_selection = std::string(current_selection_text + LLView::sPreviewClickedElement->getName() + " (no elements overlap)");
 			S32 text_width = LLFontGL::getFontSansSerifSmall()->getWidth(current_selection) + 10;
 			LLFontGL::getFontSansSerifSmall()->renderUTF8(current_selection, 0, 0, 0, text_color,
-					LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, S32_MAX, NULL, FALSE);
+					LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::NO_SHADOW);
 			// widen panel enough to fit this text
 			LLRect rect = getRect();
 			setRect(LLRect(rect.mLeft,rect.mTop,rect.getWidth() < text_width ? rect.mLeft + text_width : rect.mRight,rect.mTop));
@@ -1716,7 +1731,7 @@ void LLOverlapPanel::draw()
 		// draw currently-selected element at top of overlappers
 		LLUI::translate(0,-mSpacing);
 		LLFontGL::getFontSansSerifSmall()->renderUTF8(current_selection_text + LLView::sPreviewClickedElement->getName(), 0, 0, 0, text_color,
-				LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, S32_MAX, NULL, FALSE);
+				LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::NO_SHADOW);
 		LLUI::translate(0,-mSpacing-LLView::sPreviewClickedElement->getRect().getHeight());	// skip spacing distance + height
 		LLView::sPreviewClickedElement->draw();
 
@@ -1731,7 +1746,7 @@ void LLOverlapPanel::draw()
 			// draw name
 			LLUI::translate(0,-mSpacing);
 			LLFontGL::getFontSansSerifSmall()->renderUTF8(overlapper_text + viewp->getName(), 0, 0, 0, text_color,
-					LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, S32_MAX, NULL, FALSE);
+					LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::NO_SHADOW);
 
 			// draw element
 			LLUI::translate(0,-mSpacing-viewp->getRect().getHeight());	// skip spacing distance + height

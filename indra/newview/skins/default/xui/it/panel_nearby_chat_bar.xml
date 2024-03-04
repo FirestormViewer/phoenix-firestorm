@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="nearby_chat">
 	<line_editor label="Clicca qui per la chat" name="chat_box" tool_tip="Premi Invio per parlare, Ctrl+Invio per gridare"/>
-	<button name="show_nearby_chat" tool_tip="Mostra/Nasconde il registro della chat locale"/>
+	<button name="show_nearby_chat" tool_tip="Mostra/Nasconde la cronologia della chat locale"/>
 </panel>

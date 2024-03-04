@@ -2,7 +2,7 @@
 <toggleable_menu name="Gear Wearing">
 	<menu_item_call label="Tocca" name="touch"/>
 	<menu_item_call label="Modifica" name="edit_item"/>
-	<menu_item_call label="Modifica vestiario" name="edit_outfit"/>
+	<menu_item_call label="Modifica abito" name="edit_outfit"/>
 	<menu_item_call label="Togli" name="takeoff"/>
-	<menu_item_call label="Copia lista capi indossati negli appunti" name="copy"/>
+	<menu_item_call label="Copia lista articoli indossati negli appunti" name="copy"/>
 </toggleable_menu>

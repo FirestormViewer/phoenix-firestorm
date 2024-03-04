@@ -4888,7 +4888,7 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_ObjectID, object_id);
 
 	// <FS:ND> Protect against corrupted sounds
-	if( gAudiop->isCorruptSound( sound_id ) )
+	if (gAudiop && gAudiop->isCorruptSound(sound_id))
 		return;
 	// </FS:ND>
 

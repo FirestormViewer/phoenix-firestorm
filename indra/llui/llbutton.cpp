@@ -71,6 +71,7 @@ LLButton::Params::Params()
 	label_shadow("label_shadow", true),
 	auto_resize("auto_resize", false),
 	use_ellipses("use_ellipses", false),
+	use_font_color("use_font_color", true),
 	image_unselected("image_unselected"),
 	image_selected("image_selected"),
 	image_hover_selected("image_hover_selected"),
@@ -168,6 +169,7 @@ LLButton::LLButton(const LLButton::Params& p)
 	mDropShadowedText(p.label_shadow),
 	mAutoResize(p.auto_resize),
 	mUseEllipses( p.use_ellipses ),
+	mUseFontColor( p.use_font_color),
 	mHAlign(p.font_halign),
 	mLeftHPad(p.pad_left),
 	mRightHPad(p.pad_right),
@@ -1028,7 +1030,7 @@ void LLButton::draw()
 			LLFontGL::NORMAL,
 			mDropShadowedText ? LLFontGL::DROP_SHADOW_SOFT : LLFontGL::NO_SHADOW,
 			S32_MAX, text_width,
-			NULL, mUseEllipses);
+			NULL, mUseEllipses, mUseFontColor);
 	}
 
 	// <FS:Zi> Add checkbox control toggle
@@ -1097,6 +1099,16 @@ BOOL LLButton::toggleState()
 	return flipped; 
 }
 
+void LLButton::setLabel( const std::string& label )
+{
+	mUnselectedLabel = mSelectedLabel = label;
+}
+
+void LLButton::setLabel( const LLUIString& label )
+{
+	mUnselectedLabel = mSelectedLabel = label;
+}
+
 void LLButton::setLabel( const LLStringExplicit& label )
 {
 	setLabelUnselected(label);
@@ -1128,14 +1140,7 @@ bool LLButton::labelIsTruncated() const
 
 const LLUIString& LLButton::getCurrentLabel() const
 {
-	if( getToggleState() )
-	{
-		return mSelectedLabel;
-	}
-	else
-	{
-		return mUnselectedLabel;
-	}
+	return getToggleState() ? mSelectedLabel : mUnselectedLabel;
 }
 
 void LLButton::setImageUnselected(LLPointer<LLUIImage> image)

@@ -1467,7 +1467,8 @@ void LLFloaterTexturePicker::changeMode()
     mDefaultBtn->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
     mBlankBtn->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
     mNoneBtn->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
-    mTransparentBtn->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel    mFilterEdit->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
+    mTransparentBtn->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
+    mFilterEdit->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
     mInventoryPanel->setVisible(index == PICKER_INVENTORY ? TRUE : FALSE);
 
     getChild<LLButton>("l_add_btn")->setVisible(index == PICKER_LOCAL ? TRUE : FALSE);

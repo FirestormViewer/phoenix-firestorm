@@ -432,6 +432,7 @@ media:
 			<check_box label="Attiva voce" name="parcel_enable_voice_channel"/>
 			<check_box label="Attiva voce (stabilito dalla proprietà)" name="parcel_enable_voice_channel_is_estate_disabled"/>
 			<check_box label="Limita chat vocale a questo lotto" name="parcel_enable_voice_channel_local"/>
+			<check_box label="Limita il MOAP a questo lotto" name="obscure_moap" tool_tip="I media su un prim situati all'esterno di questo lotto non dovrebbero essere riprodotti automaticamente per un avatar all'interno di questo lotto e viceversa." />
 		</panel>
 		<panel label="Accesso" name="land_access_panel">
 			<panel.string name="access_estate_defined">

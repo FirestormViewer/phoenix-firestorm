@@ -121,6 +121,8 @@ typedef enum
 
 	void renderAvatars(LLVOAvatar *single_avatar, S32 pass = -1); // renders only one avatar if single_avatar is not null.
 
+	LLVOAvatar* mAvatar;     // <FS:Zi> Add avatar hitbox debug - remember avatar pointer in case avatar draw face breaks
+
 	static BOOL sSkipOpaque;
 	static BOOL sSkipTransparent;
     static S32  sShadowPass;

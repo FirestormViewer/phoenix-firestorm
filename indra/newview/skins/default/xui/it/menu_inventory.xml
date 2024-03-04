@@ -22,6 +22,7 @@
 	<menu_item_call label="Nuovo script" name="New Script"/>
 	<menu_item_call label="Nuova annotazione" name="New Note"/>
 	<menu_item_call label="Nuovo gesto" name="New Gesture"/>
+	<menu_item_call label="Nuovo materiale" name="New Material"/>
 	<menu label="Nuovo indumento" name="New Clothes">
 		<menu_item_call label="Nuova camicia" name="New Shirt"/>
 		<menu_item_call label="Nuovi pantaloni" name="New Pants"/>
@@ -38,7 +39,7 @@
 		<menu_item_call label="Nuova fisica" name="New Physics"/>
 	</menu>
 	<menu label="Nuova parte del corpo" name="New Body Parts">
-		<menu_item_call label="Nuova forma" name="New Shape"/>
+		<menu_item_call label="Nuovo corpo" name="New Shape"/>
 		<menu_item_call label="Nuova pelle" name="New Skin"/>
 		<menu_item_call label="Nuovi capelli" name="New Hair"/>
 		<menu_item_call label="Nuovi occhi" name="New Eyes"/>
@@ -53,6 +54,7 @@
 		<menu_item_call label="Suoni caricati" name="Sound uploads"/>
 		<menu_item_call label="Animazioni caricate" name="Animation uploads"/>
 		<menu_item_call label="Modelli mesh caricati" name="Model uploads"/>
+		<menu_item_call label="Materiali PBR caricati" name="PBR uploads"/>
 	</menu>
 	<menu label="Cambia tipo" name="Change Type">
 		<menu_item_call label="Predefinito" name="Default"/>
@@ -73,7 +75,7 @@
 	<menu_item_call label="Aggiungi all'abito" name="Add To Outfit"/>
 	<menu_item_call label="Indossa oggetti" name="Wear Items"/>
 	<menu_item_call label="Rimuovi dall'abito attuale" name="Remove From Outfit"/>
-	<menu_item_call label="Copia lista vestiti negli appunti" name="Copy outfit list to clipboard"/>
+	<menu_item_call label="Copia lista articoli indossati negli appunti" name="Copy outfit list to clipboard"/>
 	<menu_item_call label="Trova originale" name="Find Original"/>
 	<menu_item_call label="Elimina oggetto" name="Purge Item"/>
 	<menu_item_call label="Ripristina oggetto" name="Restore Item"/>
@@ -81,11 +83,16 @@
 	<menu_item_call label="Apri originale" name="Open Original"/>
 	<menu_item_call label="Proprietà" name="Properties"/>
 	<menu_item_call label="Rinomina" name="Rename"/>
+	<menu_item_call label="Immagine..." name="thumbnail" />
 	<menu_item_call label="Proteggi" name="ProtectFolder" />
 	<menu_item_call label="Non proteggere" name="UnprotectFolder" />
+	<menu_item_call label="Ricarica cartella" name="ReloadFolder" />
 	<menu_item_call label="Copia UUID elemento" name="Copy Asset UUID"/>
-	<menu_item_call label="Mostra in Tutti gli elementi" name="Show in Main Panel"/>
 	<menu_item_call label="Ripristina ultima posizione" name="Restore to Last Position"/>
+	<menu_item_call label="Mostra in Tutti gli elementi" name="Show in Main Panel"/>
+	<menu_item_call label="Mostra in una nuova finestra" name="Show in new Window" />
+	<menu_item_call label="Apri" name="open_in_current_window" />
+	<menu_item_call label="Apri in una nuova finestra" name="open_in_new_window" />
 	<menu_item_call label="Copia" name="Copy"/>
 	<menu_item_call label="Taglia" name="Cut"/>
 	<menu_item_call label="Incolla" name="Paste"/>
@@ -97,10 +104,12 @@
 	<menu_item_call label="Sposta nella cartella predefinita" name="Move to Default Folder"/>
 	<menu_item_call label="Sposta in Oggetti smarriti" name="Move to Lost And Found"/>
 	<menu_item_call label="Elimina cartella di sistema" name="Delete System Folder"/>
+	<menu_item_call label="Crea cartella dagli elementi selezionati" name="New folder from selected" />
+	<menu_item_call label="Separa gli elementi della cartella" name="Ungroup folder items" />
 	<menu_item_call label="Avvia conferenza in chat" name="Conference Chat Folder"/>
 	<menu_item_call label="Suona" name="Sound Play"/>
 	<menu_item_call label="Copia SLurl" name="url_copy"/>
-	<menu_item_call label="Informazioni segnaposto" name="About Landmark"/>
+	<menu_item_call label="Informazioni sul segnaposto" name="About Landmark"/>
 	<menu_item_call label="Mostra sulla mappa" name="show_on_map"/>
 	<menu_item_call label="Esegui pubblicamente" name="Animation Play"/>
 	<menu_item_call label="Esegui localmente" name="Animation Audition"/>
@@ -121,8 +130,8 @@
 	<menu_item_call label="Ricarica texture" name="Texture Refresh Attachment" />
 	<menu_item_call label="Stacca" name="Detach From Yourself"/>
 	<menu_item_call label="Togli" name="Take Off"/>
-	<menu_item_call label="Appplica solo a me stesso" name="Settings Apply Local" />
-	<menu_item_call label="Appplica al lotto" name="Settings Apply Parcel" />
+	<menu_item_call label="Applica solo a me stesso" name="Settings Apply Local" />
+	<menu_item_call label="Applica al lotto" name="Settings Apply Parcel" />
 	<menu_item_call label="Copia negli annunci Marketplace" name="Marketplace Copy"/>
 	<menu_item_call label="Sposta negli annunci Marketplace" name="Marketplace Move"/>
 	<menu_item_call label="--nessuna opzione--" name="--no options--"/>

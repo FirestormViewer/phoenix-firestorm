@@ -2564,7 +2564,7 @@ void LLInventoryGallery::startDrag()
             ids.push_back(selected_id);
         }
 
-        const LLViewerInventoryCategory* cat = gInventory.getCategory(selected_id);        
+        const LLViewerInventoryCategory* cat = gInventory.getCategory(selected_id);
         if (cat && gInventory.isObjectDescendentOf(selected_id, gInventory.getRootFolderID())
             && !LLFolderType::lookupIsProtectedType((cat)->getPreferredType()))
         {

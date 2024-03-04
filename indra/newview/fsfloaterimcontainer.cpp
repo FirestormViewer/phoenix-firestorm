@@ -37,6 +37,7 @@
 #include "llfloaterreg.h"
 #include "llchiclet.h"
 #include "llchicletbar.h"
+#include "llemojihelper.h"
 #include "lltoolbarview.h"
 #include "llvoiceclient.h"
 
@@ -580,4 +581,8 @@ void FSFloaterIMContainer::sessionIDUpdated(const LLUUID& old_session_id, const 
 	}
 }
 
+void FSFloaterIMContainer::tabOpen(LLFloater* opened_floater, bool from_click)
+{
+	LLEmojiHelper::instance().hideHelper(nullptr, true);
+}
 // EOF

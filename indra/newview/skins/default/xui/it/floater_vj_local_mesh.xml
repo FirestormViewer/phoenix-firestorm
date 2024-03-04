@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="Local Mesh" title="Mesh in Locale">
+	<tab_container name="local_mesh_tabs">
+		<panel name="local_mesh_assets_panel" label="Mesh locali" title="Mesh locali">
+			<fs_scroll_list name="l_name_list">
+				<column name="unit_status" label="Stato" />
+				<column name="unit_name" label="Nome" />
+				<column name="unit_lods" label="LOD" />
+				<column name="unit_objects" label="Oggetti" />
+			</fs_scroll_list>
+		</panel>
+		<panel name="logs_panel" label="Registro">
+		</panel>
+		<panel name="local_mesh_settings_panel" label="Opzioni">
+			<check_box name="local_mesh_scale_use_meters" label="Dimensioni in metri" tool_tip="Ignora le unità di misura in cm utilizzate da strumenti come Maya." />
+			<text name="lod_suffix_label">
+				Suffissi LOD:
+			</text>
+			<combo_box name="lod_suffix_combo" tool_tip="Scegli uno standard o modificalo manualmente... || Standard SL (il più basso è LOD0, l'alto non ha suffisso). || Motori di gioco: Unity/UE5, ecc. (il più basso=LOD3, alto=LOD0). || Nomi LOD: nomi LOD in inglese (il più basso='LOWEST', alto='HIGH').">
+				<combo_item name="choose_one">Attuale</combo_item>
+				<combo_item name="suff_sl">Standard SL</combo_item>
+				<combo_item name="suff_unity">Standard motori di gioco</combo_item>
+				<combo_item name="suff_descriptive">Nomi LOD</combo_item>
+			</combo_box>
+			<text name="suf_lowest_lab">
+				Molto basso:
+			</text>
+			<line_editor name="suf_lowest" tool_tip="Il suffisso utilizzato per identificare il file LOD più basso sul disco e i modelli all'interno di un file." />
+			<text name="suf_low_lab">
+				Basso:
+			</text>
+			<line_editor name="suf_low" tool_tip="Il suffisso utilizzato per identificare il file LOD basso sul disco e i modelli all'interno di un file." />
+			<text name="suf_medium_lab">
+				Medio:
+			</text>
+			<line_editor name="suf_medium" tool_tip="Il suffisso utilizzato per identificare il file LOD medio su disco e i modelli all'interno di un file." />
+			<text name="suf_high_lab">
+				Alto:
+			</text>
+			<line_editor name="suf_high" tool_tip="Il suffisso utilizzato per identificare il file LOD elevato sul disco e i modelli all'interno di un file." />
+			<text name="suf_physics_lab">
+				Fisica:
+			</text>
+			<line_editor name="suf_physics" tool_tip="Il suffisso utilizzato per identificare il file fisico sul disco e i modelli all'interno di un file." />
+		</panel>
+	</tab_container>
+	<button name="btn_apply" label="Applica" />
+	<button name="btn_add" label="Aggiungi" />
+	<button name="btn_remove" label="Rimuovi" />
+	<button name="btn_reload" label="Ricarica" />
+	<button name="btn_clear" label="Cancella Param." />
+	<button name="btn_rez" label="Rez Selezion." tool_tip="Crea una mesh vuota nel mondo e applica ad essa la mesh locale scelta. Questo crea un oggetto vuoto nel mondo." />
+</floater>

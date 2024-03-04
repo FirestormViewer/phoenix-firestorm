@@ -6,6 +6,12 @@
 	<string name="pick title">
 		Wybór:
 	</string>
+	<floater.string name="pick_material">
+		Wybór: Materiał
+	</floater.string>
+	<floater.string name="pick_texture">
+		Wybór: Tekstura
+	</floater.string>
 	<text name="Multiple">
 		Wiele tekstur
 	</text>
@@ -27,7 +33,6 @@
 	<button label="Żadna" label_selected="Żadna" name="None"/>
 	<text name="preview_disabled" value="Podgląd wyłączony"/>
 	<filter_editor label="Filtruj tekstury" name="inventory search editor"/>
-	<check_box label="Pokaż foldery" name="show_folders_check"/>
 	<button label="Dodaj" label_selected="Dodaj" name="l_add_btn"/>
 	<button label="Usuń" label_selected="Usuń" name="l_rem_btn"/>
 	<button label="Prześlij" label_selected="Prześlij" name="l_upl_btn"/>
@@ -37,7 +42,6 @@
 	<combo_box name="l_bake_use_texture_combo_box" tool_tip="Wybierz teksturę dla nakładania BOM">
 		<combo_box.item label="Brak" name="None" />
 	</combo_box>
-	<check_box label="Ukryj region mesza bazowego" name="hide_base_mesh_region" />
 	<line_editor name="TextureKey" tool_tip="Klucz UUID tekstury" />
 	<button name="TextureKeyApply" label="Ustaw UUID" tool_tip="Ustaw ten UUID" />
 	<button label="Anuluj" label_selected="Anuluj" name="Cancel"/>

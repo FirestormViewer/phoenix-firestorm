@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="change_item_thumbnail" title="Cambia Immagine Elemento">
+	<floater.string name="title_item_thumbnail">
+		Cambia Immagine Elemento
+	</floater.string>
+	<floater.string name="title_folder_thumbnail">
+		Cambia Immagine Cartella
+	</floater.string>
+	<floater.string name="tooltip_upload_local">
+		Carica dal computer
+	</floater.string>
+	<floater.string name="tooltip_upload_snapshot">
+		Scatta foto
+	</floater.string>
+	<floater.string name="tooltip_use_texture">
+		Seleziona texture
+	</floater.string>
+	<floater.string name="tooltip_copy_to_clipboard">
+		Copia negli appunti
+	</floater.string>
+	<floater.string name="tooltip_paste_from_clipboard">
+		Incolla dagli appunti
+	</floater.string>
+	<floater.string name="tooltip_remove_image">
+		Rimuovi immagine
+	</floater.string>
+	<text name="tooltip_text">
+		suggerimento
+	</text>
+</floater>
