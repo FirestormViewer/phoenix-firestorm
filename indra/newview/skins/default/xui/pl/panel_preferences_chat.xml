@@ -141,7 +141,7 @@
 			<check_box label="Włącz automatyczne odgadywanie imion w pasku czatu w pobliżu" name="FSChatbarNamePrediction"/>
 			<check_box name="AllowMUpose" label="&quot;:&quot; synonimem dla &quot;/me&quot;"/>
 			<check_box name="AutoCloseOOC" label="Domykaj ((nawiasy)) dla czatu OOC"/>
-			<check_box name="FSSuppressEmojiWindowPopupWhileTyping" label="Wyłącz automatyczne wyświetlanie okna wyboru emoji podczas pisania w paskach czatu"/>
+			<check_box name="FSEnableEmojiWindowPopupWhileTyping" label="Włącz automatyczne wyświetlanie okna wyboru emoji podczas pisania w paskach czatu"/>
 			<check_box name="FSShowEmojiButton" label="Pokaż przycisk emoji w pasku czatu dla sesji IM i czatu w pobliżu"/>
 			<check_box name="FSShowIMSendButton" label="Pokaż przycisk wysyłania wiadomości w pasku czatu dla sesji IM"/>
 			<check_box name="FSNearbyChatbar" label="Dodaj pasek czatu do okna czatu w pobliżu"/>
