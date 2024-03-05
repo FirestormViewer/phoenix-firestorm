@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="inspect_object">
 	<string name="Creator">
-		Di [CREATOR]
+		CreatoreCreatore [CREATOR]
 	</string>
 	<string name="CreatorAndOwner">
-		Di [CREATOR]
+		Creatore [CREATOR]
 Proprietario [OWNER]
 	</string>
 	<string name="Price">
-		L$ [AMOUNT]
+		[AMOUNT]L$
 	</string>
 	<string name="PriceFree">
 		Gratis
@@ -17,7 +17,7 @@ Proprietario [OWNER]
 		Tocca
 	</string>
 	<string name="Sit">
-		Siedi qui
+		Siediti qui
 	</string>
 	<icon name="secure_browsing" tool_tip="Browsing sicuro"/>
 	<button label="Acquista" name="buy_btn"/>

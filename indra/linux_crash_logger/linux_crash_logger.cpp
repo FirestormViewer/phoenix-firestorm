@@ -68,6 +68,11 @@ int main(int argc, char **argv)
     curl_global_init(CURL_GLOBAL_ALL);
 
     auto curl = curl_easy_init();
+
+//Not compatible with LL's crusty old curl - support for the curl_mime functions
+//was introduced in curl 7.57.0, LL is still using 7.54 :(
+
+/*
     if( curl)
     {
         auto form = curl_mime_init(curl);
@@ -95,6 +100,47 @@ int main(int argc, char **argv)
         curl_easy_cleanup(curl);
 
         curl_mime_free(form);
-    }
+    }*/
+
+if (auto curl_handle = curl_easy_init()) {
+    struct curl_httppost* formpost = NULL;
+    struct curl_httppost* lastptr = NULL;
+
+    // Add the file part
+    curl_formadd(&formpost, &lastptr,
+                 CURLFORM_COPYNAME, "upload_file_minidump",
+                 CURLFORM_FILE, dmpFile.c_str(),
+                 CURLFORM_END);
+
+    // Add the 'product' part
+    curl_formadd(&formpost, &lastptr,
+                 CURLFORM_COPYNAME, "product",
+                 CURLFORM_COPYCONTENTS, "Firestorm-Releasex64",
+                 CURLFORM_END);
+
+    // Add the 'version' part
+    curl_formadd(&formpost, &lastptr,
+                 CURLFORM_COPYNAME, "version",
+                 CURLFORM_COPYCONTENTS, version.c_str(),
+                 CURLFORM_END);
+
+    // Set the URL
+    curl_easy_setopt(curl_handle, CURLOPT_URL, url.c_str());
+
+    // Set the form post data
+    curl_easy_setopt(curl_handle, CURLOPT_HTTPPOST, formpost);
+
+    // Perform the request
+    auto res = curl_easy_perform(curl_handle);
+
+    // Cleanup
+    curl_easy_cleanup(curl_handle);
+    curl_formfree(formpost);
+
+    // Check for errors
+    if (res != CURLE_OK)
+        std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+}
+
     return 0;
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_new_feature_notification" title="Nuova funzionalità">
+	<floater.string name="title_txt_inventory">
+		Nuove funzioni dell'inventario
+	</floater.string>
+	<floater.string name="description_txt_inventory">
+		Ora puoi aggiungere agli elementi dell'inventario delle immagini di anteprima e visualizzare l'inventario in modalità Cartella Singola.
+Scopri di più su questo [https://community.secondlife.com/blogs/entry/13637-new-features-inventory-item-preview-and-single-folder-view/ blogpost]
+	</floater.string>
+	<floater.string name="title_txt_gltf">
+Nuovo supporto per i materiali GLTF PBR
+	</floater.string>
+	<floater.string name="description_txt_gltf">
+Ora puoi utilizzare il supporto espanso dei materiali con la possibilità di importare e modificare i materiali GLTF Physically Based Rendering (PBR).
+Per supportare l'aggiunta del formato GLTF, alcune aree nel viewer potrebbero apparire più scure del solito.
+
+Ulteriori informazioni sul [https://wiki.secondlife.com/wiki/PBR_Materials Physically Based Rendering (PBR)]
+	</floater.string>
+	<text name="title_txt">
+		Nuova funzionalità
+	</text>
+	<text name="description_txt">
+		Descrizione della funzione
+	</text>
+	<button label="Ho capito!" name="close_btn" />
+</floater>

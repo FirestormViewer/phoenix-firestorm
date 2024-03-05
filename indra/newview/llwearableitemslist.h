@@ -474,7 +474,7 @@ public:
 	{
 		LLSINGLETON(ContextMenu);
 	public:
-		/*virtual*/ void show(LLView* spawning_view, const uuid_vec_t& uuids, S32 x, S32 y);
+		/*virtual*/ void show(LLView* spawning_view, const uuid_vec_t& uuids, S32 x, S32 y) override;
 
 		void show(LLView* spawning_view, LLWearableType::EType w_type, S32 x, S32 y);
 
@@ -487,7 +487,7 @@ public:
 			MASK_UNKNOWN		= 0x10,
 		};
 
-		/* virtual */ LLContextMenu* createMenu();
+		/* virtual */ LLContextMenu* createMenu() override;
 		void updateItemsVisibility(LLContextMenu* menu);
 		void updateItemsLabels(LLContextMenu* menu);
 		static void setMenuItemVisible(LLContextMenu* menu, const std::string& name, bool val);
@@ -520,7 +520,7 @@ public:
 
 	virtual ~LLWearableItemsList();
 
-	/*virtual*/ LLPanel* createNewItem(LLViewerInventoryItem* item);
+	/*virtual*/ LLPanel* createNewItem(LLViewerInventoryItem* item) override;
 
 	void updateList(const LLUUID& category_id);
 

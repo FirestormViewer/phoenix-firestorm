@@ -4,14 +4,15 @@
 		<menu_item_call.on_enable name="EnableTouch" parameter="Tocca"/>
 	</menu_item_call>
 	<menu_item_call label="Modifica" name="Edit..."/>
+	<menu_item_call label="Modifica materiale PBR" name="EditGLTFMaterial"/>
 	<menu_item_call label="Crea" name="Build"/>
 	<menu_item_call label="Apri" name="Open"/>
 	<menu_item_call label="Siediti qui" name="Object Sit"/>
 	<menu_item_call label="Alzati" name="Object Stand Up"/>
 	<context_menu label="Oggetto" name="Object Features">
-		<menu_item_call label="Profilo" name="Object Inspect"/>
+		<menu_item_call label="Profilo dell'oggetto" name="Object Inspect"/>
 		<menu_item_call label="Ispeziona" name="Object_Inspect_Floater"/>
-		<menu_item_call label="Info script" name="ScriptInfo"/>
+		<menu_item_call label="Info sugli script" name="ScriptInfo"/>
 		<menu_item_call label="Collega" name="Object Link"/>
 		<menu_item_call label="Scollega" name="Object Unlink"/>
 		<menu_item_check label="Modifica parti collegate" name="Object Edit Linked Parts"/>
@@ -23,8 +24,8 @@
 		<menu_item_call label="Rimuovi script" name="Remove Scripts From Selection"/>
 	</context_menu>
 	<menu_item_call label="Inquadra" name="Zoom In"/>
-	<menu_item_call label="Mostra nei set collegati" name="show_in_linksets"/>
-	<menu_item_call label="Mostra nei personaggi" name="show_in_characters"/>
+	<menu_item_call label="Mostra in Oggetti Regione" name="show_in_linksets"/>
+	<menu_item_call label="Mostra in Personaggi" name="show_in_characters"/>
 	<context_menu label="Metti" name="Put On">
 		<menu_item_call label="Indossa" name="Wear"/>
 		<menu_item_call label="Aggiungi" name="Add"/>
@@ -49,7 +50,7 @@
 		<menu_item_call label="Collada" name="Collada"/>
 	</context_menu>
 	<menu_item_call label="Elimina" name="Delete"/>
-	<menu_item_call label="Blocca proprietario particella" name="Mute Particle"/>
+	<menu_item_call label="Blocca proprietario particelle" name="Mute Particle"/>
 	<menu_item_call label="Dump XML" name="Dump XML"/>
 	<menu_item_call label="Ripristina scheletro" name="Reset Skeleton"/>
 </context_menu>

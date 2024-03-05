@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<floater name="floater_avatar_render_settings" title="Impostazioni Resa Avatar">
+<floater name="floater_avatar_render_settings" title="Eccezioni Rendering Avatar">
 	<string name="av_never_render" value="Mai"/>
 	<string name="av_always_render" value="Sempre"/>
 	<filter_editor label="Filtra persone" name="people_filter_input"/>
-	<menu_button name="plus_btn" tool_tip="Azioni sulla persona evidenziata"/>
+	<menu_button name="plus_btn" tool_tip="Azioni sulla persona selezionata"/>
 	<name_list name="render_settings_list">
 		<name_list.columns label="Nome" name="name"/>
 		<name_list.columns label="Impostazione" name="setting"/>

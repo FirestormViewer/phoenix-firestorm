@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Joystick" title="Configurazione Joystick">
-	<check_box label="Abilita Joystick:" name="enable_joystick"/>
-	<text left="120" name="joystick_type" width="380"/>
+	<string name="JoystickDisabled">
+		Nessuno
+	</string>
 	<spinner label="Mapping: asse X" label_width="140" left="12" name="JoystickAxis1" width="180"/>
 	<spinner label="Mapping: asse Y" label_width="134" left="205" name="JoystickAxis2" width="174"/>
 	<spinner label="Mapping: asse Z" label_width="94" left="390" name="JoystickAxis0" width="134"/>
@@ -18,6 +19,53 @@
 	<check_box label="Avatar" name="JoystickAvatarEnabled"/>
 	<check_box label="Costruire" name="JoystickBuildEnabled"/>
 	<check_box label="Camera dall&apos;alto" name="JoystickFlycamEnabled"/>
+	<text name="joystick_monitor_label">
+		Monitor Joystick
+	</text>
+	<icon name="button_light_0" tool_tip="Pulsante joystick 0" />
+	<icon name="button_light_1" tool_tip="Pulsante joystick 1" />
+	<icon name="button_light_2" tool_tip="Pulsante joystick 2" />
+	<icon name="button_light_3" tool_tip="Pulsante joystick 3" />
+	<icon name="button_light_4" tool_tip="Pulsante joystick 4" />
+	<icon name="button_light_5" tool_tip="Pulsante joystick 5" />
+	<icon name="button_light_6" tool_tip="Pulsante joystick 6" />
+	<icon name="button_light_7" tool_tip="Pulsante joystick 7" />
+	<icon name="button_light_8" tool_tip="Pulsante joystick 8" />
+	<icon name="button_light_9" tool_tip="Pulsante joystick 9" />
+	<icon name="button_light_10" tool_tip="Pulsante joystick 10" />
+	<icon name="button_light_11" tool_tip="Pulsante joystick 11" />
+	<icon name="button_light_12" tool_tip="Pulsante joystick 12" />
+	<icon name="button_light_13" tool_tip="Pulsante joystick 13" />
+	<icon name="button_light_14" tool_tip="Pulsante joystick 14" />
+	<icon name="button_light_15" tool_tip="Pulsante joystick 15" />
+	<scroll_container name="joystick_monitor_axes_scroller">
+		<container_view name="joystick_monitor_axes_container">
+			<stat_view name="axis_view_0">
+				<stat_bar label="Asse 0" name="axis0" />
+			</stat_view>
+			<stat_view name="axis_view_1">
+				<stat_bar label="Asse 1" name="axis1" />
+			</stat_view>
+			<stat_view name="axis_view_2">
+				<stat_bar label="Asse 2" name="axis2" />
+			</stat_view>
+			<stat_view name="axis_view_3">
+				<stat_bar label="Asse 3" name="axis3" />
+			</stat_view>
+			<stat_view name="axis_view_4">
+				<stat_bar label="Asse 4" name="axis4" />
+			</stat_view>
+			<stat_view name="axis_view_5">
+				<stat_bar label="Asse 5" name="axis5" />
+			</stat_view>
+			<stat_view name="axis_view_6">
+				<stat_bar label="Asse 6" name="axis6" />
+			</stat_view>
+			<stat_view name="axis_view_7">
+				<stat_bar label="Asse 7" name="axis7" />
+			</stat_view>
+		</container_view>
+	</scroll_container>
 	<text name="XScale">
 		Regolazione X
 	</text>
@@ -63,17 +111,6 @@
 	<text name="ZoomDeadZone" width="140">
 		Angolo morto dello zoom
 	</text>
-	<button label="SpaceNavigator Defaults" name="SpaceNavigatorDefaults"/>
+	<button label="Impostazioni predefinite" name="SpaceNavigatorDefaults"/>
 	<button label="Annulla" label_selected="Annulla" name="cancel_btn"/>
-	<stat_view label="Monitor del Joystick" name="axis_view">
-		<stat_bar label="Assi 0" name="axis0"/>
-		<stat_bar label="Assi 1" name="axis1"/>
-		<stat_bar label="Assi 2" name="axis2"/>
-		<stat_bar label="Assi 3" name="axis3"/>
-		<stat_bar label="Assi 4" name="axis4"/>
-		<stat_bar label="Assi 5" name="axis5"/>
-	</stat_view>
-	<string name="NoDevice">
-		nessun dispositivo trovato
-	</string>
 </floater>

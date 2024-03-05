@@ -32,7 +32,6 @@
 		</text>
 		<check_box label="Transparentes Wasser" name="TransparentWater"/>
 		<check_box label="Ambient Occlusion" name="UseSSAO"/>
-		<check_box label="Reflexionen" name="ReflectionsEnabled"/>
 		<check_box label="Screen Space Reflections" name="ScreenSpaceReflections"/>
 		<text name="shadows_label">
 			Schatten:

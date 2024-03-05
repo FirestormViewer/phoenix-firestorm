@@ -63,6 +63,15 @@ if(WINDOWS)
         uriparser.dll
         )
 
+    # ICU4C (same filenames for 32 and 64 bit builds)
+    set(release_files ${release_files} icudt48.dll)
+    set(release_files ${release_files} icuin48.dll)
+    set(release_files ${release_files} icuio48.dll)
+    set(release_files ${release_files} icule48.dll)
+    set(release_files ${release_files} iculx48.dll)
+    set(release_files ${release_files} icutu48.dll)
+    set(release_files ${release_files} icuuc48.dll)
+
     # <FS:Ansariel> Only copy OpenJPEG dll if needed
     if (NOT USE_KDU)
         set(release_files ${release_files} openjp2.dll)

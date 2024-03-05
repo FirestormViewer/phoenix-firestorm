@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Invita una persona" name="invite_panel">
 	<panel.string name="confirm_invite_owner_str">
-		Sei sicuro di voler invitare nuovi capogruppo? Questa azione è irrevocabile!
+		Sei sicuro di voler scegliere nuovi proprietari per il gruppo? Questa azione è irrevocabile!
 	</panel.string>
 	<panel.string name="loading">
 		(Attendi...)
 	</panel.string>
 	<panel.string name="already_in_group">
-		Alcuni dei residenti selezionati sono già nel gruppo, pertanto l&apos;invito non verrà loro spedito.
+		Alcuni utenti che hai selezionato fanno già parte del gruppo e non riceveranno l'invito.
 	</panel.string>
 	<panel.string name="invite_selection_too_large">
-		Invito di gruppo non inviato: troppi residenti selezionati Gli inviti di gruppo possono essere inviati a un massimo di 100 persone per ciascuna richiesta.
+		Invio fallito: troppi utenti selezionati. Il limite è di 100 inviti per richiesta.
 	</panel.string>
 	<text name="help_text">
-		Puoi selezionare più residenti da invitare nel tuo gruppo. Per iniziare, clicca su Scelta residenti.
+		Puoi selezionare più utenti a cui inviare l'invito al gruppo. Per iniziare, fai clic sul pulsante qui sotto.
 	</text>
-	<button label="Scelta residenti" name="add_button" tool_tip=""/>
-	<name_list name="invitee_list" tool_tip="Tieni premuto Ctrl e fai clic sui nomi dei residenti per selezionare più nomi"/>
-	<button label="Rimuovi i selezionati dall&apos;elenco" name="remove_button" tool_tip="Rimuove i residenti selezionati dalla lista degli inviti"/>
+	<button label="Seleziona utenti" name="add_button" tool_tip=""/>
+	<name_list name="invitee_list" tool_tip="Tieni premuto Ctrl e fai clic sui nomi degli utenti per selezionare più nomi"/>
+	<button label="Rimuovi i selezionati dall'elenco" name="remove_button" tool_tip="Rimuovi i nomi selezionati dall'elenco degli utenti a cui mandare l'invito"/>
 	<text name="role_text">
-		Scegli che ruolo assegnare loro:
+		Scegli il ruolo da assegnare:
 	</text>
-	<combo_box name="role_name" tool_tip="Scegli dall&apos;elenco dei ruoli ai quali ti è consentito assegnare i membri"/>
+	<combo_box name="role_name" tool_tip="Scegli un ruolo tra quelli che puoi assegnare ai membri del gruppo"/>
 	<button label="Invia inviti" name="invite_button"/>
 	<button label="Annulla" name="cancel_button"/>
 	<string name="GroupInvitation">
-		Invito di gruppo
+		Invita al gruppo
 	</string>
 </panel>

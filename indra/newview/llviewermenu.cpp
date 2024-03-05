@@ -1633,6 +1633,30 @@ class LLAdvancedCheckDebugViews : public view_listener_t
 
 
 
+///////////////////
+// DEBUG UNICODE //
+///////////////////
+
+
+class LLAdvancedToggleDebugUnicode : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLView::sDebugUnicode = !(LLView::sDebugUnicode);
+		return true;
+	}
+};
+
+class LLAdvancedCheckDebugUnicode : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		return LLView::sDebugUnicode;
+	}
+};
+
+
+
 ///////////////////////
 // XUI NAME TOOLTIPS //
 ///////////////////////
@@ -10908,19 +10932,12 @@ void handle_show_url(const LLSD& param)
 
 void handle_report_bug(const LLSD& param)
 {
-	LLUIString url(param.asString());
-	
-	LLStringUtil::format_map_t replace;
-	// <FS:Ansariel> FIRE-14001: JIRA report is being cut off when using Help -> Report Bug
-	//std::string environment = LLAppViewer::instance()->getViewerInfoString(true);
-	//boost::regex regex;
-	//regex.assign("</?nolink>");
-	//std::string stripped_env = boost::regex_replace(environment, regex, "");
-
-	//replace["[ENVIRONMENT]"] = LLURI::escape(stripped_env);
+	// <FS:Ansariel> Keep linking to out JIRA
+    //std::string url = gSavedSettings.getString("ReportBugURL");
+    //LLWeb::loadURLExternal(url);
 	LLSD sysinfo = FSData::getSystemInfo();
+	LLStringUtil::format_map_t replace;
 	replace["[ENVIRONMENT]"] = LLURI::escape(sysinfo["Part1"].asString().substr(1) + sysinfo["Part2"].asString().substr(1));
-	// </FS:Ansariel>
 	LLSLURL location_url;
 	LLAgentUI::buildSLURL(location_url);
 	replace["[LOCATION]"] = LLURI::escape(location_url.getSLURLString());
@@ -10929,6 +10946,7 @@ void handle_report_bug(const LLSD& param)
 	file_bug_url.setArgs(replace);
 
 	LLWeb::loadURLExternal(file_bug_url.getString());
+	// </FS:Ansariel>
 }
 
 void handle_buy_currency_test(void*)
@@ -12317,6 +12335,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAdvancedCheckDebugClicks(), "Advanced.CheckDebugClicks");
 	view_listener_t::addMenu(new LLAdvancedCheckDebugViews(), "Advanced.CheckDebugViews");
 	view_listener_t::addMenu(new LLAdvancedToggleDebugViews(), "Advanced.ToggleDebugViews");
+	view_listener_t::addMenu(new LLAdvancedCheckDebugUnicode(), "Advanced.CheckDebugUnicode");
+	view_listener_t::addMenu(new LLAdvancedToggleDebugUnicode(), "Advanced.ToggleDebugUnicode");
 	view_listener_t::addMenu(new LLAdvancedToggleXUINameTooltips(), "Advanced.ToggleXUINameTooltips");
 	view_listener_t::addMenu(new LLAdvancedCheckXUINameTooltips(), "Advanced.CheckXUINameTooltips");
 	view_listener_t::addMenu(new LLAdvancedToggleDebugMouseEvents(), "Advanced.ToggleDebugMouseEvents");
@@ -12429,6 +12449,10 @@ void initialize_menus()
 	//Develop (clear cache immediately)
 	commit.add("Develop.ClearCache", boost::bind(&handle_cache_clear_immediately) );
     
+	// Develop (Fonts debugging)
+	commit.add("Develop.Fonts.Dump", boost::bind(&LLFontGL::dumpFonts));
+	commit.add("Develop.Fonts.DumpTextures", boost::bind(&LLFontGL::dumpFontTextures));
+
 	// <FS:Beq/> Add telemetry controls to the viewer Develop menu (Toggle profiling)
 	view_listener_t::addMenu(new FSProfilerToggle(), "Develop.ToggleProfiling");
 	view_listener_t::addMenu(new FSProfilerCheckEnabled(), "Develop.EnableProfiling");

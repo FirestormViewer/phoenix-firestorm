@@ -66,7 +66,7 @@ LLAssetType::EType S32toAssetType(S32 assetindex)
 	return type;
 }
 
-void FSAssetBlacklist::init()
+void FSAssetBlacklist::initSingleton()
 {
 	mBlacklistFileName = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "asset_blacklist.xml");
 	loadBlacklist();

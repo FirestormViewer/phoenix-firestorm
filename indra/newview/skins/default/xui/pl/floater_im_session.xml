@@ -21,10 +21,18 @@
 			</layout_panel>
 			<layout_panel name="chat_layout_panel">
 				<layout_stack name="input_panels">
+					<layout_panel name="input_editor_layout_panel">
+						<button name="emoji_recent_panel_toggle_btn" tool_tip="Pokaż/ukryj ostatnie emoji" />
+					</layout_panel>
 					<layout_panel name="input_button_layout_panel">
 						<button name="minz_btn" tool_tip="Pokaż/ukryj panel wiadomości" />
 					</layout_panel>
 				</layout_stack>
+			</layout_panel>
+			<layout_panel name="emoji_recent_layout_panel">
+				<text name="emoji_recent_empty_text">
+					Tutaj pojawią się ostatnio używane emoji
+				</text>
 			</layout_panel>
 		</layout_stack>
 	</view>
