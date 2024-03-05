@@ -160,7 +160,6 @@
 		<menu_item_call label="Explorateur d'animations" name="Animation Explorer"/>
 		<menu_item_call label="Liste noire d'éléments" name="asset_blacklist"/>
 		<menu_item_call label="Paramètres d'affichage de l'avatar" name="Avatar Render Settings"/>
-		<menu_item_check label="Toujours afficher complètement les amis" name="Always show Friends normally"/>
 		<menu_item_check label="N'afficher que les amis" name="Render Friends Only"/>
 	</menu>
 	<menu label="Construire" name="BuildTools">

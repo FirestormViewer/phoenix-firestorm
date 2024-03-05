@@ -174,7 +174,7 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mRlvBehaviorCallbackConnection()
 {
 	gAgent.setFSAreaSearchActive(true);
-	gAgent.changeInterestListMode(LLViewerRegion::IL_MODE_360);
+	gAgent.changeInterestListMode(IL_MODE_360);
 	mFactoryMap["area_search_list_panel"] = LLCallbackMap(createPanelList, this);
 	mFactoryMap["area_search_find_panel"] = LLCallbackMap(createPanelFind, this);
 	mFactoryMap["area_search_filter_panel"] = LLCallbackMap(createPanelFilter, this);
@@ -197,7 +197,7 @@ FSAreaSearch::~FSAreaSearch()
     // list updates.
     if( !LLApp::isExiting() )
     {
-        gAgent.changeInterestListMode(LLViewerRegion::IL_MODE_DEFAULT);
+        gAgent.changeInterestListMode(IL_MODE_DEFAULT);
 	}
 
 	if (!gIdleCallbacks.deleteFunction(idle, this))

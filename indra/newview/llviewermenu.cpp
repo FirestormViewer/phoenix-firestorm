@@ -1451,20 +1451,20 @@ public:
     bool handleEvent(const LLSD &userdata)
     {
         // Toggle the mode - regions will get updated
-        if (gAgent.getInterestListMode() == LLViewerRegion::IL_MODE_360)
+        if (gAgent.getInterestListMode() == IL_MODE_360)
         {
 			// <FS:Beq> we need to force the 360 mode "users" to false or this override will fail
 			gAgent.setFSAreaSearchActive(false);
 			gAgent.set360CaptureActive(false);
 			// <FS:Beq/>
-			gAgent.changeInterestListMode(LLViewerRegion::IL_MODE_DEFAULT);
+			gAgent.changeInterestListMode(IL_MODE_DEFAULT);
 		}
 		else
 		{
 			// <FS:Beq> we need to force the 360 mode user flag to true or this override will fail. Don;t set area search though as that can have other effects.
 			gAgent.set360CaptureActive(false);
 			// <FS:Beq/>
-			gAgent.changeInterestListMode(LLViewerRegion::IL_MODE_360);
+			gAgent.changeInterestListMode(IL_MODE_360);
 		}
         return true;
     }
@@ -1474,7 +1474,7 @@ class LLAdvancedCheckInterestList360Mode : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		return (gAgent.getInterestListMode() == LLViewerRegion::IL_MODE_360);
+		return (gAgent.getInterestListMode() == IL_MODE_360);
 	}
 };
 

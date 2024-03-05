@@ -1610,7 +1610,6 @@ set(viewer_HEADER_FILES
     llworldmapview.h
     llxmlrpclistener.h
     llxmlrpctransaction.h
-    macmain.h
     noise.h
     particleeditor.h
     permissionstracker.h

@@ -173,7 +173,6 @@
 		<menu_item_call label="Animasiya kəşfi" name="Animation Explorer"/>
 		<menu_item_call label="Aktivlərin qara siyahısı" name="asset_blacklist"/>
 		<menu_item_call label="Avatarların görüntü ayarları" name="Avatar Render Settings"/>
-		<menu_item_check label="Həmişə dostlarını tam göstərmək" name="Always show Friends normally"/>
 		<menu_item_check label="Yalnız dostları göstərmək" name="Render Friends Only"/>
 	</menu>
 

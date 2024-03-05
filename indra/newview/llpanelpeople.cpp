@@ -625,6 +625,11 @@ LLPanelPeople::~LLPanelPeople()
 	delete mFriendListUpdater;
 	delete mRecentListUpdater;
 
+    mNearbyFilterCommitConnection.disconnect();
+    mFriedsFilterCommitConnection.disconnect();
+    mGroupsFilterCommitConnection.disconnect();
+    mRecentFilterCommitConnection.disconnect();
+
 	if(LLVoiceClient::instanceExists())
 	{
 		LLVoiceClient::getInstance()->removeObserver(this);
@@ -669,10 +674,10 @@ bool LLPanelPeople::postBuild()
 	// </FS:Ansariel>
 
 	// <FS:Ansariel> Firestorm radar
-	//getChild<LLFilterEditor>("nearby_filter_input")->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
-	getChild<LLFilterEditor>("friends_filter_input")->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
-	getChild<LLFilterEditor>("groups_filter_input")->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
-	getChild<LLFilterEditor>("recent_filter_input")->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
+	//mNearbyFilterCommitConnection = getChild<LLFilterEditor>("nearby_filter_input")->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
+	mFriedsFilterCommitConnection = getChild<LLFilterEditor>("friends_filter_input")->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
+	mGroupsFilterCommitConnection = getChild<LLFilterEditor>("groups_filter_input")->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
+	mRecentFilterCommitConnection = getChild<LLFilterEditor>("recent_filter_input")->setCommitCallback(boost::bind(&LLPanelPeople::onFilterEdit, this, _2));
 
 	// <FS:Ansariel> Don't bother with "want more?" advertisement
 	//if(LLAgentBenefitsMgr::current().getGroupMembershipLimit() < max_premium)

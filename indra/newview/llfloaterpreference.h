@@ -229,7 +229,6 @@ public:
 	bool moveTranscriptsAndLog();
 	//[FIX FIRE-2765 : SJ] Making sure Reset button resets works
 	void onClickResetLogPath();
-	void enableHistory();
 	// <FS:Ansariel> Show email address in preferences (FIRE-1071) and keep for OpenSim
 	//void setPersonalInfo(const std::string& visibility);
 	void setPersonalInfo(const std::string& visibility, bool im_via_email, const std::string& email);
@@ -260,10 +259,8 @@ public:
 
 	void refreshUI();
 
-	void onCommitMediaEnabled();
-	void onCommitMusicEnabled();
-	void applyResolution();
 	void onChangeMaturity();
+    void onChangeComplexityMode(const LLSD& newvalue);
 	void onChangeModelFolder();
     void onChangePBRFolder();
 	void onChangeTextureFolder();

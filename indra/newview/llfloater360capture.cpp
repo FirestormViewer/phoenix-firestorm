@@ -67,7 +67,7 @@ LLFloater360Capture::LLFloater360Capture(const LLSD& key)
     mStartILMode = gAgent.getInterestListMode();
     gAgent.set360CaptureActive(true); // <FS:Beq/> make FS area search work aga
     // send everything to us for as long as this floater is open
-    gAgent.changeInterestListMode(LLViewerRegion::IL_MODE_360);
+    gAgent.changeInterestListMode(IL_MODE_360);
 }
 
 LLFloater360Capture::~LLFloater360Capture()
@@ -94,7 +94,7 @@ LLFloater360Capture::~LLFloater360Capture()
     if ( !LLApp::isExiting() )
     {
         gAgent.set360CaptureActive(false); // <FS:Beq/> make FS Area search work again
-        gAgent.changeInterestListMode(LLViewerRegion::IL_MODE_DEFAULT);// The Change Interest Mode target mode is indicative only. If something else is holding the 360 mode open then this will be ignored.
+        gAgent.changeInterestListMode(IL_MODE_DEFAULT);// The Change Interest Mode target mode is indicative only. If something else is holding the 360 mode open then this will be ignored.
 	}
 }
 

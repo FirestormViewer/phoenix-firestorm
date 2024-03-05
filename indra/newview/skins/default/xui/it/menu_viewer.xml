@@ -175,7 +175,6 @@
 		<menu_item_call label="Esplora Animazioni" name="Animation Explorer"/>
 		<menu_item_call label="Lista Nera" name="asset_blacklist"/>
 		<menu_item_call label="Impostazioni Rendering Avatar" name="Avatar Render Settings"/>
-		<menu_item_check label="Mostra amici sempre con il massimo dettaglio" name="Always show Friends normally"/>
 		<menu_item_check label="Mostra solo amici" name="Render Friends Only"/>
 	</menu>
 	<menu label="Costruisci" name="BuildTools">

@@ -112,9 +112,6 @@ S32  LLViewerRegion::sLastCameraUpdated = 0;
 S32  LLViewerRegion::sNewObjectCreationThrottle = -1;
 LLViewerRegion::vocache_entry_map_t LLViewerRegion::sRegionCacheCleanup;
 
-const std::string LLViewerRegion::IL_MODE_DEFAULT = "default";
-const std::string LLViewerRegion::IL_MODE_360     = "360";
-
 typedef std::map<std::string, std::string> CapabilityMap;
 
 static void log_capabilities(const CapabilityMap &capmap);
@@ -3692,7 +3689,7 @@ void LLViewerRegion::setInterestListMode(const std::string &new_mode)
     {
         mInterestListMode = new_mode;
 
-		if (mInterestListMode != std::string(IL_MODE_DEFAULT) && mInterestListMode != std::string(IL_MODE_360))
+		if (mInterestListMode != IL_MODE_DEFAULT && mInterestListMode != IL_MODE_360)
 		{
 			LL_WARNS("360Capture") << "Region " << getRegionID() << " setInterestListMode() invalid interest list mode: " 
 				<< mInterestListMode << ", setting to default" << LL_ENDL;

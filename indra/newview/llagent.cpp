@@ -444,7 +444,7 @@ LLAgent::LLAgent() :
 	mHttpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID),
 	mTeleportState(TELEPORT_NONE),
 	mRegionp(NULL),
-    mInterestListMode(LLViewerRegion::IL_MODE_DEFAULT),
+    mInterestListMode(IL_MODE_DEFAULT),
 
 	mAgentOriginGlobal(),
 	mPositionGlobal(),
@@ -1161,11 +1161,11 @@ void LLAgent::capabilityReceivedCallback(const LLUUID &region_id, LLViewerRegion
             LLAppViewer::instance()->updateNameLookupUrl(regionp);
         }
 
-        if (gAgent.getInterestListMode() == LLViewerRegion::IL_MODE_360)
+        if (gAgent.getInterestListMode() == IL_MODE_360)
         {
 			// <FS:Beq> make this actually work
-            // gAgent.changeInterestListMode(LLViewerRegion::IL_MODE_360);
-            regionp->setInterestListMode(LLViewerRegion::IL_MODE_360);
+            // gAgent.changeInterestListMode(IL_MODE_360);
+            regionp->setInterestListMode(IL_MODE_360);
 			// </FS:Beq>
         }
     }
@@ -1220,10 +1220,10 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
                 LLAppViewer::instance()->updateNameLookupUrl(regionp);
                 // <FS:Beq> move the interestlist update to a place where it is safe.
                 // Set the region to the desired interest list mode
-                if (getInterestListMode() == LLViewerRegion::IL_MODE_360)
+                if (getInterestListMode() == IL_MODE_360)
                 {
-                    changeInterestListMode(LLViewerRegion::IL_MODE_360);
-                     regionp->setCapabilitiesReceivedCallback(LLAgent::capabilityReceivedCallback);
+                    changeInterestListMode(IL_MODE_360);
+                    regionp->setCapabilitiesReceivedCallback(LLAgent::capabilityReceivedCallback);
                 }
                 // </FS:Beq>
             }
@@ -3604,8 +3604,8 @@ void LLAgent::changeInterestListMode(const std::string &new_mode)
     if (new_mode != mInterestListMode)
     {
 	// <FS:Beq> Fix area search again
-		if ( (new_mode == LLViewerRegion::IL_MODE_DEFAULT && (!mFSAreaSearchActive && !m360CaptureActive))  ||
-		     (new_mode == LLViewerRegion::IL_MODE_360) )
+		if ( (new_mode == IL_MODE_DEFAULT && (!mFSAreaSearchActive && !m360CaptureActive))  ||
+		     (new_mode == IL_MODE_360) )
 		{
 		LL_DEBUGS("360Capture") << "Setting Agent interest list mode to " << new_mode << " and updating regions" << LL_ENDL;
 	// </FS:Beq>

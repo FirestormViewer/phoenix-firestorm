@@ -176,6 +176,11 @@ private:
 	Updater*				mRecentListUpdater;
 	Updater*				mButtonsUpdater;
     LLHandle< LLFloater >	mPicker;
+
+    boost::signals2::connection mNearbyFilterCommitConnection;
+    boost::signals2::connection mFriedsFilterCommitConnection;
+    boost::signals2::connection mGroupsFilterCommitConnection;
+    boost::signals2::connection mRecentFilterCommitConnection;
 	
 	// [FS:CR] Contact sets
 	bool					onContactSetsEnable(const LLSD& userdata);
