@@ -140,7 +140,7 @@ public:
 
         F32 x = getRect().getWidth() / 2;
         F32 y = getRect().getHeight() / 2;
-        LLFontGL::getFontEmoji()->render(
+        LLFontGL::getFontEmojiLarge()->render(
             mText,                      // wstr
             0,                          // begin_offset
             x,                          // x
@@ -231,7 +231,7 @@ protected:
     {
         F32 x0 = x;
         F32 x1 = max_pixels;
-        LLFontGL* font = LLFontGL::getFontEmoji();
+        LLFontGL* font = LLFontGL::getFontEmojiLarge();
         if (mBegin)
         {
             std::string text = mTitle.substr(0, mBegin);
@@ -425,7 +425,7 @@ void LLFloaterEmojiPicker::fillGroups()
     mGroupButtons.clear();
 
     LLButton::Params params;
-    params.font = LLFontGL::getFontEmoji();
+    params.font = LLFontGL::getFontEmojiLarge();
 
     LLRect rect;
     rect.mTop = mGroups->getRect().getHeight();
