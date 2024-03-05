@@ -150,6 +150,7 @@ void LLUploadDialog::setMessage( const std::string& msg)
 
 LLUploadDialog::~LLUploadDialog()
 {
+    gViewerWindow->removePopup(this);
 	gFocusMgr.releaseFocusIfNeeded( this );
 
 //    LLFilePicker::instance().reset();

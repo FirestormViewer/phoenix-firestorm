@@ -352,13 +352,13 @@ private:
 		}
 
 		// Threads:  Tid
-		virtual void completed(bool success, LLImageRaw* raw, LLImageRaw* aux)
+		virtual void completed(bool success, const std::string& error_message, LLImageRaw* raw, LLImageRaw* aux)
 		{
             LL_PROFILE_ZONE_SCOPED;
 			LLTextureFetchWorker* worker = mFetcher->getWorker(mID);
 			if (worker)
 			{
- 				worker->callbackDecoded(success, raw, aux);
+ 				worker->callbackDecoded(success, error_message, raw, aux);
 			}
 		}
 	private:
@@ -402,7 +402,7 @@ public:
 	void callbackCacheWrite(bool success);
 
 	// Threads:  Tid
-	void callbackDecoded(bool success, LLImageRaw* raw, LLImageRaw* aux);
+	void callbackDecoded(bool success, const std::string& error_message, LLImageRaw* raw, LLImageRaw* aux);
 	
 	// Threads:  T*
 	void setGetStatus(LLCore::HttpStatus status, const std::string& reason)
@@ -2530,7 +2530,7 @@ void LLTextureFetchWorker::callbackCacheWrite(bool success)
 //////////////////////////////////////////////////////////////////////////////
 
 // Threads:  Tid
-void LLTextureFetchWorker::callbackDecoded(bool success, LLImageRaw* raw, LLImageRaw* aux)
+void LLTextureFetchWorker::callbackDecoded(bool success, const std::string &error_message, LLImageRaw* raw, LLImageRaw* aux)
 {
 	LLMutexLock lock(&mWorkMutex);										// +Mw
 	if (mDecodeHandle == 0)
@@ -2557,7 +2557,7 @@ void LLTextureFetchWorker::callbackDecoded(bool success, LLImageRaw* raw, LLImag
 	}
 	else
 	{
-		LL_WARNS(LOG_TXT) << "DECODE FAILED: " << mID << " Discard: " << (S32)mFormattedImage->getDiscardLevel() << LL_ENDL;
+		LL_WARNS(LOG_TXT) << "DECODE FAILED: " << mID << " Discard: " << (S32)mFormattedImage->getDiscardLevel() << ", reason: " << error_message << LL_ENDL;
 		removeFromCache();
 		mDecodedDiscard = -1; // Redundant, here for clarity and paranoia
 	}

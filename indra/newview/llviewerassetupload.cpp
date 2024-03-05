@@ -435,8 +435,8 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
         {
             // <FS:Ansariel> Duplicate error message output
             //errorMessage = llformat("Problem with file %s:\n\n%s\n",
-            //    getFileName().c_str(), LLImage::getLastError().c_str());
-            errorMessage = LLImage::getLastError();
+            //    getFileName().c_str(), LLImage::getLastThreadError().c_str());
+            errorMessage = LLImage::getLastThreadError();
             // </FS:Ansariel>
             errorLabel = "ProblemWithFile";
             error = true;

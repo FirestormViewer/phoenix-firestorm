@@ -862,7 +862,7 @@ LLRender::~LLRender()
 	shutdown();
 }
 
-void LLRender::init(bool needs_vertex_buffer)
+bool LLRender::init(bool needs_vertex_buffer)
 {
 #if LL_WINDOWS
     if (gGLManager.mHasDebugOutput && gDebugGL)
@@ -884,6 +884,13 @@ void LLRender::init(bool needs_vertex_buffer)
     // necessary for reflection maps
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
+#if LL_WINDOWS
+    if (glGenVertexArrays == nullptr)
+    {
+        return false;
+    }
+#endif
+
     { //bind a dummy vertex array object so we're core profile compliant
         U32 ret;
         glGenVertexArrays(1, &ret);
@@ -904,6 +911,7 @@ void LLRender::init(bool needs_vertex_buffer)
 	stop_glerror();
 	mMaxLineWidthSmooth = range[1];
 	// </FS:Ansariel>
+    return true;
 }
 
 void LLRender::initVertexBuffer()
