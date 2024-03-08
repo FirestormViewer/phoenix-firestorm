@@ -3814,6 +3814,10 @@ Sie haben lokal eine [RESOLUTION]-gebackene Textur für „[BODYREGION]“ nach 
 		Texture konnte nicht hochgeladen werden.
 [REASON]
 	</notification>
+	<notification name="CannotLoad">
+	[WHAT] konnte nicht geladen werden.
+[REASON]
+	</notification>
 	<notification name="CannotUploadMaterial">
 		Es ist ein Problem beim Hochladen der Datei aufgetreten.
 	</notification>

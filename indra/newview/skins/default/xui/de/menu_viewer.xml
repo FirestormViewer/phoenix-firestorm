@@ -455,6 +455,7 @@
 		<menu label="Fehler erzwingen" name="Force Errors">
 			<menu_item_call label="Haltepunkt erzwingen" name="Force Breakpoint"/>
 			<menu_item_call label="LLError erzwingen und abstürzen" name="Force LLError And Crash"/>
+			<menu_item_call label="LLError erzwingen, Meldung anzeigen und abstürzen" name="Force LLError Message And Crash"/>
 			<menu_item_call label="Fehlerhaften Speicherzugriff erzwingen" name="Force Bad Memory Access"/>
 			<menu_item_call label="Fehlerhaften Speicherzugriff in Coroutine erzwingen" name="Force Bad Memory Access in Coroutine"/>
 			<menu_item_call label="Endlosschleife erzwingen" name="Force Infinite Loop"/>
@@ -471,6 +472,7 @@
 			<menu_item_check label="Periodischer langsamer Frame" name="Periodic Slow Frame"/>
 			<menu_item_check label="Rahmenprofil" name="Frame Profile"/>
 			<menu_item_call label="Benchmark" name="Benchmark"/>
+			<menu_item_call label="HDRI-Vorschau" name="HDRI Preview"/>
 		</menu>
 		<menu label="Metadaten darstellen" name="Render Metadata">
 			<menu_item_check label="Bounding Boxes" name="Bounding Boxes"/>
