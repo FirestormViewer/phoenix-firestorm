@@ -57,6 +57,14 @@ bool LLEmojiHelper::isActive(const LLUICtrl* ctrl_p) const
 // static
 bool LLEmojiHelper::isCursorInEmojiCode(const LLWString& wtext, S32 cursorPos, S32* pShortCodePos)
 {
+	// <FS:PP> FIRE-33735: Option to suppress emoji chooser window from automatically popping up while typing in chat bars
+	static LLUICachedControl<bool> FSEnableEmojiWindowPopupWhileTyping("FSEnableEmojiWindowPopupWhileTyping");
+	if (!FSEnableEmojiWindowPopupWhileTyping)
+	{
+		return false;
+	}
+	// </FS:PP>
+
 	// If the cursor is currently on a colon start the check one character further back
 	S32 shortCodePos = (cursorPos == 0 || L':' != wtext[cursorPos - 1]) ? cursorPos : cursorPos - 1;
 

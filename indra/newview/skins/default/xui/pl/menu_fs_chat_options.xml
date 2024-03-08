@@ -15,6 +15,7 @@
 	<menu_item_check label="Informuj o nowych wiadomościach" name="new_message_notification" />
 	<menu_item_check label="Pokaż pasek czatu" name="show_chat_bar" />
 	<menu_item_check label="Pokaż wybrany kanał" name="show_channel_selection" />
+	<menu_item_check label="Pokaż przycisk emoji" name="show_emoji_button" />
 	<menu_item_check label="Pokaż typ czatu / przycisk wysyłania" name="show_send_button" />
 	<menu_item_check label="Pokaż przycisk wysyłania w sesjach IM" name="show_im_send_button" />
 </toggleable_menu>

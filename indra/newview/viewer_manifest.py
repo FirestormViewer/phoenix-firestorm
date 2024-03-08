@@ -2085,6 +2085,7 @@ class LinuxManifest(ViewerManifest):
             self.path("ca-bundle.crt")
 
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
+            self.path("libfreetype.so*")
             self.path("libapr-1.so*")
             self.path("libaprutil-1.so*")
             #self.path("libboost_context-mt.so*")
@@ -2263,7 +2264,7 @@ class Linux_i686_Manifest(LinuxManifest):
             # self.path("libfontconfig.so.*.*")    # <FS:PC> fontconfig and freetype should be taken from the user's system
 
             # Include libfreetype.so. but have it work as libfontconfig does.
-            # self.path("libfreetype.so.*.*")      # <FS:PC> fontconfig and freetype should be taken from the user's system
+            self.path("libfreetype.so.*.*")
 
             try:
                 self.path("libtcmalloc.so*") #formerly called google perf tools

@@ -25,6 +25,11 @@
 	<menu label="Debugowanie" name="Debug">
 		<menu_item_call label="Pokaż ustawienia debugowania" name="Debug Settings"/>
 		<menu_item_call label="Narzędzie podglądu XUI" name="UI Preview Tool"/>
+		<menu label="Czcionki" name="Fonts">
+			<menu_item_call label="Pokaż test czcionek" name="Show Font Test" />
+			<menu_item_call label="Zrzuć czcionki" name="Dump Fonts" />
+			<menu_item_call label="Zrzuć tekstury czcionek" name="Dump Font Textures" />
+		</menu>
 		<menu label="Testy interfejsu" name="UI Tests"/>
 		<menu_item_call label="Ustaw rozmiar okna..." name="Set Window Size..."/>
 		<menu_item_call label="Pokaż warunki użytkowania" name="TOS"/>
