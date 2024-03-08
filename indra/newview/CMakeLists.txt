@@ -214,7 +214,6 @@ set(viewer_SOURCE_FILES
     llblockedlistitem.cpp
     llblocklist.cpp
     llbox.cpp
-    #llbreadcrumbview.cpp #<FS:Ansariel> Unused
     llbrowsernotification.cpp
     llbuycurrencyhtml.cpp
     llcallingcard.cpp
@@ -471,7 +470,6 @@ set(viewer_SOURCE_FILES
     lllandmarkactions.cpp
     lllandmarklist.cpp
     lllegacyatmospherics.cpp
-    #lllistbrowser.cpp #<FS:Ansariel> Unused
     lllistcontextmenu.cpp
     lllistview.cpp
     lllocalbitmaps.cpp
@@ -635,7 +633,7 @@ set(viewer_SOURCE_FILES
     llregioninfomodel.cpp
     llregionposition.cpp
     llremoteparcelrequest.cpp
-    #llsavedsettingsglue.cpp #<FS:Ansariel> Unused
+    llsaveoutfitcombobtn.cpp
     #llsaveoutfitcombobtn.cpp #<FS:Ansariel> Unused
     llscenemonitor.cpp
     llsceneview.cpp
@@ -732,7 +730,6 @@ set(viewer_SOURCE_FILES
     llurlhistory.cpp
     llurllineeditorctrl.cpp
     llurlwhitelist.cpp
-    #llvectorperfoptions.cpp #<FS:Ansariel> Unused
     llversioninfo.cpp
     llviewchildren.cpp
     llviewerassetstats.cpp
@@ -1005,7 +1002,6 @@ set(viewer_HEADER_FILES
     llblockedlistitem.h
     llblocklist.h
     llbox.h
-    #llbreadcrumbview.h #<FS:Ansariel> Unused
     llbuycurrencyhtml.h
     llcallingcard.h
     llcapabilityprovider.h
@@ -1263,7 +1259,6 @@ set(viewer_HEADER_FILES
     lllandmarkactions.h
     lllandmarklist.h
     lllightconstants.h
-    #lllistbrowser.h #<FS:Ansariel> Unused
     lllistcontextmenu.h
     lllistview.h
     lllocalbitmaps.h
@@ -1417,7 +1412,6 @@ set(viewer_HEADER_FILES
     llresourcedata.h
     llrootview.h
     #llsavedsettingsglue.h #<FS:Ansariel> Unused
-    #llsaveoutfitcombobtn.h #<FS:Ansariel> Unused
     llscenemonitor.h
     llsceneview.h
     llscreenchannel.h
@@ -1517,7 +1511,6 @@ set(viewer_HEADER_FILES
     llurlhistory.h
     llurllineeditorctrl.h
     llurlwhitelist.h
-    #llvectorperfoptions.h #<FS:Ansariel> Unused
     llversioninfo.h
     llviewchildren.h
     llviewerassetstats.h

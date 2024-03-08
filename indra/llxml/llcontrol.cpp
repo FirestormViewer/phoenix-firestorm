@@ -855,13 +855,13 @@ void LLControlGroup::setUntypedValue(std::string_view name, const LLSD& val)
 //---------------------------------------------------------------
 
 // Returns number of controls loaded, so 0 if failure
-U32 LLControlGroup::loadFromFileLegacy(const std::string& filename, bool require_declaration, eControlType declare_as)
+U32 LLControlGroup::loadFromFileLegacy(const std::string& filename, const std::string& xml, bool require_declaration, eControlType declare_as)
 {
 	std::string name;
 
 	LLXmlTree xml_controls;
 
-	if (!xml_controls.parseFile(filename))
+	if (!xml_controls.parseString(xml))
 	{
 		LL_WARNS("Settings") << "Unable to open control file " << filename << LL_ENDL;
 		return 0;
@@ -874,7 +874,7 @@ U32 LLControlGroup::loadFromFileLegacy(const std::string& filename, bool require
 		return 0;
 	}
 
-	U32		validitems = 0;
+	U32 validitems = 0;
 	S32 version;
 	
 	rootp->getAttributeS32("version", version);
@@ -1093,24 +1093,24 @@ U32 LLControlGroup::saveToFile(const std::string& filename, bool nondefault_only
 U32 LLControlGroup::loadFromFile(const std::string& filename, bool set_default_values, bool save_values)
 {
 	LLSD settings;
-	llifstream infile;
-	infile.open(filename.c_str());
-	if(!infile.is_open())
+
+	std::string xml = gDirUtilp->getFileContents(filename);
+	if (xml.empty())
 	{
 		LL_WARNS("Settings") << "Cannot find file " << filename << " to load." << LL_ENDL;
 		return 0;
 	}
 
-	if (LLSDParser::PARSE_FAILURE == LLSDSerialize::fromXML(settings, infile))
+	std::stringstream stream(xml);
+	if (LLSDParser::PARSE_FAILURE == LLSDSerialize::fromXML(settings, stream))
 	{
-		infile.close();
 		LL_WARNS("Settings") << "Unable to parse LLSD control file " << filename << ". Trying Legacy Method." << LL_ENDL;
-		return loadFromFileLegacy(filename, true, TYPE_STRING);
+		return loadFromFileLegacy(filename, xml, true, TYPE_STRING);
 	}
 
 	U32	validitems = 0;
 	bool hidefromsettingseditor = false;
-	
+
 	for(LLSD::map_const_iterator itr = settings.beginMap(); itr != settings.endMap(); ++itr)
 	{
 		LLControlVariable::ePersist persist = LLControlVariable::PERSIST_NONDFT;
@@ -1142,7 +1142,7 @@ U32 LLControlGroup::loadFromFile(const std::string& filename, bool set_default_v
 		{
 			hidefromsettingseditor = false;
 		}
-		
+
 		// If the control exists just set the value from the input file.
 		LLControlVariable* existing_control = getControl(name);
 		if(existing_control)

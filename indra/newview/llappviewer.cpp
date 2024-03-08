@@ -210,7 +210,6 @@
 
 #include "llworld.h"
 #include "llhudeffecttrail.h"
-#include "llvectorperfoptions.h"
 #include "llslurl.h"
 #include "llurlregistry.h"
 #include "llwatchdog.h"
@@ -3523,7 +3522,7 @@ void LLAppViewer::initStrings()
 {
 	std::string strings_file = "strings.xml";
 	std::string strings_path_full = gDirUtilp->findSkinnedFilenameBaseLang(LLDir::XUI, strings_file);
-	if (strings_path_full.empty() || !LLFile::isfile(strings_path_full))
+	if (strings_path_full.empty() || !gDirUtilp->fileExists(strings_path_full))
 	{
 		if (strings_path_full.empty())
 		{

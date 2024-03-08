@@ -236,7 +236,8 @@ void downloadComplete(LLSD const &aData, std::string const &aURL, bool success)
 	FSData::getInstance()->processResponder(data, aURL, success, lastModified);
 }
 
-void downloadCompleteScript(LLSD const &aData, std::string const &aURL, std::string const &aFilename)
+#ifdef OPENSIM
+static void downloadCompleteScript(LLSD const &aData, std::string const &aURL, std::string const &aFilename)
 {
 	LL_DEBUGS("fsdata") << aURL << ": " << aData << LL_ENDL;
 	LLSD header = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS][LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
@@ -258,7 +259,7 @@ void downloadCompleteScript(LLSD const &aData, std::string const &aURL, std::str
 	LLXMLNodePtr xml_root;
 	std::string stringData;
 	stringData.assign( rawData.begin(), rawData.end() ); // LLXMLNode::parseBuffer wants a U8*, not a const U8*, so need to copy here just to be safe
-	if ( (!LLXMLNode::parseBuffer( reinterpret_cast< U8*> ( &stringData[0] ), stringData.size(), xml_root, NULL)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")) )
+	if ( (!LLXMLNode::parseBuffer(stringData.c_str(), stringData.size(), xml_root, NULL)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")))
 	{
 		LL_WARNS("fsdata") << "Could not read the script library data from "<< aURL << LL_ENDL;
 		return;
@@ -278,7 +279,7 @@ void downloadCompleteScript(LLSD const &aData, std::string const &aURL, std::str
 	}
 }
 
-void downloadError(LLSD const &aData, std::string const &aURL)
+static void downloadError(LLSD const &aData, std::string const &aURL)
 {
 	LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(aData);
 
@@ -291,6 +292,7 @@ void downloadError(LLSD const &aData, std::string const &aURL)
 		LL_WARNS("fsdata") << "Failed to download " << aURL << ": " << aData << LL_ENDL;
 	}
 }
+#endif
 
 // call this just before the login screen and after the LLProxy has been setup.
 void FSData::startDownload()
@@ -330,7 +332,7 @@ void FSData::startDownload()
 		FSCoreHttpUtil::callbackHttpGetRaw(mFSdataDefaultsUrl, boost::bind(downloadComplete, _1, mFSdataDefaultsUrl, true), boost::bind(downloadComplete, _1, mFSdataDefaultsUrl, false), LLCore::HttpHeaders::ptr_t(), httpOpts);
 	}
 
-#if OPENSIM
+#ifdef OPENSIM
 	std::string filenames[] = { "scriptlibrary_ossl.xml", "scriptlibrary_aa.xml" };
 	for (auto const& script_name : filenames)
 	{
