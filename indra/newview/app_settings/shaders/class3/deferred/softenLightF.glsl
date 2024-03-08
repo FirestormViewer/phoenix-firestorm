@@ -32,16 +32,6 @@ uniform sampler2D specularRect;
 uniform sampler2D normalMap;
 uniform sampler2D emissiveRect; // PBR linear packed Occlusion, Roughness, Metal. See: pbropaqueF.glsl
 
-uniform samplerCubeArray   heroProbes;
-
-#if defined(HERO_PROBES)
-layout (std140) uniform HeroProbeData
-{
-    vec4 heroPosition[1];
-    int heroProbeCount;
-};
-#endif
-
 const float M_PI = 3.14159265;
 
 #if defined(HAS_SUN_SHADOW) || defined(HAS_SSAO)
@@ -198,6 +188,10 @@ void main()
 
         vec3 v = -normalize(pos.xyz);
         color = pbrBaseLight(diffuseColor, specularColor, metallic, v, norm.xyz, perceptualRoughness, light_dir, sunlit_linear, scol, radiance, irradiance, colorEmissive, ao, additive, atten);
+    }
+    else if (GET_GBUFFER_FLAG(GBUFFER_FLAG_HAS_HDRI))
+    {
+        color = texture(emissiveRect, tc).rgb;
     }
     else if (!GET_GBUFFER_FLAG(GBUFFER_FLAG_HAS_ATMOS))
     {

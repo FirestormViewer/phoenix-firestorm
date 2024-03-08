@@ -36,6 +36,7 @@
 #include "llpanel.h"
 #include "llextendedstatus.h"
 #include "llpanelenvironment.h"
+#include "llvlcomposition.h"
 
 #include "lleventcoro.h"
 
@@ -269,7 +270,7 @@ class LLPanelRegionTerrainInfo : public LLPanelRegionInfo
 	LOG_CLASS(LLPanelRegionTerrainInfo);
 
 public:
-	LLPanelRegionTerrainInfo() : LLPanelRegionInfo() {}
+	LLPanelRegionTerrainInfo();
 	~LLPanelRegionTerrainInfo() {}
 	
 	BOOL postBuild() override;
@@ -284,8 +285,8 @@ public:
 
 	//static void onChangeAnything(LLUICtrl* ctrl, void* userData);			// callback for any change, to enable commit button
 	
-    void refresh() override;
     void onSelectMaterialType();
+    void updateForMaterialType();
 
 	static void onClickDownloadRaw(void*);
 	static void onClickUploadRaw(void*);
@@ -304,6 +305,8 @@ private:
 	bool mConfirmedTextureHeights;
 	bool mAskedTextureHeights;
     boost::signals2::connection mRegionChangedSlot;
+    LLUUID mLastSetTextures[LLTerrainMaterials::ASSET_COUNT];
+    LLUUID mLastSetMaterials[LLTerrainMaterials::ASSET_COUNT];
 };
 
 /////////////////////////////////////////////////////////////////////////////

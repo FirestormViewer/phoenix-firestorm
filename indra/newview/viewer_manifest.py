@@ -705,6 +705,14 @@ class Windows_x86_64_Manifest(ViewerManifest):
             self.path("libcrypto-1_1-x64.dll")
             self.path("libssl-1_1-x64.dll")
 
+            # OpenEXR
+            self.path("Iex-3_2.dll")
+            self.path("IlmThread-3_2.dll")
+            self.path("Imath-3_1.dll")
+            self.path("OpenEXR-3_2.dll")
+            self.path("OpenEXRCore-3_2.dll")
+            self.path("OpenEXRUtil-3_2.dll")
+
             # HTTP/2
             self.path("nghttp2.dll")
 
@@ -1160,6 +1168,12 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                 # with self.prefix(src=relpkgdir, dst=""):
                     # self.path("libndofdev.dylib")
                     # self.path("libhunspell-1.3.a")   
+                    # self.path("libIex-3_2.dylib")
+                    # self.path("libIlmThread-3_2.dylib")
+                    # self.path("libImath-3_1.dylib")
+                    # self.path("libOpenEXR-3_2.dylib")
+                    # self.path("libOpenEXRCore-3_2.dylib")
+                    # self.path("libOpenEXRUtil-3_2.dylib")
 
                 # with self.prefix(src_dst="cursors_mac"):
                     # self.path("*.tif")
@@ -1436,6 +1450,12 @@ class Darwin_x86_64_Manifest(ViewerManifest):
             # copy additional libs in <bundle>/Contents/MacOS/
             self.path(os.path.join(relpkgdir, "libndofdev.dylib"), dst="Resources/libndofdev.dylib")
             self.path(os.path.join(relpkgdir, "libhunspell-1.3.0.dylib"), dst="Resources/libhunspell-1.3.0.dylib")   
+            self.path(os.path.join(relpkgdir, "libIex-3_2.dylib"), dst="Resources/libIex-3_2.dylib")   
+            self.path(os.path.join(relpkgdir, "libIlmThread-3_2.dylib"), dst="Resources/libIlmThread-3_2.dylib")   
+            self.path(os.path.join(relpkgdir, "libImath-3_1.dylib"), dst="Resources/libImath-3_1.dylib")   
+            self.path(os.path.join(relpkgdir, "libOpenEXR-3_2.dylib"), dst="Resources/libOpenEXR-3_2.dylib")   
+            self.path(os.path.join(relpkgdir, "libOpenEXRCore-3_2.dylib"), dst="Resources/libOpenEXRCore-3_2.dylib")   
+            self.path(os.path.join(relpkgdir, "libOpenEXRUtil-3_2.dylib"), dst="Resources/libOpenEXRUtil-3_2.dylib")   
 
             # CEF framework goes inside Contents/Frameworks.
             # Remember where we parked this car.

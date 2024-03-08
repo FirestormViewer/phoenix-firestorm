@@ -4003,6 +4003,12 @@
                  function="Advanced.ForceErrorLlerror" />
             </menu_item_call>
             <menu_item_call
+             label="Force LLError, Message And Crash"
+             name="Force LLError Message And Crash">
+                <menu_item_call.on_click
+                 function="Advanced.ForceErrorLlerrorMsg" />
+            </menu_item_call>
+            <menu_item_call
              label="Force Bad Memory Access"
              name="Force Bad Memory Access">
                 <menu_item_call.on_click
@@ -4103,6 +4109,12 @@
              name="Benchmark">
               <menu_item_call.on_click
                function="Advanced.ClickRenderBenchmark" />
+          </menu_item_call>
+          <menu_item_call
+           label="HDRI Preview"
+           name="HDRI Preview">
+            <menu_item_call.on_click
+             function="Advanced.ClickHDRIPreview" />
           </menu_item_call>
         </menu>
       <menu

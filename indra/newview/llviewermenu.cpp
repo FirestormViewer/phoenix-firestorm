@@ -352,6 +352,7 @@ void handle_disconnect_viewer(void *);
 
 void force_error_breakpoint(void *);
 void force_error_llerror(void *);
+void force_error_llerror_msg(void*);
 void force_error_bad_memory_access(void *);
 void force_error_infinite_loop(void *);
 void force_error_software_exception(void *);
@@ -2731,6 +2732,15 @@ class LLAdvancedForceErrorLlerror : public view_listener_t
 		force_error_llerror(NULL);
 		return true;
 	}
+};
+
+class LLAdvancedForceErrorLlerrorMsg: public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        force_error_llerror_msg(NULL);
+        return true;
+    }
 };
 
 class LLAdvancedForceErrorBadMemoryAccess : public view_listener_t
@@ -9878,6 +9888,19 @@ class LLAdvancedClickRenderBenchmark: public view_listener_t
 	}
 };
 
+void hdri_preview();
+
+class LLAdvancedClickHDRIPreview: public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        // open personal lighting floater when previewing an HDRI (keeps HDRI from implicitly unloading when opening build tools)
+        LLFloaterReg::showInstance("env_adjust_snapshot");
+        hdri_preview();
+        return true;
+    }
+};
+
 // these are used in the gl menus to set control values that require shader recompilation
 class LLToggleShaderControl : public view_listener_t
 {
@@ -10744,6 +10767,11 @@ void force_error_breakpoint(void *)
 void force_error_llerror(void *)
 {
     LLAppViewer::instance()->forceErrorLLError();
+}
+
+void force_error_llerror_msg(void*)
+{
+    LLAppViewer::instance()->forceErrorLLErrorMsg();
 }
 
 void force_error_bad_memory_access(void *)
@@ -12313,6 +12341,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAdvancedClickRenderShadowOption(), "Advanced.ClickRenderShadowOption");
 	view_listener_t::addMenu(new LLAdvancedClickRenderProfile(), "Advanced.ClickRenderProfile");
 	view_listener_t::addMenu(new LLAdvancedClickRenderBenchmark(), "Advanced.ClickRenderBenchmark");
+    view_listener_t::addMenu(new LLAdvancedClickHDRIPreview(), "Advanced.ClickHDRIPreview");
 	view_listener_t::addMenu(new LLAdvancedPurgeShaderCache(), "Advanced.ClearShaderCache");
     view_listener_t::addMenu(new LLAdvancedRebuildTerrain(), "Advanced.RebuildTerrain");
 	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
@@ -12432,6 +12461,7 @@ void initialize_menus()
 	// Advanced > Debugging
 	view_listener_t::addMenu(new LLAdvancedForceErrorBreakpoint(), "Advanced.ForceErrorBreakpoint");
 	view_listener_t::addMenu(new LLAdvancedForceErrorLlerror(), "Advanced.ForceErrorLlerror");
+    view_listener_t::addMenu(new LLAdvancedForceErrorLlerrorMsg(), "Advanced.ForceErrorLlerrorMsg");
 	view_listener_t::addMenu(new LLAdvancedForceErrorBadMemoryAccess(), "Advanced.ForceErrorBadMemoryAccess");
 	view_listener_t::addMenu(new LLAdvancedForceErrorBadMemoryAccessCoro(), "Advanced.ForceErrorBadMemoryAccessCoro");
 	view_listener_t::addMenu(new LLAdvancedForceErrorInfiniteLoop(), "Advanced.ForceErrorInfiniteLoop");
