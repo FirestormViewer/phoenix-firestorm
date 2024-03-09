@@ -734,9 +734,10 @@ void LLTextEditor::selectByCursorPosition(S32 prev_cursor_pos, S32 next_cursor_p
 
 void LLTextEditor::insertEmoji(llwchar emoji)
 {
-	LL_INFOS() << "LLTextEditor::insertEmoji(" << wchar_utf8_preview(emoji) << ")" << LL_ENDL;
+	static LLUICachedControl<bool> useBWEmojis( "FSUseBWEmojis", false); // <FS:Beq/> Add B&W emoji font support
+	LL_DEBUGS("Emoji") << "LLTextEditor::insertEmoji(" << wchar_utf8_preview(emoji) << ")" << LL_ENDL;  // <FS:Beq/> reduce Emoji log spam
 	auto styleParams = LLStyle::Params();
-	styleParams.font = LLFontGL::getFontEmoji();
+	styleParams.font = LLFontGL::getFontEmoji( useBWEmojis ); // <FS:Beq/> Add B&W emoji font support
 	auto segment = new LLEmojiTextSegment(new LLStyle(styleParams), mCursorPos, mCursorPos + 1, *this);
 	insert(mCursorPos, LLWString(1, emoji), false, segment);
 	setCursorPos(mCursorPos + 1);

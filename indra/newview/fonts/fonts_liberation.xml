@@ -82,6 +82,11 @@
     <file>TwemojiSVG.ttf</file>
   </font>
 
+  <font name="EmojiBW"
+	comment="Name of emoji font">
+    <file>NotoEmoji-Regular.ttf</file>
+  </font>
+
   <font name="Monospace"
 	comment="Name of monospace font">
     <file>LiberationMono-Regular.ttf</file>

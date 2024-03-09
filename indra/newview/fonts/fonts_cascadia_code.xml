@@ -82,6 +82,19 @@
     <file>TwemojiSVG.ttf</file>
   </font>
 
+  <font name="EmojiBW"
+	comment="Name of emoji font">
+    <file>NotoEmoji-Regular.ttf</file>
+  </font>
+  <font name="EmojiBW"
+	comment="Name of emoji font">
+    <file>NotoEmoji-Regular.ttf</file>
+  </font>
+  <font name="EmojiBW"
+	comment="Name of B and W emoji font">
+    <file>NotoEmoji-Regular.ttf</file>
+  </font>
+
   <font name="Monospace"
 	comment="Name of monospace font">
     <file>CascadiaCode-Light.ttf</file>

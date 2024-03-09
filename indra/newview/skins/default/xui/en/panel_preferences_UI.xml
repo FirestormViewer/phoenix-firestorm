@@ -1806,7 +1806,32 @@ Default 0. Larger values may not work well.
              <combo_item name="Medium" value="Medium" label="Medium"/>
              <combo_item name="Large" value="Large" label="Large"/>
         </combo_box>
-
+        <text
+         top_pad="20"
+         left="10"
+         follows="left|top"
+         name="emoji_font_settings_label"
+         width="120">
+          Emoji Font Settings:
+        </text>
+        <check_box
+        control_name="FSUseBWEmojis"
+        height="16"
+        label="Display emojis in monochrome:"
+        layout="topleft"
+        left="15"
+        name="FSUseBWEmojis"
+        top_pad="13"
+        width="215" />
+        <check_box
+        control_name="FSUsePrettyEmojiButton"
+        height="16"
+        label="Use pretty Emoji button:"
+        layout="topleft"
+        left="15"
+        name="FSUsePrettyEmojiButton"
+        top_pad="3"
+        width="215" />
 <!-- not a live preview
         <text
          name="tooltip_textbox"
