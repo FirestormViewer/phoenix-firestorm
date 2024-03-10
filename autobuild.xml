@@ -1122,11 +1122,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bf2d2e4350caaea2b2fb6116d05548c80f402f81</string>
+              <string>a8326f592bf608095f0854383eec2baf36257ea9</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/freetype-2.12.1.240620850-linux64-240620850.tar.zst</string>
+              <string>https://3p.firestormviewer.org/freetype-2.12.1.240700637-linux64-240700637.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
