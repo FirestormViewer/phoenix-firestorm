@@ -1824,6 +1824,7 @@ Default 0. Larger values may not work well.
         top_pad="13"
         width="215" />
         <check_box
+        disabled_control="FSUseBWEmojis"
         control_name="FSUsePrettyEmojiButton"
         height="16"
         label="Use pretty Emoji button"
