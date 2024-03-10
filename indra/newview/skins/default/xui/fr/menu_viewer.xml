@@ -504,6 +504,8 @@
 			<menu_item_call label="Test du navigateur de médias" name="Web Browser Test"/>
 			<menu_item_check label="Test de redémarrage de la région..." name="Region Restart Test"/>
 			<menu_item_call label="Navigateur de contenus Web" name="Web Content Browser"/>
+			<menu_item_call label="Vider les polices" name="Dump Fonts"/>
+			<menu_item_call label="Vider les textures des polices" name="Dump Font Textures"/>
 			<menu_item_call label="Test de connexion FB" name="FB Connect Test"/>
 			<menu_item_call label="Dump SelectMgr" name="Dump SelectMgr"/>
 			<menu_item_call label="Dump inventaire" name="Dump Inventory"/>
@@ -516,6 +518,7 @@
 			<menu_item_check label="Débogage SelectMgr" name="Debug SelectMgr"/>
 			<menu_item_check label="Débogage clics" name="Debug Clicks"/>
 			<menu_item_check label="Débogage des vues" name="Debug Views"/>
+			<menu_item_check label="Déboguer l'Unicode" name="Debug Unicode"/>
 			<menu_item_check label="Débogage des info-bulles de noms" name="Debug Name Tooltips"/>
 			<menu_item_check label="Débogage des événements de souris" name="Debug Mouse Events"/>
 			<menu_item_check label="Débogage touches" name="Debug Keys"/>

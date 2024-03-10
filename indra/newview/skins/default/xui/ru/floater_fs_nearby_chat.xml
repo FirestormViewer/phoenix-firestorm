@@ -33,6 +33,10 @@
             <layout_panel name="input_editor_layout_panel">
               <chat_editor name="chat_box" />
             </layout_panel>
+            <layout_panel name="emoji_button_layout_panel">
+              <button name="emoji_picker_toggle_btn" tool_tip="Показать панель эмодзи"/>
+              <button name="emoji_recent_panel_toggle_btn" tool_tip="Показывает/скрывает последние эмодзи"/>
+            </layout_panel>
             <layout_panel name="input_button_layout_panel">
               <spinner name="ChatChannel" tool_tip="Канал отправки в чат. Включается в Настройки → Чат -> Печать -> Показать выбор канала в строке ввода общего чата." />
             </layout_panel>
@@ -46,6 +50,9 @@
             <icon name="chat_type_combo_arrow_icon"/>
             </layout_panel>
           </layout_stack>
+        </layout_panel>
+        <layout_panel name="emoji_recent_layout_panel">
+          <text name="emoji_recent_empty_text">Здесь появятся недавно использованные эмодзи</text>
         </layout_panel>
       </layout_stack>
     </layout_panel>
