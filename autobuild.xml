@@ -3442,7 +3442,7 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>file:///D:\src\3p-viewer-fonts\viewer_fonts-1.240681616-common-240681616.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/viewer_fonts-1.240681616-common-240681616.tar.bz2</string>
             </map>
             <key>name</key>
             <string>common</string>
