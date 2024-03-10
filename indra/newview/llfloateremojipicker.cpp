@@ -143,8 +143,8 @@ public:
         F32 x = getRect().getWidth() / 2;
         F32 y = getRect().getHeight() / 2;
         // <FS:Beq> Add B&W emoji font support
-        // LLFontGL::getFontEmoji( useBWEmojis )->render( 
-        LLFontGL::getFontEmoji( useBWEmojis )->render( 
+        // LLFontGL::getFontEmoji()->render( 
+        LLFontGL::getFontEmoji(useBWEmojis)->render( 
         // </FS:Beq>
             mText,                      // wstr
             0,                          // begin_offset
