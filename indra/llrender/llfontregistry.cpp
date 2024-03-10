@@ -50,8 +50,7 @@ const std::string MACOSX_FONT_SUPPLEMENTAL = "Supplemental/";
 
 
 // <FS:Beq> font functors with UI control access
-//static 
-bool isEmojiUseBW(llwchar wch)
+static bool isEmojiUseBW(llwchar wch)
 {
 	static LLCachedControl<bool> emoji_use_bw(gSavedSettings, "FSUseEmojiBW", false);
 	if(emoji_use_bw)
@@ -62,8 +61,7 @@ bool isEmojiUseBW(llwchar wch)
 }
 
 
-// static
-bool isEmojiUseColor(llwchar wch)
+static bool isEmojiUseColor(llwchar wch)
 {
 	static LLCachedControl<bool> emoji_use_bw(gSavedSettings, "FSUseEmojiBW", false);
 	if(!emoji_use_bw)
@@ -73,6 +71,7 @@ bool isEmojiUseColor(llwchar wch)
 	return false;
 }
 // </FS:Beq>
+
 LLFontDescriptor::char_functor_map_t LLFontDescriptor::mCharFunctors({
 	{ "is_emoji", LLStringOps::isEmoji }
 	, { "is_emoji_use_color", isEmojiUseColor }
