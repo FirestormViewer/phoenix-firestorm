@@ -34,6 +34,10 @@ class LLFontGL;
 
 typedef std::vector<std::string> string_vec_t;
 
+// <FS:Beq> preference aware font functors
+static bool isEmojiUseBW(llwchar wch);
+static bool isEmojiUseColor(llwchar wch);
+// </FS:Beq>
 struct LLFontFileInfo
 {
 	LLFontFileInfo(const std::string& file_name, const std::function<bool(llwchar)>& char_functor = nullptr)

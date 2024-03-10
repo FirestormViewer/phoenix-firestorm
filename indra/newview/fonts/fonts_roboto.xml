@@ -3,7 +3,8 @@
 
   <font name="default" comment="default font files (global fallbacks)">
     <file>DroidSans.ttf</file>
-    <file functor="is_emoji">TwemojiSVG.ttf</file>
+    <file functor="is_emoji_use_color">TwemojiSVG.ttf</file>
+    <file functor="is_emoji_use_bw">NotoEmoji-Regular.ttf</file>
     <os name="Windows">
       <file>meiryo.TTC</file>
       <file>YuGothR.ttc</file>

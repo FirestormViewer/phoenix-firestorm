@@ -1812,7 +1812,7 @@ Default 0. Larger values may not work well.
          follows="left|top"
          name="emoji_font_settings_label"
          width="120">
-          Emoji Font Settings:
+          Emoji Font Settings: (restart required for full effect)
         </text>
         <check_box
         control_name="FSUseBWEmojis"
@@ -1907,4 +1907,3 @@ Default 0. Larger values may not work well.
     </panel>
 </tab_container>
 </panel>
-
