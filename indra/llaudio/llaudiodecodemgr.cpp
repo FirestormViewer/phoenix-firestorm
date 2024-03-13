@@ -794,7 +794,7 @@ bool LLAudioDecodeMgr::addDecodeRequest(const LLUUID &uuid)
 {
 	// <FS:ND> Protect against corrupted sounds. Just do a quit exit instead of trying to decode over and over.
 	if (gAudiop && gAudiop->isCorruptSound(uuid))
-		return FALSE;
+		return false;
 	// </FS:ND>
 
 	if (gAudiop && gAudiop->hasDecodedFile(uuid))

@@ -3,6 +3,8 @@
 
   <font name="default" comment="default font files (global fallbacks)">
     <file>DejaVuSans.ttf</file>
+    <file functor="is_emoji_use_color">TwemojiSVG.ttf</file>
+    <file functor="is_emoji_use_bw">NotoEmoji-Regular.ttf</file>
     <os name="Windows">
       <file>meiryo.TTC</file>
       <file>YuGothR.ttc</file>
@@ -74,6 +76,16 @@
 	comment="Name of bold italic sans-serif font"
 	font_style="BOLD|ITALIC">
     <file>DejaVuSans-BoldOblique.ttf</file>
+  </font>
+
+  <font name="Emoji"
+	comment="Name of emoji font">
+    <file>TwemojiSVG.ttf</file>
+  </font>
+
+  <font name="EmojiBW"
+	comment="Name of emoji font">
+    <file>NotoEmoji-Regular.ttf</file>
   </font>
 
   <font name="Monospace"

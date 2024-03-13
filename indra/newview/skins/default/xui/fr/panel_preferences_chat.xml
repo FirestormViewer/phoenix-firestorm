@@ -113,7 +113,9 @@
 			<check_box name="FSChatbarNamePrediction" label="Activer l'autocomplétion des noms dans le Chat local"/>
 			<check_box name="AllowMUpose" label="':' est un synonyme pour '/me'"/>
 			<check_box name="AutoCloseOOC" label="Fermer automatiquement les doubles parenthèses ((OOC))"/>
-			<check_box name="FSShowIMSendButton" label="Afficher le bouton envoyer dans les conversations privées"/>
+			<check_box name="FSEnableEmojiWindowPopupWhileTyping" label="Activer la fenêtre de sélection auto des émojis lors de la saisie dans la barre de chat"/>
+			<check_box name="FSShowEmojiButton" label="Afficher le bouton emoji dans la barre de chat pour les IM et les discussions de proximité"/>
+			<check_box name="FSShowIMSendButton" label="Afficher le bouton d'envoi dans la barre de chat pour les sessions d'IM"/>
 			<check_box name="FSNearbyChatbar" label="Afficher une zone de saisie dans la fenêtre du Chat local"/>
 			<check_box name="FSShowChatChannel" label="Afficher la sélection du numéro canal dans la fenêtre du Chat local"/>
 			<check_box name="FSShowChatType" label="Afficher un bouton Parler / Chuchoter / Crier dans la fenêtre du Chat local"/>

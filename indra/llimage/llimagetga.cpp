@@ -349,7 +349,7 @@ bool LLImageTGA::decode(LLImageRaw* raw_image, F32 decode_time)
 
 	// <FS:ND> Handle out of memory situations a bit more graceful than a crash
 	if( raw_image->isBufferInvalid() )
-		return FALSE;
+		return false;
 	// </FS:ND>
 
 	if( (getComponents() != 1) &&
@@ -563,7 +563,7 @@ bool LLImageTGA::decodeColorMap( LLImageRaw* raw_image, bool rle, bool flipped )
 {
 	// <FS:ND> Handle out of memory situations a bit more graceful than a crash
 	if( !raw_image || raw_image->isBufferInvalid() )
-		return FALSE;
+		return false;
 	// </FS:ND>
 
 	// If flipped, origin is the top left.  Need to reverse the order of the rows.

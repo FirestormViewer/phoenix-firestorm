@@ -495,7 +495,7 @@ void LLScrollListCtrl::clearRows()
 LLScrollListItem* LLScrollListCtrl::getFirstSelected() const
 {
 	item_list::const_iterator iter;
-	for(iter = mItemList.begin(); iter != mItemList.end(); iter++)
+	for (iter = mItemList.begin(); iter != mItemList.end(); iter++)
 	{
 		LLScrollListItem* item  = *iter;
 		if (item->getSelected())
@@ -1385,7 +1385,7 @@ bool LLScrollListCtrl::selectItemByLabel(const std::string& label, bool case_sen
 	LLScrollListItem* item = getItemByLabel(label, case_sensitive, column);
 
 	bool found = NULL != item;
-	if(found)
+	if (found)
 	{
 		selectItem(item, -1);
 	}
@@ -3155,7 +3155,7 @@ bool LLScrollListCtrl::setSort(S32 column_idx, bool ascending)
 S32	LLScrollListCtrl::getLinesPerPage()
 {
 	//if mPageLines is NOT provided display all item
-	if(mPageLines)
+	if (mPageLines)
 	{
 		return mPageLines;
 	}

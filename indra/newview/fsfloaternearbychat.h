@@ -39,6 +39,7 @@ class LLChatEntry;
 class LLComboBox;
 class LLLayoutStack;
 class LLLayoutPanel;
+class LLPanelEmojiComplete;
 class LLResizeBar;
 class LLTextBox;
 
@@ -93,13 +94,14 @@ public:
 
 	virtual bool handleKeyHere( KEY key, MASK mask );
 
-	static void startChat(const char* line);
 	static void stopChat();
 
 	void updateUnreadMessageNotification(S32 unread_messages, bool muted_history);
 	void updateShowMutedChatHistory(const LLSD &data);
 
 	void handleMinimized(bool minimized);
+
+	void onEmojiPickerToggleBtnClicked();
 
 protected:
 	void onChatBoxKeystroke();
@@ -111,22 +113,30 @@ protected:
 	void onChatBoxCommit();
 	void onChatTypeChanged();
 	
-	void reshapeFloater(bool collapse);
 	void reshapeChatLayoutPanel();
 	
 	static S32 sLastSpecialChatChannel;
 
 private:
-	void	onChatOptionsContextMenuItemClicked(const LLSD& userdata);
-	bool	onChatOptionsCheckContextMenuItem(const LLSD& userdata);
-	bool	onChatOptionsVisibleContextMenuItem(const LLSD& userdata);
-	bool	onChatOptionsEnableContextMenuItem(const LLSD& userdata);
+	void onChatOptionsContextMenuItemClicked(const LLSD& userdata);
+	bool onChatOptionsCheckContextMenuItem(const LLSD& userdata);
+	bool onChatOptionsVisibleContextMenuItem(const LLSD& userdata);
+	bool onChatOptionsEnableContextMenuItem(const LLSD& userdata);
+
+	void onEmojiRecentPanelToggleBtnClicked();
+	void initEmojiRecentPanel();
+	void onRecentEmojiPicked(const LLSD& value);
 
 	FSChatHistory*		mChatHistory;
 	FSChatHistory*		mChatHistoryMuted;
 	LLChatEntry*		mInputEditor;
 
 	// chat type selector and send chat buttons
+	LLButton*			mEmojiRecentPanelToggleBtn;
+	LLButton*			mEmojiPickerToggleBtn;
+	LLLayoutPanel*		mEmojiRecentPanel;
+	LLTextBox*			mEmojiRecentEmptyText;
+	LLPanelEmojiComplete* mEmojiRecentIconsCtrl;
 	LLButton*			mSendChatButton;
 	LLComboBox*			mChatTypeCombo;
 
@@ -145,6 +155,8 @@ private:
 	std::vector<LLChat> mMessageArchive;
 
 	bool FSUseNearbyChatConsole;
+
+	boost::signals2::connection mRecentEmojisUpdatedCallbackConnection{};
 };
 
 #endif // FS_FLOATERNEARBYCHAT_H

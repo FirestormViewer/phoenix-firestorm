@@ -47,9 +47,9 @@ class LLInventoryCategory;
 class LLInventoryItem;
 class LLLayoutPanel;
 class LLLayoutStack;
+class LLPanelEmojiComplete;
 class LLTextBox;
 class LLTextEditor;
-
 
 typedef boost::signals2::signal<void(const LLUUID& session_id)> floater_showed_signal_t;
 
@@ -161,6 +161,8 @@ public:
 
 	void timedUpdate();
 
+	void onEmojiPickerToggleBtnClicked();
+
 protected:
 	/* virtual */
 	void	onClickCloseBtn(bool app_quitting = false);
@@ -234,10 +236,14 @@ private:
 	void addSessionParticipants(const uuid_vec_t& uuids);
 	void addP2PSessionParticipants(const LLSD& notification, const LLSD& response, const uuid_vec_t& uuids);
 
-	void	onChatOptionsContextMenuItemClicked(const LLSD& userdata);
-	bool	onChatOptionsCheckContextMenuItem(const LLSD& userdata);
-	bool	onChatOptionsVisibleContextMenuItem(const LLSD& userdata);
-	bool	onChatOptionsEnableContextMenuItem(const LLSD& userdata);
+	void onChatOptionsContextMenuItemClicked(const LLSD& userdata);
+	bool onChatOptionsCheckContextMenuItem(const LLSD& userdata);
+	bool onChatOptionsVisibleContextMenuItem(const LLSD& userdata);
+	bool onChatOptionsEnableContextMenuItem(const LLSD& userdata);
+
+	void onEmojiRecentPanelToggleBtnClicked();
+	void initEmojiRecentPanel();
+	void onRecentEmojiPicked(const LLSD& value);
 
 	FSPanelChatControlPanel* mControlPanel;
 	LLUUID mSessionID;
@@ -252,6 +258,11 @@ private:
 	LLLayoutStack* mInputPanels;
 	LLLayoutPanel* mUnreadMessagesNotificationPanel;
 	LLTextBox* mUnreadMessagesNotificationTextBox;
+	LLButton* mEmojiRecentPanelToggleBtn;
+	LLButton* mEmojiPickerToggleBtn;
+	LLLayoutPanel* mEmojiRecentPanel;
+	LLTextBox* mEmojiRecentEmptyText;
+	LLPanelEmojiComplete* mEmojiRecentIconsCtrl;
 
 	std::string mSavedTitle;
 	LLUIString mTypingStart;
@@ -283,6 +294,8 @@ private:
 	bool mApplyRect;
 
 	FSFloaterIMTimer*	mIMFloaterTimer;
+
+	boost::signals2::connection mRecentEmojisUpdatedCallbackConnection{};
 };
 
 class FSFloaterIMTimer : public LLEventTimer

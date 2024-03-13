@@ -15,6 +15,7 @@
 	<menu_item_check label="Hinweis über neue Nachrichten anzeigen" name="new_message_notification"/>
 	<menu_item_check label="Eingabezeile anzeigen" name="show_chat_bar"/>
 	<menu_item_check label="Kanalauswahl anzeigen" name="show_channel_selection"/>
+	<menu_item_check label="Emoji-Button anzeigen" name="show_emoji_button"/>
 	<menu_item_check label="Chat-Typ/Senden-Button anzeigen" name="show_send_button"/>
 	<menu_item_check label="Senden-Button in IM-Sitzungen anzeigen" name="show_im_send_button"/>
 </toggleable_menu>

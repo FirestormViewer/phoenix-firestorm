@@ -99,11 +99,11 @@ class LLNavigationBar
 public:
 	
 	// <FS:Zi> Make navigation bar part of the UI
-	// /*virtual*/ void	draw();
-	// /*virtual*/ bool handleRightMouseDown(S32 x, S32 y, MASK mask);
-	// /*virtual*/ bool	postBuild();
+	// /*virtual*/ void	draw() override;
+	// /*virtual*/ bool handleRightMouseDown(S32 x, S32 y, MASK mask) override;
+	// /*virtual*/ bool	postBuild() override;
 	// </FS:Zi>
-//	/*virtual*/ void	setVisible(bool visible); // <FS:Zi> Is done inside XUI now, using visibility_control
+//	/*virtual*/ void	setVisible(bool visible) override; // <FS:Zi> Is done inside XUI now, using visibility_control
 
 	void handleLoginComplete();
 	void clearHistoryCache();

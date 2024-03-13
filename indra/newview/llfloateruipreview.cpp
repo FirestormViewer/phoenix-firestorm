@@ -1647,7 +1647,7 @@ void LLOverlapPanel::draw()
 		LLUI::translate(5,getRect().getHeight()-20);	// translate to top-5,left-5
 		LLView::sDrawPreviewHighlights = false;
 		LLFontGL::getFontSansSerifSmall()->renderUTF8(current_selection_text, 0, 0, 0, text_color,
-				LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, S32_MAX, NULL, false);
+				LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::NO_SHADOW);
 	}
 	else
 	{
@@ -1665,7 +1665,7 @@ void LLOverlapPanel::draw()
 			std::string current_selection = std::string(current_selection_text + LLView::sPreviewClickedElement->getName() + " (no elements overlap)");
 			S32 text_width = LLFontGL::getFontSansSerifSmall()->getWidth(current_selection) + 10;
 			LLFontGL::getFontSansSerifSmall()->renderUTF8(current_selection, 0, 0, 0, text_color,
-					LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, S32_MAX, NULL, false);
+					LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::NO_SHADOW);
 			// widen panel enough to fit this text
 			LLRect rect = getRect();
 			setRect(LLRect(rect.mLeft,rect.mTop,rect.getWidth() < text_width ? rect.mLeft + text_width : rect.mRight,rect.mTop));
@@ -1731,7 +1731,7 @@ void LLOverlapPanel::draw()
 		// draw currently-selected element at top of overlappers
 		LLUI::translate(0,-mSpacing);
 		LLFontGL::getFontSansSerifSmall()->renderUTF8(current_selection_text + LLView::sPreviewClickedElement->getName(), 0, 0, 0, text_color,
-				LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, S32_MAX, NULL, false);
+				LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::NO_SHADOW);
 		LLUI::translate(0,-mSpacing-LLView::sPreviewClickedElement->getRect().getHeight());	// skip spacing distance + height
 		LLView::sPreviewClickedElement->draw();
 
@@ -1746,7 +1746,7 @@ void LLOverlapPanel::draw()
 			// draw name
 			LLUI::translate(0,-mSpacing);
 			LLFontGL::getFontSansSerifSmall()->renderUTF8(overlapper_text + viewp->getName(), 0, 0, 0, text_color,
-					LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::NO_SHADOW, S32_MAX, S32_MAX, NULL, false);
+					LLFontGL::LEFT, LLFontGL::BASELINE, LLFontGL::NORMAL, LLFontGL::NO_SHADOW);
 
 			// draw element
 			LLUI::translate(0,-mSpacing-viewp->getRect().getHeight());	// skip spacing distance + height

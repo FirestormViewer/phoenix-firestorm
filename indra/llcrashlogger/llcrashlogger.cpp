@@ -471,7 +471,7 @@ bool LLCrashLogger::saveCrashBehaviorSetting(S32 crash_behavior)
 
 	mCrashSettings.setS32("CrashSubmitBehavior", crash_behavior);
 	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, CRASH_SETTINGS_FILE);
-	mCrashSettings.saveToFile(filename, FALSE);
+	mCrashSettings.saveToFile(filename, false);
 
 	return true;
 }

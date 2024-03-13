@@ -1259,6 +1259,8 @@ FSChatHistory::FSChatHistory(const FSChatHistory::Params& p)
 	mUnreadChatSources(0)
 {
 	mLineSpacingPixels = llclamp(gSavedSettings.getS32("FSFontChatLineSpacingPixels"), 0, 36);
+	mTextVAlign = LLFontGL::VAlign::VCENTER;
+	mUseColor = true;
 	
 	setIsObjectBlockedCallback(boost::bind(&LLMuteList::isMuted, LLMuteList::getInstance(), _1, _2, 0));
 }

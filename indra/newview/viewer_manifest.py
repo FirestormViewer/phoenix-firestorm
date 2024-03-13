@@ -82,7 +82,17 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         # <FS:Ansariel> Copy 360 snapshot JavaScripts
         with self.prefix(src=pkgdir, dst="skins/default/html/common/equirectangular"):
             self.path("js")
-        # </FS:LO>
+        # </FS:Ansariel>
+
+        # <FS:Ansariel> Copy 3p fonts to build output
+        with self.prefix(src=pkgdir):
+            self.path("fonts")
+        # </FS:Ansariel>
+
+        # <FS:Ansariel> Copy emoji characters to build output
+        with self.prefix(src=pkgdir, dst="skins/default"):
+            self.path("xui")
+        # </FS:Ansariel>
 
         if self.is_packaging_viewer():
             with self.prefix(src_dst="app_settings"):
@@ -173,7 +183,10 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 self.path("*.tga")
 
             # Include our fonts
+            # <FS:Ansariel> Don't copy fonts to the source folder
+            #with self.prefix(src="../packages/fonts",src_dst="fonts"):
             with self.prefix(src_dst="fonts"):
+            # </FS:Ansariel>
                 self.path("*.ttf")
                 self.path("*.txt")
                 self.path("*.xml")
@@ -663,6 +676,10 @@ class Windows_x86_64_Manifest(ViewerManifest):
                 # Get openal dll
                 self.path("OpenAL32.dll")
                 self.path("alut.dll")
+
+            # For ICU4C
+            self.path("icudt48.dll")
+            self.path("icuuc48.dll")
 
             # For textures
             self.path_optional("openjp2.dll")
@@ -2087,6 +2104,7 @@ class LinuxManifest(ViewerManifest):
             self.path("ca-bundle.crt")
 
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
+            self.path("libfreetype.so*")
             self.path("libapr-1.so*")
             self.path("libaprutil-1.so*")
             #self.path("libboost_context-mt.so*")
@@ -2265,7 +2283,7 @@ class Linux_i686_Manifest(LinuxManifest):
             # self.path("libfontconfig.so.*.*")    # <FS:PC> fontconfig and freetype should be taken from the user's system
 
             # Include libfreetype.so. but have it work as libfontconfig does.
-            # self.path("libfreetype.so.*.*")      # <FS:PC> fontconfig and freetype should be taken from the user's system
+            self.path("libfreetype.so.*.*")
 
             try:
                 self.path("libtcmalloc.so*") #formerly called google perf tools

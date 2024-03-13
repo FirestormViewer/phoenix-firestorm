@@ -272,6 +272,43 @@
                wrap="true" />
             </layout_panel>
             <layout_panel
+              visibility_control="FSShowEmojiButton"
+              auto_resize="false"
+              user_resize="false"
+              name="emoji_button_layout_panel"
+              width="37">
+              <button
+               follows="right|bottom"
+               bottom="-1"
+               height="24"
+               width ="27"
+               font="EmojiBWLarge"
+               image_hover_unselected="Toolbar_Middle_Over"
+               image_selected="Toolbar_Middle_Selected"
+               image_unselected="Toolbar_Middle_Off"
+               image_overlay="Emoji_Picker_Icon"
+               label=""
+               left="0"
+               name="emoji_picker_toggle_btn"
+               tool_tip="Show emoji panel"
+              />
+              <button
+               follows="right|bottom"
+               bottom="-1"
+               height="24"
+               use_font_color="true"
+               font="EmojiLarge"
+               image_hover_unselected="Toolbar_Middle_Over"
+               image_selected="Toolbar_Middle_Selected"
+               image_unselected="Toolbar_Middle_Off"
+               image_overlay="Arrow_Down"
+               right="-1"
+               name="emoji_recent_panel_toggle_btn"
+               tool_tip="Shows/hides recent emojis"
+               left_pad="0"
+               width="10"/>
+            </layout_panel>
+            <layout_panel
               visibility_control="FSShowChatChannel"
               auto_resize="false"
               user_resize="false"
@@ -363,6 +400,31 @@
 
             </layout_panel>
           </layout_stack>
+        </layout_panel>
+        <layout_panel
+         name="emoji_recent_layout_panel"
+         height="28"
+         auto_resize="false">
+            <text
+             name="emoji_recent_empty_text"
+             follows="top|left|right"
+             layout="topleft"
+             h_pad="20"
+             v_pad="5"
+             top="0"
+             left="5"
+             right="-1"
+             height="25"
+             >Recently used emojis will appear here</text>
+            <emoji_complete
+             name="emoji_recent_icons_ctrl"
+             follows="top|left|right"
+             layout="topleft"
+             max_visible="20"
+             top="0"
+             left="5"
+             right="-1"
+             height="25"/>
         </layout_panel>
       </layout_stack>
     </layout_panel>

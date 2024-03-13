@@ -563,6 +563,8 @@
 			<menu_item_call label="Test Regionsneustart" name="Region Restart Test"/>
 			<menu_item_call label="Medienbrowser" name="Media Browser"/>
 			<menu_item_call label="Facebook Connection-Test" name="FB Connect Test"/>
+			<menu_item_call label="Schriftarten ausgeben" name="Dump Fonts"/>
+			<menu_item_call label="Schriftarten-Texturen ausgeben" name="Dump Font Textures"/>
 			<menu_item_call label="SelectMgr ausgeben" name="Dump SelectMgr"/>
 			<menu_item_call label="Inventarinfo ausgeben" name="Dump Inventory"/>
 			<menu_item_call label="Timer ausgeben" name="Dump Timers"/>
@@ -573,7 +575,8 @@
 			<menu_item_check label="Doppel-Klick-Teleport" name="DoubleClick Teleport"/>
 			<menu_item_check label="SelectMgr debuggen" name="Debug SelectMgr"/>
 			<menu_item_check label="Klicks debuggen" name="Debug Clicks"/>
-			<menu_item_check label="Debug-Ansichten" name="Debug Views"/>
+			<menu_item_check label="Ansichten debuggen" name="Debug Views"/>
+			<menu_item_check label="Unicode debuggen" name="Debug Unicode"/>
 			<menu_item_check label="Kurzinfos: Debug-Namen" name="Debug Name Tooltips"/>
 			<menu_item_check label="Maus-Events debuggen" name="Debug Mouse Events"/>
 			<menu_item_check label="Keys debuggen" name="Debug Keys"/>

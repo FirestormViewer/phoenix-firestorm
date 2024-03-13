@@ -1293,7 +1293,7 @@ bool LLModel::isMaterialListSubset( LLModel* ref )
 	if(modelCnt > refCnt)
 	{
 		// this model cannot be a strict subset if it has more materials than the reference
-		return FALSE;
+		return false;
 	}
 	// </FS:Beq>
 	for (U32 src = 0; src < modelCnt; ++src)
