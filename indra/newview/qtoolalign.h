@@ -15,7 +15,7 @@ class LLToolSelectRect;
 
 class QToolAlign : public LLTool, public LLSingleton<QToolAlign>
 {
-	LLSINGLETON_C11(QToolAlign);
+	LLSINGLETON(QToolAlign);
 	virtual ~QToolAlign();
 
 public:
