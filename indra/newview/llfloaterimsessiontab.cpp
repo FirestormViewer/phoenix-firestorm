@@ -80,7 +80,7 @@ LLFloaterIMSessionTab::LLFloaterIMSessionTab(const LLSD& session_id)
 	mInputPanels(NULL),
 	mChatLayoutPanelHeight(0)
 {
-    setAutoFocus(false);
+	setAutoFocus(false);
 	mSession = LLIMModel::getInstance()->findIMSession(mSessionID);
 
 	mCommitCallbackRegistrar.add("IMSession.Menu.Action",

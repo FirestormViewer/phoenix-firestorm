@@ -409,7 +409,7 @@ public:
 	// LLEditMenuHandler interface
 	/*virtual*/ bool		canDeselect() const override;
 	/*virtual*/ void		deselect() override;
-	
+
 	virtual void	onFocusReceived() override;
 	virtual void	onFocusLost() override;
 

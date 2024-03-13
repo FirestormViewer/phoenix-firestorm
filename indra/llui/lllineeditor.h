@@ -192,7 +192,7 @@ public:
 	/*virtual*/ void 	setRect(const LLRect& rect) override;
 	/*virtual*/ bool	acceptsTextInput() const override;
 	/*virtual*/ void	onCommit() override;
-	/*virtual*/ bool	isDirty() const override;	// Returns TRUE if user changed value at all
+	/*virtual*/ bool	isDirty() const override;	// Returns true if user changed value at all
 	/*virtual*/ void	resetDirty() override;		// Clear dirty state
 
 	// assumes UTF8 text

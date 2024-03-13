@@ -175,7 +175,7 @@ public:
 	virtual bool voiceEnabled(bool no_cache = false) override;
 	// </FS:Ansariel>
 	virtual void setVoiceEnabled(bool enabled) override;
-	virtual bool lipSyncEnabled() override;	
+	virtual bool lipSyncEnabled() override;
 	virtual void setLipSyncEnabled(bool enabled) override;
 	virtual void setMuteMic(bool muted) override;		// Set the mute state of the local mic.
 	//@}
