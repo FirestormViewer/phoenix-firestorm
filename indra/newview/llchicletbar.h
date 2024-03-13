@@ -41,7 +41,7 @@ class LLChicletBar
 	// <FS:Ansariel> [FS communication UI]
 	, public LLIMSessionObserver
 {
-	LLSINGLETON_C11(LLChicletBar);
+	LLSINGLETON(LLChicletBar);
 	LOG_CLASS(LLChicletBar);
 
 public:
