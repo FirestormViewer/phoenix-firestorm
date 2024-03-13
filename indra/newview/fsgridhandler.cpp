@@ -54,7 +54,7 @@
 #include "lfsimfeaturehandler.h"	// <COLOSI opensim multi-currency support />
 #include "llmaterialtable.h" // <FS:Beq> FIRE-31628 for access to static var
 
-static void gridDownloadError( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState )
+void gridDownloadError( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState )
 {
 	LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData );
 
@@ -101,7 +101,7 @@ static void gridDownloadError( LLSD const &aData, LLGridManager* mOwner, GridEnt
 	}
 }
 
-static void gridDownloadComplete( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState )
+void gridDownloadComplete( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState )
 {
 	//mOwner->decResponderCount();
 	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
