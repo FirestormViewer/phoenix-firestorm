@@ -29,6 +29,8 @@ When the Region/Estate floater is opened to the terrain Tab, the current terrain
 - If it is texture terrain, the "PBR Metallic Roughness" checkbox should be unchecked, and the floater should display the four textures applied to the terrain.
 - If it is material terrain, the "PBR Metallic Roughness" checkbox should be checked, and the floater should display the four materials applied to the terrain.
 
+In addition, where possible, textual labels and descriptions in the tab should make sense given the current value of the "PBR Metallic Roughness" checkbox. If the checkbox is unchecked, the labels should refer to textures. If the checkbox is checked, the labels should refer to materials.
+
 ### Toggling Composition Type
 
 When toggling the "PBR Metallic Roughness" checkbox to the opposite value, which does not correspond to the current terrain type, one of the following sets of four terrain swatches will be displayed:
@@ -48,7 +50,7 @@ A user with appropriate permissions can change and save the textures or material
 Saving may fail for the following reasons:
 
 - A terrain or material texture is invalid or null
-- A terrain texture is greater than 1024 resolution (Subject to change. See https://github.com/secondlife/viewer/issues/760)
+- A terrain texture is greater than the max texture upload resolution
 
 Unlike a viewer without PBR terrain support, the new viewer will no longer treat textures with alpha channels as invalid.
 

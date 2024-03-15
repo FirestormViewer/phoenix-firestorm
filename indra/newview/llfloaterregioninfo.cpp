@@ -1500,20 +1500,18 @@ void LLPanelRegionDebugInfo::onClickDebugConsole(void* data)
 
 BOOL LLPanelRegionTerrainInfo::validateTextureSizes()
 {
-	LLCheckBoxCtrl* material_type_ctrl = getChild<LLCheckBoxCtrl>("terrain_material_type");
-    if (material_type_ctrl)
+    if (mMaterialTypeCtrl)
     {
-        const LLTerrainMaterials::Type material_type = material_type_from_ctrl(material_type_ctrl);
+        const LLTerrainMaterials::Type material_type = material_type_from_ctrl(mMaterialTypeCtrl);
         const bool is_material_selected = material_type == LLTerrainMaterials::Type::PBR;
         if (is_material_selected) { return TRUE; }
     }
 
-    static const S32 MAX_TERRAIN_TEXTURE_SIZE = 1024;
+    static LLCachedControl<U32> max_texture_resolution(gSavedSettings, "RenderMaxTextureResolution", 2048);
+    const S32 max_terrain_texture_size = (S32)max_texture_resolution;
 	for(S32 i = 0; i < LLTerrainMaterials::ASSET_COUNT; ++i)
 	{
-		std::string buffer;
-		buffer = llformat("texture_detail_%d", i);
-		LLTextureCtrl* texture_ctrl = getChild<LLTextureCtrl>(buffer);
+        LLTextureCtrl* texture_ctrl = mTextureDetailCtrl[i];
 		if (!texture_ctrl) continue;
 
 		LLUUID image_asset_id = texture_ctrl->getImageAssetID();
@@ -1530,19 +1528,19 @@ BOOL LLPanelRegionTerrainInfo::validateTextureSizes()
 			LLSD args;
 			args["TEXTURE_NUM"] = i+1;
 			args["TEXTURE_BIT_DEPTH"] = llformat("%d",components * 8);
-            args["MAX_SIZE"] = MAX_TERRAIN_TEXTURE_SIZE;
+            args["MAX_SIZE"] = max_terrain_texture_size;
 			LLNotificationsUtil::add("InvalidTerrainBitDepth", args);
 			return FALSE;
 		}
 
-		if (width > MAX_TERRAIN_TEXTURE_SIZE || height > MAX_TERRAIN_TEXTURE_SIZE)
+		if (width > max_terrain_texture_size || height > max_terrain_texture_size)
 		{
 
 			LLSD args;
 			args["TEXTURE_NUM"] = i+1;
 			args["TEXTURE_SIZE_X"] = width;
 			args["TEXTURE_SIZE_Y"] = height;
-            args["MAX_SIZE"] = MAX_TERRAIN_TEXTURE_SIZE;
+            args["MAX_SIZE"] = max_terrain_texture_size;
 			LLNotificationsUtil::add("InvalidTerrainSize", args);
 			return FALSE;
 			
@@ -1596,7 +1594,8 @@ BOOL LLPanelRegionTerrainInfo::postBuild()
 	initCtrl("terrain_raise_spin");
 	initCtrl("terrain_lower_spin");
 
-    getChild<LLUICtrl>("terrain_material_type")->setCommitCallback(boost::bind(&LLPanelRegionTerrainInfo::onSelectMaterialType, this));
+    mMaterialTypeCtrl = findChild<LLCheckBoxCtrl>("terrain_material_type");
+    if (mMaterialTypeCtrl) { mMaterialTypeCtrl->setCommitCallback(boost::bind(&LLPanelRegionTerrainInfo::onSelectMaterialType, this)); }
 
 	std::string buffer;
 
@@ -1604,11 +1603,13 @@ BOOL LLPanelRegionTerrainInfo::postBuild()
 	{
 		buffer = llformat("texture_detail_%d", i);
 		initCtrl(buffer);
+        mTextureDetailCtrl[i] = findChild<LLTextureCtrl>(buffer);
 	}
 	for(S32 i = 0; i < LLTerrainMaterials::ASSET_COUNT; ++i)
 	{
 		buffer = llformat("material_detail_%d", i);
 		initCtrl(buffer);
+        mMaterialDetailCtrl[i] = findChild<LLTextureCtrl>(buffer);
 	}
 
 	for(S32 i = 0; i < CORNER_COUNT; ++i)
@@ -1626,11 +1627,6 @@ BOOL LLPanelRegionTerrainInfo::postBuild()
 	mAskedTextureHeights = false;
 	mConfirmedTextureHeights = false;
 
-    if (!mRegionChangedSlot.connected())
-    {
-        mRegionChangedSlot = gAgent.addRegionChangedCallback(boost::bind(&LLPanelRegionTerrainInfo::onRegionChanged,this));
-    }
-
 	return LLPanelRegionInfo::postBuild();
 }
 
@@ -1642,19 +1638,15 @@ void LLPanelRegionTerrainInfo::onSelectMaterialType()
 
 void LLPanelRegionTerrainInfo::updateForMaterialType()
 {
-    LLCheckBoxCtrl* material_type_ctrl = getChild<LLCheckBoxCtrl>("terrain_material_type");
-    if (!material_type_ctrl) { return; }
-    const LLTerrainMaterials::Type material_type = material_type_from_ctrl(material_type_ctrl);
+    if (!mMaterialTypeCtrl) { return; }
+    const LLTerrainMaterials::Type material_type = material_type_from_ctrl(mMaterialTypeCtrl);
     const bool show_texture_controls = material_type == LLTerrainMaterials::Type::TEXTURE;
     const bool show_material_controls = material_type == LLTerrainMaterials::Type::PBR;
 
     // Toggle visibility of correct swatches
-    std::string buffer;
-    LLTextureCtrl* texture_ctrl;
     for(S32 i = 0; i < LLTerrainMaterials::ASSET_COUNT; ++i)
     {
-        buffer = llformat("texture_detail_%d", i);
-        texture_ctrl = getChild<LLTextureCtrl>(buffer);
+        LLTextureCtrl* texture_ctrl = mTextureDetailCtrl[i];
         if (texture_ctrl)
         {
             texture_ctrl->setVisible(show_texture_controls);
@@ -1662,40 +1654,31 @@ void LLPanelRegionTerrainInfo::updateForMaterialType()
     }
     for(S32 i = 0; i < LLTerrainMaterials::ASSET_COUNT; ++i)
     {
-        buffer = llformat("material_detail_%d", i);
-        texture_ctrl = getChild<LLTextureCtrl>(buffer);
-        if (texture_ctrl)
+        LLTextureCtrl* material_ctrl = mMaterialDetailCtrl[i];
+        if (material_ctrl)
         {
-            texture_ctrl->setVisible(show_material_controls);
+            material_ctrl->setVisible(show_material_controls);
         }
     }
 
     // Toggle visibility of labels
-    LLUICtrl* texture_label = getChild<LLUICtrl>("detail_texture_text");
+    LLUICtrl* texture_label = findChild<LLUICtrl>("detail_texture_text");
 	if (texture_label) { texture_label->setVisible(show_texture_controls); }
-    LLUICtrl* material_label = getChild<LLUICtrl>("detail_material_text");
+    LLUICtrl* material_label = findChild<LLUICtrl>("detail_material_text");
 	if (material_label) { material_label->setVisible(show_material_controls); }
-}
 
-void LLPanelRegionTerrainInfo::onRegionChanged()
-{
-    LLViewerRegion *region = gAgent.getRegion();
-    if (!region) { return; }
-
-    if (region->simulatorFeaturesReceived())
+    // Toggle visibility of documentation labels for terrain blending ranges
+    const std::vector<std::string> doc_suffixes { "5", "10", "11" };
+    std::string buffer;
+    for (const std::string& suffix : doc_suffixes)
     {
-        onSimulatorFeaturesReceived(region->getRegionID(), region);
+        buffer = "height_text_lbl" + suffix;
+        LLUICtrl* texture_doc_label = findChild<LLUICtrl>(buffer);
+        if (texture_doc_label) { texture_doc_label->setVisible(show_texture_controls); }
+        buffer += "_material";
+        LLUICtrl* material_doc_label = findChild<LLUICtrl>(buffer);
+        if (material_doc_label) { material_doc_label->setVisible(show_material_controls); }
     }
-    else
-    {
-        // See "RenderTerrainPBREnabled" in LLViewerRegion::setSimulatorFeatures
-        region->setSimulatorFeaturesReceivedCallback(boost::bind(&LLPanelRegionTerrainInfo::onSimulatorFeaturesReceived,this,_1, _2));
-    }
-}
-
-void LLPanelRegionTerrainInfo::onSimulatorFeaturesReceived(const LLUUID& region_id, LLViewerRegion* regionp)
-{
-    refresh();
 }
 
 // virtual
@@ -1744,22 +1727,21 @@ bool LLPanelRegionTerrainInfo::refreshFromRegion(LLViewerRegion* region)
             reset_material_swatches = !set_material_swatches;
         }
 
-		LLCheckBoxCtrl* material_type_ctrl = getChild<LLCheckBoxCtrl>("terrain_material_type");
-		if (material_type_ctrl) { material_type_to_ctrl(material_type_ctrl, material_type); }
-		updateForMaterialType();
-        material_type_ctrl->setVisible(feature_pbr_terrain_enabled);
+        if (mMaterialTypeCtrl)
+        {
+            material_type_to_ctrl(mMaterialTypeCtrl, material_type);
+            updateForMaterialType();
+            mMaterialTypeCtrl->setVisible(feature_pbr_terrain_enabled);
+        }
 
-		LLTextureCtrl* asset_ctrl;
-		std::string buffer;
         if (set_texture_swatches)
         {
             for(S32 i = 0; i < LLTerrainMaterials::ASSET_COUNT; ++i)
             {
-                buffer = llformat("texture_detail_%d", i);
-                asset_ctrl = getChild<LLTextureCtrl>(buffer);
+                LLTextureCtrl* asset_ctrl = mTextureDetailCtrl[i];
                 if(asset_ctrl)
                 {
-                    LL_DEBUGS() << "Detail Texture " << i << ": "
+                    LL_DEBUGS("Terrain", "Texture") << "Detail Texture " << i << ": "
                              << compp->getDetailAssetID(i) << LL_ENDL;
                     LLUUID tmp_id(compp->getDetailAssetID(i));
                     asset_ctrl->setImageAssetID(tmp_id);
@@ -1770,11 +1752,10 @@ bool LLPanelRegionTerrainInfo::refreshFromRegion(LLViewerRegion* region)
         {
             for(S32 i = 0; i < LLTerrainMaterials::ASSET_COUNT; ++i)
             {
-                buffer = llformat("material_detail_%d", i);
-                asset_ctrl = getChild<LLTextureCtrl>(buffer);
+                LLTextureCtrl* asset_ctrl = mMaterialDetailCtrl[i];
                 if(asset_ctrl)
                 {
-                    LL_DEBUGS() << "Detail Material " << i << ": "
+                    LL_DEBUGS("Terrain", "Material") << "Detail Material " << i << ": "
                              << compp->getDetailAssetID(i) << LL_ENDL;
                     LLUUID tmp_id(compp->getDetailAssetID(i));
                     asset_ctrl->setImageAssetID(tmp_id);
@@ -1785,8 +1766,9 @@ bool LLPanelRegionTerrainInfo::refreshFromRegion(LLViewerRegion* region)
         {
             for(S32 i = 0; i < LLTerrainMaterials::ASSET_COUNT; ++i)
             {
-                buffer = llformat("texture_detail_%d", i);
-                asset_ctrl = getChild<LLTextureCtrl>(buffer);
+                LL_DEBUGS("Terrain", "Texture") << "Reset Texture swatch " << i
+                         << LL_ENDL;
+                LLTextureCtrl* asset_ctrl = mTextureDetailCtrl[i];
                 if(asset_ctrl)
                 {
                     asset_ctrl->setImageAssetID(mLastSetTextures[i]);
@@ -1797,8 +1779,9 @@ bool LLPanelRegionTerrainInfo::refreshFromRegion(LLViewerRegion* region)
         {
             for(S32 i = 0; i < LLTerrainMaterials::ASSET_COUNT; ++i)
             {
-                buffer = llformat("material_detail_%d", i);
-                asset_ctrl = getChild<LLTextureCtrl>(buffer);
+                LL_DEBUGS("Terrain", "Material") << "Reset Material swatch " << i
+                         << LL_ENDL;
+                LLTextureCtrl* asset_ctrl = mMaterialDetailCtrl[i];
                 if(asset_ctrl)
                 {
                     asset_ctrl->setImageAssetID(mLastSetMaterials[i]);
@@ -1806,6 +1789,7 @@ bool LLPanelRegionTerrainInfo::refreshFromRegion(LLViewerRegion* region)
             }
         }
 
+		std::string buffer;
 		for(S32 i = 0; i < CORNER_COUNT; ++i)
     	{
 			buffer = llformat("height_start_spin_%d", i);
@@ -1881,25 +1865,23 @@ BOOL LLPanelRegionTerrainInfo::sendUpdate()
 		}
 	}
 
-	LLTextureCtrl* asset_ctrl;
 	std::string id_str;
 	LLMessageSystem* msg = gMessageSystem;
 
     // Send either material IDs instead of texture IDs depending on
-    // terrain_material_type - they both occupy the same slot.
-	LLCheckBoxCtrl* material_type_ctrl = getChild<LLCheckBoxCtrl>("terrain_material_type");
-    const LLTerrainMaterials::Type material_type = material_type_ctrl ? material_type_from_ctrl(material_type_ctrl) : LLTerrainMaterials::Type::TEXTURE;
+    // material_type - they both occupy the same slot.
+    const LLTerrainMaterials::Type material_type = mMaterialTypeCtrl ? material_type_from_ctrl(mMaterialTypeCtrl) : LLTerrainMaterials::Type::TEXTURE;
     for(S32 i = 0; i < LLTerrainMaterials::ASSET_COUNT; ++i)
     {
+        LLTextureCtrl* asset_ctrl;
         if (material_type == LLTerrainMaterials::Type::PBR)
         {
-            buffer = llformat("material_detail_%d", i);
+            asset_ctrl = mMaterialDetailCtrl[i];
         }
         else
         {
-            buffer = llformat("texture_detail_%d", i);
+            asset_ctrl = mTextureDetailCtrl[i];
         }
-        asset_ctrl = getChild<LLTextureCtrl>(buffer);
 
         if (!asset_ctrl) { continue; }
 

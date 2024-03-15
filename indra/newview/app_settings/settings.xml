@@ -12362,6 +12362,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>0.0</real>
   </map>
+  <key>RenderHDRISplitScreen</key>
+  <map>
+    <key>Comment</key>
+    <string>What percentage of screen to render using HDRI vs EEP sky.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>1.0</real>
+  </map>
   <key>RenderMaxOpenGLVersion</key>
   <map>
     <key>Comment</key>
@@ -12394,6 +12405,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>U32</string>
     <key>Value</key>
     <integer>16</integer>
+  </map>
+  <key>RenderMaxTextureResolution</key>
+  <map>
+    <key>Comment</key>
+    <string>Maximum texture resolution to download for non-boosted textures.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>2048</integer>
   </map>
     <key>RenderDebugTextureBind</key>
     <map>
@@ -14036,7 +14058,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>4.0</real>
+      <real>8.0</real>
     </map>
     <key>RenderTerrainPBRPlanarSampleCount</key>
     <map>

@@ -153,12 +153,15 @@ void LLDrawPoolWLSky::renderSkyHazeDeferred(const LLVector3& camPosLocal, F32 ca
 
             static LLCachedControl<F32> hdri_exposure(gSavedSettings, "RenderHDRIExposure", 0.0f);
             static LLCachedControl<F32> hdri_rotation(gSavedSettings, "RenderHDRIRotation", 0.f);
-            
+            static LLCachedControl<F32> hdri_split(gSavedSettings, "RenderHDRISplitScreen", 1.f);
+            static LLStaticHashedString hdri_split_screen("hdri_split_screen");
+
             LLMatrix3 rot;
             rot.setRot(0.f, hdri_rotation*DEG_TO_RAD, 0.f);
 
             sky_shader->uniform1f(LLShaderMgr::SKY_HDR_SCALE, powf(2.f, hdri_exposure));
             sky_shader->uniformMatrix3fv(LLShaderMgr::DEFERRED_ENV_MAT, 1, GL_FALSE, (F32*) rot.mMatrix);
+            sky_shader->uniform1f(hdri_split_screen, hdri_split);
         }
         else
         {
@@ -470,8 +473,6 @@ void LLDrawPoolWLSky::renderDeferred(S32 pass)
 
     const F32 camHeightLocal = LLEnvironment::instance().getCamHeight();
 
-	gGL.setColorMask(true, false);
-
     LLVector3 const & origin = LLViewerCamera::getInstance()->getOrigin();
 
     if (gPipeline.canUseWindLightShaders())
@@ -488,7 +489,6 @@ void LLDrawPoolWLSky::renderDeferred(S32 pass)
             renderSkyCloudsDeferred(origin, camHeightLocal, cloud_shader);
         }
     }
-    gGL.setColorMask(true, true);
 }
 
 
