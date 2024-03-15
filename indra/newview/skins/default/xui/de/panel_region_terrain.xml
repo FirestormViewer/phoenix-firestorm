@@ -31,11 +31,20 @@
 	<text name="height_text_lbl5">
 		Texturhöhenbereich
 	</text>
+	<text name="height_text_lbl5_material">
+		Materialhöhenbereich
+	</text>
 	<text name="height_text_lbl10">
 		Diese Werte geben den Mischungsgrad für die obigen Texturen an.
 	</text>
+	<text name="height_text_lbl10_material">
+		Diese Werte geben den Mischungsgrad für die obigen Materialien an.
+	</text>
 	<text name="height_text_lbl11">
 		In Metern gemessen. Der Wert „Niedrig“ ist die maximale Höhe von Textur 1, der Wert „Hoch“ die Mindesthöhe von Textur 4.
+	</text>
+	<text name="height_text_lbl11_material">
+		In Metern gemessen. Der Wert „Niedrig“ ist die maximale Höhe von Material 1, der Wert „Hoch“ die Mindesthöhe von Material 4.
 	</text>
 	<text name="height_text_lbl6">
 		Nordwest
