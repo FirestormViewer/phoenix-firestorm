@@ -593,6 +593,8 @@
 			<menu_item_call label="Тест браузера для просмотра медиа" name="Web Browser Test"/>
 			<menu_item_check label="Тест перезапуска региона..." name="Region Restart Test"/>
 			<menu_item_call label="Браузер Web содержимого" name="Web Content Browser"/>
+			<menu_item_call label="Дамп шрифтов" name="Dump Fonts"/>
+			<menu_item_call label="Дамп текстур шрифтов" name="Dump Font Textures"/>
 			<menu_item_call label="Тест соединения с Facebook" name="FB Connect Test"/>
 			<menu_item_call label="Дамп SelectMgr" name="Dump SelectMgr"/>
 			<menu_item_call label="Дамп инвентаря" name="Dump Inventory"/>
