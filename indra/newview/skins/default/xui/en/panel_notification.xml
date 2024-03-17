@@ -57,8 +57,8 @@
       width="285"
       wrap="true"/>
     <text_editor
-    	h_pad="0"
-	v_pad="0"
+      h_pad="0"
+      v_pad="0"
       bg_readonly_color="Transparent"
       border_visible="false"
       embedded_items="false"

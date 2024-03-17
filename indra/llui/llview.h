@@ -243,12 +243,10 @@ public:
 
 	ECursorType	getHoverCursor() { return mHoverCursor; }
 
-    static F32 getTooltipTimeout();
-	// <FS:ND> Made this non inline when changing mToolTipMsg from a LLUIString to a char* to reduce memory usage,
-	// (Making a virtual function inline is debatable anyway).
-	// virtual const std::string getToolTip() const			{ return mToolTipMsg.getString(); }
+	static F32 getTooltipTimeout();
 	virtual const std::string getToolTip() const;
-	// </FS:ND>
+	virtual const std::string& getText() const { return LLStringUtil::null; }
+	virtual const LLFontGL* getFont() const { return nullptr; }
 
 	void		sendChildToFront(LLView* child);
 	void		sendChildToBack(LLView* child);

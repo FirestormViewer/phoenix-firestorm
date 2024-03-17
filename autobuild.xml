@@ -864,9 +864,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7ac35da9b1b5c9a05954edeef3fe8e54</string>
+              <string>52c41a4547d2d9aceb4a9a1e9e1680c71e5ffa79</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/113242/980233/emoji_shortcodes-6.1.0.579438-darwin64-579438.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-emoji-shortcodes/releases/download/v6.1.0.5413f58/emoji_shortcodes-6.1.0.5413f58-darwin64-5413f58.tar.zst</string>
             </map>
             <key>name</key>
             <string>darwin64</string>
@@ -890,16 +892,18 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>087ce7e6d93dcd88b477b10d8e1ab259</string>
+              <string>3137e06d376767a631bc9626832d558c4d5e5aa9</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://automated-builds-secondlife-com.s3.amazonaws.com/ct2/113243/980244/emoji_shortcodes-6.1.0.579438-windows64-579438.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-emoji-shortcodes/releases/download/v6.1.0.5413f58/emoji_shortcodes-6.1.0.5413f58-windows64-5413f58.tar.zst</string>
             </map>
             <key>name</key>
             <string>windows64</string>
           </map>
         </map>
         <key>version</key>
-        <string>6.1.0.579438</string>
+        <string>6.1.0.5413f58</string>
       </map>
       <key>expat</key>
       <map>
@@ -1320,68 +1324,6 @@
         <string>havok-source</string>
         <key>description</key>
         <string>Havok source code for libs and demos</string>
-      </map>
-      <key>icu4c</key>
-      <map>
-        <key>canonical_repo</key>
-        <string>https://bitbucket.org/lindenlab/3p-icu4c</string>
-        <key>copyright</key>
-        <string>Copyright (c) 1995-2011 International Business Machines Corporation and others &lt;http://source.icu-project.org&gt;</string>
-        <key>description</key>
-        <string>ICU is a mature, widely used set of C/C++ and Java libraries providing Unicode and Globalization support for software applications. ICU is widely portable and gives applications the same results on all platforms and between C/C++ and Java software.</string>
-        <key>license</key>
-        <string>ICU, permissive non-copyleft free software license</string>
-        <key>license_file</key>
-        <string>LICENSES/icu.txt</string>
-        <key>name</key>
-        <string>icu4c</string>
-        <key>platforms</key>
-        <map>
-          <key>darwin64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>47bc32b991385f1a6530e4c6179b07f64ca6edc7</string>
-              <key>hash_algorithm</key>
-              <string>sha1</string>
-              <key>url</key>
-              <string>https://github.com/secondlife/3p-icu4c/releases/download/v4.8.1-7d08d82/icu4c-4.8.1-darwin64-7d08d82.tar.zst</string>
-            </map>
-            <key>name</key>
-            <string>darwin64</string>
-          </map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>f5e5be3af96f1eb0842219a94765c04aa9c561c5</string>
-              <key>hash_algorithm</key>
-              <string>sha1</string>
-              <key>url</key>
-              <string>https://3p.firestormviewer.org/icu4c-4.8.1-linux64-240621048.tar.zst</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
-          <key>windows64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>b7db881dac80302e4d9010af34c0bf6ca9897df9</string>
-              <key>hash_algorithm</key>
-              <string>sha1</string>
-              <key>url</key>
-              <string>https://github.com/secondlife/3p-icu4c/releases/download/v4.8.1-7d08d82/icu4c-4.8.1-windows64-7d08d82.tar.zst</string>
-            </map>
-            <key>name</key>
-            <string>windows64</string>
-          </map>
-        </map>
-        <key>version</key>
-        <string>4.8.1-7d08d82</string>
       </map>
       <key>jpegencoderbasic</key>
       <map>

@@ -19,7 +19,6 @@ include(EXPAT)
 include(FMODSTUDIO)
 include(GLOD) # <FS:Beq/> restore GLOD
 include(Hunspell)
-include(ICU4C)
 include(JPEGEncoderBasic)
 include(JsonCpp)
 include(LLAppearance)
@@ -2037,6 +2036,7 @@ set(viewer_APPSETTINGS_FILES
     app_settings/cloud.xml
     app_settings/cmd_line.xml
     app_settings/commands.xml
+    app_settings/emoji_groups.xml
     app_settings/foldertypes.xml
     app_settings/graphic_preset_controls.xml
     app_settings/grass.xml
@@ -2411,7 +2411,6 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         ${LLPHYSICSEXTENSIONS_LIBRARIES}
         ll::bugsplat
         ll::tracy
-        ll::icu4c
         fs::glod # <FS:Beq/> restore GLOD dependencies
         fs::discord # <FS:Ansariel> Discord  support
         )
