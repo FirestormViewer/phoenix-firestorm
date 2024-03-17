@@ -16,6 +16,11 @@
 	<menu label="Débogage" name="Debug">
 		<menu_item_call label="Afficher les paramètres de débogage" name="Debug Settings"/>
 		<menu_item_call label="Outil de prévisualisation XUI" name="UI Preview Tool"/>
+		<menu label="Polices" name="Fonts">
+			<menu_item_call label="Afficher le test de police" name="Show Font Test"/>
+			<menu_item_call label="Vider les polices" name="Dump Fonts"/>
+			<menu_item_call label="Vider les textures des polices" name="Dump Font Textures"/>
+		</menu>
 		<menu label="Tests d'interface" name="UI Tests">
 			<menu_item_call label="Zone de texte" name="Textbox"/>
 			<menu_item_call label="Éditeur de texte" name="Text Editor"/>

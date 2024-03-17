@@ -1053,6 +1053,7 @@ S32 LLTextBase::insertStringNoUndo(S32 pos, const LLWString &wstr, LLTextBase::s
 
 	// Insert special segments where necessary (insertSegment takes care of splitting normal text segments around them for us)
 	{
+		static LLUICachedControl<bool> useBWEmojis("FSUseBWEmojis", false); // <FS:Beq/> Add B&W emoji font support
 		LLStyleSP emoji_style;
 		LLEmojiDictionary* ed = LLEmojiDictionary::instanceExists() ? LLEmojiDictionary::getInstance() : NULL;
 		for (S32 text_kitty = 0, text_len = wstr.size(); text_kitty < text_len; text_kitty++)
@@ -1064,7 +1065,7 @@ S32 LLTextBase::insertStringNoUndo(S32 pos, const LLWString &wstr, LLTextBase::s
 				if (!emoji_style)
 				{
 					emoji_style = new LLStyle(getStyleParams());
-					emoji_style->setFont(LLFontGL::getFontEmojiLarge());
+					emoji_style->setFont(LLFontGL::getFontEmojiLarge(useBWEmojis)); // <FS:Beq/> Add B&W emoji font support
 				}
 
 				S32 new_seg_start = pos + text_kitty;

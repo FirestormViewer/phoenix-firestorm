@@ -1090,30 +1090,58 @@ LLFontGL::VAlign LLFontGL::vAlignFromName(const std::string& name)
 }
 
 //static
-LLFontGL* LLFontGL::getFontEmojiSmall()
+LLFontGL* LLFontGL::getFontEmojiSmall(bool useBW) // <FS:Beq/> Add B&W emoji font support
 {
 	static LLFontGL* fontp = getFont(LLFontDescriptor("Emoji", "Small", 0));
+// <FS:Beq> Add B&W emoji font support
+	static LLFontGL* fontp_bw = getFont(LLFontDescriptor("EmojiBW", "Small", 0));
+	if( useBW )
+	{
+		return fontp_bw;
+	}
+// </FS:Beq>
 	return fontp;;
 }
 
 //static
-LLFontGL* LLFontGL::getFontEmojiMedium()
+LLFontGL* LLFontGL::getFontEmojiMedium(bool useBW) // <FS:Beq/> Add B&W emoji font support
 {
 	static LLFontGL* fontp = getFont(LLFontDescriptor("Emoji", "Medium", 0));
+// <FS:Beq> Add B&W emoji font support
+	static LLFontGL* fontp_bw = getFont(LLFontDescriptor("EmojiBW", "Medium", 0));
+	if( useBW )
+	{
+		return fontp_bw;
+	}
+// </FS:Beq>
 	return fontp;;
 }
 
 //static
-LLFontGL* LLFontGL::getFontEmojiLarge()
+LLFontGL* LLFontGL::getFontEmojiLarge(bool useBW) // <FS:Beq/> Add B&W emoji font support
 {
 	static LLFontGL* fontp = getFont(LLFontDescriptor("Emoji", "Large", 0));
+// <FS:Beq> Add B&W emoji font support
+	static LLFontGL* fontp_bw = getFont(LLFontDescriptor("EmojiBW", "Large", 0));
+	if( useBW )
+	{
+		return fontp_bw;
+	}
+// </FS:Beq>
 	return fontp;;
 }
 
 //static
-LLFontGL* LLFontGL::getFontEmojiHuge()
+LLFontGL* LLFontGL::getFontEmojiHuge(bool useBW) // <FS:Beq/> Add B&W emoji font support
 {
 	static LLFontGL* fontp = getFont(LLFontDescriptor("Emoji", "Huge", 0));
+// <FS:Beq> Add B&W emoji font support
+	static LLFontGL* fontp_bw = getFont(LLFontDescriptor("EmojiBW", "Huge", 0));
+	if( useBW )
+	{
+		return fontp_bw;
+	}
+// </FS:Beq>
 	return fontp;;
 }
 

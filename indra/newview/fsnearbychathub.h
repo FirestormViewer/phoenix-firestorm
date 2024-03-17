@@ -39,8 +39,6 @@ class FSNearbyChat : public LLSingleton<FSNearbyChat>
 	LLSINGLETON(FSNearbyChat);
 	~FSNearbyChat();
 
-	void sendMsg();
-
 	static S32 sLastSpecialChatChannel;
 	FSNearbyChatControl* mDefaultChatBar;
 

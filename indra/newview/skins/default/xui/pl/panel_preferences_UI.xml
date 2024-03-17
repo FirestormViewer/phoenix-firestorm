@@ -263,6 +263,11 @@ Domyślnie 0. Większa wartość może sprawiać kłopoty.
             <combo_item name="Medium" label="Średnia" />
             <combo_item name="Large" label="Duża" />
         </combo_box>
+        <text name="emoji_font_settings_label">
+            Ustawienia czcionki emoji: (wymaga restartu)
+        </text>
+        <check_box label="Wyświetlaj emoji monochromatycznie" name="FSUseBWEmojis" />
+        <check_box label="Użyj ładnego przycisku emoji" name="FSUsePrettyEmojiButton" />
     </panel>
 </tab_container>
 </panel>
