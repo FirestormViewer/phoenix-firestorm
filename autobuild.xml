@@ -808,9 +808,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c539c58aee1d010928ae29ad344656a5</string>
+              <string>2845d791c0f00392ba1573bc645a0fc8a7fd37ae</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/dullahan-1.14.0.202311061750_118.6.8_ge44bee1_chromium-118.0.5993.117-linux64-233100650.tar.bz2</string>
+              <string>https://3p.firestormviewer.org/dullahan-1.14.0.202403161609_118.6.8_ge44bee1_chromium-118.0.5993.117-linux64-240760509.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
