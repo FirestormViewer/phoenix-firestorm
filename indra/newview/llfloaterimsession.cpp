@@ -610,7 +610,7 @@ void LLFloaterIMSession::onCallButtonClicked()
 	}
 }
 
-void LLFloaterIMSession::onChange(EStatusType status, const std::string &channelURI, bool proximal)
+void LLFloaterIMSession::onChange(EStatusType status, const LLSD& channelInfo, bool proximal)
 {
 	if(status != STATUS_JOINING && status != STATUS_LEFT_CHANNEL)
 	{

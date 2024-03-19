@@ -753,7 +753,7 @@ void FSFloaterIM::onSysinfoButtonVisibilityChanged(const LLSD& yes)
 }
 // support sysinfo button -Zi
 
-void FSFloaterIM::onChange(EStatusType status, const std::string &channelURI, bool proximal)
+void FSFloaterIM::onChange(EStatusType status, const LLSD& channelInfo, bool proximal)
 {
 	if(status == STATUS_JOINING || status == STATUS_LEFT_CHANNEL)
 	{

@@ -103,7 +103,7 @@ public:
 	
 	//AO: Callbacks for voice handling formerly in llPanelImControlPanel
 	void onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state);
-	void onChange(EStatusType status, const std::string &channelURI, bool proximal);
+	void onChange(EStatusType status, const LLSD& channelInfo, bool proximal);
 	void updateButtons(bool is_call_started);
 	void updateCallButton();
 	void changed(U32 mask);

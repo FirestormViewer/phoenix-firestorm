@@ -108,7 +108,7 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	// is created from the UICtrlFactory
 
 	// <FS:Ansariel> Add callback for user volume change
-	mVoiceLevelChangeCallbackConnection = LLVoiceClient::getInstance()->setUserVolumeUpdateCallback(boost::bind(&LLAvatarListItem::onUserVoiceLevelChange, this, _1));
+	mVoiceLevelChangeCallbackConnection = LLVoiceClient::setUserVolumeUpdateCallback(boost::bind(&LLAvatarListItem::onUserVoiceLevelChange, this, _1));
 	// </FS:Ansariel>
 }
 
