@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="top_objects" title="Кращі об'єкти" min_width="800">
+	<floater.string name="top_scripts_title">
+		Найкращі скрипти
+	</floater.string>
+	<floater.string name="top_scripts_text">
+		[COUNT] скриптів тривалістю [TIME] мс та розміром \[MEMORY] Кбайт
+	</floater.string>
+	<floater.string name="scripts_score_label">
+		Час
+	</floater.string>
+	<floater.string name="top_colliders_title">
+		Найкращі зіткнення
+	</floater.string>
+	<floater.string name="top_colliders_text">
+		Найкращі [COUNT] об'єкти, що піддаються потенційним зіткненням
+	</floater.string>
+	<floater.string name="colliders_score_label">
+		Оцінка
+	</floater.string>
+	<floater.string name="none_descriptor">
+		Не знайдено.
+	</floater.string>
+	<floater.string name="URLs">
+		URL-адреси
+	</floater.string>
+	<floater.string name="memory">
+		Пам'ять (КБ)
+	</floater.string>
+	<text name="title_text">
+		Завантаження...
+	</text>
+	<scroll_list name="objects_list">
+		<scroll_list.columns label="Оцінка" name="score"/>
+		<scroll_list.columns label="Назва" name="name"/>
+		<scroll_list.columns label="Власник" name="owner"/>
+		<scroll_list.columns label="Місце" name="location"/>
+		<scroll_list.columns label="Ділянка" name="parcel"/>
+		<scroll_list.columns label="Дані" name="time"/>
+		<scroll_list.columns label="URL-адреса" name="URLs"/>
+		<scroll_list.columns label="Пам'ять (КБ)" name="memory"/>
+	</scroll_list>
+	<text name="id_text">
+		ID об'єкта:
+	</text>
+	<button label="Показати мітку" name="show_beacon_btn"/>
+	<text name="obj_name_text">
+		Назва об'єкту:
+	</text>
+	<button label="Фільтр" name="filter_object_btn"/>
+	<text name="owner_name_text">
+		Власник:
+	</text>
+	<button label="Фільтр" name="filter_owner_btn"/>
+	<text name="parcel_name_text">
+		Ділянка:
+	</text>
+	<button label="Фільтр" name="filter_parcel_btn"/>
+	<button label="Оновити" name="refresh_btn" />
+	<button label="Повернути вибране" name="return_selected_btn" width="120" />
+	<button label="Повернути все" name="return_all_btn" />
+	<button label="Teleport to" name="teleport_to_btn" />
+	<button label="Профіль" name="profile_btn" />
+	<button label="Про скрипти" name="script_info_btn" />
+	<button label="Викинути" name="estate_kick_btn" />
+</floater>

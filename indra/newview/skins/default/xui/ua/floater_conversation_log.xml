@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_conversation_log" title="Журнал розмов">
+	<panel name="buttons_panel">
+		<filter_editor label="Фільтр людей" name="people_filter_input"/>
+		<menu_button name="conversations_gear_btn" tool_tip="Дії для обраної людини або групи"/>
+		<menu_button name="conversation_view_btn" tool_tip="Опції виду/сортування"/>
+	</panel>
+</floater>

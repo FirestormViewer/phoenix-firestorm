@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="contents" title="Купити копію об'єкта">
+	<floater.string name="title_buy_text">
+		Придбати
+	</floater.string>
+	<floater.string name="title_buy_copy_text">
+		Купити копію
+	</floater.string>
+	<floater.string name="no_copy_text">
+		(не копіюється)
+	</floater.string>
+	<floater.string name="no_modify_text">
+		(не змінюється)
+	</floater.string>
+	<floater.string name="multiple_selected">
+		Множинний вибір
+	</floater.string>
+	<floater.string name="no_transfer_text">
+		(не передається)
+	</floater.string>
+	<text name="contents_text">
+		Вміст:
+	</text>
+	<text name="buy_text">
+		Придбати за L$[AMOUNT] у користувача:
+	</text>
+	<text name="buy_name_text">
+		[ІМ'Я]?
+	</text>
+	<button label="Купити" label_selected="Купити" name="buy_btn"/>
+	<button label="Скасувати" label_selected="Скасувати" name="cancel_btn"/>
+</floater>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="MemLeak" title="Симуляція витоку пам'яті">
+	<spinner label="Швидкість витоку (байтів за кадр):" name="leak_speed"/>
+	<spinner label="Максимальний витік пам'яті (Мб):" name="max_leak"/>
+	<text name="total_leaked_label">
+		Поточний витік пам'яті: [SIZE] КБ
+	</text>
+	<button label="Звільнити" name="release_btn"/>
+	<button label="Закрити" name="close_btn"/>
+	<button label="Почати" name="start_btn"/>
+	<button label="Зупинити" name="stop_btn"/>
+</floater>

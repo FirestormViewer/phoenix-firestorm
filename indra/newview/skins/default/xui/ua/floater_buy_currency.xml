@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<floater title="Купити L$" name="buy currency">
+	<floater.string name="buy_currency">
+		Придбати L$ [LINDENS] приблизно за [LOCALAMOUNT]
+	</floater.string>
+	<floater.string name="info_cannot_buy">
+		Не можна купити
+	</floater.string>
+	<layout_stack name="outer_stack">
+		<layout_panel name="layout_panel_title">
+			<text name="info_need_more">
+				Вам потрібно більше L$
+			</text>
+			<text name="info_buying">
+				Придбати L$
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_price">
+			<text name="target_price_label">
+				Вам потрібно
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_balance">
+			<text name="balance_label">
+				Тепер у вас є
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_required">
+			<text name="required_label">
+				Ви повинні купити хоча б
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_action">
+			<text name="currency_action">
+				Виберіть суму для покупки
+			</text>
+			<text name="currency_est">
+				приблизно [LOCALAMOUNT]
+			</text>
+			<text name="getting_data">
+				Підрахунок...
+			</text>
+			<text name="total_label">
+				Ваш новий баланс буде
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_msg">
+			<text name="currency_links">
+				[http://www.secondlife.com/my/account/payment_method_management.php спосіб оплати] | [http://www.secondlife.com/my/account/currency.php гроші]
+			</text>
+			<text name="exchange_rate_note">
+				Повторно введіть суму, щоб побачити новий курс обміну.
+			</text>
+			<text name="purchase_warning_repurchase">
+				Після отримання L$ спробуйте покупку знову.
+			</text>
+		</layout_panel>
+		<layout_panel name="layout_panel_buttons">
+			<text name="contacting">
+				З'єднання з LindeX...
+			</text>
+			<button label="Купити" name="buy_btn"/>
+			<button label="Скасувати" name="cancel_btn"/>
+		</layout_panel>
+	</layout_stack>
+</floater>

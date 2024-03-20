@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu_bar name="Main Menu">
+	<menu label="Аватар" name="Me">
+		<menu_item_call label="Ваш обліковий запис" name="Manage Account"/>
+		<menu_item_call label="Торгівельні списки..." name="MarketplaceListings"/>
+		<menu_item_call label="Купити L$" name="Buy and Sell L$"/>
+
+		<menu_item_call label="Нове вікно інвентарю" name="NewInventoryWindow"/>
+		<menu_item_check label="Інвентар" name="Inventory"/>
+		<menu_item_check label="Захищені папки" name="Protected Folders"/>
+		<menu_item_check label="Вибрані одягу" name="WearableFavorites"/>
+		<menu_item_call label="Місця" name="Picks"/>
+		<menu_item_call label="Пригоди" name="Experiences"/>
+
+		<menu_item_call label="Профіль" name="Profile"/>
+		<menu_item_call label="Зараз одягнено..." name="NowWearing"/>
+		<menu_item_check label="Зовнішність" name="ChangeOutfit"/>
+		<menu label="Зняти" name="Take Off &gt;">
+			<menu label="Одяг" name="Clothes &gt;">
+				<menu_item_call label="Сорочка" name="Shirt"/>
+				<menu_item_call label="Штани" name="Pants"/>
+				<menu_item_call label="Спідниця" name="Skirt"/>
+				<menu_item_call label="Взуття" name="Shoes"/>
+				<menu_item_call label="Носки" name="Socks"/>
+				<menu_item_call label="Піджак" name="Jacket"/>
+				<menu_item_call label="Рукавички" name="Gloves"/>
+				<menu_item_call label="Мати" name="Self Undershirt"/>
+				<menu_item_call label="Труси" name="Self Underpants"/>
+				<menu_item_call label="Татуювання" name="Self Tattoo"/>
+				<menu_item_call label="Фізика" name="Self Physics"/>
+				<menu_item_call label="Альфа" name="Self Alpha"/>
+				<menu_item_call label="Весь одяг" name="All Clothes"/>
+			</menu>
+			<menu label="Екран" name="Avatar Detach HUD" />
+			<menu label="Від'єднати" name="Avatar Detach" />
+			<menu_item_call label="Від'єднати Всі" name="Detach All"/>
+		</menu>
+
+		<menu_item_call label="Виберіть аватар" name="Avatar Picker"/>
+
+		<menu_item_call label="Висота зміщення" name="HoverHeight"/>
+		<menu label="Рух" name="Movement">
+			<menu_item_call label="Встати" name="Stand up"/>
+			<menu_item_call label="Сідайте тут" name="Sit Down Here"/>
+			<menu_item_check label="Літати" name="Fly"/>
+			<menu_item_call label="Припинити літати" name="Stop flying"/>
+			<menu_item_check label="Завжди бігти" name="Always Run"/>
+			<menu_item_check label="Примусово сісти на землю" name="Force Toggle Sitting"/>
+			<menu_item_check label="Заблокувати переміщення" name="Move Lock"/>
+			<menu_item_check label="Швидкий стрибок" name="Avatar Ignore Prejump"/>
+		</menu>
+		<menu_item_check label="Керування рухом" name="Movement Controls"/>
+		<menu_item_check label="Керування камерою" name="Camera Controls"/>
+
+		<menu label="Виправлення аватара" name="avhealth">
+			<menu_item_call label="Зупинити анімацію аватара" name="Stop Animating My Avatar"/>
+			<menu_item_call label="Зупинити анімацію аватара та скасувати дозволи" name="Stop Animating My Avatar With Revoke"/>
+			<menu_item_call label="Роздеформувати аватара" name="undeform_avatar"/>
+			<menu_item_call label="Скидання скелета" name="Reset Skeleton"/>
+			<menu_item_call label="Скидання скелета та анімацій" name="Reset Skeleton And Animations"/>
+			<menu_item_call label="Примусове оновлення зовнішності (Rebake)" name="Rebake Texture"/>
+			<menu_item_call label="Оновити приєднання" name="Refresh Attachments"/>
+			<menu_item_call label="Скидання налаштувань чоловічого аватара (Тест персонажа)" name="ResetDefaultAvM"/>
+			<menu_item_call label="Скидання налаштувань жіночого аватара (Тест персонажа)" name="ResetDefaultAvF"/>
+			<menu_item_check label="Показати інформацію складності аватарів" name="Avatar Draw Info"/>
+			<menu_item_call label="Мої скрипти..." name="MyScripts"/>
+			<menu_item_call label="Вимірювання лагів" name="Lag Meter"/>
+			<menu_item_call label="Перетворити LSL міст" name="Recreate LSL Bridge"/>
+		</menu>
+
+		<menu_item_call label="Снімок" name="Take Snapshot"/>
+		<menu_item_call label="360° Знімок" name="Capture 360"/>
+		<menu_item_call label="Відстеження грошей" name="money_tracker"/>
+		<menu_item_call label="Поза редагування..." name="pose_stand"/>
+
+		<menu_item_call label="Налаштування" name="Preferences"/>
+		<menu_item_call label="Кнопки панелі інструментів" name="Toolbar Buttons"/>
+
+		<menu_item_check label="Показувати приєднані HUD" name="Show HUD Attachments"/>
+		<menu_item_check label="Показувати Інтерфейс Користувача" name="Show User Interface"/>
+		<menu_item_call label="Запит статусу 'Адміністратор'" name="Request Admin Options"/>
+		<menu_item_call label="Вихід зі статусу 'Адміністратор'" name="Leave Admin Options"/>
+		<menu_item_call label="Вихід з [APP_NAME]" name="Quit"/>
+	</menu>
+
+<!-- Меню спілкування -->
+
+	<menu label="Спілкування" name="Communicate">
+		<menu label="Статус у мережі" name="Status">
+			<menu_item_check label="Немає на місці" name="Away"/>
+			<menu_item_check label="Не турбувати" name="Do Not Disturb" />
+			<menu_item_check label="Автовідповідач" name="Set Autorespond"/>
+			<menu_item_check label="Автовідповідач не друзям" name="Set Autorespond to non-friends"/>
+			<menu_item_check label="Відхиляти пропозиції та запити телепортації" name="Automatically reject teleport offers"/>
+			<menu_item_check label="Відхиляти всі запрошення до груп" name="Reject all group invites"/>
+			<menu_item_check label="Відхиляти всі запити дружби" name="Reject all friendship requests"/>
+		</menu>
+		<menu_item_call label="Мої друзі" name="My Friends"/>
+		<menu_item_check label="Контакти" name="Contacts"/>
+		<menu_item_call label="Набір контактів" name="Contact Sets"/>
+		<menu_item_call label="Групи" name="My Groups"/>
+		<menu_item_check label="Загальний чат..." name="Nearby Chat"/>
+		<menu_item_check label="Люди" name="People"/>
+		<menu_item_check label="Розмови" name="Conversations"/>
+		<menu_item_check label="Жести" name="Gestures"/>
+		<menu label="Зміна голосу" name="VoiceMorphing">
+			<menu_item_check label="Немає змін голосу" name="NoVoiceMorphing"/>
+			<menu_item_check label="Попередній перегляд..." name="Preview"/>
+			<menu_item_call label="Підписатися..." name="Subscribe"/>
+			<menu_item_call label="Преміум бонус..." name="PremiumPerk"/>
+		</menu>
+		<menu_item_check name="Conversation Log..." label="Журнал розмов..."/>
+		<menu_item_check label="Найближчі голоси" name="Nearby Voice"/>
+		<menu_item_call label="Список заблокованих" name="Block List"/>
+	</menu>
+
+	<!-- Світове меню -->
+
+	<menu label="Світ" name="World">
+		<menu_item_call label="Синхронізація анімації" name="Resync Animations"/>
+		<menu_item_call label="Найближчі аватари" name="Active Speakers"/>
+		<menu_item_check label="Радар" name="Radar"/>
+		<menu_item_call label="Історія телепортацій" name="Teleport History"/>
+		<menu_item_check label="Місця" name="Places"/>
+		<menu_item_call label="Пункти" name="Destinations"/>
+		<menu_item_call label="Події" name="Events"/>
+		<menu_item_check label="Міні-мапа" name="Mini-Map"/>
+		<menu_item_check label="Мапа світу" name="World Map"/>
+		<menu_item_check label="Відстеження регіону" name="Region Tracker"/>
+		<menu_item_check label="Назва Потоку" name="Stream Title"/>
+		<menu_item_call label="Створити закладку" name="Create Landmark Here"/>
+		<menu_item_call label="Профіль локації" name="Place Profile"/>
+		<menu_item_call label="Деталі ділянки" name="About Land"/>
+		<menu_item_call label="Деталі регіону" name="RegionEstate"/>
+		<menu_item_call label="Встановити 'Дім' тут" name="Set Home to Here"/>
+		<menu_item_call label="Купити цю землю" name="Buy Land"/>
+		<menu_item_call label="Показати власні землі" name="My Land"/>
+		<menu_item_call label="Мій Лінден Дім..." name="Linden Home"/>
+		<menu label="Показати більше" name="LandShow">
+			<menu_item_check label="Заборонні лінії" name="Ban Lines"/>
+			<menu_item_check label="Маяки" name="beacons"/>
+			<menu_item_check label="Лінії власності" name="Property Lines"/>
+			<menu_item_check label="Власників землі" name="Land Owners"/>
+			<menu_item_check label="Координати" name="Coordinates"/>
+			<menu_item_check label="Права ділянки" name="Parcel Properties"/>
+			<menu_item_check label="Розширене меню" name="Show Advanced Menu"/>
+		</menu>
+		<menu_item_check label="Збільшити швидкість графіки..." name="Performance"/>
+		<menu_item_call label="Телепортуватися додому" name="Teleport Home"/>
+
+		<menu label="Довкілля" name="Environment">
+			<menu_item_check label="Восход" name="Sunrise"/>
+			<menu_item_check label="Полудень" name="Noon"/>
+			<menu_item_check label="Закат" name="Sunset"/>
+			<menu_item_check label="Північ" name="Midnight"/>
+			<menu_item_check label="Використовувати Спільне Навколишнє середовище" name="Use Shared Environment"/>
+			<menu_item_call label="Моє навколишнє середовище..." name="my_environs"/>
+			<menu_item_call label="Особисте Освітлення..." name="adjustment_tool"/>
+			<menu_item_check label="Пауза Хмар" name="pause_clouds"/>
+			<menu label="Масовий імпорт" name="WL Bulk Import">
+				<menu_item_call label="Дні..." name="WL Bulk Import Days"/>
+				<menu_item_call label="Хмари..." name="WL Bulk Import Skies"/>
+				<menu_item_call label="Вода..." name="WL Bulk Import Water"/>
+			</menu>
+		</menu>
+
+		<!-- <menu label="Положення сонця" name="Environment Settings">
+			<menu_item_check label="Восход" name="Схід сонця"/>
+			<menu_item_check label="Полудень" name="Noon"/>
+			<menu_item_check label="Zakat" name="Sunset"/>
+			<menu_item_check label="Північ" name="Midnight"/>
+			<menu_item_check label="Час острова" name="Revert to Region Default"/>
+		</menu>
+		<menu label="Редактор навколишнього середовища" name="Environment Editor">
+			<menu_item_call label="Параметри середовища..." name="Environment Settings"/>
+			<menu name="Water Presets" label="Предустановлення води">
+				<menu_item_call label="Нова попередня установка..." name="new_water_preset"/>
+				<menu_item_call label="Редагувати попереднє встановлення..." name="edit_water_preset"/>
+				<menu_item_call label="Видалити попереднє встановлення..." name="delete_water_preset"/>
+			</menu>
+			<menu name="Sky Presets" label="Sky Presets">
+				<menu_item_call label="Нова попередня установка..." name="new_sky_preset"/>
+				<menu_item_call label="Редагувати попереднє встановлення..." name="edit_sky_preset"/>
+				<menu_item_call label="Видалити попереднє встановлення..." name="delete_sky_preset"/>
+			</menu>
+			<menu name="Day Presets" label="Предустановлення дня">
+				<menu_item_call label="Нова попередня установка..." name="new_day_preset"/>
+				<menu_item_call label="Редагувати попереднє встановлення..." name="edit_day_preset"/>
+				<menu_item_call label="Видалити попереднє встановлення..." name="delete_day_preset"/>
+			</menu>
+		</menu> -->
+
+		<menu name="photo_and_video" label="Фото та Відео">
+			<menu_item_call label="Інструменти фото" name="phototools_item_call"/>
+			<menu_item_call label="Інструменти камери" name="cameratools_item_call"/>
+			<menu_item_check label="Блокування фокусу Глибина різкості" name="lock_focus_point"/>
+		</menu>
+		<menu_item_call label="Пошук навколо" name="area_search"/>
+		<menu_item_call label="Провідник звуків" name="Sound Explorer"/>
+		<menu_item_call label="Провідник анімацій" name="Animation Explorer"/>
+		<menu_item_call label="Чорний список активів" name="asset_blacklist"/>
+		<menu_item_call label="Налаштування відображення аватарів" name="Avatar Render Settings"/>
+		<menu_item_check label="Завжди показувати друзів повністю" name="Always show Friends normally"/>
+		<menu_item_check label="Показувати лише друзів" name="Render Friends Only"/>
+	</menu>
+
+	<menu label="Будувати" name="BuildTools">
+		<menu_item_check label="Строити" name="Show Build Tools"/>
+		<menu label="Вибір інструменту будівництва" name="Select Tool">
+			<menu_item_call label="Фокус" name="Focus"/>
+			<menu_item_call label="Рухати" name="Move"/>
+			<menu_item_call label="Редагувати" name="Edit"/>
+			<menu_item_call label="Створити" name="Create"/>
+			<menu_item_call label="Правити землю" name="Land"/>
+		</menu>
+		<menu label="Виберіть елементи" name="Select Elements">
+			<menu_item_call label="Вибрати наступну частину або грань" name="Select Next Part or Face"/>
+			<menu_item_call label="Вибрати попередню частину або грань" name="Select Previous Part or Face"/>
+			<menu_item_call label="Включати наступну частину або грань" name="Include Next Part or Face"/>
+			<menu_item_call label="Включати попередню частину або грань" name="Include Previous Part or Face"/>
+		</menu>
+		<menu_item_call label="З'єднати" name="Link"/>
+		<menu_item_call label="Розділити" name="Unlink"/>
+		<menu_item_check label="Правити з'єднані частини" name="Edit Linked Parts"/>
+		<menu label="Вибрати з'єднані частини" name="Select Linked Parts">
+			<menu_item_call label="Вибрати наступну частину" name="Select Next Part"/>
+			<menu_item_call label="Вибрати попередню частину" name="Select Previous Part"/>
+			<menu_item_call label="Включати наступну частину" name="Include Next Part"/>
+			<menu_item_call label="Включати попередню частину" name="Include Previous Part"/>
+		</menu>
+		<menu_item_call label="Сфокусуватися на вибраному" name="Focus on Selection"/>
+		<menu_item_call label="Збільшити вибране" name="Zoom to Selection"/>
+		<menu label="Об'єкт" name="Object">
+			<menu_item_call label="Купити" name="Menu Object Buy"/>
+			<menu_item_call label="Взять" name="Menu Object Take"/>
+			<menu_item_call label="Взяти копію" name="Take Copy"/>
+			<menu_item_call label="Дублювати" name="Duplicate"/>
+			<menu_item_call label="Правити частинки" name="Menu Object Edit Particles"/>
+			<menu_item_call label="Зберегти з поверненням в інвентар" name="Save Object Back to My Inventory"/>
+			<menu_item_call label="Зберегти об'єкт в інвентарі" name="Save Object Back to My Inventory"/>
+			<menu_item_call label="Зберегти вміст об'єкта" name="Save Object Back to Object Contents"/>
+			<menu_item_call label="Повернути об'єкт" name="Return Object back to Owner"/>
+			<menu label="Зберегти як" name="Export Menu">
+				<menu_item_call label="Резервна копія" name="Backup"/>
+				<menu_item_call label="Collada" name="Collada"/>
+			</menu>
+		</menu>
+		<menu label="Скрипти" name="Scripts">
+			<menu_item_call label="Показати попередження/помилки скриптів" name="Script Debug"/>
+			<menu_item_call label="Інформація про скрипти (Лічильник)" name="Script Info"/>
+			<menu_item_call label="Перекомпілювати скрипти (Моно)" name="Mono"/>
+			<menu_item_call label="Перекомпілювати скрипти (LSL)" name="LSL"/>
+			<menu_item_call label="Скинути скрипти" name="Reset Scripts"/>
+			<menu_item_call label="Запустити скрипти" name="Set Scripts to Running"/>
+			<menu_item_call label="Зупинити скрипти" name="Set Scripts to Not Running"/>
+			<menu_item_call label="Видалити скрипти у вибраному" name="Remove Scripts From Selection"/>
+		</menu>
+		<menu label="Пошук шляху" name="Pathfinding">
+			<menu_item_call label="Групи каналів..." name="pathfinding_linksets_menu_item"/>
+			<menu_item_call label="Персонажі..." name="pathfinding_characters_menu_item"/>
+			<menu_item_call label="Огляд / перевірка..." name="pathfinding_console_menu_item"/>
+			<menu_item_call label="Перетворити регіон" name="pathfinding_rebake_navmesh_item"/>
+		</menu>
+		<menu label="Параметри" name="Options">
+			<menu_item_check label="Показати додаткові дозволи" name="DebugPermissions"/>
+			<menu_item_check label="Вибирати тільки мої об'єкти" name="Select Only My Objects"/>
+			<menu_item_check label="Вибирати лише рухомі об'єкти" name="Select Only Movable Objects"/>
+			<menu_item_check label="Вибирати лише блоковані об'єкти" name="Select Only Locked Objects"/>
+			<menu_item_check label="Вибирати тільки копіювані об'єкти" name="Select Only Copyable Objects"/>
+			<menu_item_check label="Включати об'єкти власності групи" name="Include Group-Owned Objects"/>
+			<menu_item_check label="Вибирати навколишнє" name="Select By Surrounding"/>
+			<menu_item_check label="Показати фізичну форму" name="Show Physics Shape"/>
+			<menu_item_check label="Показати контури вибраного" name="Show Selection Outlines"/>
+			<menu_item_check label="Показати прихований вибір" name="Show Hidden Selection"/>
+			<menu_item_check label="Показати радіус світла для вибраних" name="Show Light Radius for Selection"/>
+			<menu_item_check label="Показати промінь вибору" name="Show Selection Beam"/>
+			<menu_item_check label="Прив'язка до сітки" name="Snap to Grid"/>
+			<menu_item_call label="Прив'язка XY об'єкта до сітки" name="Snap Object XY to Grid"/>
+			<menu_item_call label="Використовувати вибране для сітки" name="Use Selection for Grid"/>
+			<menu_item_call label="Параметри сітки..." name="Grid Options"/>
+			<menu_item_call label="Встановити стандартні дозволи..." name="Set default permissions"/>
+		</menu>
+		<menu label="Завантажити" name="Upload">
+			<menu_item_call label="Зображення (L$[COST])..." name="Upload Image"/>
+			<menu_item_call label="Звук (L$[COST])..." name="Upload Sound"/>
+			<menu_item_call label="Анімація (L$[COST])..." name="Upload Animation"/>
+			<menu_item_call label="Меш модель..." name="Upload Model"/>
+			<menu_item_call label="Кілька..." name="Bulk Upload"/>
+			<menu_item_call label="Імпортувати..." name="import linkset"/>
+		</menu>
+		<menu_item_call label="Локальний міш" name="local_mesh"/>
+		<menu_item_call label="Скасувати" name="Undo"/>
+		<menu_item_call label="Повторити" name="Redo"/>
+	</menu>
+	<!-- Меню вмісту -->
+	<menu label="Вміст" name="Content">
+		<menu_item_check label="Пошук" name="Search"/>
+		<menu_item_call label="Торговий майданчик SL (Marketplace)" name="SL Marketplace"/>
+		<menu_item_call label="Торгівельні дані L$" name="LindenXchange"/>
+		<menu_item_call label="Бібліотека скриптів" name="Script Library"/>
+		<menu_item_call label="Блог Firestorm" name="Firestorm Blog"/>
+		<menu_item_call label="Firestorm Flickr" name="Firestorm Flickr"/>
+		<menu_item_call label="Firestorm YouTube" name="Firestorm YouTube"/>
+		<menu_item_call label="Firestorm Twitter" name="Firestorm Twitter"/>
+		<menu_item_call label="Firestorm Plurk" name="Firestorm Plurk"/>
+		<menu_item_call label="Повідомлення дня" name="Firestorm MoTD"/>
+	</menu>
+	<!-- Меню довідки -->
+	<menu label="Допомога" name="Help">
+		<menu_item_check label="Включити підказки клієнтського інтерфейсу" name="Enable Hints"/>
+		<menu_item_call label="Firestorm Wiki" name="Firestorm Wiki"/>
+		<menu_item_call label="Пошук вирішення проблем" name="Troubleshooting"/>
+		<menu_item_call label="Вступити до групи підтримки Firestorm" name="firestorm_support_group"/>
+		<menu_item_call label="Розклад навчань Firestorm" name="Firestorm Classes Schedule"/>
+		<menu_item_call label="Календар Події Firestorm" name="Firestorm Events Calendar"/>
+		<menu_item_check label="Навчання" name="How To"/>
+		<!-- <menu_item_call label="Довідка про Друге життя" name="Довідка про Друге життя"/> -->
+		<menu_item_call label="[CURRENT_GRID] допомога" name="current_grid_help"/>
+		<menu_item_call label="О [CURRENT_GRID]" name="current_grid_about"/>
+		<!-- <menu_item_call label="Навчальний посібник" name="Навчальний посібник"/>
+		<menu_item_call label="База знань" name="База знань"/>
+		<menu_item_call label="Wiki" name="Wiki"/>
+		<menu_item_call label="Форуми спільноти" name="Форуми спільноти"/>
+		<menu_item_call label="Портал підтримки" name="Портал підтримки"/>
+		<menu_item_call label="Новини [SECOND_LIFE]" name="Новини другого життя"/>
+		<menu_item_call label="[SECOND_LIFE] Блоги" name="Блоги другого життя"/> -->
+		<menu_item_call label="Перевірка стану сітки" name="Grid Status"/>
+		<menu_item_call label="Поскаржитися" name="Report Abuse"/>
+		<menu_item_call label="Повідомити про помилку" name="Report Bug"/>
+		<menu_item_call label="Удари, поштовхи та попадання" name="Bumps, Pushes &amp;amp; Hits"/>
+		<menu_item_check label="Включити кнопку системної інформації" name="Enable Sysinfo Button"/>
+		<menu_item_call label="Про [APP_NAME]" name="About Second Life"/>
+	</menu>
+	<menu name="RLVa Main">
+		<menu label="Налагодження" name="Debug">
+			<menu_item_check label="Відобразити RLVa в меню" name="Show Top-level RLVa Menu"/>
+			<menu_item_check label="Показати повідомлення налагодження" name="Show Debug Messages"/>
+			<menu_item_check label="Приховування дублюючих повідомлень" name="Hide Unset or Duplicate Messages"/>
+			<menu_item_check label="Показати прийняті помилки" name="Show Assertion Failures"/>
+			<menu_item_check label="Приховати заблоковані шари" name="Hide Locked Layers"/>
+			<menu_item_check label="Приховати заблоковані вкладення" name="Hide Locked Attachments"/>
+			<menu_item_check label="Включити старі імена (Legacy Naming)" name="Enable Legacy Naming"/>
+			<menu_item_check label="Включити 'Ділітися одягом' (Shared Wear)" name="Enable Shared Wear"/>
+			<menu_item_check label="Перейменування спільних елементів при носінні" name="Rename Shared Items on Wear"/>
+			<menu_item_check label="Блокування..." name="Locks"/>
+		</menu>
+		<menu_item_check label="Дозволити не рольовий чат (Вийшов з Ролі)" name="Allow OOC Chat"/>
+		<menu_item_check label="Показати фільтрований чат" name="Show Filtered Chat"/>
+		<menu_item_check label="Показати 'Друк' у Перенаправленому Чаті" name="Show Redirected Chat Typing"/>
+		<menu_item_check label="Поділяти довгий Перенаправлений Чат" name="Split Long Redirected Chat"/>
+		<menu_item_check label="Дозволити тимчасове приєднання" name="Allow Temporary Attachments"/>
+		<menu_item_check label="Заборонити отримання в папку #RLV" name="Forbid Give to #RLV"/>
+		<menu_item_check label="Заміна одягу розблокована" name="Wear Replaces Unlocked"/>
+		<menu_item_check label="Консоль..." name="Console"/>
+		<menu_item_check label="Обмеження..." name="Restrictions"/>
+		<menu_item_check label="Рядки..." name="Strings"/>
+	</menu>
+
+	<!-- Додаткове меню -->
+	<menu label="Розширене" name="Advanced">
+		<menu_item_call label="Перевантажити текстури (rebake)" name="Rebake Texture"/>
+		<menu_item_call label="Оновити приєднання" name="Refresh Attachments"/>
+		<menu_item_call label="Відновити вихідний розмір інтерфейсу" name="Set UI Size to Default"/>
+		<menu_item_call label="Встановити розмір вікна..." name="Set Window Size..."/>
+		<menu_item_check label="Обмежити відстань вибору" name="Limit Select Distance"/>
+		<menu_item_check label="Вимкнути обмеження камери" name="Disable Camera Distance"/>
+		<menu_item_check label="Знімок високої роздільної здатності" name="HighResSnapshot"/>
+		<menu_item_check label="Тихий знімок" name="QuietSnapshotsToDisk"/>
+		<menu label="Інструменти продуктивності" name="Performance Tools">
+			<menu_item_call label="Вимірювання лагів" name="Lag Meter"/>
+			<menu_item_check label="Вікно статистики" name="Statistics Bar"/>
+			<menu_item_check label="Статистика завантаження сцени" name="Scene Load Statistics"/>
+			<menu_item_check label="Збільшити швидкість графіки..." name="Performance"/>
+			<menu_item_check label="Показати інформацію складності аватарів" name="Avatar Draw Info"/>
+		</menu>
+		<menu label="Підсвічування та видимість" name="Highlighting and Visibility">
+			<menu_item_check label="Мигаючі маяки" name="Cheesy Beacon"/>
+			<menu_item_check label="Приховати частинки" name="Hide Particles"/>
+			<menu_item_check label="Приховати вибране" name="Hide Selected"/>
+			<menu_item_check label="Підсвічування прозорого" name="Highlight Transparent"/>
+			<menu_item_check label="- включаючи прозоре ригування" name="Include Transparent Rigged"/>
+			<menu_item_check label="Показувати приціл побачивши від першої особи" name="ShowCrosshairs"/>
+			<menu label="Спливаючі підказки" name="Hover Tips">
+				<menu_item_check label="Показувати Підказки" name="Show Tips"/>
+				<menu_item_check label="Підказки про землю" name="Land Tips"/>
+				<menu_item_check label="Підказки на всі об'єкти" name="Tips On All Objects"/>
+			</menu>
+		</menu>
+		<menu label="Типи візуалізації" name="Rendering Types">
+			<menu_item_check label="Простий" name="Rendering Type Simple"/>
+			<menu_item_check label="Альфа" name="Rendering Type Alpha"/>
+			<menu_item_check label="Дерево" name="Rendering Type Tree"/>
+			<menu_item_check label="Аватары" name="Rendering Type Character"/>
+			<menu_item_check label="Анімований міш" name="Rendering Type Control Avatar"/>
+			<menu_item_check label="Виправлення поверхні" name="Rendering Type Surface Patch"/>
+			<menu_item_check label="Небо" name="Rendering Type Sky"/>
+			<menu_item_check label="Вода" name="Rendering Type Water"/>
+			<menu_item_check label="Земля" name="Rendering Type Ground"/>
+			<menu_item_check label="Об'єм" name="Rendering Type Volume"/>
+			<menu_item_check label="Трава" name="Rendering Type Grass"/>
+			<menu_item_check label="Облака" name="Rendering Type Clouds"/>
+			<menu_item_check label="Частицы" name="Rendering Type Particles"/>
+			<menu_item_check label="Рельєфне" name="Rendering Type Bump"/>
+		</menu>
+		<menu label="Візуалізація можливостей" name="Rendering Features">
+			<menu_item_check label="Інтерфейс користувача" name="ToggleUI"/>
+			<menu_item_check label="Вибраний" name="Selected"/>
+			<menu_item_check label="Виділені" name="Highlighted"/>
+			<menu_item_check label="Динамічні текстури" name="Dynamic Textures"/>
+			<menu_item_check label="Тенi от ног" name="Foot Shadows"/>
+			<menu_item_check label="Туман" name="Fog"/>
+			<menu_item_check label="Гнучкі об'єкти" name="Flexible Objects"/>
+		</menu>
+		<menu label="Резервні копії медіа потоків" name="media_stream_import_export">
+			<menu_item_call label="Імпорт списку потоків XML..." name="media_stream_import"/>
+			<menu_item_call label="Експорт списку потоків XML..." name="media_stream_export"/>
+		</menu>
+		<menu_item_check label="Використовувати плагін для читання повідомлень" name="Use Plugin Read Thread"/>
+		<menu_item_call label="Очистити кеш групи" name="ClearGroupCache"/>
+		<menu_item_check label="Згладжування миші" name="Mouse Smoothing"/>
+		<menu_item_call label="Скасувати додавання елементів керування кнопками" name="Release Keys"/>
+		<menu label="Гарячі клавіші" name="Shortcuts">
+			<menu_item_call label="Завантажити зображення ([COST])..." name="Upload Image"/>
+			<menu_item_check label="Пошук" name="Search"/>
+			<menu_item_check label="Телепортація подвійним натисканням" name="DoubleClick Teleport"/>
+			<menu_item_check label="Завжди бігти" name="Always Run"/>
+			<menu_item_check label="Летети" name="Fly"/>
+			<menu_item_call label="Закрити вікно" name="Close Window"/>
+			<menu_item_call label="Закрити групу вікон" name="Close Window Group"/>
+			<menu_item_call label="Закрити всі вікна" name="Close All Windows"/>
+			<menu_item_call label="Знімок на диск" name="Snapshot to Disk"/>
+			<menu_item_call label="Вигляд від першої особи" name="Mouselook"/>
+			<menu_item_call label="Огляд джойстиком" name="Joystick Flycam"/>
+			<menu_item_call label="Скидання виду" name="Reset View"/>
+			<menu_item_call label="Скидання ракурсу" name="Reset Camera Angles"/>
+			<menu_item_call label="Дивитись на останнього, хто говорив" name="Look at Last Chatter"/>
+			<menu_item_call label="Наблизити" name="Zoom In"/>
+			<menu_item_call label="Збільшення за промовчанням" name="Zoom Default"/>
+			<menu_item_call label="Видалити" name="Zoom Out"/>
+		</menu>
+		<menu_item_check label="Літати примусово" name="Fly Override"/>
+		<menu_item_check label="Контроль скриптами (RLVa)" name="RLV API"/>
+		<menu_item_call label="Показати налаштування налагодження" name="Debug Settings"/>
+		<menu_item_check label="Показати меню розробників" name="Debug Mode"/>
+	</menu>
+	<menu label="Розробка" name="Develop">
+		<menu label="Консолі" name="Consoles">
+			<menu_item_check label="Консоль текстур" name="Texture Console"/>
+			<menu_item_check label="Консоль налагодження" name="Debug Console"/>
+			<menu_item_call label="Консоль сповіщень" name="Notifications"/>
+			<menu_item_check label="Консоль налагодження регіону" name="Region Debug Console"/>
+			<menu_item_check label="Оперативні таймери" name="Fast Timers"/>
+			<menu_item_check label="Пам'ять" name="Memory"/>
+			<menu_item_check label="Статистика на сцену" name="Scene Statistics"/>
+			<menu_item_check label="Монітор завантаження сцени" name="Scene Loading Monitor"/>
+			<menu_item_call label="Консоль налагодження отримання текстур" name="Texture Fetch Debug Console"/>
+			<menu_item_check label="Консоль налагодження регіону" name="Region Debug Console"/>
+			<menu_item_call label="Дані про регіон на консоль налагодження" name="Region Info to Debug Console"/>
+			<menu_item_call label="Дані про групу на консоль налагодження" name="Group Info to Debug Console"/>
+			<menu_item_call label="Дані про здібності на консоль налагодження" name="Capabilities Info to Debug Console"/>
+			<menu_item_check label="Камера" name="Camera"/>
+			<menu_item_check label="Вітер" name="Wind"/>
+			<menu_item_check label="Кут огляду" name="FOV"/>
+			<menu_item_check label="Badge" name="Badge"/>
+			<menu_item_check label="Куки" name="Cookies"/>
+		</menu>
+		<menu label="Відображати інформацію" name="Display Info">
+			<menu_item_check label="Показувати час" name="Show Time"/>
+			<menu_item_check label="Показувати трансакції завантаження" name="Show Upload Transaction"/>
+			<menu_item_check label="Показати дані про текстури" name="Show Texture Info"/>
+			<menu_item_call label="VRAM, що використовується кожним об'єктом" name="VRAM usage per object"/>
+			<menu_item_check label="Показати дані про відтворення аватара" name="Show Avatar Render Info"/>
+			<menu_item_check label="Показати дані про малювання" name="Show Render Info"/>
+			<menu_item_check label="Показати матриці" name="Show Matrices"/>
+			<menu_item_check label="Показати колір під курсором" name="Show Color Under Cursor"/>
+			<menu_item_check label="Показати пам'ять" name="Show Memory"/>
+			<menu_item_check label="Показати оновлення об'єктів" name="Show Updates"/>
+		</menu>
+		<menu label="Профілювання/Телеметрія" name="Enable / Disable telemetry capture">
+			<menu_item_check label="Профілювання" name="Profiling"/>
+			<menu_item_check label="Почати при підключенні" name="Start when telemetry client connects"/>
+		</menu>
+		<menu label="Примусово викликати помилку" name="Force Errors">
+			<menu_item_call label="Точка зупинки (breakpoint)" name="Force Breakpoint"/>
+			<menu_item_call label="Виклик помилки LL та збій" name="Force LLError And Crash"/>
+			<menu_item_call label="Неправильний доступ до пам'яті" name="Force Bad Memory Access"/>
+			<menu_item_call label="Нескінченний цикл" name="Force Infinite Loop"/>
+			<menu_item_call label="Збій драйвера" name="Force Driver Carsh"/>
+			<menu_item_call label="Виключення програми" name="Force Software Exception"/>
+			<menu_item_call label="Відключення клієнта" name="Force Disconnect Viewer"/>
+			<menu_item_call label="Імітувати витік пам'яті" name="Memory Leaking Simulation"/>
+		</menu>
+		<menu label="Тестування промальовування" name="Render Tests">
+			<menu_item_check label="Зміщення камери" name="Camera Offset"/>
+			<menu_item_check label="Випадкова частота кадрів" name="Randomize Framerate"/>
+			<menu_item_check label="Періодичне уповільнення кадрів" name="Periodic Slow Frame"/>
+			<menu_item_check label="Тест кадрів" name="Frame Test"/>
+			<menu_item_call label="Профіль рамки" name="Frame Profile"/>
+			<menu_item_call label="Стандартний (тест)" name="Benchmark"/>
+		</menu>
+		<menu label="Метадані промальовування" name="Render Metadata">
+			<menu_item_check label="Обмежувальні рамки (Bounding Boxes)" name="Bounding Boxes"/>
+			<menu_item_check label="Хітбокси аватара (Hitboxy)" name="Avatar Hitboxes"/>
+			<menu_item_check label="Normals" name="Normals"/>
+			<menu_item_check label="Octree" name="Octree"/>
+			<menu_item_check label="Тінь усіченого конуса (Shadow Frusta)" name="Shadow Frusta"/>
+			<menu_item_check label="Фізичні форми" name="Physics Shapes"/>
+			<menu_item_check label="Оклюзія" name="Occlusion"/>
+			<menu_item_check label="Пакетне промальовування" name="Render Batches"/>
+			<menu_item_check label="Тип оновлення" name="Update Type"/>
+			<menu_item_check label="Анімація текстури" name="Texture Anim"/>
+			<menu_item_check label="Пріоритет текстури" name="Texture Priority"/>
+			<menu_item_check label="Площа текстури" name="Texture Area"/>
+			<menu_item_check label="Площа грані" name="Face Area"/>
+			<menu_item_check label="Інформація про рівні деталізації" name="LOD Info"/>
+			<menu_item_check label="Лічильник Трикутників" name="Triangle Count"/>
+			<menu_item_check label="Будівництво черги" name="Build Queue"/>
+			<menu_item_check label="Освітлення" name="Lights"/>
+			<menu_item_check label="Частини" name="Particles"/>
+			<menu_item_check label="Каркас зіткнень" name="Collision Skeleton"/>
+			<menu_item_check label="Стики" name="Joints"/>
+			<menu_item_check label="Лучи" name="Raycast"/>
+			<menu_item_check label="Напрями вітру" name="Wind Vectors"/>
+			<menu_item_check label="Складність промальовування" name="rendercomplexity"/>
+			<menu_item_check label="Байти приєднання" name="attachment bytes"/>
+			<menu_item_check label="Клей" name="Ліпити"/>
+			<menu_item_check label="Розмір текстури" name="Texture Size"/>
+			<menu label="Щільність текстури" name="Texture Density">
+				<menu_item_check label="Нет" name="None"/>
+				<menu_item_check label="Поточна" name="Current"/>
+				<menu_item_check label="Бажана" name="Desired"/>
+				<menu_item_check label="Повна" name="Full"/>
+			</menu>
+		</menu>
+		<menu label="Відтворення" name="Відтворення">
+			<menu_item_check label="Оси" name="Axes"/>
+			<menu_item_check label="Касний базис" name="Tangent Basis"/>
+			<menu_item_check label="Основна інформація вибраної текстури" name="Selected Texture Info Basis"/>
+			<menu_item_call label="Інформація вибраного матеріалу" name="Selected Material Info"/>
+			<menu_item_check label="Karas" name="Wireframe"/>
+			<menu_item_check label="Оклюзія об'єкт-об'єкт" name="Object-Object Occlusion"/>
+			<menu_item_check label="Розширене освітлення" name="Advanced Lighting Model"/>
+			<menu_item_check label="Тіні для Сонця/Місяця/Прожекторо" name="Shadows from Sun/Moon/Projectors"/>
+			<menu_item_check label="SSAO та згладжування тіней" name="SSAO and Shadow Smoothing"/>
+			<menu_item_check label="Запустити налагодження GL під час наступного запуску" name="Debug GL"/>
+			<menu_item_check label="Налагодження конвеєра" name="Debug Pipeline"/>
+			<menu_item_check label="Автоматичні альфа-маски (відкладені)" name="Automatic Alpha Masks (deferred)"/>
+			<menu_item_check label="Автоматичні альфа-маски (не відкладені)" name="Automatic Alpha Masks (non-deferred)"/>
+			<menu_item_check label="Текстури анімацій" name="Animation Textures"/>
+			<menu_item_check label="Відключення текстур" name="Disable Textures"/>
+			<menu_item_call label="Не малювати всі анімеші" name="Derender Animesh"/>
+			<menu_item_check label="Вимкнути навколишнє середовище" name="Disable Ambient"/>
+			<menu_item_check label="Вимкнути сонячне світло" name="Disable Sunlight"/>
+			<menu_item_check label="Вимкнути місцеві вогні" name="Disable Local Lights"/>
+			<menu_item_check label="Текстури з повною роздільною здатністю (НЕБЕЗПЕЧНО)" name="Full Res Textures"/>
+			<menu_item_check label="Промальовування приєднаних джерел світла" name="Render Attached Lights"/>
+			<menu_item_check label="Промальовування приєднаних частинок" name="Render Attached Particles"/>
+			<menu_item_check label="Об'єкти, що світяться" name="Hover Glow Objects"/>
+		</menu>
+		<menu label="Мережа" name="Network">
+			<menu_item_check label="Зупинити аватара" name="AgentPause"/>
+			<menu_item_call label="Увімкнути журнал повідомлень" name="Enable Message Log"/>
+			<menu_item_call label="Вимкнути журнал повідомлень" name="Disable Message Log"/>
+			<menu_item_check label="Швидкість інтерполяції об'єктів" name="Velocity Interpolate Objects"/>
+			<menu_item_check label="Час відповіді інтерполяції позиції об'єкта" name="Ping Interpolate Object Positions"/>
+			<menu_item_call label="Скинути пакет" name="Drop a Packet"/>
+		</menu>
+		<menu label="Кеш" name="Cache">
+			<menu_item_call label="Очистити кеш диска" name="Purge Disk Cache"/>
+		</menu>
+		<menu_item_call label="Дамп камери зі скриптами" name="Dump Scripted Camera"/>
+		<menu label="Запис" name="Recorder">
+			<menu_item_call label="Старт запису події" name="Start event recording"/>
+			<menu_item_call label="Кінець запису події" name="Stop event recording"/>
+			<menu_item_call label="Відтворення запису події" name="Playback event recording"/>
+			<menu_item_call label="Почати відтворення" name="Start Playback"/>
+			<menu_item_call label="Зупинити відтворення" name="Stop Playback"/>
+			<menu_item_call label="Зациклити відтворення" name="Loop Playback"/>
+			<menu_item_call label="Почати запис" name="Start Record"/>
+			<menu_item_call label="Кінець запису" name="Stop Record"/>
+		</menu>
+		<menu label="Свiт" name="DevelopWorld">
+			<menu_item_check label="Перекриття сонця в симуляторі" name="Sim Sun Override"/>
+			<menu_item_check label="Фіксована погода" name="Fixed Weather"/>
+			<menu_item_call label="Дамп кешу об'єктів регіону" name="Dump Region Object Cache"/>
+			<menu_item_check label="Список інтересів: повне оновлення" name="Interest List: Full Update"/>
+			<menu_item_call label="Дамп можливостей симулятора у загальний чат" name="DumpSimFeaturesToChat"/>
+		</menu>
+		<menu label="Інтерфейс користувача" name="UI">
+			<menu_item_call label="Тест браузера для перегляду медіа" name="Web Browser Test"/>
+			<menu_item_check label="Тест перезапуску регіону..." name="Region Restart Test"/>
+			<menu_item_call label="Браузер Web вмісту" name="Web Content Browser"/>
+			<menu_item_call label="Тест з'єднання з Facebook" name="FB Connect Test"/>
+			<menu_item_call label="Дамп SelectMgr" name="Дамп SelectMgr"/>
+			<menu_item_call label="Дамп інвентаря" name="Dump Inventory"/>
+			<menu_item_call label="Дамп таймерів" name="Dump Timers"/>
+			<menu_item_call label="Дамп засобів фокусування" name="Dump Focus Holder"/>
+			<menu_item_call label="Друк інформації про вибрані об'єкти" name="Print Selected Object Info"/>
+			<menu_item_call label="Друк інформації про агента" name="Print Agent Info"/>
+			<menu_item_check label="Подвійне натискання - Автопілот" name="Double-ClickAuto-Pilot"/>
+			<menu_item_check label="Подвійне натискання - Телепортація" name="DoubleClick Teleport"/>
+			<menu_item_check label="Отладка SelectMgr" name="Debug SelectMgr"/>
+			<menu_item_check label="Налагодження натискань" name="Debug Clicks"/>
+			<menu_item_check label="Налагодження огляду" name="Debug Views"/>
+			<menu_item_check label="Налагодження назв інструментів підказки" name="Debug Name Tooltips"/>
+			<menu_item_check label="Налагодження подій мишки" name="Debug Mouse Events"/>
+			<menu_item_check label="Налагодження клавіш" name="Debug Keys"/>
+			<menu_item_check label="Налагодження вікна процесу" name="Debug WindowProc"/>
+		</menu>
+		<menu label="XUI/XML" name="XUI">
+			<menu_item_call label="Перезавантажити установки кольорів" name="Reload Color Settings"/>
+			<menu_item_call label="Показати перевірку шрифтів" name="Show Font Test"/>
+			<menu_item_call label="Завантажити з XML" name="Load from XML"/>
+			<menu_item_call label="Зберегти у XML" name="Save to XML"/>
+			<menu_item_check label="Показати назви XUI" name="Show XUI Names"/>
+			<menu_item_check label="Показати налагоджувальну інформацію" name="DebugViews"/>
+			<menu_item_call label="Інструменти перегляду XUI" name="UI Preview Tool"/>
+			<menu_item_call label="Надіслати пробне ОП" name="Send Test IMs"/>
+			<menu_item_call label="Очистити кеші імен" name="Flush Names Caches"/>
+		</menu>
+		<menu label="Аватар" name="Character">
+			<menu label="Захоплення відмальованих текстур" name="Grab Baked Texture">
+				<menu_item_call label="Iris" name="Grab Iris"/>
+				<menu_item_call label="Голова" name="Grab Head"/>
+				<menu_item_call label="Верх тіла" name="Grab Upper Body"/>
+				<menu_item_call label="Захопити нижню частину тіла" name="Grab Lower Body"/>
+				<menu_item_call label="Юбка" name="Grab Skirt"/>
+			</menu>
+			<menu label="Перевірка персонажа" name="Character Tests">
+				<menu_item_call label="Зовнішність у XML" name="Appearance To XML"/>
+				<menu_item_call label="Переключити геометрію персонажа" name="Toggle Character Geometry"/>
+				<menu_item_call label="Перевірка чоловіка" name="Test Male"/>
+				<menu_item_call label="Перевірка жінки" name="Test Female"/>
+				<menu_item_check label="Дозволити вибирати аватар" name="Allow Select Avatar"/>
+			</menu>
+			<menu label="Швидкість анімації" name="Animation Speed">
+				<menu_item_call label="Всі анімації на 10% швидше" name="All Animations 10 Faster"/>
+				<menu_item_call label="Всі анімації на 10% повільніші" name="All Animations 10 Slower"/>
+				<menu_item_call label="Скинути всі швидкості анімації" name="Reset All Animation Speed"/>
+				<menu_item_check label="Анімації повільних рухів" name="Slow Motion Animations"/>
+			</menu>
+			<menu_item_call label="Скидання налаштувань на початкові" name="Force Params to Default"/>
+			<menu_item_check label="Інформація про анімацію" name="Animation Info"/>
+			<menu_item_check label="Показати погляд" name="Show Look At"/>
+			<menu_item_check label="Показати вказівку" name="Show Point At"/>
+			<menu_item_check label="Налагодження оновлень з'єднань" name="Debug Joint Updates"/>
+			<menu_item_check label="Вимкнути деталізацію (LOD)" name="Disable LOD"/>
+			<menu_item_check label="Налагодження видимості персонажа" name="Debug Character Vis"/>
+			<menu_item_check label="Показати скелет зіткнення" name="Show Collision Skeleton"/>
+			<menu_item_check label="Показати кістки" name="Show Bones"/>
+			<menu_item_check label="Відобразити дію агента" name="Display Agent Target"/>
+			<menu_item_check label="Показати ступінь спрощення" name="Show Impostor Extents"/>
+			<menu_item_call label="Дамп приєднань" name="Dump Attachments"/>
+			<menu_item_call label="Налагодження текстур аватара" name="Debug Avatar Textures"/>
+			<menu_item_call label="Дамп локальних текстур" name="Dump Local Textures"/>
+			<menu_item_call label="Перезавантаження частинок хмари аватара" name="Reload Avatar Cloud Particle"/>
+		</menu>
+		<menu_item_check label="HTTP Текстури" name="HTTP Textures"/>
+		<menu_item_call label="Стиск зображень" name="Compress Images"/>
+		<menu_item_call label="Перевірка стиснення файлу" name="Compress File Test"/>
+		<menu_item_call label="Включити візуальний детектор витоків" name="Enable Visual Leak Detector"/>
+		<menu_item_check label="Виведення мінідампа під час налагодження" name="Output Debug Minidump"/>
+		<menu_item_check label="Вікно консолі при наступному запуску" name="Console Window"/>
+		<menu label="Встановити рівень журналу" name="Set Logging Level">
+			<menu_item_check label="Налагодження" name="Debug"/>
+			<menu_item_check label="Інформація" name="Info"/>
+			<menu_item_check label="Попередження" name="Warning"/>
+			<menu_item_check label="Помилка" name="Error"/>
+			<menu_item_check label="Нет" name="None"/>
+		</menu>
+		<menu_item_call label="Запит статусу адміністратора" name="Request Admin Options"/>
+		<menu_item_call label="Вихід зі статусу адміністратора" name="Leave Admin Options"/>
+		<menu_item_check label="Показати меню адміністратора" name="View Admin Options"/>
+	</menu>
+	<menu label="Адміністратор" name="Адміністратор">
+		<menu label="Object" name="AdminObject">
+			<menu_item_call label="Отримати копію" name="Admin Take Copy"/>
+			<menu_item_call label="Призначити мене власником" name="Force Owner To Me"/>
+			<menu_item_call label="Призначити повноправним власником" name="Force Owner Permissive"/>
+			<menu_item_call label="Видалити" name="Delete"/>
+			<menu_item_call label="Заблокувати" name="Lock"/>
+			<menu_item_call label="Отримати ID активів" name="Get Assets IDs"/>
+		</menu>
+		<menu label="Дільниця" name="Parcel">
+			<menu_item_call label="Призначити мене власником" name="Owner To Me"/>
+			<menu_item_call label="Встановити для контенту Linden" name="Set to Linden Content"/>
+			<menu_item_call label="Запит на громадську землю" name="Claim Public Land"/>
+		</menu>
+		<menu name="Region">
+			<menu_item_call label="Дамп тимчасових даних активу" name="Dump Temp Asset Data"/>
+			<menu_item_call label="Зберегти стан регіону" name="Save Region State"/>
+		</menu>
+		<menu_item_call label="Інструменти Бога" name="God Tools"/>
+	</menu>
+	<menu name="Deprecated">
+		<menu label="Приєднати об'єкт" name="Attach Object"/>
+		<menu label="Від'єднати об'єкт" name="Detach Object"/>
+		<menu label="Зняти одяг" name="Take Off Clothing">
+			<menu_item_call label="Сорочка" name="Shirt"/>
+			<menu_item_call label="Штаны" name="Pants"/>
+			<menu_item_call label="Взуття" name="Shoes"/>
+			<menu_item_call label="Носки" name="Socks"/>
+			<menu_item_call label="Куртку" name="Jacket"/>
+			<menu_item_call label="Рукавички" name="Gloves"/>
+			<menu_item_call label="Майку" name="Menu Undershirt"/>
+			<menu_item_call label="Майбутнє" name="Menu Underpants"/>
+			<menu_item_call label="Спідниця" name="Skirt"/>
+			<menu_item_call label="Тутуювання" name="Tattoo"/>
+			<menu_item_call label="Фізика" name="Physics"/>
+			<menu_item_call label="Весь одяг" name="All Clothes"/>
+		</menu>
+		<menu label="Допомога" name="DeprecatedHelp">
+			<menu_item_call label="Офіційний блог Linden" name="Official Linden Blog"/>
+			<menu_item_call label="Портал скриптів" name="Scripting Portal"/>
+			<menu label="Повідомлення про помилку" name="Bug Reporting">
+				<menu_item_call label="Загальнодоступний засіб відстеження проблем" name="Public Issue Tracker"/>
+				<menu_item_call label="Допомога за загальнодоступним засобом відстеження проблем" name="Publc Issue Tracker Help"/>
+				<menu_item_call label="Повідомлення про помилку 101" name="Bug Reporing 101"/>
+				<menu_item_call label="Проблеми безпеки" name="Security Issues"/>
+				<menu_item_call label="QA Wiki" name="QA Wiki"/>
+				<menu_item_call label="Офіційний блог Linden" name="Official Linden Blog"/>
+			</menu>
+		</menu>
+	</menu>
+</menu_bar>

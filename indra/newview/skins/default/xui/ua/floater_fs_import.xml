@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_import" title="Імпорт об'єкта" >
+	<floater.string name="floater_title">Імпорт [FILENAME]</floater.string>
+	<floater.string name="file_status">
+[LINKSETS] об'єднань. [PRIMS] примов.
+[TEXTURES] текстур.
+[SOUNDS] звуків. [ANIMATIONS] анімацій.
+	</floater.string>
+	<floater.string name="file_status_error">Помилка читання файлу. Виберіть інший файл.</floater.string>
+	<floater.string name="file_version_error">Помилка аналізу файлу, неправильний формат або версія.</floater.string>
+	<floater.string name="file_status_running">Об'єднання [LINKSET] з [LINKSETS], прим [PRIM] з [PRIMS]</floater.string>
+	<floater.string name="file_status_done">Закінчено імпорт.</floater.string>
+	<floater.string name="texture_uploading">Завантажується текстура [TEXTURE] з [TEXTURETOTAL].</floater.string>
+	<floater.string name="sound_uploading">Завантажується звук [SOUND] із [SOUNDTOTAL].</floater.string>
+	<floater.string name="animation_uploading">Завантажується анімація [ANIMATION] з [ANIMATIONTOTAL].</floater.string>
+	<floater.string name="asset_uploading">Завантажується майно [ASSET] з [ASSETTOTAL].</floater.string>
+	<floater.string name="upload_cost">Загальна вартість завантажень: L$ [COST].</floater.string>
+	<floater.string name="object">об'єкт</floater.string>
+	<floater.string name="objects">об'єкти</floater.string>
+	<text name="filename_text">[FILENAME]</text>
+	<text name="creation_date_text">Створено [DATE_STRING]</text>
+	<text name="author_text">[AUTHOR] [GRID]</text>
+	<text name="client_text">Клієнт: [CLIENT] в.[VERSION]</text>
+	<text name="file_status_text">Виберіть файл.</text>
+	<check_box name="do_not_attach" label="Не прикріплювати об'єкт"/>
+	<check_box name="region_position" label="Повернути на позицію в регіоні"/>
+	<check_box name="upload_asset" label="Завантажити вміст"/>
+	<check_box name="temp_asset" label="Тимчасовий"/>
+	<button name="import_btn" label="Імпорт"/>
+</floater>

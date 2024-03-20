@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="Outfits">
+	<accordion name="outfits_accordion">
+		<no_matched_tabs_text name="no_matched_outfits_msg" value="Не знайшли того, що вам потрібно? Скористайтеся [secondlife:///app/search/all/[SEARCH_TERM] пошуком]."/>
+		<no_visible_tabs_text name="no_outfits_msg" value="У вас поки немає костюмів. Скористайтеся [secondlife:///app/search/all/ поиском]."/>
+	</accordion>
+	<panel name="bottom_panel">
+		<menu_button name="options_gear_btn" tool_tip="Показати додаткові параметри"/>
+		<text name="OutfitcountText" width="130">
+			[COUNT] Комплектів
+		</text>
+		<text name="avatar_complexity_label">
+			Складність: [WEIGHT]
+		</text>
+		<button name="trash_btn" tool_tip="Видалити вибраний костюм"/>
+	</panel>
+</panel>

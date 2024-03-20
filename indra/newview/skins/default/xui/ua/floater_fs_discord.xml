@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<floater name="floater_discord" title="Discord">
+	<string name="discord_connected">Ви підключені до Discord як:</string>
+	<string name="discord_disconnected">Не підключено до Discord.</string>
+	<string name="SocialDiscordConnecting">Підключення до Discord...</string>
+	<string name="SocialDiscordErrorConnecting">Проблема з підключенням до Discord</string>
+	<string name="SocialDiscordDisconnecting">Відключення від Discord...</string>
+	<text name="account_caption_label">
+		Не підключено до Discord.
+	</text>
+	<check_box label="Автоматично підключатися під час входу" name="startup_check"/>
+	<check_box label="Повідомити ім'я користувача" name="name_check"/>
+	<button label="Підключити..." name="connect_btn"/>
+	<button label="Вимкнути" name="disconnect_btn"/>
+	<text name="rating_label">
+		Повідомити у Discord назви регіонів з наступним рейтингом контенту:
+	</text>
+	<combo_box name="maturity_desired_combobox">
+		<combo_box.item label="Загальний, Помірний, Дорослий" name="Desired_Adult"/>
+		<combo_box.item label="Загальний та Помірний" name="Desired_Mature"/>
+		<combo_box.item label="Загальний" name="Desired_PG"/>
+		<combo_box.item label="Не повідомляти" name="Desired_None"/>
+	</combo_box>
+	<text name="dont_names_label">
+		Не повідомляти в Discord назви регіонів, якщо вони вказані нижче:
+	</text>
+	<text name="connection_status_text">
+		Завантаження...
+	</text>
+</floater>

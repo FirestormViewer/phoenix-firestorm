@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="item properties" title="Item Properties">
+	<floater.string name="unknown">(невідомо)</floater.string>
+	<floater.string name="public">(публічне)</floater.string>
+	<floater.string name="you_can">Ви можете:</floater.string>
+	<floater.string name="owner_can">Власник може:</floater.string>
+	<floater.string name="acquiredDate">[wkday,datetime,local], [day,datetime,local] [mth,datetime,local] [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]</floater.string>
+	<text name="LabelItemNameTitle">Назва:</text>
+	<text name="LabelItemDescTitle">Опис:</text>
+	<text name="LabelCreatorTitle">Створювач:</text>
+	<button label="Профіль..." name="BtnCreator"/>
+	<text name="LabelOwnerTitle">Власник:</text>
+	<button label="Профіль..." name="BtnOwner"/>
+	<text name="LabelAcquiredTitle">Придбано:</text>
+	<text name="LabelAcquiredDate">Ср 24 травня 12:50:46 2006</text>
+	<text name="LabelItemExperienceTitle">Пригода:</text>
+	<text name="OwnerLabel">Ви:</text>
+	<check_box label="Змінити" name="CheckOwnerModify"/>
+	<check_box label="Копіювати" name="CheckOwnerCopy"/>
+	<check_box label="Передавати" name="CheckOwnerTransfer"/>
+	<check_box label="Експортувати" name="CheckOwnerExport"/>
+	<text name="AnyoneLabel">Усі:</text>
+	<check_box label="Копіювати" name="CheckEveryoneCopy"/>
+	<text name="GroupLabel">Група:</text>
+	<check_box label="Поділитися" name="CheckShareWithGroup"/>
+	<text name="NextOwnerLabel">Наступний власник:</text>
+	<check_box label="Змінити" name="CheckNextOwnerModify"/>
+	<check_box label="Копіювати" name="CheckNextOwnerCopy"/>
+	<check_box label="Передавати" name="CheckNextOwnerTransfer"/>
+	<check_box label="Продати" name="CheckPurchase"/>
+	<combo_box name="ComboBoxSaleType">
+		<combo_box.item label="Копію" name="Copy"/>
+		<combo_box.item label="Вміст" name="Contents"/>
+		<combo_box.item label="Оригінал" name="Original"/>
+	</combo_box>
+	<spinner label="Вартість:" name="Edit Cost"/>
+	<text name="CurrencySymbol">L$</text>
+</floater>

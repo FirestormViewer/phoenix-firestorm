@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Avatar Icon Menu">
+	<menu_item_call label="Профіль" name="Показати профіль"/>
+	<menu_item_call label="Відправити ОП..." name="Send IM"/>
+	<menu_item_call label="Телепортуватися до жителя" name="Teleport to"/>
+	<menu_item_call label="Запропонувати телепорт" name="Offer Teleport"/>
+	<menu_item_call label="Попросити телепорт" name="Request Teleport"/>
+	<menu_item_call label="Голосовий виклик" name="Voice Call"/>
+	<menu_item_call label="Історія чату..." name="Chat History"/>
+	<menu_item_call label="Додати в друзі..." name="Add Friend"/>
+	<menu_item_call label="Видалити з друзів..." name="Remove Friend"/>
+	<menu_item_call label="Додати в набір" name="Add Contact Set"/>
+	<menu_item_call label="Запросити в групу..." name="Invite Group"/>
+	<menu_item_call label="Наблизити" name="Zoom In"/>
+	<menu_item_call label="Мапа" name="Map"/>
+	<menu_item_call label="Відстеження" name="track"/>
+	<menu_item_call label="Поділитися" name="Share"/>
+	<menu_item_call label="Заплатити" name="Pay"/>
+	<menu_item_call label="Копіювати ім'я в буфер" name="copy name"/>
+	<menu_item_call label="Копіювати URL у буфер" name="copy url"/>
+	<menu_item_check label="Блокувати голос" name="Block Unblock"/>
+	<menu_item_check label="Блокувати текст" name="Mute Text"/>
+	<context_menu label="Опції модератора" name="Moderator Options">
+		<menu_item_call label="Дозволити текстовий чат" name="AllowTextChat"/>
+		<menu_item_call label="Заборонити текстовий чат" name="ForbidTextChat"/>
+		<menu_item_call label="Заборонити голосовий чат" name="ModerateVoiceMuteSelected"/>
+		<menu_item_call label="Дозволити голосовий чат" name="ModerateVoiceUnMuteSelected"/>
+	</context_menu>
+	<menu_item_call label="Забанити" name="BanMember"/>
+</toggleable_menu>

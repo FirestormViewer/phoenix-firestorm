@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_lagmeter" title="РІВЕНЬ ЛАГІВ">
+	<floater.string name="max_title_msg">
+		Рівень лагів
+	</floater.string>
+	<floater.string name="max_width_px">
+		360
+	</floater.string>
+	<floater.string name="min_title_msg">
+		відставання
+	</floater.string>
+	<floater.string name="min_width_px">
+		90
+	</floater.string>
+	<floater.string name="client_text_msg">
+		Замовник
+	</floater.string>
+	<floater.string name="client_frame_rate_critical_fps">
+		10
+	</floater.string>
+	<floater.string name="client_frame_rate_warning_fps">
+		15
+	</floater.string>
+	<floater.string name="client_frame_time_window_bg_msg">
+		Нормально, вікно у фоні
+	</floater.string>
+	<floater.string name="client_frame_time_critical_msg">
+		Частота кадрів клієнта нижче [CLIENT_FRAME_RATE_CRITICAL]
+	</floater.string>
+	<floater.string name="client_frame_time_warning_msg">
+		Частота кадрів клієнта від [CLIENT_FRAME_RATE_CRITICAL] до [CLIENT_FRAME_RATE_WARNING]
+	</floater.string>
+	<floater.string name="client_frame_time_normal_msg">
+		Нормальний
+	</floater.string>
+	<floater.string name="client_draw_distance_cause_msg">
+		Можлива причина: дальність малювання занадто велика
+	</floater.string>
+	<floater.string name="client_texture_loading_cause_msg">
+		Можлива причина: завантаження зображень
+	</floater.string>
+	<floater.string name="client_texture_memory_cause_msg">
+		Можлива причина: занадто багато зображень у пам'яті
+	</floater.string>
+	<floater.string name="client_complex_objects_cause_msg">
+		Можлива причина: надто багато складних об'єктів у сцені
+	</floater.string>
+	<floater.string name="network_text_msg">
+		Мережа
+	</floater.string>
+	<floater.string name="network_packet_loss_critical_pct">
+		10
+	</floater.string>
+	<floater.string name="network_packet_loss_warning_pct">
+		5
+	</floater.string>
+	<floater.string name="network_packet_loss_critical_msg">
+		Мережа втрачає більше [NETWORK_PACKET_LOSS_CRITICAL]% пакетів
+	</floater.string>
+	<floater.string name="network_packet_loss_warning_msg">
+		Мережа втрачає [NETWORK_PACKET_LOSS_WARNING]–[NETWORK_PACKET_LOSS_CRITICAL]% пакетів
+	</floater.string>
+	<floater.string name="network_performance_normal_msg">
+		Нормальний
+	</floater.string>
+	<floater.string name="network_ping_critical_ms">
+		600
+	</floater.string>
+	<floater.string name="network_ping_warning_ms">
+		300
+	</floater.string>
+	<floater.string name="network_ping_critical_msg">
+		Пінг з'єднання більше [NETWORK_PING_CRITICAL] мс
+	</floater.string>
+	<floater.string name="network_ping_warning_msg">
+		Пінг з'єднання [NETWORK_PING_WARNING]–[NETWORK_PING_CRITICAL] мс
+	</floater.string>
+	<floater.string name="network_packet_loss_cause_msg">
+		Можливо, погане з'єднання або параметр "Ширина каналу" занадто великий.
+	</floater.string>
+	<floater.string name="network_ping_cause_msg">
+		Можливо, погане з'єднання або є працюючі файлообмінні програми.
+	</floater.string>
+	<floater.string name="server_text_msg">
+		Сервер
+	</floater.string>
+	<floater.string name="server_frame_rate_critical_fps">
+		20
+	</floater.string>
+	<floater.string name="server_frame_rate_warning_fps">
+		30
+	</floater.string>
+	<floater.string name="server_single_process_max_time_ms">
+		20
+	</floater.string>
+	<floater.string name="server_frame_time_critical_msg">
+		Частота кадрів сервера нижче [SERVER_FRAME_RATE_CRITICAL]
+	</floater.string>
+	<floater.string name="server_frame_time_warning_msg">
+		Частота кадрів сервера [SERVER_FRAME_RATE_CRITICAL]–[SERVER_FRAME_RATE_WARNING]
+	</floater.string>
+	<floater.string name="server_frame_time_normal_msg">
+		Нормальний
+	</floater.string>
+	<floater.string name="server_physics_cause_msg">
+		Можлива причина: надто багато фізичних об'єктів
+	</floater.string>
+	<floater.string name="server_scripts_cause_msg">
+		Можлива причина: надто багато скриптових об'єктів
+	</floater.string>
+	<floater.string name="server_net_cause_msg">
+		Можлива причина: надто великий мережевий трафік
+	</floater.string>
+	<floater.string name="server_agent_cause_msg">
+		Можлива причина: надто багато людей у ​​регіоні
+	</floater.string>
+	<floater.string name="server_images_cause_msg">
+		Можлива причина: занадто багато зображень
+	</floater.string>
+	<floater.string name="server_generic_cause_msg">
+		Можлива причина: сервер дуже завантажений
+	</floater.string>
+	<floater.string name="smaller_label">
+		&gt;&gt;
+	</floater.string>
+	<floater.string name="bigger_label">
+		&lt;&lt;
+	</floater.string>
+	<button name="client_lagmeter" tool_tip="Рівень лагів клієнта"/>
+	<text name="client">
+		Клієнт
+	</text>
+	<text name="client_text">
+		Нормальний
+	</text>
+	<button name="network_lagmeter" tool_tip="Рівень лагів мережі"/>
+	<text name="network">
+		Мережа
+	</text>
+	<text name="network_text">
+		Нормальний
+	</text>
+	<button name="server_lagmeter" tool_tip="Рівень лагів сервера"/>
+	<text name="server">
+		Сервер
+	</text>
+	<text name="server_text">
+		Нормальний
+	</text>
+	<button label="&gt;&gt;" name="minimize" tool_tip="Переключення розміру"/>
+</floater>

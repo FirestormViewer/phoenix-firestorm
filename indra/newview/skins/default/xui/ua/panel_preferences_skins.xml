@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Теми" name="skin_panel">
+    <text name="skin_textbox">
+        Теми:
+    </text>
+    <text name="skin_textbox1">
+        (Необхідний перезапуск)
+    </text>
+    <text name="theme_textbox">
+        Схема кольорів:
+    </text>
+    <text name="theme_textbox2">
+        (Необхідний перезапуск)
+    </text>
+    <check_box label="Скидання панелі інструментів теми замінним шаром, коли змінюється тема" tool_tip="Скидання панелі інструментів теми замінним шаром, коли змінюється тема" name="reset_toolbar_settings"/>
+    <check_box label="Скидання панелі інструментів на бажаний при зміні режиму логіну." tool_tip="Коли увімкнено, цей параметр зберігає схему кнопок панелі інструментів, розроблену в режимі входу в систему, і скасовує вибрані налаштування кнопок при зміні режиму входу в систему." name="FSToolbarsResetOnModeChange" />
+    <check_box label="Використовувати курсор стилю Viewer 1" name="use_legacy_cursors"/>
+    <text name="theme_textbox3">
+        (Необхідний перезапуск)
+    </text>
+</panel>

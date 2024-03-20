@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="prefs_graphics_advanced" title="Розширені налаштування графіки">
+	<text name="GeneralText">
+		Загальні
+	</text>
+	<slider label="Дальність малювання:" name="DrawDistance"/>
+	<text name="DrawDistanceMeterText2">
+		м
+	</text>
+	<slider label="Макс. кількість частинок:" name="MaxParticleCount"/>
+	<slider label="Якість після обробки:" name="RenderPostProcess"/>
+	<text name="PostProcessText">
+		Низьке
+	</text>
+	<check_box label="Увімкнути VSync" name="vsync" tool_tip="Синхронізує частоту кадрів із частотою оновлення монітора, що забезпечує плавну роботу."/>
+	<text name="AvatarText">
+		Аватар
+	</text>
+	<slider label="Максимальна складність:" name="IndirectMaxComplexity" tool_tip="Вказує відстань, починаючи з якої візуально складний аватар малюється як мармеладний ведмедик"/>
+	<text name="IndirectMaxComplexityText">
+		0
+	</text>
+	<slider label="Макс. кількість об'ємних:" name="IndirectMaxNonImpostors"/>
+	<text name="IndirectMaxNonImpostorsText">
+		0
+	</text>
+	<slider label="Деталізація:" name="AvatarMeshDetail"/>
+	<text name="AvatarMeshDetailText">
+		Низька
+	</text>
+	<slider label="Фізика:" name="AvatarPhysicsDetail"/>
+	<text name="AvatarPhysicsDetailText">
+		Низька
+	</text>
+	<text name="HardwareText">
+		Апаратне обладнання
+	</text>
+	<slider label="Пам'ять для текстур (МБ):" name="GraphicsCardTextureMemory" tool_tip="Об'єм пам'яті, що відводиться для текстур. За замовчуванням – обсяг пам'яті відеокарти. Зменшення допоможе збільшити продуктивність, але текстури можуть стати розмитими."/>
+	<slider label="Дистанція туману:" name="fog"/>
+	<slider label="Gamma:" name="gamma"/>
+	<text name="(яскравість, менше — яскравіше)">
+		(Чим менше, тим яскравіше, 0 – яскравість за умовчанням)
+	</text>
+	<check_box label="Анізотропна фільтрація (повільніше, якщо увімкнено)" name="ani"/>
+	<check_box label="Дозволити стиснення текстур (вимагає перезавантаження)" name="texture compression" tool_tip="Стиск текстур у відеопам'яті, що дозволяє завантажувати текстури більшого розміру за рахунок деякого падіння якості кольору."/>
+	<check_box label="Включити підтримку HiDPI дисплея (потрібний перезапуск)" name="use HiDPI" tool_tip="Дозволити OpenGL відображення з високою роздільною здатністю."/>
+	<text name="antialiasing label">
+		Згладжування:
+	</text>
+	<combo_box label="Згладжування" name="fsaa">
+		<combo_box.item label="Вимкнено" name="FSAADisabled"/>
+		<combo_box.item label="2x" name="2x"/>
+		<combo_box.item label="4x" name="4x"/>
+		<combo_box.item label="8x" name="8x"/>
+		<combo_box.item label="16x" name="16x"/>
+	</combo_box>
+	<text name="antialiasing restart">
+		(потрібний перезапуск)
+	</text>
+	<text name="MeshText">
+		Мережа
+	</text>
+	<slider label="Деталізація міша:" name="TerrainMeshDetail"/>
+	<text name="TerrainMeshDetailText">
+		Низька
+	</text>
+	<slider label="Дерева:" name="TreeMeshDetail"/>
+	<text name="TreeMeshDetailText">
+		Низька
+	</text>
+	<slider label="Об'єкти:" name="ObjectMeshDetail"/>
+	<text name="ObjectMeshDetailText">
+		Низька
+	</text>
+	<slider label="Гнучкі примітиви:" name="FlexibleMeshDetail"/>
+	<text name="FlexibleMeshDetailText">
+		Низька
+	</text>
+	<text name="ShadersText">
+		Шейдери
+	</text>
+	<check_box label="Прозорість води" name="TransparentWater"/>
+	<check_box label="Рельєфність та сяйво" name="BumpShiny"/>
+	<check_box label="Локальне світло" name="LocalLights"/>
+	<!--<slider label="Пейзаж:" name="TerrainDetail"/>-->
+	<text name="TerrainDetailText">
+		Низька
+	</text>
+	<check_box label="Одяг аватара" name="AvatarCloth"/>
+	<text name="ReflectionsText">
+		Вода відбиває:
+	</text>
+	<combo_box name="Reflections">
+		<combo_box.item label="Ні; непрозоро" name="-2"/>
+		<combo_box.item label="Ні; прозоро" name="-1"/>
+		<combo_box.item label="Минимум" name="0"/>
+		<combo_box.item label="Ландшафт та дерева" name="1"/>
+		<combo_box.item label="Всі статичні об'єкти" name="2"/>
+		<combo_box.item label="Усі аватари та об'єкти" name="3"/>
+		<combo_box.item label="Все" name="4"/>
+	</combo_box>
+	<check_box label="Атмосферні шейдери" name="WindLightUseAtmosShaders"/>
+	<slider label="Небо:" name="SkyMeshDetail"/>
+	<text name="SkyMeshDetailText">
+		Низька
+	</text>
+	<check_box label="Розширена модель освітлення" name="UseLightShaders"/>
+	<check_box label="Об'ємне світло" name="UseSSAO"/>
+	<check_box label="Глибина різкості" name="UseDoF"/>
+	<!--
+	<check_box label="Покращена Атмосфера" name="UseAdvancedAtmo"/>
+	-->
+	<text name="RenderShadowDetailText">
+		Тіні:
+	</text>
+	<combo_box name="ShadowDetail">
+		<combo_box.item label="Нема" name="0"/>
+		<combo_box.item label="Сонце/місяць" name="1"/>
+		<combo_box.item label="Сонце/місяць + освітлювачі" name="2"/>
+	</combo_box>
+	<button label="Повернути рекомендовані налаштування" name="Defaults"/>
+	<button label="OK" label_selected="OK" name="OK"/>
+	<button label="Скасувати" label_selected="Скасувати" name="Cancel"/>
+	<check_box label="RenderAvatarMaxComplexity (Відрисовка аватара макс. складності)" name="RenderAvatarMaxComplexity"/>
+	<check_box label="RenderAvatarMaxNonImpostors (Відрисовка макс. кіл-ва 3-D аватарів)" name="RenderAvatarMaxNonImpostors"/>
+</floater>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_outfit_snapshot_inventory">
+    <text name="title">
+        Інвентар
+    </text>
+    <text name="hint_lbl">
+Завантаження зображення у ваш інвентар коштує L$[UPLOAD_COST].
+
+Плата залежить від рівня підписки. Вищі рівні стягуються нижчі збори.
+    </text>
+    <button label="Скасувати" name="cancel_btn"/>
+    <button label="Зберегти" name="save_btn"/>
+</panel>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Графіка" name="Display panel">
+	<tab_container label="Налаштування графіки" name="tabs">
+		<panel label="Загальне" name="General">
+			<text name="preset_label" width="90">
+				Передустановка:
+			</text>
+			<text name="preset_text">
+				(Ні)
+			</text>
+			<text name="QualitySpeed">
+				Якість зображення чи швидкість:
+			</text>
+			<text name="FasterText">
+				Швидкість
+			</text>
+			<text name="BetterText">
+				якість
+			</text>
+			<text name="ShadersPrefText">
+				Низька
+			</text>
+			<text name="ShadersPrefText2">
+				Середня
+			</text>
+			<text name="ShadersPrefText3">
+				Висока
+			</text>
+			<text name="ShadersPrefText4">
+				Ультра
+			</text>
+			<check_box label="Повноекранний режим" name="Fullscreen Mode" tool_tip="Запустити Firestorm у повноекранному режимі. Щоб змінити цей параметр, потрібно перезапустити."/>
+			<text name="ShadersText">
+				Шейдери:
+			</text>
+			<check_box label="Прозора вода" name="TransparentWater"/>
+			<check_box label="Рельєф та блиск" name="BumpShiny"/>
+			<check_box label="Локальне світло" name="LocalLights"/>
+			<check_box label="Атмосферні шейдери" name="WindLightUseAtmosShaders"/>
+			<check_box label="Розшир. модель освітлення" tool_tip="Увімкнути розширене промальовування освітлення." name="UseLightShaders"/>
+			<check_box label="Оклюзія оточення" name="UseSSAO"/>
+			<text name="shadows_label">
+				Тіні:
+			</text>
+			<combo_box name="ShadowDetail">
+				<combo_box.item label="Нічого" name="0"/>
+				<combo_box.item label="Сонце / Місяць" name="1"/>
+				<combo_box.item label="Сонце / Місяць + Прожектор" name="2"/>
+			</combo_box>
+			<text name="reflection_label">
+				Відображення у воді:
+			</text>
+			<combo_box name="Reflections">
+				<combo_box.item label="Ні (непрозора)" name="-2"/>
+				<combo_box.item label="Ні (прозора)" name="-1"/>
+				<combo_box.item label="Мінімальний" name="0"/>
+				<combo_box.item label="Земля та дерева" name="1"/>
+				<combo_box.item label="Всі статичні об'єкти" name="2"/>
+				<combo_box.item label="Усі аватари та об'єкти" name="3"/>
+				<combo_box.item label="Відбивати все" name="4"/>
+			</combo_box>
+			<text name="local lights_label" tool_tip="Впливає на кількість джерел світла, що надаються, коли розширена модель освітлення вимкнена. Потрібно перезапуск">
+				Точкове освітлення:
+			</text>
+			<combo_box name="LocalLightsDetail">
+				<combo_box.item label="Повне (за замовчуванням)" name="3"/>
+				<combo_box.item label="Зменшене" name="2"/>
+				<combo_box.item label="Тільки Сонце / Місяць" name="1"/>
+			</combo_box>
+			<slider label="Відстань відображення" name="DrawDistance"/>
+			<slider label="Максимум частинок" name="MaxParticleCount"/>
+			<slider label="Максимальна складність" name="IndirectMaxComplexity" tool_tip="Контролює, коли візуально складний аватар відобразиться як силует"/>
+			<slider label="Максимум 3D аватарів" name="IndirectMaxNonImpostors"/>
+			<slider label="Післяопераційна якість" name="RenderPostProcess"/>
+			<text name="PostProcessText">
+				Низьке
+			</text>
+			<slider label="Аватар Фізика" name="AvatarPhysicsDetail"/>
+			<text name="MeshDetailText">
+				Рівень деталізації (LOD):
+			</text>
+			<slider label="Об'єкти та скульпти" name="ObjectMeshDetail" tool_tip="Керує використанням низької деталізації об'єктів для зниження навантаження візуалізації. Вищі значення викликають затримки, використовуйте з обережністю."/>
+			<slider label="Еластичні об'єкти" name="FlexibleMeshDetail"/>
+			<slider label="Дерева" name="TreeMeshDetail"/>
+			<slider label="Аватар" name="AvatarMeshDetail"/>
+			<slider label="Земля" name="TerrainMeshDetail"/>
+			<slider label="Небо" name="SkyMeshDetail"/>
+			<text name="AvatarRenderingText">
+				Прорисовка аватара:
+			</text>
+			<check_box label="Одяг аватара" name="AvatarCloth"/>
+			<!--<text name="TerrainDetailText">
+				Деталізація землі:
+			</text>
+			<назва_радіогрупи="TerrainDetailRadio">
+				<radio_item label="Низька" name="0"/>
+				<radio_item label="Висока" name="2"/>
+			</radio_group>-->
+			<text name="Presets_Label" left="160">Попередні налаштування:</text>
+			<button label="Зберегти" name="PrefSaveButton"/>
+			<button label="Завантажити" name="PrefLoadButton"/>
+			<button label="Видалити" name="PrefDeleteButton"/>
+			<button tool_tip="Відновити налаштування графіки за замовчуванням." name="Defaults"/>
+		</panel>
+		<panel label="Апаратні установки" name="Hardware Settings">
+			<check_box label="Анізотропна фільтрація (повільніше, коли включено)" name="ani" tool_tip = "Цей прапорець включає анізотропну фільтрацію, яка є методом підвищення якості текстур, коли вони проглядаються під відносно великими кутами по відношенню до положення вашої камери. Зазвичай змушує їх виглядати менш розмитими на великих відстанях."/>
+			<check_box label="Увімкнути VSync" name="vsync" tool_tip="Синхронізує частоту кадрів із частотою оновлення монітора, що забезпечує плавну роботу."/>
+			<check_box label="Включити потокове VBO" name="vbo_stream" tool_tip="Відключення цього може покращити продуктивність при включеному VBO. Спостереження показало, що відключення давало поліпшення на різних графічних картах AMD та Intel."/>
+			<check_box label="Включити стиснення текстур із втратами (потрібно перезапуск)" name="texture compression" tool_tip="Стиск текстур у відеопам'яті, дозволяє текстурам з високим дозволом завантажуватися за рахунок деякої втрати якості кольору."/>
+			<check_box label="Увімкнути підтримку дисплеїв HiDPI (тільки Mac OSX; потрібно перезапуск)" name="use HiDPI" tool_tip="Увімкнути OpenGL для відображення високої роздільної здатності."/>
+			<text name="Antialiasing:" tool_tip = "Зміна цього параметра може вимагати перезапуск на деякому обладнанні." width="290">
+				Згладжування (рекомендується перезапуск):
+			</text>
+			<combo_box label="Згладжування" name="fsaa">
+				<combo_box.item label="Вимкнено" name="FSAADisabled"/>
+			</combo_box>
+			<spinner label="Гамма:" name="gamma"/>
+			<text name="brightness text">
+				(0/1.0 = яскравість за виповненням, нижче = яскравіше)
+			</text>
+			<slider label="Буфер текстурної пам'яті (МБ):" name="GraphicsCardTextureMemory" tool_tip="Об'єм пам'яті, що виділяється для текстур. За замовчуванням пам'ять відеокарти становить до 512МБ у 32-бітних системах і до 2048МБ у 64-бітових системах залежно від доступної виділеної відеопам'яті відеокарти. Зменшення цього параметра може покращити продуктивність, але також може зробити текстури розмитими."/>
+			<check_box label="Увімкнути динамічну пам'ять текстур" name="FSDynamicTextureMemory" tool_tip="Включає обчислення динамічної пам'яті текстур (доступне лише у 64-бітових програмах перегляду та графічних процесорах AMD/NVIDIA з не менше 512МБ відеопам'яті)"/>
+			<slider label="Мінімальний буфер пам'яті текстур (МБ):" name="FSDynamicTextureMemoryMinTextureMemory" tool_tip="Мінімальний обсяг пам'яті, що виділяється для текстур. Це гарантує, що вказаний обсяг завжди буде використовуватися для текстур, навіть якщо він перевищує обсяг доступної відеопам'яті. Якщо зазначена сума плюс резерви перевищують обсяг фізичної відеопам'яті, вона буде обмежена відповідно."/>
+			<slider label="Додатковий резерв пам'яті текстур (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="Відсоток фізичної відеопам'яті, зарезервованої для кешування завантажених текстур, які не відображаються."/>
+			<slider label="Резерв фізичної відеопам'яті (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="Відсоток фізичної відеопам'яті, зарезервованої для іншого використання."/>
+			<spinner label="Коефіцієнт дистанції туману:" name="fog"/>
+			<spinner label="Декодування зображень:" name="image_decode_threads" tool_tip="Кількість потоків, що використовуються для декодування зображень. 0 = Авто, 1 = Синхронно, 2+ = вказано користувачем. (Рекомендується 0 або 1)"/>
+		</panel>
+		<panel label="Прорисовка" name="Rendering">
+			<text name="World Updating">
+				Оновлення світу:
+			</text>
+			<check_box label="Заморозити оновлення світу (зупинити все)" tool_tip="Встановіть, щоб заморозити всі оновлення з сервера - зупиняє всі дії у світі, але не впливає на чат або голос" name="WorldPause"/>
+			<text name="Texture Rendering">
+				Прорисовка текстур:
+			</text>
+			<check_box label="Обмежити Макс. роздільна здатність текстур до 512 пікс. (лише 64 біт; потрібен перезапуск)"
+			tool_tip="Встановлює обмеження максимальної роздільної здатності для текстур до 512 пікселів. Це дозволяє відображати більше текстур, перш ніж перевищити доступну пам'ять текстур і спостерігати розмиті текстури."
+			name="FSRestrictMaxTextureSize"/>
+			<text name="TextureDetailLabel">
+				Рівень якості текстур:
+			</text>
+			<combo_box name="TextureDetail" tool_tip = "Якість завантаження текстур впливає на налаштування налагодження TextureDiscardLevel">
+				<combo_box.item label="Нормальне (0)" name="0"/>
+				<combo_box.item label="Середнє (3)" name="3"/>
+				<combo_box.item label="Низьке (4)" name="4"/>
+				<combo_box.item label="Немає текстур (5)" name="5"/>
+			</combo_box>
+			<text name="Alpha Mask Rendering">
+				Маски прозорості (альфа):
+			</text>
+			<check_box label="Промальовування альфа маски, коли 'Розширена модель освітлення' не включена" tool_tip="Коли зазначено дозволяє альфа масці промальовуватися коректно, якщо розширена модель освітлення не включена" name="RenderAutoMaskAlphaNonDeferred"/>
+			<check_box label="Промальовування альфа маски, коли 'Розширена модель освітлення' включена" tool_tip="Коли зазначено дозволяє альфа масці промальовуватися коректно, якщо розширена модель освітлення включена" name="RenderAutoMaskAlphaDeferred"/>
+			<text name="Miscellaneous Rendering">
+				Різне:
+			</text>
+			<check_box label="Промальовування свічення" tool_tip="Промальовування свічення. Зверніть увагу, що сила повинна бути встановлена ​​на нуль, щоб вимкнути свічення, коли тіні включені." name="RenderGlow"/>
+			<slider label="Сила:" tool_tip="Сила. Вище = ширше і розмитий (за замовчуванням 2) " name="glow_strength"/>
+			<check_box label="Показувати не повністю завантажені аватари" name="RenderUnloadedAvatars"/>
+			<check_box label="Обмеження частоти кадрів" name="FSLimitFramerate"/>
+			<check_box label="Режим відображення скелета" name="Wireframe"/>
+			<check_box label="Включити прикріплене освітлення" tool_tip="Ця опція включає світло, прикріплене до аватара, таке як освітлення обличчя. " name="Render Attached Lights"/>
+			<check_box label="Відображати частинки інших аватарів" name="Render Attached Particles"/>
+			<slider label="Затримка для попереднього кешування" tool_tip="Як довго затримується показ світу вам після того, як іншим показано, що ви в мережі (за замовчуванням 6 секунд)" name="PrecachingDelay"/>
+			<text name="PrecachingDelayText">
+				секунд
+			</text>
+			<slider label="Якість тіней" tool_tip="Якість тіней (за замовчуванням 1)" name="ShadowResolution"/>
+			<slider label="Масштабування промальовування текстури землі" name="RenderTerrainScale" tool_tip="Визначає масштаб текстури місцевості - нижче стисло (потрібно перезапуск)"/>
+		</panel>
+		<panel label="Глибина різкості (DoF)" name="DOF panel">
+			<check_box label="Увімкнути глибину різкості (Це розмиє вигляд за винятком фокусування камери.)" name="UseDoF"/>
+			<check_box label="Включити в режимі редагування" name="RenderDepthOfFieldInEditMode"/>
+			<check_box label="Дозволити коли під водою" name="FSRenderDoFUnderwater"/>
+			<check_box label="Фокус ГР слідує за вказівником" name="FSFocusPointFollowsPointer" tool_tip="Фокус глибини різкості (DoF) буде слідувати за курсором миші, ця поведінка відповідає тому, що спостерігається при використанні літаючої камери. Використовуйте разом з блокуванням фокусу Глибини різко "/>
+			<slider label="Номер фокусування камери:" name="CameraFNum" tool_tip="Номер фокусування камери - значення для ефекту глибини різкості"/>
+			<slider label="Фокусна відстань (мм):" name="CameraFocal" tool_tip="Фокусна відстань камери для ефекту глибини різкості (в міліметрах)"/>
+			<slider label="Кут зору камери (град.):" name="Camera FOV" tool_tip="Вертикальний кут зору камери для ефекту глибини різкості (в градусах)"/>
+			<slider label="Співвідношення сторін:" name="CameraAspectRatio" tool_tip="Співвідношення сторін камери для ефекту глибини різкості"/>
+			<slider label="Час фокусування:" name="CameraFocusTrans" tool_tip="Час зміни фокусування з одного місця на інше"/>
+			<slider label="Якість промальовування:" name="CameraDoFResScale" tool_tip="Впливає на якість розмиття та продуктивність промальовування (вища = краща якість, нижче = краща продуктивність)"/>
+		</panel>
+	</tab_container>
+</panel>

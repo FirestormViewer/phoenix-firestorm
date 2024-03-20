@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="money_tracker" title="Відстеження грошей">
+	<name_list name="payment_list">
+		<name_list.columns name="time" label="Час" />
+		<name_list.columns name="name" label="Ім'я" />
+		<name_list.columns name="amount" label="Сума" />
+	</name_list>
+	<text name="summary">
+		Оплачено: L$ [PAID] - Отримано: L$ [RECEIVED]
+	</text>
+	<check_box label="Відслідковувати при закритті" name="FSAlwaysTrackPayments" tool_tip="Відстеження грошових переказів буде здійснюватися при закритому вікні" />
+	<button name="Clear" label="Очистити"/>
+</floater>

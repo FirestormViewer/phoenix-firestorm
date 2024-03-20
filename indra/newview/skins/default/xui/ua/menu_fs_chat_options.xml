@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Chat Options Menu">
+	<menu_item_check label="Показати Радар..." name="nearby_people"/>
+	<menu_item_check label="Показати Голоси..." name="nearby_voice"/>
+	<menu_item_check label="Показати Чорний список..." name="block_list"/>
+	<menu_item_check label="Використовувати стиль V1 для чату" name="plain_text_chat_history"/>
+	<menu_item_check label="Показувати значки профілю в заголовках чату" name="chat_header_icons"/>
+	<context_menu label="Розмір шрифту..." name="font_size">
+		<menu_item_check label="Дрібний" name="font_size_small"/>
+		<menu_item_check label="Середній" name="font_size_medium"/>
+		<menu_item_check label="Великий" name="font_size_large"/>
+		<menu_item_check label="Величезний" name="font_size_huge"/>
+	</context_menu>
+	<menu_item_check label="Додавати (&gt;) як індикатор набору" name="typing_chevron"/>
+	<menu_item_check label="Показати сповіщення нових повідомлень" name="new_message_notification"/>
+	<menu_item_check label="Показати рядок набору" name="show_chat_bar"/>
+	<menu_item_check label="Показати вибір каналу" name="show_channel_selection"/>
+	<menu_item_check label="Показати кнопку Тип/Відправлення" name="show_send_button"/>
+	<menu_item_check label="Показати кнопку Відправити в ЛС" name="show_im_send_button"/>
+</toggleable_menu>

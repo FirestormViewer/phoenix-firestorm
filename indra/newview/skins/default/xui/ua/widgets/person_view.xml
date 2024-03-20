@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<person_view>
+	<facebook_icon name="facebook_icon" tool_tip="Користувач Facebook" />
+	<permission_edit_theirs_icon name="permission_edit_theirs_icon" tool_tip="Ви можете редагувати об'єкти цього друга" />
+	<permission_edit_mine_icon name="permission_edit_mine_icon" tool_tip="Цей друг може редагувати, видаляти та брати ваші об'єкти" />
+	<permission_map_icon tool_tip="Цей друг може знайти вас на мапі" name="permission_map_icon" />
+	<permission_online_icon name="permission_online_icon" tool_tip="Цей друг може бачити ваш статус у мережі" />
+	<info_btn name="info_btn" tool_tip="Більше інформації" />
+	<profile_btn name="profile_btn" tool_tip="Дивитись профіль" />
+</person_view>

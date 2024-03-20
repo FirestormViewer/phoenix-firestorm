@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater label="Подія" name="Event" title="Деталі події">
+	<floater.string name="loading_text">
+		Завантаження...
+	</floater.string>
+	<floater.string name="done_text">
+		Готові
+	</floater.string>
+</floater>

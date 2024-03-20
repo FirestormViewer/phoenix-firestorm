@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Display Name" title="Змінити відображене ім'я">
+	<text name="info_text">
+		Ім'я, яке ви даєте аватару, називається ім'ям, що відображається. Ви можете міняти його раз на тиждень.
+	</text>
+	<text name="lockout_text">
+		Ви не можете змінювати ім'я, що відображається до: [TIME].
+	</text>
+	<text name="set_name_label">
+		Нове ім'я:
+	</text>
+	<text name="name_confirm_label">
+		Введіть нове ім'я ще раз для підтвердження:
+	</text>
+	<button label="Зберегти" name="save_btn" tool_tip="Зберегти ваше нове відображене ім'я"/>
+	<button label="Скинути" name="reset_btn" tool_tip="Змінити відображене ім'я на ім'я користувача"/>
+	<button label="Скасувати" name="cancel_btn"/>
+</floater>

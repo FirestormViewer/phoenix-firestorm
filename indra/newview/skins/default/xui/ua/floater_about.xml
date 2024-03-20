@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_about" title="O [APP_NAME]">
+	<tab_container name="about_tab">
+		<panel label="Інформація" name="support_panel">
+			<text name="support_intro">
+				Нова інформація про Firestorm доступна за адресою 
+https://www.firestormviewer.org
+			</text>
+			<button label="Копіювати в буфер" name="copy_btn"/>
+		</panel>
+		<panel label="Подяки" name="credits_panel">
+			<text name="linden_intro">
+				Створення Firestorm не було б можливим без рішення Linden Lab про оприлюднення коду оригінального клієнта Second Life.
+
+Linden це:
+			</text>
+			<text name="contrib_intro">
+				із внеском open source від:
+			</text>
+			<text name="trans_intro">
+				та перекладами від:
+			</text>
+		</panel>
+		<panel label="Firestorm" name="fs_credits_panel" height="960">
+			<scroll_container name="fs_credits_scroll_container">
+				<panel name="fs_credits_scroll_container_content_panel">
+					<text name="firestorm_intro" height="130">
+						Firestorm є проектом співтовариства програмістів, які мають на меті поліпшення якості, що ґрунтуються на досвіді використання SecondLife (tm) Viewer. Ми об'єднуємо в одне ціле внесок різних програмістів, що представляють різні спільноти, у поєднанні з кодом Linden Lab та нашим власним, щоб створювати хороший, функціональний клієнт, підтримку якого забезпечує команда, що складається з волонтерів. Firestorm існує завдяки The Phoenix Firestorm Project, Inc., некомерційній організації.
+
+Команда розробників Firestorm:
+					</text>
+					<text name="fs_contrib_intro">
+						Додатковий внесок у розвиток коду Firestorm:
+					</text>
+					<text name="fs_support_intro">
+						Спеціальні подяки для команди підтримки, видавців wiki, вчителів і перекладачів:
+					</text>
+					<text name="fs_art_intro" height="90">
+						Firestorm використовує Starlight, модифікований для Firestorm. Він створений користувачами для користувачів, з метою надання альтернативного, яснішого та легшого у використанні інтерфейсу. Більше подробиць на &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
+
+Художники та дизайнери інтерфейсу:
+					</text>
+				</panel>
+			</scroll_container>
+		</panel>
+		<panel label="Ліцензії" name="licenses_panel" />
+	</tab_container>
+</floater>

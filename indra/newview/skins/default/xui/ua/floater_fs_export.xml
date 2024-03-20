@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_export" title="Резервне копіювання об'єктів...">
+	<floater.string name="title_floater">
+		Збереження [OBJECT] на жорсткому диску...
+	</floater.string>
+	<floater.string name="title_working">
+		Збереження [OBJECT] у роботі - Збираю інформацію...
+	</floater.string>
+	<floater.string name="title_inventory">
+		Збереження [OBJECT] у роботі - Одержання інвентарю...
+	</floater.string>
+	<floater.string name="title_assets">
+		Збереження [OBJECT] у роботі - Отримання активів...
+	</floater.string>
+	<floater.string name="title_textures">
+		Збереження [OBJECT] у роботі - Отримання текстур...
+	</floater.string>
+	<layout_stack name="resizing_stack">
+		<layout_panel name="control_panel">
+			<text name="SelectionInfoText">
+				Інформація про вибір
+			</text>
+			<text name="exportable_prims">
+				Експортні прими: [COUNT]/[TOTAL]
+			</text>
+			<text name="exportable_textures">
+				Експортні текстури: [COUNT]/[TOTAL]
+			</text>
+			<text name="OptionsText">
+				Параметри:
+			</text>
+			<check_box label="Зберегти вміст об'єкта" name="contents_check"/>
+			<button label="Зберегти як..." name="export_btn"/>
+		</layout_panel>
+		<layout_panel name="contents_panel">
+			<tab_container name="ls_tabs">
+				<panel label="Об'єкти" name="prims_panel"/>
+				<panel label="Текстури" name="texture_panel"/>
+			</tab_container>
+		</layout_panel>
+	</layout_stack>
+</floater>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="place_profile">
+	<string name="on" value="Вкл."/>
+	<string name="off" value="Вимк."/>
+	<string name="anyone" value="Все"/>
+	<string name="available" value="доступний"/>
+	<string name="allocated" value="allocated"/>
+	<string name="title_place" value="Місце профілю"/>
+	<string name="title_teleport_history" value="Історія телепортів"/>
+	<string name="not_available" value="(нет)"/>
+	<string name="unknown" value="(unknown)"/>
+	<string name="public" value="(публічне)"/>
+	<string name="none_text" value="(нет)"/>
+	<string name="sale_pending_text" value="(Чекання продажу)"/>
+	<string name="group_owned_text" value="(Власність групи)"/>
+	<string name="price_text" value="L$"/>
+	<string name="area_text" value="м²"/>
+	<string name="all_residents_text" value="Всі жителі"/>
+	<string name="group_text" value="Група"/>
+	<string name="can_resell">
+		Куплену в цьому регіоні землю можна перепродати.
+	</string>
+	<string name="can_not_resell">
+		Куплену в цьому регіоні землю не можна перепродати.
+	</string>
+	<string name="can_change">
+		Куплену в цьому регіоні землю можна поєднати або розділити.
+	</string>
+	<string name="can_not_change">
+		Куплену в цьому регіоні землю не можна об'єднати чи поділити.
+	</string>
+	<string name="server_update_text">
+		Інформація про місцезнаходження недоступна без оновлення сервера.
+	</string>
+	<string name="server_error_text">
+		Інформація про це місце зараз недоступна. Повторіть спробу пізніше.
+	</string>
+	<string name="server_forbidden_text">
+		Інформація про це місце недоступна через обмеження доступу. Погодьте свій рівень доступу із власником ділянки.
+	</string>
+	<string name="acquired_date">
+		[wkday,datetime,local], [day,datetime,local] [mth,datetime,local] [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</string>
+
+	<layout_stack name="place_info_sidetray_main">
+		<layout_panel name="header_container">
+
+	<button name="back_btn" tool_tip="Назад"/>
+	<text name="title" value="Профіль місця"/>
+
+		</layout_panel>
+		<layout_panel name="place_info_content">
+
+			<text name="region_title" value="Зразок_регіону"/>
+			<text name="parcel_title" value="Зразок_ділянки, назва Long (145, 228, 26)"/>
+			<expandable_text name="description" value="Невідомо"/>
+			<text name="owner_label" value="Власник:"/>
+			<text name="owner_value" value="Lenny Cazari та JP Ixito"/>
+			<text name="maturity_value" value="невідомий"/>
+			<accordion name="advanced_info_accordion">
+				<accordion_tab name="parcel_characteristics_tab" title="Ділянка">
+					<panel name="parcel_characteristics_panel">
+						<text name="rating_label" value="Рейтинг:"/>
+						<text name="rating_value" value="невідомий"/>
+						<text name="voice_label" value="Голос:"/>
+						<text name="voice_value" value="Вкл."/>
+						<text name="fly_label" value="Політ:"/>
+						<text name="fly_value" value="Вкл."/>
+						<text name="push_label" value="Штовхання:"/>
+						<text name="push_value" value="Викл."/>
+						<text name="build_label" value="Будівництво:"/>
+						<text name="build_value" value="Вкл."/>
+						<text name="scripts_label" value="Скрипти:"/>
+						<text name="scripts_value" value="Вкл."/>
+						<text name="damage_label" value="Ушкодження:"/>
+						<text name="damage_value" value="Викл."/>
+						<text name="see_avatars_label" value="Побачити аватари:"/>
+						<text name="see_avatars_value" value="Викл."/>
+						<button label="Про землю" name="about_land_btn"/>
+					</panel>
+				</accordion_tab>
+				<accordion_tab name="region_information_tab" title="Регіон">
+					<panel name="region_information_panel">
+						<text name="region_name_label" value="Регіон:"/>
+						<text name="region_name" value="Кітово"/>
+						<text name="region_type_label" value="Тип:"/>
+						<text name="region_type" value="Наглий Кіт"/>
+						<text name="region_rating_label" value="Рейтинг:"/>
+						<text name="region_rating" value="Дорослий"/>
+						<text name="region_owner_label" value="Власник:"/>
+						<text name="region_owner" value="ван Наглий Кіт дуже довге ім'я кіт"/>
+						<text name="region_group_label" value="Група:"/>
+						<text name="region_group">
+							Міцний наглий кіт із Кітово ​​під Усть-Наглокітово
+						</text>
+						<button label="Регіон/землеволодіння" name="region_info_btn"/>
+					</panel>
+				</accordion_tab>
+				<accordion_tab name="estate_information_tab" title="Землеволодіння">
+					<panel name="estate_information_panel">
+						<text name="estate_name_label" value="Маєток:"/>
+						<text name="estate_rating_label" value="Рейтинг:"/>
+						<text name="estate_owner_label" value="Власник:"/>
+						<text name="estate_owner" value="Тест імені власника використовуючи довге ім'я"/>
+						<text name="covenant_label" value="Угода:"/>
+					</panel>
+				</accordion_tab>
+				<accordion_tab name="sales_tab" title="Для продажу">
+					<panel name="sales_panel">
+						<text name="sales_price_label" value="Ціна:"/>
+						<text name="area_label" value="Площа:"/>
+						<text name="traffic_label" value="Відвідуваність:"/>
+						<text name="primitives_label" value="Примітиви:"/>
+						<text name="parcel_scripts_label" value="Скрипти:"/>
+						<text name="terraform_limits_label" value="Тераформінг:"/>
+						<text name="subdivide_label" value="Здатність поділу/об'єднання:"/>
+						<text name="resale_label" value="Здатність до продажу:"/>
+						<text name="sale_to_label" value="Продаж для:"/>
+					</panel>
+				</accordion_tab>
+			</accordion>
+
+		</layout_panel>
+	</layout_stack>
+</panel>

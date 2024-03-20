@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Середа" name="panel_env_info">
+	<string name="str_label_use_default">
+		За замовчуванням
+	</string>
+	<string name="str_label_use_region">
+		Налаштування регіону
+	</string>
+	<string name="str_altitude_desription">
+		Небо [INDEX]([ALTITUDE]м)
+	</string>
+	<string name="str_no_parcel">
+		Не вибрано жодної ділянки. Налаштування середовища вимкнено.
+	</string>
+	<string name="str_cross_region">
+		Параметри навколишнього середовища недоступні в регіоні.
+	</string>
+	<string name="str_legacy">
+		Параметри середовища недоступні для цього регіону.
+	</string>
+	<string name="str_disallowed">
+		Керівник нерухомості не дозволяє змінювати середовище навколо ділянки в цьому регіоні.
+	</string>
+	<string name="str_too_small">
+		Щоб підтримувати налаштування навколишнього середовища, ділянка повинна бути не менше 128 кв. метрів.
+	</string>
+	<string name="str_empty">
+		(порожньо)
+	</string>
+	<string name="str_region_env">
+		(середня область)
+	</string>
+	<layout_stack name="ls_main">
+		<layout_panel name="pnl_environment_region_msg">
+			<text name="region_text_lbl">
+				регіон:
+			</text>
+			<text name="region_text">
+				невідомо
+			</text>
+		</layout_panel>
+		<layout_panel name="pnl_environment_config">
+			<layout_stack name="ls_environment_config">
+				<layout_panel name="pnl_environment_config">
+					<layout_stack name="ls_environment_config2">
+						<layout_panel name="pnl_environment_current">
+							<text name="select_environment_label">
+								Вибір навколишнього середовища
+							</text>
+							<button label="[USEDEFAULT]" name="btn_usedefault"/>
+							<button label="З інвентарю" name="btn_select_inventory"/>
+							<button label="Налаштувати цикл дня" name="btn_edit"/>
+							<check_box label="Власники ділянок можуть змінювати" name="chk_allow_override"/>
+						</layout_panel>
+						<layout_panel name="pnl_environment_length">
+							<text name="day_settings_label">
+								Налаштування дня
+							</text>
+							<text name="day_length_label">
+								Довжина Дня (годин)
+							</text>
+							<text name="day_offset_label">
+								Зсув Дня (годин)
+							</text>
+							<text name="apparent_time_of_day_label">
+								Видимо час доби:
+							</text>
+						</layout_panel>
+						<layout_panel name="pnl_environment_buttons"/>
+					</layout_stack>
+				</layout_panel>
+				<layout_panel name="pnl_environment_altitudes">
+					<panel name="pnl_alt1">
+						<text name="txt_alt1">
+							Небо [INDEX]
+                            [ALTITUDE]м
+						</text>
+						<line_editor name="edt_invname_alt1">
+							Невідомо
+						</line_editor>
+						<settings_drop_target name="sdt_alt1" tool_tip="Перетягнути налаштування з інвентарю на цільове поле, щоб вибрати його як небо на даний момент."/>
+					</panel>
+					<panel name="pnl_alt2">
+						<text name="txt_alt2">
+							Небо [INDEX]
+                            [ALTITUDE]м
+						</text>
+						<line_editor name="edt_invname_alt2">
+							Невідомо
+						</line_editor>
+						<settings_drop_target name="sdt_alt2" tool_tip="Перетягнути налаштування з інвентарю на це цільове поле, щоб вибрати його як небо на даний момент."/>
+					</panel>
+					<panel name="pnl_alt3">
+						<text name="txt_alt3">
+							Небо [INDEX]
+                            [ALTITUDE]м
+						</text>
+						<line_editor name="edt_invname_alt3">
+							Невідомо
+						</line_editor>
+						<settings_drop_target name="sdt_alt3" tool_tip="Перетягнути налаштування з інвентарю на це цільове поле, щоб вибрати його як небо на даний момент."/>
+					</panel>
+					<text name="sky_altitudes_label">
+						Висоти Неба
+					</text>
+					<multi_slider initial_value="0" name="sld_altitudes">
+						<slider name="sld1" value="1000"/>
+						<slider name="sld2" value="2000"/>
+						<slider name="sld3" value="3000"/>
+					</multi_slider>
+					<panel name="pnl_ground">
+						<text name="txt_ground">
+							Земля
+						</text>
+						<line_editor name="edt_invname_ground">
+							Невідомо
+						</line_editor>
+						<settings_drop_target name="sdt_ground" tool_tip="Перетягнути налаштування з інвентарю на це цільове поле для вибору його як неба на рівні землі."/>
+					</panel>
+					<panel name="pnl_water">
+						<text name="txt_water">
+							вода
+						</text>
+						<line_editor name="edt_invname_water">
+							Невідомо
+						</line_editor>
+						<settings_drop_target name="sdt_water" tool_tip="Перетягнути налаштування з інвентарю на це цільове поле для вибору його як води на даний момент."/>
+					</panel>
+					<button label="Скинути" name="btn_rst_altitudes" tool_tip="Скинути стандартні налаштування"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>
+
+
+

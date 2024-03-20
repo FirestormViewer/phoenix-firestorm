@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Пам'ять регіону" name="script_limits_region_memory_panel">
+	<text name="script_memory">
+		Пам'ять під скрипти на ділянці
+	</text>
+	<text name="loading_text">
+		Завантаження...
+	</text>
+	<scroll_list name="scripts_list">
+		<scroll_list.columns label="Розмір (Кб)" name="size"/>
+		<scroll_list.columns label="URL-адреса" name="urls"/>
+		<scroll_list.columns label="Назва об'єкта" name="name"/>
+		<scroll_list.columns label="Власник об'єкта" name="owner"/>
+		<scroll_list.columns label="Дільниця" name="parcel"/>
+		<scroll_list.columns label="Місце" name="location"/>
+	</scroll_list>
+	<button label="Оновити список" name="refresh_list_btn" width="120"/>
+	<button label="Підсвітити" name="highlight_btn"/>
+	<button label="Повернення" name="return_btn"/>
+</panel>

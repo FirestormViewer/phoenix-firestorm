@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Речі" name="Outfits">
+	<panel.string name="wear_outfit_tooltip">
+		Одягти вибраний костюм
+	</panel.string>
+	<panel.string name="wear_items_tooltip">
+		Одягти вибрані речі
+	</panel.string>
+	<panel.string name="cof_tab_label">
+		Одягнено ([COUNT]/[MAX] Пр.)
+	</panel.string>
+	<tab_container name="appearance_tabs">
+		<panel label="Галерея костюмів" name="outfit_gallery_tab"/>
+		<panel label="Мої комплекти" name="outfitslist_tab"/>
+		<panel label="Одягнено" name="cof_tab"/>
+	</tab_container>
+	<panel name="bottom_panel">
+		<layout_stack name="bottom_panel_ls">
+			<layout_panel name="save_btn_lp">
+				<button label="Зберегти" name="save_btn"/>
+			</layout_panel>
+			<layout_panel name="save_as_btn_lp">
+				<button label="Зберегти як..." name="save_as_btn"/>
+			</layout_panel>
+			<layout_panel name="wear_btn_lp">
+				<button label="Одягнути" name="wear_btn"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

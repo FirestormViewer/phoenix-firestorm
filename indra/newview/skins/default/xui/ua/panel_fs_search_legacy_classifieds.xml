@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Реклама" name="panel_ls_classifieds">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Введіть запит:
+		</text>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_classifieds">
+			<columns label="Назва" name="classified_name" />
+			<columns label="Вартість" name="price" />
+	</scroll_list>
+		<button label="Назад" name="classifieds_back" />
+		<button label="Далі" name="classifieds_next" />
+	</panel>
+</panel>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Панель редагування одягу -->
+<panel name="outfit_edit">
+	<string name="No Outfit" value="Немає костюма"/>
+	<string name="unsaved_changes" value="Незбережені зміни"/>
+	<string name="now_editing" value="Зараз редагується"/>
+	<panel.string name="not_available">
+		(ні)
+	</panel.string>
+	<panel.string name="unknown">
+		(невідомо)
+	</panel.string>
+	<string name="Filter.All" value="Усе"/>
+	<string name="Filter.Clothes/Body" value="Одяг/тіло"/>
+	<string name="Filter.Objects" value="Об'єкти"/>
+	<string name="Filter.Clothing" value="Одяг"/>
+	<string name="Filter.Bodyparts" value="Частини тіла"/>
+	<string name="replace_body_part" value="Клацніть для заміни поточної фігури"/>
+	<text name="title" value="Змінити костюм"/>
+	<panel name="header_panel">
+		<panel name="outfit_name_and_status">
+			<text name="status" value="Зараз редагується…"/>
+			<text name="curr_outfit_name" value="[Поточний костюм]"/>
+		</panel>
+	</panel>
+	<layout_stack name="im_panels">
+		<layout_panel name="outfit_wearables_panel">
+			<layout_stack name="filter_panels">
+				<layout_panel name="add_button_and_combobox">
+					<button label="Додати…" name="show_add_wearables_btn" tool_tip="Відкрити/закрити"/>
+				</layout_panel>
+				<layout_panel name="filter_panel">
+					<filter_editor label="Фільтр для інвентаря" name="look_item_filter"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="add_wearables_panel">
+			<button label="Носима" name="plus_btn"/>
+		</layout_panel>
+	</layout_stack>
+	<panel name="no_add_wearables_button_bar">
+		<text name="avatar_complexity_label">Складність: [WEIGHT]</text>
+		<button name="shop_btn_1" tool_tip="Відвідайте магазин Second Life. Також можна вибрати предмет одягненого одягу та клацнути тут, щоб знайти щось схоже"/>
+	</panel>
+	<panel name="add_wearables_button_bar">
+		<text name="avatar_complexity_adding_label">Складність: [WEIGHT]</text>
+		<button name="shop_btn_2" tool_tip="Відвідайте магазин Second Life. Також можна вибрати предмет одягненого одягу та клацнути тут, щоб знайти щось схоже"/>
+	</panel>
+	<panel name="save_revert_button_bar">
+		<layout_stack name="button_bar_ls">
+			<layout_panel name="save_btn_lp">
+				<button label="Зберегти" name="save_btn"/>
+			</layout_panel>
+			<layout_panel name="save_as_btn_lp">
+				<button label="Зберегти як..." name="save_as_btn"/>
+			</layout_panel>
+			<layout_panel name="revert_btn_lp">
+				<button label="Скасувати зміни" name="revert_btn" tool_tip="Повернутися до останньої збереженої версії"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

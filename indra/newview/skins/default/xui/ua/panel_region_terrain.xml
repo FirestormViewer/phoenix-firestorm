@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Ландшафт" name="Terrain">
+	<text name="region_text_lbl">
+		Регіон:
+	</text>
+	<text name="region_text">
+		невідомий
+	</text>
+	<spinner label="Рівень води" name="water_height_spin" label_width="90" width="160"/>
+	<spinner label="Ліміт підйому ландшафту" name="terrain_raise_spin" left="220" label_width="160" width="230"/>
+	<spinner label="Ліміт спуску ландшафту" name="terrain_lower_spin" left="220" label_width="160" width="230"/>
+	<text name="detail_texture_text">
+		Текстури ландшафту (вимоги: 1024x1024, 24-бітні, TGA)
+	</text>
+	<text name="height_text_lbl">
+		1 (Низ)
+	</text>
+	<text name="height_text_lbl2">
+		2
+	</text>
+	<text name="height_text_lbl3">
+		3
+	</text>
+	<text name="height_text_lbl4">
+		4 (Верх)
+	</text>
+	<text name="height_text_lbl5">
+		Діапазон висот текстур
+	</text>
+	<text name="height_text_lbl10">
+		Ці значення визначають ступінь змішування накладених текстур.
+	</text>
+	<text name="height_text_lbl11">
+		Вимірюються за метри. Значення «Низ» – це максимальна висота текстури №1, а значення «Верх» – це мінімальна висота текстури №4.
+	</text>
+	<text name="height_text_lbl6">
+		Північний захід
+	</text>
+	<text name="height_text_lbl7">
+		Північний схід
+	</text>
+	<spinner label="Низ" name="height_start_spin_1"/>
+	<spinner label="Низ" name="height_start_spin_3"/>
+	<spinner label="Верх" name="height_range_spin_1"/>
+	<spinner label="Верх" name="height_range_spin_3"/>
+	<text name="height_text_lbl8">
+		На південний захід
+	</text>
+	<text name="height_text_lbl9">
+		Південний схід
+	</text>
+	<spinner label="Низ" name="height_start_spin_0"/>
+	<spinner label="Низ" name="height_start_spin_2"/>
+	<spinner label="Верх" name="height_range_spin_0"/>
+	<spinner label="Верх" name="height_range_spin_2"/>
+	<button label="Завантажити ландшафт RAW..." name="download_raw_btn" tool_tip="Доступно тільки землевласникам, не менеджерам"/>
+	<button label="Передати ландшафт RAW..." name="upload_raw_btn" tool_tip="Доступно тільки землевласникам, не менеджерам"/>
+	<button label="Зафіксувати межі" name="bake_terrain_btn" tool_tip="Встановити висоту ландшафту по середній точці між верхньою та нижньою точками"/>
+	<button label="Застосувати" name="apply_btn"/>
+</panel>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="settings picker" title="ВИБРАТИ: НАЛАШТУВАННЯ">
+	<floater.string name="pick title">
+		Вибрати:
+	</floater.string>
+	<floater.string name="pick_track">
+		ВИБРАТИ РЕЖИМ РЕДАКТУВАННЯ
+	</floater.string>
+	<floater.string name="pick_settings">
+		ВИБРАТИ НАЛАШТУВАННЯ
+	</floater.string>
+	<floater.string name="track_water">
+		Вода
+	</floater.string>
+	<floater.string name="track_ground">
+		Земля
+	</floater.string>
+	<floater.string name="track_sky">
+		Небо[NUM]
+	</floater.string>
+	<layout_stack name="test_stack">
+		<layout_panel name="inv_list">
+			<filter_editor label="Фільтрувати текстури" name="flt_inventory_search"/>
+		</layout_panel>
+		<layout_panel name="temp">
+			<button label="OK" label_selected="OK" name="btn_select"/>
+			<button label="Скасувати" label_selected="Скасувати" name="btn_cancel"/>
+		</layout_panel>
+	</layout_stack>
+</floater>
+
+
+
+

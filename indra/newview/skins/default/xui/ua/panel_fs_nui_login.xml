@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_login">
+  <string name="ServerComboTooltip">
+Існуюча мережа або URI мережі
+  </string>
+  <layout_stack name="ui_stack">
+    <layout_panel name="ui_container">
+      <layout_stack name="vert_stack_left">
+        <layout_panel name="1st_row">
+          <layout_stack name="1st_row_stack">
+            <layout_panel name="login">
+              <combo_box label="Користувач" name="username_combo" tool_tip="Ім'я користувача, яке ви вибирали при реєстрації, наприклад: bobsmith12 або Stellar Sunshine"/>
+              <check_box label="Запам'ятати користувача" name="remember_username_check"/>
+            </layout_panel> <!-- логін -->
+            <layout_panel name="delete_container">
+              <button tool_tip="Видалити це Ім'я користувача" label="" name="remove_user_btn"/>
+            </layout_panel> <!-- delete_container -->
+            <layout_panel name="password_container">
+            <!-- Максимальну довжину можна змінити у FSPanelLogin.cpp для Opensim! -->
+              <line_editor name="password_edit" label="Пароль"/>
+              <check_box label="Запам'ятати пароль" name="remember_check"/>
+            </layout_panel> <!-- password_container -->
+            <layout_panel name="start_location_panel">
+              <combo_box label="Стартове місце" name="start_location_combo">
+                <combo_box.item label="Минуле місце" name="MyLastLocation"/>
+                <combo_box.item label="Мій Дім" name="MyHome"/>
+                <combo_box.item label="&lt;Ввести назву регіону&gt;" name="Typeregionname"/>
+              </combo_box>
+            </layout_panel>
+          </layout_stack>
+        </layout_panel>
+        <layout_panel name="2nd_row">
+          <layout_stack name="2nd_row_stack">
+            <layout_panel name="grid_panel">
+              <text name="grid_login_text" width="65">Мережа:</text>
+            </layout_panel>
+            <layout_panel name="mode_selection">
+              <text name="mode_selection_text">Режим:</text>
+              <combo_box name="mode_combo" tool_tip="Виберіть стиль перегляду, з яким ви найбільш знайомі, щоб правильно встановити значення за промовчанням.">
+              <!--
+              <combo_box.item label="Вогняна буря" name="Вогняна буря"/>
+              <combo_box.item label="Фенікс" name="Фенікс"/>
+              <combo_box.item label="[VIEWER_GENERATION]" name="V3"/>
+              <combo_box.item label="Hybrid" name="Hybrid"/>
+              <combo_box.item label="Затримка" name="Затримка"/>
+              <combo_box.item label="Текст" name="Текст"/>
+              -->
+              </combo_box>
+            </layout_panel>
+          </layout_stack>
+        </layout_panel>
+      </layout_stack>
+      <button label="Увійти" name="connect_btn"/>
+      <text name="create_new_account_text">Створити акаунт</text>
+      <text name="forgot_password_text">Забули пароль?</text>
+    </layout_panel>
+  </layout_stack>
+</panel>

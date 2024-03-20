@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Object Pie">
+	<menu_item_call label="Торкнутися" name="Object Touch">
+		<menu_item_call.on_enable name="EnableTouch" parameter="Торкнутися"/>
+	</menu_item_call>
+	<menu_item_call label="Редагувати" name="Edit..."/>
+	<menu_item_call label="Будувати" name="Build"/>
+	<menu_item_call label="Відкрити" name="Open"/>
+	<menu_item_call label="Сісти" name="Object Sit"/>
+	<menu_item_call label="Встати" name="Object Stand Up"/>
+	<context_menu label="Об'єкт" name="Object Features">
+<menu_item_call label="Профіль" name="Object Inspect"/>
+		<menu_item_call label="Інспектувати" name="Object_Inspect_Floater"/>
+		<menu_item_call label="Інформація про скрипти" name="ScriptInfo"/>
+		<menu_item_call label="З'єднати" name="Object Link"/>
+		<menu_item_call label="Розділити" name="Object Unlink"/>
+		<menu_item_check label="Редагувати з'єднані частини" name="Object Edit Linked Parts"/>
+		<menu_item_call label="Компілювати (Mono)" name="Mono"/>
+		<menu_item_call label="Компілювати (LSL)" name="LSL"/>
+		<menu_item_call label="Скинути скрипти" name="Object Reset Scripts"/>
+		<menu_item_call label="Увімкнути скрипти" name="Object Set Scripts to Running"/>
+		<menu_item_call label="Вимкнути скрипти" name="Object Set Scripts to Not Running"/>
+		<menu_item_call label="Видалити скрипти" name="Remove Scripts From Selection"/>
+</context_menu>
+	<menu_item_call label="Наблизити" name="Zoom In"/>
+	<menu_item_call label="Показувати в наборах зв'язків" name="show_in_linksets"/>
+	<menu_item_call label="Показувати в персонажах" name="show_in_characters"/>
+	<context_menu label="Одягатися..." name="Put On">
+		<menu_item_call label="Одягти" name="Wear"/>
+		<menu_item_call label="Додати" name="Add"/>
+		<context_menu label="Додати" name="Object Attach"/>
+		<context_menu label="Додати HUD" name="Object Attach HUD"/>
+	</context_menu>
+	<context_menu label="Управління" name="Remove">
+		<menu_item_call label="Повідомити про порушення" name="Report Abuse..."/>
+		<menu_item_call label="Заблокувати" name="Object Mute"/>
+		<menu_item_call label="Розблокувати" name="Object Unmute"/>
+</context_menu>
+	<menu_item_call label="Оновити текстури" name="Texture Refresh"/>
+	<menu_item_call label="Не відображати" name="Derender"/>
+	<menu_item_call label="Не відображати завжди" name="DerenderPermanent"/>
+	<menu_item_call label="Повернути" name="Return..."/>
+	<menu_item_call label="Взяти" name="Pie Object Take"/>
+	<menu_item_call label="Взяти копію" name="Take Copy"/>
+	<menu_item_call label="Заплатити" name="Pay..."/>
+	<menu_item_call label="Купити" name="Buy..."/>
+	<context_menu label="Зберегти як" name="Export Menu">
+		<menu_item_call label="Резервна копія" name="Backup"/>
+		<menu_item_call label="Collada" name="Collada"/>
+	</context_menu>
+	<menu_item_call label="Видалити" name="Delete"/>
+	<menu_item_call label="Заблокувати власника частинок" name="Mute Particle"/>
+	<menu_item_call label="Виведення XML" name="Dump XML"/>
+	<menu_item_call label="Повернення скелета у початкове положення" name="Reset Skeleton"/>
+</context_menu>

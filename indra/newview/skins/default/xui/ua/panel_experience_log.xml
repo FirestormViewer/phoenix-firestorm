@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_experience_log" label="Події">
+	<string name="no_events" value="Немає подій."/>
+	<string name="loading" value="завантаження..."/>
+	<layout_stack name="ls1">
+		<layout_panel name="list panel">
+			<scroll_list name="experience_log_list">
+				<columns label="Час" name="time"/>
+				<columns label="Подія" name="event"/>
+				<columns label="Пригода" name="experience_name"/>
+				<columns label="Об'єкт" name="object_name"/>
+			</scroll_list>
+			<button label="Повідомити" name="btn_notify"/>
+			<button label="Профіль" name="btn_profile_xp"/>
+			<button label="Поскаржитися" name="btn_report_xp"/>
+		</layout_panel>
+		<layout_panel name="button_panel">
+			<check_box label="Повідомити про всі події (Дні)" name="notify_all" width="210"/>
+			<button label="Очистити" name="btn_clear"/>
+			<button label="&lt;" name="btn_prev"/>
+			<button label="&gt;" name="btn_next"/>
+		</layout_panel>
+	</layout_stack>
+</panel>

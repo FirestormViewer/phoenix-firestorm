@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Give Money">
+	<string name="payee_group">Заплатити групі</string>
+	<string name="payee_resident">Заплатити мешканцю</string>
+	<text name="payee_name">Lenny Cazari</text>
+	<text name="object_name_label">Через об'єкт:</text>
+	<icon name="icon_object" tool_tip="Об'єкти"/>
+	<text name="object_name_text">Мій дуже файний обьект з довжелезною назвою</text>
+	<button label="Сплатити L$1" label_selected="Сплатити L$1" name="fastpay 1"/>
+	<button label="Сплатити L$5" label_selected="Сплатити L$5" name="fastpay 5"/>
+	<button label="Сплатити L$10" label_selected="Сплатити L$10" name="fastpay 10"/>
+	<button label="Сплатити L$20" label_selected="Сплатити L$20" name="fastpay 20"/>
+	<text name="amount text">Або введіть суму:</text>
+	<button label="Оплатити" label_selected="Оплатити" name="pay btn"/>
+	<button label="Скасувати" label_selected="Скасувати" name="cancel btn"/>
+</floater>

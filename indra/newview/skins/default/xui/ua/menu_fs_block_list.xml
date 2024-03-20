@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="menu_blocked_gear">
+	<menu_item_call label="Розблокувати" name="unblock" />
+	<menu_item_check label="Блокувати Голос" name="BlockVoice"/>
+	<menu_item_check label="Блокувати Текст" name="MuteText"/>
+	<menu_item_check label="Блокувати Частинки" name="BlockObjectParticles"/>
+	<menu_item_check label="Блокувати Звуки Об'єктів" name="BlockObjectSounds"/>
+	<menu_item_call label="Профіль..." name="profile" />
+</context_menu>

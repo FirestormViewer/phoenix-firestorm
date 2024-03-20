@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="create_landmark" title="Створити закладку">
+	<string name="favorites_bar">Панель обраного</string>
+	<text name="title_label" value="Подробиці"/>
+	<text name="name_label" value="Назва:"/>
+	<text name="folder_label" value="Зберегти закладку в:"/>
+	<text name="new_folder_textbox">[secondlife:/// Створити нову папку]</text>
+	<text name="notes_label" value="Мої нотатки:"/>
+	<button label="OK" name="ok_btn"/>
+	<button label="Скасувати" name="cancel_btn"/>
+</floater>

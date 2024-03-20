@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="ColorPicker" title="Вибір кольору">
+  <tab_container name="scale_type_container">
+    <panel name="RGB" label="RGB">
+      <text name="r_val_text">
+        Червоний:
+      </text>
+      <text name="g_val_text">
+        Зелений:
+      </text>
+      <text name="b_val_text">
+        Синій:
+      </text>
+    </panel>
+    <panel name="LSL" label="LSL">
+      <text name="r_val_text_lsl">
+        Червоний:
+      </text>
+      <text name="g_val_text_lsl">
+        Зелений:
+      </text>
+      <text name="b_val_text_lsl">
+        Синій:
+      </text>
+    </panel>
+    <panel name="Hex" label="Hex">
+      <text name="hex_text">
+        Шістнадцятковий код (#rrggbb):
+      </text>
+    </panel>
+  </tab_container>
+  <text name="h_val_text">
+    Відтінок:
+  </text>
+  <text name="s_val_text">
+    Насичений.:
+  </text>
+  <text name="l_val_text">
+    Яскравість:
+  </text>
+  <check_box label="Прим. зараз" name="apply_immediate" width="100" />
+  <button label="Коп. LSL"
+     tool_tip="Копіює значення кольору в колірний вектор LSL у форматі &lt;r, g, b&gt;." name="copy_lsl_btn" width="80" />
+  <button label="ОК" label_selected="ОК" name="select_btn"/>
+  <button label="Скасувати" label_selected="Скасувати" name="cancel_btn"/>
+  <text name="Current color:">
+    ^ Поточний колір ^
+  </text>
+  <text name="(Drag below to save.)">
+    (Тягни вниз для сохр.)
+  </text>
+</floater>

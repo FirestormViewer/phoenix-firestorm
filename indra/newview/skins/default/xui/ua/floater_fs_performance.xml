@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="performance" title="Збільшити швидкість графіки">
+<floater.string name="frame_stats">
+Кадр:[TOT_FRAME_TIME]ms Сцена:[SCENERY_FRAME_PCT]% Аватари:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUDS:[HUDS_FRAME_PCT]% Swap:[SWAP_FRAME_PCT]% Завдання:[IDLE_FRAME_PCT]%
+</floater.string>
+<floater.string name="limit_fps">
+  FPS обмежений [FPSCAP] к/с
+</floater.string>
+<floater.string name="tuning_fps">
+  Ціль [FPSTARGET] к/с
+</floater.string>
+<floater.string name="focus_fps">
+  Фоновий режим
+</floater.string>
+<floater.string name="info_waitforit">
+  Дайте 5-10 секунд, щоб зміни відбулися.
+</floater.string>
+<floater.string name="info_frozen">
+  Пауза статистики при обмеженні FPS або фоновий режим.
+</floater.string>
+<floater.string name="tot_av_template">
+  Усього: [TOT_AV] ([TOT_AV_TIME]μs)
+</floater.string>
+<floater.string name="tot_att_template">
+  Усього: [TOT_ATT] ([TOT_ATT_TIME]μs)
+</floater.string>
+<panel name="panel_top">
+	<panel name="fps_subpanel">
+		<text name="fps_lbl">кадрів на секунду</text>
+		<text name="fps_warning">Обмеження @ 000 FPS</text>
+		<text name="fps_desc1_lbl">Пауза статистики при обмеженні FPS або фоновий режим.</text>
+		<text name="frame_breakdown">
+[---------------------Тут з'явиться розбивка кадрів.----------------------]
+		</text>
+	</panel>
+	<panel name="target_subpanel">
+		<text name="settings_lbl" tool_tip="Автоматично налаштовує параметри для підтримки FPS. Встановіть ціль на бажану частоту кадрів, і програма перегляду спробує відповідати цьому, динамічно змінюючи ваші налаштування.">Автом.:</text>
+		<text name="targetfps_desc">Цільова частота (fps)</text>
+		<spinner name="target_fps" tool_tip="Ціль FPS - Бажаний рівень FPS. Програма перегляду спробує домогтися цього, змінивши налаштування графіки."/>
+		<button name="AutoTuneFPS" label="Старт" label_selected="Стоп" tool_tip="Програма спробує налаштувати параметри для досягнення цільової частоти кадрів."/>
+		<check_box name="AutoTuneContinuous" label="Безперервно" tool_tip="Програма перегляду буде постійно змінювати налаштування для досягнення цільового FPS, доки не зупиниться, навіть якщо вікно закрито. Якщо функцію вимкнено, натискання кнопки Автоналаштування призведе до налаштування поточних параметрів, а потім зупиниться."/>
+		<button name="PrefSaveButton" tool_tip="Зберегти поточні налаштування за замовчуванням для використання в майбутньому."/>
+		<button name="PrefLoadButton" tool_tip="Завантажити наявні попередні налаштування."/>
+		<button name="Defaults" tool_tip="Перезавантажити налаштування графіки за замовчуванням для вашого обладнання."/>
+		<text name="settings_desc">Стратегія підстроювання</text>
+		<combo_box name="FSTuningFPSStrategy">
+			<combo_box.item label="Тільки аватари" name="av_only"/>
+			<combo_box.item label="Аватари та сцена" name="av_and_scene"/>
+		</combo_box>
+		<button name="target_btn" tool_tip="Змінити поведінку стратегії підлаштування."/>
+	</panel>
+</panel>
+<panel name="panel_performance_main">
+	<panel name="settings_subpanel">
+		<text name="settings_lbl">Налаштування графіки</text>
+		<text name="settings_desc">Виберіть налаштування відстані, води, освітлення і т.д.</text>
+	</panel>
+	<panel name="nearby_subpanel">
+		<text name="avatars_nearby_lbl">Аватари поруч</text>
+		<text name="avatars_nearby_desc">Керуйте відображенням найближчих аватарів.</text>
+		<text name="avatars_frme_pct_lbl">
+Час
+відтворення
+аватарів
+		</text>
+	</panel>
+	<panel name="complexity_subpanel">
+		<text name="complexity_lbl">Складність аватара</text>
+		<text name="complexity_info">Будьте добрим жителем. Керуйте впливом вашого аватара</text>
+	</panel>
+	<panel name="huds_subpanel">
+		<text name="huds_lbl">HUD-и аватара</text>
+		<text name="huds_desc">Видалення непотрібних HUD може поліпшити швидкість.</text>
+		<text name="huds_frme_pct_lbl">
+Час
+відтворення
+HUD-ів
+		</text>
+	</panel>
+</panel>
+</floater>

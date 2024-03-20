@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Outfit Wearable Context Menu">
+	<menu_item_call label="Замінити" name="wear_replace"/>
+	<menu_item_call label="Одягнути" name="wear_wear"/>
+	<menu_item_call label="Додати" name="wear_add"/>
+	<context_menu label="Прикріпити до" name="wearable_attach_to"/>
+	<context_menu label="Прикріпити на екран" name="wearable_attach_to_hud"/>
+	<menu_item_call label="Коснуться" name="touch"/>
+	<menu_item_call label="Змінити" name="edit"/>
+	<menu_item_call label="Зняти/Від'єднати" name="take_off_or_detach"/>
+	<menu_item_call label="Від'єднати" name="detach"/>
+	<menu_item_call label="Зняти" name="take_off"/>
+	<menu_item_call label="Профиль объекта" name="object_profile"/>
+	<menu_item_call label="Показати оригінал" name="show_original"/>
+	<menu_item_call label="Створити" name="create_new"/>
+	<menu_item_call label="--Немає опцій--" name="--no options--"/>
+</context_menu>

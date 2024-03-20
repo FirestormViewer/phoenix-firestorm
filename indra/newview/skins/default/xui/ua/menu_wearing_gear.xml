@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Gear Wearing">
+	<menu_item_call label="Торкнутися" name="touch"/>
+	<menu_item_call label="Змінити" name="edit_item"/>
+	<menu_item_call label="Зняти" name="takeoff"/>
+	<menu_item_call label="Змінити костюм" name="edit_outfit"/>
+	<menu_item_call label="Копіювати список предметів комплекту в буфер" name="copy"/>
+</toggleable_menu>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="camera_floater" title="Керування камерою">
+	<floater.string name="rotate_tooltip">
+		Повернути камеру навколо точки фокусування
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+		Наближення/віддалення камери щодо точки фокусування
+	</floater.string>
+	<floater.string name="move_tooltip">
+		Перемістити камеру вгору, вниз, ліворуч або праворуч
+	</floater.string>
+	<floater.string name="free_mode_title">
+		Огляд об'єкту
+	</floater.string>
+	<string name="inactive_combo_text">Попередні налаштування</string>
+	<panel name="buttons_panel">
+		<panel_camera_item name="front_view" tool_tip="Вигляд спереду" />
+		<panel_camera_item name="group_view" tool_tip="Вигляд збоку" />
+		<panel_camera_item name="rear_view" tool_tip="Від сзаді" />
+		<panel_camera_item name="object_view" tool_tip="Вигляд об'єкта"/>
+		<panel_camera_item name="mouselook_view" tool_tip="Вигляд від першої особи"/>
+		<panel_camera_item name="reset_view" tool_tip="Скинути вигляд"/>
+	</panel>
+	<panel name="zoom">
+		<layout_stack name="camera_view_layout_stack">
+			<layout_panel name="camera_rotate_layout_panel">
+				<joystick_rotate name="cam_rotate_stick" tool_tip="Обертання камери навколо точки фокусування"/>
+			</layout_panel>
+			<layout_panel name="camera_zoom_layout_panel">
+				<slider_bar name="zoom_slider" tool_tip="Наблизити/віддалити камеру до/від точки фокусування"/>
+			</layout_panel>
+			<layout_panel name="panel_track">
+				<joystick_track name="cam_track_stick" tool_tip="Двигати камеру вгору та вниз, вліво та вправо"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+	<panel name="preset_buttons_panel">
+		<button label="Позиція..." name="camera_position_btn"/>
+		<button name="save_preset_btn" tool_tip="Зберегти як Передустановку"/>
+		<combo_box name="preset_combo">
+			<combo_box.item label="Попередні налаштування" name="Use preset"/>
+		</combo_box>
+		<button name="gear_btn" tool_tip="Передустановки камери"/>
+	</panel>
+</floater>

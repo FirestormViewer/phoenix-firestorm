@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="nearby_chat" title="Загальній чат">
+  <floater.string name="chatbox_label">У загальний чат</floater.string>
+  <layout_stack name="ls_control_panel">
+     <layout_panel name="lp_chat_history_btn">
+      <button tool_tip="Відкрити історію спільного чату." name="chat_history_btn"/>
+     </layout_panel>
+     <layout_panel name="lp_chat_history_muted_btn">
+      <button tool_tip="Показати заблокований чат в історії спільного чату." name="chat_history_muted_btn"/>
+    </layout_panel>
+    <layout_panel name="lp_options_btn">
+      <menu_button tool_tip="Параметри чату" name="chat_options_btn"/>
+    </layout_panel>
+    <layout_panel name="lp_chat_search_btn">
+      <button name="chat_search_btn" tool_tip="Пошук у чаті"/>
+    </layout_panel>
+  </layout_stack>
+  <layout_stack name="ls_chat">
+    <layout_panel name="panel_im_control_lp">
+      <layout_stack name="im_panels">
+        <layout_panel name="chat_holder">
+          <fs_chat_history name="chat_history"/>
+          <fs_chat_history name="chat_history_muted" />
+        </layout_panel>
+        <layout_panel name="unread_messages_holder">
+          <icon name="unread_messages_background"/>
+          <text name="unread_messages_text">
+            Непрочитаних повідомлень: [NUM]
+          </text>
+        </layout_panel>
+        <layout_panel name="chat_layout_panel">
+          <layout_stack name="input_panels">
+            <layout_panel name="input_editor_layout_panel">
+              <chat_editor name="chat_box" />
+            </layout_panel>
+            <layout_panel name="input_button_layout_panel">
+              <spinner name="ChatChannel" tool_tip="Канал надсилання в чат. Включається в Установки → Чат -> Друк -> Показати вибір каналу в рядку введення загального чату." />
+            </layout_panel>
+            <layout_panel name="chat_type_layout_panel">
+            <combo_box name="chat_type" tool_tip="Шепіт = 10 м, Розмова = 20 м, Крик = 100 м">
+              <combo_box.item name="chat_type_whisper" label="Шепіт" />
+              <combo_box.item name="chat_type_say" label="Розмова" />
+              <combo_box.item name="chat_type_shout" label="Крик" />
+            </combo_box>
+            <button name="send_chat" tool_tip="Шепіт = 10 м, Розмова = 20 м, Крик = 100 м" />
+            <icon name="chat_type_combo_arrow_icon"/>
+            </layout_panel>
+          </layout_stack>
+        </layout_panel>
+      </layout_stack>
+    </layout_panel>
+  </layout_stack>
+</floater>

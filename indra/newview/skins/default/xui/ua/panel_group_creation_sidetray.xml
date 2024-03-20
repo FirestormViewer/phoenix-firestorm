@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Створення групи" name="GroupCreation">
+  <panel.string name="current_membership">
+    (Ваше членство)
+  </panel.string>
+  <panel name="group_info_top">
+    <text name="group_name_label">
+    Ім'я Групи:
+    </text>
+    <line_editor label="Введіть назву нової групи" name="group_name_editor" />
+  </panel>
+  <scroll_container name="content_scroll_container">
+    <panel name="content_panel">
+      <layout_stack name="layout">
+        <layout_panel name="group_info">
+          <panel name="group_info_top2">
+            <texture_picker name="insignia" tool_tip="Натисніть, щоб вибрати зображення"/>
+            <text_editor name="charter">
+              Статут Групи
+            </text_editor>
+          </panel>
+          <panel name="preferences_container">
+            <check_box label="Будь-який може вступити" name="open_enrollement"
+              tool_tip="Встановлює, чи ця група дозволяє новим членам приєднуватися без запрошення."/>
+            <check_box label="Плата за вступ" name="check_enrollment_fee"
+              tool_tip="Встановлює, чи потрібен вступний внесок для приєднання до групи"/>
+            <spinner name="spin_enrollment_fee" tool_tip="Нові учасники повинні сплатити цей внесок, щоб приєднатися до групи під час перевірки реєстраційного внеску."/>
+            <combo_box name="group_mature_check" tool_tip="Рейтинги зрілості визначають тип контенту та поведінку, дозволену в групі.">
+              <combo_item name="select_mature" value="Вибрати">
+               - Виберіть рейтинг зрілості -
+              </combo_item>
+              <combo_box.item label="Помірний" name="mature" />
+              <combo_box.item label="Загальний" name="pg" />
+            </combo_box>
+          </panel>
+        </layout_panel>
+        <layout_panel name="create_info">
+          <text name="fee_information">
+            Плата за створення групи залежить від рівня членства. [https://secondlife.com/my/account/membership.php Більше інформації]
+          </text>
+        </layout_panel>
+        <layout_panel name="create_actions" >
+          <layout_stack name="button_row_ls" >
+            <layout_panel name="layout_crt">
+              <button label="Створити групу за L$ [COST]" name="btn_create" tool_tip="Створити нову групу"/>
+              <button name="back" label="Скасувати"/>
+            </layout_panel>
+          </layout_stack>
+          <text name="info_deletion">
+            Примітка: група, яка має менше 2 учасників, видаляється протягом 48 годин!
+          </text>
+        </layout_panel>
+      </layout_stack>
+    </panel>
+  </scroll_container>
+</panel>

@@ -1,0 +1,20 @@
+<panel name="panel_login">
+  <layout_stack name="logo_stack">
+    <layout_panel name="parent_panel2">
+      <layout_stack name="widget_stack">
+        <layout_panel name="widget_container">
+         <combo_box label="Користувач"
+            tool_tip="Ім'я користувача, яке ви вибирали при реєстрації, наприклад: bobsmith12 або Steller Sunshine"
+            name="username_combo"/>
+          <line_editor name="password_edit" label="Пароль"/>
+          <button label="Увійти" name="connect_btn"/>
+          <text name="sign_up_text">Реєстрація</text>
+          <check_box label="Запам'ятати мене" name="remember_name"
+            tool_tip="Користувач, що вже запам'ятався, може бути забутий з меню Аватар &gt; Налаштування &gt; Додатково &gt; Імена користувачів, що запам'яталися."/>
+          <check_box label="Запам'ятати пароль" name="remember_password"/>
+          <text name="forgot_password_text">Забули пароль</text>
+        </layout_panel>
+      </layout_stack>
+    </layout_panel>
+  </layout_stack>
+</panel>

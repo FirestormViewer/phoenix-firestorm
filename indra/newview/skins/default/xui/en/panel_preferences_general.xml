@@ -97,6 +97,11 @@
          label="日本語 (Japanese) - Beta"
          name="(Japanese)"
          value="ja" />
+        <combo_box.item
+         enabled="true"
+         label="Український (Ukrainian) - Beta"
+         name="Ukrainian"
+         value="ua" />
         <!--
         <combo_box.item
          enabled="true"

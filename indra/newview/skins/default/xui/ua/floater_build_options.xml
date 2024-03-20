@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="build options floater" title="Опції сітки">
+	<spinner label="Одиниці сітки (метри)" name="GridResolution"/>
+	<spinner label="Розмір сітки (метри)" name="GridDrawSize"/>
+	<spinner label="Десятична точка" name="DecimalPrecision"/>
+	<spinner label="Кут (градус)" name="RotationStep"/>
+	<check_box label="Прив'язати до субодиниць" name="GridSubUnit"/>
+	<check_box label="Показати поперечний переріз" name="GridCrossSection"/>
+	<text name="grid_opacity_label" tool_tip="Непрозорість сітки">
+		Непрозорість:
+	</text>
+</floater>

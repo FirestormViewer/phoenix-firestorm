@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Пригласить в группу" name="invite_panel">
+	<panel.string name="confirm_invite_owner_str">
+		Ви впевнені, що хочете вибрати нових власників групи? Цю дію не можна скасувати!
+	</panel.string>
+	<panel.string name="loading">
+		(Завантаження...)
+	</panel.string>
+	<panel.string name="already_in_group">
+		Деякі мешканці, яких ви обрали, вже перебувають у групі та не отримали запрошення.
+	</panel.string>
+	<panel.string name="invite_selection_too_large">
+		Запрошення не надіслано: вибрано багато мешканців. Запрошення можуть охоплювати не більше 100 користувачів за один запит.
+	</panel.string>
+	<text name="help_text">
+		Ви можете запросити кількох мешканців до групи. Натисніть &apos;Вибір мешканців&apos;.
+	</text>
+	<button label="Вибір мешканців" name="add_button"/>
+	<name_list name="invitee_list" tool_tip="Щоб вибрати декілька жителів, натисніть та утримуйте клавішу CTRL, а потім вибирайте їхні імена"/>
+	<button label="Видалити зі списку" name="remove_button" tool_tip="Видалення вибраних мешканців зі списку запрошених"/>
+	<text name="role_text">
+		Виберіть роль:
+	</text>
+	<combo_box name="role_name" tool_tip="Виберіть роль зі списку, який можна призначати учасникам"/>
+	<button label="Запросити" name="invite_button"/>
+	<button label="Скасувати" name="cancel_button"/>
+	<string name="GroupInvitation">
+		Запрошення до групи
+	</string>
+</panel>

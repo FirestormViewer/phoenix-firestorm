@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="Сортувати по імені" name="sort_name" />
+	<menu_item_check label="Сортувати по імені пользователя" name="sort_username" />
+	<menu_item_check label="Сортувати за статусом" name="sort_status" />
+	<menu_item_check name="view_icons" label="Показати іконки" />
+	<menu_item_check name="view_permissions" label="Показати дозволи" />
+	<menu_item_check name="view_conversation" label="Показувати журнал розмов..." />
+</toggleable_menu>

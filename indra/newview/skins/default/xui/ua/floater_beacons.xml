@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="beacons" title="Кулі">
+	<panel name="beacons_panel">
+		<text name="label_show">
+			Показати:
+		</text>
+		<check_box label="Кордони для освітлення в сцені" name="lights_bounding_boxes"/>
+		<check_box label="Мітки" name="beacons"/>
+		<check_box label="Підсвічування" name="highlights"/>
+		<check_box label="Інформацію Маяка на екрані" name="FSRenderBeaconText"/>
+		<text name="beacon_width_label" tool_tip="Ширина міток">
+			Ширина:
+		</text>
+		<text name="label_objects">
+			Для цих об'єктів:
+		</text>
+		<check_box label="Фізичний" name="physical"/>
+		<check_box label="Scripted" name="scripted"/>
+		<check_box label="Тільки торкання" name="touch_only"/>
+		<check_box label="Джерела звуку" name="sounds"/>
+		<check_box label="Джерела частинок" name="particles"/>
+		<check_box label="Джерела медіа" name="moapbeacon"/>
+		<text name="label_objects">
+			Показати напрямок на:
+		</text>
+		<check_box label="Сонце" name="sun"/>
+		<check_box label="Луна" name="moon"/>
+	</panel>
+</floater>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_pathfinding_linksets" title="ОБ'ЄКТИ РЕГІОНУ">
+	<floater.string name="messaging_get_inprogress">
+		Запит наборів зв'язків для пошуку шляху...
+	</floater.string>
+	<floater.string name="messaging_get_error">
+		Помилка під час запиту наборів зв'язків для пошуку шляху.
+	</floater.string>
+	<floater.string name="messaging_set_inprogress">
+		Зміна вибраних наборів зв'язків для пошуку шляху...
+	</floater.string>
+	<floater.string name="messaging_set_error">
+		Помилка зміни вибраних наборів зв'язків для пошуку шляху.
+	</floater.string>
+	<floater.string name="messaging_complete_none_found">
+		Немає наборів зв'язків для пошуку шляху.
+	</floater.string>
+	<floater.string name="messaging_complete_available">
+		Вибрано [NUM_SELECTED] із [NUM_TOTAL].
+	</floater.string>
+	<floater.string name="messaging_not_enabled">
+		У цьому регіоні не дозволено пошук шляху.
+	</floater.string>
+	<floater.string name="linkset_terrain_name">
+		[Ландшафт]
+	</floater.string>
+	<floater.string name="linkset_terrain_description">
+		--
+	</floater.string>
+	<floater.string name="linkset_terrain_owner">
+		--
+	</floater.string>
+	<floater.string name="linkset_terrain_scripted">
+		--
+	</floater.string>
+	<floater.string name="linkset_terrain_land_impact">
+		--
+	</floater.string>
+	<floater.string name="linkset_terrain_dist_from_you">
+		--
+	</floater.string>
+	<floater.string name="linkset_owner_loading">
+		[Завантаження]
+	</floater.string>
+	<floater.string name="linkset_owner_unknown">
+		[Невідомо]
+	</floater.string>
+	<floater.string name="linkset_owner_group">
+		[група]
+	</floater.string>
+	<floater.string name="linkset_is_scripted">
+		Так
+	</floater.string>
+	<floater.string name="linkset_is_not_scripted">
+		Ні
+	</floater.string>
+	<floater.string name="linkset_is_unknown_scripted">
+		Невідомо
+	</floater.string>
+	<floater.string name="linkset_use_walkable">
+		Прохідне місце
+	</floater.string>
+	<floater.string name="linkset_use_static_obstacle">
+		Статична перешкода
+	</floater.string>
+	<floater.string name="linkset_use_dynamic_obstacle">
+		Переміщувана перешкода
+	</floater.string>
+	<floater.string name="linkset_use_material_volume">
+		Матеріальний обсяг
+	</floater.string>
+	<floater.string name="linkset_use_exclusion_volume">
+		Виключний обсяг
+	</floater.string>
+	<floater.string name="linkset_use_dynamic_phantom">
+		Переміщується фантом
+	</floater.string>
+	<floater.string name="linkset_is_terrain">
+		[незмінний]
+	</floater.string>
+	<floater.string name="linkset_is_restricted_state">
+		[обмежений]
+	</floater.string>
+	<floater.string name="linkset_is_non_volume_state">
+		[увігнутий]
+	</floater.string>
+	<floater.string name="linkset_is_restricted_non_volume_state">
+		[обмежений, увігнутий]
+	</floater.string>
+	<floater.string name="linkset_choose_use">
+		Виберіть рівень використання наборів зв'язків...
+	</floater.string>
+	<panel name="pathfinding_linksets_main">
+		<text name="linksets_filter_label">
+			Фільтр:
+		</text>
+		<text name="linksets_name_label">
+			Ім'я
+		</text>
+		<text name="linksets_desc_label">
+			Опис
+		</text>
+		<combo_box name="filter_by_linkset_use">
+			<combo_box.item label="Фільтр за ступенем використання наборів зв'язків..." name="filter_by_linkset_use_none"/>
+			<combo_box.item label="Прохідне місце" name="filter_by_linkset_use_walkable"/>
+			<combo_box.item label="Статична перешкода" name="filter_by_linkset_use_static_obstacle"/>
+			<combo_box.item label="Переміщувана перешкода" name="filter_by_linkset_use_dynamic_obstacle"/>
+			<combo_box.item label="Матеріальний обсяг" name="filter_by_linkset_use_material_volume"/>
+			<combo_box.item label="Виключаючий обсяг" name="filter_by_linkset_use_exclusion_volume"/>
+			<combo_box.item label="Переміщуваний фантом" name="filter_by_linkset_use_dynamic_phantom"/>
+		</combo_box>
+		<button label="Застосувати" name="apply_filters"/>
+		<button label="Очистити" name="clear_filters"/>
+		<scroll_list name="objects_scroll_list">
+			<scroll_list.columns label="Ім'я (кореневий примітив)" name="name"/>
+			<scroll_list.columns label="Опис (кореневий примітив)" name="description"/>
+			<scroll_list.columns label="Власник" name="owner"/>
+			<scroll_list.columns label="Scripted" name="scripted"/>
+			<scroll_list.columns label="Вплив" name="land_impact"/>
+			<scroll_list.columns label="Відстань" name="dist_from_you"/>
+			<scroll_list.columns label="Використання пошуку шляху" name="linkset_use"/>
+			<scroll_list.columns label="A %" name="a_percent"/>
+			<scroll_list.columns label="B %" name="b_percent"/>
+			<scroll_list.columns label="C %" name="c_percent"/>
+			<scroll_list.columns label="D %" name="d_percent"/>
+		</scroll_list>
+		<text name="messaging_status">
+			Набори зв'язків:
+		</text>
+		<button label="Оновити список" name="refresh_objects_list"/>
+		<button label="Вибрати все" name="select_all_objects"/>
+		<button label="Скасувати вибір" name="select_none_objects"/>
+	</panel>
+	<panel name="pathfinding_linksets_actions">
+		<text name="linksets_actions_label">
+			Дії з обраним
+		</text>
+		<check_box label="Показати мітку" name="show_beacon"/>
+		<button label="Взяти" name="take_objects"/>
+		<button label="Зробити копію" name="take_copy_objects"/>
+		<button label="Телепортувати мене туди" name="teleport_me_to_object"/>
+		<button label="Повернути" name="return_objects"/>
+		<button label="Видалити" name="delete_objects"/>
+	</panel>
+	<panel name="pathfinding_linksets_attributes">
+		<text name="linksets_attributes_label">
+			Змінити параметри пошуку шляху
+		</text>
+		<text name="walkability_coefficient_label">
+			Прохідність:
+		</text>
+		<text name="edit_a_label">
+			A
+		</text>
+		<line_editor name="edit_a_value" tool_tip="Прохідність для персонажів типу A. Приклад персонажа – гуманоїд."/>
+		<text name="edit_b_label">
+			B
+		</text>
+		<line_editor name="edit_b_value" tool_tip="Прохідність для персонажів типу B. Приклад персонажа – істота."/>
+		<text name="edit_c_label">
+			C
+		</text>
+		<line_editor name="edit_c_value" tool_tip="Прохідність для персонажів типу C. Приклад персонажа – механізм."/>
+		<text name="edit_d_label">
+			D
+		</text>
+		<line_editor name="edit_d_value" tool_tip="Прохідність для персонажів типу D. Приклад персонажа – інше."/>
+		<button label="Застосувати зміни" name="apply_edit_values"/>
+		<text name="suggested_use_a_label">
+			(гуманоїд)
+		</text>
+		<text name="suggested_use_b_label">
+			(Істота)
+		</text>
+		<text name="suggested_use_c_label">
+			(механізм)
+		</text>
+		<text name="suggested_use_d_label">
+			(Інше)
+		</text>
+	</panel>
+</floater>

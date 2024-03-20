@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Загальні" name="Media Settings General">
+	<text name="home_label">
+		Домашня сторінка:
+	</text>
+	<text name="home_fails_whitelist_label">
+		(Ця сторінка не визначена у білому списку)
+	</text>
+	<line_editor name="home_url" tool_tip="Домашня сторінка для цього медіа-джерела"/>
+	<text name="preview_label">
+		Перегляд
+	</text>
+	<text name="current_url_label">
+		Поточна сторінка:
+	</text>
+	<text name="current_url" tool_tip="Поточна сторінка для цього медіа-джерела" value=""/>
+	<button label="Скидання" name="current_url_reset_btn"/>
+	<check_box initial_value="false" label="Автоматичне зациклювання" name="auto_loop"/>
+	<check_box initial_value="false" label="Реакція на перше клацання" name="first_click_interact"/>
+	<check_box initial_value="false" label="Автозбільшення" name="auto_zoom"/>
+	<check_box initial_value="false" label="Автоматичне програвання" name="auto_play"/>
+	<text name="media_setting_note">
+		Примітка: Мешканці можуть ігнорувати це налаштування.
+	</text>
+	<check_box initial_value="false" label="Автомасштабування на об'єкті" name="auto_scale"/>
+	<text name="size_label">
+		Розмір:
+	</text>
+	<text name="X_label">
+		X
+	</text>
+</panel>

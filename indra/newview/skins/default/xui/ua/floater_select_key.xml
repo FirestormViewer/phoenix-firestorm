@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater title="Вибір кнопки" name="modal container">
+	<floater.string name="keyboard">Клавіатура</floater.string>
+	<floater.string name="mouse">Кнопки Миші</floater.string>
+	<floater.string name="basic_description">
+Натисніть клавішу або кнопку миші, щоб вибрати.
+Дозволений введення: [INPUT].
+	</floater.string>
+	<floater.string name="reserved_by_menu">
+Комбінація [KEYSTR] зарезервована меню.
+	</floater.string>
+	<text name="description">
+Натисніть клавішу або кнопку миші, щоб вибрати.
+Дозволений введення: [INPUT].
+	</text>
+	<check_box label="Застосувати до всіх" name="apply_all" tool_tip="Програма використовує різні комбінації елементів керування в залежності від того, що ви робите у світі, встановлення цього параметра застосує ваші зміни до всіх комбінацій."/>
+	<button label="Очистити" name="SetEmpty"/>
+	<button label="За замовчуванням" name="Default" width="90"/>
+	<button label="Скасувати" name="Cancel"/>
+</floater>

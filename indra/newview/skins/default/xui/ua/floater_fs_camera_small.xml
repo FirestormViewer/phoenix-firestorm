@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="fs_camera_floater_small">
+    <floater.string name="rotate_tooltip">
+        Обертати камеру навколо точки фокусу
+    </floater.string>
+    <floater.string name="zoom_tooltip">
+        Масштаб камери до точки фокусування
+    </floater.string>
+    <floater.string name="move_tooltip">
+        Двигати камеру вгору/вниз, вліво/вправо
+    </floater.string>
+    <panel name="zoom">
+        <layout_stack name="camera_view_layout_stack">
+            <layout_panel name="camera_rotate_layout_panel">
+                <joystick_rotate name="cam_rotate_stick" tool_tip="Обертання камери навколо точки фокусування"/>
+            </layout_panel>
+            <layout_panel name="camera_zoom_layout_panel">
+                <slider_bar name="zoom_slider" tool_tip="Наблизити/віддалити камеру до/від точки фокусування"/>
+            </layout_panel>
+            <layout_panel name="panel_track">
+                <joystick_track name="cam_track_stick" tool_tip="Двигати камеру вгору та вниз, вліво та вправо"/>
+            </layout_panel>
+        </layout_stack>
+    </panel>
+    <panel name="buttons_view">
+        <panel_camera_item name="front_view" tool_tip="Вигляд спереду"/>
+        <panel_camera_item name="group_view" tool_tip="Вигляд збоку"/>
+        <panel_camera_item name="rear_view" tool_tip="Від сзаді"/>
+    </panel>
+    <panel name="buttons">
+        <panel_camera_item name="object_view" tool_tip="Вигляд об'єкта"/>
+        <panel_camera_item name="mouselook_view" tool_tip="Вигляд від першої особи"/>
+        <panel_camera_item name="reset_view" tool_tip="Скинути вигляд"/>
+    </panel>
+</floater>

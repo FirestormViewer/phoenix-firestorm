@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_experiences" label="Пригоди">
+	<string name="loading_experiences" value="Завантаження пригод..."/>
+	<string name="no_experiences" value="Немає пригод."/>
+	<string name="acquire" value="Придбати пригоду"/>
+</panel>

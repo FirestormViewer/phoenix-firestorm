@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floatermedialists" title="Списки медіа">
+	<layout_stack name="lists_layout_stack">
+	<layout_panel name="whitelist_layout_panel">
+	<text name="whitelist_text">
+		Дозволені домени:
+	</text>
+	<scroll_list name="whitelist_list">
+		<column label="Білий список" name="whitelist_col" />
+	</scroll_list>
+	<layout_stack name="whitelist_buttons_layout_stack">
+	<layout_panel name="whitelist_buttons_panel_add">
+	<button label="Додати..." label_selected="Додати..." name="add_whitelist" />
+	</layout_panel>
+	<layout_panel name="whitelist_buttons_panel_remove">
+	<button label="Убрати" name="remove_whitelist" />
+	</layout_panel>
+	</layout_stack>
+	</layout_panel>
+	<layout_panel name="blacklist_layout_panel">
+	<text name="blacklist_text">
+		Заблоковані домени:
+	</text>
+	<scroll_list name="blacklist_list">
+		<column label="Чорний список" name="blacklist_col" />
+	</scroll_list>
+	<layout_stack name="blacklist_buttons_layout_stack">
+	<layout_panel name="blacklist_buttons_panel_add">
+	<button label="Додати..." label_selected="Додати..." name="add_blacklist" />
+	</layout_panel>
+	<layout_panel name="blacklist_buttons_panel_remove">
+	<button label="Убрати" label_selected="Видалити" name="remove_blacklist" />
+	</layout_panel>
+	</layout_stack>
+	</layout_panel>
+	</layout_stack>
+	<text name="add_text" />
+	<line_editor name="input_domain"/>
+	<button label="Додати" label_selected="Додати" name="commit_domain" />
+</floater>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="godtools floater" title="Інструменти творця">
+	<tab_container name="GodTools Tabs">
+		<panel label="Grid" name="grid">
+			<button label="Оновити кеш даних карти цього регіону" label_selected="Оновити кеш даних карти цього регіону" name="Flush This Region&apos;s Map Visibility Caches"/>
+		</panel>
+		<panel label="Регіон" name="region">
+			<text name="Region Name:">
+				Назва:
+			</text>
+			<check_box label="Буферна зона" name="check prelude" tool_tip="Зробити цей регіон буферною зоною"/>
+			<check_box label="Сонце на місці" name="check fixed sun" tool_tip="Фіксація положення сонця (як у меню 'Регіон/Землеволодіння &gt; Ландшафт')"/>
+			<check_box label="Скидання будинку при телепорті" name="check reset home" tool_tip="Будинок мешканців, які телепортуються звідси, буде там, куди вони телепортуються."/>
+			<check_box label="Вигляд" name="check visible" tool_tip="Зробити регіон видимим не тільки для творців"/>
+			<check_box label="Ушкодження" name="check damage" tool_tip="Уможливити пошкодження в регіоні"/>
+			<check_box label="Блокувати відстеження трафіку" name="block dwell" tool_tip="Виберіть, щоб регіон не відстежував трафік"/>
+			<check_box label="Заборонити тераформування" name="block terraform" tool_tip="Виберіть, щоб мешканці не могли змінювати ландшафт своєї землі"/>
+			<check_box label="Пісочниця" name="is sandbox" tool_tip="Виберіть, чи є регіон 'пісочницею'"/>
+			<button label="Зафікс. ландшафт" label_selected="Зафікс. ландшафт" name="Bake Terrain" tool_tip="Зберегти поточний ландшафт як стандартний" width="130"/>
+			<button label="Повернути ландшафт" label_selected="Повернути ландшафт" name="Revert Terrain" tool_tip="Замінити поточний ландшафт за замовчуванням" width="130"/>
+			<button label="Змінити ландшафт" label_selected="Змінити ландшафт" name="Swap Terrain" tool_tip="Змінити місцями поточний ландшафт та ландшафт за умовчанням" width="130"/>
+			<text name="estate id">
+				ВД володіння:
+			</text>
+			<text name="parent id">
+				ВД батька:
+			</text>
+			<line_editor name="parentestate" tool_tip="Родове землеволодіння для цього регіону"/>
+			<text name="Grid Pos: ">
+				Полож. сітки:
+			</text>
+			<line_editor name="gridposx" tool_tip="Положення сітки по осі x для цього регіону"/>
+			<line_editor name="gridposy" tool_tip="Положення сітки по осі y для цього регіону"/>
+			<text name="Redirect to Grid: ">
+				Перенапр. на:
+			</text>
+			<text name="billable factor text">
+				Коеф. оплати:
+			</text>
+			<text name="land cost text">
+				L$ за м²:
+			</text>
+			<button label="Оновити" label_selected="Оновити" name="Refresh" tool_tip="Оновлення наведеної вище інформації"/>
+			<button label="Застосувати" label_selected="Застосувати" name="Apply" tool_tip="Применить все изменения выше"/>
+			<button label="Вибрати регіон" label_selected="Вибрати регіон" name="Select Region" tool_tip="Вибір всього регіону за допомогою інструмента зміни ландшафту" left="160" />
+			<button label="Автозбереження" label_selected="Автозбереження" name="Autosave now" tool_tip="Зберегти в каталозі автозбереження стан в архіві Gzip"/>
+		</panel>
+		<panel label="Об'єкти" name="objects">
+			<panel.string name="no_target">
+				(немає персонажа)
+			</panel.string>
+			<text name="Region Name:">
+				Назва:
+			</text>
+			<text name="region name">
+				Уельс
+			</text>
+			<check_box label="Вимк. скрипти" name="disable scripts" tool_tip="Відключення всіх скриптів у цьому регіоні"/>
+			<check_box label="Вимк. зіткнення" name="disable collisions" tool_tip="Відключення зіткнень не-агентів у цьому регіоні"/>
+			<check_box label="Вимк. фізику" name="disable physics" tool_tip="Відключення всіх фізичних параметрів у цьому регіоні" left_delta="140"/>
+			<button label="Застосувати" label_selected="Застосувати" name="Apply" tool_tip="Применить все изменения выше"/>
+			<button label="Задати персонаж" label_selected="Задати персонаж" name="Set Target" tool_tip="Виберіть аватар-персонаж для видалення об'єкта"/>
+			<text name="target_avatar_name">
+				(немає персонажа)
+			</text>
+			<button label="Видалити об'єкти персонажа зі скриптами на чужій землі" label_selected="Видалити об'єкти персонажа зі скриптами на чужій землі" name="Delete Target&apos;s Scripted Objects On Others Land" tool_tip="Видалення всіх об'єктів зі скриптами, що належать персонажу, на землі. «Не копіювані» об'єкти будуть повернуті."/>
+			<button label="Видалити об'єкти персонажа зі скриптами на всіх землях" label_selected="Видалити об'єкти персонажа зі скриптами на всіх землях" name="Delete Target&apos;s Scripted Objects On *Any* Land" tool_tip="Видалення всіх об'єктів зі скриптами, що належать персонажу, у цьому регіоні. «Не копіювані» об'єкти будуть повернуті."/>
+			<button label="Видалити *ВСЕ* об'єкти персонажа" label_selected="Видалити *ВСЕ* об'єкти персонажа" name="Delete *ALL* Of Target&apos;s Objects" tool_tip="Видалення всіх об'єктів, що належать персонажу, в цьому регіоні. Об'єкти, що не копіюються, будуть повернуті."/>
+			<button label="Найактивніші учасники зіткнень" label_selected="Найактивніші учасники зіткнень" name="Get Top Colliders" tool_tip="Список об'єктів, для яких спостерігається найбільше деталізованих зворотних викликів" width="260"/>
+			<button label="Завантажити найкращі скрипти" label_selected="Завантажити найкращі скрипти" name="Get Top Scripts" tool_tip="Список об'єктів, у яких скрипти виконуються найдовше" width="200"/>
+			<button label="Зведення по скриптах" label_selected="Зведення з скриптів" name="Scripts digest" tool_tip="Список усіх скриптів з кількістю використань по кожному з них" width="160"/>
+		</panel>
+		<panel label="Запит" name="request">
+			<text name="Destination:">
+				Призначення:
+			</text>
+			<combo_box name="destination">
+				<combo_box.item label="призначений" name="item1"/>
+				<combo_box.item label="поточний регіон" name="item2"/>
+			</combo_box>
+			<text name="Request:">
+				Запит:
+			</text>
+			<combo_box name="request">
+				<combo_box.item label="учасники зіткнень &lt;steps&gt;" name="item1"/>
+				<combo_box.item label="скрипти: &lt;count&gt;,&lt;optional pattern&gt;" name="item2"/>
+				<combo_box.item label="значення &lt;pattern&gt;" name="item3"/>
+				<combo_box.item label="викласти &lt;asset_id&gt;" name="item4"/>
+			</combo_box>
+			<text name="Parameter:">
+				Параметр:
+			</text>
+			<button label="зробити запит" label_selected="Зробити запит" name="Make Request"/>
+		</panel>
+	</tab_container>
+</floater>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Загальне" name="general_panel">
+	<text name="language_textbox">
+		Мова:
+	</text>
+	<combo_box name="language_combobox">
+		<combo_box.item label="English (Англійська)" name="English"/>
+		<combo_box.item label="Українська мова" name="Ukrainian"/>
+		<combo_box.item label="Dansk (Датська) - Beta" name="Danish"/>
+		<combo_box.item label="Deutsch (Німецька)" name="Deutsch(German)"/>
+		<combo_box.item label="Español (Іспанська) - Beta" name="Spanish"/>
+		<combo_box.item label="Français (Французький) - Beta" name="French"/>
+		<combo_box.item label="Italiano (Італійська) - Beta" name="Italian"/>
+		<combo_box.item label="Polski (Польська)" name="Polish"/>
+		<combo_box.item label="Português (Португальська) - Beta" name="Portugese"/>
+		<combo_box.item label="Русский" name="Russian"/>
+		<combo_box.item label="Turkish (Турецький) - Бета" name="Turkish"/>
+		<combo_box.item label="日本語 (Японська) - Beta" name="(Japanese)"/>
+		<combo_box.item label="正體中文 (Традиційний Китайський) - Beta" name="Traditional Chinese"/>
+	</combo_box>
+	<text name="language_textbox2" width="145">
+		(Необхідний перезапуск)
+	</text>
+	<check_box label="Ісп. IME введення тексту" name="use_ime" tool_tip="Використовуйте міжнародний редактор методів введення, необхідний тільки для певних мов, таких як японська, китайська і т.д."/>
+	<text name="maturity_desired_prompt" width="250">
+		Отримати доступ до місць з рейтингом:
+	</text>
+	<combo_box name="maturity_desired_combobox">
+		<combo_box.item label="Загальний, Помірний, Для дорослих" name="Desired_Adult"/>
+		<combo_box.item label="Загальний, Помірний" name="Desired_Mature"/>
+		<combo_box.item label="Загальний" name="Desired_PG"/>
+	</combo_box>
+	<text name="start_location_textbox">
+		Місце запуску:
+	</text>
+	<combo_box name="start_location_combo">
+		<combo_box.item label="Останнє місце" name="MyLastLocation" tool_tip="За замовчуванням. Увійти в останнє місце."/>
+		<combo_box.item label="Мій дім" name="MyHome" tool_tip="Увійти в місце, яке встановлено будинком"/>
+	</combo_box>
+	<check_box label="Показати на екрані входу" name="show_location_checkbox"/>
+	<text name="name_tags_textbox">
+		Відображення імені:
+	</text>
+	<radio_group name="Name_Tag_Preference" width="220">
+		<radio_item width="95" label="Вимкнути" name="radio"/>
+		<radio_item width="85" label="Увімкнути" name="radio2"/>
+		<radio_item label="На деякий час" name="radio3"/>
+	</radio_group>
+	<text name="RenderNameShowTime_LabelPrefix" left_pad="105">
+		(
+	</text>
+	<text name="RenderNameShowTime_LabelSuffix">
+		секунд)
+	</text>
+	<check_box label="Показувати моє ім'я" name="show_my_name_checkbox1"/>
+	<check_box label="Імена користувачів" name="show_slids" tool_tip="Відображати імена облікових записів користувачів, наприклад Bobsmith123"/>
+	<check_box label="Показувати титул групи" name="show_all_title_checkbox1" tool_tip="Показувати титул групи Наприклад, Owner"/>
+	<check_box label="Приховати власний титул групи" name="RenderHideGroupTitle" tool_tip="Показати або приховати свій титул групи для вас та всіх інших."/>
+	<check_box label="Ім'я, що відображається" name="display_names_check" tool_tip="Показати Відображуване ім'я (Display Names) в чаті, ОП, тегах над аватарами"/>
+	<check_box label="Старий спосіб відображення імені" name="FSshow_legacyun" tool_tip="Відображення імені у старому форматі (ім'я прізвище) замість імені користувача (ім'я прізвище)"/>
+	<check_box label="Виділення друзів" name="show_friends" tool_tip="Виділення імені друзів іншим кольором"/>
+	<check_box label="Прибирати 'Resident' з імен старого типу" name="legacy_trim_check" tool_tip="Прибирати 'Resident' з імен старого типу"/>
+	<check_box label="Старий спосіб позиц. тегів." name="FSLegacyNametagPosition" tool_tip="Коли ви увімкнете цю опцію, тег імені не буде на постійній висоті над аватаром і не напливатиме на його голову, якщо він рухається. Наприклад, у результаті анімації."/>
+	<check_box label="Показати автовідповідь у тезі" name="FSShowAutorespondInNameTag" tool_tip="Це покаже, чи увімкнено автовідповідач у вашому власному тегу імені."/>
+	<check_box label="Показати складність аватара" name="FSTagShowARW" tool_tip="Якщо увімкнено, у тезі покаже поточну складність аватара."/>
+	<check_box label="Тільки якщо дуже складний" name="FSTagShowTooComplexOnlyARW" tool_tip="Якщо увімкнено, тег покаже поточну складність аватара, тільки якщо аватар занадто складний і показаний як силует."/>
+	<check_box label="Показати власну складність" name="FSTagShowOwnARW" tool_tip="Якщо увімкнено, ваш тег покаже вашу поточну складність аватара."/>
+	<text name="title_afk_text">
+		Заголовок 'Відійшов' після закінчення:
+	</text>
+	<text name="title_afk_quit_text">
+		Вийти після закінчення:
+	</text>
+	<combo_box label="'Відійшов' після закінчення:" name="afk">
+		<combo_box.item label="2 хвилини" name="item0"/>
+		<combo_box.item label="5 хвилин" name="item1"/>
+		<combo_box.item label="10 хвилин" name="item2"/>
+		<combo_box.item label="30 хвилин" name="item3"/>
+		<combo_box.item label="60 хвилин" name="item4"/>
+		<combo_box.item label="Ніколи" name="item5"/>
+	</combo_box>
+	<combo_box label="Вийти після закінчення:" name="quitafk">
+		<combo_box.item label="2 хвилини" name="item0"/>
+		<combo_box.item label="5 хвилин" name="item1"/>
+		<combo_box.item label="10 хвилин" name="item2"/>
+		<combo_box.item label="30 хвилин" name="item3"/>
+		<combo_box.item label="Ніколи" name="item4"/>
+	</combo_box>
+	<check_box name="AvatarSitOnAway" label="Сісти, коли 'Відійшов'"/>
+	<text name="text_box3">
+		Автоматичні повідомлення можна змінити в Приватність / Автовідповідь
+	</text>
+</panel>

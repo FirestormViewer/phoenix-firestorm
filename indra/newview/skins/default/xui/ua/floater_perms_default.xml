@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="perms default" title="СТАНДАРТНІ ДОЗВОЛІ НА СТВОРЕННЯ">
+	<panel label="Стандартні дозволи" name="default permissions">
+		<text name="label_1">
+			Наступний. власник:
+		</text>
+		<text name="label_2">
+			Копіювати
+		</text>
+		<text name="label_3">
+			Змінювати
+		</text>
+		<text name="label_4">
+			Передати
+		</text>
+		<text name="label_5">
+			Поділитися із групою
+		</text>
+		<text name="label_6">
+			Дозволити всім копіювати
+		</text>
+		<text name="label_7" tool_tip="Встановіть стандартні дозволи для створення об'єктів">
+			Об'єкти
+		</text>
+		<text name="label_8" tool_tip="Встановіть стандартні дозволи для речей, що передаються">
+			Передане
+		</text>
+		<text name="label_9" tool_tip="Задайте стандартні дозволи для створення скриптів">
+			Скрипти
+		</text>
+		<text name="label_10" tool_tip="Встановіть стандартні дозволи для створення нотаток">
+			нотатки
+		</text>
+		<text name="label_11" tool_tip="Встановіть стандартні дозволи для створення жестів">
+			Жести
+		</text>
+		<text name="label_12" tool_tip="Встановіть стандартні дозволи для створення одягу або частин тіла">
+			Носімі речі
+		</text>
+		<text name="label_13" tool_tip="Задати стандартні дозволи, коли будуть створені налаштування навколишнього середовища">
+			Налаштування
+		</text>
+	</panel>
+	<button label="OK" label_selected="OK" name="OK"/>
+	<button label="Скасувати" label_selected="Скасувати" name="cancel"/>
+</floater>

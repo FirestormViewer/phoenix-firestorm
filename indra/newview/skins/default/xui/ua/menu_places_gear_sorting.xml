@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_sorter_gear">
+	<menu_item_call label="Розкрити всі папки" name="expand_all"/>
+	<menu_item_call label="Згорнути всі папки" name="collapse_all"/>
+	<menu_item_check label="Сортувати за датою" name="sort_by_date"/>
+</toggleable_menu>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Avatar Pie">
+	<menu_item_call label="Профіль" name="Profile..."/>
+	<menu_item_call label="Додати до друзів" name="Add Friend"/>
+	<menu_item_call label="Дати візитну картку" name="Give Calling Card"/>
+	<menu_item_call label="Додати до набору контактів" name="Add to Set"/>
+	<menu_item_call label="Надіслати ОП" name="Send IM..."/>
+	<menu_item_call label="Дзвінок" name="Call"/>
+	<menu_item_call label="Запросити до групи" name="Invite..."/>
+	<menu_item_call label="Скидання скелета" name="Reset Skeleton"/>
+	<menu_item_call label="Скидання скелета та анімацій" name="Reset Skeleton And Animations"/>
+	<menu_item_call label="Скидання рівнів деталізації міш" name="Reset Mesh LOD"/>
+	<context_menu label="Керування" name="Remove">
+		<menu_item_call label="Заблокувати" name="Avatar Mute"/>
+		<menu_item_call label="Розблокувати" name="Avatar Unmute"/>
+		<menu_item_call label="Скарга" name="abuse"/>
+		<menu_item_call label="Заморозити" name="Freeze..."/>
+		<menu_item_call label="Викинути" name="Eject..."/>
+	</context_menu>
+	<menu_item_call label="Дамп XML" name="Dump XML"/>
+	<menu_item_call label="Наблизити" name="Zoom In"/>
+	<menu_item_call label="Заплатити" name="Pay..."/>
+	<menu_item_call label="Не відображати" name="Derender"/>
+	<menu_item_call label="Не відображати + ЧС" name="DerenderPermanent"/>
+	<menu_item_call label="Інформація про скрипти" name="ScriptInfo"/>
+	<menu_item_call label="Показати текстури" name="Debug..."/>
+	<menu_item_call label="Оновити текстуру" name="Texture Refresh"/>
+	<menu_item_check name="AlwaysRenderFully" label="Завжди відображати повністю"/>
+	<menu_item_check name="DoNotRender" label="Ніколи не відображати"/>
+	<menu_item_check name="RenderNormally" label="Видалити з винятків відображення"/>
+	<menu_item_call label="Блокувати власника частинок" name="Mute Particle"/>
+</context_menu>

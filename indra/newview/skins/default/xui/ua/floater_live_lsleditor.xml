@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="script ed float" title="Скрипт: Новий скрипт">
+	<floater.string name="not_allowed">
+		Ви не можете переглядати та змінювати цей скрипт, оскільки для нього вибрано категорію «не копіювані». Для перегляду або зміни скрипту в об'єкті потрібні повні права доступу.
+	</floater.string>
+	<floater.string name="script_running">
+		Виконується
+	</floater.string>
+	<floater.string name="Title">
+		Скрипт: [NAME]
+	</floater.string>
+	<floater.string name="experience_enabled">
+		Зніміть прапорець, щоб видалити поточну пригоду
+	</floater.string>
+	<floater.string name="no_experiences">
+		Вам не дозволено користуватися пригодами
+	</floater.string>
+	<floater.string name="add_experiences">
+		Виберіть, щоб додати пригоду
+	</floater.string>
+	<floater.string name="show_experience_profile">
+		Натисніть , щоб переглянути профіль пригоди
+	</floater.string>
+	<floater.string name="loading">
+		Завантаження...
+	</floater.string>
+	<button label="Скидання" label_selected="Скидання" name="Reset"/>
+	<check_box initial_value="true" label="Виконується" name="running"/>
+	<check_box initial_value="true" label="Моно" name="mono"/>
+	<check_box label="Викор. пригода:" name="enable_xp"/>
+	<button label="&gt;" name="view_profile"/>
+</floater>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_skin_panel">
+	<panel name="avatar_skin_color_panel">
+		<texture_picker label="Голова" name="Head" tool_tip="Натисніть, щоб вибрати зображення"/>
+		<texture_picker label="Верх тіла" name="Upper Body" tool_tip="Натисніть, щоб вибрати зображення"/>
+		<texture_picker label="Низ тіла" name="Lower Body" tool_tip="Натисніть, щоб вибрати зображення"/>
+	</panel>
+	<panel name="accordion_panel">
+		<accordion name="wearable_accordion">
+			<accordion_tab name="skin_color_tab" title="Колір шкіри"/>
+			<accordion_tab name="skin_face_tab" title="Деталі обличчя"/>
+			<accordion_tab name="skin_makeup_tab" title="Макіяж"/>
+			<accordion_tab name="skin_body_tab" title="Деталі тіла"/>
+		</accordion>
+	</panel>
+</panel>

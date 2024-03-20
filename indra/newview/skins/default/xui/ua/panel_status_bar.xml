@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="status">
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="Ділянка для продажу"/>
+		<text tool_tip="Ім'я земельної ділянки, на якій ви стоїте. Натисніть про землю." name="parcel_info_text" value="(Завантаження...)"/>
+	</panel>
+	<panel.string name="packet_loss_tooltip">
+		Втрата пакетів
+	</panel.string>
+	<panel.string name="bandwidth_tooltip">
+		Ширина полоси
+	</panel.string>
+	<panel.string name="time">
+		[hour, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone,datetime, slt]
+	</panel.string>
+	<panel.string name="timeTooltip">
+		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]
+	</panel.string>
+	<panel.string name="buycurrencylabel">
+		[AMT] L$
+	</panel.string>
+<panel name="menu_search_panel">
+		<search_editor label="Пошук у Меню" name="search_menu_edit" tool_tip="Введіть термін, який вас цікавить, для пошуку тут. Результати будуть відображені для часткового збігу повного тексту в меню."/>
+	</panel>
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="Ділянка для продажу"/>
+		<button name="status_lightshare_btn" tool_tip="Налаштування освітлення"/>
+		<text tool_tip="Ім'я земельної ділянки, на якій ви стоїте. Натисніть про землю." name="parcel_info_text" value="(Завантаження...)"/>
+	</panel>
+<panel name="balance_bg">
+		<text name="balance" tool_tip="Натисніть, для оновлення балансу"/>
+		<button label="Купити L$" name="buyL" tool_tip="Натисніть, щоб купити L$"/>
+	</panel>
+	<panel name="time_and_media_bg">
+		<text name="TimeText" tool_tip="Поточний час (Тихоокеанський)"/>
+		<button name="stream_toggle_btn" tool_tip="Увімкнути/Вимкнути відтворення потокового аудіо"/>
+		<button name="media_toggle_btn" tool_tip="Увімкнути/вимкнути відтворення всього медіа (Музика, Відео, Web)"/>
+		<text name="FPSText" tool_tip="Кадрів за секунду"/>
+	</panel>
+</panel>

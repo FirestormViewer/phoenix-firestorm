@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview_anim">
+	<floater.string name="Title">
+		Анімація: [NAME]
+	</floater.string>
+	<panel name="basic_info_panel">
+		<text name="desc txt">
+			Опис:
+		</text>
+		<button label="Запустити публічно" label_selected="Зупинити" name="Inworld" tool_tip="Запустити анімацію аватара, щоб її бачили всі навколо"/>
+		<button label="Запустити для себе" label_selected="Зупинити" name="Locally" tool_tip="Запустити анімацію аватара, щоб її бачили тільки ви"/>
+	</panel>
+	<panel name="advanced_info_panel">
+		<text name="AdvancedStatsLeft">
+Пріоритет: [PRIORITY]
+Тривалість: [DURATION]с
+Цикл: [IS_LOOP]
+		</text>
+		<text name="AdvancedStatsRight">
+Запуск: [EASE_IN]
+Зупинка: [EASE_OUT]с
+Суглоби: [NUM_JOINTS]
+		</text>
+	</panel>
+</floater>

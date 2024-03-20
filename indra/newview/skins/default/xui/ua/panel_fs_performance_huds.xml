@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_huds">
+	<text name="back_lbl">Назад</text>
+	<text name="huds_title">Ваші HUDи</text>
+	<text name="huds_desc1">
+		Від'єднання HUD-ів, що не використовуються, заощаджує пам'ять і може прискорити роботу програми.
+	</text>
+	<text name="huds_desc2">
+		HUD часто містить багато скриптів, а також призводять до затримок на стороні сервера.
+	</text>
+	<text name="huds_desc3">
+		Примітка. Кнопка згортання HUD не від'єднує його. Використовуйте X, щоб видалити його.
+	</text>
+	<name_list name="hud_list">
+		<name_list.columns name="art_value" label="Час (μs)" tool_tip="Час, витрачений на рендеринг цього HUD (мікросекунди) "/>
+		<name_list.columns name="name" label="Ім'я" tool_tip="Натисніть 'X', щоб від'єднати"/>
+	</name_list>
+</panel>

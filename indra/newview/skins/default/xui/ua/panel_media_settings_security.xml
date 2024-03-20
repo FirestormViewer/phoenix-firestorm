@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Безпека" name="Media Settings Security">
+	<check_box initial_value="false" label="Дозволити доступ до посилань тільки за шаблоном" name="whitelist_enable"/>
+	<text name="home_url_fails_some_items_in_whitelist">
+		Пункти, які не підходять для домашньої сторінки, позначені знаком:
+	</text>
+	<button label="Додати" name="whitelist_add"/>
+	<button label="Видалити" name="whitelist_del"/>
+	<text name="home_url_fails_whitelist">
+		Увага! Домашня сторінка, вказана на вкладці «Загальні», не входить до білого списку. Вона буде недоступна доти, доки не буде внесено правильний запис.
+	</text>
+</panel>

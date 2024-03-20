@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="avatar_list_item">
+    <string name="FormatSeconds">[COUNT]с</string>
+    <string name="FormatMinutes">[COUNT]х</string>
+    <string name="FormatHours">[COUNT]г</string>
+    <string name="FormatDays">[COUNT]д</string>
+    <string name="FormatWeeks">[COUNT]т</string>
+    <string name="FormatMonths">[COUNT]міс</string>
+    <string name="FormatYears">[COUNT]р</string>
+    <text name="avatar_name" value="(завантаження)" />
+    <icon name="permission_edit_theirs_icon" tool_tip="Ви можете редагувати об'єкти цього друга." />
+    <button name="permission_edit_mine_btn" tool_tip="Цей друг може редагувати, видаляти або брати ваші об'єкти" />
+    <button name="permission_map_btn" tool_tip="Цей друг може знайти вас на мапі." />
+    <button name="permission_online_btn" tool_tip="Цей друг може бачити, коли ви в мережі." />
+    <slider name="volume_slider" tool_tip="Гучність голосу" />
+    <button name="info_btn" tool_tip="Більше інформації" />
+    <button name="profile_btn" tool_tip="Переглянути профіль" />
+    <output_monitor name="speaking_indicator" tool_tip="Відображає, що аватар знаходиться в діапазоні голосового чату та рівень гучності, якщо каже." />
+</panel>

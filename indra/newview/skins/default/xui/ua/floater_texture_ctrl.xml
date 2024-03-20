@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="texture picker" title="Вибрати: Текстуру" min_height="350">
+
+	<!-- top static -->
+	<floater.string name="choose_picture">
+		Натисніть , щоб вибрати зображення
+	</floater.string>
+	<floater.string name="pick title">
+		Вибрати:
+	</floater.string>
+	<text name="Multiple">
+		Декілька текстур
+	</text>
+
+	<!-- mode selector -->
+	<radio_group name="mode_selection" left="7">
+		<radio_item label="Інв." name="inventory"/>
+		<radio_item label="Лок." name="local"/>
+		<radio_item label="Зпеч." name="bake"/>
+	</radio_group>
+	<text name="size_lbl">
+Розмір:
+[DIMENSIONS]
+	</text>
+
+	<!--  middle: inventory mode -->
+	<button label="За умовчанням." label_selected="За замовчуванням." name="Default"/>
+	<button label="Очистити" label_selected="Очистити" name="Blank"/>
+	<button label="Прозоро" label_selected="Прозоро" name="Transparent" tool_tip="Примітка. Якщо вибрано прозору текстуру або іншу текстуру з частковою прозорістю, світло не буде проектуватися."/>
+	<button label="Ні" label_selected="Ні" name="None"/>
+	<text name="preview_disabled" value="Перегляд вимкнено"/>
+
+	<!--  middle: local mode -->
+	<filter_editor label="Фільтрувати текстури" name="inventory search editor"/>
+	<check_box initial_value="false" label="Показувати папки" name="show_folders_check"/>
+	<button label="Додати" label_selected="Додати" name="l_add_btn"/>
+	<button label="Видалити" label_selected="Видалити" name="l_rem_btn"/>
+	<button label="Передати" label_selected="Передати" name="l_upl_btn"/>
+	<scroll_list name="l_name_list">
+		<column label="Імя" name="unit_name"/>
+		<column label="ID" name="unit_id_HIDDEN"/>
+	</scroll_list>
+
+	<!-- посередині: режим випічки -->
+	<combo_box name="l_bake_use_texture_combo_box" tool_tip="Виберіть текстуру">
+		<combo_box.item label="Нет" name="None"/>
+		<combo_box.item label="ГОЛОВА" name="BAKED_HEAD"/>
+		<combo_box.item label="ВЕРХ" name="BAKED_UPPER"/>
+		<combo_box.item label="НИЗ" name="BAKED_LOWER"/>
+		<combo_box.item label="ОЧІ" name="BAKED_EYES"/>
+		<combo_box.item label="СПІДНИЦЯ" name="BAKED_SKIRT"/>
+		<combo_box.item label="ВОЛОССЯ" name="BAKED_HAIR"/>
+		<combo_box.item label="РУКА" name="BAKED_LEFTARM"/>
+		<combo_box.item label="НОГА" name="BAKED_LEFTLEG"/>
+		<combo_box.item label="ДОД1" name="BAKED_AUX1"/>
+		<combo_box.item label="ДОД2" name="BAKED_AUX2"/>
+		<combo_box.item label="ДОД3" name="BAKED_AUX3"/>
+	</combo_box>
+	<check_box label="Приховати базовий регіон міша" name="hide_base_mesh_region"/>
+
+	<!-- bottom static -->
+	<line_editor name="TextureKey" tool_tip="Ключ Текстури"/>
+	<button name="TextureKeyApply" label="Примітка UUID" width="100" tool_tip="Застосувати цей UUID"/>
+	<button label="Да" label_selected="Да" name="Вибрати" left="150"/>
+	<button label="Скасувати" label_selected="Скасувати" name="Cancel"/>
+	<check_box initial_value="true" label="Застосувати зараз" name="apply_immediate_check" width="200"/>
+</floater>

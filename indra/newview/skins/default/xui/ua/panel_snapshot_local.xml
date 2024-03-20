@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_snapshot_local">
+	<text name="title">
+		Диск
+	</text>
+	<combo_box label="Роздільна здатність" name="local_size_combo">
+		<combo_box.item label="Поточне вікно" name="CurrentWindow"/>
+		<combo_box.item label="320x240" name="320x240"/>
+		<combo_box.item label="640x480" name="640x480"/>
+		<combo_box.item label="800x600" name="800x600"/>
+		<combo_box.item label="1024x768" name="1024x768"/>
+		<combo_box.item label="1280x1024" name="1280x1024"/>
+		<combo_box.item label="1600x1200" name="1600x1200"/>
+		<combo_box.item label="Інше" name="Custom"/>
+	</combo_box>
+	<spinner label="Ширина Висота" name="local_snapshot_width"/>
+	<check_box label="Зберігати пропорції" name="local_keep_aspect_check"/>
+	<text name="local_format_label">
+		Формат:
+	</text>
+	<combo_box label="Формат" name="local_format_combo">
+		<combo_box.item label="PNG (Стиснення без втрат)" name="PNG"/>
+		<combo_box.item label="JPEG" name="JPEG"/>
+		<combo_box.item label="BMP (Стиснення без втрат)" name="BMP"/>
+	</combo_box>
+	<slider label="Якість:" name="image_quality_slider"/>
+	<text name="local_remember_location_sessions_text">
+		Зберегти місце та ім'я файлу між сесіями
+	</text>
+	<button label="&#x25B6; Вибір" name="cancel_btn"/>
+	<flyout_button label="Зберегти" name="save_btn" tool_tip="Зберегти зображення у файл">
+		<flyout_button.item label="Зберегти" name="save_item"/>
+		<flyout_button.item label="Зберегти як..." name="saveas_item"/>
+	</flyout_button>
+</panel>

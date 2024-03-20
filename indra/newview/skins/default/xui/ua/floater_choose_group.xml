@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="groups" title="Групи">
+	<text name="groupdesc">
+		Виберіть групу:
+	</text>
+	<button label="Скасувати" label_selected="Скасувати" name="Cancel"/>
+</floater>

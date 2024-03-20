@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Toolbars Popup">
+  <menu_item_call label="Видалити цю кнопку" name="Remove button" />
+  <menu_item_call label="Кнопки панелі інструментів..." name="Choose Buttons" />
+  <menu_item_check label="Значки та підписи" name="icons_with_text" />
+  <menu_item_check label="Тільки значки" name="icons_only" />
+  <menu_item_check label="Заблоковане" name="toolbars_locked" />
+</context_menu>

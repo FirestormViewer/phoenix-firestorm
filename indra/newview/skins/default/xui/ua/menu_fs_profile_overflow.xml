@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="profile_overflow_menu">
+	<!--<menu_item_call label="Мапа" name="show_on_map"/>
+	<menu_item_call label="Платити" name="pay"/>-->
+	<menu_item_call label="Поділитися" name="share"/>
+	<menu_item_call label="Виклик" name="call"/>
+	<!--<menu_item_check label="Блокувати/Розблокувати" name="block_unblock"/>-->
+	<menu_item_call label="Додати до набору контактів" name="add_to_contact_set"/>
+	<menu_item_call label="Копіювати ім'я" name="copy_name_to_clipboard"/>
+	<menu_item_call label="Копіювати URI" name="copy_uri_to_clipboard"/>
+	<menu_item_call label="Копіювати UUID" name="copy_key_to_clipboard"/>
+	<menu_item_call label="Викинути" name="kick"/>
+	<menu_item_call label="Заморозити" name="freeze"/>
+	<menu_item_call label="Розморозити" name="unfreeze"/>
+	<menu_item_call label="CSR" name="csr"/>
+	<menu_item_call label="Скарга" name="report"/>
+</toggleable_menu>

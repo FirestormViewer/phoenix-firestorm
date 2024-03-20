@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Conversation Gear Menu">
+	<menu_item_call label="Показати профіль" name="View Profile" />
+	<menu_item_call label="Додати до друзів" name="Add Friend" />
+	<menu_item_call label="Видалити з друзів" name="remove_friend" />
+	<menu_item_call label="Запропонувати телепорт" name="offer_teleport" />
+	<menu_item_call label="Запросити до групи..." name="invite_to_group" />
+	<menu_item_call label="Історія чату..." name="chat_history" />
+	<menu_item_call label="Наблизити" name="zoom_in" />
+	<menu_item_call label="Мапа" name="map" />
+	<menu_item_call label="Поділитися" name="Share" />
+	<menu_item_call label="Заплатити" name="Pay" />
+	<menu_item_check label="Вимкнути голос" name="Block/Unblock" />
+	<menu_item_check label="Вимкнути чат" name="MuteText" />
+</toggleable_menu>

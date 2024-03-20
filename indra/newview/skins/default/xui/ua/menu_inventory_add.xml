@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu name="menu_inventory_add">
+	<menu label="Завантажити" name="upload">
+		<menu_item_call label="Текстуру (L$[COST])..." name="Upload Image"/>
+		<menu_item_call label="Звук (L$[COST])..." name="Upload Sound"/>
+		<menu_item_call label="Анімацію (L$[COST])..." name="Upload Animation"/>
+		<menu_item_call label="Меш модель..." name="Upload Model"/>
+		<menu_item_call label="Кілька файлів..." name="Bulk Upload"/>
+		<menu_item_call label="Імпортувати набір зв'язків..." name="import linkset"/>
+	</menu>
+	<menu_item_call label="Нова папка" name="New Folder"/>
+	<menu_item_call label="Новий скрипт" name="New Script"/>
+	<menu_item_call label="Нова нотатка" name="New Note"/>
+	<menu_item_call label="Новий жест" name="New Gesture"/>
+	<menu label="Новий одяг" name="New Clothes">
+		<menu_item_call label="Нова сорочка" name="New Shirt"/>
+		<menu_item_call label="Нові штани" name="New Pants"/>
+		<menu_item_call label="Нове взуття" name="New Shoes"/>
+		<menu_item_call label="Нові шкарпетки" name="New Socks"/>
+		<menu_item_call label="Нова куртка" name="New Jacket"/>
+		<menu_item_call label="Нова спідниця" name="New Skirt"/>
+		<menu_item_call label="Нові рукавички" name="New Gloves"/>
+		<menu_item_call label="Нова майка" name="New Undershirt"/>
+		<menu_item_call label="Нові труси" name="New Underpants"/>
+		<menu_item_call label="Нова альфа" name="New Alpha"/>
+		<menu_item_call label="Нове татуювання" name="New Tattoo"/>
+		<menu_item_call label="Новий універсальний" name="New Universal"/>
+		<menu_item_call label="Нова фізика" name="New Physics"/>
+	</menu>
+	<menu label="Нова частина тіла" name="New Body Parts">
+		<menu_item_call label="Нова форма" name="New Shape"/>
+		<menu_item_call label="Нова шкіра" name="New Skin"/>
+		<menu_item_call label="Нове волосся" name="New Hair"/>
+		<menu_item_call label="Нові очі" name="New Eyes"/>
+	</menu>
+	<menu label="Нові установки" name="New Settings">
+		<menu_item_call label="Нове небо" name="New Sky"/>
+		<menu_item_call label="Нове вода" name="New Water"/>
+		<menu_item_call label="Новий цикл дня" name="New Day Cycle"/>
+	</menu>
+	<menu_item_call label="Магазин..." name="Shop" />
+</menu>

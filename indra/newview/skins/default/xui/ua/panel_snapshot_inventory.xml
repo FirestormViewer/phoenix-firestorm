@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_snapshot_inventory">
+	<text name="title">
+		Інвентар
+	</text>
+	<text name="hint_lbl">
+		Щоб зберегти його як текстуру, виберіть один із квадратних форматів.
+	</text>
+	<combo_box label="Розмір" name="texture_size_combo">
+		<combo_box.item label="Поточне вікно (512x512)" name="CurrentWindow"/>
+		<combo_box.item label="Маленький (128x128)" name="Small(128x128)"/>
+		<combo_box.item label="Середній (256x256)" name="Medium(256x256)"/>
+		<combo_box.item label="Великий (512x512)" name="Large(512x512)"/>
+		<combo_box.item label="Задати" name="Custom"/>
+	</combo_box>
+	<spinner label="Ширина Висота" name="inventory_snapshot_width"/>
+	<check_box label="Зберігати пропорції" name="inventory_keep_aspect_check"/>
+	<button label="&#x25B6; Вибір" name="cancel_btn"/>
+	<button label="Зберегти" name="save_btn"/>
+</panel>

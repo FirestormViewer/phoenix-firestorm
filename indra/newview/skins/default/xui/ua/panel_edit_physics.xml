@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_physics_panel">
+	<panel label="" name="accordion_panel">
+		<accordion name="physics_accordion">
+			<accordion_tab name="physics_breasts_updown_tab" title="Груди стрибають"/>
+			<accordion_tab name="physics_breasts_inout_tab" title="Ложбинка між грудей"/>
+			<accordion_tab name="physics_breasts_leftright_tab" title="Груди погойдуються"/>
+			<accordion_tab name="physics_belly_tab" title="Живіт стрибає"/>
+			<accordion_tab name="physics_butt_tab" title="Ягодиці стрибають"/>
+			<accordion_tab name="physics_butt_leftright_tab" title="Ягодиці погойдуються"/>
+			<accordion_tab name="physics_advanced_tab" title="Додаткові параметри"/>
+		</accordion>
+	</panel>
+</panel>

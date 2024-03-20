@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_blocked_view">
+	<menu_item_check label="Сортувати по імені" name="sort_by_name" />
+	<menu_item_check label="Сортувати по імені (нисходящий)" name="sort_by_name_desc" />
+	<menu_item_check label="Сортувати за типом" name="sort_by_type" />
+	<menu_item_check label="Сортувати за типом (нисходящий)" name="sort_by_type_desc" />
+</toggleable_menu>

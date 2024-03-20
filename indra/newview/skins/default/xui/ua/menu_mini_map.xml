@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu name="Popup" label="Мінімапа">
+	<menu_item_call label="Показати профіль" name="View Profile"/>
+	<menu label="Показати профілі" name="View Profiles"></menu>
+	<menu_item_call label="Додати до набору" name="Add to Set Multiple"/>
+	<menu_item_call label="Наблизити камеру" name="Cam"/>
+	<menu name="MarkAvatar" label="Позначити...">
+		<menu_item_call label="Червоний" name="MarkRed"/>
+		<menu_item_call label="Зелений" name="MarkGreen"/>
+		<menu_item_call label="Блакитним" name="MarkBlue"/>
+		<menu_item_call label="Фіолетовим" name="MarkPurple"/>
+		<menu_item_call label="Жовтим" name="MarkYellow"/>
+		<menu_item_call label="Прибрати мітку" name="Clear Mark"/>
+		<menu_item_call label="Прибрати всі мітки" name="Clear Marks"/>
+	</menu>
+	<menu name="More Options" label="Більше опцій...">
+		<menu_item_call label="Додати до друзів" name="Add Friend"/>
+		<menu_item_call label="Додати до набору" name="Add to Set"/>
+		<menu_item_call label="Видалити з друзів" name="Remove Friend"/>
+		<menu_item_call label="Надіслати ОП" name="IM"/>
+		<menu_item_call label="Дзвінок" name="Call"/>
+		<menu_item_call label="Мапа" name="Map"/>
+		<menu_item_call label="Поділитися" name="Share"/>
+		<menu_item_call label="Заплатити" name="Pay"/>
+		<menu_item_call label="Запропонувати телепорт" name="teleport"/>
+		<menu_item_call label="Попросити телепорт" name="request_teleport"/>
+		<menu_item_call label="Телепортуватися до" name="teleport_to"/>
+		<menu_item_call label="Запросити до групи" name="GroupInvite"/>
+		<menu_item_call label="Інформація про скрипти" name="ScriptInfo"/>
+		<menu_item_check label="Заблокувати/розблокувати" name="Block/Unblock"/>
+		<menu_item_call label="Скарга" name="report"/>
+		<menu_item_call label="Заморозити" name="freeze"/>
+		<menu_item_call label="Дільниця: Викинути з ділянки" name="eject"/>
+		<menu_item_call label="Власність: Викинути" name="kick"/>
+		<menu_item_call label="Власність: Надіслати додому" name="teleport_home"/>
+		<menu_item_call label="Власність: Забанити" name="estate_ban"/>
+		<menu_item_call label="Не відображати" name="derender"/>
+		<menu_item_call label="Не відображати завжди" name="derender_permanent"/>
+	</menu>
+	<menu_item_call label="Почати відстеження" name="Start Tracking"/>
+	<menu_item_call label="Припинити відстеження" name="Stop Tracking"/>
+	<menu label="Наближення" name="Minimap Zoom">
+		<menu_item_check label="Дуже близько" name="Zoom very close"/>
+		<menu_item_check label="Близько" name="Zoom close"/>
+		<menu_item_check label="Середнє (За замовчуванням)" name="Zoom medium"/>
+		<menu_item_check label="Далеко" name="Zoom far"/>
+	</menu>
+	<menu label="Показати" name="Minimap Show">
+		<menu_item_check label="Об'єкти" name="Objects"/>
+		<menu_item_check label="Фізичні об'єкти" name="Physical Objects"/>
+		<menu_item_check label="Об'єкти зі скриптами" name="Scripted Objects"/>
+		<menu_item_check label="Тимчасові об'єкти" name="Temp On Rez Objects"/>
+		<menu_item_check label="Межі ділянки" name="Property Lines"/>
+		<menu_item_check label="Дільниці на продаж" name="Parcels for Sale"/>
+		<menu_item_check label="Текстури землі" name="Terrain Textures"/>
+		<menu_item_check label="Текстури карти світу" name="World Map Textures"/>
+	</menu>
+	<menu_item_check label="Північ вгорі" name="North at top"/>
+	<menu_item_check label="Камера вгорі" name="Camera at top"/>
+	<menu_item_check label="Автоцентрування картки" name="Auto-center map"/>
+	<menu_item_call label="Відцентрувати картку" name="Re-center map"/>
+	<menu label="Кільця покриття чату" name="Chat Distance Rings Menu">
+		<menu_item_check label="Показати Кільця дистанцій" name="Chat Distance Rings"/>
+		<menu_item_check label="Показати Кільце дистанції Шепоту" name="Whisper Distance Ring"/>
+		<menu_item_check label="Показати Кільце дистанції Чату" name="Chat Distance Ring"/>
+		<menu_item_check label="Показати Кільце дистанції Крику" name="Shout Distance Ring"/>
+	</menu>
+	<menu_item_call label="Про землю" name="About Land"/>
+	<menu_item_call label="Профіль місця" name="Place Profile"/>
+	<menu_item_call label="Мапа світу" name="World Map"/>
+</menu>

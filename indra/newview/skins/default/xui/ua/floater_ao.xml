@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="animation_overrider" title="Аніматор (AO)">
+	<floater.string name="ao_no_sets_loaded">Немає завантажених наборів</floater.string>
+	<floater.string name="ao_no_animations_loaded">Немає завантажених анімацій</floater.string>
+	<floater.string name="ao_dnd_only_on_full_interface">Ви можете перетягнути нотатку з набором анімацій тільки в повному віконному інтерфейсі Аніматора. Натисніть на значок гайкового ключа, щоб відкрити його.</floater.string>
+</floater>

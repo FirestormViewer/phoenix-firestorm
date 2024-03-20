@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater label="Місця" name="gestures" title="Жести">
+	<floater.string name="loading">
+		Завантаження...
+	</floater.string>
+	<floater.string name="playing">
+		(програється)
+	</floater.string>
+	<floater.string name="copy_name">
+		Копії [COPY_NAME]
+	</floater.string>
+	<scroll_list name="gesture_list">
+		<scroll_list.columns label="Name" name="name"/>
+		<scroll_list.columns label="Чат" name="trigger"/>
+		<scroll_list.columns label="Key" name="shortcut"/>
+	</scroll_list>
+	<panel label="bottom_panel" name="bottom_panel">
+		<menu_button name="gear_btn" tool_tip="Додаткові параметри"/>
+		<button name="new_gesture_btn" tool_tip="Створити новий жест"/>
+		<button name="activate_btn" tool_tip="Активувати/деактивувати вибраний жест"/>
+		<check_box label="Тільки активні" name="FSShowOnlyActiveGestures" width="150"/>
+		<button name="del_btn" tool_tip="Видалити цей жест"/>
+	</panel>
+	<button label="Змінити" name="edit_btn" tool_tip="Відкрийте вікно для редагування вибраного жесту."/>
+	<button label="Програти" name="play_btn" tool_tip="Виконайте вибраний жест в ігровому світі."/>
+	<button label="Зупинити" name="stop_btn"/>
+</floater>

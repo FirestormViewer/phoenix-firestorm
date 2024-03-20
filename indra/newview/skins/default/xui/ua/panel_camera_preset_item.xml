@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="camera_preset_item">
+	<text name="preset_name" value="За замовчуванням"/>
+	<button name="delete_btn" tool_tip="Видалити попереднє встановлення"/>
+	<button name="reset_btn" tool_tip="Скинути попереднє встановлення за замовчуванням"/>
+</panel>

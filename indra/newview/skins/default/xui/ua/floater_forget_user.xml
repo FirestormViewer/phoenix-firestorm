@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="groups" title="ЗАМ'ЯТНІ КОРИСТУВАЧІ">
+    <button label="Забути" label_selected="Забути" name="forget"/>
+    <check_box label="Також видаляти локальні дані" name="delete_data"
+     tool_tip="Видаляє локальні файли: історію чату, скріншот останнього сеансу, файли cookie браузера, історію телепортації, налаштування панелі інструментів тощо. Деякі з локальних файлів розподіляються між сітками."/>
+</floater>

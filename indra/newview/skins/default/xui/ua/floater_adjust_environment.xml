@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="env_adjust_snapshot" title="Особисте освітлення">
+	<layout_stack name="outer_stack">
+		<layout_panel name="env_controls">
+			<layout_stack name="settings_stack">
+				<layout_panel name="lp_1">
+					<text name="ambient_lbl">Оточення:</text>
+					<text name="blue_horizon_lbl">Горизонт:</text>
+					<text name="blue_density_lbl">Небо:</text>
+					<button label="Скидання" name="btn_reset" tool_tip="Закрити і скинути на Спільне Навколишнє середовище"/>
+					<text name="sun_color_lbl">Сонце:</text>
+					<text name="cloud_color_lbl">Колір хмари:</text>
+					<text name="cloud_map_label">Хмари:</text>
+					<text name="water_map_label">Вода:</text>
+				</layout_panel>
+				<layout_panel name="lp_2">
+					<text name="haze_horizon_label">Димка Горизонту:</text>
+					<text name="haze_density_label">Шільність Димки:</text>
+					<text name="cloud_coverage_label">Хмарне покриття:</text>
+					<text name="cloud_scale_label">Масштаб Хмар:</text>
+					<text name="scene_gamma_label">Гамма Сцени:</text>
+				</layout_panel>
+				<layout_panel name="lp_3">
+					<text name="label">Сонце:</text>
+					<text name="sun_azimuth_label">Азимут:</text>
+					<text name="sun_elevation_label">Висота:</text>
+					<check_box label="Показати Маяк" name="sunbeacon"/>
+					<text name="scale_label">Масштаб:</text>
+					<text name="glow_focus_label">Фокус Сяйва:</text>
+					<text name="glow_size_label">Розмір Сяйва:</text>
+					<text name="star_brightness_label">Яскравість Зірок:</text>
+				</layout_panel>
+				<layout_panel name="lp_4">
+					<text name="label">Місяць:</text>
+					<text name="moon_azimuth_label">Азимут:</text>
+					<text name="moon_elevation_label">Висота:</text>
+					<check_box label="Показати Маяк" name="moonbeacon"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</floater>

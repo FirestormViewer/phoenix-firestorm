@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu name="hide_navbar_menu">
+	<menu_item_check label="Показати панель навігації та пошуку" name="ShowNavbarNavigationPanel"/>
+	<menu_item_check label="Показати панель вибраного" name="ShowNavbarFavoritesPanel"/>
+	<menu_item_check label="Показати панель пошуку" name="ShowSearchTopBar"/>
+	<menu_item_check label="Показати розташування у верхньому меню" name="ShowMenuBarLocation"/>
+	<menu_item_check label="Показати канал симулятора у рядку стану" name="FSStatusbarShowSimulatorVersion"/>
+	<menu_item_check label="Показати пошук розділів у меню" name="FSMenuSearch"/>
+	<menu_item_check label="Показати Гроші" name="FSShowCurrencyBalanceInStatusbar"/>
+	<menu_item_check label="Показати Керування медіа" name="FSEnableVolumeControls"/>
+	<menu_item_check label="Показати FPS" name="FSStatusBarShowFPS"/>
+	<menu_item_check label="Показати Індикатор трафіку" name="ShowNetStats"/>
+	<menu_item_check label="Показати Координати" name="Coordinates"/>
+	<menu_item_check label="Показати Дозволи Ділянки" name="Parcel Properties"/>
+</menu>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="groups">
+	<filter_editor label="Фільтр груп" name="group_filter_input"/>
+	<button label="ОП/Дзвінок" name="chat_btn" tool_tip="Відкрити сесію ОП"/>
+	<button label="Профіль" name="info_btn"/>
+	<button label="Титули" name="titles_btn"/>
+	<button label="Вибрати" name="activate_btn"/>
+	<button label="Залишити" name="leave_btn"/>
+	<button label="Створити..." name="create_btn"/>
+	<button label="Пошук..." name="search_btn"/>
+	<button label="Запросити..." name="invite_btn"/>
+</panel>

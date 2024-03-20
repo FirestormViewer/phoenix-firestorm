@@ -1,0 +1,6812 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- This file contains strings that used to be hardcoded in the source.
+     It is only for those strings which do not belong in a floater.
+     For example, the strings used in avatar chat bubbles, and strings
+     that are returned from one component and may appear in many places-->
+<strings>
+	<string name="SECOND_LIFE">
+		[CURRENT_GRID]
+	</string>
+	<string name="APP_NAME">
+		Firestorm
+	</string>
+	<string name="CAPITALIZED_APP_NAME">
+		FIRESTORM
+	</string>
+	<string name="SECOND_LIFE_GRID">
+		Мережа Second Life
+	</string>
+	<string name="SUPPORT_SITE">
+		Портал технічної підтримки Firestorm
+	</string>
+	<string name="StartupDetectingHardware">
+		Виявлення обладнання...
+	</string>
+	<string name="StartupLoading">
+		Завантаження [APP_NAME]...
+	</string>
+	<string name="StartupClearingCache">
+		Очищення кешу...
+	</string>
+	<string name="StartupClearingTextureCache">
+		Очищення кешу текстури.
+	</string>
+	<string name="StartupInitializingTextureCache">
+		Ініціалізація кешу текстури.
+	</string>
+	<string name="StartupRequireDriverUpdate">
+		Ініціалізація графіки не вдалася. Будь ласка, поновіть драйвер відеокарти!
+	</string>
+	<string name="AboutHeader">
+[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]біт / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
+[[VIEWER_RELEASE_NOTES_URL] [Примітки до випуску]]
+	</string>
+	<string name="AboutCompiler">
+		Використано компілятор [COMPILER], версія [COMPILER_VERSION]
+	</string>
+	<string name="BuildConfig">
+		Конфігурація збирання [BUILD_CONFIG]
+	</string>
+	<string name="AboutPosition">
+		Ви знаходитесь у [POSITION_LOCAL_0,number,1], [POSITION_LOCAL_1,number,1], [POSITION_LOCAL_2,number,1] у регіоні [REGION], розташованому на &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt;
+SLURL: &lt;nolink&gt;[SLURL]&lt;/nolink&gt;
+(глобальні координати [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1])
+[SERVER_VERSION]
+[SERVER_RELEASE_NOTES_URL]
+	</string>
+	<string name="AboutPositionRLVShowLoc">
+Ви у регіоні [REGION]
+[SERVER_VERSION]
+[SERVER_RELEASE_NOTES_URL]
+	</string>
+	<string name="AboutSystem">
+Процесор: [CPU]
+Пам'ять RAM: [MEMORY_MB] МБ (Використовував: [USED_RAM] MB)
+Потоки декодування зображень: [CONCURRENCY]
+Версія ОС: [OS_VERSION]
+Виробник відеокарти: [GRAPHICS_CARD_VENDOR]
+Відеокарта: [GRAPHICS_CARD]
+Пам'ять відеокарти: [GRAPHICS_CARD_MEMORY] МБ
+	</string>
+	<string name="AboutDriver">
+		Версія графічного драйвера Windows: [GRAPHICS_DRIVER_VERSION]
+	</string>
+	<string name="AboutOGL">
+		Версія OpenGL: [OPENGL_VERSION]
+	</string>
+	<string name="AboutSettings">
+		Режим налаштувань: [MODE]
+Графічне оформлення: [SKIN] ([THEME])
+Розмір вікна: [WINDOW_WIDTH]x[WINDOW_HEIGHT] пікс
+Шрифт, що використовується: [FONT] ([FONT_SCREEN_DPI])
+Розмір шрифту: [FONT_SIZE] пт
+Масштаб UI: [UI_SCALE_FACTOR]
+Відстань відображення: [DRAW_DISTANCE]
+Пропускна спроможність: [BANDWIDTH]
+Рівень деталізації: [LOD]
+Якість графіки: [RENDERQUALITY]
+Модель покращеного освітлення: [ALMSTATUS]
+	</string>
+	<string name="AboutTextureMemory">
+		Пам'ять текстур: [TEXTUREMEMORY] МБ ([TEXTUREMEMORYMULTIPLIER])
+	</string>
+	<string name="AboutTextureMemoryDynamic">
+		Пам'ять текстур: динамічна ([TEXTUREMEMORYMIN] МБ хв. / [TEXTUREMEMORYCACHERESERVE]% Кеш / [TEXTUREMEMORYGPURESERVE]% VRAM)
+	</string>
+	<string name="AboutCache">
+		Кеш диска: [DISK_CACHE_INFO]
+	</string>
+	<string name="AboutOSXHiDPI">
+		Режим відображення HiDPI: [HIDPI]
+	</string>
+	<string name="AboutLibs">
+Контроль скриптами (RLVa): [RLV_VERSION]
+версія libcurl: [LIBCURL_VERSION]
+Версія декодера J2C: [J2C_VERSION]
+Версія аудіодрайвера: [AUDIO_DRIVER_VERSION]
+[LIBCEF_VERSION]
+Версія LibVLC: [LIBVLC_VERSION]
+Версія мовного сервера: [VOICE_VERSION]
+	</string>
+	<string name="AboutTraffic">
+		Втрачено пакетів: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
+	</string>
+	<string name="AboutTime">
+		[day, datetime, slt] [month, datetime, slt] [year, datetime, slt] [hour, datetime, slt]:[min, datetime, slt]:[second,datetime,slt] SLT
+	</string>
+	<string name="LocalTime">
+		[day, datetime, local] [month, datetime, local] [year, datetime, local] [hour, datetime, local]:[min, datetime, local]:[second,datetime, local]
+	</string>
+	<string name="ErrorFetchingServerReleaseNotesURL">
+		Помилка при отриманні URL-адреси нотаток про випуск сервера.
+	</string>
+	<string name="BuildConfiguration">
+		Конфігурація збирання
+	</string>
+	<string name="ProgressRestoring">
+		Відновлення...
+	</string>
+	<string name="ProgressChangingResolution">
+		Зміна дозволу.
+	</string>
+	<string name="Fullbright">
+		Власна яскравість (застарілий параметр)
+	</string>
+	<string name="LoginInProgress">
+		Вхід... Можливо, програма [APP_NAME] зависла. Будь ласка, чекайте.
+	</string>
+	<string name="LoginInProgressNoFrozen">
+		Вхід...
+	</string>
+	<string name="LoginAuthenticating">
+		Аутентифікація
+	</string>
+	<string name="LoginMaintenance">
+		Виконується обслуговування акаунта.
+	</string>
+	<string name="LoginAttempt">
+		Попередня спроба входу була невдалою. Спроба входу [NUMBER]
+	</string>
+	<string name="LoginPrecaching">
+		Завантаження світу...
+	</string>
+	<string name="LoginInitializingBrowser">
+		Ініціалізація вбудованого веб-браузера...
+	</string>
+	<string name="LoginInitializingMultimedia">
+		Ініціалізація носія...
+	</string>
+	<string name="LoginInitializingFonts">
+		Завантаження шрифтів...
+	</string>
+	<string name="LoginVerifyingCache">
+		Перевірка файлів кешу (може зайняти 60-90 секунд).
+	</string>
+	<string name="LoginProcessingResponse">
+		Обробка відповіді...
+	</string>
+	<string name="LoginInitializingWorld">
+		Ініціалізація світу...
+	</string>
+	<string name="LoginDecodingImages">
+		Декодування зображень...
+	</string>
+	<string name="LoginInitializingQuicktime">
+		Ініціалізація QuickTime...
+	</string>
+	<string name="LoginQuicktimeNotFound">
+		QuickTime не знайдено – помилка ініціалізації.
+	</string>
+	<string name="LoginQuicktimeOK">
+		Успішна ініціалізація QuickTime.
+	</string>
+	<string name="LoginRequestSeedCapGrant">
+		Запит можливостей регіону.
+	</string>
+	<string name="LoginRetrySeedCapGrant">
+		Запит можливостей регіону, спроба [NUMBER]...
+	</string>
+	<string name="LoginWaitingForRegionHandshake">
+		Встановлюється зв'язок із регіоном...
+	</string>
+	<string name="LoginConnectingToRegion">
+		Підключення до регіону...
+	</string>
+	<string name="LoginDownloadingClothing">
+		Завантаження одягу...
+	</string>
+	<string name="InvalidCertificate">
+		Сервер повернув недійсний чи пошкоджений сертифікат. Зверніться до адміністратора мережі.
+	</string>
+	<string name="CertInvalidHostname">
+		Для доступу до сервера використовувалось недійсне ім'я вузла. Перевірте URL-адресу SL або ім'я вузла в мережі.
+	</string>
+	<string name="CertExpired">
+		Сертифікат було повернуто мережею через закінчення терміну дії сертифіката. Перевірте час, встановлений у системі, або зверніться до адміністратора мережі.
+	</string>
+	<string name="CertKeyUsage">
+		Сертифікат, повернутий сервером, не може бути використаний для SSL. Зверніться до адміністратора мережі
+	</string>
+	<string name="CertBasicConstraints">
+		У ланцюжку сертифікатів серверів занадто багато сертифікатів. Зверніться до адміністратора мережі.
+	</string>
+	<string name="CertInvalid">
+		Неможливо завантажити сертифікат. Зверніться до адміністратора мережі.
+	</string>
+	<string name="CertInvalidSignature">
+		Не вдалося перевірити підпис сертифіката, повернутий сервером мережі. Зверніться до адміністратора мережі.
+	</string>
+	<string name="CertAllocationFailure">
+		Не вдалося виділити пам'ять openssl для сертифіката.
+	</string>
+	<string name="LoginFailedNoNetwork">
+		Помилка мережі: не вдалося встановити з'єднання. Перевірте підключення до мережі.
+	</string>
+	<string name="LoginFailedHeader">
+		Помилка входу.
+	</string>
+	<string name="Quit">
+		Вийти
+	</string>
+	<string name="create_account_url">
+		https://www.firestormviewer.org/join-secondlife/
+	</string>
+	<string name="AgniGridLabel">
+		Second Life Головна Мережа (Agni)
+	</string>
+	<string name="AditiGridLabel">
+		Second Life Beta-test Setka (Aditi)
+	</string>
+	<string name="ViewerDownloadURL">
+		https://www.firestormviewer.org/choose-your-platform/
+	</string>
+	<string name="LoginFailedViewerNotPermitted">
+		У клієнта, яким ви користуєтеся, більше немає доступу до гри Second Life. Завантажити нову версію клієнта можна за адресою:
+https://www.firestormviewer.org/choose-your-platform/
+
+Додаткові відомості дивіться у розділі запитань та відповідей на адресу:
+http://secondlife.com/viewer-access-faq
+	</string>
+	<string name="LoginFailed">
+		Процес входу не виконано через системні проблеми. Повторіть спробу за кілька хвилин.
+Якщо ви вважаєте, що це помилка, будь ласка, зв'яжіться зі службою підтримки мережі.
+	</string>
+	<string name="LoginIntermediateOptionalUpdateAvailable">
+		Доступне необов'язкове оновлення клієнта: [VERSION]
+	</string>
+	<string name="LoginFailedRequiredUpdate">
+		Потрібно оновити клієнт: [VERSION]
+	</string>
+	<string name="LoginFailedAlreadyLoggedIn">
+		З цього клієнта вже здійснено вхід.
+	</string>
+	<string name="LoginFailedAuthenticationFailed">
+		Вибачте! Ми не змогли вас підключити.
+Будь ласка, перевірте, чи правильно ви ввели
+    * Ім'я користувача (наприклад, bobsmith12 або steller.sunshine)
+    * Пароль
+    * Токен другого фактора (якщо включений)
+Також, будь ласка, перевірте, чи режим Caps Lock вимкнено
+	</string>
+	<string name="LoginFailedPasswordChanged">
+		В якості запобіжного заходу ваш пароль змінено.
+Перейдіть на сторінку облікового запису за адресою http://secondlife.com/password
+і дайте відповідь на контрольне питання, щоб відновити свій пароль
+Просимо вибачення за незручність.
+	</string>
+	<string name="LoginFailedPasswordReset">
+		У нашу систему внесено зміни, тому вам слід відновити свій пароль.
+Перейдіть на сторінку облікового запису за адресою http://secondlife.com/password
+і дайте відповідь на контрольне питання, щоб відновити свій пароль
+Просимо вибачення за незручність.
+	</string>
+	<string name="LoginFailedEmployeesOnly">
+		Second Life тимчасово закрито технічне обслуговування.
+На даний час входити можуть лише співробітники.
+Оновлення стану дивіться на сайті www.secondlife.com/status.
+	</string>
+	<string name="LoginFailedPremiumOnly">
+		Вхід у Second Life тимчасово обмежений, щоб зберегти найвищу якість ігрового світу для користувачів.
+
+У цей час у користувачів з безкоштовними обліковцями не буде доступу до Second Life, доступ відкритий тільки для преміум облікових записів
+	</string>
+	<string name="LoginFailedComputerProhibited">
+		Доступ до Second Life з цього комп'ютера заборонено!
+Якщо ви вважаєте, що це помилка, надішліть повідомлення на адресу
+support@secondlife.com.
+	</string>
+	<string name="PacificTime">
+		Тихоокеанський час
+	</string>
+	<string name="LoginFailedAcountSuspended">
+		Ваш обліковий запис не буде доступний до
+[TIME]
+	</string>
+	<string name="LoginFailedAccountDisabled">
+		Наразі нам не вдається виконати ваш запит.
+Зверніться до служби підтримки Second Life за адресою http://secondlife.com/support.
+	</string>
+	<string name="LoginFailedTransformError">
+		При вході виявлено неузгодженість даних.
+Будь ласка, повідомте про це support@secondlife.com.
+	</string>
+	<string name="LoginFailedAccountMaintenance">
+		Виконується технічне обслуговування вашого облікового запису.
+Ваш обліковий запис не буде доступний до
+[TIME]
+Якщо ви вважаєте, що це помилка, надішліть повідомлення на адресу support@secondlife.com.
+	</string>
+	<string name="LoginFailedPendingLogoutFault">
+		У відповідь на запит виходу симулятор повернув повідомлення про збій.
+	</string>
+	<string name="LoginFailedPendingLogout">
+		В системі виконується вихід для вашого облікового запису.
+Зачекайте хвилину перед повторним входом до системи.
+	</string>
+	<string name="LoginFailedUnableToCreateSession">
+		Неможливо створити допустимий сеанс.
+	</string>
+	<string name="LoginFailedUnableToConnectToSimulator">
+		Не вдається підключитись до симулятора.
+	</string>
+	<string name="LoginFailedRestrictedHours">
+		Ваш обліковий запис має доступ у Second Life тільки
+з [START] до [END] за тихоокеанським часом (PST).
+Заходьте у цей час.
+Якщо ви вважаєте, що це помилка, надішліть повідомлення на адресу support@secondlife.com.
+	</string>
+	<string name="LoginFailedIncorrectParameters">
+		Неправильні параметри.
+Якщо ви вважаєте, що це помилка, надішліть повідомлення на адресу support@secondlife.com.
+	</string>
+	<string name="LoginFailedFirstNameNotAlphanumeric">
+		Ім'я користувача має містити лише літери та цифри.
+Якщо ви вважаєте, що це помилка, надішліть повідомлення на адресу support@secondlife.com.
+	</string>
+	<string name="LoginFailedLastNameNotAlphanumeric">
+		Прізвище користувача має містити лише літери та цифри.
+Якщо ви вважаєте, що це помилка, надішліть повідомлення на адресу support@secondlife.com.
+	</string>
+	<string name="LogoutFailedRegionGoingOffline">
+		Регіон на даний момент вимкнено.
+Будь ласка, спробуйте зайти знову за хвилину.
+	</string>
+	<string name="LogoutFailedAgentNotInRegion">
+		Немає агента у регіоні.
+Будь ласка, спробуйте зайти знову за хвилину.
+	</string>
+	<string name="LogoutFailedPendingLogin">
+		Вхід до регіону виконано в іншому сеансі.
+Будь ласка, спробуйте зайти знову за хвилину.
+	</string>
+	<string name="LogoutFailedLoggingOut">
+		Регіон завершує роботу із попередньою сесією.
+Будь ласка, спробуйте зайти знову за хвилину.
+	</string>
+	<string name="LogoutFailedStillLoggingOut">
+		Регіон завершує ще роботу із попередньою сесією.
+Будь ласка, спробуйте зайти знову за хвилину.
+	</string>
+	<string name="LogoutSucceeded">
+		Регіон завершив попередню сесію.
+Будь ласка, спробуйте зайти знову за хвилину.
+	</string>
+	<string name="LogoutFailedLogoutBegun">
+		Для регіону розпочато процес виходу.
+Будь ласка, спробуйте зайти знову за хвилину.
+	</string>
+	<string name="LoginFailedLoggingOutSession">
+		Система почала вихід із вашого останнього сеансу.
+Будь ласка, спробуйте зайти знову за хвилину.
+	</string>
+	<string name="LoginFailedAuthenticationMFARequired">
+		Щоб продовжити вхід до системи, введіть новий токен із багатофакторної автентифікації.
+Якщо ви вважаєте, що це помилка, будь ласка, зв'яжіться з support@secondlife.com
+	</string>
+	<string name="AgentLostConnection">
+		Можливо, у цьому регіоні виникли проблеми. Перевірте підключення до Інтернету.
+	</string>
+	<string name="SavingSettings">
+		Збереження ваших налаштувань...
+	</string>
+	<string name="LoggingOut">
+		Виконується вихід...
+	</string>
+	<string name="ShuttingDown">
+		Вимкнення...
+	</string>
+	<string name="YouHaveBeenDisconnected">
+		Сталося відключення від регіону, де ви знаходилися.
+	</string>
+	<string name="SentToInvalidRegion">
+		Ви відправлені до недійсного регіону.
+	</string>
+	<string name="TestingDisconnect">
+		Тестування відключення клієнта
+	</string>
+
+	<string name="SocialFlickrConnecting">
+		З'єднання з Flickr...
+	</string>
+	<string name="SocialFlickrPosting">
+		Публікація...
+	</string>
+	<string name="SocialFlickrDisconnecting">
+		Відключення від Flickr...
+	</string>
+	<string name="SocialFlickrErrorConnecting">
+		Неможливо поєднатися з Flickr
+	</string>
+	<string name="SocialFlickrErrorPosting">
+		Неможливо опублікувати у Flickr
+	</string>
+	<string name="SocialFlickrErrorDisconnecting">
+		Неможливо відключитися від Flickr
+	</string>
+
+	<string name="BlackAndWhite">
+		Чорне і біле
+	</string>
+	<string name="Colors1970">
+		Колір 1970-х
+	</string>
+	<string name="Intense">
+		Інтенсивний
+	</string>
+	<string name="Newspaper">
+		Газетний папір
+	</string>
+	<string name="Sepia">
+		Сепія
+	</string>
+	<string name="Spotlight">
+		Прожектор
+	</string>
+	<string name="Video">
+		Відео
+	</string>
+	<string name="Autocontrast">
+		Автоконтраст
+	</string>
+	<string name="LensFlare">
+		Спалах
+	</string>
+	<string name="Miniature">
+		Мініатюра
+	</string>
+	<string name="Toycamera">
+		Іграшкова камера
+	</string>
+	<string name="Antique">
+		Антикваріат
+	</string>
+	<string name="Badtrip">
+		Погана Подорож
+	</string>
+	<string name="Blownhighlights">
+		Висока яскравість
+	</string>
+	<string name="Softfocus">
+		М'який фокус
+	</string>
+	<string name="Brighten">
+		Висока контрастність
+	</string>
+	<string name="Cartoon">
+		Мультфільм
+	</string>
+	<string name="Darken">
+		Темний
+	</string>
+	<string name="Edges">
+		Світлі краї
+	</string>
+	<string name="Focus">
+		Фокус у центрі
+	</string>
+	<string name="Heatwave">
+		Теплова хвиля
+	</string>
+	<string name="Julesverne">
+		Жюль Верн
+	</string>
+	<string name="Lightleak">
+		Витік світла
+	</string>
+	<string name="Linearize">
+		Лінеаризація
+	</string>
+	<string name="Negative">
+		Негатив
+	</string>
+	<string name="Overcast">
+		Хмарність
+	</string>
+	<string name="Posterize">
+		Постеризація
+	</string>
+	<string name="Rotatecolors180">
+		Колірний зсув
+	</string>
+	<string name="Sharpen">
+		Чіткість
+	</string>
+	<string name="Thematrix">
+		Матриця
+	</string>
+	<string name="TooltipPerson">
+		Людина
+	</string>
+	<string name="TooltipNoName">
+		(Немає назви)
+	</string>
+	<string name="TooltipOwner">
+		Власник:
+	</string>
+	<string name="TooltipPublic">
+		Публічна
+	</string>
+	<string name="TooltipIsGroup">
+		(Група)
+	</string>
+	<string name="TooltipForSaleL$">
+		Для продажу: L$[AMOUNT]
+	</string>
+	<string name="TooltipFlagGroupBuild">
+		Групове будівництво
+	</string>
+	<string name="TooltipFlagNoBuild">
+		Будівництво заборонено
+	</string>
+	<string name="TooltipFlagNoEdit">
+		Правка заборонена
+	</string>
+	<string name="TooltipFlagNotSafe">
+		Небезпечно
+	</string>
+	<string name="TooltipFlagNoFly">
+		Польоти заборонені
+	</string>
+	<string name="TooltipFlagGroupScripts">
+		Групові скрипти
+	</string>
+	<string name="TooltipFlagNoScripts">
+		Скрипти заборонені
+	</string>
+	<string name="TooltipLand">
+		Земля:
+	</string>
+	<string name="TooltipMustSingleDrop">
+		Сюди можна перетягнути лише одну річ
+	</string>
+	<string name="TooltipTooManyWearables">
+		Ви не можете надіти папку, яка містить більше [AMOUNT] елементів. Ви можете змінити це обмеження в розширеному &gt; Показати налаштування налагодження &gt; WearFolderLimit.
+	</string>
+	<string name="TooltipPrice" value="L$[AMOUNT]: "/>
+	<string name="TooltipSLIcon">
+		Це посилання на сторінку офіційного домену SecondLife.com чи LindenLab.com.
+	</string>
+	<string name="TooltipFlagScript">
+		Сценарій
+	</string>
+	<string name="TooltipFlagPhysics">
+		Фізика
+	</string>
+	<string name="TooltipFlagTouch">
+		Торкнутися
+	</string>
+	<string name="TooltipFlagL$">
+		L$
+	</string>
+	<string name="TooltipFlagDropInventory">
+		Перемістити інвентар
+	</string>
+	<string name="TooltipFlagPhantom">
+		Фантом
+	</string>
+	<string name="TooltipFlagTemporary">
+		Тимчасовий
+	</string>
+	<string name="TooltipPrimCount">
+		Примов: [COUNT]
+	</string>
+	<string name="TooltipPrimEquivalent">
+		, Вплив на землю: [PEWEIGHT]
+	</string>
+	<string name="TooltipPrimEquivalentЗавантаження">
+		, Завантаження впливу на землю...
+	</string>
+	<string name="TooltipDistance">
+		Відстань: [DISTANCE] м
+	</string>
+	<string name="TooltipPosition">
+		Позиція: [POSITION]
+	</string>
+	<string name="TooltipOutboxDragToWorld">
+		Ви не можете викладати об'єкти з папки списків Торгового центру
+	</string>
+	<string name="TooltipOutboxWorn">
+		Ви не можете помістити одягнені елементи до папки списків Торгового центру
+	</string>
+	<string name="TooltipOutboxFolderLevels">
+		Глибина вкладених папок перевищує [AMOUNT]. Зменшіть глибину папок усередині папок; при потребі помістіть предмети у коробку.
+	</string>
+	<string name="TooltipOutboxTooManyFolders">
+		Кількість підпапок перевищує [СУМА]. Зменшіть кількість папок у списку; при потребі помістіть предмети у коробку.
+	</string>
+	<string name="TooltipOutboxTooManyObjects">
+		Кількість предметів перевищує [СУМА]. Щоб продати більше, ніж [СУМА] предметів в одному списку, ви повинні помістити в коробку деякі з них.
+	</string>
+	<string name="TooltipOutboxTooManyStockItems">
+		Кількість на складі перевищує [AMOUNT].
+	</string>
+	<string name="TooltipOutboxCannotDropOnRoot">
+		Ви можете перетягувати предмети або папки лише на вкладку ВСЕ або НЕ ЗВ'ЯЗАНІ. Виберіть одну з цих вкладок і знову перемістіть предмет(и) або папки.
+	</string>
+	<string name="TooltipOutboxNoTransfer">
+		Один або більше цих об'єктів не можуть бути продані або передані.
+	</string>
+	<string name="TooltipOutboxNotInInventory">
+		Ви можете розміщувати на продаж лише предмети зі свого інвентарю
+	</string>
+	<string name="TooltipOutboxLinked">
+		Посилання, що мають посилання, предмети або папки не можна розміщувати на продаж
+	</string>
+	<string name="TooltipOutboxCallingCard">
+		Ви не можете розміщувати на продаж візитні картки
+	</string>
+	<string name="TooltipOutboxDragActive">
+		Опублікований список не можна перемістити
+	</string>
+	<string name="TooltipOutboxCannotMoveRoot">
+		Не можна переміщати кореневу папку списків товарів торгового центру
+	</string>
+	<string name="TooltipOutboxMixedStock">
+		Усі предмети в папці магазину повинні мати однаковий тип та дозвіл
+	</string>
+	<string name="TooltipOutfitNotInInventory">
+		Ви можете поміщати в "Комплекти" предмети або комплекти лише зі свого власного інвентарю.
+	</string>
+	<string name="TooltipCantCreateOutfit">
+		Один або кілька предметів не можна використовувати всередині "Комплектів"
+	</string>
+	<string name="TooltipDragOntoOwnChild">
+		Ви не можете перемістити папку в її підпапку
+	</string>
+	<string name="TooltipDragOntoSelf">
+		Ви не можете перемістити папку саму в себе
+	</string>
+	<string name="TooltipHttpUrl">
+		Натисніть, щоб переглянути цю веб-сторінку
+	</string>
+	<string name="TooltipSLURL">
+		Натисніть, щоб переглянути інформацію про це місце
+	</string>
+	<string name="TooltipAgentUrl">
+		Натисніть, щоб переглянути профіль цього мешканця
+	</string>
+	<string name="TooltipAgentInspect">
+		Дізнатись більше про цього мешканця
+	</string>
+	<string name="TooltipAgentMute">
+		Натисніть, щоб заблокувати цього мешканця
+	</string>
+	<string name="TooltipAgentUnmute">
+		Натисніть, щоб розблокувати цього мешканця
+	</string>
+	<string name="TooltipAgentIM">
+		Натисніть, щоб відправити ОП цьому мешканцю
+	</string>
+	<string name="TooltipAgentPay">
+		Натисніть, щоб заплатити цьому мешканцю
+	</string>
+	<string name="TooltipAgentOfferTeleport">
+		Натисніть, щоб запропонувати запит телепорту цього користувача
+	</string>
+	<string name="TooltipAgentRequestFriend">
+		Натисніть, щоб запропонувати цьому мешканцю дружбу
+	</string>
+	<string name="TooltipGroupUrl">
+		Натисніть, щоб переглянути опис групи
+	</string>
+	<string name="TooltipEventUrl">
+		Натисніть, щоб переглянути опис події
+	</string>
+	<string name="TooltipClassifiedUrl">
+		Натисніть тут, щоб переглянути це оголошення
+	</string>
+	<string name="TooltipParcelUrl">
+		Натисніть тут, щоб переглянути опис ділянки
+	</string>
+	<string name="TooltipTeleportUrl">
+		Натисніть, щоб телепортуватися до цього місця
+	</string>
+	<string name="TooltipObjectIMUrl">
+		Натисніть тут, щоб переглянути опис цього об'єкту
+	</string>
+	<string name="TooltipMapUrl">
+		Натисніть тут, щоб переглянути це місце на мапі
+	</string>
+	<string name="TooltipSLAPP">
+		Натисніть для виконання команди secondlife://
+	</string>
+	<string name="TooltipFSHelpDebugSLUrl">
+		Натисніть, щоб відкрити вікно параметрів налагодження для цього параметра.
+	</string>
+	<string name="TooltipFSUrlEntryWear">
+		Натисніть, щоб надіти вміст папки інвентарю
+	</string>
+	<string name="CurrentURL" value=" CurrentURL: [CurrentURL]"/>
+	<string name="TooltipEmail">
+		Натисніть, щоб написати лист
+	</string>
+	<string name="SLurlLabelTeleport">
+		Телепортуватися в
+	</string>
+	<string name="SLurlLabelShowOnMap">
+		Показати карту для
+	</string>
+	<string name="SLappAgentMute">
+		Заблокувати
+	</string>
+	<string name="SLappAgentUnmute">
+		Розблокувати
+	</string>
+	<string name="SLappAgentIM">
+		LS
+	</string>
+	<string name="SLappAgentPay">
+		Заплатити
+	</string>
+	<string name="SLappAgentOfferTeleport">
+		Запропонувати телепортацію в
+	</string>
+	<string name="SLappAgentRequestFriend">
+		Запропонувати дружбу
+	</string>
+	<string name="SLappAgentRemoveFriend">
+		Видалення друга
+	</string>
+	<string name="BUTTON_CLOSE_DARWIN">
+		Закрити (&#8984;W)
+	</string>
+	<string name="BUTTON_CLOSE_WIN">
+		Закрити (Ctrl+W)
+	</string>
+	<string name="BUTTON_CLOSE_CHROME">
+		Закрити
+	</string>
+	<string name="BUTTON_RESTORE">
+		Відновити
+	</string>
+	<string name="BUTTON_MINIMIZE">
+		Згорнути
+	</string>
+	<string name="BUTTON_TEAR_OFF">
+		Відокремити
+	</string>
+	<string name="BUTTON_DOCK">
+		Приєднати
+	</string>
+	<string name="BUTTON_HELP">
+		Показати допомогу
+	</string>
+	<string name="BUTTON_SNOOZE">
+		Подрімати
+	</string>
+	<string name="TooltipNotecardNotAllowedTypeDrop">
+		Елементи цього типу не можуть бути занесені до
+картку для коментарів у цьому регіоні.
+	</string>
+	<string name="TooltipNotecardOwnerRestrictedDrop">
+		Тільки елементи з безумовною роздільною здатністю
+'наступного власника' можна внести
+у картки для коментарів.
+	</string>
+	<string name="Search">
+		Пошук...
+	</string>
+	<string name="NoneFound">
+		Не знайдено.
+	</string>
+	<string name="RetrievingData">
+		Отримання...
+	</string>
+	<string name="ReleaseNotes">
+		Нотатки про випуск
+	</string>
+	<string name="LoadingData">
+		Завантаження...
+	</string>
+	<string name="LockedFolder">
+		заблоковано
+	</string>
+	<string name="ProtectedFolder">
+		захищено
+	</string>
+	<string name="AvatarNameNobody">
+		(ніхто)
+	</string>
+	<string name="AvatarNameWaiting">
+		(Завантаження...)
+	</string>
+	<string name="AvatarNameMultiple">
+		(кілька)
+	</string>
+	<string name="GroupNameNone">
+		(ні)
+	</string>
+	<string name="AssetErrorNone">
+		Помилок немає
+	</string>
+	<string name="AssetErrorRequestFailed">
+		Запит активу: збій
+	</string>
+	<string name="AssetErrorNonexistentFile">
+		Запит активу: файл не існує
+	</string>
+	<string name="AssetErrorNotInDatabase">
+		Запит активу: актив не знайдено у базі даних
+	</string>
+	<string name="AssetErrorEOF">
+		Кінець файлу
+	</string>
+	<string name="AssetErrorCannotOpenFile">
+		Неможливо відкрити файл
+	</string>
+	<string name="AssetErrorFileNotFound">
+		Файл не знайдено
+	</string>
+	<string name="AssetErrorTCPTimeout">
+		Час передачі файлу минув
+	</string>
+	<string name="AssetErrorCircuitGone">
+		Обрив у каналі
+	</string>
+	<string name="AssetErrorPriceMismatch">
+		Не досягнуто домовленості за ціною між клієнтом та сервером
+	</string>
+	<string name="AssetErrorUnknownStatus">
+		Невідомий статус
+	</string>
+	<string name="AssetUploadServerUnreacheble">
+		Служба недоступна.
+	</string>
+	<string name="AssetUploadServerDifficulties">
+		Сервер зазнає несподіваних труднощів.
+	</string>
+	<string name="AssetUploadServerUnavaliable">
+		Сервіс недоступний або час завантаження.
+	</string>
+	<string name="AssetUploadRequestInvalid">
+Помилка запиту на завантаження. Будь ласка, відвідайте
+https://www.firestormviewer.org/support за допомогу у вирішенні цієї проблеми.
+	</string>
+	<string name="SettingValidationError">
+		Помилка при імпорті налаштувань [NAME]
+	</string>
+	<string name="SettingImportFileError">
+		Не можу відкрити файл [FILE]
+	</string>
+	<string name="SettingParseFileError">
+		Не можу відкрити файл [FILE]
+	</string>
+	<string name="SettingTranslateError">
+		Не можу перевести оточення [NAME]
+	</string>
+	<string name="texture">
+		текстура
+	</string>
+	<string name="sound">
+		звук
+	</string>
+	<string name="calling card">
+		візитку
+	</string>
+	<string name="landmark">
+		закладку
+	</string>
+	<string name="legacy script">
+		старий скрипт
+	</string>
+	<string name="clothing">
+		одяг
+	</string>
+	<string name="object">
+		об'єкт
+	</string>
+	<string name="note card">
+		замітку
+	</string>
+	<string name="folder">
+		папку
+	</string>
+	<string name="root">
+		кореневий каталог
+	</string>
+	<string name="lsl2 script">
+		LSL2 скрипт
+	</string>
+	<string name="lsl bytecode">
+		LSL байт-код
+	</string>
+	<string name="tga texture">
+		текстура TGA
+	</string>
+	<string name="part body">
+		частина тіла
+	</string>
+	<string name="snapshot">
+		знімок
+	</string>
+	<string name="lost and found">
+		знайдені речі
+	</string>
+	<string name="targa image">
+		зображення TGA
+	</string>
+	<string name="trash">
+		видалені предмети
+	</string>
+	<string name="jpeg image">
+		зображення JPEG
+	</string>
+	<string name="animation">
+		анімацію
+	</string>
+	<string name="gesture">
+		жест
+	</string>
+	<string name="simstate">
+		стан симуляції
+	</string>
+	<string name="favorite">
+		обране
+	</string>
+	<string name="symbolic link">
+		посилання
+	</string>
+	<string name="settings blob">
+		Налаштування
+	</string>
+	<string name="symbolic folder link">
+		посилання на папку
+	</string>
+	<string name="mesh">
+		Меш
+	</string>
+	<string name="AvatarEditingAppearance">
+		(Редагування зовнішності)
+	</string>
+	<string name="AvatarAway">
+		Немає на місці
+	</string>
+	<string name="AvatarDoNotDisturb">
+		Не турбувати
+	</string>
+	<string name="AvatarMuted">
+		Заблоковано
+	</string>
+	<string name="AvatarAutoResponse">
+		Автовідповідь
+	</string>
+	<string name="AvatarTyping">
+		Пише
+	</string>
+	<string name="anim_express_afraid">
+		Страх
+	</string>
+	<string name="anim_express_anger">
+		Гнів
+	</string>
+	<string name="anim_away">
+		Немає на місці
+	</string>
+	<string name="anim_backflip">
+		Сальто тому
+	</string>
+	<string name="anim_express_laugh">
+		Регот
+	</string>
+	<string name="anim_express_toothsmile">
+		Широка посмішка
+	</string>
+	<string name="anim_blowkiss">
+		Повітряний поцілунок
+	</string>
+	<string name="anim_express_bored">
+		нудьга
+	</string>
+	<string name="anim_bow">
+		Подарунок
+	</string>
+	<string name="anim_clap">
+		Ляпасок
+	</string>
+	<string name="anim_courtbow">
+		Ввічливий уклін
+	</string>
+	<string name="anim_express_cry">
+		Плаче
+	</string>
+	<string name="anim_dance1">
+		Танець 1
+	</string>
+	<string name="anim_dance2">
+		Танець 2
+	</string>
+	<string name="anim_dance3">
+		Танець 3
+	</string>
+	<string name="anim_dance4">
+		Танець 4
+	</string>
+	<string name="anim_dance5">
+		Танець 5
+	</string>
+	<string name="anim_dance6">
+		Танець 6
+	</string>
+	<string name="anim_dance7">
+		Танець 7
+	</string>
+	<string name="anim_dance8">
+		Танець 8
+	</string>
+	<string name="anim_express_disdain">
+		Презирство
+	</string>
+	<string name="anim_drink">
+		Пиття
+	</string>
+	<string name="anim_express_embarrased">
+		Збентеження
+	</string>
+	<string name="anim_angry_fingerwag">
+		Погрозить пальцем
+	</string>
+	<string name="anim_fist_pump">
+		Піднімання кулака
+	</string>
+	<string name="anim_yoga_float">
+		Парячий Будда
+	</string>
+	<string name="anim_express_frown">
+		Похмурість
+	</string>
+	<string name="anim_impatient">
+		Нетерпіння
+	</string>
+	<string name="anim_jumpforjoy">
+		Стрибок радості
+	</string>
+	<string name="anim_kissmybutt">
+		Поцілунок у зад
+	</string>
+	<string name="anim_express_kiss">
+		Поцілунок
+	</string>
+	<string name="anim_laugh_short">
+		Сміх
+	</string>
+	<string name="anim_musclebeach">
+		Демонстрація м'язів
+	</string>
+	<string name="anim_no_unhappy">
+		Ні (Сумно)
+	</string>
+	<string name="anim_no_head">
+		Ні
+	</string>
+	<string name="anim_nanya">
+		Ні-ні-ні
+	</string>
+	<string name="anim_punch_onetwo">
+		Один-два удари
+	</string>
+	<string name="anim_express_open_mouth">
+		Відкритий рот
+	</string>
+	<string name="anim_peace">
+		Доброзичливість
+	</string>
+	<string name="anim_point_you">
+		Вказування на когось
+	</string>
+	<string name="anim_point_me">
+		Вказування на себе
+	</string>
+	<string name="anim_punch_l">
+		Удар лівою рукою
+	</string>
+	<string name="anim_punch_r">
+		Удар правою рукою
+	</string>
+	<string name="anim_rps_countdown">
+		Рахунок у КНБ
+	</string>
+	<string name="anim_rps_paper">
+		КНБ – папір
+	</string>
+	<string name="anim_rps_rock">
+		КНБ – камінь
+	</string>
+	<string name="anim_rps_scissors">
+		КНБ – ножиці
+	</string>
+	<string name="anim_express_repulsed">
+		Відмова
+	</string>
+	<string name="anim_kick_roundhouse_r">
+		Удар із розвороту
+	</string>
+	<string name="anim_express_sad">
+		Сум
+	</string>
+	<string name="anim_salute">
+		Вітання
+	</string>
+	<string name="anim_shout">
+		Крик
+	</string>
+	<string name="anim_express_shrug">
+		Знизування плечима
+	</string>
+	<string name="anim_express_smile">
+		Посмішка
+	</string>
+	<string name="anim_smoke_idle">
+		Куріння не затягується
+	</string>
+	<string name="anim_smoke_inhale">
+		Куріння в затягування
+	</string>
+	<string name="anim_smoke_throw_down">
+		Кинути сигарету
+	</string>
+	<string name="anim_express_surprise">
+		Здивування
+	</string>
+	<string name="anim_sword_strike_r">
+		Удар мечем
+	</string>
+	<string name="anim_angry_tantrum">
+		Спалах гніву
+	</string>
+	<string name="anim_express_tongue_out">
+		Показати язик
+	</string>
+	<string name="anim_hello">
+		Помахати
+	</string>
+	<string name="anim_whisper">
+		Шепіт
+	</string>
+	<string name="anim_whistle">
+		Свист
+	</string>
+	<string name="anim_express_wink">
+		Підморгування
+	</string>
+	<string name="anim_wink_hollywood">
+		Підморгування (по-голлівудськи)
+	</string>
+	<string name="anim_express_worry">
+		Занепокоєння
+	</string>
+	<string name="anim_yes_happy">
+		Згода (Радісне)
+	</string>
+	<string name="anim_yes_head">
+		Згода
+	</string>
+	<string name="multiple_textures">
+		Декілька
+	</string>
+	<string name="use_texture">
+		Використовувати текстуру
+	</string>
+	<string name="manip_hint1">
+		Рухати курсор мишки над лінійкою
+	</string>
+	<string name="manip_hint2">
+		для прив'язки до сітки
+	</string>
+	<string name="texture_loading">
+		Завантаження...
+	</string>
+	<string name="worldmap_offline">
+		Не в мережі
+	</string>
+	<string name="worldmap_item_tooltip_format">
+		[AREA] м² L$[PRICE] ([SQMPRICE] L$/м²)
+	</string>
+	<string name="worldmap_results_none_found">
+		Не знайдено.
+	</string>
+	<string name="worldmap_agent_position">
+		Ви тут
+	</string>
+	<string name="minimap_distance">
+		(Відстань: [DISTANCE] м)
+	</string>
+	<string name="minimap_no_focus">
+		Камера не може сфокусуватися на користувача, оскільки він знаходиться за межами відстані.
+	</string>
+	<string name="OK">
+		Гаразд
+	</string>
+	<string name="Передчасний кінець файлу">
+		Передчасний кінець файлу
+	</string>
+	<string name="ST_NO_JOINT">
+		Не вдається знайти ROOT чи JOINT.
+	</string>
+	<string name="no_name_object">
+		(Без назви)
+	</string>
+	<string name="NearbyChatTitle">
+		Загальний чат
+	</string>
+	<string name="NearbyChatLabel">
+		(Загальний чат)
+	</string>
+	<string name="whisper">
+		шепоче:
+	</string>
+	<string name="scream">
+		кричить:
+	</string>
+	<string name="ringing">
+		Підключення до голосового чату...
+	</string>
+	<string name="connected">
+		Підключено
+	</string>
+	<string name="unavailable">
+		У цьому місці голосовий зв'язок недоступний
+	</string>
+	<string name="hang_up">
+		Відключення від голосового чату.
+	</string>
+	<string name="reconnect_nearby">
+		Встановлюється перепідключення до локального голосового чату
+	</string>
+	<string name="ScriptQuestionCautionChatGranted">
+		Об'єкту '[OBJECTNAME]', який належить користувачеві '[OWNERNAME]' і знаходиться в [REGIONPOS] в регіоні '[REGIONNAME]', надано дозвіл: [PERMISSIONS].
+	</string>
+	<string name="ScriptQuestionCautionChatDenied">
+		Об'єкту '[OBJECTNAME]', який належить користувачеві '[OWNERNAME]' і знаходиться в [REGIONPOS] в регіоні '[REGIONNAME]', відмовлено у дозволі: [PERMISSIONS].
+	</string>
+	<string name="AdditionalPermissionsRequestHeader">
+		Дозволивши доступ до свого облікового запису, ви також дозволите об'єкту:
+	</string>
+	<string name="ScriptTakeMoney">
+		У вас беруть Лінден долари (L$)
+	</string>
+	<string name="ActOnControlInputs">
+		Дії ваших елементів керування
+	</string>
+	<string name="RemapControlInputs">
+		Перепризначення ваших елементів керування
+	</string>
+	<string name="AnimateYourAvatar">
+		Анімувати ваш аватар
+	</string>
+	<string name="AttachToYourAvatar">
+		Прикріпити до вашого аватара
+	</string>
+	<string name="ReleaseOwnership">
+		Відмовитися від прав власності, зробити загальним
+	</string>
+	<string name="LinkAndDelink">
+		Зв'язати або скасувати зв'язок з іншими об'єктами
+	</string>
+	<string name="AddAndRemoveJoints">
+		Додавання та видалення зв'язків з іншими об'єктами
+	</string>
+	<string name="ChangePermissions">
+		Змінити права доступу
+	</string>
+	<string name="TrackYourCamera">
+		Відстеження вашої камери
+	</string>
+	<string name="ControlYourCamera">
+		Керування камерою
+	</string>
+	<string name="TeleportYourAgent">
+		Телепортувати вас
+	</string>
+	<string name="ManageEstateSilently">
+		Тихо керувати вашими маєтками
+	</string>
+	<string name="ChangeYourDefaultAnimations">
+		Змінити ваші стандартні анімації
+	</string>
+	<string name="ForceSitAvatar">
+		Змусіть аватар сісти
+	</string>
+	<string name="ChangeEnvSettings">
+		Змінити налаштування середовища
+	</string>
+	<string name="SnapshotSavedToDisk">
+		Знімок збережено: [FILENAME]
+	</string>
+	<string name="JoinAnExperience"/>
+	<string name="SilentlyManageEstateAccess">
+		Вимкнути повідомлення під час управління списками доступу до нерухомості
+	</string>
+	<string name="OverrideYourAnimations">
+		Замінити стандартні анімації
+	</string>
+	<string name="ScriptReturnObjects">
+		Повернути об'єкти від вашого імені
+	</string>
+	<string name="NotConnected">
+		Не підключено
+	</string>
+	<string name="AgentNameSubst">
+		(Ви)
+	</string>
+	<string name="UnknownScriptPermission">
+		(Невідомо)!
+	</string>
+	<string name="SIM_ACCESS_PG">
+		Загальний
+	</string>
+	<string name="SIM_ACCESS_MATURE">
+		Помірний
+	</string>
+	<string name="SIM_ACCESS_ADULT">
+		Для дорослих
+	</string>
+	<string name="SIM_ACCESS_DOWN">
+		Не в мережі
+	</string>
+	<string name="SIM_ACCESS_MIN">
+		Невідомо
+	</string>
+	<string name="land_type_unknown">
+		(невідомо)
+	</string>
+	<string name="Estate / Full Region">
+		Острів / Повний регіон
+	</string>
+	<string name="Estate / Homestead">
+		Острів / Садиба
+	</string>
+	<string name="Mainland / Homestead">
+		Материк / Садиба
+	</string>
+	<string name="Mainland / Full Region">
+		Материк / Повний регіон
+	</string>
+	<string name="Linden Homes / Full Region">
+		Linden Будинки / Повний регіон
+	</string>
+	<string name="all_files">
+		Усі файли
+	</string>
+	<string name="sound_files">
+		Звуки
+	</string>
+	<string name="animation_files">
+		Анімації
+	</string>
+	<string name="image_files">
+		Зображення
+	</string>
+	<string name="save_file_verb">
+		Зберегти
+	</string>
+	<string name="load_file_verb">
+		Завантажити
+	</string>
+	<string name="targa_image_files">
+		Зображення TGA
+	</string>
+	<string name="bitmap_image_files">
+		Зображення BMP
+	</string>
+	<string name="png_image_files">
+		Зображення PNG
+	</string>
+	<string name="save_texture_image_files">
+		Зображення TGA або PNG
+	</string>
+	<string name="avi_movie_file">
+		Відео файли AVI
+	</string>
+	<string name="xaf_animation_file">
+		Файли анімації XAF
+	</string>
+	<string name="xml_file">
+		файл XML
+	</string>
+	<string name="raw_file">
+		файл RAW
+	</string>
+	<string name="compressed_image_files">
+		Стислі зображення
+	</string>
+	<string name="load_files">
+		Завантажити файли
+	</string>
+	<string name="choose_the_directory">
+		Вибрати директорію
+	</string>
+	<string name="script_files">
+		Скрипти
+	</string>
+	<string name="dictionary_files">
+		Словники
+	</string>
+	<string name="backup_files">
+		Резервні копії об'єктів
+	</string>
+	<string name="collada_files">
+		Моделі COLLADA
+	</string>
+	<string name="csv_files">
+		Значення поділяються комами
+	</string>
+	<string name="recompile_script_verb">
+		Перекомпиляция
+	</string>
+	<string name="jpeg_image_files">
+		Зображення у форматі JPEG
+	</string>
+	<string name="executable_files">
+		Виконувані файли програми
+	</string>
+	<string name="LSLTipSleepTime">
+		Призупинити сценарії на [SLEEP_TIME] с.
+	</string>
+	<string name="shape">
+		малюнок
+	</string>
+	<string name="skin">
+		Шкіра
+	</string>
+	<string name="hair">
+		Волосся
+	</string>
+	<string name="eyes">
+		Очі
+	</string>
+	<string name="shirt">
+		Сорочка
+	</string>
+	<string name="pants">
+		Штани
+	</string>
+	<string name="shoes">
+		Взуття
+	</string>
+	<string name="socks">
+		Шкарпетки
+	</string>
+	<string name="jacket">
+		Куртка
+	</string>
+	<string name="gloves">
+		Рукавички
+	</string>
+	<string name="undershirt">
+		мати
+	</string>
+	<string name="underpants">
+		Боягузи
+	</string>
+	<string name="skirt">
+		Спідниця
+	</string>
+	<string name="alpha">
+		Альфа
+	</string>
+	<string name="tattoo">
+		Татуювання
+	</string>
+	<string name="universal">
+		Універсальний
+	</string>
+	<string name="physics">
+		Фізика
+	</string>
+	<string name="invalid">
+		недійсний
+	</string>
+	<string name="none">
+		ні
+	</string>
+	<string name="sky">
+		Небо
+	</string>
+	<string name="water">
+		вода
+	</string>
+	<string name="day">
+		Цикл дня
+	</string>
+	<string name="shirt_not_worn">
+		Сорочка не одягнена
+	</string>
+	<string name="pants_not_worn">
+		Штани не одягнені
+	</string>
+	<string name="shoes_not_worn">
+		Взуття не одягнено
+	</string>
+	<string name="socks_not_worn">
+		Шкарпетки не одягнені
+	</string>
+	<string name="jacket_not_worn">
+		Куртка не одягнена
+	</string>
+	<string name="gloves_not_worn">
+		Рукавички не одягнені
+	</string>
+	<string name="undershirt_not_worn">
+		Майка не одягнена
+	</string>
+	<string name="underpants_not_worn">
+		Боягузи не надіті
+	</string>
+	<string name="skirt_not_worn">
+		Спідниця не одягнена
+	</string>
+	<string name="alpha_not_worn">
+		Альфа не одягнена
+	</string>
+	<string name="tattoo_not_worn">
+		Татуювання не одягнено
+	</string>
+	<string name="universal_not_worn">
+		Універсальний не одягнений
+	</string>
+	<string name="physics_not_worn">
+		Фізика не надіта
+	</string>
+	<string name="invalid_not_worn">
+		недійсний
+	</string>
+	<string name="create_new_shape">
+		Створити нову фігуру
+	</string>
+	<string name="create_new_skin">
+		Створити нову шкіру
+	</string>
+	<string name="create_new_hair">
+		Створити нове волосся
+	</string>
+	<string name="create_new_eyes">
+		Створити нові очі
+	</string>
+	<string name="create_new_shirt">
+		Створити нову сорочку
+	</string>
+	<string name="create_new_pants">
+		Створити нові штани
+	</string>
+	<string name="create_new_shoes">
+		Створити нове взуття
+	</string>
+	<string name="create_new_socks">
+		Створити нові шкарпетки
+	</string>
+	<string name="create_new_jacket">
+		Створити нову куртку
+	</string>
+	<string name="create_new_gloves">
+		Створити нові рукавички
+	</string>
+	<string name="create_new_undershirt">
+		Створити нову майку
+	</string>
+	<string name="create_new_underpants">
+		Створити нові труси
+	</string>
+	<string name="create_new_skirt">
+		Створити нову спідницю
+	</string>
+	<string name="create_new_alpha">
+		Створити нову альфа
+	</string>
+	<string name="create_new_tattoo">
+		Створити нове татуювання
+	</string>
+	<string name="create_new_universal">
+		Створити новий універсальний
+	</string>
+	<string name="create_new_physics">
+		Створити нову фізику
+	</string>
+	<string name="create_new_invalid">
+		недійсний
+	</string>
+	<string name="NewWearable">
+		Новий [WEARABLE_ITEM]
+	</string>
+	<string name="next">
+		Далі
+	</string>
+	<string name="ok">
+		Гаразд
+	</string>
+	<string name="GroupNotifyGroupNotice">
+		Повідомлення групи
+	</string>
+	<string name="GroupNotifyGroupNotices">
+		Сповіщення групи
+	</string>
+	<string name="GroupNotifySentBy">
+		Надіслано
+	</string>
+	<string name="GroupNotifyAttached">
+		Вкладення:
+	</string>
+	<string name="GroupNotifyViewPastNotices">
+		Переглянути останні повідомлення або відмовитися від отримання таких повідомлень.
+	</string>
+	<string name="GroupNotifyOpenAttachment">
+		відкрити вкладення
+	</string>
+	<string name="GroupNotifySaveAttachment">
+		Зберегти вкладення
+	</string>
+	<string name="GroupNotifySender">
+		Надіслано [SENDER], [GROUPNAME]
+	</string>
+	<string name="TeleportOffer">
+		Пропозиція телепортації
+	</string>
+	<string name="StartUpNotifications">
+		Надійшли нові повідомлення, поки ви були відсутні
+	</string>
+	<string name="OverflowInfoChannelString">
+		Ви отримали більше %d повідомлень
+	</string>
+	<string name="BodyPartsRightArm">
+		Права рука
+	</string>
+	<string name="BodyPartsHead">
+		Голова
+	</string>
+	<string name="BodyPartsLeftArm">
+		Ліва рука
+	</string>
+	<string name="BodyPartsLeftLeg">
+		Ліва нога
+	</string>
+	<string name="BodyPartsTorso">
+		тулуб
+	</string>
+	<string name="BodyPartsRightLeg">
+		Права нога
+	</string>
+	<string name="BodyPartsEnhancedSkeleton">
+		Поліпшений скелет
+	</string>
+	<string name="GraphicsQualityLow">
+		Низька
+	</string>
+	<string name="GraphicsQualityMid">
+		Середня
+	</string>
+	<string name="GraphicsQualityHigh">
+		Високий
+	</string>
+	<string name="LeaveMouselook">
+		Натисніть ESC, щоб повернутися до звичайного огляду
+	</string>
+	<string name="InventoryNoMatchingItems">
+		Чи не знайшли того, що вам потрібно? Спробуйте [secondlife:///app/search/all/[SEARCH_TERM] Пошук].
+	</string>
+	<string name="InventoryNoMatchingRecentItems">
+		Чи не знайшли те, що шукали? [secondlife:///app/inventory/filters Показати фільтри].
+	</string>
+	<string name="PlacesNoMatchingItems">
+		Чи не знайшли того, що вам потрібно? Спробуйте [secondlife:///app/search/places/[SEARCH_TERM] Пошук].
+	</string>
+	<string name="FavoritesNoMatchingItems">
+		Перетягніть закладку сюди, щоб додати її до списку вибраного.
+	</string>
+	<string name="MarketplaceNoListing">
+		Ви ще не маєте товарів у Торговому центрі.
+	</string>
+	<string name="MarketplaceNoMatchingItems">
+		Предмети не знайдено. Перевірте правильність рядка пошуку та повторіть спробу.
+	</string>
+	<string name="InventoryNoTexture">
+		Ви не маєте копії цієї текстури в інвентарі
+	</string>
+	<string name="InventoryInboxNoItems">
+		Тут буде показано ваші покупки з Торгового центру. Їх можна буде перетягнути у інвентар для використання.
+	</string>
+	<string name="MarketplaceURL">
+		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
+	</string>
+	<string name="MarketplaceURL_CreateStore">
+		http://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.3
+	</string>
+	<string name="MarketplaceURL_Dashboard">
+		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/dashboard
+	</string>
+	<string name="MarketplaceURL_Imports">
+		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/imports
+	</string>
+	<string name="MarketplaceURL_LearnMore">
+		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
+	</string>
+	<string name="InventoryPlayAnimationTooltip">
+		Відкрийте вікно з параметрами Відтворення.
+	</string>
+	<string name="InventoryPlayGestureTooltip">
+		Виконайте вибраний жест у ігровому світі.
+	</string>
+	<string name="InventoryPlaySoundTooltip">
+		Відкрийте вікно з параметрами Відтворення.
+	</string>
+	<string name="InventoryOutboxNotMerchantTitle">
+		Будь-хто може продавати товари в Торговому центрі.
+	</string>
+	<string name="InventoryOutboxNotMerchantTooltip">
+	</string>
+	<string name="InventoryOutboxNotMerchant">
+		Якщо ви хочете стати продавцем, вам потрібно буде створити магазин у [[MARKETPLACE_CREATE_STORE_URL] Торговому центрі].
+	</string>
+	<string name="InventoryOutboxNoItemsTitle">
+		Ваша папка "Вихідні" порожня.
+	</string>
+	<string name="InventoryOutboxNoItemsTooltip">
+	</string>
+	<string name="InventoryOutboxNoItems">
+		Перетягніть папки в цю область і натисніть 'Надіслати до Торгового майданчика', щоб виставити їх на продаж у [[MARKETPLACE_DASHBOARD_URL] Торговому центрі].
+	</string>
+	<string name="InventoryOutboxInitializingTitle">
+		Ініціалізація Торгового майданчика
+	</string>
+	<string name="InventoryOutboxInitializingTooltip">
+	</string>
+	<string name="InventoryOutboxInitializing">
+		Ми звертаємося до вашого облікового запису [[MARKETPLACE_CREATE_STORE_URL] Торгового центру].
+	</string>
+	<string name="InventoryOutboxErrorTitle">
+		Помилки торгового майданчика.
+	</string>
+	<string name="InventoryOutboxErrorTooltip">
+	</string>
+	<string name="InventoryOutboxError">
+		[[MARKETPLACE_CREATE_STORE_URL] Магазин Торгового майданчика] повернув помилки.
+	</string>
+	<string name="InventoryMarketplaceError">
+		Виникла помилка при відкритті списків Торгового майданчика.
+Якщо ви продовжуєте отримувати це повідомлення, зверніться до служби підтримки Second Life за адресою http://support.secondlife.com.
+	</string>
+	<string name="InventoryMarketplaceListingsNoItemsTitle">
+		Папка списків товарів торгового центру пуста.
+	</string>
+	<string name="InventoryMarketplaceListingsNoItems">
+		Перетягніть папки в цю область, щоб виставити їх на продаж у [[MARKETPLACE_DASHBOARD_URL] Торговому центрі].
+	</string>
+	<string name="InventoryItemsCount">
+		([ITEMS]/[CATEGORIES] предметів)
+	</string>
+	<string name="Marketplace Validation Warning Stock">
+		У папці версії має бути папка запасів
+	</string>
+	<string name="Marketplace Validation Error Mixed Stock">
+		: Помилка: всі предмети в папці запасів повинні бути некопіюваними та одного типу
+	</string>
+	<string name="Marketplace Validation Error Subfolder In Stock">
+		: Помилка: папка запасів не може містити підпапки
+	</string>
+	<string name="Marketplace Validation Warning Empty">
+		: Попередження: папка не містить предметів
+	</string>
+	<string name="Marketplace Validation Warning Create Stock">
+		: Попередження: створюється папка запасів
+	</string>
+	<string name="Попередження перевірки Marketplace Create Version">
+		: Попередження: створюється папка версії
+	</string>
+	<string name="Marketplace Validation Warning Move">
+		: Попередження: переміщаються предмети
+	</string>
+	<string name="Marketplace Validation Warning Delete">
+		: Попередження: вміст папки переноситься в папку запасів, порожня папка видаляється
+	</string>
+	<string name="Marketplace Validation Error Stock Item">
+		: Помилка: у папці запасів повинні міститися некопійовані предмети
+	</string>
+	<string name="Marketplace Validation Warning Unwrapped Item">
+		: Попередження: у папці версії повинні бути предмети
+	</string>
+	<string name="Marketplace Validation Error">
+		: Помилка:
+	</string>
+	<string name="Marketplace Validation Warning">
+		: УВАГА:
+	</string>
+	<string name="Marketplace Validation Error Empty Version">
+		: Попередження: папка версії повинна містити хоча б 1 предмет
+	</string>
+	<string name="Marketplace Validation Error Empty Stock">
+		: Попередження: папка запасів повинна містити хоча б 1 предмет
+	</string>
+	<string name="Marketplace Validation No Error">
+		Немає помилок та попереджень
+	</string>
+	<string name="Marketplace Error None">
+		Помилок немає
+	</string>
+	<string name="Marketplace Error Prefix">
+		Помилка:
+	</string>
+	<string name="Marketplace Error Not Merchant">
+		Помилка: Перед відправкою товарів для Торгового майданчика вам потрібно буде налаштувати себе як продавець (безкоштовно).
+	</string>
+	<string name="Marketplace Error Not Accepted">
+		Не можна перемістити предмет до цієї папки.
+	</string>
+	<string name="Marketplace Error Unsellable Item">
+		Помилка: Цей предмет не може бути проданий у торговому центрі.
+	</string>
+	<string name="MarketplaceNoID">
+		ні ID торг. центру
+	</string>
+	<string name="MarketplaceLive">
+		опубліковано
+	</string>
+	<string name="MarketplaceActive">
+		активно
+	</string>
+	<string name="MarketplaceMax">
+		макс.
+	</string>
+	<string name="MarketplaceStock">
+		запас
+	</string>
+	<string name="MarketplaceNoStock">
+		немає в запасі
+	</string>
+	<string name="MarketplaceUpdating">
+		оновлення...
+	</string>
+	<string name="UploadFeeInfo">
+		Плата залежить від рівня підписки. З підписок вищого рівня стягуються нижчі збори. [https://secondlife.com/my/account/membership.php? Дізнатися більше]
+	</string>
+	<string name="Open landmarks">
+		відкрити збережені локації
+	</string>
+	<string name="Unconstrained">
+		Непов'язані
+	</string>
+	<string name="no_transfer" value=" (не передається)"/>
+	<string name="no_modify" value=" (не змінюється)"/>
+	<string name="no_copy" value=" (не копіюється)"/>
+	<string name="worn" value=" (worn)"/>
+	<string name="link" value=" (посилання)"/>
+	<string name="broken_link" value=" (непрацююче посилання)"/>
+	<string name="LoadingContents">
+		Завантаження вмісту...
+	</string>
+	<string name="NoContents">
+		Немає вмісту
+	</string>
+	<string name="WornOnAttachmentPoint" value=" (надето на [ATTACHMENT_POINT])"/>
+	<string name="AttachmentErrorMessage" value="([ATTACHMENT_ERROR])"/>
+	<string name="ActiveGesture" value="[GESLABEL] (активний)"/>
+	<string name="PermYes">
+		Так
+	</string>
+	<string name="PermNo">
+		Ні
+	</string>
+	<string name="Chat Message" value=" Чат : "/>
+	<string name="Sound" value=" Звук : "/>
+	<string name="Wait" value=" --- Очікуйте : "/>
+	<string name="AnimFlagStop" value=" Зупинити анімацію : "/>
+	<string name="AnimFlagStart" value=" Почати анімацію : "/>
+	<string name="Wave" value=" Вітання рукою "/>
+	<string name="GestureActionNone" value="Нет"/>
+	<string name="HelloAvatar" value=" Привіт, аватар! "/>
+	<string name="ViewAllGestures" value=" Переглянути всі &gt;&gt;"/>
+	<string name="GetMoreGestures" value=" Отримати більше &gt;&gt;"/>
+	<string name="Animations" value="Анімації,"/>
+	<string name="Calling Cards" value="Візитні картки"/>
+	<string name="Clothing" value="Одежда,"/>
+	<string name="Gestures" value="Жести,"/>
+	<string name="Landmarks" value=" Закладки,"/>
+	<string name="Notecards" value="Нотатки,"/>
+	<string name="Objects" value="Об'єкти,"/>
+	<string name="Scripts" value="Скрипти,"/>
+	<string name="Sounds" value=" Звуки,"/>
+	<string name="Textures" value="Текстури,"/>
+	<string name="Settings" value="Налаштування,"/>
+	<string name="Snapshots" value="Snapshots,"/>
+	<string name="No Filters" value="Немає "/>
+	<string name="Since Logoff" value=" - з виходу"/>
+	<string name="Modifiable" value="Змінюване"/>
+	<string name="Copyable" value="Копійоване"/>
+	<string name="Transferable" value="Transferable"/>
+	<string name="PermissionsFilter" value=" - Тільки [PERMISSIONS]"/>
+	<string name="InvFolder My Inventory">
+		Інвентар
+	</string>
+	<string name="InvFolder Library">
+		бібліотека
+	</string>
+	<string name="InvFolder Textures">
+		Текстури
+	</string>
+	<string name="InvFolder Sounds">
+		Звуки
+	</string>
+	<string name="InvFolder Calling Cards">
+		Візитні картки
+	</string>
+	<string name="InvFolder Landmarks">
+		Закладки
+	</string>
+	<string name="InvFolder Scripts">
+		Скрипти
+	</string>
+	<string name="InvFolder Clothing">
+		Одяг
+	</string>
+	<string name="InvFolder Objects">
+		Об'єкти
+	</string>
+	<string name="InvFolder Notecards">
+		нотатки
+	</string>
+	<string name="InvFolder New Folder">
+		Нова папка
+	</string>
+	<string name="InvFolder Inventory">
+		Інвентар
+	</string>
+	<string name="InvFolder Uncompressed Images">
+		Нестиснені зображення
+	</string>
+	<string name="InvFolder Body Parts">
+		Частини тіла
+	</string>
+	<string name="InvFolder Trash">
+		Кошик
+	</string>
+	<string name="InvFolder Photo Album">
+		Фотоальбом
+	</string>
+	<string name="InvFolder Lost And Found">
+		Знайдені речі
+	</string>
+	<string name="InvFolder Uncompressed Sounds">
+		Нестиснені звуки
+	</string>
+	<string name="InvFolder Animations">
+		Анімації
+	</string>
+	<string name="InvFolder Gestures">
+		Жести
+	</string>
+	<string name="InvFolder Favorites">
+		Вибрані
+	</string>
+	<string name="InvFolder favorite">
+		Вибране
+	</string>
+	<string name="InvFolder favorites">
+		Вибрані
+	</string>
+	<string name="InvFolder Current Outfit">
+		Поточний комплект одягу
+	</string>
+	<string name="InvFolder Initial Outfits">
+		Початковий комплект одягу
+	</string>
+	<string name="InvFolder My Outfits">
+		Комплекти одягу
+	</string>
+	<string name="InvFolder Accessories">
+		Аксесуари
+	</string>
+	<string name="InvFolder Meshes">
+		Меші
+	</string>
+	<string name="InvFolder Received Items">
+		Отримані предмети
+	</string>
+	<string name="InvFolder Merchant Outbox">
+		Вихідні продавця
+	</string>
+	<string name="InvFolder Settings">
+		Налаштування
+	</string>
+	<string name="InvFolder Friends">
+		Друзі
+	</string>
+	<string name="InvFolder All">
+		Усе
+	</string>
+	<string name="InvFolder #Firestorm">
+		#Firestorm
+	</string>
+	<string name="InvFolder #Phoenix">
+		#Phoenix
+	</string>
+	<string name="InvFolder #RLV">
+		#RLV
+	</string>
+	<string name="InvFolder My Suitcase">
+		Моя Валіза
+	</string>
+	<string name="no_attachments">
+		Немає наділених вкладень
+	</string>
+	<string name="Attachments remain">
+		Вкладення ([COUNT] залишилося)
+	</string>
+	<string name="Купити">
+		Придбати
+	</string>
+	<string name="BuyforL$">
+		Купити за L$
+	</string>
+	<string name="Stone">
+		Камінь
+	</string>
+	<string name="Metal">
+		метал
+	</string>
+	<string name="Glass">
+		Скло
+	</string>
+	<string name="Wood">
+		Дерево
+	</string>
+	<string name="Flesh">
+		Плоть
+	</string>
+	<string name="Plastic">
+		пластик
+	</string>
+	<string name="Rubber">
+		Гумовий
+	</string>
+	<string name="Light">
+		світ
+	</string>
+	<string name="KBShift">
+		Shift
+	</string>
+	<string name="KBCtrl">
+		Ctrl
+	</string>
+	<string name="Chest">
+		Груди
+	</string>
+	<string name="Skull">
+		Череп
+	</string>
+	<string name="Left Shoulder">
+		Ліва ключиця
+	</string>
+	<string name="Right Shoulder">
+		Права ключиця
+	</string>
+	<string name="Left Hand">
+		Ліва кисть
+	</string>
+	<string name="Right Hand">
+		Права кисть
+	</string>
+	<string name="Left Foot">
+		Ліва нога
+	</string>
+	<string name="Right Foot">
+		Права нога
+	</string>
+	<string name="Spine">
+		Хребет
+	</string>
+	<string name="Pelvis">
+		Таз
+	</string>
+	<string name="Mouth">
+		Рот
+	</string>
+	<string name="Chin">
+		Підборіддя
+	</string>
+	<string name="Left Ear">
+		Ліве вухо
+	</string>
+	<string name="Right Ear">
+		Праве вухо
+	</string>
+	<string name="Left Eyeball">
+		Ліве око
+	</string>
+	<string name="Right Eyeball">
+		Праве око
+	</string>
+	<string name="Nose">
+		Ніс
+	</string>
+	<string name="R Upper Arm">
+		Праве плече
+	</string>
+	<string name="R Forearm">
+		Праве передпліччя
+	</string>
+	<string name="L Upper Arm">
+		Ліве плече
+	</string>
+	<string name="L Forearm">
+		Ліве передпліччя
+	</string>
+	<string name="Right Hip">
+		Праве стегно
+	</string>
+	<string name="R Upper Leg">
+		Права стегнова кістка
+	</string>
+	<string name="R Lower Leg">
+		Права гомілка
+	</string>
+	<string name="Left Hip">
+		Ліве стегно
+	</string>
+	<string name="L Upper Leg">
+		Ліва стегнова кістка
+	</string>
+	<string name="L Lower Leg">
+		Ліва гомілка
+	</string>
+	<string name="Stomach">
+		життя
+	</string>
+	<string name="Left Pec">
+		Ліві груди
+	</string>
+	<string name="Right Pec">
+		Праві груди
+	</string>
+	<string name="Neck">
+		Шия
+	</string>
+	<string name="Avatar Center">
+		Центр аватара
+	</string>
+	<string name="Left Ring Finger">
+		Лівий безіменний палець
+	</string>
+	<string name="Right Ring Finger">
+		Правий безіменний палець
+	</string>
+	<string name="Tail Base">
+		Основа хвоста
+	</string>
+	<string name="Tail Tip">
+		Кінчик хвоста
+	</string>
+	<string name="Left Wing">
+		Ліве крило
+	</string>
+	<string name="Right Wing">
+		Праве крило
+	</string>
+	<string name="Jaw">
+		Впасти
+	</string>
+	<string name="Alt Left Ear">
+		Альт. ліве вухо
+	</string>
+	<string name="Alt Right Ear">
+		Альт. праве вухо
+	</string>
+	<string name="Alt Left Eye">
+		Альт. ліве око
+	</string>
+	<string name="Alt Right Eye">
+		Альт. праве око
+	</string>
+	<string name="Tongue">
+		Язик
+	</string>
+	<string name="Groin">
+		Запах
+	</string>
+	<string name="Left Hind Foot">
+		Ліва задня нога
+	</string>
+	<string name="Right Hind Foot">
+		Права задня нога
+	</string>
+	<string name="Invalid Attachment">
+		Неправильна точка приєднання
+	</string>
+	<string name="ATTACHMENT_MISSING_ITEM">
+		Помилка: Відсутній елемент
+	</string>
+	<string name="ATTACHMENT_MISSING_BASE_ITEM">
+		Помилка: Відсутній базовий елемент
+	</string>
+	<string name="ATTACHMENT_NOT_ATTACHED">
+		Помилка: Об'єкт знаходиться в комплекті одягу, але не прикріплений
+	</string>
+	<string name="YearsMonthsOld">
+		[AGEYEARS] [AGEMONTHS]
+	</string>
+	<string name="YearsOld">
+		[AGEYEARS]
+	</string>
+	<string name="MonthsOld">
+		[AGEMONTHS]
+	</string>
+	<string name="WeeksOld">
+		[AGEWEEKS]
+	</string>
+	<string name="DaysOld">
+		[AGEDAYS]
+	</string>
+	<string name="TodayOld">
+		Зареєстрований сьогодні
+	</string>
+	<string name="TotalDaysOld">
+		; [AGEDAYSTOTAL]
+	</string>
+	<string name="av_render_everyone_now">
+		Тепер усі можуть бачити вас.
+	</string>
+	<string name="av_render_not_everyone">
+		Ви можете не відображатись у всіх навколо вас.
+	</string>
+	<string name="av_render_over_half">
+		Ви можете не відображатись у більшої половини навколо вас.
+	</string>
+	<string name="by_render_most_of">
+		Ви можете не відображатись у більшості навколо вас.
+	</string>
+	<string name="av_render_anyone">
+		Ви можете не відображатись у будь-якого навколо вас.
+	</string>
+	<string name="hud_description_total">
+		Ваші дані у грі
+	</string>
+	<string name="hud_name_with_joint">
+		[OBJ_NAME] (замінено на [JNT_NAME])
+	</string>
+	<string name="hud_render_memory_warning">
+		[HUD_DETAILS] використовує великий обсяг пам'яті текстур
+	</string>
+	<string name="hud_render_cost_warning">
+		[HUD_DETAILS] містить багато об'ємних об'єктів та текстур
+	</string>
+	<string name="hud_render_heavy_textures_warning">
+		[HUD_DETAILS] містить багато великих текстур
+	</string>
+	<string name="hud_render_cramped_warning">
+		[HUD_DETAILS] містить надто багато об'єктів
+	</string>
+	<string name="hud_render_textures_warning">
+		[HUD_DETAILS] містить дуже багато текстур
+	</string>
+	<string name="AgeYearsA">
+		[COUNT] рік
+	</string>
+	<string name="AgeYearsB">
+		[COUNT] років
+	</string>
+	<string name="AgeYearsC">
+		[COUNT] років
+	</string>
+	<string name="AgeMonthsA">
+		[COUNT] місяць
+	</string>
+	<string name="AgeMonthsB">
+		[COUNT] місяця
+	</string>
+	<string name="AgeMonthsC">
+		[COUNT] місяців
+	</string>
+	<string name="AgeWeeksA">
+		[COUNT] неділя
+	</string>
+	<string name="AgeWeeksB">
+		[COUNT] тижня
+	</string>
+	<string name="AgeWeeksC">
+		[COUNT] тижнів
+	</string>
+	<string name="AgeDaysA">
+		[COUNT] день
+	</string>
+	<string name="AgeDaysB">
+		[COUNT] дня
+	</string>
+	<string name="AgeDaysC">
+		[COUNT] днів
+	</string>
+	<string name="GroupMembersA">
+		[COUNT]
+	</string>
+	<string name="GroupMembersB">
+		[COUNT] користувача
+	</string>
+	<string name="GroupMembersC">
+		[COUNT] користувачів
+	</string>
+	<string name="AcctTypeResident">
+		Резидент
+	</string>
+	<string name="AcctTypeTrial">
+		Пробний
+	</string>
+	<string name="AcctTypeCharterMember">
+		Засновник
+	</string>
+	<string name="AcctTypeEmployee">
+		Співробітник Linden Lab
+	</string>
+	<string name="PaymentInfoUsed">
+		Платіжна інформація використовувалася
+	</string>
+	<string name="PaymentInfoOnFile">
+		Є платіжна інформація
+	</string>
+	<string name="NoPaymentInfoOnFile">
+		Немає платіжної інформації
+	</string>
+	<string name="AgeVerified">
+		Вік підтверджено
+	</string>
+	<string name="NotAgeVerified">
+		Вік не підтверджено
+	</string>
+	<string name="Center 2">
+		У центрі 2
+	</string>
+	<string name="Top Right">
+		Вгорі праворуч
+	</string>
+	<string name="Top">
+		Вгорі
+	</string>
+	<string name="Top Left">
+		Вгорі зліва
+	</string>
+	<string name="Center">
+		В центрі
+	</string>
+	<string name="Bottom Left">
+		Внизу зліва
+	</string>
+	<string name="Bottom">
+		Внизу
+	</string>
+	<string name="Bottom Right">
+		Внизу справа
+	</string>
+	<string name="CompileQueueDownloadedCompiling">
+		Завантажено, зараз компілюється
+	</string>
+	<string name="CompileQueueServiceUnavailable">
+		Сервіс компіляції скрипта недоступний
+	</string>
+	<string name="CompileQueueScriptNotFound">
+		Скрипт не знайдено на сервері.
+	</string>
+	<string name="CompileQueueProblemDownloading">
+		Проблема при завантаженні
+	</string>
+	<string name="CompileQueueInsufficientPermDownload">
+		Недостатньо прав для скачування скрипта.
+	</string>
+	<string name="CompileQueueInsufficientPermFor">
+		Недостатньо прав для
+	</string>
+	<string name="CompileQueueUnknownFailure">
+		Невідома помилка при завантаженні
+	</string>
+	<string name="CompileNoExperiencePerm">
+		Пропустіть сценарій [SCRIPT] у пригоді [EXPERIENCE].
+	</string>
+	<string name="CompileQueueTitle">
+		Прогрес перекомпіляції
+	</string>
+	<string name="CompileQueueStart">
+		перекомпиляция
+	</string>
+	<string name="CompileQueuePreprocessing">
+		Попередня обробка: [SCRIPT]
+	</string>
+	<string name="CompileQueuePreprocessingComplete">
+		Попередня обробка скрипта [SCRIPT] завершена
+	</string>
+	<string name="ResetQueueTitle">
+		Прогрес Скидання
+	</string>
+	<string name="ResetQueueStart">
+		скидання
+	</string>
+	<string name="RunQueueTitle">
+		Прогрес Запуску
+	</string>
+	<string name="RunQueueStart">
+		запустити
+	</string>
+	<string name="NotRunQueueTitle">
+		Прогрес Зупинки
+	</string>
+	<string name="NotRunQueueStart">
+		не запускається
+	</string>
+	<string name="DeleteQueueTitle">
+		Прогрес видалення
+	</string>
+	<string name="DeleteQueueStart">
+		Вилучення
+	</string>
+	<string name="Compiling">
+		Компіляція [NAME]
+	</string>
+	<string name="CompileSuccessful">
+		Компіляцію завершено успішно!
+	</string>
+	<string name="CompileSuccessfulSaving">
+		Компіляція завершена, збереження...
+	</string>
+	<string name="SaveComplete">
+		Збережено.
+	</string>
+	<string name="UploadFailed">
+		Помилка завантаження файлу: [REASON]
+	</string>
+	<string name="ObjectOutOfRange">
+		Скрипт (об'єкт поза досяжністю)
+	</string>
+	<string name="ScriptWasDeleted">
+		Скрипт (видалений з інвентарю)
+	</string>
+	<string name="GodToolsObjectOwnedBy">
+		Об'єкт [OBJECT] належить [OWNER]
+	</string>
+	<string name="GroupsNone">
+		ні
+	</string>
+	<string name="Group" value="(група)"/>
+	<string name="Unknown">
+		(Невідомо)
+	</string>
+	<string name="SummaryForTheWeek" value="Сумарно за цей тиждень, починаючи з "/>
+	<string name="NextStipendDay" value="Наступна стипендія "/>
+	<string name="GroupPlanningDate">
+		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc]
+	</string>
+	<string name="GroupIndividualShare" value="Група Часткова участь"/>
+	<string name="GroupColumn" value="Группа"/>
+	<string name="Balance">
+		Баланс
+	</string>
+	<string name="Credits">
+		Кредити
+	</string>
+	<string name="Debits">
+		Дебети
+	</string>
+	<string name="Total">
+		Разом
+	</string>
+	<string name="NoGroupDataFound">
+		Дані для групи не знайдені
+	</string>
+	<string name="AlreadyInGroup">
+		Ви вже у цій групі
+	</string>
+	<string name="IMParentEstate">
+		батьківський острів
+	</string>
+	<string name="IMMainland">
+		материк
+	</string>
+	<string name="IMTeen">
+		підлітковий
+	</string>
+	<string name="Anyone">
+		будь-який
+	</string>
+	<string name="RegionInfoError">
+		помилка
+	</string>
+	<string name="RegionInfoAllEstatesOwnedBy">
+		всі острови користувача [OWNER]
+	</string>
+	<string name="RegionInfoAllEstatesYouOwn">
+		всі острови у вашій власності
+	</string>
+	<string name="RegionInfoAllEstatesYouManage">
+		всі острови користувача [OWNER], якими ви керуєте
+	</string>
+	<string name="RegionInfoAllowedResidents">
+		Дозволені мешканці: ([ALLOWEDAGENTS], максимум [MAXACCESS])
+	</string>
+	<string name="RegionInfoAllowedGroups">
+		Дозволені групи: ([ALLOWEDGROUPS], максимум [MAXACCESS])
+	</string>
+	<string name="RegionInfoEstateManagers">
+		Менеджери острова: ([ESTATEMANAGERS], максимум [MAXMANAGERS])
+	</string>
+	<string name="RegionInfoBannedResidents">
+		Заблоковані мешканці: ([BANNEDAGENTS], максимум [MAXBANNED])
+	</string>
+	<string name="RegionInfoListTypeAllowedAgents">
+		Дозволені жителі
+	</string>
+	<string name="RegionInfoListTypeBannedAgents">
+		Заблоковані мешканці
+	</string>
+	<string name="RegionInfoAllEstates">
+		всі землеволодіння
+	</string>
+	<string name="RegionInfoManagedEstates">
+		керовані землеволодіння
+	</string>
+	<string name="RegionInfoThisEstate">
+		це землеволодіння
+	</string>
+	<string name="AndNMore">
+		та [EXTRA_COUNT] більше
+	</string>
+	<string name="ScriptLimitsParcelScriptMemory">
+		Пам'ять скриптів на ділянці
+	</string>
+	<string name="ScriptLimitsParcelsOwned">
+		Ділянок у списку: [PARCELS]
+	</string>
+	<string name="ScriptLimitsMemoryUsed">
+		Пам'яті використовується: [COUNT] kb з [MAX] kb; [AVAILABLE] kb доступно
+	</string>
+	<string name="ScriptLimitsMemoryUsedSimple">
+		Пам'яті використовується: [COUNT] kb
+	</string>
+	<string name="ScriptLimitsParcelScriptURLs">
+		URL адреси скриптів ділянки
+	</string>
+	<string name="ScriptLimitsURLsUsed">
+		URL-адрес використовується: [COUNT] з [MAX]; [AVAILABLE] доступно
+	</string>
+	<string name="ScriptLimitsURLsUsedSimple">
+		URL-адрес використовується: [COUNT]
+	</string>
+	<string name="ScriptLimitsRequestError">
+		Помилка отримання інформації
+	</string>
+	<string name="ScriptLimitsRequestNoParcelSelected">
+		Ділянка не обрана
+	</string>
+	<string name="ScriptLimitsRequestWrongRegion">
+		Помилка: Інформація про скрипти доступна лише в поточному регіоні
+	</string>
+	<string name="ScriptLimitsRequestWaiting">
+		Отримання інформації...
+	</string>
+	<string name="ScriptLimitsRequestDontOwnParcel">
+		У вас немає прав для дослідження даної ділянки
+	</string>
+	<string name="SITTING_ON">
+		Сидить на
+	</string>
+	<string name="ATTACH_CHEST">
+		Груди
+	</string>
+	<string name="ATTACH_HEAD">
+		Череп
+	</string>
+	<string name="ATTACH_LSHOULDER">
+		Ліва ключиця
+	</string>
+	<string name="ATTACH_RSHOULDER">
+		Права ключиця
+	</string>
+	<string name="ATTACH_LHAND">
+		Ліва кисть
+	</string>
+	<string name="ATTACH_RHAND">
+		Права кисть
+	</string>
+	<string name="ATTACH_LFOOT">
+		Ліва стопа
+	</string>
+	<string name="ATTACH_RFOOT">
+		Права стопа
+	</string>
+	<string name="ATTACH_BACK">
+		Хребет
+	</string>
+	<string name="ATTACH_PELVIS">
+		Таз
+	</string>
+	<string name="ATTACH_MOUTH">
+		Рот
+	</string>
+	<string name="ATTACH_CHIN">
+		Підборіддя
+	</string>
+	<string name="ATTACH_LEAR">
+		Ліве вухо
+	</string>
+	<string name="ATTACH_REAR">
+		Праве вухо
+	</string>
+	<string name="ATTACH_LEYE">
+		Ліве око
+	</string>
+	<string name="ATTACH_REYE">
+		Праве око
+	</string>
+	<string name="ATTACH_NOSE">
+		Ніс
+	</string>
+	<string name="ATTACH_RUARM">
+		Праве плече
+	</string>
+	<string name="ATTACH_RLARM">
+		Праве передпліччя
+	</string>
+	<string name="ATTACH_LUARM">
+		Ліве плече
+	</string>
+	<string name="ATTACH_LLARM">
+		Ліве передпліччя
+	</string>
+	<string name="ATTACH_RHIP">
+		Праве стегно
+	</string>
+	<string name="ATTACH_RULEG">
+		Права стегнова кістка
+	</string>
+	<string name="ATTACH_RLLEG">
+		Права гомілка
+	</string>
+	<string name="ATTACH_LHIP">
+		Ліве стегно
+	</string>
+	<string name="ATTACH_LULEG">
+		Ліва стегнова кістка
+	</string>
+	<string name="ATTACH_LLLEG">
+		Ліва гомілка
+	</string>
+	<string name="ATTACH_BELLY">
+		життя
+	</string>
+	<string name="ATTACH_LEFT_PEC">
+		Ліві груди
+	</string>
+	<string name="ATTACH_RIGHT_PEC">
+		Праві груди
+	</string>
+	<string name="ATTACH_HUD_CENTER_2">
+		Дисплей керування в центрі 2
+	</string>
+	<string name="ATTACH_HUD_TOP_RIGHT">
+		Дисплей керування нагорі праворуч
+	</string>
+	<string name="ATTACH_HUD_TOP_CENTER">
+		Дисплей керування нагорі в центрі
+	</string>
+	<string name="ATTACH_HUD_TOP_LEFT">
+		Дисплей керування нагорі зліва
+	</string>
+	<string name="ATTACH_HUD_CENTER_1">
+		Дисплей керування в центрі
+	</string>
+	<string name="ATTACH_HUD_BOTTOM_LEFT">
+		Дисплей керування внизу зліва
+	</string>
+	<string name="ATTACH_HUD_BOTTOM">
+		Дисплей керування внизу
+	</string>
+	<string name="ATTACH_HUD_BOTTOM_RIGHT">
+		Дисплей керування внизу праворуч
+	</string>
+	<string name="ATTACH_NECK">
+		Шия
+	</string>
+	<string name="ATTACH_AVATAR_CENTER">
+		Центр аватара
+	</string>
+	<string name="ATTACH_LHAND_RING1">
+		Лівий безіменний палець
+	</string>
+	<string name="ATTACH_RHAND_RING1">
+		Правий безіменний палець
+	</string>
+	<string name="ATTACH_TAIL_BASE">
+		Основа хвоста
+	</string>
+	<string name="ATTACH_TAIL_TIP">
+		Кінчик хвоста
+	</string>
+	<string name="ATTACH_LWING">
+		Ліве крило
+	</string>
+	<string name="ATTACH_RWING">
+		Праве крило
+	</string>
+	<string name="ATTACH_FACE_JAW">
+		Впасти
+	</string>
+	<string name="ATTACH_FACE_LEAR">
+		Альт. ліве вухо
+	</string>
+	<string name="ATTACH_FACE_REAR">
+		Альт. праве вухо
+	</string>
+	<string name="ATTACH_FACE_LEYE">
+		Альт. ліве око
+	</string>
+	<string name="ATTACH_FACE_REYE">
+		Альт. праве око
+	</string>
+	<string name="ATTACH_FACE_TONGUE">
+		Мова
+	</string>
+	<string name="ATTACH_GROIN">
+		Запах
+	</string>
+	<string name="ATTACH_HIND_LFOOT">
+		Ліва задня нога
+	</string>
+	<string name="ATTACH_HIND_RFOOT">
+		Права задня нога
+	</string>
+	<string name="CursorPos">
+		Рядок [LINE], Стовпець [COLUMN]
+	</string>
+	<string name="PanelDirCountFound">
+		[COUNT] знайдено
+	</string>
+	<string name="PanelDirTimeStr">
+		[hour,datetime,slt]:[min,datetime,slt]
+	</string>
+	<string name="PanelDirEventsDateText">
+		[day,datetime,slt].[mthnum,datetime,slt]
+	</string>
+	<string name="PanelContentsTooltip">
+		Вміст об'єкту
+	</string>
+	<string name="PanelContentsNewScript">
+		Новий скрипт
+	</string>
+	<string name="DoNotDisturbModeResponseDefault">
+		Цей мешканець увімкнув режим 'Недоступний'. Він побачить ваше повідомлення пізніше
+	</string>
+	<string name="AutoResponseModeDefault">
+		Цей мешканець увімкнув режим 'Автовідповідач'. Він просить не турбувати. Ваші повідомлення будуть, як і раніше, проявляється в його панелі ОП.
+	</string>
+	<string name="AutoResponseModeNonFriendsDefault">
+		Цей мешканець увімкнув режим 'Автовідповідач'. Він просить не турбувати. Ваші повідомлення будуть, як і раніше, проявляється в його панелі ОП.
+	</string>
+	<string name="RejectTeleportOffersResponseDefault">
+		Цей житель увімкнув режим 'Відхиляти всі пропозиції та запити телепортації'. Ви можете надіслати йому Особисте повідомлення.
+	</string>
+	<string name="RejectFriendshipRequestsResponseDefault">
+		Цей мешканець увімкнув режим 'Відхиляти всі запити дружби'. Ви можете надіслати йому Особисте повідомлення.
+	</string>
+	<string name="MutedAvatarsResponseDefault">
+		Цей мешканець заблокував вас для надсилання йому будь-яких повідомлень.
+	</string>
+	<string name="AwayAvatarResponseDefault">
+		Цей мешканець тимчасово відійшов. Ваші повідомлення будуть, як і раніше, проявляється в його панелі Особистих повідомлень для подальшого перегляду.
+	</string>
+	<string name="MuteByName">
+		(По імені)
+	</string>
+	<string name="MuteAgent">
+		(Для мешканця)
+	</string>
+	<string name="MuteObject">
+		(Для об'єкта)
+	</string>
+	<string name="MuteGroup">
+		(Для групи)
+	</string>
+	<string name="MuteExternal">
+		(Зовнішній)
+	</string>
+	<string name="RegionNoCovenant">
+		Для цього острова немає угоди
+	</string>
+	<string name="RegionNoCovenantOtherOwner">
+		Немає угоди для острова. Земля цьому острові продається його власником, а чи не компанією Linden Lab. Щоб дізнатися подробиці продажу, зверніться до землевласника.
+	</string>
+	<string name="covenant_last_modified" value="Остання зміна: "/><!-- use value="" to keep the trailing space -->
+	<string name="none_text" value=" (нет) "/>
+	<string name="never_text" value=" (никогда) "/>
+	<string name="GroupOwned">
+		Власність групи
+	</string>
+	<string name="Public">
+		Загальна власність
+	</string>
+	<string name="LocalSettings">
+		Локальні установки
+	</string>
+	<string name="RegionSettings">
+		Встановлення регіону
+	</string>
+	<string name="NoEnvironmentSettings">
+		Цей регіон не підтримує параметри середовища.
+	</string>
+
+	<string name="EnvironmentSun">Солнце</string>
+	<string name="EnvironmentMoon">Луна</string>
+	<string name="EnvironmentBloom">Блум</string>
+	<string name="EnvironmentCloudNoise">Хмарний шум</string>
+	<string name="EnvironmentNormalMap">Звичайна карта</string>
+	<string name="EnvironmentTransparent">Прозорий</string>
+
+	<string name="ClassifiedClicksTxt">
+		Натискання: [TELEPORT] телепортація, [MAP] мапа, [PROFILE] профіль
+	</string>
+	<string name="ClassifiedUpdateAfterPublish">
+		(буде оновлено після публікації)
+	</string>
+	<string name="NoPicksClassifiedsText">
+		Ви ще не створили добірку чи оголошення. Натисніть кнопку 'Плюс', яка знаходиться нижче, щоб створити добірку або оголошення.
+	</string>
+	<string name="NoPicksText">
+		Ви не зробили жодної збірки. Натисніть кнопку Створити, щоб зробити вибірку.
+	</string>
+	<string name="NoClassifiedsText">
+		Ви не зробили жодної реклами. Натисніть кнопку Створити, щоб зробити рекламу.
+	</string>
+	<string name="NoAvatarPicksClassifiedsText">
+		Користувач не має добірок або оголошень
+	</string>
+	<string name="NoAvatarPicksText">
+		Користувач не має добірки
+	</string>
+	<string name="NoAvatarClassifiedsText">
+		У користувача немає оголошень
+	</string>
+	<string name="PicksClassifiedsLoadingText">
+		Завантаження...
+	</string>
+	<string name="NoPicksText">
+		Ви ще не створили добірку.
+	</string>
+	<string name="NoAvatarPicksText">
+		Користувач не має добірок
+	</string>
+	<string name="NoClassifiedsText">
+		У вас немає жодного оголошення. Натисніть кнопку 'Плюс', яка знаходиться нижче, щоб створити оголошення.
+	</string>
+	<string name="NoAvatarClassifiedsText">
+		У користувача немає оголошень
+	</string>
+	<string name="MultiPreviewTitle">
+		Попередній перегляд
+	</string>
+	<string name="MultiPropertiesTitle">
+		Властивості
+	</string>
+	<string name="InvOfferAnObjectNamed">
+		Об'єкт з ім'ям
+	</string>
+	<string name="InvOfferOwnedByGroup">
+		належить групі
+	</string>
+	<string name="InvOfferOwnedByUnknownGroup">
+		належить невідомій групі
+	</string>
+	<string name="InvOfferOwnedBy">
+		належить
+	</string>
+	<string name="InvOfferOwnedByUnknownUser">
+		належить невідомому користувачеві
+	</string>
+	<string name="InvOfferGaveYou">
+		дав вам
+	</string>
+	<string name="InvOfferYouDecline">
+		Ви відхилили
+	</string>
+	<string name="InvOfferDecline">
+		Ви відхилили [DESC] від [NAME].
+	</string>
+	<string name="InvOfferFrom">
+		від
+	</string>
+	<string name="InvOfferAutoAcceptObject">
+		Об'єкт [OBJECT_NAME] дав тобі це [OBJECT_TYPE]: [DESC]
+	</string>
+	<string name="InvOfferAutoAcceptUser">
+		[USER_NAME] дав тобі це [OBJECT_TYPE]: [DESC]
+	</string>
+	<string name="GroupMoneyTotal">
+		Разом
+	</string>
+	<string name="GroupMoneyBought">
+		куплено
+	</string>
+	<string name="GroupMoneyPaidYou">
+		сплачено вам
+	</string>
+	<string name="GroupMoneyPaidInto">
+		сплачено в
+	</string>
+	<string name="GroupMoneyBoughtPassTo">
+		куплено перепустку в
+	</string>
+	<string name="GroupMoneyPaidFeeForEvent">
+		сплачено за подію
+	</string>
+	<string name="GroupMoneyPaidPrizeForEvent">
+		виплачено призових за подію
+	</string>
+	<string name="GroupMoneyBalance">
+		Баланс
+	</string>
+	<string name="GroupMoneyCredits">
+		Кредити
+	</string>
+	<string name="GroupMoneyDebits">
+		Дебети
+	</string>
+	<string name="GroupMoneyDate">
+		[weekday,datetime,utc], [day,datetime,utc] [mth,datetime,utc] [рік,datetime,utc]
+	</string>
+	<string name="AcquiredItems">
+		Придбані товари
+	</string>
+	<string name="Cancel">
+		Скасувати
+	</string>
+	<string name="UploadingCosts">
+		Завантаження [NAME] коштує L$ [AMOUNT]
+	</string>
+	<string name="UnknownFileExtension">
+		Невідоме розширення файлу .%s
+Використовуйте .wav, .tga, .bmp, .jpg, .jpeg, або .anim
+	</string>
+	<string name="MuteObject2">
+		Заблокувати
+	</string>
+	<string name="MuteAvatar">
+		Заблокувати
+	</string>
+	<string name="UnmuteObject">
+		Розблокувати
+	</string>
+	<string name="UnmuteAvatar">
+		Розблокувати
+	</string>
+	<string name="AddLandmarkNavBarMenu">
+		Додати в закладки...
+	</string>
+	<string name="EditLandmarkNavBarMenu">
+		Редагувати закладку...
+	</string>
+
+	<string name="FileSaved">
+		Файл збережено
+	</string>
+	<string name="Receiving">
+		Отримання
+	</string>
+	<string name="AM">
+		до полудня
+	</string>
+	<string name="PM">
+		по полудню
+	</string>
+	<string name="PST">
+		Тихоокеанський час
+	</string>
+	<string name="PDT">
+		Літній тихоокеанський час
+	</string>
+	<string name="Direction_Forward">
+		Вперед
+	</string>
+	<string name="Direction_Left">
+		Ліворуч
+	</string>
+	<string name="Direction_Right">
+		Праворуч
+	</string>
+	<string name="Direction_Back">
+		назад
+	</string>
+	<string name="Direction_North">
+		північ
+	</string>
+	<string name="Direction_South">
+		Південь
+	</string>
+	<string name="Direction_West">
+		Захід
+	</string>
+	<string name="Direction_East">
+		Схід
+	</string>
+	<string name="Direction_Up">
+		Вгору
+	</string>
+	<string name="Direction_Down">
+		вниз
+	</string>
+	<string name="Any Category">
+		Усі категорії
+	</string>
+	<string name="Shopping">
+		Купівля товарів
+	</string>
+	<string name="Land Rental">
+		Аренда землі
+	</string>
+	<string name="Property Rental">
+		Оренда нерухомості
+	</string>
+	<string name="Special Attraction">
+		Особлива подія
+	</string>
+	<string name="New Products">
+		Нові продукти
+	</string>
+	<string name="Employment">
+		Зайнятість
+	</string>
+	<string name="Wanted">
+		Потрібні
+	</string>
+	<string name="Service">
+		Послуги
+	</string>
+	<string name="Personal">
+		Особисте
+	</string>
+	<string name="None">
+		Ні
+	</string>
+	<string name="Linden Location">
+		Розташування Липи
+	</string>
+	<string name="Adult">
+		Для дорослих
+	</string>
+	<string name="Arts and Culture">
+		Мистецтво та Культура
+	</string>
+	<string name="Business">
+		Бізнес
+	</string>
+	<string name="Educational">
+		Навчання
+	</string>
+	<string name="Gaming">
+		Ігри
+	</string>
+	<string name="Hangout">
+		Тусовки
+	</string>
+	<string name="Newcomer Friendly">
+		Для новаків
+	</string>
+	<string name="Parks and Nature">
+		Парки та Природа
+	</string>
+	<string name="Residential">
+		Проживання
+	</string>
+	<string name="Stage">
+		Естрада
+	</string>
+	<string name="Other">
+		інше
+	</string>
+	<string name="Rental">
+		Оренда
+	</string>
+	<string name="Any">
+		Усе
+	</string>
+	<string name="You">
+		Ви
+	</string>
+
+	<string name="Multiple Media">
+		Декілька медіа
+	</string>
+	<string name="Play Media">
+		Відтворення/Пауза медіа
+	</string>
+	<string name="StreamtitleNowPlaying">
+		Зараз грає:
+	</string>
+	<string name="IntelDriverPage">
+		http://www.intel.com/p/ru_RU/support/detect/graphics
+	</string>
+	<string name="NvidiaDriverPage">
+		http://www.nvidia.com/Download/index.aspx?lang=ru
+	</string>
+	<string name="AMDDriverPage">
+		http://support.amd.com/ru/Pages/AMDSupportHub.aspx
+	</string>
+	<string name="MBCmdLineError">
+		При аналізі командного рядка було виявлено помилку.
+Будь ласка, прочитайте: http://wiki.secondlife.com/wiki/Client_parameters
+Помилка:
+	</string>
+	<string name="MBCmdLineUsg">
+		Використання командного рядка [APP_NAME]:
+	</string>
+	<string name="MBUnableToAccessFile">
+		[APP_NAME] не може отримати доступ до потрібного файлу.
+
+Можливо, виконується кілька копій або в системі неправильно відкрито файл.
+Якщо це повідомлення буде показано далі, перезавантажте комп'ютер і повторіть спробу.
+Якщо це не допоможе, можливо, вам доведеться повністю видалити [APP_NAME] і перевстановити його.
+	</string>
+	<string name="MBFatalError">
+		Непереборна помилка
+	</string>
+	<string name="MBApplicationError">
+		Помилка програми - не панікуйте
+	</string>
+	<string name="MBApplicationErrorDetails">
+		Вибачте, але [APP_NAME] вийшов з ладу і має бути закритим. Якщо ви спостерігаєте цю проблему неодноразово, будь ласка, зв'яжіться з нашою службою підтримки та надішліть таке повідомлення:
+
+[ERROR_DETAILS]
+	</string>
+	<string name="MBRequiresAltiVec">
+		 Для роботи [APP_NAME] потрібний процесор з підтримкою AltiVec (версії G4 або пізнішої).
+	</string>
+	<string name="MBAlreadyRunning">
+		[APP_NAME] вже запущено.
+Перевірте піктограму програми на панелі завдань.
+Якщо це повідомлення продовжуватиме відображатися, перезавантажте комп'ютер.
+	</string>
+	<string name="MBFrozenCrashed">
+		[APP_NAME], здається, завис або стався збій під час попереднього запуску.
+Надіслати звіт про збій?
+	</string>
+	<string name="MBAlert">
+		повідомлення
+	</string>
+	<string name="MBNoDirectX">
+		[APP_NAME] не може виявити DirectX 9.0b або пізніших версій.
+У [APP_NAME] використовується DirectX для перевірки обладнання та виявлення застарілих драйверів, через які може знизитися стабільність роботи та швидкодія, а також виникнути збої. Рекомендовано встановити DirectX 9.0b, хоча [APP_NAME] працює і без цього компонента.
+
+Ви хочете продовжити?
+	</string>
+	<string name="MBWarning">
+		УВАГА
+	</string>
+	<string name="MBNoAutoUpdate">
+		В ОС Linux автоматичне оновлення ще не реалізовано.
+Завантажте нову версію на сайті www.secondlife.com.
+	</string>
+	<string name="MBRegClassFailed">
+		Помилка RegisterClass
+	</string>
+	<string name="MBError">
+		Помилка
+	</string>
+	<string name="MBFullScreenErr">
+		Неможливо запустити в повноекранному режимі на [WIDTH] x [HEIGHT].
+Запущено у вікні.
+	</string>
+	<string name="MBDestroyWinFailed">
+		Помилка завершення роботи при видаленні вікна (збій функції DestroyWindow())
+	</string>
+	<string name="MBShutdownErr">
+		Помилка завершення роботи
+	</string>
+	<string name="MBDevContextErr">
+		Неможливо створити контекст пристрою GL
+	</string>
+	<string name="MBPixelFmtErr">
+		Не вдається знайти відповідний формат пікселів
+	</string>
+	<string name="MBPixelFmtDescErr">
+		Неможливо отримати опис формату пікселів
+	</string>
+	<string name="MBTrueColorWindow">
+		Для запуску [APP_NAME] потрібно True Color (32-біт).
+Будь ласка, зайдіть у налаштування монітора комп'ютера та встановити кольоровий режим на 32-біт.
+	</string>
+	<string name="MBalpha">
+		Неможливо запустити [APP_NAME] через відсутність доступу до 8-бітового альфа-каналу. Зазвичай ця проблема виникає через неполадки драйвера відеокарти.
+Встановіть нові драйвери відеокарти.
+Також встановіть для монітора 32-бітовий режим True Color (Панель керування &gt; Екран &gt; Параметри).
+Якщо це повідомлення продовжує відображатися, зверніться до сайту [SUPPORT_SITE].
+	</string>
+	<string name="MBPixelFmtSetErr">
+		Не вдається встановити формат пікселів
+	</string>
+	<string name="MBGLContextErr">
+		Неможливо створити контекст візуалізації GL
+	</string>
+	<string name="MBGLContextActErr">
+		Неможливо активувати контекст візуалізації GL
+	</string>
+	<string name="MBVideoDrvErr">
+		Неможливо запустити програму [APP_NAME], оскільки драйвери відеокарти неправильно встановлені, застаріли або призначені для обладнання, яке не підтримується. Встановіть або повторно інсталюйте останні драйвери відеокарти.
+Якщо це повідомлення продовжує відображатися, зверніться до сайту [SUPPORT_SITE].
+	</string>
+	<string name="5 O'Clock Shadow">
+		5 годинна тінь
+	</string>
+	<string name="All White">
+		Повністю білі
+	</string>
+	<string name="Anime Eyes">
+		Очі як в анімі
+	</string>
+	<string name="Arced">
+		Дугою
+	</string>
+	<string name="Arm Length">
+		Довжина рук
+	</string>
+	<string name="Attached">
+		Додається
+	</string>
+	<string name="Attached Earlobes">
+		Прирослі мочки
+	</string>
+	<string name="Back Fringe">
+		Потилиця
+	</string>
+	<string name="Baggy">
+		З мішками
+	</string>
+	<string name="Bangs">
+		Чубчик
+	</string>
+	<string name="Beady Eyes">
+		Намистинки
+	</string>
+	<string name="Belly Size">
+		В натуральну величину
+	</string>
+	<string name="Big">
+		Великий
+	</string>
+	<string name="Big Butt">
+		Великий зад
+	</string>
+	<string name="Big Hair Back">
+		Пишне волосся: ззаду
+	</string>
+	<string name="Big Hair Front">
+		Пишне волосся: спереду
+	</string>
+	<string name="Big Hair Top">
+		Пишне волосся: зверху
+	</string>
+	<string name="Big Head">
+		Велика голова
+	</string>
+	<string name="Big Pectorals">
+		Випуклі груди
+	</string>
+	<string name="Big Spikes">
+		Великі «шипи»
+	</string>
+	<string name="Black">
+		Чорний
+	</string>
+	<string name="Blonde">
+		Світлий
+	</string>
+	<string name="Blonde Hair">
+		Світле волосся
+	</string>
+	<string name="Blush">
+		Рум'яна
+	</string>
+	<string name="Blush Color">
+		Колір рум'ян
+	</string>
+	<string name="Blush Opacity">
+		Прозорість рум'ян
+	</string>
+	<string name="Body Definition">
+		Статура
+	</string>
+	<string name="Body Fat">
+		Жировий прошарок
+	</string>
+	<string name="Body Freckles">
+		Ластовиння
+	</string>
+	<string name="Body Thick">
+		Повне тіло
+	</string>
+	<string name="Body Thickness">
+		Повнота
+	</string>
+	<string name="Body Thin">
+		Худне тіло
+	</string>
+	<string name="Bow Legged">
+		Ноги колесом
+	</string>
+	<string name="Breast Buoyancy">
+		Висота грудей
+	</string>
+	<string name="Breast Cleavage">
+		Ложбинка между грудей
+	</string>
+	<string name="Breast Size">
+		Розмір грудей
+	</string>
+	<string name="Bridge Width">
+		Ширина перенісся
+	</string>
+	<string name="Broad">
+		Широка
+	</string>
+	<string name="Brow Size">
+		Розмір надбрівних дуг
+	</string>
+	<string name="Bug Eyes">
+		Витрішені очі
+	</string>
+	<string name="Bugged Eyes">
+		Витрішені очі
+	</string>
+	<string name="Bulbous">
+		Картоплею
+	</string>
+	<string name="Bulbous Nose">
+		Ніс картоплею
+	</string>
+	<string name="Breast Physics Mass">
+		Маса грудей
+	</string>
+	<string name="Breast Physics Smoothing">
+		Гладкість грудей
+	</string>
+	<string name="Breast Physics Gravity">
+		Обвислість грудей
+	</string>
+	<string name="Breast Physics Drag">
+		Динаміка грудей
+	</string>
+	<string name="Breast Physics InOut Max Effect">
+		Макс. ефект
+	</string>
+	<string name="Breast Physics InOut Spring">
+		Пружність
+	</string>
+	<string name="Breast Physics InOut Gain">
+		Відгук
+	</string>
+	<string name="Breast Physics InOut Damping">
+		Згасання
+	</string>
+	<string name="Breast Physics UpDown Max Effect">
+		Макс. ефект
+	</string>
+	<string name="Breast Physics UpDown Spring">
+		Пружність
+	</string>
+	<string name="Breast Physics UpDown Gain">
+		Відгук
+	</string>
+	<string name="Breast Physics UpDown Damping">
+		Згасання
+	</string>
+	<string name="Breast Physics LeftRight Max Effect">
+		Макс. ефект
+	</string>
+	<string name="Breast Physics LeftRight Spring">
+		Пружність
+	</string>
+	<string name="Breast Physics LeftRight Gain">
+		Відгук
+	</string>
+	<string name="Breast Physics LeftRight Damping">
+		Згасання
+	</string>
+	<string name="Belly Physics Mass">
+		Маса живота
+	</string>
+	<string name="Belly Physics Smoothing">
+		Гладкість живота
+	</string>
+	<string name="Belly Physics Gravity">
+		Обвислість живота
+	</string>
+	<string name="Belly Physics Drag">
+		Інертність живота
+	</string>
+	<string name="Belly Physics UpDown Max Effect">
+		Макс. ефект
+	</string>
+	<string name="Belly Physics UpDown Spring">
+		Пружність
+	</string>
+	<string name="Belly Physics UpDown Gain">
+		Відгук
+	</string>
+	<string name="Belly Physics UpDown Damping">
+		Згасання
+	</string>
+	<string name="Butt Physics Mass">
+		У масі
+	</string>
+	<string name="Butt Physics Smoothing">
+		Гладкість заду
+	</string>
+	<string name="Butt Physics Gravity">
+		Обвислість заду
+	</string>
+	<string name="Butt Physics Drag">
+		Інертність заду
+	</string>
+	<string name="Butt Physics UpDown Max Effect">
+		Макс. ефект
+	</string>
+	<string name="Butt Physics UpDown Spring">
+		Пружність
+	</string>
+	<string name="Butt Physics UpDown Gain">
+		Відгук
+	</string>
+	<string name="Butt Physics UpDown Damping">
+		Згасання
+	</string>
+	<string name="Butt Physics LeftRight Max Effect">
+		Макс. ефект
+	</string>
+	<string name="Butt Physics LeftRight Spring">
+		Пружність
+	</string>
+	<string name="Butt Physics LeftRight Gain">
+		Відгук
+	</string>
+	<string name="Butt Physics LeftRight Damping">
+		Згасання
+	</string>
+	<string name="Bushy Eyebrows">
+		Кущисті брови
+	</string>
+	<string name="Bushy Hair">
+		Пишні
+	</string>
+	<string name="Butt Size">
+		Розмір спинки
+	</string>
+	<string name="Butt Gravity">
+		Обвислість заду
+	</string>
+	<string name="bustle skirt">
+		Турнір
+	</string>
+	<string name="no bustle">
+		Без турнюру
+	</string>
+	<string name="more bustle">
+		Великий турнюр
+	</string>
+	<string name="Chaplin">
+		'Чарлі Чаплін'
+	</string>
+	<string name="Cheek Bones">
+		Вилиці
+	</string>
+	<string name="Chest Size">
+		Розмір грудної клітки
+	</string>
+	<string name="Chin Angle">
+		Кут підборіддя
+	</string>
+	<string name="Chin Cleft">
+		Ямка на підборідді
+	</string>
+	<string name="Chin Curtains">
+		Шкіперська борідка
+	</string>
+	<string name="Chin Depth">
+		Товщина підборіддя
+	</string>
+	<string name="Chin Heavy">
+		Потужне підборіддя
+	</string>
+	<string name="Chin In">
+		Підборіддя всередину
+	</string>
+	<string name="Chin Out">
+		Підборіддя назовні
+	</string>
+	<string name="Chin-Neck">
+		Перехід від підборіддя до шиї
+	</string>
+	<string name="Clear">
+		Чистий
+	</string>
+	<string name="Cleft">
+		Яма
+	</string>
+	<string name="Close Set Eyes">
+		Близько посаджені
+	</string>
+	<string name="Closed">
+		Закрито
+	</string>
+	<string name="Closed Back">
+		Закрито ззаду
+	</string>
+	<string name="Closed Front">
+		Закрито спереду
+	</string>
+	<string name="Closed Left">
+		Закрито зліва
+	</string>
+	<string name="Closed Right">
+		Закрито праворуч
+	</string>
+	<string name="Coin Purse">
+		Гаманець для дрібниці
+	</string>
+	<string name="Collar Back">
+		Виріз ззаду
+	</string>
+	<string name="Collar Front">
+		Виріз спереду
+	</string>
+	<string name="Corner Down">
+		Кути опущені
+	</string>
+	<string name="Corner Up">
+		Куточки піднято
+	</string>
+	<string name="Creased">
+		Зім'ятий
+	</string>
+	<string name="Crooked Nose">
+		Скривлений ніс
+	</string>
+	<string name="Cuff Flare">
+		Манжети
+	</string>
+	<string name="Dark">
+		Темний
+	</string>
+	<string name="Dark Green">
+		Темно-зелений
+	</string>
+	<string name="Darker">
+		Темніше
+	</string>
+	<string name="Deep">
+		Глибоко
+	</string>
+	<string name="Default Heels">
+		Стандартні підбори
+	</string>
+	<string name="Dense">
+		Густі
+	</string>
+	<string name="Double Chin">
+		Подвійне підборіддя
+	</string>
+	<string name="Downturned">
+		вниз
+	</string>
+	<string name="Duffle Bag">
+		Більше
+	</string>
+	<string name="Ear Angle">
+		Відстовбурченість вух
+	</string>
+	<string name="Ear Size">
+		Розмір вух
+	</string>
+	<string name="Ear Tips">
+		Кінчики вух
+	</string>
+	<string name="Egg Head">
+		Яйцеголовість
+	</string>
+	<string name="Eye Bags">
+		Мішки під очима
+	</string>
+	<string name="Eye Color">
+		Колір очей
+	</string>
+	<string name="Eye Depth">
+		Глибина очей
+	</string>
+	<string name="Eye Lightness">
+		Світлість очей
+	</string>
+	<string name="Eye Opening">
+		Відкритість очей
+	</string>
+	<string name="Eye Pop">
+		Витріщити око
+	</string>
+	<string name="Eye Size">
+		Розмір очей
+	</string>
+	<string name="Eye Spacing">
+		Відстань між очима
+	</string>
+	<string name="Eyebrow Arc">
+		Лінія брів
+	</string>
+	<string name="Eyebrow Density">
+		Густота бровей
+	</string>
+	<string name="Eyebrow Height">
+		Висота брів
+	</string>
+	<string name="Eyebrow Points">
+		Кінці брів
+	</string>
+	<string name="Eyebrow Size">
+		Розмір брів
+	</string>
+	<string name="Eyelash Length">
+		Довжина вій
+	</string>
+	<string name="Eyeliner">
+		Підводка
+	</string>
+	<string name="Eyeliner Color">
+		Колір підводки
+	</string>
+	<string name="Eyes Bugged">
+		Витрішені очі
+	</string>
+	<string name="Face Shear">
+		Перекіс обличчя
+	</string>
+	<string name="Facial Definition">
+		Риси обличчя
+	</string>
+	<string name="Far Set Eyes">
+		Широко розставлені очі
+	</string>
+	<string name="Fat Lips">
+		Товсті губи
+	</string>
+	<string name="Female">
+		Жінка
+	</string>
+	<string name="Fingerless">
+		Без пальців
+	</string>
+	<string name="Fingers">
+		З пальцями
+	</string>
+	<string name="Flared Cuffs">
+		З манжетамі
+	</string>
+	<string name="Flat">
+		Плоскі
+	</string>
+	<string name="Flat Butt">
+		Плоский зад
+	</string>
+	<string name="Flat Head">
+		Плоска голова
+	</string>
+	<string name="Flat Toe">
+		Плоский носок
+	</string>
+	<string name="Foot Size">
+		Розмір ступні
+	</string>
+	<string name="Forehead Angle">
+		Нахил чола
+	</string>
+	<string name="Forehead Heavy">
+		Потужний лоб
+	</string>
+	<string name="Freckles">
+		Ластовиння
+	</string>
+	<string name="Front Fringe">
+		Чубчик спереду
+	</string>
+	<string name="Full Back">
+		Повністю тому
+	</string>
+	<string name="Full Eyeliner">
+		Підведення повністю
+	</string>
+	<string name="Full Front">
+		Цілком наперед
+	</string>
+	<string name="Full Hair Sides">
+		Волосся з боків
+	</string>
+	<string name="Full Sides">
+		З боків
+	</string>
+	<string name="Glossy">
+		Блискучі
+	</string>
+	<string name="Glove Fingers">
+		Пальці рукавичок
+	</string>
+	<string name="Glove Length">
+		Довжина рукавичок
+	</string>
+	<string name="Hair">
+		Волосся
+	</string>
+	<string name="Hair Back">
+		Волосся: ззаду
+	</string>
+	<string name="Hair Front">
+		Волосся: спереду
+	</string>
+	<string name="Hair Sides">
+		Волосся: з боків
+	</string>
+	<string name="Hair Sweep">
+		Волосся на очі
+	</string>
+	<string name="Hair Thickess">
+		Товщина волосся
+	</string>
+	<string name="Hair Thickess">
+		Товщина волосся
+	</string>
+	<string name="Hair Tilt">
+		гребінець
+	</string>
+	<string name="Hair Tilted Left">
+		Зачіс назад
+	</string>
+	<string name="Hair Tilted Right">
+		Зачес вправо
+	</string>
+	<string name="Hair Volume">
+		Волосся: об'єм
+	</string>
+	<string name="Hand Size">
+		Розмір кісти
+	</string>
+	<string name="Handlebars">
+		Довгі вуса
+	</string>
+	<string name="Head Length">
+		Довжина голови
+	</string>
+	<string name="Head Shape">
+		Форма голови
+	</string>
+	<string name="Head Size">
+		Розмір голови
+	</string>
+	<string name="Head Stretch">
+		Витягнутість голови
+	</string>
+	<string name="Heel Height">
+		Висота підбора
+	</string>
+	<string name="Heel Shape">
+		Носіть форму
+	</string>
+	<string name="Height">
+		Зріст
+	</string>
+	<string name="High">
+		Високі
+	</string>
+	<string name="High Heels">
+		Високий каблук
+	</string>
+	<string name="High Jaw">
+		Щелепа високо
+	</string>
+	<string name="High Platforms">
+		Висока платформа
+	</string>
+	<string name="High and Tight">
+		Високий та щільний
+	</string>
+	<string name="Higher">
+		Вище
+	</string>
+	<string name="Hip Length">
+		Довжина стегон
+	</string>
+	<string name="Hip Width">
+		Ширина стегон
+	</string>
+	<string name="Hover">
+		Підняти
+	</string>
+	<string name="In">
+		Всередину
+	</string>
+	<string name="In Shdw Color">
+		Колір внутрішніх тіней
+	</string>
+	<string name="In Shdw Opacity">
+		Прозорість внутр. тіней
+	</string>
+	<string name="Inner Eye Corner">
+		Внутрішні куточки очей
+	</string>
+	<string name="Inner Eye Shadow">
+		Тіні на внутрішніх куточках
+	</string>
+	<string name="Inner Shadow">
+		Внутренние тени
+	</string>
+	<string name="Jacket Length">
+		Довжина куртки
+	</string>
+	<string name="Jacket Wrinkles">
+		М'ята куртка
+	</string>
+	<string name="Jaw Angle">
+		Кут щелепи
+	</string>
+	<string name="Jaw Jut">
+		Виступ щелепи
+	</string>
+	<string name="Jaw Shape">
+		Форма щелепи
+	</string>
+	<string name="Join">
+		Прикріпити
+	</string>
+	<string name="Jowls">
+		Щоки
+	</string>
+	<string name="Knee Angle">
+		Кут колін
+	</string>
+	<string name="Knock Kneed">
+		Колченогі
+	</string>
+	<string name="Large">
+		Більше
+	</string>
+	<string name="Large Hands">
+		Великі пензлі
+	</string>
+	<string name="Left Part">
+		Лівий проділ
+	</string>
+	<string name="Leg Length">
+		Довжина ніг
+	</string>
+	<string name="Leg Muscles">
+		М'язи на ногах
+	</string>
+	<string name="Less">
+		Менше
+	</string>
+	<string name="Less Body Fat">
+		Менше жиру
+	</string>
+	<string name="Less Curtains">
+		Менше борода
+	</string>
+	<string name="Less Freckles">
+		Менше ластовиння
+	</string>
+	<string name="Less Full">
+		Менш повне
+	</string>
+	<string name="Less Gravity">
+		Менше тяжіння
+	</string>
+	<string name="Less Love">
+		Менше
+	</string>
+	<string name="Less Muscles">
+		Менше м'язів
+	</string>
+	<string name="Less Muscular">
+		Менше м'язів
+	</string>
+	<string name="Less Rosy">
+		Менше рум'ян
+	</string>
+	<string name="Less Round">
+		Менше округлості
+	</string>
+	<string name="Less Saddle">
+		Менше
+	</string>
+	<string name="Less Square">
+		Менше незграбності
+	</string>
+	<string name="Less Volume">
+		Менше обсягу
+	</string>
+	<string name="Less soul">
+		Менше
+	</string>
+	<string name="Lighter">
+		Світліше
+	</string>
+	<string name="Lip Cleft">
+		Ямка між губ
+	</string>
+	<string name="Lip Cleft Depth">
+		Глибина ямки
+	</string>
+	<string name="Lip Fullness">
+		Повнота губ
+	</string>
+	<string name="Lip Pinkness">
+		Рожевість губ
+	</string>
+	<string name="Lip Ratio">
+		Пропорція губ
+	</string>
+	<string name="Lip Thickness">
+		Товщина губ
+	</string>
+	<string name="Lip Width">
+		Ширина губ
+	</string>
+	<string name="Lipgloss">
+		Блиск губ
+	</string>
+	<string name="Lipstick">
+		Губна помада
+	</string>
+	<string name="Lipstick Color">
+		Колір помади
+	</string>
+	<string name="Long">
+		Довше
+	</string>
+	<string name="Long Head">
+		Довга голова
+	</string>
+	<string name="Long Hips">
+		Довгі стегна
+	</string>
+	<string name="Long Legs">
+		Довгі ноги
+	</string>
+	<string name="Long Neck">
+		Довга шия
+	</string>
+	<string name="Long Pigtails">
+		Довгі хвости з боків
+	</string>
+	<string name="Long Ponytail">
+		Довгий хвіст позаду
+	</string>
+	<string name="Long Torso">
+		Довгий торс
+	</string>
+	<string name="Long arms">
+		Довгі руки
+	</string>
+	<string name="Loose Pants">
+		Вільні штани
+	</string>
+	<string name="Loose Shirt">
+		Вільна сорочка
+	</string>
+	<string name="Loose Sleeves">
+		Вільні рукави
+	</string>
+	<string name="Love Handles">
+		Відкладення на талії
+	</string>
+	<string name="Low">
+		Низькі
+	</string>
+	<string name="Low Heels">
+		Низький підбор
+	</string>
+	<string name="Low Jaw">
+		Щелепа низько
+	</string>
+	<string name="Low Platforms">
+		Низька платформа
+	</string>
+	<string name="Low and Loose">
+		Низький та вільний
+	</string>
+	<string name="Lower">
+		Нижче
+	</string>
+	<string name="Lower Bridge">
+		Спинка носа
+	</string>
+	<string name="Lower Cheeks">
+		Щоки нижче
+	</string>
+	<string name="Male">
+		Чоловік
+	</string>
+	<string name="Middle Part">
+		Проділ по центру
+	</string>
+	<string name="More">
+		Більше
+	</string>
+	<string name="More Blush">
+		Більше рум'ян
+	</string>
+	<string name="More Body Fat">
+		Більше жиру
+	</string>
+	<string name="More Curtains">
+		Більше борода
+	</string>
+	<string name="More Eyeshadow">
+		Більше тіней
+	</string>
+	<string name="More Freckles">
+		Більше ластовиння
+	</string>
+	<string name="More Full">
+		Більш повне
+	</string>
+	<string name="More Gravity">
+		Більше тяжіння
+	</string>
+	<string name="More Lipstick">
+		Більше помади
+	</string>
+	<string name="More Love">
+		Більше
+	</string>
+	<string name="More Lower Lip">
+		Більше нижня губа
+	</string>
+	<string name="More Muscles">
+		Більше м'язів
+	</string>
+	<string name="More Muscular">
+		Більше м'язів
+	</string>
+	<string name="More Rosy">
+		Більше рум'янцю
+	</string>
+	<string name="More Round">
+		Більше округлості
+	</string>
+	<string name="More Saddle">
+		Більше
+	</string>
+	<string name="More Sloped">
+		Більш похилий
+	</string>
+	<string name="More Square">
+		Більш квадратна
+	</string>
+	<string name="More Upper Lip">
+		Більше верхня губа
+	</string>
+	<string name="More Vertical">
+		Вертикальніший
+	</string>
+	<string name="More Volume">
+		Більше обсягу
+	</string>
+	<string name="More soul">
+		Більше
+	</string>
+	<string name="Moustache">
+		Це воно
+	</string>
+	<string name="Mouth Corner">
+		Кут рота
+	</string>
+	<string name="Mouth Position">
+		Становище рота
+	</string>
+	<string name="Mowhawk">
+		Ірокез
+	</string>
+	<string name="Muscular">
+		Мускулистий
+	</string>
+	<string name="Mutton Chops">
+		бородатий
+	</string>
+	<string name="Nail Polish">
+		Лак для нігтів
+	</string>
+	<string name="Nail Polish Color">
+		Колір лаку
+	</string>
+	<string name="Narrow">
+		Вузько
+	</string>
+	<string name="Narrow Back">
+		Вузько ззаду
+	</string>
+	<string name="Narrow Front">
+		Вузький перед
+	</string>
+	<string name="Narrow Lips">
+		Вузькі губи
+	</string>
+	<string name="Natural">
+		Природний
+	</string>
+	<string name="Neck Length">
+		Довжина шиї
+	</string>
+	<string name="Neck Thickness">
+		Товщина шиї
+	</string>
+	<string name="No Blush">
+		Без рум'ян
+	</string>
+	<string name="No Eyeliner">
+		Без підведення
+	</string>
+	<string name="No Eyeshadow">
+		Без тіней
+	</string>
+	<string name="No Lipgloss">
+		Без блиску
+	</string>
+	<string name="No Lipstick">
+		Без помади
+	</string>
+	<string name="No Part">
+		Без проділу
+	</string>
+	<string name="No Polish">
+		Без лаку
+	</string>
+	<string name="No Red">
+		Чи не червоні
+	</string>
+	<string name="No Spikes">
+		Без «шипів»
+	</string>
+	<string name="No White">
+		Ні білого
+	</string>
+	<string name="No Wrinkles">
+		Без зморшок
+	</string>
+	<string name="Normal Lower">
+		Нижче звичайного
+	</string>
+	<string name="Normal Upper">
+		Вище звичайного
+	</string>
+	<string name="Nose Left">
+		Ніс вліво
+	</string>
+	<string name="Nose Right">
+		Ніс праворуч
+	</string>
+	<string name="Nose Size">
+		Розмір носа
+	</string>
+	<string name="Nose Thickness">
+		Товщина носа
+	</string>
+	<string name="Nose Tip Angle">
+		Загнутість кінчика носа
+	</string>
+	<string name="Nose Tip Shape">
+		Форма кінчика носа
+	</string>
+	<string name="Nose Width">
+		Ширина носа
+	</string>
+	<string name="Nostril Division">
+		Перегородка
+	</string>
+	<string name="Nostril Width">
+		Ширина ніздрів
+	</string>
+	<string name="Opaque">
+		Непрозорий
+	</string>
+	<string name="Open">
+		Відкрито
+	</string>
+	<string name="Open Back">
+		Відкрито ззаду
+	</string>
+	<string name="Open Front">
+		Відкрито спереду
+	</string>
+	<string name="Open Left">
+		Відкрито зліва
+	</string>
+	<string name="Open Right">
+		Відкрито праворуч
+	</string>
+	<string name="Orange">
+		Помаранчевий
+	</string>
+	<string name="Out">
+		Назовні
+	</string>
+	<string name="Out Shdw Color">
+		Колір зовнішніх тіней
+	</string>
+	<string name="Out Shdw Opacity">
+		Прозорість зовніш. тіней
+	</string>
+	<string name="Outer Eye Corner">
+		Зовнішні куточки очей
+	</string>
+	<string name="Outer Eye Shadow">
+		Тіні у зовнішніх куточках
+	</string>
+	<string name="Outer Shadow">
+		Зовнішні тіні
+	</string>
+	<string name="Overbite">
+		Глибокий прикус
+	</string>
+	<string name="Package">
+		Гульфік
+	</string>
+	<string name="Painted Nails">
+		Пофарбовані
+	</string>
+	<string name="Pale">
+		Блідий
+	</string>
+	<string name="Pants Crotch">
+		Крок
+	</string>
+	<string name="Pants Fit">
+		Облягаючі штани
+	</string>
+	<string name="Pants Length">
+		Довжина
+	</string>
+	<string name="Pants Waist">
+		Талія штанів
+	</string>
+	<string name="Pants Wrinkles">
+		Зім'ятість штанів
+	</string>
+	<string name="Part">
+		Проділ
+	</string>
+	<string name="Part Bangs">
+		Чубчик з проділом
+	</string>
+	<string name="Pectorals">
+		Грудні м'язи
+	</string>
+	<string name="Pigment">
+		Пігментація
+	</string>
+	<string name="Pigtails">
+		Хвости з боків
+	</string>
+	<string name="Pink">
+		Рожевий
+	</string>
+	<string name="Pinker">
+		Розовее
+	</string>
+	<string name="Platform Height">
+		Висота платформи
+	</string>
+	<string name="Platform Width">
+		Ширина платформи
+	</string>
+	<string name="Pointy">
+		Гострі
+	</string>
+	<string name="Pointy Heels">
+		Гострий підбор
+	</string>
+	<string name="Ponytail">
+		Хвіст позаду
+	</string>
+	<string name="Poofy Skirt">
+		Пишна спідниця
+	</string>
+	<string name="Pop Left Eye">
+		Ліве око
+	</string>
+	<string name="Pop Right Eye">
+		Праве око
+	</string>
+	<string name="Puffy">
+		Пухкі
+	</string>
+	<string name="Puffy Eyelids">
+		Припухлість повік
+	</string>
+	<string name="Rainbow Color">
+		Кольори веселки
+	</string>
+	<string name="Red Hair">
+		Руде волосся
+	</string>
+	<string name="Regular">
+		Звичайне
+	</string>
+	<string name="Right Part">
+		Правий проділ
+	</string>
+	<string name="Rosy Complexion">
+		Рожеве обличчя
+	</string>
+	<string name="Round">
+		Кругле
+	</string>
+	<string name="Rudiness">
+		Рум'янець
+	</string>
+	<string name="Ruddy">
+		Рум'яна
+	</string>
+	<string name="Rumpled Hair">
+		Скуйовджені
+	</string>
+	<string name="Saddle Bags">
+		Галіфи
+	</string>
+	<string name="Scrawny Leg">
+		Сухопара нога
+	</string>
+	<string name="Separate">
+		Розділити
+	</string>
+	<string name="Shallow">
+		Дрібно
+	</string>
+	<string name="Shear Back">
+		Скіс позаду
+	</string>
+	<string name="Shear Face">
+		Перекіс обличчя
+	</string>
+	<string name="Shear Front">
+		Скіс спереду
+	</string>
+	<string name="Shear Left Up">
+		Скіс вліво вгору
+	</string>
+	<string name="Shear Right Up">
+		Скіс вправо вгору
+	</string>
+	<string name="Sheared Back">
+		Зменшено ззаду
+	</string>
+	<string name="Sheared Front">
+		Зменшено спереду
+	</string>
+	<string name="Shift Left">
+		Зрушити вліво
+	</string>
+	<string name="Shift Mouth">
+		Зрушити рот
+	</string>
+	<string name="Shift Right">
+		Зрушити праворуч
+	</string>
+	<string name="Shirt Bottom">
+		Низ сорочки
+	</string>
+	<string name="Shirt Fit">
+		Облягання сорочки
+	</string>
+	<string name="Shirt Wrinkles">
+		Пам'ятість сорочки
+	</string>
+	<string name="Shoe Height">
+		Висота взуття
+	</string>
+	<string name="Short">
+		Нижче
+	</string>
+	<string name="Short Arms">
+		Короткі руки
+	</string>
+	<string name="Short Legs">
+		Короткі ноги
+	</string>
+	<string name="Short Neck">
+		Коротка шия
+	</string>
+	<string name="Short Pigtails">
+		Короткі хвости з боків
+	</string>
+	<string name="Short Ponytail">
+		Короткий хвіст позаду
+	</string>
+	<string name="Short Sideburns">
+		Короткі баки
+	</string>
+	<string name="Short Torso">
+		Короткий торс
+	</string>
+	<string name="Short hips">
+		Короткі стегна
+	</string>
+	<string name="Shoulders">
+		Плечі
+	</string>
+	<string name="Side Fringe">
+		Чубчик набік
+	</string>
+	<string name="Sideburns">
+		Бородатий
+	</string>
+	<string name="Sides Hair">
+		Волосся з боків
+	</string>
+	<string name="Sides Hair Down">
+		Волосся з боків унизу
+	</string>
+	<string name="Sides Hair Up">
+		Волосся з боків вгорі
+	</string>
+	<string name="Skinny Neck">
+		Худа шия
+	</string>
+	<string name="Skirt Fit">
+		Спідниця, що облягає
+	</string>
+	<string name="Skirt Length">
+		Довжина спідниці
+	</string>
+	<string name="Slanted Forehead">
+		Похилий лоб
+	</string>
+	<string name="Sleeve Length">
+		Довжина рукавів
+	</string>
+	<string name="Sleeve Looseness">
+		Ширина рукавів
+	</string>
+	<string name="Slit Back">
+		Розріз: ззаду
+	</string>
+	<string name="Slit Front">
+		Розріз: спереду
+	</string>
+	<string name="Slit Left">
+		Розріз: зліва
+	</string>
+	<string name="Slit Right">
+		Розріз: праворуч
+	</string>
+	<string name="Small">
+		Менше
+	</string>
+	<string name="Small Hands">
+		Маленькі пензлі
+	</string>
+	<string name="Small Head">
+		Маленька голова
+	</string>
+	<string name="Smooth">
+		Гладкий
+	</string>
+	<string name="Smoot Hair">
+		Пригладжені
+	</string>
+	<string name="Sock Length">
+		Довжина шкарпеток
+	</string>
+	<string name="Soulpatch">
+		Españolca
+	</string>
+	<string name="Sparse">
+		Рідкі
+	</string>
+	<string name="Spiked Hair">
+		Зачіска «шипами»
+	</string>
+	<string name="Square">
+		Квадратний
+	</string>
+	<string name="Square Toe">
+		Квадратна шкарпетка
+	</string>
+	<string name="Squash Head">
+		Голова-гарбуз
+	</string>
+	<string name="Stretch Head">
+		Витягнутість голови
+	</string>
+	<string name="Sunken">
+		Запалі
+	</string>
+	<string name="Sunken Chest">
+		запалі груди
+	</string>
+	<string name="Sunken Eyes">
+		Впалі очі
+	</string>
+	<string name="Sweep Back">
+		Зачесані назад
+	</string>
+	<string name="Sweep Forward">
+		Зачесані вперед
+	</string>
+	<string name="Tall">
+		Вище
+	</string>
+	<string name="Taper Back">
+		Конус позаду
+	</string>
+	<string name="Taper Front">
+		Конус спереду
+	</string>
+	<string name="Thick Heels">
+		Широкий підбор
+	</string>
+	<string name="Thick Neck">
+		Товста шия
+	</string>
+	<string name="Thick Toe">
+		Товста шкарпетка
+	</string>
+	<string name="Thin">
+		Тонкий
+	</string>
+	<string name="Thin Eyebrows">
+		Тонкі брови
+	</string>
+	<string name="Thin Lips">
+		Тонкі губи
+	</string>
+	<string name="Thin Nose">
+		Тонкий ніс
+	</string>
+	<string name="Tight Chin">
+		Тонкий підборіддя
+	</string>
+	<string name="Tight Cuffs">
+		Манжети на резинці
+	</string>
+	<string name="Tight Pants">
+		Облягаючі штани
+	</string>
+	<string name="Tight Shirt">
+		Облягаюча сорочка
+	</string>
+	<string name="Tight Skirt">
+		Спідниця, що облягає
+	</string>
+	<string name="Tight Sleeves">
+		Облягаючі рукави
+	</string>
+	<string name="Toe Shape">
+		Форма носіння
+	</string>
+	<string name="Toe Thickness">
+		Товщина шкарпетки
+	</string>
+	<string name="Torso Length">
+		Довжина торсу
+	</string>
+	<string name="Torso Muscles">
+		М'язистість торсу
+	</string>
+	<string name="Torso Scrawny">
+		Сухопарість торсу
+	</string>
+	<string name="Unattached">
+		Не додається
+	</string>
+	<string name="Uncreased">
+		Без складок
+	</string>
+	<string name="Underbite">
+		Мезіальний прикус
+	</string>
+	<string name="Unnatural">
+		Неприродний
+	</string>
+	<string name="Upper Bridge">
+		Перенісся
+	</string>
+	<string name="Upper Cheeks">
+		Щоки вище
+	</string>
+	<string name="Upper Chin Cleft">
+		Ямка на підборідді вище
+	</string>
+	<string name="Upper Eyelid Fold">
+		Складка верхньої повіки
+	</string>
+	<string name="Upturned">
+		Вгору
+	</string>
+	<string name="Very Red">
+		Дуже червоні
+	</string>
+	<string name="Waist Height">
+		Висота талії
+	</string>
+	<string name="Well-Fed">
+		Вгодовані
+	</string>
+	<string name="White Hair">
+		Біле волосся
+	</string>
+	<string name="Wide">
+		Широко
+	</string>
+	<string name="Wide Back">
+		Широко позаду
+	</string>
+	<string name="Wide Front">
+		Широкий перед
+	</string>
+	<string name="Wide Lips">
+		Широкі губи
+	</string>
+	<string name="Wild">
+		Шалений
+	</string>
+	<string name="Wrinkles">
+		Складки
+	</string>
+	<string name="LocationCtrlAddLandmarkTooltip">
+		Додати в закладки
+	</string>
+	<string name="LocationCtrlEditLandmarkTooltip">
+		Редагувати закладку
+	</string>
+	<string name="LocationCtrlInfoBtnTooltip">
+		Дивитись детальну інформацію про поточне місцезнаходження
+	</string>
+	<string name="LocationCtrlComboBtnTooltip">
+		Історія розташування
+	</string>
+	<string name="LocationCtrlForSaleTooltip">
+		Купити цю землю
+	</string>
+	<string name="LocationCtrlVoiceTooltip">
+		Голосове спілкування тут недоступне
+	</string>
+	<string name="LocationCtrlFlyTooltip">
+		Літати заборонено
+	</string>
+	<string name="LocationCtrlPushTooltip">
+		Не можна штовхатися
+	</string>
+	<string name="LocationCtrlBuildTooltip">
+		Будівництво/викладання об'єктів не дозволено
+	</string>
+	<string name="LocationCtrlScriptsTooltip">
+		Скрипти не дозволені
+	</string>
+	<string name="LocationCtrlDamageTooltip">
+		Здоров'я
+	</string>
+	<string name="LocationCtrlAdultIconTooltip">
+		Регіон для дорослих
+	</string>
+	<string name="LocationCtrlModerateIconTooltip">
+		Помірний регіон
+	</string>
+	<string name="LocationCtrlGeneralIconTooltip">
+		Громадський регіон
+	</string>
+	<string name="LocationCtrlSeeAVsTooltip">
+		Аватарів усередині цієї ділянки не чути і не видно для аватарів за межами цієї ділянки
+	</string>
+	<string name="LocationCtrlPathfindingDirtyTooltip">
+		Можливі проблеми рухомих об'єктів у цьому регіоні, доки регіон не буде відновлено.
+	</string>
+	<string name="LocationCtrlPathfindingDisabledTooltip">
+		У цьому регіоні не дозволено динамічний пошук шляху.
+	</string>
+	<string name="UpdaterWindowTitle">
+		Оновлення [APP_NAME]
+	</string>
+	<string name="UpdaterNowUpdating">
+		[APP_NAME] зараз оновлюється...
+	</string>
+	<string name="UpdaterNowInstalling">
+		[APP_NAME] встановлюється...
+	</string>
+	<string name="UpdaterUpdatingDescriptive">
+		[APP_NAME] оновлюється до останньої версії. Це може зайняти деякий час, тому будь ласка, будьте терплячі.
+	</string>
+	<string name="UpdaterProgressBarTextWithEllipses">
+		Завантаження оновлення...
+	</string>
+	<string name="UpdaterProgressBarText">
+		Завантажується оновлення
+	</string>
+	<string name="UpdaterFailDownloadTitle">
+		Неможливо завантажити оновлення
+	</string>
+	<string name="UpdaterFailUpdateDescriptive">
+		При оновленні програми [APP_NAME] виникла помилка. Завантажте нову версію на сайті www.secondlife.com.
+	</string>
+	<string name="UpdaterFailInstallTitle">
+		Не вдалося інсталювати оновлення
+	</string>
+	<string name="UpdaterFailStartTitle">
+		Не вдалося запустити клієнт
+	</string>
+	<string name="ItemsComingInTooFastFrom">
+		[APP_NAME]: Елементи від [FROM_NAME] надходять занадто швидко, автоматичний перегляд було вимкнено на [TIME] секунд
+	</string>
+	<string name="ItemsComingInTooFast">
+		[APP_NAME]: Елементи надходять дуже швидко, автоматичний перегляд було вимкнено на [TIME] секунд
+	</string>
+	<string name="IM_logging_string">
+		-- Увімкнено запис Особистих повідомлень --
+	</string>
+	<string name="IM_typing_start_string">
+		[NAME] пише...
+	</string>
+	<string name="Unnamed">
+		(Без імені)
+	</string>
+	<string name="IM_moderated_chat_label">
+		(Модерується: голосовий зв'язок за замовчуванням вимкнено)
+	</string>
+	<string name="IM_unavailable_text_label">
+		Під час дзвінка текстовий чат недоступний.
+	</string>
+	<string name="IM_muted_text_label">
+		Ваш текстовий чат вимкнено модератором групи.
+	</string>
+	<string name="IM_default_text_label">
+		Натисніть , щоб створити особисте повідомлення.
+	</string>
+	<string name="IM_to_label">
+		Для
+	</string>
+	<string name="IM_moderator_label">
+		(Модератор)
+	</string>
+	<string name="Saved_message">
+		(Збережено [LONG_TIMESTAMP])
+	</string>
+	<string name="IM_unblock_only_groups_friends">
+		Щоб побачити це повідомлення, ви повинні зняти галочку &apos;Тільки друзі та групи можуть дзвонити мені та відправляти ОП&apos; в Установки/Приватність.
+	</string>
+	<string name="OnlineStatus">
+		в мережі
+	</string>
+	<string name="OfflineStatus">
+		не в мережі
+	</string>
+	<string name="not_online_msg">
+		Користувач не в мережі - повідомлення буде збережено та доставлено пізніше.
+	</string>
+	<string name="not_online_inventory">
+		Користувач не в мережі – інвентар збережений.
+	</string>
+	<string name="IM_announce_incoming">
+		Вхідне повідомлення від [NAME]
+	</string>
+	<string name="IM_autoresponse_sent">
+		Автовідповідь надіслано: [MESSAGE]
+	</string>
+	<string name="IM_autoresponse_item_sent">
+		Елемент [ITEM_NAME] надіслано автовідповіддю
+	</string>
+	<string name="answered_call">
+		На ваш дзвінок відповіли
+	</string>
+	<string name="you_started_call">
+		Ви почали голосовий виклик
+	</string>
+	<string name="you_joined_call">
+		Ви приєдналися до голосового виклику
+	</string>
+	<string name="you_auto_rejected_call-im">
+		Ви автоматично відхилили голосовий дзвінок. у вас увімкнено режим 'Недоступний'
+	</string>
+	<string name="name_started_call">
+		[NAME] розпочав голосовий виклик
+	</string>
+	<string name="ringing-im">
+		Приєднання до голосового дзвінка...
+	</string>
+	<string name="connected-im">
+		Підключено, натисніть 'Завершити дзвінок', щоб повісити слухавку
+	</string>
+	<string name="hang_up-im">
+		Голосовий виклик перервано
+	</string>
+	<string name="answering-im">
+		Підключення...
+	</string>
+	<string name="conference-title">
+		Конференц-чат
+	</string>
+	<string name="conference-title-incoming">
+		Конференція з [AGENT_NAME]
+	</string>
+	<string name="inventory_item_offered-im">
+		Запропоновано елемент інвентарю '[ITEM_NAME]'
+	</string>
+	<string name="inventory_folder_offered-im">
+		Запропонована папка інвентарю "[ITEM_NAME]"
+	</string>
+	<string name="inventory_item_offered_rlv">
+		Запропоновано елемент інвентарю [NAME]
+	</string>
+	<string name="share_alert">
+		Перетягніть елементи з інвентарю сюди
+	</string>
+	<string name="flickr_post_success">
+		Ви опублікували у Flickr.
+	</string>
+	<string name="no_session_message">
+		(Сеанс ОП немає)
+	</string>
+	<string name="only_user_message">
+		Ви єдиний користувач на цій сесії.
+	</string>
+	<string name="offline_message">
+		[NAME] не в курсі.
+	</string>
+	<string name="invite_message">
+		Натисніть [BUTTON NAME], щоб прийняти/підключитися до голосового чату.
+	</string>
+	<string name="muted_message">
+		Ви заблокували цього користувача. Надсилання повідомлення автоматично розблокує його.
+	</string>
+	<string name="generic">
+		Закрийте та знову відкрийте розмову або повторно увійдіть та спробуйте ще раз.
+	</string>
+	<string name="generic_request_error">
+		Закрийте та знову відкрийте розмову або повторно увійдіть та спробуйте ще раз.
+	</string>
+	<string name="insufficient_perms_error">
+		У вас недостатньо правий.
+	</string>
+	<string name="session_does_not_exist_error">
+		Сеансу більше не існує
+	</string>
+	<string name="no_ability_error">
+		У вас немає цієї можливості.
+	</string>
+	<string name="no_ability">
+		У вас немає цієї можливості.
+	</string>
+	<string name="not_a_mod_error">
+		Ви не модератор сеансу.
+	</string>
+	<string name="muted">
+		Модератор групи відключив текстовий чат.
+	</string>
+	<string name="muted_error">
+		Модератор групи відключив текстовий чат.
+	</string>
+	<string name="add_session_event">
+		Не вдається додати користувачів до чату з жителем [RECIPIENT].
+	</string>
+	<string name="message">
+		Повідомлення, надіслане [RECIPIENT], все ще обробляється.
+Якщо повідомлення не з'явиться протягом кількох хвилин, можливо, воно було видалено сервером.
+	</string>
+	<string name="message_session_event">
+		Повідомлення, надіслане [RECIPIENT], все ще обробляється.
+Якщо повідомлення не з'явиться протягом кількох хвилин, можливо, воно було видалено сервером.
+	</string>
+	<string name="mute">
+		Помилка під час модерування.
+	</string>
+	<string name="removed">
+		Ви виключені із групи.
+	</string>
+	<string name="removed_from_group">
+		Ви виключені із групи.
+	</string>
+	<string name="close_on_no_ability">
+		У вас більше немає можливості брати участь у чаті.
+	</string>
+	<string name="unread_chat_single">
+		[SOURCES] сказав щось нове
+	</string>
+	<string name="unread_chat_multiple">
+		[SOURCES] сказав щось нове
+	</string>
+	<string name="teleport_preamble_compact_chat">
+		Тепер ви в
+	</string>
+	<string name="session_initialization_timed_out_error">
+		Минув час очікування ініціалізації сеансу
+	</string>
+	<string name="Home position set.">
+		Вказано положення будинку.
+	</string>
+
+	<string name="paid_you_ldollars">
+		[NAME] заплатив вам L$[AMOUNT] з [REASON].
+	</string>
+	<string name="paid_you_ldollars_gift">
+		[NAME] заплатив вам L$[AMOUNT]: [REASON]
+	</string>
+	<string name="paid_you_ldollars_no_reason">
+		[NAME] заплатив вам L$[AMOUNT].
+	</string>
+	<string name="you_paid_ldollars">
+		Ви заплатили [NAME] L$[AMOUNT] за [REASON].
+	</string>
+	<string name="you_paid_ldollars_gift">
+		Ви заплатили [NAME] L$[AMOUNT]: [REASON]
+	</string>
+	<string name="you_paid_ldollars_no_info">
+		Ви заплатили L$[AMOUNT].
+	</string>
+	<string name="you_paid_ldollars_no_reason">
+		Ви заплатили [NAME] L$[AMOUNT].
+	</string>
+	<string name="you_paid_ldollars_no_name">
+		Ви заплатили L$[AMOUNT] за [REASON].
+	</string>
+	<string name="you_paid_failure_ldollars">
+		Ви не змогли заплатити [NAME] L$[AMOUNT]: [REASON].
+	</string>
+	<string name="you_paid_failure_ldollars_gift">
+		Ви не змогли заплатити [NAME] L$[AMOUNT]: [REASON]
+	</string>
+	<string name="you_paid_failure_ldollars_no_info">
+		Ви не змогли заплатити L$[AMOUNT]
+	</string>
+	<string name="you_paid_failure_ldollars_no_reason">
+		Ви не змогли заплатити [NAME] L$[AMOUNT]
+	</string>
+	<string name="you_paid_failure_ldollars_no_name">
+		Ви не змогли заплатити L$[AMOUNT]: [REASON].
+	</string>
+	<string name="for item">
+		для [ITEM]
+	</string>
+	<string name="for a parcel of land">
+		за земельну ділянку
+	</string>
+	<string name="for a land access pass">
+		за пропуск на землю
+	</string>
+	<string name="for deeding land">
+		за передачу землі
+	</string>
+	<string name="to create a group">
+		за створення групи
+	</string>
+	<string name="to join a group">
+		за вступ до групи
+	</string>
+	<string name="to upload">
+		для завантаження
+	</string>
+	<string name="to publish a classified ad">
+		за публікацію реклами
+	</string>
+	<string name="uploading_costs">
+		Завантаження коштує L$[AMOUNT]
+	</string>
+	<string name="this_costs">
+		Це коштує L$[AMOUNT]
+	</string>
+	<string name="buying_selected_land">
+		Ця земля стоїть
+	</string>
+	<string name="this_object_costs">
+		Цей об'єкт стоїть
+	</string>
+	<string name="giving">
+		Ви хочете дати
+	</string>
+	<string name="group_role_everyone">
+		Усе
+	</string>
+	<string name="group_role_officers">
+		Посадові особи
+	</string>
+	<string name="group_role_owners">
+		Власники
+	</string>
+	<string name="group_member_status_online">
+		В мережі
+	</string>
+	<string name="uploading_abuse_report">
+		Завантажується...
+Скарга
+	</string>
+	<string name="New Shape">
+		Нова постать
+	</string>
+	<string name="New Skin">
+		Нова шкіра
+	</string>
+	<string name="New Hair">
+		Нове волосся
+	</string>
+	<string name="New Eyes">
+		Нові очі
+	</string>
+	<string name="New Shirt">
+		Нова сорочка
+	</string>
+	<string name="New Pants">
+		Нові штани
+	</string>
+	<string name="New Shoes">
+		Нове взуття
+	</string>
+	<string name="New Socks">
+		Нові шкарпетки
+	</string>
+	<string name="New Jacket">
+		Новий піджак
+	</string>
+	<string name="New Gloves">
+		Нові рукавички
+	</string>
+	<string name="New Undershirt">
+		Нова майка
+	</string>
+	<string name="New Underpants">
+		Нові труси
+	</string>
+	<string name="New Skirt">
+		Нова спідниця
+	</string>
+	<string name="New Alpha">
+		Нова альфа-маска
+	</string>
+	<string name="New Tattoo">
+		Нове тату
+	</string>
+	<string name="New Universal">
+		Новий універсал
+	</string>
+	<string name="New Physics">
+		Нова фізика
+	</string>
+	<string name="Invalid Wearable">
+		Не можна носити
+	</string>
+	<string name="New Gesture">
+		Новий жест
+	</string>
+	<string name="New Script">
+		Новий скрипт
+	</string>
+	<string name="New Note">
+		Нова замітка
+	</string>
+	<string name="New Folder">
+		Нова папка
+	</string>
+	<string name="Contents">
+		Вміст
+	</string>
+	<string name="Gesture">
+		Жест
+	</string>
+	<string name="Male Gestures">
+		Чоловічі жести
+	</string>
+	<string name="Female Gestures">
+		Жіночі жести
+	</string>
+	<string name="Other Gestures">
+		Інші жести
+	</string>
+	<string name="Speech Gestures">
+		Жести у розмовах
+	</string>
+	<string name="Common Gestures">
+		Стандартні жести
+	</string>
+	<string name="Male - Excuse me">
+		Чоловік – вибачення
+	</string>
+	<string name="Male - Get lost">
+		Чоловік – сховайтесь
+	</string>
+	<string name="Male - Blow kiss">
+		Чоловік – повітряний поцілунок
+	</string>
+	<string name="Male - Boo">
+		Чоловік – фу!
+	</string>
+	<string name="Male - Bored">
+		Чоловік – нудьга
+	</string>
+	<string name="Male - Hey">
+		Чоловік – гей!
+	</string>
+	<string name="Male - Laugh">
+		Чоловік – сміх
+	</string>
+	<string name="Male - Repulsed">
+		Чоловік – неприйняття
+	</string>
+	<string name="Male - Shrug">
+		Чоловік – знизує плечима
+	</string>
+	<string name="Male - Stick tougue out">
+		Чоловік – показує мову
+	</string>
+	<string name="Male - Wow">
+		Чоловік – ух ти!
+	</string>
+	<string name="Female - Chuckle">
+		Жінка – смішок
+	</string>
+	<string name="Female - Cry">
+		Жінка – плач
+	</string>
+	<string name="Female - Embarrassed">
+		Жінка – збентеження
+	</string>
+	<string name="Female - Excuse me">
+		Жінка – вибачення
+	</string>
+	<string name="Female - Get lost">
+		Жінка – сховайтесь
+	</string>
+	<string name="Female - Blow kiss">
+		Жінка – повітряний поцілунок
+	</string>
+	<string name="Female - Boo">
+		Жінка – фу!
+	</string>
+	<string name="Female - Bored">
+		Жінка – нудьга
+	</string>
+	<string name="Female - Hey">
+		Жінка – гей!
+	</string>
+	<string name="Female - Hey baby">
+		Жінка – гей, бейбі!
+	</string>
+	<string name="Female - Laugh">
+		Жінка – сміх
+	</string>
+	<string name="Female - Looking good">
+		Жінка – добре виглядаєш
+	</string>
+	<string name="Female - Over here">
+		Жінка – сюди!
+	</string>
+	<string name="Female - Будь ласка">
+		Жінка – прохання
+	</string>
+	<string name="Female - Repulsed">
+		Жінка – неприйняття
+	</string>
+	<string name="Female - Shrug">
+		Жінка – знизує плечима
+	</string>
+	<string name="Female - Stick tougue out">
+		Жінка – показує мову
+	</string>
+	<string name="Female - Wow">
+		Жінка – ух ти!
+	</string>
+	<string name="New Day">
+		Новий добовий цикл
+	</string>
+	<string name="New Water">
+		Нова вода
+	</string>
+	<string name="New Sky">
+		Нове небо
+	</string>
+	<string name="New Settings">
+		Нові Налаштування
+	</string>
+	<string name="/bow">
+		/вклонитися
+	</string>
+	<string name="/clap">
+		/грюкнути
+	</string>
+	<string name="/count">
+		/ рахунок
+	</string>
+	<string name="/extinguish">
+		/загасити
+	</string>
+	<string name="/kmb">
+		/поцілуй мене в зад
+	</string>
+	<string name="/muscle">
+		/Сильна людина
+	</string>
+	<string name="/no">
+		/ні
+	</string>
+	<string name="/no!">
+		/Ні!
+	</string>
+	<string name="/paper">
+		/папір
+	</string>
+	<string name="/pointme">
+		/показати на себе
+	</string>
+	<string name="/pointyou">
+		/показати на іншого
+	</string>
+	<string name="/rock">
+		/камінь
+	</string>
+	<string name="/scissor">
+		/ножиці
+	</string>
+	<string name="/smoke">
+		/курити
+	</string>
+	<string name="/stretch">
+		/потягнутися
+	</string>
+	<string name="/whistle">
+		/свиснути
+	</string>
+	<string name="/yes">
+		/так
+	</string>
+	<string name="/yes!">
+		/О так!
+	</string>
+	<string name="afk">
+		відійшов
+	</string>
+	<string name="dance1">
+		танець 1
+	</string>
+	<string name="dance2">
+		танець 2
+	</string>
+	<string name="dance3">
+		танець3
+	</string>
+	<string name="dance4">
+		танець 4
+	</string>
+	<string name="dance5">
+		танець5
+	</string>
+	<string name="dance6">
+		танець 6
+	</string>
+	<string name="dance7">
+		танець7
+	</string>
+	<string name="dance8">
+		танець 8
+	</string>
+	<string name="AvatarBirthDateFormat">
+		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc]
+	</string>
+	<string name="AvatarBirthDateFormat_legacy">
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]
+	</string>
+	<string name="DefaultMimeType">
+		ні/ні
+	</string>
+	<string name="texture_load_dimensions_error">
+		Не можна завантажувати зображення, розмір яких перевищує [WIDTH]*[HEIGHT]
+	</string>
+	<string name="outfit_photo_load_dimensions_error">
+		Максимальний розмір фотографій костюма [WIDTH]*[HEIGHT]. Змініть розмір або скористайтеся іншим зображенням
+	</string>
+	<string name="outfit_photo_select_dimensions_error">
+		Максимальний розмір фотографій костюма [WIDTH]*[HEIGHT]. Виберіть іншу текстуру.
+	</string>
+	<string name="outfit_photo_verify_dimensions_error">
+		Неможливо перевірити розмір фото. Зачекайте, доки розміри фото не будуть показані у вікні вибору
+	</string>
+	<string name="sentences_separator" value=" "/>
+	<string name="words_separator" value=", "/>
+	<string name="server_is_down">
+		Попри наші зусилля щось несподівано пішло не так.
+
+Ознайомтеся з описом відомих проблем у роботі цієї служби на сайті https://secondlife-status.statuspage.io
+Якщо проблеми продовжуються, перевірте підключення до мережі та налаштування брандмауера.
+	</string>
+	<string name="dateTimeWeekdaysNames">
+		Неділя: Понеділок: Вівторок: Середа: Четвер: П'ятниця: Субота
+	</string>
+	<string name="dateTimeWeekdaysShortNames">
+		НД:ПН:ВТ:СР:ЧТ:ПТ:СБ
+	</string>
+	<string name="dateTimeMonthNames">
+		Січень:Лютий:Березень:Квітень:Май:Червень:Липень:Серпень:Вересень:Жовтень:Листопад:Грудень
+	</string>
+	<string name="dateTimeMonthShortNames">
+		Січ:Лютий:Берез:Квіт:Травень:Червень:Липень:Серпень:Сб:Жовтень:Листопад:Грудень
+	</string>
+	<string name="dateTimeDayFormat">
+		[MDAY]
+	</string>
+	<string name="dateTimeAM">
+		ДП
+	</string>
+	<string name="dateTimePM">
+		ПП
+	</string>
+	<string name="LocalEstimateUSD">
+		US$ [AMOUNT]
+	</string>
+	<string name="Group Ban">
+		Бан групи
+	</string>
+	<string name="Membership">
+		Членство
+	</string>
+	<string name="Roles">
+		Ролі
+	</string>
+	<string name="Group Identity">
+		Посвідчення групи
+	</string>
+	<string name="Parcel Management">
+		Управління ділянкою
+	</string>
+	<string name="Parcel Identity">
+		Посвідчення ділянки
+	</string>
+	<string name="Parcel Settings">
+		Параметри ділянки
+	</string>
+	<string name="Parcel Powers">
+		Здібності для ділянки
+	</string>
+	<string name="Parcel Access">
+		Доступ до ділянки
+	</string>
+	<string name="Parcel Content">
+		Вміст на ділянці
+	</string>
+	<string name="Object Management">
+		Управління об'єктами
+	</string>
+	<string name="Бухгалтерський облік">
+		Бухгалтерський облік
+	</string>
+	<string name="Notices">
+		Повідомлення
+	</string>
+	<string name="Chat">
+		Чат
+	</string>
+	<string name="BaseMembership">
+		Базовий
+	</string>
+	<string name="PremiumMembership">
+		Преміум
+	</string>
+	<string name="Premium_PlusMembership">
+		Преміум Плюс
+	</string>
+	<string name="MembershipUpgradeText">
+		Перейти на Преміум
+	</string>
+	<string name="MembershipPremiumText">
+		Моє преміум-членство
+	</string>
+	<string name="DeleteItems">
+		Видалити вибрані об'єкти [COUNT_SELECTION]? ([COUNT_TOTAL] всього)
+	</string>
+	<string name="DeleteItem">
+		Видалити вибраний об'єкт? ([COUNT_TOTAL] всього)
+	</string>
+	<string name="EmptyOutfitText">
+		Для цього комплекту одягу немає речей
+	</string>
+	<string name="ExternalEditorNotSet">
+		Виберіть редактор за допомогою ExternalEditor.
+	</string>
+	<string name="ExternalEditorNotFound">
+		Неможливо знайти вказаний зовнішній редактор.
+Спробуйте взяти шлях до редактора у подвійні лапки.
+(наприклад &quot;/шлях до мого/редактора&quot; &quot;%s&quot;)
+	</string>
+	<string name="ExternalEditorCommandParseError">
+		Помилка аналізу командного рядка зовнішнього редактора.
+	</string>
+	<string name="ExternalEditorFailedToRun">
+		Не вдалося запустити зовнішній редактор.
+	</string>
+	<string name="TranslationFailed">
+		Неможливо перекласти: [REASON]
+	</string>
+	<string name="TranslationResponseParseError">
+		Помилка під час аналізу відповіді перекладача.
+	</string>
+	<string name="Esc">
+		ESC
+	</string>
+	<string name="Space">
+		Пробел
+	</string>
+	<string name="Tab">
+		TAB
+	</string>
+	<string name="Ins">
+		INS
+	</string>
+	<string name="Del">
+		DEL
+	</string>
+	<string name="Backsp">
+		BACKSP
+	</string>
+	<string name="Shift">
+		SHIFT
+	</string>
+	<string name="Ctrl">
+		CTRL
+	</string>
+	<string name="Alt">
+		ALT
+	</string>
+	<string name="CapsLock">
+		CAPSLOCK
+	</string>
+	<string name="Left">
+		Стрілка вліво
+	</string>
+	<string name="Right">
+		Стрілка праворуч
+	</string>
+	<string name="Up">
+		Стрілка вгору
+	</string>
+	<string name="Down">
+		Стрілка вниз
+	</string>
+	<string name="Home">
+		ДІМ
+	</string>
+	<string name="End">
+		КІНЕЦЬ
+	</string>
+	<string name="PgUp">
+		PgUp
+	</string>
+	<string name="PgDn">
+		PgDn
+	</string>
+
+	<string name="Add">
+		Додати
+	</string>
+	<string name="Subtract">
+		Відняти
+	</string>
+	<string name="Multiply">
+		Помножити
+	</string>
+	<string name="Divide">
+		Розділити
+	</string>
+
+
+	<string name="LMB">ЛКМ</string>
+	<string name="MMB">СКМ</string>
+	<string name="RMB">ПКМ</string>
+	<string name="MB4">СК4</string>
+	<string name="MB5">СК5</string>
+	<string name="Double LMB">Подвійний ЛКМ</string>
+
+	<string name="BeaconParticle">
+		Перегляд міток частинок (сині)
+	</string>
+	<string name="BeaconPhysical">
+		Перегляд тегів фізичних об'єктів (зелені)
+	</string>
+	<string name="BeaconScripted">
+		Перегляд міток об'єктів зі скриптами (червоні)
+	</string>
+	<string name="BeaconScriptedTouch">
+		Перегляд міток об'єктів зі скриптами та функцією торкання (червоні)
+	</string>
+	<string name="BeaconSound">
+		Перегляд звукових позначок (жовті)
+	</string>
+	<string name="BeaconMedia">
+		Перегляд медійних позначок (білі)
+	</string>
+	<string name="BeaconSun">
+		Перегляд маяка напряму сонця (орожнжевий)
+	</string>
+	<string name="BeaconMoon">
+		Перегляд маяка напряму місяця (фіолетовий)
+	</string>
+	<string name="ParticleHiding">
+		Приховування частинок
+	</string>
+	<string name="Command_360_Capture_Label">
+		360° Знімок
+	</string>
+	<string name="Command_AboutLand_Label">
+		Про землю
+	</string>
+	<string name="Command_Appearance_Label">
+		Зовнішність
+	</string>
+	<string name="Command_Avatar_Label">
+		Аватар
+	</string>
+	<string name="Command_Build_Label">
+		Будувати
+	</string>
+	<string name="Command_Chat_Label">
+		Повідомлення
+	</string>
+	<string name="Command_Conversations_Label">
+		Повідомлення
+	</string>
+	<string name="Command_Compass_Label">
+		компас
+	</string>
+	<string name="Command_Destinations_Label">
+		Цікаві місця
+	</string>
+	<string name="Command_Environments_Label">
+		Середи
+	</string>
+	<string name="Command_Flickr_Label">
+		Flickr
+	</string>
+	<string name="Command_Gestures_Label">
+		Жести
+	</string>
+	<string name="Command_Grid_Status_Label">
+		Статус Сітки
+	</string>
+	<string name="Command_HowTo_Label">
+		Інструкція
+	</string>
+	<string name="Command_Inventory_Label">
+		Інвентар
+	</string>
+	<string name="Command_Map_Label">
+		Мапа
+	</string>
+	<string name="Command_Marketplace_Label">
+		Торговий центр
+	</string>
+	<string name="Command_MarketplaceListings_Label">
+		Торговий центр
+	</string>
+	<string name="Command_MiniMap_Label">
+		Міні-мапа
+	</string>
+	<string name="Command_Move_Label">
+		Рух
+	</string>
+	<string name="Command_People_Label">
+		Люди
+	</string>
+	<string name="Command_Performance_Label">
+		Швидкість графіки
+	</string>
+	<string name="Command_Picks_Label">
+		Місця
+	</string>
+	<string name="Command_Places_Label">
+		Місце
+	</string>
+	<string name="Command_Preferences_Label">
+		Налаштування
+	</string>
+	<string name="Command_Profile_Label">
+		Профіль
+	</string>
+	<string name="Command_Report_Abuse_Label">
+		Скарга
+	</string>
+	<string name="Command_Search_Label">
+		Пошук
+	</string>
+	<string name="Command_Snapshot_Label">
+		Знімок
+	</string>
+	<string name="Command_Speak_Label">
+		Говорити
+	</string>
+	<string name="Command_View_Label">
+		Управління камерою
+	</string>
+	<string name="Command_Voice_Label">
+		Голос поруч
+	</string>
+	<string name="Command_Quickprefs_Label">
+		Швидкі налаштування
+	</string>
+	<string name="Command_AO_Label">
+		Диспетчер анімацій
+	</string>
+	<string name="Command_Webbrowser_Label">
+		Web браузер
+	</string>
+	<string name="Command_Default_Chat_Bar_Label">
+		Чат
+	</string>
+	<string name="Command_Areasearch_Label">
+		Пошук навколо
+	</string>
+	<string name="Command_Settings_Debug_Label">
+		Налагодження налаштувань
+	</string>
+	<string name="Command_Statistics_Label">
+		Статистика
+	</string>
+	<string name="Command_Region_Label">
+		Регіон/Острів
+	</string>
+	<string name="Command_Fly_Label">
+		Літати
+	</string>
+	<string name="Command_Groundsit_Label">
+		Сісти на землю
+	</string>
+	<string name="Command_Sound_Explorer_Label">
+		Провідник звуків
+	</string>
+	<string name="Command_Asset_Blacklist_Label">
+		Чорний список активів
+	</string>
+	<string name="Command_Phototools_Label">
+		Фотоінструменти
+	</string>
+	<string name="Command_Phototools_View_Label">
+		Інструменти камери
+	</string>
+	<string name="Command_Contact_Sets_Label">
+		Набори контактів
+	</string>
+	<string name="Command_Mouselook_Label">
+		Вид від першого лиця
+	</string>
+	<string name="Command_Landmark_Here_Label">
+		Створити закладку
+	</string>
+	<string name="Command_Teleport_History_Label">
+		Історія телепортацій
+	</string>
+	<string name="Command_Pose_Stand_Label">
+		Поза редагування
+	</string>
+	<string name="Command_Snapshot_To_Disk_Label">
+		Знімок на диск
+	</string>
+	<string name="Command_Radar_Label">
+		радар
+	</string>
+	<string name="Command_Conversation_Log_Label">
+		Журнал розмов
+	</string>
+	<string name="Command_Move_Lock_Label">
+		Блок руху
+	</string>
+	<string name="Command_Blocklist_Label">
+		Чорний список
+	</string>
+	<string name="Command_ResyncAnimations_Label">
+		Синхронізація анімації
+	</string>
+	<string name="Command_RegionTracker_Label">
+		Трекер регіону
+	</string>
+	<string name="Command_Group_Titles_Label">
+		Титули Груп
+	</string>
+	<string name="Command_Wearable_Favorites_Label">
+		Вибрані Одягу
+	</string>
+	<string name="Command_RFO_Label">
+		Показувати лише друзів
+	</string>
+	<string name="Command_DAO_Label">
+		Сховати Анімеші
+	</string>
+	<string name="Command_Beacons_Label">
+		Маяки
+	</string>
+	<string name="Command_360_Capture_Tooltip">
+		Створення прямокутного зображення у форматі 360°
+	</string>
+	<string name="Command_AboutLand_Tooltip">
+		Інформація про відвідувану вами землю
+	</string>
+	<string name="Command_Appearance_Tooltip">
+		Змінити свій аватар
+	</string>
+	<string name="Command_Avatar_Tooltip">
+		Виберіть повний аватар
+	</string>
+	<string name="Command_Build_Tooltip">
+		Побудова об'єктів та формування ландшафту (CTRL+4)
+	</string>
+	<string name="Command_Chat_Tooltip">
+		Спілкуйтеся з людьми поблизу тексту (CTRL+T)
+	</string>
+	<string name="Command_Conversations_Tooltip">
+		Спілкуйтесь з усіма (CTRL+T)
+	</string>
+	<string name="Command_Compass_Tooltip">
+		компас
+	</string>
+	<string name="Command_Destinations_Tooltip">
+		Цікаві місця
+	</string>
+	<string name="Command_Environments_Tooltip">
+		Середи
+	</string>
+	<string name="Command_Flickr_Tooltip">
+		Завантажити на Flickr
+	</string>
+	<string name="Command_Gestures_Tooltip">
+		Жести для вашого аватара (CTRL+G)
+	</string>
+	<string name="Command_Grid_Status_Tooltip">
+		Показати поточний статус сітки
+	</string>
+	<string name="Command_HowTo_Tooltip">
+		Виконання типових завдань
+	</string>
+	<string name="Command_Inventory_Tooltip">
+		Перегляд та використання вашого майна (CTRL+I)
+	</string>
+	<string name="Command_Map_Tooltip">
+		Мапа світу (CTRL+M)
+	</string>
+	<string name="Command_Marketplace_Tooltip">
+		Покупки
+	</string>
+	<string name="Command_MarketplaceListings_Tooltip">
+		Продайте свої творіння
+	</string>
+	<string name="Command_MiniMap_Tooltip">
+		Показати людей поблизу (CTRL+SHIFT+M)
+	</string>
+	<string name="Command_Move_Tooltip">
+		Переміщення аватара
+	</string>
+	<string name="Command_People_Tooltip">
+		Друзі, групи та люди поблизу (CTRL+SHIFT+A)
+	</string>
+	<string name="Command_Performance_Tooltip">
+		Налаштуйте параметри графіки
+	</string>
+	<string name="Command_Picks_Tooltip">
+		Місця, які будуть показані у вашому профілі як вибране
+	</string>
+	<string name="Command_Places_Tooltip">
+		Збережені місця (ALT+H)
+	</string>
+	<string name="Command_Preferences_Tooltip">
+		Налаштування (CTRL+P)
+	</string>
+	<string name="Command_Profile_Tooltip">
+		Редагування або перегляд вашого профілю
+	</string>
+	<string name="Command_Report_Abuse_Tooltip">
+		Скарга
+	</string>
+	<string name="Command_Search_Tooltip">
+		Пошук місць, подій, людей (CTRL+F)
+	</string>
+	<string name="Command_Snapshot_Tooltip">
+		Зробити знімок (CTRL+SHIFT+S)
+	</string>
+	<string name="Command_Speak_Tooltip">
+		Розмовляйте з людьми навколо вас за допомогою мікрофона
+	</string>
+	<string name="Command_View_Tooltip">
+		Зміна кута камери
+	</string>
+	<string name="Command_Voice_Tooltip">
+		Регулювання гучності дзвінків та голосів людей біля вас
+	</string>
+	<string name="Command_Quickprefs_Tooltip">
+		Швидкі налаштування, щоб змінити часті настройки
+	</string>
+	<string name="Command_AO_Tooltip">
+		АТ
+	</string>
+	<string name="Command_Webbrowser_Tooltip">
+		Відкрити вбудований веб-браузер (CTRL+SHIFT+Z)
+	</string>
+	<string name="Command_Default_Chat_Bar_Tooltip">
+		Показати або приховати панель чату за промовчанням
+	</string>
+	<string name="Command_Areasearch_Tooltip">
+		Пошук об'єктів навколо
+	</string>
+	<string name="Command_Settings_Debug_Tooltip">
+		Змінити налаштування конфігурації клієнта (CTRL+ALT+SHIFT+S)
+	</string>
+	<string name="Command_Statistics_Tooltip">
+		Показати статистику (CTRL+SHIFT+1)
+	</string>
+	<string name="Command_Region_Tooltip">
+		Відкрити інструменти регіону (ALT+R)
+	</string>
+	<string name="Command_Groundsit_Tooltip">
+		Сісти на землю (CTRL+ALT+S)
+	</string>
+	<string name="Command_Sound_Explorer_Tooltip">
+		Відкрити браузер звуків
+	</string>
+	<string name="Command_Asset_Blacklist_Tooltip">
+		Відкрити чорний список
+	</string>
+	<string name="Command_Phototools_Tooltip">
+		Інструменти для створення фотографій (ALT+P).
+	</string>
+	<string name="Command_Phototools_View_Tooltip">
+		Розширені налаштування фотокамери (CTRL+SHIFT+C)
+	</string>
+	<string name="Command_Contact_Sets_Tooltip">
+		Відкрити набори контактів (CTRL+ALT+SHIFT+C)
+	</string>
+	<string name="Command_Mouselook_Tooltip">
+		Режим 'від першої особи' (M)
+	</string>
+	<string name="Command_Landmark_Here_Tooltip">
+		Створити закладку поточного місця
+	</string>
+	<string name="Command_Teleport_History_Tooltip">
+		Відкрити історію телепортацій (ALT+H)
+	</string>
+	<string name="Command_Pose_Stand_Tooltip">
+		Поза редагування зовнішності аватара
+	</string>
+	<string name="Command_Snapshot_To_Disk_Tooltip">
+		Зробити швидку фотографію на диск
+	</string>
+	<string name="Command_Radar_Tooltip">
+		Відкрити радар
+	</string>
+	<string name="Command_Conversation_Log_Tooltip">
+		Відкрити журнал повідомлень, щоб переглянути листування
+	</string>
+	<string name="Command_Move_Lock_Tooltip">
+		Блокувати пересування аватара (CTRL+ALT+P)
+	</string>
+	<string name="Command_Blocklist_Tooltip">
+		Відкрити список заблокованих
+	</string>
+	<string name="Command_ResyncAnimations_Tooltip">
+		Синхронізація анімацій аватара
+	</string>
+	<string name="Command_RegionTracker_Tooltip">
+		Відслідковувати статус різних регіонів
+	</string>
+	<string name="Command_Group_Titles_Tooltip">
+		Змінити активний титул групи
+	</string>
+	<string name="Command_Wearable_Favorites_Tooltip">
+		відкрити список вибраних одягу
+	</string>
+	<string name="Command_RFO_Tooltip">
+		Показує лише своїх друзів, решта аватарів будуть невидимі. Після увімкнення телепортація відновить видимість інших.
+	</string>
+	<string name="Command_DAO_Tooltip">
+		Приховати Анімовані Об'єкти (також відомі як Анімеш) - тимчасово скасовує всі видимі нині Анімеш (приєднані та вільно гуляючі). Приховані анімеші з'являться знову після телепорту
+	</string>
+	<string name="Command_Beacons_Tooltip">
+		Показати маяки
+	</string>
+	<string name="Toolbar_Bottom_Tooltip">
+		зараз на нижній панелі інструментів
+	</string>
+	<string name="Toolbar_Left_Tooltip">
+		зараз на лівій панелі інструментів
+	</string>
+	<string name="Toolbar_Right_Tooltip">
+		зараз на правій панелі інструментів
+	</string>
+	<string name="Command_Fly_Tooltip">
+		Перемикання режиму польоту Увімкнено/Вимкнено (HOME)
+	</string>
+	<string name="Command_Stop_Animations_Label">
+		Зупинити анімації
+	</string>
+	<string name="Command_Stop_Animations_Tooltip">
+		Зупинити анімації мого аватара
+	</string>
+	<string name="Retain%">
+		Залишок%
+	</string>
+	<string name="Detail">
+		Деталізація
+	</string>
+	<string name="Краща деталізація">
+		Більш детально
+	</string>
+	<string name="Поверхня">
+		Поверхня
+	</string>
+	<string name="Solid">
+		Суцільний
+	</string>
+	<string name="Wrap">
+		Оболонка
+	</string>
+	<string name="Попередній перегляд">
+		Попередній перегляд
+	</string>
+	<string name="Normal">
+		Нормальний
+	</string>
+	<string name="Pathfinding_Wiki_URL">
+		http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
+	</string>
+	<string name="Pathfinding_Object_Attr_None">
+		Ні
+	</string>
+	<string name="Pathfinding_Object_Attr_Permanent">
+		Впливає на навігаційну сітку
+	</string>
+	<string name="Pathfinding_Object_Attr_Character">
+		Персонаж
+	</string>
+	<string name="Pathfinding_Object_Attr_MultiSelect">
+		(Кілька)
+	</string>
+	<string name="snapshot_quality_very_low">
+		Дуже низька
+	</string>
+	<string name="snapshot_quality_low">
+		Низьке
+	</string>
+	<string name="snapshot_quality_medium">
+		Середнє
+	</string>
+	<string name="snapshot_quality_high">
+		Висока
+	</string>
+	<string name="snapshot_quality_very_high">
+		Дуже висока
+	</string>
+	<string name="IMPrefix">
+		LS:
+	</string>
+	<string name="SanityCheckEquals">
+		Налаштування керування &quot;[CONTROL_NAME]&quot; має бути [VALUE_1].
+	</string>
+	<string name="SanityCheckNotEquals">
+		Налаштування керування&quot;[CONTROL_NAME]&quot; не має бути [VALUE_1].
+	</string>
+	<string name="SanityCheckLessThan">
+		Налаштування керування &quot;[CONTROL_NAME]&quot; має бути менше [VALUE_1].
+	</string>
+	<string name="SanityCheckGreaterThan">
+		Налаштування керування &quot;[CONTROL_NAME]&quot; повинні бути вищими ніж [VALUE_1].
+	</string>
+	<string name="SanityCheckLessThanEquals">
+		Налаштування керування &quot;[CONTROL_NAME]&quot; повинні бути нижчими або рівними [VALUE_1].
+	</string>
+	<string name="SanityCheckGreaterThanEquals">
+		Налаштування керування &quot;[CONTROL_NAME]&quot; повинні бути вищими або рівними [VALUE_1].
+	</string>
+	<string name="SanityCheckBetween">
+		Налаштування керування &quot;[CONTROL_NAME]&quot; повинні бути між [VALUE_1] та [VALUE_2].
+	</string>
+	<string name="SanityCheckNotBetween">
+		Налаштування керування &quot;[CONTROL_NAME]&quot; не повинні бути між [VALUE_1] та [VALUE_2].
+	</string>
+	<string name="MediaFilterActionAllow">
+		Дозволити
+	</string>
+	<string name="MediaFilterActionDeny">
+		Заборонити
+	</string>
+	<string name="MediaFilterConditionAlways">
+		Завжди
+	</string>
+	<string name="MediaFilterConditionAlwaysLower">
+		завжди
+	</string>
+	<string name="MediaFilterConditionNever">
+		Ніколи
+	</string>
+	<string name="MediaFilterConditionNeverLower">
+		ніколи
+	</string>
+	<string name="MediaFilterMediaContentBlocked">
+		Медіа для домену [DOMAIN] було заблоковано.
+	</string>
+	<string name="MediaFilterMediaContentDomainAlwaysAllowed">
+		Медіа для домену [DOMAIN] завжди відтворюватиметься.
+	</string>
+	<string name="MediaFilterMediaContentDomainAlwaysBlocked">
+		Медіа для домену [DOMAIN] ніколи не відтворюватиметься.
+	</string>
+	<string name="MediaFilterMediaContentUrlAlwaysAllowed">
+		Медіа для URL [MEDIAURL] завжди буде відтворюватися.
+	</string>
+	<string name="MediaFilterMediaContentUrlAlwaysBlocked">
+		Медіа для URL [MEDIAURL] ніколи не буде відтворюватися.
+	</string>
+	<string name="MediaFilterAudioContentBlocked">
+		Аудіо домену [DOMAIN] було заблоковано.
+	</string>
+	<string name="MediaFilterAudioContentDomainAlwaysAllowed">
+		Аудіо домену [DOMAIN] завжди буде відтворено.
+	</string>
+	<string name="MediaFilterAudioContentDomainAlwaysBlocked">
+		Аудіо домену [DOMAIN] ніколи не відтворюватиметься.
+	</string>
+	<string name="MediaFilterAudioContentUrlAlwaysAllowed">
+		Аудіо для URL [MEDIAURL] завжди буде відтворено.
+	</string>
+	<string name="MediaFilterAudioContentUrlAlwaysBlocked">
+		Аудіо для URL [MEDIAURL] ніколи не відтворюватиметься.
+	</string>
+	<string name="MediaFilterBlacklist">
+		Чорний список
+	</string>
+	<string name="MediaFilterWhitelist">
+		Білий список
+	</string>
+	<string name="UnknownRegion">
+		(Невідомий регіон)
+	</string>
+	<string name="UnknownPosition">
+		(Невідома позиція)
+	</string>
+	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">
+		[AGENT][REGION](Подвійне натискання для відкриття карти, shift+тягти для переміщення)
+	</string>
+	<string name="NetMapDoubleClickTeleportToolTipMsg">
+		[REGION](Подвійне натискання для телепортації, shift+тягти для переміщення)
+	</string>
+	<string name="NetMapDoubleClickNoActionToolTipMsg">
+		[РЕГІОН]
+	</string>
+	<string name="Collision_Bump">
+		[NAME] натрапив на вас.
+	</string>
+	<string name="Collision_PushObject">
+		[NAME] штовхнув вас скриптом.
+	</string>
+	<string name="Collision_ObjectCollide">
+		[NAME] вдарив вас об'єктом.
+	</string>
+	<string name="Collision_ScriptedObject">
+		[NAME] вдарив вас скриптовим об'єктом.
+	</string>
+	<string name="Collision_PhysicalObject">
+		[NAME] вдарив вас фізичним об'єктом.
+	</string>
+	<string name="Collision_UnknownType">
+		[NAME] є причиною зіткнення невідомого типу.
+	</string>
+	<string name="MovelockEnabled">
+		Аватар на &gt; Рух &gt; Заблокувати увімкнена
+	</string>
+	<string name="BusyResponse">
+		відповідь зайнятості
+	</string>
+	<string name="TeleportMaturityExceeded">
+		Мешканець не може відвідати цей регіон.
+	</string>
+	<string name="UserDictionary">
+		[Користувач]
+	</string>
+	<string name="RLVaPendingRestart">
+		(Чекає перезавантаження)
+	</string>
+	<string name="RLVaToggleMessageLogin">
+		RLVa був [STATE] (не вимагає перезавантаження)
+	</string>
+	<string name="RLVaToggleMessageRestart">
+		RLVa буде [STATE] після перезавантаження
+	</string>
+	<string name="RLVaToggleEnabled">
+		включені
+	</string>
+	<string name="RLVaToggleDisabled">
+		вимкнено
+	</string>
+	<string name="RLVaStatusDisabled">
+		(вимкнено)
+	</string>
+
+	<string name="experience_tools_experience">
+		Пригода
+	</string>
+	<string name="ExperienceNameNull">
+		(без пригоди)
+	</string>
+	<string name="ExperienceNameUntitled">
+		(Пригода без назви)
+	</string>
+	<string name="Land-Scope">
+		Прив'язано до землі
+	</string>
+	<string name="Grid-Scope">
+		Прив'язано до сітки
+	</string>
+	<string name="Allowed_Experiences_Tab">
+		Дозволені
+	</string>
+	<string name="Blocked_Experiences_Tab">
+		Заблоковані
+	</string>
+	<string name="Contrib_Experiences_Tab">
+		Автор
+	</string>
+	<string name="Admin_Experiences_Tab">
+		Адміністратор
+	</string>
+	<string name="Recent_Experiences_Tab">
+		Недавні
+	</string>
+	<string name="Owned_Experiences_Tab">
+		Власні
+	</string>
+	<string name="ExperiencesCounter">
+		([EXPERIENCES], максимум: [MAXEXPERIENCES])
+	</string>
+	<string name="ExperiencePermission1">
+		взяти управління на себе
+	</string>
+	<string name="ExperiencePermission3">
+		запускати анімації на вашому аватарі
+	</string>
+	<string name="ExperiencePermission4">
+		прикріпити до аватара
+	</string>
+	<string name="ExperiencePermission9">
+		стежити за камерою
+	</string>
+	<string name="ExperiencePermission10">
+		керувати камерою
+	</string>
+	<string name="ExperiencePermission11">
+		телепортувати вас
+	</string>
+	<string name="ExperiencePermission12">
+		автоматично приймати дозволи пригоди
+	</string>
+	<string name="ExperiencePermission16">
+		змусити ваш аватар сісти
+	</string>
+	<string name="ExperiencePermission17">
+		змінити ваші налаштування середовища
+	</string>
+	<string name="ExperiencePermissionShortUnknown">
+		виконав невідому операцію: [Permission]
+	</string>
+	<string name="ExperiencePermissionShort1">
+		Взяти управління
+	</string>
+	<string name="ExperiencePermissionShort3">
+		Запуск анімацій
+	</string>
+	<string name="ExperiencePermissionShort4">
+		Приєднати
+	</string>
+	<string name="ExperiencePermissionShort9">
+		Стежити за камерою
+	</string>
+	<string name="ExperiencePermissionShort10">
+		Керувати камерою
+	</string>
+	<string name="ExperiencePermissionShort11">
+		Телепортація
+	</string>
+	<string name="ExperiencePermissionShort12">
+		Дозвіл
+	</string>
+	<string name="ExperiencePermissionShort16">
+		Сісти
+	</string>
+	<string name="ExperiencePermissionShort17">
+		Середа
+	</string>
+	<string name="logging_calls_disabled_log_empty">
+		Розмови не записуються. Щоб розпочати запис, у меню "Параметри > Приватність > Історії розмов" виберіть "Зберегти:" "Тільки журнал" або "Журнал та історія".
+	</string>
+	<string name="logging_calls_disabled_log_not_empty">
+		Розмови більше не записуватимуться. Щоб відновити запис, у меню "Параметри > Приватність > Історії розмов" виберіть "Зберегти:" "Тільки журнал" або "Журнал та історія".
+	</string>
+	<string name="logging_calls_enabled_log_empty">
+		Немає зареєстрованих розмов. Якщо ви звернетеся до когось або навпаки, у журналі з'явиться новий запис.
+	</string>
+	<string name="loading_chat_logs">
+		Завантаження...
+	</string>
+	<string name="that">
+		н/о
+	</string>
+	<string name="preset_combo_label">
+		-Порожній список-
+	</string>
+	<string name="Default">
+		За замовчуванням
+	</string>
+	<string name="none_paren_cap">
+		(Ні)
+	</string>
+	<string name="no_limit">
+		неогр.
+	</string>
+	<string name="Mav_Details_MAV_FOUND_DEGENERATE_TRIANGLES">
+		Фізична форма містить надто маленькі трикутники. Спробуйте спростити фізичну модель.
+	</string>
+	<string name="Mav_Details_MAV_CONFIRMATION_DATA_MISMATCH">
+		Фізична форма містить неправильні дані підтвердження. Спробуйте виправити фізичну модель.
+	</string>
+	<string name="Mav_Details_MAV_UNKNOWN_VERSION">
+		Фізична форма немає правильної версії. Встановіть правильну версію фізичної моделі.
+	</string>
+	<string name="couldnt_resolve_host">
+		DNS не вдалося дозволити ім'я сайту ([HOSTNAME]).
+Перевірте можливість підключення до веб-сайту www.secondlife.com.
+Якщо ви продовжуєте отримувати цю помилку, перейдіть до розділу
+підтримки та повідомте про проблему.
+	</string>
+	<string name="ssl_peer_certificate">
+		Серверу входу в систему не вдалося пройти аутентифікацію за допомогою
+протоколу SSL. Якщо ви продовжуєте отримувати цю помилку,
+перейдіть до розділу підтримки на веб-сайті SecondLife.com
+та повідомте про проблему.
+	</string>
+	<string name="ssl_connect_error">
+		Часто це означає, що годинник комп'ютера встановлено неправильно.
+Перейдіть, будь ласка, на Панелі керування та переконайтеся у правильній
+встановлення часу та дати. Також перевірте правильність налаштування мережі
+та брандмауера. Якщо ви продовжуєте отримувати цю помилку, перейдіть до
+розділ підтримки на веб-сайті SecondLife.com та повідомте про проблему.
+
+[https://community.secondlife.com/knowledgebase/english/error-messages-r520/#Section__3 База знань]
+	</string>
+	<string name="LoadCameraPositionNoneSaved">
+		Положення камери не було збережено.
+	</string>
+	<string name="LoadCameraPositionOutsideDrawDistance">
+		Неможливо відновити вигляд камери, тому що положення камери поза досяжністю промальовування.
+	</string>
+	<string name="DrawDistanceSteppingGestureObsolete">
+		Через зміни у коді більше не потрібно використовувати цей жест. Прогресивна покрокова промальовка була включена.
+	</string>
+	<string name="FSCameraPositionCopied">
+		Положення камери [POS] скопійовано в буфер
+	</string>
+	<string name="FSCmdLineDrawDistanceSet">
+		Расстояние прорисовки установлено на [DISTANCE]м.
+	</string>
+	<string name="FSCmdLineRollDiceTotal">
+		Загальний результат для [DICE]d[FACES][MODIFIER]: [RESULT].
+	</string>
+	<string name="FSCmdLineRollDiceLimits">
+		Ви повинні надати позитивні значення для кістки (не більше 100) та граней (не більше 1000).
+	</string>
+	<string name="FSCmdLineRollDiceModifiersInvalid">
+		Якщо ви хочете використовувати модифікатор, ви повинні надати дійсний номер модифікатора і тип модифікатора. Модифікатор повинен бути в діапазоні від -1000 до 1000. Допустимі типи модифікаторів "+" (бонуси), "-" (штрафи), "&gt;", "&lt;" (успіхи), "r&gt;", "r&lt;", "r" (перекидання), "!p&gt;", "!p&lt;", "!p" (поширення), "!&gt;", "!&lt;" та "!" (вибухи). Ви можете використовувати лише один тип модифікатора за кидок. Наприклад: "[COMMAND] 1 20 + 5", "[COMMAND] 5 40 &gt; 15", "[COMMAND] 10 25 ! 25", "[COMMAND] 15 25 !&lt; 10".
+	</string>
+	<string name="FSCmdLineRollDiceExploded">
+		Висаджений
+	</string>
+	<string name="FSCmdLineRollDicePenetrated">
+		Прониклий
+	</string>
+	<string name="FSCmdLineRollDiceSuccess">
+		Успішний
+	</string>
+	<string name="FSCmdLineRollDiceReroll">
+		Перекинуто
+	</string>
+	<string name="FSCmdLineRollDiceFreezeGuard">
+		Ця операція не може бути завершена, тому що клієнт завис у нескінченному циклі значень. Будь ласка, змініть критерії.
+	</string>
+	<string name="FSCmdLineCalcRandError">
+		'[RAND]' не є дійсним виразом для RAND(min,max). MAX має бути вищим, ніж MIN, як у діапазоні від -10000 до 10000.
+	</string>
+	<string name="FSCmdLineRSP">
+		Максимальну пропускну спроможність встановлено [VALUE] КБ/С.
+	</string>
+	<string name="FSCmdLineTpOffered">
+		Запропонована телепортація [NAME].
+	</string>
+	<string name="FSWithHavok">
+		з підтримкою Havok
+	</string>
+	<string name="FSWithOpensim">
+		з підтримкою OpenSimulator
+	</string>
+	<string name="not_found">
+		&apos;[TEXT]&apos; не знайдено
+	</string>
+	<string name="no_results">
+		Немає результатів
+	</string>
+	<string name="пошук">
+		Пошук...
+	</string>
+	<string name="all_categories">
+		Усі категорії
+	</string>
+	<string name="search_banned">
+		Деякі терміни пошукового запиту були виключені через обмеження на зміст
+	</string>
+	<string name="search_short">
+		Ваші критерії пошуку надто короткі, тому пошук не було здійснено.
+	</string>
+	<string name="search_disabled">
+		Старий пошук був вимкнений у цьому регіоні
+	</string>
+	<string name="render_quality_low">
+		Низька (1/7)
+	</string>
+	<string name="render_quality_mediumlow">
+		Середньо-низька (2/7)
+	</string>
+	<string name="render_quality_medium">
+		Середня (3/7)
+	</string>
+	<string name="render_quality_mediumhigh">
+		Середньо-висока (4/7)
+	</string>
+	<string name="render_quality_high">
+		Високий (5/7)
+	</string>
+	<string name="render_quality_higultra">
+		Висока ультра (6/7)
+	</string>
+	<string name="render_quality_ultra">
+		Ультра (7/7)
+	</string>
+	<string name="render_quality_unknown">
+		Невідоме, за межами нормального діапазону, перевірте налаштування налагодження RenderQualityPerformance
+	</string>
+	<string name="fsbridge_cant_create_disabled">
+		[APP_NAME] не може створити міст LSL, якщо "Активувати міст LSL" вимкнено в налаштуваннях.
+	</string>
+	<string name="fsbridge_no_library">
+		[APP_NAME] не може створити міст LSL. Будь ласка, увімкніть бібліотеку та перезайдіть.
+	</string>
+	<string name="fsbridge_already_creating">
+		Створення мосту у процесі. Зачекайте кілька хвилин, перш ніж намагатися знову.
+	</string>
+	<string name="fsbridge_creating">
+		Створення мосту. Це може зайняти час, будь ласка, зачекайте.
+	</string>
+	<string name="fsbridge_failure_creation_create_script">
+		Міст не створено. Скрипт моста не може бути створений.
+	</string>
+	<string name="fsbridge_failure_creation_bad_name">
+		Міст не створено. Міст названий неправильно. Використовуйте меню [APP_NAME] 'Аватар/Виправлення аватара/Перетворити LSL міст', щоб перестворити міст.
+	</string>
+	<string name="fsbridge_failure_creation_null">
+		Міст не створюється. Міст не знайдено в інвентарі. Використовуйте меню [APP_NAME] 'Аватар/Виправлення аватара/Перетворити LSL міст', щоб перестворити міст.
+	</string>
+	<string name="fsbridge_failure_attach_wrong_object">
+		Міст не вдалося приєднати. Це не поточна версія мосту. Використовуйте меню [APP_NAME] 'Аватар/Виправлення аватара/Перетворити LSL міст', щоб перестворити міст.
+	</string>
+	<string name="fsbridge_failure_attach_wrong_location">
+		Міст не вдалося приєднати. Міст не було знайдено у потрібному місці інвентарю. Використовуйте меню [APP_NAME] 'Аватар/Виправлення аватара/Перетворити LSL міст', щоб перестворити міст.
+	</string>
+	<string name="fsbridge_failure_attach_point_in_use">
+		Міст не вдалося приєднати. Щось ще використовує місце кріплення моста. Використовуйте меню [APP_NAME] 'Аватар/Виправлення аватара/Перетворити LSL міст', щоб перестворити міст.
+	</string>
+	<string name="fsbridge_failure_not_found">
+		Об'єкт мосту не знайдено. Неможливо розпочати його створення.
+	</string>
+	<string name="fsbridge_warning_unexpected_items">
+		Інвентар мосту містить непередбачені предмети.
+	</string>
+	<string name="fsbridge_warning_not_finished">
+		Міст не закінчив створення, використовуйте меню [APP_NAME] 'Аватар/Виправлення аватара/Перетворити LSL міст', щоб перестворити міст.
+	</string>
+	<string name="fsbridge_detached">
+		Міст від'єднаний
+	</string>
+	<string name="fsbridge_created">
+		Міст створений.
+	</string>
+	<string name="fsbridge_script_info">
+		Інформація скрипта: '[OBJECT_NAME]': [[OBJECT_RUNNING_SCRIPT_COUNT]/[OBJECT_TOTAL_SCRIPT_COUNT]] запущених скриптів, [OBJECT_SCRIPT_MEMORY] KB дозволяється обмеження на розмір пам'яті, [OBJECT_SCRIPT_TIME]T ms.
+	</string>
+	<string name="fsbridge_script_info_pf">
+		Середній час процесора використовується для пошуку навігаційного шляху: [OBJECT_CHARACTER_TIME] ms.
+	</string>
+	<string name="fsbridge_script_info_ext">
+ID об'єкта: [INSPECTING_KEY]
+Опис: [OBJECT_DESC]
+Кореневий прим: [OBJECT_ROOT]
+Кількість примов: [OBJECT_PRIM_COUNT]
+Вплив на землю: [OBJECT_PRIM_EQUIVALENCE]
+В інвентарі: [OBJECT_TOTAL_INVENTORY_COUNT]
+Швидкість: [OBJECT_VELOCITY]
+Позиція: [OBJECT_POS]
+Гниття: [OBJECT_ROT]
+Кутова швидкість: [OBJECT_OMEGA] (радіан за секунду)
+Автор: [OBJECT_CREATOR]
+Власник: [OBJECT_OWNER]
+Попередній власник: [OBJECT_LAST_OWNER_ID]
+Викладено: [OBJECT_REZZER_KEY]
+Група: [OBJECT_GROUP]
+Час створення: [OBJECT_CREATION_TIME]
+Час розміщення: [OBJECT_REZ_TIME]
+Тип пошуку шляху: [OBJECT_PATHFINDING_TYPE]
+Приєднано до: [OBJECT_ATTACHED_POINT]
+Тимчасово приєднано: [OBJECT_TEMP_ATTACHED]
+Ваша посада: [AVATAR_POS]
+	</string>
+	<string name="fsbridge_error_scriptinfonotfound">
+		Інформація скрипта: Об'єкт є недійсним або поза досяжністю.
+	</string>
+	<string name="fsbridge_error_scriptinfomalformed">
+		Інформація скрипта: Надійшла неправильна відповідь від мосту. Спробуйте ще раз.
+	</string>
+	<string name="fsbridge_error_injection">
+		УВАГА: Один або кілька скриптів були додані у ваш міст [APP_NAME]! Якщо ви не очікували цього повідомлення, скористайтеся параметром меню [APP_NAME] «Аватар/ Виправлення аватара/Перетворити LSL міст», щоб створити міст знову.
+	</string>
+	<string name="fsbridge_error_wrongvm">
+		УВАГА: Скрипт мосту використовує старий LSO (обмеження пам'яті 16 КБ) замість нової віртуальної машини Mono (обмеження пам'яті 64 КБ), що створює високу ймовірність колізії стека і збою мосту через брак пам'яті. Будь ласка, натисніть [APP_NAME] «Аватар/Виправлення аватара/Перетворити LSL міст» для відтворення мосту. Якщо ви знову побачите це повідомлення, спробуйте ще раз в іншому регіоні.
+	</string>
+
+	<!-- <FS:Zi> Повідомлення про ввімкнення/вимкнення заміни анімації - FIRE-24160 -->
+	<string name="FSAOEnabled">Менеджер анімації [APP_NAME] увімкнено.</string>
+	<string name="FSAODisabled">Диспетчер анімацій [APP_NAME] вимкнений.</string>
+	<string name="FSAOPausedScript">Зупинено прикріпленим скриптом.</string>
+	<string name="FSAOResumedScript">Відновлено прикріпленим скриптом.</string>
+	<string name="FSAOStandsPausedScript">Стоячі анімації призупинені прикріпленим скриптом.</string>
+	<string name="FSAOStandsResumedScript">Стоячі анімації відновлені прикріпленим скриптом.</string>
+
+	<string name="QP Draw Distance">
+		Дальність промальовування
+	</string>
+	<string name="QP Max Particles">
+		Максимум частинок
+	</string>
+	<string name="QP Avatar Physics LOD">
+		LOD фізики аватарів
+	</string>
+	<string name="QP LOD Factor">
+		Фактор LOD
+	</string>
+	<string name="QP Max Avatars">
+		Максимум аватарів
+	</string>
+	<string name="QP Tags Offset">
+		Висота тегів
+	</string>
+	<string name="QP Name Tags">
+		Теги імен
+	</string>
+	<string name="QP LookAt Target">
+		Фокус камери
+	</string>
+	<string name="QP Color Under Cursor">
+		Колір під курсором
+	</string>
+	<string name="PS_T_Pose">
+		Руки в сторони
+	</string>
+	<string name="PS_Arms_Down_Legs_together">
+		Руки вниз, ноги разом
+	</string>
+	<string name="PS_Arms_down_sitting">
+		Руки вниз, сидячи
+	</string>
+	<string name="PS_Arms_downward_Legs_together">
+		Руки піднесені, ноги разом
+	</string>
+	<string name="PS_Arms_downward_Legs_apart">
+		Руки піднесені, ноги нарізно
+	</string>
+	<string name="PS_Arms_forward_Legs_apart">
+		Руки вперед, ноги нарізно
+	</string>
+	<string name="PS_Arms_forward_Legs_together">
+		Руки вперед, ноги разом
+	</string>
+	<string name="PS_Arms_straight_Legs_apart">
+		Руки прямо, ноги нарізно
+	</string>
+	<string name="PS_Arms_straight_sitting">
+		Руки прямо сидячи
+	</string>
+	<string name="PS_Arms_upward_Legs_apart">
+		Руки вгору, ноги нарізно
+	</string>
+	<string name="PS_Arms_upward_Legs_together">
+		Руки вгору, ноги разом
+	</string>
+	<string name="QP_WL_Region_Default">
+		За замовчуванням
+	</string>
+	<string name="QP_WL_Day_Cycle_Based">
+		На основі денного циклу
+	</string>
+	<string name="QP_WL_None">
+		Ні
+	</string>
+	<string name="GroupChatMuteNotice">
+		Вимкнення групового чату від [NAME].
+	</string>
+	<string name="IgnoredAdHocSession">
+		[AVATAR_NAME] запросив вас на конференцію, але клієнт автоматично ігнорував це, тому що так встановлено ваші налаштування.
+	</string>
+	<string name="camera_no_focus">
+		Камера не може сфокусуватися на користувачеві [AVATARNAME], тому що він знаходиться за межами вашої відстані.
+	</string>
+	<string name="entering_draw_distance">
+		увійшов у межу промальовування ([DISTANCE] м).
+	</string>
+	<string name="leaving_draw_distance">
+		залишив кордон промальовування
+	</string>
+	<string name="entering_chat_range">
+		увійшов до радіусу чату ([DISTANCE] м).
+	</string>
+	<string name="leaving_chat_range">
+		залишив радіус чату
+	</string>
+	<string name="entering_region">
+		увійшов до регіону
+	</string>
+	<string name="entering_region_distance">
+		увійшов у регіон ([DISTANCE] м).
+	</string>
+	<string name="leaving_region">
+		залишив регіон
+	</string>
+	<string name="avatar_age_alert">
+		спрацювало вікове попередження. Вік: [AGE] днів
+	</string>
+	<string name="TotalScriptCountChangeIncrease">
+		Кількість скриптів у регіоні зросла з [OLD_VALUE] до [NEW_VALUE] ([DIFFERENCE]).
+	</string>
+	<string name="TotalScriptCountChangeDecrease">
+		Кількість скриптів у регіоні знизилася з [OLD_VALUE] до [NEW_VALUE] ([DIFFERENCE]).
+	</string>
+	<string name="preproc_toggle_warning">
+		Переключення препроцесора не дасть повного ефекту, доки ви не закриєте і знову не відкриєте цей редактор.
+	</string>
+	<string name="fs_preprocessor_starting">
+		[APP_NAME] запустив препроцесор...
+	</string>
+	<string name="fs_preprocessor_not_supported">
+		УВАГА: Препроцесор не підтримується у цій збірці. ([WHERE])
+	</string>
+	<string name="fs_preprocessor_disabled_by_script_marker">
+		[APP_NAME] відключив препроцесор за директивою в рядку [LINENUMBER].
+	</string>
+	<string name="fs_preprocessor_settings_list_prefix">
+		Налаштування:
+	</string>
+	<string name="fs_preprocessor_exception">
+		[ERR_NAME] ([LINENUMBER]): знайдено виняток: [ERR_DESC]
+	</string>
+	<string name="fs_preprocessor_error">
+		[ERR_NAME] ([LINENUMBER]): знайдено непередбачений виняток.
+	</string>
+	<string name="fs_preprocessor_lsl2_directive_override">
+		Виявлено встановлення перевизначення переваги директиви compile-as-LSL2.
+	</string>
+	<string name="fs_preprocessor_mono_directive_override">
+		Виявлено перевизначене встановлення переваги директиви compile-as-Mono.
+	</string>
+	<string name="fs_preprocessor_optimizer_start">
+		Оптимізація невикористовуваних функцій, що визначаються користувачем та глобальні змінні.
+	</string>
+	<string name="fs_preprocessor_optimizer_regex_err">
+		Не дійсний регулярний вираз: '[WHAT]'; Пропущена оптимізація LSL.
+	</string>
+	<string name="fs_preprocessor_optimizer_exception">
+		Виявлено виняток: '[WHAT]'; Пропущена оптимізація LSL.
+	</string>
+	<string name="fs_preprocessor_optimizer_unexpected_exception">
+		Несподіваний виняток у LSL оптимізаторі; не застосовується.
+	</string>
+	<string name="fs_preprocessor_compress_start">
+		Стиснення тексту сценарію, видалення непотрібного місця.
+	</string>
+	<string name="fs_preprocessor_compress_regex_err">
+		Не дійсний регулярний вираз: '[WHAT]'; Пропущена оптимізація LSL.
+	</string>
+	<string name="fs_preprocessor_compress_exception">
+		Виявлено виняток: '[WHAT]'; Пропущена оптимізація LSL.
+	</string>
+	<string name="fs_preprocessor_compress_unexpected_exception">
+		Несподіваний виняток у LSL оптимізаторі; не застосовується.
+	</string>
+	<string name="fs_preprocessor_lazylist_start">
+		Застосування перетворення лінивого списку.
+	</string>
+	<string name="fs_preprocessor_lazylist_regex_err">
+		Не дійсний регулярний вираз: '[WHAT]'; конвертування лінивого списку пропущено.
+	</string>
+	<string name="fs_preprocessor_lazylist_exception">
+		Виявлено виняток: '[WHAT]'; конвертування лінивого списку пропущено.
+	</string>
+	<string name="fs_preprocessor_lazylist_unexpected_exception">
+		Несподіваний виняток у конвертуванні лінивого списку; не застосовується.
+	</string>
+	<string name="fs_preprocessor_switchstatement_start">
+		Застосування перемикання оператора змін.
+	</string>
+	<string name="fs_preprocessor_switchstatement_regex_err">
+		Не дійсний регулярний вираз: '[WHAT]'; перемикання оператора змін пропущено.
+	</string>
+	<string name="fs_preprocessor_switchstatement_exception">
+		Виявлено виняток: '[WHAT]'; перемикання оператора змін пропущено.
+	</string>
+	<string name="fs_preprocessor_switchstatement_unexpected_exception">
+		Несподіваний виняток у перемиканні оператора змін; не застосовується.
+	</string>
+	<string name="fs_preprocessor_cache_miss">
+		Кешування підключеного файлу: '[FILENAME]'
+	</string>
+	<string name="fs_preprocessor_cache_invalidated">
+		Під'єднаний файл '[FILENAME]' був змінений, перекешування.
+	</string>
+	<string name="fs_preprocessor_cache_completed">
+		Кешування для '[FILENAME]' завершено
+	</string>
+	<string name="fs_preprocessor_cache_unsafe">
+		Помилка: скрипт '[FILENAME]' не є безпечним для копіювання у файлову систему. Підключення скасовано.
+	</string>
+	<string name="fs_preprocessor_caching_err">
+		Помилка кешування підключеного файлу '[FILENAME]'
+	</string>
+	<string name="skin_defaults_starlight_location">
+		Відображення вашого поточного розташування в рядку меню було вимкнено за промовчанням для серії скінів Starlight.
+	</string>
+	<string name="skin_defaults_starlight_navbar">
+		Відображення панелі навігації було увімкнено за замовчуванням для серії скінів Starlight.
+	</string>
+	<string name="fs_preprocessor_truncated">
+		Попередження: Вихідні дані препроцесора усічені через надмірний розмір тексту скрипта. Цей скрипт, швидше за все, не працюватиме.
+	</string>
+	<string name="animation_explorer_seconds_ago">
+		[SECONDS] секунд тому
+	</string>
+	<string name="animation_explorer_still_playing">
+		Продовжує відтворюватись
+	</string>
+	<string name="animation_explorer_unknown_priority">
+		невідомий
+	</string>
+	<string name="FriendOnlineNotification">
+		в мережі.
+	</string>
+	<string name="FriendOfflineNotification">
+		не в мережі.
+	</string>
+	<string name="Inbox_Folderview_New">
+		Нове
+	</string>
+	<string name="Mouselook_Unknown_Avatar">
+		Невідомий аватар
+	</string>
+	<string name="groupcountstring">
+		Ви перебуваєте в [COUNT] групах ([REMAINING] є).
+	</string>
+	<string name="groupcountunlimitedstring">
+		Ви перебуваєте в [COUNT] групах
+	</string>
+	<string name="SLGridStatusInvalidMsg">
+		Помилка статусу мережі SL: Неправильний формат повідомлення. Спробуй пізніше.
+	</string>
+	<string name="SLGridStatusTimedOut">
+		Помилка статусу мережі SL: Закінчився час запиту.
+	</string>
+	<string name="SLGridStatusOtherError">
+		Помилка статусу мережі SL: [STATUS] (https://en.wikipedia.org/wiki/List_of_HTTP_status_codes).
+	</string>
+	<string name="DoubleClickTeleportEnabled">
+		Телепортація подвійним натисканням увімкнена
+	</string>
+	<string name="DoubleClickTeleportDisabled">
+		Телепортація подвійним натисканням вимкнена
+	</string>
+	<string name="AlwaysRunEnabled">
+		Завжди біг включений.
+	</string>
+	<string name="AlwaysRunDisabled">
+		Завжди Біг вимкнено.
+	</string>
+	<string name="FSRegionRestartInLocalChat">
+		Регіон, в якому ви зараз перебуваєте, незабаром буде перезавантажено. Якщо ви залишаєтеся у цьому регіоні вас відключить від СЛ.
+	</string>
+	<string name="Mute_Add">
+		'[NAME]' було додано до чорного списку.
+	</string>
+	<string name="Mute_Remove">
+		'[NAME]' видалено з чорного списку.
+	</string>
+	<string name="Reqsysinfo_Chat_NoReason">
+		Я запитую інформацію про налаштування вашої системи.
+	</string>
+	<string name="Reqsysinfo_Chat_Reason">
+		Я запитую інформацію про налаштування вашої системи з цієї причини: [REASON]
+	</string>
+	<string name="Reqsysinfo_Chat_Information_sent">
+		Інформація надіслана: [DATA]
+	</string>
+	<string name="Reqsysinfo_Chat_Request_Denied">
+		Запит відхилено.
+	</string>
+	<string name="Reqsysinfo_Reason">
+		Причиною було: [REASON]
+	</string>
+	<string name="All Items">
+		Всі предмети
+	</string>
+	<string name="Recent Items">
+		Нещодавні предмети
+	</string>
+	<string name="Worn Items">
+		Одягні предмети
+	</string>
+	<string name="InvOfferGroupNoticeName">
+		Член групи на ім'я [NAME]
+	</string>
+	<string name="CallingCardOnlineLabelSuffix">
+		(в мережі)
+	</string>
+	<string name="GroupNoticesPanelDateString">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</string>
+	<string name="GroupNoticesToastDateString">
+		[wkday,datetime,slt], [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+	</string>
+	<string name="NotificationItemDateStringLocal">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]
+	</string>
+	<string name="NotificationItemDateStringUTC">
+		[day,datetime,utc] [mth,datetime,utc] [year,datetime,utc] [hour,datetime,utc]:[min,datetime,utc] [timezone,datetime,utc]
+	</string>
+	<string name="NotificationItemDateStringSLT">
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt] [timezone,datetime,slt]
+	</string>
+	<string name="Pie_av_render_normally">
+		Зазвичай
+	</string>
+	<string name="Pie_av_render_never">
+		Ніколи
+	</string>
+	<string name="Pie_av_render_fully">
+		Повністю
+	</string>
+	<string name="Nametag_Complexity_Label">
+		Складність: [COMPLEXITY]
+	</string>
+	<string name="Nametag_Texture_Area_Label">
+		Площа текстури: [TEXTURE_AREA] м²
+	</string>
+	<string name="font_unknown">
+		Невідомий Шрифт
+	</string>
+	<string name="mode_unknown">
+		Невідомий режим
+	</string>
+	<string name="Asset_Uploading">
+		Завантажується...
+[ASSET_NAME]
+	</string>
+	<string name="Yes">
+		Так
+	</string>
+	<string name="No">
+		Ні
+	</string>
+	<string name="FSUrlEntryWearLabel">
+		Одягти папку інвентарю
+	</string>
+	<string name="TexturePickerOutfitHeader">
+		Зображення для Комплекту
+	</string>
+	<string name="unknown_script">
+		(Невідомий скрипт)
+	</string>
+	<string name="ImportingWindlightBulk">
+		Імпорт навколишнього середовища.
+	</string>
+
+	<!-- <FS:Zi> FIRE-24142 - Show number of elements in object inventory -->
+	<string name="FSObjectInventoryNoElements">Немає елементів</string>
+	<string name="FSObjectInventoryOneElement">1 елемент</string>
+	<string name="FSObjectInventoryElements">[NUM_ELEMENTS] елементів</string>
+	<string name="OpenSimInventoryValidationErrorGenericHelp">команда підтримки оператора вашої сітки</string>
+</strings>

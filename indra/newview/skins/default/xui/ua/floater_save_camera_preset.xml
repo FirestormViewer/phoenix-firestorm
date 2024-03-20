@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<floater name="save_camera_preset" title="Зберегти Камеру">
+	<string name="btn_label_save">Зберегти</string>
+	<string name="btn_label_replace">Замінити</string>
+	<radio_group name="radio_save_preset">
+		<radio_item label="Зберегти як нове встановлення" name="new_preset"/>
+		<radio_item label="Замінити установку" name="replace_preset"/>
+	</radio_group>
+	<button label="Зберегти" name="save"/>
+	<button label="Скасувати" name="cancel"/>
+</floater>

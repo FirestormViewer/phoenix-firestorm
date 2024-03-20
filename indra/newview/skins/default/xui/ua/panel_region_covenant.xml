@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Угода" name="Covenant">
+	<panel.string name="can_resell">
+		Куплену в цьому регіоні землю можна перепродати.
+	</panel.string>
+	<panel.string name="can_not_resell">
+		Куплену в цьому регіоні землю не можна перепродати.
+	</panel.string>
+	<panel.string name="can_change">
+		Куплену землю можна поєднати або розділити.
+	</panel.string>
+	<panel.string name="can_not_change">
+		Куплену землю не можна об'єднати чи поділити.
+	</panel.string>
+	<text name="estate_section_lbl">
+		Землеволодіння
+	</text>
+	<text name="estate_name_lbl">
+		Назва:
+	</text>
+	<text name="estate_name_text">
+		материк
+	</text>
+	<text name="estate_owner_lbl">
+		Власник:
+	</text>
+	<text name="estate_owner_text">
+		(ні)
+	</text>
+	<text name="estate_cov_lbl">
+		Угода:
+	</text>
+	<text name="covenant_timestamp_text">
+		Останнє змінення: 31 грудня 1969 р., середа, 16:00:00
+	</text>
+	<text_editor name="covenant_editor">
+		Немає угоди для цього землеволодіння.
+	</text_editor>
+	<button label="Скинути" name="reset_covenant"/>
+	<text name="covenant_help_text">
+		Зміни в угоді буде показано на всіх ділянках цього землеволодіння.
+	</text>
+	<text name="covenant_instructions">
+		Перетягніть замітку сюди, щоб змінити угоду для цього землеволодіння.
+	</text>
+	<text name="region_section_lbl">
+		Регіон
+	</text>
+	<text name="region_name_lbl">
+		Назва:
+	</text>
+	<text name="region_name_text">
+		Еріка
+	</text>
+	<text name="region_landtype_lbl">
+		тип:
+	</text>
+	<text name="region_landtype_text" width="180">
+		Материк/маєток
+	</text>
+	<text name="region_maturity_lbl">
+		Рейтинг:
+	</text>
+	<text name="region_maturity_text">
+		Для дорослих
+	</text>
+	<text name="resellable_lbl">
+		Перепродаж:
+	</text>
+	<text name="resellable_clause">
+		Земля у цьому регіоні не може бути перепродана.
+	</text>
+	<text name="changeable_lbl">
+		Поділ:
+	</text>
+	<text name="changeable_clause">
+		Земля у цьому регіоні не може бути об'єднана чи поділена.
+	</text>
+</panel>

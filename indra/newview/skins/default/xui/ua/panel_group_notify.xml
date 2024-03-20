@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="instant_message" name="panel_group_notify">
+	<text name="title" value="Відправник / Група"/>
+	<text name="group_notice" value="Оголошення групи"/>
+	<text name="attachment" value="Вкладення"/>
+	<button label="Інші оголошення" name="btn_notices" width="130" />
+	<button label="Чат групи" name="btn_groupchat"/>
+</panel>

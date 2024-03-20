@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Avatar Profile Menu">
+	<menu_item_call label="ОП" name="im"/>
+	<menu_item_call label="Запропонувати телепорт" name="offer_teleport"/>
+	<menu_item_call label="Запросити Телепорт" name="request_teleport"/>
+	<menu_item_call label="Голосовий виклик" name="voice_call"/>
+	<menu_item_call label="Дивитися історію чату..." name="chat_history"/>
+	<menu_item_call label="Додати Друга" name="add_friend"/>
+	<menu_item_call label="Видалити з друзів" name="remove_friend"/>
+	<menu_item_call label="Запросити до групи..." name="invite_to_group"/>
+	<menu_item_call label="Дозволи" name="agent_permissions"/>
+	<menu_item_call label="Мапа" name="map"/>
+	<menu_item_call label="Поділитися" name="share"/>
+	<menu_item_call label="Платити" name="pay"/>
+	<menu_item_check label="Блокувати/Розблокувати" name="block_unblock"/>
+	<menu_item_call label="Копіювати Відображуване Ім'я" name="copy_display_name"/>
+	<menu_item_call label="Копіювати Ім'я користувача" name="copy_name"/>
+	<menu_item_call label="Копіювати Ідентифікатор" name="copy_id"/>
+</toggleable_menu>

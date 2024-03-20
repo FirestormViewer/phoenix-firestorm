@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Загальні" name="general_tab">
+	<panel.string name="help_text">
+		Вкладка 'Загальні' містить загальну інформацію про групу, список учасників, загальні налаштування групи та параметри учасників.
+
+Щоб отримати довідку, наведіть курсор на параметр.
+	</panel.string>
+	<panel.string name="group_info_unchanged">
+		Загальну інформацію про групу змінено.
+	</panel.string>
+	<panel.string name="incomplete_member_data_str">
+		Отримання даних учасника
+	</panel.string>
+	<panel name="group_general_panel">
+		<text name="group_key_label">
+			Ключ:
+		</text>
+		<text_editor name="group_key" label="Ключ групи:" initial_value="(Завантаження...)"/>
+		<button name="copy_uri" label="Копіювати URI"/>
+		<text name="prepend_founded_by">
+			Автор:
+		</text>
+		<text name="founder_name" initial_value="(Завантаження...)"/>
+		<button name="copy_name" label="Копіювати ім'я"/>
+		<texture_picker name="insignia" tool_tip="Натисніть, щоб вибрати зображення"/>
+		<text_editor name="charter">
+			Статут групи
+		</text_editor>
+		<text name="join_cost_text">
+			Безкоштовно
+		</text>
+		<button label="Вступити!" name="btn_join"/>
+		<name_list name="visible_members">
+			<name_list.columns label="Ім'я" name="name"/>
+			<name_list.columns label="Титул" name="title"/>
+			<name_list.columns label="Статус" name="status"/>
+		</name_list>
+		<layout_stack name="group_preferences_layout">
+			<layout_panel name="user_preferences_container">
+				<text name="my_group_settngs_label">
+					Мої налаштування групи
+				</text>
+				<check_box label="Показувати у профілі" name="list_groups_in_profile" tool_tip="Позначте, якщо хочете показувати групу у вашому профілі"/>
+				<check_box label="Отримувати оголошення від групи" name="receive_notices" tool_tip="Позначте, якщо хочете отримувати оголошення від цієї групи. Зніміть, якщо ви вважаєте, що група займається спамом."/>
+				<check_box label="Отримувати повідомлення групи" name="receive_chat" tool_tip="Позначте, якщо ви хочете взяти участь у чаті групи"/>
+				<text name="active_title_label">
+					Поточний титул:
+				</text>
+				<combo_box name="active_title" tool_tip="Встановіть титул, який відображатиметься, якщо група активна."/>
+			</layout_panel>
+			<layout_panel name="group_preferences_container">
+				<text name="group_settngs_label">
+					Налаштування групи
+				</text>
+				<check_box label="Показати у пошуку" name="show_in_group_list" tool_tip="Дозволити людям бачити цю групу в результатах пошуку"/>
+				<check_box label="Будь-який може вступити" name="open_enrollement" tool_tip="Група пропонує безкоштовний вступ для всіх, і не вимагає запрошення."/>
+				<check_box label="Вартість вступу" name="check_enrollment_fee" tool_tip="Встановіть плату за вступ до групи."/>
+				<spinner name="spin_enrollment_fee" tool_tip="Нові учасники повинні заплатити цю суму, щоб вступити до групи, якщо вибрано 'Вартість втуплення'."/>
+				<combo_box name="group_mature_check" tool_tip="Рейтинги зрілості визначають тип контенту та поведінку, дозволену в групі">
+					<combo_item name="select_mature">
+						- Виберіть класифікацію віку -
+					</combo_item>
+					<combo_box.item label="Помірний вміст" name="mature"/>
+					<combo_box.item label="Загальний зміст" name="pg"/>
+				</combo_box>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>

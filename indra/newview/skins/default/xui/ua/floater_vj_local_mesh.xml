@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="Local Mesh" title="Локальний Меш">
+  <tab_container name="local_mesh_tabs">
+    <panel name="local_mesh_assets_panel"
+      label="Активи Локального Міша"
+      title="Активи Локального Міша">
+      <fs_scroll_list name="l_name_list">
+        <column name="unit_status" label="Статус"/>
+        <column name="unit_name" label="Назва"/>
+        <column name="unit_lods" label="LOD-ы"/>
+        <column name="unit_objects" label="Об'єкти"/>
+        <column name="unit_id_HIDDEN" label="ID"/>
+      </fs_scroll_list>
+    </panel>
+    <panel name="logs_panel" label="Журнал"/>
+    <panel name="local_mesh_settings_panel" label="Налаштування">
+      <check_box name="local_mesh_scale_use_meters"
+        label="Припустимо, що масштаб вказаний у метрах."
+        tool_tip="Ігноруйте одиниці вимірювання масштабу в сантиметрах, які використовуються такими інструментами, як Maya" />
+      <text name="lod_suffix_label">
+        Суфікси LOD:
+      </text>
+      <combo_box name="lod_suffix_combo"
+        tool_tip="Виберіть стандарт або відредагуйте вручну... || За замовчуванням СЛ - (Нижчий як LOD0, Високий без суфікса). || Ігровий Двигун - Unity/UE5, і т.п. || Імена LOD - Англійські імена LOD, (Нижчий='LOWEST', Високий='HIGH').">
+        <combo_item name="choose_one">Поточний</combo_item>
+        <combo_item name="suff_sl">Стандартний SL</combo_item>
+        <combo_item name="suff_unity">Стандарт Ігрового Двигуна</combo_item>
+        <combo_item name="suff_descriptive">Імена LOD</combo_item>
+      </combo_box>
+      <text name="suf_lowest_lab">
+        Нижчий:
+      </text>
+      <line_editor name="suf_lowest"
+        tool_tip="Суфікс, що використовується для ідентифікації файлу з нижчим LOD на диску та моделей усередині файлу."/>
+      <text name="suf_low_lab">
+        Низький:
+      </text>
+      <line_editor name="suf_low"
+        tool_tip="Суфікс, що використовується для ідентифікації файлу з низьким LOD на диску та моделей усередині файлу."/>
+      <text name="suf_medium_lab">
+        Середній:
+      </text>
+      <line_editor name="suf_medium"
+        tool_tip="Суфікс, що використовується для ідентифікації файлу із середнім LOD на диску та моделей усередині файлу."/>
+      <text name="suf_high_lab">
+        Високий:
+      </text>
+      <line_editor name="suf_high"
+        tool_tip="Суфікс, що використовується для ідентифікації файлу з високим LOD на диску та моделей усередині файлу."/>
+      <text name="suf_physics_lab">
+        Фізика:
+      </text>
+      <line_editor name="suf_physics"
+        tool_tip="Суфікс, який використовується для ідентифікації файлу фізики на диску та моделей усередині файлу."/>
+    </panel>
+  </tab_container>
+  <button name="btn_apply" label="Застосувати"/>
+  <button name="btn_add" label="Додати"/>
+  <button name="btn_remove" label="Видалити"/>
+  <button name="btn_reload" label="Перезавантажити."/>
+  <button name="btn_clear" label="Очистити"/>
+  <button name="btn_rez" label="Rez Selected"
+    tool_tip="Створіть донорський міш у світі та заповніть його вибраним локальним мішом. Це створить порожній об'єкт у світі."/>
+</floater>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Url Popup">
+	<menu_item_call label="Показати профіль" name="show_agent"/>
+	<menu_item_call label="Надіслати ОП" name="send_im"/>
+	<menu_item_call label="Показати історію чату" name="chat_history"/>
+	<menu_item_call label="Додати до друзів" name="add_friend"/>
+	<menu_item_call label="Додати до набору" name="Add to Set"/>
+	<menu_item_call label="Наблизити до мешканця" name="zoom_agent"/>
+	<menu_item_call label="Телепортуватися до мешканця" name="teleportto_agent"/>
+	<menu_item_call label="Запропонувати телепорт" name="offer_teleport"/>
+	<menu_item_call label="Попросити телепорт" name="request_teleport"/>
+	<menu_item_call label="Відслідковувати мешканця" name="track_agent"/>
+	<menu_item_call label="Видалити з друзів" name="remove_friend"/>
+	<menu_item_check label="Заблокувати" name="Block"/>
+	<context_menu label="Опції Модератора" name="GroupModerationSubmenu">
+		<menu_item_call label="Дозволити текстовий чат" name="AllowGroupChat"/>
+		<menu_item_call label="Заборонити текстовий чат" name="ForbidGroupChat"/>
+		<menu_item_call label="Забанити члена" name="BanGroupMember"/>
+		<menu_item_call label="Викинути члена" name="BanEjectMember"/>
+	</context_menu>
+	<menu_item_call label="Копіювати ім'я в буфер" name="url_copy_label"/>
+	<menu_item_call label="Копіювати SLurl у буфер" name="url_copy"/>
+</context_menu>

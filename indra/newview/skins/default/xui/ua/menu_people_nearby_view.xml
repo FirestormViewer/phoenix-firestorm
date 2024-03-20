@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_group_plus">
+	<menu_item_check label="Сортувати за останньою розмовою" name="sort_by_recent_speakers" />
+	<menu_item_check label="Сортувати по імені" name="sort_name" />
+	<menu_item_check label="Сортувати за віддаленістю" name="sort_distance" />
+	<menu_item_check label="Сортувати за нещодавно надійшли" name="sort_arrival"/>
+	<menu_item_check label="Показувати значки людей" name="view_icons"/>
+	<menu_item_check label="Дивитись карту" name="view_map"/>
+	<menu_item_check label="Приховувати імена користувачів" name="view_usernames"/>
+</toggleable_menu>

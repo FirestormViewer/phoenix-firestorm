@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel name="panel_flickr_photo">
+	<combo_box name="resolution_combobox" tool_tip="Роздільна здатність зображення">
+		<combo_box.item label="Поточне вікно" name="CurrentWindow"/>
+		<combo_box.item label="640x480" name="640x480"/>
+		<combo_box.item label="800x600" name="800x600"/>
+		<combo_box.item label="1024x768" name="1024x768"/>
+	</combo_box>
+		<combo_box name="filters_combobox" tool_tip="Фільтри зображень">
+		<combo_box.item label="Без фільтра" name="NoFilter"/>
+	</combo_box>
+	<check_box label="Збереження пропорції" name="keep_aspect_ratio"/>
+	<text name="working_lbl">
+		Оновлення...
+	</text>
+	<button label="Оновити" name="new_snapshot_btn" tool_tip="Клацніть для оновлення"/>
+	<button label="Перегляд" name="big_preview_btn" tool_tip="Клацніть для зміни виду"/>
+	<text name="title_label">
+		Назва:
+	</text>
+	<text name="description_label">
+		Опис:
+	</text>
+	<check_box initial_value="true" label="Додати до опису розташування в SL" name="add_location_cb"/>
+	<text name="tags_label">
+		Теги:
+	</text>
+	<text name="tags_help_label">
+		Розділяйте теги пробілами. Теги з кількох слів укладайте у лапки.
+	</text>
+	<combo_box name="rating_combobox" tool_tip="Рейтинг контенту Flickr">
+		<combo_box.item label="Безпечний рейтинг Flickr" name="SafeRating"/>
+		<combo_box.item label="Помірний рейтинг Flickr" name="ModerateRating"/>
+		<combo_box.item label="Обмежений рейтинг Flickr" name="RestrictedRating"/>
+	</combo_box>
+	<button label="Поділитися" name="post_photo_btn"/>
+	<button label="Скасувати" name="cancel_photo_btn"/>
+</panel>

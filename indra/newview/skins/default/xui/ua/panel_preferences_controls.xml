@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel label="Управління" name="controls">
+	<combo_box name="key_mode">
+		<combo_box.item label="Коли вид збоку" name="third_person"/>
+		<combo_box.item label="Коли вид від перого обличчя (Mouselook)" name="first_person"/>
+		<combo_box.item label="Коли редагується аватар" name="edit_avatar"/>
+		<combo_box.item label="Коли сидиш" name="sitting"/>
+	</combo_box>
+	<button label="За замовчуванням" tool_tip="Відновлює стандартні значення для всіх режимів керування." name="restore_defaults"/>
+</panel>

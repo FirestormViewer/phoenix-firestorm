@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="notifications_console" title="Консоль повідомлень">
+	<combo_box label="Виберіть тип повідомлення" name="notification_types"/>
+	<button label="Додати" name="add_notification"/>
+</floater>

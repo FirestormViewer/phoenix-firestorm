@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="media_actions">
+		<columns label="Звук і Медіа" name="lst_action"/>
+	</rows>
+	<rows name="toggle_pause_media">
+		<columns name="lst_action" value="Відтворити/призупинити мультимедіа"/>
+	</rows>
+	<rows name="toggle_enable_media">
+		<columns name="lst_action" value="Відтворити/зупинити всі мультимедіа"/>
+	</rows>
+	<rows name="voice_follow_key">
+		<columns name="lst_action" value="Голос"/>
+	</rows>
+	<rows name="toggle_voice">
+		<columns name="lst_action" value="Переключити Голос"/>
+	</rows>
+	<rows name="start_chat">
+		<columns name="lst_action" value="Почати Чат"/>
+	</rows>
+	<rows name="start_gesture">
+		<columns name="lst_action" value="Почати жест"/>
+	</rows>
+	<rows name="script_trigger_lbutton">
+		<columns name="lst_action" value="Взаємодія (ЛКМ)"/>
+	</rows>
+</contents>

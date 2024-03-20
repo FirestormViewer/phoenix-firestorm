@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Text editor context menu">
+	<menu_item_call label="(невідомо)" name="Suggestion 1"/>
+	<menu_item_call label="(невідомо)" name="Suggestion 2"/>
+	<menu_item_call label="(невідомо)" name="Suggestion 3"/>
+	<menu_item_call label="(невідомо)" name="Suggestion 4"/>
+	<menu_item_call label="(невідомо)" name="Suggestion 5"/>
+	<menu_item_call label="Додати до словника" name="Add to Dictionary"/>
+	<menu_item_call label="Додати до списку ігнорованих" name="Add to Ignore"/>
+	<menu_item_call label="Вирізати" name="Cut"/>
+	<menu_item_call label="Копіювати" name="Copy"/>
+	<menu_item_call label="Вставити" name="Paste"/>
+	<menu_item_call label="Удалити" name="Delete"/>
+	<menu_item_call label="Виділити все" name="Select All"/>
+</context_menu>

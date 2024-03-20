@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_picks" label="Підбірка">
+	<string name="no_picks" value="Немає підбірку"/>
+	<layout_stack name="main_stack">
+		<layout_panel name="buttons_header">
+			<text name="header_text">
+				Розкажіть усім про ваші улюблені місця в [GRID].
+			</text>
+			<button name="new_btn" label="Новий..."
+			 tool_tip="Створити нову підбірку в поточному місці розташування"/>
+			<button name="delete_btn" label="Видалити..."
+			 tool_tip="Видалити поточну обрану підбірку"/>
+		</layout_panel>
+		<layout_panel name="main_body">
+			<text name="picks_panel_text">
+				Завантаження...
+			</text>
+		</layout_panel>
+	</layout_stack>
+</panel>

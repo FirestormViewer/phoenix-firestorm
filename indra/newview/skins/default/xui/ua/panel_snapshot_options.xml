@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_snapshot_options" width="208">
+	<layout_stack name="option_buttons" width="208">
+		<layout_panel name="lp_download">
+			<button label="Зберегти на диск" name="save_to_computer_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_inventory">
+			<button label="В інвентар (L$[AMOUNT])" name="save_to_inventory_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_profile">
+			<button label="Завантажити у профіль" name="save_to_profile_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_facebook">
+			<button label="Завантажити на Facebook" name="send_to_facebook_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_twitter">
+			<button label="Завантажити на Twitter" name="send_to_twitter_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_flickr">
+			<button label="Завантажити на Flickr" name="send_to_flickr_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_email">
+			<button label="Надіслати по E-mail" name="save_to_email_btn"/>
+		</layout_panel>
+	</layout_stack>
+	<text name="fee_hint_lbl" width="200">
+		Плата залежить від рівня підписки. На вищих рівнях стягуються нижчі збори.
+	</text>
+</panel>

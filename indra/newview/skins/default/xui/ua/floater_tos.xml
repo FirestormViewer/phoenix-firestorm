@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="modal container">
+	<floater.string name="real_url">
+		http://secondlife.com/app/tos/
+	</floater.string>
+	<floater.string name="loading_url">
+		data:text/html,%3Chtml%3E%3Chead%3E%3C/head%3E%3Cbody text=%22000000%22%3E%3Ch2%3E Loading %3Ca%20target%3D%22_external%22%20href%3D%22http%3A//secondlife.com/app/tos/%22%3ETerms%20of%20Service%3C/a%3E...%3C/h2%3E %3C/body%3E %3C/html%3E
+	</floater.string>
+	<text name="tos_heading">
+		Прочитайте умови та положення щодо конфіденційності Угоди користувача Second Life, включаючи порядок вирішення суперечок та відмову від будь-якої вимоги класу або групи для вирішення розбіжностей. Для входу до [SECOND_LIFE] ви повинні погодитись з умовами угоди.
+	</text>
+	<text name="external_tos_required">
+		Для продовження перейдіть на сайт https://my.secondlife.com, увійдіть та прийміть Умови обслуговування. Дякую!
+	</text>
+	<check_box label="" name="agree_chk"/>
+	<text name="agree_list">
+		Я прочитав і погоджується з Умовами та положеннями щодо конфіденційності Угоди, включаючи вимоги щодо вирішення розбіжностей Second Life.
+	</text>
+	<button label="Продовжити" label_selected="Продовжити" name="Continue"/>
+	<button label="Скасувати" label_selected="Скасувати" name="Cancel"/>
+</floater>

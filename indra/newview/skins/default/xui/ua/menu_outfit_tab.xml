@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Outfit">
+	<menu_item_call label="Замінити поточний комплект" name="wear_replace"/>
+	<menu_item_call label="Додати до поточного комплекту" name="wear_add"/>
+	<menu_item_call label="Видалити з поточного комплекту" name="take_off"/>
+	<menu_item_call label="Змінити комплект" name="edit"/>
+	<menu_item_call label="Перейменувати комплект" name="rename"/>
+	<menu_item_call label="Видалити комплект" name="delete"/>
+</context_menu>

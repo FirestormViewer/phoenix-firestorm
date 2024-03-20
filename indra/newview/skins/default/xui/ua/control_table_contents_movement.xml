@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<contents>
+	<rows name="move_actions">
+		<columns label="Дії Руху" name="lst_action"/>
+	</rows>
+	<rows name="walk_to">
+		<columns name="lst_action" tool_tip="Йти в точку вказану мишкою" value="Йти до"/>
+	</rows>
+	<rows name="teleport_to">
+		<columns name="lst_action" tool_tip="Телепортація в місце, вказане курсором миші, але не у всіх місцях можлива пряма телепортація, тому замість цього ви можете переміщуватися ближче до місця призначення." value="Телепорт до"/>
+	</rows>
+	<rows name="push_forward">
+		<columns name="lst_action" value="Йти Вперед"/>
+	</rows>
+	<rows name="push_backward">
+		<columns name="lst_action" value="Йти Назад"/>
+	</rows>
+	<rows name="turn_left">
+		<columns name="lst_action" value="Ліворуч"/>
+	</rows>
+	<rows name="turn_right">
+		<columns name="lst_action" value="Праворуч"/>
+	</rows>
+	<rows name="slide_left">
+		<columns name="lst_action" value="Зрушення вліво"/>
+	</rows>
+	<rows name="slide_right">
+		<columns name="lst_action" value="Зрушення вправо"/>
+	</rows>
+	<rows name="jump">
+		<columns name="lst_action" value="Стрибок/Вгору"/>
+	</rows>
+	<rows name="push_down">
+		<columns name="lst_action" value="Вниз"/>
+	</rows>
+	<rows name="run_forward">
+		<columns name="lst_action" value="Біг Вперед"/>
+	</rows>
+	<rows name="run_backward">
+		<columns name="lst_action" value="Біг Назад"/>
+	</rows>
+	<rows name="run_left">
+		<columns name="lst_action" value="Біг Вліво"/>
+	</rows>
+	<rows name="run_right">
+		<columns name="lst_action" value="Біг Вправо"/>
+	</rows>
+	<rows name="toggle_run">
+		<columns name="lst_action" value="Переключити Біг"/>
+	</rows>
+	<rows name="toggle_fly">
+		<columns name="lst_action" value="Літати/не літати"/>
+	</rows>
+	<rows name="toggle_sit">
+		<columns name="lst_action" value="Сісти/Встати"/>
+	</rows>
+	<rows name="stop_moving">
+		<columns name="lst_action" value="Зупинитися"/>
+	</rows>
+</contents>

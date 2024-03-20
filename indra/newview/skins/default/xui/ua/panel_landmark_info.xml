@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="landmark_info">
+        <string name="title_create_landmark" value="Створити закладку"/>
+        <string name="title_edit_landmark" value="Змінити закладку"/>
+        <string name="title_landmark" value="Закладка"/>
+        <string name="not_available" value="(невідомо)"/>
+        <string name="unknown" value="(unknown)"/>
+        <string name="public" value="(публічне)"/>
+        <string name="server_update_text">
+                Необхідно оновлення сервера, щоб інформація стала доступною.
+        </string>
+        <string name="server_error_text">
+                Інформація про це місце зараз недоступна. Повторіть спробу пізніше.
+        </string>
+        <string name="server_forbidden_text">
+                Інформація про це місце недоступна, оскільки у вас немає прав на її перегляд. Дізнайтеся про свої права, зв'язавшись із власником ділянки.
+        </string>
+        <string name="acquired_date">
+                [wkday,datetime,slt], [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+        </string>
+        <string name="information_text">
+                Трафік: [TRAFFIC] Площа: [AREA] м²
+        </string>
+        <layout_stack name="place_info_sidetray_main">
+                <layout_panel name="header_container">
+                        <button name="back_btn" tool_tip="Назад"/>
+                        <text name="title" value="Профіль місця"/>
+                </layout_panel>
+                <layout_panel name="place_info_content">
+                        <text name="parcel_title" value="Приклад ділянки, довга назва"/>
+                        <text name="region_title">
+                                Регіон: [REGIONNAMEPOS]
+                        </text>
+                        <text name="maturity_value" value="unknown" width="70"/>
+                        <text name="parcel_owner_label" value="Власник:" width="70" />
+                        <text name="parcel_owner" value="unknown"/>
+                        <panel name="description_panel">
+                                <expandable_text name="description" value="(завантаження ...)"/>
+                        </panel>
+                        <panel name="landmark_info_panel">
+                                <text name="owner_label" value="Власник:" width="70"/>
+                                <text name="creator_label" value="Створювач:" width="70"/>
+                                <text name="created_label" value="Створено:"/>
+                                <text name="information_label" value="Інфо:"/>
+                        </panel>
+                        <panel name="landmark_edit_panel">
+                                <text name="title_label" value="Назва:"/>
+                                <text name="notes_label" value="Мої нотатки:"/>
+                                <text name="folder_label" value="Розташування:"/>
+                                <button label="Змінити" name="edit_btn" tool_tip="Редагувати інформацію про закладку"/>
+                        </panel>
+                </layout_panel>
+        </layout_stack>
+</panel>

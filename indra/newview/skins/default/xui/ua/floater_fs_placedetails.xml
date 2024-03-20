@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_placedetails" title="Закладка">
+	<string name="title_place">
+		Подробиці місця
+	</string>
+	<string name="title_remote_place">
+		Подробиці місця
+	</string>
+	<string name="title_remote_place_detail">
+		Подробиці місця: [NAME]
+	</string>
+	<string name="title_landmark">
+		Закладка
+	</string>
+	<string name="title_landmark_detail">
+		Закладка: [NAME]
+	</string>
+	<string name="title_create_landmark">
+		Створити закладку (LM)
+	</string>
+	<string name="title_teleport_history_item">
+		Подробиці історії телепортації: [NAME]
+	</string>
+	<panel name="button_panel">
+		<layout_stack name="bottom_bar_ls0">
+			<layout_panel name="lp1">
+				<layout_stack name="bottom_bar_ls1">
+					<layout_panel name="teleport_btn_lp">
+						<button label="Телепорт" name="teleport_btn" tool_tip="Телепортуватися до обраного місця" />
+					</layout_panel>
+					<layout_panel name="map_btn_lp">
+						<button label="Мапа" name="map_btn" tool_tip="Показати відповідну область на мапі світу" />
+					</layout_panel>
+					<layout_panel name="edit_btn_lp">
+						<button label="Змінити" name="edit_btn" tool_tip="Змінити обрану закладку" />
+					</layout_panel>
+					<layout_panel name="overflow_btn_lp">
+						<menu_button name="overflow_btn" tool_tip="Показати додаткові опції" />
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>	
+		</layout_stack>
+		<layout_stack name="bottom_bar_ls1">
+			<layout_panel name="lp2">
+				<layout_stack name="bottom_bar_close_ls3">
+					<layout_panel name="close_btn_lp">
+						<button label="Закрити" name="close_btn" />
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>	
+		<layout_stack name="bottom_bar_ls2">
+			<layout_panel name="save_btn_lp">
+				<button label="Зберегти" name="save_btn" />
+			</layout_panel>
+			<layout_panel name="cancel_btn_lp">
+				<button label="Скасувати" name="cancel_btn" />
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</floater>

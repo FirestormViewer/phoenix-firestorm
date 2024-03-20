@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_wearable_favorites" title="Вибрані Одяг">
+	<floater.string name="empty_list">
+		Перетягніть одяг сюди, щоб додати до списку.
+	</floater.string>
+	<floater.string name="search_no_items">
+		Нічого не знайдено.
+	</floater.string>
+	<panel name="buttons_panel">
+		<filter_editor label="Фільтр одягу" name="wearable_filter_input" />
+		<menu_button name="options_btn" tool_tip="Опції обраного одягу" />
+		<button name="remove_btn" tool_tip="Видалити одяг зі списку обраного"/>
+	</panel>
+</floater>

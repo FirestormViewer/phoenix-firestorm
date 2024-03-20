@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Земля та L$" name="land_money_tab">
+	<panel.string name="help_text">
+		Якщо загальна кількість використаної землі не перевищує загальний внесок, відобразиться попередження.
+	</panel.string>
+	<panel.string name="cant_view_group_land_text">
+		У вас немає прав для перегляду землі, що належить групі
+	</panel.string>
+	<panel.string name="epmty_view_group_land_text">
+		Немає даних
+	</panel.string>
+	<panel.string name="cant_view_group_accounting_text">
+		У вас немає доступу до фінансових груп
+	</panel.string>
+	<panel.string name="loading_txt">
+		Завантаження...
+	</panel.string>
+	<panel.string name="land_contrib_error">
+		Не вдається поставити ваш земельний внесок
+	</panel.string>
+	<scroll_list name="group_parcel_list">
+		<scroll_list.columns label="Ділянка" name="name"/>
+		<scroll_list.columns label="Регіон" name="location"/>
+		<scroll_list.columns label="Тип" name="type"/>
+		<scroll_list.columns label="Площа" name="area"/>
+		<scroll_list.columns label="Приховане" name="hidden"/>
+	</scroll_list>
+	<button label="Мапа" label_selected="Мапа" name="map_button"/>
+	<text name="total_land_in_use_label">
+		Використовується:
+	</text>
+	<text name="land_available_label">
+		Доступно:
+	</text>
+	<text name="total_contributed_land_label">
+		Загальний внесок:
+	</text>
+	<text name="your_contribution_label">
+		Ваш внесок:
+	</text>
+	<text name="your_contribution_max_value">
+		(максимум: [AMOUNT])
+	</text>
+	<text name="group_money_heading">
+		L$ групи
+	</text>
+	<text name="group_over_limit_text">
+		Необхідно збільшити кредит на використання ділянок.
+	</text>
+	<tab_container name="group_money_tab_container">
+		<panel label="Планування" name="group_money_planning_tab">
+			<text_editor name="group_money_planning_text">
+				Завантаження...
+			</text_editor>
+		</panel>
+		<panel label="Деталі" name="group_money_details_tab">
+			<text_editor name="group_money_details_text">
+				Завантаження...
+			</text_editor>
+			<button name="earlier_details_button" tool_tip="Раніше"/>
+			<button name="later_details_button" tool_tip="Пізніше"/>
+		</panel>
+		<panel label="Продаж" name="group_money_sales_tab">
+			<text_editor name="group_money_sales_text">
+				Завантаження...
+			</text_editor>
+			<button name="earlier_sales_button" tool_tip="Раніше"/>
+			<button name="later_sales_button" tool_tip="Пізніше"/>
+		</panel>
+	</tab_container>
+</panel>

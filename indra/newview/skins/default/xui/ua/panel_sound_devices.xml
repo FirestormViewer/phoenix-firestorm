@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel label="Налаштування пристрою" name="device_settings_panel">
+	<panel.string name="default_text">
+		За замовчуванням
+	</panel.string>
+	<string name="name_no_device">
+		Немає пристрою
+	</string>
+	<string name="name_default_system_device">
+		Системний пристрій за замовчуванням
+	</string>
+	<text name="Input">
+		Вхід
+	</text>
+	<text name="Output">
+		Вихід
+	</text>
+	<text name="My volume label">
+		Мікрофон:
+	</text>
+	<slider_bar name="mic_volume_slider" tool_tip="Змініть рівень у мікрофоні, використовуючи повзунок"/>
+	<text name="wait_text">
+		Зачекайте
+	</text>
+</panel>

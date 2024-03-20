@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Friends Popup">  
+	<menu_item_call label="Надіслати ЛС" name="send_im" />
+	<menu_item_call label="Додати до набору" name="Add to Set" />
+	<menu_item_call label="Запропонувати телепорт" name="offer_teleport" />
+	<menu_item_call label="Видалити з друзів" name="remove_friend" />
+	<menu name="options" label="Опції...">
+		<menu_item_check label="Показати колонку: Ім'я користувача" name="show_username" />
+		<menu_item_check label="Показати колонку: Відображуване ім'я" name="show_displayname" />
+		<menu_item_check label="Показати колонку: Повне ім'я" name="show_fullname" />
+		<menu_item_check label="Показати колонку з правами" name="show_permissions" />
+		<menu_item_check label="Сортувати за: Ім'ям користувача" name="sort_by_username" />
+		<menu_item_check label="Сортувати за: Відображуваним ім'ям" name="sort_by_displayname" />
+		<menu_item_check label="Повне ім'я як: Ім'я користувача (Відображуване ім'я)" name="format_username_displayname" />
+		<menu_item_check label="Повне ім'я як: Відображуване ім'я (Ім'я користувача)" name="format_displayname_username" />
+	</menu>
+</context_menu>

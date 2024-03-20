@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel name="panel_login">
+	<layout_stack name="ui_stack">
+		<layout_panel name="ui_container">
+			<combo_box label="Ім'я користувача" name="username_combo" tool_tip="Ім'я користувача, яке ви вибрали під час реєстрації, наприклад, 'bobsmith12' або 'Steller Sunshine'"/>
+			<line_editor label="Пароль" name="password_edit"/>
+			<combo_box label="Мої улюблені місця" name="start_location_combo">
+				<combo_box.item label="Останнє розташування" name="MyLastLocation"/>
+				<combo_box.item label="Мій дім" name="MyHome"/>
+			</combo_box>
+			<button label="Увійти" name="connect_btn"/>
+			<text name="forgot_password_text">
+				Забули пароль?
+			</text>
+			<combo_box label="Виберіть мережу" name="server_combo"/>
+			<text name="sign_up_text">
+				Реєстрація
+			</text>
+			<check_box label="Запам'ятати мене" name="remember_name" tool_tip="Вже запам'ятаний користувач може бути забутий в Аватар &gt; Налаштування &gt; Додатково&gt; Запам'ятані імена користувачів."/>
+			<check_box label="Запам'ятати пароль" name="remember_password"/>
+		</layout_panel>
+	</layout_stack>
+</panel>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_pathfinding_console" title="Перегляд/тестування пошуку шляху">
+	<floater.string name="navmesh_viewer_status_library_not_implemented">
+		Не вдалося знайти реалізацію бібліотеки пошуку шляху
+	</floater.string>
+	<floater.string name="navmesh_viewer_status_region_not_enabled">
+		У цьому регіоні не дозволено пошук шляху.
+	</floater.string>
+	<floater.string name="navmesh_viewer_status_region_loading">
+		Очікування завершення завантаження регіону.
+	</floater.string>
+	<floater.string name="navmesh_viewer_status_checking_version">
+		Перевірка стану навігаційної сітки.
+	</floater.string>
+	<floater.string name="navmesh_viewer_status_downloading">
+		Завантаження навігаційної сітки.
+	</floater.string>
+	<floater.string name="navmesh_viewer_status_updating">
+		На сервері змінилася навігаційна сітка. Завантажує нову навігаційну сітку.
+	</floater.string>
+	<floater.string name="navmesh_viewer_status_has_navmesh">
+		Завантажено останню навігаційну сітку.
+	</floater.string>
+	<floater.string name="navmesh_viewer_status_error">
+		Не вдалося завантажити навігаційну сітку.
+	</floater.string>
+	<floater.string name="navmesh_simulator_status_pending">
+		У навігаційній сітці є незавершені зміни.
+	</floater.string>
+	<floater.string name="navmesh_simulator_status_building">
+		Йде побудова навігаційної сітки.
+	</floater.string>
+	<floater.string name="navmesh_simulator_status_some_pending">
+		У деяких регіонах навігаційної сітки є незавершені зміни.
+	</floater.string>
+	<floater.string name="navmesh_simulator_status_some_building">
+		Йде побудова регіонів навігаційної сітки.
+	</floater.string>
+	<floater.string name="navmesh_simulator_status_pending_and_building">
+		У деяких регіонах навігаційної сітки є незавершені зміни, йде побудова інших регіонів.
+	</floater.string>
+	<floater.string name="navmesh_simulator_status_complete">
+		Навігаційну сітку вже оновлено.
+	</floater.string>
+	<floater.string name="pathing_library_not_implemented">
+		Не вдалося знайти реалізацію бібліотеки пошуку шляху
+	</floater.string>
+	<floater.string name="pathing_region_not_enabled">
+		У цьому регіоні не дозволено пошук шляху.
+	</floater.string>
+	<floater.string name="pathing_choose_start_and_end_points">
+		Виберіть початкову та кінцеву точки.
+	</floater.string>
+	<floater.string name="pathing_choose_start_point">
+		Виберіть початкову точку.
+	</floater.string>
+	<floater.string name="pathing_choose_end_point">
+		Виберіть кінцеву точку.
+	</floater.string>
+	<floater.string name="pathing_path_valid">
+		Шлях показаний оранжевим кольором.
+	</floater.string>
+	<floater.string name="pathing_path_invalid">
+		Не вдалося знайти шлях між вибраними точками.
+	</floater.string>
+	<floater.string name="pathing_error">
+		Помилка під час створення шляху.
+	</floater.string>
+	<panel name="pathfinding_console_main">
+		<text name="viewer_status_label">
+			Статус клієнта
+		</text>
+	</panel>
+	<panel name="pathfinding_console_simulator">
+		<text name="simulator_status_label">
+			Статус сервера
+		</text>
+	</panel>
+	<tab_container name="view_test_tab_container">
+		<panel label="Вид" name="view_panel">
+			<text name="show_label">
+				Показати:
+			</text>
+			<check_box label="Світ" name="show_world"/>
+			<check_box label="Тільки предмети, що переміщаються" name="show_world_movables_only"/>
+			<check_box label="Навігаційна сітка" name="show_navmesh"/>
+			<text name="show_walkability_label">
+				Показати карту прохідності:
+			</text>
+			<combo_box name="show_heatmap_mode">
+				<combo_box.item label="Не показувати" name="show_heatmap_mode_none"/>
+				<combo_box.item label="Тип символу A" name="show_heatmap_mode_a"/>
+				<combo_box.item label="Тип персонажа B" name="show_heatmap_mode_b"/>
+				<combo_box.item label="Тип персонажа C" name="show_heatmap_mode_c"/>
+				<combo_box.item label="Тип персонажа D" name="show_heatmap_mode_d"/>
+			</combo_box>
+			<check_box label="Прохідні місця" name="show_walkables"/>
+			<check_box label="Матеріальні обсяги" name="show_material_volumes"/>
+			<check_box label="Статичні перешкоди" name="show_static_obstacles"/>
+			<check_box label="Виключні обсяги" name="show_exclusion_volumes"/>
+			<check_box label="Водне дзеркало" name="show_water_plane"/>
+			<check_box label="Рентгенівський зір" name="show_xray"/>
+		</panel>
+		<panel label="Перевірити шлях" name="test_panel">
+			<text name="ctrl_click_label">
+				Ctrl-клацання для вибору початкової точки.
+			</text>
+			<text name="shift_click_label">
+				Shift-клацання для вибору кінцевої точки.
+			</text>
+			<text name="character_width_label">
+				Ширина персонажа
+			</text>
+			<slider name="character_width" value="1"/>
+			<text name="character_width_unit_label">
+				м
+			</text>
+			<text name="character_type_label">
+				Тип персонажа
+			</text>
+			<combo_box name="path_character_type">
+				<combo_box.item label="Нет" name="path_character_type_none"/>
+				<combo_box.item label="A" name="path_character_type_a"/>
+				<combo_box.item label="B" name="path_character_type_b"/>
+				<combo_box.item label="C" name="path_character_type_c"/>
+				<combo_box.item label="D" name="path_character_type_d"/>
+			</combo_box>
+			<button label="Видалити шлях" name="clear_path"/>
+		</panel>
+	</tab_container>
+</floater>

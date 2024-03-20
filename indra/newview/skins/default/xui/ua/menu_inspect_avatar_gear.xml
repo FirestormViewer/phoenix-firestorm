@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<toggleable_menu name="Gear Menu">
+	<menu_item_call label="Перегляд профілю" name="view_profile"/>
+	<menu_item_call label="Додати в друзі" name="add_friend"/>
+	<menu_item_call label="Відправити ЛС" name="im"/>
+	<menu_item_call label="Дзвінок" name="call"/>
+	<menu_item_call label="Запропонувати телепорт" name="teleport"/>
+	<menu_item_call label="Попросити телепорт" name="request_teleport"/>
+	<menu_item_call label="Запросити в групу" name="invite_to_group"/>
+	<menu_item_call label="Заблокувати" name="block"/>
+	<menu_item_call label="Розблокувати" name="unblock"/>
+	<menu_item_call label="Скарга" name="report"/>
+	<menu_item_call label="Заморозити" name="freeze"/>
+	<menu_item_call label="Викинути (ділянку)" name="eject"/>
+	<menu_item_call label="Викинути (володіння)" name="kick"/>
+	<menu_item_call label="CSR" name="csr"/>
+	<menu_item_call label="Налагодження текстур" name="debug"/>
+	<menu_item_call label="Дамп XML" name="Dump XML"/>
+	<menu_item_call label="Знайти на мапі" name="find_on_map"/>
+	<menu_item_call label="Наблизити" name="zoom_in"/>
+	<menu_item_call label="Заплатити" name="pay"/>
+	<menu_item_call label="Поділитися" name="share"/>
+</toggleable_menu>

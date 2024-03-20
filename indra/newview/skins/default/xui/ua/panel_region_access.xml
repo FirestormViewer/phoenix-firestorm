@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Доступ" name="Access">
+	<tab_container name="tabs">
+		<panel label="Менеджери Землеволодіння" name="estate_managers_panel">
+			<text name="estate_manager_label">
+				Менеджери землеволодіння:
+			</text>
+			<name_list name="estate_manager_name_list">
+				<columns label="Ім'я" name="name"/>
+			</name_list>
+			<button label="Додати..." name="add_estate_manager_btn"/>
+			<button label="Видалити..." name="remove_estate_manager_btn"/>
+		</panel>
+		<panel label="Дозволені" name="allowed_panel">
+			<panel label="top_panel" name="allowed_search_panel">
+				<filter_editor label="Пошук допущених агентів" name="allowed_search_input" width="385"/>
+				<button label="Копіювати" name="copy_allowed_list_btn" width="80"/>
+			</panel>
+			<text name="allow_resident_label">
+				Дозволено завжди:
+			</text>
+			<name_list name="allowed_avatar_name_list">
+				<columns label="Ім'я" name="name"/>
+			</name_list>
+			<button label="Додати..." name="add_allowed_avatar_btn"/>
+			<button label="Видалити..." name="remove_allowed_avatar_btn"/>
+		</panel>
+		<panel label="Допущені групи" name="allowed_groups_panel">
+			<panel label="top_panel" name="allowed_group_search_panel">
+				<filter_editor label="Пошук допущених груп" name="allowed_group_search_input" width="385"/>
+				<button label="Копіювати" name="copy_allowed_group_list_btn" width="80"/>
+			</panel>
+			<text name="allow_group_label">
+				Допуск груп завжди дозволено:
+			</text>
+			<name_list name="allowed_group_name_list">
+				<columns label="Ім'я" name="name"/>
+			</name_list>
+			<button label="Додати..." name="add_allowed_group_btn"/>
+			<button label="Видалити..." name="remove_allowed_group_btn"/>
+		</panel>
+		<panel label="Заблоковано" name="banned_panel">
+			<panel label="top_panel" name="banned_search_panel">
+				<filter_editor label="Пошук заблокованих агентів" name="banned_search_input" width="385"/>
+				<button label="Копіювати" name="copy_banned_list_btn" width="80"/>
+			</panel>
+			<text name="ban_resident_label">
+				Завжди заблоковано:
+			</text>
+			<name_list name="banned_avatar_name_list">
+				<columns label="Ім'я" name="name"/>
+				<columns label="Дата останнього входу" name="last_login_date"/>
+				<columns label="Дата блокування" name="ban_date"/>
+				<columns label="Заблоковані за ініціативою" name="bannedby"/>
+			</name_list>
+			<button label="Додати..." name="add_banned_avatar_btn"/>
+			<button label="Видалити..." name="remove_banned_avatar_btn"/>
+		</panel>
+	</tab_container>
+</panel>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_search" title="Пошук Firestorm">
+	<floater.string name="string.location">
+		Місце: [LOCATION]
+	</floater.string>
+	<floater.string name="string.traffic">
+		Трафік: [DWELL]
+	</floater.string>
+	<floater.string name="string.area">
+		Площа: [AREA]
+	</floater.string>
+	<floater.string name="string.members">
+		Людина: [MEMBER_COUNT]
+	</floater.string>
+	<floater.string name="string.founder">
+		Засновник: [FOUNDER]
+	</floater.string>
+	<floater.string name="string.age">
+		Вік: [AGE]
+	</floater.string>
+	<floater.string name="string.listing_price">
+		Вартість: [LISTING_PRICE]
+	</floater.string>
+	<floater.string name="string.duration">
+		Тривалість: [DURATION]
+	</floater.string>
+	<floater.string name="string.covercharge">
+		Вступний внесок: [COVERCHARGE]
+	</floater.string>
+	<tab_container name="ls_tabs">
+		<panel label="Веб" name="panel_ls_web" />
+		<panel label="Люди" name="panel_ls_people" />
+		<panel label="Групи" name="panel_ls_groups" />
+		<panel label="Місця" name="panel_ls_places" />
+		<panel label="Продаж землі" name="panel_ls_land" />
+		<panel label="Події" name="panel_ls_events" />
+		<panel label="Реклама" name="panel_ls_classifieds" />
+	</tab_container>
+	<panel name="panel_ls_details">
+		<text_editor name="title" value="Ім'я не визначене" />
+		<text_editor name="aux1" value="Додаткове поле інформації 1" />
+		<text_editor name="aux2" value="Додаткове поле інформації 2" />
+		<text_editor name="location" value="Інформація про місце" />
+		<text_editor name="desc" value="Ви відкриваєте ці двері ключем уяви. За ним знаходиться інший вимір: вимір звуку, вимір зору, вимір розуму. Ви переміщаєтеся в країну тіней і субстанції, речей та ідей; ви тільки що перейшли в Сутінкову Зону Те, що ви збираєтеся побачити, реально, сторони в судовому процесі на екрані не актори, вони справжні громадяни, які, подавши позови до справжнього суду дрібних позовів, були переконані відмовитися від своїх позовів і дозволити їх тут, на цьому форумі. . у Народному суді."/>
+		<button label="Профіль" name="people_profile_btn" />
+		<button label="ЛС" name="people_message_btn" />
+		<button label="У друзі" name="people_friend_btn" />
+		<button label="Профіль" name="group_profile_btn" />
+		<button label="Чат" name="group_message_btn" />
+		<button label="Вступити" name="group_join_btn" />
+		<button label="Телепорт" name="teleport_btn" />
+		<button label="На мапі" name="map_btn" />
+		<button label="Нагадати мені" name="event_reminder_btn" />
+	</panel>
+</floater>

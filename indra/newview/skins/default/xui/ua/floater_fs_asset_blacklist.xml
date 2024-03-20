@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_asset_blacklist" title="Чорний список">
+	<floater.string name="asset_object">
+		Об'єкт
+	</floater.string>
+	<floater.string name="asset_texture">
+		Текстура
+	</floater.string>
+	<floater.string name="asset_sound">
+		Звук
+	</floater.string>
+	<floater.string name="asset_animation">
+		Анімація
+	</floater.string>
+	<floater.string name="asset_resident">
+		Житель
+	</floater.string>
+	<floater.string name="asset_unknown">
+		Невідомий
+	</floater.string>
+	<floater.string name="unknown_object">
+		Невідомий об'єкт
+	</floater.string>
+	<floater.string name="unknown_region">
+		Невідомий регіон
+	</floater.string>
+	<floater.string name="DateFormatString">
+		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+	</floater.string>
+	<filter_editor label="Фільтр чорного списку" name="filter_input"/>
+	<fs_scroll_list name="result_list">
+		<columns name="name" label="Імя" />
+		<columns name="region" label="Регіон"/>
+		<columns name="type" label="Тип" />
+		<columns name="date" label="Дата" />
+		<columns name="permanent" label="Постійно"/>
+	</fs_scroll_list>
+	<button name="remove_btn" label="Видалити з чорного списку" width="190"/>
+	<button name="remove_temp_btn" label="Видалити не постійні" width="170" />
+	<button name="play_btn" label="Програти звук" tool_tip="Відтворити вибраний звук; для відтворення можна вибрати лише один звуковий запис." width="120"/>
+	<button name="stop_btn" label="Зупинити звук" tool_tip="Зупинити відтворення поточного звуку." width="120"/>
+	<button name="close_btn" label="Закрити"/>
+</floater>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_contact_set_configure" title="Налаштування набору контактів" width="450">
+	<floater.string name="title">
+		Налаштування [NAME]
+	</floater.string>
+	<panel name="top_panel" width="450">
+		<text name="set_label">
+			Налаштування набору контактів:
+		</text>
+		<line_editor name="set_name_editor" right="-100"/>
+		<button name="rename_btn" width="85" label="Перейменувати"/>
+		<color_swatch label="Задати колір" name="set_swatch" tool_tip="Натисніть, щоб відкрити палітру кольорів" />
+		<check_box label="Показувати повідомлення" name="show_set_notifications" />
+	</panel>
+	<panel name="bottom_panel" width="450">
+		<text name="global_label">
+			Загальні налаштування:
+		</text>
+		<color_swatch label="За замовчуванням кольору" name="global_swatch" tool_tip="Натисніть, щоб відкрити палітру кольорів" />
+		<text name="label_online">
+			Повідомлення статусу:
+		</text>
+		<check_box label="Повідомляти про вхід до мережі для всіх друзів у тоастах" name="ChatOnlineNotification" />
+		<check_box label="Повідомляти про вхід до мережі для всіх друзів у чаті" name="OnlineOfflinetoNearbyChat" />
+		<check_box label="Повідомляти про вхід до мережі для цього набору в тоастах" name="FSContactSetsNotificationToast" />
+		<check_box label="Повідомляти про вхід до мережі для цього набору в чаті" name="FSContactSetsNotificationNearbyChat" />
+		<text name="label_colors">
+			Власні кольори:
+		</text>
+		<check_box label="Колір значка на міні мапі на основі набору контактів" name="FSContactSetsColorizeMiniMap" />
+		<check_box label="Колір тега імені на основі набору контактів" name="FSContactSetsColorizeNameTag" />
+		<check_box label="Колір запису на радарі на основі набору контактів" name="FSContactSetsColorizeRadar" />
+		<check_box label="Колір у чаті на основі набору контактів" name="FSContactSetsColorizeChat" />
+	</panel>
+</floater>

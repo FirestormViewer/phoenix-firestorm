@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="group_titles" title="Титули груп">
+	<floater.string name="NoGroupTitle" value="&lt;Немає титулу групи&gt;" />
+	<filter_editor label="Фільтр титулів груп" name="filter_input"/>
+	<scroll_list name="title_list">
+		<column name="grouptitle" label="Титул" />
+		<column name="groupname" label="Група" />
+	</scroll_list>
+	<button tool_tip="Оновити список доступних титулів груп" name="btnRefresh" />
+	<button name="btnInfo" label="Інформація" tool_tip="Показати інформацію про групу, пов'язану з вибраним титулом" />
+	<button name="btnActivate" label="Активувати" tool_tip="Активувати вибраний титул групи" />
+</floater>

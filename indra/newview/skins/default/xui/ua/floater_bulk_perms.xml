@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floaterbulkperms" title="Налаштування прав для вмісту">
+	<floater.string name="nothing_to_modify_text">
+		У вибраному вмісті нема чого змінювати.
+	</floater.string>
+	<floater.string name="status_text">
+		Завдання прав для [NAME]
+	</floater.string>
+	<floater.string name="start_text">
+		Створення запиту на зміну прав...
+	</floater.string>
+	<floater.string name="done_text">
+		Виконані запити зміни прав.
+	</floater.string>
+	<icon name="icon_animation" tool_tip="Анімація"/>
+	<icon name="icon_bodypart" tool_tip="Частини тіла"/>
+	<icon name="icon_clothing" tool_tip="Одяг"/>
+	<icon name="icon_gesture" tool_tip="Жести"/>
+	<icon name="icon_notecard" tool_tip="Примітки"/>
+	<icon name="icon_object" tool_tip="Об'єкти"/>
+	<icon name="icon_script" tool_tip="Скрипти"/>
+	<icon name="icon_sound" tool_tip="Звуки"/>
+	<icon name="icon_texture" tool_tip="Текстури"/>
+	<icon name="icon_setting" tool_tip="Налаштування навколишнього середовища"/>
+	<button label="√ Всі" name="check_all"/>
+	<button label="Очистити" label_selected="Ні" name="check_none"/>
+	<text name="newperms">
+		Налаштувати права на вміст:
+	</text>
+	<text name="GroupLabel">
+		Група:
+	</text>
+	<check_box label="Поділитися" name="share_with_group" tool_tip="Дозволити всім учасникам вибраної групи отримати встановлені вам права на цей об'єкт. Для включення рольових обмежень необхідно зробити угоду."/>
+	<text name="AnyoneLabel">
+		Всі:
+	</text>
+	<check_box label="Копіювати" name="everyone_copy" tool_tip="Копію об'єкта може взяти будь-хто. Об'єкт і його вміст повинні копіюватися і передаватися."/>
+	<text left="200" name="NextOwnerLabel">
+		Наступний власник:
+	</text>
+	<check_box top_pad="15" label="Змінювати" name="next_owner_modify" tool_tip="Наступний власник може відредагувати властивості, такі як ім'я окремого предмета або масштаб цього об'єкта."/>
+	<check_box label="Копіювати" name="next_owner_copy" tool_tip="Наступний власник може зробити необмежену кількість копій цього об'єкта. Копії містять інформацію про творця і ніколи не можуть бути більш дозвільними, ніж копіюваний предмет."/>
+	<check_box initial_value="true" label="Передати" name="next_owner_transfer" tool_tip="Наступний власник може віддати або перепродати цей об'єкт."/>
+	<scroll_list height="75" name="queue output"/>
+	<button label="OK" name="ok"/>
+	<button label="Застосувати" name="apply"/>
+	<button label="Скасувати" name="close"/>
+</floater>
+
+
+

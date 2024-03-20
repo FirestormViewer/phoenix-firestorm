@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Земельний пиріг">
+    <pie_slice label="Про землю..." name="Інформація про місце..." />
+    <pie_slice label="Будувати" name="Створити" />
+    <pie_slice label="Йти" name="Йти сюди" />
+    <pie_slice label="Сісти" name="Sit Here" />
+    <pie_slice label="Блокувати частинки" name="Mute Particle" />
+    <pie_slice label="Пропуск" name="Land Buy Pass Pie" />
+    <pie_slice label="Правити" name="Edit Terrain" />
+    <pie_slice label="Купити" name="Land Buy Pie" />
+</pie_menu>

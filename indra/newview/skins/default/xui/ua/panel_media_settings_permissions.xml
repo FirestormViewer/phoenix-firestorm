@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Налаштувати" name="Media settings for controls">
+	<text name="controls_label">
+		Управління:
+	</text>
+	<combo_box name="controls">
+		<combo_item name="Standard">
+			Стандарт
+		</combo_item>
+		<combo_item name="Mini">
+			Минимум
+		</combo_item>
+	</combo_box>
+	<text name="owner_label">
+		Власник
+	</text>
+	<check_box initial_value="false" label="Дозволити навігацію та взаємодію" name="perms_owner_interact"/>
+	<check_box initial_value="false" label="Панель керування видно" name="perms_owner_control"/>
+	<text name="group_label">
+		Група:
+	</text>
+	<check_box initial_value="false" label="Дозволити навігацію та взаємодію" name="perms_group_interact"/>
+	<check_box initial_value="false" label="Панель керування видно" name="perms_group_control"/>
+	<text name="anyone_label">
+		Всім
+	</text>
+	<check_box initial_value="false" label="Дозволити навігацію та взаємодію" name="perms_anyone_interact"/>
+	<check_box initial_value="false" label="Панель керування видно" name="perms_anyone_control"/>
+</panel>

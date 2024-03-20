@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="notification" title="Консоль повідомлень">
+	<text_editor name="payload">
+		Завантаження...
+	</text_editor>
+	<combo_box label="Відповідь" name="response"/>
+</floater>

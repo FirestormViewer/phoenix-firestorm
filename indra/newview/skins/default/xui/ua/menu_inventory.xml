@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu name="Popup">
+	<menu_item_call label="Створити список" name="Marketplace Create Listing"/>
+	<menu_item_call label="Зв'язати список" name="Marketplace Associate Listing"/>
+	<menu_item_call label="Отримати (оновити) список" name="Marketplace Get Listing"/>
+	<menu_item_call label="Перевірка на помилки" name="Marketplace Check Listing"/>
+	<menu_item_call label="Змінити список" name="Marketplace Edit Listing"/>
+	<menu_item_call label="Опублікувати" name="Marketplace List"/>
+	<menu_item_call label="Скасувати публікацію" name="Marketplace Unlist"/>
+	<menu_item_call label="Активувати" name="Marketplace Activate"/>
+	<menu_item_call label="Деактивувати" name="Marketplace Deactivate"/>
+	<menu_item_call label="Поділитися" name="Share"/>
+	<menu_item_call label="Відкрити" name="Task Open"/>
+	<menu_item_call label="Програти" name="Task Play"/>
+	<menu_item_call label="Властивості" name="Task Properties"/>
+	<menu_item_call label="Перейменувати" name="Task Rename"/>
+	<menu_item_call label="Видалити" name="Task Remove"/>
+	<menu_item_call label="Очистити кошик" name="Empty Trash"/>
+	<menu_item_call label="Очистити 'Знайдені речі'" name="Empty Lost And Found"/>
+	<menu_item_call label="Нова папка" name="New Folder"/>
+	<menu_item_call label="Новий комплект одягу" name="New Outfit"/>
+	<menu_item_call label="Новий скрипт" name="New Script"/>
+	<menu_item_call label="Нова нотатка" name="New Note"/>
+	<menu_item_call label="Новий жест" name="New Gesture"/>
+	<menu label="Новий одяг" name="New Clothes">
+		<menu_item_call label="Нова сорочка" name="New Shirt"/>
+		<menu_item_call label="Нові штани" name="New Pants"/>
+		<menu_item_call label="Нове взуття" name="New Shoes"/>
+		<menu_item_call label="Нові шкарпетки" name="New Socks"/>
+		<menu_item_call label="Нова куртка" name="New Jacket"/>
+		<menu_item_call label="Нова спідниця" name="New Skirt"/>
+		<menu_item_call label="Нові рукавички" name="New Gloves"/>
+		<menu_item_call label="Нова майка" name="New Undershirt"/>
+		<menu_item_call label="Нові труси" name="New Underpants"/>
+		<menu_item_call label="Нова альфа" name="New Alpha Mask"/>
+		<menu_item_call label="Нове татуювання" name="New Tattoo"/>
+		<menu_item_call label="Новий універсальний" name="New Universal"/>
+		<menu_item_call label="Нова фізика" name="New Physics"/>
+	</menu>
+	<menu label="Нова частина тіла" name="New Body Parts">
+		<menu_item_call label="Нова фігура" name="New Shape"/>
+		<menu_item_call label="Нова шкіра" name="New Skin"/>
+		<menu_item_call label="Нове волосся" name="New Hair"/>
+		<menu_item_call label="Нові очі" name="New Eyes"/>
+	</menu>
+	<menu label="Нові установки" name="New Settings">
+		<menu_item_call label="Нове небо" name="New Sky"/>
+		<menu_item_call label="Нова вода" name="New Water"/>
+		<menu_item_call label="Новий цикл дня" name="New Day Cycle"/>
+	</menu>
+	<menu label="Використовувати для" name="upload_def">
+		<menu_item_call label="Завантажень Зображень" name="Image uploads"/>
+		<menu_item_call label="Завантажень Звуків" name="Sound uploads"/>
+		<menu_item_call label="Завантажень Анімацій" name="Animation uploads"/>
+		<menu_item_call label="Завантажень Моделів" name="Model uploads"/>
+	</menu>
+	<menu label="Змінити тип" name="Change Type">
+		<menu_item_call label="За замовчуванням" name="Default"/>
+		<menu_item_call label="Рукавички" name="Gloves"/>
+		<menu_item_call label="Куртка" name="Jacket"/>
+		<menu_item_call label="Штани" name="Pants"/>
+		<menu_item_call label="Фігура" name="Shape"/>
+		<menu_item_call label="Взуття" name="Shoes"/>
+		<menu_item_call label="Сорочка" name="Shirt"/>
+		<menu_item_call label="Спідниця" name="Skirt"/>
+		<menu_item_call label="Труси" name="Underpants"/>
+		<menu_item_call label="Мати" name="Undershirt"/>
+	</menu>
+	<menu_item_call label="Телепорт" name="Landmark Open"/>
+	<menu_item_call label="Програти" name="Animation Open"/>
+	<menu_item_call label="Програти" name="Sound Open"/>
+	<menu_item_call label="Замінити комплект одягу" name="Replace Outfit"/>
+	<menu_item_call label="Додати в комплект одягу" name="Add To Outfit"/>
+	<menu_item_call label="Створити елементи" name="Wear Items"/>
+	<menu_item_call label="Видалити з комплекту одягу" name="Remove From Outfit"/>
+	<menu_item_call label="Копіювати список у буфер" name="Copy outfit list to clipboard"/>
+	<menu_item_call label="Знайти оригінал" name="Find Original"/>
+	<menu_item_call label="Видалити об'єкт" name="Purge Item"/>
+	<menu_item_call label="Відновити об'єкт" name="Restore Item"/>
+	<menu_item_call label="Відкрити" name="Open"/>
+	<menu_item_call label="Відкрити оригінал" name="Open Original"/>
+	<menu_item_call label="Властивості" name="Properties"/>
+	<menu_item_call label="Перейменувати" name="Rename"/>
+	<menu_item_call label="Захистити папку" name="ProtectFolder"/>
+	<menu_item_call label="Зняти захист папки" name="UnprotectFolder"/>
+	<menu_item_call label="Копіювати ідентифікатор UUID" name="Copy Asset UUID"/>
+	<menu_item_call label="Показати в головній панелі" name="Show in Main Panel"/>
+	<menu_item_call label="Показати в новому вікні" name="Show in new Window"/>
+	<menu_item_call label="Перезавантажити папку" name="ReloadFolder"/>
+	<menu_item_call label="Повернення до останньої позиції" name="Restore to Last Position"/>
+	<menu_item_call label="Копіювати" name="Copy"/>
+	<menu_item_call label="Вирізати" name="Cut"/>
+	<menu_item_call label="Вставити" name="Paste"/>
+	<menu_item_call label="Вставити як посилання" name="Paste As Link"/>
+	<menu_item_call label="Знайти всі посилання" name="Find Links"/>
+	<menu_item_call label="Замінити посилання" name="Replace Links"/>
+	<menu_item_call label="Видалити" name="Delete"/>
+	<menu_item_call label="Очистити непрацюючі посилання" name="Cleanup broken Links"/>
+	<menu_item_call label="Перемістити до стандартної папки" name="Move to Default Folder"/>
+	<menu_item_call label="Перемістити в 'Втрачене та знайдене'" name="Move to Lost And Found"/>
+	<menu_item_call label="Видалити системну папку" name="Delete System Folder"/>
+	<menu_item_call label="Створити папку з вибраних" name="New folder from selected"/>
+	<menu_item_call label="Розгрупувати елементи папки" name="Ungroup folder items"/>
+	<menu_item_call label="Почати конференц-чат" name="Conference Chat Folder"/>
+	<menu_item_call label="Програти" name="Sound Play"/>
+	<menu_item_call label="Копіювати SLurl" name="url_copy"/>
+	<menu_item_call label="Про місце" name="About Landmark"/>
+	<menu_item_call label="Показати на мапі" name="show_on_map"/>
+	<menu_item_call label="Програти публічно" name="Animation Play"/>
+	<menu_item_call label="Програти для себе" name="Animation Audition"/>
+	<menu_item_call label="Надіслати ОП" name="Send Instant Message"/>
+	<menu_item_call label="Запропонувати телепорт" name="Offer Teleport..."/>
+	<menu_item_call label="Попросити телепорт" name="Request Teleport..."/>
+	<menu_item_call label="Почати конференц-чат" name="Conference Chat"/>
+	<menu_item_call label="Активувати" name="Activate"/>
+	<menu_item_call label="Деактивувати" name="Deactivate"/>
+	<menu_item_call label="Зберегти як" name="Save As"/>
+	<menu_item_call label="Зберегти" name="Save Selected As"/>
+	<menu_item_call label="Одягнути" name="Wearable And Object Wear"/>
+	<menu_item_call label="Додати" name="Wearable Add"/>
+	<menu label="Прикріпити до" name="Attach To"/>
+	<menu label="Прикріпити на екран" name="Attach To HUD"/>
+	<menu_item_call label="Торкнутися" name="Attachment Touch"/>
+	<menu_item_call label="Редагувати" name="Wearable Edit"/>
+	<menu_item_call label="Оновити текстуру" name="Texture Refresh Attachment" />
+	<menu_item_call label="Відокремити від себе" name="Detach From Yourself"/>
+	<menu_item_call label="Зняти" name="Take Off"/>
+	<menu_item_call name="Settings Apply Local" label="Застосувати лише до себе"/>
+	<menu_item_call name="Settings Apply Parcel" label="Застосувати до ділянки"/>
+	<menu_item_call label="Копіювати до списків товарів торгового центру" name="Marketplace Copy"/>
+	<menu_item_call label="Перемістити до списків товарів торгового центру" name="Marketplace Move"/>
+	<menu_item_call label="--ні опцій--" name="--no options--"/>
+</menu>
+
+
+

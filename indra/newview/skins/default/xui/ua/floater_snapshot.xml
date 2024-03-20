@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Snapshot" title="View Snapshot">
+	<floater.string name="unknown">
+		невідомо
+	</floater.string>
+	<string name="postcard_progress_str">
+		Відправка листа
+	</string>
+	<string name="facebook_progress_str">
+		Пост у Facebook
+	</string>
+	<string name="profile_progress_str">
+		Публікація
+	</string>
+	<string name="inventory_progress_str">
+		Збереження в -інвентар
+	</string>
+	<string name="local_progress_str">
+		Збереження на комп'ютері
+	</string>
+	<string name="facebook_succeeded_str">
+		Зображення завантажено
+	</string>
+	<string name="profile_succeeded_str">
+		Зображення надіслано
+	</string>
+	<string name="postcard_succeeded_str">
+		Лист відправлено!
+	</string>
+	<string name="inventory_succeeded_str">
+		Збережено у інвентарі!
+	</string>
+	<string name="local_succeeded_str">
+		Збережено на комп'ютері!
+	</string>
+	<string name="facebook_failed_str">
+		Не вдалося передати зображення на вашу хроніку Facebook.
+	</string>
+	<string name="profile_failed_str">
+		Не вдалося передати зображення у ваш профіль.
+	</string>
+	<string name="postcard_failed_str">
+		Не вдалося надіслати листа.
+	</string>
+	<string name="inventory_failed_str">
+		Не вдалося зберегти у інвентарі.
+	</string>
+	<string name="local_failed_str">
+		Не вдалося зберегти комп'ютер.
+	</string>
+	<view name="controls_container">
+	<button label="Оновити" name="new_snapshot_btn"/>
+	<panel name="advanced_options_panel">
+		<text name="layer_type_label">
+			Захоплення:
+		</text>
+		<combo_box label="Шари зображення" name="layer_types">
+			<combo_box.item label="Цвета" name="Colors"/>
+			<combo_box.item label="Глибина" name="Depth"/>
+		</combo_box>
+		<check_box label="Інтерфейс" name="ui_check"/>
+		<check_box label="L$ Баланс" name="currency_check"/>
+		<check_box label="Дані в грі" name="hud_check"/>
+		<check_box label="Стоп-кадр (повноекранний)" name="freeze_frame_check"/>
+		<check_box label="Автооновлення" name="auto_snapshot_check"/>
+		<text name="filter_list_label" width="60">
+            Фільтр:
+        </text>
+		<combo_box name="filters_combobox" left="60" >
+            <combo_box.item label="Без фільтра" name="NoFilter"/>
+        </combo_box>
+	</panel>
+	</view>
+	<text name="image_res_text">
+		[WIDTH] (ширина) x [HEIGHT] (висота) пікс.
+	</text>
+	<text name="file_size_label">
+		[SIZE] КБ
+	</text>
+	<button label="360° знімок" name="360_label"/>
+</floater>

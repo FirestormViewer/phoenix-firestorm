@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Хмари" name="panel_settings_sky_clouds">
+	<layout_stack name="main_ls">
+		<layout_panel name="left_lp">
+			<text name="cloud_coverage_label">Покриття:</text>
+			<text name="cloud_scale_label">Масштаб:</text>
+			<text name="cloud_variance_label">Дисперсія:</text>
+			<text name="cloud_scroll_label">Рух:</text>
+			<text name="cloud_image_label">Зображення:</text>
+			<text name="cloud_color_label">Колір:</text>
+		</layout_panel>
+		<layout_panel name="right_lp">
+			<text name="cloud_density_label">Щільність:</text>
+			<text name="cloud_detail_label">Детальність:</text>
+		</layout_panel>
+	</layout_stack>
+</panel>

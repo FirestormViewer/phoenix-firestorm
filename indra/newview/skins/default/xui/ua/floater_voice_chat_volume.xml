@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_voice_volume" title="Гучність голосового чату">
+	<slider label="Гучність" name="chat_voice_volume" />
+</floater>

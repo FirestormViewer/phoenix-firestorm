@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="contact_sets_panel">
+	<panel.string name="empty_list">
+		Цей набір порожній.
+	</panel.string>
+	<panel.string name="no_sets">
+		Немає наборів
+	</panel.string>
+	<panel.string name="all_sets">
+		Усі набори
+	</panel.string>
+	<panel.string name="pseudonyms">
+		Аліаси
+	</panel.string>
+	<panel.string name="non_friends">
+		Не у списку друзів
+	</panel.string>
+	<button name="config_btn" tool_tip="Конфігурація вибраного набору" />
+	<button name="add_set_btn" tool_tip="Додати новий набір контактів" />
+	<button name="remove_set_btn" tool_tip="Видалити вибраний набір контактів" />
+	<button label="Додати..." name="add_btn" tool_tip="Додати аватара до поточного набору контактів" />
+	<button label="Видалити..." name="remove_btn" tool_tip="Видалити аватара з поточного набору контактів" />
+	<button label="Профіль..." name="profile_btn" tool_tip="Відкрити профіль аватара" />
+	<button label="ОП..." name="start_im_btn" tool_tip="Надіслати особисте повідомлення (ОП)" />
+	<button label="Телепорт..." name="offer_teleport_btn" tool_tip="Запропонувати користувачеві телепортуватися до вас" />
+	<button label="Прізвисько +" name="set_pseudonym_btn" tool_tip="Задати псевдонім даному аватару" />
+	<button label="Прізвисько -" name="remove_pseudonym_btn" tool_tip="Видалити псевдонім цього аватара" />
+	<button label="Видалити ОІ" name="remove_displayname_btn" tool_tip="Видалити ім'я цього аватара, що відображається" />
+	<text name="member_count">
+		Членів: [COUNT]
+	</text>
+</panel>

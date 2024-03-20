@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<teleport_messages>
+	<message_set name="errors">
+		<message name="invalid_tport">
+			Кількість спроб телепортації обмежена до 6 за хвилину. Якщо у вас виникли проблеми, зачекайте на хвилину і спробуйте телепортуватися знову. Якщо проблема не зникне, вийдіть із системи та увійдіть знову.
+		</message>
+		<message name="invalid_region_handoff">
+			При перетині кордону регіону виникла проблема. Можливо вам доведеться повторити вхід перед тим, як ви зможете перейти кордон.
+Якщо це повідомлення повториться, відвідайте сайт [SUPPORT_SITE].
+		</message>
+		<message name="blocked_tport">
+			Телепортацію зараз заблоковано. Повторіть спробу пізніше.
+Якщо вам все одно не вдається телепортуватися, вийдіть та увійдіть до системи, щоб усунути проблему.
+		</message>
+		<message name="nolandmark_tport">
+			Системі не вдалося визначити місце призначення закладки.
+		</message>
+		<message name="timeout_tport">
+			Системі не вдалося здійснити підключення телепорту.
+Повторіть спробу пізніше.
+		</message>
+		<message name="NoHelpIslandTP">
+			Телепортуватись назад на Острів прибуття не можна.
+Для повторення навчання перейдіть на 'Острів прибуття – загальний'.
+		</message>
+		<message name="noaccess_tport">
+			У вас немає доступу до точки призначення цього телепорту.
+		</message>
+		<message name="missing_attach_tport">
+			Ваші приєднання ще не доставлені. Зачекайте кілька секунд або вийдіть та увійдіть до програми, перш ніж повторити спробу телепортації.
+		</message>
+		<message name="too_many_uploads_tport">
+			Черга активів у регіоні заповнена, тому ваш запит на телепортацію не буде виконано вчасно. Повторіть спробу за кілька хвилин або перейдіть до менш завантаженого регіону.
+		</message>
+		<message name="expired_tport">
+			Системі не вдалося вчасно виконати ваш запит на телепортацію. Повторіть спробу за кілька хвилин.
+		</message>
+		<message name="expired_region_handoff">
+			Системі не вдалося своєчасно виконати перетин кордону. Повторіть спробу за кілька хвилин.
+		</message>
+		<message name="preexisting_tport">
+			Система не змогла запустити ваш телепорт. Будь ласка, спробуйте ще раз за кілька хвилин.
+		</message>
+		<message name="no_host">
+			Не вдається знайти призначення телепорту. Призначення може бути тимчасово недоступним або не існує. Будь ласка, спробуйте ще раз за кілька хвилин.
+		</message>
+		<message name="no_inventory_host">
+			Система інвентарю нині недоступна.
+		</message>
+		<message name="MustGetAgeRegion">
+			Для відвідування даного регіону вам має бути щонайменше 18 років.
+		</message>
+		<message name="RegionTPSpecialUsageBlocked">
+			Неможливо увійти до регіону. '[REGION_NAME]' є ігровим регіоном і ви повинні відповідати певним критеріям, щоб увійти. Для отримання додаткової інформації, будь ласка, перегляньте [http://wiki.secondlife.com/wiki/Linden_Lab_Official:Second_Life_Skill_Gaming_FAQ Skill Gaming FAQ].
+		</message>
+	</message_set>
+	<message_set name="progress">
+		<message name="sending_dest">
+			Надсилання за призначенням.
+		</message>
+		<message name="redirecting">
+			Перенаправлення в іншу локацію.
+		</message>
+		<message name="relaying">
+			Ретрансляція за призначенням.
+		</message>
+		<message name="ending_home">
+			Надсилання запиту домашньої локації.
+		</message>
+		<message name="ending_landmark">
+			Надсилання запиту закладки локації.
+		</message>
+		<message name="completing">
+			Телепортацію завершено.
+		</message>
+		<message name="completed_from">
+			Телепортацію завершено з [T_SLURL]
+		</message>
+		<message name="resolving">
+			Рішення призначення
+		</message>
+		<message name="contacting">
+			Поєднання з новим регіоном.
+		</message>
+		<message name="arriving">
+			Прибуття...
+		</message>
+		<message name="requesting">
+			Запрошується телепортація...
+		</message>
+		<message name="pending">
+			Очікується телепортація...
+		</message>
+	</message_set>
+</teleport_messages>
+
+
+

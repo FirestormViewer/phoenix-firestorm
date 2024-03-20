@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<densityctrl label="Густина" name="density_ctrl">
+    <text name="exponential_term_label">Експоненційний термін</text>
+    <text name="exponential_scale_factor_label" width="120">Експоненційний коефіцієнт масштабу</text>
+    <text name="linear_term_label" width="120">Лінійний термін</text>
+    <text name="constant_term_label" width="120">Постійний термін</text>
+    <text name="max_altitude_label" width="80">Макс.висота</text>
+    <text name="aniso_factor_label" width="80">Фактор анізотропії</text>
+</densityctrl>
