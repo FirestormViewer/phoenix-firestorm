@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Opensim" name="opensim_panel">
+	<tab_container label="Opensim" name="tabs">
+		<panel label="Керування сіткою" name="grid_management_panel">
+			<text name="add_grid_text">
+				Додати нову сітку
+			</text>
+			<line_editor name="add_grid" label="Введіть LoginURI" />
+			<button label="Очистити" label_selected="Очистити" width="80" name="clear_grid" />
+			<button label="Застосувати" width="80" name="apply_new_grid" />
+			<text name="add_grid_text">
+				Керування мережею
+			</text>
+			<scroll_list name="grid_list">
+				<scroll_list.columns label="Назва сітки" name="grid_label" />
+				<scroll_list.columns label="URI Входу" name="login_uri" />
+			</scroll_list>
+			<button label="Оновити" name="refresh_grid" />
+			<button label="Видалити" name="remove_grid" />
+			<panel name="advanced_grid_panel">
+				<text name="grid_name_text">
+					Назва мережі:
+				</text>
+				<text name="grid_uri_text">
+					URI Мережі:
+				</text>
+<text name="login_page_text">
+					Сторінка входу:
+				</text>
+				<text name="helper_uri_text">
+					URI допомоги:
+				</text>
+				<text name="website_text">
+					Сайт мережі:
+				</text>
+				<text name="support_text">
+					Підтримка мережі:
+				</text>
+				<text name="register_text">
+					Реєстрація мережі:
+				</text>
+				<text name="password_text">
+					URI пароля мережі:
+				</text>
+				<text name="search_text">
+					Пошук мережі:
+				</text>
+				<text name="message_text">
+					URI повідомлень мережі:
+				</text>
+			</panel>
+		</panel>
+		<panel label="Різне" name="opensim_misc_panel">
+			<check_box label="Налагодження пошуку" name="DebugSearch" />
+			<text name="search_url_debug_text">
+				Заміна поточного url пошуку: (без заміни якщо порожньо)
+			</text>
+			<button label="Очистити" label_selected="Очистити" name="clear_search_url_debug" />
+			<button label="Вибрати" name="pick_current_search_url" />
+		</panel>
+	</tab_container>
+</panel>

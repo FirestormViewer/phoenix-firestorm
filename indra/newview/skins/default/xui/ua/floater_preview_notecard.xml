@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview notecard" title="Нотатка:">
+	<floater.string name="no_object">
+		Неможливо знайти об'єкт, який містить цю нотатку.
+	</floater.string>
+	<floater.string name="not_allowed">
+		У вас немає прав для перегляду нотатки.
+	</floater.string>
+	<floater.string name="Title">
+		Нотатка: [NAME]
+	</floater.string>
+	<text name="desc txt">
+		Опис:
+	</text>
+	<text_editor name="Notecard Editor">
+		Завантаження...
+	</text_editor>
+	<button name="Search" tool_tip="Пошук та Заміна" />
+	<button label="Редагувати..." label_selected="Редагувати" name="Edit"/>
+	<button label="Зберегти" label_selected="Зберегти" name="Save"/>
+	<button label="Видалити" label_selected="Видалити" name="Delete"/>
+</floater>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Map">
+	<floater.string name="mini_map_caption">
+		Мінімапа
+	</floater.string>
+	<text label="Пн" name="floater_map_north">
+        Пн
+    </text>
+    <text label="Сх" name="floater_map_east">
+        Сх
+    </text>
+    <text label="Зх" name="floater_map_west">
+        Зх
+    </text>
+    <text label="Пд" name="floater_map_south">
+        Пд
+    </text>
+    <text label="ПдСх" name="floater_map_southeast">
+        ПдСх
+    </text>
+    <text label="ПнСх" name="floater_map_northeast">
+        ПнСх
+    </text>
+    <text label="ПдЗх" name="floater_map_southwest">
+        ПдЗх
+    </text>
+    <text label="ПнЗх" name="floater_map_northwest">
+        ПнЗх
+    </text>
+</floater>

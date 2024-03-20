@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_postcard_settings">
+	<combo_box label="Дозвол" name="postcard_size_combo">
+		<combo_box.item label="Поточне вікно" name="CurrentWindow" />
+		<combo_box.item label="Інше" name="Custom" />
+	</combo_box>
+	<spinner label="Ширина Висота" name="postcard_snapshot_width" />
+	<check_box label="Зберегти пропорції" name="postcard_keep_aspect_check" />
+	<slider label="Якість:" name="image_quality_slider" label_width="55"/>
+</panel>

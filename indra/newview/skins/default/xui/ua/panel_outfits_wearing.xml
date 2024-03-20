@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="Wearing">
+	<panel.string name="no_attachments">
+		Нема прикріплених об'єктів.
+	</panel.string>
+	<accordion name="wearables_accordion">
+		<accordion_tab name="tab_wearables" title="Для носіїв"/>
+		<accordion_tab name="tab_temp_attachments" title="Тимчасові прикріплені об'єкти"/>
+	</accordion>
+	<panel name="bottom_panel">
+		<menu_button name="options_gear_btn" tool_tip="Показати додаткові опції"/>
+		<text name="avatar_complexity_label">
+			Складність: [WEIGHT]
+		</text>
+	</panel>
+</panel>

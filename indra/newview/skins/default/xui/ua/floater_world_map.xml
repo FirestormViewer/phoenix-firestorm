@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="worldmap" title="Мапа світу">
+	 <layout_stack name="resizing_stack">
+	<layout_panel name="map_details_panel">
+	<panel name="layout_panel_1">
+		<text name="events_label">
+			Позначення
+		</text>
+	</panel>
+	<panel name="layout_panel_2">
+		<button name="Show My Location" tool_tip="Центрувати карту на позиції мого аватара"/>
+		<text name="me_label">
+			Я
+		</text>
+		<text name="person_label">
+			Люди
+		</text>
+		<text name="infohub_label">
+			Інфохаб
+		</text>
+		<text name="land_sale_label">
+			Продаж землі
+		</text>
+		<text name="auction_label">
+			з аукціону
+		</text>
+		<text name="by_owner_label">
+			власником
+		</text>
+		<button name="Go Home" tool_tip="Телепортація додому"/>
+		<text name="Home_label">
+			Хата
+		</text>
+		<text name="events_label">
+			Події:
+		</text>
+		<text name="pg_label">
+			Загальні
+		</text>
+		<check_box initial_value="true" name="events_mature_chk"/>
+		<text name="events_mature_label">
+			Помірні
+		</text>
+		<text name="events_adult_label">
+			Для дорослих
+		</text>
+	</panel>
+	<panel name="layout_panel_3">
+		<text name="find_on_map_label">
+			Знайти на мапі
+		</text>
+	</panel>
+	<panel name="layout_panel_4">
+		<combo_box label="Друзі онлайн" name="friend combo" tool_tip="Показати друзів на мапі">
+			<combo_box.item label="Мої друзі онлайн" name="item1"/>
+		</combo_box>
+		<combo_box label="Мої закладки" name="landmark combo" tool_tip="Показати на мапі мої закладки">
+			<combo_box.item label="Мої закладки" name="item1"/>
+		</combo_box>
+		<search_editor label="Назва регіону" name="location" tool_tip="Введіть назву регіону"/>
+		<button label="Пошук" name="DoSearch" tool_tip="Пошук у регіоні"/>
+		<button label="Очистити" name="Clear" tool_tip="Очистити відстеження та скинути карту до стандартного вигляду"/>
+		<text name="events_label">
+			Місце:
+		</text>
+		<button label="Телепорт" name="Teleport" tool_tip="Телепортація до вибраного місця"/>
+		<button label="Копіювати" name="copy_slurl" tool_tip="Копіювати поточне місце у вигляді URL-адреси SL для використання в інтернеті."/>
+		<button label="Показати місце" name="Show Destination" tool_tip="Центрувати карту на вибраному місці"/>
+		<button label="Відстежити регіон" name="track_region" tool_tip="Додати регіон до відстеження"/>
+	</panel>
+	<panel name="layout_panel_5">
+		<text name="zoom_label">
+			Збільшення
+		</text>
+	</panel>
+</layout_panel>
+</layout_stack>
+</floater>

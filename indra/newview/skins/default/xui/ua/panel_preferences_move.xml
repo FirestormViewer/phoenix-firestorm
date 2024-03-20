@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Перемістити та подивитись" name="move_panel">
+	<tab_container label="Рух і зовнішній вигляд" name="tabs">
+		<panel label="Вид" name="tab-view">
+			<slider label="Кут огляду" name="camera_fov" tool_tip="Насправді це функція збільшення/зменшення. Змінює поле зору у вікні перегляду. Також можна натискати Ctrl + 0 або Ctrl + 8. ПРИМІТКА: Не працює, якщо у вас включено Flycam (3D SpaceNavigator)."/>
+			<slider label="Відстань" name="camera_offset_scale"/>
+			<slider label="Час переходу" name="camera_transition_time"/>
+			<slider label="Згладжування" name="camera_position_smoothing"/>
+			<check_box label="Вимкнути обмеження камери" name="DisableCameraConstraints" tool_tip="Встановіть, щоб перемістити камеру за її нормальні межі та нижче рівня землі."/>
+			<check_box label="Не використовувати колесо миші для керування рівнем масштабування" name="FSDisableMouseWheelCameraZoom"/>
+			<text name="heading2" width="380">
+				Автоматична поза аватара під час (вибери один або більше):
+			</text>
+			<check_box label="Будівництва / Редагування" name="edit_camera_movement" tool_tip="Використовувати автоматичне позиціонування камери при вході та виході з режиму редагування"/>
+			<check_box label="Зовнішності" name="appearance_camera_movement" tool_tip="Використовуйте автоматичне позиціонування камери в режимі редагування"/>
+			<check_box label="Візуальні підказки" name="FSAppearanceShowHints" tool_tip="Увімкнення або вимкнення візуальних підказок, що показують змінені частини аватара." width="150" />
+			<check_box label="Натискання на аватар зберігає положення камери" name="clickonavatarkeepscamera" tool_tip="Зазвичай, при натисканні на аватарі скидає положення камери. Ця опція видаляє цю поведінку."/>
+			<check_box label="Зберігати положення камери після телепортації (в межах регіону)" name="FSResetCameraOnTP" tool_tip="Як правило, положення камери скидається при телепортації. Ця опція запобігає цій поведінці."/>
+			<check_box label="Зберігати положення камери під час руху аватара" name="FSResetCameraOnMovement"/>
+			<check_box label="Вимкнути мінімальну відстань наближення камери" name="disableminzoomdist" tool_tip="Відключення обмеження на близьку відстань камери дозволить наблизитися ближче до об'єкта."/>
+			<check_box label="Повернути аватар у напрямку камери при скиданні виду" name="resetviewturnsavatar" tool_tip="Ця опція повертає аватара у напрямку камери при скиданні режиму виду (натискання клавіші ESC)."/>
+			<check_box label="Дозволити камері рухатися крізь прими" name="ignorecameraconstraints" tool_tip="Дозволити камері рухатися без обмежень крізь прими"/>
+			<text name="ignorecameraconstraints_requires_restart">
+				(потрібний перезапуск)
+			</text>
+			<check_box label="Повторний рендеринг тимчасово прихованих об'єктів після телепорту" name="FSTempDerenderUntilTeleport" tool_tip="Якщо увімкнено, тимчасово приховані об'єкти будуть зберігатися до телепорту. Якщо вимкнено, вони залишаються приховані до кінця сеансу або до видалення вручну з чорного списку активів. " />
+		</panel>
+		<panel label="Від першої особи" name="tab-mouselook">
+			<check_box label="Включити функціональність виду від першої особи (Mouselook)" name="EnableMouselook" tool_tip="Дозволити вид від першої особи та контроль камери мишею"/>
+			<check_box label="Показувати аватара в режимі від першої особи" name="first_person_avatar_visible"/>
+			<check_box label="Показувати інтерфейс користувача в режимі від першої особи" name="first_person_ui_visible"/>
+			<check_box label="Не закривати вікна чатів і радара в режимі від першої особи (Mouselook)" name="FSShowConvoAndRadarInML"/>
+			<check_box label="Увімкнути контекстне меню в режимі від першої особи" tool_tip="Відкрити контекстне меню в режимі від першої особи при натисканні ALT + права кнопка миші" name="FSEnableRightclickMenuInMouselook"/>
+			<check_box label="Вийти з виду від першої особи за допомогою колеса прокручування" name="FSScrollWheelExitsMouselook" tool_tip="Вийти з виду від першої особи за допомогою колеса прокручування"/>
+			<check_box label="Показувати інструкції виду від першої особи" name="mouselook_instructions_visible" tool_tip="Показувати інструкції виду від першої особи"/>
+			<check_box label="Показувати приціл" name="ShowCrosshairs" tool_tip="Показувати приціл побачивши першу особу"/>
+			<check_box label="Увімкнути бойові можливості" name="FSMouselookCombatFeatures"/>
+			<check_box label="Малювати маркери мети (стрілки)" name="ExodusMouselookIFF"/>
+			<slider label="Відстань (м)" name="ExodusMouselookIFFRange"/>
+			<text name="Mouse Sensitivity">
+				Чутливість миші:
+			</text>
+			<check_box label="Інвертувати" name="invert_mouse"/>
+		</panel>
+		<panel label="Рух" name="tab-movement">
+			<check_box label="Клавіші зі стрілками завжди переміщують мене" name="arrow_keys_move_avatar_check" tool_tip="Застосовується лише до поля введення 'Загальний чат' у нижній частині вікна перегляду, а не до вкладки 'загальний чат' у діалогах."/>
+			<check_box label="Буквенні клавіші впливають на рух, не запускаючи локальний чат (тобто WASD)" name="LetterKeysAffectsMovementNotFocusChatBar"/>
+			<check_box label="Подвійне натискання для бігу" name="tap_tap_hold_to_run"/>
+			<check_box label="Літати / Приземлитися (верх (стрибок) / вниз (присісти))" name="automatic_fly"/>
+			<check_box label="Увімкнути режим перемикання присідання" name="crouch_toggle_mode"/>
+			<check_box label="Вимкнути анімацію підготовки стрибка" name="FSIgnoreFinishAnimation"/>
+			<check_box label="Вимкнути поворот аватара обличчям до камери під час руху назад" name="FSDisableTurningAroundWhenWalkingBackwards" tool_tip="Вимкнути поворот аватара обличчям до камери під час руху назад"/>
+			<check_box label="Повернути аватара обличчям до об'єкта, який вибрано" name="FSTurnAvatarToSelectedObject" tool_tip="Повертає ваш аватар обличчям до об'єкта, який ви в даний момент вибираєте."/>
+			<slider label="Швидкість повороту аватара:" name="av_turn_spd" tool_tip="Змінює швидкість реакції вашого аватара на поворот. 0-100 у відсотках від максимальної швидкості повороту. 0 за замовчуванням. З високим значенням буде швидкими/різкими"/>
+			<text name="Region_Crossing_Movement_Label" width="275">
+				Прогнозування руху між регіонами:
+			</text>
+			<radio_group name="Region_Crossing_Movement">
+				<radio_item label="Predict" name="move_predict"/>
+				<radio_item label="Stop" name="move_stop"/>
+			</radio_group>
+			<text name="movelock_lbl">
+				Якщо в побудованому LSL міст активне блокування руху...
+			</text>
+			<check_box label="Завжди повторювати блокування після зміни регіону" name="RelockMoveLockAfterRegionChange"/>
+			<check_box label="Блокування та розблокування позиції після зупинки та запуску руху" name="RelockMoveLockAfterMovement"/>
+			<text name="single_click_action_lbl">
+				Поодиноке натискання:
+			</text>
+			<combo_box name="single_click_action_combo">
+				<combo_box.item label="Немає дії" name="0"/>
+				<combo_box.item label="Іти в точку натискання" name="1"/>
+			</combo_box>
+			<text name="double_click_action_lbl">
+				Подвійне натискання:
+			</text>
+			<combo_box name="double_click_action_combo">
+				<combo_box.item label="Немає дії" name="0"/>
+				<combo_box.item label="Іти в точку натискання" name="1"/>
+				<combo_box.item label="Телепортуватися в точку натискання" name="2"/>
+			</combo_box>
+			<check_box label="Дозволити подвійне натискання на об'єкти зі скриптами" name="FSAllowDoubleClickOnScriptedObjects"/>
+			<button label="Налаштування джойстика" name="joystick_setup_button"/>
+		</panel>
+		<panel label="Телепорт" name="tab-teleports">
+			<check_box label="Відтворювати звуковий ефект при телепортації" name="PlayTeleportSound"/>
+			<check_box label="Завжди літати після телепортації" name="FSFlyAfterTeleport"/>
+			<check_box label="Завжди відображати кнопку скасування телепортації" name="FSAlwaysShowTPCancel" tool_tip="Цей параметр ігнорується RestrainedLoveAPI"/>
+			<check_box label="Вимкнути мітки телепорту" name="tp_beam_toggle" tool_tip="Відключення відображення мітки призначення після телепортації" />
+			<check_box label="Відключення екрана телепортації" name="tp_screen_toggle" tool_tip="Відключення чорного екрана телепортації" />
+			<check_box label="Не закривати картку при телепортції" name="FSDoNotHideMapOnTeleport" tool_tip="Заборонити автоматичне закриття картки при телепортції."/>
+			<check_box label="Тримати 'Показувати лише друзів' увімкненим після телепортації." name="FSRenderFriendsOnlyPersistsTP" tool_tip="Вимикає автоматичне скасування функції 'Показати тільки друзів' (за замовчуванням: вимкнено)"/>
+			<check_box label="Повідомити SLURL регіону, з якого ви завершили телепорт." name="FSShowBackSLURL"/>
+		</panel>
+		<panel label="Мапа та міні-мапа" name="tab-maps">
+			<text name="minimap_options_label">
+				Опції мінікарти:
+			</text>
+			<check_box label="Включити обертання мінімапи" name="minimaprotate" tool_tip="Обертати мінімапу при зміні напрямку аватара"/>
+			<text name="netmap_double_click_action_lbl">
+				Подвійне натискання:
+			</text>
+			<combo_box name="netmap_double_click_action_combo">
+				<combo_box.item label="Немає дії" name="0"/>
+				<combo_box.item label="Відкрити мапу світу" name="1"/>
+				<combo_box.item label="Телепортація в точку натискання" name="2"/>
+			</combo_box>
+			<slider label="Радіус вибору:" name="FSMinimapPickScale" tool_tip="Керує радіусом кола вибору на мінімапі"/>
+			<text name="world_map_options_label">
+				Опції картки світу:
+			</text>
+			<check_box label="Фільтр дублікатів закладок на мапі світу" name="WorldmapFilterDuplicateLandmarks" tool_tip="Фільтр дублікатів закладок на мапі світу"/>
+			<check_box label="Показати додаткову інформацію про регіон на мапі світу" name="FSAdvancedWorldmapRegionInfo" tool_tip="Показати додаткову інформацію про регіон на мапі світу (Кількість аватар та рівень зрілості)."/>
+			<check_box label="Показати сітку координат на мапі світу." name="FSShowRegionGridCoordinates" tool_tip="Показати сітку координат на мапі світу."/>
+			<check_box label="Телепортація при подвійному натисканні на мапі світу" name="FSWorldMapDoubleclickTeleport" tool_tip="Увімкнення можливості телепортації при подвійному натисканні на мапі світу"/>
+		</panel>
+	</tab_container>
+</panel>

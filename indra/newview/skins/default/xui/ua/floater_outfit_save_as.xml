@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="modal container" title="Зберегти комплект">
+	<button label="Зберегти" label_selected="Зберегти" name="Save"/>
+	<button label="Скасувати" label_selected="Скасувати" name="Cancel"/>
+	<text name="Save item as:">
+		Зберегти поточний одяг
+як новий комплект:
+	</text>
+	<line_editor name="name ed">
+		[DESC] (new)
+	</line_editor>
+</floater>

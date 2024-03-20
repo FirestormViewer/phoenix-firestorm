@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="toolbox floater" short_title="Будівельні інструменти">
+	<floater.string name="grid_screen_text">
+		Екран
+	</floater.string>
+	<floater.string name="grid_local_text">
+		Локальна
+	</floater.string>
+	<floater.string name="grid_world_text">
+		Світ
+	</floater.string>
+	<floater.string name="grid_reference_text">
+		Координатна
+	</floater.string>
+	<floater.string name="grid_attachment_text">
+		Приєднання
+	</floater.string>
+	<floater.string name="status_rotate">
+		Тягніть кольорові смуги для обертання об'єкта
+	</floater.string>
+	<floater.string name="status_scale">
+		Натисніть та тягніть для розтягування вибраної сторони
+	</floater.string>
+	<floater.string name="status_move">
+		Тягніть для переміщення. Shift+тягнути для копіювання
+	</floater.string>
+	<floater.string name="status_modifyland">
+		Натисніть та утримуйте, щоб змінити землю
+	</floater.string>
+	<floater.string name="status_camera">
+		Натисніть та тягніть, щоб перемістити камеру
+	</floater.string>
+	<floater.string name="status_grab">
+		Тягніть для пересування, Ctrl щоб підняти, Ctrl+Shift для обертання
+	</floater.string>
+	<floater.string name="status_place">
+		Натисніть, щоб побудувати
+	</floater.string>
+	<floater.string name="status_selectland">
+		Натисніть та тягніть, щоб вибрати землю
+	</floater.string>
+	<floater.string name="status_selectcount">
+		[OBJ_COUNT] вибрано об'єктів, вплив на землю [LAND_IMPACT]
+	</floater.string>
+	<floater.string name="status_remaining_capacity">
+		Місткість, що залишилася [LAND_CAPACITY].
+	</floater.string>
+	<floater.string name="номер_посилання">
+		Номер об'єднання:
+	</floater.string>
+	<floater.string name="selected_faces">
+		Грані:
+	</floater.string>
+	<button name="button focus" tool_tip="Фокус"/>
+	<button name="button move" tool_tip="Перемістити"/>
+	<button name="button edit" tool_tip="Змінити"/>
+	<button name="button create" tool_tip="Створити"/>
+	<button name="button land" tool_tip="Земля"/>
+	<text name="text status">
+		Тягніть для переміщення. Shift+тягнути для копіювання
+	</text>
+	<radio_group name="focus_radio_group">
+		<radio_item label="Збільшити" name="radio zoom"/>
+		<radio_item label="Обертання (Ctrl)" name="radio orbit"/>
+		<radio_item label="Панорамування (Ctrl+Shift)" name="radio pan"/>
+	</radio_group>
+	<radio_group name="move_radio_group">
+		<radio_item label="Рухати" name="radio move" />
+		<radio_item label="Підняти (Ctrl)" name="radio lift" />
+		<radio_item label="Обертати (Ctrl+Shift)" name="radio spin"/>
+	</radio_group>
+	<radio_group name="edit_radio_group">
+		<radio_item label="Рухати" name="radio position"/>
+		<radio_item label="Обертати (Ctrl)" name="radio rotate"/>
+		<radio_item label="Розтягнути (Ctrl+Shift)" name="radio stretch"/>
+		<radio_item label="Вибрати межу" name="radio select face"/>
+		<radio_item label="Вирівняти" name="radio align"/>
+	</radio_group>
+	<check_box label="Редагувати об'єднані" name="checkbox edit linked parts"/>
+	<button name="prev_part_btn" tool_tip="Вибрати попередню об'єднану частину"/>
+	<button name="next_part_btn" tool_tip="Вибрати наступну об'єднану частину"/>
+	<button label="Об'єднати" name="link_btn"/>
+	<button label="Роз'єднати" name="unlink_btn"/>
+	<combo_box name="combobox grid mode" tool_tip="Виберіть тип лінійки сітки для розміщення об'єкта">
+		<combo_box.item label="Світова" name="World"/>
+		<combo_box.item label="Локальна" name="Local"/>
+		<combo_box.item label="Точка відліку" name="Reference"/>
+	</combo_box>
+	<check_box label="Розтягнути симетр." name="checkbox uniform"/>
+	<check_box label="Розтягнути текстури" name="checkbox stretch textures"/>
+	<check_box label="Прив'язати" name="checkbox snap to grid"/>
+	<check_box label="Вісь редагування від кореня" name="checkbox actual root"/>
+	<check_box label="Показати виділення" name="checkbox show highlight"/>
+	<button name="Options..." tool_tip="Показати налаштування сітки"/>
+	<button name="ToolCube" tool_tip="Куб"/>
+	<button name="ToolPrism" tool_tip="Прiзма"/>
+	<button name="ToolPyramid" tool_tip="Пiрамiда"/>
+	<button name="ToolTetrahedron" tool_tip="Тетраедр"/>
+	<button name="ToolCylinder" tool_tip="Циліндр"/>
+	<button name="ToolHemiCylinder" tool_tip="Полуцулiндр"/>
+	<button name="ToolCone" tool_tip="Конус"/>
+	<button name="ToolHemiCone" tool_tip="Полуконус"/>
+	<button name="ToolSphere" tool_tip="Сфера"/>
+	<button name="ToolHemiSphere" tool_tip="Hemisphere"/>
+	<button name="ToolTorus" tool_tip="Тор"/>
+	<button name="ToolTube" tool_tip="Труба"/>
+	<button name="ToolRing" tool_tip="Кольцо"/>
+	<button name="ToolTree" tool_tip="Дерево"/>
+	<button name="ToolGrass" tool_tip="Трава"/>
+	<check_box label="Зберігати вибір" name="checkbox sticky"/>
+	<check_box label="Копіювати вибір" name="checkbox copy selection"/>
+	<check_box label="Копi. центр" name="checkbox copy centers"/>
+	<check_box label="Копіювання поворотів" name="checkbox copy rotates"/>
+	<radio_group name="land_radio_group">
+		<radio_item label="Вибрати землю" name="radio select land"/>
+		<radio_item label="Вирівняти" name="radio flatten"/>
+		<radio_item label="Підняти" name="radio raise"/>
+		<radio_item label="Опустити" name="radio lower"/>
+		<radio_item label="Размити" name="radio smooth"/>
+		<radio_item label="Огрубити" name="radio noise"/>
+		<radio_item label="Відновити" name="radio revert"/>
+	</radio_group>
+	<text name="Bulldozer:">
+		Бульдозер:
+	</text>
+	<text name="Dozer Size:">
+		Розмір
+	</text>
+	<text name="Strength:">
+		Сила
+	</text>
+	<button label="Застосувати" label_selected="Застосувати" name="button apply to selection" tool_tip="Змінити вибрану землю"/>
+	<text name="link_num_obj_count" tool_tip="Номер об'єднання може бути неточним." width="160">
+		[DESC] [NUM]
+	</text>
+	<text name="selection_empty" width="120">
+		Нічого не вибрано.
+	</text>
+	<text name="remaining_capacity">
+		[CAPACITY_STRING] [secondlife:///app/openfloater/object_weights Подробнее]
+	</text>
+	<tab_container name="Object Info Tabs">
+		<panel label="Загальні" name="General">
+			<panel.string name="text deed continued">
+				Передати
+			</panel.string>
+			<panel.string name="text deed">
+				Передати
+			</panel.string>
+			<panel.string name="text modify info 1">
+				Ви можете змінити цей об'єкт
+			</panel.string>
+			<panel.string name="text modify info 2">
+				Ви можете змінювати ці об'єкти
+			</panel.string>
+			<panel.string name="text modify info 3">
+				Ви не можете змінити цей об'єкт
+			</panel.string>
+			<panel.string name="text modify info 4">
+				Ви не можете змінювати ці об'єкти
+			</panel.string>
+			<panel.string name="text modify info 5">
+				Ви не можете змінити цей об'єкт через межі регіону
+			</panel.string>
+			<panel.string name="text modify info 6">
+				Ви не можете змінити ці об'єкти через межі регіону
+			</panel.string>
+			<panel.string name="text modify warning">
+				Ви повинні вибрати весь об'єкт, щоб встановити дозвіл
+			</panel.string>
+			<panel.string name="Cost Default">
+				Ціна: L$
+			</panel.string>
+			<panel.string name="Cost Total">
+				Разом: L$
+			</panel.string>
+			<panel.string name="Cost Per Unit">
+				Ціна: L$
+			</panel.string>
+			<panel.string name="Cost Mixed">
+				Змішана ціна
+			</panel.string>
+			<panel.string name="Sale Mixed">
+				Змішаний продаж
+			</panel.string>
+			<panel.string name="multiple selection">
+				Множинний вибір
+			</panel.string>
+			<text name="Name:">
+				Назва:
+			</text>
+			<line_editor name="Object Name"
+             tool_tip="Ім'я обмежене 63 символами. Довгі імена обрізаються. Імена можуть складатися лише з символів, знайдених у наборі символів ASCII-7 (не розширений), за винятком вертикальної риси &apos;|&apos;." />
+			<text name="Description:">
+				Опис:
+			</text>
+			<line_editor name="Object Description"
+             tool_tip="Коли у людей встановлено &apos;Показати спливаючі підказки На всіх об'єктах&apos; вибрані в налаштуваннях засоби перегляду, вони побачать спливаюче опис для будь-якого об'єкта під вказівником миші. Опис обмежений 127 байтами, будь-який рядок довше буде зрізаний." />
+			<text name="Creator:">
+				Автор:
+			</text>
+			<text name="Owner:">
+				Власник:
+			</text>
+			<text name="Last Owner:">
+				Минулий:
+			</text>
+			<text name="Group:">
+				Група:
+			</text>
+			<!--<name_box initial_value="Завантаження..." name="Group Name Proxy"/>-->
+			<button name="button set group" tool_tip="Виберіть групу для надсилання їй прав доступу до об'єкта"/>
+			<check_box label="Поділитися" name="checkbox share with group" tool_tip="Дозволити всім учасникам обраної групи отримати встановлені вам права на цей об'єкт. Для включення рольових обмежень необхідно зробити угоду."/>
+			<button label="Передати" label_selected="Передати" name="button deed" tool_tip="В результаті угоди об'єкт передається групі, при цьому права на нього відповідатимуть правам наступного власника. Переданий групі об'єкт може передаватися посадовцем групи."/>
+			<text name="label click action">
+				При натисканні:
+			</text>
+			<combo_box name="clickaction" tool_tip="Дія клацання дозволяє вам взаємодіяти з об'єктом одним клацанням лівої кнопки миші. Кожна дія клацання має спеціальний курсор, що вказує, що воно робить. Деякі дії клацання мають вимоги для роботи. Наприклад Торкнутися and Платити вимагають скрипти ">
+				<combo_box.item label="Торкнутися (за замовчуванням)" name="Touch/grab(default)"/>
+				<combo_box.item label="Сісти на об'єкт" name="Sitonobject"/>
+				<combo_box.item label="Купити об'єкт" name="Buyobject"/>
+				<combo_box.item label="Заплатити за об'єкт" name="Payobject"/>
+				<combo_box.item label="Відкрити" name="Open"/>
+				<combo_box.item label="Збільшити" name="Zoom"/>
+				<combo_box.item label="Нічого" name="None"/>
+			</combo_box>
+			<check_box label="Для продажу:" name="checkbox for sale" tool_tip="Дозволяє людям купувати цей об'єкт, його вміст або копіювати у світі за вказаною ціною." />
+			<combo_box name="sale type" tool_tip="Виберіть, чи буде покупець отримувати копію предмета, копію вмісту або сам предмет." >
+				<combo_box.item name="Copy" label="Копії"/>
+				<combo_box.item name="Contents" label="Вміст"/>
+				<combo_box.item name="Original" label="Оригінал"/>
+			</combo_box>
+			<spinner name="Edit Cost" label="Ціна: L$" tool_tip="Вартість об'єкта." />
+			<button label="Застосувати" name="button mark for sale" tool_tip="Позначити/оновити об'єкт(и) для продажу."/>
+			<button label="Копіювати ключі" name="btnCopyKeys" tool_tip="Копіювати в буфер обміну кореневий ключ вибраних об'єктів. Shift копіює всі ключі вибраних об'єктів"/>
+			<check_box label="Показати у пошуку" name="search_check" tool_tip="Показувати об'єкт у результатах пошуку"/>
+			<panel name="perms_build">
+				<text name="perm_modify">
+					Ви можете змінити цей об'єкт
+				</text>
+				<text name="Anyone can:">
+					Будь-хто може:
+				</text>
+				<check_box label="Перемістити" name="checkbox allow everyone move" width="95" tool_tip="Будь-який може перемістити об'єкт."/>
+				<check_box label="Копіювати" name="checkbox allow everyone copy" width="95" tool_tip="Будь-який може взяти копію об'єкта. Об'єкт та весь його вміст повинні бути дозволені для копіювання та передачі." />
+				<check_box label="Експортувати" name="checkbox allow export" tool_tip="Будь-який може експортувати цей об'єкт." />
+				<text name="Next owner can:">
+					Наступний власник може:
+				</text>
+				<check_box label="Правити" name="checkbox next owner can modify" width="95" tool_tip="Наступний власник може редагувати такі властивості, як ім'я елемента або масштаб цього об'єкта." />
+				<check_box label="Копіювати" name="checkbox next owner can copy" width="95" tool_tip="Наступний власник може зробити необмежену кількість копій цього об'єкта. Копії містять інформацію про творця і ніколи не можуть бути більш вирішальними, ніж копіюваний елемент ."/>
+				<check_box label="Передати" name="checkbox next owner can transfer" tool_tip="Наступний власник може віддати або перепродати об'єкт"/>
+			</panel>
+			<panel name="pathfinding_attrs_panel">
+				<text name="pathfinding_attributes_label">
+					Атрибути пошуку шляху:
+				</text>
+			</panel>
+		</panel>
+		<panel label="Об'єкт" name="Object">
+			<panel.string name="paste_position">
+				Вставити позицію
+[VALUE]
+			</panel.string>
+			<panel.string name="paste_size">
+				Вставити розмір
+[VALUE]
+			</panel.string>
+			<panel.string name="paste_rotation">
+				Вставити поворот
+[VALUE]
+			</panel.string>
+			<check_box label="Заблоковано" name="checkbox locked" tool_tip="Запобігання переміщенню або видаленню об'єкта. Зазвичай ця функція корисна під час будівництва, щоб уникнути небажаних змін."/>
+			<check_box label="Фізичний" name="Physical Checkbox Ctrl" tool_tip="Дозволяє штовхати об'єкт. Також на об'єкт впливатиме гравітація."/>
+			<check_box label="Тимчасовий" name="Temporary Checkbox Ctrl" tool_tip="Приводить до автоматичного видалення об'єкта через хвилину після створення."/>
+			<check_box label="Фантомний" name="Phantom Checkbox Ctrl" tool_tip="Запобігає зіткненню об'єкта з іншими об'єктами або аватарами."/>
+			<text name="label position">
+				Позиція (метри)
+			</text>
+			<button name="copy_pos_btn" label="К" tool_tip="Копіювати позицію"/>
+			<button name="paste_pos_btn" label="В" tool_tip="Вставити позицію"/>
+			<button name="paste_pos_clip_btn" label="в" tool_tip="Вставити позицію з буфера"/>
+			<text name="label size">
+				Розмір (метри)
+			</text>
+			<button name="copy_size_btn" label="К" tool_tip="Копіювати розмір"/>
+			<button name="paste_size_btn" label="В" tool_tip="Вставити розмір"/>
+			<button name="paste_size_clip_btn" label="в" tool_tip="Вставити розмір з буфера"/>
+			<text name="label rotation">
+				Поворот (градуси)
+			</text>
+			<button name="copy_rot_btn" label="К" tool_tip="Копіювати поворот"/>
+			<button name="paste_rot_btn" label="В" tool_tip="Вставити поворот"/>
+			<button name="paste_rot_clip_btn" label="в" tool_tip="Вставити поворот з буфера"/>
+			<button label="Копіювати" name="copy_params_btn" tool_tip="Копіювати параметри в буфер"/>
+			<button label="Вставити" name="paste_params_btn" tool_tip="Вставити параметри з буфера"/>
+			<combo_box name="comboBaseType">
+				<combo_box.item label="Коробка" name="Box"/>
+				<combo_box.item label="Циліндр" name="Cylinder"/>
+				<combo_box.item label="Прiзма" name="Prism"/>
+				<combo_box.item label="Сфера" name="Sphere"/>
+				<combo_box.item label="Тор" name="Torus"/>
+				<combo_box.item label="Труба" name="Tube"/>
+				<combo_box.item label="Кільце" name="Ring"/>
+				<combo_box.item label="Скульптурний" name="Sculpted"/>
+				<combo_item name="PathLineProfileHalfCircle" label="Лінія->Півколо"/>
+				<combo_item name="PathCircleProfileHalfCircle" label="Коло->Півколо"/>
+				<combo_item name="PathCircle2ProfileSquare" label="Коло2->Квадрат"/>
+				<combo_item name="PathCircle2ProfileTriangle" label="Коло2->Трикутник"/>
+				<combo_item name="PathCircle2ProfileCircle" label="Circle2->Circle"/>
+				<combo_item name="PathCircle2ProfileHalfCircle" label="Circle2->HalfCircle"/>
+				<combo_item name="PathTestProfileSquare" label="Test->Square"/>
+				<combo_item name="PathTestProfileTriangle" label="Тест->Трикутник"/>
+				<combo_item name="PathTestProfileCircle" label="Крок->Рядок"/>
+				<combo_item name="PathTestProfileHalfCircle" label="Test->HalfCircle"/>
+				<!-- Working33 Грегорі Маурер -->
+				<combo_item name="Path33Profile0" label="33->Круг"/>
+				<combo_item name="Path33Profile1" label="33->Квадрат"/>
+				<combo_item name="Path33Profile2" label="33->Трикутник"/>
+				<combo_item name="Path33Profile5" label="33->Півколо"/>
+			</combo_box>
+			<text name="text cut">
+				Вирізати (початок/кінець)
+			</text>
+			<spinner label="Н" name="cut begin"/>
+			<spinner label="К" name="cut end"/>
+			<text name="text hollow">
+				Порожнина
+			</text>
+			<text name="text skew">
+				Спіраль
+			</text>
+			<text name="Hollow Shape">
+				Форма порожнини
+			</text>
+			<combo_box name="hole">
+				<combo_box.item label="За замовчуванням" name="Default"/>
+				<combo_box.item label="Круг" name="Circle"/>
+				<combo_box.item label="Квадрат" name="Square"/>
+				<combo_box.item label="Трикутник" name="Triangle"/>
+			</combo_box>
+			<text name="text twist">
+				Скручування
+			</text>
+			<spinner label="Н" name="Twist Begin"/>
+			<spinner label="К" name="Twist End"/>
+			<text name="scale_taper">
+				Конус
+			</text>
+			<text name="scale_hole">
+				Розмір отвору
+			</text>
+			<spinner label="X" name="Taper Scale X"/>
+			<spinner label="Y" name="Taper Scale Y"/>
+			<text name="text topshear">
+				Зрушення вершини
+			</text>
+			<spinner label="X" name="Shear X"/>
+			<spinner label="Y" name="Shear Y"/>
+			<text name="advanced_cut">
+				Розріз від центру
+			</text>
+			<text name="advanced_dimple">
+				Поглиблення (початок/кінець)
+			</text>
+			<text name="advanced_slice">
+				Частка (початок/кінець)
+			</text>
+			<spinner label="Н" name="Path Limit Begin"/>
+			<spinner label="К" name="Path Limit End"/>
+			<text name="text taper2" tool_tip="Не працює на всі типи прийому">
+				Конусний зріз
+			</text>
+			<spinner label="X" name="Taper X"/>
+			<spinner label="Y" name="Taper Y"/>
+			<text name="text radius delta">
+				Радіус
+			</text>
+			<text name="text revolutions">
+				Обороти
+			</text>
+			<texture_picker label="Текстура скульптури" name="sculpt texture control" tool_tip="Натисніть, щоб вибрати зображення"/>
+			<check_box label="Дзеркально" name="sculpt mirror control" tool_tip="Відобразити дзеркально по осі Х"/>
+			<check_box label="Навиворіт" name="sculpt invert control" tool_tip="Інвертувати нормалі прима, вивернувши його навиворіт"/>
+			<text name="label sculpt type">
+				Тип стикування
+			</text>
+			<combo_box name="sculpt type control" tool_tip="Опція &quot;Ні&quot; була видалена, тому що вона ідентична &quot;Плоскість&quot;." >
+				<combo_box.item label="Сфера" name="Sphere"/>
+				<combo_box.item label="Тор" name="Torus"/>
+				<combo_box.item label="Площина / Ні" name="Plane"/>
+				<combo_box.item label="Циліндр" name="Cylinder"/>
+			</combo_box>
+			<!-- FS:Beq додає підтримку Mesh Info на панель об’єктів-->
+			<text name="mesh_info_label" width="120">
+				Інформація про Мече:
+			</text>
+			<text name="lod_label" value="LOD:"/>
+			<text name="lod_num_tris" value="Трикутників"/>
+			<text name="mesh_lod_label">
+Високий:
+Середній:
+Низький:
+Нижчий:
+			</text>
+			<combo_box name="LOD_show_combo">
+				<combo_box.item label="За замовчуванням" name="Default"/>
+				<combo_box.item label="Високий" name="High"/>
+				<combo_box.item label="Середній" name="Medium"/>
+				<combo_box.item label="Низкий" name="Low"/>
+				<combo_box.item label="Нижчий" name="Lowest/Imposter"/>
+			</combo_box>
+			<text name="ObjectLODbehaviourLabel" value="Поведінка LOD об'єкта:"/>
+			<text name="object_radius" value="Радіус:"/>
+			<text name="LOD_swap_factors_label" value="фактори LOD"/>
+			<text name="LOD_swap_defaults_label" value="За замовчуванням." tool_tip="Значення фактора LOD за умовчанням, яке буде застосовуватися більшістю в'юверів."/>
+			<text name="LOD_swap_usr_label" tool_tip="Ваші поточні налаштування, взяті з RenderVolumeLODFactor" value="Ваші"/>
+			<text name="LOD_swap_label" value="Обмен LOD" width="65"/>
+			<string name="ll_lod_tooltip_msg">Засіб перегляду Second Life від Linden Lab за умовчанням ([FACTOR])</string>
+			<text name="LOD_swap_ll_default" value="LL" width="25"/>
+			<string name="fs_lod_tooltip_msg">[APPNAME] за замовчуванням ([FACTOR])</string>
+			<text name="LOD_swap_usr_current" tool_tip="Ваш поточний коефіцієнт LOD"/>
+			<text name="LOD_swap_LOD_Change_label">
+Вис. ↔ Порівн.
+ст. ↔ Рядок.
+Низ. ↔ Нижче.
+			</text>
+			<text name="LODSwapTableDscriptionsText" tool_tip="Рекомендація. Творці повинні забезпечити хорошу поведінку LOD для налаштувань за промовчанням для всіх в'юверів.">
+				Ця таблиця показує межі зміни LOD за метри від камери.
+			</text>
+			<!-- /FS:Beq кінець інформаційного розділу Mesh-->
+		</panel>
+		<panel label="Особливості" name="Features">
+			<panel.string name="None">
+				Ні
+			</panel.string>
+			<panel.string name="Prim">
+				Примітивний
+			</panel.string>
+			<panel.string name="Convex Hull">
+				Складна оболонка
+			</panel.string>
+			<text name="select_single">
+				Виберіть лише один примітив, щоб змінити особливості.
+			</text>
+			<text name="edit_object">
+				Зміна особливостей об'єкта:
+			</text>
+			<check_box label="Анімований міш" name="Animated Mesh Checkbox Ctrl" tool_tip="Дозволяє незалежно анімувати риговані меш-об'єкти" />
+			<check_box label="Гнучкість" name="Flexible1D Checkbox Ctrl" tool_tip="Об'єкт може згинатися по осі Z (налаштування на стороні клієнта)"/>
+			<spinner label="М'якість" name="FlexNumSections"/>
+			<spinner label="Гравітація" name="FlexGravity"/>
+			<spinner label="Парусність" name="FlexFriction"/>
+			<spinner label="Вітер" name="FlexWind"/>
+			<spinner label="Пружність" name="FlexTension"/>
+			<spinner label="Вплив X" name="FlexForceX"/>
+			<spinner label="Вплив Y" name="FlexForceY"/>
+			<spinner label="Impact Z" name="FlexForceZ"/>
+			<check_box label="Світло" name="Light Checkbox Ctrl" tool_tip="Об'єкт випромінюватиме світло"/>
+			<color_swatch name="colorswatch" tool_tip="Натисніть, щоб відкрити палітру кольорів"/>
+			<texture_picker name="light texture control" tool_tip="Натисніть для вибору зображення, що проектується (діє тільки з увімкненим відкладеним малюнком)"/>
+			<spinner label="Інтенсивність" name="Light Intensity"/>
+			<spinner label="Кут" name="Light FOV"/>
+			<spinner label="Радіус" name="Light Radius"/>
+			<spinner label="Фокус" name="Light Focus"/>
+			<spinner label="Спад" name="Light Falloff"/>
+			<spinner label="Оточення" name="Light Ambiance"/>
+			<text name="label physicsshapetype" width="140">
+				Тип фізичної форми:
+			</text>
+			<combo_box name="Physics Shape Type Combo Ctrl" tool_tip="Виберіть тип фізичної форми"/>
+			<button name="PhysicsViewToggle" tool_tip="Увімкнути відображення фізики в режимі редагування" />
+			<combo_box name="material">
+				<combo_box.item label="Камінь" name="Stone"/>
+				<combo_box.item label="Метал" name="Metal"/>
+				<combo_box.item label="Скло" name="Glass"/>
+				<combo_box.item label="Дерево" name="Wood"/>
+				<combo_box.item label="Кожа" name="Flesh"/>
+				<combo_box.item label="Пластик" name="Plastic"/>
+				<combo_box.item label="Резина" name="Rubber"/>
+			</combo_box>
+			<spinner label="Гравiтация" name="Physics Gravity"/>
+			<spinner label="Тертя" name="Physics Friction"/>
+			<spinner label="Щільність 100 кг/м^3" name="Physics Density"/>
+			<spinner label="Відновлення" name="Physics Restitution"/>
+		</panel>
+		<panel label="Texture" name="Texture">
+			<panel.string name="рядок повторюється на метр">
+				Повторень на метр
+			</panel.string>
+			<panel.string name="рядок повторюється на обличчя">
+				Повторень на межу
+			</panel.string>
+			<texture_picker label="Текстура" name="texture control" tool_tip="Клацніть для вибору зображення"/>
+			<color_swatch label="Колір" name="colorswatch" tool_tip="Клацніть для вибору кольору"/>
+			<text name="color trans">
+				Прозорість %
+			</text>
+			<text name="світиться мітка">
+				Свічення
+			</text>
+			<text name="tex gen">
+				Накладення
+			</text>
+			<combo_box name="combobox texgen">
+				<combo_box.item label="За замовчуванням" name="Default"/>
+				<combo_box.item label="На площину" name="Planar"/>
+			</combo_box>
+			<text name="label shininess">
+				Блиск
+			</text>
+			<combo_box name="combobox shininess">
+				<combo_box.item label="Нi" name="None"/>
+				<combo_box.item label="Низко" name="Low"/>
+				<combo_box.item label="Середній" name="Medium"/>
+				<combo_box.item label="Високо" name="High"/>
+			</combo_box>
+			<text name="label bumpiness">
+				Рельєфність
+			</text>
+			<combo_box name="combobox bumpiness">
+				<combo_box.item label="Нi" name="None"/>
+				<combo_box.item label="Яскравість" name="Brightness"/>
+				<combo_box.item label="По темряві" name="Darkness"/>
+				<combo_box.item label="дерево" name="woodgrain" />
+				<combo_box.item label="кора" name="bark"/>
+				<combo_box.item label="кiрпич" name="bricks"/>
+				<combo_box.item label="шахівниця" name="checker"/>
+				<combo_box.item label="бетон" name="concrete"/>
+				<combo_box.item label="стара плитка" name="crustytile"/>
+				<combo_box.item label="тесаний камінь" name="cutstone"/>
+				<combo_box.item label="диски" name="discs"/>
+				<combo_box.item label="жвір" name="gravel"/>
+				<combo_box.item label="чашка Петрі" name="petridish"/>
+				<combo_box.item label="сайдинг" name="siding"/>
+				<combo_box.item label="кам'яна плитка" name="stonetile"/>
+				<combo_box.item label="stucco" name="stucco"/>
+				<combo_box.item label="присоска" name="suction"/>
+				<combo_box.item label="переплетення" name="weave"/>
+			</combo_box>
+			<spinner label="По горизонталі (U)" name="TexScaleU"/>
+			<check_box label="Розворот" name="checkbox flip s"/>
+			<spinner label="Вертикаль (V)" name="TexScaleV"/>
+			<check_box label="Розворот" name="checkbox flip t"/>
+			<spinner label="Вращение˚" name="TexRot"/>
+			<button label="Застосувати" label_selected="Застосувати" name="button apply"/>
+			<text name="tex offset">
+				Зсув текстури
+			</text>
+			<spinner label="По горизонталі (U)" name="TexOffsetU"/>
+			<spinner label="Вертикаль (V)" name="TexOffsetV"/>
+			<panel name="Add_Media">
+				<text name="media_tex">
+					Медiа
+				</text>
+				<button name="add_media" tool_tip="Додати медіа"/>
+				<button name="delete_media" tool_tip="Видалити медіатекстуру"/>
+				<button name="edit_media" tool_tip="Редагувати медіа"/>
+				<button label="Вирівняти" label_selected="Вирівняти медіа" name="button align" tool_tip="Масштабування медіа-текстури (спочатку потрібно завантажити)"/>
+			</panel>
+		</panel>
+		<panel label="Вміст" name="Contents">
+			<button label="Створити скрипт" label_selected="Створити скрипт" name="button new script"/>
+			<button label="Дозволи" name="button permissions"/>
+			<button label="Оновити" name="button refresh" width="100"/>
+			<button label="Скидання скриптів" name="btn_reset_scripts" width="100"/>
+		</panel>
+	</tab_container>
+	<panel name="land info panel">
+		<text name="label_parcel_info">
+			Інформація про ділянку
+		</text>
+		<text name="label_area_price">
+			Ціна: L$[PRICE] за [площу] м²
+		</text>
+		<text name="label_area">
+			Площа: [AREA] м²
+		</text>
+		<button label="Про землю" label_selected="Про землю" name="button about land"/>
+		<check_box label="Показати власників" name="checkbox show owners" tool_tip="Колір ділянки в залежності від типу володіння: &#10;&#10;Зелений = ваша земля &#10;Блакитний = земля вашої групи &#10;Червоний = чужа земля &#10;Жовтий = для продажу &#10;Фіолетовий = для аукціону &#10;Сірий = загальна"/>
+		<text name="label_parcel_modify">
+			Зміна ділянки
+		</text>
+		<button label="Розділити" label_selected="Розділити" name="button subdivide land"/>
+		<button label="Об'єднати" label_selected="Об'єднати" name="button join land"/>
+		<text name="label_parcel_trans">
+			Дії із землею
+		</text>
+		<button label="Купити землю" label_selected="Купити землю" name="button buy land"/>
+		<button label="Відмовитися від землі" label_selected="Відмовитися від землі" name="button abandon land"/>
+	</panel>
+</floater>

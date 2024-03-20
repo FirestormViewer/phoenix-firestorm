@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="object properties" title="Профіль Об'єкта">
+	<panel.string name="text deed continued">
+		Угода
+	</panel.string>
+	<panel.string name="text deed">
+		Угода
+	</panel.string>
+	<panel.string name="text modify info 1">
+		Цей об'єкт можна змінювати
+	</panel.string>
+	<panel.string name="text modify info 2">
+		Ці об'єкти можна змінювати
+	</panel.string>
+	<panel.string name="text modify info 3">
+		Цей об'єкт не можна змінювати
+	</panel.string>
+	<panel.string name="text modify info 4">
+		Ці об'єкти не можна змінювати
+	</panel.string>
+	<panel.string name="text modify info 5">
+		Цей об'єкт не можна змінювати через кордон регіону
+	</panel.string>
+	<panel.string name="text modify info 6">
+		Ці об'єкти не можна змінювати через кордон регіону
+	</panel.string>
+	<panel.string name="text modify warning">
+		Цей об'єкт містить об'єднані частини
+	</panel.string>
+	<panel.string name="Cost Default">
+		Ціна: L$
+	</panel.string>
+	<panel.string name="Cost Total">
+		Загальна ціна: L$
+	</panel.string>
+	<panel.string name="Cost Per Unit">
+		Ціна: L$
+	</panel.string>
+	<panel.string name="Cost Mixed">
+		Змішана ціна
+	</panel.string>
+	<panel.string name="Sale Mixed">
+		Змішаний продаж
+	</panel.string>
+	<button name="back_btn" />
+	<text name="title" value="Профіль об'єкта"/>
+	<text name="where" value="(у світі)" />
+	<scroll_container name="item_profile_scroll">
+		<panel label="" name="properties_panel">
+			<text name="Name:" width="78">
+				Назва:
+			</text>
+			<line_editor name="Object Name" tool_tip="Назва обмежена 63 символами. Більш довгі імена примітиву скорочуються. Імена можуть складатися тільки з символів, що містяться в ASCII-7 (нерозширеному) наборі символів, за винятком вертикальної риси/лінії &quot;| &quot;." />
+			<text name="Description:" width="78">
+				Опис:
+			</text>
+			<line_editor name="Object Description" tool_tip="Коли в налаштуваннях вікна перегляду вибрано &apos;Підказки на всіх об'єктах&apos;, у гравців з'являється вікно, що спливає, з описом об'єкта при наведенні миші на будь-який об'єкт. Опис примітиву обмежується значенням 127 , що перевищує цей розмір, усікається." />
+			<text name="CreatorNameLabel" width="78">
+				Автор:
+			</text>
+			<text name="Creator Name">
+				(завантаження...)
+			</text>
+			<text name="Owner:" width="78">
+				Власник:
+			</text>
+			<text name="Owner Name">
+				(завантаження...)
+			</text>
+			<text name="Group_label" width="78">
+				Група:
+			</text>
+			<button name="button set group" tool_tip="Виберіть групу для надсилання їй прав доступу до об'єкта"/>
+			<name_box initial_value="Завантаження..." name="Group Name Proxy"/>
+			<button label="Угода" label_selected="Угода" name="button deed" tool_tip="В результаті угоди об'єкт передається групі, при цьому права на нього будуть відповідати правам наступного власника. Переданий групі об'єкт може передаватися посадовцем групи." />
+			<text name="label click action" width="280">
+				Дія по клацанню:
+			</text>
+			<combo_box name="clickaction" tool_tip="Взаємодія з об'єктом проводитися натисканням на ліву кнопку миші. При кожному кліку з'являється спеціальний курсор, що вказує на чинну дію. Деякі кліки мають функціональні вимоги. Наприклад, для Touch and Pay потрібні скрипти" >
+				<combo_box.item label="Торкнутися (за замовчуванням)" name="Touch/grab(default)"/>
+				<combo_box.item label="Сісти на об'єкт" name="Sitonobject"/>
+				<combo_box.item label="Купити об'єкт" name="Buyobject"/>
+				<combo_box.item label="Заплатити за об'єкт" name="Payobject"/>
+				<combo_box.item label="Відкрити" name="Open"/>
+				<combo_box.item label="Наблизити" name="Zoom"/>
+				<combo_box.item label="Порожньо" name="None"/>
+			</combo_box>
+			<panel name="perms_inv">
+				<text name="perm_modify">
+					Цей об'єкт можна змінювати
+				</text>
+				<text name="Anyone can:">
+					Всі:
+				</text>
+				<check_box label="Копіювати" name="checkbox allow everyone copy" tool_tip="Копію об'єкта може взяти будь-хто." />
+				<check_box label="Перемістити" name="checkbox allow everyone move" tool_tip="Будь-який гравець може перемістити об'єкт." />
+				<text name="GroupLabel" >
+					Група:
+				</text>
+				<check_box label="Поділитися" name="checkbox share with group" tool_tip="дозволити всім учасникам обраної групи отримати встановлені вам права на цей об'єкт. Для включення рольових обмежень необхідно зробити угоду." />
+				<text name="NextOwnerLabel">
+					Наступний власник:
+				</text>
+				<check_box label="Змінювати" name="checkbox next owner can modify" tool_tip="Наступний власник може відредагувати такі властивості, як ім'я окремого предмета або масштаб цього об'єкта." />
+				<check_box label="Копіювати" name="checkbox next owner can copy" tool_tip="Наступний власник може зробити необмежену кількість копій цього об'єкта. Копії містять інформацію про творця і ніколи не можуть бути більш дозвільними, ніж копіюваний предмет." />
+				<check_box label="Передати" name="checkbox next owner can transfer" tool_tip="Наступний власник може віддати або перепродати об'єкт" />
+			</panel>
+			<check_box label="Для продажу" name="checkbox for sale" tool_tip="Дозволяє гравцям купувати цей об'єкт, його вміст або копіювати його в ігровому світі за вказаною ціною." />
+			<combo_box name="sale type" tool_tip="Виберіть, чи покупець отримає копію, копію вмісту або сам предмет.">
+				<combo_box.item label="Копіювати" name="Copy"/>
+				<combo_box.item label="Вміст" name="Contents"/>
+				<combo_box.item label="Оригінал" name="Original"/>
+			</combo_box>
+			<spinner label="Ціна: L$" name="Edit Cost" tool_tip="Вартість об'єкта."/>
+			<check_box label="Показати результати пошуку" name="search_check" tool_tip="Показувати об'єкт у результатах пошуку" />
+			<text name="pathfinding_attributes_label">
+				Атрибути пошуку шляху:
+			</text>
+			<text name="B:">
+				B:
+			</text>
+			<text name="O:">
+				О:
+			</text>
+			<text name="G:">
+				G:
+			</text>
+			<text name="E:">
+				І:
+			</text>
+			<text name="N:">
+				N:
+			</text>
+			<text name="F:">
+				F:
+			</text>
+		</panel>
+	</scroll_container>
+	<layout_stack name="buttons_ls">
+		<layout_panel name="open_btn_panel">
+			<button label="Відкрити" name="open_btn" tool_tip="Відкрийте для перегляду вмісту об'єкта." />
+		</layout_panel>
+		<layout_panel name="pay_btn_panel" >
+			<button label="Заплатити" name="pay_btn" tool_tip="Відкрийте вікно Оплати. Щоб сплатити за об'єкт, він повинен мати скрипт для оплати." />
+		</layout_panel>
+		<layout_panel name="buy_btn_panel">
+			<button label="Купити" name="buy_btn" tool_tip="Відкрийте вікно Купити. Потрібно, щоб об'єкт був виставлений на продаж." />
+		</layout_panel>
+		<layout_panel name="details_btn_panel">
+			<button label="Докладно" name="details_btn" tool_tip="Відкрийте вікно огляду об'єкта." />
+		</layout_panel>
+	</layout_stack>
+</panel>

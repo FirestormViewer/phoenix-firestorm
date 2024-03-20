@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fast_timers">
+	<string name="pause">
+		Пауза
+	</string>
+	<string name="run">
+		Старт
+	</string>
+	<combo_box name="time_scale_combo">
+		<item name="2x Average" label="2x середнє"/>
+		<item name="Max" label="Максимум"/>
+		<item name="Recent Max" label="Остання максимальна"/>
+	</combo_box>
+	<combo_box name="metric_combo">
+		<item name="Time" label="Час"/>
+		<item name="Number of Calls" label="Кількість звернень"/>
+	</combo_box>
+	<button label="Пауза" name="pause_btn"/>
+</floater>

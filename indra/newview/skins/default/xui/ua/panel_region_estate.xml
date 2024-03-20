@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Землеволодіння" name="Estate">
+	<text name="estate_help_text">
+		Зміна параметрів на цій вкладці впливатиме на всі регіони цього землеволодіння.
+	</text>
+	<text name="estate_text">
+		Землеволодіння:
+	</text>
+	<text name="estate_name">
+		(невідомо)
+	</text>
+	<text name="owner_text">
+		Землевласник:
+	</text>
+	<text name="estate_owner">
+		(невідомо)
+	</text>
+	<radio_group name="externally_visible_radio">
+		<radio_item label="Дозволено лише мешканцям та групам, перерахованим на вкладці доступу" name="estate_restricted_access"/>
+		<radio_item label="Доступ відкритий для всіх" name="estate_public_access"/>
+	</radio_group>
+	<check_box label="Повинен бути 18 і старшим" name="limit_age_verified" tool_tip="Доступ до цього землеволодіння мають тільки мешканці 18 років і старші. Більш детальна інформація знаходиться тут: [SUPPORT_SITE]."/>
+	<check_box label="Інформація про платежі має бути у файлі" name="limit_payment" tool_tip="Для доступу до цього землеволодіння у мешканця має бути зареєстрована інформація про оплату. Більш детальна інформація знаходиться тут: [SUPPORT_SITE]."/>
+	<check_box label="Власники ділянок можуть вживати більш обмежувальних заходів" name="parcel_access_override"/>
+	<check_box label="Дозволити голосове спілкування" name="voice_chat_check"/>
+	<check_box label="Дозволити прямий телепорт" name="allow_direct_teleport"/>
+	<button label="Застосувати" name="apply_btn"/>
+	<text name="estate_manager_label">
+		Менеджери землеволодіння:
+	</text>
+	<text name="allow_resident_label">
+		Дозволено завжди:
+	</text>
+	<button label="Додати..." name="add_estate_manager_btn"/>
+	<button label="Видалити..." name="remove_estate_manager_btn"/>
+	<button label="Додати..." name="add_allowed_avatar_btn"/>
+	<button label="Видалити..." name="remove_allowed_avatar_btn"/>
+	<text name="allow_group_label">
+		Допуск груп завжди дозволено:
+	</text>
+	<text name="ban_resident_label">
+		Завжди заблоковано:
+	</text>
+	<button label="Додати..." name="add_allowed_group_btn"/>
+	<button label="Видалити..." name="remove_allowed_group_btn"/>
+	<button label="Додати..." name="add_banned_avatar_btn"/>
+	<button label="Видалити..." name="remove_banned_avatar_btn"/>
+	<button label="Повідомлення про землеволодіння..." name="message_estate_btn"/>
+	<button label="Викинути мешканця із землеволодіння..." name="kick_user_from_estate_btn"/>
+</panel>

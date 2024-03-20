@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="item properties" title="Профіль об'єкта">
+	<panel.string name="loading_experience">
+		(завантаження)
+	</panel.string>
+	<panel.string name="unknown">
+		(невідомо)
+	</panel.string>
+	<panel.string name="unknown_multiple">
+		(невідомо/кілька)
+	</panel.string>
+	<panel.string name="public">
+		(публічне)
+	</panel.string>
+	<panel.string name="you_can">
+		Ви можете:
+	</panel.string>
+	<panel.string name="owner_can">
+		Власник може:
+	</panel.string>
+	<panel.string name="acquiredDate">
+		[wkday,datetime,slt], [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+	</panel.string>
+	<panel.string name="origin_inventory">
+		(Інвентар)
+	</panel.string>
+	<panel.string name="origin_inworld">
+		(в світі)
+	</panel.string>
+	<text name="title" value="Профіль об'єкта"/>
+	<text name="origin" value="(інвентар)"/>
+	<scroll_container name="item_profile_scroll">
+		<panel label="" name="item_profile">
+			<text name="LabelItemNameTitle">
+				Назва:
+			</text>
+			<line_editor name="LabelItemName" tool_tip="Назва обмежена 63 символами. Більш довгі імена примітиву скорочуються. Імена можуть складатися тільки з символів, що містяться в ASCII-7 (нерозширеному) наборі символів, за винятком вертикальної риси/лінії &quot;|&quot;."/>
+			<text name="LabelItemDescTitle">
+				Опис:
+			</text>
+			<line_editor name="LabelItemDesc" tool_tip="Коли в налаштуваннях вікна перегляду вибрано &apos;Спливаючі підказки на всіх об'єктах&apos;, у гравців з'являється вікно, що спливає, з описом об'єкта при наведенні миші на будь-який об'єкт. Опис примітиву рядків обмежується що перевищує цей розмір, усікається."/>
+			<text name="LabelCreatorTitle">
+				Автор:
+			</text>
+			<text name="LabelOwnerTitle">
+				Власник:
+			</text>
+			<text name="LabelAcquiredTitle">
+				Придбано:
+			</text>
+			<text name="LabelItemExperienceTitle">
+				Пригоди:
+			</text>
+			<panel name="perms_inv">
+				<text name="perm_modify">
+					Ви можете:
+				</text>
+				<check_box label="Змінювати" name="CheckOwnerModify"/>
+				<check_box label="Копіювати" name="CheckOwnerCopy"/>
+				<check_box label="Передати" name="CheckOwnerTransfer"/>
+				<text name="AnyoneLabel">
+					Всі:
+				</text>
+				<check_box label="Копіювати" name="CheckEveryoneCopy" tool_tip="Копію об'єкта може взяти будь-хто."/>
+				<text name="GroupLabel">
+					Група:
+				</text>
+				<check_box label="Поділитися" name="CheckShareWithGroup" tool_tip="Дозволити всім учасникам обраної групи отримати встановлені вам права на цей об'єкт. Для включення рольових обмежень необхідно зробити угоду."/>
+				<text name="NextOwnerLabel">
+					Наступний власник:
+				</text>
+				<check_box label="Змінювати" name="CheckNextOwnerModify" tool_tip="Наступний власник може відредагувати властивості, такі як ім'я окремого предмета або масштаб цього об'єкта."/>
+				<check_box label="Копіювати" name="CheckNextOwnerCopy" tool_tip="Наступний власник може зробити необмежену кількість копій цього об'єкта. Копії містять інформацію про творця і ніколи не можуть бути більш дозвільними, ніж копіюваний предмет."/>
+				<check_box label="Передати" name="CheckNextOwnerTransfer" tool_tip="Наступний власник може віддати або перепродати цей об'єкт."/>
+			</panel>
+			<check_box label="Для продажу" name="CheckPurchase" tool_tip="Дозволяє гравцям купувати цей об'єкт, його вміст або копіювати його в ігровому світі за вказаною ціною."/>
+			<combo_box name="ComboBoxSaleType" tool_tip="Виберіть, чи покупець отримає копію, копію вмісту або сам предмет.">
+				<combo_box.item label="Копіювати" name="Copy"/>
+				<combo_box.item label="Вміст" name="Contents"/>
+				<combo_box.item label="Оригінал" name="Original"/>
+			</combo_box>
+			<spinner label="Ціна: L$" name="Edit Cost" tool_tip="Вартість об'єкта."/>
+		</panel>
+	</scroll_container>
+	<panel name="button_panel">
+		<button label="Скасувати" name="cancel_btn"/>
+	</panel>
+</panel>

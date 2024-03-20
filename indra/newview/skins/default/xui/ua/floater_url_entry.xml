@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="url_entry">
+	<text name="media_label">
+		URL медіа:
+	</text>
+	<button label="Скасувати" name="cancel_btn"/>
+	<button label="Очистить" name="clear_btn"/>
+	<text name="loading_label">
+		Завантаження...
+	</text>
+</floater>

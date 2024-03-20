@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="wearable_item">
+	<button name="btn_delete" tool_tip="Прибрати з комплекту"/>
+	<panel name="btn_lock" tool_tip="У вас немає прав для зміни"/>
+	<panel name="btn_edit_panel">
+		<button name="btn_edit" tool_tip="Змінити предмети комплекту"/>
+	</panel>
+</panel>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatar_texture_debug" title="Текстури аватара">
+	<floater.string name="InvalidAvatar">
+		Неправильний аватар
+	</floater.string>
+	<scroll_container name="profile_scroll">
+		<panel name="scroll_content_panel">
+			<text name="label">
+				Скинуті
+Текстури
+			</text>
+			<text name="composite_label">
+				Складні
+Текстури
+			</text>
+			<button label="Виведення ID на консоль" label_selected="Виведення" name="Dump"/>
+			<panel name="scroll_content_panel">
+				<texture_picker label="Волоси" name="hair-baked"/>
+				<texture_picker label="Волосся" name="hair_grain"/>
+				<texture_picker label="Альфа волосся" name="hair_alpha"/>
+				<texture_picker label="Тату волосся" name="hair_tattoo"/>
+				<texture_picker label="Голова" name="head-baked"/>
+				<texture_picker label="Макіяж" name="head_bodypaint"/>
+				<texture_picker label="Альфа голови" name="head_alpha"/>
+				<texture_picker label="Тату голови" name="head_tattoo"/>
+				<texture_picker label="Універс.тату" name="head_universal_tattoo"/>
+				<texture_picker label="Очі" name="eyes-baked"/>
+				<texture_picker label="Око" name="eyes_iris"/>
+				<texture_picker label="Альфа очей" name="eyes_alpha"/>
+				<texture_picker label="Тату очей" name="eyes_tattoo"/>
+				<texture_picker label="Верхній запечений" name="upper-baked"/>
+				<texture_picker label="Розмальовка верху" name="upper_bodypaint"/>
+				<texture_picker label="Мати" name="upper_undershirt"/>
+				<texture_picker label="Рукавички" name="upper_gloves"/>
+				<texture_picker label="Сорочка" name="upper_shirt"/>
+				<texture_picker label="Верх піджака" name="upper_jacket"/>
+				<texture_picker label="Альфа верху" name="upper_alpha"/>
+				<texture_picker label="Тату верху" name="upper_tattoo"/>
+				<texture_picker label="Універс.тату" name="upper_universal_tattoo"/>
+				<texture_picker label="Body array" name="lower-baked"/>
+				<texture_picker label="Розмальовка низу" name="lower_bodypaint"/>
+				<texture_picker label="Труси" name="lower_underpants"/>
+				<texture_picker label="Шкарпетки" name="lower_socks"/>
+				<texture_picker label="Взуття" name="lower_shoes"/>
+				<texture_picker label="Штани" name="lower_pants"/>
+				<texture_picker label="Піджак" name="lower_jacket"/>
+				<texture_picker label="Альфа низу" name="lower_alpha"/>
+				<texture_picker label="Тату низу" name="lower_tattoo"/>
+				<texture_picker label="Універс.тату" name="lower_universal_tattoo"/>
+				<texture_picker label="Спідниця" name="skirt-baked"/>
+				<texture_picker label="Спідниця" name="skirt"/>
+				<texture_picker label="Тату спідниці" name="skirt_tattoo"/>
+				<texture_picker label="Ліва рука" name="leftarm-baked"/>
+				<texture_picker label="Ліва рука тату" name="leftarm_tattoo"/>
+				<texture_picker label="Ліва нога" name="leftleg-baked"/>
+				<texture_picker label="Ліва нога тату" name="leftleg_tattoo"/>
+				<texture_picker label="Доп 1" name="aux1-baked"/>
+				<texture_picker label="Доп 1 тату" name="aux1_tattoo"/>
+				<texture_picker label="Доп 2" name="aux2-baked"/>
+				<texture_picker label="Доп 2 тату" name="aux2_tattoo"/>
+				<texture_picker label="Доп 3" name="aux3-baked"/>
+				<texture_picker label="Доп 3 тату" name="aux3_tattoo"/>
+			</panel>
+		</panel>
+	</scroll_container>
+</floater>

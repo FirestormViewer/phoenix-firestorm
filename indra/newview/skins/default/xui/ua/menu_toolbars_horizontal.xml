@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Toolbars Popup" label="Кнопки">
+  <menu_item_call label="Видалити цю кнопку" name="Remove button" />
+  <menu_item_call label="Кнопки панелі інструментів..." name="Choose Buttons" />
+  <menu_item_check label="Вирівняти вліво" name="left_aligned" />
+  <menu_item_check label="Вирівняти по центру" name="center_aligned" />
+  <menu_item_check label="Вирівняти праворуч" name="right_aligned" />
+  <menu_item_check label="Значки та підписи" name="icons_with_text" />
+  <menu_item_check label="Тільки значки" name="icons_only" />
+  <menu_item_check label="Тільки підписи" name="text_only" />
+  <menu_item_check label="Автоматичне налаштування кнопок" name="layout_style_none" />
+  <menu_item_check label="Кнопки фіксованого розміру" name="layout_style_equalize" />
+  <menu_item_check label="Кнопки заповнюють панель" name="layout_style_fill" />
+  <menu_item_check label="Заблоковане" name="toolbars_locked" />
+</context_menu>

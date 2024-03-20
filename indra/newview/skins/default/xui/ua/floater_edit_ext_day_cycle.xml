@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="env_edit_extdaycycle" title="Змінити добовий цикл">
+	<string name="title_new">
+		Створити новий добовий цикл
+	</string>
+	<string name="title_edit">
+		Змінити добовий цикл
+	</string>
+	<string name="hint_new">
+		Введіть ім'я добового циклу, задайте його параметри за допомогою елементів керування та натисніть кнопку «Зберегти».
+	</string>
+	<string name="hint_edit">
+		Щоб змінити добовий цикл, задайте його параметри за допомогою елементів керування нижче та натисніть кнопку «Зберегти».
+	</string>
+	<string name="time_label">
+		([HH]:[MM])
+	</string>
+	<string name="sky_track_label">
+		Небо [ALT]
+	</string>
+	<string name="sky_label">
+		Небо
+	</string>
+	<string name="water_label">
+		Вода
+	</string>
+	<string name="commit_parcel">
+		Застосувати до ділянки
+	</string>
+	<string name="commit_region">
+		Застосувати до регіону
+	</string>
+	<layout_stack name="outer_stack">
+		<layout_panel name="name_and_import">
+			<text name="label">
+				Добовий цикл:
+			</text>
+			<button label="Імпорт" name="btn_import" tool_tip="Імпортувати застарілі налаштування з диска."/>
+		</layout_panel>
+		<layout_panel name="content">
+			<layout_stack name="content_stack">
+				<layout_panel name="timeline_track_selection">
+					<panel name="timeline_layers">
+						<button label="Небо 4" name="sky4_track"/>
+						<button label="Небо 3" name="sky3_track"/>
+						<button label="Небо 2" name="sky2_track"/>
+						<button label="Рівень землі" name="sky1_track"/>
+						<button label="Вода" name="water_track"/>
+					</panel>
+					<panel name="timeline">
+						<layout_stack name="track_options_ls">
+							<layout_panel name="track_options_lp">
+								<button label="Клон Треку" name="copy_track"/>
+								<button label="Завантажити Трек" name="load_track"/>
+								<button label="Очистити Трек" name="clear_track"/>
+							</layout_panel>
+							<layout_panel name="track_progress_lp">
+								<layout_stack name="progress_control">
+									<layout_panel name="skip_back">
+										<button name="skip_back_btn" tool_tip="Крок назад"/>
+									</layout_panel>
+									<layout_panel name="skip_forward">
+										<button name="skip_forward_btn" tool_tip="Крок вперед"/>
+									</layout_panel>
+								</layout_stack>
+							</layout_panel>
+							<layout_panel name="frames_lp">
+								<button label="Додати [FRAME]" name="add_frame" width="120"/>
+								<button label="Завантажити [FRAME]" name="btn_load_frame" width="120"/>
+								<button label="Видалити [FRAME]" name="delete_frame" width="120"/>
+							</layout_panel>
+						</layout_stack>
+					</panel>
+				</layout_panel>
+				<layout_panel name="frame_edit_controls">
+					<text name="icn_lock_edit">
+						Виберіть ключовий кадр на часовій шкалі вище, щоб змінити налаштування.
+					</text>
+				</layout_panel>
+				<layout_panel name="frame_settings_water">
+					<tab_container name="water_tabs">
+						<panel label="Вода" name="water_panel"/>
+					</tab_container>
+				</layout_panel>
+				<layout_panel name="frame_settings_sky">
+					<tab_container name="sky_tabs">
+						<panel label="Атмосфера та світ" name="atmosphere_panel"/>
+						<panel label="Хмари" name="clouds_panel"/>
+						<panel label="Сонце та місяць" name="moon_panel"/>
+					</tab_container>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="buttons">
+			<button label="Зберегти" name="save_btn"/>
+			<button label="Скасувати" name="cancel_btn"/>
+		</layout_panel>
+	</layout_stack>
+</floater>

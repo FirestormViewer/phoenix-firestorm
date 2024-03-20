@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="experince_list_editor">
+	<panel.string name="loading">
+		завантаження…
+	</panel.string>
+	<panel.string name="panel_allowed">
+		Дозволені пригоди:
+	</panel.string>
+	<panel.string name="panel_blocked">
+		Заблоковані пригоди:
+	</panel.string>
+	<panel.string name="panel_trusted">
+		Ключові пригоди:
+	</panel.string>
+	<panel.string name="no_results">
+		(порожньо)
+	</panel.string>
+	<text name="text_name">
+		Список пригод
+	</text>
+	<name_list name="experience_list">
+		<name_list.columns label="Назва" name="experience_name"/>
+	</name_list>
+	<button label="Додати" name="btn_add"/>
+	<button label="Видалити" name="btn_remove"/>
+	<button label="Профіль" name="btn_profile"/>
+</panel>

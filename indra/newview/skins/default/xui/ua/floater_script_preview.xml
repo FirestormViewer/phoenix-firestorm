@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview lsl text" title="Скрипт: Скрипт повороту">
+	<floater.string name="Title">
+		Скрипт: [NAME]
+	</floater.string>
+	<text name="desc txt">
+		Опис:
+	</text>
+</floater>

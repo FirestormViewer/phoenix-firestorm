@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="Scene Load Statistics" title="Статистика Завантаження Сцени" >
+	<scroll_container name="statistics_scroll" >
+		<container_view name="statistics_view" >
+			<!--Основний розділ-->
+			<stat_view name="basic" label="Базова" >
+				<stat_bar name="frame difference" label="Різниця кадрів у пікселях"/>
+				<stat_bar name="bandwidth" label="Прийом даних UDP"/>
+				<stat_bar name="packet_loss" label="Втрата пакетів"/>
+			</stat_view>
+			<!--Розширений розділ-->
+			<stat_view name="advanced" label="Розширене">
+				<stat_view name="render" label="Відтворення">
+					<stat_bar name="objs" label="Усього об'єктів"/>
+					<stat_bar name="newobjs" label="Нові об'єкти"/>
+					<stat_bar name="object_cache_hits" label="Частота потрапляння в кеш об'єктів"/>
+				</stat_view>
+				<!--Статистика текстур-->
+				<stat_view name="texture" label="Текстура" >
+					<stat_bar name="texture_cache_hits" label="Частота потрапляння в кеш"/>
+					<stat_bar name="texture_cache_read_latency" label="Затримка читання кешу"/>
+					<stat_bar name="texture_decode_latency" label="Затримка декодування кешу"/>
+					<stat_bar name="texture_decode_latency" label="Затримка запису в кеш"/>
+					<stat_bar name="texture_fetch_latency" label="Затримка вибірки кеша"/>
+					<stat_bar name="texture_fetch_time" label="Час вибірки кеша"/>
+					<stat_bar name="numimagesstat" label="Лічильник"/>
+					<stat_bar name="numrawimagesstat" label="Необроблений лічильник"/>
+				</stat_view>
+				<!--Статистика мережі-->
+				<stat_view name="network" label="Мережа" >
+					<stat_bar name="packetsinstat" label="Вхідні пакети"/>
+					<stat_bar name="packetsoutstat" label="Вихідні пакети"/>
+					<stat_bar name="objectdatareceived" label="Об'єкти"/>
+					<stat_bar name="texturedatareceived" label="Текстури"/>
+					<stat_bar name="assetudpdatareceived" label="Активи"/>
+					<stat_bar name="layersdatareceived" label="Слои"/>
+					<stat_bar name="messagedatain" label="фактичне введення"/>
+					<stat_bar name="messagedataout" label="фактичний висновок"/>
+				</stat_view>
+			</stat_view>
+			<!--Sim Stats-->
+			<stat_view name="sim" label="Симулятор" >
+				<stat_bar name="simobjects" label="Об'єкти"/>
+				<stat_bar name="simactiveobjects" label="Активні об'єкти"/>
+				<stat_bar name="simactivescripts" label="Активні Скрипти"/>
+				<stat_bar name="siminpps" label="Вхідні пакети"/>
+				<stat_bar name="simoutpps" label="Пакети вихідні"/>
+				<stat_bar name="simpendingdownloads" label="Відкладені завантаження"/>
+				<stat_bar name="simpendinguploads" label="Відкладені передачі"/>
+				<stat_bar name="simtotalunackedbytes" label="Усього не розпакованих байт"/>
+				<stat_view name="simperf" label="Час (ms)" >
+					<stat_bar name="simframemsec" label="Загальний час кадру"/>
+					<stat_bar name="simnetmsec" label="Час мережі"/>
+					<stat_bar name="simsimphysicsmsec" label="Час фізики"/>
+					<stat_bar name="simsimothermsec" label="Час Симуляції"/>
+					<stat_bar name="simagentmsec" label="Час Агентів"/>
+					<stat_bar name="simimagesmsec" label="Час зображень"/>
+					<stat_bar name="simscriptmsec" label="Час Скрипта"/>
+					<stat_bar name="simsparemsec" label="Запасний Час"/>
+					<!--Блоки часу 2-го рівня в розділі «Деталі» секунда-->
+					<stat_view name="timedetails" label="Час детально (ms)" >
+						<stat_bar name="simsimphysicsstepmsec" label="Крок Фізики"/>
+						<stat_bar name="simsimphysicsshapeupdatemsec" label="Оновлення Фіз.Форм"/>
+						<stat_bar name="simsimphysicsothermsec" label="Інша Фізика"/>
+						<stat_bar name="simsleepmsec" label="Час Сну"/>
+						<stat_bar name="simpumpiomsec" label=" Pump IO"/>
+					</stat_view>
+				</stat_view>
+			</stat_view>
+		</container_view>
+	</scroll_container>
+</floater>

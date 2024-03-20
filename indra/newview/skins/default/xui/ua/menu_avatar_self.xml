@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Self Pie">
+	<menu_item_call label="Сесть" name="Sit Down Here"/>
+	<menu_item_call label="Встати" name="Stand Up"/>
+	<context_menu label="Зняти" name="Take Off &gt;">
+		<context_menu label="Одяг" name="Clothes &gt;">
+			<menu_item_call label="Сорочка" name="Shirt"/>
+			<menu_item_call label="Штани" name="Pants"/>
+			<menu_item_call label="Спідниця" name="Skirt"/>
+			<menu_item_call label="Взуття" name="Shoes"/>
+			<menu_item_call label="Шкарпетки" name="Socks"/>
+			<menu_item_call label="Куртку" name="Jacket"/>
+			<menu_item_call label="Рукавички" name="Gloves"/>
+			<menu_item_call label="Майку" name="Self Undershirt"/>
+			<menu_item_call label="Труси" name="Self Underpants"/>
+			<menu_item_call label="Татуювання" name="Self Tattoo"/>
+			<menu_item_call label="Фізику" name="Self Physics"/>
+			<menu_item_call label="Альфа" name="Self Alpha"/>
+			<menu_item_call label="Всі" name="All Clothes"/>
+		</context_menu>
+		<context_menu label="Екран" name="Object Detach HUD"/>
+		<context_menu label="Відокремити" name="Object Detach"/>
+		<menu_item_call label="Виділити все" name="Detach All"/>
+	</context_menu>
+	<context_menu label="Зовнішність" name="AppearanceSubmenu">
+		<menu_item_call label="Зараз ношу..." name="NowWearing"/>
+		<menu_item_call label="Комплекти" name="Chenge Outfit"/>
+		<menu_item_call label="Правити форму" name="Edit My Shape"/>
+		<menu_item_call label="Правити комплект" name="Edit Outfit Parts"/>
+		<menu_item_call label="Висота" name="Hover Height"/>
+		<menu_item_call label="Скидання скелета" name="Reset Skeleton"/>
+		<menu_item_call label="Скидання скелета та анімацій" name="Reset Skeleton And Animations"/>
+		<menu_item_call label="Скинути міш LOD" name="Reset Mesh LOD"/>
+	</context_menu>
+	<context_menu label="Спільнота" name="CommunitySubmenu">
+		<menu_item_call label="Друзі" name="Friends..."/>
+		<menu_item_call label="Групи" name="Groups..."/>
+		<menu_item_call label="Профіль" name="Profile..."/>
+	</context_menu>
+	<menu_item_call label="Про сценарії" name="ScriptInfo"/>
+	<menu_item_call label="Показати текстури" name="Debug..."/>
+	<menu_item_call label="Оновити текстуру" name="Texture Refresh"/>
+	<menu_item_call label="Дамп XML" name="Dump XML"/>
+	<menu_item_call label="Блокувати власника частинок" name="Mute Particle"/>
+	<menu_item_call label="Дивитись Профіль" name="show_avatar_profile"/>
+</context_menu>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_experience_search" label="Поиск">
+	<string name="not_found">
+		Текст «[TEXT]» не знайдено
+	</string>
+	<string name="no_results">
+		Немає результатів
+	</string>
+	<string name="searching">
+		Пошук...
+	</string>
+	<string name="loading">
+		Завантаження...
+	</string>
+	<string name="maturity_icon_general">
+		&quot;Parcel_PG_Light&quot;
+	</string>
+	<string name="maturity_icon_moderate">
+		&quot;Parcel_M_Light&quot;
+	</string>
+	<string name="maturity_icon_adult">
+		&quot;Parcel_R_Light&quot;
+	</string>
+	<panel name="search_panel">
+		<text name="lbl name part" >Введіть частину назви:</text>
+		<button label="Почати" name="find"/>
+		<icons_combo_box label="Помірний" name="maturity">
+			<icons_combo_box.item label="Для дорослих" name="Adult" value="42"/>
+			<icons_combo_box.item label="Помірний" name="Mature" value="21"/>
+			<icons_combo_box.item label="Загальний" name="PG" value="13"/>
+		</icons_combo_box>
+		<scroll_list name="search_results">
+			<columns label="Ім'я" name="experience_name"/>
+			<columns label="Власник" name="owner"/>
+		</scroll_list>
+		<button label="OK" label_selected="OK" name="ok_btn"/>
+		<button label="Скасувати" name="cancel_btn"/>
+		<button label="Профіль" name="profile_btn"/>
+		<button label="&lt;" name="left_btn"/>
+		<button label="&gt;" name="right_btn"/>
+	</panel>
+</panel>

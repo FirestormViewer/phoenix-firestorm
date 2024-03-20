@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="firestorm">
+<panel.string name="BeamsOffLabel">
+	=== ВИКЛ ===
+</panel.string>
+<string name="EmbeddedItemNotSet">
+	Немає набору
+</string>
+<string name="EmbeddedItemNotAvailable">
+	Недоступний
+</string>
+<string name="EmbeddedItemNotLoggedIn">
+	Увійти
+</string>
+<tab_container label="Налаштування Firestorm" name="tabs">
+    <panel label="Основне" name="tab-extras">
+        <check_box name="checkMiscRLVa" label="Контроль скриптами (RLVa)" />
+        <text name="textMiscRLVaRestart">
+            (потрібний перезапуск)
+        </text>
+        <check_box label="Будувати та викладати під групою землі(при можл.)" name="grouplandrez" tool_tip="Намагатися викласти об'єкти під групою землі, якщо ви перебуваєте в групі землі, незалежно від того, який тег поточної групи ви носите. "/>
+        <check_box label="Створення ефектів частинок при спілкуванні скриптів" name="EffectScriptChatParticles" tool_tip="Якщо ви увімкнете цю опцію, то скриптові об'єкти будуть відображати обертові світлові частинки, коли скрипти будуть спілкуватися" />
+        <check_box label="Вимкнення відстежувального маяка, після досягнення мети аватаром (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Коли ви увімкнете цю опцію, відстежуючий маяк автоматично вимикається, якщо відстань до аватара менша, ніж 3 м ( (за замовчуванням)." />
+        <check_box label="Виправити бенто-анімацію простою" name="play_default_bento_idle_animation_toggle" tool_tip="Якщо цей параметр увімкнено, буде запускатися бенто-анімацію за умовчанням з пріоритетом 0, яка поміщає руки, крила, рот і хвіст іншу бенто-анімацію не запущено."/>
+        <check_box label="Вимкнути екран входу" name="login_screen_toggle" tool_tip="Вимкнути чорний екран входу" />
+        <check_box label="Відключення екрана виходу" name="logout_screen_toggle" tool_tip="Відключення чорного екрана виходу" />
+        <check_box label="Поступове збільшення дальності промальовування" name="FSRenderFarClipStepping" tool_tip="Якщо ви увімкнете цю опцію, Firestorm поступово збільшуватиме дальність промальовування після телепортації." />
+        <slider name="progressive_draw_distance_interval" tool_tip="Інтервал у секундах між кожним подальшим розширенням" />
+        <check_box name="UseLSLBridge" label="Активувати міст LSL" tool_tip="Активувати міст LSL" />
+        <combo_box name="UseLSLFlightAssist" tool_tip="Увімкнути скрипт, щоб допомогти літати та парити на великих висотах">
+            <combo_box.item label="Допомога польоту: Вимкнено" name="flight_disabled" />
+            <combo_box.item label="Допомога польоту: Легке прискорення" name="flight_mild" />
+            <combo_box.item label="Допомога польоту: Помірне прискорення" name="flight_moderate" />
+            <combo_box.item label="Допомога польоту: Сильне прискорення" name="flight_strong" />
+            <combo_box.item label="Допомога польоту: Екстремальне прискорення" name="flight_extreme" />
+        </combo_box>
+        <slider name="manual_environment_change_transition_period" label="Час зміни навколишнього середовища:"
+        tool_tip="Інтервал у секундах, протягом якого буде змінюватися довкілля при ручному налаштуванні. Нуль - миттєво."/>
+        <check_box name="EnvironmentPersistAcrossLogin" label="Зберігати налаштування середовища під час сеансів" tool_tip="Відновлює поточні налаштування середовища після наступного входу до системи."/>
+    </panel>
+    <panel label="Protection" name="ProtectionTab">
+        <check_box label="Блокування натискання лівою кнопкою миші, щоб сісти на об'єкти" name="FSBlockClickSit" />
+        <check_box label="Дозволити скриптам використовувати (llMapDestination)" name="ScriptsCanShowUI" />
+        <text name="revokepermissions_txt">
+         Скасувати роздільну здатність анімації:
+         </text>
+        <radio_group name="FSRevokePerms">
+            <radio_item label="Ніколи (початковий дозвіл)" name="never_radio" />
+            <radio_item label="Скасувати на СЕСТ" name="sit_radio" />
+            <radio_item label="Скасувати на ВСТАТИ" name="stand_radio" />
+            <radio_item label="Скасувати на СЕСТ і ВСТАТИ" name="sitnstand_radio" />
+        </radio_group>
+        <text name="SurfaceAreaThreshholdLabel">
+         Захист від лага текстур (може порушити деякі об'єкти):
+        </text>
+        <check_box label="Приховувати об'єкти з високою площею текстури. Поріг: " name="RenderVolumeSAProtection" tool_tip="Це захищає вас від об'єктів з дуже великими текстурами, що часто призводить до збою клієнта. За замовчуванням складає 5000 квадратних метрів" />
+        <check_box label="Включити антиспам" name="UseAntiSpam" />
+        <check_box label="Включити антиспам для ваших об'єктів" name="FSUseAntiSpamMine" tool_tip="Це дозволить застосувати захист від спаму навіть до ваших об'єктів."/>
+        <text name="AntiSpamText1">
+           Максимум рядків за повідомлення:
+        </text>
+        <spinner name="_NACL_AntiSpamNewlines" tool_tip="Максимальна кількість рядків, щоб прийняти в одному текстовому повідомленні [За замовчуванням: 70]" />
+        <text name="AntiSpamText2">
+           Максимальний потік від джерела:
+        </text>
+        <spinner name="_NACL_AntiSpamAmount" tool_tip="Максимальна кількість аналогічних подій від одного джерела за інтервал 2 секунди. [За замовчуванням: 10]" />
+        <text name="AntiSpamText3">
+           Множник для звукових запитів:
+        </text>
+        <spinner name="_NACL_AntiSpamSoundMulti" tool_tip="Множник для звукового відтворення [За замовчуванням: 10]" />
+        <text name="AntiSpamText4">
+           Множник попереднього навантаження:
+        </text>
+        <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Множина запитів попереднього завантаження звуків [За замовчуванням: 4]" />
+        <button name="AntiSpamUnblock" label="Розблокувати всі джерела спаму" />
+        <check_box label="Підтвердження перед оплатою:" name="FSConfirmPayments" tool_tip="Показувати діалогове вікно підтвердження платежу, перш ніж заплатити суму, що перевищує поріг. Щоб завжди показувати підтвердження, встановити поріг в 0."/>
+        <spinner name="FSPaymentConfirmationThreshold" tool_tip="Показувати діалогове вікно підтвердження платежу, перш ніж заплатити суму, що перевищує поріг. Щоб завжди показувати підтвердження, встановити поріг 0." width="100"/>
+    </panel>
+    <panel label="Аватар" name="firestorm_avatar">
+        <text name="HeadMovement">
+            Радіус повороту голови ('0' немає рухів.):
+        </text>
+        <slider label="Вертикальний діапазон руху голови:" tool_tip="Вертикальний діапазон руху голови в градусах" name="PitchFromMousePositionSlider" />
+        <text name="PitchFromMousePositionText">
+            місто.
+        </text>
+        <slider label="Горизонтальний діапазон руху голови:" tool_tip="Горизонтальний діапазон руху голови в градусах" name="YawFromMousePositionSlider" />
+        <text name="YawFromMousePositionText">
+            місто.
+        </text>
+        <text name="note_lookat">
+             (Налаштування фокусування камери у вкладці Приватність → Фокусування камери)
+        </text>
+        <check_box label="Заборонити випадковий рух очей аватара" name="FSStaticEyes"/>
+        <text name="BeamPrefs">
+            Ефекти променя вибору
+        </text>
+        <button name="BeamColor_delete" label="Видалити" tool_tip="Видалити" />
+        <combo_box name="BeamColor_combo" tool_tip="Виберіть певну установку для променя вибору" />
+        <button name="BeamColor_new" label="Створити" tool_tip="Створити" />
+        <button name="BeamColor_refresh" label="Оновити" tool_tip="Оновити" />
+        <slider name="FSMaxBeamsPerSecond" label="Оновлень променя/сек.:" tool_tip="Як багато оновлень отримує промінь за одну секунду. За замовчуванням 40" />
+        <check_box label="Увімкнути промінь вибору" name="SLPartBeam" />
+        <check_box label="Відправляти дані вибору до чату" name="FSParticleChat" tool_tip="Надсилати дані вибору до загального чату в канал 9000." />
+        <combo_box name="FSBeamShape_combo" tool_tip="Вибір форми променя частинок" />
+        <button name="delete_beam" label="Видалити" tool_tip="Видалити" />
+        <button name="custom_beam_btn" label="Створити" tool_tip="Створити" />
+        <button name="refresh_beams" label="Оновити" tool_tip="Оновити" />
+        <slider name="FSBeamShapeScale" label="Масштаб:" tool_tip="Змініть масштаб частинок променя вибору" />
+        <text name="BridgeProtocols">
+            Інтеграція зовнішніх протоколів мосту LSL:
+        </text>
+        <check_box label="Дозволити протоколу OpenCollar вмикати або вимикати вбудоване AO" name="BridgeIntegrationOC" />
+        <check_box label="Дозволити протоколу LockMeister вмикати або вимикати вбудоване AO" name="BridgeIntegrationLM" />
+    </panel>
+    <panel label="Будувати 1" name="BuildTab">
+        <text name="text_box_objprams">
+         Початковий розмір
+        </text>
+        <text name="text_box_objprams2">
+         Налаштування
+        </text>
+        <text name="text_box_objprams3">
+         Текстура
+        </text>
+        <spinner label="Розм. X" name="X size" />
+        <spinner label="Розм. Y" name="Y size" />
+        <spinner label="Розм. Z" name="Z size" />
+        <check_box label="Фантомний" name="FSBuildPrefs_PhantomToggle"/>
+        <check_box label="Фізичний" name="FSBuildPrefs_PhysicalToggle"/>
+        <check_box label="Тимчасовий" name="FSBuildPrefs_TemporaryToggle"/>
+        <combo_box name="material">
+             <combo_item name="Камінь" label="Камінь"/>
+             <combo_item name="Metal" label="Метал"/>
+             <combo_item name="Скло" label="Трава"/>
+             <combo_item name="Wood" label="Wood"/>
+             <combo_item name="Flesh" label="Плоть"/>
+             <combo_item name="Пластик" label="Пластик"/>
+             <combo_item name="Rubber" label="Rubber"/>
+        </combo_box>
+        <texture_picker label="Текстура" name="texture control" tool_tip="Натисніть, щоб вибрати зображення"/>
+        <color_swatch label="Колір" name="colorswatch" tool_tip="Натисніть, щоб відкрити палітру кольорів"/>
+        <spinner label="Альфа" name="alpha"/>
+        <spinner label="Свічок." name="glow"/>
+        <check_box label="Повне світло" name="EmFBToggle"/>
+        <combo_box name="combobox shininess" tool_tip="Задати кількість блиску для об'єкта">
+          <combo_item name="None" label="Ні"/>
+          <combo_item name="Low" label="Низький"/>
+          <combo_item name="Medium" label="Середній"/>
+          <combo_item name="High" label="Високий"/>
+        </combo_box>
+        <check_box name="FSBuildPrefs_EmbedItem" label="Вставити елемент у новий об'єкт"/>
+        <fs_embedded_item_drop_target name="embed_item" tool_tip="Перетягніть елемент інвентарю сюди.">
+         Перетягніть елемент інвентарю сюди.
+        </fs_embedded_item_drop_target>
+        <text name="build_item_add_disp_rect_txt">
+         Вміст: [ITEM]
+        </text>
+        <text name="text_box_pivotpoint">
+          Точка опору
+        </text>
+        <check_box label="Осі на корені" tool_tip="За замовчуванням осі відображаються в центрі об'єднаних примов. Якщо увімкнено цю опцію, то осі відображаються в центрі кореневого прийому" name="FSBuildPrefsActualRoot_toggle" />
+        <spinner label="Поз. X" name="X pos" />
+        <spinner label="Поз. Y" name="Y pos" />
+        <spinner label="Поз. Z" name="Z pos" />
+        <check_box label="У відсотках" tool_tip="За замовчуванням відсотки встановлені на кожну вісь по 50" name="FSPivotPercToggle" />
+        <button label="Дозволи створення за промовчанням" name="fs_default_creation_permissions" />
+        <text name="text_box_scripting_font">
+          Шрифт скриптів:
+        </text>
+        <combo_box name="FSScriptingFontName" tool_tip="Ім'я шрифту, що використовується в редакторі LSL-скриптів">
+          <combo_item name="Monospace" label="Моноширний"/>
+          <combo_item name="Scripting" label="Скриптовий"/>
+        </combo_box>
+        <combo_box name="FSScriptingFontSize" tool_tip="Розмір шрифту, який використовується в редакторі LSL-скриптів">
+          <combo_item name="Monospace" label="Моноширний"/>
+          <combo_item name="Scripting" label="Скриптовий"/>
+          <combo_item name="Small" label="Дрібний"/>
+          <combo_item name="Medium" label="Середній"/>
+          <combo_item name="Large" label="Великий"/>
+        </combo_box>
+        <check_box label="Увімкнути процесор попередньої обробки LSL" tool_tip="Увімкнути процесор попередньої обробки LSL." name="preproc_checkbox" />
+        <check_box label="Оптимізатор" tool_tip="Препроцесор LSL дозволить оптимізувати простір, використовуваний скриптами за рахунок читання." name="preprocoptimizer_checkbox" />
+        <check_box label="Інструкція switch()" left_delta="110" width="150" tool_tip="Препроцесор LSL дозволить використовувати switch() statement для контролю потоку скриптів" name="preprocswitch_checkbox" />
+        <check_box label="Лениві списки" left_delta="145" width="150" tool_tip="Препроцесор LSL дозволить використовувати розширення синтаксису для обробки списку." name="preproclazy_checkbox" />
+        <check_box label="#includes з диска" left_delta="125" tool_tip="Препроцесор LSL дозволяє використовувати #include для посилань на файли на локальному диску." name="preprocinclude_checkbox" />
+        <text name="lslpreprocinclude_textbox">
+          Шлях для препроцесора:
+        </text>
+        <button label="Переглянути" label_selected="Переглянути" name="SetPreprocInclude" />
+        <text name="externaleditor_textbox">
+          Зовнішній редактор:
+        </text>
+        <button label="Переглянути" label_selected="Переглянути" name="SetExternalEditor" />
+    </panel>
+    <panel label="Будувати 2" name="BuildTab2">
+        <check_box label="Увімкнути підсвічування вибраного об'єкта" tool_tip="Увімкнути підсвічування вибраного об'єкта" name="FSBuildPrefsRenderHighlight_toggle" />
+        <check_box label="Висвітити межі обраної ділянки" name="RenderParcelSelection"/>
+        <check_box label="Показати кордон до максимальної висоти будівництва" name="FSRenderParcelSelectionToMaxBuildHeight"/>
+        <check_box label="Ліміт відстані вибору:" name="LimitSelectDistance" width="237" />
+        <spinner name="MaxSelectDistance" tool_tip="Максимально допустима відстань для вибору (в метрах від аватара) [За замовчуванням: 128.000]" />
+        <check_box label="Ліміт відстані перетягування:" name="LimitDragDistance" width="237" />
+        <spinner name="MaxDragDistance" tool_tip="Максимально допустима відстань в одній експлуатації інструментів переміщення (в метрах від початкової точки) [За замовчуванням: 48.000]" />
+        <text name="RotationStepText1" width="175">
+          Обмеження у обертанні в
+        </text>
+        <spinner name="RotationStep" tool_tip="[За замовчуванням: 1.0]"/>
+        <text name="RotationStepText2">
+          градус, якщо немає прив'язки до сітки
+        </text>
+        <check_box label="Запит підтвердження роз'єднання якщо мінімум" name="FSUnlinkConfirmEnabled"/>
+        <text name="MinObjectsForUnlinkConfirmText2">
+          об'єктів
+        </text>
+        <check_box label="Встановити стару поведінку для &quot;Встановити об'єкт на продаж&quot;" tool_tip="Встановити стару поведінку для &quot;Встановити об'єкт на продаж&quot;" name="FSCommitForSaleOnChange_toggle" />
+        <check_box label="Зберегти скрипти, що редагуються в інвенторі як Моно" tool_tip="Зберігати скрипти, що редагуються в інвенторі як Моно" name="FSSaveInventoryScriptsAsMono_toggle" />
+        <check_box label="Зберегти текстури з інвентаря на диск у вигляді PNG замість TGA" tool_tip="Зберегти текстури з інвентаря на диск у вигляді PNG замість TGA" name="FSTextureDefaultSaveAsFormat" />
+        <check_box label="Використовуйте Ctrl+миша, щоб захопити та маніпулювати об'єктами" tool_tip="Використовуйте Ctrl+миша, щоб захопити та маніпулювати об'єктами" name="FSEnableGrab" />
+        <check_box label="Масштабування при натисканні (разом з caps lock) для текстур при будівництві" tool_tip="При включенні, дозволяє тягнути при натисканні або масштаб при натисканні (разом з caps lock) для текстур у режимі будівництва. Ця функція експерементальна та її слід використовувати з обережністю." name="FSExperimentalDragTexture" />
+        <check_box label="Попередній перегляд анімації на власному аватарі під час завантаження" tool_tip="Попередній перегляд анімації на власному аватарі під час завантаження" name="FSUploadAnimationOnOwnAvatar" />
+        <check_box label="Увімкнути розширену інформацію скрипта" name="FSScriptInfoExtended" tool_tip="Якщо увімкнено, розширює базову функцію інформації скрипта з різними деталями, корисними для будівельників"/>
+    </panel>
+    <!--Завантаження-->
+    <panel label="Завантаження" name="UploadsTab">
+      <text name="title">
+        Поточні каталоги призначення для завантаження:
+      </text>
+      <text name="title_images">
+        Зображення
+      </text>
+      <text name="title_sounds">
+        Звуки
+      </text>
+      <text name="title_animations">
+        Анімації
+      </text>
+      <text name="title_models">
+        Моделі
+      </text>
+      <text name="upload_help">
+        Щоб змінити папку призначення, клацніть її правою кнопкою миші в інвентарі та виберіть
+      "Використовувати за промовчанням для"
+      </text>
+        <button name="reset_default_folders" label="Скидання стандартних папок" width="200"/>
+    </panel>
+</tab_container>
+</panel>
+
+
+

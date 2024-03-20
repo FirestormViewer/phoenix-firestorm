@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Люди" name="people_panel">
+	<string name="no_recent_people" value="Немає людей, які говорили нещодавно. Шукаєте, з ким поспілкуватися? Скористайтеся [secondlife:///app/search/people поиском] або [secondlife:///app/worldmap картою світу]. " />
+	<string name="no_filtered_recent_people" value="Не знайшли того, що вам потрібно? Скористайтеся [secondlife:///app/search/people/[SEARCH_TERM] пошуком]." />
+	<string name="no_one_near" value="Нікого немає поруч. Шукаєте, з ким поспілкуватися? Скористайтеся [secondlife:///app/search/people поиском] або [secondlife:///app/worldmap картою світу]." />
+	<string name="no_one_filtered_near" value="Не знайшли, що вам потрібно? Скористайтеся [secondlife:///app/search/people/[SEARCH_TERM] пошуком]." />
+	<string name="no_friends_online" value="Немає друзів у мережі" />
+	<string name="no_friends" value="Немає друзів" />
+	<string name="no_friends_msg">
+		Знайдіть друзів за допомогою [secondlife:///app/search/people пошуку] або додайте жителів до друзів за допомогою правої кнопки миші.
+Шукаєте з ким поспілкуватися? Скористайтеся [secondlife://app/worldmap картою світу].
+	</string>
+	<string name="no_filtered_friends_msg">
+		Чи не знайшли того, що вам потрібно? Скористайтеся пошуком [secondlife:///app/search/people/[SEARCH_TERM]].
+	</string>
+	<string name="no_filtered_groups_msg" value="Не знайшли того, що вам потрібно? Скористайтеся [secondlife:///app/search/groups/[SEARCH_TERM] пошуком]." />
+	<string name="no_groups_msg" value="Шукаєте групу, щоб приєднатися до неї? Скористайтеся [secondlife:///app/search/groups поиском]." />
+	<string name="MiniMapToolTipMsg" value="[REGION](Подвійне клацання відкриває карту, shift+перетягування – огляд)" />
+	<string name="AltMiniMapToolTipMsg" value="[REGION](Подвійне клацання – телепортація, shift+перетягування – огляд)" />
+	<panel.string name="empty_list">
+		Цей набір контактів порожній.
+	</panel.string>
+	<panel.string name="no_sets">
+		Немає наборів
+	</panel.string>
+	<panel.string name="all_sets">
+		Усі набори
+	</panel.string>
+	<panel.string name="pseudonyms">
+		Псевдонім
+	</panel.string>
+	<string name="AllFriendsTitle">
+		Усі ([ALL])
+	</string>
+	<string name="OnlineFriendsTitle">
+		Онлайн ([ONLINE])
+	</string>
+	<tab_container name="tabs">
+		<panel label="Рядом" name="nearby_panel">
+			<panel name="nearby_buttons_panel">
+				<filter_editor label="Фільтр людей" name="nearby_filter_input" />
+				<button name="gear_btn" tool_tip="Дії з обраним мешканцем" />
+				<menu_button name="nearby_view_btn" tool_tip="Параметри перегляду/сортування" />
+				<button name="add_friend_btn" tool_tip="Запропонувати мешканцю дружбу" />
+				<dnd_button name="nearby_del_btn" tool_tip="Видалити вибраного користувача з друзів" />
+			</panel>
+		</panel>
+		<panel label="Друзі" name="friends_panel">
+			<panel name="friends_buttons_panel">
+				<filter_editor label="Фільтр людей" name="friends_filter_input" />
+				<button name="gear_btn" tool_tip="Дії з обраним мешканцем" />
+				<menu_button name="friends_view_btn" tool_tip="Параметри перегляду/сортування" />
+				<button name="friends_add_btn" tool_tip="Запропонувати мешканцю дружбу" />
+				<button name="GlobalOnlineStatusToggle" tool_tip="Перемикач глобальної видимості" />
+				<dnd_button name="friends_del_btn" tool_tip="Видалити вибраного користувача з друзів" />
+			</panel>
+			<tab_container name="friends_accordion">
+				<panel name="tab_online" title="У мережах" />
+				<panel name="tab_all" title="Все" />
+				<panel name="tab_suggested_friends" title="Запропоновані" />
+			</tab_container>
+		</panel>
+		<panel label="Групи" name="groups_panel">
+			<panel name="groups_buttons_panel">
+				<filter_editor label="Фільтр груп" name="groups_filter_input" />
+				<menu_button name="groups_gear_btn" tool_tip="Дії з обраною групою" />
+				<menu_button name="groups_view_btn" tool_tip="Параметри перегляду/сортування" />
+				<menu_button name="plus_btn" tool_tip="Приєднатися до групи/створити нову групу" />
+				<dnd_button name="minus_btn" tool_tip="Залишити вибрану групу" />
+			</panel>
+			<text name="groupcount">
+				Ви перебуваєте в [COUNT] групах ([REMAINING] є).
+			</text>
+		</panel>
+		<panel label="Недавні" name="recent_panel">
+			<panel name="recent_buttons_panel">
+				<filter_editor label="Фільтр людей" name="recent_filter_input" />
+				<button name="gear_btn" tool_tip="Дії з обраним мешканцем" />
+				<menu_button name="recent_view_btn" tool_tip="Параметри перегляду/сортування" />
+				<button name="add_friend_btn" tool_tip="Запропонувати мешканцю дружбу" />
+				<dnd_button name="recent_del_btn" tool_tip="Видалити вибраного користувача з друзів" />
+			</panel>
+		</panel>
+		<panel label="Заблоковані" name="blocked_panel">
+			<panel name="panel_block_list_sidetray" label="Заблоковані мешканці та об'єкти" />
+		</panel>
+		<panel label="Набори контактів" name="contact_sets_panel">
+			<panel name="panel_people_contacts_sidetray" label="Набори контактів" />
+		</panel>
+	</tab_container>
+</panel>

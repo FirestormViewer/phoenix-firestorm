@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_shape_panel">
+	<string name="meters">
+		Метри
+	</string>
+	<string name="feet">
+		Фути
+	</string>
+	<string name="height">
+		Зріст:
+	</string>
+	<panel label="Сорочка" name="accordion_panel">
+		<accordion name="wearable_accordion">
+			<accordion_tab name="shape_body_tab" title="Тіло"/>
+			<accordion_tab name="shape_head_tab" title="Голова"/>
+			<accordion_tab name="shape_eyes_tab" title="Очі"/>
+			<accordion_tab name="shape_ears_tab" title="Вуха"/>
+			<accordion_tab name="shape_nose_tab" title="Ніс"/>
+			<accordion_tab name="shape_mouth_tab" title="Рот"/>
+			<accordion_tab name="shape_chin_tab" title="Підборіддя"/>
+			<accordion_tab name="shape_torso_tab" title="Торс"/>
+			<accordion_tab name="shape_legs_tab" title="Ноги"/>
+		</accordion>
+	</panel>
+</panel>

@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Налаштування інтерфейсу" name="Display panel">
+<tab_container label="Налаштування Firestorm" name="tabs">
+    <panel label="3D світ" name="UI Prefs Panel">
+        <text name="HoverTipText" width="150">
+            Підказки, що випливають:
+        </text>
+        <check_box label="Показувати спливаючі підказки" name="ShowHoverTips" tool_tip="Встановіть, щоб показувати підказки при наведенні на аватарів та деякі інші речі (CTRL+SHIFT+T)" />
+        <check_box label="На всіх об'єктах" tool_tip="Встановіть для відображення підказок при наведенні на об'єкти" name="ShowAllHoverTips" />
+        <check_box label="На землі" tool_tip="Встановіть для відображення підказок при наведенні на землю" name="ShowLandHoverTips" />
+        <check_box name="FSAdvancedTooltips" label="Показати розширену інформацію у підказках" />
+        <check_box name="FSShowGroupTitleInTooltip" label="Показувати ролі груп у підказках" />
+        <text name="tooltip_textbox">
+           Затримка підказок:
+        </text>
+        <slider label="Інструменти:" name="ToolTipDelay_slider" tool_tip="(За замовчуванням: 0.7)" />
+        <text name="ToolTipDelay_text">
+            секунд.
+        </text>
+        <slider label="Аватари:" name="AvatarInspectorTooltipDelay_slider" tool_tip="(За замовчуванням: 0.35)" />
+        <text name="AvatarInspectorTooltipDelay_text">
+            секунд.
+        </text>
+        <slider label="Об'єкти:" name="ObjectInspectorTooltipDelay_slider" tool_tip="(За замовчуванням: 0.35)" />
+        <text name="ObjectInspectorTooltipDelay_text">
+            секунд.
+        </text>
+        <slider name="FSHudTextFadeDistance" label="Дальність зникнення плаваючого тексту (м):" tool_tip="Встановлює відстань, на якій плаваючий текст починає зникати" label_width="285" width="529"/>
+        <slider name="FSHudTextFadeRange" label="Діапазон зміни плаваючого тексту (м):" tool_tip="Встановлює діапазон, необхідний для того, щоб плаваючий текст зникав від повністю видимого до повністю невидимого" label_width="285" width="529 "/>
+    </panel>
+    <panel label="2D накладання" name="ui-2d-overlay">
+        <text name="UI Size:" width="130">
+            Масштаб інтерфейсу:
+        </text>
+        <text name="HUD Size:" width="130">
+            Масштаб HUD:
+        </text>
+        <text name="ScriptDialogsPerObjectLabel" width="185">
+            Діалогів скрипта на об'єкт:
+        </text>
+        <combo_box name="ScriptDialogPerObjectDropdown">
+            <combo_box.item label="Один на об'єкт" name="ScriptDialogOption_0" />
+            <combo_box.item label="Один на об'єкт та канал" name="ScriptDialogOption_1" />
+            <combo_box.item label="Один на Канал для Приєднання" name="ScriptDialogOption_2" />
+            <combo_box.item label="Один на Канал для Дисплею" name="ScriptDialogOption_3" />
+            <combo_box.item label="Необмежено для Дисплею" name="ScriptDialogOption_4" />
+            <combo_box.item label="Необмежено" name="ScriptDialogOption_5" />
+        </combo_box>
+        <check_box label="Прибрати кнопку &quot;Блок&quot; " name="FSRemoveScriptBlockButton" />
+        <text name="ScriptDialogsPositionLabel" width="185">
+            Розміщення діалогів скрипту:
+        </text>
+        <combo_box name="ScriptDialogsPositionDropdown" tool_tip="Виберіть у якій частині екрана відображатиметься вікно діалогового меню скрипта">
+            <combo_box.item label="Пристикований у полі іконок" name="ScriptDialogPositionOption_1" />
+            <combo_box.item label="Зверху зліва" name="ScriptDialogPositionOption_2" />
+            <combo_box.item label="Зверху праворуч" name="ScriptDialogPositionOption_3" />
+            <combo_box.item label="Знизу зліва" name="ScriptDialogPositionOption_4" />
+            <combo_box.item label="Знизу праворуч" name="ScriptDialogPositionOption_5" />
+        </combo_box>
+        <check_box label="Анімація діалогів" name="FSAnimatedScriptDialogs" tool_tip="Показує анімацію діалогового вікна під час його відкриття (Розгортається зверху вниз)" />
+        <slider label="Виглядні рядки діалогу скрипта:" label_width="200" name="FSRowsPerScriptDialog" tool_tip="Максимальна кількість рядків у діалоговому вікні скрипта, яка відображатиметься одночасно." />
+        <check_box label="Використовувати кругле меню" name="UsePieMenu" tool_tip="Використовувати стиль V1 для відображення круглого меню при натисканні правою кнопкою миші на об'єкти, аватари та землю" />
+        <check_box label="Анімація тексту" name="PieMenuPopupFontEffect" tool_tip="Включає текст круглого меню, що є частиною анімації, коли відкривається кругле меню." />
+        <check_box label="Увімкнути зовнішній відтінок кільця" name="PieMenuOuterRingShade" tool_tip="Дозволяє додати додатковий зовнішній відтінок кільця, який допомагає візуалізувати підменю." />
+        <text name="ShowGroupNoticesTopRightLabel" width="180">
+           Положення сповіщень та ОП:
+        </text>
+        <radio_group name="ShowGroupNoticesTopRight" width="210"
+         tool_tip="Виберіть, де на екрані будуть відображатися групові сповіщення та піктограми ОП." >
+           <radio_item label="Внизу Справа" name="radio" width="100" />
+           <radio_item label="Вгорі Праворуч" name="radio1" width="100" />
+        </radio_group>
+        <text name="GroupTopRightRequiresRestart" left_delta="270" width="150">
+           (Потрібен перезапуск)
+        </text>
+        <check_box label="Приховати іконки чатів груп та ОП" name="FSDisableIMChiclets" tool_tip="Будуть прибрані іконки особистих повідомлень і чатів груп (Спільноти будуть відображатися)." />
+        <check_box label="Використовувати старий список для вікна Повідомлення." name="FSLegacyNotificationWell" tool_tip="Якщо прапорець встановлений, Firestorm буде використовувати застаріле подання списку для відображення збережених повідомлень." width="320" />
+        <text name="FSLegacyNotificationWellRequiresRestart" width="150">(Необхідний перезапуск)</text>
+        <check_box label="Авторозмір списків Розмов та сповіщень" name="FSLegacyNotificationWellAutoResize" tool_tip="Якщо цей прапорець встановлений, Firestorm завжди буде автоматично змінювати розміри ваших списків Розмов і старих сповіщень при додаванні або видаленні елементів."/>
+        <check_box label="Перезначити вже використовувані гарячі клавіші (тільки в Linux, потрібен перезапуск)" name="FSRemapLinuxShortcuts" tool_tip="Якщо включено, гарячі клавіші, які вже використовуються операційною системою Linux (наприклад, CTRL-ALT-Fx), перепризначені." />
+        <check_box label="Запобігання фокусу вікна статистики" name="FSStatisticsNoFocus"
+        tool_tip="Якщо включено, вікно статистики ніколи не буде отримувати фокус при закритті іншого вікна (такі дії, як зміна макета графа для елементів, як і раніше, можливі, якщо вони включені)."
+        width="256" />
+        <slider label="Кількість миготів вкладки ОП:" name="ButtonsFlashCount" />
+        <slider label="Частота миготіння вкладок ОП:" tool_tip="Частота миготіння вкладок особистих повідомлень:" name="ButtonFlashRate" />
+        <text name="ButtonFlashRateText">
+            розд
+        </text>
+    </panel>
+	<panel label="Верхня панель" name="UI-interface-top-bars" >
+
+		<text name="statusbar_textbox">
+		Панель статусу:
+		</text>
+
+		<check_box tool_tip="Показати вимір трафіку в правому верхньому кутку екрана" label="Показати вимір трафіку в правому верхньому куті екрана" name="ShowNetStats"/>
+		<check_box label="Використовувати старе відображення значень вимірювача лагів" name="FSStatbarLegacyMeanPerSec" tool_tip="Якщо опція включена, Firestorm буде використовувати традиційний спосіб відображення даних"/>
+		<check_box label="Натискання на індикатор трафіку відкриває статистику" name="FSUseStatsInsteadOfLagMeter"/>
+		<check_box label="Показувати керування медіа у верхньому меню" name="FSEnableVolumeControls" tool_tip="Відображає праворуч нагорі можливість керування включенням та вимкненням потокового аудію, медіа."/>
+		<check_box label="Показати канал симулятора у статус панелі" name="FSStatusbarShowSimulatorVersion" tool_tip="Показати канал симулятора (RC Magnum, RC Le Tigre, RC BlueSteel etc.) у верхній панелі "/>
+		<check_box label="Показати локацію у верхньому меню" name="ShowMenuBarLocation"/>
+		<check_box label="Показати пошук у меню" name="show_search_menu_check"/>
+		<check_box label="Показати поточний баланс L$" name="FSShowCurrencyBalanceInStatusbar"/>
+		<check_box label="Увімкнути вікна меню миші на піктограмах верхнього меню" name="FSStatusBarMenuButtonPopupOnRollover" width="270" />
+		<text name="statusbar_timeformat_textbox" width="100">
+			Формат часу:
+		</text>
+		<combo_box name="FSStatusBarTimeFormat" tool_tip="Вибирає формат часу, який використовується у рядку головного меню." width="250">
+			<combo_box.item label="Стандарт вибраної мови" name="Language"/>
+			<combo_box.item label="12 Годин" name="12_Hour"/>
+			<combo_box.item label="12 Годин із Секундами" name="12_Hour_Seconds"/>
+			<combo_box.item label="12 Годин з Часовим поясом" name="12_Hour_TZ"/>
+			<combo_box.item label="12 Годин із Секундами та Часовим поясом" name="12_Hour_TZ_Seconds"/>
+			<combo_box.item label="24 Години" name="24_Hour"/>
+			<combo_box.item label="24 години з секундами" name="24_Hour_Seconds"/>
+			<combo_box.item label="24 Години з Часовим поясом" name="24_Hour_TZ"/>
+			<combo_box.item label="24 Години з Секундами та Часовим поясом" name="24_Hour_TZ_Seconds"/>
+		</combo_box>
+		<text name="navfav_textbox">
+		Панель навігації та закладок:
+		</text>
+
+		<check_box label="Показати панель закладок" name="ShowNavbarFavoritesPanel"/>
+		<check_box label="Показати панель навігації та пошук" name="ShowNavbarNavigationPanel"/>
+		<check_box label="Показати пошук" name="ShowSearchTopBar"/>
+
+    </panel>
+    <panel label="Інтерфейс вікон" name="UI-interface-windows-tab">
+        <check_box label="Відкрити профіль аватара при натисканні на його ім'я" name="FSInspectAvatarSlurlOpensProfile" tool_tip="Відкрити профіль аватара при натисканні на його ім'я" />
+        <check_box label="Вимкнути автоматичне відкриття списку заблокованого" name="FSDisableBlockListAutoOpen" tool_tip="Вимкнути автоматичне відкриття списку заблокованого, коли ви блокуєте аватара або об'єкт" />
+        <check_box label="Відкривати вікна в стилі [SHORT_VIEWER_GENERATION] для 'Друзі' та 'Групи'" name="FSUseV2Friends" tool_tip="Коли ви увімкнете цю опцію, друзі / групи будуть відкриті у вікнах - інакше це буде зроблено у Контактах." />
+        <check_box label="Використовувати застарілі вікно властивості об'єктів" name="FSUseLegacyObjectProperties" tool_tip="Якщо увімкнено, при відкритті властивостей об'єкта буде використано старе вікно властивостей."/>
+        <check_box label="Використовувати маленьке вікно камери" name="FSUseSmallCameraFloater" tool_tip="Якщо цей параметр увімкнено, буде використовуватися менше, застаріле вікно камери без елементів керування налаштуваннями камери."/>
+        <text name="standalone_textbox">
+            Використовувати окремі вікна для:
+        </text>
+        <check_box name="FSUseStandaloneGroupFloater" label="Профілів груп" tool_tip="Якщо увімкнено, профілі груп будуть відображатися в окремому вікні" />
+        <check_box name="FSUseStandaloneTeleportHistoryFloater" label="Історії телепортацій" tool_tip="Якщо увімкнено, історії телепортацій відображатимуться в окремому вікні" />
+        <check_box name="FSUseStandaloneBlocklistFloater" label="Списку заблокованих" tool_tip="Якщо увімкнено, список заблокованих відображатиметься в окремому вікні" />
+        <check_box name="FSUseStandalonePlaceDetailsFloater" label="Закладок, деталей місця та історії телепортацій" tool_tip="Якщо включено, закладки, деталі місця та подробиці історії телепортацій будуть відображатися в окремому вікні" />
+        <text name="ExtendedTeleportHistoryLabel">
+            Додати до історії телепортацій:
+        </text>
+        <check_box name="FSTeleportHistoryShowPosition" label="Позиція" tool_tip="Якщо опція включена, локальні координати в регіоні буде показано в історії телепортацій."/>
+        <check_box name="FSTeleportHistoryShowDate" label="Дату" tool_tip="Якщо увімкнено, дата та час телепорту буде показано в історії телепортацій."/>
+        <text name="textFriendlistOptions">
+            Налаштування списку контактів:
+        </text>
+        <text name="textFriendlistColumns" width="113">
+            Стовпець імені:
+        </text>
+        <check_box width="80" label="Ім'я" name="FSFriendListColumnShowUserName" tool_tip="Стовпець відображуваного імені показує лише ім'я користувача." />
+        <check_box width="105" label="Відображуване" name="FSFriendListColumnShowDisplayName" tool_tip="Стовпець відображеного імені показує лише відображене ім'я." />
+        <check_box label="Повне ім'я" name="FSFriendListColumnShowFullName" tool_tip="Стовпець відображеного імені показує повне ім'я." />
+        <text name="textFriendListSortOrder" width="83">
+            Сортувати за:
+        </text>
+        <radio_group name="FSFriendListSortOrder">
+            <radio_item label="Імени" name="username" width="80" />
+            <radio_item label="Ім'я, що відображається" name="displayname" />
+        </radio_group>
+        <text name="textFriendListFullNameFormat" width="93">
+            Показати як:
+        </text>
+        <radio_group name="FSFriendListFullNameFormat">
+            <radio_item label="Ім'я (Відображається)" name="username_displayname" />
+            <radio_item label="Відображуване (Ім'я)" name="displayname_username" />
+        </radio_group>
+        <check_box label="Показати стовпець з правами" name="FSFriendListColumnShowPermissions" tool_tip="Список контактів відображає стовпці з дозволами, які ви дали цим аватарам, і навпаки." />
+        <check_box label="Показати фільтр пошуку" name="FSContactListShowSearch" tool_tip="У списку контактів буде відображено поле пошуку для фільтрації списку."/>
+        <text name="textInventoryOptions">
+            Налаштування інвентарю:
+        </text>
+        <check_box label="Приховувати порожні системні папки в інвентарі" name="DebugHideEmptySystemFolders" tool_tip="Якщо включено, то системні папки в інвентарі не відображатимуться (Закладки, Нотатки тощо)" />
+        <check_box label="Показувати папку отриманих елементів в інвентарі" name="FSShowInboxFolder" tool_tip="Якщо включено, всі куплені товари будуть відображатися в папці Отримані." />
+        <check_box label="Завжди показувати 'Отримані товари' в нижній частині інвентарю" name="FSAlwaysShowInboxButton" tool_tip="Завжди показувати 'Отримані товари' в нижній частині інвентарю" />
+        <check_box label="Дозволити окремі умови пошуку на кожній вкладці інвентарю" name="FSSplitInventorySearchOverTabs" tool_tip="Дозволити окремі умови пошуку на кожній вкладці інвентарю" />
+    </panel>
+    <panel label="Тоасти" name="UI-toasts-tab">
+        <text name="ToastSettings" width="450">
+            Налаштування відображення сповіщень (спливаючі вікна, консоль, тоасти):
+        </text>
+        <slider label="Між нижнім тоастом та низом інтерфейсу:" tool_tip="Між нижнім тоастом і нижньою частиною інтерфейсу:" name="ToastSpace" />
+        <text name="ToastSpaceText">
+            пікселів
+        </text>
+        <slider label="Тривалість сповіщення:" tool_tip="Тривалість сповіщення перед загасанням" name="ToastLifetime" />
+        <text name="ToastLifetimeText">
+            секунд
+        </text>
+        <slider label="Длительность подсказки:" tool_tip="Кількість секунд, через яку тост із менш важливою інформацією видаляється з екрана" name="TipToastLifetime" />
+        <text name="TipToastLifetimeText">
+            секунд
+        </text>
+        <slider label="Тривалість відображення загального чату:" tool_tip="Тривалість відображення загального чату перед загасанням" name="NearbyToastLifetime" />
+        <text name="NearbyToastLifetimeText">
+            секунд
+        </text>
+        <slider label="z-зміщення для тоастів чату:" tool_tip="Зміщення по осі Z для тоастів загального чату" name="FSNearbyChatToastsOffset" />
+        <text name="FSNearbyChatToastsOffsetText">
+            пікселів
+        </text>
+        <slider label="Час загасання загального чату:" tool_tip="Час, необхідний ефект загасання" name="NearbyToastFadingTime" />
+        <text name="NearbyToastFadingTimeText">
+            секунд
+        </text>
+        <slider label="Тривалість перед зникненням:" tool_tip="Тривалість перед появою:" name="StartupToastLifetime" />
+        <text name="StartupToastLifetimeText">
+            секунд
+        </text>
+        <slider label="Час зникнення тоасту:" tool_tip="Час, який потрібний для зникнення тоасту" name="ToastFadingTime" />
+        <text name="ToastFadingTimeText">
+            секунд
+        </text>
+        <slider label="Зазор між тоастами:" tool_tip="Зазор між тоастами" name="ToastGap" />
+        <text name="ToastGapText">
+            пікселів
+        </text>
+        <slider label="Висота переповнення тоасту:" tool_tip="Висота переповнення тоасту" name="OverflowToastHeight" />
+        <text name="OverflowToastHeightText">
+            пікселів
+        </text>
+        <slider label="Ширина консолі спільного чату:" tool_tip="Ширина консолі спільного чату" name="NearbyToastWidth" />
+        <check_box label="Показувати тоасти над іншими вікнами" name="FSShowToastsInFront" />
+        <check_box label="Використовувати нове повідомлення про перезавантаження регіону" name="FSUseNewRegionRestartNotification" />
+        <check_box label="Не струшувати мій екран при отриманні сповіщення про перезавантаження регіону" name="FSNoScreenShakeOnRegionRestart" />
+        <check_box label="Повідомляти про рестарт регіону в канал:" width="245" name="FSReportRegionRestartToChat" />
+    </panel>
+    <panel label="Font" name="UI-font-tab">
+        <text name="tooltip_textbox1">
+           Шрифтова схема:
+        </text>
+        <text name="tooltip_textbox2" width="150">
+           (Необхідний перезапуск)
+        </text>
+        <text name="tooltip_textbox5">
+           Змінити розмір:
+        </text>
+        <text name="tooltip_textbox6" >
+           pt (необхідний перезапуск)
+За промовчанням 0. Значення вище можуть викликати помилки.
+        </text>
+        <text name="tooltip_textbox3">
+           Відстань рядків:
+        </text>
+        <text name="tooltip_textbox4">
+          пікселів (необхідний перезапуск)
+[VIEWER_GENERATION] за промовчанням 0. V1 за промовчанням 2.
+        </text>
+        <text name="Label_FolderItemViewHeight">
+           Висота папок:
+        </text>
+        <text name="Label_FolderItemViewHeight_Scale">
+          пікселів (необхідний перезапуск)
+[VIEWER_GENERATION] за промовчанням 20. V1 за промовчанням 18.
+        </text>
+        <text name="text_box_notecard_font" width="120">
+          Шрифт Редактора Нотаток:
+        </text>
+        <combo_box name="FSNotecardFontName" tool_tip="Назва шрифту, який використовується в редакторі нотаток"/>
+        <combo_box name="FSNotecardFontSize" tool_tip="Розмір шрифту, який використовується в редакторі нотаток">
+             <combo_item name="Monospace" label="Моноширинний"/>
+             <combo_item name="Scripting" label="Прописний"/>
+             <combo_item name="Cascadia" label="У Cascadia"/>
+             <combo_item name="Small" label="Дрібний"/>
+             <combo_item name="Medium" label="Середній"/>
+             <combo_item name="Large" label="Великий"/>
+        </combo_box>
+    </panel>
+</tab_container>
+</panel>

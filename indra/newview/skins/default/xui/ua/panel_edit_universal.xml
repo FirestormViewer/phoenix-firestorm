@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="edit_universal_panel">
+  <scroll_container name="avatar_universal_scroll">
+    <panel name="avatar_universal_color_panel">
+     <texture_picker label="Тату Голови" name="Head Universal Tattoo" tool_tip="Натисніть, щоб вибрати зображення"/>
+     <texture_picker label="Верхній Тату" name="Upper Universal Tattoo" tool_tip="Натисніть, щоб вибрати зображення"/>
+     <texture_picker label="Нижнє Тату" name="Lower Universal Tattoo" tool_tip="Натисніть, щоб вибрати зображення"/>
+     <texture_picker label="Тату Спідниці" name="Skirt Tattoo" tool_tip="Натисніть, щоб вибрати зображення"/>
+     <texture_picker label="Тату Волосок" name="Hair Tattoo" tool_tip="Натисніть, щоб вибрати зображення"/>
+     <texture_picker label="Тату Око" name="Eyes Tattoo" tool_tip="Натисніть, щоб вибрати зображення"/>
+     <texture_picker label="Тату Рук" name="Left Arm Tattoo" tool_tip="Натисніть, щоб вибрати зображення"/>
+     <texture_picker label="Тату Ніг" name="Left Leg Tattoo" tool_tip="Натисніть, щоб вибрати зображення"/>
+     <texture_picker label="Доп1 тату" name="Aux1 Tattoo" tool_tip="Натисніть, щоб вибрати зображення"/>
+     <texture_picker label="Доп2 тату" name="Aux2 Tattoo" tool_tip="Натисніть, щоб вибрати зображення"/>
+     <texture_picker label="Доп3 тату" name="Aux3 Tattoo" tool_tip="Натисніть, щоб вибрати зображення"/>
+     <color_swatch label="Колір/Тон" name="Color/Tint" tool_tip="Натисніть, щоб вибрати колір"/>
+    </panel>
+  </scroll_container>
+</panel>
+

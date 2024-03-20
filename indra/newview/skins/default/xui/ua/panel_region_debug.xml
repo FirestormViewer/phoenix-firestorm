@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Налагодження" name="Debug">
+	<text name="region_text_lbl">
+		Регіон:
+	</text>
+	<text name="region_text">
+		невідомо
+	</text>
+	<check_box label="Вимкнути скрипти" name="disable_scripts_check" tool_tip="Вимкнути всі скрипти в цьому регіоні"/>
+	<check_box label="Вимкнути зіткнення" name="disable_collisions_check" tool_tip="Вимкнути зіткнення не-аватарів у цьому регіоні"/>
+	<check_box label="Вимкнути фізику" name="disable_physics_check" tool_tip="Вимкнути всю фізику в цьому регіоні"/>
+	<button label="Застосувати" name="apply_btn"/>
+	<text name="objret_text_lbl">
+		Повернення об'єктів
+	</text>
+	<text name="resident_text_lbl">
+		Мешканець:
+	</text>
+	<line_editor name="target_avatar_name">
+		(ні)
+	</line_editor>
+	<button label="Вибір" name="choose_avatar_btn"/>
+	<text name="options_text_lbl">
+		Параметри:
+	</text>
+	<check_box label="Скрипти" name="return_scripts" tool_tip="Повертаються тільки об'єкти зі скриптами"/>
+	<check_box label="На чужій землі" name="return_other_land" tool_tip="Повертаються лише об'єкти, розташовані на чужій землі"/>
+	<check_box label="З кожного регіону цього землеволодіння" name="return_estate_wide" tool_tip="Повертаються об'єкти з усіх регіонів, що утворюють це землеволодіння"/>
+	<button label="Повернути" name="return_btn"/>
+	<button label="Найактивніші учасники зіткнень..." width="270" name="top_colliders_btn" tool_tip="Список об'єктів, для яких зіткнення найімовірніші"/>
+	<button label="Список кращих скриптів..." width="170" name="top_scripts_btn" tool_tip="Об'єкти, в яких скрипти виконуються найдовше"/>
+	<button label="Перезавантажити регіон" width="150" name="restart_btn" tool_tip="Відрахувати 2 хвилини та перезавантажити регіон"/>
+	<text name="label_restart_delay" left_delta="165">
+		Секунд:
+	</text>
+	<button label="Скасувати перезапуск" width="150" name="cancel_restart_btn" tool_tip="Скасувати перезапуск регіону"/>
+	<button label="Консоль налагодження регіону" name="region_debug_console_btn" tool_tip="Відкрити Консоль налагодження регіону" width="165"/>
+</panel>

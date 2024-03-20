@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_gear_default">
+	<menu_item_call label="Нове вікно інвентарю" name="new_window"/>
+	<menu_item_check label="Захищені папки" name="Protected Folders"/>
+	<menu_item_check label="Сортувати по імені" name="sort_by_name"/>
+	<menu_item_check label="Сортувати за датою" name="sort_by_recent"/>
+	<menu_item_check label="Сортувати папки на ім'я" name="sort_folders_by_name"/>
+	<menu_item_check label="Сортувати системні папки зверху" name="sort_system_folders_to_top"/>
+	<context_menu label="Шукати за..." name="inventory_search_menu">
+		<menu_item_check name="inventory_search_by_name" label="Названію"/>
+		<menu_item_check name="inventory_search_by_creator" label="Творцю"/>
+		<menu_item_check name="inventory_search_by_description" label="Описанію"/>
+		<menu_item_check name="inventory_search_by_all" label="Всему"/>
+	</context_menu>
+	<menu_item_check label="Додавання об'єктів з подвійного натискання" name="add_inv_toggle"/>
+	<menu_item_check label="Додавання одягу з подвійного натискання" name="add_invclothing_toggle"/>
+	<menu_item_call label="Показати фільтри..." name="show_filters"/>
+	<menu_item_call label="Скинути фільтр" name="reset_filters"/>
+	<menu_item_call label="Закрити всі папки" name="close_folders"/>
+	<menu_item_call label="Очистити 'Знайдені речі'" name="empty_lostnfound"/>
+	<menu_item_call label="Зберегти текстуру як" name="Save Texture As"/>
+	<menu_item_call label="Поділитися" name="Share"/>
+	<menu_item_call label="Знайти оригінал" name="Find Original"/>
+	<menu_item_call label="Знайти всі посилання" name="Find All Links"/>
+	<menu_item_call label="Замінити посилання" name="Replace Links"/>
+	<menu_item_check name="inventory_filter_show_links" label="Показати посилання"/>
+	<menu_item_check name="inventory_filter_only_links" label="Показати лише посилання"/>
+	<menu_item_check name="inventory_filter_hide_links" label="Приховати посилання"/>
+	<menu_item_check name="inventory_filter_only_modify" label="Тільки змінне"/>
+	<menu_item_check name="inventory_filter_only_copy" label="Тільки копіюване"/>
+	<menu_item_check name="inventory_filter_only_transfer" label="Показати передане"/>
+	<menu_item_check name="inventory_filter_coalesced_objects_only" label="Тільки об'єднані"/>
+	<menu_item_call label="Очистити кошик" name="empty_trash"/>
+</toggleable_menu>

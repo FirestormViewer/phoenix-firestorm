@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="BeamColor" title="Колір променя">
+	<floater.string name="start_hue">
+		Початковий колір
+	</floater.string>
+	<floater.string name="end_hue">
+		Кінцевий колір
+	</floater.string>
+	<text name="beamcolor_text">
+Використовуйте мишу, щоб вказати, який колір
+початковий, який кінцевий.
+Ліва кнопка миші для вибору початкового.
+Правою кнопкою миші для вибору кінцевого.
+	</text>
+	<color_swatch name="BeamColor_Preview" tool_tip="Натисніть, щоб відкрити палітру кольорів" />
+	<text name="beamcolor_text2">
+		Перегляд
+	</text>
+	<slider name="BeamColor_Speed" label="Швидкість циклу:" label_width="95" tool_tip="Вона контролює швидкість циклу зміни кольору" />
+	<button label="Зберегти" name="BeamColor_Save" />
+	<button label="Завантажити" name="BeamColor_Load" />
+	<button label="Скасувати" name="BeamColor_Cancel" />
+</floater>

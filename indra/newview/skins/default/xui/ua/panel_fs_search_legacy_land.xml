@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Продаж землі" name="panel_ls_land">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Введіть запит:
+		</text>
+		<combo_box name="land_category">
+			<combo_box.item label="Всі категорії" name="All" />
+			<combo_box.item label="Аукціон" name="Auction" />
+			<combo_box.item label="Земля на материку" name="Mainland" />
+			<combo_box.item label="Земля на острові" name="Estate" />
+		</combo_box>
+		<check_box label="Ціна &lt;" name="price_check" />
+		<line_editor left_pad="23" name="edit_price" />
+		<check_box label="Площа &gt;" name="area_check" />
+		<line_editor left_pad="32" name="edit_area" />
+		<text name="sort_text">
+			Сортувати за:
+		</text>
+		<check_box label="Зростання" name="ascending_check" />
+		<combo_box name="land_sort_combo">
+			<combo_box.item label="Назві" name="Name_item" />
+			<combo_box.item label="Ціни" name="Price_item" />
+			<combo_box.item label="Ціни за метр" name="PPM_item" />
+			<combo_box.item label="Площі" name="Area_item" />
+		</combo_box>
+		<button label="Пошук" name="land_find" />
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_land">
+			<columns label="Назва" name="land_name" />
+			<columns label="Ціна" name="price" />
+			<columns label="Площа" name="area" />
+			<columns label="Тип" name="land_type" />
+		</scroll_list>
+		<button label="Назад" name="land_back" />
+		<button label="Далі" name="land_next" />
+	</panel>
+</panel>

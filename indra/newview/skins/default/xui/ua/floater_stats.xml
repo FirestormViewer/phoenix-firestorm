@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Statistics" title="Статистика">
+	<scroll_container name="statistics_scroll">
+		<container_view name="statistics_view">
+			<stat_view label="Базова" name="basic">
+				<stat_bar label="Кадрів/с" name="fps"/>
+				<stat_bar name="frame_mean" label="кадр (значення)"/>
+				<stat_bar name="frame_median" label="кадр (середній)"/>
+				<stat_bar name="framet_jitter" label="тремтіння"/>
+				<stat_bar label="Ширина каналу" name="bandwidth"/>
+				<stat_bar label="Втрати пакетів" name="packet_loss"/>
+				<stat_bar label="Пінг" name="ping"/>
+			</stat_view>
+			<stat_view label="Додатково" name="advanced">
+				<stat_view label="Відображення" name="render">
+					<stat_bar label="Трикутників на кадр" name="ktrisframe"/>
+					<stat_bar label="Трикутників за секунду" name="ktrissec"/>
+					<stat_bar label="Усього об'єктів" name="objs"/>
+					<stat_bar label="Нових об'єктів" name="newobjs"/>
+					<stat_bar label="Частота потрапляння в кеш об'єктів" name="object_cache_hits"/>
+				</stat_view>
+				<stat_view label="Текстура" name="texture">
+					<stat_bar label="Частота потрапляння в кеш" name="texture_cache_hits"/>
+					<stat_bar label="Затримка читання кешу" name="texture_cache_read_latency"/>
+					<stat_bar label="Кількість" name="numimagesstat"/>
+					<stat_bar label="Необраб. зображень" name="numrawimagesstat"/>
+					<stat_bar label="Пам'ять GL" name="gltexmemstat"/>
+					<stat_bar label="Форматована пам'ять" name="formattedmemstat"/>
+					<stat_bar label="Неформатована пам'ять" name="rawmemstat"/>
+					<stat_bar label="Обмеження пам'яті" name="glboundmemstat"/>
+				</stat_view>
+				<stat_view label="Мережа" name="network">
+					<stat_bar label="Вхідні пакети" name="packetsinstat"/>
+					<stat_bar label="Вихідні пакети" name="packetsoutstat"/>
+					<stat_bar label="Об'єкти" name="objectkbitstat"/>
+					<stat_bar label="Текстура" name="texturekbitstat"/>
+					<stat_bar label="Актив" name="assetkbitstat"/>
+					<stat_bar label="Слои" name="layerskbitstat"/>
+					<stat_bar label="Дійсно введення" name="actualinkbitstat"/>
+					<stat_bar label="Справжній висновок" name="actualoutkbitstat"/>
+				</stat_view>
+			</stat_view>
+			<stat_view label="Симулятор" name="sim">
+				<stat_bar label="Уповільнення часу" name="simtimedilation"/>
+				<stat_bar label="Симуляція: кадри/с" name="simfps"/>
+				<stat_bar label="Фізика: кадри/с" name="simphysicsfps"/>
+				<stat_view label="Фізичні дані" name="physicsdetail">
+					<stat_bar label="Закріплені об'єкти" name="physicspinnedtasks"/>
+					<stat_bar label="Об'єкти з низькою деталізацією" name="physicslodtasks"/>
+					<stat_bar label="Виділена пам'ять" name="physicsmemoryallocated"/>
+				</stat_view>
+				<stat_bar label="Оновлення агента/с" name="simagentups"/>
+				<stat_bar label="Основні агенти" name="simmainagents"/>
+				<stat_bar label="Дочірні агенти" name="simchildagents"/>
+				<stat_bar label="Об'єкти" name="simobjects"/>
+				<stat_bar label="Активні об'єкти" name="simactiveobjects"/>
+				<stat_bar label="Активні скрипти" name="simactivescripts"/>
+				<stat_bar label="Запущені скрипти" name="simpctscriptsrun"/>
+				<stat_bar label="Події скрипту" name="simscripteps"/>
+				<stat_view label="Пошук шляху" name="simpathfinding">
+					<stat_bar label="Час кроку ІІ" name="simsimaistepmsec"/>
+					<stat_bar label="Пропущені силуетні кроки" name="simsimskippedsilhouettesteps"/>
+					<stat_bar label="Оновлені персонажі" name="simsimpctsteppedcharacters"/>
+				</stat_view>
+				<stat_bar label="Вхідні пакети" name="siminpps"/>
+				<stat_bar label="Вихідні пакети" name="simoutpps"/>
+				<stat_bar label="Відкладені завантаження" name="simpendingdownloads"/>
+				<stat_bar label="Відкладені передачі" name="simpendinguploads"/>
+				<stat_bar label="Загальний нерозпакований обсяг (байт)" name="simtotalunackedbytes"/>
+				<stat_view label="Час (мс)" name="simperf">
+					<stat_bar label="Загальний час кадру" name="simframemsec"/>
+					<stat_bar label="Чистий час" name="simnetmsec"/>
+					<stat_bar label="Час на фізику" name="simsimphysicsmsec"/>
+					<stat_bar label="Час на симуляцію" name="simsimothermsec"/>
+					<stat_bar label="Час на клієнт" name="simagentmsec"/>
+					<stat_bar label="Час на зображення" name="simimagesmsec"/>
+					<stat_bar label="Час на скрипт" name="simscriptmsec"/>
+					<stat_bar label="Резервний час" name="simsparemsec"/>
+					<stat_view label="Дані часу (мс)" name="timedetails">
+						<stat_bar label="Крок фізики" name="simsimphysicsstepmsec"/>
+						<stat_bar label="Оновити фіз. форми" name="simsimphysicsshapeupdatemsec"/>
+						<stat_bar label="Фізика - інше" name="simsimphysicsothermsec"/>
+						<stat_bar label="Час сну" name="simsleepmsec"/>
+						<stat_bar label="Введення/виведення" name="simpumpiomsec"/>
+					</stat_view>
+				</stat_view>
+			</stat_view>
+		</container_view>
+	</scroll_container>
+</floater>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Учасники та ролі" name="roles_tab">
+	<panel.string name="default_needs_apply_text">
+		Панель містить незбережені зміни
+	</panel.string>
+	<panel.string name="want_apply_text">
+		Бажаєте зберегти зміни?
+	</panel.string>
+	<tab_container name="roles_tab_container">
+		<panel label="Учасники" name="members_sub_tab" tool_tip="Учасники">
+			<panel.string name="help_text">
+				Ви можете додавати та видаляти функції, покладені на людей.
+Ви можете вибрати кілька людей, натиснувши Ctrl та натиснувши на їх імена.
+			</panel.string>
+			<filter_editor label="Фільтр учасників" name="filter_input"/>
+			<name_list name="member_list">
+				<name_list.columns label="Ім'я" name="name"/>
+				<name_list.columns label="Вклад" name="donated"/>
+				<name_list.columns label="Статус" name="online"/>
+				<name_list.columns label="Титул" name="title"/>
+			</name_list>
+			<button label="Запросити" name="member_invite"/>
+			<button label="Викинути" name="member_eject"/>
+			<button label="Забанити" name="member_ban"/>
+			<button name="export_list" label="Експорт списку"/>
+		</panel>
+		<panel label="Ролі" name="roles_sub_tab">
+			<panel.string name="help_text">
+				Ролям присвоюються назва та привілеї
+які виконують певну функцію. Будь-яка людина може мати
+одну чи більше ролей. Кожна група може мати до 10 ролей,
+у тому числі роль &quot;Всі&quot; та &quot;Власник&quot;.
+			</panel.string>
+			<panel.string name="cant_delete_role">
+				Ролі &quot;Всі&quot; та &quot;Власник&quot; є спеціальними та не можуть бути видалені.
+			</panel.string>
+			<filter_editor label="Фільтр ролей" name="filter_input"/>
+			<scroll_list name="role_list">
+				<scroll_list.columns label="Роль" name="name"/>
+				<scroll_list.columns label="Титул" name="title"/>
+			</scroll_list>
+			<button label="Нова роль" name="role_create"/>
+			<button label="Копіювати роль" name="role_copy"/>
+			<button label="Удалить роль" name="role_delete"/>
+		</panel>
+		<panel label="Привілеї" name="actions_sub_tab" tool_tip="Можна переглянути опис привілею, а також які учасники та ролі нею володіють.">
+			<panel.string name="help_text">
+				Привілеї дозволяють учасникам, яким призначено відповідні ролі, виконувати особливі
+Події групи. Є широкий вибір можливостей.
+			</panel.string>
+			<filter_editor label="Фільтр привілеїв" name="filter_input"/>
+			<scroll_list name="action_list" tool_tip="Виберіть привілей, щоб переглянути дані про неї"/>
+		</panel>
+		<panel label="Забанені" name="banlist_sub_tab" tool_tip="Подивитися, які мешканці забанені в цій групі.">
+			<panel.string name="help_text">
+				Якщо користувач у списку забанених, він не зможе приєднатися до групи.
+			</panel.string>
+			<panel.string name="ban_count_template">
+				Забанено: [COUNT]/[LIMIT]
+			</panel.string>
+			<filter_editor label="Фільтр Забанених" name="filter_input"/>
+			<name_list name="ban_list">
+				<name_list.columns label="Житель" name="name"/>
+				<name_list.columns label="Забанен" name="ban_date"/>
+			</name_list>
+			<button label="Забанити" name="ban_create" tool_tip="Забанити користувача групи"/>
+			<button label="Розбанити" name="ban_delete" tool_tip="Розбанити вибраного користувача в групі"/>
+			<button name="ban_refresh" tool_tip="Оновити список"/>
+		</panel>
+	</tab_container>
+	<panel name="members_footer">
+		<text name="assigned_roles_label">
+			Ролі
+		</text>
+		<text name="static2">
+			Привілеї
+		</text>
+		<scroll_list name="member_allowed_actions" tool_tip="Щоб побачити детальну інформацію, виберіть привілей"/>
+	</panel>
+	<panel name="members_header">
+		<text_editor name="member_action_description">
+			Це можливість «Виключення учасників із групи». Власника може виключити лише інший власник.
+		</text_editor>
+	</panel>
+	<panel name="roles_footer">
+		<text name="role_name_label">
+			Роль
+		</text>
+		<text name="role_title_label">
+			Титул ролі
+		</text>
+		<check_box label="Показувати учасників" name="role_visible_in_list" tool_tip="Визначає, чи будуть учасники цієї ролі видні на вкладці 'Основні' жителям, які не входять до групи."/>
+		<text name="description_label">
+			Опис
+		</text>
+		<panel name="group_roles_layout_panel">
+			<text name="assigned_members_label">
+				Призначений учасник
+			</text>
+		</panel>
+		<panel name="group_roles_layout_panel2">
+			<text name="allowed_abilities_label">
+				Допустимі привілеї
+			</text>
+			<scroll_list name="role_allowed_actions" tool_tip="Щоб побачити детальну інформацію про привілей, перейдіть у вкладку 'Привілеї'"/>
+		</panel>
+	</panel>
+	<panel name="roles_header">
+		<text_editor name="role_action_description">
+			Це можливість «Виключення учасників із групи». Власника може виключити лише інший власник.
+		</text_editor>
+	</panel>
+	<panel name="actions_footer">
+		<panel name="action_description_panel">
+			<text_editor name="action_description">
+				Привілей &apos;Видалити учасника з групи&apos;. Тільки власник може вилучити іншого власника.
+			</text_editor>
+		</panel>
+		<text name="action_roles_label">
+			Ролі з цим привілеєм
+		</text>
+		<text name="action_members_label">
+			Учасники з цим привілеєм
+		</text>
+	</panel>
+</panel>

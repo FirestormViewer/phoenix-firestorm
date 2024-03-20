@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="price_for_listing" title="Публікаційна реклама">
+	<text name="explanation_text">
+		Ваше оголошення відображатиметься протягом одного тижня з дня публікації.
+
+Позиція оголошення у списку залежить від того, скільки ви платите за це.
+
+Кращі платні оголошення з'являються вгорі та вище в результатах пошуку.
+	</text>
+	<text name="price_text">
+		Задати ціну:
+	</text>
+	<button label="Скасувати" name="cancel_btn"/>
+</floater>

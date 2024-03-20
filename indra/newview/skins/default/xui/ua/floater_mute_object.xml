@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="block by name" title="Заблокувати об'єкт за назвою">
+	<text name="message">
+		Заблокувати об'єкт:
+	</text>
+	<line_editor name="object_name">
+		Назва об'єкту
+	</line_editor>
+	<text name="note">
+		* Блокуються лише повідомлення об'єкта, але не звуки
+	</text>
+	<button label="Скасувати" name="Cancel"/>
+</floater>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_snapshot_postcard">
+	<string name="default_subject">
+		Листівка з [SECOND_LIFE].
+	</string>
+	<string name="default_message">
+		Погляньте на це!
+	</string>
+	<string name="upload_message">
+		Відправлення...
+	</string>
+	<tab_container name="postcard_tabs">
+		<panel label="повідомлення" name="panel_postcard_message" />
+		<panel label="Налаштування" name="panel_postcard_settings" />
+	</tab_container>
+	<button label="&#x25B6; Вибір" name="cancel_btn" />
+	<button label="Відправити" name="send_btn" />
+</panel>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_notes" label="Нотатки &amp; Приватність">
+    <text name="status_message" value="Робіть нотатки про цю людину. Ніхто їх не побачить."/>
+    <button name="notes_save_changes" label="Зберегти"/>
+    <button name="notes_discard_changes" label="Скасування"/>
+</panel>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Toybox" title="Кнопки панелі інструментів">
+	<text name="toybox label 1">
+		Додайте або видаліть кнопки, перетягуючи їх на панелі інструментів або з них.
+	</text>
+	<text name="toybox label 2">
+		Кнопки відображатимуться у вихідному вигляді або у вигляді піктограм, залежно від налаштувань кожної панелі інструментів.
+	</text>
+	<button label="Очистити всі панелі" label_selected="Очистити всі панелі" name="btn_clear_all"/>
+	<button label="Повернути стандартні" label_selected="Повернути стандартні" name="btn_restore_defaults"/>
+	<check_box name="check_toolbars_locked" label="Закріпити" tool_tip="Встановіть цей прапорець, щоб заблокувати панелі інструментів, щоб кнопки не могли бути витягнуті або видалені випадково."/>
+</floater>

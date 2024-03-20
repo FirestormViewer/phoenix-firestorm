@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_tattoo_panel">
+	<scroll_container name="avatar_tattoo_scroll">
+		<panel name="avatar_tattoo_color_panel">
+			<texture_picker label="Тату: Голова" name="Head Tattoo" tool_tip="Натисніть, щоб вибрати зображення"/>
+			<texture_picker label="Тату: Верх тіла" name="Upper Tattoo" tool_tip="Натисніть, щоб вибрати зображення"/>
+			<texture_picker label="Тату: Низ тіла" name="Lower Tattoo" tool_tip="Натисніть, щоб вибрати зображення"/>
+			<color_swatch label="Колір" name="Color/Tint" tool_tip="Натисніть, щоб вибрати колір"/>
+		</panel>
+	</scroll_container>
+</panel>

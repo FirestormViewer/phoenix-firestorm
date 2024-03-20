@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="friends">
+	<layout_stack name="ls_friend_list">
+		<layout_panel name="lp_search">
+			<filter_editor label="Фільтр друзів" name="friend_filter_input"/>
+		</layout_panel>
+		<layout_panel name="lp_friend_list">
+			<fs_scroll_list name="friend_list">
+				<fs_scroll_list.column name="icon_online_status" tool_tip="Статус у мережі"/>
+				<fs_scroll_list.column label="Ім'я" name="user_name" tool_tip="Ім'я користувача"/>
+				<fs_scroll_list.column label="Відображається" name="display_name" tool_tip="Відображуване ім'я"/>
+				<fs_scroll_list.column label="Повне ім'я" name="full_name" tool_tip="Повне ім'я користувача"/>
+				<fs_scroll_list.column name="icon_visible_online" tool_tip="Друг може бачити, що ви в мережі"/>
+				<fs_scroll_list.column name="icon_visible_map" tool_tip="Друг може шукати вас на мапі світу"/>
+				<fs_scroll_list.column name="icon_edit_mine" tool_tip="Друг може редагувати, видаляти або брати об'єкти"/>
+				<fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="Ви можете знайти на мапі"/>
+				<fs_scroll_list.column name="icon_edit_theirs" tool_tip="Ви можете редагувати, видаляти або брати об'єкти друга"/>
+			</fs_scroll_list>
+		</layout_panel>
+	</layout_stack>
+	<button label="ОП/Дзвінок" name="im_btn" tool_tip="Надіслати особисте повідомлення (ОП)"/>
+	<button label="Профіль" name="profile_btn" tool_tip="Показати профіль"/>
+	<button label="Телепорт..." name="offer_teleport_btn" tool_tip="Запропонувати телепортування до вас"/>
+	<button label="Мапа..." name="map_btn" tool_tip="Показати розташування друга на мапі світу"/>
+	<button label="Заплатити..." name="pay_btn" tool_tip="Передати гроші(L$)"/>
+	<button label="Видалити..." name="remove_btn" tool_tip="Видалити зі списку друзів"/>
+	<button label="Додати..." name="add_btn" tool_tip="Запропонувати дружбу користувачеві"/>
+	<text name="friend_count">
+	Друзі: [COUNT]
+	</text>
+</panel>

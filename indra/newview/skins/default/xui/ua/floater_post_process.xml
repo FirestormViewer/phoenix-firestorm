@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Post-Process Floater" title="Налаштування подальшої обробки">
+	<tab_container name="Вкладки після обробки">
+		<panel label="Кольоровий фільтр" name="wmiColorFilterPanel">
+			<check_box label="Вкл." name="wmiColorFilterToggle"/>
+			<text name="wmiColorFilterBrightnessText">
+				Яскравість
+			</text>
+			<text name="wmiColorFilterSaturationText">
+				Насиченість
+			</text>
+			<text name="wmiColorFilterContrastText">
+				Контрастність
+			</text>
+			<text name="wmiColorFilterBaseText">
+				Основний колір контрастності
+			</text>
+			<slider label="Ч" name="wmiColorFilterBaseR"/>
+			<slider label="З" name="wmiColorFilterBaseG"/>
+			<slider label="С" name="wmiColorFilterBaseB"/>
+			<slider label="И" name="wmiColorFilterBaseI"/>
+		</panel>
+		<panel label="Нічне бачення" name="wmiNightVisionPanel">
+			<check_box label="Вкл." name="wmiNightVisionToggle"/>
+			<text name="wmiNightVisionBrightMultText">
+				Коефіцієнт посилення світла
+			</text>
+			<text name="wmiNightVisionNoiseSizeText">
+				Розмір спотворень
+			</text>
+			<text name="wmiNightVisionNoiseStrengthText">
+				Потужність спотворень
+			</text>
+		</panel>
+		<panel label="Ореол" name="wmiBloomPanel">
+			<check_box label="Вкл." name="wmiBloomToggle"/>
+			<text name="wmiBloomExtractText">
+				Яскравість світла
+			</text>
+			<text name="wmiBloomSizeText">
+				Розмір ореола
+			</text>
+			<text name="wmiBloomStrengthText">
+				Потужність ореолу
+			</text>
+		</panel>
+		<panel label="Додатково" name="Extras">
+			<button label="Завантажити ефект" label_selected="Завантажити ефект" name="PPLoadEffect" width="120"/>
+			<button label="Зберегти ефект" label_selected="Зберегти ефект" name="PPSaveEffect" width="120"/>
+			<combo_box left_delta="130" name="PPEffectsCombo"/>
+			<line_editor label="Назва ефекту" name="PPEffectNameEditor"/>
+		</panel>
+	</tab_container>
+</floater>

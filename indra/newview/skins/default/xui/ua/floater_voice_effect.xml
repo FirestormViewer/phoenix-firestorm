@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater label="Місця" name="voice_effects" title="Зміна голосу">
+	<string name="no_voice_effect">
+		(Немає зміни голосу)
+	</string>
+	<string name="active_voice_effect">
+		(Активно)
+	</string>
+	<string name="unsubscribed_voice_effect">
+		(Немає передплати)
+	</string>
+	<string name="new_voice_effect">
+		(Новий!)
+	</string>
+	<string name="effect_Arena">
+		Arena
+	</string>
+	<string name="effect_Beast">
+		Beast
+	</string>
+	<string name="effect_Buff">
+		Buff
+	</string>
+	<string name="effect_Buzz">
+		Buzz
+	</string>
+	<string name="effect_Camille">
+		Camille
+	</string>
+	<string name="effect_Creepy">
+		Creepy
+	</string>
+	<string name="effect_CreepyBot">
+		CreepyBot
+	</string>
+	<string name="effect_Cyber">
+		Cyber
+	</string>
+	<string name="effect_DeepBot">
+		DeepBot
+	</string>
+	<string name="effect_Demon">
+		Demon
+	</string>
+	<string name="effect_Female Elf">
+		Фея
+	</string>
+	<string name="effect_Flirty">
+		Flirty
+	</string>
+	<string name="effect_Foxy">
+		Foxy
+	</string>
+	<string name="effect_Halloween 2010 Bonus">
+		Halloween 2010 Bonus
+	</string>
+	<string name="effect_Helium">
+		Helium
+	</string>
+	<string name="effect_Husky">
+		Husky
+	</string>
+	<string name="effect_Husky Whisper">
+		Хрипкий шепіт
+	</string>
+	<string name="effect_Intercom">
+		Внутрішній зв'язок
+	</string>
+	<string name="effect_Julia">
+		Julia
+	</string>
+	<string name="effect_Lo Lilt">
+		Наспівуючи
+	</string>
+	<string name="effect_Macho">
+		Macho
+	</string>
+	<string name="effect_Micro">
+		Micro
+	</string>
+	<string name="effect_Mini">
+		Mini
+	</string>
+	<string name="effect_Model">
+		Модель
+	</string>
+	<string name="effect_Nano">
+		Nano
+	</string>
+	<string name="effect_Nightmare">
+		Nightmare
+	</string>
+	<string name="effect_PopBot">
+		PopBot
+	</string>
+	<string name="effect_Rachel">
+		Rachel
+	</string>
+	<string name="effect_Radio">
+		Radio
+	</string>
+	<string name="effect_Robot">
+		Robot
+	</string>
+	<string name="effect_Roxanne">
+		Roxanne
+	</string>
+	<string name="effect_Rumble">
+		Бурчання
+	</string>
+	<string name="effect_Sabrina">
+		Sabrina
+	</string>
+	<string name="effect_Samantha">
+		Samantha
+	</string>
+	<string name="effect_Sexy">
+		Sexy
+	</string>
+	<string name="effect_Shorty">
+		Shorty
+	</string>
+	<string name="effect_Smaller">
+		Менше
+	</string>
+	<string name="effect_Sneaky">
+		Sneaky
+	</string>
+	<string name="effect_Stallion">
+		Stallion
+	</string>
+	<string name="effect_Sultry">
+		Sultry
+	</string>
+	<string name="effect_Thunder">
+		Thunder
+	</string>
+	<string name="effect_Vixen">
+		Vixen
+	</string>
+	<string name="effect_WhinyBot">
+		WhinyBot
+	</string>
+	<text name="preview_text">
+		Прослуховування
+	</text>
+	<text name="status_text">
+		Запишіть зразок, потім натисніть, щоб почути, як звучатиме голос.
+	</text>
+	<button label="Запис" name="record_btn" tool_tip="Записати зразок вашого голосу."/>
+	<button label="Стоп" name="record_stop_btn"/>
+	<text name="voice_morphing_link">
+		[[URL] Підписатися]
+	</text>
+	<scroll_list name="voice_effect_list" tool_tip="Запишіть зразок вашого голосу, потім натисніть, щоб прослухати ефект.">
+		<scroll_list.columns label="Назва голосу" name="name"/>
+		<scroll_list.columns label="Спливає" name="expires"/>
+	</scroll_list>
+</floater>

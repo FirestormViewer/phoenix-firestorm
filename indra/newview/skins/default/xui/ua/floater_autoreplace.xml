@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="autoreplace_floater" title="Налаштування автозаміни">
+	<check_box label="Увімкнути автозаміну" name="autoreplace_enable" tool_tip="У чаті по мірі введення тексту ключові слова будуть замінюватися відповідними замінниками"/>
+	<button label="Імпорт списку..." name="autoreplace_import_list" tool_tip="Завантажити раніше експортований список із файлу."/>
+	<button label="Експорт списку..." name="autoreplace_export_list" tool_tip="Зберегти вибраний список у файл для подальшого розповсюдження."/>
+	<button label="Новий список..." name="autoreplace_new_list" tool_tip="Створити новий список."/>
+	<button label="Видалити список" name="autoreplace_delete_list" tool_tip="Видалити вибраний список."/>
+	<button name="autoreplace_list_up" tool_tip="Підвищити пріоритет списку."/>
+	<button name="autoreplace_list_down" tool_tip="Зменшити пріоритет списку."/>
+	<scroll_list name="autoreplace_list_replacements">
+		<scroll_list.columns label="Ключове слово" name="keyword"/>
+		<scroll_list.columns label="Замена" name="replacement"/>
+	</scroll_list>
+	<button label="Добавить..." name="autoreplace_add_entry"/>
+	<button label="Видалити" name="autoreplace_delete_entry"/>
+	<text name="autoreplace_keyword_txt">
+		Ключове слово:
+	</text>
+	<text name="autoreplace_replacement_txt">
+		Заміна:
+	</text>
+	<button label="Зберегти запис" name="autoreplace_save_entry" tool_tip="Зберегти цей запис."/>
+	<button label="Зберегти зміни" name="autoreplace_save_changes" tool_tip="Зберегти всі зміни."/>
+	<button label="Скасувати" name="autoreplace_cancel" tool_tip="Отменить все изменения."/>
+</floater>

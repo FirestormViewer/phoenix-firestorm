@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Multi-Selected People Context Menu">
+	<menu_item_call label="Додати до друзів" name="Add Friends"/>
+	<menu_item_call label="Додати до набору контактів" name="Add to Set"/>
+	<menu_item_call label="Видалити з друзів" name="Remove Friend"/>
+	<menu_item_call label="Надіслати ОП" name="IM"/>
+	<menu_item_call label="Дзвінок" name="Call"/>
+	<menu name="MarkAvatar" label="Позначити...">
+		<menu_item_call label="Червоний" name="MarkRed"/>
+		<menu_item_call label="Зелений" name="MarkGreen"/>
+		<menu_item_call label="Блакитним" name="MarkBlue"/>
+		<menu_item_call label="Фіолетовим" name="MarkPurple"/>
+		<menu_item_call label="Жовтим" name="MarkYellow"/>
+		<menu_item_call label="Видалити мітку" name="Clear Mark"/>
+		<menu_item_call label="Видалити всі мітки" name="Clear Marks"/>
+	</menu>
+	<menu_item_call label="Поділитися" name="Share"/>
+	<menu_item_call label="Заплатити" name="Pay"/>
+	<menu_item_call label="Запропонувати телепорт" name="teleport"/>
+	<menu_item_call label="Заморозити" name="freeze"/>
+	<menu_item_call label="Дільниця: Викинути з землі" name="eject"/>
+	<menu_item_call label="Острів: Викинути" name="kick"/>
+	<menu_item_call label="Острів: Надіслати додому" name="teleport_home"/>
+	<menu_item_call label="Острів: Заблокувати" name="estate_ban"/>
+	<menu_item_call label="Не відображати" name="derender"/>
+	<menu_item_call label="Не відображати завжди" name="derender_permanent"/>
+	<menu label="Налаштування відображення" name="render_settings">
+		<menu_item_call label="Відображати Нормально" name="av_render_normal"/>
+		<menu_item_call label="Не відображати" name="av_render_never"/>
+		<menu_item_call label="Відображати Повністю" name="av_render_always"/>
+	</menu>
+</context_menu>

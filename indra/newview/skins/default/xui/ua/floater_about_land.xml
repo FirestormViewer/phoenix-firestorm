@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floaterland" title="Про землю">
+    <floater.string name="Hours">
+        [HOURS] ч
+    </floater.string>
+    <floater.string name="Hour">
+        ч.
+    </floater.string>
+    <floater.string name="Minutes">
+        [MINUTES] хв.
+    </floater.string>
+    <floater.string name="Minute">
+        хв.
+    </floater.string>
+    <floater.string name="Seconds">
+        [SECONDS] с.
+    </floater.string>
+    <floater.string name="Remaining">
+        залишилося
+    </floater.string>
+    <floater.string name="Always">
+        Завжди
+    </floater.string>
+    <tab_container name="landtab">
+        <panel label="Спільне" name="land_general_panel">
+            <panel.string name="new users only">
+                Тільки нові мешканці
+            </panel.string>
+            <panel.string name="anyone">
+                Хто завгодно
+            </panel.string>
+            <panel.string name="area_text">
+                Площа
+            </panel.string>
+            <panel.string name="area_size_text">
+                [ПЛОЩА] м²
+            </panel.string>
+            <panel.string name="auction_id_text">
+                ID аукціон: [ID]
+            </panel.string>
+            <panel.string name="need_tier_to_modify">
+                Ви повинні підтвердити покупку, щоб змінити цю землю.
+            </panel.string>
+            <panel.string name="group_owned_text">
+                (Власність групи)
+            </panel.string>
+            <panel.string name="profile_text">
+                Профіль
+            </panel.string>
+            <panel.string name="info_text">
+                Інформація
+            </panel.string>
+            <panel.string name="public_text">
+                (публічне)
+            </panel.string>
+            <panel.string name="none_text">
+                (ні)
+            </panel.string>
+            <panel.string name="sale_pending_text">
+                (Чекання продажу)
+            </panel.string>
+            <panel.string name="no_selection_text">
+                Ділянка не обрана.
+            </panel.string>
+            <panel.string name="time_stamp_template">
+                [wkday,datetime,slt], [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+            </panel.string>
+            <panel.string name="error_resolving_uuid">
+                UUID ділянки не може бути виправлено.
+            </panel.string>
+            <text name="Name:">
+                Назва:
+            </text>
+            <text name="UUID:">
+                UUID ділянки:
+            </text>
+            <text name="Description:">
+                Опис:
+            </text>
+            <text name="LandType">
+                тип:
+            </text>
+            <text name="LandTypeText">
+                Материк / Садиба
+            </text>
+            <text name="ContentRating">
+                Рейтинг:
+            </text>
+            <text name="ContentRatingText">
+                Для дорослих
+            </text>
+            <text name="Owner:">
+                Власник:
+            </text>
+            <text name="OwnerText">
+                Завантаження...
+            </text>
+            <text name="Group:">
+                Група:
+            </text>
+            <text name="GroupText">
+                Завантаження...
+            </text>
+            <button label="Задати" name="Set..."/>
+            <check_box label="Дозволити передачу землі групі" name="check deed" tool_tip="Посадова особа групи може передати цю землю групі з урахуванням існуючого внеску." />
+            <button label="Передати" name="Deed..." tool_tip="Ви можете передати землю тільки якщо ви є посадовцем обраної групи."/>
+            <check_box label="Власник робить внески під час передачі" name="check contrib" tool_tip="Коли земля передається групі, колишній власник робить внесок, достатній для підтримки землі."/>
+            <text name="Продається:">
+                Для продажу:
+            </text>
+            <text name="Not for sale.">
+                Не для продажу
+            </text>
+            <text name="For Sale: Price L$[PRICE].">
+                Ціна: [PRICE] L$ ([PRICE_PER_SQM] L$/м²)
+            </text>
+            <text name="SalePending"/>
+            <button label="Продати землю" name="Sell Land..."/>
+            <text name="For sale to">
+                У продажу: [BUYER]
+            </text>
+            <text name="Sell with landowners objects in parcel.">
+                Об'єкти включені у продаж
+            </text>
+            <text name="Selling with no objects in parcel.">
+                Об'єкти не включені у продаж
+            </text>
+            <button label="Скасувати продаж" label_selected="Скасувати продаж" name="Cancel Land Sale" />
+            <text name="Claimed:">
+                Власність із:
+            </text>
+            <text name="PriceLabel">
+                Площа:
+            </text>
+            <text name="PriceText">
+                4048 м²
+            </text>
+            <text name="Traffic:">
+                Трафік:
+            </text>
+            <text name="DwellText">
+                Завантаження...
+            </text>
+            <button label="Купити землю" name="Buy Land..."/>
+            <button label="Продаж Linden" name="Linden Sale..." tool_tip="Земля має бути у власності, мати заданий вміст і не бути виставленою на аукціон." />
+            <button label="Інформація про скрипти" name="Scripts..."/>
+            <button label="Купити для групи" name="Buy For Group..." />
+            <button label="Купити пропуск" name="Buy Pass..." tool_tip="Пропуск дає вам тимчасовий доступ на цю землю." />
+            <button label="Відмовитися від землі" name="Abandon Land..." />
+            <button label="Повернути землю" name="Reclaim Land..."/>
+        </panel>
+        <panel label="Treaty" name="land_covenant_panel">
+            <panel.string name="can_resell">
+                Земля цього регіону може бути перепродана.
+            </panel.string>
+            <panel.string name="can_not_resell">
+                Земля цього регіону не може бути перепродана.
+            </panel.string>
+            <panel.string name="can_change">
+                Земля цього регіону може бути об'єднана чи поділена.
+            </panel.string>
+            <panel.string name="can_not_change">
+                Земля цього регіону може бути об'єднана чи розділена.
+            </panel.string>
+            <text name="estate_section_lbl">
+                Острів:
+            </text>
+            <text name="estate_name_text">
+                Материк
+            </text>
+            <text name="estate_owner_lbl">
+                Власник:
+            </text>
+            <text name="exte_owner_text">
+                (ні)
+            </text>
+            <text_editor name="covenant_editor">
+                Для цього острова немає договору.
+            </text_editor>
+            <text name="covenant_timestamp_text">
+                Останнє змінення Wed Dec 31 16:00:00 1969
+            </text>
+            <text name="region_section_lbl">
+                регіон:
+            </text>
+            <text name="region_name_text">
+                Завантаження...
+            </text>
+            <text name="region_landtype_lbl">
+                тип:
+            </text>
+            <text name="region_landtype_text">
+                Материк / Садиба
+            </text>
+            <text name="region_maturity_lbl">
+                Рейтинг:
+            </text>
+            <text name="region_maturity_text">
+                Для дорослих
+            </text>
+            <text name="resellable_lbl">
+                Перепродажа:
+            </text>
+            <text name="resellable_clause">
+                Земля в цьому регіоні не може бути перепродана
+            </text>
+            <text name="changeable_lbl">
+                Поділ:
+            </text>
+            <text name="changeable_clause">
+                Земля у цьому регіоні не може бути об'єднана чи поділена.
+            </text>
+        </panel>
+        <panel label="Об'єкти" name="land_objects_panel">
+            <panel.string name="objects_available_text">
+                [COUNT] із [MAX] (доступно: [AVAILABLE])
+            </panel.string>
+            <panel.string name="objects_deleted_text">
+                [COUNT] з [MAX] (вилучено: [DELETED])
+            </panel.string>
+            <text name="parcel_object_bonus">
+                Бонусний множник для об'єктів: [BONUS]
+            </text>
+            <text name="Simulator primitive usage:">
+               Місткість регіону:
+            </text>
+            <text name="objects_available">
+                [COUNT] із [MAX] (доступно: [AVAILABLE])
+            </text>
+            <text name="Primitives parcel supports:">
+                Місткість ділянки:
+            </text>
+            <text name="Primitives on parcel:">
+                Ділянкою використано:
+            </text>
+            <text name="Owned by parcel owner:">
+                Власність власника:
+            </text>
+            <button label="Показати" label_selected="Показати" name="ShowOwner"/>
+            <button label="Повернути" name="ReturnOwner..." tool_tip="Повернути об'єкти їхнім власникам."/>
+            <text name="Set to group:">
+                Встановлено групою:
+            </text>
+            <button label="Показати" label_selected="Показати" name="ShowGroup"/>
+            <button label="Повернути" name="ReturnGroup..." tool_tip="Повернути об'єкти їхнім власникам."/>
+            <text name="Owned by others:">
+                Власність інших:
+            </text>
+            <button label="Показати" label_selected="Показати" name="ShowOther"/>
+            <button label="Повернути" name="ReturnOther..." tool_tip="Повернути об'єкти їхнім власникам."/>
+            <text name="Selected / sat upon:">
+                Вибрано / Наведено:
+            </text>
+            <text name="Autoreturn">
+                Автоповернення об'єктів користувачам (у хвилинах, 0 - вимкнено):
+            </text>
+            <text name="Object Owners:">
+                Власники об'єктів:
+            </text>
+            <button name="Refresh List" tool_tip="Оновити список об'єктів"/>
+            <button label="Повернути об'єкти" name="Return objects..."/>
+            <name_list name="owner list">
+                <name_list.columns label="Тип" name="type" />
+                <name_list.columns label="Імя" name="name" />
+                <name_list.columns label="Штук" name="count"/>
+                <name_list.columns label="Останній" name="mostrecent" />
+            </name_list>
+        </panel>
+        <panel label="Налаштування" name="land_options_panel">
+            <panel.string name="search_enabled_tooltip">
+                Дозволити людям бачити ділянку у результатах пошуку
+            </panel.string>
+            <panel.string name="search_disabled_small_tooltip">
+                Ця функція недоступна через те, що площа ділянки 128 м² або менше.
+Лише ділянки з більшою площею можуть бути доступні у пошуку.
+            </panel.string>
+            <panel.string name="search_disabled_permissions_tooltip">
+                Ця опція недоступна, тому що ви не можете змінити параметри цієї ділянки
+            </panel.string>
+            <panel.string name="mature_check_mature">
+                Помірний вміст
+            </panel.string>
+            <panel.string name="mature_check_adult">
+                Вміст для дорослих
+            </panel.string>
+            <panel.string name="mature_check_mature_tooltip">
+                Можливо, інформація про вашу ділянку або вміст вважається помірним.
+            </panel.string>
+            <panel.string name="mature_check_adult_tooltip">
+                Можливо, інформація про вашу ділянку або вміст вважається для дорослих.
+            </panel.string>
+            <panel.string name="landing_point_none">
+                (ні)
+            </panel.string>
+            <panel.string name="push_restrict_text">
+                Не штовхати
+            </panel.string>
+            <panel.string name="push_restrict_region_text">
+                Не штовхати (Заздалегідь встановлено регіоном)
+            </panel.string>
+            <panel.string name="DirectoryFree">
+                Показати місце у пошуку
+            </panel.string>
+            <panel.string name="DirectoryFee">
+                Показати це місце в пошуку (L$[DIRECTORY_FEE]/тиждень)
+            </panel.string>
+            <text name="allow_label">
+                Дозволити іншим мешканцям:
+            </text>
+            <text name="allow_label1" width="150">
+                Редагувати ландшафт:
+            </text>
+            <check_box label="Всі" name="edit land check" tool_tip="Якщо галочка встановлена, будь-яка може змінити ландшафт вашої землі. Найкраще залишити це без змін."/>
+            <text name="caution_text">
+                (Використовувати з обережністю!)
+            </text>
+            <text name="allow_label0">
+                Літати:
+            </text>
+            <check_box label="Всі" name="check fly" tool_tip="Якщо галочка встановлена, мешканці можуть літати на вашій землі. Якщо галочка не встановлена, вони можуть літати тільки за межами вашої ділянки"/>
+            <text name="allow_label2">
+                Будувати:
+            </text>
+            <check_box label="Всі" name="edit objects check" tool_tip="Якщо встановлено прапорець, жителі можуть створювати та викладати об'єкти на вашій землі."/>
+            <check_box label="Група" name="edit group objects check" tool_tip="Якщо встановлено прапорець, то жителі можуть створювати та викладати об'єкти на вашій землі."/>
+            <text name="allow_label3">
+                Викладати об'єкти:
+            </text>
+            <check_box label="Всі" name="all object entry check" tool_tip="Якщо встановлено прапорець, то жителі можуть переміщати існуючі об'єкти з інших ділянок на цю ділянку."/>
+            <check_box label="Група" name="group object entry check" tool_tip="Якщо встановлено прапорець, члени групи ділянки можуть переміщати існуючі об'єкти з інших ділянок на цю ділянку."/>
+            <text name="allow_label4">
+                Запускати скрипти:
+            </text>
+            <check_box label="Всі" name="check other scripts" tool_tip="Якщо встановлено прапорець, жителі можуть виконувати скрипти на вашій ділянці, включаючи програми."/>
+            <check_box label="Група" name="check group scripts" tool_tip="Якщо встановлено прапорець, члени групи можуть виконувати скрипти на вашій ділянці, включаючи програми."/>
+            <check_box label="Безпечно (немає пошкоджень)" name="check safe" tool_tip="Якщо прапорець встановлений, то земля вважається безпечною, відключені бойові пошкодження. Якщо прапорець не стоїть, то бойові пошкодження включені." />
+            <check_box label="Не штовхати" name="PushRestrictCheck" tool_tip="Забороняє скриптам функцію штовхання. Цей параметр може бути корисним для запобігання небажаній поведінці на вашій землі." />
+            <check_box label="Показати це місце в пошуку (L$30/тиждень)" name="ShowDirectoryCheck" tool_tip="Дозволити людям бачити ділянку в результатах пошуку" />
+            <combo_box name="категорія землі">
+                <combo_box.item label="Будь-яка категорія" name="item0" />
+                <combo_box.item label="Linden Location" name="item1" />
+                <combo_box.item label="Мистецтво та культура" name="item3" />
+                <combo_box.item label="Бізнес" name="item4"/>
+                <combo_box.item label="Освіта" name="item5"/>
+                <combo_box.item label="Ігри" name="item6" />
+                <combo_box.item label="Місця зустрічей" name="item7"/>
+                <combo_box.item label="Для новачків" name="item8" />
+                <combo_box.item label="Парки та природа" name="item9" />
+                <combo_box.item label="Проживання" name="item10" />
+                <combo_box.item label="Покупка товарів" name="item11"/>
+                <combo_box.item label="Оренда" name="item13" />
+                <combo_box.item label="Інше" name="item12" />
+            </combo_box>
+            <check_box label="Помірний вміст" name="MatureCheck" />
+            <text name="Snapshot:">
+                Знімок:
+            </text>
+            <texture_picker name="snapshot_ctrl" tool_tip="Натисніть, щоб вибрати зображення" />
+            <text name="allow_see_label">
+              Аватари з інших ділянок можуть бачити і спілкуватися з аватарами на цій ділянці
+            </text>
+            <check_box name="SeeAvatarsCheck" tool_tip="Дозволити аватарам з інших ділянок бачити та спілкуватися з аватарами на даній ділянці, ви також можете бачити та спілкуватися з ними."/>
+            <text name="landing_point">
+                Точка прибуття: [LANDING]
+            </text>
+            <button label="Задати" name="Set" tool_tip="Встановлює точку прибуття, в яку будуть прибувати аватари. Ця точка встановлюється координатами вашого аватара в межах ділянки." />
+            <button label="Очистити" label_selected="Очистити" name="Clear" tool_tip="Прибрати точку прибуття" width="65"/>
+            <button label="Телепортація" label_selected="Телепортація" name="teleport_to_landing_point" tool_tip="Телепортуватися в точку прибуття" width="90" />
+            <text name="Teleport Routing: ">
+                Маршрутизація телепортації:
+            </text>
+            <combo_box name="landing type" tool_tip="Маршрутизація телепортації - виберіть, як керувати телепортацією на вашу землю">
+                <combo_box.item label="Заблоковано" name="Blocked" />
+                <combo_box.item label="Точка прибуття" name="LandingPoint" />
+                <combo_box.item label="Будь-де" name="Будь-де"/>
+            </combo_box>
+        </panel>
+        <panel label="Медіа" name="land_media_panel">
+            <text name="with media:">
+                тип:
+            </text>
+            <combo_box name="media type" tool_tip="Вкажіть, чим є посилання - відео, веб-сторінка або інше медіа"/>
+            <text name="at URL:">
+                URL:
+            </text>
+            <button label="Задати" name="set_media_url"/>
+            <text name="Description:">
+                Опис:
+            </text>
+            <line_editor name="url_description" tool_tip="Текст, що показується поруч із кнопкою програвання/завантаження"/>
+            <text name="Медіатекстура:">
+                Текстура:
+            </text>
+            <texture_picker name="media texture" tool_tip="Натисніть, щоб вибрати зображення" />
+            <text name="replace_texture_help">
+             Об'єкт, який використовує цю текстуру, показуватиме відео або веб-сторінку після натискання кнопки відтворення. Натисніть на мініатюрі, щоб вибрати іншу текстуру.
+            </text>
+            <check_box label="Авто масштаб" name="media_auto_scale" tool_tip="В результаті вибору цієї функції, вміст для цієї ділянки автоматично масштабується. Це відбувається трохи повільніше і в нижчій якості зображення, але не потрібно масштабування та вирівнювання текстури." />
+            <text name="media_size" tool_tip="Розмір відображення веб медіа, за замовчуванням – 0.">
+                розмір:
+            </text>
+            <spinner name="media_size_width" tool_tip="Розмір відображення веб медіа, за замовчуванням – 0." />
+            <spinner name="media_size_height" tool_tip="Розмір відображення веб медіа, за замовчуванням – 0." />
+            <text name="pixels">
+                пікселів
+            </text>
+            <text name="Options:">
+                Опції:
+            </text>
+            <check_box label="Цикл" name="media_loop" tool_tip="Програвати медіа в циклі. Після завершення програвання медіа воно запуститься з початку." />
+        </panel>
+        <panel label="Звук" name="land_audio_panel">
+            <text name="MusicURL:">
+                URL музики:
+            </text>
+            <button name="stream_add_btn" tool_tip="Додати URL музичного потоку до списку збережених потоків" />
+            <button name="stream_delete_btn" tool_tip="Видалити URL-адресу музичного потоку до списку збережених потоків" />
+            <button name="stream_copy_btn" tool_tip="Копіювати URL музичного потоку в буфер обміну" />
+            <text name="Sound:">
+                звук:
+            </text>
+            <check_box label="Обмежити жести та звуки об'єктів межами ділянки" name="check sound local" width="292" tool_tip="Якщо вибрана дана функція, то жести та звуки від об'єктів будуть чутні тільки на даній ділянці, але не будуть чути за його межами."/>
+            <text name="Avatar Sounds:">
+                Звуки аватара:
+            </text>
+            <check_box label="Всі" name="all av sound check"/>
+            <check_box label="Група" name="group av sound check"/>
+            <text name="Voice settings:">
+                Голос:
+            </text>
+            <check_box label="Увімкнути голос" name="parcel_enable_voice_channel"/>
+            <check_box label="Включити голос (встановлюється власником острова)" name="parcel_enable_voice_channel_is_estate_disabled" width="300" />
+            <check_box label="Обмежити голос межами цієї ділянки" name="parcel_enable_voice_channel_local"/>
+            <text name="media">
+                ЗМІ:
+            </text>
+            <check_box label="Незрозумілі Медина на об'єкті" name="obscure_moap" tool_tip="Медіа на об'єкті, розташованому за межами ділянки, не повинні автоматично відтворюватися для агента всередині цієї ділянки та навпаки."/>
+        </panel>
+        <panel label="Доступ" name="land_access_panel">
+            <panel.string name="access_estate_defined">
+                (Визначено на острові)
+            </panel.string>
+            <panel.string name="estate_override">
+                Один або кілька параметрів визначено настройками острова
+            </panel.string>
+            <check_box name="public_access" label="Дозволити громадський доступ (Відключення створить лінії заборони)" />
+            <text name="Only Allow">
+                Дозволити доступ тільки користувачам, які:
+            </text>
+            <check_box label="Мають платіжну інформацію [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Для доступу до цієї ділянки у мешканця має бути платіжна інформація. Більш детальна інформація знаходиться тут: [SUPPORT_SITE]."/>
+            <check_box label="Досягли 18 років і вище [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Доступ до цієї ділянки мають тільки мешканці 18 років і більше. Більш детальна інформація знаходиться тут: [SUPPORT_SITE]." />
+            <check_box label="Дозволити групі: [GROUP]" name="GroupCheck" tool_tip="Встановіть групу у вкладці 'Загальні'."/>
+            <check_box label="Продаж пропуску:" name="PassCheck" tool_tip="Дозволити тимчасовий доступ на дану ділянку" />
+            <combo_box name="pass_combo">
+                <combo_box.item label="Всім" name="Anyone" />
+                <combo_box.item label="Група" name="Group" />
+            </combo_box>
+            <spinner label="Вартість L$:" name="PriceSpin"/>
+            <spinner label="Годинник доступу:" name="HoursSpin" />
+            <text name="OwnerLimited">
+                (Власник нерухомості, можливо, обмежив ці вибори)
+            </text>
+            <panel name="Allowed_layout_panel">
+                <text name="AllowedText">
+                    Дозволені мешканці ([COUNT]/[MAX])
+                </text>
+                <name_list name="AccessList" tool_tip="([LISTED] у списку, [MAX] максимум)" />
+                <button label="Додати" name="add_allowed" />
+                <button label="Видалити" label_selected="Видалити" name="remove_allowed" />
+            </panel>
+            <panel name="Banned_layout_panel">
+                <text name="BanCheck">
+                    Заблоковано ([COUNT], макс. [MAX])
+                </text>
+                <name_list name="BannedList" tool_tip="([LISTED] у списку, [MAX] максимум)">
+                    <columns label="Імя" name="name"/>
+                    <columns label="Час" name="duration"/>
+                </name_list>
+                <button label="Додати" name="add_banned"/>
+                <button label="Видалити" label_selected="Видалити" name="remove_banned" />
+            </panel>
+        </panel>
+        <panel label="Пригоди" name="land_experiences_panel"/>
+        <panel label="Навколишнє середовище" name="land_environment_panel"/>
+    </tab_container>
+</floater>
+
+
+

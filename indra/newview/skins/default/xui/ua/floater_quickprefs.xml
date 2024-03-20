@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="quickprefs" title="Швидкі налаштування">
+<panel name="quickprefs">
+  <layout_stack name="wl_options_stack">
+    <layout_panel name="wl_options_panel">
+      <text name="HoverHeightLabel" tool_tip="Дозволяє змінювати положення аватара по вертикалі, не змінюючи самої фігури." width="100">
+        Вис.зміщення:
+      </text>
+
+<!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
+      <text name="Maximum bandwidth" tool_tip="Встановлює максимальну пропускну спроможність мережі використання в Kbps (кілобіт на секунду)." width="100">
+        Макс.Швид.Мережі:
+      </text>
+
+      <text name="Maximum complexity" tool_tip="Контролює, в який момент візуально складний аватар відмалюється як силует" width="100">
+        Макс.складність:
+      </text>
+      <slider text_width="40" name="IndirectMaxComplexity" right="-50" />
+      <text name="IndirectMaxComplexityText" width="50">
+        Неогр.
+      </text>
+ <!--</FS:HG> FIRE-6340, FIRE-6567 - Встановлення проблем із пропускною здатністю -->
+      <check_box label="Використовувати Оточення Регіону" name="UseRegionWindlight"/>
+      <text name="WL Sky" tool_tip="Предустановка неба для навколишнього середовища">
+        Небо:
+      </text>
+
+      <text name="WL Water" tool_tip="Налаштування води для навколишнього середовища">
+        Вода:
+      </text>
+
+      <text name="Day Cycle" tool_tip="Перевстановлення денного циклу для навколишнього середовища">
+        Цикл дня:
+      </text>
+      <button name="btn_personal_lighting" label="Особисте Освітлення..."/>
+      <button name="ResetToRegionDefault" tool_tip="Скидання налаштувань Оточення за замовчуванням на регіоні"/>
+
+      <!-- <FS:Zi> floater titlebar button to edit dynamic quickprefs -->
+      <button name="button_edit" tool_tip="Конфігурація Швидких Налаштувань"/>
+      <!-- </FS:Zi> -->
+
+    </layout_panel>
+  </layout_stack>
+</panel>
+
+<!-- <FS:Zi> Динамічні швидкі налаштування: накладка редагування -->
+<panel name="edit_overlay_panel">
+  <button name="move_up_button" tool_tip="Зсунути обрану опцію на одну позицію вгору"/>
+  <button name="add_new_button" tool_tip="Додати нову опцію швидких налаштувань"/>
+  <line_editor name="label_edit" tool_tip="Введіть ярлик для керування ним" label="Ярлик Керування:"/>
+  <button name="move_down_button" tool_tip="Зсунути обрану опцію на одну позицію вниз"/>
+
+  <combo_box name="control_name_combo" tool_tip="Виберіть елемент керування зі списку параметрів налагодження">
+    <combo_box.item label="=== Вибрати ===" name="control_name_list_header"/>
+  </combo_box>
+  <text name="control_type_label">
+    Тип:
+  </text>
+
+  <combo_box name="control_type_combo_box" tool_tip="Виберіть тип керування користувацьким інтерфейсом, який ви хочете використати для цього параметра.">
+  <!-- не використовуйте <combo_item>Foo</combo_item>, це не працює -->
+    <combo_box.item label="Прапорець" name="Checkbox" />
+    <combo_box.item label="Текст" name="Text" />
+    <combo_box.item label="Лічильник" name="Spinner" />
+    <combo_box.item label="Движок" name="Slider" />
+    <combo_box.item label="Перекл." name="Radio" />
+    <combo_box.item label="Колір 3" name="Color 3"/>
+    <combo_box.item label="Колір 4" name="Color 4"/>
+  </combo_box>
+
+  <!-- увімкнути/вимкнути зроблено в коді залежно від обраного типу елемента керування -->
+  <check_box name="control_integer_checkbox"
+  tool_tip="Активуйте цей прапорець, якщо ваш параметр є цілим значенням, тобто має тільки цілі числа"
+  label="Ціле"/>
+
+  <!-- увімкнути/вимкнути додатково, що робиться в коді залежно від обраного типу control -->
+  <spinner name="control_min_edit" tool_tip="Мінімальне значення, яке вам буде дозволено вибрати" label="Мін:"/>
+  <spinner name="control_max_edit" tool_tip="Максимальне значення, яке вам буде дозволено вибрати" label="Макс:"/>
+  <spinner name="control_increment_edit" tool_tip="Нарощення для вашого значення, коли ви натискаєте стрілку вгору/вниз на лічильнику або використовуєте клавіші курсору на двигуні"
+  label="Крок:" label_width="32" width="81" />
+  <button name="Restore_Btn" tool_tip="Відновити налаштування за замовчуванням" label="Скидання"/>
+  <!-- змініть імена зображень на протилежні, оскільки у нас є кнопка перемикання ввімкнення -->
+  <button name="button_close" tool_tip="Закрити панель накладення редагування"/>
+</panel>
+
+</floater>

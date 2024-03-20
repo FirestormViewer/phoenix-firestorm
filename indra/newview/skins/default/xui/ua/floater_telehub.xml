@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Explicit left edge to avoid overlapping build tools -->
+<floater name="telehub" title="Телехаб">
+	<text name="status_text_connected">
+		Телехаб підключено до об'єкта [OBJECT]
+	</text>
+	<text name="status_text_not_connected">
+		Телехаб не підключено.
+	</text>
+	<text name="help_text_connected">
+		Щоб видалити, натисніть «Вимкнути».
+	</text>
+	<text name="help_text_not_connected">
+		Виберіть об'єкт і натисніть «Підключити телехаб».
+	</text>
+	<button label="Підключити телехаб" name="connect_btn"/>
+	<button label="Вимкнути" name="disconnect_btn"/>
+	<text name="spawn_points_text">
+		Точки появи (позиції, а чи не об'єкти):
+	</text>
+	<button label="Додати точку появи" name="add_spawn_point_btn"/>
+	<button label="Видалити точку появи" name="remove_spawn_point_btn"/>
+	<text name="spawn_point_help">
+		Виберіть об'єкт і натисніть «Додати точку появи», щоб вказати позицію.
+Потім об'єкт можна буде перемістити або видалити.
+Позиції пов'язані з центром телехабу.
+Виберіть річ у списку, щоб виділити її у світі.
+	</text>
+</floater>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="preview_conversation" title="Розмова:">
+	<floater.string name="Title">
+		Розмова: [NAME]
+	</floater.string>
+	<text name="page_label" value="Стор." />
+	<button tool_tip="Відкрити історію повідомлень в окремому вікні" name="open_external_btn" />
+	<button tool_tip="Пошук в історії чату" name="search_btn" />
+</floater>

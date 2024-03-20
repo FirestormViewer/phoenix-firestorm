@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Teleport History Gear Context Menu">
+	<menu_item_call label="Відкрити всі папки" name="Expand all folders"/>
+	<menu_item_call label="Закрити всі папки" name="Collapse all folders"/>
+	<menu name="TPHistoryTimeZone" label="Вибрати час...">
+		<menu_item_check name="teleport_history_tz_utc" label="UTC" />
+		<menu_item_check name="teleport_history_tz_slt" label="SLT" />
+		<menu_item_check name="teleport_history_tz_local" label="Місцеве" />
+	</menu>
+	<menu name="Show Menu" label="Показати...">
+		<menu_item_check name="Show Position" label="Позиція" />
+		<menu_item_check name="Show Date" label="Дату" />
+	</menu>
+	<menu_item_call label="Очистити історію телепортацій" name="Clear Teleport History"/>
+</toggleable_menu>

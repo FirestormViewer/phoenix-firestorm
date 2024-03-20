@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_postcard_message">
+	<text name="to_label">
+		Кому:
+	</text>
+	<text name="name_label">
+		Від:
+	</text>
+	<text name="subject_label">
+		Тема:
+	</text>
+	<line_editor label="Введіть тему листа." name="subject_form"/>
+	<text name="msg_label">
+		Повідомлення:
+	</text>
+	<text_editor name="msg_form">
+		Введіть лист.
+	</text_editor>
+	<button label="Скасувати" name="cancel_btn"/>
+	<button label="Послати" name="send_btn"/>
+</panel>

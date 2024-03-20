@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_gesture_gear">
+	<menu_item_call label="Активувати/Деактивувати жест" name="activate"/>
+	<menu_item_call label="Копіювати" name="copy_gesture"/>
+	<menu_item_call label="Вставити" name="paste"/>
+	<menu_item_call label="Копіювати UUID" name="copy_uuid"/>
+	<menu_item_call label="Зберегти у поточний комплект одягу" name="save_to_outfit"/>
+	<menu_item_call label="Редагувати" name="edit_gesture"/>
+</toggleable_menu>

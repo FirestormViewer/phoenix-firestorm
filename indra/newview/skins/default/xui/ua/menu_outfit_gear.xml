@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Gear Outfit">
+	<menu_item_call label="Замінити поточний комплект" name="wear"/>
+	<menu_item_call label="Додати до поточного комплекту" name="wear_add"/>
+	<menu_item_call label="Видалити з поточного комплекту" name="take_off"/>
+	<menu_item_call label="Завантажити фото (L$[UPLOAD_COST])" name="upload_photo"/>
+	<menu_item_call label="Вибрати фото" name="select_photo"/>
+	<menu_item_call label="Зробити знімок" name="take_snapshot"/>
+	<menu_item_call label="Видалити фото" name="remove_photo"/>
+	<context_menu label="Новий одяг" name="New Clothes">
+		<menu_item_call label="Нова сорочка" name="New Shirt"/>
+		<menu_item_call label="Нові штани" name="New Pants"/>
+		<menu_item_call label="Нове взуття" name="New Shoes"/>
+		<menu_item_call label="Нові шкарпетки" name="New Socks"/>
+		<menu_item_call label="Нова куртка" name="New Jacket"/>
+		<menu_item_call label="Нова спідниця" name="New Skirt"/>
+		<menu_item_call label="Нові рукавички" name="New Gloves"/>
+		<menu_item_call label="Нова майка" name="New Undershirt"/>
+		<menu_item_call label="Нові труси" name="New Underpants"/>
+		<menu_item_call label="Нова альфа" name="New Alpha"/>
+		<menu_item_call label="Нова фізика" name="New Physics"/>
+		<menu_item_call label="Нове татуювання" name="New Tattoo"/>
+		<menu_item_call label="Новий універсальний" name="New Universal"/>
+	</context_menu>
+	<context_menu label="Нові частини тіла" name="New Body Parts">
+		<menu_item_call label="Нова фігура" name="New Shape"/>
+		<menu_item_call label="Нова шкіра" name="New Skin"/>
+		<menu_item_call label="Нове волосся" name="New Hair"/>
+		<menu_item_call label="Нові очі" name="New Eyes"/>
+	</context_menu>
+	<menu_item_call label="Розгорнути всі папки" name="expand"/>
+	<menu_item_call label="Згорнути всі папки" name="collapse"/>
+	<menu_item_call label="Перейменувати комплект" name="rename"/>
+	<menu_item_call label="Видалити комплект" name="delete_outfit"/>
+	<menu_item_check label="Завжди сортувати папки на ім'я" name="sort_folders_by_name"/>
+</toggleable_menu>
+
+
+

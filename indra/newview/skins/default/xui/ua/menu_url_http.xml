@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Url Popup">
+	<menu_item_call label="Відкрити веб-сторінку" name="url_open"/>
+	<menu_item_call label="Відкрити у вбудованому браузері" name="url_open_internal"/>
+	<menu_item_call label="Відкрити у зовнішньому браузері" name="url_open_external"/>
+	<menu_item_call label="Копіювати URL у буфер" name="url_copy"/>
+</context_menu>

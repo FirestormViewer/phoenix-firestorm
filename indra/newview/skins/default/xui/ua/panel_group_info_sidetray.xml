@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Профіль групи" name="GroupInfo">
+	<panel.string name="default_needs_apply_text">
+		Є незбережені зміни
+	</panel.string>
+	<panel.string name="want_apply_text">
+		Ви хочете зберегти ці зміни?
+	</panel.string>
+	<panel.string name="group_join_btn">
+		Приєднатися (L$[AMOUNT])
+	</panel.string>
+	<panel.string name="group_join_free">
+		Безкоштовно
+	</panel.string>
+
+	<layout_stack name="group_info_sidetray_main">
+		<layout_panel name="header_container">
+
+	<panel name="group_info_top">
+		<text_editor name="group_name" value="(Завантаження...)"/>
+		<line_editor label="Введіть тут назву нової групи" name="group_name_editor"/>
+	</panel>
+
+		</layout_panel>
+		<layout_panel name="group_info_content">
+
+	<layout_stack name="layout">
+		<layout_panel name="group_accordions">
+			<accordion name="groups_accordion">
+				<accordion_tab name="group_general_tab" title="Загальні"/>
+				<accordion_tab name="group_roles_tab" title="Ролі"/>
+				<accordion_tab name="group_notices_tab" title="Оголошення"/>
+				<accordion_tab name="group_land_tab" title="Земля/активи"/>
+				<accordion_tab name="group_experiences_tab" title="Пригоди"/>
+			</accordion>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="button_row_ls">
+		<layout_panel name="btn_chat_lp">
+			<button label="Чат" name="btn_chat"/>
+		</layout_panel>
+		<layout_panel name="call_btn_lp">
+			<button label="Дзвінок групі" name="btn_call" tool_tip="Дзвінок цій групі"/>
+		</layout_panel>
+		<layout_panel name="btn_apply_lp">
+			<button label="Зберегти" label_selected="Зберегти" name="btn_apply"/>
+			<button label="Створити групу" name="btn_create" tool_tip="Створити нову групу"/>
+		</layout_panel>
+	</layout_stack>
+
+		</layout_panel>
+	</layout_stack>
+</panel>

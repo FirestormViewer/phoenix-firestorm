@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="publish_classified" title="Публікація реклами">
+	<text name="explanation_text">
+		Ваше оголошення відображатиметься протягом одного тижня з дня публікації.
+
+Майте на увазі, що збори не підпорядковується закону повернення.
+	</text>
+	<spinner label="Ціна: L$" name="price_for_listing" tool_tip="Ціна за розміщення реклами в пошуку"/>
+	<button label="Опублікувати" name="publish_btn"/>
+	<button label="Скасувати" name="cancel_btn"/>
+</floater>

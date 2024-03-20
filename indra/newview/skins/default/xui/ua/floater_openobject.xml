@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="objectcontents" title="Зміст об'єкту">
+	<layout_stack name="button_bar_ls">
+		<layout_panel name="copy_btn_lp">
+			<flyout_button label="Копіювати в інвентар" name="copy_flyout">
+				<flyout_button.item label="Замінити комплект" name="replace"/>
+				<flyout_button.item label="Додати в комплект" name="add"/>
+			</flyout_button>
+		</layout_panel>
+		<layout_panel name="cancel_btn_lp">
+			<button label="Скасувати" label_selected="Скасувати" name="cancel_button"/>
+		</layout_panel>
+	</layout_stack>
+</floater>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Густина" name="panel_settings_sky_density">
+	<layout_stack name="main_ls">
+		<layout_panel name="lp_1">
+			<slider label="Експонентний член Релея:" name="rayleigh_exponential"/>
+			<slider label="Екпонентна шкала Релея:" name="rayleigh_exponential_scale"/>
+			<slider label="Лінійний член Релея:" name="rayleigh_linear"/>
+			<slider label="Постійний член Релея:" name="rayleigh_constant"/>
+			<slider label="Максимальна висота Релея:" name="rayleigh_max_altitude"/>
+		</layout_panel>
+		<layout_panel name="lp_2">
+			<slider label="Експонентний член Міє:" name="mie_exponential"/>
+			<slider label="Екпонентна шкала Міє:" name="mie_exponential_scale"/>
+			<slider label="Лінійний член Міє:" name="mie_linear"/>
+			<slider label="Постійний член Міє:" name="mie_constant"/>
+			<slider label="Анізо-фактор Міє:" name="mie_aniso_factor"/>
+			<slider label="Максимальна висота Міє:" name="mie_max_altitude"/>
+		</layout_panel>
+		<layout_panel name="lp_3">
+			<slider label="Експонентний член абсорбції:" name="absorption_exponential"/>
+			<slider label="Експоненційна шкала абсорбції:" name="absorption_exponential_scale"/>
+			<slider label="Лінійний член абсорбції:" name="absorption_linear"/>
+			<slider label="Постійний член абсорбції:" name="absorption_constant"/>
+			<slider label="Максимальна висота абсорбції:" name="absorption_max_altitude"/>
+		</layout_panel>
+	</layout_stack>
+</panel>

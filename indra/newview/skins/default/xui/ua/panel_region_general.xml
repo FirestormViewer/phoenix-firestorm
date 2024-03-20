@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Регіон" name="General">
+	<text name="region_text_lbl">
+		Регіон:
+	</text>
+	<text name="region_text">
+		невідомо
+	</text>
+	<text name="estate_id_lbl">
+		ID Регіону:
+	</text>
+	<text name="region_type_lbl">
+		Тип:
+	</text>
+	<text name="region_type">
+		невідомо
+	</text>
+	<text name="grid_position_lbl">
+		Позиція сітки:
+	</text>
+	<line_editor name="grid_position_x" default_text="невід."/>
+	<line_editor name="grid_position_y" default_text="невід."/>
+	<text name="version_channel_text_lbl">
+		Версія:
+	</text>
+	<text name="version_channel_text">
+		невідомо
+	</text>
+	<check_box label="Заборонити тераформування" name="block_terraform_check"/>
+	<check_box label="Заборонити польоти" name="block_fly_check"/>
+	<check_box label="Заборонити проліт над ділянкою" name="block_fly_over_check" tool_tip="Підняти перевірку доступу вгору для запобігання прольоту над ділянкою"/>
+	<check_box label="Дозволити пошкодження" name="allow_damage_check"/>
+	<check_box label="Заборонити штовхання" name="restrict_pushobject"/>
+	<check_box label="Дозволити перепродаж землі" name="allow_land_resell_check"/>
+	<check_box label="Дозволити об'єднання/розподіл землі" name="allow_parcel_changes_check"/>
+	<check_box label="Не показувати землю в пошуку" name="block_parcel_search_check" tool_tip="Відображати регіон та його ділянки в результатах пошуку"/>
+	<check_box label="Дозволити міші-об'єкти" name="mesh_rez_enabled_check" tool_tip="Дозволити мешканцям викладати міші в цьому регіоні"/>
+	<spinner label="Ліміт агентів" name="agent_limit_spin"/>
+	<spinner label="Бонус об'єкта" name="object_bonus_spin"/>
+	<text label="Дозволенність" name="access_text">
+		Категорія:
+	</text>
+	<icons_combo_box label="combo" name="access_combo" width="125">
+		<icons_combo_box.item label="Для дорослих" name="Adult"/>
+		<icons_combo_box.item label="Помірний" name="Mature"/>
+		<icons_combo_box.item label="Загальний" name="PG"/>
+	</icons_combo_box>
+	<button label="Застосувати" name="apply_btn"/>
+	<button label="Телепортувати додому одного мешканця..." name="kick_btn"/>
+	<button label="Телепортувати додому всіх мешканців..." name="kick_all_btn"/>
+	<button label="Надіслати повідомлення до регіону..." name="im_btn"/>
+	<button label="Управління телехабом..." name="manage_telehub_btn"/>
+</panel>

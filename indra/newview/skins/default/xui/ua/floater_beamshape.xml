@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="BeamCreator" title="Майстер створення променів">
+	<text name="beamcreator_text">
+		Щоб створити новий промінь, натисніть ліву кнопку миші
+на нижній панелі та визначте його з вибраним кольором або
+Клацніть правою кнопкою миші, щоб видалити його. Натисніть на
+Зберегти, коли ви закінчите.
+	</text>
+	<color_swatch label="Колір" name="beam_color_swatch" tool_tip="Натисніть, щоб відкрити палітру кольорів" />
+	<button label="Зберегти" name="beamshape_save" />
+	<button label="Завантажити" name="beamshape_load" />
+	<button label="Очистити" name="beamshape_clear" />
+	<button label="Скасувати" name="cancel" />
+</floater>

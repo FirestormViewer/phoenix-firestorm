@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_preferences">
+	<text name="back_lbl">Назад</text>
+	<text name="settings_title">Налаштування графіки</text>
+	<text name="quality_lbl">Якість або швидкість</text>
+	<text name="FasterText">Швидко</text>
+	<text name="BetterText">Якість</text>
+	<text name="ShadersPrefText">Низький</text>
+	<text name="ShadersPrefText2">Середній</text>
+	<text name="ShadersPrefText3">Високий</text>
+	<text name="ShadersPrefText4">Ультра</text>
+	<text name="quality_desc">Вибір попередньої установки призведе до скидання всіх змін.</text>
+	<text name="distance_lbl">Відстань видимості</text>
+	<text name="faster_lbl">Швидко</text>
+	<text name="draw_distance_m">м</text>
+	<text name="farther_lbl" width="50">Далі</text>
+	<text name="distance_desc1">Став менше для кращої швидкості, збільши щоб бачити далі.</text>
+	<text name="environment_lbl">Окр.середа</text>
+	<text name="enhancements_desc">
+Зменшення/усунення тіней може підвищити FPS, але впливає на
+атмосферу та зовнішній вигляд сцени.
+	</text>
+	<text name="RenderShadowDetailText">Джерела тіні:</text>
+	<combo_box name="ShadowDetail">
+		<combo_box.item label="Ні" name="0"/>
+		<combo_box.item label="Сонце/місяць" name="1"/>
+		<combo_box.item label="Сонце/Місяць + Прожектори" name="2"/>
+	</combo_box>
+	<text name="water_lbl">Вода</text>
+	<text name="water_desc">Зменшення ефектів може покращити частоту кадрів.</text>
+	<text name="ReflectionsText">Відображення у воді:</text>
+	<combo_box name="Reflections">
+		<combo_box.item label="Ніщо; непрозора" name="-2"/>
+		<combo_box.item label="Ніщо; прозора" name="-1"/>
+		<combo_box.item label="Мінімально" name="0" value="0"/>
+		<combo_box.item label="Ландшафт та дерева" name="1"/>
+		<combo_box.item label="Всі статичні об'єкти" name="2"/>
+		<combo_box.item label="Всі аватари та об'єкти" name="3"/>
+		<combo_box.item label="Усе" name="4"/>
+	</combo_box>
+	<text name="photo_lbl">Фотографія</text>
+	<text name="photo_desc">
+Фотографам потрібна висока якість, але це
+знижує частоту кадрів. Фотоінструменти
+[APP_NAME] допоможе вам знайти правильний баланс.
+	</text>
+	<button name="open_phototools" label="Фотоінструменти" tool_tip="Відкрийте спеціальні інструменти для роботи з фотографіями для розширених налаштувань фотографій."/>
+</panel>

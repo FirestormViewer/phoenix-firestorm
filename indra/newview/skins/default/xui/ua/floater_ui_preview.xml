@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="gui_preview_tool" title="XUI Інструмент Перегляду">
+    <string name="ExternalEditorNotSet">
+Виберіть редактор, встановивши змінну оточення LL_XUI_EDITOR
+або параметр ExternalEditor
+або вказавши свій шлях у полі «Шлях редактора».</string>
+    <panel name="main_panel">
+        <text name="select_language_label">
+            Перша Мова:
+        </text>
+        <button label="Показати" label_selected="Показати" name="display_floater" tool_tip="Показати XUI-вікно, яке визначається вибраним XML-файлом"/>
+        <button label="Приховати" label_selected="Приховати" name="close_displayed_floater" tool_tip="Закрити XUI-вікно, що відображається в даний момент, якщо воно існує"/>
+        <button label="Правити..." label_selected="Правити..." name="edit_floater" tool_tip="Редагувати XUI-вікно, визначене вибраним XML-файлом (відкривається зовнішній редактор). Відкриває англійську версію, якщо не існує локалізованої ."/>
+        <button label="Зберегти" label_selected="Зберегти" name="save_floater" tool_tip="Зберегти вікно XUI, визначене вибраним XML-файлом"/>
+        <button label="Зберегти Всі" label_selected="Зберегти Всі" name="save_all_floaters" tool_tip="Збережіть всі вікна XUI, визначені обраною мовою" width="95" />
+        <button name="toggle_overlap_panel" left_pad="35" tool_tip="Переключити підсвічування та панель дисплея для елементів, що перекриваються; клацніть правою кнопкою миші елемент, щоб вибрати його для цієї функції. Вибраний елемент позначений червоним прямокутником."/>
+
+        <text name="select_language_label_2">
+            Друга Мова:
+        </text>
+        <button label="Показати" name="display_floater_2" tool_tip="Показати вікно XUI, яке визначається вибраним XML-файлом"/>
+        <button label="Приховати" name="close_displayed_floater_2" tool_tip="Закрити XUI-вікно, що відображається в даний момент, якщо воно існує"/>
+        <button label="Експорт Схеми" name="export_schema"/>
+        <button label="Оновити" name="refresh_btn"/>
+        <check_box label="Межі" name="show_rectangles"/>
+
+        <scroll_list label="Ім'я" name="name_list">
+            <scroll_list.columns label="Заголовок" name="title_column" width="220" />
+            <scroll_list.columns label="Файл" name="file_column" width="220"/>
+            <scroll_list.columns label="Вузол верхнього рівня" name="top_level_node_column" />
+        </scroll_list>
+        <panel name="editor_panel">
+            <text name="editor_path_label" width="150">
+                Шлях до Редактора:
+            </text>
+            <line_editor name="executable_path_field" left_delta="120" width="350"
+             tool_tip="Повний шлях до редактора (виконуваного файлу) для редагування XML-файлів float (лапки не потрібні)"/>
+            <button label="Вибрати..." label_selected="Вибрати..." name="browse_for_executable"
+             tool_tip="Вибрати редактор (виконуваного файлу) для редагування XML-файлів"
+             width="75" />
+            <text left_delta="-475" name="executable_args_label" width="150">
+                Параметри Редактора:
+            </text>
+            <line_editor name="executable_args_field" left_delta="150" width="350"
+             tool_tip="Аргументи командного рядка для редактора; Використовувати &apos;%FILE%&apos; для посилання на цільовий файл; &apos;YourProgram.exe FileName.xml&apos; буде запущено, якщо це поле порожнє"/>
+        </panel>
+        <panel name="vlt_panel">
+            <text name="diff_file_label" width="150">
+                Файл різниці:
+            </text>
+            <line_editor name="vlt_diff_path_field" left_delta="100" width="350"
+             tool_tip="Повний шлях до файлу різниці локалізації XML D0 або D1, згенерованого за допомогою інструментарію локалізації"/>
+            <button label="Вибрати..." label_selected="Вибрати..." name="browse_for_vlt_diffs"
+             tool_tip="Вибрати різницевий файл D0 або D1, згенерований VLT, щоб виділити змінені файли та елементи"/>
+            <button label="Висвітлити Різницю" label_selected="Не висвітлити Різницю" name="toggle_vlt_diff_highlight"
+             tool_tip="Переключити підсвічування файлів та елементів, що містять змінені дані локалізації"
+             width="150" />
+        </panel>
+    </panel>
+    <scroll_container name="overlap_scroll">
+      <panel name="overlap_dummy_panel">
+        <overlap_panel label="Панель перекриття" name="overlap_panel"
+         tool_tip="Ця панель відображає вибраний на даний момент елемент та всі елементи, які перекривають його, розділені горизонтальними лініями" />
+        <text name="overlap_panel_label" width="200">
+            Елементи, що перекриваються:
+        </text>
+      </panel>
+    </scroll_container>
+</floater>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_ladmark_gear">
+	<menu_item_call label="Телепортуватись" name="teleport"/>
+	<menu_item_call label="Показати на мапі" name="show_on_map"/>
+	<menu_item_call label="Поділитися" name="share"/>
+	<menu_item_call label="Дивитись / Правити" name="more_info"/>
+	<menu_item_call label="Перемістити до Закладок" name="Move to Landmarks"/>
+	<menu_item_call label="Перемістити до Обраного" name="Move to Favorites"/>
+	<menu_item_call label="Копіювати SLurl" name="copy_slurl"/>
+	<menu_item_call label="Створити місце" name="create_pick"/>
+	<menu_item_call label="Відновити об'єкт" name="restore_item"/>
+	<menu_item_call label="Вирізати" name="cut"/>
+	<menu_item_call label="Копіювати" name="copy_landmark"/>
+	<menu_item_call label="Вставити" name="paste"/>
+	<menu_item_call label="Перейменувати" name="rename"/>
+	<menu_item_call label="Удалити" name="delete"/>
+</toggleable_menu>

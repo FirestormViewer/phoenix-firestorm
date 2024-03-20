@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Object Pie">
+<pie_slice label="Відкрити" name="Open"/>
+	<pie_slice label="Створити" name="Build"/>
+	<pie_slice label="Торкнутися" name="Pie Object Touch"/>
+	<pie_slice label="Сісти" name="Pie Object Sit"/>
+	<pie_slice label="Встати" name="Object Stand Up"/>
+	<pie_slice label="Купити" name="Buy..."/>
+	<pie_slice label="Взяти" name="Pie Object Take"/>
+	<pie_slice label="Заплатити" name="Pay..."/>
+<pie_menu label="Далі &gt;" name="Object Pie More 1">
+		<pie_slice label="Видалити" name="Delete"/>
+		<pie_slice label="Одягти" name="Wear"/>
+		<pie_slice label="Взяти Копію" name="Take Copy"/>
+		<pie_menu label="Додати HUD &gt;" name="Pie Object Attach HUD" />
+		<pie_menu label="Прикріпити &gt;" name="Pie Object Attach">
+			<pie_menu label="Доп.Скелет &gt;" name="Enhanced Skeleton">
+				<pie_slice label="Праве Крило" name="Right Wing"/>
+				<pie_slice label="Пах" name="Groin"/>
+				<pie_slice label="Основа Хвоста" name="Tail Base"/>
+				<pie_slice label="Кінець Хвоста" name="Tail Tip"/>
+				<pie_slice label="Ліве Крило" name="Left Wing"/>
+				<pie_slice label="Лев.задн.Нога" name="Left Hind Foot"/>
+				<pie_menu label="Далі &gt;" name="Enhanced Skeleton More">
+					<pie_slice label="Доп.Прав.Вухо" name="Alt Right Ear"/>
+					<pie_slice label="Дод.Прав.Око" name="Alt Right Eye"/>
+					<pie_slice label="Язик" name="Tongue"/>
+					<pie_slice label="Дод.Лев.Око" name="Alt Left Eye"/>
+					<pie_slice label="Дод.Лев.Вухо" name="Alt Left Ear"/>
+					<pie_slice label="Лев.Безім.палець" name="Left Ring Finger"/>
+					<pie_slice label="Щелепа" name="Jaw"/>
+					<pie_slice label="Прав.Безим.палець" name="Right Ring Finger"/>
+				</pie_menu>
+				<pie_slice label="Прав.задн.нога" name="Right Hind Foot"/>
+			</pie_menu>
+		</pie_menu>
+<pie_slice label="Повернути" name="Return..."/>
+		<pie_menu label="Далі &gt;" name="Object Pie More 2">
+			<pie_menu name="ResetMenu" label="Скинути &gt;">
+				<pie_slice label="Обнов.Текстуру" name="Texture Refresh"/>
+				<pie_slice label="Скелет" name="Reset Skeleton"/>
+			</pie_menu>
+			<pie_menu name="DerenderMenu" label="Невідображати &gt;">
+				<pie_slice label="Постійно" name="DerenderPermanent"/>
+				<pie_slice label="Тимчасово" name="Derender"/>
+			</pie_menu>
+			<pie_slice label="Скарга..." name="Report Abuse..."/>
+			<pie_menu name="ExportMenu" label="Зберегти як &gt;">
+				<pie_slice label="Backup" name="Backup"/>
+				<pie_slice label="Collada" name="Collada"/>
+				<pie_slice label="Dump XML" name="Dump XML"/>
+			</pie_menu>
+<pie_menu label="Пошук шляху &gt;" name="Pathfinding">
+				<pie_slice label="Показати в колекції" name="show_in_linksets"/>
+				<pie_slice label="Показати в персонажах" name="show_in_characters"/>
+			</pie_menu>
+			<pie_menu name="mute_menu" label="Блокувати &gt;">
+				<pie_slice label="Об'єкт" name="Object Mute"/>
+				<pie_slice label="Частинки" name="Mute Particle"/>
+			</pie_menu>
+			<pie_menu label="Скрипти &gt;" name="ScriptsMenu">
+				<pie_slice label="Компіляція (Mono)" name="CompileMono"/>
+				<pie_slice label="Компіляція (LSL)" name="CompileLSL"/>
+				<pie_slice label="Скидання" name="Object Reset Scripts"/>
+				<pie_slice label="Увімкнути" name="Object Set Scripts to Running"/>
+				<pie_slice label="Вимкнути" name="Object Set Scripts to Not Running"/>
+				<pie_slice label="Видалити" name="Remove Scripts From Selection"/>
+				<pie_slice label="Інформація" name="ScriptInfo"/>
+			</pie_menu>
+			<pie_slice label="Інспекція" name="Object Inspect"/>
+		</pie_menu>
+		<pie_slice label="Купити" name="Buy..."/>
+	</pie_menu>
+	<pie_slice label="Правити" name="Edit..."/>
+</pie_menu>

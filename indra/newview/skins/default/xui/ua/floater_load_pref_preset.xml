@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<floater name="load_pref_preset" title="Завантажити Передустановку">
+	<string name="title_graphic">
+		Завантажити попереднє встановлення графіки
+	</string>
+	<string name="title_camera">
+		Завантажити попереднє встановлення камери
+	</string>
+	<text name="Preset">
+		Виберіть попереднє встановлення
+	</text>
+	<button label="OK" name="ok"/>
+	<button label="Скасувати" name="cancel"/>
+</floater>

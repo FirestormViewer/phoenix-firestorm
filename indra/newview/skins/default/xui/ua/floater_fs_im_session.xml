@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="panel_im">
+	<floater.string name="participant_added" value="[NAME] був запрошений на розмову."/>
+	<floater.string name="multiple_participants_added" value="[NAME] були запрошені на розмову."/>
+	<layout_stack name="ls_control_panel">
+		<layout_panel name="gprofile_panel">
+			<button name="group_info_btn" tool_tip="Показати профіль цієї групи"/>
+		</layout_panel>
+		<layout_panel name="profile_panel">
+			<button name="view_profile_btn" tool_tip="Показати профіль цього мешканця"/>
+		</layout_panel>
+		<layout_panel name="friend_panel">
+			<button name="add_friend_btn" tool_tip="Додати користувача до друзів"/>
+		</layout_panel>
+		<layout_panel name="tp_panel">
+			<menu_button name="teleport_btn" tool_tip="Запропонувати або попросити телепорт"/>
+		</layout_panel>
+		<layout_panel name="share_panel">
+			<button name="share_btn" tool_tip="Поділитися предметом з цим мешканцем"/>
+		</layout_panel>
+		<layout_panel name="pay_panel">
+			<button name="pay_btn" tool_tip="Відправити гроші даному мешканцю"/>
+		</layout_panel>
+		<layout_panel name="call_btn_panel">
+			<button name="call_btn" tool_tip="Додати дзвінок у цей чат"/>
+		</layout_panel>
+		<layout_panel name="end_call_btn_panel">
+			<button name="end_call_btn" tool_tip="Завершити дзвінок"/>
+		</layout_panel>
+		<layout_panel name="voice_ctrls_btn_panel">
+			<button name="voice_ctrls_btn" tool_tip="Налаштування голосу"/>
+		</layout_panel>
+		<layout_panel name="im_history_btn_panel">
+			<button name="im_history_btn" tool_tip="Відкрити журнал розмови"/>
+		</layout_panel>
+		<layout_panel name="add_participant_panel">
+			<button tool_tip="Додати співрозмовника до цієї розмови" name="add_participant_btn"/>
+		</layout_panel>
+		<layout_panel name="send_sysinfo_btn_panel">
+			<button tool_tip="Надіслати системну інформацію" name="send_sysinfo_btn"/>
+		</layout_panel>
+
+		<layout_panel name="lp_options_btn">
+			<menu_button tool_tip="Параметри чату" name="chat_options_btn"/>
+		</layout_panel>
+		<layout_panel name="lp_chat_search_btn" >
+			<button name="chat_search_btn" tool_tip="Пошук у чаті"/>
+		</layout_panel>
+
+		<!-- Прапорець для префікса FS у групах підтримки -->
+		<layout_panel name="support_panel">
+			<check_box label="Додати версію" name="FSSupportGroupChatPrefix_toggle" tool_tip="Додає поточну версію клієнта та інформацію про тему в повідомлення, надіслані вами в цій групі. Дана інформація допоможе співробітникам підтримки у правильній діагностиці Ваших проблем та підвищення точності відповідей "/>
+		</layout_panel>
+		<layout_panel name="testing_panel">
+			<check_box label="Додати збірку" name="FSSupportGroupChatPrefixTesting_toggle"
+			tool_tip="Додає поточну версію, тему, операційну систему та стан RLVa на початок повідомлень, надісланих вами цій групі, що допоможе персоналу служби підтримки правильно діагностувати ваші проблеми та підвищити точність відповідей на ваші запитання. (Це окремо від груп підтримки)"/>
+		</layout_panel>
+		<!-- END: Префікс FS -->
+	</layout_stack>
+	<layout_stack name="chat_stack">
+		<layout_panel name="panel_im_control_lp">
+			<layout_stack name="im_panels">
+				<layout_panel name="unread_messages_holder">
+					<text name="unread_messages_text">
+						Непрочитаних повідомлень: [NUM]
+					</text>
+				</layout_panel>
+				<layout_panel name="chat_layout_panel">
+					<layout_stack name="input_panels">
+						<layout_panel name="input_button_layout_panel">
+							<button name="send_chat" label="Надіслати" tool_tip="Надсилає повідомлення" />
+						</layout_panel>
+					</layout_stack>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</floater>

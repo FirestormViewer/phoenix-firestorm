@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="media ctrl context menu">
+	<menu_item_call label="Вирізати" name="Cut"/>
+	<menu_item_call label="Копіювати" name="Copy"/>
+	<menu_item_call label="Вставити" name="Paste"/>
+	<menu_item_call label="Відкрити Web Inspector" name="open_webinspector"/>
+</context_menu>

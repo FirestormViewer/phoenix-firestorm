@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_login">
+	<string name="ServerComboTooltip">
+		Існуюча мережа або URI мережі
+	</string>
+	<layout_stack name="login_widgets">
+		<layout_panel name="login">
+			<text name="log_in_text">
+				Логін
+			</text>
+			<text name="username_text">
+				Ім'я користувача:
+			</text>
+			<button tool_tip="Видалити ім'я користувача" name="remove_user_btn"/>
+			<combo_box name="username_combo" tool_tip="Ім'я користувача вибирається під час реєстрації, наприклад bobsmith12 або Steller Sunshine"/>
+			<text name="password_text">
+				Пароль:
+			</text>
+		</layout_panel>
+		<layout_panel name="start_location_panel">
+			<text name="start_location_text">
+				Місце запуску:
+			</text>
+			<combo_box name="start_location_combo">
+				<combo_box.item label="Останнє місце" name="MyLastLocation"/>
+				<combo_box.item label="Мій дім" name="MyHome"/>
+				<combo_box.item label="&lt;Написати назву регіону&gt;" name="Typeregionname"/>
+			</combo_box>
+		</layout_panel>
+		<layout_panel name="grid_panel">
+			<text name="grid_login_text">
+				Під'єднатися до мережі:
+			</text>
+		</layout_panel>
+		<layout_panel name="links_login_panel">
+			<text name="create_new_account_text">
+				Створити акаунт
+			</text>
+			<text name="forgot_password_text">
+				Забули ім'я користувача чи пароль?
+			</text>
+			<button label="Увійти" name="connect_btn"/>
+			<check_box label="Запам'ятати користувача" name="remember_username_check" />
+			<check_box label="Запам'ятати пароль" name="remember_check"/>
+		</layout_panel>
+		<layout_panel name="mode_selection">
+			<text name="mode_selection_text">
+				Вибір режиму
+			</text>
+			<combo_box name="mode_combo" tool_tip="Виберіть режим налаштування, з яким ви найбільш знайомі. За замовчуванням буде встановлено режим Firestorm">
+				<combo_box.item label="Гібридний" name="Hybrid"/>
+			</combo_box>
+		</layout_panel>
+	</layout_stack>
+</panel>

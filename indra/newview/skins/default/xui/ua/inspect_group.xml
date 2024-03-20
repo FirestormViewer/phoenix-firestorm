@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--
+  Not can_close / no title to avoid window chrome
+  Single instance - only have one at a time, recycle it each spawn
+-->
+<floater name="inspect_group">
+	<string name="PrivateGroup">
+		Приватная группа
+	</string>
+	<string name="FreeToJoin">
+		Бесплатное вступление
+	</string>
+	<string name="CostToJoin">
+		[AMOUNT]L$ за вступление
+	</string>
+	<string name="YouAreMember">
+		Вы находитесь в группе
+	</string>
+	<button label="Вступить" name="join_btn"/>
+	<button label="Покинуть" name="leave_btn"/>
+	<button label="Смотреть профиль" name="view_profile_btn"/>
+</floater>

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="buy land" title="Покупка землі">
+	<floater.string name="can_resell">
+		Може бути перепродана.
+	</floater.string>
+	<floater.string name="can_not_resell">
+		Не може бути перепродана.
+	</floater.string>
+	<floater.string name="can_change">
+		Може бути об'єднана чи розділена.
+	</floater.string>
+	<floater.string name="can_not_change">
+		Не може бути об'єднана чи розділена.
+	</floater.string>
+	<floater.string name="cant_buy_for_group">
+		У вас немає права купувати землю для вашої активної групи.
+	</floater.string>
+	<floater.string name="no_land_selected">
+		Немає вибраної землі.
+	</floater.string>
+	<floater.string name="multiple_parcels_selected">
+		Вибрано кілька різних ділянок.
+Спробуйте вибрати меншу область.
+	</floater.string>
+	<floater.string name="no_permission">
+		У вас немає права купувати землю для вашої активної групи.
+	</floater.string>
+	<floater.string name="parcel_not_for_sale">
+		Вибрана ділянка землі не для продажу.
+	</floater.string>
+	<floater.string name="group_already_owns">
+		Група вже має ділянку.
+	</floater.string>
+	<floater.string name="you_already_own">
+		Ви вже володієте ділянкою.
+	</floater.string>
+	<floater.string name="set_to_sell_to_other">
+		Обрану ділянку землі виставлено на продаж для інших людей.
+	</floater.string>
+	<floater.string name="no_public_land">
+		У вибраній області немає громадських земель.
+	</floater.string>
+	<floater.string name="not_owned_by_you">
+		Вибрано землю, що належить іншому жителю.
+Спробуйте вибрати меншу область.
+	</floater.string>
+	<floater.string name="processing">
+		Обробка вашої покупки...
+ 
+(Це може зайняти кілька хвилин).
+	</floater.string>
+	<floater.string name="fetching_error">
+		Виникла помилка при запиті інформації про покупку землі.
+	</floater.string>
+	<floater.string name="buying_will">
+		Купівля цієї землі буде:
+	</floater.string>
+	<floater.string name="buying_for_group">
+		Купівля землі для групи буде:
+	</floater.string>
+	<floater.string name="cannot_buy_now">
+		Зараз купити не можна:
+	</floater.string>
+	<floater.string name="not_for_sale">
+		Не для продажу:
+	</floater.string>
+	<floater.string name="none_needed">
+		не вимагається
+	</floater.string>
+	<floater.string name="must_upgrade">
+		Ваш обліковий запис повинен бути покращений для здатності володіння землею.
+	</floater.string>
+	<floater.string name="cant_own_land">
+		Ваш обліковий запис дозволяє володіти землею.
+	</floater.string>
+	<floater.string name="land_holdings">
+		Ви маєте [BUYER] м² землі.
+	</floater.string>
+	<floater.string name="pay_to_for_land">
+		Заплатити продавцю [SELLER] L$[AMOUNT] за цю землю
+	</floater.string>
+	<floater.string name="buy_for_US">
+		Придбати L$ [AMOUNT] приблизно за [LOCAL_AMOUNT],
+	</floater.string>
+	<floater.string name="parcel_meters">
+		Розмір ділянки [AMOUNT] м²
+	</floater.string>
+	<floater.string name="premium_land">
+		Ця земля є преміум-класом, і буде зарахована як [AMOUNT] м².
+	</floater.string>
+	<floater.string name="discounted_land">
+		Ця земля зі знижкою і буде зарахована як [AMOUNT] м².
+	</floater.string>
+	<floater.string name="meters_supports_object">
+		[AMOUNT] м²
+підтримує [AMOUNT2] об'єктів
+	</floater.string>
+	<floater.string name="sold_with_objects">
+		продано з об'єктами
+	</floater.string>
+	<floater.string name="sold_without_objects">
+		об'єкти не включені
+	</floater.string>
+	<floater.string name="info_price_string">
+		L$ [PRICE]
+(L$ [PRICE_PER_SQM]/м²)
+[SOLD_WITH_OBJECTS]
+	</floater.string>
+	<floater.string name="insufficient_land_credits">
+		Групі [GROUP] знадобиться виплатити достатню суму для підтримки цієї землі, щоб покрити ділянку до завершення покупки.
+	</floater.string>
+	<floater.string name="have_enough_lindens">
+		У вас є L$ [AMOUNT], яких достатньо для покупки цієї землі.
+	</floater.string>
+	<floater.string name="not_enough_lindens">
+		У вас є лише L$ [AMOUNT], не вистачає L$ [AMOUNT2].
+	</floater.string>
+	<floater.string name="balance_left">
+		Після придбання у вас залишиться L$ [AMOUNT].
+	</floater.string>
+	<floater.string name="balance_needed">
+		Вам потрібно придбати щонайменше L$ [AMOUNT], щоб дозволити собі цю землю.
+	</floater.string>
+	<floater.string name="no_parcel_selected">
+		(дільниця не обрана)
+	</floater.string>
+	<text name="region_name_label">
+		регіон:
+	</text>
+	<text name="region_name_text">
+		(невідомо)
+	</text>
+	<text name="region_type_label">
+		тип:
+	</text>
+	<text name="region_type_text">
+		(невідомо)
+	</text>
+	<text name="estate_name_label">
+		Землеволодіння:
+	</text>
+	<text name="estate_name_text">
+		(невідомо)
+	</text>
+	<text name="estet_owner_label">
+		Землевласник:
+	</text>
+	<text name="exte_owner_text">
+		(невідомо)
+	</text>
+	<text name="reselable_changeable_label">
+		Придбана у цьому регіоні земля:
+	</text>
+	<text name="reselable_clause">
+		Може чи не може бути перепродана.
+	</text>
+	<text name="changeable_clause">
+		Може чи може бути об'єднана чи розділена.
+	</text>
+	<text name="covenant_text">
+		Ви повинні ухвалити угоду щодо землеволодіння:
+	</text>
+	<text_editor name="covenant_editor">
+		Завантаження...
+	</text_editor>
+	<check_box label="Я беру угоду, визначену вище." name="agree_covenant"/>
+	<text name="info_parcel_label">
+		Ділянка:
+	</text>
+	<text name="info_parcel">
+		Скоттерикс 138,204
+	</text>
+	<text name="info_size_label">
+		розмір:
+	</text>
+	<text name="info_size">
+		1024 м²
+	</text>
+	<text name="info_price_label">
+		Ціна:
+	</text>
+	<text name="info_price">
+		L$ 1500
+(1,1 $/м²)
+продано з об'єктами
+	</text>
+	<text name="info_action">
+		Купівля цієї землі буде:
+	</text>
+	<text name="error_message">
+		Щось неправильно.
+	</text>
+	<button label="Перейти на сайт" name="error_web"/>
+	<text name="account_action">
+		Поліпшити ваш обліковий запис до рівня Premium.
+	</text>
+	<text name="account_reason">
+		Тільки преміум-учасники можуть мати землю.
+	</text>
+	<combo_box name="account_level">
+		<combo_box.item label="9,95 дол. США/міс, оплачується щомісяця" name="US$9.95/month,billedmonthly"/>
+		<combo_box.item label="7,50 дол. США/міс, оплачується щоквартально" name="US$7.50/month,billedquarterly"/>
+		<combo_box.item label="6,00 дол. США/міс, оплачується щорічно" name="US$6.00/month,billedannually"/>
+	</combo_box>
+	<text name="land_use_action">
+		Збільшить вашу місячну оплату на US$ 40/міс.
+	</text>
+	<text name="land_use_reason">
+		Ви маєте 1309 м² землі.
+На цій ділянці 512 м² землі.
+	</text>
+	<text name="purchase_action">
+		Заплатити мешканцю Joe L$ 4000 за землю
+	</text>
+	<text name="currency_reason">
+		У вас L$ 2100.
+	</text>
+	<text name="currency_action">
+		Купівля L$
+	</text>
+	<line_editor name="currency_amt">
+		1000
+	</line_editor>
+	<text name="currency_est">
+		обійдеться приблизно в [LOCAL_AMOUNT]
+	</text>
+	<text name="currency_balance">
+		У вас L$ 2100.
+	</text>
+	<check_box label="Видалити [AMOUNT] м² внеску з групи." name="remove_contribution"/>
+	<button label="Купити" name="buy_btn"/>
+	<button label="Скасувати" name="cancel_btn"/>
+</floater>

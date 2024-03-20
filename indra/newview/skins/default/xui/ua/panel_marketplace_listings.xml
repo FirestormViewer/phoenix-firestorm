@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Торговий центр" name="Marketplace Panel">
+	<panel name="tool_panel">
+			<menu_button name="sort_btn" tool_tip="Параметри перегляду/сортування"/>
+			<button name="add_btn" tool_tip="Створити нову папку списку"/>
+			<button label="Перевірка на помилки" name="audit_btn" left_pad="110" width="130" tool_tip="Перевірте свої списки товарів у торговому центрі"/>
+		</panel>
+		<panel name="tab_container_panel">
+			<filter_editor label="Фільтрувати списки товарів у торговому центрі" name="filter_editor"/>
+		</panel>
+		<panel name="marketplace_drop_zone">
+			<text name="drop_zone_label">
+				Тягни сюди папки для створення нових списків
+		</text>
+	</panel>
+</panel>

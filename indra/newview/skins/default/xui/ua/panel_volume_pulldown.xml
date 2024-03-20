@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="volumepulldown_floater">
+	<slider label="Спільна" name="System Volume"/>
+	<slider label="Кнопки" name="UI Volume"/>
+	<slider label="Оточення" name="Wind Volume"/>
+    <check_box name="collisions_audio_play_btn" tool_tip="Увімкнути звуки зіткнень"/>
+	<slider label="Звуки" name="SFX Volume"/>
+	<check_box name="gesture_audio_play_btn" tool_tip="Увімкнути звуки від жестів"/>
+	<slider label="Музика" name="Music Volume"/>
+	<check_box name="enable_music" tool_tip="Увімкнути потокову музику"/>
+	<slider label="Медіа" name="Media Volume"/>
+	<check_box name="enable_media" tool_tip="Увімкнути потокове медіа"/>
+	<slider label="Голос" name="Voice Volume"/>
+	<check_box name="enable_voice_check" tool_tip="Увімкнути голосовий чат"/>
+</panel>

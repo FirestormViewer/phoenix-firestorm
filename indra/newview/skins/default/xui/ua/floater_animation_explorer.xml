@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="animation_explorer" title="Провідник анімацій">
+	<scroll_list name="animation_list">
+		<scroll_list.column label="Відтворює" name="played_by" />
+		<scroll_list.column label="Стан" name="played" />
+		<scroll_list.column label="Пріоритет" name="priority" />
+		<scroll_list.column label="Час" name="timestamp" />
+		<scroll_list.column label="ID анімації" name="animation_id" />
+		<scroll_list.column label="ID об'єкта" name="object_id" />
+	</scroll_list>
+	<panel name="buttons_panel">
+		<button label="Стоп" name="stop_btn" />
+		<button label="Стоп і Скасувати" name="stop_and_revoke_btn" />
+		<button label="Заблокувати" name="blacklist_btn" />
+		<check_box label="Немає моїх анімацій" name="no_owned_animations_check" tool_tip="Буде відфільтровувати всі анімації, що належать вашому аватару, такі як АО анімації або анімації системи за замовчуванням" />
+	</panel>
+</floater>

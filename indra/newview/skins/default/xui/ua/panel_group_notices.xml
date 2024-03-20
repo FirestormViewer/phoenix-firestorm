@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Оголошення" name="notices_tab">
+	<panel.string name="help_text">
+		Оголошення це швидкий спосіб спілкуватися з усіма учасниками групи.
+На додаток до повідомлення ви можете прикріпити вкладення. Оголошення отримують лише учасники з ролями, які дають право на їх отримання
+Вимкнути отримання оголошень можна у вкладці 'Загальні', знявши галочку з 'Отримувати оголошення групи'
+	</panel.string>
+	<panel.string name="no_notices_text">
+		Немає оголошень
+	</panel.string>
+	<text name="lbl2">
+		Оголошення зберігаються протягом 14 днів.
+Денний ліміт оголошення групи 200.
+	</text>
+	<scroll_list name="notice_list">
+		<scroll_list.columns label="Тема" name="subject"/>
+		<scroll_list.columns label="Автор" name="from"/>
+		<scroll_list.columns label="Дані" name="date"/>
+	</scroll_list>
+	<button label="Створити" name="create_new_notice" tool_tip="Створити нове оголошення"/>
+	<button name="refresh_notices" tool_tip="Оновити список оголошень"/>
+	<text name="notice_list_none_found">
+		Немає оголошень
+	</text>
+	<panel label="Створити нове оголошення" name="panel_create_new_notice">
+		<text name="lbl">
+			Створити оголошення
+		</text>
+		<text name="lbl3">
+			Тема:
+		</text>
+		<text name="lbl4">
+			Текст:
+		</text>
+		<text name="lbl5">
+			Вкладення:
+		</text>
+		<text name="drag_and_drop_help">
+			Перетягніть вкладення сюди, щоб додати:
+		</text>
+		<button name="remove_attachment" tool_tip="Видалити вкладення до оголошення"/>
+		<button label="Інвентар" name="open_inventory" tool_tip="Відкрити інвентар"/>
+		<button label="Відправити" label_selected="Відправити" name="send_notice"/>
+		<group_drop_target name="drop_target" tool_tip="Перетягніть з інвентаря на цю панель предмет, щоб відправити його разом з повідомленням. У вас має бути дозвіл на копіювання та передачу цього предмета."/>
+	</panel>
+	<panel label="Архів оголошень" name="panel_view_past_notice">
+		<text name="lbl6">
+			Архів оголошень
+		</text>
+		<text name="lbl7">
+			Щоб надіслати нове повідомлення, натисніть кнопку +Створити
+		</text>
+		<text name="lbl8">
+			Тема:
+		</text>
+		<text name="lbl9">
+			Текст:
+		</text>
+		<text name="lbl10">
+			Вкладення:
+		</text>
+		<button label="Відкрити вкладення" name="open_attachment"/>
+	</panel>
+</panel>

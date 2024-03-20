@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel name="script_experience" title="Пригода">
+	<button name="Expand Experience" label="Пригода"/>
+	<check_box name="enable_xp" label="Використовується Пригода"/>
+	<layout_stack name="xp_details">
+		<layout_panel name="xp_layout_panel">
+			<text name="lbl_script">
+				Сценарій:
+			</text>
+			<text name="lbl_associated">
+				Пов'язано з:
+			</text>
+			<text name="lbl_contribute">
+				Ви можете зробити внесок:
+			</text>
+			<text name="lbl_associate">
+				Пов'язано з:
+			</text>
+		</layout_panel>
+		<layout_panel name="xp_choose_panel">
+			<combo_box name="Experiences..."  label="Вибрати Пригоду..." />
+		</layout_panel>
+	</layout_stack>
+	<text name="No Experiences">
+		Ви не є співучасником будь-якої пригоди.
+	</text>
+</panel>

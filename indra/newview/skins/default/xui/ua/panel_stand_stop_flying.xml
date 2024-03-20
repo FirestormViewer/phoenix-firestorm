@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Ширину та висоту цієї панелі слід синхронізувати з "panel_modes" у floater_moveview.xml-->
+<panel name="panel_stand_stop_flying">
+	<button label="Встати" name="stand_btn" tool_tip="Натисніть сюди, щоб встати."/>
+	<button label="Припинити літати" name="stop_fly_btn" width="130" tool_tip="Припинити літати"/>
+	<button label="Flycam" name="flycam_btn" tool_tip="Вийти з режиму Flycam"/>
+</panel>

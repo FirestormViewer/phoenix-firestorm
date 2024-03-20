@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Self Pie">
+    <pie_slice label="Профіль" name="Profile..."/>
+    <pie_slice label="Групи" name="Groups..."/>
+    <pie_menu label="Зняти &gt;" name="Take Off &gt;">
+        <pie_menu label="Одяг &gt;" name="Clothes &gt;">
+            <pie_slice label="Сорочку" name="Shirt"/>
+            <pie_slice label="Штани" name="Pants"/>
+            <pie_slice label="Взуття" name="Shoes"/>
+            <pie_slice label="Шкарпетки" name="Socks"/>
+            <pie_slice label="Куртку" name="Куртка"/>
+            <pie_slice label="Рукавички" name="Gloves"/>
+            <pie_menu label="Далі &gt;" name="Clothes More">
+                <pie_slice label="Майку" name="Self Undershirt"/>
+                <pie_slice label="Весь одяг" name="All Clothes"/>
+                <pie_slice label="Труси" name="Self Underpants"/>
+                <pie_slice label="Татуювання" name="Self Tattoo"/>
+                <pie_slice label="Фізику" name="Self Physics"/>
+                <pie_slice label="Альфа" name="Self Alpha"/>
+            </pie_menu>
+            <pie_slice label="Спідницю" name="Skirt"/>
+        </pie_menu>
+        <pie_menu name="Pie Object Detach HUD"/>
+        <pie_menu label="Відокремити &gt;" name="Pie Object Detach">
+            <pie_menu label="Доп. скелет &gt;" name="Enhanced Skeleton">
+                <pie_slice label="Праве Крило" name="Right Wing"/>
+                <pie_slice label="Пах" name="Groin"/>
+                <pie_slice label="Основа Хвоста" name="Tail Base"/>
+                <pie_slice label="Кінець Хвоста" name="Tail Tip"/>
+                <pie_slice label="Ліве Крило" name="Left Wing"/>
+                <pie_slice label="Лів.задн.нога" name="Left Hind Foot"/>
+                <pie_menu label="Ще &gt;" name="Enhanced Skeleton More">
+                    <pie_slice label="Доп.Прав.Вухо" name="Alt Right Ear"/>
+                    <pie_slice label="Дод.Прав.Око" name="Alt Right Eye"/>
+                    <pie_slice label="Язик" name="Tongue"/>
+                    <pie_slice label="Дод.Лев.Око" name="Alt Left Eye"/>
+                    <pie_slice label="Дод.Лев.Вухо" name="Alt Left Ear"/>
+                    <pie_slice label="Лев.Безім.палець" name="Left Ring Finger"/>
+                    <pie_slice label="Щелепа" name="Jaw"/>
+                    <pie_slice label="Прав.Безим.палець" name="Right Ring Finger"/>
+                </pie_menu>
+                <pie_slice label="Прав.задн.нога" name="Right Hind Foot"/>
+            </pie_menu>
+        </pie_menu>
+        <pie_slice label="Відокремити все" name="Detach All"/>
+    </pie_menu>
+    <pie_slice label="Сісти" name="Sit Down Here"/>
+    <pie_slice label="Встати" name="Stand Up"/>
+    <pie_slice label="Скрипти" name="ScriptInfo"/>
+    <pie_slice label="Жести..." name="Gestures"/>
+    <pie_menu label="Зовнішність &gt;" name="Appearance &gt;">
+        <pie_slice label="Фігура" name="Edit My Shape"/>
+        <pie_menu name="ResetMenu" label="Скидання &gt;">
+            <pie_slice label="Скел. &amp; Анім." name="Reset Skeleton And Animations"/>
+            <pie_slice label="Скелет" name="Reset Skeleton"/>
+            <pie_slice label="Mesh LOD" name="Reset Mesh LOD"/>
+        </pie_menu>
+        <pie_slice label="Оновити текстури" name="Texture Refresh"/>
+        <pie_slice label="Комплект" name="Edit My Outfit"/>
+        <pie_slice label="Дамп XML" name="Dump XML"/>
+        <pie_slice label="Висота" name="Hover Height"/>
+    </pie_menu>
+    <pie_slice label="Налагодження" name="Debug..."/>
+</pie_menu>

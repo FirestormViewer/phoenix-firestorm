@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu name="NearBy Chat Menu">
+	<menu_item_call label="Показати людей поруч..." name="nearby_people"/>
+	<menu_item_check label="Показати заблокований текст" name="muted_text"/>
+	<menu_item_check label="Показати іконки друзів" name="show_buddy_icons"/>
+	<menu_item_check label="Показати імена" name="show_names"/>
+	<menu_item_check label="Показати іконки та імена" name="show_icons_and_names"/>
+	<menu_item_call label="Розмір шрифту" name="font_size"/>
+</menu>

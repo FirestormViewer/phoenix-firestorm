@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Комплекти" name="appearance panel">
+	<string name="No Outfit" value="Немає комплектів"/>
+	<string name="Unsaved Changes" value="Незбережені зміни"/>
+	<string name="Now Wearing" value="Вдягнено..."/>
+	<string name="Changing outfits" value="Зміна комплекту"/>
+	<panel name="panel_currentlook">
+		<text name="currentlook_status">
+			(Статус)
+		</text>
+		<button name="edit_outfit_btn" tool_tip="Редагувати комплект"/>
+	</panel>
+	<search_editor label="Фільтр комплектів одягу" name="Filter"/>
+</panel>

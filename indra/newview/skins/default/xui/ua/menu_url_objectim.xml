@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Url Popup">
+	<menu_item_call label="Профіль об'єкта..." name="show_object"/>
+	<menu_item_call label="Заблокувати" name="block_object"/>
+	<menu_item_call label="Розблокувати" name="unblock_object"/>
+	<menu_item_call label="Показати на мапі" name="show_on_map"/>
+	<menu_item_call label="Телепортуватися до об'єкта" name="teleport_to_object"/>
+	<menu_item_call label="Копіювати назву об'єкта в буфер" name="url_copy_label"/>
+	<menu_item_call label="Копіювати SLurl у буфер" name="url_copy"/>
+</context_menu>

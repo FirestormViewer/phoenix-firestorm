@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_snapshot_profile">
+	<text name="title">
+		У мій профіль
+	</text>
+	<combo_box label="Роздільна здатність" name="profile_size_combo">
+		<combo_box.item label="Дане вікно" name="CurrentWindow"/>
+		<combo_box.item label="640x480" name="640x480"/>
+		<combo_box.item label="800x600" name="800x600"/>
+		<combo_box.item label="1024x768" name="1024x768"/>
+		<combo_box.item label="Вибір користувача" name="Custom"/>
+	</combo_box>
+<!-- <layout_stack name="profile_image_params_ls">
+		<layout_panel name="profile_image_size_lp">-->
+			<spinner label="Ширина Висота" name="profile_snapshot_width"/>
+			<check_box label="Зберігати пропорції" name="profile_keep_aspect_check"/>
+<!-- </layout_panel>
+		<layout_panel name="profile_image_metadata_lp">-->
+			<text name="caption_label">
+				Підпис:
+			</text>
+			<check_box initial_value="true" label="Включати місце" name="add_location_cb"/>
+<!-- </layout_panel>
+	</layout_stack>-->
+	<button label="&#x25B6; Вибір" name="cancel_btn"/>
+	<button label="Додати" name="post_btn"/>
+</panel>

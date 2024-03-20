@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="land holdings floater" title="Моя земля">
+	<floater.string name="area_string">
+		[AREA] м²
+	</floater.string>
+	<scroll_list name="parcel list">
+		<scroll_list.columns label="Ділянка" name="name"/>
+		<scroll_list.columns label="Регіон" name="location"/>
+		<scroll_list.columns label="Тип" name="type"/>
+		<scroll_list.columns label="Площа" name="area"/>
+	</scroll_list>
+	<button label="Телепорт" label_selected="Телепорт" name="Teleport" tool_tip="Телепортуватись у центр цієї землі."/>
+	<button label="Мапа" label_selected="Мапа" name="Show on Map" tool_tip="Показати цю землю на мапі світу."/>
+	<text name="contrib_label">
+		Ваші вкладення у групи:
+	</text>
+	<scroll_list name="grant list">
+		<scroll_list.columns label="Група" name="group"/>
+		<scroll_list.columns label="Площа" name="area"/>
+	</scroll_list>
+	<text name="allowed_label">
+		Дозволений розмір володінь для поточного плану оплат:
+	</text>
+	<text name="allowed_text">
+		[AREA] м²
+	</text>
+	<text name="current_label">
+		Поточний розмір:
+	</text>
+	<text name="current_text">
+		[AREA] м²
+	</text>
+	<text name="available_label">
+		Доступно для покупки:
+	</text>
+	<text name="available_text">
+		[AREA] м²
+	</text>
+</floater>

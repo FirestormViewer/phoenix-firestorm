@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Image Preview">
+	<string name="with_alpha" value="з альфою"/>
+	<string name="no_alpha" value="немає альфи"/>
+	<text name="name_label">
+		Назва:
+	</text>
+	<text name="description_label">
+		Опис:
+	</text>
+	<text name="preview_label">
+		Показати як:
+	</text>
+	<combo_box label="Тип одягу" name="clothing_type_combo">
+		<item label="Зображення" name="Image" value="Зображення"/>
+		<item label="Волосся" name="Hair" value="Волоси"/>
+		<item label="Жіноча голова" name="FemaleHead" value="Жіноча голова"/>
+		<item label="Верхня частина тіла жінки" name="FemaleUpperBody" value="Верхня частина тіла жінки"/>
+		<item label="Нижня частина тіла жінки" name="FemaleLowerBody" value="Нижня частина тіла жінки"/>
+		<item label="Чоловіча голова" name="MaleHead" value="Чоловіча голова"/>
+		<item label="Верхня частина тіла чоловіка" name="MaleUpperBody" value="Верхня частина тіла чоловіка"/>
+		<item label="Нижня частина тіла чоловіка" name="MaleLowerBody" value="Нижня частина тіла чоловіка"/>
+		<item label="Спідниця" name="Skirt" value="Спідниця"/>
+		<item label="Скульптурний примітив" name="SculptedPrim" value="Скульптурний примітив"/>
+	</combo_box>
+	<panel name="image_alpha_warning">
+		<check_box label="Порожній альфа-канал буде видалено" name="strip_alpha_check"/>
+	</panel>
+	<text name="bad_image_text">
+		Неможливо прочитати зображення.
+Спробуйте зберегти зображення як 24-бітовий TGA-файл (Targa).
+	</text>
+	<text name="uploaded_size_text">
+		Завантажений розмір: [X_RES]x[Y_RES], [ALPHA]
+	</text>
+	<check_box label="Використовувати стиск без втрат" name="lossless_check"/>
+	<check_box name="temp_check" label="Тимчасово (безкоштовно)" tool_tip="Встановлює актив як тимчасовий, що означає, що він безкоштовний, але натомість годиться лише протягом короткого часу, перш ніж він перестане існувати."/>
+	<button label="Скасувати" name="cancel_btn"/>
+	<button label="Завантажити (L$[AMOUNT])" name="ok_btn"/>
+	<text name="info_text" value="= тут буде текст інформації про плату за завантаження ="/>
+</floater>

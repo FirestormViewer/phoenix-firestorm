@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="navigation_bar">
+	<layout_stack name="navigation_favorites_bar_visibility_stack">
+		<layout_panel name="navigation_bar_visibility_panel">
+			<layout_stack name="location_search_layout">
+				<layout_panel name="navigation_buttons_visibility_panel">
+					<pull_button name="back_btn" tool_tip="Повернутись до попередньої локації"/>
+					<pull_button name="forward_btn" tool_tip="Іти вперед на одну локацію"/>
+					<button name="home_btn" tool_tip="Телепортуватися додому"/>
+					<button name="About_Land" label="Земля" tool_tip="Відкриває вікно інформації про ділянку"/>
+					<button name="PersonalLighting" label="Світло" tool_tip="Відкриває вікно Особистого Освітлення"/>
+				</layout_panel>
+				<layout_panel name="location_bar_visibility_panel">
+					<location_input label="Місце" name="location_combo"/>
+				</layout_panel>
+				<layout_panel name="search_bar_visibility_panel">
+					<search_combo_box label="Пошук" name="search_combo_box" tool_tip="Пошук">
+						<combo_editor label="Пошук (MetaVerse)" name="search_combo_editor"/>
+					</search_combo_box>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="favorites_bar_visibility_panel">
+			<favorites_bar name="favorite" tool_tip="Перетягніть закладку для швидкого доступу до ваших улюблених місць!">
+				<label name="favorites_bar_label" tool_tip="Перетягніть закладку для швидкого доступу до ваших улюблених місць!">
+					Вибрані закладки
+				</label>
+				<chevron_button name="more_btn" tool_tip="Показати більше у 'Вибраних'"/>
+			</favorites_bar>
+		</layout_panel>
+	</layout_stack>
+</panel>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="settings_debug" title="Налаштування налагодження">
+	<panel name="debug_settings_search_panel">
+		<search_editor label="Знайти" name="search_settings_input" tool_tip="Введіть запит, який вас цікавить. Результати будуть відображатися для часткових повнотекстових збігів у назві параметра або в коментарі."/>
+	</panel>
+	<panel name="debug_settings_values_panel">
+		<text_editor name="comment_text" tool_tip="Коментар налагодження налаштувань. Часто дає корисну інформацію про налаштування, які ви вибрали."/>
+		<radio_group name="boolean_combo">
+			<radio_item label="Істина" name="TRUE"/>
+			<radio_item label="Брехня" name="FALSE"/>
+		</radio_group>
+		<color_swatch label="Цвіт" name="val_color_swatch"/>
+		<button label="Копія" name="copy_btn" tool_tip="Копіює ім'я налаштування в буфер обміну."/>
+		<button label="За замовчуванням" name="default_btn" tool_tip="Скинути цей параметр налагодження на значення за замовчуванням."/>
+	</panel>
+</floater>

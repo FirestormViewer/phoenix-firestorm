@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Вода" name="panel_settings_water">
+	<layout_stack name="water_stack1">
+		<layout_panel name="lp_top">
+			<text name="water_fog_label">Водяний туман:</text>
+			<text name="color_label">Колір:</text>
+			<text name="density_exponent_label">Показник щільності:</text>
+			<text name="underwater_modifier_label">Підводний Модифікатор:</text>
+			<text name="FresnelScaleText">Масштаб Френеля:</text>
+			<text name="FresnelOffsetText">Зміщення Френеля:</text>
+		</layout_panel>
+		<layout_panel name="lp_bottom">
+			<layout_stack name="water_stack2">
+				<layout_panel name="lp_left">
+					<text name="normal_map_label">Карта нормалей</text>
+					<text name="large_wave_speed_label">Швидкість великої хвилі</text>
+					<text name="small_wave_speed_label">Швидкість малої хвилі</text>
+					<text name="reflection_wavelet_scale_label">Масштаб вейвлет-відображення</text>
+				</layout_panel>
+				<layout_panel name="lp_right">
+					<text name="refraction_and_blur_label">Проломлення та розмиття:</text>
+					<text name="refraction_scale_above_label">Масштаб заломлення (вище)</text>
+					<text name="refraction_scale_below_label">Масштаб заломлення (нижче)</text>
+					<text name="blur_multiplier_label">Множина розмиття</text>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>

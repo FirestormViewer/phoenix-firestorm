@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="Avatar Profile Menu Self">
+	<menu_item_call label="Правити Відображуване Ім'я" name="edit_display_name"/>
+	<menu_item_call label="Правити Партнера" name="edit_partner"/>
+	<menu_item_call label="Завантажити Фото" name="upload_photo"/>
+	<menu_item_call label="Змінити Фото" name="change_photo"/>
+	<menu_item_call label="Видалити Фото" name="remove_photo"/>
+	<menu_item_call label="Копіювати Відображуване Ім'я" name="copy_display_name"/>
+	<menu_item_call label="Копіювати Ім'я користувача" name="copy_name"/>
+	<menu_item_call label="Копіювати Ідентифікатор" name="copy_id"/>
+</toggleable_menu>

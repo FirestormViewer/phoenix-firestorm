@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="rlv_behaviours" title="Активні обмеження RLV">
+  <tab_container name="behaviour_tab">
+    <panel label="Обмеження" name="behaviour_panel">
+      <scroll_list name="behaviour_list" tool_tip="Список поточних обмежень RLVa.">
+        <scroll_list.columns label="Обмеження" name="behaviour" width="100"/>
+        <scroll_list.columns label="Ім'я об'єкта" name="issuer"/>
+      </scroll_list>
+    </panel>
+    <panel label="Виключення" name="exception_panel">
+      <scroll_list name="exception_list" tool_tip="Список поточних винятків RLVa.">
+        <scroll_list.columns label="Виключення" name="behaviour" width="100"/>
+        <scroll_list.columns label="Джерело" name="option" />
+        <scroll_list.columns label="Ім'я об'єкта" name="issuer" />
+      </scroll_list>
+    </panel>
+    <panel label="Модифікатори" name="modifier_panel">
+      <scroll_list name="modifier_list" tool_tip="Список поточних модифікаторів RLVa." >
+        <scroll_list.columns label="Модифікатор" name="modifier" width="150" />
+        <scroll_list.columns label="Значення" name="value" width="105" />
+        <scroll_list.columns label="Основний об'єкт" name="primary" />
+      </scroll_list>
+    </panel>
+  </tab_container>
+  <panel name="bottom_panel">
+    <button label="Копіювати в буфер обміну" name="copy_btn" width="200" />
+  </panel>
+</floater>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="linkreplace" title="Заміна Посилань Інвентар">
+	<string name="Ready">Готово...</string>
+	<string name="TargetNotFound">Цільовий елемент не знайдено.</string>
+	<string name="ItemsIdentical">Джерело та мета ідентичні.</string>
+	<string name="ItemsFound">Знайдено [NUM] посилань на ресурси.</string>
+	<string name="ItemsRemaining">Посилання, що залишилися: [NUM]</string>
+	<string name="ReplaceFinished">Закінчено заміну посилань інвентарю.</string>
+	<text name="source_label">Старе:</text>
+	<inventory_link_replace_drop_target name="source_uuid_editor" tool_tip="Перетягніть сюди поточний інвентар, який потрібно замінити."/>
+	<text left="10" right="-10" name="delete_text">
+		Посилання на цей елемент буде видалено.
+	</text>
+	<text name="target_label">Нов.:</text>
+	<inventory_link_replace_drop_target name="target_uuid_editor" tool_tip="Перетягніть новий предмет інвентарю сюди."/>
+	<check_box label="Видалити тільки посилання" name="delete_links_only"/>
+	<text name="status_text">Готово...</text>
+	<button name="btn_refresh" label="Оновити"/>
+	<button name="btn_start" label="Почати"/>
+</floater>

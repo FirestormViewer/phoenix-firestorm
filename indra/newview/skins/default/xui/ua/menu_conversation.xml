@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toggleable_menu name="menu_conversation_participant">
+	<menu_item_call label="Закінчити розмову" name="close_conversation" />
+	<menu_item_call label="Почати голосову розмову" name="open_voice_conversation" />
+	<menu_item_call label="Відключитись від голосової розмови" name="disconnect_from_voice" />
+	<menu_item_call label="Закрити вибране" name="close_selected_conversations" />
+	<menu_item_call label="Показати профіль" name="view_profile" />
+	<menu_item_call label="Надіслати ОП" name="im" />
+	<menu_item_call label="Запропонувати телепорт" name="offer_teleport" />
+	<menu_item_call label="Попросити телепорт" name="request_teleport" />
+	<menu_item_call label="Голосовий виклик" name="voice_call" />
+	<menu_item_call label="Історія чату..." name="chat_history" />
+	<menu_item_call label="Додати до друзів" name="add_friend" />
+	<menu_item_call label="Видалити з друзів" name="remove_friend" />
+	<menu_item_call label="Видалити з друзів" name="remove_friends" />
+	<menu_item_call label="Запросити до групи..." name="invite_to_group" />
+	<menu_item_call label="Наблизити" name="zoom_in" />
+	<menu_item_call label="Мапа" name="map" />
+	<menu_item_call label="Поділитися" name="share" />
+	<menu_item_call label="Заплатити" name="pay" />
+	<menu_item_check label="Блокувати голос" name="block_unblock" />
+	<menu_item_check label="Блокувати текст" name="MuteText" />
+	<menu_item_call label="Профіль групи" name="group_profile" />
+	<menu_item_call label="Активувати групу" name="activate_group" />
+	<menu_item_call label="Залишити групу" name="leave_group" />
+	<context_menu label="Опції модератора" name="Moderator Options">
+		<menu_item_check label="Дозволити текстовий чат" name="AllowTextChat" />
+		<menu_item_call label="Відключення цього мешканця" name="ModerateVoiceMuteSelected" />
+		<menu_item_call label="Увімкнення цього мешканця" name="ModerateVoiceUnMuteSelected" />
+		<menu_item_call label="Вимкнути всіх" name="ModerateVoiceMute" />
+		<menu_item_call label="Включити всіх" name="ModerateVoiceUnmute" />
+	</context_menu>
+	<menu_item_call label="Забанити" name="BanMember" />
+</toggleable_menu>

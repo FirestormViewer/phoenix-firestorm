@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_buy_contents" title="Покупка вмісту">
+	<floater.string name="no_copy_text">
+		(не копіюється)
+	</floater.string>
+	<floater.string name="no_modify_text">
+		(не змінюється)
+	</floater.string>
+	<floater.string name="no_transfer_text">
+		(не передається)
+	</floater.string>
+	<text name="contains_text">
+		&lt;nolink&gt;[NAME]&lt;/nolink&gt; містить:
+	</text>
+	<text name="buy_text">
+		Придбати за L$[AMOUNT] у мешканця [NAME]?
+	</text>
+	<check_box label="Вдягти одяг зараз" name="wear_check"/>
+	<button label="Купити" label_selected="Купити" name="buy_btn"/>
+	<button label="Скасувати" label_selected="Скасувати" name="cancel_btn"/>
+</floater>
+
+
+

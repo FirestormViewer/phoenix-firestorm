@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Джойстик" title="Конфігурація джойстика">
+	<floater.string name="JoystickDisabled">
+		Ні
+	</floater.string>
+	<text name="joystick_lbl" width="60">
+		Джойстик:
+	</text>
+	<spinner label="Вісь X" name="JoystickAxis1"/>
+	<spinner label="Вісь Y" name="JoystickAxis2"/>
+	<spinner label="Вісь Z" name="JoystickAxis0"/>
+	<spinner label="Вісь Нахилу" name="JoystickAxis4"/>
+	<spinner label="Вісь Ризикання" name="JoystickAxis5"/>
+	<spinner label="Вісь обертання" name="JoystickAxis3"/>
+	<spinner label="Вісь Масштабу" name="JoystickAxis6"/>
+	<check_box label="Масштабування" name="ZoomDirect"/>
+	<check_box label="3D курсор" name="Cursor3D" left="320" />
+	<check_box label="Автовирівнювання" name="Автовирівнювання"/>
+	<text name="Режими керування:">
+		Режими управління:
+	</text>
+	<check_box label="Аватар" name="JoystickAvatarEnabled"/>
+	<check_box label="Будівництво" name="JoystickBuildEnabled"/>
+	<check_box label="Камера" name="JoystickFlycamEnabled"/>
+	<text name="joystick_monitor_label">
+		Джойстик монітора
+	</text>
+	<icon name="button_light_0" tool_tip="Кнопка 0"/>
+	<icon name="button_light_1" tool_tip="Кнопка 1"/>
+	<icon name="button_light_2" tool_tip="Кнопка 2"/>
+	<icon name="button_light_3" tool_tip="Кнопка 3"/>
+	<icon name="button_light_4" tool_tip="Кнопка 4"/>
+	<icon name="button_light_5" tool_tip="Кнопка 5"/>
+	<icon name="button_light_6" tool_tip="Кнопка 6"/>
+	<icon name="button_light_7" tool_tip="Кнопка 7"/>
+	<icon name="button_light_8" tool_tip="Кнопка 8"/>
+	<icon name="button_light_9" tool_tip="Кнопка 9"/>
+	<icon name="button_light_10" tool_tip="Кнопка 10"/>
+	<icon name="button_light_11" tool_tip="Кнопка 11"/>
+	<icon name="button_light_12" tool_tip="Кнопка 12"/>
+	<icon name="button_light_13" tool_tip="Кнопка 13"/>
+	<icon name="button_light_14" tool_tip="Кнопка 14"/>
+	<icon name="button_light_15" tool_tip="Кнопка 15"/>
+	<scroll_container name="joystick_monitor_axes_scroller">
+		<container_view name="joystick_monitor_axes_container">
+			<stat_view name="axis_view_0">
+				<stat_bar label="Вісь 0" name="axis0"/>
+			</stat_view>
+			<stat_view name="axis_view_1">
+				<stat_bar label="Вісь 1" name="axis1"/>
+			</stat_view>
+			<stat_view name="axis_view_2">
+				<stat_bar label="Вісь 2" name="axis2"/>
+			</stat_view>
+			<stat_view name="axis_view_3">
+				<stat_bar label="Вісь 3" name="axis3"/>
+			</stat_view>
+			<stat_view name="axis_view_4">
+				<stat_bar label="Вісь 4" name="axis4"/>
+			</stat_view>
+			<stat_view name="axis_view_5">
+				<stat_bar label="Вісь 5" name="axis5"/>
+			</stat_view>
+			<stat_view name="axis_view_6">
+				<stat_bar label="Ось 6" name="axis6"/>
+			</stat_view>
+			<stat_view name="axis_view_7">
+				<stat_bar label="Вісь 7" name="axis7"/>
+			</stat_view>
+		</container_view>
+	</scroll_container>
+	<text name="XScale">
+		Шкала X
+	</text>
+	<text name="YScale">
+		Шкала Y
+	</text>
+	<text name="ZScale">
+		Шкала Z
+	</text>
+	<text name="PitchScale">
+		Шкала нахилу
+	</text>
+	<text name="YawScale">
+		Шкала нишпорення
+	</text>
+	<text name="RollScale">
+		Шкала обертання
+	</text>
+	<text name="XDeadZone">
+		Вільна зона X
+	</text>
+	<text name="YDeadZone">
+		Вільна зона Y
+	</text>
+	<text name="ZDeadZone">
+		Вільна зона Z
+	</text>
+	<text name="PitchDeadZone">
+		Вільна зона Нахилу
+	</text>
+	<text name="YawDeadZone">
+		Вільна зона Ризикання
+	</text>
+	<text name="RollDeadZone">
+		Вільна зона обертання
+	</text>
+	<text name="Fathering">
+		Згладжування
+	</text>
+	<text name="ZoomScale2">
+		Шкала Масштабу
+	</text>
+	<text name="ZoomDeadZone">
+		Вільна зона Масштабу
+	</text>
+	<button label="Стандарт для SpaceNavigator" name="SpaceNavigatorDefaults"/>
+	<button label="Да" label_selected="Да" name="ok_btn"/>
+	<button label="Скасувати" label_selected="Скасувати" name="cancel_btn"/>
+</floater>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="imcontacts" title="Контакти">
+	<string name="no_friends" value="Немає друзів" />
+	<string name="no_filtered_groups_msg" value="Не знайдено груп, які містять &quot;[SEARCH_TERM]&quot;." />
+	<string name="no_groups_msg" value="Шукайте групи, до яких можна вступити? Спробуйте [secondlife:///app/search/groups поиск]." />
+	<tab_container name="friends_and_groups">
+		<panel label="Друзі" name="friends_panel" />
+		<panel label="Групи" name="groups_panel" />
+		<panel label="Набори" name="contact_sets_panel" />
+	</tab_container>
+</floater>

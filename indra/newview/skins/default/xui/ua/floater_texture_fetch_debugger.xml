@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="TexFetchDebugger" title="Налагодження вилучення текстур">
+	<text name="total_num_fetched_label">
+		1, Загальна кількість вилучених текстур: [NUM]
+	</text>
+	<text name="total_num_fetching_requests_label">
+		2, Загальна кількість запитів: [NUM]
+	</text>
+	<text name="total_num_cache_hits_label">
+		3, Загальна кількість попадань у кеш: [NUM]
+	</text>
+	<text name="total_num_visible_tex_label">
+		4, Загальна кількість видимих ​​текстур: [NUM]
+	</text>
+	<text name="total_num_visible_tex_fetch_req_label">
+		5, Загальна кількість запитів на отримання видимих ​​текстур: [NUM]
+	</text>
+	<text name="total_fetched_data_label">
+		6, Загальний обсяг даних: [SIZE1] КБ, декодовані дані: [SIZE2] КБ, [PIXEL] Мпікселів
+	</text>
+	<text name="total_fetched_vis_data_label">
+		7, Загальний обсяг видимих ​​даних: [SIZE1] КБ, декодовані дані: [SIZE2] КБ
+	</text>
+	<text name="total_fetched_rendered_data_label">
+		8, Загальний обсяг візуалізованих даних: [SIZE1] КБ, декодовані дані: [SIZE2] КБ, [PIXEL] Мпікселів
+	</text>
+	<text name="total_time_cache_read_label">
+		9, Загальний час читання з кешу: [TIME] з
+	</text>
+	<text name="total_time_cache_write_label">
+		10, Загальний час запису в кеш: [TIME] з
+	</text>
+	<text name="total_time_decode_label">
+		11, Загальний час декодування: [TIME] з
+	</text>
+	<text name="total_time_gl_label">
+		12, Загальний час створення текстур: [TIME] з
+	</text>
+	<text name="total_time_http_label">
+		13, Загальний час HTTP-вилучення: [TIME] з
+	</text>
+	<text name="total_time_fetch_label">
+		14, Загальний час повного вилучення: [TIME] с
+	</text>
+	<text name="total_time_refetch_vis_cache_label">
+		15, Повторне вилучення з кешу, час: [TIME] с, вилучено: [SIZE] КБ, [PIXEL] Мпікселів
+	</text>
+	<text name="total_time_refetch_all_cache_label">
+		16, Повторне вилучення всіх текстур з кешу, час: [TIME] с, вилучено: [SIZE] КБ, [PIXEL] Мпікселів
+	</text>
+	<text name="total_time_refetch_vis_http_label">
+		17, Повторне вилучення з HTTP, час: [TIME] с, вилучено: [SIZE] КБ, [PIXEL] Мпікселів
+	</text>
+	<text name="total_time_refetch_all_http_label">
+		18, Повторне вилучення всіх текстур з HTTP, час: [TIME] с, вилучено: [SIZE] КБ, [PIXEL] Мпікселів
+	</text>
+	<spinner label="19, Ставлення тексели/піксели:" name="texel_pixel_ratio"/>
+	<text name="texture_source_label">
+		20, Істояник текстур:
+	</text>
+	<radio_group name="texture_source">
+		<radio_item label="Кеш + HTTP" name="0"/>
+		<radio_item label="Тільки HTTP" name="1"/>
+	</radio_group>
+	<button label="Пуск" name="start_btn"/>
+	<button label="Скинути" name="clear_btn"/>
+	<button label="Закрити" name="close_btn"/>
+	<button label="Скинути час вибірки" name="reset_time_btn"/>
+	<button label="Читання кешу" name="cacheread_btn"/>
+	<button label="Запис в кеш" name="cachewrite_btn"/>
+	<button label="HTTP" name="http_btn"/>
+	<button label="Декод" name="decode_btn"/>
+	<button label="Текстура GL" name="gl_btn"/>
+	<button label="Повторно витягти з кешу" name="refetchviscache_btn"/>
+	<button label="Повторно витягти все з кешу" name="refetchallcache_btn"/>
+	<button label="Повторно витягти з HTTP" name="refetchvishttp_btn"/>
+	<button label="Повторно витягти все з HTTP" name="refetchallhttp_btn"/>
+</floater>
+
+
+

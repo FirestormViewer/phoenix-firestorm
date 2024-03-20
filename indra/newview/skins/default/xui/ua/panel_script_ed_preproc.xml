@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="script panel" width="497">
+	<panel.string name="loading">
+		Завантаження...
+	</panel.string>
+	<panel.string name="can_not_view">
+		Ви не можете переглядати та змінювати цей скрипт, оскільки для нього вибрано категорію «не копіювані». Для перегляду або зміни скрипту в об'єкті потрібні повні права доступу.
+	</panel.string>
+	<panel.string name="public_objects_can_not_run">
+		Загальнодоступні об'єкти не можуть запускати скрипти
+	</panel.string>
+	<panel.string name="script_running">
+		Виконується
+	</panel.string>
+	<panel.string name="Title">
+		Скрипт: [NAME]
+	</panel.string>
+	<panel.string name="external_editor_not_set">
+		Виберіть редактор, вибравши змінне середовище LL_SCRIPT_EDITOR або параметр ExternalEditor.
+	</panel.string>
+	<menu_bar name="script_menu">
+		<menu label="Файл" name="File">
+			<menu_item_call label="Зберегти" name="Save"/>
+			<menu_item_call label="Скасувати всі зміни" name="Revert All Changes"/>
+			<menu_item_call label="Завантажити з файлу..." name="LoadFromFile"/>
+			<menu_item_call label="Зберегти у файл..." name="SaveToFile"/>
+			<menu_item_call label="Налаштування Редактора Скриптів..." name="ScriptPrefs" />
+		</menu>
+		<menu label="Змінити" name="Edit">
+			<menu_item_call label="Скасувати" name="Undo"/>
+			<menu_item_call label="Повернути" name="Redo"/>
+			<menu_item_call label="Вирізати" name="Cut"/>
+			<menu_item_call label="Копіювати" name="Copy"/>
+			<menu_item_call label="Вставити" name="Paste"/>
+			<menu_item_call label="Виділити все" name="Select All"/>
+			<menu_item_call label="Зняти виділення" name="Deselect"/>
+			<menu_item_call label="Пошук і заміна..." name="Search / Replace..."/>
+			<menu_item_call label="Перейти на строку..." name="Go to line..."/>
+		</menu>
+		<menu label="Довідка" name="Help">
+			<menu_item_call label="Справка..." name="Help..."/>
+			<menu_item_call label="Довідка за ключовими словами..." name="Keyword Help..."/>
+			<menu_item_call label="Бібліотека Скриптів..." name="Script Library"/>
+		</menu>
+	</menu_bar>
+	<layout_stack name="script_editor_button_bar">
+		<layout_panel name="script_editor_buttons_panel">
+			<button tool_tip="Зберегти скрипт" name="save_btn"/>
+			<button tool_tip="Зовнішній Редактор" name="Edit_btn"/>
+			<button tool_tip="Завантажити Скрипт з вашого жорсткого диска" name="load_disk_btn"/>
+			<button tool_tip="Зберегти Скрипт на жорсткий диск" name="save_disk_btn"/>
+			<button tool_tip="Вирізати" name="cut_btn"/>
+			<button tool_tip="Копіювати" name="copy_btn"/>
+			<button tool_tip="Вставити" name="paste_btn"/>
+			<button tool_tip="Скасувати" name="undo_btn"/>
+			<button tool_tip="Повернути" name="redo_btn"/>
+			<button tool_tip="Пошук/заміна" name="search_btn"/>
+			<button tool_tip="Налаштування Редактора Скриптів" name="prefs_btn"/>
+		</layout_panel>
+	</layout_stack>
+
+	<tab_container name="Tabset" >
+		<panel name="Script" label="Скрипт" width="487">
+			<script_editor name="Script Editor">
+				Завантаження...
+			</script_editor>
+		</panel>
+		<panel name="Preprocessed" label="Препроцессор" width="487">
+			<fs_lsl_preproc_viewer name="Post Editor">
+				Завантаження...
+			</fs_lsl_preproc_viewer>
+		</panel>
+	</tab_container>
+
+	<combo_box label="Вставити..." name="Insert..." width="128" />
+	<text name="line_col" value="Рядок 0, Стовпець 0" width="128" />
+	<button label="Редактор..." name="edit_btn_2" width="90" />
+	<button label="Зберегти" label_selected="Зберегти" name="save_btn_2" width="90" />
+</panel>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Події" name="panel_ls_events">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Введіть умови пошуку:
+		</text>
+		<radio_group name="events_search_mode">
+			<radio_item label="Поточні та майбутні" name="current"/>
+			<radio_item label="За датою" name="date"/>
+		</radio_group>
+		<combo_box name="events_category">
+			<combo_box.item label="Будь-яка категорія" name="any"/>
+			<combo_box.item label="Обговорення" name="discussion"/>
+			<combo_box.item label="Спорт" name="sports"/>
+			<combo_box.item label="Жива дискотека" name="dj"/>
+			<combo_box.item label="Жива музика" name="music"/>
+			<combo_box.item label="Комерція" name="commercial"/>
+			<combo_box.item label="Нічне життя/розваги" name="nightlife"/>
+			<combo_box.item label="Ігри/Конкурси" name="games"/>
+			<combo_box.item label="Театральне" name="pageants"/>
+			<combo_box.item label="Освіта" name="education"/>
+			<combo_box.item label="Мистецтво та культура" name="arts"/>
+			<combo_box.item label="Благодійність/Групи підтримки" name="charity"/>
+			<combo_box.item label="Різне" name="misc"/>
+		</combo_box>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_events">
+			<columns label="Подія" name="name"/>
+			<columns label="Дата/час" name="date"/>
+			<columns label="Час" name="time"/>
+		</scroll_list>
+		<button label="Вчора" name="events_yesterday"/>
+		<button label="Сьогодні" name="events_today"/>
+		<button label="Завтра" name="events_tomorrow"/>
+		<button label="Назад" name="events_back"/>
+		<button label="Вперед" name="events_next"/>
+	</panel>
+</panel>

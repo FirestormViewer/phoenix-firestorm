@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_performance_autotune">
+	<text name="back_lbl">Назад</text>
+	<text name="settings_title">Налаштування автоналаштування</text>
+	<text name="quality_lbl">Далекі аватари</text>
+	<check_box name="FSAutoTuneImpostorByDistEnabled" label="Оптимізація на основі відстані" tool_tip="Якщо цей параметр увімкнений, засіб перегляду налаштує параметр MaxNonImpostors, щоб обмежити повністю візуалізовані аватари тільки тими, що знаходяться в межах певного радіусу."/>
+	<spinner name="ffa_autotune" label="Найдальший"/>
+	<text name="distant_av_advice">
+Далекі аватари оптимізуватимуться незалежно від рендерингу. Встанови дальність, з якою аватар буде оптимізовано.
+Примітка. Цей параметр встановить MaxNonImpostors значення 1,
+якщо поблизу немає нікого.
+	</text>
+	<text name="distance_lbl">Межі налаштування відстані</text>
+	<spinner name="min_dd_autotune" label="Мінімальна дистанція"/>
+	<spinner name="pref_dd_autotune" label="Віддаю перевагу дистанції"/>
+	<text name="distance_desc1">
+При налаштуванні параметрів сцени автоналаштування буде вибирати значення між мінімальною і кращою відстанню промальовування.
+	</text>
+	<text name="sundry_lbl">Різні налаштування</text>
+	<check_box name="alow_self_impostor" label="Оптимізувати свій аватар" tool_tip="Коли цей параметр увімкнено, ваш власний аватар може відображатися як силует."/>
+	<check_box name="show_tuned_art" label="Оптимізований час" tool_tip="Якщо цей параметр увімкнено, у стовпці «Час» відображається поточний час візуалізації, а не час попереднього налаштування."/>
+	<text name="sundry_desc1">
+Ці параметри керують більш тонкими параметрами. Використовуйте сторінку онлайн-довідки, щоб отримати додаткову інформацію про те, що вони роблять.
+	</text>
+</panel>

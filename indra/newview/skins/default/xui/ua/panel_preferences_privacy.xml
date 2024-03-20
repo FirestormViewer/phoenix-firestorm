@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Спілкування" name="im">
+	<string name="AutoresponseItemNotSet">
+		Не встановлений
+	</string>
+	<string name="AutoresponseItemNotAvailable">
+		Недоступний
+	</string>
+	<string name="AutoresponseItemNotLoggedIn">
+		Не в мережі
+	</string>
+	<tab_container label="Конфіденційність" name="tabs">
+		<panel label="Загальне" name="tab-general">
+			<panel.string name="log_in_to_change">
+				Увійдіть для змін
+			</panel.string>
+			<button label="Очистити історію" tool_tip="Очистити зображення входу, останнє розташування, історію телепорту, інтернет та текстурний кеш" name="clear_webcache"/>
+			<text name="cache_size_label">
+				(Місця, зображення, інтернет, історія пошуку)
+			</text>
+			<check_box label="Показувати мій профіль у результатах пошуку" name="online_searchresults"/>
+			<check_box label="Тільки друзі та групи знають, що я в мережі" name="online_visibility"/>
+			<check_box label="Тільки друзі та групи можуть мені дзвонити або писати повідомлення" name="voice_call_friends_only_check"/>
+			<check_box label="Показати запрошення для груп, що вже приєдналися" name="FSShowJoinedGroupInvitations" />
+			<check_box label="Вимкнути мікрофон після закінчення дзвінків" name="auto_disengage_mic_check"/>
+			<check_box label="Дозволити скриптовим об'єктам бачити моє поточне налаштування мови" name="LanguageIsPublic"/>
+			<check_box label="Автоматично приймати нові об'єкти інвентарю" name="Auto_Accept_New_Inventory"/>
+			<check_box label="Журнал автоматично прийнятих об'єктів у загальному чаті" name="FSLogAutoAcceptInventoryToChat" />
+			<check_box label="Використовувати попередні повідомлення інвентарю з пропозицією прийняти/відхилити" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Використовувати попередні повідомлення інвентарю з пропозицією прийняти/відхилити"/>
+			<check_box label="Автоматично показувати нові предмети в інвентарі" name="Show_In_Inventory"/>
+			<check_box label="Автоматично переглядати нотатки, текстури, закладки після прийняття" name="Show_New_Inventory"/>
+			<check_box label="Автоматично показувати знімки в інвентарі після завантаження" name="FSOpenInventoryAfterSnapshot"/>
+			<check_box label="Створити ефект із частинок при отриманні об'єкта інвентарю від інших аватарів" name="FSCreateGiveInventoryParticleEffect"/>
+			<check_box label="Показати мої закладки під час входу до системи (у меню 'Запустити з')" name="favorites_on_login_check"/>
+			<button label="Керування списком заблокованих" name="block_list"/>
+		</panel>
+		<panel label="Історії розмов" name="tab-logging">
+			<text name="logging_label">
+				Зберегти:
+			</text>
+			<combo_box name="conversation_log_combo" >
+				<item name="log_and_transcripts" label="Журнал та історія"/>
+				<item name="log_only" label="Тільки журнал"/>
+				<item name="no_log_or_transcript" label="Немає історії або журналу"/>
+			</combo_box>
+			<button label="Очистити журнал..." name="clear_log"/>
+			<button label="Видалити історії..." name="delete_transcripts"/>
+			<check_box name="LogNearbyChat" label="Зберегти історію спільного чату" tool_tip="Запис повідомлення спільного чату на жорсткому диску"/>
+			<check_box label="Використовувати старий формат імені в історії" name="UseLegacyIMLogNames" tool_tip="Якщо опція увімкнена, формат застарілого імені файлу для транскриптів (User Name) буде використовуватись замість нового формату (user_name)."/>
+			<check_box label="Додати час у назві файлу історії" name="LogFileNamewithDate" tool_tip="Додає час у назві файлу у форматі chat-РРР-ММ-ДД і 'ЛС ім'я файла'-РРРР-ММ."/>
+			<check_box label="Використовувати вбудований перегляд історії" name="FSUseBuiltInHistory" tool_tip="Використовувати вбудований перегляд історії, якщо вимкнено, буде відкрито програму перегляду текстових файлів за умовчанням системи"/>
+		</panel>
+		<panel label="Фокус камери (LookAt)" name="tab-lookat">
+			<check_box label="Показати на що дивляться інші:" name="showlookat" tool_tip="Використовується для визначення точки прив'язки камери аватара."/>
+			<text name="lookatshownames" tool_tip="Формат імені для відображення імен Аватар на фокусі камери">
+				Імена у фокусів камери:
+			</text>
+			<combo_box name="lookatshownames_combobox">
+				<combo_box.item label="Немає" name="None"/>
+				<combo_box.item label="Повне ім'я" name="Complete_Name"/>
+				<combo_box.item label="Назва, що відображається" name="Display_Name"/>
+				<combo_box.item label="Старе ім'я" name="Legacy_Name"/>
+				<combo_box.item label="Ім'я користувача" name="User_Name"/>
+			</combo_box>
+			<check_box label="Не показувати свій фокус камери" name="LookAtHideOwn" tool_tip="Не показувати свій фокус камери"/>
+			<check_box label="Малювати лінії до мети" name="ExodusLookAtLines" tool_tip="Малювати лінію від аватара до його фокусу камери" />
+			<text name="mylookat">
+				Мій фокус камери:
+			</text>
+			<check_box label="Не показувати свій фокус камери іншим" name="privatelookat" tool_tip="Не показувати свій фокус камери іншим"/>
+			<check_box label="Не показувати свій фокус камери локально (для себе)" name="privateLocalLookat" tool_tip="Не показувати свій фокус камери локально (для себе)"/>
+			<check_box label="Не надсилати інформацію вибору" name="privatepointat" tool_tip="Запобігає показу моєї точки вибору іншим"/>
+			<check_box label="Гранична відстань від голови:" name="LimitLookAt" tool_tip="Закріплює ваш погляд на ціль навколо вашої голови." width="220" />
+		</panel>
+		<panel label="Автовідповідь 1" name="tab-autoresponse-1">
+			<text name="autorespond_toggle_location_tip">
+				Примітка: Щоб активувати повідомлення автовідповідача, встановіть онлайн-статус через меню Спілкування &gt; Статус у мережі.
+			</text>
+			<text name="text_box3">
+				Автоматична відповідь у режимі 'Недоступний' (тобто зайнятий):
+			</text>
+			<text name="autorespond_response_label">
+				Автоматична відповідь всім аватарам в режимі 'Автовідповідач':
+			</text>
+			<text name="autorespond_nf_response_label">
+				Автовідповідь аватарам не зі списку друзів в режимі 'Автовідповідач не друзям':
+			</text>
+			<check_box label="Надіслати автовідповідь, коли в режимі 'Немає на місці':" name="send_away_av_response" tool_tip="Надіслати автовідповідь, коли в режимі 'Немає на місці':"/>
+			<check_box label="Відправляти автовідповідь заблокованим аватарам:" name="send_muted_av_response" tool_tip="Відправляти автовідповідь аватарам, яких ви заблокували"/>
+		</panel>
+		<panel label="Автовідповідь 2" name="tab-autoresponse-2">
+			<text name="autorespond_rto_response_label">
+				Автовідповідь всім аватарам у режимі 'Відхиляти всі пропозиції телепортації':
+			</text>
+			<check_box label="Не відхиляти пропозиції телепорту від друзів (і не надсилати відповіді)" name="FSDontRejectTeleportOffersFromFriends" />
+			<text name="autorespond_rfr_response_label">
+				Автовідповідь усім у режимі ВІДКЛИНЯТИ ЗАПИТ ДРУЖБИ:
+			</text>
+			<text name="autoresponse_item_label">
+				Елемент автовідповіді:
+			</text>
+			<fs_copytrans_inventory_drop_target name="autoresponse_item" tool_tip="Перетягніть елемент інвентарю сюди."/>
+			<button label="Очистити" name="clear_autoresponse_item"/>
+		</panel>
+	</tab_container>
+</panel>

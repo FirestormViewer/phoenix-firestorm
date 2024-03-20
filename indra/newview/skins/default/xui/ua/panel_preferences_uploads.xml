@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel label="Завантаження" name="uploads">
+	<text name="title">
+		Поточні папки призначення для передачі
+	</text>
+	<text name="title_models">
+		Зображення
+	</text>
+	<text name="title_sounds">
+		Звуки
+	</text>
+	<text name="title_animation">
+		Анімація
+	</text>
+	<text name="title_model">
+		Моделі
+	</text>
+	<text name="upload_help">
+		Щоб змінити папку призначення, клацніть її в інвентарі правою кнопкою миші та виберіть
+ &quot;Використовувати за замовчуванням для&quot;
+	</text>
+</panel>

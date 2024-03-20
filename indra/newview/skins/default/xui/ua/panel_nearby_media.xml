@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="nearby_media">
+	<string name="media_item_count_format">
+		(%ld предметів з медіа)
+	</string>
+	<string name="empty_item_text">
+		&lt;порожньо&gt;
+	</string>
+	<string name="parcel_media_name">
+		Потокове відео на ділянці
+	</string>
+	<string name="parcel_audio_name">
+		Потоковий звук на ділянці
+	</string>
+	<string name="playing_suffix">
+		(програється)
+	</string>
+	<panel name="minimized_controls">
+		<button label="Вимкнути все" name="all_nearby_media_disable_btn" tool_tip="Вимкнути всі найближчі медіа"/>
+		<button label="Включити все" name="all_nearby_media_enable_btn" tool_tip="Включити всі найближчі медіа"/>
+		<button name="open_prefs_btn" tool_tip="Відкрити налаштування медіа"/>
+		<button label="Більше&gt;&gt;" label_selected="&lt;&lt;Менше" name="more_btn" tool_tip="Додаткове керування" width="75"/>
+	</panel>
+	<panel name="nearby_media_panel">
+		<text name="nearby_media_title">
+			Найближчі медіа
+		</text>
+		<text name="show_text">
+			Показати:
+		</text>
+		<combo_box name="show_combo">
+			<combo_box.item label="Все" name="All"/>
+			<combo_box.item label="На цій ділянці" name="WithinParcel"/>
+			<combo_box.item label="За межами цієї ділянки" name="OutsideParcel"/>
+			<combo_box.item label="На інших аватарах" name="OnOthers"/>
+		</combo_box>
+		<scroll_list name="media_list">
+			<scroll_list.columns label="Відстань" name="media_proximity"/>
+			<scroll_list.columns label="Видимість" name="media_visibility"/>
+			<scroll_list.columns label="Клас" name="media_class"/>
+			<scroll_list.columns label="Назва" name="media_name"/>
+			<scroll_list.columns label="Налагодження" name="media_debug"/>
+		</scroll_list>
+		<panel name="media_controls_panel">
+			<layout_stack name="media_controls">
+				<layout_panel name="stop">
+					<button name="stop_btn" tool_tip="Зупинити вибране медіа"/>
+				</layout_panel>
+				<layout_panel name="play">
+					<button name="play_btn" tool_tip="Програти вибране медіа"/>
+				</layout_panel>
+				<layout_panel name="pause">
+					<button name="pause_btn" tool_tip="Зупинити вибране медіа"/>
+				</layout_panel>
+				<layout_panel name="volume_slider_ctrl">
+					<slider_bar initial_value="0.5" name="volume_slider" tool_tip="Гучність звуку вибраного медіа"/>
+				</layout_panel>
+				<layout_panel name="mute">
+					<button name="mute_btn" tool_tip="Заглушити вибране медіа"/>
+				</layout_panel>
+				<layout_panel name="zoom">
+					<button name="zoom_btn" tool_tip="Наблизити камеру до вибраного медіа"/>
+				</layout_panel>
+				<layout_panel name="unzoom">
+					<button name="unzoom_btn" tool_tip="Видалити камеру від вибраного медіа"/>
+				</layout_panel>
+			</layout_stack>
+		</panel>
+	</panel>
+</panel>

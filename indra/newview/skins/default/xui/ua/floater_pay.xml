@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Give Money">
+	<string name="payee_group">Заплатити групі</string>
+	<string name="payee_resident">Заплатити мешканцю</string>
+	<text name="payee_name">Тестове Ім'я для перевірки</text>
+	<text name="amount text">Або введіть суму:</text>
+	<text name="payment_message_label">Повідомлення (необов'язково):</text>
+	<button label="Заплатити" label_selected="Заплатити" name="pay btn"/>
+	<button label="Скасувати" label_selected="Скасувати" name="cancel btn"/>
+</floater>

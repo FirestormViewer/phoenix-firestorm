@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="inspect" title="Інспектування об'єктів">
+    <floater.string name="timeStamp">
+        [wkday,datetime,slt], [day,datetime,slt] [mth,datetime,slt] [year,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt]
+    </floater.string>
+    <floater.string name="Group">
+        (Група)
+    </floater.string>
+    <floater.string name="stats_list">
+        Загальна статистика:
+
+[NUM_OBJECTS] об'єктів, [NUM_PRIMS]
+
+Граней: [NUM_FACES]
+Видимих: [NUM_VISIBLE_FACES]
+Вершин: [NUM_VERTICES]
+Трикутник: [NUM_TRIANGLES]
+Складн.: [COMPLEXITY]
+
+Текстур: [NUM_TEXTURES]
+TMem: [TEXTURE_MEMORY] Кб
+VRAM: [VRAM_USAGE] КБ
+    </floater.string>
+
+    <text_editor name="linksetstats_text" value="(Завантаження...)"/>
+    <scroll_list name="object_list" tool_tip="Вибір об'єкта з цього списку призведе до його підсвічування">
+        <scroll_list.columns label="Ім'я Об'єкта" name="object_name" />
+        <scroll_list.columns label="Опис" name="description" />
+        <scroll_list.columns label="Ім'я Власника" name="owner_name" />
+        <scroll_list.columns label="Ім'я Творця" name="creator_name" />
+        <scroll_list.columns label="Грані" name="facecount"/>
+        <scroll_list.columns label="Вершини" name="vertexcount" />
+        <scroll_list.columns label="Трикутники" name="trianglecount"/>
+        <scroll_list.columns label="TMem" name="tramcount"/>
+        <scroll_list.columns label="VRAM" name="vramcount"/>
+        <scroll_list.columns label="Дата Створення" name="creation_date"/>
+    </scroll_list>
+    <button label="Профіль власника..." name="button owner"
+     tool_tip="Показує профіль власника об'єкта, що підсвічується"/>
+    <button label="Профіль творця..." name="button creator" tool_tip="Показує профіль творця підсвіченого об'єкта"/>
+    <menu_button name="options_btn" tool_tip="Опції"/>
+</floater>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Proxy Settings Floater" title="Налаштування проксі-сервера">
+	<check_box initial_value="false" label="Використовувати HTTP-проксі для веб-сторінок" name="web_proxy_enabled"/>
+	<text name="http_proxy_label">
+		HTTP-проксі:
+	</text>
+	<line_editor name="web_proxy_editor" tool_tip="Ім'я DNS або IP-адресу HTTP-проксі, який слід використовувати."/>
+	<spinner label="Номер порту:" name="web_proxy_port" tool_tip="Порт HTTP-проксі, який слід використовувати."/>
+	<check_box label="Використовувати для трафіку UDP проксі-сервер SOCKS 5" name="socks_proxy_enabled"/>
+	<text name="socks5_proxy_label">
+		Сервер SOCKS 5:
+	</text>
+	<line_editor name="socks_proxy_editor" tool_tip="Ім'я DNS або IP-адреса проксі-сервера SOCKS 5, який слід використати."/>
+	<spinner label="Номер порту:" name="socks_proxy_port" tool_tip="Порт проксі-сервера SOCKS 5, який слід використовувати."/>
+	<text name="socks_auth_label">
+		Аутентифікація SOCKS:
+	</text>
+	<radio_group name="socks5_auth_type">
+		<radio_item label="Без автентифікації" name="Socks5NoAuth" tool_tip="Автентифікація на проксі-сервері SOCKS 5 не потрібна." value="Ні"/>
+		<radio_item label="Ім'я користувача/пароль" name="Socks5UserPass" tool_tip="На проксі-сервері SOCKS 5 потрібна аутентифікація (ім'я користувача та пароль)." value="UserPass"/>
+	</radio_group>
+	<text name="socks5_username_label">
+		Ім'я користувача:
+	</text>
+	<text name="socks5_password_label">
+		Пароль:
+	</text>
+	<line_editor name="socks5_username" tool_tip="Ім'я користувача для аутентифікації на сервері SOCKS 5"/>
+	<line_editor name="socks5_password" tool_tip="Пароль для аутентифікації на сервері SOCKS 5"/>
+	<text name="other_proxy_label">
+		Інший проксі-сервер HTTP-трафіку:
+	</text>
+	<radio_group name="other_http_proxy_type">
+		<radio_item label="Не використовувати проксі" name="OtherNoProxy" tool_tip="HTTP-трафік, не пов'язаний із вебсайтами, НЕ передаватиметься на проксі-сервер." value="Ні"/>
+		<radio_item label="Використовувати HTTP-проксі" name="OtherHTTPProxy" tool_tip="HTTP-трафік, не пов'язаний із вебвузлами, передаватиметься через налаштований вебпроксі." value="Веб"/>
+		<radio_item label="Використовувати сервер SOCKS 5" name="OtherSocksProxy" tool_tip="HTTP-трафік, не пов'язаний із вебвузлами, передаватиметься через налаштований сервер Socks 5." value="SOCKS"/>
+	</radio_group>
+	<button label="ОК" label_selected="ОК" name="OK"/>
+	<button label="Скасувати" label_selected="Скасувати" name="Cancel"/>
+</floater>

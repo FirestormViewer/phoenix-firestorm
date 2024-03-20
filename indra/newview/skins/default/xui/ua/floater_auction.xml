@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_auction" title="Продаж землі Linden">
+	<floater.string name="already for sale">
+		Не можна виставити на аукціон ділянки, які вже продаються.
+	</floater.string>
+	<check_box initial_value="true" label="Включаючи жовту огорожу навколо обраної ділянки" name="fence_check"/>
+	<button label="Моментальний знімок" label_selected="Моментальний знімок" name="snapshot_btn"/>
+	<button label="Купити може кожен" label_selected="Купити може кожен" name="sell_to_anyone_btn"/>
+	<button label="Очистити налаштування" label_selected="Очистити налаштування" name="reset_parcel_btn"/>
+	<button label="Почати аукціон" label_selected="Почати аукціон" name="start_auction_btn"/>
+</floater>

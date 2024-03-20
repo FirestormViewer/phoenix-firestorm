@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<floater name="delete_pref_preset" title="Видалити Передустановку">
+	<string name="title_graphic">
+		Видалити Передустановку Графіки
+	</string>
+	<string name="title_camera">
+		Видалити Передустановку Камери
+	</string>
+	<text name="Preset">
+		Виберіть Передустановку
+	</text>
+	<button label="Видалити" name="delete"/>
+	<button label="Скасувати" name="cancel"/>
+</floater>

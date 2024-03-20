@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_nearby">
+	<text name="back_lbl">Назад</text>
+	<text name="av_nearby_title">Аватари поруч</text>
+	<text name="tot_av_count">Всього: 50 (120000.10μs)</text>
+	<text name="av_nearby_desc">Приховайте найскладніші аватари, щоб збільшити швидкість.</text>
+	<slider name="IndirectMaxComplexity" label="Максимальна складність (K)" tool_tip="Визначає, в який момент візуально складний аватар відображається як силует."/>
+	<slider name="FSRenderAvatarMaxART" label="Макс. час рендерингу (μs)" tool_tip="Керує, коли вважається, що візуально складний аватар займає занадто багато часу для рендерингу. (одиниця: мікросекунди)"/>
+	<text name="FSRenderAvatarMaxARTText">необмеж.</text>
+	<name_list name="nearby_list">
+		<name_list.columns name="art_visual" tool_tip="Гістограма, що показує поточний час рендерингу (включаючи автоналаштування) у % від найповільнішого."/>
+		<name_list.columns name="art_value" label="Час (μs)" tool_tip="Час рендерингу аватара. Фактичний час, витрачений на візуалізацію цього аватара до будь-якої автонастройки (у мікросекундах)."/>
+		<name_list.columns name="complex_value" label="ARC" tool_tip="Складність (ARC) на основі стандартних правил."/>
+		<name_list.columns name="state" tool_tip="Показує будь-який тюнінг. I=Силует, S=немає тіні."/>
+		<name_list.columns name="name" label="Ім'я" />
+	</name_list>
+	<text name="av_nearby_desc2">
+		Ви можете клацнути ПКМ на аватар у світі, щоб керувати відображенням.
+	</text>
+	<text name="av_nearby_desc3">
+		Примітка. Використовуйте вкладку Складність аватара, щоб бачити, як ви впливаєте на інших.
+	</text>
+	<check_box label="Завжди відображати друзів у всіх подробицях" name="display_friends"/>
+	<button label="Винятки..." name="exceptions_btn"/>
+	<check_box label="Повністю приховати аватари" name="hide_avatars"/>
+	<text name="name_tags_textbox">Бейджі:</text>
+	<radio_group name="name_tag_mode">
+		<radio_item label="Вимк." name="radio"/>
+		<radio_item label="Увімк." name="radio2"/>
+		<radio_item label="Показати коротко" name="radio3"/>
+	</radio_group>
+</panel>

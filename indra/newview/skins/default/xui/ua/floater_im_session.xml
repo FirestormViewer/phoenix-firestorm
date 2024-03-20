@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="panel_im">
+	<floater.string name="call_btn_start">
+		Conv_toolbar_open_call
+	</floater.string>
+	<floater.string name="call_btn_stop">
+		Conv_toolbar_hang_up
+	</floater.string>
+	<floater.string name="collapseline_icon" value="Conv_collapse_to_one_line"/>
+	<floater.string name="expandline_icon" value="Conv_expand_one_line"/>
+	<floater.string name="collapse_icon" value="Conv_toolbar_collapse"/>
+	<floater.string name="expand_icon" value="Conv_toolbar_expand"/>
+	<floater.string name="tear_off_icon" value="Conv_toolbar_arrow_ne"/>
+	<floater.string name="return_icon" value="Conv_toolbar_arrow_sw"/>
+	<floater.string name="participant_added" value="[NAME] зареєструвався для розмови."/>
+	<floater.string name="multiple_participants_added" value="[NAME] запрошені на розмову."/>
+	<floater.string name="tooltip_to_separate_window" value="Перенести цю розмову в окреме вікно"/>
+	<floater.string name="tooltip_to_main_window" value="Повернути цю розмову до головного вікна"/>
+	<floater.string name="start_call_button_tooltip" value="Відкрити голосове підключення"/>
+	<floater.string name="end_call_button_tooltip" value="Закрити голосове підключення"/>
+	<floater.string name="expcol_button_not_tearoff_tooltip" value="Згорнути цю панель"/>
+	<floater.string name="expcol_button_tearoff_and_expanded_tooltip" value="Згорнути список учасників"/>
+	<floater.string name="expcol_button_tearoff_and_collapsed_tooltip" value="Розгорнути список учасників"/>
+	<view name="contents_view">
+		<layout_stack name="main_stack">
+			<layout_panel name="toolbar_panel">
+				<menu_button name="view_options_btn" tool_tip="Параметри перегляду/сортування"/>
+				<menu_button name="gear_btn" tool_tip="Дії з обраним мешканцем"/>
+				<button name="add_btn" tool_tip="Додати учасника до цієї розмови"/>
+				<button name="voice_call_btn" tool_tip="Відкрити голосове підключення"/>
+				<button name="close_btn" tool_tip="Завершити цю розмову"/>
+				<button name="expand_collapse_btn" tool_tip="Розгорнути/згорнути цю панель"/>
+			</layout_panel>
+			<layout_panel name="chat_layout_panel">
+				<layout_stack name="input_panels">
+					<layout_panel name="input_editor_layout_panel">
+						<chat_editor label="Кому" name="chat_editor"/>
+					</layout_panel>
+					<layout_panel name="input_button_layout_panel">
+						<button name="minz_btn" tool_tip="Показати/сховати панель повідомлень"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>
+	</view>
+</floater>

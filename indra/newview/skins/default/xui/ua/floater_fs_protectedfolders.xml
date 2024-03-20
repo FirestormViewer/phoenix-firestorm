@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_protected_folders" title="Захищені папки">
+	<floater.string name="UnknownFolder">
+		(Невідома папка)
+	</floater.string>
+	<panel name="buttons_panel">
+		<filter_editor label="Фільтрувати захищені папки" name="filter_input" />
+		<button name="remove_btn" tool_tip="Видалити папку зі списку захищених папок"/>
+	</panel>
+	<panel name="panel_fs_protected_folders">
+		<scroll_list name="folder_list">
+			<scroll_list.columns label="Назва" name="name"/>
+		</scroll_list>
+	</panel>
+</floater>

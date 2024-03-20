@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Import Collada" title="Імпорт сцени">
+	<text name="mesh count">
+		Піч: [COUNT]
+	</text>
+	<text name="texture count">
+		Текстури: [COUNT]
+	</text>
+	<text name="status">
+		Статус: [STATUS]
+	</text>
+	<button name="cancel" label="Скасувати"/>
+	<string name="status_idle">
+		Простий
+	</string>
+	<string name="status_uploading">
+		Завантаження [NAME]
+	</string>
+	<string name="status_creating">
+		Створення об'єкта [NAME]
+	</string>
+</floater>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile_firstlife" label="Профіль">
+	<string name="texture_picker_label" value="Фото 1го життя"/>
+	<button name="fl_upload_image" label="Завантажити Фото"/>
+	<button name="fl_change_image" label="Змінити Фото"/>
+	<button name="fl_remove_image" label="Видалити Фото"/>
+	<button name="fl_save_changes" label="Зберегти"/>
+	<button name="fl_discard_changes" label="Відмовитися"/>
+</panel>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="queue" title="Скинути прогрес">
+	<floater.string name="Starting">
+		Запуск [START] об'єктів (об'єктів: [COUNT]).
+	</floater.string>
+	<floater.string name="Done">
+		Готово.
+	</floater.string>
+	<floater.string name="Resetting">
+		Скидання
+	</floater.string>
+	<floater.string name="Running">
+		Запущено
+	</floater.string>
+	<floater.string name="NotRunning">
+		Не запущено
+	</floater.string>
+	<floater.string name="Timeout">
+		Затримка: [OBJECT_NAME]
+	</floater.string>
+	<floater.string name="LoadingObjInv">
+		Завантаження інвентарю для: [OBJECT_NAME]
+	</floater.string>
+	<button label="Закрити" label_selected="Закрити" name="close"/>
+</floater>

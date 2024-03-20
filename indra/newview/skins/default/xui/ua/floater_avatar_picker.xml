@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatarpicker" title="Вибір аватара">
+	<floater.string name="not_found">
+		Текст '[TEXT]' не знайдено
+	</floater.string>
+	<floater.string name="not_found_text">
+		Жителя не знайдено.
+	</floater.string>
+	<floater.string name="no_one_near">
+		Поруч нікого немає
+	</floater.string>
+	<floater.string name="no_results">
+		Немає результатів
+	</floater.string>
+	<floater.string name="searching">
+		Пошук...
+	</floater.string>
+	<string name="Select">
+		Вибрати
+	</string>
+	<string name="Close">
+		Закрити
+	</string>
+	<tab_container name="ResidentChooserTabs">
+		<panel label="Пошук" name="SearchPanel">
+			<text name="InstructSearchResidentName">
+				Наберіть частину імені мешканця:
+			</text>
+			<button label="Пошук" label_selected="Пошук" name="Find"/>
+			<fs_scroll_list name="Результати пошуку">
+				<columns label="Імя" name="name"/>
+				<columns label="Ім'я користувача" name="username"/>
+			</fs_scroll_list>
+		</panel>
+		<panel label="Друзі" name="FriendsPanel">
+			<text name="InstructSelectFriend">
+				Виберіть мешканця:
+			</text>
+			<fs_scroll_list name="Друзі">
+				<columns label="Імя" name="name"/>
+				<columns label="Ім'я користувача" name="username"/>
+			</fs_scroll_list>
+		</panel>
+		<panel label="Поруч зі мною" name="NearMePanel">
+			<text name="InstructSelectResident">
+				Виберіть мешканця поблизу:
+			</text>
+			<slider label="Відстань" name="near_me_range"/>
+			<text name="meters">
+				Метрів
+			</text>
+			<fs_scroll_list name="NearMe">
+				<columns label="Імя" name="name"/>
+				<columns label="Ім'я користувача" name="username"/>
+			</fs_scroll_list>
+		</panel>
+		<panel label="Пошук за UUID" name="SearchPanelUUID">
+            <text name="SearchByUUIDLabel">
+                Введіть UUID:
+            </text>
+            <line_editor name="EditUUID"/>
+            <button label="Вибрані" label_selected="Вибрані" name="FindUUID"/>
+            <fs_scroll_list name="SearchResultsUUID">
+             <columns label="Імя" name="nameUUID"/>
+             <columns label="Ім'я користувача" name="usernameUUID"/>
+          </fs_scroll_list>
+        </panel>
+	</tab_container>
+	<button label="ОК" label_selected="ОК" name="ok_btn"/>
+	<button label="Скасувати" label_selected="Скасувати" name="cancel_btn"/>
+</floater>

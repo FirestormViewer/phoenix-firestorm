@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_export_collada" title="Зберегти як Collada...">
+	<floater.string name="texture_progress">
+		Зберегти [OBJECT] як Collada: Текстури (Залишилось: [COUNT])
+	</floater.string>
+	<floater.string name="floater_title">
+		Зберегти [OBJECT] як Collada...
+	</floater.string>
+	<layout_stack name="resizing_stack">
+		<layout_panel name="control_panel">
+			<text name="ObjectInfoText">
+				Про об'єкт
+			</text>
+			<text name="NameText">
+				Ім'я: [NAME]
+			</text>
+			<text name="exportable_prims">
+				Експортовані прими: [COUNT]/[TOTAL]
+			</text>
+			<text name="exportable_textures">
+				Експортовані текстури: [COUNT]/[TOTAL]
+			</text>
+			<text name="OptionsText">
+				Опції:
+			</text>
+			<check_box label="Зберегти текстури" name="export_textures_check" />
+			<check_box label="Консолідація текстури" name="consolidate_check" />
+			<check_box label="Пропускати прозорість" name="skip_transparent_check" />
+			<check_box label="Використовуйте параметри текстури" name="texture_params_check" />
+			<check_box label="Одиночна карта розгортки" name="single_uv_map_check"/>
+			<text name="TextureFormatText">
+				Формат текстури:
+			</text>
+			<button label="Зберегти як..." name="export_btn" />
+		</layout_panel>
+	</layout_stack>
+</floater>

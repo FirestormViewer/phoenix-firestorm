@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_pathfinding_characters" title="Персонажі з пошуком шляху">
+	<floater.string name="messaging_get_inprogress">
+		Опитування персонажів із пошуком шляху...
+	</floater.string>
+	<floater.string name="messaging_get_error">
+		Помилка під час опитування персонажів з пошуком шляху.
+	</floater.string>
+	<floater.string name="messaging_complete_none_found">
+		Немає персонажів із пошуком шляху.
+	</floater.string>
+	<floater.string name="messaging_complete_available">
+		Вибрано персонажів: [NUM_SELECTED] із [NUM_TOTAL].
+	</floater.string>
+	<floater.string name="messaging_not_enabled">
+		У цьому регіоні не дозволено пошук шляху.
+	</floater.string>
+	<floater.string name="character_cpu_time">
+		[CPU_TIME] мкс
+	</floater.string>
+	<floater.string name="character_owner_loading">
+		[Завантаження]
+	</floater.string>
+	<floater.string name="character_owner_unknown">
+		[Невідомо]
+	</floater.string>
+	<floater.string name="character_owner_group">
+		[група]
+	</floater.string>
+	<panel name="pathfinding_chars_main">
+		<scroll_list name="objects_scroll_list">
+			<scroll_list.columns label="Імя" name="name"/>
+			<scroll_list.columns label="Опис" name="description"/>
+			<scroll_list.columns label="Власник" name="owner"/>
+			<scroll_list.columns label="ЦП" name="cpu_time"/>
+			<scroll_list.columns label="Висота" name="altitude"/>
+		</scroll_list>
+		<text name="messaging_status">
+			Персонажі:
+		</text>
+		<button label="Оновити список" name="refresh_objects_list"/>
+		<button label="Вибрати все" name="select_all_objects"/>
+		<button label="Скасувати вибір" name="select_none_objects"/>
+	</panel>
+	<panel name="pathfinding_chars_actions">
+		<text name="actions_label">
+			Дії з вибраними персонажами:
+		</text>
+		<check_box label="Показати мітку" name="show_beacon"/>
+		<check_box label="Показати фізичну капсулу" name="show_physics_capsule"/>
+		<button label="Взяти" name="take_objects"/>
+		<button label="Зробити копію" name="take_copy_objects"/>
+		<button label="Телепортувати мене туди" name="teleport_me_to_object" tool_tip="Дозволено лише якщо вибрано одного персонажа."/>
+		<button label="Повернути" name="return_objects"/>
+		<button label="Видалити" name="delete_objects"/>
+	</panel>
+</floater>

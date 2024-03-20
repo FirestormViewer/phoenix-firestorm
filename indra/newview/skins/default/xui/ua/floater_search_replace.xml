@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="search replace" title="Поиск / Замена">
+    <check_box label="Без урахування регістру" left="50" name="case_text" width="140" />
+    <check_box label="Шукати вгору" name="find_previous" />
+    <button label="Пошук" label_selected="Пошук" name="search_btn" />
+    <button label="Замінити" label_selected="Замінити" name="replace_btn" />
+    <button label="Замінити все" label_selected="Замінити все" name="replace_all_btn" />
+    <text name="txt">
+        Пошук
+    </text>
+    <text name="txt2">
+        Заміна
+    </text>
+</floater>

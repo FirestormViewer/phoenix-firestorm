@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Колір" name="colors_panel">
+	<tab_container label="Налаштування кольорів" name="tabs">
+		<panel label="Chat Color" name="tab-chat">
+			<text name="font_colors">
+				Повідомлення чату:
+			</text>
+			<text name="user_label">
+				Мій текст
+			</text>
+			<text name="others_label">
+				Інші
+			</text>
+			<text name="text_box3">
+				Об'єкти
+			</text>
+			<text name="friends_label">
+				Друзі
+			</text>
+			<text name="linden_label">
+				Лабораторія Линден
+			</text>
+			<text name="muted_label">
+				Заблоковані
+			</text>
+			<text name="system_label">
+				система
+			</text>
+			<text name="script_error_label">
+				Помилки
+			</text>
+			<text name="object_im_label">
+				ОП об'єктів
+			</text>
+			<text name="llownersay_label">
+				Власник
+			</text>
+			<text name="htmllink_label">
+				Посилання (URL)
+			</text>
+			<text name="uriquerypart_label">
+				URL Частина запиту
+			</text>
+			<text name="direct_label">
+				Прямий
+			</text>
+			<text name="header_colors">
+				Заголовки чату:
+			</text>
+			<text name="chat_name_label">
+				Аватарів
+			</text>
+			<text name="object_name_header_label">
+				Об'єктів
+			</text>
+			<slider label="Фактор зникнення кольору за кордоном чату:" label_width="295" name="FSBeyondNearbyChatColorDiminishFactor" />
+			<check_box name="FSColorIMsDistinctly" label="Колір виділення чату ОП/Груп у консолі:" />
+			<panel name="im_color_panel">
+				<text name="console_im_label">
+					ОП / Група
+				</text>
+			</panel>
+		</panel>
+		<panel label="Назва тегів" name="tab-nametag">
+			<text name="nametag_colors">
+				Кольори відображення імені у тезі:
+			</text>
+			<text name="self_tag_label">
+				Моє ім'я
+			</text>
+			<text name="friend_tag_label">
+				Друзі
+			</text>
+			<text name="muted_tag_label">
+				Заблокованих
+			</text>
+			<text name="linden_tag_label">
+				Лабораторія Линден
+			</text>
+			<text name="match_tag_label">
+				Збіг
+			</text>
+			<text name="mismatch_tag_label">
+				Розбіжність
+			</text>
+			<check_box label="Колір виділення імені користувачів" name="FSColorUsername" tool_tip="Колір виділення імені користувачів" />
+			<check_box name="NameTagShowFriends" label="Колірне виділення тега імені друзів" tool_tip="Колірне виділення тега імені друзів" />
+			<text name="username_tag_label">
+				Ім'я користувача
+			</text>
+			<text name="bubble_chat">
+				Тег імені / Чат у бульбашках:
+			</text>
+			<color_swatch name="background" tool_tip="Виберіть колір тега імені"/>
+			<slider label="Прозорість:" name="bubble_chat_opacity" tool_tip="Виберіть прозорість тега імені"/>
+			<slider name="FSNameTagZOffsetCorrection" label="Зміщення тега:" tool_tip="Змініть зміщення тега вашого імені. За замовчуванням 0" />
+			<check_box label="Показати відстань у тезі імені" name="FSTagShowDistance" tool_tip="Показувати відстань до аватара в його тезі імені" />
+			<check_box label="Колір тега на основі відстані:" name="FSTagShowDistanceColors" tool_tip="Зміна кольору тега на основі відстані:" />
+			<panel name="distance_panel">
+				<text name="chat_distance_tag_label">
+					У радіусі чату
+				</text>
+				<text name="whisper_distance_tag_label">
+					У радіусі шепоту
+				</text>
+				<text name="shout_tag_label">
+					Кричати
+				</text>
+				<text name="beyond_shout_distance_tag_label">
+					За кордоном дальності крику
+				</text>
+			</panel>
+			<panel name="client_tags_panel">
+				<text name="client_tags_colors">
+					Кольори тега клієнта: (лише OpenSim/AuroraSim)
+				</text>
+				<text name="whattagstoshow">
+					Які теги ви хотіли б бачити?
+				</text>
+				<combo_box name="ClientTagsVisibility">
+					<combo_box.item name="No Viewertags" label="Не відображати теги клієнта" />
+					<combo_box.item name="TPVD Viewer" label="TPVD клієнти (з використанням списку)" />
+					<combo_box.item name="All known Viewers" label="Всі відомі клієнти (з використанням списку)" />
+					<combo_box.item name="All Viewers" label="Всі клієнти" />
+				</combo_box>
+				<text name="colorbasedonviewer">
+					Колір тега на основі клієнта?
+				</text>
+				<combo_box name="ColorClienttags">
+					<combo_box.item name="Колір не залежить від засобу перегляду" label="Колір не залежить від клієнта" />
+					<combo_box.item name="Один колір для кожного глядача" label="Один колір для кожного клієнта" />
+					<combo_box.item name="Multiple colors per Viewer" label="Кілька кольорів на клієнт" />
+					<combo_box.item name="Userdefined color" label="Колір визначено користувачем" />
+				</combo_box>
+				<text name="listtodisplayviewertags_txt">
+					Використання списку відображення тегів клієнтів?
+				</text>
+				<combo_box name="UseLegacyClienttags">
+					<combo_box.item name="Не можна використовувати" label="Не використовувати список" />
+					<combo_box.item name="Local Clienttags" label="Список локальних тегів" />
+					<combo_box.item name="Download Clienttags" label="Завантажити список тегів для клієнта під час запуску" />
+				</combo_box>
+			</panel>
+		</panel>
+		<panel label="Мінімапа" name="tab-minimap">
+			<slider label="Прозорість фону:" name="FSMiniMapOpacity"/>
+			<text name="netmap_pickradius_color_textbox" width="90">
+				Радіус вибору:
+			</text>
+			<color_swatch name="MapPickRadiusColor"
+			tool_tip="Керування кольором радіусу вибору на мінімапі. Розмір радіусу вибору можна регулювати за допомогою налаштування Радіуса вибору."/>
+			<text name="netmap_pickradius_opacity_textbox" width="85">
+				Прозорість:
+			</text>
+			<slider name="MapPickRadiusTransparency"
+			tool_tip="Керує прозорістю Радіуса вибору на мінімапі. Розмір Радіуса вибору можна регулювати за допомогою налаштування Радіуса вибору." />
+			<text name="netmap_dots_textbox">
+				Крапки мінікарти:
+			</text>
+			<text name="MapAvatarSelfColor_label">
+				Я:
+			</text>
+			<text name="MapAvatarColor_label">
+				Інші
+			</text>
+			<text name="MapAvatarFriendColor_label">
+				Друзі
+			</text>
+			<text name="MapAvatarLindenColor_label">
+				Лабораторія Линден
+			</text>
+			<text name="MapAvatarMutedColor_label">
+				Заблоковані
+			</text>
+			<check_box name="MiniMapChatRing" label="Показати кільця на мінімапі з вказівкою діапазонів для розмови та крику"/>
+			<text name="netmap_whisperring_color_label">
+				Радіус шепоту
+			</text>
+			<text name="netmap_chatring_color_label">
+				Радіус чату
+			</text>
+			<text name="netmap_shoutring_color_label">
+				Радіус крику
+			</text>
+		</panel>
+		<panel label="Різне" name="tab-misc">
+			<text name="effects_color_textbox">
+				Ефекти виділення (Промінь частинок):
+			</text>
+			<text name="ScriptDialogFgLabel" width="160">
+				Скрипти Текст/Фон:
+			</text>
+			<text name="floater_opacity">
+				Прозорість вікон:
+			</text>
+			<slider label="Активні:" name="active"/>
+			<slider label="Неактивно:" name="inactive"/>
+			<slider label="Камера / Рух:" name="camera_movement"/>
+			<text name="console_opacity">
+				Прозорість консолі:
+			</text>
+			<color_swatch name="console_background" tool_tip="Виберіть колір консолі"/>
+			<slider label="Прозорість:" name="console_background_opacity" tool_tip="Виберіть прозорість фону консолі"/>
+			<text name="preferences_search_label">
+				Колір підсвічування пошуку в налаштуваннях:
+			</text>
+			<color_swatch name="preferences_search_color" tool_tip="Виберіть колір підсвічування пошуку в налаштуваннях"/>
+			<text name="area_search_beacon_color_label">
+				Колір маяка зони пошуку:
+			</text>
+			<color_swatch name="area_search_beacon_color" tool_tip="Виберіть колір маяка зони пошуку"/>
+			<text name="notecard_editor_color_label">
+				Кольори Нотаток:
+			</text>
+			<text name="notecard_editor_writable_text_color_label" width="30">
+				Текст:
+			</text>
+			<color_swatch name="notecard_editor_writable_text_color" tool_tip="Колір Тексту Нотатки"/>
+			<text name="notecard_editor_writable_bg_color_label" width="70">
+				фон:
+			</text>
+			<color_swatch name="notecard_editor_writable_bg_color" tool_tip="Колір Фона Нотатки"/>
+			<text name="notecard_editor_writable_cursor_color_label" width="40">
+				Курсор:
+			</text>
+			<color_swatch name="notecard_editor_writable_cursor_color" tool_tip="Колір Курсора Нотатки"/>
+			<text name="notecard_editor_writable_selection_color_label" width="60">
+				Виділення:
+			</text>
+			<color_swatch name="notecard_editor_writable_selection_color" tool_tip="Колір виділеного тексту нотатки"/>
+			<check_box name="FSScriptDialogNoTransparency" label="Завжди показувати діалоги скриптів на непрозорому фоні"/>
+			<check_box name="FSGroupNotifyNoTransparency" label="Завжди показувати повідомлення груп на непрозорому фоні"/>
+			<check_box name="override_pie_color_checkbox" label="Змінити фон меню, колір вибраних розділів та прозорість круглого меню:"/>
+			<panel name="tab-colorize">
+				<color_swatch name="pie_bg_color_override" tool_tip="Змінити колір фону меню"/>
+				<color_swatch name="pie_selected_color_override" tool_tip="Змінити колір вибраного розділу меню"/>
+				<slider label="Прозорість:" name="pie_menu_opacity" tool_tip="Виберіть прозорість круглого меню"/>
+				<slider label="Загасання:" name="pie_menu_fade_out" tool_tip="Виберіть значення загасання від центру до межі меню"/>
+			</panel>
+		</panel>
+	</tab_container>
+</panel>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="area_search" title="Пошук об'єктів навколо">
+	<tab_container name="area_searchtab">
+		<panel name="area_search_list_panel" label="Список">
+			<panel.string name="ListedPendingTotalBlank">
+				У переліку | В очікуванні | Усього
+			</panel.string>
+			<panel.string name="ListedPendingTotalFilled">
+				[LISTED] у списку | [PENDING] в очікуванні | [TOTAL] Всього
+			</panel.string>
+			<fs_scroll_list name="result_list">
+				<fs_scroll_list.columns name="distance" label="Відст." tool_tip="Відстань від вашого аватара до об'єкта."/>
+				<fs_scroll_list.columns name="name" label="Title"/>
+				<fs_scroll_list.columns name="description" label="Опис" />
+				<fs_scroll_list.columns name="price" label="Ціна" tool_tip="Ціна, якщо об'єкт продається."/>
+				<fs_scroll_list.columns name="land_impact" label="LI" tool_tip="Число, яке підраховується проти максимуму вашої ділянки."/>
+				<fs_scroll_list.columns name="prim_count" label="Примов" tool_tip="Лічильник примов, що становлять кожен об'єкт."/>
+				<fs_scroll_list.columns name="owner" label="Власник"/>
+				<fs_scroll_list.columns name="group" label="Група" tool_tip="У якій групі заданий об'єкт."/>
+				<fs_scroll_list.columns name="creator" label="Створювач"/>
+				<fs_scroll_list.columns name="last_owner" label="Колишній Власник" tool_tip="Хто володів раніше."/>
+			</fs_scroll_list>
+			<button name="Refresh" label="Оновити" />
+			<text name="counter">У списку | В очікуванні | Усього</text>
+			<check_box name="beacons" label="Показати маяки"/>
+		</panel>
+		<panel name="area_search_find_panel" label="Шукати">
+			<text name="name_label">Назва:</text>
+			<text name="desc_label">Опис:</text>
+			<text name="owner_label">Власник:</text>
+			<text name="group_label">Група:</text>
+			<text name="creator_label">Створювач:</text>
+			<text name="last_owner_label">Колишній власник:</text>
+			<check_box name="regular_expression" label="Використовувати регулярний вираз"/>
+			<button name="search" label="Шукати"/>
+			<button name="clear" label="Очистити"/>
+		</panel>
+		<panel name="area_search_filter_panel" label="Фільтр">
+			<text name="only_list" left="5">Тільки об'єкти списку, які:</text>
+			<check_box name="filter_locked" label="Заблоковано" width="120"/>
+			<check_box name="filter_physical" label="Фізичні" width="125"/>
+			<check_box name="filter_phantom" label="Фантомні" width="120"/>
+			<check_box name="filter_temporary" label="Тимчасові" width="120"/>
+			<check_box name="filter_attachment" label="Приєднані" width="125"/>
+			<check_box name="filter_moap" label="Спільне медіа" width="120"/>
+			<check_box name="filter_perm_copy" label="Копіюються" width="120"/>
+			<check_box name="filter_perm_modify" label="Змінюються" width="125"/>
+			<check_box name="filter_perm_transfer" label="Передаються" width="125"/>
+			<check_box name="filter_for_sale" label="Продаються" width="120"/>
+			<text name="and"> і</text>
+			<text name="mouse_text">Клікабельні</text>
+			<combo_box name="click_action" tool_tip="Дія, що виконується при натисканні на об'єкт.">
+				<combo_box.item label=" " name="click_blank"/>
+				<combo_box.item label="Любий" name="click_any"/>
+				<combo_box.item label="Торкнутися" name="click_touch"/>
+				<combo_box.item label="Сесть" name="click_sit"/>
+				<combo_box.item label="Купити" name="click_buy"/>
+				<combo_box.item label="Платити" name="click_pay"/>
+				<combo_box.item label="Відкрити" name="click_open"/>
+				<combo_box.item label="Грати" name="click_play"/>
+				<combo_box.item label="Медіа" name="click_open_media"/>
+				<combo_box.item label="Масштаб" name="click_zoom"/>
+			</combo_box>
+			<check_box name="filter_distance" label="Відстань між"/>
+			<text name="and2"> і</text>
+			<check_box name="filter_agent_parcel_only" label="На цій ділянці" width="190"/>
+			<text name="only_list">Виключити об'єкти які:</text>
+			<check_box name="exclude_attachment" label="Приєднані"/>
+			<check_box name="exclude_physical" label="Фізичні"/>
+			<check_box name="exclude_temporary" label="Тимчасовий"/>
+			<check_box name="exclude_childprim" label="Сполучені"/>
+			<check_box name="exclude_neighbor_region" label="Сусідний регіон"/>
+			<button name="apply" label="Прийняти"/>
+		</panel>
+		<panel label="Параметри" name="area_search_options_panel">
+			<text name="display_column">Показати колонки:</text>
+			<check_box name="show_distance" label="Відстань"/>
+			<check_box name="show_name" label="Назва"/>
+			<check_box name="show_description" label="Опис"/>
+			<check_box name="show_price" label="Ціна"/>
+			<check_box name="show_land_impact" label="Вплив на землю"/>
+			<check_box name="show_prim_count" label="Кількість примов"/>
+			<check_box name="show_owner" label="Власник"/>
+			<check_box name="show_group" label="Група"/>
+			<check_box name="show_creator" label="Творець"/>
+			<check_box name="show_last_owner" label="Колишній власник"/>
+		</panel>
+		<panel label="Розширене" name="area_search_advanced_panel">
+			<check_box name="double_click_touch" label="Подвійний клік Торкнутися об'єкт"/>
+			<check_box name="double_click_buy" label="Подвійний клік Купити об'єкт"/>
+		</panel>
+	</tab_container>
+</floater>

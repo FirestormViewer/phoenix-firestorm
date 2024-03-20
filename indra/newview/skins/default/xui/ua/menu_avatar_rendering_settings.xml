@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Settings">
+	<menu_item_check label="Завжди повністю" name="always_render"/>
+	<menu_item_check label="Ніколи повністю" name="never_render"/>
+	<menu_item_check label="Видалити з винятків відображення" name="default"/>
+</context_menu>

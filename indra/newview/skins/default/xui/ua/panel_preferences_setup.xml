@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Мережа та файли" name="Input panel">
+	<tab_container name="tabs">
+		<panel label="Підключення" name="tab-conn">
+			<text name="Maximum bandwidth">
+				Максимальна пропускна спроможність ([https://wiki.firestormviewer.org/fs_speedtest Потрібні підказки?] (англійською)):
+			</text>
+			<text name="NetworkPrefText3">
+				Кабель
+			</text>
+			<text name="NetworkPrefText4">
+				Може викликати проблеми
+			</text>
+			<check_box label="Користувацький порт" name="connection_port_enabled"/>
+			<spinner label="Порт номер:" name="connection_port"/>
+			<text name="Web:">
+				Web браузер:
+			</text>
+			<radio_group name="preferred_browser_behavior">
+				<radio_item label="Використовувати мій браузер (Chrome, Firefox, IE) для всіх посилань" name="new_external" tool_tip="Використовувати системний браузер для перегляду посилань. Не рекомендується, якщо увімкнено повноекранний режим." />
+				<radio_item label="Використовувати вбудований браузер тільки для Second Life посилань" name="new_internal" tool_tip="Використовувати вбудований браузер тільки для Second Life посилань" />
+				<radio_item label="Використовувати вбудований браузер для всіх посилань" name="new_internal_all" />
+			</radio_group>
+			<text name="numberwebfloaters_label">
+				Максимальна кількість вікон браузера:
+			</text>
+			<combo_box tool_tip="Максимальна кількість вікон браузера, яку можна відкрити" name="web_number_combobox">
+				<combo_box.item label="Без обмежень" name="web_unlimited"/>
+				<combo_box.item label="Одне вікно" name="web_1"/>
+				<combo_box.item label="П'ять вікон" name="web_5"/>
+				<combo_box.item label="Десять вікон" name="web_10"/>
+			</combo_box>
+			<button label="Очистити кеш браузера" name="ClearWebBrowserCache" width="195"/>
+			<check_box label="Приймати cookies" name="cookies_enabled"/>
+			<check_box label="Увімкнути Javascript" name="browser_javascript_enabled"/>
+			<check_box label="Увімкнути спливаючі вікна медіа" name="media_popup_enabled"/>
+			<button label="Налаштування параметрів проксі" label_selected="Налаштування параметрів проксі" name="set_proxy"/>
+			<text name="home_page_label_l">
+				Домашня сторінка браузера:
+			</text>
+		</panel>
+		<panel label="Каталоги" name="tab-dir">
+			<text name="cache_size_label_l">
+				Розмір кешу текстур ([https://wiki.firestormviewer.org/cache Потрібні підказки?] (англійською)):
+			</text>
+			<text name="text_box5">
+				MB
+			</text>
+			<text name="asset_cache_size_label_l">
+				Розмір кешу активів:
+			</text>
+			<text name="asset_text_box5">
+				MB
+			</text>
+			<button label="Очистити кеш інвентарю" name="ClearInventoryCache" left="380" width="150"/>
+			<text name="Cache location">
+				Розташування кешу:
+			</text>
+			<button label="Відкрити" label_selected="Відкрити" width="60" name="open_cache"/>
+			<button label="Задати" label_selected="Задати" width="50" name="set_cache"/>
+			<button label="Скидання" label_selected="Скидання" width="50" name="reset_cache"/>
+			<button label="Очистити" label_selected="Очистити" width="60" name="clear_cache"/>
+			<text name="Sound Cache location">
+				Розташування звукового кешу:
+			</text>
+			<button label="Відкрити" label_selected="Відкрити" width="60" name="open_sound_cache"/>
+			<button label="Задати" label_selected="Задати" width="50" name="set_sound_cache"/>
+			<button label="Скидання" label_selected="Скидання" width="50" name="reset_sound_cache"/>
+			<check_box label="При виході не видаляти з кешу розпаковані DSF-файли (звуки)" tool_tip="УВАГА: При включенні даної функції звукові файли кешу видалятися не будуть, що може призвести до швидкого заповнення каталогу кешу та зменшення дискового простору на вашому комп'ютері. За замовчуванням цю функцію вимкнено" name="keep_unpacked_cache"/>
+			<text name="log_path_desc">
+				Розташування журналів розмов:
+			</text>
+			<button label="Відкрити" label_selected="Відкрити" width="60" name="open_log_path_button-panelsetup"/>
+			<button label="Задати" label_selected="Задати" width="50" name="log_path_button-panelsetup"/>
+			<button label="Скидання" label_selected="Скидання" name="reset_logpath"/>
+			<button label="Журнал помилок" label_selected="Журнал помилок" name="browse_crashlogs"/>
+			<button label="Папка з налаштуваннями" label_selected="Папка з налаштуваннями" name="browse_settingsdir"/>
+		</panel>
+	</tab_container>
+</panel>

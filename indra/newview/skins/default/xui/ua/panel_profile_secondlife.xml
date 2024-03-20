@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile" label="Профіль">
+	<string name="status_online">В мережі</string>
+	<string name="status_offline">Не в мережі</string>
+	<string name="status_unknown">Невідомо</string>
+	<string name="BadgeBeta" value="Оригінальний бета-тестер" />
+	<string name="BadgeBetaLifetime" value="Учасник бета-версії довічно" />
+	<string name="BadgeLifetime" value="Член довічно" />
+	<string name="BadgeLinden" value="Співробітник лабораторії Лінден" />
+	<string name="BadgePremiumLifetime" value="Преміум довічно" />
+	<string name="BadgePremiumPlusLifetime" value="Преміум Плюс довічно" />
+	<string name="BadgeTeam" value="Член [APP_NAME]" />
+	<string name="no_partner_text" value="Ніхто"/>
+	<string name="no_group_text" value="Ніхто"/>
+	<string name="FSDev" value="Розробник"/>
+	<string name="FSSupp" value="Підтримка"/>
+	<string name="FSQualityAssurance" value="Налагоджувач"/>
+	<string name="FSGW" value="Шлюз"/>
+	<text name="name_label" value="Ім'я:"/>
+	<panel name="name_holder">
+		<text_editor name="complete_name" value="(Завантаження...)"/>
+		<menu_button name="copy_btn" tool_tip="Копіювати"/>
+	</panel>
+	<button name="set_name" tool_tip="Задати відображуване ім'я"/>
+	<icon name="can_see_online" tool_tip="Друг може бачити мій статус у мережі"/>
+	<icon name="cant_see_online" tool_tip="Друг не може бачити мій статус у мережі"/>
+	<icon name="can_see_on_map" tool_tip="Друг може бачити мене на мапі"/>
+	<icon name="cant_see_on_map" tool_tip="Друг не може бачити мене на мапі"/>
+	<icon name="can_edit_objects" tool_tip="Друг може правити мої об'єкти"/>
+	<icon name="cant_edit_objects" tool_tip="Друг не може правити мої об'єкти"/>
+	<text name="Key:" value="Ключ:"/>
+	<text_editor name="user_key" value="(Завантаження...)"/>
+	<layout_stack name="imagepositioner">
+		<layout_panel name="image_action_panel">
+			<menu_button name="image_action_btn" tool_tip="Виконання дій, пов'язаних із зображенням профілю"/>
+		</layout_panel>
+		<layout_panel name="label_stack">
+			<text name="label" value="Вік:"/>
+			<text_editor name="user_age" value="(Завантаження...)"/>
+			<text name="label2" value="Акаунт:"/>
+			<layout_stack name="badgepositioner">
+				<layout_panel name="badge_layout">
+					<icon name="badge_icon" tool_tip="Співробітник лабораторії Лінден"/>
+				</layout_panel>
+			</layout_stack>
+			<text name="partner_label" value="Партнер:"/>
+		</layout_panel>
+	</layout_stack>
+	<text name="About:" value="Про себе:"/>
+	<text name="Groups:" value="Групи:"/>
+	<button name="group_invite" tool_tip="Запросити в групу"/>
+	<text name="Give item:" value="Дати:"/>
+	<text name="Give inventory" tool_tip="Скинути речі з інвентарю тут для передачі їх цьому гравцеві.">Викинути річ з інвентарю тут.</text>
+	<layout_stack name="buttonstack">
+		<layout_panel name="left_buttonstack">
+			<button name="show_on_map_btn" label="Знайти на мапі" tool_tip="Знайти жителя на мапі" label_selected="Знайти на мапі"/>
+			<button name="pay" label="Оплатити" tool_tip="Виплатити гроші жителю" label_selected="Оплатити"/>
+		</layout_panel>
+		<layout_panel name="middle_buttonstack">
+			<button name="teleport" label="Запропонувати телепорт" tool_tip="Запропонувати телепорт цьому жителю" label_selected="Запропонувати телепорт"/>
+			<button name="im" label="Миттєве повідомлення" tool_tip="Почати сеанс миттєвого повідомлення" label_selected="Миттєве повідомлення"/>
+		</layout_panel>
+		<layout_panel name="right_buttonstack">
+			<button name="add_friend" label="Додати друга" tool_tip="Запропонувати дружбу цьому жителю" label_selected="Додати друга"/>
+			<button name="remove_friend" label="Видалити друга" tool_tip="Припинити дружбу з жителем" label_selected="Видалити друга"/>
+			<button name="block" label="Заблокувати" tool_tip="Заблокувати цього жителя"/>
+			<button name="unblock" label="Розблокувати" tool_tip="Розблокувати цього жителя"/>
+		</layout_panel>
+	</layout_stack>
+	<check_box name="show_in_search" label="Показати в пошуку" tool_tip="Дозволити людям бачити вас у результатах пошуку"/>
+	<button name="save_description_changes" label="Зберегти"/>
+	<button name="discard_description_changes" label="Відмовитися"/>
+</panel>
