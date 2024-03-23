@@ -1647,11 +1647,60 @@ Die Terraintextur [TEXTURE_NUM] hat eine ungültige Bit-Tiefe [TEXTURE_BIT_DEPTH
 
 Ersetzen Sie die Textur [TEXTURE_NUM] mit einer PNG-Bilddatei von maximal [MAX_SIZE]x[MAX_SIZE] und klicken Sie dann erneut auf „Übernehmen“.
 	</notification>
+	<notification name="InvalidTerrainAlphaNotFullyLoaded">
+		Die Regionstexturen konnten nicht festgelegt werden:
+Die Terraintextur [TEXTURE_NUM] wurde nicht vollständig geladen, aber verwendet vermutlich Transparenz aufgrund einer Bit-Tiefe von [TEXTURE_BIT_DEPTH]. Transparenz wird derzeit nicht für Terraintexturen unterstützt.
+
+Falls Textur [TEXTURE_NUM] opak ist, warten Sie bitte, bis die Textur vollständig geladen ist und klicken dann erneut auf „Übernehmen“.
+
+Alpha wird aktuell nur für Terrain-Materialien (PBR metallische Unebenheit) unterstützt, wenn alphaMode="MASK" und doubleSided=false.
+	</notification>
+	<notification name="InvalidTerrainAlpha">
+		Die Regionstexturen konnten nicht festgelegt werden:
+Die Terraintextur [TEXTURE_NUM] verwendet Transparenz. Transparenz wird derzeit nicht für Terraintexturen unterstützt.
+
+Ersetzen Sie die Textur [TEXTURE_NUM] mit einer opaken RGB-Bilddatei und klicken dann erneut auf „Übernehmen“.
+
+Falls Textur [TEXTURE_NUM] opak ist, warten Sie bitte, bis die Textur vollständig geladen ist und klicken dann erneut auf „Übernehmen“.
+
+Alpha wird aktuell nur für Terrain-Materialien (PBR metallische Unebenheit) unterstützt, wenn alphaMode="MASK" und doubleSided=false.
+
+Couldn&apos;t set region textures:
+Terrain texture [TEXTURE_NUM] contains transparency. Transparency is not currently supported for terrain textures.
+
+Replace texture [TEXTURE_NUM] with an opaque RGB image, then click &quot;Apply&quot; again.
+
+Alpha is only supported for terrain materials (PBR Metallic Roughness), when alphaMode="MASK" and doubleSided=false.
+	</notification>
 	<notification name="InvalidTerrainSize">
 		Die Regionstexturen konnten nicht festgelegt werden:
 Die Terraintextur [TEXTURE_NUM] ist mit [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y] zu groß.
 
 Ersetzen Sie die Textur [TEXTURE_NUM] mit einer PNG-Bilddatei von maximal [MAX_SIZE]x[MAX_SIZE] und klicken Sie dann erneut auf „Übernehmen“.
+	</notification>
+	<notification name="InvalidTerrainMaterialNotLoaded">
+		Die Regionsmaterialien konnten nicht festgelegt werden:
+Terrain-Material [MATERIAL_NUM] ist nicht geladen.
+
+Warten Sie bitte, bis das Material geladen ist oder ersetzen Sie Material [MATERIAL_NUM] mit einem gültigen Material.
+	</notification>
+	<notification name="InvalidTerrainMaterialLoadFailed">
+		Die Regionsmaterialien konnten nicht festgelegt werden:
+Terrain-Material [MATERIAL_NUM] konnte nicht geladen werden.
+
+Ersetzen Sie Material [MATERIAL_NUM] mit einem gültigen Material.
+	</notification>
+	<notification name="InvalidTerrainMaterialDoubleSided">
+		Die Regionsmaterialien konnten nicht festgelegt werden:
+Terrain-Material [MATERIAL_NUM] ist doppelseitig. Doppelseitige Materialien werden derzeit für PBR-Terrain nicht unterstützt.
+
+Ersetzen Sie Material [MATERIAL_NUM] mit einem Material mit doubleSided=false.
+	</notification>
+	<notification name="InvalidTerrainMaterialAlphaMode">
+		Die Regionsmaterialien konnten nicht festgelegt werden:
+Terrain-Material [MATERIAL_NUM] verwendeten den nicht-unterstützten alphaMode=„[MATERIAL_ALPHA_MODE]“.
+
+Ersetzen Sie Material [MATERIAL_NUM] mit einem Material mit alphaMode="OPAQUE" oder alphaMode="MASK".
 	</notification>
 	<notification name="RawUploadStarted">
 		Hochladen gestartet. Je nach Verbindungsgeschwindigkeit kann der Vorgang bis zu 2 Minuten dauern.
