@@ -37,7 +37,7 @@ When toggling the "PBR Metallic Roughness" checkbox to the opposite value, which
 
 - The default textures/materials
     - For textures, this is the default terrain texture set
-    - For materials, this is blank/null, but this is subject to change
+    - For materials, this is all blank materials, but this is subject to change
 - The previously applied texture/material set
     - History is available on a best-effort basis only. In particular, the history does not persist on viewer restart.
 
@@ -47,15 +47,23 @@ When toggling back the "PBR Metallic Roughness" checkbox to the original value, 
 
 A user with appropriate permissions can change and save the textures or materials to the terrain. If the "PBR Metallic Roughness" checkbox is checked, the user applies materials, otherwise the user applies textures.
 
+The user should not be allowed to set the texture or material swatches to null.
+
 Saving may fail for the following reasons:
 
-- A terrain or material texture is invalid or null
+- A terrain or material texture is invalid
 - A terrain texture is greater than the max texture upload resolution
+
+If saving the terrain fails for any reason, the terrain should not be updated.
 
 Unlike a viewer without PBR terrain support, the new viewer will no longer treat textures with alpha channels as invalid.
 
 ## Graphics Features
 
-Texture terrain with transparency will render as opaque. Parts of the texture that would be partially transparent will instead display as a mix of the color and black, depending on how transparent the texture is.
+Texture terrain with transparency is not permitted to be applied in the viewer.
 
-See [PBR Terrain Feature Gating](./pbr_terrain_feature_gating.md) for supported PBR terrain features.
+See [PBR Terrain Appearance](./pbr_terrain_appearance.md) for supported PBR terrain features.
+
+## Minimap
+
+The minimap should display the terrain with appropriate textures and colors.

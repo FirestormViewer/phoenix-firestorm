@@ -1291,7 +1291,7 @@ void LLToolDragAndDrop::dropMaterialOneFace(LLViewerObject* hit_obj,
     if (asset_id.isNull())
     {
         // use blank material
-        asset_id = LLGLTFMaterialList::BLANK_MATERIAL_ASSET_ID;
+        asset_id = BLANK_MATERIAL_ASSET_ID;
     }
 
     hit_obj->setRenderMaterialID(hit_face, asset_id);
@@ -1327,7 +1327,7 @@ void LLToolDragAndDrop::dropMaterialAllFaces(LLViewerObject* hit_obj,
     if (asset_id.isNull())
     {
         // use blank material
-        asset_id = LLGLTFMaterialList::BLANK_MATERIAL_ASSET_ID;
+        asset_id = BLANK_MATERIAL_ASSET_ID;
     }
 
     hit_obj->setRenderMaterialIDs(asset_id);
