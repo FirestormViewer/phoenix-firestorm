@@ -64,7 +64,7 @@ bool LLEmojiHelper::isCursorInEmojiCode(const LLWString& wtext, S32 cursorPos, S
 		return false;
 	}
 	// </FS:PP>
-
+	if (cursorPos < 0 || wtext.size() < cursorPos) return false; // <FS:Beq/> FIRE-33773 - fix logic to avoid OOB access to wtext
 	// If the cursor is currently on a colon start the check one character further back
 	S32 shortCodePos = (cursorPos == 0 || L':' != wtext[cursorPos - 1]) ? cursorPos : cursorPos - 1;
 
@@ -84,7 +84,7 @@ bool LLEmojiHelper::isCursorInEmojiCode(const LLWString& wtext, S32 cursorPos, S
 		shortCodePos--;
 	}
 
-	bool isShortCode = (L':' == wtext[shortCodePos - 1]) && (cursorPos - shortCodePos >= 2);
+	bool isShortCode = (cursorPos - shortCodePos >= 2) && (L':' == wtext[shortCodePos - 1]); // <FS:Beq/> FIRE-33773 - fix logic to avoid OOB access to wtext
 	if (pShortCodePos)
 		*pShortCodePos = (isShortCode) ? shortCodePos - 1 : -1;
 	return isShortCode;
