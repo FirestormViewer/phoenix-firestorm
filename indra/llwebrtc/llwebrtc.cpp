@@ -26,7 +26,14 @@
 
 #include "llwebrtc_impl.h"
 #include <algorithm>
+
+/*<FS:PC> Only available for much newer compilers on linux (fine with GCC 13).
+This causes grief with some older compilers (like GCC 10). Since it doesnt appear
+to be needed (at least when building the viewer on linux, dont try and include it*/
+#ifndef __linux__
 #include <format>
+#endif
+
 #include <string.h>
 
 #include "api/audio_codecs/audio_decoder_factory.h"

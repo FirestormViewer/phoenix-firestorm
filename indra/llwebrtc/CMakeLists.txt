@@ -26,7 +26,6 @@ set(llwebrtc_HEADER_FILES
 list(APPEND llwebrtc_SOURCE_FILES ${llwebrtc_HEADER_FILES})
 
 add_library (llwebrtc SHARED ${llwebrtc_SOURCE_FILES})
-    
 set_target_properties(llwebrtc PROPERTIES PUBLIC_HEADER llwebrtc.h)
 
 if (WINDOWS)
@@ -41,6 +40,7 @@ if (WINDOWS)
 elseif (DARWIN)
     target_link_libraries(llwebrtc PRIVATE ll::webrtc)
 elseif (LINUX)
+    target_compile_options(llwebrtc PRIVATE "-Wno-deprecated-declarations")
     target_link_libraries(llwebrtc PRIVATE ll::webrtc)
 endif (WINDOWS)
     
