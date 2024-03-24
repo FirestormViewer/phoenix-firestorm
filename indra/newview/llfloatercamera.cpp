@@ -44,6 +44,7 @@
 #include "llfirstuse.h"
 #include "llhints.h"
 #include "lltabcontainer.h"
+#include "llviewercamera.h"
 #include "llvoavatarself.h"
 // [RLVa:KB] - @setcam
 #include "rlvactions.h"
@@ -68,13 +69,19 @@ class LLPanelCameraZoom
 :	public LLPanel
 {
 	LOG_CLASS(LLPanelCameraZoom);
+
 public:
-	LLPanelCameraZoom();
+	struct Params : public LLInitParam::Block<Params, LLPanel::Params> {};
+
+	LLPanelCameraZoom() { onCreate(); }
 
 	/* virtual */ BOOL	postBuild();
 	/* virtual */ void	draw();
 
 protected:
+	LLPanelCameraZoom(const Params& p) { onCreate(); }
+
+	void	onCreate();
 	void	onZoomPlusHeldDown();
 	void	onZoomMinusHeldDown();
 	void	onSliderValueChanged();
@@ -83,9 +90,11 @@ protected:
 	F32		getOrbitRate(F32 time);
 
 private:
-	LLButton*	mPlusBtn;
-	LLButton*	mMinusBtn;
-	LLSlider*	mSlider;
+	LLButton*	mPlusBtn { nullptr };
+	LLButton*	mMinusBtn{ nullptr };
+	LLSlider*	mSlider{ nullptr };
+
+	friend class LLUICtrlFactory;
 };
 
 LLPanelCameraItem::Params::Params()
@@ -161,10 +170,7 @@ static LLPanelInjector<LLPanelCameraZoom> t_camera_zoom_panel("camera_zoom_panel
 // LLPanelCameraZoom
 //-------------------------------------------------------------------------------
 
-LLPanelCameraZoom::LLPanelCameraZoom()
-:	mPlusBtn( NULL ),
-	mMinusBtn( NULL ),
-	mSlider( NULL )
+void LLPanelCameraZoom::onCreate()
 {
 	mCommitCallbackRegistrar.add("Zoom.minus", boost::bind(&LLPanelCameraZoom::onZoomMinusHeldDown, this));
 	mCommitCallbackRegistrar.add("Zoom.plus", boost::bind(&LLPanelCameraZoom::onZoomPlusHeldDown, this));
@@ -175,9 +181,9 @@ LLPanelCameraZoom::LLPanelCameraZoom()
 
 BOOL LLPanelCameraZoom::postBuild()
 {
-	mPlusBtn  = getChild <LLButton> ("zoom_plus_btn");
-	mMinusBtn = getChild <LLButton> ("zoom_minus_btn");
-	mSlider   = getChild <LLSlider> ("zoom_slider");
+	mPlusBtn  = getChild<LLButton>("zoom_plus_btn");
+	mMinusBtn = getChild<LLButton>("zoom_minus_btn");
+	mSlider   = getChild<LLSlider>("zoom_slider");
 	return LLPanel::postBuild();
 }
 
@@ -243,11 +249,59 @@ void activate_camera_tool()
 	LLToolMgr::getInstance()->setTransientTool(LLToolCamera::getInstance());
 };
 
+class LLCameraInfoPanel : public LLPanel
+{
+    const S32 MARGIN { 10 };
+
+    const char* mTitle;
+    const LLCoordFrame* mCamera;
+    const LLFontGL* mFont;
+
+public:
+    LLCameraInfoPanel(const LLView* parent, const LLCoordFrame* camera, const char* title)
+        : LLPanel([&]() -> LLPanel::Params
+            {
+                LLPanel::Params params;
+                params.rect = LLRect(parent->getLocalRect());
+                return params;
+            }())
+        , mTitle(title)
+        , mCamera(camera)
+        , mFont(LLFontGL::getFontSansSerifBig())
+    {
+    }
+
+    virtual void draw() override
+    {
+        LLPanel::draw();
+
+        S32 width = getRect().getWidth();
+        S32 height = getRect().getHeight();
+        S32 top = MARGIN / 2 + (height - MARGIN) / 10 * 9;
+        mFont->renderUTF8(mTitle, 0, MARGIN, top, LLColor4::white, LLFontGL::LEFT, LLFontGL::VCENTER);
+        const LLVector3* const vectors[] = { &mCamera->getOrigin(), &mCamera->getXAxis(), &mCamera->getYAxis(), &mCamera->getZAxis() };
+        for (int row = 0; row < 4; ++row)
+        {
+            top -= (height - MARGIN) / 5;
+            static const char* const labels[] = { "Origin:", "X Axis:", "Y Axis:", "Z Axis:" };
+            mFont->renderUTF8(labels[row], 0, MARGIN, top, LLColor4::white, LLFontGL::LEFT, LLFontGL::VCENTER);
+            const LLVector3& vector = *vectors[row];
+            for (int col = 0; col < 3; ++col)
+            {
+                std::string text = llformat("%.6f", vector[col]);
+                S32 right = width / 4 * (col + 2) - MARGIN;
+                mFont->renderUTF8(text, 0, right, top, LLColor4::white, LLFontGL::RIGHT, LLFontGL::VCENTER);
+            }
+        }
+    }
+};
+
 //
 // Member functions
 //
 
-/*static*/ bool LLFloaterCamera::inFreeCameraMode()
+// static
+bool LLFloaterCamera::inFreeCameraMode()
 {
 	LLFloaterCamera* floater_camera = LLFloaterCamera::findInstance();
 
@@ -272,6 +326,7 @@ void activate_camera_tool()
 	return false;
 }
 
+// static
 void LLFloaterCamera::resetCameraMode()
 {
 	LLFloaterCamera* floater_camera = LLFloaterCamera::findInstance();
@@ -291,6 +346,7 @@ void LLFloaterCamera::resetCameraMode()
 	// </FS:Ansariel>
 }
 
+// static
 void LLFloaterCamera::onAvatarEditingAppearance(bool editing)
 {
 	sAppearanceEditing = editing;
@@ -311,15 +367,44 @@ void LLFloaterCamera::onAvatarEditingAppearance(bool editing)
 	// <FS:Ansariel>
 }
 
+// static
+void LLFloaterCamera::onDebugCameraToggled()
+{
+    if (LLFloaterCamera* instance = LLFloaterCamera::findInstance())
+    {
+        instance->showDebugInfo(LLView::sDebugCamera);
+    }
+
+    if (LLView::sDebugCamera)
+    {
+        LLFloaterReg::showInstanceOrBringToFront("camera");
+    }
+}
+
+void LLFloaterCamera::showDebugInfo(bool show)
+{
+    // Initially LLPanel contains 1 child "view_border"
+    if (show && mViewerCameraInfo->getChildCount() < 2)
+    {
+        mViewerCameraInfo->addChild(new LLCameraInfoPanel(mViewerCameraInfo, LLViewerCamera::getInstance(), "Viewer Camera"));
+        mAgentCameraInfo->addChild(new LLCameraInfoPanel(mAgentCameraInfo, &gAgent.getFrameAgent(), "Agent Camera"));
+    }
+
+    mAgentCameraInfo->setVisible(show);
+    mViewerCameraInfo->setVisible(show);
+}
+
 void LLFloaterCamera::handleAvatarEditingAppearance(bool editing)
 {
-
 }
 
 void LLFloaterCamera::update()
 {
 	ECameraControlMode mode = determineMode();
-	if (mode != mCurrMode) setMode(mode);
+	if (mode != mCurrMode)
+	{
+		setMode(mode);
+	}
 }
 
 
@@ -328,7 +413,8 @@ void LLFloaterCamera::toPrevMode()
 	switchMode(mPrevMode);
 }
 
-/*static*/ void LLFloaterCamera::onLeavingMouseLook()
+// static
+void LLFloaterCamera::onLeavingMouseLook()
 {
 	LLFloaterCamera* floater_camera = LLFloaterCamera::findInstance();
 	if (floater_camera)
@@ -402,12 +488,14 @@ void LLFloaterCamera::onOpen(const LLSD& key)
 	// <FS:Ansariel> Optional small camera floater
 	if (mPresetCombo)
 		populatePresetCombo();
+
+	showDebugInfo(LLView::sDebugCamera);
 }
 
 void LLFloaterCamera::onClose(bool app_quitting)
 {
 	//We don't care of camera mode if app is quitting
-	if(app_quitting)
+	if (app_quitting)
 		return;
 	// It is necessary to reset mCurrMode to CAMERA_CTRL_MODE_PAN so 
 	// to avoid seeing an empty floater when reopening the control.
@@ -441,15 +529,19 @@ LLFloaterCamera::LLFloaterCamera(const LLSD& val)
 // virtual
 BOOL LLFloaterCamera::postBuild()
 {
+	mControls = getChild<LLPanel>("controls");
+	mAgentCameraInfo = getChild<LLPanel>("agent_camera_info");
+	mViewerCameraInfo = getChild<LLPanel>("viewer_camera_info");
 	mRotate = getChild<LLJoystickCameraRotate>(ORBIT);
-	mZoom = findChild<LLPanelCameraZoom>(ZOOM);
+	mZoom = getChild<LLPanelCameraZoom>(ZOOM);
 	mTrack = getChild<LLJoystickCameraTrack>(PAN);
 	mPresetCombo = findChild<LLComboBox>("preset_combo"); // <FS:Ansariel> Optional small camera floater
-
 	// <FS:Ansariel> Improved camera floater
-	//getChild<LLTextBox>("precise_ctrs_label")->setShowCursorHand(false);
-	//getChild<LLTextBox>("precise_ctrs_label")->setSoundFlags(LLView::MOUSE_UP);
-	//getChild<LLTextBox>("precise_ctrs_label")->setClickedCallback(boost::bind(&LLFloaterReg::showInstance, "prefs_view_advanced", LLSD(), FALSE));
+	//mPreciseCtrls = getChild<LLTextBox>("precise_ctrs_label");
+
+	//mPreciseCtrls->setShowCursorHand(false);
+	//mPreciseCtrls->setSoundFlags(LLView::MOUSE_UP);
+	//mPreciseCtrls->setClickedCallback(boost::bind(&LLFloaterReg::showInstance, "prefs_view_advanced", LLSD(), FALSE));
 	// </FS:Ansariel>
 
 	// <FS:Ansariel> Phototools support
@@ -615,6 +707,7 @@ void LLFloaterCamera::updateItemsSelection()
 	getChild<LLPanelCameraItem>("object_view")->setValue(argument);
 }
 
+// static
 void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 {
 	std::string name = param.asString();
@@ -704,7 +797,7 @@ void LLFloaterCamera::onClickCameraItem(const LLSD& param)
 	}
 }
 
-/*static*/
+// static
 void LLFloaterCamera::switchToPreset(const std::string& name)
 {
 // [RLVa:KB] - @setcam family

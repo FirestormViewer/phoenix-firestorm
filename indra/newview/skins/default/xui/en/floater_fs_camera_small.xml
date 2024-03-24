@@ -411,4 +411,22 @@ free_mode_title
             </panel_camera_item.text>
         </panel_camera_item>
     </panel>
+  <panel
+    name="viewer_camera_info"
+    left="0"
+    top="77"
+    width="400"
+    height="130"
+    border="true"
+    visible="false"
+    background_visible="true"/>
+  <panel
+    name="agent_camera_info"
+    left="0"
+    top="207"
+    width="400"
+    height="130"
+    border="true"
+    visible="false"
+    background_visible="true"/>
 </floater>
