@@ -27,6 +27,10 @@
 				</layout_panel>
 				<layout_panel name="chat_layout_panel">
 					<layout_stack name="input_panels">
+						<layout_panel name="emoji_button_layout_panel">
+							<button name="emoji_picker_toggle_btn" tool_tip="Mostra pannello emoji" />
+							<button name="emoji_recent_panel_toggle_btn" tool_tip="Mostra/nascondi emoji recenti" />
+						</layout_panel>
 						<layout_panel name="input_button_layout_panel">
 							<spinner name="ChatChannel" tool_tip="Canale a cui inviare i messaggi. Abilitare in Preferenze -> Chat -> Scrittura -> Selezione canale nella barra chat"/>
 						</layout_panel>
@@ -39,6 +43,11 @@
 							<button label="Invia" name="send_chat" tool_tip="Sussurra = 10m, Parla = 20m, Grida = 100m"/>
 						</layout_panel>
 					</layout_stack>
+				</layout_panel>
+				<layout_panel name="emoji_recent_layout_panel">
+					<text name="emoji_recent_empty_text">
+						Le emoji usate di recente verranno visualizzate qui
+					</text>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

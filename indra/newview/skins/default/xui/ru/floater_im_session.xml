@@ -34,12 +34,17 @@
 			<layout_panel name="chat_layout_panel">
 				<layout_stack name="input_panels">
 					<layout_panel name="input_editor_layout_panel">
-						<chat_editor label="Кому" name="chat_editor"/>
+						<button name="emoji_recent_panel_toggle_btn" tool_tip="Показывает/скрывает последние эмодзи"/>
 					</layout_panel>
 					<layout_panel name="input_button_layout_panel">
 						<button name="minz_btn" tool_tip="Показать/скрыть панель сообщений"/>
 					</layout_panel>
 				</layout_stack>
+			</layout_panel>
+			<layout_panel name="emoji_recent_layout_panel">
+				<text name="emoji_recent_empty_text">Здесь появятся недавно использованные эмодзи</text>
+				<emoji_complete name="emoji_recent_icons_ctrl"/>
+				<button name="emoji_picker_show_btn" label="Еще" tool_tip="Показывает/скрывает средство выбора эмодзи"/>
 			</layout_panel>
 		</layout_stack>
 	</view>

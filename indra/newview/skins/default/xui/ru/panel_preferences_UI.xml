@@ -275,6 +275,11 @@
              <combo_item name="Medium" label="Средний"/>
              <combo_item name="Large" label="Крупный"/>
         </combo_box>
+        <text name="emoji_font_settings_label">
+          Настройки шрифта Эмодзи: (требуется перезапуск)
+        </text>
+        <check_box name="FSUseBWEmojis" label="Отображать эмодзи монохромно"/>
+        <check_box name="FSUsePrettyEmojiButton" label="Использовать красивую кнопку Эмодзи"/>
     </panel>
 </tab_container>
 </panel>
