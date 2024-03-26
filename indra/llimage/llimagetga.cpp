@@ -267,7 +267,7 @@ bool LLImageTGA::updateData()
 			if (!mColorMap)
 			{
                 LLError::LLUserWarningMsg::showOutOfMemory();
-				LL_WARNS() << "Out of Memory in bool LLImageTGA::updateData()" << LL_ENDL;
+				LL_WARNS() << "Out of Memory in bool LLImageTGA::updateData(), size: " << color_map_bytes << LL_ENDL;
 				return false;
 			}
 			memcpy( mColorMap, getData() + mDataOffset, color_map_bytes );	/* Flawfinder: ignore */

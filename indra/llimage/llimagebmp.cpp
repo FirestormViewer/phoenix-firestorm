@@ -322,7 +322,7 @@ bool LLImageBMP::updateData()
 		if (!mColorPalette)
 		{
             LLError::LLUserWarningMsg::showOutOfMemory();
-			LL_WARNS() << "Out of memory in LLImageBMP::updateData()" << LL_ENDL;
+			LL_WARNS() << "Out of memory in LLImageBMP::updateData(), size: " << color_palette_size << LL_ENDL;
 			return false;
 		}
 		memcpy( mColorPalette, mdata + FILE_HEADER_SIZE + BITMAP_HEADER_SIZE + extension_size, color_palette_size );	/* Flawfinder: ignore */

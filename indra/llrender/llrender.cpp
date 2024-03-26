@@ -911,6 +911,7 @@ bool LLRender::init(bool needs_vertex_buffer)
 	stop_glerror();
 	mMaxLineWidthSmooth = range[1];
 	// </FS:Ansariel>
+
     return true;
 }
 
