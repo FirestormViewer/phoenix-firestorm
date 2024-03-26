@@ -26,6 +26,11 @@
 	<menu label="Отладка" name="Debug">
 		<menu_item_call label="Показать настройки отладки" name="Debug Settings"/>
 		<menu_item_call label="Инструменты просмотра XUI" name="UI Preview Tool"/>
+		<menu label="Шрифты" name="Fonts">
+			<menu_item_call label="Показать тест шрифта" name="Show Font Test"/>
+			<menu_item_call label="Дамп шрифтов" name="Dump Fonts"/>
+			<menu_item_call label="Дамп текстур шрифтов" name="Dump Font Textures"/>
+		</menu>
 		<menu label="Тесты интерфейса" name="UI Tests"/>
 		<menu_item_call label="Установить размер окна..." name="Set Window Size..."/>
 		<menu_item_call label="Показать условия использования (ТОS)" name="TOS"/>

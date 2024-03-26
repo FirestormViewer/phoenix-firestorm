@@ -158,6 +158,7 @@
 			<check_box label="Afficher les toasts au premier plan" name="FSShowToastsInFront"/>
 			<check_box label="Utiliser la nouvelle notification de redémarrage de région" name="FSUseNewRegionRestartNotification"/>
 			<check_box label="Ne pas secouer l'écran lorsqu'une notification de redémarrage de région est affichée" name="FSNoScreenShakeOnRegionRestart"/>
+			<check_box label="Canal d'infos redémarrage région :" name="FSReportRegionRestartToChat"/>
 		</panel>
 		<panel label="Police" name="UI-font-tab">
 			<text name="tooltip_textbox1">Police d'écriture :</text>
@@ -188,6 +189,11 @@
 				<combo_item name="Medium" label="Moyenne"/>
 				<combo_item name="Large" label="Grande"/>
 			</combo_box>
+			<text name="emoji_font_settings_label">
+				Paramétrage de la police Emoji : (redémarrage nécessaire pour un effet complet)
+			</text>
+			<check_box label="Afficher les emojis en monochrome :" name="FSUseBWEmojis"/>
+			<check_box label="Utiliser le joli bouton Emoji :" name="FSUsePrettyEmojiButton"/>
 		</panel>
 	</tab_container>
 </panel>

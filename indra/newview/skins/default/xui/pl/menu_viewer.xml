@@ -554,6 +554,8 @@
 			<menu_item_call label="Test przeglądarki mediów" name="Web Browser Test"/>
 			<menu_item_check label="Test restartu regionu" name="Region Restart Test"/>
 			<menu_item_call label="Przeglądarka treści internetowych" name="Web Content Browser"/>
+			<menu_item_call label="Zrzuć czcionki" name="Dump Fonts" />
+			<menu_item_call label="Zrzuć tekstury czcionek" name="Dump Font Textures" />
 			<menu_item_call label="Zrzut SelectMgr" name="Dump SelectMgr"/>
 			<menu_item_call label="Zrzut Szafy" name="Dump Inventory"/>
 			<menu_item_call label="Zrzut liczników" name="Dump Timers"/>
@@ -565,6 +567,7 @@
 			<menu_item_check label="Debuguj SelectMgr" name="Debug SelectMgr"/>
 			<menu_item_check label="Debuguj kliknięcia" name="Debug Clicks"/>
 			<menu_item_check label="Debuguj widoki" name="Debug Views"/>
+			<menu_item_check label="Debuguj Unicode" name="Debug Unicode" />
 			<menu_item_check label="Debuguj chmurki dla podpowiedzi nazw" name="Debug Name Tooltips"/>
 			<menu_item_check label="Debuguj zdarzenia myszy" name="Debug Mouse Events"/>
 			<menu_item_check label="Debuguj klawisze" name="Debug Keys"/>

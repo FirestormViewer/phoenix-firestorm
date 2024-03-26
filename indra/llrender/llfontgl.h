@@ -194,8 +194,8 @@ public:
 
 	static void setFontDisplay(BOOL flag) { sDisplayFont = flag; }
 		
-	static LLFontGL* getFontEmoji();
-	static LLFontGL* getFontEmojiHuge();
+	static LLFontGL* getFontEmoji( bool useBW = false ); // <FS:Beq/> Add B&W emoji font support
+	static LLFontGL* getFontEmojiHuge( bool useBW = false ); // <FS:Beq/> Add B&W emoji font support
 	static LLFontGL* getFontMonospace();
 	static LLFontGL* getFontSansSerifSmall();
     static LLFontGL* getFontSansSerifSmallBold();

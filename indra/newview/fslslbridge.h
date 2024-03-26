@@ -77,19 +77,19 @@ public:
 	void processAttach(LLViewerObject* object, const LLViewerJointAttachment* attachment);
 	void processDetach(LLViewerObject* object, const LLViewerJointAttachment* attachment);
 
-	bool getBridgeCreating() { return mBridgeCreating; };
+	bool getBridgeCreating() const { return mBridgeCreating; };
 	void setBridgeCreating(bool status) { mBridgeCreating = status; };
 
 	void setBridge(LLViewerInventoryItem* item) { mpBridge = item; };
-	LLViewerInventoryItem* getBridge() { return mpBridge; };
+	LLViewerInventoryItem* getBridge() const { return mpBridge; };
 	bool canUseBridge();
 	bool isBridgeValid() const { return nullptr != mpBridge; }
 
 	void checkBridgeScriptName();
-	std::string currentFullName() { return mCurrentFullName; }
+	std::string currentFullName() const { return mCurrentFullName; }
 
-	LLUUID getBridgeFolder() { return mBridgeFolderID; }
-	LLUUID getAttachedID() { return mBridgeUUID; }
+	LLUUID getBridgeFolder() const { return mBridgeFolderID; }
+	LLUUID getAttachedID() const { return mBridgeUUID; }
 
 	bool canDetach(const LLUUID& item_id);
 
@@ -97,10 +97,10 @@ public:
 	void setTimerResult(TimerResult result);
 
 	// from LLVOInventoryListener
-	virtual void inventoryChanged(LLViewerObject* object,
-								LLInventoryObject::object_list_t* inventory,
-								S32 serial_num,
-								void* user_data);
+	void inventoryChanged(LLViewerObject* object,
+						  LLInventoryObject::object_list_t* inventory,
+						  S32 serial_num,
+						  void* user_data) override;
 
 private:
 	std::string				mCurrentURL;

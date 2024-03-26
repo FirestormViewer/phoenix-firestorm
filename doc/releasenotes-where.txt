@@ -1,5 +1,0 @@
-For full release notes, see:
-	http://wiki.secondlife.com/wiki/Release_Notes
-
-For a log of viewer changes, see:
-	doc/viewer-changes.txt

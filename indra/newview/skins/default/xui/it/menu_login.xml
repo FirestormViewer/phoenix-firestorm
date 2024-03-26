@@ -25,6 +25,11 @@
 	<menu label="Debug" name="Debug">
 		<menu_item_call label="Impostazioni di debug" name="Debug Settings"/>
 		<menu_item_call label="Strumento anteprima XUI" name="UI Preview Tool"/>
+		<menu label="Caratteri" name="Fonts">
+			<menu_item_call label="Mostra test carattere" name="Show Font Test" />
+			<menu_item_call label="Scarica caratteri" name="Dump Fonts" />
+			<menu_item_call label="Scarica texture dei caratteri" name="Dump Font Textures" />
+		</menu>
 		<menu label="Test interfaccia utente" name="UI Tests"/>
 		<menu_item_call label="Imposta dimensioni della finestra..." name="Set Window Size..."/>
 		<menu_item_call label="Mostra i Termini del servizio (TOS)" name="TOS"/>

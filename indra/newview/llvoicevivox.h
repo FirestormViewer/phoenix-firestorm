@@ -209,7 +209,7 @@ public:
 	virtual void removeObserver(LLVoiceClientParticipantObserver* observer) override;
 
 	// <FS:Ansariel> Add callback for user volume change
-	boost::signals2::connection setUserVolumeUpdateCallback(const user_voice_volume_change_callback_t::slot_type& cb)
+	boost::signals2::connection setUserVolumeUpdateCallback(const user_voice_volume_change_callback_t::slot_type& cb) override
 	{
 		return mUserVolumeUpdateSignal.connect(cb);
 	}

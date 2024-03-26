@@ -12,7 +12,18 @@
 			</layout_panel>
 			<layout_panel name="chat_layout_panel">
 				<layout_stack name="input_panels">
-					<layout_panel name="input_button_layout_panel"><button name="minz_btn" tool_tip="Affiche/Masque le panneau des messages"/></layout_panel>
+					<layout_panel name="input_editor_layout_panel">
+						<button name="emoji_recent_panel_toggle_btn" tool_tip="Affiche/masque les émojis récents"/>
+					</layout_panel>
+					<layout_panel name="input_button_layout_panel">
+						<button name="minz_btn" tool_tip="Affiche/Masque le panneau des messages"/>
+					</layout_panel>
+					<layout_panel name="emoji_recent_layout_panel">
+						<text name="emoji_recent_empty_text">
+							Les émojis récemment utilisés apparaîtront ici
+						</text>
+						<button name="emoji_picker_show_btn" label="Plus" tool_tip="Affiche/masque le sélecteur d'émojis"/>
+					</layout_panel>
 				</layout_stack>
 			</layout_panel>
 		</layout_stack>

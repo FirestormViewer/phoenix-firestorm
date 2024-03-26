@@ -10935,7 +10935,6 @@ void handle_report_bug(const LLSD& param)
 	// <FS:Ansariel> Keep linking to out JIRA
     //std::string url = gSavedSettings.getString("ReportBugURL");
     //LLWeb::loadURLExternal(url);
-	LLUIString url(param.asString());
 	LLSD sysinfo = FSData::getSystemInfo();
 	LLStringUtil::format_map_t replace;
 	replace["[ENVIRONMENT]"] = LLURI::escape(sysinfo["Part1"].asString().substr(1) + sysinfo["Part2"].asString().substr(1));

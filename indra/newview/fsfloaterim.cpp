@@ -972,8 +972,21 @@ BOOL FSFloaterIM::postBuild()
 	mEmojiRecentIconsCtrl->setCommitCallback([this](LLUICtrl*, const LLSD& value) { onRecentEmojiPicked(value); });
 	mEmojiRecentIconsCtrl->setVisible(false);
 
+	static bool usePrettyEmojiButton = gSavedSettings.getBOOL( "FSUsePrettyEmojiButton" );
+	static bool useBWEmojis = gSavedSettings.getBOOL( "FSUseBWEmojis" );
 	mEmojiPickerToggleBtn = getChild<LLButton>("emoji_picker_toggle_btn");
-	mEmojiPickerToggleBtn->setLabel(LLUIString(LLWString(1, 128512)));
+	if (usePrettyEmojiButton)
+	{
+		static auto emoji_btn_char = gSavedSettings.getU32("FSPrettyEmojiButtonCode");
+		mEmojiPickerToggleBtn->setImageOverlay(LLUUID::null);
+		mEmojiPickerToggleBtn->setFont(LLFontGL::getFontEmoji(useBWEmojis));
+		mEmojiPickerToggleBtn->setLabel(LLUIString(LLWString(1, emoji_btn_char)));
+	}
+	else
+	{
+		mEmojiPickerToggleBtn->setLabel(LLUIString(""));
+		mEmojiPickerToggleBtn->setImageOverlay("Emoji_Picker_Icon");
+	}
 	mEmojiPickerToggleBtn->setClickedCallback([this](LLUICtrl*, const LLSD&) { onEmojiPickerToggleBtnClicked(); });
 
 	mRecentEmojisUpdatedCallbackConnection = LLFloaterEmojiPicker::setRecentEmojisUpdatedCallback([this](const std::list<llwchar>& recent_emojis_list) { initEmojiRecentPanel(); });
