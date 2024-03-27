@@ -3,7 +3,8 @@
 
   <font name="default" comment="default font files (global fallbacks)">
     <file>CascadiaCode-Light.ttf</file>
-    <file functor="is_emoji">TwemojiSVG.ttf</file>
+    <file functor="is_emoji_use_color">TwemojiSVG.ttf</file>
+    <file functor="is_emoji_use_bw">NotoEmoji-Regular.ttf</file>
     <os name="Windows">
       <file>meiryo.TTC</file>
       <file>YuGothR.ttc</file>
@@ -80,6 +81,11 @@
   <font name="Emoji"
 	comment="Name of emoji font">
     <file>TwemojiSVG.ttf</file>
+  </font>
+
+  <font name="EmojiBW"
+	comment="Name of Black and White emoji font">
+    <file>NotoEmoji-Regular.ttf</file>
   </font>
 
   <font name="Monospace"

@@ -276,15 +276,10 @@ void HttpOpRequest::visitNotifier(HttpRequest * request)
 		
 		HttpResponse::TransferStats::ptr_t stats = HttpResponse::TransferStats::ptr_t(new HttpResponse::TransferStats);
 
-#if LL_LINUX
-                curl_easy_getinfo(mCurlHandle, CURLINFO_SIZE_DOWNLOAD_T, &stats->mSizeDownload);
-                curl_easy_getinfo(mCurlHandle, CURLINFO_TOTAL_TIME, &stats->mTotalTime);
-                curl_easy_getinfo(mCurlHandle, CURLINFO_SPEED_DOWNLOAD_T, &stats->mSpeedDownload);
-#else
 		curl_easy_getinfo(mCurlHandle, CURLINFO_SIZE_DOWNLOAD, &stats->mSizeDownload);
 		curl_easy_getinfo(mCurlHandle, CURLINFO_TOTAL_TIME, &stats->mTotalTime);
 		curl_easy_getinfo(mCurlHandle, CURLINFO_SPEED_DOWNLOAD, &stats->mSpeedDownload);
-#endif
+
 		response->setTransferStats(stats);
 
 		mUserHandler->onCompleted(this->getHandle(), response);

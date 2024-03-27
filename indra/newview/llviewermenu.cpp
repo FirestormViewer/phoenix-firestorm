@@ -352,6 +352,7 @@ void handle_disconnect_viewer(void *);
 
 void force_error_breakpoint(void *);
 void force_error_llerror(void *);
+void force_error_llerror_msg(void*);
 void force_error_bad_memory_access(void *);
 void force_error_infinite_loop(void *);
 void force_error_software_exception(void *);
@@ -2718,6 +2719,15 @@ class LLAdvancedForceErrorLlerror : public view_listener_t
 		force_error_llerror(NULL);
 		return true;
 	}
+};
+
+class LLAdvancedForceErrorLlerrorMsg: public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        force_error_llerror_msg(NULL);
+        return true;
+    }
 };
 
 class LLAdvancedForceErrorBadMemoryAccess : public view_listener_t
@@ -10752,6 +10762,11 @@ void force_error_llerror(void *)
     LLAppViewer::instance()->forceErrorLLError();
 }
 
+void force_error_llerror_msg(void*)
+{
+    LLAppViewer::instance()->forceErrorLLErrorMsg();
+}
+
 void force_error_bad_memory_access(void *)
 {
     LLAppViewer::instance()->forceErrorBadMemoryAccess();
@@ -10960,7 +10975,6 @@ void handle_report_bug(const LLSD& param)
 	// <FS:Ansariel> Keep linking to out JIRA
     //std::string url = gSavedSettings.getString("ReportBugURL");
     //LLWeb::loadURLExternal(url);
-	LLUIString url(param.asString());
 	LLSD sysinfo = FSData::getSystemInfo();
 	LLStringUtil::format_map_t replace;
 	replace["[ENVIRONMENT]"] = LLURI::escape(sysinfo["Part1"].asString().substr(1) + sysinfo["Part2"].asString().substr(1));
@@ -12443,6 +12457,7 @@ void initialize_menus()
 	// Advanced > Debugging
 	view_listener_t::addMenu(new LLAdvancedForceErrorBreakpoint(), "Advanced.ForceErrorBreakpoint");
 	view_listener_t::addMenu(new LLAdvancedForceErrorLlerror(), "Advanced.ForceErrorLlerror");
+    view_listener_t::addMenu(new LLAdvancedForceErrorLlerrorMsg(), "Advanced.ForceErrorLlerrorMsg");
 	view_listener_t::addMenu(new LLAdvancedForceErrorBadMemoryAccess(), "Advanced.ForceErrorBadMemoryAccess");
 	view_listener_t::addMenu(new LLAdvancedForceErrorBadMemoryAccessCoro(), "Advanced.ForceErrorBadMemoryAccessCoro");
 	view_listener_t::addMenu(new LLAdvancedForceErrorInfiniteLoop(), "Advanced.ForceErrorInfiniteLoop");

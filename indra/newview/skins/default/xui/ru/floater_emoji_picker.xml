@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="emojipicker" title="Выберите эмодзи">
+	<floater.string name="title_for_recently_used" value="Недавно использованный"/>
+	<floater.string name="title_for_frequently_used" value="Часто используемый"/>
+	<text name="Dummy">Эмодзи не выбраны</text>
+</floater>

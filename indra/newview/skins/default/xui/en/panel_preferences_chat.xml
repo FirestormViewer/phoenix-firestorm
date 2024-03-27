@@ -910,6 +910,22 @@
 		 top_pad="1"
 		 height="16"
 		 width="400"
+		 control_name="FSEnableEmojiWindowPopupWhileTyping"
+		 name="FSEnableEmojiWindowPopupWhileTyping"
+		 label="Enable automatic emoji picker window while typing in chat bars"/>
+		<check_box
+		 layout="topleft"
+		 top_pad="1"
+		 height="16"
+		 width="400"
+		 control_name="FSShowEmojiButton"
+		 name="FSShowEmojiButton"
+		 label="Show emoji button in chat bar for IM sessions and Nearby Chat"/>
+		<check_box
+		 layout="topleft"
+		 top_pad="1"
+		 height="16"
+		 width="400"
 		 control_name="FSShowIMSendButton"
 		 name="FSShowIMSendButton"
 		 label="Show send chat button in chat bar for IM sessions"/>

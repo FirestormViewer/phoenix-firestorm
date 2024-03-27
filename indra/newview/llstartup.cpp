@@ -1532,7 +1532,7 @@ bool idle_startup()
 		LLFile::mkdir(user_fonts_path_name.c_str());
 
 		// <FS:WS> Initalize Account based asset_blacklist
-		FSAssetBlacklist::instance();
+		FSAssetBlacklist::getInstance()->init();
 
 		// <FS:Techwolf Lupindo> load per grid data
 		FSData::instance().downloadAgents();
@@ -2174,9 +2174,6 @@ bool idle_startup()
 		display_startup();
 
 		gXferManager->registerCallbacks(gMessageSystem);
-		display_startup();
-
-		LLGLTFMaterialList::registerCallbacks();
 		display_startup();
 
 		LLStartUp::initNameCache();

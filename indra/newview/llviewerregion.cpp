@@ -1972,8 +1972,6 @@ LLViewerObject* LLViewerRegion::addNewObject(LLVOCacheEntry* entry)
 		addActiveCacheEntry(entry);
 	}
 
-    loadCacheMiscExtras(entry->getLocalID());
-
 	return obj;
 }
 
@@ -3933,15 +3931,6 @@ std::string LLViewerRegion::getSimHostName()
 		return mSimulatorFeatures.has("HostName") ? mSimulatorFeatures["HostName"].asString() : getHost().getHostName();
 	}
 	return std::string("...");
-}
-
-void LLViewerRegion::loadCacheMiscExtras(U32 local_id)
-{
-    auto iter = mImpl->mGLTFOverridesLLSD.find(local_id);
-    if (iter != mImpl->mGLTFOverridesLLSD.end())
-    {
-        LLGLTFMaterialList::loadCacheOverrides(iter->second);
-    }
 }
 
 void LLViewerRegion::applyCacheMiscExtras(LLViewerObject* obj)
