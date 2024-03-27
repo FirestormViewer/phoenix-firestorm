@@ -323,6 +323,7 @@ bool LLImageBMP::updateData()
 		mColorPalette = new(std::nothrow) U8[color_palette_size];
 		if (!mColorPalette)
 		{
+            LLError::LLUserWarningMsg::showOutOfMemory();
 			LL_WARNS() << "Out of memory in LLImageBMP::updateData(), size: " << color_palette_size << LL_ENDL;
 			return false;
 		}

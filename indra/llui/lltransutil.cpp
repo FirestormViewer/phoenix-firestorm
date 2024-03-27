@@ -44,8 +44,13 @@ bool LLTransUtil::parseStrings(const std::string& xml_filename, const std::set<s
 	bool success = LLUICtrlFactory::getLayeredXMLNode(xml_filename, root, LLDir::ALL_SKINS);
 	if (!success)
 	{
+        const std::string error_string =
+            "Firestorm viewer couldn't access some of the files it needs and will be closed."
+            "\n\nPlease reinstall viewer from https://firestormviewer.org/download and "
+            "contact https://www.firestormviewer.org/support if issue persists after reinstall.";
+        LLError::LLUserWarningMsg::show(error_string);
 		gDirUtilp->dumpCurrentDirectories(LLError::LEVEL_WARN);
-		LL_ERRS() << "Couldn't load string table " << xml_filename << ". Please reinstall viewer from  https://www.firestormviewer.org/choose-your-platform/ and contact https://www.firestormviewer.org/support if issue persists after reinstall." << LL_ENDL;
+		LL_ERRS() << "Couldn't load string table " << xml_filename << " " << errno << LL_ENDL;
 		return false;
 	}
 
@@ -60,6 +65,7 @@ bool LLTransUtil::parseLanguageStrings(const std::string& xml_filename)
 	
 	if (!success)
 	{
+        LLError::LLUserWarningMsg::showMissingFiles();
 		LL_ERRS() << "Couldn't load localization table " << xml_filename << LL_ENDL;
 		return false;
 	}

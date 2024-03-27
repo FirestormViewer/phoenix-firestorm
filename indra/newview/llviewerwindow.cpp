@@ -2075,7 +2075,11 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	// Initialize OpenGL Renderer
 	LLVertexBuffer::initClass(mWindow);
 	LL_INFOS("RenderInit") << "LLVertexBuffer initialization done." << LL_ENDL ;
-	gGL.init(true);
+	if (!gGL.init(true))
+    {
+        LLError::LLUserWarningMsg::show(LLTrans::getString("MBVideoDrvErr"));
+        LL_ERRS() << "gGL not initialized" << LL_ENDL;
+    }
 	// <FS:Ansariel> Exodus vignette
 
 	if (LLFeatureManager::getInstance()->isSafe()

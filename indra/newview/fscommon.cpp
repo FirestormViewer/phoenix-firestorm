@@ -478,7 +478,8 @@ bool FSCommon::isDefaultTexture(const LLUUID& asset_id)
 		asset_id == LL_DEFAULT_PLASTIC_UUID ||
 		asset_id == LL_DEFAULT_RUBBER_UUID ||
 		asset_id == LL_DEFAULT_LIGHT_UUID ||
-		asset_id == LLUUID("5748decc-f629-461c-9a36-a35a221fe21f") ||	// UIImgWhiteUUID
+		asset_id == IMG_WHITE ||
+		asset_id == LLUUID("5748decc-f629-461c-9a36-a35a221fe21f") ||	// UIImgWhiteUUID (legacy: replaced by IMG_WHITE)
 		asset_id == LLUUID("8dcd4a48-2d37-4909-9f78-f7a9eb4ef903") ||	// UIImgTransparentUUID
 		asset_id == LLUUID("f54a0c32-3cd1-d49a-5b4f-7b792bebc204") ||	// UIImgInvisibleUUID
 		asset_id == LLUUID("6522e74d-1660-4e7f-b601-6f48c1659a77") ||	// UIImgDefaultEyesUUID
