@@ -541,7 +541,6 @@ void LLFloater::enableResizeCtrls(bool enable, bool width, bool height)
 
 void LLFloater::destroy()
 {
-	gFloaterView->onDestroyFloater(this);
 	// LLFloaterReg should be synchronized with "dead" floater to avoid returning dead instance before
 	// it was deleted via LLMortician::updateClass(). See EXT-8458.
 	LLFloaterReg::removeInstance(mInstanceName, mKey);
@@ -2631,8 +2630,7 @@ LLFloaterView::LLFloaterView (const Params& p)
 	mSnapOffsetBottom(0),
 	mSnapOffsetChatBar(0),
 	mSnapOffsetLeft(0),
-	mSnapOffsetRight(0),
-	mFrontChild(NULL)
+	mSnapOffsetRight(0)
 {
 	mSnapView = getHandle();
 }
@@ -2788,7 +2786,8 @@ void LLFloaterView::bringToFront(LLFloater* child, BOOL give_focus, BOOL restore
 	if (!child)
 		return;
 
-	if (mFrontChild == child)
+    LLFloater* front_child = mFrontChildHandle.get();
+	if (front_child == child)
 	{
 		if (give_focus && child->canFocusStealFrontmost() && !gFocusMgr.childHasKeyboardFocus(child))
 		{
@@ -2797,12 +2796,12 @@ void LLFloaterView::bringToFront(LLFloater* child, BOOL give_focus, BOOL restore
 		return;
 	}
 
-	if (mFrontChild && !mFrontChild->isDead())
+	if (front_child && !front_child->isDead() && front_child->getVisible())
 	{
-		mFrontChild->goneFromFront();
+        front_child->goneFromFront();
 	}
 
-	mFrontChild = child;
+    mFrontChildHandle = child->getHandle();
 
 	// *TODO: make this respect floater's mAutoFocus value, instead of
 	// using parameter
@@ -3389,7 +3388,8 @@ LLFloater *LLFloaterView::getBackmost() const
 
 void LLFloaterView::syncFloaterTabOrder()
 {
-	if (mFrontChild && !mFrontChild->isDead() && mFrontChild->getIsChrome())
+    LLFloater* front_child = mFrontChildHandle.get();
+	if (front_child && front_child->getIsChrome())
 		return;
 
 	// look for a visible modal dialog, starting from first
@@ -3427,11 +3427,12 @@ void LLFloaterView::syncFloaterTabOrder()
 			LLFloater* floaterp = dynamic_cast<LLFloater*>(*child_it);
 			if (gFocusMgr.childHasKeyboardFocus(floaterp))
 			{
-                if (mFrontChild != floaterp)
+                LLFloater* front_child = mFrontChildHandle.get();
+                if (front_child != floaterp)
                 {
                     // Grab a list of the top floaters that want to stay on top of the focused floater
 					std::list<LLFloater*> listTop;
-					if (mFrontChild && !mFrontChild->canFocusStealFrontmost())
+					if (front_child && !front_child->canFocusStealFrontmost())
                     {
                         for (LLView* childp : *getChildList())
                         {
@@ -3451,7 +3452,7 @@ void LLFloaterView::syncFloaterTabOrder()
 						{
 							sendChildToFront(childp);
 						}
-						mFrontChild = listTop.back();
+                        mFrontChildHandle = listTop.back()->getHandle();
 					}
                 }
 
@@ -3545,14 +3546,6 @@ void LLFloaterView::setToolbarRect(LLToolBarEnums::EToolBarLocation tb, const LL
 		LL_WARNS() << "setToolbarRect() passed odd toolbar number " << (S32) tb << LL_ENDL;
 		break;
 	}
-}
-
-void LLFloaterView::onDestroyFloater(LLFloater* floater)
-{
-    if (mFrontChild == floater)
-    {
-        mFrontChild = nullptr;
-    }
 }
 
 // <FS:Ansariel> Prevent floaters being dragged under main chat bar
