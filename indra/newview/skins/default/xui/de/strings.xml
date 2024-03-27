@@ -3301,18 +3301,16 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 
 Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_SITE].
 	</string>
-	<string name="MBOutOfMemoryTitle">
-		Kein Speicher verfügbar
-	</string>
+	<string name="MBOutOfMemoryTitle">Kein Arbeitsspeicher verfügbar</string>
 	<string name="MBOutOfMemoryErr">
-		Die Anfrage nach Speicher durch [APP_NAME] schlug fehl. Die Anwendung kann nicht fortgesetzt werden und wird beendet.
+		Die Anfrage nach Arbeitsspeicher durch [APP_NAME] is fehlgeschlagen. Die Anwendung kann nicht fortgesetzt werden und wird beendet.
 
-Falls Ihr Computer wenig Speicher besitzt, beenden Sie speicherintensive Anwendungen vor dem Start von [APP_NAME], erhöhen Sie die Größe der Auslagerungsdatei und reduzieren Sie Grafikeinstellungen wie beispielsweise Sichtweite.
+Falls wenig Arbeitsspeicher auf Ihrem Computers verfügbar ist, beenden Sie andere speicherintensiven Anwendungen, bevor sie [APP_NAME] ausführen, vergrößern Sie die Auslagerungsdatei oder verringern Sie Grafikeinstellungen wie Sichtweite.
 	</string>
 	<string name="MBMissingFile">
-		[APP_NAME] konnte einige benötigte Dateien nicht finden oder auf diese Zugreifen. Die Anwendung kann nicht fortgesetzt werden und wird beendet.
+		[APP_NAME] konnte einige der benötigten Dateien nicht finden oder auf sie zugreifen und muss daher beendet werden.
 
-Bitte installieren Sie den Viewer erneut von https://www.firestormviewer.org/download und kontaktieren Sie https://www.firestormviewer.org/support falls das Problem danach weiterhin besteht.
+Bitte installieren Sie den Viewer von [DOWNLOAD_URL] erneut und wenden Sie sich an [SUPPORT_SITE] falls das Problem nach einer Neuinstallation weiterhin besteht.
 	</string>
 	<string name="5 O'Clock Shadow">
 		Bartschatten

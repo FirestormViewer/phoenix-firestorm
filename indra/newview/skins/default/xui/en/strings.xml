@@ -1530,7 +1530,7 @@ If your computer's RAM is low, quit any heavy applications before runing [APP_NA
     <string name="MBMissingFile">
         [APP_NAME] couldn't access or find some of the files it needs and will be closed.
 
-Please reinstall viewer from  https://secondlife.com/support/downloads/ and contact https://support.secondlife.com if issue persists after reinstall.
+Please reinstall viewer from [DOWNLOAD_URL] and contact [SUPPORT_SITE] if issue persists after reinstall.
     </string>
 
     <!-- Avatar Shape Information -->

@@ -266,7 +266,7 @@ bool LLImageTGA::updateData()
 			mColorMap = new(std::nothrow) U8[ color_map_bytes ];  
 			if (!mColorMap)
 			{
-                //LLError::LLUserWarningMsg::showOutOfMemory();
+                LLError::LLUserWarningMsg::showOutOfMemory();
 				LL_WARNS() << "Out of Memory in bool LLImageTGA::updateData(), size: " << color_map_bytes << LL_ENDL;
 				return false;
 			}
