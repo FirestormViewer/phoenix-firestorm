@@ -11,11 +11,11 @@ if [[ -f "$CONFIG_FILE" ]]; then
     zip_file=${app_file/app/zip}
     ditto -c -k --keepParent "$app_file" "$zip_file"
     if [[ -f "$zip_file" ]]; then
-        res=$(xcrun altool --notarize-app --primary-bundle-id "org.firestormviewer.firestorm" \
-                                   --username $USERNAME \
-                                   --password $PASSWORD \
-                                   --asc-provider $ASC_PROVIDER \
-                                   --file "$zip_file" 2>&1)
+        res=$(xcrun notarytool submit "$zip_file" \
+                                --keychain-profile viewer.keychain-db \
+                                --verbose \
+                                --asc-provider $ASC_PROVIDER \
+                                --wait 2>&1)
         echo $res
         
         requestUUID=$(echo $res | awk '/RequestUUID/ { print $NF; }')
@@ -23,9 +23,8 @@ if [[ -f "$CONFIG_FILE" ]]; then
             in_progress=1
             while [[ $in_progress -eq 1 ]]; do
                 sleep 30
-                res=$(xcrun altool --notarization-info "$requestUUID" \
-                                            --username $USERNAME \
-                                            --password $PASSWORD 2>&1)
+                res=$(xcrun notarytool info "$requestUUID" \
+                                            --keychain-profile viewer.keychain-db 2>&1)
                 if [[ $res != *"in progress"* ]]; then 
                     in_progress=0
                 fi
