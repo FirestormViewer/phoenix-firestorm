@@ -14,7 +14,6 @@ if [[ -f "$CONFIG_FILE" ]]; then
         res=$(xcrun notarytool submit "$zip_file" \
                                 --keychain-profile viewer.keychain-db \
                                 --verbose \
-                                --asc-provider $ASC_PROVIDER \
                                 --wait 2>&1)
         echo $res
         
