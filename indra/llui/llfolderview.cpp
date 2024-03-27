@@ -224,7 +224,7 @@ LLFolderView::LLFolderView(const Params& p)
 	params.font(getLabelFontForStyle(LLFontGL::NORMAL));
 	params.max_length.bytes(DB_INV_ITEM_NAME_STR_LEN);
 	params.commit_callback.function(boost::bind(&LLFolderView::commitRename, this, _2));
-	params.prevalidate_callback(&LLTextValidate::validateASCIIPrintableNoPipe);
+	params.prevalidator(&LLTextValidate::validateASCIIPrintableNoPipe);
 	params.commit_on_focus_lost(true);
 	params.visible(false);
 	mRenamer = LLUICtrlFactory::create<LLLineEditor> (params);
