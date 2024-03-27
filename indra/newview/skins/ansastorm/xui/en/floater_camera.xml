@@ -274,7 +274,7 @@
     left="0"
     top="85"
     width="400"
-    height="130"
+    height="150"
     border="true"
     visible="false"
     background_visible="true"/>
@@ -283,7 +283,7 @@
     left="0"
     top="215"
     width="400"
-    height="130"
+    height="150"
     border="true"
     visible="false"
     background_visible="true"/>
