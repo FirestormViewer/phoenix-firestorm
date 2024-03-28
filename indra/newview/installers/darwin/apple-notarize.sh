@@ -11,6 +11,11 @@ if [[ -f "$CONFIG_FILE" ]]; then
     zip_file=${app_file/app/zip}
     ditto -c -k --keepParent "$app_file" "$zip_file"
     if [[ -f "$zip_file" ]]; then
+        res=$(xcrun notarytool store-credentials \
+                                --keychain-profile viewer.keychain-db \
+                                --username $USERNAME \
+                                --password $PASSWORD 2>&1)
+        echo $res
         res=$(xcrun notarytool submit "$zip_file" \
                                 --keychain-profile viewer.keychain-db \
                                 --verbose \
