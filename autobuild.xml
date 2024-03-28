@@ -385,36 +385,6 @@
           </map>
         </map>
       </map>
-      <key>SDL</key>
-      <map>
-        <key>platforms</key>
-        <map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>64c1dff0e19792acec7fd32556bf4d7b</string>
-              <key>url</key>
-              <string>https://3p.firestormviewer.org/SDL-1.2.15-linux64-181411635.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
-        </map>
-        <key>license</key>
-        <string>lgpl</string>
-        <key>license_file</key>
-        <string>LICENSES/SDL.txt</string>
-        <key>copyright</key>
-        <string>Copyright (C) 1997-2012 Sam Lantinga</string>
-        <key>version</key>
-        <string>1.2.15</string>
-        <key>name</key>
-        <string>SDL</string>
-        <key>description</key>
-        <string>Simple DirectMedia Layer is a cross-platform multimedia library designed to provide low level access to audio, keyboard, mouse, joystick, 3D hardware via OpenGL, and 2D video framebuffer.</string>
-      </map>
       <key>apr_suite</key>
       <map>
         <key>platforms</key>
@@ -438,9 +408,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1c341bdbb5fd0c8a8930f76e6c1647d4</string>
+              <string>95137cd3f4d6ffa5bd7a00d7d91bd8fc272b7ca2</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/apr_suite-1.4.5.230921251-linux64-230921251.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-apr_suite/releases/download/v1.7.2-c5f3347/apr_suite-1.7.2-c5f3347-linux64-c5f3347.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -496,11 +468,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5d1952e270a873d4587f7b943ed6e3f87d5023da</string>
+              <string>a3bfbdba7e1977e7e65266ec654990bb13994bd3</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/boost-1.81-linux64-240621158.tar.zst</string>
+              <string>https://github.com/secondlife/3p-boost/releases/download/v1.81-3d0d7fc/boost-1.81-linux64-3d0d7fc.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -602,11 +574,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>83f9c9aff5a7b96711c04bd33cb453c108dee3a5</string>
+              <string>cab0237b5194254c0c0ff6bf77bc6a2f946d4f57</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/colladadom-2.3.240621210-linux64-240621210.tar.zst</string>
+              <string>https://github.com/secondlife/3p-colladadom/releases/download/v2.3-2f532e1/colladadom-2.3.2f532e1-linux64-2f532e1.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -660,11 +632,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>64210ab1d7c881dbe5c78ef8f6db5a6d2b27e5d2</string>
+              <string>aea0bed0f953a9371b9091f09230b41597f891f7</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/cubemaptoequirectangular-1.1.0-linux64-213500938.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-cubemap_to_eqr_js/releases/download/v1.1.0-cb8785a/cubemaptoequirectangular-1.1.0-linux64-cb8785a.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -878,11 +850,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c036cc042523fb6a3dafb7134f83e52c566c0765</string>
+              <string>5b957aa7f353b10ae17b7119e5b3668f48a35325</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/emoji_shortcodes-6.1.0.240620448-linux64-240620448.tar.zst</string>
+              <string>https://github.com/secondlife/3p-emoji-shortcodes/releases/download/v6.1.0.5413f58/emoji_shortcodes-6.1.0.5413f58-linux64-5413f58.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -926,9 +898,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>39702f98867a319b090ee04f22d82762</string>
+              <string>4cd82e2dec06ddff19e9b3dc0254f2593ec80452</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/expat-2.5.0.230021327-linux64-230021327.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-expat/releases/download/v2.1.1.1f36d02/expat-2.1.1.1f36d02-linux64-1f36d02.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1021,36 +995,6 @@
         <key>description</key>
         <string>FMOD Studio API</string>
       </map>
-      <key>fontconfig</key>
-      <map>
-        <key>platforms</key>
-        <map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>6fdcfcc9aa1d01164c0f7ca5590859bb</string>
-              <key>url</key>
-              <string>https://3p.firestormviewer.org/fontconfig-2.12.6-linux64-223020909.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
-        </map>
-        <key>license</key>
-        <string>bsd</string>
-        <key>license_file</key>
-        <string>LICENSES/fontconfig.txt</string>
-        <key>copyright</key>
-        <string>Copyright (C) 2000,2001,2002,2003,2004,2006,2007 Keith Packard, 2005 Patrick Lam, 2009 Roozbeh Pournader, 2008,2009 Red Hat, Inc., 2008 Danilo Šegan, 2012 Google, Inc.</string>
-        <key>version</key>
-        <string>2.11.0</string>
-        <key>name</key>
-        <string>fontconfig</string>
-        <key>description</key>
-        <string>Fontconfig is a library for configuring and customizing font access.</string>
-      </map>
       <key>freetype</key>
       <map>
         <key>copyright</key>
@@ -1084,11 +1028,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a8326f592bf608095f0854383eec2baf36257ea9</string>
+              <string>061e1bd8eef85a5d15fafc9d46fc562a621207da</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/freetype-2.12.1.240700637-linux64-240700637.tar.zst</string>
+              <string>https://github.com/secondlife/3p-freetype/releases/download/v2.12.1.d315c1b/freetype-2.12.1.8443253711-linux64-8443253711.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1408,9 +1352,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>fd8060aa3c920e0fc63e7ecbea67bc5e</string>
+              <string>23daab838f4b8f92e5dc1a2f6c568cb7b0cb43b7</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/jpegencoderbasic-1.0-linux64-213500937.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-jpeg_encoder_js/releases/download/v1.0-790015a/jpegencoderbasic-1.0-linux64-790015a.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1464,9 +1410,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>324bb9deb00d256a12f8cbf686f413f0</string>
+              <string>b4b2278bd2fcae85619e2145a243cca388d760d7</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/jpeglib-8c.180841548-linux64-180841548.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-jpeglib/releases/download/v8c.7846234/jpeglib-8c.7846234-linux64-7846234.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1522,9 +1470,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>352ab340f2091c93eb313cf80ac0c8cc</string>
+              <string>66dce1d0c2fc19dff13db279d973773fc7e2aa13</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/jsoncpp-0.5.0.202052209-linux64-202052209.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-jsoncpp/releases/download/v0.5.0-cc63e92/jsoncpp-0.5.0.cc63e92-linux64-cc63e92.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1634,9 +1584,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>6555f040c686d8c1dec8e6264c2d3672</string>
+              <string>6413d3bd4cd50c2a6b7f949eb4bd6f0c94feb984</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/libhunspell-1.3.2.180841552-linux64-180841552.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-libhunspell/releases/download/v1.3.2.650fb94/libhunspell-1.3.2.650fb94-linux64-650fb94.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1738,11 +1690,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e646a9da0ddfe1dfbffc6600d7d35f78ac48c75e</string>
+              <string>39d5779fd79e23da16a7b5bf608008999004c828</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/libpng-1.6.38-240620624-linux64-240620624.tar.zst</string>
+              <string>https://github.com/secondlife/3p-libpng/releases/download/v1.16.38-d427738/libpng-1.6.38-8318603154-linux64-8318603154.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2131,9 +2083,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>50d647afc4e510af72f09dcd7a77e920</string>
+              <string>6f4509dca9e32e3b4f9c4b13d875ce0e24340efc</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/meshoptimizer-0.16.222121104-linux64-222121104.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-meshoptimizer/releases/download/v160-4f905dd/meshoptimizer-160-linux64-4f905dd.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2466,9 +2420,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>03b7df0406d7588c4fb49c2ddf0d8264</string>
+              <string>90052be851c4fcecc35d8424b4f31352de14ab2f</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/ogg_vorbis-1.3.3-1.3.6.202241500-linux64-202241500.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-ogg_vorbis/releases/download/v1.3.3-1.3.6-881f65e/ogg_vorbis-1.3.3-1.3.6.881f65e-linux64-881f65e.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2544,9 +2500,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4f36ae378593240701fd4453bd6074c8</string>
+              <string>e0fbc4874acc4167a6e2b6489fbb8258d98fd665</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/openal-1.12.854-1.1.0.180841552-linux64-180841552.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-openal-soft/releases/download/v1.23.1-18e315c/openal-1.23.1-linux64-18e315c.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2616,9 +2574,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b1dad7c841118a3b6e03a01722d1846a</string>
+              <string>8c277dde6076fb682cb07264dd70f6f2298b633f</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/openjpeg-2.5.0.230362345-linux64-230362345.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-openjpeg/releases/download/v2.5.0.ea12248/openjpeg-2.5.0.ea12248-linux64-ea12248.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2848,9 +2808,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d37be064bd851276dab423d723cb9b7d</string>
+              <string>982c0fa427458082ea9e3cb9603904210732b64e</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/threejs-0.132.2-linux64-213500940.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-three_js/releases/download/v0.132.2-5da28d9/threejs-0.132.2-common-8454371083.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3026,9 +2988,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0d6832fd958ec127f089e683c9b67169</string>
+              <string>df66574b3d70f49570709eccd8a1cdeee996cb43</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/uriparser-0.9.4-linux64-211210958.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-uriparser/releases/download/v0.9.4-42d7a6d/uriparser-0.9.4-linux64-42d7a6d.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -3246,11 +3210,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>71a9c7c03a2c26cdb21fa476de485d9c</string>
+              <string>ad0c8b41ee4b4de216382bec46ee1c25962a3f12</string>
               <key>hash_algorithm</key>
-              <string>md5</string>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/xmlrpc_epi-0.54.2.230940042-linux64-230940042.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-xmlrpc-epi/releases/download/v0.54.1.8a05acf/xmlrpc_epi-0.54.1.8a05acf-linux64-8a05acf.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
