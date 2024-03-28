@@ -1908,6 +1908,7 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="Clothing" value=" Одежда,"/>
 	<string name="Gestures" value=" Жесты,"/>
 	<string name="Landmarks" value=" Закладки,"/>
+	<string name="Materials" value=" Материалы," />
 	<string name="Notecards" value=" Заметки,"/>
 	<string name="Objects" value=" Объекты,"/>
 	<string name="Scripts" value=" Скрипты,"/>
@@ -2013,6 +2014,12 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	</string>
 	<string name="InvFolder Settings">
 		Настройки
+	</string>
+	<string name="InvFolder Material">
+		Материалы
+	</string>
+	<string name="InvFolder Materials">
+		Материалы
 	</string>
 	<string name="InvFolder Friends">
 		Друзья
@@ -5073,6 +5080,9 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="New Gesture">
 		Новый жест
 	</string>
+	<string name="New Material">
+		Новый Материал
+	</string>
 	<string name="New Script">
 		Новый скрипт
 	</string>
@@ -6209,6 +6219,9 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	</string>
 	<string name="ExperiencePermissionShort17">
 		Среда
+	</string>
+	<string name="Material Texture Name Header">
+		Текстуры представляют этот материал:
 	</string>
 	<string name="logging_calls_disabled_log_empty">
 		Разговоры не записываются. Чтобы начать запись, в меню "Настройки > Приватность > Истории разговоров" выберите "Сохранить:" "Только журнал" или "Журнал и история".
