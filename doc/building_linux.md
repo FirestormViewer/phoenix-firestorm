@@ -3,18 +3,23 @@
 > [!WARNING]
 > Please note that we do not give support for compiling the viewer on your own. However, there is a self-compilers group in Second Life that can be joined to ask questions related to compiling the viewer: [Firestorm Self Compilers](https://tinyurl.com/firestorm-self-compilers)
 
-> [!NOTE]
-> These instructions only apply to Firestorm versions with AlexIvy code.
-
 This procedure is based on discussions with the Firestorm Linux development team and is the only one recommended for Firestorm for Linux. System requirements are:
-- Ubuntu 20.04 x64 fully upgraded
+- Ubuntu 22.04 LTS (x86_64) - fully upgraded (this is also now the minimum requirement for running the viewer).
 - 16GB or more RAM ([Low Memory Caution](#common-issuesbugsglitches-and-solutions))
 - 64GB hard drive space 
 - 4 or more core CPU (you could get by with 2 cores, but the process will take much longer)
+- GCC 11 compiler (which is the default version on Ubuntu 22.04 LTS)
 
-Due to the age of the build OS, it is recommended that you use a virtual machine, ensuring the guest can meet the hardware requirements.
+It is recommended that you use a virtual machine for compiling, ensuring the guest can meet the hardware requirements.
 
-This procedure may or may not work on other Linux distributions.
+This procedure may or may not work on other Linux distributions (or you might need to adjust some of the package names to suit the distribution you are using).
+
+> [!WARNING]
+> A system with a glibc version of at least 2.34 is required (Ubuntu 22.04 LTS meets this requirement) 
+> Building on a system with a glibc version older than 2.34 will likely result in linker errors.
+
+> [!IMPORTANT]
+> Only 64 bit builds are possible - 32 bit support was dropped quite some time ago.
 
 ## Establish your programming environment
 
@@ -31,22 +36,11 @@ A few packages must be installed on the build system. Some may already be instal
 |                 |                  |               |                    |                  |        |
 | --------------- | ---------------- | ------------- | ------------------ | ---------------- | ------ |
 | libgl1-mesa-dev | libglu1-mesa-dev | libpulse-dev  | build-essential    | python3-pip      | git    |
-| libssl-dev      | libxinerama-dev  | libxrandr-dev | libfontconfig1-dev | libfreetype6-dev | gcc-10 |
-|                 |                  |               |                    |                  |        |
+| libssl-dev      | libxinerama-dev  | libxrandr-dev | libfontconfig-dev  | libfreetype6-dev | gcc-11 |
+| cmake           |                  |               |                    |                  |        |
 
 ```
-sudo apt install libgl1-mesa-dev libglu1-mesa-dev libpulse-dev build-essential python3-pip git libssl-dev libxinerama-dev libxrandr-dev libfontconfig1-dev libfreetype6-dev gcc-10
-```
-
-### CMake
-
-CMake version 3.18 is required but not available in Ubuntu's repositories, we have to build it from source
-
-```
-wget https://github.com/Kitware/CMake/releases/download/v3.18.0/cmake-3.18.0.tar.gz
-tar xvf cmake-3.18.0.tar.gz
-cd cmake-3.18.0
-./bootstrap --parallel=$(nproc) --prefix=/usr && make -j $(nproc) && sudo make install
+sudo apt install libgl1-mesa-dev libglu1-mesa-dev libpulse-dev build-essential python3-pip git libssl-dev libxinerama-dev libxrandr-dev libfontconfig-dev libfreetype6-dev gcc-11 cmake
 ```
 
 ### Install Autobuild
@@ -58,7 +52,7 @@ sudo pip3 install --upgrade pip
 sudo pip3 install git+https://github.com/secondlife/autobuild.git#egg=autobuild
 ```
 
-Check Autobuild version to be "autobuild 3.8" or higher: `autobuild --version`
+Check Autobuild version to be "autobuild 4" or higher: `autobuild --version`
 
 ## Download the source code
 
@@ -81,7 +75,7 @@ The rest of this document will assume the default directory, `phoenix-firestorm`
 
 ### Clone the Autobuild build variables
 
-Autobuild 3.0 uses a separate file to control compiler options, switches, and the like for different configurations. 
+Autobuild uses a separate file to control compiler options, switches, and the like for different configurations. 
 
 ```
 cd ~/src
