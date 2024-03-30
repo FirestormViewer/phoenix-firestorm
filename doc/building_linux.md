@@ -46,14 +46,12 @@ sudo apt install libgl1-mesa-dev libglu1-mesa-dev libpulse-dev build-essential p
 ### Install Autobuild
 
 Autobuild is a Linden Lab resource that does all the hard work.
-
+You can install it using the same versions as our automated builds as follows:
 ```
 sudo pip3 install --upgrade pip
-sudo pip3 install git+https://github.com/secondlife/autobuild.git#egg=autobuild
+pip install -r requirements.txt
 ```
-
-Check Autobuild version to be "autobuild 4" or higher: `autobuild --version`
-
+Check Autobuild version to be "autobuild 3.9.3" or higher: `autobuild --version`
 ## Download the source code
 
 There are two required repositories, the viewer itself and the build variables. An optional third repository is used to configure and package FMOD Studio.
