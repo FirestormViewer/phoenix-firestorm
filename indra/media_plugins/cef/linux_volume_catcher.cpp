@@ -286,7 +286,9 @@ void VolumeCatcherImpl::setVolume(F32 volume)
 
 void VolumeCatcherImpl::pump()
 {
-	return;
+	if (mGotSyms && mMainloop) {
+		llpa_mainloop_iterate(mMainloop, 0, NULL);
+	}
 }
 
 void VolumeCatcherImpl::connected_okay()
