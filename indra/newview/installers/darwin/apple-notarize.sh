@@ -12,46 +12,26 @@ if [[ -f "$CONFIG_FILE" ]]; then
     ditto -c -k --keepParent "$app_file" "$zip_file"
     if [[ -f "$zip_file" ]]; then
         res=$(xcrun notarytool store-credentials \
-                                viewer.keychain-db \
+                                viewer.profile \
                                 --verbose \
-                                --apple-id $USERNAME \
-                                --password $PASSWORD 2>&1)
         echo $res
         res=$(xcrun notarytool submit "$zip_file" \
-                                --keychain-profile viewer.keychain-db \
+                                --apple-id $USERNAME \
+                                --password $PASSWORD \
                                 --verbose \
                                 --wait 2>&1)
+        echo "Notarytool submit:"
         echo $res
         
-        requestUUID=$(echo $res | awk '/RequestUUID/ { print $NF; }')
-        if [[ -n $requestUUID ]]; then
-            in_progress=1
-            while [[ $in_progress -eq 1 ]]; do
-                sleep 30
-                res=$(xcrun notarytool info "$requestUUID" \
-                                            --keychain-profile viewer.keychain-db 2>&1)
-                if [[ $res != *"in progress"* ]]; then 
-                    in_progress=0
-                fi
-                echo "."
-            done
-            # log results
-            echo $res
+        [[ "$res" =~ 'id: '([^[:space:]]+) ]]
+        match=$?
 
-            #remove temporary file
-            rm "$zip_file"
-
-            if [[ $res == *"success"* ]]; then
-                xcrun stapler staple "$app_file"
-                exit 0
-            elif [[ $res == *"invalid"* ]]; then
-                echo "Notarization error: failed to process the app file"
-                exit 1
-            else
-                echo "Notarization error: unknown response status"
-            fi
+        if [[ ! $match -eq 0 ]]; then
+            echo "Running Stapler"
+            xcrun stapler staple "$app_file"
+            exit 0
         else
-            echo "Notarization error: couldn't get request UUID"
+            echo "Notarization error"
             exit 1
         fi
     else
