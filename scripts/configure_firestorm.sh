@@ -620,15 +620,9 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
             make -j $JOBS | tee -a $LOG
         fi
     elif [ $TARGET_PLATFORM == "windows" ] ; then
-        if [ "${AUTOBUILD_VSVER}" -ge 170 ] ; then
-            msbuild.exe Firestorm.sln -p:Configuration=${BTYPE} -flp:LogFile="logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \
-                -flp1:"errorsonly;LogFile=logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err" -p:Platform=${AUTOBUILD_WIN_VSPLATFORM} -t:Build -p:useenv=true \
-                -verbosity:normal -toolsversion:Current -p:"VCBuildAdditionalOptions= /incremental"
-        else
-            msbuild.exe Firestorm.sln -p:Configuration=${BTYPE} -flp:LogFile="logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \
-                -flp1:"errorsonly;LogFile=logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err" -p:Platform=${AUTOBUILD_WIN_VSPLATFORM} -t:Build -p:useenv=true \
-                -verbosity:normal -toolsversion:15.0 -p:"VCBuildAdditionalOptions= /incremental"
-        fi
+        msbuild.exe Firestorm.sln -p:Configuration=${BTYPE} -flp:LogFile="logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \
+            -flp1:"errorsonly;LogFile=logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err" -p:Platform=${AUTOBUILD_WIN_VSPLATFORM} -t:Build -p:useenv=true \
+            -verbosity:normal -toolsversion:Current -p:"VCBuildAdditionalOptions= /incremental"
     fi
     # Check the return code of the build command
     if [ $? -ne 0 ]; then
