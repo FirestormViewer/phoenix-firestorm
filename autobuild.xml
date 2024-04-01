@@ -26,11 +26,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bcf0f9d160231c52869b8d81014d0ad3afe537fd</string>
+              <string>0f6fbb52ffea1a55bf76a84a6688079f95674cbd</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/SDL2-2.28.5-linux64-233480131.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-sdl2/releases/download/v2.28.0-1dc88c1/SDL2-2.28.0-linux64-1dc88c1.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1028,11 +1028,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>061e1bd8eef85a5d15fafc9d46fc562a621207da</string>
+              <string>07a38133c008ce6f728d652d00a756bea3a70288</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/3p-freetype/releases/download/v2.12.1.d315c1b/freetype-2.12.1.8443253711-linux64-8443253711.tar.zst</string>
+              <string>https://github.com/secondlife/3p-freetype/releases/download/v2.12.1-r1/freetype-2.12.1.8503093630-linux64-8503093630.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -2478,11 +2478,11 @@ Copyright (c) 2012, 2014, 2015, 2016 nghttp2 contributors</string>
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>52c4622c76c773deba056eeb6b0dc726cb3100bd</string>
+              <string>2d20683554f0b00234bbb84d0ce7ac1be1ad70aa</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/open_libndofdev-0.14.233480318-linux64-233480318.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-open-libndofdev/releases/download/v1.14-r1/open_libndofdev-0.14.8503290964-linux64-8503290964.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
