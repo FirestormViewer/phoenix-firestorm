@@ -254,7 +254,7 @@
 			<menu_item_call label="Ustaw domyślne uprawnienia..." name="Set default permissions"/>
 		</menu>
 		<menu label="Prześlij" name="Upload">
-			<menu_item_call label="Teksturę ([COST]L$)..." name="Upload Image"/>
+			<menu_item_call label="Teksturę..." name="Upload Image"/>
 			<menu_item_call label="Dźwięk ([COST]L$)..." name="Upload Sound"/>
 			<menu_item_call label="Animację ([COST]L$)..." name="Upload Animation"/>
 			<menu_item_call label="Model meszowy..." name="Upload Model"/>

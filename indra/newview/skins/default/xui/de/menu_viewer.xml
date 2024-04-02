@@ -251,7 +251,7 @@
 			<menu_item_call label="Standard-Berechtigungen festlegen..." name="Set default permissions"/>
 		</menu>
 		<menu label="Hochladen" name="Upload">
-			<menu_item_call label="Bild ([COST] L$)..." name="Upload Image"/>
+			<menu_item_call label="Bild..." name="Upload Image"/>
 			<menu_item_call label="Sound ([COST] L$)..." name="Upload Sound"/>
 			<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
 			<menu_item_call label="Modell..." name="Upload Model"/>

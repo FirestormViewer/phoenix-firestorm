@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="menu_inventory_add">
 	<menu label="Yüklə" name="upload">
-		<menu_item_call label="Tekstura (L$[COST])..." name="Upload Image"/>
+		<menu_item_call label="Tekstura..." name="Upload Image"/>
 		<menu_item_call label="Səs (L$[COST])..." name="Upload Sound"/>
 		<menu_item_call label="Animasiya (L$[COST])..." name="Upload Animation"/>
 		<menu_item_call label="Meş model..." name="Upload Model"/>

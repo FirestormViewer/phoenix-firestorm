@@ -666,10 +666,8 @@ void init_menus()
     gViewerWindow->setMenuBackgroundColor(false, 
         !LLGridManager::getInstance()->isInSLBeta());
 	// *TODO:Also fix cost in llfolderview.cpp for Inventory menus
-	const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
 	const std::string sound_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getSoundUploadCost());
 	const std::string animation_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getAnimationUploadCost());
-	gMenuHolder->childSetLabelArg("Upload Image", "[COST]", texture_upload_cost_str);
 	gMenuHolder->childSetLabelArg("Upload Sound", "[COST]", sound_upload_cost_str);
 	gMenuHolder->childSetLabelArg("Upload Animation", "[COST]", animation_upload_cost_str);
 
@@ -11797,6 +11795,8 @@ void LLUploadCostCalculator::calculateCost(const std::string& asset_type_str)
 
 	if (asset_type_str == "texture")
 	{
+        // This use minimal texture cost to allow bulk and
+        // texture upload menu options to be visible
 		upload_cost = LLAgentBenefitsMgr::current().getTextureUploadCost();
 	}
 	else if (asset_type_str == "animation")
