@@ -118,6 +118,21 @@
 		<combo_box.item label="Солнце/луна" name="1"/>
 		<combo_box.item label="Солнце/луна + осветители" name="2"/>
 	</combo_box>
+	<check_box label="Отражения в пространстве экрана" name="ScreenSpaceReflections"/>
+	<text name="ReflectionDetailText">Детали отражения:</text>
+	<combo_box name="ReflectionDetail">
+		<combo_box.item label="Только статические" name="0"/>
+		<combo_box.item label="Статика + Динамика" name="1"/>
+		<combo_box.item label="В реальном времени" name="2"/>
+	</combo_box>
+	<text name="ReflectionProbeText">Покрытие отражения:</text>
+	<combo_box name="ReflectionLevel">
+		<combo_box.item label="Ничего" name="0"/>
+		<combo_box.item label="Только вручную" name="1"/>
+		<combo_box.item label="Вручную + местность" name="2"/>
+		<combo_box.item label="Полная сцена" name="3"/>
+	</combo_box>
+	<slider label="Экспозиция:" name="RenderExposure"/>
 	<button label="Вернуть рекомендуемые настройки" name="Defaults"/>
 	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Отмена" label_selected="Отмена" name="Cancel"/>
