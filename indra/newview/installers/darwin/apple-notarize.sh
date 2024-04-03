@@ -18,6 +18,7 @@ if [[ -f "$CONFIG_FILE" ]]; then
         res=$(xcrun notarytool submit "$zip_file" \
                                 --apple-id $USERNAME \
                                 --password $PASSWORD \
+                                --team-id $ASC_PROVIDER \
                                 --verbose \
                                 --wait 2>&1)
         echo "Notarytool submit:"
