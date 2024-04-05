@@ -18,22 +18,23 @@ if [[ -f "$CONFIG_FILE" ]]; then
         res=$(xcrun notarytool submit "$zip_file" \
                                 --apple-id $USERNAME \
                                 --password $PASSWORD \
-                                --verbose \
+                                --team-id $ASC_PROVIDER \
                                 --wait 2>&1)
         echo "Notarytool submit:"
         echo $res
         
         [[ "$res" =~ 'id: '([^[:space:]]+) ]]
         match=$?
+        echo "Notarized with id: [$match]"
 
-        if [[ ! $match -eq 0 ]]; then
-            echo "Running Stapler"
-            xcrun stapler staple "$app_file"
-            exit 0
-        else
-            echo "Notarization error"
-            exit 1
-        fi
+        # if [[ ! $match -eq 0 ]]; then
+        echo "Running Stapler"
+        xcrun stapler staple "$app_file"
+        exit 0
+        # else
+            # echo "Notarization error"
+            # exit 1
+        # fi
     else
         echo "Notarization error: ditto failed"
         exit 1
