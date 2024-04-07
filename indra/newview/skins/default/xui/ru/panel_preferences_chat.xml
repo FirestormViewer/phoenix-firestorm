@@ -141,6 +141,8 @@
 			<check_box label="Включить автоматическую подстановку имени в общем чате" name="FSChatbarNamePrediction"/>
 			<check_box name="AllowMUpose" label="&quot;:&quot; как синоним для &quot;/me&quot;"/>
 			<check_box name="AutoCloseOOC" label="Закрывает ((скобки)) для чата OOC"/>
+			<check_box name="FSEnableEmojiWindowPopupWhileTyping" label="Включите окно автоматического выбора эмодзи при вводе текста в панелях чата"/>
+			<check_box name="FSShowEmojiButton" label="Показывать кнопку эмодзи в панелях чата и сеансов обмена сообщениями"/>
 			<check_box name="FSShowIMSendButton" label="Показать кнопку отправки в строке набора для ЛС"/>
 			<check_box name="FSNearbyChatbar" label="Добавить строку ввода в окно общего чата"/>
 			<check_box name="FSShowChatChannel" label="Показать выбор канала в окне общего чата"/>
@@ -269,15 +271,15 @@
 			<text name="FSCmdLineClearChat_txt">
 				Очистить историю чата
 			</text>
-			<line_editor tool_tip="Czyści logi czatu, aby zapobiec lagom pochodzącym od spamerów." name="FSCmdLineClearChat" />
+			<line_editor tool_tip="Очищает расшифровку чата, чтобы предотвратить эффект задержки от спамеров в чате." name="FSCmdLineClearChat" />
 			<text name="FSCmdLineMedia_txt">
 				Установить url для медиа
 			</text>
-			<line_editor tool_tip="Ustawia i odtwarza strumień mediów dla podanego URL" name="FSCmdLineMedia" />
+			<line_editor tool_tip="Устанавливает и воспроизводит ваш медиапоток по введенному URL-адресу" name="FSCmdLineMedia" />
 			<text name="FSCmdLineMusic_txt">
 				Установить url для потоковой музыки
 			</text>
-			<line_editor tool_tip="Ustawia i odtwarza strumień muzyki dla podanego URL" name="FSCmdLineMusic" />
+			<line_editor tool_tip="устанавливает и воспроизводит ваш музыкальный поток по введенному URL-адресу" name="FSCmdLineMusic" />
 			<text name="FSCmdLineRezPlatform_txt">
 				Выложить платформу (0 - 64)
 			</text>

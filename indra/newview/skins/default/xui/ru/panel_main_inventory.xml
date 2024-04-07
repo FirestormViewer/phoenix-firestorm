@@ -42,6 +42,7 @@
 				<combo_box.item value="filter_type_sounds" label="Звуки" />
 				<combo_box.item value="filter_type_textures" label="Текстуры" />
 				<combo_box.item value="filter_type_snapshots" label="Снимки" />
+				<combo_box.item value="filter_type_materials" label="Материалы" />
 				<combo_box.item value="filter_type_settings" label="Настройки" />
 				<combo_box.item value="filter_type_custom" label="Другое..." />
 			</combo_box>

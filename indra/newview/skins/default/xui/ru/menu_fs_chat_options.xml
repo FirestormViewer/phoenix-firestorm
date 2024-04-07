@@ -15,6 +15,7 @@
 	<menu_item_check label="Показать оповещение новых сообщений" name="new_message_notification"/>
 	<menu_item_check label="Показать строку набора" name="show_chat_bar"/>
 	<menu_item_check label="Показать выбор канала" name="show_channel_selection"/>
+	<menu_item_check label="Показать кнопку эмодзи" name="show_emoji_button"/>
 	<menu_item_check label="Показать кнопку Тип/Отправка" name="show_send_button"/>
 	<menu_item_check label="Показать кнопку Отправить в ЛС" name="show_im_send_button"/>
 </toggleable_menu>

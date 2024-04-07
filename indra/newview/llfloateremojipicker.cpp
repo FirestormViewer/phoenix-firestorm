@@ -41,6 +41,7 @@
 #include "llsdserialize.h"
 #include "lltextbox.h" 
 #include "llviewerchat.h" 
+#include "llviewercontrol.h"  // <FS:Beq/> Add B&W emoji font support
 
 LLFloaterEmojiPicker::recent_emojis_updated_callback_t LLFloaterEmojiPicker::sRecentEmojisUpdatedCallback{}; // <FS:Ansariel> Live-update recently used emojis
 
@@ -136,11 +137,15 @@ public:
 
     virtual void draw() override
     {
+        static LLCachedControl<bool> useBWEmojis(gSavedSettings, "FSUseBWEmojis", false); // <FS:Beq/> Add B&W emoji font support
         LLScrollingPanel::draw();
 
         F32 x = getRect().getWidth() / 2;
         F32 y = getRect().getHeight() / 2;
-        LLFontGL::getFontEmoji()->render(
+        // <FS:Beq> Add B&W emoji font support
+        // LLFontGL::getFontEmoji()->render( 
+        LLFontGL::getFontEmoji(useBWEmojis)->render( 
+        // </FS:Beq>
             mText,                      // wstr
             0,                          // begin_offset
             x,                          // x
@@ -213,7 +218,11 @@ public:
 protected:
     void drawIcon(F32 x, F32 y, S32 max_pixels)
     {
-        LLFontGL::getFontEmojiHuge()->render(
+        // <FS:Beq> Add B&W emoji font support
+        // LLFontGL::getFontEmojiHuge()->render(
+        static LLCachedControl<bool> useBWEmojis(gSavedSettings, "FSUseBWEmojis", false);
+        LLFontGL::getFontEmojiHuge( useBWEmojis )->render(
+        // </FS:Beq>
             mWStr,                      // wstr
             0,                          // begin_offset
             x,                          // x
@@ -229,9 +238,11 @@ protected:
 
     void drawName(F32 x, F32 y, S32 max_pixels, LLColor4& color)
     {
+        static LLCachedControl<bool> useBWEmojis(gSavedSettings, "FSUseBWEmojis", false); // <FS:Beq/> Add B&W emoji font support
+
         F32 x0 = x;
         F32 x1 = max_pixels;
-        LLFontGL* font = LLFontGL::getFontEmoji();
+        LLFontGL* font = LLFontGL::getFontEmoji( useBWEmojis ); // <FS:Beq/> Add B&W emoji font support
         if (mBegin)
         {
             std::string text = mTitle.substr(0, mBegin);
@@ -415,6 +426,7 @@ void LLFloaterEmojiPicker::initialize()
 
 void LLFloaterEmojiPicker::fillGroups()
 {
+    static LLCachedControl<bool> useBWEmojis(gSavedSettings, "FSUseBWEmojis", false); // <FS:Beq/> Add B&W emoji font support
     // Do not use deleteAllChildren() because mBadge shouldn't be removed
     for (LLButton* button : mGroupButtons)
     {
@@ -425,7 +437,7 @@ void LLFloaterEmojiPicker::fillGroups()
     mGroupButtons.clear();
 
     LLButton::Params params;
-    params.font = LLFontGL::getFontEmoji();
+    params.font = LLFontGL::getFontEmoji( useBWEmojis ); // <FS:Beq/> Add B&W emoji font support
 
     LLRect rect;
     rect.mTop = mGroups->getRect().getHeight();

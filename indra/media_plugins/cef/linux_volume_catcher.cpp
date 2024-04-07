@@ -286,7 +286,11 @@ void VolumeCatcherImpl::setVolume(F32 volume)
 
 void VolumeCatcherImpl::pump()
 {
-	return;
+	// <FS:Beq> PR#17 makidoll: Fix Linux volume catcher
+	if (mGotSyms && mMainloop) {
+		llpa_mainloop_iterate(mMainloop, 0, NULL);
+	}
+	// </FS:Beq>
 }
 
 void VolumeCatcherImpl::connected_okay()

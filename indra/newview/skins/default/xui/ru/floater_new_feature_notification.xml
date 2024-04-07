@@ -5,7 +5,17 @@
 		Теперь вы можете добавлять изображения для предварительного просмотра к элементам инвентаря и просматривать папку в отдельном окне.
 Узнайте больше здесь [https://community.secondlife.com/blogs/entry/13637-new-features-inventory-item-preview-and-single-folder-view/ blogpost]
 	</floater.string>
+
+	<floater.string name="title_txt_gltf">New GLTF PBR materials support</floater.string>
+	<floater.string name="description_txt_gltf">
+Теперь вы можете использовать расширенную поддержку материалов с возможностью импорта и редактирования GLTF Материалов Рендеринга на Физической Основе (PBR).
+In order to support the addition of the GLTF format, some areas in the viewer may appear darker than usual.
+
+Узнайте больше о [https://wiki.secondlife.com/wiki/PBR_Materials Рендеринг на физической основе (PBR)]
+	</floater.string>
+
 	<text name="title_txt">Новая функция</text>
 	<text name="description_txt">Описание функции</text>
+
 	<button label="Понятно!" name="close_btn" width="90"/>
 </floater>

@@ -285,6 +285,11 @@ Standard 0. Größere Werte können nicht korrekt funktionieren.
 			<combo_item name="Medium" label="Mittel"/>
 			<combo_item name="Large" label="Groß"/>
 		</combo_box>
+		<text name="emoji_font_settings_label">
+			Emoji-Schrifteinstellungen: (erfordert Neustart)
+		</text>
+		<check_box label="Emojis in monochrom darstellen" name="FSUseBWEmojis"/>
+		<check_box label="Hübschen Emoji-Button verwenden" name="FSUsePrettyEmojiButton"/>
 	</panel>
 </tab_container>
 </panel>

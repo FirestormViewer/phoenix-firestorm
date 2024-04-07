@@ -31,6 +31,7 @@
 #include "llpanelemojicomplete.h"
 #include "llscrollbar.h"
 #include "lluictrlfactory.h"
+#include "llviewercontrol.h"  // <FS:Beq/> Add B&W emoji font support
 
 constexpr U32 MIN_MOUSE_MOVE_DELTA = 4;
 constexpr U32 MIN_SHORT_CODE_WIDTH = 100;
@@ -60,10 +61,14 @@ LLPanelEmojiComplete::LLPanelEmojiComplete(const LLPanelEmojiComplete::Params& p
     , mMaxVisible(p.max_visible)
     , mPadding(p.padding)
     , mSelectedImage(p.selected_image)
-    , mIconFont(LLFontGL::getFontEmojiHuge())
+    // , mIconFont(LLFontGL::getFontEmojiHuge()) // <FS:Beq/> Add B&W emoji font support
     , mTextFont(LLFontGL::getFontSansSerifBig())
     , mScrollbar(nullptr)
 {
+    // <FS:Beq> Add B&W emoji font support
+    static LLCachedControl<bool> useBWEmojis(gSavedSettings, "FSUseBWEmojis");
+    mIconFont = LLFontGL::getFontEmojiHuge( useBWEmojis );
+    // </FS:Beq>
     if (mVertical)
     {
         LLScrollbar::Params sbparams;

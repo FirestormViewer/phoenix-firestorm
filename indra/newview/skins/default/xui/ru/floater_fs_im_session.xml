@@ -49,14 +49,15 @@
 
 		<!-- Checkbox for FS prefix on support groups -->
 		<layout_panel name="support_panel">
-			<check_box label="Добавить версию" name="FSSupportGroupChatPrefix_toggle" tool_tip="Добавляет текущую версию клиента и информацию о теме в сообщения, отправленные вами в этой группе. Данная информация поможет сотрудникам поддержки в правильной диагностике Ваших проблем и повышения точности ответов на ваши вопросы"/>
+			<check_box label="Добавить версию" name="FSSupportGroupChatPrefix_toggle" tool_tip="Добавляет текущую версию и внешний вид программы просмотра, операционную систему и статус RLVa в начало сообщений, отправляемых вами в эту группу, что поможет сотрудникам службы поддержки правильно диагностировать ваши проблемы и повысить точность ответов на ваши вопросы"/>
 		</layout_panel>
 		<layout_panel name="testing_panel">
 			<check_box label="Добавить сборку" name="FSSupportGroupChatPrefixTesting_toggle"
-			tool_tip="Добавляет текущую версию, тему, операционную систему и состояние RLVa в начало сообщений, отправленных вами этой группе, что поможет персоналу службы поддержки правильно диагностировать ваши проблемы и повысить точность ответов на ваши вопросы. (Это отдельно от групп поддержки)"/>
+			tool_tip="Добавляет текущую версию и внешний вид программы просмотра, операционную систему и статус RLVa в начало сообщений, отправляемых вами в эту группу, что поможет сотрудникам службы поддержки правильно диагностировать ваши проблемы и повысить точность ответов на ваши вопросы. (Это отдельно от групп поддержки)"/>
 		</layout_panel>
 		<!-- END: FS Prefix -->
 	</layout_stack>
+
 	<layout_stack name="chat_stack">
 		<layout_panel name="panel_im_control_lp">
 			<layout_stack name="im_panels">
@@ -67,10 +68,17 @@
 				</layout_panel>
 				<layout_panel name="chat_layout_panel">
 					<layout_stack name="input_panels">
+						<layout_panel name="emoji_button_layout_panel">
+							<button name="emoji_picker_toggle_btn" tool_tip="Показать панель эмодзи"/>
+							<button name="emoji_recent_panel_toggle_btn" tool_tip="Показывает/скрывает последние эмодзи"/>
+						</layout_panel>
 						<layout_panel name="input_button_layout_panel">
 							<button name="send_chat" label="Отправить" tool_tip="Отправляет сообщение" />
 						</layout_panel>
 					</layout_stack>
+				</layout_panel>
+				<layout_panel name="emoji_recent_layout_panel">
+					<text name="emoji_recent_empty_text">Здесь появятся недавно использованные эмодзи</text>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>

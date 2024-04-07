@@ -4,6 +4,7 @@
 		<menu_item_call.on_enable name="EnableTouch" parameter="Коснуться"/>
 	</menu_item_call>
 	<menu_item_call label="Редактировать" name="Edit..."/>
+	<menu_item_call label="Редактировать Материал PBR" name="EditGLTFMaterial"/>
 	<menu_item_call label="Строить" name="Build"/>
 	<menu_item_call label="Открыть" name="Open"/>
 	<menu_item_call label="Сесть" name="Object Sit"/>

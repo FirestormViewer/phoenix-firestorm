@@ -5,6 +5,7 @@
 		<menu_item_call label="Звук (L$[COST])..." name="Upload Sound"/>
 		<menu_item_call label="Анимацию (L$[COST])..." name="Upload Animation"/>
 		<menu_item_call label="Меш модель..." name="Upload Model"/>
+		<menu_item_call label="Материал..." name="Upload Material"/>
 		<menu_item_call label="Несколько файлов..." name="Bulk Upload"/>
 		<menu_item_call label="Импортировать набор связей..." name="import linkset"/>
 	</menu>
@@ -12,6 +13,7 @@
 	<menu_item_call label="Новый скрипт" name="New Script"/>
 	<menu_item_call label="Новая заметка" name="New Note"/>
 	<menu_item_call label="Новый жест" name="New Gesture"/>
+	<menu_item_call label="Новый материал" name="New Material"/>
 	<menu label="Новая одежда" name="New Clothes">
 		<menu_item_call label="Новая Рубашка" name="New Shirt"/>
 		<menu_item_call label="Новые штаны" name="New Pants"/>

@@ -40,7 +40,7 @@ sudo python3 get-pip.py
 The Linden Lab [Autobuild](https://github.com/secondlife/autobuild) tool.
 - Use the following command to install it on your machine:
 ```
-pip3 install --user git+https://bitbucket.org/lindenlab/autobuild.git#egg=autobuild
+pip3 install --user -r requirements.txt
 ```
 
 - Add it to your PATH environment variable so it can be found by the shell. The macOS-approved way to do this is to issue the following command (This change will not take effect until the next time you open a Terminal window.):
@@ -53,7 +53,7 @@ echo '~/Library/Python/3.7/bin/' | sudo tee /etc/paths.d/99-autobuild
 export PATH=$PATH:~/Library/Python/3.7/bin/
 ```
 
-- Check Autobuild version to be "autobuild 3.8" or higher: `autobuild --version`
+- Check Autobuild version to be "autobuild 3.9.3" or higher: `autobuild --version`
 
 ### Additional third party libraries 
 If you want to use licensed FMOD Studio API or KDU build libraries (they are optional) you have to provide these yourself. If you're building Firestorm as part of the project team, ask for the libraries for fmodstudio and kdu. Put them into `/opt/firestorm`.

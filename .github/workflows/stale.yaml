@@ -12,12 +12,13 @@ jobs:
   stale:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@v6
+      - uses: actions/stale@v9
         id: stale
         with:
           stale-pr-message: This pull request is stale because it has been open 30 days with no activity. Remove stale label or comment or it will be closed in 7 days
           days-before-stale: 30
-          days-before-close: 7 
+          days-before-close: 7
+          days-before-issue-close: -1
           exempt-pr-labels: blocked,must,should,keep
           stale-pr-label: stale
       - name: Print outputs
