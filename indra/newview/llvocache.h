@@ -43,6 +43,8 @@ class LLCamera;
 class LLGLTFOverrideCacheEntry
 {
 public:
+    static const std::string VERSION_LABEL;
+    static const int VERSION;
     bool fromLLSD(const LLSD& data);
     LLSD toLLSD() const;
 
@@ -95,12 +97,13 @@ public:
 			}			
 		}
 	};
-
-    struct ExtrasEntry
-    {
-        LLSD extras;
-        std::string extras_raw;
-    };
+    // <FS:Beq> Unused, remove to reduce cognitive load
+    // struct ExtrasEntry
+    // {
+    //     LLSD extras;
+    //     std::string extras_raw;
+    // };
+    // </FS:Beq>
 
 protected:
 	~LLVOCacheEntry();
@@ -288,13 +291,17 @@ public:
 	// We need this init to be separate from constructor, since we might construct cache, purge it, then init.
 	void initCache(ELLPath location, U32 size, U32 cache_version);
 	void removeCache(ELLPath location, bool started = false) ;
-
-	void readFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::vocache_entry_map_t& cache_entry_map) ;
-    void readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::vocache_gltf_overrides_map_t& cache_extras_entry_map);
+	// <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+	// void readFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::vocache_entry_map_t& cache_entry_map) ;
+	// void readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::vocache_gltf_overrides_map_t& cache_extras_entry_map);
+	bool readFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::vocache_entry_map_t& cache_entry_map) ;
+	void readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::vocache_gltf_overrides_map_t& cache_extras_entry_map, const LLVOCacheEntry::vocache_entry_map_t& cache_entry_map);
+	// </FS:Beq>
 
 	void writeToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry::vocache_entry_map_t& cache_entry_map, BOOL dirty_cache, bool removal_enabled);
     void writeGenericExtrasToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry::vocache_gltf_overrides_map_t& cache_extras_entry_map, BOOL dirty_cache, bool removal_enabled);
 	void removeEntry(U64 handle) ;
+	void removeGenericExtrasForHandle(U64 handle); // <FS:Beq/> FIRE-33808 - Material Override Cache causes long delays
 
 	U32 getCacheEntries() { return mNumEntries; }
 	U32 getCacheEntriesMax() { return mCacheSize; }
