@@ -51,8 +51,9 @@ class LLObjectSelection;
 class LLLandImpactsObserver;
 
 // <FS:Zi> switchable edit texture/materials panel
-#include "llrender.h"
+#include "llgltfmaterial.h"
 #include "llmaterial.h"
+#include "llrender.h"
 
 class FSPanelFace;
 // </FS:Zi>
@@ -118,6 +119,7 @@ public:
 	// LLPanelFace* getPanelFace() { return mPanelFace; }
 	LLRender::eTexIndex getTextureDropChannel();
 	LLRender::eTexIndex getTextureChannelToEdit();
+	LLGLTFMaterial::TextureInfo getPBRDropChannel();
 	LLMaterialPtr createDefaultMaterial(LLMaterialPtr old_mat);
 	void refreshPanelFace();
 	// </FS:Zi>

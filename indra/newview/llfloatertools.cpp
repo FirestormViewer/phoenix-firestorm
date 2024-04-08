@@ -1697,6 +1697,13 @@ LLRender::eTexIndex LLFloaterTools::getTextureChannelToEdit()
 	return LLRender::NUM_TEXTURE_CHANNELS;	// invalid
 }
 
+LLGLTFMaterial::TextureInfo LLFloaterTools::getPBRDropChannel()
+{
+	if (mPanelFace)   return mPanelFace->getPBRDropChannel();
+	if (mFSPanelFace) return mFSPanelFace->getPBRDropChannel();
+	return LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT;	// invalid
+}
+
 LLMaterialPtr LLFloaterTools::createDefaultMaterial(LLMaterialPtr old_mat)
 {
 	if (mPanelFace)   return mPanelFace->createDefaultMaterial(old_mat);

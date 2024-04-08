@@ -1477,11 +1477,17 @@ void LLToolDragAndDrop::dropTextureOneFace(LLViewerObject* hit_obj,
         if (allow_adding_to_override)
         {
             LLGLTFMaterial::TextureInfo drop_channel = LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR;
-            LLPanelFace* panel_face = gFloaterTools->getPanelFace();
-            if (gFloaterTools->getVisible() && panel_face)
+			// <FS:Zi> switchable edit texture/materials panel
+            // LLPanelFace* panel_face = gFloaterTools->getPanelFace();
+            // if (gFloaterTools->getVisible() && panel_face)
+            // {
+            //     drop_channel = panel_face->getPBRDropChannel();
+            // }
+            if (gFloaterTools->getVisible())
             {
-                drop_channel = panel_face->getPBRDropChannel();
+                drop_channel = gFloaterTools->getPBRDropChannel();
             }
+			// </FS:Zi>
             set_texture_to_material(hit_obj, hit_face, asset_id, drop_channel);
             LLGLTFMaterialList::flushUpdates(nullptr);
         }

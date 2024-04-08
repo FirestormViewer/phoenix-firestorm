@@ -785,7 +785,7 @@ BOOL FSPanelFace::postBuild()
 	mMaterialCtrlPBR->setImmediateFilterPermMask(PERM_NONE);
 	mMaterialCtrlPBR->setDnDFilterPermMask(PERM_COPY | PERM_TRANSFER);
 	mMaterialCtrlPBR->setBakeTextureEnabled(false);
-	mMaterialCtrlPBR->setInventoryPickType(LLTextureCtrl::PICK_MATERIAL);
+	mMaterialCtrlPBR->setInventoryPickType(PICK_MATERIAL);
 
 	// PBR Base Color texture swatch
 	mBaseTexturePBR->setDefaultImageAssetID(LLUUID(gSavedSettings.getString("DefaultObjectTexture")));
@@ -922,6 +922,18 @@ LLRender::eTexIndex FSPanelFace::getTextureDropChannel()
 	}
 
 	return LLRender::eTexIndex(MATTYPE_DIFFUSE);
+}
+
+LLGLTFMaterial::TextureInfo FSPanelFace::getPBRDropChannel()
+{
+	if (getCurrentMaterialType() == MATMEDIA_PBR)
+	{
+		S32 current_pbr_channel = getCurrentPBRChannel();
+		if (current_pbr_channel == PBRTYPE_NORMAL) return LLGLTFMaterial::GLTF_TEXTURE_INFO_NORMAL;
+		if (current_pbr_channel == PBRTYPE_METALLIC_ROUGHNESS) return LLGLTFMaterial::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS;
+		if (current_pbr_channel == PBRTYPE_EMISSIVE) return LLGLTFMaterial::GLTF_TEXTURE_INFO_EMISSIVE;
+	}
+    return LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR;
 }
 
 LLMaterialPtr FSPanelFace::createDefaultMaterial(LLMaterialPtr current_material)
@@ -4859,7 +4871,8 @@ void FSPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
 						LLToolDragAndDrop::dropTextureAllFaces(objectp,
 							itemp_res,
 							from_library ? LLToolDragAndDrop::SOURCE_LIBRARY : LLToolDragAndDrop::SOURCE_AGENT,
-							LLUUID::null);
+							LLUUID::null,
+							false);
 					}
 					else // one face
 					{
@@ -4868,6 +4881,7 @@ void FSPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
 							itemp_res,
 							from_library ? LLToolDragAndDrop::SOURCE_LIBRARY : LLToolDragAndDrop::SOURCE_AGENT,
 							LLUUID::null,
+							false,
 							0);
 					}
 				}
@@ -4965,8 +4979,6 @@ void FSPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
 		{
 			LLUUID object_id = objectp->getID();
 
-			LLSelectedTEMaterial::setAlphaMaskCutoff(this, (U8)te_data["material"]["AlphaMaskCutoff"].asInteger(), te, object_id);
-
 			// Normal
 			// Replace placeholders with target's
 			if (te_data["material"].has("NormMapNoCopy"))
@@ -5015,7 +5027,7 @@ void FSPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
 			LLSelectedTEMaterial::setSpecularLightExponent(this, (U8)te_data["material"]["SpecExp"].asInteger(), te, object_id);
 			LLSelectedTEMaterial::setEnvironmentIntensity(this, (U8)te_data["material"]["EnvIntensity"].asInteger(), te, object_id);
 			LLSelectedTEMaterial::setDiffuseAlphaMode(this, (U8)te_data["material"]["DiffuseAlphaMode"].asInteger(), te, object_id);
-            LLSelectedTEMaterial::setAlphaMaskCutoff(this, (U8)te_data["material"]["AlphaMaskCutoff"].asInteger(), te, object_id);
+			LLSelectedTEMaterial::setAlphaMaskCutoff(this, (U8)te_data["material"]["AlphaMaskCutoff"].asInteger(), te, object_id);
 
 			if (te_data.has("te") && te_data["te"].has("shiny"))
 			{
