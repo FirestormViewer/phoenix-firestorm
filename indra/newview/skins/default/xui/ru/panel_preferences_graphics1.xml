@@ -38,6 +38,7 @@
 			<check_box label="Атмосферные шейдеры" name="WindLightUseAtmosShaders"/>
 			<check_box label="Расшир. модель освещения" tool_tip="Включить расширенную прорисовку освещения." name="UseLightShaders"/>
 			<check_box label="Окклюзия окружения" name="UseSSAO"/>
+			<check_box label="Отражения на экране" name="ScreenSpaceReflections"/>
 			<text name="shadows_label">
 				Тени:
 			</text>
@@ -46,6 +47,20 @@
 				<combo_box.item label="Солнце / Луна" name="1"/>
 				<combo_box.item label="Солнце / Луна + Прожектора" name="2"/>
 			</combo_box>
+			<text name="ReflectionDetailText">Детали отражения:</text>
+			<combo_box name="ReflectionDetail">
+				<combo_box.item label="Только статические" name="0"/>
+				<combo_box.item label="Статика + Динамика" name="1"/>
+				<combo_box.item label="В реальном времени" name="2"/>
+			</combo_box>
+			<text name="ReflectionProbeText">Покрытие отражения:</text>
+			<combo_box name="ReflectionLevel">
+				<combo_box.item label="Ничего" name="0"/>
+				<combo_box.item label="Только вручную" name="1"/>
+				<combo_box.item label="Вручную + местность" name="2"/>
+				<combo_box.item label="Полная сцена" name="3"/>
+			</combo_box>
+
 			<text name="reflection_label">
 				Отражения в воде:
 			</text>
@@ -75,6 +90,7 @@
 				Низкое
 			</text>
 			<slider label="Физика аватаров" name="AvatarPhysicsDetail"/>
+			<slider label="Экспозиция:" name="RenderExposure"/>
 			<text name="MeshDetailText">
 				Уровень детализации (LOD):
 			</text>

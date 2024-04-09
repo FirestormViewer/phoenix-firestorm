@@ -224,7 +224,7 @@ jobs:
 
       - name: Upload executable
         if: matrix.configuration != 'ReleaseOS' && steps.build.outputs.viewer_app
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "${{ steps.build.outputs.artifact }}-app"
           path: |
@@ -234,7 +234,7 @@ jobs:
       # artifact for that too.
       - name: Upload symbol file
         if: matrix.configuration != 'ReleaseOS'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "${{ steps.build.outputs.artifact }}-symbols"
           path: |
@@ -242,7 +242,7 @@ jobs:
 
       - name: Upload metadata
         if: matrix.configuration != 'ReleaseOS'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "${{ steps.build.outputs.artifact }}-metadata"
           # emitted by build.sh, possibly multiple lines
@@ -250,7 +250,7 @@ jobs:
             ${{ steps.build.outputs.metadata }}
 
       - name: Upload physics package
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         # should only be set for viewer-private
         if: matrix.configuration != 'ReleaseOS' && steps.build.outputs.physicstpv
         with:

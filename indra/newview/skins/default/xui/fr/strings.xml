@@ -3221,6 +3221,19 @@ Si ce message persiste, veuillez aller sur la page [SUPPORT_SITE].
 
 Si ce message persiste, veuillez aller sur la page [SUPPORT_SITE].
 	</string>
+	<string name="MBOutOfMemoryTitle">
+		Out Of Memory
+	</string>
+	<string name="MBOutOfMemoryErr">
+		La demande de mémoire de [APP_NAME] a échoué. L'application ne peut pas continuer et sera fermée.
+
+Si la mémoire vive de votre ordinateur est faible, quittez les applications lourdes avant de lancer [APP_NAME], allouez un fichier de page ou réduisez les paramètres graphiques tels que la distance de rendu.
+	</string>
+	<string name="MBMissingFile">
+		[APP_NAME] n'a pas pu accéder ou trouver certains des fichiers dont il a besoin et sera fermé.
+
+Veuillez réinstaller la visionneuse à partir de [DOWNLOAD_URL] et contacter [SUPPORT_SITE] si le problème persiste après la réinstallation.
+	</string>
 	<string name="5 O'Clock Shadow">
 		Ombre de 5 heures
 	</string>

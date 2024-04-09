@@ -34,6 +34,7 @@
 #include "llagentcamera.h"
 #include "llsdserialize.h"
 #include "llagent.h" // <FS:Beq/> For gAgent
+#include "llworld.h" // <FS:Beq/> For LLWorld::getInstance()
 
 //static variables
 U32 LLVOCacheEntry::sMinFrameRange = 0;
@@ -55,6 +56,10 @@ BOOL check_write(LLAPRFile* apr_file, void* src, S32 n_bytes)
 {
 	return apr_file->write(src, n_bytes) == n_bytes ;
 }
+// <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+const std::string LLGLTFOverrideCacheEntry::VERSION_LABEL = {"GLTFCacheVer"};
+const int LLGLTFOverrideCacheEntry::VERSION = 1;
+// </FS:Beq>
 
 bool LLGLTFOverrideCacheEntry::fromLLSD(const LLSD& data)
 {
@@ -236,6 +241,8 @@ LLVOCacheEntry::LLVOCacheEntry(LLAPRFile* apr_file)
 		}
 		else
 		{
+			// <FS:Beq/> improve logging around vocache
+			LL_WARNS() << "Error loading cache entry for " << mLocalID << ", size " << size << " aborting!" << LL_ENDL;
 			delete[] mBuffer ;
 			mBuffer = NULL ;
 		}
@@ -1289,6 +1296,11 @@ void LLVOCache::removeEntry(HeaderEntryInfo* entry)
 	{
 		return;
 	}
+	// <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+	std::string filename;
+	getObjectCacheFilename(entry->mHandle, filename);
+	LL_INFOS() << "Removing entry for region with filename" << filename << LL_ENDL;
+	// </FS:Beq>
 
 	header_entry_queue_t::iterator iter = mHeaderEntryQueue.find(entry);
 	if(iter != mHeaderEntryQueue.end())
@@ -1359,6 +1371,11 @@ void LLVOCache::removeFromCache(HeaderEntryInfo* entry)
 	std::string filename;
 	getObjectCacheFilename(entry->mHandle, filename);
 	LLAPRFile::remove(filename, mLocalAPRFilePoolp);
+	// <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+	// Note that removeFromCache should take responsibility for cleaning up all cache artefactgs specfic to the handle/entry.
+	// as such this now includes the generic extras
+	removeGenericExtrasForHandle(entry->mHandle);
+	// </FS:Beq>
 	entry->mTime = INVALID_TIME ;
 	updateEntry(entry) ; //update the head file.
 }
@@ -1507,13 +1524,17 @@ BOOL LLVOCache::updateEntry(const HeaderEntryInfo* entry)
 
 	return check_write(&apr_file, (void*)entry, sizeof(HeaderEntryInfo)) ;
 }
-
-void LLVOCache::readFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::vocache_entry_map_t& cache_entry_map) 
+// <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+// void LLVOCache::readFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::vocache_entry_map_t& cache_entry_map) 
+// we now return bool to trigger dirty cache
+// and force a rewrite after a partial read due to corruption.
+bool LLVOCache::readFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::vocache_entry_map_t& cache_entry_map) 
+// </FS:Beq>
 {
 	if(!mEnabled)
 	{
 		LL_WARNS() << "Not reading cache for handle " << handle << "): Cache is currently disabled." << LL_ENDL;
-		return ;
+		return true; // <FS:Beq/> FIRE-33808 - Material Override Cache causes long delays
 	}
 	llassert_always(mInitialized);
 
@@ -1521,12 +1542,13 @@ void LLVOCache::readFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::voca
 	if(iter == mHandleEntryMap.end()) //no cache
 	{
 		LL_WARNS() << "No handle map entry for " << handle << LL_ENDL;
-		return ;
+		return false; // <FS:Beq/> FIRE-33808 - Material Override Cache causes long delays
 	}
 
 	bool success = true ;
+	S32 num_entries=0;  // <FS:Beq/> FIRE-33808 - Material Override Cache causes long delays
+	std::string filename;
 	{
-		std::string filename;
 		LLUUID cache_id;
 		getObjectCacheFilename(handle, filename);
 		LLAPRFile apr_file(filename, APR_READ|APR_BINARY, mLocalAPRFilePoolp);
@@ -1543,7 +1565,7 @@ void LLVOCache::readFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::voca
 
 			if(success)
 			{
-				S32 num_entries;  // if removal was enabled during write num_entries might be wrong
+				// S32 num_entries;  // if removal was enabled during write num_entries might be wrong
 				success = check_read(&apr_file, &num_entries, sizeof(S32)) ;
 	
 				if(success)
@@ -1554,7 +1576,7 @@ void LLVOCache::readFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::voca
 						if (!entry->getLocalID())
 						{
 							LL_WARNS() << "Aborting cache file load for " << filename << ", cache file corruption!" << LL_ENDL;
-							success = false ;
+                        success = false ;
 							break ;
 						}
 						cache_entry_map[entry->getLocalID()] = entry;
@@ -1570,13 +1592,24 @@ void LLVOCache::readFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::voca
 		{
 			removeEntry(iter->second) ;
 		}
-	}
 
-	return ;
+	}
+	// <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+	// return ;
+	LL_DEBUGS("GLTF", "VOCache") << "Read " << cache_entry_map.size() << " entries from object cache " << filename << ", expected " << num_entries << ", success=" << (success?"True":"False") << LL_ENDL;
+	return success;
+	// </FS:Beq>
 }
 
-void LLVOCache::readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::vocache_gltf_overrides_map_t& cache_extras_entry_map)
+// <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+// void LLVOCache::readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::vocache_gltf_overrides_map_t& cache_extras_entry_map)
+void LLVOCache::readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::vocache_gltf_overrides_map_t& cache_extras_entry_map, const LLVOCacheEntry::vocache_entry_map_t& cache_entry_map)
 {
+	int loaded= 0;
+	int discarded = 0;
+	// get ViewerRegion pointer from handle
+	LLViewerRegion* pRegion = LLWorld::getInstance()->getRegionFromHandle(handle);
+// </FS:Beq>
     if(!mEnabled)
     {
         LL_WARNS() << "Not reading cache for handle " << handle << "): Cache is currently disabled." << LL_ENDL;
@@ -1598,19 +1631,42 @@ void LLVOCache::readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCac
     std::getline(in, line);
     if(!in.good()) {
         LL_WARNS() << "Failed reading extras cache for handle " << handle << LL_ENDL;
+		// <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+        in.close();
+        removeGenericExtrasForHandle(handle);
+		// </FS:Beq>
         return;
     }
 
+    // <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+    // file formats need versions, let's add one. legacy cache files will be considered version 0
+    int versionNumber=0;
+    if (line.compare(0, LLGLTFOverrideCacheEntry::VERSION_LABEL.length(), LLGLTFOverrideCacheEntry::VERSION_LABEL) == 0) 
+    {
+        std::string versionStr = line.substr(LLGLTFOverrideCacheEntry::VERSION_LABEL.length()+1); // skip the version label and ':'
+        versionNumber = std::stol(versionStr);
+        std::getline(in, line); // read the next line for the region UUID check
+    }
+    // </FS:Beq>
     if(!LLUUID::validate(line))
     {
         LL_WARNS() << "Failed reading extras cache for handle" << handle << ". invalid uuid line: '" << line << "'" << LL_ENDL;
+        // <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+        in.close();
+        removeGenericExtrasForHandle(handle);
+        // </FS:Beq>
         return;
     }
 
     LLUUID cache_id(line);
     if(cache_id != id)
     {
-        LL_INFOS() << "Cache ID doesn't match for this region, discarding" << LL_ENDL;
+        // <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+        // if the cache id doesn't match the expected region we should just kill the file.
+        LL_WARNS() << "Cache ID doesn't match for this region, deleting it" << LL_ENDL;
+        in.close();
+        removeGenericExtrasForHandle(handle);
+        // </FS:Beq>
         return;
     }
 
@@ -1618,6 +1674,10 @@ void LLVOCache::readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCac
     std::getline(in, line);
     if(!in.good()) {
         LL_WARNS() << "Failed reading extras cache for handle " << handle << LL_ENDL;
+        // <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+        in.close();
+        removeGenericExtrasForHandle(handle);
+        // </FS:Beq>
         return;
     }
     try {
@@ -1626,10 +1686,15 @@ void LLVOCache::readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCac
     catch(std::logic_error&)  // either invalid_argument or out_of_range
     {
         LL_WARNS() << "Failed reading extras cache for handle " << handle << ". unreadable num_entries" << LL_ENDL;
+        // <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+        in.close();
+        removeGenericExtrasForHandle(handle);
+        // </FS:Beq>
         return;
     }
 
-    LL_DEBUGS("GLTF") << "Beginning reading extras cache for handle " << handle << ", " << num_entries << " entries" << LL_ENDL;
+    // <FS:Beq/> FIRE-33808 - Material Override Cache causes long delays
+    LL_DEBUGS("GLTF") << "Beginning reading extras cache for handle " << handle << " from " << getObjectCacheExtrasFilename(handle) << LL_ENDL;
 
     LLSD entry_llsd;
     for (U32 i = 0; i < num_entries && !in.eof(); i++)
@@ -1638,46 +1703,77 @@ void LLVOCache::readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCac
         bool success = LLSDSerialize::deserialize(entry_llsd, in, max_size);
         // check bool(in) this time since eof is not a failure condition here
         if(!success || !in) {
-            LL_WARNS() << "Failed reading extras cache for handle " << handle << ", entry number " << i << LL_ENDL;
-            return;
+            // <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+            LL_WARNS() << "Failed reading extras cache for handle " << handle << ", entry number " << i << " cache patrtial load only." << LL_ENDL;
+            in.close();
+            removeGenericExtrasForHandle(handle);
+            break;
+            // </FS:Beq>
         }
 
         LLGLTFOverrideCacheEntry entry;
         entry.fromLLSD(entry_llsd);
         U32 local_id = entry_llsd["local_id"].asInteger();
-        cache_extras_entry_map[local_id] = entry;
+        // <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+        // cache_extras_entry_map[local_id] = entry;
+        // only add entries that exist in the primary cache
+        // this is a self-healing test that avoids us polluting the cache with entries that are no longer valid.
+        if(cache_entry_map.find(local_id)!= cache_entry_map.end())
+        {
+            // attempt to backfill a null objectId, though these shouldn't be in the persisted cache really
+            if(entry.mObjectId.isNull() && pRegion)
+            {
+                gObjectList.getUUIDFromLocal( entry.mObjectId, local_id, pRegion->getHost().getAddress(), pRegion->getHost().getPort() );
+            }
+            cache_extras_entry_map[local_id] = entry;
+            loaded++;
+        }
+        else
+        {
+            discarded++;
+        }
     }
-
-    LL_DEBUGS("GLTF") << "Completed reading extras cache for handle " << handle << ", " << num_entries << " entries" << LL_ENDL;
+    LL_DEBUGS("GLTF") << "Completed reading extras cache for handle " << handle << ", " << loaded << " loaded, " << discarded << " discarded" << LL_ENDL;
+    // </FS:Beq>
 }
 
 void LLVOCache::purgeEntries(U32 size)
 {
+    // <FS:Beq/> FIRE-33808 - Material Override Cache causes long delays
+	LL_DEBUGS("VOCache","GLTF") << "Purging " << size << " entries from cache" << LL_ENDL;
 	while(mHeaderEntryQueue.size() > size)
 	{
 		header_entry_queue_t::iterator iter = mHeaderEntryQueue.begin() ;
 		HeaderEntryInfo* entry = *iter ;			
 		mHandleEntryMap.erase(entry->mHandle);
-		mHeaderEntryQueue.erase(iter) ;
-		removeFromCache(entry) ;
+		// <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+		mHeaderEntryQueue.erase(iter);
+		removeFromCache(entry); 
+		// </FS:Beq>
 		delete entry;
-        // TODO also delete extras
+
 	}
 	mNumEntries = mHandleEntryMap.size() ;
 }
 
 void LLVOCache::writeToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry::vocache_entry_map_t& cache_entry_map, BOOL dirty_cache, bool removal_enabled) 
 {
+	// <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+	std::string filename;
+	getObjectCacheFilename(handle, filename);
+	// </FS:Beq>
 	if(!mEnabled)
 	{
-		LL_WARNS() << "Not writing cache for handle " << handle << "): Cache is currently disabled." << LL_ENDL;
+		// <FS:Beq/> FIRE-33808 - Material Override Cache causes long delays
+		LL_WARNS() << "Not writing cache for " << filename << " (handle:" << handle << "): Cache is currently disabled." << LL_ENDL;
 		return ;
 	}
 	llassert_always(mInitialized);
 
 	if(mReadOnly)
 	{
-		LL_WARNS() << "Not writing cache for handle " << handle << "): Cache is currently in read-only mode." << LL_ENDL;
+		// <FS:Beq/> FIRE-33808 - Material Override Cache causes long delays
+		LL_WARNS() << "Not writing cache for " << filename << " (handle:" << handle << "): Cache is currently in read-only mode." << LL_ENDL;
 		return ;
 	}	
 
@@ -1712,13 +1808,15 @@ void LLVOCache::writeToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry:
 	//update cache header
 	if(!updateEntry(entry))
 	{
-		LL_WARNS() << "Failed to update cache header index " << entry->mIndex << ". handle = " << handle << LL_ENDL;
+		// <FS:Beq/> FIRE-33808 - Material Override Cache causes long delays
+		LL_WARNS() << "Failed to update cache header index " << entry->mIndex << ". " << filename << " handle = " << handle << LL_ENDL;
 		return ; //update failed.
 	}
 
 	if(!dirty_cache)
 	{
-		LL_WARNS() << "Skipping write to cache for handle " << handle << ": cache not dirty" << LL_ENDL;
+		// <FS:Beq/> FIRE-33808 - Material Override Cache causes long delays
+		LL_WARNS() << "Skipping write to cache for " << filename << " (handle:" << handle << "): cache not dirty" << LL_ENDL;
 		return ; //nothing changed, no need to update.
 	}
 
@@ -1754,6 +1852,8 @@ void LLVOCache::writeToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry:
                         }
                         else
                         {
+                            // <FS:Beq/> FIRE-33808 - Material Override Cache causes long delays
+                            LL_WARNS() << "Failed to write cache entry to buffer for " << filename << ", entry number " << iter->second->getLocalID() << LL_ENDL;
                             success = false;
                             break;
                         }
@@ -1765,6 +1865,8 @@ void LLVOCache::writeToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry:
                             size_in_buffer = 0;
                             if (!success)
                             {
+                                // <FS:Beq/> FIRE-33808 - Material Override Cache causes long delays
+                                LL_WARNS() << "Failed to write cache to disk " << filename << LL_ENDL;
                                 break;
                             }
                         }
@@ -1775,8 +1877,16 @@ void LLVOCache::writeToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry:
                 {
                     // final write
                     success = check_write(&apr_file, (void*)data_buffer, size_in_buffer);
+                    // <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+                    if(!success)
+                    {
+                        LL_WARNS() << "Failed to write cache entry to disk " << filename << LL_ENDL;
+                    }
+                    // </FS:Beq>
                     size_in_buffer = 0;
                 }
+                // <FS:Beq/> FIRE-33808 - Material Override Cache causes long delays
+                LL_DEBUGS("VOCache") << "Wrote " << num_entries << " entries to the primary VOCache file " << filename << ". success = " << (success ? "True":"False") << LL_ENDL;
             }
 		}
 	}
@@ -1788,6 +1898,18 @@ void LLVOCache::writeToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry:
 
 	return ;
 }
+// <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+void LLVOCache::removeGenericExtrasForHandle(U64 handle)
+{
+    if(mReadOnly)
+    {
+        LL_WARNS() << "Not removing cache for handle " << handle << ": Cache is currently in read-only mode." << LL_ENDL;
+        return ;
+    }
+    LL_WARNS("GLTF", "VOCache") << "Removing generic extras for handle " << handle << "Filename: " << getObjectCacheExtrasFilename(handle) << LL_ENDL;
+    LLFile::remove(getObjectCacheExtrasFilename(handle));
+}
+// </FS:Beq>
 
 void LLVOCache::writeGenericExtrasToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry::vocache_gltf_overrides_map_t& cache_extras_entry_map, BOOL dirty_cache, bool removal_enabled)
 {
@@ -1804,46 +1926,106 @@ void LLVOCache::writeGenericExtrasToCache(U64 handle, const LLUUID& id, const LL
         return;
     }
 
-    std::string filename(getObjectCacheExtrasFilename(handle));
+    // <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+    std::string filename = getObjectCacheExtrasFilename(handle);
+    // </FS:Beq>
     llofstream out(filename, std::ios::out | std::ios::binary);
     if(!out.good())
     {
         LL_WARNS() << "Failed writing extras cache for handle " << handle << LL_ENDL;
+        // <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+    //     return;
+    //     // TODO - clean up broken cache file
+    // }
+
+    // out << id << '\n';
+    // if(!out.good())
+    // {
+    //     LL_WARNS() << "Failed writing extras cache for handle " << handle << LL_ENDL;
+    //     return;
+    //     // TODO - clean up broken cache file
+    // }
+
+    // U32 num_entries = cache_extras_entry_map.size();
+    // out << num_entries << '\n';
+    // if(!out.good())
+    // {
+    //     LL_WARNS() << "Failed writing extras cache for handle " << handle << LL_ENDL;
+    //     return;
+    //     // TODO - clean up broken cache file
+    // }
+        removeGenericExtrasForHandle(handle);
         return;
-        // TODO - clean up broken cache file
     }
+    // It is good practice to version file formats so let's add one.
+    // legacy versions will be treated as version 0.
+    out << LLGLTFOverrideCacheEntry::VERSION_LABEL << ":" << LLGLTFOverrideCacheEntry::VERSION << '\n';
 
     out << id << '\n';
     if(!out.good())
     {
         LL_WARNS() << "Failed writing extras cache for handle " << handle << LL_ENDL;
+        removeGenericExtrasForHandle(handle); // <FS:Beq/> FIRE-33808 - Material Override Cache causes long delays
         return;
-        // TODO - clean up broken cache file
     }
 
-    U32 num_entries = cache_extras_entry_map.size();
-    out << num_entries << '\n';
+    auto num_entries_placeholder = out.tellp();
+    out << std::setw(10) << std::setfill('0') << 0 << '\n';
     if(!out.good())
     {
         LL_WARNS() << "Failed writing extras cache for handle " << handle << LL_ENDL;
+        removeGenericExtrasForHandle(handle); 
         return;
-        // TODO - clean up broken cache file
     }
 
-    for (auto const & entry : cache_extras_entry_map)
+    // get ViewerRegion pointer from handle
+    LLViewerRegion* pRegion = LLWorld::getInstance()->getRegionFromHandle(handle);
+
+    U32 num_entries = 0;
+    U32 inmem_entries = 0;
+    U32 skipped = 0;
+    inmem_entries = cache_extras_entry_map.size();
+    for (auto [local_id, entry] : cache_extras_entry_map)
     {
-        S32 local_id = entry.first;
-        LLSD entry_llsd = entry.second.toLLSD();
-        entry_llsd["local_id"] = local_id;
-        LLSDSerialize::serialize(entry_llsd, out, LLSDSerialize::LLSD_XML);
-        out << '\n';
-        if(!out.good())
+        // Only write out GLTFOverrides that we can actually apply again on import.
+        // worst case we have an extra cache miss.
+        // Note: mObjectId is valid in memory as we might have a data race between GLTF of the object itself.
+        // This remains a valid state to persist as it is consistent with the localid checks on import with the main cache.
+        if(entry.mObjectId.isNull() && pRegion)
         {
-            LL_WARNS() << "Failed writing extras cache for handle " << handle << LL_ENDL;
-            return;
-            // TODO - clean up broken cache file
+            gObjectList.getUUIDFromLocal( entry.mObjectId, local_id, pRegion->getHost().getAddress(), pRegion->getHost().getPort() );
+        }
+
+        if( /*entry.mObjectId.notNull() &&*/
+            entry.mSides.size() > 0 &&
+            entry.mSides.size() == entry.mGLTFMaterial.size()
+        )
+        {
+            LLSD entry_llsd = entry.toLLSD();
+            entry_llsd["local_id"] = (S32)local_id;
+            LLSDSerialize::serialize(entry_llsd, out, LLSDSerialize::LLSD_XML);
+            out << '\n';
+            if(!out.good())
+            {
+                // We're not in a good place when this happens so we might as well nuke the file.
+                LL_WARNS() << "Failed writing extras cache for handle " << handle << ". Corrupted cache file " << filename << " removed." << LL_ENDL;
+                removeGenericExtrasForHandle(handle);
+                return;
+            }
+            num_entries++;
+        }
+        else
+        {
+            skipped++;
         }
     }
-
-    LL_DEBUGS("GLTF") << "Completed writing extras cache for handle " << handle << ", " << num_entries << " entries" << LL_ENDL;
+    out.seekp(num_entries_placeholder);
+    out << std::setw(10) << std::setfill('0') << num_entries << '\n';
+    if(!out.good())
+    {
+        LL_WARNS() << "Failed writing extras cache for handle " << handle << LL_ENDL;
+        removeGenericExtrasForHandle(handle);
+        return;
+    }
+    LL_DEBUGS("GLTF") << "Completed writing extras cache for handle " << handle << ", " << num_entries << " entries. Total in RAM: " << inmem_entries << " skipped (no persist): " << skipped << LL_ENDL;
 }
