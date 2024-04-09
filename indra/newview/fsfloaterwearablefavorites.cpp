@@ -311,7 +311,7 @@ void FSFloaterWearableFavorites::handleRemove()
 
 void FSFloaterWearableFavorites::onFilterEdit(const std::string& search_string)
 {
-	mItemsList->setFilterSubString(search_string);
+	mItemsList->setFilterSubString(search_string, true);
 	mItemsList->setNoItemsCommentText(getString("empty_list"));
 }
 

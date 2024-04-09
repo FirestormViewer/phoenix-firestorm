@@ -142,9 +142,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>81fe1e927e4fe3c5e5f15ce6219ca883</string>
+              <string>691fef2ddd57d7b6c26e87fc82d9ace3f54e078c</string>
+              <key>hash_algorithm</key>
+              <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/fltk-1.3.5.202282121-linux64-202282121.tar.bz2</string>
+              <string>https://github.com/secondlife/3p-fltk/releases/download/v1.3.9-r1/fltk-1.3.9.8556992788-linux64-8556992788.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1177,34 +1179,6 @@
         <key>description</key>
         <string>a library for writing and using C++ mock classes</string>
       </map>
-      <key>gstreamer</key>
-      <map>
-        <key>platforms</key>
-        <map>
-          <key>linux64</key>
-          <map>
-            <key>archive</key>
-            <map>
-              <key>hash</key>
-              <string>86a358f1b5a2c2baf68444b2bfc5bb32</string>
-              <key>url</key>
-              <string>https://3p.firestormviewer.org/gstreamer-0.10.6.180841551-linux64-180841551.tar.bz2</string>
-            </map>
-            <key>name</key>
-            <string>linux64</string>
-          </map>
-        </map>
-        <key>license</key>
-        <string>LGPL</string>
-        <key>license_file</key>
-        <string>LICENSES/gstreamer.txt</string>
-        <key>copyright</key>
-        <string>Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;</string>
-        <key>version</key>
-        <string>0.10.6.314267</string>
-        <key>name</key>
-        <string>gstreamer</string>
-      </map>
       <key>havok-source</key>
       <map>
         <key>platforms</key>
@@ -1302,11 +1276,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f5e5be3af96f1eb0842219a94765c04aa9c561c5</string>
+              <string>bdd74e2a02c7b78fded9222140d197da4af9904e</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://3p.firestormviewer.org/icu4c-4.8.1-linux64-240621048.tar.zst</string>
+              <string>https://github.com/secondlife/3p-icu4c/releases/download/v4.8.1-8bff176/icu4c-4.8.1-linux64-8512575562.tar.zst</string>
             </map>
             <key>name</key>
             <string>linux64</string>
@@ -1856,11 +1830,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e50ea94bbaa4ff41bf53b84b7192df1a694c5337</string>
+              <string>3a3e14563cd5fc019c3f139b82aa46ec79847709</string>
               <key>hash_algorithm</key>
               <string>sha1</string>
               <key>url</key>
-              <string>https://github.com/secondlife/llca/releases/download/v202310121525.0-d22bd98/llca-202310121530.0-common-d22bd98.tar.zst</string>
+              <string>https://github.com/secondlife/llca/releases/download/v202312051403.17-0f5d9c3/llca-202312051404.0-common-0f5d9c3.tar.zst</string>
             </map>
             <key>name</key>
             <string>common</string>
@@ -1874,7 +1848,7 @@
         <string>Copyright (c) 2016, Linden Research, Inc.; data provided by the Mozilla NSS Project.
       </string>
         <key>version</key>
-        <string>202310121530.0</string>
+        <string>202312051404.0</string>
         <key>name</key>
         <string>llca</string>
       </map>

@@ -40,7 +40,7 @@ namespace LL
          * overrides this parameter.
          */
         ThreadPoolBase(const std::string& name, size_t threads,
-                       WorkQueueBase* queue);
+                       WorkQueueBase* queue, bool auto_shutdown = true);
         virtual ~ThreadPoolBase();
 
         /**
@@ -55,10 +55,7 @@ namespace LL
          * ThreadPool listens for application shutdown messages on the "LLApp"
          * LLEventPump. Call close() to shut down this ThreadPool early.
          */
-        // <FS:Beq> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
-        // void close();
         virtual void close();
-        // </FS:Beq>
 
         std::string getName() const { return mName; }
         size_t getWidth() const { return mThreads.size(); }
@@ -90,14 +87,14 @@ namespace LL
 
     protected:
         std::unique_ptr<WorkQueueBase> mQueue;
+        std::vector<std::pair<std::string, std::thread>> mThreads;
+        bool mAutomaticShutdown;
 
     private:
         void run(const std::string& name);
-        
-    protected: // <FS:Beq/> [FIRE-32453][BUG-232971] Improve shutdown behaviour.
+
         std::string mName;
         size_t mThreadCount;
-        std::vector<std::pair<std::string, std::thread>> mThreads;
     };
 
     /**
@@ -121,8 +118,11 @@ namespace LL
          * Constraining the queue can cause a submitter to block. Do not
          * constrain any ThreadPool accepting work from the main thread.
          */
-        ThreadPoolUsing(const std::string& name, size_t threads=1, size_t capacity=1024*1024):
-            ThreadPoolBase(name, threads, new queue_t(name, capacity))
+        ThreadPoolUsing(const std::string& name,
+                        size_t threads=1,
+                        size_t capacity=1024*1024,
+                        bool auto_shutdown = true):
+            ThreadPoolBase(name, threads, new queue_t(name, capacity), auto_shutdown)
         {}
         ~ThreadPoolUsing() override {}
 

@@ -60,6 +60,8 @@ LLFloaterProfileTexture::~LLFloaterProfileTexture()
         mImage->forceActive(); // <FS:Ansariel> Make sure it can get discarded
         mImage = NULL;
     }
+
+    LLLoadedCallbackEntry::cleanUpCallbackList(&mCallbackTextureList);
 }
 
 // virtual

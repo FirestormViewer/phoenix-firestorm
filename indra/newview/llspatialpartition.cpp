@@ -864,10 +864,8 @@ void LLSpatialGroup::rebound()
             if (controlAvatar &&
                 controlAvatar->mDrawable &&
                 controlAvatar->mControlAVBridge &&
-                controlAvatar->mControlAVBridge->mOctree)// <FS:Beq> FIRE-33367 toggling animesh state off causes a crash
+                controlAvatar->mControlAVBridge->mOctree)
             {
-                llassert(controlAvatar->mControlAVBridge->mOctree);
-
                 LLSpatialGroup* root = (LLSpatialGroup*)controlAvatar->mControlAVBridge->mOctree->getListener(0);
                 if (this == root)
                 {
@@ -880,7 +878,7 @@ void LLSpatialGroup::rebound()
     }
 }
 
-void LLSpatialGroup::destroyGLState(bool keep_occlusion)
+void LLSpatialGroup::destroyGLState(bool keep_occlusion) 
 {
 	// <FS:Ansariel> Reset VB during TP
 	bool is_tree_group = getSpatialPartition()->mPartitionType == LLViewerRegion::PARTITION_TREE;
@@ -1347,17 +1345,8 @@ void drawBox(const LLVector4a& c, const LLVector4a& r)
 
 void drawBoxOutline(const LLVector3& pos, const LLVector3& size)
 {
-
-	llassert(pos.isFinite());
-	llassert(size.isFinite());
-
-	llassert(!llisnan(pos.mV[0]));
-	llassert(!llisnan(pos.mV[1]));
-	llassert(!llisnan(pos.mV[2]));
-
-	llassert(!llisnan(size.mV[0]));
-	llassert(!llisnan(size.mV[1]));
-	llassert(!llisnan(size.mV[2]));
+    if (!pos.isFinite() || !size.isFinite())
+        return;
 
 	LLVector3 v1 = size.scaledVec(LLVector3( 1, 1,1));
 	LLVector3 v2 = size.scaledVec(LLVector3(-1, 1,1));
