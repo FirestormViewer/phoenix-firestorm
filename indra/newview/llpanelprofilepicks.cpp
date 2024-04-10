@@ -270,8 +270,6 @@ void LLPanelProfilePicks::onClickNewBtn()
         select_tab(true).
         label(pick_panel->getPickName()));
     updateButtons();
-
-    pick_panel->addLocationChangedCallbacks();
 }
 
 void LLPanelProfilePicks::onClickDelete()
@@ -841,10 +839,6 @@ void LLPanelProfilePick::onClickSave()
     {
         mParcelCallbackConnection.disconnect();
     }
-    if (mLocationChanged) 
-    {
-        onClickSetLocation();
-    }
     sendUpdate();
 
     mLocationChanged = false;
@@ -891,13 +885,6 @@ void LLPanelProfilePick::processParcelInfo(const LLParcelData& parcel_data)
         LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mParcelId, this);
     }
 }
-
-void LLPanelProfilePick::addLocationChangedCallbacks()
-{
-    mRegionCallbackConnection = gAgent.addRegionChangedCallback([this]() { onClickSetLocation(); });
-    mParcelCallbackConnection = gAgent.addParcelChangedCallback([this]() { onClickSetLocation(); });
-}
-
 
 void LLPanelProfilePick::sendUpdate()
 {
