@@ -270,6 +270,9 @@ void LLPanelProfilePicks::onClickNewBtn()
         select_tab(true).
         label(pick_panel->getPickName()));
     updateButtons();
+
+    // <FS:Ansariel> Keep set location button
+    pick_panel->addLocationChangedCallbacks();
 }
 
 void LLPanelProfilePicks::onClickDelete()
@@ -839,6 +842,12 @@ void LLPanelProfilePick::onClickSave()
     {
         mParcelCallbackConnection.disconnect();
     }
+    // <FS:Ansariel> Keep set location button
+    if (mLocationChanged) 
+    {
+        onClickSetLocation();
+    }
+    // </FS:Ansariel>
     sendUpdate();
 
     mLocationChanged = false;
@@ -885,6 +894,14 @@ void LLPanelProfilePick::processParcelInfo(const LLParcelData& parcel_data)
         LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mParcelId, this);
     }
 }
+
+// <FS:Ansariel> Keep set location button
+void LLPanelProfilePick::addLocationChangedCallbacks()
+{
+    mRegionCallbackConnection = gAgent.addRegionChangedCallback([this]() { onClickSetLocation(); });
+    mParcelCallbackConnection = gAgent.addParcelChangedCallback([this]() { onClickSetLocation(); });
+}
+// </FS:Ansariel>
 
 void LLPanelProfilePick::sendUpdate()
 {

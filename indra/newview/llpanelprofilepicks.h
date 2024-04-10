@@ -147,6 +147,8 @@ public:
     void setParcelID(const LLUUID& parcel_id) override { mParcelId = parcel_id; }
     void setErrorStatus(S32 status, const std::string& reason) override {};
 
+    void addLocationChangedCallbacks(); // <FS:Ansariel> Keep set location button
+
   protected:
 
     /**
