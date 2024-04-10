@@ -24,6 +24,7 @@
 	<floater.string name="loading">
 		Laden...
 	</floater.string>
+	<text name="obj_name">Ursprungsobjekt: [SOURCE_OBJECT]</text>
 	<button label="Zurücksetzen" label_selected="Zurücksetzen" name="Reset"/>
 	<check_box initial_value="true" label="Läuft" name="running"/>
 	<check_box initial_value="true" label="Mono" name="mono"/>

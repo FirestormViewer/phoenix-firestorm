@@ -22,6 +22,7 @@
 	<menu_item_call label="Новый скрипт" name="New Script"/>
 	<menu_item_call label="Новая заметка" name="New Note"/>
 	<menu_item_call label="Новый жест" name="New Gesture"/>
+	<menu_item_call label="Новый материал" name="New Material"/>
 	<menu label="Новая одежда" name="New Clothes">
 		<menu_item_call label="Новая рубашка" name="New Shirt"/>
 		<menu_item_call label="Новые штаны" name="New Pants"/>
@@ -53,6 +54,7 @@
 		<menu_item_call label="загрузок Звуков" name="Sound uploads"/>
 		<menu_item_call label="загрузок Анимаций" name="Animation uploads"/>
 		<menu_item_call label="загрузок Моделей" name="Model uploads"/>
+		<menu_item_call label="загрузок Материалов PBR" name="PBR uploads"/>
 	</menu>
 	<menu label="Изменить тип" name="Change Type">
 		<menu_item_call label="По умолчанию" name="Default"/>

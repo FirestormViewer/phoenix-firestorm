@@ -350,6 +350,15 @@ BOOL LLStatusBar::postBuild()
 	LLHints::getInstance()->registerHintTarget("linden_balance", getChild<LLView>("balance_bg")->getHandle());
 
 	gSavedSettings.getControl("MuteAudio")->getSignal()->connect(boost::bind(&LLStatusBar::onVolumeChanged, this, _2));
+    // <FS:Ansariel> Fix LL voice disabled on 2nd instance nonsense
+    //gSavedSettings.getControl("EnableVoiceChat")->getSignal()->connect(boost::bind(&LLStatusBar::onVoiceChanged, this, _2));
+
+    //if (!gSavedSettings.getBOOL("EnableVoiceChat") && LLAppViewer::instance()->isSecondInstance())
+    //{
+    //    // Indicate that second instance started without sound
+    //    mBtnVolume->setImageUnselected(LLUI::getUIImage("VoiceMute_Off"));
+    //}
+    // </FS:Ansariel>
 
 	// <FS:Ansariel> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
 	gSavedSettings.getControl("FSStatusBarMenuButtonPopupOnRollover")->getSignal()->connect(boost::bind(&LLStatusBar::onPopupRolloverChanged, this, _2));
@@ -1124,6 +1133,18 @@ void LLStatusBar::onVolumeChanged(const LLSD& newvalue)
 {
 	refresh();
 }
+
+// <FS:Ansariel> Fix LL voice disabled on 2nd instance nonsense
+//void LLStatusBar::onVoiceChanged(const LLSD& newvalue)
+//{
+//    if (newvalue.asBoolean())
+//    {
+//        // Second instance starts with "VoiceMute_Off" icon, fix it
+//        mBtnVolume->setImageUnselected(LLUI::getUIImage("Audio_Off"));
+//    }
+//    refresh();
+//}
+// </FS:Ansariel>
 
 void LLStatusBar::onUpdateFilterTerm()
 {

@@ -5401,6 +5401,12 @@ Missbrauchsbericht
 	<string name="texture_load_dimensions_error">
 		Bilder, die größer sind als [WIDTH]*[HEIGHT] können nicht geladen werden
 	</string>
+	<string name="texture_load_format_error">
+		Inkorrektes Bildformat.
+	</string>
+	<string name="texture_load_empty_file">
+		Datei ist leer.
+	</string>
 	<string name="outfit_photo_load_dimensions_error">
 		Max. Outfit-Fotogröße ist [WIDTH]*[HEIGHT]. Bitte verkleinern oder anderes Bild auswählen.
 	</string>

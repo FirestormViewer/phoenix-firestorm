@@ -3089,6 +3089,19 @@ Uruchomione w oknie.
 
 Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	</string>
+	<string name="MBOutOfMemoryTitle">
+		Zabrakło pamięci
+	</string>
+	<string name="MBOutOfMemoryErr">
+		Żądanie [APP_NAME] przydzielenia pamięci nie powiodło się. Aplikacja nie może kontynuować i zostanie zamknięta.
+
+Jeśli w komputerze jest mało pamięci RAM, zamknij wszystkie obciążające aplikacje przed uruchomieniem [APP_NAME], ustaw plik wymiany lub zmniejsz ustawienia graficzne, takie jak pole widzenia.
+	</string>
+	<string name="MBMissingFile">
+		[APP_NAME] nie mogła uzyskać dostępu do niektórych potrzebnych plików, dlatego zostanie zamknięta.
+
+Zainstaluj ponownie przeglądarkę z [DOWNLOAD_URL] i skontaktuj się z [SUPPORT_SITE], jeśli problem będzie się powtarzał po reinstalacji.
+	</string>
 	<string name="5 O'Clock Shadow">
 		Cień na godzinie 5
 	</string>

@@ -10,5 +10,5 @@
 		</text>
 		<button name="edit_outfit_btn" tool_tip="Geyimi dəyişdir"/>
 	</panel>
-	<search_editor label="Geyim filtri" name="Filter"/>
+	<filter_editor label="Geyim filtri" name="Filter"/>
 </panel>

@@ -164,13 +164,12 @@ private:
 	
 	void onClickBuyCurrency();
 	void onVolumeChanged(const LLSD& newvalue);
+    //void onVoiceChanged(const LLSD& newvalue); // <FS:Ansariel> Fix LL voice disabled on 2nd instance nonsense
 
 	void onMouseEnterPresetsCamera();
 	void onMouseEnterPresets();
 	void onMouseEnterVolume();
 	void onMouseEnterNearbyMedia();
-	// <FS:Ansariel> Does not exist 15-02-2021
-	//void onClickScreen(S32 x, S32 y);
 
 	static void onClickStreamToggle(void* data);		// <FS:Zi> Media/Stream separation
 	static void onClickMediaToggle(void* data);

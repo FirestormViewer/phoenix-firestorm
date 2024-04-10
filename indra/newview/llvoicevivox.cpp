@@ -595,9 +595,6 @@ void LLVivoxVoiceClient::connectorCreate()
 		<< "<AccountManagementServer>" << mVoiceAccountServerURI << "</AccountManagementServer>"
 		<< "<Mode>Normal</Mode>"
         << strConnectorHandle
-		// <FS:Ansariel> Voice in multiple instances; by Latif Khalifa
-		<< (gSavedSettings.getBOOL("VoiceMultiInstance") ? "<MinimumPort>30000</MinimumPort><MaximumPort>50000</MaximumPort>" : "")
-		// </FS:Ansariel>
 		<< "<Logging>"
 		<< "<Folder>" << logdir << "</Folder>"
 		<< "<FileNamePrefix>Connector</FileNamePrefix>"
@@ -1039,30 +1036,44 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
             // cause SLVoice's bind() call to fail with EADDRINUSE. We expect
             // that eventually the OS will time out previous ports, which is
             // why we cycle instead of incrementing indefinitely.
-            // <FS:Ansariel> Unfail voice connection failures
-            //U32 portbase = gSavedSettings.getU32("VivoxVoicePort");
-            //static U32 portoffset = 0;
-            //static const U32 portrange = 100;
-            //std::string host(gSavedSettings.getString("VivoxVoiceHost"));
-            //U32 port = portbase + portoffset;
-            //portoffset = (portoffset + 1) % portrange;
-            //params.args.add("-i");
-            //params.args.add(STRINGIZE(host << ':' << port));
-            // </FS:Ansariel>
 
-            std::string loglevel = gSavedSettings.getString("VivoxDebugLevel");
-            if (loglevel.empty())
-            {
-                loglevel = "0";
-            }
-            params.args.add("-ll");
-            params.args.add(loglevel);
-
+            static LLCachedControl<U32> portbase(gSavedSettings, "VivoxVoicePort");
+            static LLCachedControl<std::string> host(gSavedSettings, "VivoxVoiceHost");
+            static LLCachedControl<std::string> loglevel(gSavedSettings, "VivoxDebugLevel");
+            // <FS:Ansariel> Strip trailing directory delimiter
+            //static LLCachedControl<std::string> log_folder(gSavedSettings, "VivoxLogDirectory");
             std::string log_folder = gSavedSettings.getString("VivoxLogDirectory");
+            // </FS:Ansariel>
+            static LLCachedControl<std::string> shutdown_timeout(gSavedSettings, "VivoxShutdownTimeout");
+            static const U32 portrange = 100;
+            static U32 portoffset = 0;
+            U32 port = 0;
 
-            if (log_folder.empty())
+            if (LLAppViewer::instance()->isSecondInstance())
             {
-                log_folder = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
+                // Ideally need to know amount of instances and
+                // to increment instance_offset on EADDRINUSE.
+                // But for now just use rand
+                static U32 instance_offset = portrange * ll_rand(20);
+                port = portbase + portoffset + instance_offset;
+            }
+            else
+            {
+                // leave main thread with exclusive port set
+                port = portbase + portoffset;
+            }
+            portoffset = (portoffset + 1) % portrange;
+            params.args.add("-i");
+            params.args.add(STRINGIZE(host() << ':' << port));
+
+            params.args.add("-ll");
+            if (loglevel().empty())
+            {
+                params.args.add("0");
+            }
+            else
+            {
+                params.args.add(loglevel);
             }
 
             // <FS:Ansariel> Strip trailing directory delimiter
@@ -1072,7 +1083,17 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
             }
             // </FS:Ansariel>
             params.args.add("-lf");
-            params.args.add(log_folder);
+            // <FS:Ansariel> Strip trailing directory delimiter
+            //if (log_folder().empty())
+            if (log_folder.empty())
+            // </FS:Ansariel>
+            {
+                params.args.add(gDirUtilp->getExpandedFilename(LL_PATH_LOGS, ""));
+            }
+            else
+            {
+                params.args.add(log_folder);
+            }
 
             // set log file basename and .log
             params.args.add("-lp");
@@ -1088,27 +1109,11 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
                 LLFile::rename(new_log, old_log);
             }
             
-            std::string shutdown_timeout = gSavedSettings.getString("VivoxShutdownTimeout");
-            if (!shutdown_timeout.empty())
+            if (!shutdown_timeout().empty())
             {
                 params.args.add("-st");
                 params.args.add(shutdown_timeout);
             }
-
-            // <FS:Ansariel> Voice in multiple instances; by Latif Khalifa
-            if (gSavedSettings.getBOOL("VoiceMultiInstance"))
-            {
-                S32 port_nr = 30000 + ll_rand(20000);
-                LLControlVariable* voice_port = gSavedSettings.getControl("VivoxVoicePort");
-                if (voice_port)
-                {
-                    voice_port->setValue(LLSD(port_nr), false);
-                    params.args.add("-i");
-                    params.args.add(llformat("127.0.0.1:%u",  gSavedSettings.getU32("VivoxVoicePort")));
-                }
-            }
-            // </FS:Ansariel>
-
             params.cwd = gDirUtilp->getAppRODataDir();
 
             // <FS:ND> Check if using the old SLVoice for Linux. the SDK in that version is too old to handle the extra args
@@ -1130,9 +1135,7 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
 
             sGatewayPtr = LLProcess::create(params);
 
-            // <FS:Ansariel> Unfail voice connection failures
-            //mDaemonHost = LLHost(host.c_str(), port);
-            mDaemonHost = LLHost(gSavedSettings.getString("VivoxVoiceHost").c_str(), gSavedSettings.getU32("VivoxVoicePort"));
+            mDaemonHost = LLHost(host().c_str(), port);
         }
         else
         {

@@ -154,6 +154,7 @@ public:
     virtual void forceErrorBadMemoryAccess();
     virtual void forceErrorInfiniteLoop();
     virtual void forceErrorSoftwareException();
+    virtual void forceErrorOSSpecificException();
     virtual void forceErrorDriverCrash();
     // <FS:Ansariel> Wrongly merged back in by LL
     //virtual void forceErrorCoroutineCrash();

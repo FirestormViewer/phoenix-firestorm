@@ -33,10 +33,7 @@
 #include "llinventory.h"
 #include "llpaneloutfitedit.h"
 
-// <FS:Ansariel> Don't filter outfits list on keypress
-//class LLFilterEditor;
-class LLSearchEditor;
-// </FS:Ansariel>
+class LLFilterEditor;
 class LLCurrentlyWornFetchObserver;
 class LLPanelEditWearable;
 class LLViewerWearable;
@@ -97,10 +94,7 @@ private:
 	void toggleOutfitEditPanel(BOOL visible, BOOL disable_camera_switch = FALSE);
 	void toggleWearableEditPanel(BOOL visible, LLViewerWearable* wearable = NULL, BOOL disable_camera_switch = FALSE);
 
-	// <FS:Ansariel> Don't filter outfits list on keypress
-	//LLFilterEditor*			mFilterEditor;
-	LLSearchEditor*				mFilterEditor;
-	// </FS:Ansariel>
+	LLFilterEditor*			mFilterEditor;
 	LLPanelOutfitsInventory* mPanelOutfitsInventory;
 	LLPanelOutfitEdit*		mOutfitEdit;
 	LLPanelEditWearable*	mEditWearable;

@@ -269,15 +269,19 @@
 			<menu_item_check label="Выбирать только подвижные объекты" name="Select Only Movable Objects"/>
 			<menu_item_check label="Выбирать только блокированные объекты" name="Select Only Locked Objects"/>
 			<menu_item_check label="Выбирать только копируемые объекты" name="Select Only Copyable Objects"/>
+			<menu_item_check label="Выбирать невидимые объекты" name="Select Invisible Objects"/>
+			<menu_item_check label="Выбирать датчики отражения" name="Select Reflection Probes"/>
 			<menu_item_check label="Включать объекты собственности группы" name="Include Group-Owned Objects"/>
 			<menu_item_check label="Выбирать окружающее" name="Select By Surrounding"/>
 			<menu_item_check label="Показать физическую форму" name="Show Physics Shape"/>
 			<menu_item_check label="Показать контуры выбранного" name="Show Selection Outlines"/>
 			<menu_item_check label="Показать скрытый выбор" name="Show Hidden Selection"/>
 			<menu_item_check label="Показать радиус света для выбранных" name="Show Light Radius for Selection"/>
+			<menu_item_check label="Показать уровни датчиков отражения" name="Show Reflection Probe Volumes" />
 			<menu_item_check label="Показать луч выбора" name="Show Selection Beam"/>
 			<menu_item_check label="Подсветка прозрачного" name="Highlight Transparent"/>
 			<menu_item_check label="- включая ригованное прозрачное" name="Include Transparent Rigged"/>
+			<menu_item_check label="Никакой постобработки" name="No Post"/>
 			<menu_item_check label="Привязка к сетке" name="Snap to Grid"/>
 			<menu_item_call label="Привязка XY объекта к сетке" name="Snap Object XY to Grid"/>
 			<menu_item_call label="Использовать выбранное для сетки" name="Use Selection for Grid"/>
@@ -289,6 +293,7 @@
 			<menu_item_call label="Звук (L$[COST])..." name="Upload Sound"/>
 			<menu_item_call label="Анимацию (L$[COST])..." name="Upload Animation"/>
 			<menu_item_call label="Меш модель..." name="Upload Model"/>
+			<menu_item_call label="Материалы..." name="Upload Material"/>
 			<menu_item_call label="Несколько..." name="Bulk Upload"/>
 			<menu_item_call label="Импортировать..." name="import linkset"/>
 		</menu>

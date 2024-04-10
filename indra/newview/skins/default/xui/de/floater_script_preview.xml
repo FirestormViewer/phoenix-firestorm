@@ -3,6 +3,7 @@
 	<floater.string name="Title">
 		Skript: [NAME]
 	</floater.string>
+	<text name="path_txt" tool_tip="Inventar-Ort: [PATH]">Inventar-Ort: [PATH]</text>
 	<text name="desc txt" width="90">
 		Beschreibung:
 	</text>
