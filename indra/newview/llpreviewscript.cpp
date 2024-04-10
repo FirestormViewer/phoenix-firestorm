@@ -88,6 +88,9 @@
 #include "llexperiencecache.h"
 #include "llfloaterexperienceprofile.h"
 #include "llviewerassetupload.h"
+//#include "lltoggleablemenu.h" // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
+//#include "llmenubutton.h" // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
+#include "llinventoryfunctions.h"
 #include "llloadingindicator.h" // <FS:Kadah> Compile indicator
 #include "lliconctrl.h" // <FS:Kadah> Compile indicator
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
@@ -366,6 +369,38 @@ void LLFloaterScriptSearch::onSearchBoxCommit()
 // </FS>
 
 /// ---------------------------------------------------------------------------
+
+class LLScriptMovedObserver : public LLInventoryObserver
+{
+  public:
+    LLScriptMovedObserver(LLPreviewLSL *floater) : mPreview(floater) { gInventory.addObserver(this); }
+    virtual ~LLScriptMovedObserver() { gInventory.removeObserver(this); }
+    virtual void changed(U32 mask);
+
+  private:
+    LLPreviewLSL *mPreview;
+};
+
+void LLScriptMovedObserver::changed(U32 mask)
+{
+    const std::set<LLUUID> &mChangedItemIDs = gInventory.getChangedIDs();
+    std::set<LLUUID>::const_iterator it;
+
+    const LLUUID &item_id = mPreview->getScriptID();
+
+    for (it = mChangedItemIDs.begin(); it != mChangedItemIDs.end(); it++)
+    {
+        if (*it == item_id)
+        {
+            if ((mask & (LLInventoryObserver::STRUCTURE)) != 0)
+            {
+                mPreview->setDirty();
+            }
+        }
+    }
+}
+
+/// ---------------------------------------------------------------------------
 /// LLScriptEdCore
 /// ---------------------------------------------------------------------------
 
@@ -587,6 +622,15 @@ BOOL LLScriptEdCore::postBuild()
 	// Intialise keyword highlighting for the current simulator's version of LSL
 	LLSyntaxIdLSL::getInstance()->initialize();
 	processKeywords();
+
+    // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
+    //mCommitCallbackRegistrar.add("FontSize.Set", boost::bind(&LLScriptEdCore::onChangeFontSize, this, _2));
+    //mEnableCallbackRegistrar.add("FontSize.Check", boost::bind(&LLScriptEdCore::isFontSizeChecked, this, _2));
+
+    //LLToggleableMenu *context_menu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>(
+    //    "menu_lsl_font_size.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+    //getChild<LLMenuButton>("font_btn")->setMenu(context_menu, LLMenuButton::MP_BOTTOM_LEFT, true);
+    // </FS:Ansariel>
 
 	return TRUE;
 }
@@ -1267,7 +1311,7 @@ void LLScriptEdCore::setHelpPage(const std::string& help_string)
 
 	LLUIString url_string = gSavedSettings.getString("LSLHelpURL");
 
-	url_string.setArg("[LSL_STRING]", help_string);
+	url_string.setArg("[LSL_STRING]", help_string.empty() ? HELP_LSL_PORTAL_TOPIC : help_string);
 
 	addHelpItemToHistory(help_string);
 
@@ -1835,6 +1879,20 @@ LLUUID LLScriptEdCore::getAssociatedExperience()const
 }
 
 // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
+//void LLScriptEdCore::onChangeFontSize(const LLSD &userdata)
+//{
+//    const std::string font_name = userdata.asString();
+//    gSavedSettings.setString("LSLFontSizeName", font_name);
+//}
+//
+//bool LLScriptEdCore::isFontSizeChecked(const LLSD &userdata)
+//{
+//    const std::string current_size_name = LLScriptEditor::getScriptFontSize();
+//    const std::string size_name = userdata.asString();
+//
+//    return (size_name == current_size_name);
+//}
+
 void LLScriptEdCore::onFontChanged()
 {
 	LLFontGL* font = LLFontGL::getFont(LLFontDescriptor(gSavedSettings.getString("FSScriptingFontName"), gSavedSettings.getString("FSScriptingFontSize"), LLFontGL::NORMAL));
@@ -2112,6 +2170,21 @@ bool LLScriptEdContainer::onExternalChange(const std::string& filename)
 	return true;
 }
 
+BOOL LLScriptEdContainer::handleKeyHere(KEY key, MASK mask) 
+{
+    if (('A' == key) && (MASK_CONTROL == (mask & MASK_MODIFIERS)))
+    {
+        mScriptEd->selectAll();
+        return TRUE;
+    }
+
+    if (!LLPreview::handleKeyHere(key, mask)) 
+    {
+        return mScriptEd->handleKeyHere(key, mask);
+    }
+    return TRUE;
+}
+
 // <FS:Ansariel> FIRE-16740: Color syntax highlighting changes don't immediately appear in script window
 void LLScriptEdContainer::updateStyle()
 {
@@ -2164,6 +2237,14 @@ LLPreviewLSL::LLPreviewLSL(const LLSD& key )
 	mPendingUploads(0)
 {
 	mFactoryMap["script panel"] = LLCallbackMap(LLPreviewLSL::createScriptEdPanel, this);
+
+    mItemObserver = new LLScriptMovedObserver(this);
+}
+
+LLPreviewLSL::~LLPreviewLSL() 
+{ 
+    delete mItemObserver;
+    mItemObserver = NULL;
 }
 
 // virtual
@@ -2175,10 +2256,25 @@ BOOL LLPreviewLSL::postBuild()
 	if (item)
 	{
 		getChild<LLUICtrl>("desc")->setValue(item->getDescription());
+
+        std::string item_path = get_category_path(item->getParentUUID());
+        // <FS:Ansariel> Make ugly location display better
+        //getChild<LLUICtrl>("path_txt")->setValue(item_path);
+        //getChild<LLUICtrl>("path_txt")->setToolTip(item_path);
+        getChild<LLUICtrl>("path_txt")->setTextArg("[PATH]", LLStringExplicit(item_path));
+        getChild<LLUICtrl>("path_txt")->setToolTipArg(LLStringExplicit("[PATH]"), LLStringExplicit(item_path));
+        // </FS:Ansariel>
 	}
+	// <FS:Ansariel> Make ugly location display better
+	else
+	{
+		getChild<LLUICtrl>("path_txt")->setTextArg("[PATH]", LLStringExplicit("-"));
+		getChild<LLUICtrl>("path_txt")->setToolTipArg(LLStringExplicit("[PATH]"), LLStringExplicit("-"));
+	}
+	// </FS:Ansariel>
 	childSetCommitCallback("desc", LLPreview::onText, this);
 	getChild<LLLineEditor>("desc")->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
-
+ 
 	return LLPreview::postBuild();
 }
 
@@ -2189,8 +2285,21 @@ void LLPreviewLSL::draw()
 	{
 		setTitle(LLTrans::getString("ScriptWasDeleted"));
 		mScriptEd->setItemRemoved(TRUE);
+		// <FS:Ansariel> Make ugly location display better
+		getChild<LLUICtrl>("path_txt")->setTextArg("[PATH]", LLStringExplicit("-"));
+		getChild<LLUICtrl>("path_txt")->setToolTipArg(LLStringExplicit("[PATH]"), LLStringExplicit("-"));
+		// </FS:Ansariel>
 	}
-
+    else if (mDirty) 
+    {
+        std::string item_path = get_category_path(item->getParentUUID());
+		// <FS:Ansariel> Make ugly location display better
+		//getChild<LLUICtrl>("path_txt")->setValue(item_path);
+        //getChild<LLUICtrl>("path_txt")->setToolTip(item_path);
+        getChild<LLUICtrl>("path_txt")->setTextArg("[PATH]", LLStringExplicit(item_path));
+        getChild<LLUICtrl>("path_txt")->setToolTipArg(LLStringExplicit("[PATH]"), LLStringExplicit(item_path));
+        // </FS:Ansariel>
+    }
 	LLPreview::draw();
 }
 // virtual
@@ -2608,7 +2717,8 @@ LLLiveLSLEditor::LLLiveLSLEditor(const LLSD& key) :
 	mPendingUploads(0),
 	mIsModifiable(FALSE),
 	mIsNew(false),
-	mIsSaving(FALSE)
+	mIsSaving(FALSE),
+    mObjectName("")
 {
 	mFactoryMap["script ed panel"] = LLCallbackMap(LLLiveLSLEditor::createScriptEdPanel, this);
 }
@@ -2773,6 +2883,10 @@ void LLLiveLSLEditor::loadAsset()
 			}
 
 			refreshFromItem();
+			// <FS:Ansariel> Make ugly location display better
+            //getChild<LLUICtrl>("obj_name")->setValue(mObjectName);
+			getChild<LLUICtrl>("obj_name")->setTextArg("[SOURCE_OBJECT]", LLStringExplicit(mObjectName) );
+			// </FS:Ansariel>
 			// This is commented out, because we don't completely
 			// handle script exports yet.
 			/*

@@ -293,16 +293,18 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
 		//if (match_entry == mUrlEntryTrusted)
 		//{
 		//	LLUriParser up(url);
-		//	up.normalize();
-		//	url = up.normalizedUri();
+		//	if (up.normalize() == 0)
+        //    {
+        //        url = up.normalizedUri();
+        //    }
 		//}
 		if (match_entry != mUrlEntryNoLink && match_entry == mUrlEntryTrustedUrl)
 		{
 			LLUriParser up(url);
-			if (!up.normalize())
-			{
-				url = up.normalizedUri();
-			}
+			if (up.normalize() == 0)
+            {
+                url = up.normalizedUri();
+            }
 		}
 		// </FS:Ansariel>
 
