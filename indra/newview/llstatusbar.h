@@ -164,6 +164,7 @@ private:
 	
 	void onClickBuyCurrency();
 	void onVolumeChanged(const LLSD& newvalue);
+    //void onVoiceChanged(const LLSD& newvalue); // <FS:Ansariel> Fix LL voice disabled on 2nd instance nonsense
 
 	void onMouseEnterPresetsCamera();
 	void onMouseEnterPresets();

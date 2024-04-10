@@ -104,10 +104,7 @@ bool LLSidepanelAppearance::postBuild()
 
 	childSetAction("edit_outfit_btn", boost::bind(&LLSidepanelAppearance::showOutfitEditPanel, this));
 
-	// <FS:Ansariel> Don't filter outfits list on keypress
-	//mFilterEditor = getChild<LLFilterEditor>("Filter");
-	mFilterEditor = findChild<LLSearchEditor>("Filter");
-	// </FS:Ansariel>
+	mFilterEditor = getChild<LLFilterEditor>("Filter");
 	if (mFilterEditor)
 	{
 		mFilterEditor->setCommitCallback(boost::bind(&LLSidepanelAppearance::onFilterEdit, this, _2));

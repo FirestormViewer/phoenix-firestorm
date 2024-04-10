@@ -563,6 +563,8 @@ public:
 	// add a context menu branch
 	bool appendContextSubMenu(LLMenuGL *menu);
 
+    const LLFontGL *getFont() const { return mFont; }
+
 	// <FS:Ansariel> Items-accessor
 	typedef std::list< LLMenuItemGL* > item_list_t;
 	item_list_t* getItems() { return &mItems; }
@@ -598,6 +600,9 @@ protected:
 	bool			mScrollable;
 	bool			mKeepFixedSize;
 	bool			mNeedsArrange;
+
+    // Font for top menu items only
+    const LLFontGL* mFont;
 
 private:
 

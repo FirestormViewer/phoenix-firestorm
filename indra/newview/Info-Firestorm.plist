@@ -28,6 +28,8 @@
 	<string>${VIEWER_VERSION_MAJOR}.${VIEWER_VERSION_MINOR}.${VIEWER_VERSION_PATCH}.${VIEWER_VERSION_REVISION}</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.games</string>
 	<key>LSRequiresCarbon</key>
 	<true/>
 	<key>NSAppSleepDisabled</key>

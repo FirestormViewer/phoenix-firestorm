@@ -40,6 +40,9 @@
 		<text name="label_13" tool_tip="Задать стандартные разрешения, когда будут созданы настройки Окружающей среды">
 			Настройки
 		</text>
+		<text name="label_14" tool_tip="Задать стандартные разрешения для создаваемых Материалов">
+			Материалы
+		</text>
 	</panel>
 	<button label="OK" label_selected="OK" name="ok"/>
 	<button label="Отмена" label_selected="Отмена" name="cancel"/>

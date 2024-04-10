@@ -37,7 +37,7 @@ public:
 	struct Params : public LLInitParam::Block<Params, LLTextEditor::Params>
 	{
 		Optional<bool>		show_line_numbers;
-		
+        Optional<bool> default_font_size;
 		Params();
 	};
 	
@@ -45,6 +45,7 @@ public:
 	
 	// LLView override
 	virtual void	draw();
+    bool postBuild();
 
 	// <FS> Improved Home-key behavior
 	// LLTextBase override
@@ -56,7 +57,13 @@ public:
 	LLKeywords::keyword_iterator_t keywordsBegin()	{ return mKeywords.begin(); }
 	LLKeywords::keyword_iterator_t keywordsEnd()	{ return mKeywords.end(); }
 	
-	// <FS:Ansariel> Re-add legacy format support
+    // <FS:Ansariel> FIRE-20818: User-selectable font and size for script editor
+    //static std::string getScriptFontSize();
+    //LLFontGL* getScriptFont();
+    //void onFontSizeChange();
+    // <FS:Ansariel>
+
+  	// <FS:Ansariel> Re-add legacy format support
 	void	loadKeywords(const std::string& filename,
 						 const std::vector<std::string>& funcs,
 						 const std::vector<std::string>& tooltips,
@@ -80,6 +87,7 @@ private:
 	
 	LLKeywords	mKeywords;
 	bool		mShowLineNumbers;
+    bool mUseDefaultFontSize;
 };
 
 #endif // LL_SCRIPTEDITOR_H

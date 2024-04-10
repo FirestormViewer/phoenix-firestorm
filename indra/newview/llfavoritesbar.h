@@ -56,6 +56,7 @@ public:
 protected:
 	LLFavoritesBarCtrl(const Params&);
 	friend class LLUICtrlFactory;
+    friend class LLItemCopiedCallback;
 public:
 	virtual ~LLFavoritesBarCtrl();
 
@@ -170,6 +171,9 @@ private:
 	LLUUID mDragItemId;
 	bool mStartDrag;
 	LLInventoryModel::item_array_t mItems;
+
+    static F64 sWaitingForCallabck;
+    bool mItemsListDirty;
 
 	S32 mMouseX;
 	S32 mMouseY;

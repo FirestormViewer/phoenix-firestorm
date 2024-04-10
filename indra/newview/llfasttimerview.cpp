@@ -973,7 +973,7 @@ void LLFastTimerView::printLineStats()
 	{
 		std::string legend_stat;
 		bool first = true;
-		for(block_timer_tree_df_iterator_t it = LLTrace::begin_block_timer_tree_df(FTM_FRAME);
+		for(LLTrace::block_timer_tree_df_iterator_t it = LLTrace::begin_block_timer_tree_df(FTM_FRAME);
 			it != LLTrace::end_block_timer_tree_df();
 			++it)
 		{
@@ -995,7 +995,7 @@ void LLFastTimerView::printLineStats()
 
 		std::string timer_stat;
 		first = true;
-		for(block_timer_tree_df_iterator_t it = LLTrace::begin_block_timer_tree_df(FTM_FRAME);
+		for(LLTrace::block_timer_tree_df_iterator_t it = LLTrace::begin_block_timer_tree_df(FTM_FRAME);
 			it != LLTrace::end_block_timer_tree_df();
 			++it)
 		{
@@ -1072,7 +1072,7 @@ void LLFastTimerView::drawLineGraph()
 	F32Seconds cur_max(0);
 	U32 cur_max_calls = 0;
 
-	for(block_timer_tree_df_iterator_t it = LLTrace::begin_block_timer_tree_df(FTM_FRAME);
+	for(LLTrace::block_timer_tree_df_iterator_t it = LLTrace::begin_block_timer_tree_df(FTM_FRAME);
 		it != LLTrace::end_block_timer_tree_df();
 		++it)
 	{
@@ -1231,8 +1231,8 @@ void LLFastTimerView::drawLegend()
 #pragma GCC diagnostic ignored "-Wnonnull"
 #endif
 // </FS:Zi>
-		for (block_timer_tree_df_iterator_t it = LLTrace::begin_block_timer_tree_df(FTM_FRAME);
-			it != block_timer_tree_df_iterator_t();
+		for (LLTrace::block_timer_tree_df_iterator_t it = LLTrace::begin_block_timer_tree_df(FTM_FRAME);
+			it != LLTrace::end_block_timer_tree_df();
 			++it)
 // <FS:Zi> GCC12 warning: nonnull - probably bogus
 #if defined(__GNUC__) && (__GNUC__ >= 12)
@@ -1357,8 +1357,8 @@ void LLFastTimerView::generateUniqueColors()
 #pragma GCC diagnostic ignored "-Wnonnull"
 #endif
 // </FS:Zi>
-		for (block_timer_tree_df_iterator_t it = LLTrace::begin_block_timer_tree_df(FTM_FRAME);
-			it != block_timer_tree_df_iterator_t();
+		for (LLTrace::block_timer_tree_df_iterator_t it = LLTrace::begin_block_timer_tree_df(FTM_FRAME);
+			it != LLTrace::end_block_timer_tree_df();
 			++it)
 // <FS:Zi> GCC12 warning: nonnull - probably bogus
 #if defined(__GNUC__) && (__GNUC__ >= 12)

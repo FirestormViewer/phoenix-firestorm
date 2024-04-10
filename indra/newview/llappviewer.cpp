@@ -2212,6 +2212,9 @@ bool LLAppViewer::cleanup()
 		LL_INFOS() << "ViewerWindow deleted" << LL_ENDL;
 	}
 
+    LLSplashScreen::show();
+    LLSplashScreen::update(LLTrans::getString("ShuttingDown"));
+
 	LL_INFOS() << "Cleaning up Keyboard & Joystick" << LL_ENDL;
 
 	// viewer UI relies on keyboard so keep it aound until viewer UI isa gone
@@ -2527,6 +2530,8 @@ bool LLAppViewer::cleanup()
 	// This calls every remaining LLSingleton's cleanupSingleton() and
 	// deleteSingleton() methods.
 	LLSingletonBase::deleteAll();
+
+    LLSplashScreen::hide();
 
     LL_INFOS() << "Goodbye!" << LL_ENDL;
 
@@ -3477,20 +3482,19 @@ bool LLAppViewer::initConfiguration()
 		return false;
 	}
 
-	if (mSecondInstance)
-	{
-		// This is the second instance of SL. Turn off voice support,
-		// but make sure the setting is *not* persisted.
-		LLControlVariable* disable_voice = gSavedSettings.getControl("CmdLineDisableVoice");
-		// <FS:Ansariel> Voice in multiple instances; by Latif Khalifa
-		//if(disable_voice)
-		if(disable_voice && !gSavedSettings.getBOOL("VoiceMultiInstance"))
-		// </FS:Ansariel>
-		{
-			const bool DO_NOT_PERSIST = false;
-			disable_voice->setValue(LLSD(true), DO_NOT_PERSIST);
-		}
-	}
+	// <FS:Ansariel> Voice in multiple instances
+	//if (mSecondInstance)
+	//{
+	//	// This is the second instance of SL. Mute voice,
+	//	// but make sure the setting is *not* persisted.
+	//	LLControlVariable* enable_voice = gSavedSettings.getControl("EnableVoiceChat");
+	//	if(enable_voice)
+	//	{
+	//		const bool DO_NOT_PERSIST = false;
+	//		enable_voice->setValue(LLSD(false), DO_NOT_PERSIST);
+	//	}
+	//}
+	// </FS:Ansariel>
 
 	gLastRunVersion = gSavedSettings.getString("LastRunVersion");
 
@@ -5931,6 +5935,9 @@ void LLAppViewer::idleShutdown()
 		&& gLogoutTimer.getElapsedTimeF32() < SHUTDOWN_UPLOAD_SAVE_TIME
 		&& !logoutRequestSent())
 	{
+        gViewerWindow->setShowProgress(true, !gSavedSettings.getBOOL("FSDisableLogoutScreens"));
+        gViewerWindow->setProgressPercent(100.f);
+        gViewerWindow->setProgressString(LLTrans::getString("LoggingOut"));
 		return;
 	}
 
@@ -6335,9 +6342,18 @@ void LLAppViewer::forceErrorBadMemoryAccess()
 void LLAppViewer::forceErrorInfiniteLoop()
 {
    	LL_WARNS() << "Forcing a deliberate infinite loop" << LL_ENDL;
+    // Loop is intentionally complicated to fool basic loop detection
+    LLTimer timer_total;
+    LLTimer timer_expiry;
+    const S32 report_frequency = 10;
+    timer_expiry.setTimerExpirySec(report_frequency);
     while(true)
     {
-        ;
+        if (timer_expiry.hasExpired())
+        {
+            LL_INFOS() << "Infinite loop time : " << timer_total.getElapsedSeconds() << LL_ENDL;
+            timer_expiry.setTimerExpirySec(report_frequency);
+        }
     }
     return;
 }
@@ -6346,6 +6362,13 @@ void LLAppViewer::forceErrorSoftwareException()
 {
    	LL_WARNS() << "Forcing a deliberate exception" << LL_ENDL;
     LLTHROW(LLException("User selected Force Software Exception"));
+}
+
+void LLAppViewer::forceErrorOSSpecificException()
+{
+    // Virtual, MacOS only
+    const std::string exception_text = "User selected Force OS Exception, Not implemented on this OS";
+    throw std::runtime_error(exception_text);
 }
 
 void LLAppViewer::forceErrorDriverCrash()

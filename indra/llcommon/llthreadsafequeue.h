@@ -342,13 +342,7 @@ bool LLThreadSafeQueue<ElementT, QueueT>::pushIfOpen(T&& element)
             return true;
 
         // Storage Full. Wait for signal.
-        // <FS:Beq> [FIRE-32453][BUG-232971] Improve shutdown behaviour. Time bound the sleep
-        // mCapacityCond.wait(lock1);
-        // When the queue is full and the consuming thread has exited we would never wake up.
-        // For safety, we now wait max half a second then recheck close.
-        const auto timeout = std::chrono::milliseconds(500);
-        mCapacityCond.wait_for(lock1, timeout);
-        // </FS:Beq>
+        mCapacityCond.wait(lock1);
     }
 }
 
