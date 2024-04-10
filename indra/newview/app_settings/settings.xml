@@ -17952,6 +17952,19 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>ShowSelectedInBlinnPhong</key>
+    <map>
+      <key>Comment</key>
+      <string>show BlinnPhong while selected</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+      <key>Backup</key>
+      <integer>0</integer>
+    </map>
     <key>ShowSpecificLODInEdit</key>
     <map>
       <key>Comment</key>

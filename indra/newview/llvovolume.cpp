@@ -6781,6 +6781,14 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 
             const LLTextureEntry* te = facep->getTextureEntry();
             LLGLTFMaterial* gltf_mat = te->getGLTFRenderMaterial();
+			
+			// <FS:Beq> show legacy when editing the fallback materials.
+			static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "ShowSelectedInBlinnPhong");
+			if( gltf_mat && facep->getViewerObject()->isSelected() && showSelectedinBP )
+			{
+				gltf_mat = nullptr;
+			}
+			// </FS:Beq>
 
 			if (hud_group && gltf_mat == nullptr)
 			{ //all hud attachments are fullbright
