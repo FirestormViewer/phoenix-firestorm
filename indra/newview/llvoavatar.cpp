@@ -5348,7 +5348,7 @@ bool LLVOAvatar::updateCharacter(LLAgent &agent)
 	mSpeed = speed;
 
 	// update animations
-	if (!visible)
+	if (!visible && !isSelf()) // NOTE: never do a "hidden update" for self avatar as it interrupts controller processing
 	{
 		updateMotions(LLCharacter::HIDDEN_UPDATE);
 	}
