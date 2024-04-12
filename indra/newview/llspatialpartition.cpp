@@ -863,10 +863,8 @@ void LLSpatialGroup::rebound()
             if (controlAvatar &&
                 controlAvatar->mDrawable &&
                 controlAvatar->mControlAVBridge &&
-                controlAvatar->mControlAVBridge->mOctree)// <FS:Beq> FIRE-33367 toggling animesh state off causes a crash
+                controlAvatar->mControlAVBridge->mOctree)
             {
-                llassert(controlAvatar->mControlAVBridge->mOctree);
-
                 LLSpatialGroup* root = (LLSpatialGroup*)controlAvatar->mControlAVBridge->mOctree->getListener(0);
                 if (this == root)
                 {
@@ -879,7 +877,7 @@ void LLSpatialGroup::rebound()
     }
 }
 
-void LLSpatialGroup::destroyGLState(bool keep_occlusion)
+void LLSpatialGroup::destroyGLState(bool keep_occlusion) 
 {
 	// <FS:Ansariel> Reset VB during TP
 	bool is_tree_group = getSpatialPartition()->mPartitionType == LLViewerRegion::PARTITION_TREE;

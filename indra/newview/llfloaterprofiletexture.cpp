@@ -73,6 +73,8 @@ void LLProfileImageCtrl::releaseTexture()
         }
         mImage = NULL;
     }
+
+    LLLoadedCallbackEntry::cleanUpCallbackList(&mCallbackTextureList);
 }
 
 void LLProfileImageCtrl::setValue(const LLSD& value)

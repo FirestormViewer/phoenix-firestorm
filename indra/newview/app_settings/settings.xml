@@ -4657,171 +4657,6 @@
       <key>Value</key>
       <integer>-1</integer>
     </map>
-    <key>DebugStatModeMemTrace</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemUI</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemFonts</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemInventory</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemObjects</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemOctreeGroupData</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemOctreeData</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemObjectCache</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemDrawable</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemFaceData</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemDrawInfo</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemTextureData</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemImageData</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemGLImageData</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemVertexBuffer</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
     <key>DebugStatModeMaterials</key>
     <map>
       <key>Comment</key>
@@ -6744,6 +6579,17 @@
       <string>http://wiki.secondlife.com/wiki/[LSL_STRING]</string>
       <key>Backup</key>
       <integer>0</integer>
+    </map>
+    <key>LSLFontSizeName</key>
+    <map>
+        <key>Comment</key>
+        <string>UNUSED - Text font size in LSL editor</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>String</string>
+        <key>Value</key>
+        <string>Monospace</string>
     </map>
     <key>GridStatusRSS</key>
     <map>
@@ -9263,21 +9109,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>OpenDebugStatAdvanced</key>
-    <map>
-      <key>Comment</key>
-      <string>Expand advanced performance stats display</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
     <key>OpenDebugStatBasic</key>
     <map>
       <key>Comment</key>
-      <string>Expand basic performance stats display</string>
+      <string>Expand Basic performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -9285,10 +9120,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>OpenDebugStatNet</key>
+    <key>OpenDebugStatAdvanced</key>
     <map>
       <key>Comment</key>
-      <string>Expand network stats display</string>
+      <string>Expand Advanced performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -9299,18 +9134,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>OpenDebugStatRender</key>
     <map>
       <key>Comment</key>
-      <string>Expand render stats display</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>OpenDebugStatSim</key>
-    <map>
-      <key>Comment</key>
-      <string>Expand simulator performance stats display</string>
+      <string>Expand Render performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -9329,10 +9153,32 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>OpenDebugStatSimPathfinding</key>
+    <key>OpenDebugStatNet</key>
     <map>
       <key>Comment</key>
-      <string>Expand Pathfinding performance stats display</string>
+      <string>Expand Network performance stats display</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>OpenDebugStatSim</key>
+    <map>
+      <key>Comment</key>
+      <string>Expand Simulator performance stats display</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>OpenDebugStatPhysicsDetails</key>
+    <map>
+      <key>Comment</key>
+      <string>Expand Physics Details performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -9340,10 +9186,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>OpenDebugStatPhysicsDetails</key>
+    <key>OpenDebugStatPathfinding</key>
     <map>
       <key>Comment</key>
-      <string>Expand Physics Details performance stats display</string>
+      <string>Expand Pathfinding performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -9366,17 +9212,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Expand Simulator Time Details performance stats display</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>OpenDebugStatMemory</key>
-    <map>
-      <key>Comment</key>
-      <string>Expand Memory performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -23428,17 +23263,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
-    <key>VoiceMultiInstance</key>
-    <map>
-      <key>Comment</key>
-      <string>Enables using voice in multiple simultaneous viewer instances</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
     </map>
     <key>FSSoundCacheLocation</key>
     <map>

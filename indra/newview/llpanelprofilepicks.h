@@ -206,10 +206,12 @@ protected:
      */
     void resetDirty() override;
 
+    // <FS:Ansariel> Keep set location button
     /**
      * Callback for "Set Location" button click
      */
     void onClickSetLocation();
+    // <FS:Ansariel>
 
     /**
      * Callback for "Save" and "Create" button click
@@ -233,7 +235,7 @@ protected:
     LLTextureCtrl*      mSnapshotCtrl;
     LLLineEditor*       mPickName;
     LLTextEditor*       mPickDescription;
-    LLButton*           mSetCurrentLocationButton;
+    LLButton*           mSetCurrentLocationButton; // <FS:Ansariel> Keep set location button
     LLButton*           mSaveButton;
     LLButton*           mCreateButton;
     LLButton*           mCancelButton;

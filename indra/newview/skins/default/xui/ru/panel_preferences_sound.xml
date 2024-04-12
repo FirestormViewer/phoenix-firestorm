@@ -105,7 +105,6 @@
 		<panel label="Настройки голоса" name="Media Voice tab">
 			<check_box label="Включить голос" name="enable_voice_check" width="155"/>
 			<button tool_tip="Сброс голоса" name="reset_voice_button"/>
-			<check_box label="Разрешить голос в нескольких клиентах одновременно" name="VoiceMultiInstance" />
 			<radio_group name="ear_location">
 				<radio_item label="Слышать голос из положения камеры" name="0"/>
 				<radio_item label="Слышать голос из положения аватара" name="1"/>

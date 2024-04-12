@@ -613,9 +613,7 @@ void LLPanelProfilePick::setAvatarId(const LLUUID& avatar_id)
         mPickName->setEnabled(TRUE);
         mPickDescription->setEnabled(TRUE);
         // <FS:Zi> Make sure the "Set Location"  button is only visible when viewing own picks
-        // mSetCurrentLocationButton->setVisible(TRUE);
         childSetVisible("set_to_curr_location_btn_lp", true);
-        // </FS:Zi>
     }
     else
     {
@@ -632,7 +630,7 @@ BOOL LLPanelProfilePick::postBuild()
     mSaveButton = getChild<LLButton>("save_changes_btn");
     mCreateButton = getChild<LLButton>("create_changes_btn");
     mCancelButton = getChild<LLButton>("cancel_changes_btn");
-    mSetCurrentLocationButton = getChild<LLButton>("set_to_curr_location_btn");
+    mSetCurrentLocationButton = getChild<LLButton>("set_to_curr_location_btn"); // <FS:Ansariel> Keep set location button
 
     mSnapshotCtrl = getChild<LLTextureCtrl>("pick_snapshot");
     mSnapshotCtrl->setCommitCallback(boost::bind(&LLPanelProfilePick::onSnapshotChanged, this));
@@ -643,7 +641,7 @@ BOOL LLPanelProfilePick::postBuild()
     mSaveButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickSave, this));
     mCreateButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickSave, this));
     mCancelButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickCancel, this));
-    mSetCurrentLocationButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickSetLocation, this));
+    mSetCurrentLocationButton->setCommitCallback(boost::bind(&LLPanelProfilePick::onClickSetLocation, this)); // <FS:Ansariel> Keep set location button
 
     mPickName->setKeystrokeCallback(boost::bind(&LLPanelProfilePick::onPickChanged, this, _1), NULL);
     mPickName->setEnabled(FALSE);
@@ -805,6 +803,7 @@ BOOL LLPanelProfilePick::isDirty() const
     return FALSE;
 }
 
+// <FS:Ansariel> Keep set location button
 void LLPanelProfilePick::onClickSetLocation()
 {
     // Save location for later use.
@@ -830,6 +829,7 @@ void LLPanelProfilePick::onClickSetLocation()
     mLocationChanged = true;
     enableSaveButton(TRUE);
 }
+// </FS:Ansariel>
 
 void LLPanelProfilePick::onClickSave()
 {

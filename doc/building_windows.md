@@ -93,9 +93,11 @@ If they all report sensible values and not "Command not found" errors, then you 
 ### Set up Autobuild
 
 - Install Autobuild
+   You can install autobuild and its dependencies using the `requirements.txt` file that is part of the repo, this will build using the same versions that our official builds use.
+  - Open Windows Command Prompt and enter: <code>pip install -r requirements.txt</code>
+  - Autobuild will be installed. **Earlier versions of Autobuild could be made to work by just putting the source files into your path correctly; this is no longer true - Autobuild _must_ be installed as described here.**
   - Open Windows Command Prompt and enter:
     `pip install git+https://github.com/secondlife/autobuild.git#egg=autobuild`
-  - Autobuild will be installed. **Earlier versions of Autobuild could be made to work by just putting the source files into your path correctly; this is no longer true - Autobuild _must_ be installed as described here.**
 - Set environment variable AUTOBUILD_VSVER to 170 (170 = Visual Studio 2022).
 - Check Autobuild version to be "autobuild 3.8" or higher:
   `autobuild --version`

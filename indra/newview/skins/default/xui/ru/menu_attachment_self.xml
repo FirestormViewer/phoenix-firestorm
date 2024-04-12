@@ -3,6 +3,7 @@
 	<menu_item_call label="Коснуться" name="Attachment Object Touch"/>
 	<menu_item_call label="Показать в инвентаре" name="Show original"/>
 	<menu_item_call label="Редактировать" name="Edit..."/>
+	<menu_item_call label="Редактировать Материал PBR" name="EditGLTFMaterial"/>
 	<menu_item_call label="Отсоеденить" name="Detach"/>
 	<context_menu label="Сохранить как" name="Export Menu">
 		<menu_item_call label="Backup" name="Backup"/>

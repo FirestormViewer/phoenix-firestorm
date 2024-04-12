@@ -110,7 +110,6 @@
 		<panel label="Voce" name="Media Voice tab">
 			<check_box label="Abilita voce" name="enable_voice_check"/>
 			<button tool_tip="Ripristina voce" name="reset_voice_button"/>
-			<check_box label="Abilita voce in più viewer contemporaneamente" name="VoiceMultiInstance"/>
 			<radio_group name="ear_location">
 				<radio_item label="Ascolta voce da posizione camera" name="0"/>
 				<radio_item label="Ascolta voce da posizione avatar" name="1"/>
