@@ -187,6 +187,7 @@ LLTextBase::Params::Params()
 	trusted_content("trusted_content", true),
 	always_show_icons("always_show_icons", false),
 	use_ellipses("use_ellipses", false),
+	use_emoji("use_emoji", true),
 	use_color("use_color", true),
 	// <FS:Ansariel> Optional icon position
 	icon_positioning("icon_positioning", LLTextBaseEnums::RIGHT),
@@ -252,6 +253,7 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 	mPlainText ( p.plain_text ),
 	mWordWrap(p.wrap),
 	mUseEllipses( p.use_ellipses ),
+	mUseEmoji(p.use_emoji),
 	mUseColor(p.use_color),
 	mParseHTML(p.parse_urls),
 	mForceUrlsExternal(p.force_urls_external),
@@ -1052,6 +1054,7 @@ S32 LLTextBase::insertStringNoUndo(S32 pos, const LLWString &wstr, LLTextBase::s
 	}
 
 	// Insert special segments where necessary (insertSegment takes care of splitting normal text segments around them for us)
+	if (mUseEmoji)
 	{
 		static LLUICachedControl<bool> useBWEmojis("FSUseBWEmojis", false); // <FS:Beq/> Add B&W emoji font support
 		LLStyleSP emoji_style;
