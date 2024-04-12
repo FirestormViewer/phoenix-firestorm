@@ -21,7 +21,6 @@ include(GLOD) # <FS:Beq/> restore GLOD
 include(Hunspell)
 include(ICU4C)
 include(JPEGEncoderBasic)
-include(JsonCpp)
 include(LLAppearance)
 include(LLAudio)
 include(LLCA)

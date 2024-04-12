@@ -484,7 +484,7 @@ LLCircuitData* LLMessageSystem::findCircuit(const LLHost& host,
 	return cdp;
 }
 
-// Returns TRUE if a valid, on-circuit message has been received.
+// Returns true if a valid, on-circuit message has been received.
 // Requiring a non-const LockMessageChecker reference ensures that
 // mMessageReader has been set to mTemplateMessageReader.
 bool LLMessageSystem::checkMessages(LockMessageChecker&, S64 frame_count )
@@ -970,7 +970,7 @@ bool LLMessageSystem::isSendFullFast(const char* blockname)
 }
 
 
-// blow away the last block of a message, return FALSE if that leaves no blocks or there wasn't a block to remove
+// blow away the last block of a message, return false if that leaves no blocks or there wasn't a block to remove
 // TODO: Babbage: Remove this horror.
 bool LLMessageSystem::removeLastBlock()
 {
@@ -1524,8 +1524,8 @@ bool    LLMessageSystem::getCircuitTrust(const LLHost &host)
 	return false;
 }
 
-// Activate a circuit, and set its trust level (TRUE if trusted,
-// FALSE if not).
+// Activate a circuit, and set its trust level (true if trusted,
+// false if not).
 void LLMessageSystem::enableCircuit(const LLHost &host, bool trusted)
 {
 	LLCircuitData *cdp = mCircuitInfo.findCircuit(host);

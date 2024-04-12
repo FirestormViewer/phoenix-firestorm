@@ -1015,7 +1015,7 @@ bool LLUUID::isNull() const
 {
     // <FS> Fix for misaligned unsigned ints in LLUUID; by Sovereign Engineer / Shyotl Kuhr
     //U32 *word = (U32 *)mData;
-    //// If all bits are zero, return !0 == TRUE
+    //// If all bits are zero, return !0 == true
     //return !(word[0] | word[1] | word[2] | word[3]);
     return !memcmp(mData, nullUUID, sizeof(mData));
     // </FS>

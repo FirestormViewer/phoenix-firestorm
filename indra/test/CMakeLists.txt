@@ -9,9 +9,6 @@ include(Linking)
 include(Tut)
 include(LLAddBuildTest)
 include(bugsplat)
-# <FS:ND> Google Mock/Test is not used
-#include(GoogleMock)
-# </FS:ND>
 
 set(test_SOURCE_FILES
     io.cpp
@@ -67,7 +64,6 @@ target_link_libraries(lltest
         llxml
         llcommon
         llcorehttp
-        ll::googlemock
         )
 
 if (WINDOWS)

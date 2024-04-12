@@ -847,7 +847,7 @@ void display(bool rebuild, F32 zoom_factor, int subfield, bool for_snapshot)
 			if (gResizeScreenTexture)
 			{
 				gPipeline.resizeScreenTexture();
-                gResizeScreenTexture = false;
+				gResizeScreenTexture = false;
 			}
 
 			gGL.setColorMask(true, true);

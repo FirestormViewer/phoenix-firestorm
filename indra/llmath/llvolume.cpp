@@ -236,7 +236,7 @@ void calc_tangent_from_triangle(
 
 
 // intersect test between triangle vert0, vert1, vert2 and a ray from orig in direction dir.
-// returns TRUE if intersecting and returns barycentric coordinates in intersection_a, intersection_b,
+// returns true if intersecting and returns barycentric coordinates in intersection_a, intersection_b,
 // and returns the intersection point along dir in intersection_t.
 
 // Moller-Trumbore algorithm
@@ -4541,7 +4541,7 @@ void LLVolumeParams::reduceT(F32 begin, F32 end)
 const F32 MIN_CONCAVE_PROFILE_WEDGE = 0.125f;	// 1/8 unity
 const F32 MIN_CONCAVE_PATH_WEDGE = 0.111111f;	// 1/9 unity
 
-// returns TRUE if the shape can be approximated with a convex shape 
+// returns true if the shape can be approximated with a convex shape 
 // for collison purposes
 bool LLVolumeParams::isConvex() const
 {
@@ -4705,7 +4705,7 @@ bool LLVolume::isFaceMaskValid(LLFaceID face_mask)
 
 bool LLVolume::isConvex() const
 {
-	// mParams.isConvex() may return FALSE even though the final
+	// mParams.isConvex() may return false even though the final
 	// geometry is actually convex due to LOD approximations.
 	// TODO -- provide LLPath and LLProfile with isConvex() methods
 	// that correctly determine convexity. -- Leviathan

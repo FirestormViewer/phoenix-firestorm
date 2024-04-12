@@ -289,7 +289,7 @@ protected:
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLAssetIDAndTypeMatches
 //
-// Implementation of a LLInventoryCollectFunctor which returns TRUE if
+// Implementation of a LLInventoryCollectFunctor which returns true if
 // the item matches both asset type and asset id.
 // This is needed in case you are looking for a specific type with default id
 // (since null is default for multiple asset types)
