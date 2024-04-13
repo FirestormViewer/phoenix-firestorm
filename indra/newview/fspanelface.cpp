@@ -592,6 +592,23 @@ void skin_error(int line)
 	LL_ERRS("BuildTool") << "Skin error in line: " << line << LL_ENDL;
 }
 
+void FSPanelFace::onMatTabChange()
+{
+	static S32 last_mat = -1;	
+	if( auto curr_mat = getCurrentMaterialType(); curr_mat != last_mat )
+	{
+		LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstNode();
+		LLViewerObject* objectp = node ? node->getObject() : NULL;
+		if(objectp)
+		{
+			last_mat = curr_mat;
+			gSavedSettings.setBOOL("ShowSelectedInBlinnPhong", (curr_mat == MATMEDIA_MATERIAL));
+			objectp->markForUpdate();
+			objectp->faceMappingChanged();
+		}
+	}
+}
+
 BOOL FSPanelFace::postBuild()
 {
 	//
@@ -689,7 +706,7 @@ BOOL FSPanelFace::postBuild()
 	//
 	// hook up callbacks and do setup of all relevant UI elements here
 	//
-
+	mTabsPBRMatMedia->setCommitCallback(boost::bind(&FSPanelFace::onMatTabChange, this));
 	// common controls and parameters for Blinn-Phong and PBR
 	mBtnCopyFaces->setCommitCallback(boost::bind(&FSPanelFace::onCopyFaces, this));
 	mBtnPasteFaces->setCommitCallback(boost::bind(&FSPanelFace::onPasteFaces, this));
@@ -852,7 +869,7 @@ BOOL FSPanelFace::postBuild()
 	selectMaterialType(MATMEDIA_MATERIAL);			// TODO: add tab switching signal
 	selectMatChannel(MATTYPE_DIFFUSE);				// TODO: add tab switching signal
 	selectPBRChannel(PBRTYPE_RENDER_MATERIAL_ID);	// TODO: add tab switching signal
-
+	onMatTabChange(); // set up relative to active tab
 	return TRUE;
 }
 
@@ -958,6 +975,7 @@ void FSPanelFace::onVisibilityChange(BOOL new_visibility)
 
 void FSPanelFace::draw()
 {
+	// TODO(Beq) why does it have to call applyTE?
 	updateCopyTexButton();
 
 	// grab media name/title and update the UI widget

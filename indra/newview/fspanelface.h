@@ -348,6 +348,7 @@ public:
 	// Tab controls
 	// public to give functors access -Zi
 	LLTabContainer* mTabsMatChannel;
+	void onMatTabChange();
 
 private:
 	bool isAlpha() { return mIsAlpha; }
