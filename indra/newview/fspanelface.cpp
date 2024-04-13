@@ -1509,10 +1509,7 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
 
 		mTabsPBRMatMedia->enableTabButton(
 			mTabsPBRMatMedia->getIndexForPanel(
-				mTabsPBRMatMedia->getPanelByName("panel_material_type_blinn_phong")), editable && has_faces_without_pbr);
-		LL_DEBUGS("ENABLEDISABLETOOLS") << "panel_material_type_blinn_phong " << (editable && has_faces_without_pbr) << LL_ENDL;
-
-		const bool has_material = !has_pbr_material;
+				mTabsPBRMatMedia->getPanelByName("panel_material_type_blinn_phong")), editable );
 
 		// only turn on auto-adjust button if there is a media renderer and the media is loaded
 		mBtnAlignMedia->setEnabled(editable);
@@ -1535,16 +1532,8 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
 		LLSelectedTEMaterial::getNormalID(normmap_id, identical_norm);
 		LLSelectedTEMaterial::getSpecularID(specmap_id, identical_spec);
 
-		if (getCurrentMaterialType() != MATMEDIA_MEDIA)
-		{
-			// When selecting an object with a pbr and UI tab is not set,
-			// set to pbr option, otherwise to a texture (material)
-			selectMaterialType(has_pbr_material ? MATMEDIA_PBR : MATMEDIA_MATERIAL);
-		}
-
-		mTabsMatChannel->setEnabled(editable && !has_pbr_material && has_faces_without_pbr);
-		mTabsPBRChannel->setEnabled(editable && has_pbr_material && !has_faces_without_pbr);
-		LL_DEBUGS("ENABLEDISABLETOOLS") << "editable " << editable << " has_pbr_material " << has_pbr_material << " has_faces_without_pbr " << has_faces_without_pbr << LL_ENDL;
+		mTabsMatChannel->setEnabled(editable);
+		mTabsPBRChannel->setEnabled(editable);
 
 		mCheckSyncMaterials->setEnabled(editable);
 		mCheckSyncMaterials->setValue(gSavedSettings.getBOOL("SyncMaterialSettings"));
@@ -1560,15 +1549,14 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
 		mColorSwatch->setOriginal(color);
 		mColorSwatch->set(color, force_set_values || (prev_color != color) || !editable);
 
-		mColorSwatch->setValid(editable && !has_pbr_material);
-		LL_DEBUGS("ENABLEDISABLETOOLS") << "mColorSwatch valid " << (editable && !has_pbr_material) << LL_ENDL;
-		mColorSwatch->setEnabled(editable && !has_pbr_material);
-		mColorSwatch->setCanApplyImmediately( editable && !has_pbr_material);
+		mColorSwatch->setValid(editable);
+		mColorSwatch->setEnabled(editable);
+		mColorSwatch->setCanApplyImmediately( editable );
 
 		F32 transparency = (1.f - color.mV[VALPHA]) * 100.f;
 		mCtrlColorTransp->setValue(editable ? transparency : 0);
-		mCtrlColorTransp->setEnabled(editable && has_material);
-		mColorTransPercent->setMouseOpaque(editable && has_material);
+		mCtrlColorTransp->setEnabled(editable );
+		mColorTransPercent->setMouseOpaque(editable );
 
 		U8 shiny = 0;
 		// Shiny
@@ -1636,10 +1624,10 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
 			if (identical_diffuse)
 			{
 				mTextureCtrl->setTentative(false);
-				mTextureCtrl->setEnabled(editable && !has_pbr_material);
+				mTextureCtrl->setEnabled(editable);
 				mTextureCtrl->setImageAssetID(id);
-				mComboAlphaMode->setEnabled(editable && mIsAlpha && transparency <= 0.f && !has_pbr_material);
-				mCtrlMaskCutoff->setEnabled(editable && mIsAlpha && !has_pbr_material);
+				mComboAlphaMode->setEnabled(editable && mIsAlpha && transparency <= 0.f );
+				mCtrlMaskCutoff->setEnabled(editable && mIsAlpha );
 
 				mTextureCtrl->setBakeTextureEnabled(true);
 			}
@@ -1658,20 +1646,20 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
 			{
 				// Tentative: multiple selected with different textures
 				mTextureCtrl->setTentative(true);
-				mTextureCtrl->setEnabled(editable && !has_pbr_material);
+				mTextureCtrl->setEnabled(editable );
 				mTextureCtrl->setImageAssetID(id);
-				mComboAlphaMode->setEnabled(editable && mIsAlpha && transparency <= 0.f && !has_pbr_material);
-				mCtrlMaskCutoff->setEnabled(editable && mIsAlpha && !has_pbr_material);
+				mComboAlphaMode->setEnabled(editable && mIsAlpha && transparency <= 0.f );
+				mCtrlMaskCutoff->setEnabled(editable && mIsAlpha );
 
 				mTextureCtrl->setBakeTextureEnabled(true);
 			}
 
 			mShinyTextureCtrl->setTentative(!identical_spec);
-			mShinyTextureCtrl->setEnabled(editable && !has_pbr_material);
+			mShinyTextureCtrl->setEnabled(editable);
 			mShinyTextureCtrl->setImageAssetID(specmap_id);
 
 			mBumpyTextureCtrl->setTentative(!identical_norm);
-			mBumpyTextureCtrl->setEnabled(editable && !has_pbr_material);
+			mBumpyTextureCtrl->setEnabled(editable );
 			mBumpyTextureCtrl->setImageAssetID(normmap_id);
 
 			if (attachment)
@@ -1988,7 +1976,7 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
 			LLSelectedTE::getFullbright(fullbright_flag,identical_fullbright);
 
 			mCheckFullbright->setValue((S32)(fullbright_flag != 0));
-			mCheckFullbright->setEnabled(editable && !has_pbr_material);
+			mCheckFullbright->setEnabled(editable );
 			mCheckFullbright->setTentative(!identical_fullbright);
 
 			// TODO: find a better way to do this without relying on the name -Zi
@@ -2025,7 +2013,7 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
 			// TODO: check if repeats per meter even apply to PBR materials -Zi
 			else if (material_selection == MATMEDIA_PBR)
 			{
-				enabled = editable && has_pbr_material;
+				enabled = editable;
 				material_type = getCurrentPBRChannel();
 			}
 
@@ -2080,7 +2068,7 @@ void FSPanelFace::updateUI(bool force_set_values /*false*/)
 				mCtrlRpt->setValue(editable ? repeats : 1.0f);
 			}
 			mCtrlRpt->setTentative(LLSD(repeats_tentative));
-			mCtrlRpt->setEnabled(!has_pbr_material && !identical_planar_texgen && enabled);
+			mCtrlRpt->setEnabled(!identical_planar_texgen && enabled);
 		}
 
 		// Blinn-Phong Materials
