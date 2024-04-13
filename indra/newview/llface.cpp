@@ -1396,7 +1396,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
     // </FS:ND>
     LLGLTFMaterial* gltf_mat = tep->getGLTFRenderMaterial();
 	// <FS:Beq> show legacy when editing the fallback materials.
-	static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "ShowSelectedInBlinnPhong");
+	static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "FSShowSelectedInBlinnPhong");
 	if( gltf_mat && getViewerObject()->isSelected() && showSelectedinBP )
 	{
 		gltf_mat = nullptr;

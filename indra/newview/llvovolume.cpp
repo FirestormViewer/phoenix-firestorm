@@ -5557,7 +5557,7 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
     llassert(gltf_mat == nullptr || dynamic_cast<LLFetchedGLTFMaterial*>(te->getGLTFRenderMaterial()) != nullptr);
 
 	// <FS:Beq> show legacy when editing the fallback materials.
-	static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "ShowSelectedInBlinnPhong");
+	static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "FSShowSelectedInBlinnPhong");
 	if( gltf_mat && facep->getViewerObject()->isSelected() && showSelectedinBP )
 	{
 		gltf_mat = nullptr;
@@ -6796,7 +6796,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
             LLGLTFMaterial* gltf_mat = te->getGLTFRenderMaterial();
 			
 			// <FS:Beq> show legacy when editing the fallback materials.
-			static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "ShowSelectedInBlinnPhong");
+			static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "FSShowSelectedInBlinnPhong");
 			if( gltf_mat && facep->getViewerObject()->isSelected() && showSelectedinBP )
 			{
 				gltf_mat = nullptr;

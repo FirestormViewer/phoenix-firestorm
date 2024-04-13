@@ -17952,10 +17952,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
-    <key>ShowSelectedInBlinnPhong</key>
+    <key>FSShowSelectedInBlinnPhong</key>
     <map>
       <key>Comment</key>
-      <string>show BlinnPhong while selected</string>
+      <string>Show BlinnPhong while selected (non-persistent).This setting is driven by the code, not by user</string>
       <key>Persist</key>
       <integer>0</integer>
       <key>Type</key>
@@ -17964,6 +17964,8 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>0</integer>
       <key>Backup</key>
       <integer>0</integer>
+      <key>HideFromEditor</key>
+      <integer>1</integer>
     </map>
     <key>ShowSpecificLODInEdit</key>
     <map>
@@ -26563,7 +26565,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>128578</integer>
     </map>
-    <key>UseNewTexturePanel</key>
+    <key>FSUseNewTexturePanel</key>
     <map>
       <key>Backup</key>
       <boolean>1</boolean>

@@ -239,7 +239,7 @@ BOOL	LLFloaterTools::postBuild()
 {	
 	// <FS:Zi> switchable edit texture/materials panel
 	LLPanel* panel;
-	if (gSavedSettings.getBOOL("UseNewTexturePanel"))
+	if (gSavedSettings.getBOOL("FSUseNewTexturePanel"))
 	{
 		mFSPanelFace = new FSPanelFace;
 		panel = mFSPanelFace;

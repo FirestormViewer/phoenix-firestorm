@@ -602,7 +602,7 @@ void FSPanelFace::onMatTabChange()
 		if(objectp)
 		{
 			last_mat = curr_mat;
-			gSavedSettings.setBOOL("ShowSelectedInBlinnPhong", (curr_mat == MATMEDIA_MATERIAL));
+			gSavedSettings.setBOOL("FSShowSelectedInBlinnPhong", (curr_mat == MATMEDIA_MATERIAL));
 			objectp->markForUpdate();
 			objectp->faceMappingChanged();
 		}
@@ -866,10 +866,10 @@ BOOL FSPanelFace::postBuild()
 
 	changePrecision(gSavedSettings.getS32("FSBuildToolDecimalPrecision"));
 
-	selectMaterialType(MATMEDIA_MATERIAL);			// TODO: add tab switching signal
+	selectMaterialType(MATMEDIA_PBR);				// TODO: add tab switching signal
 	selectMatChannel(MATTYPE_DIFFUSE);				// TODO: add tab switching signal
 	selectPBRChannel(PBRTYPE_RENDER_MATERIAL_ID);	// TODO: add tab switching signal
-	onMatTabChange(); // set up relative to active tab
+
 	return TRUE;
 }
 
@@ -5917,6 +5917,7 @@ void FSPanelFace::selectMaterialType(S32 material_type)
 	{
 		mTabsPBRMatMedia->selectTabByName("panel_material_type_blinn_phong");
 	}
+	onMatTabChange(); // set up relative to active tab
 }
 
 void FSPanelFace::selectMatChannel(S32 mat_channel)
