@@ -1026,7 +1026,7 @@ void FSPanelFace::sendTexture()
 		{
 			id = mTextureCtrl->getImageAssetID();
 		}
-		if (!LLSelectMgr::getInstance()->selectionSetImage(id))
+		if (!LLSelectMgr::getInstance()->selectionSetImage(id, getCurrentMaterialType()==MATMEDIA_PBR) )
 		{
 			// need to refresh value in texture ctrl
 			refresh();
