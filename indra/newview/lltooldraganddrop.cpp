@@ -1467,7 +1467,7 @@ void LLToolDragAndDrop::dropTextureOneFace(LLViewerObject* hit_obj,
 
     LLUUID asset_id = item->getAssetUUID();
 
-    if (hit_obj->getRenderMaterialID(hit_face).notNull() && !remove_pbr)
+    if (hit_obj->getRenderMaterialID(hit_face).notNull() && !remove_pbr && tex_channel >= -1) // <FS:Beq/> tex_channel -2 means ignorePBR then treat as -1, don't judge me.
     {
         // Overrides require textures to be copy and transfer free
         LLPermissions item_permissions = item->getPermissions();
@@ -1493,6 +1493,12 @@ void LLToolDragAndDrop::dropTextureOneFace(LLViewerObject* hit_obj,
         }
         return;
     }
+	// <FS:Beq> tex_channel -2 means ignorePBR then treat as -1
+	if(tex_channel < -1)
+	{
+		tex_channel = -1;
+	}
+	// </FS:Beq>
 	BOOL success = handleDropMaterialProtections(hit_obj, item, source, src_id);
 	if (!success)
 	{
