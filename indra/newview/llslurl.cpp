@@ -34,6 +34,10 @@
 #include "llviewernetwork.h"
 #include "llfiltersd2xmlrpc.h"
 #include "curl/curl.h"
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 const char* LLSLURL::SLURL_HTTP_SCHEME		 = "http";
 const char* LLSLURL::SLURL_HTTPS_SCHEME		 = "https";
 const char* LLSLURL::SLURL_SECONDLIFE_SCHEME = "secondlife";
