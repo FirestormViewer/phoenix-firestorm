@@ -94,6 +94,8 @@
 #include "llvograss.h"
 #include "llvotree.h"
 
+#include "fspanelface.h"	// <FS:Zi> switchable edit texture/materials panel
+
 // Globals
 LLFloaterTools *gFloaterTools = NULL;
 bool LLFloaterTools::sShowObjectCost = true;
@@ -174,8 +176,14 @@ void*	LLFloaterTools::createPanelVolume(void* data)
 void*	LLFloaterTools::createPanelFace(void* data)
 {
 	LLFloaterTools* floater = (LLFloaterTools*)data;
-	floater->mPanelFace = new LLPanelFace();
-	return floater->mPanelFace;
+
+	// <FS:Zi> switchable edit texture/materials panel
+	//         we should not need this here at all, we are adding the texture/materials
+	//         panel in postBuild()
+	// floater->mPanelFace = new LLPanelFace();
+	// return floater->mPanelFace;
+	return floater->findChild<LLPanel>("Texture");
+	// </FS:Zi>
 }
 
 //static
@@ -229,6 +237,27 @@ LLPCode toolData[]={
 
 BOOL	LLFloaterTools::postBuild()
 {	
+	// <FS:Zi> switchable edit texture/materials panel
+	LLPanel* panel;
+	if (gSavedSettings.getBOOL("UseNewTexturePanel"))
+	{
+		mFSPanelFace = new FSPanelFace;
+		panel = mFSPanelFace;
+	}
+	else
+	{
+		mPanelFace = new LLPanelFace;
+		panel = mPanelFace;
+	}
+
+	LLTabContainer::TabPanelParams params;
+	params.panel = panel;
+	params.insert_at = (LLTabContainer::eInsertionPoint) PANEL_FACE;
+
+	mTab = getChild<LLTabContainer>("Object Info Tabs");
+	mTab->addTabPanel(params);
+	// </FS:Zi>
+
 	// Hide until tool selected
 	setVisible(FALSE);
 
@@ -367,7 +396,11 @@ void LLFloaterTools::changePrecision(S32 decimal_precision)
 	else if (decimal_precision > 7) decimal_precision = 7;
 	
 	mPanelObject->changePrecision(decimal_precision);
-	mPanelFace->changePrecision(decimal_precision);
+	// <FS:Zi> switchable edit texture/materials panel
+	// mPanelFace->changePrecision(decimal_precision);
+	if (mPanelFace)   mPanelFace->changePrecision(decimal_precision);
+	if (mFSPanelFace) mFSPanelFace->changePrecision(decimal_precision);
+	// </FS:Zi>
 }
 
 // Create the popupview with a dummy center.  It will be moved into place
@@ -431,6 +464,7 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mPanelVolume(NULL),
 	mPanelContents(NULL),
 	mPanelFace(NULL),
+	mFSPanelFace(nullptr),   // <FS:Zi> switchable edit texture/materials panel
 	mPanelLandInfo(NULL),
 
 	mCostTextBorder(NULL),
@@ -470,7 +504,6 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	// <FS>
 	mCommitCallbackRegistrar.add("BuildTool.CopyKeys",			boost::bind(&LLFloaterTools::onClickBtnCopyKeys,this));
 	mCommitCallbackRegistrar.add("BuildTool.Expand",			boost::bind(&LLFloaterTools::onClickExpand,this));
-	mCommitCallbackRegistrar.add("BuildTool.Flip",				boost::bind(&LLPanelFace::onCommitFlip, _1, _2));
 	// </FS>
 
 	// <FS:Ansariel> FIRE-7802: Grass and tree selection in build tool
@@ -744,8 +777,20 @@ void LLFloaterTools::refresh()
 	mPanelPermissions->refresh();
 	mPanelObject->refresh();
 	mPanelVolume->refresh();
-	mPanelFace->refresh();
-    mPanelFace->refreshMedia();
+	// <FS:Zi> switchable edit texture/materials panel
+	// mPanelFace->refresh();
+	// mPanelFace->refreshMedia();
+	if (mPanelFace)
+	{
+		mPanelFace->refresh();
+		mPanelFace->refreshMedia();
+	}
+	if (mFSPanelFace)
+	{
+		mFSPanelFace->refresh();
+		mFSPanelFace->refreshMedia();
+	}
+	// <FS:Zi>
 	mPanelContents->refresh();
 	mPanelLandInfo->refresh();
 
@@ -1142,7 +1187,11 @@ void LLFloaterTools::onClose(bool app_quitting)
 	LLViewerJoystick::getInstance()->moveAvatar(false);
 
 	// destroy media source used to grab media title
-	mPanelFace->unloadMedia();
+	// <FS:Zi> switchable edit texture/materials panel
+	// mPanelFace->unloadMedia();
+	if (mPanelFace)   mPanelFace->unloadMedia();
+	if (mFSPanelFace) mFSPanelFace->unloadMedia();
+	// </FS:Zi>
 
     // Different from handle_reset_view in that it doesn't actually 
 	//   move the camera if EditCameraMovement is not set.
@@ -1626,3 +1675,39 @@ void LLFloaterTools::onSelectTreeGrassCombo()
 	}
 }
 // </FS:Ansariel>
+
+// <FS:Zi> switchable edit texture/materials panel
+void LLFloaterTools::refreshPanelFace()
+{
+	if (mPanelFace)   mPanelFace->refresh();
+	if (mFSPanelFace) mFSPanelFace->refresh();
+}
+
+LLRender::eTexIndex LLFloaterTools::getTextureDropChannel()
+{
+	if (mPanelFace)   return mPanelFace->getTextureDropChannel();
+	if (mFSPanelFace) return mFSPanelFace->getTextureDropChannel();
+	return LLRender::NUM_TEXTURE_CHANNELS;	// invalid
+}
+
+LLRender::eTexIndex LLFloaterTools::getTextureChannelToEdit()
+{
+	if (mPanelFace)   return mPanelFace->getTextureChannelToEdit();
+	if (mFSPanelFace) return mFSPanelFace->getTextureChannelToEdit();
+	return LLRender::NUM_TEXTURE_CHANNELS;	// invalid
+}
+
+LLGLTFMaterial::TextureInfo LLFloaterTools::getPBRDropChannel()
+{
+	if (mPanelFace)   return mPanelFace->getPBRDropChannel();
+	if (mFSPanelFace) return mFSPanelFace->getPBRDropChannel();
+	return LLGLTFMaterial::GLTF_TEXTURE_INFO_COUNT;	// invalid
+}
+
+LLMaterialPtr LLFloaterTools::createDefaultMaterial(LLMaterialPtr old_mat)
+{
+	if (mPanelFace)   return mPanelFace->createDefaultMaterial(old_mat);
+	if (mFSPanelFace) return mFSPanelFace->createDefaultMaterial(old_mat);
+	return nullptr;	// invalid
+}
+// </FS:Zi>
