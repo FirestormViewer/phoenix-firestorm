@@ -3602,7 +3602,7 @@ Hai caricato una texture [RESOLUTION] completata per &apos;[BODYREGION]&apos; do
 Hai aggiornato localmente una texture [RESOLUTION] completata per &apos;[BODYREGION]&apos; dopo [TIME] secondi.
 	</notification>
 	<notification name="CannotUploadTexture">
-		Impossibile caricare la texture.
+		Impossibile caricare la texture: &apos;[NAME]&apos;
 [REASON]
 	</notification>
 	<notification name="CannotUploadMaterial">

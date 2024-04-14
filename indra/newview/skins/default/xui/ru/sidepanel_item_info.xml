@@ -57,10 +57,10 @@
 		</layout_panel>
 
 		<layout_panel name="layout_item_permissions_sale" >
-			<text name="permissions_label">
+			<text name="perm_modify">
 				Разрешения
 			</text>
-			<text name="perm_modify">
+			<text name="you_perm_modify">
 				Вы можете:
 			</text>
 			<check_box label="Изменять" name="CheckOwnerModify"/>
