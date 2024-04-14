@@ -24,6 +24,9 @@
 	<floater.string name="loading">
 		Wczytywanie...
 	</floater.string>
+	<text name="obj_name">
+		Obiekt: [SOURCE_OBJECT]
+	</text>
 	<button label="Zresetuj" label_selected="Zresetuj" name="Reset"/>
 	<check_box label="Włączony" name="running"/>
 	<check_box label="Przygoda:" name="enable_xp"/>
