@@ -33,7 +33,7 @@
 		<radio_item label="Google Translate" name="google"/>
 		<radio_item label="DeepL Translate" name="deepl"/>
 	</radio_group>
-	<text name="google_links_text">
+	<text name="azure_links_text">
 [https://learn.microsoft.com/en-us/azure/cognitive-services/translator/create-translator-resource Guide]</text>
 	<text name="azure_api_endoint_label">Point final :</text>
 	<text name="azure_api_key_label">Clé Azure :</text>
