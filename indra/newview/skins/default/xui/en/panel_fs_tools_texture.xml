@@ -335,19 +335,31 @@
    follows="left|top"
    layout="topleft"
    halign="center"
-   left="0"
+   left="10"
    right="-1"
    height="16">
     Scale
 </text>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="0"
+   top_pad="0"
+   width="12"
+   height="19"
+   name="labelGltfTextureScaleU_All"
+>
+    U
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="0"
-   top_pad="0"
+   left_pad="0"
    height="19"
-   right="-20"
+   right="-12"
    name="gltfTextureScaleU_All"
    initial_value="0"
    min_val="-10000"
@@ -378,13 +390,25 @@
    parameter="gltfTextureScaleU_All" />
 </button>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="0"
+   top_pad="2"
+   width="12"
+   height="19"
+   name="labelGltfTextureScaleV_All"
+>
+    V
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="0"
-   top_pad="2"
+   left_pad="0"
    height="19"
-   right="-20"
+   right="-12"
    initial_value="0"
    min_val="-10000"
    max_val="10000"
@@ -432,19 +456,31 @@
    follows="left|top"
    layout="topleft"
    halign="center"
-   left="0"
+   left="10"
    right="-1"
    height="16">
     Offset
 </text>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="10"
+   top_pad="0"
+   width="12"
+   height="19"
+   name="labelGltfTextureOffsetU_All"
+>
+    U
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="10"
-   top_pad="0"
+   left_pad="0"
    height="19"
-   right="-10"
+   right="-2"
    name="gltfTextureOffsetU_All"
    initial_value="0"
    min_val="-1"
@@ -456,13 +492,25 @@
    parameter="all" />
 </spinner>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="10"
+   top_pad="2"
+   width="12"
+   height="19"
+   name="labelGltfTextureOffsetV_All"
+>
+    V
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="10"
-   top_pad="2"
+   left_pad="0"
    height="19"
-   right="-10"
+   right="-2"
    name="gltfTextureOffsetV_All"
    initial_value="0"
    min_val="-1"
@@ -544,19 +592,31 @@
    follows="left|top"
    layout="topleft"
    halign="center"
-   left="0"
+   left="10"
    right="-1"
    height="16">
     Scale
 </text>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="0"
+   top_pad="0"
+   width="12"
+   height="19"
+   name="labelGltfTextureScaleU_Base"
+>
+    U
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="0"
-   top_pad="0"
+   left_pad="0"
    height="19"
-   right="-20"
+   right="-12"
    name="gltfTextureScaleU_Base"
    initial_value="0"
    min_val="-10000"
@@ -587,13 +647,25 @@
    parameter="gltfTextureScaleU_Base" />
 </button>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="0"
+   top_pad="2"
+   width="12"
+   height="19"
+   name="labelGltfTextureScaleV_Base"
+>
+    V
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="0"
-   top_pad="2"
+   left_pad="0"
    height="19"
-   right="-20"
+   right="-12"
    name="gltfTextureScaleV_Base"
    initial_value="0"
    min_val="-10000"
@@ -641,19 +713,31 @@
    follows="left|top"
    layout="topleft"
    halign="center"
-   left="0"
+   left="10"
    right="-1"
    height="16">
     Offset
 </text>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="10"
+   top_pad="0"
+   width="12"
+   height="19"
+   name="labelGltfTextureOffsetU_Base"
+>
+    U
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="10"
-   top_pad="0"
+   left_pad="0"
    height="19"
-   right="-10"
+   right="-2"
    name="gltfTextureOffsetU_Base"
    initial_value="0"
    min_val="-1"
@@ -665,13 +749,25 @@
    parameter="base" />
 </spinner>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="10"
+   top_pad="2"
+   width="12"
+   height="19"
+   name="labelGltfTextureOffsetV_Base"
+>
+    V
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="10"
-   top_pad="2"
+   left_pad="0"
    height="19"
-   right="-10"
+   right="-2"
    name="gltfTextureOffsetV_Base"
    initial_value="0"
    min_val="-1"
@@ -752,19 +848,31 @@
    follows="left|top"
    layout="topleft"
    halign="center"
-   left="0"
+   left="10"
    right="-1"
    height="16">
     Scale
 </text>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="0"
+   top_pad="0"
+   width="12"
+   height="19"
+   name="labelGltfTextureScaleU_Normal"
+>
+    U
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="0"
-   top_pad="0"
+   left_pad="0"
    height="19"
-   right="-20"
+   right="-12"
    name="gltfTextureScaleU_Normal"
    initial_value="0"
    min_val="-10000"
@@ -795,13 +903,25 @@
    parameter="gltfTextureScaleU_Normal" />
 </button>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="0"
+   top_pad="2"
+   width="12"
+   height="19"
+   name="labelGltfTextureScaleV_Normal"
+>
+    V
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="0"
-   top_pad="2"
+   left_pad="0"
    height="19"
-   right="-20"
+   right="-12"
    name="gltfTextureScaleV_Normal"
    initial_value="0"
    min_val="-10000"
@@ -849,19 +969,31 @@
    follows="left|top"
    layout="topleft"
    halign="center"
-   left="0"
+   left="10"
    right="-1"
    height="16">
     Offset
 </text>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="10"
+   top_pad="0"
+   width="12"
+   height="19"
+   name="labelGltfTextureOffsetU_Normal"
+>
+    U
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="10"
-   top_pad="0"
+   left_pad="0"
    height="19"
-   right="-10"
+   right="-2"
    name="gltfTextureOffsetU_Normal"
    initial_value="0"
    min_val="-1"
@@ -873,13 +1005,25 @@
    parameter="normal" />
 </spinner>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="10"
+   top_pad="2"
+   width="12"
+   height="19"
+   name="labelGltfTextureOffsetV_Normal"
+>
+    V
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="10"
-   top_pad="2"
+   left_pad="0"
    height="19"
-   right="-10"
+   right="-2"
    name="gltfTextureOffsetV_Normal"
    initial_value="0"
    min_val="-1"
@@ -960,19 +1104,31 @@
    follows="left|top"
    layout="topleft"
    halign="center"
-   left="0"
+   left="10"
    right="-1"
    height="16">
     Scale
 </text>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="0"
+   top_pad="0"
+   width="12"
+   height="19"
+   name="labelGltfTextureScaleU_Metallic"
+>
+    U
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="0"
-   top_pad="0"
+   left_pad="0"
    height="19"
-   right="-20"
+   right="-12"
    name="gltfTextureScaleU_Metallic"
    initial_value="0"
    min_val="-10000"
@@ -1003,13 +1159,25 @@
    parameter="gltfTextureScaleU_Metallic" />
 </button>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="0"
+   top_pad="2"
+   width="12"
+   height="19"
+   name="labelGltfTextureScaleV_Metallic"
+>
+    V
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="0"
-   top_pad="2"
+   left_pad="0"
    height="19"
-   right="-20"
+   right="-12"
    name="gltfTextureScaleV_Metallic"
    initial_value="0"
    min_val="-10000"
@@ -1057,19 +1225,31 @@
    follows="left|top"
    layout="topleft"
    halign="center"
-   left="0"
+   left="10"
    right="-1"
    height="16">
     Offset
 </text>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="10"
+   top_pad="0"
+   width="12"
+   height="19"
+   name="labelGltfTextureOffsetU_Metallic"
+>
+    U
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="10"
-   top_pad="0"
+   left_pad="0"
    height="19"
-   right="-10"
+   right="-2"
    name="gltfTextureOffsetU_Metallic"
    initial_value="0"
    min_val="-1"
@@ -1081,13 +1261,25 @@
    parameter="metallic" />
 </spinner>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="10"
+   top_pad="2"
+   width="12"
+   height="19"
+   name="labelGltfTextureOffsetU_Metallic"
+>
+    V
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="10"
-   top_pad="2"
+   left_pad="0"
    height="19"
-   right="-10"
+   right="-2"
    name="gltfTextureOffsetV_Metallic"
    initial_value="0"
    min_val="-1"
@@ -1168,19 +1360,31 @@
    follows="left|top"
    layout="topleft"
    halign="center"
-   left="0"
+   left="10"
    right="-1"
    height="16">
     Scale
 </text>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="0"
+   top_pad="0"
+   width="12"
+   height="19"
+   name="labelGltfTextureScaleU_Emissive"
+>
+    U
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="0"
-   top_pad="0"
+   left_pad="0"
    height="19"
-   right="-20"
+   right="-12"
    name="gltfTextureScaleU_Emissive"
    initial_value="0"
    min_val="-10000"
@@ -1211,13 +1415,25 @@
    parameter="gltfTextureScaleU_Emissive" />
 </button>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="0"
+   top_pad="2"
+   width="12"
+   height="19"
+   name="labelGltfTextureScaleV_Emissive"
+>
+    V
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="0"
-   top_pad="2"
+   left_pad="0"
    height="19"
-   right="-20"
+   right="-12"
    name="gltfTextureScaleV_Emissive"
    initial_value="0"
    min_val="-10000"
@@ -1265,19 +1481,31 @@
    follows="left|top"
    layout="topleft"
    halign="center"
-   left="0"
+   left="10"
    right="-1"
    height="16">
     Offset
 </text>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="10"
+   top_pad="0"
+   width="12"
+   height="19"
+   name="labelGltfTextureOffsetU_Emissive"
+>
+    U
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="10"
-   top_pad="0"
+   left_pad="0"
    height="19"
-   right="-10"
+   right="-2"
    name="gltfTextureOffsetU_Emissive"
    initial_value="0"
    min_val="-1"
@@ -1289,13 +1517,25 @@
    parameter="emissive" />
 </spinner>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="10"
+   top_pad="2"
+   width="12"
+   height="19"
+   name="labelGltfTextureOffsetV_Emissive"
+>
+    V
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="10"
-   top_pad="2"
+   left_pad="0"
    height="19"
-   right="-10"
+   right="-2"
    name="gltfTextureOffsetV_Emissive"
    initial_value="0"
    min_val="-1"
@@ -1807,19 +2047,31 @@
    follows="left|top"
    layout="topleft"
    halign="center"
-   left="0"
+   left="10"
    right="-1"
    height="16">
     Scale
 </text>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="0"
+   top_pad="0"
+   width="12"
+   height="19"
+   name="labelTexScaleU"
+>
+    H
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="0"
-   top_pad="0"
+   left_pad="0"
    height="19"
-   right="-20"
+   right="-12"
    name="TexScaleU"
    initial_value="0"
    min_val="-10000"
@@ -1846,13 +2098,25 @@
    parameter="TexScaleU" />
 </button>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="0"
+   top_pad="2"
+   width="12"
+   height="19"
+   name="labelTexScaleV"
+>
+    V
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="0"
-   top_pad="2"
+   left_pad="0"
    height="19"
-   right="-20"
+   right="-12"
    name="TexScaleV"
    initial_value="0"
    min_val="-10000"
@@ -1896,19 +2160,31 @@
    follows="left|top"
    layout="topleft"
    halign="center"
-   left="0"
+   left="10"
    right="-1"
    height="16">
     Offset
 </text>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="10"
+   top_pad="0"
+   width="12"
+   height="19"
+   name="labelTexOffsetU"
+>
+    H
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="10"
-   top_pad="0"
+   left_pad="0"
    height="19"
-   right="-10"
+   right="-2"
    name="TexOffsetU"
    initial_value="0"
    min_val="-1"
@@ -1916,13 +2192,25 @@
    decimal_digits="5"
 />
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="10"
+   top_pad="2"
+   width="12"
+   height="19"
+   name="labelTexOffsetV"
+>
+    V
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="10"
-   top_pad="2"
+   left_pad="0"
    height="19"
-   right="-10"
+   right="-2"
    name="TexOffsetV"
    initial_value="0"
    min_val="-1"
@@ -1996,19 +2284,31 @@
    follows="left|top"
    layout="topleft"
    halign="center"
-   left="0"
+   left="10"
    right="-1"
    height="16">
     Scale
 </text>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="0"
+   top_pad="0"
+   width="12"
+   height="19"
+   name="labelBumpyScaleU"
+>
+    H
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="0"
-   top_pad="0"
+   left_pad="0"
    height="19"
-   right="-20"
+   right="-12"
    name="bumpyScaleU"
    initial_value="0"
    min_val="-10000"
@@ -2035,13 +2335,25 @@
    parameter="bumpyScaleU" />
 </button>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="0"
+   top_pad="2"
+   width="12"
+   height="19"
+   name="labelBumpyScaleV"
+>
+    V
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="0"
-   top_pad="2"
+   left_pad="0"
    height="19"
-   right="-20"
+   right="-12"
    name="bumpyScaleV"
    initial_value="0"
    min_val="-10000"
@@ -2085,19 +2397,31 @@
    follows="left|top"
    layout="topleft"
    halign="center"
-   left="0"
+   left="10"
    right="-1"
    height="16">
     Offset
 </text>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="10"
+   top_pad="0"
+   width="12"
+   height="19"
+   name="labelBumpyOffsetU"
+>
+    H
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="10"
-   top_pad="0"
+   left_pad="0"
    height="19"
-   right="-10"
+   right="-2"
    name="bumpyOffsetU"
    initial_value="0"
    min_val="-1"
@@ -2105,13 +2429,25 @@
    decimal_digits="5"
 />
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="10"
+   top_pad="2"
+   width="12"
+   height="19"
+   name="labelBumpyOffsetU"
+>
+    V
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="10"
-   top_pad="2"
+   left_pad="0"
    height="19"
-   right="-10"
+   right="-2"
    name="bumpyOffsetV"
    initial_value="0"
    min_val="-1"
@@ -2185,19 +2521,31 @@
    follows="left|top"
    layout="topleft"
    halign="center"
-   left="0"
+   left="10"
    right="-1"
    height="16">
     Scale
 </text>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="0"
+   top_pad="0"
+   width="12"
+   height="19"
+   name="labelShinyScaleU"
+>
+    H
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="0"
-   top_pad="0"
+   left_pad="0"
    height="19"
-   right="-20"
+   right="-12"
    name="shinyScaleU"
    initial_value="0"
    min_val="-10000"
@@ -2224,13 +2572,25 @@
    parameter="shinyScaleU" />
 </button>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="0"
+   top_pad="2"
+   width="12"
+   height="19"
+   name="labelShinyScaleV"
+>
+    V
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="0"
-   top_pad="2"
+   left_pad="0"
    height="19"
-   right="-20"
+   right="-12"
    name="shinyScaleV"
    initial_value="0"
    min_val="-10000"
@@ -2274,19 +2634,31 @@
    follows="left|top"
    layout="topleft"
    halign="center"
-   left="0"
+   left="10"
    right="-1"
    height="16">
     Offset
 </text>
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="10"
+   top_pad="0"
+   width="12"
+   height="19"
+   name="labelShinyOffsetU"
+>
+    H
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="10"
-   top_pad="0"
+   left_pad="0"
    height="19"
-   right="-10"
+   right="-2"
    name="shinyOffsetU"
    initial_value="0"
    min_val="-1"
@@ -2294,13 +2666,25 @@
    decimal_digits="5"
 />
 
+<text
+   follows="left|top"
+   layout="topleft"
+   halign="left"
+   left="10"
+   top_pad="2"
+   width="12"
+   height="19"
+   name="labelShinyOffsetV"
+>
+    V
+</text>
+
 <spinner
    follows="left|top"
    layout="topleft"
-   left="10"
-   top_pad="2"
+   left_pad="0"
    height="19"
-   right="-10"
+   right="-2"
    name="shinyOffsetV"
    initial_value="0"
    min_val="-1"
