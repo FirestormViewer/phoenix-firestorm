@@ -748,7 +748,7 @@ BOOL FSPanelFace::postBuild()
 	mColorSwatch->setOnSelectCallback(boost::bind(&FSPanelFace::onSelectColor, this));
 
 	// Blinn-Phong Diffuse texture swatch
-	mTextureCtrl->setDefaultImageAssetID(LLUUID(gSavedSettings.getString("DefaultObjectTexture")));
+	mTextureCtrl->setDefaultImageAssetID(DEFAULT_OBJECT_TEXTURE);
 	mTextureCtrl->setCommitCallback(boost::bind(&FSPanelFace::onCommitTexture, this, _1, _2));
 	mTextureCtrl->setOnCancelCallback(boost::bind(&FSPanelFace::onCancelTexture, this));
 	mTextureCtrl->setDragCallback(boost::bind(&FSPanelFace::onDragTexture, this, _2));
@@ -757,8 +757,8 @@ BOOL FSPanelFace::postBuild()
 	mTextureCtrl->setDnDFilterPermMask(PERM_COPY | PERM_TRANSFER);
 
 	// Blinn-Phong Normal texture swatch
-	mBumpyTextureCtrl->setDefaultImageAssetID(LLUUID(gSavedSettings.getString("DefaultObjectNormalTexture")));
-	mBumpyTextureCtrl->setBlankImageAssetID(LLUUID(gSavedSettings.getString("DefaultBlankNormalTexture")));
+	mBumpyTextureCtrl->setDefaultImageAssetID(DEFAULT_OBJECT_NORMAL);
+	mBumpyTextureCtrl->setBlankImageAssetID(BLANK_OBJECT_NORMAL);
 	mBumpyTextureCtrl->setCommitCallback(boost::bind(&FSPanelFace::onCommitNormalTexture, this, _1, _2));
 	mBumpyTextureCtrl->setOnCancelCallback(boost::bind(&FSPanelFace::onCancelNormalTexture, this));
 	mBumpyTextureCtrl->setDragCallback(boost::bind(&FSPanelFace::onDragTexture, this, _2));
@@ -767,7 +767,7 @@ BOOL FSPanelFace::postBuild()
 	mBumpyTextureCtrl->setDnDFilterPermMask(PERM_COPY | PERM_TRANSFER);
 
 	// Blinn-Phong Specular texture swatch
-	mShinyTextureCtrl->setDefaultImageAssetID(LLUUID(gSavedSettings.getString("DefaultObjectSpecularTexture")));
+	mShinyTextureCtrl->setDefaultImageAssetID(DEFAULT_OBJECT_SPECULAR);
 	mShinyTextureCtrl->setCommitCallback(boost::bind(&FSPanelFace::onCommitSpecularTexture, this, _1, _2));
 	mShinyTextureCtrl->setOnCancelCallback(boost::bind(&FSPanelFace::onCancelSpecularTexture, this));
 	mShinyTextureCtrl->setDragCallback(boost::bind(&FSPanelFace::onDragTexture, this, _2));
@@ -805,7 +805,7 @@ BOOL FSPanelFace::postBuild()
 	mMaterialCtrlPBR->setInventoryPickType(PICK_MATERIAL);
 
 	// PBR Base Color texture swatch
-	mBaseTexturePBR->setDefaultImageAssetID(LLUUID(gSavedSettings.getString("DefaultObjectTexture")));
+	mBaseTexturePBR->setDefaultImageAssetID(DEFAULT_OBJECT_TEXTURE);
 	mBaseTexturePBR->setCommitCallback(boost::bind(&FSPanelFace::onCommitPbr, this, _1));
 	mBaseTexturePBR->setOnCancelCallback(boost::bind(&FSPanelFace::onCancelPbr, this, _1));
 	mBaseTexturePBR->setOnSelectCallback(boost::bind(&FSPanelFace::onSelectPbr, this, _1));
@@ -816,8 +816,8 @@ BOOL FSPanelFace::postBuild()
 	mBaseTintPBR->setOnSelectCallback(boost::bind(&FSPanelFace::onSelectPbr, this, _1));
 
 	// PBR Base Normal map swatch
-	mNormalTexturePBR->setDefaultImageAssetID(LLUUID(gSavedSettings.getString("DefaultObjectNormalTexture")));
-	mNormalTexturePBR->setBlankImageAssetID(LLUUID(gSavedSettings.getString("DefaultBlankNormalTexture")));
+	mNormalTexturePBR->setDefaultImageAssetID(DEFAULT_OBJECT_NORMAL);
+	mNormalTexturePBR->setBlankImageAssetID(BLANK_OBJECT_NORMAL);
 	mNormalTexturePBR->setCommitCallback(boost::bind(&FSPanelFace::onCommitPbr, this, _1));
 	mNormalTexturePBR->setOnCancelCallback(boost::bind(&FSPanelFace::onCancelPbr, this, _1));
 	mNormalTexturePBR->setOnSelectCallback(boost::bind(&FSPanelFace::onSelectPbr, this, _1));
