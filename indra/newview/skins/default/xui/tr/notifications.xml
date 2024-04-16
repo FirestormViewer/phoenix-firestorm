@@ -3524,7 +3524,7 @@ Sesli iletişim kullanılamayacak.
  &apos;[BODYREGION]&apos; için [RESOLUTION] çözünürlükte kaydedilmiş bir dokuyu [TIME] saniye sonra yerel olarak güncellediniz.
 	</notification>
 	<notification name="CannotUploadTexture">
-		Doku karşıya yüklenemiyor.
+		Doku karşıya yüklenemiyor: &apos;[NAME]&apos;
 [REASON]
 	</notification>
 	<notification name="LivePreviewUnavailable">

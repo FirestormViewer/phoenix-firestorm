@@ -21,5 +21,6 @@ LL_PA_SYM(true, pa_sw_volume_from_linear, pa_volume_t, double v);
 LL_PA_SYM(true, pa_mainloop_free, void, pa_mainloop* m);
 LL_PA_SYM(true, pa_mainloop_get_api, pa_mainloop_api*, pa_mainloop* m);
 LL_PA_SYM(true, pa_mainloop_new, pa_mainloop*, void);
+LL_PA_SYM(true, pa_mainloop_iterate, int, pa_mainloop*, int, int*);
 
 // optional symbols to grab

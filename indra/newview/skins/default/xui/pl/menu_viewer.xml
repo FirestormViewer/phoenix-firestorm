@@ -448,11 +448,13 @@
 		<menu label="Wymuś błąd" name="Force Errors">
 			<menu_item_call label="Wymuś pułapkę w programie (breakpoint)" name="Force Breakpoint"/>
 			<menu_item_call label="Wymuś błąd LLError i spowoduj awarię" name="Force LLError And Crash"/>
+			<menu_item_call label="Wymuś błąd LLError, wiadomość i awarię" name="Force LLError Message And Crash"/>
 			<menu_item_call label="Wymuś błąd dostępu do pamięci" name="Force Bad Memory Access"/>
 			<menu_item_call label="Wymuś zły dostęp do pamięci we współprogramie (coroutine)" name="Force Bad Memory Access in Coroutine" />
 			<menu_item_call label="Wymuś nieskończoną pętlę" name="Force Infinite Loop"/>
 			<menu_item_call label="Wymuś awarię sterownika" name="Force Driver Carsh"/>
 			<menu_item_call label="Wymuś wyjątek programu" name="Force Software Exception"/>
+			<menu_item_call label="Wymuś wyjątek systemu operacyjnego" name="Force OS Exception" />
 			<menu_item_call label="Wymuś wyjątek we współprogramie (coroutine)" name="Force Software Exception in Coroutine" />
 			<menu_item_call label="Wymuś awarię w wątku" name="Force a Crash in a Thread" />
 			<menu_item_call label="Wymuś rozłączenie Przeglądarki" name="Force Disconnect Viewer"/>

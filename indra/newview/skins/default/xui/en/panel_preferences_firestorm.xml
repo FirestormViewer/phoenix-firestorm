@@ -1654,6 +1654,14 @@
          tool_tip="If enabled, the list of attachments spots in the &amp;Attach to&amp; menus will be sorted alphabetically"
          name="FSSortAttachmentSpotsAlphabetically"
          control_name="FSSortAttachmentSpotsAlphabetically"/>
+        <check_box
+         top_pad="8"
+         follows="left|top"
+         height="16"
+         label="Use the new Firestorm texture panel in the tools floater (requires restart)"
+         tool_tip="If enabled, the texture editing tools will use the refined FS workflow and allow editing of BlinnPhong"
+         name="FSUseNewTexturePanel"
+         control_name="FSUseNewTexturePanel"/>
     </panel>
 
     <!--Uploads-->

@@ -3387,7 +3387,7 @@ SHA1 指紋：[MD5_DIGEST]
 你在 [TIME] 秒鐘後在本地為 &apos;[BODYREGION]&apos; 更新了一個 [RESOLUTION] 的定貌材質。
 	</notification>
 	<notification name="CannotUploadTexture">
-		無法上傳質料。
+		無法上傳質料: &apos;[NAME]&apos;
 [REASON]
 	</notification>
 	<notification name="LivePreviewUnavailable">

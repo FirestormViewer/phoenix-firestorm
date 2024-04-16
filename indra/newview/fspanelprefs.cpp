@@ -70,7 +70,7 @@ BOOL FSPanelPrefs::postBuild()
 
 	LLTextureCtrl* tex_ctrl = getChild<LLTextureCtrl>("texture control");
 	tex_ctrl->setCommitCallback(boost::bind(&FSPanelPrefs::onCommitTexture, this, _2));
-	tex_ctrl->setDefaultImageAssetID(LLUUID(gSavedSettings.getString("DefaultObjectTexture")));
+	tex_ctrl->setDefaultImageAssetID(DEFAULT_OBJECT_TEXTURE);
 
 	mInvDropTarget = getChild<FSEmbeddedItemDropTarget>("embed_item");
 	mInvDropTarget->setDADCallback(boost::bind(&FSPanelPrefs::onDADEmbeddedItem, this, _1));

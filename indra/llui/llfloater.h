@@ -645,7 +645,6 @@ public:
 	// </FS:KC> Fix for bad edge snapping
 
 	void setToolbarRect(LLToolBarEnums::EToolBarLocation tb, const LLRect& toolbar_rect);
-	void onDestroyFloater(LLFloater* floater);
 
 	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
 	void setMainChatbarRect(LLLayoutPanel* panel, const LLRect& chatbar_rect);
@@ -670,7 +669,7 @@ private:
 	S32				mMinimizePositionVOffset;
 	typedef std::vector<std::pair<LLHandle<LLFloater>, boost::signals2::connection> > hidden_floaters_t;
 	hidden_floaters_t mHiddenFloaters;
-	LLFloater *		mFrontChild;
+    LLHandle<LLFloater>	mFrontChildHandle;
 
 	// <FS:Ansariel> Prevent floaters being dragged under main chat bar
 	LLRect			mMainChatbarRect;

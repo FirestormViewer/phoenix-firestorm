@@ -3914,7 +3914,7 @@ https://wiki.firestormviewer.org/fs_voice
 &apos;[BODYREGION]&apos;の[RESOLUTION]のベークドテクスチャは[TIME]秒後にローカルに更新されました。
 	</notification>
 	<notification name="CannotUploadTexture">
-		テクスチャをアップロードできません。
+		テクスチャをアップロードできません: &apos;[NAME]&apos;
 [REASON]
 	</notification>
 	<notification name="LivePreviewUnavailable">

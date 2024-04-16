@@ -107,7 +107,7 @@
 #include "llfloaterpathfindingconsole.h"
 #include "llfloaterpathfindingcharacters.h"
 #include "llfloatertools.h"
-#include "llpanelface.h"
+// #include "llpanelface.h"  // <FS:Zi> switchable edit texture/materials panel - include not needed
 #include "llpathfindingpathtool.h"
 #include "llscenemonitor.h"
 #include "llprogressview.h"
@@ -1771,17 +1771,23 @@ void LLPipeline::unlinkDrawable(LLDrawable *drawable)
 void LLPipeline::removeMutedAVsLights(LLVOAvatar* muted_avatar)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
-	for (light_set_t::iterator iter = gPipeline.mNearbyLights.begin();
-		 iter != gPipeline.mNearbyLights.end(); iter++)
-	{
-        const LLViewerObject *vobj = iter->drawable->getVObj();
-        if (vobj && vobj->getAvatar()
-            && vobj->isAttachment() && vobj->getAvatar() == muted_avatar)
-		{
-			gPipeline.mLights.erase(iter->drawable);
-			gPipeline.mNearbyLights.erase(iter);
-		}
-	}
+    light_set_t::iterator iter = gPipeline.mNearbyLights.begin();
+    while (iter != gPipeline.mNearbyLights.end())
+    {
+        const LLViewerObject* vobj = iter->drawable->getVObj();
+        if (vobj
+            && vobj->getAvatar()
+            && vobj->isAttachment()
+            && vobj->getAvatar() == muted_avatar)
+        {
+            gPipeline.mLights.erase(iter->drawable);
+            iter = gPipeline.mNearbyLights.erase(iter);
+        }
+        else
+        {
+            iter++;
+        }
+    }
 }
 
 U32 LLPipeline::addObject(LLViewerObject *vobj)
@@ -3654,7 +3660,9 @@ void LLPipeline::postSort(LLCamera &camera)
 
         if (!gNonInteractive)
         {
-            LLPipeline::setRenderHighlightTextureChannel(gFloaterTools->getPanelFace()->getTextureChannelToEdit());
+            // <FS:Zi> switchable edit texture/materials panel
+            // LLPipeline::setRenderHighlightTextureChannel(gFloaterTools->getPanelFace()->getTextureChannelToEdit());
+            LLPipeline::setRenderHighlightTextureChannel(gFloaterTools->getTextureChannelToEdit());
         }
 
         // Draw face highlights for selected faces.
@@ -8574,7 +8582,7 @@ void LLPipeline::doWaterHaze()
         else
         {
             //render water patches like LLDrawPoolWater does
-            LLGLDepthTest depth(GL_FALSE);
+            LLGLDepthTest depth(GL_TRUE, GL_FALSE);
             LLGLDisable   cull(GL_CULL_FACE);
 
             gGLLastMatrix = NULL;

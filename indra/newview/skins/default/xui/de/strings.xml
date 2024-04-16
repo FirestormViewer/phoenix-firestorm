@@ -3301,6 +3301,17 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 
 Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_SITE].
 	</string>
+	<string name="MBOutOfMemoryTitle">Kein Arbeitsspeicher verfügbar</string>
+	<string name="MBOutOfMemoryErr">
+		Die Anfrage nach Arbeitsspeicher durch [APP_NAME] is fehlgeschlagen. Die Anwendung kann nicht fortgesetzt werden und wird beendet.
+
+Falls wenig Arbeitsspeicher auf Ihrem Computers verfügbar ist, beenden Sie andere speicherintensiven Anwendungen, bevor sie [APP_NAME] ausführen, vergrößern Sie die Auslagerungsdatei oder verringern Sie Grafikeinstellungen wie Sichtweite.
+	</string>
+	<string name="MBMissingFile">
+		[APP_NAME] konnte einige der benötigten Dateien nicht finden oder auf sie zugreifen und muss daher beendet werden.
+
+Bitte installieren Sie den Viewer von [DOWNLOAD_URL] erneut und wenden Sie sich an [SUPPORT_SITE] falls das Problem nach einer Neuinstallation weiterhin besteht.
+	</string>
 	<string name="5 O'Clock Shadow">
 		Bartschatten
 	</string>
@@ -5389,6 +5400,12 @@ Missbrauchsbericht
 	</string>
 	<string name="texture_load_dimensions_error">
 		Bilder, die größer sind als [WIDTH]*[HEIGHT] können nicht geladen werden
+	</string>
+	<string name="texture_load_format_error">
+		Inkorrektes Bildformat.
+	</string>
+	<string name="texture_load_empty_file">
+		Datei ist leer.
 	</string>
 	<string name="outfit_photo_load_dimensions_error">
 		Max. Outfit-Fotogröße ist [WIDTH]*[HEIGHT]. Bitte verkleinern oder anderes Bild auswählen.

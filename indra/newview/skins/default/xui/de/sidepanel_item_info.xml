@@ -56,10 +56,10 @@
 		</layout_panel>
 
 		<layout_panel name="layout_item_permissions_sale">
-			<text name="permissions_label">
+			<text name="perm_modify">
 				Berechtigungen
 			</text>
-			<text name="perm_modify">
+			<text name="you_perm_modify">
 				Sie können:
 			</text>
 			<check_box label="Bearbeiten" name="CheckOwnerModify"/>

@@ -5152,171 +5152,6 @@
       <key>Value</key>
       <integer>-1</integer>
     </map>
-    <key>DebugStatModeMemTrace</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemUI</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemFonts</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemInventory</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemObjects</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemOctreeGroupData</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemOctreeData</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemObjectCache</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemDrawable</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemFaceData</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemDrawInfo</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemTextureData</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemImageData</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemGLImageData</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
-    <key>DebugStatModeMemVertexBuffer</key>
-    <map>
-      <key>Comment</key>
-      <string>Mode of stat in Statistics floater</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>-1</integer>
-    </map>
     <key>DebugStatModeMaterials</key>
     <map>
       <key>Comment</key>
@@ -5354,17 +5189,6 @@
       <key>Backup</key>
       <integer>0</integer>
     </map>
-  <key>DefaultBlankNormalTexture</key>
-  <map>
-    <key>Comment</key>
-    <string>Texture used as 'Blank' in texture picker for normal maps. (UUID texture reference)</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>String</string>
-    <key>Value</key>
-    <string>5b53359e-59dd-d8a2-04c3-9e65134da47a</string>
-  </map>
 	<key>DefaultFemaleAvatar</key>
 	<map>
 	  <key>Comment</key>
@@ -5398,39 +5222,6 @@
 	  <key>Value</key>
 	  <string>Male Shape &amp; Outfit</string>
 	</map>
-  <key>DefaultObjectNormalTexture</key>
-  <map>
-    <key>Comment</key>
-    <string>Texture used as 'Default' in texture picker for normal map. (UUID texture reference)</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>String</string>
-    <key>Value</key>
-    <string>85f28839-7a1c-b4e3-d71d-967792970a7b</string>
-  </map>
-  <key>DefaultObjectSpecularTexture</key>
-  <map>
-    <key>Comment</key>
-    <string>Texture used as 'Default' in texture picker for specular map. (UUID texture reference)</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>String</string>
-    <key>Value</key>
-    <string>87e0e8f7-8729-1ea8-cfc9-8915773009db</string>
-  </map>
-  <key>DefaultObjectTexture</key>
-    <map>
-      <key>Comment</key>
-      <string>Texture used as 'Default' in texture picker. (UUID texture reference)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string>89556747-24cb-43ed-920b-47caed15465f</string>
-    </map>
     <key>DefaultUploadCost</key>
     <map>
       <key>Comment</key>
@@ -7775,6 +7566,17 @@
       <string>http://wiki.secondlife.com/wiki/[LSL_STRING]</string>
       <key>Backup</key>
       <integer>0</integer>
+    </map>
+    <key>LSLFontSizeName</key>
+    <map>
+        <key>Comment</key>
+        <string>UNUSED - Text font size in LSL editor</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>String</string>
+        <key>Value</key>
+        <string>Monospace</string>
     </map>
     <key>GridStatusRSS</key>
     <map>
@@ -10386,21 +10188,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>OpenDebugStatAdvanced</key>
-    <map>
-      <key>Comment</key>
-      <string>Expand advanced performance stats display</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
     <key>OpenDebugStatBasic</key>
     <map>
       <key>Comment</key>
-      <string>Expand basic performance stats display</string>
+      <string>Expand Basic performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10408,10 +10199,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>OpenDebugStatNet</key>
+    <key>OpenDebugStatAdvanced</key>
     <map>
       <key>Comment</key>
-      <string>Expand network stats display</string>
+      <string>Expand Advanced performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10422,18 +10213,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>OpenDebugStatRender</key>
     <map>
       <key>Comment</key>
-      <string>Expand render stats display</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>OpenDebugStatSim</key>
-    <map>
-      <key>Comment</key>
-      <string>Expand simulator performance stats display</string>
+      <string>Expand Render performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10452,10 +10232,32 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>OpenDebugStatSimPathfinding</key>
+    <key>OpenDebugStatNet</key>
     <map>
       <key>Comment</key>
-      <string>Expand Pathfinding performance stats display</string>
+      <string>Expand Network performance stats display</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>OpenDebugStatSim</key>
+    <map>
+      <key>Comment</key>
+      <string>Expand Simulator performance stats display</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>OpenDebugStatPhysicsDetails</key>
+    <map>
+      <key>Comment</key>
+      <string>Expand Physics Details performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10463,10 +10265,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>OpenDebugStatPhysicsDetails</key>
+    <key>OpenDebugStatPathfinding</key>
     <map>
       <key>Comment</key>
-      <string>Expand Physics Details performance stats display</string>
+      <string>Expand Pathfinding performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10489,17 +10291,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Expand Simulator Time Details performance stats display</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>OpenDebugStatMemory</key>
-    <map>
-      <key>Comment</key>
-      <string>Expand Memory performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -13787,7 +13578,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>2.0</real>
+    <real>1.0</real>
   </map>
   <key>RendeSkyAutoAdjustBlueHorizonScale</key>
   <map>
@@ -13831,7 +13622,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>0.001</real>
+    <real>0.01</real>
   </map>
   <key>RenderSkySunlightScale</key>
   <map>
@@ -16846,17 +16637,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>F3E07BC8-A973-476D-8C7F-F3B7293975D1</string>
     </map>
-    <key>UIImgWhiteUUID</key>
-    <map>
-      <key>Comment</key>
-      <string />
-      <key>Persist</key>
-      <integer>0</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string>5748decc-f629-461c-9a36-a35a221fe21f</string>
-    </map>
     <key>UIImgTransparentUUID</key>
     <map>
       <key>Comment</key>
@@ -18171,6 +17951,21 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>0</integer>
       <key>Backup</key>
       <integer>0</integer>
+    </map>
+    <key>FSShowSelectedInBlinnPhong</key>
+    <map>
+      <key>Comment</key>
+      <string>Show BlinnPhong while selected (non-persistent).This setting is driven by the code, not by user</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+      <key>Backup</key>
+      <integer>0</integer>
+      <key>HideFromEditor</key>
+      <integer>1</integer>
     </map>
     <key>ShowSpecificLODInEdit</key>
     <map>
@@ -21791,17 +21586,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
-  <key>FSDisplaySavedOutfitsCap</key>
-  <map>
-    <key>Comment</key>
-    <string>Display only so many saved outfits in edit appearance. 0 to disable.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>U32</string>
-    <key>Value</key>
-    <integer>0</integer>
-  </map>
   <key>FSAdvancedWorldmapRegionInfo</key>
   <map>
     <key>Comment</key>
@@ -25000,17 +24784,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>VoiceMultiInstance</key>
-    <map>
-      <key>Comment</key>
-      <string>Enables using voice in multiple simultaneous viewer instances</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
     <key>FSSoundCacheLocation</key>
     <map>
       <key>Comment</key>
@@ -26792,5 +26565,57 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>128578</integer>
     </map>
-</map>
+    <key>FSUseNewTexturePanel</key>
+    <map>
+      <key>Backup</key>
+      <boolean>1</boolean>
+      <key>Comment</key>
+      <string>Use the new Texture/Material editor panel in build mode</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <boolean>1</boolean>
+    </map>
+    <key>FSInternalCanEditObjectFaces</key>
+    <map>
+      <key>Comment</key>
+      <string>Internal control to show/hide object texture/material edit controls</string>
+      <key>HideFromEditor</key>
+      <integer>1</integer>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSInternalFaceHasBPNormalMap</key>
+    <map>
+      <key>Comment</key>
+      <string>Internal control to store a flag about the edited face having a Blinn-Phong normal map or not</string>
+      <key>HideFromEditor</key>
+      <integer>1</integer>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSInternalFaceHasBPSpecularMap</key>
+    <map>
+      <key>Comment</key>
+      <string>Internal control to store a flag about the edited face having a Blinn-Phong specular map or not</string>
+      <key>HideFromEditor</key>
+      <integer>1</integer>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+  </map>
 </llsd>

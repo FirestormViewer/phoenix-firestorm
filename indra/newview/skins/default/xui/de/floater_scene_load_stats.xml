@@ -17,6 +17,8 @@
 				<stat_view label="Textur" name="texture">
 					<stat_bar label="Cache-Trefferrate" name="texture_cache_hits"/>
 					<stat_bar label="Cache-Leselatenz" name="texture_cache_read_latency"/>
+					<stat_bar label="Cache-Dekodierlatenz" name="texture_decode_latency"/>
+					<stat_bar label="Cache-Schreiblatenz" name="texture_write_latency"/>
 					<stat_bar label="Anzahl" name="numimagesstat"/>
 					<stat_bar label="Rohanzahl" name="numrawimagesstat"/>
 				</stat_view>

@@ -3623,7 +3623,7 @@ Has actualizado una textura obtenida mediante bake de [RESOLUTION] para &apos;[B
 Has actualizado de manera local una textura obtenida mediante bake de [RESOLUTION] para &apos;[BODYREGION]&apos; después de [TIME] segundos.
 	</notification>
 	<notification name="CannotUploadTexture">
-		No se puede subir la textura.
+		No se puede subir la textura: &apos;[NAME]&apos;
 [REASON]
 	</notification>
 	<notification name="LivePreviewUnavailable">

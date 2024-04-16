@@ -3800,7 +3800,7 @@ Bitte überprüfen Sie Ihr Netzwerk- und Firewall-Setup.
 	</notification>
 	<notification name="AvatarRezLeftNotification">
 		(Seit [EXISTENCE] Sekunden inworld )
-Avatar &apos;[NAME]&apos; hat als vollständig gerezzter Avatar die Welt verlassen.
+Avatar „[NAME]“ hat als vollständig gerezzter Avatar die Welt verlassen.
 	</notification>
 	<notification name="AvatarRezSelfBakedTextureUploadNotification">
 		( [EXISTENCE] Sekunden am Leben)
@@ -3811,7 +3811,7 @@ Sie haben eine [RESOLUTION]-gebackene Textur für „[BODYREGION]“ nach [TIME]
 Sie haben lokal eine [RESOLUTION]-gebackene Textur für „[BODYREGION]“ nach [TIME] Sekunden aktualisiert.
 	</notification>
 	<notification name="CannotUploadTexture">
-		Texture konnte nicht hochgeladen werden.
+		Textur konnte nicht hochgeladen werden: „[NAME]“
 [REASON]
 	</notification>
 	<notification name="CannotUploadMaterial">
@@ -4986,6 +4986,9 @@ Geriggte Mesh-Objekte sind dafür gemacht, um am Avatar angehängt zu werden. We
 
 Falls Sie dieses Objekt sehen möchten, nehmen Sie es ab und hängen es an einem Avatar-Punkt an.
 		<usetemplate ignoretext="Warnen, falls geriggtes Mesh an einem HUD-Punkt angehängt ist." name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="IncorrectFormat">
+		Datei „[NAME]“ konnte nicht hochgeladen werden: Inkorrektes Bildformat.
 	</notification>
 
 	<notification name="ReflectionProbeApplied">

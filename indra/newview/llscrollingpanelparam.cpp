@@ -259,21 +259,17 @@ void LLScrollingPanelParam::onHintHeldDown( LLVisualParamHint* hint )
 
 		// Make sure we're not taking the slider out of bounds
 		// (this is where some simple UI limits are stored)
-		F32 new_percent = weightToPercent(new_weight);
-		LLSliderCtrl* slider = getChild<LLSliderCtrl>("param slider");
-		if (slider)
+		F32 new_percent = weightToSlider(new_weight);
+		if (mSlider->getMinValue() < new_percent
+			&& new_percent < mSlider->getMaxValue())
 		{
-			if (slider->getMinValue() < new_percent
-				&& new_percent < slider->getMaxValue())
-			{
-				// <FS:Ansariel> [Legacy Bake]
-				//mWearable->setVisualParamWeight( hint->getVisualParam()->getID(), new_weight);
-				mWearable->setVisualParamWeight( hint->getVisualParam()->getID(), new_weight, FALSE);
-				mWearable->writeToAvatar(gAgentAvatarp);
-				gAgentAvatarp->updateVisualParams();
+			// <FS:Ansariel> [Legacy Bake]
+			//mWearable->setVisualParamWeight( hint->getVisualParam()->getID(), new_weight);
+			mWearable->setVisualParamWeight( hint->getVisualParam()->getID(), new_weight, FALSE);
+			mWearable->writeToAvatar(gAgentAvatarp);
+			gAgentAvatarp->updateVisualParams();
 
-				slider->setValue( weightToPercent( new_weight ) );
-			}
+			mSlider->setValue( weightToSlider( new_weight ) );
 		}
 	}
 }
@@ -294,19 +290,15 @@ void LLScrollingPanelParam::onHintMinMouseUp( void* userdata )
 		F32 range = self->mHintMax->getVisualParamWeight() - self->mHintMin->getVisualParamWeight();
 		// step a fraction in the negative directiona
 		F32 new_weight = current_weight - (range / 10.f);
-		F32 new_percent = self->weightToPercent(new_weight);
-		LLSliderCtrl* slider = self->getChild<LLSliderCtrl>("param slider");
-		if (slider)
+		F32 new_percent = self->weightToSlider(new_weight);
+		if (self->mSlider->getMinValue() < new_percent
+			&& new_percent < self->mSlider->getMaxValue())
 		{
-			if (slider->getMinValue() < new_percent
-				&& new_percent < slider->getMaxValue())
-			{
-				// <FS:Ansariel> [Legacy Bake]
-				//self->mWearable->setVisualParamWeight(hint->getVisualParam()->getID(), new_weight);
-				self->mWearable->setVisualParamWeight(hint->getVisualParam()->getID(), new_weight, FALSE);
-				self->mWearable->writeToAvatar(gAgentAvatarp);
-				slider->setValue( self->weightToPercent( new_weight ) );
-			}
+			// <FS:Ansariel> [Legacy Bake]
+			//self->mWearable->setVisualParamWeight(hint->getVisualParam()->getID(), new_weight);
+			self->mWearable->setVisualParamWeight(hint->getVisualParam()->getID(), new_weight, FALSE);
+			self->mWearable->writeToAvatar(gAgentAvatarp);
+			self->mSlider->setValue( self->weightToSlider( new_weight ) );
 		}
 	}
 
@@ -330,35 +322,18 @@ void LLScrollingPanelParam::onHintMaxMouseUp( void* userdata )
 			F32 range = self->mHintMax->getVisualParamWeight() - self->mHintMin->getVisualParamWeight();
 			// step a fraction in the negative direction
 			F32 new_weight = current_weight + (range / 10.f);
-			F32 new_percent = self->weightToPercent(new_weight);
-			LLSliderCtrl* slider = self->getChild<LLSliderCtrl>("param slider");
-			if (slider)
+			F32 new_percent = self->weightToSlider(new_weight);
+			if (self->mSlider->getMinValue() < new_percent
+				&& new_percent < self->mSlider->getMaxValue())
 			{
-				if (slider->getMinValue() < new_percent
-					&& new_percent < slider->getMaxValue())
-				{
-					// <FS:Ansariel> [Legacy Bake]
-					//self->mWearable->setVisualParamWeight(hint->getVisualParam()->getID(), new_weight);
-					self->mWearable->setVisualParamWeight(hint->getVisualParam()->getID(), new_weight, FALSE);
-					self->mWearable->writeToAvatar(gAgentAvatarp);
-					slider->setValue( self->weightToPercent( new_weight ) );
-				}
+				// <FS:Ansariel> [Legacy Bake]
+				//self->mWearable->setVisualParamWeight(hint->getVisualParam()->getID(), new_weight);
+				self->mWearable->setVisualParamWeight(hint->getVisualParam()->getID(), new_weight, FALSE);
+				self->mWearable->writeToAvatar(gAgentAvatarp);
+				self->mSlider->setValue( self->weightToSlider( new_weight ) );
 			}
 		}
 	}
 
 	LLVisualParamHint::requestHintUpdates( self->mHintMin, self->mHintMax );
-}
-
-
-F32 LLScrollingPanelParam::weightToPercent( F32 weight )
-{
-	LLViewerVisualParam* param = mParam;
-	return (weight - param->getMinWeight()) /  (param->getMaxWeight() - param->getMinWeight()) * 100.f;
-}
-
-F32 LLScrollingPanelParam::percentToWeight( F32 percent )
-{
-	LLViewerVisualParam* param = mParam;
-	return percent / 100.f * (param->getMaxWeight() - param->getMinWeight()) + param->getMinWeight();
 }

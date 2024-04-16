@@ -5630,9 +5630,9 @@ bool LLVolumeFace::cacheOptimize(bool gen_tangents)
 
         U32 stream_count = data.w.empty() ? 4 : 5;
 
-        U32 vert_count = meshopt_generateVertexRemapMulti(&remap[0], nullptr, data.p.size(), data.p.size(), mos, stream_count);
+        size_t vert_count = meshopt_generateVertexRemapMulti(&remap[0], nullptr, data.p.size(), data.p.size(), mos, stream_count);
 
-        if (vert_count < 65535)
+        if (vert_count < 65535 && vert_count != 0)
         {
             std::vector<U32> indices;
             indices.resize(mNumIndices);
@@ -5651,6 +5651,13 @@ bool LLVolumeFace::cacheOptimize(bool gen_tangents)
             {
                 U32 src_idx = i;
                 U32 dst_idx = remap[i];
+                if (dst_idx >= mNumVertices)
+                {
+                    dst_idx = mNumVertices - 1;
+                    // Shouldn't happen, figure out what gets returned in remap and why.
+                    llassert(false);
+                    LL_DEBUGS_ONCE("LLVOLUME") << "Invalid destination index, substituting" << LL_ENDL;
+                }
                 mIndices[i] = dst_idx;
 
                 mPositions[dst_idx].load3(data.p[src_idx].mV);
@@ -5684,6 +5691,10 @@ bool LLVolumeFace::cacheOptimize(bool gen_tangents)
         }
         else
         {
+            if (vert_count == 0)
+            {
+                LL_WARNS_ONCE("LLVOLUME") << "meshopt_generateVertexRemapMulti failed to process a model or model was invalid" << LL_ENDL;
+            }
             // blew past the max vertex size limit, use legacy tangent generation which never adds verts
             createTangents();
         }

@@ -3414,7 +3414,7 @@ Você carregou uma textura com [RESOLUTION] para o(a) &apos;[BODYREGION]&apos; e
 Você carregou uma textura com [RESOLUTION] para o(a) &apos;[BODYREGION]&apos; em [TIME] segundos.
 	</notification>
 	<notification name="CannotUploadTexture">
-		Não foi possível carregar textura.
+		Não foi possível carregar textura: &apos;[NAME]&apos;
 [REASON]
 	</notification>
 	<notification name="LivePreviewUnavailable">

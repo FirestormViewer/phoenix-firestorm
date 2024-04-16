@@ -20,7 +20,7 @@
 		<check_box label="Səs mənbələri" name="sounds"/>
 		<check_box label="Partikl mənbələri" name="particles"/>
 		<check_box label="Media mənbələri" name="moapbeacon"/>
-		<text name="label_objects">
+		<text name="label_direction">
 			Göstərmə istiqaməti:
 		</text>
 		<check_box label="Günəş" name="sun"/>

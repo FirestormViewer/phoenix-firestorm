@@ -83,7 +83,6 @@
 #include "llcorehttputil.h"
 #include "llcallstack.h"
 #include "llsettingsdaycycle.h"
-
 #include <boost/regex.hpp>
 
 // Firestorm includes
@@ -845,8 +844,13 @@ void LLViewerRegion::loadObjectCache()
 	if(LLVOCache::instanceExists())
 	{
         LLVOCache & vocache = LLVOCache::instance();
-		vocache.readFromCache(mHandle, mImpl->mCacheID, mImpl->mCacheMap);
-        vocache.readGenericExtrasFromCache(mHandle, mImpl->mCacheID, mImpl->mGLTFOverridesLLSD);
+		// <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+		// vocache.readFromCache(mHandle, mImpl->mCacheID, mImpl->mCacheMap);
+		// vocache.readGenericExtrasFromCache(mHandle, mImpl->mCacheID, mImpl->mGLTFOverridesLLSD);		
+		// mark as dirty if read fails to force a rewrite.
+		mCacheDirty = !vocache.readFromCache(mHandle, mImpl->mCacheID, mImpl->mCacheMap);
+		vocache.readGenericExtrasFromCache(mHandle, mImpl->mCacheID, mImpl->mGLTFOverridesLLSD, mImpl->mCacheMap);
+		// </FS:Beq>
 
 		if (mImpl->mCacheMap.empty())
 		{
@@ -880,10 +884,17 @@ void LLViewerRegion::saveObjectCache()
 		mCacheDirty = FALSE;
 	}
 
-	// Map of LLVOCacheEntry takes time to release, store map for cleanup on idle
-	sRegionCacheCleanup.insert(mImpl->mCacheMap.begin(), mImpl->mCacheMap.end());
-	mImpl->mCacheMap.clear();
-	// TODO - probably need to do the same for overrides cache
+    if (LLAppViewer::instance()->isQuitting())
+    {
+        mImpl->mCacheMap.clear();
+    }
+    else
+    {
+        // Map of LLVOCacheEntry takes time to release, store map for cleanup on idle
+        sRegionCacheCleanup.insert(mImpl->mCacheMap.begin(), mImpl->mCacheMap.end());
+        mImpl->mCacheMap.clear();
+        // TODO - probably need to do the same for overrides cache
+    }
 }
 
 void LLViewerRegion::sendMessage()
@@ -1241,12 +1252,16 @@ void LLViewerRegion::killCacheEntry(LLVOCacheEntry* entry, bool for_rendering)
 		}
 	}
 
+	// <FS:Beq> Fix the missing kill on overrides
+	mImpl->mGLTFOverridesLLSD.erase(entry->getLocalID());
+	// </FS:Beq>
 	//will remove it from the object cache, real deletion
 	entry->setState(LLVOCacheEntry::INACTIVE);
 	entry->removeOctreeEntry();
 	entry->setValid(FALSE);
-
-	// TODO kill extras/material overrides cache too
+	// <FS:Beq/> Fix the missing kill on overrides
+	// // TODO kill extras/material overrides cache too
+	
 }
 
 //physically delete the cache entry	
@@ -1965,8 +1980,6 @@ LLViewerObject* LLViewerRegion::addNewObject(LLVOCacheEntry* entry)
 		addActiveCacheEntry(entry);
 	}
 
-    loadCacheMiscExtras(entry->getLocalID());
-
 	return obj;
 }
 
@@ -2680,7 +2693,10 @@ void LLViewerRegion::decodeBoundingInfo(LLVOCacheEntry* entry)
 
 		//set parent id
 		U32	parent_id = 0;
-		LLViewerObject::unpackParentID(entry->getDP(), parent_id);
+        if (entry->getDP()) // NULL if nothing cached
+        {
+            LLViewerObject::unpackParentID(entry->getDP(), parent_id);
+        }
 		if(parent_id != entry->getParentID())
 		{				
 			entry->setParentID(parent_id);
@@ -2700,7 +2716,7 @@ void LLViewerRegion::decodeBoundingInfo(LLVOCacheEntry* entry)
 	LLQuaternion rot;
 
 	//decode spatial info and parent info
-	U32 parent_id = LLViewerObject::extractSpatialExtents(entry->getDP(), pos, scale, rot);
+	U32 parent_id = entry->getDP() ? LLViewerObject::extractSpatialExtents(entry->getDP(), pos, scale, rot) : entry->getParentID();
 	
 	U32 old_parent_id = entry->getParentID();
 	bool same_old_parent = false;
@@ -3926,15 +3942,6 @@ std::string LLViewerRegion::getSimHostName()
 	return std::string("...");
 }
 
-void LLViewerRegion::loadCacheMiscExtras(U32 local_id)
-{
-    auto iter = mImpl->mGLTFOverridesLLSD.find(local_id);
-    if (iter != mImpl->mGLTFOverridesLLSD.end())
-    {
-        LLGLTFMaterialList::loadCacheOverrides(iter->second);
-    }
-}
-
 void LLViewerRegion::applyCacheMiscExtras(LLViewerObject* obj)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DISPLAY;
@@ -3944,6 +3951,12 @@ void LLViewerRegion::applyCacheMiscExtras(LLViewerObject* obj)
     auto iter = mImpl->mGLTFOverridesLLSD.find(local_id);
     if (iter != mImpl->mGLTFOverridesLLSD.end())
     {
+        // <FS:Beq> backfill the UUID if it was left empty
+        if (iter->second.mObjectId.isNull())
+        {
+            iter->second.mObjectId = obj->getID();
+        }
+        // </FS:Beq>
         llassert(iter->second.mGLTFMaterial.size() == iter->second.mSides.size());
 
         for (auto& side : iter->second.mGLTFMaterial)

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar
  bg_visible="false"
  follows="left|top|right"
@@ -4003,6 +4003,12 @@
                  function="Advanced.ForceErrorLlerror" />
             </menu_item_call>
             <menu_item_call
+             label="Force LLError, Message And Crash"
+             name="Force LLError Message And Crash">
+                <menu_item_call.on_click
+                 function="Advanced.ForceErrorLlerrorMsg" />
+            </menu_item_call>
+            <menu_item_call
              label="Force Bad Memory Access"
              name="Force Bad Memory Access">
                 <menu_item_call.on_click
@@ -4031,6 +4037,14 @@
              name="Force Software Exception">
                 <menu_item_call.on_click
                  function="Advanced.ForceErrorSoftwareException" />
+            </menu_item_call>
+            <menu_item_call
+             label="Force OS Exception"
+             name="Force OS Exception">
+                <menu_item_call.on_click
+                 function="Advanced.ForceErrorOSException" />
+                <menu_item_call.on_visible
+                 function="Advanced.EnableErrorOSException" />
             </menu_item_call>
             <menu_item_call
              label="Force Software Exception in Coroutine"

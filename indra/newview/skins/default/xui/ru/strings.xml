@@ -783,6 +783,11 @@ support@secondlife.com.
 ‘следующего владельца’ можно внести
 в карточки для комментариев.
 	</string>
+	<string name="TooltipTextureRestrictedDrop">
+Разрешены только текстуры с
+неограниченными разрешениями
+на копирование и передачу.
+	</string>
 	<string name="Searching">
 		Поиск...
 	</string>
@@ -1769,6 +1774,14 @@ https://www.firestormviewer.org/support за помощь в решении эт
 		Произошла ошибка при открытии списков Торговой площадки.
 Если вы продолжаете получать это сообщение, обратитесь за помощью в службу поддержки Second Life по адресу http://support.secondlife.com.
 	</string>
+	<string name="InventoryMarketplaceConnectionError">
+Не удалось подключиться к спискам на Торговой площадке.
+Если вы продолжаете получать это сообщение, обратитесь за помощью в службу поддержки Second Life по адресу http://support.secondlife.com.
+	</string>
+	<string name="InventoryMarketplaceConnectionErrorReason">
+Не удалось подключиться к спискам на Торговой площадке. Причина: [REASON]
+Если вы продолжаете получать это сообщение, обратитесь за помощью в службу поддержки Second Life по адресу http://support.secondlife.com.
+	</string>
 	<string name="InventoryMarketplaceListingsNoItemsTitle">
 		Папка списков товаров торгового центра пуста.
 	</string>
@@ -1908,6 +1921,7 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="Clothing" value=" Одежда,"/>
 	<string name="Gestures" value=" Жесты,"/>
 	<string name="Landmarks" value=" Закладки,"/>
+	<string name="Materials" value=" Материалы," />
 	<string name="Notecards" value=" Заметки,"/>
 	<string name="Objects" value=" Объекты,"/>
 	<string name="Scripts" value=" Скрипты,"/>
@@ -2013,6 +2027,12 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	</string>
 	<string name="InvFolder Settings">
 		Настройки
+	</string>
+	<string name="InvFolder Material">
+		Материалы
+	</string>
+	<string name="InvFolder Materials">
+		Материалы
 	</string>
 	<string name="InvFolder Friends">
 		Друзья
@@ -2867,18 +2887,6 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="PicksClassifiedsLoadingText">
 		Загрузка...
 	</string>
-	<string name="NoPicksText">
-		Вы еще не создали подборку.
-	</string>
-	<string name="NoAvatarPicksText">
-		У пользователя нет подборок
-	</string>
-	<string name="NoClassifiedsText">
-		У вас нет ни одного объявления. Нажмите на кнопку 'Плюс', которая находится ниже, чтобы создать объявление.
-	</string>
-	<string name="NoAvatarClassifiedsText">
-		У пользователя нет объявлнений
-	</string>
 	<string name="MultiPreviewTitle">
 		Предварительный просмотр
 	</string>
@@ -2948,8 +2956,8 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="GroupMoneyDebits">
 		Дебеты
 	</string>
-	<string name="GroupMoneyDate">
-		[weekday,datetime,utc], [day,datetime,utc] [mth,datetime,utc] [year,datetime,utc]
+	<string name="GroupMoneyStartDate">
+		Сделки начиная с [weekday,datetime,utc], [day,datetime,utc] [mth,datetime,utc] [year,datetime,utc]
 	</string>
 	<string name="AcquiredItems">
 		Приобретенные товары
@@ -3207,16 +3215,6 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="MBPixelFmtDescErr">
 		Не удается получить описание формата пикселей
 	</string>
-	<string name="MBTrueColorWindow">
-		Приложению [APP_NAME] требуется True Color (32-бит) для запуска.
-Пожалуйста, зайдите в настройки монитора компьютера и установить цветной режим на 32-бит.
-	</string>
-	<string name="MBAlpha">
-		Не удается запустить [APP_NAME] из-за отсутствия доступа к 8-битному альфа-каналу.  Обычно эта проблема возникает из-за неполадок с драйвером видеокарты.
-Установите новые драйверы видеокарты.
-Также задайте для монитора 32-битный режим True Color (Панель управления &gt; Экран &gt; Параметры).
-Если это сообщение продолжает отображаться, обратитесь на сайт [SUPPORT_SITE].
-	</string>
 	<string name="MBPixelFmtSetErr">
 		Не удается задать формат пикселей
 	</string>
@@ -3229,6 +3227,19 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="MBVideoDrvErr">
 		Не удается запустить приложение [APP_NAME], поскольку драйверы видеокарты неправильно установлены, устарели или предназначены для оборудования, которое не поддерживается. Установите или переустановите последние драйверы видеокарты.
 Если это сообщение продолжает отображаться, обратитесь на сайт [SUPPORT_SITE].
+	</string>
+	<string name="MBOutOfMemoryTitle">
+		недостаточно памяти
+	</string>
+	<string name="MBOutOfMemoryErr">
+		Не удалось выполнить запрос памяти [APP_NAME]. Приложение не может продолжить работу и будет закрыто.
+
+Если оперативной памяти вашего компьютера недостаточно, закройте все тяжелые приложения перед запуском [APP_NAME], выделите файл подкачки или уменьшите графические настройки, такие как расстояние прорисовки.
+	</string>
+	<string name="MBMissingFile">
+		[APP_NAME] не удалось получить доступ к некоторым нужным файлам или найти их, и будет закрыто.
+
+Пожалуйста, переустановите программу просмотра с [DOWNLOAD_URL] и обратитесь на [SUPPORT_SITE], если проблема не устранится после переустановки.
 	</string>
 	<string name="5 O'Clock Shadow">
 		5 часовая тень
@@ -5073,6 +5084,9 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="New Gesture">
 		Новый жест
 	</string>
+	<string name="New Material">
+		Новый Материал
+	</string>
 	<string name="New Script">
 		Новый скрипт
 	</string>
@@ -6210,11 +6224,14 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="ExperiencePermissionShort17">
 		Среда
 	</string>
+	<string name="Material Texture Name Header">
+		Текстуры представляют этот материал:
+	</string>
 	<string name="logging_calls_disabled_log_empty">
-		Разговоры не записываются. Чтобы начать запись, в меню "Настройки > Приватность > Истории разговоров" выберите "Сохранить:" "Только журнал" или "Журнал и история".
+		Разговоры не записываются. Чтобы начать запись, в меню Настройки > Приватность выберите "Сохранить: Только журнал" или "Сохранить: Журнал и история".
 	</string>
 	<string name="logging_calls_disabled_log_not_empty">
-		Разговоры больше не будут записываться. Чтобы восстановить запись, в меню "Настройки > Приватность > Истории разговоров" выберите "Сохранить:" "Только журнал" или "Журнал и история".
+		Разговоры больше не будут записываться. Чтобы восстановить запись, в меню Настройки > Приватность выберите "Сохранить: Только журнал" или "Сохранить: Журнал и история".
 	</string>
 	<string name="logging_calls_enabled_log_empty">
 		Нет зарегистрированных разговоров. Если вы обратитесь к кому-то или наоборот, в журнале появится новая запись.
@@ -6659,14 +6676,14 @@ ID объекта: [INSPECTING_KEY]
 	<string name="fs_preprocessor_caching_err">
 		Ошибка кэширования подключенного файла '[FILENAME]'
 	</string>
+	<string name="fs_preprocessor_truncated">
+		Предупреждение: Выходные данные препроцессора усечены из-за чрезмерного размера текста скрипта. Этот скрипт, скорее всего, не будет работать.
+	</string>
 	<string name="skin_defaults_starlight_location">
 		Отображение вашего текущего местоположения в строке меню было отключено по умолчанию для серии скинов Starlight.
 	</string>
 	<string name="skin_defaults_starlight_navbar">
 		Отображение панели навигации было включено по умолчанию для серии скинов Starlight.
-	</string>
-	<string name="fs_preprocessor_truncated">
-		Предупреждение: Выходные данные препроцессора усечены из-за чрезмерного размера текста скрипта. Этот скрипт, скорее всего, не будет работать.
 	</string>
 	<string name="animation_explorer_seconds_ago">
 		[SECONDS] секунд назад

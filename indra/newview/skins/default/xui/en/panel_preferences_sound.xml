@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel
  border="true"
  follows="all"
@@ -924,53 +924,6 @@
            <button.commit_callback
             function="Pref.ResetVoice" />
         </button>
-         <check_box
-         follows="left|top"
-         height="16"
-         control_name="VoiceMultiInstance"
-         disabled_control="CmdLineDisableVoice"
-         label="Allow Voice in multiple viewer instances simultaneously"
-         layout="topleft"
-         top_pad="3"
-         left="25"
-         name="VoiceMultiInstance"
-         width="400"/>
-         
-<!--
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         layout="topleft"
-         left="25"
-         top_pad="5"
-         name="Listen from"
-         width="112">
-            Listen from:
-        </text>
-        <icon
-         follows="left|top"
-         height="18"
-         image_name="Cam_FreeCam_Off"
-         layout="topleft"
-         name="camera_icon"
-         mouse_opaque="false"
-         visible="true"
-         width="18"
-         left_pad="-4"
-         top_delta="-5"/>
-        <icon
-         follows="left|top"
-         height="18"
-         image_name="Move_Walk_Off"
-         layout="topleft"
-         left_pad="170"
-         name="avatar_icon"
-         mouse_opaque="false"
-         visible="true"
-         width="18"
-         top_delta="0" />
--->
         <radio_group
          enabled_control="EnableVoiceChat"
          control_name="VoiceEarLocation"
