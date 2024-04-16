@@ -1273,7 +1273,9 @@ bool LLVivoxVoiceClient::provisionVoiceAccount()
     do
     {
         LLVoiceVivoxStats::getInstance()->provisionAttemptStart();
-        result = httpAdapter->postAndSuspend(httpRequest, url, LLSD(), httpOpts);
+        LLSD body;
+        body["voice_server_type"] = "vivox";
+        result = httpAdapter->postAndSuspend(httpRequest, url, body, httpOpts);
 
         if (sShuttingDown)
         {
@@ -5248,7 +5250,7 @@ bool LLVivoxVoiceClient::isCurrentChannel(const LLSD &channelInfo)
     }
     if (mAudioSession)
     {
-        if (!channelInfo["sessionHandle"].asString().empty())
+        if (!channelInfo["session_handle"].asString().empty())
         {
             return mAudioSession->mHandle == channelInfo["session_handle"].asString();
         }

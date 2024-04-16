@@ -78,7 +78,12 @@ class LLWebRTCVoiceDevice
     LLWebRTCVoiceDevice(const std::string &display_name, const std::string &id) :
         mDisplayName(display_name),
         mID(id)
-    {};
+    {
+        if (mID.empty())
+        {
+            mID = display_name;
+        }
+    };
 };
 
 typedef std::vector<LLWebRTCVoiceDevice> LLWebRTCVoiceDeviceList;
@@ -99,10 +104,32 @@ class LLWebRTCDevicesObserver
 // to enumerate, set, and get notifications of changes
 // for both capture (microphone) and render (speaker)
 // devices.
+
 class LLWebRTCDeviceInterface
 {
   public:
+    struct AudioConfig {
 
+        bool mAGC { true };
+
+        bool mEchoCancellation { true };
+
+        // TODO: The various levels of noise suppression are configured
+        // on the APM which would require setting config on the APM.
+        // We should pipe the various values through
+        // later.
+        typedef enum {
+            NOISE_SUPPRESSION_LEVEL_NONE = 0,
+            NOISE_SUPPRESSION_LEVEL_LOW,
+            NOISE_SUPPRESSION_LEVEL_MODERATE,
+            NOISE_SUPPRESSION_LEVEL_HIGH,
+            NOISE_SUPPRESSION_LEVEL_VERY_HIGH
+        } ENoiseSuppressionLevel;
+        ENoiseSuppressionLevel mNoiseSuppressionLevel { NOISE_SUPPRESSION_LEVEL_VERY_HIGH };
+    };
+
+    virtual void setAudioConfig(AudioConfig config) = 0;
+    
     // instructs webrtc to refresh the device list.
     virtual void refreshDevices() = 0;
 
@@ -192,11 +219,7 @@ class LLWebRTCSignalingObserver
     // Called when the data channel has been established and data
     // transfer can begin.
     virtual void OnDataChannelReady(LLWebRTCDataInterface *data_interface) = 0;
-
-    // Called when a peer connection has finished shutting down.
-    virtual void OnPeerConnectionShutdown() = 0;
 };
-
 
 // LLWebRTCPeerConnectionInterface representsd a connection to a peer,
 // in most cases a Secondlife WebRTC server.  This interface
@@ -204,12 +227,30 @@ class LLWebRTCSignalingObserver
 class LLWebRTCPeerConnectionInterface
 {
   public:
+    
+    struct InitOptions
+    {
+        // equivalent of PeerConnectionInterface::IceServer
+        struct IceServers {
+
+            // Valid formats are described in RFC7064 and RFC7065.
+            // Urls should containe dns hostnames (not IP addresses)
+            // as the TLS certificate policy is 'secure.'
+            // and we do not currentply support TLS extensions.
+            std::vector<std::string> mUrls;
+            std::string mUserName;
+            std::string mPassword;
+        };
+
+        std::vector<IceServers> mServers;
+    };
+
+    virtual bool initializeConnection(const InitOptions& options) = 0;
+    virtual bool shutdownConnection() = 0;
 
     virtual void setSignalingObserver(LLWebRTCSignalingObserver* observer) = 0;
     virtual void unsetSignalingObserver(LLWebRTCSignalingObserver* observer) = 0;
 
-    virtual bool initializeConnection() = 0;
-    virtual bool shutdownConnection() = 0;
     virtual void AnswerAvailable(const std::string &sdp) = 0;
 };
 

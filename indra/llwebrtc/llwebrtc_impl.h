@@ -146,6 +146,8 @@ class LLWebRTCImpl : public LLWebRTCDeviceInterface, public webrtc::AudioDeviceS
     // LLWebRTCDeviceInterface
     //
 
+    void setAudioConfig(LLWebRTCDeviceInterface::AudioConfig config = LLWebRTCDeviceInterface::AudioConfig()) override;
+
     void refreshDevices() override;
 
     void setDevicesObserver(LLWebRTCDevicesObserver *observer) override;
@@ -228,6 +230,8 @@ class LLWebRTCImpl : public LLWebRTCDeviceInterface, public webrtc::AudioDeviceS
 
     // The factory that allows creation of native webrtc PeerConnections.
     rtc::scoped_refptr<webrtc::PeerConnectionFactoryInterface> mPeerConnectionFactory;
+    
+    rtc::scoped_refptr<webrtc::AudioProcessing>                mAudioProcessingModule;
 
     // more native webrtc stuff
     std::unique_ptr<webrtc::TaskQueueFactory>                  mTaskQueueFactory;
@@ -241,8 +245,12 @@ class LLWebRTCImpl : public LLWebRTCDeviceInterface, public webrtc::AudioDeviceS
 
     // accessors in native webrtc for devices aren't apparently implemented yet.
     bool                                                       mTuningMode;
-    int32_t                                                    mPlayoutDevice;
     int32_t                                                    mRecordingDevice;
+    LLWebRTCVoiceDeviceList                                    mRecordingDeviceList;
+
+    int32_t                                                    mPlayoutDevice;
+    LLWebRTCVoiceDeviceList                                    mPlayoutDeviceList;
+
     bool                                                       mMute;
 
     LLAudioDeviceObserver *                                    mTuningAudioDeviceObserver;
@@ -279,11 +287,11 @@ class LLWebRTCPeerConnectionImpl : public LLWebRTCPeerConnectionInterface,
     //
     // LLWebRTCPeerConnection
     //
+    bool initializeConnection(const InitOptions& options) override;
+    bool shutdownConnection() override;
 
     void setSignalingObserver(LLWebRTCSignalingObserver *observer) override;
     void unsetSignalingObserver(LLWebRTCSignalingObserver *observer) override;
-    bool initializeConnection() override;
-    bool shutdownConnection() override;
     void AnswerAvailable(const std::string &sdp) override;
 
     //
@@ -347,21 +355,23 @@ class LLWebRTCPeerConnectionImpl : public LLWebRTCPeerConnectionInterface,
 
     LLWebRTCImpl * mWebRTCImpl;
 
+    bool mClosing;
+
     rtc::scoped_refptr<webrtc::PeerConnectionFactoryInterface> mPeerConnectionFactory;
 
-    bool                                                       mMute;
+    bool mMute;
 
     // signaling
-    std::vector<LLWebRTCSignalingObserver *>                   mSignalingObserverList;
+    std::vector<LLWebRTCSignalingObserver *>  mSignalingObserverList;
     std::vector<std::unique_ptr<webrtc::IceCandidateInterface>>  mCachedIceCandidates;
-    bool                                                       mAnswerReceived;
+    bool mAnswerReceived;
 
-    rtc::scoped_refptr<webrtc::PeerConnectionInterface>        mPeerConnection;
-    rtc::scoped_refptr<webrtc::MediaStreamInterface>           mLocalStream;
+    rtc::scoped_refptr<webrtc::PeerConnectionInterface> mPeerConnection;
+    rtc::scoped_refptr<webrtc::MediaStreamInterface> mLocalStream;
 
     // data
-    std::vector<LLWebRTCDataObserver *>                        mDataObserverList;
-    rtc::scoped_refptr<webrtc::DataChannelInterface>           mDataChannel;
+    std::vector<LLWebRTCDataObserver *> mDataObserverList;
+    rtc::scoped_refptr<webrtc::DataChannelInterface> mDataChannel;
 };
 
 }
