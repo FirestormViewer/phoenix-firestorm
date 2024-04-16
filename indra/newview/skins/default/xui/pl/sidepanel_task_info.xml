@@ -100,7 +100,7 @@
 			<check_box label="Transferowanie" name="checkbox next owner can transfer" tool_tip="Następny właściciel może sprzedać lub oddać ten obiekt." />
 		</panel>
 		<check_box label="Na sprzedaż" name="checkbox for sale" tool_tip="Pozwala ludziom kupować ten obiekt, jego zawartość lub kopię w świecie za określoną cenę." />
-		<combo_box name="sale type" tool_tip="Wybierz, czy kupujący otrzyma kopię przedmiou, kopię samej zawartości przedmiou lub oryginalny przedmiot w ogóle.">
+		<combo_box name="sale type" tool_tip="Wybierz, czy kupujący otrzyma kopię przedmiotu, kopię samej zawartości przedmiotu lub oryginalny przedmiot w ogóle.">
 			<combo_box.item label="Kopia" name="Copy"/>
 			<combo_box.item label="Zawartość" name="Contents"/>
 			<combo_box.item label="Oryginał" name="Original"/>

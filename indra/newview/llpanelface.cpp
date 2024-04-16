@@ -603,6 +603,8 @@ LLPanelFace::LLPanelFace()
     mTitleMediaText(NULL),
     mNeedMediaTitle(true)
 {
+    buildFromFile("panel_tools_texture.xml");    // <FS:Zi> switchable edit texture/materials
+
     USE_TEXTURE = LLTrans::getString("use_texture");
     // <FS> Extended copy & paste buttons
     //mCommitCallbackRegistrar.add("PanelFace.menuDoToSelected", boost::bind(&LLPanelFace::menuDoToSelected, this, _2));

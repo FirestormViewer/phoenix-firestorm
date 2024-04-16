@@ -5565,6 +5565,10 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 	const LLMatrix4* model_mat = NULL;
 
 	LLDrawable* drawable = facep->getDrawable();
+	if(!drawable)
+	{
+		return;
+	}
 	
     if (rigged)
     {
@@ -5600,6 +5604,15 @@ void LLVolumeGeometryManager::registerFace(LLSpatialGroup* group, LLFace* facep,
 
     auto* gltf_mat = (LLFetchedGLTFMaterial*)te->getGLTFRenderMaterial();
     llassert(gltf_mat == nullptr || dynamic_cast<LLFetchedGLTFMaterial*>(te->getGLTFRenderMaterial()) != nullptr);
+
+	// <FS:Beq> show legacy when editing the fallback materials.
+	static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "FSShowSelectedInBlinnPhong");
+	if( gltf_mat && facep->getViewerObject()->isSelected() && showSelectedinBP )
+	{
+		gltf_mat = nullptr;
+	}
+	// </FS:Beq>
+
     if (gltf_mat != nullptr)
     {
         mat_id = gltf_mat->getHash(); // TODO: cache this hash
@@ -6830,6 +6843,14 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 
             const LLTextureEntry* te = facep->getTextureEntry();
             LLGLTFMaterial* gltf_mat = te->getGLTFRenderMaterial();
+			
+			// <FS:Beq> show legacy when editing the fallback materials.
+			static LLCachedControl<bool> showSelectedinBP(gSavedSettings, "FSShowSelectedInBlinnPhong");
+			if( gltf_mat && facep->getViewerObject()->isSelected() && showSelectedinBP )
+			{
+				gltf_mat = nullptr;
+			}
+			// </FS:Beq>
 
 			if (hud_group && gltf_mat == nullptr)
 			{ //all hud attachments are fullbright

@@ -107,7 +107,7 @@
 #include "llfloaterpathfindingconsole.h"
 #include "llfloaterpathfindingcharacters.h"
 #include "llfloatertools.h"
-#include "llpanelface.h"
+// #include "llpanelface.h"  // <FS:Zi> switchable edit texture/materials panel - include not needed
 #include "llpathfindingpathtool.h"
 #include "llscenemonitor.h"
 #include "llprogressview.h"
@@ -3708,7 +3708,9 @@ void LLPipeline::postSort(LLCamera &camera)
 
         if (!gNonInteractive)
         {
-            LLPipeline::setRenderHighlightTextureChannel(gFloaterTools->getPanelFace()->getTextureChannelToEdit());
+            // <FS:Zi> switchable edit texture/materials panel
+            // LLPipeline::setRenderHighlightTextureChannel(gFloaterTools->getPanelFace()->getTextureChannelToEdit());
+            LLPipeline::setRenderHighlightTextureChannel(gFloaterTools->getTextureChannelToEdit());
         }
 
         // Draw face highlights for selected faces.

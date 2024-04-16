@@ -3790,7 +3790,7 @@ https://wiki.firestormviewer.org/fs_voice
 Вы локально обновили готовую текстуру [RESOLUTION] для &quot;[BODYREGION]&quot; через [TIME] сек.
 	</notification>
 	<notification name="CannotUploadTexture">
-		Невозможно загрузить текстуру.
+		Невозможно загрузить текстуру: &apos;[NAME]&apos;
 [REASON]
 	</notification>
 	<notification name="LivePreviewUnavailable">

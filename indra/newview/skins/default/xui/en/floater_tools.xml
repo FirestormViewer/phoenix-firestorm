@@ -3272,8 +3272,10 @@ Low ↔ Lwst
         <panel
          label="Texture"
          help_topic="toolbox_texture_tab"
-         name="Texture"
+         name="Texture">
+<!--	<FS:Zi> switchable edit texture/materials panel
          filename="panel_tools_texture.xml">
+-->
 	   </panel>
        <panel
          border="false"
