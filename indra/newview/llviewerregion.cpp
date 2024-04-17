@@ -844,13 +844,9 @@ void LLViewerRegion::loadObjectCache()
 	if(LLVOCache::instanceExists())
 	{
         LLVOCache & vocache = LLVOCache::instance();
-		// <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
-		// vocache.readFromCache(mHandle, mImpl->mCacheID, mImpl->mCacheMap);
-		// vocache.readGenericExtrasFromCache(mHandle, mImpl->mCacheID, mImpl->mGLTFOverridesLLSD);		
-		// mark as dirty if read fails to force a rewrite.
+		// Without this a "corrupted" vocache persists until a cache clear or other rewrite. Mark as dirty hereif read fails to force a rewrite.
 		mCacheDirty = !vocache.readFromCache(mHandle, mImpl->mCacheID, mImpl->mCacheMap);
 		vocache.readGenericExtrasFromCache(mHandle, mImpl->mCacheID, mImpl->mGLTFOverridesLLSD, mImpl->mCacheMap);
-		// </FS:Beq>
 
 		if (mImpl->mCacheMap.empty())
 		{
@@ -1256,17 +1252,13 @@ void LLViewerRegion::killCacheEntry(LLVOCacheEntry* entry, bool for_rendering)
 			child = entry->getChild();
 		}
 	}
-
-	// <FS:Beq> Fix the missing kill on overrides
+	// Kill the assocaited overrides
 	mImpl->mGLTFOverridesLLSD.erase(entry->getLocalID());
-	// </FS:Beq>
 	//will remove it from the object cache, real deletion
 	entry->setState(LLVOCacheEntry::INACTIVE);
 	entry->removeOctreeEntry();
 	entry->setValid(FALSE);
-	// <FS:Beq/> Fix the missing kill on overrides
-	// // TODO kill extras/material overrides cache too
-	
+
 }
 
 //physically delete the cache entry	
@@ -4021,12 +4013,11 @@ void LLViewerRegion::applyCacheMiscExtras(LLViewerObject* obj)
     auto iter = mImpl->mGLTFOverridesLLSD.find(local_id);
     if (iter != mImpl->mGLTFOverridesLLSD.end())
     {
-        // <FS:Beq> backfill the UUID if it was left empty
+        // UUID can be inserted null, so backfill the UUID if it was left empty
         if (iter->second.mObjectId.isNull())
         {
             iter->second.mObjectId = obj->getID();
         }
-        // </FS:Beq>
         llassert(iter->second.mGLTFMaterial.size() == iter->second.mSides.size());
 
         for (auto& side : iter->second.mGLTFMaterial)

@@ -293,18 +293,7 @@ void LLFloaterImagePreview::onBtnUpload()
 //-----------------------------------------------------------------------------
 S32 LLFloaterImagePreview::getExpectedUploadCost() const
 {
-    if (mRawImagep.notNull())
-    {
-        if (mRawImagep->getWidth() * mRawImagep->getHeight() >= LLAgentBenefits::MIN_2K_TEXTURE_AREA)
-        {
-            return LLAgentBenefitsMgr::current().get2KTextureUploadCost();
-        }
-        else
-        {
-            return LLAgentBenefitsMgr::current().getTextureUploadCost();
-        }
-    }
-    return 0;
+    return LLAgentBenefitsMgr::current().getTextureUploadCost(mRawImagep);
 }
 
 //-----------------------------------------------------------------------------
@@ -591,7 +580,7 @@ bool LLFloaterImagePreview::loadImage(const std::string& src_filename)
 		return false;
 	}
 	
-	raw_image->biasedScaleToPowerOfTwo(1024);
+	raw_image->biasedScaleToPowerOfTwo(LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT);
 	mRawImagep = raw_image;
 	
 	return true;

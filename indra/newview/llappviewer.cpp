@@ -256,6 +256,8 @@
 #include "llavatariconctrl.h"
 #include "llgroupiconctrl.h"
 #include "llviewerassetstats.h"
+#include "gltfscenemanager.h"
+
 #include "workqueue.h"
 using namespace LL;
 
@@ -1484,6 +1486,8 @@ bool LLAppViewer::init()
     LLWorld::createInstance();
     LLSelectMgr::createInstance();
     LLViewerCamera::createInstance();
+    LL::GLTFSceneManager::createInstance();
+
 
 #if LL_WINDOWS
     if (!mSecondInstance)
@@ -2515,7 +2519,7 @@ bool LLAppViewer::cleanup()
 	ll_close_fail_log();
 
 	LLError::LLCallStacks::cleanup();
-
+    LL::GLTFSceneManager::deleteSingleton();
 	LLEnvironment::deleteSingleton();
 	LLSelectMgr::deleteSingleton();
 	LLViewerEventRecorder::deleteSingleton();

@@ -243,13 +243,13 @@ void LLGLTFMaterialList::applyOverrideMessage(LLMessageSystem* msg, const std::s
                     }
                 }
             }
-            // <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
+
+            // Workaround for server sending empty overrides.
             if(cache.mSides.size() > 0)
             {
                 region->cacheFullUpdateGLTFOverride(cache);
                 LL_DEBUGS("GLTF") << "GLTF Material Override: " << cache.mObjectId << " " << cache.mLocalId << " " << cache.mRegionHandle << " (sides:" << (cache.mSides.size()) << ")" << LL_ENDL;
             }
-            // </FS:Beq>
         }
 
     }

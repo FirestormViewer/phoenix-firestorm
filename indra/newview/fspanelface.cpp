@@ -792,7 +792,7 @@ BOOL FSPanelFace::postBuild()
 
 	// PBR Base Material swatch
 	// mMaterialCtrlPBR->setDefaultImageAssetID(LLUUID::null);	// we have no default material, and null is standard for LLUUID -Zi
-	mMaterialCtrlPBR->setBlankImageAssetID(LLGLTFMaterialList::BLANK_MATERIAL_ASSET_ID);
+	mMaterialCtrlPBR->setBlankImageAssetID(BLANK_MATERIAL_ASSET_ID);
 	mMaterialCtrlPBR->setCommitCallback(boost::bind(&FSPanelFace::onCommitPbr, this));
 	mMaterialCtrlPBR->setOnCancelCallback(boost::bind(&FSPanelFace::onCancelPbr, this));
 	mMaterialCtrlPBR->setOnSelectCallback(boost::bind(&FSPanelFace::onSelectPbr, this));
@@ -2406,7 +2406,7 @@ void FSPanelFace::updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, 
     {
         mVOInventoryListener = nullptr;
     }
-    if (!func.mIdenticalMaterial || func.mMaterialId.isNull() || func.mMaterialId == LLGLTFMaterialList::BLANK_MATERIAL_ASSET_ID)
+    if (!func.mIdenticalMaterial || func.mMaterialId.isNull() || func.mMaterialId == BLANK_MATERIAL_ASSET_ID)
     {
         mAgentInventoryListener = nullptr;
     }
