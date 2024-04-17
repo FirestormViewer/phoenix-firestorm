@@ -128,7 +128,7 @@
    image_overlay="Command_Search_Icon"
    name="btn_select_same_gltf"
    mouse_opaque="false"
-   tool_tip="Select all faces with the same gltf material as this one"
+   tool_tip="Select all faces with the same GLTF material as this one"
    width="23"
 >
    <button.commit_callback
