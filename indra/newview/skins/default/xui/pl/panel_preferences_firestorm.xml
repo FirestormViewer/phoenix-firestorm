@@ -140,7 +140,7 @@
         <color_swatch label="Kolor" name="colorswatch" tool_tip="Kliknij, aby wybrać kolor"/>
         <spinner label="Przezr." name="alpha"/>
         <spinner label="Blask" name="glow"/>
-        <check_box label="Pełna jasność" name="EmFBToggle"/>
+        <check_box label="Superjasność" name="EmFBToggle"/>
         <combo_box name="combobox shininess" tool_tip="Określ, jak mocny połysk ma mieć obiekt">
           <combo_item name="None" label="Żaden"/>
           <combo_item name="Low" label="Niski"/>
