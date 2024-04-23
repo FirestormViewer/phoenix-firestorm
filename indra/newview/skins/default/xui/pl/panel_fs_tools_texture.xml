@@ -36,8 +36,8 @@
 					<combo_box.item label="Maskowanie" name="Alpha masking" />
 				</combo_box>
 				<spinner label="Odcięcie" name="alpha cutoff" />
-				<spinner label="Metaliczność" name="metalness factor" />
-				<spinner label="Chropowatość" name="roughness factor" />
+				<spinner label="Metaliczn." name="metalness factor" />
+				<spinner label="Chropowat." name="roughness factor" />
 				<button name="save_selected_pbr" label="Zapisz" />
 			</panel>
 			<tab_container name="tabs_pbr_transforms">
@@ -152,7 +152,7 @@
 				</layout_panel>
 				<layout_panel name="panel_blinn_phong_options">
 					<check_box label="Superjasna" name="checkbox fullbright" />
-					<spinner name="ColorTrans" label="Przezroczystość" />
+					<spinner name="ColorTrans" label="Przezrocz." />
 					<text name="label alphamode">
 						Tryb alphy
 					</text>
