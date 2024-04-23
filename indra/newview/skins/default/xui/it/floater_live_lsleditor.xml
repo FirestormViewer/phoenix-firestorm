@@ -24,6 +24,9 @@
 	<floater.string name="loading">
 		Caricamento in corso...
 	</floater.string>
+	<text name="obj_name">
+		Oggetto: [SOURCE_OBJECT]
+	</text>
 	<button label="Ripristina" name="Reset"/>
 	<check_box label="In esecuzione" left="4" name="running"/>
 	<check_box label="Usa le esperienze:" name="enable_xp"/>

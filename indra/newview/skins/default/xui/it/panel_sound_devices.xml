@@ -22,4 +22,8 @@
 	<text name="wait_text">
 		Attendi
 	</text>
+	<text name="disabled_text">
+		Spento
+	</text>
+	<button name="unmute_btn" label="Accendi" />
 </panel>
