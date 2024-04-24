@@ -342,6 +342,11 @@
 		</menu>
 		<menu label="Darstellungstypen" name="Rendering Types">
 			<menu_item_check label="Einfach" name="Rendering Type Simple"/>
+			<menu_item_check label="Materialien" name="Rendering Type Materials"/>
+			<menu_item_check label="Alpha-Masken" name="Rendering Type Alpha Mask"/>
+			<menu_item_check label="Ganz hell Alpha-Masken" name="Rendering Type Fullbright Alpha Mask"/>
+			<menu_item_check label="Leuchten" name="Rendering Type Glow"/>
+			<menu_item_check label="Ganz hell" name="Rendering Type Fullbright"/>
 			<menu_item_check label="Alpha" name="Rendering Type Alpha"/>
 			<menu_item_check label="Baum" name="Rendering Type Tree"/>
 			<menu_item_check label="Avatare" name="Rendering Type Character"/>

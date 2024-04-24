@@ -5722,6 +5722,7 @@ void LLAppViewer::idle()
 		{
 			LLPerfStats::tunedAvatars=0; // <FS:Beq> reset the number of avatars that have been tweaked.
 			gObjectList.update(gAgent);
+            LL::GLTFSceneManager::instance().update();
 		}
 	}
 

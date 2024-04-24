@@ -2124,10 +2124,6 @@ void LLRender::diffuseColor3f(F32 r, F32 g, F32 b)
 	{
 		shader->uniform4f(LLShaderMgr::DIFFUSE_COLOR, r,g,b,1.f);
 	}
-	else
-	{
-		glColor3f(r,g,b);
-	}
 }
 
 void LLRender::diffuseColor3fv(const F32* c)
@@ -2138,10 +2134,6 @@ void LLRender::diffuseColor3fv(const F32* c)
 	if (shader)
 	{
 		shader->uniform4f(LLShaderMgr::DIFFUSE_COLOR, c[0], c[1], c[2], 1.f);
-	}
-	else
-	{
-		glColor3fv(c);
 	}
 }
 
@@ -2154,10 +2146,6 @@ void LLRender::diffuseColor4f(F32 r, F32 g, F32 b, F32 a)
 	{
 		shader->uniform4f(LLShaderMgr::DIFFUSE_COLOR, r,g,b,a);
 	}
-	else
-	{
-		glColor4f(r,g,b,a);
-	}
 }
 
 void LLRender::diffuseColor4fv(const F32* c)
@@ -2168,10 +2156,6 @@ void LLRender::diffuseColor4fv(const F32* c)
 	if (shader)
 	{
 		shader->uniform4fv(LLShaderMgr::DIFFUSE_COLOR, 1, c);
-	}
-	else
-	{
-		glColor4fv(c);
 	}
 }
 
@@ -2184,10 +2168,6 @@ void LLRender::diffuseColor4ubv(const U8* c)
 	{
 		shader->uniform4f(LLShaderMgr::DIFFUSE_COLOR, c[0]/255.f, c[1]/255.f, c[2]/255.f, c[3]/255.f);
 	}
-	else
-	{
-		glColor4ubv(c);
-	}
 }
 
 void LLRender::diffuseColor4ub(U8 r, U8 g, U8 b, U8 a)
@@ -2198,10 +2178,6 @@ void LLRender::diffuseColor4ub(U8 r, U8 g, U8 b, U8 a)
 	if (shader)
 	{
 		shader->uniform4f(LLShaderMgr::DIFFUSE_COLOR, r/255.f, g/255.f, b/255.f, a/255.f);
-	}
-	else
-	{
-		glColor4ub(r,g,b,a);
 	}
 }
 

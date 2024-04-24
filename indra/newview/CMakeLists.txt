@@ -35,11 +35,11 @@ include(LLWindow)
 include(NDOF)
 include(NVAPI)
 include(OPENAL)
-include(OpenEXR)
 include(OpenGL)
 include(OpenSSL)
 include(PNG)
 include(TemplateCheck)
+include(TinyEXR)
 include(ThreeJS)
 include(Tracy)
 include(UI)
@@ -187,7 +187,9 @@ set(viewer_SOURCE_FILES
 
     gltfscenemanager.cpp
     gltf/asset.cpp
+    gltf/accessor.cpp
     gltf/primitive.cpp
+    gltf/animation.cpp
     groupchatlistener.cpp
     llaccountingcostmanager.cpp
     llaisapi.cpp
@@ -986,7 +988,10 @@ set(viewer_HEADER_FILES
     gltfscenemanager.h
     groupchatlistener.h
     gltf/asset.h
+    gltf/accessor.h
+    gltf/buffer_util.h
     gltf/primitive.h
+    gltf/animation.h
     llaccountingcost.h
     llaccountingcostmanager.h
     llaisapi.h
@@ -2184,12 +2189,6 @@ if (WINDOWS)
       media_plugin_cef
       media_plugin_libvlc
       #media_plugin_example # <FS:Ansariel> Don't package example plugin
-      ${SHARED_LIB_STAGING_DIR}/Iex-3_2.dll
-      ${SHARED_LIB_STAGING_DIR}/IlmThread-3_2.dll
-      ${SHARED_LIB_STAGING_DIR}/Imath-3_1.dll
-      ${SHARED_LIB_STAGING_DIR}/OpenEXR-3_2.dll
-      ${SHARED_LIB_STAGING_DIR}/OpenEXRCore-3_2.dll
-      ${SHARED_LIB_STAGING_DIR}/OpenEXRUtil-3_2.dll
       )
 
     # <FS:Ansariel> Only copy OpenJPEG dll if needed
@@ -2397,7 +2396,6 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         ll::bugsplat
         ll::tracy
         ll::icu4c
-        ll::openexr
         fs::glod # <FS:Beq/> restore GLOD dependencies
         fs::discord # <FS:Ansariel> Discord  support
         )

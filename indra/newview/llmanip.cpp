@@ -357,9 +357,16 @@ LLVector3 LLManip::getSavedPivotPoint() const
 
 LLVector3 LLManip::getPivotPoint()
 {
+
 	// <FS:KC> Pivot point controls
-	//if (mObjectSelection->getFirstObject() && mObjectSelection->getObjectCount() == 1 && mObjectSelection->getSelectType() != SELECT_TYPE_HUD)
+    //LLViewerObject* object = mObjectSelection->getFirstObject();
+	//if (object && mObjectSelection->getObjectCount() == 1 && mObjectSelection->getSelectType() != SELECT_TYPE_HUD)
 	//{
+    //    LLSelectNode* select_node = mObjectSelection->getFirstNode();
+    //    if (select_node->mSelectedGLTFNode != -1)
+    //    {
+    //        return object->getGLTFNodePositionAgent(select_node->mSelectedGLTFNode);
+    //    }
 	//	return mObjectSelection->getFirstObject()->getPivotPositionAgent();
 	//}
 	//return LLSelectMgr::getInstance()->getBBoxOfSelection().getCenterAgent();
@@ -377,7 +384,15 @@ LLVector3 LLManip::getPivotPoint()
 	LLViewerObject* root_object = mObjectSelection->getFirstRootObject(children_ok);
 	if (root_object && (mObjectSelection->getObjectCount() == 1 || sActualRoot) && mObjectSelection->getSelectType() != SELECT_TYPE_HUD)
 	{
-		pos = root_object->getPivotPositionAgent();
+        LLSelectNode* select_node = mObjectSelection->getFirstNode();
+        if (select_node->mSelectedGLTFNode != -1)
+        {
+            pos = root_object->getGLTFNodePositionAgent(select_node->mSelectedGLTFNode);
+        }
+        else
+        {
+            pos = root_object->getPivotPositionAgent();
+        }
 		scale = root_object->getScale();
 		rot = root_object->getRotation();
 	}

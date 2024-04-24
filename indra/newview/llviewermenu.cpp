@@ -905,10 +905,30 @@ U32 render_type_from_string(std::string render_type)
 	{
 		return LLPipeline::RENDER_TYPE_SIMPLE;
 	}
+    if ("materials" == render_type)
+    {
+        return LLPipeline::RENDER_TYPE_MATERIALS;
+    }
 	else if ("alpha" == render_type)
 	{
 		return LLPipeline::RENDER_TYPE_ALPHA;
 	}
+    else if ("alpha_mask" == render_type)
+    {
+        return LLPipeline::RENDER_TYPE_ALPHA_MASK;
+    }
+    else if ("fullbright_alpha_mask" == render_type)
+    {
+        return LLPipeline::RENDER_TYPE_FULLBRIGHT_ALPHA_MASK;
+    }
+    else if ("fullbright" == render_type)
+    {
+        return LLPipeline::RENDER_TYPE_FULLBRIGHT;
+    }
+    else if ("glow" == render_type)
+    {
+        return LLPipeline::RENDER_TYPE_GLOW;
+    }
 	else if ("tree" == render_type)
 	{
 		return LLPipeline::RENDER_TYPE_TREE;
@@ -1165,6 +1185,10 @@ U64 info_display_from_string(std::string info_display)
 	{
 		return LLPipeline::RENDER_DEBUG_OCTREE;
 	}
+    else if ("nodes" == info_display)
+    {
+        return LLPipeline::RENDER_DEBUG_NODES;
+    }
 	else if ("shadow frusta" == info_display)
 	{
 		return LLPipeline::RENDER_DEBUG_SHADOW_FRUSTA;
