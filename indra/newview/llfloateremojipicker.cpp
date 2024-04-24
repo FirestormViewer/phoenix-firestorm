@@ -346,6 +346,14 @@ void LLFloaterEmojiPicker::onOpen(const LLSD& key)
     gFloaterView->adjustToFitScreen(this, FALSE);
 }
 
+void LLFloaterEmojiPicker::onClose(bool app_quitting)
+{
+    if (!app_quitting)
+    {
+        LLEmojiHelper::instance().hideHelper(nullptr, true);
+    }
+}
+
 void LLFloaterEmojiPicker::dirtyRect()
 {
     super::dirtyRect();
