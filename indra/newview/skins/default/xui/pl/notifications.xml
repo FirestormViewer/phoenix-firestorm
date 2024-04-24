@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <notifications>
 	<global name="skipnexttime">
 		Nie pokazuj tego ponownie
@@ -2492,10 +2492,10 @@ Czy chcesz je odtworzyć?
 		Twój kosz się przepełnia. Może to sprawić, że będziesz mieć problemy z zalogowaniem się.
 		<usetemplate name="okcancelbuttons" notext="Wyczyszczę kosz ręcznie później" yestext="Sprawdź kosz teraz" />
 	</notification>
-	<notification name="InventoryLimitReachedAISAlert">
+	<notification name="InventoryLimitReachedAIS">
 		W Twojej Szafie występują problemy. Skontaktuj się z pomocą techniczną swojego świata.
 	</notification>
-	<notification name="InventoryLimitReachedAIS">
+	<notification name="InventoryLimitReachedAISAlert">
 		W Twojej Szafie występują problemy. Skontaktuj się z pomocą techniczną swojego świata.
 	</notification>
 	<notification name="ConfirmClearBrowserCache">
@@ -3701,7 +3701,7 @@ Wstępnie przetworzone tekstury [RESOLUTION] dla &apos;[BODYREGION]&apos; zosta�
 Wstępnie przetworzone tekstury [RESOLUTION] zostały lokalnie zaktualizowane dla &apos;[BODYREGION]&apos; po [TIME] sekundach.
 	</notification>
 	<notification name="CannotUploadTexture">
-		Nie można przesłać tekstury.
+		Nie można przesłać tekstury: &apos;[NAME]&apos;
 [REASON]
 	</notification>
 	<notification name="CannotUploadMaterial">

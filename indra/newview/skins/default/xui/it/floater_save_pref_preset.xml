@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="save_pref_preset" title="Salva Preset Grafica">
 	<text name="Preset">
 		Digita un nome per il preset o selezionane uno esistente.

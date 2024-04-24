@@ -104,7 +104,7 @@ Wersja serwera głosu (Voice Server): [VOICE_VERSION]
 		Zmiana rozdzielczości...
 	</string>
 	<string name="Fullbright">
-		Pełna jasność
+		Superjasność
 	</string>
 	<string name="LoginInProgress">
 		Trwa logowanie. [APP_NAME] może wydawać się zawieszony. Proszę czekać.
@@ -5085,6 +5085,12 @@ Raport o Nadużyciu
 	</string>
 	<string name="texture_load_dimensions_error">
 		Nie można załadować obrazów większych niż [WIDTH]*[HEIGHT]
+	</string>
+	<string name="texture_load_format_error">
+		Nieprawidłowy format obrazu.
+	</string>
+	<string name="texture_load_empty_file">
+		Plik jest pusty.
 	</string>
 	<string name="outfit_photo_load_dimensions_error">
 		Maks. rozmiar zdjęcia stroju to [WIDTH]*[HEIGHT]. Przeskaluj lub użyj innego.

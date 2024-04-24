@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <notifications>
 	<global name="skipnexttime">
 		Non mostrare più la prossima volta
@@ -2420,6 +2420,12 @@ Vuoi disattivare la modalità Non disturbare prima di completare questa transazi
 		Il cestino è troppo pieno. Ciò potrebbe causare problemi durante l&apos;accesso.
 		<usetemplate name="okcancelbuttons" notext="Svuota il cestino più tardi" yestext="Svuota il cestino adesso"/>
 	</notification>
+	<notification name="InventoryLimitReachedAIS">
+		Il tuo inventario sta riscontrando problemi. Contatta il supporto della tua grid.
+	</notification>
+	<notification name="InventoryLimitReachedAISAlert">
+		Il tuo inventario sta riscontrando problemi. Contatta il supporto della tua grid.
+	</notification>
 	<notification name="ConfirmClearBrowserCache">
 		Eliminare la cronologia viaggi, web e ricerche fatte?
 		<usetemplate name="okcancelbuttons" notext="Annulla" />
@@ -3602,7 +3608,7 @@ Hai caricato una texture [RESOLUTION] completata per &apos;[BODYREGION]&apos; do
 Hai aggiornato localmente una texture [RESOLUTION] completata per &apos;[BODYREGION]&apos; dopo [TIME] secondi.
 	</notification>
 	<notification name="CannotUploadTexture">
-		Impossibile caricare la texture.
+		Impossibile caricare la texture: &apos;[NAME]&apos;
 [REASON]
 	</notification>
 	<notification name="CannotUploadMaterial">

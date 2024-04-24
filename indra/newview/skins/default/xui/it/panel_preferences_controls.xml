@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Controlli" name="controls">
 	<combo_box name="key_mode">
 		<combo_box.item label="In terza persona" name="third_person" />

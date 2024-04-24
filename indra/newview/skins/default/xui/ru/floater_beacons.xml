@@ -20,7 +20,7 @@
 		<check_box label="Источники звука" name="sounds"/>
 		<check_box label="Источники частиц" name="particles"/>
 		<check_box label="Источники медиа" name="moapbeacon"/>
-		<text name="label_objects">
+		<text name="label_direction">
 			Показать направление на:
 		</text>
 		<check_box label="Солнце" name="sun"/>
