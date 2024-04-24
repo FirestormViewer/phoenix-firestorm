@@ -4995,6 +4995,24 @@ Falls Sie dieses Objekt sehen möchten, nehmen Sie es ab und hängen es an einem
 		Datei „[NAME]“ konnte nicht hochgeladen werden: Inkorrektes Bildformat.
 	</notification>
 
+	<notification name="ConfirmOverwriteOutfit">
+		Diese Aktion wird die Objekte im ausgewählten Outfit mit denen ersetzen, die Sie gerade tragen.
+		<usetemplate ignoretext="Bestätigen, bevor ein Outfit überschrieben wird" name="okcancelignore" notext="Abbrechen" yestext="Speichern"/>
+	</notification>
+	<notification name="ClearInventoryThumbnailsWarning">
+		Sie sind dabei, die Abbildungen der aufgelisteten Inventar-Objekte zu entfernen. Diese Änderung kann nicht rückgängig gemacht werden.
+
+Möchten Sie fortfahren?
+		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
+	</notification>
+
+	<notification name="WriteInventoryThumbnailsWarning">
+		Sie sind dabei, die Abbildungen für einige oder alle der aufgelisteten Inventar-Objekte zu überschreiben. Diese Änderung kann nicht rückgängig gemacht werden.
+
+Möchten Sie fortfahren?
+		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
+	</notification>
+
 	<notification name="ReflectionProbeApplied">
 		WARNUNG: Sie haben aus Ihrem Objekt einen Reflexionstest erzeugt. Dieser verändert implizit das Objekt, um dessen Einflusskörper nachzuahmen. Diese Änderungen sind nicht umkehrbar. Möchten Sie fortfahren?
 		<usetemplate ignoretext="Hinweis zum Reflexionstest" name="okcancelignore" yestext="OK" notext="Abbrechen"/>

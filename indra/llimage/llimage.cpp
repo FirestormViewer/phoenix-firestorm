@@ -2392,9 +2392,9 @@ bool LLImageFormatted::save(const std::string &filename)
 
 	LLImageDataSharedLock lock(this);
 
-	outfile.write(getData(), getDataSize());
+	S32 result = outfile.write(getData(), getDataSize());
 	outfile.close() ;
-	return true;
+    return (result != 0);
 }
 
 S8 LLImageFormatted::getCodec() const

@@ -293,4 +293,22 @@
       <button.commit_callback function="CameraPresets.ShowPresetsList" />
     </button>  
   </panel>
+  <panel
+    name="viewer_camera_info"
+    left="0"
+    top="135"
+    width="400"
+    height="150"
+    border="true"
+    visible="false"
+    background_visible="true"/>
+  <panel
+    name="agent_camera_info"
+    left="0"
+    top="285"
+    width="400"
+    height="150"
+    border="true"
+    visible="false"
+    background_visible="true"/>
 </floater>

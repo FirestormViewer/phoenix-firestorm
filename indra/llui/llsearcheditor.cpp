@@ -106,9 +106,13 @@ LLSearchEditor::LLSearchEditor(const LLSearchEditor::Params& p)
 
 LLSearchEditor::~LLSearchEditor()
 {
+    mSearchButton = NULL;
+    mClearButton = NULL;
     mKeystrokeCallback = NULL;
     mTextChangedCallback = NULL;
     setCommitOnFocusLost(false);
+    mSearchEditor->deleteAllChildren();
+    deleteAllChildren();
 }
 
 //virtual

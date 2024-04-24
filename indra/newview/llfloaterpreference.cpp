@@ -1642,7 +1642,6 @@ void LLFloaterPreference::onBtnCancel(const LLSD& userdata)
 	{
         cancel({"RenderQualityPerformance"});
 		LLFloaterReg::hideInstance("prefs_graphics_advanced");
-		updateMaxComplexity();
 	}
 	else
 	{

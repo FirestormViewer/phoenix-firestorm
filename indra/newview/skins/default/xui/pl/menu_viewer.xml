@@ -453,6 +453,7 @@
 			<menu_item_call label="Wymuś nieskończoną pętlę" name="Force Infinite Loop"/>
 			<menu_item_call label="Wymuś awarię sterownika" name="Force Driver Carsh"/>
 			<menu_item_call label="Wymuś wyjątek programu" name="Force Software Exception"/>
+			<menu_item_call label="Wymuś wyjątek systemu operacyjnego" name="Force OS Exception" />
 			<menu_item_call label="Wymuś wyjątek we współprogramie (coroutine)" name="Force Software Exception in Coroutine" />
 			<menu_item_call label="Wymuś awarię w wątku" name="Force a Crash in a Thread" />
 			<menu_item_call label="Wymuś rozłączenie Przeglądarki" name="Force Disconnect Viewer"/>

@@ -151,6 +151,7 @@ set(viewer_SOURCE_FILES
     fsnearbychatvoicemonitor.cpp
     fspanelblocklist.cpp
     fspanelcontactsets.cpp
+    fspanelface.cpp
     fspanelimcontrolpanel.cpp
     fspanellogin.cpp
     fspanelprefs.cpp
@@ -342,6 +343,7 @@ set(viewer_SOURCE_FILES
     llfloaterimcontainer.cpp
     llfloaterinspect.cpp
     llfloaterinventorysettings.cpp
+    llfloaterinventorythumbnailshelper.cpp
     llfloaterjoystick.cpp
     llfloaterlagmeter.cpp
     llfloaterland.cpp
@@ -939,6 +941,7 @@ set(viewer_HEADER_FILES
     fsnearbychatvoicemonitor.h
     fspanelblocklist.h
     fspanelcontactsets.h
+    fspanelface.h
     fspanelimcontrolpanel.h
     fspanellogin.h
     fspanelprefs.h
@@ -1135,6 +1138,7 @@ set(viewer_HEADER_FILES
     llfloaterimcontainer.h
     llfloaterinspect.h
     llfloaterinventorysettings.h
+    llfloaterinventorythumbnailshelper.h
     llfloaterjoystick.h
     llfloaterlagmeter.h
     llfloaterland.h
@@ -1968,50 +1972,14 @@ endif (WINDOWS)
 
 # Add the xui files. This is handy for searching for xui elements
 # from within the IDE.
-# <FS:Ansariel> Make all XUI files accessible in Visual Studio
-#set(viewer_XUI_FILES
-#    skins/default/colors.xml
-#    skins/default/default_languages.xml
-#    skins/default/textures/textures.xml
-#    )
-#file(GLOB DEFAULT_XUI_FILE_GLOB_LIST
-#     ${CMAKE_CURRENT_SOURCE_DIR}/skins/*/xui/en/*.xml)
-#list(APPEND viewer_XUI_FILES ${DEFAULT_XUI_FILE_GLOB_LIST})
-
-#file(GLOB DEFAULT_WIDGET_FILE_GLOB_LIST
-#     ${CMAKE_CURRENT_SOURCE_DIR}/skins/*/xui/en/widgets/*.xml)
-#list(APPEND viewer_XUI_FILES ${DEFAULT_WIDGET_FILE_GLOB_LIST})
-
-## Cannot append empty lists in CMake, wait until we have files here.
-##file(GLOB SILVER_WIDGET_FILE_GLOB_LIST
-##     ${CMAKE_CURRENT_SOURCE_DIR}/skins/silver/xui/en-us/widgets/*.xml)
-##list(APPEND viewer_XUI_FILES ${SILVER_WIDGET_FILE_GLOB_LIST})
-
-#list(SORT viewer_XUI_FILES)
-
-#source_group("XUI Files" FILES ${viewer_XUI_FILES})
-
-#set_source_files_properties(${viewer_XUI_FILES}
-#                            PROPERTIES HEADER_FILE_ONLY TRUE)
-
-#list(APPEND viewer_SOURCE_FILES ${viewer_XUI_FILES})
-
 file(GLOB_RECURSE viewer_XUI_FILES LIST_DIRECTORIES FALSE
     ${CMAKE_CURRENT_SOURCE_DIR}/skins/*.xml)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/skins PREFIX "XUI Files" FILES ${viewer_XUI_FILES})
 set_source_files_properties(${viewer_XUI_FILES} 
                             PROPERTIES HEADER_FILE_ONLY TRUE)
 list(APPEND viewer_SOURCE_FILES ${viewer_XUI_FILES})
-# </FS:Ansariel>
 
-file(GLOB_RECURSE viewer_SHADER_FILES LIST_DIRECTORIES FALSE
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_settings/shaders/*.glsl)
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/app_settings/shaders PREFIX "Shaders" FILES ${viewer_SHADER_FILES})
-set_source_files_properties(${viewer_SHADER_FILES} 
-                            PROPERTIES HEADER_FILE_ONLY TRUE)
-list(APPEND viewer_SOURCE_FILES ${viewer_SHADER_FILES})
-
-
+# Add the shader sources
 file(GLOB_RECURSE viewer_SHADER_FILES LIST_DIRECTORIES FALSE
     ${CMAKE_CURRENT_SOURCE_DIR}/app_settings/shaders/*.glsl)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/app_settings/shaders PREFIX "Shaders" FILES ${viewer_SHADER_FILES})
@@ -2284,7 +2252,7 @@ if (WINDOWS)
 
     if (PACKAGE)
       add_custom_command(
-        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/event_host.tar.bz2
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/event_host.tar.xz
         COMMAND ${PYTHON_EXECUTABLE}
         ARGS
           ${CMAKE_CURRENT_SOURCE_DIR}/event_host_manifest.py
@@ -2329,7 +2297,7 @@ if (WINDOWS)
         )
         # temporarily disable packaging of event_host until hg subrepos get
         # sorted out on the parabuild cluster...
-        #${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/event_host.tar.bz2)
+        #${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/event_host.tar.xz)
 
     endif (PACKAGE)
 elseif (DARWIN)
@@ -2482,7 +2450,7 @@ if (LINUX)
   add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_gstreamer10 media_plugin_cef linux-crash-logger)
   
   add_custom_command(
-      OUTPUT ${product}.tar.bz2
+      OUTPUT ${product}.tar.xz
       COMMAND ${PYTHON_EXECUTABLE}
       ARGS
         ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
@@ -2535,7 +2503,7 @@ if (LINUX)
   add_custom_target(copy_l_viewer_manifest ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/.${product}.copy_touched)
 
   if (PACKAGE)
-    add_custom_target(llpackage ALL DEPENDS ${product}.tar.bz2)
+    add_custom_target(llpackage ALL DEPENDS ${product}.tar.xz)
     # Make sure we don't run two instances of viewer_manifest.py at the same time.
     add_dependencies(llpackage copy_l_viewer_manifest)
     check_message_template(llpackage)
@@ -2684,7 +2652,7 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
         # OUTPUT_VARIABLE PARENT_DIRECTORY_CYGWIN
         # OUTPUT_STRIP_TRAILING_WHITESPACE)
       # add_custom_command(OUTPUT "${VIEWER_SYMBOL_FILE}"
-        # # Use of 'tar ...j' here assumes VIEWER_SYMBOL_FILE endswith .tar.bz2;
+        # # Use of 'tar ...j' here assumes VIEWER_SYMBOL_FILE endswith .tar.xz;
         # # testing a string suffix is painful enough in CMake language that
         # # we'll continue assuming it until forced to generalize.
         # COMMAND "tar"

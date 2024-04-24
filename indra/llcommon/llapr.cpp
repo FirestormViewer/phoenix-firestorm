@@ -152,7 +152,7 @@ LLVolatileAPRPool::LLVolatileAPRPool(bool is_local, apr_pool_t *parent, apr_size
 {
 	//create mutex
 
-	// <FS:ND> Crashfix/FIRE-4090/FIRE-4820: is_local is default to TRUE. And of today (2012-07-15) all instances of LLVolatileAPRPool seem
+	// <FS:ND> Crashfix/FIRE-4090/FIRE-4820: is_local is default to true. And of today (2012-07-15) all instances of LLVolatileAPRPool seem
 	// to be created just using this default argument.
 	// Using apr_os_thread_current and apr_os_thread_equal it appears that there are pools that get access from different threads nonetheless.
 	// This would explain why mNumActiveRef sometimes gets garbled.

@@ -32,7 +32,7 @@
 	<text name="tip">
 		Seleziona il servizio di traduzione:
 	</text>
-	<text name="google_links_text">
+	<text name="azure_links_text">
 		[https://learn.microsoft.com/en-us/azure/cognitive-services/translator/create-translator-resource Setup]
 	</text>
 	<!-- <text name="azure_api_key_label">

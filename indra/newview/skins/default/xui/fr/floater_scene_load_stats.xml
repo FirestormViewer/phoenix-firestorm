@@ -18,7 +18,7 @@
 					<stat_bar label="Taux de réussite du cache" name="texture_cache_hits"/>
 					<stat_bar label="Temps de lecture du cache" name="texture_cache_read_latency"/>
 					<stat_bar label="Temps de décodage du cache" name="texture_decode_latency" />
-					<stat_bar label="Temps du cache en écriture" name="texture_decode_latency" />
+					<stat_bar label="Temps du cache en écriture" name="texture_write_latency" />
 					<stat_bar label="Temps de lecture du cache" name="texture_fetch_latency" />
 					<stat_bar label="Temps de récupér. du cache" name="texture_fetch_time" />
 					<stat_bar label="Nombre" name="numimagesstat"/>

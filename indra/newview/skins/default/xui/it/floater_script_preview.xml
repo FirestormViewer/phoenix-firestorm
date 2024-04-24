@@ -3,6 +3,9 @@
 	<floater.string name="Title">
 		Script: [NAME]
 	</floater.string>
+	<text name="path_txt" tool_tip="Posizione: [PATH]">
+		Posizione: [PATH]
+	</text>
 	<text name="desc txt">
 		Descrizione:
 	</text>

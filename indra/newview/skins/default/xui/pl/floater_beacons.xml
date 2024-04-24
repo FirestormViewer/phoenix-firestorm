@@ -20,7 +20,7 @@
 		<check_box label="Źródeł dźwięku" name="sounds"/>
 		<check_box label="Źródeł cząsteczek" name="particles"/>
 		<check_box label="Źródeł mediów" name="moapbeacon"/>
-		<text name="label_objects">
+		<text name="label_direction">
 			Pokazuj kierunek:
 		</text>
 		<check_box label="Słońce" name="sun" />

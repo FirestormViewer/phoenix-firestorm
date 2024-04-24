@@ -111,6 +111,8 @@ public:
 		std::vector<LLVector3> mPositions;
 		std::vector<LLVector3> mNormals;
 
+        ~PhysicsMesh() {}
+
 		void clear()
 		{
 			mPositions.clear();
@@ -136,6 +138,7 @@ public:
 	public:
 		Decomposition() { }
 		Decomposition(LLSD& data);
+		~Decomposition() { }
 		void fromLLSD(LLSD& data);
 		LLSD asLLSD() const;
 		bool hasHullList() const;
@@ -370,7 +373,7 @@ class LLModelInstanceBase
 {
 public:
 	LLPointer<LLModel> mModel;
-	LLPointer<LLModel> mLOD[5];
+	LLPointer<LLModel> mLOD[LLModel::NUM_LODS];
 	LLUUID mMeshID;
 
 	LLMatrix4 mTransform;
@@ -385,6 +388,15 @@ public:
 		: mModel(NULL)
 	{
 	}
+
+    virtual ~LLModelInstanceBase()
+    {
+        mModel = NULL;
+        for (int j = 0; j < LLModel::NUM_LODS; ++j)
+        {
+            mLOD[j] = NULL;
+        }
+    };
 };
 
 typedef std::vector<LLModelInstanceBase> model_instance_list;
@@ -403,6 +415,8 @@ public:
 	}
 
 	LLModelInstance(LLSD& data);
+
+    ~LLModelInstance() {}
 
 	LLSD asLLSD();
 };

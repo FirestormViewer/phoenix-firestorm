@@ -36,22 +36,6 @@
 				<stat_view name="material" label="Materiały">
 					<stat_bar name="nummaterials" label="Ilość" />
 				</stat_view>
-				<stat_view name="memory" label="Użycie pamięci">
-					<stat_bar name="LLView" label="Interfejs"/>
-					<stat_bar name="LLFontFreetype" label="Czcionki"/>
-					<stat_bar name="LLInventoryObject" label="Szafa"/>
-					<stat_bar name="LLViewerObject" label="Obiekty przeglądarki"/>
-					<stat_bar name="LLViewerOctreeGroup" label="Dane grupy drzewa ósemkowego"/>
-					<stat_bar name="LLViewerOctreeEntry" label="Dane drzewa ósemkowego"/>
-					<stat_bar name="LLVOCacheEntry" label="Pamięć podr. obiektów przegl."/>
-					<stat_bar name="LLDrawable" label="Obiekty rysowane"/>
-					<stat_bar name="LLFace" label="Dane powierzchni"/>
-					<stat_bar name="LLDrawInfo" label="Informacje rysowania"/>
-					<stat_bar name="LLTexture" label="Dane tekstur"/>
-					<stat_bar name="LLImage" label="Dane obrazów"/>
-					<stat_bar name="LLImageGL" label="Dane obrazu GL"/>
-					<stat_bar name="LLVertexBuffer" label="Bufory wierzchołków"/>
-				</stat_view>
 				<stat_view label="Sieć" name="network">
 					<stat_bar label="Pakiety wchodzące" name="packetsinstat"/>
 					<stat_bar label="Pakiety wychodzące" name="packetsoutstat"/>

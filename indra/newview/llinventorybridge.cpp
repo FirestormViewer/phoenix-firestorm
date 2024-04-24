@@ -2538,8 +2538,11 @@ bool LLFolderBridge::isItemMovable() const
 
 void LLFolderBridge::selectItem()
 {
-	// Have no fear: the first thing start() does is to test if everything for that folder has been fetched...
-	LLInventoryModelBackgroundFetch::instance().start(getUUID(), true);
+    LLViewerInventoryCategory* cat = gInventory.getCategory(getUUID());
+    if (cat)
+    {
+        cat->fetch();
+    }
 }
 
 void LLFolderBridge::buildDisplayName() const
@@ -2927,8 +2930,7 @@ bool LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 	if (is_agent_inventory)
 	{
 		const LLUUID &trash_id = model->findCategoryUUIDForType(LLFolderType::FT_TRASH);
-		// <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
-		//const LLUUID &landmarks_id = model->findCategoryUUIDForType(LLFolderType::FT_LANDMARK);
+		const LLUUID &landmarks_id = model->findCategoryUUIDForType(LLFolderType::FT_LANDMARK);
 		const LLUUID &my_outifts_id = model->findCategoryUUIDForType(LLFolderType::FT_MY_OUTFITS);
 		const LLUUID &lost_and_found_id = model->findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND);
 
@@ -2936,8 +2938,7 @@ bool LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 		const bool move_is_into_my_outfits = (mUUID == my_outifts_id) || model->isObjectDescendentOf(mUUID, my_outifts_id);
 		const bool move_is_into_outfit = move_is_into_my_outfits || (getCategory() && getCategory()->getPreferredType()==LLFolderType::FT_OUTFIT);
 		const bool move_is_into_current_outfit = (getCategory() && getCategory()->getPreferredType()==LLFolderType::FT_CURRENT_OUTFIT);
-		// <FS:Ansariel> FIRE-1392: Allow dragging all asset types into Landmarks folder
-		//const bool move_is_into_landmarks = (mUUID == landmarks_id) || model->isObjectDescendentOf(mUUID, landmarks_id);
+		const bool move_is_into_landmarks = (mUUID == landmarks_id) || model->isObjectDescendentOf(mUUID, landmarks_id);
 		const bool move_is_into_lost_and_found = model->isObjectDescendentOf(mUUID, lost_and_found_id);
 
 		//--------------------------------------------------------------------------------
@@ -3099,7 +3100,7 @@ bool LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
             is_movable = can_move_folder_to_marketplace(master_folder, dest_folder, inv_cat, tooltip_msg, bundle_size);
 		}
 
-		if (is_movable)
+		if (is_movable && !move_is_into_landmarks)
 		{
 			LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel(false);
 			is_movable = active_panel != NULL;
@@ -3325,7 +3326,7 @@ bool LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 	return accept;
 }
 
-void warn_move_inventory(LLViewerObject* object, boost::shared_ptr<LLMoveInv> move_inv)
+void warn_move_inventory(LLViewerObject* object, std::shared_ptr<LLMoveInv> move_inv)
 {
 	const char* dialog = NULL;
 	if (object->flagScripted())
@@ -3338,7 +3339,7 @@ void warn_move_inventory(LLViewerObject* object, boost::shared_ptr<LLMoveInv> mo
 	}
 
     static LLNotificationPtr notification_ptr;
-    static boost::shared_ptr<LLMoveInv> inv_ptr;
+    static std::shared_ptr<LLMoveInv> inv_ptr;
 
     // Notification blocks user from interacting with inventories so everything that comes after first message
     // is part of this message - don'r show it again
@@ -3451,7 +3452,7 @@ bool move_inv_category_world_to_agent(const LLUUID& object_id,
 	if(drop && accept)
 	{
 		it = inventory_objects.begin();
-        boost::shared_ptr<LLMoveInv> move_inv(new LLMoveInv);
+        std::shared_ptr<LLMoveInv> move_inv(new LLMoveInv);
 		move_inv->mObjectID = object_id;
 		move_inv->mCategoryID = category_id;
 		move_inv->mCallback = callback;
@@ -5553,7 +5554,7 @@ LLFontGL::StyleFlags LLMarketplaceFolderBridge::getLabelStyle() const
 
 
 // helper stuff
-bool move_task_inventory_callback(const LLSD& notification, const LLSD& response, boost::shared_ptr<LLMoveInv> move_inv)
+bool move_task_inventory_callback(const LLSD& notification, const LLSD& response, std::shared_ptr<LLMoveInv> move_inv)
 {
 	LLFloaterOpenObject::LLCatAndWear* cat_and_wear = (LLFloaterOpenObject::LLCatAndWear* )move_inv->mUserData;
 	LLViewerObject* object = gObjectList.findObject(move_inv->mObjectID);
@@ -6060,7 +6061,7 @@ bool LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 		if (accept && drop)
 		{
             LLUUID item_id = inv_item->getUUID();
-            boost::shared_ptr<LLMoveInv> move_inv (new LLMoveInv());
+            std::shared_ptr<LLMoveInv> move_inv (new LLMoveInv());
 			move_inv->mObjectID = inv_item->getParentUUID();
 			two_uuids_t item_pair(mUUID, item_id);
 			move_inv->mMoveList.push_back(item_pair);

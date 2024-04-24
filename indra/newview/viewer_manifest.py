@@ -629,7 +629,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
             #                                 'secondlife-bin.*',
             #                                 '*_Setup.exe',
             #                                 '*.bat',
-            #                                 '*.tar.bz2')))
+            #                                 '*.tar.xz')))
             # </FS:Ansariel>
 
             # <FS:Ansariel> Remove VMP

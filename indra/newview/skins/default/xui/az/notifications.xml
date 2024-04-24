@@ -3738,7 +3738,7 @@ Siz [TIME] saniyədən sonra '[BODYREGION]' üçün [RESOLUTION] bişmiş tekstu
 Siz [TIME] saniyədən sonra '[BODYREGION]' üçün [RESOLUTION] bişmiş teksturasını yerli olaraq yenilədiniz.
 	</notification>
 	<notification name="CannotUploadTexture">
-		Teksturanı yükləmək mümkün deyil.
+		Teksturanı yükləmək mümkün deyil: &apos;[NAME]&apos;
 [REASON]
 	</notification>
 	<notification name="LivePreviewUnavailable">

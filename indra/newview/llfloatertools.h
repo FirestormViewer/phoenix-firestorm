@@ -50,6 +50,14 @@ class LLParcelSelection;
 class LLObjectSelection;
 class LLLandImpactsObserver;
 
+// <FS:Zi> switchable edit texture/materials panel
+#include "llgltfmaterial.h"
+#include "llmaterial.h"
+#include "llrender.h"
+
+class FSPanelFace;
+// </FS:Zi>
+
 typedef LLSafeHandle<LLObjectSelection> LLObjectSelectionHandle;
 
 class LLFloaterTools
@@ -107,7 +115,14 @@ public:
 
 	static void setGridMode(S32 mode);
 
-	LLPanelFace* getPanelFace() { return mPanelFace; }
+	// <FS:Zi> switchable edit texture/materials panel
+	// LLPanelFace* getPanelFace() { return mPanelFace; }
+	LLRender::eTexIndex getTextureDropChannel();
+	LLRender::eTexIndex getTextureChannelToEdit();
+	LLGLTFMaterial::TextureInfo getPBRDropChannel();
+	LLMaterialPtr createDefaultMaterial(LLMaterialPtr old_mat);
+	void refreshPanelFace();
+	// </FS:Zi>
 
 	void onClickBtnCopyKeys();
 	void onClickExpand();
@@ -193,7 +208,7 @@ public:
 	LLPanelObject			*mPanelObject;
 	LLPanelVolume			*mPanelVolume;
 	LLPanelContents			*mPanelContents;
-	LLPanelFace				*mPanelFace;
+//	LLPanelFace				*mPanelFace;         // <FS:Zi> switchable edit texture/materials panel
 	LLPanelLandInfo			*mPanelLandInfo;
 
 	LLViewBorder*			mCostTextBorder;
@@ -214,6 +229,9 @@ private:
 	S32					mCollapsedHeight;
 	S32					mExpandedHeight;
 	std::map<std::string, std::string> mStatusText;
+
+	LLPanelFace*			mPanelFace;         // <FS:Zi> switchable edit texture/materials panel
+	FSPanelFace*			mFSPanelFace;       // <FS:Zi> switchable edit texture/materials panel
 
 public:
 	static bool		sShowObjectCost;

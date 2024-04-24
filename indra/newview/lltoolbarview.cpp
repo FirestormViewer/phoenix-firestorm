@@ -46,8 +46,6 @@
 #include "llviewercontrol.h"  // HACK for destinations guide on startup
 #include "llinventorymodel.h" // HACK to disable starter avatars button for NUX
 
-#include <boost/foreach.hpp>
-
 #include "fscommon.h"
 #include "quickprefs.h"
 
@@ -319,7 +317,7 @@ bool LLToolBarView::loadToolbars(bool force_default)
 			mToolbars[LLToolBarEnums::TOOLBAR_LEFT]->setLayoutStyle(layout_style);
 		}
 		// </FS:Zi>
-		BOOST_FOREACH(const LLCommandId::Params& command_params, toolbar_set.left_toolbar.commands)
+		for (const LLCommandId::Params& command_params : toolbar_set.left_toolbar.commands)
 		{
 			if (!addCommandInternal(LLCommandId(command_params), mToolbars[LLToolBarEnums::TOOLBAR_LEFT]))
 			{
@@ -347,7 +345,7 @@ bool LLToolBarView::loadToolbars(bool force_default)
 			mToolbars[LLToolBarEnums::TOOLBAR_RIGHT]->setLayoutStyle(layout_style);
 		}
 		// </FS:Zi>
-		BOOST_FOREACH(const LLCommandId::Params& command_params, toolbar_set.right_toolbar.commands)
+		for (const LLCommandId::Params& command_params : toolbar_set.right_toolbar.commands)
 		{
 			if (!addCommandInternal(LLCommandId(command_params), mToolbars[LLToolBarEnums::TOOLBAR_RIGHT]))
 			{
@@ -375,7 +373,7 @@ bool LLToolBarView::loadToolbars(bool force_default)
 			mToolbars[LLToolBarEnums::TOOLBAR_BOTTOM]->setLayoutStyle(layout_style);
 		}
 		// </FS:Zi>
-		BOOST_FOREACH(const LLCommandId::Params& command_params, toolbar_set.bottom_toolbar.commands)
+		for (const LLCommandId::Params& command_params : toolbar_set.bottom_toolbar.commands)
 		{
 			if (!addCommandInternal(LLCommandId(command_params), mToolbars[LLToolBarEnums::TOOLBAR_BOTTOM]))
 			{

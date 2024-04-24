@@ -84,8 +84,8 @@ public:
 	void setWriteDebugFunc(void (*func)(const char*));
 	void cleanup();
 
-	// Returns TRUE on success.
-	// vram_only TRUE does a "light" probe.
+	// Returns true on success.
+	// vram_only true does a "light" probe.
 	// <FS:Ansariel> FIRE-15891: Add option to disable WMI check in case of problems
 	//bool getInfo(bool vram_only);
 	bool getInfo(bool vram_only, bool disable_wmi);

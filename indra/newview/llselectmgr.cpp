@@ -97,7 +97,7 @@
 #include "llvovolume.h"
 #include "pipeline.h"
 #include "llviewershadermgr.h"
-#include "llpanelface.h"
+// #include "llpanelface.h"  // <FS:Zi> switchable edit texture/materials panel - include not needed
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvactions.h"
 #include "rlvhandler.h"
@@ -1919,8 +1919,52 @@ bool LLObjectSelection::applyRestrictedPbrMaterialToTEs(LLViewerInventoryItem* i
 //-----------------------------------------------------------------------------
 // selectionSetImage()
 //-----------------------------------------------------------------------------
+// <FS:Beq> Allow editing of non-PBR materials in-situ
+template<bool IsPBR>
+struct TextureApplyFunctor : public LLSelectedTEFunctor
+{
+	LLViewerInventoryItem* mItem;
+	LLUUID mImageID;
+	TextureApplyFunctor(LLViewerInventoryItem* item, const LLUUID& id) : mItem(item), mImageID(id) {}
+	bool apply(LLViewerObject* objectp, S32 te) override
+	{
+		if(!objectp || !objectp->permModify())
+		{
+			return false;
+		}
+
+		if (mItem && objectp->isAttachment())
+		{
+			const LLPermissions& perm = mItem->getPermissions();
+			bool unrestricted = ((perm.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED) ? true : false;
+			if (!unrestricted)
+			{
+				return false;
+			}
+		}
+
+		if (mItem)
+		{
+			if constexpr (IsPBR)
+			{
+				LLToolDragAndDrop::dropTextureOneFace(objectp, te, mItem, LLToolDragAndDrop::SOURCE_AGENT, LLUUID::null, false);
+			}
+			else
+			{
+				LLToolDragAndDrop::dropTextureOneFace(objectp, te, mItem, LLToolDragAndDrop::SOURCE_AGENT, LLUUID::null, false, -2); // -2 means no PBR
+			}
+		}
+		else // not an inventory item
+		{
+			objectp->setTEImage(te, LLViewerTextureManager::getFetchedTexture(mImageID, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE));
+		}
+
+		return true;
+	}
+};
+// </FS:Beq>
 // *TODO: re-arch texture applying out of lltooldraganddrop
-bool LLSelectMgr::selectionSetImage(const LLUUID& imageid)
+bool LLSelectMgr::selectionSetImage(const LLUUID& imageid, bool isPBR)
 {
 	// First for (no copy) textures and multiple object selection
 	LLViewerInventoryItem* item = gInventory.getItem(imageid);
@@ -1935,60 +1979,73 @@ bool LLSelectMgr::selectionSetImage(const LLUUID& imageid)
         return false;
 	}
 
-	struct f : public LLSelectedTEFunctor
-	{
-		LLViewerInventoryItem* mItem;
-		LLUUID mImageID;
-		f(LLViewerInventoryItem* item, const LLUUID& id) : mItem(item), mImageID(id) {}
-		bool apply(LLViewerObject* objectp, S32 te)
-		{
-		    if(!objectp || !objectp->permModify())
-		    {
-		        return false;
-		    }
+    // <FS:Beq> Allow editing of non-PBR materials in-situ
+	// struct f : public LLSelectedTEFunctor
+	// {
+	// 	LLViewerInventoryItem* mItem;
+	// 	LLUUID mImageID;
+	// 	f(LLViewerInventoryItem* item, const LLUUID& id) : mItem(item), mImageID(id) {}
+	// 	bool apply(LLViewerObject* objectp, S32 te)
+	// 	{
+	// 	    if(!objectp || !objectp->permModify())
+	// 	    {
+	// 	        return false;
+	// 	    }
 
-            // Might be better to run willObjectAcceptInventory
-            if (mItem && objectp->isAttachment())
-            {
-                const LLPermissions& perm = mItem->getPermissions();
-                bool unrestricted = ((perm.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED) ? true : false;
-                if (!unrestricted)
-                {
-                    // Attachments are in world and in inventory simultaneously,
-                    // at the moment server doesn't support such a situation.
-                    return false;
-                }
-            }
+    //         // Might be better to run willObjectAcceptInventory
+    //         if (mItem && objectp->isAttachment())
+    //         {
+    //             const LLPermissions& perm = mItem->getPermissions();
+    //             bool unrestricted = ((perm.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED) ? true : false;
+    //             if (!unrestricted)
+    //             {
+    //                 // Attachments are in world and in inventory simultaneously,
+    //                 // at the moment server doesn't support such a situation.
+    //                 return false;
+    //             }
+    //         }
 
-		    if (mItem)
-			{
-                LLToolDragAndDrop::dropTextureOneFace(objectp,
-                                                      te,
-                                                      mItem,
-                                                      LLToolDragAndDrop::SOURCE_AGENT,
-                                                      LLUUID::null,
-                                                      false);
-			}
-			else // not an inventory item
-			{
-				// Texture picker defaults aren't inventory items
-				// * Don't need to worry about permissions for them
-				// * Can just apply the texture and be done with it.
-				objectp->setTEImage(te, LLViewerTextureManager::getFetchedTexture(mImageID, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE));
-			}
+	// 	    if (mItem)
+	// 		{
+    //             LLToolDragAndDrop::dropTextureOneFace(objectp,
+    //                                                   te,
+    //                                                   mItem,
+    //                                                   LLToolDragAndDrop::SOURCE_AGENT,
+    //                                                   LLUUID::null,
+    //                                                   false);
+	// 		}
+	// 		else // not an inventory item
+	// 		{
+	// 			// Texture picker defaults aren't inventory items
+	// 			// * Don't need to worry about permissions for them
+	// 			// * Can just apply the texture and be done with it.
+	// 			objectp->setTEImage(te, LLViewerTextureManager::getFetchedTexture(mImageID, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE));
+	// 		}
 
-			return true;
-		}
-	};
-
+	// 		return true;
+	// 	}
+	// };
+    // </FS:Beq>
 	if (item && !item->getPermissions().allowOperationBy(PERM_COPY, gAgent.getID()))
 	{
 		getSelection()->applyNoCopyTextureToTEs(item);
 	}
 	else
 	{
-		f setfunc(item, imageid);
-		getSelection()->applyToTEs(&setfunc);
+		// <FS:Beq> Allow editing of non-PBR materials in-situ
+		// f setfunc(item, imageid);
+		// getSelection()->applyToTEs(&setfunc);
+		TextureApplyFunctor<true> setfuncPBR(item, imageid); // For PBR textures
+		TextureApplyFunctor<false> setfuncBP(item, imageid); // For non-PBR textures
+		if(isPBR)
+		{
+			getSelection()->applyToTEs(&setfuncPBR);
+		}
+		else
+		{
+			getSelection()->applyToTEs(&setfuncBP);
+		}
+		// </FS:Beq>
 	}
 
 
@@ -2258,7 +2315,9 @@ void LLSelectMgr::selectionRevertShinyColors()
 					LLMaterialPtr old_mat = object->getTEref(te).getMaterialParams();
 					if (!old_mat.isNull())
 					{
-						LLMaterialPtr new_mat = gFloaterTools->getPanelFace()->createDefaultMaterial(old_mat);
+						// <FS:Zi> switchable edit texture/materials panel
+						// LLMaterialPtr new_mat = gFloaterTools->getPanelFace()->createDefaultMaterial(old_mat);
+						LLMaterialPtr new_mat = gFloaterTools->createDefaultMaterial(old_mat);
 						new_mat->setSpecularLightColor(color);
 						object->getTEref(te).setMaterialParams(new_mat);
 						LLMaterialMgr::getInstance()->put(object->getID(), te, *new_mat);
@@ -3174,7 +3233,9 @@ void LLSelectMgr::adjustTexturesByScale(bool send_to_sim, bool stretch)
 					if (tep && !tep->getMaterialParams().isNull())
 					{
 						LLMaterialPtr orig = tep->getMaterialParams();
-						LLMaterialPtr p = gFloaterTools->getPanelFace()->createDefaultMaterial(orig);
+						// <FS:Zi> switchable edit texture/materials panel
+						// LLMaterialPtr p = gFloaterTools->getPanelFace()->createDefaultMaterial(orig);
+						LLMaterialPtr p = gFloaterTools->createDefaultMaterial(orig);
 						p->setNormalRepeat(normal_scale_s, normal_scale_t);
 						p->setSpecularRepeat(specular_scale_s, specular_scale_t);
 
@@ -3200,7 +3261,9 @@ void LLSelectMgr::adjustTexturesByScale(bool send_to_sim, bool stretch)
 					if (tep && !tep->getMaterialParams().isNull())
 					{
 						LLMaterialPtr orig = tep->getMaterialParams();
-						LLMaterialPtr p = gFloaterTools->getPanelFace()->createDefaultMaterial(orig);
+						// <FS:Zi> switchable edit texture/materials panel
+						// LLMaterialPtr p = gFloaterTools->getPanelFace()->createDefaultMaterial(orig);
+						LLMaterialPtr p = gFloaterTools->createDefaultMaterial(orig);
 
 						p->setNormalRepeat(normal_scale_s, normal_scale_t);
 						p->setSpecularRepeat(specular_scale_s, specular_scale_t);
