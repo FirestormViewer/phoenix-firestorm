@@ -214,7 +214,7 @@
 					<color_swatch label="" name="shinycolorswatch" tool_tip="Klicken Sie hier, um die Farbauswahl zu öffnen"/>
 				</layout_panel>
 				<layout_panel name="panel_blinn_phong_options">
-					<check_box label="Ganz hell" name="checkbox fullbright"/>
+					<check_box label="Ganz hell" name="checkbox fullbright" width="70"/>
 					<spinner name="ColorTrans" label="Transparenz"/>
 					<text name="color trans percent">
 						%
