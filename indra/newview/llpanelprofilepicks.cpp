@@ -264,6 +264,9 @@ void LLPanelProfilePicks::onClickNewBtn()
         select_tab(true).
         label(pick_panel->getPickName()));
     updateButtons();
+
+    // <FS:Ansariel> Keep set location button
+    pick_panel->addLocationChangedCallbacks();
 }
 
 void LLPanelProfilePicks::onClickDelete()
@@ -538,6 +541,8 @@ LLPanelProfilePick::LLPanelProfilePick()
  , mLocationChanged(false)
  , mNewPick(false)
  , mIsEditing(false)
+ , mRegionCallbackConnection()
+ , mParcelCallbackConnection()
 {
 }
 
@@ -554,6 +559,15 @@ LLPanelProfilePick::~LLPanelProfilePick()
     if (mParcelId.notNull())
     {
         LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mParcelId, this);
+    }
+
+    if (mRegionCallbackConnection.connected())
+    {
+        mRegionCallbackConnection.disconnect();
+    }
+    if (mParcelCallbackConnection.connected())
+    {
+        mParcelCallbackConnection.disconnect();
     }
 }
 
@@ -634,6 +648,8 @@ BOOL LLPanelProfilePick::postBuild()
 
     mSnapshotCtrl = getChild<LLTextureCtrl>("pick_snapshot");
     mSnapshotCtrl->setCommitCallback(boost::bind(&LLPanelProfilePick::onSnapshotChanged, this));
+    mSnapshotCtrl->setAllowLocalTexture(FALSE);
+    mSnapshotCtrl->setBakeTextureEnabled(FALSE);
 
     childSetAction("teleport_btn", boost::bind(&LLPanelProfilePick::onClickTeleport, this));
     childSetAction("show_on_map_btn", boost::bind(&LLPanelProfilePick::onClickMap, this));
@@ -723,6 +739,7 @@ void LLPanelProfilePick::setSnapshotId(const LLUUID& id)
 void LLPanelProfilePick::setPickName(const std::string& name)
 {
     mPickName->setValue(name);
+    mPickNameStr = name;
 }
 
 const std::string LLPanelProfilePick::getPickName()
@@ -833,6 +850,20 @@ void LLPanelProfilePick::onClickSetLocation()
 
 void LLPanelProfilePick::onClickSave()
 {
+    if (mRegionCallbackConnection.connected())
+    {
+        mRegionCallbackConnection.disconnect();
+    }
+    if (mParcelCallbackConnection.connected())
+    {
+        mParcelCallbackConnection.disconnect();
+    }
+    // <FS:Ansariel> Keep set location button
+    if (mLocationChanged) 
+    {
+        onClickSetLocation();
+    }
+    // </FS:Ansariel>
     sendUpdate();
 
     mLocationChanged = false;
@@ -840,6 +871,7 @@ void LLPanelProfilePick::onClickSave()
 
 void LLPanelProfilePick::onClickCancel()
 {
+    updateTabLabel(mPickNameStr);
     LLAvatarPropertiesProcessor::getInstance()->sendPickInfoRequest(getAvatarId(), getPickId());
     mLocationChanged = false;
     enableSaveButton(FALSE);
@@ -878,6 +910,14 @@ void LLPanelProfilePick::processParcelInfo(const LLParcelData& parcel_data)
         LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mParcelId, this);
     }
 }
+
+// <FS:Ansariel> Keep set location button
+void LLPanelProfilePick::addLocationChangedCallbacks()
+{
+    mRegionCallbackConnection = gAgent.addRegionChangedCallback([this]() { onClickSetLocation(); });
+    mParcelCallbackConnection = gAgent.addParcelChangedCallback([this]() { onClickSetLocation(); });
+}
+// </FS:Ansariel>
 
 void LLPanelProfilePick::sendUpdate()
 {

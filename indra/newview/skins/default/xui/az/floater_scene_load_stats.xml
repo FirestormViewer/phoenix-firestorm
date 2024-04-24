@@ -20,7 +20,7 @@
 					<stat_bar name="texture_cache_hits" label="Keşdə uyğunlaşma sürəti"/>
 					<stat_bar name="texture_cache_read_latency" label="Keş oxuma gecikməsi"/>
 					<stat_bar name="texture_decode_latency" label="Keş dekodlaşdırma gecikməsi"/>
-					<stat_bar name="texture_decode_latency" label="Keşə yazma gecikməsi"/>
+					<stat_bar name="texture_write_latency" label="Keşə yazma gecikməsi"/>
 					<stat_bar name="texture_fetch_latency" label="Keş seçmə gecikməsi"/>
 					<stat_bar name="texture_fetch_time" label="Keş seçmə vaxtı"/>
 					<stat_bar name="numimagesstat" label="Sayğac"/>

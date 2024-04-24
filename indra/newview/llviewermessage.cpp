@@ -130,8 +130,6 @@
 #include "rlvui.h"
 // [/RLVa:KB]
 
-#include <boost/foreach.hpp>
-
 #include "llnotificationmanager.h" //
 #include "llexperiencecache.h"
 
@@ -7188,7 +7186,7 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 		BOOL caution = FALSE;
 		S32 count = 0;
 		std::string perms;
-		BOOST_FOREACH(script_perm_t script_perm, SCRIPT_PERMISSIONS)
+		for (const script_perm_t& script_perm : SCRIPT_PERMISSIONS)
 		{
 //			if ((orig_questions & script_perm.permbit)
 //				&& script_perm.caution)
@@ -7467,7 +7465,7 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 		S32 known_questions = 0;
 		bool has_not_only_debit = questions ^ SCRIPT_PERMISSIONS[SCRIPT_PERMISSION_DEBIT].permbit;
 		// check the received permission flags against each permission
-		BOOST_FOREACH(script_perm_t script_perm, SCRIPT_PERMISSIONS)
+		for (const script_perm_t& script_perm : SCRIPT_PERMISSIONS)
 		{
 			if (questions & script_perm.permbit)
 			{

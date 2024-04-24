@@ -70,6 +70,8 @@ public:
 	void updateToVisibility( const LLSD& new_visibility );
 	LLPanelEditWearable* getWearable(){ return mEditWearable; }
 
+    bool isCOFPanelVisible();
+
 // [RLVa:KB] - Checked: 2010-09-16 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
 	bool isOutfitEditPanelVisible() const;
 	bool isWearableEditPanelVisible() const;

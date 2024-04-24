@@ -3856,7 +3856,7 @@ Texture figée de [RESOLUTION] chargée pour [BODYREGION] au bout de [TIME] seco
 Texture figée de [RESOLUTION] mise à jour localement pour [BODYREGION] au bout de [TIME] secondes.
 	</notification>
 	<notification name="CannotUploadTexture">
-		Chargement de la texture impossible.
+		Chargement de la texture impossible: &apos;[NAME]&apos;
 [REASON]
 	</notification>
 	<notification name="LivePreviewUnavailable">

@@ -17,7 +17,7 @@
 					<stat_bar name="texture_cache_hits" label="Wspł. trafień do cache"/>
 					<stat_bar name="texture_cache_read_latency" label="Opóźnienie odczytu cache"/>
 					<stat_bar name="texture_decode_latency" label="Opóźn. dekodowania cache" />
-					<stat_bar name="texture_decode_latency" label="Opóźn. zapisu cache" />
+					<stat_bar name="texture_write_latency" label="Opóźn. zapisu cache" />
 					<stat_bar name="texture_fetch_latency" label="Opóźn. pobierania cache" />
 					<stat_bar name="texture_fetch_time" label="Czas pob. z cache" />
 					<stat_bar name="numimagesstat" label="Suma"/>

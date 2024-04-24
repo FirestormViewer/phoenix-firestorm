@@ -45,7 +45,6 @@
 
 #include <algorithm>
 #include <boost/regex.hpp>
-#include <boost/foreach.hpp>
 
 
 const std::string NOTIFICATION_PERSIST_VERSION = "0.93";
@@ -446,14 +445,14 @@ LLNotificationTemplate::LLNotificationTemplate(const LLNotificationTemplate::Par
 		mSoundName = p.sound;
 	}
 
-	BOOST_FOREACH(const LLNotificationTemplate::UniquenessContext& context, p.unique.contexts)
+	for (const LLNotificationTemplate::UniquenessContext& context : p.unique.contexts)
 	{
 		mUniqueContext.push_back(context.value);
 	}
 	
 	LL_DEBUGS("Notifications") << "notification \"" << mName << "\": tag count is " << p.tags.size() << LL_ENDL;
 	
-	BOOST_FOREACH(const LLNotificationTemplate::Tag& tag, p.tags)
+	for (const LLNotificationTemplate::Tag& tag : p.tags)
 	{
 		LL_DEBUGS("Notifications") << "    tag \"" << std::string(tag.value) << "\"" << LL_ENDL;
 		mTags.push_back(tag.value);
@@ -1003,6 +1002,7 @@ LLBoundListener LLNotificationChannelBase::connectChangedImpl(const LLEventListe
 	// all of the notifications that are already in the channel
 	// we use a special signal called "load" in case the channel wants to care
 	// only about new notifications
+    LLMutexLock lock(&mItemsMutex);
 	for (LLNotificationSet::iterator it = mItems.begin(); it != mItems.end(); ++it)
 	{
 		slot(LLSD().with("sigtype", "load").with("id", (*it)->id()));
@@ -1162,7 +1162,7 @@ LLNotificationChannel::LLNotificationChannel(const Params& p)
 	LLInstanceTracker<LLNotificationChannel, std::string>(p.name.isProvided() ? p.name : LLUUID::generateNewID().asString()),
 	mName(p.name.isProvided() ? p.name : LLUUID::generateNewID().asString())
 {
-	BOOST_FOREACH(const std::string& source, p.sources)
+	for (const std::string& source : p.sources)
     {
 		connectToChannel(source);
 	}
@@ -1180,6 +1180,14 @@ LLNotificationChannel::LLNotificationChannel(const std::string& name,
 	connectToChannel(parent);
 }
 
+LLNotificationChannel::~LLNotificationChannel()
+{
+    for (LLBoundListener &listener : mListeners)
+    {
+        listener.disconnect();
+    }
+}
+
 bool LLNotificationChannel::isEmpty() const
 {
 	return mItems.empty();
@@ -1187,17 +1195,7 @@ bool LLNotificationChannel::isEmpty() const
 
 S32 LLNotificationChannel::size() const
 {
-	return mItems.size();
-}
-
-LLNotificationChannel::Iterator LLNotificationChannel::begin()
-{
-	return mItems.begin();
-}
-
-LLNotificationChannel::Iterator LLNotificationChannel::end()
-{
-	return mItems.end();
+    return mItems.size();
 }
 
 size_t LLNotificationChannel::size()
@@ -1205,12 +1203,19 @@ size_t LLNotificationChannel::size()
 	return mItems.size();
 }
 
+void LLNotificationChannel::forEachNotification(NotificationProcess process)
+{
+    LLMutexLock lock(&mItemsMutex);
+    std::for_each(mItems.begin(), mItems.end(), process);
+}
+
 std::string LLNotificationChannel::summarize()
 {
 	std::string s("Channel '");
 	s += mName;
 	s += "'\n  ";
-	for (LLNotificationChannel::Iterator it = begin(); it != end(); ++it)
+    LLMutexLock lock(&mItemsMutex);
+	for (LLNotificationChannel::Iterator it = mItems.begin(); it != mItems.end(); ++it)
 	{
 		s += (*it)->summarize();
 		s += "\n  ";
@@ -1222,14 +1227,14 @@ void LLNotificationChannel::connectToChannel( const std::string& channel_name )
 {
 	if (channel_name.empty())
 	{
-		LLNotifications::instance().connectChanged(
-			boost::bind(&LLNotificationChannelBase::updateItem, this, _1));
+        mListeners.push_back(LLNotifications::instance().connectChanged(
+			boost::bind(&LLNotificationChannelBase::updateItem, this, _1)));
 	}
 	else
 	{
 		mParents.push_back(channel_name);
 		LLNotificationChannelPtr p = LLNotifications::instance().getChannel(channel_name);
-		p->connectChanged(boost::bind(&LLNotificationChannelBase::updateItem, this, _1));
+        mListeners.push_back(p->connectChanged(boost::bind(&LLNotificationChannelBase::updateItem, this, _1)));
 	}
 }
 
@@ -1531,7 +1536,7 @@ void replaceFormText(LLNotificationForm::Params& form, const std::string& patter
 		form.ignore.text = replace;
 	}
 
-	BOOST_FOREACH(LLNotificationForm::FormElement& element, form.form_elements.elements)
+	for (LLNotificationForm::FormElement& element : form.form_elements.elements)
 	{
 		if (element.button.isChosen() && element.button.text() == pattern)
 		{
@@ -1586,19 +1591,19 @@ bool LLNotifications::loadTemplates()
 
 	mTemplates.clear();
 
-	BOOST_FOREACH(LLNotificationTemplate::GlobalString& string, params.strings)
+	for (const LLNotificationTemplate::GlobalString& string : params.strings)
 	{
 		mGlobalStrings[string.name] = string.value;
 	}
 
 	std::map<std::string, LLNotificationForm::Params> form_templates;
 
-	BOOST_FOREACH(LLNotificationTemplate::Template& notification_template, params.templates)
+	for (const LLNotificationTemplate::Template& notification_template : params.templates)
 	{
 		form_templates[notification_template.name] = notification_template.form;
 	}
 
-	BOOST_FOREACH(LLNotificationTemplate::Params& notification, params.notifications)
+	for (LLNotificationTemplate::Params& notification : params.notifications)
 	{
 		if (notification.form_ref.form_template.isChosen())
 		{
@@ -1653,7 +1658,7 @@ bool LLNotifications::loadVisibilityRules()
 
 	mVisibilityRules.clear();
 
-	BOOST_FOREACH(LLNotificationVisibilityRule::Rule& rule, params.rules)
+	for (const LLNotificationVisibilityRule::Rule& rule : params.rules)
 	{
 		mVisibilityRules.push_back(LLNotificationVisibilityRulePtr(new LLNotificationVisibilityRule(rule)));
 	}
@@ -1746,6 +1751,7 @@ void LLNotifications::cancel(LLNotificationPtr pNotif)
 
 void LLNotifications::cancelByName(const std::string& name)
 {
+    LLMutexLock lock(&mItemsMutex);
 	std::vector<LLNotificationPtr> notifs_to_cancel;
 	for (LLNotificationSet::iterator it=mItems.begin(), end_it = mItems.end();
 		it != end_it;
@@ -1770,6 +1776,7 @@ void LLNotifications::cancelByName(const std::string& name)
 
 void LLNotifications::cancelByOwner(const LLUUID ownerId)
 {
+    LLMutexLock lock(&mItemsMutex);
 	std::vector<LLNotificationPtr> notifs_to_cancel;
 	for (LLNotificationSet::iterator it = mItems.begin(), end_it = mItems.end();
 		 it != end_it;
@@ -1815,11 +1822,6 @@ LLNotificationPtr LLNotifications::find(LLUUID uuid)
 	{
 		return *it;
 	}
-}
-
-void LLNotifications::forEachNotification(NotificationProcess process)
-{
-	std::for_each(mItems.begin(), mItems.end(), process);
 }
 
 std::string LLNotifications::getGlobalString(const std::string& key) const

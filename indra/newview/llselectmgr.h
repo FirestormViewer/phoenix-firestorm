@@ -717,7 +717,7 @@ public:
 	void selectionSetDensity(F32 density);
 	void selectionSetRestitution(F32 restitution);
 	void selectionSetMaterial(U8 material);
-	bool selectionSetImage(const LLUUID& imageid); // could be item or asset id
+	bool selectionSetImage(const LLUUID& imageid, bool isPBR=true); // <FS:Beq/> inject PBR awareness.
     bool selectionSetGLTFMaterial(const LLUUID& mat_id); // material id only
 	void selectionSetColor(const LLColor4 &color);
 	void selectionSetColorOnly(const LLColor4 &color); // Set only the RGB channels

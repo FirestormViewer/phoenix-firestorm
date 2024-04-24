@@ -184,7 +184,8 @@ void LLPanelMarketplaceListings::draw()
     // Get the audit button enabled only after the whole inventory is fetched
     if (!mAuditBtn->getEnabled())
     {
-        mAuditBtn->setEnabled(LLInventoryModelBackgroundFetch::instance().isEverythingFetched());
+        LLInventoryModelBackgroundFetch* inst = LLInventoryModelBackgroundFetch::getInstance();
+        mAuditBtn->setEnabled(inst->isEverythingFetched() && !inst->folderFetchActive());
     }
     
 	LLPanel::draw();
@@ -411,8 +412,14 @@ BOOL LLFloaterMarketplaceListings::postBuild()
 	mCategoryAddedObserver = new LLMarketplaceListingsAddedObserver(this);
 	gInventory.addObserver(mCategoryAddedObserver);
 	
-    // Fetch aggressively so we can interact with listings right onOpen()
-	fetchContents();
+
+    // Fetch aggressively so we can interact with listings as soon as possible
+    if (!fetchContents())
+    {
+        const LLUUID& marketplacelistings_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_MARKETPLACE_LISTINGS);
+        LLInventoryModelBackgroundFetch::instance().start(marketplacelistings_id, true);
+    }
+	
 
 	return TRUE;
 }
@@ -441,17 +448,19 @@ void LLFloaterMarketplaceListings::onFocusReceived()
 	updateView();
 }
 
-void LLFloaterMarketplaceListings::fetchContents()
+bool LLFloaterMarketplaceListings::fetchContents()
 {
-	if (mRootFolderId.notNull() &&
+    if (mRootFolderId.notNull() &&
         (LLMarketplaceData::instance().getSLMDataFetched() != MarketplaceFetchCodes::MARKET_FETCH_LOADING) &&
         (LLMarketplaceData::instance().getSLMDataFetched() != MarketplaceFetchCodes::MARKET_FETCH_DONE))
-	{
+    {
         LLMarketplaceData::instance().setDataFetchedSignal(boost::bind(&LLFloaterMarketplaceListings::updateView, this));
         LLMarketplaceData::instance().setSLMDataFetched(MarketplaceFetchCodes::MARKET_FETCH_LOADING);
-		LLInventoryModelBackgroundFetch::instance().start(mRootFolderId, true);
+        LLInventoryModelBackgroundFetch::instance().start(mRootFolderId, true);
         LLMarketplaceData::instance().getSLMListings();
-	}
+        return true;
+    }
+    return false;
 }
 
 void LLFloaterMarketplaceListings::setRootFolder()

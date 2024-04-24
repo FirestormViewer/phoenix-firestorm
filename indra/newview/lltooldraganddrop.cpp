@@ -60,7 +60,12 @@
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llworld.h"
-#include "llpanelface.h"
+// <FS:Zi> switchable edit texture/materials panel
+// #include "llpanelface.h"
+#include "llmaterial.h"
+#include "llmaterialmgr.h"
+// </FS:Zi>
+
 #include "lluiusage.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
 #include "rlvactions.h"
@@ -1411,11 +1416,14 @@ void LLToolDragAndDrop::dropTexture(LLViewerObject* hit_obj,
 
         // If user dropped a texture onto face it implies
         // applying texture now without cancel, save to selection
-        LLPanelFace* panel_face = gFloaterTools->getPanelFace();
+		// LLPanelFace* panel_face = gFloaterTools->getPanelFace();  // <FS:Zi> switchable edit texture/materials panel
         if (nodep
             && gFloaterTools->getVisible()
-            && panel_face
-            && panel_face->getTextureDropChannel() == 0 /*texture*/
+			// <FS:Zi> switchable edit texture/materials panel
+			// && panel_face
+			// && panel_face->getTextureDropChannel() == 0 /*texture*/
+			&& gFloaterTools->getTextureDropChannel() == 0 /*texture*/
+			// <FS:Zi>
             && nodep->mSavedTextures.size() > hit_face)
         {
             LLViewerTexture* tex = hit_obj->getTEImage(hit_face);
@@ -1458,7 +1466,7 @@ void LLToolDragAndDrop::dropTextureOneFace(LLViewerObject* hit_obj,
 
     LLUUID asset_id = item->getAssetUUID();
 
-    if (hit_obj->getRenderMaterialID(hit_face).notNull() && !remove_pbr)
+    if (hit_obj->getRenderMaterialID(hit_face).notNull() && !remove_pbr && tex_channel >= -1) // <FS:Beq/> tex_channel -2 means ignorePBR then treat as -1, don't judge me.
     {
         // Overrides require textures to be copy and transfer free
         LLPermissions item_permissions = item->getPermissions();
@@ -1468,16 +1476,28 @@ void LLToolDragAndDrop::dropTextureOneFace(LLViewerObject* hit_obj,
         if (allow_adding_to_override)
         {
             LLGLTFMaterial::TextureInfo drop_channel = LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR;
-            LLPanelFace* panel_face = gFloaterTools->getPanelFace();
-            if (gFloaterTools->getVisible() && panel_face)
+            // <FS:Zi> switchable edit texture/materials panel
+            // LLPanelFace* panel_face = gFloaterTools->getPanelFace();
+            // if (gFloaterTools->getVisible() && panel_face)
+            // {
+            //     drop_channel = panel_face->getPBRDropChannel();
+            // }
+            if (gFloaterTools->getVisible())
             {
-                drop_channel = panel_face->getPBRDropChannel();
+                drop_channel = gFloaterTools->getPBRDropChannel();
             }
+            // </FS:Zi>
             set_texture_to_material(hit_obj, hit_face, asset_id, drop_channel);
             LLGLTFMaterialList::flushUpdates(nullptr);
         }
         return;
     }
+	// <FS:Beq> tex_channel -2 means ignorePBR then treat as -1
+	if(tex_channel < -1)
+	{
+		tex_channel = -1;
+	}
+	// </FS:Beq>
 	BOOL success = handleDropMaterialProtections(hit_obj, item, source, src_id);
 	if (!success)
 	{
@@ -1494,11 +1514,16 @@ void LLToolDragAndDrop::dropTextureOneFace(LLViewerObject* hit_obj,
 
 	LLTextureEntry* tep = hit_obj->getTE(hit_face);
 
-	LLPanelFace* panel_face = gFloaterTools->getPanelFace();
+	// <FS:Zi> switchable edit texture/materials panel
+	// LLPanelFace* panel_face = gFloaterTools->getPanelFace();
 
-	if (gFloaterTools->getVisible() && panel_face)
+	// if (gFloaterTools->getVisible() && panel_face)
+	if (gFloaterTools->getVisible())
+	// </FS:Zi>
 	{
-        tex_channel = (tex_channel > -1) ? tex_channel : panel_face->getTextureDropChannel();
+		// <FS:Zi> switchable edit texture/materials panel
+		// tex_channel = (tex_channel > -1) ? tex_channel : panel_face->getTextureDropChannel();
+		tex_channel = (tex_channel > -1) ? tex_channel : gFloaterTools->getTextureDropChannel();
         switch (tex_channel)
 		{
 
@@ -1513,7 +1538,9 @@ void LLToolDragAndDrop::dropTextureOneFace(LLViewerObject* hit_obj,
             if (tep)
 			{
 				LLMaterialPtr old_mat = tep->getMaterialParams();
-				LLMaterialPtr new_mat = panel_face->createDefaultMaterial(old_mat);
+				// <FS:Zi> switchable edit texture/materials panel
+				// LLMaterialPtr new_mat = panel_face->createDefaultMaterial(old_mat);
+				LLMaterialPtr new_mat = gFloaterTools->createDefaultMaterial(old_mat);
 				new_mat->setNormalID(asset_id);
 				tep->setMaterialParams(new_mat);
 				hit_obj->setTENormalMap(hit_face, asset_id);
@@ -1525,7 +1552,9 @@ void LLToolDragAndDrop::dropTextureOneFace(LLViewerObject* hit_obj,
             if (tep)
 			{
 				LLMaterialPtr old_mat = tep->getMaterialParams();
-				LLMaterialPtr new_mat = panel_face->createDefaultMaterial(old_mat);
+				// <FS:Zi> switchable edit texture/materials panel
+				// LLMaterialPtr new_mat = panel_face->createDefaultMaterial(old_mat);
+				LLMaterialPtr new_mat = gFloaterTools->createDefaultMaterial(old_mat);
 				new_mat->setSpecularID(asset_id);
 				tep->setMaterialParams(new_mat);
 				hit_obj->setTESpecularMap(hit_face, asset_id);

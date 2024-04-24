@@ -93,7 +93,7 @@ private:
 
 	void attemptComplete() { mAttemptComplete = true; } // In the future an event?
 
-	boost::scoped_ptr<LLLogin> mLoginModule;
+	std::unique_ptr<LLLogin> mLoginModule;
 	LLNotificationsInterface* mNotifications;
 
 	std::string mLoginState;
