@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="contents" title="Inventar-Abbildungshelfer">
+	<scroll_list name="inventory_thumbnails_list" tool_tip="Objekte aus Ihrem Inventar einfügen">
+		<scroll_list.columns label="Inventar-Objekt" name="item_name"/>
+		<scroll_list.columns label="Aktuelle Abbildung" name="existing_texture"/>
+		<scroll_list.columns label="Neue Abbildung" name="new_texture"/>
+	</scroll_list>
+	<button label="Objekte aus Inventar einfügen" name="paste_items_btn"/>
+	<button label="Textureb aus Inventar einfügen" name="paste_textures_btn"/>
+	<button label="Abbildungen speichern" name="write_thumbnails_btn"/>
+	<button label="Objekte ohne Abbildungen loggen" name="log_missing_thumbnails_btn"/>
+	<button label="Abbildungen von Onjekten entfernen" name="clear_thumbnails_btn"/>
+</floater>

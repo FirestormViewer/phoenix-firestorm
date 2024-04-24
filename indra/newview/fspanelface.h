@@ -286,6 +286,8 @@ protected:
 	void onCommitGLTFUVSpinner(const LLUICtrl* ctrl, const LLSD& user_data);
 
 	void onClickBtnSelectSameTexture(const LLUICtrl* ctrl, const LLSD& user_data);	// Find all faces with same texture
+	void onShowFindAllButton(LLUICtrl* ctrl, const LLSD& user_data);	// Find all faces with same texture
+	void onHideFindAllButton(LLUICtrl* ctrl, const LLSD& user_data);	// Find all faces with same texture
 
 public: // needs to be accessible to selection manager
 	void onCopyColor(); // records all selected faces

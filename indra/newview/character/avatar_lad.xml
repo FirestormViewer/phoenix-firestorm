@@ -2023,7 +2023,7 @@
      value_min="-1"
      value_max="1">
       <param_skeleton>
-
+	  
         <bone
          name="mEyeLeft"
          scale="0 0 0"
@@ -2033,8 +2033,9 @@
          name="mEyeRight"
          scale="0 0 0"
          offset="-.005 0 0" />
-
-        <bone
+		 
+	  
+<bone
          name="mFaceEyeAltLeft"
          scale="0 0 0"
          offset="-.005 0 0" />
@@ -2043,7 +2044,7 @@
          name="mFaceEyeAltRight"
          scale="0 0 0"
          offset="-.005 0 0" />
-
+	  
         <bone
          name="mFaceEyeLidLowerRight"
          scale="0 0.3 0.7"
@@ -2054,7 +2055,7 @@
          scale="0 0.3 0.7"
          offset="0 0 0" />
 
-        <bone
+		 <bone
          name="mFaceEyeLidUpperRight"
          scale="0 0.3 0.7"
          offset=" 0 0 0" />
@@ -2063,17 +2064,17 @@
          name="mFaceEyeLidUpperLeft"
          scale="0 0.3 0.7"
          offset=" 0 0 0" />
-
+		 
         <bone
          name="mFaceEyecornerInnerLeft"
          scale="0 0 0"
          offset="-0.005 -0.008 0.0" />
-
+		 
         <bone
          name="mFaceEyecornerInnerRight"
          scale="0 0 0"
          offset="-0.005 0.008 0.0" />
-
+		 
       </param_skeleton>
     </param>
 

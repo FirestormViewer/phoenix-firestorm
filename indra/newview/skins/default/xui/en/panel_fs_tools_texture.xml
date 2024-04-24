@@ -79,7 +79,14 @@
    allow_no_texture="true"
    fallback_image="materials_ui_x_24.png"
    tool_tip="Click to choose a pbr material"
-/>
+>
+   <texture_picker.mouseenter_callback
+      function="BuildTool.ShowFindAllButton"
+      parameter="btn_select_same_gltf"/>
+   <texture_picker.mouseleave_callback
+      function="BuildTool.HideFindAllButton"
+      parameter="btn_select_same_gltf"/>
+</texture_picker>
 
 <texture_picker
    follows="left|top"
@@ -93,8 +100,7 @@
    can_apply_immediately="true"
    allow_no_texture="true"
    fallback_image="materials_ui_x_24.png"
-   tool_tip="Click to choose the base color map (Albedo)"
-/>
+   tool_tip="Click to choose the base color map (Albedo)"/>
 
 <color_swatch
    follows="left|top"
@@ -109,11 +115,32 @@
    tool_tip="Click to choose the base color tint"
 />
 
+<button
+   enabled="true"
+   visible="true"
+   layout="topleft"
+   follows="right|top"
+   height="23"
+   left="0"
+   top_delta="33"
+   image_selected="DropTarget"
+   image_unselected="DropTarget"
+   image_overlay="Command_Search_Icon"
+   name="btn_select_same_gltf"
+   mouse_opaque="false"
+   tool_tip="Select all faces with the same GLTF material as this one"
+   width="23"
+>
+   <button.commit_callback
+      function="BuildTool.SelectSameTexture"
+      parameter="gltf"/>
+</button>
+
 <texture_picker
    follows="left|top"
    layout="topleft"
    left="0"
-   top_pad="-6"
+   top_pad="14"
    width="60"
    height="76"
    name="normal_map_picker"
@@ -1634,7 +1661,7 @@
 <layout_panel
    follows="all"
    layout="topleft"
-   width="110"
+   width="100"
    height="212"
    name="panel_blinn_phong_maps"
    auto_resize="false"
@@ -1654,7 +1681,14 @@
    default_image_name="Default"
    fallback_image="materials_ui_x_24.png"
    tool_tip="Click to choose a picture"
-/>
+>
+   <texture_picker.mouseenter_callback
+      function="BuildTool.ShowFindAllButton"
+      parameter="btn_select_same_diff"/>
+   <texture_picker.mouseleave_callback
+      function="BuildTool.HideFindAllButton"
+      parameter="btn_select_same_diff"/>
+</texture_picker>
 
 <color_swatch
    follows="top|left"
@@ -1669,11 +1703,32 @@
    can_apply_immediately="true"
 />
 
+<button
+   enabled="true"
+   visible="false"
+   layout="topleft"
+   follows="right|top"
+   height="23"
+   left="0"
+   top_delta="33"
+   image_selected="DropTarget"
+   image_unselected="DropTarget"
+   image_overlay="Command_Search_Icon"
+   name="btn_select_same_diff"
+   mouse_opaque="false"
+   tool_tip="Select all faces with the same diffuse texture as this one"
+   width="23"
+>
+   <button.commit_callback
+      function="BuildTool.SelectSameTexture"
+      parameter="diffuse"/>
+</button>
+
 <texture_picker
    follows="left|top"
    layout="topleft"
    left="0"
-   top_pad="-6"
+   top_pad="14"
    width="60"
    height="76"
    allow_no_texture="true"
@@ -1683,13 +1738,41 @@
    label="Normal"
    name="bumpytexture control"
    tool_tip="Click to choose a picture"
-/>
+>
+   <texture_picker.mouseenter_callback
+      function="BuildTool.ShowFindAllButton"
+      parameter="btn_select_same_norm"/>
+   <texture_picker.mouseleave_callback
+      function="BuildTool.HideFindAllButton"
+      parameter="btn_select_same_norm"/>
+</texture_picker>
+
+<button
+   enabled="true"
+   visible="false"
+   layout="topleft"
+   follows="right|top"
+   height="23"
+   left="0"
+   top_delta="33"
+   image_selected="DropTarget"
+   image_unselected="DropTarget"
+   image_overlay="Command_Search_Icon"
+   name="btn_select_same_norm"
+   mouse_opaque="false"
+   tool_tip="Select all faces with the same normal map as this one"
+   width="23"
+>
+   <button.commit_callback
+      function="BuildTool.SelectSameTexture"
+      parameter="normal"/>
+</button>
 
 <texture_picker
    follows="left|top"
    layout="topleft"
    left="0"
-   top_pad="-6"
+   top_pad="14"
    width="60"
    height="76"
    allow_no_texture="true"
@@ -1699,7 +1782,14 @@
    label="Specular"
    name="shinytexture control"
    tool_tip="Click to choose a picture"
-/>
+>
+   <texture_picker.mouseenter_callback
+      function="BuildTool.ShowFindAllButton"
+      parameter="btn_select_same_spec"/>
+   <texture_picker.mouseleave_callback
+      function="BuildTool.HideFindAllButton"
+      parameter="btn_select_same_spec"/>
+</texture_picker>
 
 <color_swatch
    follows="left|top"
@@ -1715,6 +1805,27 @@
    enabled_control="FSInternalFaceHasBPSpecularMap"
 />
 
+<button
+   enabled="true"
+   visible="false"
+   layout="topleft"
+   follows="right|top"
+   height="23"
+   left="0"
+   top_delta="33"
+   image_selected="DropTarget"
+   image_unselected="DropTarget"
+   image_overlay="Command_Search_Icon"
+   name="btn_select_same_spec"
+   mouse_opaque="false"
+   tool_tip="Select all faces with the same specular map as this one"
+   width="23"
+>
+   <button.commit_callback
+      function="BuildTool.SelectSameTexture"
+      parameter="specular"/>
+</button>
+
 </layout_panel>   <!-- panel_blinn_phong_maps -->
 
 <layout_panel
@@ -1723,21 +1834,21 @@
    name="panel_blinn_phong_options"
    left="140"
    top="0"
-   width="172"
+   width="182"
    height="212"
    auto_resize="false"
 >
 
 <check_box
-   follows="top|rileftght"
+   follows="top|left"
    layout="topleft"
-   left="0"
-   top="6"
+   top="4"
    height="16"
-   right="-1"
+   left="0"
    label="Full Bright"
    name="checkbox fullbright"
-   width="81"
+   width="80"
+   word_wrap="down"
 />
 
 <spinner
@@ -1757,7 +1868,7 @@
 />
 
 <text
-   follows="right|top|"
+   follows="top|right"
    layout="topleft"
    top_delta="4"
    right="-1"

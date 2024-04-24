@@ -5160,6 +5160,12 @@ Segnala abuso
 	<string name="texture_load_dimensions_error">
 		Impossibile caricare immagini di dimensioni superiori a [WIDTH]*[HEIGHT]
 	</string>
+	<string name="texture_load_format_error">
+		Formato immagine non valido
+	</string>
+	<string name="texture_load_empty_file">
+		Il file è vuoto
+	</string>
 	<string name="outfit_photo_load_dimensions_error">
 		Le dimensioni massime delle foto di abiti sono [WIDTH]*[HEIGHT]. Ridimensionare l&apos;immagine o usarne un&apos;altra
 	</string>

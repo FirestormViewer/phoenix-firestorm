@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Tekstura" name="Texture">
+	<panel.string name="paste_error_face_selection_mismatch">
+		Gdy kopiowanych jest wiele stron, to obiekt docelowy musi mieć wybraną taką samą ich liczbę.
+	</panel.string>
+	<panel.string name="paste_error_object_face_count_mismatch">
+		Gdy kopiowane są wszystkie strony, to obiekt docelowy musi mieć taką samą ich liczbę.
+	</panel.string>
+	<panel.string name="paste_error_inventory_not_found">
+		Nie znaleziono jednej lub więcej tekstur.
+	</panel.string>
+	<panel.string name="paste_options">
+		Skopiuj parametry tekstury do schowka
+	</panel.string>
+	<tab_container name="tabs_material_type">
+		<panel name="panel_material_type_pbr">
+			<panel name="panel_material_maps">
+				<texture_picker name="pbr_control" label="Materiał" tool_tip="Kliknij, aby wybrać materiał PBR" />
+				<texture_picker name="base_color_picker" label="Bazowy" tool_tip="Kliknij, aby wybrać bazową mapę kolorów (Albedo)" />
+				<color_swatch name="base_color_tint_picker" label="Kolor" tool_tip="Kliknij, aby wybrać odcień koloru bazowego" />
+				<button name="btn_select_same_gltf" tool_tip="Wybierz wszystkie powierzchnie z takim samym materiałem GLTF jak ta" />
+				<texture_picker name="normal_map_picker" label="Normalne" tool_tip="Kliknij, aby wybrać mapę normalnych" />
+				<texture_picker name="emissive_map_picker" label="Emisyjność" tool_tip="Kliknij, aby wybrać mapę emisyjności" />
+				<color_swatch name="emissive_color_tint_picker" label="Kolor" tool_tip="Kliknij, aby wybrać odcień koloru emisyjności" />
+				<texture_picker name="metallic_map_picker" tool_tip="Kliknij, aby wybrać mapę chropowatości metalicznej, która może zawierać opcjonalny kanał okluzji" />
+			</panel>
+			<panel name="panel_material_parameters">
+				<check_box label="Dwustronny" name="double sided" />
+				<spinner label="Alfa" name="transparency" />
+				<text name="blend mode label">
+					Tryb
+				</text>
+				<combo_box name="alpha mode">
+					<combo_box.item label="Brak" name="None" />
+					<combo_box.item label="Przenikanie" name="Alpha blending" />
+					<combo_box.item label="Maskowanie" name="Alpha masking" />
+				</combo_box>
+				<spinner label="Odcięcie" name="alpha cutoff" />
+				<spinner label="Metaliczn." name="metalness factor" />
+				<spinner label="Chropowat." name="roughness factor" />
+				<button name="save_selected_pbr" label="Zapisz" />
+			</panel>
+			<tab_container name="tabs_pbr_transforms">
+				<panel label="Razem" name="panel_pbr_transforms_all">
+					<panel name="pbr_transforms_all_scale">
+						<text name="pbr_transforms_all_scale_label">
+							Skala
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="Odwróć" />
+						<button name="flipTextureScaleMV" tool_tip="Odwróć" />
+					</panel>
+					<panel name="pbr_transforms_all_offset">
+						<text name="pbr_transforms_all_offset_label">
+							Przesun.
+						</text>
+					</panel>
+					<panel name="pbr_transforms_all_rotation">
+						<text name="pbr_transforms_all_rotation_label">
+							Obrót
+						</text>
+					</panel>
+				</panel>
+				<panel label="Bazowy" name="panel_pbr_transforms_base_color">
+					<panel name="pbr_transforms_base_color_scale">
+						<text name="pbr_transforms_base_color_scale_label">
+							Skala
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="Odwróć" />
+						<button name="flipTextureScaleMV" tool_tip="Odwróć" />
+					</panel>
+					<panel name="pbr_transforms_base_color_offset">
+						<text name="pbr_transforms_base_color_offset_label">
+							Przesun.
+						</text>
+					</panel>
+					<panel name="pbr_transforms_base_color_rotation">
+						<text name="pbr_transforms_base_color_rotation_label">
+							Obrót
+						</text>
+					</panel>
+				</panel>
+				<panel label="Normalne" name="panel_pbr_transforms_normal">
+					<panel name="pbr_transforms_normal_scale">
+						<text name="pbr_transforms_normal_scale_label">
+							Skala
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="Odwróć" />
+						<button name="flipTextureScaleMV" tool_tip="Odwróć" />
+					</panel>
+					<panel name="pbr_transforms_normal_offset">
+						<text name="pbr_transforms_normal_offset_label">
+							Przesun.
+						</text>
+					</panel>
+					<panel name="pbr_transforms_normal_rotation">
+						<text name="pbr_transforms_normal_rotation_label">
+							Obrót
+						</text>
+					</panel>
+				</panel>
+				<panel name="panel_pbr_transforms_metallic">
+					<panel name="pbr_transforms_orm_scale">
+						<text name="pbr_transforms_orm_scale_label">
+							Skala
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="Odwróć" />
+						<button name="flipTextureScaleMV" tool_tip="Odwróć" />
+					</panel>
+					<panel name="pbr_transforms_orm_offset">
+						<text name="pbr_transforms_orm_offset_label">
+							Przesun.
+						</text>
+					</panel>
+					<panel name="pbr_transforms_orm_rotation">
+						<text name="pbr_transforms_orm_rotation_label">
+							Obrót
+						</text>
+					</panel>
+				</panel>
+				<panel label="Emisyjn." name="panel_pbr_transforms_emissive">
+					<panel name="pbr_transforms_emissive_scale">
+						<text name="pbr_transforms_emissive_scale_label">
+							Skala
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="Odwróć" />
+						<button name="flipTextureScaleMV" tool_tip="Odwróć" />
+					</panel>
+					<panel name="pbr_transforms_emissive_offset">
+						<text name="pbr_transforms_emissive_offset_label">
+							Przesun.
+						</text>
+					</panel>
+					<panel name="pbr_transforms_emissive_rotation">
+						<text name="pbr_transforms_emissive_rotation_label">
+							Obrót
+						</text>
+					</panel>
+				</panel>
+			</tab_container>
+		</panel>
+		<panel name="panel_material_type_blinn_phong">
+			<layout_stack name="panel_material_type_blinn_phong_layout_stack">
+				<layout_panel name="panel_blinn_phong_maps">
+					<texture_picker name="texture control" label="Tekstura" tool_tip="Kliknij, aby wybrać obraz" />
+					<color_swatch name="colorswatch" label="Kolor" tool_tip="Kliknij, aby wybrać kolor" />
+					<button name="btn_select_same_diff" tool_tip="Wybierz wszystkie powierzchnie z taką samą teksturą (diffuse) jak ta" />
+					<texture_picker label="Normalne" name="bumpytexture control" tool_tip="Kliknij, aby wybrać obraz" />
+					<button name="btn_select_same_norm" tool_tip="Wybierz wszystkie powierzchnie z taką samą mapą normalnych jak ta" />
+					<texture_picker label="Lśnienie" name="shinytexture control" tool_tip="Kliknij, aby wybrać obraz" />
+					<color_swatch label="Kolor" name="shinycolorswatch" tool_tip="Kliknij, aby wybrać kolor" />
+					<button name="btn_select_same_spec" tool_tip="Wybierz wszystkie powierzchnie z taką samą mapą lśnienia (specular) jak ta" />
+				</layout_panel>
+				<layout_panel name="panel_blinn_phong_options">
+					<check_box label="Superjasna" name="checkbox fullbright" />
+					<spinner name="ColorTrans" label="Przezrocz." />
+					<text name="label alphamode">
+						Tryb alphy
+					</text>
+					<combo_box name="combobox alphamode">
+						<combo_box.item label="Brak" name="None" />
+						<combo_box.item label="Przenikanie" name="Alpha blending" />
+						<combo_box.item label="Maskowanie" name="Alpha masking" />
+						<combo_box.item label="Maska emisyjna" name="Emissive mask" />
+					</combo_box>
+					<spinner label="Odcięcie maski" name="maskcutoff" />
+					<text name="label bumpiness">
+						Powierzchnia
+					</text>
+					<combo_box name="combobox bumpiness">
+						<combo_box.item label="Bez mapowania" name="None" />
+						<combo_box.item label="Rozjaśnienie" name="Brightness" />
+						<combo_box.item label="Przyciemnienie" name="Darkness" />
+						<combo_box.item label="Włókna drewna" name="woodgrain" />
+						<combo_box.item label="Kora drzewa" name="bark" />
+						<combo_box.item label="Cegły" name="bricks" />
+						<combo_box.item label="Plansza szachowa" name="checker" />
+						<combo_box.item label="Beton" name="concrete" />
+						<combo_box.item label="Płytki/Kafelki" name="crustytile" />
+						<combo_box.item label="Kamień" name="cutstone" />
+						<combo_box.item label="Dyski" name="discs" />
+						<combo_box.item label="Żwir" name="gravel" />
+						<combo_box.item label="Skamieliny" name="petridish" />
+						<combo_box.item label="Brzeg" name="siding" />
+						<combo_box.item label="Płytka kamienna" name="stonetile" />
+						<combo_box.item label="Stiuk (gips ozdobny)" name="stucco" />
+						<combo_box.item label="Ssawki" name="suction" />
+						<combo_box.item label="Splot" name="weave" />
+					</combo_box>
+					<text name="label shininess">
+						Połysk
+					</text>
+					<combo_box name="combobox shininess">
+						<combo_box.item label="Żaden" name="None" />
+						<combo_box.item label="Niski" name="Low" />
+						<combo_box.item label="Średni" name="Medium" />
+						<combo_box.item label="Wysoki" name="High" />
+					</combo_box>
+					<spinner name="glossiness" label="Gładkość" />
+					<spinner name="environment" label="Otoczenie" />
+				</layout_panel>
+			</layout_stack>
+			<tab_container name="tabs_blinn_phong_uvs">
+				<panel label="Tekstura" name="panel_blinn_phong_diffuse">
+					<panel name="transforms_diffuse_scale">
+						<text name="transforms_diffuse_scale_label">
+							Skala
+						</text>
+						<button name="flipTextureScaleU" tool_tip="Odwróć" />
+						<button name="flipTextureScaleV" tool_tip="Odwróć" />
+					</panel>
+					<panel name="transforms_diffuse_offset">
+						<text name="transforms_diffuse_offset_label">
+							Przesun.
+						</text>
+					</panel>
+					<panel name="transforms_diffuse_rotation">
+						<text name="transforms_diffuse_rotation_label">
+							Obrót
+						</text>
+					</panel>
+				</panel>
+				<panel label="Normalne" name="panel_blinn_phong_normal">
+					<panel name="transforms_normal_scale">
+						<text name="transforms_normal_scale_label">
+							Skala
+						</text>
+						<button name="flipTextureScaleNU" tool_tip="Odwróć" />
+						<button name="flipTextureScaleNV" tool_tip="Odwróć" />
+					</panel>
+					<panel name="transforms_normal_offset">
+						<text name="transforms_normal_offset_label">
+							Przesun.
+						</text>
+					</panel>
+					<panel name="transforms_normal_rotation">
+						<text name="transforms_normal_rotation_label">
+							Obrót
+						</text>
+					</panel>
+				</panel>
+				<panel label="Lśnienie" name="panel_blinn_phong_specular">
+					<panel name="transforms_specular_scale">
+						<text name="transforms_specular_scale_label">
+							Skala
+						</text>
+						<button name="flipTextureScaleSU" tool_tip="Odwróć" />
+						<button name="flipTextureScaleSV" tool_tip="Odwróć" />
+					</panel>
+					<panel name="transforms_specular_offset">
+						<text name="transforms_specular_offset_label">
+							Przesun.
+						</text>
+					</panel>
+					<panel name="transforms_specular_rotation">
+						<text name="transforms_specular_rotation_label">
+							Obrót
+						</text>
+					</panel>
+				</panel>
+			</tab_container>
+		</panel>
+		<panel name="panel_material_type_media">
+			<text name="media_info">
+				Wybrany URL mediów, jeśli jest obecny
+			</text>
+			<button name="add_media" label="Wybierz..." tool_tip="Dodaj media" />
+			<button name="delete_media" label="Usuń" tool_tip="Usuń tę teksturę mediów" />
+			<button name="button align" label="Dopasuj" label_selected="Dopasuj Media" tool_tip="Wyrównaj teksturę mediów (musi się najpierw załadować)" />
+		</panel>
+	</tab_container>
+	<panel name="panel_face_params">
+		<spinner name="rptctrl" label="Powtórzenia / metr" />
+		<check_box label="Synchronizuj materiały" name="checkbox_sync_settings" tool_tip="Synchronizuj parametry map tekstur" />
+		<check_box label="Równaj powierzchnie planarne" name="checkbox planar align" tool_tip="Wyrównuj tekstury na wszystkich wybranych powierzchniach z powierzchnią wybraną jako ostatnia. Wymaga planarnego mapowania tekstur." />
+		<text name="tex gen">
+			Mapowanie
+		</text>
+		<combo_box name="combobox texgen">
+			<combo_box.item label="Domyślne" name="Default" />
+			<combo_box.item label="Planarne" name="Planar" />
+		</combo_box>
+		<button label="Wyrównaj" name="button align textures" tool_tip="Wyrównaj bieżące warstwy tekstury" />
+	</panel>
+	<button name="copy_face_btn" tool_tip="Skopiuj parametry tekstury do schowka" />
+	<button name="paste_face_btn" tool_tip="Wklej parametry tekstury ze schowka" />
+	<spinner label="Blask" name="glow" />
+</panel>

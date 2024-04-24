@@ -4879,6 +4879,14 @@
              function="Advanced.WebContentTest"
              parameter="HOME_PAGE"/>
           </menu_item_call>
+            <menu_item_call
+             label="Inventory Thumbnails Helper"
+             name="Inventory Thumbnails Helper"
+				shortcut="control|alt|shift|X">
+                <menu_item_call.on_click
+                 function="Floater.Show"
+                 parameter="inventory_thumbnails_helper" />
+            </menu_item_call>
           <menu_item_call
            label="Dump Fonts"
            name="Dump Fonts">
@@ -4986,6 +4994,14 @@
                  function="Advanced.CheckDebugUnicode" />
                 <menu_item_check.on_click
                  function="Advanced.ToggleDebugUnicode" />
+            </menu_item_check>
+            <menu_item_check
+             label="Debug Camera Controls"
+             name="Debug Camera Controls">
+                <menu_item_check.on_check
+                 function="Advanced.CheckDebugCamera" />
+                <menu_item_check.on_click
+                 function="Advanced.ToggleDebugCamera" />
             </menu_item_check>
             <menu_item_check
              label="Debug Name Tooltips"

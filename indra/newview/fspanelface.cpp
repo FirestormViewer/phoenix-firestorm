@@ -566,6 +566,8 @@ FSPanelFace::FSPanelFace() :
 	mCommitCallbackRegistrar.add("BuildTool.Flip",              boost::bind(&FSPanelFace::onCommitFlip, this, _2));
 	mCommitCallbackRegistrar.add("BuildTool.GLTFUVSpinner",     boost::bind(&FSPanelFace::onCommitGLTFUVSpinner, this, _1, _2));
 	mCommitCallbackRegistrar.add("BuildTool.SelectSameTexture", boost::bind(&FSPanelFace::onClickBtnSelectSameTexture, this, _1, _2));
+	mCommitCallbackRegistrar.add("BuildTool.ShowFindAllButton", boost::bind(&FSPanelFace::onShowFindAllButton, this, _1, _2));
+	mCommitCallbackRegistrar.add("BuildTool.HideFindAllButton", boost::bind(&FSPanelFace::onHideFindAllButton, this, _1, _2));
 
 	buildFromFile("panel_fs_tools_texture.xml");
 
@@ -5767,12 +5769,19 @@ void FSPanelFace::changePrecision(S32 decimal_precision)
 	// TODO: add PBR spinners -Zi
 }
 
+void FSPanelFace::onShowFindAllButton(LLUICtrl* ctrl, const LLSD& user_data)
+{
+	findChildView(user_data.asStringRef())->setVisible(true);
+}
+
+void FSPanelFace::onHideFindAllButton(LLUICtrl* ctrl, const LLSD& user_data)
+{
+	findChildView(user_data.asStringRef())->setVisible(false);
+}
+
 // Find all faces with same texture
-// TODO: not yet implemented in the new edit panel -Zi
 void FSPanelFace::onClickBtnSelectSameTexture(const LLUICtrl* ctrl, const LLSD& user_data)
 {
-	char channel = user_data.asStringRef()[0];
-
 	std::unordered_set<LLViewerObject*> objects;
 
 	// get a list of all linksets where at least one face is selected
@@ -5792,6 +5801,10 @@ void FSPanelFace::onClickBtnSelectSameTexture(const LLUICtrl* ctrl, const LLSD& 
 		handle = LLSelectMgr::getInstance()->selectObjectAndFamily(objectp, true, false);
 	}
 
+	// get the texture channel we are interested in - using the first letter is sufficient
+	// and makes things faster in the if () blocks
+	char channel = user_data.asStringRef()[0];
+
 	// grab the texture ID from the texture selector
 	LLTextureCtrl* texture_control = mTextureCtrl;
 	if (channel == 'n')
@@ -5801,6 +5814,10 @@ void FSPanelFace::onClickBtnSelectSameTexture(const LLUICtrl* ctrl, const LLSD& 
 	else if (channel == 's')
 	{
 		texture_control = mShinyTextureCtrl;
+	}
+	else if (channel == 'g')
+	{
+		texture_control = mMaterialCtrlPBR;
 	}
 
 	LLUUID id = texture_control->getImageAssetID();
@@ -5819,6 +5836,10 @@ void FSPanelFace::onClickBtnSelectSameTexture(const LLUICtrl* ctrl, const LLSD& 
 			if (channel == 'd')
 			{
 				image_id = objectp->getTEImage(i)->getID();
+			}
+			else if (channel == 'g')
+			{
+				image_id = objectp->getRenderMaterialID(i);
 			}
 			else
 			{

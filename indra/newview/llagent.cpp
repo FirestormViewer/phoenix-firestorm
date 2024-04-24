@@ -102,7 +102,6 @@
 #include "llworld.h"
 #include "llworldmap.h"
 #include "stringize.h"
-#include "boost/foreach.hpp"
 #include "llcorehttputil.h"
 #include "lluiusage.h"
 // [RLVa:KB] - Checked: 2011-11-04 (RLVa-1.4.4a)
@@ -1675,23 +1674,27 @@ void LLAgent::pitch(F32 angle)
 
 	LLVector3 skyward = getReferenceUpVector();
 
-	// SL-19286 Avatar is upside down when viewed from below
-	// after left-clicking the mouse on the avatar and dragging down
-	//
-	// The issue is observed on angle below 10 degrees
-	const F32 look_down_limit = 179.f * DEG_TO_RAD;
-	const F32 look_up_limit   =  10.f * DEG_TO_RAD;
-
-	F32 angle_from_skyward = acos(mFrameAgent.getAtAxis() * skyward);
-
 	// clamp pitch to limits
-	if ((angle >= 0.f) && (angle_from_skyward + angle > look_down_limit))
+	if (angle >= 0.f)
 	{
-		angle = look_down_limit - angle_from_skyward;
+		const F32 look_down_limit = 179.f * DEG_TO_RAD;
+		F32 angle_from_skyward = acos(mFrameAgent.getAtAxis() * skyward);
+		if (angle_from_skyward + angle > look_down_limit)
+		{
+			angle = look_down_limit - angle_from_skyward;
+		}
 	}
-	else if ((angle < 0.f) && (angle_from_skyward + angle < look_up_limit))
+	else if (angle < 0.f)
 	{
-		angle = look_up_limit - angle_from_skyward;
+		const F32 look_up_limit = 5.f * DEG_TO_RAD;
+		const LLVector3& viewer_camera_pos = LLViewerCamera::getInstance()->getOrigin();
+		LLVector3 agent_focus_pos = getPosAgentFromGlobal(gAgentCamera.calcFocusPositionTargetGlobal());
+		LLVector3 look_dir = agent_focus_pos - viewer_camera_pos;
+		F32 angle_from_skyward = angle_between(look_dir, skyward);
+		if (angle_from_skyward + angle < look_up_limit)
+		{
+			angle = look_up_limit - angle_from_skyward;
+		}
 	}
 
 	if (fabs(angle) > 1e-4)
@@ -2806,7 +2809,7 @@ void LLAgent::endAnimationUpdateUI()
 				skip_list.insert(LLFloaterReg::findInstance("stats"));
 			}
 			// <FS:LO> //FIRE-6385: Show all script dialogs still after leaving mouselook
-			BOOST_FOREACH(LLFloater *tmp, LLFloaterReg::getFloaterList("script_floater"))
+			for (LLFloater *tmp : LLFloaterReg::getFloaterList("script_floater"))
 			{
 				skip_list.insert(tmp);
 			}
@@ -2825,7 +2828,7 @@ void LLAgent::endAnimationUpdateUI()
 			//LLFloaterIMContainer* im_box = LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container");
 			//LLFloaterIMContainer::floater_list_t conversations;
 			//im_box->getDetachedConversationFloaters(conversations);
-			//BOOST_FOREACH(LLFloater* conversation, conversations)
+			//for (LLFloater* conversation : conversations)
 			//{
 			//	LL_INFOS() << "skip_list.insert(session_floater): " << conversation->getTitle() << LL_ENDL;
 			//	skip_list.insert(conversation);
@@ -2981,7 +2984,7 @@ void LLAgent::endAnimationUpdateUI()
 			skip_list.insert(LLFloaterReg::findInstance("stats"));
 		}
 		// <FS:LO> //FIRE-6385: Show all script dialogs still when entering mouselook
-		BOOST_FOREACH(LLFloater *tmp, LLFloaterReg::getFloaterList("script_floater"))
+		for (LLFloater* tmp : LLFloaterReg::getFloaterList("script_floater"))
 		{
 			skip_list.insert(tmp);
 		}
@@ -5159,14 +5162,14 @@ void LLAgent::teleportViaLandmark(const LLUUID& landmark_asset_id)
 	}
 // [/RLVa:KB]
 
-	// <FS:Ansariel> FIRE-7273: Typing does not stop after using Cmd Line tph
-	if (landmark_asset_id.isNull())
-	{
-		// This might mean a local TP, so pro-actively stop typing
-		gAgent.stopTyping();
-	}
-	// </FS:Ansariel>
-
+    if (landmark_asset_id.isNull())
+    {
+        gAgentCamera.resetView();
+        // <FS:Ansariel> FIRE-7273: Typing does not stop after using Cmd Line tph
+        // This might mean a local TP, so pro-actively stop typing
+        gAgent.stopTyping();
+        // </FS:Ansariel>
+    }
 	mTeleportRequest = LLTeleportRequestPtr(new LLTeleportRequestViaLandmark(landmark_asset_id));
 	startTeleportRequest();
 }
