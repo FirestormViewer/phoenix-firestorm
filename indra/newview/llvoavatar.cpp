@@ -708,6 +708,7 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
 	mVisuallyMuteSetting(AV_RENDER_NORMALLY),
 	mMutedAVColor(LLColor4::white /* used for "uninitialize" */),
 	mFirstFullyVisible(true),
+    mFirstDecloudTime(-1.f),
 	mFirstUseDelaySeconds(FIRST_APPEARANCE_CLOUD_MIN_DELAY),
 	mFullyLoaded(false),
 	mPreviousFullyLoaded(false),
@@ -1002,7 +1003,9 @@ S32 LLVOAvatar::getRezzedStatus() const
 {
 	if (getIsCloud()) return 0;
 	bool textured = isFullyTextured();
-	if (textured && allBakedTexturesCompletelyDownloaded()) return 3;
+    bool all_baked_loaded = allBakedTexturesCompletelyDownloaded();
+	if (textured && all_baked_loaded && getAttachmentCount() == mSimAttachments.size()) return 4;
+    if (textured && all_baked_loaded) return 3;
 	if (textured) return 2;
 	llassert(hasGray());
 	return 1; // gray
@@ -1055,10 +1058,13 @@ bool LLVOAvatar::areAllNearbyInstancesBaked(S32& grey_avatars)
 }
 
 // static
-void LLVOAvatar::getNearbyRezzedStats(std::vector<S32>& counts)
+void LLVOAvatar::getNearbyRezzedStats(std::vector<S32>& counts, F32& avg_cloud_time, S32& cloud_avatars)
 {
 	counts.clear();
-	counts.resize(4);
+	counts.resize(5);
+    avg_cloud_time = 0;
+    cloud_avatars = 0;
+    S32 count_avg = 0;
 	for (std::vector<LLCharacter*>::iterator iter = LLCharacter::sInstances.begin();
 		 iter != LLCharacter::sInstances.end(); ++iter)
 	{
@@ -1067,8 +1073,23 @@ void LLVOAvatar::getNearbyRezzedStats(std::vector<S32>& counts)
 		{
 			S32 rez_status = inst->getRezzedStatus();
 			counts[rez_status]++;
+            F32 time = inst->getFirstDecloudTime();
+            if (time >= 0)
+            {
+                avg_cloud_time+=time;
+                count_avg++;
+            }
+            if (!inst->isFullyLoaded() || time < 0)
+            {
+                // still renders as cloud
+                cloud_avatars++;
+            }
 		}
 	}
+    if (count_avg > 0)
+    {
+        avg_cloud_time /= count_avg;
+    }
 }
 
 // static
@@ -1076,8 +1097,9 @@ std::string LLVOAvatar::rezStatusToString(S32 rez_status)
 {
 	if (rez_status==0) return "cloud";
 	if (rez_status==1) return "gray";
-	if (rez_status==2) return "downloading";
-	if (rez_status==3) return "full";
+	if (rez_status==2) return "downloading baked";
+	if (rez_status==3) return "loading attachments";
+	if (rez_status==4) return "full";
 	return "unknown";
 }
 
@@ -3305,9 +3327,10 @@ void LLVOAvatar::idleUpdateLoadingEffect()
 			if (mFirstFullyVisible)
 			{
 				mFirstFullyVisible = false;
+                mFirstDecloudTime = mFirstAppearanceMessageTimer.getElapsedTimeF32();
 				if (isSelf())
 				{
-					LL_INFOS("Avatar") << avString() << "self isFullyLoaded, mFirstFullyVisible" << LL_ENDL;
+					LL_INFOS("Avatar") << avString() << "self isFullyLoaded, mFirstFullyVisible after " << mFirstDecloudTime << LL_ENDL;
 					LLAppearanceMgr::instance().onFirstFullyVisible();
 
 					// <FS:Zi> Animation Overrider
@@ -3318,7 +3341,7 @@ void LLVOAvatar::idleUpdateLoadingEffect()
 				}
 				else
 				{
-					LL_INFOS("Avatar") << avString() << "other isFullyLoaded, mFirstFullyVisible" << LL_ENDL;
+					LL_INFOS("Avatar") << avString() << "other isFullyLoaded, mFirstFullyVisible after " << mFirstDecloudTime << LL_ENDL;
 				}
 			}
 
@@ -3828,6 +3851,7 @@ void LLVOAvatar::idleUpdateNameTagText(bool new_name)
 
 		static LLUICachedControl<bool> show_display_names("NameTagShowDisplayNames", true);
 		static LLUICachedControl<bool> show_usernames("NameTagShowUsernames", true);
+		static LLUICachedControl<bool> show_rez_status("NameTagDebugAVRezState", false);
 		static LLUICachedControl<bool> colorize_username("FSColorUsername");	// <FS:CR> FIRE-1061
 		static LLUICachedControl<bool> show_legacynames("FSNameTagShowLegacyUsernames");
 
@@ -3948,6 +3972,12 @@ void LLVOAvatar::idleUpdateNameTagText(bool new_name)
 			}
 		}
 		// </FS:Ansariel>
+
+        if (show_rez_status)
+        {
+            std::string av_string = LLVOAvatar::rezStatusToString(mLastRezzedStatus);
+            addNameTagLine(av_string, name_tag_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall(), true);
+        }
 
 		mNameAway = is_away;
 		mNameDoNotDisturb = is_do_not_disturb;
@@ -8795,11 +8825,11 @@ LLVOAvatar* LLVOAvatar::findAvatarFromAttachment( LLViewerObject* obj )
 	return NULL;
 }
 
-S32 LLVOAvatar::getAttachmentCount()
+S32 LLVOAvatar::getAttachmentCount() const
 {
 	S32 count = 0;
 
-    for (attachment_map_t::iterator iter = mAttachmentPoints.begin(); iter != mAttachmentPoints.end(); ++iter)
+    for (attachment_map_t::const_iterator iter = mAttachmentPoints.begin(); iter != mAttachmentPoints.end(); ++iter)
     {
         LLViewerJointAttachment* pAttachment = iter->second;
         count += pAttachment->mAttachedObjects.size();
@@ -8998,7 +9028,7 @@ bool LLVOAvatar::getIsCloud() const
 void LLVOAvatar::updateRezzedStatusTimers(S32 rez_status)
 {
 	// State machine for rezzed status. Statuses are -1 on startup, 0
-	// = cloud, 1 = gray, 2 = downloading, 3 = full.
+	// = cloud, 1 = gray, 2 = downloading, 3 = waiting for attachments, 4 = full.
 	// Purpose is to collect time data for each it takes avatar to reach
 	// various loading landmarks: gray, textured (partial), textured fully.
 
@@ -9031,7 +9061,7 @@ void LLVOAvatar::updateRezzedStatusTimers(S32 rez_status)
 				stopPhase("load_" + LLVOAvatar::rezStatusToString(i));
 				stopPhase("first_load_" + LLVOAvatar::rezStatusToString(i), false);
 			}
-			if (rez_status == 3)
+			if (rez_status == 4)
 			{
 				// "fully loaded", mark any pending appearance change complete.
 				selfStopPhase("update_appearance_from_cof");
@@ -9042,6 +9072,12 @@ void LLVOAvatar::updateRezzedStatusTimers(S32 rez_status)
 			}
 		}
 		mLastRezzedStatus = rez_status;
+
+        static LLUICachedControl<bool> show_rez_status("NameTagDebugAVRezState", false);
+        if (show_rez_status)
+        {
+            mNameIsSet = false;
+        }
 	}
 }
 
@@ -9174,7 +9210,7 @@ void LLVOAvatar::logMetricsTimerRecord(const std::string& phase_name, F32 elapse
 bool LLVOAvatar::updateIsFullyLoaded()
 {
 	S32 rez_status = getRezzedStatus();
-	bool loading = getIsCloud();
+	bool loading = rez_status == 0;
 	if (mFirstFullyVisible && !mIsControlAvatar)
 	{
         loading = ((rez_status < 2)
@@ -9189,7 +9225,7 @@ bool LLVOAvatar::updateIsFullyLoaded()
                   );
 
         // compare amount of attachments to one reported by simulator
-        if (!loading && !isSelf() && mLastCloudAttachmentCount != mSimAttachments.size())
+        if (!loading && !isSelf() && rez_status < 4 && mLastCloudAttachmentCount != mSimAttachments.size())
         {
             S32 attachment_count = getAttachmentCount();
             if (mLastCloudAttachmentCount != attachment_count)
@@ -10340,8 +10376,9 @@ void LLVOAvatar::parseAppearanceMessage(LLMessageSystem* mesgsys, LLAppearanceMe
             << " on point " << (S32)attach_point << LL_ENDL;
 
         mSimAttachments[attachment_id] = attach_point;
-	}
+    }
 
+    // todo? Doesn't detect if attachments were switched
     if (old_size != mSimAttachments.size())
     {
         mLastCloudAttachmentCount = 0;

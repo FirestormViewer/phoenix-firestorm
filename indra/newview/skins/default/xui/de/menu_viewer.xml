@@ -624,6 +624,7 @@
 			<menu_item_check label="Landaktualisierung debuggen" name="Debug Joint Updates"/>
 			<menu_item_check label="LOD deaktivieren" name="Disable LOD"/>
 			<menu_item_check label="Sichtbare Agenten debuggen" name="Debug Character Vis"/>
+			<menu_item_check label="Charakter-Rez-Status debuggen" name="Debug Character Rez State"/>
 			<menu_item_check label="Gelenkpunkte anzeigen" name="Show Collision Skeleton"/>
 			<menu_item_check label="Knochen anzeigen" name="Show Bones"/>
 			<menu_item_check label="Agent-Ziel anzeigen" name="Display Agent Target"/>
