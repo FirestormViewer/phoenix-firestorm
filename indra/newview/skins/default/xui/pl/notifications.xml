@@ -5296,9 +5296,25 @@ Riggowane mesze są przeznaczone do dodawania do samego awatara. Ani ty, ani nik
 Jeśli chcesz zobaczyć ten obiekt, to usuń go i ponownie dołącz do punktu doczepienia na awatarze.
 		<usetemplate ignoretext="Ostrzegaj, gdy dodatek z riggowanym meszem jest dołączany do punktu HUD" name="okignore" />
 	</notification>
+	<notification name="ConfirmOverwriteOutfit">
+		Zamierzasz zastąpić elementy wybranego stroju przedmiotami, które masz na sobie teraz.
+		<usetemplate ignoretext="Potwierdź przed nadpisaniem stroju" name="okcancelignore" notext="Anuluj" yestext="Zapisz" />
+	</notification>
+	<notification name="ClearInventoryThumbnailsWarning">
+		Zamierzasz usunąć miniatury elementów z listy. Tej zmiany nie można cofnąć.
+
+Czy chcesz kontynuować?
+		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak" />
+	</notification>
+	<notification name="WriteInventoryThumbnailsWarning">
+		Zamierzasz nadpisać miniatury wszystkich lub niektórych elementów z listy. Tej zmiany nie można cofnąć.
+
+Czy chcesz kontynuować?
+		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak" />
+	</notification>
 	<notification name="ReflectionProbeApplied">
 		UWAGA: Ten obiekt stanie się sondą refleksyjną - nastąpią w nim nieodwracalne zmiany. Sprawią one, że obiekt będzie naśladować wpływ sondy na otoczenie. Czy chcesz kontynuować?
-		<usetemplate ignoretext="Wskazówki sond refleksyjnych" name="okcancelignore" notext="Cancel" />
+		<usetemplate ignoretext="Wskazówki sond refleksyjnych" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="AutoAdjustHDRSky">
 		Edytujesz niebo inne niż HDR, które zostało automatycznie przekonwertowane na HDR. Aby usunąć HDR i mapowanie tonów, ustaw Nastrój Sondy Refleksyjnej na zero.
