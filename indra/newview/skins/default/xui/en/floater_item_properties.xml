@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater
+ positioning="cascading"
+ save_rect="true"
  legacy_header_height="18"
  height="570"
  layout="topleft"
