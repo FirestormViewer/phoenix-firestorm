@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="contents" title="Aide pour les vignettes de l'inventaire">
+	<scroll_list name="inventory_thumbnails_list" tool_tip="Coller des éléments de votre inventaire">
+		<scroll_list.columns label="Élément d'inventaire" name="item_name"/>
+		<scroll_list.columns label="Image existante" name="existing_texture"/>
+		<scroll_list.columns label="Nouvelle image" name="new_texture"/>
+	</scroll_list>
+	<button label="Coller des éléments de l'inventaire" name="paste_items_btn"/>
+	<button label="Coller des images à partir de l'inventaire" name="paste_textures_btn"/>
+	<button label="Écrire les vignettes" name="write_thumbnails_btn"/>
+	<button label="Enregistrer les éléments sans vignette" name="log_missing_thumbnails_btn"/>
+	<button label="Effacer les vignettes des éléments collés" name="clear_thumbnails_btn"/>
+</floater>
