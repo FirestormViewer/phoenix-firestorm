@@ -65,7 +65,7 @@
       layout="topleft"
       left_delta="0"
       name="paste_textures_btn"
-      top_delta="26	"
+      top_delta="26"
       width="235" />
     <button
       follows="left|bottom"
@@ -74,7 +74,7 @@
       layout="topleft"
       left_delta="0"
       name="write_thumbnails_btn"
-      top_delta="26	"
+      top_delta="26"
       width="235" />
     <button
       follows="left|bottom"
