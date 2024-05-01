@@ -1,4 +1,4 @@
-/** 
+/**
  * @file lggbeammapps.cpp
  * @brief Manager for beam shapes
  * @copyright Copyright (c) 2011 LordGregGreg Back
@@ -30,363 +30,363 @@ lggBeamMaps gLggBeamMaps;
 
 F32 hueToRgb(F32 val1In, F32 val2In, F32 valHUeIn)
 {
-	while (valHUeIn < 0.0f)
-	{
-		valHUeIn += 1.0f;
-	}
+    while (valHUeIn < 0.0f)
+    {
+        valHUeIn += 1.0f;
+    }
 
-	while (valHUeIn > 1.0f)
-	{
-		valHUeIn -= 1.0f;
-	}
+    while (valHUeIn > 1.0f)
+    {
+        valHUeIn -= 1.0f;
+    }
 
-	if ((6.0f * valHUeIn) < 1.0f)
-	{
-		return (val1In + (val2In - val1In) * 6.0f * valHUeIn);
-	}
-	else if ((2.0f * valHUeIn) < 1.0f)
-	{
-		return (val2In);
-	}
-	else if ((3.0f * valHUeIn) < 2.0f)
-	{
-		return (val1In + (val2In - val1In) * ((2.0f / 3.0f) - valHUeIn) * 6.0f);
-	}
-	else
-	{
-		return val1In;
-	}
+    if ((6.0f * valHUeIn) < 1.0f)
+    {
+        return (val1In + (val2In - val1In) * 6.0f * valHUeIn);
+    }
+    else if ((2.0f * valHUeIn) < 1.0f)
+    {
+        return (val2In);
+    }
+    else if ((3.0f * valHUeIn) < 2.0f)
+    {
+        return (val1In + (val2In - val1In) * ((2.0f / 3.0f) - valHUeIn) * 6.0f);
+    }
+    else
+    {
+        return val1In;
+    }
 }
 
 void hslToRgb(F32 hValIn, F32 sValIn, F32 lValIn, F32& rValOut, F32& gValOut, F32& bValOut)
 {
-	if (sValIn < F_ALMOST_ZERO)
-	{
-		rValOut = lValIn;
-		gValOut = lValIn;
-		bValOut = lValIn;
-	}
-	else
-	{
-		F32 interVal1;
-		F32 interVal2;
+    if (sValIn < F_ALMOST_ZERO)
+    {
+        rValOut = lValIn;
+        gValOut = lValIn;
+        bValOut = lValIn;
+    }
+    else
+    {
+        F32 interVal1;
+        F32 interVal2;
 
-		if (lValIn < 0.5f)
-		{
-			interVal2 = lValIn * (1.0f + sValIn);
-		}
-		else
-		{
-			interVal2 = (lValIn + sValIn) - (sValIn * lValIn);
-		}
+        if (lValIn < 0.5f)
+        {
+            interVal2 = lValIn * (1.0f + sValIn);
+        }
+        else
+        {
+            interVal2 = (lValIn + sValIn) - (sValIn * lValIn);
+        }
 
-		interVal1 = 2.0f * lValIn - interVal2;
+        interVal1 = 2.0f * lValIn - interVal2;
 
-		rValOut = hueToRgb(interVal1, interVal2, hValIn + (1.f / 3.f));
-		gValOut = hueToRgb(interVal1, interVal2, hValIn);
-		bValOut = hueToRgb(interVal1, interVal2, hValIn - (1.f / 3.f));
-	}
+        rValOut = hueToRgb(interVal1, interVal2, hValIn + (1.f / 3.f));
+        gValOut = hueToRgb(interVal1, interVal2, hValIn);
+        bValOut = hueToRgb(interVal1, interVal2, hValIn - (1.f / 3.f));
+    }
 }
 
 LLSD lggBeamMaps::getPic(const std::string& filename)
 {
-	LLSD data;
-	llifstream importer(filename.c_str());
-	LLSDSerialize::fromXMLDocument(data, importer);
+    LLSD data;
+    llifstream importer(filename.c_str());
+    LLSDSerialize::fromXMLDocument(data, importer);
 
-	return data;
+    return data;
 }
 
 LLColor4U lggBeamMaps::getCurrentColor(const LLColor4U& agentColor)
 {
-	static LLCachedControl<std::string> settingName(gSavedSettings, "FSBeamColorFile");
+    static LLCachedControl<std::string> settingName(gSavedSettings, "FSBeamColorFile");
 
-	if (settingName().empty())
-	{
-		return agentColor;
-	}
+    if (settingName().empty())
+    {
+        return agentColor;
+    }
 
-	if (settingName() != mLastColorFileName)
-	{
-		mLastColorFileName = settingName;
-	
-		std::string path_name(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beamsColors", ""));
-		std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "beamsColors", ""));
-		std::string filename = path_name + settingName() + ".xml";
-		if (!gDirUtilp->fileExists(filename))
-		{
-			filename = path_name2 + settingName() + ".xml";
-			if (!gDirUtilp->fileExists(filename))
-			{
-				return agentColor;
-			}
-		}
+    if (settingName() != mLastColorFileName)
+    {
+        mLastColorFileName = settingName;
 
-		mLastColorsData = lggBeamsColors::fromLLSD(getPic(filename));
-	}
-	
-	return beamColorFromData(mLastColorsData);
+        std::string path_name(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beamsColors", ""));
+        std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "beamsColors", ""));
+        std::string filename = path_name + settingName() + ".xml";
+        if (!gDirUtilp->fileExists(filename))
+        {
+            filename = path_name2 + settingName() + ".xml";
+            if (!gDirUtilp->fileExists(filename))
+            {
+                return agentColor;
+            }
+        }
+
+        mLastColorsData = lggBeamsColors::fromLLSD(getPic(filename));
+    }
+
+    return beamColorFromData(mLastColorsData);
 }
 
 static LLFrameTimer timer;
 LLColor4U lggBeamMaps::beamColorFromData(const lggBeamsColors& data)
 {
-	F32 r, g, b;
-	LLColor4 output;
-	LLColor4U toReturn;
+    F32 r, g, b;
+    LLColor4 output;
+    LLColor4U toReturn;
 
-	F32 difference = data.mEndHue - data.mStartHue;
-	F32 timeinc = difference != 0.f ? timer.getElapsedTimeF32() * 0.3f * (data.mRotateSpeed + 0.01f) * (360 / difference) : 0.f;
+    F32 difference = data.mEndHue - data.mStartHue;
+    F32 timeinc = difference != 0.f ? timer.getElapsedTimeF32() * 0.3f * (data.mRotateSpeed + 0.01f) * (360 / difference) : 0.f;
 
-	S32 rounded_difference = ll_round(difference);
-	if (rounded_difference == 360 || rounded_difference == 720)
-	{
-		//full rainbow
-		//liner one
-		hslToRgb(fmodf(timeinc, 1.0f), 1.0f, 0.5f, r, g, b);
-	}
-	else
-	{
-		F32 variance = difference / 360.0f / 2.0f;
-		hslToRgb((data.mStartHue / 360.0f) + variance + (sinf(timeinc) * variance), 1.0f, 0.5f, r, g, b);
-	}
-	output.set(r, g, b);
+    S32 rounded_difference = ll_round(difference);
+    if (rounded_difference == 360 || rounded_difference == 720)
+    {
+        //full rainbow
+        //liner one
+        hslToRgb(fmodf(timeinc, 1.0f), 1.0f, 0.5f, r, g, b);
+    }
+    else
+    {
+        F32 variance = difference / 360.0f / 2.0f;
+        hslToRgb((data.mStartHue / 360.0f) + variance + (sinf(timeinc) * variance), 1.0f, 0.5f, r, g, b);
+    }
+    output.set(r, g, b);
 
-	toReturn.setVecScaleClamp(output);
-	return toReturn;
+    toReturn.setVecScaleClamp(output);
+    return toReturn;
 }
 
 void lggBeamMaps::fireCurrentBeams(LLPointer<LLHUDEffectSpiral> mBeam, const LLColor4U& rgb)
 {
-	if (mScale == 0.0f)
-	{
-		return;
-	}
+    if (mScale == 0.0f)
+    {
+        return;
+    }
 
-	static LLCachedControl<std::string> colorf(gSavedSettings, "FSBeamColorFile");
-	bool colorsDisabled = (colorf().empty());
-	
-	for (std::vector<lggBeamData>::iterator it = mDots.begin(); it != mDots.end(); ++it)
-	{
-		LLColor4U myColor = rgb;
-		if (colorsDisabled)
-		{
-			myColor = (*it).c;
-		}
+    static LLCachedControl<std::string> colorf(gSavedSettings, "FSBeamColorFile");
+    bool colorsDisabled = (colorf().empty());
 
-		F32 distanceAdjust = dist_vec(mBeam->getPositionGlobal(), gAgent.getPositionGlobal());
-		F32 pulse = 0.75f + sinf(gFrameTimeSeconds * 1.0f) * 0.25f;
-		LLVector3d offset = (*it).p;
-		offset.mdV[VY] *= -1.f;
-		offset *= pulse * mScale * distanceAdjust * 0.1f;
-		
-		LLVector3 beamLine = LLVector3( mBeam->getPositionGlobal() - gAgent.getPositionGlobal());
-		LLVector3 beamLineFlat = beamLine;
-		beamLineFlat.mV[VZ]= 0.0f;
+    for (std::vector<lggBeamData>::iterator it = mDots.begin(); it != mDots.end(); ++it)
+    {
+        LLColor4U myColor = rgb;
+        if (colorsDisabled)
+        {
+            myColor = (*it).c;
+        }
 
-		LLVector3 newDirFlat = LLVector3::x_axis;
-		beamLine.normalize();
-		beamLineFlat.normalize();
-		LLQuaternion change;
-		change.shortestArc(newDirFlat, beamLineFlat);
-		offset.rotVec(change);
-		newDirFlat.rotVec(change);
-		change.shortestArc(newDirFlat, beamLine);
-		offset.rotVec(change);
+        F32 distanceAdjust = dist_vec(mBeam->getPositionGlobal(), gAgent.getPositionGlobal());
+        F32 pulse = 0.75f + sinf(gFrameTimeSeconds * 1.0f) * 0.25f;
+        LLVector3d offset = (*it).p;
+        offset.mdV[VY] *= -1.f;
+        offset *= pulse * mScale * distanceAdjust * 0.1f;
 
-		LLPointer<LLHUDEffectSpiral> myBeam = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM);
-		myBeam->setPositionGlobal(mBeam->getPositionGlobal() + offset + (LLVector3d(beamLine) * sinf(gFrameTimeSeconds * 2.0f) * 0.2f));
-		
-		myBeam->setColor(myColor);
-		myBeam->setTargetObject(mBeam->getTargetObject());
-		myBeam->setSourceObject(mBeam->getSourceObject());
-		myBeam->setNeedsSendToSim(mBeam->getNeedsSendToSim());
-		myBeam->setDuration(mDuration * 1.2f);
-	}
+        LLVector3 beamLine = LLVector3( mBeam->getPositionGlobal() - gAgent.getPositionGlobal());
+        LLVector3 beamLineFlat = beamLine;
+        beamLineFlat.mV[VZ]= 0.0f;
+
+        LLVector3 newDirFlat = LLVector3::x_axis;
+        beamLine.normalize();
+        beamLineFlat.normalize();
+        LLQuaternion change;
+        change.shortestArc(newDirFlat, beamLineFlat);
+        offset.rotVec(change);
+        newDirFlat.rotVec(change);
+        change.shortestArc(newDirFlat, beamLine);
+        offset.rotVec(change);
+
+        LLPointer<LLHUDEffectSpiral> myBeam = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM);
+        myBeam->setPositionGlobal(mBeam->getPositionGlobal() + offset + (LLVector3d(beamLine) * sinf(gFrameTimeSeconds * 2.0f) * 0.2f));
+
+        myBeam->setColor(myColor);
+        myBeam->setTargetObject(mBeam->getTargetObject());
+        myBeam->setSourceObject(mBeam->getSourceObject());
+        myBeam->setNeedsSendToSim(mBeam->getNeedsSendToSim());
+        myBeam->setDuration(mDuration * 1.2f);
+    }
 }
 
 void lggBeamMaps::forceUpdate()
 {
-	mDots.clear();
-	mScale = 0.0f;
-	mLastFileName = "";
+    mDots.clear();
+    mScale = 0.0f;
+    mLastFileName = "";
 }
 
 F32 lggBeamMaps::setUpAndGetDuration()
 {
-	static LLCachedControl<std::string> settingName(gSavedSettings, "FSBeamShape");
+    static LLCachedControl<std::string> settingName(gSavedSettings, "FSBeamShape");
 
-	if (settingName() != mLastFileName)
-	{
-		mLastFileName = settingName;
-		if (!settingName().empty())
-		{
-			std::string path_name(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beams", ""));
-			std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "beams", ""));
-			std::string filename = path_name + settingName() + ".xml";
-			if (!gDirUtilp->fileExists(filename))
-			{
-				filename = path_name2 + settingName() + ".xml";
-			}
+    if (settingName() != mLastFileName)
+    {
+        mLastFileName = settingName;
+        if (!settingName().empty())
+        {
+            std::string path_name(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beams", ""));
+            std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS , "beams", ""));
+            std::string filename = path_name + settingName() + ".xml";
+            if (!gDirUtilp->fileExists(filename))
+            {
+                filename = path_name2 + settingName() + ".xml";
+            }
 
-			LLSD mydata = getPic(filename);
-			mScale = (F32)mydata["scale"].asReal() / 10.0f;
-			LLSD myPicture = mydata["data"];
-			mDots.clear();
-			for (LLSD::array_iterator it = myPicture.beginArray(); it != myPicture.endArray(); ++it)
-			{
-				LLSD beamData = *it;
-				lggBeamData dot;
-				
-				dot.p = LLVector3d(beamData["offset"]);
-				static LLCachedControl<F32> FSBeamShapeScale(gSavedSettings, "FSBeamShapeScale");
-				dot.p *= (FSBeamShapeScale * 2.0f);
-				LLColor4 color = LLColor4(beamData["color"]);
-				dot.c = LLColor4U(color);
-				mDots.push_back(dot);
-			}
-			
-			static LLCachedControl<F32> FSMaxBeamsPerSecond(gSavedSettings, "FSMaxBeamsPerSecond");
-			F32 maxBPerQS = FSMaxBeamsPerSecond / 4.0f;
-			mDuration = llceil((F32)(myPicture.size()) / maxBPerQS) * 0.25f;
-			LL_INFOS("LGG_Beams") << "reading it all now size is " << myPicture.size() << " and duration is " << mDuration << LL_ENDL;
-		}
-		else
-		{
-			mDots.clear();
-			mScale = 0.0f; //used as a flag too
-			mDuration = 0.25f;
-		}
-	}
+            LLSD mydata = getPic(filename);
+            mScale = (F32)mydata["scale"].asReal() / 10.0f;
+            LLSD myPicture = mydata["data"];
+            mDots.clear();
+            for (LLSD::array_iterator it = myPicture.beginArray(); it != myPicture.endArray(); ++it)
+            {
+                LLSD beamData = *it;
+                lggBeamData dot;
 
-	return mDuration;
+                dot.p = LLVector3d(beamData["offset"]);
+                static LLCachedControl<F32> FSBeamShapeScale(gSavedSettings, "FSBeamShapeScale");
+                dot.p *= (FSBeamShapeScale * 2.0f);
+                LLColor4 color = LLColor4(beamData["color"]);
+                dot.c = LLColor4U(color);
+                mDots.push_back(dot);
+            }
+
+            static LLCachedControl<F32> FSMaxBeamsPerSecond(gSavedSettings, "FSMaxBeamsPerSecond");
+            F32 maxBPerQS = FSMaxBeamsPerSecond / 4.0f;
+            mDuration = llceil((F32)(myPicture.size()) / maxBPerQS) * 0.25f;
+            LL_INFOS("LGG_Beams") << "reading it all now size is " << myPicture.size() << " and duration is " << mDuration << LL_ENDL;
+        }
+        else
+        {
+            mDots.clear();
+            mScale = 0.0f; //used as a flag too
+            mDuration = 0.25f;
+        }
+    }
+
+    return mDuration;
 }
 
 string_vec_t lggBeamMaps::getFileNames()
 {
-	string_vec_t names;
-	std::string path_name(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beams", ""));
-	bool found = true;
+    string_vec_t names;
+    std::string path_name(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beams", ""));
+    bool found = true;
 
-	while (found)
-	{
-		std::string name;
-		found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
-		if (found)
-		{
-			name = name.erase(name.length() - 4);
-			names.push_back(unescape_name(name));
-		}
-	}
+    while (found)
+    {
+        std::string name;
+        found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
+        if (found)
+        {
+            name = name.erase(name.length() - 4);
+            names.push_back(unescape_name(name));
+        }
+    }
 
-	std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beams", ""));
-	found = true;
-	while (found)
-	{
-		std::string name;
-		found = gDirUtilp->getNextFileInDir(path_name2, "*.xml", name);
-		if (found)
-		{
-			name = name.erase(name.length() - 4);
-			names.push_back(unescape_name(name));
-		}
-	}
-	return names;
+    std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beams", ""));
+    found = true;
+    while (found)
+    {
+        std::string name;
+        found = gDirUtilp->getNextFileInDir(path_name2, "*.xml", name);
+        if (found)
+        {
+            name = name.erase(name.length() - 4);
+            names.push_back(unescape_name(name));
+        }
+    }
+    return names;
 }
 
 string_vec_t lggBeamMaps::getColorsFileNames()
 {
-	string_vec_t names;
-	std::string path_name(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beamsColors", ""));
-	bool found = true;
+    string_vec_t names;
+    std::string path_name(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "beamsColors", ""));
+    bool found = true;
 
-	while (found)
-	{
-		std::string name;
-		found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
-		if (found)
-		{
-			name = name.erase(name.length() - 4);
-			names.push_back(unescape_name(name));
-		}
-	}
+    while (found)
+    {
+        std::string name;
+        found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name);
+        if (found)
+        {
+            name = name.erase(name.length() - 4);
+            names.push_back(unescape_name(name));
+        }
+    }
 
-	std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beamsColors", ""));
-	found = true;
+    std::string path_name2(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "beamsColors", ""));
+    found = true;
 
-	while (found)
-	{
-		std::string name;
-		found = gDirUtilp->getNextFileInDir(path_name2, "*.xml", name);
-		if (found)
-		{
-			name = name.erase(name.length() - 4);
-			names.push_back(unescape_name(name));
-		}
-	}
-	return names;
+    while (found)
+    {
+        std::string name;
+        found = gDirUtilp->getNextFileInDir(path_name2, "*.xml", name);
+        if (found)
+        {
+            name = name.erase(name.length() - 4);
+            names.push_back(unescape_name(name));
+        }
+    }
+    return names;
 }
 
 void lggBeamMaps::stopBeamChat()
 {
-	static LLCachedControl<bool> FSParticleChat(gSavedSettings, "FSParticleChat");
-	if (FSParticleChat)
-	{
-		if (mPartsNow)
-		{
-			mPartsNow = false;
-			LLMessageSystem* msg = gMessageSystem;
-			msg->newMessageFast(_PREHASH_ChatFromViewer);
-			msg->nextBlockFast(_PREHASH_AgentData);
-			msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
-			msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
-			msg->nextBlockFast(_PREHASH_ChatData);
-			msg->addStringFast(_PREHASH_Message, "stop");
-			msg->addU8Fast(_PREHASH_Type, 0);
-			msg->addS32("Channel", 9000);
+    static LLCachedControl<bool> FSParticleChat(gSavedSettings, "FSParticleChat");
+    if (FSParticleChat)
+    {
+        if (mPartsNow)
+        {
+            mPartsNow = false;
+            LLMessageSystem* msg = gMessageSystem;
+            msg->newMessageFast(_PREHASH_ChatFromViewer);
+            msg->nextBlockFast(_PREHASH_AgentData);
+            msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+            msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
+            msg->nextBlockFast(_PREHASH_ChatData);
+            msg->addStringFast(_PREHASH_Message, "stop");
+            msg->addU8Fast(_PREHASH_Type, 0);
+            msg->addS32("Channel", 9000);
 
-			gAgent.sendReliableMessage();
-			mBeamLastAt = LLVector3d::zero;
-		}
-	}
+            gAgent.sendReliableMessage();
+            mBeamLastAt = LLVector3d::zero;
+        }
+    }
 }
 
 void lggBeamMaps::updateBeamChat(const LLVector3d& currentPos)
 {
-	static LLCachedControl<bool> FSParticleChat(gSavedSettings, "FSParticleChat");
-	if (FSParticleChat)
-	{
-		if (!mPartsNow)
-		{
-			mPartsNow = true;
-			LLMessageSystem* msg = gMessageSystem;
-			msg->newMessageFast(_PREHASH_ChatFromViewer);
-			msg->nextBlockFast(_PREHASH_AgentData);
-			msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
-			msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
-			msg->nextBlockFast(_PREHASH_ChatData);
-			msg->addStringFast(_PREHASH_Message, "start");
-			msg->addU8Fast(_PREHASH_Type, 0);
-			msg->addS32("Channel", 9000);
+    static LLCachedControl<bool> FSParticleChat(gSavedSettings, "FSParticleChat");
+    if (FSParticleChat)
+    {
+        if (!mPartsNow)
+        {
+            mPartsNow = true;
+            LLMessageSystem* msg = gMessageSystem;
+            msg->newMessageFast(_PREHASH_ChatFromViewer);
+            msg->nextBlockFast(_PREHASH_AgentData);
+            msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+            msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
+            msg->nextBlockFast(_PREHASH_ChatData);
+            msg->addStringFast(_PREHASH_Message, "start");
+            msg->addU8Fast(_PREHASH_Type, 0);
+            msg->addS32("Channel", 9000);
 
-			gAgent.sendReliableMessage();
-		}
+            gAgent.sendReliableMessage();
+        }
 
-		if ((mBeamLastAt - currentPos).length() > .2f)
-		{
-			mBeamLastAt = currentPos;
+        if ((mBeamLastAt - currentPos).length() > .2f)
+        {
+            mBeamLastAt = currentPos;
 
-			LLMessageSystem* msg = gMessageSystem;
-			msg->newMessageFast(_PREHASH_ChatFromViewer);
-			msg->nextBlockFast(_PREHASH_AgentData);
-			msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
-			msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
-			msg->nextBlockFast(_PREHASH_ChatData);
-			msg->addStringFast(_PREHASH_Message, llformat("<%.6f, %.6f, %.6f>",(F32)(mBeamLastAt.mdV[VX]), (F32)(mBeamLastAt.mdV[VY]), (F32)(mBeamLastAt.mdV[VZ])));
-			msg->addU8Fast(_PREHASH_Type, 0);
-			msg->addS32("Channel", 9000); // *TODO: make configurable
+            LLMessageSystem* msg = gMessageSystem;
+            msg->newMessageFast(_PREHASH_ChatFromViewer);
+            msg->nextBlockFast(_PREHASH_AgentData);
+            msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+            msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
+            msg->nextBlockFast(_PREHASH_ChatData);
+            msg->addStringFast(_PREHASH_Message, llformat("<%.6f, %.6f, %.6f>",(F32)(mBeamLastAt.mdV[VX]), (F32)(mBeamLastAt.mdV[VY]), (F32)(mBeamLastAt.mdV[VZ])));
+            msg->addU8Fast(_PREHASH_Type, 0);
+            msg->addS32("Channel", 9000); // *TODO: make configurable
 
-			gAgent.sendReliableMessage();
-		}
-	}
+            gAgent.sendReliableMessage();
+        }
+    }
 }

@@ -115,7 +115,7 @@ LLUUID post_profile_image(std::string cap_url, const LLSD &first_data, std::stri
 
     LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
     httpOpts->setFollowRedirects(true);
-    
+
     LLSD result = httpAdapter->postAndSuspend(httpRequest, cap_url, first_data, httpOpts, httpHeaders);
 
     LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
@@ -264,22 +264,22 @@ void post_profile_image_coro(std::string cap_url, EProfileImageType type, std::s
 class LLProfileHandler : public LLCommandHandler
 {
 public:
-	// requires trusted browser to trigger
-	LLProfileHandler() : LLCommandHandler("profile", UNTRUSTED_THROTTLE) { }
+    // requires trusted browser to trigger
+    LLProfileHandler() : LLCommandHandler("profile", UNTRUSTED_THROTTLE) { }
 
-	bool handle(const LLSD& params,
+    bool handle(const LLSD& params,
                 const LLSD& query_map,
                 const std::string& grid,
                 LLMediaCtrl* web)
-	{
-		if (params.size() < 1) return false;
-		std::string agent_name = params[0];
-		LL_INFOS() << "Profile, agent_name " << agent_name << LL_ENDL;
-		std::string url = getProfileURL(agent_name);
-		LLWeb::loadURLInternal(url);
+    {
+        if (params.size() < 1) return false;
+        std::string agent_name = params[0];
+        LL_INFOS() << "Profile, agent_name " << agent_name << LL_ENDL;
+        std::string url = getProfileURL(agent_name);
+        LLWeb::loadURLInternal(url);
 
-		return true;
-	}
+        return true;
+    }
 };
 LLProfileHandler gProfileHandler;
 
@@ -290,8 +290,8 @@ LLProfileHandler gProfileHandler;
 class LLAgentHandler : public LLCommandHandler
 {
 public:
-	// requires trusted browser to trigger
-	LLAgentHandler() : LLCommandHandler("agent", UNTRUSTED_THROTTLE) { }
+    // requires trusted browser to trigger
+    LLAgentHandler() : LLCommandHandler("agent", UNTRUSTED_THROTTLE) { }
 
     virtual bool canHandleUntrusted(
         const LLSD& params,
@@ -318,114 +318,114 @@ public:
         return false;
     }
 
-	bool handle(const LLSD& params,
+    bool handle(const LLSD& params,
                 const LLSD& query_map,
                 const std::string& grid,
                 LLMediaCtrl* web)
-	{
-		if (params.size() < 2) return false;
-		LLUUID avatar_id;
-		if (!avatar_id.set(params[0], FALSE))
-		{
-			return false;
-		}
+    {
+        if (params.size() < 2) return false;
+        LLUUID avatar_id;
+        if (!avatar_id.set(params[0], FALSE))
+        {
+            return false;
+        }
 
-		const std::string verb = params[1].asString();
-		// <FS:Ansariel> FIRE-9045: Inspect links always open full profile
-		//if (verb == "about")
-		if (verb == "about" || (gSavedSettings.getBOOL("FSInspectAvatarSlurlOpensProfile") && verb == "inspect"))
-		// </FS:Ansariel>
-		{
-			LLAvatarActions::showProfile(avatar_id);
-			return true;
-		}
+        const std::string verb = params[1].asString();
+        // <FS:Ansariel> FIRE-9045: Inspect links always open full profile
+        //if (verb == "about")
+        if (verb == "about" || (gSavedSettings.getBOOL("FSInspectAvatarSlurlOpensProfile") && verb == "inspect"))
+        // </FS:Ansariel>
+        {
+            LLAvatarActions::showProfile(avatar_id);
+            return true;
+        }
 
-		if (verb == "inspect")
-		{
-			LLFloaterReg::showInstance("inspect_avatar", LLSD().with("avatar_id", avatar_id));
-			return true;
-		}
+        if (verb == "inspect")
+        {
+            LLFloaterReg::showInstance("inspect_avatar", LLSD().with("avatar_id", avatar_id));
+            return true;
+        }
 
-		if (verb == "im")
-		{
-			LLAvatarActions::startIM(avatar_id);
-			return true;
-		}
+        if (verb == "im")
+        {
+            LLAvatarActions::startIM(avatar_id);
+            return true;
+        }
 
-		if (verb == "pay")
-		{
-			if (!LLUI::getInstance()->mSettingGroups["config"]->getBOOL("EnableAvatarPay"))
-			{
-				LLNotificationsUtil::add("NoAvatarPay", LLSD(), LLSD(), std::string("SwitchToStandardSkinAndQuit"));
-				return true;
-			}
+        if (verb == "pay")
+        {
+            if (!LLUI::getInstance()->mSettingGroups["config"]->getBOOL("EnableAvatarPay"))
+            {
+                LLNotificationsUtil::add("NoAvatarPay", LLSD(), LLSD(), std::string("SwitchToStandardSkinAndQuit"));
+                return true;
+            }
 
-			LLAvatarActions::pay(avatar_id);
-			return true;
-		}
+            LLAvatarActions::pay(avatar_id);
+            return true;
+        }
 
-		if (verb == "offerteleport")
-		{
-			LLAvatarActions::offerTeleport(avatar_id);
-			return true;
-		}
+        if (verb == "offerteleport")
+        {
+            LLAvatarActions::offerTeleport(avatar_id);
+            return true;
+        }
 
-		if (verb == "requestfriend")
-		{
-			LLAvatarActions::requestFriendshipDialog(avatar_id);
-			return true;
-		}
+        if (verb == "requestfriend")
+        {
+            LLAvatarActions::requestFriendshipDialog(avatar_id);
+            return true;
+        }
 
-		if (verb == "removefriend")
-		{
-			LLAvatarActions::removeFriendDialog(avatar_id);
-			return true;
-		}
+        if (verb == "removefriend")
+        {
+            LLAvatarActions::removeFriendDialog(avatar_id);
+            return true;
+        }
 
-		if (verb == "mute")
-		{
-			if (! LLAvatarActions::isBlocked(avatar_id))
-			{
-				LLAvatarActions::toggleBlock(avatar_id);
-			}
-			return true;
-		}
+        if (verb == "mute")
+        {
+            if (! LLAvatarActions::isBlocked(avatar_id))
+            {
+                LLAvatarActions::toggleBlock(avatar_id);
+            }
+            return true;
+        }
 
-		if (verb == "unmute")
-		{
-			if (LLAvatarActions::isBlocked(avatar_id))
-			{
-				LLAvatarActions::toggleBlock(avatar_id);
-			}
-			return true;
-		}
+        if (verb == "unmute")
+        {
+            if (LLAvatarActions::isBlocked(avatar_id))
+            {
+                LLAvatarActions::toggleBlock(avatar_id);
+            }
+            return true;
+        }
 
-		if (verb == "block")
-		{
-			if (params.size() > 2)
-			{
-				const std::string object_name = LLURI::unescape(params[2].asString());
-				LLMute mute(avatar_id, object_name, LLMute::OBJECT);
-				LLMuteList::getInstance()->add(mute);
-				LLPanelBlockedList::showPanelAndSelect(mute.mID);
-			}
-			return true;
-		}
+        if (verb == "block")
+        {
+            if (params.size() > 2)
+            {
+                const std::string object_name = LLURI::unescape(params[2].asString());
+                LLMute mute(avatar_id, object_name, LLMute::OBJECT);
+                LLMuteList::getInstance()->add(mute);
+                LLPanelBlockedList::showPanelAndSelect(mute.mID);
+            }
+            return true;
+        }
 
-		if (verb == "unblock")
-		{
-			if (params.size() > 2)
-			{
-				const std::string object_name = params[2].asString();
-				LLMute mute(avatar_id, object_name, LLMute::OBJECT);
-				LLMuteList::getInstance()->remove(mute);
-			}
-			return true;
-		}
+        if (verb == "unblock")
+        {
+            if (params.size() > 2)
+            {
+                const std::string object_name = params[2].asString();
+                LLMute mute(avatar_id, object_name, LLMute::OBJECT);
+                LLMuteList::getInstance()->remove(mute);
+            }
+            return true;
+        }
 
         // reportAbuse is here due to convoluted avatar handling
         // in LLScrollListCtrl and LLTextBase
-        if (verb == "reportAbuse" && web == NULL) 
+        if (verb == "reportAbuse" && web == NULL)
         {
             LLAvatarName av_name;
             if (LLAvatarNameCache::get(avatar_id, &av_name))
@@ -438,8 +438,8 @@ public:
             }
             return true;
         }
-		return false;
-	}
+        return false;
+    }
 };
 LLAgentHandler gAgentHandler;
 
@@ -447,13 +447,13 @@ LLAgentHandler gAgentHandler;
 class FSAgentSelfHandler : public LLCommandHandler
 {
 public:
-	// requires trusted browser to trigger
-	FSAgentSelfHandler() : LLCommandHandler("agentself", UNTRUSTED_THROTTLE) { }
+    // requires trusted browser to trigger
+    FSAgentSelfHandler() : LLCommandHandler("agentself", UNTRUSTED_THROTTLE) { }
 
-	bool handle(const LLSD& params, const LLSD& query_map, const std::string& grid, LLMediaCtrl* web)
-	{
-		return gAgentHandler.handle(params, query_map, grid, web);
-	}
+    bool handle(const LLSD& params, const LLSD& query_map, const std::string& grid, LLMediaCtrl* web)
+    {
+        return gAgentHandler.handle(params, query_map, grid, web);
+    }
 };
 FSAgentSelfHandler gAgentSelfHandler;
 // </FS:Ansariel>
@@ -499,7 +499,7 @@ private:
     bool                mHasUnsavedPermChanges;
     LLHandle<LLView>    mOwnerHandle;
 
-    boost::signals2::connection	mAvatarNameCacheConnection;
+    boost::signals2::connection mAvatarNameCacheConnection;
 };
 
 LLFloaterProfilePermissions::LLFloaterProfilePermissions(LLView * owner, const LLUUID &avatar_id)
@@ -959,14 +959,14 @@ void LLPanelProfileSecondLife::refreshName()
 void LLPanelProfileSecondLife::apply(LLAvatarData* data)
 {
 #ifdef OPENSIM
-	if (LLGridManager::instance().isInOpenSim() && getIsLoaded() && getSelfProfile())
-	{
-		data->image_id = mImageId;
-		data->about_text = mDescriptionEdit->getValue().asString();
-		data->allow_publish = mShowInSearchCheckbox->getValue();
+    if (LLGridManager::instance().isInOpenSim() && getIsLoaded() && getSelfProfile())
+    {
+        data->image_id = mImageId;
+        data->about_text = mDescriptionEdit->getValue().asString();
+        data->allow_publish = mShowInSearchCheckbox->getValue();
 
-		LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesUpdate(data);
-	}
+        LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesUpdate(data);
+    }
 #endif
 }
 // </FS:Beq>
@@ -1050,31 +1050,31 @@ void LLPanelProfileSecondLife::processProperties(void* data, EAvatarProcessorTyp
         }
     }
 
-	// <FS:Beq> Restore UDP profiles
-	// discard UDP replies for profile data if profile capability is available
-	// otherwise we will truncate profile descriptions to the old UDP limits
-	if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
-	{
-		return;
-	}
+    // <FS:Beq> Restore UDP profiles
+    // discard UDP replies for profile data if profile capability is available
+    // otherwise we will truncate profile descriptions to the old UDP limits
+    if (!gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty())
+    {
+        return;
+    }
 
-	if (data && APT_PROPERTIES_LEGACY == type)
-	{
-		const LLAvatarData avatar_data(*static_cast<const LLAvatarLegacyData*>(data));
-		if (getAvatarId() == avatar_data.avatar_id)
-		{
-			processProfileProperties(&avatar_data);
-		}
-	}
-	else if (APT_GROUPS == type)
-	{
-		LLAvatarGroups* avatar_groups = static_cast<LLAvatarGroups*>(data);
-		if (avatar_groups && getAvatarId() == avatar_groups->avatar_id)
-		{
-			processGroupProperties(avatar_groups);
-		}
-	}
-	// </FS:Beq>
+    if (data && APT_PROPERTIES_LEGACY == type)
+    {
+        const LLAvatarData avatar_data(*static_cast<const LLAvatarLegacyData*>(data));
+        if (getAvatarId() == avatar_data.avatar_id)
+        {
+            processProfileProperties(&avatar_data);
+        }
+    }
+    else if (APT_GROUPS == type)
+    {
+        LLAvatarGroups* avatar_groups = static_cast<LLAvatarGroups*>(data);
+        if (avatar_groups && getAvatarId() == avatar_groups->avatar_id)
+        {
+            processGroupProperties(avatar_groups);
+        }
+    }
+    // </FS:Beq>
 }
 
 void LLPanelProfileSecondLife::processProfileProperties(const LLAvatarData* avatar_data)
@@ -1375,7 +1375,7 @@ void LLPanelProfileSecondLife::fillAccountStatus(const LLAvatarData* avatar_data
             args["[FSSUPP]"] = text;
             separator = true;
         }
-        
+
         if (flags & FSData::QA)
         {
             text = getString("FSQualityAssurance");
@@ -2535,7 +2535,7 @@ void LLPanelProfileWeb::updateData()
 #ifdef OPENSIM
 void LLPanelProfileWeb::apply(LLAvatarData* data)
 {
-	data->profile_url = mURLHome;
+    data->profile_url = mURLHome;
 }
 #endif
 // </FS:Beq>
@@ -2906,23 +2906,23 @@ void LLPanelProfileFirstLife::onDiscardDescriptionChanges()
 void LLPanelProfileFirstLife::processProperties(void * data, EAvatarProcessorType type)
 {
     if (APT_PROPERTIES == type)
-	{
+    {
         const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
-		if (avatar_data && getAvatarId() == avatar_data->avatar_id)
-		{
+        if (avatar_data && getAvatarId() == avatar_data->avatar_id)
+        {
             processProperties(avatar_data);
         }
     }
-	// <FS:Beq> Restore UDP profiles
+    // <FS:Beq> Restore UDP profiles
     else if (gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty() && APT_PROPERTIES_LEGACY == type)
-	{
+    {
         const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
-		if (avatar_data && getAvatarId() == avatar_data->avatar_id)
-		{
+        if (avatar_data && getAvatarId() == avatar_data->avatar_id)
+        {
             processProperties(avatar_data);
         }
     }
-	// </FS:Beq>
+    // </FS:Beq>
 }
 
 void LLPanelProfileFirstLife::processProperties(const LLAvatarData* avatar_data)
@@ -2947,8 +2947,8 @@ void LLPanelProfileFirstLife::processProperties(const LLAvatarData* avatar_data)
 #ifdef OPENSIM
 void LLPanelProfileFirstLife::apply(LLAvatarData* data)
 {
-	data->fl_image_id = mImageId;
-	data->fl_about_text = mDescriptionEdit->getValue().asString();
+    data->fl_image_id = mImageId;
+    data->fl_about_text = mDescriptionEdit->getValue().asString();
 }
 #endif
 // </FS:Beq>
@@ -3275,12 +3275,12 @@ void LLPanelProfile::showPick(const LLUUID& pick_id)
 
 bool LLPanelProfile::isPickTabSelected()
 {
-	return (mTabContainer->getCurrentPanel() == mPanelPicks);
+    return (mTabContainer->getCurrentPanel() == mPanelPicks);
 }
 
 bool LLPanelProfile::isNotesTabSelected()
 {
-	return (mTabContainer->getCurrentPanel() == mPanelNotes);
+    return (mTabContainer->getCurrentPanel() == mPanelNotes);
 }
 
 bool LLPanelProfile::hasUnsavedChanges()
@@ -3306,21 +3306,21 @@ void LLPanelProfile::commitUnsavedChanges()
     mPanelNotes->commitUnsavedChanges();
     // <FS:Beq> restore UDP - this is effectvely the apply() method from the previous incarnation
 #ifdef OPENSIM
-	if (LLGridManager::instance().isInOpenSim() && (gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty()) && getSelfProfile())
-	{
-		//KC - Avatar data is spread over 3 different panels
-		// collect data from the last 2 and give to the first to save
+    if (LLGridManager::instance().isInOpenSim() && (gAgent.getRegionCapability(PROFILE_PROPERTIES_CAP).empty()) && getSelfProfile())
+    {
+        //KC - Avatar data is spread over 3 different panels
+        // collect data from the last 2 and give to the first to save
         LLAvatarData data = mAvatarData;
-		data.avatar_id = gAgentID;
+        data.avatar_id = gAgentID;
         // these three collate data so need to be called in sequence.
-		mPanelFirstlife->apply(&data);
-		mPanelWeb->apply(&data);
-		mPanelSecondlife->apply(&data);
+        mPanelFirstlife->apply(&data);
+        mPanelWeb->apply(&data);
+        mPanelSecondlife->apply(&data);
         // These three triggered above
-		// mPanelInterests->apply();
-		// mPanelPicks->apply();
-		// mPanelNotes->apply();
-	}
+        // mPanelInterests->apply();
+        // mPanelPicks->apply();
+        // mPanelNotes->apply();
+    }
 #endif
     // </FS:Beq>
 }

@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -43,205 +43,205 @@
 class FSSlurlCommandHandler : public LLCommandHandler
 {
 public:
-	// not allowed from outside the app
-	FSSlurlCommandHandler() : LLCommandHandler("firestorm", UNTRUSTED_BLOCK) { }
+    // not allowed from outside the app
+    FSSlurlCommandHandler() : LLCommandHandler("firestorm", UNTRUSTED_BLOCK) { }
 
-	bool handle(const LLSD& params, const LLSD& query_map, const std::string& grid, LLMediaCtrl* web)
-	{
-		if (params.size() < 2)
-		{
-			return false;
-		}
+    bool handle(const LLSD& params, const LLSD& query_map, const std::string& grid, LLMediaCtrl* web)
+    {
+        if (params.size() < 2)
+        {
+            return false;
+        }
 
-		LLUUID target_id;
-		if (!target_id.set(params[0], FALSE))
-		{
-			return false;
-		}
+        LLUUID target_id;
+        if (!target_id.set(params[0], FALSE))
+        {
+            return false;
+        }
 
-		const std::string verb = params[1].asString();
+        const std::string verb = params[1].asString();
 
-		if (verb == "zoom")
-		{
-			if (LLAvatarActions::canZoomIn(target_id))
-			{
-				LLAvatarActions::zoomIn(target_id);
-				return true;
-			}
+        if (verb == "zoom")
+        {
+            if (LLAvatarActions::canZoomIn(target_id))
+            {
+                LLAvatarActions::zoomIn(target_id);
+                return true;
+            }
 
-			LLNotificationsUtil::add("ZoomToAvatarNotPossible");
-			return true;
-		}
+            LLNotificationsUtil::add("ZoomToAvatarNotPossible");
+            return true;
+        }
 
-		if (verb == "offerteleport")
-		{
-			if (gAgentID != target_id)
-			{
-				LLAvatarActions::offerTeleport(target_id);
-			}
+        if (verb == "offerteleport")
+        {
+            if (gAgentID != target_id)
+            {
+                LLAvatarActions::offerTeleport(target_id);
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-		if (verb == "requestteleport")
-		{
-			if (gAgentID != target_id)
-			{
-				LLAvatarActions::teleportRequest(target_id);
-			}
+        if (verb == "requestteleport")
+        {
+            if (gAgentID != target_id)
+            {
+                LLAvatarActions::teleportRequest(target_id);
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-		if (verb == "teleportto")
-		{
-			if (gAgentID != target_id)
-			{
-				LLAvatarActions::teleportTo(target_id);
-			}
+        if (verb == "teleportto")
+        {
+            if (gAgentID != target_id)
+            {
+                LLAvatarActions::teleportTo(target_id);
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-		if (verb == "track")
-		{
-			if (gAgentID != target_id)
-			{
-				LLAvatarActions::track(target_id);
-			}
-	
-			return true;
-		}
-		
-		if (verb == "addtocontactset")
-		{
-			if (gAgentID != target_id)
-			{
-				LLAvatarActions::addToContactSet(target_id);
-			}
-			return true;
-		}
+        if (verb == "track")
+        {
+            if (gAgentID != target_id)
+            {
+                LLAvatarActions::track(target_id);
+            }
 
-		if (verb == "blockavatar")
-		{
-			if (gAgentID != target_id)
-			{
-				LLAvatarActions::toggleBlock(target_id);
-			}
-			return true;
-		}
+            return true;
+        }
 
-		if (verb == "viewlog")
-		{
-			if (gAgentID != target_id && LLLogChat::isTranscriptExist(target_id))
-			{
-				LLAvatarActions::viewChatHistory(target_id);
-			}
-			return true;
-		}
+        if (verb == "addtocontactset")
+        {
+            if (gAgentID != target_id)
+            {
+                LLAvatarActions::addToContactSet(target_id);
+            }
+            return true;
+        }
 
-		if (verb == "groupjoin")
-		{
-			LLGroupActions::join(target_id);
-			return true;
-		}
+        if (verb == "blockavatar")
+        {
+            if (gAgentID != target_id)
+            {
+                LLAvatarActions::toggleBlock(target_id);
+            }
+            return true;
+        }
 
-		if (verb == "groupleave")
-		{
-			LLGroupActions::leave(target_id);
-			return true;
-		}
+        if (verb == "viewlog")
+        {
+            if (gAgentID != target_id && LLLogChat::isTranscriptExist(target_id))
+            {
+                LLAvatarActions::viewChatHistory(target_id);
+            }
+            return true;
+        }
 
-		if (verb == "groupactivate")
-		{
-			LLGroupActions::activate(target_id);
-			return true;
-		}
+        if (verb == "groupjoin")
+        {
+            LLGroupActions::join(target_id);
+            return true;
+        }
 
-		// please someone tell me there is an easier way to get the group UUID of the
-		// currently focused group, or transfer the UUID through the context menu somehow - Zi
-		LLFloater* focused_floater = gFloaterView->getFocusedFloater();
+        if (verb == "groupleave")
+        {
+            LLGroupActions::leave(target_id);
+            return true;
+        }
 
-		FSFloaterIM* floater_im;
+        if (verb == "groupactivate")
+        {
+            LLGroupActions::activate(target_id);
+            return true;
+        }
 
-		// let's guess that the user has tabbed IMs
-		FSFloaterIMContainer* floater_container = dynamic_cast<FSFloaterIMContainer*>(focused_floater);
+        // please someone tell me there is an easier way to get the group UUID of the
+        // currently focused group, or transfer the UUID through the context menu somehow - Zi
+        LLFloater* focused_floater = gFloaterView->getFocusedFloater();
 
-		if (floater_container)
-		{
-			// get the active sub-floater inside the tabbed IMs
-			floater_im = dynamic_cast<FSFloaterIM*>(floater_container->getActiveFloater());
-		}
-		else
-		{
-			// no tabbed IMs or torn-off group floater, try if this is already what we wanted
-			floater_im = dynamic_cast<FSFloaterIM*>(focused_floater);
-		}
+        FSFloaterIM* floater_im;
 
-		// still not an IM floater, give up
-		if (!floater_im)
-		{
-			return true;
-		}
+        // let's guess that the user has tabbed IMs
+        FSFloaterIMContainer* floater_container = dynamic_cast<FSFloaterIMContainer*>(focused_floater);
 
-		// get the group's UUID
-		LLUUID group_id = floater_im->getKey();
+        if (floater_container)
+        {
+            // get the active sub-floater inside the tabbed IMs
+            floater_im = dynamic_cast<FSFloaterIM*>(floater_container->getActiveFloater());
+        }
+        else
+        {
+            // no tabbed IMs or torn-off group floater, try if this is already what we wanted
+            floater_im = dynamic_cast<FSFloaterIM*>(focused_floater);
+        }
 
-		// is this actually a valid IM session?
-		LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(group_id);
-		if (!session)
-		{
-			return true;
-		}
+        // still not an IM floater, give up
+        if (!floater_im)
+        {
+            return true;
+        }
 
-		// is this actually a valid group IM session?
-		if (!session->isGroupSessionType())
-		{
-			return true;
-		}
+        // get the group's UUID
+        LLUUID group_id = floater_im->getKey();
 
-		// finally! let's see what we came here to do
+        // is this actually a valid IM session?
+        LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(group_id);
+        if (!session)
+        {
+            return true;
+        }
 
-		if (verb == "groupchatallow")
-		{
-			// no safety checks, just allow
-			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(group_id);
-			speaker_mgr->allowTextChat(target_id, true);
+        // is this actually a valid group IM session?
+        if (!session->isGroupSessionType())
+        {
+            return true;
+        }
 
-			return true;
-		}
+        // finally! let's see what we came here to do
 
-		if (verb == "groupchatforbid")
-		{
-			// no safety checks, just mute
-			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(group_id);
-			speaker_mgr->allowTextChat(target_id, false);
+        if (verb == "groupchatallow")
+        {
+            // no safety checks, just allow
+            LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(group_id);
+            speaker_mgr->allowTextChat(target_id, true);
 
-			return true;
-		}
+            return true;
+        }
 
-		if (verb == "groupeject")
-		{
-			// no safety checks, just eject
-			LLGroupActions::ejectFromGroup(group_id, target_id);
-			return true;
-		}
+        if (verb == "groupchatforbid")
+        {
+            // no safety checks, just mute
+            LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(group_id);
+            speaker_mgr->allowTextChat(target_id, false);
 
-		if (verb == "groupban")
-		{
-			std::vector<LLUUID> ids;
-			ids.push_back(target_id);
+            return true;
+        }
 
-			// no safety checks, just ban
-			LLGroupMgr::getInstance()->sendGroupBanRequest(LLGroupMgr::REQUEST_POST, group_id, LLGroupMgr::BAN_CREATE, ids);
-			LLGroupMgr::getInstance()->sendGroupMemberEjects(group_id, ids);
-			LLGroupMgr::getInstance()->sendGroupMembersRequest(group_id);
+        if (verb == "groupeject")
+        {
+            // no safety checks, just eject
+            LLGroupActions::ejectFromGroup(group_id, target_id);
+            return true;
+        }
 
-			return true;
-		}
+        if (verb == "groupban")
+        {
+            std::vector<LLUUID> ids;
+            ids.push_back(target_id);
 
-		return false;
-	}
+            // no safety checks, just ban
+            LLGroupMgr::getInstance()->sendGroupBanRequest(LLGroupMgr::REQUEST_POST, group_id, LLGroupMgr::BAN_CREATE, ids);
+            LLGroupMgr::getInstance()->sendGroupMemberEjects(group_id, ids);
+            LLGroupMgr::getInstance()->sendGroupMembersRequest(group_id);
+
+            return true;
+        }
+
+        return false;
+    }
 };
 
 // Creating the object registers with the dispatcher.
@@ -250,25 +250,25 @@ FSSlurlCommandHandler gFSSlurlHandler;
 class FSHelpSlurlCommandHandler : public LLCommandHandler
 {
 public:
-	// not allowed from outside the app
-	FSHelpSlurlCommandHandler() : LLCommandHandler("fshelp", UNTRUSTED_THROTTLE) { }
+    // not allowed from outside the app
+    FSHelpSlurlCommandHandler() : LLCommandHandler("fshelp", UNTRUSTED_THROTTLE) { }
 
-	bool handle(const LLSD& params, const LLSD& query_map, const std::string& grid, LLMediaCtrl* web)
-	{
-		if (params.size() < 2)
-		{
-			return false;
-		}
+    bool handle(const LLSD& params, const LLSD& query_map, const std::string& grid, LLMediaCtrl* web)
+    {
+        if (params.size() < 2)
+        {
+            return false;
+        }
 
-		if (params[0].asString() == "showdebug")
-		{
-			std::string setting_name = params[1].asString();
-			LLFloaterSettingsDebug::showControl(setting_name);
-			return true;
-		}
+        if (params[0].asString() == "showdebug")
+        {
+            std::string setting_name = params[1].asString();
+            LLFloaterSettingsDebug::showControl(setting_name);
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 };
 
 // Creating the object registers with the dispatcher.

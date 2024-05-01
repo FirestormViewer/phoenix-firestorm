@@ -1,25 +1,25 @@
-/** 
+/**
  * @file llfloaterprofiletexture.cpp
  * @brief LLFloaterProfileTexture class implementation
  *
  * $LicenseInfo:firstyear=2022&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2022, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -208,13 +208,13 @@ BOOL LLFloaterProfileTexture::postBuild()
     // <FS:Ansariel> Add refresh function
     getChild<LLButton>("btn_refresh")->setCommitCallback([this](LLUICtrl*, void*) { refreshTexture(); }, nullptr);
 
-	return TRUE;
+    return TRUE;
 }
 
 // virtual
 void LLFloaterProfileTexture::reshape(S32 width, S32 height, BOOL called_from_parent)
 {
-	LLFloater::reshape(width, height, called_from_parent);
+    LLFloater::reshape(width, height, called_from_parent);
 }
 
 // It takes a while until we get height and width information.
@@ -294,7 +294,7 @@ void LLFloaterProfileTexture::onImageLoaded(BOOL success, LLViewerFetchedTexture
 // <FS:Ansariel> Add refresh function
 void LLFloaterProfileTexture::refreshTexture()
 {
-    
+
     if (mProfileIcon->getImageAssetId().notNull() && mProfileIcon->getImage().notNull())
     {
         destroy_texture(mProfileIcon->getImageAssetId());

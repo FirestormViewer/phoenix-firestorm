@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -37,24 +37,24 @@ class LLMenuButton;
 class FSFloaterTeleportHistory : public LLFloater
 {
 public:
-	FSFloaterTeleportHistory(const LLSD& seed);
-	virtual ~FSFloaterTeleportHistory();
+    FSFloaterTeleportHistory(const LLSD& seed);
+    virtual ~FSFloaterTeleportHistory();
 
-	BOOL postBuild();
-	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
-	/*virtual*/ bool hasAccelerators() const { return true; }
+    BOOL postBuild();
+    /*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+    /*virtual*/ bool hasAccelerators() const { return true; }
 
-	void resetFilter();
+    void resetFilter();
 
 private:
-	void onFilterEdit(const std::string& search_string, bool force_filter);
-	void onGearMenuClick();
-	void onSortingMenuClick();
+    void onFilterEdit(const std::string& search_string, bool force_filter);
+    void onGearMenuClick();
+    void onSortingMenuClick();
 
-	LLTeleportHistoryPanel*	mHistoryPanel;
-	LLFilterEditor*			mFilterEditor;
-	LLMenuButton*				mGearMenuButton;
-	LLMenuButton*				mSortingMenuButton;
+    LLTeleportHistoryPanel* mHistoryPanel;
+    LLFilterEditor*         mFilterEditor;
+    LLMenuButton*               mGearMenuButton;
+    LLMenuButton*               mSortingMenuButton;
 };
 
 #endif // FS_FLOATERTELEPORTHISTORY_H

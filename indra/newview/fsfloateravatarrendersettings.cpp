@@ -46,159 +46,159 @@ FSFloaterAvatarRenderSettings::FSFloaterAvatarRenderSettings(const LLSD& key)
  mFilterSubString(LLStringUtil::null),
  mFilterSubStringOrig(LLStringUtil::null)
 {
-	mCommitCallbackRegistrar.add("Settings.AddNewEntry", boost::bind(&FSFloaterAvatarRenderSettings::onClickAdd, this, _2));
+    mCommitCallbackRegistrar.add("Settings.AddNewEntry", boost::bind(&FSFloaterAvatarRenderSettings::onClickAdd, this, _2));
 }
 
 FSFloaterAvatarRenderSettings::~FSFloaterAvatarRenderSettings()
 {
-	if (mRenderSettingChangedCallbackConnection.connected())
-	{
-		mRenderSettingChangedCallbackConnection.disconnect();
-	}
+    if (mRenderSettingChangedCallbackConnection.connected())
+    {
+        mRenderSettingChangedCallbackConnection.disconnect();
+    }
 }
 
 
 void FSFloaterAvatarRenderSettings::addElementToList(const LLUUID& avatar_id, LLVOAvatar::VisualMuteSettings render_setting)
 {
-	static const std::string av_render_never = getString("av_render_never");
-	static const std::string av_render_always = getString("av_render_always");
-	static const std::string av_name_waiting = LLTrans::getString("AvatarNameWaiting");
+    static const std::string av_render_never = getString("av_render_never");
+    static const std::string av_render_always = getString("av_render_always");
+    static const std::string av_name_waiting = LLTrans::getString("AvatarNameWaiting");
 
-	LLNameListCtrl::NameItem item_params;
-	item_params.value = avatar_id;
-	item_params.target = LLNameListCtrl::INDIVIDUAL;
+    LLNameListCtrl::NameItem item_params;
+    item_params.value = avatar_id;
+    item_params.target = LLNameListCtrl::INDIVIDUAL;
 
-	item_params.columns.add().column("name");
-	item_params.name = av_name_waiting;
+    item_params.columns.add().column("name");
+    item_params.name = av_name_waiting;
 
-	std::string render_value = (render_setting == LLVOAvatar::AV_DO_NOT_RENDER ? av_render_never : av_render_always);
-	item_params.columns.add().value(render_value).column("render_setting");
+    std::string render_value = (render_setting == LLVOAvatar::AV_DO_NOT_RENDER ? av_render_never : av_render_always);
+    item_params.columns.add().value(render_value).column("render_setting");
 
-	mAvatarList->addNameItemRow(item_params);
+    mAvatarList->addNameItemRow(item_params);
 }
 
 BOOL FSFloaterAvatarRenderSettings::postBuild()
 {
-	mAvatarList = getChild<LLNameListCtrl>("avatar_list");
-	mAvatarList->setContextMenu(&FSFloaterAvatarRenderPersistenceMenu::gFSAvatarRenderPersistenceMenu);
-	mAvatarList->setFilterColumn(0);
+    mAvatarList = getChild<LLNameListCtrl>("avatar_list");
+    mAvatarList->setContextMenu(&FSFloaterAvatarRenderPersistenceMenu::gFSAvatarRenderPersistenceMenu);
+    mAvatarList->setFilterColumn(0);
 
-	childSetAction("close_btn", boost::bind(&FSFloaterAvatarRenderSettings::onCloseBtn, this));
+    childSetAction("close_btn", boost::bind(&FSFloaterAvatarRenderSettings::onCloseBtn, this));
 
-	getChild<LLFilterEditor>("filter_input")->setCommitCallback(boost::bind(&FSFloaterAvatarRenderSettings::onFilterEdit, this, _2));
+    getChild<LLFilterEditor>("filter_input")->setCommitCallback(boost::bind(&FSFloaterAvatarRenderSettings::onFilterEdit, this, _2));
 
-	mRenderSettingChangedCallbackConnection = FSAvatarRenderPersistence::instance().setAvatarRenderSettingChangedCallback(boost::bind(&FSFloaterAvatarRenderSettings::onAvatarRenderSettingChanged, this, _1, _2));
+    mRenderSettingChangedCallbackConnection = FSAvatarRenderPersistence::instance().setAvatarRenderSettingChangedCallback(boost::bind(&FSFloaterAvatarRenderSettings::onAvatarRenderSettingChanged, this, _1, _2));
 
-	this->setVisibleCallback(boost::bind(&FSFloaterAvatarRenderSettings::removePicker, this));
-	
-	loadInitialList();
+    this->setVisibleCallback(boost::bind(&FSFloaterAvatarRenderSettings::removePicker, this));
 
-	return TRUE;
+    loadInitialList();
+
+    return TRUE;
 }
 
 void FSFloaterAvatarRenderSettings::removePicker()
 {
-	if (mPicker.get())
-	{
-		mPicker.get()->closeFloater();
-	}
+    if (mPicker.get())
+    {
+        mPicker.get()->closeFloater();
+    }
 }
 
 void FSFloaterAvatarRenderSettings::onCloseBtn()
 {
-	closeFloater();
+    closeFloater();
 }
 
 void FSFloaterAvatarRenderSettings::loadInitialList()
 {
-	FSAvatarRenderPersistence::avatar_render_setting_t avatar_render_map = FSAvatarRenderPersistence::instance().getAvatarRenderMap();
-	for (FSAvatarRenderPersistence::avatar_render_setting_t::iterator it = avatar_render_map.begin(); it != avatar_render_map.end(); ++it)
-	{
-		addElementToList(it->first, it->second);
-	}
+    FSAvatarRenderPersistence::avatar_render_setting_t avatar_render_map = FSAvatarRenderPersistence::instance().getAvatarRenderMap();
+    for (FSAvatarRenderPersistence::avatar_render_setting_t::iterator it = avatar_render_map.begin(); it != avatar_render_map.end(); ++it)
+    {
+        addElementToList(it->first, it->second);
+    }
 }
 
 void FSFloaterAvatarRenderSettings::onAvatarRenderSettingChanged(const LLUUID& avatar_id, LLVOAvatar::VisualMuteSettings render_setting)
 {
-	mAvatarList->removeNameItem(avatar_id);
-	if (render_setting != LLVOAvatar::AV_RENDER_NORMALLY)
-	{
-		addElementToList(avatar_id, render_setting);
-	}
+    mAvatarList->removeNameItem(avatar_id);
+    if (render_setting != LLVOAvatar::AV_RENDER_NORMALLY)
+    {
+        addElementToList(avatar_id, render_setting);
+    }
 }
 
 void FSFloaterAvatarRenderSettings::onFilterEdit(const std::string& search_string)
 {
-	mFilterSubStringOrig = search_string;
-	LLStringUtil::trimHead(mFilterSubStringOrig);
-	// Searches are case-insensitive
-	std::string search_upper = mFilterSubStringOrig;
-	LLStringUtil::toUpper(search_upper);
+    mFilterSubStringOrig = search_string;
+    LLStringUtil::trimHead(mFilterSubStringOrig);
+    // Searches are case-insensitive
+    std::string search_upper = mFilterSubStringOrig;
+    LLStringUtil::toUpper(search_upper);
 
-	if (mFilterSubString == search_upper)
-	{
-		return;
-	}
+    if (mFilterSubString == search_upper)
+    {
+        return;
+    }
 
-	mFilterSubString = search_upper;
+    mFilterSubString = search_upper;
 
-	// Apply new filter.
-	mAvatarList->setFilterString(mFilterSubStringOrig);
+    // Apply new filter.
+    mAvatarList->setFilterString(mFilterSubStringOrig);
 }
 
 BOOL FSFloaterAvatarRenderSettings::handleKeyHere(KEY key, MASK mask)
 {
-	if (FSCommon::isFilterEditorKeyCombo(key, mask))
-	{
-		getChild<LLFilterEditor>("filter_input")->setFocus(TRUE);
-		return TRUE;
-	}
+    if (FSCommon::isFilterEditorKeyCombo(key, mask))
+    {
+        getChild<LLFilterEditor>("filter_input")->setFocus(TRUE);
+        return TRUE;
+    }
 
-	return LLFloater::handleKeyHere(key, mask);
+    return LLFloater::handleKeyHere(key, mask);
 }
 
 void FSFloaterAvatarRenderSettings::onClickAdd(const LLSD& userdata)
 {
-	const std::string command_name = userdata.asString();
-	LLVOAvatar::VisualMuteSettings render_setting = LLVOAvatar::AV_RENDER_NORMALLY;
-	if ("never" == command_name)
-	{
-		render_setting = LLVOAvatar::AV_DO_NOT_RENDER;
-	}
-	else if ("always" == command_name)
-	{
-		render_setting = LLVOAvatar::AV_ALWAYS_RENDER;
-	}
+    const std::string command_name = userdata.asString();
+    LLVOAvatar::VisualMuteSettings render_setting = LLVOAvatar::AV_RENDER_NORMALLY;
+    if ("never" == command_name)
+    {
+        render_setting = LLVOAvatar::AV_DO_NOT_RENDER;
+    }
+    else if ("always" == command_name)
+    {
+        render_setting = LLVOAvatar::AV_ALWAYS_RENDER;
+    }
 
-	LLView* button = findChild<LLButton>("plus_btn", TRUE);
-	LLFloater* root_floater = gFloaterView->getParentFloater(this);
-	LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&FSFloaterAvatarRenderSettings::callbackAvatarPicked, this, _1, render_setting),
-																	TRUE, TRUE, TRUE, root_floater->getName(), button);
+    LLView* button = findChild<LLButton>("plus_btn", TRUE);
+    LLFloater* root_floater = gFloaterView->getParentFloater(this);
+    LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&FSFloaterAvatarRenderSettings::callbackAvatarPicked, this, _1, render_setting),
+                                                                    TRUE, TRUE, TRUE, root_floater->getName(), button);
 
-	if (root_floater)
-	{
-		root_floater->addDependentFloater(picker);
-	}
+    if (root_floater)
+    {
+        root_floater->addDependentFloater(picker);
+    }
 
-	mPicker = picker->getHandle();
+    mPicker = picker->getHandle();
 }
 
 void FSFloaterAvatarRenderSettings::callbackAvatarPicked(const uuid_vec_t& ids, LLVOAvatar::VisualMuteSettings render_setting)
 {
-	for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
-	{
-		LLUUID avatar_id = *it;
+    for (uuid_vec_t::const_iterator it = ids.begin(); it != ids.end(); ++it)
+    {
+        LLUUID avatar_id = *it;
 
-		LLVOAvatar *avatarp = dynamic_cast<LLVOAvatar*>(gObjectList.findObject(avatar_id));
-		if (avatarp)
-		{
-			avatarp->setVisualMuteSettings(render_setting);
-		}
-		else
-		{
-			FSAvatarRenderPersistence::instance().setAvatarRenderSettings(avatar_id, render_setting);
-		}
-	}
+        LLVOAvatar *avatarp = dynamic_cast<LLVOAvatar*>(gObjectList.findObject(avatar_id));
+        if (avatarp)
+        {
+            avatarp->setVisualMuteSettings(render_setting);
+        }
+        else
+        {
+            FSAvatarRenderPersistence::instance().setAvatarRenderSettings(avatar_id, render_setting);
+        }
+    }
 }
 
 
@@ -208,39 +208,39 @@ void FSFloaterAvatarRenderSettings::callbackAvatarPicked(const uuid_vec_t& ids, 
 namespace FSFloaterAvatarRenderPersistenceMenu
 {
 
-	FSAvatarRenderPersistenceMenu gFSAvatarRenderPersistenceMenu;
+    FSAvatarRenderPersistenceMenu gFSAvatarRenderPersistenceMenu;
 
-	LLContextMenu* FSAvatarRenderPersistenceMenu::createMenu()
-	{
-		// set up the callbacks for all of the avatar menu items
-		LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+    LLContextMenu* FSAvatarRenderPersistenceMenu::createMenu()
+    {
+        // set up the callbacks for all of the avatar menu items
+        LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 
-		registrar.add("Avatar.ChangeRenderSetting", boost::bind(&FSAvatarRenderPersistenceMenu::changeRenderSetting, this, _2));
+        registrar.add("Avatar.ChangeRenderSetting", boost::bind(&FSAvatarRenderPersistenceMenu::changeRenderSetting, this, _2));
 
-		// create the context menu from the XUI
-		return createFromFile("menu_fs_avatar_render_setting.xml");
-	}
+        // create the context menu from the XUI
+        return createFromFile("menu_fs_avatar_render_setting.xml");
+    }
 
-	void FSAvatarRenderPersistenceMenu::changeRenderSetting(const LLSD& param)
-	{
-		LLVOAvatar::VisualMuteSettings render_setting = (LLVOAvatar::VisualMuteSettings)param.asInteger();
+    void FSAvatarRenderPersistenceMenu::changeRenderSetting(const LLSD& param)
+    {
+        LLVOAvatar::VisualMuteSettings render_setting = (LLVOAvatar::VisualMuteSettings)param.asInteger();
 
-		for (uuid_vec_t::iterator it = mUUIDs.begin(); it != mUUIDs.end(); ++it)
-		{
-			LLUUID avatar_id = *it;
+        for (uuid_vec_t::iterator it = mUUIDs.begin(); it != mUUIDs.end(); ++it)
+        {
+            LLUUID avatar_id = *it;
 
-			LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(gObjectList.findObject(avatar_id));
-			if (avatar)
-			{
-				// Set setting via the LLVOAvatar instance if it's available; will also call FSAvatarRenderPersistence::setAvatarRenderSettings()
-				avatar->setVisualMuteSettings(render_setting);
-			}
-			else
-			{
-				FSAvatarRenderPersistence::instance().setAvatarRenderSettings(avatar_id, render_setting);
-			}
-		}
+            LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(gObjectList.findObject(avatar_id));
+            if (avatar)
+            {
+                // Set setting via the LLVOAvatar instance if it's available; will also call FSAvatarRenderPersistence::setAvatarRenderSettings()
+                avatar->setVisualMuteSettings(render_setting);
+            }
+            else
+            {
+                FSAvatarRenderPersistence::instance().setAvatarRenderSettings(avatar_id, render_setting);
+            }
+        }
 
-		LLVOAvatar::cullAvatarsByPixelArea();
-	}
+        LLVOAvatar::cullAvatarsByPixelArea();
+    }
 }

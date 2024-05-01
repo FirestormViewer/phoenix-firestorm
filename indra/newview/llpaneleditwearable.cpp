@@ -1,25 +1,25 @@
-/** 
+/**
  * @file llpaneleditwearable.cpp
  * @brief UI panel for editing of a particular wearable item.
  *
  * $LicenseInfo:firstyear=2009&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -221,7 +221,7 @@ LLEditWearableDictionary::LLEditWearableDictionary()
 {
 }
 
-//virtual 
+//virtual
 LLEditWearableDictionary::~LLEditWearableDictionary()
 {
 }
@@ -663,7 +663,7 @@ LLPanelEditWearable::LLPanelEditWearable()
 LLPanelEditWearable::~LLPanelEditWearable()
 {
        if (mWearablePtr)
-       	    mWearablePtr->unregisterObserver(this);
+            mWearablePtr->unregisterObserver(this);
 }
 
 bool LLPanelEditWearable::changeHeightUnits(const LLSD& new_value)
@@ -725,7 +725,7 @@ void LLPanelEditWearable::setWearablePanelVisibilityChangeCallback(LLPanel* body
         }
 }
 
-// virtual 
+// virtual
 BOOL LLPanelEditWearable::postBuild()
 {
         // buttons
@@ -736,7 +736,7 @@ BOOL LLPanelEditWearable::postBuild()
         mBackBtnLabel = mBtnBack->getLabelUnselected();
         mBtnBack->setLabel(LLStringUtil::null);
 
-        childSetAction("import_btn", boost::bind(&LLPanelEditWearable::onClickedImportBtn, this));	// [FS:CR] FIRE-290
+        childSetAction("import_btn", boost::bind(&LLPanelEditWearable::onClickedImportBtn, this));  // [FS:CR] FIRE-290
 
         mBtnBack->setClickedCallback(boost::bind(&LLPanelEditWearable::onBackButtonClicked, this));
 
@@ -822,7 +822,7 @@ BOOL LLPanelEditWearable::postBuild()
                         }
 
                         const std::string accordion_tab = subpart_entry->mAccordionTab;
-        
+
                         // <FS:Ansariel> Alpha and tattoo don't adhere to the usual panel layout and don't have a param list and main tab
                         //               We can safely skip here as the wearables having no accordion tabs only have one sub-part,
                         //               so no camera switch is needed
@@ -879,7 +879,7 @@ BOOL LLPanelEditWearable::postBuild()
         return TRUE;
 }
 
-// virtual 
+// virtual
 // LLUICtrl
 BOOL LLPanelEditWearable::isDirty() const
 {
@@ -928,14 +928,14 @@ void LLPanelEditWearable::setWearable(LLViewerWearable *wearable, BOOL disable_c
 {
         showWearable(mWearablePtr, FALSE, disable_camera_switch);
         if (mWearablePtr)
-       	    mWearablePtr->unregisterObserver(this);
+            mWearablePtr->unregisterObserver(this);
         mWearablePtr = wearable;
         if( mWearablePtr )
             mWearablePtr->registerObserver( this );
         showWearable(mWearablePtr, TRUE, disable_camera_switch);
 }
 
-//static 
+//static
 void LLPanelEditWearable::onBackButtonClicked(void* userdata)
 {
         LLPanelEditWearable* panel = (LLPanelEditWearable*)userdata;
@@ -945,7 +945,7 @@ void LLPanelEditWearable::onBackButtonClicked(void* userdata)
         }
 }
 
-//static 
+//static
 void LLPanelEditWearable::onRevertButtonClicked(void* userdata)
 {
         LLPanelEditWearable *panel = (LLPanelEditWearable*) userdata;
@@ -1281,7 +1281,7 @@ void LLPanelEditWearable::showWearable(LLViewerWearable* wearable, BOOL show, BO
                             continue;
                         }
                         // </FS:Ansariel>
-        
+
                         LLScrollingPanelList *panel_list = getChild<LLScrollingPanelList>(scrolling_panel);
                         LLAccordionCtrlTab *tab = getChild<LLAccordionCtrlTab>(accordion_tab);
 
@@ -1440,8 +1440,8 @@ void LLPanelEditWearable::changeCamera(U8 subpart)
 
         // Update the camera
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
-		//gMorphView->setCameraTargetJoint( gAgentAvatarp->getJoint( subpart_entry->mTargetJoint ) );
-		gMorphView->setCameraTargetJoint( gAgentAvatarp->getJoint( JointKey::construct( subpart_entry->mTargetJoint ) ) );
+        //gMorphView->setCameraTargetJoint( gAgentAvatarp->getJoint( subpart_entry->mTargetJoint ) );
+        gMorphView->setCameraTargetJoint( gAgentAvatarp->getJoint( JointKey::construct( subpart_entry->mTargetJoint ) ) );
 // </FS>ND>
 
         gMorphView->setCameraTargetOffset( subpart_entry->mTargetOffset );
@@ -1619,9 +1619,9 @@ void LLPanelEditWearable::getSortedParams(value_map_t &sorted_params, const std:
         {
                 LLViewerVisualParam *param = (LLViewerVisualParam*) *iter;
 
-                if (param->getID() == -1 
+                if (param->getID() == -1
                         || !param->isTweakable()
-                        || param->getEditGroup() != edit_group 
+                        || param->getEditGroup() != edit_group
                         || !(param->getSex() & avatar_sex))
                 {
                         continue;
@@ -1745,7 +1745,7 @@ void LLPanelEditWearable::onInvisibilityCommit(LLCheckBoxCtrl* checkbox_ctrl, LL
         {
                 LLLocalTextureObject *lto = getWearable()->getLocalTextureObject(te);
                 mPreviousAlphaTexture[te] = lto->getID();
-                
+
                 LLViewerFetchedTexture* image = LLViewerTextureManager::getFetchedTexture( IMG_INVISIBLE );
                 gAgentAvatarp->setLocalTexture(te, image, FALSE, index);
                 // <FS:Ansariel> [Legacy Bake]
@@ -1815,7 +1815,7 @@ void LLPanelEditWearable::initPreviousAlphaTextureEntry(LLAvatarAppearanceDefine
 // [FS:CR] FIRE-10986
 void LLPanelEditWearable::onClickedImportBtn()
 {
-	LLFilePickerReplyThread::startPicker(boost::bind(&LLPanelEditWearable::onClickedImportBtnCallback, this, _1), LLFilePicker::FFLOAD_XML, false);
+    LLFilePickerReplyThread::startPicker(boost::bind(&LLPanelEditWearable::onClickedImportBtnCallback, this, _1), LLFilePicker::FFLOAD_XML, false);
 }
 
 void LLPanelEditWearable::onClickedImportBtnCallback(const std::vector<std::string>& filenames)
@@ -1849,7 +1849,7 @@ void LLPanelEditWearable::onClickedImportBtnCallback(const std::vector<std::stri
         static const LLStdStringHandle id_handle = LLXmlTree::addAttributeString("id");
         static const LLStdStringHandle value_handle = LLXmlTree::addAttributeString("value");
         U32 parse_errors = 0;
-        
+
         for (LLXmlTreeNode* child = archetype->getFirstChild(); child != NULL; child = archetype->getNextChild())
         {
             if (!child->hasName("param")) continue;

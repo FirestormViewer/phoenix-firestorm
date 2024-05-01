@@ -1,4 +1,4 @@
-/** 
+/**
  * @file lggbeamscolors.h
  * @brief Manager for beams colors
  * @copyright Copyright (c) 2011 LordGregGreg Back
@@ -19,20 +19,20 @@
 class lggBeamsColors
 {
 public:
-	lggBeamsColors(F32 startHue, F32 endHue, F32 rotateSpeed);
-	lggBeamsColors();
+    lggBeamsColors(F32 startHue, F32 endHue, F32 rotateSpeed);
+    lggBeamsColors();
 
-	~lggBeamsColors();
+    ~lggBeamsColors();
 
-	F32 mStartHue;
-	F32 mEndHue;
-	F32 mRotateSpeed;
+    F32 mStartHue;
+    F32 mEndHue;
+    F32 mRotateSpeed;
 
-	LLSD toLLSD();
-	static lggBeamsColors fromLLSD(const LLSD& inputData);
+    LLSD toLLSD();
+    static lggBeamsColors fromLLSD(const LLSD& inputData);
 
-	std::string toString();
-	// List sorted by name.
+    std::string toString();
+    // List sorted by name.
 };
 
 #endif // LGG_BEAMSCOLORS_H

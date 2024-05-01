@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -39,23 +39,23 @@
 class FSDispatchClassifiedClickThrough : public LLDispatchHandler
 {
 public:
-	virtual bool operator()(
-		const LLDispatcher* dispatcher,
-		const std::string& key,
-		const LLUUID& invoice,
-		const sparam_t& strings)
-	{
-		if (strings.size() != 4) return false;
-		LLUUID classified_id(strings[0]);
-		S32 teleport_clicks = atoi(strings[1].c_str());
-		S32 map_clicks = atoi(strings[2].c_str());
-		S32 profile_clicks = atoi(strings[3].c_str());
+    virtual bool operator()(
+        const LLDispatcher* dispatcher,
+        const std::string& key,
+        const LLUUID& invoice,
+        const sparam_t& strings)
+    {
+        if (strings.size() != 4) return false;
+        LLUUID classified_id(strings[0]);
+        S32 teleport_clicks = atoi(strings[1].c_str());
+        S32 map_clicks = atoi(strings[2].c_str());
+        S32 profile_clicks = atoi(strings[3].c_str());
 
-		LLPanelProfileClassified::setClickThrough(
-			classified_id, teleport_clicks, map_clicks, profile_clicks, false);
+        LLPanelProfileClassified::setClickThrough(
+            classified_id, teleport_clicks, map_clicks, profile_clicks, false);
 
-		return true;
-	}
+        return true;
+    }
 };
 
 #endif // FS_DISPATCHCLASSIFIEDCLICKTHROUGH_H

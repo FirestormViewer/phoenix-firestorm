@@ -1,25 +1,25 @@
-/** 
+/**
  * @file audioengine.h
  * @brief Definition of LLAudioEngine base class abstracting the audio support
  *
  * $LicenseInfo:firstyear=2000&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -52,7 +52,7 @@ const F32 DEFAULT_MIN_DISTANCE = 2.0f;
 
 #define LL_MAX_AUDIO_CHANNELS 30
 // <FS:Ansariel> FIRE-4276: Increase number of audio buffers
-//#define LL_MAX_AUDIO_BUFFERS 40	// Some extra for preloading, maybe?
+//#define LL_MAX_AUDIO_BUFFERS 40   // Some extra for preloading, maybe?
 #define LL_MAX_AUDIO_BUFFERS 60
 // </FS:Ansariel>
 
@@ -67,223 +67,223 @@ struct SoundData;
 //
 //  LLAudioEngine definition
 //
-class LLAudioEngine 
+class LLAudioEngine
 {
-	friend class LLAudioChannelOpenAL; // bleh. channel needs some listener methods.
-	
+    friend class LLAudioChannelOpenAL; // bleh. channel needs some listener methods.
+
 public:
-	enum LLAudioType
-	{
-		AUDIO_TYPE_NONE    = 0,
-		AUDIO_TYPE_SFX     = 1,
-		AUDIO_TYPE_UI      = 2,
-		AUDIO_TYPE_AMBIENT = 3,
-		AUDIO_TYPE_COUNT   = 4 // last
-	};
-	
-	enum LLAudioPlayState
-	{
-		// isInternetStreamPlaying() returns an *S32*, with
-		// 0 = stopped, 1 = playing, 2 = paused.
-		AUDIO_STOPPED = 0,
-		AUDIO_PLAYING = 1,
-		AUDIO_PAUSED = 2
-	};
-	
-	LLAudioEngine();
-	virtual ~LLAudioEngine();
+    enum LLAudioType
+    {
+        AUDIO_TYPE_NONE    = 0,
+        AUDIO_TYPE_SFX     = 1,
+        AUDIO_TYPE_UI      = 2,
+        AUDIO_TYPE_AMBIENT = 3,
+        AUDIO_TYPE_COUNT   = 4 // last
+    };
 
-	// initialization/startup/shutdown
-	virtual bool init(void *userdata, const std::string &app_title);
-	virtual std::string getDriverName(bool verbose) = 0;
-	virtual LLStreamingAudioInterface *createDefaultStreamingAudioImpl() const = 0;
-	virtual void shutdown();
+    enum LLAudioPlayState
+    {
+        // isInternetStreamPlaying() returns an *S32*, with
+        // 0 = stopped, 1 = playing, 2 = paused.
+        AUDIO_STOPPED = 0,
+        AUDIO_PLAYING = 1,
+        AUDIO_PAUSED = 2
+    };
 
-	// Used by the mechanics of the engine
-	//virtual void processQueue(const LLUUID &sound_guid);
-	virtual void setListener(LLVector3 pos,LLVector3 vel,LLVector3 up,LLVector3 at);
-	virtual void updateWind(LLVector3 direction, F32 camera_height_above_water) = 0;
-	virtual void idle();
-	virtual void updateChannels();
+    LLAudioEngine();
+    virtual ~LLAudioEngine();
 
-	//
-	// "End user" functionality
-	//
-	virtual bool isWindEnabled();
-	virtual void enableWind(bool state_b);
+    // initialization/startup/shutdown
+    virtual bool init(void *userdata, const std::string &app_title);
+    virtual std::string getDriverName(bool verbose) = 0;
+    virtual LLStreamingAudioInterface *createDefaultStreamingAudioImpl() const = 0;
+    virtual void shutdown();
 
-	// Use these for temporarily muting the audio system.
-	// Does not change buffers, initialization, etc. but
-	// stops playing new sounds.
-	void setMuted(bool muted);
-	bool getMuted() const { return mMuted; }
+    // Used by the mechanics of the engine
+    //virtual void processQueue(const LLUUID &sound_guid);
+    virtual void setListener(LLVector3 pos,LLVector3 vel,LLVector3 up,LLVector3 at);
+    virtual void updateWind(LLVector3 direction, F32 camera_height_above_water) = 0;
+    virtual void idle();
+    virtual void updateChannels();
+
+    //
+    // "End user" functionality
+    //
+    virtual bool isWindEnabled();
+    virtual void enableWind(bool state_b);
+
+    // Use these for temporarily muting the audio system.
+    // Does not change buffers, initialization, etc. but
+    // stops playing new sounds.
+    void setMuted(bool muted);
+    bool getMuted() const { return mMuted; }
 #ifdef USE_PLUGIN_MEDIA
-	LLPluginClassMedia* initializeMedia(const std::string& media_type);
+    LLPluginClassMedia* initializeMedia(const std::string& media_type);
 #endif
-	F32 getMasterGain();
-	void setMasterGain(F32 gain);
+    F32 getMasterGain();
+    void setMasterGain(F32 gain);
 
-	F32 getSecondaryGain(S32 type);
-	void setSecondaryGain(S32 type, F32 gain);
+    F32 getSecondaryGain(S32 type);
+    void setSecondaryGain(S32 type, F32 gain);
 
-	F32 getInternetStreamGain();
+    F32 getInternetStreamGain();
 
-	virtual void setDopplerFactor(F32 factor);
-	virtual F32 getDopplerFactor();
-	virtual void setRolloffFactor(F32 factor);
-	virtual F32 getRolloffFactor();
-	virtual void setMaxWindGain(F32 gain);
+    virtual void setDopplerFactor(F32 factor);
+    virtual F32 getDopplerFactor();
+    virtual void setRolloffFactor(F32 factor);
+    virtual F32 getRolloffFactor();
+    virtual void setMaxWindGain(F32 gain);
 
 
-	// Methods actually related to setting up and removing sounds
-	// Owner ID is the owner of the object making the request
-	// NaCl - Sound Explorer
-	void triggerSound(const LLUUID &sound_id, const LLUUID& owner_id, const F32 gain,
-					  const S32 type = LLAudioEngine::AUDIO_TYPE_NONE,
-					  const LLVector3d &pos_global = LLVector3d::zero,
-					  // <FS:Testy> Optional parameter for setting the audio source UUID
-					  // const LLUUID& source_object = LLUUID::null);
-					  const LLUUID& source_object = LLUUID::null,
-					  const LLUUID& audio_source_id = LLUUID::null);
+    // Methods actually related to setting up and removing sounds
+    // Owner ID is the owner of the object making the request
+    // NaCl - Sound Explorer
+    void triggerSound(const LLUUID &sound_id, const LLUUID& owner_id, const F32 gain,
+                      const S32 type = LLAudioEngine::AUDIO_TYPE_NONE,
+                      const LLVector3d &pos_global = LLVector3d::zero,
+                      // <FS:Testy> Optional parameter for setting the audio source UUID
+                      // const LLUUID& source_object = LLUUID::null);
+                      const LLUUID& source_object = LLUUID::null,
+                      const LLUUID& audio_source_id = LLUUID::null);
 
-	// NaCl End
-	void triggerSound(SoundData& soundData);
+    // NaCl End
+    void triggerSound(SoundData& soundData);
 
-	bool preloadSound(const LLUUID &id);
+    bool preloadSound(const LLUUID &id);
 
-	void addAudioSource(LLAudioSource *asp);
-	void cleanupAudioSource(LLAudioSource *asp);
+    void addAudioSource(LLAudioSource *asp);
+    void cleanupAudioSource(LLAudioSource *asp);
 
-	LLAudioSource *findAudioSource(const LLUUID &source_id);
-	LLAudioData *getAudioData(const LLUUID &audio_uuid);
+    LLAudioSource *findAudioSource(const LLUUID &source_id);
+    LLAudioData *getAudioData(const LLUUID &audio_uuid);
 
-	// Internet stream implementation manipulation
-	LLStreamingAudioInterface *getStreamingAudioImpl();
-	void setStreamingAudioImpl(LLStreamingAudioInterface *impl);
-	// Internet stream methods - these will call down into the *mStreamingAudioImpl if it exists
-	void startInternetStream(const std::string& url);
-	void stopInternetStream();
-	void pauseInternetStream(S32 pause);
-	void updateInternetStream(); // expected to be called often
-	LLAudioPlayState isInternetStreamPlaying();
-	// use a value from 0.0 to 1.0, inclusive
-	void setInternetStreamGain(F32 vol);
-	std::string getInternetStreamURL();
-	
-	// For debugging usage
-	virtual LLVector3 getListenerPos();
+    // Internet stream implementation manipulation
+    LLStreamingAudioInterface *getStreamingAudioImpl();
+    void setStreamingAudioImpl(LLStreamingAudioInterface *impl);
+    // Internet stream methods - these will call down into the *mStreamingAudioImpl if it exists
+    void startInternetStream(const std::string& url);
+    void stopInternetStream();
+    void pauseInternetStream(S32 pause);
+    void updateInternetStream(); // expected to be called often
+    LLAudioPlayState isInternetStreamPlaying();
+    // use a value from 0.0 to 1.0, inclusive
+    void setInternetStreamGain(F32 vol);
+    std::string getInternetStreamURL();
 
-	LLAudioBuffer *getFreeBuffer(); // Get a free buffer, or flush an existing one if you have to.
-	LLAudioChannel *getFreeChannel(const F32 priority); // Get a free channel or flush an existing one if your priority is higher
-	void cleanupBuffer(LLAudioBuffer *bufferp);
+    // For debugging usage
+    virtual LLVector3 getListenerPos();
 
-	bool hasDecodedFile(const LLUUID &uuid);
-	bool hasLocalFile(const LLUUID &uuid);
+    LLAudioBuffer *getFreeBuffer(); // Get a free buffer, or flush an existing one if you have to.
+    LLAudioChannel *getFreeChannel(const F32 priority); // Get a free channel or flush an existing one if your priority is higher
+    void cleanupBuffer(LLAudioBuffer *bufferp);
 
-	bool updateBufferForData(LLAudioData *adp, const LLUUID &audio_uuid = LLUUID::null);
+    bool hasDecodedFile(const LLUUID &uuid);
+    bool hasLocalFile(const LLUUID &uuid);
 
- 
-	// <FS:Ansariel> Asset blacklisting
-	void removeAudioData(const LLUUID& audio_uuid);
+    bool updateBufferForData(LLAudioData *adp, const LLUUID &audio_uuid = LLUUID::null);
 
-	// Asset callback when we're retrieved a sound from the asset server.
-	void startNextTransfer();
-	static void assetCallback(const LLUUID &uuid, LLAssetType::EType type, void *user_data, S32 result_code, LLExtStat ext_status);
 
-	// <FS:Ansariel> Output device selection
-	typedef std::map<LLUUID, std::string> output_device_map_t;
-	virtual output_device_map_t getDevices();
-	virtual void setDevice(const LLUUID& device_uuid) { };
+    // <FS:Ansariel> Asset blacklisting
+    void removeAudioData(const LLUUID& audio_uuid);
 
-	typedef boost::signals2::signal<void(output_device_map_t output_device_map)> output_device_list_changed_callback_t;
-	boost::signals2::connection setOutputDeviceListChangedCallback(const output_device_list_changed_callback_t::slot_type& cb)
-	{
-		return mOutputDeviceListChangedCallback.connect(cb);
-	}
+    // Asset callback when we're retrieved a sound from the asset server.
+    void startNextTransfer();
+    static void assetCallback(const LLUUID &uuid, LLAssetType::EType type, void *user_data, S32 result_code, LLExtStat ext_status);
 
-	void OnOutputDeviceListChanged(output_device_map_t output_device_map);
-	// </FS:Ansariel>
+    // <FS:Ansariel> Output device selection
+    typedef std::map<LLUUID, std::string> output_device_map_t;
+    virtual output_device_map_t getDevices();
+    virtual void setDevice(const LLUUID& device_uuid) { };
 
-	friend class LLPipeline; // For debugging
+    typedef boost::signals2::signal<void(output_device_map_t output_device_map)> output_device_list_changed_callback_t;
+    boost::signals2::connection setOutputDeviceListChangedCallback(const output_device_list_changed_callback_t::slot_type& cb)
+    {
+        return mOutputDeviceListChangedCallback.connect(cb);
+    }
+
+    void OnOutputDeviceListChanged(output_device_map_t output_device_map);
+    // </FS:Ansariel>
+
+    friend class LLPipeline; // For debugging
 public:
-	F32 mMaxWindGain; // Hack.  Public to set before fade in?
+    F32 mMaxWindGain; // Hack.  Public to set before fade in?
 
 protected:
-	virtual LLAudioBuffer *createBuffer() = 0;
-	virtual LLAudioChannel *createChannel() = 0;
+    virtual LLAudioBuffer *createBuffer() = 0;
+    virtual LLAudioChannel *createChannel() = 0;
 
-	virtual bool initWind() = 0;
-	virtual void cleanupWind() = 0;
-	virtual void setInternalGain(F32 gain) = 0;
+    virtual bool initWind() = 0;
+    virtual void cleanupWind() = 0;
+    virtual void setInternalGain(F32 gain) = 0;
 
-	void commitDeferredChanges();
+    void commitDeferredChanges();
 
-	virtual void allocateListener() = 0;
-
-
-	// listener methods
-	virtual void setListenerPos(LLVector3 vec);
-	virtual void setListenerVelocity(LLVector3 vec);
-	virtual void orientListener(LLVector3 up, LLVector3 at);
-	virtual void translateListener(LLVector3 vec);
+    virtual void allocateListener() = 0;
 
 
-	F64 mapWindVecToGain(LLVector3 wind_vec);
-	F64 mapWindVecToPitch(LLVector3 wind_vec);
-	F64 mapWindVecToPan(LLVector3 wind_vec);
+    // listener methods
+    virtual void setListenerPos(LLVector3 vec);
+    virtual void setListenerVelocity(LLVector3 vec);
+    virtual void orientListener(LLVector3 up, LLVector3 at);
+    virtual void translateListener(LLVector3 vec);
+
+
+    F64 mapWindVecToGain(LLVector3 wind_vec);
+    F64 mapWindVecToPitch(LLVector3 wind_vec);
+    F64 mapWindVecToPan(LLVector3 wind_vec);
 
 protected:
-	LLListener *mListenerp;
+    LLListener *mListenerp;
 
-	bool mMuted;
-	void* mUserData;
+    bool mMuted;
+    void* mUserData;
 
-	S32 mLastStatus;
-	
-	bool mEnableWind;
+    S32 mLastStatus;
 
-	LLUUID mCurrentTransfer; // Audio file currently being transferred by the system
-	LLFrameTimer mCurrentTransferTimer;
+    bool mEnableWind;
 
-	// A list of all audio sources that are known to the viewer at this time.
-	// This is most likely a superset of the ones that we actually have audio
-	// data for, or are playing back.
-	typedef std::map<LLUUID, LLAudioSource *> source_map;
-	typedef std::map<LLUUID, LLAudioData *> data_map;
+    LLUUID mCurrentTransfer; // Audio file currently being transferred by the system
+    LLFrameTimer mCurrentTransferTimer;
 
-	source_map mAllSources;
-	data_map mAllData;
+    // A list of all audio sources that are known to the viewer at this time.
+    // This is most likely a superset of the ones that we actually have audio
+    // data for, or are playing back.
+    typedef std::map<LLUUID, LLAudioSource *> source_map;
+    typedef std::map<LLUUID, LLAudioData *> data_map;
+
+    source_map mAllSources;
+    data_map mAllData;
 
     std::array<LLAudioChannel*, LL_MAX_AUDIO_CHANNELS> mChannels;
 
-	// Buffers needs to change into a different data structure, as the number of buffers
-	// that we have active should be limited by RAM usage, not count.
+    // Buffers needs to change into a different data structure, as the number of buffers
+    // that we have active should be limited by RAM usage, not count.
     std::array<LLAudioBuffer*, LL_MAX_AUDIO_BUFFERS> mBuffers;
-	
-	F32 mMasterGain;
-	F32 mInternalGain;			// Actual gain set; either mMasterGain or 0 when mMuted is true.
-	F32 mSecondaryGain[AUDIO_TYPE_COUNT];
 
-	F32 mNextWindUpdate;
+    F32 mMasterGain;
+    F32 mInternalGain;          // Actual gain set; either mMasterGain or 0 when mMuted is true.
+    F32 mSecondaryGain[AUDIO_TYPE_COUNT];
 
-	LLFrameTimer mWindUpdateTimer;
+    F32 mNextWindUpdate;
 
-	// <FS:Ansariel> Output device selection
-	output_device_list_changed_callback_t mOutputDeviceListChangedCallback;
+    LLFrameTimer mWindUpdateTimer;
+
+    // <FS:Ansariel> Output device selection
+    output_device_list_changed_callback_t mOutputDeviceListChangedCallback;
 
 private:
-	void setDefaults();
-	LLStreamingAudioInterface *mStreamingAudioImpl;
+    void setDefaults();
+    LLStreamingAudioInterface *mStreamingAudioImpl;
 
-	// <FS:ND> Protect against corrupted sounds
+    // <FS:ND> Protect against corrupted sounds
 
-	std::map<LLUUID,U32> mCorruptData;
+    std::map<LLUUID,U32> mCorruptData;
 
 public:
-	void markSoundCorrupt( LLUUID const & );
-	bool isCorruptSound( LLUUID const& ) const;
+    void markSoundCorrupt( LLUUID const & );
+    bool isCorruptSound( LLUUID const& ) const;
 
-	// </FS:ND>
+    // </FS:ND>
 };
 
 
@@ -297,61 +297,61 @@ public:
 class LLAudioSource
 {
 public:
-	// owner_id is the id of the agent responsible for making this sound
-	// play, for example, the owner of the object currently playing it
-	// NaCl - Sound Explorer
-	LLAudioSource(const LLUUID &id, const LLUUID& owner_id, const F32 gain, const S32 type = LLAudioEngine::AUDIO_TYPE_NONE, const LLUUID& source_id = LLUUID::null, const bool isTrigger = true);
-	// NaCl End
-	virtual ~LLAudioSource();
+    // owner_id is the id of the agent responsible for making this sound
+    // play, for example, the owner of the object currently playing it
+    // NaCl - Sound Explorer
+    LLAudioSource(const LLUUID &id, const LLUUID& owner_id, const F32 gain, const S32 type = LLAudioEngine::AUDIO_TYPE_NONE, const LLUUID& source_id = LLUUID::null, const bool isTrigger = true);
+    // NaCl End
+    virtual ~LLAudioSource();
 
-	virtual void update();						// Update this audio source
-	void updatePriority();
+    virtual void update();                      // Update this audio source
+    void updatePriority();
 
-	void preload(const LLUUID &audio_id); // Only used for preloading UI sounds, now.
+    void preload(const LLUUID &audio_id); // Only used for preloading UI sounds, now.
 
-	void addAudioData(LLAudioData *adp, bool set_current = TRUE);
+    void addAudioData(LLAudioData *adp, bool set_current = TRUE);
 
-	void setForcedPriority(const bool ambient)						{ mForcedPriority = ambient; }
-	bool isForcedPriority() const									{ return mForcedPriority; }
+    void setForcedPriority(const bool ambient)                      { mForcedPriority = ambient; }
+    bool isForcedPriority() const                                   { return mForcedPriority; }
 
-	void setLoop(const bool loop)							{ mLoop = loop; }
-	bool isLoop() const										{ return mLoop; }
+    void setLoop(const bool loop)                           { mLoop = loop; }
+    bool isLoop() const                                     { return mLoop; }
 
-	void setSyncMaster(const bool master)					{ mSyncMaster = master; }
-	bool isSyncMaster() const								{ return mSyncMaster; }
+    void setSyncMaster(const bool master)                   { mSyncMaster = master; }
+    bool isSyncMaster() const                               { return mSyncMaster; }
 
-	void setSyncSlave(const bool slave)						{ mSyncSlave = slave; }
-	bool isSyncSlave() const								{ return mSyncSlave; }
+    void setSyncSlave(const bool slave)                     { mSyncSlave = slave; }
+    bool isSyncSlave() const                                { return mSyncSlave; }
 
-	void setQueueSounds(const bool queue)					{ mQueueSounds = queue; }
-	bool isQueueSounds() const								{ return mQueueSounds; }
+    void setQueueSounds(const bool queue)                   { mQueueSounds = queue; }
+    bool isQueueSounds() const                              { return mQueueSounds; }
 
-	void setPlayedOnce(const bool played_once)				{ mPlayedOnce = played_once; }
+    void setPlayedOnce(const bool played_once)              { mPlayedOnce = played_once; }
 
-	void setType(S32 type)                                  { mType = type; }
-	S32 getType()                                           { return mType; }
+    void setType(S32 type)                                  { mType = type; }
+    S32 getType()                                           { return mType; }
 
-	void setPositionGlobal(const LLVector3d &position_global)		{ mPositionGlobal = position_global; }
-	LLVector3d getPositionGlobal() const							{ return mPositionGlobal; }
-	LLVector3 getVelocity()	const									{ return mVelocity; }				
-	F32 getPriority() const											{ return mPriority; }
+    void setPositionGlobal(const LLVector3d &position_global)       { mPositionGlobal = position_global; }
+    LLVector3d getPositionGlobal() const                            { return mPositionGlobal; }
+    LLVector3 getVelocity() const                                   { return mVelocity; }
+    F32 getPriority() const                                         { return mPriority; }
 
-	// Gain should always be clamped between 0 and 1.
-	F32 getGain() const												{ return mGain; }
-	virtual void setGain(const F32 gain)							{ mGain = llclamp(gain, 0.f, 1.f); }
+    // Gain should always be clamped between 0 and 1.
+    F32 getGain() const                                             { return mGain; }
+    virtual void setGain(const F32 gain)                            { mGain = llclamp(gain, 0.f, 1.f); }
 
-	const LLUUID &getID() const		{ return mID; }
-	// NaCl - Sound Explorer
-	const LLUUID &getLogID() const { return mLogID; }
-	// NaCl End
-	bool isDone() const;
-	bool isMuted() const { return mSourceMuted; }
+    const LLUUID &getID() const     { return mID; }
+    // NaCl - Sound Explorer
+    const LLUUID &getLogID() const { return mLogID; }
+    // NaCl End
+    bool isDone() const;
+    bool isMuted() const { return mSourceMuted; }
 
-	LLAudioData *getCurrentData();
-	LLAudioData *getQueuedData();
-	LLAudioBuffer *getCurrentBuffer();
+    LLAudioData *getCurrentData();
+    LLAudioData *getQueuedData();
+    LLAudioBuffer *getCurrentBuffer();
 
-	bool setupChannel();
+    bool setupChannel();
 
     // Stop the audio source, reset audio id even if muted
     void stop();
@@ -360,51 +360,51 @@ public:
     // takes mute into account to preserve previous id if nessesary
     bool play(const LLUUID &audio_id);
 
-	bool hasPendingPreloads() const;	// Has preloads that haven't been done yet
+    bool hasPendingPreloads() const;    // Has preloads that haven't been done yet
 
-	friend class LLAudioEngine;
-	friend class LLAudioChannel;
+    friend class LLAudioEngine;
+    friend class LLAudioChannel;
 protected:
-	void setChannel(LLAudioChannel *channelp);
-	LLAudioChannel *getChannel() const						{ return mChannelp; }
-	// NaCl - Sound Explorer
-	static void logSoundPlay(const LLUUID& id, LLVector3d position, S32 type, const LLUUID& assetid, const LLUUID& ownerid, const LLUUID& sourceid, bool is_trigger, bool is_looped);
-	static void logSoundStop(const LLUUID& id);
-	static void pruneSoundLog();
-	static S32 sSoundHistoryPruneCounter;
-	// NaCl End
+    void setChannel(LLAudioChannel *channelp);
+    LLAudioChannel *getChannel() const                      { return mChannelp; }
+    // NaCl - Sound Explorer
+    static void logSoundPlay(const LLUUID& id, LLVector3d position, S32 type, const LLUUID& assetid, const LLUUID& ownerid, const LLUUID& sourceid, bool is_trigger, bool is_looped);
+    static void logSoundStop(const LLUUID& id);
+    static void pruneSoundLog();
+    static S32 sSoundHistoryPruneCounter;
+    // NaCl End
 
 protected:
-	LLUUID			mID; // The ID of the source is that of the object if it's attached to an object.
-	LLUUID			mOwnerID;	// owner of the object playing the sound
-	F32				mPriority;
-	F32				mGain;
-	bool			mSourceMuted;
-	bool			mForcedPriority; // ignore mute, set high priority, researved for sound preview and UI
-	bool			mLoop;
-	bool			mSyncMaster;
-	bool			mSyncSlave;
-	bool			mQueueSounds;
-	bool			mPlayedOnce;
-	bool            mCorrupted;
-	S32             mType;
-	LLVector3d		mPositionGlobal;
-	LLVector3		mVelocity;
-	// NaCl - Sound explorer
-	LLUUID			mLogID;
-	LLUUID			mSourceID;
-	bool			mIsTrigger;
-	// NaCl end
+    LLUUID          mID; // The ID of the source is that of the object if it's attached to an object.
+    LLUUID          mOwnerID;   // owner of the object playing the sound
+    F32             mPriority;
+    F32             mGain;
+    bool            mSourceMuted;
+    bool            mForcedPriority; // ignore mute, set high priority, researved for sound preview and UI
+    bool            mLoop;
+    bool            mSyncMaster;
+    bool            mSyncSlave;
+    bool            mQueueSounds;
+    bool            mPlayedOnce;
+    bool            mCorrupted;
+    S32             mType;
+    LLVector3d      mPositionGlobal;
+    LLVector3       mVelocity;
+    // NaCl - Sound explorer
+    LLUUID          mLogID;
+    LLUUID          mSourceID;
+    bool            mIsTrigger;
+    // NaCl end
 
-	//LLAudioSource	*mSyncMasterp;	// If we're a slave, the source that we're synced to.
-	LLAudioChannel	*mChannelp;		// If we're currently playing back, this is the channel that we're assigned to.
-	LLAudioData		*mCurrentDatap;
-	LLAudioData		*mQueuedDatap;
+    //LLAudioSource *mSyncMasterp;  // If we're a slave, the source that we're synced to.
+    LLAudioChannel  *mChannelp;     // If we're currently playing back, this is the channel that we're assigned to.
+    LLAudioData     *mCurrentDatap;
+    LLAudioData     *mQueuedDatap;
 
-	typedef std::map<LLUUID, LLAudioData *> data_map;
-	data_map mPreloadMap;
+    typedef std::map<LLUUID, LLAudioData *> data_map;
+    data_map mPreloadMap;
 
-	LLFrameTimer mAgeTimer;
+    LLFrameTimer mAgeTimer;
 };
 
 
@@ -462,34 +462,34 @@ class LLAudioData
 class LLAudioChannel
 {
 public:
-	LLAudioChannel();
-	virtual ~LLAudioChannel();
+    LLAudioChannel();
+    virtual ~LLAudioChannel();
 
-	virtual void setSource(LLAudioSource *sourcep);
-	LLAudioSource *getSource() const			{ return mCurrentSourcep; }
+    virtual void setSource(LLAudioSource *sourcep);
+    LLAudioSource *getSource() const            { return mCurrentSourcep; }
 
-	void setSecondaryGain(F32 gain)             { mSecondaryGain = gain; }
-	F32 getSecondaryGain()                      { return mSecondaryGain; }
+    void setSecondaryGain(F32 gain)             { mSecondaryGain = gain; }
+    F32 getSecondaryGain()                      { return mSecondaryGain; }
 
-	friend class LLAudioEngine;
-	friend class LLAudioSource;
+    friend class LLAudioEngine;
+    friend class LLAudioSource;
 protected:
-	virtual void play() = 0;
-	virtual void playSynced(LLAudioChannel *channelp) = 0;
-	virtual void cleanup() = 0;
-	virtual bool isPlaying() = 0;
-	void setWaiting(const bool waiting)			{ mWaiting = waiting; }
-	bool isWaiting() const						{ return mWaiting; }
+    virtual void play() = 0;
+    virtual void playSynced(LLAudioChannel *channelp) = 0;
+    virtual void cleanup() = 0;
+    virtual bool isPlaying() = 0;
+    void setWaiting(const bool waiting)         { mWaiting = waiting; }
+    bool isWaiting() const                      { return mWaiting; }
 
-	virtual bool updateBuffer(); // Check to see if the buffer associated with the source changed, and update if necessary.
-	virtual void update3DPosition() = 0;
-	virtual void updateLoop() = 0; // Update your loop/completion status, for use by queueing/syncing.
+    virtual bool updateBuffer(); // Check to see if the buffer associated with the source changed, and update if necessary.
+    virtual void update3DPosition() = 0;
+    virtual void updateLoop() = 0; // Update your loop/completion status, for use by queueing/syncing.
 protected:
-	LLAudioSource	*mCurrentSourcep;
-	LLAudioBuffer	*mCurrentBufferp;
-	bool			mLoopedThisFrame;
-	bool			mWaiting;	// Waiting for sync.
-	F32             mSecondaryGain;
+    LLAudioSource   *mCurrentSourcep;
+    LLAudioBuffer   *mCurrentBufferp;
+    bool            mLoopedThisFrame;
+    bool            mWaiting;   // Waiting for sync.
+    F32             mSecondaryGain;
 };
 
 
@@ -503,39 +503,39 @@ protected:
 class LLAudioBuffer
 {
 public:
-	virtual ~LLAudioBuffer() {};
-	virtual bool loadWAV(const std::string& filename) = 0;
-	virtual U32 getLength() = 0;
+    virtual ~LLAudioBuffer() {};
+    virtual bool loadWAV(const std::string& filename) = 0;
+    virtual U32 getLength() = 0;
 
-	friend class LLAudioEngine;
-	friend class LLAudioChannel;
-	friend class LLAudioData;
+    friend class LLAudioEngine;
+    friend class LLAudioChannel;
+    friend class LLAudioData;
 protected:
-	bool mInUse;
-	LLAudioData *mAudioDatap;
-	LLFrameTimer mLastUseTimer;
+    bool mInUse;
+    LLAudioData *mAudioDatap;
+    LLFrameTimer mLastUseTimer;
 };
 
 struct SoundData
 {
-	LLUUID audio_uuid;
-	LLUUID owner_id;
-	F32 gain;
-	S32 type;
-	LLVector3d pos_global;
+    LLUUID audio_uuid;
+    LLUUID owner_id;
+    F32 gain;
+    S32 type;
+    LLVector3d pos_global;
 
-	SoundData(const LLUUID &audio_uuid, 
-		const LLUUID& owner_id, 
-		const F32 gain, 					  
-		const S32 type = LLAudioEngine::AUDIO_TYPE_NONE,
-		const LLVector3d &pos_global = LLVector3d::zero) :
-		audio_uuid(audio_uuid),
-		owner_id(owner_id),
-		gain(gain),
-		type(type),
-		pos_global(pos_global)
-	{
-	}
+    SoundData(const LLUUID &audio_uuid,
+        const LLUUID& owner_id,
+        const F32 gain,
+        const S32 type = LLAudioEngine::AUDIO_TYPE_NONE,
+        const LLVector3d &pos_global = LLVector3d::zero) :
+        audio_uuid(audio_uuid),
+        owner_id(owner_id),
+        gain(gain),
+        type(type),
+        pos_global(pos_global)
+    {
+    }
 };
 
 extern LLAudioEngine* gAudiop;
@@ -543,31 +543,31 @@ extern LLAudioEngine* gAudiop;
 // NaCl - Sound explorer
 struct LLSoundHistoryItem
 {
-	LLUUID mID;
-	LLVector3d mPosition;
-	S32 mType;
-	bool mPlaying;
-	LLUUID mAssetID;
-	LLUUID mOwnerID;
-	LLUUID mSourceID;
-	bool mIsTrigger;
-	bool mIsLooped;
-	F64 mTimeStarted;
-	F64 mTimeStopped;
-	bool mReviewed;
-	bool mReviewedCollision;
+    LLUUID mID;
+    LLVector3d mPosition;
+    S32 mType;
+    bool mPlaying;
+    LLUUID mAssetID;
+    LLUUID mOwnerID;
+    LLUUID mSourceID;
+    bool mIsTrigger;
+    bool mIsLooped;
+    F64 mTimeStarted;
+    F64 mTimeStopped;
+    bool mReviewed;
+    bool mReviewedCollision;
 
-	LLSoundHistoryItem()
-	  : mType(0)
-	  , mPlaying(0)
-	  , mIsTrigger(0)
-	  , mIsLooped(0)
-	  , mTimeStarted(0.f)
-	  , mTimeStopped(0.f)
-	  , mReviewed(false)
-	  , mReviewedCollision(false)
-	{
-	}
+    LLSoundHistoryItem()
+      : mType(0)
+      , mPlaying(0)
+      , mIsTrigger(0)
+      , mIsLooped(0)
+      , mTimeStarted(0.f)
+      , mTimeStopped(0.f)
+      , mReviewed(false)
+      , mReviewedCollision(false)
+    {
+    }
 };
 extern std::map<LLUUID, LLSoundHistoryItem> gSoundHistory;
 // NaCl End

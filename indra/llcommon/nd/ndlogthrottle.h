@@ -29,11 +29,11 @@
 
 namespace nd
 {
-	namespace logging
-	{
-		bool throttle( char const *aFile, int aLine, std::ostream *aOut );
-		void setThrottleEnabled(bool enabled);
-	}
+    namespace logging
+    {
+        bool throttle( char const *aFile, int aLine, std::ostream *aOut );
+        void setThrottleEnabled(bool enabled);
+    }
 }
 
 #endif

@@ -34,11 +34,11 @@ class FSFloaterStatistics : public LLFloater
 {
 
 public:
-	FSFloaterStatistics(const LLSD& key);
-	virtual ~FSFloaterStatistics();
+    FSFloaterStatistics(const LLSD& key);
+    virtual ~FSFloaterStatistics();
 
-	/*virtual*/ void onOpen(const LLSD& key);
-	/*virtual*/ BOOL postBuild();
+    /*virtual*/ void onOpen(const LLSD& key);
+    /*virtual*/ BOOL postBuild();
 };
 
 #endif // FS_FLOATERSTATISTICS_H

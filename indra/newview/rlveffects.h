@@ -32,33 +32,33 @@ class LLViewerFetchedTexture;
 class RlvOverlayEffect : public LLVisualEffect
 {
 public:
-	RlvOverlayEffect(const LLUUID& idRlvObj);
-	~RlvOverlayEffect();
+    RlvOverlayEffect(const LLUUID& idRlvObj);
+    ~RlvOverlayEffect();
 
-	static const EVisualEffect EffectCode = EVisualEffect::RlvOverlay;
+    static const EVisualEffect EffectCode = EVisualEffect::RlvOverlay;
 public:
-	bool hitTest(const LLCoordGL& ptMouse) const;
-	void run(const LLVisualEffectParams*) override;
-	void setBlockTouch(bool block_touch)                { m_fBlockTouch = block_touch; }
-	void tweenAlpha(float endAlpha, double duration)    { m_nAlpha.start(endAlpha, duration); }
-	void tweenColor(LLColor3 endColor, double duration) { m_Color.start(endColor, duration); }
-	static ERlvCmdRet onAlphaValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onColorValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onTextureChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+    bool hitTest(const LLCoordGL& ptMouse) const;
+    void run(const LLVisualEffectParams*) override;
+    void setBlockTouch(bool block_touch)                { m_fBlockTouch = block_touch; }
+    void tweenAlpha(float endAlpha, double duration)    { m_nAlpha.start(endAlpha, duration); }
+    void tweenColor(LLColor3 endColor, double duration) { m_Color.start(endColor, duration); }
+    static ERlvCmdRet onAlphaValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+    static ERlvCmdRet onColorValueChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+    static ERlvCmdRet onTextureChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 protected:
-	void clearImage();
-	void setImage(const LLUUID& idTexture);
+    void clearImage();
+    void setImage(const LLUUID& idTexture);
 
-	/*
-	 * Member variables
-	 */
+    /*
+     * Member variables
+     */
 protected:
-	LLTweenableValueLerp<float>    m_nAlpha;
-	bool                           m_fBlockTouch;
-	LLTweenableValueLerp<LLColor3> m_Color;
+    LLTweenableValueLerp<float>    m_nAlpha;
+    bool                           m_fBlockTouch;
+    LLTweenableValueLerp<LLColor3> m_Color;
 
-	LLPointer<LLViewerFetchedTexture> m_pImage = nullptr;
-	int      m_nImageOrigBoost = 0;
+    LLPointer<LLViewerFetchedTexture> m_pImage = nullptr;
+    int      m_nImageOrigBoost = 0;
 };
 
 // ====================================================================================
@@ -68,42 +68,42 @@ protected:
 class RlvSphereEffect : public LLVisualEffect
 {
 public:
-	RlvSphereEffect(const LLUUID& idRlvObj);
-	~RlvSphereEffect();
+    RlvSphereEffect(const LLUUID& idRlvObj);
+    ~RlvSphereEffect();
 
-	static const EVisualEffect EffectCode = EVisualEffect::RlvSphere;
+    static const EVisualEffect EffectCode = EVisualEffect::RlvSphere;
 public:
-	void run(const LLVisualEffectParams* pParams) override;
-	static ERlvCmdRet onModeChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onOriginChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onColorChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onDistMinChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onDistMaxChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onDistExtendChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onParamsChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onTweenDurationChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onValueMinChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
-	static ERlvCmdRet onValueMaxChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+    void run(const LLVisualEffectParams* pParams) override;
+    static ERlvCmdRet onModeChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+    static ERlvCmdRet onOriginChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+    static ERlvCmdRet onColorChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+    static ERlvCmdRet onDistMinChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+    static ERlvCmdRet onDistMaxChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+    static ERlvCmdRet onDistExtendChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+    static ERlvCmdRet onParamsChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+    static ERlvCmdRet onTweenDurationChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+    static ERlvCmdRet onValueMinChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
+    static ERlvCmdRet onValueMaxChanged(const LLUUID& idRlvObj, const boost::optional<RlvBehaviourModifierValue> newValue);
 protected:
-	void renderPass(LLGLSLShader* pShader, const LLShaderEffectParams* pParams) const;
-	void setShaderUniforms(LLGLSLShader* pShader);
+    void renderPass(LLGLSLShader* pShader, const LLShaderEffectParams* pParams) const;
+    void setShaderUniforms(LLGLSLShader* pShader);
 
-	/*
-	 * Member variables
-	 */
+    /*
+     * Member variables
+     */
 protected:
-	enum class ESphereMode { Blend = 0, Blur, BlurVariable, ChromaticAberration, Pixelate, Count };
-	ESphereMode   m_eMode;
-	enum class ESphereOrigin { Avatar = 0, Camera, Count };
-	ESphereOrigin m_eOrigin;
-	LLTweenableValueLerp<LLVector4> m_Params;
-	LLTweenableValueLerp<float>     m_nDistanceMin;
-	LLTweenableValueLerp<float>     m_nDistanceMax;
-	enum class ESphereDistExtend { Max = 0x01, Min = 0x02, Both = 0x03 };
-	ESphereDistExtend m_eDistExtend;
-	LLTweenableValueLerp<float>     m_nValueMin;
-	LLTweenableValueLerp<float>     m_nValueMax;
-	float                           m_nTweenDuration;
+    enum class ESphereMode { Blend = 0, Blur, BlurVariable, ChromaticAberration, Pixelate, Count };
+    ESphereMode   m_eMode;
+    enum class ESphereOrigin { Avatar = 0, Camera, Count };
+    ESphereOrigin m_eOrigin;
+    LLTweenableValueLerp<LLVector4> m_Params;
+    LLTweenableValueLerp<float>     m_nDistanceMin;
+    LLTweenableValueLerp<float>     m_nDistanceMax;
+    enum class ESphereDistExtend { Max = 0x01, Min = 0x02, Both = 0x03 };
+    ESphereDistExtend m_eDistExtend;
+    LLTweenableValueLerp<float>     m_nValueMin;
+    LLTweenableValueLerp<float>     m_nValueMax;
+    float                           m_nTweenDuration;
 };
 
 // ====================================================================================

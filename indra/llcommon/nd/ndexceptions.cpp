@@ -26,16 +26,16 @@
 
 namespace nd
 {
-	namespace exceptions
-	{
-		xran::xran( std::string const &aReason )
-		{
-			mReason = aReason;
-		}
+    namespace exceptions
+    {
+        xran::xran( std::string const &aReason )
+        {
+            mReason = aReason;
+        }
 
-		std::string const& xran::what() const
-		{
-			return mReason;
-		}
-	}
+        std::string const& xran::what() const
+        {
+            return mReason;
+        }
+    }
 }

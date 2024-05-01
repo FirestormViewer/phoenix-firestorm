@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -36,66 +36,66 @@ class LLInventoryItem;
 class FSCopyTransInventoryDropTarget : public LLLineEditor
 {
 public:
-	struct Params : public LLInitParam::Block<Params, LLLineEditor::Params>
-	{
-		Params()
-		{}
-	};
+    struct Params : public LLInitParam::Block<Params, LLLineEditor::Params>
+    {
+        Params()
+        {}
+    };
 
-	FSCopyTransInventoryDropTarget(const Params& p)
-		: LLLineEditor(p) {}
+    FSCopyTransInventoryDropTarget(const Params& p)
+        : LLLineEditor(p) {}
 
-	~FSCopyTransInventoryDropTarget() {}
+    ~FSCopyTransInventoryDropTarget() {}
 
-	typedef boost::signals2::signal<void(const LLUUID& id)> item_dad_callback_t;
-	boost::signals2::connection setDADCallback(const item_dad_callback_t::slot_type& cb)
-	{
-		return mDADSignal.connect(cb);
-	}
+    typedef boost::signals2::signal<void(const LLUUID& id)> item_dad_callback_t;
+    boost::signals2::connection setDADCallback(const item_dad_callback_t::slot_type& cb)
+    {
+        return mDADSignal.connect(cb);
+    }
 
-	virtual BOOL postBuild()
-	{
-		setEnabled(FALSE);
-		return LLLineEditor::postBuild();
-	}
+    virtual BOOL postBuild()
+    {
+        setEnabled(FALSE);
+        return LLLineEditor::postBuild();
+    }
 
-	virtual BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
-								   EDragAndDropType cargo_type,
-								   void* cargo_data,
-								   EAcceptance* accept,
-								   std::string& tooltip_msg);
+    virtual BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+                                   EDragAndDropType cargo_type,
+                                   void* cargo_data,
+                                   EAcceptance* accept,
+                                   std::string& tooltip_msg);
 
 private:
-	item_dad_callback_t mDADSignal;
+    item_dad_callback_t mDADSignal;
 };
 
 
 class FSEmbeddedItemDropTarget : public LLTextBox
 {
 public:
-	struct Params : public LLInitParam::Block<Params, LLTextBox::Params>
-	{
-		Params()
-		{}
-	};
+    struct Params : public LLInitParam::Block<Params, LLTextBox::Params>
+    {
+        Params()
+        {}
+    };
 
-	FSEmbeddedItemDropTarget(const Params& p) : LLTextBox(p) {}
-	~FSEmbeddedItemDropTarget() {}
+    FSEmbeddedItemDropTarget(const Params& p) : LLTextBox(p) {}
+    ~FSEmbeddedItemDropTarget() {}
 
-	typedef boost::signals2::signal<void(const LLUUID& id)> item_dad_callback_t;
-	boost::signals2::connection setDADCallback(const item_dad_callback_t::slot_type& cb)
-	{
-		return mDADSignal.connect(cb);
-	}
+    typedef boost::signals2::signal<void(const LLUUID& id)> item_dad_callback_t;
+    boost::signals2::connection setDADCallback(const item_dad_callback_t::slot_type& cb)
+    {
+        return mDADSignal.connect(cb);
+    }
 
-	virtual BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
-								   EDragAndDropType cargo_type,
-								   void* cargo_data,
-								   EAcceptance* accept,
-								   std::string& tooltip_msg);
+    virtual BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+                                   EDragAndDropType cargo_type,
+                                   void* cargo_data,
+                                   EAcceptance* accept,
+                                   std::string& tooltip_msg);
 
 protected:
-	item_dad_callback_t mDADSignal;
+    item_dad_callback_t mDADSignal;
 };
 
 #endif // FS_DROPTARGET_H

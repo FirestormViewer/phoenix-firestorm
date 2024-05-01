@@ -36,124 +36,124 @@
 #include "llslurl.h"
 
 FSFloaterAddToContactSet::FSFloaterAddToContactSet(const LLSD& target)
-:	LLFloater(target),
-	mContactSetsCombo(NULL)
+:   LLFloater(target),
+    mContactSetsCombo(NULL)
 {
-	if (target.isArray())
-	{
-		mHasMultipleAgents = true;
-		for (LLSD::array_const_iterator it = target.beginArray(); it != target.endArray(); ++it)
-		{
-			mAgentIDs.push_back((*it).asUUID());
-		}
-	}
-	else
-	{
-		mHasMultipleAgents = false;
-		mAgentID = target.asUUID();
-	}
+    if (target.isArray())
+    {
+        mHasMultipleAgents = true;
+        for (LLSD::array_const_iterator it = target.beginArray(); it != target.endArray(); ++it)
+        {
+            mAgentIDs.push_back((*it).asUUID());
+        }
+    }
+    else
+    {
+        mHasMultipleAgents = false;
+        mAgentID = target.asUUID();
+    }
 
-	mContactSetChangedConnection = LGGContactSets::getInstance()->setContactSetChangeCallback(boost::bind(&FSFloaterAddToContactSet::updateSets, this, _1));
+    mContactSetChangedConnection = LGGContactSets::getInstance()->setContactSetChangeCallback(boost::bind(&FSFloaterAddToContactSet::updateSets, this, _1));
 }
 
 FSFloaterAddToContactSet::~FSFloaterAddToContactSet()
 {
-	if (mContactSetChangedConnection.connected())
-	{
-		mContactSetChangedConnection.disconnect();
-	}
+    if (mContactSetChangedConnection.connected())
+    {
+        mContactSetChangedConnection.disconnect();
+    }
 }
 
 BOOL FSFloaterAddToContactSet::postBuild()
 {
-	if (mHasMultipleAgents)
-	{
-		LLStringUtil::format_map_t args;
-		args["COUNT"] = llformat("%d", mAgentIDs.size());
-		childSetValue("textfield", LLSD( getString("text_add_multiple", args) ) );
-	}
-	else
-	{
-		LLStringUtil::format_map_t args;
-		args["NAME"] = LLSLURL("agent", mAgentID, "inspect").getSLURLString();
-		childSetValue("textfield", LLSD( getString("text_add_single", args)) );
-	}
-	
-	mContactSetsCombo = getChild<LLComboBox>("contact_sets");
-	populateContactSets();
-	
-	childSetAction("add_btn",	boost::bind(&FSFloaterAddToContactSet::onClickAdd, this));
-	childSetAction("cancel_btn", boost::bind(&FSFloaterAddToContactSet::onClickCancel, this));
-	childSetAction("add_set_btn", boost::bind(&FSFloaterAddToContactSet::onClickAddSet, this));
-	
-	return TRUE;
+    if (mHasMultipleAgents)
+    {
+        LLStringUtil::format_map_t args;
+        args["COUNT"] = llformat("%d", mAgentIDs.size());
+        childSetValue("textfield", LLSD( getString("text_add_multiple", args) ) );
+    }
+    else
+    {
+        LLStringUtil::format_map_t args;
+        args["NAME"] = LLSLURL("agent", mAgentID, "inspect").getSLURLString();
+        childSetValue("textfield", LLSD( getString("text_add_single", args)) );
+    }
+
+    mContactSetsCombo = getChild<LLComboBox>("contact_sets");
+    populateContactSets();
+
+    childSetAction("add_btn",   boost::bind(&FSFloaterAddToContactSet::onClickAdd, this));
+    childSetAction("cancel_btn", boost::bind(&FSFloaterAddToContactSet::onClickCancel, this));
+    childSetAction("add_set_btn", boost::bind(&FSFloaterAddToContactSet::onClickAddSet, this));
+
+    return TRUE;
 }
 
 void FSFloaterAddToContactSet::onClickAdd()
 {
-	const std::string set = mContactSetsCombo->getSimple();
+    const std::string set = mContactSetsCombo->getSimple();
 
-	if (!mHasMultipleAgents)
-	{
-		mAgentIDs.push_back(mAgentID);
-	}
+    if (!mHasMultipleAgents)
+    {
+        mAgentIDs.push_back(mAgentID);
+    }
 
-	LGGContactSets::instance().addToSet(mAgentIDs, set);
+    LGGContactSets::instance().addToSet(mAgentIDs, set);
 
-	if (mHasMultipleAgents)
-	{
-		LLSD args;
-		args["COUNT"] = llformat("%d", mAgentIDs.size());
-		args["SET"] = set;
-		LLNotificationsUtil::add("AddToContactSetMultipleSuccess", args);
-	}
-	else
-	{
-		LLSD args;
-		args["NAME"] = LLSLURL("agent", mAgentID, "inspect").getSLURLString();
-		args["SET"] = set;
-		LLNotificationsUtil::add("AddToContactSetSingleSuccess", args);
-	}
-	closeFloater();
+    if (mHasMultipleAgents)
+    {
+        LLSD args;
+        args["COUNT"] = llformat("%d", mAgentIDs.size());
+        args["SET"] = set;
+        LLNotificationsUtil::add("AddToContactSetMultipleSuccess", args);
+    }
+    else
+    {
+        LLSD args;
+        args["NAME"] = LLSLURL("agent", mAgentID, "inspect").getSLURLString();
+        args["SET"] = set;
+        LLNotificationsUtil::add("AddToContactSetSingleSuccess", args);
+    }
+    closeFloater();
 }
 
 void FSFloaterAddToContactSet::onClickCancel()
 {
-	closeFloater();
+    closeFloater();
 }
 
 void FSFloaterAddToContactSet::onClickAddSet()
 {
-	LLNotificationsUtil::add("AddNewContactSet", LLSD(), LLSD(), &LGGContactSets::handleAddContactSetCallback);
+    LLNotificationsUtil::add("AddNewContactSet", LLSD(), LLSD(), &LGGContactSets::handleAddContactSetCallback);
 }
 
 void FSFloaterAddToContactSet::updateSets(LGGContactSets::EContactSetUpdate type)
 {
-	if (type)
-	{
-		populateContactSets();
-	}
+    if (type)
+    {
+        populateContactSets();
+    }
 }
 
 void FSFloaterAddToContactSet::populateContactSets()
 {
-	if (!mContactSetsCombo)
-	{
-		return;
-	}
-	
-	mContactSetsCombo->clearRows();
-	std::vector<std::string> contact_sets = LGGContactSets::getInstance()->getAllContactSets();
-	if (contact_sets.empty())
-	{
-		mContactSetsCombo->add(getString("no_sets"), LLSD("No Set"));
-	}
-	else
-	{
-		for (auto const& set_name : contact_sets)
-		{
-			mContactSetsCombo->add(set_name);
-		}
-	}
-	getChild<LLButton>("add_btn")->setEnabled(!contact_sets.empty());
+    if (!mContactSetsCombo)
+    {
+        return;
+    }
+
+    mContactSetsCombo->clearRows();
+    std::vector<std::string> contact_sets = LGGContactSets::getInstance()->getAllContactSets();
+    if (contact_sets.empty())
+    {
+        mContactSetsCombo->add(getString("no_sets"), LLSD("No Set"));
+    }
+    else
+    {
+        for (auto const& set_name : contact_sets)
+        {
+            mContactSetsCombo->add(set_name);
+        }
+    }
+    getChild<LLButton>("add_btn")->setEnabled(!contact_sets.empty());
 }

@@ -37,51 +37,51 @@ LLScriptLibrary::LLScriptLibrary()
 
 bool LLScriptLibrary::loadLibrary(const std::string& filename)
 {
-	LLXMLNodePtr xml_root;
-	if ( (!LLUICtrlFactory::getLayeredXMLNode(filename, xml_root)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")) )
-	{
-		LL_WARNS() << "Could not read the script library (" << filename << ")" << LL_ENDL;
-		return false;
-	}
-	LL_INFOS() << "Loading script library at: " << filename << LL_ENDL;
-	for (LLXMLNode* pNode = xml_root->getFirstChild(); pNode != NULL; pNode = pNode->getNextSibling())
-	{
-		if (pNode->hasName("functions"))
-		{
-			std::string function;
-			for (LLXMLNode* pStringNode = pNode->getFirstChild(); pStringNode != NULL; pStringNode = pStringNode->getNextSibling())
-			{
-				if (!pStringNode->getAttributeString("name", function) ||
-					!pStringNode->hasName("function"))
-				{
-					continue;
-				}
-				bool god_only = false;
-				std::string tool_tip;
-				F32 sleep_time;
-				F32 energy;
-				if (!pStringNode->getAttribute_bool("god-only", god_only))
-				{
-					god_only = false;
-				}
-				if (!pStringNode->getAttributeString("desc", tool_tip))
-				{
-					// TODO: Should this be localized? Tooltips aren't translated. <FS:CR>
-					tool_tip = "No Description available";
-				}
-				if (!pStringNode->getAttributeF32("sleep", sleep_time))
-				{
-					sleep_time = 0;
-				}
-				if (!pStringNode->getAttributeF32("energy", energy))
-				{
-					energy = 10;
-				}
-				addFunction(function, tool_tip, sleep_time, energy, god_only);
-			}
-		}
-	}
-	return true;
+    LLXMLNodePtr xml_root;
+    if ( (!LLUICtrlFactory::getLayeredXMLNode(filename, xml_root)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")) )
+    {
+        LL_WARNS() << "Could not read the script library (" << filename << ")" << LL_ENDL;
+        return false;
+    }
+    LL_INFOS() << "Loading script library at: " << filename << LL_ENDL;
+    for (LLXMLNode* pNode = xml_root->getFirstChild(); pNode != NULL; pNode = pNode->getNextSibling())
+    {
+        if (pNode->hasName("functions"))
+        {
+            std::string function;
+            for (LLXMLNode* pStringNode = pNode->getFirstChild(); pStringNode != NULL; pStringNode = pStringNode->getNextSibling())
+            {
+                if (!pStringNode->getAttributeString("name", function) ||
+                    !pStringNode->hasName("function"))
+                {
+                    continue;
+                }
+                bool god_only = false;
+                std::string tool_tip;
+                F32 sleep_time;
+                F32 energy;
+                if (!pStringNode->getAttribute_bool("god-only", god_only))
+                {
+                    god_only = false;
+                }
+                if (!pStringNode->getAttributeString("desc", tool_tip))
+                {
+                    // TODO: Should this be localized? Tooltips aren't translated. <FS:CR>
+                    tool_tip = "No Description available";
+                }
+                if (!pStringNode->getAttributeF32("sleep", sleep_time))
+                {
+                    sleep_time = 0;
+                }
+                if (!pStringNode->getAttributeF32("energy", energy))
+                {
+                    energy = 10;
+                }
+                addFunction(function, tool_tip, sleep_time, energy, god_only);
+            }
+        }
+    }
+    return true;
 }
 
 void LLScriptLibrary::addFunction(std::string name, std::string desc, F32 sleep, F32 energy, bool god_only)
@@ -91,7 +91,7 @@ void LLScriptLibrary::addFunction(std::string name, std::string desc, F32 sleep,
 }
 
 LLScriptLibraryFunction::LLScriptLibraryFunction(std::string name, std::string desc, F32 sleep, F32 energy, bool god_only)
-:	mName(name),
+:   mName(name),
 mDesc(desc),
 mSleepTime(sleep),
 mEnergy(energy),

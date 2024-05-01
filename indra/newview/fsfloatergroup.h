@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -36,28 +36,28 @@ class LLPanelGroupCreate;
 class FSFloaterGroup : public LLFloater
 {
 public:
-	FSFloaterGroup(const LLSD& seed);
-	/*virtual*/ ~FSFloaterGroup();
-	/*virtual*/ void onOpen(const LLSD& key);
+    FSFloaterGroup(const LLSD& seed);
+    /*virtual*/ ~FSFloaterGroup();
+    /*virtual*/ void onOpen(const LLSD& key);
 
-	BOOL postBuild();
+    BOOL postBuild();
 
-	void setGroup(const LLUUID& group_id);
+    void setGroup(const LLUUID& group_id);
 
-	void setGroupName(const std::string& group_name);
-	LLPanelGroup* getGroupPanel() const { return mGroupPanel; };
+    void setGroupName(const std::string& group_name);
+    LLPanelGroup* getGroupPanel() const { return mGroupPanel; };
 
-	static FSFloaterGroup* openGroupFloater(const LLUUID& group_id);
-	static FSFloaterGroup* openGroupFloater(const LLSD& params);
-	static void closeGroupFloater(const LLUUID& group_id);
-	static bool isFloaterVisible(const LLUUID& group_id);
-	static FSFloaterGroup* getInstance(const LLUUID& group_id);
-	static FSFloaterGroup* findInstance(const LLUUID& group_id);
+    static FSFloaterGroup* openGroupFloater(const LLUUID& group_id);
+    static FSFloaterGroup* openGroupFloater(const LLSD& params);
+    static void closeGroupFloater(const LLUUID& group_id);
+    static bool isFloaterVisible(const LLUUID& group_id);
+    static FSFloaterGroup* getInstance(const LLUUID& group_id);
+    static FSFloaterGroup* findInstance(const LLUUID& group_id);
 
 private:
-	LLPanelGroup*		mGroupPanel;
-	LLPanelGroupCreate*	mGroupCreatePanel;
-	bool				mIsCreateGroup;
+    LLPanelGroup*       mGroupPanel;
+    LLPanelGroupCreate* mGroupCreatePanel;
+    bool                mIsCreateGroup;
 };
 
 #endif // FS_FLOATERGROUP_H

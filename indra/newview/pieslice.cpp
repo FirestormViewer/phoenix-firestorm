@@ -31,128 +31,128 @@
 
 // pick up parameters from the XUI definition
 PieSlice::Params::Params() :
-	on_click("on_click"),
-	on_visible("on_visible"),
-	on_enable("on_enable"),
-	start_autohide("start_autohide", false),
-	autohide("autohide", false),
-	check_enable_once("check_enable_once", false)
+    on_click("on_click"),
+    on_visible("on_visible"),
+    on_enable("on_enable"),
+    start_autohide("start_autohide", false),
+    autohide("autohide", false),
+    check_enable_once("check_enable_once", false)
 {
 }
 
 // create a new slice and memorize the XUI parameters
 PieSlice::PieSlice(const PieSlice::Params& p) :
-	LLUICtrl(p),
-	mLabel(p.label),
-	mStartAutohide(p.start_autohide),
-	mAutohide(p.autohide),
-	mCheckEnableOnce(p.check_enable_once),
-	mDoUpdateEnabled(true)
+    LLUICtrl(p),
+    mLabel(p.label),
+    mStartAutohide(p.start_autohide),
+    mAutohide(p.autohide),
+    mCheckEnableOnce(p.check_enable_once),
+    mDoUpdateEnabled(true)
 {
-	LL_DEBUGS("Pie") << "PieSlice::PieSlice(): " << mLabel << " " << mAutohide << " " << mCheckEnableOnce << LL_ENDL;
+    LL_DEBUGS("Pie") << "PieSlice::PieSlice(): " << mLabel << " " << mAutohide << " " << mCheckEnableOnce << LL_ENDL;
 }
 
 // initialize parameters
 void PieSlice::initFromParams(const Params& p)
 {
-	// add a callback if on_click is provided
-	if (p.on_click.isProvided())
-	{
-		setCommitCallback(initCommitCallback(p.on_click));
-	}
-	// add a callback if on_visible is provided
-	if (p.on_visible.isProvided())
-	{
-		mVisibleSignal.connect(initEnableCallback(p.on_visible));
-	}
-	// add a callback if on_enable is provided
-	if (p.on_enable.isProvided())
-	{
-		setEnableCallback(initEnableCallback(p.on_enable));
-		// Set the enabled control variable (for backwards compatability)
-		if (p.on_enable.control_name.isProvided() && !p.on_enable.control_name().empty())
-		{
-			LLControlVariable* control = findControl(p.on_enable.control_name());
-			if (control)
-			{
-				setEnabledControlVariable(control);
-			}
-		}
-	}
+    // add a callback if on_click is provided
+    if (p.on_click.isProvided())
+    {
+        setCommitCallback(initCommitCallback(p.on_click));
+    }
+    // add a callback if on_visible is provided
+    if (p.on_visible.isProvided())
+    {
+        mVisibleSignal.connect(initEnableCallback(p.on_visible));
+    }
+    // add a callback if on_enable is provided
+    if (p.on_enable.isProvided())
+    {
+        setEnableCallback(initEnableCallback(p.on_enable));
+        // Set the enabled control variable (for backwards compatability)
+        if (p.on_enable.control_name.isProvided() && !p.on_enable.control_name().empty())
+        {
+            LLControlVariable* control = findControl(p.on_enable.control_name());
+            if (control)
+            {
+                setEnabledControlVariable(control);
+            }
+        }
+    }
 
-	LLUICtrl::initFromParams(p);
+    LLUICtrl::initFromParams(p);
 }
 
 // call this to make the menu update its "enabled" status
 void PieSlice::updateEnabled()
 {
-	if (mDoUpdateEnabled && mEnableSignal.num_slots() > 0)
-	{
-		bool enabled = mEnableSignal(this, LLSD());
-		if (mEnabledControlVariable)
-		{
-			if (!enabled)
-			{
-				// callback overrides control variable; this will call setEnabled()
-				mEnabledControlVariable->set(false);
-			}
-		}
-		else
-		{
-			setEnabled(enabled);
-		}
+    if (mDoUpdateEnabled && mEnableSignal.num_slots() > 0)
+    {
+        bool enabled = mEnableSignal(this, LLSD());
+        if (mEnabledControlVariable)
+        {
+            if (!enabled)
+            {
+                // callback overrides control variable; this will call setEnabled()
+                mEnabledControlVariable->set(false);
+            }
+        }
+        else
+        {
+            setEnabled(enabled);
+        }
 
-		mDoUpdateEnabled = !mCheckEnableOnce;
-	}
+        mDoUpdateEnabled = !mCheckEnableOnce;
+    }
 }
 
 // call this to make the menu update its "visible" status
 void PieSlice::updateVisible()
 {
-	if (mVisibleSignal.num_slots() > 0)
-	{
-		bool visible = mVisibleSignal(this, LLSD());
-		setVisible(visible);
-	}
+    if (mVisibleSignal.num_slots() > 0)
+    {
+        bool visible = mVisibleSignal(this, LLSD());
+        setVisible(visible);
+    }
 }
 
 // accessor
 LLSD PieSlice::getValue() const
 {
-	return getLabel();
+    return getLabel();
 }
 
 // accessor
 void PieSlice::setValue(const LLSD& value)
 {
-	setLabel(value.asString());
+    setLabel(value.asString());
 }
 
 // accessor
 std::string PieSlice::getLabel() const
 {
-	return mLabel;
+    return mLabel;
 }
 
 // accessor
 void PieSlice::setLabel(std::string_view newLabel)
 {
-	mLabel = newLabel;
+    mLabel = newLabel;
 }
 
 // accessor
 bool PieSlice::getStartAutohide() const
 {
-	return mStartAutohide;
+    return mStartAutohide;
 }
 
 // accessor
 bool PieSlice::getAutohide() const
 {
-	return mStartAutohide || mAutohide;
+    return mStartAutohide || mAutohide;
 }
 
 void PieSlice::resetUpdateEnabledCheck()
 {
-	mDoUpdateEnabled = true;
+    mDoUpdateEnabled = true;
 }

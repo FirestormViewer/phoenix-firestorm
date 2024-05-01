@@ -17,7 +17,7 @@
 #include "llvoavatarself.h"
 
 FSPose::FSPose()
-:	mCurrentPose(LLUUID::null)
+:   mCurrentPose(LLUUID::null)
 {
 }
 
@@ -27,25 +27,25 @@ FSPose::~FSPose()
 
 void FSPose::setPose(const std::string& new_pose, bool save_state)
 {
-	if (isAgentAvatarValid() && LLUUID::validate(new_pose))
-	{
-		if (mCurrentPose.notNull())
-		{
-			gAgent.sendAnimationRequest(mCurrentPose, ANIM_REQUEST_STOP);
-		}
-		if (save_state)
-		{
-			mCurrentPose.set(new_pose);
-		}
-		gAgent.sendAnimationRequest(LLUUID(new_pose), ANIM_REQUEST_START);
-	}
+    if (isAgentAvatarValid() && LLUUID::validate(new_pose))
+    {
+        if (mCurrentPose.notNull())
+        {
+            gAgent.sendAnimationRequest(mCurrentPose, ANIM_REQUEST_STOP);
+        }
+        if (save_state)
+        {
+            mCurrentPose.set(new_pose);
+        }
+        gAgent.sendAnimationRequest(LLUUID(new_pose), ANIM_REQUEST_START);
+    }
 }
 
 void FSPose::stopPose()
 {
-	if (isAgentAvatarValid() && mCurrentPose.notNull())
-	{
-		gAgent.sendAnimationRequest(mCurrentPose, ANIM_REQUEST_STOP);
-		mCurrentPose.setNull();
-	}
+    if (isAgentAvatarValid() && mCurrentPose.notNull())
+    {
+        gAgent.sendAnimationRequest(mCurrentPose, ANIM_REQUEST_STOP);
+        mCurrentPose.setNull();
+    }
 }
