@@ -459,6 +459,18 @@ void LLAvatarPropertiesProcessor::processAvatarLegacyPropertiesReply(LLMessageSy
 	self->notifyObservers(avatar_data.avatar_id, &avatar_data, APT_PROPERTIES_LEGACY);
 }
 
+void LLAvatarPropertiesProcessor::processAvatarInterestsReply(LLMessageSystem* msg, void**)
+{
+/*
+	AvatarInterestsReply is automatically sent by the server in response to the 
+	AvatarPropertiesRequest (in addition to the AvatarPropertiesReply message).
+	If the interests panel is no longer part of the design (?) we should just register the message 
+	to a handler function that does nothing. 
+	That will suppress the warnings and be compatible with old server versions.
+	WARNING: LLTemplateMessageReader::decodeData: Message from 216.82.37.237:13000 with no handler function received: AvatarInterestsReply
+*/
+}
+
 void LLAvatarPropertiesProcessor::processAvatarClassifiedsReply(LLMessageSystem* msg, void**)
 {
 	LLAvatarClassifieds classifieds;
@@ -516,6 +528,55 @@ void LLAvatarPropertiesProcessor::processClassifiedInfoReply(LLMessageSystem* ms
 // </FS:CR>
 }
 
+
+void LLAvatarPropertiesProcessor::processAvatarNotesReply(LLMessageSystem* msg, void**)
+{
+    // Deprecated, new "AgentProfile" allows larger notes
+    // <FS> OpenSim
+    LLAvatarNotes avatar_notes;
+
+    msg->getUUID(_PREHASH_AgentData, _PREHASH_AgentID, avatar_notes.agent_id);
+    msg->getUUID(_PREHASH_Data, _PREHASH_TargetID, avatar_notes.target_id);
+    msg->getString(_PREHASH_Data, _PREHASH_Notes, avatar_notes.notes);
+
+    LLAvatarPropertiesProcessor* self = getInstance();
+    // Request processed, no longer pending
+    self->removePendingRequest(avatar_notes.target_id, APT_NOTES);
+    self->notifyObservers(avatar_notes.target_id, &avatar_notes, APT_NOTES);
+    // </FS>
+}
+
+void LLAvatarPropertiesProcessor::processAvatarPicksReply(LLMessageSystem* msg, void**)
+{
+    // <FS> OpenSim
+    //LLUUID agent_id;
+    //LLUUID target_id;
+    //msg->getUUID(_PREHASH_AgentData, _PREHASH_AgentID, agent_id);
+    //msg->getUUID(_PREHASH_AgentData, _PREHASH_TargetID, target_id);
+
+    //LL_DEBUGS("AvatarProperties") << "Received AvatarPicksReply for " << target_id << LL_ENDL;
+    LLAvatarPicks avatar_picks;
+    msg->getUUID(_PREHASH_AgentData, _PREHASH_AgentID, avatar_picks.agent_id);
+    msg->getUUID(_PREHASH_AgentData, _PREHASH_TargetID, avatar_picks.target_id);
+
+    S32 block_count = msg->getNumberOfBlocks(_PREHASH_Data);
+    for (int block = 0; block < block_count; ++block)
+    {
+        LLUUID pick_id;
+        std::string pick_name;
+
+        msg->getUUID(_PREHASH_Data, _PREHASH_PickID, pick_id, block);
+        msg->getString(_PREHASH_Data, _PREHASH_PickName, pick_name, block);
+
+        avatar_picks.picks_list.push_back(std::make_pair(pick_id, pick_name));
+    }
+    LLAvatarPropertiesProcessor* self = getInstance();
+    // Request processed, no longer pending
+    self->removePendingRequest(avatar_picks.target_id, APT_PICKS);
+    self->notifyObservers(avatar_picks.target_id, &avatar_picks, APT_PICKS);
+    // </FS> OpenSim
+}
+
 void LLAvatarPropertiesProcessor::processPickInfoReply(LLMessageSystem* msg, void**)
 {
 	LLPickData pick_data;
@@ -544,6 +605,43 @@ void LLAvatarPropertiesProcessor::processPickInfoReply(LLMessageSystem* msg, voi
 	LLAvatarPropertiesProcessor* self = getInstance();
 	// don't need to remove pending request as we don't track pick info
 	self->notifyObservers(pick_data.creator_id, &pick_data, APT_PICK_INFO);
+}
+
+void LLAvatarPropertiesProcessor::processAvatarGroupsReply(LLMessageSystem* msg, void**)
+{
+    /*
+    AvatarGroupsReply is automatically sent by the server in response to the 
+	AvatarPropertiesRequest in addition to the AvatarPropertiesReply message.
+    */
+    // <FS> OpenSim
+    //LLUUID agent_id;
+    //LLUUID avatar_id;
+    //msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, agent_id);
+    //msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AvatarID, avatar_id);
+
+    //LL_DEBUGS("AvatarProperties") << "Received AvatarGroupsReply for " << avatar_id << LL_ENDL;
+    LLAvatarGroups avatar_groups;
+    msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, avatar_groups.agent_id);
+    msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AvatarID, avatar_groups.avatar_id);
+
+    S32 group_count = msg->getNumberOfBlocksFast(_PREHASH_GroupData);
+    for (S32 i = 0; i < group_count; ++i)
+    {
+        LLAvatarGroups::LLGroupData group_data;
+
+        msg->getU64(_PREHASH_GroupData, _PREHASH_GroupPowers, group_data.group_powers, i);
+        msg->getStringFast(_PREHASH_GroupData, _PREHASH_GroupTitle, group_data.group_title, i);
+        msg->getUUIDFast(_PREHASH_GroupData, _PREHASH_GroupID, group_data.group_id, i);
+        msg->getStringFast(_PREHASH_GroupData, _PREHASH_GroupName, group_data.group_name, i);
+        msg->getUUIDFast(_PREHASH_GroupData, _PREHASH_GroupInsigniaID, group_data.group_insignia_id, i);
+
+        avatar_groups.group_list.push_back(group_data);
+    }
+
+    LLAvatarPropertiesProcessor* self = getInstance();
+    self->removePendingRequest(avatar_groups.avatar_id, APT_GROUPS);
+    self->notifyObservers(avatar_groups.avatar_id, &avatar_groups, APT_GROUPS);
+    // </FS> OpenSim
 }
 
 void LLAvatarPropertiesProcessor::notifyObservers(const LLUUID& id, void* data, EAvatarProcessorType type)
@@ -751,69 +849,6 @@ void LLAvatarPropertiesProcessor::sendAvatarGroupsRequest(const LLUUID& avatar_i
 {
 	sendGenericRequest(avatar_id, APT_GROUPS, "avatargroupsrequest");
 }
-
-void LLAvatarPropertiesProcessor::processAvatarNotesReply(LLMessageSystem* msg, void**)
-{
-	LLAvatarNotes avatar_notes;
-
-	msg->getUUID(_PREHASH_AgentData, _PREHASH_AgentID, avatar_notes.agent_id);
-	msg->getUUID(_PREHASH_Data, _PREHASH_TargetID, avatar_notes.target_id);
-	msg->getString(_PREHASH_Data, _PREHASH_Notes, avatar_notes.notes);
-
-	LLAvatarPropertiesProcessor* self = getInstance();
-	// Request processed, no longer pending
-	self->removePendingRequest(avatar_notes.target_id, APT_NOTES);
-	self->notifyObservers(avatar_notes.target_id,&avatar_notes,APT_NOTES);
-}
-
-void LLAvatarPropertiesProcessor::processAvatarPicksReply(LLMessageSystem* msg, void**)
-{
-	LLAvatarPicks avatar_picks;
-	msg->getUUID(_PREHASH_AgentData, _PREHASH_AgentID, avatar_picks.agent_id);
-	msg->getUUID(_PREHASH_AgentData, _PREHASH_TargetID, avatar_picks.target_id);
-
-	S32 block_count = msg->getNumberOfBlocks(_PREHASH_Data);
-	for (int block = 0; block < block_count; ++block)
-	{
-		LLUUID pick_id;
-		std::string pick_name;
-
-		msg->getUUID(_PREHASH_Data, _PREHASH_PickID, pick_id, block);
-		msg->getString(_PREHASH_Data, _PREHASH_PickName, pick_name, block);
-
-		avatar_picks.picks_list.push_back(std::make_pair(pick_id,pick_name));
-	}
-	LLAvatarPropertiesProcessor* self = getInstance();
-	// Request processed, no longer pending
-	self->removePendingRequest(avatar_picks.target_id, APT_PICKS);
-	self->notifyObservers(avatar_picks.target_id,&avatar_picks,APT_PICKS);
-}
-
-void LLAvatarPropertiesProcessor::processAvatarGroupsReply(LLMessageSystem* msg, void**)
-{
-	LLAvatarGroups avatar_groups;
-	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, avatar_groups.agent_id );
-	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AvatarID, avatar_groups.avatar_id );
-
-	S32 group_count = msg->getNumberOfBlocksFast(_PREHASH_GroupData);
-	for(S32 i = 0; i < group_count; ++i)
-	{
-		LLAvatarGroups::LLGroupData group_data;
-
-		msg->getU64(    _PREHASH_GroupData, _PREHASH_GroupPowers,	group_data.group_powers, i );
-		msg->getStringFast(_PREHASH_GroupData, _PREHASH_GroupTitle,	group_data.group_title, i );
-		msg->getUUIDFast(  _PREHASH_GroupData, _PREHASH_GroupID,	group_data.group_id, i);
-		msg->getStringFast(_PREHASH_GroupData, _PREHASH_GroupName,	group_data.group_name, i );
-		msg->getUUIDFast(  _PREHASH_GroupData, _PREHASH_GroupInsigniaID, group_data.group_insignia_id, i );
-
-		avatar_groups.group_list.push_back(group_data);
-	}
-
-	LLAvatarPropertiesProcessor* self = getInstance();
-	self->removePendingRequest(avatar_groups.avatar_id, APT_GROUPS);
-	self->notifyObservers(avatar_groups.avatar_id,&avatar_groups,APT_GROUPS);
-}
-
 
 void LLAvatarPropertiesProcessor::sendNotes(const LLUUID& avatar_id, const std::string notes)
 {
