@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Outfit">
-	<menu_item_call label="Заменить текущий комплект" name="wear_replace"/>
-	<menu_item_call label="Добавить в текущий комплект" name="wear_add"/>
-	<menu_item_call label="Удалить из текущего комплекта" name="take_off"/>
-	<menu_item_call label="Изменить комплект" name="edit"/>
-	<menu_item_call label="Переименовать комплект" name="rename"/>
-	<menu_item_call label="Удалить комплект" name="delete"/>
+	<menu_item_call label="Заменить текущий костюм" name="wear_replace"/>
+	<menu_item_call label="Добавить в текущий костюм" name="wear_add"/>
+	<menu_item_call label="Удалить из текущего костюма" name="take_off"/>
+	<menu_item_call label="Изменить костюм" name="edit"/>
+	<menu_item_call label="Переименовать костюм" name="rename"/>
+	<menu_item_call label="Сохранить в этот костюм" name="save"/>
+	<menu_item_call label="Удалить костюм" name="delete"/>
 </context_menu>

@@ -5346,6 +5346,66 @@ https://wiki.firestormviewer.org/fs_voice
 			<button name="cancel" text="Отмена"/>
 		</form>
 	</notification>
+
+	<notification label="Создать вложенную папку" name="CreateSubfolder">
+		Назовите новую папку:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Отмена"/>
+		</form>
+	</notification>
+
+	<notification name="SameFolderRequired">
+		Выбранные элементы должны находиться в одной папке.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="RiggedMeshAttachedToHUD">
+		Объект "[NAME]" прикрепленный к точке дисплея "[POINT]" содержит ригованый меш.
+
+Ригованые мешевые объекты предназначены для прикрепления к аватару. Ни вы, ни кто-либо другой не увидит этот объект.
+
+Если вы хотите увидеть этот объект, удалите его и снова прикрепите к точке прикрепления аватара.
+
+		<usetemplate ignoretext="Предупредить меня, когда к точке дисплея будет прикреплен меш." name="okignore" yestext="OK"/>
+	</notification>
+
+	<notification name="ConfirmOverwriteOutfit">
+		Это заменит предметы из выбранного костюма на те, что надеты сейчас.
+		<usetemplate ignoretext="Подтвердить перед перезаписью костюма." name="okcancelignore" notext="Отмена" yestext="Сохранить"/>
+	</notification>
+
+	<notification name="ClearInventoryThumbnailsWarning">
+		Вы собираетесь удалить миниатюры изображений из списка предметов инвентаря. Это изменение невозможно отменить.
+
+Хотите продолжить?
+		<usetemplate name="okcancelbuttons" notext="Нет" yestext="Да"/>
+	</notification>
+
+	<notification name="WriteInventoryThumbnailsWarning">
+		Вы собираетесь перезаписать миниатюры изображений для некоторых или всех элементов инвентаря в списке. Это изменение невозможно отменить.
+
+Хотите продолжить?
+		<usetemplate name="okcancelbuttons" notext="Нет" yestext="Да"/>
+	</notification>
+
+	<notification name="ReflectionProbeApplied">
+		ВНИМАНИЕ: Вы превратили свой объект в датчик отражения.  Это приведет к неявному изменению объекта, чтобы имитировать его объем воздействия, и внесет необратимые изменения в объект.  Хотите продолжить?
+		<usetemplate ignoretext="Reflection Probe tips" name="okcancelignore" notext="Отмена" yestext="OK"/>
+	</notification>
+
+	<notification name="AutoAdjustHDRSky">
+		Вы редактируете изображение неба без разрешения HDR, которое было автоматически преобразовано в HDR. Чтобы удалить HDR и тональное отображение, установите значение Reflection Probe Ambiance равным нулю.
+		<usetemplate ignoretext="Предупреждение о настройке неба в режиме HDR" name="okignore" yestext="OK"/>
+	</notification>
+
+	<notification name="EnableAutoFPSWarning">
+		Вы собираетесь включить Автонастройку частоты кадров. Все несохраненные настройки графики будут потеряны.
+
+Хотите сначала сохранить их?
+		<usetemplate name="okcancelbuttons" notext="Нет" yestext="Да"/>
+	</notification>
+
 	<notification name="NoValidEnvSettingFound">
 		Не выбрана допустимая настройка окружающей среды.
 
