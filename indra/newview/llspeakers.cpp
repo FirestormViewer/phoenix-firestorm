@@ -624,7 +624,7 @@ void LLSpeakerMgr::getSpeakerList(speaker_list_t* speaker_list, BOOL include_tex
 
 const LLUUID LLSpeakerMgr::getSessionID() 
 { 
-	return mVoiceChannel->getSessionID(); 
+	return mVoiceChannel ? mVoiceChannel->getSessionID() : LLUUID(); 
 }
 
 bool LLSpeakerMgr::isSpeakerToBeRemoved(const LLUUID& speaker_id)

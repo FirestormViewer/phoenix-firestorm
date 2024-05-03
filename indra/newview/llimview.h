@@ -89,8 +89,10 @@ public:
 // [/SL:KB]
 
 		LLIMSession(const LLUUID& session_id, const std::string& name,
-			const EInstantMessage& type, const LLUUID& other_participant_id, const uuid_vec_t& ids, const LLSD& voiceChannelInfo, bool has_offline_msg);
+			const EInstantMessage& type, const LLUUID& other_participant_id, const LLSD& voiceChannelInfo, const uuid_vec_t& ids, bool has_offline_msg);
 		virtual ~LLIMSession();
+
+		void initVoiceChannel(const LLSD &voiceChannelInfo = LLSD());
 
 		void sessionInitReplyReceived(const LLUUID& new_session_id);
 		void addMessagesFromHistoryCache(const std::list<LLSD>& history);        // From local file
@@ -158,6 +160,7 @@ public:
 
 		LLVoiceChannel* mVoiceChannel;
 		LLIMSpeakerMgr* mSpeakers;
+        bool            mP2PAsAdhocCall;
 
 		bool mSessionInitialized;
 
@@ -326,7 +329,7 @@ public:
 	 * Get voice channel for the session specified by session_id
 	 * Returns NULL if the session does not exist
 	 */
-	LLVoiceChannel* getVoiceChannel(const LLUUID& session_id) const;
+	LLVoiceChannel* getVoiceChannel(const LLUUID& session_id, const LLSD& voice_channel_info = LLSD()) const;
 
 	/**
 	* Get im speaker manager for the session specified by session_id
@@ -518,7 +521,7 @@ public:
 	 * Start call in a session
 	 * @return false if voice channel doesn't exist
 	 **/
-	bool startCall(const LLUUID& session_id, LLVoiceChannel::EDirection direction = LLVoiceChannel::OUTGOING_CALL);
+	bool startCall(const LLUUID& session_id, LLVoiceChannel::EDirection direction = LLVoiceChannel::OUTGOING_CALL, const LLSD& voice_channel_info = LLSD());
 
 	/**
 	 * End call in a session
