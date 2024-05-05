@@ -136,8 +136,8 @@
 	<text name="selection_empty" width="120">
 		Ничего не выбрано.
 	</text>
-	<text name="remaining_capacity">
-		[CAPACITY_STRING] [secondlife:///app/openfloater/object_weights Подробнее]
+	<text name="more info label">
+		[CAPACITY_STRING] [secondlife:///app/openfloater/object_weights Больше информации]
 	</text>
 	<tab_container name="Object Info Tabs">
 		<panel label="Общие" name="General">
@@ -466,6 +466,14 @@
 			<spinner label="Фокус" name="Light Focus"/>
 			<spinner label="Спад" name="Light Falloff"/>
 			<spinner label="Окружение" name="Light Ambiance"/>
+			<check_box label="Датчик отражений" name="Reflection Probe" tool_tip="Настраивает способ отражения объектов в пределах этого объема при включенном PBR" width="60" />
+			<combo_box name="Probe Volume Type" tool_tip="Выберите тип объема влияния датчика">
+				<combo_box.item label="Сфера" name="Sphere"/>
+				<combo_box.item label="Куб" name="Box"/>
+			</combo_box>
+			<check_box label="Динамика" name="Probe Dynamic" tool_tip="Если эта функция включена, аватары будут отображаться в отражениях в пределах объема влияния этого датчика." width="60" />
+			<spinner label="Окружение" label_width="65" name="Probe Ambiance" width="125" />
+			<spinner label="Клип Рядом" label_width="65" name="Probe Near Clip" width="125" />
 			<text name="label physicsshapetype" width="140">
 				Тип физической формы:
 			</text>

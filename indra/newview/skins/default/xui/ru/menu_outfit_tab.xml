@@ -4,6 +4,7 @@
 	<menu_item_call label="Добавить в текущий костюм" name="wear_add"/>
 	<menu_item_call label="Удалить из текущего костюма" name="take_off"/>
 	<menu_item_call label="Изменить костюм" name="edit"/>
+	<menu_item_call label="Изображение..." name="thumbnail"/>
 	<menu_item_call label="Переименовать костюм" name="rename"/>
 	<menu_item_call label="Сохранить в этот костюм" name="save"/>
 	<menu_item_call label="Удалить костюм" name="delete"/>
