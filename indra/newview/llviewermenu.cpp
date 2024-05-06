@@ -3108,10 +3108,18 @@ void derenderObject(bool permanent)
 
 	while ((objp = select_mgr->getSelection()->getFirstRootObject(TRUE)))
 	{
-//		if ( (objp) && (gAgentID != objp->getID()) )
+        if ( (objp) && (objp->isAttachment()) )
+		// Disallow derendering of attachments. Derender the avatar instead. FIRE-33670
+        {
+            select_mgr->deselectObjectOnly(objp);
+            objp = objp->getAvatarAncestor();
+        }
+
+ 		if ( (objp) && (gAgentID != objp->getID()) )
 // [RLVa:KB] - Checked: 2012-03-11 (RLVa-1.4.5) | Added: RLVa-1.4.5 | FS-specific
 		// Don't allow derendering of own attachments when RLVa is enabled
-		if ( (objp) && (gAgentID != objp->getID()) && ((!rlv_handler_t::isEnabled()) || (!objp->isAttachment()) || (!objp->permYouOwner())) )
+		// Obsoleted by disallowing derendering of attachments in general. FIRE-33670
+		// if ( (objp) && (gAgentID != objp->getID()) && ((!rlv_handler_t::isEnabled()) || (!objp->isAttachment()) || (!objp->permYouOwner())) )
 // [/RLVa:KB]
 		{
 			LLUUID id = objp->getID();
@@ -3193,10 +3201,9 @@ void derenderObject(bool permanent)
 			}
 
 		}
-		else if( (objp) && (gAgentID != objp->getID()) && ((rlv_handler_t::isEnabled()) || (objp->isAttachment()) || (objp->permYouOwner())) )
+		else if( (objp) )
 		{
 			select_mgr->deselectObjectOnly(objp);
-			return;
 		}
 	}
 
