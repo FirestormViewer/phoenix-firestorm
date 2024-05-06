@@ -429,24 +429,6 @@ name="Stand Up">
        function="Object.EnableScriptInfo" />
   </menu_item_call>
   <menu_item_call
-      enabled="true"
-      label="Derender"
-      name="Derender">
-      <menu_item_call.on_click
-       function="Object.Derender" />
-      <menu_item_call.on_enable
-       function="Object.EnableDerender" />
-  </menu_item_call>
-   <menu_item_call
-      enabled="true"
-      label="Derender + Blacklist"
-      name="DerenderPermanent">
-    <menu_item_call.on_click
-      function="Object.DerenderPermanent" />
-    <menu_item_call.on_enable
-      function="Object.EnableDerender" />
-   </menu_item_call>
-  <menu_item_call
  label="Show Textures"
      name="Debug...">
     <menu_item_call.on_click
