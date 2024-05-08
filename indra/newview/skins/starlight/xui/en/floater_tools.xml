@@ -2947,7 +2947,7 @@ Low ↔ Lwst
              height="50"
              layout="topleft"
              left_pad="10"
-             top_pad="-17"
+             top_pad="-21"
              name="colorswatch"
              tool_tip="Click to open color picker"
              width="40" />
@@ -2973,7 +2973,7 @@ Low ↔ Lwst
              layout="topleft"
              left="10"
              name="Light Intensity"
-             top_pad="3"
+             top_pad="-21"
              width="128" />
           <spinner bottom_delta="0"
                    decimal_digits="3"

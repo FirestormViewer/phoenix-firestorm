@@ -3104,8 +3104,7 @@ void LLSelectMgr::logNoOp(LLSelectNode* node, void *)
 // static
 void LLSelectMgr::logAttachmentRequest(LLSelectNode* node, void *)
 {
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: Catznip-3.7
-//    LLAttachmentsMgr::instance().onAttachmentRequested(node->mItemID);
+    LLAttachmentsMgr::instance().onAttachmentRequested(node->mItemID);
 }
 
 // static

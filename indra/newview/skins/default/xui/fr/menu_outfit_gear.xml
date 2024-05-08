@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="Gear Outfit">
-	<menu_item_call label="Porter - Remplacer la tenue actuelle" name="wear"/>
-	<menu_item_call label="Porter - Ajouter à la tenue actuelle" name="wear_add"/>
-	<menu_item_call label="Enlever - Supprimer de la tenue actuelle" name="take_off"/>
+	<menu_item_call label="Remplacer la tenue actuelle" name="wear"/>
+	<menu_item_call label="Ajouter à la tenue actuelle" name="wear_add"/>
+	<menu_item_call label="Supprimer de la tenue actuelle" name="take_off"/>
 	<menu_item_call label="Image" name="thumbnail"/>
+	<menu_item_call label="Renommer la tenue" name="rename"/>
+	<menu_item_call label="Enregister dans cette tenue" name="save"/>
+	<menu_item_call label="Supprimer la tenue" name="delete_outfit"/>
+	<menu_item_check label="Toujours trier les dossiers par nom" name="sort_folders_by_name"/>
+	<menu_item_call label="Développer tous les dossiers" name="expand"/>
+	<menu_item_call label="Réduire tous les dossiers" name="collapse"/>
 	<menu label="Nouveaux habits" name="New Clothes">
 		<menu_item_call label="Nouvelle chemise" name="New Shirt"/>
 		<menu_item_call label="Nouveau pantalon" name="New Pants"/>
@@ -25,9 +31,4 @@
 		<menu_item_call label="Nouveaux cheveux" name="New Hair"/>
 		<menu_item_call label="Nouveaux yeux" name="New Eyes"/>
 	</menu>
-	<menu_item_call label="Développer tous les dossiers" name="expand"/>
-	<menu_item_call label="Réduire tous les dossiers" name="collapse"/>
-	<menu_item_call label="Renommer la tenue" name="rename"/>
-	<menu_item_call label="Supprimer la tenue" name="delete_outfit"/>
-	<menu_item_check label="Toujours trier les dossiers par nom" name="sort_folders_by_name"/>
 </toggleable_menu>

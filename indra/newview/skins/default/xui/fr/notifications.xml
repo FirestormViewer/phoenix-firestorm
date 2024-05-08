@@ -5450,6 +5450,22 @@ Les mesh riggés sont conçus pour être attachés à l'avatar. Ni vous ni perso
 Si vous souhaitez voir cet objet, retirez-le et rattachez-le à un point d'attache de l'avatar.
 		<usetemplate ignoretext="M'avertir lorsqu'un mesh riggé est attaché à un point du HUD." name="okignore" yestext="OK"/>
 	</notification>
+	<notification name="ConfirmOverwriteOutfit">
+		Les articles de la tenue sélectionnée seront remplacés par les articles que vous portez actuellement.
+		<usetemplate ignoretext="Confirmer avant de remplacer la tenue" name="okcancelignore" notext="Annuler" yestext="Enregistrer"/>
+	</notification>
+	<notification name="ClearInventoryThumbnailsWarning">
+		Vous êtes sur le point de supprimer les vignettes des éléments d'inventaire de la liste. Cette modification ne peut être annulée.
+
+Voulez-vous continuer ?
+		<usetemplate name="okcancelbuttons" notext="Non" yestext="Oui"/>
+	</notification>
+	<notification name="WriteInventoryThumbnailsWarning">
+		Vous êtes sur le point d'écraser les vignettes de certains ou de tous les éléments d'inventaire de la liste. Cette modification ne peut être annulée.
+
+Voulez-vous continuer ?
+		<usetemplate name="okcancelbuttons" notext="Non" yestext="Oui"/>
+	</notification>
 	<notification name="ReflectionProbeApplied">
 		ATTENTION : Vous avez fait de votre objet une sonde de réflexion.  Cela modifiera implicitement l'objet pour imiter son volume d'influence et entraînera des modifications irréversibles de cet objet.  Voulez-vous continuer ?
 		<usetemplate ignoretext="Conseils pour la sonde de réflexion" name="okcancelignore" notext="Annuler" yestext="OK"/>

@@ -1149,7 +1149,6 @@ struct FSPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 
 		bool align_planar = mPanel->mCheckPlanarAlign->get();
 
-		llassert(comboTexGen);
 		llassert(object);
 
 		if (ctrlTexScaleS)
