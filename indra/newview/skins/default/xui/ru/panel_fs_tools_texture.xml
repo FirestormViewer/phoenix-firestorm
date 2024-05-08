@@ -28,7 +28,7 @@
 			</panel>	   <!-- panel_material_maps -->
 
 			<panel name="panel_material_parameters">
-				<check_box label="Двусторонний" name="double sided"/>
+				<check_box label="Двусторонний" name="double sided" width="100"/>
 				<spinner label="Альфа" name="transparency"/>
 				<text name="blend mode label">Режим</text>
 				<combo_box name="alpha mode">
