@@ -1719,13 +1719,13 @@ void LLToolDragAndDrop::dropObject(LLViewerObject* raycast_target,
 	// currently the ray's end point is an approximation,
 	// and is sometimes too short (causing failure.)  so we
 	// double the ray's length:
-	if (bypass_sim_raycast == false)
+	if (!bypass_sim_raycast)
 	{
 		LLVector3 ray_direction = ray_start - ray_end;
 		ray_end = ray_end - ray_direction;
 	}
-	
-	
+
+
 	// Message packing code should be it's own uninterrupted block
 	LLMessageSystem* msg = gMessageSystem;
 	if (mSource == SOURCE_NOTECARD)
@@ -1887,7 +1887,9 @@ void LLToolDragAndDrop::dropInventory(LLViewerObject* hit_obj,
 EAcceptance LLToolDragAndDrop::willObjectAcceptInventory(LLViewerObject* obj, LLInventoryItem* item, EDragAndDropType type)
 {
 	// check the basics
-	if (!item || !obj) return ACCEPT_NO;
+	if (!item || !obj)
+		return ACCEPT_NO;
+
 	// HACK: downcast
 	LLViewerInventoryItem* vitem = (LLViewerInventoryItem*)item;
 	if (!vitem->isFinished() && (type != DAD_CATEGORY))
@@ -1898,13 +1900,14 @@ EAcceptance LLToolDragAndDrop::willObjectAcceptInventory(LLViewerObject* obj, LL
 		// Library or agent inventory only.
 		return ACCEPT_NO;
 	}
-	if (vitem->getIsLinkType()) return ACCEPT_NO; // No giving away links
+	if (vitem->getIsLinkType())
+		return ACCEPT_NO; // No giving away links
 
 	// deny attempts to drop from an object onto itself. This is to
 	// help make sure that drops that are from an object to an object
 	// don't have to worry about order of evaluation. Think of this
 	// like check for self in assignment.
-	if(obj->getID() == item->getParentUUID())
+	if (obj->getID() == item->getParentUUID())
 	{
 		return ACCEPT_NO;
 	}
@@ -1914,7 +1917,7 @@ EAcceptance LLToolDragAndDrop::willObjectAcceptInventory(LLViewerObject* obj, LL
 	//			 && (obj->mPermModify || obj->mFlagAllowInventoryAdd));
 	bool worn = false;
 	LLVOAvatarSelf* my_avatar = NULL;
-	switch(item->getType())
+	switch (item->getType())
 	{
 	case LLAssetType::AT_OBJECT:
 		my_avatar = gAgentAvatarp;
@@ -1925,7 +1928,7 @@ EAcceptance LLToolDragAndDrop::willObjectAcceptInventory(LLViewerObject* obj, LL
 		break;
 	case LLAssetType::AT_BODYPART:
 	case LLAssetType::AT_CLOTHING:
-		if(gAgentWearables.isWearingItem(item->getUUID()))
+		if (gAgentWearables.isWearingItem(item->getUUID()))
 		{
 			worn = true;
 		}
@@ -1935,19 +1938,19 @@ EAcceptance LLToolDragAndDrop::willObjectAcceptInventory(LLViewerObject* obj, LL
 		// because of incomplete LSL support. See STORM-1117.
 		return ACCEPT_NO;
 	default:
-			break;
+		break;
 	}
 	const LLPermissions& perm = item->getPermissions();
 	bool modify = (obj->permModify() || obj->flagAllowInventoryAdd());
 	bool transfer = false;
-	if((obj->permYouOwner() && (perm.getOwner() == gAgent.getID()))
+	if ((obj->permYouOwner() && (perm.getOwner() == gAgent.getID()))
 	   || perm.allowOperationBy(PERM_TRANSFER, gAgent.getID()))
 	{
 		transfer = true;
 	}
 	bool volume = (LL_PCODE_VOLUME == obj->getPCode());
 	bool attached = obj->isAttachment();
-	bool unrestricted = ((perm.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED) ? true : false;
+	bool unrestricted = (perm.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED;
 
 // [RLVa:KB] - Checked: 2010-03-31 (RLVa-1.2.0c) | Modified: RLVa-1.0.0c
 	if (rlv_handler_t::isEnabled())
@@ -1971,14 +1974,17 @@ EAcceptance LLToolDragAndDrop::willObjectAcceptInventory(LLViewerObject* obj, LL
         // at the moment server doesn't support such a situation.
 		return ACCEPT_NO_LOCKED;
 	}
-	else if(modify && transfer && volume && !worn)
+
+	if (modify && transfer && volume && !worn)
 	{
 		return ACCEPT_YES_MULTI;
 	}
-	else if(!modify)
+
+	if (!modify)
 	{
 		return ACCEPT_NO_LOCKED;
 	}
+
 	return ACCEPT_NO;
 }
 
@@ -2706,41 +2712,41 @@ EAcceptance LLToolDragAndDrop::dad3dWearCategory(
 		return ACCEPT_NO_CUSTOM;
 	}
 
-	if(mSource == SOURCE_AGENT)
+	if (mSource == SOURCE_AGENT)
 	{
 		const LLUUID trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
-		if( gInventory.isObjectDescendentOf( category->getUUID(), trash_id ) )
+		if (gInventory.isObjectDescendentOf(category->getUUID(), trash_id))
 		{
 			return ACCEPT_NO;
 		}
 
 		const LLUUID &outbox_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_OUTBOX);
-		if(outbox_id.notNull() && gInventory.isObjectDescendentOf(category->getUUID(), outbox_id))
+		if (outbox_id.notNull() && gInventory.isObjectDescendentOf(category->getUUID(), outbox_id))
 		{
 			// Legacy
 			return ACCEPT_NO;
 		}
 
-		if(drop)
+		if (drop)
 		{
-			bool append = ( (mask & MASK_SHIFT) ? true : false );
-			LLAppearanceMgr::instance().wearInventoryCategory(category, false, append);
+			LLAppearanceMgr::instance().wearInventoryCategory(category, false, mask & MASK_SHIFT);
 		}
+
 		return ACCEPT_YES_MULTI;
 	}
-	else if(mSource == SOURCE_LIBRARY)
+
+	if (mSource == SOURCE_LIBRARY)
 	{
-		if(drop)
+		if (drop)
 		{
 			LLAppearanceMgr::instance().wearInventoryCategory(category, true, false);
 		}
+
 		return ACCEPT_YES_MULTI;
 	}
-	else
-	{
-		// TODO: copy/move category to avatar's inventory and then wear it.
-		return ACCEPT_NO;
-	}
+
+	// TODO: copy/move category to avatar's inventory and then wear it.
+	return ACCEPT_NO;
 }
 
 
@@ -2751,15 +2757,15 @@ EAcceptance LLToolDragAndDrop::dad3dUpdateInventory(
 
 	// *HACK: In order to resolve SL-22177, we need to block drags
 	// from notecards and objects onto other objects.
-	if((SOURCE_WORLD == mSource) || (SOURCE_NOTECARD == mSource))
-	{
+	if ((SOURCE_WORLD == mSource) || (SOURCE_NOTECARD == mSource))
 		return ACCEPT_NO;
-	}
 
 	LLViewerInventoryItem* item;
 	LLViewerInventoryCategory* cat;
 	locateInventory(item, cat);
-	if (!item || !item->isFinished()) return ACCEPT_NO;
+	if (!item || !item->isFinished())
+		return ACCEPT_NO;
+
 	LLViewerObject* root_object = obj;
 	if (obj && obj->getParent())
 	{
@@ -2771,17 +2777,18 @@ EAcceptance LLToolDragAndDrop::dad3dUpdateInventory(
 	}
 
 	EAcceptance rv = willObjectAcceptInventory(root_object, item);
-	if(root_object && drop && (ACCEPT_YES_COPY_SINGLE <= rv))
+	if (root_object && drop && (ACCEPT_YES_COPY_SINGLE <= rv))
 	{
 		dropInventory(root_object, item, mSource, mSourceID);
 	}
+
 	return rv;
 }
 
 bool LLToolDragAndDrop::dadUpdateInventory(LLViewerObject* obj, bool drop)
 {
 	EAcceptance rv = dad3dUpdateInventory(obj, -1, MASK_NONE, drop);
-	return (rv >= ACCEPT_YES_COPY_SINGLE);
+	return rv >= ACCEPT_YES_COPY_SINGLE;
 }
 
 EAcceptance LLToolDragAndDrop::dad3dUpdateInventoryCategory(

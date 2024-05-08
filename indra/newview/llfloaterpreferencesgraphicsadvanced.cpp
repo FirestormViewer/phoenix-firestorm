@@ -391,7 +391,7 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
     // Bump & Shiny	
     LLCheckBoxCtrl* bumpshiny_ctrl = getChild<LLCheckBoxCtrl>("BumpShiny");
     bool bumpshiny = LLCubeMap::sUseCubeMaps && LLFeatureManager::getInstance()->isFeatureAvailable("RenderObjectBump");
-    bumpshiny_ctrl->setEnabled(bumpshiny ? true : false);
+    bumpshiny_ctrl->setEnabled(bumpshiny);
 
     // Avatar Mode
     // Enable Avatar Shaders
@@ -403,19 +403,12 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
     if (LLViewerShaderMgr::sInitialized)
     {
         S32 max_avatar_shader = LLViewerShaderMgr::instance()->mMaxAvatarShaderLevel;
-        avatar_vp_enabled = (max_avatar_shader > 0) ? true : false;
+        avatar_vp_enabled = max_avatar_shader > 0;
     }
 
     ctrl_avatar_vp->setEnabled(avatar_vp_enabled);
 
-    if (gSavedSettings.getBOOL("RenderAvatarVP") == false)
-    {
-        ctrl_avatar_cloth->setEnabled(false);
-    } 
-    else
-    {
-        ctrl_avatar_cloth->setEnabled(true);
-    }
+    ctrl_avatar_cloth->setEnabled(gSavedSettings.getBOOL("RenderAvatarVP"));
 
     /* <FS:LO> remove orphaned code left over from EEP
     // Vertex Shaders, Global Shader Enable
@@ -441,8 +434,8 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
     LLCheckBoxCtrl* ctrl_deferred = getChild<LLCheckBoxCtrl>("UseLightShaders");
 
     enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") &&
-        ((bumpshiny_ctrl && bumpshiny_ctrl->get()) ? true : false) &&
-        (ctrl_wind_light->get()) ? true : false;
+        bumpshiny_ctrl && bumpshiny_ctrl->get() &&
+        ctrl_wind_light->get();
 
     ctrl_deferred->setEnabled(enabled);
 #endif
@@ -458,7 +451,7 @@ void LLFloaterPreferenceGraphicsAdvanced::refreshEnabledState()
     LLTextBox* shadow_text = getChild<LLTextBox>("RenderShadowDetailText");
 
     // note, okay here to get from ctrl_deferred as it's twin, ctrl_deferred2 will alway match it
-    enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO");// && (ctrl_deferred->get() ? true : false);
+    enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO");// && ctrl_deferred->get();
 
     //ctrl_deferred->set(gSavedSettings.getBOOL("RenderDeferred"));
 

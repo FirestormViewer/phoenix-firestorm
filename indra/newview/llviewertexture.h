@@ -193,12 +193,7 @@ private:
 	friend class LLUIImageList;
 
 	virtual void switchToCachedImage();
-	
-public: // <FS:Ansariel> Dynamic texture memory calculation
-	static void getGPUMemoryForTextures(S32Megabytes &gpu, S32Megabytes &physical);
 
-public:
-    static bool isMemoryForTextureLow();
 protected:
     friend class LLViewerTextureList;
 	LLUUID mID;
@@ -340,7 +335,7 @@ public:
 	void setLoadedCallback(loaded_callback_func cb,
 						   S32 discard_level, bool keep_imageraw, bool needs_aux,
 						   void* userdata, LLLoadedCallbackEntry::source_callback_list_t* src_callback_list, bool pause = false);
-	bool hasCallbacks() { return mLoadedCallbackList.empty() ? false : true; }	
+	bool hasCallbacks() { return !mLoadedCallbackList.empty(); }	
 	void pauseLoadedCallbacks(const LLLoadedCallbackEntry::source_callback_list_t* callback_list);
 	void unpauseLoadedCallbacks(const LLLoadedCallbackEntry::source_callback_list_t* callback_list);
 	bool doLoadedCallbacks();

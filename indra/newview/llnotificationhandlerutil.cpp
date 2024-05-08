@@ -74,13 +74,11 @@ bool LLHandlerUtil::isIMFloaterOpened(const LLNotificationPtr& notification)
 	LLUUID from_id = notification->getPayload()["from_id"];
 	LLUUID session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, from_id);
 	// <FS:Ansariel> [FS communication UI]
-	//LLFloaterIMSession* im_floater = LLFloaterReg::findTypedInstance<LLFloaterIMSession>("impanel", session_id);
-	FSFloaterIM* im_floater = LLFloaterReg::findTypedInstance<FSFloaterIM>("fs_impanel", session_id);
+	//if (LLFloaterIMSession* im_floater = LLFloaterReg::findTypedInstance<LLFloaterIMSession>("impanel", session_id))
+	if (FSFloaterIM* im_floater = LLFloaterReg::findTypedInstance<FSFloaterIM>("fs_impanel", session_id))
 	// </FS:Ansariel> [FS communication UI]
-
-	if (im_floater != NULL)
 	{
-		res = im_floater->getVisible() == true;
+		res = im_floater->getVisible();
 	}
 
 	return res;

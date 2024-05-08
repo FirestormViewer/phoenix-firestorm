@@ -1425,7 +1425,7 @@ bool LLMeshRepoThread::fetchMeshSkinInfo(const LLUUID& mesh_id, bool can_retry)
 		{
 			//check cache for mesh skin info
 			LLFileSystem file(mesh_id, LLAssetType::AT_MESH);
-			if (file.getSize() >= offset+size)
+			if (file.getSize() >= offset + size)
 			{
 				U8* buffer = new(std::nothrow) U8[size];
 				if (!buffer)
@@ -1442,7 +1442,7 @@ bool LLMeshRepoThread::fetchMeshSkinInfo(const LLUUID& mesh_id, bool can_retry)
 				bool zero = true;
 				for (S32 i = 0; i < llmin(size, 1024) && zero; ++i)
 				{
-					zero = buffer[i] > 0 ? false : true;
+					zero = buffer[i] == 0;
 				}
 
 				if (!zero)
@@ -1563,7 +1563,7 @@ bool LLMeshRepoThread::fetchMeshDecomposition(const LLUUID& mesh_id)
 				bool zero = true;
 				for (S32 i = 0; i < llmin(size, 1024) && zero; ++i)
 				{
-					zero = buffer[i] > 0 ? false : true;
+					zero = buffer[i] == 0;
 				}
 
 				if (!zero)
@@ -1668,7 +1668,7 @@ bool LLMeshRepoThread::fetchMeshPhysicsShape(const LLUUID& mesh_id)
 				bool zero = true;
 				for (S32 i = 0; i < llmin(size, 1024) && zero; ++i)
 				{
-					zero = buffer[i] > 0 ? false : true;
+					zero = buffer[i] == 0;
 				}
 
 				if (!zero)
@@ -1882,7 +1882,7 @@ bool LLMeshRepoThread::fetchMeshLOD(const LLVolumeParams& mesh_params, S32 lod, 
 				bool zero = true;
 				for (S32 i = 0; i < llmin(size, 1024) && zero; ++i)
 				{
-					zero = buffer[i] > 0 ? false : true;
+					zero = buffer[i] == 0;
 				}
 
 				if (!zero)

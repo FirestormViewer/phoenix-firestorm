@@ -472,7 +472,7 @@ struct LLDictionaryLess
 public:
 	bool operator()(const std::string& a, const std::string& b) const
 	{
-		return (LLStringUtil::precedesDict(a, b) ? true : false);
+		return (LLStringUtil::precedesDict(a, b));
 	}
 };
 

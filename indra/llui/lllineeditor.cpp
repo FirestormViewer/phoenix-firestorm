@@ -1541,13 +1541,13 @@ bool LLLineEditor::handleSpecialKey(KEY key, MASK mask)
 
 	// handle ctrl-uparrow if we have a history enabled line editor.
 	case KEY_UP:
-		if( mHaveHistory && ((mIgnoreArrowKeys == false) || ( MASK_CONTROL == mask )) )
+		if (mHaveHistory && (!mIgnoreArrowKeys || (MASK_CONTROL == mask)))
 		{
-			if( mCurrentHistoryLine > mLineHistory.begin() )
+			if (mCurrentHistoryLine > mLineHistory.begin())
 			{
 				// <FS> FIRE-324. Nearby and IM chat bars forget what was written after browsing history
 				(*mCurrentHistoryLine).assign(getText());
-				mText.assign( *(--mCurrentHistoryLine) );
+				mText.assign(*(--mCurrentHistoryLine));
 				setCursorToEnd();
 			}
 			else
@@ -1560,9 +1560,9 @@ bool LLLineEditor::handleSpecialKey(KEY key, MASK mask)
 
 	// handle [ctrl]-downarrow if we have a history enabled line editor
 	case KEY_DOWN:
-		if( mHaveHistory  && ((mIgnoreArrowKeys == false) || ( MASK_CONTROL == mask )) )
+		if (mHaveHistory  && (!mIgnoreArrowKeys || (MASK_CONTROL == mask)))
 		{
-			if( !mLineHistory.empty() && mCurrentHistoryLine < mLineHistory.end() - 1 )
+			if (!mLineHistory.empty() && mCurrentHistoryLine < mLineHistory.end() - 1)
 			{
 				mText.assign( *(++mCurrentHistoryLine) );
 				setCursorToEnd();
@@ -2789,7 +2789,7 @@ void LLLineEditor::showContextMenu(S32 x, S32 y, bool set_cursor_pos)
 
 			// If the cursor is on a misspelled word, retrieve suggestions for it
 			std::string misspelled_word = getMisspelledWord(mCursorPos);
-			if ((is_misspelled = !misspelled_word.empty()) == true)
+			if ((is_misspelled = !misspelled_word.empty()))
 			{
 				LLSpellChecker::instance().getSuggestions(misspelled_word, mSuggestionList);
 			}

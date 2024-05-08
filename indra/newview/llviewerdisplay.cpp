@@ -1008,7 +1008,7 @@ void display(bool rebuild, F32 zoom_factor, int subfield, bool for_snapshot)
 		//	gGL.popMatrix();
 		//}
 
-		LLPipeline::sUnderWaterRender = camera.cameraUnderWater() ? true : false; // <FS:Ansariel> Factor out calls to getInstance
+		LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater();
 
 // <FS:CR> Aurora Sim
 		if (!LLWorld::getInstance()->getAllowRenderWater())
@@ -1226,7 +1226,7 @@ void display_cube_face()
 
     LLAppViewer::instance()->pingMainloopTimeout("Display:RenderStart");
 
-    LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater() ? true : false;
+    LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater();
 
     gGL.setColorMask(true, true);
 

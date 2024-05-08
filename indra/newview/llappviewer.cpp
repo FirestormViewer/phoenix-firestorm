@@ -4951,7 +4951,7 @@ U32 LLAppViewer::getObjectCacheVersion()
 bool LLAppViewer::initCache()
 {
 	mPurgeCache = false;
-	bool read_only = mSecondInstance ? true : false;
+	bool read_only = mSecondInstance;
 	LLAppViewer::getTextureCache()->setReadOnly(read_only) ;
 	LLVOCache::initParamSingleton(read_only);
 
@@ -4983,7 +4983,7 @@ bool LLAppViewer::initCache()
 	if (gSavedSettings.getS32("LocalCacheVersion") != LLAppViewer::getTextureCacheVersion())
 	{
 		texture_cache_mismatch = true;
-		if(!read_only)
+		if (!read_only)
 		{
 			gSavedSettings.setS32("LocalCacheVersion", LLAppViewer::getTextureCacheVersion());
 
@@ -4992,7 +4992,7 @@ bool LLAppViewer::initCache()
 		}
 	}
 
-	if(!read_only)
+	if (!read_only)
 	{
 		// <FS:Zi> Purge inventory cache is done in LLInventoryModel::loadSkeleton()
 

@@ -365,27 +365,25 @@ bool	LLFloaterIMNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 
 	S32 local_x = x - mMsgText->getRect().mLeft;
 	S32 local_y = y - mMsgText->getRect().mBottom;
-	
+
 	//if text_box process mouse up (ussually this is click on url) - we didn't show nearby_chat.
-	if (mMsgText->pointInView(local_x, local_y) )
+	if (mMsgText->pointInView(local_x, local_y))
 	{
-		if (mMsgText->handleMouseUp(local_x,local_y,mask) == true)
+		if (mMsgText->handleMouseUp(local_x, local_y, mask))
 			return true;
+
+		// <FS:Ansariel> [FS communication UI]
+		//LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->showHistory();
+		if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
+		{
+			LLFloaterReg::showInstance("fs_nearby_chat");
+		}
 		else
 		{
-			// <FS:Ansariel> [FS communication UI]
-			//LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat")->showHistory();
-			if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
-			{
-				LLFloaterReg::showInstance("fs_nearby_chat");
-			}
-			else
-			{
-				LLFloaterReg::showTypedInstance<FSFloaterIMContainer>("fs_im_container")->selectFloater(FSFloaterNearbyChat::getInstance());
-			}
-			// </FS:Ansariel> [FS communication UI]
-			return false;
+			LLFloaterReg::showTypedInstance<FSFloaterIMContainer>("fs_im_container")->selectFloater(FSFloaterNearbyChat::getInstance());
 		}
+		// </FS:Ansariel> [FS communication UI]
+		return false;
 	}
 
 	// <FS:Ansariel> [FS communication UI]
@@ -399,7 +397,7 @@ bool	LLFloaterIMNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 		LLFloaterReg::showTypedInstance<FSFloaterIMContainer>("fs_im_container")->selectFloater(FSFloaterNearbyChat::getInstance());
 	}
 	// </FS:Ansariel> [FS communication UI]
-	return LLPanel::handleMouseUp(x,y,mask);
+	return LLPanel::handleMouseUp(x, y, mask);
 }
 
 void	LLFloaterIMNearbyChatToastPanel::setHeaderVisibility(EShowItemHeader e)

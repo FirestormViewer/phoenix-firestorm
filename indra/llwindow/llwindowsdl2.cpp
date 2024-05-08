@@ -2681,32 +2681,6 @@ std::vector<std::string> LLWindowSDL::getDynamicFallbackFontList()
 	return rtns;
 }
 
-// <FS:Zi> Implement available VRAM estimation like MacOSX
-U32 LLWindowSDL::getAvailableVRAMMegabytes()
-{
-/*
-    static const U32 mb = 1024*1024;
-    // We're asked for total available gpu memory, but we only have allocation info on texture usage. So estimate by doubling that.
-    static const U32 total_factor = 2; // estimated total/textures
-    return gGLManager.mVRAM - (LLImageGL::getTextureBytesAllocated() * total_factor/mb);
-*/
-    LL_PROFILE_ZONE_SCOPED;
-    if (gGLManager.mHasNVXMemInfo)
-    {
-		S32 available_memory;
-		glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &available_memory);
-		return available_memory / 1024;
-    }
-    else
-    {
-	    static const U32 mb = 1024*1024;
-		// We're asked for total available gpu memory, but we only have allocation info on texture usage. So estimate by doubling that.
-		static const U32 total_factor = 2; // estimated total/textures
-		return (U32)llmax((U32)1, (U32)(gGLManager.mVRAM - (LLImageGL::getTextureBytesAllocated() * total_factor/mb)));
-    }
-}
-// </FS:Zi>
-
 // <FS:Zi> Make shared context work on Linux for multithreaded OpenGL
 class sharedContext
 {

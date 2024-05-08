@@ -1481,7 +1481,7 @@ void LLPanelEditWearable::updateTypeSpecificControls(LLWearableType::EType type)
                 // The .195 is a fudge factor derived by measuring against
                 // prims inworld, and carried forward from Phoenix. -- TS
                 F32 new_size = gAgentAvatarp->mBodySize.mV[VZ] + .195f;
-                if (gSavedSettings.getBOOL("HeightUnits") == false)
+                if (!gSavedSettings.getBOOL("HeightUnits"))
                 {
                         // convert meters to feet
                         new_size = new_size / ONE_FOOT;
@@ -1900,7 +1900,7 @@ public:
         bool handle(const LLSD& params, const LLSD& query_map, const std::string& grid, LLMediaCtrl* web)
         {
                 // change height units true for meters and false for feet
-                bool new_value = (gSavedSettings.getBOOL("HeightUnits") == false) ? true : false;
+                bool new_value = !gSavedSettings.getBOOL("HeightUnits");
                 gSavedSettings.setBOOL("HeightUnits", new_value);
                 return true;
         }

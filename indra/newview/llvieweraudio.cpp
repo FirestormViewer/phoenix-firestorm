@@ -76,7 +76,7 @@ LLViewerAudio::~LLViewerAudio()
 
 void LLViewerAudio::registerIdleListener()
 {
-	if(mIdleListnerActive==false)
+	if (!mIdleListnerActive)
 	{
 		mIdleListnerActive = true;
 		doOnIdleRepeating(boost::bind(boost::bind(&LLViewerAudio::onIdleUpdate, this)));

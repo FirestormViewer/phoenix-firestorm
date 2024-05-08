@@ -849,7 +849,7 @@ std::string LLVOAvatar::avString() const
 {
     if (isControlAvatar())
     {
-        return getFullname();
+        return " " + getFullname() + " ";
     }
     else
     {
@@ -1241,7 +1241,7 @@ void LLVOAvatar::deleteCachedImages(bool clearAll)
 // LLVOAvatar::initClass()
 //------------------------------------------------------------------------
 void LLVOAvatar::initClass()
-{ 
+{
 	gAnimLibrary.animStateSetString(ANIM_AGENT_BODY_NOISE,"body_noise");
 	gAnimLibrary.animStateSetString(ANIM_AGENT_BREATHE_ROT,"breathe_rot");
 	gAnimLibrary.animStateSetString(ANIM_AGENT_PHYSICS_MOTION,"physics_motion");
@@ -2276,7 +2276,7 @@ void LLVOAvatar::resetSkeleton(bool reset_animations)
     LL_DEBUGS("Avatar") << avString() << " reset starts" << LL_ENDL;
     if (!isControlAvatar() && !mLastProcessedAppearance)
     {
-        LL_WARNS() << "Can't reset avatar; no appearance message has been received yet." << LL_ENDL;
+        LL_WARNS() << "Can't reset avatar " << getID() << "; no appearance message has been received yet." << LL_ENDL;
         return;
     }
 
@@ -2625,19 +2625,20 @@ U32 LLVOAvatar::processUpdateMessage(LLMessageSystem *mesgsys,
 									 U32 block_num, const EObjectUpdateType update_type,
 									 LLDataPacker *dp)
 {
-	const bool has_name = !getNVPair("FirstName");
+	const bool had_no_name = !getNVPair("FirstName");
 
 	// Do base class updates...
 	U32 retval = LLViewerObject::processUpdateMessage(mesgsys, user_data, block_num, update_type, dp);
 
 	// Print out arrival information once we have name of avatar.
-    if (has_name && getNVPair("FirstName"))
+	const bool has_name = getNVPair("FirstName");
+    if (had_no_name && has_name)
     {
         mDebugExistenceTimer.reset();
-        debugAvatarRezTime("AvatarRezArrivedNotification","avatar arrived");
+        debugAvatarRezTime("AvatarRezArrivedNotification", "avatar arrived");
     }
 
-	if(retval & LLViewerObject::INVALID_UPDATE)
+	if (retval & LLViewerObject::INVALID_UPDATE)
 	{
 		if (isSelf())
 		{
@@ -6616,7 +6617,7 @@ void LLVOAvatar::processAnimationStateChanges()
 			startMotion(ANIM_AGENT_BODY_NOISE);
 		}
 	}
-	
+
 	// clear all current animations
 	AnimIterator anim_it;
 	for (anim_it = mPlayingAnimations.begin(); anim_it != mPlayingAnimations.end();)
@@ -7407,9 +7408,9 @@ void LLVOAvatar::addAttachmentOverridesForObject(LLViewerObject *vo, std::set<LL
                 LL_DEBUGS("AnimatedObjects") << "adding attachment overrides for " << mesh_id 
                                              << " to root object " << root_object->getID() << LL_ENDL;
             }
-			bool fullRig = (jointCnt>=JOINT_COUNT_REQUIRED_FOR_FULLRIG) ? true : false;								
+			bool fullRig = jointCnt>=JOINT_COUNT_REQUIRED_FOR_FULLRIG;
 			if ( fullRig && !mesh_overrides_loaded )
-			{								
+			{
 				for ( int i=0; i<jointCnt; ++i )
 				{
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
@@ -7419,7 +7420,7 @@ void LLVOAvatar::addAttachmentOverridesForObject(LLViewerObject *vo, std::set<LL
 
 					LLJoint* pJoint = getJoint( lookingForJoint );
 					if (pJoint)
-					{   									
+					{
 						const LLVector3& jointPos = LLVector3(pSkinData->mAlternateBindMatrix[i].getTranslation());
                         if (pJoint->aboveJointPosThreshold(jointPos))
                         {
@@ -7433,9 +7434,9 @@ void LLVOAvatar::addAttachmentOverridesForObject(LLViewerObject *vo, std::set<LL
 //                              if( lookingForJoint == "mPelvis" )
                                 if( lookingForJoint.mName == "mPelvis" )
 // </FS:ND>
-                                {	
-                                    pelvisGotSet = true;											
-                                }										
+                                {
+                                    pelvisGotSet = true;
+                                }
                             }
                             if (pSkinData->mLockScaleIfJointPosition)
                             {
@@ -7444,8 +7445,9 @@ void LLVOAvatar::addAttachmentOverridesForObject(LLViewerObject *vo, std::set<LL
                                 pJoint->addAttachmentScaleOverride(pJoint->getDefaultScale(), mesh_id, avString());
                             }
                         }
-					}										
-				}																
+					}
+				}
+
 				if (pelvisZOffset != 0.0F)
 				{
                     F32 pelvis_fixup_before;
@@ -7455,25 +7457,25 @@ void LLVOAvatar::addAttachmentOverridesForObject(LLViewerObject *vo, std::set<LL
                     hasPelvisFixup(pelvis_fixup_after); // Don't have to check bool here because we just added it...
                     if (!has_fixup_before || (pelvis_fixup_before != pelvis_fixup_after))
                     {
-                        pelvisGotSet = true;											
+                        pelvisGotSet = true;
                     }
                     
 				}
                 mActiveOverrideMeshes.insert(mesh_id);
                 onActiveOverrideMeshesChanged();
-			}							
+			}
 		}
 	}
     else
     {
         LL_DEBUGS("AnimatedObjects") << "failed to add attachment overrides for root object " << root_object->getID() << " not mesh or no pSkinData" << LL_ENDL;
     }
-					
+
 	//Rebuild body data if we altered joints/pelvis
 	if ( pelvisGotSet ) 
 	{
 		postPelvisSetRecalc();
-	}		
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -7512,7 +7514,6 @@ void LLVOAvatar::getAttachmentOverrideNames(std::set<std::string>& pos_names, st
         }
         // Attachment points don't have scales.
     }
-
 }
 
 //-----------------------------------------------------------------------------
@@ -7532,6 +7533,7 @@ void LLVOAvatar::showAttachmentOverrides(bool verbose) const
     {
         LL_DEBUGS("Avatar") << getFullname() << " no attachment positions defined for any joints" << "\n" << LL_ENDL;
     }
+
     if (scale_names.size())
     {
         std::stringstream ss;
@@ -7631,25 +7633,26 @@ void LLVOAvatar::removeAttachmentOverridesForObject(const LLUUID& mesh_id)
     for (S32 joint_num = 0; joint_num < LL_CHARACTER_MAX_ANIMATED_JOINTS; joint_num++)
 	{
         LLJoint *pJoint = getJoint(joint_num);
-		if ( pJoint )
-		{			
+		if (pJoint)
+		{
             bool dummy; // unused
 			pJoint->removeAttachmentPosOverride(mesh_id, av_string, dummy);
 			pJoint->removeAttachmentScaleOverride(mesh_id, av_string);
-		}		
-		if ( pJoint && pJoint == pJointPelvis)
+		}
+		if (pJoint && pJoint == pJointPelvis)
 		{
-			removePelvisFixup( mesh_id );
+			removePelvisFixup(mesh_id);
 			// SL-315
-			pJoint->setPosition( LLVector3( 0.0f, 0.0f, 0.0f) );
-		}		
-	}	
-		
+			pJoint->setPosition(LLVector3( 0.0f, 0.0f, 0.0f));
+		}
+	}
+
 	postPelvisSetRecalc();	
 
     mActiveOverrideMeshes.erase(mesh_id);
     onActiveOverrideMeshesChanged();
 }
+
 //-----------------------------------------------------------------------------
 // getCharacterPosition()
 //-----------------------------------------------------------------------------
@@ -7665,7 +7668,6 @@ LLVector3 LLVOAvatar::getCharacterPosition()
 	}
 }
 
-
 //-----------------------------------------------------------------------------
 // LLVOAvatar::getCharacterRotation()
 //-----------------------------------------------------------------------------
@@ -7674,7 +7676,6 @@ LLQuaternion LLVOAvatar::getCharacterRotation()
 	return getRotation();
 }
 
-
 //-----------------------------------------------------------------------------
 // LLVOAvatar::getCharacterVelocity()
 //-----------------------------------------------------------------------------
@@ -7682,7 +7683,6 @@ LLVector3 LLVOAvatar::getCharacterVelocity()
 {
 	return getVelocity() - mStepObjectVelocity;
 }
-
 
 //-----------------------------------------------------------------------------
 // LLVOAvatar::getCharacterAngularVelocity()
@@ -7706,7 +7706,7 @@ void LLVOAvatar::getGround(const LLVector3 &in_pos_agent, LLVector3 &out_pos_age
 		out_pos_agent = in_pos_agent;
 		return;
 	}
-	
+
 	p0_global = gAgent.getPosGlobalFromAgent(in_pos_agent) + z_vec;
 	p1_global = gAgent.getPosGlobalFromAgent(in_pos_agent) - z_vec;
 	LLViewerObject *obj;
@@ -7723,7 +7723,6 @@ F32 LLVOAvatar::getTimeDilation()
 	return mRegionp ? mRegionp->getTimeDilation() : 1.f;
 }
 
-
 //-----------------------------------------------------------------------------
 // LLVOAvatar::getPixelArea()
 //-----------------------------------------------------------------------------
@@ -7735,8 +7734,6 @@ F32 LLVOAvatar::getPixelArea() const
 	}
 	return mPixelArea;
 }
-
-
 
 //-----------------------------------------------------------------------------
 // LLVOAvatar::getPosGlobalFromAgent()
@@ -7753,7 +7750,6 @@ LLVector3	LLVOAvatar::getPosAgentFromGlobal(const LLVector3d &position)
 {
 	return gAgent.getPosAgentFromGlobal(position);
 }
-
 
 //-----------------------------------------------------------------------------
 // requestStopMotion()
@@ -7774,7 +7770,7 @@ bool LLVOAvatar::loadSkeletonNode ()
 	{
 		return false;
 	}
-	
+
     bool ignore_hud_joints = false;
     initAttachmentPoints(ignore_hud_joints);
 
@@ -9318,7 +9314,7 @@ bool LLVOAvatar::processFullyLoadedChange(bool loading)
 
 	if (!mPreviousFullyLoaded && !loading && mFullyLoaded)
 	{
-		debugAvatarRezTime("AvatarRezNotification","fully loaded");
+		debugAvatarRezTime("AvatarRezNotification", "fully loaded");
 	}
 
 	// did our loading state "change" from last call?
@@ -12448,7 +12444,10 @@ void LLVOAvatar::setOverallAppearanceNormal()
 		return;
 
     LLVector3 pelvis_pos = getJoint("mPelvis")->getPosition();
-	resetSkeleton(false);
+    if (isControlAvatar() || mLastProcessedAppearance)
+    {
+        resetSkeleton(false);
+    }
     getJoint("mPelvis")->setPosition(pelvis_pos);
 
 	for (auto it = mJellyAnims.begin(); it !=  mJellyAnims.end(); ++it)
@@ -12741,30 +12740,16 @@ bool LLVOAvatar::isTextureDefined(LLAvatarAppearanceDefines::ETextureIndex te, U
 	{
 		return false;
 	}
-	
-	if( !getImage( te, index ) )
+
+	LLViewerTexture* tex = getImage(te, index);
+	if (!tex)
 	{
 		LL_WARNS() << "getImage( " << te << ", " << index << " ) returned 0" << LL_ENDL;
 		return false;
 	}
 
-	// <FS:ND> getImage(te, index) can return 0 in some edge cases. Plus make this faster as it gets called frequently.
-
-	// return (getImage(te, index)->getID() != IMG_DEFAULT_AVATAR && 
-	// 		getImage(te, index)->getID() != IMG_DEFAULT);
-
-
-	LLViewerTexture *pImage( getImage( te, index ) );
-
-	if( !pImage )
-	{
-		LL_WARNS() << "getImage( " << (S32)te << ", " << index << " ) returned invalid ptr" << LL_ENDL;
-		return false;
-	}
-	// </FS:ND>
-
-	LLUUID const &id = pImage->getID();
-	return id != IMG_DEFAULT_AVATAR && id != IMG_DEFAULT;
+	return (tex->getID() != IMG_DEFAULT_AVATAR &&
+			tex->getID() != IMG_DEFAULT);
 }
 
 //virtual
@@ -12774,13 +12759,10 @@ bool LLVOAvatar::isTextureVisible(LLAvatarAppearanceDefines::ETextureIndex type,
 	{
 		return isTextureDefined(type, index);
 	}
-	else
-	{
-		// baked textures can use TE images directly
-		return ((isTextureDefined(type) || isSelf())
-				&& (getTEImage(type)->getID() != IMG_INVISIBLE 
-				|| LLDrawPoolAlpha::sShowDebugAlpha));
-	}
+
+	// baked textures can use TE images directly
+	return ((isTextureDefined(type) || isSelf()) &&
+			(getTEImage(type)->getID() != IMG_INVISIBLE || LLDrawPoolAlpha::sShowDebugAlpha));
 }
 
 //virtual

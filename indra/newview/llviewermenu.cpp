@@ -1106,7 +1106,7 @@ class LLAdvancedSetDisplayTextureDensity : public view_listener_t
 		std::string mode = userdata.asString();
 		if (mode == "none")
 		{
-			if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_TEXEL_DENSITY) == true) 
+			if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_TEXEL_DENSITY))
 			{
 				gPipeline.toggleRenderDebug(LLPipeline::RENDER_DEBUG_TEXEL_DENSITY);
 			}
@@ -1114,7 +1114,7 @@ class LLAdvancedSetDisplayTextureDensity : public view_listener_t
 		}
 		else if (mode == "current")
 		{
-			if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_TEXEL_DENSITY) == false) 
+			if (!gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_TEXEL_DENSITY))
 			{
 				gPipeline.toggleRenderDebug(LLPipeline::RENDER_DEBUG_TEXEL_DENSITY);
 			}
@@ -1122,7 +1122,7 @@ class LLAdvancedSetDisplayTextureDensity : public view_listener_t
 		}
 		else if (mode == "desired")
 		{
-			if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_TEXEL_DENSITY) == false) 
+			if (!gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_TEXEL_DENSITY))
 			{
 				gPipeline.toggleRenderDebug(LLPipeline::RENDER_DEBUG_TEXEL_DENSITY);
 			}
@@ -1131,7 +1131,7 @@ class LLAdvancedSetDisplayTextureDensity : public view_listener_t
 		}
 		else if (mode == "full")
 		{
-			if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_TEXEL_DENSITY) == false) 
+			if (!gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_TEXEL_DENSITY))
 			{
 				gPipeline.toggleRenderDebug(LLPipeline::RENDER_DEBUG_TEXEL_DENSITY);
 			}

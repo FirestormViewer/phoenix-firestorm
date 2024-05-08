@@ -950,7 +950,7 @@ const std::string& LLParcel::getActionString(LLParcel::EAction action)
 
 bool LLParcel::isSaleTimerExpired(const U64& time)
 {
-    if (mSaleTimerExpires.getStarted() == false)
+    if (!mSaleTimerExpires.getStarted())
     {
         return false;
     }
@@ -964,7 +964,7 @@ bool LLParcel::isSaleTimerExpired(const U64& time)
 
 bool LLParcel::isMediaResetTimerExpired(const U64& time)
 {
-    if (mMediaResetTimer.getStarted() == false)
+    if (!mMediaResetTimer.getStarted())
     {
         return false;
     }

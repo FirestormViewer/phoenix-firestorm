@@ -554,13 +554,12 @@ void LLGLTexMemBar::draw()
     U32 texFetchLatMed = U32(recording.getMean(LLTextureFetch::sTexFetchLatency).value() * 1000.0f);
     U32 texFetchLatMax = U32(recording.getMax(LLTextureFetch::sTexFetchLatency).value() * 1000.0f);
 
-    text = llformat("GL Free: %d MB Sys Free: %d MB GL Tex: %d MB FBO: %d MB Bias: %.2f (%d MB) Cache: %.1f/%.1f MB",
-                    gViewerWindow->getWindow()->getAvailableVRAMMegabytes(),
+    text = llformat("Est. Free: %d MB Sys Free: %d MB GL Tex: %d MB FBO: %d MB Bias: %.2f (%d MB) Cache: %.1f/%.1f MB",
+                    (S32)LLViewerTexture::sFreeVRAMMegabytes,
                     LLMemory::getAvailableMemKB()/1024,
 					LLImageGL::getTextureBytesAllocated() / 1024 / 1024,
 					LLRenderTarget::sBytesAllocated/(1024*1024),
 					discard_bias,
-                    (S32)LLViewerTexture::sFreeVRAMMegabytes,
 					cache_usage,
 					cache_max_usage);
 	//, cache_entries, cache_max_entries
@@ -593,7 +592,7 @@ void LLGLTexMemBar::draw()
 	gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f);
 	gl_rect_2d(left, top, right, bottom);
 
-	U32 gpu_used = gGLManager.mVRAM - gViewerWindow->getWindow()->getAvailableVRAMMegabytes();
+	U32 gpu_used = gGLManager.mVRAM - (S32)LLViewerTexture::sFreeVRAMMegabytes;
 	color = (gpu_used < llfloor(gGLManager.mVRAM * texmem_lower_bound_scale)) ? LLColor4::green :
 		(gpu_used < gGLManager.mVRAM) ? LLColor4::yellow : LLColor4::red;
 	color[VALPHA] = .75f;

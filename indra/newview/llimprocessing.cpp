@@ -338,7 +338,7 @@ void inventory_offer_handler(LLOfferInfo* info)
         p.name = info->mFromID == gAgentID ? "OwnObjectGiveItem" : "ObjectGiveItem";
 
         // Pop up inv offer chiclet and let the user accept (keep), or reject (and silently delete) the inventory.
-        LLPostponedNotification::add<LLPostponedOfferNotification>(p, info->mFromID, info->mFromGroup == true);
+        LLPostponedNotification::add<LLPostponedOfferNotification>(p, info->mFromID, info->mFromGroup);
     }
     else // Agent -> Agent Inventory Offer
     {
@@ -691,7 +691,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
         // object IMs contain sender object id in session_id (STORM-1209)
         || (dialog == IM_FROM_TASK && LLMuteList::getInstance()->isMuted(session_id));
     bool is_owned_by_me = false;
-    bool is_friend = (LLAvatarTracker::instance().getBuddyInfo(from_id) == NULL) ? false : true;
+    bool is_friend = LLAvatarTracker::instance().getBuddyInfo(from_id) != NULL;
     static LLCachedControl<bool> accept_im_from_only_friend(gSavedPerAccountSettings, "VoiceCallsFriendsOnly");
     //bool is_linden = chat.mSourceType != CHAT_SOURCE_OBJECT &&
     //		LLMuteList::isLinden(name); <:FS:TM> Bear compile fix - is_linden not referenced
@@ -1101,7 +1101,7 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
             {
                 // aux_id contains group id, binary bucket contains name and asset type
                 group_id = aux_id;
-                has_inventory = binary_bucket_size > 1 ? true : false;
+                has_inventory = binary_bucket_size > 1;
                 from_group = true; // inaccurate value correction
                 if (has_inventory)
                 {

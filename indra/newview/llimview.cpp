@@ -245,26 +245,26 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
 		if (msg["source_type"].asInteger() == CHAT_SOURCE_OBJECT)
 		{
 			user_preferences = gSavedSettings.getString("NotificationObjectIMOptions");
-			if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundObjectIM") == true))
+			if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundObjectIM")))
 			{
 				make_ui_sound("UISndNewIncomingIMSession");
 			}
 		}
 		else
 		{
-    	user_preferences = gSavedSettings.getString("NotificationNearbyChatOptions");
-			if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNearbyChatIM") == true))
+			user_preferences = gSavedSettings.getString("NotificationNearbyChatOptions");
+			if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNearbyChatIM")))
 			{
 				make_ui_sound("UISndNewIncomingIMSession");
-    }
+			}
 		}
 	}
-    else if(session->isP2PSessionType())
+    else if (session->isP2PSessionType())
     {
         if (LLAvatarTracker::instance().isBuddy(participant_id))
         {
         	user_preferences = gSavedSettings.getString("NotificationFriendIMOptions");
-			if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundFriendIM") == true))
+			if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundFriendIM")))
 			{
 				make_ui_sound("UISndNewIncomingIMSession");
 			}
@@ -272,24 +272,24 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
         else
         {
         	user_preferences = gSavedSettings.getString("NotificationNonFriendIMOptions");
-			if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNonFriendIM") == true))
+			if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNonFriendIM")))
 			{
 				make_ui_sound("UISndNewIncomingIMSession");
-        }
-    }
+			}
+		}
 	}
-    else if(session->isAdHocSessionType())
+    else if (session->isAdHocSessionType())
     {
     	user_preferences = gSavedSettings.getString("NotificationConferenceIMOptions");
-		if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundConferenceIM") == true))
+		if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundConferenceIM")))
 		{
 			make_ui_sound("UISndNewIncomingIMSession");
-    }
+		}
 	}
     else if(session->isGroupSessionType())
     {
     	user_preferences = gSavedSettings.getString("NotificationGroupChatOptions");
-		if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundGroupChatIM") == true))
+		if (!gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundGroupChatIM")))
 		{
 			make_ui_sound("UISndNewIncomingIMSession");
 		}
@@ -339,8 +339,7 @@ void notify_of_message(const LLSD& msg, bool is_dnd_msg)
         else
         {
 			store_dnd_message = true;
-	        }
-
+		}
     }
 
     // 2. Flash line item
@@ -3535,7 +3534,7 @@ void LLIMMgr::addMessage(
 
 			// <FS:PP> Configurable IM sounds
 			// //Play sound for new conversations
-			// if (!skip_message & !gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation") == true))
+			// if (!skip_message & !gAgent.isDoNotDisturb() && (gSavedSettings.getBOOL("PlaySoundNewConversation")))
 
 			// <FS:PP> Option to automatically ignore and leave all conference (ad-hoc) chats
 			static LLCachedControl<bool> ignoreAdHocSessions(gSavedSettings, "FSIgnoreAdHocSessions");

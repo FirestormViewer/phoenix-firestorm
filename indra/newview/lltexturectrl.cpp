@@ -1481,20 +1481,20 @@ void LLFloaterTexturePicker::changeMode()
     //int index = mModeSelector->getValue().asInteger();
     int index = mModeSelector->getSelectedIndex();
 
-    mDefaultBtn->setVisible(index == PICKER_INVENTORY ? true : false);
-    mBlankBtn->setVisible(index == PICKER_INVENTORY ? true : false);
-    mNoneBtn->setVisible(index == PICKER_INVENTORY ? true : false);
-    mTransparentBtn->setVisible(index == PICKER_INVENTORY ? true : false); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
-    mFilterEdit->setVisible(index == PICKER_INVENTORY ? true : false);
-    mInventoryPanel->setVisible(index == PICKER_INVENTORY ? true : false);
+    mDefaultBtn->setVisible(index == PICKER_INVENTORY);
+    mBlankBtn->setVisible(index == PICKER_INVENTORY);
+    mNoneBtn->setVisible(index == PICKER_INVENTORY);
+    mTransparentBtn->setVisible(index == PICKER_INVENTORY); // <FS:PP> FIRE-5082: "Transparent" button in Texture Panel
+    mFilterEdit->setVisible(index == PICKER_INVENTORY);
+    mInventoryPanel->setVisible(index == PICKER_INVENTORY);
 
-    getChild<LLButton>("l_add_btn")->setVisible(index == PICKER_LOCAL ? true : false);
-    getChild<LLButton>("l_rem_btn")->setVisible(index == PICKER_LOCAL ? true : false);
-    getChild<LLButton>("l_upl_btn")->setVisible(index == PICKER_LOCAL ? true : false);
-    getChild<LLScrollListCtrl>("l_name_list")->setVisible(index == PICKER_LOCAL ? true : false);
+    getChild<LLButton>("l_add_btn")->setVisible(index == PICKER_LOCAL);
+    getChild<LLButton>("l_rem_btn")->setVisible(index == PICKER_LOCAL);
+    getChild<LLButton>("l_upl_btn")->setVisible(index == PICKER_LOCAL);
+    getChild<LLScrollListCtrl>("l_name_list")->setVisible(index == PICKER_LOCAL);
 
-    getChild<LLComboBox>("l_bake_use_texture_combo_box")->setVisible(index == PICKER_BAKE ? true : false);
-    //getChild<LLCheckBoxCtrl>("hide_base_mesh_region")->setVisible(false);// index == 2 ? true : false); // <FS:Ansariel> Does not exist 11-10-2023
+    getChild<LLComboBox>("l_bake_use_texture_combo_box")->setVisible(index == PICKER_BAKE);
+    //getChild<LLCheckBoxCtrl>("hide_base_mesh_region")->setVisible(false);// index == 2); // <FS:Ansariel> Does not exist 11-10-2023
 
     bool pipette_visible = (index == PICKER_INVENTORY)
         && (mInventoryPickType != PICK_MATERIAL);
@@ -2436,8 +2436,8 @@ void LLTextureCtrl::draw()
 	// Using the discard level, do not show the string if the texture is almost but not 
 	// fully loaded.
 	if (mTexturep.notNull() &&
-		(!mTexturep->isFullyLoaded()) &&
-		(mShowLoadingPlaceholder == true))
+		!mTexturep->isFullyLoaded() &&
+		mShowLoadingPlaceholder)
 	{
 		U32 v_offset = 25;
 		LLFontGL* font = LLFontGL::getFontSansSerif();
