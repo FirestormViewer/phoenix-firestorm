@@ -678,11 +678,11 @@ LLSD LLModel::writeModel(
 	LLModel* low,
 	LLModel* impostor,
 	const LLModel::Decomposition& decomp,
-	BOOL upload_skin,
-	BOOL upload_joints,
-    BOOL lock_scale_if_joint_position,
-	BOOL nowrite,
-	BOOL as_slm,
+	bool upload_skin,
+	bool upload_joints,
+    bool lock_scale_if_joint_position,
+	bool nowrite,
+	bool as_slm,
 	int submodel_id)
 {
 	LLSD mdl;
@@ -963,7 +963,7 @@ LLSD LLModel::writeModel(
 	return writeModelToStream(ostr, mdl, nowrite, as_slm);
 }
 
-LLSD LLModel::writeModelToStream(std::ostream& ostr, LLSD& mdl, BOOL nowrite, BOOL as_slm)
+LLSD LLModel::writeModelToStream(std::ostream& ostr, LLSD& mdl, bool nowrite, bool as_slm)
 {
 	std::string::size_type cur_offset = 0;
 
@@ -1304,7 +1304,7 @@ bool LLModel::isMaterialListSubset( LLModel* ref )
 	if(modelCnt > refCnt)
 	{
 		// this model cannot be a strict subset if it has more materials than the reference
-		return FALSE;
+		return false;
 	}
 	// </FS:Beq>
 	for (U32 src = 0; src < modelCnt; ++src)

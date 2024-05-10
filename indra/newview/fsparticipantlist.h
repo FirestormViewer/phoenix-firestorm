@@ -60,7 +60,7 @@ public:
 					  bool exclude_agent = true, 
 					  bool can_toggle_icons = true);
 	~FSParticipantList();
-	void setSpeakingIndicatorsVisible(BOOL visible);
+	void setSpeakingIndicatorsVisible(bool visible);
 
 	enum EParticipantSortOrder
 	{

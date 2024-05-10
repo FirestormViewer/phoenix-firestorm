@@ -104,7 +104,7 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 
 #if LL_SDL2
 		// IME - International input compositing, i.e. for Japanese / Chinese text input
-		/* virtual */ void  setFocus(BOOL b);
+		/* virtual */ void  setFocus(bool b);
 #endif
 
 		LLSD getValue() const;
@@ -160,7 +160,7 @@ class FSChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 
 	// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
 	public:
-		virtual BOOL	handleUnicodeCharHere(llwchar uni_char);
+		virtual bool	handleUnicodeCharHere(llwchar uni_char);
 
 		LLChatEntry* mChatInputLine;
 	// </FS:Zi>

@@ -273,7 +273,7 @@ F32		LLPanelFace::getCurrentTextureOffsetV()		{ return mCtrlTexOffsetV->getValue
 // Methods
 //
 
-BOOL	LLPanelFace::postBuild()
+bool	LLPanelFace::postBuild()
 {
 	childSetCommitCallback("combobox shininess",&LLPanelFace::onCommitShiny,this);
 	childSetCommitCallback("combobox bumpiness",&LLPanelFace::onCommitBump,this);
@@ -420,7 +420,7 @@ BOOL	LLPanelFace::postBuild()
 
 	//LLSpinCtrl*     mCtrlGlow;
 
-	setMouseOpaque(FALSE);
+	setMouseOpaque(false);
 
     LLTextureCtrl*	pbr_ctrl = findChild<LLTextureCtrl>("pbr_control");
     if (pbr_ctrl)
@@ -502,7 +502,7 @@ BOOL	LLPanelFace::postBuild()
 		mColorSwatch->setOnSelectCallback(boost::bind(&LLPanelFace::onSelectColor, this, _2));
 		mColorSwatch->setFollowsTop();
 		mColorSwatch->setFollowsLeft();
-		mColorSwatch->setCanApplyImmediately(TRUE);
+		mColorSwatch->setCanApplyImmediately(true);
 	}
 
 	mShinyColorSwatch = getChild<LLColorSwatchCtrl>("shinycolorswatch");
@@ -513,7 +513,7 @@ BOOL	LLPanelFace::postBuild()
 		mShinyColorSwatch->setOnSelectCallback(boost::bind(&LLPanelFace::onSelectShinyColor, this, _2));
 		mShinyColorSwatch->setFollowsTop();
 		mShinyColorSwatch->setFollowsLeft();
-		mShinyColorSwatch->setCanApplyImmediately(TRUE);
+		mShinyColorSwatch->setCanApplyImmediately(true);
 	}
 
 	mLabelColorTransp = getChild<LLTextBox>("color trans");
@@ -592,7 +592,7 @@ BOOL	LLPanelFace::postBuild()
 	getChild<LLUICtrl>("btn_select_same_spec")->setEnabled(false);
 	// </FS:Zi>
 
-	return TRUE;
+	return true;
 }
 
 LLPanelFace::LLPanelFace()
@@ -621,7 +621,7 @@ LLPanelFace::~LLPanelFace()
     unloadMedia();
 }
 
-void LLPanelFace::onVisibilityChange(BOOL new_visibility)
+void LLPanelFace::onVisibilityChange(bool new_visibility)
 {
     if (new_visibility)
     {
@@ -781,7 +781,7 @@ struct LLPanelFaceSetTEFunctor : public LLSelectedTEFunctor
 	LLPanelFaceSetTEFunctor(LLPanelFace* panel) : mPanel(panel) {}
 	virtual bool apply(LLViewerObject* object, S32 te)
 	{
-		BOOL valid;
+		bool valid;
 		F32 value;
         std::string prefix;
 
@@ -1143,8 +1143,8 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 		&& objectp->getPCode() == LL_PCODE_VOLUME
 		&& objectp->permModify())
 	{
-		BOOL editable = objectp->permModify() && !objectp->isPermanentEnforced();
-        BOOL attachment = objectp->isAttachment();
+		bool editable = objectp->permModify() && !objectp->isPermanentEnforced();
+        bool attachment = objectp->isAttachment();
 
         bool has_pbr_material;
         bool has_faces_without_pbr;
@@ -1156,7 +1156,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
         childSetEnabled("button align", editable);
 		
 		// <FS>
-		BOOL enable_material_controls = (!gSavedSettings.getBOOL("SyncMaterialSettings"));
+        bool enable_material_controls = (!gSavedSettings.getBOOL("SyncMaterialSettings"));
 
         if (mComboMatMedia->getCurrentIndex() < MATMEDIA_MATERIAL)
         {
@@ -1362,18 +1362,18 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 
 		// Texture
 		{
-			mIsAlpha = FALSE;
+			mIsAlpha = false;
 			LLGLenum image_format = GL_RGB;
 			bool identical_image_format = false;
 			LLSelectedTE::getImageFormat(image_format, identical_image_format);
             
-			mIsAlpha = FALSE;
+			mIsAlpha = false;
 			switch (image_format)
 			{
 				case GL_RGBA:
 				case GL_ALPHA:
 				{
-					mIsAlpha = TRUE;
+					mIsAlpha = true;
 				}
 				break;
 
@@ -1425,7 +1425,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 			{
 				if (identical_diffuse)
 				{
-					mTextureCtrl->setTentative(FALSE);
+					mTextureCtrl->setTentative(false);
 					mTextureCtrl->setEnabled(editable && !has_pbr_material);
 					mTextureCtrl->setImageAssetID(id);
 					getChildView("combobox alphamode")->setEnabled(editable && mIsAlpha && transparency <= 0.f && !has_pbr_material);
@@ -1433,25 +1433,25 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 					getChildView("maskcutoff")->setEnabled(editable && mIsAlpha && !has_pbr_material);
 					getChildView("label maskcutoff")->setEnabled(editable && mIsAlpha && !has_pbr_material);
 
-					mTextureCtrl->setBakeTextureEnabled(TRUE);
+					mTextureCtrl->setBakeTextureEnabled(true);
 				}
 				else if (id.isNull())
 				{
 					// None selected
-					mTextureCtrl->setTentative(FALSE);
-					mTextureCtrl->setEnabled(FALSE);
+					mTextureCtrl->setTentative(false);
+					mTextureCtrl->setEnabled(false);
 					mTextureCtrl->setImageAssetID(LLUUID::null);
-					getChildView("combobox alphamode")->setEnabled(FALSE);
-					getChildView("label alphamode")->setEnabled(FALSE);
-					getChildView("maskcutoff")->setEnabled(FALSE);
-					getChildView("label maskcutoff")->setEnabled(FALSE);
+					getChildView("combobox alphamode")->setEnabled(false);
+					getChildView("label alphamode")->setEnabled(false);
+					getChildView("maskcutoff")->setEnabled(false);
+					getChildView("label maskcutoff")->setEnabled(false);
 
 					mTextureCtrl->setBakeTextureEnabled(false);
 				}
 				else
 				{
 					// Tentative: multiple selected with different textures
-					mTextureCtrl->setTentative(TRUE);
+					mTextureCtrl->setTentative(true);
 					mTextureCtrl->setEnabled(editable && !has_pbr_material);
 					mTextureCtrl->setImageAssetID(id);
 					getChildView("combobox alphamode")->setEnabled(editable && mIsAlpha && transparency <= 0.f && !has_pbr_material);
@@ -1459,7 +1459,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 					getChildView("maskcutoff")->setEnabled(editable && mIsAlpha && !has_pbr_material);
 					getChildView("label maskcutoff")->setEnabled(editable && mIsAlpha && !has_pbr_material);
 					
-					mTextureCtrl->setBakeTextureEnabled(TRUE);
+					mTextureCtrl->setBakeTextureEnabled(true);
 				}
 
                 if (attachment)
@@ -1582,9 +1582,9 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
             mCtrlShinyScaleU->setEnabled(editable && has_material && specmap_id.notNull() && enable_material_controls);
             mCtrlBumpyScaleU->setEnabled(editable && has_material && normmap_id.notNull() && enable_material_controls);
 
-			BOOL diff_scale_tentative = !(identical && identical_diff_scale_s);
-			BOOL norm_scale_tentative = !(identical && identical_norm_scale_s);
-			BOOL spec_scale_tentative = !(identical && identical_spec_scale_s);
+			bool diff_scale_tentative = !(identical && identical_diff_scale_s);
+			bool norm_scale_tentative = !(identical && identical_norm_scale_s);
+			bool spec_scale_tentative = !(identical && identical_spec_scale_s);
 
 			mCtrlTexScaleU->setTentative(  LLSD(diff_scale_tentative));
 			mCtrlShinyScaleU->setTentative(LLSD(spec_scale_tentative));
@@ -1616,9 +1616,9 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 			spec_scale_t = editable ? spec_scale_t : 1.0f;
 			spec_scale_t *= identical_planar_texgen ? 2.0f : 1.0f;
 
-			BOOL diff_scale_tentative = !identical_diff_scale_t;
-			BOOL norm_scale_tentative = !identical_norm_scale_t;
-			BOOL spec_scale_tentative = !identical_spec_scale_t;
+			bool diff_scale_tentative = !identical_diff_scale_t;
+			bool norm_scale_tentative = !identical_norm_scale_t;
+			bool spec_scale_tentative = !identical_spec_scale_t;
 
             mCtrlTexScaleV->setEnabled(editable && has_material);
             // <FS:CR> Materials alignment
@@ -1657,9 +1657,9 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 			LLSelectedTEMaterial::getNormalOffsetX(norm_offset_s, identical_norm_offset_s);
 			LLSelectedTEMaterial::getSpecularOffsetX(spec_offset_s, identical_spec_offset_s);
 
-			BOOL diff_offset_u_tentative = !(align_planar ? identical_planar_aligned : identical_diff_offset_s);
-			BOOL norm_offset_u_tentative = !(align_planar ? identical_planar_aligned : identical_norm_offset_s);
-			BOOL spec_offset_u_tentative = !(align_planar ? identical_planar_aligned : identical_spec_offset_s);
+			bool diff_offset_u_tentative = !(align_planar ? identical_planar_aligned : identical_diff_offset_s);
+			bool norm_offset_u_tentative = !(align_planar ? identical_planar_aligned : identical_norm_offset_s);
+			bool spec_offset_u_tentative = !(align_planar ? identical_planar_aligned : identical_spec_offset_s);
 
 			mCtrlTexOffsetU->setValue(  editable ? diff_offset_s : 0.0f);
 			mCtrlBumpyOffsetU->setValue(editable ? norm_offset_s : 0.0f);
@@ -1690,9 +1690,9 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 			LLSelectedTEMaterial::getNormalOffsetY(norm_offset_t, identical_norm_offset_t);
 			LLSelectedTEMaterial::getSpecularOffsetY(spec_offset_t, identical_spec_offset_t);
 			
-			BOOL diff_offset_v_tentative = !(align_planar ? identical_planar_aligned : identical_diff_offset_t);
-			BOOL norm_offset_v_tentative = !(align_planar ? identical_planar_aligned : identical_norm_offset_t);
-			BOOL spec_offset_v_tentative = !(align_planar ? identical_planar_aligned : identical_spec_offset_t);
+			bool diff_offset_v_tentative = !(align_planar ? identical_planar_aligned : identical_diff_offset_t);
+			bool norm_offset_v_tentative = !(align_planar ? identical_planar_aligned : identical_norm_offset_t);
+			bool spec_offset_v_tentative = !(align_planar ? identical_planar_aligned : identical_spec_offset_t);
 
 			mCtrlTexOffsetV->setValue(  editable ? diff_offset_t : 0.0f);
 			mCtrlBumpyOffsetV->setValue(editable ? norm_offset_t : 0.0f);
@@ -1724,9 +1724,9 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 			LLSelectedTEMaterial::getSpecularRotation(spec_rotation,identical_spec_rotation);
 			LLSelectedTEMaterial::getNormalRotation(norm_rotation,identical_norm_rotation);
 
-			BOOL diff_rot_tentative = !(align_planar ? identical_planar_aligned : identical_diff_rotation);
-			BOOL norm_rot_tentative = !(align_planar ? identical_planar_aligned : identical_norm_rotation);
-			BOOL spec_rot_tentative = !(align_planar ? identical_planar_aligned : identical_spec_rotation);
+			bool diff_rot_tentative = !(align_planar ? identical_planar_aligned : identical_diff_rotation);
+			bool norm_rot_tentative = !(align_planar ? identical_planar_aligned : identical_norm_rotation);
+			bool spec_rot_tentative = !(align_planar ? identical_planar_aligned : identical_spec_rotation);
 
 			F32 diff_rot_deg = diff_rotation * RAD_TO_DEG;
 			F32 norm_rot_deg = norm_rotation * RAD_TO_DEG;
@@ -1862,7 +1862,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
                 break;
                 }
 
-				BOOL repeats_tentative = !identical_repeats;
+				bool repeats_tentative = !identical_repeats;
 
 				//LLSpinCtrl* rpt_ctrl = getChild<LLSpinCtrl>("rptctrl");
 				if (force_set_values)
@@ -1989,7 +1989,7 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
 			}
 		}
         S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
-        BOOL single_volume = (selected_count == 1);
+        bool single_volume = (selected_count == 1);
         // <FS> Extended copy & paste buttons
         //mMenuClipboardColor->setEnabled(editable && single_volume);
         mBtnCopyFaces->setEnabled(editable && single_volume);
@@ -2022,40 +2022,40 @@ void LLPanelFace::updateUI(bool force_set_values /*false*/)
         if (pbr_ctrl)
         {
             pbr_ctrl->setImageAssetID(LLUUID::null);
-            pbr_ctrl->setEnabled(FALSE);
+            pbr_ctrl->setEnabled(false);
         }
 		///LLTextureCtrl*	texture_ctrl = getChild<LLTextureCtrl>("texture control"); 
 		if (mTextureCtrl)
 		{
 			mTextureCtrl->setImageAssetID( LLUUID::null );
-			mTextureCtrl->setEnabled( FALSE );  // this is a LLUICtrl, but we don't want it to have keyboard focus so we add it as a child, not a ctrl.
-// 			mTextureCtrl->setValid(FALSE);
+			mTextureCtrl->setEnabled( false );  // this is a LLUICtrl, but we don't want it to have keyboard focus so we add it as a child, not a ctrl.
+// 			mTextureCtrl->setValid(false);
 		}
 		//LLColorSwatchCtrl* mColorSwatch = getChild<LLColorSwatchCtrl>("colorswatch");
 		if (mColorSwatch)
 		{
-			mColorSwatch->setEnabled( FALSE );			
+			mColorSwatch->setEnabled( false );			
 			mColorSwatch->setFallbackImage(LLUI::getUIImage("locked_image.j2c") );
-			mColorSwatch->setValid(FALSE);
+			mColorSwatch->setValid(false);
 		}
 		//LLRadioGroup* radio_mat_type = getChild<LLRadioGroup>("radio_material_type");
 		if (mRadioMatType)
 		{
 			mRadioMatType->setSelectedIndex(0);
 		}
-		getChildView("color trans")->setEnabled(FALSE);
-		mCtrlRpt->setEnabled(FALSE);
-		getChildView("tex gen")->setEnabled(FALSE);
-		getChildView("label shininess")->setEnabled(FALSE);
-		getChildView("label bumpiness")->setEnabled(FALSE);
-		getChildView("button align")->setEnabled(FALSE);
-        getChildView("pbr_from_inventory")->setEnabled(FALSE);
-        getChildView("edit_selected_pbr")->setEnabled(FALSE);
-        getChildView("save_selected_pbr")->setEnabled(FALSE);
+		getChildView("color trans")->setEnabled(false);
+		mCtrlRpt->setEnabled(false);
+		getChildView("tex gen")->setEnabled(false);
+		getChildView("label shininess")->setEnabled(false);
+		getChildView("label bumpiness")->setEnabled(false);
+		getChildView("button align")->setEnabled(false);
+        getChildView("pbr_from_inventory")->setEnabled(false);
+        getChildView("edit_selected_pbr")->setEnabled(false);
+        getChildView("save_selected_pbr")->setEnabled(false);
 
 		// <FS> Extended copy & paste buttons
-		mBtnCopyFaces->setEnabled(FALSE);
-		mBtnPasteFaces->setEnabled(FALSE);
+		mBtnCopyFaces->setEnabled(false);
+		mBtnPasteFaces->setEnabled(false);
 		// </FS>
 		
 		updateVisibility();
@@ -2166,7 +2166,7 @@ void LLPanelFace::updateUIGLTF(LLViewerObject* objectp, bool& has_pbr_material, 
     {
         LLSelectedTE::getPbrMaterialId(pbr_id, identical_pbr, has_pbr_material, has_faces_without_pbr);
 
-        pbr_ctrl->setTentative(identical_pbr ? FALSE : TRUE);
+        pbr_ctrl->setTentative(!identical_pbr);
         pbr_ctrl->setEnabled(settable);
         pbr_ctrl->setImageAssetID(pbr_id);
 
@@ -2290,7 +2290,7 @@ void LLPanelFace::refreshMedia()
         && first_object->permModify()
         ))
     {
-        getChildView("add_media")->setEnabled(FALSE);
+        getChildView("add_media")->setEnabled(false);
         mTitleMediaText->clear();
         clearMediaSettings();
         return;
@@ -2301,13 +2301,13 @@ void LLPanelFace::refreshMedia()
 
     if (!has_media_capability)
     {
-        getChildView("add_media")->setEnabled(FALSE);
+        getChildView("add_media")->setEnabled(false);
         LL_WARNS("LLFloaterToolsMedia") << "Media not enabled (no capability) in this region!" << LL_ENDL;
         clearMediaSettings();
         return;
     }
 
-    BOOL is_nonpermanent_enforced = (LLSelectMgr::getInstance()->getSelection()->getFirstRootNode()
+    bool is_nonpermanent_enforced = (LLSelectMgr::getInstance()->getSelection()->getFirstRootNode()
         && LLSelectMgr::getInstance()->selectGetRootsNonPermanentEnforced())
         || LLSelectMgr::getInstance()->selectGetNonPermanentEnforced();
     bool editable = is_nonpermanent_enforced && (first_object->permModify() || selectedMediaEditable());
@@ -2427,7 +2427,7 @@ void LLPanelFace::refreshMedia()
             }
         }
 
-        getChildView("delete_media")->setEnabled(TRUE);
+        getChildView("delete_media")->setEnabled(true);
     }
 
     U32 materials_media = mComboMatMedia->getCurrentIndex();
@@ -2671,7 +2671,7 @@ void LLPanelFace::updateMediaSettings()
 
     // Auto play
     //value_bool = default_media_data.getAutoPlay();
-    // set default to auto play TRUE -- angela  EXT-5172
+    // set default to auto play true -- angela  EXT-5172
     value_bool = true;
     struct functor_getter_auto_play : public LLSelectedTEGetFunctor< bool >
     {
@@ -2683,7 +2683,7 @@ void LLPanelFace::updateMediaSettings()
                 if (object->getTE(face))
                     if (object->getTE(face)->getMediaData())
                         return object->getTE(face)->getMediaData()->getAutoPlay();
-            //return mMediaEntry.getAutoPlay(); set default to auto play TRUE -- angela  EXT-5172
+            //return mMediaEntry.getAutoPlay(); set default to auto play true -- angela  EXT-5172
             return true;
         };
 
@@ -2697,7 +2697,7 @@ void LLPanelFace::updateMediaSettings()
 
 
     // Auto scale
-    // set default to auto scale TRUE -- angela  EXT-5172
+    // set default to auto scale true -- angela  EXT-5172
     //value_bool = default_media_data.getAutoScale();
     value_bool = true;
     struct functor_getter_auto_scale : public LLSelectedTEGetFunctor< bool >
@@ -2710,7 +2710,7 @@ void LLPanelFace::updateMediaSettings()
                 if (object->getTE(face))
                     if (object->getTE(face)->getMediaData())
                         return object->getTE(face)->getMediaData()->getAutoScale();
-            // return mMediaEntry.getAutoScale();  set default to auto scale TRUE -- angela  EXT-5172
+            // return mMediaEntry.getAutoScale();  set default to auto scale true -- angela  EXT-5172
             return true;
         };
 
@@ -3407,9 +3407,9 @@ void LLPanelFace::onCommitGlow(LLUICtrl* ctrl, void* userdata)
 }
 
 // static
-BOOL LLPanelFace::onDragPbr(LLUICtrl*, LLInventoryItem* item)
+bool LLPanelFace::onDragPbr(LLUICtrl*, LLInventoryItem* item)
 {
-    BOOL accept = TRUE;
+    bool accept = true;
     for (LLObjectSelection::root_iterator iter = LLSelectMgr::getInstance()->getSelection()->root_begin();
         iter != LLSelectMgr::getInstance()->getSelection()->root_end(); iter++)
     {
@@ -3417,7 +3417,7 @@ BOOL LLPanelFace::onDragPbr(LLUICtrl*, LLInventoryItem* item)
         LLViewerObject* obj = node->getObject();
         if (!LLToolDragAndDrop::isInventoryDropAcceptable(obj, item))
         {
-            accept = FALSE;
+            accept = false;
             break;
         }
     }
@@ -3473,9 +3473,9 @@ void LLPanelFace::onSelectPbr(const LLSD& data)
 }
 
 // static
-BOOL LLPanelFace::onDragTexture(LLUICtrl*, LLInventoryItem* item)
+bool LLPanelFace::onDragTexture(LLUICtrl*, LLInventoryItem* item)
 {
-    BOOL accept = TRUE;
+    bool accept = true;
     for (LLObjectSelection::root_iterator iter = LLSelectMgr::getInstance()->getSelection()->root_begin();
         iter != LLSelectMgr::getInstance()->getSelection()->root_end(); iter++)
     {
@@ -3483,7 +3483,7 @@ BOOL LLPanelFace::onDragTexture(LLUICtrl*, LLInventoryItem* item)
         LLViewerObject* obj = node->getObject();
         if (!LLToolDragAndDrop::isInventoryDropAcceptable(obj, item))
         {
-            accept = FALSE;
+            accept = false;
             break;
         }
     }
@@ -4869,7 +4869,7 @@ void LLPanelFace::onPasteTexture(LLViewerObject* objectp, S32 te)
                 else if (full_perm)
                 {
                     // Either library, local or existed as fullperm when user made a copy
-                    LLViewerTexture* image = LLViewerTextureManager::getFetchedTexture(imageid, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+                    LLViewerTexture* image = LLViewerTextureManager::getFetchedTexture(imageid, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
                     objectp->setTEImage(U8(te), image);
                 }
             }

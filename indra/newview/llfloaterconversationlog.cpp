@@ -44,7 +44,7 @@ LLFloaterConversationLog::LLFloaterConversationLog(const LLSD& key)
 	mEnableCallbackRegistrar.add("CallLog.Check",	boost::bind(&LLFloaterConversationLog::isActionChecked, this, _2));
 }
 
-BOOL LLFloaterConversationLog::postBuild()
+bool LLFloaterConversationLog::postBuild()
 {
 	mConversationLogList = getChild<LLConversationLogList>("conversation_log_list");
 
@@ -138,12 +138,12 @@ bool LLFloaterConversationLog::isActionChecked(const LLSD& userdata)
 }
 
 // <FS:Ansariel> CTRL-F focusses local search editor
-BOOL LLFloaterConversationLog::handleKeyHere(KEY key, MASK mask)
+bool LLFloaterConversationLog::handleKeyHere(KEY key, MASK mask)
 {
 	if (FSCommon::isFilterEditorKeyCombo(key, mask))
 	{
-		getChild<LLFilterEditor>("people_filter_input")->setFocus(TRUE);
-		return TRUE;
+		getChild<LLFilterEditor>("people_filter_input")->setFocus(true);
+		return true;
 	}
 
 	return LLFloater::handleKeyHere(key, mask);

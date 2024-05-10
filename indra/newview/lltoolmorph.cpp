@@ -62,7 +62,7 @@
 
 //static
 LLVisualParamHint::instance_list_t LLVisualParamHint::sInstances;
-BOOL LLVisualParamReset::sDirty = FALSE;
+bool LLVisualParamReset::sDirty = false;
 
 //-----------------------------------------------------------------------------
 // LLVisualParamHint()
@@ -78,14 +78,14 @@ LLVisualParamHint::LLVisualParamHint(
 	F32 param_weight,
 	LLJoint* jointp)
 	:
-	LLViewerDynamicTexture(width, height, 3, LLViewerDynamicTexture::ORDER_MIDDLE, TRUE ),
-	mNeedsUpdate( TRUE ),
-	mIsVisible( FALSE ),
+	LLViewerDynamicTexture(width, height, 3, LLViewerDynamicTexture::ORDER_MIDDLE, true ),
+	mNeedsUpdate( true ),
+	mIsVisible( false ),
 	mJointMesh( mesh ),
 	mVisualParam( param ),
 	mWearablePtr( wearable ),
 	mVisualParamWeight( param_weight ),
-	mAllowsUpdates( TRUE ),
+	mAllowsUpdates( true ),
 	mDelayFrames( 0 ),
 	mRect( pos_x, pos_y + height, pos_x + width, pos_y ),
 	mLastParamWeight(0.f),
@@ -128,37 +128,37 @@ void LLVisualParamHint::requestHintUpdates( LLVisualParamHint* exception1, LLVis
 		{
 			if( instance->mAllowsUpdates )
 			{
-				instance->mNeedsUpdate = TRUE;
+				instance->mNeedsUpdate = true;
 				instance->mDelayFrames = delay_frames;
 				delay_frames++;
 			}
 			else
 			{
-				instance->mNeedsUpdate = TRUE;
+				instance->mNeedsUpdate = true;
 				instance->mDelayFrames = 0;
 			}
 		}
 	}
 }
 
-BOOL LLVisualParamHint::needsRender()
+bool LLVisualParamHint::needsRender()
 {
 	return mNeedsUpdate && mDelayFrames-- <= 0 && !gAgentAvatarp->getIsAppearanceAnimating() && mAllowsUpdates;
 }
 
-void LLVisualParamHint::preRender(BOOL clear_depth)
+void LLVisualParamHint::preRender(bool clear_depth)
 {
 	LLViewerWearable* wearable = (LLViewerWearable*)mWearablePtr;
 	if (wearable)
 	{
-		wearable->setVolatile(TRUE);
+		wearable->setVolatile(true);
 	}
 	mLastParamWeight = mVisualParam->getWeight();
 	// <FS:Ansariel> [Legacy Bake]
 	//mWearablePtr->setVisualParamWeight(mVisualParam->getID(), mVisualParamWeight);
 	//gAgentAvatarp->setVisualParamWeight(mVisualParam->getID(), mVisualParamWeight);
-	mWearablePtr->setVisualParamWeight(mVisualParam->getID(), mVisualParamWeight, FALSE);
-	gAgentAvatarp->setVisualParamWeight(mVisualParam->getID(), mVisualParamWeight, FALSE);
+	mWearablePtr->setVisualParamWeight(mVisualParam->getID(), mVisualParamWeight, false);
+	gAgentAvatarp->setVisualParamWeight(mVisualParam->getID(), mVisualParamWeight, false);
 	// </FS:Ansariel> [Legacy Bake]
 	gAgentAvatarp->setVisualParamWeight("Blink_Left", 0.f);
 	gAgentAvatarp->setVisualParamWeight("Blink_Right", 0.f);
@@ -183,9 +183,9 @@ void LLVisualParamHint::preRender(BOOL clear_depth)
 //-----------------------------------------------------------------------------
 // render()
 //-----------------------------------------------------------------------------
-BOOL LLVisualParamHint::render()
+bool LLVisualParamHint::render()
 {
-	LLVisualParamReset::sDirty = TRUE;
+	LLVisualParamReset::sDirty = true;
 
 	gGL.pushUIMatrix();
 	gGL.loadUIIdentity();
@@ -202,7 +202,7 @@ BOOL LLVisualParamHint::render()
 	gUIProgram.bind();
 
 	LLGLSUIDefault gls_ui;
-	//LLGLState::verify(TRUE);
+	//LLGLState::verify(true);
 	mBackgroundp->draw(0, 0, mFullWidth, mFullHeight);
 
 	gGL.matrixMode(LLRender::MM_PROJECTION);
@@ -211,8 +211,8 @@ BOOL LLVisualParamHint::render()
 	gGL.matrixMode(LLRender::MM_MODELVIEW);
 	gGL.popMatrix();
 
-	mNeedsUpdate = FALSE;
-	mIsVisible = TRUE;
+	mNeedsUpdate = false;
+	mIsVisible = true;
 
 	LLQuaternion avatar_rotation;
 	LLJoint* root_joint = gAgentAvatarp->getRootJoint();
@@ -241,7 +241,7 @@ BOOL LLVisualParamHint::render()
 		LLVector3::z_axis,	// up
 		target_pos );		// point of interest
 
-	LLViewerCamera::getInstance()->setPerspective(FALSE, mOrigin.mX, mOrigin.mY, mFullWidth, mFullHeight, FALSE);
+	LLViewerCamera::getInstance()->setPerspective(false, mOrigin.mX, mOrigin.mY, mFullWidth, mFullHeight, false);
 
     if (gAgentAvatarp->mDrawable.notNull())
     {
@@ -256,11 +256,11 @@ BOOL LLVisualParamHint::render()
 	gAgentAvatarp->setVisualParamWeight(mVisualParam->getID(), mLastParamWeight);
 	// <FS:Ansariel> [Legacy Bake]
 	//mWearablePtr->setVisualParamWeight(mVisualParam->getID(), mLastParamWeight);
-	mWearablePtr->setVisualParamWeight(mVisualParam->getID(), mLastParamWeight, FALSE);
+	mWearablePtr->setVisualParamWeight(mVisualParam->getID(), mLastParamWeight, false);
 	LLViewerWearable* wearable = (LLViewerWearable*)mWearablePtr;
 	if (wearable)
 	{
-		wearable->setVolatile(FALSE);
+		wearable->setVolatile(false);
 	}
 
 	gAgentAvatarp->updateVisualParams();
@@ -268,7 +268,7 @@ BOOL LLVisualParamHint::render()
 	mGLTexturep->setGLTextureCreated(true);
 	gGL.popUIMatrix();
 
-	return TRUE;
+	return true;
 }
 
 
@@ -322,7 +322,7 @@ void LLVisualParamHint::draw(F32 alpha)
 //-----------------------------------------------------------------------------
 // LLVisualParamReset()
 //-----------------------------------------------------------------------------
-LLVisualParamReset::LLVisualParamReset() : LLViewerDynamicTexture(1, 1, 1, ORDER_RESET, FALSE)
+LLVisualParamReset::LLVisualParamReset() : LLViewerDynamicTexture(1, 1, 1, ORDER_RESET, false)
 {	
 }
 
@@ -335,15 +335,15 @@ S8 LLVisualParamReset::getType() const
 //-----------------------------------------------------------------------------
 // render()
 //-----------------------------------------------------------------------------
-BOOL LLVisualParamReset::render()
+bool LLVisualParamReset::render()
 {
 	if (sDirty)
 	{
 		gAgentAvatarp->updateComposites();
 		gAgentAvatarp->updateVisualParams();
 		gAgentAvatarp->updateGeometry(gAgentAvatarp->mDrawable);
-		sDirty = FALSE;
+		sDirty = false;
 	}
 
-	return FALSE;
+	return false;
 }

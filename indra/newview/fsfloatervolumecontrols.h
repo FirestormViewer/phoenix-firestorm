@@ -35,12 +35,12 @@ class FSFloaterVolumeControls
 {
 public:
 	FSFloaterVolumeControls(const LLSD& key);
-	BOOL postBuild();
+	bool postBuild() override;
 
 private:
 	~FSFloaterVolumeControls();
 	
-	/*virtual*/ void onVisibilityChange(BOOL new_visibility);
+	void onVisibilityChange(bool new_visibility) override;
 };
 
 #endif // FS_FLOATERVOLUMECONTROLS_H

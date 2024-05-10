@@ -106,7 +106,7 @@ LLToolBarView::~LLToolBarView()
 	saveToolbars();
 }
 
-BOOL LLToolBarView::postBuild()
+bool LLToolBarView::postBuild()
 {
 	mToolbars[LLToolBarEnums::TOOLBAR_LEFT] = getChild<LLToolBar>("toolbar_left");
 	mToolbars[LLToolBarEnums::TOOLBAR_LEFT]->getCenterLayoutPanel()->setLocationId(LLToolBarEnums::TOOLBAR_LEFT);
@@ -134,7 +134,7 @@ BOOL LLToolBarView::postBuild()
 	// <FS:Ansariel> Added to determine if toolbar gets hidden when empty
 	mHideBottomOnEmpty = FSCommon::isLegacySkin();
 
-	return TRUE;
+	return true;
 }
 
 S32 LLToolBarView::hasCommand(const LLCommandId& commandId) const
@@ -672,7 +672,7 @@ void LLToolBarView::draw()
 
 		for (S32 i = LLToolBarEnums::TOOLBAR_FIRST; i <= LLToolBarEnums::TOOLBAR_LAST; i++)
 		{
-			gl_rect_2d(toolbar_rects[i], drop_color, TRUE);
+			gl_rect_2d(toolbar_rects[i], drop_color, true);
 		}
 	}
 	
@@ -700,12 +700,12 @@ void LLToolBarView::startDragTool(S32 x, S32 y, LLToolBarButton* toolbarButton)
 	LLToolDragAndDrop::getInstance()->setDragStart( x, y );
 }
 
-BOOL LLToolBarView::handleDragTool( S32 x, S32 y, const LLUUID& uuid, LLAssetType::EType type)
+bool LLToolBarView::handleDragTool( S32 x, S32 y, const LLUUID& uuid, LLAssetType::EType type)
 {
 	// <FS:Zi> Do not drag and drop when toolbars are locked
 	if(gSavedSettings.getBOOL("LockToolbars"))
 	{
-		return FALSE;
+		return false;
 	}
 	// </FS:Zi>
 
@@ -729,7 +729,7 @@ BOOL LLToolBarView::handleDragTool( S32 x, S32 y, const LLUUID& uuid, LLAssetTyp
 			gToolBarView->stopCommandInProgress(command_id);
 
 			gToolBarView->mDragStarted = true;
-			return TRUE;
+			return true;
 		}
 		else
 		{
@@ -737,25 +737,25 @@ BOOL LLToolBarView::handleDragTool( S32 x, S32 y, const LLUUID& uuid, LLAssetTyp
 			return LLToolDragAndDrop::getInstance()->handleHover( x, y, mask );
 		}
 	}
-	return FALSE;
+	return false;
 }
 
-BOOL LLToolBarView::handleDropTool( void* cargo_data, S32 x, S32 y, LLToolBar* toolbar)
+bool LLToolBarView::handleDropTool( void* cargo_data, S32 x, S32 y, LLToolBar* toolbar)
 {
 	// <FS:Zi> Do not drag and drop when toolbars are locked
 	if(gSavedSettings.getBOOL("LockToolbars"))
 	{
-		return FALSE;
+		return false;
 	}
 	// </FS:Zi>
 
-	BOOL handled = FALSE;
+	bool handled = false;
 	LLInventoryObject* inv_item = static_cast<LLInventoryObject*>(cargo_data);
 	
 	LLAssetType::EType type = inv_item->getType();
 	if (type == LLAssetType::AT_WIDGET)
 	{
-		handled = TRUE;
+		handled = true;
 		// Get the command from its uuid
 		LLCommandManager& mgr = LLCommandManager::instance();
 		LLCommandId command_id(inv_item->getUUID());

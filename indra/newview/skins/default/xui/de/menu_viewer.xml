@@ -172,7 +172,6 @@
 		<menu_item_call label="Animation-Explorer" name="Animation Explorer"/>
 		<menu_item_call label="Asset-Blacklist" name="asset_blacklist"/>
 		<menu_item_call label="Avatar-Anzeigeeinstellungen" name="Avatar Render Settings"/>
-		<menu_item_check label="Freunde immer komplett anzeigen" name="Always show Friends normally"/>
 		<menu_item_check label="Nur Freunde anzeigen" name="Render Friends Only"/>
 	</menu>
 	<menu label="Bauen" name="BuildTools">
@@ -633,6 +632,7 @@
 			<menu_item_check label="Landaktualisierung debuggen" name="Debug Joint Updates"/>
 			<menu_item_check label="LOD deaktivieren" name="Disable LOD"/>
 			<menu_item_check label="Sichtbare Agenten debuggen" name="Debug Character Vis"/>
+			<menu_item_check label="Charakter-Rez-Status debuggen" name="Debug Character Rez State"/>
 			<menu_item_check label="Gelenkpunkte anzeigen" name="Show Collision Skeleton"/>
 			<menu_item_check label="Knochen anzeigen" name="Show Bones"/>
 			<menu_item_check label="Agent-Ziel anzeigen" name="Display Agent Target"/>

@@ -35,10 +35,10 @@ FSLSLPreProcViewer::FSLSLPreProcViewer(const Params& p)
 {
 }
 
-BOOL FSLSLPreProcViewer::handleKeyHere(KEY key, MASK mask )
+bool FSLSLPreProcViewer::handleKeyHere(KEY key, MASK mask )
 {
 	// Normal key handling
-	BOOL handled = handleNavigationKey( key, mask )
+	bool handled = handleNavigationKey( key, mask )
 					|| handleSelectionKey(key, mask)
 					|| handleControlKey(key, mask);
 
@@ -51,7 +51,7 @@ BOOL FSLSLPreProcViewer::handleKeyHere(KEY key, MASK mask )
 	return handled;
 }
 
-BOOL FSLSLPreProcViewer::handleUnicodeCharHere(llwchar uni_char)
+bool FSLSLPreProcViewer::handleUnicodeCharHere(llwchar uni_char)
 {
-	return FALSE;
+	return false;
 }

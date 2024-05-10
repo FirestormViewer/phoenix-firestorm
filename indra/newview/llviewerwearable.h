@@ -58,23 +58,23 @@ public:
 
 public:
 
-	BOOL				isDirty() const;
-	BOOL				isOldVersion() const;
+	bool				isDirty() const;
+	bool				isOldVersion() const;
 
 	/*virtual*/ void	writeToAvatar(LLAvatarAppearance *avatarp);
 	// <FS:Ansariel> [Legacy Bake]
 	//void				removeFromAvatar()	{ LLViewerWearable::removeFromAvatar( mType); }
 	//static void			removeFromAvatar( LLWearableType::EType type); 
-	void				removeFromAvatar( BOOL upload_bake )	{ LLViewerWearable::removeFromAvatar( mType, upload_bake ); }
-	static void			removeFromAvatar( LLWearableType::EType type, BOOL upload_bake ); 
+	void				removeFromAvatar( bool upload_bake )	{ LLViewerWearable::removeFromAvatar( mType, upload_bake ); }
+	static void			removeFromAvatar( LLWearableType::EType type, bool upload_bake ); 
 	// </FS:Ansariel> [Legacy Bake]
 
 	/*virtual*/ EImportResult	importStream( std::istream& input_stream, LLAvatarAppearance* avatarp );
 	
 	void				setParamsToDefaults();
 	void				setTexturesToDefaults();
-	void				setVolatile(BOOL is_volatile) { mVolatile = is_volatile; } // TRUE when doing preview renders, some updates will be suppressed.
-	BOOL				getVolatile() { return mVolatile; }
+	void				setVolatile(bool is_volatile) { mVolatile = is_volatile; } // true when doing preview renders, some updates will be suppressed.
+	bool				getVolatile() { return mVolatile; }
 
 	/*virtual*/ LLUUID	getDefaultTextureImageID(LLAvatarAppearanceDefines::ETextureIndex index) const;
 
@@ -104,7 +104,7 @@ protected:
 	LLAssetID			mAssetID;
 	LLTransactionID		mTransactionID;
 
-	BOOL 				mVolatile; // True when rendering preview images. Can suppress some updates.
+	bool 				mVolatile; // True when rendering preview images. Can suppress some updates.
 
 	LLUUID				mItemID;  // ID of the inventory item in the agent's inventory	
 };

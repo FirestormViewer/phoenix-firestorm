@@ -121,7 +121,7 @@ FSPanelRadar::~FSPanelRadar()
 		mOptionsMenuHandle.get()->die();
 }
 
-BOOL FSPanelRadar::postBuild()
+bool FSPanelRadar::postBuild()
 {
 	mRadarList = getChild<FSRadarListCtrl>("radar_list");
 	mRadarList->setFilterColumn(0);
@@ -166,15 +166,15 @@ BOOL FSPanelRadar::postBuild()
 	// call this method in case some list is empty and buttons can be in inconsistent state
 	updateButtons();
 
-	return TRUE;
+	return true;
 }
 
-BOOL FSPanelRadar::handleKeyHere(KEY key, MASK mask)
+bool FSPanelRadar::handleKeyHere(KEY key, MASK mask)
 {
 	if (FSCommon::isFilterEditorKeyCombo(key, mask))
 	{
-		mFilterEditor->setFocus(TRUE);
-		return TRUE;
+		mFilterEditor->setFocus(true);
+		return true;
 	}
 
 	return LLPanel::handleKeyHere(key, mask);
@@ -484,7 +484,7 @@ void FSPanelRadar::onColumnDisplayModeChanged()
 	parent_floater->getResizeLimits(&min_width, &min_height);
 
 	std::string current_sort_col = mRadarList->getSortColumnName();
-	BOOL current_sort_asc = mRadarList->getSortAscending();
+	bool current_sort_asc = mRadarList->getSortAscending();
 	
 	mRadarList->clearRows();
 	mRadarList->clearColumns();
@@ -529,7 +529,7 @@ void FSPanelRadar::onColumnDisplayModeChanged()
 		(current_sort_col == "seen_sort" && mRadarList->getColumn("seen")->getWidth() == -1))
 	{
 		current_sort_col = "range";
-		current_sort_asc = TRUE;
+		current_sort_asc = true;
 	}
 	mRadarList->sortByColumn(current_sort_col, current_sort_asc);
 	mRadarList->setFilterColumn(0);

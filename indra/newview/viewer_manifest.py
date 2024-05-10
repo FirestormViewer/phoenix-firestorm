@@ -1262,6 +1262,14 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                                     # ):
                             # dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
 
+                # # OpenAL dylibs
+                # if self.args['openal'] == 'ON':
+                    # for libfile in (
+                                # "libopenal.dylib",
+                                # "libalut.dylib",
+                                # ):
+                        # dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+
                 # # our apps
                 # executable_path = {}
                 # embedded_apps = [ (os.path.join("llplugin", "slplugin"), "SLPlugin.app") ]
@@ -1566,9 +1574,20 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         for libfile in (
                                     "libfmod.dylib",
                                     ):
-                            
                             print("debug: adding {} to dylibs for fmodstudio".format(path_optional(os.path.join(relpkgdir, libfile), libfile)))
                             dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+
+                # OpenAL dylibs
+                useopenal = self.args['openal'].lower()
+                print(f"debug: openal={useopenal}")
+                if useopenal == 'on':
+                    for libfile in (
+                                "libopenal.dylib",
+                                "libalut.dylib",
+                                ):
+                        print("debug: adding {} to dylibs for openal".format(path_optional(os.path.join(relpkgdir, libfile), libfile)))
+                        dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
+
                 print(f"debug: dylibs = {dylibs}")
 
                 # our apps

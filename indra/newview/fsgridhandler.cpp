@@ -56,7 +56,7 @@
 
 void gridDownloadError( LLSD const &aData, LLGridManager* mOwner, GridEntry* mData, LLGridManager::AddState mState )
 {
-    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData );
+	LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData );
 
 	if (HTTP_GATEWAY_TIME_OUT == status.getType() )// gateway timeout ... well ... retry once >_>
 	{
@@ -105,9 +105,9 @@ void gridDownloadComplete( LLSD const &aData, LLGridManager* mOwner, GridEntry* 
 {
 	//mOwner->decResponderCount();
 	LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
-    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
+	LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD( aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ] );
 
-    const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
+	const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
 
 	// LL_DEBUGS("GridManager") << mData->grid[GRID_VALUE] << " status: " << getStatus() << " reason: " << getReason() << LL_ENDL;
 	if(LLGridManager::TRYLEGACY == mState && HTTP_OK ==  status.getType() )
@@ -121,7 +121,7 @@ void gridDownloadComplete( LLSD const &aData, LLGridManager* mOwner, GridEntry* 
 
 		std::string stringData;
 		stringData.assign( rawData.begin(), rawData.end() ); // LLXMLNode::parseBuffer wants a U8*, not a const U8*, so need to copy here just to be safe
-		if(LLXMLNode::parseBuffer( reinterpret_cast< U8*> ( &stringData[0] ), stringData.size(), mData->info_root, NULL))
+		if(LLXMLNode::parseBuffer(stringData.c_str(), stringData.size(), mData->info_root, NULL))
 		{
 			mOwner->gridInfoResponderCB(mData);
 		}
@@ -884,7 +884,7 @@ void LLGridManager::addSystemGrid(const std::string& label,
 	if (name == std::string(MAINGRID))
 	{
 		grid_entry->grid[GRID_SLURL_BASE] = MAIN_GRID_SLURL_BASE;
-		grid_entry->grid[GRID_IS_FAVORITE_VALUE] = TRUE;
+		grid_entry->grid[GRID_IS_FAVORITE_VALUE] = true;
 	}
 	else
 	{

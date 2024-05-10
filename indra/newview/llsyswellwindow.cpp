@@ -62,7 +62,7 @@ LLSysWellWindow::LLSysWellWindow(const LLSD& key) : LLTransientDockableFloater(N
 }
 
 //---------------------------------------------------------------------------------
-BOOL LLSysWellWindow::postBuild()
+bool LLSysWellWindow::postBuild()
 {
 	mMessageList = getChild<LLFlatListView>("notification_list");
 
@@ -80,7 +80,7 @@ void LLSysWellWindow::onOpen(const LLSD& key)
 		mReshapedByUserControlName = mInstanceName + "_user_reshaped";
 		if (!getControlGroup()->controlExists(mReshapedByUserControlName))
 		{
-			getControlGroup()->declareBOOL(mReshapedByUserControlName, FALSE, llformat("Has system well %s been resized by the user", mInstanceName.c_str()), LLControlVariable::PERSIST_NONDFT);
+			getControlGroup()->declareBOOL(mReshapedByUserControlName, false, llformat("Has system well %s been resized by the user", mInstanceName.c_str()), LLControlVariable::PERSIST_NONDFT);
 		}
 		mIsReshapedByUser = getControlGroup()->getBOOL(mReshapedByUserControlName);
 
@@ -94,7 +94,7 @@ void LLSysWellWindow::onOpen(const LLSD& key)
 // </FS:Ansariel>
 
 //---------------------------------------------------------------------------------
-void LLSysWellWindow::setMinimized(BOOL minimize)
+void LLSysWellWindow::setMinimized(bool minimize)
 {
 	LLTransientDockableFloater::setMinimized(minimize);
 }
@@ -107,7 +107,7 @@ void LLSysWellWindow::handleReshape(const LLRect& rect, bool by_user)
 	// <FS:Ansariel> FIRE-11537: Fix well lists size appearing random
 	if (by_user)
 	{
-		getControlGroup()->setBOOL(mReshapedByUserControlName, TRUE);
+		getControlGroup()->setBOOL(mReshapedByUserControlName, true);
 	}
 	// </FS:Ansariel>
 
@@ -118,7 +118,7 @@ void LLSysWellWindow::handleReshape(const LLRect& rect, bool by_user)
 void LLSysWellWindow::onStartUpToastClick(S32 x, S32 y, MASK mask)
 {
 	// just set floater visible. Screen channels will be cleared.
-	setVisible(TRUE);
+	setVisible(true);
 }
 
 void LLSysWellWindow::setSysWellChiclet(LLSysWellChiclet* chiclet) 
@@ -155,7 +155,7 @@ void LLSysWellWindow::removeItemByID(const LLUUID& id)
 	// hide chiclet window if there are no items left
 	if(isWindowEmpty())
 	{
-		setVisible(FALSE);
+		setVisible(false);
 	}
 }
 
@@ -178,7 +178,7 @@ void LLSysWellWindow::initChannel()
 }
 
 //---------------------------------------------------------------------------------
-void LLSysWellWindow::setVisible(BOOL visible)
+void LLSysWellWindow::setVisible(bool visible)
 {
 	if (visible)
 	{
@@ -205,7 +205,7 @@ void LLSysWellWindow::setVisible(BOOL visible)
 	}
 
 	// do not show empty window
-	if (NULL == mMessageList || isWindowEmpty()) visible = FALSE;
+	if (NULL == mMessageList || isWindowEmpty()) visible = false;
 
 	LLTransientDockableFloater::setVisible(visible);
 
@@ -256,7 +256,7 @@ void LLSysWellWindow::reshapeWindow()
 		S32 newWidth = curRect.getWidth() < MIN_WINDOW_WIDTH ? MIN_WINDOW_WIDTH	: curRect.getWidth();
 
 		curRect.setLeftTopAndSize(curRect.mLeft, curRect.mTop, newWidth, new_window_height);
-		reshape(curRect.getWidth(), curRect.getHeight(), TRUE);
+		reshape(curRect.getWidth(), curRect.getHeight(), true);
 		setRect(curRect);
 	}
 
@@ -373,20 +373,20 @@ void LLIMWellWindow::RowPanel::onMouseLeave(S32 x, S32 y, MASK mask)
 
 //---------------------------------------------------------------------------------
 // virtual
-BOOL LLIMWellWindow::RowPanel::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLIMWellWindow::RowPanel::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	// Pass the mouse down event to the chiclet (EXT-596).
 	if (!mChiclet->pointInView(x, y) && !mCloseBtn->getRect().pointInRect(x, y)) // prevent double call of LLIMChiclet::onMouseDown()
 	{
 		mChiclet->onMouseDown();
-		return TRUE;
+		return true;
 	}
 
 	return LLPanel::handleMouseDown(x, y, mask);
 }
 
 // virtual
-BOOL LLIMWellWindow::RowPanel::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool LLIMWellWindow::RowPanel::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	return mChiclet->handleRightMouseDown(x, y, mask);
 }
@@ -453,20 +453,20 @@ void LLIMWellWindow::ObjectRowPanel::onMouseLeave(S32 x, S32 y, MASK mask)
 
 //---------------------------------------------------------------------------------
 // virtual
-BOOL LLIMWellWindow::ObjectRowPanel::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLIMWellWindow::ObjectRowPanel::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	// Pass the mouse down event to the chiclet (EXT-596).
 	if (!mChiclet->pointInView(x, y) && !mCloseBtn->getRect().pointInRect(x, y)) // prevent double call of LLIMChiclet::onMouseDown()
 	{
 		mChiclet->onMouseDown();
-		return TRUE;
+		return true;
 	}
 
 	return LLPanel::handleMouseDown(x, y, mask);
 }
 
 // virtual
-BOOL LLIMWellWindow::ObjectRowPanel::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool LLIMWellWindow::ObjectRowPanel::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	return mChiclet->handleRightMouseDown(x, y, mask);
 }
@@ -501,15 +501,15 @@ LLNotificationWellWindow* LLNotificationWellWindow::getInstance(const LLSD& key 
 }
 
 // virtual
-BOOL LLNotificationWellWindow::postBuild()
+bool LLNotificationWellWindow::postBuild()
 {
-	BOOL rv = LLSysWellWindow::postBuild();
+	bool rv = LLSysWellWindow::postBuild();
 	setTitle(getString("title_notification_well_window"));
 	return rv;
 }
 
 // virtual
-void LLNotificationWellWindow::setVisible(BOOL visible)
+void LLNotificationWellWindow::setVisible(bool visible)
 {
 	if (visible)
 	{
@@ -683,9 +683,9 @@ LLIMWellWindow* LLIMWellWindow::findInstance(const LLSD& key /*= LLSD()*/)
 	return LLFloaterReg::findTypedInstance<LLIMWellWindow>("im_well_window", key);
 }
 
-BOOL LLIMWellWindow::postBuild()
+bool LLIMWellWindow::postBuild()
 {
-	BOOL rv = LLSysWellWindow::postBuild();
+	bool rv = LLSysWellWindow::postBuild();
 	setTitle(getString("title_im_well_window"));
 
 	LLIMChiclet::sFindChicletsSignal.connect(boost::bind(&LLIMWellWindow::findObjectChiclet, this, _1));
@@ -699,7 +699,7 @@ BOOL LLIMWellWindow::postBuild()
 // <FS:Ansariel> [FS communication UI]
 //virtual
 void LLIMWellWindow::sessionAdded(const LLUUID& session_id,
-								   const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg)
+								   const std::string& name, const LLUUID& other_participant_id, bool has_offline_msg)
 {
 	LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(session_id);
 	if (!session) return;
@@ -809,7 +809,7 @@ void LLIMWellWindow::delIMRow(const LLUUID& sessionId)
 	// hide chiclet window if there are no items left
 	if(isWindowEmpty())
 	{
-		setVisible(FALSE);
+		setVisible(false);
 	}
 	else
 	{
@@ -860,7 +860,7 @@ void LLIMWellWindow::removeObjectRow(const LLUUID& notification_id)
 	// hide chiclet window if there are no items left
 	if(isWindowEmpty())
 	{
-		setVisible(FALSE);
+		setVisible(false);
 	}
 }
 

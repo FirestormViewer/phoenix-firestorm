@@ -38,7 +38,7 @@ lggBeamMapFloater::~lggBeamMapFloater()
 {
 }
 
-BOOL lggBeamMapFloater::postBuild()
+bool lggBeamMapFloater::postBuild()
 {
 	getChild<LLUICtrl>("beamshape_save")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickSave, this));
 	getChild<LLUICtrl>("beamshape_clear")->setCommitCallback(boost::bind(&lggBeamMapFloater::onClickClear, this));
@@ -50,7 +50,7 @@ BOOL lggBeamMapFloater::postBuild()
 
 	mBeamshapePanel = getChild<LLPanel>("beamshape_draw");
 
-	return TRUE;
+	return true;
 }
 
 void lggBeamMapFloater::draw()
@@ -89,7 +89,7 @@ void lggBeamMapFloater::draw()
 	gGL.popMatrix();
 }
 
-BOOL lggBeamMapFloater::handleMouseDown(S32 x, S32 y, MASK mask)
+bool lggBeamMapFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	if (y > 39 && x > 16 && x < 394 && y < 317)
 	{
@@ -103,7 +103,7 @@ BOOL lggBeamMapFloater::handleMouseDown(S32 x, S32 y, MASK mask)
 	return LLFloater::handleMouseDown(x, y, mask);
 }
 
-BOOL lggBeamMapFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool lggBeamMapFloater::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	std::vector<lggPoint> newDots;
 	for (std::vector<lggPoint>::iterator it = mDots.begin(); it != mDots.end(); ++it)

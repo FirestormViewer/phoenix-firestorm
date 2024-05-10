@@ -380,10 +380,10 @@ void LLAgentListener::startAutoPilot(LLSD const & event_data)
         rotation_threshold = event_data["rotation_threshold"].asReal();
     }
 	
-	BOOL allow_flying = TRUE;
+	bool allow_flying = true;
 	if (event_data.has("allow_flying"))
 	{
-		allow_flying = (BOOL) event_data["allow_flying"].asBoolean();
+		allow_flying = (bool) event_data["allow_flying"].asBoolean();
 		mAgent.setFlying(allow_flying);
 	}
 
@@ -444,10 +444,10 @@ void LLAgentListener::startFollowPilot(LLSD const & event_data)
 {
 	LLUUID target_id;
 
-	BOOL allow_flying = TRUE;
+	bool allow_flying = true;
 	if (event_data.has("allow_flying"))
 	{
-		allow_flying = (BOOL) event_data["allow_flying"].asBoolean();
+		allow_flying = (bool) event_data["allow_flying"].asBoolean();
 	}
 
 	if (event_data.has("leader_id"))
@@ -502,7 +502,7 @@ void LLAgentListener::setAutoPilotTarget(LLSD const & event_data) const
 
 void LLAgentListener::stopAutoPilot(LLSD const & event_data) const
 {
-	BOOL user_cancel = FALSE;
+	bool user_cancel = false;
 	if (event_data.has("user_cancel"))
 	{
 		user_cancel = event_data["user_cancel"].asBoolean();

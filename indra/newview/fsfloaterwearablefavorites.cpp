@@ -53,8 +53,8 @@ FSWearableFavoritesItemsList::FSWearableFavoritesItemsList(const Params& p)
 {
 }
 
-BOOL FSWearableFavoritesItemsList::handleDragAndDrop(S32 x, S32 y, MASK mask,
-												  BOOL drop,
+bool FSWearableFavoritesItemsList::handleDragAndDrop(S32 x, S32 y, MASK mask,
+												  bool drop,
 												  EDragAndDropType cargo_type,
 												  void* cargo_data,
 												  EAcceptance* accept,
@@ -80,7 +80,7 @@ BOOL FSWearableFavoritesItemsList::handleDragAndDrop(S32 x, S32 y, MASK mask,
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 LLUUID FSFloaterWearableFavorites::sFolderID = LLUUID();
@@ -114,7 +114,7 @@ FSFloaterWearableFavorites::~FSFloaterWearableFavorites()
 }
 
 //virtual
-BOOL FSFloaterWearableFavorites::postBuild()
+bool FSFloaterWearableFavorites::postBuild()
 {
 	mItemsList = getChild<FSWearableFavoritesItemsList>("favorites_list");
 	mItemsList->setNoFilteredItemsMsg(getString("search_no_items"));
@@ -141,7 +141,7 @@ BOOL FSFloaterWearableFavorites::postBuild()
 		mOptionsButton->setMenu(options_menu, LLMenuButton::MP_BOTTOM_LEFT);
 	}
 
-	return TRUE;
+	return true;
 }
 
 //virtual
@@ -196,12 +196,12 @@ void FSFloaterWearableFavorites::draw()
 }
 
 //virtual
-BOOL FSFloaterWearableFavorites::handleKeyHere(KEY key, MASK mask)
+bool FSFloaterWearableFavorites::handleKeyHere(KEY key, MASK mask)
 {
 	if (FSCommon::isFilterEditorKeyCombo(key, mask))
 	{
-		mFilterEditor->setFocus(TRUE);
-		return TRUE;
+		mFilterEditor->setFocus(true);
+		return true;
 	}
 
 	return LLFloater::handleKeyHere(key, mask);

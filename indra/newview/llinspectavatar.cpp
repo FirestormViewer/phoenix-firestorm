@@ -85,7 +85,7 @@ public:
 	LLInspectAvatar(const LLSD& avatar_id);
 	virtual ~LLInspectAvatar();
 
-	/*virtual*/ BOOL postBuild(void);
+	/*virtual*/ bool postBuild(void);
 	
 	// Because floater is single instance, need to re-parse data on each spawn
 	// (for example, inspector about same avatar but in different position)
@@ -285,7 +285,7 @@ LLInspectAvatar::~LLInspectAvatar()
 }
 
 /*virtual*/
-BOOL LLInspectAvatar::postBuild(void)
+bool LLInspectAvatar::postBuild(void)
 {
 	// <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
 	getChild<LLUICtrl>("add_friend_btn")->setCommitCallback(
@@ -301,7 +301,7 @@ BOOL LLInspectAvatar::postBuild(void)
 	getChild<LLUICtrl>("volume_slider")->setCommitCallback(
 		boost::bind(&LLInspectAvatar::onVolumeChange, this, _2));
 
-	return TRUE;
+	return true;
 }
 
 // Multiple calls to showInstance("inspect_avatar", foo) will provide different
@@ -316,7 +316,7 @@ void LLInspectAvatar::onOpen(const LLSD& data)
 	mAvatarID = data["avatar_id"];
 
 	// <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
-	BOOL self = mAvatarID == gAgentID;
+	bool self = mAvatarID == gAgentID;
 	
 	getChild<LLUICtrl>("gear_btn")->setVisible(!self);
 	LLMenuButton* gear_self_btn = getChild<LLMenuButton>("gear_self_btn");

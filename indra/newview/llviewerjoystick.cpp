@@ -241,19 +241,19 @@ void LLViewerJoystick::updateEnabled(bool autoenable)
 {
 	if (mDriverState == JDS_UNINITIALIZED)
 	{
-		gSavedSettings.setBOOL("JoystickEnabled", FALSE );
+		gSavedSettings.setBOOL("JoystickEnabled", false);
 	}
 	else
 	{
 		// autoenable if user specifically chose this device
 		if (autoenable && (isLikeSpaceNavigator() || isDeviceUUIDSet())) 
 		{
-			gSavedSettings.setBOOL("JoystickEnabled", TRUE );
+			gSavedSettings.setBOOL("JoystickEnabled", true );
 		}
 	}
 	if (!gSavedSettings.getBOOL("JoystickEnabled"))
 	{
-		mOverrideCamera = FALSE;
+		mOverrideCamera = false;
 	}
 }
 
@@ -261,7 +261,7 @@ void LLViewerJoystick::setOverrideCamera(bool val)
 {
 	if (!gSavedSettings.getBOOL("JoystickEnabled"))
 	{
-		mOverrideCamera = FALSE;
+		mOverrideCamera = false;
 	}
 	else
 	{
@@ -361,7 +361,7 @@ void LLViewerJoystick::init(bool autoenable)
 
     loadDeviceIdFromSettings();
 
-	if (libinit == false)
+	if (!libinit)
 	{
 		// Note: The HotPlug callbacks are not actually getting called on Windows
 		if (ndof_libinit(HotPlugAddCallback, 
@@ -420,10 +420,10 @@ void LLViewerJoystick::init(bool autoenable)
 	// Autoenable the joystick for recognized devices if nothing was connected previously
 	if (!autoenable)
 	{
-		autoenable = gSavedSettings.getString("JoystickInitialized").empty() ? true : false;
+		autoenable = gSavedSettings.getString("JoystickInitialized").empty();
 	}
 	updateEnabled(autoenable);
-	
+
 	if (mDriverState == JDS_INITIALIZED)
 	{
 		// A Joystick device is plugged in
@@ -935,7 +935,7 @@ void LLViewerJoystick::moveAvatar(bool reset)
 			else if (!button_held)
 			{
 				button_held = true;
-				gAgent.setFlying(FALSE);
+				gAgent.setFlying(false);
 			}
 		}
 		else if (!button_held)
@@ -1474,7 +1474,7 @@ void LLViewerJoystick::setSNDefaults()
 #if LL_DARWIN || LL_LINUX
 	const float platformScale = 20.f;
 	const float platformScaleAvXZ = 1.f;
-	// The SpaceNavigator doesn't act as a 3D cursor on OS X / Linux. 
+	// The SpaceNavigator doesn't act as a 3D cursor on macOS / Linux.
 	const bool is_3d_cursor = false;
 #else
 	const float platformScale = 1.f;

@@ -106,7 +106,7 @@ LLPreviewNotecard::~LLPreviewNotecard()
 	// </FS:Ansariel>
 }
 
-BOOL LLPreviewNotecard::postBuild()
+bool LLPreviewNotecard::postBuild()
 {
 	mEditor = getChild<LLViewerTextEditor>("Notecard Editor");
 	mEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5)); // <FS:Ansariel> FIRE-22810: Add autoreplace to notecards
@@ -114,7 +114,7 @@ BOOL LLPreviewNotecard::postBuild()
 	mEditor->makePristine();
 
 	childSetAction("Save", onClickSave, this);
-	getChildView("lock")->setVisible( FALSE);	
+	getChildView("lock")->setVisible( false);	
 
 	childSetAction("Delete", onClickDelete, this);
 	getChildView("Delete")->setEnabled(false);
@@ -130,7 +130,7 @@ BOOL LLPreviewNotecard::postBuild()
 	if (item)
 	{
 		getChild<LLUICtrl>("desc")->setValue(item->getDescription());
-		BOOL source_library = mObjectUUID.isNull() && gInventory.isObjectDescendentOf(item->getUUID(), gInventory.getLibraryRootFolderID());
+		bool source_library = mObjectUUID.isNull() && gInventory.isObjectDescendentOf(item->getUUID(), gInventory.getLibraryRootFolderID());
 		getChildView("Delete")->setEnabled(!source_library);
 	}
 	getChild<LLLineEditor>("desc")->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
@@ -150,7 +150,7 @@ bool LLPreviewNotecard::saveItem()
 	return saveIfNeeded(item);
 }
 
-void LLPreviewNotecard::setEnabled( BOOL enabled )
+void LLPreviewNotecard::setEnabled(bool enabled)
 {
 	LLViewerTextEditor* editor = findChild<LLViewerTextEditor>("Notecard Editor");
 	// editor is part of xml, if it doesn't exists, nothing else does
@@ -167,7 +167,7 @@ void LLPreviewNotecard::setEnabled( BOOL enabled )
 void LLPreviewNotecard::draw()
 {
 	LLViewerTextEditor* editor = getChild<LLViewerTextEditor>("Notecard Editor");
-	BOOL changed = !editor->isPristine();
+	bool changed = !editor->isPristine();
 
 	getChildView("Save")->setEnabled(changed && getEnabled());
 	
@@ -182,19 +182,19 @@ bool LLPreviewNotecard::hasAccelerators() const
 // [/SL:KB]
 
 // virtual
-BOOL LLPreviewNotecard::handleKeyHere(KEY key, MASK mask)
+bool LLPreviewNotecard::handleKeyHere(KEY key, MASK mask)
 {
 	if(('S' == key) && (MASK_CONTROL == (mask & MASK_CONTROL)))
 	{
 		saveIfNeeded();
-		return TRUE;
+		return true;
 	}
 
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
 	if(('F' == key) && (MASK_CONTROL == (mask & MASK_CONTROL)))
 	{
 		LLFloaterSearchReplace::show(getEditor());
-		return TRUE;
+		return true;
 	}
 // [/SL:KB]
 
@@ -202,23 +202,23 @@ BOOL LLPreviewNotecard::handleKeyHere(KEY key, MASK mask)
 }
 
 // virtual
-BOOL LLPreviewNotecard::canClose()
+bool LLPreviewNotecard::canClose()
 {
 	LLViewerTextEditor* editor = getChild<LLViewerTextEditor>("Notecard Editor");
 
 	if(mForceClose || editor->isPristine())
 	{
-		return TRUE;
+		return true;
 	}
 	else
 	{
 		if(!mSaveDialogShown)
 		{
-			mSaveDialogShown = TRUE;
+			mSaveDialogShown = true;
 			// Bring up view-modal dialog: Save changes? Yes, No, Cancel
 			LLNotificationsUtil::add("SaveChanges", LLSD(), LLSD(), boost::bind(&LLPreviewNotecard::handleSaveChangesDialog,this, _1, _2));
 		}
-		return FALSE;
+		return false;
 	}
 }
 
@@ -301,10 +301,10 @@ void LLPreviewNotecard::loadAsset()
 	if(item)
 	{
 		LLPermissions perm(item->getPermissions());
-		BOOL is_owner = gAgent.allowOperation(PERM_OWNER, perm, GP_OBJECT_MANIPULATE);
-		BOOL allow_copy = gAgent.allowOperation(PERM_COPY, perm, GP_OBJECT_MANIPULATE);
-		BOOL allow_modify = canModify(mObjectUUID, item);
-		BOOL source_library = mObjectUUID.isNull() && gInventory.isObjectDescendentOf(mItemUUID, gInventory.getLibraryRootFolderID());
+		bool is_owner = gAgent.allowOperation(PERM_OWNER, perm, GP_OBJECT_MANIPULATE);
+		bool allow_copy = gAgent.allowOperation(PERM_COPY, perm, GP_OBJECT_MANIPULATE);
+		bool allow_modify = canModify(mObjectUUID, item);
+		bool source_library = mObjectUUID.isNull() && gInventory.isObjectDescendentOf(mItemUUID, gInventory.getLibraryRootFolderID());
 
 		if (allow_copy || gAgent.isGodlike())
 		{
@@ -313,7 +313,7 @@ void LLPreviewNotecard::loadAsset()
 			{
 				editor->setText(LLStringUtil::null);
 				editor->makePristine();
-				editor->setEnabled(TRUE);
+				editor->setEnabled(true);
 				mAssetStatus = PREVIEW_ASSET_LOADED;
 			}
 			else
@@ -334,7 +334,7 @@ void LLPreviewNotecard::loadAsset()
 						mAssetID.setNull();
 						editor->setText(getString("no_object"));
 						editor->makePristine();
-						editor->setEnabled(FALSE);
+						editor->setEnabled(false);
 						mAssetStatus = PREVIEW_ASSET_LOADED;
 						return;
 					}
@@ -356,7 +356,7 @@ void LLPreviewNotecard::loadAsset()
 												item->getType(),
 												&onLoadComplete,
 												(void*)user_data,
-												TRUE);
+												true);
 				mAssetStatus = PREVIEW_ASSET_LOADING;
 			}
 		}
@@ -365,20 +365,20 @@ void LLPreviewNotecard::loadAsset()
 			mAssetID.setNull();
 			editor->setText(getString("not_allowed"));
 			editor->makePristine();
-			editor->setEnabled(FALSE);
+			editor->setEnabled(false);
 			mAssetStatus = PREVIEW_ASSET_LOADED;
 		}
 
 		if(!allow_modify)
 		{
-			editor->setEnabled(FALSE);
-			getChildView("lock")->setVisible( TRUE);
-			getChildView("Edit")->setEnabled(FALSE);
+			editor->setEnabled(false);
+			getChildView("lock")->setVisible( true);
+			getChildView("Edit")->setEnabled(false);
 		}
 
 		if((allow_modify || is_owner) && !source_library)
 		{
-			getChildView("Delete")->setEnabled(TRUE);
+			getChildView("Delete")->setEnabled(true);
 		}
 	}
     else if (mObjectUUID.notNull() && mItemUUID.notNull())
@@ -409,7 +409,7 @@ void LLPreviewNotecard::loadAsset()
 	{
 		editor->setText(LLStringUtil::null);
 		editor->makePristine();
-		editor->setEnabled(TRUE);
+		editor->setEnabled(true);
 		// Don't set asset status here; we may not have set the item id yet
 		// (e.g. when this gets called initially)
 		//mAssetStatus = PREVIEW_ASSET_LOADED;
@@ -455,7 +455,7 @@ void LLPreviewNotecard::onLoadComplete(const LLUUID& asset_uuid,
 			}
 
 			previewEditor->makePristine();
-			BOOL modifiable = preview->canModify(preview->mObjectID, preview->getItem());
+			bool modifiable = preview->canModify(preview->mObjectID, preview->getItem());
 			// <FS:Ansariel> Force spell checker to check again after saving a NC,
 			//               or misspelled words wouldn't be shown
 			previewEditor->onSpellCheckSettingsChange();
@@ -677,7 +677,7 @@ bool LLPreviewNotecard::saveIfNeeded(LLInventoryItem* copyitem, bool sync)
 				gAssetStorage->storeAssetData(tid, LLAssetType::AT_NOTECARD,
 												&onSaveComplete,
 												(void*)info,
-												FALSE);
+												false);
 				// <FS:Ansariel> FIRE-9039: Close notecard after choosing "Save" in close confirmation
 				//return true;
 			}
@@ -740,7 +740,7 @@ void LLPreviewNotecard::onSaveComplete(const LLUUID& asset_uuid, void* user_data
 				LLPointer<LLViewerInventoryItem> new_item = new LLViewerInventoryItem(item);
 				new_item->setAssetUUID(asset_uuid);
 				new_item->setTransactionID(info->mTransactionID);
-				new_item->updateServer(FALSE);
+				new_item->updateServer(false);
 				gInventory.updateItem(new_item);
 				gInventory.notifyObservers();
 			}
@@ -806,17 +806,17 @@ void LLPreviewNotecard::onSaveComplete(const LLUUID& asset_uuid, void* user_data
 
 bool LLPreviewNotecard::handleSaveChangesDialog(const LLSD& notification, const LLSD& response)
 {
-	mSaveDialogShown = FALSE;
+	mSaveDialogShown = false;
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	switch(option)
 	{
 	case 0:  // "Yes"
-		mCloseAfterSave = TRUE;
+		mCloseAfterSave = true;
 		LLPreviewNotecard::onClickSave((void*)this);
 		break;
 
 	case 1:  // "No"
-		mForceClose = TRUE;
+		mForceClose = true;
 		closeFloater();
 		break;
 
@@ -845,7 +845,7 @@ bool LLPreviewNotecard::handleConfirmDeleteDialog(const LLSD& notification, cons
 		if (item != NULL)
 		{
 			const LLUUID trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
-			gInventory.changeItemParent(item, trash_id, FALSE);
+			gInventory.changeItemParent(item, trash_id, false);
 		}
 	}
 	else
@@ -863,7 +863,7 @@ bool LLPreviewNotecard::handleConfirmDeleteDialog(const LLSD& notification, cons
 	}
 
 	// close floater, ignore unsaved changes
-	mForceClose = TRUE;
+	mForceClose = true;
 	closeFloater();
 	return false;
 }

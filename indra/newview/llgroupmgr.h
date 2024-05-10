@@ -84,14 +84,14 @@ public:
 						U64 agent_powers,
 						const std::string& title,
 						const std::string& online_status,
-						BOOL is_owner);
+						bool is_owner);
 
 	~LLGroupMemberData();
 
 	const LLUUID& getID() const { return mID; }
 	S32 getContribution() const { return mContribution; }
 	U64	getAgentPowers() const { return mAgentPowers; }
-	BOOL isOwner() const { return mIsOwner; }
+	bool isOwner() const { return mIsOwner; }
 	const std::string& getTitle() const { return mTitle; }
 	const std::string& getOnlineStatus() const { return mOnlineStatus; }
 	void addRole(const LLUUID& role, LLGroupRoleData* rd);
@@ -104,7 +104,7 @@ public:
 	role_list_t::const_iterator roleEnd() const { return mRolesList.end(); }
 // [/SL:KB]
 
-	BOOL isInRole(const LLUUID& role_id) { return (mRolesList.find(role_id) != mRolesList.end()); }
+	bool isInRole(const LLUUID& role_id) { return (mRolesList.find(role_id) != mRolesList.end()); }
 
 private:
 	LLUUID	mID;
@@ -112,7 +112,7 @@ private:
 	U64		mAgentPowers;
 	std::string	mTitle;
 	std::string	mOnlineStatus;
-	BOOL	mIsOwner;
+	bool	mIsOwner;
 	role_list_t mRolesList;
 };
 
@@ -154,7 +154,7 @@ public:
 	const LLUUID& getID() const { return mRoleID; }
 
 	const uuid_vec_t& getRoleMembers() const { return mMemberIDs; }
-	S32 getMembersInRole(uuid_vec_t members, BOOL needs_sort = TRUE);
+	S32 getMembersInRole(uuid_vec_t members, bool needs_sort = true);
 	S32 getTotalMembersInRole() { return mMemberCount ? mMemberCount : mMemberIDs.size(); } //FIXME: Returns 0 for Everyone role when Member list isn't yet loaded, see MAINT-5225
 
 	LLRoleData getRoleData() const { return mRoleData; }
@@ -173,7 +173,7 @@ public:
 
 protected:
 	LLGroupRoleData()
-	: mMemberCount(0), mMembersNeedsSort(FALSE) {}
+	: mMemberCount(0), mMembersNeedsSort(false) {}
 
 	LLUUID mRoleID;
 	LLRoleData	mRoleData;
@@ -182,7 +182,7 @@ protected:
 	S32	mMemberCount;
 
 private:
-	BOOL mMembersNeedsSort;
+	bool mMembersNeedsSort;
 };
 
 struct LLRoleMemberChange
@@ -225,7 +225,7 @@ struct LLGroupTitle
 {
 	std::string mTitle;
 	LLUUID		mRoleID;
-	BOOL		mSelected;
+	bool		mSelected;
 };
 
 class LLGroupMgrGroupData
@@ -238,11 +238,11 @@ public:
 
 	const LLUUID& getID() { return mID; }
 
-	BOOL getRoleData(const LLUUID& role_id, LLRoleData& role_data);
+	bool getRoleData(const LLUUID& role_id, LLRoleData& role_data);
 	void setRoleData(const LLUUID& role_id, LLRoleData role_data);
 	void createRole(const LLUUID& role_id, LLRoleData role_data);
 	void deleteRole(const LLUUID& role_id);
-	BOOL pendingRoleChanges();
+	bool pendingRoleChanges();
 
 	void addRolePower(const LLUUID& role_id, U64 power);
 	void removeRolePower(const LLUUID& role_id, U64 power);
@@ -307,15 +307,15 @@ public:
 	LLUUID				mOwnerRole;
 	std::string			mName;
 	std::string			mCharter;
-	BOOL				mShowInList;
+	bool				mShowInList;
 	LLUUID				mInsigniaID;
 	LLUUID				mFounderID;
-	BOOL				mOpenEnrollment;
+	bool				mOpenEnrollment;
 	S32					mMembershipFee;
-	BOOL				mAllowPublish;
-	BOOL				mListInProfile;
-	BOOL				mMaturePublish;
-	BOOL				mChanged;
+	bool				mAllowPublish;
+	bool				mListInProfile;
+	bool				mMaturePublish;
+	bool				mChanged;
 	S32					mMemberCount;
 	S32					mRoleCount;
 
@@ -408,9 +408,9 @@ public:
 									   U8 show_in_list,
 									   const LLUUID& insignia,
 									   S32 membership_fee,
-									   BOOL open_enrollment,
-									   BOOL allow_publish,
-									   BOOL mature_publish);
+									   bool open_enrollment,
+									   bool allow_publish,
+									   bool mature_publish);
 
 	static void sendGroupMemberJoin(const LLUUID& group_id);
 	static void sendGroupMemberInvites(const LLUUID& group_id, std::map<LLUUID,LLUUID>& role_member_pairs);

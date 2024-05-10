@@ -69,18 +69,18 @@ public:
 	{
 		LLUUID mItemID;
 		U8 mAttachmentPt;
-		BOOL mAdd;
+		bool mAdd;
 	};
 	typedef std::deque<AttachmentsInfo> attachments_vec_t;
 
 // [RLVa:KB] - Checked: 2010-09-13 (RLVa-1.2.1)
 	void addAttachmentRequest(const LLUUID& item_id,
                               const U8 attachment_pt,
-                              const BOOL add, const BOOL fRlvForce = FALSE);
+                              const bool add, const bool fRlvForce = false);
 // [/RLVa:KB]
 //	void addAttachmentRequest(const LLUUID& item_id,
 //                              const U8 attachment_pt,
-//                              const BOOL add);
+//                              const bool add);
     void onAttachmentRequested(const LLUUID& item_id);
 	void requestAttachments(attachments_vec_t& attachment_requests);
 	static void onIdle(void *);
@@ -103,8 +103,8 @@ private:
         LLItemRequestTimes(const std::string& op_name, F32 timeout);
         void addTime(const LLUUID& inv_item_id);
         void removeTime(const LLUUID& inv_item_id);
-        BOOL wasRequestedRecently(const LLUUID& item_id) const;
-        BOOL getTime(const LLUUID& inv_item_id, LLTimer& timer) const;
+        bool wasRequestedRecently(const LLUUID& item_id) const;
+        bool getTime(const LLUUID& inv_item_id, LLTimer& timer) const;
 
     private:
         F32 mTimeout;

@@ -52,15 +52,15 @@ LLFloaterAvatarTextures::~LLFloaterAvatarTextures()
 {
 }
 
-BOOL LLFloaterAvatarTextures::postBuild()
+bool LLFloaterAvatarTextures::postBuild()
 {
 	for (U32 i=0; i < TEX_NUM_INDICES; i++)
 	{
 		const std::string tex_name = LLAvatarAppearance::getDictionary()->getTexture(ETextureIndex(i))->mName;
 		mTextures[i] = getChild<LLTextureCtrl>(tex_name);
 		// <FS:Ansariel> Mask avatar textures and disable
-		mTextures[i]->setIsMasked(TRUE);
-		mTextures[i]->setEnabled(FALSE);
+		mTextures[i]->setIsMasked(true);
+		mTextures[i]->setEnabled(false);
 		// </FS:Ansariel>
 	}
 	mTitle = getTitle();
@@ -71,7 +71,7 @@ BOOL LLFloaterAvatarTextures::postBuild()
 	childSetVisible("Dump", gAgent.isGodlike());
 
 	refresh();
-	return TRUE;
+	return true;
 }
 
 void LLFloaterAvatarTextures::draw()

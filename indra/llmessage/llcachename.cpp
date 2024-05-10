@@ -98,14 +98,14 @@ public:
 		: mID(id), mHost(host)
 	{
 	}
-	
+
 	boost::signals2::connection setCallback(const LLCacheNameCallback& cb)
 	{
 		return mSignal.connect(cb);
 	}
-	
+
 	void done()			{ mID.setNull(); }
-	bool isDone() const	{ return mID.isNull() != FALSE; }
+	bool isDone() const	{ return mID.isNull(); }
 };
 
 class ReplySender
@@ -221,7 +221,7 @@ public:
 	Impl(LLMessageSystem* msg);
 	~Impl();
 
-	BOOL getName(const LLUUID& id, std::string& first, std::string& last);
+	bool getName(const LLUUID& id, std::string& first, std::string& last);
 
 	// <FS:Ansariel> Fix stale legacy requests
 	//boost::signals2::connection addPending(const LLUUID& id, const LLCacheNameCallback& callback);
@@ -426,13 +426,13 @@ void LLCacheName::exportFile(std::ostream& ostr)
 }
 
 
-BOOL LLCacheName::Impl::getName(const LLUUID& id, std::string& first, std::string& last)
+bool LLCacheName::Impl::getName(const LLUUID& id, std::string& first, std::string& last)
 {
 	if(id.isNull())
 	{
 		first = sCacheName["nobody"];
 		last.clear();
-		return TRUE;
+		return true;
 	}
 
 	LLCacheNameEntry* entry = get_ptr_in_map(mCache, id );
@@ -440,7 +440,7 @@ BOOL LLCacheName::Impl::getName(const LLUUID& id, std::string& first, std::strin
 	{
 		first = entry->mFirstName;
 		last =  entry->mLastName;
-		return TRUE;
+		return true;
 	}
 	else
 	{
@@ -450,7 +450,7 @@ BOOL LLCacheName::Impl::getName(const LLUUID& id, std::string& first, std::strin
 		{
 			mAskNameQueue.insert(id);
 		}	
-		return FALSE;
+		return false;
 	}
 
 }
@@ -464,27 +464,27 @@ void LLCacheName::localizeCacheName(std::string key, std::string value)
 		LL_WARNS()<< " Error localizing cache key " << key << " To "<< value<<LL_ENDL;
 }
 
-BOOL LLCacheName::getFullName(const LLUUID& id, std::string& fullname)
+bool LLCacheName::getFullName(const LLUUID& id, std::string& fullname)
 {
 	std::string first_name, last_name;
-	BOOL res = impl.getName(id, first_name, last_name);
+	bool res = impl.getName(id, first_name, last_name);
 	fullname = buildFullName(first_name, last_name);
 	return res;
 }
 
 // <FS:CR> Returns first name, last name
-BOOL LLCacheName::getFirstLastName(const LLUUID& id, std::string& first, std::string& last)
+bool LLCacheName::getFirstLastName(const LLUUID& id, std::string& first, std::string& last)
 {
 	return impl.getName(id, first, last);
 }
 // </FS:CR>
 
-BOOL LLCacheName::getGroupName(const LLUUID& id, std::string& group)
+bool LLCacheName::getGroupName(const LLUUID& id, std::string& group)
 {
 	if(id.isNull())
 	{
 		group = sCacheName["none"];
-		return TRUE;
+		return true;
 	}
 
 	LLCacheNameEntry* entry = get_ptr_in_map(impl.mCache,id);
@@ -500,7 +500,7 @@ BOOL LLCacheName::getGroupName(const LLUUID& id, std::string& group)
 	if (entry)
 	{
 		group = entry->mGroupName;
-		return TRUE;
+		return true;
 	}
 	else 
 	{
@@ -509,27 +509,27 @@ BOOL LLCacheName::getGroupName(const LLUUID& id, std::string& group)
 		{
 			impl.mAskGroupQueue.insert(id);
 		}
-		return FALSE;
+		return false;
 	}
 }
 
-BOOL LLCacheName::getUUID(const std::string& first, const std::string& last, LLUUID& id)
+bool LLCacheName::getUUID(const std::string& first, const std::string& last, LLUUID& id)
 {
 	std::string full_name = buildFullName(first, last);
 	return getUUID(full_name, id);
 }
 
-BOOL LLCacheName::getUUID(const std::string& full_name, LLUUID& id)
+bool LLCacheName::getUUID(const std::string& full_name, LLUUID& id)
 {
 	ReverseCache::iterator iter = impl.mReverseCache.find(full_name);
 	if (iter != impl.mReverseCache.end())
 	{
 		id = iter->second;
-		return TRUE;
+		return true;
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 }
 
@@ -721,16 +721,15 @@ boost::signals2::connection LLCacheName::get(const LLUUID& id, bool is_group, co
 }
 
 // NaCl - Sound explorer
-BOOL LLCacheName::getIfThere(const LLUUID& id, std::string& fullname, BOOL& is_group)
+bool LLCacheName::getIfThere(const LLUUID& id, std::string& fullname, bool& is_group)
 {
-	if(id.isNull())
+	if (id.isNull())
 	{
 		fullname = "";
-		return FALSE;
+		return false;
 	}
 
-	LLCacheNameEntry* entry = get_ptr_in_map(impl.mCache, id );
-	if (entry)
+	if (LLCacheNameEntry* entry = get_ptr_in_map(impl.mCache, id); entry)
 	{
 		if (entry->mIsGroup)
 		{
@@ -741,10 +740,11 @@ BOOL LLCacheName::getIfThere(const LLUUID& id, std::string& fullname, BOOL& is_g
 			fullname = buildFullName(entry->mFirstName, entry->mLastName);
 		}
 		is_group = entry->mIsGroup;
-		return TRUE;
+		return true;
 	}
+
 	fullname = "";
-	return FALSE;
+	return false;
 }
 // NaCl end
 

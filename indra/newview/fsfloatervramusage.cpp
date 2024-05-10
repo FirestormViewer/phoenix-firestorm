@@ -82,14 +82,14 @@ FSFloaterVRAMUsage::~FSFloaterVRAMUsage()
  	gIdleCallbacks.deleteFunction( &::onIdle, this );
 	delete mData;
 	LLSelectMgr::instance().removePropertyListener( this );
-	LLSelectMgr::instance().enableSilhouette( TRUE );
+	LLSelectMgr::instance().enableSilhouette( true );
 }
 
 void FSFloaterVRAMUsage::onOpen(const LLSD& key)
 {
 }
 
-BOOL FSFloaterVRAMUsage::postBuild()
+bool FSFloaterVRAMUsage::postBuild()
 {
 	LLButton *pRefresh = getChild< LLButton >( "refresh_button" );
 	pRefresh->setClickedCallback( boost::bind( &FSFloaterVRAMUsage::doRefresh, this ) );
@@ -97,9 +97,9 @@ BOOL FSFloaterVRAMUsage::postBuild()
 	mData->mList = getChild< LLScrollListCtrl >( "result_list" );
 
 	LLSelectMgr::instance().registerPropertyListener( this );
-	LLSelectMgr::instance().enableSilhouette( FALSE );
+	LLSelectMgr::instance().enableSilhouette( false );
 
-	return TRUE;
+	return true;
 }
 
 void FSFloaterVRAMUsage::onIdle()

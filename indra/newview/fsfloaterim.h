@@ -66,17 +66,17 @@ public:
 	virtual ~FSFloaterIM();
 	
 	// LLView overrides
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ void setVisible(BOOL visible);
-	/*virtual*/ BOOL getVisible();
-	/*virtual*/ void setMinimized(BOOL b);
+	/*virtual*/ bool postBuild();
+	/*virtual*/ void setVisible(bool visible);
+	/*virtual*/ bool getVisible();
+	/*virtual*/ void setMinimized(bool b);
 
 	// LLFloater overrides
 	/*virtual*/ void onClose(bool app_quitting);
 	/*virtual*/ void setDocked(bool docked, bool pop_on_undock = true);
 	/*virtual*/ void onSnooze();
 
-	/*virtual*/ BOOL tick();
+	/*virtual*/ bool tick();
 
 	// Make IM conversion visible and update the message history
 	static FSFloaterIM* show(const LLUUID& session_id);
@@ -108,10 +108,10 @@ public:
 	void updateCallButton();
 	void changed(U32 mask);
 	// ## Zi: overridden to fix the IM focus bug - FIRE-3989 etc.
-	BOOL focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
+	bool focusFirstItem(bool prefer_text_fields = false, bool focus_flash = true );
 
-	void onVisibilityChange(BOOL new_visibility);
-	void processIMTyping(const LLUUID& from_id, BOOL typing);
+	void onVisibilityChange(bool new_visibility);
+	void processIMTyping(const LLUUID& from_id, bool typing);
 	void processAgentListUpdates(const LLSD& body);
 
 	void updateChatHistoryStyle();
@@ -121,12 +121,12 @@ public:
 
 	void onChatSearchButtonClicked();
 
-	BOOL handleDragAndDrop(S32 x, S32 y, MASK mask,
-							   BOOL drop, EDragAndDropType cargo_type,
+	bool handleDragAndDrop(S32 x, S32 y, MASK mask,
+							   bool drop, EDragAndDropType cargo_type,
 							   void *cargo_data, EAcceptance *accept,
 							   std::string& tooltip_msg);
 
-	virtual BOOL handleKeyHere( KEY key, MASK mask );
+	virtual bool handleKeyHere( KEY key, MASK mask );
 
 	/**
 	 * Returns true if chat is displayed in multi tabbed floater
@@ -173,7 +173,7 @@ protected:
 	LLButton* mSysinfoButton;
 	// support sysinfo button -Zi
 
-	BOOL enableViewerVersionCallback(const LLSD& notification,const LLSD& response);		// <FS:Zi> Viewer version popup
+	bool enableViewerVersionCallback(const LLSD& notification,const LLSD& response);		// <FS:Zi> Viewer version popup
 	void reshapeChatLayoutPanel();
 private:
 	// process focus events to set a currently active session
@@ -191,8 +191,8 @@ private:
 	bool dropCategory(LLInventoryCategory* category, bool drop);
 	bool dropPerson(LLUUID* person_id, bool drop);
 
-	BOOL isInviteAllowed() const;
-	BOOL inviteToSession(const uuid_vec_t& agent_ids);
+	bool isInviteAllowed() const;
+	bool inviteToSession(const uuid_vec_t& agent_ids);
 	
 	void onInputEditorFocusReceived();
 	void onInputEditorFocusLost();
@@ -203,7 +203,7 @@ private:
 
 	// support sysinfo button -Zi
 	void onSysinfoButtonClicked();
-	BOOL onSendSysinfo(const LLSD& notification,const LLSD& response);
+	bool onSendSysinfo(const LLSD& notification,const LLSD& response);
 	// support sysinfo button -Zi
 
 	// connection to voice channel state change signal
@@ -304,7 +304,7 @@ public:
 	typedef boost::function<void()> callback_t;
 
 	FSFloaterIMTimer(callback_t callback);
-	/*virtual*/ BOOL tick();
+	/*virtual*/ bool tick();
 
 private:
 	callback_t mCallback;

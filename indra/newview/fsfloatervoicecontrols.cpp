@@ -107,7 +107,7 @@ FSFloaterVoiceControls::~FSFloaterVoiceControls()
 }
 
 // virtual
-BOOL FSFloaterVoiceControls::postBuild()
+bool FSFloaterVoiceControls::postBuild()
 {
 	mAvatarList = getChild<LLAvatarList>("speakers_list");
 	mAvatarListRefreshConnection = mAvatarList->setRefreshCompleteCallback(boost::bind(&FSFloaterVoiceControls::onAvatarListRefreshed, this));
@@ -134,7 +134,7 @@ BOOL FSFloaterVoiceControls::postBuild()
 	updateTransparency(TT_ACTIVE); // force using active floater transparency (STORM-730)
 	
 	updateSession();
-	return TRUE;
+	return true;
 }
 
 // virtual
@@ -171,7 +171,7 @@ void FSFloaterVoiceControls::draw()
 }
 
 // virtual
-void FSFloaterVoiceControls::setFocus( BOOL b )
+void FSFloaterVoiceControls::setFocus( bool b )
 {
 	LLFloater::setFocus(b);
 
@@ -336,8 +336,8 @@ void FSFloaterVoiceControls::onParticipantSelected()
 	uuid_vec_t participants;
 	mAvatarList->getSelectedUUIDs(participants);
 
-	mVolumeSlider->setEnabled(FALSE);
-	mMuteButton->setEnabled(FALSE);
+	mVolumeSlider->setEnabled(false);
+	mMuteButton->setEnabled(false);
 
 	mSelectedParticipant=LLUUID::null;
 
@@ -352,8 +352,8 @@ void FSFloaterVoiceControls::onParticipantSelected()
 	if(!LLVoiceClient::instance().getVoiceEnabled(mSelectedParticipant))
 		return;
 
-	mVolumeSlider->setEnabled(TRUE);
-	mMuteButton->setEnabled(TRUE);
+	mVolumeSlider->setEnabled(true);
+	mMuteButton->setEnabled(true);
 
 	mMuteButton->setToggleState(LLVoiceClient::instance().getOnMuteList(mSelectedParticipant));
 	mVolumeSlider->setValue(LLVoiceClient::instance().getUserVolume(mSelectedParticipant));
@@ -607,7 +607,7 @@ void FSFloaterVoiceControls::updateParticipantsVoiceState()
 			LLPointer<LLSpeaker> speaker = mSpeakerManager->findSpeaker(participant_id);
 			if (speaker.isNull())
 				continue;
-			speaker->mHasLeftCurrentCall = FALSE;
+			speaker->mHasLeftCurrentCall = false;
 
 			speakers_uuids.erase(speakers_iter);
 			found = true;
@@ -637,7 +637,7 @@ void FSFloaterVoiceControls::updateNotInVoiceParticipantState(LLAvatarListItem* 
 			LLPointer<LLSpeaker> speaker = mSpeakerManager->findSpeaker(participant_id);
 			if (speaker.notNull())
 			{
-				speaker->mHasLeftCurrentCall = TRUE;
+				speaker->mHasLeftCurrentCall = true;
 			}
 		}
 		break;
@@ -825,7 +825,7 @@ void FSFloaterVoiceControls::reset(const LLVoiceChannel::EState& new_state)
 	}
 
 	// Ansariel: Changed for RLVa @shownearby
-	//mAvatarList->setVisible(TRUE);
+	//mAvatarList->setVisible(true);
 	updateListVisibility();
 
 	mSpeakerManager = NULL;
@@ -841,13 +841,13 @@ void FSFloaterVoiceControls::updateListVisibility()
 {
 	if (mIsRlvShowNearbyRestricted && mVoiceType == VC_LOCAL_CHAT)
 	{
-		mAvatarList->setVisible(FALSE);
-		mRlvRestrictedText->setVisible(TRUE);
+		mAvatarList->setVisible(false);
+		mRlvRestrictedText->setVisible(true);
 	}
 	else
 	{
-		mAvatarList->setVisible(TRUE);
-		mRlvRestrictedText->setVisible(FALSE);
+		mAvatarList->setVisible(true);
+		mRlvRestrictedText->setVisible(false);
 	}
 }
 //EOF

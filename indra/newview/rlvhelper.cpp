@@ -1286,9 +1286,9 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 	// Grab a list of all the items we'll be wearing/attaching
 	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
 	RlvWearableItemCollector f(pFolder, eAction, eFlags);
-	gInventory.collectDescendentsIf(pFolder->getUUID(), folders, items, FALSE, f, true);
+	gInventory.collectDescendentsIf(pFolder->getUUID(), folders, items, false, f, true);
 
-	// TRUE if we've already encountered this LLWearableType::EType (used only on wear actions and only for AT_CLOTHING)
+	// true if we've already encountered this LLWearableType::EType (used only on wear actions and only for AT_CLOTHING)
 	bool fSeenWType[LLWearableType::WT_COUNT] = { false };
 
 	EWearAction eCurAction = eAction;
@@ -1968,7 +1968,7 @@ void RlvBehaviourNotifyHandler::onStand(const LLUUID& idObj, bool fAllowed)
 //
 
 // Checked: 2010-03-13 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-BOOL RlvGCTimer::tick()
+bool RlvGCTimer::tick()
 {
 	bool fContinue = gRlvHandler.onGC();
 	if (!fContinue)
@@ -2092,7 +2092,7 @@ namespace Rlv
 		if ( (LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders")) && (!LLPipeline::WindLightUseAtmosShaders) )
 		{
 			// Triggers handleSetShaderChanged() which will do the actual work for us
-			gSavedSettings.setBOOL("WindLightUseAtmosShaders", TRUE);
+			gSavedSettings.setBOOL("WindLightUseAtmosShaders", true);
 		}
 	}
 

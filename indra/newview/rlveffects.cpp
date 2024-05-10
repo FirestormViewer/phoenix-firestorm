@@ -357,7 +357,7 @@ void RlvSphereEffect::renderPass(LLGLSLShader* pShader, const LLShaderEffectPara
 	S32 nDepthChannel = pShader->enableTexture(LLShaderMgr::DEFERRED_DEPTH, gPipeline.mRT->deferredScreen.getUsage());
 	if (nDepthChannel > -1)
 	{
-		gGL.getTexUnit(nDepthChannel)->bind(&gPipeline.mRT->deferredScreen, TRUE);
+		gGL.getTexUnit(nDepthChannel)->bind(&gPipeline.mRT->deferredScreen, true);
 	}
 
 	gPipeline.mScreenTriangleVB->setBuffer();

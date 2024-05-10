@@ -680,7 +680,7 @@ void LLAvatarActions::teleport_request_callback(const LLSD& notification, const 
 		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
 
 		msg->nextBlockFast(_PREHASH_MessageBlock);
-		msg->addBOOLFast(_PREHASH_FromGroup, FALSE);
+		msg->addBOOLFast(_PREHASH_FromGroup, false);
 		msg->addUUIDFast(_PREHASH_ToAgentID, notification["substitutions"]["uuid"] );
 		msg->addU8Fast(_PREHASH_Offline, IM_ONLINE);
 		msg->addU8Fast(_PREHASH_Dialog, IM_TELEPORT_REQUEST);
@@ -927,7 +927,7 @@ namespace action_give_inventory
 	 */
 	static LLInventoryPanel* get_active_inventory_panel()
 	{
-		LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel(FALSE);
+		LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel(false);
 		LLFloater* floater_appearance = LLFloaterReg::findInstance("appearance");
 		if (!active_panel || (floater_appearance && floater_appearance->hasFocus()))
 		{
@@ -1302,8 +1302,8 @@ void LLAvatarActions::shareWithAvatars(LLView * panel)
 	LLInventoryPanel* inv_panel = dynamic_cast<LLInventoryPanel*>(panel);
 	LLFloaterAvatarPicker* picker =
 		// <FS:Ansariel> FIRE-32377: Don't include own avatar when sharing items
-		//LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2, inv_panel), TRUE, FALSE, FALSE, root_floater->getName());
-		LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2, inv_panel), TRUE, FALSE, TRUE, root_floater->getName());
+		//LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2, inv_panel), true, false, false, root_floater->getName());
+		LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2, inv_panel), true, false, true, root_floater->getName());
 	if (!picker)
 	{
 		return;
@@ -1325,7 +1325,7 @@ void LLAvatarActions::shareWithAvatars(const uuid_set_t inventory_selected_uuids
     using namespace action_give_inventory;
 
     LLFloaterAvatarPicker* picker =
-        LLFloaterAvatarPicker::show(boost::bind(give_inventory_ids, _1, _2, inventory_selected_uuids), TRUE, FALSE, FALSE, root_floater->getName());
+        LLFloaterAvatarPicker::show(boost::bind(give_inventory_ids, _1, _2, inventory_selected_uuids), true, false, false, root_floater->getName());
     if (!picker)
     {
         return;
@@ -1548,7 +1548,7 @@ void LLAvatarActions::viewChatHistory(const LLUUID& id)
 			//LLFloaterReg::showInstance("preview_conversation", iter->getSessionID(), true);
 			if (gSavedSettings.getBOOL("FSUseBuiltInHistory"))
 			{
-				LLFloaterReg::showInstance("preview_conversation", iter->getSessionID(), TRUE);
+				LLFloaterReg::showInstance("preview_conversation", iter->getSessionID(), true);
 			}
 			else
 			{
@@ -1581,7 +1581,7 @@ void LLAvatarActions::viewChatHistory(const LLUUID& id)
 
 		if (gSavedSettings.getBOOL("FSUseBuiltInHistory"))
 		{
-			LLFloaterReg::showInstance("preview_conversation", extended_id, TRUE);
+			LLFloaterReg::showInstance("preview_conversation", extended_id, true);
 		}
 		else
 		{
@@ -1621,7 +1621,7 @@ void LLAvatarActions::viewChatHistoryExternally(const LLUUID& id)
 //static
 void LLAvatarActions::addToContactSet(const LLUUID& agent_id)
 {
-	LLFloaterReg::showInstance("fs_add_contact", agent_id, TRUE);
+	LLFloaterReg::showInstance("fs_add_contact", agent_id, true);
 }
 
 void LLAvatarActions::addToContactSet(const uuid_vec_t& agent_ids)
@@ -1637,7 +1637,7 @@ void LLAvatarActions::addToContactSet(const uuid_vec_t& agent_ids)
 		{
 			data.append(*it);
 		}
-		LLFloaterReg::showInstance("fs_add_contact", data, TRUE);
+		LLFloaterReg::showInstance("fs_add_contact", data, true);
 	}
 }
 // [/FS:CR] Add to contact set
@@ -1661,7 +1661,7 @@ bool LLAvatarActions::handleRemove(const LLSD& notification, const LLSD& respons
 			case 0: // YES
 				if( ip->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS))
 				{
-					LLAvatarTracker::instance().empower(id, FALSE);
+					LLAvatarTracker::instance().empower(id, false);
 					LLAvatarTracker::instance().notifyObservers();
 				}
 				LLAvatarTracker::instance().terminateBuddy(id);

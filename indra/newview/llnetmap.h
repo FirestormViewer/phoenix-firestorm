@@ -74,17 +74,17 @@ public:
     static const F32 MAP_SCALE_MAX;
 
 	/*virtual*/ void	draw();
-	/*virtual*/ BOOL	handleScrollWheel(S32 x, S32 y, S32 clicks);
-	/*virtual*/ BOOL	handleMouseDown(S32 x, S32 y, MASK mask);
-	/*virtual*/ BOOL	handleMouseUp(S32 x, S32 y, MASK mask);
-	/*virtual*/ BOOL	handleHover( S32 x, S32 y, MASK mask );
-	/*virtual*/ BOOL	handleToolTip( S32 x, S32 y, MASK mask);
-	/*virtual*/ void	reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
+	/*virtual*/ bool	handleScrollWheel(S32 x, S32 y, S32 clicks);
+	/*virtual*/ bool	handleMouseDown(S32 x, S32 y, MASK mask);
+	/*virtual*/ bool	handleMouseUp(S32 x, S32 y, MASK mask);
+	/*virtual*/ bool	handleHover( S32 x, S32 y, MASK mask );
+	/*virtual*/ bool	handleToolTip( S32 x, S32 y, MASK mask);
+	/*virtual*/ void	reshape(S32 width, S32 height, bool called_from_parent = true);
 
-	/*virtual*/ BOOL 	postBuild();
-	/*virtual*/ BOOL	handleRightMouseDown( S32 x, S32 y, MASK mask );
-	/*virtual*/ BOOL	handleClick(S32 x, S32 y, MASK mask);
-	/*virtual*/ BOOL	handleDoubleClick( S32 x, S32 y, MASK mask );
+	/*virtual*/ bool 	postBuild();
+	/*virtual*/ bool	handleRightMouseDown( S32 x, S32 y, MASK mask );
+	/*virtual*/ bool	handleClick(S32 x, S32 y, MASK mask);
+	/*virtual*/ bool	handleDoubleClick( S32 x, S32 y, MASK mask );
 
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)
     void            refreshParcelOverlay() { mUpdateParcelImage = true; }
@@ -128,11 +128,11 @@ private:
 
 	void			drawTracking( const LLVector3d& pos_global, 
 								  const LLColor4& color,
-								  BOOL draw_arrow = TRUE);
+								  bool draw_arrow = true);
 	void			drawRing(const F32 radius, LLVector3 pos_map, const LLUIColor& color);
     bool            isMouseOnPopupMenu();
     void            updateAboutLandPopupButton();
-	BOOL			handleToolTipAgent(const LLUUID& avatar_id);
+	bool			handleToolTipAgent(const LLUUID& avatar_id);
 	static void		showAvatarInspector(const LLUUID& avatar_id);
 
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3)

@@ -35,9 +35,9 @@ class FSFloaterBlocklist : public LLFloater
 public:
 	FSFloaterBlocklist(const LLSD& seed);
 	/*virtual*/ ~FSFloaterBlocklist();
-	/*virtual*/ void onOpen(const LLSD& key);
+	void onOpen(const LLSD& key) override;
 
-	BOOL postBuild();
+	bool postBuild() override;
 
 private:
 	LLPanel* mBlockedListPanel;

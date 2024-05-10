@@ -63,9 +63,9 @@ public:
 	// Returns the path of the supplied folder (relative to the shared root)
 	std::string					getSharedPath(const LLViewerInventoryCategory* pFolder) const;
 	std::string					getSharedPath(const LLUUID& idFolder) const;
-	// Returns TRUE if the supplied folder is a descendent of the #RLV folder
+	// Returns true if the supplied folder is a descendent of the #RLV folder
 	bool						isSharedFolder(const LLUUID& idFolder);
-	// Returns TRUE if the inventory offer is a "give to #RLV" offer
+	// Returns true if the inventory offer is a "give to #RLV" offer
 	bool						isGiveToRLVOffer(const LLOfferInfo& offerInfo);
 
 	/*
@@ -94,8 +94,8 @@ public:
 	 * Member variables
 	 */
 protected:
-	bool				m_fFetchStarted;			// TRUE if we fired off an inventory fetch
-	bool				m_fFetchComplete;			// TRUE if everything was fetched
+	bool				m_fFetchStarted;			// true if we fired off an inventory fetch
+	bool				m_fFetchComplete;			// true if everything was fetched
 	mutable LLUUID		m_idRlvRoot;
 	callback_signal_t	m_OnSharedRootIDChanged;
 

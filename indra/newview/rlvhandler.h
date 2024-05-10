@@ -54,54 +54,54 @@ public:
 	bool findBehaviour(ERlvBehaviour eBhvr, std::list<const RlvObject*>& lObjects) const;
 	// Returns a pointer to an RLV object instance (DO NOT STORE THIS!)
 	RlvObject* getObject(const LLUUID& idRlvObj) const;
-	// Returns TRUE is at least one object contains the specified behaviour (and optional option)
+	// Returns true is at least one object contains the specified behaviour (and optional option)
 	bool hasBehaviour(ERlvBehaviour eBhvr) const { return (eBhvr < RLV_BHVR_COUNT) ? (0 != m_Behaviours[eBhvr]) : false; }
 	bool hasBehaviour(ERlvBehaviour eBhvr, const std::string& strOption) const;
-	// Returns TRUE if the specified object has at least one active behaviour
+	// Returns true if the specified object has at least one active behaviour
 	bool hasBehaviour(const LLUUID& idObj) { return m_Objects.end() != m_Objects.find(idObj);  }
-	// Returns TRUE if the specified object contains the specified behaviour (and optional option)
+	// Returns true if the specified object contains the specified behaviour (and optional option)
 	bool hasBehaviour(const LLUUID& idObj, ERlvBehaviour eBhvr, const std::string& strOption = LLStringUtil::null) const;
-	// Returns TRUE if at least one object (except the specified one) contains the specified behaviour (and optional option)
+	// Returns true if at least one object (except the specified one) contains the specified behaviour (and optional option)
 	bool hasBehaviourExcept(ERlvBehaviour eBhvr, const LLUUID& idObj) const;
 	bool hasBehaviourExcept(ERlvBehaviour eBhvr, const std::string& strOption, const LLUUID& idObj) const;
-	// Returns TRUE if at least one object in the linkset with specified root ID contains the specified behaviour (and optional option)
+	// Returns true if at least one object in the linkset with specified root ID contains the specified behaviour (and optional option)
 	bool hasBehaviourRoot(const LLUUID& idObjRoot, ERlvBehaviour eBhvr, const std::string& strOption = LLStringUtil::null) const;
-	// Returns TRUE if the specified object is the only object containing the specified behaviour
+	// Returns true if the specified object is the only object containing the specified behaviour
 	bool ownsBehaviour(const LLUUID& idObj, ERlvBehaviour eBhvr) const;
 
 	// Adds or removes an exception for the specified behaviour
 	void addException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption);
 	void removeException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption);
-	// Returns TRUE if the specified behaviour has an added exception
+	// Returns true if the specified behaviour has an added exception
 	bool hasException(ERlvBehaviour eBhvr) const;
-	// Returns TRUE if the specified option was added as an exception for the specified behaviour
+	// Returns true if the specified option was added as an exception for the specified behaviour
 	bool isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varOption, ERlvExceptionCheck eCheckType = ERlvExceptionCheck::Default) const;
-	// Returns TRUE if the specified behaviour should behave "permissive" (rather than "strict"/"secure")
+	// Returns true if the specified behaviour should behave "permissive" (rather than "strict"/"secure")
 	bool isPermissive(ERlvBehaviour eBhvr) const;
 
 	#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-	// Returns TRUE if the composite folder doesn't contain any "locked" items
+	// Returns true if the composite folder doesn't contain any "locked" items
 	bool canTakeOffComposite(const LLInventoryCategory* pFolder) const;
-	// Returns TRUE if the composite folder doesn't replace any "locked" items
+	// Returns true if the composite folder doesn't replace any "locked" items
 	bool canWearComposite(const LLInventoryCategory* pFolder) const;
-	// Returns TRUE if the folder is a composite folder and optionally returns the name
+	// Returns true if the folder is a composite folder and optionally returns the name
 	bool getCompositeInfo(const LLInventoryCategory* pFolder, std::string* pstrName) const;
-	// Returns TRUE if the inventory item belongs to a composite folder and optionally returns the name and composite folder
+	// Returns true if the inventory item belongs to a composite folder and optionally returns the name and composite folder
 	bool getCompositeInfo(const LLUUID& idItem, std::string* pstrName, LLViewerInventoryCategory** ppFolder) const;
-	// Returns TRUE if the folder is a composite folder
+	// Returns true if the folder is a composite folder
 	bool isCompositeFolder(const LLInventoryCategory* pFolder) const { return getCompositeInfo(pFolder, NULL); }
-	// Returns TRUE if the inventory item belongs to a composite folder
+	// Returns true if the inventory item belongs to a composite folder
 	bool isCompositeDescendent(const LLUUID& idItem) const { return getCompositeInfo(idItem, NULL, NULL); }
-	// Returns TRUE if the inventory item is part of a folded composite folder and should be hidden from @getoufit or @getattach
+	// Returns true if the inventory item is part of a folded composite folder and should be hidden from @getoufit or @getattach
 	bool isHiddenCompositeItem(const LLUUID& idItem, const std::string& strItemType) const;
 	#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 
 public:
 	// Adds a blocked object (= object that is blocked from issuing commands) by UUID (can be null) and/or name
 	void addBlockedObject(const LLUUID& idObj, const std::string& strObjName);
-	// Returns TRUE if there's an unresolved blocked object (known name but unknown UUID)
+	// Returns true if there's an unresolved blocked object (known name but unknown UUID)
 	bool hasUnresolvedBlockedObject() const;
-	// Returns TRUE if the object with the specified UUID is blocked from issuing commands
+	// Returns true if the object with the specified UUID is blocked from issuing commands
 	bool isBlockedObject(const LLUUID& idObj) const;
 	// Removes a blocked object
 	void removeBlockedObject(const LLUUID& idObj);

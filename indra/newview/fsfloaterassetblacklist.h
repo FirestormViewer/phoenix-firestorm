@@ -43,12 +43,12 @@ public:
 	FSFloaterAssetBlacklist(const LLSD& key);
 	virtual ~FSFloaterAssetBlacklist();
 
-	/*virtual*/ void onOpen(const LLSD& key);
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
-	/*virtual*/ bool hasAccelerators() const { return true; }
-	/*virtual*/ BOOL tick();
-	/*virtual*/ void closeFloater(bool app_quitting = false);
+	void onOpen(const LLSD& key) override;
+	bool postBuild() override;
+	bool handleKeyHere(KEY key, MASK mask) override;
+	bool hasAccelerators() const override { return true; }
+	bool tick() override;
+	void closeFloater(bool app_quitting = false) override;
 
 	void addElementToList(const LLUUID& id, const LLSD& data);
 	void removeElements();

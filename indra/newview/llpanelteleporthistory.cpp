@@ -71,7 +71,7 @@ public:
 	// </FS:Ansariel>
 	virtual ~LLTeleportHistoryFlatItem();
 
-	virtual BOOL postBuild();
+	virtual bool postBuild();
 
 	/*virtual*/ S32 notify(const LLSD& info);
 
@@ -92,7 +92,7 @@ public:
 
 	void onMouseEnter(S32 x, S32 y, MASK mask);
 	void onMouseLeave(S32 x, S32 y, MASK mask);
-	virtual BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+	virtual bool handleRightMouseDown(S32 x, S32 y, MASK mask);
 
 	static void showPlaceInfoPanel(S32 index);
 
@@ -174,7 +174,7 @@ LLTeleportHistoryFlatItem::~LLTeleportHistoryFlatItem()
 }
 
 //virtual
-BOOL LLTeleportHistoryFlatItem::postBuild()
+bool LLTeleportHistoryFlatItem::postBuild()
 {
 	mTitle = getChild<LLTextBox>("region");
 
@@ -322,11 +322,11 @@ void LLTeleportHistoryFlatItem::onMouseLeave(S32 x, S32 y, MASK mask)
 }
 
 // virtual
-BOOL LLTeleportHistoryFlatItem::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool LLTeleportHistoryFlatItem::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
     LLPanel::handleRightMouseDown(x, y, mask);
 	showMenu(x, y);
-    return TRUE;
+    return true;
 }
 
 void LLTeleportHistoryFlatItem::showPlaceInfoPanel(S32 index)
@@ -386,7 +386,7 @@ LLTeleportHistoryFlatItemStorage::getFlatItemForPersistentItem (
 			item->setLocalPos(local_pos);
 			// </FS:Ansariel>
 			item->setHighlightedText(hl);
-			item->setVisible(TRUE);
+			item->setVisible(true);
 			item->updateTitle();
 			item->updateTimestamp();
 		}
@@ -479,14 +479,14 @@ LLTeleportHistoryPanel::~LLTeleportHistoryPanel()
 	mTeleportHistoryChangedConnection.disconnect();
 }
 
-BOOL LLTeleportHistoryPanel::postBuild()
+bool LLTeleportHistoryPanel::postBuild()
 {
     mCommitCallbackRegistrar.add("TeleportHistory.GearMenu.Action", boost::bind(&LLTeleportHistoryPanel::onGearMenuAction, this, _2));
     mEnableCallbackRegistrar.add("TeleportHistory.GearMenu.Enable", boost::bind(&LLTeleportHistoryPanel::isActionEnabled, this, _2));
 
     // init menus before list, since menus are passed to list
     mGearItemMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_teleport_history_item.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-    mGearItemMenu->setAlwaysShowMenu(TRUE); // all items can be disabled if nothing is selected, show anyway
+    mGearItemMenu->setAlwaysShowMenu(true); // all items can be disabled if nothing is selected, show anyway
     mSortingMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_teleport_history_gear.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 
 	mTeleportHistory = LLTeleportHistoryStorage::getInstance();
@@ -540,7 +540,7 @@ BOOL LLTeleportHistoryPanel::postBuild()
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 // virtual
@@ -1118,8 +1118,8 @@ void LLTeleportHistoryPanel::onAccordionTabRightClick(LLView *view, S32 x, S32 y
 	mAccordionTabMenu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>(
 		"menu_teleport_history_tab.xml", LLMenuGL::sMenuContainer, LLViewerMenuHolderGL::child_registry_t::instance());
 
-	mAccordionTabMenu->setItemVisible("TabOpen", !tab->isExpanded() ? true : false);
-	mAccordionTabMenu->setItemVisible("TabClose", tab->isExpanded() ? true : false);
+	mAccordionTabMenu->setItemVisible("TabOpen", !tab->isExpanded());
+	mAccordionTabMenu->setItemVisible("TabClose", tab->isExpanded());
 
 
 	mAccordionTabMenu->show(x, y);

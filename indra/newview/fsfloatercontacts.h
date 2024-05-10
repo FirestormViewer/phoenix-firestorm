@@ -48,11 +48,11 @@ public:
 	FSFloaterContacts(const LLSD& seed);
 	virtual ~FSFloaterContacts();
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/ void draw();
-	/*virtual*/ BOOL tick();
-	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ bool tick();
+	/*virtual*/ bool handleKeyHere(KEY key, MASK mask);
 	/*virtual*/ bool hasAccelerators() const { return true; }
 
 	// LLFriendObserver implementation
@@ -114,7 +114,7 @@ private:
 	// misc callbacks
 	static void				onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
 	void					onColumnDisplayModeChanged(const std::string& settings_name = "");
-	BOOL					handleFriendsListDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+	bool					handleFriendsListDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
 															EDragAndDropType cargo_type,
 															void* cargo_data,
 															EAcceptance* accept,

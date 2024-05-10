@@ -37,8 +37,8 @@ public:
 	FSFloaterStatistics(const LLSD& key);
 	virtual ~FSFloaterStatistics();
 
-	/*virtual*/ void onOpen(const LLSD& key);
-	/*virtual*/ BOOL postBuild();
+	void onOpen(const LLSD& key) override;
+	bool postBuild() override;
 };
 
 #endif // FS_FLOATERSTATISTICS_H

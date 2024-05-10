@@ -87,7 +87,7 @@ public:
 // <FS:CR> Aurora Sim
 	void rebuildWater();
 // </FS:CR> Aurora Sim
-	virtual void decompressDCTPatch(LLBitPack &bitpack, LLGroupHeader *gopp, BOOL b_large_patch);
+	virtual void decompressDCTPatch(LLBitPack &bitpack, LLGroupHeader *gopp, bool b_large_patch);
 	virtual void updatePatchVisibilities(LLAgent &agent);
 
 	inline F32 getZ(const U32 k) const				{ return mSurfaceZ[k]; }
@@ -118,7 +118,7 @@ public:
     template<bool PBR>
 	bool idleUpdate(F32 max_update_time);
 
-	BOOL containsPosition(const LLVector3 &position);
+	bool containsPosition(const LLVector3 &position);
 
 	void moveZ(const S32 x, const S32 y, const F32 delta);	
 
@@ -132,7 +132,7 @@ public:
 
 	LLViewerTexture *getSTexture();
 	LLViewerTexture *getWaterTexture();
-	BOOL hasZData() const							{ return mHasZData; }
+	bool hasZData() const							{ return mHasZData; }
 
 	void dirtyAllPatches();	// Use this to dirty all patches when changing terrain parameters
 
@@ -182,7 +182,7 @@ protected:
 	void createPatchData();		// Allocates memory for patches.
 	void destroyPatchData();    // Deallocates memory for patches.
 
-	BOOL generateWaterTexture(const F32 x, const F32 y,
+	bool generateWaterTexture(const F32 x, const F32 y,
 						const F32 width, const F32 height);		// Generate texture from composition values.
 
 	//F32 updateTexture(LLSurfacePatch *ppatch);
@@ -217,7 +217,7 @@ protected:
 
 	LLPatchVertexArray mPVArray;
 
-	BOOL		mHasZData;				// We've received any patch data for this surface.
+	bool		mHasZData;				// We've received any patch data for this surface.
 	F32			mMinZ;					// min z for this region (during the session)
 	F32			mMaxZ;					// max z for this region (during the session)
 

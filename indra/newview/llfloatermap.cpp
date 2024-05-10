@@ -81,7 +81,7 @@ LLFloaterMap::~LLFloaterMap()
 {
 }
 
-BOOL LLFloaterMap::postBuild()
+bool LLFloaterMap::postBuild()
 {
     mMap = getChild<LLNetMap>("Net Map");
     mMap->setToolTipMsg(getString("ToolTipMsg"));
@@ -123,8 +123,8 @@ BOOL LLFloaterMap::postBuild()
     sendChildToBack(getDragHandle());
 
     // <FS:Ansariel> Remove titlebar
-    setIsChrome(TRUE);
-    getDragHandle()->setTitleVisible(TRUE);
+    setIsChrome(true);
+    getDragHandle()->setTitleVisible(true);
     // </FS:Ansariel>
 
     // keep onscreen
@@ -133,13 +133,13 @@ BOOL LLFloaterMap::postBuild()
     return true;
 }
 
-BOOL LLFloaterMap::handleDoubleClick(S32 x, S32 y, MASK mask)
+bool LLFloaterMap::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
 	// If floater is minimized, minimap should be shown on doubleclick (STORM-299)
 	if (isMinimized())
 	{
-		setMinimized(FALSE);
-		return TRUE;
+		setMinimized(false);
+		return true;
 	}
 
 	LLVector3d pos_global = mMap->viewPosToGlobal(x, y);
@@ -163,7 +163,7 @@ BOOL LLFloaterMap::handleDoubleClick(S32 x, S32 y, MASK mask)
 	//}
 	mMap->performDoubleClickAction(pos_global);
 	// </FS:Ansariel> Synchronize double click handling throughout instances
-    return TRUE;
+    return true;
 }
 
 void LLFloaterMap::setDirectionPos(LLTextBox *text_box, F32 rotation)
@@ -248,19 +248,19 @@ void LLFloaterMap::draw()
 	// Note: we can't just gAgent.check cameraMouselook() because the transition states are wrong.
 	if(gAgentCamera.cameraMouselook())
 	{
-		setMouseOpaque(FALSE);
-		getDragHandle()->setMouseOpaque(FALSE);
+		setMouseOpaque(false);
+		getDragHandle()->setMouseOpaque(false);
 	}
 	else
 	{
-		setMouseOpaque(TRUE);
-		getDragHandle()->setMouseOpaque(TRUE);
+		setMouseOpaque(true);
+		getDragHandle()->setMouseOpaque(true);
 	}
 	
 	LLFloater::draw();
 }
 
-void LLFloaterMap::reshape(S32 width, S32 height, BOOL called_from_parent)
+void LLFloaterMap::reshape(S32 width, S32 height, bool called_from_parent)
 {
 	LLFloater::reshape(width, height, called_from_parent);
 	
@@ -284,7 +284,7 @@ F32 LLFloaterMap::getCurrentTransparency()
 }
 
 // <FS:Ansariel> Remove titlebar
-void LLFloaterMap::setMinimized(BOOL b)
+void LLFloaterMap::setMinimized(bool b)
 {
 	LLFloater::setMinimized(b);
 	if (b)

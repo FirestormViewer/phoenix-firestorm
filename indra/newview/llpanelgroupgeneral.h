@@ -56,7 +56,7 @@ public:
 	
 	virtual void update(LLGroupChange gc);
 	
-	virtual BOOL postBuild();
+	virtual bool postBuild();
 	
 	virtual void draw();
 
@@ -93,8 +93,8 @@ private:
 	void updateChanged();
 	bool confirmMatureApply(const LLSD& notification, const LLSD& response);
 
-	BOOL			mChanged;
-	BOOL			mFirstUse;
+	bool			mChanged;
+	bool			mFirstUse;
 	std::string		mIncompleteMemberDataStr;
 
 	// Group information (include any updates in updateChanged)
@@ -130,7 +130,7 @@ private:
 	typedef std::unordered_map<LLUUID, boost::signals2::connection, FSUUIDHash> avatar_name_cache_connection_map_t;
 	avatar_name_cache_connection_map_t mAvatarNameCacheConnections;
 
-	BOOL			mPendingMemberUpdate;
+	bool			mPendingMemberUpdate;
 	LLNameListCtrl*	mListVisibleMembers;
 	// </FS:Ansariel>
 };

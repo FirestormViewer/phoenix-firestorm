@@ -1615,16 +1615,6 @@
           parameter="fs_avatar_render_settings" />
       </menu_item_call>
       <menu_item_check
-        label="Always show Friends fully"
-        name="Always show Friends normally">
-        <menu_item_check.on_click
-          function="ToggleControl"
-          parameter="AlwaysRenderFriends"/>
-        <menu_item_check.on_check
-          function="CheckControl"
-          parameter="AlwaysRenderFriends"/>
-      </menu_item_check>
-      <menu_item_check
         label="Show Friends only"
         name="Render Friends Only">
         <menu_item_check.on_click
@@ -5367,6 +5357,16 @@
                  parameter="DebugCharacterVis" />
                 <menu_item_check.on_click
                  function="Advanced.ToggleDebugCharacterVis" />
+            </menu_item_check>
+            <menu_item_check
+             label="Debug Character Rez State"
+             name="Debug Character Rez State">
+                <menu_item_check.on_check
+                 function="CheckControl"
+                 parameter="NameTagDebugAVRezState" />
+                <menu_item_check.on_click
+                 function="ToggleControl"
+                 parameter="NameTagDebugAVRezState" />
             </menu_item_check>
             <menu_item_check
              label="Show Collision Skeleton"

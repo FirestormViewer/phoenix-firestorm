@@ -287,7 +287,7 @@ void FSFloaterSearch::onClose(bool app_quitting)
 	}
 }
 
-BOOL FSFloaterSearch::postBuild()
+bool FSFloaterSearch::postBuild()
 {
 	childSetAction("people_profile_btn", boost::bind(&FSFloaterSearch::onBtnPeopleProfile, this));
 	childSetAction("people_message_btn", boost::bind(&FSFloaterSearch::onBtnPeopleIM, this));
@@ -332,7 +332,7 @@ BOOL FSFloaterSearch::postBuild()
 		mTabContainer->selectFirstTab();
 	}
 
-	return TRUE;
+	return true;
 }
 
 void FSFloaterSearch::onTabChange()
@@ -351,14 +351,14 @@ void FSFloaterSearch::onTabChange()
 
 	if (active_panel == mPanelPeople || active_panel == mPanelGroups)
 	{
-		mDetailSnapshotParcel->setVisible(FALSE);
-		mDetailSnapshot->setVisible(TRUE);
+		mDetailSnapshotParcel->setVisible(false);
+		mDetailSnapshot->setVisible(true);
 	}
 	else if (active_panel == mPanelPlaces || active_panel == mPanelLand ||
 		active_panel == mPanelEvents || active_panel == mPanelClassifieds)
 	{
-		mDetailSnapshot->setVisible(FALSE);
-		mDetailSnapshotParcel->setVisible(TRUE);
+		mDetailSnapshot->setVisible(false);
+		mDetailSnapshotParcel->setVisible(true);
 	}
 }
 
@@ -724,7 +724,7 @@ void FSFloaterSearch::onBtnTeleport()
 		}
 		else if (teleport_action == 2)
 		{
-			setMinimized(TRUE);
+			setMinimized(true);
 		}
 	}
 }
@@ -766,7 +766,7 @@ FSPanelSearchPeople::~FSPanelSearchPeople()
 	}
 }
 
-BOOL FSPanelSearchPeople::postBuild()
+bool FSPanelSearchPeople::postBuild()
 {
 	mSearchComboBox =	findChild<LLSearchComboBox>("people_edit");
 	mSearchResults =	findChild<FSScrollListCtrl>("search_results_people");
@@ -778,17 +778,17 @@ BOOL FSPanelSearchPeople::postBuild()
 	if (mSearchResults)
 	{
 		mSearchResults->setCommitCallback(boost::bind(&FSPanelSearchPeople::onSelectItem, this));
-		mSearchResults->setEnabled(FALSE);
+		mSearchResults->setEnabled(false);
 		mSearchResults->setCommentText(LLTrans::getString("no_results"));
 		mSearchResults->setContextMenu(&gFSAvatarSearchMenu);
 	}
 
 	childSetAction("people_next", boost::bind(&FSPanelSearchPeople::onBtnNext, this));
 	childSetAction("people_back", boost::bind(&FSPanelSearchPeople::onBtnBack, this));
-	getChildView("people_next")->setEnabled(FALSE);
-	getChildView("people_back")->setEnabled(FALSE);
+	getChildView("people_next")->setEnabled(false);
+	getChildView("people_back")->setEnabled(false);
 
-	return TRUE;
+	return true;
 }
 
 void FSPanelSearchPeople::focusDefaultElement()
@@ -871,7 +871,7 @@ void FSPanelSearchPeople::onBtnFind()
 void FSPanelSearchPeople::onBtnNext()
 {
 	mStartSearch += RESULT_PAGE_SIZE;
-	getChildView("people_back")->setEnabled(TRUE);
+	getChildView("people_back")->setEnabled(true);
 
 	find();
 }
@@ -887,8 +887,8 @@ void FSPanelSearchPeople::onBtnBack()
 void FSPanelSearchPeople::resetSearch()
 {
 	mStartSearch = 0;
-	getChildView("people_back")->setEnabled(FALSE);
-	getChildView("people_next")->setEnabled(FALSE);
+	getChildView("people_back")->setEnabled(false);
+	getChildView("people_next")->setEnabled(false);
 }
 
 S32 FSPanelSearchPeople::showNextButton(S32 rows)
@@ -957,25 +957,25 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 		{
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("people_edit")->getValue().asString();
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("not_found", map));
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_SHORTSTRING)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_short"));
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_BANNEDWORD)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_banned"));
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_SEARCHDISABLED)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_disabled"));
 			return;
 		}
@@ -987,7 +987,7 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("people_edit")->getValue().asString();
-		search_results->setEnabled(FALSE);
+		search_results->setEnabled(false);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
 	}
 
@@ -1006,13 +1006,13 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 			LL_INFOS("Search") << "Null result returned for QueryID: " << query_id << LL_ENDL;
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("people_edit")->getValue().asString();
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("not_found", map));
 		}
 		else
 		{
 			LL_DEBUGS("Search") << "Got: " << first_name << " " << last_name << " AgentID: " << agent_id << LL_ENDL;
-			search_results->setEnabled(TRUE);
+			search_results->setEnabled(true);
 			found_one = true;
 			
 			std::string avatar_name;
@@ -1039,7 +1039,7 @@ void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 	if (found_one)
 	{
 		search_results->selectFirstItem();
-		search_results->setFocus(TRUE);
+		search_results->setFocus(true);
 		self->onSelectItem();
 	}
 }
@@ -1074,16 +1074,16 @@ void FSPanelSearchPeople::onAvatarNameCallback(const LLUUID& id, const LLAvatarN
 		mResultsReceived = 1;
 		mNumResultsReturned = 1;
 
-		search_results->setEnabled(TRUE);
+		search_results->setEnabled(true);
 		search_results->selectFirstItem();
-		search_results->setFocus(TRUE);
+		search_results->setFocus(true);
 		onSelectItem();
 	}
 	else
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = getChild<LLUICtrl>("people_edit")->getValue().asString();
-		search_results->setEnabled(FALSE);
+		search_results->setEnabled(false);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
 	}
 }
@@ -1106,7 +1106,7 @@ FSPanelSearchGroups::~FSPanelSearchGroups()
 {
 }
 
-BOOL FSPanelSearchGroups::postBuild()
+bool FSPanelSearchGroups::postBuild()
 {
 	mSearchComboBox =	findChild<LLSearchComboBox>("groups_edit");
 	mSearchResults =	findChild<LLScrollListCtrl>("search_results_groups");
@@ -1118,16 +1118,16 @@ BOOL FSPanelSearchGroups::postBuild()
 	if (mSearchResults)
 	{
 		mSearchResults->setCommitCallback(boost::bind(&FSPanelSearchGroups::onSelectItem, this));
-		mSearchResults->setEnabled(FALSE);
+		mSearchResults->setEnabled(false);
 		mSearchResults->setCommentText(LLTrans::getString("no_results"));
 	}
 
 	childSetAction("groups_next", boost::bind(&FSPanelSearchGroups::onBtnNext, this));
 	childSetAction("groups_back", boost::bind(&FSPanelSearchGroups::onBtnBack, this));
-	getChildView("groups_next")->setEnabled(FALSE);
-	getChildView("groups_back")->setEnabled(FALSE);
+	getChildView("groups_next")->setEnabled(false);
+	getChildView("groups_back")->setEnabled(false);
 
-	return TRUE;
+	return true;
 }
 
 void FSPanelSearchGroups::focusDefaultElement()
@@ -1218,7 +1218,7 @@ void FSPanelSearchGroups::onBtnFind()
 void FSPanelSearchGroups::onBtnNext()
 {
 	mStartSearch += RESULT_PAGE_SIZE;
-	getChildView("groups_back")->setEnabled(TRUE);
+	getChildView("groups_back")->setEnabled(true);
 
 	find();
 }
@@ -1234,8 +1234,8 @@ void FSPanelSearchGroups::onBtnBack()
 void FSPanelSearchGroups::resetSearch()
 {
 	mStartSearch = 0;
-	getChildView("groups_back")->setEnabled(FALSE);
-	getChildView("groups_next")->setEnabled(FALSE);
+	getChildView("groups_back")->setEnabled(false);
+	getChildView("groups_next")->setEnabled(false);
 }
 
 S32 FSPanelSearchGroups::showNextButton(S32 rows)
@@ -1307,25 +1307,25 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 		{
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("groups_edit")->getValue().asString();
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("not_found", map));
 			return;
 		}
 		else if(status & STATUS_SEARCH_PLACES_SHORTSTRING)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_short"));
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_BANNEDWORD)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_banned"));
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_SEARCHDISABLED)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_disabled"));
 			return;
 		}
@@ -1337,7 +1337,7 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("groups_edit")->getValue().asString();
-		search_results->setEnabled(FALSE);
+		search_results->setEnabled(false);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
 	}
 
@@ -1355,13 +1355,13 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 			LL_DEBUGS("Search") << "No results returned for QueryID: " << query_id << LL_ENDL;
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("groups_edit")->getValue().asString();
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("not_found", map));
 		}
 		else
 		{
 			LL_DEBUGS("Search") << "Got: " << group_name << " GroupID: " << group_id << LL_ENDL;
-			search_results->setEnabled(TRUE);
+			search_results->setEnabled(true);
 			found_one = true;
 
 			LLSD content;
@@ -1391,7 +1391,7 @@ void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 	if (found_one)
 	{
 		search_results->selectFirstItem();
-		search_results->setFocus(TRUE);
+		search_results->setFocus(true);
 		self->onSelectItem();
 	}
 }
@@ -1415,7 +1415,7 @@ FSPanelSearchPlaces::~FSPanelSearchPlaces()
 {
 }
 
-BOOL FSPanelSearchPlaces::postBuild()
+bool FSPanelSearchPlaces::postBuild()
 {
 	mSearchComboBox =	findChild<LLSearchComboBox>("places_edit");
 	mSearchResults =	findChild<LLScrollListCtrl>("search_results_places");
@@ -1428,7 +1428,7 @@ BOOL FSPanelSearchPlaces::postBuild()
 	if (mSearchResults)
 	{
 		mSearchResults->setCommitCallback(boost::bind(&FSPanelSearchPlaces::onSelectItem, this));
-		mSearchResults->setEnabled(FALSE);
+		mSearchResults->setEnabled(false);
 		mSearchResults->setCommentText(LLTrans::getString("no_results"));
 	}
 	if (mPlacesCategory)
@@ -1443,10 +1443,10 @@ BOOL FSPanelSearchPlaces::postBuild()
 	}
 	childSetAction("places_next", boost::bind(&FSPanelSearchPlaces::onBtnNext, this));
 	childSetAction("places_back", boost::bind(&FSPanelSearchPlaces::onBtnBack, this));
-	getChildView("places_next")->setEnabled(FALSE);
-	getChildView("places_back")->setEnabled(FALSE);
+	getChildView("places_next")->setEnabled(false);
+	getChildView("places_back")->setEnabled(false);
 
-	return TRUE;
+	return true;
 }
 
 void FSPanelSearchPlaces::focusDefaultElement()
@@ -1550,7 +1550,7 @@ void FSPanelSearchPlaces::onBtnFind()
 void FSPanelSearchPlaces::onBtnNext()
 {
 	mStartSearch += RESULT_PAGE_SIZE;
-	getChildView("places_back")->setEnabled(TRUE);
+	getChildView("places_back")->setEnabled(true);
 
 	find();
 }
@@ -1566,8 +1566,8 @@ void FSPanelSearchPlaces::onBtnBack()
 void FSPanelSearchPlaces::resetSearch()
 {
 	mStartSearch = 0;
-	getChildView("places_back")->setEnabled(FALSE);
-	getChildView("places_next")->setEnabled(FALSE);
+	getChildView("places_back")->setEnabled(false);
+	getChildView("places_next")->setEnabled(false);
 }
 
 S32 FSPanelSearchPlaces::showNextButton(S32 rows)
@@ -1601,8 +1601,8 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 	LLUUID		query_id;
 	LLUUID		parcel_id;
 	std::string	name;
-	BOOL		for_sale;
-	BOOL		auction;
+	bool		for_sale;
+	bool		auction;
 	F32			dwell;
 
 	msg->getUUID("AgentData", "AgentID", agent_id);
@@ -1640,31 +1640,31 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 		{
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("places_edit")->getValue().asString();
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("not_found", map));
 			return;
 		}
 		else if(status & STATUS_SEARCH_PLACES_SHORTSTRING)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_short"));
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_BANNEDWORD)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_banned"));
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_SEARCHDISABLED)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_disabled"));
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_ESTATEEMPTY)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_disabled"));
 			return;
 		}
@@ -1676,7 +1676,7 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("places_edit")->getValue().asString();
-		search_results->setEnabled(FALSE);
+		search_results->setEnabled(false);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
 	}
 
@@ -1695,13 +1695,13 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 			LL_DEBUGS("Search") << "Null result returned for QueryID: " << query_id << LL_ENDL;
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("places_edit")->getValue().asString();
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("not_found", map));
 		}
 		else
 		{
 			LL_DEBUGS("Search") << "Got: " << name << " ParcelID: " << parcel_id << LL_ENDL;
-			search_results->setEnabled(TRUE);
+			search_results->setEnabled(true);
 			found_one = true;
 
 			LLSD content;
@@ -1744,7 +1744,7 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 	if (found_one)
 	{
 		search_results->selectFirstItem();
-		search_results->setFocus(TRUE);
+		search_results->setFocus(true);
 		self->onSelectItem();
 	}
 }
@@ -1768,7 +1768,7 @@ FSPanelSearchLand::~FSPanelSearchLand()
 {
 }
 
-BOOL FSPanelSearchLand::postBuild()
+bool FSPanelSearchLand::postBuild()
 {
 	mSearchResults	= getChild<LLScrollListCtrl>("search_results_land");
 	mPriceEditor	= findChild<LLLineEditor>("price_edit");
@@ -1776,7 +1776,7 @@ BOOL FSPanelSearchLand::postBuild()
 	if (mSearchResults)
 	{
 		mSearchResults->setCommitCallback(boost::bind(&FSPanelSearchLand::onSelectItem, this));
-		mSearchResults->setEnabled(FALSE);
+		mSearchResults->setEnabled(false);
 		mSearchResults->setCommentText(LLTrans::getString("no_results"));
 	}
 	if (mPriceEditor)
@@ -1793,10 +1793,10 @@ BOOL FSPanelSearchLand::postBuild()
 	childSetAction("land_next", boost::bind(&FSPanelSearchLand::onBtnNext, this));
 	childSetAction("land_back", boost::bind(&FSPanelSearchLand::onBtnBack, this));
 
-	getChildView("land_next")->setEnabled(FALSE);
-	getChildView("land_back")->setEnabled(FALSE);
+	getChildView("land_next")->setEnabled(false);
+	getChildView("land_back")->setEnabled(false);
 	
-	return TRUE;
+	return true;
 }
 
 void FSPanelSearchLand::find()
@@ -1929,7 +1929,7 @@ void FSPanelSearchLand::onBtnFind()
 void FSPanelSearchLand::onBtnNext()
 {
 	mStartSearch += RESULT_PAGE_SIZE;
-	getChildView("land_back")->setEnabled(TRUE);
+	getChildView("land_back")->setEnabled(true);
 
 	find();
 }
@@ -1945,8 +1945,8 @@ void FSPanelSearchLand::onBtnBack()
 void FSPanelSearchLand::resetSearch()
 {
 	mStartSearch = 0;
-	getChildView("land_back")->setEnabled(FALSE);
-	getChildView("land_next")->setEnabled(FALSE);
+	getChildView("land_back")->setEnabled(false);
+	getChildView("land_next")->setEnabled(false);
 }
 
 S32 FSPanelSearchLand::showNextButton(S32 rows)
@@ -1982,8 +1982,8 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 	std::string	name;
 	std::string	land_sku;
 	std::string	land_type;
-	BOOL		auction;
-	BOOL		for_sale;
+	bool		auction;
+	bool		for_sale;
 	S32			price;
 	S32			area;
 
@@ -2023,7 +2023,7 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("events_edit")->getValue().asString();
-		search_results->setEnabled(FALSE);
+		search_results->setEnabled(false);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
 	}
 	self->mResultsReceived += num_new_rows;
@@ -2040,13 +2040,13 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 		if (parcel_id.isNull())
 		{
 			LL_DEBUGS("Search") << "Null result returned for QueryID: " << query_id << LL_ENDL;
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("no_results"));
 		}
 		else
 		{
 			LL_DEBUGS("Search") << "Got: " << name << " ClassifiedID: " << parcel_id << LL_ENDL;
-			search_results->setEnabled(TRUE);
+			search_results->setEnabled(true);
 			found_one = true;
 			if (msg->getSizeFast(_PREHASH_QueryReplies, i, _PREHASH_ProductSKU) > 0)
 			{
@@ -2143,7 +2143,7 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 	if (found_one)
 	{
 		search_results->selectFirstItem();
-		search_results->setFocus(TRUE);
+		search_results->setFocus(true);
 		self->onSelectItem();
 	}
 }
@@ -2167,7 +2167,7 @@ FSPanelSearchClassifieds::~FSPanelSearchClassifieds()
 {
 }
 
-BOOL FSPanelSearchClassifieds::postBuild()
+bool FSPanelSearchClassifieds::postBuild()
 {
 	mSearchComboBox = findChild<LLSearchComboBox>("classifieds_edit");
 	mSearchResults = getChild<LLScrollListCtrl>("search_results_classifieds");
@@ -2179,7 +2179,7 @@ BOOL FSPanelSearchClassifieds::postBuild()
 	if (mSearchResults)
 	{
 		mSearchResults->setCommitCallback(boost::bind(&FSPanelSearchClassifieds::onSelectItem, this));
-		mSearchResults->setEnabled(FALSE);
+		mSearchResults->setEnabled(false);
 		mSearchResults->setCommentText(LLTrans::getString("no_results"));
 	}
 
@@ -2199,10 +2199,10 @@ BOOL FSPanelSearchClassifieds::postBuild()
 	childSetAction("classifieds_next", boost::bind(&FSPanelSearchClassifieds::onBtnNext, this));
 	childSetAction("classifieds_back", boost::bind(&FSPanelSearchClassifieds::onBtnBack, this));
 
-	getChildView("classifieds_next")->setEnabled(FALSE);
-	getChildView("classifieds_back")->setEnabled(FALSE);
+	getChildView("classifieds_next")->setEnabled(false);
+	getChildView("classifieds_back")->setEnabled(false);
 	
-	return TRUE;
+	return true;
 }
 
 void FSPanelSearchClassifieds::focusDefaultElement()
@@ -2228,7 +2228,7 @@ void FSPanelSearchClassifieds::find()
 		return;
 	}
 	U32 category = mClassifiedsCategory->getValue().asInteger();
-	BOOL auto_renew = FALSE;
+	bool auto_renew = false;
 	U32 flags = pack_classified_flags_request(auto_renew, inc_pg, inc_mature, inc_adult);
 
 	mResultsReceived = 0;
@@ -2277,7 +2277,7 @@ void FSPanelSearchClassifieds::onBtnFind()
 void FSPanelSearchClassifieds::onBtnNext()
 {
 	mStartSearch += RESULT_PAGE_SIZE;
-	getChildView("classifieds_back")->setEnabled(TRUE);
+	getChildView("classifieds_back")->setEnabled(true);
 
 	find();
 }
@@ -2293,8 +2293,8 @@ void FSPanelSearchClassifieds::onBtnBack()
 void FSPanelSearchClassifieds::resetSearch()
 {
 	mStartSearch = 0;
-	getChildView("classifieds_back")->setEnabled(FALSE);
-	getChildView("classifieds_next")->setEnabled(FALSE);
+	getChildView("classifieds_back")->setEnabled(false);
+	getChildView("classifieds_next")->setEnabled(false);
 }
 
 S32 FSPanelSearchClassifieds::showNextButton(S32 rows)
@@ -2377,25 +2377,25 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 		{
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("classifieds_edit")->getValue().asString();
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("not_found", map));
 			return;
 		}
 		else if(status & STATUS_SEARCH_PLACES_SHORTSTRING)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_short"));
 			return;
 		}
 		else if (status & STATUS_SEARCH_CLASSIFIEDS_BANNEDWORD)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_banned"));
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_SEARCHDISABLED)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_disabled"));
 			return;
 		}
@@ -2407,7 +2407,7 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("classifieds_edit")->getValue().asString();
-		search_results->setEnabled(FALSE);
+		search_results->setEnabled(false);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
 	}
 	self->mResultsReceived += num_new_rows;
@@ -2425,13 +2425,13 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 			LL_DEBUGS("Search") << "Null result returned for QueryID: " << query_id << LL_ENDL;
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("classifieds_edit")->getValue().asString();
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("not_found", map));
 		}
 		else
 		{
 			LL_DEBUGS("Search") << "Got: " << name << " ClassifiedID: " << classified_id << LL_ENDL;
-			search_results->setEnabled(TRUE);
+			search_results->setEnabled(true);
 			found_one = true;
 
 			LLSD content;
@@ -2458,7 +2458,7 @@ void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 	if (found_one)
 	{
 		search_results->selectFirstItem();
-		search_results->setFocus(TRUE);
+		search_results->setFocus(true);
 		self->onSelectItem();
 	}
 }
@@ -2483,7 +2483,7 @@ FSPanelSearchEvents::~FSPanelSearchEvents()
 {
 }
 
-BOOL FSPanelSearchEvents::postBuild()
+bool FSPanelSearchEvents::postBuild()
 {
 	mSearchComboBox = findChild<LLSearchComboBox>("events_edit");
 	mSearchResults = getChild<LLScrollListCtrl>("search_results_events");
@@ -2496,7 +2496,7 @@ BOOL FSPanelSearchEvents::postBuild()
 	if (mSearchResults)
 	{
 		mSearchResults->setCommitCallback(boost::bind(&FSPanelSearchEvents::onSelectItem, this));
-		mSearchResults->setEnabled(FALSE);
+		mSearchResults->setEnabled(false);
 		mSearchResults->setCommentText(LLTrans::getString("no_results"));
 	}
 	if (mEventsMode)
@@ -2511,14 +2511,14 @@ BOOL FSPanelSearchEvents::postBuild()
 	childSetAction("events_yesterday", boost::bind(&FSPanelSearchEvents::onBtnYesterday, this));
 	childSetAction("events_today", boost::bind(&FSPanelSearchEvents::onBtnToday, this));
 
-	getChildView("events_next")->setEnabled(FALSE);
-	getChildView("events_back")->setEnabled(FALSE);
-	getChildView("events_tomorrow")->setEnabled(FALSE);
-	getChildView("events_yesterday")->setEnabled(FALSE);
-	getChildView("events_today")->setEnabled(FALSE);
+	getChildView("events_next")->setEnabled(false);
+	getChildView("events_back")->setEnabled(false);
+	getChildView("events_tomorrow")->setEnabled(false);
+	getChildView("events_yesterday")->setEnabled(false);
+	getChildView("events_today")->setEnabled(false);
 	setDay(0);
 
-	return TRUE;
+	return true;
 }
 
 void FSPanelSearchEvents::focusDefaultElement()
@@ -2618,7 +2618,7 @@ void FSPanelSearchEvents::onBtnFind()
 void FSPanelSearchEvents::onBtnNext()
 {
 	mStartSearch += RESULT_PAGE_SIZE;
-	getChildView("events_back")->setEnabled(TRUE);
+	getChildView("events_back")->setEnabled(true);
 
 	find();
 }
@@ -2658,23 +2658,23 @@ void FSPanelSearchEvents::onBtnToday()
 void FSPanelSearchEvents::resetSearch()
 {
 	mStartSearch = 0;
-	getChildView("events_back")->setEnabled(FALSE);
-	getChildView("events_next")->setEnabled(FALSE);
+	getChildView("events_back")->setEnabled(false);
+	getChildView("events_next")->setEnabled(false);
 }
 
 void FSPanelSearchEvents::onSearchModeChanged()
 {
 	if (mEventsMode->getValue().asString() == "current")
 	{
-		getChildView("events_yesterday")->setEnabled(FALSE);
-		getChildView("events_tomorrow")->setEnabled(FALSE);
-		getChildView("events_today")->setEnabled(FALSE);
+		getChildView("events_yesterday")->setEnabled(false);
+		getChildView("events_tomorrow")->setEnabled(false);
+		getChildView("events_today")->setEnabled(false);
 	}
 	else
 	{
-		getChildView("events_yesterday")->setEnabled(TRUE);
-		getChildView("events_tomorrow")->setEnabled(TRUE);
-		getChildView("events_today")->setEnabled(TRUE);
+		getChildView("events_yesterday")->setEnabled(true);
+		getChildView("events_tomorrow")->setEnabled(true);
+		getChildView("events_today")->setEnabled(true);
 	}
 }
 
@@ -2758,43 +2758,43 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 		{
 			LLStringUtil::format_map_t map;
 			map["[TEXT]"] = self->getChild<LLUICtrl>("events_edit")->getValue().asString();
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("not_found", map));
 			return;
 		}
 		else if(status & STATUS_SEARCH_EVENTS_SHORTSTRING)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_short"));
 			return;
 		}
 		else if (status & STATUS_SEARCH_EVENTS_BANNEDWORD)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_banned"));
 			return;
 		}
 		else if (status & STATUS_SEARCH_EVENTS_SEARCHDISABLED)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_disabled"));
 			return;
 		}
 		else if (status & STATUS_SEARCH_EVENTS_NODATEOFFSET)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_no_date_offset"));
 			return;
 		}
 		else if (status & STATUS_SEARCH_EVENTS_NOCATEGORY)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_no_events_category"));
 			return;
 		}
 		else if (status & STATUS_SEARCH_EVENTS_NOQUERY)
 		{
-			search_results->setEnabled(FALSE);
+			search_results->setEnabled(false);
 			search_results->setCommentText(LLTrans::getString("search_no_query"));
 			return;
 		}
@@ -2805,7 +2805,7 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 	{
 		LLStringUtil::format_map_t map;
 		map["[TEXT]"] = self->getChild<LLUICtrl>("events_edit")->getValue().asString();
-		search_results->setEnabled(FALSE);
+		search_results->setEnabled(false);
 		search_results->setCommentText(LLTrans::getString("not_found", map));
 	}
 
@@ -2851,7 +2851,7 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 			LL_INFOS("Search") << "Skipped " << event_id << " because it was out of scope" << LL_ENDL;
 			continue;
 		}
-		search_results->setEnabled(TRUE);
+		search_results->setEnabled(true);
 		found_one = true;
 
 		LLSD content;
@@ -2896,7 +2896,7 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 	if (found_one)
 	{
 		search_results->selectFirstItem();
-		search_results->setFocus(TRUE);
+		search_results->setFocus(true);
 		self->onSelectItem();
 	}
 }
@@ -2948,10 +2948,10 @@ FSPanelSearchWeb::FSPanelSearchWeb() : FSSearchPanelBase()
 	}
 }
 
-BOOL FSPanelSearchWeb::postBuild()
+bool FSPanelSearchWeb::postBuild()
 {
 	mWebBrowser = getChild<LLMediaCtrl>("search_browser");
-	return TRUE;
+	return true;
 }
 
 void FSPanelSearchWeb::loadURL(const SearchQuery &p)
@@ -3057,7 +3057,7 @@ void FSPanelSearchWeb::loadURL(const SearchQuery &p)
 
 void FSPanelSearchWeb::focusDefaultElement()
 {
-	mWebBrowser->setFocus(TRUE);
+	mWebBrowser->setFocus(true);
 }
 
 void FSPanelSearchWeb::draw()

@@ -100,8 +100,8 @@ bool LLScriptFloater::toggle(const LLUUID& notification_id)
 		}
 		else
 		{
-			floater->setVisible(TRUE);
-			floater->setFocus(FALSE);
+			floater->setVisible(true);
+			floater->setFocus(false);
 		}
 	}
 	// create and show new floater
@@ -130,7 +130,7 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	floater->createForm(notification_id);
 
 	//LLDialog(LLGiveInventory and LLLoadURL) should no longer steal focus (see EXT-5445)
-	floater->setAutoFocus(FALSE);
+	floater->setAutoFocus(false);
 
 	if(LLScriptFloaterManager::OBJ_SCRIPT == LLScriptFloaterManager::getObjectType(notification_id))
 	{
@@ -143,7 +143,7 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	}
 
 	//LLDialog(LLGiveInventory and LLLoadURL) should no longer steal focus (see EXT-5445)
-	LLFloaterReg::showTypedInstance<LLScriptFloater>("script_floater", notification_id, FALSE);
+	LLFloaterReg::showTypedInstance<LLScriptFloater>("script_floater", notification_id, false);
 
 	return floater;
 }
@@ -229,7 +229,7 @@ void LLScriptFloater::onStackClicked()
 		const LLUUID& next_notification = DialogStack::instance().flip(getNotificationId());
 		floater = LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater", next_notification);
 	}
-	gFloaterView->bringToFront(floater, TRUE);
+	gFloaterView->bringToFront(floater, true);
 }
 // </FS:Zi>
 
@@ -260,7 +260,7 @@ void LLScriptFloater::setDocked(bool docked, bool pop_on_undock /* = true */)
 	hideToastsIfNeeded();
 }
 
-void LLScriptFloater::setVisible(BOOL visible)
+void LLScriptFloater::setVisible(bool visible)
 {
 	LLDockableFloater::setVisible(visible);
 
@@ -944,11 +944,11 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	floater->createForm(notification_id);
 
 	//LLDialog(LLGiveInventory and LLLoadURL) should no longer steal focus (see EXT-5445)
-	floater->setAutoFocus(FALSE);
+	floater->setAutoFocus(false);
 
 	eDialogPosition dialog_position = (eDialogPosition)gSavedSettings.getS32("ScriptDialogsPosition");
 
-	BOOL chicletsDisabled = gSavedSettings.getBOOL("FSDisableIMChiclets");
+	bool chicletsDisabled = gSavedSettings.getBOOL("FSDisableIMChiclets");
 
 	if (dialog_position == POS_DOCKED && chicletsDisabled)
 	{
@@ -1036,7 +1036,7 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 	}
 
 	//LLDialog(LLGiveInventory and LLLoadURL) should no longer steal focus (see EXT-5445)
-	LLFloaterReg::showTypedInstance<LLScriptFloater>("script_floater", notification_id, FALSE);
+	LLFloaterReg::showTypedInstance<LLScriptFloater>("script_floater", notification_id, false);
 
 	if (!floater->isDocked())
 	{

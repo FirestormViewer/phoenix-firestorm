@@ -89,7 +89,7 @@ public:
 	// returns global pos of tracked thing
 	static LLVector3d 	getTrackedPositionGlobal();
 
-	static BOOL 		hasLandmarkPosition();
+	static bool 		hasLandmarkPosition();
 	static const std::string& getTrackedLocationName();
 
 	static void drawHUDArrow();
@@ -97,10 +97,10 @@ public:
 	// Draw in-world 3D tracking stuff
 	static void	render3D();
 
-	static BOOL handleMouseDown(S32 x, S32 y);
+	static bool handleMouseDown(S32 x, S32 y);
 
 	static LLTracker* sTrackerp;
-	static BOOL sCheesyBeacon;
+	static bool sCheesyBeacon;
 	
 	static const std::string& getLabel() { return instance()->mLabel; }
 	static const std::string& getToolTip() { return instance()->mToolTip; }
@@ -146,13 +146,13 @@ protected:
 	LLUUID					mTrackedLandmarkItemID;
 	std::vector<LLUUID>	mLandmarkAssetIDList;
 	std::vector<LLUUID>	mLandmarkItemIDList;
-	BOOL					mHasReachedLandmark;
-	BOOL 					mHasLandmarkPosition;
-	BOOL					mLandmarkHasBeenVisited;
+	bool					mHasReachedLandmark;
+	bool 					mHasLandmarkPosition;
+	bool					mLandmarkHasBeenVisited;
 
 	std::string				mTrackedLocationName;
-	BOOL					mIsTrackingLocation;
-	BOOL					mHasReachedLocation;
+	bool					mIsTrackingLocation;
+	bool					mHasReachedLocation;
 };
 
 

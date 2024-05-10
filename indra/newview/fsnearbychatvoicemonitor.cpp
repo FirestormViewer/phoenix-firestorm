@@ -66,12 +66,12 @@ void FSNearbyChatVoiceControl::draw()
 		if (mVoiceMonitorVisible)
 		{
 			setTextPadding(mOriginalTextpadLeft, mOriginalTextpadRight + mVoiceMonitor->getRect().getWidth() + mVoiceMonitorPadding);
-			mVoiceMonitor->setVisible(TRUE);
+			mVoiceMonitor->setVisible(true);
 		}
 		else
 		{
 			setTextPadding(mOriginalTextpadLeft, mOriginalTextpadRight);
-			mVoiceMonitor->setVisible(FALSE);
+			mVoiceMonitor->setVisible(false);
 		}
 	}
 	FSNearbyChatControl::draw();

@@ -48,7 +48,7 @@ LLVisualParamInfo::LLVisualParamInfo()
 //-----------------------------------------------------------------------------
 // parseXml()
 //-----------------------------------------------------------------------------
-BOOL LLVisualParamInfo::parseXml(LLXmlTreeNode *node)
+bool LLVisualParamInfo::parseXml(LLXmlTreeNode *node)
 {
 	// attribute: id
 	static LLStdStringHandle id_string = LLXmlTree::addAttributeString("id");
@@ -102,7 +102,7 @@ BOOL LLVisualParamInfo::parseXml(LLXmlTreeNode *node)
 	else
 	{
 		LL_WARNS() << "Avatar file: <param> has invalid sex attribute: " << sex << LL_ENDL;
-		return FALSE;
+		return false;
 	}
 	
 	// attribute: name
@@ -110,7 +110,7 @@ BOOL LLVisualParamInfo::parseXml(LLXmlTreeNode *node)
 	if( !node->getFastAttributeString( name_string, mName ) )
 	{
 		LL_WARNS() << "Avatar file: <param> is missing name attribute" << LL_ENDL;
-		return FALSE;
+		return false;
 	}
 
 	// attribute: label
@@ -138,7 +138,7 @@ BOOL LLVisualParamInfo::parseXml(LLXmlTreeNode *node)
 		mMaxName = "More";
 	}
 
-	return TRUE;
+	return true;
 }
 
 //virtual
@@ -164,8 +164,8 @@ LLVisualParam::LLVisualParam()
 	mLastWeight( 0.f ),
 	mNext( NULL ),
 	mTargetWeight( 0.f ),
-	mIsAnimating( FALSE ),
-	mIsDummy(FALSE),
+	mIsAnimating( false ),
+	mIsDummy(false),
 	mID( -1 ),
 	mInfo( 0 ),
 	mParamLocation(LOC_UNKNOWN)
@@ -207,29 +207,29 @@ LLVisualParam::~LLVisualParam()
 // setInfo()
 //-----------------------------------------------------------------------------
 
-BOOL LLVisualParam::setInfo(LLVisualParamInfo *info)
+bool LLVisualParam::setInfo(LLVisualParamInfo *info)
 {
 	llassert(mInfo == NULL);
 	if (info->mID < 0)
-		return FALSE;
+		return false;
 	mInfo = info;
 	mID = info->mID;
-	setWeight(getDefaultWeight(), FALSE );
-	return TRUE;
+	setWeight(getDefaultWeight(), false );
+	return true;
 }
 
 //-----------------------------------------------------------------------------
 // parseData()
 //-----------------------------------------------------------------------------
-BOOL LLVisualParam::parseData(LLXmlTreeNode *node)
+bool LLVisualParam::parseData(LLXmlTreeNode *node)
 {
 	LLVisualParamInfo *info = new LLVisualParamInfo;
 
 	info->parseXml(node);
 	if (!setInfo(info))
-		return FALSE;
+		return false;
 	
-	return TRUE;
+	return true;
 }
 */
 
@@ -238,7 +238,7 @@ BOOL LLVisualParam::parseData(LLXmlTreeNode *node)
 //-----------------------------------------------------------------------------
 // <FS:Ansariel> [Legacy Bake]
 //void LLVisualParam::setWeight(F32 weight)
-void LLVisualParam::setWeight(F32 weight, BOOL upload_bake)
+void LLVisualParam::setWeight(F32 weight, bool upload_bake)
 {
 	if (mIsAnimating)
 	{
@@ -267,7 +267,7 @@ void LLVisualParam::setWeight(F32 weight, BOOL upload_bake)
 //-----------------------------------------------------------------------------
 // <FS:Ansariel> [Legacy Bake]
 //void LLVisualParam::setAnimationTarget(F32 target_value)
-void LLVisualParam::setAnimationTarget(F32 target_value, BOOL upload_bake)
+void LLVisualParam::setAnimationTarget(F32 target_value, bool upload_bake)
 {
 	// don't animate dummy parameters
 	if (mIsDummy)
@@ -290,7 +290,7 @@ void LLVisualParam::setAnimationTarget(F32 target_value, BOOL upload_bake)
 	{
 		mTargetWeight = target_value;
 	}
-	mIsAnimating = TRUE;
+	mIsAnimating = true;
 
 	if (mNext)
 	{
@@ -323,7 +323,7 @@ void LLVisualParam::clearNextParam()
 //-----------------------------------------------------------------------------
 // <FS:Ansariel> [Legacy Bake]
 //void LLVisualParam::animate( F32 delta)
-void LLVisualParam::animate( F32 delta, BOOL upload_bake)
+void LLVisualParam::animate( F32 delta, bool upload_bake)
 {
 	if (mIsAnimating)
 	{
@@ -339,11 +339,11 @@ void LLVisualParam::animate( F32 delta, BOOL upload_bake)
 //-----------------------------------------------------------------------------
 // <FS:Ansariel> [Legacy Bake]
 //void LLVisualParam::stopAnimating()
-void LLVisualParam::stopAnimating(BOOL upload_bake)
+void LLVisualParam::stopAnimating(bool upload_bake)
 { 
 	if (mIsAnimating && isTweakable())
 	{
-		mIsAnimating = FALSE; 
+		mIsAnimating = false; 
 		// <FS:Ansariel> [Legacy Bake]
 		//setWeight(mTargetWeight);
 		setWeight(mTargetWeight, upload_bake);
@@ -351,10 +351,10 @@ void LLVisualParam::stopAnimating(BOOL upload_bake)
 }
 
 //virtual
-BOOL LLVisualParam::linkDrivenParams(visual_param_mapper mapper, BOOL only_cross_params)
+bool LLVisualParam::linkDrivenParams(visual_param_mapper mapper, bool only_cross_params)
 {
 	// nothing to do for non-driver parameters
-	return TRUE;
+	return true;
 }
 
 //virtual 

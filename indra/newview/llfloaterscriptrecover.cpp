@@ -77,12 +77,12 @@ void LLFloaterScriptRecover::onOpen(const LLSD& sdKey)
 	}
 }
 
-BOOL LLFloaterScriptRecover::postBuild()
+bool LLFloaterScriptRecover::postBuild()
 {
 	findChild<LLUICtrl>("recover_btn")->setCommitCallback(boost::bind(&LLFloaterScriptRecover::onBtnRecover, this));
 	findChild<LLUICtrl>("cancel_btn")->setCommitCallback(boost::bind(&LLFloaterScriptRecover::onBtnCancel, this));
 
-	return TRUE;
+	return true;
 }
 
 void LLFloaterScriptRecover::onBtnCancel()
@@ -222,12 +222,12 @@ bool LLScriptRecoverQueue::recoverNext()
 
 	if (m_FileQueue.end() == itFile) 
 	{
-		LLInventoryPanel* pInvPanel = LLInventoryPanel::getActiveInventoryPanel(TRUE);
+		LLInventoryPanel* pInvPanel = LLInventoryPanel::getActiveInventoryPanel(true);
 		LLFolderViewFolder* pFVF = dynamic_cast<LLFolderViewFolder*>(pInvPanel ? pInvPanel->getItemByID(idFNF) : NULL);
 		if (pFVF)
 		{
-			pFVF->setOpenArrangeRecursively(TRUE, LLFolderViewFolder::RECURSE_UP);
-			pInvPanel->setSelection(idFNF, TRUE);
+			pFVF->setOpenArrangeRecursively(true, LLFolderViewFolder::RECURSE_UP);
+			pInvPanel->setSelection(idFNF, true);
 		}
 
 		delete this;
@@ -337,7 +337,7 @@ void LLScriptRecoverQueue::onSavedScript(LLUUID itemId, LLUUID newAssetId, LLUUI
 			{
 				LLPointer<LLViewerInventoryItem> pNewItem = new LLViewerInventoryItem(pItem);
 				pNewItem->rename(strScriptName);
-				pNewItem->updateServer(FALSE);
+				pNewItem->updateServer(false);
 				gInventory.updateItem(pNewItem);
 				gInventory.notifyObservers();
 			}
@@ -352,7 +352,7 @@ void LLScriptRecoverQueue::onSavedScript(LLUUID itemId, LLUUID newAssetId, LLUUI
 
 		LLViewerInventoryItem* pItem = gInventory.getItem( itemId );
 		if (pItem)
-			gInventory.changeItemParent(pItem, gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH), FALSE);
+			gInventory.changeItemParent(pItem, gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH), false);
 		m_FileQueue.erase(itFile);
 	}
 	recoverNext();

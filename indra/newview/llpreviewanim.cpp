@@ -55,7 +55,7 @@ LLPreviewAnim::LLPreviewAnim(const LLSD& key)
 }
 
 // virtual
-BOOL LLPreviewAnim::postBuild()
+bool LLPreviewAnim::postBuild()
 {
 	childSetCommitCallback("desc", LLPreview::onText, this);
 	getChild<LLLineEditor>("desc")->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
@@ -64,9 +64,9 @@ BOOL LLPreviewAnim::postBuild()
 	//pAdvancedStatsTextBox = getChild<LLTextBox>("AdvancedStats");
 
     //// Assume that advanced stats start visible (for XUI preview tool's purposes)
-    //pAdvancedStatsTextBox->setVisible(FALSE);
+    //pAdvancedStatsTextBox->setVisible(false);
     //LLRect rect = getRect();
-    //reshape(rect.getWidth(), rect.getHeight() - pAdvancedStatsTextBox->getRect().getHeight() - ADVANCED_VPAD, FALSE);
+    //reshape(rect.getWidth(), rect.getHeight() - pAdvancedStatsTextBox->getRect().getHeight() - ADVANCED_VPAD, false);
 	// </FS:Ansariel>
 
 	// <FS:Zi> Make advanced animation preview optional
@@ -210,10 +210,10 @@ void LLPreviewAnim::cleanup()
 {
 	this->mItemID = LLUUID::null;
 	this->mDidStart = false;
-	getChild<LLUICtrl>("Inworld")->setValue(FALSE);
-	getChild<LLUICtrl>("Locally")->setValue(FALSE);
-	getChild<LLUICtrl>("Inworld")->setEnabled(TRUE);
-	getChild<LLUICtrl>("Locally")->setEnabled(TRUE);
+	getChild<LLUICtrl>("Inworld")->setValue(false);
+	getChild<LLUICtrl>("Locally")->setValue(false);
+	getChild<LLUICtrl>("Inworld")->setEnabled(true);
+	getChild<LLUICtrl>("Locally")->setEnabled(true);
 }
 
 // virtual
@@ -231,19 +231,19 @@ void LLPreviewAnim::onClose(bool app_quitting)
 // <FS:Ansariel> Improved animation preview
 //void LLPreviewAnim::showAdvanced()
 //{
-//    BOOL was_visible =  pAdvancedStatsTextBox->getVisible();
+//    bool was_visible =  pAdvancedStatsTextBox->getVisible();
 //
 //    if (was_visible)
 //    {
-//        pAdvancedStatsTextBox->setVisible(FALSE);
+//        pAdvancedStatsTextBox->setVisible(false);
 //        LLRect rect = getRect();
-//        reshape(rect.getWidth(), rect.getHeight() - pAdvancedStatsTextBox->getRect().getHeight() - ADVANCED_VPAD, FALSE);
+//        reshape(rect.getWidth(), rect.getHeight() - pAdvancedStatsTextBox->getRect().getHeight() - ADVANCED_VPAD, false);
 //    }
 //    else
 //    {
-//        pAdvancedStatsTextBox->setVisible(TRUE);
+//        pAdvancedStatsTextBox->setVisible(true);
 //        LLRect rect = getRect();
-//        reshape(rect.getWidth(), rect.getHeight() + pAdvancedStatsTextBox->getRect().getHeight() + ADVANCED_VPAD, FALSE);
+//        reshape(rect.getWidth(), rect.getHeight() + pAdvancedStatsTextBox->getRect().getHeight() + ADVANCED_VPAD, false);
 //
 //        LLMotion *motion = NULL;
 //        const LLInventoryItem* item = getItem();

@@ -41,7 +41,7 @@ public:
 	virtual ~FSMoneyTracker() {};
 	virtual void onClose(bool app_quitting);
 
-	BOOL postBuild();
+	bool postBuild();
 	void addPayment(const LLUUID other_id, bool is_group, S32 amount, bool incoming);
 
 private:

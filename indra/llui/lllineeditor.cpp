@@ -74,7 +74,7 @@ static LLDefaultChildRegistry::Register<LLLineEditor> r1("line_editor");
 
 // Compiler optimization, generate extern template
 template class LLLineEditor* LLView::getChild<class LLLineEditor>(
-	const std::string& name, BOOL recurse) const;
+	const std::string& name, bool recurse) const;
 
 //
 // Member functions
@@ -128,10 +128,10 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 	mTextLeftEdge(0),		// computed in updateTextPadding() below
 	mTextRightEdge(0),		// computed in updateTextPadding() below
 	mCommitOnFocusLost( p.commit_on_focus_lost ),
-	mKeystrokeOnEsc(FALSE),
+	mKeystrokeOnEsc(false),
 	mRevertOnEsc( p.revert_on_esc ),
 	mKeystrokeCallback( p.keystroke_callback() ),
-	mIsSelecting( FALSE ),
+	mIsSelecting( false ),
 	mSelectionStart( 0 ),
 	mSelectionEnd( 0 ),
 	mLastSelectionX(-1),
@@ -139,24 +139,24 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 	mLastSelectionStart(-1),
 	mLastSelectionEnd(-1),
 	mBorderThickness( 0 ),
-	mIgnoreArrowKeys( FALSE ),
+	mIgnoreArrowKeys( false ),
 	mIgnoreTab( p.ignore_tab ),
 	mDrawAsterixes( p.is_password ),
 	mSpellCheck( p.spellcheck ),
 	mSpellCheckStart(-1),
 	mSpellCheckEnd(-1),
 	mSelectAllonFocusReceived( p.select_on_focus ),
-	mSelectAllonCommit( TRUE ),
-	mPassDelete(FALSE),
-	mReadOnly(FALSE),
+	mSelectAllonCommit( true ),
+	mPassDelete(false),
+	mReadOnly(false),
 	mBgImage( p.background_image ),
 	mBgImageDisabled( p.background_image_disabled ),
 	mBgImageFocused( p.background_image_focused ),
 	mShowImageFocused( p.bg_image_always_focused ),
 	mShowLabelFocused( p.show_label_focused ),
 	mUseBgColor(p.use_bg_color),
-	mHaveHistory(FALSE),
-	mReplaceNewlinesWithSpaces( TRUE ),
+	mHaveHistory(false),
+	mReplaceNewlinesWithSpaces( true ),
 	mLabel(p.label),
 	mCursorColor(p.cursor_color()),
 	mBgColor(p.bg_color()),
@@ -172,7 +172,7 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
 {
 	llassert( mMaxLengthBytes > 0 );
 
-	LLUICtrl::setEnabled(TRUE);
+	LLUICtrl::setEnabled(true);
 	setEnabled(p.enabled);
 
 	mScrollTimer.reset();
@@ -217,7 +217,7 @@ LLLineEditor::LLLineEditor(const LLLineEditor::Params& p)
  
 LLLineEditor::~LLLineEditor()
 {
-	mCommitOnFocusLost = FALSE;
+	mCommitOnFocusLost = false;
     
     // Make sure no context menu linger around once the widget is deleted
 	LLContextMenu* menu = static_cast<LLContextMenu*>(mContextMenuHandle.get());
@@ -234,7 +234,7 @@ LLLineEditor::~LLLineEditor()
 void LLLineEditor::initFromParams(const LLLineEditor::Params& params)
 {
 	LLUICtrl::initFromParams(params);
-	LLUICtrl::setEnabled(TRUE);
+	LLUICtrl::setEnabled(true);
 	setEnabled(params.enabled);
 }
 
@@ -283,9 +283,9 @@ void LLLineEditor::onCommit()
 	if (mSelectAllonCommit) selectAll();
 }
 
-// Returns TRUE if user changed value at all
+// Returns true if user changed value at all
 // virtual
-BOOL LLLineEditor::isDirty() const
+bool LLLineEditor::isDirty() const
 {
 	return mText.getString() != mPrevText;
 }
@@ -346,14 +346,14 @@ void LLLineEditor::updateHistory()
 	}
 }
 
-void LLLineEditor::reshape(S32 width, S32 height, BOOL called_from_parent)
+void LLLineEditor::reshape(S32 width, S32 height, bool called_from_parent)
 {
 	LLUICtrl::reshape(width, height, called_from_parent);
 	updateTextPadding(); // For clamping side-effect.
 	setCursor(mCursorPos); // For clamping side-effect.
 }
 
-void LLLineEditor::setEnabled(BOOL enabled)
+void LLLineEditor::setEnabled(bool enabled)
 {
 	mReadOnly = !enabled;
 	setTabStop(!mReadOnly);
@@ -408,7 +408,7 @@ void LLLineEditor::setText(const LLStringExplicit &new_text, bool use_size_limit
 
 	// Check to see if entire field is selected.
 	S32 len = mText.length();
-	BOOL all_selected = (len > 0)
+	bool all_selected = (len > 0)
 		&& (( mSelectionStart == 0 && mSelectionEnd == len ) 
 			|| ( mSelectionStart == len && mSelectionEnd == 0 ));
 
@@ -520,7 +520,7 @@ void LLLineEditor::resetScrollPosition()
 	setCursor(getCursor());
 }
 
-BOOL LLLineEditor::canDeselect() const
+bool LLLineEditor::canDeselect() const
 {
 	return hasSelection();
 }
@@ -529,13 +529,13 @@ void LLLineEditor::deselect()
 {
 	mSelectionStart = 0;
 	mSelectionEnd = 0;
-	mIsSelecting = FALSE;
+	mIsSelecting = false;
 }
 
 
 void LLLineEditor::startSelection()
 {
-	mIsSelecting = TRUE;
+	mIsSelecting = true;
 	mSelectionStart = getCursor();
 	mSelectionEnd = getCursor();
 }
@@ -544,14 +544,14 @@ void LLLineEditor::endSelection()
 {
 	if( mIsSelecting )
 	{
-		mIsSelecting = FALSE;
+		mIsSelecting = false;
 		mSelectionEnd = getCursor();
 	}
 }
 
-BOOL LLLineEditor::canSelectAll() const
+bool LLLineEditor::canSelectAll() const
 {
-	return TRUE;
+	return true;
 }
 
 void LLLineEditor::selectAll()
@@ -565,7 +565,7 @@ void LLLineEditor::selectAll()
 	mSelectionEnd = 0;
 	setCursor(mSelectionEnd);
 	//mScrollHPos = 0;
-	mIsSelecting = TRUE;
+	mIsSelecting = true;
 	// <FS:AW> Linux primary "clipboard" tainted by auto-selection
 	//updatePrimary();
 }
@@ -664,9 +664,9 @@ void LLLineEditor::onSpellCheckSettingsChange()
 	mSpellCheckStart = mSpellCheckEnd = -1;
 }
 
-BOOL LLLineEditor::handleDoubleClick(S32 x, S32 y, MASK mask)
+bool LLLineEditor::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
-	setFocus( TRUE );
+	setFocus( true );
 	mTripleClickTimer.setTimerExpirySec(TRIPLE_CLICK_INTERVAL);
 
 	if (mSelectionEnd == 0 && mSelectionStart == mText.length())
@@ -678,7 +678,7 @@ BOOL LLLineEditor::handleDoubleClick(S32 x, S32 y, MASK mask)
 	{
 		const LLWString& wtext = mText.getWString();
 
-		BOOL doSelectAll = TRUE;
+		bool doSelectAll = true;
 
 		// Select the word we're on
 		if( LLWStringUtil::isPartOfWord( wtext[mCursorPos] ) )
@@ -713,7 +713,7 @@ BOOL LLLineEditor::handleDoubleClick(S32 x, S32 y, MASK mask)
 	// We don't want handleMouseUp() to "finish" the selection (and thereby
 	// set mSelectionEnd to where the mouse is), so we finish the selection 
 	// here.
-	mIsSelecting = FALSE;  
+	mIsSelecting = false;
 
 	// delay cursor flashing
 	mKeystrokeTimer.reset();
@@ -722,15 +722,15 @@ BOOL LLLineEditor::handleDoubleClick(S32 x, S32 y, MASK mask)
 	// <FS:AW> Linux primary "clipboard" tainted by auto-selection
 	//updatePrimary();
 
-	return TRUE;
+	return true;
 }
 
-BOOL LLLineEditor::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLLineEditor::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	// Check first whether the "clear search" button wants to deal with this.
 	if(childrenHandleMouseDown(x, y, mask) != NULL) 
 	{
-		return TRUE;
+		return true;
 	}
 	
 	if (!mSelectAllonFocusReceived
@@ -742,7 +742,7 @@ BOOL LLLineEditor::handleMouseDown(S32 x, S32 y, MASK mask)
 		if (mask & MASK_SHIFT)
 		{
 			// assume we're starting a drag select
-			mIsSelecting = TRUE;
+			mIsSelecting = true;
 
 			// Handle selection extension
 			S32 old_cursor_pos = getCursor();
@@ -798,14 +798,14 @@ BOOL LLLineEditor::handleMouseDown(S32 x, S32 y, MASK mask)
 				// We don't want handleMouseUp() to "finish" the selection (and thereby
 				// set mSelectionEnd to where the mouse is), so we finish the selection 
 				// here.
-				mIsSelecting = FALSE;
+				mIsSelecting = false;
 			}
 		}
 
 		gFocusMgr.setMouseCapture( this );
 	}
 
-	setFocus(TRUE);
+	setFocus(true);
 
 	// delay cursor flashing
 	mKeystrokeTimer.reset();
@@ -813,40 +813,40 @@ BOOL LLLineEditor::handleMouseDown(S32 x, S32 y, MASK mask)
 	if (mMouseDownSignal)
 		(*mMouseDownSignal)(this,x,y,mask);
 
-	return TRUE;
+	return true;
 }
 
-BOOL LLLineEditor::handleMiddleMouseDown(S32 x, S32 y, MASK mask)
+bool LLLineEditor::handleMiddleMouseDown(S32 x, S32 y, MASK mask)
 {
         // LL_INFOS() << "MiddleMouseDown" << LL_ENDL;
-	setFocus( TRUE );
+	setFocus( true );
 	if( canPastePrimary() )
 	{
 		setCursorAtLocalPos(x);
 		pastePrimary();
 	}
-	return TRUE;
+	return true;
 }
 
-BOOL LLLineEditor::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool LLLineEditor::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
-	setFocus(TRUE);
+	setFocus(true);
     if (!LLUICtrl::handleRightMouseDown(x, y, mask) && getShowContextMenu())
 	{
 		showContextMenu(x, y);
 	}
-	return TRUE;
+	return true;
 }
 
-BOOL LLLineEditor::handleHover(S32 x, S32 y, MASK mask)
+bool LLLineEditor::handleHover(S32 x, S32 y, MASK mask)
 {
-	BOOL handled = FALSE;
+	bool handled = false;
 	// Check first whether the "clear search" button wants to deal with this.
 	if(!hasMouseCapture())
 	{
 		if(childrenHandleHover(x, y, mask) != NULL) 
 		{
-			return TRUE;
+			return true;
 		}
 	}
 
@@ -889,34 +889,34 @@ BOOL LLLineEditor::handleHover(S32 x, S32 y, MASK mask)
 
 		getWindow()->setCursor(UI_CURSOR_IBEAM);
 		LL_DEBUGS("UserInput") << "hover handled by " << getName() << " (active)" << LL_ENDL;		
-		handled = TRUE;
+		handled = true;
 	}
 
 	if( !handled  )
 	{
 		getWindow()->setCursor(UI_CURSOR_IBEAM);
 		LL_DEBUGS("UserInput") << "hover handled by " << getName() << " (inactive)" << LL_ENDL;		
-		handled = TRUE;
+		handled = true;
 	}
 
 	return handled;
 }
 
 
-BOOL LLLineEditor::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLLineEditor::handleMouseUp(S32 x, S32 y, MASK mask)
 {
-	BOOL	handled = FALSE;
+	bool	handled = false;
 
 	if( hasMouseCapture() )
 	{
 		gFocusMgr.setMouseCapture( NULL );
-		handled = TRUE;
+		handled = true;
 	}
 
 	// Check first whether the "clear search" button wants to deal with this.
 	if(!handled && childrenHandleMouseUp(x, y, mask) != NULL) 
 	{
-		return TRUE;
+		return true;
 	}
 
 	if( mIsSelecting )
@@ -924,7 +924,7 @@ BOOL LLLineEditor::handleMouseUp(S32 x, S32 y, MASK mask)
 		setCursorAtLocalPos( x );
 		mSelectionEnd = getCursor();
 
-		handled = TRUE;
+		handled = true;
 	}
 
 	if( handled )
@@ -1009,19 +1009,19 @@ void LLLineEditor::addChar(const llwchar uni_char)
 
 	S32 new_bytes = wchar_utf8_length(new_c);
 
-	BOOL allow_char = TRUE;
+	bool allow_char = true;
 
 	// Check byte length limit
 	if ((new_bytes + cur_bytes) > mMaxLengthBytes)
 	{
-		allow_char = FALSE;
+		allow_char = false;
 	}
 	else if (mMaxLengthChars)
 	{
 		S32 wide_chars = mText.getWString().size();
 		if ((wide_chars + 1) > mMaxLengthChars)
 		{
-			allow_char = FALSE;
+			allow_char = false;
 		}
 	}
 
@@ -1085,7 +1085,7 @@ void LLLineEditor::setSelection(S32 start, S32 end)
 {
 	S32 len = mText.length();
 
-	mIsSelecting = TRUE;
+	mIsSelecting = true;
 
 	// JC, yes, this seems odd, but I think you have to presume a 
 	// selection dragged from the end towards the start.
@@ -1094,7 +1094,7 @@ void LLLineEditor::setSelection(S32 start, S32 end)
 	setCursor(start);
 }
 
-void LLLineEditor::setDrawAsterixes(BOOL b)
+void LLLineEditor::setDrawAsterixes(bool b)
 {
 	mDrawAsterixes = b;
 	updateAllowingLanguageInput();
@@ -1129,13 +1129,13 @@ S32 LLLineEditor::nextWordPos(S32 cursorPos) const
 }
 
 
-BOOL LLLineEditor::handleSelectionKey(KEY key, MASK mask)
+bool LLLineEditor::handleSelectionKey(KEY key, MASK mask)
 {
-	BOOL handled = FALSE;
+	bool handled = false;
 
 	if( mask & MASK_SHIFT )
 	{
-		handled = TRUE;
+		handled = true;
 
 		switch( key )
 		{
@@ -1188,7 +1188,7 @@ BOOL LLLineEditor::handleSelectionKey(KEY key, MASK mask)
 			}
 
 		default:
-			handled = FALSE;
+			handled = false;
 			break;
 		}
 	}
@@ -1221,7 +1221,7 @@ void LLLineEditor::deleteSelection()
 	}
 }
 
-BOOL LLLineEditor::canCut() const
+bool LLLineEditor::canCut() const
 {
 	return !mReadOnly && !mDrawAsterixes && hasSelection();
 }
@@ -1245,7 +1245,7 @@ void LLLineEditor::cut()
 		deleteSelection();
 
 		// Validate new string and rollback the if needed.
-		BOOL need_to_rollback = ( mPrevalidateFunc && !mPrevalidateFunc( mText.getWString() ) );
+		bool need_to_rollback = ( mPrevalidateFunc && !mPrevalidateFunc( mText.getWString() ) );
 		if( need_to_rollback )
 		{
 			rollback.doRollback( this );
@@ -1258,7 +1258,7 @@ void LLLineEditor::cut()
 	}
 }
 
-BOOL LLLineEditor::canCopy() const
+bool LLLineEditor::canCopy() const
 {
 	return !mDrawAsterixes && hasSelection();
 }
@@ -1275,7 +1275,7 @@ void LLLineEditor::copy()
 	}
 }
 
-BOOL LLLineEditor::canPaste() const
+bool LLLineEditor::canPaste() const
 {
 	return !mReadOnly && LLClipboard::instance().isTextAvailable(); 
 }
@@ -1373,7 +1373,7 @@ void LLLineEditor::pasteHelper(bool is_primary)
 			deselect();
 
 			// Validate new string and rollback the if needed.
-			BOOL need_to_rollback = ( mPrevalidateFunc && !mPrevalidateFunc( mText.getWString() ) );
+			bool need_to_rollback = ( mPrevalidateFunc && !mPrevalidateFunc( mText.getWString() ) );
 			if( need_to_rollback )
 			{
 				rollback.doRollback( this );
@@ -1398,7 +1398,7 @@ void LLLineEditor::copyPrimary()
 	}
 }
 
-BOOL LLLineEditor::canPastePrimary() const
+bool LLLineEditor::canPastePrimary() const
 {
 	return !mReadOnly && LLClipboard::instance().isTextAvailable(true); 
 }
@@ -1411,9 +1411,9 @@ void LLLineEditor::updatePrimary()
 	}
 }
 
-BOOL LLLineEditor::handleSpecialKey(KEY key, MASK mask)	
+bool LLLineEditor::handleSpecialKey(KEY key, MASK mask)	
 {
-	BOOL handled = FALSE;
+	bool handled = false;
 
 	switch( key )
 	{
@@ -1423,7 +1423,7 @@ BOOL LLLineEditor::handleSpecialKey(KEY key, MASK mask)
 			gKeyboard->toggleInsertMode();
 		}
 
-		handled = TRUE;
+		handled = true;
 		break;
 
 	case KEY_BACKSPACE:
@@ -1450,7 +1450,7 @@ BOOL LLLineEditor::handleSpecialKey(KEY key, MASK mask)
 				LLUI::getInstance()->reportBadKeystroke();
 			}
 		}
-		handled = TRUE;
+		handled = true;
 		break;
 
 	// <FS> Ctrl-Backspace remove word
@@ -1468,7 +1468,7 @@ BOOL LLLineEditor::handleSpecialKey(KEY key, MASK mask)
 		if (!mIgnoreArrowKeys)
 		{
 			setCursor(0);
-			handled = TRUE;
+			handled = true;
 		}
 		break;
 
@@ -1481,7 +1481,7 @@ BOOL LLLineEditor::handleSpecialKey(KEY key, MASK mask)
 			{
 				setCursor(len);
 			}
-			handled = TRUE;
+			handled = true;
 		}
 		break;
 
@@ -1508,7 +1508,7 @@ BOOL LLLineEditor::handleSpecialKey(KEY key, MASK mask)
 			{
 				LLUI::getInstance()->reportBadKeystroke();
 			}
-			handled = TRUE;
+			handled = true;
 		}
 		break;
 
@@ -1535,34 +1535,34 @@ BOOL LLLineEditor::handleSpecialKey(KEY key, MASK mask)
 			{
 				LLUI::getInstance()->reportBadKeystroke();
 			}
-			handled = TRUE;
+			handled = true;
 		}
 		break;
 
 	// handle ctrl-uparrow if we have a history enabled line editor.
 	case KEY_UP:
-		if( mHaveHistory && ((mIgnoreArrowKeys == false) || ( MASK_CONTROL == mask )) )
+		if (mHaveHistory && (!mIgnoreArrowKeys || (MASK_CONTROL == mask)))
 		{
-			if( mCurrentHistoryLine > mLineHistory.begin() )
+			if (mCurrentHistoryLine > mLineHistory.begin())
 			{
 				// <FS> FIRE-324. Nearby and IM chat bars forget what was written after browsing history
 				(*mCurrentHistoryLine).assign(getText());
-				mText.assign( *(--mCurrentHistoryLine) );
+				mText.assign(*(--mCurrentHistoryLine));
 				setCursorToEnd();
 			}
 			else
 			{
 				LLUI::getInstance()->reportBadKeystroke();
 			}
-			handled = TRUE;
+			handled = true;
 		}
 		break;
 
 	// handle [ctrl]-downarrow if we have a history enabled line editor
 	case KEY_DOWN:
-		if( mHaveHistory  && ((mIgnoreArrowKeys == false) || ( MASK_CONTROL == mask )) )
+		if (mHaveHistory  && (!mIgnoreArrowKeys || (MASK_CONTROL == mask)))
 		{
-			if( !mLineHistory.empty() && mCurrentHistoryLine < mLineHistory.end() - 1 )
+			if (!mLineHistory.empty() && mCurrentHistoryLine < mLineHistory.end() - 1)
 			{
 				mText.assign( *(++mCurrentHistoryLine) );
 				setCursorToEnd();
@@ -1571,7 +1571,7 @@ BOOL LLLineEditor::handleSpecialKey(KEY key, MASK mask)
 			{
 				LLUI::getInstance()->reportBadKeystroke();
 			}
-			handled = TRUE;
+			handled = true;
 		}
 		break;
 
@@ -1600,10 +1600,10 @@ BOOL LLLineEditor::handleSpecialKey(KEY key, MASK mask)
 }
 
 
-BOOL LLLineEditor::handleKeyHere(KEY key, MASK mask )
+bool LLLineEditor::handleKeyHere(KEY key, MASK mask )
 {
-	BOOL	handled = FALSE;
-	BOOL	selection_modified = FALSE;
+	bool	handled = false;
+	bool	selection_modified = false;
 
 	if ( gFocusMgr.getKeyboardFocus() == this )
 	{
@@ -1645,7 +1645,7 @@ BOOL LLLineEditor::handleKeyHere(KEY key, MASK mask )
 				deselect();
 			}
 
-			BOOL need_to_rollback = FALSE;
+			bool need_to_rollback = false;
 
 			// If read-only, don't allow changes
 			need_to_rollback |= (mReadOnly && (mText.getString() == rollback.getText()));
@@ -1676,18 +1676,18 @@ BOOL LLLineEditor::handleKeyHere(KEY key, MASK mask )
 }
 
 
-BOOL LLLineEditor::handleUnicodeCharHere(llwchar uni_char)
+bool LLLineEditor::handleUnicodeCharHere(llwchar uni_char)
 {
 	if ((uni_char < 0x20) || (uni_char == 0x7F)) // Control character or DEL
 	{
-		return FALSE;
+		return false;
 	}
 
-	BOOL	handled = FALSE;
+	bool	handled = false;
 
 	if ( (gFocusMgr.getKeyboardFocus() == this) && getVisible() && !mReadOnly)
 	{
-		handled = TRUE;
+		handled = true;
 
 		LLLineEditorRollback rollback( this );
 
@@ -1704,7 +1704,7 @@ BOOL LLLineEditor::handleUnicodeCharHere(llwchar uni_char)
 
 		deselect();
 
-		BOOL need_to_rollback = FALSE;
+		bool need_to_rollback = false;
 
 		// Validate new string and rollback the keystroke if needed.
 		need_to_rollback |= ( mPrevalidateFunc && !mPrevalidateFunc( mText.getWString() ) );
@@ -1730,7 +1730,7 @@ BOOL LLLineEditor::handleUnicodeCharHere(llwchar uni_char)
 }
 
 
-BOOL LLLineEditor::canDoDelete() const
+bool LLLineEditor::canDoDelete() const
 {
 	return ( !mReadOnly && (!mPassDelete || (hasSelection() || (getCursor() < mText.length()))) );
 }
@@ -1760,7 +1760,7 @@ void LLLineEditor::doDelete()
 		}
 
 		// Validate new string and rollback the if needed.
-		BOOL need_to_rollback = ( mPrevalidateFunc && !mPrevalidateFunc( mText.getWString() ) );
+		bool need_to_rollback = ( mPrevalidateFunc && !mPrevalidateFunc( mText.getWString() ) );
 		if( need_to_rollback )
 		{
 			rollback.doRollback( this );
@@ -1781,7 +1781,7 @@ void LLLineEditor::drawBackground()
 	F32 alpha = getCurrentTransparency();
 	if (mUseBgColor)
 	{
-		gl_rect_2d(getLocalRect(), mBgColor % alpha, TRUE);
+		gl_rect_2d(getLocalRect(), mBgColor % alpha, true);
 	}
 	else
 	{
@@ -2016,7 +2016,7 @@ void LLLineEditor::draw()
 			&rendered_pixels_right);
 	}
 #if 1 // for when we're ready for image art.
-	mBorder->setVisible(FALSE); // no more programmatic art.
+	mBorder->setVisible(false); // no more programmatic art.
 #endif
 
 	if ( (getSpellCheck()) && (mText.length() > 2) )
@@ -2117,7 +2117,7 @@ void LLLineEditor::draw()
 	// If we're editing...
 	if( hasFocus())
 	{
-		//mBorder->setVisible(TRUE); // ok, programmer art just this once.
+		//mBorder->setVisible(true); // ok, programmer art just this once.
 		// (Flash the cursor every half second)
 		if (!mReadOnly && gFocusMgr.getAppHasFocus())
 		{
@@ -2179,16 +2179,16 @@ void LLLineEditor::draw()
 							LLFontGL::NO_SHADOW,
 							S32_MAX,
 							mTextRightEdge - ll_round(rendered_pixels_right),
-							&rendered_pixels_right, FALSE);
+							&rendered_pixels_right, false);
 		}
 
 
 		// Draw children (border)
-		//mBorder->setVisible(TRUE);
-		mBorder->setKeyboardFocusHighlight( TRUE );
+		//mBorder->setVisible(true);
+		mBorder->setKeyboardFocusHighlight( true );
 		LLView::draw();
-		mBorder->setKeyboardFocusHighlight( FALSE );
-		//mBorder->setVisible(FALSE);
+		mBorder->setKeyboardFocusHighlight( false );
+		//mBorder->setVisible(false);
 	}
 	else // does not have keyboard input
 	{
@@ -2261,19 +2261,19 @@ void LLLineEditor::onTabInto()
 }
 
 //virtual
-BOOL LLLineEditor::acceptsTextInput() const
+bool LLLineEditor::acceptsTextInput() const
 {
-	return TRUE;
+	return true;
 }
 
 // Start or stop the editor from accepting text-editing keystrokes
-void LLLineEditor::setFocus( BOOL new_state )
+void LLLineEditor::setFocus( bool new_state )
 {
-	BOOL old_state = hasFocus();
+	bool old_state = hasFocus();
 
 	if (!new_state)
 	{
-		getWindow()->allowLanguageTextInput(this, FALSE);
+		getWindow()->allowLanguageTextInput(this, false);
 	}
 
 
@@ -2284,7 +2284,7 @@ void LLLineEditor::setFocus( BOOL new_state )
 		// We don't want handleMouseUp() to "finish" the selection (and thereby
 		// set mSelectionEnd to where the mouse is), so we finish the selection 
 		// here.
-		mIsSelecting = FALSE;
+		mIsSelecting = false;
 	}
 
 	if( new_state )
@@ -2366,13 +2366,13 @@ bool LLLineEditor::prevalidateInput(const LLWString& wstr)
 }
 
 // static
-BOOL LLLineEditor::postvalidateFloat(const std::string &str)
+bool LLLineEditor::postvalidateFloat(const std::string &str)
 {
 	LLLocale locale(LLLocale::USER_LOCALE);
 
-	BOOL success = TRUE;
-	BOOL has_decimal = FALSE;
-	BOOL has_digit = FALSE;
+	bool success = true;
+	bool has_decimal = false;
+	bool has_digit = false;
 
 	LLWString trimmed = utf8str_to_wstring(str);
 	LLWStringUtil::trim(trimmed);
@@ -2397,22 +2397,22 @@ BOOL LLLineEditor::postvalidateFloat(const std::string &str)
 				if( has_decimal )
 				{
 					// can't have two
-					success = FALSE;
+					success = false;
 					break;
 				}
 				else
 				{
-					has_decimal = TRUE;
+					has_decimal = true;
 				}
 			}
 			else
 			if( LLStringOps::isDigit( trimmed[i] ) )
 			{
-				has_digit = TRUE;
+				has_digit = true;
 			}
 			else
 			{
-				success = FALSE;
+				success = false;
 				break;
 			}
 		}
@@ -2424,7 +2424,7 @@ BOOL LLLineEditor::postvalidateFloat(const std::string &str)
 	return success;
 }
 
-BOOL LLLineEditor::evaluateFloat()
+bool LLLineEditor::evaluateFloat()
 {
 	bool success;
 	F32 result = 0.f;
@@ -2456,7 +2456,7 @@ void LLLineEditor::onMouseCaptureLost()
 }
 
 
-void LLLineEditor::setSelectAllonFocusReceived(BOOL b)
+void LLLineEditor::setSelectAllonFocusReceived(bool b)
 {
 	mSelectAllonFocusReceived = b;
 }
@@ -2477,16 +2477,16 @@ void LLLineEditor::setKeystrokeCallback(callback_t callback, void* user_data)
 }
 
 
-BOOL LLLineEditor::setTextArg( const std::string& key, const LLStringExplicit& text )
+bool LLLineEditor::setTextArg( const std::string& key, const LLStringExplicit& text )
 {
 	mText.setArg(key, text);
-	return TRUE;
+	return true;
 }
 
-BOOL LLLineEditor::setLabelArg( const std::string& key, const LLStringExplicit& text )
+bool LLLineEditor::setLabelArg( const std::string& key, const LLStringExplicit& text )
 {
 	mLabel.setArg(key, text);
-	return TRUE;
+	return true;
 }
 
 
@@ -2515,15 +2515,15 @@ void LLLineEditor::updateAllowingLanguageInput()
 	if (hasFocus() && !mReadOnly && !mDrawAsterixes && mPrevalidateFunc == NULL)
 #endif // <FS:Zi>
 	{
-		window->allowLanguageTextInput(this, TRUE);
+		window->allowLanguageTextInput(this, true);
 	}
 	else
 	{
-		window->allowLanguageTextInput(this, FALSE);
+		window->allowLanguageTextInput(this, false);
 	}
 }
 
-BOOL LLLineEditor::hasPreeditString() const
+bool LLLineEditor::hasPreeditString() const
 {
 	return (mPreeditPositions.size() > 1);
 }
@@ -2606,7 +2606,7 @@ void LLLineEditor::updatePreedit(const LLWString &preedit_string,
 	mSpellCheckTimer.setTimerExpirySec(SPELLCHECK_DELAY);
 }
 
-BOOL LLLineEditor::getPreeditLocation(S32 query_offset, LLCoordGL *coord, LLRect *bounds, LLRect *control) const
+bool LLLineEditor::getPreeditLocation(S32 query_offset, LLCoordGL *coord, LLRect *bounds, LLRect *control) const
 {
 	if (control)
 	{
@@ -2628,13 +2628,13 @@ BOOL LLLineEditor::getPreeditLocation(S32 query_offset, LLCoordGL *coord, LLRect
 	if (preedit_right_column < mScrollHPos)
 	{
 		// This should not occure...
-		return FALSE;
+		return false;
 	}
 
 	const S32 query = (query_offset >= 0 ? preedit_left_column + query_offset : getCursor());
 	if (query < mScrollHPos || query < preedit_left_column || query > preedit_right_column)
 	{
-		return FALSE;
+		return false;
 	}
 
 	if (coord)
@@ -2661,7 +2661,7 @@ BOOL LLLineEditor::getPreeditLocation(S32 query_offset, LLCoordGL *coord, LLRect
 		LLUI::getInstance()->screenRectToGL(preedit_rect_screen, bounds);
 	}
 
-	return TRUE;
+	return true;
 }
 
 void LLLineEditor::getPreeditRange(S32 *position, S32 *length) const
@@ -2707,7 +2707,7 @@ void LLLineEditor::markAsPreedit(S32 position, S32 length)
 		mPreeditPositions[0] = position;
 		mPreeditPositions[1] = position + length;
 		mPreeditStandouts.resize(1);
-		mPreeditStandouts[0] = FALSE;
+		mPreeditStandouts[0] = false;
 	}
 	else
 	{
@@ -2729,7 +2729,7 @@ S32 LLLineEditor::getPreeditFontSize() const
 	return ll_round(mGLFont->getLineHeight() * LLUI::getScaleFactor().mV[VY]);
 }
 
-void LLLineEditor::setReplaceNewlinesWithSpaces(BOOL replace)
+void LLLineEditor::setReplaceNewlinesWithSpaces(bool replace)
 {
 	mReplaceNewlinesWithSpaces = replace;
 }
@@ -2789,7 +2789,7 @@ void LLLineEditor::showContextMenu(S32 x, S32 y, bool set_cursor_pos)
 
 			// If the cursor is on a misspelled word, retrieve suggestions for it
 			std::string misspelled_word = getMisspelledWord(mCursorPos);
-			if ((is_misspelled = !misspelled_word.empty()) == true)
+			if ((is_misspelled = !misspelled_word.empty()))
 			{
 				LLSpellChecker::instance().getSuggestions(misspelled_word, mSuggestionList);
 			}

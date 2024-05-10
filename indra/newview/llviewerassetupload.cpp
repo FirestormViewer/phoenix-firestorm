@@ -426,7 +426,7 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
         // Unknown extension
         errorMessage = llformat(LLTrans::getString("UnknownFileExtension").c_str(), exten.c_str());
         errorLabel = "ErrorMessage";
-        error = TRUE;;
+        error = true;;
     }
     else if (assetType == LLAssetType::AT_TEXTURE)
     {
@@ -535,7 +535,7 @@ LLSD LLNewFileResourceUploadInfo::exportTempFile()
         // Unknown extension
         errorMessage = llformat(LLTrans::getString("UnknownFileExtension").c_str(), exten.c_str());
         errorLabel = "ErrorMessage";
-        error = TRUE;;
+        error = true;;
     }
 
     if (error)
@@ -682,6 +682,8 @@ LLBufferedAssetUploadInfo::LLBufferedAssetUploadInfo(LLUUID itemId, LLPointer<LL
     mStoredToCache(false)
 {
     setItemId(itemId);
+
+    LLImageDataSharedLock lock(image);
 
     EImageCodec codec = static_cast<EImageCodec>(image->getCodec());
 
@@ -846,7 +848,7 @@ LLSD LLScriptAssetUpload::generatePostBody()
         body["item_id"] = getItemId();
         // <FS:Ansariel> OpenSim expects an integer here...
         //body["is_script_running"] = getIsRunning();
-        body["is_script_running"] = (BOOL)getIsRunning();
+        body["is_script_running"] = (S32)getIsRunning();
         // </FS:Ansariel>
         body["target"] = (getTargetType() == MONO) ? "mono" : "lsl2";
         body["experience"] = getExerienceId();
@@ -972,7 +974,7 @@ void LLViewerAssetUpload::AssetInventoryUploadCoproc(LLCoreHttpUtil::HttpCorouti
 
             // Show the preview panel for textures and sounds to let
             // user know that the image (or snapshot) arrived intact.
-            LLInventoryPanel* panel = LLInventoryPanel::getActiveInventoryPanel(FALSE);
+            LLInventoryPanel* panel = LLInventoryPanel::getActiveInventoryPanel(false);
             // <FS:Ansariel> Use correct inventory floater for showing the upload
             if (!panel)
             {

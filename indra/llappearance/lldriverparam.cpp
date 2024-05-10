@@ -41,16 +41,16 @@ LLDriverParamInfo::LLDriverParamInfo() :
 {
 }
 
-BOOL LLDriverParamInfo::parseXml(LLXmlTreeNode* node)
+bool LLDriverParamInfo::parseXml(LLXmlTreeNode* node)
 {
 	llassert( node->hasName( "param" ) && node->getChildByName( "param_driver" ) );
 
 	if( !LLViewerVisualParamInfo::parseXml( node ))
-		return FALSE;
+		return false;
 
 	LLXmlTreeNode* param_driver_node = node->getChildByName( "param_driver" );
 	if( !param_driver_node )
-		return FALSE;
+		return false;
 
 	for (LLXmlTreeNode* child = param_driver_node->getChildByName( "driven" );
 		 child;
@@ -90,10 +90,10 @@ BOOL LLDriverParamInfo::parseXml(LLXmlTreeNode* node)
 		else
 		{
 			LL_ERRS() << "<driven> Unable to resolve driven parameter: " << driven_id << LL_ENDL;
-			return FALSE;
+			return false;
 		}
 	}
-	return TRUE;
+	return true;
 }
 
 //virtual 
@@ -187,20 +187,20 @@ LLDriverParam::~LLDriverParam()
 {
 }
 
-BOOL LLDriverParam::setInfo(LLDriverParamInfo *info)
+bool LLDriverParam::setInfo(LLDriverParamInfo *info)
 {
 	llassert(mInfo == NULL);
 	if (info->mID < 0)
-		return FALSE;
+		return false;
 	mInfo = info;
 	mID = info->mID;
 	info->mDriverParam = this;
 
 	// <FS:Ansariel> [Legacy Bake]
 	//setWeight(getDefaultWeight());
-	setWeight(getDefaultWeight(), FALSE );
+	setWeight(getDefaultWeight(), false );
 
-	return TRUE;
+	return true;
 }
 
 /*virtual*/ LLViewerVisualParam* LLDriverParam::cloneParam(LLWearable* wearable) const
@@ -211,7 +211,7 @@ BOOL LLDriverParam::setInfo(LLDriverParamInfo *info)
 
 // <FS:Ansariel> [Legacy Bake]
 //void LLDriverParam::setWeight(F32 weight)
-void LLDriverParam::setWeight(F32 weight, BOOL upload_bake)
+void LLDriverParam::setWeight(F32 weight, bool upload_bake)
 // </FS:Ansariel> [Legacy Bake]
 {
 	F32 min_weight = getMinWeight();
@@ -454,7 +454,7 @@ const LLViewerVisualParam* LLDriverParam::getDrivenParam(S32 index) const
 //void LLDriverParam::setAnimationTarget( F32 target_value)
 //{
 //	LLVisualParam::setAnimationTarget(target_value);
-void LLDriverParam::setAnimationTarget( F32 target_value, BOOL upload_bake )
+void LLDriverParam::setAnimationTarget( F32 target_value, bool upload_bake )
 {
 	LLVisualParam::setAnimationTarget(target_value, upload_bake);
 // </FS:Ansariel> [Legacy Bake]
@@ -480,32 +480,32 @@ void LLDriverParam::setAnimationTarget( F32 target_value, BOOL upload_bake )
 //void LLDriverParam::stopAnimating()
 //{
 //	LLVisualParam::stopAnimating();
-void LLDriverParam::stopAnimating(BOOL upload_bake)
+void LLDriverParam::stopAnimating(bool upload_bake)
 {
 	LLVisualParam::stopAnimating(upload_bake);
 // </FS:Ansariel> [Legacy Bake]
 
 	for(LLDrivenEntry& driven : mDriven)
 	{
-		driven.mParam->setAnimating(FALSE);
+		driven.mParam->setAnimating(false);
 	}
 }
 
 /*virtual*/ 
-BOOL LLDriverParam::linkDrivenParams(visual_param_mapper mapper, BOOL only_cross_params)
+bool LLDriverParam::linkDrivenParams(visual_param_mapper mapper, bool only_cross_params)
 {
-	BOOL success = TRUE;
+	bool success = true;
 	for (LLDrivenEntryInfo& driven_info : getInfo()->mDrivenInfoList)
 	{
 		S32 driven_id = driven_info.mDrivenID;
 
 		// check for already existing links. Do not overwrite.
-		BOOL found = FALSE;
+		bool found = false;
 		for (auto& driven : mDriven)
 		{
 			if (driven.mInfo->mDrivenID == driven_id)
 			{
-				found = TRUE;
+				found = true;
 			}
 		}
 
@@ -520,7 +520,7 @@ BOOL LLDriverParam::linkDrivenParams(visual_param_mapper mapper, BOOL only_cross
 			}
 			else
 			{
-				success = FALSE;
+				success = false;
 			}
 		}
 	}

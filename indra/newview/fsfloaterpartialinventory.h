@@ -38,7 +38,7 @@ public:
 	FSFloaterPartialInventory(const LLSD& key);
 	virtual ~FSFloaterPartialInventory();
 
-	BOOL postBuild() override;
+	bool postBuild() override;
 	void onOpen(const LLSD& key) override;
 
 	LLInventoryPanel* getInventoryPanel() const { return mInventoryList; };

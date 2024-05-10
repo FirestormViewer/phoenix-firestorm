@@ -65,8 +65,8 @@ public:
 	const LLUIColor& getSelectedColor() const { return mSelectedColor; }
 	void setSelectedColor(const LLUIColor& color) { mSelectedColor = color; }
 
-	BOOL isVisible() const;
-	void setVisible(BOOL is_visible);
+	bool isVisible() const;
+	void setVisible(bool is_visible);
 
 	LLFontGL::ShadowType getShadowType() const { return mDropShadow; }
 
@@ -75,13 +75,13 @@ public:
 
 	const std::string& getLinkHREF() const { return mLink; }
 	void setLinkHREF(const std::string& href);
-	BOOL isLink() const;
+	bool isLink() const;
 
 	LLPointer<LLUIImage> getImage() const;
 	void setImage(const LLUUID& src);
 	void setImage(const std::string& name);
 
-	BOOL isImage() const { return mImagep.notNull(); }
+	bool isImage() const { return mImagep.notNull(); }
 
 	bool operator==(const LLStyle &rhs) const
 	{
@@ -105,7 +105,7 @@ protected:
 	~LLStyle() { }
 
 private:
-	BOOL				mVisible;
+	bool				mVisible;
 	LLUIColor			mColor;
 	LLUIColor   		mReadOnlyColor;
 	LLUIColor			mSelectedColor;

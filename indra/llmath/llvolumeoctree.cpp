@@ -27,7 +27,7 @@
 #include "llvolumeoctree.h"
 #include "llvector4a.h"
 
-BOOL LLLineSegmentBoxIntersect(const LLVector4a& start, const LLVector4a& end, const LLVector4a& center, const LLVector4a& size)
+bool LLLineSegmentBoxIntersect(const LLVector4a& start, const LLVector4a& end, const LLVector4a& center, const LLVector4a& size)
 {
 	LLVector4a fAWdU;
 	LLVector4a dir;
@@ -71,9 +71,8 @@ BOOL LLLineSegmentBoxIntersect(const LLVector4a& start, const LLVector4a& end, c
 	
 	grt = f.greaterThan(rhs).getGatheredBits();
 
-	return (grt & 0x7) ? false : true;
+	return (grt & 0x7) == 0;
 }
-
 
 LLVolumeOctreeListener::LLVolumeOctreeListener(LLOctreeNode<LLVolumeTriangle, LLVolumeTriangle*>* node)
 {
@@ -84,7 +83,7 @@ LLVolumeOctreeListener::~LLVolumeOctreeListener()
 {
 
 }
-	
+
 void LLVolumeOctreeListener::handleChildAddition(const LLOctreeNode<LLVolumeTriangle, LLVolumeTriangle*>* parent, 
     LLOctreeNode<LLVolumeTriangle, LLVolumeTriangle*>* child)
 {

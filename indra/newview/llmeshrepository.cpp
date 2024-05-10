@@ -1425,7 +1425,7 @@ bool LLMeshRepoThread::fetchMeshSkinInfo(const LLUUID& mesh_id, bool can_retry)
 		{
 			//check cache for mesh skin info
 			LLFileSystem file(mesh_id, LLAssetType::AT_MESH);
-			if (file.getSize() >= offset+size)
+			if (file.getSize() >= offset + size)
 			{
 				U8* buffer = new(std::nothrow) U8[size];
 				if (!buffer)
@@ -1442,7 +1442,7 @@ bool LLMeshRepoThread::fetchMeshSkinInfo(const LLUUID& mesh_id, bool can_retry)
 				bool zero = true;
 				for (S32 i = 0; i < llmin(size, 1024) && zero; ++i)
 				{
-					zero = buffer[i] > 0 ? false : true;
+					zero = buffer[i] == 0;
 				}
 
 				if (!zero)
@@ -1563,7 +1563,7 @@ bool LLMeshRepoThread::fetchMeshDecomposition(const LLUUID& mesh_id)
 				bool zero = true;
 				for (S32 i = 0; i < llmin(size, 1024) && zero; ++i)
 				{
-					zero = buffer[i] > 0 ? false : true;
+					zero = buffer[i] == 0;
 				}
 
 				if (!zero)
@@ -1668,7 +1668,7 @@ bool LLMeshRepoThread::fetchMeshPhysicsShape(const LLUUID& mesh_id)
 				bool zero = true;
 				for (S32 i = 0; i < llmin(size, 1024) && zero; ++i)
 				{
-					zero = buffer[i] > 0 ? false : true;
+					zero = buffer[i] == 0;
 				}
 
 				if (!zero)
@@ -1882,7 +1882,7 @@ bool LLMeshRepoThread::fetchMeshLOD(const LLVolumeParams& mesh_params, S32 lod, 
 				bool zero = true;
 				for (S32 i = 0; i < llmin(size, 1024) && zero; ++i)
 				{
-					zero = buffer[i] > 0 ? false : true;
+					zero = buffer[i] == 0;
 				}
 
 				if (!zero)
@@ -2398,8 +2398,8 @@ void LLMeshUploadThread::wholeModelToLLSD(LLSD& dest, bool include_textures)
 				mUploadSkin,
 				mUploadJoints,
                 mLockScaleIfJointPosition,
-				FALSE,
-				FALSE,
+				false,
+				false,
 				data.mBaseModel->mSubmodelID);
 
 			data.mAssetData = ostr.str();
@@ -2465,16 +2465,18 @@ void LLMeshUploadThread::wholeModelToLLSD(LLSD& dest, bool include_textures)
 				std::stringstream texture_str;
 				if (texture != NULL && include_textures && mUploadTextures)
 				{
-					if(texture->hasSavedRawImage())
-					{											
+					if (texture->hasSavedRawImage())
+					{
+						LLImageDataLock lock(texture->getSavedRawImage());
+
 						LLPointer<LLImageJ2C> upload_file =
 							LLViewerTextureList::convertToUploadFile(texture->getSavedRawImage());
 
 						if (!upload_file.isNull() && upload_file->getDataSize())
 						{
-						texture_str.write((const char*) upload_file->getData(), upload_file->getDataSize());
+							texture_str.write((const char*) upload_file->getData(), upload_file->getDataSize());
+						}
 					}
-				}
 				}
 
 				if (texture != NULL &&
@@ -2553,8 +2555,8 @@ void LLMeshUploadThread::wholeModelToLLSD(LLSD& dest, bool include_textures)
 				mUploadSkin,
 				mUploadJoints,
                 mLockScaleIfJointPosition,
-				FALSE,
-				FALSE,
+				false,
+				false,
 				data.mBaseModel->mSubmodelID);
 
 			data.mAssetData = ostr.str();
@@ -2619,16 +2621,18 @@ void LLMeshUploadThread::wholeModelToLLSD(LLSD& dest, bool include_textures)
 				std::stringstream texture_str;
 				if (texture != NULL && include_textures && mUploadTextures)
 				{
-					if(texture->hasSavedRawImage())
-					{											
+					if (texture->hasSavedRawImage())
+					{
+						LLImageDataLock lock(texture->getSavedRawImage());
+
 						LLPointer<LLImageJ2C> upload_file =
 							LLViewerTextureList::convertToUploadFile(texture->getSavedRawImage());
 
 						if (!upload_file.isNull() && upload_file->getDataSize())
 						{
-						texture_str.write((const char*) upload_file->getData(), upload_file->getDataSize());
+							texture_str.write((const char*) upload_file->getData(), upload_file->getDataSize());
+						}
 					}
-				}
 				}
 
 				if (texture != NULL &&
@@ -4579,7 +4583,7 @@ void LLMeshUploadThread::decomposeMeshMatrix(LLMatrix4& transformation,
 											 LLVector3& result_scale)
 {
 	// check for reflection
-	BOOL reflected = (transformation.determinant() < 0);
+	bool reflected = (transformation.determinant() < 0);
 
 	// compute position
 	LLVector3 position = LLVector3(0, 0, 0) * transformation;
@@ -5744,7 +5748,7 @@ void on_new_single_inventory_upload_complete(
 
         // Show the preview panel for textures and sounds to let
         // user know that the image (or snapshot) arrived intact.
-        LLInventoryPanel* panel = LLInventoryPanel::getActiveInventoryPanel(FALSE);
+        LLInventoryPanel* panel = LLInventoryPanel::getActiveInventoryPanel(false);
         if (panel)
         {
 

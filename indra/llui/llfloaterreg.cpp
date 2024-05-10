@@ -307,7 +307,7 @@ bool LLFloaterReg::canShowInstance(const std::string& name, const LLSD& key)
 // [/RLVa:KB]
 
 //static
-LLFloater* LLFloaterReg::showInstance(const std::string& name, const LLSD& key, BOOL focus) 
+LLFloater* LLFloaterReg::showInstance(const std::string& name, const LLSD& key, bool focus) 
 {
 //	if( sBlockShowFloaters
 //			// see EXT-7090
@@ -322,7 +322,7 @@ LLFloater* LLFloaterReg::showInstance(const std::string& name, const LLSD& key, 
 		LL_INFOS() << "show instance for refreshing group ID: " << key.asString() << LL_ENDL;
 		instance->openFloater(key);
 		if (focus)
-			instance->setFocus(TRUE);
+			instance->setFocus(true);
 	}
 	return instance;
 }
@@ -344,15 +344,15 @@ bool LLFloaterReg::hideInstance(const std::string& name, const LLSD& key)
 bool LLFloaterReg::toggleInstance(const std::string& name, const LLSD& key)
 {
 	LLFloater* instance = findInstance(name, key); 
-	if (LLFloater::isShown(instance))
+	if (instance && instance->isShown())
 	{
 		instance->closeHostedFloater();
 		return false;
 	}
-	else
-	{
-		return showInstance(name, key, TRUE) ? true : false;
-	}
+
+	instance = showInstance(name, key, true);
+
+	return instance != nullptr;
 }
 
 //static
@@ -373,7 +373,7 @@ void LLFloaterReg::showInitialVisibleInstances()
 		std::string controlname = getVisibilityControlName(name);
 		if (LLFloater::getControlGroup()->controlExists(controlname))
 		{
-			BOOL isvis = LLFloater::getControlGroup()->getBOOL(controlname);
+			bool isvis = LLFloater::getControlGroup()->getBOOL(controlname);
 			if (isvis)
 			{
 				// <FS:Ansariel> Set correct window transparency at login
@@ -399,7 +399,7 @@ void LLFloaterReg::hideVisibleInstances(const std::set<std::string>& exceptions)
 		for (instance_list_t::iterator iter = list.begin(); iter != list.end(); ++iter)
 		{
 			LLFloater* floater = *iter;
-			floater->pushVisible(FALSE);
+			floater->pushVisible(false);
 		}
 	}
 }
@@ -476,7 +476,7 @@ std::string LLFloaterReg::getBaseControlName(const std::string& name)
 std::string LLFloaterReg::declareVisibilityControl(const std::string& name)
 {
 	std::string controlname = getVisibilityControlName(name);
-	LLFloater::getControlGroup()->declareBOOL(controlname, FALSE,
+	LLFloater::getControlGroup()->declareBOOL(controlname, false,
 												 llformat("Window Visibility for %s", name.c_str()),
 												 LLControlVariable::PERSIST_NONDFT);
 	return controlname;
@@ -486,7 +486,7 @@ std::string LLFloaterReg::declareVisibilityControl(const std::string& name)
 std::string LLFloaterReg::declareDockStateControl(const std::string& name)
 {
 	std::string controlname = getDockStateControlName(name);
-	LLFloater::getControlGroup()->declareBOOL(controlname, TRUE,
+	LLFloater::getControlGroup()->declareBOOL(controlname, true,
 												 llformat("Window Docking state for %s", name.c_str()),
 												 LLControlVariable::PERSIST_NONDFT);
 	return controlname;
@@ -566,7 +566,7 @@ void LLFloaterReg::toggleInstanceOrBringToFront(const LLSD& sdname, const LLSD& 
 		//if (host->isMinimized() || !host->isShown() || !host->isFrontmost())
 		if (host->isMinimized() || !host->isShown() || (!host->hasFocus() || !host->isFrontmost()))
 		{
-			host->setMinimized(FALSE);
+			host->setMinimized(false);
 			instance->openFloater(key);
 			instance->setVisibleAndFrontmost(true, key);
 		}
@@ -574,7 +574,7 @@ void LLFloaterReg::toggleInstanceOrBringToFront(const LLSD& sdname, const LLSD& 
 		{
 			instance->openFloater(key);
 			instance->setVisibleAndFrontmost(true, key);
-			instance->setFocus(TRUE);
+			instance->setFocus(true);
 		}
 		else
 		{
@@ -585,7 +585,7 @@ void LLFloaterReg::toggleInstanceOrBringToFront(const LLSD& sdname, const LLSD& 
 	{
 		if (instance->isMinimized())
 		{
-			instance->setMinimized(FALSE);
+			instance->setMinimized(false);
 			instance->setVisibleAndFrontmost(true, key);
 		}
 		else if (!instance->isShown())
@@ -628,7 +628,7 @@ void LLFloaterReg::showInstanceOrBringToFront(const LLSD& sdname, const LLSD& ke
     {
         if (host->isMinimized() || !host->isShown() || !host->isFrontmost())
         {
-            host->setMinimized(FALSE);
+            host->setMinimized(false);
             instance->openFloater(key);
             instance->setVisibleAndFrontmost(true, key);
         }
@@ -636,14 +636,14 @@ void LLFloaterReg::showInstanceOrBringToFront(const LLSD& sdname, const LLSD& ke
         {
             instance->openFloater(key);
             instance->setVisibleAndFrontmost(true, key);
-            instance->setFocus(TRUE);
+            instance->setFocus(true);
         }
     }
     else
     {
         if (instance->isMinimized())
         {
-            instance->setMinimized(FALSE);
+            instance->setMinimized(false);
             instance->setVisibleAndFrontmost(true, key);
         }
         else if (!instance->isShown())

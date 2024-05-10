@@ -59,11 +59,11 @@ LLAttachmentsMgr::~LLAttachmentsMgr()
 
 //void LLAttachmentsMgr::addAttachmentRequest(const LLUUID& item_id,
 //                                            const U8 attachment_pt,
-//                                            const BOOL add)
+//                                            const bool add)
 // [RLVa:KB] - Checked: 2010-09-13 (RLVa-1.2.1)
 void LLAttachmentsMgr::addAttachmentRequest(const LLUUID& item_id,
                                             const U8 attachment_pt,
-                                            const BOOL add, const BOOL fRlvForce /*=FALSE*/)
+                                            const bool add, const bool fRlvForce /*=false*/)
 // [/RLVa:KB]
 {
 	LLViewerInventoryItem *item = gInventory.getItem(item_id);
@@ -336,18 +336,18 @@ void LLAttachmentsMgr::LLItemRequestTimes::removeTime(const LLUUID& inv_item_id)
     }
 }
 
-BOOL LLAttachmentsMgr::LLItemRequestTimes::getTime(const LLUUID& inv_item_id, LLTimer& timer) const
+bool LLAttachmentsMgr::LLItemRequestTimes::getTime(const LLUUID& inv_item_id, LLTimer& timer) const
 {
 	std::map<LLUUID,LLTimer>::const_iterator it = (*this).find(inv_item_id);
 	if (it != (*this).end())
 	{
         timer = it->second;
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
-BOOL LLAttachmentsMgr::LLItemRequestTimes::wasRequestedRecently(const LLUUID& inv_item_id) const
+bool LLAttachmentsMgr::LLItemRequestTimes::wasRequestedRecently(const LLUUID& inv_item_id) const
 {
     LLTimer request_time;
     if (getTime(inv_item_id, request_time))
@@ -357,7 +357,7 @@ BOOL LLAttachmentsMgr::LLItemRequestTimes::wasRequestedRecently(const LLUUID& in
     }
     else
     {
-        return FALSE;
+        return false;
     }
 }
 

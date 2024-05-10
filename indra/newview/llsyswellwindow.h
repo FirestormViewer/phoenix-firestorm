@@ -55,7 +55,7 @@ public:
 
     LLSysWellWindow(const LLSD& key);
     virtual ~LLSysWellWindow();
-	BOOL postBuild() override;
+	bool postBuild() override;
 
 	// <FS:Ansariel> FIRE-11537: Fix well lists size appearing random
 	virtual void onOpen(const LLSD& key) override;
@@ -69,11 +69,11 @@ public:
 	LLPanel * findItemByID(const LLUUID& id);
 
 	// Operating with outfit
-	virtual void setVisible(BOOL visible) override;
+	virtual void setVisible(bool visible) override;
 	void adjustWindowPosition();
 	/*virtual*/ void	setDocked(bool docked, bool pop_on_undock = true) override;
 	// override LLFloater's minimization according to EXT-1216
-	/*virtual*/ void	setMinimized(BOOL minimize) override;
+	/*virtual*/ void	setMinimized(bool minimize) override;
 	/*virtual*/ void	handleReshape(const LLRect& rect, bool by_user) override;
 
 	void onStartUpToastClick(S32 x, S32 y, MASK mask);
@@ -81,8 +81,8 @@ public:
 	void setSysWellChiclet(LLSysWellChiclet* chiclet);
 
 	// size constants for the window and for its elements
-	static const S32 MAX_WINDOW_HEIGHT		= 200;
-	static const S32 MIN_WINDOW_WIDTH		= 318;
+	static constexpr S32 MAX_WINDOW_HEIGHT		= 200;
+	static constexpr S32 MIN_WINDOW_WIDTH		= 318;
 
 protected:
 	// init Window's channel
@@ -124,8 +124,8 @@ public:
 	LLNotificationWellWindow(const LLSD& key);
 	static LLNotificationWellWindow* getInstance(const LLSD& key = LLSD());
 
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ void setVisible(BOOL visible);
+	/*virtual*/ bool postBuild();
+	/*virtual*/ void setVisible(bool visible);
 	/*virtual*/ void onAdd(LLNotificationPtr notify);
 	// Operating with items
 	void addItem(LLSysWellItem::Params p);
@@ -187,11 +187,11 @@ public:
 	static LLIMWellWindow* findInstance(const LLSD& key = LLSD());
 	static void initClass() { getInstance(); }
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 
 	// <FS:Ansariel> [FS communication UI]
 	// LLIMSessionObserver observe triggers
-	/*virtual*/ void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg);
+	/*virtual*/ void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, bool has_offline_msg);
 	/*virtual*/ void sessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) {}
 	/*virtual*/ void sessionVoiceOrIMStarted(const LLUUID& session_id) {};
 	/*virtual*/ void sessionRemoved(const LLUUID& session_id);
@@ -231,8 +231,8 @@ private:
 		virtual ~RowPanel();
 		void onMouseEnter(S32 x, S32 y, MASK mask);
 		void onMouseLeave(S32 x, S32 y, MASK mask);
-		BOOL handleMouseDown(S32 x, S32 y, MASK mask);
-		BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+		bool handleMouseDown(S32 x, S32 y, MASK mask);
+		bool handleRightMouseDown(S32 x, S32 y, MASK mask);
 
 	private:
 		static const S32 CHICLET_HPAD = 10;
@@ -253,8 +253,8 @@ private:
 		virtual ~ObjectRowPanel();
 		/*virtual*/ void onMouseEnter(S32 x, S32 y, MASK mask);
 		/*virtual*/ void onMouseLeave(S32 x, S32 y, MASK mask);
-		/*virtual*/ BOOL handleMouseDown(S32 x, S32 y, MASK mask);
-		/*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+		/*virtual*/ bool handleMouseDown(S32 x, S32 y, MASK mask);
+		/*virtual*/ bool handleRightMouseDown(S32 x, S32 y, MASK mask);
 
 	private:
 		void onClosePanel();

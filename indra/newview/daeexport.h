@@ -112,7 +112,7 @@ class ColladaExportFloater : public LLFloater
 {
 public:
 	ColladaExportFloater(const LLSD& key);
-	BOOL postBuild();
+	bool postBuild();
 	void updateSelection();
 	
 protected:
@@ -164,7 +164,7 @@ private:
 	public:
 		CacheReadResponder(const LLUUID& id, LLImageFormatted* image, std::string name, S32 img_type);
 		
-		void setData(U8* data, S32 datasize, S32 imagesize, S32 imageformat, BOOL imagelocal);
+		void setData(U8* data, S32 datasize, S32 imagesize, S32 imageformat, bool imagelocal);
 		virtual void completed(bool success);
 		static void saveTexturesWorker(void* data);
 	};

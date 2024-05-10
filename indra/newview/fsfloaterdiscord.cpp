@@ -46,7 +46,7 @@
 //FSFloaterDiscord///////
 ////////////////////////
 
-void FSFloaterDiscord::onVisibilityChange(BOOL visible)
+void FSFloaterDiscord::onVisibilityChange(bool visible)
 {
 	if (visible)
 	{
@@ -118,8 +118,8 @@ void FSFloaterDiscord::showConnectButton()
 {
 	if (!mConnectButton->getVisible())
 	{
-		mConnectButton->setVisible(TRUE);
-		mDisconnectButton->setVisible(FALSE);
+		mConnectButton->setVisible(true);
+		mDisconnectButton->setVisible(false);
 	}
 }
 
@@ -127,8 +127,8 @@ void FSFloaterDiscord::hideConnectButton()
 {
 	if (mConnectButton->getVisible())
 	{
-		mConnectButton->setVisible(FALSE);
-		mDisconnectButton->setVisible(TRUE);
+		mConnectButton->setVisible(false);
+		mDisconnectButton->setVisible(true);
 	}
 }
 
@@ -239,7 +239,7 @@ void FSFloaterDiscord::onClose(bool app_quitting)
 	LLFloater::onClose(app_quitting);
 }
 
-BOOL FSFloaterDiscord::postBuild()
+bool FSFloaterDiscord::postBuild()
 {
 	mAccountCaptionLabel = getChild<LLTextBox>("account_caption_label");
 	mAccountNameLabel = getChild<LLTextBox>("account_name_label");

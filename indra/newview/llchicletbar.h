@@ -49,7 +49,7 @@ public:
 	~LLChicletBar();
 
 	// LLIMSessionObserver observe triggers
-	/*virtual*/ void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg) override;
+	/*virtual*/ void sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, bool has_offline_msg) override;
 	/*virtual*/ void sessionActivated(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id) override {}
 	/*virtual*/ void sessionVoiceOrIMStarted(const LLUUID& session_id) override {};
 	/*virtual*/ void sessionRemoved(const LLUUID& session_id) override;
@@ -63,11 +63,11 @@ public:
 	LLIMChiclet* createIMChiclet(const LLUUID& session_id);
 	// </FS:Ansariel> [FS communication UI]
 
-	BOOL postBuild() override;
+	bool postBuild() override;
 
 	LLChicletPanel*	getChicletPanel() { return mChicletPanel; }
 
-	/*virtual*/ void reshape(S32 width, S32 height, BOOL called_from_parent) override;
+	void reshape(S32 width, S32 height, bool called_from_parent) override;
 
 
 	/**

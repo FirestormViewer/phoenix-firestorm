@@ -91,7 +91,7 @@ private:
 	// <FS:Ansariel> Changed to public so we can update history when using modifier keys
 	//void	updateHistory();
 
-	BOOL	handleSpecialKey(const KEY key, const MASK mask);
+	bool	handleSpecialKey(const KEY key, const MASK mask);
 
 
 	// Fired when text height expanded to mExpandLinesCount

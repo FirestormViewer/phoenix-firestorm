@@ -56,10 +56,10 @@ LLFloaterDestinations::~LLFloaterDestinations()
 	// </FS:Ansariel>
 }
 
-BOOL LLFloaterDestinations::postBuild()
+bool LLFloaterDestinations::postBuild()
 {
 	enableResizeCtrls(true, true, false);
-	return TRUE;
+	return true;
 }
 
 // <FS:Ansariel> FIRE-16833: Destination guide does not change between OpenSim grids

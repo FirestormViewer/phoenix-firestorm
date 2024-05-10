@@ -37,7 +37,7 @@ static LLDefaultChildRegistry::Register<FSCopyTransInventoryDropTarget> r1("fs_c
 static LLDefaultChildRegistry::Register<FSEmbeddedItemDropTarget> r3("fs_embedded_item_drop_target");
 
 
-BOOL FSCopyTransInventoryDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+bool FSCopyTransInventoryDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
 													   EDragAndDropType cargo_type,
 													   void* cargo_data,
 													   EAcceptance* accept,
@@ -66,10 +66,10 @@ BOOL FSCopyTransInventoryDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, 
 		*accept = ACCEPT_NO;
 	}
 
-	return TRUE;
+	return true;
 }
 
-BOOL FSEmbeddedItemDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+bool FSEmbeddedItemDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
 												EDragAndDropType cargo_type,
 												void* cargo_data,
 												EAcceptance* accept,
@@ -98,5 +98,5 @@ BOOL FSEmbeddedItemDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL d
 		*accept = ACCEPT_NO;
 	}
 
-	return TRUE;
+	return true;
 }

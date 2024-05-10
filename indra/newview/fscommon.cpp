@@ -226,7 +226,7 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 			{
 				if (item->getType() == LLAssetType::AT_LSL_TEXT)
 				{
-					LLToolDragAndDrop::dropScript(object, item, TRUE,
+					LLToolDragAndDrop::dropScript(object, item, true,
 									  LLToolDragAndDrop::SOURCE_AGENT,
 									  gAgentID);
 				}
@@ -253,7 +253,7 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
 		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
 		gMessageSystem->nextBlockFast(_PREHASH_HeaderData);
-		gMessageSystem->addBOOLFast(_PREHASH_Override, FALSE);
+		gMessageSystem->addBOOLFast(_PREHASH_Override, false);
 		gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
 		gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
 		gMessageSystem->addU8Fast(_PREHASH_Field, PERM_NEXT_OWNER);
@@ -280,7 +280,7 @@ void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
 	gMessageSystem->addBOOLFast(_PREHASH_UsePhysics, gSavedSettings.getBOOL("FSBuildPrefs_Physical"));
 	gMessageSystem->addBOOL(_PREHASH_IsTemporary, gSavedSettings.getBOOL("FSBuildPrefs_Temporary"));
 	gMessageSystem->addBOOL(_PREHASH_IsPhantom, gSavedSettings.getBOOL("FSBuildPrefs_Phantom"));
-	gMessageSystem->addBOOL("CastsShadows", FALSE);
+	gMessageSystem->addBOOL("CastsShadows", false);
 	gMessageSystem->sendReliable(object->getRegion()->getHost());
 }
 

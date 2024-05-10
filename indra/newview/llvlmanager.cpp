@@ -113,12 +113,12 @@ void LLVLManager::unpackData(const S32 num_packets)
 		decode_patch_group_header(bit_pack, &goph);
 		if (LAND_LAYER_CODE == datap->mType)
 		{
-			datap->mRegionp->getLand().decompressDCTPatch(bit_pack, &goph, FALSE);
+			datap->mRegionp->getLand().decompressDCTPatch(bit_pack, &goph, false);
 		}
 // <FS:CR> Aurora Sim
 		else if (AURORA_LAND_LAYER_CODE == datap->mType)
 		{
-			datap->mRegionp->getLand().decompressDCTPatch(bit_pack, &goph, TRUE);
+			datap->mRegionp->getLand().decompressDCTPatch(bit_pack, &goph, true);
 		}
 		//else if (WIND_LAYER_CODE == datap->mType)
 		else if (WIND_LAYER_CODE == datap->mType || AURORA_WIND_LAYER_CODE == datap->mType)

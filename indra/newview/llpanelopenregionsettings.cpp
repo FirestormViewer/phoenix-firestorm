@@ -46,7 +46,7 @@ class OpenRegionInfoUpdate : public LLHTTPNode
 		const LLSD& context,
 		const LLSD& input) const
 	{
-		BOOL time_UTCDST = FALSE;
+		bool time_UTCDST = false;
 
 		if (!input || !context || !input.isMap() || !input.has("body"))
 		{
@@ -89,7 +89,7 @@ class OpenRegionInfoUpdate : public LLHTTPNode
 			}
 			if ( body.has("ForceDrawDistance") )
 			{
-				regionlimits->setLockedDrawDistance(body["ForceDrawDistance"].asInteger() == 1  ? TRUE : FALSE);
+				regionlimits->setLockedDrawDistance(body["ForceDrawDistance"].asInteger() == 1  ? true : false);
 			}
 		}
 		if ( body.has("LSLFunctions") )
@@ -155,7 +155,7 @@ class OpenRegionInfoUpdate : public LLHTTPNode
 		}
 		if ( body.has("OffsetOfUTCDST") )
 		{
-			time_UTCDST = body["OffsetOfUTCDST"].asInteger() == 1 ? TRUE : FALSE;
+			time_UTCDST = body["OffsetOfUTCDST"].asInteger() == 1 ? true : false;
 		}
 		if ( body.has("OffsetOfUTC") )
 		{
@@ -164,7 +164,7 @@ class OpenRegionInfoUpdate : public LLHTTPNode
 		}
 		if ( body.has("RenderWater") )
 		{
-			regionlimits->setAllowRenderWater(body["RenderWater"].asInteger() == 1 ? TRUE : FALSE);
+			regionlimits->setAllowRenderWater(body["RenderWater"].asInteger() == 1 ? true : false);
 		}
 #if 0 // *FIXME
 		if ( body.has("SayDistance") )
@@ -182,7 +182,7 @@ class OpenRegionInfoUpdate : public LLHTTPNode
 #endif // FIXME
 		if ( body.has("ToggleTeenMode") )
 		{
-			regionlimits->setEnableTeenMode(body["ToggleTeenMode"].asInteger() == 1 ? TRUE : FALSE);
+			regionlimits->setEnableTeenMode(body["ToggleTeenMode"].asInteger() == 1 ? true : false);
 		}
 		if ( body.has("ShowTags") )
 		{
@@ -190,7 +190,7 @@ class OpenRegionInfoUpdate : public LLHTTPNode
 		}
 		if ( body.has("EnforceMaxBuild") )
 		{
-			regionlimits->setEnforceMaxBuild(body["EnforceMaxBuild"].asInteger() == 1 ? TRUE : FALSE);
+			regionlimits->setEnforceMaxBuild(body["EnforceMaxBuild"].asInteger() == 1 ? true : false);
 		}
 		if ( body.has("MaxGroups") )
 		{

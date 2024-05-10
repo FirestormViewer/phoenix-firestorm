@@ -29,7 +29,9 @@
 #include "llpanelnearbymedia.h"
 
 // #include "llaudioengine.h"	// ## Zi: Media/Stream separation
+#include "llbase64.h"
 #include "llcheckboxctrl.h"
+#include "llclipboard.h"
 #include "llcombobox.h"
 #include "llresizebar.h"
 #include "llresizehandle.h"
@@ -53,7 +55,9 @@
 #include "llvovolume.h"
 #include "llstatusbar.h"
 #include "llsdutil.h"
+#include "lltoggleablemenu.h"
 #include "llvieweraudio.h"
+#include "llviewermenu.h"
 
 #include "llfloaterreg.h"
 #include "llfloaterpreference.h" // for the gear icon
@@ -74,10 +78,10 @@ static const LLUUID PARCEL_MEDIA_LIST_ITEM_UUID = LLUUID("CAB5920F-E484-4233-862
 LLPanelNearByMedia::LLPanelNearByMedia()
 :	mMediaList(NULL),
 	  mEnableAllCtrl(NULL),
-	  mAllMediaDisabled(false),
 	  mDebugInfoVisible(false),
-	  mParcelMediaItem(NULL)
-//	  mParcelAudioItem(NULL)	// ## Zi: Media/Stream separation
+	  mParcelMediaItem(NULL),
+	  //mParcelAudioItem(NULL),	// <FS:Zi> Media/Stream separation
+      mMoreLessBtn(NULL)
 {
     // This is just an initial value, mParcelAudioAutoStart does not affect ParcelMediaAutoPlayEnable
 	/* ## Zi: Media/Stream separation
@@ -100,7 +104,19 @@ LLPanelNearByMedia::LLPanelNearByMedia()
 	mCommitCallbackRegistrar.add("SelectedMediaCtrl.Volume",	boost::bind(&LLPanelNearByMedia::onCommitSelectedMediaVolume, this));
 	mCommitCallbackRegistrar.add("SelectedMediaCtrl.Zoom",		boost::bind(&LLPanelNearByMedia::onClickSelectedMediaZoom, this));
 	mCommitCallbackRegistrar.add("SelectedMediaCtrl.Unzoom",	boost::bind(&LLPanelNearByMedia::onClickSelectedMediaUnzoom, this));
-	
+
+    // Context menu handler.
+    mCommitCallbackRegistrar.add("SelectedMediaCtrl.Action",
+                                 [this](LLUICtrl* ctrl, const LLSD& data)
+                                 {
+                                     onMenuAction(data);
+                                 });
+    mEnableCallbackRegistrar.add("SelectedMediaCtrl.Visible",
+                                 [this](LLUICtrl* ctrl, const LLSD& data)
+                                 {
+                                     return onMenuVisible(data);
+                                 });
+
 	buildFromFile( "panel_nearby_media.xml");
 }
 
@@ -108,7 +124,7 @@ LLPanelNearByMedia::~LLPanelNearByMedia()
 {
 }
 
-BOOL LLPanelNearByMedia::postBuild()
+bool LLPanelNearByMedia::postBuild()
 {
 	LLPanelPulldown::postBuild();
 
@@ -151,15 +167,16 @@ BOOL LLPanelNearByMedia::postBuild()
 	mUnzoomCtrl = getChild<LLUICtrl>("unzoom");
 	mVolumeSlider = getChild<LLSlider>("volume_slider");
 	mMuteBtn = getChild<LLButton>("mute_btn");
-	
+    mMoreLessBtn = getChild<LLButton>("more_btn");
+
 	mEmptyNameString = getString("empty_item_text");
 	mParcelMediaName = getString("parcel_media_name");
 //	mParcelAudioName = getString("parcel_audio_name");	// ## Zi: Media/Stream separation
 	mPlayingString = getString("playing_suffix");
 	
 	mMediaList->setDoubleClickCallback(onZoomMedia, this);
-	mMediaList->sortByColumnIndex(PROXIMITY_COLUMN, TRUE);
-	mMediaList->sortByColumnIndex(VISIBILITY_COLUMN, FALSE);
+	mMediaList->sortByColumnIndex(PROXIMITY_COLUMN, true);
+	mMediaList->sortByColumnIndex(VISIBILITY_COLUMN, false);
 	
 	refreshList();
 	updateControls();
@@ -170,10 +187,15 @@ BOOL LLPanelNearByMedia::postBuild()
 	mLessRect = getRect();
 	mLessRect.mBottom = minimized_controls->getRect().mBottom;
 
-	getChild<LLUICtrl>("more_btn")->setVisible(false);
+    mMoreLessBtn->setVisible(false);
 	onMoreLess();
+
+    mContextMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>(
+        "menu_nearby_media.xml",
+        gMenuHolder,
+        LLViewerMenuHolderGL::child_registry_t::instance());
 	
-	return TRUE;
+	return true;
 }
 
 /* <FS:Zi> Media/Stream separation
@@ -196,12 +218,11 @@ void LLPanelNearByMedia::handleMediaAutoPlayChanged(const LLSD& newvalue)
 */
 
 /*virtual*/
-void LLPanelNearByMedia::reshape(S32 width, S32 height, BOOL called_from_parent)
+void LLPanelNearByMedia::reshape(S32 width, S32 height, bool called_from_parent)
 {
 	LLPanelPulldown::reshape(width, height, called_from_parent);
 
-	LLButton* more_btn = findChild<LLButton>("more_btn");
-	if (more_btn && more_btn->getValue().asBoolean())
+	if (mMoreLessBtn && mMoreLessBtn->getValue().asBoolean())
 	{
 		mMoreRect = getRect();
 	}
@@ -227,7 +248,7 @@ void LLPanelNearByMedia::draw()
 }
 
 /*virtual*/
-BOOL LLPanelNearByMedia::handleHover(S32 x, S32 y, MASK mask)
+bool LLPanelNearByMedia::handleHover(S32 x, S32 y, MASK mask)
 {
 	LLPanelPulldown::handleHover(x, y, mask);
 	
@@ -239,6 +260,36 @@ BOOL LLPanelNearByMedia::handleHover(S32 x, S32 y, MASK mask)
 		
 	// Always handle
 	return true;
+}
+
+bool LLPanelNearByMedia::handleRightMouseDown(S32 x, S32 y, MASK mask)
+{
+    S32 x_list, y_list;
+    localPointToOtherView(x, y, &x_list, &y_list, mMediaList);
+    if (mMoreLessBtn->getToggleState()
+        && mMediaList->pointInView(x_list, y_list)
+        && mMediaList->selectItemAt(x_list, y_list, mask))
+    {
+        if (mContextMenu)
+        {
+            mContextMenu->buildDrawLabels();
+            mContextMenu->updateParent(LLMenuGL::sMenuContainer);
+            LLMenuGL::showPopup(this, mContextMenu, x, y);
+            return true;
+        }
+    }
+
+    return LLPanelPulldown::handleRightMouseDown(x, y, mask);
+}
+
+
+void LLPanelNearByMedia::onVisibilityChange(bool new_visibility)
+{
+    if (!new_visibility && mContextMenu->getVisible())
+    {
+        gMenuHolder->hideMenus();
+    }
+    LLPanelPulldown::onVisibilityChange(new_visibility);
 }
 
 /* <FS:Zi> Media/Stream separation
@@ -980,7 +1031,7 @@ void LLPanelNearByMedia::onAdvancedButtonClick()
 
 void LLPanelNearByMedia::onMoreLess()
 {
-	bool is_more = getChild<LLButton>("more_btn")->getToggleState();
+	bool is_more = mMoreLessBtn->getToggleState();
 	mNearbyMediaPanel->setVisible(is_more);
 
 	// enable resizing when expanded
@@ -991,7 +1042,7 @@ void LLPanelNearByMedia::onMoreLess()
 
 	setShape(new_rect);
 
-	getChild<LLUICtrl>("more_btn")->setVisible(true);
+    mMoreLessBtn->setVisible(true);
 }
 
 void LLPanelNearByMedia::updateControls()
@@ -1254,6 +1305,53 @@ void LLPanelNearByMedia::onClickSelectedMediaUnzoom()
 	LLViewerMediaFocus::getInstance()->unZoom();
 }
 
+void LLPanelNearByMedia::onMenuAction(const LLSD& userdata)
+{
+    const std::string command_name = userdata.asString();
+    if ("copy_url" == command_name)
+    {
+        LLClipboard::instance().reset();
+        std::string url = getSelectedUrl();
+
+        if (!url.empty())
+        {
+            LLClipboard::instance().copyToClipboard(utf8str_to_wstring(url), 0, url.size());
+        }
+    }
+    else if ("copy_data" == command_name)
+    {
+        LLClipboard::instance().reset();
+        std::string url = getSelectedUrl();
+        static const std::string encoding_specifier = "base64,";
+        size_t pos = url.find(encoding_specifier);
+        if (pos != std::string::npos)
+        {
+            pos += encoding_specifier.size();
+            std::string res = LLBase64::decodeAsString(url.substr(pos));
+            LLClipboard::instance().copyToClipboard(utf8str_to_wstring(res), 0, res.size());
+        }
+        else
+        {
+            url = LLURI::unescape(url);
+            LLClipboard::instance().copyToClipboard(utf8str_to_wstring(url), 0, url.size());
+        }
+    }
+}
+
+bool LLPanelNearByMedia::onMenuVisible(const LLSD& userdata)
+{
+    const std::string command_name = userdata.asString();
+    if ("copy_data" == command_name)
+    {
+        std::string url = getSelectedUrl();
+        if (url.rfind("data:", 0) == 0)
+        {
+            // might be a a good idea to permit text/html only
+            return true;
+        }
+    }
+    return false;
+}
 
 // static
 void LLPanelNearByMedia::getNameAndUrlHelper(LLViewerMediaImpl* impl, std::string& name, std::string & url, const std::string &defaultName)
@@ -1278,5 +1376,30 @@ void LLPanelNearByMedia::getNameAndUrlHelper(LLViewerMediaImpl* impl, std::strin
 	{
 		name = defaultName;
 	}
+}
+
+std::string LLPanelNearByMedia::getSelectedUrl()
+{
+    std::string url;
+    LLUUID selected_media_id = mMediaList->getValue().asUUID();
+	// <FS> Media / Stream separation
+    /*if (selected_media_id == PARCEL_AUDIO_LIST_ITEM_UUID)
+    {
+        url = LLViewerMedia::getInstance()->getParcelAudioURL();
+    }
+    else*/ if (selected_media_id == PARCEL_MEDIA_LIST_ITEM_UUID)
+    {
+        url = LLViewerParcelMedia::getInstance()->getURL();
+    }
+    else
+    {
+        LLViewerMediaImpl* impl = LLViewerMedia::getInstance()->getMediaImplFromTextureID(selected_media_id);
+        if (NULL != impl)
+        {
+            std::string name;
+            getNameAndUrlHelper(impl, name, url, mEmptyNameString);
+        }
+    }
+    return url;
 }
 

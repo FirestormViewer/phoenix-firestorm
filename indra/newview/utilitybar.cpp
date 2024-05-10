@@ -108,13 +108,13 @@ void UtilityBar::onParcelMediaClicked()
 	gStatusBar->toggleMedia(!any_media_playing);
 }
 
-BOOL UtilityBar::tick()
+bool UtilityBar::tick()
 {
 	// Don't check media before being logged in properly so we won't try to
 	// initialize parcel media classes too early
 	if (LLStartUp::getStartupState() != STATE_STARTED)
 	{
-		return FALSE;
+		return false;
 	}
 
 	// NOTE: copied from llstatusbar.cpp
@@ -156,7 +156,7 @@ BOOL UtilityBar::tick()
 		mPTTButton->setEnabled(LLAgent::isActionAllowed(LLSD("speak")));
 	}
 
-	return FALSE;
+	return false;
 }
 
 void UtilityBar::setAOInterfaceButtonExpanded(bool expanded)

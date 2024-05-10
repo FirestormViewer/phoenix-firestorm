@@ -30,13 +30,13 @@ public:
 	lggBeamColorMapFloater(const LLSD& seed);
 	virtual ~lggBeamColorMapFloater();
 
-	BOOL postBuild();
-	BOOL handleMouseDown(S32 x, S32 y, MASK mask);
-	BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+	bool postBuild() override;
+	bool handleMouseDown(S32 x, S32 y, MASK mask) override;
+	bool handleRightMouseDown(S32 x, S32 y, MASK mask) override;
 
 	void setData(FSPanelPrefs* data);
 
-	void draw();
+	void draw() override;
 
 protected:
 	// UI Handlers

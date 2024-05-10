@@ -381,7 +381,7 @@ void LLLocalMeshObject::fillVolume(LLLocalMeshFileLOD lod)
 	if (current_volume)
 	{
 		current_volume->copyFacesFrom(new_faces);
-		current_volume->setMeshAssetLoaded(TRUE);
+		current_volume->setMeshAssetLoaded(true);
 		LLPrimitive::getVolumeManager()->unrefVolume(current_volume);
 	}
 }

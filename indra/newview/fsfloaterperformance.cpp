@@ -60,10 +60,10 @@
 
 extern F32 gSavedDrawDistance;
 
-const F32 REFRESH_INTERVAL = 1.0f;
-const S32 BAR_LEFT_PAD = 2;
-const S32 BAR_RIGHT_PAD = 5;
-const S32 BAR_BOTTOM_PAD = 9;
+constexpr F32 REFRESH_INTERVAL = 1.0f;
+constexpr S32 BAR_LEFT_PAD = 2;
+constexpr S32 BAR_RIGHT_PAD = 5;
+constexpr S32 BAR_BOTTOM_PAD = 9;
 
 constexpr auto AvType       {LLPerfStats::ObjType_t::OT_AVATAR};
 constexpr auto SceneType    {LLPerfStats::ObjType_t::OT_GENERAL};
@@ -105,7 +105,7 @@ FSFloaterPerformance::~FSFloaterPerformance()
     delete mUpdateTimer;
 }
 
-BOOL FSFloaterPerformance::postBuild()
+bool FSFloaterPerformance::postBuild()
 {
     mMainPanel = getChild<LLPanel>("panel_performance_main");
     mNearbyPanel = getChild<LLPanel>("panel_performance_nearby");
@@ -175,7 +175,7 @@ BOOL FSFloaterPerformance::postBuild()
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 void FSFloaterPerformance::resetMaxArtSlider()
@@ -211,8 +211,8 @@ void FSFloaterPerformance::setHardwareDefaults()
 void FSFloaterPerformance::showSelectedPanel(LLPanel* selected_panel)
 {
     hidePanels();
-    mMainPanel->setVisible(FALSE);
-    selected_panel->setVisible(TRUE);
+    mMainPanel->setVisible(false);
+    selected_panel->setVisible(true);
 
     if (mHUDsPanel == selected_panel)
     {
@@ -436,16 +436,16 @@ void FSFloaterPerformance::draw()
 void FSFloaterPerformance::showMainPanel()
 {
     hidePanels();
-    mMainPanel->setVisible(TRUE);
+    mMainPanel->setVisible(true);
 }
 
 void FSFloaterPerformance::hidePanels()
 {
-    mNearbyPanel->setVisible(FALSE);
-    mComplexityPanel->setVisible(FALSE);
-    mHUDsPanel->setVisible(FALSE);
-    mSettingsPanel->setVisible(FALSE);
-    mAutoTunePanel->setVisible(FALSE);
+    mNearbyPanel->setVisible(false);
+    mComplexityPanel->setVisible(false);
+    mHUDsPanel->setVisible(false);
+    mSettingsPanel->setVisible(false);
+    mAutoTunePanel->setVisible(false);
 }
 
 void FSFloaterPerformance::initBackBtn(LLPanel* panel)
@@ -561,7 +561,7 @@ void FSFloaterPerformance::populateHUDList()
         }
     }
 
-    mHUDList->sortByColumnIndex(1, FALSE);
+    mHUDList->sortByColumnIndex(1, false);
     mHUDList->setScrollPos(prev_pos);
     mHUDList->selectItemBySpecialId(prev_selected_id);
 }
@@ -572,7 +572,7 @@ void FSFloaterPerformance::populateObjectList()
     auto prev_selected_id = mObjectList->getSelectedSpecialId();
 
     std::string current_sort_col = mObjectList->getSortColumnName();
-    BOOL current_sort_asc = mObjectList->getSortAscending();
+    bool current_sort_asc = mObjectList->getSortAscending();
 
     mObjectList->clearRows();
     mObjectList->updateColumns(true);
@@ -696,7 +696,7 @@ void FSFloaterPerformance::populateNearbyList()
     S32 prev_pos = mNearbyList->getScrollPos();
     LLUUID prev_selected_id = mNearbyList->getStringUUIDSelectedItem();
     std::string current_sort_col = mNearbyList->getSortColumnName();
-    BOOL current_sort_asc = mNearbyList->getSortAscending();
+    bool current_sort_asc = mNearbyList->getSortAscending();
     
     if (current_sort_col == "art_visual")
     {
@@ -1088,7 +1088,7 @@ void FSFloaterPerformance::onExtendedAction(const LLSD& userdata, const LLUUID& 
 
         LLViewerJoystick::getInstance()->setCameraNeedsUpdate(true); // Fixes an edge case where if the user has JUST disabled flycam themselves, the camera gets stuck waiting for input.
 
-        gAgentCamera.setFocusOnAvatar(FALSE, ANIMATE);
+        gAgentCamera.setFocusOnAvatar(false, ANIMATE);
 
         gAgentCamera.setLookAt(LOOKAT_TARGET_SELECT, objectp);
 

@@ -118,7 +118,7 @@ LLOutfitsList::~LLOutfitsList()
 {
 }
 
-BOOL LLOutfitsList::postBuild()
+bool LLOutfitsList::postBuild()
 {
 	mAccordion = getChild<LLAccordionCtrl>("outfits_accordion");
 	mAccordion->setComparator(&OUTFIT_TAB_NAME_COMPARATOR);
@@ -345,15 +345,15 @@ void LLOutfitListBase::performAction(std::string action)
 
 	if ("replaceoutfit" == action)
 	{
-		LLAppearanceMgr::instance().wearInventoryCategory( cat, FALSE, FALSE );
+		LLAppearanceMgr::instance().wearInventoryCategory( cat, false, false );
 	}
 	if ("replaceitems" == action)
 	{
-		LLAppearanceMgr::instance().wearInventoryCategory( cat, FALSE, TRUE );
+		LLAppearanceMgr::instance().wearInventoryCategory( cat, false, true );
 	}
 	else if ("addtooutfit" == action)
 	{
-		LLAppearanceMgr::instance().wearInventoryCategory( cat, FALSE, TRUE );
+		LLAppearanceMgr::instance().wearInventoryCategory( cat, false, true );
 	}
 	else if ("rename_outfit" == action)
 	{
@@ -375,7 +375,7 @@ void LLOutfitsList::onSetSelectedOutfitByUUID(const LLUUID& outfit_uuid)
 			LLWearableItemsList* list = dynamic_cast<LLWearableItemsList*>(tab->getAccordionView());
 			if (!list) continue;
 
-			tab->setFocus(TRUE);
+			tab->setFocus(true);
 			ChangeOutfitSelection(list, outfit_uuid);
 
 			tab->changeOpenClose(false);
@@ -513,7 +513,7 @@ void LLOutfitsList::resetItemSelection(LLWearableItemsList* list, const LLUUID& 
 
 void LLOutfitsList::onChangeOutfitSelection(LLWearableItemsList* list, const LLUUID& category_id)
 {
-	MASK mask = gKeyboard->currentMask(TRUE);
+	MASK mask = gKeyboard->currentMask(true);
 
 	// Reset selection in all previously selected tabs except for the current
 	// if new selection is started.
@@ -606,7 +606,7 @@ void LLOutfitsList::onFilterSubStringChanged(const std::string& new_string, cons
 		}
 		else
 		{
-			tab->setVisible(TRUE);
+			tab->setVisible(true);
 
 			// Restore tab title when filter is empty
 			tab->setTitle(tab->getTitle());
@@ -799,7 +799,7 @@ void LLOutfitsList::onOutfitRightClick(LLUICtrl* ctrl, S32 x, S32 y, const LLUUI
         LLUICtrl* header = tab->findChild<LLUICtrl>("dd_header");
         if (header)
         {
-            header->setFocus(TRUE);
+            header->setFocus(true);
         }
 
         uuid_vec_t selected_uuids;
@@ -1136,7 +1136,7 @@ void LLOutfitListBase::ChangeOutfitSelection(LLWearableItemsList* list, const LL
     signalSelectionOutfitUUID(category_id);
 }
 
-BOOL LLOutfitListBase::postBuild()
+bool LLOutfitListBase::postBuild()
 {
     mGearMenu = createGearMenu();
 
@@ -1147,7 +1147,7 @@ BOOL LLOutfitListBase::postBuild()
 
     menu_gear_btn->setMouseDownCallback(boost::bind(&LLOutfitListGearMenuBase::updateItemsVisibility, mGearMenu));
     menu_gear_btn->setMenu(mGearMenu->getMenu());
-    return TRUE;
+    return true;
 }
 
 void LLOutfitListBase::collapseAllFolders()
@@ -1362,7 +1362,7 @@ void LLOutfitListGearMenuBase::onWear()
     if (selected_outfit)
     {
         LLAppearanceMgr::instance().wearInventoryCategory(
-            selected_outfit, /*copy=*/ FALSE, /*append=*/ FALSE);
+            selected_outfit, /*copy=*/ false, /*append=*/ false);
     }
 }
 
@@ -1468,14 +1468,14 @@ LLOutfitListGearMenu::~LLOutfitListGearMenu()
 void LLOutfitListGearMenu::onUpdateItemsVisibility()
 {
     if (!mMenu) return;
-    mMenu->setItemVisible("expand", TRUE);
-    mMenu->setItemVisible("collapse", TRUE);
+    mMenu->setItemVisible("expand", true);
+    mMenu->setItemVisible("collapse", true);
     mMenu->setItemVisible("thumbnail", getSelectedOutfitID().notNull());
-    mMenu->setItemVisible("sort_folders_by_name", FALSE);
+    mMenu->setItemVisible("sort_folders_by_name", false);
     LLOutfitListGearMenuBase::onUpdateItemsVisibility();
 }
 
-BOOL LLOutfitAccordionCtrlTab::handleToolTip(S32 x, S32 y, MASK mask)
+bool LLOutfitAccordionCtrlTab::handleToolTip(S32 x, S32 y, MASK mask)
 {
     // <FS:Ansariel> Make thumbnail tooltip work properly
     //if (y >= getLocalRect().getHeight() - getHeaderHeight())
@@ -1503,7 +1503,7 @@ BOOL LLOutfitAccordionCtrlTab::handleToolTip(S32 x, S32 y, MASK mask)
                                     .delay_time(tooltipDelay)
                                     .create_callback(boost::bind(&LLInspectTextureUtil::createInventoryToolTip, _1))
                                     .create_params(params));
-        return TRUE;
+        return true;
     }
 
     return LLAccordionCtrlTab::handleToolTip(x, y, mask);

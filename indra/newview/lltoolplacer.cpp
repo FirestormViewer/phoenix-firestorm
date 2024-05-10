@@ -108,8 +108,8 @@ LLToolPlacer::LLToolPlacer()
 {
 }
 
-BOOL LLToolPlacer::raycastForNewObjPos( S32 x, S32 y, LLViewerObject** hit_obj, S32* hit_face, 
-							 BOOL* b_hit_land, LLVector3* ray_start_region, LLVector3* ray_end_region, LLViewerRegion** region )
+bool LLToolPlacer::raycastForNewObjPos( S32 x, S32 y, LLViewerObject** hit_obj, S32* hit_face, 
+							 bool* b_hit_land, LLVector3* ray_start_region, LLVector3* ray_end_region, LLViewerRegion** region )
 {
 	// <FS:Ansariel> Performance tweak and selection fix
 	static LLCachedControl<bool> limitSelectDistance(gSavedSettings, "LimitSelectDistance");
@@ -119,7 +119,7 @@ BOOL LLToolPlacer::raycastForNewObjPos( S32 x, S32 y, LLViewerObject** hit_obj, 
 
 	// Viewer-side pick to find the right sim to create the object on.  
 	// First find the surface the object will be created on.
-	LLPickInfo pick = gViewerWindow->pickImmediate(x, y, FALSE, FALSE);
+	LLPickInfo pick = gViewerWindow->pickImmediate(x, y, false, false);
 	
 	// Note: use the frontmost non-flora version because (a) plants usually have lots of alpha and (b) pants' Havok
 	// representations (if any) are NOT the same as their viewer representation.
@@ -137,12 +137,12 @@ BOOL LLToolPlacer::raycastForNewObjPos( S32 x, S32 y, LLViewerObject** hit_obj, 
 	LLVector3d land_pos_global = pick.mPosGlobal;
 
 	// Make sure there's a surface to place the new object on.
-	BOOL bypass_sim_raycast = FALSE;
+	bool bypass_sim_raycast = false;
 	LLVector3d	surface_pos_global;
 	if (*b_hit_land)
 	{
 		surface_pos_global = land_pos_global; 
-		bypass_sim_raycast = TRUE;
+		bypass_sim_raycast = true;
 	}
 	else 
 	if (*hit_obj)
@@ -151,7 +151,7 @@ BOOL LLToolPlacer::raycastForNewObjPos( S32 x, S32 y, LLViewerObject** hit_obj, 
 	}
 	else
 	{
-		return FALSE;
+		return false;
 	}
 
 	// Make sure the surface isn't too far away.
@@ -163,7 +163,7 @@ BOOL LLToolPlacer::raycastForNewObjPos( S32 x, S32 y, LLViewerObject** hit_obj, 
 	if(limitSelectDistance && dist_to_surface_sq > (max_dist_from_camera * max_dist_from_camera) )
 	// </FS:Ansariel>
 	{
-		return FALSE;
+		return false;
 	}
 
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-0.2.0f
@@ -172,7 +172,7 @@ BOOL LLToolPlacer::raycastForNewObjPos( S32 x, S32 y, LLViewerObject** hit_obj, 
 	{
 		static RlvCachedBehaviourModifier<float> s_nFartouchDist(RLV_MODIFIER_FARTOUCHDIST);
 		if (dist_vec_squared(gAgent.getPositionGlobal(), pick.mPosGlobal) > s_nFartouchDist * s_nFartouchDist)
-			return FALSE;
+			return false;
 	}
 // [/RLVa:KB]
 
@@ -181,7 +181,7 @@ BOOL LLToolPlacer::raycastForNewObjPos( S32 x, S32 y, LLViewerObject** hit_obj, 
 	if (!regionp)
 	{
 		LL_WARNS() << "Trying to add object outside of all known regions!" << LL_ENDL;
-		return FALSE;
+		return false;
 	}
 
 	// Find the simulator-side ray that will be used to place the object accurately
@@ -213,35 +213,35 @@ BOOL LLToolPlacer::raycastForNewObjPos( S32 x, S32 y, LLViewerObject** hit_obj, 
 		*ray_end_region = regionp->getPosRegionFromGlobal( ray_end_global );
 	}
 
-	return TRUE;
+	return true;
 }
 
 
-BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
+bool LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 {
 	LLVector3 ray_start_region;
 	LLVector3 ray_end_region;
 	LLViewerRegion* regionp = NULL;
-	BOOL b_hit_land = FALSE;
+	bool b_hit_land = false;
 	S32 hit_face = -1;
 	LLViewerObject* hit_obj = NULL;
 	U8 state = 0;
-	BOOL success = raycastForNewObjPos( x, y, &hit_obj, &hit_face, &b_hit_land, &ray_start_region, &ray_end_region, &regionp );
+	bool success = raycastForNewObjPos( x, y, &hit_obj, &hit_face, &b_hit_land, &ray_start_region, &ray_end_region, &regionp );
 	if( !success )
 	{
-		return FALSE;
+		return false;
 	}
 
 	if( hit_obj && (hit_obj->isAvatar() || hit_obj->isAttachment()) )
 	{
 		// Can't create objects on avatars or attachments
-		return FALSE;
+		return false;
 	}
 
 	if (NULL == regionp)
 	{
 		LL_WARNS() << "regionp was NULL; aborting function." << LL_ENDL;
-		return FALSE;
+		return false;
 	}
 
 	if (regionp->getRegionFlag(REGION_FLAGS_SANDBOX))
@@ -266,7 +266,7 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 	else if (default_material == "Rubber")	material = LL_MCODE_RUBBER;
 	else if (default_material == "Plastic")	material = LL_MCODE_PLASTIC;
 
-	BOOL			create_selected = FALSE;
+	bool			create_selected = false;
 	LLVolumeParams	volume_params;
 	
 	switch (pcode) 
@@ -297,7 +297,7 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 	case LLViewerObject::LL_VO_SQUARE_TORUS:
 	case LLViewerObject::LL_VO_TRIANGLE_TORUS:
 	default:
-		create_selected = TRUE;
+		create_selected = true;
 		break;
 	}
 
@@ -487,7 +487,7 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 	gMessageSystem->addVector3Fast(_PREHASH_RayStart,		ray_start_region );
 	gMessageSystem->addVector3Fast(_PREHASH_RayEnd,			ray_end_region );
 	gMessageSystem->addU8Fast(_PREHASH_BypassRaycast,		(U8)b_hit_land );
-	gMessageSystem->addU8Fast(_PREHASH_RayEndIsIntersection, (U8)FALSE );
+	gMessageSystem->addU8Fast(_PREHASH_RayEndIsIntersection, (U8)false );
 	gMessageSystem->addU8Fast(_PREHASH_State, state);
 
 	// Limit raycast to a single object.  
@@ -516,7 +516,7 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 	}
 
 	// VEFFECT: AddObject
-	LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM, TRUE);
+	LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM, true);
 	effectp->setSourceObject((LLViewerObject*)gAgentAvatarp);
 	effectp->setPositionGlobal(regionp->getPosGlobalFromRegion(ray_end_region));
 	effectp->setDuration(LL_HUD_DUR_SHORT);
@@ -524,30 +524,30 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 
 	add(LLStatViewer::OBJECT_CREATE, 1);
 
-	return TRUE;
+	return true;
 }
 
 // Used by the placer tool to add copies of the current selection.
 // Inspired by add_object().  JC
-BOOL LLToolPlacer::addDuplicate(S32 x, S32 y)
+bool LLToolPlacer::addDuplicate(S32 x, S32 y)
 {
 	LLVector3 ray_start_region;
 	LLVector3 ray_end_region;
 	LLViewerRegion* regionp = NULL;
-	BOOL b_hit_land = FALSE;
+	bool b_hit_land = false;
 	S32 hit_face = -1;
 	LLViewerObject* hit_obj = NULL;
-	BOOL success = raycastForNewObjPos( x, y, &hit_obj, &hit_face, &b_hit_land, &ray_start_region, &ray_end_region, &regionp );
+	bool success = raycastForNewObjPos( x, y, &hit_obj, &hit_face, &b_hit_land, &ray_start_region, &ray_end_region, &regionp );
 	if( !success )
 	{
 		make_ui_sound("UISndInvalidOp");
-		return FALSE;
+		return false;
 	}
 	if( hit_obj && (hit_obj->isAvatar() || hit_obj->isAttachment()) )
 	{
 		// Can't create objects on avatars or attachments
 		make_ui_sound("UISndInvalidOp");
-		return FALSE;
+		return false;
 	}
 
 
@@ -567,11 +567,11 @@ BOOL LLToolPlacer::addDuplicate(S32 x, S32 y)
 	LLSelectMgr::getInstance()->selectDuplicateOnRay(ray_start_region,
 										ray_end_region,
 										b_hit_land,			// suppress raycast
-										FALSE,				// intersection
+										false,				// intersection
 										ray_target_id,
 										gSavedSettings.getBOOL("CreateToolCopyCenters"),
 										gSavedSettings.getBOOL("CreateToolCopyRotates"),
-										FALSE);				// select copy
+										false);				// select copy
 
 	if (regionp
 		&& (regionp->getRegionFlag(REGION_FLAGS_SANDBOX)))
@@ -579,18 +579,18 @@ BOOL LLToolPlacer::addDuplicate(S32 x, S32 y)
 		//LLFirstUse::useSandbox();
 	}
 
-	return TRUE;
+	return true;
 }
 
 
-BOOL LLToolPlacer::placeObject(S32 x, S32 y, MASK mask)
+bool LLToolPlacer::placeObject(S32 x, S32 y, MASK mask)
 {
-	BOOL added = TRUE;
+	bool added = true;
 	
 // [RLVa:KB] - Checked: 2010-03-23 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
 	if ( (rlv_handler_t::isEnabled()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || (gRlvHandler.hasBehaviour(RLV_BHVR_INTERACT))) )
 	{
-		return TRUE; // Callers seem to expect a "did you handle it?" so we return TRUE rather than FALSE
+		return true; // Callers seem to expect a "did you handle it?" so we return true rather than false
 	}
 // [/RLVa:KB]
 
@@ -600,7 +600,7 @@ BOOL LLToolPlacer::placeObject(S32 x, S32 y, MASK mask)
 	}
 	else
 	{
-		added = addObject( sObjectType, x, y, FALSE );
+		added = addObject( sObjectType, x, y, false );
 	}
 
 	// ...and go back to the default tool
@@ -612,11 +612,11 @@ BOOL LLToolPlacer::placeObject(S32 x, S32 y, MASK mask)
 	return added;
 }
 
-BOOL LLToolPlacer::handleHover(S32 x, S32 y, MASK mask)
+bool LLToolPlacer::handleHover(S32 x, S32 y, MASK mask)
 {
 	LL_DEBUGS("UserInput") << "hover handled by LLToolPlacer" << LL_ENDL;		
 	gViewerWindow->setCursor(UI_CURSOR_TOOLCREATE);
-	return TRUE;
+	return true;
 }
 
 void LLToolPlacer::handleSelect()

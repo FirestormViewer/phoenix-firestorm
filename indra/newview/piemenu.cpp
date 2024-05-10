@@ -66,7 +66,7 @@ PieMenu::PieMenu(const LLMenuGL::Params& p) :
 	LL_DEBUGS("Pie") << "PieMenu::PieMenu()" << LL_ENDL;
 
 	// radius, so we need this *2
-	reshape(PIE_OUTER_SIZE * 2, PIE_OUTER_SIZE * 2, FALSE);
+	reshape(PIE_OUTER_SIZE * 2, PIE_OUTER_SIZE * 2, false);
 	
 	// set up the font for the menu
 	mFont = LLFontGL::getFont(LLFontDescriptor("SansSerif", "Pie", LLFontGL::NORMAL));
@@ -85,7 +85,7 @@ bool PieMenu::addChild(LLView* child, S32 tab_group)
 	// don't add invalid slices
 	if (!child)
 	{
-		return FALSE;
+		return false;
 	}
 
 	// add a new slice to the menu
@@ -93,9 +93,9 @@ bool PieMenu::addChild(LLView* child, S32 tab_group)
 
 	// tell the view that our menu has changed and reshape it back to correct size
 	LLUICtrl::addChild(child);
-	reshape(PIE_OUTER_SIZE * 2, PIE_OUTER_SIZE * 2, FALSE);
+	reshape(PIE_OUTER_SIZE * 2, PIE_OUTER_SIZE * 2, false);
 
-	return TRUE;
+	return true;
 }
 
 void PieMenu::removeChild(LLView* child)
@@ -109,10 +109,10 @@ void PieMenu::removeChild(LLView* child)
 
 	// tell the view that our menu has changed and reshape it back to correct size
 	LLUICtrl::removeChild(child);
-	reshape(PIE_OUTER_SIZE * 2, PIE_OUTER_SIZE * 2, FALSE);
+	reshape(PIE_OUTER_SIZE * 2, PIE_OUTER_SIZE * 2, false);
 }
 
-BOOL PieMenu::handleHover(S32 x, S32 y, MASK mask)
+bool PieMenu::handleHover(S32 x, S32 y, MASK mask)
 {
 	// initialize pie scale factor for popup effect
 	F32 factor = getScaleFactor();
@@ -143,7 +143,7 @@ BOOL PieMenu::handleHover(S32 x, S32 y, MASK mask)
 		mCurrentSegment = (S32) (PIE_MAX_SLICES_F * angle / (F_PI * 2.f)) % PIE_MAX_SLICES;
 	}
 
-	return TRUE;
+	return true;
 }
 
 void PieMenu::show(S32 x, S32 y, LLView* spawning_view)
@@ -162,7 +162,7 @@ void PieMenu::show(S32 x, S32 y, LLView* spawning_view)
 	LL_DEBUGS("Pie") << "PieMenu::show(): " << x << " " << y << LL_ENDL;
 
 	// make sure the menu is always the correct size
-	reshape(PIE_OUTER_SIZE * 2, PIE_OUTER_SIZE * 2, FALSE);
+	reshape(PIE_OUTER_SIZE * 2, PIE_OUTER_SIZE * 2, false);
 
 	// get the 3D view rectangle
 	LLRect screen = LLMenuGL::sMenuContainer->getMenuRect();
@@ -215,8 +215,8 @@ void PieMenu::show(S32 x, S32 y, LLView* spawning_view)
 	mOldSlice = nullptr;
 
 	// draw the menu on screen
-	setVisible(TRUE);
-	LLView::setVisible(TRUE);
+	setVisible(true);
+	LLView::setVisible(true);
 }
 
 void PieMenu::hide()
@@ -238,10 +238,10 @@ void PieMenu::hide()
 	// safety in case the timer was still running
 	mPopupTimer.stop();
 #endif
-	LLView::setVisible(FALSE);
+	LLView::setVisible(false);
 }
 
-void PieMenu::setVisible(BOOL visible)
+void PieMenu::setVisible(bool visible)
 {
 	// hide the menu if needed
 	if (!visible)
@@ -265,7 +265,7 @@ void PieMenu::draw()
 
 #if PIE_DRAW_BOUNDING_BOX
 	// draw a bounding box around the menu for debugging purposes
-	gl_rect_2d(0, r.getHeight(), r.getWidth(), 0, LLColor4::white, FALSE);
+	gl_rect_2d(0, r.getHeight(), r.getWidth(), 0, LLColor4::white, false);
 #endif
 
 	LLUIColorTable& colortable = LLUIColorTable::instance();
@@ -342,7 +342,7 @@ void PieMenu::draw()
 				label = currentSlice->getLabel();
 				currentSlice->updateVisible();
 				// disable it if it's not visible, pie slices never really disappear
-				BOOL slice_visible = currentSlice->getVisible();
+				bool slice_visible = currentSlice->getVisible();
 				currentSlice->setEnabled(slice_visible);
 				if (!slice_visible)
 				{
@@ -470,12 +470,12 @@ void PieMenu::draw()
 	LLView::draw();
 }
 
-BOOL PieMenu::appendContextSubMenu(PieMenu* menu)
+bool PieMenu::appendContextSubMenu(PieMenu* menu)
 {
 	LL_DEBUGS("Pie") << "PieMenu::appendContextSubMenu()" << LL_ENDL;
 	if (!menu)
 	{
-		return FALSE;
+		return false;
 	}
 
 	LL_DEBUGS("Pie") << "PieMenu::appendContextSubMenu() appending " << menu->getLabel() << " to " << getLabel() << LL_ENDL;
@@ -485,23 +485,23 @@ BOOL PieMenu::appendContextSubMenu(PieMenu* menu)
 	// tell the view that our menu has changed
 	LLUICtrl::addChild(menu);
 
-	return TRUE;
+	return true;
 }
 
-BOOL PieMenu::handleMouseUp(S32 x, S32 y, MASK mask)
+bool PieMenu::handleMouseUp(S32 x, S32 y, MASK mask)
 {
 	// left and right mouse buttons both do the same thing currently
 	return handleMouseButtonUp(x, y, mask);
 }
 
-BOOL PieMenu::handleRightMouseUp(S32 x, S32 y, MASK mask)
+bool PieMenu::handleRightMouseUp(S32 x, S32 y, MASK mask)
 {
 	// left and right mouse buttons both do the same thing currently
 	return handleMouseButtonUp(x, y, mask);
 }
 
 // left and right mouse buttons both do the same thing currently
-BOOL PieMenu::handleMouseButtonUp(S32 x, S32 y, MASK mask)
+bool PieMenu::handleMouseButtonUp(S32 x, S32 y, MASK mask)
 {
 	// if this was the first click and no slice is highlighted (no borderless click), start the popup timer
 	if (mFirstClick && !mSlice)
@@ -514,7 +514,7 @@ BOOL PieMenu::handleMouseButtonUp(S32 x, S32 y, MASK mask)
 	else
 	{
 		// default to invisible
-		BOOL visible = FALSE;
+		bool visible = false;
 
 		// get the current selected slice and check if this is a regular click slice
 		PieSlice* currentSlice = dynamic_cast<PieSlice*>(mSlice);
@@ -543,7 +543,7 @@ BOOL PieMenu::handleMouseButtonUp(S32 x, S32 y, MASK mask)
 					}
 				}
 				// the menu stays visible
-				visible = TRUE;
+				visible = true;
 #if PIE_POPUP_EFFECT
 				// restart the popup timer
 				mPopupTimer.reset();

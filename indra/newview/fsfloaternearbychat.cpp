@@ -117,18 +117,18 @@ void FSFloaterNearbyChat::updateFSUseNearbyChatConsole(const LLSD &data)
 	if (FSUseNearbyChatConsole)
 	{
 		removeScreenChat();
-		gConsole->setVisible(TRUE);
+		gConsole->setVisible(true);
 	}
 	else
 	{
-		gConsole->setVisible(FALSE);
+		gConsole->setVisible(false);
 	}
 }
 
 
-BOOL FSFloaterNearbyChat::postBuild()
+bool FSFloaterNearbyChat::postBuild()
 {
-	setIsSingleInstance(TRUE);
+	setIsSingleInstance(true);
 
 	mInputEditor = getChild<LLChatEntry>("chat_box");
 	mInputEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2, _3, _4, _5));
@@ -137,7 +137,7 @@ BOOL FSFloaterNearbyChat::postBuild()
 	mInputEditor->setFocusLostCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxFocusLost, this));
 	mInputEditor->setFocusReceivedCallback(boost::bind(&FSFloaterNearbyChat::onChatBoxFocusReceived, this));
 	mInputEditor->setTextExpandedCallback(boost::bind(&FSFloaterNearbyChat::reshapeChatLayoutPanel, this));
-	mInputEditor->setPassDelete(TRUE);
+	mInputEditor->setPassDelete(true);
 	mInputEditor->setFont(LLViewerChat::getChatFont());
 	mInputEditor->setLabel(getString("chatbox_label"));
 	mInputEditor->enableSingleLineMode(gSavedSettings.getBOOL("FSUseSingleLineChatEntry"));
@@ -229,7 +229,7 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 	LLChat& tmp_chat = const_cast<LLChat&>(chat);
 	bool use_plain_text_chat_history = gSavedSettings.getBOOL("PlainTextChatHistory");
 	bool show_timestamps_nearby_chat = gSavedSettings.getBOOL("FSShowTimestampsNearbyChat");
-	// [FIRE-1641 : SJ]: Option to hide timestamps in nearby chat - add Timestamp when show_timestamps_nearby_chat is TRUE
+	// [FIRE-1641 : SJ]: Option to hide timestamps in nearby chat - add Timestamp when show_timestamps_nearby_chat is true
 	if (show_timestamps_nearby_chat)
 	{
 		if (tmp_chat.mTimeStr.empty())
@@ -270,7 +270,7 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 		// KC: Don't flash tab on system messages
 		if (!isInVisibleChain() && hostp && (chat.mSourceType == CHAT_SOURCE_AGENT || chat.mSourceType == CHAT_SOURCE_OBJECT))
 		{
-			hostp->setFloaterFlashing(this, TRUE);
+			hostp->setFloaterFlashing(this, true);
 		}
 	}
 
@@ -329,15 +329,15 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 }
 
 // virtual
-BOOL FSFloaterNearbyChat::focusFirstItem(BOOL prefer_text_fields, BOOL focus_flash)
+bool FSFloaterNearbyChat::focusFirstItem(bool prefer_text_fields, bool focus_flash)
 {
-	mInputEditor->setFocus(TRUE);
+	mInputEditor->setFocus(true);
 	onTabInto();
 	if (focus_flash)
 	{
 		gFocusMgr.triggerFocusFlash();
 	}
-	return TRUE;
+	return true;
 }
 
 void FSFloaterNearbyChat::onHistoryButtonClicked()
@@ -398,7 +398,7 @@ void FSFloaterNearbyChat::openFloater(const LLSD& key)
 		{
 			floater_container->showFloater(this, LLTabContainer::START);
 		}
-		setVisible(TRUE);
+		setVisible(true);
 		LLFloater::openFloater(key);
 	}
 }
@@ -412,7 +412,7 @@ void FSFloaterNearbyChat::removeScreenChat()
 	}
 }
 
-void FSFloaterNearbyChat::setVisible(BOOL visible)
+void FSFloaterNearbyChat::setVisible(bool visible)
 {
 	if (visible)
 	{
@@ -420,7 +420,7 @@ void FSFloaterNearbyChat::setVisible(BOOL visible)
 	}
 	LLFloater::setVisible(visible);
 	
-	BOOL is_minimized = visible && isChatMultiTab()
+	bool is_minimized = visible && isChatMultiTab()
 		? FSFloaterIMContainer::getInstance()->isMinimized()
 		: !visible;
 
@@ -434,7 +434,7 @@ void FSFloaterNearbyChat::setVisible(BOOL visible)
 		bool is_active = im_container->getActiveFloater() == this && im_container->hasFocus();
 		if (!isChatMultiTab() || is_active || hasFocus())
 		{
-			mInputEditor->setFocus(TRUE);
+			mInputEditor->setFocus(true);
 		}
 	}
 
@@ -448,7 +448,7 @@ void FSFloaterNearbyChat::setVisible(BOOL visible)
 	}
 }
 
-void FSFloaterNearbyChat::setMinimized(BOOL b)
+void FSFloaterNearbyChat::setMinimized(bool b)
 {
 	handleMinimized(b);
 
@@ -471,7 +471,7 @@ void FSFloaterNearbyChat::onOpen(const LLSD& key )
 		}
 		else
 		{
-			floater_container->addFloater(this, FALSE);
+			floater_container->addFloater(this, false);
 		}
 	}
 
@@ -482,10 +482,10 @@ void FSFloaterNearbyChat::onOpen(const LLSD& key )
 		if (floater_container && !gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
 			// make sure to show our parent floater, too
-			floater_container->setVisible(TRUE);
+			floater_container->setVisible(true);
 			floater_container->showFloater(this, LLTabContainer::START);
 		}
-		setVisible(TRUE);
+		setVisible(true);
 	}
 
 	LLFloater::onOpen(key);
@@ -683,7 +683,7 @@ bool FSFloaterNearbyChat::isChatMultiTab()
 	return is_single_window;
 }
 
-BOOL FSFloaterNearbyChat::getVisible()
+bool FSFloaterNearbyChat::getVisible()
 {
 	FSFloaterIMContainer* im_container = FSFloaterIMContainer::getInstance();
 		
@@ -696,14 +696,14 @@ BOOL FSFloaterNearbyChat::getVisible()
 		return LLFloater::getVisible();
 	}
 		
-	// getVisible() returns TRUE when Tabbed IM window is minimized.
+	// getVisible() returns true when Tabbed IM window is minimized.
 	return is_active && !im_container->isMinimized() && im_container->getVisible();
 }
 
 // virtual
-BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
+bool FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 {
-	BOOL handled = FALSE;
+	bool handled = false;
 	
 	if (KEY_RETURN == key)
 	{
@@ -712,21 +712,21 @@ BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 			// shout
 			mInputEditor->updateHistory();
 			sendChat(CHAT_TYPE_SHOUT);
-			handled = TRUE;
+			handled = true;
 		}
 		else if (mask == MASK_SHIFT && gSavedSettings.getBOOL("FSUseShiftWhisper"))
 		{
 			// whisper
 			mInputEditor->updateHistory();
 			sendChat(CHAT_TYPE_WHISPER);
-			handled = TRUE;
+			handled = true;
 		}
 		else if (mask == MASK_ALT && gSavedSettings.getBOOL("FSUseAltOOC"))
 		{
 			// OOC
 			mInputEditor->updateHistory();
 			sendChat(CHAT_TYPE_OOC);
-			handled = TRUE;
+			handled = true;
 		}
 		else if (mask == (MASK_SHIFT | MASK_CONTROL))
 		{
@@ -755,7 +755,7 @@ BOOL FSFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 				}
 			}
 
-			handled = TRUE;
+			handled = true;
 		}
 	}
 
@@ -788,7 +788,7 @@ void FSFloaterNearbyChat::onChatBoxFocusReceived()
 
 void FSFloaterNearbyChat::reshapeChatLayoutPanel()
 {
-	mChatLayoutPanel->reshape(mChatLayoutPanel->getRect().getWidth(), mInputEditor->getRect().getHeight() + mInputEditorPad, FALSE);
+	mChatLayoutPanel->reshape(mChatLayoutPanel->getRect().getWidth(), mInputEditor->getRect().getHeight() + mInputEditorPad, false);
 }
 
 void FSFloaterNearbyChat::sendChat( EChatType type )
@@ -904,7 +904,7 @@ void FSFloaterNearbyChat::onChatTypeChanged()
 	mSendChatButton->setLabel(mChatTypeCombo->getSelectedItemLabel());
 }
 
-void FSFloaterNearbyChat::sendChatFromViewer(const std::string &utf8text, EChatType type, BOOL animate)
+void FSFloaterNearbyChat::sendChatFromViewer(const std::string &utf8text, EChatType type, bool animate)
 {
 	LLWString wtext = utf8string_to_wstring(utf8text);
 	S32 channel = 0;
@@ -928,14 +928,14 @@ void FSFloaterNearbyChat::stopChat()
 	FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat");
 	if (nearby_chat)
 	{
-		nearby_chat->mInputEditor->setFocus(FALSE);
+		nearby_chat->mInputEditor->setFocus(false);
 		gAgent.stopTyping();
 	}
 }
 
 void FSFloaterNearbyChat::updateUnreadMessageNotification(S32 unread_messages, bool muted_history)
 {
-	BOOL show_muted_history = gSavedSettings.getBOOL("FSShowMutedChatHistory");
+	bool show_muted_history = gSavedSettings.getBOOL("FSShowMutedChatHistory");
 
 	if (muted_history)
 	{
@@ -956,12 +956,12 @@ void FSFloaterNearbyChat::updateUnreadMessageNotification(S32 unread_messages, b
 
 	if (unread_messages == 0 || !gSavedSettings.getBOOL("FSNotifyUnreadChatMessages"))
 	{
-		mUnreadMessagesNotificationPanel->setVisible(FALSE);
+		mUnreadMessagesNotificationPanel->setVisible(false);
 	}
 	else
 	{
 		mUnreadMessagesNotificationTextBox->setTextArg("[NUM]", llformat("%d", unread_messages));
-		mUnreadMessagesNotificationPanel->setVisible(TRUE);
+		mUnreadMessagesNotificationPanel->setVisible(true);
 	}
 }
 
@@ -985,14 +985,14 @@ void FSFloaterNearbyChat::handleMinimized(bool minimized)
 
 void FSFloaterNearbyChat::onEmojiRecentPanelToggleBtnClicked()
 {
-	BOOL show = mEmojiRecentPanel->getVisible() ? FALSE : TRUE;
+	bool show = mEmojiRecentPanel->getVisible() ? false : true;
 	if (show)
 	{
 		initEmojiRecentPanel();
 	}
 
 	mEmojiRecentPanel->setVisible(show);
-	mInputEditor->setFocus(TRUE);
+	mInputEditor->setFocus(true);
 }
 
 void FSFloaterNearbyChat::initEmojiRecentPanel()
@@ -1000,8 +1000,8 @@ void FSFloaterNearbyChat::initEmojiRecentPanel()
 	std::list<llwchar>& recentlyUsed = LLFloaterEmojiPicker::getRecentlyUsed();
 	if (recentlyUsed.empty())
 	{
-		mEmojiRecentEmptyText->setVisible(TRUE);
-		mEmojiRecentIconsCtrl->setVisible(FALSE);
+		mEmojiRecentEmptyText->setVisible(true);
+		mEmojiRecentIconsCtrl->setVisible(false);
 	}
 	else
 	{
@@ -1011,8 +1011,8 @@ void FSFloaterNearbyChat::initEmojiRecentPanel()
 			emojis += emoji;
 		}
 		mEmojiRecentIconsCtrl->setEmojis(emojis);
-		mEmojiRecentEmptyText->setVisible(FALSE);
-		mEmojiRecentIconsCtrl->setVisible(TRUE);
+		mEmojiRecentEmptyText->setVisible(false);
+		mEmojiRecentIconsCtrl->setVisible(true);
 	}
 }
 
@@ -1032,6 +1032,6 @@ void FSFloaterNearbyChat::onRecentEmojiPicked(const LLSD& value)
 
 void FSFloaterNearbyChat::onEmojiPickerToggleBtnClicked()
 {
-	mInputEditor->setFocus(TRUE);
+	mInputEditor->setFocus(true);
 	mInputEditor->showEmojiHelper();
 }

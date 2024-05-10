@@ -134,7 +134,7 @@ LLAvatarListItem::~LLAvatarListItem()
 	// </FS:Ansariel>
 }
 
-BOOL  LLAvatarListItem::postBuild()
+bool LLAvatarListItem::postBuild()
 {
 	mAvatarIcon = getChild<LLAvatarIconCtrl>("avatar_icon");
 	mAvatarName = getChild<LLTextBox>("avatar_name");
@@ -151,11 +151,11 @@ BOOL  LLAvatarListItem::postBuild()
 	mBtnPermissionEditMine->setClickedCallback(boost::bind(&LLAvatarListItem::onPermissionEditMineClick, this));
 	
 	mBtnPermissionOnline->setVisible(false);
-	mBtnPermissionOnline->setIsChrome(TRUE);
+	mBtnPermissionOnline->setIsChrome(true);
 	mBtnPermissionMap->setVisible(false);
-	mBtnPermissionMap->setIsChrome(TRUE);
+	mBtnPermissionMap->setIsChrome(true);
 	mBtnPermissionEditMine->setVisible(false);
-	mBtnPermissionEditMine->setIsChrome(TRUE);
+	mBtnPermissionEditMine->setIsChrome(true);
 	mIconPermissionEditTheirs->setVisible(false);
 
 	mSpeakingIndicator = getChild<LLOutputMonitorCtrl>("speaking_indicator");
@@ -185,7 +185,7 @@ BOOL  LLAvatarListItem::postBuild()
 		sStaticInitialized = true;
 	}
 
-	return TRUE;
+	return true;
 }
 
 void LLAvatarListItem::onVolumeChange(const LLSD& data)
@@ -195,8 +195,8 @@ void LLAvatarListItem::onVolumeChange(const LLSD& data)
 }
 
 // <FS:Ansariel> LL refactoring error
-//void LLAvatarListItem::handleVisibilityChange ( BOOL new_visibility )
-void LLAvatarListItem::onVisibilityChange ( BOOL new_visibility )
+//void LLAvatarListItem::handleVisibilityChange ( bool new_visibility )
+void LLAvatarListItem::onVisibilityChange ( bool new_visibility )
 // </FS:Ansariel>
 {
     //Adjust positions of icons (info button etc) when 
@@ -462,7 +462,7 @@ void LLAvatarListItem::setShowProfileBtn(bool show)
 void LLAvatarListItem::showSpeakingIndicator(bool visible)
 {
 	// Already done? Then do nothing.
-	if (mSpeakingIndicator->getVisible() == (BOOL)visible)
+	if (mSpeakingIndicator->getVisible() == (bool)visible)
 		return;
 // Disabled to not contradict with SpeakingIndicatorManager functionality. EXT-3976
 // probably this method should be totally removed.
@@ -473,7 +473,7 @@ void LLAvatarListItem::showSpeakingIndicator(bool visible)
 void LLAvatarListItem::setAvatarIconVisible(bool visible)
 {
 	// Already done? Then do nothing.
-	if (mAvatarIcon->getVisible() == (BOOL)visible)
+	if (mAvatarIcon->getVisible() == (bool)visible)
 	{
 		return;
 	}
@@ -511,7 +511,7 @@ void LLAvatarListItem::onProfileBtnClick()
 	LLAvatarActions::showProfile(mAvatarId);
 }
 
-BOOL LLAvatarListItem::handleDoubleClick(S32 x, S32 y, MASK mask)
+bool LLAvatarListItem::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
 //	if(mInfoBtn->getRect().pointInRect(x, y))
 // [RVLa:KB] - Checked: RLVa-1.2.2
@@ -519,7 +519,7 @@ BOOL LLAvatarListItem::handleDoubleClick(S32 x, S32 y, MASK mask)
 // [/SL:KB]
 	{
 		onInfoBtnClick();
-		return TRUE;
+		return true;
 	}
 //	if(mProfileBtn->getRect().pointInRect(x, y))
 // [RLVa:KB] - Checked: RLVa-1.2.2
@@ -527,13 +527,13 @@ BOOL LLAvatarListItem::handleDoubleClick(S32 x, S32 y, MASK mask)
 // [/SL:KB]
 	{
 		onProfileBtnClick();
-		return TRUE;
+		return true;
 	}
 	return LLPanel::handleDoubleClick(x, y, mask);
 }
 
 // [SL:KB] - Patch: UI-AvatarListDndShare | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
-BOOL LLAvatarListItem::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDropType cargo_type, void *cargo_data, 
+bool LLAvatarListItem::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDropType cargo_type, void *cargo_data,
 	                                     EAcceptance *accept, std::string& tooltip_msg)
 {
 	notifyParent(LLSD().with("select", mAvatarId));
@@ -924,7 +924,7 @@ void LLAvatarListItem::onPermissionOnlineClick()
 			mBtnPermissionOnline->setColor(LLUIColorTable::instance().getColor("White_10"));
 		}
 		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(),new_rights);
-		mBtnPermissionOnline->setFocus(FALSE);
+		mBtnPermissionOnline->setFocus(false);
 	}
 }
 
@@ -946,7 +946,7 @@ void LLAvatarListItem::onPermissionMapClick()
 			mBtnPermissionMap->setColor(LLUIColorTable::instance().getColor("White_10"));
 		}
 		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(),new_rights);
-		mBtnPermissionMap->setFocus(FALSE);
+		mBtnPermissionMap->setFocus(false);
 	}
 }
 
@@ -969,7 +969,7 @@ void LLAvatarListItem::onPermissionEditMineClick()
 			LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(getAvatarId(),new_rights);
 		}
 		
-		mBtnPermissionEditMine->setFocus(FALSE);
+		mBtnPermissionEditMine->setFocus(false);
 	}
 }
 

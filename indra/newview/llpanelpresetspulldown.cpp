@@ -56,7 +56,7 @@ LLPanelPresetsPulldown::LLPanelPresetsPulldown()
 	buildFromFile( "panel_presets_pulldown.xml");
 }
 
-BOOL LLPanelPresetsPulldown::postBuild()
+bool LLPanelPresetsPulldown::postBuild()
 {
 	LLPresetsManager* presetsMgr = LLPresetsManager::getInstance();
     presetsMgr->setPresetListChangeCallback(boost::bind(&LLPanelPresetsPulldown::populatePanel, this));
@@ -124,9 +124,9 @@ void LLPanelPresetsPulldown::onRowClick(const LLSD& user_data)
 			LLPresetsManager::getInstance()->loadPreset(PRESETS_GRAPHIC, name);
 
             // Scroll grabbed focus, drop it to prevent selection of parent menu
-            setFocus(FALSE);
+            setFocus(false);
 
-			setVisible(FALSE);
+			setVisible(false);
 		}
         else
         {
@@ -142,7 +142,7 @@ void LLPanelPresetsPulldown::onRowClick(const LLSD& user_data)
 void LLPanelPresetsPulldown::onGraphicsButtonClick(const LLSD& user_data)
 {
 	// close the minicontrol, we're bringing up the big one
-	setVisible(FALSE);
+	setVisible(false);
 
 	// bring up the prefs floater
 	LLFloater* prefsfloater = LLFloaterReg::showInstance("preferences");
@@ -161,7 +161,7 @@ void LLPanelPresetsPulldown::onGraphicsButtonClick(const LLSD& user_data)
 
 void LLPanelPresetsPulldown::onAutofpsButtonClick(const LLSD& user_data)
 {
-    setVisible(FALSE);
+    setVisible(false);
     //LLFloaterPerformance* performance_floater = LLFloaterReg::showTypedInstance<LLFloaterPerformance>("performance");
     FSFloaterPerformance* performance_floater = LLFloaterReg::showTypedInstance<FSFloaterPerformance>("performance");
     if (performance_floater)

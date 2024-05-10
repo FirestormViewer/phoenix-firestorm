@@ -44,15 +44,15 @@ public:
 	LLFloaterConversationPreview(const LLSD& session_id);
 	virtual ~LLFloaterConversationPreview();
 
-	virtual BOOL postBuild();
+	bool postBuild() override;
 	void setPages(std::list<LLSD>* messages,const std::string& file_name);
 
-	virtual void draw();
-	virtual void onOpen(const LLSD& key);
-	virtual void onClose(bool app_quitting);
+	void draw() override;
+	void onOpen(const LLSD& key) override;
+	void onClose(bool app_quitting) override;
 	// <FS:Ansariel> CTRL-F for search history
-	virtual BOOL handleKeyHere(KEY key, MASK mask);
-	virtual bool hasAccelerators() const { return true; }
+	bool handleKeyHere(KEY key, MASK mask) override;
+	bool hasAccelerators() const override { return true; }
 	// </FS:Ansariel>
 
 private:

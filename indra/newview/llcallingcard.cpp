@@ -107,7 +107,7 @@ LLAvatarTracker::LLAvatarTracker() :
 	mTrackingData(NULL),
 	mTrackedAgentValid(false),
 	mModifyMask(0x0),
-	mIsNotifyObservers(FALSE)
+	mIsNotifyObservers(false)
 {
 }
 
@@ -508,7 +508,7 @@ void LLAvatarTracker::notifyObservers()
 		return;
 	}
 	LL_PROFILE_ZONE_SCOPED
-	mIsNotifyObservers = TRUE;
+	mIsNotifyObservers = true;
 
 	observer_list_t observers(mObservers);
 	observer_list_t::iterator it = observers.begin();
@@ -525,7 +525,7 @@ void LLAvatarTracker::notifyObservers()
 
 	mModifyMask = LLFriendObserver::NONE;
 	mChangedBuddyIDs.clear();
-	mIsNotifyObservers = FALSE;
+	mIsNotifyObservers = false;
 }
 
 void LLAvatarTracker::addParticularFriendObserver(const LLUUID& buddy_id, LLFriendObserver* observer)
@@ -766,9 +766,9 @@ void LLAvatarTracker::processNotify(LLMessageSystem* msg, bool online)
 	S32 count = msg->getNumberOfBlocksFast(_PREHASH_AgentBlock);
 
 	// <FS:PP> Attempt to speed up things a little
-	// 	BOOL chat_notify = gSavedSettings.getBOOL("ChatOnlineNotification");
+	// 	bool chat_notify = gSavedSettings.getBOOL("ChatOnlineNotification");
 	static LLCachedControl<bool> ChatOnlineNotification(gSavedSettings, "ChatOnlineNotification");
-	BOOL chat_notify = ChatOnlineNotification;
+	bool chat_notify = ChatOnlineNotification;
 	// </FS:PP>
 
 	LL_DEBUGS() << "Received " << count << " online notifications **** " << LL_ENDL;
@@ -847,7 +847,7 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 		notification =
 			LLNotifications::instance().add("FriendOnlineOffline",
 									 args,
-									 payload.with("respond_on_mousedown", TRUE),
+									 payload.with("respond_on_mousedown", true),
 									 boost::bind(&LLAvatarActions::startIM, agent_id));
 	}
 	else

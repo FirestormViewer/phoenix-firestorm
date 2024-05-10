@@ -42,12 +42,12 @@ public:
 	LLFlickrPhotoPanel();
 	~LLFlickrPhotoPanel();
 
-	BOOL postBuild();
+	bool postBuild();
 	S32 notify(const LLSD& info);
 	void draw();
 
 	LLSnapshotLivePreview* getPreviewView();
-	void onVisibilityChange(BOOL new_visibility);
+	void onVisibilityChange(bool new_visibility);
 	void onClickNewSnapshot();
     void onClickBigPreview();
 	void onSend();
@@ -57,7 +57,7 @@ public:
 	void clearAndClose();
 
 	void updateControls();
-	void updateResolution(BOOL do_update);
+	void updateResolution(bool do_update);
 	void checkAspectRatio(S32 index);
 	LLUICtrl* getRefreshBtn();
 
@@ -72,7 +72,7 @@ private:
     void attachPreview();
 
 	// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
-	BOOL checkImageSize(LLSnapshotLivePreview* previewp, S32& width, S32& height, BOOL isWidthChanged, S32 max_value);
+	bool checkImageSize(LLSnapshotLivePreview* previewp, S32& width, S32& height, bool isWidthChanged, S32 max_value);
 
 	LLHandle<LLView> mPreviewHandle;
 
@@ -97,11 +97,11 @@ class LLFlickrAccountPanel : public LLPanel
 {
 public:
 	LLFlickrAccountPanel();
-	BOOL postBuild();
+	bool postBuild();
 	void draw();
 
 private:
-	void onVisibilityChange(BOOL new_visibility);
+	void onVisibilityChange(bool new_visibility);
 	bool onFlickrConnectStateChange(const LLSD& data);
 	bool onFlickrConnectInfoChange();
 	void onConnect();
@@ -125,7 +125,7 @@ class LLFloaterFlickr : public LLFloater
 {
 public:
 	LLFloaterFlickr(const LLSD& key);
-	BOOL postBuild();
+	bool postBuild();
 	void draw();
 	void onClose(bool app_quitting);
 	void onCancel();

@@ -28,6 +28,8 @@
 #ifndef FS_REGISTRARUTILS_H
 #define FS_REGISTRARUTILS_H
 
+#include <functional>
+
 enum class EFSRegistrarFunctionActionType
 {
 	FS_RGSTR_ACT_ADD_FRIEND,

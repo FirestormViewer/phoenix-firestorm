@@ -280,12 +280,12 @@ public:
 	/*virtual*/ bool			canEdit() const { return false; }
 
 
-	/*virtual*/ BOOL			handleHover(S32 x, S32 y, MASK mask)
+	/*virtual*/ bool			handleHover(S32 x, S32 y, MASK mask)
 	{
 		LLUI::getInstance()->getWindow()->setCursor(UI_CURSOR_HAND);
-		return TRUE;
+		return true;
 	}
-	virtual BOOL				handleToolTip(S32 x, S32 y, MASK mask )
+	virtual bool				handleToolTip(S32 x, S32 y, MASK mask )
 	{ 
 		if (mItem->getThumbnailUUID().notNull())
 		{
@@ -299,19 +299,19 @@ public:
 					.create_callback(boost::bind(&LLInspectTextureUtil::createInventoryToolTip, _1))
 					.create_params(params));
 
-			return TRUE;
+			return true;
 		}
 
 		if (!mToolTip.empty())
 		{
 			LLToolTipMgr::instance().show(mToolTip);
-			return TRUE;
+			return true;
 		}
-		return FALSE; 
+		return false; 
 	}
 
 // [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-12 (Catznip-2.1.2d) | Added: Catznip-2.1.2d
-	/*virtual*/ BOOL			handleRightMouseDown(S32 x, S32 y, MASK mask)
+	/*virtual*/ bool			handleRightMouseDown(S32 x, S32 y, MASK mask)
 	{
 		if (!mContextMenu)
 		{
@@ -328,7 +328,7 @@ public:
 		mEditor.localPointToScreen(x, y, &screen_x, &screen_y);
 		mContextMenu->show(screen_x, screen_y);
 
-		return TRUE;
+		return true;
 	}
 
 	void onOpen()
@@ -388,10 +388,10 @@ public:
 	// return true if there are no embedded items.
 	bool empty();
 	
-	BOOL	insertEmbeddedItem(LLInventoryItem* item, llwchar* value, bool is_new);
-	BOOL	removeEmbeddedItem( llwchar ext_char );
+	bool	insertEmbeddedItem(LLInventoryItem* item, llwchar* value, bool is_new);
+	bool	removeEmbeddedItem( llwchar ext_char );
 
-	BOOL	hasEmbeddedItem(llwchar ext_char); // returns TRUE if /this/ editor has an entry for this item
+	bool	hasEmbeddedItem(llwchar ext_char); // returns true if /this/ editor has an entry for this item
 	LLUIImagePtr getItemImage(llwchar ext_char) const;
 
 	void	getEmbeddedItemList( std::vector<LLPointer<LLInventoryItem> >& items );
@@ -406,14 +406,14 @@ public:
 	void	markSaved();
 	
 	static LLPointer<LLInventoryItem> getEmbeddedItemPtr(llwchar ext_char); // returns pointer to item from static list
-	static BOOL getEmbeddedItemSaved(llwchar ext_char); // returns whether item from static list is saved
+	static bool getEmbeddedItemSaved(llwchar ext_char); // returns whether item from static list is saved
 
 private:
 
 	struct embedded_info_t
 	{
 		LLPointer<LLInventoryItem> mItemPtr;
-		BOOL mSaved;
+		bool mSaved;
 	};
 	typedef std::map<llwchar, embedded_info_t > item_map_t;
 	static item_map_t sEntries;
@@ -458,7 +458,7 @@ bool LLEmbeddedItems::empty()
 }
 
 // Inserts a new unique entry
-BOOL LLEmbeddedItems::insertEmbeddedItem( LLInventoryItem* item, llwchar* ext_char, bool is_new)
+bool LLEmbeddedItems::insertEmbeddedItem( LLInventoryItem* item, llwchar* ext_char, bool is_new)
 {
 	// Now insert a new one
 	llwchar wc_emb;
@@ -478,20 +478,20 @@ BOOL LLEmbeddedItems::insertEmbeddedItem( LLInventoryItem* item, llwchar* ext_ch
 		wc_emb = last->first;
 		if (wc_emb >= LLTextEditor::LAST_EMBEDDED_CHAR)
 		{
-			return FALSE;
+			return false;
 		}
 		++wc_emb;
 	}
 
 	sEntries[wc_emb].mItemPtr = item;
-	sEntries[wc_emb].mSaved = is_new ? FALSE : TRUE;
+	sEntries[wc_emb].mSaved = !is_new;
 	*ext_char = wc_emb;
 	mEmbeddedUsedChars.insert(wc_emb);
-	return TRUE;
+	return true;
 }
 
 // Removes an entry (all entries are unique)
-BOOL LLEmbeddedItems::removeEmbeddedItem( llwchar ext_char )
+bool LLEmbeddedItems::removeEmbeddedItem( llwchar ext_char )
 {
 	mEmbeddedUsedChars.erase(ext_char);
 	item_map_t::iterator iter = sEntries.find(ext_char);
@@ -499,9 +499,9 @@ BOOL LLEmbeddedItems::removeEmbeddedItem( llwchar ext_char )
 	{
 		sEntries.erase(ext_char);
 		sFreeEntries.push(ext_char);
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 	
 // static
@@ -519,7 +519,7 @@ LLPointer<LLInventoryItem> LLEmbeddedItems::getEmbeddedItemPtr(llwchar ext_char)
 }
 
 // static
-BOOL LLEmbeddedItems::getEmbeddedItemSaved(llwchar ext_char)
+bool LLEmbeddedItems::getEmbeddedItemSaved(llwchar ext_char)
 {
 	if( ext_char >= LLTextEditor::FIRST_EMBEDDED_CHAR && ext_char <= LLTextEditor::LAST_EMBEDDED_CHAR )
 	{
@@ -529,7 +529,7 @@ BOOL LLEmbeddedItems::getEmbeddedItemSaved(llwchar ext_char)
 			return iter->second.mSaved;
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 llwchar	LLEmbeddedItems::getEmbeddedCharFromIndex(S32 index)
@@ -597,14 +597,14 @@ S32 LLEmbeddedItems::getIndexFromEmbeddedChar(llwchar wch)
 	}
 }
 
-BOOL LLEmbeddedItems::hasEmbeddedItem(llwchar ext_char)
+bool LLEmbeddedItems::hasEmbeddedItem(llwchar ext_char)
 {
 	std::set<llwchar>::iterator iter = mEmbeddedUsedChars.find(ext_char);
 	if (iter != mEmbeddedUsedChars.end())
 	{
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 
@@ -689,7 +689,7 @@ void LLEmbeddedItems::markSaved()
 	for (std::set<llwchar>::iterator iter = mEmbeddedUsedChars.begin(); iter != mEmbeddedUsedChars.end(); ++iter)
 	{
 		llwchar wc = *iter;
-		sEntries[wc].mSaved = TRUE;
+		sEntries[wc].mSaved = true;
 	}
 }
 
@@ -699,13 +699,13 @@ class LLViewerTextEditor::TextCmdInsertEmbeddedItem : public LLTextBase::TextCmd
 {
 public:
 	TextCmdInsertEmbeddedItem( S32 pos, LLInventoryItem* item )
-		: TextCmd(pos, FALSE), 
+		: TextCmd(pos, false), 
 		  mExtCharValue(0)
 	{
 		mItem = item;
 	}
 
-	virtual BOOL execute( LLTextBase* editor, S32* delta )
+	virtual bool execute( LLTextBase* editor, S32* delta )
 	{
 		LLViewerTextEditor* viewer_editor = (LLViewerTextEditor*)editor;
 		// Take this opportunity to remove any unused embedded items from this editor
@@ -717,7 +717,7 @@ public:
 			*delta = insert(editor, getPosition(), ws );
 			return (*delta != 0);
 		}
-		return FALSE;
+		return false;
 	}
 	
 	virtual S32 undo( LLTextBase* editor )
@@ -733,7 +733,7 @@ public:
 		insert(editor, getPosition(), ws );
 		return getPosition() + 1;
 	}
-	virtual BOOL hasExtCharValue( llwchar value ) const
+	virtual bool hasExtCharValue( llwchar value ) const
 	{
 		return (value == mExtCharValue);
 	}
@@ -765,7 +765,7 @@ struct LLNotecardCopyInfo
 LLViewerTextEditor::LLViewerTextEditor(const LLViewerTextEditor::Params& p)
 :	LLTextEditor(p),
 	mDragItemChar(0),
-	mDragItemSaved(FALSE),
+	mDragItemSaved(false),
 	mInventoryCallback(new LLEmbeddedNotecardOpener)
 {
 	mEmbeddedItemList = new LLEmbeddedItems(this);
@@ -790,14 +790,14 @@ void LLViewerTextEditor::makePristine()
 	LLTextEditor::makePristine();
 }
 
-void LLViewerTextEditor::onVisibilityChange( BOOL new_visibility )
+void LLViewerTextEditor::onVisibilityChange( bool new_visibility )
 {
 	LLUICtrl::onVisibilityChange(new_visibility);
 }
 
-BOOL LLViewerTextEditor::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLViewerTextEditor::handleMouseDown(S32 x, S32 y, MASK mask)
 {
-	BOOL	handled = FALSE;
+	bool	handled = false;
 
 	// Let scrollbar have first dibs
 	handled = LLView::childrenHandleMouseDown(x, y, mask) != NULL;
@@ -806,7 +806,7 @@ BOOL LLViewerTextEditor::handleMouseDown(S32 x, S32 y, MASK mask)
 	{
 		if( allowsEmbeddedItems() )
 		{
-			setCursorAtLocalPos( x, y, FALSE );
+			setCursorAtLocalPos( x, y, false );
 			llwchar wc = 0;
 			if (mCursorPos < getLength())
 			{
@@ -828,10 +828,10 @@ BOOL LLViewerTextEditor::handleMouseDown(S32 x, S32 y, MASK mask)
 
 				if (hasTabStop())
 				{
-					setFocus( TRUE );
+					setFocus( true );
 				}
 
-				handled = TRUE;
+				handled = true;
 			}
 			else
 			{
@@ -849,9 +849,9 @@ BOOL LLViewerTextEditor::handleMouseDown(S32 x, S32 y, MASK mask)
 }
 
 
-BOOL LLViewerTextEditor::handleHover(S32 x, S32 y, MASK mask)
+bool LLViewerTextEditor::handleHover(S32 x, S32 y, MASK mask)
 {
-	BOOL handled = LLTextEditor::handleHover(x, y, mask);
+	bool handled = LLTextEditor::handleHover(x, y, mask);
 
 	if(hasMouseCapture() && mDragItem)
 	{
@@ -871,16 +871,16 @@ BOOL LLViewerTextEditor::handleHover(S32 x, S32 y, MASK mask)
 			return LLToolDragAndDrop::getInstance()->handleHover( x, y, mask );
 		}
 		getWindow()->setCursor(UI_CURSOR_HAND);
-		handled = TRUE;
+		handled = true;
 	}
 
 	return handled;
 }
 
 
-BOOL LLViewerTextEditor::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLViewerTextEditor::handleMouseUp(S32 x, S32 y, MASK mask)
 {
-	BOOL handled = FALSE;
+	bool handled = false;
 
 	if( hasMouseCapture() )
 	{
@@ -909,9 +909,9 @@ BOOL LLViewerTextEditor::handleMouseUp(S32 x, S32 y, MASK mask)
 	return handled;
 }
 
-BOOL LLViewerTextEditor::handleDoubleClick(S32 x, S32 y, MASK mask)
+bool LLViewerTextEditor::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
-	BOOL	handled = FALSE;
+	bool	handled = false;
 
 	// let scrollbar have first dibs
 	handled = LLView::childrenHandleDoubleClick(x, y, mask) != NULL;
@@ -920,15 +920,15 @@ BOOL LLViewerTextEditor::handleDoubleClick(S32 x, S32 y, MASK mask)
 	{
 		if( allowsEmbeddedItems() )
 		{
-			S32 doc_index = getDocIndexFromLocalCoord(x, y, FALSE);
+			S32 doc_index = getDocIndexFromLocalCoord(x, y, false);
 			llwchar doc_char = getWText()[doc_index];
 			if (mEmbeddedItemList->hasEmbeddedItem(doc_char))
 			{
 				if( openEmbeddedItemAtPos( doc_index ))
 				{
 					deselect();
-					setFocus( FALSE );
-					return TRUE;
+					setFocus( false );
+					return true;
 				}
 			}
 		}
@@ -939,19 +939,19 @@ BOOL LLViewerTextEditor::handleDoubleClick(S32 x, S32 y, MASK mask)
 
 
 // virtual
-BOOL LLViewerTextEditor::handleDragAndDrop(S32 x, S32 y, MASK mask,
-					  BOOL drop, EDragAndDropType cargo_type, void *cargo_data,
+bool LLViewerTextEditor::handleDragAndDrop(S32 x, S32 y, MASK mask,
+					  bool drop, EDragAndDropType cargo_type, void *cargo_data,
 					  EAcceptance *accept,
 					  std::string& tooltip_msg)
 {
-	BOOL handled = FALSE;
+	bool handled = false;
 	
 	LLToolDragAndDrop::ESource source = LLToolDragAndDrop::getInstance()->getSource();
 	if (LLToolDragAndDrop::SOURCE_NOTECARD == source)
 	{
 		// We currently do not handle dragging items from one notecard to another
 		// since items in a notecard must be in Inventory to be verified. See DEV-2891.
-		return FALSE;
+		return false;
 	}
 	
 	if (getEnabled() && acceptsTextInput())
@@ -1001,10 +1001,10 @@ BOOL LLViewerTextEditor::handleDragAndDrop(S32 x, S32 y, MASK mask,
 				{
 					deselect();
 					S32 old_cursor = mCursorPos;
-					setCursorAtLocalPos( x, y, TRUE );
+					setCursorAtLocalPos( x, y, true );
 					S32 insert_pos = mCursorPos;
 					setCursorPos(old_cursor);
-					BOOL inserted = insertEmbeddedItem( insert_pos, item );
+					bool inserted = insertEmbeddedItem( insert_pos, item );
 					if( inserted && (old_cursor > mCursorPos) )
 					{
 						setCursorPos(mCursorPos + 1);
@@ -1034,7 +1034,7 @@ BOOL LLViewerTextEditor::handleDragAndDrop(S32 x, S32 y, MASK mask,
 		*accept = ACCEPT_NO;
 	}
 
-	handled = TRUE;
+	handled = true;
 	LL_DEBUGS("UserInput") << "dragAndDrop handled by LLViewerTextEditor " << getName() << LL_ENDL;
 
 	return handled;
@@ -1182,7 +1182,7 @@ void LLViewerTextEditor::findEmbeddedItemSegments(S32 start, S32 end)
 	}
 }
 
-BOOL LLViewerTextEditor::openEmbeddedItemAtPos(S32 pos)
+bool LLViewerTextEditor::openEmbeddedItemAtPos(S32 pos)
 {
 	if( pos < getLength())
 	{
@@ -1190,7 +1190,7 @@ BOOL LLViewerTextEditor::openEmbeddedItemAtPos(S32 pos)
 		LLPointer<LLInventoryItem> item = LLEmbeddedItems::getEmbeddedItemPtr( wc );
 		if( item )
 		{
-			BOOL saved = LLEmbeddedItems::getEmbeddedItemSaved( wc );
+			bool saved = LLEmbeddedItems::getEmbeddedItemSaved( wc );
 			if (saved)
 			{
 				return openEmbeddedItem(item, wc); 
@@ -1201,36 +1201,36 @@ BOOL LLViewerTextEditor::openEmbeddedItemAtPos(S32 pos)
 			}
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 
-BOOL LLViewerTextEditor::openEmbeddedItem(LLPointer<LLInventoryItem> item, llwchar wc)
+bool LLViewerTextEditor::openEmbeddedItem(LLPointer<LLInventoryItem> item, llwchar wc)
 {
 
 	switch( item->getType() )
 	{
 		case LLAssetType::AT_TEXTURE:
 			openEmbeddedTexture( item, wc );
-			return TRUE;
+			return true;
 
 		case LLAssetType::AT_SOUND:
 			openEmbeddedSound( item, wc );
-			return TRUE;
+			return true;
 
 		case LLAssetType::AT_LANDMARK:
 			openEmbeddedLandmark( item, wc );
-			return TRUE;
+			return true;
 
 		case LLAssetType::AT_CALLINGCARD:
 			openEmbeddedCallingcard( item, wc );
-			return TRUE;
+			return true;
 		case LLAssetType::AT_SETTINGS:
 			openEmbeddedSetting(item, wc);
-			return TRUE;
+			return true;
         case LLAssetType::AT_MATERIAL:
             openEmbeddedGLTFMaterial(item, wc);
-            return TRUE;
+            return true;
 		case LLAssetType::AT_NOTECARD:
 		case LLAssetType::AT_LSL_TEXT:
 		case LLAssetType::AT_CLOTHING:
@@ -1239,9 +1239,9 @@ BOOL LLViewerTextEditor::openEmbeddedItem(LLPointer<LLInventoryItem> item, llwch
 		case LLAssetType::AT_ANIMATION:
 		case LLAssetType::AT_GESTURE:
 			showCopyToInvDialog( item, wc );
-			return TRUE;
+			return true;
 		default:
-			return FALSE;
+			return false;
 	}
 
 }
@@ -1257,8 +1257,8 @@ void LLViewerTextEditor::openEmbeddedTexture( LLInventoryItem* item, llwchar wc 
 //	LLPreviewTexture* preview = LLFloaterReg::showTypedInstance<LLPreviewTexture>("preview_texture", LLSD(item->getAssetUUID()), TAKE_FOCUS_YES);
 // [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-05 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
 	// If there's already a preview of the texture open then we do want it to take focus, otherwise leave it up to the debug setting
-	BOOL fHasInstance = (NULL != LLFloaterReg::findTypedInstance<LLPreviewTexture>("preview_texture", LLSD(item->getAssetUUID())));
-	BOOL fTakeFocus = ( (fHasInstance) || (gSavedSettings.getBOOL("EmbeddedTextureStealsFocus")) ) ? TAKE_FOCUS_YES : TAKE_FOCUS_NO;
+	bool fHasInstance = (NULL != LLFloaterReg::findTypedInstance<LLPreviewTexture>("preview_texture", LLSD(item->getAssetUUID())));
+	bool fTakeFocus = ( (fHasInstance) || (gSavedSettings.getBOOL("EmbeddedTextureStealsFocus")) ) ? TAKE_FOCUS_YES : TAKE_FOCUS_NO;
 	LLPreviewTexture* preview = LLFloaterReg::showTypedInstance<LLPreviewTexture>("preview_texture", LLSD(item->getAssetUUID()), fTakeFocus);
 // [/SL:KB]
 	if (preview)
@@ -1343,7 +1343,7 @@ void LLViewerTextEditor::openEmbeddedGLTFMaterial(LLInventoryItem* item, llwchar
         preview->setAuxItem(item);
         preview->setNotecardInfo(mNotecardInventoryID, mObjectID);
         preview->openFloater(floater_key);
-        preview->setFocus(TRUE);
+        preview->setFocus(true);
     }
 }
 
@@ -1444,13 +1444,13 @@ bool LLViewerTextEditor::hasEmbeddedInventory()
 
 ////////////////////////////////////////////////////////////////////////////
 
-BOOL LLViewerTextEditor::importBuffer( const char* buffer, S32 length )
+bool LLViewerTextEditor::importBuffer( const char* buffer, S32 length )
 {
 	LLMemoryStream str((U8*)buffer, length);
 	return importStream(str);
 }
 
-BOOL LLViewerTextEditor::exportBuffer( std::string& buffer )
+bool LLViewerTextEditor::exportBuffer( std::string& buffer )
 {
 	LLNotecard nc(LLNotecard::MAX_SIZE);
 
@@ -1467,6 +1467,6 @@ BOOL LLViewerTextEditor::exportBuffer( std::string& buffer )
 	
 	buffer = out_stream.str();
 	
-	return TRUE;
+	return true;
 }
 

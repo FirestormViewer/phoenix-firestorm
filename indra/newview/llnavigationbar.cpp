@@ -179,12 +179,12 @@ void LLTeleportHistoryMenuItem::draw()
 
 void LLTeleportHistoryMenuItem::onMouseEnter(S32 x, S32 y, MASK mask)
 {
-	mArrowIcon->setVisible(TRUE);
+	mArrowIcon->setVisible(true);
 }
 
 void LLTeleportHistoryMenuItem::onMouseLeave(S32 x, S32 y, MASK mask)
 {
-	mArrowIcon->setVisible(FALSE);
+	mArrowIcon->setVisible(false);
 }
 
 static LLDefaultChildRegistry::Register<LLPullButton> menu_button("pull_button");
@@ -222,9 +222,9 @@ void LLPullButton::onMouseLeave(S32 x, S32 y, MASK mask)
 }
 
 /*virtual*/
-BOOL LLPullButton::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLPullButton::handleMouseDown(S32 x, S32 y, MASK mask)
 {
-	BOOL handled = LLButton::handleMouseDown(x, y, mask);
+	bool handled = LLButton::handleMouseDown(x, y, mask);
 	if (handled)
 	{
 		//if mouse down was handled by button, 
@@ -235,7 +235,7 @@ BOOL LLPullButton::handleMouseDown(S32 x, S32 y, MASK mask)
 }
 
 /*virtual*/
-BOOL LLPullButton::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLPullButton::handleMouseUp(S32 x, S32 y, MASK mask)
 {
 	// reset data to get ready for next circle 
 	mLastMouseDown.clear();
@@ -306,7 +306,7 @@ LLNavigationBar::~LLNavigationBar()
 }
 
 // <FS:Zi> Make navigation bar part of the UI
-// BOOL LLNavigationBar::postBuild()
+// bool LLNavigationBar::postBuild()
 void LLNavigationBar::setupPanel()
 // </FS:Zi>
 {
@@ -336,14 +336,14 @@ void LLNavigationBar::setupPanel()
 
 	fillSearchComboBox();
 
-	mBtnBack->setEnabled(FALSE);
+	mBtnBack->setEnabled(false);
 	// [FS:CR] FIRE-12333
 	//mBtnBack->setClickedCallback(boost::bind(&LLNavigationBar::onBackButtonClicked, this));
 	mBtnBack->setClickedCallback(boost::bind(&LLNavigationBar::onBackButtonClicked, this, _1));
 	mBtnBack->setHeldDownCallback(boost::bind(&LLNavigationBar::onBackOrForwardButtonHeldDown, this,_1, _2));
 	mBtnBack->setClickDraggingCallback(boost::bind(&LLNavigationBar::showTeleportHistoryMenu, this,_1));
 	
-	mBtnForward->setEnabled(FALSE);
+	mBtnForward->setEnabled(false);
 	// [FS:CR] FIRE-12333
 	//mBtnForward->setClickedCallback(boost::bind(&LLNavigationBar::onForwardButtonClicked, this));
 	mBtnForward->setClickedCallback(boost::bind(&LLNavigationBar::onForwardButtonClicked, this, _1));
@@ -383,7 +383,7 @@ void LLNavigationBar::setupPanel()
 	//mNavigationPanel->getResizeBar()->setResizeListener(boost::bind(&LLNavigationBar::onNavbarResized, this));
 	//mFavoritePanel->getResizeBar()->setResizeListener(boost::bind(&LLNavigationBar::onNavbarResized, this));
 
-	// return TRUE;
+	// return true;
 	LLHints::getInstance()->registerHintTarget("nav_bar",mView->getHandle());
 	// </FS:Zi>
 
@@ -392,7 +392,7 @@ void LLNavigationBar::setupPanel()
 }
 
 // <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
-// void LLNavigationBar::setVisible(BOOL visible)
+// void LLNavigationBar::setVisible(bool visible)
 // {
 // 	// change visibility of grandparent layout_panel to animate in and out
 // 	if (getParent()) 
@@ -441,9 +441,9 @@ void LLNavigationBar::fillSearchComboBox()
 // 	LLPanel::draw();
 // }
 
-// BOOL LLNavigationBar::handleRightMouseDown(S32 x, S32 y, MASK mask)
+// bool LLNavigationBar::handleRightMouseDown(S32 x, S32 y, MASK mask)
 // {
-// 	BOOL handled = childrenHandleRightMouseDown( x, y, mask) != NULL;
+// 	bool handled = childrenHandleRightMouseDown( x, y, mask) != NULL;
 // 	if(!handled && !gMenuHolder->hasVisibleMenu())
 // 	{
 // 		show_navbar_context_menu(this,x,y);
@@ -561,7 +561,7 @@ void LLNavigationBar::onLocationSelection()
 			{
 				LLInventoryModel::item_array_t landmark_items =
 						LLLandmarkActions::fetchLandmarksByName(typed_location,
-								FALSE);
+								false);
 				if (!landmark_items.empty())
 				{
 					gAgent.teleportViaLandmark( landmark_items[0]->getAssetUUID());

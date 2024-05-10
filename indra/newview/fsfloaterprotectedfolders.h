@@ -40,11 +40,11 @@ public:
 	FSFloaterProtectedFolders(const LLSD& key);
 	virtual ~FSFloaterProtectedFolders();
 
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ void onOpen(const LLSD& info);
-	/*virtual*/ void draw();
-	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
-	/*virtual*/ bool hasAccelerators() const { return true; }
+	bool postBuild() override;
+	void onOpen(const LLSD& info) override;
+	void draw() override;
+	bool handleKeyHere(KEY key, MASK mask) override;
+	bool hasAccelerators() const override { return true; }
 
 private:
 	void updateList();

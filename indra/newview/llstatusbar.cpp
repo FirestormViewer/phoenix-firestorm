@@ -133,10 +133,10 @@ public:
 	{
 		bakeTimeout=NULL;
 	}
-	BOOL tick()
+	bool tick()
 	{
 		mbar->setRebakeStuck(true);
-		return TRUE;
+		return true;
 	}
 private:
 	LLStatusBar *mbar;
@@ -182,15 +182,15 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mBoxBalance(NULL),
 	mBalance(0),
 	mHealth(100),
-	mShowParcelIcons(TRUE),
+	mShowParcelIcons(true),
 	mSquareMetersCredit(0),
 	mSquareMetersCommitted(0),
 	mFilterEdit(NULL),			// Edit for filtering
 	mSearchPanel(NULL),			// Panel for filtering
-	mPathfindingFlashOn(TRUE),	// <FS:Zi> Pathfinding rebake functions
-	mAudioStreamEnabled(FALSE),	// <FS:Zi> Media/Stream separation
-	mRebakeStuck(FALSE),		// <FS:LO> FIRE-7639 - Stop the blinking after a while
-	mNearbyIcons(FALSE),		// <FS:Ansariel> Script debug
+	mPathfindingFlashOn(true),	// <FS:Zi> Pathfinding rebake functions
+	mAudioStreamEnabled(false),	// <FS:Zi> Media/Stream separation
+	mRebakeStuck(false),		// <FS:LO> FIRE-7639 - Stop the blinking after a while
+	mNearbyIcons(false),		// <FS:Ansariel> Script debug
 	mIconPresetsGraphic(NULL),
 	mIconPresetsCamera(NULL),
 	mMediaToggle(NULL),
@@ -203,7 +203,7 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	setRect(rect);
 	
 	// status bar can possible overlay menus?
-	setMouseOpaque(FALSE);
+	setMouseOpaque(false);
 
 	mBalanceTimer = new LLFrameTimer();
 	mHealthTimer = new LLFrameTimer();
@@ -283,13 +283,13 @@ void LLStatusBar::draw()
 	LLPanel::draw();
 }
 
-BOOL LLStatusBar::handleRightMouseDown(S32 x, S32 y, MASK mask)
+bool LLStatusBar::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	show_navbar_context_menu(this,x,y);
-	return TRUE;
+	return true;
 }
 
-BOOL LLStatusBar::postBuild()
+bool LLStatusBar::postBuild()
 {
 	gMenuBarView->setRightMouseDownCallback(boost::bind(&show_navbar_context_menu, _1, _2, _3));
 
@@ -423,22 +423,22 @@ BOOL LLStatusBar::postBuild()
 	mPanelPresetsCameraPulldown = new LLPanelPresetsCameraPulldown();
 	addChild(mPanelPresetsCameraPulldown);
 	mPanelPresetsCameraPulldown->setFollows(FOLLOWS_TOP|FOLLOWS_RIGHT);
-	mPanelPresetsCameraPulldown->setVisible(FALSE);
+	mPanelPresetsCameraPulldown->setVisible(false);
 
 	mPanelPresetsPulldown = new LLPanelPresetsPulldown();
 	addChild(mPanelPresetsPulldown);
 	mPanelPresetsPulldown->setFollows(FOLLOWS_TOP|FOLLOWS_RIGHT);
-	mPanelPresetsPulldown->setVisible(FALSE);
+	mPanelPresetsPulldown->setVisible(false);
 
 	mPanelVolumePulldown = new LLPanelVolumePulldown();
 	addChild(mPanelVolumePulldown);
 	mPanelVolumePulldown->setFollows(FOLLOWS_TOP|FOLLOWS_RIGHT);
-	mPanelVolumePulldown->setVisible(FALSE);
+	mPanelVolumePulldown->setVisible(false);
 
 	mPanelNearByMedia = new LLPanelNearByMedia();
 	addChild(mPanelNearByMedia);
 	mPanelNearByMedia->setFollows(FOLLOWS_TOP|FOLLOWS_RIGHT);
-	mPanelNearByMedia->setVisible(FALSE);
+	mPanelNearByMedia->setVisible(false);
 
 	updateBalancePanelPosition();
 
@@ -446,7 +446,7 @@ BOOL LLStatusBar::postBuild()
 	mFilterEdit = getChild<LLSearchEditor>( "search_menu_edit" );
 	mSearchPanel = getChild<LLPanel>( "menu_search_panel" );
 
-	BOOL search_panel_visible = gSavedSettings.getBOOL("MenuSearch");
+	bool search_panel_visible = gSavedSettings.getBOOL("MenuSearch");
 	mSearchPanel->setVisible(search_panel_visible);
 	mFilterEdit->setKeystrokeCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
 	mFilterEdit->setCommitCallback(boost::bind(&LLStatusBar::onUpdateFilterTerm, this));
@@ -511,21 +511,21 @@ BOOL LLStatusBar::postBuild()
 
 	if (!gSavedSettings.getBOOL("ShowNetStats"))
 	{
-		updateNetstatVisibility(LLSD(FALSE));
+		updateNetstatVisibility(LLSD(false));
 	}
 
 	// <FS:Ansariel> FIRE-14482: Show FPS in status bar
 	gSavedSettings.getControl("FSStatusBarShowFPS")->getSignal()->connect(boost::bind(&LLStatusBar::onShowFPSChanged, this, _2));
 	if (!gSavedSettings.getBOOL("FSStatusBarShowFPS"))
 	{
-		onShowFPSChanged(LLSD(FALSE));
+		onShowFPSChanged(LLSD(false));
 	}
 	// </FS:Ansariel>
 
 	// <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
 	if (!gSavedSettings.getBOOL("FSEnableVolumeControls"))
 	{
-		updateVolumeControlsVisibility(LLSD(FALSE));
+		updateVolumeControlsVisibility(LLSD(false));
 	}
 	// </FS:PP>
 
@@ -545,7 +545,7 @@ BOOL LLStatusBar::postBuild()
 	mClockFormat = gSavedSettings.getString("FSStatusBarTimeFormat");
 	// </FS:Zi>
 
-	return TRUE;
+	return true;
 }
 
 // <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
@@ -740,12 +740,12 @@ void LLStatusBar::setVisibleForMouselook(bool visible)
 	// mStreamToggle->setVisible(visible);		// ## Zi: Media/Stream separation
 	// mMediaToggle->setVisible(visible);
 	mSearchPanel->setVisible(visible && gSavedSettings.getBOOL("MenuSearch"));
-	BOOL FSEnableVolumeControls = gSavedSettings.getBOOL("FSEnableVolumeControls");
+	bool FSEnableVolumeControls = gSavedSettings.getBOOL("FSEnableVolumeControls");
 	mBtnVolume->setVisible(visible && FSEnableVolumeControls);
 	mStreamToggle->setVisible(visible && FSEnableVolumeControls); // ## Zi: Media/Stream separation
 	mMediaToggle->setVisible(visible && FSEnableVolumeControls);
 	// </FS:PP>
-	BOOL showNetStats = gSavedSettings.getBOOL("ShowNetStats");
+	bool showNetStats = gSavedSettings.getBOOL("ShowNetStats");
 	mSGBandwidth->setVisible(visible && showNetStats);
 	mSGPacketLoss->setVisible(visible && showNetStats);
 	mBandwidthButton->setVisible(visible && showNetStats); // <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
@@ -827,7 +827,7 @@ void LLStatusBar::sendMoneyBalanceRequest()
     }
     // Double amount of retries due to this request initially happening during busy stage
     // Ideally this should be turned into a capability
-    gMessageSystem->sendReliable(gAgent.getRegionHost(), LL_DEFAULT_RELIABLE_RETRIES * 2, TRUE, LL_PING_BASED_TIMEOUT_DUMMY, NULL, NULL);
+    gMessageSystem->sendReliable(gAgent.getRegionHost(), LL_DEFAULT_RELIABLE_RETRIES * 2, true, LL_PING_BASED_TIMEOUT_DUMMY, NULL, NULL);
 }
 
 
@@ -878,7 +878,7 @@ void LLStatusBar::setLandCommitted(S32 committed)
 	mSquareMetersCommitted = committed;
 }
 
-BOOL LLStatusBar::isUserTiered() const
+bool LLStatusBar::isUserTiered() const
 {
 	return (mSquareMetersCredit > 0);
 }
@@ -927,10 +927,10 @@ void LLStatusBar::onMouseEnterPresetsCamera()
 	// show the master presets pull-down
 	LLUI::getInstance()->clearPopups();
 	LLUI::getInstance()->addPopup(mPanelPresetsCameraPulldown);
-	mPanelNearByMedia->setVisible(FALSE);
-	mPanelVolumePulldown->setVisible(FALSE);
-	mPanelPresetsPulldown->setVisible(FALSE);
-	mPanelPresetsCameraPulldown->setVisible(TRUE);
+	mPanelNearByMedia->setVisible(false);
+	mPanelVolumePulldown->setVisible(false);
+	mPanelPresetsPulldown->setVisible(false);
+	mPanelPresetsCameraPulldown->setVisible(true);
 }
 
 void LLStatusBar::onMouseEnterPresets()
@@ -954,9 +954,9 @@ void LLStatusBar::onMouseEnterPresets()
 	// show the master presets pull-down
 	LLUI::getInstance()->clearPopups();
 	LLUI::getInstance()->addPopup(mPanelPresetsPulldown);
-	mPanelNearByMedia->setVisible(FALSE);
-	mPanelVolumePulldown->setVisible(FALSE);
-	mPanelPresetsPulldown->setVisible(TRUE);
+	mPanelNearByMedia->setVisible(false);
+	mPanelVolumePulldown->setVisible(false);
+	mPanelPresetsPulldown->setVisible(true);
 }
 
 void LLStatusBar::onMouseEnterVolume()
@@ -981,10 +981,10 @@ void LLStatusBar::onMouseEnterVolume()
 	// show the master volume pull-down
 	LLUI::getInstance()->clearPopups();
 	LLUI::getInstance()->addPopup(mPanelVolumePulldown);
-	mPanelPresetsCameraPulldown->setVisible(FALSE);
-	mPanelPresetsPulldown->setVisible(FALSE);
-	mPanelNearByMedia->setVisible(FALSE);
-	mPanelVolumePulldown->setVisible(TRUE);
+	mPanelPresetsCameraPulldown->setVisible(false);
+	mPanelPresetsPulldown->setVisible(false);
+	mPanelNearByMedia->setVisible(false);
+	mPanelVolumePulldown->setVisible(true);
 }
 
 void LLStatusBar::onMouseEnterNearbyMedia()
@@ -1006,10 +1006,10 @@ void LLStatusBar::onMouseEnterNearbyMedia()
 	LLUI::getInstance()->clearPopups();
 	LLUI::getInstance()->addPopup(mPanelNearByMedia);
 
-	mPanelPresetsCameraPulldown->setVisible(FALSE);
-	mPanelPresetsPulldown->setVisible(FALSE);
-	mPanelVolumePulldown->setVisible(FALSE);
-	mPanelNearByMedia->setVisible(TRUE);
+	mPanelPresetsCameraPulldown->setVisible(false);
+	mPanelPresetsPulldown->setVisible(false);
+	mPanelVolumePulldown->setVisible(false);
+	mPanelNearByMedia->setVisible(true);
 }
 
 
@@ -1118,13 +1118,13 @@ void LLStatusBar::toggleStream(bool enable)
 	mAudioStreamEnabled = enable;
 }
 
-BOOL LLStatusBar::getAudioStreamEnabled() const
+bool LLStatusBar::getAudioStreamEnabled() const
 {
 	return mAudioStreamEnabled;
 }
 // </FS:Zi> Media/Stream separation
 
-BOOL can_afford_transaction(S32 cost)
+bool can_afford_transaction(S32 cost)
 {
 	return((cost <= 0)||((gStatusBar) && (gStatusBar->getBalance() >=cost)));
 }
@@ -1370,7 +1370,7 @@ void LLStatusBar::setParcelInfoText(const std::string& new_text)
 		rect.mRight = panelParcelInfoRect.getWidth();
 	}
 
-	mParcelInfoText->reshape(rect.getWidth(), rect.getHeight(), TRUE);
+	mParcelInfoText->reshape(rect.getWidth(), rect.getHeight(), true);
 	mParcelInfoText->setRect(rect);
 	mParcelInfoPanel->setRect(panelParcelInfoRect);
 }
@@ -1449,7 +1449,7 @@ void LLStatusBar::updateParcelIcons()
 		bool allow_build	= vpm->allowAgentBuild(current_parcel); // true when anyone is allowed to build. See EXT-4610.
 		bool allow_scripts	= vpm->allowAgentScripts(agent_region, current_parcel);
 		bool allow_damage	= vpm->allowAgentDamage(agent_region, current_parcel);
-		BOOL see_avatars	= current_parcel->getSeeAVs();
+		bool see_avatars	= current_parcel->getSeeAVs();
 		bool is_for_sale	= (!current_parcel->isPublic() && vpm->canAgentBuyParcel(current_parcel, false));
 		bool pathfinding_dynamic_enabled = agent_region->dynamicPathfindingEnabled();
 
@@ -1667,7 +1667,7 @@ void LLStatusBar::setBackgroundColor( const LLColor4& color )
 void LLStatusBar::updateNetstatVisibility(const LLSD& data)
 {
 	const S32 NETSTAT_WIDTH = (SIM_STAT_WIDTH + 2) * 2;
-	BOOL showNetStat = data.asBoolean();
+	bool showNetStat = data.asBoolean();
 	S32 translateFactor = (showNetStat ? -1 : 1);
 
 	mSGBandwidth->setVisible(showNetStat);
@@ -1689,7 +1689,7 @@ void LLStatusBar::updateNetstatVisibility(const LLSD& data)
 void LLStatusBar::updateVolumeControlsVisibility(const LLSD& data)
 {
 	const S32 cVolumeIconsWidth = mVolumeIconsWidth;
-	BOOL showVolumeControls = data.asBoolean();
+	bool showVolumeControls = data.asBoolean();
 	S32 translateFactor = (showVolumeControls ? -1 : 1);
 
 	mBtnVolume->setVisible(showVolumeControls);
@@ -1714,7 +1714,7 @@ void LLStatusBar::updateVolumeControlsVisibility(const LLSD& data)
 void LLStatusBar::onShowFPSChanged(const LLSD& newvalue)
 {
 	const S32 text_width = mFPSText->getRect().getWidth() + 4; // left_pad = 4
-	BOOL show_fps = newvalue.asBoolean();
+	bool show_fps = newvalue.asBoolean();
 	S32 translateFactor = (show_fps ? -1 : 1);
 
 	mFPSText->setVisible(show_fps);
@@ -1732,7 +1732,7 @@ void LLStatusBar::onShowFPSChanged(const LLSD& newvalue)
 	update();
 }
 
-BOOL LLStatusBar::rebakeRegionCallback(const LLSD& notification, const LLSD& response)
+bool LLStatusBar::rebakeRegionCallback(const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 
@@ -1742,9 +1742,9 @@ BOOL LLStatusBar::rebakeRegionCallback(const LLSD& notification, const LLSD& res
 		{
 			LLMenuOptionPathfindingRebakeNavmesh::getInstance()->rebakeNavmesh();
 		}
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 void LLStatusBar::onMouseEnterParcelInfo()

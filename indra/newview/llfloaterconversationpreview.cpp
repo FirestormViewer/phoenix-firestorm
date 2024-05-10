@@ -71,7 +71,7 @@ LLFloaterConversationPreview::~LLFloaterConversationPreview()
 {
 }
 
-BOOL LLFloaterConversationPreview::postBuild()
+bool LLFloaterConversationPreview::postBuild()
 {
 	// <FS:CR> [FS communication UI]
 	//mChatHistory = getChild<LLChatHistory>("chat_history");
@@ -316,12 +316,12 @@ void LLFloaterConversationPreview::onClickSearch()
 }
 
 // <FS:Ansariel> CTRL-F for search history
-BOOL LLFloaterConversationPreview::handleKeyHere(KEY key, MASK mask)
+bool LLFloaterConversationPreview::handleKeyHere(KEY key, MASK mask)
 {
 	if (mask == MASK_CONTROL && key == 'F')
 	{
 		LLFloaterSearchReplace::show(mChatHistory);
-		return TRUE;
+		return true;
 	}
 
 	return LLFloater::handleKeyHere(key, mask);

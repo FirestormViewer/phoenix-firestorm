@@ -59,7 +59,7 @@
 #include "llviewerinventory.h"
 #include "rlvactions.h"
 
-static const F32 FS_PLACE_INFO_UPDATE_INTERVAL = 3.0f;
+static constexpr F32 FS_PLACE_INFO_UPDATE_INTERVAL = 3.0f;
 
 static bool fs_is_agent_in_selected_parcel(LLParcel* parcel)
 {
@@ -220,14 +220,14 @@ FSFloaterPlaceDetails::~FSFloaterPlaceDetails()
 	}
 }
 
-BOOL FSFloaterPlaceDetails::postBuild()
+bool FSFloaterPlaceDetails::postBuild()
 {
 	mPanelLandmarkInfo = findChild<LLPanelLandmarkInfo>("panel_landmark_info");
 	mPanelPlaceInfo = findChild<LLPanelPlaceProfile>("panel_place_profile");
 
 	if (!mPanelLandmarkInfo || !mPanelPlaceInfo)
 	{
-		return FALSE;
+		return false;
 	}
 
 	getChild<LLButton>("teleport_btn")->setClickedCallback(boost::bind(&FSFloaterPlaceDetails::onTeleportButtonClicked, this));
@@ -268,7 +268,7 @@ BOOL FSFloaterPlaceDetails::postBuild()
 
 	updateVerbs();
 
-	return TRUE;
+	return true;
 }
 
 void FSFloaterPlaceDetails::onOpen(const LLSD& key)
@@ -293,10 +293,10 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 
 			mPanelLandmarkInfo->resetLocation();
 			mPanelLandmarkInfo->setInfoType(LLPanelPlaceInfo::LANDMARK);
-			mPanelLandmarkInfo->setHeaderVisible(FALSE);
+			mPanelLandmarkInfo->setHeaderVisible(false);
 			
-			mPanelPlaceInfo->setVisible(FALSE);
-			mPanelLandmarkInfo->setVisible(TRUE);
+			mPanelPlaceInfo->setVisible(false);
+			mPanelLandmarkInfo->setVisible(true);
 
 			setItem(item);
 		}
@@ -319,11 +319,11 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 			LLUUID dest_folder = key["dest_folder"];
 			mPanelLandmarkInfo->resetLocation();
 			mPanelLandmarkInfo->setInfoAndCreateLandmark(dest_folder);
-			mPanelLandmarkInfo->setHeaderVisible(FALSE);
+			mPanelLandmarkInfo->setHeaderVisible(false);
 			mPanelLandmarkInfo->displayParcelInfo(LLUUID(), mGlobalPos);
 			
-			mPanelPlaceInfo->setVisible(FALSE);
-			mPanelLandmarkInfo->setVisible(TRUE);
+			mPanelPlaceInfo->setVisible(false);
+			mPanelLandmarkInfo->setVisible(true);
 
 			mIsInCreateMode = true;
 			updateVerbs();
@@ -335,9 +335,9 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 
 			mPanelPlaceInfo->resetLocation();
 			mPanelPlaceInfo->setInfoType(LLPanelPlaceInfo::PLACE);
-			mPanelPlaceInfo->setHeaderVisible(FALSE);
-			mPanelPlaceInfo->setVisible(TRUE);
-			mPanelLandmarkInfo->setVisible(FALSE);
+			mPanelPlaceInfo->setHeaderVisible(false);
+			mPanelPlaceInfo->setVisible(true);
+			mPanelLandmarkInfo->setVisible(false);
 
 			if (key.has("id"))
 			{
@@ -387,9 +387,9 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 			mPanelPlaceInfo->setInfoType(LLPanelPlaceInfo::TELEPORT_HISTORY);
 			mPanelPlaceInfo->displayParcelInfo(LLUUID(), mGlobalPos);
 
-			mPanelPlaceInfo->setHeaderVisible(FALSE);
-			mPanelPlaceInfo->setVisible(TRUE);
-			mPanelLandmarkInfo->setVisible(FALSE);
+			mPanelPlaceInfo->setHeaderVisible(false);
+			mPanelPlaceInfo->setVisible(true);
+			mPanelLandmarkInfo->setVisible(false);
 
 			updateVerbs();
 		}
@@ -401,9 +401,9 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 
 			mPanelPlaceInfo->resetLocation();
 			mPanelPlaceInfo->setInfoType(LLPanelPlaceInfo::AGENT);
-			mPanelPlaceInfo->setHeaderVisible(FALSE);
-			mPanelPlaceInfo->setVisible(TRUE);
-			mPanelLandmarkInfo->setVisible(FALSE);
+			mPanelPlaceInfo->setHeaderVisible(false);
+			mPanelPlaceInfo->setVisible(true);
+			mPanelLandmarkInfo->setVisible(false);
 
 			LLViewerParcelMgr* parcel_mgr = LLViewerParcelMgr::getInstance();
 			if (!parcel_mgr)
@@ -450,23 +450,23 @@ void FSFloaterPlaceDetails::updateVerbs()
 	}
 	else if (mDisplayInfo == REMOTE_PLACE || mDisplayInfo == TELEPORT_HISTORY_ITEM)
 	{
-		getChildView("teleport_btn")->setVisible(TRUE);
+		getChildView("teleport_btn")->setVisible(true);
 		getChildView("teleport_btn")->setEnabled(RlvActions::canTeleportToLocation());
-		getChildView("map_btn")->setVisible(TRUE);
-		getChildView("edit_btn")->setVisible(FALSE);
-		getChildView("save_btn")->setVisible(FALSE);
-		getChildView("cancel_btn")->setVisible(FALSE);
-		getChildView("close_btn")->setVisible(FALSE);
+		getChildView("map_btn")->setVisible(true);
+		getChildView("edit_btn")->setVisible(false);
+		getChildView("save_btn")->setVisible(false);
+		getChildView("cancel_btn")->setVisible(false);
+		getChildView("close_btn")->setVisible(false);
 	}
 	else if (mDisplayInfo == AGENT)
 	{
-		getChildView("teleport_btn")->setVisible(TRUE);
+		getChildView("teleport_btn")->setVisible(true);
 		getChildView("teleport_btn")->setEnabled(have_position && !LLViewerParcelMgr::getInstance()->inAgentParcel(mGlobalPos));
-		getChildView("map_btn")->setVisible(TRUE);
-		getChildView("edit_btn")->setVisible(FALSE);
-		getChildView("save_btn")->setVisible(FALSE);
-		getChildView("cancel_btn")->setVisible(FALSE);
-		getChildView("close_btn")->setVisible(FALSE);
+		getChildView("map_btn")->setVisible(true);
+		getChildView("edit_btn")->setVisible(false);
+		getChildView("save_btn")->setVisible(false);
+		getChildView("cancel_btn")->setVisible(false);
+		getChildView("close_btn")->setVisible(false);
 	}
 }
 
@@ -534,7 +534,7 @@ void FSFloaterPlaceDetails::setItem(LLInventoryItem* item)
 	}
 
 	// Check if item is in agent's inventory and he has the permission to modify it.
-	BOOL is_landmark_editable = gInventory.isObjectDescendentOf(mItem->getUUID(), gInventory.getRootFolderID()) &&
+	bool is_landmark_editable = gInventory.isObjectDescendentOf(mItem->getUUID(), gInventory.getRootFolderID()) &&
 								mItem->getPermissions().allowModifyBy(gAgent.getID());
 
 	getChildView("edit_btn")->setEnabled(is_landmark_editable);
@@ -641,7 +641,7 @@ void FSFloaterPlaceDetails::onShowOnMapButtonClicked()
 
 void FSFloaterPlaceDetails::onEditButtonClicked()
 {
-	mPanelLandmarkInfo->toggleLandmarkEditMode(TRUE);
+	mPanelLandmarkInfo->toggleLandmarkEditMode(true);
 	mIsInEditMode = true;
 	mIsInCreateMode = false;
 	updateVerbs();
@@ -649,7 +649,7 @@ void FSFloaterPlaceDetails::onEditButtonClicked()
 
 void FSFloaterPlaceDetails::onCancelButtonClicked()
 {
-	mPanelLandmarkInfo->toggleLandmarkEditMode(FALSE);
+	mPanelLandmarkInfo->toggleLandmarkEditMode(false);
 	mIsInEditMode = false;
 
 	updateVerbs();
@@ -683,7 +683,7 @@ void FSFloaterPlaceDetails::onSaveButtonClicked()
 	{
 		new_item->rename(current_title_value);
 		new_item->setDescription(current_notes_value);
-		new_item->updateServer(FALSE);
+		new_item->updateServer(false);
 	}
 
 	if(folder_id != mItem->getParentUUID())
@@ -696,7 +696,7 @@ void FSFloaterPlaceDetails::onSaveButtonClicked()
 		gInventory.accountForUpdate(update);
 
 		new_item->setParent(folder_id);
-		new_item->updateParentOnServer(FALSE);
+		new_item->updateParentOnServer(false);
 	}
 
 	gInventory.updateItem(new_item);
@@ -729,7 +729,7 @@ void FSFloaterPlaceDetails::onOverflowButtonClicked()
 	{
 		menu = mLandmarkMenu;
 
-		BOOL is_landmark_removable = FALSE;
+		bool is_landmark_removable = false;
 		if (mItem.notNull())
 		{
 			const LLUUID& item_id = mItem->getUUID();
@@ -746,7 +746,7 @@ void FSFloaterPlaceDetails::onOverflowButtonClicked()
 	}
 
 	// TODO: What to do with the create pick stuff? Disabled for now...
-	menu->getChild<LLMenuItemCallGL>("pick")->setVisible(FALSE);
+	menu->getChild<LLMenuItemCallGL>("pick")->setVisible(false);
 
 	mOverflowBtn->setMenu(menu, LLMenuButton::MP_TOP_RIGHT);
 }

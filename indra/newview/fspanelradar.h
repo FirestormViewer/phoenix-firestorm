@@ -48,9 +48,9 @@ public:
 	FSPanelRadar();
 	virtual ~FSPanelRadar();
 
-	/*virtual*/ BOOL 	postBuild();
-	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
-	/*virtual*/ bool hasAccelerators() const { return true; }
+	bool postBuild() override;
+	bool handleKeyHere(KEY key, MASK mask) override;
+	bool hasAccelerators() const override { return true; }
 
 	void					requestUpdate();
 	LLUUID					getCurrentItemID() const;

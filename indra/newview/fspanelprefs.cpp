@@ -51,7 +51,7 @@ FSPanelPrefs::FSPanelPrefs() : LLPanelPreference()
 	mEmbeddedItem = gSavedPerAccountSettings.getString("FSBuildPrefs_Item");
 }
 
-BOOL FSPanelPrefs::postBuild()
+bool FSPanelPrefs::postBuild()
 {
 	// LGG's Color Beams
 	refreshBeamLists();
@@ -82,7 +82,7 @@ void FSPanelPrefs::onOpen(const LLSD& key)
 {
 	if (LLStartUp::getStartupState() == STATE_STARTED)
 	{
-		getChild<LLCheckBoxCtrl>("FSBuildPrefs_EmbedItem")->setEnabled(TRUE);
+		getChild<LLCheckBoxCtrl>("FSBuildPrefs_EmbedItem")->setEnabled(true);
 		mEmbeddedItem = gSavedPerAccountSettings.getString("FSBuildPrefs_Item");
 		LLUUID item_id(mEmbeddedItem);
 		if (item_id.isNull())
@@ -101,13 +101,13 @@ void FSPanelPrefs::onOpen(const LLSD& key)
 				getChild<LLTextBox>("build_item_add_disp_rect_txt")->setTextArg("[ITEM]", getString("EmbeddedItemNotAvailable"));
 			}
 		}
-		getChild<LLUICtrl>("reset_default_folders")->setEnabled(TRUE);
+		getChild<LLUICtrl>("reset_default_folders")->setEnabled(true);
 	}
 	else
 	{
-		getChild<LLCheckBoxCtrl>("FSBuildPrefs_EmbedItem")->setEnabled(FALSE);
+		getChild<LLCheckBoxCtrl>("FSBuildPrefs_EmbedItem")->setEnabled(false);
 		getChild<LLTextBox>("build_item_add_disp_rect_txt")->setTextArg("[ITEM]", getString("EmbeddedItemNotLoggedIn"));
-		getChild<LLUICtrl>("reset_default_folders")->setEnabled(FALSE);
+		getChild<LLUICtrl>("reset_default_folders")->setEnabled(false);
 	}
 }
 
@@ -121,9 +121,9 @@ void FSPanelPrefs::apply()
 	}
 }
 
-void FSPanelPrefs::cancel()
+void FSPanelPrefs::cancel(const std::vector<std::string> settings_to_skip)
 {
-	LLPanelPreference::cancel();
+	LLPanelPreference::cancel(settings_to_skip);
 }
 
 void FSPanelPrefs::refreshBeamLists()
@@ -249,10 +249,10 @@ void FSPanelPrefs::onCommitTexture(const LLSD& data)
 void FSPanelPrefs::onCommitCopy()
 {
 	// Implements fair use
-	BOOL copyable = gSavedSettings.getBOOL("NextOwnerCopy");
+	bool copyable = gSavedSettings.getBOOL("NextOwnerCopy");
 	if (!copyable)
 	{
-		gSavedSettings.setBOOL("NextOwnerTransfer", TRUE);
+		gSavedSettings.setBOOL("NextOwnerTransfer", true);
 	}
 	LLCheckBoxCtrl* xfer = getChild<LLCheckBoxCtrl>("next_owner_transfer");
 	xfer->setEnabled(copyable);
@@ -260,10 +260,10 @@ void FSPanelPrefs::onCommitCopy()
 
 void FSPanelPrefs::onCommitTrans()
 {
-	BOOL transferable = gSavedSettings.getBOOL("NextOwnerTransfer");
+	bool transferable = gSavedSettings.getBOOL("NextOwnerTransfer");
 	if (!transferable)
 	{
-		gSavedSettings.setBOOL("NextOwnerCopy", TRUE);
+		gSavedSettings.setBOOL("NextOwnerCopy", true);
 	}
 }
 

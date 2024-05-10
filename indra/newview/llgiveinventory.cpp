@@ -87,7 +87,7 @@ bool LLGiveable::operator()(LLInventoryCategory* cat, LLInventoryItem* item)
 		   !item->getPermissions().allowOperationBy(PERM_TRANSFER,
 							    gAgent.getID()))
 		{
-			allowed = FALSE;
+			allowed = false;
 		}
 		if (allowed &&
 		   !item->getPermissions().allowCopyBy(gAgent.getID()))
@@ -451,7 +451,7 @@ bool LLGiveInventory::commitGiveInventoryItem(const LLUUID& to_agent,
 	pack_instant_message(
 		gMessageSystem,
 		gAgentID,
-		FALSE,
+		false,
 		gAgentSessionID,
 		to_agent,
 		name,
@@ -471,7 +471,7 @@ bool LLGiveInventory::commitGiveInventoryItem(const LLUUID& to_agent,
 	// <FS:Ansariel> Make the particle effect optional
 	if (gSavedSettings.getBOOL("FSCreateGiveInventoryParticleEffect"))
 	{
-		LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM, TRUE);
+		LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM, true);
 		effectp->setSourceObject(gAgentAvatarp);
 		effectp->setTargetObject(gObjectList.findObject(to_agent));
 		effectp->setDuration(LL_HUD_DUR_SHORT);
@@ -647,7 +647,7 @@ bool LLGiveInventory::commitGiveInventoryCategory(const LLUUID& to_agent,
 		pack_instant_message(
 			gMessageSystem,
 			gAgent.getID(),
-			FALSE,
+			false,
 			gAgent.getSessionID(),
 			to_agent,
 			name,
@@ -668,7 +668,7 @@ bool LLGiveInventory::commitGiveInventoryCategory(const LLUUID& to_agent,
 		// <FS:Ansariel> Make the particle effect optional
 		if (gSavedSettings.getBOOL("FSCreateGiveInventoryParticleEffect"))
 		{
-			LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM, TRUE);
+			LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_BEAM, true);
 			effectp->setSourceObject(gAgentAvatarp);
 			effectp->setTargetObject(gObjectList.findObject(to_agent));
 			effectp->setDuration(LL_HUD_DUR_SHORT);

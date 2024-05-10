@@ -53,7 +53,7 @@ FSFloaterIMContainer::FSFloaterIMContainer(const LLSD& seed)
 	mForceVoiceStateUpdate(false),
 	mIsAddingNewSession(false)
 {
-	mAutoResize = FALSE;
+	mAutoResize = false;
 	LLTransientFloaterMgr::getInstance()->addControlView(LLTransientFloaterMgr::IM, this);
 
 	// Firstly add our self to IMSession observers, so we catch session events
@@ -71,7 +71,7 @@ FSFloaterIMContainer::~FSFloaterIMContainer()
 	}
 }
 
-BOOL FSFloaterIMContainer::postBuild()
+bool FSFloaterIMContainer::postBuild()
 {
 	mNewMessageConnection = LLIMModel::instance().mNewMsgSignal.connect(boost::bind(&FSFloaterIMContainer::onNewMessageReceived, this, _1));
 	// Do not call base postBuild to not connect to mCloseSignal to not close all floaters via Close button
@@ -85,7 +85,7 @@ BOOL FSFloaterIMContainer::postBuild()
 
 	gSavedSettings.getControl("FSShowConversationVoiceStateIndicator")->getSignal()->connect(boost::bind(&FSFloaterIMContainer::onVoiceStateIndicatorChanged, this, _2));
 
-	return TRUE;
+	return true;
 }
 
 void FSFloaterIMContainer::initTabs()
@@ -117,7 +117,7 @@ void FSFloaterIMContainer::initTabs()
 		}
 		else
 		{
-			addFloater(floater_contacts, TRUE);
+			addFloater(floater_contacts, true);
 		}
 	}
 
@@ -135,7 +135,7 @@ void FSFloaterIMContainer::initTabs()
 		}
 		else
 		{
-			addFloater(floater_chat, TRUE);
+			addFloater(floater_chat, true);
 		}
 	}
 }
@@ -164,7 +164,7 @@ void FSFloaterIMContainer::onOpen(const LLSD& key)
 	LLFloater* active_floater = getActiveFloater();
 	if (active_floater && !active_floater->hasFocus())
 	{
-		mTabContainer->setFocus(TRUE);
+		mTabContainer->setFocus(true);
 	}
 }
 
@@ -184,7 +184,7 @@ void FSFloaterIMContainer::onClose(bool app_quitting)
 }
 
 void FSFloaterIMContainer::addFloater(LLFloater* floaterp, 
-									BOOL select_added_floater, 
+									bool select_added_floater, 
 									LLTabContainer::eInsertionPoint insertion_point)
 {
 	if (!floaterp)
@@ -208,7 +208,7 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
 		if (floaterp->getName() == "imcontacts")
 		{
 			LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::START);
-			gSavedSettings.setBOOL("ContactsTornOff", FALSE);
+			gSavedSettings.setBOOL("ContactsTornOff", false);
 		}
 		else
 		{
@@ -224,12 +224,12 @@ void FSFloaterIMContainer::addFloater(LLFloater* floaterp,
 			{
 				LLMultiFloater::addFloater(floaterp, select_added_floater, LLTabContainer::START);
 			}
-			gSavedSettings.setBOOL("ChatHistoryTornOff", FALSE);
+			gSavedSettings.setBOOL("ChatHistoryTornOff", false);
 		}
 		// make sure first two tabs are now locked
 		mTabContainer->lockTabs(num_locked_tabs + 1);
 		
-		floaterp->setCanClose(FALSE);
+		floaterp->setCanClose(false);
 		return;
 	}
 	else
@@ -280,7 +280,7 @@ void FSFloaterIMContainer::addNewSession(LLFloater* floaterp)
 {
 	// Make sure we don't do some strange re-arranging if we add a new IM floater due to a new session
 	mIsAddingNewSession = true;
-	addFloater(floaterp, FALSE, LLTabContainer::END);
+	addFloater(floaterp, false, LLTabContainer::END);
 	mIsAddingNewSession = false;
 }
 
@@ -313,8 +313,8 @@ void FSFloaterIMContainer::removeFloater(LLFloater* floaterp)
 		{
 			mTabContainer->unlockTabs();
 		}
-		gSavedSettings.setBOOL(setting_name, TRUE);
-		floaterp->setCanClose(TRUE);
+		gSavedSettings.setBOOL(setting_name, true);
+		floaterp->setCanClose(true);
 	}
 	LLMultiFloater::removeFloater(floaterp);
 }
@@ -337,11 +337,11 @@ void FSFloaterIMContainer::onCloseFloater(LLUUID& id)
 	mSessions.erase(id);
 	if (isShown())
 	{
-		setFocus(TRUE);
+		setFocus(true);
 	}
 	else if (isMinimized())
 	{
-		setMinimized(TRUE); // Make sure console output that needs to be shown is still doing so 
+		setMinimized(true); // Make sure console output that needs to be shown is still doing so 
 	}
 }
 
@@ -357,9 +357,9 @@ void FSFloaterIMContainer::onNewMessageReceived(const LLSD& data)
 	{
 		if (LLMultiFloater::isFloaterFlashing(floaterp))
 		{
-			LLMultiFloater::setFloaterFlashing(floaterp, FALSE);
+			LLMultiFloater::setFloaterFlashing(floaterp, false);
 		}
-		LLMultiFloater::setFloaterFlashing(floaterp, TRUE);
+		LLMultiFloater::setFloaterFlashing(floaterp, true);
 	}
 }
 
@@ -373,7 +373,7 @@ FSFloaterIMContainer* FSFloaterIMContainer::getInstance()
 	return LLFloaterReg::getTypedInstance<FSFloaterIMContainer>("fs_im_container");
 }
 
-void FSFloaterIMContainer::setVisible(BOOL b)
+void FSFloaterIMContainer::setVisible(bool b)
 {
 	LLMultiFloater::setVisible(b);
 
@@ -383,7 +383,7 @@ void FSFloaterIMContainer::setVisible(BOOL b)
 	}
 }
 
-void FSFloaterIMContainer::setMinimized(BOOL b)
+void FSFloaterIMContainer::setMinimized(bool b)
 {
 	if (mTabContainer)
 	{
@@ -402,7 +402,7 @@ void FSFloaterIMContainer::setMinimized(BOOL b)
 }
 
 //virtual
-void FSFloaterIMContainer::sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, BOOL has_offline_msg)
+void FSFloaterIMContainer::sessionAdded(const LLUUID& session_id, const std::string& name, const LLUUID& other_participant_id, bool has_offline_msg)
 {
 	LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(session_id);
 	if (!session)

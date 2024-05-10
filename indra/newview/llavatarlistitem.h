@@ -83,14 +83,14 @@ public:
 	LLAvatarListItem(bool not_from_ui_factory = true);
 	virtual ~LLAvatarListItem();
 
-	virtual BOOL postBuild();
+	virtual bool postBuild();
 
 	/**
 	 * Processes notification from speaker indicator to update children when indicator's visibility is changed.
 	 */
 	// <FS:Ansariel> LL refactoring error
-    //virtual void handleVisibilityChange ( BOOL new_visibility );
-	virtual void onVisibilityChange ( BOOL new_visibility );
+    //virtual void handleVisibilityChange ( bool new_visibility );
+	virtual void onVisibilityChange ( bool new_visibility );
 	// </FS:Ansariel>
 	virtual S32	notifyParent(const LLSD& info);
 	virtual void onMouseLeave(S32 x, S32 y, MASK mask);
@@ -135,9 +135,9 @@ public:
 	void onPermissionEditMineClick();
 	void onPermissionMapClick();
 
-	/*virtual*/ BOOL handleDoubleClick(S32 x, S32 y, MASK mask);
+	/*virtual*/ bool handleDoubleClick(S32 x, S32 y, MASK mask);
 // [SL:KB] - Patch: UI-AvatarListDndShare | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
-	/*virtual*/ BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop, EDragAndDropType cargo_type, void *cargo_data, 
+	/*virtual*/ bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop, EDragAndDropType cargo_type, void *cargo_data,
 	                                   EAcceptance *accept, std::string& tooltip_msg);
 // [/SL:KB]
 

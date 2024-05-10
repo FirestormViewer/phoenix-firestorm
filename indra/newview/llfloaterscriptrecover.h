@@ -33,8 +33,8 @@ private:
 	 * LLFloater overrides
 	 */
 public:
-	/*virtual*/ void onOpen(const LLSD& sdKey);
-	/*virtual*/ BOOL postBuild();
+	void onOpen(const LLSD& sdKey) override;
+	bool postBuild() override;
 
 	/*
 	 * Member functions

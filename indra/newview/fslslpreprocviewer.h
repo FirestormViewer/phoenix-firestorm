@@ -42,15 +42,15 @@ public:
 	
 	virtual ~FSLSLPreProcViewer() {};
 
-	virtual BOOL	handleKeyHere(KEY key, MASK mask );
-	virtual BOOL	handleUnicodeCharHere(llwchar uni_char);
+	bool	handleKeyHere(KEY key, MASK mask ) override;
+	bool	handleUnicodeCharHere(llwchar uni_char) override;
 
-	virtual BOOL	canCut() const { return false; }
-	virtual BOOL	canPaste() const { return false; }
-	virtual BOOL	canUndo() const { return false; }
-	virtual BOOL	canRedo() const { return false; }
-	virtual BOOL	canPastePrimary() const { return false; }
-	virtual BOOL	canDoDelete() const { return false; }
+	bool	canCut() const override { return false; }
+	bool	canPaste() const override { return false; }
+	bool	canUndo() const override { return false; }
+	bool	canRedo() const override { return false; }
+	bool	canPastePrimary() const override { return false; }
+	bool	canDoDelete() const override { return false; }
 
 protected:
 	friend class LLUICtrlFactory;

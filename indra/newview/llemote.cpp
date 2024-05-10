@@ -74,11 +74,11 @@ LLMotion::LLMotionInitStatus LLEmote::onInitialize(LLCharacter *character)
 //-----------------------------------------------------------------------------
 // LLEmote::onActivate()
 //-----------------------------------------------------------------------------
-BOOL LLEmote::onActivate()
+bool LLEmote::onActivate()
 {
 	// <FS:ND> mCharacter being 0 might be one of the reasons for FIRE-10737
 	if( !mCharacter )
-		return TRUE;
+		return true;
 	// </FS:ND>
 
 	LLVisualParam* default_param = mCharacter->getVisualParam( "Express_Closed_Mouth" );
@@ -86,7 +86,7 @@ BOOL LLEmote::onActivate()
 	{
 		// <FS:Ansariel> [Legacy Bake]
 		//default_param->setWeight( default_param->getMaxWeight());
-		default_param->setWeight( default_param->getMaxWeight(), FALSE);
+		default_param->setWeight( default_param->getMaxWeight(), false);
 	}
 
 	mParam = mCharacter->getVisualParam(mName.c_str());
@@ -94,29 +94,29 @@ BOOL LLEmote::onActivate()
 	{
 		// <FS:Ansariel> [Legacy Bake]
 		//mParam->setWeight(0.f);
-		mParam->setWeight(0.f, FALSE);
+		mParam->setWeight(0.f, false);
 		mCharacter->updateVisualParams();
 	}
 	
-	return TRUE;
+	return true;
 }
 
 
 //-----------------------------------------------------------------------------
 // LLEmote::onUpdate()
 //-----------------------------------------------------------------------------
-BOOL LLEmote::onUpdate(F32 time, U8* joint_mask)
+bool LLEmote::onUpdate(F32 time, U8* joint_mask)
 {
 	if( mParam )
 	{
 		F32 weight = mParam->getMinWeight() + mPose.getWeight() * (mParam->getMaxWeight() - mParam->getMinWeight());
 		// <FS:Ansariel> [Legacy Bake]
 		//mParam->setWeight(weight);
-		mParam->setWeight(weight, FALSE);
+		mParam->setWeight(weight, false);
 
 		// <FS:ND> mCharacter being 0 might be one of the reasons for FIRE-11529
 		if( !mCharacter )
-			return TRUE;
+			return true;
 		// </FS:ND>	
 
 		// Cross fade against the default parameter
@@ -128,13 +128,13 @@ BOOL LLEmote::onUpdate(F32 time, U8* joint_mask)
 			
 			// <FS:Ansariel> [Legacy Bake]
 			//default_param->setWeight( default_param_weight);
-			default_param->setWeight( default_param_weight, FALSE);
+			default_param->setWeight( default_param_weight, false);
 		}
 
 		mCharacter->updateVisualParams();
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -147,7 +147,7 @@ void LLEmote::onDeactivate()
 	{
 		// <FS:Ansariel> [Legacy Bake]
 		//mParam->setWeight( mParam->getDefaultWeight());
-		mParam->setWeight( mParam->getDefaultWeight(), FALSE);
+		mParam->setWeight( mParam->getDefaultWeight(), false);
 	}
 
 	LLVisualParam* default_param = mCharacter->getVisualParam( "Express_Closed_Mouth" );
@@ -155,7 +155,7 @@ void LLEmote::onDeactivate()
 	{
 		// <FS:Ansariel> [Legacy Bake]
 		//default_param->setWeight( default_param->getMaxWeight());
-		default_param->setWeight( default_param->getMaxWeight(), FALSE);
+		default_param->setWeight( default_param->getMaxWeight(), false);
 	}
 
 	mCharacter->updateVisualParams();

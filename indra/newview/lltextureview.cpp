@@ -107,7 +107,7 @@ public:
 	{}
 
 	virtual void draw();
-	virtual BOOL handleMouseDown(S32 x, S32 y, MASK mask);
+	virtual bool handleMouseDown(S32 x, S32 y, MASK mask);
 	virtual LLRect getRequiredRect();	// Return the height of this object, given the set options.
 
 // Used for sorting
@@ -348,12 +348,12 @@ void LLTextureBar::draw()
 
 }
 
-BOOL LLTextureBar::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLTextureBar::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	if ((mask & (MASK_CONTROL|MASK_SHIFT|MASK_ALT)) == MASK_ALT)
 	{
 		LLAppViewer::getTextureFetch()->mDebugID = mImagep->getID();
-		return TRUE;
+		return true;
 	}
 	return LLView::handleMouseDown(x,y,mask);
 }
@@ -389,7 +389,7 @@ public:
 	{}
 
 	virtual void draw();	
-	virtual BOOL handleMouseDown(S32 x, S32 y, MASK mask);
+	virtual bool handleMouseDown(S32 x, S32 y, MASK mask);
 	virtual LLRect getRequiredRect();	// Return the height of this object, given the set options.
 
 private:
@@ -465,9 +465,9 @@ void LLAvatarTexBar::draw()
 											 header_color, LLFontGL::LEFT, LLFontGL::TOP, LLFontGL::BOLD, LLFontGL::DROP_SHADOW_SOFT);
 }
 
-BOOL LLAvatarTexBar::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLAvatarTexBar::handleMouseDown(S32 x, S32 y, MASK mask)
 {
-	return FALSE;
+	return false;
 }
 
 LLRect LLAvatarTexBar::getRequiredRect()
@@ -500,7 +500,7 @@ public:
 	{}
 
 	virtual void draw();	
-	virtual BOOL handleMouseDown(S32 x, S32 y, MASK mask);
+	virtual bool handleMouseDown(S32 x, S32 y, MASK mask);
 	virtual LLRect getRequiredRect();	// Return the height of this object, given the set options.
 
 private:
@@ -554,8 +554,8 @@ void LLGLTexMemBar::draw()
     U32 texFetchLatMed = U32(recording.getMean(LLTextureFetch::sTexFetchLatency).value() * 1000.0f);
     U32 texFetchLatMax = U32(recording.getMax(LLTextureFetch::sTexFetchLatency).value() * 1000.0f);
 
-    text = llformat("GL Free: %d MB Sys Free: %d MB GL Tex: %d MB FBO: %d MB Bias: %.2f Cache: %.1f/%.1f MB",
-                    gViewerWindow->getWindow()->getAvailableVRAMMegabytes(),
+    text = llformat("Est. Free: %d MB Sys Free: %d MB GL Tex: %d MB FBO: %d MB Bias: %.2f (%d MB) Cache: %.1f/%.1f MB",
+                    (S32)LLViewerTexture::sFreeVRAMMegabytes,
                     LLMemory::getAvailableMemKB()/1024,
 					LLImageGL::getTextureBytesAllocated() / 1024 / 1024,
 					LLRenderTarget::sBytesAllocated/(1024*1024),
@@ -592,7 +592,7 @@ void LLGLTexMemBar::draw()
 	gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f);
 	gl_rect_2d(left, top, right, bottom);
 
-	U32 gpu_used = gGLManager.mVRAM - gViewerWindow->getWindow()->getAvailableVRAMMegabytes();
+	U32 gpu_used = gGLManager.mVRAM - (S32)LLViewerTexture::sFreeVRAMMegabytes;
 	color = (gpu_used < llfloor(gGLManager.mVRAM * texmem_lower_bound_scale)) ? LLColor4::green :
 		(gpu_used < gGLManager.mVRAM) ? LLColor4::yellow : LLColor4::red;
 	color[VALPHA] = .75f;
@@ -747,9 +747,9 @@ void LLGLTexMemBar::draw()
 									 text_color, LLFontGL::LEFT, LLFontGL::TOP);
 }
 
-BOOL LLGLTexMemBar::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLGLTexMemBar::handleMouseDown(S32 x, S32 y, MASK mask)
 {
-	return FALSE;
+	return false;
 }
 
 LLRect LLGLTexMemBar::getRequiredRect()
@@ -781,7 +781,7 @@ public:
 	void setTop(S32 loaded, S32 bound, F32 scale) {mTopLoaded = loaded ; mTopBound = bound; mScale = scale ;}
 
 	void draw();	
-	BOOL handleHover(S32 x, S32 y, MASK mask, BOOL set_pick_size) ;
+	bool handleHover(S32 x, S32 y, MASK mask, bool set_pick_size) ;
 	
 private:
 	S32 mIndex ;
@@ -794,13 +794,13 @@ private:
 	F32 mScale ;
 };
 
-BOOL LLGLTexSizeBar::handleHover(S32 x, S32 y, MASK mask, BOOL set_pick_size) 
+bool LLGLTexSizeBar::handleHover(S32 x, S32 y, MASK mask, bool set_pick_size) 
 {
 	if(y > mBottom && (y < mBottom + (S32)(mTopLoaded * mScale) || y < mBottom + (S32)(mTopBound * mScale)))
 	{
 		LLImageGL::setCurTexSizebar(mIndex, set_pick_size);
 	}
-	return TRUE ;
+	return true ;
 }
 void LLGLTexSizeBar::draw()
 {
@@ -829,14 +829,14 @@ void LLGLTexSizeBar::draw()
 
 LLTextureView::LLTextureView(const LLTextureView::Params& p)
 	:	LLContainerView(p),
-		mFreezeView(FALSE),
-		mOrderFetch(FALSE),
-		mPrintList(FALSE),
+		mFreezeView(false),
+		mOrderFetch(false),
+		mPrintList(false),
 		mNumTextureBars(0)
 {
-	setVisible(FALSE);
+	setVisible(false);
 	
-	setDisplayChildren(TRUE);
+	setDisplayChildren(true);
 	mGLTexMemBar = 0;
 	mAvatarTexBar = 0;
 }
@@ -1008,7 +1008,7 @@ void LLTextureView::draw()
 		
 		if (mPrintList)
 		{
-			mPrintList = FALSE;
+			mPrintList = false;
 		}
 		
 		static S32 max_count = 50;
@@ -1057,7 +1057,7 @@ void LLTextureView::draw()
 		addChild(mAvatarTexBar);
 		sendChildToFront(mAvatarTexBar);
 
-		reshape(getRect().getWidth(), getRect().getHeight(), TRUE);
+		reshape(getRect().getWidth(), getRect().getHeight(), true);
 
 		LLUI::popMatrix();
 		LLUI::pushMatrix();
@@ -1069,7 +1069,7 @@ void LLTextureView::draw()
 			LLView *viewp = *child_iter;
 			if (viewp->getRect().mBottom < 0)
 			{
-				viewp->setVisible(FALSE);
+				viewp->setVisible(false);
 			}
 		}
 	}
@@ -1078,7 +1078,7 @@ void LLTextureView::draw()
 
 }
 
-BOOL LLTextureView::addBar(LLViewerFetchedTexture *imagep, S32 hilite)
+bool LLTextureView::addBar(LLViewerFetchedTexture *imagep, S32 hilite)
 {
 	llassert(imagep);
 	
@@ -1098,42 +1098,42 @@ BOOL LLTextureView::addBar(LLViewerFetchedTexture *imagep, S32 hilite)
 	addChild(barp);
 	mTextureBars.push_back(barp);
 
-	return TRUE;
+	return true;
 }
 
-BOOL LLTextureView::handleMouseDown(S32 x, S32 y, MASK mask)
+bool LLTextureView::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	if ((mask & (MASK_CONTROL|MASK_SHIFT|MASK_ALT)) == (MASK_ALT|MASK_SHIFT))
 	{
-		mPrintList = TRUE;
-		return TRUE;
+		mPrintList = true;
+		return true;
 	}
 	if ((mask & (MASK_CONTROL|MASK_SHIFT|MASK_ALT)) == (MASK_CONTROL|MASK_SHIFT))
 	{
 		LLAppViewer::getTextureFetch()->mDebugPause = !LLAppViewer::getTextureFetch()->mDebugPause;
-		return TRUE;
+		return true;
 	}
 	if (mask & MASK_SHIFT)
 	{
 		mFreezeView = !mFreezeView;
-		return TRUE;
+		return true;
 	}
 	if (mask & MASK_CONTROL)
 	{
 		mOrderFetch = !mOrderFetch;
-		return TRUE;
+		return true;
 	}
 	return LLView::handleMouseDown(x,y,mask);
 }
 
-BOOL LLTextureView::handleMouseUp(S32 x, S32 y, MASK mask)
+bool LLTextureView::handleMouseUp(S32 x, S32 y, MASK mask)
 {
-	return FALSE;
+	return false;
 }
 
-BOOL LLTextureView::handleKey(KEY key, MASK mask, BOOL called_from_parent)
+bool LLTextureView::handleKey(KEY key, MASK mask, bool called_from_parent)
 {
-	return FALSE;
+	return false;
 }
 
 

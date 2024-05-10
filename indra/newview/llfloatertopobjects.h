@@ -63,7 +63,7 @@ public:
 	
 	void clearList();
 	void updateSelectionInfo();
-	virtual BOOL postBuild();
+	virtual bool postBuild();
 
 	void onRefresh();
 
@@ -118,7 +118,7 @@ private:
 	U32 mFlags;
 	std::string mFilter;
 
-	BOOL mInitialized;
+	bool mInitialized;
 
 	F32 mtotalScore;
 

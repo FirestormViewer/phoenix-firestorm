@@ -96,7 +96,7 @@ void RlvInventory::fetchSharedInventory()
 
 	// Grab all the folders under the shared root
 	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
-	gInventory.collectDescendents(pRlvRoot->getUUID(), folders, items, FALSE);
+	gInventory.collectDescendents(pRlvRoot->getUUID(), folders, items, false);
 
 	// Add them to the "to fetch" list
 	uuid_vec_t idFolders;
@@ -127,7 +127,7 @@ void RlvInventory::fetchSharedLinks()
 
 	// Grab all the inventory links under the shared root
 	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items; RlvIsLinkType f;
-	gInventory.collectDescendentsIf(pRlvRoot->getUUID(), folders, items, FALSE, f, false);
+	gInventory.collectDescendentsIf(pRlvRoot->getUUID(), folders, items, false, f, false);
 
 	// Add them to the "to fetch" list based on link type
 	uuid_vec_t idFolders, idItems;
@@ -206,7 +206,7 @@ bool RlvInventory::findSharedFolders(const std::string& strCriteria, LLInventory
 	folders.clear();
 	LLInventoryModel::item_array_t items;
 	RlvCriteriaCategoryCollector f(strCriteria);
-	gInventory.collectDescendentsIf(pRlvRoot->getUUID(), folders, items, FALSE, f);
+	gInventory.collectDescendentsIf(pRlvRoot->getUUID(), folders, items, false, f);
 
 	return (folders.size() != 0);
 }
@@ -455,7 +455,7 @@ void RlvRenameOnWearObserver::doneIdle()
 				strName += " (" + strAttachPt + ")";
 
 				pItem->rename(strName);
-				pItem->updateServer(FALSE);
+				pItem->updateServer(false);
 				gInventory.addChangedMask(LLInventoryObserver::LABEL, pItem->getUUID());
 			}
 			else
@@ -472,7 +472,7 @@ void RlvRenameOnWearObserver::doneIdle()
 						 (1 == RlvInventory::getDirectDescendentsItemCount(pFolder, LLAssetType::AT_OBJECT)) )
 					{
 						pFolder->rename(strFolderName);
-						pFolder->updateServer(FALSE);
+						pFolder->updateServer(false);
 						gInventory.addChangedMask(LLInventoryObserver::LABEL, pFolder->getUUID());
 					}
 					else
@@ -592,7 +592,7 @@ void RlvGiveToRLVOffer::moveAndRename(const LLUUID& idFolder, const LLUUID& idDe
 
 				LLPointer<LLViewerInventoryCategory> pNewFolder = new LLViewerInventoryCategory(pFolder);
 				pNewFolder->setParent(idDestination);
-				pNewFolder->updateParentOnServer(FALSE);
+				pNewFolder->updateParentOnServer(false);
 
 				gInventory.updateCategory(pNewFolder);
 				gInventory.notifyObservers();

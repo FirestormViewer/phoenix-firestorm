@@ -492,6 +492,9 @@ public:
 
     bool encode(const LLImageRaw& rawImageIn, LLImageJ2C &compressedImageOut)
     {
+        LLImageDataSharedLock lockIn(&rawImageIn);
+        LLImageDataLock lockOut(&compressedImageOut);
+
         setImage(rawImageIn);
 
         encoder = opj_create_compress(OPJ_CODEC_J2K);
@@ -735,6 +738,9 @@ bool LLImageJ2COJ::initEncode(LLImageJ2C &base, LLImageRaw &raw_image, int block
 
 bool LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decode_time, S32 first_channel, S32 max_channel_count)
 {
+    LLImageDataLock lockIn(&base);
+    LLImageDataLock lockOut(&raw_image);
+
     JPEG2KDecode decoder(0);
 
     // <FS:Techwolf Lupindo> texture comment metadata reader
@@ -878,6 +884,8 @@ bool LLImageJ2COJ::encodeImpl(LLImageJ2C &base, const LLImageRaw &raw_image, con
 
 bool LLImageJ2COJ::getMetadata(LLImageJ2C &base)
 {
+    LLImageDataLock lock(&base);
+
     JPEG2KDecode decode(0);
 
     S32 width = 0;

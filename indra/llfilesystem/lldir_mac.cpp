@@ -1,6 +1,6 @@
 /** 
  * @file lldir_mac.cpp
- * @brief Implementation of directory utilities for Mac OS X
+ * @brief Implementation of directory utilities for macOS
  *
  * $LicenseInfo:firstyear=2002&license=viewerlgpl$
  * Second Life Viewer Source Code
@@ -210,10 +210,10 @@ U32 LLDir_Mac::countFilesInDir(const std::string &dirname, const std::string &ma
 
 // get the next file in the directory
 // AO: Used by LGG Selection Beams
-BOOL LLDir_Mac::getNextFileInDir(const std::string &dirname, const std::string &mask, std::string &fname)
+bool LLDir_Mac::getNextFileInDir(const std::string &dirname, const std::string &mask, std::string &fname)
 {
         glob_t g;
-        BOOL result = FALSE;
+        bool result = false;
         fname = "";
 
         if(!(dirname == mCurrentDir))
@@ -258,7 +258,7 @@ BOOL LLDir_Mac::getNextFileInDir(const std::string &dirname, const std::string &
 
                                 fname = s;
 
-                                result = TRUE;
+                                result = true;
                         }
                 }
 

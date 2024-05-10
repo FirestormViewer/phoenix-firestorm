@@ -101,8 +101,8 @@ protected:
 		const LLHandle<LLFloater>& floater_handle,
 		void (*load_callback)(void* userdata),
 		// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
-		//void (*save_callback)(void* userdata, BOOL close_after_save),
-		void (*save_callback)(void* userdata, BOOL close_after_save, bool sync),
+		//void (*save_callback)(void* userdata, bool close_after_save),
+		void (*save_callback)(void* userdata, bool close_after_save, bool sync),
 		// </FS:Ansariel>
 		void (*search_replace_callback)(void* userdata),
 		void* userdata,
@@ -111,21 +111,19 @@ protected:
 public:
 	~LLScriptEdCore();
 	
-	void			initializeKeywords();
 	void			initMenu();
 	void			processKeywords();
-	void			processLoaded();
 
 	virtual void	draw();
-	/*virtual*/	BOOL	postBuild();
-	BOOL			canClose();
+	/*virtual*/	bool	postBuild();
+	bool			canClose();
 	void			setEnableEditing(bool enable);
 	bool			canLoadOrSaveToFile( void* userdata );
 
-	void            setScriptText(const std::string& text, BOOL is_valid);
+	void            setScriptText(const std::string& text, bool is_valid);
 	// NaCL - LSL Preprocessor
 	std::string		getScriptText();
-	void			doSaveComplete(void* userdata, BOOL close_after_save, bool sync);
+	void			doSaveComplete(void* userdata, bool close_after_save, bool sync);
 	// NaCl End
 	void			makeEditorPristine();
 	bool			loadScriptText(const std::string& filename);
@@ -133,8 +131,8 @@ public:
 	void			sync();
 	
 	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
-	//void			doSave( BOOL close_after_save );
-	void			doSave(BOOL close_after_save, bool sync = true);
+	//void			doSave( bool close_after_save );
+	void			doSave(bool close_after_save, bool sync = true);
 	// </FS:Ansariel>
 
 	bool			handleSaveChangesDialog(const LLSD& notification, const LLSD& response);
@@ -174,7 +172,7 @@ public:
     //void onChangeFontSize(const LLSD &size_name);
     // </FS:Ansarie>
 
-    virtual BOOL handleKeyHere(KEY key, MASK mask);
+    virtual bool handleKeyHere(KEY key, MASK mask);
     void selectAll() { mEditor->selectAll(); }
 
   private:
@@ -196,7 +194,7 @@ private: // <FS:Ansariel> Show keyword help on F1
 
 	void selectFirstError();
 
-	void enableSave(BOOL b) {mEnableSave = b;}
+	void enableSave(bool b) {mEnableSave = b;}
 	
 // <FS:CR> Advanced Script Editor
 	void	initButtonBar();
@@ -214,7 +212,7 @@ private: // <FS:Ansariel> Show keyword help on F1
 protected:
 	void deleteBridges();
 	void setHelpPage(const std::string& help_string);
-	void updateDynamicHelp(BOOL immediate = FALSE);
+	void updateDynamicHelp(bool immediate = false);
 	bool isKeyword(LLKeywordToken* token);
 	void addHelpItemToHistory(const std::string& help_string);
 	static void onErrorList(LLUICtrl*, void* user_data);
@@ -228,13 +226,13 @@ private:
 	LLScriptEditor*	mEditor;
 	void			(*mLoadCallback)(void* userdata);
 	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
-	//void			(*mSaveCallback)(void* userdata, BOOL close_after_save);
-	void			(*mSaveCallback)(void* userdata, BOOL close_after_save, bool sync);
+	//void			(*mSaveCallback)(void* userdata, bool close_after_save);
+	void			(*mSaveCallback)(void* userdata, bool close_after_save, bool sync);
 	// </FS:Ansariel>
 	void			(*mSearchReplaceCallback) (void* userdata);
     void*			mUserdata;
     LLComboBox		*mFunctions;
-	BOOL			mForceClose;
+	bool			mForceClose;
 	LLPanel*		mCodePanel;
 	LLScrollListCtrl* mErrorList;
 	std::vector<LLEntryAndEdCore*> mBridges;
@@ -242,12 +240,12 @@ private:
 	LLKeywordToken* mLastHelpToken;
 	LLFrameTimer	mLiveHelpTimer;
 	S32				mLiveHelpHistorySize;
-	BOOL			mEnableSave;
-	BOOL			mHasScriptData;
+	bool			mEnableSave;
+	bool			mHasScriptData;
 	LLLiveLSLFile*	mLiveFile;
 	LLUUID			mAssociatedExperience;
-	BOOL			mScriptRemoved;
-	BOOL			mSaveDialogShown;
+	bool			mScriptRemoved;
+	bool			mSaveDialogShown;
     LLUUID          mAssetID;
 
 	LLTextBox*		mLineCol;
@@ -295,7 +293,7 @@ public:
 	// <FS:Ansariel> FIRE-16740: Color syntax highlighting changes don't immediately appear in script window
 	void updateStyle();
 
-    BOOL handleKeyHere(KEY key, MASK mask);
+    bool handleKeyHere(KEY key, MASK mask);
 
 protected:
 	std::string		getTmpFileName(const std::string& script_name);
@@ -328,7 +326,7 @@ public:
 	virtual void callbackLSLCompileSucceeded();
 	virtual void callbackLSLCompileFailed(const LLSD& compile_errors);
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
 	LLScriptEditor* getEditor() { return (mScriptEd) ? mScriptEd->mEditor : NULL; }
@@ -336,7 +334,7 @@ public:
 
 protected:
 	virtual void draw();
-	virtual BOOL canClose();
+	virtual bool canClose();
 	void closeIfNeeded();
 
 	virtual void loadAsset();
@@ -345,8 +343,8 @@ protected:
 	static void onSearchReplace(void* userdata);
 	static void onLoad(void* userdata);
 	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
-	//static void onSave(void* userdata, BOOL close_after_save);
-	static void onSave(void* userdata, BOOL close_after_save, bool sync);
+	//static void onSave(void* userdata, bool close_after_save);
+	static void onSave(void* userdata, bool close_after_save, bool sync);
 	// </FS:Ansariel>
 	
 	static void onLoadComplete(const LLUUID& uuid,
@@ -383,9 +381,9 @@ public:
 											bool is_script_running);
 	virtual void callbackLSLCompileFailed(const LLSD& compile_errors);
 
-	/*virtual*/ BOOL postBuild();
+	/*virtual*/ bool postBuild();
 	
-    void setIsNew() { mIsNew = TRUE; }
+    void setIsNew() { mIsNew = true; }
 
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-11-05 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
 	LLScriptEditor* getEditor() { return (mScriptEd) ? mScriptEd->mEditor : NULL; }
@@ -400,26 +398,24 @@ public:
 	void updateExperiencePanel();
 	void requestExperiences();
 	void experienceChanged();
-	void addAssociatedExperience(const LLSD& experience);
 
     void setObjectName(std::string name) { mObjectName = name; }
 	
 private:
-	virtual BOOL canClose();
+	virtual bool canClose();
 	void closeIfNeeded();
 	virtual void draw();
 
 	virtual void loadAsset();
-	void loadAsset(BOOL is_new);
 	/*virtual*/ void saveIfNeeded(bool sync = true);
-	BOOL monoChecked() const;
+	bool monoChecked() const;
 
 
 	static void onSearchReplace(void* userdata);
 	static void onLoad(void* userdata);
 	// <FS:Ansariel> FIRE-7514: Script in external editor needs to be saved twice
-	//static void onSave(void* userdata, BOOL close_after_save);
-	static void onSave(void* userdata, BOOL close_after_save, bool sync);
+	//static void onSave(void* userdata, bool close_after_save);
+	static void onSave(void* userdata, bool close_after_save, bool sync);
 	// </FS:Ansariel>
 
 	static void onLoadComplete(const LLUUID& asset_uuid,
@@ -429,8 +425,6 @@ private:
 	static void onReset(void* userdata);
 
 	void loadScriptText(const LLUUID &uuid, LLAssetType::EType type);
-
-	static void onErrorList(LLUICtrl*, void* user_data);
 
 	static void* createScriptEdPanel(void* userdata);
 
@@ -442,21 +436,21 @@ private:
 private:
 	bool				mIsNew;
 	//LLUUID mTransmitID;
-	LLCheckBoxCtrl*		mRunningCheckbox;
-	BOOL				mAskedForRunningInfo;
-	BOOL				mHaveRunningInfo;
-	LLButton*			mResetButton;
+	//LLCheckBoxCtrl*		mRunningCheckbox;
+	bool				mAskedForRunningInfo;
+	bool				mHaveRunningInfo;
+	//LLButton*			mResetButton;
 	LLPointer<LLViewerInventoryItem> mItem;
-	BOOL				mCloseAfterSave;
+	bool				mCloseAfterSave;
 	// need to save both text and script, so need to decide when done
 	S32					mPendingUploads;
 
-	BOOL                mIsSaving;
+	bool                mIsSaving;
 
-	BOOL getIsModifiable() const { return mIsModifiable; } // Evaluated on load assert
+	bool getIsModifiable() const { return mIsModifiable; } // Evaluated on load assert
 
 	LLCheckBoxCtrl*	mMonoCheckbox;
-	BOOL mIsModifiable;
+	bool mIsModifiable;
 
 
 	LLComboBox*		mExperiences;

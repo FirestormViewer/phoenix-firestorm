@@ -40,7 +40,7 @@ public:
 	/*virtual*/ ~FSFloaterVRAMUsage();
 	/*virtual*/ void onOpen(const LLSD& key);
 
-	BOOL postBuild();
+	bool postBuild();
 
 	virtual void onProperties( LLSelectNode const * );
 

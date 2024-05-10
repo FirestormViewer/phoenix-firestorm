@@ -170,17 +170,17 @@ public:
 		LLModel* low,
 		LLModel* imposotr,
 		const LLModel::Decomposition& decomp,
-		BOOL upload_skin,
-		BOOL upload_joints,
-        BOOL lock_scale_if_joint_position,
-		BOOL nowrite = FALSE,
-		BOOL as_slm = FALSE,
+		bool upload_skin,
+		bool upload_joints,
+        bool lock_scale_if_joint_position,
+		bool nowrite = false,
+		bool as_slm = false,
 		int submodel_id = 0);
 
 	static LLSD writeModelToStream(
 		std::ostream& ostr,
 		LLSD& mdl,
-		BOOL nowrite = FALSE, BOOL as_slm = FALSE);
+		bool nowrite = false, bool as_slm = false);
 	
 	void ClearFacesAndMaterials() { mVolumeFaces.clear(); mMaterialList.clear(); }
 
@@ -261,17 +261,18 @@ public:
 		}
 	};
 
-	
 	//Are the doubles the same w/in epsilon specified tolerance
 	bool areEqual( double a, double b ) 
 	{
 		const float epsilon = 1e-5f;
-		return (fabs((a - b)) < epsilon) ? true : false ;
+		return fabs(a - b) < epsilon;
 	}
+
 	//Make sure that we return false for any values that are within the tolerance for equivalence
 	bool jointPositionalLookup( const LLVector3& a, const LLVector3& b ) 
 	{
-		 return ( areEqual( a[0],b[0]) && areEqual( a[1],b[1] ) && areEqual( a[2],b[2]) ) ? true : false;
+		const float epsilon = 1e-5f;
+		return (a - b).length() < epsilon;
 	}
 
 	//copy of position array for this model -- mPosition[idx].mV[X,Y,Z]
