@@ -470,6 +470,11 @@
 			<menu_item_call label="Verbindungsabbruch erzwingen" name="Force Disconnect Viewer"/>
 			<menu_item_call label="Speicherverlust simulieren" name="Memory Leaking Simulation"/>
 		</menu>
+		<menu label="GLTF" name="GLTF">
+			<menu_item_call label="Öffnen..." name="Open..."/>
+			<menu_item_call label="Speichern unter..." name="Save As..."/>
+			<menu_item_call label="Trennen..." name="Decompose..."/>
+		</menu>
 		<menu label="Render-Tests" name="Render Tests">
 			<menu_item_check label="Kamera-Versatz" name="Camera Offset"/>
 			<menu_item_check label="Framerate randomisieren" name="Randomize Framerate"/>
