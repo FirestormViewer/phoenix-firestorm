@@ -455,6 +455,7 @@ public:
 protected:
 	/*virtual*/ void switchToCachedImage() override;
 	S32 getCurrentDiscardLevelForFetching() ;
+public: // <FS:Ansariel> Needed for texture refresh
 	void forceToRefetchTexture(S32 desired_discard = 0, F32 kept_time = 60.f);
 
 private:

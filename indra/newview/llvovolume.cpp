@@ -3616,8 +3616,15 @@ bool LLVOVolume::setReflectionProbeIsMirror(bool is_mirror)
     {
         if (param_block->getIsMirror() != is_mirror)
         {
+            LL_INFOS() << "Setting reflection probe mirror to " << is_mirror << LL_ENDL;
             param_block->setIsMirror(is_mirror);
             parameterChanged(LLNetworkData::PARAMS_REFLECTION_PROBE, true);
+
+			if (!is_mirror)
+				gPipeline.mHeroProbeManager.unregisterViewerObject(this);
+			else
+				gPipeline.mHeroProbeManager.registerViewerObject(this);
+
             return true;
         }
     }
@@ -6585,19 +6592,7 @@ U32 LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, LLFace
 
 	LLViewerTexture* last_tex = NULL;
 
-	S32 texture_index_channels = 1;
-	
-	if (gGLManager.mGLSLVersionMajor > 1 || gGLManager.mGLSLVersionMinor >= 30)
-	{
-		texture_index_channels = LLGLSLShader::sIndexedTextureChannels-1; //always reserve one for shiny for now just for simplicity;
-	}
-
-	if (distance_sort)
-	{
-		texture_index_channels = gDeferredAlphaProgram.mFeatures.mIndexedTextureChannels;
-	}
-
-	texture_index_channels = LLGLSLShader::sIndexedTextureChannels;
+	S32 texture_index_channels = LLGLSLShader::sIndexedTextureChannels;
 
 	bool flexi = false;
 

@@ -130,12 +130,6 @@ public:
     bool mOverrideDoubleSided = false;
     bool mOverrideAlphaMode = false;
 
-    // These fields are local to viewer and are a part of local bitmap support
-    typedef std::map<LLUUID, LLUUID> local_tex_map_t;
-    local_tex_map_t                  mTrackingIdToLocalTexture;
-
-public:
-
     // *TODO: If/when we implement additional GLTF extensions, they may not be
     // compatible with our GLTF terrain implementation. We may want to disallow
     // materials with some features from being set on terrain, if their
@@ -146,6 +140,11 @@ public:
     //       heightmaps cannot currently be described as finite enclosed
     //       volumes.
     // See also LLPanelRegionTerrainInfo::validateMaterials
+    // These fields are local to viewer and are a part of local bitmap support
+    typedef std::map<LLUUID, LLUUID> local_tex_map_t;
+    local_tex_map_t                  mTrackingIdToLocalTexture;
+
+public:
 
     // get a UUID based on a hash of this LLGLTFMaterial
     LLUUID getHash() const;
