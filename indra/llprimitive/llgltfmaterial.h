@@ -122,12 +122,19 @@ public:
     F32 mRoughnessFactor = 1.f;
     F32 mAlphaCutoff = 0.5f;
 
-    bool mDoubleSided = false;
     AlphaMode mAlphaMode = ALPHA_MODE_OPAQUE;
+
+    bool mDoubleSided = false;
 
     // override specific flags for state that can't use off-by-epsilon or UUID hack
     bool mOverrideDoubleSided = false;
     bool mOverrideAlphaMode = false;
+
+    // These fields are local to viewer and are a part of local bitmap support
+    typedef std::map<LLUUID, LLUUID> local_tex_map_t;
+    local_tex_map_t                  mTrackingIdToLocalTexture;
+
+public:
 
     // *TODO: If/when we implement additional GLTF extensions, they may not be
     // compatible with our GLTF terrain implementation. We may want to disallow
@@ -239,10 +246,6 @@ public:
     bool hasLocalTextures() { return !mTrackingIdToLocalTexture.empty(); }
     virtual bool replaceLocalTexture(const LLUUID& tracking_id, const LLUUID &old_id, const LLUUID& new_id);
     virtual void updateTextureTracking();
-
-    // These fields are local to viewer and are a part of local bitmap support
-    typedef std::map<LLUUID, LLUUID> local_tex_map_t;
-    local_tex_map_t mTrackingIdToLocalTexture;
 
 protected:
     static LLVector2 vec2FromJson(const std::map<std::string, tinygltf::Value>& object, const char* key, const LLVector2& default_value);

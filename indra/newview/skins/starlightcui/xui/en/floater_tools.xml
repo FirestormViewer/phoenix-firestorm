@@ -2973,7 +2973,7 @@ Low ↔ Lwst
              layout="topleft"
              left="10"
              name="Light Intensity"
-             top_pad="-14"
+             top_pad="-21"
              width="128" />
           <spinner bottom_delta="0"
                    decimal_digits="3"
