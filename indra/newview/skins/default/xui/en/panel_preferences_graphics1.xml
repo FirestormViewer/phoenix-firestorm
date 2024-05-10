@@ -893,6 +893,53 @@
              name="16x"
              value="16" />
         </combo_box>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="advanced_settings"
+         top_pad="10"
+         width="308">
+            Advanced Settings (restart required):
+        </text>
+
+        <check_box
+          control_name="FSOverrideVRAMDetection"
+          height="16"
+          label="Override VRAM detection"
+          layout="topleft"
+          left="10"
+          top_pad="10"
+          name="FSDynamicTextureMemory"
+          tool_tip="Enable the user to override VRAM detection (use with extreme caution)"
+          width="315" 
+        />
+        <slider
+          control_name="FSForcedVideoMemory"
+          enabled_control="FSOverrideVRAMDetection"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="1"
+          initial_value="2"
+          label="GPU Dedicated VRAM (GB):"
+          label_width="275"
+          layout="topleft"
+          left="10"
+          min_val="0"
+          max_val="32"
+          name="FSForcedVideoMemory"
+          tool_tip="Important: use with extreme caution.
+Override the detected VRAM on your GPU.
+This must not include 'shared' VRAM which is part of the system RAM.
+If you do not understand the distinction then leave this control alone."
+          top_pad="5"
+          width="475" 
+        />
     </panel>
 
 <!--Rendering-->

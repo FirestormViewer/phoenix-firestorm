@@ -13873,6 +13873,21 @@ LOD Factor >8: Has no real effect. May cause errors.
      yestext="OK"/>
   </notification>
   <notification
+   icon="alert.tga"
+   name="OverrideVRAMWarning"
+   type="alert">
+    WARNING: Overriding the VRAM detection may cause instability.
+
+Most users should leave this setting disabled and let the viewer and 
+operating system determine the correct value.
+
+This setting is intended for cases where VRAM detection is reporting
+incorrect values. Use with caution, seek support advice in case of doubt.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+  <notification
    icon="alertmodal.tga"
    name="CurrencyURIOverrideReceived"
    type="alertmodal">

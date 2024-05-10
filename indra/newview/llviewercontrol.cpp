@@ -357,6 +357,16 @@ static bool handleVolumeLODChanged(const LLSD& newvalue)
 
 	return true;
 }
+// <FS:Beq> Override VRAM detection support
+static bool handleOverrideVRAMDetectionChanged(const LLSD& newvalue)
+{
+	if (newvalue.asBoolean())
+	{
+		LLNotificationsUtil::add("OverrideVRAMWarning");
+	}
+	return true;
+}
+// </FS:Beq>
 
 static bool handleAvatarLODChanged(const LLSD& newvalue)
 {
@@ -1169,6 +1179,7 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "RenderGlowHDR", handleReleaseGLBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderGlowNoise", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderGammaFull", handleSetShaderChanged);
+    setting_setup_signal_listener(gSavedSettings, "FSOverrideVRAMDetection", handleOverrideVRAMDetectionChanged); // <FS:Beq/> Override VRAM detection support
     setting_setup_signal_listener(gSavedSettings, "RenderVolumeLODFactor", handleVolumeLODChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderAvatarLODFactor", handleAvatarLODChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderAvatarPhysicsLODFactor", handleAvatarPhysicsLODChanged);
