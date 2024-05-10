@@ -5467,6 +5467,17 @@ struct MikktData
             n[i].normalize();
             tc[i].set(face->mTexCoords[idx]);
 
+            if (idx >= face->mNumVertices)
+            {
+                // invalid index
+                // replace with a valid index to avoid crashes
+                idx = face->mNumVertices - 1;
+                face->mIndices[i] = idx;
+
+                // Needs better logging
+                LL_DEBUGS_ONCE("LLVOLUME") << "Invalid index, substituting" << LL_ENDL;
+            }
+
             if (face->mWeights)
             {
                 w[i].set(face->mWeights[idx].getF32ptr());
