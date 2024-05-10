@@ -1944,7 +1944,7 @@ void LLTextureCtrl::onVisibilityChange(bool new_visibility)
     }
 }
 
-void LLTextureCtrl::setVisible( bool visible ) 
+void LLTextureCtrl::setVisible(bool visible )
 {
 	if( !visible )
 	{
@@ -2053,6 +2053,9 @@ void LLTextureCtrl::showPicker(bool take_focus)
 		if (texture_floaterp)
 		{
 			texture_floaterp->setOnFloaterCommitCallback(boost::bind(&LLTextureCtrl::onFloaterCommit, this, _1, _2, _3, _4, _5));
+		}
+		if (texture_floaterp)
+		{
 			texture_floaterp->setSetImageAssetIDCallback(boost::bind(&LLTextureCtrl::setImageAssetID, this, _1));
 
 			texture_floaterp->setBakeTextureEnabled(mBakeTextureEnabled);
@@ -2431,11 +2434,8 @@ void LLTextureCtrl::draw()
             }
             else
             {
-				mTexturep = LLViewerTextureManager::getFetchedTexture(mImageAssetID, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
-				mTexturep->setBoostLevel(LLGLTexture::BOOST_PREVIEW);
-				mTexturep->forceToSaveRawImage(0);
-
-				preview = mTexturep;
+                preview = LLViewerTextureManager::getFetchedTexture(mImageAssetID, FTT_DEFAULT, true, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+                preview->setBoostLevel(LLGLTexture::BOOST_PREVIEW);
             }
 		}
 	}

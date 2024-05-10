@@ -263,3 +263,4 @@ void LLFetchedGLTFMaterial::materialComplete(bool success)
     materialCompleteCallbacks.clear();
     materialCompleteCallbacks.shrink_to_fit();
 }
+

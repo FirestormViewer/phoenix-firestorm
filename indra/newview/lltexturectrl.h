@@ -170,7 +170,7 @@ public:
 
     void onVisibilityChange(bool new_visibility) override;
 
-    void setValid(BOOL valid);
+    void setValid(bool valid);
 
     // LLUICtrl interface
     void clear() override;

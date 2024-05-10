@@ -107,6 +107,7 @@
 #include "llmeshrepository.h"
 #include "llgltfmateriallist.h"
 #include "llgl.h"
+#include "gltf/asset.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvactions.h"
 #include "rlvcommon.h"
@@ -4418,7 +4419,7 @@ LLMatrix4a LLViewerObject::getGLTFAssetToAgentTransform() const
     LLMatrix4 root;
     root.initScale(getScale());
     root.rotate(getRenderRotation());
-    root.translate(getPositionAgent());
+    root.translate(getRenderPosition());
 
     LLMatrix4a mat;
     mat.loadu((F32*)root.mMatrix);
@@ -4442,7 +4443,7 @@ LLMatrix4a LLViewerObject::getAgentToGLTFAssetTransform() const
     scale.mV[1] = 1.f / scale.mV[1];
     scale.mV[2] = 1.f / scale.mV[2];
 
-    root.translate(-getPositionAgent());
+    root.translate(-getRenderPosition());
     root.rotate(~getRenderRotation());
 
     LLMatrix4 scale_mat;
@@ -4459,7 +4460,7 @@ LLMatrix4a LLViewerObject::getGLTFNodeTransformAgent(S32 node_index) const
 {
     LLMatrix4a mat;
 
-    if (mGLTFAsset.notNull() && node_index >= 0 && node_index < mGLTFAsset->mNodes.size())
+    if (mGLTFAsset && node_index >= 0 && node_index < mGLTFAsset->mNodes.size())
     {
         auto& node = mGLTFAsset->mNodes[node_index];
 
@@ -4513,7 +4514,7 @@ void decomposeMatrix(const LLMatrix4a& mat, LLVector3& position, LLQuaternion& r
 
 void LLViewerObject::setGLTFNodeRotationAgent(S32 node_index, const LLQuaternion& rotation)
 {
-    if (mGLTFAsset.notNull() && node_index >= 0 && node_index < mGLTFAsset->mNodes.size())
+    if (mGLTFAsset && node_index >= 0 && node_index < mGLTFAsset->mNodes.size())
     {
         auto& node = mGLTFAsset->mNodes[node_index];
 
@@ -4545,7 +4546,7 @@ void LLViewerObject::setGLTFNodeRotationAgent(S32 node_index, const LLQuaternion
 
 void LLViewerObject::moveGLTFNode(S32 node_index, const LLVector3& offset)
 {
-    if (mGLTFAsset.notNull() && node_index >= 0 && node_index < mGLTFAsset->mNodes.size())
+    if (mGLTFAsset && node_index >= 0 && node_index < mGLTFAsset->mNodes.size())
     {
         auto& node = mGLTFAsset->mNodes[node_index];
 

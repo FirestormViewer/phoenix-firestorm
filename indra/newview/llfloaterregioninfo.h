@@ -82,7 +82,7 @@ public:
 
 	void onOpen(const LLSD& key) override;
 	void onClose(bool app_quitting) override;
-	bool postBuild() override;
+    bool postBuild() override;
 
 	static void processEstateOwnerRequest(LLMessageSystem* msg, void**);
 
@@ -152,7 +152,7 @@ public:
 	virtual bool refreshFromRegion(LLViewerRegion* region);
 	virtual bool estateUpdate(LLMessageSystem* msg) { return true; }
 	
-	bool postBuild() override;
+    bool postBuild() override;
 	virtual void updateChild(LLUICtrl* child_ctrl);
 	
 	void enableButton(const std::string& btn_name, bool enable = true);
@@ -214,7 +214,7 @@ public:
 	
 	bool refreshFromRegion(LLViewerRegion* region) override;
 	
-	bool postBuild() override;
+    bool postBuild() override;
 	
 	void onBtnSet();
 	void setObjBonusFactor(F32 object_bonus_factor) {mObjBonusFactor = object_bonus_factor;}
@@ -242,12 +242,12 @@ public:
 		:	LLPanelRegionInfo(), mTargetAvatar() {}
 	~LLPanelRegionDebugInfo() {}
 
-	bool postBuild() override;
+    bool postBuild() override;
 	
 	bool refreshFromRegion(LLViewerRegion* region) override;
 	
 protected:
-	bool sendUpdate() override;
+    bool sendUpdate() override;
 
 	void onClickChooseAvatar();
 	void callbackAvatarID(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
@@ -274,14 +274,14 @@ public:
 	LLPanelRegionTerrainInfo();
 	~LLPanelRegionTerrainInfo() {}
 	
-	bool postBuild() override;
+    bool postBuild() override;
 	
     bool refreshFromRegion(LLViewerRegion* region) override;                // refresh local settings from region update from simulator
 	void setEnvControls(bool available);									// Whether environment settings are available for this region
 
     bool validateTextureSizes();
     bool validateMaterials();
-	bool validateTextureHeights();
+    bool validateTextureHeights();
 
 	//static void onChangeAnything(LLUICtrl* ctrl, void* userData);			// callback for any change, to enable commit button
 	
@@ -299,7 +299,7 @@ public:
 	bool callbackTextureHeights(const LLSD& notification, const LLSD& response);
 
 protected:
-	BOOL sendUpdate() override;
+    bool sendUpdate() override;
 
 private:
 	bool mConfirmedTextureHeights;
@@ -347,7 +347,7 @@ public:
 	bool refreshFromRegion(LLViewerRegion* region) override;
 	bool estateUpdate(LLMessageSystem* msg) override;
 	
-	bool postBuild() override;
+    bool postBuild() override;
 	void updateChild(LLUICtrl* child_ctrl) override;
 	void refresh() override;
 
@@ -359,7 +359,7 @@ public:
 	void setOwnerName(const std::string& name);
 
 protected:
-	bool sendUpdate() override;
+    bool sendUpdate() override;
 	// confirmation dialog callback
 	bool callbackChangeLindenEstate(const LLSD& notification, const LLSD& response);
 
@@ -379,7 +379,7 @@ public:
 	LLPanelEstateCovenant();
 	~LLPanelEstateCovenant() {}
 	
-	bool postBuild() override;
+    bool postBuild() override;
 	void updateChild(LLUICtrl* child_ctrl) override;
 	bool refreshFromRegion(LLViewerRegion* region) override;
 	bool estateUpdate(LLMessageSystem* msg) override;
@@ -421,7 +421,7 @@ public:
 	} EAssetStatus;
 
 protected:
-	bool sendUpdate() override;
+    bool sendUpdate() override;
 	LLTextBox*				mEstateNameText;
 	LLTextBox*				mEstateOwnerText;
 	LLTextBox*				mLastModifiedText;
@@ -440,7 +440,7 @@ class LLPanelRegionExperiences : public LLPanelRegionInfo
 
 public:
 	LLPanelRegionExperiences(){}
-	bool postBuild() override;
+    bool postBuild() override;
 	
 	static bool experienceCoreConfirm(const LLSD& notification, const LLSD& response);
 	static void sendEstateExperienceDelta(U32 flags, const LLUUID& agent_id);
@@ -451,7 +451,7 @@ public:
 	void processResponse( const LLSD& content );
 
 protected:
-	BOOL sendUpdate() override;
+    bool sendUpdate() override;
 
 private:
 	void refreshRegionExperiences();
@@ -477,7 +477,7 @@ class LLPanelEstateAccess : public LLPanelRegionInfo
 public:
 	LLPanelEstateAccess();
 
-	bool postBuild() override;
+    bool postBuild() override;
 	void updateChild(LLUICtrl* child_ctrl) override;
 
 	void updateControls(LLViewerRegion* region);

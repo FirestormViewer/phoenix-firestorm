@@ -54,7 +54,7 @@ protected:
 	void setPreviewTarget(LLImageRaw *imagep, F32 distance);
 	void setTexture(U32 name) { mTextureName = name; }
 
-	bool render() override;
+    bool render() override;
 	void refresh();
 	void rotate(F32 yaw_radians, F32 pitch_radians);
 	void zoom(F32 zoom_amt);
@@ -88,7 +88,7 @@ public:
 	void setTexture(U32 name) { mTextureName = name; }
 	void clearPreviewTexture(const std::string& mesh_name);
 
-	bool	render() override;
+    bool	render() override;
 	void	refresh();
 	void	rotate(F32 yaw_radians, F32 pitch_radians);
 	void	zoom(F32 zoom_amt);
@@ -114,14 +114,14 @@ public:
 	LLFloaterImagePreview(const std::string& filename);
 	virtual ~LLFloaterImagePreview();
 
-	bool postBuild() override;
+    bool postBuild() override;
 
     S32 getExpectedUploadCost() const override;
 	
-	bool handleMouseDown(S32 x, S32 y, MASK mask) override;
-	bool handleMouseUp(S32 x, S32 y, MASK mask) override;
-	bool handleHover(S32 x, S32 y, MASK mask) override;
-	bool handleScrollWheel(S32 x, S32 y, S32 clicks) override;
+    bool handleMouseDown(S32 x, S32 y, MASK mask) override;
+    bool handleMouseUp(S32 x, S32 y, MASK mask) override;
+    bool handleHover(S32 x, S32 y, MASK mask) override;
+    bool handleScrollWheel(S32 x, S32 y, S32 clicks) override;
 
 	static void onMouseCaptureLostImagePreview(LLMouseHandler*);
 

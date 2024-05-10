@@ -83,6 +83,7 @@
 #include "llcorehttputil.h"
 #include "llcallstack.h"
 #include "llsettingsdaycycle.h"
+
 #include <boost/regex.hpp>
 
 // Firestorm includes
@@ -2595,6 +2596,7 @@ bool LLViewerRegion::simulatorFeaturesReceived() const
 void LLViewerRegion::getSimulatorFeatures(LLSD& sim_features) const
 {
 	sim_features = mSimulatorFeatures;
+
 }
 
 void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
@@ -2629,6 +2631,14 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
                 gSavedSettings.setS32("max_texture_dimension_Y", 1024);
             }
 
+            bool mirrors_enabled = false;
+            if (features.has("MirrorsEnabled"))
+            {
+                mirrors_enabled = features["MirrorsEnabled"].asBoolean();
+            }
+
+            gSavedSettings.setBOOL("RenderMirrors", mirrors_enabled);
+
             if (features.has("PBRTerrainEnabled"))
             {
                 bool enabled = features["PBRTerrainEnabled"];
@@ -2650,11 +2660,8 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
             }
         };
 
-    auto workqueue = LL::WorkQueue::getInstance("mainloop");
-    if (workqueue)
-    {
-        LL::WorkQueue::postMaybe(workqueue, work);
-    }
+
+    LLAppViewer::instance()->postToMainCoro(work);
 	
 // <FS:CR> Opensim god names
 #ifdef OPENSIM

@@ -6059,6 +6059,11 @@ void LLAppViewer::updateNameLookupUrl(const LLViewerRegion * regionp)
     }
 }
 
+void LLAppViewer::postToMainCoro(const LL::WorkQueue::Work& work)
+{
+    gMainloopWork.post(work);
+}
+
 void LLAppViewer::idleNameCache()
 {
 	// Neither old nor new name cache can function before agent has a region

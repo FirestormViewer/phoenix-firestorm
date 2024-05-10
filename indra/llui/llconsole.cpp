@@ -759,7 +759,7 @@ static LLTrace::BlockTimerStatHandle FTM_CONSOLE_UPDATE_PARAGRAPHS("Update Conso
 void LLConsole::update()
 {
 	{
-		LLMutexLock lock(&mMutex);
+		LLCoros::LockType lock(mMutex);
 
 		while (!mLines.empty())
 		{

@@ -1199,7 +1199,7 @@ void display_cube_face()
     LLSpatialGroup::sNoDelete = true;
         
     S32 occlusion = LLPipeline::sUseOcclusion;
-    LLPipeline::sUseOcclusion = 1; // occlusion data is from main camera point of view, don't read or write it during cube snapshots
+    LLPipeline::sUseOcclusion = 0; // occlusion data is from main camera point of view, don't read or write it during cube snapshots
     //gDepthDirty = true; //let "real" render pipe know it can't trust the depth buffer for occlusion data
 
     static LLCullResult result;

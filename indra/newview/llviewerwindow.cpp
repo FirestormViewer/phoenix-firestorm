@@ -6094,7 +6094,7 @@ bool LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 	// PRE SNAPSHOT
 	gSnapshotNoPost = no_post;
 	gDisplaySwapBuffers = false;
-	    
+	
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT); // stencil buffer is deprecated | GL_STENCIL_BUFFER_BIT);
 	setCursor(UI_CURSOR_WAIT);
 
@@ -6554,7 +6554,7 @@ bool LLViewerWindow::simpleSnapshot(LLImageRaw* raw, S32 image_width, S32 image_
 
 void display_cube_face();
 
-BOOL LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubearray, S32 cubeIndex, S32 face, F32 near_clip, bool dynamic_render, bool useCustomClipPlane, LLPlane clipPlane)
+bool LLViewerWindow::cubeSnapshot(const LLVector3& origin, LLCubeMapArray* cubearray, S32 cubeIndex, S32 face, F32 near_clip, bool dynamic_render, bool useCustomClipPlane, LLPlane clipPlane)
 {
     // NOTE: implementation derived from LLFloater360Capture::capture360Images() and simpleSnapshot
     LL_PROFILE_ZONE_SCOPED_CATEGORY_APP;

@@ -842,7 +842,6 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
     LL_PROFILE_ZONE_SCOPED_CATEGORY_DISPLAY;
     if (mRT == &mMainRT)
     { // hacky -- allocate auxillary buffer
-
         gCubeSnapshot = true;
         mReflectionMapManager.initReflectionMaps();
         mHeroProbeManager.initReflectionMaps();
@@ -7482,7 +7481,7 @@ void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
 					LLVector4a result;
 					result.clear();
 
-					gViewerWindow->cursorIntersect(-1, -1, 512.f, NULL, -1, false, false, true, true, nullptr, nullptr, nullptr, &result);
+					gViewerWindow->cursorIntersect(-1, -1, 512.f, nullptr, -1, false, false, true, true, nullptr, nullptr, nullptr, &result);
 
 					focus_point.set(result.getF32ptr());
 				}
