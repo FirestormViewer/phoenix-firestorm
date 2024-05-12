@@ -1112,7 +1112,7 @@ bool LLVivoxVoiceClient::startAndLaunchDaemon()
             {
                 LLFile::rename(new_log, old_log);
             }
-
+ 
             if (!shutdown_timeout().empty())
             {
                 params.args.add("-st");
