@@ -405,7 +405,7 @@ public:
 	void findOrphans(U32 parent_id);
 	void clearCachedVisibleObjects();
 	void dumpCache();
-
+	void clearVOCacheFromMemory();
 	void unpackRegionHandshake();
 
 	void calculateCenterGlobal();

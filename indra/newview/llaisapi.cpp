@@ -957,122 +957,68 @@ void AISAPI::InvokeAISCommandCoro(LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t ht
 
     if (callback && !callback.empty())
     {
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: Catznip-3.7
-        uuid_list_t ids;
+        bool needs_callback = true;
+        LLUUID id(LLUUID::null);
+
         switch (type)
         {
-            case COPYLIBRARYCATEGORY:
-            case FETCHCATEGORYCATEGORIES:
-            case FETCHCATEGORYCHILDREN:
-            case FETCHCATEGORYSUBSET:
-            case FETCHCATEGORYLINKS:
-            case FETCHCOF:
-                if (result.has("category_id"))
+        case COPYLIBRARYCATEGORY:
+        case FETCHCATEGORYCATEGORIES:
+        case FETCHCATEGORYCHILDREN:
+        case FETCHCATEGORYSUBSET:
+        case FETCHCATEGORYLINKS:
+        case FETCHCOF:
+            if (result.has("category_id"))
+            {
+                id = result["category_id"];
+            }
+            break;
+        case FETCHITEM:
+            if (result.has("item_id"))
+            {
+                // Error message might contain an item_id!!!
+                id = result["item_id"];
+            }
+            if (result.has("linked_id"))
+            {
+                id = result["linked_id"];
+            }
+            break;
+        case CREATEINVENTORY:
+            // CREATEINVENTORY can have multiple callbacks
+            if (result.has("_created_categories"))
+            {
+                LLSD& cats = result["_created_categories"];
+                LLSD::array_const_iterator cat_iter;
+                for (cat_iter = cats.beginArray(); cat_iter != cats.endArray(); ++cat_iter)
                 {
-                    ids.emplace(result["category_id"]);
+                    LLUUID cat_id = *cat_iter;
+                    callback(cat_id);
+                    needs_callback = false;
                 }
-                break;
-            case FETCHITEM:
-                if (result.has("linked_id"))
+            }
+            if (result.has("_created_items"))
+            {
+                LLSD& items = result["_created_items"];
+                LLSD::array_const_iterator item_iter;
+                for (item_iter = items.beginArray(); item_iter != items.endArray(); ++item_iter)
                 {
-                    ids.emplace(result["linked_id"]);
+                    LLUUID item_id = *item_iter;
+                    callback(item_id);
+                    needs_callback = false;
                 }
-                else if (result.has("item_id"))
-                {
-                    // Error message might contain an item_id!!!
-                    ids.emplace(result["item_id"]);
-                }
-                break;
-            case COPYINVENTORY:
-            case CREATEINVENTORY:
-                {
-                AISUpdate::parseUUIDArray(result, "_created_categories", ids);
-                AISUpdate::parseUUIDArray(result, "_created_items", ids);
-                }
-                break;
-            case UPDATECATEGORY:
-                {
-                    AISUpdate::parseUUIDArray(result, "_updated_categories", ids);
-                }
-                break;
-            default:
-                break;
+            }
+            break;
+        default:
+            break;
         }
 
-        // Call callback at least once regardless of failure.
-        if (ids.empty())
+        if (needs_callback)
         {
-            ids.emplace(LLUUID::null);
-        }
-
-        for (const auto& id : ids)
-        {
+            // Call callback at least once regardless of failure.
+            // UPDATEITEM doesn't expect an id
             callback(id);
         }
-
-// [/SL:KB]
-        //bool needs_callback = true;
-        //LLUUID id(LLUUID::null);
-
-        //switch (type)
-        //{
-        //case COPYLIBRARYCATEGORY:
-        //case FETCHCATEGORYCATEGORIES:
-        //case FETCHCATEGORYCHILDREN:
-        //case FETCHCATEGORYSUBSET:
-        //case FETCHCATEGORYLINKS:
-        //case FETCHCOF:
-        //    if (result.has("category_id"))
-        //    {
-        //        id = result["category_id"];
-        //    }
-        //    break;
-        //case FETCHITEM:
-        //    if (result.has("item_id"))
-        //    {
-        //        // Error message might contain an item_id!!!
-        //        id = result["item_id"];
-        //    }
-        //    if (result.has("linked_id"))
-        //    {
-        //        id = result["linked_id"];
-        //    }
-        //    break;
-        //case CREATEINVENTORY:
-        //    // CREATEINVENTORY can have multiple callbacks
-        //    if (result.has("_created_categories"))
-        //    {
-        //        LLSD& cats = result["_created_categories"];
-        //        LLSD::array_const_iterator cat_iter;
-        //        for (cat_iter = cats.beginArray(); cat_iter != cats.endArray(); ++cat_iter)
-        //        {
-        //            LLUUID cat_id = *cat_iter;
-        //            callback(cat_id);
-        //            needs_callback = false;
-        //        }
-        //    }
-        //    if (result.has("_created_items"))
-        //    {
-        //        LLSD& items = result["_created_items"];
-        //        LLSD::array_const_iterator item_iter;
-        //        for (item_iter = items.beginArray(); item_iter != items.endArray(); ++item_iter)
-        //        {
-        //            LLUUID item_id = *item_iter;
-        //            callback(item_id);
-        //            needs_callback = false;
-        //        }
-        //    }
-        //    break;
-        //default:
-        //    break;
-        //}
-
-        //if (needs_callback)
-        //{
-        //    // Call callback at least once regardless of failure.
-        //    // UPDATEITEM doesn't expect an id
-        //    callback(id);
-        //}
     }
 
 }
@@ -1806,10 +1752,6 @@ void AISUpdate::doUpdate()
 		LL_DEBUGS("Inventory") << "cat version update " << cat->getName() << " to version " << cat->getVersion() << LL_ENDL;
 		if (cat->getVersion() != version)
 		{
-			LL_WARNS() << "Possible version mismatch for category " << cat->getName()
-					<< ", viewer version " << cat->getVersion()
-					<< " AIS version " << version << " !!!Adjusting local version!!!" <<  LL_ENDL;
-
             // the AIS version should be considered the true version. Adjust 
             // our local category model to reflect this version number.  Otherwise 
             // it becomes possible to get stuck with the viewer being out of 
@@ -1819,13 +1761,23 @@ void AISUpdate::doUpdate()
             // is performed.  This occasionally gets out of sync however.
             if (version != LLViewerInventoryCategory::VERSION_UNKNOWN)
             {
+                LL_WARNS() << "Possible version mismatch for category " << cat->getName()
+                    << ", viewer version " << cat->getVersion()
+                    << " AIS version " << version << " !!!Adjusting local version!!!" << LL_ENDL;
                 cat->setVersion(version);
             }
             else
             {
                 // We do not account for update if version is UNKNOWN, so we shouldn't rise version
                 // either or viewer will get stuck on descendants count -1, try to refetch folder instead
-                cat->fetch();
+                //
+                // Todo: proper backoff?
+
+                LL_WARNS() << "Possible version mismatch for category " << cat->getName()
+                    << ", viewer version " << cat->getVersion()
+                    << " AIS version " << version << " !!!Rerequesting category!!!" << LL_ENDL;
+                const S32 LONG_EXPIRY = 360;
+                cat->fetch(LONG_EXPIRY);
             }
 		}
 	}

@@ -5178,6 +5178,13 @@ Mnożnik LOD >3: Zwiększa lag. Zalecane tylko dla fotografii.
 Mnożnik LOD >4: Używaj tylko w specjalnych przypadkach. Resetuje się po restarcie.
 Mnożnik LOD >8: Brak widocznych efektów. Może powodować błędy.
 	</notification>
+	<notification name="OverrideVRAMWarning">
+		UWAGA: Wyłączenie automatycznego wykrywania VRAM może zdestabilizować Twój komputer.
+
+Większość użytkowników powinna pozostawić wykrywanie włączone i pozwolić przeglądarce oraz systemowi operacyjnemu określać poprawną wartość.
+
+To ustawienie jest przeznaczone dla przypadków, gdy wykrywanie VRAM zgłasza nieprawidłowe wartości. Używaj ostrożnie, w razie wątpliwości zasięgnij porady Wsparcia.
+	</notification>
 	<notification name="CurrencyURIOverrideReceived">
 		W tym regionie wybrano portal walutowy strony trzeciej.
 Należy pamiętać, że zakupy w walucie dokonywane za pośrednictwem Firestorm Viewer są transakcjami między Tobą (użytkownikiem) a dostawcą (-ami) lub sprzedawcą (-ami) waluty.
@@ -5296,9 +5303,25 @@ Riggowane mesze są przeznaczone do dodawania do samego awatara. Ani ty, ani nik
 Jeśli chcesz zobaczyć ten obiekt, to usuń go i ponownie dołącz do punktu doczepienia na awatarze.
 		<usetemplate ignoretext="Ostrzegaj, gdy dodatek z riggowanym meszem jest dołączany do punktu HUD" name="okignore" />
 	</notification>
+	<notification name="ConfirmOverwriteOutfit">
+		Zamierzasz zastąpić elementy wybranego stroju przedmiotami, które masz na sobie teraz.
+		<usetemplate ignoretext="Potwierdź przed nadpisaniem stroju" name="okcancelignore" notext="Anuluj" yestext="Zapisz" />
+	</notification>
+	<notification name="ClearInventoryThumbnailsWarning">
+		Zamierzasz usunąć miniatury elementów z listy. Tej zmiany nie można cofnąć.
+
+Czy chcesz kontynuować?
+		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak" />
+	</notification>
+	<notification name="WriteInventoryThumbnailsWarning">
+		Zamierzasz nadpisać miniatury wszystkich lub niektórych elementów z listy. Tej zmiany nie można cofnąć.
+
+Czy chcesz kontynuować?
+		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak" />
+	</notification>
 	<notification name="ReflectionProbeApplied">
 		UWAGA: Ten obiekt stanie się sondą refleksyjną - nastąpią w nim nieodwracalne zmiany. Sprawią one, że obiekt będzie naśladować wpływ sondy na otoczenie. Czy chcesz kontynuować?
-		<usetemplate ignoretext="Wskazówki sond refleksyjnych" name="okcancelignore" notext="Cancel" />
+		<usetemplate ignoretext="Wskazówki sond refleksyjnych" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="AutoAdjustHDRSky">
 		Edytujesz niebo inne niż HDR, które zostało automatycznie przekonwertowane na HDR. Aby usunąć HDR i mapowanie tonów, ustaw Nastrój Sondy Refleksyjnej na zero.

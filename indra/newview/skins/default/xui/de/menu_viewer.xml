@@ -562,9 +562,10 @@
 			<menu_item_call label="Simulator-Features ausgeben" name="DumpSimFeaturesToChat"/>
 		</menu>
 		<menu label="UI" name="UI">
+			<menu_item_call label="Medienbrowser-Test" name="Web Browser Test"/>
 			<menu_item_call label="Test Regionsneustart" name="Region Restart Test"/>
-			<menu_item_call label="Medienbrowser" name="Media Browser"/>
-			<menu_item_call label="Facebook Connection-Test" name="FB Connect Test"/>
+			<menu_item_call label="Web-Browser" name="Web Content Browser"/>
+			<menu_item_call label="Inventar-Abbildungshelfer" name="Inventory Thumbnails Helper"/>
 			<menu_item_call label="Schriftarten ausgeben" name="Dump Fonts"/>
 			<menu_item_call label="Schriftarten-Texturen ausgeben" name="Dump Font Textures"/>
 			<menu_item_call label="SelectMgr ausgeben" name="Dump SelectMgr"/>
@@ -579,9 +580,10 @@
 			<menu_item_check label="Klicks debuggen" name="Debug Clicks"/>
 			<menu_item_check label="Ansichten debuggen" name="Debug Views"/>
 			<menu_item_check label="Unicode debuggen" name="Debug Unicode"/>
+			<menu_item_check label="Kamera-Controls debuggen" name="Debug Unicode"/>
 			<menu_item_check label="Kurzinfos: Debug-Namen" name="Debug Name Tooltips"/>
 			<menu_item_check label="Maus-Events debuggen" name="Debug Mouse Events"/>
-			<menu_item_check label="Keys debuggen" name="Debug Keys"/>
+			<menu_item_check label="Tasten debuggen" name="Debug Keys"/>
 			<menu_item_check label="WindowProc debuggen" name="Debug WindowProc"/>
 		</menu>
 		<menu label="XUI" name="XUI">

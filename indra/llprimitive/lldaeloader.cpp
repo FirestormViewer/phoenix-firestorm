@@ -53,7 +53,6 @@
 #pragma warning (default : 4264)
 #endif
 
-#include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/replace.hpp>
 
 #include "lldaeloader.h"
@@ -958,7 +957,7 @@ LLDAELoader::LLDAELoader(
   mPreprocessDAE(preprocess)
 {
 	// <FS:Beq> mesh loader suffix configuration
-	for(int i=0;i<LLModel::NUM_LODS;i++)
+	for (int i = 0; i < LLModel::NUM_LODS; i++)
 	{
   		LLDAELoader::sLODSuffix[i] = lod_suffix[i];
 	}
@@ -2473,7 +2472,7 @@ std::string LLDAELoader::getElementLabel(daeElement *element)
 
 		if (ind > 0)
 		{
-			index_string = "_" + boost::lexical_cast<std::string>(ind);
+			index_string = "_" + std::to_string(ind);
 		}
 
 		// if parent has a name or ID, use it

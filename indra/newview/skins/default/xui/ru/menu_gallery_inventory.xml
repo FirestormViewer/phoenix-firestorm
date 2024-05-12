@@ -4,9 +4,9 @@
 	<menu_item_call label="Очистить Корзину" name="Empty Trash"/>
 	<menu_item_call label="Пустые потерянные и найденные" name="Empty Lost And Found"/>
 	<menu_item_call label="Телепорт" name="Landmark Open"/>
-	<menu_item_call label="Заменить текущий Костюм" name="Replace Outfit"/>
-	<menu_item_call label="Добавить в текущий Костюм" name="Add To Outfit"/>
-	<menu_item_call label="Удалить из текущего Костюма" name="Remove From Outfit"/>
+	<menu_item_call label="Сменить текущий костюм" name="Replace Outfit"/>
+	<menu_item_call label="Добавить элементы костюма" name="Add To Outfit"/>
+	<menu_item_call label="Снять элементы костюма" name="Remove From Outfit"/>
 	<menu_item_call label="Скопировать список костюма в буфер обмена" name="Copy outfit list to clipboard"/>
 	<menu_item_call label="Найти оригинал" name="Find Original"/>
 	<menu_item_call label="Очистить элемент" name="Purge Item"/>

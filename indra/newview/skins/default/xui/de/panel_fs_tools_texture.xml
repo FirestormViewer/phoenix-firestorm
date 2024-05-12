@@ -18,6 +18,7 @@
 				<texture_picker label="Material" name="pbr_control" tool_tip="Klicken, um ein PBR-Material zu wählen"/>
 				<texture_picker label="Basis-Farbe" name="base_color_picker" tool_tip="Klicken, um eine Basis-Farbe (Albedo) zu wählen"/>
 				<color_swatch label="" name="base_color_tint_picker" tool_tip="Klicken, um den Farbton der Basis-Farbe zu wählen"/>
+				<button name="btn_select_same_gltf" tool_tip="Alle Oberflächen mit demselben GLTF-Material wie diesem auswählen"/>
 				<texture_picker label="Normal" name="normal_map_picker" tool_tip="Klicken, um die Normal-Map zu wählen"/>
 				<texture_picker label="Emissive" name="emissive_map_picker" tool_tip="Klicken, um die Emission-Map zu wählen"/>
 				<color_swatch label="" name="emissive_color_tint_picker" tool_tip="Klicken, um den Farbton der Emission zu wählen"/>
@@ -205,12 +206,15 @@
 				<layout_panel name="panel_blinn_phong_maps">
 					<texture_picker label="Textur" name="texture control" tool_tip="Klicken, um ein Bild zu wählen"/>
 					<color_swatch label="" name="colorswatch" tool_tip="Klicken Sie hier, um die Farbauswahl zu öffnen"/>
-					<texture_picker label="Textur" name="bumpytexture control" tool_tip="Klicken, um ein Bild zu wählen"/>
-					<texture_picker label="Textur" name="shinytexture control" tool_tip="Klicken, um ein Bild zu wählen"/>
+					<button name="btn_select_same_diff" tool_tip="Alle Oberflächen mit derselben Textur wie dieser auswählen"/>
+					<texture_picker label="Normal" name="bumpytexture control" tool_tip="Klicken, um ein Bild zu wählen"/>
+					<button name="btn_select_same_norm" tool_tip="Alle Oberflächen mit derselben Normal-Map wie dieser auswählen"/>
+					<texture_picker label="Specular" name="shinytexture control" tool_tip="Klicken, um ein Bild zu wählen"/>
+					<button name="btn_select_same_spec" tool_tip="Alle Oberflächen mit derselben Specular-Map wie dieser auswählen"/>
 					<color_swatch label="" name="shinycolorswatch" tool_tip="Klicken Sie hier, um die Farbauswahl zu öffnen"/>
 				</layout_panel>
 				<layout_panel name="panel_blinn_phong_options">
-					<check_box label="Ganz hell" name="checkbox fullbright"/>
+					<check_box label="Ganz hell" name="checkbox fullbright" width="70"/>
 					<spinner name="ColorTrans" label="Transparenz"/>
 					<text name="color trans percent">
 						%

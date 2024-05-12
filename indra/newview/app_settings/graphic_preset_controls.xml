@@ -19,29 +19,55 @@
 		<string>RenderAvatarMaxComplexity</string>
 		<string>RenderAvatarMaxNonImpostors</string>
 		<string>RenderAvatarPhysicsLODFactor</string>
+		<string>RenderCloudShadowAmbianceFactor</string>
 		<string>RenderCompressTextures</string>
 		<string>RenderDeferredSSAO</string>
 		<string>RenderDepthOfField</string>
 		<string>RenderDepthOfFieldInEditMode</string>
+		<string>RenderDisablePostProcessing</string>
+		<string>RenderPostProcessingHDR</string>
+		<string>RenderDefaultProbeUpdatePeriod</string>
 		<string>RenderDynamicExposureCoefficient</string>
 		<string>RenderExposure</string>
 		<string>RenderFarClip</string>
 		<string>RenderFlexTimeFactor</string>
 		<string>RenderFSAASamples</string>
 		<string>RenderGlow</string>
+		<string>RenderGlowHDR</string>
 		<string>RenderGlowIterations</string>
+		<string>RenderGlowNoise</string>
 		<string>RenderGlowResolutionPow</string>
 		<string>RenderLocalLightCount</string>
 		<string>RenderMaxPartCount</string>
+		<string>RenderMaxVRAMBudget</string>
 		<string>RenderQualityPerformance</string>
 		<string>RenderReflectionsEnabled</string>
+		<string>RenderReflectionProbeAmbiance</string>
 		<string>RenderReflectionProbeDetail</string>
+		<string>RenderReflectionProbeDrawDistance</string>
 		<string>RenderReflectionProbeLevel</string>
+		<string>RenderReflectionProbeMaxLocalLightAmbiance</string>
+		<string>RenderReflectionProbeResolution</string>
+		<string>RenderReflectionProbeVolumes</string>
 		<string>RenderScreenSpaceReflections</string>
+		<string>RenderScreenSpaceReflectionIterations</string>
+		<string>RenderScreenSpaceReflectionRayStep</string>
+		<string>RenderScreenSpaceReflectionDistanceBias</string>
+		<string>RenderScreenSpaceReflectionDepthRejectBias</string>
+		<string>RenderScreenSpaceReflectionAdaptiveStepMultiplier</string>
+		<string>RenderScreenSpaceReflectionGlossySamples</string>
 		<string>RenderShaderLightingMaxLevel</string>
 		<string>RenderShadowDetail</string>
 		<string>RenderShadowResolutionScale</string>
+		<string>RenderSkyAmbientScale</string>
+		<string>RenderSkyAutoAdjustAmbientScale</string>
+		<string>RenderSkyAutoAdjustBlueDensityScale</string>
+		<string>RenderSkyAutoAdjustBlueHorizonScale</string>
+		<string>RenderSkyAutoAdjustSunColorScale</string>
+		<string>RenderSkyAutoAdjustHDRScale</string>
 		<string>RenderSkyAutoAdjustLegacy</string>
+		<string>RenderSkyAutoAdjustProbeAmbiance</string>
+		<string>RenderSkySunlightScale</string>
 		<string>RenderSSAOIrradianceScale</string>
 		<string>RenderSSAOIrradianceMax</string>
 		<string>RenderSunDynamicRange</string>

@@ -4905,8 +4905,12 @@ void LLWindowWin32::LLWindowWin32Thread::updateVRAMUsage()
         info.CurrentUsage = 0;
 #endif
 
-        U32 budget_mb = info.Budget / 1024 / 1024;
-        gGLManager.mVRAM = llmax(gGLManager.mVRAM, (S32) budget_mb);
+        // <FS:Beq> Let's not override the detected values here.
+        // U32 budget_mb = info.Budget / 1024 / 1024;
+        // instead we clamp budget to detected values
+        // gGLManager.mVRAM = llmax(gGLManager.mVRAM, (S32) budget_mb);
+        U32 budget_mb = gGLManager.mVRAM;
+        // </FS:Beq>
 
         U32 afr_mb = info.AvailableForReservation / 1024 / 1024;
         // correct for systems that misreport budget
@@ -4932,21 +4936,24 @@ void LLWindowWin32::LLWindowWin32Thread::updateVRAMUsage()
         }
         U32 target_mb = budget_mb;
 
-        if (target_mb > 4096)  // if 4GB are installed, try to leave 2GB free 
-        {
-            target_mb -= 2048;
-        }
-        else // if less than 4GB are installed, try not to use more than half of it
-        {
-            target_mb /= 2;
-        }
+        // <FS:Beq> Let's not override the detected values here.
+        // Stop playing nice and just let the OS and drivers deal with it.
+        // if (target_mb > 4096)  // if 4GB are installed, try to leave 2GB free 
+        // {
+        //     target_mb -= 2048;
+        // }
+        // else // if less than 4GB are installed, try not to use more than half of it
+        // {
+        //     target_mb /= 2;
+        // }
 
-        mAvailableVRAM = cu_mb < target_mb ? target_mb - cu_mb : 0;
-
+        // mAvailableVRAM = cu_mb < target_mb ? target_mb - cu_mb : 0;
+        mAvailableVRAM = eu_mb < target_mb ? target_mb - cu_mb : 0;
+        // </FS:Beq>
 #if 1
         
         F32 eu_error = (F32)((S32)eu_mb - (S32)cu_mb) / (F32)cu_mb;
-        LL_INFOS("Window") << "\nLocal\nAFR: " << info.AvailableForReservation / 1024 / 1024
+        LL_DEBUGS("Window") << "\nLocal\nAFR: " << info.AvailableForReservation / 1024 / 1024
             << "\nBudget: " << info.Budget / 1024 / 1024
             << "\nCR: " << info.CurrentReservation / 1024 / 1024
             << "\nCU: " << info.CurrentUsage / 1024 / 1024

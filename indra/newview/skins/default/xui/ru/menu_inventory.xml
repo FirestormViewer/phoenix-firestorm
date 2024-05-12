@@ -71,10 +71,10 @@
 	<menu_item_call label="Телепорт" name="Landmark Open"/>
 	<menu_item_call label="Проиграть" name="Animation Open"/>
 	<menu_item_call label="Проиграть" name="Sound Open"/>
-	<menu_item_call label="Заменить комплект одежды" name="Replace Outfit"/>
-	<menu_item_call label="Добавить в комплект одежды" name="Add To Outfit"/>
-	<menu_item_call label="Создать элементы" name="Wear Items"/>
-	<menu_item_call label="Удалить из комплекта одежды" name="Remove From Outfit"/>
+	<menu_item_call label="Переодеться (сменить костюм)" name="Replace Outfit"/>
+	<menu_item_call label="Надеть (добавить в костюм)" name="Add To Outfit"/>
+	<menu_item_call label="Надеть элементы" name="Wear Items"/>
+	<menu_item_call label="Снять (убрать из костюма)" name="Remove From Outfit"/>
 	<menu_item_call label="Копировать список в буфер" name="Copy outfit list to clipboard"/>
 	<menu_item_call label="Найти оригинал" name="Find Original"/>
 	<menu_item_call label="Удалить объект" name="Purge Item"/>

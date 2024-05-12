@@ -203,7 +203,7 @@ HttpOpRequest::~HttpOpRequest()
 void HttpOpRequest::stageFromRequest(HttpService * service)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
-    HttpOpRequest::ptr_t self(boost::dynamic_pointer_cast<HttpOpRequest>(shared_from_this()));
+    HttpOpRequest::ptr_t self(std::dynamic_pointer_cast<HttpOpRequest>(shared_from_this()));
     service->getPolicy().addOp(self);			// transfers refcount
 }
 
@@ -211,7 +211,7 @@ void HttpOpRequest::stageFromRequest(HttpService * service)
 void HttpOpRequest::stageFromReady(HttpService * service)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
-    HttpOpRequest::ptr_t self(boost::dynamic_pointer_cast<HttpOpRequest>(shared_from_this()));
+    HttpOpRequest::ptr_t self(std::dynamic_pointer_cast<HttpOpRequest>(shared_from_this()));
     service->getTransport().addOp(self);		// transfers refcount
 }
 
@@ -292,7 +292,7 @@ void HttpOpRequest::visitNotifier(HttpRequest * request)
 // HttpOpRequest::ptr_t HttpOpRequest::fromHandle(HttpHandle handle)
 // {
 // 
-//     return boost::dynamic_pointer_cast<HttpOpRequest>((static_cast<HttpOpRequest *>(handle))->shared_from_this());
+//     return std::dynamic_pointer_cast<HttpOpRequest>((static_cast<HttpOpRequest *>(handle))->shared_from_this());
 // }
 
 

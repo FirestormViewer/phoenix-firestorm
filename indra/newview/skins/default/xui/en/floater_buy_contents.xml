@@ -5,7 +5,7 @@
  height="290"
  layout="topleft"
  min_height="150"
- min_width="200"
+ min_width="224"
  name="floater_buy_contents"
  help_topic="floater_buy_contents"
  save_rect="true"

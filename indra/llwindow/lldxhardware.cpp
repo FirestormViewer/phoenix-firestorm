@@ -40,6 +40,7 @@
 #include <boost/tokenizer.hpp>
 
 #include "lldxhardware.h"
+#include <dxgi.h>
 
 #include "llerror.h"
 
@@ -61,17 +62,52 @@ typedef BOOL ( WINAPI* PfnCoSetProxyBlanket )( IUnknown* pProxy, DWORD dwAuthnSv
                                                OLECHAR* pServerPrincName, DWORD dwAuthnLevel, DWORD dwImpLevel,
                                                RPC_AUTH_IDENTITY_HANDLE pAuthInfo, DWORD dwCapabilities );
 
+// <FS:Beq> Deprecate WMI support
+uint64_t GetVideoMemoryViaDXGI()
+{
+	HRESULT hr;
+	IDXGIFactory* pFactory = nullptr;
+	IDXGIAdapter* pAdapter = nullptr;
+
+	// Create a DXGI Factory
+	hr = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&pFactory);
+	if (FAILED(hr)) {
+		std::cerr << "Failed to create DXGI factory." << std::endl;
+		return 0;
+	}
+
+	// Enumerate adapters
+	UINT i = 0;
+	uint64_t vram_bytes = 0;
+	while (pFactory->EnumAdapters(i, &pAdapter) != DXGI_ERROR_NOT_FOUND) 
+	{
+		if(pAdapter)
+		{
+			DXGI_ADAPTER_DESC desc;
+			pAdapter->GetDesc(&desc);
+
+			vram_bytes = desc.DedicatedVideoMemory;
+			break;
+		}
+		SAFE_RELEASE(pAdapter);
+		++i;
+	}
+	SAFE_RELEASE(pAdapter)
+	SAFE_RELEASE(pFactory)
+	return vram_bytes;
+}
+// </FS:Beq>
+
 HRESULT GetVideoMemoryViaWMI(WCHAR* strInputDeviceID, DWORD* pdwAdapterRam)
 {
     HRESULT hr;
     bool bGotMemory = false;
-    HRESULT hrCoInitialize = S_OK;
     IWbemLocator* pIWbemLocator = nullptr;
     IWbemServices* pIWbemServices = nullptr;
     BSTR pNamespace = nullptr;
 
     *pdwAdapterRam = 0;
-    hrCoInitialize = CoInitialize( 0 );
+    CoInitializeEx(0, COINIT_APARTMENTTHREADED);
 
     hr = CoCreateInstance( CLSID_WbemLocator,
                            nullptr,
@@ -208,8 +244,7 @@ HRESULT GetVideoMemoryViaWMI(WCHAR* strInputDeviceID, DWORD* pdwAdapterRam)
 
     SAFE_RELEASE( pIWbemLocator );
 
-    if( SUCCEEDED( hrCoInitialize ) )
-        CoUninitialize();
+    CoUninitialize();
 
     if( bGotMemory )
         return S_OK;
@@ -232,9 +267,8 @@ S32 LLDXHardware::getMBVideoMemoryViaWMI()
 std::string LLDXHardware::getDriverVersionWMI(EGPUVendor vendor)
 {
 	std::string mDriverVersion;
-	HRESULT hrCoInitialize = S_OK;
 	HRESULT hres;
-	hrCoInitialize = CoInitialize(0);
+	CoInitializeEx(0, COINIT_APARTMENTTHREADED);
 	IWbemLocator *pLoc = NULL;
 
 	hres = CoCreateInstance(
@@ -437,10 +471,10 @@ std::string LLDXHardware::getDriverVersionWMI(EGPUVendor vendor)
 	{
 		pEnumerator->Release();
 	}
-	if (SUCCEEDED(hrCoInitialize))
-	{
-		CoUninitialize();
-	}
+
+    // supposed to always call CoUninitialize even if init returned false
+	CoUninitialize();
+
 	return mDriverVersion;
 }
 
@@ -690,7 +724,8 @@ BOOL LLDXHardware::getInfo(BOOL vram_only, bool disable_wmi)
 	BOOL ok = FALSE;
     HRESULT       hr;
 
-    CoInitialize(NULL);
+    // CLSID_DxDiagProvider does not work with Multithreaded?
+    CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
     IDxDiagProvider *dx_diag_providerp = NULL;
     IDxDiagContainer *dx_diag_rootp = NULL;
@@ -805,6 +840,10 @@ BOOL LLDXHardware::getInfo(BOOL vram_only, bool disable_wmi)
 				LL_INFOS("AppInit") << "VRAM Detected via WMI: " << mVRAM << LL_ENDL;
 			}
 		}
+		// <FS:Beq> Deprecate WMI use DXGI in preference.
+		mVRAM = GetVideoMemoryViaDXGI()/1024/1024;
+		LL_INFOS("AppInit") << "VRAM Detected via DXGI: " << mVRAM << "MB" << LL_ENDL;
+		// </FS:Beq>
 		
 		if (mVRAM == 0)
 		{ // Get the English VRAM string
@@ -986,7 +1025,7 @@ LLSD LLDXHardware::getDisplayInfo()
 	LLTimer hw_timer;
     HRESULT       hr;
 	LLSD ret;
-    CoInitialize(NULL);
+    CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
     IDxDiagProvider *dx_diag_providerp = NULL;
     IDxDiagContainer *dx_diag_rootp = NULL;
