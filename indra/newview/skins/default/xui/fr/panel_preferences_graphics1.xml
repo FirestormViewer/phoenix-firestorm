@@ -2,7 +2,10 @@
 <panel label="Affichage" name="Display panel">
 	<tab_container label="Paramètres d'affichage" name="tabs">
 		<panel label="Général" name="General">
-			<text name="preset_label">Preset utilisé : </text>
+			<text name="preset_label">Préréglage utilisé : </text>
+			<text name="preset_text">
+				(Aucun)
+			</text>
 			<text name="QualitySpeed">Qualité et performance :</text>
 			<text name="FasterText">Performance</text>
 			<text name="BetterText">Qualité</text>
@@ -13,25 +16,34 @@
 			<check_box label="Mode plein écran" name="Fullscreen Mode" tool_tip="Exécuter Firestorm en mode plein écran. Un redémarrage est nécessaire pour changer de mode."/>
 			<text name="ShadersText">Shaders :</text>
 			<check_box label="Transparence de l'eau" name="TransparentWater"/>
-			<check_box label="Relief &amp; Brillance" name="BumpShiny"/>
-			<check_box label="Shaders atmosphériques" name="WindLightUseAtmosShaders"/>
-			<check_box label="Éclairage avancé" tool_tip="Permet un rendu de lumière avancé" name="UseLightShaders"/>
 			<check_box label="Occlusion ambiante" name="UseSSAO"/>
+			<check_box label="Reflets affichés à l'écran (SSR)" name="ScreenSpaceReflections"/>
 			<text name="shadows_label">Ombres :</text>
 			<combo_box name="ShadowDetail">
+				<combo_box.item label="Aucunes" name="0"/>
+				<combo_box.item label="Soleil/Lune" name="1"/>
+				<combo_box.item label="Soleil/Lune/Projecteurs" name="2"/>
+			</combo_box>
+			<text name="ReflectionDetailText">
+				Détails des reflets :
+			</text>
+			<combo_box name="ReflectionDetail">
+				<combo_box.item label="Statiques" name="0"/>
+				<combo_box.item label="Statiques&amp;dynamiques" name="1"/>
+				<combo_box.item label="Temps réel" name="2"/>
+				</combo_box>
+			<text name="ReflectionProbeText">
+				Couverture des reflets :
+			</text>
+			<combo_box name="ReflectionLevel">
 				<combo_box.item label="Aucune" name="0"/>
-				<combo_box.item label="Soleil / Lune" name="1"/>
-				<combo_box.item label="Soleil / Lune &amp; Projecteurs" name="2"/>
+				<combo_box.item label="Manuels seulement" name="1"/>
+				<combo_box.item label="Manuels &amp; terrain" name="2"/>
+				<combo_box.item label="Scène complète" name="3"/>
 			</combo_box>
-			<text name="reflection_label">Reflets aquatiques :</text>
-			<combo_box name="Reflections">
-				<combo_box.item label="Minimaux" name="0"/>
-				<combo_box.item label="Terrain et arbres" name="1"/>
-				<combo_box.item label="Tous les objets statiques" name="2"/>
-				<combo_box.item label="Avatars et objets" name="3"/>
-				<combo_box.item label="Tout" name="4"/>
-			</combo_box>
-			<text name="local lights_label" tool_tip="Affecte le nombre de sources de lumière lorsque l'éclairage avancé est désactivé. Un redémarrage est requis pour changer de mode.">Sources de lumière</text>
+			<text width="185" name="local lights_label" tool_tip="Affecte le nombre de sources de lumière lorsque l'éclairage avancé est désactivé. Un redémarrage est requis pour changer de mode.">
+				Éclairage ponctuel (redémarrage) :
+			</text>
 			<combo_box name="LocalLightsDetail">
 				<combo_box.item label="Toutes (par défaut)" name="3"/>
 				<combo_box.item label="Réduites" name="2"/>
@@ -45,6 +57,7 @@
 			<slider label="Qualité post-traitement" name="RenderPostProcess"/>
 			<text name="PostProcessText">Basse</text>
 			<slider label="Propriétés physiques des avatars" name="AvatarPhysicsDetail"/>
+			<slider label="Exposition" name="RenderExposure"/>
 			<text name="MeshDetailText">Facteurs de détails liés à la distance :</text>
 			<slider label="  Objets et Sculpts" name="ObjectMeshDetail"/>
 			<slider label="  Prims flexibles" name="FlexibleMeshDetail"/>
@@ -52,25 +65,23 @@
 			<slider label="  Avatars" name="AvatarMeshDetail"/>
 			<slider label="  Terrain" name="TerrainMeshDetail"/>
 			<slider label="  Ciel" name="SkyMeshDetail"/>
+			<text name="Presets_Label">
+				Préréglages
+			</text>
+			<button left="270" label="Enregistrer" name="PrefSaveButton"/>
+			<button left_pad="5" label="Charger" name="PrefLoadButton"/>
+			<button left_pad="5" label="Supprimer" name="PrefDeleteButton"/>
 			<text name="AvatarRenderingText">Rendu des avatars :</text>
-			<check_box label="Avatars 2D" name="AvatarImpostors"/>
-			<check_box label="Flexibilité des vêtements" name="AvatarCloth"/>
-			<text name="TerrainDetailText">Détails du terrain :</text>
-			<radio_group name="TerrainDetailRadio">
-				<radio_item label="Bas" name="0"/>
-				<radio_item label="Haut" name="2"/>
-			</radio_group>
 			<button tool_tip="Rétablit les valeurs par défaut." name="Defaults"/>
-			<button label="Enregistrer" name="PrefSaveButton"/>
-			<button label="Charger" name="PrefLoadButton"/>
-			<button label="Supprimer" name="PrefDeleteButton"/>
 		</panel>
 		<panel label="Paramètres matériels" name="Hardware Settings">
 			<check_box label="Filtrage Anisotrope (plus lent lorsqu'il est activé)" name="ani"/>
 			<check_box label="Activer VSync" name="vsync" tool_tip="Synchronise la fréquence d'images avec la fréquence de rafraîchissement du moniteur, ce qui peut entraîner une augmentation du lag et des images saccadées."/>
 			<check_box label="Activer la compression de textures sans pertes (Redémarrage requis)" name="texture compression" tool_tip="Activer la compression des textures dans la mémoire graphique permet de charger des textures de résolution supérieure et une prise en charge d'un nombre de textures plus élevé pour le même cout mémoire."/>
 			<check_box label="Active la prise en charge des écrans HiDPI (Mac OSX seulement; Redémarrage requis)" name="use HiDPI" tool_tip="Active OpenGL pour l'affichage haute résolution."/>
-			<text name="Antialiasing:">Anticrénelage :</text>
+			<text width="235" name="Antialiasing:" tool_tip="La modification de ce paramètre peut nécessiter un redémarrage de certains ordinateurs.">
+				Anticrénelage (redémarrage recommandé) :
+			</text>
 			<combo_box label="Anticrénelage" name="fsaa">
 				<combo_box.item label="Désactivé" name="FSAADisabled"/>
 				<combo_box.item label="2x" name="2x"/>
@@ -78,31 +89,31 @@
 				<combo_box.item label="8x" name="8x"/>
 				<combo_box.item label="16x" name="16x"/>
 			</combo_box>
-			<spinner label="Gamma :" name="gamma"/>
-			<text name="brightness text">Baisser la valeur pour augmenter la brillance</text>
-			<slider label="Mémoire vidéo utilisée par le viewer (Mo) :" label_width="235" width="450" name="GraphicsCardTextureMemory" tool_tip="Quantité de mémoire à allouer pour les textures. Par défaut, la mémoire de la carte vidéo jusqu'à 512Mo. Réduire ce paramètre peut améliorer les performances, mais peut également rendre les textures plus floues. Augmenter cette valeur au-delà de 512Mo n'est pas recommandé. Même si votre carte graphique le supporte, l'impact sur la mémoire sera conséquent et se traduira par des ralentissements."/>
-			<check_box label="Activer la mémoire de texture dynamique" name="FSDynamicTextureMemory" tool_tip="Permet le calcul de la mémoire de texture dynamique (uniquement disponible sur les systèmes 64 bits et les GPU AMD/NVIDIA avec au moins 512 Mo de mémoire vidéo)" width="315" />
-			<slider label="Mémoire tampon de texture minimale (Mo):" name="FSDynamicTextureMemoryMinTextureMemory" tool_tip="La quantité minimale de mémoire à allouer pour les textures. Cela permettra de s'assurer que la quantité spécifiée sera toujours utilisée pour les textures, même si elle dépasse la quantité de mémoire vidéo disponible. Si la quantité spécifiée plus les réserves dépassent la quantité de mémoire vidéo physique, elle sera plafonnée en conséquence."/>
-			<slider label="Réserve supplémentaire de mémoire tampon (%):" name="FSDynamicTextureMemoryCacheReserve" tool_tip="Le pourcentage de mémoire vidéo physique réservé aux textures chargées en cache qui ne sont actuellement pas affichées."/>
-			<slider label="Réserve de mémoire vidéo physique (%):" name="FSDynamicTextureMemoryGPUReserve" tool_tip="Le pourcentage de mémoire vidéo physique réservé à un autre usage."/>
-			<spinner label="Ratio de distance du brouillard :" name="fog"/>
+			<text name="advanced_settings">
+				Paramètres avancés (redémarrage requis) :
+			</text>
+			<check_box label="Ignorer la détection de la VRAM" name="FSDynamicTextureMemory" tool_tip="Permet à l'utilisateur d'ignorer la détection de VRAM (à utiliser avec une extrême prudence)"/>
+			<slider label="VRAM dédiée du GPU (Go) :" name="FSForcedVideoMemory" tool_tip="Important : à utiliser avec une extrême prudence.
+Ignorer la VRAM détectée sur votre GPU.
+Cela ne doit pas inclure la VRAM 'partagée' qui fait partie de la RAM du système.
+Si vous ne comprenez pas la distinction, ne vous souciez pas de ce contrôle."/>
 		</panel>
 		<panel label="Rendu" name="Rendering">
 			<text name="World Updating">Actualisation de l'univers :</text>
 			<check_box label="Figer les mises à jour de l'univers (Met tout en pause)" tool_tip="Cochez cette option pour figer toutes les mises à jour provenant de l'univers - Ceci interrompra toutes les actions visuelles mais n'affectera pas les conversations écrites  ou vocales" name="WorldPause"/>
 			<text name="Texture Rendering">Rendu des textures :</text>
 			<check_box label="Limiter le résolution maximale des textures à 512px (64bit seulement; redémarrage requis)" tool_tip="Activée, cette option limite la résomution maximale d'affichage des textures dans Second Life à 512px. Cela permet d'afficher plus de textures avant de dépasser la limite de mémoire disponible et évite de voir des textures floues." name="FSRestrictMaxTextureSize"/>
-			<check_box label="Utiliser HTTP pour récupérer les textures" tool_tip="Cochez cette option pour charger les textures en utilisant le protocole HTTP - désactivez cette option si vous avez des problèmes d'affichage et souhaitez utiliser le protocole UDP à la place." name="TexturesHTTP"/>
-			<text name="TextureDetailLabel">Qualité max. des textures :</text>
-			<combo_box name="TextureDetail">
+			<text name="TextureDetailLabel">
+				Qualité max. des textures :
+			</text>
+			<combo_box name="TextureDetail" tool_tip="Qualité de chargement des textures, affecte le paramètre TextureDiscardLevel">
 				<combo_box.item label="Normale" name="0"/>
 				<combo_box.item label="Moyenne" name="3"/>
 				<combo_box.item label="Basse" name="4"/>
 				<combo_box.item label="Pas de textures" name="5"/>
 			</combo_box>
 			<text name="Alpha Mask Rendering">Rendu des masques alphas :</text>
-			<check_box label="Activer les masques alpha lorsque 'Éclairage avancé' n'est pas activé" tool_tip="Lorsqu'activé, les masques alpha seront pris en compte lorsque l'éclairage avancé est désactivé" name="RenderAutoMaskAlphaNonDeferred"/>
-			<check_box label="Activer les masques alpha lorsque 'Éclairage avancé' est activé" tool_tip="Lorsqu'activé, les masques alpha seront pris en compte lorsque l'éclairage avancé est activé" name="RenderAutoMaskAlphaDeferred"/>
+			<check_box label="Activer les masques alpha" tool_tip="Si cette option est cochée, le rendu des masques Alpha (bits transparents) est correct." name="RenderAutoMaskAlphaDeferred"/>
 			<text name="Miscellaneous Rendering">Divers :</text>
 			<check_box label="Éclat lumineux" tool_tip="Activer l'éclat lumineux. Noter que la force doit être définie sur 0 pour désactiver l'éclat lumineux lorsque les ombres sont activées." name="RenderGlow"/>
 			<slider label="Force :" tool_tip="Force de l'éclat lumineux. Une valeur plus élevée le rends plus diffus et plus doux (2 par défaut)" name="glow_strength"/>
@@ -120,11 +131,10 @@
 		<panel label="Profondeur de champ" name="DOF panel">
 			<check_box label="Activer la profondeur de champ (Floutera la vue sauf au point de focalisation de la caméra)" name="UseDoF"/>
 			<check_box label="Activer pendant la modification d'objets ou de terrain" name="RenderDepthOfFieldInEditMode"/>
-			<check_box label="La mise au point de la profondeur de champ suit le pointeur" name="FSFocusPointFollowsPointer" tool_tip="La mise au point de la profondeur de champ (PdC) suivra votre curseur, ce comportement correspond à celui observé lors de l'utilisation de flycam. Utilisation en conjonction avec le verrouillage de la mise au point PdC"/>
+			<check_box label="La mise au point de la profondeur de champ suit le curseur" name="FSFocusPointFollowsPointer" tool_tip="La mise au point de la profondeur de champ (PdC) suivra votre curseur, ce comportement correspond à celui observé lors de l'utilisation de flycam. Utilisation en conjonction avec le verrouillage de la mise au point PdC"/>
 			<slider label="Indice d'ouverture :" name="CameraFNum" tool_tip="Indice d'ouverture de la caméra pour les effets de profondeur"/>
 			<slider label="Distance focale :" name="CameraFocal" tool_tip="Distance focale de la caméra pour les effets de profondeur (en millimètres)"/>
 			<slider label="Angle de champ :" name="Camera FOV" tool_tip="Angle de champ vertical de la caméra pour les effets de profondeur (en degrés)"/>
-			<slider label="Format d'image :" name="CameraAspectRatio" tool_tip="Rapport de format de l'écran pour les effets de profondeur"/>
 			<slider label="Dynamisme des transitions :" name="CameraFocusTrans" tool_tip="Temps nécessaire pour modifier l'effet de profondeur lors d'un mouvement de caméra"/>
 			<slider label="Qualité du rendu du floutage :" name="CameraDoFResScale" tool_tip="Définit la qualité du floutage et les performances de rendu. (Le plus élevé la meilleure qualité, le plus bas les meilleures performances)"/>
 		</panel>
