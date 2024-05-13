@@ -1182,8 +1182,10 @@ bool LLGLManager::initGL()
 	// This is called here because it depends on the setting of mIsGF2or4MX, and sets up mHasMultitexture.
 	initExtensions();
 
-	S32 old_vram = mVRAM;
-	mVRAM = 0;
+    // <FS:Beq> stop doing this and trust the hardware detection
+    // if hardware detection has all failed the this will correct for that
+	// S32 old_vram = mVRAM;
+	// mVRAM = 0;
 
 #if LL_WINDOWS
 	if (mHasAMDAssociations)
@@ -1216,22 +1218,26 @@ bool LLGLManager::initGL()
 	}
 #endif
 
-#if LL_WINDOWS
-	if (mVRAM < 256)
-	{
-		// Something likely went wrong using the above extensions
-		// try WMI first and fall back to old method (from dxdiag) if all else fails
-		// Function will check all GPUs WMI knows of and will pick up the one with most
-		// memory. We need to check all GPUs because system can switch active GPU to
-		// weaker one, to preserve power when not under load.
-		S32 mem = LLDXHardware::getMBVideoMemoryViaWMI();
-		if (mem != 0)
-		{
-			mVRAM = mem;
-			LL_WARNS("RenderInit") << "VRAM Detected (WMI):" << mVRAM<< LL_ENDL;
-		}
-	}
-#endif
+// <FS:Beq> remove this so that we can attempt to use driver specifics
+// if it fails we will pick up the `old_vram` value , which is either WMI or the combined dxdiag number
+// both of which are rather useless, but it does at least respect the disable_wmi setting.
+// #if LL_WINDOWS
+// 	if (mVRAM < 256)
+// 	{
+// 		// Something likely went wrong using the above extensions
+// 		// try WMI first and fall back to old method (from dxdiag) if all else fails
+// 		// Function will check all GPUs WMI knows of and will pick up the one with most
+// 		// memory. We need to check all GPUs because system can switch active GPU to
+// 		// weaker one, to preserve power when not under load.
+// 		S32 mem = LLDXHardware::getMBVideoMemoryViaWMI();
+// 		if (mem != 0)
+// 		{
+// 			mVRAM = mem;
+// 			LL_WARNS("RenderInit") << "VRAM Detected (WMI):" << mVRAM<< LL_ENDL;
+// 		}
+// 	}
+// #endif
+// </FS:Beq>
 
 	// Ultimate fallbacks for linux and mesa
 	if (mHasNVXMemInfo && mVRAM == 0)
@@ -1250,18 +1256,18 @@ bool LLGLManager::initGL()
 		mVRAM = meminfo[0] / 1024;
 		LL_INFOS("RenderInit") << "VRAM Detected (ATIMemInfo):" << mVRAM << LL_ENDL;
 	}
+    // <FS:Beq> stop doing this and trust the hardware detection
+	// if (mVRAM < 256 && old_vram > 0)
+	// {
+	// 	// fall back to old method
+	// 	// Note: on Windows value will be from LLDXHardware.
+	// 	// Either received via dxdiag or via WMI by id from dxdiag.
+	// 	mVRAM = old_vram;
 
-	if (mVRAM < 256 && old_vram > 0)
-	{
-		// fall back to old method
-		// Note: on Windows value will be from LLDXHardware.
-		// Either received via dxdiag or via WMI by id from dxdiag.
-		mVRAM = old_vram;
-
-		// <FS:Ansariel> VRAM detection logging
-		LL_WARNS("RenderInit") << "VRAM detected via MemInfo OpenGL extension most likely broken. Reverting to " << mVRAM << " MB" << LL_ENDL;
-	}
-
+	// 	// <FS:Ansariel> VRAM detection logging
+	// 	LL_WARNS("RenderInit") << "VRAM detected via MemInfo OpenGL extension most likely broken. Reverting to " << mVRAM << " MB" << LL_ENDL;
+	// }
+    // </FS:Beq>
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &mNumTextureImageUnits);
 	glGetIntegerv(GL_MAX_COLOR_TEXTURE_SAMPLES, &mMaxColorTextureSamples);
 	glGetIntegerv(GL_MAX_DEPTH_TEXTURE_SAMPLES, &mMaxDepthTextureSamples);

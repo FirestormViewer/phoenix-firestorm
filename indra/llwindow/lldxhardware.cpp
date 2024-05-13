@@ -40,6 +40,7 @@
 #include <boost/tokenizer.hpp>
 
 #include "lldxhardware.h"
+#include <dxgi.h>
 
 #include "llerror.h"
 
@@ -60,6 +61,42 @@ LLDXHardware gDXHardware;
 typedef BOOL ( WINAPI* PfnCoSetProxyBlanket )( IUnknown* pProxy, DWORD dwAuthnSvc, DWORD dwAuthzSvc,
                                                OLECHAR* pServerPrincName, DWORD dwAuthnLevel, DWORD dwImpLevel,
                                                RPC_AUTH_IDENTITY_HANDLE pAuthInfo, DWORD dwCapabilities );
+
+// <FS:Beq> Deprecate WMI support
+uint64_t GetVideoMemoryViaDXGI()
+{
+	HRESULT hr;
+	IDXGIFactory* pFactory = nullptr;
+	IDXGIAdapter* pAdapter = nullptr;
+
+	// Create a DXGI Factory
+	hr = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&pFactory);
+	if (FAILED(hr)) {
+		std::cerr << "Failed to create DXGI factory." << std::endl;
+		return 0;
+	}
+
+	// Enumerate adapters
+	UINT i = 0;
+	uint64_t vram_bytes = 0;
+	while (pFactory->EnumAdapters(i, &pAdapter) != DXGI_ERROR_NOT_FOUND) 
+	{
+		if(pAdapter)
+		{
+			DXGI_ADAPTER_DESC desc;
+			pAdapter->GetDesc(&desc);
+
+			vram_bytes = desc.DedicatedVideoMemory;
+			break;
+		}
+		SAFE_RELEASE(pAdapter);
+		++i;
+	}
+	SAFE_RELEASE(pAdapter)
+	SAFE_RELEASE(pFactory)
+	return vram_bytes;
+}
+// </FS:Beq>
 
 HRESULT GetVideoMemoryViaWMI(WCHAR* strInputDeviceID, DWORD* pdwAdapterRam)
 {
@@ -803,6 +840,10 @@ bool LLDXHardware::getInfo(bool vram_only, bool disable_wmi)
 				LL_INFOS("AppInit") << "VRAM Detected via WMI: " << mVRAM << LL_ENDL;
 			}
 		}
+		// <FS:Beq> Deprecate WMI use DXGI in preference.
+		mVRAM = GetVideoMemoryViaDXGI()/1024/1024;
+		LL_INFOS("AppInit") << "VRAM Detected via DXGI: " << mVRAM << "MB" << LL_ENDL;
+		// </FS:Beq>
 		
 		if (mVRAM == 0)
 		{ // Get the English VRAM string

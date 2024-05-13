@@ -138,7 +138,11 @@
 			<combo_box.item label="8x" name="8x"/>
 			<combo_box.item label="16x" name="16x"/>
 		</combo_box>
-
+		<text name="advanced_settings">
+			Erweiterte Einstellungen (Neustart erforderlich):
+		</text>
+		<check_box label="VRAM-Erkennung übersteuern" name="FSOverrideVRAMDetection" tool_tip="Erlaubt die Übersteuerung der VRAM-Erkennung (mit extreme Vorsicht verwenden)" />
+		<slider label="Dedizierter GPU-VRAM(GB):" name="FSForcedVideoMemory" tool_tip="Wichtig: Mit extremer Vorsicht verwenden. Übersteuert den erkannten VRAM der GPU. Dieser Wert darf nicht den geteilten VRAM enthalten, der Teil des Systemspeichers ist. Falls Sie den Unterschied nicht kennen, verändern Sie diese Einstellung bitte nicht!" />
 	</panel>
 
 	<panel label="Darstellung" name="Rendering">

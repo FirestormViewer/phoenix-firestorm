@@ -104,6 +104,11 @@
 			<combo_box label="Antyaliasing" name="fsaa">
 				<combo_box.item label="Wyłączony" name="FSAADisabled"/>
 			</combo_box>
+			<text name="advanced_settings">
+				Zaawansowane (wymagany restart):
+			</text>
+			<check_box label="Wyłącz autodetekcję VRAM" name="FSOverrideVRAMDetection" tool_tip="Zezwól na wyłączenie automatycznego wykrywania VRAM (używaj z zachowaniem szczególnej ostrożności)" />
+			<slider label="Dedykowana VRAM dla GPU (GB):" name="FSForcedVideoMemory" tool_tip="Ważne: używaj ze szczególną ostrożnością. || Zastąp wykrytą pamięć VRAM dla karty graficznej. || Nie może zawierać 'współdzielonej' pamięci VRAM, która jest częścią systemowej pamięci RAM. || Jeśli nie rozumiesz różnicy, zostaw tę opcję w spokoju." />
 		</panel>
 		<panel name="Rendering">
 			<text name="World Updating">
