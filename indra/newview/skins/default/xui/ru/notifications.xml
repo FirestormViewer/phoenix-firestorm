@@ -2376,6 +2376,15 @@
 		Примечание.
 Вы изменили местоположение этого места, но остальные данные сохранили прежние значения.
 	</notification>
+
+	<notification name="ApplyInventoryToObject">
+Вы применяете элемент инвентаря &apos;без копирования&apos;.
+Этот элемент будет перемещен в инвентарь объекта, а не скопирован.
+
+Переместите инвентарный элемент?
+		<usetemplate ignoretext="Предупредите меня, прежде чем я применю элементы &apos;без копирования&apos; к объекту" name="okcancelignore" notext="Отмена" yestext="OK"/>
+	</notification>
+
 	<notification name="MoveInventoryFromObject">
 		Вы выбрали &quot;не копируемые&quot; предметы.
 Они будут перемещены в ваш инвентарь, а не скопированы.
@@ -2383,6 +2392,7 @@
 Переместить предмет(ы)?
 		<usetemplate ignoretext="Предупреждать перед перемещением &quot;не копируемых&quot; предметов из объекта" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
+
 	<notification name="MoveInventoryFromScriptedObject">
 		Вы выбрали &quot;не копируемые&quot; предметы.  Они будут перемещены в ваш инвентарь, а не скопированы.
 Так как объект является скриптовым, перемещение предметов в ваш инвентарий может вызвать ошибки скрипта.
@@ -2841,6 +2851,22 @@ URL: [AUDIOURL]
 		Невозможно загрузить заметку.
 Повторите попытку.
 	</notification>
+
+	<notification name="UnableToLoadMaterial">
+		Не удается загрузить материал.
+Пожалуйста, попробуйте снова.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="MissingMaterialCaps">
+		Не подключен к области, пригодной для использования с материалами.
+	</notification>
+
+	<notification name="CantSelectReflectionProbe">
+		Вы установили датчик отражения, но функция "Выбрать датчики отражения" отключена. Чтобы иметь возможность выбирать датчики отражения, установите флажок "Строить" &gt; "Параметры" &gt; "Выбрать датчики отражения".
+		<usetemplate ignoretext="Предупреждает, если выбор датчиков отражения отключен." name="okignore" yestext="OK"/>
+	</notification>
+
 	<notification name="ScriptMissing">
 		Скрипта нет в базе данных.
 	</notification>
@@ -3797,6 +3823,33 @@ https://wiki.firestormviewer.org/fs_voice
 		Просмотр этой текстуры невозможен, так как запрещено ее копирование и/или передача.
 		<usetemplate ignoretext="Предупреждать, если режим просмотра вживую недоступен для текстур с запрещенным копированием и/или передачей" name="okignore" yestext="Да"/>
 	</notification>
+
+	<notification name="LivePreviewUnavailablePBR">
+		Мы не можем показать предварительный просмотр этого материала, поскольку он запрещен для копирования, передачи и/или изменения.
+		<usetemplate ignoretext="Предупредить меня, что режим предварительного просмотра в реальном времени недоступен для материалов без копирования, передачи и/или изменения" name="okignore" yestext="OK"/>
+	</notification>
+
+	<notification name="FacePasteFailed">
+		Вставить не удалось. [REASON]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="FailedToApplyTextureNoCopyToMultiple">
+		Не удалось применить текстуру. Вы не можете применить текстуру без копирования к нескольким объектам.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="FailedToApplyGLTFNoCopyToMultiple">
+		Не удалось применить материал GLTF. Вы не можете применить материал без копирования к нескольким объектам.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="FacePasteTexturePermissions">
+		Вы применили текстуру с ограниченными разрешениями, объект унаследует разрешения от текстуры.
+		<usetemplate ignoretext="Вставить: Вы применили текстуру с ограниченными разрешениями" name="notifyignore"/>
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
 	<notification name="ConfirmLeaveCall">
 		Вы уверены, что хотите покинуть этот разговор?
 		<usetemplate ignoretext="Подтверждать перед выходом из разговора" name="okcancelignore" notext="Нет" yestext="Да"/>
@@ -5244,6 +5297,16 @@ https://wiki.firestormviewer.org/fs_voice
 Уровень LOD > 4: использовать в особых случаях. Возврат после relog.
 Уровень LOD > 8: не имеет реального эффекта. Может вызвать ошибки.
 	</notification>
+	<notification name="OverrideVRAMWarning">
+ПРЕДУПРЕЖДЕНИЕ: Переопределение функции обнаружения видеопамяти может привести к нестабильности.
+
+Большинству пользователей рекомендуется отключить эту настройку и позволить
+программе просмотра и операционной системе определить правильное значение.
+
+Эта настройка предназначена для случаев, когда функция обнаружения видеопамяти выдает неверные значения.
+Используйте с осторожностью, в случае сомнений обратитесь за консультацией в службу поддержки.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="CurrencyURIOverrideReceived">
 Этот регион решил указать сторонний валютный портал.
 Обратите внимание, что покупки валюты, сделанные через Firestorm Viewer, являются транзакциями между вами (пользователем) и поставщиком (ами) или продавцом (ами) валюты.
@@ -5346,6 +5409,66 @@ https://wiki.firestormviewer.org/fs_voice
 			<button name="cancel" text="Отмена"/>
 		</form>
 	</notification>
+
+	<notification label="Создать вложенную папку" name="CreateSubfolder">
+		Назовите новую папку:
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Отмена"/>
+		</form>
+	</notification>
+
+	<notification name="SameFolderRequired">
+		Выбранные элементы должны находиться в одной папке.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification name="RiggedMeshAttachedToHUD">
+		Объект "[NAME]" прикрепленный к точке дисплея "[POINT]" содержит ригованый меш.
+
+Ригованые мешевые объекты предназначены для прикрепления к аватару. Ни вы, ни кто-либо другой не увидит этот объект.
+
+Если вы хотите увидеть этот объект, удалите его и снова прикрепите к точке прикрепления аватара.
+
+		<usetemplate ignoretext="Предупредить меня, когда к точке дисплея будет прикреплен меш." name="okignore" yestext="OK"/>
+	</notification>
+
+	<notification name="ConfirmOverwriteOutfit">
+		Это заменит предметы из выбранного костюма на те, что надеты сейчас.
+		<usetemplate ignoretext="Подтвердить перед перезаписью костюма." name="okcancelignore" notext="Отмена" yestext="Сохранить"/>
+	</notification>
+
+	<notification name="ClearInventoryThumbnailsWarning">
+		Вы собираетесь удалить миниатюры изображений из списка предметов инвентаря. Это изменение невозможно отменить.
+
+Хотите продолжить?
+		<usetemplate name="okcancelbuttons" notext="Нет" yestext="Да"/>
+	</notification>
+
+	<notification name="WriteInventoryThumbnailsWarning">
+		Вы собираетесь перезаписать миниатюры изображений для некоторых или всех элементов инвентаря в списке. Это изменение невозможно отменить.
+
+Хотите продолжить?
+		<usetemplate name="okcancelbuttons" notext="Нет" yestext="Да"/>
+	</notification>
+
+	<notification name="ReflectionProbeApplied">
+		ВНИМАНИЕ: Вы превратили свой объект в датчик отражения.  Это приведет к неявному изменению объекта, чтобы имитировать его объем воздействия, и внесет необратимые изменения в объект.  Хотите продолжить?
+		<usetemplate ignoretext="Советы по Датчикам отражений" name="okcancelignore" notext="Отмена" yestext="OK"/>
+	</notification>
+
+	<notification name="AutoAdjustHDRSky">
+		Вы редактируете изображение неба без разрешения HDR, которое было автоматически преобразовано в HDR. Чтобы удалить HDR и тональное отображение, установите значение Reflection Probe Ambiance равным нулю.
+		<usetemplate ignoretext="Предупреждение о настройке неба в режиме HDR" name="okignore" yestext="OK"/>
+	</notification>
+
+	<notification name="EnableAutoFPSWarning">
+		Вы собираетесь включить Автонастройку частоты кадров. Все несохраненные настройки графики будут потеряны.
+
+Хотите сначала сохранить их?
+		<usetemplate name="okcancelbuttons" notext="Нет" yestext="Да"/>
+	</notification>
+
 	<notification name="NoValidEnvSettingFound">
 		Не выбрана допустимая настройка окружающей среды.
 

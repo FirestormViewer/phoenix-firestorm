@@ -92,15 +92,8 @@ public:
 
     bool isAttachmentStateComplete() const;
 
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: Catznip-2.1
-public:
-    void clearPendingAttachmentLink(const LLUUID& idItem);
-    bool getPendingAttachments(std::set<LLUUID>& ids) const;
+    // [SL:KB] - Patch: Appearance-PhantomAttach | Checked: Catznip-5.0
     void refreshAttachments();
-protected:
-    void onRegisterAttachmentComplete(const LLUUID& idAttachLink);
-    friend class LLRegisterAttachmentCallback;
-// [/SL:KB]
 
 private:
 
@@ -124,7 +117,7 @@ private:
     void linkRecentlyArrivedAttachments();
     void expireOldAttachmentRequests();
     void expireOldDetachRequests();
-//    void checkInvalidCOFLinks();
+    void checkInvalidCOFLinks();
     void spamStatusInfo();
 
     // Attachments that we are planning to rez but haven't requested from the server yet.
@@ -140,13 +133,8 @@ private:
     std::set<LLUUID> mRecentlyArrivedAttachments;
     LLTimer mCOFLinkBatchTimer;
 
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: Catznip-2.1
-    // Attachments that have pending link creation
-    std::set<LLUUID> mPendingAttachLinks;
-// [/SL:KB]
-
-//    // Attachments that are linked in the COF but may be invalid.
-//  LLItemRequestTimes mQuestionableCOFLinks;
+    // Attachments that are linked in the COF but may be invalid.
+    LLItemRequestTimes mQuestionableCOFLinks;
 };
 
 #endif

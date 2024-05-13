@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="Gear Outfit">
-	<menu_item_call label="Заменить текущий комплект" name="wear"/>
-	<menu_item_call label="Добавить в текущий комплект" name="wear_add"/>
-	<menu_item_call label="Удалить из текущего комплекта" name="take_off"/>
+	<menu_item_call label="Переодеться" name="wear"/>
+	<menu_item_call label="Надеть" name="wear_add"/>
+	<menu_item_call label="Снять" name="take_off"/>
 	<menu_item_call label="Изображение" name="thumbnail"/>
+	<menu_item_call label="Переименовать костюм" name="rename"/>
+	<menu_item_call label="Сохранить в этот костюм" name="save"/>
+	<menu_item_call label="Удалить костюм" name="delete_outfit"/>
+	<menu_item_check label="Всегда сортировать папки по имени" name="sort_folders_by_name"/>
+	<menu_item_call label="Развернуть все папки" name="expand"/>
+	<menu_item_call label="Свернуть все папки" name="collapse"/>
 	<context_menu label="Новая одежда" name="New Clothes">
 		<menu_item_call label="Новая рубашка" name="New Shirt"/>
 		<menu_item_call label="Новые штаны" name="New Pants"/>
@@ -25,9 +31,4 @@
 		<menu_item_call label="Новые волосы" name="New Hair"/>
 		<menu_item_call label="Новые глаза" name="New Eyes"/>
 	</context_menu>
-	<menu_item_call label="Развернуть все папки" name="expand"/>
-	<menu_item_call label="Свернуть все папки" name="collapse"/>
-	<menu_item_call label="Переименовать комплект" name="rename"/>
-	<menu_item_call label="Удалить комплект" name="delete_outfit"/>
-	<menu_item_check label="Всегда сортировать папки по имени" name="sort_folders_by_name"/>
 </toggleable_menu>

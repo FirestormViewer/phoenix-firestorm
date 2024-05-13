@@ -1302,6 +1302,13 @@ void LLVOCache::removeEntry(HeaderEntryInfo* entry)
     LL_INFOS() << "Removing entry for region with filename" << filename << LL_ENDL;
     // </FS:Beq>
 
+    // make sure corresponding LLViewerRegion also clears its in-memory cache
+    LLViewerRegion* regionp = LLWorld::instance().getRegionFromHandle(entry->mHandle);
+    if (regionp)
+    {
+        regionp->clearVOCacheFromMemory();
+    }
+
     header_entry_queue_t::iterator iter = mHeaderEntryQueue.find(entry);
     if(iter != mHeaderEntryQueue.end())
     {
@@ -1370,11 +1377,14 @@ void LLVOCache::removeFromCache(HeaderEntryInfo* entry)
 
     std::string filename;
     getObjectCacheFilename(entry->mHandle, filename);
+    LL_WARNS("GLTF", "VOCache") << "Removing object cache for handle " << entry->mHandle << "Filename: " << filename << LL_ENDL;
     LLAPRFile::remove(filename, mLocalAPRFilePoolp);
     // <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
     // Note that removeFromCache should take responsibility for cleaning up all cache artefactgs specfic to the handle/entry.
     // as such this now includes the generic extras
-    removeGenericExtrasForHandle(entry->mHandle);
+    filename = getObjectCacheExtrasFilename(entry->mHandle);
+    LL_WARNS("GLTF", "VOCache") << "Removing generic extras for handle " << entry->mHandle << "Filename: " << filename << LL_ENDL;
+    LLFile::remove(filename);
     // </FS:Beq>
     entry->mTime = INVALID_TIME ;
     updateEntry(entry) ; //update the head file.
@@ -1647,6 +1657,13 @@ void LLVOCache::readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCac
         versionNumber = std::stol(versionStr);
         std::getline(in, line); // read the next line for the region UUID check
     }
+    // For future versions we may call a legacy handler here, but realistically we'll just consider this cache out of date.
+    // The important thing is to make sure it gets removed.
+    if(versionNumber != LLGLTFOverrideCacheEntry::VERSION && versionNumber != 0)
+    {
+        LL_WARNS() << "Unexpected version number " << versionNumber << " for extras cache for handle " << handle << LL_ENDL;
+        in.close();
+    }
     // </FS:Beq>
     if(!LLUUID::validate(line))
     {
@@ -1907,7 +1924,19 @@ void LLVOCache::removeGenericExtrasForHandle(U64 handle)
         return ;
     }
     LL_WARNS("GLTF", "VOCache") << "Removing generic extras for handle " << handle << "Filename: " << getObjectCacheExtrasFilename(handle) << LL_ENDL;
-    LLFile::remove(getObjectCacheExtrasFilename(handle));
+
+    // NOTE: when removing the extras, we must also remove the objects so the simulator will send us a full upddate with the valid overrides
+    auto* entry = mHandleEntryMap[handle];
+    if (entry)
+    {
+        removeEntry(entry);
+    }
+    else
+    {
+        //shouldn't happen, but if it does, we should remove the extras file since it's orphaned
+        LL_WARNS("GLTF", "VOCache") << "Removing generic extras for handle " << entry->mHandle << "Filename: " << getObjectCacheExtrasFilename(handle) << LL_ENDL;
+        LLFile::remove(getObjectCacheExtrasFilename(entry->mHandle));
+    }
 }
 // </FS:Beq>
 

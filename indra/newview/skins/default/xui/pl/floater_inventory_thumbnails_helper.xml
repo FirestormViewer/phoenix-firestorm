@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="contents" title="Pomocnik miniaturek">
+	<scroll_list name="inventory_thumbnails_list" tool_tip="Wklej elementy ze swojej szafy">
+		<scroll_list.columns label="Element" name="item_name" />
+		<scroll_list.columns label="Istniejący obraz" name="existing_texture" />
+		<scroll_list.columns label="Nowy obraz" name="new_texture" />
+	</scroll_list>
+	<button label="Wklej elementy z szafy" name="paste_items_btn" />
+	<button label="Wklej tekstury z szafy" name="paste_textures_btn" />
+	<button label="Zapisz miniatury" name="write_thumbnails_btn" />
+	<button label="Loguj elementy bez miniatury" name="log_missing_thumbnails_btn" />
+	<button label="Usuń miniatury z wklejonych elementów" name="clear_thumbnails_btn" />
+</floater>

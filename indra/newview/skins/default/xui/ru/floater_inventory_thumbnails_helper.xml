@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="contents" title="Помощник по созданию миниатюр инвентаря">
+	<scroll_list name="inventory_thumbnails_list" tool_tip="Вставьте предметы из своего инвентаря">
+		<scroll_list.columns label="Предмет инвентаря" name="item_name"/>
+		<scroll_list.columns label="Существующая текстура" name="existing_texture"/>
+		<scroll_list.columns label="Новая текстура" name="new_texture"/>
+	</scroll_list>
+	<button label="Вставить предметы из инвентаря" name="paste_items_btn"/>
+	<button label="Вставить текстуры из инвентаря" name="paste_textures_btn"/>
+	<button label="Записать миниатюры" name="write_thumbnails_btn"/>
+	<button label="Список предметов без миниатюр" name="log_missing_thumbnails_btn"/>
+	<button label="Удалить миниатюры" name="clear_thumbnails_btn"/>
+</floater>

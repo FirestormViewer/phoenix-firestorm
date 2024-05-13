@@ -438,6 +438,23 @@
        right="-33"
        layout="topleft"
        name="dummy_panel">
+          <icon
+           follows="top|left|right"
+           height="25"
+           image_name="Toolbar_Middle_Off"
+           layout="topleft"
+           left="0"
+           top="0"
+           right="-1"
+           name="dummy_icon" />
+      </panel>
+      <panel
+       follows="top|left|right"
+       height="25"
+       left_pad="168"
+       right="-33"
+       layout="topleft"
+       name="dummy_panel">
           <text
            type="string"
            length="1"
@@ -453,15 +470,6 @@
            right="-8">
           Elements
           </text>
-          <icon
-           follows="top|left|right"
-           height="25"
-           image_name="Toolbar_Middle_Off"
-           layout="topleft"
-           left="0"
-           top="0"
-           right="-1"
-           name="dummy_icon" />
       </panel>
       <panel
        follows="top|right"

@@ -2889,7 +2889,14 @@ LLViewerRegion::eCacheUpdateResult LLViewerRegion::cacheFullUpdate(LLViewerObjec
 void LLViewerRegion::cacheFullUpdateGLTFOverride(const LLGLTFOverrideCacheEntry &override_data)
 {
     U32 local_id = override_data.mLocalId;
+    if (override_data.mSides.size() > 0)
+    { // empty override means overrides were removed from this object
     mImpl->mGLTFOverridesLLSD[local_id] = override_data;
+}
+    else
+    {
+        mImpl->mGLTFOverridesLLSD.erase(local_id);
+    }
 }
 
 LLVOCacheEntry* LLViewerRegion::getCacheEntryForOctree(U32 local_id)
@@ -3120,6 +3127,11 @@ void LLViewerRegion::dumpCache()
         LL_INFOS() << "Changes " << i << " " << change_bin[i] << LL_ENDL;
     }
     // TODO - add overrides cache too
+}
+
+void LLViewerRegion::clearVOCacheFromMemory()
+{
+    mImpl->mCacheMap.clear();
 }
 
 void LLViewerRegion::unpackRegionHandshake()

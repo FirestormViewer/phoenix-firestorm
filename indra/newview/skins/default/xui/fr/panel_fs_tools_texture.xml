@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="Texture">
+	<panel.string name="paste_error_face_selection_mismatch">
+		Lorsque plusieurs faces sont copiées, l'objet cible doit avoir le même nombre de faces sélectionnées.
+	</panel.string>
+	<panel.string name="paste_error_object_face_count_mismatch">
+		Lorsque toutes les faces d'un objet sont copiées, l'objet cible doit avoir le même nombre de faces.
+	</panel.string>
+	<panel.string name="paste_error_inventory_not_found">
+		Une ou plusieurs textures introuvables dans l'inventaire.
+	</panel.string>
+	<panel.string name="paste_options">
+		Copier les paramètres de texture dans le presse-papiers
+	</panel.string>
+	<tab_container name="tabs_material_type">
+		<panel label="PBR" name="panel_material_type_pbr">
+			<panel name="panel_material_maps">
+				<texture_picker name="pbr_control" label="Matériau" tool_tip="Cliquez pour choisir un matériau pbr"/>
+				<texture_picker name="base_color_picker" label="Couleur" tool_tip="Cliquez pour choisir la carte de couleurs de base (Albedo)"/>
+				<color_swatch name="base_color_tint_picker" label="Teinte" tool_tip="Cliquez pour choisir la teinte de la couleur de base"/>
+				<button name="btn_select_same_gltf" tool_tip="Sélectionner toutes les faces ayant le même matériau GLTF que celle-ci"/>
+				<texture_picker name="normal_map_picker" label="Normale" tool_tip="Cliquez pour choisir la carte normale"/>
+				<texture_picker name="emissive_map_picker" label="Émissive" tool_tip="Cliquez pour choisir la carte d'émission"/>
+				<color_swatch name="emissive_color_tint_picker" label="Teinte" tool_tip="Cliquez pour choisir la teinte de la couleur émissive"/>
+				<texture_picker name="metallic_map_picker" label="(O)RM" tool_tip="Cliquez pour choisir la carte de rugosité-métallicité, qui peut contenir un canal d'occlusion optionnel."/>
+			</panel>	   <!-- panel_material_maps -->
+			<panel name="panel_material_parameters">
+				<check_box label="Double face" name="double sided"/>
+				<spinner label="Alpha" name="transparency"/>
+				<text name="blend mode label">
+					Mode
+				</text>
+				<combo_box name="alpha mode">
+					<combo_box.item label="Opaque" name="Aucun"/>
+					<combo_box.item label="Fusion" name="Alpha blending"/>
+					<combo_box.item label="Masquage" name="Alpha masking"/>
+				</combo_box>
+				<spinner label="Coupure" name="alpha cutoff"/>
+				<spinner label="Métallicité" name="metalness factor"/>
+				<spinner label="Rugosité" name="roughness factor"/>
+				<button name="save_selected_pbr" label="Enregistrer"/>
+			</panel>
+		<!-- panel_material_parameters -->
+		<!-- BEGIN PBR Material texture transform parameters -->
+			<tab_container name="tabs_pbr_transforms">
+				<panel label="Tous" name="panel_pbr_transforms_all">
+					<panel name="pbr_transforms_all_scale">
+						<text name="pbr_transforms_all_scale_label">
+							Échelle
+						</text>
+					<text name="labelGltfTextureScaleU_All">
+						U
+					</text>
+					<button name="flipTextureScaleMU" tool_tip="Flip"/>
+					<text name="labelGltfTextureScaleV_All">
+						V
+					</text>
+					<button name="flipTextureScaleMV" tool_tip="Pivoter"/>
+					</panel>	<!-- pbr_transforms_all_scale -->
+					<panel name="pbr_transforms_all_offset">
+						<text name="pbr_transforms_all_offset_label">
+							Décalage
+						</text>
+						<text name="labelGltfTextureOffsetU_All">
+							U
+						</text>
+						<text name="labelGltfTextureOffsetV_All">
+							V
+						</text>
+					</panel>	<!-- pbr_transforms_all_offset -->
+					<panel name="pbr_transforms_all_rotation">
+						<text name="pbr_transforms_all_rotation_label">
+							Rotation
+						</text>
+					</panel>	<!-- pbr_transforms_all_rotation -->
+				</panel>    <!-- panel_pbr_transforms_all -->
+				<panel label="Couleur" name="panel_pbr_transforms_base_color">
+					<panel name="pbr_transforms_base_color_scale">
+						<text name="pbr_transforms_base_color_scale_label">
+							Échelle
+						</text>
+						<text name="labelGltfTextureScaleU_Base">
+							U
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="Pivoter"/>
+						<text name="labelGltfTextureScaleV_Base">
+							V
+						</text>
+						<button name="flipTextureScaleMV" tool_tip="Pivoter"/>
+					</panel>	<!-- pbr_transforms_base_color_scale -->
+					<panel name="pbr_transforms_base_color_offset">
+						<text name="pbr_transforms_base_color_offset_label">
+							Décalage
+						</text>
+						<text name="labelGltfTextureOffsetU_Base">
+							U
+						</text>
+						<text name="labelGltfTextureOffsetV_Base">
+							V
+						</text>
+					</panel>	<!-- pbr_transforms_base_color_offset -->
+					<panel name="pbr_transforms_base_color_rotation">
+						<text name="pbr_transforms_base_color_rotation_label">
+							Rotation
+						</text>
+					</panel>	<!-- pbr_transforms_base_color_rotation -->
+				</panel>    <!-- panel_pbr_transforms_base_color -->
+				<panel label="Normale" name="panel_pbr_transforms_normal">
+					<panel name="pbr_transforms_normal_scale">
+						<text name="pbr_transforms_normal_scale_label">
+							Échelle
+						</text>
+						<text name="labelGltfTextureScaleU_Normal">
+							U
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="Pivoter"/>
+						<text name="labelGltfTextureScaleV_Normal">
+							V
+						</text>
+						<button name="flipTextureScaleMV" tool_tip="Pivoter"/>
+					</panel>	<!-- pbr_transforms_normal_scale -->
+					<panel name="pbr_transforms_normal_offset">
+						<text name="pbr_transforms_normal_offset_label">
+							Décalage
+						</text>
+						<text name="labelGltfTextureOffsetU_Normal">
+							U
+						</text>
+						<text name="labelGltfTextureOffsetV_Normal">
+							V
+						</text>
+					</panel>	<!-- pbr_transforms_normal_offset -->
+					<panel name="pbr_transforms_normal_rotation">
+						<text name="pbr_transforms_normal_rotation_label">
+							Rotation
+						</text>
+					</panel>	<!-- pbr_transforms_normal_rotation -->
+				</panel>    <!-- panel_pbr_transforms_normal -->
+				<panel label="(O)RM" name="panel_pbr_transforms_metallic">
+					<panel name="pbr_transforms_orm_scale">
+						<text name="pbr_transforms_orm_scale_label">
+							Échelle
+						</text>
+						<text name="labelGltfTextureScaleU_Metallic">
+							U
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="Pivoter"/>
+						<text name="labelGltfTextureScaleV_Metallic">
+							V
+						</text>
+						<button name="flipTextureScaleMV" tool_tip="Pivoter"/>
+					</panel>	<!-- pbr_transforms_orm_scale -->
+					<panel name="pbr_transforms_orm_offset">
+						<text name="pbr_transforms_orm_offset_label">
+							Décalage
+						</text>
+						<text name="labelGltfTextureOffsetU_Metallic">
+							U
+						</text>
+						<text name="labelGltfTextureOffsetU_Metallic">
+							V
+						</text>
+					</panel>	<!-- pbr_transforms_orm_offset -->
+					<panel name="pbr_transforms_orm_rotation">
+						<text name="pbr_transforms_orm_rotation_label">
+							Rotation
+						</text>
+					</panel>	<!-- pbr_transforms_orm_rotation -->
+				</panel>    <!-- panel_pbr_transforms_metallic -->
+				<panel label="Émissive" name="panel_pbr_transforms_emissive">
+					<panel name="pbr_transforms_emissive_scale">
+						<text name="pbr_transforms_emissive_scale_label">
+							Échelle
+						</text>
+						<text name="labelGltfTextureScaleU_Emissive">
+							U
+						</text>
+						<button name="flipTextureScaleMU" tool_tip="Pivoter"/>
+						<text name="labelGltfTextureScaleV_Emissive">
+							V
+						</text>
+						<button name="flipTextureScaleMV" tool_tip="Pivoter"/>
+					</panel>	<!-- pbr_transforms_emissive_scale -->
+					<panel name="pbr_transforms_emissive_offset">
+						<text name="pbr_transforms_emissive_offset_label">
+							Décalage
+						</text>
+						<text name="labelGltfTextureOffsetU_Emissive">
+							U
+						</text>
+						<text name="labelGltfTextureOffsetV_Emissive">
+							V
+						</text>
+					</panel>	<!-- pbr_transforms_emissive_offset -->
+					<panel name="pbr_transforms_emissive_rotation">
+						<text name="pbr_transforms_emissive_rotation_label">
+							Rotation
+						</text>
+					</panel>	<!-- pbr_transforms_emissive_rotation -->
+				</panel>    <!-- panel_pbr_transforms_emissive -->
+			</tab_container>
+<!-- END PBR Material texture transform parameters -->
+		</panel>    <!-- panel_material_type_pbr -->
+		<panel label="Blinn-Phong" name="panel_material_type_blinn_phong">
+			<layout_stack name="panel_material_type_blinn_phong_layout_stack">
+				<layout_panel name="panel_blinn_phong_maps">
+					<texture_picker name="texture control" label="Diffuse" tool_tip="Cliquez pour choisir une image"/>
+					<color_swatch name="colorswatch" label="Teinte" tool_tip="Cliquez pour ouvrir le sélecteur de couleurs"/>
+					<button name="btn_select_same_diff" tool_tip="Sélectionner toutes les faces ayant la même texture diffuse que celle-ci"/>
+					<texture_picker label="Normale" name="bumpytexture control" tool_tip="Cliquez pour choisir une image"/>
+					<button name="btn_select_same_norm" tool_tip="Sélectionnez toutes les faces ayant la même carte normale que celle-ci"/>
+					<texture_picker label="Spéculaire" name="shinytexture control" tool_tip="Cliquez pour choisir une image"/>
+					<color_swatch label="Teinte" name="shinycolorswatch" tool_tip="Click to open color picker"/>
+					<button name="btn_select_same_spec" tool_tip="Sélectionner toutes les faces ayant la même carte spéculaire que celle-ci"/>
+				</layout_panel>   <!-- panel_blinn_phong_maps -->
+				<layout_panel name="panel_blinn_phong_options">
+					<check_box label="Lumineux" name="checkbox fullbright"/>
+					<spinner name="ColorTrans" label="Transparence"/>
+					<text name="color trans percent">
+						%
+					</text>
+					<text name="label alphamode">
+						Mode alpha
+					</text>
+					<combo_box name="combobox alphamode">
+						<combo_box.item label="Aucun" name="None"/>
+						<combo_box.item label="Fusion alpha" name="Alpha blending"/>
+						<combo_box.item label="Masquage alpha" name="Alpha masking"/>
+						<combo_box.item label="Masque émissif" name="Emissive mask"/>
+					</combo_box>
+					<spinner label="Coupe masque" name="maskcutoff"/>
+					<text name="label bumpiness">
+   						Relief
+					</text>
+					<combo_box name="combobox bumpiness">
+						<combo_box.item label="Aucun" name="None"/>
+						<combo_box.item label="Brillance" name="Brightness"/>
+						<combo_box.item label="Sombreté" name="Darkness"/>
+						<combo_box.item label="grain de bois" name="woodgrain"/>
+						<combo_box.item label="écorce" name="bark"/>
+						<combo_box.item label="briques" name="bricks"/>
+						<combo_box.item label="damier" name="checker"/>
+						<combo_box.item label="béton" name="concrete"/>
+						<combo_box.item label="croûteux" name="crustytile"/>
+						<combo_box.item label="pierre de taille" name="cutstone"/>
+						<combo_box.item label="disques" name="discs"/>
+						<combo_box.item label="gravier" name="gravel"/>
+						<combo_box.item label="pétrin" name="petridish"/>
+						<combo_box.item label="bardage" name="siding"/>
+						<combo_box.item label="carrelage en pierre" name="stonetile"/>
+						<combo_box.item label="stuc" name="stucco"/>
+						<combo_box.item label="aspiration" name="suction"/>
+						<combo_box.item label="trame" name="weave"/>
+<!--
+						NORSPEC-182, ensure item doesn't show up in menu until it should
+						<combo_box.item label="Utiliser la texture" name="Use texture"/>
+-->
+					</combo_box>
+					<text name="label shininess">
+   						Luminosité
+					</text>
+					<combo_box name="combobox shininess">
+						<combo_box.item label="Aucune" name="None"/>
+						<combo_box.item label="Faible" name="Low"/>
+						<combo_box.item label="Moyenne" name="Medium"/>
+						<combo_box.item label="Elevée" name="High"/>
+					</combo_box>
+					<spinner name="glossiness" label="Brillance"/>
+					<spinner name="environment" label="Environnement"/>
+				</layout_panel>    <!-- panel_blinn_phong_options -->
+			</layout_stack>
+			<tab_container name="tabs_blinn_phong_uvs">
+				<panel label="Diffuse" name="panel_blinn_phong_diffuse">
+					<panel name="transforms_diffuse_scale">
+						<text name="transforms_diffuse_scale_label">
+							Échelle
+						</text>
+						<text name="labelTexScaleU">
+							H
+						</text>
+						<button name="flipTextureScaleU" tool_tip="Pivoter"/>
+						<text name="labelTexScaleV">
+							V
+						</text>
+						<button name="flipTextureScaleV" tool_tip="Pivoter"/>
+					</panel>	<!-- transforms_diffuse_scale -->
+					<panel name="transforms_diffuse_offset">
+						<text name="transforms_diffuse_offset_label">
+							Décalage
+						</text>
+						<text name="labelTexOffsetU">
+							H
+						</text>
+						<text name="labelTexOffsetV">
+							V
+						</text>
+					</panel>	<!-- transforms_diffuse_offset -->
+					<panel name="transforms_diffuse_rotation">
+						<text name="transforms_diffuse_rotation_label">
+							Rotation
+						</text>
+					</panel>    <!-- transforms_diffuse_rotation -->
+				</panel>    <!-- panel_blinn_phong_diffuse -->
+				<panel label="Normale" name="panel_blinn_phong_normal">
+					<panel name="transforms_normal_scale">
+						<text name="transforms_normal_scale_label">
+							Échelle
+						</text>
+						<text name="labelBumpyScaleU">
+							H
+						</text>
+						<button name="flipTextureScaleNU" tool_tip="Pivoter"/>
+						<text name="labelBumpyScaleV">
+							V
+						</text>
+						<button name="flipTextureScaleNV" tool_tip="Pivoter"/>
+					</panel>	<!-- transforms_normal_scale -->
+					<panel name="transforms_normal_offset">
+						<text name="transforms_normal_offset_label">
+							Décalage
+						</text>
+						<text name="labelBumpyOffsetU">
+							H
+						</text>
+						<text name="labelBumpyOffsetU">
+							V
+						</text>
+					</panel>	<!-- transforms_normal_offset -->
+					<panel name="transforms_normal_rotation">
+						<text name="transforms_normal_rotation_label">
+							Rotation
+						</text>
+					</panel>    <!-- transforms_normal_rotation -->
+				</panel>    <!-- panel_blinn_phong_normal -->
+				<panel label="Spéculaire" name="panel_blinn_phong_specular">
+					<panel name="transforms_specular_scale">
+						<text name="transforms_specular_scale_label">
+							Échelle
+						</text>
+						<text name="labelShinyScaleU">
+							H
+						</text>
+						<button name="flipTextureScaleSU" tool_tip="Pivoter"/>
+						<text name="labelShinyScaleV">
+							V
+						</text>
+						<button name="flipTextureScaleSV" tool_tip="Pivoter"/>
+					</panel>	<!-- transforms_specular_scale -->
+					<panel name="transforms_specular_offset">
+						<text name="transforms_specular_offset_label">
+							Décalage
+						</text>
+						<text name="labelShinyOffsetU">
+							H
+						</text>
+						<text name="labelShinyOffsetV">
+							V
+						</text>
+					</panel>	<!-- transforms_specular_offset -->
+					<panel name="transforms_specular_rotation">
+						<text name="transforms_specular_rotation_label">
+							Rotation
+						</text>
+					</panel>    <!-- transforms_specular_rotation -->
+				</panel>    <!-- panel_blinn_phong_specular -->
+			</tab_container>  <!-- tabs_blinn_phong_uvs -->
+		</panel> <!-- panel_material_type_blinn_phong -->
+		<panel label="Media" name="panel_material_type_media">
+			<text name="media_info">
+				L'URL du média choisi, s'il y en a un, va ici
+			</text>
+			<button name="add_media" label="Choisir..." tool_tip="Ajouter un média"/>
+			<button name="delete_media" label="Supprimer" tool_tip="Supprimer cette texture de média"/>
+			<button name="button align" label="Aligner" label_selected="Aligner le média" tool_tip="Aligner la texture du media (doit être chargé en premier)"/>
+		</panel> <!-- panel_material_type_media -->
+	</tab_container>  <!-- tabs_material_type -->
+	<panel name="panel_face_params">
+		<spinner name="rptctrl" label="Répétitions / mètre"/>
+		<check_box label="Synchroniser les matériaux" name="checkbox_sync_settings" tool_tip="Synchronisation des paramètres de la carte de texture"/>
+		<check_box label="Aligner les faces planaires" name="checkbox planar align" tool_tip="Aligne les textures de toutes les faces sélectionnées sur la dernière face sélectionnée. Nécessite un mappage planaire des textures."/>
+		<text name="tex gen">
+			Mapping
+		</text>
+		<combo_box name="combobox texgen">
+			<combo_box.item label="Défaut" name="Default"/>
+			<combo_box.item label="Planaire" name="Planar"/>
+		</combo_box>
+		<button label="Aligner" name="button align textures" tool_tip="Aligne les couches de texture présentes"/>
+	</panel>   <!-- panel_face_params -->
+	<button name="copy_face_btn" tool_tip="Copier les paramètres de texture dans le presse-papiers"/>
+	<button name="paste_face_btn" tool_tip="Coller les paramètres de texture à partir du presse-papiers"/>
+	<spinner label="Lueur" name="glow"/>
+
+</panel>    <!-- Texture -->
