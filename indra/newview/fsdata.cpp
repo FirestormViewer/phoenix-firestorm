@@ -259,7 +259,7 @@ static void downloadCompleteScript(LLSD const &aData, std::string const &aURL, s
 	LLXMLNodePtr xml_root;
 	std::string stringData;
 	stringData.assign( rawData.begin(), rawData.end() ); // LLXMLNode::parseBuffer wants a U8*, not a const U8*, so need to copy here just to be safe
-	if ( (!LLXMLNode::parseBuffer(stringData.c_str(), stringData.size(), xml_root, NULL)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")))
+	if ( (!LLXMLNode::parseBuffer( reinterpret_cast< U8*> ( &stringData[0] ), stringData.size(), xml_root, NULL)) || (xml_root.isNull()) || (!xml_root->hasName("script_library")) )
 	{
 		LL_WARNS("fsdata") << "Could not read the script library data from "<< aURL << LL_ENDL;
 		return;
