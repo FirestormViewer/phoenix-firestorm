@@ -5695,6 +5695,14 @@ LOD-Faktor >4: Nur in Ausnahmefällen verwenden. Wird beim Neustart zurückgeset
 LOD-Faktor >8: Hat keinen echten Effekt. Kann Fehler verursachen.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="OverrideVRAMWarning">
+		WARNUNG: Das Übersteuern der VRAM-Erkennung kann Instabilitäten verursachen.
+
+Die meisten Benutzer sollten diese Einstellung deaktiviert und dem Viewer sowie Betriebssystem den korrekten Wert ermitteln lassen.
+
+Diese Einstellung ist für den Fall gedacht, wenn die VRAM-Erkennung inkorrekte Ergebnisse liefert. Bitte mit Vorsicht verwenden und im Zweifel Hilfe beim Support erfragen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="CurrencyURIOverrideReceived">
 Diese Region hat sich dazu entschieden, das Währungsportal eines Drittanbieters zu nutzen.
 Bitte beachten Sie, dass es sich bei Käufen von Währung innerhalb des Firestorm Viewers um Transaktionen zwischen Ihnen (dem Nutzer) und den Anbietern oder Verkäufern der Währung handelt.

@@ -92,7 +92,7 @@
 			<text name="advanced_settings">
 				Paramètres avancés (redémarrage requis) :
 			</text>
-			<check_box label="Ignorer la détection de la VRAM" name="FSDynamicTextureMemory" tool_tip="Permet à l'utilisateur d'ignorer la détection de VRAM (à utiliser avec une extrême prudence)"/>
+			<check_box label="Ignorer la détection de la VRAM" name="FSOverrideVRAMDetection" tool_tip="Permet à l'utilisateur d'ignorer la détection de VRAM (à utiliser avec une extrême prudence)"/>
 			<slider label="VRAM dédiée du GPU (Go) :" name="FSForcedVideoMemory" tool_tip="Important : à utiliser avec une extrême prudence.
 Ignorer la VRAM détectée sur votre GPU.
 Cela ne doit pas inclure la VRAM 'partagée' qui fait partie de la RAM du système.
