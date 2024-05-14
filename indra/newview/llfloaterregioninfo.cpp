@@ -1942,7 +1942,7 @@ bool LLPanelRegionTerrainInfo::sendUpdate()
     // Prevent applying unsupported alpha blend/double-sided materials
     if (!validateMaterials())
     {
-        return FALSE;
+        return false;
     }
 
 	// Check if terrain Elevation Ranges are correct

@@ -1172,7 +1172,7 @@ void LLPipeline::refreshCachedSettings()
     RenderScreenSpaceReflectionAdaptiveStepMultiplier = gSavedSettings.getF32("RenderScreenSpaceReflectionAdaptiveStepMultiplier");
     RenderScreenSpaceReflectionGlossySamples = gSavedSettings.getS32("RenderScreenSpaceReflectionGlossySamples");
 	RenderBufferVisualization = gSavedSettings.getS32("RenderBufferVisualization");
-    if (gSavedSettings.getBOOL("RenderMirrors") != (BOOL)RenderMirrors)
+    if (gSavedSettings.getBOOL("RenderMirrors") != RenderMirrors)
     {
         RenderMirrors = gSavedSettings.getBOOL("RenderMirrors");
         LLViewerShaderMgr::instance()->clearShaderCache();

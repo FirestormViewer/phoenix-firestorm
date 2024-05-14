@@ -733,7 +733,7 @@ bool LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
                     if (selectNode->mIndividualSelection)
                     {
                         // counter-translate child objects if we are moving the root as an individual
-                        object->resetChildrenPosition(old_position_local - new_position_local, TRUE);
+                        object->resetChildrenPosition(old_position_local - new_position_local, true);
                     }
                 }
                 else
@@ -1765,13 +1765,6 @@ void LLManipTranslate::highlightIntersection(LLVector3 normal,
 	{
 		shader->bind();
 	}
-
-	// <FS:Ansariel> Remove LL merge error
-	//if (shader)
-	//{
-	//	shader->bind();
-	//}
-	// </FS:Ansariel>
 
 	//draw volume/plane intersections
 	{

@@ -1822,7 +1822,7 @@ void LLEnvironment::update(const LLViewerCamera * cam)
                 shaders_iter->mUniformsDirty = true;
                 if (shaders_iter->mRiggedVariant)
                 {
-                    shaders_iter->mRiggedVariant->mUniformsDirty = TRUE;
+                    shaders_iter->mRiggedVariant->mUniformsDirty = true;
                 }
             }
         }
