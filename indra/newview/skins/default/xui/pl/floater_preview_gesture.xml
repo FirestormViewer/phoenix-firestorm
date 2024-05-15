@@ -55,6 +55,7 @@
 	<text name="options_text">
 		(opcje)
 	</text>
+	<check_box label="do puszczenia przycisku" name="wait_key_release_check" />
 	<check_box label="do końca animacji" name="wait_anim_check"/>
 	<check_box label="czas w sekundach:" name="wait_time_check"/>
 	<text name="help_label">
