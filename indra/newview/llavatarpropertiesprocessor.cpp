@@ -439,7 +439,7 @@ void LLAvatarPropertiesProcessor::processAvatarLegacyPropertiesReply(LLMessageSy
 
     LLDateUtil::dateFromPDTString(avatar_data.born_on, birth_date);
     // <FS:Ansariel> OpenSim
-    avatar_data.hide_age = true;
+    avatar_data.hide_age = false;
     // </FS:Ansariel>
     avatar_data.caption_index = 0;
 
