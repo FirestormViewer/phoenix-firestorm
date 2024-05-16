@@ -35,17 +35,17 @@
 
 namespace nd
 {
-	namespace exceptions
-	{
-		class xran
-		{
-			std::string mReason;
-		public:
-			xran( std::string const & );
-			
-			std::string const& what() const;
-		};
-	}
+    namespace exceptions
+    {
+        class xran
+        {
+            std::string mReason;
+        public:
+            xran( std::string const & );
+
+            std::string const& what() const;
+        };
+    }
 }
 
 #endif

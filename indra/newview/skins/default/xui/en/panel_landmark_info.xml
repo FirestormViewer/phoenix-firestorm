@@ -337,7 +337,7 @@
          height="22"
          layout="topleft"
          name="title_editor"
-         prevalidate_callback="ascii"
+         prevalidator="ascii"
          text_readonly_color="white"
          top_delta="0"
          right="-1" />

@@ -1,25 +1,25 @@
-/** 
+/**
  * @file llstatusbar.h
  * @brief LLStatusBar class definition
  *
  * $LicenseInfo:firstyear=2002&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -59,348 +59,348 @@ class LLPathfindingNavMeshStatus;
 class LLRegionDetails
 {
 public:
-	LLRegionDetails() :
-		mRegionName("Unknown"),
-		mParcelName("Unknown"),
-		mAccessString("Unknown"),
-		mX(0),
-		mY(0),
-		mZ(0),
-		mArea (0),
-		mForSale(FALSE),
-		mOwner("Unknown"),
-		mTraffic(0),
-		mBalance(0),
-		mPing(0)
-	{
-	}
-	std::string mRegionName;
-	std::string	mParcelName;
-	std::string	mAccessString;
-	S32		mX;
-	S32		mY;
-	S32		mZ;
-	S32		mArea;
-	BOOL	mForSale;
-	std::string	mOwner;
-	F32		mTraffic;
-	S32		mBalance;
-	std::string mTime;
-	U32		mPing;
+    LLRegionDetails() :
+        mRegionName("Unknown"),
+        mParcelName("Unknown"),
+        mAccessString("Unknown"),
+        mX(0),
+        mY(0),
+        mZ(0),
+        mArea (0),
+        mForSale(FALSE),
+        mOwner("Unknown"),
+        mTraffic(0),
+        mBalance(0),
+        mPing(0)
+    {
+    }
+    std::string mRegionName;
+    std::string mParcelName;
+    std::string mAccessString;
+    S32     mX;
+    S32     mY;
+    S32     mZ;
+    S32     mArea;
+    BOOL    mForSale;
+    std::string mOwner;
+    F32     mTraffic;
+    S32     mBalance;
+    std::string mTime;
+    U32     mPing;
 };
 
 namespace ll
 {
-	namespace statusbar
-	{
-		struct SearchData;
-	}
+    namespace statusbar
+    {
+        struct SearchData;
+    }
 }
 class LLStatusBar
-:	public LLPanel
+:   public LLPanel
 {
 public:
-	LLStatusBar(const LLRect& rect );
-	/*virtual*/ ~LLStatusBar();
-	
-	/*virtual*/ void draw();
+    LLStatusBar(const LLRect& rect );
+    /*virtual*/ ~LLStatusBar();
 
-	/*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
-	/*virtual*/ BOOL postBuild();
+    /*virtual*/ void draw();
 
-	// MANIPULATORS
-	void		setBalance(S32 balance);
-	void		debitBalance(S32 debit);
-	void		creditBalance(S32 credit);
+    /*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+    /*virtual*/ BOOL postBuild();
 
-	// Request the latest currency balance from the server
-	static void sendMoneyBalanceRequest();
+    // MANIPULATORS
+    void        setBalance(S32 balance);
+    void        debitBalance(S32 debit);
+    void        creditBalance(S32 credit);
 
-	void		setHealth(S32 percent);
+    // Request the latest currency balance from the server
+    static void sendMoneyBalanceRequest();
 
-	void setLandCredit(S32 credit);
-	void setLandCommitted(S32 committed);
+    void        setHealth(S32 percent);
 
-	void		refresh();
-	void setVisibleForMouselook(bool visible);
-		// some elements should hide in mouselook
+    void setLandCredit(S32 credit);
+    void setLandCommitted(S32 committed);
 
-	/**
-	 * Updates location and parcel icons on login complete
-	 */
-	void handleLoginComplete();
+    void        refresh();
+    void setVisibleForMouselook(bool visible);
+        // some elements should hide in mouselook
 
-	// ACCESSORS
-	S32			getBalance() const;
-	S32			getHealth() const;
+    /**
+     * Updates location and parcel icons on login complete
+     */
+    void handleLoginComplete();
 
-	BOOL isUserTiered() const;
-	S32 getSquareMetersCredit() const;
-	S32 getSquareMetersCommitted() const;
-	S32 getSquareMetersLeft() const;
-	LLRegionDetails mRegionDetails;
+    // ACCESSORS
+    S32         getBalance() const;
+    S32         getHealth() const;
 
-	LLPanelNearByMedia* getNearbyMediaPanel() { return mPanelNearByMedia; }
-	BOOL getAudioStreamEnabled() const;
-	
-	void setBackgroundColor( const LLColor4& color );
+    BOOL isUserTiered() const;
+    S32 getSquareMetersCredit() const;
+    S32 getSquareMetersCommitted() const;
+    S32 getSquareMetersLeft() const;
+    LLRegionDetails mRegionDetails;
 
-	// <FS:Zi> External toggles for media and streams
-	void toggleMedia(bool enable);
-	void toggleStream(bool enable);
-	// </FS:Zi>
-	
-	void showBalance(bool show);	// <FS:CR> Hide currency balance in snapshots
+    LLPanelNearByMedia* getNearbyMediaPanel() { return mPanelNearByMedia; }
+    BOOL getAudioStreamEnabled() const;
 
-	// <COLOSI opensim multi-currency support>
-	// force update of the "BUY L$" button when currency symbol is changed.
-	void updateCurrencySymbols();
-	// </COLOSI opensim multi-currency support>
+    void setBackgroundColor( const LLColor4& color );
 
-	// <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
-	void onTimeFormatChanged(const std::string& format);
+    // <FS:Zi> External toggles for media and streams
+    void toggleMedia(bool enable);
+    void toggleStream(bool enable);
+    // </FS:Zi>
+
+    void showBalance(bool show);    // <FS:CR> Hide currency balance in snapshots
+
+    // <COLOSI opensim multi-currency support>
+    // force update of the "BUY L$" button when currency symbol is changed.
+    void updateCurrencySymbols();
+    // </COLOSI opensim multi-currency support>
+
+    // <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
+    void onTimeFormatChanged(const std::string& format);
 
 private:
-	
-	void onClickBuyCurrency();
-	void onVolumeChanged(const LLSD& newvalue);
+
+    void onClickBuyCurrency();
+    void onVolumeChanged(const LLSD& newvalue);
     //void onVoiceChanged(const LLSD& newvalue); // <FS:Ansariel> Fix LL voice disabled on 2nd instance nonsense
 
-	void onMouseEnterPresetsCamera();
-	void onMouseEnterPresets();
-	void onMouseEnterVolume();
-	void onMouseEnterNearbyMedia();
+    void onMouseEnterPresetsCamera();
+    void onMouseEnterPresets();
+    void onMouseEnterVolume();
+    void onMouseEnterNearbyMedia();
 
-	static void onClickStreamToggle(void* data);		// <FS:Zi> Media/Stream separation
-	static void onClickMediaToggle(void* data);
-	static void onClickVolume(void* data); // <FS:Ansariel> Open popup panels on click if FSStatusBarMenuButtonPopupOnRollover is disabled
+    static void onClickStreamToggle(void* data);        // <FS:Zi> Media/Stream separation
+    static void onClickMediaToggle(void* data);
+    static void onClickVolume(void* data); // <FS:Ansariel> Open popup panels on click if FSStatusBarMenuButtonPopupOnRollover is disabled
 
-	static void onClickBalance(void* data);
+    static void onClickBalance(void* data);
 
-	LLSearchEditor *mFilterEdit;
-	LLPanel *mSearchPanel;
-	void onUpdateFilterTerm();
+    LLSearchEditor *mFilterEdit;
+    LLPanel *mSearchPanel;
+    void onUpdateFilterTerm();
 
-	std::unique_ptr< ll::statusbar::SearchData > mSearchData;
-	void collectSearchableItems();
-	void updateMenuSearchVisibility( const LLSD& data );
-	void updateMenuSearchPosition(); // depends onto balance position
-	void updateBalancePanelPosition();
-	
-	class LLParcelChangeObserver;
+    std::unique_ptr< ll::statusbar::SearchData > mSearchData;
+    void collectSearchableItems();
+    void updateMenuSearchVisibility( const LLSD& data );
+    void updateMenuSearchPosition(); // depends onto balance position
+    void updateBalancePanelPosition();
 
-	friend class LLParcelChangeObserver;
+    class LLParcelChangeObserver;
 
-	// <FS:Ansariel> This enum also defines the order of visibility in the
-	//               status bar in reverse order!
-	enum EParcelIcon
-	{
-		VOICE_ICON = 0,
-		FLY_ICON,
-		PUSH_ICON,
-		BUILD_ICON,
-		SCRIPTS_ICON,
-		SEE_AVATARS_ICON,
-		PATHFINDING_DIRTY_ICON,
-		PATHFINDING_DISABLED_ICON,
-		DAMAGE_ICON,
-		ICON_COUNT
-	};
+    friend class LLParcelChangeObserver;
 
-	/**
-	 * Initializes parcel icons controls. Called from the constructor.
-	 */
-	void initParcelIcons();
+    // <FS:Ansariel> This enum also defines the order of visibility in the
+    //               status bar in reverse order!
+    enum EParcelIcon
+    {
+        VOICE_ICON = 0,
+        FLY_ICON,
+        PUSH_ICON,
+        BUILD_ICON,
+        SCRIPTS_ICON,
+        SEE_AVATARS_ICON,
+        PATHFINDING_DIRTY_ICON,
+        PATHFINDING_DISABLED_ICON,
+        DAMAGE_ICON,
+        ICON_COUNT
+    };
 
-	/**
-	 * Handles clicks on the parcel icons.
-	 */
-	void onParcelIconClick(EParcelIcon icon);
+    /**
+     * Initializes parcel icons controls. Called from the constructor.
+     */
+    void initParcelIcons();
 
-	/**
-	 * Handles clicks on the info buttons.
-	 */
-	void onInfoButtonClicked();
-	
-	// <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
-	/**
-	 * Handles clicks on the connection status indicator.
-	 */
-	void onBandwidthGraphButtonClicked();
-	// </FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
+    /**
+     * Handles clicks on the parcel icons.
+     */
+    void onParcelIconClick(EParcelIcon icon);
 
-	/**
-	 * Called when agent changes the parcel.
-	 */
-	void onAgentParcelChange();
+    /**
+     * Handles clicks on the info buttons.
+     */
+    void onInfoButtonClicked();
 
-	/**
-	 * Called when context menu item is clicked.
-	 */
-	void onContextMenuItemClicked(const LLSD::String& userdata);
+    // <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
+    /**
+     * Handles clicks on the connection status indicator.
+     */
+    void onBandwidthGraphButtonClicked();
+    // </FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
 
-	/**
-	 * Called when user checks/unchecks Show Paracel Properies menu item
-	 */
-	void onNavBarShowParcelPropertiesCtrlChanged();
+    /**
+     * Called when agent changes the parcel.
+     */
+    void onAgentParcelChange();
 
-	/**
-	 * Called when user checks/unchecks Show Coordinates menu item.
-	 */
-	void onNavBarShowCoordinatesCtrlChanged();
+    /**
+     * Called when context menu item is clicked.
+     */
+    void onContextMenuItemClicked(const LLSD::String& userdata);
 
-	/**
-	 * Shorthand to call updateParcelInfoText() and updateParcelIcons().
-	 */
-	void update();
+    /**
+     * Called when user checks/unchecks Show Paracel Properies menu item
+     */
+    void onNavBarShowParcelPropertiesCtrlChanged();
 
-	/**
-	 * Updates parcel info text (mParcelInfoText).
-	 */
-	void updateParcelInfoText();
+    /**
+     * Called when user checks/unchecks Show Coordinates menu item.
+     */
+    void onNavBarShowCoordinatesCtrlChanged();
 
-	/**
-	 * Updates the visibility state of the parcel icons according to parcel properties
-	 */
-	 // <FS:Ansariel> Does not exist 15-02-2021
-	//void updateParcelIconVisibility();
+    /**
+     * Shorthand to call updateParcelInfoText() and updateParcelIcons().
+     */
+    void update();
 
-	void onBuyLandClicked();
+    /**
+     * Updates parcel info text (mParcelInfoText).
+     */
+    void updateParcelInfoText();
 
-	// <FS:Ansariel> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
-	void onPopupRolloverChanged(const LLSD& newvalue);
+    /**
+     * Updates the visibility state of the parcel icons according to parcel properties
+     */
+     // <FS:Ansariel> Does not exist 15-02-2021
+    //void updateParcelIconVisibility();
 
-	// <FS:Ansariel> FIRE-14482: Show FPS in status bar
-	void onShowFPSChanged(const LLSD& newvalue);
+    void onBuyLandClicked();
 
-	/**
-	 * Updates parcel panel pos (mParcelPanel).
-	 */
-	void updateParcelPanel();
+    // <FS:Ansariel> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
+    void onPopupRolloverChanged(const LLSD& newvalue);
 
-	/**
-	 * Updates health information (mDamageText).
-	 */
-	void updateHealth();
+    // <FS:Ansariel> FIRE-14482: Show FPS in status bar
+    void onShowFPSChanged(const LLSD& newvalue);
 
-	/**
-	 * Lays out all parcel icons starting from right edge of the mParcelInfoText + 11px
-	 * (see screenshots in EXT-5808 for details).
-	 */
-	void layoutParcelIcons();
+    /**
+     * Updates parcel panel pos (mParcelPanel).
+     */
+    void updateParcelPanel();
 
-	/**
-	 * Lays out a widget. Widget's rect mLeft becomes equal to the 'left' argument.
-	 */
-	S32 layoutWidget(LLUICtrl* ctrl, S32 left);
+    /**
+     * Updates health information (mDamageText).
+     */
+    void updateHealth();
 
-	/**
-	 * Generates location string and returns it in the loc_str parameter.
-	 */
-	void buildLocationString(std::string& loc_str, bool show_coords);
+    /**
+     * Lays out all parcel icons starting from right edge of the mParcelInfoText + 11px
+     * (see screenshots in EXT-5808 for details).
+     */
+    void layoutParcelIcons();
 
-	/**
-	 * Sets new value to the mParcelInfoText and updates the size of the top bar.
-	 */
-	void setParcelInfoText(const std::string& new_text);
+    /**
+     * Lays out a widget. Widget's rect mLeft becomes equal to the 'left' argument.
+     */
+    S32 layoutWidget(LLUICtrl* ctrl, S32 left);
 
-	void updateNetstatVisibility(const LLSD& data);
-	void updateVolumeControlsVisibility(const LLSD& data); // <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
+    /**
+     * Generates location string and returns it in the loc_str parameter.
+     */
+    void buildLocationString(std::string& loc_str, bool show_coords);
+
+    /**
+     * Sets new value to the mParcelInfoText and updates the size of the top bar.
+     */
+    void setParcelInfoText(const std::string& new_text);
+
+    void updateNetstatVisibility(const LLSD& data);
+    void updateVolumeControlsVisibility(const LLSD& data); // <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
 
 public:
 
-	/**
-	 * Updates parcel icons (mParcelIcon[]).
-	 */
-	void updateParcelIcons();
+    /**
+     * Updates parcel icons (mParcelIcon[]).
+     */
+    void updateParcelIcons();
 
-	void setRebakeStuck(bool stuck) { mRebakeStuck = stuck;} // <FS:LO> FIRE-7639 - Stop the blinking after a while
+    void setRebakeStuck(bool stuck) { mRebakeStuck = stuck;} // <FS:LO> FIRE-7639 - Stop the blinking after a while
 
 private:
-	LLTextBox	*mTextBalance;
-	LLTextBox	*mTextHealth;
-	LLTextBox	*mTextTime;
-	LLTextBox	*mFPSText; // <FS:Ansariel> FIRE-14482: Show FPS in status bar
+    LLTextBox   *mTextBalance;
+    LLTextBox   *mTextHealth;
+    LLTextBox   *mTextTime;
+    LLTextBox   *mFPSText; // <FS:Ansariel> FIRE-14482: Show FPS in status bar
 
-	LLTextBox*	mTextParcelName;
+    LLTextBox*  mTextParcelName;
 
-	LLStatGraph *mSGBandwidth;
-	LLStatGraph *mSGPacketLoss;
+    LLStatGraph *mSGBandwidth;
+    LLStatGraph *mSGPacketLoss;
 
-	LLButton	*mIconPresetsCamera;
-	LLButton	*mIconPresetsGraphic;
-	LLButton	*mBtnVolume;
-	LLTextBox	*mBoxBalance;
-	LLButton	*mStreamToggle;		// ## Zi: Media/Stream separation
-	LLButton	*mMediaToggle;
-	LLButton	*mBandwidthButton; // <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
-	// <FS:Ansariel> Script debug
-	LLIconCtrl	*mScriptOut;
-	// </FS:Ansariel> Script debug
-	LLFrameTimer	mClockUpdateTimer;
-	LLFrameTimer	mFPSUpdateTimer; // <FS:Ansariel> FIRE-14482: Show FPS in status bar
-	LLFrameTimer	mNetStatUpdateTimer; // <FS:Ansariel> Less frequent update of net stats
+    LLButton    *mIconPresetsCamera;
+    LLButton    *mIconPresetsGraphic;
+    LLButton    *mBtnVolume;
+    LLTextBox   *mBoxBalance;
+    LLButton    *mStreamToggle;     // ## Zi: Media/Stream separation
+    LLButton    *mMediaToggle;
+    LLButton    *mBandwidthButton; // <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
+    // <FS:Ansariel> Script debug
+    LLIconCtrl  *mScriptOut;
+    // </FS:Ansariel> Script debug
+    LLFrameTimer    mClockUpdateTimer;
+    LLFrameTimer    mFPSUpdateTimer; // <FS:Ansariel> FIRE-14482: Show FPS in status bar
+    LLFrameTimer    mNetStatUpdateTimer; // <FS:Ansariel> Less frequent update of net stats
 
-	S32				mVolumeIconsWidth; // <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
-	S32				mBalance;
-	S32				mHealth;
-	S32				mSquareMetersCredit;
-	S32				mSquareMetersCommitted;
-	BOOL			mAudioStreamEnabled;
-	BOOL			mShowParcelIcons;
-	LLFrameTimer*	mBalanceTimer;
-	LLFrameTimer*	mHealthTimer;
-	LLPanelPresetsCameraPulldown* mPanelPresetsCameraPulldown;
-	LLPanelPresetsPulldown* mPanelPresetsPulldown;
-	LLPanelVolumePulldown* mPanelVolumePulldown;
-	LLPanelNearByMedia*	mPanelNearByMedia;
-	
-	LLPanel* 				mParcelInfoPanel;
-	LLButton* 				mInfoBtn;
-	LLTextBox* 				mParcelInfoText;
-	LLTextBox* 				mDamageText;
-	LLIconCtrl*				mParcelIcon[ICON_COUNT];
-	LLParcelChangeObserver*	mParcelChangedObserver;
-	LLPanel*				mBalancePanel;
-	LLButton*				mBuyParcelBtn;
-	LLPanel*				mTimeMediaPanel;
+    S32             mVolumeIconsWidth; // <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
+    S32             mBalance;
+    S32             mHealth;
+    S32             mSquareMetersCredit;
+    S32             mSquareMetersCommitted;
+    BOOL            mAudioStreamEnabled;
+    BOOL            mShowParcelIcons;
+    LLFrameTimer*   mBalanceTimer;
+    LLFrameTimer*   mHealthTimer;
+    LLPanelPresetsCameraPulldown* mPanelPresetsCameraPulldown;
+    LLPanelPresetsPulldown* mPanelPresetsPulldown;
+    LLPanelVolumePulldown* mPanelVolumePulldown;
+    LLPanelNearByMedia* mPanelNearByMedia;
 
-	boost::signals2::connection	mParcelPropsCtrlConnection;
-	boost::signals2::connection	mShowCoordsCtrlConnection;
-	boost::signals2::connection	mParcelMgrConnection;
+    LLPanel*                mParcelInfoPanel;
+    LLButton*               mInfoBtn;
+    LLTextBox*              mParcelInfoText;
+    LLTextBox*              mDamageText;
+    LLIconCtrl*             mParcelIcon[ICON_COUNT];
+    LLParcelChangeObserver* mParcelChangedObserver;
+    LLPanel*                mBalancePanel;
+    LLButton*               mBuyParcelBtn;
+    LLPanel*                mTimeMediaPanel;
 
-	// <FS:Ansariel> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
-	boost::signals2::connection mMouseEnterPresetsConnection;
-	boost::signals2::connection mMouseEnterPresetsCameraConnection;
-	boost::signals2::connection mMouseEnterVolumeConnection;
-	boost::signals2::connection mMouseEnterNearbyMediaConnection;
-	// </FS:Ansariel>
+    boost::signals2::connection mParcelPropsCtrlConnection;
+    boost::signals2::connection mShowCoordsCtrlConnection;
+    boost::signals2::connection mParcelMgrConnection;
 
-	// <FS:Zi> Pathfinding rebake functions
-	BOOL			rebakeRegionCallback(const LLSD& notification,const LLSD& response);
+    // <FS:Ansariel> FIRE-19697: Add setting to disable graphics preset menu popup on mouse over
+    boost::signals2::connection mMouseEnterPresetsConnection;
+    boost::signals2::connection mMouseEnterPresetsCameraConnection;
+    boost::signals2::connection mMouseEnterVolumeConnection;
+    boost::signals2::connection mMouseEnterNearbyMediaConnection;
+    // </FS:Ansariel>
 
-	LLFrameTimer	mRebakingTimer;
-	BOOL			mPathfindingFlashOn;
-	// </FS:Zi>
+    // <FS:Zi> Pathfinding rebake functions
+    BOOL            rebakeRegionCallback(const LLSD& notification,const LLSD& response);
 
-	// <FS:Ansariel> Script debug
-	BOOL			mNearbyIcons;
+    LLFrameTimer    mRebakingTimer;
+    BOOL            mPathfindingFlashOn;
+    // </FS:Zi>
 
-	bool	mRebakeStuck; // <FS:LO> FIRE-7639 - Stop the blinking after a while
+    // <FS:Ansariel> Script debug
+    BOOL            mNearbyIcons;
+
+    bool    mRebakeStuck; // <FS:LO> FIRE-7639 - Stop the blinking after a while
 
 // <FS:Zi> Make hovering over parcel info actually work
-	void	onMouseEnterParcelInfo();
-	void	onMouseLeaveParcelInfo();
+    void    onMouseEnterParcelInfo();
+    void    onMouseLeaveParcelInfo();
 // </FS:Zi>
 
 // <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
-	std::map<std::string, std::string> mClockFormatChoices;
-	std::string mClockFormat;
+    std::map<std::string, std::string> mClockFormatChoices;
+    std::string mClockFormat;
 
-	void	updateClockDisplay();
+    void    updateClockDisplay();
 // </FS:Zi>
 
-	std::string mCurrentLocationString;
+    std::string mCurrentLocationString;
 };
 
 // *HACK: Status bar owns your cached money balance. JC

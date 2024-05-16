@@ -442,10 +442,20 @@ label_skip_start_menu:
 
 # Other shortcuts
 SetOutPath "$INSTDIR"
-CreateShortCut "$DESKTOP\$INSTSHORTCUT.lnk" \
+
+Push $0
+${GetParameters} $COMMANDLINE
+${GetOptionsS} $COMMANDLINE "/marker" $0
+# Returns error if option does not exist
+IfErrors 0 DESKTOP_SHORTCUT_DONE
+  # "/marker" is set by updater, do not recreate desktop shortcut
+  CreateShortCut "$DESKTOP\$INSTSHORTCUT.lnk" \
         "$INSTDIR\$VIEWER_EXE" "$SHORTCUT_LANG_PARAM"
         # <FS:Ansariel> Remove VMP
         #"$INSTDIR\$VIEWER_EXE" "$SHORTCUT_LANG_PARAM" "$INSTDIR\$VIEWER_EXE"
+
+DESKTOP_SHORTCUT_DONE:
+Pop $0
 CreateShortCut "$INSTDIR\$INSTSHORTCUT.lnk" \
         "$INSTDIR\$VIEWER_EXE" "$SHORTCUT_LANG_PARAM"
         # <FS:Ansariel> Remove VMP

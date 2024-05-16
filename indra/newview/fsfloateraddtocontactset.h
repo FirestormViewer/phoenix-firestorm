@@ -39,24 +39,24 @@
 class FSFloaterAddToContactSet : public LLFloater
 {
 public:
-	FSFloaterAddToContactSet(const LLSD& target);
-	BOOL postBuild();
-	
+    FSFloaterAddToContactSet(const LLSD& target);
+    BOOL postBuild();
+
 private:
-	~FSFloaterAddToContactSet();
-	void onClickAdd();
-	void onClickCancel();
-	void onClickAddSet();
-	void populateContactSets();
-	
-	void updateSets(LGGContactSets::EContactSetUpdate type);
-	boost::signals2::connection mContactSetChangedConnection;
-	
-	bool mHasMultipleAgents;
-	LLUUID mAgentID;
-	uuid_vec_t mAgentIDs;
-	
-	LLComboBox* mContactSetsCombo;
+    ~FSFloaterAddToContactSet();
+    void onClickAdd();
+    void onClickCancel();
+    void onClickAddSet();
+    void populateContactSets();
+
+    void updateSets(LGGContactSets::EContactSetUpdate type);
+    boost::signals2::connection mContactSetChangedConnection;
+
+    bool mHasMultipleAgents;
+    LLUUID mAgentID;
+    uuid_vec_t mAgentIDs;
+
+    LLComboBox* mContactSetsCombo;
 };
 
 #endif // FS_FLOATERADDTOCONTACTSET_H

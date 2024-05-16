@@ -347,7 +347,7 @@ private: // </FS:ND>
 
     LLPublishClassifiedFloater* mPublishFloater;
 
-    S32 getClassifiedFee();	// <FS:CR> FIRE-9814 - Don't hardcode a classified listing fee
+    S32 getClassifiedFee(); // <FS:CR> FIRE-9814 - Don't hardcode a classified listing fee
 };
 
 #endif // LL_PANELPROFILECLASSIFIEDS_H

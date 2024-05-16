@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -40,88 +40,88 @@ class FSScrollListCtrl;
 
 class FSStreamTitleManager : public LLSingleton<FSStreamTitleManager>
 {
-	LLSINGLETON_EMPTY_CTOR(FSStreamTitleManager);
+    LLSINGLETON_EMPTY_CTOR(FSStreamTitleManager);
 
 public:
-	~FSStreamTitleManager();
+    ~FSStreamTitleManager();
 
-	using history_vec_t = std::vector<std::string>;
+    using history_vec_t = std::vector<std::string>;
 
-	using streamtitle_update_callback_t = boost::signals2::signal<void(std::string_view streamtitle)>;
-	boost::signals2::connection setUpdateCallback(const streamtitle_update_callback_t::slot_type& cb) noexcept
-	{
-		return mUpdateSignal.connect(cb);
-	}
+    using streamtitle_update_callback_t = boost::signals2::signal<void(std::string_view streamtitle)>;
+    boost::signals2::connection setUpdateCallback(const streamtitle_update_callback_t::slot_type& cb) noexcept
+    {
+        return mUpdateSignal.connect(cb);
+    }
 
-	using streamtitle_history_update_callback_t = boost::signals2::signal<void(const history_vec_t& streamtitle_history)>;
-	boost::signals2::connection setHistoryUpdateCallback(const streamtitle_history_update_callback_t::slot_type& cb) noexcept
-	{
-		return mHistoryUpdateSignal.connect(cb);
-	}
+    using streamtitle_history_update_callback_t = boost::signals2::signal<void(const history_vec_t& streamtitle_history)>;
+    boost::signals2::connection setHistoryUpdateCallback(const streamtitle_history_update_callback_t::slot_type& cb) noexcept
+    {
+        return mHistoryUpdateSignal.connect(cb);
+    }
 
-	std::string getCurrentStreamTitle() const noexcept { return mCurrentStreamTitle; }
-	const history_vec_t& getStreamTitleHistory() const noexcept { return mStreamTitleHistory; }
+    std::string getCurrentStreamTitle() const noexcept { return mCurrentStreamTitle; }
+    const history_vec_t& getStreamTitleHistory() const noexcept { return mStreamTitleHistory; }
 
 protected:
-	void initSingleton() override;
-	void processMetadataUpdate(const LLSD& metadata) noexcept;
+    void initSingleton() override;
+    void processMetadataUpdate(const LLSD& metadata) noexcept;
 
-	boost::signals2::connection mMetadataUpdateConnection;
-	streamtitle_update_callback_t mUpdateSignal;
-	streamtitle_history_update_callback_t mHistoryUpdateSignal;
+    boost::signals2::connection mMetadataUpdateConnection;
+    streamtitle_update_callback_t mUpdateSignal;
+    streamtitle_history_update_callback_t mHistoryUpdateSignal;
 
-	std::string mCurrentStreamTitle{};
-	history_vec_t mStreamTitleHistory{};
+    std::string mCurrentStreamTitle{};
+    history_vec_t mStreamTitleHistory{};
 };
 
 class FSFloaterStreamTitleHistory : public LLFloater
 {
 public:
-	FSFloaterStreamTitleHistory(const LLSD& key);
-	virtual ~FSFloaterStreamTitleHistory();
+    FSFloaterStreamTitleHistory(const LLSD& key);
+    virtual ~FSFloaterStreamTitleHistory();
 
-	BOOL postBuild() override;
-	void draw() override;
-	void setOwnerOrigin(LLView* owner) noexcept;
+    BOOL postBuild() override;
+    void draw() override;
+    void setOwnerOrigin(LLView* owner) noexcept;
 
 protected:
-	void updateHistory(const FSStreamTitleManager::history_vec_t& history);
+    void updateHistory(const FSStreamTitleManager::history_vec_t& history);
 
-	FSScrollListCtrl* mHistoryCtrl{ nullptr };
+    FSScrollListCtrl* mHistoryCtrl{ nullptr };
 
-	boost::signals2::connection mUpdateConnection{};
+    boost::signals2::connection mUpdateConnection{};
 
-	LLHandle<LLView> mOwner{};
-	F32 mContextConeOpacity{ 0.f };
+    LLHandle<LLView> mOwner{};
+    F32 mContextConeOpacity{ 0.f };
 };
 
 class FSFloaterStreamTitle : public LLFloater, LLEventTimer
 {
 public:
-	FSFloaterStreamTitle(const LLSD& key);
-	virtual ~FSFloaterStreamTitle();
+    FSFloaterStreamTitle(const LLSD& key);
+    virtual ~FSFloaterStreamTitle();
 
-	BOOL postBuild() override;
-	void reshape(S32 width, S32 height, BOOL called_from_parent = TRUE) override;
+    BOOL postBuild() override;
+    void reshape(S32 width, S32 height, BOOL called_from_parent = TRUE) override;
 
 private:
-	BOOL tick() override;
+    BOOL tick() override;
 
-	void updateStreamTitle(std::string_view streamtitle) noexcept;
-	void toggleHistory() noexcept;
-	void closeHistory() noexcept;
-	void checkTitleWidth() noexcept;
+    void updateStreamTitle(std::string_view streamtitle) noexcept;
+    void toggleHistory() noexcept;
+    void closeHistory() noexcept;
+    void checkTitleWidth() noexcept;
 
-	LLButton* mHistoryBtn{ nullptr };
-	LLTextBox* mTitletext{ nullptr };
+    LLButton* mHistoryBtn{ nullptr };
+    LLTextBox* mTitletext{ nullptr };
 
-	LLHandle<LLFloater> mHistory{};
+    LLHandle<LLFloater> mHistory{};
 
-	boost::signals2::connection mUpdateConnection{};
+    boost::signals2::connection mUpdateConnection{};
 
-	std::string mCurrentTitle{};
-	std::string mCurrentDrawnTitle{};
-	bool mResetTitle{ false };
+    std::string mCurrentTitle{};
+    std::string mCurrentDrawnTitle{};
+    bool mResetTitle{ false };
 
 };
 

@@ -45,7 +45,7 @@
 // LLNearbyChatBarListener::LLNearbyChatBarListener(LLNearbyChatBar & chatbar)
 //  : LLEventAPI("LLChatBar",
 //               "LLChatBar listener to (e.g.) sendChat, etc."),
-//	mChatbar(chatbar)
+//  mChatbar(chatbar)
 FSNearbyChatBarListener::FSNearbyChatBarListener()
   : LLEventAPI("LLChatBar",
                "LLChatBar listener to (e.g.) sendChat, etc.")
@@ -55,7 +55,7 @@ FSNearbyChatBarListener::FSNearbyChatBarListener()
         "Send chat to the simulator:\n"
         "[\"message\"] chat message text [required]\n"
         "[\"channel\"] chat channel number [default = 0]\n"
-		"[\"type\"] chat type \"whisper\", \"normal\", \"shout\" [default = \"normal\"]",
+        "[\"type\"] chat type \"whisper\", \"normal\", \"shout\" [default = \"normal\"]",
         &FSNearbyChatBarListener::sendChat);
 }
 
@@ -63,48 +63,48 @@ FSNearbyChatBarListener::FSNearbyChatBarListener()
 // "sendChat" command
 void FSNearbyChatBarListener::sendChat(LLSD const & chat_data) const
 {
-	// Extract the data
-	std::string chat_text = chat_data["message"].asString();
+    // Extract the data
+    std::string chat_text = chat_data["message"].asString();
 
-	S32 channel = 0;
-	if (chat_data.has("channel"))
-	{
-		channel = chat_data["channel"].asInteger();
-		if (channel < 0 || channel >= CHAT_CHANNEL_DEBUG)
-		{	// Use 0 up to (but not including) CHAT_CHANNEL_DEBUG
-			channel = 0;
-		}
-	}
+    S32 channel = 0;
+    if (chat_data.has("channel"))
+    {
+        channel = chat_data["channel"].asInteger();
+        if (channel < 0 || channel >= CHAT_CHANNEL_DEBUG)
+        {   // Use 0 up to (but not including) CHAT_CHANNEL_DEBUG
+            channel = 0;
+        }
+    }
 
-	EChatType type_o_chat = CHAT_TYPE_NORMAL;
-	if (chat_data.has("type"))
-	{
-		std::string type_string = chat_data["type"].asString();
-		if (type_string == "whisper")
-		{
-			type_o_chat = CHAT_TYPE_WHISPER;
-		}
-		else if (type_string == "shout")
-		{
-			type_o_chat = CHAT_TYPE_SHOUT;
-		}
-	}
+    EChatType type_o_chat = CHAT_TYPE_NORMAL;
+    if (chat_data.has("type"))
+    {
+        std::string type_string = chat_data["type"].asString();
+        if (type_string == "whisper")
+        {
+            type_o_chat = CHAT_TYPE_WHISPER;
+        }
+        else if (type_string == "shout")
+        {
+            type_o_chat = CHAT_TYPE_SHOUT;
+        }
+    }
 
-	// Have to prepend /42 style channel numbers
-	std::string chat_to_send;
-	if (channel == 0)
-	{
-		chat_to_send = chat_text;
-	}
-	else
-	{
-		chat_to_send += "/";
-		chat_to_send += chat_data["channel"].asString();
-		chat_to_send += " ";
-		chat_to_send += chat_text;
-	}
+    // Have to prepend /42 style channel numbers
+    std::string chat_to_send;
+    if (channel == 0)
+    {
+        chat_to_send = chat_text;
+    }
+    else
+    {
+        chat_to_send += "/";
+        chat_to_send += chat_data["channel"].asString();
+        chat_to_send += " ";
+        chat_to_send += chat_text;
+    }
 
-	// Send it as if it was typed in
-	FSNearbyChat::instance().sendChatFromViewer(chat_to_send, type_o_chat, ((BOOL)(channel == 0)) && gSavedSettings.getBOOL("PlayChatAnim"));
+    // Send it as if it was typed in
+    FSNearbyChat::instance().sendChatFromViewer(chat_to_send, type_o_chat, ((BOOL)(channel == 0)) && gSavedSettings.getBOOL("PlayChatAnim"));
 }
 

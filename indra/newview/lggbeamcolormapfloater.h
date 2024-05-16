@@ -1,4 +1,4 @@
-/** 
+/**
  * @file lggbeamcolormapfloater.h
  * @brief Floater for beam colors
  * @copyright Copyright (c) 2011 LordGregGreg Back
@@ -27,38 +27,38 @@ class LLSliderCtrl;
 class lggBeamColorMapFloater : public LLFloater
 {
 public:
-	lggBeamColorMapFloater(const LLSD& seed);
-	virtual ~lggBeamColorMapFloater();
+    lggBeamColorMapFloater(const LLSD& seed);
+    virtual ~lggBeamColorMapFloater();
 
-	BOOL postBuild();
-	BOOL handleMouseDown(S32 x, S32 y, MASK mask);
-	BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+    BOOL postBuild();
+    BOOL handleMouseDown(S32 x, S32 y, MASK mask);
+    BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
 
-	void setData(FSPanelPrefs* data);
+    void setData(FSPanelPrefs* data);
 
-	void draw();
+    void draw();
 
 protected:
-	// UI Handlers
-	void onClickSlider();
-	void onClickSave();
-	void onClickLoad();
+    // UI Handlers
+    void onClickSlider();
+    void onClickSave();
+    void onClickLoad();
 
-	void onSaveCallback(const std::vector<std::string>& filenames);
-	void onLoadCallback(const std::vector<std::string>& filenames);
+    void onSaveCallback(const std::vector<std::string>& filenames);
+    void onLoadCallback(const std::vector<std::string>& filenames);
 
-	F32  getHueFromLocation(S32 x, S32 y);
-	void fixOrder();
-	LLSD getDataSerialized();
+    F32  getHueFromLocation(S32 x, S32 y);
+    void fixOrder();
+    LLSD getDataSerialized();
 
-	F32					mContextConeOpacity;
-	F32					mContextConeInAlpha;
-	F32					mContextConeOutAlpha;
-	F32					mContextConeFadeTime;
-	FSPanelPrefs*		mFSPanel;
-	lggBeamsColors		mData;
-	LLSliderCtrl*		mColorSlider;
-	LLColorSwatchCtrl*	mBeamColorPreview;
+    F32                 mContextConeOpacity;
+    F32                 mContextConeInAlpha;
+    F32                 mContextConeOutAlpha;
+    F32                 mContextConeFadeTime;
+    FSPanelPrefs*       mFSPanel;
+    lggBeamsColors      mData;
+    LLSliderCtrl*       mColorSlider;
+    LLColorSwatchCtrl*  mBeamColorPreview;
 };
 
 #endif // LGG_BEAMCOLORMAPFLOATER_H

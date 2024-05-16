@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -36,26 +36,26 @@ class LLVertexBuffer;
 class FSFloaterVRAMUsage : public LLFloater, public nd::selection::PropertiesListener
 {
 public:
-	FSFloaterVRAMUsage(const LLSD& seed);
-	/*virtual*/ ~FSFloaterVRAMUsage();
-	/*virtual*/ void onOpen(const LLSD& key);
+    FSFloaterVRAMUsage(const LLSD& seed);
+    /*virtual*/ ~FSFloaterVRAMUsage();
+    /*virtual*/ void onOpen(const LLSD& key);
 
-	BOOL postBuild();
+    BOOL postBuild();
 
-	virtual void onProperties( LLSelectNode const * );
+    virtual void onProperties( LLSelectNode const * );
 
-	void onIdle();
+    void onIdle();
 
 private:
-	void doRefresh();
+    void doRefresh();
 
-	void addObjectToList( LLViewerObject*, std::string const& );
-	void calcFaceSize( LLFace *aFace, S32 &aW, S32 &aH );
-	S32 calcVBOEntrySize( LLVertexBuffer *aVBO );
-	U32 calcTexturSize( LLViewerObject*, std::ostream * = 0 );
+    void addObjectToList( LLViewerObject*, std::string const& );
+    void calcFaceSize( LLFace *aFace, S32 &aW, S32 &aH );
+    S32 calcVBOEntrySize( LLVertexBuffer *aVBO );
+    U32 calcTexturSize( LLViewerObject*, std::ostream * = 0 );
 
-	struct ImplData;
-	ImplData *mData;
+    struct ImplData;
+    ImplData *mData;
 };
 
 #endif // FS_FLOATERBLOCKLIST_H

@@ -1,4 +1,4 @@
-/** 
+/**
  * @file fsregioncross.cpp
  * @brief Improvements to region crossing display
  * @author nagle@animats.com
@@ -14,7 +14,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -34,14 +34,14 @@
 
 //  Improved region crossing time limit prediction.
 //
-//  Applied when 
+//  Applied when
 //  1) object has an avatar sitting on it
 //  2) object has been seen to move since sat on
 //  3) object is outside the 0..256m region boundaries.
 //
 //  In other words, a vehicle with an avatar doing a region crossing.
 //
-//  This computes a safe time limit for extrapolating vehicle position and 
+//  This computes a safe time limit for extrapolating vehicle position and
 //  rotation during a region crossing, when the simulator to simulator handoff
 //  is in progress and no object updates are being received. Goal is to keep
 //  the position and rotation errors within set bounds.
@@ -85,7 +85,7 @@ void RegionCrossExtrapolateImpl::update()
     }
 
     //  Moving seat - do the extrapolation calculations
-    F64 dt = 1.0 / 45.0;                                        // dt used on first value - one physics frame on server  
+    F64 dt = 1.0 / 45.0;                                        // dt used on first value - one physics frame on server
     F64 now = LLFrameTimer::getElapsedSeconds();
     if (mPreviousUpdateTime != 0.0)
     {
@@ -122,7 +122,7 @@ F32 RegionCrossExtrapolateImpl::getextraptimelimit() const
     //  Debug tuning parameters. This code will try to limit the maximum position and angle error to the specified limits.
     //  The limits can be adjusted as debug symbols or in settings.xml, but that should not be necessary.
     static LLCachedControl<F32> fsRegionCrossingPositionErrorLimit(gSavedSettings, "FSRegionCrossingPositionErrorLimit");
-    static LLCachedControl<F32> fsRegionCrossingAngleErrorLimit(gSavedSettings, "FSRegionCrossingAngleErrorLimit");   
+    static LLCachedControl<F32> fsRegionCrossingAngleErrorLimit(gSavedSettings, "FSRegionCrossingAngleErrorLimit");
 
     //  Time limit is max allowed error / error. Returns worst case (smallest) of vel and angular vel limits.
     LLQuaternion rot = mOwner.getRotationRegion();              // transform in global coords

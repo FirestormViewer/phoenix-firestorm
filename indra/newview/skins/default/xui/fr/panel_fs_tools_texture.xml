@@ -228,7 +228,7 @@
 						<combo_box.item label="Masquage alpha" name="Alpha masking"/>
 						<combo_box.item label="Masque émissif" name="Emissive mask"/>
 					</combo_box>
-					<spinner label="Découpe du masque" name="maskcutoff"/>
+					<spinner label="Coupe masque" name="maskcutoff"/>
 					<text name="label bumpiness">
    						Relief
 					</text>

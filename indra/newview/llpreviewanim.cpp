@@ -1,25 +1,25 @@
-/** 
+/**
  * @file llpreviewanim.cpp
  * @brief LLPreviewAnim class implementation
  *
  * $LicenseInfo:firstyear=2004&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -40,141 +40,141 @@
 #include "lluictrlfactory.h"
 #include "lldatapacker.h"
 
-#include "llviewercontrol.h"	// <FS:Zi> Make advanced animation preview optional
+#include "llviewercontrol.h"    // <FS:Zi> Make advanced animation preview optional
 
 extern LLAgent gAgent;
 //const S32 ADVANCED_VPAD = 3; // <FS:Ansariel> Improved animation preview
 
 LLPreviewAnim::LLPreviewAnim(const LLSD& key)
-	: LLPreview( key )
+    : LLPreview( key )
 {
-	mCommitCallbackRegistrar.add("PreviewAnim.Play", boost::bind(&LLPreviewAnim::play, this, _2));
-	// <FS:Zi> Make advanced animation preview optional
-	mCommitCallbackRegistrar.add("PreviewAnim.Expand", boost::bind(&LLPreviewAnim::expand, this, _2));
-	// </FS:Zi>
+    mCommitCallbackRegistrar.add("PreviewAnim.Play", boost::bind(&LLPreviewAnim::play, this, _2));
+    // <FS:Zi> Make advanced animation preview optional
+    mCommitCallbackRegistrar.add("PreviewAnim.Expand", boost::bind(&LLPreviewAnim::expand, this, _2));
+    // </FS:Zi>
 }
 
 // virtual
 BOOL LLPreviewAnim::postBuild()
 {
-	childSetCommitCallback("desc", LLPreview::onText, this);
-	getChild<LLLineEditor>("desc")->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
-	// <FS:Ansariel> Improved animation preview
-	//getChild<LLTextBox>("adv_trigger")->setClickedCallback(boost::bind(&LLPreviewAnim::showAdvanced, this));
-	//pAdvancedStatsTextBox = getChild<LLTextBox>("AdvancedStats");
+    childSetCommitCallback("desc", LLPreview::onText, this);
+    getChild<LLLineEditor>("desc")->setPrevalidate(&LLTextValidate::validateASCIIPrintableNoPipe);
+    // <FS:Ansariel> Improved animation preview
+    //getChild<LLTextBox>("adv_trigger")->setClickedCallback(boost::bind(&LLPreviewAnim::showAdvanced, this));
+    //pAdvancedStatsTextBox = getChild<LLTextBox>("AdvancedStats");
 
     //// Assume that advanced stats start visible (for XUI preview tool's purposes)
     //pAdvancedStatsTextBox->setVisible(FALSE);
     //LLRect rect = getRect();
     //reshape(rect.getWidth(), rect.getHeight() - pAdvancedStatsTextBox->getRect().getHeight() - ADVANCED_VPAD, FALSE);
-	// </FS:Ansariel>
+    // </FS:Ansariel>
 
-	// <FS:Zi> Make advanced animation preview optional
-	bool expanded = gSavedSettings.getBOOL("FSAnimationPreviewExpanded");
+    // <FS:Zi> Make advanced animation preview optional
+    bool expanded = gSavedSettings.getBOOL("FSAnimationPreviewExpanded");
 
-	getChild<LLView>("advanced_info_panel")->setVisible(!expanded);
-	getChild<LLButton>("btn_expand")->setToggleState(expanded);
+    getChild<LLView>("advanced_info_panel")->setVisible(!expanded);
+    getChild<LLButton>("btn_expand")->setToggleState(expanded);
 
-	expand(LLSD());
-	// </FS:Zi>
+    expand(LLSD());
+    // </FS:Zi>
 
-	return LLPreview::postBuild();
+    return LLPreview::postBuild();
 }
 
 // llinventorybridge also calls into here
 void LLPreviewAnim::play(const LLSD& param)
 {
-	const LLInventoryItem *item = getItem();
+    const LLInventoryItem *item = getItem();
 
-	if(item)
-	{
-		LLUUID itemID=item->getAssetUUID();
+    if(item)
+    {
+        LLUUID itemID=item->getAssetUUID();
 
-		std::string btn_name = param.asString();
-		LLButton* btn_inuse;
-		LLButton* btn_other;
+        std::string btn_name = param.asString();
+        LLButton* btn_inuse;
+        LLButton* btn_other;
 
-		if ("Inworld" == btn_name)
-		{
-			btn_inuse = getChild<LLButton>("Inworld");
-			btn_other = getChild<LLButton>("Locally");
-		}
-		else if ("Locally" == btn_name)
-		{
-			btn_inuse = getChild<LLButton>("Locally");
-			btn_other = getChild<LLButton>("Inworld");
-		}
-		else
-		{
-			return;
-		}
+        if ("Inworld" == btn_name)
+        {
+            btn_inuse = getChild<LLButton>("Inworld");
+            btn_other = getChild<LLButton>("Locally");
+        }
+        else if ("Locally" == btn_name)
+        {
+            btn_inuse = getChild<LLButton>("Locally");
+            btn_other = getChild<LLButton>("Inworld");
+        }
+        else
+        {
+            return;
+        }
 
-		if (btn_inuse)
-		{
-			btn_inuse->toggleState();
-		}
+        if (btn_inuse)
+        {
+            btn_inuse->toggleState();
+        }
 
-		if (btn_other)
-		{
-			btn_other->setEnabled(false);
-		}
-		
-		if (getChild<LLUICtrl>(btn_name)->getValue().asBoolean() ) 
-		{
-			if("Inworld" == btn_name)
-			{
-				gAgent.sendAnimationRequest(itemID, ANIM_REQUEST_START);
-			}
-			else
-			{
-				gAgentAvatarp->startMotion(item->getAssetUUID());
-			}
+        if (btn_other)
+        {
+            btn_other->setEnabled(false);
+        }
 
-			LLMotion* motion = gAgentAvatarp->findMotion(itemID);
-			if (motion)
-			{
-				mItemID = itemID;
-				mDidStart = false;
-			}
-		}
-		else
-		{
-			gAgentAvatarp->stopMotion(itemID);
-			gAgent.sendAnimationRequest(itemID, ANIM_REQUEST_STOP);
+        if (getChild<LLUICtrl>(btn_name)->getValue().asBoolean() )
+        {
+            if("Inworld" == btn_name)
+            {
+                gAgent.sendAnimationRequest(itemID, ANIM_REQUEST_START);
+            }
+            else
+            {
+                gAgentAvatarp->startMotion(item->getAssetUUID());
+            }
 
-			if (btn_other)
-			{
-				btn_other->setEnabled(true);
-			}
-		}
-	}
+            LLMotion* motion = gAgentAvatarp->findMotion(itemID);
+            if (motion)
+            {
+                mItemID = itemID;
+                mDidStart = false;
+            }
+        }
+        else
+        {
+            gAgentAvatarp->stopMotion(itemID);
+            gAgent.sendAnimationRequest(itemID, ANIM_REQUEST_STOP);
+
+            if (btn_other)
+            {
+                btn_other->setEnabled(true);
+            }
+        }
+    }
 }
 
 // virtual
 void LLPreviewAnim::draw()
 {
-	LLPreview::draw();
-	if (!this->mItemID.isNull())
-	{
-		LLMotion* motion = gAgentAvatarp->findMotion(this->mItemID);
-		if (motion)
-		{
-			if (motion->isStopped() && this->mDidStart)
-			{
-				cleanup();
-			}
-			if(gAgentAvatarp->isMotionActive(this->mItemID) && !this->mDidStart)
-			{
-				const LLInventoryItem *item = getItem();
-				LLMotion* motion = gAgentAvatarp->findMotion(this->mItemID);
-				if (item && motion)
-				{
-					motion->setName(item->getName());
-				}
-				this->mDidStart = true;
-			}
-		}
-	}
+    LLPreview::draw();
+    if (!this->mItemID.isNull())
+    {
+        LLMotion* motion = gAgentAvatarp->findMotion(this->mItemID);
+        if (motion)
+        {
+            if (motion->isStopped() && this->mDidStart)
+            {
+                cleanup();
+            }
+            if(gAgentAvatarp->isMotionActive(this->mItemID) && !this->mDidStart)
+            {
+                const LLInventoryItem *item = getItem();
+                LLMotion* motion = gAgentAvatarp->findMotion(this->mItemID);
+                if (item && motion)
+                {
+                    motion->setName(item->getName());
+                }
+                this->mDidStart = true;
+            }
+        }
+    }
 }
 
 // virtual
@@ -188,7 +188,7 @@ void LLPreviewAnim::refreshFromItem()
 
     // Preload motion
     // <FS:Ansariel> Improved animation preview
-    //gAgentAvatarp->createMotion(item->getAssetUUID());  
+    //gAgentAvatarp->createMotion(item->getAssetUUID());
     LLMotion *motion = gAgentAvatarp->createMotion(item->getAssetUUID());
     if (motion)
     {
@@ -208,24 +208,24 @@ void LLPreviewAnim::refreshFromItem()
 
 void LLPreviewAnim::cleanup()
 {
-	this->mItemID = LLUUID::null;
-	this->mDidStart = false;
-	getChild<LLUICtrl>("Inworld")->setValue(FALSE);
-	getChild<LLUICtrl>("Locally")->setValue(FALSE);
-	getChild<LLUICtrl>("Inworld")->setEnabled(TRUE);
-	getChild<LLUICtrl>("Locally")->setEnabled(TRUE);
+    this->mItemID = LLUUID::null;
+    this->mDidStart = false;
+    getChild<LLUICtrl>("Inworld")->setValue(FALSE);
+    getChild<LLUICtrl>("Locally")->setValue(FALSE);
+    getChild<LLUICtrl>("Inworld")->setEnabled(TRUE);
+    getChild<LLUICtrl>("Locally")->setEnabled(TRUE);
 }
 
 // virtual
 void LLPreviewAnim::onClose(bool app_quitting)
 {
-	const LLInventoryItem *item = getItem();
+    const LLInventoryItem *item = getItem();
 
-	if(item)
-	{
-		gAgentAvatarp->stopMotion(item->getAssetUUID());
-		gAgent.sendAnimationRequest(item->getAssetUUID(), ANIM_REQUEST_STOP);
-	}
+    if(item)
+    {
+        gAgentAvatarp->stopMotion(item->getAssetUUID());
+        gAgent.sendAnimationRequest(item->getAssetUUID(), ANIM_REQUEST_STOP);
+    }
 }
 
 // <FS:Ansariel> Improved animation preview
@@ -271,33 +271,33 @@ void LLPreviewAnim::onClose(bool app_quitting)
 // <FS:Zi> Make advanced animation preview optional
 void LLPreviewAnim::expand(const LLSD& param)
 {
-	LLView* basic_info_panel = getChild<LLView>("basic_info_panel");
-	LLView* advanced_info_panel = getChild<LLView>("advanced_info_panel");
+    LLView* basic_info_panel = getChild<LLView>("basic_info_panel");
+    LLView* advanced_info_panel = getChild<LLView>("advanced_info_panel");
 
-	// I don't get why we can't use getLocalRect().mTop or something similar to get the .top from the XML -Zi
-	S32 height = getRect().getHeight() - basic_info_panel->getRect().mTop;
-	S32 basic_info_height = basic_info_panel->getRect().getHeight();
-	S32 advanced_info_height = advanced_info_panel->getRect().getHeight();
+    // I don't get why we can't use getLocalRect().mTop or something similar to get the .top from the XML -Zi
+    S32 height = getRect().getHeight() - basic_info_panel->getRect().mTop;
+    S32 basic_info_height = basic_info_panel->getRect().getHeight();
+    S32 advanced_info_height = advanced_info_panel->getRect().getHeight();
 
-	bool was_expanded = advanced_info_panel->getVisible();
-	advanced_info_panel->setVisible(!was_expanded);
+    bool was_expanded = advanced_info_panel->getVisible();
+    advanced_info_panel->setVisible(!was_expanded);
 
-	height += basic_info_height;
-	if (!was_expanded)
-	{
-		height += advanced_info_height;
-	}
+    height += basic_info_height;
+    if (!was_expanded)
+    {
+        height += advanced_info_height;
+    }
 
-	LLRect rect = getRect();
+    LLRect rect = getRect();
 
-	rect.setLeftTopAndSize(rect.mLeft, rect.mTop, rect.getWidth(), height);
-	reshape(rect.getWidth(), rect.getHeight(), false);
+    rect.setLeftTopAndSize(rect.mLeft, rect.mTop, rect.getWidth(), height);
+    reshape(rect.getWidth(), rect.getHeight(), false);
 
-	setRect(rect);
+    setRect(rect);
 
-	if(getHost())
-	{
-		getHost()->growToFit(rect.getWidth(), height);
-	}
+    if(getHost())
+    {
+        getHost()->growToFit(rect.getWidth(), height);
+    }
 }
 // </FS:Zi>

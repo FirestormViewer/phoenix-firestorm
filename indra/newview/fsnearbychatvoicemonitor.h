@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -36,26 +36,26 @@ class FSNearbyChatVoiceControl : public FSNearbyChatControl
 {
 
 public:
-	struct Params : public LLInitParam::Block<Params, FSNearbyChatControl::Params>
-	{
-		Optional<S32>							voice_monitor_padding;
-		Optional<NearbyVoiceMonitor::Params>	nearby_voice_monitor;
+    struct Params : public LLInitParam::Block<Params, FSNearbyChatControl::Params>
+    {
+        Optional<S32>                           voice_monitor_padding;
+        Optional<NearbyVoiceMonitor::Params>    nearby_voice_monitor;
 
-		Params();
-	};
+        Params();
+    };
 
-	FSNearbyChatVoiceControl(const Params& p);
+    FSNearbyChatVoiceControl(const Params& p);
 
-	void draw();
+    void draw();
 
 protected:
-	friend class LLUICtrlFactory;
+    friend class LLUICtrlFactory;
 
-	NearbyVoiceMonitor*	mVoiceMonitor;
-	S32					mOriginalTextpadLeft;
-	S32					mOriginalTextpadRight;
-	S32					mVoiceMonitorPadding;
-	bool				mVoiceMonitorVisible;
+    NearbyVoiceMonitor* mVoiceMonitor;
+    S32                 mOriginalTextpadLeft;
+    S32                 mOriginalTextpadRight;
+    S32                 mVoiceMonitorPadding;
+    bool                mVoiceMonitorVisible;
 };
 
 #endif // FS_NEARBYCHATVOICEMONITOR_H

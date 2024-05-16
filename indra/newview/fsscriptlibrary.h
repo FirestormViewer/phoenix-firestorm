@@ -32,11 +32,11 @@ class LLScriptLibraryFunction
 {
 public:
     LLScriptLibraryFunction(std::string name, std::string desc, F32 sleep, F32 energy, bool god_only = false);
-	
+
     std::string mName;
-	std::string mDesc;
-	F32 mSleepTime;
-	F32 mEnergy;
+    std::string mDesc;
+    F32 mSleepTime;
+    F32 mEnergy;
     bool mGodOnly;
 };
 
@@ -44,10 +44,10 @@ class LLScriptLibrary
 {
 public:
     LLScriptLibrary();
-	bool loadLibrary(const std::string& filename);
-	
-	std::vector<LLScriptLibraryFunction> mFunctions;
-	
+    bool loadLibrary(const std::string& filename);
+
+    std::vector<LLScriptLibraryFunction> mFunctions;
+
 private:
     void addFunction(std::string name, std::string desc, F32 sleep, F32 energy, bool god_only = false);
 };

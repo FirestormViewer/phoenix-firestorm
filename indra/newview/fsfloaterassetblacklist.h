@@ -37,58 +37,58 @@ class FSScrollListCtrl;
 
 class FSFloaterAssetBlacklist : public LLFloater, public LLEventTimer
 {
-	LOG_CLASS(FSFloaterAssetBlacklist);
+    LOG_CLASS(FSFloaterAssetBlacklist);
 
 public:
-	FSFloaterAssetBlacklist(const LLSD& key);
-	virtual ~FSFloaterAssetBlacklist();
+    FSFloaterAssetBlacklist(const LLSD& key);
+    virtual ~FSFloaterAssetBlacklist();
 
-	/*virtual*/ void onOpen(const LLSD& key);
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
-	/*virtual*/ bool hasAccelerators() const { return true; }
-	/*virtual*/ BOOL tick();
-	/*virtual*/ void closeFloater(bool app_quitting = false);
+    /*virtual*/ void onOpen(const LLSD& key);
+    /*virtual*/ BOOL postBuild();
+    /*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+    /*virtual*/ bool hasAccelerators() const { return true; }
+    /*virtual*/ BOOL tick();
+    /*virtual*/ void closeFloater(bool app_quitting = false);
 
-	void addElementToList(const LLUUID& id, const LLSD& data);
-	void removeElements();
+    void addElementToList(const LLUUID& id, const LLSD& data);
+    void removeElements();
 
 protected:
-	void onRemoveBtn();
-	void onRemoveAllTemporaryBtn();
-	void onPlayBtn();
-	void onStopBtn();
-	void onCloseBtn();
-	void onFilterEdit(const std::string& search_string);
-	void onBlacklistChanged(const LLSD& data, FSAssetBlacklist::eBlacklistOperation op);
-	void onSelectionChanged();
+    void onRemoveBtn();
+    void onRemoveAllTemporaryBtn();
+    void onPlayBtn();
+    void onStopBtn();
+    void onCloseBtn();
+    void onFilterEdit(const std::string& search_string);
+    void onBlacklistChanged(const LLSD& data, FSAssetBlacklist::eBlacklistOperation op);
+    void onSelectionChanged();
 
-	void buildBlacklist();
-	std::string getTypeString(S32 type);
+    void buildBlacklist();
+    std::string getTypeString(S32 type);
 
-	LLUUID mAudioSourceID;
+    LLUUID mAudioSourceID;
 
 private:
-	FSScrollListCtrl*	mResultList;
+    FSScrollListCtrl*   mResultList;
 
-	std::string			mFilterSubString;
-	std::string			mFilterSubStringOrig;
+    std::string         mFilterSubString;
+    std::string         mFilterSubStringOrig;
 
-	boost::signals2::connection mBlacklistCallbackConnection;
+    boost::signals2::connection mBlacklistCallbackConnection;
 };
 
 namespace FSFloaterAssetBlacklistMenu
 {
 
-	class FSAssetBlacklistMenu : public LLListContextMenu
-	{
-	public:
-		/*virtual*/ LLContextMenu* createMenu();
-	private:
-		void onContextMenuItemClick(const LLSD& param);
-	};
+    class FSAssetBlacklistMenu : public LLListContextMenu
+    {
+    public:
+        /*virtual*/ LLContextMenu* createMenu();
+    private:
+        void onContextMenuItemClick(const LLSD& param);
+    };
 
-	extern FSAssetBlacklistMenu gFSAssetBlacklistMenu;
+    extern FSAssetBlacklistMenu gFSAssetBlacklistMenu;
 
 } // namespace FSFloaterAssetBlacklistMenu
 

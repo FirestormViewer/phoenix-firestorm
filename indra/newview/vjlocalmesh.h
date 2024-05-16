@@ -37,11 +37,11 @@ class LLFloaterLocalMesh;
 
 enum LLLocalMeshFileLOD
 {
-	LOCAL_LOD_LOWEST,
-	LOCAL_LOD_LOW,
-	LOCAL_LOD_MEDIUM,
-	LOCAL_LOD_HIGH,
-	LOCAL_NUM_LODS
+    LOCAL_LOD_LOWEST,
+    LOCAL_LOD_LOW,
+    LOCAL_LOD_MEDIUM,
+    LOCAL_LOD_HIGH,
+    LOCAL_NUM_LODS
 };
 
 
@@ -53,33 +53,33 @@ enum LLLocalMeshFileLOD
 /*==========================================*/
 class LLLocalMeshFace
 {
-	public:
-		struct LLLocalMeshSkinUnit
-		{
-			std::array<int, 4>   mJointIndices;
-			std::array<float, 4> mJointWeights;
-		};
+    public:
+        struct LLLocalMeshSkinUnit
+        {
+            std::array<int, 4>   mJointIndices;
+            std::array<float, 4> mJointWeights;
+        };
 
-		void setFaceBoundingBox(LLVector4 data_in, bool initial_values = false);
+        void setFaceBoundingBox(LLVector4 data_in, bool initial_values = false);
 
-		int                     getNumVerts() const { return mPositions.size(); }
-		int						getNumIndices() const { return mIndices.size(); }
+        int                     getNumVerts() const { return mPositions.size(); }
+        int                     getNumIndices() const { return mIndices.size(); }
 
-		std::vector<int>&       getIndices()					{ return mIndices; };
-		std::vector<LLVector4>& getPositions()					{ return mPositions; };
-		std::vector<LLVector4>& getNormals()					{ return mNormals; };
-		std::vector<LLVector2>& getUVs()						{ return mUVs; };
-		std::vector<LLLocalMeshSkinUnit>& getSkin()				{ return mSkin; }
-		std::pair<LLVector4, LLVector4>& getFaceBoundingBox()	{ return mFaceBoundingBox; }
-		void logFaceInfo() const;
+        std::vector<int>&       getIndices()                    { return mIndices; };
+        std::vector<LLVector4>& getPositions()                  { return mPositions; };
+        std::vector<LLVector4>& getNormals()                    { return mNormals; };
+        std::vector<LLVector2>& getUVs()                        { return mUVs; };
+        std::vector<LLLocalMeshSkinUnit>& getSkin()             { return mSkin; }
+        std::pair<LLVector4, LLVector4>& getFaceBoundingBox()   { return mFaceBoundingBox; }
+        void logFaceInfo() const;
 
-	private:
-		std::vector<int>		mIndices;
-		std::vector<LLVector4>	mPositions;
-		std::vector<LLVector4>	mNormals;
-		std::vector<LLVector2>	mUVs;
-		std::vector<LLLocalMeshSkinUnit> mSkin;
-		std::pair<LLVector4, LLVector4>	 mFaceBoundingBox;
+    private:
+        std::vector<int>        mIndices;
+        std::vector<LLVector4>  mPositions;
+        std::vector<LLVector4>  mNormals;
+        std::vector<LLVector2>  mUVs;
+        std::vector<LLLocalMeshSkinUnit> mSkin;
+        std::pair<LLVector4, LLVector4>  mFaceBoundingBox;
 };
 
 
@@ -91,46 +91,46 @@ class LLLocalMeshFace
 /*==========================================*/
 class LLLocalMeshObject
 {
-	public:
-		// life cycle management
-		explicit LLLocalMeshObject(std::string_view name);
-		~LLLocalMeshObject();
+    public:
+        // life cycle management
+        explicit LLLocalMeshObject(std::string_view name);
+        ~LLLocalMeshObject();
 
-		// translation and scale
-		void computeObjectBoundingBox();
-		void computeObjectTransform(const LLMatrix4& scene_transform);
-		void normalizeFaceValues(LLLocalMeshFileLOD lod_iter);
+        // translation and scale
+        void computeObjectBoundingBox();
+        void computeObjectTransform(const LLMatrix4& scene_transform);
+        void normalizeFaceValues(LLLocalMeshFileLOD lod_iter);
 
-		// applying local object to viewer object
-		void fillVolume(LLLocalMeshFileLOD lod);
-		void attachSkinInfo();
+        // applying local object to viewer object
+        void fillVolume(LLLocalMeshFileLOD lod);
+        void attachSkinInfo();
 
-		// getters
-		std::vector<std::unique_ptr<LLLocalMeshFace>>& getFaces(LLLocalMeshFileLOD lod) { return mFaces[lod]; };
-		std::pair<LLVector4, LLVector4>& getObjectBoundingBox() { return mObjectBoundingBox; };
-		LLVector4					getObjectTranslation() const	{ return mObjectTranslation; };
-		std::string					getObjectName() const		{ return mObjectName; };
-		LLVector4					getObjectSize() const		{ return mObjectSize; };
-		LLVector4					getObjectScale() const		{ return mObjectScale; };
-		LLPointer<LLMeshSkinInfo> 	getObjectMeshSkinInfo() 	{ return mMeshSkinInfoPtr; };
-		void					 	setObjectMeshSkinInfo(LLPointer<LLMeshSkinInfo> skininfop ) 	{ mMeshSkinInfoPtr = skininfop; };
-		LLVolumeParams				getVolumeParams() const		{ return mVolumeParams; };
-		bool						getIsRiggedObject() const;
-		void logObjectInfo() const;
+        // getters
+        std::vector<std::unique_ptr<LLLocalMeshFace>>& getFaces(LLLocalMeshFileLOD lod) { return mFaces[lod]; };
+        std::pair<LLVector4, LLVector4>& getObjectBoundingBox() { return mObjectBoundingBox; };
+        LLVector4                   getObjectTranslation() const    { return mObjectTranslation; };
+        std::string                 getObjectName() const       { return mObjectName; };
+        LLVector4                   getObjectSize() const       { return mObjectSize; };
+        LLVector4                   getObjectScale() const      { return mObjectScale; };
+        LLPointer<LLMeshSkinInfo>   getObjectMeshSkinInfo()     { return mMeshSkinInfoPtr; };
+        void                        setObjectMeshSkinInfo(LLPointer<LLMeshSkinInfo> skininfop )     { mMeshSkinInfoPtr = skininfop; };
+        LLVolumeParams              getVolumeParams() const     { return mVolumeParams; };
+        bool                        getIsRiggedObject() const;
+        void logObjectInfo() const;
 
-	private:
-		// internal data keeping
-		std::array<std::vector<std::unique_ptr<LLLocalMeshFace>>, 4> mFaces;
-		std::pair<LLVector4, LLVector4> mObjectBoundingBox;
-		std::string     mObjectName;
-		LLVector4		mObjectTranslation;
-		LLVector4		mObjectSize;
-		LLVector4		mObjectScale;
+    private:
+        // internal data keeping
+        std::array<std::vector<std::unique_ptr<LLLocalMeshFace>>, 4> mFaces;
+        std::pair<LLVector4, LLVector4> mObjectBoundingBox;
+        std::string     mObjectName;
+        LLVector4       mObjectTranslation;
+        LLVector4       mObjectSize;
+        LLVector4       mObjectScale;
 
-		// vovolume
-		LLPointer<LLMeshSkinInfo>		mMeshSkinInfoPtr{nullptr};
-		LLUUID				mSculptID;
-		LLVolumeParams		mVolumeParams;
+        // vovolume
+        LLPointer<LLMeshSkinInfo>       mMeshSkinInfoPtr{nullptr};
+        LLUUID              mSculptID;
+        LLVolumeParams      mVolumeParams;
 };
 
 
@@ -141,82 +141,82 @@ class LLLocalMeshObject
 /*==========================================*/
 class LLLocalMeshFile
 {
-	// class specific types
-	public:
-		enum LLLocalMeshFileStatus
-		{
-			STATUS_NONE,
-			STATUS_LOADING,
-			STATUS_ACTIVE,
-			STATUS_ERROR
-		};
+    // class specific types
+    public:
+        enum LLLocalMeshFileStatus
+        {
+            STATUS_NONE,
+            STATUS_LOADING,
+            STATUS_ACTIVE,
+            STATUS_ERROR
+        };
 
-		// for future gltf support, possibly more.
-		enum class LLLocalMeshFileExtension
-		{
-			EXTEN_DAE,
-			EXTEN_NONE
-		};
+        // for future gltf support, possibly more.
+        enum class LLLocalMeshFileExtension
+        {
+            EXTEN_DAE,
+            EXTEN_NONE
+        };
 
-		struct LLLocalMeshFileInfo
-		{
-			std::string mName;
-			LLLocalMeshFileStatus mStatus;
-			LLUUID mLocalID;
-			std::array<bool, 4> mLODAvailability;
-			std::vector<std::string> mObjectList;
-		};
+        struct LLLocalMeshFileInfo
+        {
+            std::string mName;
+            LLLocalMeshFileStatus mStatus;
+            LLUUID mLocalID;
+            std::array<bool, 4> mLODAvailability;
+            std::vector<std::string> mObjectList;
+        };
 
-		struct LLLocalMeshLoaderReply
-		{
-			bool mChanged;
-			std::vector<std::string> mLog;
-			std::array<bool, 4> mStatus;
-		};
-		
-		// life cycle management
-		LLLocalMeshFile(const std::string& filename, bool try_lods);
-		~LLLocalMeshFile();
-	
-		// disallowing copy
-		LLLocalMeshFile(const LLLocalMeshFile& local_mesh_file) = delete;
-		LLLocalMeshFile& operator=(const LLLocalMeshFile& local_mesh_file) = delete;
+        struct LLLocalMeshLoaderReply
+        {
+            bool mChanged;
+            std::vector<std::string> mLog;
+            std::array<bool, 4> mStatus;
+        };
 
-		// file loading
-		void reloadLocalMeshObjects(bool initial_load = false);
-		LLLocalMeshFileStatus reloadLocalMeshObjectsCheck();
-		void reloadLocalMeshObjectsCallback();
-		bool updateLastModified(LLLocalMeshFileLOD lod);
-		std::vector<std::unique_ptr<LLLocalMeshObject>>& getObjectVector() { return mLoadedObjectList; };
+        // life cycle management
+        LLLocalMeshFile(const std::string& filename, bool try_lods);
+        ~LLLocalMeshFile();
 
-		// info getters
-		bool notifyNeedsUIUpdate();
-		LLLocalMeshFileInfo getFileInfo();
-		std::string getFilename(LLLocalMeshFileLOD lod) const { return mFilenames[lod]; };
-		LLUUID getFileID() const { return mLocalMeshFileID; };
-		std::vector<std::string> getFileLog() const { return mLoadingLog; };
+        // disallowing copy
+        LLLocalMeshFile(const LLLocalMeshFile& local_mesh_file) = delete;
+        LLLocalMeshFile& operator=(const LLLocalMeshFile& local_mesh_file) = delete;
 
-		// viewer object
-		void updateVObjects();
-		void applyToVObject(LLUUID viewer_object_id, int object_index, bool use_scale);
+        // file loading
+        void reloadLocalMeshObjects(bool initial_load = false);
+        LLLocalMeshFileStatus reloadLocalMeshObjectsCheck();
+        void reloadLocalMeshObjectsCallback();
+        bool updateLastModified(LLLocalMeshFileLOD lod);
+        std::vector<std::unique_ptr<LLLocalMeshObject>>& getObjectVector() { return mLoadedObjectList; };
 
-		void pushLog(const std::string& who, const std::string& what, bool is_error = false);
+        // info getters
+        bool notifyNeedsUIUpdate();
+        LLLocalMeshFileInfo getFileInfo();
+        std::string getFilename(LLLocalMeshFileLOD lod) const { return mFilenames[lod]; };
+        LLUUID getFileID() const { return mLocalMeshFileID; };
+        std::vector<std::string> getFileLog() const { return mLoadingLog; };
 
-	private:
-		std::array<std::string, LOCAL_NUM_LODS> mFilenames;
-		std::array<LLSD, LOCAL_NUM_LODS> mLastModified;
-		std::array<bool, LOCAL_NUM_LODS> mLoadedSuccessfully; 
-		bool mTryLODFiles;
-		std::string mShortName;
-		std::vector<std::string> mLoadingLog;
-		LLLocalMeshFileExtension mExtension;
-		LLLocalMeshFileStatus mLocalMeshFileStatus;
-		LLUUID mLocalMeshFileID;
-		bool mLocalMeshFileNeedsUIUpdate;
+        // viewer object
+        void updateVObjects();
+        void applyToVObject(LLUUID viewer_object_id, int object_index, bool use_scale);
 
-		std::future<LLLocalMeshLoaderReply> mAsyncFuture;
-		std::vector<std::unique_ptr<LLLocalMeshObject>> mLoadedObjectList;
-		std::vector<LLUUID> mSavedObjectSculptIDs;
+        void pushLog(const std::string& who, const std::string& what, bool is_error = false);
+
+    private:
+        std::array<std::string, LOCAL_NUM_LODS> mFilenames;
+        std::array<LLSD, LOCAL_NUM_LODS> mLastModified;
+        std::array<bool, LOCAL_NUM_LODS> mLoadedSuccessfully;
+        bool mTryLODFiles;
+        std::string mShortName;
+        std::vector<std::string> mLoadingLog;
+        LLLocalMeshFileExtension mExtension;
+        LLLocalMeshFileStatus mLocalMeshFileStatus;
+        LLUUID mLocalMeshFileID;
+        bool mLocalMeshFileNeedsUIUpdate;
+
+        std::future<LLLocalMeshLoaderReply> mAsyncFuture;
+        std::vector<std::unique_ptr<LLLocalMeshObject>> mLoadedObjectList;
+        std::vector<LLUUID> mSavedObjectSculptIDs;
 };
 
 
@@ -225,37 +225,37 @@ class LLLocalMeshFile
 /*  user facing manager class. */
 /*=============================*/
 class LLLocalMeshSystem : public LLSingleton<LLLocalMeshSystem>
-{	
-		// life cycle management
-		LLSINGLETON(LLLocalMeshSystem);
-	public:
-		~LLLocalMeshSystem();
+{
+        // life cycle management
+        LLSINGLETON(LLLocalMeshSystem);
+    public:
+        ~LLLocalMeshSystem();
 
-		// file management
-		void addFile(const std::string& filename, bool try_lods);
-		void deleteFile(LLUUID local_file_id);
-		void reloadFile(LLUUID local_file_id);
+        // file management
+        void addFile(const std::string& filename, bool try_lods);
+        void deleteFile(LLUUID local_file_id);
+        void reloadFile(LLUUID local_file_id);
 
-		// viewer object management
-		void applyVObject(LLUUID viewer_object_id, LLUUID local_file_id, int object_index, bool use_scale);
-		void clearVObject(LLUUID viewer_object_id);
+        // viewer object management
+        void applyVObject(LLUUID viewer_object_id, LLUUID local_file_id, int object_index, bool use_scale);
+        void clearVObject(LLUUID viewer_object_id);
 
-		// high level async support
-		void triggerCheckFileAsyncStatus();
-		void checkFileAsyncStatus();
+        // high level async support
+        void triggerCheckFileAsyncStatus();
+        void checkFileAsyncStatus();
 
-		// floater two-way communication
-		void registerFloaterPointer(LLFloaterLocalMesh* floater_ptr);
-		LLFloaterLocalMesh* getFloaterPointer(){return mFloaterPtr;};
-		void triggerFloaterRefresh( bool keep_selection=true );
-		std::vector<LLLocalMeshFile::LLLocalMeshFileInfo> getFileInfoVector() const;
-		std::vector<std::string> getFileLog(LLUUID local_file_id) const;
-		// misc
-		void pushLog(const std::string& who, const std::string& what, bool is_error = false);
+        // floater two-way communication
+        void registerFloaterPointer(LLFloaterLocalMesh* floater_ptr);
+        LLFloaterLocalMesh* getFloaterPointer(){return mFloaterPtr;};
+        void triggerFloaterRefresh( bool keep_selection=true );
+        std::vector<LLLocalMeshFile::LLLocalMeshFileInfo> getFileInfoVector() const;
+        std::vector<std::string> getFileLog(LLUUID local_file_id) const;
+        // misc
+        void pushLog(const std::string& who, const std::string& what, bool is_error = false);
 
-	private:
-		std::vector<std::string> mSystemLog;
-		std::vector<std::unique_ptr<LLLocalMeshFile>> mLoadedFileList;
-		bool mFileAsyncsOngoing;
-		LLFloaterLocalMesh* mFloaterPtr;
+    private:
+        std::vector<std::string> mSystemLog;
+        std::vector<std::unique_ptr<LLLocalMeshFile>> mLoadedFileList;
+        bool mFileAsyncsOngoing;
+        LLFloaterLocalMesh* mFloaterPtr;
 };

@@ -36,72 +36,72 @@ class LLOfferInfo;
 
 class RlvInventory : public LLSingleton<RlvInventory>, public LLInventoryObserver
 {
-	LLSINGLETON(RlvInventory);
-	~RlvInventory();
+    LLSINGLETON(RlvInventory);
+    ~RlvInventory();
 
 public:
-	// LLInventoryObserver override
-	/*virtual*/ void changed(U32 mask) override;
+    // LLInventoryObserver override
+    /*virtual*/ void changed(U32 mask) override;
 
-	/*
-	 * #RLV Shared inventory
-	 */
+    /*
+     * #RLV Shared inventory
+     */
 public:
-	typedef boost::signals2::signal<void (void)> callback_signal_t;
-	void						addSharedRootIDChangedCallback(const callback_signal_t::slot_type& cb) { m_OnSharedRootIDChanged.connect(cb); }
-	// Find all folders that match a supplied criteria (clears the output array)
-	bool						findSharedFolders(const std::string& strCriteria, LLInventoryModel::cat_array_t& folders) const;
-	// Gets the shared path for any shared items present in idItems (clears the output array)
-	bool						getPath(const uuid_vec_t& idItems, LLInventoryModel::cat_array_t& folders) const;
-	// Returns a pointer to the shared root folder (if there is one)
-	LLViewerInventoryCategory*	getSharedRoot() const;
-	const LLUUID&				getSharedRootID() const;
-	// Returns a subfolder of idParent that starts with strFolderName (exact match > partial match)
-	LLViewerInventoryCategory*	getSharedFolder(const LLUUID& idParent, const std::string& strFolderName, bool fMatchPartial = true) const;
-	// Looks up a folder from a path (relative to the shared root)
-	LLViewerInventoryCategory*	getSharedFolder(const std::string& strPath, bool fMatchPartial = true) const;
-	// Returns the path of the supplied folder (relative to the shared root)
-	std::string					getSharedPath(const LLViewerInventoryCategory* pFolder) const;
-	std::string					getSharedPath(const LLUUID& idFolder) const;
-	// Returns TRUE if the supplied folder is a descendent of the #RLV folder
-	bool						isSharedFolder(const LLUUID& idFolder);
-	// Returns TRUE if the inventory offer is a "give to #RLV" offer
-	bool						isGiveToRLVOffer(const LLOfferInfo& offerInfo);
+    typedef boost::signals2::signal<void (void)> callback_signal_t;
+    void                        addSharedRootIDChangedCallback(const callback_signal_t::slot_type& cb) { m_OnSharedRootIDChanged.connect(cb); }
+    // Find all folders that match a supplied criteria (clears the output array)
+    bool                        findSharedFolders(const std::string& strCriteria, LLInventoryModel::cat_array_t& folders) const;
+    // Gets the shared path for any shared items present in idItems (clears the output array)
+    bool                        getPath(const uuid_vec_t& idItems, LLInventoryModel::cat_array_t& folders) const;
+    // Returns a pointer to the shared root folder (if there is one)
+    LLViewerInventoryCategory*  getSharedRoot() const;
+    const LLUUID&               getSharedRootID() const;
+    // Returns a subfolder of idParent that starts with strFolderName (exact match > partial match)
+    LLViewerInventoryCategory*  getSharedFolder(const LLUUID& idParent, const std::string& strFolderName, bool fMatchPartial = true) const;
+    // Looks up a folder from a path (relative to the shared root)
+    LLViewerInventoryCategory*  getSharedFolder(const std::string& strPath, bool fMatchPartial = true) const;
+    // Returns the path of the supplied folder (relative to the shared root)
+    std::string                 getSharedPath(const LLViewerInventoryCategory* pFolder) const;
+    std::string                 getSharedPath(const LLUUID& idFolder) const;
+    // Returns TRUE if the supplied folder is a descendent of the #RLV folder
+    bool                        isSharedFolder(const LLUUID& idFolder);
+    // Returns TRUE if the inventory offer is a "give to #RLV" offer
+    bool                        isGiveToRLVOffer(const LLOfferInfo& offerInfo);
 
-	/*
-	 * Inventory fetching
-	 */
+    /*
+     * Inventory fetching
+     */
 public:
-	void fetchSharedInventory();
-	void fetchWornItems();
+    void fetchSharedInventory();
+    void fetchWornItems();
 protected:
-	void fetchSharedLinks();
+    void fetchSharedLinks();
 
-	/*
-	 * General purpose helper functions
-	 */
+    /*
+     * General purpose helper functions
+     */
 public:
-	// Returns the number of sub-folders of the specified folder
-	static S32 getDirectDescendentsFolderCount(const LLInventoryCategory* pFolder);
-	// Returns the number of direct descendents of the specified folder that have the specified type asset type
-	static S32 getDirectDescendentsItemCount(const LLInventoryCategory* pFolder, LLAssetType::EType filterType);
-	// Returns the folder the items of the specified folder should folded into (can be the folder itself)
-	static const LLUUID& getFoldedParent(const LLUUID& idFolder, bool fCheckComposite);
-	// A "folded folder" is a folder whose items logically belong to the grandparent rather than the parent
-	static bool isFoldedFolder(const LLInventoryCategory* pFolder, bool fCheckComposite);
+    // Returns the number of sub-folders of the specified folder
+    static S32 getDirectDescendentsFolderCount(const LLInventoryCategory* pFolder);
+    // Returns the number of direct descendents of the specified folder that have the specified type asset type
+    static S32 getDirectDescendentsItemCount(const LLInventoryCategory* pFolder, LLAssetType::EType filterType);
+    // Returns the folder the items of the specified folder should folded into (can be the folder itself)
+    static const LLUUID& getFoldedParent(const LLUUID& idFolder, bool fCheckComposite);
+    // A "folded folder" is a folder whose items logically belong to the grandparent rather than the parent
+    static bool isFoldedFolder(const LLInventoryCategory* pFolder, bool fCheckComposite);
 
-	/*
-	 * Member variables
-	 */
+    /*
+     * Member variables
+     */
 protected:
-	bool				m_fFetchStarted;			// TRUE if we fired off an inventory fetch
-	bool				m_fFetchComplete;			// TRUE if everything was fetched
-	mutable LLUUID		m_idRlvRoot;
-	callback_signal_t	m_OnSharedRootIDChanged;
+    bool                m_fFetchStarted;            // TRUE if we fired off an inventory fetch
+    bool                m_fFetchComplete;           // TRUE if everything was fetched
+    mutable LLUUID      m_idRlvRoot;
+    callback_signal_t   m_OnSharedRootIDChanged;
 
 private:
-	static const std::string cstrSharedRoot;
-	friend class RlvSharedInventoryFetcher;
+    static const std::string cstrSharedRoot;
+    friend class RlvSharedInventoryFetcher;
 };
 
 // ============================================================================
@@ -111,12 +111,12 @@ private:
 class RlvRenameOnWearObserver : public LLInventoryFetchItemsObserver
 {
 public:
-	RlvRenameOnWearObserver(const LLUUID& idItem) : LLInventoryFetchItemsObserver(idItem) {}
-	virtual ~RlvRenameOnWearObserver() {}
-	virtual void done();
+    RlvRenameOnWearObserver(const LLUUID& idItem) : LLInventoryFetchItemsObserver(idItem) {}
+    virtual ~RlvRenameOnWearObserver() {}
+    virtual void done();
 protected:
-	void doneIdle();
-	static void onCategoryCreate(const LLUUID& idFolder, const LLUUID idItem);
+    void doneIdle();
+    static void onCategoryCreate(const LLUUID& idFolder, const LLUUID idItem);
 };
 
 // ============================================================================
@@ -126,17 +126,17 @@ protected:
 class RlvGiveToRLVOffer
 {
 protected:
-	RlvGiveToRLVOffer() {}
-	virtual ~RlvGiveToRLVOffer() {}
+    RlvGiveToRLVOffer() {}
+    virtual ~RlvGiveToRLVOffer() {}
 protected:
-	bool         createDestinationFolder(const std::string& strPath);
-	virtual void onDestinationCreated(const LLUUID& idDestFolder, const std::string& strName) = 0;
-	static void  moveAndRename(const LLUUID& idFolder, const LLUUID& idDestination, const std::string& strName, LLPointer<LLInventoryCallback> cb);
+    bool         createDestinationFolder(const std::string& strPath);
+    virtual void onDestinationCreated(const LLUUID& idDestFolder, const std::string& strName) = 0;
+    static void  moveAndRename(const LLUUID& idFolder, const LLUUID& idDestination, const std::string& strName, LLPointer<LLInventoryCallback> cb);
 private:
-	static void  onCategoryCreateCallback(LLUUID idFolder, RlvGiveToRLVOffer* pInstance);
+    static void  onCategoryCreateCallback(LLUUID idFolder, RlvGiveToRLVOffer* pInstance);
 
 private:
-	std::list<std::string> m_DestPath;
+    std::list<std::string> m_DestPath;
 };
 
 // [See LLInventoryTransactionObserver which says it's not entirely complete?]
@@ -145,30 +145,30 @@ private:
 class RlvGiveToRLVTaskOffer : public LLInventoryObserver, RlvGiveToRLVOffer
 {
 public:
-	RlvGiveToRLVTaskOffer(const LLUUID& idTransaction) : RlvGiveToRLVOffer(), m_idTransaction(idTransaction) {}
-	void changed(U32 mask) override;
+    RlvGiveToRLVTaskOffer(const LLUUID& idTransaction) : RlvGiveToRLVOffer(), m_idTransaction(idTransaction) {}
+    void changed(U32 mask) override;
 protected:
-	void done();
-	void doneIdle();
-	void onDestinationCreated(const LLUUID& idDestFolder, const std::string& strName) override;
-	void onOfferCompleted(const LLUUID& idOfferedFolder);
+    void done();
+    void doneIdle();
+    void onDestinationCreated(const LLUUID& idDestFolder, const std::string& strName) override;
+    void onOfferCompleted(const LLUUID& idOfferedFolder);
 
 protected:
-	typedef std::vector<LLUUID> folder_ref_t;
-	folder_ref_t m_Folders;
-	LLUUID       m_idTransaction;
+    typedef std::vector<LLUUID> folder_ref_t;
+    folder_ref_t m_Folders;
+    LLUUID       m_idTransaction;
 };
 
 class RlvGiveToRLVAgentOffer : public LLInventoryFetchDescendentsObserver, RlvGiveToRLVOffer
 {
 public:
-	RlvGiveToRLVAgentOffer(const LLUUID& idFolder) : RlvGiveToRLVOffer(), LLInventoryFetchDescendentsObserver(idFolder) {}
-	/*virtual*/ ~RlvGiveToRLVAgentOffer() {}
+    RlvGiveToRLVAgentOffer(const LLUUID& idFolder) : RlvGiveToRLVOffer(), LLInventoryFetchDescendentsObserver(idFolder) {}
+    /*virtual*/ ~RlvGiveToRLVAgentOffer() {}
 public:
-	/*virtual*/ void done();
+    /*virtual*/ void done();
 protected:
-	            void doneIdle();
-	/*virtual*/ void onDestinationCreated(const LLUUID& idFolder, const std::string& strName);
+                void doneIdle();
+    /*virtual*/ void onDestinationCreated(const LLUUID& idFolder, const std::string& strName);
 };
 
 // ============================================================================
@@ -178,45 +178,45 @@ protected:
 class RlvCriteriaCategoryCollector : public LLInventoryCollectFunctor
 {
 public:
-	RlvCriteriaCategoryCollector(const std::string& strCriteria)
-	{
-		std::string::size_type idxIt, idxLast = 0;
-		while (idxLast < strCriteria.length())
-		{
-			idxIt = strCriteria.find("&&", idxLast);
-			if (std::string::npos == idxIt)
-				idxIt = strCriteria.length();
-			if (idxIt != idxLast)
-				m_Criteria.push_back(strCriteria.substr(idxLast, idxIt - idxLast));
-			idxLast = idxIt + 2;
-		}
-	}
-	virtual ~RlvCriteriaCategoryCollector() {}
+    RlvCriteriaCategoryCollector(const std::string& strCriteria)
+    {
+        std::string::size_type idxIt, idxLast = 0;
+        while (idxLast < strCriteria.length())
+        {
+            idxIt = strCriteria.find("&&", idxLast);
+            if (std::string::npos == idxIt)
+                idxIt = strCriteria.length();
+            if (idxIt != idxLast)
+                m_Criteria.push_back(strCriteria.substr(idxLast, idxIt - idxLast));
+            idxLast = idxIt + 2;
+        }
+    }
+    virtual ~RlvCriteriaCategoryCollector() {}
 
-	virtual bool operator()(LLInventoryCategory* pFolder, LLInventoryItem* pItem)
-	{
-		if ( (!pFolder) || (m_Criteria.empty()) )	// We're only interested in matching folders, we don't care about items
-			return false;							// (if there are no criteria then we don't want to return a match)
+    virtual bool operator()(LLInventoryCategory* pFolder, LLInventoryItem* pItem)
+    {
+        if ( (!pFolder) || (m_Criteria.empty()) )   // We're only interested in matching folders, we don't care about items
+            return false;                           // (if there are no criteria then we don't want to return a match)
 
-		std::string strFolderName = pFolder->getName();
-		LLStringUtil::toLower(strFolderName);
+        std::string strFolderName = pFolder->getName();
+        LLStringUtil::toLower(strFolderName);
 
-		// NOTE: hidden or "give to #RLV" folders can never be a match
-		if ( (strFolderName.empty()) ||
-			 (RLV_FOLDER_PREFIX_HIDDEN == strFolderName[0]) || (RLV_FOLDER_PREFIX_PUTINV == strFolderName[0]) ||
-			 (std::string::npos != strFolderName.find_first_of(RLV_FOLDER_INVALID_CHARS)) )
-		{
-			return false;
-		}
+        // NOTE: hidden or "give to #RLV" folders can never be a match
+        if ( (strFolderName.empty()) ||
+             (RLV_FOLDER_PREFIX_HIDDEN == strFolderName[0]) || (RLV_FOLDER_PREFIX_PUTINV == strFolderName[0]) ||
+             (std::string::npos != strFolderName.find_first_of(RLV_FOLDER_INVALID_CHARS)) )
+        {
+            return false;
+        }
 
-		for (std::list<std::string>::const_iterator itCrit = m_Criteria.begin(); itCrit != m_Criteria.end(); ++itCrit)
-			if (std::string::npos == strFolderName.find(*itCrit))
-				return false;
-		return true;
-	}
+        for (std::list<std::string>::const_iterator itCrit = m_Criteria.begin(); itCrit != m_Criteria.end(); ++itCrit)
+            if (std::string::npos == strFolderName.find(*itCrit))
+                return false;
+        return true;
+    }
 
 protected:
-	std::list<std::string> m_Criteria;
+    std::list<std::string> m_Criteria;
 };
 
 // ============================================================================
@@ -226,32 +226,32 @@ protected:
 class RlvWearableItemCollector : public LLInventoryCollectFunctor
 {
 public:
-	RlvWearableItemCollector(const LLInventoryCategory* pFolder, RlvForceWear::EWearAction eAction, RlvForceWear::EWearFlags eFlags);
-	virtual ~RlvWearableItemCollector() {}
+    RlvWearableItemCollector(const LLInventoryCategory* pFolder, RlvForceWear::EWearAction eAction, RlvForceWear::EWearFlags eFlags);
+    virtual ~RlvWearableItemCollector() {}
 
-	virtual bool operator()(LLInventoryCategory* pFolder, LLInventoryItem* pItem);
+    virtual bool operator()(LLInventoryCategory* pFolder, LLInventoryItem* pItem);
 
-	const LLUUID&             getFoldedParent(const LLUUID& idFolder) const;
-	RlvForceWear::EWearAction getWearAction(const LLUUID& idFolder) const;
-	RlvForceWear::EWearAction getWearActionNormal(const LLInventoryCategory* pFolder);
-	RlvForceWear::EWearAction getWearActionFolded(const LLInventoryCategory* pFolder);
-	bool                      isLinkedFolder(const LLUUID& idFolder);
+    const LLUUID&             getFoldedParent(const LLUUID& idFolder) const;
+    RlvForceWear::EWearAction getWearAction(const LLUUID& idFolder) const;
+    RlvForceWear::EWearAction getWearActionNormal(const LLInventoryCategory* pFolder);
+    RlvForceWear::EWearAction getWearActionFolded(const LLInventoryCategory* pFolder);
+    bool                      isLinkedFolder(const LLUUID& idFolder);
 protected:
-	const LLUUID              m_idFolder;
-	RlvForceWear::EWearAction m_eWearAction;
-	RlvForceWear::EWearFlags  m_eWearFlags;
+    const LLUUID              m_idFolder;
+    RlvForceWear::EWearAction m_eWearAction;
+    RlvForceWear::EWearFlags  m_eWearFlags;
 
-	bool onCollectFolder(const LLInventoryCategory* pFolder);
-	bool onCollectItem(const LLInventoryItem* pItem);
+    bool onCollectFolder(const LLInventoryCategory* pFolder);
+    bool onCollectItem(const LLInventoryItem* pItem);
 
-	std::list<LLUUID> m_Folded;
-	std::list<LLUUID> m_Linked;
-	std::list<LLUUID> m_Wearable;
-	std::map<LLUUID, LLUUID>                    m_FoldingMap;
-	std::map<LLUUID, RlvForceWear::EWearAction> m_WearActionMap;
+    std::list<LLUUID> m_Folded;
+    std::list<LLUUID> m_Linked;
+    std::list<LLUUID> m_Wearable;
+    std::map<LLUUID, LLUUID>                    m_FoldingMap;
+    std::map<LLUUID, RlvForceWear::EWearAction> m_WearActionMap;
 
-	std::string m_strWearAddPrefix;
-	std::string m_strWearReplacePrefix;
+    std::string m_strWearAddPrefix;
+    std::string m_strWearReplacePrefix;
 };
 
 // ============================================================================
@@ -261,20 +261,20 @@ protected:
 class RlvIsLinkType : public LLInventoryCollectFunctor
 {
 public:
-	RlvIsLinkType() {}
-	/*virtual*/ ~RlvIsLinkType() {}
-	virtual bool operator()(LLInventoryCategory* pFolder, LLInventoryItem* pItem) { return (pItem) && (pItem->getIsLinkType()); }
+    RlvIsLinkType() {}
+    /*virtual*/ ~RlvIsLinkType() {}
+    virtual bool operator()(LLInventoryCategory* pFolder, LLInventoryItem* pItem) { return (pItem) && (pItem->getIsLinkType()); }
 };
 
 // If the attachment item is linked in COF but isn't worn (or just detached) the function will return inconsistent information
 class RlvFindAttachmentsOnPoint : public LLInventoryCollectFunctor
 {
 public:
-	RlvFindAttachmentsOnPoint(const LLViewerJointAttachment* pAttachPt) : m_pAttachPt(pAttachPt) {}
-	/*virtual*/ ~RlvFindAttachmentsOnPoint() {}
-	virtual bool operator()(LLInventoryCategory* pFolder, LLInventoryItem* pItem);
+    RlvFindAttachmentsOnPoint(const LLViewerJointAttachment* pAttachPt) : m_pAttachPt(pAttachPt) {}
+    /*virtual*/ ~RlvFindAttachmentsOnPoint() {}
+    virtual bool operator()(LLInventoryCategory* pFolder, LLInventoryItem* pItem);
 protected:
-	const LLViewerJointAttachment* m_pAttachPt;
+    const LLViewerJointAttachment* m_pAttachPt;
 };
 
 // ============================================================================
@@ -284,49 +284,49 @@ protected:
 // Checked: 2011-03-28 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
 inline LLViewerInventoryCategory* RlvInventory::getSharedRoot() const
 {
-	const LLUUID& idRlvRoot = getSharedRootID();
-	return (idRlvRoot.notNull()) ? gInventory.getCategory(idRlvRoot) : NULL;
+    const LLUUID& idRlvRoot = getSharedRootID();
+    return (idRlvRoot.notNull()) ? gInventory.getCategory(idRlvRoot) : NULL;
 }
 
 // Checked: 2011-11-26 (RLVa-1.5.4a) | Added: RLVa-1.5.4a
 inline const LLUUID& RlvInventory::getFoldedParent(const LLUUID& idFolder, bool fCheckComposite)
 {
-	LLViewerInventoryCategory* pFolder = gInventory.getCategory(idFolder);
-	while ((pFolder) && (isFoldedFolder(pFolder, fCheckComposite)))
-		pFolder = gInventory.getCategory(pFolder->getParentUUID());
-	return (pFolder) ? pFolder->getUUID() : LLUUID::null;
+    LLViewerInventoryCategory* pFolder = gInventory.getCategory(idFolder);
+    while ((pFolder) && (isFoldedFolder(pFolder, fCheckComposite)))
+        pFolder = gInventory.getCategory(pFolder->getParentUUID());
+    return (pFolder) ? pFolder->getUUID() : LLUUID::null;
 }
 
 // Checked: 2011-11-26 (RLVa-1.5.4a) | Added: RLVa-1.5.4a
 inline std::string RlvInventory::getSharedPath(const LLUUID& idFolder) const
 {
-	return getSharedPath(gInventory.getCategory(idFolder));
+    return getSharedPath(gInventory.getCategory(idFolder));
 }
 
 // Checked: 2010-03-19 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
 inline bool RlvInventory::isFoldedFolder(const LLInventoryCategory* pFolder, bool fCheckComposite)
 {
-	return
-	  // If legacy naming isn't enabled we can return early if the folder name doesn't start with a '.' (= the most common case)
-	  (pFolder) && ( (RlvSettings::getEnableLegacyNaming()) || (RLV_FOLDER_PREFIX_HIDDEN == pFolder->getName().at(0)) ) &&
-	  (
-		// .(<attachpt>) type folder
-		(0 != RlvAttachPtLookup::getAttachPointIndex(pFolder))
-		// .(nostrip) folder
-		|| ( (pFolder) && (".(" RLV_FOLDER_FLAG_NOSTRIP ")" == pFolder->getName()) )
-		// Composite folder (if composite folders are enabled and we're asked to look for them)
-		#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-		|| ( (fCheckComposite) && (RlvSettings::getEnableComposites()) &&
-		     (pFolder) && (RLV_FOLDER_PREFIX_HIDDEN == pFolder->getName().at(0)) && (isCompositeFolder(pFolder)) )
-		#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-	  );
+    return
+      // If legacy naming isn't enabled we can return early if the folder name doesn't start with a '.' (= the most common case)
+      (pFolder) && ( (RlvSettings::getEnableLegacyNaming()) || (RLV_FOLDER_PREFIX_HIDDEN == pFolder->getName().at(0)) ) &&
+      (
+        // .(<attachpt>) type folder
+        (0 != RlvAttachPtLookup::getAttachPointIndex(pFolder))
+        // .(nostrip) folder
+        || ( (pFolder) && (".(" RLV_FOLDER_FLAG_NOSTRIP ")" == pFolder->getName()) )
+        // Composite folder (if composite folders are enabled and we're asked to look for them)
+        #ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
+        || ( (fCheckComposite) && (RlvSettings::getEnableComposites()) &&
+             (pFolder) && (RLV_FOLDER_PREFIX_HIDDEN == pFolder->getName().at(0)) && (isCompositeFolder(pFolder)) )
+        #endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
+      );
 }
 
 // Checked: 2010-08-29 (RLVa-1.2.0c) | Added: RLVa-1.2.0c
 inline bool RlvInventory::isSharedFolder(const LLUUID& idFolder)
 {
-	const LLViewerInventoryCategory* pRlvRoot = getSharedRoot();
-	return (pRlvRoot) ? (pRlvRoot->getUUID() != idFolder) && (gInventory.isObjectDescendentOf(idFolder, pRlvRoot->getUUID())) : false;
+    const LLViewerInventoryCategory* pRlvRoot = getSharedRoot();
+    return (pRlvRoot) ? (pRlvRoot->getUUID() != idFolder) && (gInventory.isObjectDescendentOf(idFolder, pRlvRoot->getUUID())) : false;
 }
 
 // ============================================================================
@@ -336,7 +336,7 @@ inline bool RlvInventory::isSharedFolder(const LLUUID& idFolder)
 // Checked: 2010-09-30 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
 inline bool RlvWearableItemCollector::isLinkedFolder(const LLUUID& idFolder)
 {
-	return (!m_Linked.empty()) && (m_Linked.end() != std::find(m_Linked.begin(), m_Linked.end(), idFolder));
+    return (!m_Linked.empty()) && (m_Linked.end() != std::find(m_Linked.begin(), m_Linked.end(), idFolder));
 }
 
 // ============================================================================

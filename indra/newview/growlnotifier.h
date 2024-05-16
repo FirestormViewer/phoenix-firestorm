@@ -38,13 +38,13 @@
 class GrowlNotifier
 {
 public:
-	LOG_CLASS(GrowlNotifier);
-	GrowlNotifier() { }
-	virtual ~GrowlNotifier() { }
-	virtual void showNotification(const std::string& notification_title, const std::string& notification_message, const std::string& notification_type) { }
-	virtual bool isUsable() { return false; }
-	virtual void registerApplication(const std::string& application, const std::set<std::string>& notificationTypes) { }
-	virtual bool needsThrottle() { return true; }
+    LOG_CLASS(GrowlNotifier);
+    GrowlNotifier() { }
+    virtual ~GrowlNotifier() { }
+    virtual void showNotification(const std::string& notification_title, const std::string& notification_message, const std::string& notification_type) { }
+    virtual bool isUsable() { return false; }
+    virtual void registerApplication(const std::string& application, const std::set<std::string>& notificationTypes) { }
+    virtual bool needsThrottle() { return true; }
 };
 
 #endif // GROWLNOTIFIER_H

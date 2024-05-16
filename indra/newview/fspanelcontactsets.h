@@ -40,38 +40,38 @@
 class FSPanelContactSets : public LLPanel
 {
 public:
-	FSPanelContactSets();
-	BOOL postBuild();
-	void refreshSetList();
+    FSPanelContactSets();
+    BOOL postBuild();
+    void refreshSetList();
 
 private:
-	~FSPanelContactSets();
+    ~FSPanelContactSets();
 
-	void onSelectAvatar();
-	void generateAvatarList(const std::string& contact_set);
-	void onClickAddAvatar(LLUICtrl* ctrl);
-	void handlePickerCallback(const uuid_vec_t& ids, const std::string& set);
-	void onClickRemoveAvatar();
-	void onClickOpenProfile();
-	void onClickStartIM();
-	void onClickOfferTeleport();
-	void onClickAddSet();
-	void onClickRemoveSet();
-	void onClickConfigureSet(LLUICtrl* ctrl);
-	void onClickRemoveDisplayName();
-	void onClickSetPseudonym();
-	void onClickRemovePseudonym();
+    void onSelectAvatar();
+    void generateAvatarList(const std::string& contact_set);
+    void onClickAddAvatar(LLUICtrl* ctrl);
+    void handlePickerCallback(const uuid_vec_t& ids, const std::string& set);
+    void onClickRemoveAvatar();
+    void onClickOpenProfile();
+    void onClickStartIM();
+    void onClickOfferTeleport();
+    void onClickAddSet();
+    void onClickRemoveSet();
+    void onClickConfigureSet(LLUICtrl* ctrl);
+    void onClickRemoveDisplayName();
+    void onClickSetPseudonym();
+    void onClickRemovePseudonym();
 
-	void refreshContactSets();
-	void resetControls();
+    void refreshContactSets();
+    void resetControls();
 
-	void updateSets(LGGContactSets::EContactSetUpdate type);
-	boost::signals2::connection mContactSetChangedConnection;
+    void updateSets(LGGContactSets::EContactSetUpdate type);
+    boost::signals2::connection mContactSetChangedConnection;
 
-	uuid_vec_t mAvatarSelections;
+    uuid_vec_t mAvatarSelections;
 
-	LLComboBox* mContactSetCombo{ nullptr };
-	LLAvatarList* mAvatarList{ nullptr };
+    LLComboBox* mContactSetCombo{ nullptr };
+    LLAvatarList* mAvatarList{ nullptr };
 };
 
 #endif // FS_PANELCONTACTSETS_H

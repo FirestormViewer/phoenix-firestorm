@@ -1,25 +1,25 @@
-/** 
+/**
  * @file llpanelteleporthistory.cpp
  * @brief Teleport history represented by a scrolling list
  *
  * $LicenseInfo:firstyear=2009&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -64,61 +64,61 @@ static const std::string COLLAPSED_BY_USER = "collapsed_by_user";
 class LLTeleportHistoryFlatItem : public LLPanel
 {
 public:
-	LLTeleportHistoryFlatItem(S32 index, LLToggleableMenu *menu, const std::string &region_name,
-	// <FS:Ansariel> Extended TP history
-	//									 	 LLDate date, const std::string &hl);
-										 	 LLDate date, const LLVector3& local_pos, const std::string &hl);
-	// </FS:Ansariel>
-	virtual ~LLTeleportHistoryFlatItem();
+    LLTeleportHistoryFlatItem(S32 index, LLToggleableMenu *menu, const std::string &region_name,
+    // <FS:Ansariel> Extended TP history
+    //                                       LLDate date, const std::string &hl);
+                                             LLDate date, const LLVector3& local_pos, const std::string &hl);
+    // </FS:Ansariel>
+    virtual ~LLTeleportHistoryFlatItem();
 
-	virtual BOOL postBuild();
+    virtual BOOL postBuild();
 
-	/*virtual*/ S32 notify(const LLSD& info);
+    /*virtual*/ S32 notify(const LLSD& info);
 
-	S32 getIndex() { return mIndex; }
-	void setIndex(S32 index) { mIndex = index; }
-	const std::string& getRegionName() { return mRegionName;}
-	void setRegionName(const std::string& name);
-	void setDate(LLDate date);
-	void setHighlightedText(const std::string& text);
-	void updateTitle();
-	void updateTimestamp();
-	std::string getTimestamp();
+    S32 getIndex() { return mIndex; }
+    void setIndex(S32 index) { mIndex = index; }
+    const std::string& getRegionName() { return mRegionName;}
+    void setRegionName(const std::string& name);
+    void setDate(LLDate date);
+    void setHighlightedText(const std::string& text);
+    void updateTitle();
+    void updateTimestamp();
+    std::string getTimestamp();
 
-	// <FS:Ansariel> Extended TP history
-	void setLocalPos(const LLVector3& local_pos);
+    // <FS:Ansariel> Extended TP history
+    void setLocalPos(const LLVector3& local_pos);
 
-	/*virtual*/ void setValue(const LLSD& value);
+    /*virtual*/ void setValue(const LLSD& value);
 
-	void onMouseEnter(S32 x, S32 y, MASK mask);
-	void onMouseLeave(S32 x, S32 y, MASK mask);
-	virtual BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+    void onMouseEnter(S32 x, S32 y, MASK mask);
+    void onMouseLeave(S32 x, S32 y, MASK mask);
+    virtual BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
 
-	static void showPlaceInfoPanel(S32 index);
+    static void showPlaceInfoPanel(S32 index);
 
-	LLHandle<LLTeleportHistoryFlatItem> getItemHandle()	{ mItemHandle.bind(this); return mItemHandle; }
+    LLHandle<LLTeleportHistoryFlatItem> getItemHandle() { mItemHandle.bind(this); return mItemHandle; }
 
 private:
-	void onProfileBtnClick();
+    void onProfileBtnClick();
     void showMenu(S32 x, S32 y);
 
-	LLButton* mProfileBtn;
-	LLTextBox* mTitle;
-	LLTextBox* mTimeTextBox;
-	
-	LLToggleableMenu *mMenu;
+    LLButton* mProfileBtn;
+    LLTextBox* mTitle;
+    LLTextBox* mTimeTextBox;
 
-	S32 mIndex;
-	std::string mRegionName;
-	std::string mHighlight;
-	LLDate 		mDate;
-	LLRootHandle<LLTeleportHistoryFlatItem> mItemHandle;
+    LLToggleableMenu *mMenu;
 
-	// <FS:Ansariel> Extended TP history
-	LLVector3	mLocalPos;
+    S32 mIndex;
+    std::string mRegionName;
+    std::string mHighlight;
+    LLDate      mDate;
+    LLRootHandle<LLTeleportHistoryFlatItem> mItemHandle;
 
-	LLTextBox*	mLocalPosBox;
-	// </FS:Ansariel>
+    // <FS:Ansariel> Extended TP history
+    LLVector3   mLocalPos;
+
+    LLTextBox*  mLocalPosBox;
+    // </FS:Ansariel>
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -127,24 +127,24 @@ private:
 
 class LLTeleportHistoryFlatItemStorage: public LLSingleton<LLTeleportHistoryFlatItemStorage>
 {
-	LLSINGLETON_EMPTY_CTOR(LLTeleportHistoryFlatItemStorage);
+    LLSINGLETON_EMPTY_CTOR(LLTeleportHistoryFlatItemStorage);
 protected:
-	typedef std::vector< LLHandle<LLTeleportHistoryFlatItem> > flat_item_list_t;
+    typedef std::vector< LLHandle<LLTeleportHistoryFlatItem> > flat_item_list_t;
 
 public:
-	LLTeleportHistoryFlatItem* getFlatItemForPersistentItem (
-		LLToggleableMenu *menu,
-		const LLTeleportHistoryPersistentItem& persistent_item,
-		const S32 cur_item_index,
-		const std::string &hl);
+    LLTeleportHistoryFlatItem* getFlatItemForPersistentItem (
+        LLToggleableMenu *menu,
+        const LLTeleportHistoryPersistentItem& persistent_item,
+        const S32 cur_item_index,
+        const std::string &hl);
 
-	void removeItem(LLTeleportHistoryFlatItem* item);
+    void removeItem(LLTeleportHistoryFlatItem* item);
 
-	void purge();
+    void purge();
 
 private:
 
-	flat_item_list_t mItems;
+    flat_item_list_t mItems;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -153,20 +153,20 @@ private:
 
 LLTeleportHistoryFlatItem::LLTeleportHistoryFlatItem(S32 index, LLToggleableMenu *menu, const std::string &region_name,
 // <FS:Ansariel> Extended TP history
-//																LLDate date, const std::string &hl)
-																LLDate date, const LLVector3& local_pos, const std::string &hl)
+//                                                              LLDate date, const std::string &hl)
+                                                                LLDate date, const LLVector3& local_pos, const std::string &hl)
 // </FS:Ansariel>
-:	LLPanel(),
-	mIndex(index),
-	mMenu(menu),
-	mRegionName(region_name),
-	mDate(date),
-	// <FS:Ansariel> Extended TP history
-	mLocalPos(local_pos),
-	// </FS:Ansariel>
-	mHighlight(hl)
+:   LLPanel(),
+    mIndex(index),
+    mMenu(menu),
+    mRegionName(region_name),
+    mDate(date),
+    // <FS:Ansariel> Extended TP history
+    mLocalPos(local_pos),
+    // </FS:Ansariel>
+    mHighlight(hl)
 {
-	buildFromFile("panel_teleport_history_item.xml");
+    buildFromFile("panel_teleport_history_item.xml");
 }
 
 LLTeleportHistoryFlatItem::~LLTeleportHistoryFlatItem()
@@ -176,174 +176,174 @@ LLTeleportHistoryFlatItem::~LLTeleportHistoryFlatItem()
 //virtual
 BOOL LLTeleportHistoryFlatItem::postBuild()
 {
-	mTitle = getChild<LLTextBox>("region");
+    mTitle = getChild<LLTextBox>("region");
 
-	mTimeTextBox = getChild<LLTextBox>("timestamp");
-	// <FS:Ansariel> Extended TP history
-	mLocalPosBox = getChild<LLTextBox>("position");
-	// </FS:Ansariel>
+    mTimeTextBox = getChild<LLTextBox>("timestamp");
+    // <FS:Ansariel> Extended TP history
+    mLocalPosBox = getChild<LLTextBox>("position");
+    // </FS:Ansariel>
 
-	mProfileBtn = getChild<LLButton>("profile_btn");
-        
-	mProfileBtn->setClickedCallback(boost::bind(&LLTeleportHistoryFlatItem::onProfileBtnClick, this));
+    mProfileBtn = getChild<LLButton>("profile_btn");
 
-	updateTitle();
-	updateTimestamp();
+    mProfileBtn->setClickedCallback(boost::bind(&LLTeleportHistoryFlatItem::onProfileBtnClick, this));
 
-	return true;
+    updateTitle();
+    updateTimestamp();
+
+    return true;
 }
 
 S32 LLTeleportHistoryFlatItem::notify(const LLSD& info)
 {
-	if(info.has("detach"))
-	{
-		delete mMouseDownSignal;
-		mMouseDownSignal = NULL;
-		delete mRightMouseDownSignal;
-		mRightMouseDownSignal = NULL;
-		return 1;
-	}
-	return 0;
+    if(info.has("detach"))
+    {
+        delete mMouseDownSignal;
+        mMouseDownSignal = NULL;
+        delete mRightMouseDownSignal;
+        mRightMouseDownSignal = NULL;
+        return 1;
+    }
+    return 0;
 }
 
 void LLTeleportHistoryFlatItem::setValue(const LLSD& value)
 {
-	if (!value.isMap()) return;;
-	if (!value.has("selected")) return;
-	getChildView("selected_icon")->setVisible( value["selected"]);
+    if (!value.isMap()) return;;
+    if (!value.has("selected")) return;
+    getChildView("selected_icon")->setVisible( value["selected"]);
 }
 
 void LLTeleportHistoryFlatItem::setHighlightedText(const std::string& text)
 {
-	mHighlight = text;
+    mHighlight = text;
 }
 
 void LLTeleportHistoryFlatItem::setRegionName(const std::string& name)
 {
-	mRegionName = name;
+    mRegionName = name;
 }
 
 void LLTeleportHistoryFlatItem::setDate(LLDate date)
 {
-	mDate = date;
+    mDate = date;
 }
 
 // <FS:Ansariel> Extended TP history
 void LLTeleportHistoryFlatItem::setLocalPos(const LLVector3& local_pos)
 {
-	mLocalPos.set(local_pos);
+    mLocalPos.set(local_pos);
 }
 // </FS:Ansariel>
 
 std::string LLTeleportHistoryFlatItem::getTimestamp()
 {
-	const LLDate &date = mDate;
-	std::string timestamp = "";
+    const LLDate &date = mDate;
+    std::string timestamp = "";
 
-	// <FS:Ansariel> Extended TP history
-	//LLDate now = LLDate::now();
-	//S32 now_year, now_month, now_day, now_hour, now_min, now_sec;
-	//now.split(&now_year, &now_month, &now_day, &now_hour, &now_min, &now_sec);
+    // <FS:Ansariel> Extended TP history
+    //LLDate now = LLDate::now();
+    //S32 now_year, now_month, now_day, now_hour, now_min, now_sec;
+    //now.split(&now_year, &now_month, &now_day, &now_hour, &now_min, &now_sec);
 
-	//const S32 seconds_in_day = 24 * 60 * 60;
-	//S32 seconds_today = now_hour * 60 * 60 + now_min * 60 + now_sec;
-	//S32 time_diff = (S32) now.secondsSinceEpoch() - (S32) date.secondsSinceEpoch();
+    //const S32 seconds_in_day = 24 * 60 * 60;
+    //S32 seconds_today = now_hour * 60 * 60 + now_min * 60 + now_sec;
+    //S32 time_diff = (S32) now.secondsSinceEpoch() - (S32) date.secondsSinceEpoch();
 
-	//// Only show timestamp for today and yesterday
-	//if(time_diff < seconds_today + seconds_in_day)
-	//{
-	//	timestamp = "[" + LLTrans::getString("TimeHour12")+"]:["
-	//					+ LLTrans::getString("TimeMin")+"] ["+ LLTrans::getString("TimeAMPM")+"]";
-	//	LLSD substitution;
-	//	substitution["datetime"] = (S32) date.secondsSinceEpoch();
-	//	LLStringUtil::format(timestamp, substitution);
-	//}
-	LLSD args;
-	args["datetime"] = date.secondsSinceEpoch();
-	timestamp = getString("DateFmt");
-	//<FS:Beq [timezone support for teleport history]>
-	// Check whether we have an override for the timezone
-	static const std::string xml_timezone = "utc"; // In case we decide to change the XML default !
-	static LLCachedControl<std::string> sFSTPHistoryTZ(gSavedSettings, "FSTPHistoryTZ");
-	boost::replace_all(timestamp, xml_timezone, sFSTPHistoryTZ());
-	LL_DEBUGS() << "Replacement DateFmt: " << timestamp << LL_ENDL;
-	//</FS:Beq>
-	LLStringUtil::format(timestamp, args);
-	// </FS:Ansariel>
+    //// Only show timestamp for today and yesterday
+    //if(time_diff < seconds_today + seconds_in_day)
+    //{
+    //  timestamp = "[" + LLTrans::getString("TimeHour12")+"]:["
+    //                  + LLTrans::getString("TimeMin")+"] ["+ LLTrans::getString("TimeAMPM")+"]";
+    //  LLSD substitution;
+    //  substitution["datetime"] = (S32) date.secondsSinceEpoch();
+    //  LLStringUtil::format(timestamp, substitution);
+    //}
+    LLSD args;
+    args["datetime"] = date.secondsSinceEpoch();
+    timestamp = getString("DateFmt");
+    //<FS:Beq [timezone support for teleport history]>
+    // Check whether we have an override for the timezone
+    static const std::string xml_timezone = "utc"; // In case we decide to change the XML default !
+    static LLCachedControl<std::string> sFSTPHistoryTZ(gSavedSettings, "FSTPHistoryTZ");
+    boost::replace_all(timestamp, xml_timezone, sFSTPHistoryTZ());
+    LL_DEBUGS() << "Replacement DateFmt: " << timestamp << LL_ENDL;
+    //</FS:Beq>
+    LLStringUtil::format(timestamp, args);
+    // </FS:Ansariel>
 
-	return timestamp;
+    return timestamp;
 
 }
 
 void LLTeleportHistoryFlatItem::updateTitle()
 {
-	static LLUIColor sFgColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", LLColor4U(255, 255, 255));
+    static LLUIColor sFgColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", LLColor4U(255, 255, 255));
 
-	LLTextUtil::textboxSetHighlightedVal(
-		mTitle,
-		LLStyle::Params().color(sFgColor),
-		mRegionName,
-		mHighlight);
+    LLTextUtil::textboxSetHighlightedVal(
+        mTitle,
+        LLStyle::Params().color(sFgColor),
+        mRegionName,
+        mHighlight);
 
-	// <FS:Ansariel> Extended TP history
-	LLTextUtil::textboxSetHighlightedVal(
-		mLocalPosBox,
-		LLStyle::Params().color(sFgColor),
-		llformat("%.0f, %.0f, %.0f", mLocalPos.mV[VX], mLocalPos.mV[VY], mLocalPos.mV[VZ]),
-		mHighlight);
-	// </FS:Ansariel>
+    // <FS:Ansariel> Extended TP history
+    LLTextUtil::textboxSetHighlightedVal(
+        mLocalPosBox,
+        LLStyle::Params().color(sFgColor),
+        llformat("%.0f, %.0f, %.0f", mLocalPos.mV[VX], mLocalPos.mV[VY], mLocalPos.mV[VZ]),
+        mHighlight);
+    // </FS:Ansariel>
 }
 
 void LLTeleportHistoryFlatItem::updateTimestamp()
 {
-	static LLUIColor sFgColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", LLColor4U(255, 255, 255));
+    static LLUIColor sFgColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", LLColor4U(255, 255, 255));
 
-	LLTextUtil::textboxSetHighlightedVal(
-		mTimeTextBox,
-		LLStyle::Params().color(sFgColor),
-		getTimestamp(),
-		mHighlight);
+    LLTextUtil::textboxSetHighlightedVal(
+        mTimeTextBox,
+        LLStyle::Params().color(sFgColor),
+        getTimestamp(),
+        mHighlight);
 }
 
 void LLTeleportHistoryFlatItem::onMouseEnter(S32 x, S32 y, MASK mask)
 {
-	getChildView("hovered_icon")->setVisible( true);
-	mProfileBtn->setVisible(true);
+    getChildView("hovered_icon")->setVisible( true);
+    mProfileBtn->setVisible(true);
 
-	LLPanel::onMouseEnter(x, y, mask);
+    LLPanel::onMouseEnter(x, y, mask);
 }
 
 void LLTeleportHistoryFlatItem::onMouseLeave(S32 x, S32 y, MASK mask)
 {
-	getChildView("hovered_icon")->setVisible( false);
-	mProfileBtn->setVisible(false);
+    getChildView("hovered_icon")->setVisible( false);
+    mProfileBtn->setVisible(false);
 
-	LLPanel::onMouseLeave(x, y, mask);
+    LLPanel::onMouseLeave(x, y, mask);
 }
 
 // virtual
 BOOL LLTeleportHistoryFlatItem::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
     LLPanel::handleRightMouseDown(x, y, mask);
-	showMenu(x, y);
+    showMenu(x, y);
     return TRUE;
 }
 
 void LLTeleportHistoryFlatItem::showPlaceInfoPanel(S32 index)
 {
-	LLSD params;
-	params["id"] = index;
-	params["type"] = "teleport_history";
+    LLSD params;
+    params["id"] = index;
+    params["type"] = "teleport_history";
 
-	// <FS:Ansariel> FIRE-817: Separate place details floater
-	//LLFloaterSidePanelContainer::showPanel("places", params);
-	FSFloaterPlaceDetails::showPlaceDetails(params);
-	// </FS:Ansariel>
+    // <FS:Ansariel> FIRE-817: Separate place details floater
+    //LLFloaterSidePanelContainer::showPanel("places", params);
+    FSFloaterPlaceDetails::showPlaceDetails(params);
+    // </FS:Ansariel>
 }
 
 void LLTeleportHistoryFlatItem::onProfileBtnClick()
 {
-	LLTeleportHistoryFlatItem::showPlaceInfoPanel(mIndex);
+    LLTeleportHistoryFlatItem::showPlaceInfoPanel(mIndex);
 }
 
 void LLTeleportHistoryFlatItem::showMenu(S32 x, S32 y)
@@ -362,85 +362,85 @@ void LLTeleportHistoryFlatItem::showMenu(S32 x, S32 y)
 
 LLTeleportHistoryFlatItem*
 LLTeleportHistoryFlatItemStorage::getFlatItemForPersistentItem (
-	LLToggleableMenu *menu,
-	const LLTeleportHistoryPersistentItem& persistent_item,
-	const S32 cur_item_index,
-	const std::string &hl)
+    LLToggleableMenu *menu,
+    const LLTeleportHistoryPersistentItem& persistent_item,
+    const S32 cur_item_index,
+    const std::string &hl)
 {
-	// <FS:Ansariel> Extended TP history
-	LLVector3 local_pos((F32)fmod(persistent_item.mGlobalPos.mdV[VX], (F64)REGION_WIDTH_METERS),
-						(F32)fmod(persistent_item.mGlobalPos.mdV[VY], (F64)REGION_WIDTH_METERS),
-						(F32)persistent_item.mGlobalPos.mdV[VZ]);
-	// </FS:Ansariel>
+    // <FS:Ansariel> Extended TP history
+    LLVector3 local_pos((F32)fmod(persistent_item.mGlobalPos.mdV[VX], (F64)REGION_WIDTH_METERS),
+                        (F32)fmod(persistent_item.mGlobalPos.mdV[VY], (F64)REGION_WIDTH_METERS),
+                        (F32)persistent_item.mGlobalPos.mdV[VZ]);
+    // </FS:Ansariel>
 
-	LLTeleportHistoryFlatItem* item = NULL;
-	if ( cur_item_index < (S32) mItems.size() )
-	{
-		item = mItems[cur_item_index].get();
-		if (item->getParent() == NULL)
-		{
-			item->setIndex(cur_item_index);
-			item->setRegionName(persistent_item.mTitle);
-			item->setDate(persistent_item.mDate);
-			// <FS:Ansariel> Extended TP history
-			item->setLocalPos(local_pos);
-			// </FS:Ansariel>
-			item->setHighlightedText(hl);
-			item->setVisible(TRUE);
-			item->updateTitle();
-			item->updateTimestamp();
-		}
-		else
-		{
-			// Item already added to parent
-			item = NULL;
-		}
-	}
+    LLTeleportHistoryFlatItem* item = NULL;
+    if ( cur_item_index < (S32) mItems.size() )
+    {
+        item = mItems[cur_item_index].get();
+        if (item->getParent() == NULL)
+        {
+            item->setIndex(cur_item_index);
+            item->setRegionName(persistent_item.mTitle);
+            item->setDate(persistent_item.mDate);
+            // <FS:Ansariel> Extended TP history
+            item->setLocalPos(local_pos);
+            // </FS:Ansariel>
+            item->setHighlightedText(hl);
+            item->setVisible(TRUE);
+            item->updateTitle();
+            item->updateTimestamp();
+        }
+        else
+        {
+            // Item already added to parent
+            item = NULL;
+        }
+    }
 
-	if ( !item )
-	{
-		item = new LLTeleportHistoryFlatItem(cur_item_index,
-											 menu,
-											 persistent_item.mTitle,
-											 persistent_item.mDate,
-											 // <FS:Ansariel> Extended TP history
-											 local_pos,
-											 // </FS:Ansariel>
-											 hl);
-		mItems.push_back(item->getItemHandle());
-	}
+    if ( !item )
+    {
+        item = new LLTeleportHistoryFlatItem(cur_item_index,
+                                             menu,
+                                             persistent_item.mTitle,
+                                             persistent_item.mDate,
+                                             // <FS:Ansariel> Extended TP history
+                                             local_pos,
+                                             // </FS:Ansariel>
+                                             hl);
+        mItems.push_back(item->getItemHandle());
+    }
 
-	return item;
+    return item;
 }
 
 void LLTeleportHistoryFlatItemStorage::removeItem(LLTeleportHistoryFlatItem* item)
 {
-	if (item)
-	{
-		flat_item_list_t::iterator item_iter = std::find(mItems.begin(),
-														 mItems.end(),
-														 item->getItemHandle());
-		if (item_iter != mItems.end())
-		{
-			mItems.erase(item_iter);
-		}
-	}
+    if (item)
+    {
+        flat_item_list_t::iterator item_iter = std::find(mItems.begin(),
+                                                         mItems.end(),
+                                                         item->getItemHandle());
+        if (item_iter != mItems.end())
+        {
+            mItems.erase(item_iter);
+        }
+    }
 }
 
 void LLTeleportHistoryFlatItemStorage::purge()
 {
-	for ( flat_item_list_t::iterator
-			  it = mItems.begin(),
-			  it_end = mItems.end();
-		  it != it_end; ++it )
-	{
-		LLHandle <LLTeleportHistoryFlatItem> item_handle = *it;
-		if ( !item_handle.isDead() && item_handle.get()->getParent() == NULL )
-		{
-			item_handle.get()->die();
-		}
-	}
-	mItems.clear();
+    for ( flat_item_list_t::iterator
+              it = mItems.begin(),
+              it_end = mItems.end();
+          it != it_end; ++it )
+    {
+        LLHandle <LLTeleportHistoryFlatItem> item_handle = *it;
+        if ( !item_handle.isDead() && item_handle.get()->getParent() == NULL )
+        {
+            item_handle.get()->die();
+        }
+    }
+    mItems.clear();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -452,31 +452,31 @@ void LLTeleportHistoryFlatItemStorage::purge()
 //static LLPanelInjector<LLTeleportHistoryPanel> t_teleport_history("panel_teleport_history");
 
 LLTeleportHistoryPanel::LLTeleportHistoryPanel()
-	:	LLPanelPlacesTab(),
-		mDirty(true),
-		mCurrentItem(0),
-		mTeleportHistory(NULL),
-		mHistoryAccordion(NULL),
-		mAccordionTabMenu(NULL),
-		mLastSelectedFlatlList(NULL),
-		mLastSelectedItemIndex(-1),
-		mGearItemMenu(NULL),
-		mSortingMenu(NULL),
-		// <FS:Ansariel> Separate search filter for standalone TP history
-		mIsStandAlone(false)
-		// </FS:Ansariel>
+    :   LLPanelPlacesTab(),
+        mDirty(true),
+        mCurrentItem(0),
+        mTeleportHistory(NULL),
+        mHistoryAccordion(NULL),
+        mAccordionTabMenu(NULL),
+        mLastSelectedFlatlList(NULL),
+        mLastSelectedItemIndex(-1),
+        mGearItemMenu(NULL),
+        mSortingMenu(NULL),
+        // <FS:Ansariel> Separate search filter for standalone TP history
+        mIsStandAlone(false)
+        // </FS:Ansariel>
 {
-	// <FS:Beq> [timezone support for teleport history] 
-	mCommitCallbackRegistrar.add("TeleportHistory.TimeZone.Set", boost::bind(&LLTeleportHistoryPanel::onTimeZoneChecked, this, _2));
-	mEnableCallbackRegistrar.add("TeleportHistory.TimeZone.Check", boost::bind(&LLTeleportHistoryPanel::isTimeZoneChecked, this, _2));
-	// </FS:Beq>
-	buildFromFile( "panel_teleport_history.xml");
+    // <FS:Beq> [timezone support for teleport history]
+    mCommitCallbackRegistrar.add("TeleportHistory.TimeZone.Set", boost::bind(&LLTeleportHistoryPanel::onTimeZoneChecked, this, _2));
+    mEnableCallbackRegistrar.add("TeleportHistory.TimeZone.Check", boost::bind(&LLTeleportHistoryPanel::isTimeZoneChecked, this, _2));
+    // </FS:Beq>
+    buildFromFile( "panel_teleport_history.xml");
 }
 
 LLTeleportHistoryPanel::~LLTeleportHistoryPanel()
 {
-	LLTeleportHistoryFlatItemStorage::instance().purge();
-	mTeleportHistoryChangedConnection.disconnect();
+    LLTeleportHistoryFlatItemStorage::instance().purge();
+    mTeleportHistoryChangedConnection.disconnect();
 }
 
 BOOL LLTeleportHistoryPanel::postBuild()
@@ -489,138 +489,138 @@ BOOL LLTeleportHistoryPanel::postBuild()
     mGearItemMenu->setAlwaysShowMenu(TRUE); // all items can be disabled if nothing is selected, show anyway
     mSortingMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_teleport_history_gear.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 
-	mTeleportHistory = LLTeleportHistoryStorage::getInstance();
-	if (mTeleportHistory)
-	{
-		mTeleportHistoryChangedConnection = mTeleportHistory->setHistoryChangedCallback(boost::bind(&LLTeleportHistoryPanel::onTeleportHistoryChange, this, _1));
-	}
+    mTeleportHistory = LLTeleportHistoryStorage::getInstance();
+    if (mTeleportHistory)
+    {
+        mTeleportHistoryChangedConnection = mTeleportHistory->setHistoryChangedCallback(boost::bind(&LLTeleportHistoryPanel::onTeleportHistoryChange, this, _1));
+    }
 
-	mHistoryAccordion = getChild<LLAccordionCtrl>("history_accordion");
+    mHistoryAccordion = getChild<LLAccordionCtrl>("history_accordion");
 
-	if (mHistoryAccordion)
-	{
-		for (child_list_const_iter_t iter = mHistoryAccordion->beginChild(); iter != mHistoryAccordion->endChild(); iter++)
-		{
-			if (dynamic_cast<LLAccordionCtrlTab*>(*iter))
-			{
-				LLAccordionCtrlTab* tab = (LLAccordionCtrlTab*)*iter;
-				tab->setRightMouseDownCallback(boost::bind(&LLTeleportHistoryPanel::onAccordionTabRightClick, this, _1, _2, _3, _4));
-				tab->setDisplayChildren(false);
-				tab->setDropDownStateChangedCallback(boost::bind(&LLTeleportHistoryPanel::onAccordionExpand, this, _1, _2));
+    if (mHistoryAccordion)
+    {
+        for (child_list_const_iter_t iter = mHistoryAccordion->beginChild(); iter != mHistoryAccordion->endChild(); iter++)
+        {
+            if (dynamic_cast<LLAccordionCtrlTab*>(*iter))
+            {
+                LLAccordionCtrlTab* tab = (LLAccordionCtrlTab*)*iter;
+                tab->setRightMouseDownCallback(boost::bind(&LLTeleportHistoryPanel::onAccordionTabRightClick, this, _1, _2, _3, _4));
+                tab->setDisplayChildren(false);
+                tab->setDropDownStateChangedCallback(boost::bind(&LLTeleportHistoryPanel::onAccordionExpand, this, _1, _2));
 
-				// All accordion tabs are collapsed initially
-				setAccordionCollapsedByUser(tab, true);
+                // All accordion tabs are collapsed initially
+                setAccordionCollapsedByUser(tab, true);
 
-				mItemContainers.push_back(tab);
+                mItemContainers.push_back(tab);
 
-				LLFlatListView* fl = getFlatListViewFromTab(tab);
-				if (fl)
-				{
-					fl->setCommitOnSelectionChange(true);
-					fl->setDoubleClickCallback(boost::bind(&LLTeleportHistoryPanel::onDoubleClickItem, this));
-					fl->setCommitCallback(boost::bind(&LLTeleportHistoryPanel::handleItemSelect, this, fl));
-					fl->setReturnCallback(boost::bind(&LLTeleportHistoryPanel::onReturnKeyPressed, this));
-				}
-			}
-		}
+                LLFlatListView* fl = getFlatListViewFromTab(tab);
+                if (fl)
+                {
+                    fl->setCommitOnSelectionChange(true);
+                    fl->setDoubleClickCallback(boost::bind(&LLTeleportHistoryPanel::onDoubleClickItem, this));
+                    fl->setCommitCallback(boost::bind(&LLTeleportHistoryPanel::handleItemSelect, this, fl));
+                    fl->setReturnCallback(boost::bind(&LLTeleportHistoryPanel::onReturnKeyPressed, this));
+                }
+            }
+        }
 
-		// Open first 2 accordion tabs
-		if (mItemContainers.size() > 1)
-		{
-			LLAccordionCtrlTab* tab = mItemContainers.at(mItemContainers.size() - 1);
-			tab->setDisplayChildren(true);
-			setAccordionCollapsedByUser(tab, false);
-		}
+        // Open first 2 accordion tabs
+        if (mItemContainers.size() > 1)
+        {
+            LLAccordionCtrlTab* tab = mItemContainers.at(mItemContainers.size() - 1);
+            tab->setDisplayChildren(true);
+            setAccordionCollapsedByUser(tab, false);
+        }
 
-		if (mItemContainers.size() > 2)
-		{
-			LLAccordionCtrlTab* tab = mItemContainers.at(mItemContainers.size() - 2);
-			tab->setDisplayChildren(true);
-			setAccordionCollapsedByUser(tab, false);
-		}
-	}
+        if (mItemContainers.size() > 2)
+        {
+            LLAccordionCtrlTab* tab = mItemContainers.at(mItemContainers.size() - 2);
+            tab->setDisplayChildren(true);
+            setAccordionCollapsedByUser(tab, false);
+        }
+    }
 
-	return TRUE;
+    return TRUE;
 }
 
 // virtual
 void LLTeleportHistoryPanel::draw()
 {
-	if (mDirty)
-		refresh();
+    if (mDirty)
+        refresh();
 
-	LLPanelPlacesTab::draw();
+    LLPanelPlacesTab::draw();
 }
 
 // virtual
 void LLTeleportHistoryPanel::onSearchEdit(const std::string& string)
 {
-	// <FS:Ansariel> Separate search filter for standalone TP history
-	//sFilterSubString = string;
-	if (mIsStandAlone)
-	{
-		mFilterString = string;
-	}
-	else
-	{
-		sFilterSubString = string;
-	}
-	// </FS:Ansariel>
-	showTeleportHistory();
+    // <FS:Ansariel> Separate search filter for standalone TP history
+    //sFilterSubString = string;
+    if (mIsStandAlone)
+    {
+        mFilterString = string;
+    }
+    else
+    {
+        sFilterSubString = string;
+    }
+    // </FS:Ansariel>
+    showTeleportHistory();
 }
 
 // virtual
 bool LLTeleportHistoryPanel::isSingleItemSelected()
 {
-	return mLastSelectedFlatlList && mLastSelectedFlatlList->getSelectedItem();
+    return mLastSelectedFlatlList && mLastSelectedFlatlList->getSelectedItem();
 }
 
 // virtual
 void LLTeleportHistoryPanel::onShowOnMap()
 {
-	if (!mLastSelectedFlatlList)
-		return;
+    if (!mLastSelectedFlatlList)
+        return;
 
-	LLTeleportHistoryFlatItem* itemp = dynamic_cast<LLTeleportHistoryFlatItem *> (mLastSelectedFlatlList->getSelectedItem());
+    LLTeleportHistoryFlatItem* itemp = dynamic_cast<LLTeleportHistoryFlatItem *> (mLastSelectedFlatlList->getSelectedItem());
 
-	if(!itemp)
-		return;
+    if(!itemp)
+        return;
 
-	LLVector3d global_pos = mTeleportHistory->getItems()[itemp->getIndex()].mGlobalPos;
+    LLVector3d global_pos = mTeleportHistory->getItems()[itemp->getIndex()].mGlobalPos;
 
-	if (!global_pos.isExactlyZero())
-	{
-		LLFloaterWorldMap::getInstance()->trackLocation(global_pos);
-		LLFloaterReg::showInstance("world_map", "center");
-	}
+    if (!global_pos.isExactlyZero())
+    {
+        LLFloaterWorldMap::getInstance()->trackLocation(global_pos);
+        LLFloaterReg::showInstance("world_map", "center");
+    }
 }
 
 //virtual
 void LLTeleportHistoryPanel::onShowProfile()
 {
-	if (!mLastSelectedFlatlList)
-		return;
+    if (!mLastSelectedFlatlList)
+        return;
 
-	LLTeleportHistoryFlatItem* itemp = dynamic_cast<LLTeleportHistoryFlatItem *> (mLastSelectedFlatlList->getSelectedItem());
+    LLTeleportHistoryFlatItem* itemp = dynamic_cast<LLTeleportHistoryFlatItem *> (mLastSelectedFlatlList->getSelectedItem());
 
-	if(!itemp)
-		return;
+    if(!itemp)
+        return;
 
-	LLTeleportHistoryFlatItem::showPlaceInfoPanel(itemp->getIndex());
+    LLTeleportHistoryFlatItem::showPlaceInfoPanel(itemp->getIndex());
 }
 
 // virtual
 void LLTeleportHistoryPanel::onTeleport()
 {
-	if (!mLastSelectedFlatlList)
-		return;
+    if (!mLastSelectedFlatlList)
+        return;
 
-	LLTeleportHistoryFlatItem* itemp = dynamic_cast<LLTeleportHistoryFlatItem *> (mLastSelectedFlatlList->getSelectedItem());
-	if(!itemp)
-		return;
+    LLTeleportHistoryFlatItem* itemp = dynamic_cast<LLTeleportHistoryFlatItem *> (mLastSelectedFlatlList->getSelectedItem());
+    if(!itemp)
+        return;
 
-	// teleport to existing item in history, so we don't add it again
-	confirmTeleport(itemp->getIndex());
+    // teleport to existing item in history, so we don't add it again
+    confirmTeleport(itemp->getIndex());
 }
 
 // virtual
@@ -633,52 +633,52 @@ void LLTeleportHistoryPanel::onRemoveSelected()
 // virtual
 void LLTeleportHistoryPanel::onCopySLURL()
 {
-	LLScrollListItem* itemp = mHistoryItems->getFirstSelected();
-	if(!itemp)
-		return;
+    LLScrollListItem* itemp = mHistoryItems->getFirstSelected();
+    if(!itemp)
+        return;
 
-	S32 index = itemp->getColumn(LIST_INDEX)->getValue().asInteger();
+    S32 index = itemp->getColumn(LIST_INDEX)->getValue().asInteger();
 
-	const LLTeleportHistory::slurl_list_t& hist_items = mTeleportHistory->getItems();
+    const LLTeleportHistory::slurl_list_t& hist_items = mTeleportHistory->getItems();
 
-	LLVector3d global_pos = hist_items[index].mGlobalPos;
+    LLVector3d global_pos = hist_items[index].mGlobalPos;
 
-	U64 new_region_handle = to_region_handle(global_pos);
+    U64 new_region_handle = to_region_handle(global_pos);
 
-	LLWorldMapMessage::url_callback_t cb = boost::bind(
-			&LLPanelPlacesTab::onRegionResponse, this,
-			global_pos, _1, _2, _3, _4);
+    LLWorldMapMessage::url_callback_t cb = boost::bind(
+            &LLPanelPlacesTab::onRegionResponse, this,
+            global_pos, _1, _2, _3, _4);
 
-	LLWorldMap::getInstance()->sendHandleRegionRequest(new_region_handle, cb, std::string("unused"), false);
+    LLWorldMap::getInstance()->sendHandleRegionRequest(new_region_handle, cb, std::string("unused"), false);
 }
 */
 
 // virtual
 void LLTeleportHistoryPanel::updateVerbs()
 {
-	if (!isTabVisible())
-		return;
+    if (!isTabVisible())
+        return;
 
-	if (sRemoveBtn)
-	{
-		sRemoveBtn->setEnabled(true);
-	}
+    if (sRemoveBtn)
+    {
+        sRemoveBtn->setEnabled(true);
+    }
 
-	// <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
-	if (!mLastSelectedFlatlList)
-	{
-		mTeleportBtn->setEnabled(false);
-		mShowProfile->setEnabled(false);
-		mShowOnMapBtn->setEnabled(false);
-		return;
-	}
+    // <FS:Ansariel> FIRE-31033: Keep Teleport/Map/Profile buttons on places floater
+    if (!mLastSelectedFlatlList)
+    {
+        mTeleportBtn->setEnabled(false);
+        mShowProfile->setEnabled(false);
+        mShowOnMapBtn->setEnabled(false);
+        return;
+    }
 
-	LLTeleportHistoryFlatItem* itemp = dynamic_cast<LLTeleportHistoryFlatItem *> (mLastSelectedFlatlList->getSelectedItem());
+    LLTeleportHistoryFlatItem* itemp = dynamic_cast<LLTeleportHistoryFlatItem *> (mLastSelectedFlatlList->getSelectedItem());
 
-	mTeleportBtn->setEnabled(NULL != itemp && RlvActions::canTeleportToLocation());
-	mShowProfile->setEnabled(NULL != itemp);
-	mShowOnMapBtn->setEnabled(NULL != itemp && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWWORLDMAP));
-	// </FS:Ansariel>
+    mTeleportBtn->setEnabled(NULL != itemp && RlvActions::canTeleportToLocation());
+    mShowProfile->setEnabled(NULL != itemp);
+    mShowOnMapBtn->setEnabled(NULL != itemp && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWWORLDMAP));
+    // </FS:Ansariel>
 }
 
 // virtual
@@ -701,488 +701,488 @@ LLToggleableMenu* LLTeleportHistoryPanel::getCreateMenu()
 
 void LLTeleportHistoryPanel::getNextTab(const LLDate& item_date, S32& tab_idx, LLDate& tab_date)
 {
-	const U32 seconds_in_day = 24 * 60 * 60;
-	//<FS:Beq [timezone support for teleport history]>
-	static LLCachedControl<std::string> sFSTPHistoryTZ(gSavedSettings, "FSTPHistoryTZ");
-	//</FS:Beq>
-	S32 tabs_cnt = mItemContainers.size();
-	S32 curr_year = 0, curr_month = 0, curr_day = 0;
+    const U32 seconds_in_day = 24 * 60 * 60;
+    //<FS:Beq [timezone support for teleport history]>
+    static LLCachedControl<std::string> sFSTPHistoryTZ(gSavedSettings, "FSTPHistoryTZ");
+    //</FS:Beq>
+    S32 tabs_cnt = mItemContainers.size();
+    S32 curr_year = 0, curr_month = 0, curr_day = 0;
 
-	tab_date = LLDate::now(); 
-	//<FS:Beq [timezone support for teleport history]>
-	// 1) Tab_date is now() which is UTC so we need to onvert that to timezoen by dedcuting the offset
-	// before we flatten to current day
-	// Given currrent date/time in UTC (tab_date) apply the offset for the users selected preference
-	// Must be done before the split and adjust to get midnight today
-	if (sFSTPHistoryTZ() == "local")   // local
-	{
-		tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() - LLStringOps::getLocalTimeOffset());
-	}
-	else if (sFSTPHistoryTZ() != "utc") // slt
-	{
-		// note that SLT is a +ve offset
-		tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() - LLStringOps::getPacificTimeOffset());
-	}
-	// we now have the adjusted date time which maybe a different day to the UTC day
-	//</FS:Beq>
-	tab_date.split(&curr_year, &curr_month, &curr_day);
-	tab_date.fromYMDHMS(curr_year, curr_month, curr_day); // Set hour, min, and sec to 0
-	tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() + seconds_in_day);
-	//<FS:Beq [timezone support for teleport history]>
-	// 2) Tab_date is cutrrently last second of the selected TZ current day. Adjust back
-	// Given date/time in midnight UTC (tab_date) apply the offset for the users selected preference
-	// (add offset).
-	if (sFSTPHistoryTZ() == "local")   // local
-	{
-		tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() + LLStringOps::getLocalTimeOffset());
-	}
-	else if (sFSTPHistoryTZ() != "utc") // slt
-	{
-		// note that SLT is a +ve offset
-		tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() + LLStringOps::getPacificTimeOffset());
-	}
-	// we now have the adjusted date time which maybe a different day to the UTC day
-	// Note that the existing logic below is "slightly" broken. Adding "seconds_in_day" to establish "next 23:59" will be wrong for leapseconds
-	// however fixing it is more risky than the change warrants.
-	// Other edge cases can feasibily occur due to change of time during list build. not important
-	//</FS:Beq>
+    tab_date = LLDate::now();
+    //<FS:Beq [timezone support for teleport history]>
+    // 1) Tab_date is now() which is UTC so we need to onvert that to timezoen by dedcuting the offset
+    // before we flatten to current day
+    // Given currrent date/time in UTC (tab_date) apply the offset for the users selected preference
+    // Must be done before the split and adjust to get midnight today
+    if (sFSTPHistoryTZ() == "local")   // local
+    {
+        tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() - LLStringOps::getLocalTimeOffset());
+    }
+    else if (sFSTPHistoryTZ() != "utc") // slt
+    {
+        // note that SLT is a +ve offset
+        tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() - LLStringOps::getPacificTimeOffset());
+    }
+    // we now have the adjusted date time which maybe a different day to the UTC day
+    //</FS:Beq>
+    tab_date.split(&curr_year, &curr_month, &curr_day);
+    tab_date.fromYMDHMS(curr_year, curr_month, curr_day); // Set hour, min, and sec to 0
+    tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() + seconds_in_day);
+    //<FS:Beq [timezone support for teleport history]>
+    // 2) Tab_date is cutrrently last second of the selected TZ current day. Adjust back
+    // Given date/time in midnight UTC (tab_date) apply the offset for the users selected preference
+    // (add offset).
+    if (sFSTPHistoryTZ() == "local")   // local
+    {
+        tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() + LLStringOps::getLocalTimeOffset());
+    }
+    else if (sFSTPHistoryTZ() != "utc") // slt
+    {
+        // note that SLT is a +ve offset
+        tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() + LLStringOps::getPacificTimeOffset());
+    }
+    // we now have the adjusted date time which maybe a different day to the UTC day
+    // Note that the existing logic below is "slightly" broken. Adding "seconds_in_day" to establish "next 23:59" will be wrong for leapseconds
+    // however fixing it is more risky than the change warrants.
+    // Other edge cases can feasibily occur due to change of time during list build. not important
+    //</FS:Beq>
 
-	tab_idx = -1;
+    tab_idx = -1;
 
-	while (tab_idx < tabs_cnt - 1 && item_date < tab_date)
-	{
-		tab_idx++;
+    while (tab_idx < tabs_cnt - 1 && item_date < tab_date)
+    {
+        tab_idx++;
 
-		if (tab_idx <= tabs_cnt - 4)
-		{
-			// All tabs, except last three, are tabs for one day, so just push tab_date back by one day
-			tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() - seconds_in_day);
-		}
-		else if (tab_idx == tabs_cnt - 3) // 6 day and older, low boundary is 1 month
-		{
-			tab_date =  LLDate::now();
-			tab_date.split(&curr_year, &curr_month, &curr_day);
-			curr_month--;
-			if (0 == curr_month)
-			{
-				curr_month = 12;
-				curr_year--;
-			}
-			tab_date.fromYMDHMS(curr_year, curr_month, curr_day);
-		}
-		else if (tab_idx == tabs_cnt - 2) // 1 month and older, low boundary is 6 months
-		{
-			tab_date =  LLDate::now();
-			tab_date.split(&curr_year, &curr_month, &curr_day);
-			if (curr_month > 6)
-			{
-				curr_month -= 6;
-			}
-			else
-			{
-				curr_month += 6;
-				curr_year--;
-			}
-			tab_date.fromYMDHMS(curr_year, curr_month, curr_day);
-		}
-		else // 6 months and older
-		{
-			tab_date.secondsSinceEpoch(0);
-		}
-	}
+        if (tab_idx <= tabs_cnt - 4)
+        {
+            // All tabs, except last three, are tabs for one day, so just push tab_date back by one day
+            tab_date.secondsSinceEpoch(tab_date.secondsSinceEpoch() - seconds_in_day);
+        }
+        else if (tab_idx == tabs_cnt - 3) // 6 day and older, low boundary is 1 month
+        {
+            tab_date =  LLDate::now();
+            tab_date.split(&curr_year, &curr_month, &curr_day);
+            curr_month--;
+            if (0 == curr_month)
+            {
+                curr_month = 12;
+                curr_year--;
+            }
+            tab_date.fromYMDHMS(curr_year, curr_month, curr_day);
+        }
+        else if (tab_idx == tabs_cnt - 2) // 1 month and older, low boundary is 6 months
+        {
+            tab_date =  LLDate::now();
+            tab_date.split(&curr_year, &curr_month, &curr_day);
+            if (curr_month > 6)
+            {
+                curr_month -= 6;
+            }
+            else
+            {
+                curr_month += 6;
+                curr_year--;
+            }
+            tab_date.fromYMDHMS(curr_year, curr_month, curr_day);
+        }
+        else // 6 months and older
+        {
+            tab_date.secondsSinceEpoch(0);
+        }
+    }
 }
 
 // Called to add items, no more, than ADD_LIMIT at time
 void LLTeleportHistoryPanel::refresh()
 {
-	if (!mHistoryAccordion)
-	{
-		mDirty = false;
-		return;
-	}
+    if (!mHistoryAccordion)
+    {
+        mDirty = false;
+        return;
+    }
 
-	const LLTeleportHistoryStorage::slurl_list_t& items = mTeleportHistory->getItems();
+    const LLTeleportHistoryStorage::slurl_list_t& items = mTeleportHistory->getItems();
 
-	// Setting tab_boundary_date to "now", so date from any item would be earlier, than boundary.
-	// That leads to call to getNextTab to get right tab_idx in first pass
-	LLDate tab_boundary_date =  LLDate::now();
+    // Setting tab_boundary_date to "now", so date from any item would be earlier, than boundary.
+    // That leads to call to getNextTab to get right tab_idx in first pass
+    LLDate tab_boundary_date =  LLDate::now();
 
-	LLFlatListView* curr_flat_view = NULL;
-	std::string filter_string = sFilterSubString;
-	// <FS:Ansariel> Separate search filter for standalone TP history
-	if (mIsStandAlone)
-	{
-		filter_string = mFilterString;
-	}
-	// </FS:Ansariel>
+    LLFlatListView* curr_flat_view = NULL;
+    std::string filter_string = sFilterSubString;
+    // <FS:Ansariel> Separate search filter for standalone TP history
+    if (mIsStandAlone)
+    {
+        filter_string = mFilterString;
+    }
+    // </FS:Ansariel>
 
-	LLStringUtil::toUpper(filter_string);
+    LLStringUtil::toUpper(filter_string);
 
-	U32 added_items = 0;
-	while (mCurrentItem >= 0)
-	{
-		// Filtering
-		if (!filter_string.empty())
-		{
-			std::string landmark_title(items[mCurrentItem].mTitle);
-			LLStringUtil::toUpper(landmark_title);
-			if( std::string::npos == landmark_title.find(filter_string) )
-			{
-				mCurrentItem--;
-				continue;
-			}
-		}
+    U32 added_items = 0;
+    while (mCurrentItem >= 0)
+    {
+        // Filtering
+        if (!filter_string.empty())
+        {
+            std::string landmark_title(items[mCurrentItem].mTitle);
+            LLStringUtil::toUpper(landmark_title);
+            if( std::string::npos == landmark_title.find(filter_string) )
+            {
+                mCurrentItem--;
+                continue;
+            }
+        }
 
-		// Checking whether date of item is earlier, than tab_boundary_date.
-		// In that case, item should be added to another tab
-		const LLDate &date = items[mCurrentItem].mDate;
+        // Checking whether date of item is earlier, than tab_boundary_date.
+        // In that case, item should be added to another tab
+        const LLDate &date = items[mCurrentItem].mDate;
 
-		if (date < tab_boundary_date)
-		{
-			// Getting apropriate tab_idx for this and subsequent items,
-			// tab_boundary_date would be earliest possible date for this tab
-			S32 tab_idx = 0;
-			getNextTab(date, tab_idx, tab_boundary_date);
-			tab_idx = mItemContainers.size() - 1 - tab_idx;
-			if (tab_idx >= 0)
-			{
-				LLAccordionCtrlTab* tab = mItemContainers.at(tab_idx);
-				tab->setVisible(true);
+        if (date < tab_boundary_date)
+        {
+            // Getting apropriate tab_idx for this and subsequent items,
+            // tab_boundary_date would be earliest possible date for this tab
+            S32 tab_idx = 0;
+            getNextTab(date, tab_idx, tab_boundary_date);
+            tab_idx = mItemContainers.size() - 1 - tab_idx;
+            if (tab_idx >= 0)
+            {
+                LLAccordionCtrlTab* tab = mItemContainers.at(tab_idx);
+                tab->setVisible(true);
 
-				// Expand all accordion tabs when filtering
-				// <FS:Ansariel> Separate search filter for standalone TP history
-				//if(!sFilterSubString.empty())
-				std::string str_filter = sFilterSubString;
-				if (mIsStandAlone)
-				{
-					str_filter = mFilterString;
-				}
-				if (!str_filter.empty())
-				// <FS:Ansariel>
-				{
-					//store accordion tab state when filter is not empty
-					tab->notifyChildren(LLSD().with("action","store_state"));
-				
-					tab->setDisplayChildren(true);
-				}
-				// Restore each tab's expand state when not filtering
-				else
-				{
-					bool collapsed = isAccordionCollapsedByUser(tab);
-					tab->setDisplayChildren(!collapsed);
-			
-					//restore accordion state after all those accodrion tabmanipulations
-					tab->notifyChildren(LLSD().with("action","restore_state"));
-				}
+                // Expand all accordion tabs when filtering
+                // <FS:Ansariel> Separate search filter for standalone TP history
+                //if(!sFilterSubString.empty())
+                std::string str_filter = sFilterSubString;
+                if (mIsStandAlone)
+                {
+                    str_filter = mFilterString;
+                }
+                if (!str_filter.empty())
+                // <FS:Ansariel>
+                {
+                    //store accordion tab state when filter is not empty
+                    tab->notifyChildren(LLSD().with("action","store_state"));
 
-				curr_flat_view = getFlatListViewFromTab(tab);
-			}
-		}
+                    tab->setDisplayChildren(true);
+                }
+                // Restore each tab's expand state when not filtering
+                else
+                {
+                    bool collapsed = isAccordionCollapsedByUser(tab);
+                    tab->setDisplayChildren(!collapsed);
 
-		if (curr_flat_view)
-		{
-			LLTeleportHistoryFlatItem* item =
-				LLTeleportHistoryFlatItemStorage::instance()
-				.getFlatItemForPersistentItem(mGearItemMenu,
-											  items[mCurrentItem],
-											  mCurrentItem,
-											  filter_string);
-			if ( !curr_flat_view->addItem(item, LLUUID::null, ADD_BOTTOM, false) )
-				LL_ERRS() << "Couldn't add flat item to teleport history." << LL_ENDL;
-			if (mLastSelectedItemIndex == mCurrentItem)
-				curr_flat_view->selectItem(item, true);
-		}
+                    //restore accordion state after all those accodrion tabmanipulations
+                    tab->notifyChildren(LLSD().with("action","restore_state"));
+                }
 
-		mCurrentItem--;
+                curr_flat_view = getFlatListViewFromTab(tab);
+            }
+        }
 
-		if (++added_items >= ADD_LIMIT)
-			break;
-	}
+        if (curr_flat_view)
+        {
+            LLTeleportHistoryFlatItem* item =
+                LLTeleportHistoryFlatItemStorage::instance()
+                .getFlatItemForPersistentItem(mGearItemMenu,
+                                              items[mCurrentItem],
+                                              mCurrentItem,
+                                              filter_string);
+            if ( !curr_flat_view->addItem(item, LLUUID::null, ADD_BOTTOM, false) )
+                LL_ERRS() << "Couldn't add flat item to teleport history." << LL_ENDL;
+            if (mLastSelectedItemIndex == mCurrentItem)
+                curr_flat_view->selectItem(item, true);
+        }
 
-	for (S32 n = mItemContainers.size() - 1; n >= 0; --n)
-	{
-		LLAccordionCtrlTab* tab = mItemContainers.at(n);
-		LLFlatListView* fv = getFlatListViewFromTab(tab);
-		if (fv)
-		{
-			fv->notify(LLSD().with("rearrange", LLSD()));
-		}
-	}
+        mCurrentItem--;
 
-	// <FS:Ansariel> Separate search filter for standalone TP history
-	//mHistoryAccordion->setFilterSubString(sFilterSubString);
-	if (mIsStandAlone)
-	{
-		mHistoryAccordion->setFilterSubString(mFilterString);
-	}
-	else
-	{
-		mHistoryAccordion->setFilterSubString(sFilterSubString);
-	}
-	// <FS:Ansariel>
+        if (++added_items >= ADD_LIMIT)
+            break;
+    }
 
-	mHistoryAccordion->arrange();
+    for (S32 n = mItemContainers.size() - 1; n >= 0; --n)
+    {
+        LLAccordionCtrlTab* tab = mItemContainers.at(n);
+        LLFlatListView* fv = getFlatListViewFromTab(tab);
+        if (fv)
+        {
+            fv->notify(LLSD().with("rearrange", LLSD()));
+        }
+    }
 
-	updateVerbs();
+    // <FS:Ansariel> Separate search filter for standalone TP history
+    //mHistoryAccordion->setFilterSubString(sFilterSubString);
+    if (mIsStandAlone)
+    {
+        mHistoryAccordion->setFilterSubString(mFilterString);
+    }
+    else
+    {
+        mHistoryAccordion->setFilterSubString(sFilterSubString);
+    }
+    // <FS:Ansariel>
 
-	if (mCurrentItem < 0)
-		mDirty = false;
+    mHistoryAccordion->arrange();
+
+    updateVerbs();
+
+    if (mCurrentItem < 0)
+        mDirty = false;
 }
 
 void LLTeleportHistoryPanel::onTeleportHistoryChange(S32 removed_index)
 {
-	mLastSelectedItemIndex = -1;
+    mLastSelectedItemIndex = -1;
 
-	if (-1 == removed_index)
-		showTeleportHistory(); // recreate all items
-	else
-	{
-		replaceItem(removed_index); // replace removed item by most recent
-		updateVerbs();
-	}
+    if (-1 == removed_index)
+        showTeleportHistory(); // recreate all items
+    else
+    {
+        replaceItem(removed_index); // replace removed item by most recent
+        updateVerbs();
+    }
 }
 
 void LLTeleportHistoryPanel::replaceItem(S32 removed_index)
 {
-	// Flat list for 'Today' (mItemContainers keeps accordion tabs in reverse order)
-	LLFlatListView* fv = NULL;
-	
-	if (mItemContainers.size() > 0)
-	{
-		fv = getFlatListViewFromTab(mItemContainers[mItemContainers.size() - 1]);
-	}
+    // Flat list for 'Today' (mItemContainers keeps accordion tabs in reverse order)
+    LLFlatListView* fv = NULL;
 
-	// Empty flat list for 'Today' means that other flat lists are empty as well,
-	// so all items from teleport history should be added.
-	if (!fv || fv->size() == 0)
-	{
-		showTeleportHistory();
-		return;
-	}
+    if (mItemContainers.size() > 0)
+    {
+        fv = getFlatListViewFromTab(mItemContainers[mItemContainers.size() - 1]);
+    }
 
-	const LLTeleportHistoryStorage::slurl_list_t& history_items = mTeleportHistory->getItems();
-	LLTeleportHistoryFlatItem* item = LLTeleportHistoryFlatItemStorage::instance()
-		.getFlatItemForPersistentItem(mGearItemMenu,
-									  history_items[history_items.size() - 1], // Most recent item, it was added instead of removed
-									  history_items.size(), // index will be decremented inside loop below
-									  // <FS:Ansariel> Separate search filter for standalone TP history
-									  //sFilterSubString);
-									  (mIsStandAlone ? mFilterString : sFilterSubString));
-									  // </FS:Ansariel>
+    // Empty flat list for 'Today' means that other flat lists are empty as well,
+    // so all items from teleport history should be added.
+    if (!fv || fv->size() == 0)
+    {
+        showTeleportHistory();
+        return;
+    }
 
-	fv->addItem(item, LLUUID::null, ADD_TOP);
+    const LLTeleportHistoryStorage::slurl_list_t& history_items = mTeleportHistory->getItems();
+    LLTeleportHistoryFlatItem* item = LLTeleportHistoryFlatItemStorage::instance()
+        .getFlatItemForPersistentItem(mGearItemMenu,
+                                      history_items[history_items.size() - 1], // Most recent item, it was added instead of removed
+                                      history_items.size(), // index will be decremented inside loop below
+                                      // <FS:Ansariel> Separate search filter for standalone TP history
+                                      //sFilterSubString);
+                                      (mIsStandAlone ? mFilterString : sFilterSubString));
+                                      // </FS:Ansariel>
 
-	// Index of each item, from last to removed item should be decremented
-	// to point to the right item in LLTeleportHistoryStorage
-	for (S32 tab_idx = mItemContainers.size() - 1; tab_idx >= 0; --tab_idx)
-	{
-		LLAccordionCtrlTab* tab = mItemContainers.at(tab_idx);
-		if (!tab->getVisible())
-			continue;
+    fv->addItem(item, LLUUID::null, ADD_TOP);
 
-		fv = getFlatListViewFromTab(tab);
-		if (!fv)
-		{
-			showTeleportHistory();
-			return;
-		}
+    // Index of each item, from last to removed item should be decremented
+    // to point to the right item in LLTeleportHistoryStorage
+    for (S32 tab_idx = mItemContainers.size() - 1; tab_idx >= 0; --tab_idx)
+    {
+        LLAccordionCtrlTab* tab = mItemContainers.at(tab_idx);
+        if (!tab->getVisible())
+            continue;
 
-		std::vector<LLPanel*> items;
-		fv->getItems(items);
+        fv = getFlatListViewFromTab(tab);
+        if (!fv)
+        {
+            showTeleportHistory();
+            return;
+        }
 
-		S32 items_cnt = items.size();
-		for (S32 n = 0; n < items_cnt; ++n)
-		{
-			LLTeleportHistoryFlatItem *item = (LLTeleportHistoryFlatItem*) items[n];
+        std::vector<LLPanel*> items;
+        fv->getItems(items);
 
-			if (item->getIndex() == removed_index)
-			{
-				LLTeleportHistoryFlatItemStorage::instance().removeItem(item);
+        S32 items_cnt = items.size();
+        for (S32 n = 0; n < items_cnt; ++n)
+        {
+            LLTeleportHistoryFlatItem *item = (LLTeleportHistoryFlatItem*) items[n];
 
-				fv->removeItem(item);
+            if (item->getIndex() == removed_index)
+            {
+                LLTeleportHistoryFlatItemStorage::instance().removeItem(item);
 
-				// If flat list becames empty, then accordion tab should be hidden
-				if (fv->size() == 0)
-					tab->setVisible(false);
+                fv->removeItem(item);
 
-				mHistoryAccordion->arrange();
+                // If flat list becames empty, then accordion tab should be hidden
+                if (fv->size() == 0)
+                    tab->setVisible(false);
 
-				return; // No need to decrement idexes for the rest of items
-			}
+                mHistoryAccordion->arrange();
 
-			item->setIndex(item->getIndex() - 1);
-		}
-	}
+                return; // No need to decrement idexes for the rest of items
+            }
+
+            item->setIndex(item->getIndex() - 1);
+        }
+    }
 }
 
 void LLTeleportHistoryPanel::showTeleportHistory()
 {
-	mDirty = true;
+    mDirty = true;
 
-	// Starting to add items from last one, in reverse order,
-	// since TeleportHistory keeps most recent item at the end
-	if (!mTeleportHistory)
-	{
-		mTeleportHistory = LLTeleportHistoryStorage::getInstance();
-	}
+    // Starting to add items from last one, in reverse order,
+    // since TeleportHistory keeps most recent item at the end
+    if (!mTeleportHistory)
+    {
+        mTeleportHistory = LLTeleportHistoryStorage::getInstance();
+    }
 
-	mCurrentItem = mTeleportHistory->getItems().size() - 1;
+    mCurrentItem = mTeleportHistory->getItems().size() - 1;
 
-	for (S32 n = mItemContainers.size() - 1; n >= 0; --n)
-	{
-		LLAccordionCtrlTab* tab = mItemContainers.at(n);
-		if (tab)
-		{
-			tab->setVisible(false);
+    for (S32 n = mItemContainers.size() - 1; n >= 0; --n)
+    {
+        LLAccordionCtrlTab* tab = mItemContainers.at(n);
+        if (tab)
+        {
+            tab->setVisible(false);
 
-			LLFlatListView* fv = getFlatListViewFromTab(tab);
-			if (fv)
-			{
-				// Detached panels are managed by LLTeleportHistoryFlatItemStorage
-				std::vector<LLPanel*> detached_items;
-				fv->detachItems(detached_items);
-			}
-		}
-	}
+            LLFlatListView* fv = getFlatListViewFromTab(tab);
+            if (fv)
+            {
+                // Detached panels are managed by LLTeleportHistoryFlatItemStorage
+                std::vector<LLPanel*> detached_items;
+                fv->detachItems(detached_items);
+            }
+        }
+    }
 }
 
 void LLTeleportHistoryPanel::handleItemSelect(LLFlatListView* selected)
 {
-	mLastSelectedFlatlList = selected;
-	LLTeleportHistoryFlatItem* item = dynamic_cast<LLTeleportHistoryFlatItem *> (mLastSelectedFlatlList->getSelectedItem());
-	if (item)
-		mLastSelectedItemIndex = item->getIndex();
+    mLastSelectedFlatlList = selected;
+    LLTeleportHistoryFlatItem* item = dynamic_cast<LLTeleportHistoryFlatItem *> (mLastSelectedFlatlList->getSelectedItem());
+    if (item)
+        mLastSelectedItemIndex = item->getIndex();
 
-	S32 tabs_cnt = mItemContainers.size();
+    S32 tabs_cnt = mItemContainers.size();
 
-	for (S32 n = 0; n < tabs_cnt; n++)
-	{
-		LLAccordionCtrlTab* tab = mItemContainers.at(n);
+    for (S32 n = 0; n < tabs_cnt; n++)
+    {
+        LLAccordionCtrlTab* tab = mItemContainers.at(n);
 
-		if (!tab->getVisible())
-			continue;
+        if (!tab->getVisible())
+            continue;
 
-		LLFlatListView *flv = getFlatListViewFromTab(tab);
-		if (!flv)
-			continue;
+        LLFlatListView *flv = getFlatListViewFromTab(tab);
+        if (!flv)
+            continue;
 
-		if (flv == selected)
-			continue;
+        if (flv == selected)
+            continue;
 
-		flv->resetSelection(true);
-	}
+        flv->resetSelection(true);
+    }
 
-	updateVerbs();
+    updateVerbs();
 }
 
 void LLTeleportHistoryPanel::onReturnKeyPressed()
 {
-	// Teleport to selected region as default action on return key pressed
-	onTeleport();
+    // Teleport to selected region as default action on return key pressed
+    onTeleport();
 }
 
 void LLTeleportHistoryPanel::onDoubleClickItem()
 {
-	// If item got doubleclick, then that item is already selected
-	onTeleport();
+    // If item got doubleclick, then that item is already selected
+    onTeleport();
 }
 
 void LLTeleportHistoryPanel::onAccordionTabRightClick(LLView *view, S32 x, S32 y, MASK mask)
 {
-	LLAccordionCtrlTab *tab = (LLAccordionCtrlTab *) view;
+    LLAccordionCtrlTab *tab = (LLAccordionCtrlTab *) view;
 
-	// If click occurred below the header, don't show this menu
-	if (y < tab->getRect().getHeight() - tab->getHeaderHeight() - tab->getPaddingBottom())
-		return;
+    // If click occurred below the header, don't show this menu
+    if (y < tab->getRect().getHeight() - tab->getHeaderHeight() - tab->getPaddingBottom())
+        return;
 
-	if (mAccordionTabMenu)
-	{
-		//preventing parent (menu holder) from deleting already "dead" context menus on exit
-		LLView* parent = mAccordionTabMenu->getParent();
-		if (parent)
-		{
-			parent->removeChild(mAccordionTabMenu);
-		}
-		delete mAccordionTabMenu;
-	}
+    if (mAccordionTabMenu)
+    {
+        //preventing parent (menu holder) from deleting already "dead" context menus on exit
+        LLView* parent = mAccordionTabMenu->getParent();
+        if (parent)
+        {
+            parent->removeChild(mAccordionTabMenu);
+        }
+        delete mAccordionTabMenu;
+    }
 
-	// set up the callbacks for all of the avatar menu items
-	// (N.B. callbacks don't take const refs as mID is local scope)
-	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+    // set up the callbacks for all of the avatar menu items
+    // (N.B. callbacks don't take const refs as mID is local scope)
+    LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 
-	registrar.add("TeleportHistory.TabOpen",	boost::bind(&LLTeleportHistoryPanel::onAccordionTabOpen, this, tab));
-	registrar.add("TeleportHistory.TabClose",	boost::bind(&LLTeleportHistoryPanel::onAccordionTabClose, this, tab));
+    registrar.add("TeleportHistory.TabOpen",    boost::bind(&LLTeleportHistoryPanel::onAccordionTabOpen, this, tab));
+    registrar.add("TeleportHistory.TabClose",   boost::bind(&LLTeleportHistoryPanel::onAccordionTabClose, this, tab));
 
-	// create the context menu from the XUI
-	llassert(LLMenuGL::sMenuContainer != NULL);
-	mAccordionTabMenu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>(
-		"menu_teleport_history_tab.xml", LLMenuGL::sMenuContainer, LLViewerMenuHolderGL::child_registry_t::instance());
+    // create the context menu from the XUI
+    llassert(LLMenuGL::sMenuContainer != NULL);
+    mAccordionTabMenu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>(
+        "menu_teleport_history_tab.xml", LLMenuGL::sMenuContainer, LLViewerMenuHolderGL::child_registry_t::instance());
 
-	mAccordionTabMenu->setItemVisible("TabOpen", !tab->isExpanded() ? true : false);
-	mAccordionTabMenu->setItemVisible("TabClose", tab->isExpanded() ? true : false);
+    mAccordionTabMenu->setItemVisible("TabOpen", !tab->isExpanded() ? true : false);
+    mAccordionTabMenu->setItemVisible("TabClose", tab->isExpanded() ? true : false);
 
 
-	mAccordionTabMenu->show(x, y);
-	LLMenuGL::showPopup(tab, mAccordionTabMenu, x, y);
+    mAccordionTabMenu->show(x, y);
+    LLMenuGL::showPopup(tab, mAccordionTabMenu, x, y);
 }
 
 void LLTeleportHistoryPanel::onAccordionTabOpen(LLAccordionCtrlTab *tab)
 {
-	tab->setDisplayChildren(true);
-	mHistoryAccordion->arrange();
+    tab->setDisplayChildren(true);
+    mHistoryAccordion->arrange();
 }
 
 void LLTeleportHistoryPanel::onAccordionTabClose(LLAccordionCtrlTab *tab)
 {
-	tab->setDisplayChildren(false);
-	mHistoryAccordion->arrange();
+    tab->setDisplayChildren(false);
+    mHistoryAccordion->arrange();
 }
 
 // <FS:Beq> [timezone support for teleport history]
 void LLTeleportHistoryPanel::onTimeZoneChecked(const LLSD& userdata)
 {
-	gSavedSettings.setString("FSTPHistoryTZ", userdata.asString());
-	onTeleportHistoryChange(-1); // force recreate all
+    gSavedSettings.setString("FSTPHistoryTZ", userdata.asString());
+    onTeleportHistoryChange(-1); // force recreate all
 }
 
 bool LLTeleportHistoryPanel::isTimeZoneChecked(const LLSD& userdata)
 {
-	static LLCachedControl<std::string> sFSTPHistoryTZ(gSavedSettings, "FSTPHistoryTZ");
+    static LLCachedControl<std::string> sFSTPHistoryTZ(gSavedSettings, "FSTPHistoryTZ");
 
-	const std::string zone_string = userdata.asString();
-	return (sFSTPHistoryTZ() == zone_string);
+    const std::string zone_string = userdata.asString();
+    return (sFSTPHistoryTZ() == zone_string);
 }
 // </FS:Beq>
 
 bool LLTeleportHistoryPanel::onClearTeleportHistoryDialog(const LLSD& notification, const LLSD& response)
 {
 
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 
-	if (0 == option)
-	{
-		// order does matter, call this first or teleport history will contain one record(current location)
-		LLTeleportHistory::getInstance()->purgeItems();
+    if (0 == option)
+    {
+        // order does matter, call this first or teleport history will contain one record(current location)
+        LLTeleportHistory::getInstance()->purgeItems();
 
-		LLTeleportHistoryStorage *th = LLTeleportHistoryStorage::getInstance();
-		th->purgeItems();
-		th->save();
-	}
+        LLTeleportHistoryStorage *th = LLTeleportHistoryStorage::getInstance();
+        th->purgeItems();
+        th->save();
+    }
 
-	return false;
+    return false;
 }
 
 LLFlatListView* LLTeleportHistoryPanel::getFlatListViewFromTab(LLAccordionCtrlTab *tab)
 {
-	for (child_list_const_iter_t iter = tab->beginChild(); iter != tab->endChild(); iter++)
-	{
-		if (dynamic_cast<LLFlatListView*>(*iter))
-		{
-			return (LLFlatListView*)*iter; // There should be one scroll list per tab.
-		}
-	}
+    for (child_list_const_iter_t iter = tab->beginChild(); iter != tab->endChild(); iter++)
+    {
+        if (dynamic_cast<LLFlatListView*>(*iter))
+        {
+            return (LLFlatListView*)*iter; // There should be one scroll list per tab.
+        }
+    }
 
-	return NULL;
+    return NULL;
 }
 
 void LLTeleportHistoryPanel::gotSLURLCallback(const std::string& slurl)
@@ -1315,7 +1315,7 @@ bool LLTeleportHistoryPanel::isActionEnabled(const LLSD& userdata) const
     {
         return mTeleportHistory->getItems().size() > 0;
     }
-    
+
     if ("teleport" == command_name
         || "view" == command_name
         || "show_on_map" == command_name
@@ -1341,60 +1341,60 @@ bool LLTeleportHistoryPanel::isActionEnabled(const LLSD& userdata) const
         return itemp != NULL;
     }
 
-	return false;
+    return false;
 }
 
 void LLTeleportHistoryPanel::setAccordionCollapsedByUser(LLUICtrl* acc_tab, bool collapsed)
 {
-	LLSD param = acc_tab->getValue();
-	param[COLLAPSED_BY_USER] = collapsed;
-	acc_tab->setValue(param);
+    LLSD param = acc_tab->getValue();
+    param[COLLAPSED_BY_USER] = collapsed;
+    acc_tab->setValue(param);
 }
 
 bool LLTeleportHistoryPanel::isAccordionCollapsedByUser(LLUICtrl* acc_tab)
 {
-	LLSD param = acc_tab->getValue();
-	if(!param.has(COLLAPSED_BY_USER))
-	{
-		return false;
-	}
-	return param[COLLAPSED_BY_USER].asBoolean();
+    LLSD param = acc_tab->getValue();
+    if(!param.has(COLLAPSED_BY_USER))
+    {
+        return false;
+    }
+    return param[COLLAPSED_BY_USER].asBoolean();
 }
 
 void LLTeleportHistoryPanel::onAccordionExpand(LLUICtrl* ctrl, const LLSD& param)
 {
-	bool expanded = param.asBoolean();
-	// Save accordion tab state to restore it in refresh()
-	setAccordionCollapsedByUser(ctrl, !expanded);
+    bool expanded = param.asBoolean();
+    // Save accordion tab state to restore it in refresh()
+    setAccordionCollapsedByUser(ctrl, !expanded);
 
-	// Reset selection upon accordion being collapsed
-	// to disable "Teleport" and "Map" buttons for hidden item.
-	if (!expanded && mLastSelectedFlatlList)
-	{
-		mLastSelectedFlatlList->resetSelection();
-	}
+    // Reset selection upon accordion being collapsed
+    // to disable "Teleport" and "Map" buttons for hidden item.
+    if (!expanded && mLastSelectedFlatlList)
+    {
+        mLastSelectedFlatlList->resetSelection();
+    }
 }
 
 // static
 void LLTeleportHistoryPanel::confirmTeleport(S32 hist_idx)
 {
-	LLSD args;
-	args["HISTORY_ENTRY"] = LLTeleportHistoryStorage::getInstance()->getItems()[hist_idx].mTitle;
-	LLNotificationsUtil::add("TeleportToHistoryEntry", args, LLSD(),
-		boost::bind(&LLTeleportHistoryPanel::onTeleportConfirmation, _1, _2, hist_idx));
+    LLSD args;
+    args["HISTORY_ENTRY"] = LLTeleportHistoryStorage::getInstance()->getItems()[hist_idx].mTitle;
+    LLNotificationsUtil::add("TeleportToHistoryEntry", args, LLSD(),
+        boost::bind(&LLTeleportHistoryPanel::onTeleportConfirmation, _1, _2, hist_idx));
 }
 
 // Called when user reacts upon teleport confirmation dialog.
 // static
 bool LLTeleportHistoryPanel::onTeleportConfirmation(const LLSD& notification, const LLSD& response, S32 hist_idx)
 {
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 
-	if (0 == option)
-	{
-		// Teleport to given history item.
-		LLTeleportHistoryStorage::getInstance()->goToItem(hist_idx);
-	}
+    if (0 == option)
+    {
+        // Teleport to given history item.
+        LLTeleportHistoryStorage::getInstance()->goToItem(hist_idx);
+    }
 
-	return false;
+    return false;
 }
