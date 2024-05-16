@@ -34,6 +34,9 @@
 #include "llviewernetwork.h"
 #include "llfiltersd2xmlrpc.h"
 #include "curl/curl.h"
+
+#include "rlvhandler.h"
+
 const char* LLSLURL::SLURL_HTTP_SCHEME       = "http";
 const char* LLSLURL::SLURL_HTTPS_SCHEME      = "https";
 const char* LLSLURL::SLURL_SECONDLIFE_SCHEME = "secondlife";
