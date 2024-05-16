@@ -35,7 +35,7 @@
 #include "llviewerregion.h"
 #include "rlvhandler.h"
 
-static constexpr char* CAPNAME = "AgentProfile";
+static constexpr char CAPNAME[] = "AgentProfile";
 
 FSRadarEntry::FSRadarEntry(const LLUUID& avid)
     : mID(avid),
