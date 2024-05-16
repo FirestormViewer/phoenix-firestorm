@@ -1,4 +1,4 @@
-/** 
+/**
 * @file   llfloatertwitter.h
 * @brief  Header file for fsfloaterdiscord
 * @author liny@pinkfox.xyz
@@ -38,32 +38,32 @@ class LLTextBox;
 class FSFloaterDiscord : public LLFloater
 {
 public:
-	FSFloaterDiscord(const LLSD& key);
-	bool postBuild();
-	void draw();
-	void onClose(bool app_quitting);
+    FSFloaterDiscord(const LLSD& key);
+    bool postBuild();
+    void draw();
+    void onClose(bool app_quitting);
 
 private:
-	void onVisibilityChange(bool visible);
-	bool onDiscordConnectStateChange(const LLSD& data);
-	bool onDiscordConnectInfoChange();
-	void onConnect();
-	void onDisconnect();
-	void onAdd();
-	void onRemove();
+    void onVisibilityChange(bool visible);
+    bool onDiscordConnectStateChange(const LLSD& data);
+    bool onDiscordConnectInfoChange();
+    void onConnect();
+    void onDisconnect();
+    void onAdd();
+    void onRemove();
 
-	void showConnectButton();
-	void hideConnectButton();
-	void showDisconnectedLayout();
-	void showConnectedLayout();
+    void showConnectButton();
+    void hideConnectButton();
+    void showDisconnectedLayout();
+    void showConnectedLayout();
 
-	LLTextBox*			mAccountCaptionLabel;
-	LLTextBox*			mAccountNameLabel;
-	LLButton*			mConnectButton;
-	LLButton*			mDisconnectButton;
-	LLScrollListCtrl*	mBlacklistedNames;
-	LLLineEditor*		mBlacklistEntry;
-	LLTextBox*			mStatusText;
+    LLTextBox*          mAccountCaptionLabel;
+    LLTextBox*          mAccountNameLabel;
+    LLButton*           mConnectButton;
+    LLButton*           mDisconnectButton;
+    LLScrollListCtrl*   mBlacklistedNames;
+    LLLineEditor*       mBlacklistEntry;
+    LLTextBox*          mStatusText;
 };
 
 #endif // FS_FSFLOATERDISCORD_H

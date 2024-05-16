@@ -34,35 +34,35 @@ class LLScrollListCtrl;
 
 class ALFloaterRegionTracker : public LLFloater, public LLEventTimer
 {
-	friend class LLFloaterReg;
+    friend class LLFloaterReg;
 private:
-	ALFloaterRegionTracker(const LLSD& key);
-	virtual ~ALFloaterRegionTracker();
+    ALFloaterRegionTracker(const LLSD& key);
+    virtual ~ALFloaterRegionTracker();
 public:
-	bool postBuild() override;
-	void onOpen(const LLSD& key) override;
-	void onClose(bool app_quitting) override;
-	void refresh() override;
-	bool tick() override;
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
+    void onClose(bool app_quitting) override;
+    void refresh() override;
+    bool tick() override;
 
 private:
-	void updateHeader();
-	void requestRegionData();
-	void removeRegions();
-	bool saveToJSON();
-	bool loadFromJSON();
-	void openMap();
+    void updateHeader();
+    void requestRegionData();
+    void removeRegions();
+    bool saveToJSON();
+    bool loadFromJSON();
+    void openMap();
 
 public:
-	std::string getRegionLabelIfExists(const std::string& name);
-	void onRegionAddedCallback(const LLSD& notification, const LLSD& response);
+    std::string getRegionLabelIfExists(const std::string& name);
+    void onRegionAddedCallback(const LLSD& notification, const LLSD& response);
 
 private:
-	LLSD mRegionMap;
-	LLButton* mRefreshRegionListBtn;
-	LLButton* mRemoveRegionBtn;
-	LLButton* mOpenMapBtn;
-	LLScrollListCtrl* mRegionScrollList;
+    LLSD mRegionMap;
+    LLButton* mRefreshRegionListBtn;
+    LLButton* mRemoveRegionBtn;
+    LLButton* mOpenMapBtn;
+    LLScrollListCtrl* mRegionScrollList;
 
-	F64 mLastRegionUpdate;
+    F64 mLastRegionUpdate;
 };

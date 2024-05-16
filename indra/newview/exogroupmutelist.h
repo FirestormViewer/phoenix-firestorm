@@ -24,25 +24,25 @@
 
 class exoGroupMuteList : public LLSingleton<exoGroupMuteList>
 {
-	LLSINGLETON(exoGroupMuteList);
+    LLSINGLETON(exoGroupMuteList);
 
 public:
-	bool isMuted(const LLUUID &group) const;
-	bool isLoaded() const;
-	void add(const LLUUID &group);
-	void remove(const LLUUID &group);
-	bool loadMuteList();
-	void addDeferredGroupChat(const LLUUID& group);
-	bool restoreDeferredGroupChat(const LLUUID& group);
+    bool isMuted(const LLUUID &group) const;
+    bool isLoaded() const;
+    void add(const LLUUID &group);
+    void remove(const LLUUID &group);
+    bool loadMuteList();
+    void addDeferredGroupChat(const LLUUID& group);
+    bool restoreDeferredGroupChat(const LLUUID& group);
 
 private:
-	bool saveMuteList();
-	std::string getFilePath() const;
-	
-	uuid_set_t mMuted;
-	uuid_set_t mDeferredGroupChatSessionIDs;
+    bool saveMuteList();
+    std::string getFilePath() const;
 
-	std::string getMutelistString(const LLUUID& group) const;
+    uuid_set_t mMuted;
+    uuid_set_t mDeferredGroupChatSessionIDs;
+
+    std::string getMutelistString(const LLUUID& group) const;
 };
 
 #endif

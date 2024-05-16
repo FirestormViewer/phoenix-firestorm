@@ -1,25 +1,25 @@
-/** 
+/**
  * @file lldrawpooltree.cpp
  * @brief LLDrawPoolTree class implementation
  *
  * $LicenseInfo:firstyear=2002&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -44,10 +44,10 @@ S32 LLDrawPoolTree::sDiffTex = 0;
 static LLGLSLShader* shader = NULL;
 
 LLDrawPoolTree::LLDrawPoolTree(LLViewerTexture *texturep) :
-	LLFacePool(POOL_TREE),
-	mTexturep(texturep)
+    LLFacePool(POOL_TREE),
+    mTexturep(texturep)
 {
-	mTexturep->setAddressMode(LLTexUnit::TAM_WRAP);
+    mTexturep->setAddressMode(LLTexUnit::TAM_WRAP);
 }
 
 //============================================
@@ -55,11 +55,11 @@ LLDrawPoolTree::LLDrawPoolTree(LLViewerTexture *texturep) :
 //============================================
 void LLDrawPoolTree::beginDeferredPass(S32 pass)
 {
-	LL_RECORD_BLOCK_TIME(FTM_RENDER_TREES);
-		
-	shader = &gDeferredTreeProgram;
-	shader->bind();
-	shader->setMinimumAlpha(0.5f);
+    LL_RECORD_BLOCK_TIME(FTM_RENDER_TREES);
+
+    shader = &gDeferredTreeProgram;
+    shader->bind();
+    shader->setMinimumAlpha(0.5f);
 }
 
 void LLDrawPoolTree::renderDeferred(S32 pass)
@@ -111,9 +111,9 @@ void LLDrawPoolTree::renderDeferred(S32 pass)
 
 void LLDrawPoolTree::endDeferredPass(S32 pass)
 {
-	LL_RECORD_BLOCK_TIME(FTM_RENDER_TREES);
-		
-	shader->unbind();
+    LL_RECORD_BLOCK_TIME(FTM_RENDER_TREES);
+
+    shader->unbind();
 }
 
 //============================================
@@ -123,59 +123,59 @@ void LLDrawPoolTree::beginShadowPass(S32 pass)
 {
     LL_PROFILE_ZONE_SCOPED;
 
-	// <FS:PP> Attempt to speed up things a little
-	// glPolygonOffset(gSavedSettings.getF32("RenderDeferredTreeShadowOffset"),
-	//				gSavedSettings.getF32("RenderDeferredTreeShadowBias"));
-	static LLCachedControl<F32> RenderDeferredTreeShadowOffset(gSavedSettings, "RenderDeferredTreeShadowOffset");
-	static LLCachedControl<F32> RenderDeferredTreeShadowBias(gSavedSettings, "RenderDeferredTreeShadowBias");
-	glPolygonOffset(RenderDeferredTreeShadowOffset, RenderDeferredTreeShadowBias);
-	// </FS:PP>
+    // <FS:PP> Attempt to speed up things a little
+    // glPolygonOffset(gSavedSettings.getF32("RenderDeferredTreeShadowOffset"),
+    //              gSavedSettings.getF32("RenderDeferredTreeShadowBias"));
+    static LLCachedControl<F32> RenderDeferredTreeShadowOffset(gSavedSettings, "RenderDeferredTreeShadowOffset");
+    static LLCachedControl<F32> RenderDeferredTreeShadowBias(gSavedSettings, "RenderDeferredTreeShadowBias");
+    glPolygonOffset(RenderDeferredTreeShadowOffset, RenderDeferredTreeShadowBias);
+    // </FS:PP>
 
     LLEnvironment& environment = LLEnvironment::instance();
 
-	gDeferredTreeShadowProgram.bind();
+    gDeferredTreeShadowProgram.bind();
     gDeferredTreeShadowProgram.uniform1i(LLShaderMgr::SUN_UP_FACTOR, environment.getIsSunUp() ? 1 : 0);
-	gDeferredTreeShadowProgram.setMinimumAlpha(0.5f);
+    gDeferredTreeShadowProgram.setMinimumAlpha(0.5f);
 }
 
 void LLDrawPoolTree::renderShadow(S32 pass)
 {
-	renderDeferred(pass);
+    renderDeferred(pass);
 }
 
 void LLDrawPoolTree::endShadowPass(S32 pass)
 {
     LL_PROFILE_ZONE_SCOPED;
 
-	// <FS:PP> Attempt to speed up things a little
-	// glPolygonOffset(gSavedSettings.getF32("RenderDeferredSpotShadowOffset"),
-	//					gSavedSettings.getF32("RenderDeferredSpotShadowBias"));
-	static LLCachedControl<F32> RenderDeferredSpotShadowOffset(gSavedSettings, "RenderDeferredSpotShadowOffset");
-	static LLCachedControl<F32> RenderDeferredSpotShadowBias(gSavedSettings, "RenderDeferredSpotShadowBias");
-	glPolygonOffset(RenderDeferredSpotShadowOffset, RenderDeferredSpotShadowBias);
-	// </FS:PP>
+    // <FS:PP> Attempt to speed up things a little
+    // glPolygonOffset(gSavedSettings.getF32("RenderDeferredSpotShadowOffset"),
+    //                  gSavedSettings.getF32("RenderDeferredSpotShadowBias"));
+    static LLCachedControl<F32> RenderDeferredSpotShadowOffset(gSavedSettings, "RenderDeferredSpotShadowOffset");
+    static LLCachedControl<F32> RenderDeferredSpotShadowBias(gSavedSettings, "RenderDeferredSpotShadowBias");
+    glPolygonOffset(RenderDeferredSpotShadowOffset, RenderDeferredSpotShadowBias);
+    // </FS:PP>
 
-	gDeferredTreeShadowProgram.unbind();
+    gDeferredTreeShadowProgram.unbind();
 }
 
 bool LLDrawPoolTree::verify() const
 {
-	return true;
+    return true;
 }
 
 LLViewerTexture *LLDrawPoolTree::getTexture()
 {
-	return mTexturep;
+    return mTexturep;
 }
 
 LLViewerTexture *LLDrawPoolTree::getDebugTexture()
 {
-	return mTexturep;
+    return mTexturep;
 }
 
 
 LLColor3 LLDrawPoolTree::getDebugColor() const
 {
-	return LLColor3(1.f, 0.f, 1.f);
+    return LLColor3(1.f, 0.f, 1.f);
 }
 

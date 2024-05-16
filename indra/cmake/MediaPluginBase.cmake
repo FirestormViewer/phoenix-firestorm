@@ -4,12 +4,12 @@
 if (LINUX)
 
   foreach( PULSE_FILE pulse/introspect.h pulse/context.h pulse/subscribe.h )
-	find_path( PULSE_FILE_${PULSE_FILE}_FOUND ${PULSE_FILE} NO_CACHE)
-	if( NOT PULSE_FILE_${PULSE_FILE}_FOUND )
-	  message( "Looking for ${PULSE_FILE} ... not found")
-	  message( FATAL_ERROR "Pulse header not found" )
-	else()
-	  message( "Looking for ${PULSE_FILE} ... found")
+    find_path( PULSE_FILE_${PULSE_FILE}_FOUND ${PULSE_FILE} NO_CACHE)
+    if( NOT PULSE_FILE_${PULSE_FILE}_FOUND )
+      message( "Looking for ${PULSE_FILE} ... not found")
+      message( FATAL_ERROR "Pulse header not found" )
+    else()
+      message( "Looking for ${PULSE_FILE} ... found")
     endif()
   endforeach()
 

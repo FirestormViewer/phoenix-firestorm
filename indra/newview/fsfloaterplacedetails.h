@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -50,68 +50,68 @@ class FSPlaceDetailsPlacesParcelObserver;
 class FSFloaterPlaceDetails : public LLFloater
 {
 public:
-	FSFloaterPlaceDetails(const LLSD& seed);
-	virtual ~FSFloaterPlaceDetails();
+    FSFloaterPlaceDetails(const LLSD& seed);
+    virtual ~FSFloaterPlaceDetails();
 
-	bool postBuild() override;
-	void onOpen(const LLSD& key) override;
+    bool postBuild() override;
+    void onOpen(const LLSD& key) override;
 
-	void showAddedLandmarkInfo(const uuid_set_t& items);
-	void changedGlobalPos(const LLVector3d& global_pos);
-	void changedParcelSelection();
-	void processParcelDetails(const LLParcelData& parcel_details);
+    void showAddedLandmarkInfo(const uuid_set_t& items);
+    void changedGlobalPos(const LLVector3d& global_pos);
+    void changedParcelSelection();
+    void processParcelDetails(const LLParcelData& parcel_details);
 
-	static void showPlaceDetails(const LLSD& key);
+    static void showPlaceDetails(const LLSD& key);
 
-	void updateEstateName(const std::string& name);
-	void updateEstateOwnerName(const std::string& name);
-	void updateCovenantText(const std::string &text);
+    void updateEstateName(const std::string& name);
+    void updateEstateOwnerName(const std::string& name);
+    void updateCovenantText(const std::string &text);
 
 private:
-	enum ePlaceDisplayInfo
-	{
-		NONE,
-		LANDMARK,
-		CREATE_LANDMARK,
-		REMOTE_PLACE,
-		TELEPORT_HISTORY_ITEM,
-		AGENT
-	};
+    enum ePlaceDisplayInfo
+    {
+        NONE,
+        LANDMARK,
+        CREATE_LANDMARK,
+        REMOTE_PLACE,
+        TELEPORT_HISTORY_ITEM,
+        AGENT
+    };
 
-	void onLandmarkLoaded(LLLandmark* landmark);
-	void onTeleportButtonClicked();
-	void onShowOnMapButtonClicked();
-	void onEditButtonClicked();
-	void onCancelButtonClicked();
-	void onSaveButtonClicked();
-	void onCloseButtonClicked();
-	void onOverflowButtonClicked();
-	void onOverflowMenuItemClicked(const LLSD& param);
-	bool onOverflowMenuItemEnable(const LLSD& param);
+    void onLandmarkLoaded(LLLandmark* landmark);
+    void onTeleportButtonClicked();
+    void onShowOnMapButtonClicked();
+    void onEditButtonClicked();
+    void onCancelButtonClicked();
+    void onSaveButtonClicked();
+    void onCloseButtonClicked();
+    void onOverflowButtonClicked();
+    void onOverflowMenuItemClicked(const LLSD& param);
+    bool onOverflowMenuItemEnable(const LLSD& param);
 
-	void updateVerbs();
-	void setItem(LLInventoryItem* item);
-	void onSLURLBuilt(std::string& slurl);
+    void updateVerbs();
+    void setItem(LLInventoryItem* item);
+    void onSLURLBuilt(std::string& slurl);
 
-	LLPanelLandmarkInfo*					mPanelLandmarkInfo;
-	LLPanelPlaceProfile*					mPanelPlaceInfo;
+    LLPanelLandmarkInfo*                    mPanelLandmarkInfo;
+    LLPanelPlaceProfile*                    mPanelPlaceInfo;
 
-	LLSafeHandle<LLParcelSelection>			mParcel;
-	LLPointer<LLInventoryItem>				mItem;
-	FSPlaceDetailsInventoryObserver*		mInventoryObserver;
-	FSPlaceDetailsRemoteParcelInfoObserver*	mRemoteParcelObserver;
-	FSPlaceDetailsPlacesParcelObserver*		mParcelObserver;
-	LLMenuButton*							mOverflowBtn;
-	LLToggleableMenu*						mPlaceMenu;
-	LLToggleableMenu*						mLandmarkMenu;
-	LLTimer									mResetInfoTimer;
+    LLSafeHandle<LLParcelSelection>         mParcel;
+    LLPointer<LLInventoryItem>              mItem;
+    FSPlaceDetailsInventoryObserver*        mInventoryObserver;
+    FSPlaceDetailsRemoteParcelInfoObserver* mRemoteParcelObserver;
+    FSPlaceDetailsPlacesParcelObserver*     mParcelObserver;
+    LLMenuButton*                           mOverflowBtn;
+    LLToggleableMenu*                       mPlaceMenu;
+    LLToggleableMenu*                       mLandmarkMenu;
+    LLTimer                                 mResetInfoTimer;
 
-	bool				mIsInEditMode;
-	bool				mIsInCreateMode;
-	LLVector3d			mGlobalPos;
-	ePlaceDisplayInfo	mDisplayInfo;
+    bool                mIsInEditMode;
+    bool                mIsInCreateMode;
+    LLVector3d          mGlobalPos;
+    ePlaceDisplayInfo   mDisplayInfo;
 
-	boost::signals2::connection mAgentParcelChangedConnection;
+    boost::signals2::connection mAgentParcelChangedConnection;
 };
 
 #endif // FS_FLOATERPLACEDETAILS_H

@@ -5,21 +5,21 @@
  * $LicenseInfo:firstyear=2001&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -52,156 +52,156 @@
 #include "llgroupactions.h"
 #include "llslurl.h"
 
-const S32 LLToastGroupNotifyPanel::DEFAULT_MESSAGE_MAX_LINE_COUNT	= 7;
+const S32 LLToastGroupNotifyPanel::DEFAULT_MESSAGE_MAX_LINE_COUNT   = 7;
 
 LLToastGroupNotifyPanel::LLToastGroupNotifyPanel(const LLNotificationPtr& notification)
-:	LLToastPanel(notification),
-	mInventoryOffer(NULL)
+:   LLToastPanel(notification),
+    mInventoryOffer(NULL)
 {
-	buildFromFile( "panel_group_notify.xml");
-	const LLSD& payload = notification->getPayload();
-	LLGroupData groupData;
-	if (!gAgent.getGroupData(payload["group_id"].asUUID(),groupData))
-	{
-		LL_WARNS() << "Group notice for unknown group: " << payload["group_id"].asUUID() << LL_ENDL;
-	}
-	
-	mGroupID = payload["group_id"].asUUID();
+    buildFromFile( "panel_group_notify.xml");
+    const LLSD& payload = notification->getPayload();
+    LLGroupData groupData;
+    if (!gAgent.getGroupData(payload["group_id"].asUUID(),groupData))
+    {
+        LL_WARNS() << "Group notice for unknown group: " << payload["group_id"].asUUID() << LL_ENDL;
+    }
 
-	//group icon
-	LLGroupIconCtrl* pGroupIcon = getChild<LLGroupIconCtrl>("group_icon", true);
+    mGroupID = payload["group_id"].asUUID();
 
-	// We should already have this data preloaded, so no sense in setting icon through setValue(group_id)
-	pGroupIcon->setIconId(groupData.mInsigniaID);
+    //group icon
+    LLGroupIconCtrl* pGroupIcon = getChild<LLGroupIconCtrl>("group_icon", true);
 
-	//header title
-	std::string from_name = payload["sender_name"].asString();
-	// <FS:CR> Let the user decide how they want to see names
-	//from_name = LLCacheName::buildUsername(from_name);
-	from_name = gSavedSettings.getBOOL("FSNameTagShowLegacyUsernames") ? LLCacheName::buildLegacyName(from_name) : LLCacheName::buildUsername(from_name);
-	// </FS:CR>
+    // We should already have this data preloaded, so no sense in setting icon through setValue(group_id)
+    pGroupIcon->setIconId(groupData.mInsigniaID);
 
-	std::string from;
-	LLStringUtil::format_map_t args;
-	args["[SENDER]"] = from_name;
-	args["[GROUPNAME]"] = LLSLURL("group", groupData.mID, "inspect").getSLURLString();
-	from = LLTrans::getString("GroupNotifySender", args);
-	
-	LLTextBox* pTitleText = getChild<LLTextBox>("title");
-	pTitleText->setValue(from);
-	pTitleText->setToolTip(from);
+    //header title
+    std::string from_name = payload["sender_name"].asString();
+    // <FS:CR> Let the user decide how they want to see names
+    //from_name = LLCacheName::buildUsername(from_name);
+    from_name = gSavedSettings.getBOOL("FSNameTagShowLegacyUsernames") ? LLCacheName::buildLegacyName(from_name) : LLCacheName::buildUsername(from_name);
+    // </FS:CR>
 
-	//message subject
-	const std::string& subject = payload["subject"].asString();
-	//message body
-	const std::string& message = payload["message"].asString();
+    std::string from;
+    LLStringUtil::format_map_t args;
+    args["[SENDER]"] = from_name;
+    args["[GROUPNAME]"] = LLSLURL("group", groupData.mID, "inspect").getSLURLString();
+    from = LLTrans::getString("GroupNotifySender", args);
 
-	// <FS:Ansariel> FIRE-17649: Localizable date formats for group notices
-	//std::string timeStr = "["+LLTrans::getString("TimeWeek")+"], ["
-	//						+LLTrans::getString("TimeMth")+"] ["
-	//						+LLTrans::getString("TimeDay")+"] ["
-	//						+LLTrans::getString("TimeYear")+"] ["
-	//						+LLTrans::getString("TimeHour")+"]:["
-	//						+LLTrans::getString("TimeMin")+"]:["
-	//						+LLTrans::getString("TimeSec")+"] ["
-	//						+LLTrans::getString("TimeTimezone")+"]";
-	std::string timeStr = LLTrans::getString("GroupNoticesToastDateString");
-	// </FS:Ansariel>
-	const LLDate timeStamp = notification->getDate();
-	LLDate notice_date = timeStamp.notNull() ? timeStamp : payload["received_time"].asDate();
-	LLSD substitution;
-	substitution["datetime"] = (S32) notice_date.secondsSinceEpoch();
-	LLStringUtil::format(timeStr, substitution);
+    LLTextBox* pTitleText = getChild<LLTextBox>("title");
+    pTitleText->setValue(from);
+    pTitleText->setToolTip(from);
 
-	// <FS:Ansariel> FIRE-17995: Urls without protocol randomly get broken
-	//LLViewerTextEditor* pMessageText = getChild<LLViewerTextEditor>("message");
-	LLTextEditor* pMessageText = getChild<LLTextEditor>("message");
-	// </FS:Ansariel>
-	pMessageText->setContentTrusted(false);
-	pMessageText->clear();
+    //message subject
+    const std::string& subject = payload["subject"].asString();
+    //message body
+    const std::string& message = payload["message"].asString();
 
-	LLStyle::Params style;
-	LLFontGL* subject_font = LLFontGL::getFontByName(getString("subject_font"));
-	if (subject_font) 
-		style.font = subject_font;
-	pMessageText->appendText(subject, false, style);
+    // <FS:Ansariel> FIRE-17649: Localizable date formats for group notices
+    //std::string timeStr = "["+LLTrans::getString("TimeWeek")+"], ["
+    //                      +LLTrans::getString("TimeMth")+"] ["
+    //                      +LLTrans::getString("TimeDay")+"] ["
+    //                      +LLTrans::getString("TimeYear")+"] ["
+    //                      +LLTrans::getString("TimeHour")+"]:["
+    //                      +LLTrans::getString("TimeMin")+"]:["
+    //                      +LLTrans::getString("TimeSec")+"] ["
+    //                      +LLTrans::getString("TimeTimezone")+"]";
+    std::string timeStr = LLTrans::getString("GroupNoticesToastDateString");
+    // </FS:Ansariel>
+    const LLDate timeStamp = notification->getDate();
+    LLDate notice_date = timeStamp.notNull() ? timeStamp : payload["received_time"].asDate();
+    LLSD substitution;
+    substitution["datetime"] = (S32) notice_date.secondsSinceEpoch();
+    LLStringUtil::format(timeStr, substitution);
 
-	LLFontGL* date_font = LLFontGL::getFontByName(getString("date_font"));
-	if (date_font)
-		style.font = date_font;
-	pMessageText->appendText(timeStr + "\n", true, style);
-	
-	style.font = pMessageText->getFont();
-	pMessageText->appendText(message, true, style);
+    // <FS:Ansariel> FIRE-17995: Urls without protocol randomly get broken
+    //LLViewerTextEditor* pMessageText = getChild<LLViewerTextEditor>("message");
+    LLTextEditor* pMessageText = getChild<LLTextEditor>("message");
+    // </FS:Ansariel>
+    pMessageText->setContentTrusted(false);
+    pMessageText->clear();
 
-	//attachment
-	bool hasInventory = payload["inventory_offer"].isDefined();
+    LLStyle::Params style;
+    LLFontGL* subject_font = LLFontGL::getFontByName(getString("subject_font"));
+    if (subject_font)
+        style.font = subject_font;
+    pMessageText->appendText(subject, false, style);
 
-	// attachment container (if any)
-	LLPanel* pAttachContainer = findChild<LLPanel>("attachment_container");
-	// attachment container label (if any)
-	LLTextBox* pAttachContainerLabel = findChild<LLTextBox>("attachment_label");
-	//attachment text
-	LLTextBox * pAttachLink = getChild<LLTextBox>("attachment");
-	//attachment icon
-	LLIconCtrl* pAttachIcon = getChild<LLIconCtrl>("attachment_icon", true);
+    LLFontGL* date_font = LLFontGL::getFontByName(getString("date_font"));
+    if (date_font)
+        style.font = date_font;
+    pMessageText->appendText(timeStr + "\n", true, style);
 
-	//If attachment is empty let it be invisible and not take place at the panel
-	if (pAttachContainer)
-	{
-		pAttachContainer->setVisible(hasInventory);
-	}
-	if (pAttachContainerLabel)
-	{
-		pAttachContainerLabel->setVisible(hasInventory);
-	}
-	pAttachLink->setVisible(hasInventory);
-	pAttachIcon->setVisible(hasInventory);
-	if (hasInventory) {
-		pAttachLink->setValue(payload["inventory_name"]);
+    style.font = pMessageText->getFont();
+    pMessageText->appendText(message, true, style);
 
-		mInventoryOffer = new LLOfferInfo(payload["inventory_offer"]);
-		getChild<LLTextBox>("attachment")->setClickedCallback(boost::bind(
-				&LLToastGroupNotifyPanel::onClickAttachment, this));
+    //attachment
+    bool hasInventory = payload["inventory_offer"].isDefined();
 
-		LLUIImagePtr attachIconImg = LLInventoryIcon::getIcon(mInventoryOffer->mType,
-												LLInventoryType::IT_TEXTURE);
-		pAttachIcon->setValue(attachIconImg->getName());
-	}
-	else
-	{
-		LLRect message_rect = pMessageText->getRect();
-		message_rect.mBottom -= 20;
-		pMessageText->reshape(message_rect.getWidth(), message_rect.getHeight());
-		pMessageText->setRect(message_rect);
-	}
+    // attachment container (if any)
+    LLPanel* pAttachContainer = findChild<LLPanel>("attachment_container");
+    // attachment container label (if any)
+    LLTextBox* pAttachContainerLabel = findChild<LLTextBox>("attachment_label");
+    //attachment text
+    LLTextBox * pAttachLink = getChild<LLTextBox>("attachment");
+    //attachment icon
+    LLIconCtrl* pAttachIcon = getChild<LLIconCtrl>("attachment_icon", true);
 
-	//ok button
-	LLButton* pOkBtn = getChild<LLButton>("btn_ok");
-	pOkBtn->setClickedCallback((boost::bind(&LLToastGroupNotifyPanel::onClickOk, this)));
-	setDefaultBtn(pOkBtn);
+    //If attachment is empty let it be invisible and not take place at the panel
+    if (pAttachContainer)
+    {
+        pAttachContainer->setVisible(hasInventory);
+    }
+    if (pAttachContainerLabel)
+    {
+        pAttachContainerLabel->setVisible(hasInventory);
+    }
+    pAttachLink->setVisible(hasInventory);
+    pAttachIcon->setVisible(hasInventory);
+    if (hasInventory) {
+        pAttachLink->setValue(payload["inventory_name"]);
 
-	//group notices button
-	LLButton* pNoticesBtn = findChild<LLButton>("btn_notices");
-	if (pNoticesBtn)
-	{
-		pNoticesBtn->setClickedCallback((boost::bind(&LLToastGroupNotifyPanel::onClickGroupNotices, this)));
-	}
+        mInventoryOffer = new LLOfferInfo(payload["inventory_offer"]);
+        getChild<LLTextBox>("attachment")->setClickedCallback(boost::bind(
+                &LLToastGroupNotifyPanel::onClickAttachment, this));
 
-	// group chat button
-	LLButton* pGroupChatBtn = findChild<LLButton>("btn_groupchat");
-	if (pGroupChatBtn)
-	{
-		pGroupChatBtn->setClickedCallback((boost::bind(&LLGroupActions::startIM, mGroupID)));
-	}
+        LLUIImagePtr attachIconImg = LLInventoryIcon::getIcon(mInventoryOffer->mType,
+                                                LLInventoryType::IT_TEXTURE);
+        pAttachIcon->setValue(attachIconImg->getName());
+    }
+    else
+    {
+        LLRect message_rect = pMessageText->getRect();
+        message_rect.mBottom -= 20;
+        pMessageText->reshape(message_rect.getWidth(), message_rect.getHeight());
+        pMessageText->setRect(message_rect);
+    }
 
-	S32 maxLinesCount;
-	std::istringstream ss( getString("message_max_lines_count") );
-	if (!(ss >> maxLinesCount))
-	{
-		maxLinesCount = DEFAULT_MESSAGE_MAX_LINE_COUNT;
-	}
-	snapToMessageHeight(pMessageText, maxLinesCount);
+    //ok button
+    LLButton* pOkBtn = getChild<LLButton>("btn_ok");
+    pOkBtn->setClickedCallback((boost::bind(&LLToastGroupNotifyPanel::onClickOk, this)));
+    setDefaultBtn(pOkBtn);
+
+    //group notices button
+    LLButton* pNoticesBtn = findChild<LLButton>("btn_notices");
+    if (pNoticesBtn)
+    {
+        pNoticesBtn->setClickedCallback((boost::bind(&LLToastGroupNotifyPanel::onClickGroupNotices, this)));
+    }
+
+    // group chat button
+    LLButton* pGroupChatBtn = findChild<LLButton>("btn_groupchat");
+    if (pGroupChatBtn)
+    {
+        pGroupChatBtn->setClickedCallback((boost::bind(&LLGroupActions::startIM, mGroupID)));
+    }
+
+    S32 maxLinesCount;
+    std::istringstream ss( getString("message_max_lines_count") );
+    if (!(ss >> maxLinesCount))
+    {
+        maxLinesCount = DEFAULT_MESSAGE_MAX_LINE_COUNT;
+    }
+    snapToMessageHeight(pMessageText, maxLinesCount);
 }
 
 // virtual
@@ -211,68 +211,68 @@ LLToastGroupNotifyPanel::~LLToastGroupNotifyPanel()
 
 void LLToastGroupNotifyPanel::close()
 {
-	// The group notice dialog may be an inventory offer.
-	// If it has an inventory save button and that button is still enabled
-	// Then we need to send the inventory declined message
-	if(mInventoryOffer != NULL)
-	{
-		mInventoryOffer->forceResponse(IOR_DECLINE);
-		mInventoryOffer = NULL;
-	}
+    // The group notice dialog may be an inventory offer.
+    // If it has an inventory save button and that button is still enabled
+    // Then we need to send the inventory declined message
+    if(mInventoryOffer != NULL)
+    {
+        mInventoryOffer->forceResponse(IOR_DECLINE);
+        mInventoryOffer = NULL;
+    }
 
-	die();
+    die();
 }
 
 void LLToastGroupNotifyPanel::onClickOk()
 {
-	LLSD response = mNotification->getResponseTemplate();
-	mNotification->respond(response);
-	close();
+    LLSD response = mNotification->getResponseTemplate();
+    mNotification->respond(response);
+    close();
 }
 
 void LLToastGroupNotifyPanel::onClickGroupNotices()
 {
-	LLGroupActions::show(mGroupID, "group_notices_tab_panel");
+    LLGroupActions::show(mGroupID, true);
 }
 
 void LLToastGroupNotifyPanel::onClickAttachment()
 {
-	if (mInventoryOffer != NULL) {
-		mInventoryOffer->forceResponse(IOR_ACCEPT);
+    if (mInventoryOffer != NULL) {
+        mInventoryOffer->forceResponse(IOR_ACCEPT);
 
-		LLTextBox * pAttachLink = getChild<LLTextBox> ("attachment");
-		static const LLUIColor textColor = LLUIColorTable::instance().getColor(
-				"GroupNotifyDimmedTextColor");
-		pAttachLink->setColor(textColor);
+        LLTextBox * pAttachLink = getChild<LLTextBox> ("attachment");
+        static const LLUIColor textColor = LLUIColorTable::instance().getColor(
+                "GroupNotifyDimmedTextColor");
+        pAttachLink->setColor(textColor);
 
-		LLIconCtrl* pAttachIcon =
-				getChild<LLIconCtrl> ("attachment_icon", true);
-		pAttachIcon->setEnabled(false);
+        LLIconCtrl* pAttachIcon =
+                getChild<LLIconCtrl> ("attachment_icon", true);
+        pAttachIcon->setEnabled(false);
 
-		//if attachment isn't openable - notify about saving
-		if (!isAttachmentOpenable(mInventoryOffer->mType)) {
-			LLNotifications::instance().add("AttachmentSaved", LLSD(), LLSD());
-		}
+        //if attachment isn't openable - notify about saving
+        if (!isAttachmentOpenable(mInventoryOffer->mType)) {
+            LLNotifications::instance().add("AttachmentSaved", LLSD(), LLSD());
+        }
 
-		mInventoryOffer = NULL;
-	}
+        mInventoryOffer = NULL;
+    }
 }
 
 //static
 bool LLToastGroupNotifyPanel::isAttachmentOpenable(LLAssetType::EType type)
 {
-	switch(type)
-	{
-	case LLAssetType::AT_LANDMARK:
-	case LLAssetType::AT_NOTECARD:
-	case LLAssetType::AT_IMAGE_JPEG:
-	case LLAssetType::AT_IMAGE_TGA:
-	case LLAssetType::AT_TEXTURE:
-	case LLAssetType::AT_TEXTURE_TGA:
-		return true;
-	default:
-		return false;
-	}
+    switch(type)
+    {
+    case LLAssetType::AT_LANDMARK:
+    case LLAssetType::AT_NOTECARD:
+    case LLAssetType::AT_IMAGE_JPEG:
+    case LLAssetType::AT_IMAGE_TGA:
+    case LLAssetType::AT_TEXTURE:
+    case LLAssetType::AT_TEXTURE_TGA:
+        return true;
+    default:
+        return false;
+    }
 }
 
 // Copied from Ansariel: Override base method so we have the option to ignore
@@ -280,12 +280,12 @@ bool LLToastGroupNotifyPanel::isAttachmentOpenable(LLAssetType::EType type)
 // opaque background. -Zi
 F32 LLToastGroupNotifyPanel::getCurrentTransparency()
 {
-	if (gSavedSettings.getBOOL("FSGroupNotifyNoTransparency"))
-	{
-		return 1.0f;
-	}
-	else
-	{
-		return LLUICtrl::getCurrentTransparency();
-	}
+    if (gSavedSettings.getBOOL("FSGroupNotifyNoTransparency"))
+    {
+        return 1.0f;
+    }
+    else
+    {
+        return LLUICtrl::getCurrentTransparency();
+    }
 }

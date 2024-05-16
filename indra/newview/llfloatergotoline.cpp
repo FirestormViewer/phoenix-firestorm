@@ -43,7 +43,7 @@ LLFloaterGotoLine::LLFloaterGotoLine(LLScriptEdCore* editor_core)
         buildFromFile("floater_goto_line.xml");
 
         sInstance = this;
-        
+
         // find floater in which script panel is embedded
         LLView* viewp = (LLView*)editor_core;
         while(viewp)
@@ -60,9 +60,9 @@ LLFloaterGotoLine::LLFloaterGotoLine(LLScriptEdCore* editor_core)
 
 bool LLFloaterGotoLine::postBuild()
 {
-	mGotoBox = getChild<LLLineEditor>("goto_line");
-	mGotoBox->setCommitCallback(boost::bind(&LLFloaterGotoLine::onGotoBoxCommit, this));
-	mGotoBox->setCommitOnFocusLost(false);
+    mGotoBox = getChild<LLLineEditor>("goto_line");
+    mGotoBox->setCommitCallback(boost::bind(&LLFloaterGotoLine::onGotoBoxCommit, this));
+    mGotoBox->setCommitOnFocusLost(false);
         getChild<LLLineEditor>("goto_line")->setPrevalidate(LLTextValidate::validateNonNegativeS32);
         childSetAction("goto_btn", onBtnGoto,this);
         setDefaultBtn("goto_btn");
@@ -70,7 +70,7 @@ bool LLFloaterGotoLine::postBuild()
         return true;
 }
 
-//static 
+//static
 void LLFloaterGotoLine::show(LLScriptEdCore* editor_core)
 {
         if (sInstance && sInstance->mEditorCore && sInstance->mEditorCore != editor_core)
@@ -93,7 +93,7 @@ LLFloaterGotoLine::~LLFloaterGotoLine()
         sInstance = NULL;
 }
 
-// static 
+// static
 void LLFloaterGotoLine::onBtnGoto(void *userdata)
 {
         LLFloaterGotoLine* self = (LLFloaterGotoLine*)userdata;
@@ -107,20 +107,20 @@ void LLFloaterGotoLine::handleBtnGoto()
         row = getChild<LLUICtrl>("goto_line")->getValue().asInteger();
         if (row >= 0)
         {
-			// <FS:Ansariel> LSL Preprocessor
+            // <FS:Ansariel> LSL Preprocessor
    //             if (mEditorCore && mEditorCore->mEditor)
    //             {
-			//mEditorCore->mEditor->deselect();
-			//mEditorCore->mEditor->setCursor(row, column);
-			//mEditorCore->mEditor->setFocus(true);
+            //mEditorCore->mEditor->deselect();
+            //mEditorCore->mEditor->setCursor(row, column);
+            //mEditorCore->mEditor->setFocus(true);
    //             }
-			if (mEditorCore && mEditorCore->mCurrentEditor)
-			{
-				mEditorCore->mCurrentEditor->deselect();
-				mEditorCore->mCurrentEditor->setCursor(row, column);
-				mEditorCore->mCurrentEditor->setFocus(true);
-			}
-			// </FS:Ansariel>
+            if (mEditorCore && mEditorCore->mCurrentEditor)
+            {
+                mEditorCore->mCurrentEditor->deselect();
+                mEditorCore->mCurrentEditor->setCursor(row, column);
+                mEditorCore->mCurrentEditor->setFocus(true);
+            }
+            // </FS:Ansariel>
        }
 }
 
@@ -150,35 +150,35 @@ void LLFloaterGotoLine::onGotoBoxCommit()
         row = getChild<LLUICtrl>("goto_line")->getValue().asInteger();
         if (row >= 0)
         {
-			// <FS:Ansariel> LSL Preprocessor
+            // <FS:Ansariel> LSL Preprocessor
    //             if (mEditorCore && mEditorCore->mEditor)
    //             {
-			//mEditorCore->mEditor->setCursor(row, column);
+            //mEditorCore->mEditor->setCursor(row, column);
 
-			//S32 rownew = 0;
-			//S32 columnnew = 0;
-			//mEditorCore->mEditor->getCurrentLineAndColumn( &rownew, &columnnew, false );  // don't include wordwrap
-			//if (rownew == row && columnnew == column)
-			//{
-			//        mEditorCore->mEditor->deselect();
-			//        mEditorCore->mEditor->setFocus(true);
-			//        sInstance->closeFloater();
-			//} //else do nothing (if the cursor-position didn't change)
+            //S32 rownew = 0;
+            //S32 columnnew = 0;
+            //mEditorCore->mEditor->getCurrentLineAndColumn( &rownew, &columnnew, false );  // don't include wordwrap
+            //if (rownew == row && columnnew == column)
+            //{
+            //        mEditorCore->mEditor->deselect();
+            //        mEditorCore->mEditor->setFocus(true);
+            //        sInstance->closeFloater();
+            //} //else do nothing (if the cursor-position didn't change)
    //             }
-			if (mEditorCore && mEditorCore->mCurrentEditor)
-			{
-				mEditorCore->mCurrentEditor->setCursor(row, column);
+            if (mEditorCore && mEditorCore->mCurrentEditor)
+            {
+                mEditorCore->mCurrentEditor->setCursor(row, column);
 
-				S32 rownew = 0;
-				S32 columnnew = 0;
-				mEditorCore->mCurrentEditor->getCurrentLineAndColumn( &rownew, &columnnew, false );  // don't include wordwrap
-				if (rownew == row && columnnew == column)
-				{
-					mEditorCore->mCurrentEditor->deselect();
-					mEditorCore->mCurrentEditor->setFocus(true);
-					sInstance->closeFloater();
-				} //else do nothing (if the cursor-position didn't change)
-			}
-			// </FS:Ansariel>
+                S32 rownew = 0;
+                S32 columnnew = 0;
+                mEditorCore->mCurrentEditor->getCurrentLineAndColumn( &rownew, &columnnew, false );  // don't include wordwrap
+                if (rownew == row && columnnew == column)
+                {
+                    mEditorCore->mCurrentEditor->deselect();
+                    mEditorCore->mCurrentEditor->setFocus(true);
+                    sInstance->closeFloater();
+                } //else do nothing (if the cursor-position didn't change)
+            }
+            // </FS:Ansariel>
         }
 }

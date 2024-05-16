@@ -34,27 +34,27 @@ class LLFloaterConversationLog : public LLFloater
 {
 public:
 
-	LLFloaterConversationLog(const LLSD& key);
-	virtual ~LLFloaterConversationLog(){};
+    LLFloaterConversationLog(const LLSD& key);
+    virtual ~LLFloaterConversationLog(){};
 
-	bool postBuild() override;
+    bool postBuild() override;
 
-	void draw() override;
+    void draw() override;
 
-	void onFilterEdit(const std::string& search_string);
+    void onFilterEdit(const std::string& search_string);
 
-	// <FS:Ansariel> CTRL-F focusses local search editor
-	bool handleKeyHere(KEY key, MASK mask) override;
-	bool hasAccelerators() const override { return true; }
-	// </FS:Ansariel>
+    // <FS:Ansariel> CTRL-F focusses local search editor
+    bool handleKeyHere(KEY key, MASK mask) override;
+    bool hasAccelerators() const override { return true; }
+    // </FS:Ansariel>
 
 private:
 
-	void onCustomAction (const LLSD& userdata);
-	bool isActionEnabled(const LLSD& userdata);
-	bool isActionChecked(const LLSD& userdata);
+    void onCustomAction (const LLSD& userdata);
+    bool isActionEnabled(const LLSD& userdata);
+    bool isActionChecked(const LLSD& userdata);
 
-	LLConversationLogList* mConversationLogList;
+    LLConversationLogList* mConversationLogList;
 };
 
 

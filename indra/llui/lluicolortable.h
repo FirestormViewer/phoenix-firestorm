@@ -1,25 +1,25 @@
-/** 
+/**
  * @file lluicolortable.h
  * @brief brief LLUIColorTable class header file
  *
  * $LicenseInfo:firstyear=2009&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -38,101 +38,101 @@ class LLUIColor;
 
 class LLUIColorTable : public LLSingleton<LLUIColorTable>
 {
-	LLSINGLETON_EMPTY_CTOR(LLUIColorTable);
-	LOG_CLASS(LLUIColorTable);
+    LLSINGLETON_EMPTY_CTOR(LLUIColorTable);
+    LOG_CLASS(LLUIColorTable);
 
-	// consider using sorted vector, can be much faster
+    // consider using sorted vector, can be much faster
 
-	// <FS:ND> Change from std::string to char*, avoind lots of unecessary string constructions
+    // <FS:ND> Change from std::string to char*, avoind lots of unecessary string constructions
 
-	// typedef std::map<std::string, LLUIColor>  string_color_map_t;
+    // typedef std::map<std::string, LLUIColor>  string_color_map_t;
 
-	struct ColorName
-	{
-		char *pName;
-		int nLen;
+    struct ColorName
+    {
+        char *pName;
+        int nLen;
 
-		bool operator<( ColorName const &aRHS ) const
-		{
-			if( nLen == aRHS.nLen )
-				return strcmp( pName, aRHS.pName ) < 0;
+        bool operator<( ColorName const &aRHS ) const
+        {
+            if( nLen == aRHS.nLen )
+                return strcmp( pName, aRHS.pName ) < 0;
 
-			return nLen < aRHS.nLen;
-		}
-	};
+            return nLen < aRHS.nLen;
+        }
+    };
 
-	typedef std::map<ColorName, LLUIColor>  string_color_map_t;
+    typedef std::map<ColorName, LLUIColor>  string_color_map_t;
 
 
-	// </FS:ND>
+    // </FS:ND>
 
 public:
-	struct ColorParams : LLInitParam::ChoiceBlock<ColorParams>
-	{
-		Alternative<LLColor4>    value;
-		Alternative<std::string> reference;
+    struct ColorParams : LLInitParam::ChoiceBlock<ColorParams>
+    {
+        Alternative<LLColor4>    value;
+        Alternative<std::string> reference;
 
-		ColorParams();
-	};
+        ColorParams();
+    };
 
-	struct ColorEntryParams : LLInitParam::Block<ColorEntryParams>
-	{
-		Mandatory<std::string> name;
-		Mandatory<ColorParams> color;
+    struct ColorEntryParams : LLInitParam::Block<ColorEntryParams>
+    {
+        Mandatory<std::string> name;
+        Mandatory<ColorParams> color;
 
-		ColorEntryParams();
-	};
+        ColorEntryParams();
+    };
 
-	struct Params : LLInitParam::Block<Params>
-	{
-		Multiple<ColorEntryParams> color_entries;
+    struct Params : LLInitParam::Block<Params>
+    {
+        Multiple<ColorEntryParams> color_entries;
 
-		Params();
-	};
+        Params();
+    };
 
-	// define colors by passing in a param block that can be generated via XUI file or manually
-	void insertFromParams(const Params& p);
+    // define colors by passing in a param block that can be generated via XUI file or manually
+    void insertFromParams(const Params& p);
 
-	// reset all colors to default magenta color
-	void clear();
+    // reset all colors to default magenta color
+    void clear();
 
-	// color lookup
+    // color lookup
 
-	LLUIColor getColor(const std::string& name, const LLColor4& default_color = LLColor4::magenta) const;
+    LLUIColor getColor(const std::string& name, const LLColor4& default_color = LLColor4::magenta) const;
 
-	// <FS:ND> Change from std::string to char*, avoind lots of unecessary string constructions
-	LLUIColor getColor(char const *name, const LLColor4& default_color = LLColor4::magenta) const;
-	// </FS:ND>
+    // <FS:ND> Change from std::string to char*, avoind lots of unecessary string constructions
+    LLUIColor getColor(char const *name, const LLColor4& default_color = LLColor4::magenta) const;
+    // </FS:ND>
 
-	// if the color is in the table, it's value is changed, otherwise it is added
-	void setColor(const std::string& name, const LLColor4& color);
+    // if the color is in the table, it's value is changed, otherwise it is added
+    void setColor(const std::string& name, const LLColor4& color);
 
-	// returns true if color_name exists in the table
+    // returns true if color_name exists in the table
 
-	// <FS:ND> Change from std::string to char*, avoind lots of unecessary string constructions
+    // <FS:ND> Change from std::string to char*, avoind lots of unecessary string constructions
 
-	// bool colorExists(const std::string& color_name) const;
-	bool colorExists(char const *name) const;
+    // bool colorExists(const std::string& color_name) const;
+    bool colorExists(char const *name) const;
 
-	// </FS:ND>
+    // </FS:ND>
 
-	// loads colors from settings files
-	bool loadFromSettings();
+    // loads colors from settings files
+    bool loadFromSettings();
 
-	// saves colors specified by the user to the users skin directory
-	void saveUserSettings() const;
-	void saveUserSettingsPaletteOnly() const; // AO, saves the user pallete, excluding skips skin-related files
+    // saves colors specified by the user to the users skin directory
+    void saveUserSettings() const;
+    void saveUserSettingsPaletteOnly() const; // AO, saves the user pallete, excluding skips skin-related files
 
 private:
-	bool loadFromFilename(const std::string& filename, string_color_map_t& table);
+    bool loadFromFilename(const std::string& filename, string_color_map_t& table);
 
-	void insertFromParams(const Params& p, string_color_map_t& table);
-	
-	void clearTable(string_color_map_t& table);
-	void setColor(const std::string& name, const LLColor4& color, string_color_map_t& table);
+    void insertFromParams(const Params& p, string_color_map_t& table);
 
-	string_color_map_t mLoadedColors;
-	string_color_map_t mUserSetColors;
+    void clearTable(string_color_map_t& table);
+    void setColor(const std::string& name, const LLColor4& color, string_color_map_t& table);
+
+    string_color_map_t mLoadedColors;
+    string_color_map_t mUserSetColors;
 };
 
 #endif // LL_LLUICOLORTABLE_H

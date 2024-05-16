@@ -30,64 +30,64 @@
 
 namespace nd
 {
-	namespace etw
-	{
+    namespace etw
+    {
 #ifdef LL_WINDOWS
-		typedef bool (_cdecl *tpInitialize)(void);
+        typedef bool (_cdecl *tpInitialize)(void);
 
-		typedef void (_cdecl *tpLogFrame)(double);
-		typedef void (_cdecl *tpLogStartTask)(wchar_t const*);
-		typedef void (_cdecl *tpLogEndTask)(wchar_t const*);
-		typedef void (_cdecl *tpLogTickTask)(wchar_t const*);
+        typedef void (_cdecl *tpLogFrame)(double);
+        typedef void (_cdecl *tpLogStartTask)(wchar_t const*);
+        typedef void (_cdecl *tpLogEndTask)(wchar_t const*);
+        typedef void (_cdecl *tpLogTickTask)(wchar_t const*);
 
-		extern tpLogFrame pLogFrame;
-		extern tpLogStartTask pLogStartTask;
-		extern tpLogEndTask pLogEndTask;
-		extern tpLogTickTask pLogTickTask;
-		
-		extern LLTimer etwFrameTimer;
+        extern tpLogFrame pLogFrame;
+        extern tpLogStartTask pLogStartTask;
+        extern tpLogEndTask pLogEndTask;
+        extern tpLogTickTask pLogTickTask;
 
-		void init();
+        extern LLTimer etwFrameTimer;
 
-		inline void logFrame( )
-		{
-			if( pLogFrame )
-				(*pLogFrame)( etwFrameTimer.getElapsedTimeAndResetF64() );
-		}
+        void init();
 
-		inline void logTaskStart( wchar_t const *aTask )
-		{
-			if( pLogStartTask )
-				(*pLogStartTask)( aTask );
-		}
+        inline void logFrame( )
+        {
+            if( pLogFrame )
+                (*pLogFrame)( etwFrameTimer.getElapsedTimeAndResetF64() );
+        }
 
-		inline void logTaskEnd( wchar_t const *aTask )
-		{
-			if( pLogEndTask )
-				(*pLogEndTask)( aTask );
-		}
+        inline void logTaskStart( wchar_t const *aTask )
+        {
+            if( pLogStartTask )
+                (*pLogStartTask)( aTask );
+        }
 
-		inline void tickTask( wchar_t const *aTask )
-		{
-			if( pLogTickTask )
-				(*pLogTickTask)( aTask );
-		}
+        inline void logTaskEnd( wchar_t const *aTask )
+        {
+            if( pLogEndTask )
+                (*pLogEndTask)( aTask );
+        }
+
+        inline void tickTask( wchar_t const *aTask )
+        {
+            if( pLogTickTask )
+                (*pLogTickTask)( aTask );
+        }
 #else
-		inline void init()
-		{ }
+        inline void init()
+        { }
 
-		inline void logFrame( )
-		{ }
+        inline void logFrame( )
+        { }
 
-		inline void logTaskStart( wchar_t const *aTask )
-		{ }
+        inline void logTaskStart( wchar_t const *aTask )
+        { }
 
-		inline void logTaskEnd( wchar_t const *aTask )
-		{ }
+        inline void logTaskEnd( wchar_t const *aTask )
+        { }
 
-		inline void tickTask( wchar_t const *aTask )
-		{ }
+        inline void tickTask( wchar_t const *aTask )
+        { }
 #endif
-	}
+    }
 }
 #endif

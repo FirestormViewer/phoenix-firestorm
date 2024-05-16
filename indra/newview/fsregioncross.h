@@ -1,4 +1,4 @@
-/** 
+/**
  * @file fsregioncross.h
  * @brief Improvements to region crossing display
  * @author nagle@animats.com
@@ -14,7 +14,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -69,10 +69,10 @@ public:
 //  seat moves, it's effectively a vehicle, so we start calculating
 //  region crossing safe extrapolation times.  If the seat never moves,
 //  we still allocate one of these, but it doesn't do anything.
-//  When the avatar stands, this object is released. 
+//  When the avatar stands, this object is released.
 //  If the LLViewerObject is deleted, so is this object.
 //
-class RegionCrossExtrapolateImpl                                    // Implementation of region cross extrapolation control 
+class RegionCrossExtrapolateImpl                                    // Implementation of region cross extrapolation control
 {
 private:
     const LLViewerObject& mOwner;                                   // ref to owning object
@@ -83,7 +83,7 @@ private:
 
 public:
     RegionCrossExtrapolateImpl(const LLViewerObject& vo);
-    void update();                                                  // update on object update message  
+    void update();                                                  // update on object update message
     F32 getextraptimelimit() const;                                 // don't extrapolate more than this
     bool hasmoved() const { return (mMoved); }                      // true if has been seen to move with sitter
 };

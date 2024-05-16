@@ -157,7 +157,7 @@ Maximum 200 per group daily
          left_pad="-1"
          max_length_chars="63"
          name="create_subject"
-         prevalidate_callback="ascii"
+         prevalidator="ascii"
          spellcheck="true"
          width="371" />
 

@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -32,42 +32,42 @@
 
 enum class EFSRegistrarFunctionActionType
 {
-	FS_RGSTR_ACT_ADD_FRIEND,
-	FS_RGSTR_ACT_REMOVE_FRIEND,
-	FS_RGSTR_ACT_SEND_IM,
-	FS_RGSTR_ACT_VIEW_TRANSCRIPT,
-	FS_RGSTR_ACT_ZOOM_IN,
-	FS_RGSTR_ACT_OFFER_TELEPORT,
-	FS_RGSTR_ACT_SHOW_PROFILE,
-	FS_RGSTR_ACT_TRACK_AVATAR,
-	FS_RGSTR_ACT_TELEPORT_TO,
-	FS_RGSTR_ACT_REQUEST_TELEPORT,
-	FS_RGSTR_CHK_AVATAR_BLOCKED,
-	FS_RGSTR_CHK_IS_SELF,
-	FS_RGSTR_CHK_IS_NOT_SELF,
-	FS_RGSTR_CHK_WAITING_FOR_GROUP_DATA,
-	FS_RGSTR_CHK_HAVE_GROUP_DATA,
-	FS_RGSTR_CHK_CAN_LEAVE_GROUP,
-	FS_RGSTR_CHK_CAN_JOIN_GROUP,
-	FS_RGSTR_CHK_GROUP_NOT_ACTIVE
+    FS_RGSTR_ACT_ADD_FRIEND,
+    FS_RGSTR_ACT_REMOVE_FRIEND,
+    FS_RGSTR_ACT_SEND_IM,
+    FS_RGSTR_ACT_VIEW_TRANSCRIPT,
+    FS_RGSTR_ACT_ZOOM_IN,
+    FS_RGSTR_ACT_OFFER_TELEPORT,
+    FS_RGSTR_ACT_SHOW_PROFILE,
+    FS_RGSTR_ACT_TRACK_AVATAR,
+    FS_RGSTR_ACT_TELEPORT_TO,
+    FS_RGSTR_ACT_REQUEST_TELEPORT,
+    FS_RGSTR_CHK_AVATAR_BLOCKED,
+    FS_RGSTR_CHK_IS_SELF,
+    FS_RGSTR_CHK_IS_NOT_SELF,
+    FS_RGSTR_CHK_WAITING_FOR_GROUP_DATA,
+    FS_RGSTR_CHK_HAVE_GROUP_DATA,
+    FS_RGSTR_CHK_CAN_LEAVE_GROUP,
+    FS_RGSTR_CHK_CAN_JOIN_GROUP,
+    FS_RGSTR_CHK_GROUP_NOT_ACTIVE
 };
 
 class FSRegistrarUtils
 {
 public:
-	FSRegistrarUtils() = default;
-	~FSRegistrarUtils() = default;
+    FSRegistrarUtils() = default;
+    ~FSRegistrarUtils() = default;
 
-	using enable_check_function_t = std::function<bool(const LLUUID&, EFSRegistrarFunctionActionType)>;
-	void setEnableCheckFunction(const enable_check_function_t& func)
-	{
-		mEnableCheckFunction = func;
-	}
+    using enable_check_function_t = std::function<bool(const LLUUID&, EFSRegistrarFunctionActionType)>;
+    void setEnableCheckFunction(const enable_check_function_t& func)
+    {
+        mEnableCheckFunction = func;
+    }
 
-	bool checkIsEnabled(LLUUID av_id, EFSRegistrarFunctionActionType action);
+    bool checkIsEnabled(LLUUID av_id, EFSRegistrarFunctionActionType action);
 
 private:
-	enable_check_function_t mEnableCheckFunction{ nullptr };
+    enable_check_function_t mEnableCheckFunction{ nullptr };
 };
 
 extern FSRegistrarUtils gFSRegistrarUtils;

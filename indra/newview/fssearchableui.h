@@ -34,87 +34,87 @@ class LLTabContainer;
 
 namespace nd
 {
-	namespace prefs
-	{
-		struct SearchableItem;
-		struct PanelData;
-		struct TabContainerData;
+    namespace prefs
+    {
+        struct SearchableItem;
+        struct PanelData;
+        struct TabContainerData;
 
-		typedef boost::shared_ptr< SearchableItem > SearchableItemPtr;
-		typedef boost::shared_ptr< PanelData > PanelDataPtr;
-		typedef boost::shared_ptr< TabContainerData > TabContainerDataPtr;
+        typedef boost::shared_ptr< SearchableItem > SearchableItemPtr;
+        typedef boost::shared_ptr< PanelData > PanelDataPtr;
+        typedef boost::shared_ptr< TabContainerData > TabContainerDataPtr;
 
-		typedef std::vector< TabContainerData > tTabContainerDataList;
-		typedef std::vector< SearchableItemPtr > tSearchableItemList;
-		typedef std::vector< PanelDataPtr > tPanelDataList;
+        typedef std::vector< TabContainerData > tTabContainerDataList;
+        typedef std::vector< SearchableItemPtr > tSearchableItemList;
+        typedef std::vector< PanelDataPtr > tPanelDataList;
 
-		struct SearchableItem
-		{
-			LLWString mLabel;
-			LLView const *mView;
-			nd::ui::SearchableControl const *mCtrl;
+        struct SearchableItem
+        {
+            LLWString mLabel;
+            LLView const *mView;
+            nd::ui::SearchableControl const *mCtrl;
 
-			std::vector< boost::shared_ptr< SearchableItem >  > mChildren;
+            std::vector< boost::shared_ptr< SearchableItem >  > mChildren;
 
-			virtual ~SearchableItem();
+            virtual ~SearchableItem();
 
-			void setNotHighlighted();
-			virtual bool hightlightAndHide( LLWString const &aFilter );
-		};
+            void setNotHighlighted();
+            virtual bool hightlightAndHide( LLWString const &aFilter );
+        };
 
-		struct PanelData
-		{
-			LLPanel const *mPanel;
-			std::string mLabel;
+        struct PanelData
+        {
+            LLPanel const *mPanel;
+            std::string mLabel;
 
-			std::vector< boost::shared_ptr< SearchableItem > > mChildren;
-			std::vector< boost::shared_ptr< PanelData > > mChildPanel;
+            std::vector< boost::shared_ptr< SearchableItem > > mChildren;
+            std::vector< boost::shared_ptr< PanelData > > mChildPanel;
 
-			virtual ~PanelData();
+            virtual ~PanelData();
 
-			virtual bool hightlightAndHide( LLWString const &aFilter );
-		};
+            virtual bool hightlightAndHide( LLWString const &aFilter );
+        };
 
-		struct TabContainerData: public PanelData
-		{
-			LLTabContainer *mTabContainer;
-			virtual bool hightlightAndHide( LLWString const &aFilter );
-		};
+        struct TabContainerData: public PanelData
+        {
+            LLTabContainer *mTabContainer;
+            virtual bool hightlightAndHide( LLWString const &aFilter );
+        };
 
-		struct SearchData
-		{
-			TabContainerDataPtr mRootTab;
-			LLWString mLastFilter;
-		};
-	}
-	namespace statusbar
-	{
-		struct SearchableItem;
+        struct SearchData
+        {
+            TabContainerDataPtr mRootTab;
+            LLWString mLastFilter;
+        };
+    }
+    namespace statusbar
+    {
+        struct SearchableItem;
 
-		typedef boost::shared_ptr< SearchableItem > SearchableItemPtr;
+        typedef boost::shared_ptr< SearchableItem > SearchableItemPtr;
 
-		typedef std::vector< SearchableItemPtr > tSearchableItemList;
+        typedef std::vector< SearchableItemPtr > tSearchableItemList;
 
-		struct SearchableItem
-		{
-			LLWString mLabel;
-			LLMenuItemGL *mMenu;
-			tSearchableItemList mChildren;
-			nd::ui::SearchableControl const *mCtrl;
-			bool mWasHiddenBySearch;
+        struct SearchableItem
+        {
+            LLWString mLabel;
+            LLMenuItemGL *mMenu;
+            tSearchableItemList mChildren;
+            nd::ui::SearchableControl const *mCtrl;
+            bool mWasHiddenBySearch;
 
-			SearchableItem();
+            SearchableItem();
 
-			void setNotHighlighted( );
-			bool hightlightAndHide( LLWString const &aFilter );
-		};
+            void setNotHighlighted( );
+            bool hightlightAndHide( LLWString const &aFilter );
+        };
 
-		struct SearchData
-		{
-			SearchableItemPtr mRootMenu;
-			LLWString mLastFilter;
-		};
-	}
+        struct SearchData
+        {
+            SearchableItemPtr mRootMenu;
+            LLWString mLastFilter;
+        };
+    }
 }
 
 #endif

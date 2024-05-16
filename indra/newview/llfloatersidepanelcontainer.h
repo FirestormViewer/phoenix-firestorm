@@ -1,4 +1,4 @@
-/** 
+/**
  * @file llfloatersidepanelcontainer.h
  * @brief LLFloaterSidePanelContainer class
  *
@@ -6,21 +6,21 @@
  * $LicenseInfo:firstyear=2011&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2011, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -43,78 +43,78 @@
 class LLFloaterSidePanelContainer : public LLFloater
 {
 private:
-	static const std::string sMainPanelName;
+    static const std::string sMainPanelName;
 
 public:
-	LLFloaterSidePanelContainer(const LLSD& key, const Params& params = getDefaultParams());
-	~LLFloaterSidePanelContainer();
+    LLFloaterSidePanelContainer(const LLSD& key, const Params& params = getDefaultParams());
+    ~LLFloaterSidePanelContainer();
 
-	/*virtual*/ void onOpen(const LLSD& key);
+    /*virtual*/ void onOpen(const LLSD& key);
 
-	/*virtual*/ void closeFloater(bool app_quitting = false);
+    /*virtual*/ void closeFloater(bool app_quitting = false);
 
-	void cleanup() { destroy(); }
+    void cleanup() { destroy(); }
 
-	LLPanel* openChildPanel(const std::string& panel_name, const LLSD& params);
+    LLPanel* openChildPanel(const std::string& panel_name, const LLSD& params);
 
     static LLFloater* getTopmostInventoryFloater();
 
 // [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
-	static bool canShowPanel(const std::string& floater_name, const LLSD& key);
-	static bool canShowPanel(const std::string& floater_name, const std::string& panel_name, const LLSD& key);
+    static bool canShowPanel(const std::string& floater_name, const LLSD& key);
+    static bool canShowPanel(const std::string& floater_name, const std::string& panel_name, const LLSD& key);
 // [/RLVa:KB]
-	
-	static void showPanel(const std::string& floater_name, const LLSD& key);
 
-	static void showPanel(const std::string& floater_name, const std::string& panel_name, const LLSD& key);
-	
-	static LLPanel* getPanel(const std::string& floater_name, const std::string& panel_name = sMainPanelName);
+    static void showPanel(const std::string& floater_name, const LLSD& key);
 
-	static LLPanel* findPanel(const std::string& floater_name, const std::string& panel_name = sMainPanelName);
-	
-	/**
-	 * Gets the panel of given type T (doesn't show it or do anything else with it).
-	 *
-	 * @param floater_name a string specifying the floater to be searched for a child panel.
-	 * @param panel_name a string specifying the child panel to get.
-	 * @returns a pointer to the panel of given type T.
-	 */
-	template <typename T>
-	static T* getPanel(const std::string& floater_name, const std::string& panel_name = sMainPanelName)
-	{
-		T* panel = dynamic_cast<T*>(getPanel(floater_name, panel_name));
-		if (!panel)
-		{
-			LL_WARNS() << "Child named \"" << panel_name << "\" of type " << typeid(T*).name() << " not found" << LL_ENDL;
-		}
-		return panel;
-	}
+    static void showPanel(const std::string& floater_name, const std::string& panel_name, const LLSD& key);
 
-	template <typename T>
-	static T* findPanel(const std::string& floater_name, const std::string& panel_name = sMainPanelName)
-	{
-		LLPanel* panel = findPanel(floater_name, panel_name);
-		if (!panel)
-		{
-			return NULL;
-		}
+    static LLPanel* getPanel(const std::string& floater_name, const std::string& panel_name = sMainPanelName);
 
-		T* res = dynamic_cast<T*>(panel);
-		if (!res)
-		{
-			LL_WARNS() << "Child named \"" << panel_name << "\" is not of type " << typeid(T*).name() << LL_ENDL;
-		}
-		return res;
-	}
-	// </FS:Ansariel>
-	
+    static LLPanel* findPanel(const std::string& floater_name, const std::string& panel_name = sMainPanelName);
+
+    /**
+     * Gets the panel of given type T (doesn't show it or do anything else with it).
+     *
+     * @param floater_name a string specifying the floater to be searched for a child panel.
+     * @param panel_name a string specifying the child panel to get.
+     * @returns a pointer to the panel of given type T.
+     */
+    template <typename T>
+    static T* getPanel(const std::string& floater_name, const std::string& panel_name = sMainPanelName)
+    {
+        T* panel = dynamic_cast<T*>(getPanel(floater_name, panel_name));
+        if (!panel)
+        {
+            LL_WARNS() << "Child named \"" << panel_name << "\" of type " << typeid(T*).name() << " not found" << LL_ENDL;
+        }
+        return panel;
+    }
+
+    template <typename T>
+    static T* findPanel(const std::string& floater_name, const std::string& panel_name = sMainPanelName)
+    {
+        LLPanel* panel = findPanel(floater_name, panel_name);
+        if (!panel)
+        {
+            return NULL;
+        }
+
+        T* res = dynamic_cast<T*>(panel);
+        if (!res)
+        {
+            LL_WARNS() << "Child named \"" << panel_name << "\" is not of type " << typeid(T*).name() << LL_ENDL;
+        }
+        return res;
+    }
+    // </FS:Ansariel>
+
 // [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
-	// Used to determine whether a sidepanel can be shown
+    // Used to determine whether a sidepanel can be shown
 public:
-	typedef boost::signals2::signal<bool(const std::string&, const std::string&, const LLSD&), boost_boolean_combiner> validate_signal_t;
-	static boost::signals2::connection setValidateCallback(const validate_signal_t::slot_type& cb) { return mValidateSignal.connect(cb); }
+    typedef boost::signals2::signal<bool(const std::string&, const std::string&, const LLSD&), boost_boolean_combiner> validate_signal_t;
+    static boost::signals2::connection setValidateCallback(const validate_signal_t::slot_type& cb) { return mValidateSignal.connect(cb); }
 private:
-	static validate_signal_t mValidateSignal;
+    static validate_signal_t mValidateSignal;
 // [/RLVa:KB]
 };
 

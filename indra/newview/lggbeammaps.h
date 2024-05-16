@@ -1,4 +1,4 @@
-/** 
+/**
  * @file lggbeammaps.h
  * @brief Manager for Beam Shapes
  * @copyright Copyright (c) 2011 LordGregGreg Back
@@ -24,44 +24,44 @@ void hslToRgb(F32 hValIn, F32 sValIn, F32 lValIn, F32& rValOut, F32& gValOut, F3
 class lggBeamData
 {
 public:
-	LLVector3d p;
-	LLColor4U c;
+    LLVector3d p;
+    LLColor4U c;
 };
 
 class lggBeamMaps
 {
 public:
-	lggBeamMaps() :
-		mLastFileName(""),
-		mScale(0.0f),
-		mDuration(0.25f),
-		mPartsNow(false),
-		mBeamLastAt(LLVector3d::zero)
-		{}
-	~lggBeamMaps() {}
+    lggBeamMaps() :
+        mLastFileName(""),
+        mScale(0.0f),
+        mDuration(0.25f),
+        mPartsNow(false),
+        mBeamLastAt(LLVector3d::zero)
+        {}
+    ~lggBeamMaps() {}
 
-	F32							setUpAndGetDuration();
-	void						fireCurrentBeams(LLPointer<LLHUDEffectSpiral>, const LLColor4U& rgb);
-	void						forceUpdate();
-	void						stopBeamChat();
-	void						updateBeamChat(const LLVector3d& currentPos);
-	static LLColor4U			beamColorFromData(const lggBeamsColors& data);
-	LLColor4U					getCurrentColor(const LLColor4U& agentColor);
-	string_vec_t				getFileNames();
-	string_vec_t				getColorsFileNames();
+    F32                         setUpAndGetDuration();
+    void                        fireCurrentBeams(LLPointer<LLHUDEffectSpiral>, const LLColor4U& rgb);
+    void                        forceUpdate();
+    void                        stopBeamChat();
+    void                        updateBeamChat(const LLVector3d& currentPos);
+    static LLColor4U            beamColorFromData(const lggBeamsColors& data);
+    LLColor4U                   getCurrentColor(const LLColor4U& agentColor);
+    string_vec_t                getFileNames();
+    string_vec_t                getColorsFileNames();
 
 private:
-	LLSD			getPic(const std::string& filename);
+    LLSD            getPic(const std::string& filename);
 
-	std::string		mLastFileName;
-	std::string		mLastColorFileName;
-	lggBeamsColors	mLastColorsData;
-	F32				mDuration;
-	F32				mScale;
-	bool			mPartsNow;
-	LLVector3d		mBeamLastAt;
+    std::string     mLastFileName;
+    std::string     mLastColorFileName;
+    lggBeamsColors  mLastColorsData;
+    F32             mDuration;
+    F32             mScale;
+    bool            mPartsNow;
+    LLVector3d      mBeamLastAt;
 
-	std::vector<lggBeamData> mDots;
+    std::vector<lggBeamData> mDots;
 };
 
 extern lggBeamMaps gLggBeamMaps;

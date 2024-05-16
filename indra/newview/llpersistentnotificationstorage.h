@@ -1,4 +1,4 @@
-/** 
+/**
 * @file   llpersistentnotificationstorage.h
 * @brief  Header file for llpersistentnotificationstorage
 * @author Stinson@lindenlab.com
@@ -45,31 +45,31 @@ class LLSD;
 
 class LLPersistentNotificationStorage : public LLParamSingleton<LLPersistentNotificationStorage>, public LLNotificationStorage
 {
-	LLSINGLETON(LLPersistentNotificationStorage);
-	~LLPersistentNotificationStorage();
-	LOG_CLASS(LLPersistentNotificationStorage);
+    LLSINGLETON(LLPersistentNotificationStorage);
+    ~LLPersistentNotificationStorage();
+    LOG_CLASS(LLPersistentNotificationStorage);
 public:
 
-	void saveNotifications();
-	void loadNotifications();
+    void saveNotifications();
+    void loadNotifications();
     void reset();
 
 protected:
 
 private:
-	void initialize();
+    void initialize();
 
-	bool onPersistentChannelChanged(const LLSD& payload);
-	bool mLoaded;
+    bool onPersistentChannelChanged(const LLSD& payload);
+    bool mLoaded;
 
-	// <FS:ND> Don't save notifications over and over during bulk updates.
-	bool mDuringBulkUpdate;
+    // <FS:ND> Don't save notifications over and over during bulk updates.
+    bool mDuringBulkUpdate;
 public:
-	void startBulkUpdate()
-	{ mDuringBulkUpdate = true; }
-	void endBulkUpdate()
-	{ mDuringBulkUpdate = false; }
-	// </FS:ND>
+    void startBulkUpdate()
+    { mDuringBulkUpdate = true; }
+    void endBulkUpdate()
+    { mDuringBulkUpdate = false; }
+    // </FS:ND>
 };
 
 #endif // LL_LLPERSISTENTNOTIFICATIONSTORAGE_H

@@ -666,6 +666,21 @@ https://www.firestormviewer.org/support for help fixing this problem.
 	<string name="executable_files">Executable Program Files</string>
 
   <!-- LSL Usage Hover Tips -->
+    <!-- Text validator error messages -->
+    <string name="Validator_InvalidNumericString">Invalid numeric string: "[STR]"</string>
+    <string name="Validator_ShouldNotBeMinus">Invalid initial character: '[CH]' (shouldn't be a minus)</string>
+    <string name="Validator_ShouldNotBeMinusOrZero">Invalid initial character: '[CH]' (shouldn't be either a minus or a zero)</string>
+    <string name="Validator_ShouldBeDigit">Invalid character [NR]: '[CH]' (should only be a digit)</string>
+    <string name="Validator_ShouldBeDigitOrDot">Invalid character [NR]: '[CH]' (should only be a digit or a decimal point)</string>
+    <string name="Validator_ShouldBeDigitOrAlpha">Invalid character [NR]: '[CH]' (should only be a digit or an alpha-numeric ASCII character)</string>
+    <string name="Validator_ShouldBeDigitOrAlphaOrSpace">Invalid character [NR]: '[CH]' (should only be a digit or an alpha-numeric ASCII character or a space)</string>
+    <string name="Validator_ShouldBeDigitOrAlphaOrPunct">Invalid character [NR]: '[CH]' (should only be a digit or an alpha-numeric ASCII character or a punctuation)</string>
+    <string name="Validator_ShouldBeDigitOrAlphaOrPunctNotSpace">Invalid character [NR]: '[CH]' (should only be a digit or an alpha-numeric ASCII character or a punctuation with no space)</string>
+    <string name="Validator_ShouldBeDigitNotSpace">Invalid character [NR]: '[CH]' (should only be a digit with no space)</string>
+    <string name="Validator_ShouldBeASCII">Invalid character [NR]: '[CH]' (should only be an ASCII character)</string>
+    <string name="Validator_ShouldBeNewLineOrASCII">Invalid character [NR]: '[CH]' (should only be an ASCII character or a new line)</string>
+
+    <!-- LSL Usage Hover Tips -->
 	<string name="LSLTipSleepTime" translate="false">Sleeps script for [SLEEP_TIME] seconds.</string>
 	<!-- (FS:CR) LSL Hover Tips have been moved into scriptlibrary_*.xml so they can be dynamically updated -->
 
@@ -2460,7 +2475,8 @@ Abuse Report</string>
   <string name="dance8">dance8</string>
 
   <!-- birth date format shared by avatar inspector and profile panels -->
-  <string name="AvatarBirthDateFormat">[mthnum,datetime,utc]/[day,datetime,utc]/[year,datetime,utc]</string>
+  <string name="AvatarBirthDateFormatFull">[mthnum,datetime,utc]/[day,datetime,utc]/[year,datetime,utc]</string>
+  <string name="AvatarBirthDateFormatShort">[mthnum,datetime,utc]/[day,datetime,utc]</string>
   <string name="AvatarBirthDateFormat_legacy">[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt]</string>
 
   <string name="DefaultMimeType">none/none</string>
@@ -2528,7 +2544,8 @@ If you continue to experience problems, please check your network and firewall s
   <string name="EmptyOutfitText">There are no items in this outfit</string>
 
  <!-- External editor status codes -->
- <string name="ExternalEditorNotSet">Select an editor by setting the environment variable LL_SCRIPT_EDITOR or the ExternalEditor setting.</string>
+ <string name="ExternalEditorNotSet">Select an editor by setting the environment variable LL_SCRIPT_EDITOR or the ExternalEditor setting.
+See https://wiki.secondlife.com/wiki/LSL_Alternate_Editors</string>
  <string name="ExternalEditorNotFound">Cannot find the external editor you specified.
 Try enclosing path to the editor with double quotes.
 (e.g. "/path to my/editor" "%s")</string>
@@ -3139,6 +3156,7 @@ Your current position: [AVATAR_POS]
   <string name="entering_region_distance">entered the region ([DISTANCE] m).</string>
   <string name="leaving_region">left the region.</string>
   <string name="avatar_age_alert">triggered the age alert. Age: [AGE] day(s)</string>
+  <string name="avatar_age_not_available">n.a.</string>
 
   <string name="TotalScriptCountChangeIncrease">Total scripts in region jumped from [OLD_VALUE] to [NEW_VALUE] ([DIFFERENCE]).</string>
   <string name="TotalScriptCountChangeDecrease">Total scripts in region dropped from [OLD_VALUE] to [NEW_VALUE] ([DIFFERENCE]).</string>

@@ -36,20 +36,20 @@ class LLUICtrl;
 class LLFloaterScriptEdPrefs : public LLFloater
 {
 public:
-	LLFloaterScriptEdPrefs(const LLSD& key);
-	bool postBuild() override;
-	
-private:
-	~LLFloaterScriptEdPrefs() {};
-	
-	void applyUIColor(LLUICtrl* ctrl, const LLSD& param);
-	void getUIColor(LLUICtrl* ctrl, const LLSD& param);
-	
-	// <FS:Ansariel> Port old FS script prefs
-	void setPreprocInclude();
-	void changePreprocIncludePath(const std::vector<std::string>& filenames, std::string proposed_name);
+    LLFloaterScriptEdPrefs(const LLSD& key);
+    bool postBuild() override;
 
-	LLScriptEditor* mEditor;
+private:
+    ~LLFloaterScriptEdPrefs() {};
+
+    void applyUIColor(LLUICtrl* ctrl, const LLSD& param);
+    void getUIColor(LLUICtrl* ctrl, const LLSD& param);
+
+    // <FS:Ansariel> Port old FS script prefs
+    void setPreprocInclude();
+    void changePreprocIncludePath(const std::vector<std::string>& filenames, std::string proposed_name);
+
+    LLScriptEditor* mEditor;
 };
 
 #endif // LL_FLOATERSCRIPTEDPREFS_H

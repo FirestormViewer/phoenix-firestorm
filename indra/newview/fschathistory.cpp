@@ -1,25 +1,25 @@
-/** 
+/**
  * @file fschathistory.cpp
  * @brief LLTextEditor base class
  *
  * $LicenseInfo:firstyear=2001&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General PublicatarActions::pay(getAvat
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -93,1863 +93,1863 @@ const static std::string SLURL_ABOUT = "/about";
 class LLObjectIMHandler : public LLCommandHandler
 {
 public:
-	// requests will be throttled from a non-trusted browser
-	LLObjectIMHandler() : LLCommandHandler("objectim", UNTRUSTED_THROTTLE) {}
+    // requests will be throttled from a non-trusted browser
+    LLObjectIMHandler() : LLCommandHandler("objectim", UNTRUSTED_THROTTLE) {}
 
-	bool handle(const LLSD& params, const LLSD& query_map, const std::string& grid, LLMediaCtrl* web)
-	{
-		if (params.size() < 1)
-		{
-			return false;
-		}
+    bool handle(const LLSD& params, const LLSD& query_map, const std::string& grid, LLMediaCtrl* web)
+    {
+        if (params.size() < 1)
+        {
+            return false;
+        }
 
-		LLUUID object_id;
-		if (!object_id.set(params[0], false))
-		{
-			return false;
-		}
+        LLUUID object_id;
+        if (!object_id.set(params[0], false))
+        {
+            return false;
+        }
 
-		LLSD payload;
-		payload["object_id"] = object_id;
-		payload["owner_id"] = query_map["owner"];
+        LLSD payload;
+        payload["object_id"] = object_id;
+        payload["owner_id"] = query_map["owner"];
 // [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-		if (query_map.has("rlv_shownames"))
-			payload["rlv_shownames"] = query_map["rlv_shownames"];
+        if (query_map.has("rlv_shownames"))
+            payload["rlv_shownames"] = query_map["rlv_shownames"];
 // [/RLVa:KB]
-		payload["name"] = query_map["name"];
-		payload["slurl"] = LLWeb::escapeURL(query_map["slurl"]);
-		payload["group_owned"] = query_map["groupowned"];
-		LLFloaterReg::showInstance("inspect_remote_object", payload);
-		return true;
-	}
+        payload["name"] = query_map["name"];
+        payload["slurl"] = LLWeb::escapeURL(query_map["slurl"]);
+        payload["group_owned"] = query_map["groupowned"];
+        LLFloaterReg::showInstance("inspect_remote_object", payload);
+        return true;
+    }
 };
 LLObjectIMHandler gObjectIMHandler;
 
 class FSChatHistoryHeader: public LLPanel
 {
 public:
-	FSChatHistoryHeader()
-	:	LLPanel(),
-		mInfoCtrl(NULL),
+    FSChatHistoryHeader()
+    :   LLPanel(),
+        mInfoCtrl(NULL),
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
-		mShowContextMenu(true), 
-		mShowInfoCtrl(true),
+        mShowContextMenu(true),
+        mShowInfoCtrl(true),
 // [/RLVa:KB]
-		mPopupMenuHandleAvatar(),
-		mPopupMenuHandleObject(),
-		mAvatarID(),
-		mSourceType(CHAT_SOURCE_UNKNOWN),
-		mType(CHAT_TYPE_NORMAL), // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
-		mFrom(),
-		mSessionID(),
-		mCreationTime(time_corrected()),
-		mMinUserNameWidth(0),
-		mUserNameFont(NULL),
-		mUserNameTextBox(NULL),
-		mNeedsTimeBox(true),
-		mTimeBoxTextBox(NULL),
-		mHeaderLayoutStack(NULL),
-		mAvatarNameCacheConnection(),
-		mTime(0)
-	{}
+        mPopupMenuHandleAvatar(),
+        mPopupMenuHandleObject(),
+        mAvatarID(),
+        mSourceType(CHAT_SOURCE_UNKNOWN),
+        mType(CHAT_TYPE_NORMAL), // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+        mFrom(),
+        mSessionID(),
+        mCreationTime(time_corrected()),
+        mMinUserNameWidth(0),
+        mUserNameFont(NULL),
+        mUserNameTextBox(NULL),
+        mNeedsTimeBox(true),
+        mTimeBoxTextBox(NULL),
+        mHeaderLayoutStack(NULL),
+        mAvatarNameCacheConnection(),
+        mTime(0)
+    {}
 
-	static FSChatHistoryHeader* createInstance(const std::string& file_name)
-	{
-		FSChatHistoryHeader* pInstance = new FSChatHistoryHeader;
-		pInstance->buildFromFile(file_name);	
-		return pInstance;
-	}
+    static FSChatHistoryHeader* createInstance(const std::string& file_name)
+    {
+        FSChatHistoryHeader* pInstance = new FSChatHistoryHeader;
+        pInstance->buildFromFile(file_name);
+        return pInstance;
+    }
 
-	~FSChatHistoryHeader()
-	{
-		if (mAvatarNameCacheConnection.connected())
-		{
-			mAvatarNameCacheConnection.disconnect();
-		}
-		auto menu = mPopupMenuHandleAvatar.get();
-		if (menu)
-		{
-			menu->die();
-			mPopupMenuHandleAvatar.markDead();
-		}
-		menu = mPopupMenuHandleObject.get();
-		if (menu)
-		{
-			menu->die();
-			mPopupMenuHandleObject.markDead();
-		}
-	}
+    ~FSChatHistoryHeader()
+    {
+        if (mAvatarNameCacheConnection.connected())
+        {
+            mAvatarNameCacheConnection.disconnect();
+        }
+        auto menu = mPopupMenuHandleAvatar.get();
+        if (menu)
+        {
+            menu->die();
+            mPopupMenuHandleAvatar.markDead();
+        }
+        menu = mPopupMenuHandleObject.get();
+        if (menu)
+        {
+            menu->die();
+            mPopupMenuHandleObject.markDead();
+        }
+    }
 
-	bool handleMouseUp(S32 x, S32 y, MASK mask)
-	{
-		return LLPanel::handleMouseUp(x,y,mask);
-	}
+    bool handleMouseUp(S32 x, S32 y, MASK mask)
+    {
+        return LLPanel::handleMouseUp(x,y,mask);
+    }
 
-	void onObjectIconContextMenuItemClicked(const LLSD& userdata)
-	{
-		std::string level = userdata.asString();
+    void onObjectIconContextMenuItemClicked(const LLSD& userdata)
+    {
+        std::string level = userdata.asString();
 
-		if (level == "profile")
-		{
-			LLFloaterReg::showInstance("inspect_remote_object", mObjectData);
-		}
-		else if (level == "block")
-		{
-			LLMuteList::getInstance()->add(LLMute(getAvatarId(), mFrom, LLMute::OBJECT));
-			LLPanelBlockedList::showPanelAndSelect(getAvatarId());
-		}
-		else if (level == "unblock")
-		{
-			LLMuteList::getInstance()->remove(LLMute(getAvatarId(), mFrom, LLMute::OBJECT));
-		}
-		else if (level == "map")
-		{
-			std::string url = "secondlife://" + mObjectData["slurl"].asString();
-			LLUrlAction::showLocationOnMap(url);
-		}
-		else if (level == "teleport")
-		{
-			std::string url = "secondlife://" + mObjectData["slurl"].asString();
-			LLUrlAction::teleportToLocation(url);
-		}
-	}
+        if (level == "profile")
+        {
+            LLFloaterReg::showInstance("inspect_remote_object", mObjectData);
+        }
+        else if (level == "block")
+        {
+            LLMuteList::getInstance()->add(LLMute(getAvatarId(), mFrom, LLMute::OBJECT));
+            LLPanelBlockedList::showPanelAndSelect(getAvatarId());
+        }
+        else if (level == "unblock")
+        {
+            LLMuteList::getInstance()->remove(LLMute(getAvatarId(), mFrom, LLMute::OBJECT));
+        }
+        else if (level == "map")
+        {
+            std::string url = "secondlife://" + mObjectData["slurl"].asString();
+            LLUrlAction::showLocationOnMap(url);
+        }
+        else if (level == "teleport")
+        {
+            std::string url = "secondlife://" + mObjectData["slurl"].asString();
+            LLUrlAction::teleportToLocation(url);
+        }
+    }
 
-	bool onObjectIconContextMenuItemVisible(const LLSD& userdata)
-	{
-		std::string level = userdata.asString();
-		if (level == "is_blocked")
-		{
-			return LLMuteList::getInstance()->isMuted(getAvatarId(), mFrom, LLMute::flagTextChat);
-		}
-		else if (level == "not_blocked")
-		{
-			return !LLMuteList::getInstance()->isMuted(getAvatarId(), mFrom, LLMute::flagTextChat);
-		}
-		return false;
-	}
+    bool onObjectIconContextMenuItemVisible(const LLSD& userdata)
+    {
+        std::string level = userdata.asString();
+        if (level == "is_blocked")
+        {
+            return LLMuteList::getInstance()->isMuted(getAvatarId(), mFrom, LLMute::flagTextChat);
+        }
+        else if (level == "not_blocked")
+        {
+            return !LLMuteList::getInstance()->isMuted(getAvatarId(), mFrom, LLMute::flagTextChat);
+        }
+        return false;
+    }
 
-	void banGroupMember(const LLUUID& participant_uuid)
-	{
-		LLUUID group_uuid = mSessionID;
-		LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(group_uuid);
-		if (!gdatap)
-		{
-			// Not a group
-			return;
-		}
+    void banGroupMember(const LLUUID& participant_uuid)
+    {
+        LLUUID group_uuid = mSessionID;
+        LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(group_uuid);
+        if (!gdatap)
+        {
+            // Not a group
+            return;
+        }
 
-		gdatap->banMemberById(participant_uuid);
-	}
+        gdatap->banMemberById(participant_uuid);
+    }
 
-	bool canBanInGroup()
-	{
-		LLUUID group_uuid = mSessionID;
-		LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(group_uuid);
-		if (!gdatap)
-		{
-			// Not a group
-			return false;
-		}
+    bool canBanInGroup()
+    {
+        LLUUID group_uuid = mSessionID;
+        LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(group_uuid);
+        if (!gdatap)
+        {
+            // Not a group
+            return false;
+        }
 
-		if (gAgent.hasPowerInGroup(group_uuid, GP_ROLE_REMOVE_MEMBER)
-			&& gAgent.hasPowerInGroup(group_uuid, GP_GROUP_BAN_ACCESS))
-		{
-			return true;
-		}
+        if (gAgent.hasPowerInGroup(group_uuid, GP_ROLE_REMOVE_MEMBER)
+            && gAgent.hasPowerInGroup(group_uuid, GP_GROUP_BAN_ACCESS))
+        {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	bool canBanGroupMember(const LLUUID& participant_uuid)
-	{
-		LLUUID group_uuid = mSessionID;
-		LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(group_uuid);
-		if (!gdatap)
-		{
-			// Not a group
-			return false;
-		}
+    bool canBanGroupMember(const LLUUID& participant_uuid)
+    {
+        LLUUID group_uuid = mSessionID;
+        LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(group_uuid);
+        if (!gdatap)
+        {
+            // Not a group
+            return false;
+        }
 
-		if (gdatap->mPendingBanRequest)
-		{
-			return false;
-		}
+        if (gdatap->mPendingBanRequest)
+        {
+            return false;
+        }
 
-		if (gAgentID == getAvatarId())
-		{
-			//Don't ban self
-			return false;
-		}
+        if (gAgentID == getAvatarId())
+        {
+            //Don't ban self
+            return false;
+        }
 
-		if (gdatap->isRoleMemberDataComplete())
-		{
-			if (gdatap->mMembers.size())
-			{
-				LLGroupMgrGroupData::member_list_t::iterator mi = gdatap->mMembers.find(participant_uuid);
-				if (mi != gdatap->mMembers.end())
-				{
-					LLGroupMemberData* member_data = (*mi).second;
-					// Is the member an owner?
-					if (member_data && member_data->isInRole(gdatap->mOwnerRole))
-					{
-						return false;
-					}
+        if (gdatap->isRoleMemberDataComplete())
+        {
+            if (gdatap->mMembers.size())
+            {
+                LLGroupMgrGroupData::member_list_t::iterator mi = gdatap->mMembers.find(participant_uuid);
+                if (mi != gdatap->mMembers.end())
+                {
+                    LLGroupMemberData* member_data = (*mi).second;
+                    // Is the member an owner?
+                    if (member_data && member_data->isInRole(gdatap->mOwnerRole))
+                    {
+                        return false;
+                    }
 
-					if (gAgent.hasPowerInGroup(group_uuid, GP_ROLE_REMOVE_MEMBER)
-						&& gAgent.hasPowerInGroup(group_uuid, GP_GROUP_BAN_ACCESS))
-					{
-						return true;
-					}
-				}
-			}
-		}
+                    if (gAgent.hasPowerInGroup(group_uuid, GP_ROLE_REMOVE_MEMBER)
+                        && gAgent.hasPowerInGroup(group_uuid, GP_GROUP_BAN_ACCESS))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
 
-		LLSpeakerMgr * speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
-		if (speaker_mgr)
-		{
-			LLSpeaker * speakerp = speaker_mgr->findSpeaker(participant_uuid).get();
+        LLSpeakerMgr * speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
+        if (speaker_mgr)
+        {
+            LLSpeaker * speakerp = speaker_mgr->findSpeaker(participant_uuid).get();
 
-			if (speakerp
-				&& gAgent.hasPowerInGroup(group_uuid, GP_ROLE_REMOVE_MEMBER)
-				&& gAgent.hasPowerInGroup(group_uuid, GP_GROUP_BAN_ACCESS))
-			{
-				return true;
-			}
-		}
+            if (speakerp
+                && gAgent.hasPowerInGroup(group_uuid, GP_ROLE_REMOVE_MEMBER)
+                && gAgent.hasPowerInGroup(group_uuid, GP_GROUP_BAN_ACCESS))
+            {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	bool isGroupModerator()
-	{
-		LLSpeakerMgr * speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
-		if (!speaker_mgr)
-		{
-			LL_WARNS() << "Speaker manager is missing" << LL_ENDL;
-			return false;
-		}
+    bool isGroupModerator()
+    {
+        LLSpeakerMgr * speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
+        if (!speaker_mgr)
+        {
+            LL_WARNS() << "Speaker manager is missing" << LL_ENDL;
+            return false;
+        }
 
-		// Is session a group call/chat?
-		if(gAgent.isInGroup(mSessionID))
-		{
-			LLSpeaker * speakerp = speaker_mgr->findSpeaker(gAgentID).get();
+        // Is session a group call/chat?
+        if(gAgent.isInGroup(mSessionID))
+        {
+            LLSpeaker * speakerp = speaker_mgr->findSpeaker(gAgentID).get();
 
-			// Is agent a moderator?
-			return speakerp && speakerp->mIsModerator;
-		}
+            // Is agent a moderator?
+            return speakerp && speakerp->mIsModerator;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	bool canModerate(const std::string& userdata)
-	{
-		// only group moderators can perform actions related to this "enable callback"
-		if (!isGroupModerator() || gAgentID == getAvatarId())
-		{
-			return false;
-		}
+    bool canModerate(const std::string& userdata)
+    {
+        // only group moderators can perform actions related to this "enable callback"
+        if (!isGroupModerator() || gAgentID == getAvatarId())
+        {
+            return false;
+        }
 
-		LLSpeakerMgr * speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
-		if (!speaker_mgr)
-		{
-			return false;
-		}
+        LLSpeakerMgr * speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
+        if (!speaker_mgr)
+        {
+            return false;
+        }
 
-		LLSpeaker * speakerp = speaker_mgr->findSpeaker(getAvatarId()).get();
-		if (!speakerp)
-		{
-			return false;
-		}
+        LLSpeaker * speakerp = speaker_mgr->findSpeaker(getAvatarId()).get();
+        if (!speakerp)
+        {
+            return false;
+        }
 
-		bool voice_channel = speakerp->isInVoiceChannel();
+        bool voice_channel = speakerp->isInVoiceChannel();
 
-		if ("can_moderate_voice" == userdata)
-		{
-			return voice_channel;
-		}
-		else if ("can_mute" == userdata)
-		{
-			return voice_channel && (speakerp->mStatus != LLSpeaker::STATUS_MUTED);
-		}
-		else if ("can_unmute" == userdata)
-		{
-			return speakerp->mStatus == LLSpeaker::STATUS_MUTED;
-		}
-		else if ("can_allow_text_chat" == userdata)
-		{
-			return true;
-		}
+        if ("can_moderate_voice" == userdata)
+        {
+            return voice_channel;
+        }
+        else if ("can_mute" == userdata)
+        {
+            return voice_channel && (speakerp->mStatus != LLSpeaker::STATUS_MUTED);
+        }
+        else if ("can_unmute" == userdata)
+        {
+            return speakerp->mStatus == LLSpeaker::STATUS_MUTED;
+        }
+        else if ("can_allow_text_chat" == userdata)
+        {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	void onAvatarIconContextMenuItemClicked(const LLSD& userdata)
-	{
-		std::string param = userdata.asString();
+    void onAvatarIconContextMenuItemClicked(const LLSD& userdata)
+    {
+        std::string param = userdata.asString();
 
-		if (param == "profile")
-		{
-			LLAvatarActions::showProfile(getAvatarId());
-		}
-		else if (param == "im")
-		{
-			LLAvatarActions::startIM(getAvatarId());
-		}
-		else if (param == "teleport_to")
-		{
-			LLAvatarActions::teleportTo(getAvatarId());
-		}
-		else if (param == "teleport")
-		{
-			LLAvatarActions::offerTeleport(getAvatarId());
-		}
-		else if (param == "request_teleport")
-		{
-			LLAvatarActions::teleportRequest(getAvatarId());
-		}
-		else if (param == "voice_call")
-		{
-			LLAvatarActions::startCall(getAvatarId());
-		}
-		else if (param == "chat_history")
-		{
-			LLAvatarActions::viewChatHistory(getAvatarId());
-		}
-		else if (param == "add")
-		{
-			LLAvatarActions::requestFriendshipDialog(getAvatarId(), mFrom);
-		}
-		else if (param == "add_set")
-		{
-			LLAvatarActions::addToContactSet(getAvatarId());
-		}
-		else if (param == "remove")
-		{
-			LLAvatarActions::removeFriendDialog(getAvatarId());
-		}
-		else if (param == "invite_to_group")
-		{
-			LLAvatarActions::inviteToGroup(getAvatarId());
-		}
-		else if (param == "zoom_in")
-		{
-			handle_zoom_to_object(getAvatarId());
-		}
-		else if (param == "map")
-		{
-			LLAvatarActions::showOnMap(getAvatarId());
-		}
-		else if (param == "track")
-		{
-			LLAvatarActions::track(getAvatarId());
-		}
-		else if (param == "share")
-		{
-			LLAvatarActions::share(getAvatarId());
-		}
-		else if (param == "pay")
-		{
-			LLAvatarActions::pay(getAvatarId());
-		}
-		else if (param == "copy_name")
-		{
-			LLUrlAction::copyLabelToClipboard(LLSLURL("agent", getAvatarId(), "inspect").getSLURLString());
-		}
-		else if (param == "copy_url")
-		{
-			LLUrlAction::copyURLToClipboard(LLSLURL("agent", getAvatarId(), "about").getSLURLString());
-		}
-		else if (param == "report_abuse")
-		{
-			std::string time_string;
-			if (mTime > 0) // have frame time
-			{
-				time_t current_time = time_corrected();
-				time_t message_time = current_time - LLFrameTimer::getElapsedSeconds() + mTime;
+        if (param == "profile")
+        {
+            LLAvatarActions::showProfile(getAvatarId());
+        }
+        else if (param == "im")
+        {
+            LLAvatarActions::startIM(getAvatarId());
+        }
+        else if (param == "teleport_to")
+        {
+            LLAvatarActions::teleportTo(getAvatarId());
+        }
+        else if (param == "teleport")
+        {
+            LLAvatarActions::offerTeleport(getAvatarId());
+        }
+        else if (param == "request_teleport")
+        {
+            LLAvatarActions::teleportRequest(getAvatarId());
+        }
+        else if (param == "voice_call")
+        {
+            LLAvatarActions::startCall(getAvatarId());
+        }
+        else if (param == "chat_history")
+        {
+            LLAvatarActions::viewChatHistory(getAvatarId());
+        }
+        else if (param == "add")
+        {
+            LLAvatarActions::requestFriendshipDialog(getAvatarId(), mFrom);
+        }
+        else if (param == "add_set")
+        {
+            LLAvatarActions::addToContactSet(getAvatarId());
+        }
+        else if (param == "remove")
+        {
+            LLAvatarActions::removeFriendDialog(getAvatarId());
+        }
+        else if (param == "invite_to_group")
+        {
+            LLAvatarActions::inviteToGroup(getAvatarId());
+        }
+        else if (param == "zoom_in")
+        {
+            handle_zoom_to_object(getAvatarId());
+        }
+        else if (param == "map")
+        {
+            LLAvatarActions::showOnMap(getAvatarId());
+        }
+        else if (param == "track")
+        {
+            LLAvatarActions::track(getAvatarId());
+        }
+        else if (param == "share")
+        {
+            LLAvatarActions::share(getAvatarId());
+        }
+        else if (param == "pay")
+        {
+            LLAvatarActions::pay(getAvatarId());
+        }
+        else if (param == "copy_name")
+        {
+            LLUrlAction::copyLabelToClipboard(LLSLURL("agent", getAvatarId(), "inspect").getSLURLString());
+        }
+        else if (param == "copy_url")
+        {
+            LLUrlAction::copyURLToClipboard(LLSLURL("agent", getAvatarId(), "about").getSLURLString());
+        }
+        else if (param == "report_abuse")
+        {
+            std::string time_string;
+            if (mTime > 0) // have frame time
+            {
+                time_t current_time = time_corrected();
+                time_t message_time = current_time - LLFrameTimer::getElapsedSeconds() + mTime;
 
-				time_string = "[" + LLTrans::getString("TimeMonth") + "]/["
-					+ LLTrans::getString("TimeDay") + "]/["
-					+ LLTrans::getString("TimeYear") + "] ["
-					+ LLTrans::getString("TimeHour") + "]:["
-					+ LLTrans::getString("TimeMin") + "]";
+                time_string = "[" + LLTrans::getString("TimeMonth") + "]/["
+                    + LLTrans::getString("TimeDay") + "]/["
+                    + LLTrans::getString("TimeYear") + "] ["
+                    + LLTrans::getString("TimeHour") + "]:["
+                    + LLTrans::getString("TimeMin") + "]";
 
-				LLSD substitution;
+                LLSD substitution;
 
-				substitution["datetime"] = (S32)message_time;
-				LLStringUtil::format(time_string, substitution);
-			}
-			else
-			{
-				// From history. This might be empty or not full.
-				// See LLChatLogParser::parse
-				time_string = getChild<LLTextBox>("time_box")->getValue().asString();
+                substitution["datetime"] = (S32)message_time;
+                LLStringUtil::format(time_string, substitution);
+            }
+            else
+            {
+                // From history. This might be empty or not full.
+                // See LLChatLogParser::parse
+                time_string = getChild<LLTextBox>("time_box")->getValue().asString();
 
-				// Just add current date if not full.
-				// Should be fine since both times are supposed to be stl
-				if (!time_string.empty() && time_string.size() < 7)
-				{
-					time_string = "[" + LLTrans::getString("TimeMonth") + "]/["
-						+ LLTrans::getString("TimeDay") + "]/["
-						+ LLTrans::getString("TimeYear") + "] " + time_string;
+                // Just add current date if not full.
+                // Should be fine since both times are supposed to be stl
+                if (!time_string.empty() && time_string.size() < 7)
+                {
+                    time_string = "[" + LLTrans::getString("TimeMonth") + "]/["
+                        + LLTrans::getString("TimeDay") + "]/["
+                        + LLTrans::getString("TimeYear") + "] " + time_string;
 
-					LLSD substitution;
-					// To avoid adding today's date to yesterday's timestamp,
-					// use creation time instead of current time
-					substitution["datetime"] = (S32)mCreationTime;
-					LLStringUtil::format(time_string, substitution);
-				}
-			}
-			LLFloaterReporter::showFromChat(mAvatarID, mFrom, time_string, mText);
-		}
-		else if (param == "block_unblock")
-		{
-			LLAvatarActions::toggleMute(getAvatarId(), LLMute::flagVoiceChat);
-		}
-		else if (param == "mute_unmute")
-		{
-			LLAvatarActions::toggleMute(getAvatarId(), LLMute::flagTextChat);
-		}
-		else if (param == "allow_text_chat")
-		{
-			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
-			speaker_mgr->allowTextChat(getAvatarId(), true);
-		}
-		else if (param == "forbid_text_chat")
-		{
-			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
-			speaker_mgr->allowTextChat(getAvatarId(), false);
-		}
-		else if (param == "group_mute")
-		{
-			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
-			if (speaker_mgr)
-			{
-				speaker_mgr->moderateVoiceParticipant(getAvatarId(), false);
-			}
-		}
-		else if (param == "group_unmute")
-		{
-			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
-			if (speaker_mgr)
-			{
-				speaker_mgr->moderateVoiceParticipant(getAvatarId(), true);
-			}
-		}
-		else if (param == "ban_member")
-		{
-			// <FS:Zi> don't do safety checks as participant list is broken, just ban
-			// banGroupMember(getAvatarId());
-			std::vector<LLUUID> ids;
-			ids.push_back(getAvatarId());
+                    LLSD substitution;
+                    // To avoid adding today's date to yesterday's timestamp,
+                    // use creation time instead of current time
+                    substitution["datetime"] = (S32)mCreationTime;
+                    LLStringUtil::format(time_string, substitution);
+                }
+            }
+            LLFloaterReporter::showFromChat(mAvatarID, mFrom, time_string, mText);
+        }
+        else if (param == "block_unblock")
+        {
+            LLAvatarActions::toggleMute(getAvatarId(), LLMute::flagVoiceChat);
+        }
+        else if (param == "mute_unmute")
+        {
+            LLAvatarActions::toggleMute(getAvatarId(), LLMute::flagTextChat);
+        }
+        else if (param == "allow_text_chat")
+        {
+            LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
+            speaker_mgr->allowTextChat(getAvatarId(), true);
+        }
+        else if (param == "forbid_text_chat")
+        {
+            LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
+            speaker_mgr->allowTextChat(getAvatarId(), false);
+        }
+        else if (param == "group_mute")
+        {
+            LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
+            if (speaker_mgr)
+            {
+                speaker_mgr->moderateVoiceParticipant(getAvatarId(), false);
+            }
+        }
+        else if (param == "group_unmute")
+        {
+            LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
+            if (speaker_mgr)
+            {
+                speaker_mgr->moderateVoiceParticipant(getAvatarId(), true);
+            }
+        }
+        else if (param == "ban_member")
+        {
+            // <FS:Zi> don't do safety checks as participant list is broken, just ban
+            // banGroupMember(getAvatarId());
+            std::vector<LLUUID> ids;
+            ids.push_back(getAvatarId());
 
-			LLGroupMgr::getInstance()->sendGroupBanRequest(LLGroupMgr::REQUEST_POST, mSessionID, LLGroupMgr::BAN_CREATE, ids);
-			LLGroupMgr::getInstance()->sendGroupMemberEjects(mSessionID, ids);
-			LLGroupMgr::getInstance()->sendGroupMembersRequest(mSessionID);
-			// </FS:Zi>
-		}
-	}
+            LLGroupMgr::getInstance()->sendGroupBanRequest(LLGroupMgr::REQUEST_POST, mSessionID, LLGroupMgr::BAN_CREATE, ids);
+            LLGroupMgr::getInstance()->sendGroupMemberEjects(mSessionID, ids);
+            LLGroupMgr::getInstance()->sendGroupMembersRequest(mSessionID);
+            // </FS:Zi>
+        }
+    }
 
-	bool onAvatarIconContextMenuItemChecked(const LLSD& userdata)
-	{
-		std::string param = userdata.asString();
+    bool onAvatarIconContextMenuItemChecked(const LLSD& userdata)
+    {
+        std::string param = userdata.asString();
 
-		if (param == "is_blocked")
-		{
-			return LLMuteList::getInstance()->isMuted(getAvatarId(), LLMute::flagVoiceChat);
-		}
-		if (param == "is_muted")
-		{
-			return LLMuteList::getInstance()->isMuted(getAvatarId(), LLMute::flagTextChat);
-		}
-		else if (param == "is_allowed_text_chat")
-		{
-			if (gAgent.isInGroup(mSessionID))
-			{
-				LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
-				const LLSpeaker * speakerp = speaker_mgr->findSpeaker(getAvatarId());
+        if (param == "is_blocked")
+        {
+            return LLMuteList::getInstance()->isMuted(getAvatarId(), LLMute::flagVoiceChat);
+        }
+        if (param == "is_muted")
+        {
+            return LLMuteList::getInstance()->isMuted(getAvatarId(), LLMute::flagTextChat);
+        }
+        else if (param == "is_allowed_text_chat")
+        {
+            if (gAgent.isInGroup(mSessionID))
+            {
+                LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
+                const LLSpeaker * speakerp = speaker_mgr->findSpeaker(getAvatarId());
 
-				if (NULL != speakerp)
-				{
-					return !speakerp->mModeratorMutedText;
-				}
-			}
-			return false;
-		}
-		return false;
-	}
+                if (NULL != speakerp)
+                {
+                    return !speakerp->mModeratorMutedText;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
 
-	bool onAvatarIconContextMenuItemEnabled(const LLSD& userdata)
-	{
-		std::string param = userdata.asString();
+    bool onAvatarIconContextMenuItemEnabled(const LLSD& userdata)
+    {
+        std::string param = userdata.asString();
 
-		if (param == "can_allow_text_chat" || param == "can_mute" || param == "can_unmute")
-		{
-			return canModerate(userdata);
-		}
-		else if (param == "report_abuse")
-		{
-			return gAgentID != mAvatarID;
-		}
-		// [RLVa:KB] - @pay
-		else if (param == "can_pay")
-		{
-			return RlvActions::canPayAvatar(getAvatarId());
-		}
+        if (param == "can_allow_text_chat" || param == "can_mute" || param == "can_unmute")
+        {
+            return canModerate(userdata);
+        }
+        else if (param == "report_abuse")
+        {
+            return gAgentID != mAvatarID;
+        }
+        // [RLVa:KB] - @pay
+        else if (param == "can_pay")
+        {
+            return RlvActions::canPayAvatar(getAvatarId());
+        }
 // [/RLVa:KB]
-		else if (param == "can_ban_member")
-		{
-			return canBanGroupMember(getAvatarId());
-		}
-		return false;
-	}
+        else if (param == "can_ban_member")
+        {
+            return canBanGroupMember(getAvatarId());
+        }
+        return false;
+    }
 
-	bool onAvatarIconContextMenuItemVisible(const LLSD& userdata)
-	{
-		std::string param = userdata.asString();
+    bool onAvatarIconContextMenuItemVisible(const LLSD& userdata)
+    {
+        std::string param = userdata.asString();
 
-		if (param == "show_mute")
-		{
-			LLSpeakerMgr * speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
-			if (speaker_mgr)
-			{
-				LLSpeaker * speakerp = speaker_mgr->findSpeaker(getAvatarId()).get();
-				if (speakerp)
-				{
-					return speakerp->isInVoiceChannel() && speakerp->mStatus != LLSpeaker::STATUS_MUTED;
-				}
-			}
-			return false;
-		}
-		else if (param == "show_unmute")
-		{
-			LLSpeakerMgr * speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
-			if (speaker_mgr)
-			{
-				LLSpeaker * speakerp = speaker_mgr->findSpeaker(getAvatarId()).get();
-				if (speakerp)
-				{
-					return speakerp->mStatus == LLSpeaker::STATUS_MUTED;
-				}
-			}
-			return false;
-		}
-		return false;
-	}
+        if (param == "show_mute")
+        {
+            LLSpeakerMgr * speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
+            if (speaker_mgr)
+            {
+                LLSpeaker * speakerp = speaker_mgr->findSpeaker(getAvatarId()).get();
+                if (speakerp)
+                {
+                    return speakerp->isInVoiceChannel() && speakerp->mStatus != LLSpeaker::STATUS_MUTED;
+                }
+            }
+            return false;
+        }
+        else if (param == "show_unmute")
+        {
+            LLSpeakerMgr * speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(mSessionID);
+            if (speaker_mgr)
+            {
+                LLSpeaker * speakerp = speaker_mgr->findSpeaker(getAvatarId()).get();
+                if (speakerp)
+                {
+                    return speakerp->mStatus == LLSpeaker::STATUS_MUTED;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
 
-	bool postBuild()
-	{
-		setDoubleClickCallback(boost::bind(&FSChatHistoryHeader::showInspector, this));
+    bool postBuild()
+    {
+        setDoubleClickCallback(boost::bind(&FSChatHistoryHeader::showInspector, this));
 
-		setMouseEnterCallback(boost::bind(&FSChatHistoryHeader::showInfoCtrl, this));
-		setMouseLeaveCallback(boost::bind(&FSChatHistoryHeader::hideInfoCtrl, this));
+        setMouseEnterCallback(boost::bind(&FSChatHistoryHeader::showInfoCtrl, this));
+        setMouseLeaveCallback(boost::bind(&FSChatHistoryHeader::hideInfoCtrl, this));
 
-		mUserNameTextBox = getChild<LLTextBox>("user_name");
-		mTimeBoxTextBox = getChild<LLTextBox>("time_box");
-		mHeaderLayoutStack = getChild<LLLayoutStack>("header_ls");
+        mUserNameTextBox = getChild<LLTextBox>("user_name");
+        mTimeBoxTextBox = getChild<LLTextBox>("time_box");
+        mHeaderLayoutStack = getChild<LLLayoutStack>("header_ls");
 
-		mInfoCtrl = LLUICtrlFactory::getInstance()->createFromFile<LLUICtrl>("inspector_info_ctrl.xml", this, LLPanel::child_registry_t::instance());
-		if (mInfoCtrl)
-		{
-			mInfoCtrl->setCommitCallback(boost::bind(&FSChatHistoryHeader::onClickInfoCtrl, mInfoCtrl));
-			mInfoCtrl->setVisible(false);
-		}
-		else
-		{
-			LL_ERRS() << "Failed to create an interface element due to missing or corrupted file inspector_info_ctrl.xml" << LL_ENDL;
-		}
+        mInfoCtrl = LLUICtrlFactory::getInstance()->createFromFile<LLUICtrl>("inspector_info_ctrl.xml", this, LLPanel::child_registry_t::instance());
+        if (mInfoCtrl)
+        {
+            mInfoCtrl->setCommitCallback(boost::bind(&FSChatHistoryHeader::onClickInfoCtrl, mInfoCtrl));
+            mInfoCtrl->setVisible(false);
+        }
+        else
+        {
+            LL_ERRS() << "Failed to create an interface element due to missing or corrupted file inspector_info_ctrl.xml" << LL_ENDL;
+        }
 
-		return LLPanel::postBuild();
-	}
+        return LLPanel::postBuild();
+    }
 
-	bool pointInChild(const std::string& name,S32 x,S32 y)
-	{
-		LLUICtrl* child = findChild<LLUICtrl>(name);
-		if(!child)
-			return false;
-		
-		LLView* parent = child->getParent();
-		if(parent!=this)
-		{
-			x-=parent->getRect().mLeft;
-			y-=parent->getRect().mBottom;
-		}
+    bool pointInChild(const std::string& name,S32 x,S32 y)
+    {
+        LLUICtrl* child = findChild<LLUICtrl>(name);
+        if(!child)
+            return false;
 
-		S32 local_x = x - child->getRect().mLeft ;
-		S32 local_y = y - child->getRect().mBottom ;
-		return 	child->pointInView(local_x, local_y);
-	}
+        LLView* parent = child->getParent();
+        if(parent!=this)
+        {
+            x-=parent->getRect().mLeft;
+            y-=parent->getRect().mBottom;
+        }
 
-	bool handleRightMouseDown(S32 x, S32 y, MASK mask)
-	{
-		if(pointInChild("avatar_icon",x,y) || pointInChild("user_name",x,y))
-		{
-			showContextMenu(x,y);
-			return true;
-		}
+        S32 local_x = x - child->getRect().mLeft ;
+        S32 local_y = y - child->getRect().mBottom ;
+        return  child->pointInView(local_x, local_y);
+    }
 
-		return LLPanel::handleRightMouseDown(x,y,mask);
-	}
+    bool handleRightMouseDown(S32 x, S32 y, MASK mask)
+    {
+        if(pointInChild("avatar_icon",x,y) || pointInChild("user_name",x,y))
+        {
+            showContextMenu(x,y);
+            return true;
+        }
 
-	void showInspector()
-	{
-//		if (mAvatarID.isNull() && CHAT_SOURCE_SYSTEM != mSourceType && CHAT_SOURCE_REGION != mSourceType) return;
+        return LLPanel::handleRightMouseDown(x,y,mask);
+    }
+
+    void showInspector()
+    {
+//      if (mAvatarID.isNull() && CHAT_SOURCE_SYSTEM != mSourceType && CHAT_SOURCE_REGION != mSourceType) return;
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
-		// Don't double-click show the inspector if we're not showing the info control
-		if ( (!mShowInfoCtrl) || (mAvatarID.isNull() && CHAT_SOURCE_SYSTEM != mSourceType && CHAT_SOURCE_REGION != mSourceType) ) return;
+        // Don't double-click show the inspector if we're not showing the info control
+        if ( (!mShowInfoCtrl) || (mAvatarID.isNull() && CHAT_SOURCE_SYSTEM != mSourceType && CHAT_SOURCE_REGION != mSourceType) ) return;
 // [/RLVa:KB]
-		
-		if (mSourceType == CHAT_SOURCE_OBJECT)
-		{
-			LLFloaterReg::showInstance("inspect_remote_object", mObjectData);
-		}
-		else if (mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR)) // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
-		{
-			LLUrlAction::executeSLURL(LLSLURL("agent", mAvatarID, "inspect").getSLURLString());
-		}
-		//if chat source is system, you may add "else" here to define behaviour.
-	}
 
-	static void onClickInfoCtrl(LLUICtrl* info_ctrl)
-	{
-		if (!info_ctrl) return;
+        if (mSourceType == CHAT_SOURCE_OBJECT)
+        {
+            LLFloaterReg::showInstance("inspect_remote_object", mObjectData);
+        }
+        else if (mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR)) // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+        {
+            LLUrlAction::executeSLURL(LLSLURL("agent", mAvatarID, "inspect").getSLURLString());
+        }
+        //if chat source is system, you may add "else" here to define behaviour.
+    }
 
-		FSChatHistoryHeader* header = dynamic_cast<FSChatHistoryHeader*>(info_ctrl->getParent());	
-		if (!header) return;
+    static void onClickInfoCtrl(LLUICtrl* info_ctrl)
+    {
+        if (!info_ctrl) return;
 
-		header->showInspector();
-	}
+        FSChatHistoryHeader* header = dynamic_cast<FSChatHistoryHeader*>(info_ctrl->getParent());
+        if (!header) return;
 
-	const LLUUID& getAvatarId () const { return mAvatarID;}
+        header->showInspector();
+    }
 
-	void setup(const LLChat& chat, const LLStyle::Params& style_params, const LLSD& args)
-	{
-		mAvatarID = chat.mFromID;
-		mSessionID = chat.mSessionID;
-		mSourceType = chat.mSourceType;
-		mType = chat.mChatType; // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
-		mNameStyleParams = style_params;
+    const LLUUID& getAvatarId () const { return mAvatarID;}
 
-		// To be able to report a message, we need a copy of it's text
-		// and it's easier to store text directly than trying to get
-		// it from a lltextsegment or chat's mEditor
-		mText = chat.mText;
-		mTime = chat.mTime;
+    void setup(const LLChat& chat, const LLStyle::Params& style_params, const LLSD& args)
+    {
+        mAvatarID = chat.mFromID;
+        mSessionID = chat.mSessionID;
+        mSourceType = chat.mSourceType;
+        mType = chat.mChatType; // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+        mNameStyleParams = style_params;
 
-		//*TODO overly defensive thing, source type should be maintained out there
-		if((chat.mFromID.isNull() && chat.mFromName.empty()) || (chat.mFromName == SYSTEM_FROM && chat.mFromID.isNull()))
-		{
-			mSourceType = CHAT_SOURCE_SYSTEM;
-		}
+        // To be able to report a message, we need a copy of it's text
+        // and it's easier to store text directly than trying to get
+        // it from a lltextsegment or chat's mEditor
+        mText = chat.mText;
+        mTime = chat.mTime;
 
-		// Use the original font defined in panel_chat_header.xml
-		mNameStyleParams.font.name = "SansSerifSmall";
+        //*TODO overly defensive thing, source type should be maintained out there
+        if((chat.mFromID.isNull() && chat.mFromName.empty()) || (chat.mFromName == SYSTEM_FROM && chat.mFromID.isNull()))
+        {
+            mSourceType = CHAT_SOURCE_SYSTEM;
+        }
 
-		// To be able to use the group chat moderator options, we use the
-		// original font style "BOLD" for everything except group chats.
-		// Group chats have the option to show moderators in bold, so
-		// we display both display and username in "NORMAL" for now.
-		static LLCachedControl<bool> fsHighlightGroupMods(gSavedSettings, "FSHighlightGroupMods");
-		LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(mSessionID);
-		if (!fsHighlightGroupMods || !session || !session->isGroupSessionType())
-		{
-			mNameStyleParams.font.style = "BOLD";
-		}
+        // Use the original font defined in panel_chat_header.xml
+        mNameStyleParams.font.name = "SansSerifSmall";
 
-		mUserNameFont = mNameStyleParams.font();
-		if (!mUserNameTextBox)
-		{
-			mUserNameTextBox = getChild<LLTextBox>("user_name");
-			mTimeBoxTextBox = getChild<LLTextBox>("time_box");
-		}
-		mUserNameTextBox->setReadOnlyColor(mNameStyleParams.readonly_color());
-		mUserNameTextBox->setColor(mNameStyleParams.color());
-		mUserNameTextBox->setFont(mUserNameFont);
+        // To be able to use the group chat moderator options, we use the
+        // original font style "BOLD" for everything except group chats.
+        // Group chats have the option to show moderators in bold, so
+        // we display both display and username in "NORMAL" for now.
+        static LLCachedControl<bool> fsHighlightGroupMods(gSavedSettings, "FSHighlightGroupMods");
+        LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(mSessionID);
+        if (!fsHighlightGroupMods || !session || !session->isGroupSessionType())
+        {
+            mNameStyleParams.font.style = "BOLD";
+        }
 
-		// Make sure we use the correct font style for everything after the display name
-		mNameStyleParams.font.style = style_params.font.style;
+        mUserNameFont = mNameStyleParams.font();
+        if (!mUserNameTextBox)
+        {
+            mUserNameTextBox = getChild<LLTextBox>("user_name");
+            mTimeBoxTextBox = getChild<LLTextBox>("time_box");
+        }
+        mUserNameTextBox->setReadOnlyColor(mNameStyleParams.readonly_color());
+        mUserNameTextBox->setColor(mNameStyleParams.color());
+        mUserNameTextBox->setFont(mUserNameFont);
 
-		if (mSourceType == CHAT_SOURCE_TELEPORT
-			&& chat.mChatStyle == CHAT_STYLE_TELEPORT_SEP)
-		{
-			mFrom = chat.mFromName;
-			mNeedsTimeBox = false;
-			mUserNameTextBox->setValue(mFrom);
-			updateMinUserNameWidth();
-			LLColor4 sep_color = LLUIColorTable::instance().getColor("ChatTeleportSeparatorColor");
-			setTransparentColor(sep_color);
-			mTimeBoxTextBox->setVisible(false);
-		}
-		else  if (chat.mFromName.empty()
-			//|| mSourceType == CHAT_SOURCE_SYSTEM
-			// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
-			|| (mSourceType == CHAT_SOURCE_SYSTEM && mType != CHAT_TYPE_RADAR)
-			|| mAvatarID.isNull())
-		{
-			if (mSourceType == CHAT_SOURCE_UNKNOWN)
-			{
-				// Avatar names may come up as CHAT_SOURCE_UNKNOWN - don't append the grid name in that case
-				mFrom = chat.mFromName;
-			}
-			else
-			{
-				mFrom = LLTrans::getString("SECOND_LIFE"); // Will automatically be substituted!
-				if (!chat.mFromName.empty() && (mFrom != chat.mFromName))
-				{
-					mFrom += " (" + chat.mFromName + ")";
-				}
-			}
-			mUserNameTextBox->setValue(mFrom);
-			updateMinUserNameWidth();
-		}
-		else if ((mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR))
-				 && !mAvatarID.isNull()
-				 && chat.mChatStyle != CHAT_STYLE_SERVER_HISTORY
-				 && chat.mChatStyle != CHAT_STYLE_HISTORY)
-		{
-			// ...from a normal user, lookup the name and fill in later.
-			// *NOTE: Do not do this for chat history logs, otherwise the viewer
-			// will flood the People API with lookup requests on startup
+        // Make sure we use the correct font style for everything after the display name
+        mNameStyleParams.font.style = style_params.font.style;
 
-			// Start with blank so sample data from XUI XML doesn't
-			// flash on the screen
-//			user_name->setValue( LLSD() );
-//			fetchAvatarName();
+        if (mSourceType == CHAT_SOURCE_TELEPORT
+            && chat.mChatStyle == CHAT_STYLE_TELEPORT_SEP)
+        {
+            mFrom = chat.mFromName;
+            mNeedsTimeBox = false;
+            mUserNameTextBox->setValue(mFrom);
+            updateMinUserNameWidth();
+            LLColor4 sep_color = LLUIColorTable::instance().getColor("ChatTeleportSeparatorColor");
+            setTransparentColor(sep_color);
+            mTimeBoxTextBox->setVisible(false);
+        }
+        else  if (chat.mFromName.empty()
+            //|| mSourceType == CHAT_SOURCE_SYSTEM
+            // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+            || (mSourceType == CHAT_SOURCE_SYSTEM && mType != CHAT_TYPE_RADAR)
+            || mAvatarID.isNull())
+        {
+            if (mSourceType == CHAT_SOURCE_UNKNOWN)
+            {
+                // Avatar names may come up as CHAT_SOURCE_UNKNOWN - don't append the grid name in that case
+                mFrom = chat.mFromName;
+            }
+            else
+            {
+                mFrom = LLTrans::getString("SECOND_LIFE"); // Will automatically be substituted!
+                if (!chat.mFromName.empty() && (mFrom != chat.mFromName))
+                {
+                    mFrom += " (" + chat.mFromName + ")";
+                }
+            }
+            mUserNameTextBox->setValue(mFrom);
+            updateMinUserNameWidth();
+        }
+        else if ((mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR))
+                 && !mAvatarID.isNull()
+                 && chat.mChatStyle != CHAT_STYLE_SERVER_HISTORY
+                 && chat.mChatStyle != CHAT_STYLE_HISTORY)
+        {
+            // ...from a normal user, lookup the name and fill in later.
+            // *NOTE: Do not do this for chat history logs, otherwise the viewer
+            // will flood the People API with lookup requests on startup
+
+            // Start with blank so sample data from XUI XML doesn't
+            // flash on the screen
+//          user_name->setValue( LLSD() );
+//          fetchAvatarName();
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
-			if (!chat.mRlvNamesFiltered)
-			{
-				mUserNameTextBox->setValue( LLSD() );
-				fetchAvatarName();
-			}
-			else
-			{
-				// If the agent's chat was subject to @shownames=n we should display their anonimized name
-				mFrom = chat.mFromName;
-				mUserNameTextBox->setValue(mFrom);
-				mUserNameTextBox->setToolTip(mFrom);
-				setToolTip(mFrom);
-				updateMinUserNameWidth();
-			}
+            if (!chat.mRlvNamesFiltered)
+            {
+                mUserNameTextBox->setValue( LLSD() );
+                fetchAvatarName();
+            }
+            else
+            {
+                // If the agent's chat was subject to @shownames=n we should display their anonimized name
+                mFrom = chat.mFromName;
+                mUserNameTextBox->setValue(mFrom);
+                mUserNameTextBox->setToolTip(mFrom);
+                setToolTip(mFrom);
+                updateMinUserNameWidth();
+            }
 // [/RLVa:KB]
-		}
-		else if (chat.mChatStyle == CHAT_STYLE_HISTORY ||
-				 chat.mChatStyle == CHAT_STYLE_SERVER_HISTORY ||
-				 (mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR)))
-		{
-			//if it's an avatar name with a username add formatting
-			S32 username_start = chat.mFromName.rfind(" (");
-			S32 username_end = chat.mFromName.rfind(')');
-			
-			if (username_start != std::string::npos &&
-				username_end == (chat.mFromName.length() - 1))
-			{
-				mFrom = chat.mFromName.substr(0, username_start);
-				mUserNameTextBox->setValue(mFrom);
-			}
-			else
-			{
-				// If the agent's chat was subject to @shownames=n we should display their anonimized name
-				mFrom = chat.mFromName;
-				mUserNameTextBox->setValue(mFrom);
-				updateMinUserNameWidth();
-			}
-		}
-		else
-		{
-			// ...from an object, just use name as given
-			mFrom = chat.mFromName;
-			mUserNameTextBox->setValue(mFrom);
-			updateMinUserNameWidth();
-		}
+        }
+        else if (chat.mChatStyle == CHAT_STYLE_HISTORY ||
+                 chat.mChatStyle == CHAT_STYLE_SERVER_HISTORY ||
+                 (mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR)))
+        {
+            //if it's an avatar name with a username add formatting
+            S32 username_start = chat.mFromName.rfind(" (");
+            S32 username_end = chat.mFromName.rfind(')');
+
+            if (username_start != std::string::npos &&
+                username_end == (chat.mFromName.length() - 1))
+            {
+                mFrom = chat.mFromName.substr(0, username_start);
+                mUserNameTextBox->setValue(mFrom);
+            }
+            else
+            {
+                // If the agent's chat was subject to @shownames=n we should display their anonimized name
+                mFrom = chat.mFromName;
+                mUserNameTextBox->setValue(mFrom);
+                updateMinUserNameWidth();
+            }
+        }
+        else
+        {
+            // ...from an object, just use name as given
+            mFrom = chat.mFromName;
+            mUserNameTextBox->setValue(mFrom);
+            updateMinUserNameWidth();
+        }
 
 
-		setTimeField(chat);
+        setTimeField(chat);
 
-		// Set up the icon.
-		LLAvatarIconCtrl* icon = getChild<LLAvatarIconCtrl>("avatar_icon");
+        // Set up the icon.
+        LLAvatarIconCtrl* icon = getChild<LLAvatarIconCtrl>("avatar_icon");
 
-		if(mSourceType != CHAT_SOURCE_AGENT ||	mAvatarID.isNull())
-			icon->setDrawTooltip(false);
+        if(mSourceType != CHAT_SOURCE_AGENT ||  mAvatarID.isNull())
+            icon->setDrawTooltip(false);
 
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
-		// Don't show the context menu, info control or avatar icon tooltip if this chat was subject to @shownames=n
-		if ( (chat.mRlvNamesFiltered) && ((mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR)) || (CHAT_SOURCE_OBJECT == mSourceType))  )
-		{
-			mShowInfoCtrl = mShowContextMenu = false;
-			icon->setDrawTooltip(false);
-		}
+        // Don't show the context menu, info control or avatar icon tooltip if this chat was subject to @shownames=n
+        if ( (chat.mRlvNamesFiltered) && ((mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR)) || (CHAT_SOURCE_OBJECT == mSourceType))  )
+        {
+            mShowInfoCtrl = mShowContextMenu = false;
+            icon->setDrawTooltip(false);
+        }
 // [/RLVa:KB]
 
-		switch (mSourceType)
-		{
-			case CHAT_SOURCE_AGENT:
-				if (!chat.mRlvNamesFiltered)
-				{
-					icon->setValue(chat.mFromID);
-				}
-				else
-				{
-					icon->setValue(LLSD("Unknown_Icon"));
-				}
-				break;
-			case CHAT_SOURCE_OBJECT:
-				icon->setValue(LLSD("OBJECT_Icon"));
-				break;
-			case CHAT_SOURCE_SYSTEM:
-			case CHAT_SOURCE_REGION:
-				//icon->setValue(LLSD("SL_Logo"));
-				// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
-				if(chat.mChatType == CHAT_TYPE_RADAR)
-				{
-					if (!chat.mRlvNamesFiltered)
-					{
-						icon->setValue(chat.mFromID);
-					}
-					else
-					{
-						icon->setValue(LLSD("Unknown_Icon"));
-					}
-				}
-				else
-				{
-					icon->setValue(LLSD("SL_Logo"));
-				}
-				// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
-				break;
-			case CHAT_SOURCE_TELEPORT:
-				icon->setValue(LLSD("Command_Destinations_Icon"));
-				break;
-			case CHAT_SOURCE_UNKNOWN:
-				icon->setValue(LLSD("Unknown_Icon"));
-				break;
-		}
+        switch (mSourceType)
+        {
+            case CHAT_SOURCE_AGENT:
+                if (!chat.mRlvNamesFiltered)
+                {
+                    icon->setValue(chat.mFromID);
+                }
+                else
+                {
+                    icon->setValue(LLSD("Unknown_Icon"));
+                }
+                break;
+            case CHAT_SOURCE_OBJECT:
+                icon->setValue(LLSD("OBJECT_Icon"));
+                break;
+            case CHAT_SOURCE_SYSTEM:
+            case CHAT_SOURCE_REGION:
+                //icon->setValue(LLSD("SL_Logo"));
+                // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+                if(chat.mChatType == CHAT_TYPE_RADAR)
+                {
+                    if (!chat.mRlvNamesFiltered)
+                    {
+                        icon->setValue(chat.mFromID);
+                    }
+                    else
+                    {
+                        icon->setValue(LLSD("Unknown_Icon"));
+                    }
+                }
+                else
+                {
+                    icon->setValue(LLSD("SL_Logo"));
+                }
+                // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+                break;
+            case CHAT_SOURCE_TELEPORT:
+                icon->setValue(LLSD("Command_Destinations_Icon"));
+                break;
+            case CHAT_SOURCE_UNKNOWN:
+                icon->setValue(LLSD("Unknown_Icon"));
+                break;
+        }
 
-		// In case the message came from an object, save the object info
-		// to be able properly show its profile.
-		if ( chat.mSourceType == CHAT_SOURCE_OBJECT)
-		{
-			std::string slurl = args["slurl"].asString();
-			if (slurl.empty())
-			{
-				LLViewerRegion *region = LLWorld::getInstance()->getRegionFromPosAgent(chat.mPosAgent);
-				if(region)
-				{
-					LLSLURL region_slurl(region->getName(), chat.mPosAgent);
-					slurl = region_slurl.getLocationString();
-				}
-			}
+        // In case the message came from an object, save the object info
+        // to be able properly show its profile.
+        if ( chat.mSourceType == CHAT_SOURCE_OBJECT)
+        {
+            std::string slurl = args["slurl"].asString();
+            if (slurl.empty())
+            {
+                LLViewerRegion *region = LLWorld::getInstance()->getRegionFromPosAgent(chat.mPosAgent);
+                if(region)
+                {
+                    LLSLURL region_slurl(region->getName(), chat.mPosAgent);
+                    slurl = region_slurl.getLocationString();
+                }
+            }
 
-			LLSD payload;
-			payload["object_id"]	= chat.mFromID;
-			payload["name"]			= chat.mFromName;
-			payload["owner_id"]		= chat.mOwnerID;
-			payload["slurl"]		= LLWeb::escapeURL(slurl);
+            LLSD payload;
+            payload["object_id"]    = chat.mFromID;
+            payload["name"]         = chat.mFromName;
+            payload["owner_id"]     = chat.mOwnerID;
+            payload["slurl"]        = LLWeb::escapeURL(slurl);
 
-			mObjectData = payload;
-		}
-	}
+            mObjectData = payload;
+        }
+    }
 
-	/*virtual*/ void draw()
-	{
-		LLRect user_name_rect = mUserNameTextBox->getRect();
-		S32 user_name_width = user_name_rect.getWidth();
-		S32 time_box_width = mTimeBoxTextBox->getRect().getWidth();
+    /*virtual*/ void draw()
+    {
+        LLRect user_name_rect = mUserNameTextBox->getRect();
+        S32 user_name_width = user_name_rect.getWidth();
+        S32 time_box_width = mTimeBoxTextBox->getRect().getWidth();
 
-		if (mNeedsTimeBox && !mTimeBoxTextBox->getVisible() && user_name_width > mMinUserNameWidth)
-		{
-			user_name_rect.mRight -= time_box_width;
-			mUserNameTextBox->reshape(user_name_rect.getWidth(), user_name_rect.getHeight());
-			mUserNameTextBox->setRect(user_name_rect);
+        if (mNeedsTimeBox && !mTimeBoxTextBox->getVisible() && user_name_width > mMinUserNameWidth)
+        {
+            user_name_rect.mRight -= time_box_width;
+            mUserNameTextBox->reshape(user_name_rect.getWidth(), user_name_rect.getHeight());
+            mUserNameTextBox->setRect(user_name_rect);
 
-			mTimeBoxTextBox->setVisible(true);
-		}
+            mTimeBoxTextBox->setVisible(true);
+        }
 
-		LLPanel::draw();
-	}
+        LLPanel::draw();
+    }
 
-	void updateMinUserNameWidth()
-	{
-		if (mUserNameFont)
-		{
-			const LLWString& text = mUserNameTextBox->getWText();
-			mMinUserNameWidth = mUserNameFont->getWidth(text.c_str()) + PADDING;
-		}
-	}
+    void updateMinUserNameWidth()
+    {
+        if (mUserNameFont)
+        {
+            const LLWString& text = mUserNameTextBox->getWText();
+            mMinUserNameWidth = mUserNameFont->getWidth(text.c_str()) + PADDING;
+        }
+    }
 
 protected:
-	static const S32 PADDING = 20;
+    static const S32 PADDING = 20;
 
-	void showContextMenu(S32 x,S32 y)
-	{
+    void showContextMenu(S32 x,S32 y)
+    {
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
-		if (!mShowContextMenu)
-			return;
+        if (!mShowContextMenu)
+            return;
 // [/RLVa:KB]
-		if(mSourceType == CHAT_SOURCE_SYSTEM)
-			//showSystemContextMenu(x,y);
-		// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
-		{
-			// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
-			if(mType == CHAT_TYPE_RADAR)
-			{
-				showAvatarContextMenu(x,y);
-			}
-			else
-			{
-				showSystemContextMenu(x,y);
-			}
-		}
-		// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
-		if(mAvatarID.notNull() && mSourceType == CHAT_SOURCE_AGENT)
-			showAvatarContextMenu(x,y);
-		if(mAvatarID.notNull() && mSourceType == CHAT_SOURCE_OBJECT)
-			showObjectContextMenu(x,y);
-	}
+        if(mSourceType == CHAT_SOURCE_SYSTEM)
+            //showSystemContextMenu(x,y);
+        // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+        {
+            // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+            if(mType == CHAT_TYPE_RADAR)
+            {
+                showAvatarContextMenu(x,y);
+            }
+            else
+            {
+                showSystemContextMenu(x,y);
+            }
+        }
+        // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+        if(mAvatarID.notNull() && mSourceType == CHAT_SOURCE_AGENT)
+            showAvatarContextMenu(x,y);
+        if(mAvatarID.notNull() && mSourceType == CHAT_SOURCE_OBJECT)
+            showObjectContextMenu(x,y);
+    }
 
-	void showSystemContextMenu(S32 x,S32 y)
-	{
-	}
-	
-	void showObjectContextMenu(S32 x,S32 y)
-	{
-		LLMenuGL* menu = (LLMenuGL*)mPopupMenuHandleObject.get();
-		if (!menu)
-		{
-			LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
-			LLUICtrl::EnableCallbackRegistry::ScopedRegistrar registrar_enable;
+    void showSystemContextMenu(S32 x,S32 y)
+    {
+    }
 
-			registrar.add("ObjectIcon.Action", boost::bind(&FSChatHistoryHeader::onObjectIconContextMenuItemClicked, this, _2));
-			registrar_enable.add("ObjectIcon.Visible", boost::bind(&FSChatHistoryHeader::onObjectIconContextMenuItemVisible, this, _2));
+    void showObjectContextMenu(S32 x,S32 y)
+    {
+        LLMenuGL* menu = (LLMenuGL*)mPopupMenuHandleObject.get();
+        if (!menu)
+        {
+            LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+            LLUICtrl::EnableCallbackRegistry::ScopedRegistrar registrar_enable;
 
-			menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_object_icon.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-			if (menu)
-			{
-				mPopupMenuHandleObject = menu->getHandle();
-				menu->updateParent(LLMenuGL::sMenuContainer);
-				LLMenuGL::showPopup(this, menu, x, y);
-			}
-			else
-			{
-				LL_WARNS() << " Failed to create menu_object_icon.xml" << LL_ENDL;
-			}
-		}
-		else
-		{
-			LLMenuGL::showPopup(this, menu, x, y);
-		}
-	}
-	
-	void showAvatarContextMenu(S32 x,S32 y)
-	{
-		LLMenuGL* menu = (LLMenuGL*)mPopupMenuHandleAvatar.get();
+            registrar.add("ObjectIcon.Action", boost::bind(&FSChatHistoryHeader::onObjectIconContextMenuItemClicked, this, _2));
+            registrar_enable.add("ObjectIcon.Visible", boost::bind(&FSChatHistoryHeader::onObjectIconContextMenuItemVisible, this, _2));
 
-		if (!menu)
-		{
-			LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
-			LLUICtrl::EnableCallbackRegistry::ScopedRegistrar registrar_enable;
+            menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_object_icon.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+            if (menu)
+            {
+                mPopupMenuHandleObject = menu->getHandle();
+                menu->updateParent(LLMenuGL::sMenuContainer);
+                LLMenuGL::showPopup(this, menu, x, y);
+            }
+            else
+            {
+                LL_WARNS() << " Failed to create menu_object_icon.xml" << LL_ENDL;
+            }
+        }
+        else
+        {
+            LLMenuGL::showPopup(this, menu, x, y);
+        }
+    }
 
-			registrar.add("AvatarIcon.Action", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemClicked, this, _2));
-			registrar_enable.add("AvatarIcon.Check", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemChecked, this, _2));
-			registrar_enable.add("AvatarIcon.Enable", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemEnabled, this, _2));
-			registrar_enable.add("AvatarIcon.Visible", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemVisible, this, _2));
+    void showAvatarContextMenu(S32 x,S32 y)
+    {
+        LLMenuGL* menu = (LLMenuGL*)mPopupMenuHandleAvatar.get();
 
-			menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_avatar_icon.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-			if (menu)
-			{
-				mPopupMenuHandleAvatar = menu->getHandle();
-			}
-			else
-			{
-				LL_WARNS() << " Failed to create menu_avatar_icon.xml" << LL_ENDL;
-			}
-		}
+        if (!menu)
+        {
+            LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+            LLUICtrl::EnableCallbackRegistry::ScopedRegistrar registrar_enable;
 
-		if(menu)
-		{
-			bool is_friend = LLAvatarActions::isFriend(mAvatarID);
-			bool is_group_session = gAgent.isInGroup(mSessionID);
-			
-			menu->setItemEnabled("Add Friend", !is_friend);
-			menu->setItemEnabled("Remove Friend", is_friend);
-			menu->setItemVisible("Moderator Options Separator", is_group_session && isGroupModerator());
-			menu->setItemVisible("Moderator Options", is_group_session && isGroupModerator());
-			menu->setItemVisible("Group Ban Separator", is_group_session && canBanInGroup());
-			menu->setItemVisible("BanMember", is_group_session && canBanInGroup());
+            registrar.add("AvatarIcon.Action", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemClicked, this, _2));
+            registrar_enable.add("AvatarIcon.Check", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemChecked, this, _2));
+            registrar_enable.add("AvatarIcon.Enable", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemEnabled, this, _2));
+            registrar_enable.add("AvatarIcon.Visible", boost::bind(&FSChatHistoryHeader::onAvatarIconContextMenuItemVisible, this, _2));
 
-			if(gAgentID == mAvatarID)
-			{
-				menu->setItemEnabled("Add Friend", false);
-				menu->setItemEnabled("Send IM", false);
-				menu->setItemEnabled("Remove Friend", false);
-				menu->setItemEnabled("Offer Teleport",false);
-				menu->setItemEnabled("Request Teleport",false);
-				menu->setItemEnabled("Teleport to",false);
-				menu->setItemEnabled("Voice Call", false);
-				menu->setItemEnabled("Chat History", false);
-				menu->setItemEnabled("Add Contact Set", false);
-				menu->setItemEnabled("Invite Group", false);
-				menu->setItemEnabled("Zoom In", false);
-				menu->setItemEnabled("track", false);
-				menu->setItemEnabled("Share", false);
-				menu->setItemEnabled("Pay", false);
-				menu->setItemEnabled("Block Unblock", false);
-				menu->setItemEnabled("Mute Text", false);
-			}
-			else
-			{
-				if (mSessionID == LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, mAvatarID))
-				{
-					menu->setItemVisible("Send IM", false);
-				}
-				menu->setItemEnabled("Teleport to", FSCommon::checkIsActionEnabled(mAvatarID, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TELEPORT_TO));
-				menu->setItemEnabled("Offer Teleport", LLAvatarActions::canOfferTeleport(mAvatarID));
-				menu->setItemEnabled("Request Teleport", LLAvatarActions::canRequestTeleport(mAvatarID));
-				menu->setItemEnabled("Voice Call", LLAvatarActions::canCall());
-				menu->setItemEnabled("Zoom In", FSCommon::checkIsActionEnabled(mAvatarID, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ZOOM_IN));
-				menu->setItemEnabled("track", FSCommon::checkIsActionEnabled(mAvatarID, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TRACK_AVATAR));
-				menu->setItemEnabled("Block Unblock", LLAvatarActions::canBlock(mAvatarID));
-				menu->setItemEnabled("Mute Text", LLAvatarActions::canBlock(mAvatarID));
-				menu->setItemEnabled("Chat History", LLLogChat::isTranscriptExist(mAvatarID));
-			}
+            menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_avatar_icon.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+            if (menu)
+            {
+                mPopupMenuHandleAvatar = menu->getHandle();
+            }
+            else
+            {
+                LL_WARNS() << " Failed to create menu_avatar_icon.xml" << LL_ENDL;
+            }
+        }
 
-			menu->setItemEnabled("Map", (LLAvatarTracker::instance().isBuddyOnline(mAvatarID) && is_agent_mappable(mAvatarID)) || gAgent.isGodlike() );
-			menu->buildDrawLabels();
-			menu->updateParent(LLMenuGL::sMenuContainer);
-			LLMenuGL::showPopup(this, menu, x, y);
-		}
-	}
+        if(menu)
+        {
+            bool is_friend = LLAvatarActions::isFriend(mAvatarID);
+            bool is_group_session = gAgent.isInGroup(mSessionID);
 
-	void showInfoCtrl()
-	{
-//		const bool isVisible = !mAvatarID.isNull() && !mFrom.empty() && (CHAT_SOURCE_SYSTEM != mSourceType || mType == CHAT_TYPE_RADAR) && CHAT_SOURCE_REGION != mSourceType;
+            menu->setItemEnabled("Add Friend", !is_friend);
+            menu->setItemEnabled("Remove Friend", is_friend);
+            menu->setItemVisible("Moderator Options Separator", is_group_session && isGroupModerator());
+            menu->setItemVisible("Moderator Options", is_group_session && isGroupModerator());
+            menu->setItemVisible("Group Ban Separator", is_group_session && canBanInGroup());
+            menu->setItemVisible("BanMember", is_group_session && canBanInGroup());
+
+            if(gAgentID == mAvatarID)
+            {
+                menu->setItemEnabled("Add Friend", false);
+                menu->setItemEnabled("Send IM", false);
+                menu->setItemEnabled("Remove Friend", false);
+                menu->setItemEnabled("Offer Teleport",false);
+                menu->setItemEnabled("Request Teleport",false);
+                menu->setItemEnabled("Teleport to",false);
+                menu->setItemEnabled("Voice Call", false);
+                menu->setItemEnabled("Chat History", false);
+                menu->setItemEnabled("Add Contact Set", false);
+                menu->setItemEnabled("Invite Group", false);
+                menu->setItemEnabled("Zoom In", false);
+                menu->setItemEnabled("track", false);
+                menu->setItemEnabled("Share", false);
+                menu->setItemEnabled("Pay", false);
+                menu->setItemEnabled("Block Unblock", false);
+                menu->setItemEnabled("Mute Text", false);
+            }
+            else
+            {
+                if (mSessionID == LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, mAvatarID))
+                {
+                    menu->setItemVisible("Send IM", false);
+                }
+                menu->setItemEnabled("Teleport to", FSCommon::checkIsActionEnabled(mAvatarID, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TELEPORT_TO));
+                menu->setItemEnabled("Offer Teleport", LLAvatarActions::canOfferTeleport(mAvatarID));
+                menu->setItemEnabled("Request Teleport", LLAvatarActions::canRequestTeleport(mAvatarID));
+                menu->setItemEnabled("Voice Call", LLAvatarActions::canCall());
+                menu->setItemEnabled("Zoom In", FSCommon::checkIsActionEnabled(mAvatarID, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_ZOOM_IN));
+                menu->setItemEnabled("track", FSCommon::checkIsActionEnabled(mAvatarID, EFSRegistrarFunctionActionType::FS_RGSTR_ACT_TRACK_AVATAR));
+                menu->setItemEnabled("Block Unblock", LLAvatarActions::canBlock(mAvatarID));
+                menu->setItemEnabled("Mute Text", LLAvatarActions::canBlock(mAvatarID));
+                menu->setItemEnabled("Chat History", LLLogChat::isTranscriptExist(mAvatarID));
+            }
+
+            menu->setItemEnabled("Map", (LLAvatarTracker::instance().isBuddyOnline(mAvatarID) && is_agent_mappable(mAvatarID)) || gAgent.isGodlike() );
+            menu->buildDrawLabels();
+            menu->updateParent(LLMenuGL::sMenuContainer);
+            LLMenuGL::showPopup(this, menu, x, y);
+        }
+    }
+
+    void showInfoCtrl()
+    {
+//      const bool isVisible = !mAvatarID.isNull() && !mFrom.empty() && (CHAT_SOURCE_SYSTEM != mSourceType || mType == CHAT_TYPE_RADAR) && CHAT_SOURCE_REGION != mSourceType;
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
-		const bool isVisible = mShowInfoCtrl && !mAvatarID.isNull() && !mFrom.empty() && (CHAT_SOURCE_SYSTEM != mSourceType || mType == CHAT_TYPE_RADAR) && CHAT_SOURCE_REGION != mSourceType;
+        const bool isVisible = mShowInfoCtrl && !mAvatarID.isNull() && !mFrom.empty() && (CHAT_SOURCE_SYSTEM != mSourceType || mType == CHAT_TYPE_RADAR) && CHAT_SOURCE_REGION != mSourceType;
 // [/RLVa:KB]
-		if (isVisible)
-		{
-			const LLRect sticky_rect = mUserNameTextBox->getRect();
-			S32 icon_x = llmin(sticky_rect.mLeft + mUserNameTextBox->getTextBoundingRect().getWidth() + 7, sticky_rect.mRight - 3);
+        if (isVisible)
+        {
+            const LLRect sticky_rect = mUserNameTextBox->getRect();
+            S32 icon_x = llmin(sticky_rect.mLeft + mUserNameTextBox->getTextBoundingRect().getWidth() + 7, sticky_rect.mRight - 3);
 
-			if (gSavedSettings.getBOOL("ShowChatMiniIcons"))
-			{
-				LLAvatarIconCtrl* icon = getChild<LLAvatarIconCtrl>("avatar_icon");
-				icon_x += icon->getRect().getWidth() + icon->getRect().mLeft;
-			}
+            if (gSavedSettings.getBOOL("ShowChatMiniIcons"))
+            {
+                LLAvatarIconCtrl* icon = getChild<LLAvatarIconCtrl>("avatar_icon");
+                icon_x += icon->getRect().getWidth() + icon->getRect().mLeft;
+            }
 
-			mInfoCtrl->setOrigin(icon_x, sticky_rect.getCenterY() - mInfoCtrl->getRect().getHeight() / 2 ) ;
-		}
-		mInfoCtrl->setVisible(isVisible);
-	}
+            mInfoCtrl->setOrigin(icon_x, sticky_rect.getCenterY() - mInfoCtrl->getRect().getHeight() / 2 ) ;
+        }
+        mInfoCtrl->setVisible(isVisible);
+    }
 
-	void hideInfoCtrl()
-	{
-		mInfoCtrl->setVisible(false);
-	}
+    void hideInfoCtrl()
+    {
+        mInfoCtrl->setVisible(false);
+    }
 
 private:
-	void setTimeField(const LLChat& chat)
-	{
-		LLRect rect_before = mTimeBoxTextBox->getRect();
+    void setTimeField(const LLChat& chat)
+    {
+        LLRect rect_before = mTimeBoxTextBox->getRect();
 
-		mTimeBoxTextBox->setValue(chat.mTimeStr);
+        mTimeBoxTextBox->setValue(chat.mTimeStr);
 
-		// set necessary textbox width to fit all text
-		mTimeBoxTextBox->reshapeToFitText();
-		LLRect rect_after = mTimeBoxTextBox->getRect();
+        // set necessary textbox width to fit all text
+        mTimeBoxTextBox->reshapeToFitText();
+        LLRect rect_after = mTimeBoxTextBox->getRect();
 
-		// move rect to the left to correct position...
-		S32 delta_pos_x = rect_before.getWidth() - rect_after.getWidth();
-		S32 delta_pos_y = rect_before.getHeight() - rect_after.getHeight();
-		mTimeBoxTextBox->translate(delta_pos_x, delta_pos_y);
+        // move rect to the left to correct position...
+        S32 delta_pos_x = rect_before.getWidth() - rect_after.getWidth();
+        S32 delta_pos_y = rect_before.getHeight() - rect_after.getHeight();
+        mTimeBoxTextBox->translate(delta_pos_x, delta_pos_y);
 
-		//... & change width of the name control
-		//const LLRect& user_rect = mUserNameTextBox->getRect();
-		//mUserNameTextBox->reshape(user_rect.getWidth() + delta_pos_x, user_rect.getHeight());
-		const LLRect& layoutstack_rect = mHeaderLayoutStack->getRect();
-		mHeaderLayoutStack->reshape(layoutstack_rect.getWidth() + delta_pos_x, layoutstack_rect.getHeight());
-	}
+        //... & change width of the name control
+        //const LLRect& user_rect = mUserNameTextBox->getRect();
+        //mUserNameTextBox->reshape(user_rect.getWidth() + delta_pos_x, user_rect.getHeight());
+        const LLRect& layoutstack_rect = mHeaderLayoutStack->getRect();
+        mHeaderLayoutStack->reshape(layoutstack_rect.getWidth() + delta_pos_x, layoutstack_rect.getHeight());
+    }
 
-	void fetchAvatarName()
-	{
-		if (mAvatarID.notNull())
-		{
-			if (mAvatarNameCacheConnection.connected())
-			{
-				mAvatarNameCacheConnection.disconnect();
-			}
-			mAvatarNameCacheConnection = LLAvatarNameCache::get(mAvatarID,
-				boost::bind(&FSChatHistoryHeader::onAvatarNameCache, this, _1, _2));
-		}
-	}
+    void fetchAvatarName()
+    {
+        if (mAvatarID.notNull())
+        {
+            if (mAvatarNameCacheConnection.connected())
+            {
+                mAvatarNameCacheConnection.disconnect();
+            }
+            mAvatarNameCacheConnection = LLAvatarNameCache::get(mAvatarID,
+                boost::bind(&FSChatHistoryHeader::onAvatarNameCache, this, _1, _2));
+        }
+    }
 
-	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
-	{
-		mAvatarNameCacheConnection.disconnect();
+    void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
+    {
+        mAvatarNameCacheConnection.disconnect();
 
-		mFrom = av_name.getDisplayName();
+        mFrom = av_name.getDisplayName();
 
-		mUserNameTextBox->setValue( LLSD(mFrom) );
-		mUserNameTextBox->setToolTip( av_name.getUserName() );
+        mUserNameTextBox->setValue( LLSD(mFrom) );
+        mUserNameTextBox->setToolTip( av_name.getUserName() );
 
-		if (gSavedSettings.getBOOL("NameTagShowUsernames") &&
-			av_name.useDisplayNames() &&
-			!av_name.isDisplayNameDefault())
-		{
-			LLStyle::Params style_params_name;
-			LLColor4 userNameColor = LLUIColorTable::instance().getColor("EmphasisColor");
-			style_params_name.color(userNameColor);
-			style_params_name.font.name("SansSerifSmall");
-			style_params_name.font.style(mNameStyleParams.font.style);
-			style_params_name.readonly_color(userNameColor);
-			mUserNameTextBox->appendText(" - " + av_name.getUserNameForDisplay(), false, style_params_name);
-		}
-		setToolTip( av_name.getUserName() );
-		// name might have changed, update width
-		updateMinUserNameWidth();
-	}
+        if (gSavedSettings.getBOOL("NameTagShowUsernames") &&
+            av_name.useDisplayNames() &&
+            !av_name.isDisplayNameDefault())
+        {
+            LLStyle::Params style_params_name;
+            LLColor4 userNameColor = LLUIColorTable::instance().getColor("EmphasisColor");
+            style_params_name.color(userNameColor);
+            style_params_name.font.name("SansSerifSmall");
+            style_params_name.font.style(mNameStyleParams.font.style);
+            style_params_name.readonly_color(userNameColor);
+            mUserNameTextBox->appendText(" - " + av_name.getUserNameForDisplay(), false, style_params_name);
+        }
+        setToolTip( av_name.getUserName() );
+        // name might have changed, update width
+        updateMinUserNameWidth();
+    }
 
 protected:
-	LLHandle<LLView>	mPopupMenuHandleAvatar;
-	LLHandle<LLView>	mPopupMenuHandleObject;
+    LLHandle<LLView>    mPopupMenuHandleAvatar;
+    LLHandle<LLView>    mPopupMenuHandleObject;
 
-	LLUICtrl*			mInfoCtrl;
+    LLUICtrl*           mInfoCtrl;
 
-	LLUUID				mAvatarID;
-	LLSD				mObjectData;
-	EChatSourceType		mSourceType;
-	EChatType			mType; // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
-	std::string			mFrom;
-	LLUUID				mSessionID;
-	std::string			mText;
-	F64					mTime; // IM's frame time
-	time_t				mCreationTime; // Views's time
-	// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
-	bool				mShowContextMenu;
-	bool				mShowInfoCtrl;
+    LLUUID              mAvatarID;
+    LLSD                mObjectData;
+    EChatSourceType     mSourceType;
+    EChatType           mType; // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+    std::string         mFrom;
+    LLUUID              mSessionID;
+    std::string         mText;
+    F64                 mTime; // IM's frame time
+    time_t              mCreationTime; // Views's time
+    // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
+    bool                mShowContextMenu;
+    bool                mShowInfoCtrl;
 // [/RLVa:KB]
 
-	S32					mMinUserNameWidth;
-	const LLFontGL*		mUserNameFont;
-	LLTextBox*			mUserNameTextBox;
-	LLTextBox*			mTimeBoxTextBox;
-	LLLayoutStack*		mHeaderLayoutStack;
+    S32                 mMinUserNameWidth;
+    const LLFontGL*     mUserNameFont;
+    LLTextBox*          mUserNameTextBox;
+    LLTextBox*          mTimeBoxTextBox;
+    LLLayoutStack*      mHeaderLayoutStack;
 
-	LLStyle::Params		mNameStyleParams;
+    LLStyle::Params     mNameStyleParams;
 
-	bool				mNeedsTimeBox;
+    bool                mNeedsTimeBox;
 
 private:
-	boost::signals2::connection mAvatarNameCacheConnection;
+    boost::signals2::connection mAvatarNameCacheConnection;
 };
 
 FSChatHistory::FSChatHistory(const FSChatHistory::Params& p)
-:	LLTextEditor(p),	// <FS:Zi> FIRE-8600: TAB out of chat history
-	mMessageHeaderFilename(p.message_header),
-	mMessageSeparatorFilename(p.message_separator),
-	mLeftTextPad(p.left_text_pad),
-	mRightTextPad(p.right_text_pad),
-	mLeftWidgetPad(p.left_widget_pad),
-	mRightWidgetPad(p.right_widget_pad),
-	mTopSeparatorPad(p.top_separator_pad),
-	mBottomSeparatorPad(p.bottom_separator_pad),
-	mTopHeaderPad(p.top_header_pad),
-	mBottomHeaderPad(p.bottom_header_pad),
-	mChatInputLine(NULL),	// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
-	mIsLastMessageFromLog(false),
-	mScrollToBottom(false),
-	mUnreadChatSources(0)
+:   LLTextEditor(p),    // <FS:Zi> FIRE-8600: TAB out of chat history
+    mMessageHeaderFilename(p.message_header),
+    mMessageSeparatorFilename(p.message_separator),
+    mLeftTextPad(p.left_text_pad),
+    mRightTextPad(p.right_text_pad),
+    mLeftWidgetPad(p.left_widget_pad),
+    mRightWidgetPad(p.right_widget_pad),
+    mTopSeparatorPad(p.top_separator_pad),
+    mBottomSeparatorPad(p.bottom_separator_pad),
+    mTopHeaderPad(p.top_header_pad),
+    mBottomHeaderPad(p.bottom_header_pad),
+    mChatInputLine(NULL),   // <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
+    mIsLastMessageFromLog(false),
+    mScrollToBottom(false),
+    mUnreadChatSources(0)
 {
-	mLineSpacingPixels = llclamp(gSavedSettings.getS32("FSFontChatLineSpacingPixels"), 0, 36);
-	mTextVAlign = LLFontGL::VAlign::VCENTER;
-	mUseColor = true;
-	
-	setIsObjectBlockedCallback(boost::bind(&LLMuteList::isMuted, LLMuteList::getInstance(), _1, _2, 0));
+    mLineSpacingPixels = llclamp(gSavedSettings.getS32("FSFontChatLineSpacingPixels"), 0, 36);
+    mTextVAlign = LLFontGL::VAlign::VCENTER;
+    mUseColor = true;
+
+    setIsObjectBlockedCallback(boost::bind(&LLMuteList::isMuted, LLMuteList::getInstance(), _1, _2, 0));
 }
 
 LLSD FSChatHistory::getValue() const
 {
-	return LLSD(getText());
+    return LLSD(getText());
 }
 
 FSChatHistory::~FSChatHistory()
 {
-	this->clear();
+    this->clear();
 }
 
 void FSChatHistory::updateChatInputLine()
 {
-	if(!mChatInputLine)
-	{
-		// get our focus root
-		LLUICtrl* focusRoot=findRootMostFocusRoot();
-		if(focusRoot)
-		{
-			// focus on the next item that is a text input control
-			focusRoot->focusNextItem(true);
-			// remember the control's pointer if it really is a LLLineEditor
-			mChatInputLine = dynamic_cast<LLChatEntry*>(gFocusMgr.getKeyboardFocus());
-		}
-	}
+    if(!mChatInputLine)
+    {
+        // get our focus root
+        LLUICtrl* focusRoot=findRootMostFocusRoot();
+        if(focusRoot)
+        {
+            // focus on the next item that is a text input control
+            focusRoot->focusNextItem(true);
+            // remember the control's pointer if it really is a LLLineEditor
+            mChatInputLine = dynamic_cast<LLChatEntry*>(gFocusMgr.getKeyboardFocus());
+        }
+    }
 }
 
 #if LL_SDL2
 void FSChatHistory::setFocus(bool b)
 {
-	LLTextEditor::setFocus(b);
+    LLTextEditor::setFocus(b);
 
-	// IME - Don't do anything here if IME is disabled
-	if (!gSavedSettings.getBOOL("SDL2IMEEnabled"))
-	{
-		return;
-	}
+    // IME - Don't do anything here if IME is disabled
+    if (!gSavedSettings.getBOOL("SDL2IMEEnabled"))
+    {
+        return;
+    }
 
-	// IME - International input compositing, i.e. for Japanese / Chinese text input
-	updateChatInputLine();
+    // IME - International input compositing, i.e. for Japanese / Chinese text input
+    updateChatInputLine();
 
-	if (b && mChatInputLine)
-	{
-		// Make sure the IME is in the right place, on top of the input line
-		LLRect screen_pos = mChatInputLine->calcScreenRect();
-		LLCoordGL ime_pos(screen_pos.mLeft, screen_pos.mBottom + gSavedSettings.getS32("SDL2IMEChatHistoryVerticalOffset"));
+    if (b && mChatInputLine)
+    {
+        // Make sure the IME is in the right place, on top of the input line
+        LLRect screen_pos = mChatInputLine->calcScreenRect();
+        LLCoordGL ime_pos(screen_pos.mLeft, screen_pos.mBottom + gSavedSettings.getS32("SDL2IMEChatHistoryVerticalOffset"));
 
-		// shift by a few pixels so the IME doesn't pop to the left side when the input
-		// field is very close to the left edge
-		ime_pos.mX = (S32) (ime_pos.mX * LLUI::getScaleFactor().mV[VX]) + 5;
-		ime_pos.mY = (S32) (ime_pos.mY * LLUI::getScaleFactor().mV[VY]);
+        // shift by a few pixels so the IME doesn't pop to the left side when the input
+        // field is very close to the left edge
+        ime_pos.mX = (S32) (ime_pos.mX * LLUI::getScaleFactor().mV[VX]) + 5;
+        ime_pos.mY = (S32) (ime_pos.mY * LLUI::getScaleFactor().mV[VY]);
 
-		getWindow()->setLanguageTextInput(ime_pos);
-	}
+        getWindow()->setLanguageTextInput(ime_pos);
+    }
 
-	// this floater is not an LLPreeditor but we are only interested in the pointer anyway
-	// so hopefully we will get away with this
-	getWindow()->allowLanguageTextInput((LLPreeditor*) this, true);
+    // this floater is not an LLPreeditor but we are only interested in the pointer anyway
+    // so hopefully we will get away with this
+    getWindow()->allowLanguageTextInput((LLPreeditor*) this, true);
 }
 #endif
 
 void FSChatHistory::initFromParams(const FSChatHistory::Params& p)
 {
-	// initialize the LLTextEditor base class first ... -Zi
-	LLTextEditor::initFromParams(p);
-	/// then set up these properties, because otherwise they would get lost when we
-	/// do this in the constructor only -Zi
-	setEnabled(false);
-	setReadOnly(true);
-	setShowContextMenu(true);
+    // initialize the LLTextEditor base class first ... -Zi
+    LLTextEditor::initFromParams(p);
+    /// then set up these properties, because otherwise they would get lost when we
+    /// do this in the constructor only -Zi
+    setEnabled(false);
+    setReadOnly(true);
+    setShowContextMenu(true);
 }
 
 LLView* FSChatHistory::getSeparator()
 {
-	LLPanel* separator = LLUICtrlFactory::getInstance()->createFromFile<LLPanel>(mMessageSeparatorFilename, NULL, LLPanel::child_registry_t::instance());
-	return separator;
+    LLPanel* separator = LLUICtrlFactory::getInstance()->createFromFile<LLPanel>(mMessageSeparatorFilename, NULL, LLPanel::child_registry_t::instance());
+    return separator;
 }
 
 LLView* FSChatHistory::getHeader(const LLChat& chat,const LLStyle::Params& style_params, const LLSD& args)
 {
-	FSChatHistoryHeader* header = FSChatHistoryHeader::createInstance(mMessageHeaderFilename);
-	if (header)
-	{
-		header->setup(chat, style_params, args);
-	}
-	return header;
+    FSChatHistoryHeader* header = FSChatHistoryHeader::createInstance(mMessageHeaderFilename);
+    if (header)
+    {
+        header->setup(chat, style_params, args);
+    }
+    return header;
 }
 
 void FSChatHistory::clear()
 {
-	mLastFromName.clear();
-	// workaround: Setting the text to an empty line before clear() gets rid of
-	// the scrollbar, if present, which otherwise would get stuck until the next
-	// line was appended. -Zi
-	setText(std::string(" \n"));	// <FS:Zi> FIRE-8600: TAB out of chat history
-	mLastFromID = LLUUID::null;
+    mLastFromName.clear();
+    // workaround: Setting the text to an empty line before clear() gets rid of
+    // the scrollbar, if present, which otherwise would get stuck until the next
+    // line was appended. -Zi
+    setText(std::string(" \n"));    // <FS:Zi> FIRE-8600: TAB out of chat history
+    mLastFromID = LLUUID::null;
 }
 
 enum e_moderation_options
 {
-	NORMAL = 0,
-	BOLD = 1,
-	ITALIC = 2,
-	BOLD_ITALIC = 3,
-	UNDERLINE = 4,
-	BOLD_UNDERLINE = 5,
-	ITALIC_UNDERLINE = 6,
-	BOLD_ITALIC_UNDERLINE = 7
+    NORMAL = 0,
+    BOLD = 1,
+    ITALIC = 2,
+    BOLD_ITALIC = 3,
+    UNDERLINE = 4,
+    BOLD_UNDERLINE = 5,
+    ITALIC_UNDERLINE = 6,
+    BOLD_ITALIC_UNDERLINE = 7
 };
 
 std::string applyModeratorStyle(U32 moderator_style)
-{	
-	std::string style;
-	switch (moderator_style)
-	{
-		case BOLD:
-			style = "BOLD";
-			break;
-		case ITALIC:
-			style = "ITALIC";
-			break;
-		case BOLD_ITALIC:
-			style = "BOLDITALIC";
-			break;
-		case UNDERLINE:
-			style = "UNDERLINE";
-			break;
-		case BOLD_UNDERLINE:
-			style = "BOLDUNDERLINE";
-			break;
-		case ITALIC_UNDERLINE:
-			style = "ITALICUNDERLINE";
-			break;
-		case BOLD_ITALIC_UNDERLINE:
-			style = "BOLDITALICUNDERLINE";
-			break;
-		case NORMAL:
-		default:
-			style = "NORMAL";
-			break;
-	}
-	return style;
+{
+    std::string style;
+    switch (moderator_style)
+    {
+        case BOLD:
+            style = "BOLD";
+            break;
+        case ITALIC:
+            style = "ITALIC";
+            break;
+        case BOLD_ITALIC:
+            style = "BOLDITALIC";
+            break;
+        case UNDERLINE:
+            style = "UNDERLINE";
+            break;
+        case BOLD_UNDERLINE:
+            style = "BOLDUNDERLINE";
+            break;
+        case ITALIC_UNDERLINE:
+            style = "ITALICUNDERLINE";
+            break;
+        case BOLD_ITALIC_UNDERLINE:
+            style = "BOLDITALICUNDERLINE";
+            break;
+        case NORMAL:
+        default:
+            style = "NORMAL";
+            break;
+    }
+    return style;
 }
 
 static LLTrace::BlockTimerStatHandle FTM_APPEND_MESSAGE("Append Chat Message");
 
 void FSChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LLStyle::Params& input_append_params)
 {
-	LL_RECORD_BLOCK_TIME(FTM_APPEND_MESSAGE);
-	// Ansa: FIRE-12754: Hack around a weird issue where the doc size magically increases by 1px
-	//       during draw if the doc exceeds the visible space and the scrollbar is getting visible.
-	mScrollToBottom = (mScroller->isAtBottom() || mScroller->getScrollbar(LLScrollContainer::VERTICAL)->getDocPosMax() <= 1);
+    LL_RECORD_BLOCK_TIME(FTM_APPEND_MESSAGE);
+    // Ansa: FIRE-12754: Hack around a weird issue where the doc size magically increases by 1px
+    //       during draw if the doc exceeds the visible space and the scrollbar is getting visible.
+    mScrollToBottom = (mScroller->isAtBottom() || mScroller->getScrollbar(LLScrollContainer::VERTICAL)->getDocPosMax() <= 1);
 
-	bool use_plain_text_chat_history = args["use_plain_text_chat_history"].asBoolean();
-	bool square_brackets = false; // square brackets necessary for a system messages
-	bool is_p2p = args.has("is_p2p") && args["is_p2p"].asBoolean();
-	bool is_conversation_log = args.has("conversation_log") && args["conversation_log"].asBoolean();	// <FS:CR> Don't dim chat in conversation log
-	bool is_local = args.has("is_local") && args["is_local"].asBoolean();
+    bool use_plain_text_chat_history = args["use_plain_text_chat_history"].asBoolean();
+    bool square_brackets = false; // square brackets necessary for a system messages
+    bool is_p2p = args.has("is_p2p") && args["is_p2p"].asBoolean();
+    bool is_conversation_log = args.has("conversation_log") && args["conversation_log"].asBoolean();    // <FS:CR> Don't dim chat in conversation log
+    bool is_local = args.has("is_local") && args["is_local"].asBoolean();
 
-	bool from_me = chat.mFromID == gAgent.getID();
-	setPlainText(use_plain_text_chat_history);
+    bool from_me = chat.mFromID == gAgent.getID();
+    setPlainText(use_plain_text_chat_history);
 
-	if (!scrolledToEnd() && !from_me && !chat.mFromName.empty())
-	{
-		mUnreadChatSources++;
-		if (!mUnreadMessagesUpdateSignal.empty())
-		{
-			mUnreadMessagesUpdateSignal(mUnreadChatSources);
-		}
-	}
+    if (!scrolledToEnd() && !from_me && !chat.mFromName.empty())
+    {
+        mUnreadChatSources++;
+        if (!mUnreadMessagesUpdateSignal.empty())
+        {
+            mUnreadMessagesUpdateSignal(mUnreadChatSources);
+        }
+    }
 
-	LLColor4 txt_color = LLUIColorTable::instance().getColor("White");
-	LLColor4 name_color = LLUIColorTable::instance().getColor("ChatNameColor");
-	LLViewerChat::getChatColor(chat, txt_color, LLSD().with("is_local", is_local));
-	LLFontGL* fontp = LLViewerChat::getChatFont();
-	std::string font_name = LLFontGL::nameFromFont(fontp);
-	std::string font_size = LLFontGL::sizeFromFont(fontp);
+    LLColor4 txt_color = LLUIColorTable::instance().getColor("White");
+    LLColor4 name_color = LLUIColorTable::instance().getColor("ChatNameColor");
+    LLViewerChat::getChatColor(chat, txt_color, LLSD().with("is_local", is_local));
+    LLFontGL* fontp = LLViewerChat::getChatFont();
+    std::string font_name = LLFontGL::nameFromFont(fontp);
+    std::string font_size = LLFontGL::sizeFromFont(fontp);
 
-	LLStyle::Params body_message_params;
-	body_message_params.color(txt_color);
-	body_message_params.readonly_color(txt_color);
-	body_message_params.font.name(font_name);
-	body_message_params.font.size(font_size);
-	body_message_params.font.style(input_append_params.font.style);
+    LLStyle::Params body_message_params;
+    body_message_params.color(txt_color);
+    body_message_params.readonly_color(txt_color);
+    body_message_params.font.name(font_name);
+    body_message_params.font.size(font_size);
+    body_message_params.font.style(input_append_params.font.style);
 
-	LLStyle::Params name_params(body_message_params);
-	name_params.color(name_color);
-	name_params.readonly_color(name_color);
-	std::string name_font_style_postfix = use_plain_text_chat_history ? "UNDERLINE" : "";
-	name_params.font.style = name_font_style_postfix; // This will be used when hovering the name (LLTextBase::appendAndHighlightTextImpl() will filter it out)
-	std::string delimiter_style = "NORMAL";
+    LLStyle::Params name_params(body_message_params);
+    name_params.color(name_color);
+    name_params.readonly_color(name_color);
+    std::string name_font_style_postfix = use_plain_text_chat_history ? "UNDERLINE" : "";
+    name_params.font.style = name_font_style_postfix; // This will be used when hovering the name (LLTextBase::appendAndHighlightTextImpl() will filter it out)
+    std::string delimiter_style = "NORMAL";
 
-	// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
-	F32 FSIMChatHistoryFade = gSavedSettings.getF32("FSIMChatHistoryFade");
+    // FS:LO FIRE-2899 - Faded text for IMs in nearby chat
+    F32 FSIMChatHistoryFade = gSavedSettings.getF32("FSIMChatHistoryFade");
 
-	if (FSIMChatHistoryFade > 1.0f)
-	{
-		FSIMChatHistoryFade = 1.0f;
-		gSavedSettings.setF32("FSIMChatHistoryFade",FSIMChatHistoryFade);
-	}
-	// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
+    if (FSIMChatHistoryFade > 1.0f)
+    {
+        FSIMChatHistoryFade = 1.0f;
+        gSavedSettings.setF32("FSIMChatHistoryFade",FSIMChatHistoryFade);
+    }
+    // FS:LO FIRE-2899 - Faded text for IMs in nearby chat
 
-	//IRC styled /me messages.
-	bool irc_me = is_irc_me_prefix(chat.mText);
+    //IRC styled /me messages.
+    bool irc_me = is_irc_me_prefix(chat.mText);
 
-	// Delimiter after a name in header copy/past and in plain text mode
-	std::string delimiter = ": ";
-	std::string shout = LLTrans::getString("shout");
-	std::string whisper = LLTrans::getString("whisper");
-	if (chat.mChatType == CHAT_TYPE_SHOUT || 
-		chat.mChatType == CHAT_TYPE_WHISPER ||
-		// FS:TS FIRE-6049: No : in radar chat header
-		chat.mChatType == CHAT_TYPE_RADAR ||
-		// FS:TS FIRE-6049: No : in radar chat header
-		chat.mText.compare(0, shout.length(), shout) == 0 ||
-		chat.mText.compare(0, whisper.length(), whisper) == 0)
-	{
-		delimiter = " ";
-	}
+    // Delimiter after a name in header copy/past and in plain text mode
+    std::string delimiter = ": ";
+    std::string shout = LLTrans::getString("shout");
+    std::string whisper = LLTrans::getString("whisper");
+    if (chat.mChatType == CHAT_TYPE_SHOUT ||
+        chat.mChatType == CHAT_TYPE_WHISPER ||
+        // FS:TS FIRE-6049: No : in radar chat header
+        chat.mChatType == CHAT_TYPE_RADAR ||
+        // FS:TS FIRE-6049: No : in radar chat header
+        chat.mText.compare(0, shout.length(), shout) == 0 ||
+        chat.mText.compare(0, whisper.length(), whisper) == 0)
+    {
+        delimiter = " ";
+    }
 
-	// Don't add any delimiter after name in irc styled messages
-	if (irc_me || chat.mChatStyle == CHAT_STYLE_IRC)
-	{
-		delimiter = LLStringUtil::null;
+    // Don't add any delimiter after name in irc styled messages
+    if (irc_me || chat.mChatStyle == CHAT_STYLE_IRC)
+    {
+        delimiter = LLStringUtil::null;
 
-		// italics for emotes -Zi
-		if (gSavedSettings.getBOOL("EmotesUseItalic"))
-		{
-			body_message_params.font.style = "ITALIC";
-			name_params.font.style = "ITALIC" + name_font_style_postfix;
-		}
-	}
+        // italics for emotes -Zi
+        if (gSavedSettings.getBOOL("EmotesUseItalic"))
+        {
+            body_message_params.font.style = "ITALIC";
+            name_params.font.style = "ITALIC" + name_font_style_postfix;
+        }
+    }
 
-	if (chat.mChatType == CHAT_TYPE_WHISPER && gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))
-	{
-		body_message_params.font.style = "ITALIC";
-		name_params.font.style = "ITALIC" + name_font_style_postfix;
-		delimiter_style = "ITALIC";
-	}
-	else if(chat.mChatType == CHAT_TYPE_SHOUT && gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))
-	{
-		body_message_params.font.style = "BOLD";
-		name_params.font.style = "BOLD" + name_font_style_postfix;
-		delimiter_style = "BOLD";
-	}
+    if (chat.mChatType == CHAT_TYPE_WHISPER && gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))
+    {
+        body_message_params.font.style = "ITALIC";
+        name_params.font.style = "ITALIC" + name_font_style_postfix;
+        delimiter_style = "ITALIC";
+    }
+    else if(chat.mChatType == CHAT_TYPE_SHOUT && gSavedSettings.getBOOL("FSEmphasizeShoutWhisper"))
+    {
+        body_message_params.font.style = "BOLD";
+        name_params.font.style = "BOLD" + name_font_style_postfix;
+        delimiter_style = "BOLD";
+    }
 
-	bool message_from_log = (chat.mChatStyle == CHAT_STYLE_HISTORY || chat.mChatStyle == CHAT_STYLE_SERVER_HISTORY);
-	bool teleport_separator = chat.mSourceType == CHAT_SOURCE_TELEPORT;
-	// We graying out chat history by graying out messages that contains full date in a time string
-	if (message_from_log && !is_conversation_log)
-	{
-		if (chat.mChatStyle == CHAT_STYLE_HISTORY)
-		{
-			txt_color = LLUIColorTable::instance().getColor("ChatHistoryMessageFromLog");
-		}
-		else if (chat.mChatStyle == CHAT_STYLE_SERVER_HISTORY)
-		{
-			txt_color = LLUIColorTable::instance().getColor("ChatHistoryMessageFromServerLog");
-		}
-		body_message_params.color(txt_color);
-		body_message_params.readonly_color(txt_color);
-		name_params.color(txt_color);
-		name_params.readonly_color(txt_color);
-	}
+    bool message_from_log = (chat.mChatStyle == CHAT_STYLE_HISTORY || chat.mChatStyle == CHAT_STYLE_SERVER_HISTORY);
+    bool teleport_separator = chat.mSourceType == CHAT_SOURCE_TELEPORT;
+    // We graying out chat history by graying out messages that contains full date in a time string
+    if (message_from_log && !is_conversation_log)
+    {
+        if (chat.mChatStyle == CHAT_STYLE_HISTORY)
+        {
+            txt_color = LLUIColorTable::instance().getColor("ChatHistoryMessageFromLog");
+        }
+        else if (chat.mChatStyle == CHAT_STYLE_SERVER_HISTORY)
+        {
+            txt_color = LLUIColorTable::instance().getColor("ChatHistoryMessageFromServerLog");
+        }
+        body_message_params.color(txt_color);
+        body_message_params.readonly_color(txt_color);
+        name_params.color(txt_color);
+        name_params.readonly_color(txt_color);
+    }
 
-	//<FS:HG> FS-1734 seperate name and text styles for moderator
-	bool moderator_style_active = false;
-	U32 moderator_name_style_value = gSavedSettings.getU32("FSModNameStyle");
-	U32 moderator_body_style_value = gSavedSettings.getU32("FSModTextStyle");
-	std::string moderator_name_style = applyModeratorStyle(moderator_name_style_value);
-	std::string moderator_body_style = applyModeratorStyle(moderator_body_style_value);
-	std::string moderator_timestamp_style = moderator_name_style;
+    //<FS:HG> FS-1734 seperate name and text styles for moderator
+    bool moderator_style_active = false;
+    U32 moderator_name_style_value = gSavedSettings.getU32("FSModNameStyle");
+    U32 moderator_body_style_value = gSavedSettings.getU32("FSModTextStyle");
+    std::string moderator_name_style = applyModeratorStyle(moderator_name_style_value);
+    std::string moderator_body_style = applyModeratorStyle(moderator_body_style_value);
+    std::string moderator_timestamp_style = moderator_name_style;
 
-	if (chat.mChatStyle == CHAT_STYLE_MODERATOR)
-	{
-		moderator_style_active = true;
+    if (chat.mChatStyle == CHAT_STYLE_MODERATOR)
+    {
+        moderator_style_active = true;
 
-		delimiter_style = moderator_name_style;
-		if (moderator_name_style_value < UNDERLINE)
-		{
-			// Need to add "UNDERLINE" here because we want to underline the name on hover
-			moderator_name_style += name_font_style_postfix;
-		}
-		else
-		{
-			// Always contains underline - don't show it on hover only
-			name_params.can_underline_on_hover = false;
-		}
-		name_params.font.style(moderator_name_style);
-		body_message_params.font.style(moderator_body_style);
+        delimiter_style = moderator_name_style;
+        if (moderator_name_style_value < UNDERLINE)
+        {
+            // Need to add "UNDERLINE" here because we want to underline the name on hover
+            moderator_name_style += name_font_style_postfix;
+        }
+        else
+        {
+            // Always contains underline - don't show it on hover only
+            name_params.can_underline_on_hover = false;
+        }
+        name_params.font.style(moderator_name_style);
+        body_message_params.font.style(moderator_body_style);
 
-		if ( irc_me && gSavedSettings.getBOOL("EmotesUseItalic") )
-		{
-			if ( (ITALIC & moderator_name_style_value) != ITALIC )//HG: if ITALIC isn't one of the styles... add it
-			{
-				moderator_name_style += "ITALIC";
-				moderator_timestamp_style += "ITALIC";
-				name_params.font.style(moderator_name_style);
-			}
-			if ( (ITALIC & moderator_body_style_value) != ITALIC )
-			{
-				moderator_body_style += "ITALIC";
-				body_message_params.font.style(moderator_body_style);
-			}
-			body_message_params.font.style(moderator_body_style);
-		}
-	}
-	//</FS:HG> FS-1734 seperate name and text styles for moderator
+        if ( irc_me && gSavedSettings.getBOOL("EmotesUseItalic") )
+        {
+            if ( (ITALIC & moderator_name_style_value) != ITALIC )//HG: if ITALIC isn't one of the styles... add it
+            {
+                moderator_name_style += "ITALIC";
+                moderator_timestamp_style += "ITALIC";
+                name_params.font.style(moderator_name_style);
+            }
+            if ( (ITALIC & moderator_body_style_value) != ITALIC )
+            {
+                moderator_body_style += "ITALIC";
+                body_message_params.font.style(moderator_body_style);
+            }
+            body_message_params.font.style(moderator_body_style);
+        }
+    }
+    //</FS:HG> FS-1734 seperate name and text styles for moderator
 
-	bool prependNewLineState = getText().size() != 0;
+    bool prependNewLineState = getText().size() != 0;
 
-	// compact mode: show a timestamp and name
-	if (use_plain_text_chat_history)
-	{
-		square_brackets = (chat.mSourceType == CHAT_SOURCE_SYSTEM && chat.mChatType != CHAT_TYPE_RADAR && gSavedSettings.getBOOL("FSIMSystemMessageBrackets"));
+    // compact mode: show a timestamp and name
+    if (use_plain_text_chat_history)
+    {
+        square_brackets = (chat.mSourceType == CHAT_SOURCE_SYSTEM && chat.mChatType != CHAT_TYPE_RADAR && gSavedSettings.getBOOL("FSIMSystemMessageBrackets"));
 
-		LLStyle::Params timestamp_style(body_message_params);
+        LLStyle::Params timestamp_style(body_message_params);
 
-		// out of the timestamp
-		if (args["show_time"].asBoolean() && !teleport_separator)
-		{
-			LLColor4 timestamp_color = LLUIColorTable::instance().getColor("ChatTimestampColor");
-			timestamp_style.color(timestamp_color);
-			timestamp_style.readonly_color(timestamp_color);
-			if (message_from_log && !is_conversation_log)
-			{
-				timestamp_style.color.alpha = FSIMChatHistoryFade;
-				timestamp_style.readonly_color.alpha = FSIMChatHistoryFade;
-			}
-			//<FS:HG> FS-1734 seperate name and text styles for moderator
-			if ( moderator_style_active )
-			{
-				timestamp_style.font.style(moderator_timestamp_style);
-			}
-			//</FS:HG> FS-1734 seperate name and text styles for moderator
-			appendText("[" + chat.mTimeStr + "] ", prependNewLineState, timestamp_style);
-			prependNewLineState = false;
-		}
+        // out of the timestamp
+        if (args["show_time"].asBoolean() && !teleport_separator)
+        {
+            LLColor4 timestamp_color = LLUIColorTable::instance().getColor("ChatTimestampColor");
+            timestamp_style.color(timestamp_color);
+            timestamp_style.readonly_color(timestamp_color);
+            if (message_from_log && !is_conversation_log)
+            {
+                timestamp_style.color.alpha = FSIMChatHistoryFade;
+                timestamp_style.readonly_color.alpha = FSIMChatHistoryFade;
+            }
+            //<FS:HG> FS-1734 seperate name and text styles for moderator
+            if ( moderator_style_active )
+            {
+                timestamp_style.font.style(moderator_timestamp_style);
+            }
+            //</FS:HG> FS-1734 seperate name and text styles for moderator
+            appendText("[" + chat.mTimeStr + "] ", prependNewLineState, timestamp_style);
+            prependNewLineState = false;
+        }
 
         // out the opening square bracket (if need)
-		if (square_brackets)
-		{
-			appendText("[", prependNewLineState, body_message_params);
-			prependNewLineState = false;
-		}
+        if (square_brackets)
+        {
+            appendText("[", prependNewLineState, body_message_params);
+            prependNewLineState = false;
+        }
 
-		// names showing
-		if ( (!is_p2p || args["show_names_for_p2p_conv"].asBoolean()) &&
-			utf8str_trim(chat.mFromName).size() != 0)
-		{
-			// Don't hotlink any messages from the system (e.g. "Second Life:"), so just add those in plain text.
-			if ( chat.mSourceType == CHAT_SOURCE_OBJECT && chat.mFromID.notNull())
-			{
+        // names showing
+        if ( (!is_p2p || args["show_names_for_p2p_conv"].asBoolean()) &&
+            utf8str_trim(chat.mFromName).size() != 0)
+        {
+            // Don't hotlink any messages from the system (e.g. "Second Life:"), so just add those in plain text.
+            if ( chat.mSourceType == CHAT_SOURCE_OBJECT && chat.mFromID.notNull())
+            {
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-				// NOTE-RLVa: we don't need to do any @shownames or @showloc filtering here because we'll already have an existing URL
-				std::string url = chat.mURL;
-				RLV_ASSERT( (url.empty()) || (std::string::npos != url.find("objectim")) );
-				if ( (url.empty()) || (std::string::npos == url.find("objectim")) )
-				{
+                // NOTE-RLVa: we don't need to do any @shownames or @showloc filtering here because we'll already have an existing URL
+                std::string url = chat.mURL;
+                RLV_ASSERT( (url.empty()) || (std::string::npos != url.find("objectim")) );
+                if ( (url.empty()) || (std::string::npos == url.find("objectim")) )
+                {
 // [/RLVa:KB]
-					// for object IMs, create a secondlife:///app/objectim SLapp
-					/*std::string*/ url = LLViewerChat::getSenderSLURL(chat, args);
+                    // for object IMs, create a secondlife:///app/objectim SLapp
+                    /*std::string*/ url = LLViewerChat::getSenderSLURL(chat, args);
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-				}
+                }
 // [/RLVa:KB]
 
-				// set the link for the object name to be the objectim SLapp
-				// (don't let object names with hyperlinks override our objectim Url)
-				LLStyle::Params link_params(body_message_params);
-				link_params.color.control = "ChatNameObjectColor";
-				LLColor4 link_color = LLUIColorTable::instance().getColor("ChatNameObjectColor");
-				link_params.color = link_color;
-				link_params.readonly_color = link_color;
-				if (message_from_log && !is_conversation_log)
-				{
-					link_params.color.alpha = FSIMChatHistoryFade;
-					link_params.readonly_color.alpha = FSIMChatHistoryFade;
-				}
-				link_params.is_link = true;
-				link_params.link_href = url;
+                // set the link for the object name to be the objectim SLapp
+                // (don't let object names with hyperlinks override our objectim Url)
+                LLStyle::Params link_params(body_message_params);
+                link_params.color.control = "ChatNameObjectColor";
+                LLColor4 link_color = LLUIColorTable::instance().getColor("ChatNameObjectColor");
+                link_params.color = link_color;
+                link_params.readonly_color = link_color;
+                if (message_from_log && !is_conversation_log)
+                {
+                    link_params.color.alpha = FSIMChatHistoryFade;
+                    link_params.readonly_color.alpha = FSIMChatHistoryFade;
+                }
+                link_params.is_link = true;
+                link_params.link_href = url;
 
-				appendText(chat.mFromName + delimiter, prependNewLineState, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-				prependNewLineState = false;
-			}
-//			else if (chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log && chat.mSourceType != CHAT_SOURCE_REGION)
+                appendText(chat.mFromName + delimiter, prependNewLineState, link_params);   // <FS:Zi> FIRE-8600: TAB out of chat history
+                prependNewLineState = false;
+            }
+//          else if (chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log && chat.mSourceType != CHAT_SOURCE_REGION)
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-			else if (chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log && chat.mSourceType != CHAT_SOURCE_REGION && !chat.mRlvNamesFiltered)
+            else if (chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log && chat.mSourceType != CHAT_SOURCE_REGION && !chat.mRlvNamesFiltered)
 // [/RLVa:KB]
-			{
-				name_params.color = name_color;
-				name_params.readonly_color = name_color;
-				if (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)
-				{
-					name_params.color.alpha = FSIMChatHistoryFade;
-					name_params.readonly_color.alpha = FSIMChatHistoryFade;
-					appendText(LLTrans::getString("IMPrefix") + " ", prependNewLineState, name_params);
-					prependNewLineState = false;
-					
-					if (!chat.mFromNameGroup.empty())
-					{
-						appendText(chat.mFromNameGroup, prependNewLineState, name_params);
-						prependNewLineState = false;
-					}
-				}
+            {
+                name_params.color = name_color;
+                name_params.readonly_color = name_color;
+                if (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)
+                {
+                    name_params.color.alpha = FSIMChatHistoryFade;
+                    name_params.readonly_color.alpha = FSIMChatHistoryFade;
+                    appendText(LLTrans::getString("IMPrefix") + " ", prependNewLineState, name_params);
+                    prependNewLineState = false;
 
-				name_params.use_default_link_style = false;
-				name_params.link_href = LLSLURL(from_me ? "agentself" : "agent", chat.mFromID, "inspect").getSLURLString();
+                    if (!chat.mFromNameGroup.empty())
+                    {
+                        appendText(chat.mFromNameGroup, prependNewLineState, name_params);
+                        prependNewLineState = false;
+                    }
+                }
 
-				// Add link to avatar's inspector and delimiter to message.
-				appendText(std::string(name_params.link_href), prependNewLineState, name_params);
+                name_params.use_default_link_style = false;
+                name_params.link_href = LLSLURL(from_me ? "agentself" : "agent", chat.mFromID, "inspect").getSLURLString();
 
-				prependNewLineState = false;
+                // Add link to avatar's inspector and delimiter to message.
+                appendText(std::string(name_params.link_href), prependNewLineState, name_params);
 
-				if (delimiter.length() > 0 && delimiter[0] == ':')
-				{
-					LLStyle::Params delimiter_params(body_message_params);
-					delimiter_params.font.style = delimiter_style;
+                prependNewLineState = false;
 
-					appendText(":", prependNewLineState, delimiter_params);
-					prependNewLineState = false;
+                if (delimiter.length() > 0 && delimiter[0] == ':')
+                {
+                    LLStyle::Params delimiter_params(body_message_params);
+                    delimiter_params.font.style = delimiter_style;
 
-					appendText(delimiter.substr(1, std::string::npos), prependNewLineState, body_message_params);
-				}
-				else
-				{
-					appendText(delimiter, prependNewLineState, body_message_params);
-				}
-				prependNewLineState = false;
-			}
-			else if (teleport_separator)
-			{
-				std::string tp_text = LLTrans::getString("teleport_preamble_compact_chat");
-				appendText(tp_text + " <nolink>" + chat.mFromName + "</nolink>",
-					prependNewLineState, body_message_params);
-				prependNewLineState = false;
-			}
-			else
-			{
-				appendText("<nolink>" + chat.mFromName + "</nolink>" + delimiter,
-						prependNewLineState, body_message_params);
-				prependNewLineState = false;
-			}
-		}
-	}
-	else // showing timestamp and name in the expanded mode
-	{
-		prependNewLineState = false;
-		LLView* view = NULL;
-		LLInlineViewSegment::Params p;
-		p.force_newline = true;
-		p.left_pad = mLeftWidgetPad;
-		p.right_pad = mRightWidgetPad;
+                    appendText(":", prependNewLineState, delimiter_params);
+                    prependNewLineState = false;
 
-		LLDate new_message_time = LLDate::now();
-		bool needs_header_text = false;
+                    appendText(delimiter.substr(1, std::string::npos), prependNewLineState, body_message_params);
+                }
+                else
+                {
+                    appendText(delimiter, prependNewLineState, body_message_params);
+                }
+                prependNewLineState = false;
+            }
+            else if (teleport_separator)
+            {
+                std::string tp_text = LLTrans::getString("teleport_preamble_compact_chat");
+                appendText(tp_text + " <nolink>" + chat.mFromName + "</nolink>",
+                    prependNewLineState, body_message_params);
+                prependNewLineState = false;
+            }
+            else
+            {
+                appendText("<nolink>" + chat.mFromName + "</nolink>" + delimiter,
+                        prependNewLineState, body_message_params);
+                prependNewLineState = false;
+            }
+        }
+    }
+    else // showing timestamp and name in the expanded mode
+    {
+        prependNewLineState = false;
+        LLView* view = NULL;
+        LLInlineViewSegment::Params p;
+        p.force_newline = true;
+        p.left_pad = mLeftWidgetPad;
+        p.right_pad = mRightWidgetPad;
 
-		if (!teleport_separator
-			&& mLastFromName == chat.mFromName
-			&& mLastFromID == chat.mFromID
-			&& mLastMessageTime.notNull() 
-			&& (new_message_time.secondsSinceEpoch() - mLastMessageTime.secondsSinceEpoch()) < 60.0
-			&& mIsLastMessageFromLog == message_from_log)  //distinguish between current and previous chat session's histories
-		{
-			view = getSeparator();
-			p.top_pad = mTopSeparatorPad;
-			p.bottom_pad = mBottomSeparatorPad;
-			if (!view)
-			{
-				// Might be wiser to make this LL_ERRS, getSeparator() should work in case of correct instalation.
-				LL_WARNS() << "Failed to create separator from " << mMessageSeparatorFilename << ": can't append to history" << LL_ENDL;
-				return;
-			}
-		}
-		else
-		{
-			needs_header_text = true;
-			view = getHeader(chat, name_params, args);
-			if (getLength() == 0)
-				p.top_pad = 0;
-			else
-				p.top_pad = mTopHeaderPad;
-			if (teleport_separator)
-			{
-				p.bottom_pad = mBottomSeparatorPad;
-			}
-			else
-			{
-				p.bottom_pad = mBottomHeaderPad;
-			}
-			if (!view)
-			{
-				LL_WARNS() << "Failed to create header from " << mMessageHeaderFilename << ": can't append to history" << LL_ENDL;
-				return;
-			}
-		}
-		p.view = view;
+        LLDate new_message_time = LLDate::now();
+        bool needs_header_text = false;
 
-		//Prepare the rect for the view
-		LLRect target_rect = getDocumentView()->getRect();	// <FS:Zi> FIRE-8600: TAB out of chat history
-		// squeeze down the widget by subtracting padding off left and right
-		target_rect.mLeft += mLeftWidgetPad + getHPad();	// <FS:Zi> FIRE-8600: TAB out of chat history
-		target_rect.mRight -= mRightWidgetPad;
-		view->reshape(target_rect.getWidth(), view->getRect().getHeight());
-		view->setOrigin(target_rect.mLeft, view->getRect().mBottom);
+        if (!teleport_separator
+            && mLastFromName == chat.mFromName
+            && mLastFromID == chat.mFromID
+            && mLastMessageTime.notNull()
+            && (new_message_time.secondsSinceEpoch() - mLastMessageTime.secondsSinceEpoch()) < 60.0
+            && mIsLastMessageFromLog == message_from_log)  //distinguish between current and previous chat session's histories
+        {
+            view = getSeparator();
+            p.top_pad = mTopSeparatorPad;
+            p.bottom_pad = mBottomSeparatorPad;
+            if (!view)
+            {
+                // Might be wiser to make this LL_ERRS, getSeparator() should work in case of correct instalation.
+                LL_WARNS() << "Failed to create separator from " << mMessageSeparatorFilename << ": can't append to history" << LL_ENDL;
+                return;
+            }
+        }
+        else
+        {
+            needs_header_text = true;
+            view = getHeader(chat, name_params, args);
+            if (getLength() == 0)
+                p.top_pad = 0;
+            else
+                p.top_pad = mTopHeaderPad;
+            if (teleport_separator)
+            {
+                p.bottom_pad = mBottomSeparatorPad;
+            }
+            else
+            {
+                p.bottom_pad = mBottomHeaderPad;
+            }
+            if (!view)
+            {
+                LL_WARNS() << "Failed to create header from " << mMessageHeaderFilename << ": can't append to history" << LL_ENDL;
+                return;
+            }
+        }
+        p.view = view;
 
-		std::string widget_associated_text = "\n";
-		if (needs_header_text)
-		{
-			widget_associated_text += "[" + chat.mTimeStr + "] ";
-			if (utf8str_trim(chat.mFromName).size() != 0 && chat.mFromName != SYSTEM_FROM)
-			{
-				widget_associated_text += chat.mFromName + delimiter;
-			}
-		}
+        //Prepare the rect for the view
+        LLRect target_rect = getDocumentView()->getRect();  // <FS:Zi> FIRE-8600: TAB out of chat history
+        // squeeze down the widget by subtracting padding off left and right
+        target_rect.mLeft += mLeftWidgetPad + getHPad();    // <FS:Zi> FIRE-8600: TAB out of chat history
+        target_rect.mRight -= mRightWidgetPad;
+        view->reshape(target_rect.getWidth(), view->getRect().getHeight());
+        view->setOrigin(target_rect.mLeft, view->getRect().mBottom);
 
-		appendWidget(p, widget_associated_text, false);	// <FS:Zi> FIRE-8600: TAB out of chat history
+        std::string widget_associated_text = "\n";
+        if (needs_header_text)
+        {
+            widget_associated_text += "[" + chat.mTimeStr + "] ";
+            if (utf8str_trim(chat.mFromName).size() != 0 && chat.mFromName != SYSTEM_FROM)
+            {
+                widget_associated_text += chat.mFromName + delimiter;
+            }
+        }
 
-		mLastFromName = chat.mFromName;
-		mLastFromID = chat.mFromID;
-		mLastMessageTime = new_message_time;
-		mIsLastMessageFromLog = message_from_log;
-	}
+        appendWidget(p, widget_associated_text, false); // <FS:Zi> FIRE-8600: TAB out of chat history
 
-	// body of the message processing
+        mLastFromName = chat.mFromName;
+        mLastFromID = chat.mFromID;
+        mLastMessageTime = new_message_time;
+        mIsLastMessageFromLog = message_from_log;
+    }
 
-	// notify processing
-	if (chat.mNotifId.notNull())
-	{
-		LLNotificationPtr notification = LLNotificationsUtil::find(chat.mNotifId);
-		if (notification != NULL)
-		{
-			bool create_toast = true;
-			if (notification->getName() == "OfferFriendship")
-			{
-				// We don't want multiple friendship offers to appear, this code checks if there are previous offers
-				// by iterating though all panels.
-				// Note: it might be better to simply add a "pending offer" flag somewhere
-				for (auto& ti : LLToastNotifyPanel::instance_snapshot())
-				{
-					LLIMToastNotifyPanel * imtoastp = dynamic_cast<LLIMToastNotifyPanel *>(&ti);
-					const std::string& notification_name = ti.getNotificationName();
-					if (notification_name == "OfferFriendship"
-						&& ti.isControlPanelEnabled()
-						&& imtoastp)
-					{
-						create_toast = false;
-						break;
-					}
-				}
-			}
+    // body of the message processing
 
-			if (create_toast)
-			{
-				LLIMToastNotifyPanel* notify_box = new LLIMToastNotifyPanel(
-						notification, chat.mSessionID, LLRect::null, true, this);
+    // notify processing
+    if (chat.mNotifId.notNull())
+    {
+        LLNotificationPtr notification = LLNotificationsUtil::find(chat.mNotifId);
+        if (notification != NULL)
+        {
+            bool create_toast = true;
+            if (notification->getName() == "OfferFriendship")
+            {
+                // We don't want multiple friendship offers to appear, this code checks if there are previous offers
+                // by iterating though all panels.
+                // Note: it might be better to simply add a "pending offer" flag somewhere
+                for (auto& ti : LLToastNotifyPanel::instance_snapshot())
+                {
+                    LLIMToastNotifyPanel * imtoastp = dynamic_cast<LLIMToastNotifyPanel *>(&ti);
+                    const std::string& notification_name = ti.getNotificationName();
+                    if (notification_name == "OfferFriendship"
+                        && ti.isControlPanelEnabled()
+                        && imtoastp)
+                    {
+                        create_toast = false;
+                        break;
+                    }
+                }
+            }
 
-				//Prepare the rect for the view
-				LLRect target_rect = getDocumentView()->getRect();
-				// squeeze down the widget by subtracting padding off left and right
-				target_rect.mLeft += mLeftWidgetPad + getHPad();
-				target_rect.mRight -= mRightWidgetPad;
-				notify_box->reshape(target_rect.getWidth(),	notify_box->getRect().getHeight());
-				notify_box->setOrigin(target_rect.mLeft, notify_box->getRect().mBottom);
+            if (create_toast)
+            {
+                LLIMToastNotifyPanel* notify_box = new LLIMToastNotifyPanel(
+                        notification, chat.mSessionID, LLRect::null, true, this);
 
-				LLInlineViewSegment::Params params;
-				params.view = notify_box;
-				params.left_pad = mLeftWidgetPad;
-				params.right_pad = mRightWidgetPad;
-				appendWidget(params, "\n", false);
-			}
-		}
-	}
+                //Prepare the rect for the view
+                LLRect target_rect = getDocumentView()->getRect();
+                // squeeze down the widget by subtracting padding off left and right
+                target_rect.mLeft += mLeftWidgetPad + getHPad();
+                target_rect.mRight -= mRightWidgetPad;
+                notify_box->reshape(target_rect.getWidth(), notify_box->getRect().getHeight());
+                notify_box->setOrigin(target_rect.mLeft, notify_box->getRect().mBottom);
 
-	// usual messages showing
-	else if (!teleport_separator)
-	{
-		std::string message = irc_me ? chat.mText.substr(3) : chat.mText;
+                LLInlineViewSegment::Params params;
+                params.view = notify_box;
+                params.left_pad = mLeftWidgetPad;
+                params.right_pad = mRightWidgetPad;
+                appendWidget(params, "\n", false);
+            }
+        }
+    }
 
-		//MESSAGE TEXT PROCESSING
-		//*HACK getting rid of redundant sender names in system notifications sent using sender name (see EXT-5010)
-		if (use_plain_text_chat_history && !from_me && chat.mFromID.notNull())
-		{
-			std::string slurl_about = SLURL_APP_AGENT + chat.mFromID.asString() + SLURL_ABOUT;
-			if (message.length() > slurl_about.length() && 
-				message.compare(0, slurl_about.length(), slurl_about) == 0)
-			{
-				message = message.substr(slurl_about.length(), message.length()-1);
-			}
-		}
+    // usual messages showing
+    else if (!teleport_separator)
+    {
+        std::string message = irc_me ? chat.mText.substr(3) : chat.mText;
 
-		if (irc_me && !use_plain_text_chat_history)
-		{
-			if (chat.mSourceType == CHAT_SOURCE_AGENT)
-			{
-				static LLCachedControl<bool> useDisplayNames(gSavedSettings, "UseDisplayNames");
-				static LLCachedControl<bool> nameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
+        //MESSAGE TEXT PROCESSING
+        //*HACK getting rid of redundant sender names in system notifications sent using sender name (see EXT-5010)
+        if (use_plain_text_chat_history && !from_me && chat.mFromID.notNull())
+        {
+            std::string slurl_about = SLURL_APP_AGENT + chat.mFromID.asString() + SLURL_ABOUT;
+            if (message.length() > slurl_about.length() &&
+                message.compare(0, slurl_about.length(), slurl_about) == 0)
+            {
+                message = message.substr(slurl_about.length(), message.length()-1);
+            }
+        }
 
-				std::string name_format = (useDisplayNames && nameTagShowUsernames) ? "completename" : "displayname";
-				if (is_local && gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-				{
-					name_format = "rlvanonym";
-				}
-				message = LLSLURL("agent", chat.mFromID, name_format).getSLURLString() + message;
-			}
-			else
-			{
-				message = chat.mFromName + message;
-			}
-		}
+        if (irc_me && !use_plain_text_chat_history)
+        {
+            if (chat.mSourceType == CHAT_SOURCE_AGENT)
+            {
+                static LLCachedControl<bool> useDisplayNames(gSavedSettings, "UseDisplayNames");
+                static LLCachedControl<bool> nameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
 
-		if(chat.mSourceType != CHAT_SOURCE_OBJECT && (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)) // FS::LO Fix for FIRE-6334; Fade IM Text into background of chat history default setting should not be 0.5; made object IM text not fade into the background as per phoenix behavior.
-		{
-			body_message_params.color.alpha = FSIMChatHistoryFade;
-			body_message_params.readonly_color.alpha = FSIMChatHistoryFade;
-			body_message_params.selected_color.alpha = FSIMChatHistoryFade;
-		}
-		// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
+                std::string name_format = (useDisplayNames && nameTagShowUsernames) ? "completename" : "displayname";
+                if (is_local && gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+                {
+                    name_format = "rlvanonym";
+                }
+                message = LLSLURL("agent", chat.mFromID, name_format).getSLURLString() + message;
+            }
+            else
+            {
+                message = chat.mFromName + message;
+            }
+        }
 
-		if (square_brackets)
-		{
-			message += "]";
-		}
+        if(chat.mSourceType != CHAT_SOURCE_OBJECT && (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)) // FS::LO Fix for FIRE-6334; Fade IM Text into background of chat history default setting should not be 0.5; made object IM text not fade into the background as per phoenix behavior.
+        {
+            body_message_params.color.alpha = FSIMChatHistoryFade;
+            body_message_params.readonly_color.alpha = FSIMChatHistoryFade;
+            body_message_params.selected_color.alpha = FSIMChatHistoryFade;
+        }
+        // FS:LO FIRE-2899 - Faded text for IMs in nearby chat
 
-		bool is_trusted = isContentTrusted();
-		setContentTrusted(chat.mFromID.isNull() && is_p2p); // <FS:Ansariel> Set trusted content temporarily for system messages
-		setPlainText((use_plain_text_chat_history && is_p2p) ? chat.mFromID.notNull() : use_plain_text_chat_history);
-		appendText(message, prependNewLineState, body_message_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
-		setContentTrusted(is_trusted);
-		setPlainText(use_plain_text_chat_history);
-		// Uncomment this if we never need to append to the end of a message. [FS:CR]
-		//prependNewLineState = false;
-	}
+        if (square_brackets)
+        {
+            message += "]";
+        }
 
-	blockUndo();	// <FS:Zi> FIRE-8600: TAB out of chat history
+        bool is_trusted = isContentTrusted();
+        setContentTrusted(chat.mFromID.isNull() && is_p2p); // <FS:Ansariel> Set trusted content temporarily for system messages
+        setPlainText((use_plain_text_chat_history && is_p2p) ? chat.mFromID.notNull() : use_plain_text_chat_history);
+        appendText(message, prependNewLineState, body_message_params);  // <FS:Zi> FIRE-8600: TAB out of chat history
+        setContentTrusted(is_trusted);
+        setPlainText(use_plain_text_chat_history);
+        // Uncomment this if we never need to append to the end of a message. [FS:CR]
+        //prependNewLineState = false;
+    }
 
-	// automatically scroll to end when receiving chat from myself
-	if (from_me)
-	{
-		setCursorAndScrollToEnd();	// <FS:Zi> FIRE-8600: TAB out of chat history
-	}
+    blockUndo();    // <FS:Zi> FIRE-8600: TAB out of chat history
+
+    // automatically scroll to end when receiving chat from myself
+    if (from_me)
+    {
+        setCursorAndScrollToEnd();  // <FS:Zi> FIRE-8600: TAB out of chat history
+    }
 }
 
 // <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
 bool FSChatHistory::handleUnicodeCharHere(llwchar uni_char)
 {
-	// do not change focus when the CTRL key is used to make copy/select all etc. possible
-	if(gKeyboard->currentMask(false) & MASK_CONTROL)
-	{
-		// instead, let the base class handle things
-		return LLTextEditor::handleUnicodeCharHere(uni_char);
-	}
+    // do not change focus when the CTRL key is used to make copy/select all etc. possible
+    if(gKeyboard->currentMask(false) & MASK_CONTROL)
+    {
+        // instead, let the base class handle things
+        return LLTextEditor::handleUnicodeCharHere(uni_char);
+    }
 
-	// we might not know which is our chat input line yet
-	updateChatInputLine();
+    // we might not know which is our chat input line yet
+    updateChatInputLine();
 
-	// do we know our chat input line now?
-	if(mChatInputLine)
-	{
-		// we do, so focus on it
-		mChatInputLine->setFocus(true);
-		// and let it handle the keystroke
-		return mChatInputLine->handleUnicodeCharHere(uni_char);
-	}
+    // do we know our chat input line now?
+    if(mChatInputLine)
+    {
+        // we do, so focus on it
+        mChatInputLine->setFocus(true);
+        // and let it handle the keystroke
+        return mChatInputLine->handleUnicodeCharHere(uni_char);
+    }
 
-	// we don't know what to do, so let our base class handle the keystroke
-	return LLTextEditor::handleUnicodeCharHere(uni_char);
+    // we don't know what to do, so let our base class handle the keystroke
+    return LLTextEditor::handleUnicodeCharHere(uni_char);
 }
 
 void FSChatHistory::draw()
 {
-	LLTextEditor::draw();
-	// Ansa: FIRE-12754: Hack around a weird issue where the doc size magically increases by 1px
-	//       during draw if the doc exceeds the visible space and the scrollbar is getting visible.
-	if (mScrollToBottom)
-	{
-		mScroller->goToBottom();
-		mScrollToBottom = false;
-	}
+    LLTextEditor::draw();
+    // Ansa: FIRE-12754: Hack around a weird issue where the doc size magically increases by 1px
+    //       during draw if the doc exceeds the visible space and the scrollbar is getting visible.
+    if (mScrollToBottom)
+    {
+        mScroller->goToBottom();
+        mScrollToBottom = false;
+    }
 
-	if (scrolledToEnd() && mUnreadChatSources != 0)
-	{
-		mUnreadChatSources = 0;
-		if (!mUnreadMessagesUpdateSignal.empty())
-		{
-			mUnreadMessagesUpdateSignal(mUnreadChatSources);
-		}
-	}
+    if (scrolledToEnd() && mUnreadChatSources != 0)
+    {
+        mUnreadChatSources = 0;
+        if (!mUnreadMessagesUpdateSignal.empty())
+        {
+            mUnreadMessagesUpdateSignal(mUnreadChatSources);
+        }
+    }
 }
 // </FS:Zi>

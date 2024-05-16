@@ -32,6 +32,7 @@
 			<menu label="Odłącz" name="Avatar Detach" />
 			<menu_item_call label="Odłącz wszystko" name="Detach All" />
 		</menu>
+		<menu_item_call label="Usuń wybrane dodatki" name="Remove Selected Attachments" />
 		<menu_item_call label="Biblioteka awatarów" name="Avatar Picker"/>
 		<menu_item_call label="Uniesienie" name="HoverHeight" />
 		<menu label="Ruch" name="Movement">

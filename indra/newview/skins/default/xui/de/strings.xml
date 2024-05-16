@@ -5389,8 +5389,11 @@ Missbrauchsbericht
 	<string name="dance8">
 		Tanzen8
 	</string>
-	<string name="AvatarBirthDateFormat">
+	<string name="AvatarBirthDateFormatFull">
 		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc]
+	</string>
+	<string name="AvatarBirthDateFormatShort">
+		[day,datetime,utc].[mthnum,datetime,utc].
 	</string>
 	<string name="AvatarBirthDateFormat_legacy">
 		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]
@@ -5515,6 +5518,7 @@ Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und F
 	</string>
 	<string name="ExternalEditorNotSet">
 		Wählen Sie über die Umgebungsvariable „LL_SCRIPT_EDITOR“ oder die Einstellung „ExternalEditor“ einen Editor aus.
+Siehe https://wiki.secondlife.com/wiki/LSL_Alternate_Editors
 	</string>
 	<string name="ExternalEditorNotFound">
 		Angegebener externer Editor nicht gefunden.
@@ -6988,6 +6992,9 @@ Ihre aktuelle Position: [AVATAR_POS]
 	</string>
 	<string name="avatar_age_alert">
 		hat den Alters-Alarm ausgelöst. Alter: [AGE] Tag(e)
+	</string>
+	<string name="avatar_age_not_available">
+		n.v.
 	</string>
 
 	<string name="TotalScriptCountChangeIncrease">

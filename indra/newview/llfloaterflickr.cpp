@@ -1,4 +1,4 @@
-/** 
+/**
 * @file llfloaterflickr.cpp
 * @brief Implementation of llfloaterflickr
 * @author cho@lindenlab.com
@@ -37,7 +37,7 @@
 #include "llfloaterreg.h"
 #include "lliconctrl.h"
 #include "llimagefiltersmanager.h"
-#include "llresmgr.h"		// LLLocale
+#include "llresmgr.h"       // LLLocale
 #include "llsdserialize.h"
 #include "llloadingindicator.h"
 #include "llslurl.h"
@@ -86,110 +86,110 @@ mRatingComboBox(NULL),
 mBigPreviewFloater(NULL),
 mPostButton(NULL)
 {
-	mCommitCallbackRegistrar.add("SocialSharing.SendPhoto", boost::bind(&LLFlickrPhotoPanel::onSend, this));
-	mCommitCallbackRegistrar.add("SocialSharing.RefreshPhoto", boost::bind(&LLFlickrPhotoPanel::onClickNewSnapshot, this));
-	mCommitCallbackRegistrar.add("SocialSharing.BigPreview", boost::bind(&LLFlickrPhotoPanel::onClickBigPreview, this));
+    mCommitCallbackRegistrar.add("SocialSharing.SendPhoto", boost::bind(&LLFlickrPhotoPanel::onSend, this));
+    mCommitCallbackRegistrar.add("SocialSharing.RefreshPhoto", boost::bind(&LLFlickrPhotoPanel::onClickNewSnapshot, this));
+    mCommitCallbackRegistrar.add("SocialSharing.BigPreview", boost::bind(&LLFlickrPhotoPanel::onClickBigPreview, this));
 }
 
 LLFlickrPhotoPanel::~LLFlickrPhotoPanel()
 {
-	if(mPreviewHandle.get())
-	{
-		mPreviewHandle.get()->die();
-	}
+    if(mPreviewHandle.get())
+    {
+        mPreviewHandle.get()->die();
+    }
 
-	// <FS:Ansariel> Store settings at logout
-	gSavedSettings.setS32("FSLastSnapshotToFlickrResolution", getChild<LLComboBox>("resolution_combobox")->getCurrentIndex());
-	gSavedSettings.setS32("FSLastSnapshotToFlickrWidth", getChild<LLSpinCtrl>("custom_snapshot_width")->getValue().asInteger());
-	gSavedSettings.setS32("FSLastSnapshotToFlickrHeight", getChild<LLSpinCtrl>("custom_snapshot_height")->getValue().asInteger());
-	// </FS:Ansariel>
+    // <FS:Ansariel> Store settings at logout
+    gSavedSettings.setS32("FSLastSnapshotToFlickrResolution", getChild<LLComboBox>("resolution_combobox")->getCurrentIndex());
+    gSavedSettings.setS32("FSLastSnapshotToFlickrWidth", getChild<LLSpinCtrl>("custom_snapshot_width")->getValue().asInteger());
+    gSavedSettings.setS32("FSLastSnapshotToFlickrHeight", getChild<LLSpinCtrl>("custom_snapshot_height")->getValue().asInteger());
+    // </FS:Ansariel>
 }
 
 bool LLFlickrPhotoPanel::postBuild()
 {
-	setVisibleCallback(boost::bind(&LLFlickrPhotoPanel::onVisibilityChange, this, _2));
-	
-	mResolutionComboBox = getChild<LLUICtrl>("resolution_combobox");
-	mResolutionComboBox->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, true));
-	mFilterComboBox = getChild<LLUICtrl>("filters_combobox");
-	mFilterComboBox->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, true));
-	mRefreshBtn = getChild<LLUICtrl>("new_snapshot_btn");
-	mBtnPreview = getChild<LLButton>("big_preview_btn");
+    setVisibleCallback(boost::bind(&LLFlickrPhotoPanel::onVisibilityChange, this, _2));
+
+    mResolutionComboBox = getChild<LLUICtrl>("resolution_combobox");
+    mResolutionComboBox->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, true));
+    mFilterComboBox = getChild<LLUICtrl>("filters_combobox");
+    mFilterComboBox->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, true));
+    mRefreshBtn = getChild<LLUICtrl>("new_snapshot_btn");
+    mBtnPreview = getChild<LLButton>("big_preview_btn");
     mWorkingLabel = getChild<LLUICtrl>("working_lbl");
-	mThumbnailPlaceholder = getChild<LLUICtrl>("thumbnail_placeholder");
-	mTitleTextBox = getChild<LLUICtrl>("photo_title");
-	mDescriptionTextBox = getChild<LLUICtrl>("photo_description");
-	mLocationCheckbox = getChild<LLUICtrl>("add_location_cb");
-	mTagsTextBox = getChild<LLUICtrl>("photo_tags");
-	// <FS:Ansariel> Don't assume we're always in Second Life
-	//mTagsTextBox->setValue(DEFAULT_TAG_TEXT);
-	mTagsTextBox->setValue(DEFAULT_TAG_TEXT + (LLGridManager::instance().isInSecondLife() ? "secondlife" : ("\"" + LLGridManager::instance().getGridId()) + "\"") + " ");
-	// </FS:Ansariel>
-	mRatingComboBox = getChild<LLUICtrl>("rating_combobox");
-	mPostButton = getChild<LLUICtrl>("post_photo_btn");
-	mCancelButton = getChild<LLUICtrl>("cancel_photo_btn");
-	mBigPreviewFloater = dynamic_cast<LLFloaterBigPreview*>(LLFloaterReg::getInstance("big_preview"));
+    mThumbnailPlaceholder = getChild<LLUICtrl>("thumbnail_placeholder");
+    mTitleTextBox = getChild<LLUICtrl>("photo_title");
+    mDescriptionTextBox = getChild<LLUICtrl>("photo_description");
+    mLocationCheckbox = getChild<LLUICtrl>("add_location_cb");
+    mTagsTextBox = getChild<LLUICtrl>("photo_tags");
+    // <FS:Ansariel> Don't assume we're always in Second Life
+    //mTagsTextBox->setValue(DEFAULT_TAG_TEXT);
+    mTagsTextBox->setValue(DEFAULT_TAG_TEXT + (LLGridManager::instance().isInSecondLife() ? "secondlife" : ("\"" + LLGridManager::instance().getGridId()) + "\"") + " ");
+    // </FS:Ansariel>
+    mRatingComboBox = getChild<LLUICtrl>("rating_combobox");
+    mPostButton = getChild<LLUICtrl>("post_photo_btn");
+    mCancelButton = getChild<LLUICtrl>("cancel_photo_btn");
+    mBigPreviewFloater = dynamic_cast<LLFloaterBigPreview*>(LLFloaterReg::getInstance("big_preview"));
 
-	// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
-	getChild<LLSpinCtrl>("custom_snapshot_width")->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, true));
-	getChild<LLSpinCtrl>("custom_snapshot_height")->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, true));
-	getChild<LLCheckBoxCtrl>("keep_aspect_ratio")->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, true));
+    // <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
+    getChild<LLSpinCtrl>("custom_snapshot_width")->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, true));
+    getChild<LLSpinCtrl>("custom_snapshot_height")->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, true));
+    getChild<LLCheckBoxCtrl>("keep_aspect_ratio")->setCommitCallback(boost::bind(&LLFlickrPhotoPanel::updateResolution, this, true));
 
-	getChild<LLComboBox>("resolution_combobox")->setCurrentByIndex(gSavedSettings.getS32("FSLastSnapshotToFlickrResolution"));
-	getChild<LLSpinCtrl>("custom_snapshot_width")->setValue(gSavedSettings.getS32("FSLastSnapshotToFlickrWidth"));
-	getChild<LLSpinCtrl>("custom_snapshot_height")->setValue(gSavedSettings.getS32("FSLastSnapshotToFlickrHeight"));
-	// </FS:Ansariel>
+    getChild<LLComboBox>("resolution_combobox")->setCurrentByIndex(gSavedSettings.getS32("FSLastSnapshotToFlickrResolution"));
+    getChild<LLSpinCtrl>("custom_snapshot_width")->setValue(gSavedSettings.getS32("FSLastSnapshotToFlickrWidth"));
+    getChild<LLSpinCtrl>("custom_snapshot_height")->setValue(gSavedSettings.getS32("FSLastSnapshotToFlickrHeight"));
+    // </FS:Ansariel>
 
-	// Update filter list
+    // Update filter list
     std::vector<std::string> filter_list = LLImageFiltersManager::getInstance()->getFiltersList();
-	LLComboBox* filterbox = static_cast<LLComboBox *>(mFilterComboBox);
-    for (U32 i = 0; i < filter_list.size(); i++) 
-	{
+    LLComboBox* filterbox = static_cast<LLComboBox *>(mFilterComboBox);
+    for (U32 i = 0; i < filter_list.size(); i++)
+    {
         filterbox->add(filter_list[i]);
     }
 
-	return LLPanel::postBuild();
+    return LLPanel::postBuild();
 }
 
 // virtual
 S32 LLFlickrPhotoPanel::notify(const LLSD& info)
 {
-	if (info.has("snapshot-updating"))
-	{
+    if (info.has("snapshot-updating"))
+    {
         // Disable the Post button and whatever else while the snapshot is not updated
         // updateControls();
-		return 1;
-	}
-    
-	if (info.has("snapshot-updated"))
-	{
+        return 1;
+    }
+
+    if (info.has("snapshot-updated"))
+    {
         // Enable the send/post/save buttons.
         updateControls();
-        
-		// The refresh button is initially hidden. We show it after the first update,
-		// i.e. after snapshot is taken
-		LLUICtrl * refresh_button = getRefreshBtn();
-		if (!refresh_button->getVisible())
-		{
-			refresh_button->setVisible(true);
-		}
-		return 1;
-	}
-    
-	return 0;
+
+        // The refresh button is initially hidden. We show it after the first update,
+        // i.e. after snapshot is taken
+        LLUICtrl * refresh_button = getRefreshBtn();
+        if (!refresh_button->getVisible())
+        {
+            refresh_button->setVisible(true);
+        }
+        return 1;
+    }
+
+    return 0;
 }
 
 void LLFlickrPhotoPanel::draw()
-{ 
-	LLSnapshotLivePreview * previewp = static_cast<LLSnapshotLivePreview *>(mPreviewHandle.get());
+{
+    LLSnapshotLivePreview * previewp = static_cast<LLSnapshotLivePreview *>(mPreviewHandle.get());
 
     // Enable interaction only if no transaction with the service is on-going (prevent duplicated posts)
     bool no_ongoing_connection = !(LLFlickrConnect::instance().isTransactionOngoing());
 // <FS:Ansariel> Exodus' flickr upload
-	LLFlickrConnect::EConnectionState connection_state = LLFlickrConnect::instance().getConnectionState();
-	no_ongoing_connection &= (connection_state != LLFlickrConnect::FLICKR_CONNECTION_IN_PROGRESS &&
-								connection_state != LLFlickrConnect::FLICKR_CONNECTION_FAILED &&
-								connection_state != LLFlickrConnect::FLICKR_NOT_CONNECTED);
+    LLFlickrConnect::EConnectionState connection_state = LLFlickrConnect::instance().getConnectionState();
+    no_ongoing_connection &= (connection_state != LLFlickrConnect::FLICKR_CONNECTION_IN_PROGRESS &&
+                                connection_state != LLFlickrConnect::FLICKR_CONNECTION_FAILED &&
+                                connection_state != LLFlickrConnect::FLICKR_NOT_CONNECTED);
 // </FS:Ansariel>
     mCancelButton->setEnabled(no_ongoing_connection);
     mTitleTextBox->setEnabled(no_ongoing_connection);
@@ -201,75 +201,75 @@ void LLFlickrPhotoPanel::draw()
     mRefreshBtn->setEnabled(no_ongoing_connection);
     mBtnPreview->setEnabled(no_ongoing_connection);
     mLocationCheckbox->setEnabled(no_ongoing_connection);
-    
+
     // Reassign the preview floater if we have the focus and the preview exists
     if (hasFocus() && isPreviewVisible())
     {
         attachPreview();
     }
-    
+
     // Toggle the button state as appropriate
     bool preview_active = (isPreviewVisible() && mBigPreviewFloater->isFloaterOwner(getParentByType<LLFloater>()));
-	mBtnPreview->setToggleState(preview_active);
-    
+    mBtnPreview->setToggleState(preview_active);
+
     // Display the preview if one is available
-	if (previewp && previewp->getThumbnailImage())
-	{
-		const LLRect& thumbnail_rect = mThumbnailPlaceholder->getRect();
-		const S32 thumbnail_w = previewp->getThumbnailWidth();
-		const S32 thumbnail_h = previewp->getThumbnailHeight();
+    if (previewp && previewp->getThumbnailImage())
+    {
+        const LLRect& thumbnail_rect = mThumbnailPlaceholder->getRect();
+        const S32 thumbnail_w = previewp->getThumbnailWidth();
+        const S32 thumbnail_h = previewp->getThumbnailHeight();
 
-		// calc preview offset within the preview rect
-		const S32 local_offset_x = (thumbnail_rect.getWidth()  - thumbnail_w) / 2 ;
-		const S32 local_offset_y = (thumbnail_rect.getHeight() - thumbnail_h) / 2 ;
-		S32 offset_x = thumbnail_rect.mLeft + local_offset_x;
-		S32 offset_y = thumbnail_rect.mBottom + local_offset_y;
+        // calc preview offset within the preview rect
+        const S32 local_offset_x = (thumbnail_rect.getWidth()  - thumbnail_w) / 2 ;
+        const S32 local_offset_y = (thumbnail_rect.getHeight() - thumbnail_h) / 2 ;
+        S32 offset_x = thumbnail_rect.mLeft + local_offset_x;
+        S32 offset_y = thumbnail_rect.mBottom + local_offset_y;
 
-		gGL.matrixMode(LLRender::MM_MODELVIEW);
-		// Apply floater transparency to the texture unless the floater is focused.
-		F32 alpha = getTransparencyType() == TT_ACTIVE ? 1.0f : getCurrentTransparency();
-		LLColor4 color = LLColor4::white;
-		gl_draw_scaled_image(offset_x, offset_y, 
-			thumbnail_w, thumbnail_h,
-			previewp->getThumbnailImage(), color % alpha);
-	}
+        gGL.matrixMode(LLRender::MM_MODELVIEW);
+        // Apply floater transparency to the texture unless the floater is focused.
+        F32 alpha = getTransparencyType() == TT_ACTIVE ? 1.0f : getCurrentTransparency();
+        LLColor4 color = LLColor4::white;
+        gl_draw_scaled_image(offset_x, offset_y,
+            thumbnail_w, thumbnail_h,
+            previewp->getThumbnailImage(), color % alpha);
+    }
 
     // Update the visibility of the working (computing preview) label
     mWorkingLabel->setVisible(!(previewp && previewp->getSnapshotUpToDate()));
-    
+
     // Enable Post if we have a preview to send and no on going connection being processed
     mPostButton->setEnabled(no_ongoing_connection && (previewp && previewp->getSnapshotUpToDate()));
-    
+
     // Draw the rest of the panel on top of it
-	LLPanel::draw();
+    LLPanel::draw();
 }
 
 LLSnapshotLivePreview* LLFlickrPhotoPanel::getPreviewView()
 {
-	LLSnapshotLivePreview* previewp = (LLSnapshotLivePreview*)mPreviewHandle.get();
-	return previewp;
+    LLSnapshotLivePreview* previewp = (LLSnapshotLivePreview*)mPreviewHandle.get();
+    return previewp;
 }
 
 void LLFlickrPhotoPanel::onVisibilityChange(bool visible)
 {
-	if (visible)
-	{
-		if (mPreviewHandle.get())
-		{
-			LLSnapshotLivePreview* preview = getPreviewView();
-			if(preview)
-			{
-				LL_DEBUGS() << "opened, updating snapshot" << LL_ENDL;
-				preview->updateSnapshot(true);
-			}
-		}
-		else
-		{
-			LLRect full_screen_rect = getRootView()->getRect();
-			LLSnapshotLivePreview::Params p;
-			p.rect(full_screen_rect);
-			LLSnapshotLivePreview* previewp = new LLSnapshotLivePreview(p);
-			mPreviewHandle = previewp->getHandle();
+    if (visible)
+    {
+        if (mPreviewHandle.get())
+        {
+            LLSnapshotLivePreview* preview = getPreviewView();
+            if(preview)
+            {
+                LL_DEBUGS() << "opened, updating snapshot" << LL_ENDL;
+                preview->updateSnapshot(true);
+            }
+        }
+        else
+        {
+            LLRect full_screen_rect = getRootView()->getRect();
+            LLSnapshotLivePreview::Params p;
+            p.rect(full_screen_rect);
+            LLSnapshotLivePreview* previewp = new LLSnapshotLivePreview(p);
+            mPreviewHandle = previewp->getHandle();
 
             previewp->setContainer(this);
             previewp->setSnapshotType(LLSnapshotModel::SNAPSHOT_WEB);
@@ -277,20 +277,20 @@ void LLFlickrPhotoPanel::onVisibilityChange(bool visible)
             previewp->setThumbnailSubsampled(true);     // We want the preview to reflect the *saved* image
             previewp->setAllowRenderUI(false);          // We do not want the rendered UI in our snapshots
             previewp->setAllowFullScreenPreview(false);  // No full screen preview in SL Share mode
-			previewp->setThumbnailPlaceholderRect(mThumbnailPlaceholder->getRect());
+            previewp->setThumbnailPlaceholderRect(mThumbnailPlaceholder->getRect());
 
-			updateControls();
-		}
-	}
+            updateControls();
+        }
+    }
 }
 
 void LLFlickrPhotoPanel::onClickNewSnapshot()
 {
-	LLSnapshotLivePreview* previewp = getPreviewView();
-	if (previewp)
-	{
-		previewp->updateSnapshot(true);
-	}
+    LLSnapshotLivePreview* previewp = getPreviewView();
+    if (previewp)
+    {
+        previewp->updateSnapshot(true);
+    }
 }
 
 void LLFlickrPhotoPanel::onClickBigPreview()
@@ -324,362 +324,362 @@ void LLFlickrPhotoPanel::attachPreview()
 
 void LLFlickrPhotoPanel::onSend()
 {
-	LLEventPumps::instance().obtain("FlickrConnectState").stopListening("LLFlickrPhotoPanel"); // just in case it is already listening
-	LLEventPumps::instance().obtain("FlickrConnectState").listen("LLFlickrPhotoPanel", boost::bind(&LLFlickrPhotoPanel::onFlickrConnectStateChange, this, _1));
-	
+    LLEventPumps::instance().obtain("FlickrConnectState").stopListening("LLFlickrPhotoPanel"); // just in case it is already listening
+    LLEventPumps::instance().obtain("FlickrConnectState").listen("LLFlickrPhotoPanel", boost::bind(&LLFlickrPhotoPanel::onFlickrConnectStateChange, this, _1));
+
 // <FS:Ansariel> Exodus' flickr upload
-	sendPhoto();
+    sendPhoto();
 // </FS:Ansariel>
 }
 
 bool LLFlickrPhotoPanel::onFlickrConnectStateChange(const LLSD& data)
 {
-	switch (data.get("enum").asInteger())
-	{
-		case LLFlickrConnect::FLICKR_CONNECTED:
-			sendPhoto();
-			break;
+    switch (data.get("enum").asInteger())
+    {
+        case LLFlickrConnect::FLICKR_CONNECTED:
+            sendPhoto();
+            break;
 
-		case LLFlickrConnect::FLICKR_POSTED:
-			LLEventPumps::instance().obtain("FlickrConnectState").stopListening("LLFlickrPhotoPanel");
-			// <FS:Ansariel> FIRE-15948: Don't close floater after each post and retain entered text
-			//clearAndClose();
-			break;
-	}
+        case LLFlickrConnect::FLICKR_POSTED:
+            LLEventPumps::instance().obtain("FlickrConnectState").stopListening("LLFlickrPhotoPanel");
+            // <FS:Ansariel> FIRE-15948: Don't close floater after each post and retain entered text
+            //clearAndClose();
+            break;
+    }
 
-	return false;
+    return false;
 }
 
 void LLFlickrPhotoPanel::sendPhoto()
 {
-	// Get the title, description, and tags
-	std::string title = mTitleTextBox->getValue().asString();
-	std::string description = mDescriptionTextBox->getValue().asString();
-	std::string tags = mTagsTextBox->getValue().asString();
+    // Get the title, description, and tags
+    std::string title = mTitleTextBox->getValue().asString();
+    std::string description = mDescriptionTextBox->getValue().asString();
+    std::string tags = mTagsTextBox->getValue().asString();
 
-	// Add the location if required
-	bool add_location = mLocationCheckbox->getValue().asBoolean();
-	if (add_location)
-	{
-		// Get the SLURL for the location
-		LLSLURL slurl;
-		LLAgentUI::buildSLURL(slurl);
-		std::string slurl_string = slurl.getSLURLString();
+    // Add the location if required
+    bool add_location = mLocationCheckbox->getValue().asBoolean();
+    if (add_location)
+    {
+        // Get the SLURL for the location
+        LLSLURL slurl;
+        LLAgentUI::buildSLURL(slurl);
+        std::string slurl_string = slurl.getSLURLString();
 
-		std::string photo_link_text = "Visit this location";// at [] in Second Life";
-		std::string parcel_name = LLViewerParcelMgr::getInstance()->getAgentParcelName();
-		if (!parcel_name.empty())
-		{
-			boost::regex pattern = boost::regex("\\S\\.[a-zA-Z]{2,}");
-			boost::match_results<std::string::const_iterator> matches;
-			if(!boost::regex_search(parcel_name, matches, pattern))
-			{
-				photo_link_text += " at " + parcel_name;
-			}
-		}
-		// <FS:Ansariel> Don't assume we're always in Second Life
-		//photo_link_text += " in Second Life";
-		if (LLGridManager::instance().isInSecondLife())
-		{
-			photo_link_text += " in Second Life";
-		}
-		else
-		{
-			photo_link_text += " in \"" + LLGridManager::instance().getGridLabel() + "\"";
-		}
-		// </FS:Ansariel>
+        std::string photo_link_text = "Visit this location";// at [] in Second Life";
+        std::string parcel_name = LLViewerParcelMgr::getInstance()->getAgentParcelName();
+        if (!parcel_name.empty())
+        {
+            boost::regex pattern = boost::regex("\\S\\.[a-zA-Z]{2,}");
+            boost::match_results<std::string::const_iterator> matches;
+            if(!boost::regex_search(parcel_name, matches, pattern))
+            {
+                photo_link_text += " at " + parcel_name;
+            }
+        }
+        // <FS:Ansariel> Don't assume we're always in Second Life
+        //photo_link_text += " in Second Life";
+        if (LLGridManager::instance().isInSecondLife())
+        {
+            photo_link_text += " in Second Life";
+        }
+        else
+        {
+            photo_link_text += " in \"" + LLGridManager::instance().getGridLabel() + "\"";
+        }
+        // </FS:Ansariel>
 
-		slurl_string = "<a href=\"" + slurl_string + "\">" + photo_link_text + "</a>";
+        slurl_string = "<a href=\"" + slurl_string + "\">" + photo_link_text + "</a>";
 
-		// Add it to the description (pretty crude, but we don't have a better option with photos)
-		if (description.empty())
-			description = slurl_string;
-		else
-			description = description + "\n\n" + slurl_string;
+        // Add it to the description (pretty crude, but we don't have a better option with photos)
+        if (description.empty())
+            description = slurl_string;
+        else
+            description = description + "\n\n" + slurl_string;
 
-		// Also add special "machine tags" with location metadata
-		const LLVector3& agent_pos_region = gAgent.getPositionAgent();
-		LLViewerRegion* region = gAgent.getRegion();
-		LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
-		if (region && parcel)
-		{
-			S32 pos_x = S32(agent_pos_region.mV[VX]);
-			S32 pos_y = S32(agent_pos_region.mV[VY]);
-			S32 pos_z = S32(agent_pos_region.mV[VZ]);
-			
-			std::string parcel_name = LLViewerParcelMgr::getInstance()->getAgentParcelName();
-			std::string region_name = region->getName();
-			
-			// <FS:Ansariel> Don't assume we're always in Second Life
-			if (!LLGridManager::instance().isInSecondLife())
-			{
-				FLICKR_MACHINE_TAGS_NAMESPACE = LLGridManager::instance().getGridId();
-			}
-			// </FS:Ansariel>
+        // Also add special "machine tags" with location metadata
+        const LLVector3& agent_pos_region = gAgent.getPositionAgent();
+        LLViewerRegion* region = gAgent.getRegion();
+        LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+        if (region && parcel)
+        {
+            S32 pos_x = S32(agent_pos_region.mV[VX]);
+            S32 pos_y = S32(agent_pos_region.mV[VY]);
+            S32 pos_z = S32(agent_pos_region.mV[VZ]);
 
-			if (!region_name.empty())
-			{
-				tags += llformat(" \"%s:region=%s\"", FLICKR_MACHINE_TAGS_NAMESPACE.c_str(), region_name.c_str());
-			}
-			if (!parcel_name.empty())
-			{
-				tags += llformat(" \"%s:parcel=%s\"", FLICKR_MACHINE_TAGS_NAMESPACE.c_str(), parcel_name.c_str());
-			}
-			tags += llformat(" \"%s:x=%d\"", FLICKR_MACHINE_TAGS_NAMESPACE.c_str(), pos_x);
-			tags += llformat(" \"%s:y=%d\"", FLICKR_MACHINE_TAGS_NAMESPACE.c_str(), pos_y);
-			tags += llformat(" \"%s:z=%d\"", FLICKR_MACHINE_TAGS_NAMESPACE.c_str(), pos_z);
-		}
-	}
+            std::string parcel_name = LLViewerParcelMgr::getInstance()->getAgentParcelName();
+            std::string region_name = region->getName();
 
-	// Get the content rating
-	int content_rating = mRatingComboBox->getValue().asInteger();
+            // <FS:Ansariel> Don't assume we're always in Second Life
+            if (!LLGridManager::instance().isInSecondLife())
+            {
+                FLICKR_MACHINE_TAGS_NAMESPACE = LLGridManager::instance().getGridId();
+            }
+            // </FS:Ansariel>
 
-	// Get the image
-	LLSnapshotLivePreview* previewp = getPreviewView();
-	
+            if (!region_name.empty())
+            {
+                tags += llformat(" \"%s:region=%s\"", FLICKR_MACHINE_TAGS_NAMESPACE.c_str(), region_name.c_str());
+            }
+            if (!parcel_name.empty())
+            {
+                tags += llformat(" \"%s:parcel=%s\"", FLICKR_MACHINE_TAGS_NAMESPACE.c_str(), parcel_name.c_str());
+            }
+            tags += llformat(" \"%s:x=%d\"", FLICKR_MACHINE_TAGS_NAMESPACE.c_str(), pos_x);
+            tags += llformat(" \"%s:y=%d\"", FLICKR_MACHINE_TAGS_NAMESPACE.c_str(), pos_y);
+            tags += llformat(" \"%s:z=%d\"", FLICKR_MACHINE_TAGS_NAMESPACE.c_str(), pos_z);
+        }
+    }
+
+    // Get the content rating
+    int content_rating = mRatingComboBox->getValue().asInteger();
+
+    // Get the image
+    LLSnapshotLivePreview* previewp = getPreviewView();
+
 // <FS:Ansariel> Exodus' flickr upload
-	LLFlickrConnect::instance().setConnectionState(LLFlickrConnect::FLICKR_POSTING);
-	LLSD params;
-	params["title"] = title;
-	params["safety_level"] = content_rating;
-	params["tags"] = tags;
-	params["description"] = description;
-	exoFlickr::uploadPhoto(params, previewp->getFormattedImage().get(), boost::bind(&LLFlickrPhotoPanel::uploadCallback, this, _1, _2));
+    LLFlickrConnect::instance().setConnectionState(LLFlickrConnect::FLICKR_POSTING);
+    LLSD params;
+    params["title"] = title;
+    params["safety_level"] = content_rating;
+    params["tags"] = tags;
+    params["description"] = description;
+    exoFlickr::uploadPhoto(params, previewp->getFormattedImage().get(), boost::bind(&LLFlickrPhotoPanel::uploadCallback, this, _1, _2));
 // </FS:Ansariel>
 
-	updateControls();
+    updateControls();
 }
 
 void LLFlickrPhotoPanel::clearAndClose()
 {
-	mTitleTextBox->setValue("");
-	mDescriptionTextBox->setValue("");
+    mTitleTextBox->setValue("");
+    mDescriptionTextBox->setValue("");
 
-	LLFloater* floater = getParentByType<LLFloater>();
-	if (floater)
-	{
-		floater->closeFloater();
+    LLFloater* floater = getParentByType<LLFloater>();
+    if (floater)
+    {
+        floater->closeFloater();
         if (mBigPreviewFloater)
         {
             mBigPreviewFloater->closeOnFloaterOwnerClosing(floater);
         }
-	}
+    }
 }
 
 void LLFlickrPhotoPanel::updateControls()
 {
-	LLSnapshotLivePreview* previewp = getPreviewView();
-	bool got_snap = previewp && previewp->getSnapshotUpToDate();
+    LLSnapshotLivePreview* previewp = getPreviewView();
+    bool got_snap = previewp && previewp->getSnapshotUpToDate();
 
-	// *TODO: Separate maximum size for Web images from postcards
-	LL_DEBUGS() << "Is snapshot up-to-date? " << got_snap << LL_ENDL;
+    // *TODO: Separate maximum size for Web images from postcards
+    LL_DEBUGS() << "Is snapshot up-to-date? " << got_snap << LL_ENDL;
 
-	updateResolution(false);
+    updateResolution(false);
 }
 
 void LLFlickrPhotoPanel::updateResolution(bool do_update)
 {
-	LLComboBox* combobox  = static_cast<LLComboBox *>(mResolutionComboBox);
-	LLComboBox* filterbox = static_cast<LLComboBox *>(mFilterComboBox);
+    LLComboBox* combobox  = static_cast<LLComboBox *>(mResolutionComboBox);
+    LLComboBox* filterbox = static_cast<LLComboBox *>(mFilterComboBox);
 
-	std::string sdstring = combobox->getSelectedValue();
-	LLSD sdres;
-	std::stringstream sstream(sdstring);
-	LLSDSerialize::fromNotation(sdres, sstream, sdstring.size());
+    std::string sdstring = combobox->getSelectedValue();
+    LLSD sdres;
+    std::stringstream sstream(sdstring);
+    LLSDSerialize::fromNotation(sdres, sstream, sdstring.size());
 
-	S32 width = sdres[0];
-	S32 height = sdres[1];
-    
-    // Note : index 0 of the filter drop down is assumed to be "No filter" in whichever locale 
+    S32 width = sdres[0];
+    S32 height = sdres[1];
+
+    // Note : index 0 of the filter drop down is assumed to be "No filter" in whichever locale
     std::string filter_name = (filterbox->getCurrentIndex() ? filterbox->getSimple() : "");
 
-	LLSnapshotLivePreview * previewp = static_cast<LLSnapshotLivePreview *>(mPreviewHandle.get());
-	if (previewp && combobox->getCurrentIndex() >= 0)
-	{
-		// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare; moved up
-		checkAspectRatio(width);
+    LLSnapshotLivePreview * previewp = static_cast<LLSnapshotLivePreview *>(mPreviewHandle.get());
+    if (previewp && combobox->getCurrentIndex() >= 0)
+    {
+        // <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare; moved up
+        checkAspectRatio(width);
 
-		S32 original_width = 0 , original_height = 0 ;
-		previewp->getSize(original_width, original_height) ;
+        S32 original_width = 0 , original_height = 0 ;
+        previewp->getSize(original_width, original_height) ;
 
-		if (width == 0 || height == 0)
-		{
-			// take resolution from current window size
-			LL_DEBUGS() << "Setting preview res from window: " << gViewerWindow->getWindowWidthRaw() << "x" << gViewerWindow->getWindowHeightRaw() << LL_ENDL;
-			previewp->setSize(gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw());
-		}
-		// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
-		else if (width == -1 || height == -1)
-		{
-			// take resolution from custom size
-			LLSpinCtrl* width_spinner = getChild<LLSpinCtrl>("custom_snapshot_width");
-			LLSpinCtrl* height_spinner = getChild<LLSpinCtrl>("custom_snapshot_height");
-			S32 custom_width = width_spinner->getValue().asInteger();
-			S32 custom_height = height_spinner->getValue().asInteger();
-			if (checkImageSize(previewp, custom_width, custom_height, true, previewp->getMaxImageSize()))
-			{
-				width_spinner->set(custom_width);
-				height_spinner->set(custom_height);
-			}
-			LL_DEBUGS() << "Setting preview res from custom: " << custom_width << "x" << custom_height << LL_ENDL;
-			previewp->setSize(custom_width, custom_height);
-		}
-		// </FS:Ansariel>
-		else
-		{
-			// use the resolution from the selected pre-canned drop-down choice
-			LL_DEBUGS() << "Setting preview res selected from combo: " << width << "x" << height << LL_ENDL;
-			previewp->setSize(width, height);
-		}
+        if (width == 0 || height == 0)
+        {
+            // take resolution from current window size
+            LL_DEBUGS() << "Setting preview res from window: " << gViewerWindow->getWindowWidthRaw() << "x" << gViewerWindow->getWindowHeightRaw() << LL_ENDL;
+            previewp->setSize(gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw());
+        }
+        // <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
+        else if (width == -1 || height == -1)
+        {
+            // take resolution from custom size
+            LLSpinCtrl* width_spinner = getChild<LLSpinCtrl>("custom_snapshot_width");
+            LLSpinCtrl* height_spinner = getChild<LLSpinCtrl>("custom_snapshot_height");
+            S32 custom_width = width_spinner->getValue().asInteger();
+            S32 custom_height = height_spinner->getValue().asInteger();
+            if (checkImageSize(previewp, custom_width, custom_height, true, previewp->getMaxImageSize()))
+            {
+                width_spinner->set(custom_width);
+                height_spinner->set(custom_height);
+            }
+            LL_DEBUGS() << "Setting preview res from custom: " << custom_width << "x" << custom_height << LL_ENDL;
+            previewp->setSize(custom_width, custom_height);
+        }
+        // </FS:Ansariel>
+        else
+        {
+            // use the resolution from the selected pre-canned drop-down choice
+            LL_DEBUGS() << "Setting preview res selected from combo: " << width << "x" << height << LL_ENDL;
+            previewp->setSize(width, height);
+        }
 
-		// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare; moved up
-		//checkAspectRatio(width);
+        // <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare; moved up
+        //checkAspectRatio(width);
 
-		previewp->getSize(width, height);
-		if ((original_width != width) || (original_height != height))
-		{
-			previewp->setSize(width, height);
-			if (do_update)
-			{
+        previewp->getSize(width, height);
+        if ((original_width != width) || (original_height != height))
+        {
+            previewp->setSize(width, height);
+            if (do_update)
+            {
                 //previewp->updateSnapshot(true);
                 previewp->updateSnapshot(true, true);
-				updateControls();
-			}
-		}
+                updateControls();
+            }
+        }
         // Get the old filter, compare to the current one "filter_name" and set if changed
         std::string original_filter = previewp->getFilter();
-		if (original_filter != filter_name)
-		{
+        if (original_filter != filter_name)
+        {
             previewp->setFilter(filter_name);
-			if (do_update)
-			{
+            if (do_update)
+            {
                 previewp->updateSnapshot(false, true);
-				updateControls();
-			}
-		}
-	}
+                updateControls();
+            }
+        }
+    }
 
-	// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
-	bool custom_resolution = static_cast<LLComboBox *>(mResolutionComboBox)->getSelectedValue().asString() == "[i-1,i-1]";
-	getChild<LLSpinCtrl>("custom_snapshot_width")->setEnabled(custom_resolution);
-	getChild<LLSpinCtrl>("custom_snapshot_height")->setEnabled(custom_resolution);
-	getChild<LLCheckBoxCtrl>("keep_aspect_ratio")->setEnabled(custom_resolution);
-	// </FS:Ansariel>
+    // <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
+    bool custom_resolution = static_cast<LLComboBox *>(mResolutionComboBox)->getSelectedValue().asString() == "[i-1,i-1]";
+    getChild<LLSpinCtrl>("custom_snapshot_width")->setEnabled(custom_resolution);
+    getChild<LLSpinCtrl>("custom_snapshot_height")->setEnabled(custom_resolution);
+    getChild<LLCheckBoxCtrl>("keep_aspect_ratio")->setEnabled(custom_resolution);
+    // </FS:Ansariel>
 }
 
 void LLFlickrPhotoPanel::checkAspectRatio(S32 index)
 {
-	LLSnapshotLivePreview *previewp = getPreviewView() ;
+    LLSnapshotLivePreview *previewp = getPreviewView() ;
 
-	bool keep_aspect = false;
+    bool keep_aspect = false;
 
-	if (0 == index) // current window size
-	{
-		keep_aspect = true;
-	}
-	// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
-	else if (-1 == index)
-	{
-		keep_aspect = getChild<LLCheckBoxCtrl>("keep_aspect_ratio")->get();
-	}
-	// </FS:Ansariel>
-	else // predefined resolution
-	{
-		keep_aspect = false;
-	}
+    if (0 == index) // current window size
+    {
+        keep_aspect = true;
+    }
+    // <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
+    else if (-1 == index)
+    {
+        keep_aspect = getChild<LLCheckBoxCtrl>("keep_aspect_ratio")->get();
+    }
+    // </FS:Ansariel>
+    else // predefined resolution
+    {
+        keep_aspect = false;
+    }
 
-	if (previewp)
-	{
-		previewp->mKeepAspectRatio = keep_aspect;
-	}
+    if (previewp)
+    {
+        previewp->mKeepAspectRatio = keep_aspect;
+    }
 }
 
 LLUICtrl* LLFlickrPhotoPanel::getRefreshBtn()
 {
-	return mRefreshBtn;
+    return mRefreshBtn;
 }
 
 // <FS:Ansariel> Exodus' flickr upload
 void LLFlickrPhotoPanel::onOpen(const LLSD& key)
 {
-	// Reauthorise if necessary.
-	LLFlickrConnect::instance().setConnectionState(LLFlickrConnect::FLICKR_CONNECTION_IN_PROGRESS);
-	new exoFlickrAuth(boost::bind(&LLFlickrPhotoPanel::flickrAuthResponse, this, _1, _2));
+    // Reauthorise if necessary.
+    LLFlickrConnect::instance().setConnectionState(LLFlickrConnect::FLICKR_CONNECTION_IN_PROGRESS);
+    new exoFlickrAuth(boost::bind(&LLFlickrPhotoPanel::flickrAuthResponse, this, _1, _2));
 }
 
 void LLFlickrPhotoPanel::uploadCallback(bool success, const LLSD& response)
 {
-	LLSD args;
-	if(success && response["stat"].asString() == "ok")
-	{
-		LLFlickrConnect::instance().setConnectionState(LLFlickrConnect::FLICKR_POSTED);
-		args["ID"] = response["photoid"];
-		LLNotificationsUtil::add("ExodusFlickrUploadComplete", args);
-	}
-	else
-	{
-		LLFlickrConnect::instance().setConnectionState(LLFlickrConnect::FLICKR_POST_FAILED);
-	}
+    LLSD args;
+    if(success && response["stat"].asString() == "ok")
+    {
+        LLFlickrConnect::instance().setConnectionState(LLFlickrConnect::FLICKR_POSTED);
+        args["ID"] = response["photoid"];
+        LLNotificationsUtil::add("ExodusFlickrUploadComplete", args);
+    }
+    else
+    {
+        LLFlickrConnect::instance().setConnectionState(LLFlickrConnect::FLICKR_POST_FAILED);
+    }
 }
 
 void LLFlickrPhotoPanel::flickrAuthResponse(bool success, const LLSD& response)
 {
-	if(!success)
-	{
-		// Complain about failed auth here.
-		LL_WARNS("Flickr") << "Flickr authentication failed." << LL_ENDL;
-		LLFlickrConnect::instance().setConnectionState(LLFlickrConnect::FLICKR_CONNECTION_FAILED);
-	}
-	else
-	{
-		LLFlickrConnect::instance().setConnectionState(LLFlickrConnect::FLICKR_CONNECTED);
-	}
+    if(!success)
+    {
+        // Complain about failed auth here.
+        LL_WARNS("Flickr") << "Flickr authentication failed." << LL_ENDL;
+        LLFlickrConnect::instance().setConnectionState(LLFlickrConnect::FLICKR_CONNECTION_FAILED);
+    }
+    else
+    {
+        LLFlickrConnect::instance().setConnectionState(LLFlickrConnect::FLICKR_CONNECTED);
+    }
 }
 // </FS:Ansariel>
 
 // <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
 bool LLFlickrPhotoPanel::checkImageSize(LLSnapshotLivePreview* previewp, S32& width, S32& height, bool isWidthChanged, S32 max_value)
 {
-	S32 w = width ;
-	S32 h = height ;
+    S32 w = width ;
+    S32 h = height ;
 
-	if(previewp && previewp->mKeepAspectRatio)
-	{
-		if(gViewerWindow->getWindowWidthRaw() < 1 || gViewerWindow->getWindowHeightRaw() < 1)
-		{
-			return false;
-		}
+    if(previewp && previewp->mKeepAspectRatio)
+    {
+        if(gViewerWindow->getWindowWidthRaw() < 1 || gViewerWindow->getWindowHeightRaw() < 1)
+        {
+            return false;
+        }
 
-		//aspect ratio of the current window
-		F32 aspect_ratio = (F32)gViewerWindow->getWindowWidthRaw() / gViewerWindow->getWindowHeightRaw() ;
+        //aspect ratio of the current window
+        F32 aspect_ratio = (F32)gViewerWindow->getWindowWidthRaw() / gViewerWindow->getWindowHeightRaw() ;
 
-		//change another value proportionally
-		if(isWidthChanged)
-		{
-			height = ll_round(width / aspect_ratio) ;
-		}
-		else
-		{
-			width = ll_round(height * aspect_ratio) ;
-		}
+        //change another value proportionally
+        if(isWidthChanged)
+        {
+            height = ll_round(width / aspect_ratio) ;
+        }
+        else
+        {
+            width = ll_round(height * aspect_ratio) ;
+        }
 
-		//bound w/h by the max_value
-		if(width > max_value || height > max_value)
-		{
-			if(width > height)
-			{
-				width = max_value ;
-				height = (S32)(width / aspect_ratio) ;
-			}
-			else
-			{
-				height = max_value ;
-				width = (S32)(height * aspect_ratio) ;
-			}
-		}
-	}
+        //bound w/h by the max_value
+        if(width > max_value || height > max_value)
+        {
+            if(width > height)
+            {
+                width = max_value ;
+                height = (S32)(width / aspect_ratio) ;
+            }
+            else
+            {
+                height = max_value ;
+                width = (S32)(height * aspect_ratio) ;
+            }
+        }
+    }
 
-	return (w != width || h != height) ;
+    return (w != width || h != height) ;
 }
 // </FS:Ansariel>
 
@@ -687,153 +687,153 @@ bool LLFlickrPhotoPanel::checkImageSize(LLSnapshotLivePreview* previewp, S32& wi
 //LLFlickrAccountPanel//////
 ///////////////////////////
 
-LLFlickrAccountPanel::LLFlickrAccountPanel() : 
+LLFlickrAccountPanel::LLFlickrAccountPanel() :
 mAccountCaptionLabel(NULL),
 mAccountNameLabel(NULL),
 mPanelButtons(NULL),
 mConnectButton(NULL),
 mDisconnectButton(NULL)
 {
-	mCommitCallbackRegistrar.add("SocialSharing.Connect", boost::bind(&LLFlickrAccountPanel::onConnect, this));
-	mCommitCallbackRegistrar.add("SocialSharing.Disconnect", boost::bind(&LLFlickrAccountPanel::onDisconnect, this));
+    mCommitCallbackRegistrar.add("SocialSharing.Connect", boost::bind(&LLFlickrAccountPanel::onConnect, this));
+    mCommitCallbackRegistrar.add("SocialSharing.Disconnect", boost::bind(&LLFlickrAccountPanel::onDisconnect, this));
 
-	setVisibleCallback(boost::bind(&LLFlickrAccountPanel::onVisibilityChange, this, _2));
+    setVisibleCallback(boost::bind(&LLFlickrAccountPanel::onVisibilityChange, this, _2));
 }
 
 bool LLFlickrAccountPanel::postBuild()
 {
-	mAccountCaptionLabel = getChild<LLTextBox>("account_caption_label");
-	mAccountNameLabel = getChild<LLTextBox>("account_name_label");
-	mPanelButtons = getChild<LLUICtrl>("panel_buttons");
-	mConnectButton = getChild<LLUICtrl>("connect_btn");
-	mDisconnectButton = getChild<LLUICtrl>("disconnect_btn");
+    mAccountCaptionLabel = getChild<LLTextBox>("account_caption_label");
+    mAccountNameLabel = getChild<LLTextBox>("account_name_label");
+    mPanelButtons = getChild<LLUICtrl>("panel_buttons");
+    mConnectButton = getChild<LLUICtrl>("connect_btn");
+    mDisconnectButton = getChild<LLUICtrl>("disconnect_btn");
 
-	return LLPanel::postBuild();
+    return LLPanel::postBuild();
 }
 
 void LLFlickrAccountPanel::draw()
 {
-	LLFlickrConnect::EConnectionState connection_state = LLFlickrConnect::instance().getConnectionState();
+    LLFlickrConnect::EConnectionState connection_state = LLFlickrConnect::instance().getConnectionState();
 
-	//Disable the 'disconnect' button and the 'use another account' button when disconnecting in progress
-	bool disconnecting = connection_state == LLFlickrConnect::FLICKR_DISCONNECTING;
-	mDisconnectButton->setEnabled(!disconnecting);
+    //Disable the 'disconnect' button and the 'use another account' button when disconnecting in progress
+    bool disconnecting = connection_state == LLFlickrConnect::FLICKR_DISCONNECTING;
+    mDisconnectButton->setEnabled(!disconnecting);
 
-	//Disable the 'connect' button when a connection is in progress
-	bool connecting = connection_state == LLFlickrConnect::FLICKR_CONNECTION_IN_PROGRESS;
-	mConnectButton->setEnabled(!connecting);
+    //Disable the 'connect' button when a connection is in progress
+    bool connecting = connection_state == LLFlickrConnect::FLICKR_CONNECTION_IN_PROGRESS;
+    mConnectButton->setEnabled(!connecting);
 
-	LLPanel::draw();
+    LLPanel::draw();
 }
 
 void LLFlickrAccountPanel::onVisibilityChange(bool visible)
 {
-	if(visible)
-	{
-		LLEventPumps::instance().obtain("FlickrConnectState").stopListening("LLFlickrAccountPanel");
-		LLEventPumps::instance().obtain("FlickrConnectState").listen("LLFlickrAccountPanel", boost::bind(&LLFlickrAccountPanel::onFlickrConnectStateChange, this, _1));
+    if(visible)
+    {
+        LLEventPumps::instance().obtain("FlickrConnectState").stopListening("LLFlickrAccountPanel");
+        LLEventPumps::instance().obtain("FlickrConnectState").listen("LLFlickrAccountPanel", boost::bind(&LLFlickrAccountPanel::onFlickrConnectStateChange, this, _1));
 
-		LLEventPumps::instance().obtain("FlickrConnectInfo").stopListening("LLFlickrAccountPanel");
-		LLEventPumps::instance().obtain("FlickrConnectInfo").listen("LLFlickrAccountPanel", boost::bind(&LLFlickrAccountPanel::onFlickrConnectInfoChange, this));
+        LLEventPumps::instance().obtain("FlickrConnectInfo").stopListening("LLFlickrAccountPanel");
+        LLEventPumps::instance().obtain("FlickrConnectInfo").listen("LLFlickrAccountPanel", boost::bind(&LLFlickrAccountPanel::onFlickrConnectInfoChange, this));
 
-		//Connected
-		if(LLFlickrConnect::instance().isConnected())
-		{
-			showConnectedLayout();
-		}
-		//Check if connected (show disconnected layout in meantime)
-		else
-		{
-			showDisconnectedLayout();
-		}
+        //Connected
+        if(LLFlickrConnect::instance().isConnected())
+        {
+            showConnectedLayout();
+        }
+        //Check if connected (show disconnected layout in meantime)
+        else
+        {
+            showDisconnectedLayout();
+        }
         if ((LLFlickrConnect::instance().getConnectionState() == LLFlickrConnect::FLICKR_NOT_CONNECTED) ||
             (LLFlickrConnect::instance().getConnectionState() == LLFlickrConnect::FLICKR_CONNECTION_FAILED))
         {
             LLFlickrConnect::instance().checkConnectionToFlickr();
         }
-	}
-	else
-	{
-		LLEventPumps::instance().obtain("FlickrConnectState").stopListening("LLFlickrAccountPanel");
-		LLEventPumps::instance().obtain("FlickrConnectInfo").stopListening("LLFlickrAccountPanel");
-	}
+    }
+    else
+    {
+        LLEventPumps::instance().obtain("FlickrConnectState").stopListening("LLFlickrAccountPanel");
+        LLEventPumps::instance().obtain("FlickrConnectInfo").stopListening("LLFlickrAccountPanel");
+    }
 }
 
 bool LLFlickrAccountPanel::onFlickrConnectStateChange(const LLSD& data)
 {
-	if(LLFlickrConnect::instance().isConnected())
-	{
-		//In process of disconnecting so leave the layout as is
-		if(data.get("enum").asInteger() != LLFlickrConnect::FLICKR_DISCONNECTING)
-		{
-			showConnectedLayout();
-		}
-	}
-	else
-	{
-		showDisconnectedLayout();
-	}
+    if(LLFlickrConnect::instance().isConnected())
+    {
+        //In process of disconnecting so leave the layout as is
+        if(data.get("enum").asInteger() != LLFlickrConnect::FLICKR_DISCONNECTING)
+        {
+            showConnectedLayout();
+        }
+    }
+    else
+    {
+        showDisconnectedLayout();
+    }
 
-	return false;
+    return false;
 }
 
 bool LLFlickrAccountPanel::onFlickrConnectInfoChange()
 {
-	LLSD info = LLFlickrConnect::instance().getInfo();
-	std::string clickable_name;
+    LLSD info = LLFlickrConnect::instance().getInfo();
+    std::string clickable_name;
 
-	//Strings of format [http://www.somewebsite.com Click Me] become clickable text
-	if(info.has("link") && info.has("name"))
-	{
-		clickable_name = "[" + info["link"].asString() + " " + info["name"].asString() + "]";
-	}
+    //Strings of format [http://www.somewebsite.com Click Me] become clickable text
+    if(info.has("link") && info.has("name"))
+    {
+        clickable_name = "[" + info["link"].asString() + " " + info["name"].asString() + "]";
+    }
 
-	mAccountNameLabel->setText(clickable_name);
+    mAccountNameLabel->setText(clickable_name);
 
-	return false;
+    return false;
 }
 
 void LLFlickrAccountPanel::showConnectButton()
 {
-	if(!mConnectButton->getVisible())
-	{
-		mConnectButton->setVisible(true);
-		mDisconnectButton->setVisible(false);
-	}
+    if(!mConnectButton->getVisible())
+    {
+        mConnectButton->setVisible(true);
+        mDisconnectButton->setVisible(false);
+    }
 }
 
 void LLFlickrAccountPanel::hideConnectButton()
 {
-	if(mConnectButton->getVisible())
-	{
-		mConnectButton->setVisible(false);
-		mDisconnectButton->setVisible(true);
-	}
+    if(mConnectButton->getVisible())
+    {
+        mConnectButton->setVisible(false);
+        mDisconnectButton->setVisible(true);
+    }
 }
 
 void LLFlickrAccountPanel::showDisconnectedLayout()
 {
-	mAccountCaptionLabel->setText(getString("flickr_disconnected"));
-	mAccountNameLabel->setText(std::string(""));
-	showConnectButton();
+    mAccountCaptionLabel->setText(getString("flickr_disconnected"));
+    mAccountNameLabel->setText(std::string(""));
+    showConnectButton();
 }
 
 void LLFlickrAccountPanel::showConnectedLayout()
 {
-	LLFlickrConnect::instance().loadFlickrInfo();
+    LLFlickrConnect::instance().loadFlickrInfo();
 
-	mAccountCaptionLabel->setText(getString("flickr_connected"));
-	hideConnectButton();
+    mAccountCaptionLabel->setText(getString("flickr_connected"));
+    hideConnectButton();
 }
 
 void LLFlickrAccountPanel::onConnect()
 {
-	LLFlickrConnect::instance().checkConnectionToFlickr(true);
+    LLFlickrConnect::instance().checkConnectionToFlickr(true);
 }
 
 void LLFlickrAccountPanel::onDisconnect()
 {
-	LLFlickrConnect::instance().disconnectFromFlickr();
+    LLFlickrConnect::instance().disconnectFromFlickr();
 }
 
 ////////////////////////
@@ -846,7 +846,7 @@ LLFloaterFlickr::LLFloaterFlickr(const LLSD& key) : LLFloater(key),
     mStatusLoadingText(NULL),
     mStatusLoadingIndicator(NULL)
 {
-	mCommitCallbackRegistrar.add("SocialSharing.Cancel", boost::bind(&LLFloaterFlickr::onCancel, this));
+    mCommitCallbackRegistrar.add("SocialSharing.Cancel", boost::bind(&LLFloaterFlickr::onCancel, this));
 }
 
 void LLFloaterFlickr::onClose(bool app_quitting)
@@ -856,7 +856,7 @@ void LLFloaterFlickr::onClose(bool app_quitting)
     {
         big_preview_floater->closeOnFloaterOwnerClosing(this);
     }
-	LLFloater::onClose(app_quitting);
+    LLFloater::onClose(app_quitting);
 }
 
 void LLFloaterFlickr::onCancel()
@@ -872,29 +872,29 @@ void LLFloaterFlickr::onCancel()
 bool LLFloaterFlickr::postBuild()
 {
     // Keep tab of the Photo Panel
-	mFlickrPhotoPanel = static_cast<LLFlickrPhotoPanel*>(getChild<LLUICtrl>("panel_flickr_photo"));
+    mFlickrPhotoPanel = static_cast<LLFlickrPhotoPanel*>(getChild<LLUICtrl>("panel_flickr_photo"));
     // Connection status widgets
     mStatusErrorText = getChild<LLTextBox>("connection_error_text");
     mStatusLoadingText = getChild<LLTextBox>("connection_loading_text");
     mStatusLoadingIndicator = getChild<LLUICtrl>("connection_loading_indicator");
 
 // <FS:Ansariel> Exodus' flickr upload
-	getChild<LLTabContainer>("tabs")->removeTabPanel(getChild<LLPanel>("panel_flickr_account"));
+    getChild<LLTabContainer>("tabs")->removeTabPanel(getChild<LLPanel>("panel_flickr_account"));
 // </FS:Ansariel>
 
-	return LLFloater::postBuild();
+    return LLFloater::postBuild();
 }
 
 void LLFloaterFlickr::showPhotoPanel()
 {
-	LLTabContainer* parent = dynamic_cast<LLTabContainer*>(mFlickrPhotoPanel->getParent());
-	if (!parent)
-	{
-		LL_WARNS() << "Cannot find panel container" << LL_ENDL;
-		return;
-	}
+    LLTabContainer* parent = dynamic_cast<LLTabContainer*>(mFlickrPhotoPanel->getParent());
+    if (!parent)
+    {
+        LL_WARNS() << "Cannot find panel container" << LL_ENDL;
+        return;
+    }
 
-	parent->selectTabPanel(mFlickrPhotoPanel);
+    parent->selectTabPanel(mFlickrPhotoPanel);
 }
 
 void LLFloaterFlickr::draw()
@@ -906,7 +906,7 @@ void LLFloaterFlickr::draw()
         mStatusLoadingIndicator->setVisible(false);
         LLFlickrConnect::EConnectionState connection_state = LLFlickrConnect::instance().getConnectionState();
         std::string status_text;
-        
+
         switch (connection_state)
         {
         case LLFlickrConnect::FLICKR_NOT_CONNECTED:
@@ -929,7 +929,7 @@ void LLFloaterFlickr::draw()
             status_text = LLTrans::getString("SocialFlickrPosting");
             mStatusLoadingText->setValue(status_text);
             mStatusLoadingIndicator->setVisible(true);
-			break;
+            break;
         case LLFlickrConnect::FLICKR_CONNECTION_FAILED:
             // Error connecting to the service
             mStatusErrorText->setVisible(true);
@@ -942,27 +942,27 @@ void LLFloaterFlickr::draw()
             status_text = LLTrans::getString("SocialFlickrErrorPosting");
             mStatusErrorText->setValue(status_text);
             break;
-		case LLFlickrConnect::FLICKR_DISCONNECTING:
-			// Disconnecting loading indicator
-			mStatusLoadingText->setVisible(true);
-			status_text = LLTrans::getString("SocialFlickrDisconnecting");
-			mStatusLoadingText->setValue(status_text);
-			mStatusLoadingIndicator->setVisible(true);
-			break;
-		case LLFlickrConnect::FLICKR_DISCONNECT_FAILED:
-			// Error disconnecting from the service
-			mStatusErrorText->setVisible(true);
-			status_text = LLTrans::getString("SocialFlickrErrorDisconnecting");
-			mStatusErrorText->setValue(status_text);
-			break;
+        case LLFlickrConnect::FLICKR_DISCONNECTING:
+            // Disconnecting loading indicator
+            mStatusLoadingText->setVisible(true);
+            status_text = LLTrans::getString("SocialFlickrDisconnecting");
+            mStatusLoadingText->setValue(status_text);
+            mStatusLoadingIndicator->setVisible(true);
+            break;
+        case LLFlickrConnect::FLICKR_DISCONNECT_FAILED:
+            // Error disconnecting from the service
+            mStatusErrorText->setVisible(true);
+            status_text = LLTrans::getString("SocialFlickrErrorDisconnecting");
+            mStatusErrorText->setValue(status_text);
+            break;
         }
     }
-	LLFloater::draw();
+    LLFloater::draw();
 }
 
 // <FS:Ansariel> Exodus' flickr upload
 void LLFloaterFlickr::onOpen(const LLSD& key)
 {
-	mFlickrPhotoPanel->onOpen(key);
+    mFlickrPhotoPanel->onOpen(key);
 }
 // </FS:Ansariel>

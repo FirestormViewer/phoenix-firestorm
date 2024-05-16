@@ -1,25 +1,25 @@
-/** 
+/**
  * @file llfloatergridstatus.cpp
  * @brief Grid status floater - uses an embedded web browser to show Grid status info
  *
  * $LicenseInfo:firstyear=2009&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2017, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -44,7 +44,7 @@
 
 std::map<std::string, std::string> LLFloaterGridStatus::sItemsMap;
 // <FS:Ansariel> FIRE-21236 - Help Menu - Check Grid Status doesn't open using External Browser
-//const std::string DEFAULT_GRID_STATUS_URL = "http://status.secondlifegrid.net/"; 
+//const std::string DEFAULT_GRID_STATUS_URL = "http://status.secondlifegrid.net/";
 
 LLFloaterGridStatus::LLFloaterGridStatus(const Params& key) :
     LLFloaterWebContent(key),
@@ -67,9 +67,9 @@ void LLFloaterGridStatus::onOpen(const LLSD& key)
     p.allow_address_entry = false;
 
     LLFloaterWebContent::onOpen(p);
-	// <FS:Beq> [FIRE-21236] Changes to improve usability of grid status
-	getChildView("popexternal")->setEnabled(true);
-	// </FS:Beq>
+    // <FS:Beq> [FIRE-21236] Changes to improve usability of grid status
+    getChildView("popexternal")->setEnabled(true);
+    // </FS:Beq>
     applyPreferredRect();
     if (mWebBrowser)
     {

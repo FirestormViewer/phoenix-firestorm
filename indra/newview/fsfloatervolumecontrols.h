@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -31,16 +31,16 @@
 #include "llfloater.h"
 
 class FSFloaterVolumeControls
-:	public LLFloater
+:   public LLFloater
 {
 public:
-	FSFloaterVolumeControls(const LLSD& key);
-	bool postBuild() override;
+    FSFloaterVolumeControls(const LLSD& key);
+    bool postBuild() override;
 
 private:
-	~FSFloaterVolumeControls();
-	
-	void onVisibilityChange(bool new_visibility) override;
+    ~FSFloaterVolumeControls();
+
+    void onVisibilityChange(bool new_visibility) override;
 };
 
 #endif // FS_FLOATERVOLUMECONTROLS_H

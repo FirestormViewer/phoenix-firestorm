@@ -1,4 +1,4 @@
-/** 
+/**
  * @file lggbeamscolors.cpp
  * @brief Manager for beams colors
  * @copyright Copyright (c) 2011 LordGregGreg Back
@@ -20,51 +20,51 @@
 
 lggBeamsColors lggBeamsColors::fromLLSD(const LLSD& inputData)
 {
-	lggBeamsColors toReturn;
-	
-	if (inputData.has("startHue"))
-	{
-		toReturn.mStartHue = (F32)inputData["startHue"].asReal();
-	}
+    lggBeamsColors toReturn;
 
-	if (inputData.has("endHue"))
-	{
-		toReturn.mEndHue = (F32)inputData["endHue"].asReal();
-	}
+    if (inputData.has("startHue"))
+    {
+        toReturn.mStartHue = (F32)inputData["startHue"].asReal();
+    }
 
-	if (inputData.has("rotateSpeed"))
-	{
-		toReturn.mRotateSpeed = (F32)inputData["rotateSpeed"].asReal();
-	}
+    if (inputData.has("endHue"))
+    {
+        toReturn.mEndHue = (F32)inputData["endHue"].asReal();
+    }
 
-	return toReturn;
+    if (inputData.has("rotateSpeed"))
+    {
+        toReturn.mRotateSpeed = (F32)inputData["rotateSpeed"].asReal();
+    }
+
+    return toReturn;
 }
 
 LLSD lggBeamsColors::toLLSD()
 {
-	LLSD out;
-	out["startHue"] = mStartHue;
-	out["endHue"] = mEndHue;
-	out["rotateSpeed"] = mRotateSpeed;
-	return out;
+    LLSD out;
+    out["startHue"] = mStartHue;
+    out["endHue"] = mEndHue;
+    out["rotateSpeed"] = mRotateSpeed;
+    return out;
 }
 
 std::string lggBeamsColors::toString()
 {
-	return llformat("Start Hue %d\nEnd Hue is %d\nRotate Speed is %d", mStartHue, mEndHue, mRotateSpeed);
+    return llformat("Start Hue %d\nEnd Hue is %d\nRotate Speed is %d", mStartHue, mEndHue, mRotateSpeed);
 }
 
 lggBeamsColors::lggBeamsColors(F32 startHue, F32 endHue, F32 rotateSpeed) :
-	mStartHue(startHue),
-	mEndHue(endHue),
-	mRotateSpeed(rotateSpeed)
+    mStartHue(startHue),
+    mEndHue(endHue),
+    mRotateSpeed(rotateSpeed)
 {
 }
 
 lggBeamsColors::lggBeamsColors():
-	mStartHue(0.0f),
-	mEndHue(360.0f),
-	mRotateSpeed(1.0f)
+    mStartHue(0.0f),
+    mEndHue(360.0f),
+    mRotateSpeed(1.0f)
 {
 }
 

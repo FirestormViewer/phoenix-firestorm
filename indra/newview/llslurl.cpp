@@ -34,21 +34,20 @@
 #include "llviewernetwork.h"
 #include "llfiltersd2xmlrpc.h"
 #include "curl/curl.h"
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d)
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
-const char* LLSLURL::SLURL_HTTP_SCHEME		 = "http";
-const char* LLSLURL::SLURL_HTTPS_SCHEME		 = "https";
+#include "rlvhandler.h"
+
+const char* LLSLURL::SLURL_HTTP_SCHEME       = "http";
+const char* LLSLURL::SLURL_HTTPS_SCHEME      = "https";
 const char* LLSLURL::SLURL_SECONDLIFE_SCHEME = "secondlife";
-const char* LLSLURL::SLURL_SECONDLIFE_PATH	 = "secondlife";
-const char* LLSLURL::SLURL_COM		         = "slurl.com";
+const char* LLSLURL::SLURL_SECONDLIFE_PATH   = "secondlife";
+const char* LLSLURL::SLURL_COM               = "slurl.com";
 // For DnD - even though www.slurl.com redirects to slurl.com in a browser, you  can copy and drag
 // text with www.slurl.com or a link explicitly pointing at www.slurl.com so testing for this
 // version is required also.
 
-const char* LLSLURL::WWW_SLURL_COM				 = "www.slurl.com";
-const char* LLSLURL::MAPS_SECONDLIFE_COM		 = "maps.secondlife.com";
+const char* LLSLURL::WWW_SLURL_COM               = "www.slurl.com";
+const char* LLSLURL::MAPS_SECONDLIFE_COM         = "maps.secondlife.com";
 const char* LLSLURL::SLURL_X_GRID_LOCATION_INFO_SCHEME = "x-grid-location-info";
 const char* LLSLURL::SLURL_APP_PATH              = "app";
 const char* LLSLURL::SLURL_REGION_PATH           = "region";
@@ -402,8 +401,8 @@ std::string LLSLURL::getSLURLString() const
             S32 x = ll_round((F32)mPosition[VX]);
             S32 y = ll_round((F32)mPosition[VY]);
             S32 z = ll_round((F32)mPosition[VZ]);
-//          return LLGridManager::getInstance()->getSLURLBase(mGrid) + 
-//          LLURI::escape(mRegion) + llformat("/%d/%d/%d", x, y, z); 
+//          return LLGridManager::getInstance()->getSLURLBase(mGrid) +
+//          LLURI::escape(mRegion) + llformat("/%d/%d/%d", x, y, z);
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
             return LLGridManager::getInstance()->getSLURLBase(mGrid) +
                ( ((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) || (!RlvUtil::isNearbyRegion(mRegion)))

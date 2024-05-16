@@ -24,22 +24,22 @@
 class exoFlickrAuth
 {
 public:
-	typedef boost::function<void(bool success, const LLSD& params)> authorized_callback_t;
+    typedef boost::function<void(bool success, const LLSD& params)> authorized_callback_t;
 
-	exoFlickrAuth(authorized_callback_t callback);
-	~exoFlickrAuth();
+    exoFlickrAuth(authorized_callback_t callback);
+    ~exoFlickrAuth();
 
 private:
-	authorized_callback_t mCallback;
-	bool mAuthenticating;
-	static bool sAuthorisationInProgress;
+    authorized_callback_t mCallback;
+    bool mAuthenticating;
+    static bool sAuthorisationInProgress;
 
-	void beginAuthorisation();
-	void checkAuthorisation();
-	void checkResult(bool success, const LLSD& response);
-	void explanationCallback(const LLSD& notification, const LLSD& response);
+    void beginAuthorisation();
+    void checkAuthorisation();
+    void checkResult(bool success, const LLSD& response);
+    void explanationCallback(const LLSD& notification, const LLSD& response);
 
-	void gotRequestToken(bool success, const LLSD& params); // Stage 1 response (HTTP)
-	void gotVerifier(const LLSD& notification, const LLSD& response); // Stage 2 response (LLNotification)
-	void gotAccessToken(bool success, const LLSD& params); // Stage 3 response (HTTP)
+    void gotRequestToken(bool success, const LLSD& params); // Stage 1 response (HTTP)
+    void gotVerifier(const LLSD& notification, const LLSD& response); // Stage 2 response (LLNotification)
+    void gotAccessToken(bool success, const LLSD& params); // Stage 3 response (HTTP)
 };

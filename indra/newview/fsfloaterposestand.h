@@ -17,23 +17,23 @@
 #include "llcombobox.h"
 
 class FSFloaterPoseStand
-:	public LLFloater
+:   public LLFloater
 {
-	LOG_CLASS(FSFloaterPoseStand);
+    LOG_CLASS(FSFloaterPoseStand);
 public:
-	FSFloaterPoseStand(const LLSD& key);
-	bool postBuild() override;
-	void setLock(bool enabled);
-	void onCommitCombo();
+    FSFloaterPoseStand(const LLSD& key);
+    bool postBuild() override;
+    void setLock(bool enabled);
+    void onCommitCombo();
 private:
-	~FSFloaterPoseStand();
-	void onOpen(const LLSD& key) override;
-	void onClose(bool app_quitting) override;
-	void loadPoses();
-	
-	bool mAOPaused;
-	bool mPoseStandLock;
-	LLComboBox* mComboPose;
+    ~FSFloaterPoseStand();
+    void onOpen(const LLSD& key) override;
+    void onClose(bool app_quitting) override;
+    void loadPoses();
+
+    bool mAOPaused;
+    bool mPoseStandLock;
+    LLComboBox* mComboPose;
 };
 
 #endif // FS_FLOATERPOSESTAND_H

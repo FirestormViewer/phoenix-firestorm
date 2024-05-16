@@ -1,24 +1,24 @@
-/** 
+/**
  * @file llinspectavatar.cpp
  *
  * $LicenseInfo:firstyear=2009&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -77,102 +77,102 @@ class LLFetchAvatarData;
 // the 3D world.
 class LLInspectAvatar : public LLInspect, LLTransientFloater
 {
-	friend class LLFloaterReg;
-	
+    friend class LLFloaterReg;
+
 public:
-	// avatar_id - Avatar ID for which to show information
-	// Inspector will be positioned relative to current mouse position
-	LLInspectAvatar(const LLSD& avatar_id);
-	virtual ~LLInspectAvatar();
+    // avatar_id - Avatar ID for which to show information
+    // Inspector will be positioned relative to current mouse position
+    LLInspectAvatar(const LLSD& avatar_id);
+    virtual ~LLInspectAvatar();
 
-	/*virtual*/ bool postBuild(void);
-	
-	// Because floater is single instance, need to re-parse data on each spawn
-	// (for example, inspector about same avatar but in different position)
-	/*virtual*/ void onOpen(const LLSD& avatar_id);
+    /*virtual*/ bool postBuild(void);
 
-	// Update view based on information from avatar properties processor
-	void processAvatarData(LLAvatarData* data);
-	
-	virtual LLTransientFloaterMgr::ETransientGroup getGroup() { return LLTransientFloaterMgr::GLOBAL; }
-	
-	// <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
-	// When closing they should close their gear menu 
-	/*virtual*/ void onClose(bool app_quitting);
-	
-	// override the inspector mouse leave so timer is only paused if 
-	// gear menu is not open
-	/* virtual */ void onMouseLeave(S32 x, S32 y, MASK mask);
-	// </FS:Ansariel>
+    // Because floater is single instance, need to re-parse data on each spawn
+    // (for example, inspector about same avatar but in different position)
+    /*virtual*/ void onOpen(const LLSD& avatar_id);
+
+    // Update view based on information from avatar properties processor
+    void processAvatarData(LLAvatarData* data);
+
+    virtual LLTransientFloaterMgr::ETransientGroup getGroup() { return LLTransientFloaterMgr::GLOBAL; }
+
+    // <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
+    // When closing they should close their gear menu
+    /*virtual*/ void onClose(bool app_quitting);
+
+    // override the inspector mouse leave so timer is only paused if
+    // gear menu is not open
+    /* virtual */ void onMouseLeave(S32 x, S32 y, MASK mask);
+    // </FS:Ansariel>
 
 private:
-	// Make network requests for all the data to display in this view.
-	// Used on construction and if avatar id changes.
-	void requestUpdate();
+    // Make network requests for all the data to display in this view.
+    // Used on construction and if avatar id changes.
+    void requestUpdate();
 
-	// Set the volume slider to this user's current client-side volume setting,
-	// hiding/disabling if the user is not nearby.
-	void updateVolumeSlider();
+    // Set the volume slider to this user's current client-side volume setting,
+    // hiding/disabling if the user is not nearby.
+    void updateVolumeSlider();
 
-	// <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
-	// Shows/hides moderator panel depending on voice state 
-	void updateModeratorPanel();
+    // <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
+    // Shows/hides moderator panel depending on voice state
+    void updateModeratorPanel();
 
-	// Moderator ability to enable/disable voice chat for avatar
-	void toggleSelectedVoice(bool enabled);
-	// </FS:Ansariel>
+    // Moderator ability to enable/disable voice chat for avatar
+    void toggleSelectedVoice(bool enabled);
+    // </FS:Ansariel>
 
-	// Button callbacks
-	void onClickMuteVolume();
-	void onVolumeChange(const LLSD& data);
+    // Button callbacks
+    void onClickMuteVolume();
+    void onVolumeChange(const LLSD& data);
 
-	// <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
-	void onClickAddFriend();
-	void onClickViewProfile();
-	void onClickIM();
-	void onClickCall();
-	void onClickTeleport();
-	void onClickTeleportRequest();
-	void onClickInviteToGroup();
-	void onClickPay();
-	void onClickShare();
-	void onToggleMute();
-	void onClickReport();
-	void onClickFreeze();
-	void onClickEject();
-	void onClickKick();
-	void onClickCSR();
-	void onClickZoomIn();  
-	void onClickFindOnMap();
-	bool onVisibleFindOnMap();
-	bool onVisibleEject();
-	bool onVisibleFreeze();
-	bool onVisibleZoomIn();
-	bool enableMute();
-	bool enableUnmute();
-	bool enableTeleportOffer();
-	bool enableTeleportRequest();
-	bool enablePay();
-	bool godModeEnabled();
+    // <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
+    void onClickAddFriend();
+    void onClickViewProfile();
+    void onClickIM();
+    void onClickCall();
+    void onClickTeleport();
+    void onClickTeleportRequest();
+    void onClickInviteToGroup();
+    void onClickPay();
+    void onClickShare();
+    void onToggleMute();
+    void onClickReport();
+    void onClickFreeze();
+    void onClickEject();
+    void onClickKick();
+    void onClickCSR();
+    void onClickZoomIn();
+    void onClickFindOnMap();
+    bool onVisibleFindOnMap();
+    bool onVisibleEject();
+    bool onVisibleFreeze();
+    bool onVisibleZoomIn();
+    bool enableMute();
+    bool enableUnmute();
+    bool enableTeleportOffer();
+    bool enableTeleportRequest();
+    bool enablePay();
+    bool godModeEnabled();
 
-	// Is used to determine if "Add friend" option should be enabled in gear menu
-	bool isNotFriend();
+    // Is used to determine if "Add friend" option should be enabled in gear menu
+    bool isNotFriend();
 
-	void moderationActionCoro(std::string url, LLSD action);
+    void moderationActionCoro(std::string url, LLSD action);
 
-	// </FS:Ansariel>
+    // </FS:Ansariel>
 
-	void onAvatarNameCache(const LLUUID& agent_id,
-						   const LLAvatarName& av_name);
-	
+    void onAvatarNameCache(const LLUUID& agent_id,
+                           const LLAvatarName& av_name);
+
 private:
-	LLUUID				mAvatarID;
-	// Need avatar name information to spawn friend add request
-	LLAvatarName		mAvatarName;
-	// an in-flight request for avatar properties from LLAvatarPropertiesProcessor
-	// is represented by this object
-	LLFetchAvatarData*	mPropertiesRequest;
-	boost::signals2::connection mAvatarNameCacheConnection;
+    LLUUID              mAvatarID;
+    // Need avatar name information to spawn friend add request
+    LLAvatarName        mAvatarName;
+    // an in-flight request for avatar properties from LLAvatarPropertiesProcessor
+    // is represented by this object
+    LLFetchAvatarData*  mPropertiesRequest;
+    boost::signals2::connection mAvatarNameCacheConnection;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -183,125 +183,139 @@ private:
 class LLFetchAvatarData : public LLAvatarPropertiesObserver
 {
 public:
-	// If the inspector closes it will delete the pending request object, so the
-	// inspector pointer will be valid for the lifetime of this object
-	LLFetchAvatarData(const LLUUID& avatar_id, LLInspectAvatar* inspector)
-	:	mAvatarID(avatar_id),
-		mInspector(inspector)
-	{
-		LLAvatarPropertiesProcessor* processor = 
-			LLAvatarPropertiesProcessor::getInstance();
-		// register ourselves as an observer
-		processor->addObserver(mAvatarID, this);
-		// send a request (duplicates will be suppressed inside the avatar
-		// properties processor)
-		processor->sendAvatarPropertiesRequest(mAvatarID);
-	}
-	
-	~LLFetchAvatarData()
-	{
-		// remove ourselves as an observer
-		LLAvatarPropertiesProcessor::getInstance()->
-		removeObserver(mAvatarID, this);
-	}
-	
-	void processProperties(void* data, EAvatarProcessorType type)
-	{
-		// route the data to the inspector
-		if (data
-			&& type == APT_PROPERTIES)
-		{
-			LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
-			mInspector->processAvatarData(avatar_data);
-		}
-	}
-	
-	// Store avatar ID so we can un-register the observer on destruction
-	LLUUID mAvatarID;
-	LLInspectAvatar* mInspector;
+    // If the inspector closes it will delete the pending request object, so the
+    // inspector pointer will be valid for the lifetime of this object
+    LLFetchAvatarData(const LLUUID& avatar_id, LLInspectAvatar* inspector)
+    :   mAvatarID(avatar_id),
+        mInspector(inspector)
+    {
+        LLAvatarPropertiesProcessor* processor =
+            LLAvatarPropertiesProcessor::getInstance();
+        // register ourselves as an observer
+        processor->addObserver(mAvatarID, this);
+        // send a request (duplicates will be suppressed inside the avatar
+        // properties processor)
+        // <FS:Ansariel> OpenSim
+        //processor->sendAvatarPropertiesRequest(mAvatarID);
+        if (LLGridManager::instance().isInSecondLife() || !gAgent.getRegionCapability("AgentProfile").empty())
+        processor->sendAvatarPropertiesRequest(mAvatarID);
+        else
+            processor->sendAvatarLegacyPropertiesRequest(mAvatarID);
+        // </FS:Ansariel>
+    }
+
+    ~LLFetchAvatarData()
+    {
+        // remove ourselves as an observer
+        LLAvatarPropertiesProcessor::getInstance()->
+        removeObserver(mAvatarID, this);
+    }
+
+    void processProperties(void* data, EAvatarProcessorType type)
+    {
+        // route the data to the inspector
+        if (data
+            && type == APT_PROPERTIES)
+        {
+            LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
+            mInspector->processAvatarData(avatar_data);
+        }
+        // <FS:Ansariel> OpenSim
+        if (data
+            && type == APT_PROPERTIES_LEGACY)
+        {
+            LLAvatarData avatar_data(*static_cast<LLAvatarLegacyData*>(data));
+            mInspector->processAvatarData(&avatar_data);
+        }
+        // </FS:Ansariel>
+    }
+
+    // Store avatar ID so we can un-register the observer on destruction
+    LLUUID mAvatarID;
+    LLInspectAvatar* mInspector;
 };
 
 LLInspectAvatar::LLInspectAvatar(const LLSD& sd)
-:	LLInspect( LLSD() ),	// single_instance, doesn't really need key
-	mAvatarID(),			// set in onOpen()  *Note: we used to show partner's name but we dont anymore --angela 3rd Dec* 
-	mAvatarName(),
-	mPropertiesRequest(NULL),
-	mAvatarNameCacheConnection()
+:   LLInspect( LLSD() ),    // single_instance, doesn't really need key
+    mAvatarID(),            // set in onOpen()  *Note: we used to show partner's name but we dont anymore --angela 3rd Dec*
+    mAvatarName(),
+    mPropertiesRequest(NULL),
+    mAvatarNameCacheConnection()
 {
-	// <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
-	mCommitCallbackRegistrar.add("InspectAvatar.ViewProfile",					boost::bind(&LLInspectAvatar::onClickViewProfile, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.AddFriend",						boost::bind(&LLInspectAvatar::onClickAddFriend, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.IM",							boost::bind(&LLInspectAvatar::onClickIM, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.Call",							boost::bind(&LLInspectAvatar::onClickCall, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.Teleport",						boost::bind(&LLInspectAvatar::onClickTeleport, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.TeleportRequest",				boost::bind(&LLInspectAvatar::onClickTeleportRequest, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.InviteToGroup",					boost::bind(&LLInspectAvatar::onClickInviteToGroup, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.Pay",							boost::bind(&LLInspectAvatar::onClickPay, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.Share",							boost::bind(&LLInspectAvatar::onClickShare, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.ToggleMute",					boost::bind(&LLInspectAvatar::onToggleMute, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.Freeze",						boost::bind(&LLInspectAvatar::onClickFreeze, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.Eject",							boost::bind(&LLInspectAvatar::onClickEject, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.Kick",							boost::bind(&LLInspectAvatar::onClickKick, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.CSR",							boost::bind(&LLInspectAvatar::onClickCSR, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.Report",						boost::bind(&LLInspectAvatar::onClickReport, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.FindOnMap",						boost::bind(&LLInspectAvatar::onClickFindOnMap, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.ZoomIn",						boost::bind(&LLInspectAvatar::onClickZoomIn, this));
-	mCommitCallbackRegistrar.add("InspectAvatar.DisableVoice",					boost::bind(&LLInspectAvatar::toggleSelectedVoice, this, false));
-	mCommitCallbackRegistrar.add("InspectAvatar.EnableVoice",					boost::bind(&LLInspectAvatar::toggleSelectedVoice, this, true));
+    // <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
+    mCommitCallbackRegistrar.add("InspectAvatar.ViewProfile",                   boost::bind(&LLInspectAvatar::onClickViewProfile, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.AddFriend",                     boost::bind(&LLInspectAvatar::onClickAddFriend, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.IM",                            boost::bind(&LLInspectAvatar::onClickIM, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.Call",                          boost::bind(&LLInspectAvatar::onClickCall, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.Teleport",                      boost::bind(&LLInspectAvatar::onClickTeleport, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.TeleportRequest",               boost::bind(&LLInspectAvatar::onClickTeleportRequest, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.InviteToGroup",                 boost::bind(&LLInspectAvatar::onClickInviteToGroup, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.Pay",                           boost::bind(&LLInspectAvatar::onClickPay, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.Share",                         boost::bind(&LLInspectAvatar::onClickShare, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.ToggleMute",                    boost::bind(&LLInspectAvatar::onToggleMute, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.Freeze",                        boost::bind(&LLInspectAvatar::onClickFreeze, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.Eject",                         boost::bind(&LLInspectAvatar::onClickEject, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.Kick",                          boost::bind(&LLInspectAvatar::onClickKick, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.CSR",                           boost::bind(&LLInspectAvatar::onClickCSR, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.Report",                        boost::bind(&LLInspectAvatar::onClickReport, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.FindOnMap",                     boost::bind(&LLInspectAvatar::onClickFindOnMap, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.ZoomIn",                        boost::bind(&LLInspectAvatar::onClickZoomIn, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.DisableVoice",                  boost::bind(&LLInspectAvatar::toggleSelectedVoice, this, false));
+    mCommitCallbackRegistrar.add("InspectAvatar.EnableVoice",                   boost::bind(&LLInspectAvatar::toggleSelectedVoice, this, true));
 
-	mEnableCallbackRegistrar.add("InspectAvatar.EnableGod",						boost::bind(&LLInspectAvatar::godModeEnabled, this));
-	mEnableCallbackRegistrar.add("InspectAvatar.VisibleFindOnMap",				boost::bind(&LLInspectAvatar::onVisibleFindOnMap, this));
-	mEnableCallbackRegistrar.add("InspectAvatar.VisibleEject",					boost::bind(&LLInspectAvatar::onVisibleEject, this));
-	mEnableCallbackRegistrar.add("InspectAvatar.VisibleFreeze",					boost::bind(&LLInspectAvatar::onVisibleFreeze, this));
-	mEnableCallbackRegistrar.add("InspectAvatar.VisibleZoomIn",					boost::bind(&LLInspectAvatar::onVisibleZoomIn, this));
-	mEnableCallbackRegistrar.add("InspectAvatar.Gear.Enable",					boost::bind(&LLInspectAvatar::isNotFriend, this));
-	mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnableCall",				boost::bind(&LLAvatarActions::canCall));
-	mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnableTeleportOffer",		boost::bind(&LLInspectAvatar::enableTeleportOffer, this));
-	mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnableTeleportRequest",	boost::bind(&LLInspectAvatar::enableTeleportRequest, this));
-	mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnablePay",				boost::bind(&LLInspectAvatar::enablePay, this));
-	mEnableCallbackRegistrar.add("InspectAvatar.EnableMute",					boost::bind(&LLInspectAvatar::enableMute, this));
-	mEnableCallbackRegistrar.add("InspectAvatar.EnableUnmute",					boost::bind(&LLInspectAvatar::enableUnmute, this));
-	// </FS:Ansariel>
+    mEnableCallbackRegistrar.add("InspectAvatar.EnableGod",                     boost::bind(&LLInspectAvatar::godModeEnabled, this));
+    mEnableCallbackRegistrar.add("InspectAvatar.VisibleFindOnMap",              boost::bind(&LLInspectAvatar::onVisibleFindOnMap, this));
+    mEnableCallbackRegistrar.add("InspectAvatar.VisibleEject",                  boost::bind(&LLInspectAvatar::onVisibleEject, this));
+    mEnableCallbackRegistrar.add("InspectAvatar.VisibleFreeze",                 boost::bind(&LLInspectAvatar::onVisibleFreeze, this));
+    mEnableCallbackRegistrar.add("InspectAvatar.VisibleZoomIn",                 boost::bind(&LLInspectAvatar::onVisibleZoomIn, this));
+    mEnableCallbackRegistrar.add("InspectAvatar.Gear.Enable",                   boost::bind(&LLInspectAvatar::isNotFriend, this));
+    mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnableCall",               boost::bind(&LLAvatarActions::canCall));
+    mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnableTeleportOffer",      boost::bind(&LLInspectAvatar::enableTeleportOffer, this));
+    mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnableTeleportRequest",    boost::bind(&LLInspectAvatar::enableTeleportRequest, this));
+    mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnablePay",                boost::bind(&LLInspectAvatar::enablePay, this));
+    mEnableCallbackRegistrar.add("InspectAvatar.EnableMute",                    boost::bind(&LLInspectAvatar::enableMute, this));
+    mEnableCallbackRegistrar.add("InspectAvatar.EnableUnmute",                  boost::bind(&LLInspectAvatar::enableUnmute, this));
+    // </FS:Ansariel>
 
-	// can't make the properties request until the widgets are constructed
-	// as it might return immediately, so do it in onOpen.
+    // can't make the properties request until the widgets are constructed
+    // as it might return immediately, so do it in onOpen.
 
-	LLTransientFloaterMgr::getInstance()->addControlView(LLTransientFloaterMgr::GLOBAL, this);
-	LLTransientFloater::init(this);
+    LLTransientFloaterMgr::getInstance()->addControlView(LLTransientFloaterMgr::GLOBAL, this);
+    LLTransientFloater::init(this);
 }
 
 LLInspectAvatar::~LLInspectAvatar()
 {
-	if (mAvatarNameCacheConnection.connected())
-	{
-		mAvatarNameCacheConnection.disconnect();
-	}
-	// clean up any pending requests so they don't call back into a deleted
-	// view
-	delete mPropertiesRequest;
-	mPropertiesRequest = NULL;
+    if (mAvatarNameCacheConnection.connected())
+    {
+        mAvatarNameCacheConnection.disconnect();
+    }
+    // clean up any pending requests so they don't call back into a deleted
+    // view
+    delete mPropertiesRequest;
+    mPropertiesRequest = NULL;
 
-	LLTransientFloaterMgr::getInstance()->removeControlView(this);
+    LLTransientFloaterMgr::getInstance()->removeControlView(this);
 }
 
 /*virtual*/
 bool LLInspectAvatar::postBuild(void)
 {
-	// <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
-	getChild<LLUICtrl>("add_friend_btn")->setCommitCallback(
-		boost::bind(&LLInspectAvatar::onClickAddFriend, this) );
+    // <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
+    getChild<LLUICtrl>("add_friend_btn")->setCommitCallback(
+        boost::bind(&LLInspectAvatar::onClickAddFriend, this) );
 
-	getChild<LLUICtrl>("view_profile_btn")->setCommitCallback(
-		boost::bind(&LLInspectAvatar::onClickViewProfile, this) );
-	// </FS:Ansariel>
+    getChild<LLUICtrl>("view_profile_btn")->setCommitCallback(
+        boost::bind(&LLInspectAvatar::onClickViewProfile, this) );
+    // </FS:Ansariel>
 
-	getChild<LLUICtrl>("mute_btn")->setCommitCallback(
-		boost::bind(&LLInspectAvatar::onClickMuteVolume, this) );
+    getChild<LLUICtrl>("mute_btn")->setCommitCallback(
+        boost::bind(&LLInspectAvatar::onClickMuteVolume, this) );
 
-	getChild<LLUICtrl>("volume_slider")->setCommitCallback(
-		boost::bind(&LLInspectAvatar::onVolumeChange, this, _2));
+    getChild<LLUICtrl>("volume_slider")->setCommitCallback(
+        boost::bind(&LLInspectAvatar::onVolumeChange, this, _2));
 
-	return true;
+    return true;
 }
 
 // Multiple calls to showInstance("inspect_avatar", foo) will provide different
@@ -309,602 +323,605 @@ bool LLInspectAvatar::postBuild(void)
 //virtual
 void LLInspectAvatar::onOpen(const LLSD& data)
 {
-	// Start open animation
-	LLInspect::onOpen(data);
+    // Start open animation
+    LLInspect::onOpen(data);
 
-	// Extract appropriate avatar id
-	mAvatarID = data["avatar_id"];
+    // Extract appropriate avatar id
+    mAvatarID = data["avatar_id"];
 
-	// <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
-	bool self = mAvatarID == gAgentID;
-	
-	getChild<LLUICtrl>("gear_btn")->setVisible(!self);
-	LLMenuButton* gear_self_btn = getChild<LLMenuButton>("gear_self_btn");
-	gear_self_btn->setVisible(self);
+    // <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
+    bool self = mAvatarID == gAgentID;
 
-	if (self)
-	{
-		gear_self_btn->setMenu(gMenuInspectSelf);
-	}
-	// </FS:Ansariel>
+    getChild<LLUICtrl>("gear_btn")->setVisible(!self);
+    LLMenuButton* gear_self_btn = getChild<LLMenuButton>("gear_self_btn");
+    gear_self_btn->setVisible(self);
 
-	LLInspect::repositionInspector(data);
+    if (self)
+    {
+        gear_self_btn->setMenu(gMenuInspectSelf);
+    }
+    // </FS:Ansariel>
 
-	// Generate link to avatar profile.
-	// <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
-	//LLTextBase* avatar_profile_link = getChild<LLTextBase>("avatar_profile_link");
-	//avatar_profile_link->setTextArg("[LINK]", LLSLURL("agent", mAvatarID, "about").getSLURLString());
-	//avatar_profile_link->setIsFriendCallback(LLAvatarActions::isFriend);
-	// </FS:Ansariel>
+    LLInspect::repositionInspector(data);
 
-	// can't call from constructor as widgets are not built yet
-	requestUpdate();
+    // Generate link to avatar profile.
+    // <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
+    //LLTextBase* avatar_profile_link = getChild<LLTextBase>("avatar_profile_link");
+    //avatar_profile_link->setTextArg("[LINK]", LLSLURL("agent", mAvatarID, "about").getSLURLString());
+    //avatar_profile_link->setIsFriendCallback(LLAvatarActions::isFriend);
+    // </FS:Ansariel>
 
-	updateVolumeSlider();
+    // can't call from constructor as widgets are not built yet
+    requestUpdate();
 
-	// <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
-	updateModeratorPanel();
+    updateVolumeSlider();
+
+    // <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
+    updateModeratorPanel();
 }
 
 // <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
 // virtual
 void LLInspectAvatar::onClose(bool app_quitting)
 {
-	getChild<LLMenuButton>("gear_btn")->hideMenu();
-	getChild<LLMenuButton>("gear_self_btn")->hideMenu();
+    getChild<LLMenuButton>("gear_btn")->hideMenu();
+    getChild<LLMenuButton>("gear_self_btn")->hideMenu();
 }
 // </FS:Ansariel>
 
 void LLInspectAvatar::requestUpdate()
 {
-	// Don't make network requests when spawning from the debug menu at the
-	// login screen (which is useful to work on the layout).
-	if (mAvatarID.isNull())
-	{
-		if (LLStartUp::getStartupState() >= STATE_STARTED)
-		{
-			// once we're running we don't want to show the test floater
-			// for bogus LLUUID::null links
-			closeFloater();
-		}
-		return;
-	}
+    // Don't make network requests when spawning from the debug menu at the
+    // login screen (which is useful to work on the layout).
+    if (mAvatarID.isNull())
+    {
+        if (LLStartUp::getStartupState() >= STATE_STARTED)
+        {
+            // once we're running we don't want to show the test floater
+            // for bogus LLUUID::null links
+            closeFloater();
+        }
+        return;
+    }
 
-	// Clear out old data so it doesn't flash between old and new
-	getChild<LLUICtrl>("user_name")->setValue("");
-	getChild<LLUICtrl>("user_name_small")->setValue("");
-	getChild<LLUICtrl>("user_slid")->setValue("");
-	getChild<LLUICtrl>("user_subtitle")->setValue("");
-	getChild<LLUICtrl>("user_details")->setValue("");
-	
-	// Make a new request for properties
-	delete mPropertiesRequest;
-	mPropertiesRequest = new LLFetchAvatarData(mAvatarID, this);
+    // Clear out old data so it doesn't flash between old and new
+    getChild<LLUICtrl>("user_name")->setValue("");
+    getChild<LLUICtrl>("user_name_small")->setValue("");
+    getChild<LLUICtrl>("user_slid")->setValue("");
+    getChild<LLUICtrl>("user_subtitle")->setValue("");
+    getChild<LLUICtrl>("user_details")->setValue("");
 
-	// <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
-	// You can't re-add someone as a friend if they are already your friend
-	bool is_friend = LLAvatarTracker::instance().getBuddyInfo(mAvatarID) != NULL;
-	bool is_self = (mAvatarID == gAgentID);
-	if (is_self)
-	{
-		getChild<LLUICtrl>("add_friend_btn")->setVisible(false);
-		getChild<LLUICtrl>("im_btn")->setVisible(false);
-	}
-	else if (is_friend)
-	{
-		getChild<LLUICtrl>("add_friend_btn")->setVisible(false);
-		getChild<LLUICtrl>("im_btn")->setVisible(true);
-	}
-	else
-	{
-		getChild<LLUICtrl>("add_friend_btn")->setVisible(true);
-		getChild<LLUICtrl>("im_btn")->setVisible(false);
-	}
-	// </FS:Ansariel>
+    // Make a new request for properties
+    delete mPropertiesRequest;
+    mPropertiesRequest = new LLFetchAvatarData(mAvatarID, this);
 
-	// Use an avatar_icon even though the image id will come down with the
-	// avatar properties because the avatar_icon code maintains a cache of icons
-	// and this may result in the image being visible sooner.
-	// *NOTE: This may generate a duplicate avatar properties request, but that
-	// will be suppressed internally in the avatar properties processor.
-	
-	//remove avatar id from cache to get fresh info
-	LLAvatarIconIDCache::getInstance()->remove(mAvatarID);
+    // <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
+    // You can't re-add someone as a friend if they are already your friend
+    bool is_friend = LLAvatarTracker::instance().getBuddyInfo(mAvatarID) != NULL;
+    bool is_self = (mAvatarID == gAgentID);
+    if (is_self)
+    {
+        getChild<LLUICtrl>("add_friend_btn")->setVisible(false);
+        getChild<LLUICtrl>("im_btn")->setVisible(false);
+    }
+    else if (is_friend)
+    {
+        getChild<LLUICtrl>("add_friend_btn")->setVisible(false);
+        getChild<LLUICtrl>("im_btn")->setVisible(true);
+    }
+    else
+    {
+        getChild<LLUICtrl>("add_friend_btn")->setVisible(true);
+        getChild<LLUICtrl>("im_btn")->setVisible(false);
+    }
+    // </FS:Ansariel>
 
-	getChild<LLUICtrl>("avatar_icon")->setValue(LLSD(mAvatarID) );
+    // Use an avatar_icon even though the image id will come down with the
+    // avatar properties because the avatar_icon code maintains a cache of icons
+    // and this may result in the image being visible sooner.
+    // *NOTE: This may generate a duplicate avatar properties request, but that
+    // will be suppressed internally in the avatar properties processor.
 
-	if (mAvatarNameCacheConnection.connected())
-	{
-		mAvatarNameCacheConnection.disconnect();
-	}
-	mAvatarNameCacheConnection = LLAvatarNameCache::get(mAvatarID,boost::bind(&LLInspectAvatar::onAvatarNameCache,this, _1, _2));
+    //remove avatar id from cache to get fresh info
+    LLAvatarIconIDCache::getInstance()->remove(mAvatarID);
+
+    getChild<LLUICtrl>("avatar_icon")->setValue(LLSD(mAvatarID) );
+
+    if (mAvatarNameCacheConnection.connected())
+    {
+        mAvatarNameCacheConnection.disconnect();
+    }
+    mAvatarNameCacheConnection = LLAvatarNameCache::get(mAvatarID,boost::bind(&LLInspectAvatar::onAvatarNameCache,this, _1, _2));
 }
 
 void LLInspectAvatar::processAvatarData(LLAvatarData* data)
 {
-	LLStringUtil::format_map_t args;
-	{
-		std::string birth_date = LLTrans::getString("AvatarBirthDateFormat");
-		LLStringUtil::format(birth_date, LLSD().with("datetime", (S32) data->born_on.secondsSinceEpoch()));
-		args["[BORN_ON]"] = birth_date;
-	}
-	args["[AGE]"] = LLDateUtil::ageFromDate(data->born_on, LLDate::now());
-	args["[SL_PROFILE]"] = data->about_text;
-	args["[RW_PROFILE"] = data->fl_about_text;
-	args["[ACCTTYPE]"] = LLAvatarPropertiesProcessor::accountType(data);
-	std::string payment_info = LLAvatarPropertiesProcessor::paymentInfo(data);
-	args["[PAYMENTINFO]"] = payment_info;
-	args["[COMMA]"] = (payment_info.empty() ? "" : ",");
+    LLStringUtil::format_map_t args;
 
-	std::string subtitle = getString("Subtitle", args);
-	getChild<LLUICtrl>("user_subtitle")->setValue( LLSD(subtitle) );
-	std::string details = getString("Details", args);
-	getChild<LLUICtrl>("user_details")->setValue( LLSD(details) );
+    std::string birth_date = LLTrans::getString(data->hide_age ?
+        "AvatarBirthDateFormatShort" :
+        "AvatarBirthDateFormatFull");
+        LLStringUtil::format(birth_date, LLSD().with("datetime", (S32) data->born_on.secondsSinceEpoch()));
+        args["[BORN_ON]"] = birth_date;
+    args["[AGE]"] = data->hide_age ?
+        LLStringUtilBase<char>::null :
+        LLDateUtil::ageFromDate(data->born_on, LLDate::now());
+    args["[SL_PROFILE]"] = data->about_text;
+    args["[RW_PROFILE"] = data->fl_about_text;
+    args["[ACCTTYPE]"] = LLAvatarPropertiesProcessor::accountType(data);
+    std::string payment_info = LLAvatarPropertiesProcessor::paymentInfo(data);
+    args["[PAYMENTINFO]"] = payment_info;
+    args["[COMMA]"] = (payment_info.empty() ? "" : ",");
 
-	// Delete the request object as it has been satisfied
-	delete mPropertiesRequest;
-	mPropertiesRequest = NULL;
+    std::string subtitle = getString("Subtitle", args);
+    getChild<LLUICtrl>("user_subtitle")->setValue( LLSD(subtitle) );
+    std::string details = getString("Details", args);
+    getChild<LLUICtrl>("user_details")->setValue( LLSD(details) );
+
+    // Delete the request object as it has been satisfied
+    delete mPropertiesRequest;
+    mPropertiesRequest = NULL;
 }
 
 void LLInspectAvatar::updateVolumeSlider()
 {
-	bool voice_enabled = LLVoiceClient::getInstance()->getVoiceEnabled(mAvatarID);
+    bool voice_enabled = LLVoiceClient::getInstance()->getVoiceEnabled(mAvatarID);
 
-	// Do not display volume slider and mute button if it 
-	// is ourself or we are not in a voice channel together
-	if (!voice_enabled || (mAvatarID == gAgent.getID()))
-	{
-		getChild<LLUICtrl>("mute_btn")->setVisible(false);
-		getChild<LLUICtrl>("volume_slider")->setVisible(false);
-	}
+    // Do not display volume slider and mute button if it
+    // is ourself or we are not in a voice channel together
+    if (!voice_enabled || (mAvatarID == gAgent.getID()))
+    {
+        getChild<LLUICtrl>("mute_btn")->setVisible(false);
+        getChild<LLUICtrl>("volume_slider")->setVisible(false);
+    }
 
-	else 
-	{
-		getChild<LLUICtrl>("mute_btn")->setVisible(true);
-		getChild<LLUICtrl>("volume_slider")->setVisible(true);
+    else
+    {
+        getChild<LLUICtrl>("mute_btn")->setVisible(true);
+        getChild<LLUICtrl>("volume_slider")->setVisible(true);
 
-		// By convention, we only display and toggle voice mutes, not all mutes
-		bool is_muted = LLAvatarActions::isVoiceMuted(mAvatarID);
+        // By convention, we only display and toggle voice mutes, not all mutes
+        bool is_muted = LLAvatarActions::isVoiceMuted(mAvatarID);
 
-		LLUICtrl* mute_btn = getChild<LLUICtrl>("mute_btn");
+        LLUICtrl* mute_btn = getChild<LLUICtrl>("mute_btn");
 
-		bool is_linden = LLStringUtil::endsWith(mAvatarName.getDisplayName(), " Linden");
+        bool is_linden = LLStringUtil::endsWith(mAvatarName.getDisplayName(), " Linden");
 
-		mute_btn->setEnabled( !is_linden);
-		mute_btn->setValue( is_muted );
+        mute_btn->setEnabled( !is_linden);
+        mute_btn->setValue( is_muted );
 
-		LLUICtrl* volume_slider = getChild<LLUICtrl>("volume_slider");
-		volume_slider->setEnabled( !is_muted );
+        LLUICtrl* volume_slider = getChild<LLUICtrl>("volume_slider");
+        volume_slider->setEnabled( !is_muted );
 
-		F32 volume;
-		
-		if (is_muted)
-		{
-			// it's clearer to display their volume as zero
-			volume = 0.f;
-		}
-		else
-		{
-			// actual volume
-			volume = LLVoiceClient::getInstance()->getUserVolume(mAvatarID);
-		}
-		volume_slider->setValue( (F64)volume );
-	}
+        F32 volume;
+
+        if (is_muted)
+        {
+            // it's clearer to display their volume as zero
+            volume = 0.f;
+        }
+        else
+        {
+            // actual volume
+            volume = LLVoiceClient::getInstance()->getUserVolume(mAvatarID);
+        }
+        volume_slider->setValue( (F64)volume );
+    }
 
 }
 
 void LLInspectAvatar::onClickMuteVolume()
 {
-	// By convention, we only display and toggle voice mutes, not all mutes
-	LLMuteList* mute_list = LLMuteList::getInstance();
-	bool is_muted = mute_list->isMuted(mAvatarID, LLMute::flagVoiceChat);
+    // By convention, we only display and toggle voice mutes, not all mutes
+    LLMuteList* mute_list = LLMuteList::getInstance();
+    bool is_muted = mute_list->isMuted(mAvatarID, LLMute::flagVoiceChat);
 
-	LLMute mute(mAvatarID, mAvatarName.getUserName(), LLMute::AGENT);
-	if (!is_muted)
-	{
-		mute_list->add(mute, LLMute::flagVoiceChat);
-	}
-	else
-	{
-		mute_list->remove(mute, LLMute::flagVoiceChat);
-	}
+    LLMute mute(mAvatarID, mAvatarName.getUserName(), LLMute::AGENT);
+    if (!is_muted)
+    {
+        mute_list->add(mute, LLMute::flagVoiceChat);
+    }
+    else
+    {
+        mute_list->remove(mute, LLMute::flagVoiceChat);
+    }
 
-	updateVolumeSlider();
+    updateVolumeSlider();
 }
 
 void LLInspectAvatar::onVolumeChange(const LLSD& data)
 {
-	F32 volume = (F32)data.asReal();
-	LLVoiceClient::getInstance()->setUserVolume(mAvatarID, volume);
+    F32 volume = (F32)data.asReal();
+    LLVoiceClient::getInstance()->setUserVolume(mAvatarID, volume);
 }
 
 void LLInspectAvatar::onAvatarNameCache(
-		const LLUUID& agent_id,
-		const LLAvatarName& av_name)
+        const LLUUID& agent_id,
+        const LLAvatarName& av_name)
 {
-	mAvatarNameCacheConnection.disconnect();
+    mAvatarNameCacheConnection.disconnect();
 
-	if (agent_id == mAvatarID)
-	{
-		getChild<LLUICtrl>("user_name")->setValue(av_name.getDisplayName());
-		getChild<LLUICtrl>("user_name_small")->setValue(av_name.getDisplayName());
-		getChild<LLUICtrl>("user_slid")->setValue(av_name.getUserName());
-		mAvatarName = av_name;
-		
-		// show smaller display name if too long to display in regular size
-		if (getChild<LLTextBox>("user_name")->getTextPixelWidth() > getChild<LLTextBox>("user_name")->getRect().getWidth())
-		{
-			getChild<LLUICtrl>("user_name_small")->setVisible( true );
-			getChild<LLUICtrl>("user_name")->setVisible( false );
-		}
-		else
-		{
-			getChild<LLUICtrl>("user_name_small")->setVisible( false );
-			getChild<LLUICtrl>("user_name")->setVisible( true );
+    if (agent_id == mAvatarID)
+    {
+        getChild<LLUICtrl>("user_name")->setValue(av_name.getDisplayName());
+        getChild<LLUICtrl>("user_name_small")->setValue(av_name.getDisplayName());
+        getChild<LLUICtrl>("user_slid")->setValue(av_name.getUserName());
+        mAvatarName = av_name;
 
-		}
+        // show smaller display name if too long to display in regular size
+        if (getChild<LLTextBox>("user_name")->getTextPixelWidth() > getChild<LLTextBox>("user_name")->getRect().getWidth())
+        {
+            getChild<LLUICtrl>("user_name_small")->setVisible( true );
+            getChild<LLUICtrl>("user_name")->setVisible( false );
+        }
+        else
+        {
+            getChild<LLUICtrl>("user_name_small")->setVisible( false );
+            getChild<LLUICtrl>("user_name")->setVisible( true );
 
-	}
+        }
+
+    }
 }
 
 // <FS:Ansariel> Undo CHUI-90 and make avatar inspector useful again
-// For the avatar inspector, we only want to unpause the fade timer 
+// For the avatar inspector, we only want to unpause the fade timer
 // if neither the gear menu or self gear menu are open
 void LLInspectAvatar::onMouseLeave(S32 x, S32 y, MASK mask)
 {
-	LLToggleableMenu* gear_menu = getChild<LLMenuButton>("gear_btn")->getMenu();
-	LLToggleableMenu* gear_menu_self = getChild<LLMenuButton>("gear_self_btn")->getMenu();
-	if ( gear_menu && gear_menu->getVisible() &&
-		 gear_menu_self && gear_menu_self->getVisible() )
-	{
-		return;
-	}
+    LLToggleableMenu* gear_menu = getChild<LLMenuButton>("gear_btn")->getMenu();
+    LLToggleableMenu* gear_menu_self = getChild<LLMenuButton>("gear_self_btn")->getMenu();
+    if ( gear_menu && gear_menu->getVisible() &&
+         gear_menu_self && gear_menu_self->getVisible() )
+    {
+        return;
+    }
 
-	if(childHasVisiblePopupMenu())
-	{
-		return;
-	}
+    if(childHasVisiblePopupMenu())
+    {
+        return;
+    }
 
-	mOpenTimer.unpause();
+    mOpenTimer.unpause();
 }
 
 void LLInspectAvatar::updateModeratorPanel()
 {
-	bool enable_moderator_panel = false;
+    bool enable_moderator_panel = false;
 
     if (LLVoiceChannel::getCurrentVoiceChannel() &&
-		mAvatarID != gAgent.getID())
+        mAvatarID != gAgent.getID())
     {
-		LLUUID session_id = LLVoiceChannel::getCurrentVoiceChannel()->getSessionID();
+        LLUUID session_id = LLVoiceChannel::getCurrentVoiceChannel()->getSessionID();
 
-		if (session_id != LLUUID::null)
-		{
-			LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(session_id);
+        if (session_id != LLUUID::null)
+        {
+            LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(session_id);
 
-			if (speaker_mgr)
-			{
-				LLPointer<LLSpeaker> self_speakerp = speaker_mgr->findSpeaker(gAgent.getID());
-				LLPointer<LLSpeaker> selected_speakerp = speaker_mgr->findSpeaker(mAvatarID);
-				
-				if(speaker_mgr->isVoiceActive() && selected_speakerp && 
-					selected_speakerp->isInVoiceChannel() &&
-					((self_speakerp && self_speakerp->mIsModerator) || gAgent.isGodlike()))
-				{
-					getChild<LLUICtrl>("enable_voice")->setVisible(selected_speakerp->mModeratorMutedVoice);
-					getChild<LLUICtrl>("disable_voice")->setVisible(!selected_speakerp->mModeratorMutedVoice);
+            if (speaker_mgr)
+            {
+                LLPointer<LLSpeaker> self_speakerp = speaker_mgr->findSpeaker(gAgent.getID());
+                LLPointer<LLSpeaker> selected_speakerp = speaker_mgr->findSpeaker(mAvatarID);
 
-					enable_moderator_panel = true;
-				}
-			}
-		}
-	}
+                if(speaker_mgr->isVoiceActive() && selected_speakerp &&
+                    selected_speakerp->isInVoiceChannel() &&
+                    ((self_speakerp && self_speakerp->mIsModerator) || gAgent.isGodlike()))
+                {
+                    getChild<LLUICtrl>("enable_voice")->setVisible(selected_speakerp->mModeratorMutedVoice);
+                    getChild<LLUICtrl>("disable_voice")->setVisible(!selected_speakerp->mModeratorMutedVoice);
 
-	if (enable_moderator_panel)
-	{
-		if (!getChild<LLUICtrl>("moderator_panel")->getVisible())
-		{
-			getChild<LLUICtrl>("moderator_panel")->setVisible(true);
-			// stretch the floater so it can accommodate the moderator panel
-			reshape(getRect().getWidth(), getRect().getHeight() + getChild<LLUICtrl>("moderator_panel")->getRect().getHeight());
-		}
-	}
-	else if (getChild<LLUICtrl>("moderator_panel")->getVisible())
-	{
-		getChild<LLUICtrl>("moderator_panel")->setVisible(false);
-		// shrink the inspector floater back to original size
-		reshape(getRect().getWidth(), getRect().getHeight() - getChild<LLUICtrl>("moderator_panel")->getRect().getHeight());					
-	}
+                    enable_moderator_panel = true;
+                }
+            }
+        }
+    }
+
+    if (enable_moderator_panel)
+    {
+        if (!getChild<LLUICtrl>("moderator_panel")->getVisible())
+        {
+            getChild<LLUICtrl>("moderator_panel")->setVisible(true);
+            // stretch the floater so it can accommodate the moderator panel
+            reshape(getRect().getWidth(), getRect().getHeight() + getChild<LLUICtrl>("moderator_panel")->getRect().getHeight());
+        }
+    }
+    else if (getChild<LLUICtrl>("moderator_panel")->getVisible())
+    {
+        getChild<LLUICtrl>("moderator_panel")->setVisible(false);
+        // shrink the inspector floater back to original size
+        reshape(getRect().getWidth(), getRect().getHeight() - getChild<LLUICtrl>("moderator_panel")->getRect().getHeight());
+    }
 }
 
 void LLInspectAvatar::toggleSelectedVoice(bool enabled)
 {
-	LLUUID session_id = LLVoiceChannel::getCurrentVoiceChannel()->getSessionID();
-	LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(session_id);
+    LLUUID session_id = LLVoiceChannel::getCurrentVoiceChannel()->getSessionID();
+    LLIMSpeakerMgr* speaker_mgr = LLIMModel::getInstance()->getSpeakerManager(session_id);
 
-	if (speaker_mgr)
-	{
-		std::string url = gAgent.getRegionCapability("ChatSessionRequest");
-		if (!url.empty())
-		{
-			LLSD data;
-			data["method"] = "mute update";
-			data["session-id"] = session_id;
-			data["params"] = LLSD::emptyMap();
-			data["params"]["agent_id"] = mAvatarID;
-			data["params"]["mute_info"] = LLSD::emptyMap();
-			// ctrl value represents ability to type, so invert
-			data["params"]["mute_info"]["voice"] = !enabled;
+    if (speaker_mgr)
+    {
+        std::string url = gAgent.getRegionCapability("ChatSessionRequest");
+        if (!url.empty())
+        {
+            LLSD data;
+            data["method"] = "mute update";
+            data["session-id"] = session_id;
+            data["params"] = LLSD::emptyMap();
+            data["params"]["agent_id"] = mAvatarID;
+            data["params"]["mute_info"] = LLSD::emptyMap();
+            // ctrl value represents ability to type, so invert
+            data["params"]["mute_info"]["voice"] = !enabled;
 
-			LLCoros::instance().launch("LLIMSpeakerMgr::moderationActionCoro",
-				boost::bind(&LLInspectAvatar::moderationActionCoro, this, url, data));
-		}
-	}
+            LLCoros::instance().launch("LLIMSpeakerMgr::moderationActionCoro",
+                boost::bind(&LLInspectAvatar::moderationActionCoro, this, url, data));
+        }
+    }
 
-	closeFloater();
+    closeFloater();
 }
 
 void LLInspectAvatar::onClickAddFriend()
 {
-	LLAvatarActions::requestFriendshipDialog(mAvatarID, mAvatarName.getDisplayName());
-	closeFloater();
+    LLAvatarActions::requestFriendshipDialog(mAvatarID, mAvatarName.getDisplayName());
+    closeFloater();
 }
 
 void LLInspectAvatar::onClickViewProfile()
 {
-	LLAvatarActions::showProfile(mAvatarID);
-	closeFloater();
+    LLAvatarActions::showProfile(mAvatarID);
+    closeFloater();
 }
 
 bool LLInspectAvatar::isNotFriend()
 {
-	return !LLAvatarActions::isFriend(mAvatarID);
+    return !LLAvatarActions::isFriend(mAvatarID);
 }
 
 bool LLInspectAvatar::onVisibleFindOnMap()
 {
-	return gAgent.isGodlike() || is_agent_mappable(mAvatarID);
+    return gAgent.isGodlike() || is_agent_mappable(mAvatarID);
 }
 
 bool LLInspectAvatar::onVisibleEject()
 {
-	return enable_freeze_eject( LLSD(mAvatarID) );
+    return enable_freeze_eject( LLSD(mAvatarID) );
 }
 
 bool LLInspectAvatar::onVisibleFreeze()
 {
-	// either user is a god and can do long distance freeze
-	// or check for target proximity and permissions
-	return gAgent.isGodlike() || enable_freeze_eject(LLSD(mAvatarID));
+    // either user is a god and can do long distance freeze
+    // or check for target proximity and permissions
+    return gAgent.isGodlike() || enable_freeze_eject(LLSD(mAvatarID));
 }
 
 bool LLInspectAvatar::onVisibleZoomIn()
 {
-	return gObjectList.findObject(mAvatarID);
+    return gObjectList.findObject(mAvatarID);
 }
 
 void LLInspectAvatar::onClickIM()
-{ 
-	LLAvatarActions::startIM(mAvatarID);
-	closeFloater();
+{
+    LLAvatarActions::startIM(mAvatarID);
+    closeFloater();
 }
 
 void LLInspectAvatar::onClickCall()
-{ 
-	LLAvatarActions::startCall(mAvatarID);
-	closeFloater();
+{
+    LLAvatarActions::startCall(mAvatarID);
+    closeFloater();
 }
 
 void LLInspectAvatar::onClickTeleport()
 {
-	LLAvatarActions::offerTeleport(mAvatarID);
-	closeFloater();
+    LLAvatarActions::offerTeleport(mAvatarID);
+    closeFloater();
 }
 
 void LLInspectAvatar::onClickTeleportRequest()
 {
-	LLAvatarActions::teleportRequest(mAvatarID);
-	closeFloater();
+    LLAvatarActions::teleportRequest(mAvatarID);
+    closeFloater();
 }
 
 void LLInspectAvatar::onClickInviteToGroup()
 {
-	LLAvatarActions::inviteToGroup(mAvatarID);
-	closeFloater();
+    LLAvatarActions::inviteToGroup(mAvatarID);
+    closeFloater();
 }
 
 void LLInspectAvatar::onClickPay()
 {
-	LLAvatarActions::pay(mAvatarID);
-	closeFloater();
+    LLAvatarActions::pay(mAvatarID);
+    closeFloater();
 }
 
 void LLInspectAvatar::onClickShare()
 {
-	LLAvatarActions::share(mAvatarID);
-	closeFloater();
+    LLAvatarActions::share(mAvatarID);
+    closeFloater();
 }
 
 void LLInspectAvatar::onToggleMute()
 {
-	LLMute mute(mAvatarID, mAvatarName.getUserName(), LLMute::AGENT);
+    LLMute mute(mAvatarID, mAvatarName.getUserName(), LLMute::AGENT);
 
-	if (LLMuteList::getInstance()->isMuted(mute.mID, mute.mName))
-	{
-		LLMuteList::getInstance()->remove(mute);
-	}
-	else
-	{
-		LLMuteList::getInstance()->add(mute);
-	}
+    if (LLMuteList::getInstance()->isMuted(mute.mID, mute.mName))
+    {
+        LLMuteList::getInstance()->remove(mute);
+    }
+    else
+    {
+        LLMuteList::getInstance()->add(mute);
+    }
 
-	LLPanelBlockedList::showPanelAndSelect(mute.mID);
-	closeFloater();
+    LLPanelBlockedList::showPanelAndSelect(mute.mID);
+    closeFloater();
 }
 
 void LLInspectAvatar::onClickReport()
 {
-	LLFloaterReporter::showFromAvatar(mAvatarID, mAvatarName.getCompleteName());
-	closeFloater();
+    LLFloaterReporter::showFromAvatar(mAvatarID, mAvatarName.getCompleteName());
+    closeFloater();
 }
 
 bool godlike_freeze(const LLSD& notification, const LLSD& response)
 {
-	LLUUID avatar_id = notification["payload"]["avatar_id"].asUUID();
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+    LLUUID avatar_id = notification["payload"]["avatar_id"].asUUID();
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 
-	switch (option)
-	{
-	case 0:
-		LLAvatarActions::freeze(avatar_id);
-		break;
-	case 1:
-		LLAvatarActions::unfreeze(avatar_id);
-		break;
-	default:
-		break;
-	}
+    switch (option)
+    {
+    case 0:
+        LLAvatarActions::freeze(avatar_id);
+        break;
+    case 1:
+        LLAvatarActions::unfreeze(avatar_id);
+        break;
+    default:
+        break;
+    }
 
-	return false;
+    return false;
 }
 
 void LLInspectAvatar::onClickFreeze()
 {
-	if (gAgent.isGodlike())
-	{
-		// use godlike freeze-at-a-distance, with confirmation
-		LLNotificationsUtil::add("FreezeAvatar",
-			LLSD(),
-			LLSD().with("avatar_id", mAvatarID),
-			godlike_freeze);
-	}
-	else
-	{
-		// use default "local" version of freezing that requires avatar to be in range
-		handle_avatar_freeze( LLSD(mAvatarID) );
-	}
-	closeFloater();
+    if (gAgent.isGodlike())
+    {
+        // use godlike freeze-at-a-distance, with confirmation
+        LLNotificationsUtil::add("FreezeAvatar",
+            LLSD(),
+            LLSD().with("avatar_id", mAvatarID),
+            godlike_freeze);
+    }
+    else
+    {
+        // use default "local" version of freezing that requires avatar to be in range
+        handle_avatar_freeze( LLSD(mAvatarID) );
+    }
+    closeFloater();
 }
 
 void LLInspectAvatar::onClickEject()
 {
-	handle_avatar_eject( LLSD(mAvatarID) );
-	closeFloater();
+    handle_avatar_eject( LLSD(mAvatarID) );
+    closeFloater();
 }
 
 void LLInspectAvatar::onClickKick()
 {
-	LLAvatarActions::kick(mAvatarID);
-	closeFloater();
+    LLAvatarActions::kick(mAvatarID);
+    closeFloater();
 }
 
 void LLInspectAvatar::onClickCSR()
 {
-	LLAvatarName av_name;
-	LLAvatarNameCache::get(mAvatarID, &av_name);
-	std::string name = av_name.getUserName();
-	LLAvatarActions::csr(mAvatarID, name);
-	closeFloater();
+    LLAvatarName av_name;
+    LLAvatarNameCache::get(mAvatarID, &av_name);
+    std::string name = av_name.getUserName();
+    LLAvatarActions::csr(mAvatarID, name);
+    closeFloater();
 }
 
-void LLInspectAvatar::onClickZoomIn() 
+void LLInspectAvatar::onClickZoomIn()
 {
-	handle_zoom_to_object(mAvatarID);
-	closeFloater();
+    handle_zoom_to_object(mAvatarID);
+    closeFloater();
 }
 
 void LLInspectAvatar::onClickFindOnMap()
 {
-	gFloaterWorldMap->trackAvatar(mAvatarID, mAvatarName.getDisplayName());
-	LLFloaterReg::showInstance("world_map");
+    gFloaterWorldMap->trackAvatar(mAvatarID, mAvatarName.getDisplayName());
+    LLFloaterReg::showInstance("world_map");
 }
 
 bool LLInspectAvatar::enableMute()
 {
-	bool is_linden = LLStringUtil::endsWith(mAvatarName.getDisplayName(), " Linden");
-	bool is_self = mAvatarID == gAgent.getID();
+    bool is_linden = LLStringUtil::endsWith(mAvatarName.getDisplayName(), " Linden");
+    bool is_self = mAvatarID == gAgent.getID();
 
-	if (!is_linden && !is_self && !LLMuteList::getInstance()->isMuted(mAvatarID, mAvatarName.getDisplayName()))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+    if (!is_linden && !is_self && !LLMuteList::getInstance()->isMuted(mAvatarID, mAvatarName.getDisplayName()))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 bool LLInspectAvatar::enableUnmute()
 {
-	bool is_linden = LLStringUtil::endsWith(mAvatarName.getDisplayName(), " Linden");
-	bool is_self = mAvatarID == gAgent.getID();
+    bool is_linden = LLStringUtil::endsWith(mAvatarName.getDisplayName(), " Linden");
+    bool is_self = mAvatarID == gAgent.getID();
 
-	if (!is_linden && !is_self && LLMuteList::getInstance()->isMuted(mAvatarID, mAvatarName.getDisplayName()))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+    if (!is_linden && !is_self && LLMuteList::getInstance()->isMuted(mAvatarID, mAvatarName.getDisplayName()))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 bool LLInspectAvatar::enableTeleportOffer()
 {
-	return LLAvatarActions::canOfferTeleport(mAvatarID);
+    return LLAvatarActions::canOfferTeleport(mAvatarID);
 }
 
 bool LLInspectAvatar::enableTeleportRequest()
 {
-	return LLAvatarActions::canRequestTeleport(mAvatarID);
+    return LLAvatarActions::canRequestTeleport(mAvatarID);
 }
 
 bool LLInspectAvatar::enablePay()
 {
-	return RlvActions::canPayAvatar(mAvatarID);
+    return RlvActions::canPayAvatar(mAvatarID);
 }
 
 bool LLInspectAvatar::godModeEnabled()
 {
-	return gAgent.isGodlike();
+    return gAgent.isGodlike();
 }
 
 void LLInspectAvatar::moderationActionCoro(std::string url, LLSD action)
 {
-	LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
-	LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("moderationActionCoro", httpPolicy));
-	LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
-	LLCore::HttpOptions::ptr_t httpOpts = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
+    LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
+    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter(new LLCoreHttpUtil::HttpCoroutineAdapter("moderationActionCoro", httpPolicy));
+    LLCore::HttpRequest::ptr_t httpRequest(new LLCore::HttpRequest);
+    LLCore::HttpOptions::ptr_t httpOpts = LLCore::HttpOptions::ptr_t(new LLCore::HttpOptions);
 
-	httpOpts->setWantHeaders(true);
+    httpOpts->setWantHeaders(true);
 
-	LLUUID sessionId = action["session-id"];
+    LLUUID sessionId = action["session-id"];
 
-	LLSD result = httpAdapter->postAndSuspend(httpRequest, url, action, httpOpts);
-	LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
-	LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+    LLSD result = httpAdapter->postAndSuspend(httpRequest, url, action, httpOpts);
+    LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
 
-	if (!status)
-	{
-		if (gIMMgr)
-		{
-			//403 == you're not a mod
-			//should be disabled if you're not a moderator
-			if (status == LLCore::HttpStatus(HTTP_FORBIDDEN))
-			{
-				gIMMgr->showSessionEventError(
-					"mute",
-					"not_a_mod_error",
-					sessionId);
-			}
-			else
-			{
-				gIMMgr->showSessionEventError(
-					"mute",
-					"generic_request_error",
-					sessionId);
-			}
-		}
-	}
+    if (!status)
+    {
+        if (gIMMgr)
+        {
+            //403 == you're not a mod
+            //should be disabled if you're not a moderator
+            if (status == LLCore::HttpStatus(HTTP_FORBIDDEN))
+            {
+                gIMMgr->showSessionEventError(
+                    "mute",
+                    "not_a_mod_error",
+                    sessionId);
+            }
+            else
+            {
+                gIMMgr->showSessionEventError(
+                    "mute",
+                    "generic_request_error",
+                    sessionId);
+            }
+        }
+    }
 }
 // </FS:Ansariel>
 
@@ -913,6 +930,6 @@ void LLInspectAvatar::moderationActionCoro(std::string url, LLSD action)
 //////////////////////////////////////////////////////////////////////////////
 void LLInspectAvatarUtil::registerFloater()
 {
-	LLFloaterReg::add("inspect_avatar", "inspect_avatar.xml",
-					  &LLFloaterReg::build<LLInspectAvatar>);
+    LLFloaterReg::add("inspect_avatar", "inspect_avatar.xml",
+                      &LLFloaterReg::build<LLInspectAvatar>);
 }

@@ -458,7 +458,7 @@
                  follows="left|top|right"
                  layout="topleft"
                  max_length_bytes="30"
-                 prevalidate_callback="ascii"
+                 prevalidator="ascii"
                  commit_on_focus_lost="false"
                 />
                 <text

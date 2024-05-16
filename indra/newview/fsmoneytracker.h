@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -37,32 +37,32 @@ class LLTextBox;
 class FSMoneyTracker: public LLFloater
 {
 public:
-	FSMoneyTracker(const LLSD& key);
-	virtual ~FSMoneyTracker() {};
-	virtual void onClose(bool app_quitting);
+    FSMoneyTracker(const LLSD& key);
+    virtual ~FSMoneyTracker() {};
+    virtual void onClose(bool app_quitting);
 
-	bool postBuild();
-	void addPayment(const LLUUID other_id, bool is_group, S32 amount, bool incoming);
+    bool postBuild();
+    void addPayment(const LLUUID other_id, bool is_group, S32 amount, bool incoming);
 
 private:
-	void clear();
-	std::string getTime(time_t utc_time);
-	std::string getDate(time_t utc_time);
+    void clear();
+    std::string getTime(time_t utc_time);
+    std::string getDate(time_t utc_time);
 
-	LLNameListCtrl*	mTransactionHistory;
-	LLTextBox*		mSummary;
+    LLNameListCtrl* mTransactionHistory;
+    LLTextBox*      mSummary;
 
-	S32 mAmountPaid;
-	S32 mAmountReceived;
+    S32 mAmountPaid;
+    S32 mAmountReceived;
 };
 
 class FSMoneyTrackerListMenu : public LLListContextMenu
 {
 public:
-	/*virtual*/ LLContextMenu* createMenu();
+    /*virtual*/ LLContextMenu* createMenu();
 private:
-	void onContextMenuItemClick(const LLSD& userdata);
-	bool onContextMenuItemEnable(const LLSD& userdata);
+    void onContextMenuItemClick(const LLSD& userdata);
+    bool onContextMenuItemEnable(const LLSD& userdata);
 };
 
 extern FSMoneyTrackerListMenu gFSMoneyTrackerListMenu;

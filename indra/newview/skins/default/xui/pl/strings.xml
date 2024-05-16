@@ -1386,6 +1386,45 @@ https://www.firestormviewer.org/support aby uzyskać pomoc.
 	<string name="executable_files">
 		Pliki wykonywalne
 	</string>
+	<string name="Validator_InvalidNumericString">
+		Nieprawidłowy ciąg liczbowy: "[STR]"
+	</string>
+	<string name="Validator_ShouldNotBeMinus">
+		Nieprawidłowy znak początkowy: '[CH]' (nie powinien być minusem)
+	</string>
+	<string name="Validator_ShouldNotBeMinusOrZero">
+		Nieprawidłowy znak początkowy: '[CH]' (nie powinien być ani minusem, ani zerem)
+	</string>
+	<string name="Validator_ShouldBeDigit">
+		Nieprawidłowy znak [NR]: '[CH]' (powinien być tylko cyfrą)
+	</string>
+	<string name="Validator_ShouldBeDigitOrDot">
+		Nieprawidłowy znak [NR]: '[CH]' (powinien być tylko cyfrą lub kropką dziesiętną)
+	</string>
+	<string name="Validator_ShouldBeDigitOrAlpha">
+		Nieprawidłowy znak [NR]: '[CH]' (powinien być tylko cyfrą lub alfanumerycznym znakiem ASCII)
+	</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrSpace">
+		Nieprawidłowy znak [NR]: '[CH]' (powinien być tylko cyfrą, alfanumerycznym znakiem ASCII lub spacją)
+	</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrPunct">
+		Nieprawidłowy znak [NR]: '[CH]' (powinien być tylko cyfrą, alfanumerycznym znakiem ASCII lub znakiem interpunkcyjnym)
+	</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrPunctNotSpace">
+		Nieprawidłowy znak [NR]: '[CH]' (powinien być tylko cyfrą lub alfanumerycznym znakiem ASCII albo znakiem interpunkcyjnym bez spacji)
+	</string>
+	<string name="Validator_ShouldBeDigitNotSpace">
+		Nieprawidłowy znak [NR]: '[CH]' (powinien być tylko cyfrą bez spacji)
+	</string>
+	<string name="Validator_ShouldBeASCII">
+		Nieprawidłowy znak [NR]: '[CH]' (powinien być tylko znakiem ASCII)
+	</string>
+	<string name="Validator_ShouldBeNewLineOrASCII">
+		Nieprawidłowy znak [NR]: '[CH]' (powinien być tylko znakiem ASCII lub nową linią)
+	</string>
+	<string name="LSLTipSleepTime">
+		Usypia skrypt na [SLEEP_TIME] sekund.
+	</string>
 	<string name="shape">
 		Kształt
 	</string>
@@ -5074,8 +5113,11 @@ Raport o Nadużyciu
 	<string name="New Settings">
 		Nowe otoczenie
 	</string>
-	<string name="AvatarBirthDateFormat">
+	<string name="AvatarBirthDateFormatFull">
 		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc]
+	</string>
+	<string name="AvatarBirthDateFormatShort">
+		[day,datetime,utc].[mthnum,datetime,utc]
 	</string>
 	<string name="AvatarBirthDateFormat_legacy">
 		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]
@@ -5187,6 +5229,7 @@ Jeśli problemy będą występowały nadal, proszę sprawdź sieć i ustawienia 
 	</string>
 	<string name="ExternalEditorNotSet">
 		Wybierz edytor poprzez ustawienie zmiennej środowiska LL_SCRIPT_EDITOR lub ustawienie ExternalEditor.
+Zobacz https://wiki.secondlife.com/wiki/LSL_Alternate_Editors
 	</string>
 	<string name="ExternalEditorNotFound">
 		Nie odnaleziono zewnętrznego edytora wskazanego przez Ciebie.
@@ -6286,6 +6329,9 @@ Twoja aktualna pozycja: [AVATAR_POS]
 	</string>
 	<string name="avatar_age_alert">
 		wywołał/a alert powiadamiania o wieku. Wiek: [AGE] dni.
+	</string>
+	<string name="avatar_age_not_available">
+		nd.
 	</string>
 	<string name="TotalScriptCountChangeIncrease">
 		Całkowita il. skryptów w regionie wzrosła z [OLD_VALUE] do [NEW_VALUE] ([DIFFERENCE]).

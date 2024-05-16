@@ -24,7 +24,6 @@ https://wiki.firestormviewer.org/fs_media
 aby poznać możliwe kroki naprawy błędu.
 			</text>
 			<button label="Użyj mojej przeglądarki" name="open_browser"/>
-			<check_box label="Zawsze w mojej przeglądarce" name="open_always"/>
 			<button label="Zamknij" name="close"/>
 		</layout_panel>
 	</layout_stack>

@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -38,65 +38,65 @@ static LLDefaultChildRegistry::Register<FSEmbeddedItemDropTarget> r3("fs_embedde
 
 
 bool FSCopyTransInventoryDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
-													   EDragAndDropType cargo_type,
-													   void* cargo_data,
-													   EAcceptance* accept,
-													   std::string& tooltip_msg)
+                                                       EDragAndDropType cargo_type,
+                                                       void* cargo_data,
+                                                       EAcceptance* accept,
+                                                       std::string& tooltip_msg)
 {
-	LLInventoryItem* item = (LLInventoryItem*)cargo_data;
+    LLInventoryItem* item = (LLInventoryItem*)cargo_data;
 
-	if (cargo_type >= DAD_TEXTURE && cargo_type <= DAD_GESTURE &&
-		item && item->getActualType() != LLAssetType::AT_LINK && item->getActualType() != LLAssetType::AT_LINK_FOLDER && item->getType() != LLAssetType::AT_CATEGORY &&
-		item->getPermissions().getMaskOwner() & PERM_COPY && item->getPermissions().getMaskOwner() & PERM_TRANSFER)
-	{
-		if (drop)
-		{
-			if (!mDADSignal.empty())
-			{
-				mDADSignal(item->getUUID());
-			}
-		}
-		else
-		{
-			*accept = ACCEPT_YES_SINGLE;
-		}
-	}
-	else
-	{
-		*accept = ACCEPT_NO;
-	}
+    if (cargo_type >= DAD_TEXTURE && cargo_type <= DAD_GESTURE &&
+        item && item->getActualType() != LLAssetType::AT_LINK && item->getActualType() != LLAssetType::AT_LINK_FOLDER && item->getType() != LLAssetType::AT_CATEGORY &&
+        item->getPermissions().getMaskOwner() & PERM_COPY && item->getPermissions().getMaskOwner() & PERM_TRANSFER)
+    {
+        if (drop)
+        {
+            if (!mDADSignal.empty())
+            {
+                mDADSignal(item->getUUID());
+            }
+        }
+        else
+        {
+            *accept = ACCEPT_YES_SINGLE;
+        }
+    }
+    else
+    {
+        *accept = ACCEPT_NO;
+    }
 
-	return true;
+    return true;
 }
 
 bool FSEmbeddedItemDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
-												EDragAndDropType cargo_type,
-												void* cargo_data,
-												EAcceptance* accept,
-												std::string& tooltip_msg)
+                                                EDragAndDropType cargo_type,
+                                                void* cargo_data,
+                                                EAcceptance* accept,
+                                                std::string& tooltip_msg)
 {
-	LLInventoryItem* item = (LLInventoryItem*)cargo_data;
+    LLInventoryItem* item = (LLInventoryItem*)cargo_data;
 
-	if (cargo_type >= DAD_TEXTURE && cargo_type <= DAD_GESTURE &&
-		item && item->getActualType() != LLAssetType::AT_LINK && item->getActualType() != LLAssetType::AT_LINK_FOLDER && item->getType() != LLAssetType::AT_CATEGORY &&
-		item->getPermissions().getMaskOwner() & PERM_COPY && item->getPermissions().getMaskOwner() & PERM_TRANSFER)
-	{
-		if (drop)
-		{
-			if (!mDADSignal.empty())
-			{
-				mDADSignal(item->getUUID());
-			}
-		}
-		else
-		{
-			*accept = ACCEPT_YES_SINGLE;
-		}
-	}
-	else
-	{
-		*accept = ACCEPT_NO;
-	}
+    if (cargo_type >= DAD_TEXTURE && cargo_type <= DAD_GESTURE &&
+        item && item->getActualType() != LLAssetType::AT_LINK && item->getActualType() != LLAssetType::AT_LINK_FOLDER && item->getType() != LLAssetType::AT_CATEGORY &&
+        item->getPermissions().getMaskOwner() & PERM_COPY && item->getPermissions().getMaskOwner() & PERM_TRANSFER)
+    {
+        if (drop)
+        {
+            if (!mDADSignal.empty())
+            {
+                mDADSignal(item->getUUID());
+            }
+        }
+        else
+        {
+            *accept = ACCEPT_YES_SINGLE;
+        }
+    }
+    else
+    {
+        *accept = ACCEPT_NO;
+    }
 
-	return true;
+    return true;
 }
