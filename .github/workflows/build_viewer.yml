@@ -115,7 +115,7 @@ jobs:
             FS_RELEASE_TYPE=Alpha
           elif [[ "${{ github.ref_name }}" == *nightly* ]] || [[ "${{ github.event_name }}" == 'schedule' ]]; then
             FS_RELEASE_TYPE=Nightly
-          elif: github.event_name == 'workflow_dispatch'
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             FS_RELEASE_TYPE=Manual
           fi
           if [[ "${{ matrix.addrsize }}" == "64" ]]; then
