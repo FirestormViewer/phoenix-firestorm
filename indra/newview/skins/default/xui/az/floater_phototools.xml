@@ -69,16 +69,16 @@
 			</panel>
 
 			<panel name="P_R_Res">
-				<text name="T_R_Res" tool_tip="Su əks etdirmələrinin ayırdetmə qabiliyyətini/keyfiyyətini müəyyən edir. Çözünürlük seçimləri 'Çox Yaxşı' və ya daha yüksək olaraq təyin edilərsə, 'İşıq' pəncərəsində 'Qabaqcıl İşıqlandırma Modeli'ni də aktivləşdirməlisiniz.">
+				<text name="T_R_Res" tool_tip="Su əks etdirmələrinin ayırdetmə qabiliyyətini/keyfiyyətini müəyyən edir.">
 					Çözünürlük
 				</text>
 				<combo_box name="ReflectionRescombo">
 					<combo_box.item name="0" label="Məqbul"/>
 					<combo_box.item name="1" label="Yaxşı"/>
-					<combo_box.item name="2" label="Çox Yaxşı - 'Qabaqcıl İşıqlandırma Modeli' aktivləşdirilməlidir (İşıq pəncərəsi)"/>
-					<combo_box.item name="3" label="Əla       - 'Qabaqcıl İşıqlandırma Modeli' aktivləşdirilməlidir (İşıq pəncərəsi)"/>
-					<combo_box.item name="4" label="Görkəmli   - 'Qabaqcıl İşıqlandırma Modeli' aktivləşdirilməlidir (İşıq pəncərəsi)"/>
-					<combo_box.item name="5" label="Canlı kimi - 'Qabaqcıl İşıqlandırma Modeli' aktivləşdirilməlidir (İşıq pəncərəsi)"/>
+					<combo_box.item name="2" label="Çox Yaxşı"/>
+					<combo_box.item name="3" label="Əla"/>
+					<combo_box.item name="4" label="Görkəmli"/>
+					<combo_box.item name="5" label="Canlı kimi"/>
 				</combo_box>
 				<check_box name="TransparentWater" label="Şəffaf Su" tool_tip="Su şəffaflığını göstərir. Onu söndürmək, tətbiq olunan sadə tekstura ilə suyu qeyri-şəffaf edir."/>
 			</panel>

@@ -61,16 +61,16 @@
 				</combo_box>
 			</panel>
 			<panel name="P_R_Res">
-				<text name="T_R_Res" tool_tip="Determina la qualità dei riflessi sull'acqua. Impostando 'Molto buona' o superiore, è necessario abilitare anche 'Illuminazione Avanzata' nella scheda 'Luce'.">
+				<text name="T_R_Res" tool_tip="Determina la qualità dei riflessi sull'acqua.">
 					Risoluzione
 				</text>
 				<combo_box name="ReflectionRescombo">
 					<combo_box.item label="Discreta" name="0"/>
 					<combo_box.item label="Buona" name="1"/>
-					<combo_box.item label="Molto buona - NOTA: è necessario abilitare anche 'Illuminazione Avanzata' (scheda Luce)" name="2"/>
-					<combo_box.item label="Eccellente - NOTA: è necessario abilitare anche 'Illuminazione Avanzata' (scheda Luce)" name="3"/>
-					<combo_box.item label="Eccezionale - NOTA: è necessario abilitare anche 'Illuminazione Avanzata' (scheda Luce)" name="4"/>
-					<combo_box.item label="Realistica - NOTA: è necessario abilitare anche 'Illuminazione Avanzata' (scheda Luce)" name="5"/>
+					<combo_box.item label="Molto buona" name="2"/>
+					<combo_box.item label="Eccellente" name="3"/>
+					<combo_box.item label="Eccezionale" name="4"/>
+					<combo_box.item label="Realistica" name="5"/>
 				</combo_box>
 				<check_box label="Acqua Trasparente" name="TransparentWater" tool_tip="Rende l'acqua trasparente. Senza questa spunta, l'acqua apparirà opaca con una semplice texture."/>
 			</panel>

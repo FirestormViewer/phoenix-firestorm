@@ -46,16 +46,16 @@
 				</text>
 			</panel>
 			<panel name="P_R_Res">
-				<text name="T_R_Res" tool_tip="Określa rozdzielczość/jakość odbić w wodzie. Aby zmiany odniosły skutek musisz wyłączyć i włączyć 'podstawowe shadery'. Poza tym, gdy ustawienia rozdzielczości są w trybie 'bardzo dobrym' lub wyższym musisz także włączyć 'Zaawansowane oświetlenie' w karcie 'Światła'.">
+				<text name="T_R_Res" tool_tip="Określa rozdzielczość/jakość odbić w wodzie.">
 					Rozdzielczość
 				</text>
 				<combo_box name="ReflectionRescombo">
 					<combo_box.item label="Przyzwoita" name="0"/>
 					<combo_box.item label="Dobra" name="1"/>
-					<combo_box.item label="Bardzo dobra - UWAGA: Musisz także włączyć 'Zaawansowane oświetlenie' (karta Światła)" name="2"/>
-					<combo_box.item label="Świetna - UWAGA: Musisz także włączyć 'Zaawansowane oświetlenie' (karta Światła)" name="3"/>
-					<combo_box.item label="Znakomita - UWAGA: Musisz także włączyć 'Zaawansowane oświetlenie' (karta Światła)" name="4"/>
-					<combo_box.item label="Jak żywa - UWAGA: Musisz także włączyć 'Zaawansowane oświetlenie' (karta Światła)" name="5"/>
+					<combo_box.item label="Bardzo dobra" name="2"/>
+					<combo_box.item label="Świetna" name="3"/>
+					<combo_box.item label="Znakomita" name="4"/>
+					<combo_box.item label="Jak żywa" name="5"/>
 				</combo_box>
 				<check_box label="Przezroczysta woda" name="TransparentWater" tool_tip="Renderuj wodę jako powierzchnię przezroczystą. Wyłączenie tej opcji pokryje wodę nieprzejrzystą, prostą teksturą."/>
 			</panel>

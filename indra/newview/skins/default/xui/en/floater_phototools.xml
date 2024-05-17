@@ -492,7 +492,7 @@
 				 top_pad="13"
 				 width="80"
 				 layout="topleft"
-				 tool_tip="Determines the resolution/quality of water reflections. Whenever resolution settings are set to 'Very Good' or above, you must also enable 'Advanced Lighting Model' in tab 'Light'.">
+				 tool_tip="Determines the resolution/quality of water reflections.">
 					Resolution
 				</text>
 				<combo_box
@@ -513,19 +513,19 @@
 					 name="1"
 					 value="512"/>
 					<combo_box.item
-					 label="Very Good          - NOTE: You must also enable 'Advanced Lighting Model' (Light Tab)"
+					 label="Very Good"
 					 name="2"
 					 value="1024"/>
 					<combo_box.item
-					 label="Excellent            - NOTE: You must also enable 'Advanced Lighting Model' (Light Tab)"
+					 label="Excellent"
 					 name="3"
 					 value="1536"/>
 					<combo_box.item
-					 label="Outstanding      - NOTE: You must also enable 'Advanced Lighting Model' (Light Tab)"
+					 label="Outstanding"
 					 name="4"
 					 value="2048"/>
 					<combo_box.item
-					 label="Life-Like             - NOTE: You must also enable 'Advanced Lighting Model' (Light Tab)"
+					 label="Life-Like"
 					 name="5"
 					 value="4096"/>
 					<combo_box.commit_callback

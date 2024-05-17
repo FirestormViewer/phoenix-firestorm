@@ -93,16 +93,16 @@
 			</panel>
 		
 			<panel name="P_R_Res">
-				<text name="T_R_Res" tool_tip="水の反射の解像度／品質を決定します。「非常によい」以上に設定する場合は、「光」タブの「高度な照明モデル」を有効にしておく必要があります。">
+				<text name="T_R_Res" tool_tip="水の反射の解像度／品質を決定します。">
 					解像度
 				</text>
 				<combo_box name="ReflectionRescombo">
 					<combo_box.item label="ふつう" name="0" />
 					<combo_box.item label="よい" name="1" />
-					<combo_box.item label="非常によい          - ※注意！　「高度な照明モデル」（光タブ内）を有効にしておく必要があります。" name="2" />
-					<combo_box.item label="優れている            - ※注意！　「高度な照明モデル」（光タブ内）を有効にしておく必要があります。" name="3" />
-					<combo_box.item label="非常に優れている      - ※注意！　「高度な照明モデル」（光タブ内）を有効にしておく必要があります。" name="4" />
-					<combo_box.item label="実物レベル             - ※注意！　「高度な照明モデル」（光タブ内）を有効にしておく必要があります。" name="5" />
+					<combo_box.item label="非常によい" name="2" />
+					<combo_box.item label="優れている" name="3" />
+					<combo_box.item label="非常に優れている" name="4" />
+					<combo_box.item label="実物レベル" name="5" />
 				</combo_box>
 				<check_box label="透明な水" name="TransparentWater" tool_tip="水を透明に描画します。ここにチェックを入れると、単純なテクスチャが適用された不透明な水を描画しなくなります。" />
 			</panel>
