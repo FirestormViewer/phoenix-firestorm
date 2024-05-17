@@ -92,10 +92,6 @@
 			</panel>
 
 			<panel adı="P_L_S_Settings">
-				<check_box name="RenderDeferred" label="Qabaqcıl işıqlandırma modeli"
-				 tool_tip="Bu, Günəşdən və Aydan, eləcə də xarici işıqlardan kölgələr yaradacaq. Bu, həmçinin sizə Sahənin Dərinliyini və digər qrafik xüsusiyyətlərini aktiv etməyə imkan verəcək. Əsasən, siz dünyada ən yaxşı şeyləri görmək üçün bunu aktiv etməlisiniz. . Əgər bu funksiyanı aktiv edə bilmirsinizsə və ya onun təsirini görə bilmirsinizsə, əvvəlcə Ətraf mühit nişanında Atmosfer Kölgələrinin aktiv olduğundan əmin olun."/>
-				<check_box name="LocalLights" label="Bütün yerli işıqları aktivləşdir"
-				 tool_tip="Bu, dünyadakı bütün işıqları yandıracaq. Bu funksiyanı deaktiv etsəniz, Günəş/Aydan gələn işıq hələ də göstəriləcək. SİM kartın işıqlandırmasını çıxarmaq və yalnız Günəş işığından istifadə etmək istəyirsinizsə faydalıdır. /Ay."/>
 				<check_box name="Render Attached Lights"  label="Birləşdirilmiş İşıqları Aktivləşdir"
 				 tool_tip="Bu, avatar işıqları kimi istənilən işığı yandıracaq. Lazım olduqda işıqları söndürmək üçün faydalıdır."/>
 			</panel>

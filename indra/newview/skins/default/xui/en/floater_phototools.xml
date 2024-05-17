@@ -549,7 +549,7 @@
 		 name="P_Lighting" 
 		 follows="all"
 		 layout="topleft"
-		 width="285"
+		 width="267"
 		 top="0"
 		 label="Light"
 		 left="0">
@@ -584,24 +584,14 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="45"
+			 height="28"
 			 border_visible="true"
 			 background_visible="true">
-				<check_box
-				 control_name="RenderLocalLights"
-				 height="16"
-				 label="Enable All Local Lights"
-				 layout="topleft"
-				 left="5"
-				 name="LocalLights"
-				 tool_tip="This will turn on all in-world lights. If you disable this feature, light from Sun and Moon will still appear. Useful when you wish to eliminate SIM lighting and use only the Sun and Moon light."
-				 top_pad="7"
-				 width="240"/>
 				<check_box
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 top_pad="2"
+				 top_pad="9"
 				 height="16"
 				 label="Enable Attached Lights (Face Lights)"
 				 tool_tip="This will enable any lights, such as face lights, avatars have attached to them. Useful for turning off facelights when necessary."

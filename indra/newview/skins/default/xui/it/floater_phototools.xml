@@ -82,8 +82,6 @@
 				</text>
 			</panel>
 			<panel name="P_L_S_Settings">
-				<check_box label="Abilita Illuminazione Avanzata" name="RenderDeferred" tool_tip="Abilita le ombre di sole e luna e dalle altre fonti di luce. Permette anche di abilitare la profondità di campo ed altre funzioni grafiche. In sostanza questa impostazione abilita la maggior parte degli abbellimenti grafici."/>
-				<check_box label="Abilita Luci Locali" name="LocalLights" tool_tip="Abilita tutte le luci. Se disabilitata, rimarranno attive solo le luci del sole e della luna. Utile per disabilitare le luci provenienti dagli oggetti ed usare soltanto quelle di sole e luna."/>
 				<check_box label="Abilita Luci Attachments" tool_tip="Abilita tutte le luci provenienti da oggetti indossati dagli avatar, come ad esempio le face-light. Utile per disabilitare le face-light quando necessario." name="Render Attached Lights"/>
 			</panel>
 			<panel name="P_Shadows">

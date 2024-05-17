@@ -85,8 +85,6 @@
 				</text>
 			</panel>
 			<panel name="P_L_S_Settings">
-				<check_box label="Modelo avanzado de iluminación" name="RenderDeferred" tool_tip="Activa las sombras de sol, luna y fuentes de luz. También permite activar la profundidad de campo y otras características gráficas. Básicamente, necesitas activarlo para apreciar casi todo lo vistoso de SL. Si no puedes activar esta característica o apreciar sus efectos, asegúrate de que los efectos atmosféricos y los efectos básicos están activados en la pestaña 'WL'."/>
-				<check_box label="Activar todas las luces locales" name="LocalLights" tool_tip="Activa todas las luces del entorno. Si desactivas esta característica, la luz del sol y de la luna aún se verán. Útil cuando quieres eliminar toda iluminación que no provenga del sol y de la luna."/>
 				<check_box label="Activar luces anexadas" tool_tip="Activa cualquier luz, como las iluminaciones faciales que los avatares tengan anexadas. Útil para desactivar las iluminaciones faciales cuando sea necesario." name="Render Attached Lights"/>
 			</panel>
 			<panel name="P_Shadows">

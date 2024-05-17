@@ -67,7 +67,6 @@
 				</text>
 			</panel>
 			<panel name="P_L_S_Settings">
-				<check_box label="Wszystkie lokalne światła" name="LocalLights" tool_tip="Ta opcja włącza wszystkie światła w świecie. Jeśli ją wyłączysz, to światło pochodzące od Słońca i Księżyca ciągle będzie widoczne. Przydatne, gdy chcesz wyeliminować oświetlenie pochodzące z regionu i użyć tylko światła słonecznego/księżycowego."/>
 				<check_box label="Włącz doczepiane światła (np. twarzy)" name="Render Attached Lights" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy."/>
 			</panel>
 			<panel name="P_Shadows">
