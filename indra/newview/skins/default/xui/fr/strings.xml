@@ -1388,6 +1388,19 @@ http://secondlife.com/support pour vous aider à résoudre ce problème.
 	<string name="executable_files">
 		Fichiers de programmes exécutables
 	</string>
+	<string name="Validator_InvalidNumericString">Chaîne numérique non valide : "[STR]"</string>
+	<string name="Validator_ShouldNotBeMinus">Caractère initial non valide : '[CH]' (ne doit pas être un moins)</string>
+	<string name="Validator_ShouldNotBeMinusOrZero">Caractère initial non valide : '[CH]' (ne doit être ni un moins ni un zéro)</string>
+	<string name="Validator_ShouldBeDigit">Caractère non valide [NR] : '[CH]' (ne doit être qu'un chiffre)</string>
+	<string name="Validator_ShouldBeDigitOrDot">Caractère non valide [NR] : '[CH]' (ne doit être qu'un chiffre ou un point décimal)</string>
+	<string name="Validator_ShouldBeDigitOrAlpha">Caractère non valide [NR] : '[CH]' (ne peut être qu'un chiffre ou un caractère alphanumérique ASCII)</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrSpace">Caractère non valide [NR] : '[CH]' (ne peut être qu'un chiffre, un caractère alphanumérique ASCII ou un espace.)</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrPunct">Caractère non valide [NR] : '[CH]' (ne peut être qu'un chiffre, un caractère alphanumérique ASCII ou un signe de ponctuation.)</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrPunctNotSpace">Caractère non valide [NR] : '[CH]' (ne peut être qu'un chiffre ou un caractère alphanumérique ASCII ou une ponctuation sans espace.)</string>
+	<string name="Validator_ShouldBeDigitNotSpace">Caractère non valide [NR] : '[CH]' (ne doit être qu'un chiffre sans espace)</string>
+	<string name="Validator_ShouldBeASCII">Caractère non valide [NR] : '[CH]' (ne peut être qu'un caractère ASCII)</string>
+	<string name="Validator_ShouldBeNewLineOrASCII">Caractère non valide [NR] : '[CH]' (ne doit être qu'un caractère ASCII ou une nouvelle ligne.)</string>
+	<string name="LSLTipSleepTime" translate="false">Pause le script pendant [SLEEP_TIME] secondes.</string>
 	<string name="shape">
 		Silhouette
 	</string>
@@ -5416,7 +5429,8 @@ Si le problème persiste, vérifiez la configuration de votre réseau et de votr
 		Cette tenue ne contient aucun article.
 	</string>
 	<string name="ExternalEditorNotSet">
-		Sélectionnez un éditeur à l&apos;aide du paramètre ExternalEditor.
+		Sélectionnez un éditeur en définissant la variable d'environnement LL_SCRIPT_EDITOR ou le paramètre ExternalEditor.
+Voyez https://wiki.secondlife.com/wiki/LSL_Alternate_Editors
 	</string>
 	<string name="ExternalEditorNotFound">
 		Éditeur externe spécifié introuvable.
@@ -6841,6 +6855,7 @@ Votre position actuelle : [AVATAR_POS]
 	<string name="avatar_age_alert">
 		a déclenché l'alerte sur l'âge. Âge: [AGE] jour(s)
 	</string>
+	<string name="avatar_age_not_available">n.d.</string>
 
 	<string name="TotalScriptCountChangeIncrease">
 		Le nombre total de scripts dans la région est passé de [OLD_VALUE] à [NEW_VALUE] ([DIFFERENCE]).

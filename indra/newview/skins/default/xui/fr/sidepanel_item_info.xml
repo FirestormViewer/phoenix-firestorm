@@ -18,23 +18,17 @@
 	<panel.string name="owner_can">
 		Le propriétaire peut :
 	</panel.string>
-	<panel.string name="acquiredDate">
-		[wkday,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [hour,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [year,datetime,slt]
-	</panel.string>
 	<panel.string name="origin_inventory">
 		(inventaire)
 	</panel.string>
 	<panel.string name="origin_inworld">
 		(dans Second Life)
 	</panel.string>
-	<text name="title" value="Profil de l&apos;article"/>
-	<text name="origin" value="(inventaire)"/>
-	<scroll_container name="item_profile_scroll">
-		<panel label="" name="item_profile">
-			<text name="LabelItemNameTitle">
-				Nom :
-			</text>
+	<layout_stack name="main_stack">
+		<layout_panel name="layout_item_name">
 			<line_editor name="LabelItemName" tool_tip="Le nom est limité à 63 caractères. Les noms de prim plus longs sont écourtés. Les noms ne peuvent contenir que des caractères imprimables trouvés dans le jeu de caractères ASCII-7 (non étendu), à l&apos;exception de la barre / pipe verticale &apos;|&apos;."/>
+		</layout_panel>
+		<layout_panel name="layout_item_details">
 			<text name="LabelOwnerTitle">
 				Propriétaire :
 			</text>
@@ -44,31 +38,42 @@
 			<text name="LabelAcquiredTitle">
 				Acquis le :
 			</text>
+			<button label="Photo..." name="change_thumbnail_btn" />
+		</layout_panel>
+		<layout_panel name="layout_item_description">
+			<text name="LabelItemDescTitle">
+				Description :
+			</text>
+			<text_editor name="LabelItemDesc" tool_tip="Lorsque les utilisateurs ont sélectionné &apos;Afficher les infobulles sur tous les objets&apos; dans les paramètres de la visionneuse, ils verront la description de l'objet s'afficher pour tout objet placé sous le pointeur de leur souris. La description de l'objet est limitée à 127 octets. Toute chaîne de caractères plus longue sera tronquée." />
 			<text name="LabelItemExperienceTitle">
 				Expérience :
 			</text>
-			<panel name="perms_inv">
-				<text name="perm_modify">
-					Vous pouvez :
-				</text>
-				<check_box label="Modifier" name="CheckOwnerModify"/>
-				<check_box label="Copier" name="CheckOwnerCopy"/>
-				<check_box label="Transférer" name="CheckOwnerTransfer"/>
-				<text name="AnyoneLabel">
-					N&apos;importe qui :
-				</text>
-				<check_box label="Copier" name="CheckEveryoneCopy" tool_tip="Tout le monde peut prendre une copie de l&apos;objet. L&apos;objet et tout son contenu doit être autorisé à être copié et transféré."/>
-				<text name="GroupLabel">
-					Groupe :
-				</text>
-				<check_box label="Partager" name="CheckShareWithGroup" tool_tip="Autoriser tous les membres du groupe choisi à partager vos droits de modification pour cet objet. Pour activer les restrictions de rôles, vous devez d&apos;abord cliquer sur Céder."/>
-				<text name="NextOwnerLabel">
-					Prochain propriétaire :
-				</text>
-				<check_box label="Modifier" name="CheckNextOwnerModify" tool_tip="Le prochain propriétaire peut modifier des propriétés telles que le libellé de l&apos;élément ou l&apos;échelle de cet objet."/>
-				<check_box label="Copier" name="CheckNextOwnerCopy" tool_tip="Le prochain propriétaire peut faire des copies illimitées de cet objet. Les copies conservent les informations sur le créateur et ne peuvent jamais être plus permissives que l&apos;élément qui est copié."/>
-				<check_box label="Transférer" name="CheckNextOwnerTransfer" tool_tip="Le prochain propriétaire peut donner ou revendre cet objet."/>
-			</panel>
+		</layout_panel>
+		<layout_panel name="layout_item_permissions_sale">
+			<text name="perm_modify">
+				Autorisations
+			</text>
+			<text name="you_perm_modify">
+				Vous pouvez :
+			</text>
+			<check_box label="Modifier" name="CheckOwnerModify"/>
+			<check_box label="Copier" name="CheckOwnerCopy"/>
+			<check_box label="Transférer" name="CheckOwnerTransfer"/>
+			<text name="AnyoneLabel">
+				N&apos;importe qui :
+			</text>
+			<check_box label="Copier" name="CheckEveryoneCopy" tool_tip="Tout le monde peut prendre une copie de l&apos;objet. L&apos;objet et tout son contenu doit être autorisé à être copié et transféré."/>
+			<text name="GroupLabel">
+				Groupe :
+			</text>
+			<check_box label="Partager" name="CheckShareWithGroup" tool_tip="Autoriser tous les membres du groupe choisi à partager vos droits de modification pour cet objet. Pour activer les restrictions de rôles, vous devez d&apos;abord cliquer sur Céder."/>
+			<text name="NextOwnerLabel">
+				Prochain propriétaire :
+			</text>
+			<check_box label="Modifier" name="CheckNextOwnerModify" tool_tip="Le prochain propriétaire peut modifier des propriétés telles que le libellé de l&apos;élément ou l&apos;échelle de cet objet."/>
+			<check_box label="Copier" name="CheckNextOwnerCopy" tool_tip="Le prochain propriétaire peut faire des copies illimitées de cet objet. Les copies conservent les informations sur le créateur et ne peuvent jamais être plus permissives que l&apos;élément qui est copié."/>
+			<check_box label="Transférer" name="CheckNextOwnerTransfer" tool_tip="Le prochain propriétaire peut donner ou revendre cet objet."/>
+
 			<check_box label="À vendre" name="CheckPurchase" tool_tip="Permet aux gens d&apos;acheter cet objet, son contenu ou de le copier dans Second Life à un prix donné."/>
 			<combo_box name="ComboBoxSaleType" tool_tip="Indiquez si l’acheteur recevra une copie, une copie du contenu ou l’article lui-même.">
 				<combo_box.item label="Copier" name="Copy"/>
@@ -76,9 +81,6 @@
 				<combo_box.item label="Original" name="Original"/>
 			</combo_box>
 			<spinner label="Prix : L$" name="Edit Cost" tool_tip="Coût de l&apos;objet."/>
-		</panel>
-	</scroll_container>
-	<panel name="button_panel">
-		<button label="Annuler" name="cancel_btn"/>
-	</panel>
+		</layout_panel>
+	</layout_stack>
 </panel>

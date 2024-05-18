@@ -4,6 +4,9 @@
 	<panel.string name="want_apply_text">Voulez-vous enregistrer vos modifications ?</panel.string>
 	<panel.string name="group_join_btn">Rejoindre ([AMOUNT] L$)</panel.string>
 	<panel.string name="group_join_free">Gratuit</panel.string>
+	<panel.string name="group_member">Membre</panel.string>
+	<panel.string name="join_txt">Joindre</panel.string>
+	<panel.string name="leave_txt">Quitter</panel.string>
 	<layout_stack name="group_info_sidetray_main">
 		<layout_panel name="header_container">
 			<panel name="group_info_top"><line_editor label="Saisissez le nom de votre nouveau groupe ici" name="group_name_editor"/></panel>
