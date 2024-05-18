@@ -220,83 +220,32 @@
         </map>
     <key>goto.theencoreescape.com:8002</key>
         <map>
-        <key>DirectoryFee</key>
-            <string>0</string>
-        <key>LastModified</key>
-            <date>2020-04-24T17:00:50.92Z</date>
-        <key>SendGridInfoToViewerOnLogin</key>
-            <string>true</string>
-        <key>about</key>
-            <string>http://theencoreescape.com/</string>
-        <key>gatekeeper</key>
-            <string>goto.theencoreescape.com:8002</string>
-        <key>gridname</key>
-            <string>The Encore Escape</string>
-        <key>gridnick</key>
-            <string>EncoreEscape</string>
-        <key>help</key>
-            <string>http://theencoreescape.com/</string>
-        <key>helperuri</key>
-            <string>http://money.theencoreescape.com/</string>
+        <key>DEPRECATED</key>
+            <string>TRUE</string>
         <key>login_identifier_types</key>
             <array>
                 <string>agent</string>
                 <string>account</string>
             </array>
-        <key>loginpage</key>
-            <string>http://splash.theencoreescape.com/</string>
-        <key>loginuri</key>
-            <array>
-                <string>http://goto.theencoreescape.com:8002/</string>
-            </array>
+        <key>LastModified</key>
+            <date>2024-05-16T08:00:00.00Z</date>
         <key>name</key>
             <string>goto.theencoreescape.com:8002</string>
-        <key>password</key>
-            <string>http://theencoreescape.com/</string>
-        <key>platform</key>
-            <string>OpenSim</string>
-        <key>register</key>
-            <string>http://theencoreescape.com/</string>
-        <key>search</key>
-            <string>http://search.theencoreescape.com/query.php</string>
-        <key>slurl_base</key>
-            <string>hop://goto.theencoreescape.com:8002/</string>
         </map>
     <key>grid.3rdrockgrid.com:8002</key>
         <map>
-        <key>LastModified</key>
-            <date>2012-08-03T15:32:54.31Z</date>
-        <key>about</key>
-            <string>http://3rdrockgrid.com/</string>
-        <key>gridname</key>
-            <string>3RD Rock Grid</string>
-        <key>gridnick</key>
-            <string>3RG</string>
-        <key>help</key>
-            <string>http://3rdrockgrid.com/</string>
-        <key>helperuri</key>
-            <string>http://grid.3rdrockgrid.com/3rg_money/</string>
+        <key>DEPRECATED</key>
+            <string>TRUE</string>
         <key>login_identifier_types</key>
             <array>
                 <string>agent</string>
                 <string>account</string>
             </array>
-        <key>loginpage</key>
-            <string>http://grid.3rdrockgrid.com/3rg_login/</string>
-        <key>loginuri</key>
-            <array>
-                <string>http://grid.3rdrockgrid.com:8002/</string>
-            </array>
+        <key>LastModified</key>
+            <date>2024-05-16T08:00:00.00Z</date>
         <key>name</key>
             <string>grid.3rdrockgrid.com:8002</string>
-        <key>password</key>
-            <string>http://3rdrockgrid.com/</string>
-        <key>register</key>
-            <string>http://3rdrockgrid.com/</string>
-        <key>slurl_base</key>
-            <string>hop://grid.3rdrockgrid.com:8002/</string>
         </map>
-
     <key>grid.avacon.org:8002</key>
         <map>
         <key>LastModified</key>
@@ -409,43 +358,45 @@
         <key>name</key>
             <string>grid01.from-ne.com:8002</string>
         </map>
-    <key>hypergrid.org:8002</key>
+    <key>grid.wolfterritories.org:8002</key>
         <map>
         <key>LastModified</key>
-            <date>2013-04-02T01:01:24.65Z</date>
-        <key>about</key>
-            <string>http://www.hypergrid.org/metropolis/wiki</string>
-        <key>gatekeeper</key>
-            <string>hypergrid.org:8002</string>
+            <date>2024-01-01T11:41:00.95Z</date>
         <key>gridname</key>
-            <string>Metropolis Metaversum</string>
+            <string>Wolf Territories Grid</string>
         <key>gridnick</key>
-            <string>Metropolis</string>
-        <key>help</key>
-            <string>http://metropolis.hypergrid.org/forum</string>
-        <key>helperuri</key>
-            <string>http://metropolis.hypergrid.org/currency/helper/</string>
+            <string>WolfGrid</string>
         <key>login_identifier_types</key>
             <array>
                 <string>agent</string>
                 <string>account</string>
             </array>
         <key>loginpage</key>
-            <string>http://metropolis.hypergrid.org</string>
+            <string>https://www.wolf-grid.com</string>
         <key>loginuri</key>
             <array>
-                <string>http://hypergrid.org:8002/</string>
+                <string>http://grid.wolfterritories.org:8002</string>
             </array>
         <key>name</key>
-            <string>hypergrid.org:8002</string>
-        <key>password</key>
-            <string>http://metropolis.hypergrid.org/password.php</string>
+            <string>grid.wolfterritories.org:8002</string>
         <key>platform</key>
             <string>OpenSim</string>
-        <key>register</key>
-            <string>http://www.hypergrid.org/metropolis/metro_rg.php</string>
         <key>slurl_base</key>
-            <string>hop://hypergrid.org:8002/</string>
+            <string>hop://grid.wolfterritories.org:8002/</string>
+        </map>
+    <key>hypergrid.org:8002</key>
+        <map>
+        <key>DEPRECATED</key>
+            <string>TRUE</string>
+        <key>login_identifier_types</key>
+            <array>
+                <string>agent</string>
+                <string>account</string>
+            </array>
+        <key>LastModified</key>
+            <date>2024-05-16T08:00:00.00Z</date>
+        <key>name</key>
+            <string>hypergrid.org:8002</string>
         </map>
     <key>islandoasisgrid.biz:8002</key>
         <map>
@@ -520,6 +471,32 @@
             <string>http://lfgrid.com:8002/wifi/user/account/</string>
         <key>slurl_base</key>
             <string>hop://lfgrid.com:8002/</string>
+        </map>
+    <key>localhost:9000</key>
+        <map>
+        <key>LastModified</key>
+            <date>2011-08-28T12:00:00Z</date>
+        <key>grid_login_id</key>
+            <string>localhost:9000</string>
+        <key>gridname</key>
+            <string>localhost</string>
+        <key>gridnick</key>
+            <string>localhost</string>
+        <key>login_identifier_types</key>
+            <array>
+                <string>agent</string>
+                <string>account</string>
+            </array>
+        <key>loginpage</key>
+            <undef />
+        <key>loginuri</key>
+            <array>
+                <string>http://localhost:9000</string>
+            </array>
+        <key>name</key>
+            <string>localhost:9000</string>
+        <key>slurl_base</key>
+            <string>hop://localhost:9000/</string>
         </map>
     <key>login.aviworlds.com:8002</key>
         <map>
@@ -866,43 +843,17 @@
         </map>
     <key>tanglegrid.net:8002</key>
         <map>
-        <key>LastModified</key>
-            <date>2019-12-04T10:49:43.20Z</date>
-        <key>about</key>
-            <string>http://tanglegrid.com/</string>
-        <key>gatekeeper</key>
-            <string>tanglegrid.net:8002</string>
-        <key>gridname</key>
-            <string>TanGLe Grid</string>
-        <key>gridnick</key>
-            <string>TanGLe</string>
-        <key>help</key>
-            <string>http://tanglegrid.com/contact.php</string>
-        <key>helperuri</key>
-            <string>http://tanglegrid.net/scripts/helper/</string>
+        <key>DEPRECATED</key>
+            <string>TRUE</string>
         <key>login_identifier_types</key>
             <array>
                 <string>agent</string>
                 <string>account</string>
             </array>
-        <key>loginpage</key>
-            <string>http://tanglegrid.net/web_interface/loginscreen.php</string>
-        <key>loginuri</key>
-            <array>
-                <string>http://tanglegrid.net:8002/</string>
-            </array>
+        <key>LastModified</key>
+            <date>2024-05-16T08:00:00.00Z</date>
         <key>name</key>
             <string>tanglegrid.net:8002</string>
-        <key>password</key>
-            <string>http://www.tanglegrid.net/web_interface/index.php?page=forgotpass</string>
-        <key>platform</key>
-            <string>OpenSim</string>
-        <key>register</key>
-            <string>http://www.tanglegrid.net/web_interface/avatar.php</string>
-        <key>search</key>
-            <string>http://www.tanglegrid.net/helper/query.php</string>
-        <key>slurl_base</key>
-            <string>hop://tanglegrid.net:8002/</string>
         </map>
     <key>thekazgrid.com:8002</key>
         <map>
@@ -953,7 +904,7 @@
                 <string>agent</string>
             </array>
         <key>loginpage</key>
-            <string>https://phoenixviewer.com/app/loginV3/</string>
+            <string>http://viewer-login.agni.lindenlab.com</string>
         <key>loginuri</key>
             <array>
                 <string>https://login.aditi.lindenlab.com/cgi-bin/login.cgi</string>
