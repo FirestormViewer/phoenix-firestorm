@@ -904,6 +904,7 @@
                 <string>agent</string>
             </array>
         <key>loginpage</key>
+            <!-- uses agni page with logic for non-prod-grid -->
             <string>http://viewer-login.agni.lindenlab.com</string>
         <key>loginuri</key>
             <array>
