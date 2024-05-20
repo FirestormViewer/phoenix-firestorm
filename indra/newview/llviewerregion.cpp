@@ -2616,7 +2616,7 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
     }
 #endif
 
-    if (mSimulatorFeatures.has("BakesOnMeshEnabled") && mSimulatorFeatures["BakesOnMeshEnabled"].asBoolean())
+    if (LLGridManager::getInstance()->isInSecondLife() || (mSimulatorFeatures.has("BakesOnMeshEnabled") && mSimulatorFeatures["BakesOnMeshEnabled"].asBoolean()))
     {
         mMaxBakes = LLAvatarAppearanceDefines::EBakedTextureIndex::BAKED_NUM_INDICES;
         mMaxTEs   = LLAvatarAppearanceDefines::ETextureIndex::TEX_NUM_INDICES;
