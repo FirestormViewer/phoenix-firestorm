@@ -93,6 +93,8 @@ public:
     void setCallDirection(EDirection direction) {mCallDirection = direction;}
     EDirection getCallDirection() {return mCallDirection;}
 
+    bool isThisVoiceChannel(const LLSD &voiceChannelInfo) { return LLVoiceClient::getInstance()->compareChannels(mChannelInfo, voiceChannelInfo); }
+
     static LLVoiceChannel* getChannelByID(const LLUUID& session_id);
     static LLVoiceChannel* getCurrentVoiceChannel();
 

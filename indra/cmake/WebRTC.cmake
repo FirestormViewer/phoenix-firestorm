@@ -26,7 +26,7 @@ elseif (DARWIN)
         ${COCOA_LIBRARY}
     )
 elseif (LINUX)
-    target_link_libraries( ll::webrtc INTERFACE webrtc )
+    target_link_libraries( ll::webrtc INTERFACE libwebrtc.a X11 )
 endif (WINDOWS)
 
 

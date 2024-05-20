@@ -10,8 +10,9 @@ include(WebRTC)
 
 project(llwebrtc)
 
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
-
+if (LINUX)
+    add_compile_options(-Wno-deprecated-declarations) # webrtc::CreateAudioDeviceWithDataObserver is deprecated
+endif (LINUX)
 
 set(llwebrtc_SOURCE_FILES
     llwebrtc.cpp
