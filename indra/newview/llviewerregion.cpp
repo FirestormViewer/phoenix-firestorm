@@ -675,7 +675,8 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 // </FS:Beq>
     // <FS:CR> Aurora Sim
     mWidth(region_width_meters),
-    mWidthScaleFactor(region_width_meters / REGION_WIDTH_METERS) // <FS:Ansariel> FIRE-19563: Scaling for OpenSim VarRegions
+    mWidthScaleFactor(region_width_meters / REGION_WIDTH_METERS), // <FS:Ansariel> FIRE-19563: Scaling for OpenSim VarRegions
+    mMinSimHeight(0.f) // <FS:humbletim> FIRE-33613: [OpenSim] [PBR] Camera cannot be located at negative Z
 {
     // Moved this up... -> mWidth = region_width_meters;
 // </FS:CR>
@@ -2632,6 +2633,11 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
     mMaxTEs   = LLAvatarAppearanceDefines::ETextureIndex::TEX_NUM_INDICES;
 #endif // OPENSIM
 // </FS:Beq>
+// <FS:humbletim> FIRE-33613: [OpenSim] [PBR] Camera cannot be located at negative Z
+#ifdef OPENSIM
+    mMinSimHeight = !mSimulatorFeatures.has("OpenSimExtras") ? 0.0f : mSimulatorFeatures["OpenSimExtras"]["MinSimHeight"].asReal();
+#endif
+// </FS:humbletim>
 }
 
 //this is called when the parent is not cacheable.
