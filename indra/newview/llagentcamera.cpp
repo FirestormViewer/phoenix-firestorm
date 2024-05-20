@@ -2145,16 +2145,14 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
     }
 // [/RLVa:KB]
 
-// <FS:humbletim> FIRE-33613: [OpenSim] [PBR] Camera cannot be located at negative Z
-    F32 camera_ground_plane = F_ALMOST_ZERO;
-#ifdef OPENSIM
+    // <FS:humbletim> FIRE-33613: [OpenSim] [PBR] Camera cannot be located at negative Z
+    F32 camera_ground_plane{ F_ALMOST_ZERO };
     // integrate OpenSimExtras.MinSimHeight into the camera ground plane calculation
     if (auto regionp = LLWorld::getInstance()->getRegionFromPosGlobal(camera_position_global))
     {
       camera_ground_plane += regionp->getMinSimHeight();
     }
-#endif
-// </FS:humbletim>
+    // </FS:humbletim>
 
     // Don't let camera go underground
     F32 camera_min_off_ground = getCameraMinOffGround();
