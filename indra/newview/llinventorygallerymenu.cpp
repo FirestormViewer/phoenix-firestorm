@@ -507,7 +507,7 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
             }
         }
         items.push_back(std::string("Purge Item"));
-        if (is_folder && !get_is_category_removable(&gInventory, selected_id))
+        if (is_folder && !get_is_category_and_children_removable(&gInventory, selected_id, true))
         {
             disabled_items.push_back(std::string("Purge Item"));
         }
@@ -554,9 +554,14 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
                 }
                 items.push_back(std::string("Cut"));
                 items.push_back(std::string("Delete"));
-                if(!get_is_category_removable(&gInventory, selected_id))
+
+                if(!get_is_category_and_children_removable(&gInventory, selected_id, false))
                 {
                     disabled_items.push_back(std::string("Delete"));
+                    disabled_items.push_back(std::string("Cut"));
+                }
+                else if (!get_is_category_and_children_removable(&gInventory, selected_id, true))
+                {
                     disabled_items.push_back(std::string("Cut"));
                 }
 
@@ -592,9 +597,13 @@ void LLInventoryGalleryContextMenu::updateMenuItemsVisibility(LLContextMenu* men
                 {
                     items.push_back(std::string("Delete"));
                 }
-                if(!get_is_item_removable(&gInventory, selected_id))
+                if (!get_is_item_removable(&gInventory, selected_id, false))
                 {
                     disabled_items.push_back(std::string("Delete"));
+                    disabled_items.push_back(std::string("Cut"));
+                }
+                else if(!get_is_item_removable(&gInventory, selected_id, true))
+                {
                     disabled_items.push_back(std::string("Cut"));
                 }
 

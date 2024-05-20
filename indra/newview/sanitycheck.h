@@ -28,14 +28,14 @@ class LLControlVariable;
 
 class SanityCheck : public LLSingleton<SanityCheck>
 {
-	LLSINGLETON_EMPTY_CTOR(SanityCheck);
-	~SanityCheck() { };
+    LLSINGLETON_EMPTY_CTOR(SanityCheck);
+    ~SanityCheck() { };
 
 public:
-	void init();
+    void init();
 
-	static void onSanity(LLControlVariable* controlp, bool disregardLastControl = false);
-	static void onFixIt(const LLSD& notification, const LLSD& response, LLControlVariable* controlp);
+    static void onSanity(LLControlVariable* controlp, bool disregardLastControl = false);
+    static void onFixIt(const LLSD& notification, const LLSD& response, LLControlVariable* controlp);
 };
 
 #endif // SANITYCHECK_H

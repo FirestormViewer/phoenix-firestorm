@@ -33,7 +33,7 @@
 
 
 FSFloaterStatistics::FSFloaterStatistics(const LLSD& key)
-	: LLFloater(key)
+    : LLFloater(key)
 {
 }
 
@@ -43,18 +43,18 @@ FSFloaterStatistics::~FSFloaterStatistics()
 
 BOOL FSFloaterStatistics::postBuild()
 {
-	if (gSavedSettings.getBOOL("FSStatisticsNoFocus"))
-	{
-		setIsChrome(TRUE);
-	}
-	return TRUE;
+    if (gSavedSettings.getBOOL("FSStatisticsNoFocus"))
+    {
+        setIsChrome(TRUE);
+    }
+    return TRUE;
 }
 
 void FSFloaterStatistics::onOpen(const LLSD& key)
 {
-	if (gSavedSettings.getBOOL("FSStatisticsNoFocus"))
-	{
-		setIsChrome(TRUE);
-		setFocus(FALSE);
-	}
+    if (gSavedSettings.getBOOL("FSStatisticsNoFocus"))
+    {
+        setIsChrome(TRUE);
+        setFocus(FALSE);
+    }
 }

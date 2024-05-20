@@ -1,25 +1,25 @@
-/** 
+/**
  * @file llfloaterbuycurrency.cpp
  * @brief LLFloaterBuyCurrency class implementation
  *
  * $LicenseInfo:firstyear=2005&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -50,41 +50,41 @@
 static const S32 MINIMUM_BALANCE_AMOUNT = 0;
 
 class LLFloaterBuyCurrencyUI
-:	public LLFloater
+:   public LLFloater
 {
 public:
-	LLFloaterBuyCurrencyUI(const LLSD& key);
-	virtual ~LLFloaterBuyCurrencyUI();
+    LLFloaterBuyCurrencyUI(const LLSD& key);
+    virtual ~LLFloaterBuyCurrencyUI();
 
 
 public:
-	LLViewChildren		mChildren;
-	LLCurrencyUIManager	mManager;
-	
-	bool		mHasTarget;
-	S32			mTargetPrice;
-	S32			mRequiredAmount;
-	
+    LLViewChildren      mChildren;
+    LLCurrencyUIManager mManager;
+
+    bool        mHasTarget;
+    S32         mTargetPrice;
+    S32         mRequiredAmount;
+
 public:
-	void noTarget();
-	void target(const std::string& name, S32 price);
-	
-	virtual BOOL postBuild();
-	
-	void updateUI();
-	void collapsePanels(bool collapse);
+    void noTarget();
+    void target(const std::string& name, S32 price);
 
-	virtual void draw();
-	virtual BOOL canClose();
+    virtual BOOL postBuild();
 
-	void onClickBuy();
-	void onClickCancel();
+    void updateUI();
+    void collapsePanels(bool collapse);
+
+    virtual void draw();
+    virtual BOOL canClose();
+
+    void onClickBuy();
+    void onClickCancel();
 };
 
 LLFloater* LLFloaterBuyCurrency::buildFloater(const LLSD& key)
 {
-	LLFloaterBuyCurrencyUI* floater = new LLFloaterBuyCurrencyUI(key);
-	return floater;
+    LLFloaterBuyCurrencyUI* floater = new LLFloaterBuyCurrencyUI(key);
+    return floater;
 }
 
 #if LL_WINDOWS
@@ -93,13 +93,13 @@ LLFloater* LLFloaterBuyCurrency::buildFloater(const LLSD& key)
 // already valid, so this call does the correct thing. Disable the
 // warning so that we can compile without generating a warning.
 #pragma warning(disable : 4355)
-#endif 
+#endif
 LLFloaterBuyCurrencyUI::LLFloaterBuyCurrencyUI(const LLSD& key)
-:	LLFloater(key),
-	mChildren(*this),
-	mManager(*this),
-	mHasTarget(false),
-	mTargetPrice(0)
+:   LLFloater(key),
+    mChildren(*this),
+    mManager(*this),
+    mHasTarget(false),
+    mTargetPrice(0)
 {
 }
 
@@ -110,210 +110,210 @@ LLFloaterBuyCurrencyUI::~LLFloaterBuyCurrencyUI()
 
 void LLFloaterBuyCurrencyUI::noTarget()
 {
-	mHasTarget = false;
-	mTargetPrice = 0;
-	mManager.setAmount(0);
+    mHasTarget = false;
+    mTargetPrice = 0;
+    mManager.setAmount(0);
 }
 
 void LLFloaterBuyCurrencyUI::target(const std::string& name, S32 price)
 {
-	mHasTarget = true;
-	mTargetPrice = price;
-	
-	if (!name.empty())
-	{
-		getChild<LLUICtrl>("target_price_label")->setValue(name);
-	}
+    mHasTarget = true;
+    mTargetPrice = price;
 
-	S32 balance = gStatusBar->getBalance();
-	S32 need = price - balance;
-	if (need < 0)
-	{
-		need = 0;
-	}
-	
-	mRequiredAmount = need + MINIMUM_BALANCE_AMOUNT;
-	mManager.setAmount(0);
+    if (!name.empty())
+    {
+        getChild<LLUICtrl>("target_price_label")->setValue(name);
+    }
+
+    S32 balance = gStatusBar->getBalance();
+    S32 need = price - balance;
+    if (need < 0)
+    {
+        need = 0;
+    }
+
+    mRequiredAmount = need + MINIMUM_BALANCE_AMOUNT;
+    mManager.setAmount(0);
 }
 
 
 // virtual
 BOOL LLFloaterBuyCurrencyUI::postBuild()
 {
-	mManager.prepare();
-	
-	getChild<LLUICtrl>("buy_btn")->setCommitCallback( boost::bind(&LLFloaterBuyCurrencyUI::onClickBuy, this));
-	getChild<LLUICtrl>("cancel_btn")->setCommitCallback( boost::bind(&LLFloaterBuyCurrencyUI::onClickCancel, this));
+    mManager.prepare();
+
+    getChild<LLUICtrl>("buy_btn")->setCommitCallback( boost::bind(&LLFloaterBuyCurrencyUI::onClickBuy, this));
+    getChild<LLUICtrl>("cancel_btn")->setCommitCallback( boost::bind(&LLFloaterBuyCurrencyUI::onClickCancel, this));
 
 #ifdef OPENSIM
-	if (LLGridManager::instance().isInOpenSim())
-	{
-		getChild<LLTextBox>("currency_links")->setText(LLStringExplicit(""));
-	}
+    if (LLGridManager::instance().isInOpenSim())
+    {
+        getChild<LLTextBox>("currency_links")->setText(LLStringExplicit(""));
+    }
 #endif
-	
-	center();
-	
-	updateUI();
-	
-	return TRUE;
+
+    center();
+
+    updateUI();
+
+    return TRUE;
 }
 
 void LLFloaterBuyCurrencyUI::draw()
 {
-	if (mManager.process())
-	{
-		if (mManager.bought())
-		{
-			LLNotificationsUtil::add("BuyLindenDollarSuccess");
-			closeFloater();
-			return;
-		}
-		
-		updateUI();
-	}
+    if (mManager.process())
+    {
+        if (mManager.bought())
+        {
+            LLNotificationsUtil::add("BuyLindenDollarSuccess");
+            closeFloater();
+            return;
+        }
 
-	// disable the Buy button when we are not able to buy
-	getChildView("buy_btn")->setEnabled(mManager.canBuy());
+        updateUI();
+    }
 
-	LLFloater::draw();
+    // disable the Buy button when we are not able to buy
+    getChildView("buy_btn")->setEnabled(mManager.canBuy());
+
+    LLFloater::draw();
 }
 
 BOOL LLFloaterBuyCurrencyUI::canClose()
 {
-	return mManager.canCancel();
+    return mManager.canCancel();
 }
 
 void LLFloaterBuyCurrencyUI::updateUI()
 {
-	bool hasError = mManager.hasError();
-	mManager.updateUI(!hasError && !mManager.buying());
+    bool hasError = mManager.hasError();
+    mManager.updateUI(!hasError && !mManager.buying());
 
-	// hide most widgets - we'll turn them on as needed next
-	getChildView("info_buying")->setVisible(FALSE);
-	getChildView("info_need_more")->setVisible(FALSE);	
-	getChildView("purchase_warning_repurchase")->setVisible(FALSE);
-	getChildView("purchase_warning_notenough")->setVisible(FALSE);
-	getChildView("contacting")->setVisible(FALSE);
+    // hide most widgets - we'll turn them on as needed next
+    getChildView("info_buying")->setVisible(FALSE);
+    getChildView("info_need_more")->setVisible(FALSE);
+    getChildView("purchase_warning_repurchase")->setVisible(FALSE);
+    getChildView("purchase_warning_notenough")->setVisible(FALSE);
+    getChildView("contacting")->setVisible(FALSE);
 
-	if (hasError)
-	{
-		// display an error from the server
-		LLSD args;
-		args["TITLE"] = getString("info_cannot_buy");
-		args["MESSAGE"] = mManager.errorMessage();
+    if (hasError)
+    {
+        // display an error from the server
+        LLSD args;
+        args["TITLE"] = getString("info_cannot_buy");
+        args["MESSAGE"] = mManager.errorMessage();
 // <FS:Beq> FIRE-30481 restore access to help/donate link for OpenSim
 #ifdef OPENSIM
-		if( !LLGridManager::getInstance()->isInSecondLife() )
-		{
-			args["LINK"] = mManager.errorURI();
-			LLNotificationsUtil::add("CouldNotBuyCurrencyOS", args);
-		}
-		else // trailing else required for OS builds
+        if( !LLGridManager::getInstance()->isInSecondLife() )
+        {
+            args["LINK"] = mManager.errorURI();
+            LLNotificationsUtil::add("CouldNotBuyCurrencyOS", args);
+        }
+        else // trailing else required for OS builds
 #endif
 // </FS:Beq>
-		LLNotificationsUtil::add("CouldNotBuyCurrency", args);
-		mManager.clearError();
-		closeFloater();
-	}
-	else
-	{
-		// display the main Buy L$ interface
-		getChildView("normal_background")->setVisible(TRUE);
+        LLNotificationsUtil::add("CouldNotBuyCurrency", args);
+        mManager.clearError();
+        closeFloater();
+    }
+    else
+    {
+        // display the main Buy L$ interface
+        getChildView("normal_background")->setVisible(TRUE);
 
-		if (mHasTarget)
-		{
-			getChildView("info_need_more")->setVisible(TRUE);
-		}
-		else
-		{
-			getChildView("info_buying")->setVisible(TRUE);
-		}
+        if (mHasTarget)
+        {
+            getChildView("info_need_more")->setVisible(TRUE);
+        }
+        else
+        {
+            getChildView("info_buying")->setVisible(TRUE);
+        }
 
-		if (mManager.buying())
-		{
-			getChildView("contacting")->setVisible( true);
-		}
-		else
-		{
-			if (mHasTarget)
-			{
-				getChild<LLUICtrl>("target_price")->setTextArg("[AMT]", llformat("%d", mTargetPrice));
-				getChild<LLUICtrl>("required_amount")->setTextArg("[AMT]", llformat("%d", mRequiredAmount));
-			}
-		}
-		
-		S32 balance = gStatusBar->getBalance();
-		getChildView("balance_label")->setVisible(TRUE);
-		getChildView("balance_amount")->setVisible(TRUE);
-		getChild<LLUICtrl>("balance_amount")->setTextArg("[AMT]", llformat("%d", balance));
-		
-		S32 buying = mManager.getAmount();
-		getChildView("buying_label")->setVisible(TRUE);
-		getChildView("buying_amount")->setVisible(TRUE);
-		getChild<LLUICtrl>("buying_amount")->setTextArg("[AMT]", llformat("%d", buying));
-		
-		S32 total = balance + buying;
-		getChildView("total_label")->setVisible(TRUE);
-		getChildView("total_amount")->setVisible(TRUE);
-		getChild<LLUICtrl>("total_amount")->setTextArg("[AMT]", llformat("%d", total));
+        if (mManager.buying())
+        {
+            getChildView("contacting")->setVisible( true);
+        }
+        else
+        {
+            if (mHasTarget)
+            {
+                getChild<LLUICtrl>("target_price")->setTextArg("[AMT]", llformat("%d", mTargetPrice));
+                getChild<LLUICtrl>("required_amount")->setTextArg("[AMT]", llformat("%d", mRequiredAmount));
+            }
+        }
 
-		if (mHasTarget)
-		{
-			getChildView("purchase_warning_repurchase")->setVisible( !getChildView("currency_links")->getVisible());
-		}
-	}
+        S32 balance = gStatusBar->getBalance();
+        getChildView("balance_label")->setVisible(TRUE);
+        getChildView("balance_amount")->setVisible(TRUE);
+        getChild<LLUICtrl>("balance_amount")->setTextArg("[AMT]", llformat("%d", balance));
 
-	getChildView("getting_data")->setVisible( !mManager.canBuy() && !hasError && !getChildView("currency_est")->getVisible());
+        S32 buying = mManager.getAmount();
+        getChildView("buying_label")->setVisible(TRUE);
+        getChildView("buying_amount")->setVisible(TRUE);
+        getChild<LLUICtrl>("buying_amount")->setTextArg("[AMT]", llformat("%d", buying));
+
+        S32 total = balance + buying;
+        getChildView("total_label")->setVisible(TRUE);
+        getChildView("total_amount")->setVisible(TRUE);
+        getChild<LLUICtrl>("total_amount")->setTextArg("[AMT]", llformat("%d", total));
+
+        if (mHasTarget)
+        {
+            getChildView("purchase_warning_repurchase")->setVisible( !getChildView("currency_links")->getVisible());
+        }
+    }
+
+    getChildView("getting_data")->setVisible( !mManager.canBuy() && !hasError && !getChildView("currency_est")->getVisible());
 }
 
 void LLFloaterBuyCurrencyUI::collapsePanels(bool collapse)
 {
-	LLLayoutPanel* price_panel = getChild<LLLayoutPanel>("layout_panel_price");
-	
-	if (price_panel->isCollapsed() == collapse)
-		return;
-	
-	LLLayoutStack* outer_stack = getChild<LLLayoutStack>("outer_stack");	
-	LLLayoutPanel* required_panel = getChild<LLLayoutPanel>("layout_panel_required");
-	LLLayoutPanel* msg_panel = getChild<LLLayoutPanel>("layout_panel_msg");
+    LLLayoutPanel* price_panel = getChild<LLLayoutPanel>("layout_panel_price");
 
-	S32 delta_height = price_panel->getRect().getHeight() + required_panel->getRect().getHeight() + msg_panel->getRect().getHeight();
-	delta_height *= (collapse ? -1 : 1);
+    if (price_panel->isCollapsed() == collapse)
+        return;
 
-	LLIconCtrl* icon = getChild<LLIconCtrl>("normal_background");
-	LLRect rect = icon->getRect();
-	icon->setRect(rect.setOriginAndSize(rect.mLeft, rect.mBottom - delta_height, rect.getWidth(), rect.getHeight() + delta_height));
+    LLLayoutStack* outer_stack = getChild<LLLayoutStack>("outer_stack");
+    LLLayoutPanel* required_panel = getChild<LLLayoutPanel>("layout_panel_required");
+    LLLayoutPanel* msg_panel = getChild<LLLayoutPanel>("layout_panel_msg");
 
-	outer_stack->collapsePanel(price_panel, collapse);
-	outer_stack->collapsePanel(required_panel, collapse);
-	outer_stack->collapsePanel(msg_panel, collapse);
+    S32 delta_height = price_panel->getRect().getHeight() + required_panel->getRect().getHeight() + msg_panel->getRect().getHeight();
+    delta_height *= (collapse ? -1 : 1);
 
-	outer_stack->updateLayout();
+    LLIconCtrl* icon = getChild<LLIconCtrl>("normal_background");
+    LLRect rect = icon->getRect();
+    icon->setRect(rect.setOriginAndSize(rect.mLeft, rect.mBottom - delta_height, rect.getWidth(), rect.getHeight() + delta_height));
 
-	LLRect floater_rect = getRect();
-	floater_rect.mBottom -= delta_height;
-	setShape(floater_rect, false);
+    outer_stack->collapsePanel(price_panel, collapse);
+    outer_stack->collapsePanel(required_panel, collapse);
+    outer_stack->collapsePanel(msg_panel, collapse);
+
+    outer_stack->updateLayout();
+
+    LLRect floater_rect = getRect();
+    floater_rect.mBottom -= delta_height;
+    setShape(floater_rect, false);
 }
 
 void LLFloaterBuyCurrencyUI::onClickBuy()
 {
-	// <COLOSI opensim multi-currency support>
-	// Do not wrap the "buy_currency" string because it is the mOrig later stored
-	// in an LLUIString with params and will be wrapped when params are inserted.
-	// wrapping here would break multi-currency support as it would remove the L$
-	//</COLOSI opensim multi-currency support>>
-	mManager.buy(getString("buy_currency"));
-	updateUI();
-	// Update L$ balance
-	LLStatusBar::sendMoneyBalanceRequest();
+    // <COLOSI opensim multi-currency support>
+    // Do not wrap the "buy_currency" string because it is the mOrig later stored
+    // in an LLUIString with params and will be wrapped when params are inserted.
+    // wrapping here would break multi-currency support as it would remove the L$
+    //</COLOSI opensim multi-currency support>>
+    mManager.buy(getString("buy_currency"));
+    updateUI();
+    // Update L$ balance
+    LLStatusBar::sendMoneyBalanceRequest();
 }
 
 void LLFloaterBuyCurrencyUI::onClickCancel()
 {
-	closeFloater();
-	// Update L$ balance
-	LLStatusBar::sendMoneyBalanceRequest();
+    closeFloater();
+    // Update L$ balance
+    LLStatusBar::sendMoneyBalanceRequest();
 }
 
 LLFetchAvatarPaymentInfo* LLFloaterBuyCurrency::sPropertiesRequest = NULL;
@@ -321,130 +321,141 @@ LLFetchAvatarPaymentInfo* LLFloaterBuyCurrency::sPropertiesRequest = NULL;
 // static
 void LLFloaterBuyCurrency::buyCurrency()
 {
-	// <FS:Ansariel> OpenSim support
-	//delete sPropertiesRequest;
-	//sPropertiesRequest = new LLFetchAvatarPaymentInfo(false);
+    // <FS:Ansariel> OpenSim support
+    //delete sPropertiesRequest;
+    //sPropertiesRequest = new LLFetchAvatarPaymentInfo(false);
 #if OPENSIM
-	if (LLGridManager::instance().isInOpenSim())
-	{
-		LLFloaterBuyCurrencyUI* ui = LLFloaterReg::showTypedInstance<LLFloaterBuyCurrencyUI>("buy_currency");
-		ui->noTarget();
-		ui->updateUI();
-	}
-	else
+    if (LLGridManager::instance().isInOpenSim())
+    {
+        LLFloaterBuyCurrencyUI* ui = LLFloaterReg::showTypedInstance<LLFloaterBuyCurrencyUI>("buy_currency");
+        ui->noTarget();
+        ui->updateUI();
+    }
+    else
 #endif
-	{
-		delete sPropertiesRequest;
-		sPropertiesRequest = new LLFetchAvatarPaymentInfo(false);
-	}
-	// <FS:Ansariel>
+    {
+        delete sPropertiesRequest;
+        sPropertiesRequest = new LLFetchAvatarPaymentInfo(false);
+    }
+    // <FS:Ansariel>
 }
 
 // static
 void LLFloaterBuyCurrency::buyCurrency(const std::string& name, S32 price)
 {
-	// <FS:Ansariel> OpenSim support
-	//delete sPropertiesRequest;
-	//sPropertiesRequest = new LLFetchAvatarPaymentInfo(true, name, price);
+    // <FS:Ansariel> OpenSim support
+    //delete sPropertiesRequest;
+    //sPropertiesRequest = new LLFetchAvatarPaymentInfo(true, name, price);
 #if OPENSIM
-	if (LLGridManager::instance().isInOpenSim())
-	{
-		LLFloaterBuyCurrencyUI* ui = LLFloaterReg::showTypedInstance<LLFloaterBuyCurrencyUI>("buy_currency");
-		// <COLOSI opensim multi-currency support>
-		// Not wrapping name here because according to llfloaterbuycurrency.h
-		// name should not include currency symbols as the price will be appended to the string.
-		// If an "L$" is ever included in a name, then we should call Tea::wrapCurrency on it here.
-		// </COLOSI opensim multi-currency support>>
-		ui->target(name, price);
-		ui->updateUI();
-	}
-	else
+    if (LLGridManager::instance().isInOpenSim())
+    {
+        LLFloaterBuyCurrencyUI* ui = LLFloaterReg::showTypedInstance<LLFloaterBuyCurrencyUI>("buy_currency");
+        // <COLOSI opensim multi-currency support>
+        // Not wrapping name here because according to llfloaterbuycurrency.h
+        // name should not include currency symbols as the price will be appended to the string.
+        // If an "L$" is ever included in a name, then we should call Tea::wrapCurrency on it here.
+        // </COLOSI opensim multi-currency support>>
+        ui->target(name, price);
+        ui->updateUI();
+    }
+    else
 #endif
-	{
-		delete sPropertiesRequest;
-		sPropertiesRequest = new LLFetchAvatarPaymentInfo(true, name, price);
-	}
-	// <FS:Ansariel>
+    {
+        delete sPropertiesRequest;
+        sPropertiesRequest = new LLFetchAvatarPaymentInfo(true, name, price);
+    }
+    // <FS:Ansariel>
 }
 
 // static
 void LLFloaterBuyCurrency::handleBuyCurrency(bool has_piof, bool has_target, const std::string name, S32 price)
 {
-	delete sPropertiesRequest;
-	sPropertiesRequest = NULL;
+    delete sPropertiesRequest;
+    sPropertiesRequest = NULL;
 
-	if (has_piof)
-	{
-		LLFloaterBuyCurrencyUI* ui = LLFloaterReg::showTypedInstance<LLFloaterBuyCurrencyUI>("buy_currency");
-		if (has_target)
-		{
-			ui->target(name, price);
-		}
-		else
-		{
-			ui->noTarget();			
-		}
-		ui->updateUI();
-		ui->collapsePanels(!has_target);
-	}
-	else
-	{
-		LLFloaterReg::showInstance("add_payment_method");
-	}
+    if (has_piof)
+    {
+        LLFloaterBuyCurrencyUI* ui = LLFloaterReg::showTypedInstance<LLFloaterBuyCurrencyUI>("buy_currency");
+        if (has_target)
+        {
+            ui->target(name, price);
+        }
+        else
+        {
+            ui->noTarget();
+        }
+        ui->updateUI();
+        ui->collapsePanels(!has_target);
+    }
+    else
+    {
+        LLFloaterReg::showInstance("add_payment_method");
+    }
 }
 
 LLFetchAvatarPaymentInfo::LLFetchAvatarPaymentInfo(bool has_target, const std::string& name, S32 price)
-:	mAvatarID(gAgent.getID()),
-	mHasTarget(has_target),
-	mPrice(price),
-	mName(name)
+:   mAvatarID(gAgent.getID()),
+    mHasTarget(has_target),
+    mPrice(price),
+    mName(name)
 {
-	LLAvatarPropertiesProcessor* processor = LLAvatarPropertiesProcessor::getInstance();
-	// register ourselves as an observer
-	processor->addObserver(mAvatarID, this);
-	// send a request (duplicates will be suppressed inside the avatar
-	// properties processor)
-	processor->sendAvatarPropertiesRequest(mAvatarID);
+    LLAvatarPropertiesProcessor* processor = LLAvatarPropertiesProcessor::getInstance();
+    // register ourselves as an observer
+    processor->addObserver(mAvatarID, this);
+    // send a request (duplicates will be suppressed inside the avatar
+    // properties processor)
+    // <FS> OpenSim
+    //processor->sendAvatarPropertiesRequest(mAvatarID);
+    if (!gAgent.getRegionCapability("AgentProfile").empty())
+        processor->sendAvatarPropertiesRequest(mAvatarID);
+    else
+        processor->sendAvatarLegacyPropertiesRequest(mAvatarID);
+    // </FS>
 }
 
 LLFetchAvatarPaymentInfo::~LLFetchAvatarPaymentInfo()
 {
-	LLAvatarPropertiesProcessor::getInstance()->removeObserver(mAvatarID, this);
+    LLAvatarPropertiesProcessor::getInstance()->removeObserver(mAvatarID, this);
 }
 
 void LLFetchAvatarPaymentInfo::processProperties(void* data, EAvatarProcessorType type)
 {
-	if (data && type == APT_PROPERTIES)
-	{
-		LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
-		LLFloaterBuyCurrency::handleBuyCurrency(LLAvatarPropertiesProcessor::hasPaymentInfoOnFile(avatar_data), mHasTarget, mName, mPrice);
-	}
+    if (data && type == APT_PROPERTIES)
+    {
+        LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
+        LLFloaterBuyCurrency::handleBuyCurrency(LLAvatarPropertiesProcessor::hasPaymentInfoOnFile(avatar_data), mHasTarget, mName, mPrice);
+    }
+    else if (data && type == APT_PROPERTIES_LEGACY)
+    {
+        LLAvatarData avatar_data(*static_cast<LLAvatarLegacyData*>(data));
+        LLFloaterBuyCurrency::handleBuyCurrency(LLAvatarPropertiesProcessor::hasPaymentInfoOnFile(&avatar_data), mHasTarget, mName, mPrice);
+    }
 }
 
 // <COLOSI opensim multi-currency support>
 // static
 void LLFloaterBuyCurrency::updateCurrencySymbols()
 {
-	LLFloater* fbc = LLFloaterReg::findInstance("buy_currency");
-	if (fbc)
-	{
-		// Call update on the floater to update the title
-		fbc->updateCurrencySymbols();
+    LLFloater* fbc = LLFloaterReg::findInstance("buy_currency");
+    if (fbc)
+    {
+        // Call update on the floater to update the title
+        fbc->updateCurrencySymbols();
 
-		// update all text boxes with currency symbols.
-		LLTextBox* tb = NULL;
-		static const std::list<std::string> sctb = { "info_need_more", "info_buying", "target_price", "balance_amount",
-			"required_amount", "currency_label", "total_amount", "purchase_warning_repurchase" };
-		// Do not include balance_amount and total_amount because they are updated on every display when amounts are replaced.
-		for (std::list<std::string>::const_iterator iter = sctb.begin(); iter != sctb.end(); ++iter)
-		{
-			tb = fbc->findChild<LLTextBox>(*iter);
-			if (tb)
-			{
-				tb->updateCurrencySymbols();
-			}
-		}
-	}
+        // update all text boxes with currency symbols.
+        LLTextBox* tb = NULL;
+        static const std::list<std::string> sctb = { "info_need_more", "info_buying", "target_price", "balance_amount",
+            "required_amount", "currency_label", "total_amount", "purchase_warning_repurchase" };
+        // Do not include balance_amount and total_amount because they are updated on every display when amounts are replaced.
+        for (std::list<std::string>::const_iterator iter = sctb.begin(); iter != sctb.end(); ++iter)
+        {
+            tb = fbc->findChild<LLTextBox>(*iter);
+            if (tb)
+            {
+                tb->updateCurrencySymbols();
+            }
+        }
+    }
 }
 // </COLOSI opensim multi-currency support>
 

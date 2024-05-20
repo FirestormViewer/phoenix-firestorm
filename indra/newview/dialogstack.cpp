@@ -30,41 +30,41 @@
 
 void DialogStack::update()
 {
-	// show dialog stack browse icon when more than one dialog is on the screen
-	gSavedSettings.setBOOL("DialogStackIconVisible", mNotificationIDs.size() > 1);
+    // show dialog stack browse icon when more than one dialog is on the screen
+    gSavedSettings.setBOOL("DialogStackIconVisible", mNotificationIDs.size() > 1);
 }
 
 void DialogStack::push(const LLUUID& uuid)
 {
-	mNotificationIDs.push_back(uuid);
-	update();
+    mNotificationIDs.push_back(uuid);
+    update();
 }
 
 void DialogStack::pop(const LLUUID& uuid)
 {
-	if (mNotificationIDs.empty())
-	{
-		LL_WARNS() << "Dialog Stack count was 0 when pop() was called." << LL_ENDL;
-	}
-	else
-	{
-		mNotificationIDs.remove(uuid);
-		update();
-	}
+    if (mNotificationIDs.empty())
+    {
+        LL_WARNS() << "Dialog Stack count was 0 when pop() was called." << LL_ENDL;
+    }
+    else
+    {
+        mNotificationIDs.remove(uuid);
+        update();
+    }
 }
 
 const LLUUID& DialogStack::flip(const LLUUID& uuid)
 {
-	std::list<LLUUID>::iterator found = std::find(mNotificationIDs.begin(), mNotificationIDs.end(), uuid);
-	if (found != mNotificationIDs.end())
-	{
-		if (found == mNotificationIDs.begin())
-		{
-			return mNotificationIDs.back();
-		}
-		--found;
-		return *found;
-	}
+    std::list<LLUUID>::iterator found = std::find(mNotificationIDs.begin(), mNotificationIDs.end(), uuid);
+    if (found != mNotificationIDs.end())
+    {
+        if (found == mNotificationIDs.begin())
+        {
+            return mNotificationIDs.back();
+        }
+        --found;
+        return *found;
+    }
 
-	return LLUUID::null;
+    return LLUUID::null;
 }

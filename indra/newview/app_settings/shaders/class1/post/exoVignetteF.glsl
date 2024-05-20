@@ -17,10 +17,10 @@ in vec2 vary_fragcoord;
 
 void main ()
 {
-	vec4 diff = texture(diffuseRect, vary_fragcoord.xy);
-	vec2 tc = vary_fragcoord / screen_res - 0.5f;
-	float vignette_val = 1 - dot(tc, tc);
-	diff.rgb *= clamp(pow(mix(1, vignette_val * vignette_val * vignette_val * vignette_val * vignette.z, vignette.x), vignette.y), 0, 1);
-	frag_color = diff;
-	// frag_color = vec4(0.0, 1.0, 0.0, 0.5);
+    vec4 diff = texture(diffuseRect, vary_fragcoord.xy);
+    vec2 tc = vary_fragcoord / screen_res - 0.5f;
+    float vignette_val = 1 - dot(tc, tc);
+    diff.rgb *= clamp(pow(mix(1, vignette_val * vignette_val * vignette_val * vignette_val * vignette.z, vignette.x), vignette.y), 0, 1);
+    frag_color = diff;
+    // frag_color = vec4(0.0, 1.0, 0.0, 0.5);
 }

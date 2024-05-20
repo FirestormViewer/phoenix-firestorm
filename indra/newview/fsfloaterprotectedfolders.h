@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -37,32 +37,32 @@ class LLScrollListCtrl;
 class FSFloaterProtectedFolders : public LLFloater
 {
 public:
-	FSFloaterProtectedFolders(const LLSD& key);
-	virtual ~FSFloaterProtectedFolders();
+    FSFloaterProtectedFolders(const LLSD& key);
+    virtual ~FSFloaterProtectedFolders();
 
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ void onOpen(const LLSD& info);
-	/*virtual*/ void draw();
-	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
-	/*virtual*/ bool hasAccelerators() const { return true; }
+    /*virtual*/ BOOL postBuild();
+    /*virtual*/ void onOpen(const LLSD& info);
+    /*virtual*/ void draw();
+    /*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+    /*virtual*/ bool hasAccelerators() const { return true; }
 
 private:
-	void updateList();
+    void updateList();
 
-	void handleRemove();
-	void onFilterEdit(const std::string& search_string);
-	void onDoubleClick();
+    void handleRemove();
+    void onFilterEdit(const std::string& search_string);
+    void onDoubleClick();
 
-	bool mInitialized;
+    bool mInitialized;
 
-	std::string mFilterSubString;
-	std::string mFilterSubStringOrig;
+    std::string mFilterSubString;
+    std::string mFilterSubStringOrig;
 
-	boost::signals2::connection mProtectedCategoriesChangedCallbackConnection;
+    boost::signals2::connection mProtectedCategoriesChangedCallbackConnection;
 
-	LLScrollListCtrl*	mFolderList;
-	LLButton*			mRemoveFolderBtn;
-	LLFilterEditor*		mFilterEditor;
+    LLScrollListCtrl*   mFolderList;
+    LLButton*           mRemoveFolderBtn;
+    LLFilterEditor*     mFilterEditor;
 };
 
 #endif // FS_FLOATERPROTECTEDFOLDERS_H

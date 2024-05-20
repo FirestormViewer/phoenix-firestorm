@@ -1,4 +1,4 @@
-/** 
+/**
  * @file NACLfloaterexploresounds.h
  */
 
@@ -17,37 +17,37 @@ class NACLFloaterExploreSounds
 : public LLFloater, public LLEventTimer
 {
 public:
-	NACLFloaterExploreSounds(const LLSD& key);
-	BOOL postBuild();
+    NACLFloaterExploreSounds(const LLSD& key);
+    BOOL postBuild();
 
-	BOOL tick();
+    BOOL tick();
 
-	LLSoundHistoryItem getItem(const LLUUID& itemID);
+    LLSoundHistoryItem getItem(const LLUUID& itemID);
 
 private:
-	virtual ~NACLFloaterExploreSounds();
-	void handlePlayLocally();
-	void handleLookAt();
-	void handleStop();
-	void handleStopLocally();
-	void handleSelection();
-	void blacklistSound();
+    virtual ~NACLFloaterExploreSounds();
+    void handlePlayLocally();
+    void handleLookAt();
+    void handleStop();
+    void handleStopLocally();
+    void handleSelection();
+    void blacklistSound();
 
-	LLScrollListCtrl*	mHistoryScroller;
-	LLCheckBoxCtrl*		mCollisionSounds;
-	LLCheckBoxCtrl*		mRepeatedAssets;
-	LLCheckBoxCtrl*		mAvatarSounds;
-	LLCheckBoxCtrl*		mObjectSounds;
-	LLCheckBoxCtrl*		mPaused;
+    LLScrollListCtrl*   mHistoryScroller;
+    LLCheckBoxCtrl*     mCollisionSounds;
+    LLCheckBoxCtrl*     mRepeatedAssets;
+    LLCheckBoxCtrl*     mAvatarSounds;
+    LLCheckBoxCtrl*     mObjectSounds;
+    LLCheckBoxCtrl*     mPaused;
 
-	std::list<LLSoundHistoryItem> mLastHistory;
+    std::list<LLSoundHistoryItem> mLastHistory;
 
-	uuid_vec_t mLocalPlayingAudioSourceIDs;
+    uuid_vec_t mLocalPlayingAudioSourceIDs;
 
-	typedef std::map<LLUUID, boost::signals2::connection> blacklist_avatar_name_cache_connection_map_t;
-	blacklist_avatar_name_cache_connection_map_t mBlacklistAvatarNameCacheConnections;
+    typedef std::map<LLUUID, boost::signals2::connection> blacklist_avatar_name_cache_connection_map_t;
+    blacklist_avatar_name_cache_connection_map_t mBlacklistAvatarNameCacheConnections;
 
-	void onBlacklistAvatarNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
+    void onBlacklistAvatarNameCacheCallback(const LLUUID& av_id, const LLAvatarName& av_name, const LLUUID& asset_id, const std::string& region_name);
 };
 
 #endif

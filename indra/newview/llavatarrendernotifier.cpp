@@ -2,26 +2,26 @@
  * @file   llavatarrendernotifier.cpp
  * @author andreykproductengine
  * @date   2015-08-05
- * @brief  
- * 
+ * @brief
+ *
  * $LicenseInfo:firstyear=2013&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2013, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -114,20 +114,20 @@ void LLAvatarRenderNotifier::displayNotification(bool show_over_limit)
 {
     mAgentComplexity = mLatestAgentComplexity;
     mShowOverLimitAgents = show_over_limit;
-	static LLCachedControl<U32> expire_delay(gSavedSettings, "ShowMyComplexityChanges", 20);
+    static LLCachedControl<U32> expire_delay(gSavedSettings, "ShowMyComplexityChanges", 20);
 
-	LLDate expire_date(LLDate::now().secondsSinceEpoch() + expire_delay);
-	LLSD args;
-	// <FS:Ansariel> FIRE-19958: Add digit group separators to avatar complexity notification
-	//args["AGENT_COMPLEXITY"] = LLSD::Integer(mLatestAgentComplexity);
-	{
-		LLLocale locale("");
-		std::string complexity_string;
-		LLResMgr::getInstance()->getIntegerString(complexity_string, mLatestAgentComplexity);
-		args["AGENT_COMPLEXITY"] = complexity_string;
-	}
-	// </FS:Ansariel>
-	std::string notification_name;
+    LLDate expire_date(LLDate::now().secondsSinceEpoch() + expire_delay);
+    LLSD args;
+    // <FS:Ansariel> FIRE-19958: Add digit group separators to avatar complexity notification
+    //args["AGENT_COMPLEXITY"] = LLSD::Integer(mLatestAgentComplexity);
+    {
+        LLLocale locale("");
+        std::string complexity_string;
+        LLResMgr::getInstance()->getIntegerString(complexity_string, mLatestAgentComplexity);
+        args["AGENT_COMPLEXITY"] = complexity_string;
+    }
+    // </FS:Ansariel>
+    std::string notification_name;
     if (mShowOverLimitAgents)
     {
         notification_name = "AgentComplexityWithVisibility";
@@ -137,19 +137,19 @@ void LLAvatarRenderNotifier::displayNotification(bool show_over_limit)
         mAgentsCount = mLatestAgentsCount;
         mOverLimitAgents = mLatestOverLimitAgents;
         mOverLimitPct = mLatestOverLimitPct;
-	}
-	else
-	{
+    }
+    else
+    {
         // no change in visibility, just update complexity
         notification_name = "AgentComplexity";
-	}
+    }
 
-	if (mNotificationPtr != NULL && mNotificationPtr->getName() != notification_name)
-	{
-		// since unique tag works only for same notification,
-		// old notification needs to be canceled manually
-		LLNotifications::instance().cancel(mNotificationPtr);
-	}
+    if (mNotificationPtr != NULL && mNotificationPtr->getName() != notification_name)
+    {
+        // since unique tag works only for same notification,
+        // old notification needs to be canceled manually
+        LLNotifications::instance().cancel(mNotificationPtr);
+    }
 
     // log unconditionally
     LL_DEBUGS("AvatarRenderInfo") << notification_name << " " << args << LL_ENDL;
@@ -167,21 +167,21 @@ void LLAvatarRenderNotifier::displayNotification(bool show_over_limit)
 
 bool LLAvatarRenderNotifier::isNotificationVisible()
 {
-	return mNotificationPtr != NULL && mNotificationPtr->isActive();
+    return mNotificationPtr != NULL && mNotificationPtr->isActive();
 }
 
 void LLAvatarRenderNotifier::updateNotificationRegion(U32 agentcount, U32 overLimit)
 {
-	if (agentcount == 0)
-	{
-		// Data not ready
-		return;
-	}
+    if (agentcount == 0)
+    {
+        // Data not ready
+        return;
+    }
 
-	// save current values for later use
-	mLatestAgentsCount = agentcount > overLimit ? agentcount - 1 : agentcount; // subtract self
-	mLatestOverLimitAgents = overLimit;
-	mLatestOverLimitPct = mLatestAgentsCount != 0 ? ((F32)overLimit / (F32)mLatestAgentsCount) * 100.0 : 0;
+    // save current values for later use
+    mLatestAgentsCount = agentcount > overLimit ? agentcount - 1 : agentcount; // subtract self
+    mLatestOverLimitAgents = overLimit;
+    mLatestOverLimitPct = mLatestAgentsCount != 0 ? ((F32)overLimit / (F32)mLatestAgentsCount) * 100.0 : 0;
 
     if (mAgentsCount == mLatestAgentsCount
         && mOverLimitAgents == mLatestOverLimitAgents)
@@ -322,7 +322,7 @@ void LLHUDRenderNotifier::updateNotificationHUD(hud_complexity_list_t complexity
     {
         return;
     }
-        
+
     // TODO:
     // Find a way to show message with list of issues, but without making it too large
     // and intrusive.

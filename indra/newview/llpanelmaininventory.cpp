@@ -1,25 +1,25 @@
-/** 
+/**
  * @file llpanelmaininventory.cpp
  * @brief Implementation of llpanelmaininventory.
  *
  * $LicenseInfo:firstyear=2001&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -86,34 +86,34 @@ static LLPanelInjector<LLPanelMainInventory> t_inventory("panel_main_inventory")
 class LLFloaterInventoryFinder : public LLFloater
 {
 public:
-	LLFloaterInventoryFinder( LLPanelMainInventory* inventory_view);
-	virtual void draw();
-	/*virtual*/	BOOL	postBuild();
-	void changeFilter(LLInventoryFilter* filter);
-	void updateElementsFromFilter();
-	BOOL getCheckShowEmpty();
-	BOOL getCheckSinceLogoff();
-	U32 getDateSearchDirection();
+    LLFloaterInventoryFinder( LLPanelMainInventory* inventory_view);
+    virtual void draw();
+    /*virtual*/ BOOL    postBuild();
+    void changeFilter(LLInventoryFilter* filter);
+    void updateElementsFromFilter();
+    BOOL getCheckShowEmpty();
+    BOOL getCheckSinceLogoff();
+    U32 getDateSearchDirection();
 
-	void onCreatorSelfFilterCommit();
-	void onCreatorOtherFilterCommit();
+    void onCreatorSelfFilterCommit();
+    void onCreatorOtherFilterCommit();
 
-	void onPermissionsChanged(); // <FS:Zi> FIRE-1175 - Filter Permissions Menu
+    void onPermissionsChanged(); // <FS:Zi> FIRE-1175 - Filter Permissions Menu
 
-	static void onTimeAgo(LLUICtrl*, void *);
-	static void onCloseBtn(void* user_data);
-	static void selectAllTypes(void* user_data);
-	static void selectNoTypes(void* user_data);
+    static void onTimeAgo(LLUICtrl*, void *);
+    static void onCloseBtn(void* user_data);
+    static void selectAllTypes(void* user_data);
+    static void selectNoTypes(void* user_data);
 
-	// <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
-	void onResetBtn();
+    // <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
+    void onResetBtn();
 private:
-	LLPanelMainInventory*	mPanelMainInventory;
-	LLSpinCtrl*			mSpinSinceDays;
-	LLSpinCtrl*			mSpinSinceHours;
-	LLCheckBoxCtrl*		mCreatorSelf;
-	LLCheckBoxCtrl*		mCreatorOthers;
-	LLInventoryFilter*	mFilter;
+    LLPanelMainInventory*   mPanelMainInventory;
+    LLSpinCtrl*         mSpinSinceDays;
+    LLSpinCtrl*         mSpinSinceHours;
+    LLCheckBoxCtrl*     mCreatorSelf;
+    LLCheckBoxCtrl*     mCreatorOthers;
+    LLInventoryFilter*  mFilter;
 };
 
 ///----------------------------------------------------------------------------
@@ -121,15 +121,15 @@ private:
 ///----------------------------------------------------------------------------
 
 LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
-	: LLPanel(p),
-	  mActivePanel(NULL),
-	  mWornItemsPanel(NULL),
-	  mSavedFolderState(NULL),
-	  mFilterText(""),
-	  mMenuGearDefault(NULL),
-	  mMenuVisibility(NULL),
-	  mMenuAddHandle(),
-	  mNeedUploadCost(true),
+    : LLPanel(p),
+      mActivePanel(NULL),
+      mWornItemsPanel(NULL),
+      mSavedFolderState(NULL),
+      mFilterText(""),
+      mMenuGearDefault(NULL),
+      mMenuVisibility(NULL),
+      mMenuAddHandle(),
+      mNeedUploadCost(true),
       mMenuViewDefault(NULL),
       mSingleFolderMode(false),
       mForceShowInvLayout(false),
@@ -139,234 +139,234 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
       mViewMenuButton(nullptr), // <FS:Ansariel> Keep better inventory layout
       mSearchTypeCombo(NULL) // <FS:Ansariel> Properly initialize this
 {
-	// Menu Callbacks (non contex menus)
-	mCommitCallbackRegistrar.add("Inventory.DoToSelected", boost::bind(&LLPanelMainInventory::doToSelected, this, _2));
-	mCommitCallbackRegistrar.add("Inventory.CloseAllFolders", boost::bind(&LLPanelMainInventory::closeAllFolders, this));
-	mCommitCallbackRegistrar.add("Inventory.EmptyTrash", boost::bind(&LLInventoryModel::emptyFolderType, &gInventory, "ConfirmEmptyTrash", LLFolderType::FT_TRASH));
-	mCommitCallbackRegistrar.add("Inventory.EmptyLostAndFound", boost::bind(&LLInventoryModel::emptyFolderType, &gInventory, "ConfirmEmptyLostAndFound", LLFolderType::FT_LOST_AND_FOUND));
-	mCommitCallbackRegistrar.add("Inventory.DoCreate", boost::bind(&LLPanelMainInventory::doCreate, this, _2));
-	mCommitCallbackRegistrar.add("Inventory.ShowFilters", boost::bind(&LLPanelMainInventory::toggleFindOptions, this));
-	mCommitCallbackRegistrar.add("Inventory.ResetFilters", boost::bind(&LLPanelMainInventory::resetFilters, this));
-	//mCommitCallbackRegistrar.add("Inventory.SetSortBy", boost::bind(&LLPanelMainInventory::setSortBy, this, _2)); // <FS:Zi> Sort By menu handlers
+    // Menu Callbacks (non contex menus)
+    mCommitCallbackRegistrar.add("Inventory.DoToSelected", boost::bind(&LLPanelMainInventory::doToSelected, this, _2));
+    mCommitCallbackRegistrar.add("Inventory.CloseAllFolders", boost::bind(&LLPanelMainInventory::closeAllFolders, this));
+    mCommitCallbackRegistrar.add("Inventory.EmptyTrash", boost::bind(&LLInventoryModel::emptyFolderType, &gInventory, "ConfirmEmptyTrash", LLFolderType::FT_TRASH));
+    mCommitCallbackRegistrar.add("Inventory.EmptyLostAndFound", boost::bind(&LLInventoryModel::emptyFolderType, &gInventory, "ConfirmEmptyLostAndFound", LLFolderType::FT_LOST_AND_FOUND));
+    mCommitCallbackRegistrar.add("Inventory.DoCreate", boost::bind(&LLPanelMainInventory::doCreate, this, _2));
+    mCommitCallbackRegistrar.add("Inventory.ShowFilters", boost::bind(&LLPanelMainInventory::toggleFindOptions, this));
+    mCommitCallbackRegistrar.add("Inventory.ResetFilters", boost::bind(&LLPanelMainInventory::resetFilters, this));
+    //mCommitCallbackRegistrar.add("Inventory.SetSortBy", boost::bind(&LLPanelMainInventory::setSortBy, this, _2)); // <FS:Zi> Sort By menu handlers
 
     mEnableCallbackRegistrar.add("Inventory.EnvironmentEnabled", [](LLUICtrl *, const LLSD &) { return LLPanelMainInventory::hasSettingsInventory(); });
     mEnableCallbackRegistrar.add("Inventory.MaterialsEnabled", [](LLUICtrl *, const LLSD &) { return LLPanelMainInventory::hasMaterialsInventory(); });
 
 
-	// <FS:Zi> Filter Links Menu
-	mCommitCallbackRegistrar.add("Inventory.FilterLinks.Set", boost::bind(&LLPanelMainInventory::onFilterLinksChecked, this, _2));
-	mEnableCallbackRegistrar.add("Inventory.FilterLinks.Check", boost::bind(&LLPanelMainInventory::isFilterLinksChecked, this, _2));
-	// </FS:Zi> Filter Links Menu
+    // <FS:Zi> Filter Links Menu
+    mCommitCallbackRegistrar.add("Inventory.FilterLinks.Set", boost::bind(&LLPanelMainInventory::onFilterLinksChecked, this, _2));
+    mEnableCallbackRegistrar.add("Inventory.FilterLinks.Check", boost::bind(&LLPanelMainInventory::isFilterLinksChecked, this, _2));
+    // </FS:Zi> Filter Links Menu
 
-	// <FS:Zi> FIRE-1175 - Filter Permissions Menu
-	mCommitCallbackRegistrar.add("Inventory.FilterPermissions.Set", boost::bind(&LLPanelMainInventory::onFilterPermissionsChecked, this, _2));
-	mEnableCallbackRegistrar.add("Inventory.FilterPermissions.Check", boost::bind(&LLPanelMainInventory::isFilterPermissionsChecked, this, _2));
-	// </FS:Zi>
+    // <FS:Zi> FIRE-1175 - Filter Permissions Menu
+    mCommitCallbackRegistrar.add("Inventory.FilterPermissions.Set", boost::bind(&LLPanelMainInventory::onFilterPermissionsChecked, this, _2));
+    mEnableCallbackRegistrar.add("Inventory.FilterPermissions.Check", boost::bind(&LLPanelMainInventory::isFilterPermissionsChecked, this, _2));
+    // </FS:Zi>
 
-	// <FS:Zi> Extended Inventory Search
-	mCommitCallbackRegistrar.add("Inventory.SearchType.Set", boost::bind(&LLPanelMainInventory::onSearchTypeChecked, this, _2));
-	mEnableCallbackRegistrar.add("Inventory.SearchType.Check", boost::bind(&LLPanelMainInventory::isSearchTypeChecked, this, _2));
-	// </FS:Zi> Extended Inventory Search
+    // <FS:Zi> Extended Inventory Search
+    mCommitCallbackRegistrar.add("Inventory.SearchType.Set", boost::bind(&LLPanelMainInventory::onSearchTypeChecked, this, _2));
+    mEnableCallbackRegistrar.add("Inventory.SearchType.Check", boost::bind(&LLPanelMainInventory::isSearchTypeChecked, this, _2));
+    // </FS:Zi> Extended Inventory Search
 
-	// <FS:Zi> Sort By menu handlers
-	// we set up our own handlers here because the gear menu handlers are only set up
-	// later in the code, so our XML based menus can't reach them yet.
-	mCommitCallbackRegistrar.add("Inventory.SortBy.Set", boost::bind(&LLPanelMainInventory::setSortBy, this, _2));
-	mEnableCallbackRegistrar.add("Inventory.SortBy.Check", boost::bind(&LLPanelMainInventory::isSortByChecked, this, _2));
-	// </FS:Zi> Sort By menu handlers
+    // <FS:Zi> Sort By menu handlers
+    // we set up our own handlers here because the gear menu handlers are only set up
+    // later in the code, so our XML based menus can't reach them yet.
+    mCommitCallbackRegistrar.add("Inventory.SortBy.Set", boost::bind(&LLPanelMainInventory::setSortBy, this, _2));
+    mEnableCallbackRegistrar.add("Inventory.SortBy.Check", boost::bind(&LLPanelMainInventory::isSortByChecked, this, _2));
+    // </FS:Zi> Sort By menu handlers
 
-	// <FS:Ansariel> Add handler for being able to directly route to onCustomAction
-	mCommitCallbackRegistrar.add("Inventory.CustomAction", boost::bind(&LLPanelMainInventory::onCustomAction, this, _2));
+    // <FS:Ansariel> Add handler for being able to directly route to onCustomAction
+    mCommitCallbackRegistrar.add("Inventory.CustomAction", boost::bind(&LLPanelMainInventory::onCustomAction, this, _2));
 
-	// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
-	mCommitCallbackRegistrar.add("Inventory.CoalescedObjects.Toggle", boost::bind(&LLPanelMainInventory::onCoalescedObjectsToggled, this, _2));
-	mEnableCallbackRegistrar.add("Inventory.CoalescedObjects.Check", boost::bind(&LLPanelMainInventory::isCoalescedObjectsChecked, this, _2));
-	// </FS:Zi>
+    // <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
+    mCommitCallbackRegistrar.add("Inventory.CoalescedObjects.Toggle", boost::bind(&LLPanelMainInventory::onCoalescedObjectsToggled, this, _2));
+    mEnableCallbackRegistrar.add("Inventory.CoalescedObjects.Check", boost::bind(&LLPanelMainInventory::isCoalescedObjectsChecked, this, _2));
+    // </FS:Zi>
 
-	// <FS:Ansariel> Register all callback handlers early
-	mCommitCallbackRegistrar.add("Inventory.GearDefault.Custom.Action", boost::bind(&LLPanelMainInventory::onCustomAction, this, _2));
-	mEnableCallbackRegistrar.add("Inventory.GearDefault.Check", boost::bind(&LLPanelMainInventory::isActionChecked, this, _2));
-	mEnableCallbackRegistrar.add("Inventory.GearDefault.Enable", boost::bind(&LLPanelMainInventory::isActionEnabled, this, _2));
-	mEnableCallbackRegistrar.add("Inventory.GearDefault.Visible", boost::bind(&LLPanelMainInventory::isActionVisible, this, _2));
-	// </FS:Ansariel>
+    // <FS:Ansariel> Register all callback handlers early
+    mCommitCallbackRegistrar.add("Inventory.GearDefault.Custom.Action", boost::bind(&LLPanelMainInventory::onCustomAction, this, _2));
+    mEnableCallbackRegistrar.add("Inventory.GearDefault.Check", boost::bind(&LLPanelMainInventory::isActionChecked, this, _2));
+    mEnableCallbackRegistrar.add("Inventory.GearDefault.Enable", boost::bind(&LLPanelMainInventory::isActionEnabled, this, _2));
+    mEnableCallbackRegistrar.add("Inventory.GearDefault.Visible", boost::bind(&LLPanelMainInventory::isActionVisible, this, _2));
+    // </FS:Ansariel>
 
-	mSavedFolderState = new LLSaveFolderState();
-	mSavedFolderState->setApply(FALSE);
+    mSavedFolderState = new LLSaveFolderState();
+    mSavedFolderState->setApply(FALSE);
 
-	// <FS:Zi> Filter dropdown
-	// create name-to-number mapping for the dropdown filter
-	mFilterMap["filter_type_animations"]	= 0x01 << LLInventoryType::IT_ANIMATION;
-	mFilterMap["filter_type_calling_cards"]	= 0x01 << LLInventoryType::IT_CALLINGCARD;
-	mFilterMap["filter_type_clothing"]		= 0x01 << LLInventoryType::IT_WEARABLE;
-	mFilterMap["filter_type_gestures"]		= 0x01 << LLInventoryType::IT_GESTURE;
-	mFilterMap["filter_type_landmarks"]		= 0x01 << LLInventoryType::IT_LANDMARK;
-	mFilterMap["filter_type_notecards"]		= 0x01 << LLInventoryType::IT_NOTECARD;
-	mFilterMap["filter_type_objects"]		= 0x01 << LLInventoryType::IT_OBJECT;
-	mFilterMap["filter_type_scripts"]		= 0x01 << LLInventoryType::IT_LSL;
-	mFilterMap["filter_type_sounds"]		= 0x01 << LLInventoryType::IT_SOUND;
-	mFilterMap["filter_type_textures"]		= 0x01 << LLInventoryType::IT_TEXTURE;
-	mFilterMap["filter_type_snapshots"]		= 0x01 << LLInventoryType::IT_SNAPSHOT;
-	mFilterMap["filter_type_settings"]		= 0x01 << LLInventoryType::IT_SETTINGS;
-	mFilterMap["filter_type_materials"]		= 0x01 << LLInventoryType::IT_MATERIAL;
+    // <FS:Zi> Filter dropdown
+    // create name-to-number mapping for the dropdown filter
+    mFilterMap["filter_type_animations"]    = 0x01 << LLInventoryType::IT_ANIMATION;
+    mFilterMap["filter_type_calling_cards"] = 0x01 << LLInventoryType::IT_CALLINGCARD;
+    mFilterMap["filter_type_clothing"]      = 0x01 << LLInventoryType::IT_WEARABLE;
+    mFilterMap["filter_type_gestures"]      = 0x01 << LLInventoryType::IT_GESTURE;
+    mFilterMap["filter_type_landmarks"]     = 0x01 << LLInventoryType::IT_LANDMARK;
+    mFilterMap["filter_type_notecards"]     = 0x01 << LLInventoryType::IT_NOTECARD;
+    mFilterMap["filter_type_objects"]       = 0x01 << LLInventoryType::IT_OBJECT;
+    mFilterMap["filter_type_scripts"]       = 0x01 << LLInventoryType::IT_LSL;
+    mFilterMap["filter_type_sounds"]        = 0x01 << LLInventoryType::IT_SOUND;
+    mFilterMap["filter_type_textures"]      = 0x01 << LLInventoryType::IT_TEXTURE;
+    mFilterMap["filter_type_snapshots"]     = 0x01 << LLInventoryType::IT_SNAPSHOT;
+    mFilterMap["filter_type_settings"]      = 0x01 << LLInventoryType::IT_SETTINGS;
+    mFilterMap["filter_type_materials"]     = 0x01 << LLInventoryType::IT_MATERIAL;
 
-	// initialize empty filter mask
-	mFilterMask = 0;
-	// add filter bits to the mask
-	for (std::map<std::string, U64>::iterator it = mFilterMap.begin() ; it != mFilterMap.end(); ++it)
-	{
-		mFilterMask |= (*it).second;
-	}
-	// </FS:Zi> Filter dropdown
+    // initialize empty filter mask
+    mFilterMask = 0;
+    // add filter bits to the mask
+    for (std::map<std::string, U64>::iterator it = mFilterMap.begin() ; it != mFilterMap.end(); ++it)
+    {
+        mFilterMask |= (*it).second;
+    }
+    // </FS:Zi> Filter dropdown
 }
 
 BOOL LLPanelMainInventory::postBuild()
 {
-	gInventory.addObserver(this);
-	
-	// <FS:Zi> Inventory Collapse and Expand Buttons
-	mCollapseBtn = getChild<LLButton>("collapse_btn");
-	mCollapseBtn->setClickedCallback(boost::bind(&LLPanelMainInventory::onCollapseButtonClicked, this));
+    gInventory.addObserver(this);
 
-	mExpandBtn = getChild<LLButton>("expand_btn");
-	mExpandBtn->setClickedCallback(boost::bind(&LLPanelMainInventory::onExpandButtonClicked, this));
-	// </FS:Zi> Inventory Collapse and Expand Buttons
+    // <FS:Zi> Inventory Collapse and Expand Buttons
+    mCollapseBtn = getChild<LLButton>("collapse_btn");
+    mCollapseBtn->setClickedCallback(boost::bind(&LLPanelMainInventory::onCollapseButtonClicked, this));
 
-	mFilterTabs = getChild<LLTabContainer>("inventory filter tabs");
-	mFilterTabs->setCommitCallback(boost::bind(&LLPanelMainInventory::onFilterSelected, this));
-	
+    mExpandBtn = getChild<LLButton>("expand_btn");
+    mExpandBtn->setClickedCallback(boost::bind(&LLPanelMainInventory::onExpandButtonClicked, this));
+    // </FS:Zi> Inventory Collapse and Expand Buttons
+
+    mFilterTabs = getChild<LLTabContainer>("inventory filter tabs");
+    mFilterTabs->setCommitCallback(boost::bind(&LLPanelMainInventory::onFilterSelected, this));
+
     mCounterCtrl = getChild<LLUICtrl>("ItemcountText");
-    
-	//panel->getFilter().markDefault();
 
-	// Set up the default inv. panel/filter settings.
-	mActivePanel = getChild<LLInventoryPanel>(ALL_ITEMS);
-	if (mActivePanel)
-	{
-		// "All Items" is the previous only view, so it gets the InventorySortOrder
-		mActivePanel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::DEFAULT_SORT_ORDER));
-		mActivePanel->getFilter().markDefault();
-		mActivePanel->getRootFolder()->applyFunctorRecursively(*mSavedFolderState);
-		mActivePanel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, mActivePanel, _1, _2));
-		mResortActivePanel = true;
-	}
-	LLInventoryPanel* recent_items_panel = getChild<LLInventoryPanel>(RECENT_ITEMS);
-	if (recent_items_panel)
-	{
-		// assign default values until we will be sure that we have setting to restore
-		recent_items_panel->setSinceLogoff(TRUE);
-		// <FS:Zi> Recent items panel should save sort order
-		// recent_items_panel->setSortOrder(LLInventoryFilter::SO_DATE);
-		recent_items_panel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::RECENTITEMS_SORT_ORDER));
-		// </FS:Zi>
-		recent_items_panel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
-		LLInventoryFilter& recent_filter = recent_items_panel->getFilter();
-		recent_filter.setFilterObjectTypes(recent_filter.getFilterObjectTypes() & ~(0x1 << LLInventoryType::IT_CATEGORY));
-		recent_filter.setEmptyLookupMessage("InventoryNoMatchingRecentItems");
-		recent_filter.markDefault();
-		recent_items_panel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, recent_items_panel, _1, _2));
-	}
+    //panel->getFilter().markDefault();
 
-	mWornItemsPanel = getChild<LLInventoryPanel>(WORN_ITEMS);
-	if (mWornItemsPanel)
-	{
-		U32 filter_types = 0x0;
-		filter_types |= 0x1 << LLInventoryType::IT_WEARABLE;
-		filter_types |= 0x1 << LLInventoryType::IT_ATTACHMENT;
-		filter_types |= 0x1 << LLInventoryType::IT_OBJECT;
-		mWornItemsPanel->setFilterTypes(filter_types);
-		mWornItemsPanel->setFilterWorn();
-		mWornItemsPanel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
-		mWornItemsPanel->setFilterLinks(LLInventoryFilter::FILTERLINK_EXCLUDE_LINKS);
-		LLInventoryFilter& worn_filter = mWornItemsPanel->getFilter();
-		worn_filter.setFilterCategoryTypes(worn_filter.getFilterCategoryTypes() | (1ULL << LLFolderType::FT_INBOX));
-		worn_filter.markDefault();
-		mWornItemsPanel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, mWornItemsPanel, _1, _2));
+    // Set up the default inv. panel/filter settings.
+    mActivePanel = getChild<LLInventoryPanel>(ALL_ITEMS);
+    if (mActivePanel)
+    {
+        // "All Items" is the previous only view, so it gets the InventorySortOrder
+        mActivePanel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::DEFAULT_SORT_ORDER));
+        mActivePanel->getFilter().markDefault();
+        mActivePanel->getRootFolder()->applyFunctorRecursively(*mSavedFolderState);
+        mActivePanel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, mActivePanel, _1, _2));
+        mResortActivePanel = true;
+    }
+    LLInventoryPanel* recent_items_panel = getChild<LLInventoryPanel>(RECENT_ITEMS);
+    if (recent_items_panel)
+    {
+        // assign default values until we will be sure that we have setting to restore
+        recent_items_panel->setSinceLogoff(TRUE);
+        // <FS:Zi> Recent items panel should save sort order
+        // recent_items_panel->setSortOrder(LLInventoryFilter::SO_DATE);
+        recent_items_panel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::RECENTITEMS_SORT_ORDER));
+        // </FS:Zi>
+        recent_items_panel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
+        LLInventoryFilter& recent_filter = recent_items_panel->getFilter();
+        recent_filter.setFilterObjectTypes(recent_filter.getFilterObjectTypes() & ~(0x1 << LLInventoryType::IT_CATEGORY));
+        recent_filter.setEmptyLookupMessage("InventoryNoMatchingRecentItems");
+        recent_filter.markDefault();
+        recent_items_panel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, recent_items_panel, _1, _2));
+    }
 
-		// <FS:Ansariel> Firestorm additions
-		mWornItemsPanel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::DEFAULT_SORT_ORDER));
+    mWornItemsPanel = getChild<LLInventoryPanel>(WORN_ITEMS);
+    if (mWornItemsPanel)
+    {
+        U32 filter_types = 0x0;
+        filter_types |= 0x1 << LLInventoryType::IT_WEARABLE;
+        filter_types |= 0x1 << LLInventoryType::IT_ATTACHMENT;
+        filter_types |= 0x1 << LLInventoryType::IT_OBJECT;
+        mWornItemsPanel->setFilterTypes(filter_types);
+        mWornItemsPanel->setFilterWorn();
+        mWornItemsPanel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
+        mWornItemsPanel->setFilterLinks(LLInventoryFilter::FILTERLINK_EXCLUDE_LINKS);
+        LLInventoryFilter& worn_filter = mWornItemsPanel->getFilter();
+        worn_filter.setFilterCategoryTypes(worn_filter.getFilterCategoryTypes() | (1ULL << LLFolderType::FT_INBOX));
+        worn_filter.markDefault();
+        mWornItemsPanel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, mWornItemsPanel, _1, _2));
 
-		if (mWornItemsPanel->getRootFolder())
-		{
-			mWornItemsPanel->getRootFolder()->setOpenArrangeRecursively(TRUE, LLFolderViewFolder::RECURSE_NO);
-			mWornItemsPanel->getRootFolder()->arrangeAll();
-		}
-		// </FS:Ansariel>
-	}
-	// <FS:Ansariel> Only if we actually have it!
-	//mSearchTypeCombo  = getChild<LLComboBox>("search_type");
-	mSearchTypeCombo  = findChild<LLComboBox>("search_type");
-	// <FS:Ansariel>
-	if(mSearchTypeCombo)
-	{
-		mSearchTypeCombo->setCommitCallback(boost::bind(&LLPanelMainInventory::onSelectSearchType, this));
-	}
-	// Now load the stored settings from disk, if available.
-	std::string filterSaveName(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, FILTERS_FILENAME));
-	LL_INFOS("Inventory") << "LLPanelMainInventory::init: reading from " << filterSaveName << LL_ENDL;
-	llifstream file(filterSaveName.c_str());
-	LLSD savedFilterState;
-	if (file.is_open())
-	{
-		LLSDSerialize::fromXML(savedFilterState, file);
-		file.close();
+        // <FS:Ansariel> Firestorm additions
+        mWornItemsPanel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::DEFAULT_SORT_ORDER));
 
-		// Load the persistent "Recent Items" settings.
-		// Note that the "All Items" settings do not persist.
-		if(recent_items_panel)
-		{
-			if(savedFilterState.has(recent_items_panel->getFilter().getName()))
-			{
-				LLSD recent_items = savedFilterState.get(
-					recent_items_panel->getFilter().getName());
-				// <FS:Ansariel> Fix wrong param type
-				//LLInventoryFilter::Params p;
-				LLInventoryPanel::InventoryState p;
-				// </FS:Ansariel>
-				LLParamSDParser parser;
-				parser.readSD(recent_items, p);
-				// <FS:Ansariel> Fix wrong param type
-				//recent_items_panel->getFilter().fromParams(p);
-				recent_items_panel->getFilter().fromParams(p.filter);
-				// </FS:Ansariel>
-				// <FS:Ansariel> We do that earlier already
-				//recent_items_panel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::RECENTITEMS_SORT_ORDER));
+        if (mWornItemsPanel->getRootFolder())
+        {
+            mWornItemsPanel->getRootFolder()->setOpenArrangeRecursively(TRUE, LLFolderViewFolder::RECURSE_NO);
+            mWornItemsPanel->getRootFolder()->arrangeAll();
+        }
+        // </FS:Ansariel>
+    }
+    // <FS:Ansariel> Only if we actually have it!
+    //mSearchTypeCombo  = getChild<LLComboBox>("search_type");
+    mSearchTypeCombo  = findChild<LLComboBox>("search_type");
+    // <FS:Ansariel>
+    if(mSearchTypeCombo)
+    {
+        mSearchTypeCombo->setCommitCallback(boost::bind(&LLPanelMainInventory::onSelectSearchType, this));
+    }
+    // Now load the stored settings from disk, if available.
+    std::string filterSaveName(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, FILTERS_FILENAME));
+    LL_INFOS("Inventory") << "LLPanelMainInventory::init: reading from " << filterSaveName << LL_ENDL;
+    llifstream file(filterSaveName.c_str());
+    LLSD savedFilterState;
+    if (file.is_open())
+    {
+        LLSDSerialize::fromXML(savedFilterState, file);
+        file.close();
 
-				// </FS:Ansariel> Recent items panel doesn't filter empty folders until filter floater has been opened
-				LLInventoryFilter& recent_filter = recent_items_panel->getFilter();
-				recent_filter.setFilterObjectTypes(recent_filter.getFilterObjectTypes() & ~(0x1 << LLInventoryType::IT_CATEGORY));
-				// </FS:Ansariel>
-			}
-		}
-		if(mActivePanel)
-		{
-			if(savedFilterState.has(mActivePanel->getFilter().getName()))
-			{
-				LLSD items = savedFilterState.get(mActivePanel->getFilter().getName());
-				LLInventoryFilter::Params p;
-				LLParamSDParser parser;
-				parser.readSD(items, p);
-				mActivePanel->getFilter().setSearchVisibilityTypes(p);
-			}
-		}
+        // Load the persistent "Recent Items" settings.
+        // Note that the "All Items" settings do not persist.
+        if(recent_items_panel)
+        {
+            if(savedFilterState.has(recent_items_panel->getFilter().getName()))
+            {
+                LLSD recent_items = savedFilterState.get(
+                    recent_items_panel->getFilter().getName());
+                // <FS:Ansariel> Fix wrong param type
+                //LLInventoryFilter::Params p;
+                LLInventoryPanel::InventoryState p;
+                // </FS:Ansariel>
+                LLParamSDParser parser;
+                parser.readSD(recent_items, p);
+                // <FS:Ansariel> Fix wrong param type
+                //recent_items_panel->getFilter().fromParams(p);
+                recent_items_panel->getFilter().fromParams(p.filter);
+                // </FS:Ansariel>
+                // <FS:Ansariel> We do that earlier already
+                //recent_items_panel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::RECENTITEMS_SORT_ORDER));
 
-	}
+                // </FS:Ansariel> Recent items panel doesn't filter empty folders until filter floater has been opened
+                LLInventoryFilter& recent_filter = recent_items_panel->getFilter();
+                recent_filter.setFilterObjectTypes(recent_filter.getFilterObjectTypes() & ~(0x1 << LLInventoryType::IT_CATEGORY));
+                // </FS:Ansariel>
+            }
+        }
+        if(mActivePanel)
+        {
+            if(savedFilterState.has(mActivePanel->getFilter().getName()))
+            {
+                LLSD items = savedFilterState.get(mActivePanel->getFilter().getName());
+                LLInventoryFilter::Params p;
+                LLParamSDParser parser;
+                parser.readSD(items, p);
+                mActivePanel->getFilter().setSearchVisibilityTypes(p);
+            }
+        }
 
-	mFilterEditor = getChild<LLFilterEditor>("inventory search editor");
-	if (mFilterEditor)
-	{
-		mFilterEditor->setCommitCallback(boost::bind(&LLPanelMainInventory::onFilterEdit, this, _2));
-	}
+    }
 
-	// <FS:Zi> Filter dropdown
-	mFilterComboBox = getChild<LLComboBox>("filter_combo_box");
-	mFilterComboBox->setCommitCallback(boost::bind(&LLPanelMainInventory::onFilterTypeSelected, this, _2));
-	// </FS:Zi> Filter dropdown
+    mFilterEditor = getChild<LLFilterEditor>("inventory search editor");
+    if (mFilterEditor)
+    {
+        mFilterEditor->setCommitCallback(boost::bind(&LLPanelMainInventory::onFilterEdit, this, _2));
+    }
 
-	mGearMenuButton = getChild<LLMenuButton>("options_gear_btn");
-	mVisibilityMenuButton = getChild<LLMenuButton>("options_visibility_btn");
-	// <FS:Ansariel> Keep better inventory layout
+    // <FS:Zi> Filter dropdown
+    mFilterComboBox = getChild<LLComboBox>("filter_combo_box");
+    mFilterComboBox->setCommitCallback(boost::bind(&LLPanelMainInventory::onFilterTypeSelected, this, _2));
+    // </FS:Zi> Filter dropdown
+
+    mGearMenuButton = getChild<LLMenuButton>("options_gear_btn");
+    mVisibilityMenuButton = getChild<LLMenuButton>("options_visibility_btn");
+    // <FS:Ansariel> Keep better inventory layout
     //mViewMenuButton = getChild<LLMenuButton>("view_btn");
-	mViewMenuButton = findChild<LLMenuButton>("view_btn");
+    mViewMenuButton = findChild<LLMenuButton>("view_btn");
 
     mBackBtn = getChild<LLButton>("back_btn");
     mForwardBtn = getChild<LLButton>("forward_btn");
@@ -395,81 +395,81 @@ BOOL LLPanelMainInventory::postBuild()
     mGalleryRootUpdatedConnection = mCombinationGalleryPanel->setRootChangedCallback(boost::bind(&LLPanelMainInventory::onCombinationRootChanged, this, true));
     mCombinationGalleryPanel->setSelectionChangeCallback(boost::bind(&LLPanelMainInventory::onCombinationGallerySelectionChanged, this, _1));
 
-	initListCommandsHandlers();
-	const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
-	const std::string sound_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getSoundUploadCost());
-	const std::string animation_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getAnimationUploadCost());
+    initListCommandsHandlers();
+    const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
+    const std::string sound_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getSoundUploadCost());
+    const std::string animation_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getAnimationUploadCost());
 
-	LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
-	if (menu)
-	{
-		menu->getChild<LLMenuItemGL>("Upload Image")->setLabelArg("[COST]", texture_upload_cost_str);
-		menu->getChild<LLMenuItemGL>("Upload Sound")->setLabelArg("[COST]", sound_upload_cost_str);
-		menu->getChild<LLMenuItemGL>("Upload Animation")->setLabelArg("[COST]", animation_upload_cost_str);
-	}
+    LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
+    if (menu)
+    {
+        menu->getChild<LLMenuItemGL>("Upload Image")->setLabelArg("[COST]", texture_upload_cost_str);
+        menu->getChild<LLMenuItemGL>("Upload Sound")->setLabelArg("[COST]", sound_upload_cost_str);
+        menu->getChild<LLMenuItemGL>("Upload Animation")->setLabelArg("[COST]", animation_upload_cost_str);
+    }
 
-	// Trigger callback for focus received so we can deselect items in inbox/outbox
-	LLFocusableElement::setFocusReceivedCallback(boost::bind(&LLPanelMainInventory::onFocusReceived, this));
+    // Trigger callback for focus received so we can deselect items in inbox/outbox
+    LLFocusableElement::setFocusReceivedCallback(boost::bind(&LLPanelMainInventory::onFocusReceived, this));
 
-	return TRUE;
+    return TRUE;
 }
 
 // Destroys the object
 LLPanelMainInventory::~LLPanelMainInventory( void )
 {
-	// Save the filters state.
-	// Some params types cannot be saved this way
-	// for example, LLParamSDParser doesn't know about U64,
-	// so some FilterOps params should be revised.
-	LLSD filterRoot;
-	LLInventoryPanel* all_items_panel = getChild<LLInventoryPanel>(ALL_ITEMS);
-	if (all_items_panel)
-	{
-		LLSD filterState;
-		LLInventoryPanel::InventoryState p;
-		all_items_panel->getFilter().toParams(p.filter);
-		all_items_panel->getRootViewModel().getSorter().toParams(p.sort);
-		if (p.validateBlock(false))
-		{
-			LLParamSDParser().writeSD(filterState, p);
-			filterRoot[all_items_panel->getName()] = filterState;
-		}
-	}
-
-	LLInventoryPanel* panel = findChild<LLInventoryPanel>(RECENT_ITEMS);
-	if (panel)
-	{
-		LLSD filterState;
-		LLInventoryPanel::InventoryState p;
-		panel->getFilter().toParams(p.filter);
-		panel->getRootViewModel().getSorter().toParams(p.sort);
-		if (p.validateBlock(false))
-		{
-			LLParamSDParser().writeSD(filterState, p);
-			filterRoot[panel->getName()] = filterState;
-		}
-	}
-
-	// <FS:Ansariel> FIRE-12808: Don't save filters during settings restore
-	if (sSaveFilters)
-	{
-	// </FS:Ansariel>
-	std::string filterSaveName(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, FILTERS_FILENAME));
-	llofstream filtersFile(filterSaveName.c_str());
-	if(!LLSDSerialize::toPrettyXML(filterRoot, filtersFile))
-	{
-		LL_WARNS() << "Could not write to filters save file " << filterSaveName << LL_ENDL;
-	}
-	else
+    // Save the filters state.
+    // Some params types cannot be saved this way
+    // for example, LLParamSDParser doesn't know about U64,
+    // so some FilterOps params should be revised.
+    LLSD filterRoot;
+    LLInventoryPanel* all_items_panel = getChild<LLInventoryPanel>(ALL_ITEMS);
+    if (all_items_panel)
     {
-		filtersFile.close();
+        LLSD filterState;
+        LLInventoryPanel::InventoryState p;
+        all_items_panel->getFilter().toParams(p.filter);
+        all_items_panel->getRootViewModel().getSorter().toParams(p.sort);
+        if (p.validateBlock(false))
+        {
+            LLParamSDParser().writeSD(filterState, p);
+            filterRoot[all_items_panel->getName()] = filterState;
+        }
     }
-	// <FS:Ansariel> FIRE-12808: Don't save filters during settings restore
-	}
-	// </FS:Ansariel>
-    
-	gInventory.removeObserver(this);
-	delete mSavedFolderState;
+
+    LLInventoryPanel* panel = findChild<LLInventoryPanel>(RECENT_ITEMS);
+    if (panel)
+    {
+        LLSD filterState;
+        LLInventoryPanel::InventoryState p;
+        panel->getFilter().toParams(p.filter);
+        panel->getRootViewModel().getSorter().toParams(p.sort);
+        if (p.validateBlock(false))
+        {
+            LLParamSDParser().writeSD(filterState, p);
+            filterRoot[panel->getName()] = filterState;
+        }
+    }
+
+    // <FS:Ansariel> FIRE-12808: Don't save filters during settings restore
+    if (sSaveFilters)
+    {
+    // </FS:Ansariel>
+    std::string filterSaveName(gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, FILTERS_FILENAME));
+    llofstream filtersFile(filterSaveName.c_str());
+    if(!LLSDSerialize::toPrettyXML(filterRoot, filtersFile))
+    {
+        LL_WARNS() << "Could not write to filters save file " << filterSaveName << LL_ENDL;
+    }
+    else
+    {
+        filtersFile.close();
+    }
+    // <FS:Ansariel> FIRE-12808: Don't save filters during settings restore
+    }
+    // </FS:Ansariel>
+
+    gInventory.removeObserver(this);
+    delete mSavedFolderState;
 
     auto menu = mMenuAddHandle.get();
     if(menu)
@@ -490,65 +490,65 @@ LLPanelMainInventory::~LLPanelMainInventory( void )
 
 LLInventoryPanel* LLPanelMainInventory::getAllItemsPanel()
 {
-	return  getChild<LLInventoryPanel>(ALL_ITEMS);
+    return  getChild<LLInventoryPanel>(ALL_ITEMS);
 }
 
 void LLPanelMainInventory::selectAllItemsPanel()
 {
-	mFilterTabs->selectFirstTab();
+    mFilterTabs->selectFirstTab();
 }
 
 bool LLPanelMainInventory::isRecentItemsPanelSelected()
 {
-	return (RECENT_ITEMS == getActivePanel()->getName());
+    return (RECENT_ITEMS == getActivePanel()->getName());
 }
 
 void LLPanelMainInventory::startSearch()
 {
-	// this forces focus to line editor portion of search editor
-	if (mFilterEditor)
-	{
-		mFilterEditor->focusFirstItem(TRUE);
-	}
+    // this forces focus to line editor portion of search editor
+    if (mFilterEditor)
+    {
+        mFilterEditor->focusFirstItem(TRUE);
+    }
 }
 
 BOOL LLPanelMainInventory::handleKeyHere(KEY key, MASK mask)
 {
-	// <FS:Ansariel> CTRL-F focusses local search editor
-	if (FSCommon::isFilterEditorKeyCombo(key, mask))
-	{
-		mFilterEditor->setFocus(TRUE);
-		return TRUE;
-	}
-	// </FS:Ansariel>
+    // <FS:Ansariel> CTRL-F focusses local search editor
+    if (FSCommon::isFilterEditorKeyCombo(key, mask))
+    {
+        mFilterEditor->setFocus(TRUE);
+        return TRUE;
+    }
+    // </FS:Ansariel>
 
-	LLFolderView* root_folder = mActivePanel ? mActivePanel->getRootFolder() : NULL;
-	if (root_folder)
-	{
-		// first check for user accepting current search results
-		if (mFilterEditor 
-			&& mFilterEditor->hasFocus()
-		    && (key == KEY_RETURN 
-		    	|| key == KEY_DOWN)
-		    && mask == MASK_NONE)
-		{
-			// move focus to inventory proper
-			mActivePanel->setFocus(TRUE);
-			root_folder->scrollToShowSelection();
-			return TRUE;
-		}
+    LLFolderView* root_folder = mActivePanel ? mActivePanel->getRootFolder() : NULL;
+    if (root_folder)
+    {
+        // first check for user accepting current search results
+        if (mFilterEditor
+            && mFilterEditor->hasFocus()
+            && (key == KEY_RETURN
+                || key == KEY_DOWN)
+            && mask == MASK_NONE)
+        {
+            // move focus to inventory proper
+            mActivePanel->setFocus(TRUE);
+            root_folder->scrollToShowSelection();
+            return TRUE;
+        }
 
-		if (mActivePanel->hasFocus() && key == KEY_UP)
-		{
-			startSearch();
-		}
+        if (mActivePanel->hasFocus() && key == KEY_UP)
+        {
+            startSearch();
+        }
         if(mSingleFolderMode && key == KEY_LEFT)
         {
             onBackFolderClicked();
         }
-	}
+    }
 
-	return LLPanel::handleKeyHere(key, mask);
+    return LLPanel::handleKeyHere(key, mask);
 
 }
 
@@ -557,12 +557,12 @@ BOOL LLPanelMainInventory::handleKeyHere(KEY key, MASK mask)
 
 void LLPanelMainInventory::doToSelected(const LLSD& userdata)
 {
-	getPanel()->doToSelected(userdata);
+    getPanel()->doToSelected(userdata);
 }
 
 void LLPanelMainInventory::closeAllFolders()
 {
-	getPanel()->getRootFolder()->closeAllFolders();
+    getPanel()->getRootFolder()->closeAllFolders();
 }
 
 S32 get_instance_num()
@@ -577,13 +577,13 @@ LLFloaterSidePanelContainer* LLPanelMainInventory::newWindow()
 {
     S32 instance_num = get_instance_num();
 
-	if (!gAgentCamera.cameraMouselook())
-	{
+    if (!gAgentCamera.cameraMouselook())
+    {
         LLFloaterSidePanelContainer* floater = LLFloaterReg::showTypedInstance<LLFloaterSidePanelContainer>("inventory", LLSD(instance_num));
         LLSidepanelInventory* sidepanel_inventory = floater->findChild<LLSidepanelInventory>("main_panel");
         sidepanel_inventory->initInventoryViews();
-		return floater;
-	}
+        return floater;
+    }
     return NULL;
 }
 
@@ -613,7 +613,7 @@ void LLPanelMainInventory::newFolderWindow(LLUUID folder_id, LLUUID item_to_sele
             }
         }
     }
-    
+
     S32 instance_num = get_instance_num();
 
     LLFloaterSidePanelContainer* inventory_container = LLFloaterReg::showTypedInstance<LLFloaterSidePanelContainer>("inventory", LLSD(instance_num));
@@ -641,10 +641,10 @@ void LLPanelMainInventory::newFolderWindow(LLUUID folder_id, LLUUID item_to_sele
 
 void LLPanelMainInventory::doCreate(const LLSD& userdata)
 {
-	// <FS:Ansariel> FIRE-20108: Can't create new folder in secondary inventory if view is filtered
-	//reset_inventory_filter();
-	onFilterEdit("");
-	// </FS:Ansariel>
+    // <FS:Ansariel> FIRE-20108: Can't create new folder in secondary inventory if view is filtered
+    //reset_inventory_filter();
+    onFilterEdit("");
+    // </FS:Ansariel>
     if(mSingleFolderMode)
     {
         if(isListViewMode() || isCombinationViewMode())
@@ -705,24 +705,24 @@ void LLPanelMainInventory::doCreate(const LLSD& userdata)
 
 void LLPanelMainInventory::resetFilters()
 {
-	LLFloaterInventoryFinder *finder = getFinder();
-	// <FS:Ansariel> Properly reset all filters
-	//getCurrentFilter().resetDefault();
-	LLInventoryFilter& filter = getCurrentFilter();
-	filter.resetDefault();
-	filter.setFilterCreator(LLInventoryFilter::FILTERCREATOR_ALL);
-	filter.setSearchType(LLInventoryFilter::SEARCHTYPE_NAME);
-	filter.setFilterPermissions(PERM_NONE); // <FS:Zi> FIRE-1175 - Filter Permissions Menu
-	getActivePanel()->updateShowInboxFolder(gSavedSettings.getBOOL("FSShowInboxFolder"));
-	getActivePanel()->updateHideEmptySystemFolders(gSavedSettings.getBOOL("DebugHideEmptySystemFolders"));
-	updateFilterDropdown(&filter);
-	// </FS:Ansariel>
-	if (finder)
-	{
-		finder->updateElementsFromFilter();
-	}
+    LLFloaterInventoryFinder *finder = getFinder();
+    // <FS:Ansariel> Properly reset all filters
+    //getCurrentFilter().resetDefault();
+    LLInventoryFilter& filter = getCurrentFilter();
+    filter.resetDefault();
+    filter.setFilterCreator(LLInventoryFilter::FILTERCREATOR_ALL);
+    filter.setSearchType(LLInventoryFilter::SEARCHTYPE_NAME);
+    filter.setFilterPermissions(PERM_NONE); // <FS:Zi> FIRE-1175 - Filter Permissions Menu
+    getActivePanel()->updateShowInboxFolder(gSavedSettings.getBOOL("FSShowInboxFolder"));
+    getActivePanel()->updateHideEmptySystemFolders(gSavedSettings.getBOOL("DebugHideEmptySystemFolders"));
+    updateFilterDropdown(&filter);
+    // </FS:Ansariel>
+    if (finder)
+    {
+        finder->updateElementsFromFilter();
+    }
 
-	setFilterTextFromFilter();
+    setFilterTextFromFilter();
 }
 
 void LLPanelMainInventory::resetAllItemsFilters()
@@ -750,45 +750,45 @@ void LLPanelMainInventory::findLinks(const LLUUID& item_id, const std::string& i
 
 void LLPanelMainInventory::setSortBy(const LLSD& userdata)
 {
-	U32 sort_order_mask = getActivePanel()->getSortOrder();
-	std::string sort_type = userdata.asString();
-	if (sort_type == "name")
-	{
-		sort_order_mask &= ~LLInventoryFilter::SO_DATE;
-	}
-	else if (sort_type == "date")
-	{
-		sort_order_mask |= LLInventoryFilter::SO_DATE;
-	}
-	else if (sort_type == "foldersalwaysbyname")
-	{
-		if ( sort_order_mask & LLInventoryFilter::SO_FOLDERS_BY_NAME )
-		{
-			sort_order_mask &= ~LLInventoryFilter::SO_FOLDERS_BY_NAME;
-		}
-		else
-		{
-			sort_order_mask |= LLInventoryFilter::SO_FOLDERS_BY_NAME;
-		}
-	}
-	else if (sort_type == "systemfolderstotop")
-	{
-		if ( sort_order_mask & LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP )
-		{
-			sort_order_mask &= ~LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP;
-		}
-		else
-		{
-			sort_order_mask |= LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP;
-		}
-	}
+    U32 sort_order_mask = getActivePanel()->getSortOrder();
+    std::string sort_type = userdata.asString();
+    if (sort_type == "name")
+    {
+        sort_order_mask &= ~LLInventoryFilter::SO_DATE;
+    }
+    else if (sort_type == "date")
+    {
+        sort_order_mask |= LLInventoryFilter::SO_DATE;
+    }
+    else if (sort_type == "foldersalwaysbyname")
+    {
+        if ( sort_order_mask & LLInventoryFilter::SO_FOLDERS_BY_NAME )
+        {
+            sort_order_mask &= ~LLInventoryFilter::SO_FOLDERS_BY_NAME;
+        }
+        else
+        {
+            sort_order_mask |= LLInventoryFilter::SO_FOLDERS_BY_NAME;
+        }
+    }
+    else if (sort_type == "systemfolderstotop")
+    {
+        if ( sort_order_mask & LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP )
+        {
+            sort_order_mask &= ~LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP;
+        }
+        else
+        {
+            sort_order_mask |= LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP;
+        }
+    }
     if(mSingleFolderMode && !isListViewMode())
     {
         mCombinationGalleryPanel->setSortOrder(sort_order_mask, true);
     }
 
-	getActivePanel()->setSortOrder(sort_order_mask);
-	// <FS:Zi> Recent items panel should save sort order
+    getActivePanel()->setSortOrder(sort_order_mask);
+    // <FS:Zi> Recent items panel should save sort order
     //if (isRecentItemsPanelSelected())
     //{
     //    gSavedSettings.setU32("RecentItemsSortOrder", sort_order_mask);
@@ -797,29 +797,29 @@ void LLPanelMainInventory::setSortBy(const LLSD& userdata)
     //{
     //    gSavedSettings.setU32("InventorySortOrder", sort_order_mask);
     //}
-	gSavedSettings.setU32(getActivePanel()->mSortOrderSetting, sort_order_mask);
-	// </FS:Zi>
+    gSavedSettings.setU32(getActivePanel()->mSortOrderSetting, sort_order_mask);
+    // </FS:Zi>
 }
 
 void LLPanelMainInventory::onSelectSearchType()
 {
-	std::string new_type = mSearchTypeCombo->getValue();
-	if (new_type == "search_by_name")
-	{
-		setSearchType(LLInventoryFilter::SEARCHTYPE_NAME);
-	}
-	if (new_type == "search_by_creator")
-	{
-		setSearchType(LLInventoryFilter::SEARCHTYPE_CREATOR);
-	}
-	if (new_type == "search_by_description")
-	{
-		setSearchType(LLInventoryFilter::SEARCHTYPE_DESCRIPTION);
-	}
-	if (new_type == "search_by_UUID")
-	{
-		setSearchType(LLInventoryFilter::SEARCHTYPE_UUID);
-	}
+    std::string new_type = mSearchTypeCombo->getValue();
+    if (new_type == "search_by_name")
+    {
+        setSearchType(LLInventoryFilter::SEARCHTYPE_NAME);
+    }
+    if (new_type == "search_by_creator")
+    {
+        setSearchType(LLInventoryFilter::SEARCHTYPE_CREATOR);
+    }
+    if (new_type == "search_by_description")
+    {
+        setSearchType(LLInventoryFilter::SEARCHTYPE_DESCRIPTION);
+    }
+    if (new_type == "search_by_UUID")
+    {
+        setSearchType(LLInventoryFilter::SEARCHTYPE_UUID);
+    }
 }
 
 void LLPanelMainInventory::setSearchType(LLInventoryFilter::ESearchType type)
@@ -841,12 +841,12 @@ void LLPanelMainInventory::setSearchType(LLInventoryFilter::ESearchType type)
 
 void LLPanelMainInventory::updateSearchTypeCombo()
 {
-	// <FS:Ansariel> Check if combo box is actually there
-	if (!mSearchTypeCombo)
-	{
-		return;
-	}
-	// </FS:Ansariel>
+    // <FS:Ansariel> Check if combo box is actually there
+    if (!mSearchTypeCombo)
+    {
+        return;
+    }
+    // </FS:Ansariel>
 
     LLInventoryFilter::ESearchType search_type(LLInventoryFilter::SEARCHTYPE_NAME);
 
@@ -863,115 +863,115 @@ void LLPanelMainInventory::updateSearchTypeCombo()
         search_type = getActivePanel()->getSearchType();
     }
 
-	switch(search_type)
-	{
-		case LLInventoryFilter::SEARCHTYPE_CREATOR:
-			mSearchTypeCombo->setValue("search_by_creator");
-			break;
-		case LLInventoryFilter::SEARCHTYPE_DESCRIPTION:
-			mSearchTypeCombo->setValue("search_by_description");
-			break;
-		case LLInventoryFilter::SEARCHTYPE_UUID:
-			mSearchTypeCombo->setValue("search_by_UUID");
-			break;
-		case LLInventoryFilter::SEARCHTYPE_NAME:
-		default:
-			mSearchTypeCombo->setValue("search_by_name");
-			break;
-	}
+    switch(search_type)
+    {
+        case LLInventoryFilter::SEARCHTYPE_CREATOR:
+            mSearchTypeCombo->setValue("search_by_creator");
+            break;
+        case LLInventoryFilter::SEARCHTYPE_DESCRIPTION:
+            mSearchTypeCombo->setValue("search_by_description");
+            break;
+        case LLInventoryFilter::SEARCHTYPE_UUID:
+            mSearchTypeCombo->setValue("search_by_UUID");
+            break;
+        case LLInventoryFilter::SEARCHTYPE_NAME:
+        default:
+            mSearchTypeCombo->setValue("search_by_name");
+            break;
+    }
 }
 
 BOOL LLPanelMainInventory::isSortByChecked(const LLSD& userdata)
 {
-	U32 sort_order_mask = getActivePanel()->getSortOrder();
-	const std::string command_name = userdata.asString();
-	if (command_name == "name")
-	{
-		return !(sort_order_mask & LLInventoryFilter::SO_DATE);
-	}
+    U32 sort_order_mask = getActivePanel()->getSortOrder();
+    const std::string command_name = userdata.asString();
+    if (command_name == "name")
+    {
+        return !(sort_order_mask & LLInventoryFilter::SO_DATE);
+    }
 
-	if (command_name == "date")
-	{
-		return (sort_order_mask & LLInventoryFilter::SO_DATE);
-	}
+    if (command_name == "date")
+    {
+        return (sort_order_mask & LLInventoryFilter::SO_DATE);
+    }
 
-	if (command_name == "foldersalwaysbyname")
-	{
-		return (sort_order_mask & LLInventoryFilter::SO_FOLDERS_BY_NAME);
-	}
+    if (command_name == "foldersalwaysbyname")
+    {
+        return (sort_order_mask & LLInventoryFilter::SO_FOLDERS_BY_NAME);
+    }
 
-	if (command_name == "systemfolderstotop")
-	{
-		return (sort_order_mask & LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP);
-	}
+    if (command_name == "systemfolderstotop")
+    {
+        return (sort_order_mask & LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP);
+    }
 
-	return FALSE;
+    return FALSE;
 }
 // </FS:Zi> Sort By menu handlers
 
 // static
 BOOL LLPanelMainInventory::filtersVisible(void* user_data)
 {
-	LLPanelMainInventory* self = (LLPanelMainInventory*)user_data;
-	if(!self) return FALSE;
+    LLPanelMainInventory* self = (LLPanelMainInventory*)user_data;
+    if(!self) return FALSE;
 
-	return self->getFinder() != NULL;
+    return self->getFinder() != NULL;
 }
 
 void LLPanelMainInventory::onClearSearch()
 {
-	BOOL initially_active = FALSE;
-	LLFloater *finder = getFinder();
-	// <FS:Ansariel> Worn inventory panel
-	//if (mActivePanel && (getActivePanel() != mWornItemsPanel))
-	if (mActivePanel)
-	// </FS:Ansariel>
-	{
-		// <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
-		//initially_active = mActivePanel->getFilter().isNotDefault();
-		//setFilterSubString(LLStringUtil::null);
-		//mActivePanel->setFilterTypes(0xffffffffffffffffULL);
-		//mActivePanel->setFilterLinks(LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
-		setFilterSubString(LLStringUtil::null);
-		// </FS:Ansariel>
-	}
+    BOOL initially_active = FALSE;
+    LLFloater *finder = getFinder();
+    // <FS:Ansariel> Worn inventory panel
+    //if (mActivePanel && (getActivePanel() != mWornItemsPanel))
+    if (mActivePanel)
+    // </FS:Ansariel>
+    {
+        // <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
+        //initially_active = mActivePanel->getFilter().isNotDefault();
+        //setFilterSubString(LLStringUtil::null);
+        //mActivePanel->setFilterTypes(0xffffffffffffffffULL);
+        //mActivePanel->setFilterLinks(LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
+        setFilterSubString(LLStringUtil::null);
+        // </FS:Ansariel>
+    }
 
-	if (finder)
-	{
-		LLFloaterInventoryFinder::selectAllTypes(finder);
-	}
+    if (finder)
+    {
+        LLFloaterInventoryFinder::selectAllTypes(finder);
+    }
 
-	// re-open folders that were initially open in case filter was active
-	if (mActivePanel && (mFilterSubString.size() || initially_active) && !mSingleFolderMode)
-	{
-		mSavedFolderState->setApply(TRUE);
-		mActivePanel->getRootFolder()->applyFunctorRecursively(*mSavedFolderState);
-		LLOpenFoldersWithSelection opener;
-		mActivePanel->getRootFolder()->applyFunctorRecursively(opener);
-		mActivePanel->getRootFolder()->scrollToShowSelection();
-	}
-	mFilterSubString = "";
+    // re-open folders that were initially open in case filter was active
+    if (mActivePanel && (mFilterSubString.size() || initially_active) && !mSingleFolderMode)
+    {
+        mSavedFolderState->setApply(TRUE);
+        mActivePanel->getRootFolder()->applyFunctorRecursively(*mSavedFolderState);
+        LLOpenFoldersWithSelection opener;
+        mActivePanel->getRootFolder()->applyFunctorRecursively(opener);
+        mActivePanel->getRootFolder()->scrollToShowSelection();
+    }
+    mFilterSubString = "";
 
-	// <FS:Ansariel> FIRE-22509: Only apply inbox filter on primary inventory window
-	//LLSidepanelInventory * sidepanel_inventory = getParentSidepanelInventory();
-	//if (sidepanel_inventory)
-	//{
-	//	LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getChild<LLPanelMarketplaceInbox>("marketplace_inbox");
-	//	if (inbox_panel)
-	//	{
-	//		inbox_panel->onClearSearch();
-	//	}
-	//}
-	LLSidepanelInventory * sidepanel_inventory = getParentByType<LLSidepanelInventory>();
-	if (sidepanel_inventory && sidepanel_inventory->getInboxPanel())
-	{
-		LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getInboxPanel()->getParentByType<LLPanelMarketplaceInbox>();
-		if (inbox_panel)
-		{
-			inbox_panel->onClearSearch();
-		}
-	}
-	// </FS:Ansariel>
+    // <FS:Ansariel> FIRE-22509: Only apply inbox filter on primary inventory window
+    //LLSidepanelInventory * sidepanel_inventory = getParentSidepanelInventory();
+    //if (sidepanel_inventory)
+    //{
+    //  LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getChild<LLPanelMarketplaceInbox>("marketplace_inbox");
+    //  if (inbox_panel)
+    //  {
+    //      inbox_panel->onClearSearch();
+    //  }
+    //}
+    LLSidepanelInventory * sidepanel_inventory = getParentByType<LLSidepanelInventory>();
+    if (sidepanel_inventory && sidepanel_inventory->getInboxPanel())
+    {
+        LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getInboxPanel()->getParentByType<LLPanelMarketplaceInbox>();
+        if (inbox_panel)
+        {
+            inbox_panel->onClearSearch();
+        }
+    }
+    // </FS:Ansariel>
 }
 
 void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
@@ -987,15 +987,15 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
         mCombinationGalleryPanel->setFilterSubString(search_string);
     }
 
-	if (search_string == "")
-	{
-		onClearSearch();
-	}
+    if (search_string == "")
+    {
+        onClearSearch();
+    }
 
-	if (!mActivePanel)
-	{
-		return;
-	}
+    if (!mActivePanel)
+    {
+        return;
+    }
 
     if (!LLInventoryModelBackgroundFetch::instance().inventoryFetchStarted())
     {
@@ -1003,395 +1003,395 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
         LLInventoryModelBackgroundFetch::instance().start();
     }
 
-	mFilterSubString = search_string;
-	// <FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
-	//if (mActivePanel->getFilterSubString().empty() && mFilterSubString.empty())
-	std::string search_for;
-	if (gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
-	{
-		search_for = search_string;
-	}
-	else
-	{
-		search_for = mFilterSubString;
-	}
-	if (mActivePanel->getFilterSubString().empty() && search_for.empty())
-	// </FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
-	{
-			// current filter and new filter empty, do nothing
-			return;
-	}
+    mFilterSubString = search_string;
+    // <FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
+    //if (mActivePanel->getFilterSubString().empty() && mFilterSubString.empty())
+    std::string search_for;
+    if (gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
+    {
+        search_for = search_string;
+    }
+    else
+    {
+        search_for = mFilterSubString;
+    }
+    if (mActivePanel->getFilterSubString().empty() && search_for.empty())
+    // </FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
+    {
+            // current filter and new filter empty, do nothing
+            return;
+    }
 
-	// save current folder open state if no filter currently applied
-	if (!mActivePanel->getFilter().isNotDefault())
-	{
-		mSavedFolderState->setApply(FALSE);
-		mActivePanel->getRootFolder()->applyFunctorRecursively(*mSavedFolderState);
-	}
+    // save current folder open state if no filter currently applied
+    if (!mActivePanel->getFilter().isNotDefault())
+    {
+        mSavedFolderState->setApply(FALSE);
+        mActivePanel->getRootFolder()->applyFunctorRecursively(*mSavedFolderState);
+    }
 
-	// set new filter string
-	// <FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
-	//setFilterSubString(mFilterSubString);
-	if (gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
-	{
-		setFilterSubString(search_string);
-	}
-	else
-	{
-		setFilterSubString(mFilterSubString);
-	}
-	// </FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
+    // set new filter string
+    // <FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
+    //setFilterSubString(mFilterSubString);
+    if (gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
+    {
+        setFilterSubString(search_string);
+    }
+    else
+    {
+        setFilterSubString(mFilterSubString);
+    }
+    // </FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 
-	// <FS:Ansariel> FIRE-22509: Only apply inbox filter on primary inventory window
+    // <FS:Ansariel> FIRE-22509: Only apply inbox filter on primary inventory window
     //LLSidepanelInventory * sidepanel_inventory = getParentSidepanelInventory();
-	//if (sidepanel_inventory)
-	//{
-	//	LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getChild<LLPanelMarketplaceInbox>("marketplace_inbox");
-	//	if (inbox_panel)
-	//	{
-	//		inbox_panel->onFilterEdit(search_string);
-	//	}
-	//}
-	LLSidepanelInventory * sidepanel_inventory = getParentByType<LLSidepanelInventory>();
-	if (sidepanel_inventory && sidepanel_inventory->getInboxPanel())
-	{
-		LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getInboxPanel()->getParentByType<LLPanelMarketplaceInbox>();
-		if (inbox_panel)
-		{
-			inbox_panel->onFilterEdit(search_string);
-		}
-	}
-	// </FS:Ansariel>
+    //if (sidepanel_inventory)
+    //{
+    //  LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getChild<LLPanelMarketplaceInbox>("marketplace_inbox");
+    //  if (inbox_panel)
+    //  {
+    //      inbox_panel->onFilterEdit(search_string);
+    //  }
+    //}
+    LLSidepanelInventory * sidepanel_inventory = getParentByType<LLSidepanelInventory>();
+    if (sidepanel_inventory && sidepanel_inventory->getInboxPanel())
+    {
+        LLPanelMarketplaceInbox* inbox_panel = sidepanel_inventory->getInboxPanel()->getParentByType<LLPanelMarketplaceInbox>();
+        if (inbox_panel)
+        {
+            inbox_panel->onFilterEdit(search_string);
+        }
+    }
+    // </FS:Ansariel>
 }
 
 // <FS:Zi> Filter dropdown
 void LLPanelMainInventory::onFilterTypeSelected(const std::string& filter_type_name)
 {
-	if (!mActivePanel)
-	{
-		return;
-	}
+    if (!mActivePanel)
+    {
+        return;
+    }
 
-	// by default enable everything
-	U64 filterTypes = ~0;
+    // by default enable everything
+    U64 filterTypes = ~0;
 
-	// get the pointer to the filter subwindow
-	LLFloaterInventoryFinder* finder = getFinder();
+    // get the pointer to the filter subwindow
+    LLFloaterInventoryFinder* finder = getFinder();
 
-	// find the filter name in our filter map
-	if (mFilterMap.find(filter_type_name) != mFilterMap.end())
-	{
-		filterTypes = mFilterMap[filter_type_name];
-	}
-	// special treatment for "all" filter
-	else if (filter_type_name == "filter_type_all")
-	{
-		// update subwindow if it's open
-		if (finder)
-		{
-			LLFloaterInventoryFinder::selectAllTypes(finder);
-		}
-	}
-	// special treatment for "custom" filter
-	else if (filter_type_name == "filter_type_custom")
-	{
-		// open the subwindow if needed, otherwise just give it focus
-		if (!finder)
-		{
-			toggleFindOptions();
-		}
-		else
-		{
-			finder->setFocus(TRUE);
-		}
+    // find the filter name in our filter map
+    if (mFilterMap.find(filter_type_name) != mFilterMap.end())
+    {
+        filterTypes = mFilterMap[filter_type_name];
+    }
+    // special treatment for "all" filter
+    else if (filter_type_name == "filter_type_all")
+    {
+        // update subwindow if it's open
+        if (finder)
+        {
+            LLFloaterInventoryFinder::selectAllTypes(finder);
+        }
+    }
+    // special treatment for "custom" filter
+    else if (filter_type_name == "filter_type_custom")
+    {
+        // open the subwindow if needed, otherwise just give it focus
+        if (!finder)
+        {
+            toggleFindOptions();
+        }
+        else
+        {
+            finder->setFocus(TRUE);
+        }
 
-		return;
-	}
-	// invalid selection (broken XML?)
-	else
-	{
-		LL_WARNS() << "Invalid filter selection: " << filter_type_name << LL_ENDL;
-		return;
-	}
+        return;
+    }
+    // invalid selection (broken XML?)
+    else
+    {
+        LL_WARNS() << "Invalid filter selection: " << filter_type_name << LL_ENDL;
+        return;
+    }
 
-	mActivePanel->setFilterTypes(filterTypes);
-	// update subwindow if it's open
-	if (finder)
-	{
-		finder->updateElementsFromFilter();
-	}
+    mActivePanel->setFilterTypes(filterTypes);
+    // update subwindow if it's open
+    if (finder)
+    {
+        finder->updateElementsFromFilter();
+    }
 
-	setFilterTextFromFilter();
+    setFilterTextFromFilter();
 }
 
 // reflect state of current filter selection in the dropdown list
 void LLPanelMainInventory::updateFilterDropdown(const LLInventoryFilter* filter)
 {
-	// if we don't have a filter combobox (missing in the skin and failed to create?) do nothing
-	if (!mFilterComboBox)
-	{
-		return;
-	}
+    // if we don't have a filter combobox (missing in the skin and failed to create?) do nothing
+    if (!mFilterComboBox)
+    {
+        return;
+    }
 
-	// extract filter bits we need to see
-	U64 filterTypes = filter->getFilterObjectTypes() & mFilterMask;
+    // extract filter bits we need to see
+    U64 filterTypes = filter->getFilterObjectTypes() & mFilterMask;
 
-	std::string controlName;
+    std::string controlName;
 
-	// check if the filter types match our filter mask, meaning "All"
-	if (filterTypes == mFilterMask)
-	{
-		controlName = "filter_type_all";
-	}
-	else
-	{
-		// find the name of the current filter in our filter map, if exists
-		for (std::map<std::string, U64>::iterator it = mFilterMap.begin(); it != mFilterMap.end(); ++it)
-		{
-			if ((*it).second == filterTypes)
-			{
-				controlName = (*it).first;
-				break;
-			}
-		}
+    // check if the filter types match our filter mask, meaning "All"
+    if (filterTypes == mFilterMask)
+    {
+        controlName = "filter_type_all";
+    }
+    else
+    {
+        // find the name of the current filter in our filter map, if exists
+        for (std::map<std::string, U64>::iterator it = mFilterMap.begin(); it != mFilterMap.end(); ++it)
+        {
+            if ((*it).second == filterTypes)
+            {
+                controlName = (*it).first;
+                break;
+            }
+        }
 
-		// no filter type found in the map, must be a custom filter
-		if (controlName.empty())
-		{
-			controlName = "filter_type_custom";
-		}
-	}
+        // no filter type found in the map, must be a custom filter
+        if (controlName.empty())
+        {
+            controlName = "filter_type_custom";
+        }
+    }
 
-	mFilterComboBox->setValue(controlName);
+    mFilterComboBox->setValue(controlName);
 }
 // </FS:Zi> Filter dropdown
 
  //static
  BOOL LLPanelMainInventory::incrementalFind(LLFolderViewItem* first_item, const char *find_text, BOOL backward)
  {
- 	LLPanelMainInventory* active_view = NULL;
-	
-	LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("inventory");
-	for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin(); iter != inst_list.end(); ++iter)
-	{
-		LLPanelMainInventory* iv = dynamic_cast<LLPanelMainInventory*>(*iter);
-		if (iv)
-		{
-			if (gFocusMgr.childHasKeyboardFocus(iv))
-			{
-				active_view = iv;
-				break;
-			}
- 		}
- 	}
+    LLPanelMainInventory* active_view = NULL;
 
- 	if (!active_view)
- 	{
- 		return FALSE;
- 	}
+    LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("inventory");
+    for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin(); iter != inst_list.end(); ++iter)
+    {
+        LLPanelMainInventory* iv = dynamic_cast<LLPanelMainInventory*>(*iter);
+        if (iv)
+        {
+            if (gFocusMgr.childHasKeyboardFocus(iv))
+            {
+                active_view = iv;
+                break;
+            }
+        }
+    }
 
- 	std::string search_string(find_text);
+    if (!active_view)
+    {
+        return FALSE;
+    }
 
- 	if (search_string.empty())
- 	{
- 		return FALSE;
- 	}
+    std::string search_string(find_text);
 
- 	if (active_view->getPanel() &&
- 		active_view->getPanel()->getRootFolder()->search(first_item, search_string, backward))
- 	{
- 		return TRUE;
- 	}
+    if (search_string.empty())
+    {
+        return FALSE;
+    }
 
- 	return FALSE;
+    if (active_view->getPanel() &&
+        active_view->getPanel()->getRootFolder()->search(first_item, search_string, backward))
+    {
+        return TRUE;
+    }
+
+    return FALSE;
  }
 
 void LLPanelMainInventory::onFilterSelected()
 {
-	// Find my index
+    // Find my index
     setActivePanel();
 
-	if (!mActivePanel)
-	{
-		return;
-	}
+    if (!mActivePanel)
+    {
+        return;
+    }
 
-	// <FS:Ansariel> Worn inventory panel; We do this at init and only once for performance reasons!
-	//if (getActivePanel() == mWornItemsPanel)
-	//{
-	//	mActivePanel->openAllFolders();
-	//}
-	// </FS:Ansariel>
-	updateSearchTypeCombo();
-	// <FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
-	//setFilterSubString(mFilterSubString);
-	if (!gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
-	{
-		setFilterSubString(mFilterSubString);
-	}
-	// </FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
-	LLInventoryFilter& filter = getCurrentFilter();
-	LLFloaterInventoryFinder *finder = getFinder();
-	if (finder)
-	{
-		finder->changeFilter(&filter);
+    // <FS:Ansariel> Worn inventory panel; We do this at init and only once for performance reasons!
+    //if (getActivePanel() == mWornItemsPanel)
+    //{
+    //  mActivePanel->openAllFolders();
+    //}
+    // </FS:Ansariel>
+    updateSearchTypeCombo();
+    // <FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
+    //setFilterSubString(mFilterSubString);
+    if (!gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
+    {
+        setFilterSubString(mFilterSubString);
+    }
+    // </FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
+    LLInventoryFilter& filter = getCurrentFilter();
+    LLFloaterInventoryFinder *finder = getFinder();
+    if (finder)
+    {
+        finder->changeFilter(&filter);
         if (mSingleFolderMode)
         {
             finder->setTitle(getLocalizedRootName());
         }
-	}
-	if (filter.isActive() && !LLInventoryModelBackgroundFetch::instance().inventoryFetchStarted())
-	{
+    }
+    if (filter.isActive() && !LLInventoryModelBackgroundFetch::instance().inventoryFetchStarted())
+    {
         llassert(false); // this should have been done on startup
-		LLInventoryModelBackgroundFetch::instance().start();
-	}
-	updateFilterDropdown(&filter);	// <FS:Zi> Filter dropdown
-	setFilterTextFromFilter();
+        LLInventoryModelBackgroundFetch::instance().start();
+    }
+    updateFilterDropdown(&filter);  // <FS:Zi> Filter dropdown
+    setFilterTextFromFilter();
 }
 
-const std::string LLPanelMainInventory::getFilterSubString() 
-{ 
-	return mActivePanel->getFilterSubString(); 
+const std::string LLPanelMainInventory::getFilterSubString()
+{
+    return mActivePanel->getFilterSubString();
 }
 
-void LLPanelMainInventory::setFilterSubString(const std::string& string) 
-{ 
-	mActivePanel->setFilterSubString(string); 
+void LLPanelMainInventory::setFilterSubString(const std::string& string)
+{
+    mActivePanel->setFilterSubString(string);
 }
 
 BOOL LLPanelMainInventory::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
-										 EDragAndDropType cargo_type,
-										 void* cargo_data,
-										 EAcceptance* accept,
-										 std::string& tooltip_msg)
+                                         EDragAndDropType cargo_type,
+                                         void* cargo_data,
+                                         EAcceptance* accept,
+                                         std::string& tooltip_msg)
 {
-	// Check to see if we are auto scrolling from the last frame
-//	LLInventoryPanel* panel = (LLInventoryPanel*)this->getActivePanel();
-//	BOOL needsToScroll = panel->getScrollableContainer()->canAutoScroll(x, y);
-//	if(mFilterTabs)
-//	{
-//		if(needsToScroll)
-//		{
-//			mFilterTabs->startDragAndDropDelayTimer();
-//		}
-//	}
+    // Check to see if we are auto scrolling from the last frame
+//  LLInventoryPanel* panel = (LLInventoryPanel*)this->getActivePanel();
+//  BOOL needsToScroll = panel->getScrollableContainer()->canAutoScroll(x, y);
+//  if(mFilterTabs)
+//  {
+//      if(needsToScroll)
+//      {
+//          mFilterTabs->startDragAndDropDelayTimer();
+//      }
+//  }
 // [SL:KB] - Checked: UI-InvPanelDnD | Checked: 2011-06-16 (Catznip-2.6)
-	LLInventoryPanel* pInvPanel = getActivePanel();
-	if ( (pInvPanel) && (pInvPanel->pointInView(x - pInvPanel->getRect().mLeft, y - pInvPanel->getRect().mBottom)) )
-	{
-		pInvPanel->getScrollableContainer()->autoScroll(x, y);
-	}
+    LLInventoryPanel* pInvPanel = getActivePanel();
+    if ( (pInvPanel) && (pInvPanel->pointInView(x - pInvPanel->getRect().mLeft, y - pInvPanel->getRect().mBottom)) )
+    {
+        pInvPanel->getScrollableContainer()->autoScroll(x, y);
+    }
 // [/SL:KB]
 
-	BOOL handled = LLPanel::handleDragAndDrop(x, y, mask, drop, cargo_type, cargo_data, accept, tooltip_msg);
+    BOOL handled = LLPanel::handleDragAndDrop(x, y, mask, drop, cargo_type, cargo_data, accept, tooltip_msg);
 
-	return handled;
+    return handled;
 }
 
 // virtual
 void LLPanelMainInventory::changed(U32)
 {
-	updateItemcountText();
+    updateItemcountText();
 }
 
 void LLPanelMainInventory::setFocusFilterEditor()
 {
-	if(mFilterEditor)
-	{
-		mFilterEditor->setFocus(true);
-	}
+    if(mFilterEditor)
+    {
+        mFilterEditor->setFocus(true);
+    }
 }
 
 // virtual
 void LLPanelMainInventory::draw()
 {
-	if (mActivePanel && mFilterEditor)
-	{
-		// <FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
-		//mFilterEditor->setText(mFilterSubString);
-		static LLCachedControl<bool> sfSplitInventorySearchOverTabs(gSavedSettings, "FSSplitInventorySearchOverTabs");
-		if (sfSplitInventorySearchOverTabs)
-		{
-			mFilterEditor->setText(mActivePanel->getFilter().getFilterSubStringOrig());
-		}
-		else
-		{
-			mFilterEditor->setText(mFilterSubString);
-		}
-		// </FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
-	}	
-	if (mActivePanel && mResortActivePanel)
-	{
-		// EXP-756: Force resorting of the list the first time we draw the list: 
-		// In the case of date sorting, we don't have enough information at initialization time
-		// to correctly sort the folders. Later manual resort doesn't do anything as the order value is 
-		// set correctly. The workaround is to reset the order to alphabetical (or anything) then to the correct order.
-		U32 order = mActivePanel->getSortOrder();
-		mActivePanel->setSortOrder(LLInventoryFilter::SO_NAME);
-		mActivePanel->setSortOrder(order);
-		mResortActivePanel = false;
-	}
-	LLPanel::draw();
-	updateItemcountText();
+    if (mActivePanel && mFilterEditor)
+    {
+        // <FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
+        //mFilterEditor->setText(mFilterSubString);
+        static LLCachedControl<bool> sfSplitInventorySearchOverTabs(gSavedSettings, "FSSplitInventorySearchOverTabs");
+        if (sfSplitInventorySearchOverTabs)
+        {
+            mFilterEditor->setText(mActivePanel->getFilter().getFilterSubStringOrig());
+        }
+        else
+        {
+            mFilterEditor->setText(mFilterSubString);
+        }
+        // </FS:Ansariel> Separate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
+    }
+    if (mActivePanel && mResortActivePanel)
+    {
+        // EXP-756: Force resorting of the list the first time we draw the list:
+        // In the case of date sorting, we don't have enough information at initialization time
+        // to correctly sort the folders. Later manual resort doesn't do anything as the order value is
+        // set correctly. The workaround is to reset the order to alphabetical (or anything) then to the correct order.
+        U32 order = mActivePanel->getSortOrder();
+        mActivePanel->setSortOrder(LLInventoryFilter::SO_NAME);
+        mActivePanel->setSortOrder(order);
+        mResortActivePanel = false;
+    }
+    LLPanel::draw();
+    updateItemcountText();
     updateCombinationVisibility();
 }
 
 void LLPanelMainInventory::updateItemcountText()
 {
-	// <FS:Ansariel> Include folders in inventory count
-	//if(mItemCount != gInventory.getItemCount())
-	//{
-	//	mItemCount = gInventory.getItemCount();
-	S32 new_count = gInventory.getItemCount() + gInventory.getCategoryCount();
-	if(mItemCount != new_count)
-	{
-		mItemCount = new_count;
-	// </FS:Ansariel>
-		mItemCountString = "";
-		// <FS:Ansariel> Use user-default locale from operating system
-		//LLLocale locale(LLLocale::USER_LOCALE);
-		LLLocale locale("");
-		// </FS:Ansariel>
-		LLResMgr::getInstance()->getIntegerString(mItemCountString, mItemCount);
-		
-		// <FS:Ansariel> Include folders in inventory count
-		std::string item_str, category_str;
-		LLResMgr::getInstance()->getIntegerString(item_str, gInventory.getItemCount());
-		LLResMgr::getInstance()->getIntegerString(category_str, gInventory.getCategoryCount());
-		LLStringUtil::format_map_t args;
-		args["[ITEMS]"] = item_str;
-		args["[CATEGORIES]"] = category_str;
-		mCounterCtrl->setToolTipArgs(args);
-		// </FS:Ansariel>
-	}
+    // <FS:Ansariel> Include folders in inventory count
+    //if(mItemCount != gInventory.getItemCount())
+    //{
+    //  mItemCount = gInventory.getItemCount();
+    S32 new_count = gInventory.getItemCount() + gInventory.getCategoryCount();
+    if(mItemCount != new_count)
+    {
+        mItemCount = new_count;
+    // </FS:Ansariel>
+        mItemCountString = "";
+        // <FS:Ansariel> Use user-default locale from operating system
+        //LLLocale locale(LLLocale::USER_LOCALE);
+        LLLocale locale("");
+        // </FS:Ansariel>
+        LLResMgr::getInstance()->getIntegerString(mItemCountString, mItemCount);
 
-	if(mCategoryCount != gInventory.getCategoryCount())
-	{
-		mCategoryCount = gInventory.getCategoryCount();
-		mCategoryCountString = "";
-		LLLocale locale(LLLocale::USER_LOCALE);
-		LLResMgr::getInstance()->getIntegerString(mCategoryCountString, mCategoryCount);
-	}
+        // <FS:Ansariel> Include folders in inventory count
+        std::string item_str, category_str;
+        LLResMgr::getInstance()->getIntegerString(item_str, gInventory.getItemCount());
+        LLResMgr::getInstance()->getIntegerString(category_str, gInventory.getCategoryCount());
+        LLStringUtil::format_map_t args;
+        args["[ITEMS]"] = item_str;
+        args["[CATEGORIES]"] = category_str;
+        mCounterCtrl->setToolTipArgs(args);
+        // </FS:Ansariel>
+    }
 
-	LLStringUtil::format_map_t string_args;
-	string_args["[ITEM_COUNT]"] = mItemCountString;
-	string_args["[CATEGORY_COUNT]"] = mCategoryCountString;
-	string_args["[FILTER]"] = getFilterText();
+    if(mCategoryCount != gInventory.getCategoryCount())
+    {
+        mCategoryCount = gInventory.getCategoryCount();
+        mCategoryCountString = "";
+        LLLocale locale(LLLocale::USER_LOCALE);
+        LLResMgr::getInstance()->getIntegerString(mCategoryCountString, mCategoryCount);
+    }
 
-	std::string text = "";
+    LLStringUtil::format_map_t string_args;
+    string_args["[ITEM_COUNT]"] = mItemCountString;
+    string_args["[CATEGORY_COUNT]"] = mCategoryCountString;
+    string_args["[FILTER]"] = getFilterText();
 
-	if (LLInventoryModelBackgroundFetch::instance().folderFetchActive())
-	{
-		text = getString("ItemcountFetching", string_args);
-	}
-	else if (LLInventoryModelBackgroundFetch::instance().isEverythingFetched())
-	{
-		text = getString("ItemcountCompleted", string_args);
-	}
-	else
-	{
-		text = getString("ItemcountUnknown", string_args);
-	}
+    std::string text = "";
+
+    if (LLInventoryModelBackgroundFetch::instance().folderFetchActive())
+    {
+        text = getString("ItemcountFetching", string_args);
+    }
+    else if (LLInventoryModelBackgroundFetch::instance().isEverythingFetched())
+    {
+        text = getString("ItemcountCompleted", string_args);
+    }
+    else
+    {
+        text = getString("ItemcountUnknown", string_args);
+    }
 
     if (mSingleFolderMode)
     {
@@ -1407,46 +1407,46 @@ void LLPanelMainInventory::updateItemcountText()
             text = getString("ItemcountCompleted", string_args);
         }
     }
-	
+
     mCounterCtrl->setValue(text);
     //mCounterCtrl->setToolTip(text); // <FS:Ansariel> Include folders in inventory count
 }
 
 void LLPanelMainInventory::onFocusReceived()
 {
-	LLSidepanelInventory *sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
-	if (!sidepanel_inventory)
-	{
-		LL_WARNS() << "Could not find Inventory Panel in My Inventory floater" << LL_ENDL;
-		return;
-	}
+    LLSidepanelInventory *sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+    if (!sidepanel_inventory)
+    {
+        LL_WARNS() << "Could not find Inventory Panel in My Inventory floater" << LL_ENDL;
+        return;
+    }
 
-	sidepanel_inventory->clearSelections(false, true);
+    sidepanel_inventory->clearSelections(false, true);
 }
 
-void LLPanelMainInventory::setFilterTextFromFilter() 
-{ 
-	// <FS:Zi> Filter dropdown
-	//mFilterText = getCurrentFilter().getFilterText();
-	// this method gets called by the filter subwindow (once every frame), so we update our combo box here
-	LLInventoryFilter &filter = getCurrentFilter();
-	updateFilterDropdown(&filter);
-	mFilterText = filter.getFilterText();
-	// </FS:Zi> Filter dropdown
+void LLPanelMainInventory::setFilterTextFromFilter()
+{
+    // <FS:Zi> Filter dropdown
+    //mFilterText = getCurrentFilter().getFilterText();
+    // this method gets called by the filter subwindow (once every frame), so we update our combo box here
+    LLInventoryFilter &filter = getCurrentFilter();
+    updateFilterDropdown(&filter);
+    mFilterText = filter.getFilterText();
+    // </FS:Zi> Filter dropdown
 }
 
 void LLPanelMainInventory::toggleFindOptions()
 {
-	LLFloater *floater = getFinder();
-	if (!floater)
-	{
-		LLFloaterInventoryFinder * finder = new LLFloaterInventoryFinder(this);
-		mFinderHandle = finder->getHandle();
-		finder->openFloater();
+    LLFloater *floater = getFinder();
+    if (!floater)
+    {
+        LLFloaterInventoryFinder * finder = new LLFloaterInventoryFinder(this);
+        mFinderHandle = finder->getHandle();
+        finder->openFloater();
 
-		LLFloater* parent_floater = gFloaterView->getParentFloater(this);
-		if (parent_floater)
-			parent_floater->addDependentFloater(mFinderHandle);
+        LLFloater* parent_floater = gFloaterView->getParentFloater(this);
+        if (parent_floater)
+            parent_floater->addDependentFloater(mFinderHandle);
 
         if (!LLInventoryModelBackgroundFetch::instance().inventoryFetchStarted())
         {
@@ -1458,259 +1458,259 @@ void LLPanelMainInventory::toggleFindOptions()
         {
             finder->setTitle(getLocalizedRootName());
         }
-	}
-	else
-	{
-		floater->closeFloater();
-	}
+    }
+    else
+    {
+        floater->closeFloater();
+    }
 }
 
 void LLPanelMainInventory::setSelectCallback(const LLFolderView::signal_t::slot_type& cb)
 {
-	getChild<LLInventoryPanel>(ALL_ITEMS)->setSelectCallback(cb);
-	getChild<LLInventoryPanel>(RECENT_ITEMS)->setSelectCallback(cb);
-	getChild<LLInventoryPanel>("Worn Items")->setSelectCallback(cb);
+    getChild<LLInventoryPanel>(ALL_ITEMS)->setSelectCallback(cb);
+    getChild<LLInventoryPanel>(RECENT_ITEMS)->setSelectCallback(cb);
+    getChild<LLInventoryPanel>("Worn Items")->setSelectCallback(cb);
 }
 
 void LLPanelMainInventory::onSelectionChange(LLInventoryPanel *panel, const std::deque<LLFolderViewItem*>& items, BOOL user_action)
 {
-	updateListCommands();
-	panel->onSelectionChange(items, user_action);
+    updateListCommands();
+    panel->onSelectionChange(items, user_action);
 }
 
 ///----------------------------------------------------------------------------
 /// LLFloaterInventoryFinder
 ///----------------------------------------------------------------------------
 
-LLFloaterInventoryFinder* LLPanelMainInventory::getFinder() 
-{ 
-	return (LLFloaterInventoryFinder*)mFinderHandle.get();
+LLFloaterInventoryFinder* LLPanelMainInventory::getFinder()
+{
+    return (LLFloaterInventoryFinder*)mFinderHandle.get();
 }
 
 
-LLFloaterInventoryFinder::LLFloaterInventoryFinder(LLPanelMainInventory* inventory_view) :	
-	LLFloater(LLSD()),
-	mPanelMainInventory(inventory_view),
-	mFilter(&inventory_view->getPanel()->getFilter())
+LLFloaterInventoryFinder::LLFloaterInventoryFinder(LLPanelMainInventory* inventory_view) :
+    LLFloater(LLSD()),
+    mPanelMainInventory(inventory_view),
+    mFilter(&inventory_view->getPanel()->getFilter())
 {
-	buildFromFile("floater_inventory_view_finder.xml");
-	updateElementsFromFilter();
+    buildFromFile("floater_inventory_view_finder.xml");
+    updateElementsFromFilter();
 }
 
 BOOL LLFloaterInventoryFinder::postBuild()
 {
-	const LLRect& viewrect = mPanelMainInventory->getRect();
-	setRect(LLRect(viewrect.mLeft - getRect().getWidth(), viewrect.mTop, viewrect.mLeft, viewrect.mTop - getRect().getHeight()));
+    const LLRect& viewrect = mPanelMainInventory->getRect();
+    setRect(LLRect(viewrect.mLeft - getRect().getWidth(), viewrect.mTop, viewrect.mLeft, viewrect.mTop - getRect().getHeight()));
 
-	childSetAction("All", selectAllTypes, this);
-	childSetAction("None", selectNoTypes, this);
+    childSetAction("All", selectAllTypes, this);
+    childSetAction("None", selectNoTypes, this);
 
-	mSpinSinceHours = getChild<LLSpinCtrl>("spin_hours_ago");
-	childSetCommitCallback("spin_hours_ago", onTimeAgo, this);
+    mSpinSinceHours = getChild<LLSpinCtrl>("spin_hours_ago");
+    childSetCommitCallback("spin_hours_ago", onTimeAgo, this);
 
-	mSpinSinceDays = getChild<LLSpinCtrl>("spin_days_ago");
-	childSetCommitCallback("spin_days_ago", onTimeAgo, this);
+    mSpinSinceDays = getChild<LLSpinCtrl>("spin_days_ago");
+    childSetCommitCallback("spin_days_ago", onTimeAgo, this);
 
-	mCreatorSelf = getChild<LLCheckBoxCtrl>("check_created_by_me");
-	mCreatorOthers = getChild<LLCheckBoxCtrl>("check_created_by_others");
-	mCreatorSelf->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onCreatorSelfFilterCommit, this));
-	mCreatorOthers->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onCreatorOtherFilterCommit, this));
+    mCreatorSelf = getChild<LLCheckBoxCtrl>("check_created_by_me");
+    mCreatorOthers = getChild<LLCheckBoxCtrl>("check_created_by_others");
+    mCreatorSelf->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onCreatorSelfFilterCommit, this));
+    mCreatorOthers->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onCreatorOtherFilterCommit, this));
 
-	childSetAction("Close", onCloseBtn, this);
+    childSetAction("Close", onCloseBtn, this);
 
-	// <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
-	getChild<LLButton>("btnReset")->setClickedCallback(boost::bind(&LLFloaterInventoryFinder::onResetBtn, this));
+    // <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
+    getChild<LLButton>("btnReset")->setClickedCallback(boost::bind(&LLFloaterInventoryFinder::onResetBtn, this));
 
-	updateElementsFromFilter();
+    updateElementsFromFilter();
 
-	// <FS:Zi> FIRE-1175 - Filter Permissions Menu
-	getChild<LLUICtrl>("check_modify")->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
-	getChild<LLUICtrl>("check_copy")->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
-	getChild<LLUICtrl>("check_transfer")->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
-	// </FS:Zi>
+    // <FS:Zi> FIRE-1175 - Filter Permissions Menu
+    getChild<LLUICtrl>("check_modify")->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
+    getChild<LLUICtrl>("check_copy")->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
+    getChild<LLUICtrl>("check_transfer")->setCommitCallback(boost::bind(&LLFloaterInventoryFinder::onPermissionsChanged, this));
+    // </FS:Zi>
 
-	return TRUE;
+    return TRUE;
 }
 void LLFloaterInventoryFinder::onTimeAgo(LLUICtrl *ctrl, void *user_data)
 {
-	LLFloaterInventoryFinder *self = (LLFloaterInventoryFinder *)user_data;
-	if (!self) return;
-	
-	if ( self->mSpinSinceDays->get() ||  self->mSpinSinceHours->get() )
-	{
-		self->getChild<LLUICtrl>("check_since_logoff")->setValue(false);
+    LLFloaterInventoryFinder *self = (LLFloaterInventoryFinder *)user_data;
+    if (!self) return;
 
-		U32 days = (U32)self->mSpinSinceDays->get();
-		U32 hours = (U32)self->mSpinSinceHours->get();
-		if (hours >= 24)
-		{
-			// Try to handle both cases of spinner clicking and text input in a sensible fashion as best as possible.
-			// There is no way to tell if someone has clicked the spinner to get to 24 or input 24 manually, so in
-			// this case add to days.  Any value > 24 means they have input the hours manually, so do not add to the
-			// current day value.
-			if (24 == hours)  // Got to 24 via spinner clicking or text input of 24
-			{
-				days = days + hours / 24;
-			}
-			else	// Text input, so do not add to days
-			{ 
-				days = hours / 24;
-			}
-			hours = (U32)hours % 24;
-			self->mSpinSinceHours->setFocus(false);
-			self->mSpinSinceDays->setFocus(false);
-			self->mSpinSinceDays->set((F32)days);
-			self->mSpinSinceHours->set((F32)hours);
-			self->mSpinSinceHours->setFocus(true);
-		}
-	}
+    if ( self->mSpinSinceDays->get() ||  self->mSpinSinceHours->get() )
+    {
+        self->getChild<LLUICtrl>("check_since_logoff")->setValue(false);
+
+        U32 days = (U32)self->mSpinSinceDays->get();
+        U32 hours = (U32)self->mSpinSinceHours->get();
+        if (hours >= 24)
+        {
+            // Try to handle both cases of spinner clicking and text input in a sensible fashion as best as possible.
+            // There is no way to tell if someone has clicked the spinner to get to 24 or input 24 manually, so in
+            // this case add to days.  Any value > 24 means they have input the hours manually, so do not add to the
+            // current day value.
+            if (24 == hours)  // Got to 24 via spinner clicking or text input of 24
+            {
+                days = days + hours / 24;
+            }
+            else    // Text input, so do not add to days
+            {
+                days = hours / 24;
+            }
+            hours = (U32)hours % 24;
+            self->mSpinSinceHours->setFocus(false);
+            self->mSpinSinceDays->setFocus(false);
+            self->mSpinSinceDays->set((F32)days);
+            self->mSpinSinceHours->set((F32)hours);
+            self->mSpinSinceHours->setFocus(true);
+        }
+    }
 }
 
 // <FS:Ansariel> FIRE-5160: Don't reset inventory filter when clearing search term
 void LLFloaterInventoryFinder::onResetBtn()
 {
-	mPanelMainInventory->resetFilters();
+    mPanelMainInventory->resetFilters();
 }
 // </FS:Ansariel>
 
 void LLFloaterInventoryFinder::changeFilter(LLInventoryFilter* filter)
 {
-	mFilter = filter;
-	updateElementsFromFilter();
+    mFilter = filter;
+    updateElementsFromFilter();
 }
 
 void LLFloaterInventoryFinder::updateElementsFromFilter()
 {
-	if (!mFilter)
-		return;
+    if (!mFilter)
+        return;
 
-	// Get data needed for filter display
-	U32 filter_types = mFilter->getFilterObjectTypes();
-	LLInventoryFilter::EFolderShow show_folders = mFilter->getShowFolderState();
-	U32 hours = mFilter->getHoursAgo();
-	U32 date_search_direction = mFilter->getDateSearchDirection();
+    // Get data needed for filter display
+    U32 filter_types = mFilter->getFilterObjectTypes();
+    LLInventoryFilter::EFolderShow show_folders = mFilter->getShowFolderState();
+    U32 hours = mFilter->getHoursAgo();
+    U32 date_search_direction = mFilter->getDateSearchDirection();
 
-	LLInventoryFilter::EFilterCreatorType filter_creator = mFilter->getFilterCreatorType();
-	bool show_created_by_me = ((filter_creator == LLInventoryFilter::FILTERCREATOR_ALL) || (filter_creator == LLInventoryFilter::FILTERCREATOR_SELF));
-	bool show_created_by_others = ((filter_creator == LLInventoryFilter::FILTERCREATOR_ALL) || (filter_creator == LLInventoryFilter::FILTERCREATOR_OTHERS));
+    LLInventoryFilter::EFilterCreatorType filter_creator = mFilter->getFilterCreatorType();
+    bool show_created_by_me = ((filter_creator == LLInventoryFilter::FILTERCREATOR_ALL) || (filter_creator == LLInventoryFilter::FILTERCREATOR_SELF));
+    bool show_created_by_others = ((filter_creator == LLInventoryFilter::FILTERCREATOR_ALL) || (filter_creator == LLInventoryFilter::FILTERCREATOR_OTHERS));
 
-	// update the ui elements
-	// <FS:PP> Make floater title translatable
-	// setTitle(mFilter->getName());
-	setTitle(LLTrans::getString(mFilter->getName()));
-	// </FS:PP>
+    // update the ui elements
+    // <FS:PP> Make floater title translatable
+    // setTitle(mFilter->getName());
+    setTitle(LLTrans::getString(mFilter->getName()));
+    // </FS:PP>
 
-	getChild<LLUICtrl>("check_animation")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_ANIMATION));
+    getChild<LLUICtrl>("check_animation")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_ANIMATION));
 
-	getChild<LLUICtrl>("check_calling_card")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_CALLINGCARD));
-	getChild<LLUICtrl>("check_clothing")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_WEARABLE));
-	getChild<LLUICtrl>("check_gesture")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_GESTURE));
-	getChild<LLUICtrl>("check_landmark")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_LANDMARK));
-	getChild<LLUICtrl>("check_material")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_MATERIAL));
-	getChild<LLUICtrl>("check_notecard")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_NOTECARD));
-	getChild<LLUICtrl>("check_object")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_OBJECT));
-	getChild<LLUICtrl>("check_script")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_LSL));
-	getChild<LLUICtrl>("check_sound")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_SOUND));
-	getChild<LLUICtrl>("check_texture")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_TEXTURE));
-	getChild<LLUICtrl>("check_snapshot")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_SNAPSHOT));
+    getChild<LLUICtrl>("check_calling_card")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_CALLINGCARD));
+    getChild<LLUICtrl>("check_clothing")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_WEARABLE));
+    getChild<LLUICtrl>("check_gesture")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_GESTURE));
+    getChild<LLUICtrl>("check_landmark")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_LANDMARK));
+    getChild<LLUICtrl>("check_material")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_MATERIAL));
+    getChild<LLUICtrl>("check_notecard")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_NOTECARD));
+    getChild<LLUICtrl>("check_object")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_OBJECT));
+    getChild<LLUICtrl>("check_script")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_LSL));
+    getChild<LLUICtrl>("check_sound")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_SOUND));
+    getChild<LLUICtrl>("check_texture")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_TEXTURE));
+    getChild<LLUICtrl>("check_snapshot")->setValue((S32) (filter_types & 0x1 << LLInventoryType::IT_SNAPSHOT));
     getChild<LLUICtrl>("check_settings")->setValue((S32)(filter_types & 0x1 << LLInventoryType::IT_SETTINGS));
-	getChild<LLUICtrl>("check_show_empty")->setValue(show_folders == LLInventoryFilter::SHOW_ALL_FOLDERS);
+    getChild<LLUICtrl>("check_show_empty")->setValue(show_folders == LLInventoryFilter::SHOW_ALL_FOLDERS);
 
-	getChild<LLUICtrl>("check_created_by_me")->setValue(show_created_by_me);
-	getChild<LLUICtrl>("check_created_by_others")->setValue(show_created_by_others);
+    getChild<LLUICtrl>("check_created_by_me")->setValue(show_created_by_me);
+    getChild<LLUICtrl>("check_created_by_others")->setValue(show_created_by_others);
 
-	getChild<LLUICtrl>("check_since_logoff")->setValue(mFilter->isSinceLogoff());
-	mSpinSinceHours->set((F32)(hours % 24));
-	mSpinSinceDays->set((F32)(hours / 24));
-	getChild<LLRadioGroup>("date_search_direction")->setSelectedIndex(date_search_direction);
+    getChild<LLUICtrl>("check_since_logoff")->setValue(mFilter->isSinceLogoff());
+    mSpinSinceHours->set((F32)(hours % 24));
+    mSpinSinceDays->set((F32)(hours / 24));
+    getChild<LLRadioGroup>("date_search_direction")->setSelectedIndex(date_search_direction);
 
-	// <FS:Zi> FIRE-1175 - Filter Permissions Menu
-	getChild<LLUICtrl>("check_modify")->setValue((BOOL) (mFilter->getFilterPermissions() & PERM_MODIFY));
-	getChild<LLUICtrl>("check_copy")->setValue((BOOL) (mFilter->getFilterPermissions() & PERM_COPY));
-	getChild<LLUICtrl>("check_transfer")->setValue((BOOL) (mFilter->getFilterPermissions() & PERM_TRANSFER));
-	// </FS:Zi>
+    // <FS:Zi> FIRE-1175 - Filter Permissions Menu
+    getChild<LLUICtrl>("check_modify")->setValue((BOOL) (mFilter->getFilterPermissions() & PERM_MODIFY));
+    getChild<LLUICtrl>("check_copy")->setValue((BOOL) (mFilter->getFilterPermissions() & PERM_COPY));
+    getChild<LLUICtrl>("check_transfer")->setValue((BOOL) (mFilter->getFilterPermissions() & PERM_TRANSFER));
+    // </FS:Zi>
 }
 
 void LLFloaterInventoryFinder::draw()
 {
-	U64 filter = 0xffffffffffffffffULL;
-	BOOL filtered_by_all_types = TRUE;
+    U64 filter = 0xffffffffffffffffULL;
+    BOOL filtered_by_all_types = TRUE;
 
-	if (!getChild<LLUICtrl>("check_animation")->getValue())
-	{
-		filter &= ~(0x1 << LLInventoryType::IT_ANIMATION);
-		filtered_by_all_types = FALSE;
-	}
-
-
-	if (!getChild<LLUICtrl>("check_calling_card")->getValue())
-	{
-		filter &= ~(0x1 << LLInventoryType::IT_CALLINGCARD);
-		filtered_by_all_types = FALSE;
-	}
-
-	if (!getChild<LLUICtrl>("check_clothing")->getValue())
-	{
-		filter &= ~(0x1 << LLInventoryType::IT_WEARABLE);
-		filtered_by_all_types = FALSE;
-	}
-
-	if (!getChild<LLUICtrl>("check_gesture")->getValue())
-	{
-		filter &= ~(0x1 << LLInventoryType::IT_GESTURE);
-		filtered_by_all_types = FALSE;
-	}
-
-	if (!getChild<LLUICtrl>("check_landmark")->getValue())
+    if (!getChild<LLUICtrl>("check_animation")->getValue())
+    {
+        filter &= ~(0x1 << LLInventoryType::IT_ANIMATION);
+        filtered_by_all_types = FALSE;
+    }
 
 
-	{
-		filter &= ~(0x1 << LLInventoryType::IT_LANDMARK);
-		filtered_by_all_types = FALSE;
-	}
+    if (!getChild<LLUICtrl>("check_calling_card")->getValue())
+    {
+        filter &= ~(0x1 << LLInventoryType::IT_CALLINGCARD);
+        filtered_by_all_types = FALSE;
+    }
 
-	if (!getChild<LLUICtrl>("check_material")->getValue())
-	{
-		filter &= ~(0x1 << LLInventoryType::IT_MATERIAL);
-		filtered_by_all_types = FALSE;
-	}
+    if (!getChild<LLUICtrl>("check_clothing")->getValue())
+    {
+        filter &= ~(0x1 << LLInventoryType::IT_WEARABLE);
+        filtered_by_all_types = FALSE;
+    }
 
-	if (!getChild<LLUICtrl>("check_notecard")->getValue())
-	{
-		filter &= ~(0x1 << LLInventoryType::IT_NOTECARD);
-		filtered_by_all_types = FALSE;
-	}
+    if (!getChild<LLUICtrl>("check_gesture")->getValue())
+    {
+        filter &= ~(0x1 << LLInventoryType::IT_GESTURE);
+        filtered_by_all_types = FALSE;
+    }
 
-	if (!getChild<LLUICtrl>("check_object")->getValue())
-	{
-		filter &= ~(0x1 << LLInventoryType::IT_OBJECT);
-		filter &= ~(0x1 << LLInventoryType::IT_ATTACHMENT);
-		filtered_by_all_types = FALSE;
-	}
+    if (!getChild<LLUICtrl>("check_landmark")->getValue())
 
-	if (!getChild<LLUICtrl>("check_script")->getValue())
-	{
-		filter &= ~(0x1 << LLInventoryType::IT_LSL);
-		filtered_by_all_types = FALSE;
-	}
 
-	if (!getChild<LLUICtrl>("check_sound")->getValue())
-	{
-		filter &= ~(0x1 << LLInventoryType::IT_SOUND);
-		filtered_by_all_types = FALSE;
-	}
+    {
+        filter &= ~(0x1 << LLInventoryType::IT_LANDMARK);
+        filtered_by_all_types = FALSE;
+    }
 
-	if (!getChild<LLUICtrl>("check_texture")->getValue())
-	{
-		filter &= ~(0x1 << LLInventoryType::IT_TEXTURE);
-		filtered_by_all_types = FALSE;
-	}
+    if (!getChild<LLUICtrl>("check_material")->getValue())
+    {
+        filter &= ~(0x1 << LLInventoryType::IT_MATERIAL);
+        filtered_by_all_types = FALSE;
+    }
 
-	if (!getChild<LLUICtrl>("check_snapshot")->getValue())
-	{
-		filter &= ~(0x1 << LLInventoryType::IT_SNAPSHOT);
-		filtered_by_all_types = FALSE;
-	}
+    if (!getChild<LLUICtrl>("check_notecard")->getValue())
+    {
+        filter &= ~(0x1 << LLInventoryType::IT_NOTECARD);
+        filtered_by_all_types = FALSE;
+    }
+
+    if (!getChild<LLUICtrl>("check_object")->getValue())
+    {
+        filter &= ~(0x1 << LLInventoryType::IT_OBJECT);
+        filter &= ~(0x1 << LLInventoryType::IT_ATTACHMENT);
+        filtered_by_all_types = FALSE;
+    }
+
+    if (!getChild<LLUICtrl>("check_script")->getValue())
+    {
+        filter &= ~(0x1 << LLInventoryType::IT_LSL);
+        filtered_by_all_types = FALSE;
+    }
+
+    if (!getChild<LLUICtrl>("check_sound")->getValue())
+    {
+        filter &= ~(0x1 << LLInventoryType::IT_SOUND);
+        filtered_by_all_types = FALSE;
+    }
+
+    if (!getChild<LLUICtrl>("check_texture")->getValue())
+    {
+        filter &= ~(0x1 << LLInventoryType::IT_TEXTURE);
+        filtered_by_all_types = FALSE;
+    }
+
+    if (!getChild<LLUICtrl>("check_snapshot")->getValue())
+    {
+        filter &= ~(0x1 << LLInventoryType::IT_SNAPSHOT);
+        filtered_by_all_types = FALSE;
+    }
 
     if (!getChild<LLUICtrl>("check_settings")->getValue())
     {
@@ -1718,11 +1718,11 @@ void LLFloaterInventoryFinder::draw()
         filtered_by_all_types = FALSE;
     }
 
-	if (!filtered_by_all_types || (mPanelMainInventory->getPanel()->getFilter().getFilterTypes() & LLInventoryFilter::FILTERTYPE_DATE))
-	{
-		// don't include folders in filter, unless I've selected everything or filtering by date
-		filter &= ~(0x1 << LLInventoryType::IT_CATEGORY);
-	}
+    if (!filtered_by_all_types || (mPanelMainInventory->getPanel()->getFilter().getFilterTypes() & LLInventoryFilter::FILTERTYPE_DATE))
+    {
+        // don't include folders in filter, unless I've selected everything or filtering by date
+        filter &= ~(0x1 << LLInventoryType::IT_CATEGORY);
+    }
 
 
     bool is_sf_mode = mPanelMainInventory->isSingleFolderMode();
@@ -1746,28 +1746,28 @@ void LLFloaterInventoryFinder::draw()
         mPanelMainInventory->getPanel()->setFilterTypes(filter);
     }
 
-	if (getCheckSinceLogoff())
-	{
-		mSpinSinceDays->set(0);
-		mSpinSinceHours->set(0);
-	}
-	U32 days = (U32)mSpinSinceDays->get();
-	U32 hours = (U32)mSpinSinceHours->get();
-	if (hours >= 24)
-	{
-		days = hours / 24;
-		hours = (U32)hours % 24;
-		// A UI element that has focus will not display a new value set to it
-		mSpinSinceHours->setFocus(false);
-		mSpinSinceDays->setFocus(false);
-		mSpinSinceDays->set((F32)days);
-		mSpinSinceHours->set((F32)hours);
-		mSpinSinceHours->setFocus(true);
-	}
-	hours += days * 24;
+    if (getCheckSinceLogoff())
+    {
+        mSpinSinceDays->set(0);
+        mSpinSinceHours->set(0);
+    }
+    U32 days = (U32)mSpinSinceDays->get();
+    U32 hours = (U32)mSpinSinceHours->get();
+    if (hours >= 24)
+    {
+        days = hours / 24;
+        hours = (U32)hours % 24;
+        // A UI element that has focus will not display a new value set to it
+        mSpinSinceHours->setFocus(false);
+        mSpinSinceDays->setFocus(false);
+        mSpinSinceDays->set((F32)days);
+        mSpinSinceHours->set((F32)hours);
+        mSpinSinceHours->setFocus(true);
+    }
+    hours += days * 24;
 
 
-	mPanelMainInventory->setFilterTextFromFilter();
+    mPanelMainInventory->setFilterTextFromFilter();
     if(is_sf_mode && mPanelMainInventory->isGalleryViewMode())
     {
         mPanelMainInventory->mCombinationGalleryPanel->getFilter().setHoursAgo(hours);
@@ -1787,66 +1787,66 @@ void LLFloaterInventoryFinder::draw()
         mPanelMainInventory->getPanel()->setDateSearchDirection(getDateSearchDirection());
     }
 
-	LLPanel::draw();
+    LLPanel::draw();
 }
 
 void LLFloaterInventoryFinder::onCreatorSelfFilterCommit()
 {
-	bool show_creator_self = mCreatorSelf->getValue();
-	bool show_creator_other = mCreatorOthers->getValue();
+    bool show_creator_self = mCreatorSelf->getValue();
+    bool show_creator_other = mCreatorOthers->getValue();
 
-	if(show_creator_self && show_creator_other)
-	{
+    if(show_creator_self && show_creator_other)
+    {
         mPanelMainInventory->getCurrentFilter().setFilterCreator(LLInventoryFilter::FILTERCREATOR_ALL);
-	}
-	else if(show_creator_self)
-	{
+    }
+    else if(show_creator_self)
+    {
         mPanelMainInventory->getCurrentFilter().setFilterCreator(LLInventoryFilter::FILTERCREATOR_SELF);
-	}
-	else if(!show_creator_self || !show_creator_other)
-	{
+    }
+    else if(!show_creator_self || !show_creator_other)
+    {
         mPanelMainInventory->getCurrentFilter().setFilterCreator(LLInventoryFilter::FILTERCREATOR_OTHERS);
-		mCreatorOthers->set(TRUE);
-	}
+        mCreatorOthers->set(TRUE);
+    }
 }
 
 void LLFloaterInventoryFinder::onCreatorOtherFilterCommit()
 {
-	bool show_creator_self = mCreatorSelf->getValue();
-	bool show_creator_other = mCreatorOthers->getValue();
+    bool show_creator_self = mCreatorSelf->getValue();
+    bool show_creator_other = mCreatorOthers->getValue();
 
-	if(show_creator_self && show_creator_other)
-	{
+    if(show_creator_self && show_creator_other)
+    {
         mPanelMainInventory->getCurrentFilter().setFilterCreator(LLInventoryFilter::FILTERCREATOR_ALL);
-	}
-	else if(show_creator_other)
-	{
+    }
+    else if(show_creator_other)
+    {
         mPanelMainInventory->getCurrentFilter().setFilterCreator(LLInventoryFilter::FILTERCREATOR_OTHERS);
-	}
-	else if(!show_creator_other || !show_creator_self)
-	{
+    }
+    else if(!show_creator_other || !show_creator_self)
+    {
         mPanelMainInventory->getCurrentFilter().setFilterCreator(LLInventoryFilter::FILTERCREATOR_SELF);
-		mCreatorSelf->set(TRUE);
-	}
+        mCreatorSelf->set(TRUE);
+    }
 }
 
 // <FS:Zi> FIRE-1175 - Filter Permissions Menu
 void LLFloaterInventoryFinder::onPermissionsChanged()
 {
-	PermissionMask perms = PERM_NONE;
+    PermissionMask perms = PERM_NONE;
 
-	if (getChild<LLUICtrl>("check_modify")->getValue().asBoolean())
-	{
+    if (getChild<LLUICtrl>("check_modify")->getValue().asBoolean())
+    {
         perms |= PERM_MODIFY;
     }
 
-	if (getChild<LLUICtrl>("check_copy")->getValue().asBoolean())
-	{
+    if (getChild<LLUICtrl>("check_copy")->getValue().asBoolean())
+    {
         perms |= PERM_COPY;
     }
 
-	if (getChild<LLUICtrl>("check_transfer")->getValue().asBoolean())
-	{
+    if (getChild<LLUICtrl>("check_transfer")->getValue().asBoolean())
+    {
         perms |= PERM_TRANSFER;
     }
 
@@ -1856,85 +1856,85 @@ void LLFloaterInventoryFinder::onPermissionsChanged()
 
 BOOL LLFloaterInventoryFinder::getCheckShowEmpty()
 {
-	return getChild<LLUICtrl>("check_show_empty")->getValue();
+    return getChild<LLUICtrl>("check_show_empty")->getValue();
 }
 
 BOOL LLFloaterInventoryFinder::getCheckSinceLogoff()
 {
-	return getChild<LLUICtrl>("check_since_logoff")->getValue();
+    return getChild<LLUICtrl>("check_since_logoff")->getValue();
 }
 
 U32 LLFloaterInventoryFinder::getDateSearchDirection()
 {
-	return 	getChild<LLRadioGroup>("date_search_direction")->getSelectedIndex();
+    return  getChild<LLRadioGroup>("date_search_direction")->getSelectedIndex();
 }
 
 void LLFloaterInventoryFinder::onCloseBtn(void* user_data)
 {
-	LLFloaterInventoryFinder* finderp = (LLFloaterInventoryFinder*)user_data;
-	finderp->closeFloater();
+    LLFloaterInventoryFinder* finderp = (LLFloaterInventoryFinder*)user_data;
+    finderp->closeFloater();
 }
 
 // static
 void LLFloaterInventoryFinder::selectAllTypes(void* user_data)
 {
-	LLFloaterInventoryFinder* self = (LLFloaterInventoryFinder*)user_data;
-	if(!self) return;
+    LLFloaterInventoryFinder* self = (LLFloaterInventoryFinder*)user_data;
+    if(!self) return;
 
-	self->getChild<LLUICtrl>("check_animation")->setValue(TRUE);
-	self->getChild<LLUICtrl>("check_calling_card")->setValue(TRUE);
-	self->getChild<LLUICtrl>("check_clothing")->setValue(TRUE);
-	self->getChild<LLUICtrl>("check_gesture")->setValue(TRUE);
-	self->getChild<LLUICtrl>("check_landmark")->setValue(TRUE);
-	self->getChild<LLUICtrl>("check_material")->setValue(TRUE);
-	self->getChild<LLUICtrl>("check_notecard")->setValue(TRUE);
-	self->getChild<LLUICtrl>("check_object")->setValue(TRUE);
-	self->getChild<LLUICtrl>("check_script")->setValue(TRUE);
-	self->getChild<LLUICtrl>("check_sound")->setValue(TRUE);
-	self->getChild<LLUICtrl>("check_texture")->setValue(TRUE);
-	self->getChild<LLUICtrl>("check_snapshot")->setValue(TRUE);
+    self->getChild<LLUICtrl>("check_animation")->setValue(TRUE);
+    self->getChild<LLUICtrl>("check_calling_card")->setValue(TRUE);
+    self->getChild<LLUICtrl>("check_clothing")->setValue(TRUE);
+    self->getChild<LLUICtrl>("check_gesture")->setValue(TRUE);
+    self->getChild<LLUICtrl>("check_landmark")->setValue(TRUE);
+    self->getChild<LLUICtrl>("check_material")->setValue(TRUE);
+    self->getChild<LLUICtrl>("check_notecard")->setValue(TRUE);
+    self->getChild<LLUICtrl>("check_object")->setValue(TRUE);
+    self->getChild<LLUICtrl>("check_script")->setValue(TRUE);
+    self->getChild<LLUICtrl>("check_sound")->setValue(TRUE);
+    self->getChild<LLUICtrl>("check_texture")->setValue(TRUE);
+    self->getChild<LLUICtrl>("check_snapshot")->setValue(TRUE);
     self->getChild<LLUICtrl>("check_settings")->setValue(TRUE);
 }
 
 //static
 void LLFloaterInventoryFinder::selectNoTypes(void* user_data)
 {
-	LLFloaterInventoryFinder* self = (LLFloaterInventoryFinder*)user_data;
-	if(!self) return;
+    LLFloaterInventoryFinder* self = (LLFloaterInventoryFinder*)user_data;
+    if(!self) return;
 
-	self->getChild<LLUICtrl>("check_animation")->setValue(FALSE);
-	self->getChild<LLUICtrl>("check_calling_card")->setValue(FALSE);
-	self->getChild<LLUICtrl>("check_clothing")->setValue(FALSE);
-	self->getChild<LLUICtrl>("check_gesture")->setValue(FALSE);
-	self->getChild<LLUICtrl>("check_landmark")->setValue(FALSE);
-	self->getChild<LLUICtrl>("check_material")->setValue(FALSE);
-	self->getChild<LLUICtrl>("check_notecard")->setValue(FALSE);
-	self->getChild<LLUICtrl>("check_object")->setValue(FALSE);
-	self->getChild<LLUICtrl>("check_script")->setValue(FALSE);
-	self->getChild<LLUICtrl>("check_sound")->setValue(FALSE);
-	self->getChild<LLUICtrl>("check_texture")->setValue(FALSE);
-	self->getChild<LLUICtrl>("check_snapshot")->setValue(FALSE);
+    self->getChild<LLUICtrl>("check_animation")->setValue(FALSE);
+    self->getChild<LLUICtrl>("check_calling_card")->setValue(FALSE);
+    self->getChild<LLUICtrl>("check_clothing")->setValue(FALSE);
+    self->getChild<LLUICtrl>("check_gesture")->setValue(FALSE);
+    self->getChild<LLUICtrl>("check_landmark")->setValue(FALSE);
+    self->getChild<LLUICtrl>("check_material")->setValue(FALSE);
+    self->getChild<LLUICtrl>("check_notecard")->setValue(FALSE);
+    self->getChild<LLUICtrl>("check_object")->setValue(FALSE);
+    self->getChild<LLUICtrl>("check_script")->setValue(FALSE);
+    self->getChild<LLUICtrl>("check_sound")->setValue(FALSE);
+    self->getChild<LLUICtrl>("check_texture")->setValue(FALSE);
+    self->getChild<LLUICtrl>("check_snapshot")->setValue(FALSE);
     self->getChild<LLUICtrl>("check_settings")->setValue(FALSE);
 }
 
 // <FS:Zi> Inventory Collapse and Expand Buttons
 void LLPanelMainInventory::onCollapseButtonClicked()
 {
-//	mFilterEditor->clear();
-	onFilterEdit("");
-	getPanel()->closeAllFolders();
+//  mFilterEditor->clear();
+    onFilterEdit("");
+    getPanel()->closeAllFolders();
 }
 
 void LLPanelMainInventory::onExpandButtonClicked()
 {
-	getPanel()->openAllFolders();
+    getPanel()->openAllFolders();
 }
 // </FS:Zi> Inventory Collapse and Expand Buttons
 
 // <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel
 void LLPanelMainInventory::showAllItemsPanel()
 {
-	mFilterTabs->selectTabByName("All Items");
+    mFilterTabs->selectTabByName("All Items");
 }
 // </FS:Ansariel>
 
@@ -1943,49 +1943,49 @@ void LLPanelMainInventory::showAllItemsPanel()
 
 void LLPanelMainInventory::initListCommandsHandlers()
 {
-	childSetAction("trash_btn", boost::bind(&LLPanelMainInventory::onTrashButtonClick, this)); // <FS:Ansariel> Keep better inventory layout
-	childSetAction("add_btn", boost::bind(&LLPanelMainInventory::onAddButtonClick, this));
+    childSetAction("trash_btn", boost::bind(&LLPanelMainInventory::onTrashButtonClick, this)); // <FS:Ansariel> Keep better inventory layout
+    childSetAction("add_btn", boost::bind(&LLPanelMainInventory::onAddButtonClick, this));
     childSetAction("view_mode_btn", boost::bind(&LLPanelMainInventory::onViewModeClick, this));
     childSetAction("up_btn", boost::bind(&LLPanelMainInventory::onUpFolderClicked, this));
     childSetAction("back_btn", boost::bind(&LLPanelMainInventory::onBackFolderClicked, this));
     childSetAction("forward_btn", boost::bind(&LLPanelMainInventory::onForwardFolderClicked, this));
 
-	// <FS:Ansariel> Keep better inventory layout
-	mTrashButton = getChild<LLDragAndDropButton>("trash_btn");
-	mTrashButton->setDragAndDropHandler(boost::bind(&LLPanelMainInventory::handleDragAndDropToTrash, this
-			,	_4 // BOOL drop
-			,	_5 // EDragAndDropType cargo_type
-			,	_7 // EAcceptance* accept
-			));
-	// </FS:Ansariel>
+    // <FS:Ansariel> Keep better inventory layout
+    mTrashButton = getChild<LLDragAndDropButton>("trash_btn");
+    mTrashButton->setDragAndDropHandler(boost::bind(&LLPanelMainInventory::handleDragAndDropToTrash, this
+            ,   _4 // BOOL drop
+            ,   _5 // EDragAndDropType cargo_type
+            ,   _7 // EAcceptance* accept
+            ));
+    // </FS:Ansariel>
 
-	// <FS:Ansariel> Moved to constructor to register early
-	//mCommitCallbackRegistrar.add("Inventory.GearDefault.Custom.Action", boost::bind(&LLPanelMainInventory::onCustomAction, this, _2));
-	//mEnableCallbackRegistrar.add("Inventory.GearDefault.Check", boost::bind(&LLPanelMainInventory::isActionChecked, this, _2));
-	//mEnableCallbackRegistrar.add("Inventory.GearDefault.Enable", boost::bind(&LLPanelMainInventory::isActionEnabled, this, _2));
+    // <FS:Ansariel> Moved to constructor to register early
+    //mCommitCallbackRegistrar.add("Inventory.GearDefault.Custom.Action", boost::bind(&LLPanelMainInventory::onCustomAction, this, _2));
+    //mEnableCallbackRegistrar.add("Inventory.GearDefault.Check", boost::bind(&LLPanelMainInventory::isActionChecked, this, _2));
+    //mEnableCallbackRegistrar.add("Inventory.GearDefault.Enable", boost::bind(&LLPanelMainInventory::isActionEnabled, this, _2));
     //mEnableCallbackRegistrar.add("Inventory.GearDefault.Visible", boost::bind(&LLPanelMainInventory::isActionVisible, this, _2));
-	// </FS:Ansariel>
-	mMenuGearDefault = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_inventory_gear_default.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-	mGearMenuButton->setMenu(mMenuGearDefault, LLMenuButton::MP_BOTTOM_LEFT, true);
+    // </FS:Ansariel>
+    mMenuGearDefault = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_inventory_gear_default.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+    mGearMenuButton->setMenu(mMenuGearDefault, LLMenuButton::MP_BOTTOM_LEFT, true);
     mMenuViewDefault = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_inventory_view_default.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-	if (mViewMenuButton) // <FS:Ansariel> Keep better inventory layout
-		mViewMenuButton->setMenu(mMenuViewDefault, LLMenuButton::MP_BOTTOM_LEFT, true);
-	LLMenuGL* menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_inventory_add.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-	mMenuAddHandle = menu->getHandle();
+    if (mViewMenuButton) // <FS:Ansariel> Keep better inventory layout
+        mViewMenuButton->setMenu(mMenuViewDefault, LLMenuButton::MP_BOTTOM_LEFT, true);
+    LLMenuGL* menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_inventory_add.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+    mMenuAddHandle = menu->getHandle();
 
-	mMenuVisibility = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_inventory_search_visibility.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+    mMenuVisibility = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_inventory_search_visibility.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
     mVisibilityMenuButton->setMenu(mMenuVisibility, LLMenuButton::MP_BOTTOM_LEFT, true);
 
-	// Update the trash button when selected item(s) get worn or taken off.
-	LLOutfitObserver::instance().addCOFChangedCallback(boost::bind(&LLPanelMainInventory::updateListCommands, this));
+    // Update the trash button when selected item(s) get worn or taken off.
+    LLOutfitObserver::instance().addCOFChangedCallback(boost::bind(&LLPanelMainInventory::updateListCommands, this));
 }
 
 void LLPanelMainInventory::updateListCommands()
 {
-	// <FS:Ansariel> Keep better inventory layout
-	bool trash_enabled = isActionEnabled("delete");
-	mTrashButton->setEnabled(trash_enabled);
-	// </FS:Ansariel>
+    // <FS:Ansariel> Keep better inventory layout
+    bool trash_enabled = isActionEnabled("delete");
+    mTrashButton->setEnabled(trash_enabled);
+    // </FS:Ansariel>
 }
 
 void LLPanelMainInventory::onAddButtonClick()
@@ -1993,15 +1993,15 @@ void LLPanelMainInventory::onAddButtonClick()
 // Gray out the "New Folder" option when the Recent tab is active as new folders will not be displayed
 // unless "Always show folders" is checked in the filter options.
 
-	LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
-	if (menu)
-	{
+    LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
+    if (menu)
+    {
         disableAddIfNeeded();
 
-		setUploadCostIfNeeded();
+        setUploadCostIfNeeded();
 
-		showActionMenu(menu,"add_btn");
-	}
+        showActionMenu(menu,"add_btn");
+    }
 }
 
 void LLPanelMainInventory::setActivePanel()
@@ -2218,29 +2218,29 @@ LLUUID LLPanelMainInventory::getSingleFolderViewRoot()
 
 void LLPanelMainInventory::showActionMenu(LLMenuGL* menu, std::string spawning_view_name)
 {
-	if (menu)
-	{
-		menu->buildDrawLabels();
-		menu->updateParent(LLMenuGL::sMenuContainer);
-		LLView* spawning_view = getChild<LLView> (spawning_view_name);
-		S32 menu_x, menu_y;
-		//show menu in co-ordinates of panel
-		spawning_view->localPointToOtherView(0, 0, &menu_x, &menu_y, this);
-		LLMenuGL::showPopup(this, menu, menu_x, menu_y);
-	}
+    if (menu)
+    {
+        menu->buildDrawLabels();
+        menu->updateParent(LLMenuGL::sMenuContainer);
+        LLView* spawning_view = getChild<LLView> (spawning_view_name);
+        S32 menu_x, menu_y;
+        //show menu in co-ordinates of panel
+        spawning_view->localPointToOtherView(0, 0, &menu_x, &menu_y, this);
+        LLMenuGL::showPopup(this, menu, menu_x, menu_y);
+    }
 }
 
 // <FS:Ansariel> Keep better inventory layout
 void LLPanelMainInventory::onTrashButtonClick()
 {
-	onClipboardAction("delete");
+    onClipboardAction("delete");
 }
 // </FS:Ansariel>
 
 void LLPanelMainInventory::onClipboardAction(const LLSD& userdata)
 {
-	std::string command_name = userdata.asString();
-	getActivePanel()->doToSelected(command_name);
+    std::string command_name = userdata.asString();
+    getActivePanel()->doToSelected(command_name);
 }
 
 void LLPanelMainInventory::saveTexture(const LLSD& userdata)
@@ -2261,97 +2261,97 @@ void LLPanelMainInventory::saveTexture(const LLSD& userdata)
         item_id = static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->getUUID();
     }
 
-	LLPreviewTexture* preview_texture = LLFloaterReg::showTypedInstance<LLPreviewTexture>("preview_texture", LLSD(item_id), TAKE_FOCUS_YES);
-	if (preview_texture)
-	{
-		preview_texture->openToSave();
-	}
+    LLPreviewTexture* preview_texture = LLFloaterReg::showTypedInstance<LLPreviewTexture>("preview_texture", LLSD(item_id), TAKE_FOCUS_YES);
+    if (preview_texture)
+    {
+        preview_texture->openToSave();
+    }
 }
 
 void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 {
-	if (!isActionEnabled(userdata))
-		return;
+    if (!isActionEnabled(userdata))
+        return;
 
-	const std::string command_name = userdata.asString();
+    const std::string command_name = userdata.asString();
 
-	if (command_name == "new_window")
-	{
-		newWindow();
-	}
-	if (command_name == "sort_by_name")
-	{
-		const LLSD arg = "name";
-		setSortBy(arg);
-	}
-	if (command_name == "sort_by_recent")
-	{
-		const LLSD arg = "date";
-		setSortBy(arg);
-	}
-	if (command_name == "sort_folders_by_name")
-	{
-		const LLSD arg = "foldersalwaysbyname";
-		setSortBy(arg);
-	}
-	if (command_name == "sort_system_folders_to_top")
-	{
-		const LLSD arg = "systemfolderstotop";
-		setSortBy(arg);
-	}
-	if (command_name == "add_objects_on_double_click")
-	{
-		gSavedSettings.setBOOL("FSDoubleClickAddInventoryObjects",!gSavedSettings.getBOOL("FSDoubleClickAddInventoryObjects"));
-	}
-	if (command_name == "add_clothing_on_double_click")
-	{
-		gSavedSettings.setBOOL("FSDoubleClickAddInventoryClothing",!gSavedSettings.getBOOL("FSDoubleClickAddInventoryClothing"));
-	}
-	if (command_name == "show_filters")
-	{
-		toggleFindOptions();
-	}
-	if (command_name == "reset_filters")
-	{
-		resetFilters();
-	}
-	if (command_name == "close_folders")
-	{
-		closeAllFolders();
-	}
-	if (command_name == "empty_trash")
-	{
-		const std::string notification = "ConfirmEmptyTrash";
-		gInventory.emptyFolderType(notification, LLFolderType::FT_TRASH);
-	}
-	if (command_name == "empty_lostnfound")
-	{
-		const std::string notification = "ConfirmEmptyLostAndFound";
-		gInventory.emptyFolderType(notification, LLFolderType::FT_LOST_AND_FOUND);
-	}
-	if (command_name == "save_texture")
-	{
-		saveTexture(userdata);
-	}
-	// This doesn't currently work, since the viewer can't change an assetID an item.
-	if (command_name == "regenerate_link")
-	{
-		LLInventoryPanel *active_panel = getActivePanel();
-		LLFolderViewItem* current_item = active_panel->getRootFolder()->getCurSelectedItem();
-		if (!current_item)
-		{
-			return;
-		}
-		const LLUUID item_id = static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->getUUID();
-		LLViewerInventoryItem *item = gInventory.getItem(item_id);
-		if (item)
-		{
-			item->regenerateLink();
-		}
-		active_panel->setSelection(item_id, TAKE_FOCUS_NO);
-	}
-	if (command_name == "find_original")
-	{
+    if (command_name == "new_window")
+    {
+        newWindow();
+    }
+    if (command_name == "sort_by_name")
+    {
+        const LLSD arg = "name";
+        setSortBy(arg);
+    }
+    if (command_name == "sort_by_recent")
+    {
+        const LLSD arg = "date";
+        setSortBy(arg);
+    }
+    if (command_name == "sort_folders_by_name")
+    {
+        const LLSD arg = "foldersalwaysbyname";
+        setSortBy(arg);
+    }
+    if (command_name == "sort_system_folders_to_top")
+    {
+        const LLSD arg = "systemfolderstotop";
+        setSortBy(arg);
+    }
+    if (command_name == "add_objects_on_double_click")
+    {
+        gSavedSettings.setBOOL("FSDoubleClickAddInventoryObjects",!gSavedSettings.getBOOL("FSDoubleClickAddInventoryObjects"));
+    }
+    if (command_name == "add_clothing_on_double_click")
+    {
+        gSavedSettings.setBOOL("FSDoubleClickAddInventoryClothing",!gSavedSettings.getBOOL("FSDoubleClickAddInventoryClothing"));
+    }
+    if (command_name == "show_filters")
+    {
+        toggleFindOptions();
+    }
+    if (command_name == "reset_filters")
+    {
+        resetFilters();
+    }
+    if (command_name == "close_folders")
+    {
+        closeAllFolders();
+    }
+    if (command_name == "empty_trash")
+    {
+        const std::string notification = "ConfirmEmptyTrash";
+        gInventory.emptyFolderType(notification, LLFolderType::FT_TRASH);
+    }
+    if (command_name == "empty_lostnfound")
+    {
+        const std::string notification = "ConfirmEmptyLostAndFound";
+        gInventory.emptyFolderType(notification, LLFolderType::FT_LOST_AND_FOUND);
+    }
+    if (command_name == "save_texture")
+    {
+        saveTexture(userdata);
+    }
+    // This doesn't currently work, since the viewer can't change an assetID an item.
+    if (command_name == "regenerate_link")
+    {
+        LLInventoryPanel *active_panel = getActivePanel();
+        LLFolderViewItem* current_item = active_panel->getRootFolder()->getCurSelectedItem();
+        if (!current_item)
+        {
+            return;
+        }
+        const LLUUID item_id = static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->getUUID();
+        LLViewerInventoryItem *item = gInventory.getItem(item_id);
+        if (item)
+        {
+            item->regenerateLink();
+        }
+        active_panel->setSelection(item_id, TAKE_FOCUS_NO);
+    }
+    if (command_name == "find_original")
+    {
         if(mSingleFolderMode && isGalleryViewMode())
         {
             LLInventoryObject *obj = gInventory.getObject(mCombinationGalleryPanel->getFirstSelectedItemID());
@@ -2362,17 +2362,17 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
         }
         else
         {
-		LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
-		if (!current_item)
-		{
-			return;
-		}
-		static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->performAction(getActivePanel()->getModel(), "goto");
+        LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
+        if (!current_item)
+        {
+            return;
         }
-	}
+        static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->performAction(getActivePanel()->getModel(), "goto");
+        }
+    }
 
-	if (command_name == "find_links")
-	{
+    if (command_name == "find_links")
+    {
         if(mSingleFolderMode && isGalleryViewMode())
         {
             LLFloaterSidePanelContainer* inventory_container = newWindow();
@@ -2404,10 +2404,10 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
             const std::string &item_name = current_item->getViewModelItem()->getName();
             findLinks(item_id, item_name);
         }
-	}
+    }
 
-	if (command_name == "replace_links")
-	{
+    if (command_name == "replace_links")
+    {
         LLSD params;
         if(mSingleFolderMode && isGalleryViewMode())
         {
@@ -2415,23 +2415,23 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
         }
         else
         {
-		LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
-		if (current_item)
-		{
-			LLInvFVBridge* bridge = (LLInvFVBridge*)current_item->getViewModelItem();
+        LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
+        if (current_item)
+        {
+            LLInvFVBridge* bridge = (LLInvFVBridge*)current_item->getViewModelItem();
 
-			if (bridge)
-			{
-				LLInventoryObject* obj = bridge->getInventoryObject();
-				if (obj && obj->getType() != LLAssetType::AT_CATEGORY && obj->getActualType() != LLAssetType::AT_LINK_FOLDER)
-				{
-					params = LLSD(obj->getUUID());
-				}
-			}
-		}
+            if (bridge)
+            {
+                LLInventoryObject* obj = bridge->getInventoryObject();
+                if (obj && obj->getType() != LLAssetType::AT_CATEGORY && obj->getActualType() != LLAssetType::AT_LINK_FOLDER)
+                {
+                    params = LLSD(obj->getUUID());
+                }
+            }
         }
-		LLFloaterReg::showInstance("linkreplace", params);
-	}
+        }
+        LLFloaterReg::showInstance("linkreplace", params);
+    }
 
     if (command_name == "close_inv_windows")
     {
@@ -2452,20 +2452,20 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
         getCurrentFilter().toggleSearchVisibilityOutfits();
     }
 
-	if (command_name == "toggle_search_trash")
-	{
+    if (command_name == "toggle_search_trash")
+    {
         getCurrentFilter().toggleSearchVisibilityTrash();
-	}
+    }
 
-	if (command_name == "toggle_search_library")
-	{
+    if (command_name == "toggle_search_library")
+    {
         getCurrentFilter().toggleSearchVisibilityLibrary();
-	}
+    }
 
-	if (command_name == "include_links")
-	{
+    if (command_name == "include_links")
+    {
         getCurrentFilter().toggleSearchVisibilityLinks();
-	}
+    }
 
     if (command_name == "share")
     {
@@ -2499,22 +2499,22 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 
 void LLPanelMainInventory::onVisibilityChange( BOOL new_visibility )
 {
-	if(!new_visibility)
-	{
-		LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
-		if (menu)
-		{
-			menu->setVisible(FALSE);
-		}
-		// <FS:Ansariel> FIRE-20109: Crash at start using Vintage skin
-		//getActivePanel()->getRootFolder()->finishRenamingItem();
-		LLInventoryPanel* panel = getActivePanel();
-		if (panel)
-		{
-			panel->getRootFolder()->finishRenamingItem();
-		}
-		// </FS:Ansariel>
-	}
+    if(!new_visibility)
+    {
+        LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
+        if (menu)
+        {
+            menu->setVisible(FALSE);
+        }
+        // <FS:Ansariel> FIRE-20109: Crash at start using Vintage skin
+        //getActivePanel()->getRootFolder()->finishRenamingItem();
+        LLInventoryPanel* panel = getActivePanel();
+        if (panel)
+        {
+            panel->getRootFolder()->finishRenamingItem();
+        }
+        // </FS:Ansariel>
+    }
 }
 
 bool LLPanelMainInventory::isSaveTextureEnabled(const LLSD& userdata)
@@ -2532,126 +2532,126 @@ bool LLPanelMainInventory::isSaveTextureEnabled(const LLSD& userdata)
             inv_item = dynamic_cast<LLViewerInventoryItem*>(static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->getInventoryObject());
         }
     }
-		if(inv_item)
-		{
-			bool can_save = inv_item->checkPermissionsSet(PERM_ITEM_UNRESTRICTED);
+        if(inv_item)
+        {
+            bool can_save = inv_item->checkPermissionsSet(PERM_ITEM_UNRESTRICTED);
             LLInventoryType::EType curr_type = inv_item->getInventoryType();
-			return can_save && (curr_type == LLInventoryType::IT_TEXTURE || curr_type == LLInventoryType::IT_SNAPSHOT);
-		}
+            return can_save && (curr_type == LLInventoryType::IT_TEXTURE || curr_type == LLInventoryType::IT_SNAPSHOT);
+        }
 
-	return false;
+    return false;
 }
 
 BOOL LLPanelMainInventory::isActionEnabled(const LLSD& userdata)
 {
-	const std::string command_name = userdata.asString();
-	// <FS:Ansariel> Unused changes from STORM-2091 that has been fixed by LL differently in the meantime
-	//if (command_name == "not_empty")
-	//{
-	//	BOOL status = FALSE;
-	//	LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
-	//	if (current_item)
-	//	{
-	//		const LLUUID& item_id = static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->getUUID();
-	//		LLInventoryModel::cat_array_t* cat_array;
-	//		LLInventoryModel::item_array_t* item_array;
-	//		gInventory.getDirectDescendentsOf(item_id, cat_array, item_array);
-	//		status = (0 == cat_array->size() && 0 == item_array->size());
-	//	}
-	//	return status;
-	//}
-	// </FS:Ansariel>
-	if (command_name == "delete")
-	{
-		return getActivePanel()->isSelectionRemovable();
-	}
-	if (command_name == "save_texture")
-	{
-		return isSaveTextureEnabled(userdata);
-	}
-	if (command_name == "find_original")
-	{
+    const std::string command_name = userdata.asString();
+    // <FS:Ansariel> Unused changes from STORM-2091 that has been fixed by LL differently in the meantime
+    //if (command_name == "not_empty")
+    //{
+    //  BOOL status = FALSE;
+    //  LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
+    //  if (current_item)
+    //  {
+    //      const LLUUID& item_id = static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->getUUID();
+    //      LLInventoryModel::cat_array_t* cat_array;
+    //      LLInventoryModel::item_array_t* item_array;
+    //      gInventory.getDirectDescendentsOf(item_id, cat_array, item_array);
+    //      status = (0 == cat_array->size() && 0 == item_array->size());
+    //  }
+    //  return status;
+    //}
+    // </FS:Ansariel>
+    if (command_name == "delete")
+    {
+        return getActivePanel()->isSelectionRemovable();
+    }
+    if (command_name == "save_texture")
+    {
+        return isSaveTextureEnabled(userdata);
+    }
+    if (command_name == "find_original")
+    {
         LLUUID item_id;
         if(mSingleFolderMode && isGalleryViewMode())
         {
             item_id = mCombinationGalleryPanel->getFirstSelectedItemID();
         }
         else{
-		LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
-		if (!current_item) return FALSE;
+        LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
+        if (!current_item) return FALSE;
         item_id = static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->getUUID();
         }
-		const LLViewerInventoryItem *item = gInventory.getItem(item_id);
-		if (item && item->getIsLinkType() && !item->getIsBrokenLink())
-		{
-			return TRUE;
-		}
-		return FALSE;
-	}
+        const LLViewerInventoryItem *item = gInventory.getItem(item_id);
+        if (item && item->getIsLinkType() && !item->getIsBrokenLink())
+        {
+            return TRUE;
+        }
+        return FALSE;
+    }
 
-	if (command_name == "find_links")
-	{
+    if (command_name == "find_links")
+    {
         LLUUID item_id;
         if(mSingleFolderMode && isGalleryViewMode())
         {
             item_id = mCombinationGalleryPanel->getFirstSelectedItemID();
         }
         else{
-		LLFolderView* root = getActivePanel()->getRootFolder();
-		std::set<LLFolderViewItem*> selection_set = root->getSelectionList();
-		if (selection_set.size() != 1) return FALSE;
-		LLFolderViewItem* current_item = root->getCurSelectedItem();
-		if (!current_item) return FALSE;
-		item_id = static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->getUUID();
+        LLFolderView* root = getActivePanel()->getRootFolder();
+        std::set<LLFolderViewItem*> selection_set = root->getSelectionList();
+        if (selection_set.size() != 1) return FALSE;
+        LLFolderViewItem* current_item = root->getCurSelectedItem();
+        if (!current_item) return FALSE;
+        item_id = static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->getUUID();
         }
-		const LLInventoryObject *obj = gInventory.getObject(item_id);
-		if (obj && !obj->getIsLinkType() && LLAssetType::lookupCanLink(obj->getType()))
-		{
-			return TRUE;
-		}
-		return FALSE;
-	}
-	// This doesn't currently work, since the viewer can't change an assetID an item.
-	if (command_name == "regenerate_link")
-	{
-		LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
-		if (!current_item) return FALSE;
-		const LLUUID& item_id = static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->getUUID();
-		const LLViewerInventoryItem *item = gInventory.getItem(item_id);
-		if (item && item->getIsBrokenLink())
-		{
-			return TRUE;
-		}
-		return FALSE;
-	}
+        const LLInventoryObject *obj = gInventory.getObject(item_id);
+        if (obj && !obj->getIsLinkType() && LLAssetType::lookupCanLink(obj->getType()))
+        {
+            return TRUE;
+        }
+        return FALSE;
+    }
+    // This doesn't currently work, since the viewer can't change an assetID an item.
+    if (command_name == "regenerate_link")
+    {
+        LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
+        if (!current_item) return FALSE;
+        const LLUUID& item_id = static_cast<LLFolderViewModelItemInventory*>(current_item->getViewModelItem())->getUUID();
+        const LLViewerInventoryItem *item = gInventory.getItem(item_id);
+        if (item && item->getIsBrokenLink())
+        {
+            return TRUE;
+        }
+        return FALSE;
+    }
 
-	if (command_name == "share")
-	{
+    if (command_name == "share")
+    {
         if(mSingleFolderMode && isGalleryViewMode())
         {
             return can_share_item(mCombinationGalleryPanel->getFirstSelectedItemID());
         }
         else{
-		LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
-		if (!current_item) return FALSE;
-		LLSidepanelInventory* parent = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
-		return parent ? parent->canShare() : FALSE;
+        LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
+        if (!current_item) return FALSE;
+        LLSidepanelInventory* parent = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
+        return parent ? parent->canShare() : FALSE;
         }
-	}
-	if (command_name == "empty_trash")
-	{
-		const LLUUID &trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
-		LLInventoryModel::EHasChildren children = gInventory.categoryHasChildren(trash_id);
-		return children != LLInventoryModel::CHILDREN_NO && gInventory.isCategoryComplete(trash_id);
-	}
-	if (command_name == "empty_lostnfound")
-	{
-		const LLUUID &trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND);
-		LLInventoryModel::EHasChildren children = gInventory.categoryHasChildren(trash_id);
-		return children != LLInventoryModel::CHILDREN_NO && gInventory.isCategoryComplete(trash_id);
-	}
+    }
+    if (command_name == "empty_trash")
+    {
+        const LLUUID &trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
+        LLInventoryModel::EHasChildren children = gInventory.categoryHasChildren(trash_id);
+        return children != LLInventoryModel::CHILDREN_NO && gInventory.isCategoryComplete(trash_id);
+    }
+    if (command_name == "empty_lostnfound")
+    {
+        const LLUUID &trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND);
+        LLInventoryModel::EHasChildren children = gInventory.categoryHasChildren(trash_id);
+        return children != LLInventoryModel::CHILDREN_NO && gInventory.isCategoryComplete(trash_id);
+    }
 
-	return TRUE;
+    return TRUE;
 }
 
 bool LLPanelMainInventory::isActionVisible(const LLSD& userdata)
@@ -2671,47 +2671,47 @@ bool LLPanelMainInventory::isActionVisible(const LLSD& userdata)
 
 BOOL LLPanelMainInventory::isActionChecked(const LLSD& userdata)
 {
-	U32 sort_order_mask = (mSingleFolderMode && isGalleryViewMode()) ? mCombinationGalleryPanel->getSortOrder() :  getActivePanel()->getSortOrder();
-	const std::string command_name = userdata.asString();
-	if (command_name == "sort_by_name")
-	{
-		return ~sort_order_mask & LLInventoryFilter::SO_DATE;
-	}
+    U32 sort_order_mask = (mSingleFolderMode && isGalleryViewMode()) ? mCombinationGalleryPanel->getSortOrder() :  getActivePanel()->getSortOrder();
+    const std::string command_name = userdata.asString();
+    if (command_name == "sort_by_name")
+    {
+        return ~sort_order_mask & LLInventoryFilter::SO_DATE;
+    }
 
-	if (command_name == "sort_by_recent")
-	{
-		return sort_order_mask & LLInventoryFilter::SO_DATE;
-	}
+    if (command_name == "sort_by_recent")
+    {
+        return sort_order_mask & LLInventoryFilter::SO_DATE;
+    }
 
-	if (command_name == "sort_folders_by_name")
-	{
-		return sort_order_mask & LLInventoryFilter::SO_FOLDERS_BY_NAME;
-	}
+    if (command_name == "sort_folders_by_name")
+    {
+        return sort_order_mask & LLInventoryFilter::SO_FOLDERS_BY_NAME;
+    }
 
-	if (command_name == "sort_system_folders_to_top")
-	{
-		return sort_order_mask & LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP;
-	}
+    if (command_name == "sort_system_folders_to_top")
+    {
+        return sort_order_mask & LLInventoryFilter::SO_SYSTEM_FOLDERS_TO_TOP;
+    }
 
     if (command_name == "toggle_search_outfits")
     {
         return (getCurrentFilter().getSearchVisibilityTypes() & LLInventoryFilter::VISIBILITY_OUTFITS) != 0;
     }
 
-	if (command_name == "toggle_search_trash")
-	{
-		return (getCurrentFilter().getSearchVisibilityTypes() & LLInventoryFilter::VISIBILITY_TRASH) != 0;
-	}
+    if (command_name == "toggle_search_trash")
+    {
+        return (getCurrentFilter().getSearchVisibilityTypes() & LLInventoryFilter::VISIBILITY_TRASH) != 0;
+    }
 
-	if (command_name == "toggle_search_library")
-	{
-		return (getCurrentFilter().getSearchVisibilityTypes() & LLInventoryFilter::VISIBILITY_LIBRARY) != 0;
-	}
+    if (command_name == "toggle_search_library")
+    {
+        return (getCurrentFilter().getSearchVisibilityTypes() & LLInventoryFilter::VISIBILITY_LIBRARY) != 0;
+    }
 
-	if (command_name == "include_links")
-	{
+    if (command_name == "include_links")
+    {
         return (getCurrentFilter().getSearchVisibilityTypes() & LLInventoryFilter::VISIBILITY_LINKS) != 0;
-	}	
+    }
 
     if (command_name == "list_view")
     {
@@ -2726,219 +2726,219 @@ BOOL LLPanelMainInventory::isActionChecked(const LLSD& userdata)
         return isCombinationViewMode();
     }
 
-	if (command_name == "add_objects_on_double_click")
-	{
-		return gSavedSettings.getBOOL("FSDoubleClickAddInventoryObjects");
-	}
-	
-	if (command_name == "add_clothing_on_double_click")
-	{
-		return gSavedSettings.getBOOL("FSDoubleClickAddInventoryClothing");
-	}
+    if (command_name == "add_objects_on_double_click")
+    {
+        return gSavedSettings.getBOOL("FSDoubleClickAddInventoryObjects");
+    }
+
+    if (command_name == "add_clothing_on_double_click")
+    {
+        return gSavedSettings.getBOOL("FSDoubleClickAddInventoryClothing");
+    }
 
 
-	return FALSE;
+    return FALSE;
 }
 
 // <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
 void LLPanelMainInventory::onCoalescedObjectsToggled(const LLSD& userdata)
 {
-	const std::string command_name = userdata.asString();
-	if (command_name == "coalesced_objects_only")
-	{
-		getActivePanel()->setFilterCoalescedObjects(!getActivePanel()->getFilterCoalescedObjects());
-	}
+    const std::string command_name = userdata.asString();
+    if (command_name == "coalesced_objects_only")
+    {
+        getActivePanel()->setFilterCoalescedObjects(!getActivePanel()->getFilterCoalescedObjects());
+    }
 }
 
 bool LLPanelMainInventory::isCoalescedObjectsChecked(const LLSD& userdata)
 {
-	const std::string command_name = userdata.asString();
-	if (command_name == "coalesced_objects_only")
-	{
-		return getActivePanel()->getFilterCoalescedObjects();
-	}
+    const std::string command_name = userdata.asString();
+    if (command_name == "coalesced_objects_only")
+    {
+        return getActivePanel()->getFilterCoalescedObjects();
+    }
 
-	return false;
+    return false;
 }
 // </FS:Zi>
 
 // <FS:Zi> Filter Links Menu
 void LLPanelMainInventory::onFilterLinksChecked(const LLSD& userdata)
 {
-	const std::string command_name = userdata.asString();
-	if (command_name == "show_links")
-	{
-		getActivePanel()->setFilterLinks(LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
-	}
+    const std::string command_name = userdata.asString();
+    if (command_name == "show_links")
+    {
+        getActivePanel()->setFilterLinks(LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
+    }
 
-	if (command_name == "only_links")
-	{
-		getActivePanel()->setFilterLinks(LLInventoryFilter::FILTERLINK_ONLY_LINKS);
-	}
+    if (command_name == "only_links")
+    {
+        getActivePanel()->setFilterLinks(LLInventoryFilter::FILTERLINK_ONLY_LINKS);
+    }
 
-	if (command_name == "hide_links")
-	{
-		getActivePanel()->setFilterLinks(LLInventoryFilter::FILTERLINK_EXCLUDE_LINKS);
-	}
+    if (command_name == "hide_links")
+    {
+        getActivePanel()->setFilterLinks(LLInventoryFilter::FILTERLINK_EXCLUDE_LINKS);
+    }
 }
 
 BOOL LLPanelMainInventory::isFilterLinksChecked(const LLSD& userdata)
 {
-	const std::string command_name = userdata.asString();
-	if (command_name == "show_links")
-	{
-		return (getActivePanel()->getFilter().getFilterLinks() == LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
-	}
+    const std::string command_name = userdata.asString();
+    if (command_name == "show_links")
+    {
+        return (getActivePanel()->getFilter().getFilterLinks() == LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
+    }
 
-	if (command_name == "only_links")
-	{
-		return (getActivePanel()->getFilter().getFilterLinks() == LLInventoryFilter::FILTERLINK_ONLY_LINKS);
-	}
+    if (command_name == "only_links")
+    {
+        return (getActivePanel()->getFilter().getFilterLinks() == LLInventoryFilter::FILTERLINK_ONLY_LINKS);
+    }
 
-	if (command_name == "hide_links")
-	{
-		return (getActivePanel()->getFilter().getFilterLinks() == LLInventoryFilter::FILTERLINK_EXCLUDE_LINKS);
-	}
+    if (command_name == "hide_links")
+    {
+        return (getActivePanel()->getFilter().getFilterLinks() == LLInventoryFilter::FILTERLINK_EXCLUDE_LINKS);
+    }
 
-	return FALSE;
+    return FALSE;
 }
 // </FS:Zi> Filter Links Menu
 
 // <FS:Zi> FIRE-1175 - Filter Permissions Menu
 void LLPanelMainInventory::onFilterPermissionsChecked(const LLSD &userdata)
 {
-	U64 permissions = getActivePanel()->getFilterPermissions();
+    U64 permissions = getActivePanel()->getFilterPermissions();
 
-	const std::string command_name = userdata.asString();
-	if (command_name == "only_modify")
-	{
-		getActivePanel()->setFilterPermissions(permissions ^ PERM_MODIFY);
-	}
+    const std::string command_name = userdata.asString();
+    if (command_name == "only_modify")
+    {
+        getActivePanel()->setFilterPermissions(permissions ^ PERM_MODIFY);
+    }
 
-	if (command_name == "only_copy")
-	{
-		getActivePanel()->setFilterPermissions(permissions ^ PERM_COPY);
-	}
+    if (command_name == "only_copy")
+    {
+        getActivePanel()->setFilterPermissions(permissions ^ PERM_COPY);
+    }
 
-	if (command_name == "only_transfer")
-	{
-		getActivePanel()->setFilterPermissions(permissions ^ PERM_TRANSFER);
-	}
+    if (command_name == "only_transfer")
+    {
+        getActivePanel()->setFilterPermissions(permissions ^ PERM_TRANSFER);
+    }
 
-	if (getFinder())
-	{
-		getFinder()->updateElementsFromFilter();
-	}
+    if (getFinder())
+    {
+        getFinder()->updateElementsFromFilter();
+    }
 }
 
 BOOL LLPanelMainInventory::isFilterPermissionsChecked(const LLSD &userdata)
 {
-	const std::string command_name = userdata.asString();
-	if (command_name == "only_modify")
-	{
-		return (getActivePanel()->getFilter().getFilterPermissions() & PERM_MODIFY);
-	}
+    const std::string command_name = userdata.asString();
+    if (command_name == "only_modify")
+    {
+        return (getActivePanel()->getFilter().getFilterPermissions() & PERM_MODIFY);
+    }
 
-	if (command_name == "only_copy")
-	{
-		return (getActivePanel()->getFilter().getFilterPermissions() & PERM_COPY);
-	}
+    if (command_name == "only_copy")
+    {
+        return (getActivePanel()->getFilter().getFilterPermissions() & PERM_COPY);
+    }
 
-	if (command_name == "only_transfer")
-	{
-		return (getActivePanel()->getFilter().getFilterPermissions() & PERM_TRANSFER);
-	}
+    if (command_name == "only_transfer")
+    {
+        return (getActivePanel()->getFilter().getFilterPermissions() & PERM_TRANSFER);
+    }
 
-	return FALSE;
+    return FALSE;
 }
 // </FS:Zi>
 
 // <FS:Zi> Extended Inventory Search
 void LLPanelMainInventory::onSearchTypeChecked(const LLSD& userdata)
 {
-	std::string new_type = userdata.asString();
-	if (new_type == "search_by_name")
-	{
-		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_NAME);
-	}
-	if (new_type == "search_by_creator")
-	{
-		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_CREATOR);
-	}
-	if (new_type == "search_by_description")
-	{
-		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_DESCRIPTION);
-	}
-	if (new_type == "search_by_UUID")
-	{
-		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_UUID);
-	}
-	if (new_type == "search_by_all")
-	{
-		getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_ALL);
-	}
+    std::string new_type = userdata.asString();
+    if (new_type == "search_by_name")
+    {
+        getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_NAME);
+    }
+    if (new_type == "search_by_creator")
+    {
+        getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_CREATOR);
+    }
+    if (new_type == "search_by_description")
+    {
+        getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_DESCRIPTION);
+    }
+    if (new_type == "search_by_UUID")
+    {
+        getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_UUID);
+    }
+    if (new_type == "search_by_all")
+    {
+        getActivePanel()->setSearchType(LLInventoryFilter::SEARCHTYPE_ALL);
+    }
 }
 
 BOOL LLPanelMainInventory::isSearchTypeChecked(const LLSD& userdata)
 {
-	LLInventoryFilter::ESearchType search_type = getActivePanel()->getSearchType();
-	const std::string command_name = userdata.asString();
-	if (command_name == "search_by_name")
-	{
-		return (search_type == LLInventoryFilter::SEARCHTYPE_NAME);
-	}
+    LLInventoryFilter::ESearchType search_type = getActivePanel()->getSearchType();
+    const std::string command_name = userdata.asString();
+    if (command_name == "search_by_name")
+    {
+        return (search_type == LLInventoryFilter::SEARCHTYPE_NAME);
+    }
 
-	if (command_name == "search_by_creator")
-	{
-		return (search_type == LLInventoryFilter::SEARCHTYPE_CREATOR);
-	}
+    if (command_name == "search_by_creator")
+    {
+        return (search_type == LLInventoryFilter::SEARCHTYPE_CREATOR);
+    }
 
-	if (command_name == "search_by_description")
-	{
-		return (search_type == LLInventoryFilter::SEARCHTYPE_DESCRIPTION);
-	}
+    if (command_name == "search_by_description")
+    {
+        return (search_type == LLInventoryFilter::SEARCHTYPE_DESCRIPTION);
+    }
 
-	if (command_name == "search_by_UUID")
-	{
-		return (search_type == LLInventoryFilter::SEARCHTYPE_UUID);
-	}
+    if (command_name == "search_by_UUID")
+    {
+        return (search_type == LLInventoryFilter::SEARCHTYPE_UUID);
+    }
 
-	if (command_name == "search_by_all")
-	{
-		return (search_type == LLInventoryFilter::SEARCHTYPE_ALL);
-	}
-	return FALSE;
+    if (command_name == "search_by_all")
+    {
+        return (search_type == LLInventoryFilter::SEARCHTYPE_ALL);
+    }
+    return FALSE;
 }
 // </FS:Zi> Extended Inventory Search
 
 // <FS:Ansariel> Keep better inventory layout
 bool LLPanelMainInventory::handleDragAndDropToTrash(BOOL drop, EDragAndDropType cargo_type, EAcceptance* accept)
 {
-	*accept = ACCEPT_NO;
+    *accept = ACCEPT_NO;
 
-	const bool is_enabled = isActionEnabled("delete");
-	if (is_enabled) *accept = ACCEPT_YES_MULTI;
+    const bool is_enabled = isActionEnabled("delete");
+    if (is_enabled) *accept = ACCEPT_YES_MULTI;
 
-	if (is_enabled && drop)
-	{
-		onClipboardAction("delete");
-	}
-	return true;
+    if (is_enabled && drop)
+    {
+        onClipboardAction("delete");
+    }
+    return true;
 }
 // </FS:Ansariel>
 
 void LLPanelMainInventory::setUploadCostIfNeeded()
 {
-	LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
-	if(mNeedUploadCost && menu)
-	{
-		const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
-		const std::string sound_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getSoundUploadCost());
-		const std::string animation_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getAnimationUploadCost());
-		menu->getChild<LLView>("Upload Image")->setLabelArg("[COST]", texture_upload_cost_str);
-		menu->getChild<LLView>("Upload Sound")->setLabelArg("[COST]", sound_upload_cost_str);
-		menu->getChild<LLView>("Upload Animation")->setLabelArg("[COST]", animation_upload_cost_str);
-	}
+    LLMenuGL* menu = (LLMenuGL*)mMenuAddHandle.get();
+    if(mNeedUploadCost && menu)
+    {
+        const std::string texture_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getTextureUploadCost());
+        const std::string sound_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getSoundUploadCost());
+        const std::string animation_upload_cost_str = std::to_string(LLAgentBenefitsMgr::current().getAnimationUploadCost());
+        menu->getChild<LLView>("Upload Image")->setLabelArg("[COST]", texture_upload_cost_str);
+        menu->getChild<LLView>("Upload Sound")->setLabelArg("[COST]", sound_upload_cost_str);
+        menu->getChild<LLView>("Upload Animation")->setLabelArg("[COST]", animation_upload_cost_str);
+    }
 }
 
 bool is_add_allowed(LLUUID folder_id)
@@ -3118,7 +3118,7 @@ void LLPanelMainInventory::updateCombinationVisibility()
         {
             mCombinationGalleryPanel->handleModifiedFilter();
         }
-        
+
         getActivePanel()->getRootFolder();
 
         if (mReshapeInvLayout
@@ -3242,7 +3242,7 @@ void LLPanelMainInventory::setViewMode(EViewModeType mode)
                 sort_order = mCombinationInventoryPanel->getSortOrder();
                 break;
         }
-            
+
         LLUUID cur_root = getCurrentSFVRoot();
         mViewMode = mode;
 

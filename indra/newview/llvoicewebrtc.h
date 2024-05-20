@@ -271,7 +271,7 @@ public:
         participantStatePtr_t findParticipantByID(const LLUUID& id);
 
         static ptr_t matchSessionByChannelID(const std::string& channel_id);
-        
+
         void shutdownAllConnections();
         void revive();
 
@@ -444,7 +444,7 @@ private:
     /// Clean up objects created during a voice session.
     void cleanUp();
 
-	LL::WorkQueue::weak_t mMainQueue;
+    LL::WorkQueue::weak_t mMainQueue;
 
     bool mTuningMode;
     F32 mTuningMicGain;
@@ -604,7 +604,7 @@ class LLVoiceWebRTCConnection :
     void processIceUpdates();
 
     void processIceUpdatesCoro();
- 
+
     virtual void setMuteMic(bool muted);
     virtual void setMicGain(F32 volume);
     virtual void setSpeakerVolume(F32 volume);

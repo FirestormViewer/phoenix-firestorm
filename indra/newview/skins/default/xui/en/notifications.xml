@@ -415,6 +415,15 @@ Initialization with the Marketplace failed because of a system or network error.
     </notification>
 
     <notification
+     icon="notifytip.tga"
+     name="InvalidKeystroke"
+     type="notifytip">
+There was an invalid keystroke entered.
+[REASON].
+Please input a valid text.
+    </notification>
+
+    <notification
         icon="alertmodal.tga"
         name="MerchantForceValidateListing"
         type="alertmodal">
@@ -4535,29 +4544,28 @@ Are you sure you want to return the selected objects to their owners? Transferab
    icon="alert.tga"
    name="GroupLeaveConfirmMember"
    type="alert">
-You are currently a member of the group &lt;nolink&gt;[GROUP]&lt;/nolink&gt;.
-Leave Group?
+Leave the group &apos;&lt;nolink&gt;[GROUP]&lt;/nolink&gt;&apos;?
+Currently, the fee to join this group again is L$[COST].
     <tag>group</tag>
     <tag>confirm</tag>
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
-     yestext="OK"/>
+     yestext="Leave"/>
   </notification>
-
 
   <notification
    icon="alert.tga"
-   name="GroupLeaveConfirmMemberWithFee"
+   name="GroupLeaveConfirmMemberNoFee"
    type="alert">
-You are currently a member of the group &lt;nolink&gt;[GROUP]&lt;/nolink&gt;. Joining again will cost L$[AMOUNT].
-Leave Group?
+Leave the group &apos;&lt;nolink&gt;[GROUP]&lt;/nolink&gt;&apos;?
+There is currently no fee to join this group again.
     <tag>group</tag>
     <tag>confirm</tag>
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
-     yestext="OK"/>
+     yestext="Leave"/>
   </notification>
 
   <notification
@@ -6476,6 +6484,33 @@ Are you sure you want to delete them?
      ignoretext="Confirm before deleting filtered items"
      name="okcancelignore"
      notext="Cancel"
+     yestext="OK"/>
+  </notification>
+    
+  <notification
+   icon="alertmodal.tga"
+   name="DeleteWornItems"
+   type="alertmodal">
+    <unique/>
+Some item(s) you wish to delete are being worn on your avatar.
+Remove these items from your avatar?
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="Remove item(s) and delete"/>
+  </notification>
+    
+  <notification
+   icon="alertmodal.tga"
+   name="CantDeleteRequiredClothing"
+   type="alertmodal">
+    <unique/>
+Some item(s) you wish to delete are required clothing layers (skin, shape, hair, eyes).
+You must replace those layers before deleting them.
+    <tag>confirm</tag>
+    <usetemplate
+     name="okbutton"
      yestext="OK"/>
   </notification>
 
@@ -13878,11 +13913,9 @@ LOD Factor >8: Has no real effect. May cause errors.
    type="alert">
     WARNING: Overriding the VRAM detection may cause instability.
 
-Most users should leave this setting disabled and let the viewer and 
-operating system determine the correct value.
+Most users should leave this setting disabled and let the viewer and operating system determine the correct value.
 
-This setting is intended for cases where VRAM detection is reporting
-incorrect values. Use with caution, seek support advice in case of doubt.
+This setting is intended for cases where VRAM detection is reporting incorrect values. Use with caution, seek support advice in case of doubt.
     <usetemplate
      name="okbutton"
      yestext="OK"/>

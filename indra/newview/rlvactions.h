@@ -38,340 +38,340 @@ enum class ERlvCheckType { All, Some, Nothing };
 
 class RlvActions
 {
-	// ======
-	// Camera
-	// ======
+    // ======
+    // Camera
+    // ======
 public:
-	/*
-	 * Returns true if the specified object cannot manipulate the camera FOV
-	 */
-	static bool canChangeCameraFOV(const LLUUID& idRlvObject);
+    /*
+     * Returns true if the specified object cannot manipulate the camera FOV
+     */
+    static bool canChangeCameraFOV(const LLUUID& idRlvObject);
 
-	/*
-	 * Returns true if the specified object can manipulate the camera offset and/or focus offset values
-	 */
-	static bool canChangeCameraPreset(const LLUUID& idRlvObject);
+    /*
+     * Returns true if the specified object can manipulate the camera offset and/or focus offset values
+     */
+    static bool canChangeCameraPreset(const LLUUID& idRlvObject);
 
-	/*
-	 * Returns true if the user can switch to mouselook
-	 */
-	static bool canChangeToMouselook();
+    /*
+     * Returns true if the user can switch to mouselook
+     */
+    static bool canChangeToMouselook();
 
-	/*
-	 * Returns true if the camera's distance (from either the avatar of the focus) is currently restricted/clamped
-	 */
-	static bool isCameraDistanceClamped();
+    /*
+     * Returns true if the camera's distance (from either the avatar of the focus) is currently restricted/clamped
+     */
+    static bool isCameraDistanceClamped();
 
-	/*
-	 * Returns true if the camera's FOV is currently restricted/clamped
-	 */
-	static bool isCameraFOVClamped();
+    /*
+     * Returns true if the camera's FOV is currently restricted/clamped
+     */
+    static bool isCameraFOVClamped();
 
-	/*
-	 * Returns true if the camera offset and focus offset are locked (prevents changing the current camera preset)
-	 */
-	static bool isCameraPresetLocked();
+    /*
+     * Returns true if the camera offset and focus offset are locked (prevents changing the current camera preset)
+     */
+    static bool isCameraPresetLocked();
 
-	/*
-	 * Retrieves the current (avatar or focus) camera distance limits
-	 */
-	static bool getCameraAvatarDistanceLimits(float& nDistMin, float& nDistMax);
-	static bool getCameraOriginDistanceLimits(float& nDistMin, float& nDistMax);
+    /*
+     * Retrieves the current (avatar or focus) camera distance limits
+     */
+    static bool getCameraAvatarDistanceLimits(float& nDistMin, float& nDistMax);
+    static bool getCameraOriginDistanceLimits(float& nDistMin, float& nDistMax);
 
-	/*
-	 * Retrieves the current camera FOV limits - returns isCameraFOVClamped()
-	 */
-	static bool getCameraFOVLimits(float& nFOVMin, float& nFOVMax);
+    /*
+     * Retrieves the current camera FOV limits - returns isCameraFOVClamped()
+     */
+    static bool getCameraFOVLimits(float& nFOVMin, float& nFOVMax);
 
-	// ================================
-	// Communication/Avatar interaction
-	// ================================
+    // ================================
+    // Communication/Avatar interaction
+    // ================================
 public:
-	/*
-	 * Returns true if the user is allowed to change their currently active group
-	 */
-	static bool canChangeActiveGroup(const LLUUID& idRlvObject = LLUUID::null);
+    /*
+     * Returns true if the user is allowed to change their currently active group
+     */
+    static bool canChangeActiveGroup(const LLUUID& idRlvObject = LLUUID::null);
 
-	/*
-	 * Returns true if the user is allowed to give inventory to at least one (unspecified) avatar (used to blanket ban use of 'Share' if the user cannot give items to *anyone*)
-	 */
-	static bool canGiveInventory();
+    /*
+     * Returns true if the user is allowed to give inventory to at least one (unspecified) avatar (used to blanket ban use of 'Share' if the user cannot give items to *anyone*)
+     */
+    static bool canGiveInventory();
 
-	/*
-	 * Returns true if the user is allowed to give the specified avatar inventory
-	 */
-	static bool canGiveInventory(const LLUUID& idAgent);
+    /*
+     * Returns true if the user is allowed to give the specified avatar inventory
+     */
+    static bool canGiveInventory(const LLUUID& idAgent);
 
-	/*
-	 * Returns true if the user is allowed to receive IMs from the specified sender (can be an avatar or a group)
-	 */
-	static bool canReceiveIM(const LLUUID& idSender);
+    /*
+     * Returns true if the user is allowed to receive IMs from the specified sender (can be an avatar or a group)
+     */
+    static bool canReceiveIM(const LLUUID& idSender);
 
-	/*
-	 * Returns true if the user is allowed to send/play gestures (whether active ones from the chat bar or using the gesture preview floater)
-	 */
-	static bool canPlayGestures();
+    /*
+     * Returns true if the user is allowed to send/play gestures (whether active ones from the chat bar or using the gesture preview floater)
+     */
+    static bool canPlayGestures();
 
-	/*
-	 * Returns true if the user is allowed to chat on the specified channel
-	 */
-	static bool canSendChannel(int nChannel);
+    /*
+     * Returns true if the user is allowed to chat on the specified channel
+     */
+    static bool canSendChannel(int nChannel);
 
-	/*
-	 * Returns true if the user is allowed to send IMs to the specified recipient (can be an avatar or a group)
-	 */
-	static bool canSendIM(const LLUUID& idRecipient);
+    /*
+     * Returns true if the user is allowed to send IMs to the specified recipient (can be an avatar or a group)
+     */
+    static bool canSendIM(const LLUUID& idRecipient);
 
-	/*
-	 * Returns true if the viewer can inform the region about the user's (nearby chat) typing
-	 */
-	static bool canSendTypingStart();
+    /*
+     * Returns true if the viewer can inform the region about the user's (nearby chat) typing
+     */
+    static bool canSendTypingStart();
 
-	/*
-	 * Returns true if the user is allowed to start a - P2P or group - conversation with the specified UUID (or if the session already exists, unless 'ignore open' is specified)
-	 */
-	static bool canStartIM(const LLUUID& idRecipient, bool fIgnoreOpen = false);
+    /*
+     * Returns true if the user is allowed to start a - P2P or group - conversation with the specified UUID (or if the session already exists, unless 'ignore open' is specified)
+     */
+    static bool canStartIM(const LLUUID& idRecipient, bool fIgnoreOpen = false);
 
-	/*
-	 * Returns true if an avatar's name should be hidden for the requested operation/context
-	 * (This is used to hide an avatar name in one case but not a near-identical case - such as teleporting a friend vs a nearby agent -
-	 *  in a way that limits the amount of code that needs to be changed to carry context from one function to another)
-	 */
-	enum EShowNamesContext { SNC_DEFAULT = 0, SNC_TELEPORTOFFER, SNC_TELEPORTREQUEST, SNC_COUNT };
-	static bool canShowName(EShowNamesContext eContext, const LLUUID& idAgent = LLUUID::null);
-	static bool canShowNameTag(const LLVOAvatar* pAvatar);
-	static void setShowName(EShowNamesContext eContext, bool fCanShowName) { if ( (eContext < SNC_COUNT) && (isRlvEnabled()) ) { s_BlockNamesContexts[eContext] = !fCanShowName; } }
+    /*
+     * Returns true if an avatar's name should be hidden for the requested operation/context
+     * (This is used to hide an avatar name in one case but not a near-identical case - such as teleporting a friend vs a nearby agent -
+     *  in a way that limits the amount of code that needs to be changed to carry context from one function to another)
+     */
+    enum EShowNamesContext { SNC_DEFAULT = 0, SNC_TELEPORTOFFER, SNC_TELEPORTREQUEST, SNC_COUNT };
+    static bool canShowName(EShowNamesContext eContext, const LLUUID& idAgent = LLUUID::null);
+    static bool canShowNameTag(const LLVOAvatar* pAvatar);
+    static void setShowName(EShowNamesContext eContext, bool fCanShowName) { if ( (eContext < SNC_COUNT) && (isRlvEnabled()) ) { s_BlockNamesContexts[eContext] = !fCanShowName; } }
 
-	/*
-	 * Returns true if the user is allowed to see the presence of nearby avatars in UI elements (anonymized or otherwise)
-	 */
-	static bool canShowNearbyAgents();
+    /*
+     * Returns true if the user is allowed to see the presence of nearby avatars in UI elements (anonymized or otherwise)
+     */
+    static bool canShowNearbyAgents();
 
-	/*
-	 * Checks if the user is allowed to use the specified volume in (main) chat and returns the appropriate chat volume type
-	 */
-	static EChatType checkChatVolume(EChatType chatType);
+    /*
+     * Checks if the user is allowed to use the specified volume in (main) chat and returns the appropriate chat volume type
+     */
+    static EChatType checkChatVolume(EChatType chatType);
 
 protected:
-	// Backwards logic so that we can initialize to 0 and it won't block when we forget to/don't check if RLVa is disabled
-	static bool s_BlockNamesContexts[SNC_COUNT];
+    // Backwards logic so that we can initialize to 0 and it won't block when we forget to/don't check if RLVa is disabled
+    static bool s_BlockNamesContexts[SNC_COUNT];
 
-	// =========
-	// Inventory
-	// =========
+    // =========
+    // Inventory
+    // =========
 public:
-	/*
-	 * Returns true if the user is allowed to paste the specified inventory object (item/folder) into the specified destination category (within user inventory)
-	 */
-	static bool canPasteInventory(const LLInventoryCategory* pSourceCat, const LLInventoryCategory* pDestCat);
-	static bool canPasteInventory(const LLInventoryItem* pSourceItem, const LLInventoryCategory* pDestCat);
+    /*
+     * Returns true if the user is allowed to paste the specified inventory object (item/folder) into the specified destination category (within user inventory)
+     */
+    static bool canPasteInventory(const LLInventoryCategory* pSourceCat, const LLInventoryCategory* pDestCat);
+    static bool canPasteInventory(const LLInventoryItem* pSourceItem, const LLInventoryCategory* pDestCat);
 
-	/*
-	 * Returns true if the user can open the inventory floater for (user/library/notecard/object)inventory based textures
-	 */
-	static bool canPreviewTextures();
+    /*
+     * Returns true if the user can open the inventory floater for (user/library/notecard/object)inventory based textures
+     */
+    static bool canPreviewTextures();
 
-	// ========
-	// Movement
-	// ========
+    // ========
+    // Movement
+    // ========
 public:
-	/*
-	 * Returns true if the user can accept an incoming teleport offer from the specified avatar
-	 */
-	static bool canAcceptTpOffer(const LLUUID& idSender);
+    /*
+     * Returns true if the user can accept an incoming teleport offer from the specified avatar
+     */
+    static bool canAcceptTpOffer(const LLUUID& idSender);
 
-	/*
-	 * Returns true if a teleport offer from the specified avatar should be auto-accepted
-	 * (pass the null UUID to check if all teleport offers should be auto-accepted regardless of sender)
-	 */
-	static bool autoAcceptTeleportOffer(const LLUUID& idSender);
+    /*
+     * Returns true if a teleport offer from the specified avatar should be auto-accepted
+     * (pass the null UUID to check if all teleport offers should be auto-accepted regardless of sender)
+     */
+    static bool autoAcceptTeleportOffer(const LLUUID& idSender);
 
-	/*
-	 * Returns true if the user can accept an incoming teleport request from the specified avatar
-	 */
-	static bool canAcceptTpRequest(const LLUUID& idSender);
+    /*
+     * Returns true if the user can accept an incoming teleport request from the specified avatar
+     */
+    static bool canAcceptTpRequest(const LLUUID& idSender);
 
-	/*
-	 * Returns true if a teleport request from the specified avatar should be auto-accepted
-	 * (pass the null UUID to check if all teleport requests should be auto-accepted regardless of requester)
-	 */
-	static bool autoAcceptTeleportRequest(const LLUUID& idRequester);
+    /*
+     * Returns true if a teleport request from the specified avatar should be auto-accepted
+     * (pass the null UUID to check if all teleport requests should be auto-accepted regardless of requester)
+     */
+    static bool autoAcceptTeleportRequest(const LLUUID& idRequester);
 
-	/*
-	 * Returns true if the user can fly
-	 * (NOTE: the parameter-less overload takes the currently executing command into account)
-	 */
-	static bool canFly();
-	static bool canFly(const LLUUID& idRlvObjExcept);
+    /*
+     * Returns true if the user can fly
+     * (NOTE: the parameter-less overload takes the currently executing command into account)
+     */
+    static bool canFly();
+    static bool canFly(const LLUUID& idRlvObjExcept);
 
-	/*
-	 * Returns true if the user can jump
-	 */
-	static bool canJump();
+    /*
+     * Returns true if the user can jump
+     */
+    static bool canJump();
 
-	// ===========
-	// Teleporting
-	// ===========
+    // ===========
+    // Teleporting
+    // ===========
 public:
-	/*
-	 * Returns true if the user can teleport locally (short distances)
-	 */
-	static bool canTeleportToLocal(const LLVector3d& posGlobal);
+    /*
+     * Returns true if the user can teleport locally (short distances)
+     */
+    static bool canTeleportToLocal(const LLVector3d& posGlobal);
 
-	/*
-	 * Returns true if the user can teleport to a (remote) location
-	 */
-	static bool canTeleportToLocation();
+    /*
+     * Returns true if the user can teleport to a (remote) location
+     */
+    static bool canTeleportToLocation();
 
-	/*
-	 * Returns true if the teleport is considered local (e.g. double-click tp)
-	 */
-	static bool isLocalTp(const LLVector3d& posGlobal);
+    /*
+     * Returns true if the teleport is considered local (e.g. double-click tp)
+     */
+    static bool isLocalTp(const LLVector3d& posGlobal);
 
-	// =========
-	// WindLight
-	// =========
+    // =========
+    // WindLight
+    // =========
 public:
-	/*
-	 * Returns true if the user can make changes to their WindLight environment
-	 */
-	static bool canChangeEnvironment(const LLUUID& idRlvObject = LLUUID::null);
+    /*
+     * Returns true if the user can make changes to their WindLight environment
+     */
+    static bool canChangeEnvironment(const LLUUID& idRlvObject = LLUUID::null);
 
-	/*
-	 * Returns true if a postprocessing shader is currently active
-	 */
-	static bool hasPostProcess();
+    /*
+     * Returns true if a postprocessing shader is currently active
+     */
+    static bool hasPostProcess();
 
-	// =================
-	// World interaction
-	// =================
-	// Terminology:
-	//   - build    : <todo>
-	//   - edit     : ability to get access an object from the build floater, or being able to look at its contents (i.e. open)
-	//   - interact : ability to interact with an object/avatar in any way or shape (i.e. touch, edit, click, grab, move, ...)
-	//   - rez      : ability to rez new objects (from either inventory or through the create tool)
-	//   - touch    : singularly refers to the ability to either invoke the scripted touch handler, or perform a physical grab
+    // =================
+    // World interaction
+    // =================
+    // Terminology:
+    //   - build    : <todo>
+    //   - edit     : ability to get access an object from the build floater, or being able to look at its contents (i.e. open)
+    //   - interact : ability to interact with an object/avatar in any way or shape (i.e. touch, edit, click, grab, move, ...)
+    //   - rez      : ability to rez new objects (from either inventory or through the create tool)
+    //   - touch    : singularly refers to the ability to either invoke the scripted touch handler, or perform a physical grab
 public:
-	/*
-	 * Returns true if the user can build (= access the build tools)
-	 */
-	static bool canBuild();
+    /*
+     * Returns true if the user can build (= access the build tools)
+     */
+    static bool canBuild();
 
-	/*
-	 * Returns true if the user can buy an object set for sale
-	 */
-	static bool canBuyObject(const LLUUID& idObj);
+    /*
+     * Returns true if the user can buy an object set for sale
+     */
+    static bool canBuyObject(const LLUUID& idObj);
 
-	/*
-	 * Returns true if the user can edit all, some, or nothing (used to bail early, or to skip expensive selection checks)
-	 */
-	static bool canEdit(ERlvCheckType eCheckType);
+    /*
+     * Returns true if the user can edit all, some, or nothing (used to bail early, or to skip expensive selection checks)
+     */
+    static bool canEdit(ERlvCheckType eCheckType);
 
-	/*
-	 * Returns true if the user can edit the specified object (with an optional relative offset)
-	 */
-	static bool canEdit(const LLViewerObject* pObj);
+    /*
+     * Returns true if the user can edit the specified object (with an optional relative offset)
+     */
+    static bool canEdit(const LLViewerObject* pObj);
 
-	/*
-	 * Returns true if the user can sit on the ground
-	 */
-	static bool canGroundSit();
-	static bool canGroundSit(const LLUUID& idRlvObjExcept);
+    /*
+     * Returns true if the user can sit on the ground
+     */
+    static bool canGroundSit();
+    static bool canGroundSit(const LLUUID& idRlvObjExcept);
 
-	/*
-	 * Returns true if the user can interact with the specified object (with an optional relative offset)
-	 * (returns true if pObj == nullptr to not short circuit calling code)
-	 */
-	static bool canInteract(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
+    /*
+     * Returns true if the user can interact with the specified object (with an optional relative offset)
+     * (returns true if pObj == nullptr to not short circuit calling code)
+     */
+    static bool canInteract(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
 
-	/*
-	 * Returns true if the user can pay an avatar
-	 */
-	static bool canPayAvatar(const LLUUID& idAvatar);
+    /*
+     * Returns true if the user can pay an avatar
+     */
+    static bool canPayAvatar(const LLUUID& idAvatar);
 
-	/*
-	 * Returns true if the user can pay an object (i.e. vendor)
-	 */
-	static bool canPayObject(const LLUUID& idObj);
+    /*
+     * Returns true if the user can pay an object (i.e. vendor)
+     */
+    static bool canPayObject(const LLUUID& idObj);
 
-	/*
-	 * Returns true if the user can rez new objects (from inventory or through the create tool)
-	 */
-	static bool canRez();
+    /*
+     * Returns true if the user can rez new objects (from inventory or through the create tool)
+     */
+    static bool canRez();
 
-	/*
-	 * Returns true if the user can see the hovertext associated with the specified object
-	 */
-	static bool canShowHoverText(const LLViewerObject* pObj);
+    /*
+     * Returns true if the user can see the hovertext associated with the specified object
+     */
+    static bool canShowHoverText(const LLViewerObject* pObj);
 
-	/*
-	 * Returns true if the user can sit on the specified object (see canGroundSit() for sitting on land)
-	 */
-	static bool canSit(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
+    /*
+     * Returns true if the user can sit on the specified object (see canGroundSit() for sitting on land)
+     */
+    static bool canSit(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
 
-	/*
-	 * Returns true if the user can see their in-world location
-	 */
-	static bool canShowLocation();
+    /*
+     * Returns true if the user can see their in-world location
+     */
+    static bool canShowLocation();
 
-	/*
-	 * Returns true if the user can stand up (returns true if the user isn't currently sitting)
-	 */
-	static bool canStand();
-	static bool canStand(const LLUUID& idRlvObjExcept);
+    /*
+     * Returns true if the user can stand up (returns true if the user isn't currently sitting)
+     */
+    static bool canStand();
+    static bool canStand(const LLUUID& idRlvObjExcept);
 
-	/*
-	 * Returns true if the user can touch the specified object (with an optional offset relative to its center)
-	 */
-	static bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
+    /*
+     * Returns true if the user can touch the specified object (with an optional offset relative to its center)
+     */
+    static bool canTouch(const LLViewerObject* pObj, const LLVector3& posOffset = LLVector3::zero);
 
-	// ===============
-	// World (General)
-	// ===============
+    // ===============
+    // World (General)
+    // ===============
 public:
-	/*
-	 * Returns true if the user can highlight transparent faces
-	 */
-	static bool canHighlightTransparent();
+    /*
+     * Returns true if the user can highlight transparent faces
+     */
+    static bool canHighlightTransparent();
 
-	/*
-	 * Returns true if the user can switch to wireframe rendering
-	 */
-	static bool canViewWireframe();
+    /*
+     * Returns true if the user can switch to wireframe rendering
+     */
+    static bool canViewWireframe();
 
-	// ================
-	// Helper functions
-	// ================
+    // ================
+    // Helper functions
+    // ================
 public:
-	/*
-	 * Convenience function to get the current/active value of a behaviour modifier
-	 */
-	template<typename T> static const T& getModifierValue(ERlvBehaviourModifier eBhvrMod);
+    /*
+     * Convenience function to get the current/active value of a behaviour modifier
+     */
+    template<typename T> static const T& getModifierValue(ERlvBehaviourModifier eBhvrMod);
 
-	/*
-	 * Convenience function to check for a behaviour without having to include rlvhandler.h.
-	 * Do NOT call this function if speed is important (i.e. per-frame)
-	 */
-	static bool hasBehaviour(ERlvBehaviour eBhvr);
+    /*
+     * Convenience function to check for a behaviour without having to include rlvhandler.h.
+     * Do NOT call this function if speed is important (i.e. per-frame)
+     */
+    static bool hasBehaviour(ERlvBehaviour eBhvr);
 
-	/*
-	 * Returns true if a - P2P or group - IM session is open with the specified UUID
-	 */
-	static bool hasOpenP2PSession(const LLUUID& idAgent);
-	static bool hasOpenGroupSession(const LLUUID& idGroup);
+    /*
+     * Returns true if a - P2P or group - IM session is open with the specified UUID
+     */
+    static bool hasOpenP2PSession(const LLUUID& idAgent);
+    static bool hasOpenGroupSession(const LLUUID& idGroup);
 
-	/*
-	 * Convenience function to check if RLVa is enabled without having to include rlvhandler.h
-	 */
-	static bool isRlvEnabled();
+    /*
+     * Convenience function to check if RLVa is enabled without having to include rlvhandler.h
+     */
+    static bool isRlvEnabled();
 
-	/*
-	 * Shows one of the blocked toast notifications (see rlva_strings.xml)
-	 */
+    /*
+     * Shows one of the blocked toast notifications (see rlva_strings.xml)
+     */
 #ifdef CATZNIP_STRINGVIEW
-	static void notifyBlocked(const boost::string_view& strNotifcation, const LLSD& sdArgs = LLSD());
+    static void notifyBlocked(const boost::string_view& strNotifcation, const LLSD& sdArgs = LLSD());
 #else
-	static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD());
+    static void notifyBlocked(const std::string& strNotifcation, const LLSD& sdArgs = LLSD());
 #endif // CATZNIP_STRINGVIEW
 };
 

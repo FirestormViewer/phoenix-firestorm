@@ -1,24 +1,24 @@
-/** 
+/**
  * @file llfloateravatarpicker.cpp
  *
  * $LicenseInfo:firstyear=2003&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -32,10 +32,10 @@
 #include "llcallingcard.h"
 #include "llfocusmgr.h"
 #include "llfloaterreg.h"
-#include "llimview.h"			// for gIMMgr
-#include "lltooldraganddrop.h"	// for LLToolDragAndDrop
+#include "llimview.h"           // for gIMMgr
+#include "lltooldraganddrop.h"  // for LLToolDragAndDrop
 #include "llviewercontrol.h"
-#include "llviewerregion.h"		// getCapability()
+#include "llviewerregion.h"     // getCapability()
 #include "llworld.h"
 // [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
 #include "rlvactions.h"
@@ -43,7 +43,7 @@
 // [/RLVa:KB]
 
 // Linden libraries
-#include "llavatarnamecache.h"	// IDEVO
+#include "llavatarnamecache.h"  // IDEVO
 #include "llbutton.h"
 #include "llcachename.h"
 #include "lllineeditor.h"
@@ -72,451 +72,447 @@ static std::map<LLUUID, LLAvatarName> sAvatarNameMap;
 LLFloaterAvatarPicker::query_id_name_map_t LLFloaterAvatarPicker::sQueryNameMap;
 
 LLFloaterAvatarPicker* LLFloaterAvatarPicker::show(select_callback_t callback,
-												   BOOL allow_multiple,
-												   BOOL closeOnSelect,
-												   BOOL skip_agent,
+                                                   BOOL allow_multiple,
+                                                   BOOL closeOnSelect,
+                                                   BOOL skip_agent,
                                                    const std::string& name,
                                                    LLView * frustumOrigin)
 {
-	// *TODO: Use a key to allow this not to be an effective singleton
-	LLFloaterAvatarPicker* floater = 
-		LLFloaterReg::showTypedInstance<LLFloaterAvatarPicker>("avatar_picker", LLSD(name));
-	if (!floater)
-	{
-		LL_WARNS() << "Cannot instantiate avatar picker" << LL_ENDL;
-		return NULL;
-	}
-	
-	floater->mSelectionCallback = callback;
-	floater->setAllowMultiple(allow_multiple);
-	floater->mNearMeListComplete = FALSE;
-	floater->mCloseOnSelect = closeOnSelect;
-	floater->mExcludeAgentFromSearchResults = skip_agent;
-	
-	if (!closeOnSelect)
-	{
-		// Use Select/Close
-		std::string select_string = floater->getString("Select");
-		std::string close_string = floater->getString("Close");
-		floater->getChild<LLButton>("ok_btn")->setLabel(select_string);
-		floater->getChild<LLButton>("cancel_btn")->setLabel(close_string);
-	}
+    // *TODO: Use a key to allow this not to be an effective singleton
+    LLFloaterAvatarPicker* floater =
+        LLFloaterReg::showTypedInstance<LLFloaterAvatarPicker>("avatar_picker", LLSD(name));
+    if (!floater)
+    {
+        LL_WARNS() << "Cannot instantiate avatar picker" << LL_ENDL;
+        return NULL;
+    }
+
+    floater->mSelectionCallback = callback;
+    floater->setAllowMultiple(allow_multiple);
+    floater->mNearMeListComplete = FALSE;
+    floater->mCloseOnSelect = closeOnSelect;
+    floater->mExcludeAgentFromSearchResults = skip_agent;
+
+    if (!closeOnSelect)
+    {
+        // Use Select/Close
+        std::string select_string = floater->getString("Select");
+        std::string close_string = floater->getString("Close");
+        floater->getChild<LLButton>("ok_btn")->setLabel(select_string);
+        floater->getChild<LLButton>("cancel_btn")->setLabel(close_string);
+    }
 
     if(frustumOrigin)
     {
         floater->mFrustumOrigin = frustumOrigin->getHandle();
     }
 
-	return floater;
+    return floater;
 }
 
 // Default constructor
 LLFloaterAvatarPicker::LLFloaterAvatarPicker(const LLSD& key)
   : LLFloater(key),
-	mNumResultsReturned(0),
-	mNearMeListComplete(FALSE),
-	mCloseOnSelect(FALSE),
+    mNumResultsReturned(0),
+    mNearMeListComplete(FALSE),
+    mCloseOnSelect(FALSE),
     mExcludeAgentFromSearchResults(FALSE),
-    mContextConeOpacity	(0.f),
-    mContextConeInAlpha(0.f),
-    mContextConeOutAlpha(0.f),
-    mContextConeFadeTime(0.f),
-	mFindUUIDAvatarNameCacheConnection() // <FS:Ansariel> Search by UUID
+    mContextConeOpacity (0.f),
+    mContextConeInAlpha(CONTEXT_CONE_IN_ALPHA),
+    mContextConeOutAlpha(CONTEXT_CONE_OUT_ALPHA),
+    mContextConeFadeTime(CONTEXT_CONE_FADE_TIME),
+    mFindUUIDAvatarNameCacheConnection() // <FS:Ansariel> Search by UUID
 {
-	mCommitCallbackRegistrar.add("Refresh.FriendList", boost::bind(&LLFloaterAvatarPicker::populateFriend, this));
-
-    mContextConeInAlpha = gSavedSettings.getF32("ContextConeInAlpha");
-    mContextConeOutAlpha = gSavedSettings.getF32("ContextConeOutAlpha");
-    mContextConeFadeTime = gSavedSettings.getF32("ContextConeFadeTime");
+    mCommitCallbackRegistrar.add("Refresh.FriendList", boost::bind(&LLFloaterAvatarPicker::populateFriend, this));
 }
 
 BOOL LLFloaterAvatarPicker::postBuild()
 {
-	getChild<LLLineEditor>("Edit")->setKeystrokeCallback( boost::bind(&LLFloaterAvatarPicker::editKeystroke, this, _1, _2),NULL);
+    getChild<LLLineEditor>("Edit")->setKeystrokeCallback( boost::bind(&LLFloaterAvatarPicker::editKeystroke, this, _1, _2),NULL);
 
-	childSetAction("Find", boost::bind(&LLFloaterAvatarPicker::onBtnFind, this));
-	getChildView("Find")->setEnabled(FALSE);
-	childSetAction("Refresh", boost::bind(&LLFloaterAvatarPicker::onBtnRefresh, this));
-	getChild<LLUICtrl>("near_me_range")->setCommitCallback(boost::bind(&LLFloaterAvatarPicker::onRangeAdjust, this));
-	
-	// <FS:Ansariel> FIRE-5096: Add context menu for result lists
-	//LLScrollListCtrl* searchresults = getChild<LLScrollListCtrl>("SearchResults");
-	FSScrollListCtrl* searchresults = getChild<FSScrollListCtrl>("SearchResults");
-	searchresults->setContextMenu(&gFSAvatarSearchMenu);
-	// </FS:Ansariel>
-	searchresults->setDoubleClickCallback( boost::bind(&LLFloaterAvatarPicker::onBtnSelect, this));
-	searchresults->setCommitCallback(boost::bind(&LLFloaterAvatarPicker::onList, this));
-	getChildView("SearchResults")->setEnabled(FALSE);
-	
-	// <FS:Ansariel> FIRE-5096: Add context menu for result lists
-	//LLScrollListCtrl* nearme = getChild<LLScrollListCtrl>("NearMe");
-	FSScrollListCtrl* nearme = getChild<FSScrollListCtrl>("NearMe");
-	nearme->setContextMenu(&gFSAvatarSearchMenu);
-	// </FS:Ansariel>
-	nearme->setDoubleClickCallback(boost::bind(&LLFloaterAvatarPicker::onBtnSelect, this));
-	nearme->setCommitCallback(boost::bind(&LLFloaterAvatarPicker::onList, this));
+    childSetAction("Find", boost::bind(&LLFloaterAvatarPicker::onBtnFind, this));
+    getChildView("Find")->setEnabled(FALSE);
+    childSetAction("Refresh", boost::bind(&LLFloaterAvatarPicker::onBtnRefresh, this));
+    getChild<LLUICtrl>("near_me_range")->setCommitCallback(boost::bind(&LLFloaterAvatarPicker::onRangeAdjust, this));
 
-	// <FS:Ansariel> FIRE-5096: Add context menu for result lists
-	//LLScrollListCtrl* friends = getChild<LLScrollListCtrl>("Friends");
-	FSScrollListCtrl* friends = getChild<FSScrollListCtrl>("Friends");
-	friends->setContextMenu(&gFSAvatarSearchMenu);
-	// </FS:Ansariel>
-	friends->setDoubleClickCallback(boost::bind(&LLFloaterAvatarPicker::onBtnSelect, this));
-	getChild<LLUICtrl>("Friends")->setCommitCallback(boost::bind(&LLFloaterAvatarPicker::onList, this));
+    // <FS:Ansariel> FIRE-5096: Add context menu for result lists
+    //LLScrollListCtrl* searchresults = getChild<LLScrollListCtrl>("SearchResults");
+    FSScrollListCtrl* searchresults = getChild<FSScrollListCtrl>("SearchResults");
+    searchresults->setContextMenu(&gFSAvatarSearchMenu);
+    // </FS:Ansariel>
+    searchresults->setDoubleClickCallback( boost::bind(&LLFloaterAvatarPicker::onBtnSelect, this));
+    searchresults->setCommitCallback(boost::bind(&LLFloaterAvatarPicker::onList, this));
+    getChildView("SearchResults")->setEnabled(FALSE);
 
-	childSetAction("ok_btn", boost::bind(&LLFloaterAvatarPicker::onBtnSelect, this));
-	getChildView("ok_btn")->setEnabled(FALSE);
-	childSetAction("cancel_btn", boost::bind(&LLFloaterAvatarPicker::onBtnClose, this));
+    // <FS:Ansariel> FIRE-5096: Add context menu for result lists
+    //LLScrollListCtrl* nearme = getChild<LLScrollListCtrl>("NearMe");
+    FSScrollListCtrl* nearme = getChild<FSScrollListCtrl>("NearMe");
+    nearme->setContextMenu(&gFSAvatarSearchMenu);
+    // </FS:Ansariel>
+    nearme->setDoubleClickCallback(boost::bind(&LLFloaterAvatarPicker::onBtnSelect, this));
+    nearme->setCommitCallback(boost::bind(&LLFloaterAvatarPicker::onList, this));
 
-	getChild<LLUICtrl>("Edit")->setFocus(TRUE);
+    // <FS:Ansariel> FIRE-5096: Add context menu for result lists
+    //LLScrollListCtrl* friends = getChild<LLScrollListCtrl>("Friends");
+    FSScrollListCtrl* friends = getChild<FSScrollListCtrl>("Friends");
+    friends->setContextMenu(&gFSAvatarSearchMenu);
+    // </FS:Ansariel>
+    friends->setDoubleClickCallback(boost::bind(&LLFloaterAvatarPicker::onBtnSelect, this));
+    getChild<LLUICtrl>("Friends")->setCommitCallback(boost::bind(&LLFloaterAvatarPicker::onList, this));
 
-	LLPanel* search_panel = getChild<LLPanel>("SearchPanel");
-	if (search_panel)
-	{
-		// Start searching when Return is pressed in the line editor.
-		search_panel->setDefaultBtn("Find");
-	}
+    childSetAction("ok_btn", boost::bind(&LLFloaterAvatarPicker::onBtnSelect, this));
+    getChildView("ok_btn")->setEnabled(FALSE);
+    childSetAction("cancel_btn", boost::bind(&LLFloaterAvatarPicker::onBtnClose, this));
 
-	getChild<LLScrollListCtrl>("SearchResults")->setCommentText(getString("no_results"));
+    getChild<LLUICtrl>("Edit")->setFocus(TRUE);
 
-	getChild<LLTabContainer>("ResidentChooserTabs")->setCommitCallback(
-		boost::bind(&LLFloaterAvatarPicker::onTabChanged, this));
-	
-	// <FS:Ansariel> Search by UUID
-	getChild<LLLineEditor>("EditUUID")->setKeystrokeCallback(boost::bind(&LLFloaterAvatarPicker::editKeystrokeUUID, this, _1, _2), NULL);
-	childSetAction("FindUUID", boost::bind(&LLFloaterAvatarPicker::onBtnFindUUID, this));
-	getChildView("FindUUID")->setEnabled(FALSE);
+    LLPanel* search_panel = getChild<LLPanel>("SearchPanel");
+    if (search_panel)
+    {
+        // Start searching when Return is pressed in the line editor.
+        search_panel->setDefaultBtn("Find");
+    }
 
-	FSScrollListCtrl* searchresultsuuid = getChild<FSScrollListCtrl>("SearchResultsUUID");
-	searchresultsuuid->setContextMenu(&gFSAvatarSearchMenu);
-	searchresultsuuid->setDoubleClickCallback( boost::bind(&LLFloaterAvatarPicker::onBtnSelect, this));
-	searchresultsuuid->setCommitCallback(boost::bind(&LLFloaterAvatarPicker::onList, this));
-	searchresultsuuid->setEnabled(FALSE);
-	searchresultsuuid->setCommentText(getString("no_results"));
+    getChild<LLScrollListCtrl>("SearchResults")->setCommentText(getString("no_results"));
 
-	getChild<LLPanel>("SearchPanelUUID")->setDefaultBtn("FindUUID");
-	// </FS:Ansariel>
+    getChild<LLTabContainer>("ResidentChooserTabs")->setCommitCallback(
+        boost::bind(&LLFloaterAvatarPicker::onTabChanged, this));
 
-	setAllowMultiple(FALSE);
-	
-	center();
-	
-	populateFriend();
+    // <FS:Ansariel> Search by UUID
+    getChild<LLLineEditor>("EditUUID")->setKeystrokeCallback(boost::bind(&LLFloaterAvatarPicker::editKeystrokeUUID, this, _1, _2), NULL);
+    childSetAction("FindUUID", boost::bind(&LLFloaterAvatarPicker::onBtnFindUUID, this));
+    getChildView("FindUUID")->setEnabled(FALSE);
 
-	return TRUE;
+    FSScrollListCtrl* searchresultsuuid = getChild<FSScrollListCtrl>("SearchResultsUUID");
+    searchresultsuuid->setContextMenu(&gFSAvatarSearchMenu);
+    searchresultsuuid->setDoubleClickCallback( boost::bind(&LLFloaterAvatarPicker::onBtnSelect, this));
+    searchresultsuuid->setCommitCallback(boost::bind(&LLFloaterAvatarPicker::onList, this));
+    searchresultsuuid->setEnabled(FALSE);
+    searchresultsuuid->setCommentText(getString("no_results"));
+
+    getChild<LLPanel>("SearchPanelUUID")->setDefaultBtn("FindUUID");
+    // </FS:Ansariel>
+
+    setAllowMultiple(FALSE);
+
+    center();
+
+    populateFriend();
+
+    return TRUE;
 }
 
 void LLFloaterAvatarPicker::setOkBtnEnableCb(validate_callback_t cb)
 {
-	mOkButtonValidateSignal.connect(cb);
+    mOkButtonValidateSignal.connect(cb);
 }
 
 void LLFloaterAvatarPicker::onTabChanged()
 {
-	getChildView("ok_btn")->setEnabled(isSelectBtnEnabled());
+    getChildView("ok_btn")->setEnabled(isSelectBtnEnabled());
 }
 
 // Destroys the object
 LLFloaterAvatarPicker::~LLFloaterAvatarPicker()
 {
-	// <FS:Ansariel> Search by UUID
-	if (mFindUUIDAvatarNameCacheConnection.connected())
-	{
-		mFindUUIDAvatarNameCacheConnection.disconnect();
-	}
-	// </FS:Ansariel>
+    // <FS:Ansariel> Search by UUID
+    if (mFindUUIDAvatarNameCacheConnection.connected())
+    {
+        mFindUUIDAvatarNameCacheConnection.disconnect();
+    }
+    // </FS:Ansariel>
 
-	// <FS:Ansariel> FIRE-15194: Avatar picker doesn't work anymore when using legacy simulator messages
-	query_id_name_map_t::iterator found = sQueryNameMap.find(mQueryID);
-	if (found != sQueryNameMap.end())
-	{
-		sQueryNameMap.erase(found);
-	}
-	// </FS:Ansariel>
+    // <FS:Ansariel> FIRE-15194: Avatar picker doesn't work anymore when using legacy simulator messages
+    query_id_name_map_t::iterator found = sQueryNameMap.find(mQueryID);
+    if (found != sQueryNameMap.end())
+    {
+        sQueryNameMap.erase(found);
+    }
+    // </FS:Ansariel>
 
-	gFocusMgr.releaseFocusIfNeeded( this );
+    gFocusMgr.releaseFocusIfNeeded( this );
 
-	LLTransientFloaterMgr::getInstance()->removeControlView(LLTransientFloaterMgr::IM, this);
+    LLTransientFloaterMgr::getInstance()->removeControlView(LLTransientFloaterMgr::IM, this);
 }
 
 // <FS:Ansariel> Search by UUID
 void LLFloaterAvatarPicker::onBtnFindUUID()
 {
-	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("SearchResultsUUID");
-	search_results->deleteAllItems();
-	search_results->setCommentText(getString("searching"));
+    LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("SearchResultsUUID");
+    search_results->deleteAllItems();
+    search_results->setCommentText(getString("searching"));
 
-	if (mFindUUIDAvatarNameCacheConnection.connected())
-	{
-		mFindUUIDAvatarNameCacheConnection.disconnect();
-	}
-	LLAvatarNameCache::get(LLUUID(getChild<LLLineEditor>("EditUUID")->getText()), boost::bind(&LLFloaterAvatarPicker::onFindUUIDAvatarNameCache, this, _1, _2));
+    if (mFindUUIDAvatarNameCacheConnection.connected())
+    {
+        mFindUUIDAvatarNameCacheConnection.disconnect();
+    }
+    LLAvatarNameCache::get(LLUUID(getChild<LLLineEditor>("EditUUID")->getText()), boost::bind(&LLFloaterAvatarPicker::onFindUUIDAvatarNameCache, this, _1, _2));
 }
 
 void LLFloaterAvatarPicker::onFindUUIDAvatarNameCache(const LLUUID& av_id, const LLAvatarName& av_name)
 {
-	mFindUUIDAvatarNameCacheConnection.disconnect();
-	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("SearchResultsUUID");
-	search_results->deleteAllItems();
+    mFindUUIDAvatarNameCacheConnection.disconnect();
+    LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("SearchResultsUUID");
+    search_results->deleteAllItems();
 
-	if (av_name.getAccountName() != "(?\?\?).(?\?\?)")
-	{
-		LLSD data;
-		data["id"] = av_id;
+    if (av_name.getAccountName() != "(?\?\?).(?\?\?)")
+    {
+        LLSD data;
+        data["id"] = av_id;
 
-		data["columns"][0]["name"] = "nameUUID";
-		data["columns"][0]["value"] = av_name.getDisplayName();
+        data["columns"][0]["name"] = "nameUUID";
+        data["columns"][0]["value"] = av_name.getDisplayName();
 
-		data["columns"][1]["name"] = "usernameUUID";
-		data["columns"][1]["value"] = av_name.getUserName();
+        data["columns"][1]["name"] = "usernameUUID";
+        data["columns"][1]["value"] = av_name.getUserName();
 
-		search_results->addElement(data);
-		search_results->setEnabled(TRUE);
-		search_results->sortByColumnIndex(1, TRUE);
-		search_results->selectFirstItem();
-		onList();
-		search_results->setFocus(TRUE);
+        search_results->addElement(data);
+        search_results->setEnabled(TRUE);
+        search_results->sortByColumnIndex(1, TRUE);
+        search_results->selectFirstItem();
+        onList();
+        search_results->setFocus(TRUE);
 
-		getChildView("ok_btn")->setEnabled(TRUE);
-	}
-	else
-	{
-		LLStringUtil::format_map_t map;
-		map["[TEXT]"] = getChild<LLUICtrl>("EditUUID")->getValue().asString();
-		LLSD data;
-		data["id"] = LLUUID::null;
-		data["columns"][0]["column"] = "nameUUID";
-		data["columns"][0]["value"] = getString("not_found", map);
-		search_results->addElement(data);
-		search_results->setEnabled(FALSE);
-		getChildView("ok_btn")->setEnabled(FALSE);
-	}
+        getChildView("ok_btn")->setEnabled(TRUE);
+    }
+    else
+    {
+        LLStringUtil::format_map_t map;
+        map["[TEXT]"] = getChild<LLUICtrl>("EditUUID")->getValue().asString();
+        LLSD data;
+        data["id"] = LLUUID::null;
+        data["columns"][0]["column"] = "nameUUID";
+        data["columns"][0]["value"] = getString("not_found", map);
+        search_results->addElement(data);
+        search_results->setEnabled(FALSE);
+        getChildView("ok_btn")->setEnabled(FALSE);
+    }
 }
 // </FS:Ansariel>
 
 void LLFloaterAvatarPicker::onBtnFind()
 {
-	find();
+    find();
 }
 
 static void getSelectedAvatarData(const LLScrollListCtrl* from, uuid_vec_t& avatar_ids, std::vector<LLAvatarName>& avatar_names)
 {
-	std::vector<LLScrollListItem*> items = from->getAllSelected();
-	for (std::vector<LLScrollListItem*>::iterator iter = items.begin(); iter != items.end(); ++iter)
-	{
-		LLScrollListItem* item = *iter;
-		if (item->getUUID().notNull())
-		{
-			avatar_ids.push_back(item->getUUID());
+    std::vector<LLScrollListItem*> items = from->getAllSelected();
+    for (std::vector<LLScrollListItem*>::iterator iter = items.begin(); iter != items.end(); ++iter)
+    {
+        LLScrollListItem* item = *iter;
+        if (item->getUUID().notNull())
+        {
+            avatar_ids.push_back(item->getUUID());
 
-			std::map<LLUUID, LLAvatarName>::iterator iter = sAvatarNameMap.find(item->getUUID());
-			if (iter != sAvatarNameMap.end())
-			{
-				avatar_names.push_back(iter->second);
-			}
-			else
-			{
-				// the only case where it isn't in the name map is friends
-				// but it should be in the name cache
-				LLAvatarName av_name;
-				LLAvatarNameCache::get(item->getUUID(), &av_name);
-				avatar_names.push_back(av_name);
-			}
-		}
-	}
+            std::map<LLUUID, LLAvatarName>::iterator iter = sAvatarNameMap.find(item->getUUID());
+            if (iter != sAvatarNameMap.end())
+            {
+                avatar_names.push_back(iter->second);
+            }
+            else
+            {
+                // the only case where it isn't in the name map is friends
+                // but it should be in the name cache
+                LLAvatarName av_name;
+                LLAvatarNameCache::get(item->getUUID(), &av_name);
+                avatar_names.push_back(av_name);
+            }
+        }
+    }
 }
 
 void LLFloaterAvatarPicker::onBtnSelect()
 {
 
-	// If select btn not enabled then do not callback
-	if (!isSelectBtnEnabled())
-		return;
+    // If select btn not enabled then do not callback
+    if (!isSelectBtnEnabled())
+        return;
 
-	if(mSelectionCallback)
-	{
-		std::string acvtive_panel_name;
-		LLScrollListCtrl* list =  NULL;
-		LLPanel* active_panel = getChild<LLTabContainer>("ResidentChooserTabs")->getCurrentPanel();
-		if(active_panel)
-		{
-			acvtive_panel_name = active_panel->getName();
-		}
-		if(acvtive_panel_name == "SearchPanel")
-		{
-			list = getChild<LLScrollListCtrl>("SearchResults");
-		}
-		else if(acvtive_panel_name == "NearMePanel")
-		{
-			list = getChild<LLScrollListCtrl>("NearMe");
-		}
-		else if (acvtive_panel_name == "FriendsPanel")
-		{
-			list = getChild<LLScrollListCtrl>("Friends");
-		}
-		// <FS:Ansariel> Search by UUID
-		else if (acvtive_panel_name == "SearchPanelUUID")
-		{
-			list = getChild<LLScrollListCtrl>("SearchResultsUUID");
-		}
-		// </FS:Ansariel>
+    if(mSelectionCallback)
+    {
+        std::string acvtive_panel_name;
+        LLScrollListCtrl* list =  NULL;
+        LLPanel* active_panel = getChild<LLTabContainer>("ResidentChooserTabs")->getCurrentPanel();
+        if(active_panel)
+        {
+            acvtive_panel_name = active_panel->getName();
+        }
+        if(acvtive_panel_name == "SearchPanel")
+        {
+            list = getChild<LLScrollListCtrl>("SearchResults");
+        }
+        else if(acvtive_panel_name == "NearMePanel")
+        {
+            list = getChild<LLScrollListCtrl>("NearMe");
+        }
+        else if (acvtive_panel_name == "FriendsPanel")
+        {
+            list = getChild<LLScrollListCtrl>("Friends");
+        }
+        // <FS:Ansariel> Search by UUID
+        else if (acvtive_panel_name == "SearchPanelUUID")
+        {
+            list = getChild<LLScrollListCtrl>("SearchResultsUUID");
+        }
+        // </FS:Ansariel>
 
-		if(list)
-		{
-			uuid_vec_t			avatar_ids;
-			std::vector<LLAvatarName>	avatar_names;
-			getSelectedAvatarData(list, avatar_ids, avatar_names);
-			mSelectionCallback(avatar_ids, avatar_names);
-		}
-	}
-	getChild<LLScrollListCtrl>("SearchResults")->deselectAllItems(TRUE);
-	getChild<LLScrollListCtrl>("NearMe")->deselectAllItems(TRUE);
-	getChild<LLScrollListCtrl>("Friends")->deselectAllItems(TRUE);
-	// <FS:Ansariel> Search by UUID
-	getChild<LLScrollListCtrl>("SearchResultsUUID")->deselectAllItems(TRUE);
-	// </FS:Ansariel>
-	if(mCloseOnSelect)
-	{
-		mCloseOnSelect = FALSE;
-		closeFloater();		
-	}
+        if(list)
+        {
+            uuid_vec_t          avatar_ids;
+            std::vector<LLAvatarName>   avatar_names;
+            getSelectedAvatarData(list, avatar_ids, avatar_names);
+            mSelectionCallback(avatar_ids, avatar_names);
+        }
+    }
+    getChild<LLScrollListCtrl>("SearchResults")->deselectAllItems(TRUE);
+    getChild<LLScrollListCtrl>("NearMe")->deselectAllItems(TRUE);
+    getChild<LLScrollListCtrl>("Friends")->deselectAllItems(TRUE);
+    // <FS:Ansariel> Search by UUID
+    getChild<LLScrollListCtrl>("SearchResultsUUID")->deselectAllItems(TRUE);
+    // </FS:Ansariel>
+    if(mCloseOnSelect)
+    {
+        mCloseOnSelect = FALSE;
+        closeFloater();
+    }
 }
 
 void LLFloaterAvatarPicker::onBtnRefresh()
 {
-	getChild<LLScrollListCtrl>("NearMe")->deleteAllItems();
-	getChild<LLScrollListCtrl>("NearMe")->setCommentText(getString("searching"));
-	mNearMeListComplete = FALSE;
+    getChild<LLScrollListCtrl>("NearMe")->deleteAllItems();
+    getChild<LLScrollListCtrl>("NearMe")->setCommentText(getString("searching"));
+    mNearMeListComplete = FALSE;
 }
 
 void LLFloaterAvatarPicker::onBtnClose()
 {
-	closeFloater();
+    closeFloater();
 }
 
 void LLFloaterAvatarPicker::onRangeAdjust()
 {
-	onBtnRefresh();
+    onBtnRefresh();
 }
 
 void LLFloaterAvatarPicker::onList()
 {
-	getChildView("ok_btn")->setEnabled(isSelectBtnEnabled());
+    getChildView("ok_btn")->setEnabled(isSelectBtnEnabled());
 
 // [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.2a) | Modified: RLVa-1.2.0d
-	if (rlv_handler_t::isEnabled())
-	{
-		LLTabContainer* pTabs = getChild<LLTabContainer>("ResidentChooserTabs");
-		LLPanel* pNearMePanel = getChild<LLPanel>("NearMePanel");
-		RLV_ASSERT( (pTabs) && (pNearMePanel) );
-		if ( (pTabs) && (pNearMePanel) )
-		{
-			// TODO-RLVa: check this for RlvActions::canShowName()
-			bool fRlvEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
-			pTabs->enableTabButton(pTabs->getIndexForPanel(pNearMePanel), fRlvEnable);
-			if ( (!fRlvEnable) && (pTabs->getCurrentPanel() == pNearMePanel) )
-				pTabs->selectTabByName("SearchPanel");
-		}
-	}
+    if (rlv_handler_t::isEnabled())
+    {
+        LLTabContainer* pTabs = getChild<LLTabContainer>("ResidentChooserTabs");
+        LLPanel* pNearMePanel = getChild<LLPanel>("NearMePanel");
+        RLV_ASSERT( (pTabs) && (pNearMePanel) );
+        if ( (pTabs) && (pNearMePanel) )
+        {
+            // TODO-RLVa: check this for RlvActions::canShowName()
+            bool fRlvEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
+            pTabs->enableTabButton(pTabs->getIndexForPanel(pNearMePanel), fRlvEnable);
+            if ( (!fRlvEnable) && (pTabs->getCurrentPanel() == pNearMePanel) )
+                pTabs->selectTabByName("SearchPanel");
+        }
+    }
 // [/RLVa:KB]
 }
 
 void LLFloaterAvatarPicker::populateNearMe()
 {
-	BOOL all_loaded = TRUE;
-	BOOL empty = TRUE;
-	LLScrollListCtrl* near_me_scroller = getChild<LLScrollListCtrl>("NearMe");
-	near_me_scroller->deleteAllItems();
+    BOOL all_loaded = TRUE;
+    BOOL empty = TRUE;
+    LLScrollListCtrl* near_me_scroller = getChild<LLScrollListCtrl>("NearMe");
+    near_me_scroller->deleteAllItems();
 
-	uuid_vec_t avatar_ids;
-	LLWorld::getInstance()->getAvatars(&avatar_ids, NULL, gAgent.getPositionGlobal(), gSavedSettings.getF32("NearMeRange"));
-	for(U32 i=0; i<avatar_ids.size(); i++)
-	{
-		LLUUID& av = avatar_ids[i];
-		if(mExcludeAgentFromSearchResults && (av == gAgent.getID())) continue;
-		LLSD element;
-		element["id"] = av; // value
-		LLAvatarName av_name;
+    uuid_vec_t avatar_ids;
+    LLWorld::getInstance()->getAvatars(&avatar_ids, NULL, gAgent.getPositionGlobal(), gSavedSettings.getF32("NearMeRange"));
+    for(U32 i=0; i<avatar_ids.size(); i++)
+    {
+        LLUUID& av = avatar_ids[i];
+        if(mExcludeAgentFromSearchResults && (av == gAgent.getID())) continue;
+        LLSD element;
+        element["id"] = av; // value
+        LLAvatarName av_name;
 
-		if (!LLAvatarNameCache::get(av, &av_name))
-		{
-			element["columns"][0]["column"] = "name";
-			element["columns"][0]["value"] = LLCacheName::getDefaultName();
-			all_loaded = FALSE;
-		}			
-		else
-		{
-			element["columns"][0]["column"] = "name";
-			element["columns"][0]["value"] = av_name.getDisplayName();
-			element["columns"][1]["column"] = "username";
-			element["columns"][1]["value"] = av_name.getUserName();
+        if (!LLAvatarNameCache::get(av, &av_name))
+        {
+            element["columns"][0]["column"] = "name";
+            element["columns"][0]["value"] = LLCacheName::getDefaultName();
+            all_loaded = FALSE;
+        }
+        else
+        {
+            element["columns"][0]["column"] = "name";
+            element["columns"][0]["value"] = av_name.getDisplayName();
+            element["columns"][1]["column"] = "username";
+            element["columns"][1]["value"] = av_name.getUserName();
 
-			sAvatarNameMap[av] = av_name;
-		}
-		near_me_scroller->addElement(element);
-		empty = FALSE;
-	}
+            sAvatarNameMap[av] = av_name;
+        }
+        near_me_scroller->addElement(element);
+        empty = FALSE;
+    }
 
-	if (empty)
-	{
-		getChildView("NearMe")->setEnabled(FALSE);
-		getChildView("ok_btn")->setEnabled(FALSE);
-		near_me_scroller->setCommentText(getString("no_one_near"));
-	}
-	else 
-	{
-		getChildView("NearMe")->setEnabled(TRUE);
-		getChildView("ok_btn")->setEnabled(TRUE);
-		near_me_scroller->selectFirstItem();
-		onList();
-		near_me_scroller->setFocus(TRUE);
-	}
+    if (empty)
+    {
+        getChildView("NearMe")->setEnabled(FALSE);
+        getChildView("ok_btn")->setEnabled(FALSE);
+        near_me_scroller->setCommentText(getString("no_one_near"));
+    }
+    else
+    {
+        getChildView("NearMe")->setEnabled(TRUE);
+        getChildView("ok_btn")->setEnabled(TRUE);
+        near_me_scroller->selectFirstItem();
+        onList();
+        near_me_scroller->setFocus(TRUE);
+    }
 
-	if (all_loaded)
-	{
-		mNearMeListComplete = TRUE;
-	}
+    if (all_loaded)
+    {
+        mNearMeListComplete = TRUE;
+    }
 }
 
 void LLFloaterAvatarPicker::populateFriend()
 {
-	LLScrollListCtrl* friends_scroller = getChild<LLScrollListCtrl>("Friends");
-	friends_scroller->deleteAllItems();
-	// <FS:Ansariel> FIRE-16846: Make friend list sortable
-	//LLCollectAllBuddies collector;
-	//LLAvatarTracker::instance().applyFunctor(collector);
-	//LLCollectAllBuddies::buddy_map_t::iterator it;
-	//
-	//for(it = collector.mOnline.begin(); it!=collector.mOnline.end(); it++)
-	//{
-	//	friends_scroller->addStringUUIDItem(it->second, it->first);
-	//}
-	//for(it = collector.mOffline.begin(); it!=collector.mOffline.end(); it++)
-	//{
-	//	friends_scroller->addStringUUIDItem(it->second, it->first);
-	//}
-	//friends_scroller->sortByColumnIndex(0, TRUE);
+    LLScrollListCtrl* friends_scroller = getChild<LLScrollListCtrl>("Friends");
+    friends_scroller->deleteAllItems();
+    // <FS:Ansariel> FIRE-16846: Make friend list sortable
+    //LLCollectAllBuddies collector;
+    //LLAvatarTracker::instance().applyFunctor(collector);
+    //LLCollectAllBuddies::buddy_map_t::iterator it;
+    //
+    //for(it = collector.mOnline.begin(); it!=collector.mOnline.end(); it++)
+    //{
+    //  friends_scroller->addStringUUIDItem(it->second, it->first);
+    //}
+    //for(it = collector.mOffline.begin(); it!=collector.mOffline.end(); it++)
+    //{
+    //  friends_scroller->addStringUUIDItem(it->second, it->first);
+    //}
+    //friends_scroller->sortByColumnIndex(0, TRUE);
 
-	LLAvatarTracker::buddy_map_t friend_list;
-	LLAvatarTracker::instance().copyBuddyList(friend_list);
-	for (LLAvatarTracker::buddy_map_t::iterator it = friend_list.begin(); it != friend_list.end(); ++it)
-	{
-		const LLUUID& av_id = it->first;
+    LLAvatarTracker::buddy_map_t friend_list;
+    LLAvatarTracker::instance().copyBuddyList(friend_list);
+    for (LLAvatarTracker::buddy_map_t::iterator it = friend_list.begin(); it != friend_list.end(); ++it)
+    {
+        const LLUUID& av_id = it->first;
 
-		LLSD element;
-		element["id"] = av_id;
+        LLSD element;
+        element["id"] = av_id;
 
-		LLAvatarName av_name;
-		LLAvatarNameCache::get(av_id, &av_name); // Should have the name in the cache already
-		element["columns"][0]["column"] = "name";
-		element["columns"][0]["value"] = av_name.getDisplayName();
-		element["columns"][1]["column"] = "username";
-		element["columns"][1]["value"] = av_name.getUserName();
+        LLAvatarName av_name;
+        LLAvatarNameCache::get(av_id, &av_name); // Should have the name in the cache already
+        element["columns"][0]["column"] = "name";
+        element["columns"][0]["value"] = av_name.getDisplayName();
+        element["columns"][1]["column"] = "username";
+        element["columns"][1]["value"] = av_name.getUserName();
 
-		friends_scroller->addElement(element);
-	}
-	friends_scroller->sortByColumnIndex(0, TRUE);
-	// </FS:Ansariel>
+        friends_scroller->addElement(element);
+    }
+    friends_scroller->sortByColumnIndex(0, TRUE);
+    // </FS:Ansariel>
 }
 
 void LLFloaterAvatarPicker::drawFrustum()
@@ -529,48 +525,48 @@ void LLFloaterAvatarPicker::draw()
 {
     drawFrustum();
 
-	// sometimes it is hard to determine when Select/Ok button should be disabled (see LLAvatarActions::shareWithAvatars).
-	// lets check this via mOkButtonValidateSignal callback periodically.
-	static LLFrameTimer timer;
-	if (timer.hasExpired())
-	{
-		timer.setTimerExpirySec(0.33f); // three times per second should be enough.
+    // sometimes it is hard to determine when Select/Ok button should be disabled (see LLAvatarActions::shareWithAvatars).
+    // lets check this via mOkButtonValidateSignal callback periodically.
+    static LLFrameTimer timer;
+    if (timer.hasExpired())
+    {
+        timer.setTimerExpirySec(0.33f); // three times per second should be enough.
 
-		// simulate list changes.
-		onList();
-		timer.start();
-	}
+        // simulate list changes.
+        onList();
+        timer.start();
+    }
 
-	LLFloater::draw();
-	if (!mNearMeListComplete && getChild<LLTabContainer>("ResidentChooserTabs")->getCurrentPanel() == getChild<LLPanel>("NearMePanel"))
-	{
-		populateNearMe();
-	}
+    LLFloater::draw();
+    if (!mNearMeListComplete && getChild<LLTabContainer>("ResidentChooserTabs")->getCurrentPanel() == getChild<LLPanel>("NearMePanel"))
+    {
+        populateNearMe();
+    }
 }
 
 BOOL LLFloaterAvatarPicker::visibleItemsSelected() const
 {
-	LLPanel* active_panel = getChild<LLTabContainer>("ResidentChooserTabs")->getCurrentPanel();
+    LLPanel* active_panel = getChild<LLTabContainer>("ResidentChooserTabs")->getCurrentPanel();
 
-	if(active_panel == getChild<LLPanel>("SearchPanel"))
-	{
-		return getChild<LLScrollListCtrl>("SearchResults")->getFirstSelectedIndex() >= 0;
-	}
-	else if(active_panel == getChild<LLPanel>("NearMePanel"))
-	{
-		return getChild<LLScrollListCtrl>("NearMe")->getFirstSelectedIndex() >= 0;
-	}
-	else if(active_panel == getChild<LLPanel>("FriendsPanel"))
-	{
-		return getChild<LLScrollListCtrl>("Friends")->getFirstSelectedIndex() >= 0;
-	}
-	// <FS:Ansariel> Search by UUID
-	else if (active_panel == getChild<LLPanel>("SearchPanelUUID"))
-	{
-		return getChild<LLScrollListCtrl>("SearchResultsUUID")->getFirstSelectedIndex() >= 0;
-	}
-	// </FS:Ansariel>
-	return FALSE;
+    if(active_panel == getChild<LLPanel>("SearchPanel"))
+    {
+        return getChild<LLScrollListCtrl>("SearchResults")->getFirstSelectedIndex() >= 0;
+    }
+    else if(active_panel == getChild<LLPanel>("NearMePanel"))
+    {
+        return getChild<LLScrollListCtrl>("NearMe")->getFirstSelectedIndex() >= 0;
+    }
+    else if(active_panel == getChild<LLPanel>("FriendsPanel"))
+    {
+        return getChild<LLScrollListCtrl>("Friends")->getFirstSelectedIndex() >= 0;
+    }
+    // <FS:Ansariel> Search by UUID
+    else if (active_panel == getChild<LLPanel>("SearchPanelUUID"))
+    {
+        return getChild<LLScrollListCtrl>("SearchResultsUUID")->getFirstSelectedIndex() >= 0;
+    }
+    // </FS:Ansariel>
+    return FALSE;
 }
 
 /*static*/
@@ -611,260 +607,260 @@ void LLFloaterAvatarPicker::findCoro(std::string url, LLUUID queryID, std::strin
 
 void LLFloaterAvatarPicker::find()
 {
-	//clear our stored LLAvatarNames
-	sAvatarNameMap.clear();
+    //clear our stored LLAvatarNames
+    sAvatarNameMap.clear();
 
-	std::string text = getChild<LLUICtrl>("Edit")->getValue().asString();
+    std::string text = getChild<LLUICtrl>("Edit")->getValue().asString();
 
-	size_t separator_index = text.find_first_of(" ._");
-	if (separator_index != text.npos)
-	{
-		std::string first = text.substr(0, separator_index);
-		std::string last = text.substr(separator_index+1, text.npos);
-		LLStringUtil::trim(last);
-		if("Resident" == last)
-		{
-			text = first;
-		}
-	}
+    size_t separator_index = text.find_first_of(" ._");
+    if (separator_index != text.npos)
+    {
+        std::string first = text.substr(0, separator_index);
+        std::string last = text.substr(separator_index+1, text.npos);
+        LLStringUtil::trim(last);
+        if("Resident" == last)
+        {
+            text = first;
+        }
+    }
 
-	mQueryID.generate();
+    mQueryID.generate();
 
-	std::string url;
-	url.reserve(128); // avoid a memory allocation or two
+    std::string url;
+    url.reserve(128); // avoid a memory allocation or two
 
-	LLViewerRegion* region = gAgent.getRegion();
-	if(region)
-	{
-		url = region->getCapability("AvatarPickerSearch");
-		// Prefer use of capabilities to search on both SLID and display name
-		if (!url.empty())
-		{
-			// capability urls don't end in '/', but we need one to parse
-			// query parameters correctly
-			if (url.size() > 0 && url[url.size()-1] != '/')
-			{
-				url += "/";
-			}
-			url += "?page_size=100&names=";
-			std::replace(text.begin(), text.end(), '.', ' ');
-			url += LLURI::escape(text);
-			LL_INFOS() << "avatar picker " << url << LL_ENDL;
+    LLViewerRegion* region = gAgent.getRegion();
+    if(region)
+    {
+        url = region->getCapability("AvatarPickerSearch");
+        // Prefer use of capabilities to search on both SLID and display name
+        if (!url.empty())
+        {
+            // capability urls don't end in '/', but we need one to parse
+            // query parameters correctly
+            if (url.size() > 0 && url[url.size()-1] != '/')
+            {
+                url += "/";
+            }
+            url += "?page_size=100&names=";
+            std::replace(text.begin(), text.end(), '.', ' ');
+            url += LLURI::escape(text);
+            LL_INFOS() << "avatar picker " << url << LL_ENDL;
 
             LLCoros::instance().launch("LLFloaterAvatarPicker::findCoro",
                 boost::bind(&LLFloaterAvatarPicker::findCoro, url, mQueryID, getKey().asString()));
-		}
-		else
-		{
-			// <FS:Ansariel> FIRE-15194: Avatar picker doesn't work anymore when using legacy simulator messages
-			sQueryNameMap[mQueryID] = getKey().asString();
+        }
+        else
+        {
+            // <FS:Ansariel> FIRE-15194: Avatar picker doesn't work anymore when using legacy simulator messages
+            sQueryNameMap[mQueryID] = getKey().asString();
 
-			LLMessageSystem* msg = gMessageSystem;
-			msg->newMessage("AvatarPickerRequest");
-			msg->nextBlock("AgentData");
-			msg->addUUID("AgentID", gAgent.getID());
-			msg->addUUID("SessionID", gAgent.getSessionID());
-			msg->addUUID("QueryID", mQueryID);	// not used right now
-			msg->nextBlock("Data");
-			msg->addString("Name", text);
-			gAgent.sendReliableMessage();
-		}
-	}
-	getChild<LLScrollListCtrl>("SearchResults")->deleteAllItems();
-	getChild<LLScrollListCtrl>("SearchResults")->setCommentText(getString("searching"));
-	
-	getChildView("ok_btn")->setEnabled(FALSE);
-	mNumResultsReturned = 0;
+            LLMessageSystem* msg = gMessageSystem;
+            msg->newMessage("AvatarPickerRequest");
+            msg->nextBlock("AgentData");
+            msg->addUUID("AgentID", gAgent.getID());
+            msg->addUUID("SessionID", gAgent.getSessionID());
+            msg->addUUID("QueryID", mQueryID);  // not used right now
+            msg->nextBlock("Data");
+            msg->addString("Name", text);
+            gAgent.sendReliableMessage();
+        }
+    }
+    getChild<LLScrollListCtrl>("SearchResults")->deleteAllItems();
+    getChild<LLScrollListCtrl>("SearchResults")->setCommentText(getString("searching"));
+
+    getChildView("ok_btn")->setEnabled(FALSE);
+    mNumResultsReturned = 0;
 }
 
 void LLFloaterAvatarPicker::setAllowMultiple(BOOL allow_multiple)
 {
-	getChild<LLScrollListCtrl>("SearchResults")->setAllowMultipleSelection(allow_multiple);
-	getChild<LLScrollListCtrl>("NearMe")->setAllowMultipleSelection(allow_multiple);
-	getChild<LLScrollListCtrl>("Friends")->setAllowMultipleSelection(allow_multiple);
-	// <FS:Ansariel> Search by UUID
-	getChild<LLScrollListCtrl>("SearchResultsUUID")->setAllowMultipleSelection(allow_multiple);
+    getChild<LLScrollListCtrl>("SearchResults")->setAllowMultipleSelection(allow_multiple);
+    getChild<LLScrollListCtrl>("NearMe")->setAllowMultipleSelection(allow_multiple);
+    getChild<LLScrollListCtrl>("Friends")->setAllowMultipleSelection(allow_multiple);
+    // <FS:Ansariel> Search by UUID
+    getChild<LLScrollListCtrl>("SearchResultsUUID")->setAllowMultipleSelection(allow_multiple);
 }
 
 LLScrollListCtrl* LLFloaterAvatarPicker::getActiveList()
 {
-	std::string acvtive_panel_name;
-	LLScrollListCtrl* list = NULL;
-	LLPanel* active_panel = getChild<LLTabContainer>("ResidentChooserTabs")->getCurrentPanel();
-	if(active_panel)
-	{
-		acvtive_panel_name = active_panel->getName();
-	}
-	if(acvtive_panel_name == "SearchPanel")
-	{
-		list = getChild<LLScrollListCtrl>("SearchResults");
-	}
-	else if(acvtive_panel_name == "NearMePanel")
-	{
-		list = getChild<LLScrollListCtrl>("NearMe");
-	}
-	else if (acvtive_panel_name == "FriendsPanel")
-	{
-		list = getChild<LLScrollListCtrl>("Friends");
-	}
-	// <FS:Ansariel> Search by UUID
-	else if (acvtive_panel_name == "SearchPanelUUID")
-	{
-		list = getChild<LLScrollListCtrl>("SearchResultsUUID");
-	}
-	// </FS:Ansariel>
-	return list;
+    std::string acvtive_panel_name;
+    LLScrollListCtrl* list = NULL;
+    LLPanel* active_panel = getChild<LLTabContainer>("ResidentChooserTabs")->getCurrentPanel();
+    if(active_panel)
+    {
+        acvtive_panel_name = active_panel->getName();
+    }
+    if(acvtive_panel_name == "SearchPanel")
+    {
+        list = getChild<LLScrollListCtrl>("SearchResults");
+    }
+    else if(acvtive_panel_name == "NearMePanel")
+    {
+        list = getChild<LLScrollListCtrl>("NearMe");
+    }
+    else if (acvtive_panel_name == "FriendsPanel")
+    {
+        list = getChild<LLScrollListCtrl>("Friends");
+    }
+    // <FS:Ansariel> Search by UUID
+    else if (acvtive_panel_name == "SearchPanelUUID")
+    {
+        list = getChild<LLScrollListCtrl>("SearchResultsUUID");
+    }
+    // </FS:Ansariel>
+    return list;
 }
 
 BOOL LLFloaterAvatarPicker::handleDragAndDrop(S32 x, S32 y, MASK mask,
-											  BOOL drop, EDragAndDropType cargo_type,
-											  void *cargo_data, EAcceptance *accept,
-											  std::string& tooltip_msg)
+                                              BOOL drop, EDragAndDropType cargo_type,
+                                              void *cargo_data, EAcceptance *accept,
+                                              std::string& tooltip_msg)
 {
-	LLScrollListCtrl* list = getActiveList();
-	if(list)
-	{
-		LLRect rc_list;
-		LLRect rc_point(x,y,x,y);
-		if (localRectToOtherView(rc_point, &rc_list, list))
-		{
-			// Keep selected only one item
-			list->deselectAllItems(TRUE);
-			list->selectItemAt(rc_list.mLeft, rc_list.mBottom, mask);
-			LLScrollListItem* selection = list->getFirstSelected();
-			if (selection)
-			{
-				LLUUID session_id = LLUUID::null;
-				LLUUID dest_agent_id = selection->getUUID();
-				std::string avatar_name = selection->getColumn(0)->getValue().asString();
-				if (dest_agent_id.notNull() && dest_agent_id != gAgentID)
-				{
-//					if (drop)
+    LLScrollListCtrl* list = getActiveList();
+    if(list)
+    {
+        LLRect rc_list;
+        LLRect rc_point(x,y,x,y);
+        if (localRectToOtherView(rc_point, &rc_list, list))
+        {
+            // Keep selected only one item
+            list->deselectAllItems(TRUE);
+            list->selectItemAt(rc_list.mLeft, rc_list.mBottom, mask);
+            LLScrollListItem* selection = list->getFirstSelected();
+            if (selection)
+            {
+                LLUUID session_id = LLUUID::null;
+                LLUUID dest_agent_id = selection->getUUID();
+                std::string avatar_name = selection->getColumn(0)->getValue().asString();
+                if (dest_agent_id.notNull() && dest_agent_id != gAgentID)
+                {
+//                  if (drop)
 // [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0)
-					if ( (drop) && (RlvActions::canStartIM(dest_agent_id)) )
+                    if ( (drop) && (RlvActions::canStartIM(dest_agent_id)) )
 // [/RLVa:KB]
-					{
-						// Start up IM before give the item
-						session_id = gIMMgr->addSession(avatar_name, IM_NOTHING_SPECIAL, dest_agent_id);
-					}
-					return LLToolDragAndDrop::handleGiveDragAndDrop(dest_agent_id, session_id, drop,
-																	cargo_type, cargo_data, accept, getName());
-				}
-			}
-		}
-	}
-	*accept = ACCEPT_NO;
-	return TRUE;
+                    {
+                        // Start up IM before give the item
+                        session_id = gIMMgr->addSession(avatar_name, IM_NOTHING_SPECIAL, dest_agent_id);
+                    }
+                    return LLToolDragAndDrop::handleGiveDragAndDrop(dest_agent_id, session_id, drop,
+                                                                    cargo_type, cargo_data, accept, getName());
+                }
+            }
+        }
+    }
+    *accept = ACCEPT_NO;
+    return TRUE;
 }
 
 
 void LLFloaterAvatarPicker::openFriendsTab()
 {
-	LLTabContainer* tab_container = getChild<LLTabContainer>("ResidentChooserTabs");
-	if (tab_container == NULL)
-	{
-		llassert(tab_container != NULL);
-		return;
-	}
+    LLTabContainer* tab_container = getChild<LLTabContainer>("ResidentChooserTabs");
+    if (tab_container == NULL)
+    {
+        llassert(tab_container != NULL);
+        return;
+    }
 
-	tab_container->selectTabByName("FriendsPanel");
+    tab_container->selectTabByName("FriendsPanel");
 }
 
-// static 
+// static
 void LLFloaterAvatarPicker::processAvatarPickerReply(LLMessageSystem* msg, void**)
 {
-	LLUUID	agent_id;
-	LLUUID	query_id;
-	LLUUID	avatar_id;
-	std::string first_name;
-	std::string last_name;
+    LLUUID  agent_id;
+    LLUUID  query_id;
+    LLUUID  avatar_id;
+    std::string first_name;
+    std::string last_name;
 
-	msg->getUUID("AgentData", "AgentID", agent_id);
-	msg->getUUID("AgentData", "QueryID", query_id);
+    msg->getUUID("AgentData", "AgentID", agent_id);
+    msg->getUUID("AgentData", "QueryID", query_id);
 
-	// Not for us
-	if (agent_id != gAgent.getID()) return;
-	
-	// <FS:Ansariel> FIRE-15194: Avatar picker doesn't work anymore when using legacy simulator messages
-	//LLFloaterAvatarPicker* floater = LLFloaterReg::findTypedInstance<LLFloaterAvatarPicker>("avatar_picker");
-	query_id_name_map_t::iterator found = sQueryNameMap.find(query_id);
-	if (found == sQueryNameMap.end())
-	{
-		return;
-	}
-	const LLSD floater_key(found->second);
-	sQueryNameMap.erase(found);
-	LLFloaterAvatarPicker* floater = LLFloaterReg::findTypedInstance<LLFloaterAvatarPicker>("avatar_picker", floater_key);
-	// </FS:Ansariel>
+    // Not for us
+    if (agent_id != gAgent.getID()) return;
 
-	// floater is closed or these are not results from our last request
-	if (NULL == floater || query_id != floater->mQueryID)
-	{
-		return;
-	}
+    // <FS:Ansariel> FIRE-15194: Avatar picker doesn't work anymore when using legacy simulator messages
+    //LLFloaterAvatarPicker* floater = LLFloaterReg::findTypedInstance<LLFloaterAvatarPicker>("avatar_picker");
+    query_id_name_map_t::iterator found = sQueryNameMap.find(query_id);
+    if (found == sQueryNameMap.end())
+    {
+        return;
+    }
+    const LLSD floater_key(found->second);
+    sQueryNameMap.erase(found);
+    LLFloaterAvatarPicker* floater = LLFloaterReg::findTypedInstance<LLFloaterAvatarPicker>("avatar_picker", floater_key);
+    // </FS:Ansariel>
 
-	LLScrollListCtrl* search_results = floater->getChild<LLScrollListCtrl>("SearchResults");
+    // floater is closed or these are not results from our last request
+    if (NULL == floater || query_id != floater->mQueryID)
+    {
+        return;
+    }
 
-	// clear "Searching" label on first results
-	if (floater->mNumResultsReturned++ == 0)
-	{
-		search_results->deleteAllItems();
-	}
+    LLScrollListCtrl* search_results = floater->getChild<LLScrollListCtrl>("SearchResults");
 
-	BOOL found_one = FALSE;
-	S32 num_new_rows = msg->getNumberOfBlocks("Data");
-	for (S32 i = 0; i < num_new_rows; i++)
-	{			
-		msg->getUUIDFast(  _PREHASH_Data,_PREHASH_AvatarID,	avatar_id, i);
-		msg->getStringFast(_PREHASH_Data,_PREHASH_FirstName, first_name, i);
-		msg->getStringFast(_PREHASH_Data,_PREHASH_LastName,	last_name, i);
+    // clear "Searching" label on first results
+    if (floater->mNumResultsReturned++ == 0)
+    {
+        search_results->deleteAllItems();
+    }
 
-		if (avatar_id != agent_id || !floater->isExcludeAgentFromSearchResults()) // exclude agent from search results?
-		{
-			std::string avatar_name;
-			if (avatar_id.isNull())
-			{
-				LLStringUtil::format_map_t map;
-				map["[TEXT]"] = floater->getChild<LLUICtrl>("Edit")->getValue().asString();
-				avatar_name = floater->getString("not_found", map);
-				search_results->setEnabled(FALSE);
-				floater->getChildView("ok_btn")->setEnabled(FALSE);
-			}
-			else
-			{
-				avatar_name = LLCacheName::buildFullName(first_name, last_name);
-				search_results->setEnabled(TRUE);
-				found_one = TRUE;
+    BOOL found_one = FALSE;
+    S32 num_new_rows = msg->getNumberOfBlocks("Data");
+    for (S32 i = 0; i < num_new_rows; i++)
+    {
+        msg->getUUIDFast(  _PREHASH_Data,_PREHASH_AvatarID, avatar_id, i);
+        msg->getStringFast(_PREHASH_Data,_PREHASH_FirstName, first_name, i);
+        msg->getStringFast(_PREHASH_Data,_PREHASH_LastName, last_name, i);
 
-				LLAvatarName av_name;
-				av_name.fromString(avatar_name);
-				const LLUUID& agent_id = avatar_id;
-				sAvatarNameMap[agent_id] = av_name;
+        if (avatar_id != agent_id || !floater->isExcludeAgentFromSearchResults()) // exclude agent from search results?
+        {
+            std::string avatar_name;
+            if (avatar_id.isNull())
+            {
+                LLStringUtil::format_map_t map;
+                map["[TEXT]"] = floater->getChild<LLUICtrl>("Edit")->getValue().asString();
+                avatar_name = floater->getString("not_found", map);
+                search_results->setEnabled(FALSE);
+                floater->getChildView("ok_btn")->setEnabled(FALSE);
+            }
+            else
+            {
+                avatar_name = LLCacheName::buildFullName(first_name, last_name);
+                search_results->setEnabled(TRUE);
+                found_one = TRUE;
 
-			}
-			LLSD element;
-			element["id"] = avatar_id; // value
-			element["columns"][0]["column"] = "name";
-			element["columns"][0]["value"] = avatar_name;
-			search_results->addElement(element);
-		}
-	}
+                LLAvatarName av_name;
+                av_name.fromString(avatar_name);
+                const LLUUID& agent_id = avatar_id;
+                sAvatarNameMap[agent_id] = av_name;
 
-	if (found_one)
-	{
-		floater->getChildView("ok_btn")->setEnabled(TRUE);
-		search_results->selectFirstItem();
-		floater->onList();
-		search_results->setFocus(TRUE);
-	}
+            }
+            LLSD element;
+            element["id"] = avatar_id; // value
+            element["columns"][0]["column"] = "name";
+            element["columns"][0]["value"] = avatar_name;
+            search_results->addElement(element);
+        }
+    }
+
+    if (found_one)
+    {
+        floater->getChildView("ok_btn")->setEnabled(TRUE);
+        search_results->selectFirstItem();
+        floater->onList();
+        search_results->setFocus(TRUE);
+    }
 }
 
 void LLFloaterAvatarPicker::processResponse(const LLUUID& query_id, const LLSD& content)
 {
-	// Check for out-of-date query
-	if (query_id == mQueryID)
-	{
-		LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("SearchResults");
+    // Check for out-of-date query
+    if (query_id == mQueryID)
+    {
+        LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("SearchResults");
 
         // clear "Searching" label on first results
         search_results->deleteAllItems();
@@ -927,104 +923,104 @@ void LLFloaterAvatarPicker::processResponse(const LLUUID& query_id, const LLSD& 
                 search_results->setFocus(TRUE);
             }
         }
-	}
+    }
 }
 
 void LLFloaterAvatarPicker::editKeystroke(LLLineEditor* caller, void* user_data)
 {
-	getChildView("Find")->setEnabled(caller->getText().size() > 0);
+    getChildView("Find")->setEnabled(caller->getText().size() > 0);
 }
 
 // <FS:Ansariel> Search by UUID
 void LLFloaterAvatarPicker::editKeystrokeUUID(LLLineEditor* caller, void* user_data)
 {
-	if (caller)
-	{
-		LLUUID id(caller->getText());
-		getChildView("FindUUID")->setEnabled(!id.isNull());
-	}
+    if (caller)
+    {
+        LLUUID id(caller->getText());
+        getChildView("FindUUID")->setEnabled(!id.isNull());
+    }
 }
 // </FS:Ansariel>
 
 // virtual
 BOOL LLFloaterAvatarPicker::handleKeyHere(KEY key, MASK mask)
 {
-	if (key == KEY_RETURN && mask == MASK_NONE)
-	{
-		if (getChild<LLUICtrl>("Edit")->hasFocus())
-		{
-			onBtnFind();
-		}
-		// <FS:Ansariel> Search by UUID
-		else if (getChild<LLUICtrl>("EditUUID")->hasFocus())
-		{
-			onBtnFindUUID();
-		}
-		// </FS:Ansariel>
-		else
-		{
-			onBtnSelect();
-		}
-		return TRUE;
-	}
-	else if (key == KEY_ESCAPE && mask == MASK_NONE)
-	{
-		closeFloater();
-		return TRUE;
-	}
+    if (key == KEY_RETURN && mask == MASK_NONE)
+    {
+        if (getChild<LLUICtrl>("Edit")->hasFocus())
+        {
+            onBtnFind();
+        }
+        // <FS:Ansariel> Search by UUID
+        else if (getChild<LLUICtrl>("EditUUID")->hasFocus())
+        {
+            onBtnFindUUID();
+        }
+        // </FS:Ansariel>
+        else
+        {
+            onBtnSelect();
+        }
+        return TRUE;
+    }
+    else if (key == KEY_ESCAPE && mask == MASK_NONE)
+    {
+        closeFloater();
+        return TRUE;
+    }
 
-	return LLFloater::handleKeyHere(key, mask);
+    return LLFloater::handleKeyHere(key, mask);
 }
 
 bool LLFloaterAvatarPicker::isSelectBtnEnabled()
 {
-	bool ret_val = visibleItemsSelected();
+    bool ret_val = visibleItemsSelected();
 
-	if ( ret_val && !isMinimized())
-	{
-		std::string acvtive_panel_name;
-		LLScrollListCtrl* list =  NULL;
-		LLPanel* active_panel = getChild<LLTabContainer>("ResidentChooserTabs")->getCurrentPanel();
+    if ( ret_val && !isMinimized())
+    {
+        std::string acvtive_panel_name;
+        LLScrollListCtrl* list =  NULL;
+        LLPanel* active_panel = getChild<LLTabContainer>("ResidentChooserTabs")->getCurrentPanel();
 
-		if(active_panel)
-		{
-			acvtive_panel_name = active_panel->getName();
-		}
+        if(active_panel)
+        {
+            acvtive_panel_name = active_panel->getName();
+        }
 
-		if(acvtive_panel_name == "SearchPanel")
-		{
-			list = getChild<LLScrollListCtrl>("SearchResults");
-		}
-		else if(acvtive_panel_name == "NearMePanel")
-		{
-			list = getChild<LLScrollListCtrl>("NearMe");
-		}
-		else if (acvtive_panel_name == "FriendsPanel")
-		{
-			list = getChild<LLScrollListCtrl>("Friends");
-		}
-		// <FS:Ansariel> Search by UUID
-		else if (acvtive_panel_name == "SearchPanelUUID")
-		{
-			list = getChild<LLScrollListCtrl>("SearchResultsUUID");
-		}
-		// </FS:Ansariel>
+        if(acvtive_panel_name == "SearchPanel")
+        {
+            list = getChild<LLScrollListCtrl>("SearchResults");
+        }
+        else if(acvtive_panel_name == "NearMePanel")
+        {
+            list = getChild<LLScrollListCtrl>("NearMe");
+        }
+        else if (acvtive_panel_name == "FriendsPanel")
+        {
+            list = getChild<LLScrollListCtrl>("Friends");
+        }
+        // <FS:Ansariel> Search by UUID
+        else if (acvtive_panel_name == "SearchPanelUUID")
+        {
+            list = getChild<LLScrollListCtrl>("SearchResultsUUID");
+        }
+        // </FS:Ansariel>
 
-		if(list)
-		{
-			uuid_vec_t avatar_ids;
-			std::vector<LLAvatarName> avatar_names;
-			getSelectedAvatarData(list, avatar_ids, avatar_names);
-			if (avatar_ids.size() >= 1) 
-			{
-				ret_val = mOkButtonValidateSignal.num_slots()?mOkButtonValidateSignal(avatar_ids):true;
-			}
-			else
-			{
-				ret_val = false;
-			}
-		}
-	}
+        if(list)
+        {
+            uuid_vec_t avatar_ids;
+            std::vector<LLAvatarName> avatar_names;
+            getSelectedAvatarData(list, avatar_ids, avatar_names);
+            if (avatar_ids.size() >= 1)
+            {
+                ret_val = mOkButtonValidateSignal.num_slots()?mOkButtonValidateSignal(avatar_ids):true;
+            }
+            else
+            {
+                ret_val = false;
+            }
+        }
+    }
 
-	return ret_val;
+    return ret_val;
 }

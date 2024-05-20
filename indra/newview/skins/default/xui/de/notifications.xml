@@ -1793,14 +1793,14 @@ Fortfahren?
 		<usetemplate ignoretext="Bestätigen, bevor Objekte an Ihre Eigentümer zurückgegeben werden" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="GroupLeaveConfirmMember">
-		Sie sind gegenwärtig Mitglied der Gruppe &lt;nolink&gt;[GROUP]&lt;/nolink&gt;.
-Diese Gruppe verlassen?
-		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+		Möchten Sie die Gruppe &lt;nolink&gt;[GROUP]&lt;/nolink&gt; verlassen?
+Ein erneutes Beitreten kostet aktuell [COST] L$.
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Verlassen"/>
 	</notification>
-	<notification name="GroupLeaveConfirmMemberWithFee">
-		Sie sind gegenwärtig Mitglied der Gruppe „&lt;nolink&gt;[GROUP]&lt;/nolink&gt;“. Erneutes Beitreten kostet [AMOUNT] L$.
-Diese Gruppe verlassen?
-		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	<notification name="GroupLeaveConfirmMemberNoFee">
+		Möchten Sie die Gruppe &lt;nolink&gt;[GROUP]&lt;/nolink&gt; verlassen?
+Ein erneutes Beitreten ist aktuell kostenlos.
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Verlassen"/>
 	</notification>
 	<notification name="OwnerCannotLeaveGroup">
 		Sie können die Gruppe nicht verlassen, da Sie der letzte Besitzer der Gruppe sind. Weisen Sie die Besitzerrolle zuerst einem anderen Mitglied zu.
@@ -2525,6 +2525,16 @@ Diese Aktion kann nicht rückgängig gemacht werden.
 
 Möchten Sie diese Objekte wirklich löschen?
 		<usetemplate ignoretext="Vor dem Löschen gefilterter Objekte bestätigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification name="DeleteWornItems">
+		Einige Objekte, die Sie löschen möchten, werden gerade von Ihrem Avatar getragen.
+Sollen diese Objekte von Ihrem Avatar entfernt werden?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Objekte entfernen und löschen"/>
+	</notification>
+	<notification name="CantDeleteRequiredClothing">
+		Einige Objekte, die Sie löschen möchten, sind notwendige Körperteile (Haut, Körperform, Haar, Augen).
+Sie müssen diese vor dem Löschen ersetzen.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="DeleteThumbnail">
 		Soll die Abbildung für dieses Objekt gelöscht werden?
@@ -5693,6 +5703,14 @@ Ziehen Sie in Erwägung Objekte zu ersetzen, die bei einem entsprechenden Wert d
 LOD-Faktor >3: Verschlechtert Performance. Nur für Fotoaufnahmen ratsam.
 LOD-Faktor >4: Nur in Ausnahmefällen verwenden. Wird beim Neustart zurückgesetzt.
 LOD-Faktor >8: Hat keinen echten Effekt. Kann Fehler verursachen.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OverrideVRAMWarning">
+		WARNUNG: Das Übersteuern der VRAM-Erkennung kann Instabilitäten verursachen.
+
+Die meisten Benutzer sollten diese Einstellung deaktiviert und dem Viewer sowie Betriebssystem den korrekten Wert ermitteln lassen.
+
+Diese Einstellung ist für den Fall gedacht, wenn die VRAM-Erkennung inkorrekte Ergebnisse liefert. Bitte mit Vorsicht verwenden und im Zweifel Hilfe beim Support erfragen.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="CurrencyURIOverrideReceived">

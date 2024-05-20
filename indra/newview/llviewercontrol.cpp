@@ -1,4 +1,4 @@
-/** 
+/**
  * @file llviewercontrol.cpp
  * @brief Viewer configuration
  * @author Richard Nelson
@@ -6,21 +6,21 @@
  * $LicenseInfo:firstyear=2001&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -30,7 +30,7 @@
 #include "llviewercontrol.h"
 
 // Library includes
-#include "llwindow.h"	// getGamma()
+#include "llwindow.h"   // getGamma()
 
 // <FS:Zi> Handle IME text input getting enabled or disabled
 #if LL_SDL2
@@ -119,15 +119,15 @@
 #include <boost/algorithm/string.hpp>
 
 #ifdef TOGGLE_HACKED_GODLIKE_VIEWER
-BOOL 				gHackGodmode = FALSE;
+BOOL                gHackGodmode = FALSE;
 #endif
 
 // Should you contemplate changing the name "Global", please first grep for
 // that string literal. There are at least a couple other places in the C++
 // code that assume the LLControlGroup named "Global" is gSavedSettings.
-LLControlGroup gSavedSettings("Global");	// saved at end of session
+LLControlGroup gSavedSettings("Global");    // saved at end of session
 LLControlGroup gSavedPerAccountSettings("PerAccount"); // saved at end of session
-LLControlGroup gCrashSettings("CrashSettings");	// saved at end of session
+LLControlGroup gCrashSettings("CrashSettings"); // saved at end of session
 LLControlGroup gWarningSettings("Warnings"); // persists ignored dialogs/warnings
 
 std::string gLastRunVersion;
@@ -140,38 +140,38 @@ extern BOOL gDebugGL;
 class BandwidthUpdater : public LLEventTimer
 {
 public:
-	BandwidthUpdater()
-		:LLEventTimer(0.5f)
-	{
-		mEventTimer.stop();
-	}
+    BandwidthUpdater()
+        :LLEventTimer(0.5f)
+    {
+        mEventTimer.stop();
+    }
 
-	virtual ~BandwidthUpdater(){}
+    virtual ~BandwidthUpdater(){}
 
-	void update(const LLSD& new_value)
-	{
-		mNewValue = new_value.asReal();
-		mEventTimer.start();
-	}
+    void update(const LLSD& new_value)
+    {
+        mNewValue = new_value.asReal();
+        mEventTimer.start();
+    }
 
 protected:
-	BOOL tick()
-	{
-		gViewerThrottle.setMaxBandwidth(mNewValue);
-		mEventTimer.stop();
-	
-		static LLCachedControl<bool> alreadyComplainedAboutBW(gWarningSettings, "FSBandwidthTooHigh");
-		if (!alreadyComplainedAboutBW && mNewValue > 1500.f)
-		{
-			LLNotificationsUtil::add("FSBWTooHigh");
-			gWarningSettings.setBOOL("FSBandwidthTooHigh", TRUE);
-		}
+    BOOL tick()
+    {
+        gViewerThrottle.setMaxBandwidth(mNewValue);
+        mEventTimer.stop();
 
-		return FALSE;
-	}
+        static LLCachedControl<bool> alreadyComplainedAboutBW(gWarningSettings, "FSBandwidthTooHigh");
+        if (!alreadyComplainedAboutBW && mNewValue > 1500.f)
+        {
+            LLNotificationsUtil::add("FSBWTooHigh");
+            gWarningSettings.setBOOL("FSBandwidthTooHigh", TRUE);
+        }
+
+        return FALSE;
+    }
 
 private:
-	F32 mNewValue;
+    F32 mNewValue;
 };
 BandwidthUpdater sBandwidthUpdater;
 // </FS:Ansariel>
@@ -181,8 +181,8 @@ BandwidthUpdater sBandwidthUpdater;
 
 static bool handleRenderAvatarMouselookChanged(const LLSD& newvalue)
 {
-	LLVOAvatar::sVisibleInFirstPerson = newvalue.asBoolean();
-	return true;
+    LLVOAvatar::sVisibleInFirstPerson = newvalue.asBoolean();
+    return true;
 }
 
 static bool handleRenderFarClipChanged(const LLSD& newvalue)
@@ -190,17 +190,17 @@ static bool handleRenderFarClipChanged(const LLSD& newvalue)
     if (LLStartUp::getStartupState() >= STATE_STARTED)
     {
         F32 draw_distance = (F32)newvalue.asReal();
-	gAgentCamera.mDrawDistance = draw_distance;
-	LLWorld::getInstance()->setLandFarClip(draw_distance);
-	return true;
+    gAgentCamera.mDrawDistance = draw_distance;
+    LLWorld::getInstance()->setLandFarClip(draw_distance);
+    return true;
     }
     return false;
 }
 
 static bool handleTerrainDetailChanged(const LLSD& newvalue)
 {
-	LLDrawPoolTerrain::sDetailMode = newvalue.asInteger();
-	return true;
+    LLDrawPoolTerrain::sDetailMode = newvalue.asInteger();
+    return true;
 }
 
 
@@ -213,11 +213,11 @@ static bool handleDebugAvatarJointsChanged(const LLSD& newvalue)
 
 static bool handleAvatarHoverOffsetChanged(const LLSD& newvalue)
 {
-	if (isAgentAvatarValid())
-	{
-		gAgentAvatarp->setHoverIfRegionEnabled();
-	}
-	return true;
+    if (isAgentAvatarValid())
+    {
+        gAgentAvatarp->setHoverIfRegionEnabled();
+    }
+    return true;
 }
 
 
@@ -226,9 +226,9 @@ static bool handleAvatarHoverOffsetChanged(const LLSD& newvalue)
 bool handleSetShaderChanged(const LLSD& newvalue)
 // </FS:Ansariel>
 {
-	// changing shader level may invalidate existing cached bump maps, as the shader type determines the format of the bump map it expects - clear and repopulate the bump cache
-	gBumpImageList.destroyGL();
-	gBumpImageList.restoreGL();
+    // changing shader level may invalidate existing cached bump maps, as the shader type determines the format of the bump map it expects - clear and repopulate the bump cache
+    gBumpImageList.destroyGL();
+    gBumpImageList.restoreGL();
 
     if (gPipeline.isInit())
     {
@@ -236,9 +236,9 @@ bool handleSetShaderChanged(const LLSD& newvalue)
         LLPipeline::refreshCachedSettings();
     }
 
-	// else, leave terrain detail as is
-	LLViewerShaderMgr::instance()->setShaders();
-	return true;
+    // else, leave terrain detail as is
+    LLViewerShaderMgr::instance()->setShaders();
+    return true;
 }
 
 static bool handleRenderPerfTestChanged(const LLSD& newvalue)
@@ -255,10 +255,10 @@ static bool handleRenderPerfTestChanged(const LLSD& newvalue)
                                                                          LLPipeline::RENDER_TYPE_HUD,
                                                                          LLPipeline::RENDER_TYPE_CLOUDS,
                                                                          LLPipeline::RENDER_TYPE_HUD_PARTICLES,
-                                                                         LLPipeline::END_RENDER_TYPES); 
+                                                                         LLPipeline::END_RENDER_TYPES);
                gPipeline.setRenderDebugFeatureControl(LLPipeline::RENDER_DEBUG_FEATURE_UI, false);
        }
-       else 
+       else
        {
                gPipeline.setRenderTypeMask(LLPipeline::RENDER_TYPE_WL_SKY,
                                                                          LLPipeline::RENDER_TYPE_TERRAIN,
@@ -278,55 +278,55 @@ static bool handleRenderPerfTestChanged(const LLSD& newvalue)
 
 bool handleRenderTransparentWaterChanged(const LLSD& newvalue)
 {
-	if (gPipeline.isInit())
-	{
-		gPipeline.updateRenderTransparentWater();
-		gPipeline.releaseGLBuffers();
-		gPipeline.createGLBuffers();
-		LLViewerShaderMgr::instance()->setShaders();
-	}
-	LLWorld::getInstance()->updateWaterObjects();
-	return true;
+    if (gPipeline.isInit())
+    {
+        gPipeline.updateRenderTransparentWater();
+        gPipeline.releaseGLBuffers();
+        gPipeline.createGLBuffers();
+        LLViewerShaderMgr::instance()->setShaders();
+    }
+    LLWorld::getInstance()->updateWaterObjects();
+    return true;
 }
 
 
 static bool handleShadowsResized(const LLSD& newvalue)
 {
-	gPipeline.requestResizeShadowTexture();
-	return true;
+    gPipeline.requestResizeShadowTexture();
+    return true;
 }
 
 static bool handleWindowResized(const LLSD& newvalue)
 {
-	gPipeline.requestResizeScreenTexture();
-	return true;
+    gPipeline.requestResizeScreenTexture();
+    return true;
 }
 
 static bool handleReleaseGLBufferChanged(const LLSD& newvalue)
 {
-	if (gPipeline.isInit())
-	{
-		gPipeline.releaseGLBuffers();
-		gPipeline.createGLBuffers();
-	}
-	return true;
+    if (gPipeline.isInit())
+    {
+        gPipeline.releaseGLBuffers();
+        gPipeline.createGLBuffers();
+    }
+    return true;
 }
 
 static bool handleLUTBufferChanged(const LLSD& newvalue)
 {
-	if (gPipeline.isInit())
-	{
-		gPipeline.releaseLUTBuffers();
-		gPipeline.createLUTBuffers();
-	}
-	return true;
+    if (gPipeline.isInit())
+    {
+        gPipeline.releaseLUTBuffers();
+        gPipeline.createLUTBuffers();
+    }
+    return true;
 }
 
 static bool handleAnisotropicChanged(const LLSD& newvalue)
 {
-	LLImageGL::sGlobalUseAnisotropic = newvalue.asBoolean();
-	LLImageGL::dirtyTexOptions();
-	return true;
+    LLImageGL::sGlobalUseAnisotropic = newvalue.asBoolean();
+    LLImageGL::dirtyTexOptions();
+    return true;
 }
 
 static bool handleVSyncChanged(const LLSD& newvalue)
@@ -345,80 +345,80 @@ static bool handleVSyncChanged(const LLSD& newvalue)
 
 static bool handleVolumeLODChanged(const LLSD& newvalue)
 {
-	LLVOVolume::sLODFactor = llclamp((F32) newvalue.asReal(), 0.01f, MAX_LOD_FACTOR);
-	LLVOVolume::sDistanceFactor = 1.f-LLVOVolume::sLODFactor * 0.1f;
+    LLVOVolume::sLODFactor = llclamp((F32) newvalue.asReal(), 0.01f, MAX_LOD_FACTOR);
+    LLVOVolume::sDistanceFactor = 1.f-LLVOVolume::sLODFactor * 0.1f;
 
-	// <FS:PP> Warning about too high LOD on LOD change
-	if (LLVOVolume::sLODFactor > 4.0f)
-	{
-		LLNotificationsUtil::add("RenderVolumeLODFactorWarning");
-	}
-	// </FS:PP>
+    // <FS:PP> Warning about too high LOD on LOD change
+    if (LLVOVolume::sLODFactor > 4.0f)
+    {
+        LLNotificationsUtil::add("RenderVolumeLODFactorWarning");
+    }
+    // </FS:PP>
 
-	return true;
+    return true;
 }
 // <FS:Beq> Override VRAM detection support
 static bool handleOverrideVRAMDetectionChanged(const LLSD& newvalue)
 {
-	if (newvalue.asBoolean())
-	{
-		LLNotificationsUtil::add("OverrideVRAMWarning");
-	}
-	return true;
+    if (newvalue.asBoolean())
+    {
+        LLNotificationsUtil::add("OverrideVRAMWarning");
+    }
+    return true;
 }
 // </FS:Beq>
 
 static bool handleAvatarLODChanged(const LLSD& newvalue)
 {
-	LLVOAvatar::sLODFactor = llclamp((F32) newvalue.asReal(), 0.f, MAX_AVATAR_LOD_FACTOR);
-	return true;
+    LLVOAvatar::sLODFactor = llclamp((F32) newvalue.asReal(), 0.f, MAX_AVATAR_LOD_FACTOR);
+    return true;
 }
 
 static bool handleAvatarPhysicsLODChanged(const LLSD& newvalue)
 {
-	LLVOAvatar::sPhysicsLODFactor = llclamp((F32) newvalue.asReal(), 0.f, MAX_AVATAR_LOD_FACTOR);
-	return true;
+    LLVOAvatar::sPhysicsLODFactor = llclamp((F32) newvalue.asReal(), 0.f, MAX_AVATAR_LOD_FACTOR);
+    return true;
 }
 
 static bool handleTerrainLODChanged(const LLSD& newvalue)
 {
-		LLVOSurfacePatch::sLODFactor = (F32)newvalue.asReal();
-		//sqaure lod factor to get exponential range of [0,4] and keep
-		//a value of 1 in the middle of the detail slider for consistency
-		//with other detail sliders (see panel_preferences_graphics1.xml)
-		LLVOSurfacePatch::sLODFactor *= LLVOSurfacePatch::sLODFactor;
-		return true;
+        LLVOSurfacePatch::sLODFactor = (F32)newvalue.asReal();
+        //sqaure lod factor to get exponential range of [0,4] and keep
+        //a value of 1 in the middle of the detail slider for consistency
+        //with other detail sliders (see panel_preferences_graphics1.xml)
+        LLVOSurfacePatch::sLODFactor *= LLVOSurfacePatch::sLODFactor;
+        return true;
 }
 
 static bool handleTreeLODChanged(const LLSD& newvalue)
 {
-	LLVOTree::sTreeFactor = (F32) newvalue.asReal();
-	return true;
+    LLVOTree::sTreeFactor = (F32) newvalue.asReal();
+    return true;
 }
 
 static bool handleFlexLODChanged(const LLSD& newvalue)
 {
-	LLVolumeImplFlexible::sUpdateFactor = (F32) newvalue.asReal();
-	return true;
+    LLVolumeImplFlexible::sUpdateFactor = (F32) newvalue.asReal();
+    return true;
 }
 
 static bool handleGammaChanged(const LLSD& newvalue)
 {
-	F32 gamma = (F32) newvalue.asReal();
-	if (gamma == 0.0f)
-	{
-		gamma = 1.0f; // restore normal gamma
-	}
-	if (gViewerWindow && gViewerWindow->getWindow() && gamma != gViewerWindow->getWindow()->getGamma())
-	{
-		// Only save it if it's changed
-		if (!gViewerWindow->getWindow()->setGamma(gamma))
-		{
-			LL_WARNS() << "setGamma failed!" << LL_ENDL;
-		}
-	}
+    F32 gamma = (F32) newvalue.asReal();
+    if (gamma == 0.0f)
+    {
+        gamma = 1.0f; // restore normal gamma
+    }
+    if (gViewerWindow && gViewerWindow->getWindow() && gamma != gViewerWindow->getWindow()->getGamma())
+    {
+        // Only save it if it's changed
+        if (!gViewerWindow->getWindow()->setGamma(gamma))
+        {
+            LL_WARNS() << "setGamma failed!" << LL_ENDL;
+        }
+    }
 
-	return true;
+    return true;
 }
 
 const F32 MAX_USER_FOG_RATIO = 10.f;
@@ -426,107 +426,109 @@ const F32 MIN_USER_FOG_RATIO = 0.5f;
 
 static bool handleFogRatioChanged(const LLSD& newvalue)
 {
-	F32 fog_ratio = llmax(MIN_USER_FOG_RATIO, llmin((F32) newvalue.asReal(), MAX_USER_FOG_RATIO));
-	gSky.setFogRatio(fog_ratio);
-	return true;
+    F32 fog_ratio = llmax(MIN_USER_FOG_RATIO, llmin((F32) newvalue.asReal(), MAX_USER_FOG_RATIO));
+    gSky.setFogRatio(fog_ratio);
+    return true;
 }
 
 static bool handleMaxPartCountChanged(const LLSD& newvalue)
 {
-	LLViewerPartSim::setMaxPartCount(newvalue.asInteger());
-	return true;
+    LLViewerPartSim::setMaxPartCount(newvalue.asInteger());
+    return true;
 }
 
 static bool handleChatFontSizeChanged(const LLSD& newvalue)
 {
-	if(gConsole)
-	{
-		gConsole->setFontSize(newvalue.asInteger());
-	}
-	return true;
+    if(gConsole)
+    {
+        gConsole->setFontSize(newvalue.asInteger());
+    }
+    return true;
 }
 
+// <FS:Ansariel> Keep custom chat persist time
 static bool handleChatPersistTimeChanged(const LLSD& newvalue)
 {
-	if(gConsole)
-	{
-		gConsole->setLinePersistTime((F32) newvalue.asReal());
-	}
-	return true;
+    if(gConsole)
+    {
+        gConsole->setLinePersistTime((F32) newvalue.asReal());
+    }
+    return true;
 }
+// </FS:Ansariel>
 
 static bool handleConsoleMaxLinesChanged(const LLSD& newvalue)
 {
-	if(gConsole)
-	{
-		gConsole->setMaxLines(newvalue.asInteger());
-	}
-	return true;
+    if(gConsole)
+    {
+        gConsole->setMaxLines(newvalue.asInteger());
+    }
+    return true;
 }
 
 static void handleAudioVolumeChanged(const LLSD& newvalue)
 {
-	audio_update_volume(true);
+    audio_update_volume(true);
 }
 
 static bool handleJoystickChanged(const LLSD& newvalue)
 {
-	LLViewerJoystick::getInstance()->setCameraNeedsUpdate(TRUE);
-	return true;
+    LLViewerJoystick::getInstance()->setCameraNeedsUpdate(TRUE);
+    return true;
 }
 
 static bool handleUseOcclusionChanged(const LLSD& newvalue)
 {
-	LLPipeline::sUseOcclusion = (newvalue.asBoolean()
-		&& LLFeatureManager::getInstance()->isFeatureAvailable("UseOcclusion") && !gUseWireframe) ? 2 : 0;
-	return true;
+    LLPipeline::sUseOcclusion = (newvalue.asBoolean()
+        && LLFeatureManager::getInstance()->isFeatureAvailable("UseOcclusion") && !gUseWireframe) ? 2 : 0;
+    return true;
 }
 
 static bool handleUploadBakedTexOldChanged(const LLSD& newvalue)
 {
-	LLPipeline::sForceOldBakedUpload = newvalue.asBoolean();
-	return true;
+    LLPipeline::sForceOldBakedUpload = newvalue.asBoolean();
+    return true;
 }
 
 
 static bool handleWLSkyDetailChanged(const LLSD&)
 {
-	if (gSky.mVOWLSkyp.notNull())
-	{
-		gSky.mVOWLSkyp->updateGeometry(gSky.mVOWLSkyp->mDrawable);
-	}
-	return true;
+    if (gSky.mVOWLSkyp.notNull())
+    {
+        gSky.mVOWLSkyp->updateGeometry(gSky.mVOWLSkyp->mDrawable);
+    }
+    return true;
 }
 
 static bool handleRepartition(const LLSD&)
 {
-	if (gPipeline.isInit())
-	{
-		gOctreeMaxCapacity = gSavedSettings.getU32("OctreeMaxNodeCapacity");
-		gOctreeMinSize = gSavedSettings.getF32("OctreeMinimumNodeSize");
-		gObjectList.repartitionObjects();
-	}
-	return true;
+    if (gPipeline.isInit())
+    {
+        gOctreeMaxCapacity = gSavedSettings.getU32("OctreeMaxNodeCapacity");
+        gOctreeMinSize = gSavedSettings.getF32("OctreeMinimumNodeSize");
+        gObjectList.repartitionObjects();
+    }
+    return true;
 }
 
 static bool handleRenderDynamicLODChanged(const LLSD& newvalue)
 {
-	LLPipeline::sDynamicLOD = newvalue.asBoolean();
-	return true;
+    LLPipeline::sDynamicLOD = newvalue.asBoolean();
+    return true;
 }
 
 // static bool handleReflectionsEnabled(const LLSD& newvalue)
 // {
-// 	// <FS:Beq> FIRE-33659 - everything is too dark when reflections are disabled.
-// 	if(newvalue.asBoolean())
-// 	{
-// 		// TODO(Beq): This setting level should probably be governed by render quality settings.
-// 		gSavedSettings.setS32("RenderReflectionProbeLevel", 3);
-// 	}
-// 	else
-// 	{
-// 		gSavedSettings.setS32("RenderReflectionProbeLevel", 0);
-// 	}
+//  // <FS:Beq> FIRE-33659 - everything is too dark when reflections are disabled.
+//  if(newvalue.asBoolean())
+//  {
+//      // TODO(Beq): This setting level should probably be governed by render quality settings.
+//      gSavedSettings.setS32("RenderReflectionProbeLevel", 3);
+//  }
+//  else
+//  {
+//      gSavedSettings.setS32("RenderReflectionProbeLevel", 0);
+//  }
 //     return true;
 // }
 
@@ -545,498 +547,498 @@ static bool handleReflectionProbeDetailChanged(const LLSD& newvalue)
 
 static bool handleRenderDebugPipelineChanged(const LLSD& newvalue)
 {
-	gDebugPipeline = newvalue.asBoolean();
-	return true;
+    gDebugPipeline = newvalue.asBoolean();
+    return true;
 }
 
 static bool handleRenderResolutionDivisorChanged(const LLSD&)
 {
-	gResizeScreenTexture = TRUE;
-	return true;
+    gResizeScreenTexture = TRUE;
+    return true;
 }
 
 static bool handleDebugViewsChanged(const LLSD& newvalue)
 {
-	LLView::sDebugRects = newvalue.asBoolean();
-	return true;
+    LLView::sDebugRects = newvalue.asBoolean();
+    return true;
 }
 
 static bool handleLogFileChanged(const LLSD& newvalue)
 {
-	std::string log_filename = newvalue.asString();
-	LLFile::remove(log_filename);
-	LLError::logToFile(log_filename);
-	return true;
+    std::string log_filename = newvalue.asString();
+    LLFile::remove(log_filename);
+    LLError::logToFile(log_filename);
+    return true;
 }
 
 bool handleHideGroupTitleChanged(const LLSD& newvalue)
 {
-	gAgent.setHideGroupTitle(newvalue);
-	return true;
+    gAgent.setHideGroupTitle(newvalue);
+    return true;
 }
 
 bool handleEffectColorChanged(const LLSD& newvalue)
 {
-	gAgent.setEffectColor(LLColor4(newvalue));
-	return true;
+    gAgent.setEffectColor(LLColor4(newvalue));
+    return true;
 }
 
 bool handleHighResSnapshotChanged(const LLSD& newvalue)
 {
-	// High Res Snapshot active, must uncheck RenderUIInSnapshot
-	if (newvalue.asBoolean())
-	{
-		gSavedSettings.setBOOL( "RenderUIInSnapshot", FALSE );
-	}
-	return true;
+    // High Res Snapshot active, must uncheck RenderUIInSnapshot
+    if (newvalue.asBoolean())
+    {
+        gSavedSettings.setBOOL( "RenderUIInSnapshot", FALSE );
+    }
+    return true;
 }
 
 bool handleVoiceClientPrefsChanged(const LLSD& newvalue)
 {
-	if (LLVoiceClient::instanceExists())
-	{
-		LLVoiceClient::getInstance()->updateSettings();
-	}
-	return true;
+    if (LLVoiceClient::instanceExists())
+    {
+        LLVoiceClient::getInstance()->updateSettings();
+    }
+    return true;
 }
 
 // NaCl - Antispam Registry
 bool handleNaclAntiSpamGlobalQueueChanged(const LLSD& newvalue)
 {
-	NACLAntiSpamRegistry::instance().setGlobalQueue(newvalue.asBoolean());
-	return true;
+    NACLAntiSpamRegistry::instance().setGlobalQueue(newvalue.asBoolean());
+    return true;
 }
 bool handleNaclAntiSpamTimeChanged(const LLSD& newvalue)
 {
-	NACLAntiSpamRegistry::instance().setAllQueueTimes(newvalue.asInteger());
-	return true;
+    NACLAntiSpamRegistry::instance().setAllQueueTimes(newvalue.asInteger());
+    return true;
 }
 bool handleNaclAntiSpamAmountChanged(const LLSD& newvalue)
 {
-	NACLAntiSpamRegistry::instance().setAllQueueAmounts(newvalue.asInteger());
-	return true;
+    NACLAntiSpamRegistry::instance().setAllQueueAmounts(newvalue.asInteger());
+    return true;
 }
-// NaCl End 
+// NaCl End
 
 bool handleVelocityInterpolate(const LLSD& newvalue)
 {
-	LLMessageSystem* msg = gMessageSystem;
-	if ( newvalue.asBoolean() )
-	{
-		msg->newMessageFast(_PREHASH_VelocityInterpolateOn);
-		msg->nextBlockFast(_PREHASH_AgentData);
-		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-		gAgent.sendReliableMessage();
-		LL_INFOS() << "Velocity Interpolation On" << LL_ENDL;
-	}
-	else
-	{
-		msg->newMessageFast(_PREHASH_VelocityInterpolateOff);
-		msg->nextBlockFast(_PREHASH_AgentData);
-		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-		gAgent.sendReliableMessage();
-		LL_INFOS() << "Velocity Interpolation Off" << LL_ENDL;
-	}
-	return true;
+    LLMessageSystem* msg = gMessageSystem;
+    if ( newvalue.asBoolean() )
+    {
+        msg->newMessageFast(_PREHASH_VelocityInterpolateOn);
+        msg->nextBlockFast(_PREHASH_AgentData);
+        msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+        msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+        gAgent.sendReliableMessage();
+        LL_INFOS() << "Velocity Interpolation On" << LL_ENDL;
+    }
+    else
+    {
+        msg->newMessageFast(_PREHASH_VelocityInterpolateOff);
+        msg->nextBlockFast(_PREHASH_AgentData);
+        msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+        msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+        gAgent.sendReliableMessage();
+        LL_INFOS() << "Velocity Interpolation Off" << LL_ENDL;
+    }
+    return true;
 }
 
 bool handleForceShowGrid(const LLSD& newvalue)
 {
-	// <FS:Ansariel> [FS Login Panel]
-	//LLPanelLogin::updateLocationSelectorsVisibility( );
-	FSPanelLogin::updateLocationSelectorsVisibility( );
-	// </FS:Ansariel> [FS Login Panel]
-	return true;
+    // <FS:Ansariel> [FS Login Panel]
+    //LLPanelLogin::updateLocationSelectorsVisibility( );
+    FSPanelLogin::updateLocationSelectorsVisibility( );
+    // </FS:Ansariel> [FS Login Panel]
+    return true;
 }
 
 bool handleLoginLocationChanged()
 {
-	/*
-	 * This connects the default preference setting to the state of the login
-	 * panel if it is displayed; if you open the preferences panel before
-	 * logging in, and change the default login location there, the login
-	 * panel immediately changes to match your new preference.
-	 */
-	std::string new_login_location = gSavedSettings.getString("LoginLocation");
-	LL_DEBUGS("AppInit")<<new_login_location<<LL_ENDL;
-	LLStartUp::setStartSLURL(LLSLURL(new_login_location));
-	return true;
+    /*
+     * This connects the default preference setting to the state of the login
+     * panel if it is displayed; if you open the preferences panel before
+     * logging in, and change the default login location there, the login
+     * panel immediately changes to match your new preference.
+     */
+    std::string new_login_location = gSavedSettings.getString("LoginLocation");
+    LL_DEBUGS("AppInit")<<new_login_location<<LL_ENDL;
+    LLStartUp::setStartSLURL(LLSLURL(new_login_location));
+    return true;
 }
 
 bool handleSpellCheckChanged()
 {
-	if (gSavedSettings.getBOOL("SpellCheck"))
-	{
-		std::list<std::string> dict_list;
-		std::string dict_setting = gSavedSettings.getString("SpellCheckDictionary");
-		boost::split(dict_list, dict_setting, boost::is_any_of(std::string(",")));
-		if (!dict_list.empty())
-		{
-			LLSpellChecker::setUseSpellCheck(dict_list.front());
-			dict_list.pop_front();
-			LLSpellChecker::instance().setSecondaryDictionaries(dict_list);
-			return true;
-		}
-	}
-	LLSpellChecker::setUseSpellCheck(LLStringUtil::null);
-	return true;
+    if (gSavedSettings.getBOOL("SpellCheck"))
+    {
+        std::list<std::string> dict_list;
+        std::string dict_setting = gSavedSettings.getString("SpellCheckDictionary");
+        boost::split(dict_list, dict_setting, boost::is_any_of(std::string(",")));
+        if (!dict_list.empty())
+        {
+            LLSpellChecker::setUseSpellCheck(dict_list.front());
+            dict_list.pop_front();
+            LLSpellChecker::instance().setSecondaryDictionaries(dict_list);
+            return true;
+        }
+    }
+    LLSpellChecker::setUseSpellCheck(LLStringUtil::null);
+    return true;
 }
 
 bool toggle_agent_pause(const LLSD& newvalue)
 {
-	if ( newvalue.asBoolean() )
-	{
-		send_agent_pause();
-	}
-	else
-	{
-		send_agent_resume();
-	}
-	return true;
+    if ( newvalue.asBoolean() )
+    {
+        send_agent_pause();
+    }
+    else
+    {
+        send_agent_resume();
+    }
+    return true;
 }
 
 // <FS:Zi> Is done inside XUI now, using visibility_control
 // bool toggle_show_navigation_panel(const LLSD& newvalue)
 // {
-	//bool value = newvalue.asBoolean();
+    //bool value = newvalue.asBoolean();
 
-	//LLNavigationBar::getInstance()->setVisible(value);
-	//gSavedSettings.setBOOL("ShowMiniLocationPanel", !value);
+    //LLNavigationBar::getInstance()->setVisible(value);
+    //gSavedSettings.setBOOL("ShowMiniLocationPanel", !value);
     //gViewerWindow->reshapeStatusBarContainer();
-	//return true;
+    //return true;
 // }
 
 // <FS:Zi> We don't have the mini location bar
 // bool toggle_show_mini_location_panel(const LLSD& newvalue)
 // {
-	//bool value = newvalue.asBoolean();
+    //bool value = newvalue.asBoolean();
 
-	//LLPanelTopInfoBar::getInstance()->setVisible(value);
-	//gSavedSettings.setBOOL("ShowNavbarNavigationPanel", !value);
+    //LLPanelTopInfoBar::getInstance()->setVisible(value);
+    //gSavedSettings.setBOOL("ShowNavbarNavigationPanel", !value);
 
-	//return true;
+    //return true;
 // </FS:Zi>
 
 bool toggle_show_menubar_location_panel(const LLSD& newvalue)
 {
-	bool value = newvalue.asBoolean();
+    bool value = newvalue.asBoolean();
 
-	if (gStatusBar)
-		gStatusBar->childSetVisible("parcel_info_panel",value);
+    if (gStatusBar)
+        gStatusBar->childSetVisible("parcel_info_panel",value);
 
-	return true;
+    return true;
 }
 
 bool toggle_show_object_render_cost(const LLSD& newvalue)
 {
-	LLFloaterTools::sShowObjectCost = newvalue.asBoolean();
-	return true;
+    LLFloaterTools::sShowObjectCost = newvalue.asBoolean();
+    return true;
 }
 
 // <FS:Ansariel> Change visibility of main chatbar if autohide setting is changed
 static void handleAutohideChatbarChanged(const LLSD& new_value)
 {
-	// Flip MainChatbarVisible when chatbar autohide setting changes. This
-	// will trigger LLNearbyChat::showDefaultChatBar() being called. Since we
-	// don't want to loose focus of the preferences floater when changing the
-	// autohide setting, we have to use the workaround via gFloaterView.
-	LLFloater* focus = gFloaterView->getFocusedFloater();
-	gSavedSettings.setBOOL("MainChatbarVisible", !new_value.asBoolean());
-	if (focus)
-	{
-		focus->setFocus(TRUE);
-	}
+    // Flip MainChatbarVisible when chatbar autohide setting changes. This
+    // will trigger LLNearbyChat::showDefaultChatBar() being called. Since we
+    // don't want to loose focus of the preferences floater when changing the
+    // autohide setting, we have to use the workaround via gFloaterView.
+    LLFloater* focus = gFloaterView->getFocusedFloater();
+    gSavedSettings.setBOOL("MainChatbarVisible", !new_value.asBoolean());
+    if (focus)
+    {
+        focus->setFocus(TRUE);
+    }
 }
 // </FS:Ansariel>
 
 // <FS:Ansariel> Clear places / teleport history search filter
 static void handleUseStandaloneTeleportHistoryFloaterChanged()
 {
-	LLFloaterSidePanelContainer* places = LLFloaterReg::findTypedInstance<LLFloaterSidePanelContainer>("places");
-	if (places)
-	{
-		places->findChild<LLPanelPlaces>("main_panel")->resetFilter();
-	}
-	FSFloaterTeleportHistory* tphistory = LLFloaterReg::findTypedInstance<FSFloaterTeleportHistory>("fs_teleporthistory");
-	if (tphistory)
-	{
-		tphistory->resetFilter();
-	}
+    LLFloaterSidePanelContainer* places = LLFloaterReg::findTypedInstance<LLFloaterSidePanelContainer>("places");
+    if (places)
+    {
+        places->findChild<LLPanelPlaces>("main_panel")->resetFilter();
+    }
+    FSFloaterTeleportHistory* tphistory = LLFloaterReg::findTypedInstance<FSFloaterTeleportHistory>("fs_teleporthistory");
+    if (tphistory)
+    {
+        tphistory->resetFilter();
+    }
 }
 // </FS:Ansariel> Clear places / teleport history search filter
 
 // <FS:CR> Posestand Ground Lock
 static void handleSetPoseStandLock(const LLSD& newvalue)
 {
-	FSFloaterPoseStand* pose_stand = LLFloaterReg::findTypedInstance<FSFloaterPoseStand>("fs_posestand");
-	if (pose_stand)
-	{
-		pose_stand->setLock(newvalue);
-		pose_stand->onCommitCombo();
-	}
-		
+    FSFloaterPoseStand* pose_stand = LLFloaterReg::findTypedInstance<FSFloaterPoseStand>("fs_posestand");
+    if (pose_stand)
+    {
+        pose_stand->setLock(newvalue);
+        pose_stand->onCommitCombo();
+    }
+
 }
 // </FS:CR> Posestand Ground Lock
 
 // <FS:TT> Client LSL Bridge
 static void handleFlightAssistOptionChanged(const LLSD& newvalue)
 {
-	FSLSLBridge::instance().viewerToLSL("UseLSLFlightAssist|" + newvalue.asString());
+    FSLSLBridge::instance().viewerToLSL("UseLSLFlightAssist|" + newvalue.asString());
 }
 // </FS:TT>
 
 // <FS:PP> Movelock for Bridge
 static void handleMovelockOptionChanged(const LLSD& newvalue)
 {
-	FSLSLBridge::instance().updateBoolSettingValue("UseMoveLock", newvalue.asBoolean());
+    FSLSLBridge::instance().updateBoolSettingValue("UseMoveLock", newvalue.asBoolean());
 }
 static void handleMovelockAfterMoveOptionChanged(const LLSD& newvalue)
 {
-	FSLSLBridge::instance().updateBoolSettingValue("RelockMoveLockAfterMovement", newvalue.asBoolean());
+    FSLSLBridge::instance().updateBoolSettingValue("RelockMoveLockAfterMovement", newvalue.asBoolean());
 }
 // </FS:PP>
 
 // <FS:PP> External integrations (OC, LM etc.) for Bridge
 static void handleExternalIntegrationsOptionChanged()
 {
-	FSLSLBridge::instance().updateIntegrations();
+    FSLSLBridge::instance().updateIntegrations();
 }
 // </FS:PP>
 
 static void handleDecimalPrecisionChanged(const LLSD& newvalue)
 {
-	LLFloaterTools* build_tools = LLFloaterReg::findTypedInstance<LLFloaterTools>("build");
-	if (build_tools)
-	{
-		build_tools->changePrecision(newvalue);
-	}
+    LLFloaterTools* build_tools = LLFloaterReg::findTypedInstance<LLFloaterTools>("build");
+    if (build_tools)
+    {
+        build_tools->changePrecision(newvalue);
+    }
 }
 
 // <FS:CR> FIRE-6659: Legacy "Resident" name toggle
 void handleLegacyTrimOptionChanged(const LLSD& newvalue)
 {
-	LLAvatarName::setTrimResidentSurname(newvalue.asBoolean());
-	LLAvatarNameCache::getInstance()->clearCache();
-	LLVOAvatar::invalidateNameTags();
-	FSFloaterContacts::getInstance()->onDisplayNameChanged();
-	FSRadar::getInstance()->updateNames();
+    LLAvatarName::setTrimResidentSurname(newvalue.asBoolean());
+    LLAvatarNameCache::getInstance()->clearCache();
+    LLVOAvatar::invalidateNameTags();
+    FSFloaterContacts::getInstance()->onDisplayNameChanged();
+    FSRadar::getInstance()->updateNames();
 }
 
 void handleUsernameFormatOptionChanged(const LLSD& newvalue)
 {
-	LLAvatarName::setUseLegacyFormat(newvalue.asBoolean());
-	LLAvatarNameCache::getInstance()->clearCache();
-	LLVOAvatar::invalidateNameTags();
-	FSFloaterContacts::getInstance()->onDisplayNameChanged();
-	FSRadar::getInstance()->updateNames();
+    LLAvatarName::setUseLegacyFormat(newvalue.asBoolean());
+    LLAvatarNameCache::getInstance()->clearCache();
+    LLVOAvatar::invalidateNameTags();
+    FSFloaterContacts::getInstance()->onDisplayNameChanged();
+    FSRadar::getInstance()->updateNames();
 }
 // </FS:CR>
 
 // <FS:Ansariel> Global online status toggle
 void handleGlobalOnlineStatusChanged(const LLSD& newvalue)
 {
-	bool visible = newvalue.asBoolean();
+    bool visible = newvalue.asBoolean();
 
-	LLAvatarTracker::buddy_map_t all_buddies;
-	LLAvatarTracker::instance().copyBuddyList(all_buddies);
+    LLAvatarTracker::buddy_map_t all_buddies;
+    LLAvatarTracker::instance().copyBuddyList(all_buddies);
 
-	LLAvatarTracker::buddy_map_t::const_iterator buddy_it = all_buddies.begin();
-	for (; buddy_it != all_buddies.end(); ++buddy_it)
-	{
-		LLUUID buddy_id = buddy_it->first;
-		const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(buddy_id);
-		if (relation == NULL)
-		{
-			// Lets have a warning log message instead of having a crash. EXT-4947.
-			LL_WARNS() << "Trying to modify rights for non-friend avatar. Skipped." << LL_ENDL;
-			return;
-		}
-		
-		S32 cur_rights = relation->getRightsGrantedTo();
-		S32 new_rights = 0;
-		if (visible)
-		{
-			new_rights = LLRelationship::GRANT_ONLINE_STATUS + (cur_rights & LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
-		}
-		else
-		{
-			new_rights = (cur_rights & LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
-		}
+    LLAvatarTracker::buddy_map_t::const_iterator buddy_it = all_buddies.begin();
+    for (; buddy_it != all_buddies.end(); ++buddy_it)
+    {
+        LLUUID buddy_id = buddy_it->first;
+        const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(buddy_id);
+        if (relation == NULL)
+        {
+            // Lets have a warning log message instead of having a crash. EXT-4947.
+            LL_WARNS() << "Trying to modify rights for non-friend avatar. Skipped." << LL_ENDL;
+            return;
+        }
 
-		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(buddy_id, new_rights);
-	}
+        S32 cur_rights = relation->getRightsGrantedTo();
+        S32 new_rights = 0;
+        if (visible)
+        {
+            new_rights = LLRelationship::GRANT_ONLINE_STATUS + (cur_rights & LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
+        }
+        else
+        {
+            new_rights = (cur_rights & LLRelationship::GRANT_MAP_LOCATION) + (cur_rights & LLRelationship::GRANT_MODIFY_OBJECTS);
+        }
 
-	LLNotificationsUtil::add("GlobalOnlineStatusToggle");
+        LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(buddy_id, new_rights);
+    }
+
+    LLNotificationsUtil::add("GlobalOnlineStatusToggle");
 }
 // </FS:Ansariel>
 
 // <FS:Ansariel> FIRE-14083: Search filter for contact list
 void handleContactListShowSearchChanged(const LLSD& newvalue)
 {
-	bool visible = newvalue.asBoolean();
-	if (!visible)
-	{
-		FSFloaterContacts* instance = FSFloaterContacts::findInstance();
-		if (instance)
-		{
-			instance->resetFriendFilter();
-		}
-	}
+    bool visible = newvalue.asBoolean();
+    if (!visible)
+    {
+        FSFloaterContacts* instance = FSFloaterContacts::findInstance();
+        if (instance)
+        {
+            instance->resetFriendFilter();
+        }
+    }
 }
 // </FS:Ansariel>
 
 // <FS:Ansariel> Debug setting to disable log throttle
 void handleLogThrottleChanged(const LLSD& newvalue)
 {
-	nd::logging::setThrottleEnabled(newvalue.asBoolean());
+    nd::logging::setThrottleEnabled(newvalue.asBoolean());
 }
 // </FS:Ansariel>
 
 // <FS:Ansariel> FIRE-18250: Option to disable default eye movement
 void handleStaticEyesChanged()
 {
-	if (!isAgentAvatarValid())
-	{
-		return;
-	}
+    if (!isAgentAvatarValid())
+    {
+        return;
+    }
 
-	LLUUID anim_id(gSavedSettings.getString("FSStaticEyesUUID"));
-	if (gSavedPerAccountSettings.getBOOL("FSStaticEyes"))
-	{
-		gAgentAvatarp->startMotion(anim_id);
-		gAgent.sendAnimationRequest(anim_id, ANIM_REQUEST_START);
-	}
-	else
-	{
-		gAgentAvatarp->stopMotion(anim_id);
-		gAgent.sendAnimationRequest(anim_id, ANIM_REQUEST_STOP);
-	}
+    LLUUID anim_id(gSavedSettings.getString("FSStaticEyesUUID"));
+    if (gSavedPerAccountSettings.getBOOL("FSStaticEyes"))
+    {
+        gAgentAvatarp->startMotion(anim_id);
+        gAgent.sendAnimationRequest(anim_id, ANIM_REQUEST_START);
+    }
+    else
+    {
+        gAgentAvatarp->stopMotion(anim_id);
+        gAgent.sendAnimationRequest(anim_id, ANIM_REQUEST_STOP);
+    }
 }
 // </FS:Ansariel>
 
 // <FS:Ansariel> Notification not showing if hiding the UI
 void handleNavbarSettingsChanged()
 {
-	gSavedSettings.setBOOL("FSInternalShowNavbarNavigationPanel", gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
-	gSavedSettings.setBOOL("FSInternalShowNavbarFavoritesPanel", gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
+    gSavedSettings.setBOOL("FSInternalShowNavbarNavigationPanel", gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
+    gSavedSettings.setBOOL("FSInternalShowNavbarFavoritesPanel", gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
 }
 // </FS:Ansariel>
 
 // <FS:Ansariel> FIRE-20288: Option to render friends only
 void handleRenderFriendsOnlyChanged(const LLSD& newvalue)
 {
-	if (newvalue.asBoolean())
-	{
-		for (std::vector<LLCharacter*>::iterator iter = LLCharacter::sInstances.begin();
-			iter != LLCharacter::sInstances.end(); ++iter)
-		{
-			LLVOAvatar* avatar = (LLVOAvatar*)*iter;
+    if (newvalue.asBoolean())
+    {
+        for (std::vector<LLCharacter*>::iterator iter = LLCharacter::sInstances.begin();
+            iter != LLCharacter::sInstances.end(); ++iter)
+        {
+            LLVOAvatar* avatar = (LLVOAvatar*)*iter;
 
-			if (avatar->getID() != gAgentID && !LLAvatarActions::isFriend(avatar->getID()) && !avatar->isControlAvatar())
-			{
-				gObjectList.killObject(avatar);
-				if (LLViewerRegion::sVOCacheCullingEnabled && avatar->getRegion())
-				{
-					avatar->getRegion()->killCacheEntry(avatar->getLocalID());
-				}
-			}
-		}
-	}
+            if (avatar->getID() != gAgentID && !LLAvatarActions::isFriend(avatar->getID()) && !avatar->isControlAvatar())
+            {
+                gObjectList.killObject(avatar);
+                if (LLViewerRegion::sVOCacheCullingEnabled && avatar->getRegion())
+                {
+                    avatar->getRegion()->killCacheEntry(avatar->getLocalID());
+                }
+            }
+        }
+    }
 }
 // </FS:Ansariel>
 
 // <FS:LO> Add ability for the statistics window to not be able to receive focus
 void handleFSStatisticsNoFocusChanged(const LLSD& newvalue)
 {
-	LLFloater* stats = LLFloaterReg::findInstance("stats");
-	if (stats)
-	{
-		stats->setIsChrome(newvalue.asBoolean());
-	}
+    LLFloater* stats = LLFloaterReg::findInstance("stats");
+    if (stats)
+    {
+        stats->setIsChrome(newvalue.asBoolean());
+    }
 }
 // </FS:LO>
 
 // <FS:Ansariel> Output device selection
 void handleOutputDeviceChanged(const LLSD& newvalue)
 {
-	if (gAudiop)
-	{
-		gAudiop->setDevice(newvalue.asUUID());
-	}
+    if (gAudiop)
+    {
+        gAudiop->setDevice(newvalue.asUUID());
+    }
 }
 // </FS:Ansariel>
 
 // <FS:TS> FIRE-24081: Disable HiDPI by default and warn if set
 void handleRenderHiDPIChanged(const LLSD& newvalue)
 {
-	if (newvalue)
-	{
-		LLNotificationsUtil::add("EnableHiDPI");
-	}
+    if (newvalue)
+    {
+        LLNotificationsUtil::add("EnableHiDPI");
+    }
 }
 // </FS:TS> FIRE-24081
 
 // <FS:Ansariel> Optional small camera floater
 void handleSmallCameraFloaterChanged(const LLSD& newValue)
 {
-	std::string old_floater_name = newValue.asBoolean() ? "camera" : "fs_camera_small";
-	std::string new_floater_name = newValue.asBoolean() ? "fs_camera_small" : "camera";
+    std::string old_floater_name = newValue.asBoolean() ? "camera" : "fs_camera_small";
+    std::string new_floater_name = newValue.asBoolean() ? "fs_camera_small" : "camera";
 
-	if (LLFloaterReg::instanceVisible(old_floater_name))
-	{
-		LLFloaterReg::hideInstance(old_floater_name);
-		LLFloaterReg::showInstance(new_floater_name);
-	}
+    if (LLFloaterReg::instanceVisible(old_floater_name))
+    {
+        LLFloaterReg::hideInstance(old_floater_name);
+        LLFloaterReg::showInstance(new_floater_name);
+    }
 }
 // </FS:Ansariel>
 
 // <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
 void handleStatusbarTimeformatChanged(const LLSD& newValue)
 {
-	const std::string format = newValue.asString();
-	if (gStatusBar)
-	{
-		gStatusBar->onTimeFormatChanged(format);
-	}
+    const std::string format = newValue.asString();
+    if (gStatusBar)
+    {
+        gStatusBar->onTimeFormatChanged(format);
+    }
 }
 // </FS:Zi>
 
 // <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
 void handlePlayBentoIdleAnimationChanged(const LLSD& newValue)
 {
-	EAnimRequest startStop = ANIM_REQUEST_STOP;
+    EAnimRequest startStop = ANIM_REQUEST_STOP;
 
-	if (newValue.asBoolean())
-	{
-		startStop = ANIM_REQUEST_START;
-	}
+    if (newValue.asBoolean())
+    {
+        startStop = ANIM_REQUEST_START;
+    }
 
-	gAgent.sendAnimationRequest(ANIM_AGENT_BENTO_IDLE, startStop);
+    gAgent.sendAnimationRequest(ANIM_AGENT_BENTO_IDLE, startStop);
 }
 // </FS:Zi>
 
 // <FS:Ansariel> Better asset cache size control
 void handleDiskCacheSizeChanged(const LLSD& newValue)
 {
-	const unsigned int disk_cache_mb = gSavedSettings.getU32("FSDiskCacheSize");
-	const U64 disk_cache_bytes = disk_cache_mb * 1024ULL * 1024ULL;
-	LLDiskCache::getInstance()->setMaxSizeBytes(disk_cache_bytes);
+    const unsigned int disk_cache_mb = gSavedSettings.getU32("FSDiskCacheSize");
+    const U64 disk_cache_bytes = disk_cache_mb * 1024ULL * 1024ULL;
+    LLDiskCache::getInstance()->setMaxSizeBytes(disk_cache_bytes);
 }
 // </FS:Ansariel>
 
 // <FS:Beq> Better asset cache purge control
 void handleDiskCacheHighWaterPctChanged(const LLSD& newValue)
 {
-	const auto new_high = newValue.asReal();
-	LLDiskCache::getInstance()->setHighWaterPercentage(new_high);
+    const auto new_high = newValue.asReal();
+    LLDiskCache::getInstance()->setHighWaterPercentage(new_high);
 }
 
 void handleDiskCacheLowWaterPctChanged(const LLSD& newValue)
 {
-	const auto new_low = newValue.asReal();
-	LLDiskCache::getInstance()->setLowWaterPercentage(new_low);
+    const auto new_low = newValue.asReal();
+    LLDiskCache::getInstance()->setLowWaterPercentage(new_low);
 }
 // </FS:Beq>
 
@@ -1084,6 +1086,12 @@ void handleUserTargetDrawDistanceChanged(const LLSD& newValue)
     LLPerfStats::tunables.userTargetDrawDistance = newval;
 }
 
+void handleUserMinDrawDistanceChanged(const LLSD &newValue)
+{
+    const auto newval = gSavedSettings.getF32("AutoTuneRenderFarClipMin");
+    LLPerfStats::tunables.userMinDrawDistance = newval;
+}
+
 void handlePerformanceStatsEnabledChanged(const LLSD& newValue)
 {
     const auto newval = gSavedSettings.getBOOL("PerfStatsCaptureEnabled");
@@ -1108,7 +1116,7 @@ void handleFPSTuningStrategyChanged(const LLSD& newValue)
 // <FS:Ansariel> FIRE-6809: Quickly moving the bandwidth slider has no effect
 void handleBandwidthChanged(const LLSD& newValue)
 {
-	sBandwidthUpdater.update(newValue);
+    sBandwidthUpdater.update(newValue);
 }
 // </FS:Ansariel>
 
@@ -1205,7 +1213,7 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "RenderDeferredSSAO", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderPerformanceTest", handleRenderPerfTestChanged);
     setting_setup_signal_listener(gSavedSettings, "ChatConsoleFontSize", handleChatFontSizeChanged);
-    setting_setup_signal_listener(gSavedSettings, "ChatPersistTime", handleChatPersistTimeChanged);
+    setting_setup_signal_listener(gSavedSettings, "ChatPersistTime", handleChatPersistTimeChanged); // <FS:Ansariel> Keep custom chat persist time
     setting_setup_signal_listener(gSavedSettings, "ConsoleMaxLines", handleConsoleMaxLinesChanged);
     setting_setup_signal_listener(gSavedSettings, "UploadBakedTexOld", handleUploadBakedTexOldChanged);
     setting_setup_signal_listener(gSavedSettings, "UseOcclusion", handleUseOcclusionChanged);
@@ -1216,9 +1224,6 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "AudioLevelMusic", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "AudioLevelMedia", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "AudioLevelVoice", handleAudioVolumeChanged);
-    setting_setup_signal_listener(gSavedSettings, "AudioLevelDoppler", handleAudioVolumeChanged);
-    setting_setup_signal_listener(gSavedSettings, "AudioLevelRolloff", handleAudioVolumeChanged);
-    setting_setup_signal_listener(gSavedSettings, "AudioLevelUnderwaterRolloff", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "MuteAudio", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "MuteMusic", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "MuteMedia", handleAudioVolumeChanged);
@@ -1286,7 +1291,7 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "VoiceInputAudioDevice", handleVoiceClientPrefsChanged);
     setting_setup_signal_listener(gSavedSettings, "VoiceOutputAudioDevice", handleVoiceClientPrefsChanged);
     setting_setup_signal_listener(gSavedSettings, "AudioLevelMic", handleVoiceClientPrefsChanged);
-    setting_setup_signal_listener(gSavedSettings, "LipSyncEnabled", handleVoiceClientPrefsChanged);	
+    setting_setup_signal_listener(gSavedSettings, "LipSyncEnabled", handleVoiceClientPrefsChanged);
     setting_setup_signal_listener(gSavedSettings, "VelocityInterpolate", handleVelocityInterpolate);
     setting_setup_signal_listener(gSavedSettings, "QAMode", show_debug_menus);
     setting_setup_signal_listener(gSavedSettings, "UseDebugMenus", show_debug_menus);
@@ -1314,6 +1319,7 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "RenderAvatarMaxART", handleRenderAvatarMaxARTChanged);
     setting_setup_signal_listener(gSavedSettings, "PerfStatsCaptureEnabled", handlePerformanceStatsEnabledChanged);
     setting_setup_signal_listener(gSavedSettings, "AutoTuneRenderFarClipTarget", handleUserTargetDrawDistanceChanged);
+    setting_setup_signal_listener(gSavedSettings, "AutoTuneRenderFarClipMin", handleUserMinDrawDistanceChanged);
     setting_setup_signal_listener(gSavedSettings, "AutoTuneImpostorFarAwayDistance", handleUserImpostorDistanceChanged);
     setting_setup_signal_listener(gSavedSettings, "AutoTuneImpostorByDistEnabled", handleUserImpostorByDistEnabledChanged);
     setting_setup_signal_listener(gSavedSettings, "TuningFPSStrategy", handleFPSTuningStrategyChanged);
@@ -1321,95 +1327,95 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedPerAccountSettings, "AvatarHoverOffsetZ", handleAvatarHoverOffsetChanged);
 
 // [RLVa:KB] - Checked: 2015-12-27 (RLVa-1.5.0)
-	setting_setup_signal_listener(gSavedSettings, RlvSettingNames::Main, RlvSettings::onChangedSettingMain);
+    setting_setup_signal_listener(gSavedSettings, RlvSettingNames::Main, RlvSettings::onChangedSettingMain);
 // [/RLVa:KB]
-	// NaCl - Antispam Registry
-	setting_setup_signal_listener(gSavedSettings, "_NACL_AntiSpamGlobalQueue", handleNaclAntiSpamGlobalQueueChanged);
-	setting_setup_signal_listener(gSavedSettings, "_NACL_AntiSpamTime", handleNaclAntiSpamTimeChanged);
-	setting_setup_signal_listener(gSavedSettings, "_NACL_AntiSpamAmount", handleNaclAntiSpamAmountChanged);
-	// NaCl End
-	setting_setup_signal_listener(gSavedSettings, "AutohideChatBar", handleAutohideChatbarChanged);
+    // NaCl - Antispam Registry
+    setting_setup_signal_listener(gSavedSettings, "_NACL_AntiSpamGlobalQueue", handleNaclAntiSpamGlobalQueueChanged);
+    setting_setup_signal_listener(gSavedSettings, "_NACL_AntiSpamTime", handleNaclAntiSpamTimeChanged);
+    setting_setup_signal_listener(gSavedSettings, "_NACL_AntiSpamAmount", handleNaclAntiSpamAmountChanged);
+    // NaCl End
+    setting_setup_signal_listener(gSavedSettings, "AutohideChatBar", handleAutohideChatbarChanged);
 
-	// <FS:Ansariel> Clear places / teleport history search filter
-	setting_setup_signal_listener(gSavedSettings, "FSUseStandaloneTeleportHistoryFloater", handleUseStandaloneTeleportHistoryFloaterChanged);
+    // <FS:Ansariel> Clear places / teleport history search filter
+    setting_setup_signal_listener(gSavedSettings, "FSUseStandaloneTeleportHistoryFloater", handleUseStandaloneTeleportHistoryFloaterChanged);
 
-	// <FS:CR> Pose stand ground lock
-	setting_setup_signal_listener(gSavedSettings, "FSPoseStandLock", handleSetPoseStandLock);
+    // <FS:CR> Pose stand ground lock
+    setting_setup_signal_listener(gSavedSettings, "FSPoseStandLock", handleSetPoseStandLock);
 
-	setting_setup_signal_listener(gSavedPerAccountSettings, "UseLSLFlightAssist", handleFlightAssistOptionChanged);
-	setting_setup_signal_listener(gSavedPerAccountSettings, "UseMoveLock", handleMovelockOptionChanged);
-	setting_setup_signal_listener(gSavedPerAccountSettings, "RelockMoveLockAfterMovement", handleMovelockAfterMoveOptionChanged);
-	setting_setup_signal_listener(gSavedSettings, "FSBuildToolDecimalPrecision", handleDecimalPrecisionChanged);
+    setting_setup_signal_listener(gSavedPerAccountSettings, "UseLSLFlightAssist", handleFlightAssistOptionChanged);
+    setting_setup_signal_listener(gSavedPerAccountSettings, "UseMoveLock", handleMovelockOptionChanged);
+    setting_setup_signal_listener(gSavedPerAccountSettings, "RelockMoveLockAfterMovement", handleMovelockAfterMoveOptionChanged);
+    setting_setup_signal_listener(gSavedSettings, "FSBuildToolDecimalPrecision", handleDecimalPrecisionChanged);
 
-	// <FS:PP> External integrations (OC, LM etc.) for Bridge
-	setting_setup_signal_listener(gSavedPerAccountSettings, "BridgeIntegrationOC", handleExternalIntegrationsOptionChanged);
-	setting_setup_signal_listener(gSavedPerAccountSettings, "BridgeIntegrationLM", handleExternalIntegrationsOptionChanged);
+    // <FS:PP> External integrations (OC, LM etc.) for Bridge
+    setting_setup_signal_listener(gSavedPerAccountSettings, "BridgeIntegrationOC", handleExternalIntegrationsOptionChanged);
+    setting_setup_signal_listener(gSavedPerAccountSettings, "BridgeIntegrationLM", handleExternalIntegrationsOptionChanged);
 
-	setting_setup_signal_listener(gSavedSettings, "FSNameTagShowLegacyUsernames", handleUsernameFormatOptionChanged);
-	setting_setup_signal_listener(gSavedSettings, "FSTrimLegacyNames", handleLegacyTrimOptionChanged);
+    setting_setup_signal_listener(gSavedSettings, "FSNameTagShowLegacyUsernames", handleUsernameFormatOptionChanged);
+    setting_setup_signal_listener(gSavedSettings, "FSTrimLegacyNames", handleLegacyTrimOptionChanged);
 
-	// <FS:Ansariel> [FS communication UI]
-	setting_setup_signal_listener(gSavedSettings, "PlainTextChatHistory", FSFloaterIM::processChatHistoryStyleUpdate);
-	setting_setup_signal_listener(gSavedSettings, "PlainTextChatHistory", FSFloaterNearbyChat::processChatHistoryStyleUpdate);
-	setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterIM::processChatHistoryStyleUpdate);
-	setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterNearbyChat::processChatHistoryStyleUpdate);
-	setting_setup_signal_listener(gSavedSettings, "ChatFontSize", LLViewerChat::signalChatFontChanged);
-	// </FS:Ansariel> [FS communication UI]
+    // <FS:Ansariel> [FS communication UI]
+    setting_setup_signal_listener(gSavedSettings, "PlainTextChatHistory", FSFloaterIM::processChatHistoryStyleUpdate);
+    setting_setup_signal_listener(gSavedSettings, "PlainTextChatHistory", FSFloaterNearbyChat::processChatHistoryStyleUpdate);
+    setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterIM::processChatHistoryStyleUpdate);
+    setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterNearbyChat::processChatHistoryStyleUpdate);
+    setting_setup_signal_listener(gSavedSettings, "ChatFontSize", LLViewerChat::signalChatFontChanged);
+    // </FS:Ansariel> [FS communication UI]
 
-	setting_setup_signal_listener(gSavedPerAccountSettings, "GlobalOnlineStatusToggle", handleGlobalOnlineStatusChanged);
+    setting_setup_signal_listener(gSavedPerAccountSettings, "GlobalOnlineStatusToggle", handleGlobalOnlineStatusChanged);
 
-	// <FS:Ansariel> FIRE-17393: Control HUD text fading by options
-	setting_setup_signal_listener(gSavedSettings, "FSHudTextFadeDistance", LLHUDText::onFadeSettingsChanged);
-	setting_setup_signal_listener(gSavedSettings, "FSHudTextFadeRange", LLHUDText::onFadeSettingsChanged);
+    // <FS:Ansariel> FIRE-17393: Control HUD text fading by options
+    setting_setup_signal_listener(gSavedSettings, "FSHudTextFadeDistance", LLHUDText::onFadeSettingsChanged);
+    setting_setup_signal_listener(gSavedSettings, "FSHudTextFadeRange", LLHUDText::onFadeSettingsChanged);
 
-	//<FS:HG> FIRE-6340, FIRE-6567, FIRE-6809 - Setting Bandwidth issues
-	setting_setup_signal_listener(gSavedSettings, "ThrottleBandwidthKBPS", handleBandwidthChanged);
-	setting_setup_signal_listener(gSavedSettings, "FSContactListShowSearch", handleContactListShowSearchChanged);
+    //<FS:HG> FIRE-6340, FIRE-6567, FIRE-6809 - Setting Bandwidth issues
+    setting_setup_signal_listener(gSavedSettings, "ThrottleBandwidthKBPS", handleBandwidthChanged);
+    setting_setup_signal_listener(gSavedSettings, "FSContactListShowSearch", handleContactListShowSearchChanged);
 
-	// <FS:Ansariel> Debug setting to disable log throttle
-	setting_setup_signal_listener(gSavedSettings, "FSEnableLogThrottle", handleLogThrottleChanged);
+    // <FS:Ansariel> Debug setting to disable log throttle
+    setting_setup_signal_listener(gSavedSettings, "FSEnableLogThrottle", handleLogThrottleChanged);
 
-	// <FS:Ansariel> FIRE-18250: Option to disable default eye movement
-	setting_setup_signal_listener(gSavedSettings, "FSStaticEyesUUID", handleStaticEyesChanged);
-	setting_setup_signal_listener(gSavedPerAccountSettings, "FSStaticEyes", handleStaticEyesChanged);
-	// </FS:Ansariel>
+    // <FS:Ansariel> FIRE-18250: Option to disable default eye movement
+    setting_setup_signal_listener(gSavedSettings, "FSStaticEyesUUID", handleStaticEyesChanged);
+    setting_setup_signal_listener(gSavedPerAccountSettings, "FSStaticEyes", handleStaticEyesChanged);
+    // </FS:Ansariel>
 
-	// <FS:Ansariel> FIRE-20288: Option to render friends only
-	setting_setup_signal_listener(gSavedPerAccountSettings, "FSRenderFriendsOnly", handleRenderFriendsOnlyChanged);
+    // <FS:Ansariel> FIRE-20288: Option to render friends only
+    setting_setup_signal_listener(gSavedPerAccountSettings, "FSRenderFriendsOnly", handleRenderFriendsOnlyChanged);
 
-	// <FS:Ansariel> Notification not showing if hiding the UI
-	setting_setup_signal_listener(gSavedSettings, "ShowNavbarFavoritesPanel", handleNavbarSettingsChanged);
-	setting_setup_signal_listener(gSavedSettings, "ShowNavbarNavigationPanel", handleNavbarSettingsChanged);
-	// </FS:Ansariel>
+    // <FS:Ansariel> Notification not showing if hiding the UI
+    setting_setup_signal_listener(gSavedSettings, "ShowNavbarFavoritesPanel", handleNavbarSettingsChanged);
+    setting_setup_signal_listener(gSavedSettings, "ShowNavbarNavigationPanel", handleNavbarSettingsChanged);
+    // </FS:Ansariel>
 
-	// <FS:LO> Add ability for the statistics window to not be able to receive focus
-	setting_setup_signal_listener(gSavedSettings, "FSStatisticsNoFocus", handleFSStatisticsNoFocusChanged);
-	// </FS:LO>
+    // <FS:LO> Add ability for the statistics window to not be able to receive focus
+    setting_setup_signal_listener(gSavedSettings, "FSStatisticsNoFocus", handleFSStatisticsNoFocusChanged);
+    // </FS:LO>
 
-	// <FS:Ansariel> Output device selection
-	setting_setup_signal_listener(gSavedSettings, "FSOutputDeviceUUID", handleOutputDeviceChanged);
+    // <FS:Ansariel> Output device selection
+    setting_setup_signal_listener(gSavedSettings, "FSOutputDeviceUUID", handleOutputDeviceChanged);
 
-	// <FS:Ansariel> Optional small camera floater
-	setting_setup_signal_listener(gSavedSettings, "FSUseSmallCameraFloater", handleSmallCameraFloaterChanged);
+    // <FS:Ansariel> Optional small camera floater
+    setting_setup_signal_listener(gSavedSettings, "FSUseSmallCameraFloater", handleSmallCameraFloaterChanged);
 
-	// <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
-	setting_setup_signal_listener(gSavedSettings, "FSStatusBarTimeFormat", handleStatusbarTimeformatChanged);
+    // <FS:Zi> FIRE-20390, FIRE-4269 - Option for 12/24 hour clock and seconds display
+    setting_setup_signal_listener(gSavedSettings, "FSStatusBarTimeFormat", handleStatusbarTimeformatChanged);
 
-	// <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
-	setting_setup_signal_listener(gSavedSettings, "FSPlayDefaultBentoAnimation", handlePlayBentoIdleAnimationChanged);
+    // <FS:Zi> Run Prio 0 default bento pose in the background to fix splayed hands, open mouths, etc.
+    setting_setup_signal_listener(gSavedSettings, "FSPlayDefaultBentoAnimation", handlePlayBentoIdleAnimationChanged);
 
-	// <FS:Ansariel> Better asset cache size control
-	setting_setup_signal_listener(gSavedSettings, "FSDiskCacheSize", handleDiskCacheSizeChanged);
-	// <FS:Beq> Better asset cache purge control
-	setting_setup_signal_listener(gSavedSettings, "FSDiskCacheHighWaterPercent", handleDiskCacheHighWaterPctChanged);
-	setting_setup_signal_listener(gSavedSettings, "FSDiskCacheLowWaterPercent", handleDiskCacheLowWaterPctChanged);
-	// </FS:Beq>
+    // <FS:Ansariel> Better asset cache size control
+    setting_setup_signal_listener(gSavedSettings, "FSDiskCacheSize", handleDiskCacheSizeChanged);
+    // <FS:Beq> Better asset cache purge control
+    setting_setup_signal_listener(gSavedSettings, "FSDiskCacheHighWaterPercent", handleDiskCacheHighWaterPctChanged);
+    setting_setup_signal_listener(gSavedSettings, "FSDiskCacheLowWaterPercent", handleDiskCacheLowWaterPctChanged);
+    // </FS:Beq>
 
-	// <FS:Zi> Handle IME text input getting enabled or disabled
+    // <FS:Zi> Handle IME text input getting enabled or disabled
 #if LL_SDL2
-	setting_setup_signal_listener(gSavedSettings, "SDL2IMEEnabled", handleSDL2IMEEnabledChanged);
+    setting_setup_signal_listener(gSavedSettings, "SDL2IMEEnabled", handleSDL2IMEEnabledChanged);
 #endif
-	// </FS:Zi>
+    // </FS:Zi>
 }
 
 #if TEST_CACHED_CONTROL
@@ -1431,27 +1437,22 @@ DECL_LLCC(LLColor4U, LLColor4U(255, 200, 100, 255));
 LLSD test_llsd = LLSD()["testing1"] = LLSD()["testing2"];
 DECL_LLCC(LLSD, test_llsd);
 
-static LLCachedControl<std::string> test_BrowserHomePage("BrowserHomePage", "hahahahahha", "Not the real comment");
-
 void test_cached_control()
 {
 #define do { TEST_LLCC(T, V) if((T)mySetting_##T != V) LL_ERRS() << "Fail "#T << LL_ENDL; } while(0)
-	TEST_LLCC(U32, 666);
-	TEST_LLCC(S32, (S32)-666);
-	TEST_LLCC(F32, (F32)-666.666);
-	TEST_LLCC(bool, true);
-	TEST_LLCC(BOOL, FALSE);
-	if((std::string)mySetting_string != "Default String Value") LL_ERRS() << "Fail string" << LL_ENDL;
-	TEST_LLCC(LLVector3, LLVector3(1.0f, 2.0f, 3.0f));
-	TEST_LLCC(LLVector3d, LLVector3d(6.0f, 5.0f, 4.0f));
-	TEST_LLCC(LLRect, LLRect(0, 0, 100, 500));
-	TEST_LLCC(LLColor4, LLColor4(0.0f, 0.5f, 1.0f));
-	TEST_LLCC(LLColor3, LLColor3(1.0f, 0.f, 0.5f));
-	TEST_LLCC(LLColor4U, LLColor4U(255, 200, 100, 255));
-//There's no LLSD comparsion for LLCC yet. TEST_LLCC(LLSD, test_llsd); 
-
-	// AO - Phoenixviewer doesn't want to send unecessary noise to secondlife.com
-	//if((std::string)test_BrowserHomePage != "http://www.secondlife.com") LL_ERRS() << "Fail BrowserHomePage" << LL_ENDL;
+    TEST_LLCC(U32, 666);
+    TEST_LLCC(S32, (S32)-666);
+    TEST_LLCC(F32, (F32)-666.666);
+    TEST_LLCC(bool, true);
+    TEST_LLCC(BOOL, FALSE);
+    if((std::string)mySetting_string != "Default String Value") LL_ERRS() << "Fail string" << LL_ENDL;
+    TEST_LLCC(LLVector3, LLVector3(1.0f, 2.0f, 3.0f));
+    TEST_LLCC(LLVector3d, LLVector3d(6.0f, 5.0f, 4.0f));
+    TEST_LLCC(LLRect, LLRect(0, 0, 100, 500));
+    TEST_LLCC(LLColor4, LLColor4(0.0f, 0.5f, 1.0f));
+    TEST_LLCC(LLColor3, LLColor3(1.0f, 0.f, 0.5f));
+    TEST_LLCC(LLColor4U, LLColor4U(255, 200, 100, 255));
+//There's no LLSD comparsion for LLCC yet. TEST_LLCC(LLSD, test_llsd);
 }
 #endif // TEST_CACHED_CONTROL
 

@@ -29,40 +29,40 @@
 
 namespace nd
 {
-	namespace etw
-	{
-		HMODULE hETW;
-		tpLogFrame pLogFrame;
-		tpLogStartTask pLogStartTask;
-		tpLogEndTask pLogEndTask;
-		tpLogTickTask pLogTickTask;
-		
-		LLTimer etwFrameTimer;
+    namespace etw
+    {
+        HMODULE hETW;
+        tpLogFrame pLogFrame;
+        tpLogStartTask pLogStartTask;
+        tpLogEndTask pLogEndTask;
+        tpLogTickTask pLogTickTask;
 
-		void init()
-		{
-			pLogFrame = NULL;
-			pLogStartTask = NULL;
-			pLogEndTask = NULL;
-			pLogTickTask = NULL;
-			
-			// This is okay for now. We'll only need that for measuring under well defined circumstances.
-			// Maybe create an installer for this one day (very low prio) that copies and registers the provider.
+        LLTimer etwFrameTimer;
 
-			hETW = ::LoadLibrary( L"c:\\xperf\\fs_etw.dll" );
-			if( hETW )
-			{
-				tpInitialize pInitialize = reinterpret_cast< tpInitialize>( ::GetProcAddress( hETW, "initialize" ) );
-				if( pInitialize && (*pInitialize)() )
-				{
-					pLogFrame = reinterpret_cast< tpLogFrame >( ::GetProcAddress( hETW, "log_beginFrame" ) );
-					pLogStartTask = reinterpret_cast< tpLogStartTask >( ::GetProcAddress( hETW, "log_startTask" ) );
-					pLogEndTask = reinterpret_cast< tpLogEndTask >( ::GetProcAddress( hETW, "log_endTask" ) );
-					pLogTickTask = reinterpret_cast< tpLogTickTask >( ::GetProcAddress( hETW, "log_tickTask" ) );
-					etwFrameTimer.reset();
-				}
-			}
-		}
-	}
+        void init()
+        {
+            pLogFrame = NULL;
+            pLogStartTask = NULL;
+            pLogEndTask = NULL;
+            pLogTickTask = NULL;
+
+            // This is okay for now. We'll only need that for measuring under well defined circumstances.
+            // Maybe create an installer for this one day (very low prio) that copies and registers the provider.
+
+            hETW = ::LoadLibrary( L"c:\\xperf\\fs_etw.dll" );
+            if( hETW )
+            {
+                tpInitialize pInitialize = reinterpret_cast< tpInitialize>( ::GetProcAddress( hETW, "initialize" ) );
+                if( pInitialize && (*pInitialize)() )
+                {
+                    pLogFrame = reinterpret_cast< tpLogFrame >( ::GetProcAddress( hETW, "log_beginFrame" ) );
+                    pLogStartTask = reinterpret_cast< tpLogStartTask >( ::GetProcAddress( hETW, "log_startTask" ) );
+                    pLogEndTask = reinterpret_cast< tpLogEndTask >( ::GetProcAddress( hETW, "log_endTask" ) );
+                    pLogTickTask = reinterpret_cast< tpLogTickTask >( ::GetProcAddress( hETW, "log_tickTask" ) );
+                    etwFrameTimer.reset();
+                }
+            }
+        }
+    }
 }
 #endif

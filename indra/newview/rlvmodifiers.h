@@ -28,11 +28,11 @@ template<ERlvBehaviourModifier eBhvrMod>
 class RlvBehaviourModifierHandler : public RlvBehaviourModifier
 {
 public:
-	//using RlvBehaviourModifier::RlvBehaviourModifier; // Needs VS2015 and up
-	RlvBehaviourModifierHandler(const std::string& strName, const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifierComp* pValueComparator)
-		: RlvBehaviourModifier(strName, defaultValue, fAddDefaultOnEmpty, pValueComparator) {}
+    //using RlvBehaviourModifier::RlvBehaviourModifier; // Needs VS2015 and up
+    RlvBehaviourModifierHandler(const std::string& strName, const RlvBehaviourModifierValue& defaultValue, bool fAddDefaultOnEmpty, RlvBehaviourModifierComp* pValueComparator)
+        : RlvBehaviourModifier(strName, defaultValue, fAddDefaultOnEmpty, pValueComparator) {}
 protected:
-	void onValueChange() const override;
+    void onValueChange() const override;
 };
 
 // ====================================================================================
@@ -41,36 +41,36 @@ protected:
 
 struct RlvBehaviourModifierComp
 {
-	virtual ~RlvBehaviourModifierComp() {}
-	virtual bool operator()(const RlvBehaviourModifierValueTuple& lhs, const RlvBehaviourModifierValueTuple& rhs)
-	{
-		// Values that match the primary object take precedence (otherwise maintain relative ordering)
-		if ( (std::get<1>(rhs) == m_idPrimaryObject) && (std::get<1>(lhs) != m_idPrimaryObject) )
-			return false;
-		return true;
-	}
+    virtual ~RlvBehaviourModifierComp() {}
+    virtual bool operator()(const RlvBehaviourModifierValueTuple& lhs, const RlvBehaviourModifierValueTuple& rhs)
+    {
+        // Values that match the primary object take precedence (otherwise maintain relative ordering)
+        if ( (std::get<1>(rhs) == m_idPrimaryObject) && (std::get<1>(lhs) != m_idPrimaryObject) )
+            return false;
+        return true;
+    }
 
-	LLUUID m_idPrimaryObject;
+    LLUUID m_idPrimaryObject;
 };
 
 struct RlvBehaviourModifierCompMin : public RlvBehaviourModifierComp
 {
-	bool operator()(const RlvBehaviourModifierValueTuple& lhs, const RlvBehaviourModifierValueTuple& rhs) override
-	{
-		if ( (m_idPrimaryObject.isNull()) || ((std::get<1>(lhs) == m_idPrimaryObject) && (std::get<1>(rhs) == m_idPrimaryObject)) )
-			return std::get<0>(lhs) < std::get<0>(rhs);
-		return RlvBehaviourModifierComp::operator()(lhs, rhs);
-	}
+    bool operator()(const RlvBehaviourModifierValueTuple& lhs, const RlvBehaviourModifierValueTuple& rhs) override
+    {
+        if ( (m_idPrimaryObject.isNull()) || ((std::get<1>(lhs) == m_idPrimaryObject) && (std::get<1>(rhs) == m_idPrimaryObject)) )
+            return std::get<0>(lhs) < std::get<0>(rhs);
+        return RlvBehaviourModifierComp::operator()(lhs, rhs);
+    }
 };
 
 struct RlvBehaviourModifierCompMax : public RlvBehaviourModifierComp
 {
-	bool operator()(const RlvBehaviourModifierValueTuple& lhs, const RlvBehaviourModifierValueTuple& rhs) override
-	{
-		if ( (m_idPrimaryObject.isNull()) || ((std::get<1>(lhs) == m_idPrimaryObject) && (std::get<1>(rhs) == m_idPrimaryObject)) )
-			return std::get<0>(rhs) < std::get<0>(lhs);
-		return RlvBehaviourModifierComp::operator()(lhs, rhs);
-	}
+    bool operator()(const RlvBehaviourModifierValueTuple& lhs, const RlvBehaviourModifierValueTuple& rhs) override
+    {
+        if ( (m_idPrimaryObject.isNull()) || ((std::get<1>(lhs) == m_idPrimaryObject) && (std::get<1>(rhs) == m_idPrimaryObject)) )
+            return std::get<0>(rhs) < std::get<0>(lhs);
+        return RlvBehaviourModifierComp::operator()(lhs, rhs);
+    }
 };
 
 // ====================================================================================
@@ -82,36 +82,36 @@ template<typename T>
 class RlvBehaviourModifierCache : public LLRefCount, public LLInstanceTracker<RlvBehaviourModifierCache<T>, ERlvBehaviourModifier>
 {
 public:
-	RlvBehaviourModifierCache(ERlvBehaviourModifier eModifier)
-		: LLInstanceTracker<RlvBehaviourModifierCache<T>, ERlvBehaviourModifier>(eModifier)
-	{
-		if (RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier(eModifier))
-		{
-			mConnection = pBhvrModifier->getSignal().connect(boost::bind(&RlvBehaviourModifierCache<T>::handleValueChange, this, _1));
-			mCachedValue = pBhvrModifier->getValue<T>();
-		}
-		else
-		{
-			mCachedValue = {};
-			RLV_ASSERT(false);
-		}
-	}
-	~RlvBehaviourModifierCache() {}
+    RlvBehaviourModifierCache(ERlvBehaviourModifier eModifier)
+        : LLInstanceTracker<RlvBehaviourModifierCache<T>, ERlvBehaviourModifier>(eModifier)
+    {
+        if (RlvBehaviourModifier* pBhvrModifier = RlvBehaviourDictionary::instance().getModifier(eModifier))
+        {
+            mConnection = pBhvrModifier->getSignal().connect(boost::bind(&RlvBehaviourModifierCache<T>::handleValueChange, this, _1));
+            mCachedValue = pBhvrModifier->getValue<T>();
+        }
+        else
+        {
+            mCachedValue = {};
+            RLV_ASSERT(false);
+        }
+    }
+    ~RlvBehaviourModifierCache() {}
 
-	/*
-	 * Member functions
-	 */
+    /*
+     * Member functions
+     */
 public:
-	const T& getValue() const { return mCachedValue; }
+    const T& getValue() const { return mCachedValue; }
 protected:
-	void handleValueChange(const RlvBehaviourModifierValue& newValue) { mCachedValue = boost::get<T>(newValue); }
+    void handleValueChange(const RlvBehaviourModifierValue& newValue) { mCachedValue = boost::get<T>(newValue); }
 
-	/*
-	 * Member variables
-	 */
+    /*
+     * Member variables
+     */
 protected:
-	T mCachedValue;
-	boost::signals2::scoped_connection mConnection;
+    T mCachedValue;
+    boost::signals2::scoped_connection mConnection;
 };
 
 // Inspired by LLCachedControl<T>
@@ -119,24 +119,24 @@ template <typename T>
 class RlvCachedBehaviourModifier
 {
 public:
-	RlvCachedBehaviourModifier(ERlvBehaviourModifier eModifier)
-	{
-		if ((mCachedModifierPtr = RlvBehaviourModifierCache<T>::getInstance(eModifier).get()) == nullptr)
-			mCachedModifierPtr = new RlvBehaviourModifierCache<T>(eModifier);
-	}
+    RlvCachedBehaviourModifier(ERlvBehaviourModifier eModifier)
+    {
+        if ((mCachedModifierPtr = RlvBehaviourModifierCache<T>::getInstance(eModifier).get()) == nullptr)
+            mCachedModifierPtr = new RlvBehaviourModifierCache<T>(eModifier);
+    }
 
-	/*
-	 * Operators
-	 */
+    /*
+     * Operators
+     */
 public:
-	operator const T&() const { return mCachedModifierPtr->getValue(); }
-	const T& operator()()     { return mCachedModifierPtr->getValue(); }
+    operator const T&() const { return mCachedModifierPtr->getValue(); }
+    const T& operator()()     { return mCachedModifierPtr->getValue(); }
 
-	/*
-	 * Member variables
-	 */
+    /*
+     * Member variables
+     */
 protected:
-	LLPointer<RlvBehaviourModifierCache<T>> mCachedModifierPtr;
+    LLPointer<RlvBehaviourModifierCache<T>> mCachedModifierPtr;
 };
 
 // ====================================================================================

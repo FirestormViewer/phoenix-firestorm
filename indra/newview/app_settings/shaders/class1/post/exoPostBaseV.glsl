@@ -12,10 +12,10 @@ out vec2 vary_fragcoord;
 
 uniform vec2 screen_res;
 
-void main() 
+void main()
 {
-	vec4 pos = vec4(position.xyz, 1.0);
-	gl_Position = pos;
-        
-	vary_fragcoord.xy = (pos.xy * 0.5 + 0.5);
+    vec4 pos = vec4(position.xyz, 1.0);
+    gl_Position = pos;
+
+    vary_fragcoord.xy = (pos.xy * 0.5 + 0.5);
 }

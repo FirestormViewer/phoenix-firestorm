@@ -1,4 +1,4 @@
-/** 
+/**
  * @file llflickrconnect.h
  * @author Merov, Cho
  * @brief Connection to Flickr Service
@@ -6,21 +6,21 @@
  * $LicenseInfo:firstyear=2013&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2013, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -30,7 +30,7 @@
 #include "llflickrconnect.h"
 
 #include "llagent.h"
-#include "llcallingcard.h"			// for LLAvatarTracker
+#include "llcallingcard.h"          // for LLAvatarTracker
 #include "llcommandhandler.h"
 #include "llnotificationsutil.h"
 #include "llurlaction.h"
@@ -215,7 +215,7 @@ void LLFlickrConnect::flickrShareImageCoro(LLPointer<LLImageFormatted> image, st
     std::string contentType = "multipart/form-data; boundary=" + boundary;
     httpHeaders->append("Content-Type", contentType.c_str());
 
-    LLCore::BufferArray::ptr_t raw = LLCore::BufferArray::ptr_t(new LLCore::BufferArray()); // 
+    LLCore::BufferArray::ptr_t raw = LLCore::BufferArray::ptr_t(new LLCore::BufferArray()); //
     LLCore::BufferArrayStream body(raw.get());
 
     // *NOTE: The order seems to matter.
@@ -390,29 +390,29 @@ void LLFlickrConnect::flickrInfoCoro()
 ///////////////////////////////////////////////////////////////////////////////
 //
 LLFlickrConnect::LLFlickrConnect()
-:	mConnectionState(FLICKR_NOT_CONNECTED),
-	mConnected(false),
-	mInfo(),
-	mRefreshInfo(false),
-	mReadFromMaster(false)
+:   mConnectionState(FLICKR_NOT_CONNECTED),
+    mConnected(false),
+    mInfo(),
+    mRefreshInfo(false),
+    mReadFromMaster(false)
 {
 }
 
 void LLFlickrConnect::openFlickrWeb(std::string url)
 {
-	LLFloaterWebContent::Params p;
+    LLFloaterWebContent::Params p;
     p.url(url);
     p.show_chrome(true);
     p.allow_back_forward_navigation(false);
     p.clean_browser(true);
-	LLFloater *floater = LLFloaterReg::showInstance("flickr_web", p);
-	//the internal web browser has a bug that prevents it from gaining focus unless a mouse event occurs first (it seems).
-	//So when showing the internal web browser, set focus to it's containing floater "flickr_web". When a mouse event 
-	//occurs on the "webbrowser" panel part of the floater, a mouse cursor will properly show and the "webbrowser" will gain focus.
-	//flickr_web floater contains the "webbrowser" panel.    JIRA: ACME-744
-	gFocusMgr.setKeyboardFocus( floater );
+    LLFloater *floater = LLFloaterReg::showInstance("flickr_web", p);
+    //the internal web browser has a bug that prevents it from gaining focus unless a mouse event occurs first (it seems).
+    //So when showing the internal web browser, set focus to it's containing floater "flickr_web". When a mouse event
+    //occurs on the "webbrowser" panel part of the floater, a mouse cursor will properly show and the "webbrowser" will gain focus.
+    //flickr_web floater contains the "webbrowser" panel.    JIRA: ACME-744
+    gFocusMgr.setKeyboardFocus( floater );
 
-	//LLUrlAction::openURLExternal(url);
+    //LLUrlAction::openURLExternal(url);
 }
 
 std::string LLFlickrConnect::getFlickrConnectURL(const std::string& route, bool include_read_from_master)
@@ -421,16 +421,16 @@ std::string LLFlickrConnect::getFlickrConnectURL(const std::string& route, bool 
     LLViewerRegion *regionp = gAgent.getRegion();
     if (regionp)
     {
-		//url = "http://pdp15.lindenlab.com/flickr/agent/" + gAgentID.asString(); // TEMPORARY FOR TESTING - CHO
+        //url = "http://pdp15.lindenlab.com/flickr/agent/" + gAgentID.asString(); // TEMPORARY FOR TESTING - CHO
         url = regionp->getCapability("FlickrConnect");
         url += route;
-    
+
         if (include_read_from_master && mReadFromMaster)
         {
             url += "?read_from_master=true";
         }
     }
-	return url;
+    return url;
 }
 
 void LLFlickrConnect::connectToFlickr(const std::string& request_token, const std::string& oauth_verifier)
@@ -453,21 +453,21 @@ void LLFlickrConnect::checkConnectionToFlickr(bool auto_connect)
 
 void LLFlickrConnect::loadFlickrInfo()
 {
-	if(mRefreshInfo)
-	{
+    if(mRefreshInfo)
+    {
         LLCoros::instance().launch("LLFlickrConnect::flickrInfoCoro",
             std::bind(&LLFlickrConnect::flickrInfoCoro, this));
-	}
+    }
 }
 
 void LLFlickrConnect::uploadPhoto(const std::string& image_url, const std::string& title, const std::string& description, const std::string& tags, int safety_level)
 {
-	LLSD body;
-	body["image"] = image_url;
-	body["title"] = title;
-	body["description"] = description;
-	body["tags"] = tags;
-	body["safety_level"] = safety_level;
+    LLSD body;
+    body["image"] = image_url;
+    body["title"] = title;
+    body["description"] = description;
+    body["tags"] = tags;
+    body["safety_level"] = safety_level;
 
     setConnectionState(LLFlickrConnect::FLICKR_POSTING);
 
@@ -480,62 +480,62 @@ void LLFlickrConnect::uploadPhoto(LLPointer<LLImageFormatted> image, const std::
     setConnectionState(LLFlickrConnect::FLICKR_POSTING);
 
     LLCoros::instance().launch("LLFlickrConnect::flickrShareImageCoro",
-        std::bind(&LLFlickrConnect::flickrShareImageCoro, this, image, 
+        std::bind(&LLFlickrConnect::flickrShareImageCoro, this, image,
         title, description, tags, safety_level));
 }
 
 void LLFlickrConnect::storeInfo(const LLSD& info)
 {
-	mInfo = info;
-	mRefreshInfo = false;
+    mInfo = info;
+    mRefreshInfo = false;
 
-	sInfoWatcher->post(info);
+    sInfoWatcher->post(info);
 }
 
 const LLSD& LLFlickrConnect::getInfo() const
 {
-	return mInfo;
+    return mInfo;
 }
 
 void LLFlickrConnect::clearInfo()
 {
-	mInfo = LLSD();
+    mInfo = LLSD();
 }
 
 void LLFlickrConnect::setDataDirty()
 {
-	mRefreshInfo = true;
+    mRefreshInfo = true;
 }
 
 void LLFlickrConnect::setConnectionState(LLFlickrConnect::EConnectionState connection_state)
 {
-	if(connection_state == FLICKR_CONNECTED)
-	{
-		mReadFromMaster = true;
-		setConnected(true);
-		setDataDirty();
-	}
-	else if(connection_state == FLICKR_NOT_CONNECTED)
-	{
-		setConnected(false);
-	}
-	else if(connection_state == FLICKR_POSTED)
-	{
-		mReadFromMaster = false;
-	}
+    if(connection_state == FLICKR_CONNECTED)
+    {
+        mReadFromMaster = true;
+        setConnected(true);
+        setDataDirty();
+    }
+    else if(connection_state == FLICKR_NOT_CONNECTED)
+    {
+        setConnected(false);
+    }
+    else if(connection_state == FLICKR_POSTED)
+    {
+        mReadFromMaster = false;
+    }
 
-	if (mConnectionState != connection_state)
-	{
-		// set the connection state before notifying watchers
-		mConnectionState = connection_state;
+    if (mConnectionState != connection_state)
+    {
+        // set the connection state before notifying watchers
+        mConnectionState = connection_state;
 
-		LLSD state_info;
-		state_info["enum"] = connection_state;
-		sStateWatcher->post(state_info);
-	}
+        LLSD state_info;
+        state_info["enum"] = connection_state;
+        sStateWatcher->post(state_info);
+    }
 }
 
 void LLFlickrConnect::setConnected(bool connected)
 {
-	mConnected = connected;
+    mConnected = connected;
 }

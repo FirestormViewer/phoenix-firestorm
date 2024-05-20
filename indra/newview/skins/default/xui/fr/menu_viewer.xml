@@ -31,6 +31,7 @@
 			</menu>
 			<menu label="Détacher" name="Avatar Detach" />
 			<menu_item_call label="Tout détacher" name="Detach All" />
+			<menu_item_call label="Détacher les éléments sélectionnés" name="Remove Selected Attachments"/>
 		</menu>
 		<menu_item_call label="Choisir un avatar..." name="Avatar Picker"/>
 		<menu label="Déplacements" name="Movement">

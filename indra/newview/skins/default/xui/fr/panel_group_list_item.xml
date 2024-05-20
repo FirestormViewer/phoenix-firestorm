@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="group_list_item">
+	<button name="notices_btn" tool_tip="Notices du groupe"/>
 	<button name="info_btn" tool_tip="Plus d'infos"/>
 	<button name="profile_btn" tool_tip="Voir le profil"/>
 </panel>

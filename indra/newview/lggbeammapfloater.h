@@ -1,4 +1,4 @@
-/** 
+/**
  * @file lggbeammapfloater.h
  * @brief Floater for beam shapes
  * @copyright Copyright (c) 2011 LordGregGreg Back
@@ -21,10 +21,10 @@ class LLPanel;
 
 class lggPoint
 {
-	public:
-		S32 x;
-		S32 y;
-		LLColor4 c;
+    public:
+        S32 x;
+        S32 y;
+        LLColor4 c;
 };
 
 ////////////////////////////////////////////////////////////////////////////
@@ -32,38 +32,38 @@ class lggPoint
 class lggBeamMapFloater : public LLFloater
 {
 public:
-	lggBeamMapFloater(const LLSD& seed);
-	virtual ~lggBeamMapFloater();
+    lggBeamMapFloater(const LLSD& seed);
+    virtual ~lggBeamMapFloater();
 
-	BOOL postBuild(void);
-	BOOL handleMouseDown(S32 x, S32 y, MASK mask);
-	BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+    BOOL postBuild(void);
+    BOOL handleMouseDown(S32 x, S32 y, MASK mask);
+    BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
 
-	void draw();
+    void draw();
 
-	void setData(FSPanelPrefs* data);
+    void setData(FSPanelPrefs* data);
 
 private:
-	// UI Handlers
-	void onClickSave();
-	void onClickClear();
-	void onClickLoad();
-	void onBackgroundChange();
+    // UI Handlers
+    void onClickSave();
+    void onClickClear();
+    void onClickLoad();
+    void onBackgroundChange();
 
-	void onSaveCallback(const std::vector<std::string>& filenames);
-	void onLoadCallback(const std::vector<std::string>& filenames);
+    void onSaveCallback(const std::vector<std::string>& filenames);
+    void onLoadCallback(const std::vector<std::string>& filenames);
 
-	void clearPoints();
+    void clearPoints();
 
-	LLSD getDataSerialized();
+    LLSD getDataSerialized();
 
-	std::vector<lggPoint>	mDots;
-	F32						mContextConeOpacity;
-	F32						mContextConeInAlpha;
-	F32						mContextConeOutAlpha;
-	F32						mContextConeFadeTime;
-	FSPanelPrefs*			mFSPanel;
-	LLPanel*				mBeamshapePanel;
+    std::vector<lggPoint>   mDots;
+    F32                     mContextConeOpacity;
+    F32                     mContextConeInAlpha;
+    F32                     mContextConeOutAlpha;
+    F32                     mContextConeFadeTime;
+    FSPanelPrefs*           mFSPanel;
+    LLPanel*                mBeamshapePanel;
 };
 
 #endif // LGG_BEAMMAPFLOATER_H

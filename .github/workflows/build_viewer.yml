@@ -115,8 +115,8 @@ jobs:
             FS_RELEASE_TYPE=Alpha
           elif [[ "${{ github.ref_name }}" == *nightly* ]] || [[ "${{ github.event_name }}" == 'schedule' ]]; then
             FS_RELEASE_TYPE=Nightly
-          else
-            FS_RELEASE_TYPE=Unknown
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            FS_RELEASE_TYPE=Manual
           fi
           if [[ "${{ matrix.addrsize }}" == "64" ]]; then
             FS_RELEASE_CHAN="${FS_RELEASE_TYPE}x64"
@@ -240,21 +240,31 @@ jobs:
           done
         shell: bash
 
-      - name: make Nightly builds expire after 14 days
-        if: env.FS_RELEASE_TYPE == 'Nightly'
+      - name: Set expiration days based on FS_RELEASE_TYPE
         run: |
-          echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}} --testbuild=14" >> $GITHUB_ENV
+          case "${{ env.FS_RELEASE_TYPE }}" in
+            "Nightly" | "Manual")
+              EXPIRE_DAYS=14
+              ;;
+            "Alpha")
+              EXPIRE_DAYS=28
+              ;;
+            "Beta")
+              EXPIRE_DAYS=60
+              ;;
+            *)
+              EXPIRE_DAYS=""
+              ;;
+          esac
+          if [ -n "$EXPIRE_DAYS" ]; then
+            echo "This ${{ env.FS_RELEASE_TYPE }} build will expire in $EXPIRE_DAYS"
+            echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}} --testbuild=$EXPIRE_DAYS" >> $GITHUB_ENV
+            else
+            echo "This ${{ env.FS_RELEASE_TYPE }} has no built in expiry"
+            echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}}" >> $GITHUB_ENV
+          fi
         shell: bash
-      - name: make Alpha builds expire after 28 days
-        if: env.FS_RELEASE_TYPE == 'Alpha'
-        run: |
-          echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}} --testbuild=28" >> $GITHUB_ENV
-        shell: bash
-      - name: make Beta builds expire after 28 days
-        if: env.FS_RELEASE_TYPE == 'Beta'
-        run: |
-          echo "EXTRA_ARGS=${{ env.EXTRA_ARGS}} --testbuild=60" >> $GITHUB_ENV
-        shell: bash
+
       - name: Clean up packages to give more space
         run: rm *${{ env.fallback_platform }}*bz2
         shell: bash
@@ -353,9 +363,12 @@ jobs:
           elif [[ "${{ github.ref_name }}" == *alpha* ]]; then
             FS_RELEASE_FOLDER=test
             FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
-          elif [[ "${{ github.ref_name }}" == *nightly* ]] || [[ "${{ github.event_name }}" == 'schedule' ]]; then
+            elif [[ "${{ github.ref_name }}" == *nightly* ]] || [[ "${{ github.event_name }}" == 'schedule' ]]; then
             FS_RELEASE_FOLDER=nightly
             FS_BUILD_WEBHOOK_URL=${{ secrets.NIGHTLY_WEBHOOK_URL }}
+            elif [[ "${{github.event_name }}" == "workflow_dispatch" ]]; then
+            FS_RELEASE_FOLDER=test
+            FS_BUILD_WEBHOOK_URL=${{ secrets.BETA_WEBHOOK_URL }}
           else
             FS_RELEASE_TYPE=Unknown
           fi

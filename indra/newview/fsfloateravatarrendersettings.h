@@ -37,34 +37,34 @@ class LLNameListCtrl;
 
 class FSFloaterAvatarRenderSettings : public LLFloater
 {
-	LOG_CLASS(FSFloaterAvatarRenderSettings);
+    LOG_CLASS(FSFloaterAvatarRenderSettings);
 public:
-	FSFloaterAvatarRenderSettings(const LLSD& key);
-	virtual ~FSFloaterAvatarRenderSettings();
+    FSFloaterAvatarRenderSettings(const LLSD& key);
+    virtual ~FSFloaterAvatarRenderSettings();
 
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
-	/*virtual*/ bool hasAccelerators() const { return true; }
+    /*virtual*/ BOOL postBuild();
+    /*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+    /*virtual*/ bool hasAccelerators() const { return true; }
 
 private:
-	void onCloseBtn();
-	void onFilterEdit(const std::string& search_string);
-	void onAvatarRenderSettingChanged(const LLUUID& avatar_id, LLVOAvatar::VisualMuteSettings render_setting);
-	void onClickAdd(const LLSD& userdata);
+    void onCloseBtn();
+    void onFilterEdit(const std::string& search_string);
+    void onAvatarRenderSettingChanged(const LLUUID& avatar_id, LLVOAvatar::VisualMuteSettings render_setting);
+    void onClickAdd(const LLSD& userdata);
 
-	void loadInitialList();
-	void addElementToList(const LLUUID& avatar_id, LLVOAvatar::VisualMuteSettings render_setting);
+    void loadInitialList();
+    void addElementToList(const LLUUID& avatar_id, LLVOAvatar::VisualMuteSettings render_setting);
 
-	void callbackAvatarPicked(const uuid_vec_t& ids, LLVOAvatar::VisualMuteSettings render_setting);
-	void removePicker();
+    void callbackAvatarPicked(const uuid_vec_t& ids, LLVOAvatar::VisualMuteSettings render_setting);
+    void removePicker();
 
-	LLNameListCtrl* mAvatarList;
-	LLHandle<LLFloater> mPicker;
+    LLNameListCtrl* mAvatarList;
+    LLHandle<LLFloater> mPicker;
 
-	boost::signals2::connection mRenderSettingChangedCallbackConnection;
+    boost::signals2::connection mRenderSettingChangedCallbackConnection;
 
-	std::string mFilterSubString;
-	std::string mFilterSubStringOrig;
+    std::string mFilterSubString;
+    std::string mFilterSubStringOrig;
 };
 
 
@@ -75,9 +75,9 @@ namespace FSFloaterAvatarRenderPersistenceMenu
 class FSAvatarRenderPersistenceMenu : public LLListContextMenu
 {
 public:
-	/*virtual*/ LLContextMenu* createMenu();
+    /*virtual*/ LLContextMenu* createMenu();
 private:
-	void changeRenderSetting(const LLSD& param);
+    void changeRenderSetting(const LLSD& param);
 };
 
 extern FSAvatarRenderPersistenceMenu gFSAvatarRenderPersistenceMenu;

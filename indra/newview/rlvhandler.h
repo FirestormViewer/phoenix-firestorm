@@ -29,266 +29,266 @@
 
 class RlvHandler : public LLOldEvents::LLSimpleListener, public LLParticularGroupObserver
 {
-	// Temporary LLSingleton look-alike
+    // Temporary LLSingleton look-alike
 public:
-	static RlvHandler& instance();
-	static RlvHandler* getInstance();
-
-public:
-	RlvHandler();
-	~RlvHandler();
-
-	// --------------------------------
-
-	/*
-	 * Rule checking functions
-	 */
-	// NOTE: - to check @detach=n    -> (see RlvAttachmentLocks)
-	//       - to check @addattach=n -> (see RlvAttachmentLocks)
-	//       - to check @remattach=n -> (see RlvAttachmentLocks)
-	//       - to check @addoutfit=n -> (see RlvWearableLocks)
-	//       - to check @remoutfit=n -> (see RlvWearableLocks)
-	//       - to check exceptions   -> isException()
-public:
-	// Returns a list of all objects containing the specified behaviour
-	bool findBehaviour(ERlvBehaviour eBhvr, std::list<const RlvObject*>& lObjects) const;
-	// Returns a pointer to an RLV object instance (DO NOT STORE THIS!)
-	RlvObject* getObject(const LLUUID& idRlvObj) const;
-	// Returns TRUE is at least one object contains the specified behaviour (and optional option)
-	bool hasBehaviour(ERlvBehaviour eBhvr) const { return (eBhvr < RLV_BHVR_COUNT) ? (0 != m_Behaviours[eBhvr]) : false; }
-	bool hasBehaviour(ERlvBehaviour eBhvr, const std::string& strOption) const;
-	// Returns TRUE if the specified object has at least one active behaviour
-	bool hasBehaviour(const LLUUID& idObj) { return m_Objects.end() != m_Objects.find(idObj);  }
-	// Returns TRUE if the specified object contains the specified behaviour (and optional option)
-	bool hasBehaviour(const LLUUID& idObj, ERlvBehaviour eBhvr, const std::string& strOption = LLStringUtil::null) const;
-	// Returns TRUE if at least one object (except the specified one) contains the specified behaviour (and optional option)
-	bool hasBehaviourExcept(ERlvBehaviour eBhvr, const LLUUID& idObj) const;
-	bool hasBehaviourExcept(ERlvBehaviour eBhvr, const std::string& strOption, const LLUUID& idObj) const;
-	// Returns TRUE if at least one object in the linkset with specified root ID contains the specified behaviour (and optional option)
-	bool hasBehaviourRoot(const LLUUID& idObjRoot, ERlvBehaviour eBhvr, const std::string& strOption = LLStringUtil::null) const;
-	// Returns TRUE if the specified object is the only object containing the specified behaviour
-	bool ownsBehaviour(const LLUUID& idObj, ERlvBehaviour eBhvr) const;
-
-	// Adds or removes an exception for the specified behaviour
-	void addException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption);
-	void removeException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption);
-	// Returns TRUE if the specified behaviour has an added exception
-	bool hasException(ERlvBehaviour eBhvr) const;
-	// Returns TRUE if the specified option was added as an exception for the specified behaviour
-	bool isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varOption, ERlvExceptionCheck eCheckType = ERlvExceptionCheck::Default) const;
-	// Returns TRUE if the specified behaviour should behave "permissive" (rather than "strict"/"secure")
-	bool isPermissive(ERlvBehaviour eBhvr) const;
-
-	#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
-	// Returns TRUE if the composite folder doesn't contain any "locked" items
-	bool canTakeOffComposite(const LLInventoryCategory* pFolder) const;
-	// Returns TRUE if the composite folder doesn't replace any "locked" items
-	bool canWearComposite(const LLInventoryCategory* pFolder) const;
-	// Returns TRUE if the folder is a composite folder and optionally returns the name
-	bool getCompositeInfo(const LLInventoryCategory* pFolder, std::string* pstrName) const;
-	// Returns TRUE if the inventory item belongs to a composite folder and optionally returns the name and composite folder
-	bool getCompositeInfo(const LLUUID& idItem, std::string* pstrName, LLViewerInventoryCategory** ppFolder) const;
-	// Returns TRUE if the folder is a composite folder
-	bool isCompositeFolder(const LLInventoryCategory* pFolder) const { return getCompositeInfo(pFolder, NULL); }
-	// Returns TRUE if the inventory item belongs to a composite folder
-	bool isCompositeDescendent(const LLUUID& idItem) const { return getCompositeInfo(idItem, NULL, NULL); }
-	// Returns TRUE if the inventory item is part of a folded composite folder and should be hidden from @getoufit or @getattach
-	bool isHiddenCompositeItem(const LLUUID& idItem, const std::string& strItemType) const;
-	#endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
+    static RlvHandler& instance();
+    static RlvHandler* getInstance();
 
 public:
-	// Adds a blocked object (= object that is blocked from issuing commands) by UUID (can be null) and/or name
-	void addBlockedObject(const LLUUID& idObj, const std::string& strObjName);
-	// Returns TRUE if there's an unresolved blocked object (known name but unknown UUID)
-	bool hasUnresolvedBlockedObject() const;
-	// Returns TRUE if the object with the specified UUID is blocked from issuing commands
-	bool isBlockedObject(const LLUUID& idObj) const;
-	// Removes a blocked object
-	void removeBlockedObject(const LLUUID& idObj);
+    RlvHandler();
+    ~RlvHandler();
 
-	// --------------------------------
+    // --------------------------------
 
-	/*
-	 * Helper functions
-	 */
+    /*
+     * Rule checking functions
+     */
+    // NOTE: - to check @detach=n    -> (see RlvAttachmentLocks)
+    //       - to check @addattach=n -> (see RlvAttachmentLocks)
+    //       - to check @remattach=n -> (see RlvAttachmentLocks)
+    //       - to check @addoutfit=n -> (see RlvWearableLocks)
+    //       - to check @remoutfit=n -> (see RlvWearableLocks)
+    //       - to check exceptions   -> isException()
 public:
-	// Accessors/Mutators
-	const LLUUID&     getAgentGroup() const			{ return m_idAgentGroup; }					// @setgroup
-	bool              getCanCancelTp() const		{ return m_fCanCancelTp; }					// @accepttp and @tpto
-	void              setCanCancelTp(bool fAllow)	{ m_fCanCancelTp = fAllow; }				// @accepttp and @tpto
-	const LLVector3d& getSitSource() const						{ return m_posSitSource; }		// @standtp
-	void              setSitSource(const LLVector3d& posSource)	{ m_posSitSource = posSource; }	// @standtp
+    // Returns a list of all objects containing the specified behaviour
+    bool findBehaviour(ERlvBehaviour eBhvr, std::list<const RlvObject*>& lObjects) const;
+    // Returns a pointer to an RLV object instance (DO NOT STORE THIS!)
+    RlvObject* getObject(const LLUUID& idRlvObj) const;
+    // Returns TRUE is at least one object contains the specified behaviour (and optional option)
+    bool hasBehaviour(ERlvBehaviour eBhvr) const { return (eBhvr < RLV_BHVR_COUNT) ? (0 != m_Behaviours[eBhvr]) : false; }
+    bool hasBehaviour(ERlvBehaviour eBhvr, const std::string& strOption) const;
+    // Returns TRUE if the specified object has at least one active behaviour
+    bool hasBehaviour(const LLUUID& idObj) { return m_Objects.end() != m_Objects.find(idObj);  }
+    // Returns TRUE if the specified object contains the specified behaviour (and optional option)
+    bool hasBehaviour(const LLUUID& idObj, ERlvBehaviour eBhvr, const std::string& strOption = LLStringUtil::null) const;
+    // Returns TRUE if at least one object (except the specified one) contains the specified behaviour (and optional option)
+    bool hasBehaviourExcept(ERlvBehaviour eBhvr, const LLUUID& idObj) const;
+    bool hasBehaviourExcept(ERlvBehaviour eBhvr, const std::string& strOption, const LLUUID& idObj) const;
+    // Returns TRUE if at least one object in the linkset with specified root ID contains the specified behaviour (and optional option)
+    bool hasBehaviourRoot(const LLUUID& idObjRoot, ERlvBehaviour eBhvr, const std::string& strOption = LLStringUtil::null) const;
+    // Returns TRUE if the specified object is the only object containing the specified behaviour
+    bool ownsBehaviour(const LLUUID& idObj, ERlvBehaviour eBhvr) const;
 
-	// Command specific helper functions
-	bool filterChat(std::string& strUTF8Text, bool fFilterEmote) const;							// @sendchat, @recvchat and @redirchat
-	bool redirectChatOrEmote(const std::string& strUTF8Test) const;								// @redirchat and @rediremote
+    // Adds or removes an exception for the specified behaviour
+    void addException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption);
+    void removeException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& varOption);
+    // Returns TRUE if the specified behaviour has an added exception
+    bool hasException(ERlvBehaviour eBhvr) const;
+    // Returns TRUE if the specified option was added as an exception for the specified behaviour
+    bool isException(ERlvBehaviour eBhvr, const RlvExceptionOption& varOption, ERlvExceptionCheck eCheckType = ERlvExceptionCheck::Default) const;
+    // Returns TRUE if the specified behaviour should behave "permissive" (rather than "strict"/"secure")
+    bool isPermissive(ERlvBehaviour eBhvr) const;
 
-	// Command processing helper functions
-	ERlvCmdRet processCommand(const LLUUID& idObj, const std::string& strCommand, bool fFromObj);
-	void       processRetainedCommands(ERlvBehaviour eBhvrFilter = RLV_BHVR_UNKNOWN, ERlvParamType eTypeFilter = RLV_TYPE_UNKNOWN);
-	bool       processIMQuery(const LLUUID& idSender, const std::string& strCommand);
+    #ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
+    // Returns TRUE if the composite folder doesn't contain any "locked" items
+    bool canTakeOffComposite(const LLInventoryCategory* pFolder) const;
+    // Returns TRUE if the composite folder doesn't replace any "locked" items
+    bool canWearComposite(const LLInventoryCategory* pFolder) const;
+    // Returns TRUE if the folder is a composite folder and optionally returns the name
+    bool getCompositeInfo(const LLInventoryCategory* pFolder, std::string* pstrName) const;
+    // Returns TRUE if the inventory item belongs to a composite folder and optionally returns the name and composite folder
+    bool getCompositeInfo(const LLUUID& idItem, std::string* pstrName, LLViewerInventoryCategory** ppFolder) const;
+    // Returns TRUE if the folder is a composite folder
+    bool isCompositeFolder(const LLInventoryCategory* pFolder) const { return getCompositeInfo(pFolder, NULL); }
+    // Returns TRUE if the inventory item belongs to a composite folder
+    bool isCompositeDescendent(const LLUUID& idItem) const { return getCompositeInfo(idItem, NULL, NULL); }
+    // Returns TRUE if the inventory item is part of a folded composite folder and should be hidden from @getoufit or @getattach
+    bool isHiddenCompositeItem(const LLUUID& idItem, const std::string& strItemType) const;
+    #endif // RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 
-	// Returns a pointer to the currently executing command (do *not* save this pointer)
-	const RlvCommand* getCurrentCommand() const { return (!m_CurCommandStack.empty()) ? &m_CurCommandStack.top().get() : nullptr; }
-	// Returns the UUID of the object we're currently executing a command for
-	const LLUUID&     getCurrentObject() const	{ return (!m_CurObjectStack.empty()) ? m_CurObjectStack.top() : LLUUID::null; }
+public:
+    // Adds a blocked object (= object that is blocked from issuing commands) by UUID (can be null) and/or name
+    void addBlockedObject(const LLUUID& idObj, const std::string& strObjName);
+    // Returns TRUE if there's an unresolved blocked object (known name but unknown UUID)
+    bool hasUnresolvedBlockedObject() const;
+    // Returns TRUE if the object with the specified UUID is blocked from issuing commands
+    bool isBlockedObject(const LLUUID& idObj) const;
+    // Removes a blocked object
+    void removeBlockedObject(const LLUUID& idObj);
 
-	// Initialization
-	static bool canEnable();
-	static bool isEnabled()	{ return m_fEnabled; }
-	static bool setEnabled(bool fEnable);
+    // --------------------------------
+
+    /*
+     * Helper functions
+     */
+public:
+    // Accessors/Mutators
+    const LLUUID&     getAgentGroup() const         { return m_idAgentGroup; }                  // @setgroup
+    bool              getCanCancelTp() const        { return m_fCanCancelTp; }                  // @accepttp and @tpto
+    void              setCanCancelTp(bool fAllow)   { m_fCanCancelTp = fAllow; }                // @accepttp and @tpto
+    const LLVector3d& getSitSource() const                      { return m_posSitSource; }      // @standtp
+    void              setSitSource(const LLVector3d& posSource) { m_posSitSource = posSource; } // @standtp
+
+    // Command specific helper functions
+    bool filterChat(std::string& strUTF8Text, bool fFilterEmote) const;                         // @sendchat, @recvchat and @redirchat
+    bool redirectChatOrEmote(const std::string& strUTF8Test) const;                             // @redirchat and @rediremote
+
+    // Command processing helper functions
+    ERlvCmdRet processCommand(const LLUUID& idObj, const std::string& strCommand, bool fFromObj);
+    void       processRetainedCommands(ERlvBehaviour eBhvrFilter = RLV_BHVR_UNKNOWN, ERlvParamType eTypeFilter = RLV_TYPE_UNKNOWN);
+    bool       processIMQuery(const LLUUID& idSender, const std::string& strCommand);
+
+    // Returns a pointer to the currently executing command (do *not* save this pointer)
+    const RlvCommand* getCurrentCommand() const { return (!m_CurCommandStack.empty()) ? &m_CurCommandStack.top().get() : nullptr; }
+    // Returns the UUID of the object we're currently executing a command for
+    const LLUUID&     getCurrentObject() const  { return (!m_CurObjectStack.empty()) ? m_CurObjectStack.top() : LLUUID::null; }
+
+    // Initialization
+    static bool canEnable();
+    static bool isEnabled() { return m_fEnabled; }
+    static bool setEnabled(bool fEnable);
 protected:
-	// Command specific helper functions (NOTE: these generally do not perform safety checks)
-	bool checkActiveGroupThrottle(const LLUUID& idRlvObj);                                      // @setgroup=force
-	void setActiveGroup(const LLUUID& idGroup);                                                 // @setgroup=force
-	void setActiveGroupRole(const LLUUID& idGroup, const std::string& strRole);                 // @setgroup=force
-	void setCameraOverride(bool fOverride);                                                     // @setcam family
+    // Command specific helper functions (NOTE: these generally do not perform safety checks)
+    bool checkActiveGroupThrottle(const LLUUID& idRlvObj);                                      // @setgroup=force
+    void setActiveGroup(const LLUUID& idGroup);                                                 // @setgroup=force
+    void setActiveGroupRole(const LLUUID& idGroup, const std::string& strRole);                 // @setgroup=force
+    void setCameraOverride(bool fOverride);                                                     // @setcam family
 
-	void onIMQueryListResponse(const LLSD& sdNotification, const LLSD sdResponse);
+    void onIMQueryListResponse(const LLSD& sdNotification, const LLSD sdResponse);
 
-	// --------------------------------
+    // --------------------------------
 
-	/*
-	 * Event handling
-	 */
+    /*
+     * Event handling
+     */
 public:
-	// The behaviour signal is triggered whenever a command is successfully processed and resulted in adding or removing a behaviour
-	typedef boost::signals2::signal<void (ERlvBehaviour, ERlvParamType)> rlv_behaviour_signal_t;
-	boost::signals2::connection setBehaviourCallback(const rlv_behaviour_signal_t::slot_type& cb )		 { return m_OnBehaviour.connect(cb); }
-	boost::signals2::connection setBehaviourToggleCallback(const rlv_behaviour_signal_t::slot_type& cb ) { return m_OnBehaviourToggle.connect(cb); }
-	// The command signal is triggered whenever a command is processed
-	typedef boost::signals2::signal<void (const RlvCommand&, ERlvCmdRet, bool)> rlv_command_signal_t;
-	boost::signals2::connection setCommandCallback(const rlv_command_signal_t::slot_type& cb )			 { return m_OnCommand.connect(cb); }
+    // The behaviour signal is triggered whenever a command is successfully processed and resulted in adding or removing a behaviour
+    typedef boost::signals2::signal<void (ERlvBehaviour, ERlvParamType)> rlv_behaviour_signal_t;
+    boost::signals2::connection setBehaviourCallback(const rlv_behaviour_signal_t::slot_type& cb )       { return m_OnBehaviour.connect(cb); }
+    boost::signals2::connection setBehaviourToggleCallback(const rlv_behaviour_signal_t::slot_type& cb ) { return m_OnBehaviourToggle.connect(cb); }
+    // The command signal is triggered whenever a command is processed
+    typedef boost::signals2::signal<void (const RlvCommand&, ERlvCmdRet, bool)> rlv_command_signal_t;
+    boost::signals2::connection setCommandCallback(const rlv_command_signal_t::slot_type& cb )           { return m_OnCommand.connect(cb); }
 
-	void addCommandHandler(RlvExtCommandHandler* pHandler);
-	void removeCommandHandler(RlvExtCommandHandler* pHandler);
+    void addCommandHandler(RlvExtCommandHandler* pHandler);
+    void removeCommandHandler(RlvExtCommandHandler* pHandler);
 protected:
-	void clearCommandHandlers();
-	bool notifyCommandHandlers(rlvExtCommandHandler f, const RlvCommand& rlvCmd, ERlvCmdRet& eRet, bool fNotifyAll) const;
+    void clearCommandHandlers();
+    bool notifyCommandHandlers(rlvExtCommandHandler f, const RlvCommand& rlvCmd, ERlvCmdRet& eRet, bool fNotifyAll) const;
 
-	// Externally invoked event handlers
+    // Externally invoked event handlers
 public:
-	void cleanup();
-	void onActiveGroupChanged();
-	void onAttach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
-	void onDetach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
-	void onExperienceAttach(const LLSD& sdExperience, const std::string& strObjName);
-	void onExperienceEvent(const LLSD& sdEvent);
-	bool onGC();
-	void onLoginComplete();
-	void onSitOrStand(bool fSitting);
-	void onTeleportFailed();
-	void onTeleportFinished(const LLVector3d& posArrival);
-	static void cleanupClass();
-	static void onIdleStartup(void* pParam);
+    void cleanup();
+    void onActiveGroupChanged();
+    void onAttach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
+    void onDetach(const LLViewerObject* pAttachObj, const LLViewerJointAttachment* pAttachPt);
+    void onExperienceAttach(const LLSD& sdExperience, const std::string& strObjName);
+    void onExperienceEvent(const LLSD& sdEvent);
+    bool onGC();
+    void onLoginComplete();
+    void onSitOrStand(bool fSitting);
+    void onTeleportFailed();
+    void onTeleportFinished(const LLVector3d& posArrival);
+    static void cleanupClass();
+    static void onIdleStartup(void* pParam);
 protected:
-	void getAttachmentResourcesCoro(const std::string& strUrl);
-	void onTeleportCallback(U64 hRegion, const LLVector3& posRegion, const LLVector3& vecLookAt, const LLUUID& idRlvObj);
+    void getAttachmentResourcesCoro(const std::string& strUrl);
+    void onTeleportCallback(U64 hRegion, const LLVector3& posRegion, const LLVector3& vecLookAt, const LLUUID& idRlvObj);
 
-	/*
-	 * Base class overrides
-	 */
+    /*
+     * Base class overrides
+     */
 public:
-	// LLParticularGroupObserver implementation
-	void changed(const LLUUID& group_id, LLGroupChange gc) override;
-	// LLOldEvents::LLSimpleListener implementation
-	bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& sdUserdata) override;
+    // LLParticularGroupObserver implementation
+    void changed(const LLUUID& group_id, LLGroupChange gc) override;
+    // LLOldEvents::LLSimpleListener implementation
+    bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& sdUserdata) override;
 
-	/*
-	 * Command processing
-	 */
+    /*
+     * Command processing
+     */
 protected:
-	ERlvCmdRet processCommand(std::reference_wrapper<const RlvCommand> rlvCmdRef, bool fFromObj);
-	ERlvCmdRet processClearCommand(const RlvCommand& rlvCmd);
+    ERlvCmdRet processCommand(std::reference_wrapper<const RlvCommand> rlvCmdRef, bool fFromObj);
+    ERlvCmdRet processClearCommand(const RlvCommand& rlvCmd);
 
-	// Command handlers (RLV_TYPE_ADD and RLV_TYPE_CLEAR)
-	ERlvCmdRet processAddRemCommand(const RlvCommand& rlvCmd);
-	ERlvCmdRet onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCount);
-	ERlvCmdRet onAddRemFolderLockException(const RlvCommand& rlvCmd, bool& fRefCount);
-	// Command handlers (RLV_TYPE_FORCE)
-	ERlvCmdRet processForceCommand(const RlvCommand& rlvCmd) const;
-	ERlvCmdRet onForceWear(const LLViewerInventoryCategory* pFolder, U32 nFlags) const;
-	void       onForceWearCallback(const uuid_vec_t& idItems, U32 nFlags) const;
-	// Command handlers (RLV_TYPE_REPLY)
-	ERlvCmdRet processReplyCommand(const RlvCommand& rlvCmd) const;
-	ERlvCmdRet onFindFolder(const RlvCommand& rlvCmd, std::string& strReply) const;
-	ERlvCmdRet onGetAttach(const RlvCommand& rlvCmd, std::string& strReply) const;
-	ERlvCmdRet onGetAttachNames(const RlvCommand& rlvCmd, std::string& strReply) const;
-	ERlvCmdRet onGetInv(const RlvCommand& rlvCmd, std::string& strReply) const;
-	ERlvCmdRet onGetInvWorn(const RlvCommand& rlvCmd, std::string& strReply) const;
-	ERlvCmdRet onGetOutfit(const RlvCommand& rlvCmd, std::string& strReply) const;
-	ERlvCmdRet onGetOutfitNames(const RlvCommand& rlvCmd, std::string& strReply) const;
-	ERlvCmdRet onGetPath(const RlvCommand& rlvCmd, std::string& strReply) const;
+    // Command handlers (RLV_TYPE_ADD and RLV_TYPE_CLEAR)
+    ERlvCmdRet processAddRemCommand(const RlvCommand& rlvCmd);
+    ERlvCmdRet onAddRemFolderLock(const RlvCommand& rlvCmd, bool& fRefCount);
+    ERlvCmdRet onAddRemFolderLockException(const RlvCommand& rlvCmd, bool& fRefCount);
+    // Command handlers (RLV_TYPE_FORCE)
+    ERlvCmdRet processForceCommand(const RlvCommand& rlvCmd) const;
+    ERlvCmdRet onForceWear(const LLViewerInventoryCategory* pFolder, U32 nFlags) const;
+    void       onForceWearCallback(const uuid_vec_t& idItems, U32 nFlags) const;
+    // Command handlers (RLV_TYPE_REPLY)
+    ERlvCmdRet processReplyCommand(const RlvCommand& rlvCmd) const;
+    ERlvCmdRet onFindFolder(const RlvCommand& rlvCmd, std::string& strReply) const;
+    ERlvCmdRet onGetAttach(const RlvCommand& rlvCmd, std::string& strReply) const;
+    ERlvCmdRet onGetAttachNames(const RlvCommand& rlvCmd, std::string& strReply) const;
+    ERlvCmdRet onGetInv(const RlvCommand& rlvCmd, std::string& strReply) const;
+    ERlvCmdRet onGetInvWorn(const RlvCommand& rlvCmd, std::string& strReply) const;
+    ERlvCmdRet onGetOutfit(const RlvCommand& rlvCmd, std::string& strReply) const;
+    ERlvCmdRet onGetOutfitNames(const RlvCommand& rlvCmd, std::string& strReply) const;
+    ERlvCmdRet onGetPath(const RlvCommand& rlvCmd, std::string& strReply) const;
 
-	// --------------------------------
+    // --------------------------------
 
-	/*
-	 * Member variables
-	 */
+    /*
+     * Member variables
+     */
 public:
-	typedef std::map<LLUUID, RlvObject> rlv_object_map_t;
-	typedef std::tuple<LLUUID, std::string, double> rlv_blocked_object_t;
-	typedef std::list<rlv_blocked_object_t> rlv_blocked_object_list_t;
+    typedef std::map<LLUUID, RlvObject> rlv_object_map_t;
+    typedef std::tuple<LLUUID, std::string, double> rlv_blocked_object_t;
+    typedef std::list<rlv_blocked_object_t> rlv_blocked_object_list_t;
 
-	struct RlvException
-	{
-	public:
-		LLUUID				idObject;    // UUID of the object that added the exception
-		ERlvBehaviour		eBehaviour;  // Behaviour the exception applies to
-		RlvExceptionOption	varOption;   // Exception data (type is dependent on eBehaviour)
+    struct RlvException
+    {
+    public:
+        LLUUID              idObject;    // UUID of the object that added the exception
+        ERlvBehaviour       eBehaviour;  // Behaviour the exception applies to
+        RlvExceptionOption  varOption;   // Exception data (type is dependent on eBehaviour)
 
-		RlvException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& option) : idObject(idObj), eBehaviour(eBhvr), varOption(option) {}
-	private:
-		RlvException();
-	};
-	typedef std::multimap<ERlvBehaviour, RlvException> rlv_exception_map_t;
+        RlvException(const LLUUID& idObj, ERlvBehaviour eBhvr, const RlvExceptionOption& option) : idObject(idObj), eBehaviour(eBhvr), varOption(option) {}
+    private:
+        RlvException();
+    };
+    typedef std::multimap<ERlvBehaviour, RlvException> rlv_exception_map_t;
 protected:
-	rlv_object_map_t      m_Objects;				// Map of objects that have active restrictions (idObj -> RlvObject)
-	rlv_blocked_object_list_t m_BlockedObjects;		// List of (attached) objects that can't issue commands
-	rlv_exception_map_t   m_Exceptions;				// Map of currently active restriction exceptions (ERlvBehaviour -> RlvException)
-	S16                   m_Behaviours[RLV_BHVR_COUNT];
+    rlv_object_map_t      m_Objects;                // Map of objects that have active restrictions (idObj -> RlvObject)
+    rlv_blocked_object_list_t m_BlockedObjects;     // List of (attached) objects that can't issue commands
+    rlv_exception_map_t   m_Exceptions;             // Map of currently active restriction exceptions (ERlvBehaviour -> RlvException)
+    S16                   m_Behaviours[RLV_BHVR_COUNT];
 
-	rlv_command_list_t    m_Retained;
-	RlvGCTimer*           m_pGCTimer;
+    rlv_command_list_t    m_Retained;
+    RlvGCTimer*           m_pGCTimer;
 
-	std::stack<std::reference_wrapper<const RlvCommand>> m_CurCommandStack; // Convenience (see @tpto)
-	std::stack<LLUUID>    m_CurObjectStack;			// Convenience (see @tpto)
+    std::stack<std::reference_wrapper<const RlvCommand>> m_CurCommandStack; // Convenience (see @tpto)
+    std::stack<LLUUID>    m_CurObjectStack;         // Convenience (see @tpto)
 
-	rlv_behaviour_signal_t m_OnBehaviour;
-	rlv_behaviour_signal_t m_OnBehaviourToggle;
-	rlv_command_signal_t   m_OnCommand;
-	mutable std::list<RlvExtCommandHandler*> m_CommandHandlers;
-	boost::signals2::scoped_connection       m_ExperienceEventConn;
-	boost::signals2::scoped_connection       m_TeleportFailedConn;
-	boost::signals2::scoped_connection       m_TeleportFinishedConn;
+    rlv_behaviour_signal_t m_OnBehaviour;
+    rlv_behaviour_signal_t m_OnBehaviourToggle;
+    rlv_command_signal_t   m_OnCommand;
+    mutable std::list<RlvExtCommandHandler*> m_CommandHandlers;
+    boost::signals2::scoped_connection       m_ExperienceEventConn;
+    boost::signals2::scoped_connection       m_TeleportFailedConn;
+    boost::signals2::scoped_connection       m_TeleportFinishedConn;
 
-	static bool         m_fEnabled;					// Use setEnabled() to toggle this
+    static bool         m_fEnabled;                 // Use setEnabled() to toggle this
 
-	bool                                    m_fCanCancelTp;					// @accepttp=n and @tpto=force
-	mutable LLVector3d                      m_posSitSource;					// @standtp=n (mutable because onForceXXX handles are all declared as const)
-	bool                                    m_fPendingGroundSit = false;	// @sitground=force
-	LLUUID                                  m_idPendingSitActor;			// @sit=force and @sitground=force
-	LLUUID                                  m_idPendingUnsitActor;			// @unsit=force
-	mutable LLUUID                          m_idAgentGroup;					// @setgroup=n
-	std::pair<LLUUID, std::string>          m_PendingGroupChange;			// @setgroup=force
-	std::pair<LLTimer, LLUUID>              m_GroupChangeExpiration;        // @setgroup=force
+    bool                                    m_fCanCancelTp;                 // @accepttp=n and @tpto=force
+    mutable LLVector3d                      m_posSitSource;                 // @standtp=n (mutable because onForceXXX handles are all declared as const)
+    bool                                    m_fPendingGroundSit = false;    // @sitground=force
+    LLUUID                                  m_idPendingSitActor;            // @sit=force and @sitground=force
+    LLUUID                                  m_idPendingUnsitActor;          // @unsit=force
+    mutable LLUUID                          m_idAgentGroup;                 // @setgroup=n
+    std::pair<LLUUID, std::string>          m_PendingGroupChange;           // @setgroup=force
+    std::pair<LLTimer, LLUUID>              m_GroupChangeExpiration;        // @setgroup=force
 
-	std::string                             m_strCameraPresetRestore;       // @setcam_eyeoffset, @setcam_eyeoffsetscale and @setcam_focusoffset
+    std::string                             m_strCameraPresetRestore;       // @setcam_eyeoffset, @setcam_eyeoffsetscale and @setcam_focusoffset
 
-	friend class RlvSharedRootFetcher;				// Fetcher needs access to m_fFetchComplete
-	friend class RlvGCTimer;						// Timer clear its own point at destruction
-	template<ERlvBehaviourOptionType> friend struct RlvBehaviourGenericHandler;
-	template<ERlvParamType> friend struct RlvCommandHandlerBaseImpl;
-	template<ERlvParamType, ERlvBehaviour> friend struct RlvCommandHandler;
-	template<ERlvBehaviourModifier> friend class RlvBehaviourModifierHandler;
+    friend class RlvSharedRootFetcher;              // Fetcher needs access to m_fFetchComplete
+    friend class RlvGCTimer;                        // Timer clear its own point at destruction
+    template<ERlvBehaviourOptionType> friend struct RlvBehaviourGenericHandler;
+    template<ERlvParamType> friend struct RlvCommandHandlerBaseImpl;
+    template<ERlvParamType, ERlvBehaviour> friend struct RlvCommandHandler;
+    template<ERlvBehaviourModifier> friend class RlvBehaviourModifierHandler;
 
-	// --------------------------------
+    // --------------------------------
 
-	/*
-	 * Internal access functions
-	 */
+    /*
+     * Internal access functions
+     */
 public:
-	const rlv_object_map_t& getObjectMap() const { return m_Objects; }
+    const rlv_object_map_t& getObjectMap() const { return m_Objects; }
 };
 
 typedef RlvHandler rlv_handler_t;
@@ -300,28 +300,28 @@ extern rlv_handler_t gRlvHandler;
 
 inline RlvHandler& RlvHandler::instance()
 {
-	return gRlvHandler;
+    return gRlvHandler;
 }
 
 inline RlvHandler* RlvHandler::getInstance()
 {
-	return &gRlvHandler;
+    return &gRlvHandler;
 }
 
 inline RlvObject* RlvHandler::getObject(const LLUUID& idRlvObj) const
 {
-	auto itObj = m_Objects.find(idRlvObj);
-	return (m_Objects.end() != itObj) ? const_cast<RlvObject*>(&itObj->second) : nullptr;
+    auto itObj = m_Objects.find(idRlvObj);
+    return (m_Objects.end() != itObj) ? const_cast<RlvObject*>(&itObj->second) : nullptr;
 }
 
 inline bool RlvHandler::hasBehaviour(ERlvBehaviour eBhvr, const std::string& strOption) const
 {
-	return hasBehaviourExcept(eBhvr, strOption, LLUUID::null);
+    return hasBehaviourExcept(eBhvr, strOption, LLUUID::null);
 }
 
 inline bool RlvHandler::hasBehaviourExcept(ERlvBehaviour eBhvr, const LLUUID& idObj) const
 {
-	return hasBehaviourExcept(eBhvr, LLStringUtil::null, idObj);
+    return hasBehaviourExcept(eBhvr, LLStringUtil::null, idObj);
 }
 
 // ============================================================================

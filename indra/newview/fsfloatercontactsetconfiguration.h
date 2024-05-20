@@ -40,35 +40,35 @@ class LLButton;
 class FSFloaterContactSetConfiguration : public LLFloater
 {
 public:
-	FSFloaterContactSetConfiguration(const LLSD& target_set);
-	BOOL postBuild();
-	void onOpen(const LLSD& target_set);
-	void draw();
-	void setFrustumOrigin(LLView* frustumOrigin);
+    FSFloaterContactSetConfiguration(const LLSD& target_set);
+    BOOL postBuild();
+    void onOpen(const LLSD& target_set);
+    void draw();
+    void setFrustumOrigin(LLView* frustumOrigin);
 
 private:
-	~FSFloaterContactSetConfiguration(){};
-	void onCommitSetColor();
-	void onCommitSetNotifications();
-	void onCommitDefaultColor();
-	void onRenameSet();
-	
-	void updateTitle();
+    ~FSFloaterContactSetConfiguration(){};
+    void onCommitSetColor();
+    void onCommitSetNotifications();
+    void onCommitDefaultColor();
+    void onRenameSet();
 
-	// Wish there was something better to use for this...
-	std::string mContactSet;
+    void updateTitle();
 
-	LLCheckBoxCtrl*		mNotificationCheckBox;
-	LLColorSwatchCtrl*	mSetSwatch;
-	LLColorSwatchCtrl*	mGlobalSwatch;
-	LLLineEditor*		mSetName;
-	LLButton*			mRenameButton;
+    // Wish there was something better to use for this...
+    std::string mContactSet;
 
-	LLHandle<LLView>	mFrustumOrigin;
-	F32					mContextConeOpacity;
-	F32					mContextConeInAlpha;
-	F32					mContextConeOutAlpha;
-	F32					mContextConeFadeTime;
+    LLCheckBoxCtrl*     mNotificationCheckBox;
+    LLColorSwatchCtrl*  mSetSwatch;
+    LLColorSwatchCtrl*  mGlobalSwatch;
+    LLLineEditor*       mSetName;
+    LLButton*           mRenameButton;
+
+    LLHandle<LLView>    mFrustumOrigin;
+    F32                 mContextConeOpacity;
+    F32                 mContextConeInAlpha;
+    F32                 mContextConeOutAlpha;
+    F32                 mContextConeFadeTime;
 };
 
 #endif //FS_FLOATERCONTACTSETCONFIGURATION_H

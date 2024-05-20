@@ -3,6 +3,7 @@
 	<text name="group_name" value="Unbekannt"/>
 	<button name="visibility_hide_btn" tool_tip="Gruppe in meinem Profil verbergen"/>
 	<button name="visibility_show_btn" tool_tip="Gruppe in meinem Profil anzeigen"/>
+	<button name="notices_btn" tool_tip="Gruppenmitteilungen"/>
 	<button name="info_btn" tool_tip="Mehr Infos"/>
 	<button name="profile_btn" tool_tip="Profil anzeigen"/>
 </panel>

@@ -1,4 +1,4 @@
-/** 
+/**
  * @file fsfloatervoicecontrols.h
  * @author Mike Antipov
  * @brief Voice Control Panel in a Voice Chats (P2P, Group, Nearby...).
@@ -6,21 +6,21 @@
  * $LicenseInfo:firstyear=2009&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -59,246 +59,246 @@ class FSFloaterVoiceControls : public LLTransientDockableFloater, LLVoiceClientP
 {
 public:
 
-	LOG_CLASS(FSFloaterVoiceControls);
+    LOG_CLASS(FSFloaterVoiceControls);
 
-	FSFloaterVoiceControls(const LLSD& key);
-	~FSFloaterVoiceControls();
+    FSFloaterVoiceControls(const LLSD& key);
+    ~FSFloaterVoiceControls();
 
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ void onOpen(const LLSD& key);
-	/*virtual*/ void draw();
-	/*virtual*/ void setFocus( BOOL b );
+    /*virtual*/ BOOL postBuild();
+    /*virtual*/ void onOpen(const LLSD& key);
+    /*virtual*/ void draw();
+    /*virtual*/ void setFocus( BOOL b );
 
-	/**
-	 * Is called by LLVoiceClient::notifyParticipantObservers when voice participant list is changed.
-	 *
-	 * Refreshes list to display participants not in voice as disabled.
-	 */
-	/*virtual*/ void onParticipantsChanged();
+    /**
+     * Is called by LLVoiceClient::notifyParticipantObservers when voice participant list is changed.
+     *
+     * Refreshes list to display participants not in voice as disabled.
+     */
+    /*virtual*/ void onParticipantsChanged();
 
-	static void sOnCurrentChannelChanged(const LLUUID& session_id);
+    static void sOnCurrentChannelChanged(const LLUUID& session_id);
 
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
-	LLAvatarList* getAvatarCallerList() { return mAvatarList; }
+    LLAvatarList* getAvatarCallerList() { return mAvatarList; }
 // [/RLVa:KB]
 
-	void toggleRlvShowNearbyRestriction(bool restricted);
+    void toggleRlvShowNearbyRestriction(bool restricted);
 
 private:
-	typedef enum e_voice_controls_type
-	{
-		VC_LOCAL_CHAT,
-		VC_GROUP_CHAT,
-		VC_AD_HOC_CHAT,
-		VC_PEER_TO_PEER,
-	} EVoiceControls;
+    typedef enum e_voice_controls_type
+    {
+        VC_LOCAL_CHAT,
+        VC_GROUP_CHAT,
+        VC_AD_HOC_CHAT,
+        VC_PEER_TO_PEER,
+    } EVoiceControls;
 
-	typedef enum e_speaker_state
-	{
-		STATE_UNKNOWN,
-		STATE_INVITED,
-		STATE_JOINED,
-		STATE_LEFT,
-	} ESpeakerState;
+    typedef enum e_speaker_state
+    {
+        STATE_UNKNOWN,
+        STATE_INVITED,
+        STATE_JOINED,
+        STATE_LEFT,
+    } ESpeakerState;
 
-	typedef std::map<LLUUID, ESpeakerState> speaker_state_map_t;
+    typedef std::map<LLUUID, ESpeakerState> speaker_state_map_t;
 
-	void leaveCall();
+    void leaveCall();
 
-	/**
-	 * Updates mSpeakerManager and list according to current Voice Channel
-	 *
-	 * It compares mSpeakerManager & current Voice Channel session IDs.
-	 * If they are different gets Speaker manager related to current channel and updates channel participant list.
-	 */
-	void updateSession();
+    /**
+     * Updates mSpeakerManager and list according to current Voice Channel
+     *
+     * It compares mSpeakerManager & current Voice Channel session IDs.
+     * If they are different gets Speaker manager related to current channel and updates channel participant list.
+     */
+    void updateSession();
 
-	/**
-	 * Refreshes participant list according to current Voice Channel
-	 */
-	void refreshParticipantList();
+    /**
+     * Refreshes participant list according to current Voice Channel
+     */
+    void refreshParticipantList();
 
-	/**
-	 * Handles event on avatar list is refreshed after it was marked dirty.
-	 *
-	 * It sets initial participants voice states (once after the first refreshing)
-	 * and updates voice states each time anybody is joined/left voice chat in session.
-	 */
-	void onAvatarListRefreshed();
+    /**
+     * Handles event on avatar list is refreshed after it was marked dirty.
+     *
+     * It sets initial participants voice states (once after the first refreshing)
+     * and updates voice states each time anybody is joined/left voice chat in session.
+     */
+    void onAvatarListRefreshed();
 
-	/**
-	 * Gets called whenever a selection changes in the nearby voice list.
-	 * 
-	 * This updates the slider and mute button at the lower edge, so the selected participant
-	 * becomes the target of this control.
-	 */
-	void onParticipantSelected();
+    /**
+     * Gets called whenever a selection changes in the nearby voice list.
+     *
+     * This updates the slider and mute button at the lower edge, so the selected participant
+     * becomes the target of this control.
+     */
+    void onParticipantSelected();
 
-	/**
-	 * Gets called whenever the volume on the optional single slider control gets changed
-	 */
-	void onVolumeChanged();
+    /**
+     * Gets called whenever the volume on the optional single slider control gets changed
+     */
+    void onVolumeChanged();
 
-	/**
-	 * Gets called whenever the optional single mute button gets toggled
-	 */
-	void onMuteChanged();
+    /**
+     * Gets called whenever the optional single mute button gets toggled
+     */
+    void onMuteChanged();
 
-	/**
-	 * Updates window title with an avatar name
-	 */
-	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
-	
-	void updateTitle();
-	void initAgentData();
-	void setModeratorMutedVoice(bool moderator_muted);
-	void updateAgentModeratorState();
-	void onModeratorNameCache(const LLAvatarName& av_name);
+    /**
+     * Updates window title with an avatar name
+     */
+    void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 
-	/**
-	 * Sets initial participants voice states in avatar list (Invited, Joined, Has Left).
-	 *
-	 * @see refreshParticipantList()
-	 * @see onAvatarListRefreshed()
-	 * @see mInitParticipantsVoiceState
-	 */
-	void initParticipantsVoiceState();
+    void updateTitle();
+    void initAgentData();
+    void setModeratorMutedVoice(bool moderator_muted);
+    void updateAgentModeratorState();
+    void onModeratorNameCache(const LLAvatarName& av_name);
 
-	/**
-	 * Updates participants voice states in avatar list (Invited, Joined, Has Left).
-	 *
-	 * @see onAvatarListRefreshed()
-	 * @see onChanged()
-	 */
-	void updateParticipantsVoiceState();
+    /**
+     * Sets initial participants voice states in avatar list (Invited, Joined, Has Left).
+     *
+     * @see refreshParticipantList()
+     * @see onAvatarListRefreshed()
+     * @see mInitParticipantsVoiceState
+     */
+    void initParticipantsVoiceState();
 
-	/**
-	 * Updates voice state of participant not in current voice channel depend on its current state.
-	 */
-	void updateNotInVoiceParticipantState(LLAvatarListItem* item);
-	void setState(LLAvatarListItem* item, ESpeakerState state);
-	void setState(const LLUUID& speaker_id, ESpeakerState state)
-	{
-		LL_DEBUGS() << "Storing state: " << speaker_id << ", " << state << LL_ENDL;
-		mSpeakerStateMap[speaker_id] = state;
-	}
+    /**
+     * Updates participants voice states in avatar list (Invited, Joined, Has Left).
+     *
+     * @see onAvatarListRefreshed()
+     * @see onChanged()
+     */
+    void updateParticipantsVoiceState();
 
-	ESpeakerState getState(const LLUUID& speaker_id)
-	{
-		LL_DEBUGS() << "Getting state: " << speaker_id << ", " << mSpeakerStateMap[speaker_id] << LL_ENDL;
+    /**
+     * Updates voice state of participant not in current voice channel depend on its current state.
+     */
+    void updateNotInVoiceParticipantState(LLAvatarListItem* item);
+    void setState(LLAvatarListItem* item, ESpeakerState state);
+    void setState(const LLUUID& speaker_id, ESpeakerState state)
+    {
+        LL_DEBUGS() << "Storing state: " << speaker_id << ", " << state << LL_ENDL;
+        mSpeakerStateMap[speaker_id] = state;
+    }
 
-		return mSpeakerStateMap[speaker_id];
-	}
+    ESpeakerState getState(const LLUUID& speaker_id)
+    {
+        LL_DEBUGS() << "Getting state: " << speaker_id << ", " << mSpeakerStateMap[speaker_id] << LL_ENDL;
 
-	/**
-	 * Instantiates new LLAvatarListItemRemoveTimer and adds it into the map if it is not already created.
-	 *
-	 * @param voice_speaker_id LLUUID of Avatar List item to be removed from the list when timer expires.
-	 */
-	void setVoiceRemoveTimer(const LLUUID& voice_speaker_id);
+        return mSpeakerStateMap[speaker_id];
+    }
 
-	/**
-	 * Removes specified by UUID Avatar List item.
-	 *
-	 * @param voice_speaker_id LLUUID of Avatar List item to be removed from the list.
-	 */
-	bool removeVoiceLeftParticipant(const LLUUID& voice_speaker_id);
+    /**
+     * Instantiates new LLAvatarListItemRemoveTimer and adds it into the map if it is not already created.
+     *
+     * @param voice_speaker_id LLUUID of Avatar List item to be removed from the list when timer expires.
+     */
+    void setVoiceRemoveTimer(const LLUUID& voice_speaker_id);
 
-	/**
-	 * Deletes all timers from the list to prevent started timers from ticking after destruction
-	 * and after switching on another voice channel.
-	 */
-	void resetVoiceRemoveTimers();
+    /**
+     * Removes specified by UUID Avatar List item.
+     *
+     * @param voice_speaker_id LLUUID of Avatar List item to be removed from the list.
+     */
+    bool removeVoiceLeftParticipant(const LLUUID& voice_speaker_id);
 
-	/**
-	 * Removes specified by UUID timer from the map.
-	 *
-	 * @param voice_speaker_id LLUUID of Avatar List item whose timer should be removed from the map.
-	 */
-	void removeVoiceRemoveTimer(const LLUUID& voice_speaker_id);
+    /**
+     * Deletes all timers from the list to prevent started timers from ticking after destruction
+     * and after switching on another voice channel.
+     */
+    void resetVoiceRemoveTimers();
 
-	/**
-	 * Called by LLParticipantList before adding a speaker to the participant list.
-	 *
-	 * If false is returned, the speaker will not be added to the list.
-	 *
-	 * @param speaker_id Speaker to validate.
-	 * @return true if this is a valid speaker, false otherwise.
-	 */
-	bool validateSpeaker(const LLUUID& speaker_id);
+    /**
+     * Removes specified by UUID timer from the map.
+     *
+     * @param voice_speaker_id LLUUID of Avatar List item whose timer should be removed from the map.
+     */
+    void removeVoiceRemoveTimer(const LLUUID& voice_speaker_id);
 
-	/**
-	 * Connects to passed channel to be updated according to channel's voice states.
-	 */
-	void connectToChannel(LLVoiceChannel* channel);
+    /**
+     * Called by LLParticipantList before adding a speaker to the participant list.
+     *
+     * If false is returned, the speaker will not be added to the list.
+     *
+     * @param speaker_id Speaker to validate.
+     * @return true if this is a valid speaker, false otherwise.
+     */
+    bool validateSpeaker(const LLUUID& speaker_id);
 
-	/**
-	 * Callback to process changing of voice channel's states.
-	 */
-	void onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state);
+    /**
+     * Connects to passed channel to be updated according to channel's voice states.
+     */
+    void connectToChannel(LLVoiceChannel* channel);
 
-	/**
-	 * Updates floater according to passed channel's voice state.
-	 */
-	void updateState(const LLVoiceChannel::EState& new_state);
+    /**
+     * Callback to process changing of voice channel's states.
+     */
+    void onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state);
 
-	/**
-	 * Resets floater to be ready to show voice participants.
-	 *
-	 * Clears all data from the latest voice session.
-	 */
-	void reset(const LLVoiceChannel::EState& new_state);
+    /**
+     * Updates floater according to passed channel's voice state.
+     */
+    void updateState(const LLVoiceChannel::EState& new_state);
 
-	void updateListVisibility();
+    /**
+     * Resets floater to be ready to show voice participants.
+     *
+     * Clears all data from the latest voice session.
+     */
+    void reset(const LLVoiceChannel::EState& new_state);
+
+    void updateListVisibility();
 
 private:
-	speaker_state_map_t mSpeakerStateMap;
-	LLSpeakerMgr* mSpeakerManager;
-	FSParticipantList* mParticipants;
-	LLAvatarList* mAvatarList;
-	EVoiceControls mVoiceType;
-	LLPanel* mAgentPanel;
-	LLOutputMonitorCtrl* mSpeakingIndicator;
-	bool mIsModeratorMutedVoice;
-	bool mIsRlvShowNearbyRestricted;
+    speaker_state_map_t mSpeakerStateMap;
+    LLSpeakerMgr* mSpeakerManager;
+    FSParticipantList* mParticipants;
+    LLAvatarList* mAvatarList;
+    EVoiceControls mVoiceType;
+    LLPanel* mAgentPanel;
+    LLOutputMonitorCtrl* mSpeakingIndicator;
+    bool mIsModeratorMutedVoice;
+    bool mIsRlvShowNearbyRestricted;
 
-	LLUUID mSelectedParticipant;
-	LLSliderCtrl* mVolumeSlider;
-	LLButton* mMuteButton;
-	LLTextBox* mRlvRestrictedText;
+    LLUUID mSelectedParticipant;
+    LLSliderCtrl* mVolumeSlider;
+    LLButton* mMuteButton;
+    LLTextBox* mRlvRestrictedText;
 
-	/**
-	 * Flag indicated that participants voice states should be initialized.
-	 *
-	 * It is used due to Avatar List has delayed refreshing after it content is changed.
-	 * Real initializing is performed when Avatar List is first time refreshed.
-	 *
-	 * @see onAvatarListRefreshed()
-	 * @see initParticipantsVoiceState()
-	 */
-	bool mInitParticipantsVoiceState;
+    /**
+     * Flag indicated that participants voice states should be initialized.
+     *
+     * It is used due to Avatar List has delayed refreshing after it content is changed.
+     * Real initializing is performed when Avatar List is first time refreshed.
+     *
+     * @see onAvatarListRefreshed()
+     * @see initParticipantsVoiceState()
+     */
+    bool mInitParticipantsVoiceState;
 
-	boost::signals2::connection mAvatarListRefreshConnection;
+    boost::signals2::connection mAvatarListRefreshConnection;
 
 
-	/**
-	 * time out speakers when they are not part of current session
-	 */
-	LLSpeakersDelayActionsStorage* mSpeakerDelayRemover;
+    /**
+     * time out speakers when they are not part of current session
+     */
+    LLSpeakersDelayActionsStorage* mSpeakerDelayRemover;
 
-	/**
-	 * Stores reference to current voice channel.
-	 *
-	 * Is used to ignore voice channel changed callback for the same channel.
-	 *
-	 * @see sOnCurrentChannelChanged()
-	 */
-	static LLVoiceChannel* sCurrentVoiceChannel;
+    /**
+     * Stores reference to current voice channel.
+     *
+     * Is used to ignore voice channel changed callback for the same channel.
+     *
+     * @see sOnCurrentChannelChanged()
+     */
+    static LLVoiceChannel* sCurrentVoiceChannel;
 
-	/* virtual */
-	LLTransientFloaterMgr::ETransientGroup getGroup() { return LLTransientFloaterMgr::IM; }
+    /* virtual */
+    LLTransientFloaterMgr::ETransientGroup getGroup() { return LLTransientFloaterMgr::IM; }
 
-	boost::signals2::connection mVoiceChannelStateChangeConnection;
+    boost::signals2::connection mVoiceChannelStateChangeConnection;
 };
 
 

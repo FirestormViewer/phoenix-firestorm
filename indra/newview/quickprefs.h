@@ -1,4 +1,4 @@
-/** 
+/**
  * @file quickprefs.h
  * @brief Quick preferences access panel for bottomtray
  *
@@ -7,21 +7,21 @@
  * Copyright (C) 2011, WoLf Loonie @ Second Life
  * Copyright (C) 2013, Zi Ree @ Second Life
  * Copyright (C) 2013, Ansariel Hiller @ Second Life
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -53,260 +53,260 @@ class LLColorSwatchCtrl;
 
 typedef enum e_quickpref_update_param
 {
-	QP_PARAM_SKY,
-	QP_PARAM_WATER,
-	QP_PARAM_DAYCYCLE
+    QP_PARAM_SKY,
+    QP_PARAM_WATER,
+    QP_PARAM_DAYCYCLE
 } EQuickPrefUpdateParam;
 
 class FloaterQuickPrefs : public LLTransientDockableFloater
 {
-	friend class LLFloaterReg;
+    friend class LLFloaterReg;
 
 private:
-	FloaterQuickPrefs(const LLSD& key);
-	~FloaterQuickPrefs();
+    FloaterQuickPrefs(const LLSD& key);
+    ~FloaterQuickPrefs();
 
-	void selectSkyPreset(const LLSD& preset);
-	void selectWaterPreset(const LLSD& preset);
-	void selectDayCyclePreset(const LLSD& preset);
+    void selectSkyPreset(const LLSD& preset);
+    void selectWaterPreset(const LLSD& preset);
+    void selectDayCyclePreset(const LLSD& preset);
 
-	bool isValidPreset(const LLSD& preset);
-	void stepComboBox(LLComboBox* ctrl, bool forward);
+    bool isValidPreset(const LLSD& preset);
+    void stepComboBox(LLComboBox* ctrl, bool forward);
 
-	void initCallbacks();
-	void loadPresets();
-	void loadDayCyclePresets(const std::multimap<std::string, LLUUID>& daycycle_map);
-	void loadSkyPresets(const std::multimap<std::string, LLUUID>& sky_map);
-	void loadWaterPresets(const std::multimap<std::string, LLUUID>& water_map);
+    void initCallbacks();
+    void loadPresets();
+    void loadDayCyclePresets(const std::multimap<std::string, LLUUID>& daycycle_map);
+    void loadSkyPresets(const std::multimap<std::string, LLUUID>& sky_map);
+    void loadWaterPresets(const std::multimap<std::string, LLUUID>& water_map);
 
-	void onChangeWaterPreset();
-	void onChangeSkyPreset();
-	void onChangeDayCyclePreset();
-	void onClickSkyPrev();
-	void onClickSkyNext();
-	void onClickWaterPrev();
-	void onClickWaterNext();
-	void onClickDayCyclePrev();
-	void onClickDayCycleNext();
-	void onClickResetToRegionDefault();
+    void onChangeWaterPreset();
+    void onChangeSkyPreset();
+    void onChangeDayCyclePreset();
+    void onClickSkyPrev();
+    void onClickSkyNext();
+    void onClickWaterPrev();
+    void onClickWaterNext();
+    void onClickDayCyclePrev();
+    void onClickDayCycleNext();
+    void onClickResetToRegionDefault();
 
-	boost::signals2::connection mRlvBehaviorCallbackConnection;
-	void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
-	void enableWindlightButtons(bool enable);
+    boost::signals2::connection mRlvBehaviorCallbackConnection;
+    void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+    void enableWindlightButtons(bool enable);
 
-	void setDefaultPresetsEnabled(BOOL enabled);
+    void setDefaultPresetsEnabled(BOOL enabled);
 
 public:
-	/*virtual*/ BOOL postBuild();
-	virtual void onOpen(const LLSD& key);
+    /*virtual*/ BOOL postBuild();
+    virtual void onOpen(const LLSD& key);
 
-	void setSelectedSky(const std::string& preset_name);
-	void setSelectedWater(const std::string& preset_name);
-	void setSelectedDayCycle(const std::string& preset_name);
-	void setSelectedEnvironment();
+    void setSelectedSky(const std::string& preset_name);
+    void setSelectedWater(const std::string& preset_name);
+    void setSelectedDayCycle(const std::string& preset_name);
+    void setSelectedEnvironment();
 
-	// Phototools additions
-	void refreshSettings();
-	bool getIsPhototools() const { return getName() == PHOTOTOOLS_FLOATER; };
+    // Phototools additions
+    void refreshSettings();
+    bool getIsPhototools() const { return getName() == PHOTOTOOLS_FLOATER; };
 
-	void dockToToolbarButton();
+    void dockToToolbarButton();
 
 private:
 
-	// Windlight controls
-	LLComboBox*			mWLPresetsCombo;
-	LLComboBox*			mWaterPresetsCombo;
-	LLComboBox*			mDayCyclePresetsCombo;
+    // Windlight controls
+    LLComboBox*         mWLPresetsCombo;
+    LLComboBox*         mWaterPresetsCombo;
+    LLComboBox*         mDayCyclePresetsCombo;
 
-	// Phototools additions
-	LLCheckBoxCtrl*		mCtrlUseSSAO;
-	LLCheckBoxCtrl*		mCtrlUseDoF;
-	LLComboBox*			mCtrlShadowDetail;
+    // Phototools additions
+    LLCheckBoxCtrl*     mCtrlUseSSAO;
+    LLCheckBoxCtrl*     mCtrlUseDoF;
+    LLComboBox*         mCtrlShadowDetail;
 
-	// Vignette UI controls
-	LLSpinCtrl*			mSpinnerVignetteX;
-	LLSpinCtrl*			mSpinnerVignetteY;
-	LLSpinCtrl*			mSpinnerVignetteZ;
-	LLSlider*			mSliderVignetteX;
-	LLSlider*			mSliderVignetteY;
-	LLSlider*			mSliderVignetteZ;
-	
-	LLSlider*			mSliderRenderShadowSplitExponentY;
-	LLSpinCtrl*			mSpinnerRenderShadowSplitExponentY;
+    // Vignette UI controls
+    LLSpinCtrl*         mSpinnerVignetteX;
+    LLSpinCtrl*         mSpinnerVignetteY;
+    LLSpinCtrl*         mSpinnerVignetteZ;
+    LLSlider*           mSliderVignetteX;
+    LLSlider*           mSliderVignetteY;
+    LLSlider*           mSliderVignetteZ;
 
-	LLSlider*			mSliderRenderShadowGaussianX;
-	LLSlider*			mSliderRenderShadowGaussianY;
-	LLSpinCtrl*			mSpinnerRenderShadowGaussianX;
-	LLSpinCtrl*			mSpinnerRenderShadowGaussianY;
+    LLSlider*           mSliderRenderShadowSplitExponentY;
+    LLSpinCtrl*         mSpinnerRenderShadowSplitExponentY;
 
-	LLSlider*			mSliderRenderSSAOEffectX;
-	LLSpinCtrl*			mSpinnerRenderSSAOEffectX;
+    LLSlider*           mSliderRenderShadowGaussianX;
+    LLSlider*           mSliderRenderShadowGaussianY;
+    LLSpinCtrl*         mSpinnerRenderShadowGaussianX;
+    LLSpinCtrl*         mSpinnerRenderShadowGaussianY;
 
-	LLSliderCtrl*		mAvatarZOffsetSlider;
+    LLSlider*           mSliderRenderSSAOEffectX;
+    LLSpinCtrl*         mSpinnerRenderSSAOEffectX;
 
-	LLButton*			mBtnResetDefaults;
-	
-	LLSliderCtrl*		mMaxComplexitySlider;
-	LLTextBox*			mMaxComplexityLabel;
+    LLSliderCtrl*       mAvatarZOffsetSlider;
 
-	LLSettingsSky::ptr_t		mLiveSky;
-	LLSettingsWater::ptr_t		mLiveWater;
-	LLSettingsDay::ptr_t		mLiveDay;
-	LLEnvironment::connection_t	mEnvChangedConnection;
+    LLButton*           mBtnResetDefaults;
 
-	// Vignette UI callbacks
-	void onChangeVignetteX();
-	void onChangeVignetteY();
-	void onChangeVignetteZ();
-	void onChangeVignetteSpinnerX();
-	void onChangeVignetteSpinnerY();
-	void onChangeVignetteSpinnerZ();
-	void onClickResetVignetteX();
-	void onClickResetVignetteY();
-	void onClickResetVignetteZ();
+    LLSliderCtrl*       mMaxComplexitySlider;
+    LLTextBox*          mMaxComplexityLabel;
 
-	void onChangeRenderShadowSplitExponentSlider();
-	void onChangeRenderShadowSplitExponentSpinner();
-	void onClickResetRenderShadowSplitExponentY();
+    LLSettingsSky::ptr_t        mLiveSky;
+    LLSettingsWater::ptr_t      mLiveWater;
+    LLSettingsDay::ptr_t        mLiveDay;
+    LLEnvironment::connection_t mEnvChangedConnection;
 
-	void onChangeRenderShadowGaussianSlider();
-	void onChangeRenderShadowGaussianSpinner();
-	void onClickResetRenderShadowGaussianX();
-	void onClickResetRenderShadowGaussianY();
+    // Vignette UI callbacks
+    void onChangeVignetteX();
+    void onChangeVignetteY();
+    void onChangeVignetteZ();
+    void onChangeVignetteSpinnerX();
+    void onChangeVignetteSpinnerY();
+    void onChangeVignetteSpinnerZ();
+    void onClickResetVignetteX();
+    void onClickResetVignetteY();
+    void onClickResetVignetteZ();
 
-	void onChangeRenderSSAOEffectSlider();
-	void onChangeRenderSSAOEffectSpinner();
-	void onClickResetRenderSSAOEffectX();
+    void onChangeRenderShadowSplitExponentSlider();
+    void onChangeRenderShadowSplitExponentSpinner();
+    void onClickResetRenderShadowSplitExponentY();
 
-	// Restore Quickprefs Defaults
-	void onClickRestoreDefaults();
-	void loadSavedSettingsFromFile(const std::string& settings_path);
-	void callbackRestoreDefaults(const LLSD& notification, const LLSD& response);
+    void onChangeRenderShadowGaussianSlider();
+    void onChangeRenderShadowGaussianSpinner();
+    void onClickResetRenderShadowGaussianX();
+    void onClickResetRenderShadowGaussianY();
 
-	void onAvatarZOffsetSliderMoved();
-	void onAvatarZOffsetFinalCommit();
-	void updateAvatarZOffsetEditEnabled();
-	void onRegionChanged();
-	void onSimulatorFeaturesReceived(const LLUUID &region_id);
-	void syncAvatarZOffsetFromPreferenceSetting();
-	void updateMaxNonImpostors(const LLSD& newvalue);
-	void updateMaxComplexity();
-	void updateMaxComplexityLabel(const LLSD& newvalue);
+    void onChangeRenderSSAOEffectSlider();
+    void onChangeRenderSSAOEffectSpinner();
+    void onClickResetRenderSSAOEffectX();
 
-	boost::signals2::connection mRegionChangedSlot;
+    // Restore Quickprefs Defaults
+    void onClickRestoreDefaults();
+    void loadSavedSettingsFromFile(const std::string& settings_path);
+    void callbackRestoreDefaults(const LLSD& notification, const LLSD& response);
+
+    void onAvatarZOffsetSliderMoved();
+    void onAvatarZOffsetFinalCommit();
+    void updateAvatarZOffsetEditEnabled();
+    void onRegionChanged();
+    void onSimulatorFeaturesReceived(const LLUUID &region_id);
+    void syncAvatarZOffsetFromPreferenceSetting();
+    void updateMaxNonImpostors(const LLSD& newvalue);
+    void updateMaxComplexity();
+    void updateMaxComplexityLabel(const LLSD& newvalue);
+
+    boost::signals2::connection mRegionChangedSlot;
 
 public:
-	virtual void onClose(bool app_quitting);
+    virtual void onClose(bool app_quitting);
 
 protected:
-	enum ControlType
-	{
-		ControlTypeCheckbox,
-		ControlTypeText,
-		ControlTypeSpinner,
-		ControlTypeSlider,
-		ControlTypeRadio,
-		ControlTypeColor3,
-		ControlTypeColor4
-	};
+    enum ControlType
+    {
+        ControlTypeCheckbox,
+        ControlTypeText,
+        ControlTypeSpinner,
+        ControlTypeSlider,
+        ControlTypeRadio,
+        ControlTypeColor3,
+        ControlTypeColor4
+    };
 
-	struct ControlEntry
-	{
-		LLPanel* panel;
-		LLUICtrl* widget;
-		LLTextBox* label_textbox;
-		std::string label;
-		ControlType type;
-		BOOL integer;
-		F32 min_value;
-		F32 max_value;
-		F32 increment;
-		LLSD value;		// used temporary during updateControls()
-	};
+    struct ControlEntry
+    {
+        LLPanel* panel;
+        LLUICtrl* widget;
+        LLTextBox* label_textbox;
+        std::string label;
+        ControlType type;
+        BOOL integer;
+        F32 min_value;
+        F32 max_value;
+        F32 increment;
+        LLSD value;     // used temporary during updateControls()
+    };
 
-	// XUI definition of a control entry in quick_preferences.xml
-	struct QuickPrefsXMLEntry : public LLInitParam::Block<QuickPrefsXMLEntry>
-	{
-		Mandatory<std::string>	control_name;
-		Mandatory<std::string>	label;
-		Optional<std::string>	translation_id;
-		Mandatory<U32>			control_type;
-		Mandatory<BOOL>			integer;
-		Mandatory<F32>			min_value;	// "min" is frowned upon by a braindead windows include
-		Mandatory<F32>			max_value;	// "max" see "min"
-		Mandatory<F32>			increment;
+    // XUI definition of a control entry in quick_preferences.xml
+    struct QuickPrefsXMLEntry : public LLInitParam::Block<QuickPrefsXMLEntry>
+    {
+        Mandatory<std::string>  control_name;
+        Mandatory<std::string>  label;
+        Optional<std::string>   translation_id;
+        Mandatory<U32>          control_type;
+        Mandatory<BOOL>         integer;
+        Mandatory<F32>          min_value;  // "min" is frowned upon by a braindead windows include
+        Mandatory<F32>          max_value;  // "max" see "min"
+        Mandatory<F32>          increment;
 
-		QuickPrefsXMLEntry();
-	};
+        QuickPrefsXMLEntry();
+    };
 
-	// overall XUI container in quick_preferences.xml
-	struct QuickPrefsXML : public LLInitParam::Block<QuickPrefsXML>
-	{
-		Multiple<QuickPrefsXMLEntry> entries;
+    // overall XUI container in quick_preferences.xml
+    struct QuickPrefsXML : public LLInitParam::Block<QuickPrefsXML>
+    {
+        Multiple<QuickPrefsXMLEntry> entries;
 
-		QuickPrefsXML();
-	};
+        QuickPrefsXML();
+    };
 
-	// internal list of user defined controls to display
-	typedef std::map<std::string,ControlEntry> control_list_t;
-	control_list_t mControlsList;
+    // internal list of user defined controls to display
+    typedef std::map<std::string,ControlEntry> control_list_t;
+    control_list_t mControlsList;
 
-	// order of the controls on the user interface
-	std::list<std::string> mControlsOrder;
-	// list of layout_panel slots to put our options in
-	std::list<LLLayoutPanel*> mOrderingSlots;
+    // order of the controls on the user interface
+    std::list<std::string> mControlsOrder;
+    // list of layout_panel slots to put our options in
+    std::list<LLLayoutPanel*> mOrderingSlots;
 
-	// pointer to the layout_stack where the controls will be inserted
-	LLLayoutStack* mOptionsStack;
+    // pointer to the layout_stack where the controls will be inserted
+    LLLayoutStack* mOptionsStack;
 
-	// currently selected for editing
-	std::string mSelectedControl;
+    // currently selected for editing
+    std::string mSelectedControl;
 
-	// editor control widgets
-	LLLineEditor* mControlLabelEdit;
-	LLComboBox* mControlNameCombo;
-	LLComboBox* mControlTypeCombo;
-	LLCheckBoxCtrl* mControlIntegerCheckbox;
-	LLSpinCtrl* mControlMinSpinner;
-	LLSpinCtrl* mControlMaxSpinner;
-	LLSpinCtrl* mControlIncrementSpinner;
+    // editor control widgets
+    LLLineEditor* mControlLabelEdit;
+    LLComboBox* mControlNameCombo;
+    LLComboBox* mControlTypeCombo;
+    LLCheckBoxCtrl* mControlIntegerCheckbox;
+    LLSpinCtrl* mControlMinSpinner;
+    LLSpinCtrl* mControlMaxSpinner;
+    LLSpinCtrl* mControlIncrementSpinner;
 
-	// returns the path to the quick_preferences.xml file. in save mode it will
-	// always return the user_settings path, if not in save mode, it will return
-	// the app_settings path in case the user_settings path does not (yet) exist
-	std::string getSettingsPath(bool save_mode);
+    // returns the path to the quick_preferences.xml file. in save mode it will
+    // always return the user_settings path, if not in save mode, it will return
+    // the app_settings path in case the user_settings path does not (yet) exist
+    std::string getSettingsPath(bool save_mode);
 
-	// adds a new control and returns a pointer to the chosen widget
-	LLUICtrl* addControl(const std::string& controlName, const std::string& controlLabel, LLView* slot = NULL, ControlType type = ControlTypeRadio, BOOL integer = FALSE, F32 min_value = -1000000.0f, F32 max_value = 1000000.0f, F32 increment = 0.0f);
-	// removes a control
-	void removeControl(const std::string& controlName, bool remove_slot = true);
-	// updates a single control
-	void updateControl(const std::string& controlName, ControlEntry& entry);
+    // adds a new control and returns a pointer to the chosen widget
+    LLUICtrl* addControl(const std::string& controlName, const std::string& controlLabel, LLView* slot = NULL, ControlType type = ControlTypeRadio, BOOL integer = FALSE, F32 min_value = -1000000.0f, F32 max_value = 1000000.0f, F32 increment = 0.0f);
+    // removes a control
+    void removeControl(const std::string& controlName, bool remove_slot = true);
+    // updates a single control
+    void updateControl(const std::string& controlName, ControlEntry& entry);
 
-	// make this control the currently selected one
-	void selectControl(std::string controlName);
+    // make this control the currently selected one
+    void selectControl(std::string controlName);
 
-	// toggles edit mode
-	void onDoubleClickLabel(LLUICtrl* ctrl, LLPanel* panel);
-	// selects a control in edit mode
-	void onClickLabel(LLUICtrl* ctrl, LLPanel* panel);
+    // toggles edit mode
+    void onDoubleClickLabel(LLUICtrl* ctrl, LLPanel* panel);
+    // selects a control in edit mode
+    void onClickLabel(LLUICtrl* ctrl, LLPanel* panel);
 
-	// will save settings when leaving edit mode
-	void onEditModeChanged();
-	// updates the control when a value in the edit panel was changed by the user
-	void onValuesChanged();
+    // will save settings when leaving edit mode
+    void onEditModeChanged();
+    // updates the control when a value in the edit panel was changed by the user
+    void onValuesChanged();
 
-	void onAddNewClicked();
-	void onRemoveClicked(LLUICtrl* ctrl, LLPanel* panel);
-	void onAlphaChanged(LLUICtrl* ctrl, LLColorSwatchCtrl* color_swatch);
-	void onMoveUpClicked();
-	void onMoveDownClicked();
+    void onAddNewClicked();
+    void onRemoveClicked(LLUICtrl* ctrl, LLPanel* panel);
+    void onAlphaChanged(LLUICtrl* ctrl, LLColorSwatchCtrl* color_swatch);
+    void onMoveUpClicked();
+    void onMoveDownClicked();
 
-	// swaps two controls, used for move up and down
-	void swapControls(const std::string& control1, const std::string& control2);
+    // swaps two controls, used for move up and down
+    void swapControls(const std::string& control1, const std::string& control2);
 
-	bool hasControl( std::string const &aName ) const
-	{ return mControlsList.end() != mControlsList.find( aName ); }
+    bool hasControl( std::string const &aName ) const
+    { return mControlsList.end() != mControlsList.find( aName ); }
 
 };
 #endif // QUICKPREFS_H

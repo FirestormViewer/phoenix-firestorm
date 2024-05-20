@@ -35,20 +35,20 @@
 #include "lleventapi.h"
 
 class LLSD;
-// class LLNearbyChatBar;	// <FS:Zi> Remove floating chat bar
+// class LLNearbyChatBar;   // <FS:Zi> Remove floating chat bar
 
 class FSNearbyChatBarListener : public LLEventAPI
 {
 public:
-	// <FS:Zi> Remove floating chat bar
-	// LLNearbyChatBarListener(LLNearbyChatBar & chatbar);
-	FSNearbyChatBarListener();
-	// </FS:Zi>
+    // <FS:Zi> Remove floating chat bar
+    // LLNearbyChatBarListener(LLNearbyChatBar & chatbar);
+    FSNearbyChatBarListener();
+    // </FS:Zi>
 
 private:
     void sendChat(LLSD const & chat_data) const;
 
-//	LLNearbyChatBar & mChatbar;
+//  LLNearbyChatBar & mChatbar;
 };
 
 #endif // FS_NEARBYCHATBARLISTENER_H

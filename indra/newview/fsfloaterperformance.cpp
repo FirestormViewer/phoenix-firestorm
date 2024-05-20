@@ -1,24 +1,24 @@
-/** 
+/**
  * @file fsfloaterperformance.cpp
  *
  * $LicenseInfo:firstyear=2021&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2021, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -47,7 +47,7 @@
 #include "llviewerjoystick.h"
 #include "llviewermediafocus.h"
 #include "llvoavatar.h"
-#include "llvoavatarself.h" 
+#include "llvoavatarself.h"
 #include "llperfstats.h"
 #include "llworld.h"
 #include "pipeline.h"
@@ -153,7 +153,7 @@ BOOL FSFloaterPerformance::postBuild()
     mNearbyList = mNearbyPanel->getChild<LLNameListCtrl>("nearby_list");
     mNearbyList->setRightMouseDownCallback(boost::bind(&FSFloaterPerformance::onAvatarListRightClick, this, _1, _2, _3));
 
-    
+
     updateComplexityText();
     mComplexityChangedSignal = gSavedSettings.getControl("RenderAvatarMaxComplexity")->getCommitSignal()->connect(boost::bind(&FSFloaterPerformance::updateComplexityText, this));
     mNearbyPanel->getChild<LLSliderCtrl>("IndirectMaxComplexity")->setCommitCallback(boost::bind(&FSFloaterPerformance::updateMaxComplexity, this));
@@ -166,10 +166,10 @@ BOOL FSFloaterPerformance::postBuild()
     if(!LLPerfStats::tunables.userAutoTuneEnabled)
     {
         if (gSavedDrawDistance)
-	    {
+        {
             gSavedSettings.setF32("AutoTuneRenderFarClipTarget", gSavedDrawDistance);
         }
-        else 
+        else
         {
             gSavedSettings.setF32("AutoTuneRenderFarClipTarget", LLPipeline::RenderFarClip);
         }
@@ -188,22 +188,22 @@ void FSFloaterPerformance::resetMaxArtSlider()
 
 void FSFloaterPerformance::savePreset()
 {
-	LLFloaterReg::showInstance("save_pref_preset", "graphic" );
+    LLFloaterReg::showInstance("save_pref_preset", "graphic" );
 }
 
 void FSFloaterPerformance::loadPreset()
 {
-	LLFloaterReg::showInstance("load_pref_preset", "graphic");
+    LLFloaterReg::showInstance("load_pref_preset", "graphic");
     resetMaxArtSlider();
 }
 
 void FSFloaterPerformance::setHardwareDefaults()
 {
-	LLFeatureManager::getInstance()->applyRecommendedSettings();
-	// reset indirects before refresh because we may have changed what they control
-	LLAvatarComplexityControls::setIndirectControls(); 
-	gSavedSettings.setString("PresetGraphicActive", "");
-	LLPresetsManager::getInstance()->triggerChangeSignal();
+    LLFeatureManager::getInstance()->applyRecommendedSettings();
+    // reset indirects before refresh because we may have changed what they control
+    LLAvatarComplexityControls::setIndirectControls();
+    gSavedSettings.setString("PresetGraphicActive", "");
+    LLPresetsManager::getInstance()->triggerChangeSignal();
     resetMaxArtSlider();
 }
 
@@ -234,8 +234,8 @@ void FSFloaterPerformance::draw()
     constexpr auto NANOS = 1000000000;
 
     static LLCachedControl<U32> fpsCap(gSavedSettings, "FramePerSecondLimit"); // user limited FPS
-    static LLCachedControl<U32> targetFPS(gSavedSettings, "TargetFPS"); // desired FPS 
-    static LLCachedControl<U32> tuningStrategy(gSavedSettings, "TuningFPSStrategy"); 
+    static LLCachedControl<U32> targetFPS(gSavedSettings, "TargetFPS"); // desired FPS
+    static LLCachedControl<U32> tuningStrategy(gSavedSettings, "TuningFPSStrategy");
     static LLCachedControl<bool> vsyncEnabled(gSavedSettings, "RenderVSyncEnable");
 
 
@@ -259,7 +259,7 @@ void FSFloaterPerformance::draw()
         // auto tot_avatar_render_time_raw = tot_avatar_time_raw - tot_av_idle_time_raw;
         // the time spent this frame on the "display()" call. Treated as "tot time rendering"
         auto tot_render_time_raw = LLPerfStats::StatsRecorder::getSceneStat(LLPerfStats::StatType_t::RENDER_DISPLAY);
-        // sleep time is basically forced sleep when window out of focus 
+        // sleep time is basically forced sleep when window out of focus
         auto tot_sleep_time_raw = LLPerfStats::StatsRecorder::getSceneStat(LLPerfStats::StatType_t::RENDER_SLEEP);
         // time spent on UI
         auto tot_ui_time_raw = LLPerfStats::StatsRecorder::getSceneStat(LLPerfStats::StatType_t::RENDER_UI);
@@ -272,7 +272,7 @@ void FSFloaterPerformance::draw()
         // swap time is time spent in swap buffer
         auto tot_swap_time_raw = LLPerfStats::StatsRecorder::getSceneStat(LLPerfStats::StatType_t::RENDER_SWAP);
 
-        LLPerfStats::bufferToggleLock.unlock(); 
+        LLPerfStats::bufferToggleLock.unlock();
 
         auto unreliable = false; // if there is something to skew the stats such as sleep of fps cap
         auto tot_frame_time_ns = LLPerfStats::raw_to_ns(tot_frame_time_raw);
@@ -377,7 +377,7 @@ void FSFloaterPerformance::draw()
             getChild<LLTextBox>("av_frame_stats")->setText(getString("av_frame_pct", args));
             getChild<LLTextBox>("huds_frame_stats")->setText(getString("huds_frame_pct", args));
             getChild<LLTextBox>("frame_breakdown")->setText(getString("frame_stats", args));
-            
+
             auto button = getChild<LLButton>("AutoTuneFPS");
             if((bool)button->getToggleState() != LLPerfStats::tunables.userAutoTuneEnabled)
             {
@@ -427,7 +427,7 @@ void FSFloaterPerformance::draw()
         {
             LL_WARNS("performance") << "Scene time 0. Skipping til we have data." << LL_ENDL;
         }
-        
+
         mUpdateTimer->setTimerExpirySec(REFRESH_INTERVAL);
     }
     LLFloater::draw();
@@ -697,7 +697,7 @@ void FSFloaterPerformance::populateNearbyList()
     LLUUID prev_selected_id = mNearbyList->getStringUUIDSelectedItem();
     std::string current_sort_col = mNearbyList->getSortColumnName();
     BOOL current_sort_asc = mNearbyList->getSortAscending();
-    
+
     if (current_sort_col == "art_visual")
     {
         current_sort_col = "art_value";
@@ -746,7 +746,7 @@ void FSFloaterPerformance::populateNearbyList()
             row[colno]["column"] = "art_visual";
             row[colno]["type"] = "bar";
             LLSD& value = row[colno]["value"];
-            // The ratio used in the bar is the current cost, as soon as we take action this changes so we keep the 
+            // The ratio used in the bar is the current cost, as soon as we take action this changes so we keep the
             // pre-tune value for the numerical column and sorting.
             value["ratio"] = render_av_gpu_ms / mNearbyMaxGPUTime;
             value["bottom"] = BAR_BOTTOM_PAD;
@@ -893,9 +893,9 @@ void FSFloaterPerformance::detachItem(const LLUUID& item_id)
 
 void FSFloaterPerformance::onChangeQuality(const LLSD& data)
 {
-	U32 level = (U32)(data.asReal());
-	LLFeatureManager::getInstance()->setGraphicsLevel(level, true);
-	refresh();
+    U32 level = (U32)(data.asReal());
+    LLFeatureManager::getInstance()->setGraphicsLevel(level, true);
+    refresh();
 }
 
 void FSFloaterPerformance::onClickHideAvatars()
@@ -920,7 +920,7 @@ void FSFloaterPerformance::updateMaxComplexity()
 {
     LLAvatarComplexityControls::updateMax(
         mNearbyPanel->getChild<LLSliderCtrl>("IndirectMaxComplexity"),
-        mNearbyPanel->getChild<LLTextBox>("IndirectMaxComplexityText"), 
+        mNearbyPanel->getChild<LLTextBox>("IndirectMaxComplexityText"),
         true);
 }
 
@@ -928,7 +928,7 @@ void FSFloaterPerformance::updateMaxRenderTime()
 {
     LLAvatarComplexityControls::updateMaxRenderTime(
         mNearbyPanel->getChild<LLSliderCtrl>("FSRenderAvatarMaxART"),
-        mNearbyPanel->getChild<LLTextBox>("FSRenderAvatarMaxARTText"), 
+        mNearbyPanel->getChild<LLTextBox>("FSRenderAvatarMaxARTText"),
         true);
 }
 
@@ -936,14 +936,14 @@ void FSFloaterPerformance::updateMaxRenderTimeText()
 {
     LLAvatarComplexityControls::setRenderTimeText(
         gSavedSettings.getF32("RenderAvatarMaxART"),
-        mNearbyPanel->getChild<LLTextBox>("RenderAvatarMaxARTText", true), 
+        mNearbyPanel->getChild<LLTextBox>("RenderAvatarMaxARTText", true),
         true);
 }
 
 void FSFloaterPerformance::updateComplexityText()
 {
     LLAvatarComplexityControls::setText(gSavedSettings.getU32("RenderAvatarMaxComplexity"),
-        mNearbyPanel->getChild<LLTextBox>("IndirectMaxComplexityText", true), 
+        mNearbyPanel->getChild<LLTextBox>("IndirectMaxComplexityText", true),
         true);
 }
 
@@ -1050,7 +1050,7 @@ void FSFloaterPerformance::onExtendedAction(const LLSD& userdata, const LLUUID& 
     auto avp = objectp->asAvatar();
     if ("inspect" == command_name)
     {
-        for (LLVOAvatar::attachment_map_t::iterator iter = avp->mAttachmentPoints.begin(); 
+        for (LLVOAvatar::attachment_map_t::iterator iter = avp->mAttachmentPoints.begin();
              iter != avp->mAttachmentPoints.end();
              ++iter)
         {
@@ -1113,10 +1113,10 @@ void FSFloaterPerformance::onExtendedAction(const LLSD& userdata, const LLUUID& 
         F32 aspect_ratio(LLViewerMediaFocus::getBBoxAspectRatio(bbox, LLVector3(camera_dir), &height, &width, &depth));
         F32 camera_aspect(LLViewerCamera::getInstance()->getAspect());
 
-        // We will normally use the side of the volume aligned with the short side of the screen (i.e. the height for 
-        // a screen in a landscape aspect ratio), however there is an edge case where the aspect ratio of the object is 
+        // We will normally use the side of the volume aligned with the short side of the screen (i.e. the height for
+        // a screen in a landscape aspect ratio), however there is an edge case where the aspect ratio of the object is
         // more extreme than the screen.  In this case we invert the logic, using the longer component of both the object
-        // and the screen.  
+        // and the screen.
         bool invert((camera_aspect > 1.0f && aspect_ratio > camera_aspect) || (camera_aspect < 1.0f && aspect_ratio < camera_aspect));
 
         // To calculate the optimum viewing distance we will need the angle of the shorter side of the view rectangle.
@@ -1158,13 +1158,13 @@ void FSFloaterPerformance::onExtendedAction(const LLSD& userdata, const LLUUID& 
         if (camera_dir == LLVector3d::z_axis || camera_dir == LLVector3d::z_axis_neg)
         {
             // If the direction points directly up, the camera will "flip" around.
-            // We try to avoid this by adjusting the target camera position a 
+            // We try to avoid this by adjusting the target camera position a
             // smidge towards current camera position
             // *NOTE: this solution is not perfect.  All it attempts to solve is the
             // "looking down" problem where the camera flips around when it animates
             // to that position.  You still are not guaranteed to be looking at the
             // object in the correct orientation.  What this solution does is it will
-            // put the camera into position keeping as best it can the current 
+            // put the camera into position keeping as best it can the current
             // orientation with respect to the direction wanted.  In other words, if
             // before zoom the object appears "upside down" from the camera, after
             /// zooming it will still be upside down, but at least it will not flip.
@@ -1181,7 +1181,7 @@ void FSFloaterPerformance::onExtendedAction(const LLSD& userdata, const LLUUID& 
         // *TODO: Re-enable joystick flycam if we disabled it earlier...  Have to find some form of callback as re-enabling at this point causes the camera motion to not happen. ~Cron
         //if (fly_cam_status)
         //{
-        //	LLViewerJoystick::getInstance()->toggleFlycam();
+        //  LLViewerJoystick::getInstance()->toggleFlycam();
         //}
     }
 }

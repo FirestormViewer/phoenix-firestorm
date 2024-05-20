@@ -914,7 +914,7 @@
           layout="topleft"
           left="10"
           top_pad="10"
-          name="FSDynamicTextureMemory"
+          name="FSOverrideVRAMDetection"
           tool_tip="Enable the user to override VRAM detection (use with extreme caution)"
           width="315" 
         />
@@ -933,7 +933,7 @@
           min_val="0"
           max_val="32"
           name="FSForcedVideoMemory"
-          tool_tip="Important: use with extreme caution.
+          tool_tip="Important: Use with extreme caution.
 Override the detected VRAM on your GPU.
 This must not include 'shared' VRAM which is part of the system RAM.
 If you do not understand the distinction then leave this control alone."

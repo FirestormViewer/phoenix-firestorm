@@ -1,25 +1,25 @@
-/** 
+/**
  * @file fspanellogin.h
  * @brief Login username entry fields.
  *
  * $LicenseInfo:firstyear=2002&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -30,114 +30,114 @@
 #define FS_PANELLOGIN_H
 
 #include "llpanel.h"
-#include "llpointer.h"			// LLPointer<>
-#include "llmediactrl.h"	// LLMediaCtrlObserver
+#include "llpointer.h"          // LLPointer<>
+#include "llmediactrl.h"    // LLMediaCtrlObserver
 
 class LLLineEditor;
 class LLSLURL;
 class LLCredential;
 
-class FSPanelLogin:	
-	public LLPanel,
-	public LLViewerMediaObserver
+class FSPanelLogin:
+    public LLPanel,
+    public LLViewerMediaObserver
 {
-	LOG_CLASS(FSPanelLogin);
+    LOG_CLASS(FSPanelLogin);
 public:
-	FSPanelLogin(const LLRect &rect,
-				void (*callback)(S32 option, void* user_data),
-				void *callback_data);
-	~FSPanelLogin();
+    FSPanelLogin(const LLRect &rect,
+                void (*callback)(S32 option, void* user_data),
+                void *callback_data);
+    ~FSPanelLogin();
 
-	virtual void setFocus( BOOL b );
+    virtual void setFocus( BOOL b );
 
-	static void show(const LLRect &rect,
-		void (*callback)(S32 option, void* user_data), 
-		void* callback_data);
-	static void reshapePanel();
+    static void show(const LLRect &rect,
+        void (*callback)(S32 option, void* user_data),
+        void* callback_data);
+    static void reshapePanel();
 
-	static void setFields(LLPointer<LLCredential> credential, bool from_startup = false);
+    static void setFields(LLPointer<LLCredential> credential, bool from_startup = false);
 
-	static void getFields(LLPointer<LLCredential>& credential, bool& remember);
+    static void getFields(LLPointer<LLCredential>& credential, bool& remember);
 
-	static BOOL isCredentialSet() { return sCredentialSet; }
+    static BOOL isCredentialSet() { return sCredentialSet; }
 
-	static BOOL areCredentialFieldsDirty();
-	static void setLocation(const LLSLURL& slurl);
-	static void autologinToLocation(const LLSLURL& slurl);
-	
-	/// Call when preferences that control visibility may have changed
-	static void updateLocationSelectorsVisibility();
+    static BOOL areCredentialFieldsDirty();
+    static void setLocation(const LLSLURL& slurl);
+    static void autologinToLocation(const LLSLURL& slurl);
 
-	static void closePanel();
+    /// Call when preferences that control visibility may have changed
+    static void updateLocationSelectorsVisibility();
 
-	void setSiteIsAlive( bool alive );
+    static void closePanel();
 
-	void showLoginWidgets();
+    void setSiteIsAlive( bool alive );
 
-	static void loadLoginPage();	
-	static void giveFocus();
-	static void setAlwaysRefresh(bool refresh); 
-	
-	// inherited from LLViewerMediaObserver
-	/*virtual*/ void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event);
-	static void updateServer();  // update the combo box, change the login page to the new server, clear the combo
+    void showLoginWidgets();
 
-	/// to be called from LLStartUp::setStartSLURL
-	static void onUpdateStartSLURL(const LLSLURL& new_start_slurl);
+    static void loadLoginPage();
+    static void giveFocus();
+    static void setAlwaysRefresh(bool refresh);
 
-	// called from prefs when initializing panel
-	static bool getShowFavorites();
+    // inherited from LLViewerMediaObserver
+    /*virtual*/ void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event);
+    static void updateServer();  // update the combo box, change the login page to the new server, clear the combo
 
-	static void clearPassword() { sPassword.clear(); }
+    /// to be called from LLStartUp::setStartSLURL
+    static void onUpdateStartSLURL(const LLSLURL& new_start_slurl);
 
-	void gridListChanged(bool success);
+    // called from prefs when initializing panel
+    static bool getShowFavorites();
+
+    static void clearPassword() { sPassword.clear(); }
+
+    void gridListChanged(bool success);
 private:
-	void addFavoritesToStartLocation();
-	void addUsersToCombo(BOOL show_server);
-	void onSelectUser();
-	void onModeChange(const LLSD& original_value, const LLSD& new_value);
-	void onModeChangeConfirm(const LLSD& original_value, const LLSD& new_value, const LLSD& notification, const LLSD& response);
-	void onSelectServer();
-	void onLocationSLURL();
-	void onUsernameTextChanged();
+    void addFavoritesToStartLocation();
+    void addUsersToCombo(BOOL show_server);
+    void onSelectUser();
+    void onModeChange(const LLSD& original_value, const LLSD& new_value);
+    void onModeChangeConfirm(const LLSD& original_value, const LLSD& new_value, const LLSD& notification, const LLSD& response);
+    void onSelectServer();
+    void onLocationSLURL();
+    void onUsernameTextChanged();
 
-	static void onClickConnect(void*);
-	static void onClickNewAccount(void*);
-	static void onClickVersion(void*);
-	static void onClickForgotPassword(void*);
-	static void onClickHelp(void*);
-	static void onPassKey(LLLineEditor* caller, void* user_data);
-	static void updateServerCombo();
-	static void onClickRemove(void*);
-	static void onRemoveCallback(const LLSD& notification, const LLSD& response);
-	static void onClickGridMgrHelp(void*);
-	static std::string credentialName();
+    static void onClickConnect(void*);
+    static void onClickNewAccount(void*);
+    static void onClickVersion(void*);
+    static void onClickForgotPassword(void*);
+    static void onClickHelp(void*);
+    static void onPassKey(LLLineEditor* caller, void* user_data);
+    static void updateServerCombo();
+    static void onClickRemove(void*);
+    static void onRemoveCallback(const LLSD& notification, const LLSD& response);
+    static void onClickGridMgrHelp(void*);
+    static std::string credentialName();
 
 private:
-	boost::signals2::connection mGridListChangedCallbackConnection;
+    boost::signals2::connection mGridListChangedCallbackConnection;
 
-	void updateLoginButtons();
+    void updateLoginButtons();
 
-	void			(*mCallback)(S32 option, void *userdata);
-	void*			mCallbackData;
+    void            (*mCallback)(S32 option, void *userdata);
+    void*           mCallbackData;
 
-	BOOL            mPasswordModified;
-	bool			mShowFavorites;
+    BOOL            mPasswordModified;
+    bool            mShowFavorites;
 
-	static FSPanelLogin* sInstance;
-	static BOOL		sCapslockDidNotification;
+    static FSPanelLogin* sInstance;
+    static BOOL     sCapslockDidNotification;
 
-	static BOOL sCredentialSet;
+    static BOOL sCredentialSet;
 
-	unsigned int mUsernameLength;
-	unsigned int mPasswordLength;
-	unsigned int mLocationLength;
+    unsigned int mUsernameLength;
+    unsigned int mPasswordLength;
+    unsigned int mLocationLength;
 
-	std::string		mPreviousUsername;
-	static std::string	sPassword;
-	static std::string	sPendingNewGridURI;
+    std::string     mPreviousUsername;
+    static std::string  sPassword;
+    static std::string  sPendingNewGridURI;
 
-	bool			mInitialized;
+    bool            mInitialized;
 };
 
 #endif //FS_PANELLOGIN_H

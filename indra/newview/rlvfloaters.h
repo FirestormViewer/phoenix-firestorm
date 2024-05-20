@@ -34,41 +34,41 @@ class LLTextEditor;
 //
 
 enum class ERlvBehaviourFilter {
-	BEHAVIOURS_ONLY,
-	EXCEPTIONS_ONLY,
-	ALL
+    BEHAVIOURS_ONLY,
+    EXCEPTIONS_ONLY,
+    ALL
 };
 
 class RlvFloaterBehaviours : public LLFloater
 {
-	friend class LLFloaterReg;
+    friend class LLFloaterReg;
 private:
-	RlvFloaterBehaviours(const LLSD& sdKey) : LLFloater(sdKey) {}
+    RlvFloaterBehaviours(const LLSD& sdKey) : LLFloater(sdKey) {}
 
-	/*
-	 * LLFloater overrides
-	 */
+    /*
+     * LLFloater overrides
+     */
 public:
-	/*virtual*/ void onOpen(const LLSD& sdKey);
-	/*virtual*/ void onClose(bool fQuitting);
-	/*virtual*/ BOOL postBuild();
+    /*virtual*/ void onOpen(const LLSD& sdKey);
+    /*virtual*/ void onClose(bool fQuitting);
+    /*virtual*/ BOOL postBuild();
 
-	/*
-	 * Member functions
-	 */
-	static std::string getFormattedBehaviourString(ERlvBehaviourFilter eFilter);
+    /*
+     * Member functions
+     */
+    static std::string getFormattedBehaviourString(ERlvBehaviourFilter eFilter);
 protected:
-	void onAvatarNameLookup(const LLUUID& idAgent, const LLAvatarName& avName);
-	void onBtnCopyToClipboard();
-	void onCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet);
-	void refreshAll();
+    void onAvatarNameLookup(const LLUUID& idAgent, const LLAvatarName& avName);
+    void onBtnCopyToClipboard();
+    void onCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet);
+    void refreshAll();
 
-	/*
-	 * Member variables
-	 */
+    /*
+     * Member variables
+     */
 protected:
-	boost::signals2::connection	m_ConnRlvCommand;
-	uuid_vec_t 					m_PendingLookup;
+    boost::signals2::connection m_ConnRlvCommand;
+    uuid_vec_t                  m_PendingLookup;
 };
 
 // ============================================================================
@@ -77,30 +77,30 @@ protected:
 
 class RlvFloaterLocks : public LLFloater
 {
-	friend class LLFloaterReg;
+    friend class LLFloaterReg;
 private:
-	RlvFloaterLocks(const LLSD& sdKey) : LLFloater(sdKey) {}
+    RlvFloaterLocks(const LLSD& sdKey) : LLFloater(sdKey) {}
 
-	/*
-	 * LLFloater overrides
-	 */
+    /*
+     * LLFloater overrides
+     */
 public:
-	/*virtual*/ void onOpen(const LLSD& sdKey);
-	/*virtual*/ void onClose(bool fQuitting);
-	/*virtual*/ BOOL postBuild();
+    /*virtual*/ void onOpen(const LLSD& sdKey);
+    /*virtual*/ void onClose(bool fQuitting);
+    /*virtual*/ BOOL postBuild();
 
-	/*
-	 * Member functions
-	 */
+    /*
+     * Member functions
+     */
 protected:
-	void onRlvCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet);
-	void refreshAll();
+    void onRlvCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet);
+    void refreshAll();
 
-	/*
-	 * Member variables
-	 */
+    /*
+     * Member variables
+     */
 protected:
-	boost::signals2::connection m_ConnRlvCommand;
+    boost::signals2::connection m_ConnRlvCommand;
 };
 
 // ============================================================================
@@ -109,27 +109,27 @@ protected:
 
 class RlvFloaterStrings : public LLFloater
 {
-	friend class LLFloaterReg;
+    friend class LLFloaterReg;
 private:
-	RlvFloaterStrings(const LLSD& sdKey);
+    RlvFloaterStrings(const LLSD& sdKey);
 
-	// LLFloater overrides
+    // LLFloater overrides
 public:
-	/*virtual*/ void onClose(bool fQuitting);
-	/*virtual*/ BOOL postBuild();
+    /*virtual*/ void onClose(bool fQuitting);
+    /*virtual*/ BOOL postBuild();
 
-	// Member functions
+    // Member functions
 protected:
-	void onStringRevertDefault();
-	void checkDirty(bool fRefresh);
-	void refresh();
+    void onStringRevertDefault();
+    void checkDirty(bool fRefresh);
+    void refresh();
 
-	// Member variables
+    // Member variables
 protected:
-	bool		m_fDirty;
-	std::string m_strStringCurrent;
-	LLComboBox*	m_pStringList;
-	LLSD		m_sdStringsInfo;
+    bool        m_fDirty;
+    std::string m_strStringCurrent;
+    LLComboBox* m_pStringList;
+    LLSD        m_sdStringsInfo;
 };
 
 // ============================================================================
@@ -138,36 +138,36 @@ protected:
 
 class RlvFloaterConsole : public LLFloater
 {
-	friend class LLFloaterReg;
-	template<ERlvParamType> friend struct RlvCommandHandlerBaseImpl;
-	friend class RlvHandler;
+    friend class LLFloaterReg;
+    template<ERlvParamType> friend struct RlvCommandHandlerBaseImpl;
+    friend class RlvHandler;
 private:
-	RlvFloaterConsole(const LLSD& sdKey);
-	~RlvFloaterConsole() override;
+    RlvFloaterConsole(const LLSD& sdKey);
+    ~RlvFloaterConsole() override;
 
-	/*
-	 * LLFloater overrides
-	 */
+    /*
+     * LLFloater overrides
+     */
 public:
-	BOOL postBuild() override;
-	void onClose(bool fQuitting) override;
+    BOOL postBuild() override;
+    void onClose(bool fQuitting) override;
 
-	/*
-	 * Member functions
-	 */
+    /*
+     * Member functions
+     */
 protected:
-	void addCommandReply(const std::string& strCommand, const std::string& strReply);
-	void onInput(LLUICtrl* ctrl, const LLSD& param);
-	void reshapeLayoutPanel();
+    void addCommandReply(const std::string& strCommand, const std::string& strReply);
+    void onInput(LLUICtrl* ctrl, const LLSD& param);
+    void reshapeLayoutPanel();
 
-	/*
-	 * Member variables
-	 */
+    /*
+     * Member variables
+     */
 protected:
-	LLTextEditor*  m_pOutputText = nullptr;
-	LLLayoutPanel* m_pInputPanel = nullptr;
-	LLChatEntry*   m_pInputEdit = nullptr;
-	int            m_nInputEditPad = 0;
+    LLTextEditor*  m_pOutputText = nullptr;
+    LLLayoutPanel* m_pInputPanel = nullptr;
+    LLChatEntry*   m_pInputEdit = nullptr;
+    int            m_nInputEditPad = 0;
 };
 
 // ============================================================================

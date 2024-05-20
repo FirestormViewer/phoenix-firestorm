@@ -47,49 +47,49 @@ class LLLocalMeshFileData;
 
 
 /*
-	NOTE: basically everything here is just a refactor of lldaeloader
-	in what is hopefully more modernized and easier to understand c++
-	and more importantly - less dependent on the caller.
+    NOTE: basically everything here is just a refactor of lldaeloader
+    in what is hopefully more modernized and easier to understand c++
+    and more importantly - less dependent on the caller.
 
-	there's only so much of a wheel you can reinvent.
+    there's only so much of a wheel you can reinvent.
 
-	one important note: i explicitly excluded the parts that add
-	additional faces (on too many verts) and additional objects (on too many faces)
-	because that perpetuates bad habits in bad creators. 
+    one important note: i explicitly excluded the parts that add
+    additional faces (on too many verts) and additional objects (on too many faces)
+    because that perpetuates bad habits in bad creators.
 
-	if someone wants to upload a mesh object with 400 faces - 
-	let them do it by hand, or eat cake, or something.
+    if someone wants to upload a mesh object with 400 faces -
+    let them do it by hand, or eat cake, or something.
 */
 
 class LLLocalMeshImportDAE
 {
 public:
-	// use default constructor/destructor if we can get away with it.
+    // use default constructor/destructor if we can get away with it.
 
 public:
-	typedef std::pair<bool, std::vector<std::string>> loadFile_return;
-	loadFile_return loadFile(LLLocalMeshFile* data, LLLocalMeshFileLOD lod);
-	bool processObject(domMesh* current_mesh, LLLocalMeshObject* current_object);
-	bool processSkin(daeDatabase* collada_db, daeElement* collada_document_root, domMesh* current_mesh, domSkin* current_skin, std::unique_ptr<LLLocalMeshObject>& current_object);
-	bool processSkeletonJoint(domNode* current_node, std::map<std::string, std::string>& joint_map, std::map<std::string, LLMatrix4>& joint_transforms, bool recurse_children=false);
+    typedef std::pair<bool, std::vector<std::string>> loadFile_return;
+    loadFile_return loadFile(LLLocalMeshFile* data, LLLocalMeshFileLOD lod);
+    bool processObject(domMesh* current_mesh, LLLocalMeshObject* current_object);
+    bool processSkin(daeDatabase* collada_db, daeElement* collada_document_root, domMesh* current_mesh, domSkin* current_skin, std::unique_ptr<LLLocalMeshObject>& current_object);
+    bool processSkeletonJoint(domNode* current_node, std::map<std::string, std::string>& joint_map, std::map<std::string, LLMatrix4>& joint_transforms, bool recurse_children=false);
 
-	bool readMesh_CommonElements(const domInputLocalOffset_Array& inputs,
-		int& offset_position, int& offset_normals, int& offset_uvmap, int& index_stride,
-		domSource*& source_position, domSource*& source_normals, domSource*& source_uvmap);
+    bool readMesh_CommonElements(const domInputLocalOffset_Array& inputs,
+        int& offset_position, int& offset_normals, int& offset_uvmap, int& index_stride,
+        domSource*& source_position, domSource*& source_normals, domSource*& source_uvmap);
 
-	std::string getElementName(daeElement* element_current, int fallback_index);
+    std::string getElementName(daeElement* element_current, int fallback_index);
 
-	// mesh data read functions, basically refactored from what's already in lldaeloader
-	// consolidating them into a single mega function makes for very sketchy readability.
-	bool readMesh_Triangle(LLLocalMeshFace* data_out, const domTrianglesRef& data_in);
-	bool readMesh_Polylist(LLLocalMeshFace* data_out, const domPolylistRef& data_in);
-	
-	// NOTE: polygon schema
-	//bool readMesh_Polygons(LLLocalMeshFace* data_out, const domPolygonsRef& data_in); 
-	void pushLog(const std::string& who, const std::string& what, bool is_error=false);
-	
+    // mesh data read functions, basically refactored from what's already in lldaeloader
+    // consolidating them into a single mega function makes for very sketchy readability.
+    bool readMesh_Triangle(LLLocalMeshFace* data_out, const domTrianglesRef& data_in);
+    bool readMesh_Polylist(LLLocalMeshFace* data_out, const domPolylistRef& data_in);
+
+    // NOTE: polygon schema
+    //bool readMesh_Polygons(LLLocalMeshFace* data_out, const domPolygonsRef& data_in);
+    void pushLog(const std::string& who, const std::string& what, bool is_error=false);
+
 private:
-	LLLocalMeshFileLOD mLod;
-	std::vector<std::string> mLoadingLog;
+    LLLocalMeshFileLOD mLod;
+    std::vector<std::string> mLoadingLog;
 };
 

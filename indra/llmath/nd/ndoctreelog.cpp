@@ -28,48 +28,48 @@
 
 namespace nd
 {
-	namespace octree
-	{
-		namespace debug
-		{
-			U32 gOctreeDebug;
-			llofstream *pLogStream;
-			std::string mOctreeLogFilename;
-			
-			void setOctreeLogFilename( std::string const &aFilename )
-			{
-				mOctreeLogFilename = aFilename;
-			}
-			
-			void doOctreeLog( std::string const &aStr )
-			{
-				if( pLogStream )
-				{
-					*pLogStream << aStr;
-					pLogStream->flush();
-				}
-			}
-			
-			void checkOctreeLog()
-			{
-				if( !pLogStream && mOctreeLogFilename.size() )
-				{
-					pLogStream = new llofstream();
-					pLogStream->open(  mOctreeLogFilename.c_str(), std::ios::out );
-					if( pLogStream->is_open() )
-					{
-						time_t curTime;
-						time(&curTime);
-						tm *curTimeUTC = gmtime( &curTime );
-						
-						*pLogStream << "Starting octree log" << asctime( curTimeUTC ) << std::endl;
-						pLogStream->flush();
-					}
-					else
-						delete pLogStream;
-				}
-			}
-		}
-	}
+    namespace octree
+    {
+        namespace debug
+        {
+            U32 gOctreeDebug;
+            llofstream *pLogStream;
+            std::string mOctreeLogFilename;
+
+            void setOctreeLogFilename( std::string const &aFilename )
+            {
+                mOctreeLogFilename = aFilename;
+            }
+
+            void doOctreeLog( std::string const &aStr )
+            {
+                if( pLogStream )
+                {
+                    *pLogStream << aStr;
+                    pLogStream->flush();
+                }
+            }
+
+            void checkOctreeLog()
+            {
+                if( !pLogStream && mOctreeLogFilename.size() )
+                {
+                    pLogStream = new llofstream();
+                    pLogStream->open(  mOctreeLogFilename.c_str(), std::ios::out );
+                    if( pLogStream->is_open() )
+                    {
+                        time_t curTime;
+                        time(&curTime);
+                        tm *curTimeUTC = gmtime( &curTime );
+
+                        *pLogStream << "Starting octree log" << asctime( curTimeUTC ) << std::endl;
+                        pLogStream->flush();
+                    }
+                    else
+                        delete pLogStream;
+                }
+            }
+        }
+    }
 }
 
