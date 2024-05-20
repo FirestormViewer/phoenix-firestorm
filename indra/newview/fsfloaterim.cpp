@@ -1554,7 +1554,7 @@ void FSFloaterIM::updateMessages()
                     LLNotificationsUI::LLScreenChannel* channel = static_cast<LLNotificationsUI::LLScreenChannel*>
                             (LLNotificationsUI::LLChannelManager::getInstance()->
                                                                 findChannelByID(LLUUID(gSavedSettings.getString("NotificationChannelUUID"))));
-                    if (getVisible())
+                    if (channel && getVisible())
                     {
                         // toast will be automatically closed since it is not storable toast
                         channel->hideToast(chat.mNotifId);
