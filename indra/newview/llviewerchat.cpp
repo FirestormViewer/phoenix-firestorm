@@ -99,16 +99,16 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, LLSD args
 
                     if (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)
                     {
-                        r_color = LGGContactSets::getInstance()->colorize(chat.mFromID, r_color, LGG_CS_IM);
+                        r_color = LGGContactSets::getInstance()->colorize(chat.mFromID, r_color, ContactSetType::IM);
                     }
                     else
                     {
-                        r_color = LGGContactSets::getInstance()->colorize(chat.mFromID, r_color, LGG_CS_CHAT);
+                        r_color = LGGContactSets::getInstance()->colorize(chat.mFromID, r_color, ContactSetType::CHAT);
                     }
                     // </FS:CR>
 
                     //color based on contact sets prefs
-                    LGGContactSets::getInstance()->hasFriendColorThatShouldShow(chat.mFromID, LGG_CS_CHAT, r_color);
+                    LGGContactSets::getInstance()->hasFriendColorThatShouldShow(chat.mFromID, ContactSetType::CHAT, r_color);
                 }
                 break;
             case CHAT_SOURCE_OBJECT:

@@ -3062,10 +3062,10 @@ void LLViewerWindow::draw()
                     }
 
                     LLColor4 targetColor = map_avatar_color.get();
-                    targetColor = contact_sets.colorize(targetKey, targetColor, LGG_CS_MINIMAP);
+                    targetColor = contact_sets.colorize(targetKey, targetColor, ContactSetType::MINIMAP);
 
                     //color based on contact sets prefs
-                    contact_sets.hasFriendColorThatShouldShow(targetKey, LGG_CS_MINIMAP, targetColor);
+                    contact_sets.hasFriendColorThatShouldShow(targetKey, ContactSetType::MINIMAP, targetColor);
 
                     LLColor4 mark_color;
                     if (LLNetMap::getAvatarMarkColor(targetKey, mark_color))
