@@ -2594,22 +2594,16 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
         {
             if (mSimulatorFeatures["god_names"].has("full_names"))
             {
-                LLSD god_names = mSimulatorFeatures["god_names"]["full_names"];
-                for (LLSD::array_iterator itr = god_names.beginArray();
-                     itr != god_names.endArray();
-                     itr++)
+                for (const auto& item : llsd::inArray(mSimulatorFeatures["god_names"]["full_names"]))
                 {
-                    mGodNames.emplace((*itr).asString());
+                    mGodNames.emplace(item.asString());
                 }
             }
             if (mSimulatorFeatures["god_names"].has("last_names"))
             {
-                LLSD god_names = mSimulatorFeatures["god_names"]["last_names"];
-                for (LLSD::array_iterator itr = god_names.beginArray();
-                     itr != god_names.endArray();
-                     itr++)
+                for (const auto& item : llsd::inArray(mSimulatorFeatures["god_names"]["last_names"]))
                 {
-                    mGodNames.emplace((*itr).asString());
+                    mGodNames.emplace(item.asString());
                 }
             }
         }
