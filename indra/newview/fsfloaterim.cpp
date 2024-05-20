@@ -1307,16 +1307,15 @@ void FSFloaterIM::setDocked(bool docked, bool pop_on_undock)
 {
     // update notification channel state
     LLNotificationsUI::LLScreenChannel* channel = static_cast<LLNotificationsUI::LLScreenChannel*>
-        (LLNotificationsUI::LLChannelManager::getInstance()->
-                                            findChannelByID(LLUUID(gSavedSettings.getString("NotificationChannelUUID"))));
+        (LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLNotificationsUI::NOTIFICATION_CHANNEL_UUID));
 
-    if(!isChatMultiTab())
+    if (!isChatMultiTab())
     {
         LLTransientDockableFloater::setDocked(docked, pop_on_undock);
     }
 
     // update notification channel state
-    if(channel)
+    if (channel)
     {
         channel->updateShowToastsState();
         channel->redrawToasts();
@@ -1326,8 +1325,7 @@ void FSFloaterIM::setDocked(bool docked, bool pop_on_undock)
 void FSFloaterIM::setVisible(BOOL visible)
 {
     LLNotificationsUI::LLScreenChannel* channel = static_cast<LLNotificationsUI::LLScreenChannel*>
-        (LLNotificationsUI::LLChannelManager::getInstance()->
-                                            findChannelByID(LLUUID(gSavedSettings.getString("NotificationChannelUUID"))));
+        (LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLNotificationsUI::NOTIFICATION_CHANNEL_UUID));
     LLTransientDockableFloater::setVisible(visible);
 
     // update notification channel state
@@ -1552,8 +1550,7 @@ void FSFloaterIM::updateMessages()
                 {
                     // remove embedded notification from channel
                     LLNotificationsUI::LLScreenChannel* channel = static_cast<LLNotificationsUI::LLScreenChannel*>
-                            (LLNotificationsUI::LLChannelManager::getInstance()->
-                                                                findChannelByID(LLUUID(gSavedSettings.getString("NotificationChannelUUID"))));
+                            (LLNotificationsUI::LLChannelManager::getInstance()->findChannelByID(LLNotificationsUI::NOTIFICATION_CHANNEL_UUID));
                     if (channel && getVisible())
                     {
                         // toast will be automatically closed since it is not storable toast
