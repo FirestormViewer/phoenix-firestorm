@@ -9,9 +9,10 @@
 	<panel.string name="group_join_btn">
 		Присоединиться (L$[AMOUNT])
 	</panel.string>
-	<panel.string name="group_join_free">
-		Бесплатно
-	</panel.string>
+	<panel.string name="group_join_free">Бесплатно</panel.string>
+	<panel.string name="group_member">Член</panel.string>
+	<panel.string name="join_txt">Вступить</panel.string>
+	<panel.string name="leave_txt">Покинуть</panel.string>
 
 	<layout_stack name="group_info_sidetray_main">
 		<layout_panel name="header_container">

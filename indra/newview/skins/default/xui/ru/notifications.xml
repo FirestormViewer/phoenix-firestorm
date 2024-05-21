@@ -119,6 +119,11 @@
 
         &quot;[ERROR_CODE]&quot;
 	</notification>
+	<notification name="InvalidKeystroke">
+Было введено неверное нажатие клавиши.
+[REASON].
+Пожалуйста, введите правильный текст.
+	</notification>
 	<notification name="MerchantForceValidateListing">
 		Для того, чтобы создать свой список, мы исправили иерархию вашего списка содержимого.
         <usetemplate ignoretext="Предупреждать меня, что создание исправленного списка иерархии содержания" name="okignore"  yestext="Да"/>
@@ -1749,17 +1754,17 @@
 		<usetemplate ignoretext="Подтверждать перед возвратом объектов владельцам" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="GroupLeaveConfirmMember">
-		В настоящее время вы состоите в группе &lt;nolink&gt;[GROUP]&lt;/nolink&gt;.
-Хотите выйти из группы?
-		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Да"/>
+Покинуть группу &apos;&lt;nolink&gt;[GROUP]&lt;/nolink&gt;&apos;?
+В настоящее время плата за вступление в эту группу L$[COST].
+		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Покинуть"/>
+	</notification>
+	<notification name="GroupLeaveConfirmMemberNoFee">
+Покинуть группу &apos;&lt;nolink&gt;[GROUP]&lt;/nolink&gt;&apos;?
+В настоящее время плата за вступление в эту группу не взимается.
+		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Покинуть"/>
 	</notification>
 	<notification name="GroupDepart">
 		Вы покинули группу «[group_name]».
-	</notification>
-	<notification name="GroupLeaveConfirmMemberWithFee">
-		Вы в настоящее время являетесь участником группы &lt;nolink&gt;[GROUP]&lt;/nolink&gt;. Присоединение снова будет стоить L$[AMOUNT].
-Покинуть группу?
-		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Да"/>
 	</notification>
 	<notification name="OwnerCannotLeaveGroup">
 		Невозможно выйти из группы. Вы не можете покинуть группу, потому что вы единственый владелец группы. Пожалуйста, назначить сначала назначьте на данную роль другого пользователя.
@@ -2457,6 +2462,19 @@
 Вы уверены, что хотите удалить их?
 		<usetemplate ignoretext="Подтвердить удаление отфильтрованных элементов" name="okcancelignore" notext="Отмена" yestext="Да"/>
 	</notification>
+
+	<notification name="DeleteWornItems">
+Предмет(ы) которые вы хотите удалить надеты на ваш аватар.
+Удалить эти элементы со своего аватара?
+		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Снять и удалить предмет(ы)"/>
+	</notification>
+
+	<notification name="CantDeleteRequiredClothing">
+Предмет(ы), которые вы хотите удалить, относятся к обязательным слоям одежды (кожа, фигура, волосы, глаза).
+Вы должны заменить эти слои, прежде чем удалять их.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
 	<notification name="DeleteThumbnail">
 		Удалить изображение этого товара? Отмена невозможна.
 		<usetemplate ignoretext="Подтвердите перед удалением миниатюры." name="okcancelignore" notext="Отмена" yestext="Удалить"/>
