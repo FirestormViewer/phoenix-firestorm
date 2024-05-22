@@ -57,12 +57,6 @@
 #if 0
 
 #ifndef LL_WINDOWS
-
-typedef struct {
-  void *re_pcre;
-  size_t re_nsub;
-  size_t re_erroffset;
-} regex_t;
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #endif
