@@ -75,13 +75,13 @@ public:
     std::vector<LLGestureStep*> mSteps;
 
     // Is the gesture currently playing?
-    bool mPlaying;
+    bool mPlaying { false };
 
     // "instruction pointer" for steps
     S32 mCurrentStep { 0 };
 
     // We're waiting for triggered animations to stop playing
-    bool mWaitingAnimations;
+    bool mWaitingAnimations { false };
 
     // We're waiting for key release
     bool mWaitingKeyRelease { false };

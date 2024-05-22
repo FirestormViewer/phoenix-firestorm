@@ -121,7 +121,7 @@ public:
     {
         mCallbackMap[inv_item_id] = cb;
     }
-    // Trigger the first gesture that matches this key.
+    // Trigger a random gesture that matches this key.
     // Returns true if it finds a gesture bound to that key.
     bool triggerGesture(KEY key, MASK mask);
 

@@ -258,6 +258,7 @@ public:
 
     virtual bool    isControlAvatar() const { return mIsControlAvatar; } // True if this avatar is a control av (no associated user)
     virtual bool    isUIAvatar() const { return mIsUIAvatar; } // True if this avatar is a supplemental av used in some UI views (no associated user)
+    virtual bool    isBuddy() const;
 
     // If this is an attachment, return the avatar it is attached to. Otherwise NULL.
     virtual const LLVOAvatar *getAttachedAvatar() const { return NULL; }
@@ -442,7 +443,6 @@ protected:
 private:
     bool            mFirstFullyVisible;
     F32             mFirstDecloudTime;
-    F32             mFirstUseDelaySeconds;
     LLFrameTimer    mFirstAppearanceMessageTimer;
 
     bool            mFullyLoaded;

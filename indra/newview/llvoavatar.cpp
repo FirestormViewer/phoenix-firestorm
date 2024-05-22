@@ -227,7 +227,7 @@ const U32 LLVOAvatar::VISUAL_COMPLEXITY_UNKNOWN = 0;
 const F64 HUD_OVERSIZED_TEXTURE_DATA_SIZE = 1024 * 1024;
 
 const F32 MAX_TEXTURE_WAIT_TIME_SEC = 60.f;
-const F32 MAX_ATTACHMENT_WAIT_TIME_SEC = 120;
+const F32 MAX_ATTACHMENT_WAIT_TIME_SEC = 60;
 
 const S32 MIN_NONTUNED_AVS = 5;
 
@@ -614,6 +614,7 @@ bool LLVOAvatar::sLimitNonImpostors = false; // True unless RenderAvatarMaxNonIm
 F32 LLVOAvatar::sRenderDistance = 256.f;
 S32 LLVOAvatar::sNumVisibleAvatars = 0;
 S32 LLVOAvatar::sNumLODChangesThisFrame = 0;
+
 // const LLUUID LLVOAvatar::sStepSoundOnLand("e8af4a28-aa83-4310-a7c4-c047e15ea0df"); - <FS:PP> Commented out for FIRE-3169: Option to change the default footsteps sound
 const LLUUID LLVOAvatar::sStepSounds[LL_MCODE_END] =
 {
@@ -709,7 +710,6 @@ LLVOAvatar::LLVOAvatar(const LLUUID& id,
     mMutedAVColor(LLColor4::white /* used for "uninitialize" */),
     mFirstFullyVisible(true),
     mFirstDecloudTime(-1.f),
-    mFirstUseDelaySeconds(FIRST_APPEARANCE_CLOUD_MIN_DELAY),
     mFullyLoaded(false),
     mPreviousFullyLoaded(false),
     mFullyLoadedInitialized(false),
@@ -2741,6 +2741,27 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
         LL_INFOS() << "Warning!  Idle on dead avatar" << LL_ENDL;
         return;
     }
+
+    LLCachedControl<bool> friends_only(gSavedSettings, "RenderAvatarFriendsOnly", false);
+    if (friends_only()
+        && !isUIAvatar()
+        && !isControlAvatar()
+        && !isSelf()
+        && !isBuddy())
+    {
+        if (mNameText)
+        {
+            mNameIsSet = false;
+            mNameText->markDead();
+            mNameText = NULL;
+            sNumVisibleChatBubbles--;
+        }
+        deleteParticleSource();
+        mVoiceVisualizer->setVoiceEnabled(false);
+
+        return;
+    }
+
     // record time and refresh "tooSlow" status
     updateTooSlow();
 
@@ -2911,9 +2932,9 @@ void LLVOAvatar::idleUpdateVoiceVisualizer(bool voice_enabled, const LLVector3 &
     // Don't render the user's own voice visualizer when in mouselook, or when opening the mic is disabled.
     if(isSelf())
     {
-        static LLCachedControl<bool> voiceDisableMic(gSavedSettings, "VoiceDisableMic");
+        static LLCachedControl<bool> voice_disable_mic(gSavedSettings, "VoiceDisableMic");
         static LLCachedControl<bool> fsShowMyOwnVoiceVisualizer(gSavedSettings, "FSShowMyOwnVoiceVisualizer"); // <FS:PP> FIRE-21210: Don't show my voice visualizer
-        if (gAgentCamera.cameraMouselook() || voiceDisableMic || !fsShowMyOwnVoiceVisualizer)
+        if (gAgentCamera.cameraMouselook() || voice_disable_mic || !fsShowMyOwnVoiceVisualizer)
         {
             render_visualizer = false;
         }
@@ -9221,7 +9242,7 @@ bool LLVOAvatar::updateIsFullyLoaded()
                   );
 
         // compare amount of attachments to one reported by simulator
-        if (!loading && !isSelf() && rez_status < 4 && mLastCloudAttachmentCount != mSimAttachments.size())
+        if (!loading && !isSelf() && rez_status < 4 && mLastCloudAttachmentCount < mSimAttachments.size())
         {
             S32 attachment_count = getAttachmentCount();
             if (mLastCloudAttachmentCount != attachment_count)
@@ -9289,11 +9310,12 @@ bool LLVOAvatar::processFullyLoadedChange(bool loading)
 
     if (mFirstFullyVisible)
     {
+        F32 first_use_delay = FIRST_APPEARANCE_CLOUD_MIN_DELAY;
         if (!isSelf() && loading)
         {
                 // Note that textures can causes 60s delay on thier own
                 // so this delay might end up on top of textures' delay
-                mFirstUseDelaySeconds = llclamp(
+                first_use_delay = llclamp(
                     mFirstAppearanceMessageTimer.getElapsedTimeF32(),
                     FIRST_APPEARANCE_CLOUD_MIN_DELAY,
                     FIRST_APPEARANCE_CLOUD_MAX_DELAY);
@@ -9302,10 +9324,10 @@ bool LLVOAvatar::processFullyLoadedChange(bool loading)
                 {
                     // Impostors are less of a priority,
                     // let them stay cloud longer
-                    mFirstUseDelaySeconds *= FIRST_APPEARANCE_CLOUD_IMPOSTOR_MODIFIER;
+                    first_use_delay *= FIRST_APPEARANCE_CLOUD_IMPOSTOR_MODIFIER;
                 }
         }
-        mFullyLoaded = (mFullyLoadedTimer.getElapsedTimeF32() > mFirstUseDelaySeconds);
+        mFullyLoaded = (mFullyLoadedTimer.getElapsedTimeF32() > first_use_delay);
     }
     else
     {
@@ -10367,7 +10389,17 @@ void LLVOAvatar::parseAppearanceMessage(LLMessageSystem* mesgsys, LLAppearanceMe
             << (attachment_id.isNull() ? "pending" : attachment_id.asString())
             << " on point " << (S32)attach_point << LL_ENDL;
 
-        mSimAttachments[attachment_id] = attach_point;
+        if (attachment_id.notNull())
+        {
+            mSimAttachments[attachment_id] = attach_point;
+        }
+        else
+        {
+            // at the moment viewer is only interested in non-null attachments
+            LL_DEBUGS("AVAppearanceAttachments") << "AV " << getID()
+                << " has null attachment on point " << (S32)attach_point
+                << ", discarding" << LL_ENDL;
+        }
     }
 
     // todo? Doesn't detect if attachments were switched
@@ -12865,6 +12897,10 @@ F32 LLVOAvatar::getAverageGPURenderTime()
     }
 
     return ret;
+}
+bool LLVOAvatar::isBuddy() const
+{
+    return LLAvatarTracker::instance().isBuddy(getID());
 }
 
 

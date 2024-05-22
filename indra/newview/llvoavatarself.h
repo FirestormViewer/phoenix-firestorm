@@ -129,6 +129,7 @@ private:
 
 public:
     /*virtual*/ bool    isSelf() const { return true; }
+        virtual bool    isBuddy() const { return false; }
     /*virtual*/ bool    isValid() const;
 
     //--------------------------------------------------------------------

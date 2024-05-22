@@ -66,10 +66,10 @@ void LLAvatarPropertiesProcessor::addObserver(const LLUUID& avatar_id, LLAvatarP
 
     // IAN BUG this should update the observer's UUID if this is a dupe - sent to PE
     if (it == end)
-        {
+    {
         mObservers.emplace(avatar_id, observer);
-        }
     }
+}
 
 void LLAvatarPropertiesProcessor::removeObserver(const LLUUID& avatar_id, LLAvatarPropertiesObserver* observer)
 {
@@ -83,13 +83,13 @@ void LLAvatarPropertiesProcessor::removeObserver(const LLUUID& avatar_id, LLAvat
     observer_multimap_t::iterator begin = mObservers.begin();
     observer_multimap_t::iterator end = mObservers.end();
     observer_multimap_t::iterator it = std::find_if(begin, end, [&](const pair& p)
-    {
+        {
             return p.first == avatar_id && p.second == observer;
         });
 
     if (it != end)
-        {
-            mObservers.erase(it);
+    {
+        mObservers.erase(it);
     }
 }
 
@@ -275,7 +275,7 @@ std::string LLAvatarPropertiesProcessor::paymentInfo(const LLAvatarData* avatar_
     //bool age_verified = (avatar_data->flags & AVATAR_AGEVERIFIED);
 
     const char* payment_text;
-    if(transacted)
+    if (transacted)
     {
         payment_text = "PaymentInfoUsed";
     }
@@ -445,11 +445,11 @@ void LLAvatarPropertiesProcessor::processAvatarLegacyPropertiesReply(LLMessageSy
 
     S32 charter_member_size = 0;
     charter_member_size = msg->getSize(_PREHASH_PropertiesData, _PREHASH_CharterMember);
-    if(1 == charter_member_size)
+    if (1 == charter_member_size)
     {
         msg->getBinaryData(_PREHASH_PropertiesData, _PREHASH_CharterMember, &avatar_data.caption_index, 1);
     }
-    else if(1 < charter_member_size)
+    else if (1 < charter_member_size)
     {
         msg->getString(_PREHASH_PropertiesData, _PREHASH_CharterMember, avatar_data.caption_text);
     }
@@ -644,7 +644,7 @@ void LLAvatarPropertiesProcessor::processAvatarGroupsReply(LLMessageSystem* msg,
     // </FS> OpenSim
 }
 
-void LLAvatarPropertiesProcessor::notifyObservers(const LLUUID& id,void* data, EAvatarProcessorType type)
+void LLAvatarPropertiesProcessor::notifyObservers(const LLUUID& id, void* data, EAvatarProcessorType type)
 {
     // Copy the map (because observers may delete themselves when updated?)
     LLAvatarPropertiesProcessor::observer_multimap_t observers = mObservers;
