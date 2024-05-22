@@ -2108,10 +2108,10 @@ LLColor4 LLNetMap::getAvatarColor(const LLUUID& avatar_id)
     LGGContactSets& cs_instance = LGGContactSets::instance();
 
     // Color "special" avatars with special colors (Friends, muted, Lindens, etc)
-    color = cs_instance.colorize(avatar_id, color, LGG_CS_MINIMAP);
+    color = cs_instance.colorize(avatar_id, color, ContactSetType::MINIMAP);
 
     // Color based on contact sets prefs
-    cs_instance.hasFriendColorThatShouldShow(avatar_id, LGG_CS_MINIMAP, color);
+    cs_instance.hasFriendColorThatShouldShow(avatar_id, ContactSetType::MINIMAP, color);
 
     // Mark Avatars with special colors
     avatar_marks_map_t::iterator found = sAvatarMarksMap.find(avatar_id);

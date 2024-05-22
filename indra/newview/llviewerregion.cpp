@@ -672,7 +672,8 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 // </FS:Beq>
     // <FS:CR> Aurora Sim
     mWidth(region_width_meters),
-    mWidthScaleFactor(region_width_meters / REGION_WIDTH_METERS) // <FS:Ansariel> FIRE-19563: Scaling for OpenSim VarRegions
+    mWidthScaleFactor(region_width_meters / REGION_WIDTH_METERS), // <FS:Ansariel> FIRE-19563: Scaling for OpenSim VarRegions
+    mMinSimHeight(0.f) // <FS:humbletim> FIRE-33613: [OpenSim] [PBR] Camera cannot be located at negative Z
 {
     // Moved this up... -> mWidth = region_width_meters;
 // </FS:CR>
@@ -2581,7 +2582,7 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
     setSimulatorFeaturesReceived(true);
 
 
-// <FS:CR> Opensim god names
+// <FS> Opensim
 #ifdef OPENSIM
     if (LLGridManager::getInstance()->isInOpenSim())
     {
@@ -2590,31 +2591,23 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
         {
             if (mSimulatorFeatures["god_names"].has("full_names"))
             {
-                LLSD god_names = mSimulatorFeatures["god_names"]["full_names"];
-                for (LLSD::array_iterator itr = god_names.beginArray();
-                     itr != god_names.endArray();
-                     itr++)
+                for (const auto& item : llsd::inArray(mSimulatorFeatures["god_names"]["full_names"]))
                 {
-                    mGodNames.insert((*itr).asString());
+                    mGodNames.emplace(item.asString());
                 }
             }
             if (mSimulatorFeatures["god_names"].has("last_names"))
             {
-                LLSD god_names = mSimulatorFeatures["god_names"]["last_names"];
-                for (LLSD::array_iterator itr = god_names.beginArray();
-                     itr != god_names.endArray();
-                     itr++)
+                for (const auto& item : llsd::inArray(mSimulatorFeatures["god_names"]["last_names"]))
                 {
-                    mGodNames.insert((*itr).asString());
+                    mGodNames.emplace(item.asString());
                 }
             }
         }
     }
-#endif // OPENSIM
-// </FS:CR>
-// <FS:Beq> limit num bakes by region support
-#ifdef OPENSIM
-    if (mSimulatorFeatures.has("BakesOnMeshEnabled") && (mSimulatorFeatures["BakesOnMeshEnabled"].asBoolean()==true))
+#endif
+
+    if (LLGridManager::getInstance()->isInSecondLife() || (mSimulatorFeatures.has("BakesOnMeshEnabled") && mSimulatorFeatures["BakesOnMeshEnabled"].asBoolean()))
     {
         mMaxBakes = LLAvatarAppearanceDefines::EBakedTextureIndex::BAKED_NUM_INDICES;
         mMaxTEs   = LLAvatarAppearanceDefines::ETextureIndex::TEX_NUM_INDICES;
@@ -2624,11 +2617,8 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
         mMaxBakes = LLAvatarAppearanceDefines::EBakedTextureIndex::BAKED_LEFT_ARM;
         mMaxTEs   = LLAvatarAppearanceDefines::ETextureIndex::TEX_HEAD_UNIVERSAL_TATTOO;
     }
-#else
-    mMaxBakes = LLAvatarAppearanceDefines::EBakedTextureIndex::BAKED_NUM_INDICES;
-    mMaxTEs   = LLAvatarAppearanceDefines::ETextureIndex::TEX_NUM_INDICES;
-#endif // OPENSIM
-// </FS:Beq>
+    mMinSimHeight = mSimulatorFeatures.has("OpenSimExtras") && mSimulatorFeatures["OpenSimExtras"].has("MinSimHeight") ? mSimulatorFeatures["OpenSimExtras"]["MinSimHeight"].asReal() : 0.0f;
+// </FS>
 }
 
 //this is called when the parent is not cacheable.
@@ -3207,9 +3197,8 @@ void LLViewerRegion::unpackRegionHandshake()
 
     mCentralBakeVersion = region_protocols & 1; // was (S32)gSavedSettings.getBOOL("UseServerTextureBaking");
     // <FS:Beq> Earlier trigger for BOM support on region
-    #ifdef OPENSIM
-    constexpr U64 REGION_SUPPORTS_BOM {(U64)1<<63};
-    if(region_protocols & REGION_SUPPORTS_BOM) // OS sets bit 63 when BOM supported
+    constexpr U64 REGION_SUPPORTS_BOM{ 1ULL << 63 };
+    if (region_protocols & REGION_SUPPORTS_BOM) // OS sets bit 63 when BOM supported
     {
         mMaxBakes = LLAvatarAppearanceDefines::EBakedTextureIndex::BAKED_NUM_INDICES;
         mMaxTEs   = LLAvatarAppearanceDefines::ETextureIndex::TEX_NUM_INDICES;
@@ -3219,7 +3208,6 @@ void LLViewerRegion::unpackRegionHandshake()
         mMaxBakes = LLAvatarAppearanceDefines::EBakedTextureIndex::BAKED_LEFT_ARM;
         mMaxTEs   = LLAvatarAppearanceDefines::ETextureIndex::TEX_HEAD_UNIVERSAL_TATTOO;
     }
-    #endif
     // </FS:Beq>
     LLVLComposition *compp = getComposition();
     if (compp)

@@ -62,12 +62,13 @@
 		<radio_item label="Старт" name="start"/>
 		<radio_item label="Стоп" name="stop"/>
 	</radio_group>
-	<check_box label="до завершения анимации" name="wait_anim_check"/>
-	<check_box label="время в секундах:" name="wait_time_check"/>
+	<check_box label="пока нажата кнопка" name="wait_key_release_check" />
+	<check_box label="до конца анимации" name="wait_anim_check"/>
+	<check_box label="время, секунды:" name="wait_time_check"/>
 	<text name="help_label">
 		Все шаги выполняются одновременно, если только вы не добавите шаги ожидания.
 	</text>
 	<check_box label="Активный" name="active_check" tool_tip="Активные жесты можно включить путем ввода их триггеров в чат или нажатием горячих клавиш.  Жесты обычно становятся неактивными, если возникает конфликт клавиш."/>
-	<button label="Предварительный просмотр" name="preview_btn"/>
+	<button label="Просмотр" name="preview_btn"/>
 	<button label="Сохранить" name="save_btn"/>
 </floater>

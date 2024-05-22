@@ -3665,7 +3665,7 @@ void LLVOAvatar::idleUpdateNameTagText(bool new_name)
     // then use that color as name_tag_color
     static LLUICachedControl<bool> show_friends("NameTagShowFriends");
     static LLUICachedControl<U32> color_client_tags("FSColorClienttags");
-    bool special_color_override = (show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))) ||
+    bool special_color_override = (show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), ContactSetType::TAG))) ||
                                     LLNetMap::hasAvatarMarkColor(getID());
     if (mClientTagData.has("color")
         && !special_color_override
@@ -4017,10 +4017,10 @@ void LLVOAvatar::idleUpdateNameTagText(bool new_name)
         LLColor4 new_chat = LLUIColorTable::instance().getColor( isSelf() ? "UserChatColor" : "AgentChatColor" );
 
         // <FS:CR> Colorize tags
-        new_chat = LGGContactSets::getInstance()->colorize(getID(), new_chat, LGG_CS_CHAT);
+        new_chat = LGGContactSets::getInstance()->colorize(getID(), new_chat, ContactSetType::CHAT);
 
         //color based on contact sets prefs
-        LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_CHAT, new_chat);
+        LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), ContactSetType::CHAT, new_chat);
         // </FS:CR>
 
         if (mVisibleChat)
@@ -4274,10 +4274,10 @@ LLColor4 LLVOAvatar::getNameTagColor()
     }
 
     // <FS:CR> FIRE-1061 - Color friends, lindens, muted, etc
-    color = LGGContactSets::getInstance()->colorize(getID(), color, LGG_CS_TAG);
+    color = LGGContactSets::getInstance()->colorize(getID(), color, ContactSetType::TAG);
     // </FS:CR>
 
-    LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG, color);
+    LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), ContactSetType::TAG, color);
 
     LLNetMap::getAvatarMarkColor(getID(), color);
 

@@ -15,7 +15,7 @@
 	<text name="key_label">Raccourci :</text>
 	<combo_box label="Non" name="modifier_combo"/>
 	<combo_box label="Non" name="key_combo"/>
-	<text name="library_label">Librairie :</text>
+	<text name="library_label">Bibliothèque :</text>
 	<button label="Ajouter &gt;&gt;" name="add_btn"/>
 	<text name="steps_label">Étapes:</text>
 	<button label="Haut" name="up_btn"/>
@@ -26,6 +26,7 @@
 		<radio_item label="Démarrer" name="start"/>
 		<radio_item label="Arrêter" name="stop"/>
 	</radio_group>
+	<check_box label="jusqu'au relâchement de la touche" name="wait_key_release_check"/>
 	<check_box label="Jusqu'à ce que les anims. soient jouées" name="wait_anim_check"/>
 	<check_box label="Durée en secondes :" name="wait_time_check"/>
 	<text name="help_label">Toutes les étapes se produisent simultanément, sauf si vous insérez des pauses.</text>

@@ -26,21 +26,22 @@
 #include <unordered_set>
 #include <boost/signals2.hpp>
 
-typedef enum e_lgg_cs
+enum class ContactSetType
 {
-    LGG_CS_CHAT,
-    LGG_CS_IM,
-    LGG_CS_TAG,
-    LGG_CS_RADAR,
-    LGG_CS_MINIMAP
-} ELGGCSType;
+    CHAT,
+    IM,
+    TAG,
+    RADAR,
+    MINIMAP
+};
 
-const std::string CS_SET_ALL_SETS = "All Sets";
-const std::string CS_SET_NO_SETS = "No Sets";
-const std::string CS_SET_EXTRA_AVS = "extraAvs";
-const std::string CS_SET_PSEUDONYM = "Pseudonyms";
-const std::string CS_GLOBAL_SETTINGS = "globalSettings";
-const std::string CS_PSEUDONYM = "--- ---";
+constexpr char CS_SET_ALL_SETS[] = "All Sets";
+constexpr char CS_SET_NO_SETS[] = "No Sets";
+constexpr char CS_SET_EXTRA_AVS[] = "extraAvs";
+constexpr char CS_SET_PSEUDONYM[] = "Pseudonyms";
+constexpr char CS_GLOBAL_SETTINGS[] = "globalSettings";
+constexpr char CS_PSEUDONYM[] = "--- ---";
+constexpr char CS_PSEUDONYM_QUOTED[] = "'--- ---'";
 
 class LGGContactSets : public LLSingleton<LGGContactSets>
 {
@@ -58,7 +59,7 @@ public:
     void setSetColor(std::string_view set_name, const LLColor4& color);
     LLColor4 getSetColor(std::string_view set_name) const;
     LLColor4 getFriendColor(const LLUUID& friend_id, std::string_view ignored_set_name = "") const;
-    LLColor4 colorize(const LLUUID& uuid, LLColor4 color, ELGGCSType type) const;
+    LLColor4 colorize(const LLUUID& uuid, LLColor4 color, ContactSetType type) const;
 
     void setDefaultColor(const LLColor4& default_color) { mDefaultColor = default_color; };
     LLColor4 getDefaultColor() const { return mDefaultColor; };
@@ -81,8 +82,8 @@ public:
     void removeFriendFromSet(const LLUUID& friend_id, std::string_view set_name, bool save_changes = true);
     void removeFriendFromAllSets(const LLUUID& friend_id, bool save_changes = true);
     bool isFriendInSet(const LLUUID& friend_id, std::string_view set_name) const;
-    bool hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGCSType type) const;
-    bool hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGCSType type, LLColor4& color) const;
+    bool hasFriendColorThatShouldShow(const LLUUID& friend_id, ContactSetType type) const;
+    bool hasFriendColorThatShouldShow(const LLUUID& friend_id, ContactSetType type, LLColor4& color) const;
 
     void addSet(std::string_view set_name);
     bool renameSet(std::string_view set_name, std::string_view new_set_name);

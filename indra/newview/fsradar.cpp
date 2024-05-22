@@ -594,9 +594,9 @@ void FSRadar::updateRadarList()
         entry_options["name_style"] = nameCellStyle;
 
         LLColor4 name_color = colortable.getColor("AvatarListItemIconDefaultColor", LLColor4::white).get();
-        name_color = contactsets->colorize(avId, (sFSRadarColorNamesByDistance ? range_color.get() : name_color), LGG_CS_RADAR);
+        name_color = contactsets->colorize(avId, (sFSRadarColorNamesByDistance ? range_color.get() : name_color), ContactSetType::RADAR);
 
-        contactsets->hasFriendColorThatShouldShow(avId, LGG_CS_RADAR, name_color);
+        contactsets->hasFriendColorThatShouldShow(avId, ContactSetType::RADAR, name_color);
 
         entry_options["name_color"] = name_color.getValue();
 

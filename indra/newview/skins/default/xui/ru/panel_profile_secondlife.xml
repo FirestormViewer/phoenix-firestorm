@@ -68,6 +68,7 @@
 		</layout_panel>
 	</layout_stack>
 	<check_box name="show_in_search" label="Показать в поиске" tool_tip="Позволить людям видеть вас в результатах поиска"/>
+	<check_box name="hide_sl_age" label="Показать полную дату рождения" tool_tip="Позволить людям видеть ваш возраст в СЛ"/>
 	<button name="save_description_changes" label="Сохранить"/>
 	<button name="discard_description_changes" label="Отказаться"/>
 </panel>
