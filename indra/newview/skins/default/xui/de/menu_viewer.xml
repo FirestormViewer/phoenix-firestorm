@@ -474,6 +474,13 @@
 			<menu_item_call label="Öffnen..." name="Open..."/>
 			<menu_item_call label="Speichern unter..." name="Save As..."/>
 			<menu_item_call label="Trennen..." name="Decompose..."/>
+			<menu_item_call label="Hochladen..." name="Upload..."/>
+		</menu>
+		<menu label="Auflösung" name="Video">
+			<menu_item_call label="1080x1920" name="1080x1920"/>
+			<menu_item_call label="1920x1080" name="1920x1080"/>
+			<menu_item_call label="1280x720" name="1280x720"/>
+			<menu_item_call label="720x1280" name="720x1280"/>
 		</menu>
 		<menu label="Render-Tests" name="Render Tests">
 			<menu_item_check label="Kamera-Versatz" name="Camera Offset"/>

@@ -5082,6 +5082,14 @@ Möchten Sie fortfahren?
 		Sie müssen ein Objekt auswählen, das mit einem GLTF-Gegenstand verknüpft ist.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="GLTFUploadSelection">
+		Sie müssen ein Objekt auswählen, das nur mit einem lokalen GLTF-Gegenstand verknüpft ist.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="GLTFUploadInProgress">
+		Upload wird gerade durchgeführt. Bitte versuchen Sie es später erneut.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 
 	<notification name="NoValidEnvSettingFound">
 		Keine gültige Einstellung für die Umgebung ausgewählt.

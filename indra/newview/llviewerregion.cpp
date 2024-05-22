@@ -2639,24 +2639,14 @@ void LLViewerRegion::setSimulatorFeatures(const LLSD& sim_features)
 
             gSavedSettings.setBOOL("RenderMirrors", mirrors_enabled);
 
-            if (features.has("PBRTerrainEnabled"))
+            if (features.has("GLTFEnabled"))
             {
-                bool enabled = features["PBRTerrainEnabled"];
-                gSavedSettings.setBOOL("RenderTerrainPBREnabled", enabled);
+                bool enabled = features["GLTFEnabled"];
+                gSavedSettings.setBOOL("GLTFEnabled", enabled);
             }
             else
             {
-                gSavedSettings.setBOOL("RenderTerrainPBREnabled", false);
-            }
-
-            if (features.has("PBRMaterialSwatchEnabled"))
-            {
-                bool enabled = features["PBRMaterialSwatchEnabled"];
-                gSavedSettings.setBOOL("UIPreviewMaterial", enabled);
-            }
-            else
-            {
-                gSavedSettings.setBOOL("UIPreviewMaterial", false);
+                gSavedSettings.setBOOL("GLTFEnabled", false);
             }
         };
 

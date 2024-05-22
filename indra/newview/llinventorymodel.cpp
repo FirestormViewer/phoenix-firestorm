@@ -1551,6 +1551,13 @@ U32 LLInventoryModel::updateItem(const LLViewerInventoryItem* item, U32 mask)
 		return mask;
 	}
 
+	if (item->getType() == LLAssetType::AT_MESH ||
+        item->getType() == LLAssetType::AT_GLTF ||
+        item->getType() == LLAssetType::AT_GLTF_BIN)
+	{
+		return mask;
+	}
+
 	LLPointer<LLViewerInventoryItem> old_item = getItem(item->getUUID());
 	LLPointer<LLViewerInventoryItem> new_item;
 	if(old_item)
