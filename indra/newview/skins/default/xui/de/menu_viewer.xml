@@ -611,6 +611,7 @@
 				<menu_item_call label="Männlich testen" name="Test Male"/>
 				<menu_item_call label="Weiblich testen" name="Test Female"/>
 				<menu_item_check label="Avatarauswahl zulassen" name="Allow Select Avatar"/>
+				<menu_item_check label="Nur Freunde anzeigen" name="Render Only Friends"/>
 			</menu>
 			<menu label="Animationsgeschwindigkeit" name="Animation Speed">
 				<menu_item_call label="Alle Animationen 10 % schneller" name="All Animations 10 Faster"/>
