@@ -60,7 +60,7 @@ public:
     void selectPick(const LLUUID& pick_id);
 
     void processProperties(void* data, EAvatarProcessorType type) override;
-    void processProperties(const LLAvatarPicks* avatar_picks);
+    void processProperties(const LLAvatarData* avatar_picks);
 
     void resetData() override;
 
@@ -78,8 +78,6 @@ public:
 
     bool hasUnsavedChanges() override;
     void commitUnsavedChanges() override;
-
-    friend void request_avatar_properties_coro(std::string cap_url, LLUUID agent_id);
 
 private:
     void onClickNewBtn();

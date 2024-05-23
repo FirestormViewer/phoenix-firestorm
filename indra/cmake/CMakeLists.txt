@@ -30,7 +30,6 @@ set(cmake_SOURCE_FILES
         GLOD.cmake # <FS:Ansariel> Bring back GLOD
         Havok.cmake
         Hunspell.cmake
-        ICU4C.cmake
         LLAddBuildTest.cmake
         LLAppearance.cmake
         LLAudio.cmake

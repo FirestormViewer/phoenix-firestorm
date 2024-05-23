@@ -1,4 +1,4 @@
-/** 
+/**
  * @file qtoolalign.h
  * @brief A tool to align objects
  */
@@ -15,30 +15,30 @@ class LLToolSelectRect;
 
 class QToolAlign : public LLTool, public LLSingleton<QToolAlign>
 {
-	LLSINGLETON(QToolAlign);
-	virtual ~QToolAlign();
+    LLSINGLETON(QToolAlign);
+    virtual ~QToolAlign();
 
 public:
-	void	handleSelect() override;
-	void	handleDeselect() override;
-	bool	handleMouseDown(S32 x, S32 y, MASK mask) override;
-	bool	handleHover(S32 x, S32 y, MASK mask) override;
-	void	render() override;
-	bool	canAffectSelection();
+    void    handleSelect() override;
+    void    handleDeselect() override;
+    bool    handleMouseDown(S32 x, S32 y, MASK mask) override;
+    bool    handleHover(S32 x, S32 y, MASK mask) override;
+    void    render() override;
+    bool    canAffectSelection();
 
-	static void pickCallback(const LLPickInfo& pick_info);
+    static void pickCallback(const LLPickInfo& pick_info);
 
 private:
-	void			align();
-	void			computeManipulatorSize();
-	void			renderManipulators();
-	bool			findSelectedManipulator(S32 x, S32 y);
+    void            align();
+    void            computeManipulatorSize();
+    void            renderManipulators();
+    bool            findSelectedManipulator(S32 x, S32 y);
 
-	LLBBox			mBBox;
-	F32				mManipulatorSize;
-	S32				mHighlightedAxis;
-	F32				mHighlightedDirection;
-	bool			mForce;
+    LLBBox          mBBox;
+    F32             mManipulatorSize;
+    S32             mHighlightedAxis;
+    F32             mHighlightedDirection;
+    bool            mForce;
 };
 
 #endif // Q_QTOOLALIGN_H

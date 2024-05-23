@@ -34,13 +34,13 @@
 class PieSeparator : public LLUICtrl
 {
 public:
-	// parameter block for the XUI factory
-	struct Params : public LLInitParam::Block<Params, LLUICtrl::Params>
-	{
-		Params();
-	};
+    // parameter block for the XUI factory
+    struct Params : public LLInitParam::Block<Params, LLUICtrl::Params>
+    {
+        Params();
+    };
 
-	PieSeparator(const Params& p);
+    PieSeparator(const Params& p);
 };
 
 #endif // PIESEPARATOR_H

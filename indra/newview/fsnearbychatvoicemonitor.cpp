@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -32,47 +32,47 @@
 static LLDefaultChildRegistry::Register<FSNearbyChatVoiceControl> r("fs_nearby_chat_voice_monitor");
 
 FSNearbyChatVoiceControl::Params::Params() :
-	voice_monitor_padding("voice_monitor_padding"),
-	nearby_voice_monitor("nearby_voice_monitor")
+    voice_monitor_padding("voice_monitor_padding"),
+    nearby_voice_monitor("nearby_voice_monitor")
 {}
 
 FSNearbyChatVoiceControl::FSNearbyChatVoiceControl(const FSNearbyChatVoiceControl::Params& p) :
-	FSNearbyChatControl(p),
-	mVoiceMonitor(NULL),
-	mOriginalTextpadLeft(p.text_pad_left),
-	mOriginalTextpadRight(p.text_pad_right),
-	mVoiceMonitorPadding(p.voice_monitor_padding),
-	mVoiceMonitorVisible(p.nearby_voice_monitor.visible)
+    FSNearbyChatControl(p),
+    mVoiceMonitor(NULL),
+    mOriginalTextpadLeft(p.text_pad_left),
+    mOriginalTextpadRight(p.text_pad_right),
+    mVoiceMonitorPadding(p.voice_monitor_padding),
+    mVoiceMonitorVisible(p.nearby_voice_monitor.visible)
 {
-	S32 vm_top = p.nearby_voice_monitor.top_pad + p.nearby_voice_monitor.rect.height;
-	S32 vm_right = p.rect.right - p.rect.left;
-	S32 vm_left = p.rect.right - p.rect.left - p.nearby_voice_monitor.rect.width;
-	LLRect vm_rect(vm_left, vm_top, vm_right, p.nearby_voice_monitor.top_pad);
+    S32 vm_top = p.nearby_voice_monitor.top_pad + p.nearby_voice_monitor.rect.height;
+    S32 vm_right = p.rect.right - p.rect.left;
+    S32 vm_left = p.rect.right - p.rect.left - p.nearby_voice_monitor.rect.width;
+    LLRect vm_rect(vm_left, vm_top, vm_right, p.nearby_voice_monitor.top_pad);
 
-	NearbyVoiceMonitor::Params voice_monitor_params(p.nearby_voice_monitor);
-	voice_monitor_params.rect(vm_rect);
-	
-	mVoiceMonitor = LLUICtrlFactory::create<NearbyVoiceMonitor>(voice_monitor_params);
-	addChild(mVoiceMonitor);
+    NearbyVoiceMonitor::Params voice_monitor_params(p.nearby_voice_monitor);
+    voice_monitor_params.rect(vm_rect);
+
+    mVoiceMonitor = LLUICtrlFactory::create<NearbyVoiceMonitor>(voice_monitor_params);
+    addChild(mVoiceMonitor);
 }
 
 void FSNearbyChatVoiceControl::draw()
 {
-	LLVoiceClient* voice_client = LLVoiceClient::getInstance();
-	bool new_visibility_status = (voice_client->voiceEnabled() && voice_client->isVoiceWorking());
-	if (mVoiceMonitorVisible != new_visibility_status)
-	{
-		mVoiceMonitorVisible = new_visibility_status;
-		if (mVoiceMonitorVisible)
-		{
-			setTextPadding(mOriginalTextpadLeft, mOriginalTextpadRight + mVoiceMonitor->getRect().getWidth() + mVoiceMonitorPadding);
-			mVoiceMonitor->setVisible(true);
-		}
-		else
-		{
-			setTextPadding(mOriginalTextpadLeft, mOriginalTextpadRight);
-			mVoiceMonitor->setVisible(false);
-		}
-	}
-	FSNearbyChatControl::draw();
+    LLVoiceClient* voice_client = LLVoiceClient::getInstance();
+    bool new_visibility_status = (voice_client->voiceEnabled() && voice_client->isVoiceWorking());
+    if (mVoiceMonitorVisible != new_visibility_status)
+    {
+        mVoiceMonitorVisible = new_visibility_status;
+        if (mVoiceMonitorVisible)
+        {
+            setTextPadding(mOriginalTextpadLeft, mOriginalTextpadRight + mVoiceMonitor->getRect().getWidth() + mVoiceMonitorPadding);
+            mVoiceMonitor->setVisible(true);
+        }
+        else
+        {
+            setTextPadding(mOriginalTextpadLeft, mOriginalTextpadRight);
+            mVoiceMonitor->setVisible(false);
+        }
+    }
+    FSNearbyChatControl::draw();
 }

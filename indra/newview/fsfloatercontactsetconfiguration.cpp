@@ -40,98 +40,95 @@
 #include "llviewercontrol.h"
 
 FSFloaterContactSetConfiguration::FSFloaterContactSetConfiguration(const LLSD& target_set)
-:	LLFloater(target_set),
-	mContextConeOpacity(0.f),
-	mContextConeInAlpha(0.f),
-	mContextConeOutAlpha(0.f),
-	mContextConeFadeTime(0.f)
+:   LLFloater(target_set),
+    mContextConeOpacity(0.f),
+    mContextConeInAlpha(CONTEXT_CONE_IN_ALPHA),
+    mContextConeOutAlpha(CONTEXT_CONE_OUT_ALPHA),
+    mContextConeFadeTime(CONTEXT_CONE_FADE_TIME)
 {
-	mContactSet = target_set.asString();
-	mContextConeInAlpha = gSavedSettings.getF32("ContextConeInAlpha");
-	mContextConeOutAlpha = gSavedSettings.getF32("ContextConeOutAlpha");
-	mContextConeFadeTime = gSavedSettings.getF32("ContextConeFadeTime");
+    mContactSet = target_set.asString();
 }
 
 bool FSFloaterContactSetConfiguration::postBuild()
 {
-	updateTitle();
+    updateTitle();
 
-	mSetName = getChild<LLLineEditor>("set_name_editor");
-	mSetName->setText(mContactSet);
+    mSetName = getChild<LLLineEditor>("set_name_editor");
+    mSetName->setText(mContactSet);
 
-	mRenameButton = getChild<LLButton>("rename_btn");
-	mRenameButton->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onRenameSet, this));
+    mRenameButton = getChild<LLButton>("rename_btn");
+    mRenameButton->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onRenameSet, this));
 
-	mSetSwatch = getChild<LLColorSwatchCtrl>("set_swatch");
-	mSetSwatch->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetColor, this));
+    mSetSwatch = getChild<LLColorSwatchCtrl>("set_swatch");
+    mSetSwatch->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetColor, this));
 
-	mGlobalSwatch = getChild<LLColorSwatchCtrl>("global_swatch");
-	mGlobalSwatch->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitDefaultColor, this));
+    mGlobalSwatch = getChild<LLColorSwatchCtrl>("global_swatch");
+    mGlobalSwatch->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitDefaultColor, this));
 
-	mNotificationCheckBox = getChild<LLCheckBoxCtrl>("show_set_notifications");
-	mNotificationCheckBox->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetNotifications, this));
-	return true;
+    mNotificationCheckBox = getChild<LLCheckBoxCtrl>("show_set_notifications");
+    mNotificationCheckBox->setCommitCallback(boost::bind(&FSFloaterContactSetConfiguration::onCommitSetNotifications, this));
+    return true;
 }
 
 void FSFloaterContactSetConfiguration::draw()
 {
-	static LLCachedControl<F32> max_opacity(gSavedSettings, "PickerContextOpacity", 0.4f);
-	drawConeToOwner(mContextConeOpacity, max_opacity, mFrustumOrigin.get(), mContextConeFadeTime, mContextConeInAlpha, mContextConeOutAlpha);
-	LLFloater::draw();
+    static LLCachedControl<F32> max_opacity(gSavedSettings, "PickerContextOpacity", 0.4f);
+    drawConeToOwner(mContextConeOpacity, max_opacity, mFrustumOrigin.get(), mContextConeFadeTime, mContextConeInAlpha, mContextConeOutAlpha);
+    LLFloater::draw();
 }
 
 void FSFloaterContactSetConfiguration::onOpen(const LLSD& target_set)
 {
-	mSetSwatch->set(LGGContactSets::getInstance()->getSetColor(mContactSet), true);
-	mGlobalSwatch->set(LGGContactSets::getInstance()->getDefaultColor(), true);
-	mNotificationCheckBox->set(LGGContactSets::getInstance()->getNotifyForSet(mContactSet));
+    mSetSwatch->set(LGGContactSets::getInstance()->getSetColor(mContactSet), true);
+    mGlobalSwatch->set(LGGContactSets::getInstance()->getDefaultColor(), true);
+    mNotificationCheckBox->set(LGGContactSets::getInstance()->getNotifyForSet(mContactSet));
 }
 
 void FSFloaterContactSetConfiguration::onCommitSetColor()
 {
-	LGGContactSets::getInstance()->setSetColor(mContactSet, mSetSwatch->get());
+    LGGContactSets::getInstance()->setSetColor(mContactSet, mSetSwatch->get());
 }
 
 void FSFloaterContactSetConfiguration::onCommitSetNotifications()
 {
-	LGGContactSets::getInstance()->setNotifyForSet(mContactSet, mNotificationCheckBox->getValue().asBoolean());
+    LGGContactSets::getInstance()->setNotifyForSet(mContactSet, mNotificationCheckBox->getValue().asBoolean());
 }
 
 void FSFloaterContactSetConfiguration::onCommitDefaultColor()
 {
-	LGGContactSets::getInstance()->setDefaultColor(mGlobalSwatch->get());
+    LGGContactSets::getInstance()->setDefaultColor(mGlobalSwatch->get());
 }
 
 void FSFloaterContactSetConfiguration::onRenameSet()
 {
-	std::string new_name = mSetName->getText();
+    std::string new_name = mSetName->getText();
 
-	if (!new_name.empty() && LGGContactSets::getInstance()->renameSet(mContactSet, new_name))
-	{
-		mKey = LLSD(new_name);
-		mContactSet = new_name;
-		updateTitle();
-	}
-	else
-	{
-		LLSD substitutions;
-		substitutions["SET"] = mContactSet;
-		substitutions["NEW_NAME"] = new_name;
-		LLNotificationsUtil::add("RenameContactSetFailure", substitutions);
-	}
+    if (!new_name.empty() && LGGContactSets::getInstance()->renameSet(mContactSet, new_name))
+    {
+        mKey = LLSD(new_name);
+        mContactSet = new_name;
+        updateTitle();
+    }
+    else
+    {
+        LLSD substitutions;
+        substitutions["SET"] = mContactSet;
+        substitutions["NEW_NAME"] = new_name;
+        LLNotificationsUtil::add("RenameContactSetFailure", substitutions);
+    }
 }
 
 void FSFloaterContactSetConfiguration::updateTitle()
 {
-	LLStringUtil::format_map_t map;
-	map["NAME"] = mContactSet;
-	setTitle(getString("title", map));
+    LLStringUtil::format_map_t map;
+    map["NAME"] = mContactSet;
+    setTitle(getString("title", map));
 }
 
 void FSFloaterContactSetConfiguration::setFrustumOrigin(LLView* frustumOrigin)
 {
-	if (frustumOrigin)
-	{
-		mFrustumOrigin = frustumOrigin->getHandle();
-	}
+    if (frustumOrigin)
+    {
+        mFrustumOrigin = frustumOrigin->getHandle();
+    }
 }

@@ -180,6 +180,11 @@ L&apos;initialisation de la Place du marché a échoué en raison d&apos;une err
 &apos;[ERROR_CODE]&apos;
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="InvalidKeystroke">
+Une entrée de touche non valide a été saisie.
+[REASON].
+Veuillez saisir un texte valide.
+	</notification>
 	<notification name="MerchantForceValidateListing">
 		Pour créer votre annonce, nous avons corrigé la hiérarchie de votre contenu d’annonces.
 		<usetemplate ignoretext="M’avertir que la création d’une annonce corrige la hiérarchie du contenu" name="okignore" yestext="OK"/>
@@ -1793,14 +1798,14 @@ Continuer ?
 		<usetemplate ignoretext="Confirmer avant de rendre les objets à leurs propriétaires" name="okcancelignore" notext="Annuler" yestext="OK"/>
 	</notification>
 	<notification name="GroupLeaveConfirmMember">
-		Vous êtes actuellement membre du groupe &lt;nolink&gt;[GROUP]&lt;/nolink&gt;.
-Quitter le groupe ?
-		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
+		Quitter le &apos;&lt;nolink&gt;[GROUP]&lt;/nolink&gt;&apos; ?
+Une nouvelle adhésion coûtera [COST]L$.
+		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Quitter"/>
 	</notification>
-	<notification name="GroupLeaveConfirmMemberWithFee">
-		Vous êtes actuellement membre du groupe &lt;nolink&gt;[GROUP]&lt;/nolink&gt;. Une nouvelle adhésion coûtera [AMOUNT]L$.
-Quitter le groupe ?
-		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="OK"/>
+	<notification name="GroupLeaveConfirmMemberNoFee">
+		Quitter le groupe &apos;&lt;nolink&gt;[GROUP]&lt;/nolink&gt;&apos; ?
+Une nouvelle adhésion ne vous coûtera rien.
+		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Quitter"/>
 	</notification>
 	<notification name="OwnerCannotLeaveGroup">
 		Impossible de quitter le groupe. Vous ne pouvez pas quitter le groupe car vous en êtes le dernier propriétaire. Vous devez d&apos;abord affecter le rôle de propriétaire à un autre membre.
@@ -2506,6 +2511,16 @@ Vous ne pouvez pas l&apos;annuler.
 
 Voulez-vous vraiment les supprimer ?
 		<usetemplate ignoretext="Confirmer avant de supprimer des articles filtrés." name="okcancelignore" notext="Annuler" yestext="OK"/>
+	</notification>
+	<notification name="DeleteWornItems">
+Un ou plusieurs objets que vous souhaitez supprimer sont portés par votre avatar.
+Retirer ces éléments de votre avatar ?
+		<usetemplate name="okcancelbuttons" notext="Annuler" yestext="Retirer le(s) élément(s) et supprimer"/>
+	</notification>
+	<notification name="CantDeleteRequiredClothing">
+Certains éléments que vous souhaitez supprimer sont obligatoires (peau, forme, cheveux, yeux).
+Vous devez les remplacer avant de les supprimer.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="DeleteThumbnail">
 		Supprimer l'image de cet élément ? Il n'y a pas d'annulation possible.
@@ -5327,6 +5342,14 @@ Envisagez de remplacer les objets qui semblent déformés avec de telles valeurs
 Facteur LOD >3: Ajoute au lag. Conseillé uniquement pour la photographie.
 Facteur LOD >4: A utiliser dans des circonstances particulières. Se réinitialise après une nouvelle connexion.
 Facteur LOD >8: N'a pas d'effet réel. Peut provoquer des erreurs.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="OverrideVRAMWarning">
+		AVERTISSEMENT : Le fait de passer outre la détection de la VRAM peut entraîner de l'instabilité.
+
+La plupart des utilisateurs devraient laisser ce paramètre désactivé et laisser la visionneuse et le système d'exploitation déterminer la valeur correcte.
+
+Ce paramètre est destiné aux cas où la détection de la VRAM indique des valeurs incorrectes. À utiliser avec précaution. En cas de doute, demandez l'aide de l'assistance technique.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="CurrencyURIOverrideReceived">

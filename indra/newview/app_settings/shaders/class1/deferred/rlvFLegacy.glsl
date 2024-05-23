@@ -34,25 +34,25 @@ uniform bvec2 rlvEffectParam3;  // Min/max dist extend
 uniform vec4 rlvEffectParam4;   // Sphere params (=color when using blend)
 uniform vec2 rlvEffectParam5;   // Blur direction (not used for blend)
 
-#define SPHERE_ORIGIN		rlvEffectParam1.xyz
-#define SPHERE_DISTMIN		rlvEffectParam2.y
-#define SPHERE_DISTMAX		rlvEffectParam2.w
-#define SPHERE_DISTEXTEND	rlvEffectParam3
-#define SPHERE_VALUEMIN		rlvEffectParam2.x
-#define SPHERE_VALUEMAX		rlvEffectParam2.z
-#define SPHERE_PARAMS		rlvEffectParam4
-#define BLUR_DIRECTION		rlvEffectParam5.xy
+#define SPHERE_ORIGIN       rlvEffectParam1.xyz
+#define SPHERE_DISTMIN      rlvEffectParam2.y
+#define SPHERE_DISTMAX      rlvEffectParam2.w
+#define SPHERE_DISTEXTEND   rlvEffectParam3
+#define SPHERE_VALUEMIN     rlvEffectParam2.x
+#define SPHERE_VALUEMAX     rlvEffectParam2.z
+#define SPHERE_PARAMS       rlvEffectParam4
+#define BLUR_DIRECTION      rlvEffectParam5.xy
 
 vec4 getPosition_d(vec2 pos_screen, float depth)
 {
-	vec2 sc = pos_screen.xy * 2.0;
-	sc /= screen_res;
-	sc -= vec2(1.0, 1.0);
-	vec4 ndc = vec4(sc.x, sc.y, 2.0 * depth - 1.0, 1.0);
-	vec4 pos = inv_proj * ndc;
-	pos /= pos.w;
-	pos.w = 1.0;
-	return pos;
+    vec2 sc = pos_screen.xy * 2.0;
+    sc /= screen_res;
+    sc -= vec2(1.0, 1.0);
+    vec4 ndc = vec4(sc.x, sc.y, 2.0 * depth - 1.0, 1.0);
+    vec4 pos = inv_proj * ndc;
+    pos /= pos.w;
+    pos.w = 1.0;
+    return pos;
 }
 
 vec3 blur13(sampler2DRect source, vec2 tc, vec2 direction)
@@ -98,10 +98,10 @@ vec3 blurVariable(sampler2DRect source, vec2 tc, float kernelSize, vec2 directio
 
   // Go through the remaining 8 vertical samples (4 on each side of the center)
   for (float i = 1.0; i <= numBlurPixelsPerSide; i++) {
-	avgValue += texture2DRect(source, tc - i * direction) * incrementalGaussian.x;
-	avgValue += texture2DRect(source, tc + i * direction) * incrementalGaussian.x;
-	coefficientSum += 2.0 * incrementalGaussian.x;
-	incrementalGaussian.xy *= incrementalGaussian.yz;
+    avgValue += texture2DRect(source, tc - i * direction) * incrementalGaussian.x;
+    avgValue += texture2DRect(source, tc + i * direction) * incrementalGaussian.x;
+    coefficientSum += 2.0 * incrementalGaussian.x;
+    incrementalGaussian.xy *= incrementalGaussian.yz;
   }
 
   return (avgValue / coefficientSum).rgb;
@@ -109,66 +109,66 @@ vec3 blurVariable(sampler2DRect source, vec2 tc, float kernelSize, vec2 directio
 
 vec3 chromaticAberration(sampler2DRect source, vec2 tc, vec2 redDrift, vec2 blueDrift, float strength)
 {
-	vec3 sourceColor = texture2DRect(source, tc).rgb;
+    vec3 sourceColor = texture2DRect(source, tc).rgb;
 
-	// Sample the color components
-	vec3 driftColor;
-	driftColor.r = texture2DRect(source, tc + redDrift).r;
-	driftColor.g = sourceColor.g;
-	driftColor.b = texture2DRect(source, tc + blueDrift).b;
+    // Sample the color components
+    vec3 driftColor;
+    driftColor.r = texture2DRect(source, tc + redDrift).r;
+    driftColor.g = sourceColor.g;
+    driftColor.b = texture2DRect(source, tc + blueDrift).b;
 
-	// Adjust the strength of the effect
-	return mix(sourceColor, driftColor, strength);
+    // Adjust the strength of the effect
+    return mix(sourceColor, driftColor, strength);
 }
 
 void main()
 {
-	vec2 fragTC = vary_fragcoord.st;
-	float fragDepth = texture2DRect(depthMap, fragTC).x;
-	vec3 fragPosLocal = getPosition_d(fragTC, fragDepth).xyz;
-	float distance = length(fragPosLocal.xyz - SPHERE_ORIGIN);
+    vec2 fragTC = vary_fragcoord.st;
+    float fragDepth = texture2DRect(depthMap, fragTC).x;
+    vec3 fragPosLocal = getPosition_d(fragTC, fragDepth).xyz;
+    float distance = length(fragPosLocal.xyz - SPHERE_ORIGIN);
 
-	// Linear non-branching interpolation of the strength of the sphere effect (replaces if/elseif/else for x < min, min <= x <= max and x > max)
-	float effectStrength = SPHERE_VALUEMIN + mix(0.0, SPHERE_VALUEMAX - SPHERE_VALUEMIN, (distance - SPHERE_DISTMIN) / (SPHERE_DISTMAX - SPHERE_DISTMIN));
-	if (distance < SPHERE_DISTMIN)
-	{
-		effectStrength = SPHERE_DISTEXTEND.x ? SPHERE_VALUEMIN : 0.0;
-	}
-	else if (distance > SPHERE_DISTMAX)
-	{
-		effectStrength = SPHERE_DISTEXTEND.y ? SPHERE_VALUEMAX : 0.0;
-	}
+    // Linear non-branching interpolation of the strength of the sphere effect (replaces if/elseif/else for x < min, min <= x <= max and x > max)
+    float effectStrength = SPHERE_VALUEMIN + mix(0.0, SPHERE_VALUEMAX - SPHERE_VALUEMIN, (distance - SPHERE_DISTMIN) / (SPHERE_DISTMAX - SPHERE_DISTMIN));
+    if (distance < SPHERE_DISTMIN)
+    {
+        effectStrength = SPHERE_DISTEXTEND.x ? SPHERE_VALUEMIN : 0.0;
+    }
+    else if (distance > SPHERE_DISTMAX)
+    {
+        effectStrength = SPHERE_DISTEXTEND.y ? SPHERE_VALUEMAX : 0.0;
+    }
 
-	vec3 fragColor;
-	if (rlvEffectMode == 0)				// Blend
-	{
-		fragColor = texture2DRect(diffuseRect, fragTC).rgb;
-		fragColor = mix(fragColor, SPHERE_PARAMS.rgb, effectStrength);
-	}
-	else if (rlvEffectMode == 1)		// Blur (fixed)
-	{
-		fragColor = blur13(diffuseRect, fragTC, effectStrength * BLUR_DIRECTION);
-	}
-	else if (rlvEffectMode == 2)		// Blur (variable)
-	{
-		fragColor = texture2DRect(diffuseRect, fragTC).rgb;
-		if (effectStrength > 0)
-		{
-			fragColor = blurVariable(diffuseRect, fragTC, SPHERE_PARAMS.x, BLUR_DIRECTION, effectStrength);
-		}
-	}
-	else if (rlvEffectMode == 3)		// ChromaticAberration
-	{
-		fragColor = chromaticAberration(diffuseRect, fragTC, SPHERE_PARAMS.xy, SPHERE_PARAMS.zw, effectStrength);
-	}
-	else if (rlvEffectMode == 4)		// Pixelate
-	{
-		effectStrength = sign(effectStrength);
-		float pixelWidth = max(1, floor(SPHERE_PARAMS.x * effectStrength)); float pixelHeight = max(1, floor(SPHERE_PARAMS.y * effectStrength));
-		fragTC = vec2(pixelWidth * floor(fragTC.x / pixelWidth), pixelHeight * floor(fragTC.y / pixelHeight));
-		fragColor = texture2DRect(diffuseRect, fragTC).rgb;
-	}
+    vec3 fragColor;
+    if (rlvEffectMode == 0)             // Blend
+    {
+        fragColor = texture2DRect(diffuseRect, fragTC).rgb;
+        fragColor = mix(fragColor, SPHERE_PARAMS.rgb, effectStrength);
+    }
+    else if (rlvEffectMode == 1)        // Blur (fixed)
+    {
+        fragColor = blur13(diffuseRect, fragTC, effectStrength * BLUR_DIRECTION);
+    }
+    else if (rlvEffectMode == 2)        // Blur (variable)
+    {
+        fragColor = texture2DRect(diffuseRect, fragTC).rgb;
+        if (effectStrength > 0)
+        {
+            fragColor = blurVariable(diffuseRect, fragTC, SPHERE_PARAMS.x, BLUR_DIRECTION, effectStrength);
+        }
+    }
+    else if (rlvEffectMode == 3)        // ChromaticAberration
+    {
+        fragColor = chromaticAberration(diffuseRect, fragTC, SPHERE_PARAMS.xy, SPHERE_PARAMS.zw, effectStrength);
+    }
+    else if (rlvEffectMode == 4)        // Pixelate
+    {
+        effectStrength = sign(effectStrength);
+        float pixelWidth = max(1, floor(SPHERE_PARAMS.x * effectStrength)); float pixelHeight = max(1, floor(SPHERE_PARAMS.y * effectStrength));
+        fragTC = vec2(pixelWidth * floor(fragTC.x / pixelWidth), pixelHeight * floor(fragTC.y / pixelHeight));
+        fragColor = texture2DRect(diffuseRect, fragTC).rgb;
+    }
 
-	frag_color.rgb = fragColor;
-	frag_color.a = 0.0;
+    frag_color.rgb = fragColor;
+    frag_color.a = 0.0;
 }

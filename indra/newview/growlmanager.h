@@ -40,11 +40,11 @@
 
 struct GrowlNotification
 {
-	std::string growlName;
-	std::string growlTitle;
-	std::string growlBody;
-	bool useDefaultTextForTitle;
-	bool useDefaultTextForBody;
+    std::string growlName;
+    std::string growlTitle;
+    std::string growlBody;
+    bool useDefaultTextForTitle;
+    bool useDefaultTextForBody;
 };
 
 constexpr U64 GROWL_THROTTLE_TIME = 1000000u; // Maximum spam rate (in microseconds).
@@ -55,38 +55,38 @@ constexpr char GROWL_KEYWORD_ALERT_TYPE[] = "Keyword Alert";
 
 class GrowlManager : public LLEventTimer
 {
-	LOG_CLASS(GrowlManager);
+    LOG_CLASS(GrowlManager);
 
 public:
-	GrowlManager();
-	~GrowlManager();
-	bool tick() override;
+    GrowlManager();
+    ~GrowlManager();
+    bool tick() override;
 
-	static void initiateManager();
-	static void destroyManager();
-	static bool isUsable();
-	static void notify(const std::string& title, const std::string& message, const std::string& type);
+    static void initiateManager();
+    static void destroyManager();
+    static bool isUsable();
+    static void notify(const std::string& title, const std::string& message, const std::string& type);
 
 private:
-	GrowlNotifier*								mNotifier;
-	std::map<std::string, GrowlNotification>	mNotifications;
-	std::map<std::string, U64>					mTitleTimers;
-	LLNotificationChannelPtr					mGrowlNotificationsChannel;
-	
-	void loadConfig();
-	void performNotification(const std::string& title, const std::string& message, const std::string& type);
-	static bool onLLNotification(const LLSD& notice);
-	static bool filterOldNotifications(LLNotificationPtr pNotification);
-	static void onInstantMessage(const LLSD& im);
-	static void onScriptDialog(const LLSD& data);
-	static void onNearbyChatMessage(const LLSD& chat);
-	static inline bool shouldNotify();
-	static void onAvatarNameCache(const LLAvatarName& av_name, const std::string& message, const std::string& type);
+    GrowlNotifier*                              mNotifier;
+    std::map<std::string, GrowlNotification>    mNotifications;
+    std::map<std::string, U64>                  mTitleTimers;
+    LLNotificationChannelPtr                    mGrowlNotificationsChannel;
 
-	LLBoundListener				mNotificationConnection;
-	boost::signals2::connection	mInstantMessageConnection;
-	boost::signals2::connection	mScriptDialogConnection;
-	boost::signals2::connection	mChatMessageConnection;
+    void loadConfig();
+    void performNotification(const std::string& title, const std::string& message, const std::string& type);
+    static bool onLLNotification(const LLSD& notice);
+    static bool filterOldNotifications(LLNotificationPtr pNotification);
+    static void onInstantMessage(const LLSD& im);
+    static void onScriptDialog(const LLSD& data);
+    static void onNearbyChatMessage(const LLSD& chat);
+    static inline bool shouldNotify();
+    static void onAvatarNameCache(const LLAvatarName& av_name, const std::string& message, const std::string& type);
+
+    LLBoundListener             mNotificationConnection;
+    boost::signals2::connection mInstantMessageConnection;
+    boost::signals2::connection mScriptDialogConnection;
+    boost::signals2::connection mChatMessageConnection;
 };
 
 extern GrowlManager *gGrowlManager;

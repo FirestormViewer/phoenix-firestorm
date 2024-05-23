@@ -31,28 +31,28 @@
 class LLButton;
 
 class UtilityBar
-:	public LLSingleton<UtilityBar>,
-	public LLEventTimer
+:   public LLSingleton<UtilityBar>,
+    public LLEventTimer
 {
-	LLSINGLETON(UtilityBar);
-	~UtilityBar();
+    LLSINGLETON(UtilityBar);
+    ~UtilityBar();
 
-	public:
-		void init();
-		virtual bool tick() override;
-		void setAOInterfaceButtonExpanded(bool expanded);
-		void setVolumeControlsButtonExpanded(bool expanded);
+    public:
+        void init();
+        virtual bool tick() override;
+        void setAOInterfaceButtonExpanded(bool expanded);
+        void setVolumeControlsButtonExpanded(bool expanded);
 
-	protected:
-		void onParcelStreamClicked();
-		void onParcelMediaClicked();
+    protected:
+        void onParcelStreamClicked();
+        void onParcelMediaClicked();
 
-		LLButton* mParcelStreamPlayButton;
-		LLButton* mParcelMediaPlayButton;
-		LLButton* mTalkButton;
-		LLButton* mAOInterfaceButton;
-		LLButton* mVolumeControlsInterfaceButton;
-		LLButton* mPTTButton;
+        LLButton* mParcelStreamPlayButton;
+        LLButton* mParcelMediaPlayButton;
+        LLButton* mTalkButton;
+        LLButton* mAOInterfaceButton;
+        LLButton* mVolumeControlsInterfaceButton;
+        LLButton* mPTTButton;
 };
 
 #endif // UTILITYBAR_H

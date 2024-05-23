@@ -1,4 +1,4 @@
-/** 
+/**
  * @file fspanelblocklist.cpp
  * @brief Container for blocked Residents & Objects list
  *
@@ -6,21 +6,21 @@
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
  * Copyright (c) 2014 Ansariel Hiller
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -58,108 +58,108 @@ const std::string BLOCKED_PARAM_NAME = "blocked_to_select";
 //-----------------------------------------------------------------------------
 
 FSPanelBlockList::FSPanelBlockList()
-:	LLPanel(),
-	mFilterSubString(LLStringUtil::null),
-	mFilterSubStringOrig(LLStringUtil::null)
+:   LLPanel(),
+    mFilterSubString(LLStringUtil::null),
+    mFilterSubStringOrig(LLStringUtil::null)
 {
-	mCommitCallbackRegistrar.add("Block.Action",	boost::bind(&FSPanelBlockList::onCustomAction,  this, _2));
-	mEnableCallbackRegistrar.add("Block.Check",		boost::bind(&FSPanelBlockList::isActionChecked, this, _2));
-	mEnableCallbackRegistrar.add("Block.Enable",	boost::bind(&FSPanelBlockList::isActionEnabled, this, _2));
-	mEnableCallbackRegistrar.add("Block.Visible",	boost::bind(&FSPanelBlockList::isActionVisible, this, _2));
+    mCommitCallbackRegistrar.add("Block.Action",    boost::bind(&FSPanelBlockList::onCustomAction,  this, _2));
+    mEnableCallbackRegistrar.add("Block.Check",     boost::bind(&FSPanelBlockList::isActionChecked, this, _2));
+    mEnableCallbackRegistrar.add("Block.Enable",    boost::bind(&FSPanelBlockList::isActionEnabled, this, _2));
+    mEnableCallbackRegistrar.add("Block.Visible",   boost::bind(&FSPanelBlockList::isActionVisible, this, _2));
 }
 
 void FSPanelBlockList::removePicker()
 {
-	if (mAvatarPicker.get())
-	{
-		mAvatarPicker.get()->closeFloater();
-	}
-	if (mObjectPicker.get())
-	{
-		mObjectPicker.get()->closeFloater();
-	}
+    if (mAvatarPicker.get())
+    {
+        mAvatarPicker.get()->closeFloater();
+    }
+    if (mObjectPicker.get())
+    {
+        mObjectPicker.get()->closeFloater();
+    }
 }
 
 FSPanelBlockList::~FSPanelBlockList()
 {
-	LLMuteList::getInstance()->removeObserver(this);
+    LLMuteList::getInstance()->removeObserver(this);
 }
 
 bool FSPanelBlockList::postBuild()
 {
-	mBlockedList = getChild<FSScrollListCtrl>("block_list");
-	mBlockedList->setCommitOnSelectionChange(true);
-	mBlockedList->setCommitCallback(boost::bind(&FSPanelBlockList::onSelectionChanged, this));
-	mBlockedList->setDoubleClickCallback(boost::bind(&FSPanelBlockList::showProfile, this));
-	mBlockedList->setSearchColumn(mBlockedList->getColumn("item_name")->mIndex);
-	mBlockedList->setContextMenu(&gFSBlockListMenu);
-	mBlockedList->setFilterColumn(COL_NAME);
-	mBlockedList->setSortChangedCallback(boost::bind(&FSPanelBlockList::onSortChanged, this));
+    mBlockedList = getChild<FSScrollListCtrl>("block_list");
+    mBlockedList->setCommitOnSelectionChange(true);
+    mBlockedList->setCommitCallback(boost::bind(&FSPanelBlockList::onSelectionChanged, this));
+    mBlockedList->setDoubleClickCallback(boost::bind(&FSPanelBlockList::showProfile, this));
+    mBlockedList->setSearchColumn(mBlockedList->getColumn("item_name")->mIndex);
+    mBlockedList->setContextMenu(&gFSBlockListMenu);
+    mBlockedList->setFilterColumn(COL_NAME);
+    mBlockedList->setSortChangedCallback(boost::bind(&FSPanelBlockList::onSortChanged, this));
 
-	getChild<LLButton>("unblock_btn")->setCommitCallback(boost::bind(&FSPanelBlockList::removeMutes, this));
-	getChild<LLFilterEditor>("blocked_filter_input")->setCommitCallback(boost::bind(&FSPanelBlockList::onFilterEdit, this, _2));
+    getChild<LLButton>("unblock_btn")->setCommitCallback(boost::bind(&FSPanelBlockList::removeMutes, this));
+    getChild<LLFilterEditor>("blocked_filter_input")->setCommitCallback(boost::bind(&FSPanelBlockList::onFilterEdit, this, _2));
 
-	LLMuteList::getInstance()->addObserver(this);
-	
-	refreshBlockedList();
+    LLMuteList::getInstance()->addObserver(this);
 
-	setVisibleCallback(boost::bind(&FSPanelBlockList::removePicker, this));
-	
-	updateButtons();
+    refreshBlockedList();
 
-	return LLPanel::postBuild();
+    setVisibleCallback(boost::bind(&FSPanelBlockList::removePicker, this));
+
+    updateButtons();
+
+    return LLPanel::postBuild();
 }
 
 void FSPanelBlockList::onOpen(const LLSD& key)
 {
-	if (key.has(BLOCKED_PARAM_NAME) && key[BLOCKED_PARAM_NAME].asUUID().notNull())
-	{
-		selectBlocked(key[BLOCKED_PARAM_NAME].asUUID());
-	}
+    if (key.has(BLOCKED_PARAM_NAME) && key[BLOCKED_PARAM_NAME].asUUID().notNull())
+    {
+        selectBlocked(key[BLOCKED_PARAM_NAME].asUUID());
+    }
 }
 
 bool FSPanelBlockList::handleKeyHere(KEY key, MASK mask)
 {
-	if (FSCommon::isFilterEditorKeyCombo(key, mask))
-	{
-		getChild<LLFilterEditor>("blocked_filter_input")->setFocus(true);
-		return true;
-	}
+    if (FSCommon::isFilterEditorKeyCombo(key, mask))
+    {
+        getChild<LLFilterEditor>("blocked_filter_input")->setFocus(true);
+        return true;
+    }
 
-	return LLPanel::handleKeyHere(key, mask);
+    return LLPanel::handleKeyHere(key, mask);
 }
 
 void FSPanelBlockList::selectBlocked(const LLUUID& mute_id)
 {
-	mBlockedList->deselectAllItems();
-	for (auto item : mBlockedList->getAllData())
-	{
-		if (item->getColumn(3)->getValue().asUUID() == mute_id)
-		{
-			item->setSelected(true);
-			break;
-		}
-	}
+    mBlockedList->deselectAllItems();
+    for (auto item : mBlockedList->getAllData())
+    {
+        if (item->getColumn(3)->getValue().asUUID() == mute_id)
+        {
+            item->setSelected(true);
+            break;
+        }
+    }
 
-	mBlockedList->scrollToShowSelected();
+    mBlockedList->scrollToShowSelected();
 }
 
 void FSPanelBlockList::showPanelAndSelect(const LLUUID& idToSelect)
 {
-	if (gSavedSettings.getBOOL("FSDisableBlockListAutoOpen"))
-	{
-		return;
-	}
+    if (gSavedSettings.getBOOL("FSDisableBlockListAutoOpen"))
+    {
+        return;
+    }
 
-	if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
-	{
-		LLFloaterReg::showInstance("fs_blocklist", LLSD().with(BLOCKED_PARAM_NAME, idToSelect));
-	}
-	else
-	{
-		LLFloaterSidePanelContainer::showPanel("people", "panel_people",
-			LLSD().with("people_panel_tab_name", "blocked_panel").with(BLOCKED_PARAM_NAME, idToSelect));
-	}
+    if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
+    {
+        LLFloaterReg::showInstance("fs_blocklist", LLSD().with(BLOCKED_PARAM_NAME, idToSelect));
+    }
+    else
+    {
+        LLFloaterSidePanelContainer::showPanel("people", "panel_people",
+            LLSD().with("people_panel_tab_name", "blocked_panel").with(BLOCKED_PARAM_NAME, idToSelect));
+    }
 }
 
 
@@ -168,342 +168,342 @@ void FSPanelBlockList::showPanelAndSelect(const LLUUID& idToSelect)
 //////////////////////////////////////////////////////////////////////////
 void FSPanelBlockList::refreshBlockedList()
 {
-	mBlockedList->deleteAllItems();
+    mBlockedList->deleteAllItems();
 
-	for (const auto& mute : LLMuteList::getInstance()->getMutes())
-	{
-		LLScrollListItem::Params item_p;
-		item_p.enabled(true);
-		item_p.value(LLUUID::generateNewID()); // can't link UUID of blocked item directly because of mutes by name
-		item_p.columns.add().column("item_name").value(mute.mName);
-		item_p.columns.add().column("item_type").value(mute.getDisplayType());
-		item_p.columns.add().column("item_mute_type").value(mute.mType);
-		item_p.columns.add().column("item_mute_uuid").value(mute.mID);
+    for (const auto& mute : LLMuteList::getInstance()->getMutes())
+    {
+        LLScrollListItem::Params item_p;
+        item_p.enabled(true);
+        item_p.value(LLUUID::generateNewID()); // can't link UUID of blocked item directly because of mutes by name
+        item_p.columns.add().column("item_name").value(mute.mName);
+        item_p.columns.add().column("item_type").value(mute.getDisplayType());
+        item_p.columns.add().column("item_mute_type").value(mute.mType);
+        item_p.columns.add().column("item_mute_uuid").value(mute.mID);
 
-		mBlockedList->addRow(item_p, ADD_BOTTOM);
-	}
-	mBlockedList->refreshLineHeight();
+        mBlockedList->addRow(item_p, ADD_BOTTOM);
+    }
+    mBlockedList->refreshLineHeight();
 
-	LLUICtrl* block_limit = getChild<LLUICtrl>("block_limit");
-	block_limit->setTextArg("[COUNT]", llformat("%d", LLMuteList::getInstance()->getMutes().size()));
-	block_limit->setTextArg("[LIMIT]", llformat("%d", gSavedSettings.getS32("MuteListLimit")));
+    LLUICtrl* block_limit = getChild<LLUICtrl>("block_limit");
+    block_limit->setTextArg("[COUNT]", llformat("%d", LLMuteList::getInstance()->getMutes().size()));
+    block_limit->setTextArg("[LIMIT]", llformat("%d", gSavedSettings.getS32("MuteListLimit")));
 }
 
 void FSPanelBlockList::updateButtons()
 {
-	bool has_selection = mBlockedList->getNumSelected() > 0;
-	getChildView("blocked_gear_btn")->setEnabled(has_selection);
-	getChildView("unblock_btn")->setEnabled(has_selection);
+    bool has_selection = mBlockedList->getNumSelected() > 0;
+    getChildView("blocked_gear_btn")->setEnabled(has_selection);
+    getChildView("unblock_btn")->setEnabled(has_selection);
 }
 
 void FSPanelBlockList::removeMutes()
 {
-	S32 scroll_pos = mBlockedList->getScrollPos();
-	S32 last_selected = mBlockedList->getFirstSelectedIndex();
+    S32 scroll_pos = mBlockedList->getScrollPos();
+    S32 last_selected = mBlockedList->getFirstSelectedIndex();
 
-	// Remove observer before bulk operation or it would refresh the
-	// list after each removal, sending us straight into a crash!
-	LLMuteList::getInstance()->removeObserver(this);
+    // Remove observer before bulk operation or it would refresh the
+    // list after each removal, sending us straight into a crash!
+    LLMuteList::getInstance()->removeObserver(this);
 
-	for (auto item : mBlockedList->getAllSelected())
-	{
-		std::string name = item->getColumn(COL_NAME)->getValue().asString();
-		LLUUID id = item->getColumn(COL_UUID)->getValue().asUUID();
-		LLMute mute(id, name);
-		LLMuteList::getInstance()->remove(mute);
-	}
+    for (auto item : mBlockedList->getAllSelected())
+    {
+        std::string name = item->getColumn(COL_NAME)->getValue().asString();
+        LLUUID id = item->getColumn(COL_UUID)->getValue().asUUID();
+        LLMute mute(id, name);
+        LLMuteList::getInstance()->remove(mute);
+    }
 
-	LLMuteList::getInstance()->addObserver(this);
-	refreshBlockedList();
+    LLMuteList::getInstance()->addObserver(this);
+    refreshBlockedList();
 
-	if (last_selected == mBlockedList->getItemCount())
-	{
-		// we were on the last item, so select the last item again
-		mBlockedList->selectNthItem(last_selected - 1);
-	}
-	else
-	{
-		// else select the item after the last item previously selected
-		mBlockedList->selectNthItem(last_selected);
-	}
-	onSelectionChanged();
-	mBlockedList->setScrollPos(scroll_pos);
+    if (last_selected == mBlockedList->getItemCount())
+    {
+        // we were on the last item, so select the last item again
+        mBlockedList->selectNthItem(last_selected - 1);
+    }
+    else
+    {
+        // else select the item after the last item previously selected
+        mBlockedList->selectNthItem(last_selected);
+    }
+    onSelectionChanged();
+    mBlockedList->setScrollPos(scroll_pos);
 }
 
 void FSPanelBlockList::onCustomAction(const LLSD& userdata)
 {
-	const std::string command_name = userdata.asString();
+    const std::string command_name = userdata.asString();
 
-	if ("block_obj_by_name" == command_name)
-	{
-		blockObjectByName();
-	}
-	else if ("block_res_by_name" == command_name)
-	{
-		blockResidentByName();
-	}
-	else if ("sort_by_name" == command_name)
-	{
-		mBlockedList->sortByColumn("item_name", true);
-		gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_NAME_ASC);
-	}
-	else if ("sort_by_type" == command_name)
-	{
-		mBlockedList->sortByColumn("item_type", true);
-		gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_TYPE_ASC);
-	}
-	else if ("sort_by_name_desc" == command_name)
-	{
-		mBlockedList->sortByColumn("item_name", false);
-		gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_NAME_DESC);
-	}
-	else if ("sort_by_type_desc" == command_name)
-	{
-		mBlockedList->sortByColumn("item_type", false);
-		gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_TYPE_DESC);
-	}
-	else if ("unblock_item" == command_name)
-	{
-		removeMutes();
-	}
-	else if ("profile_item" == command_name)
-	{
-		showProfile();
-	}
-	else if ("block_voice" == command_name)
-	{
-		toggleMute(LLMute::flagVoiceChat);
-	}
-	else if ("block_text" == command_name)
-	{
-		toggleMute(LLMute::flagTextChat);
-	}
-	else if ("block_particles" == command_name)
-	{
-		toggleMute(LLMute::flagParticles);
-	}
-	else if ("block_obj_sounds" == command_name)
-	{
-		toggleMute(LLMute::flagObjectSounds);
-	}
+    if ("block_obj_by_name" == command_name)
+    {
+        blockObjectByName();
+    }
+    else if ("block_res_by_name" == command_name)
+    {
+        blockResidentByName();
+    }
+    else if ("sort_by_name" == command_name)
+    {
+        mBlockedList->sortByColumn("item_name", true);
+        gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_NAME_ASC);
+    }
+    else if ("sort_by_type" == command_name)
+    {
+        mBlockedList->sortByColumn("item_type", true);
+        gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_TYPE_ASC);
+    }
+    else if ("sort_by_name_desc" == command_name)
+    {
+        mBlockedList->sortByColumn("item_name", false);
+        gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_NAME_DESC);
+    }
+    else if ("sort_by_type_desc" == command_name)
+    {
+        mBlockedList->sortByColumn("item_type", false);
+        gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_TYPE_DESC);
+    }
+    else if ("unblock_item" == command_name)
+    {
+        removeMutes();
+    }
+    else if ("profile_item" == command_name)
+    {
+        showProfile();
+    }
+    else if ("block_voice" == command_name)
+    {
+        toggleMute(LLMute::flagVoiceChat);
+    }
+    else if ("block_text" == command_name)
+    {
+        toggleMute(LLMute::flagTextChat);
+    }
+    else if ("block_particles" == command_name)
+    {
+        toggleMute(LLMute::flagParticles);
+    }
+    else if ("block_obj_sounds" == command_name)
+    {
+        toggleMute(LLMute::flagObjectSounds);
+    }
 }
 
 bool FSPanelBlockList::isActionChecked(const LLSD& userdata)
 {
-	std::string command_name = userdata.asString();
-	U32 sort_order = gSavedSettings.getU32("BlockPeopleSortOrder");
+    std::string command_name = userdata.asString();
+    U32 sort_order = gSavedSettings.getU32("BlockPeopleSortOrder");
 
-	if ("sort_by_name" == command_name)
-	{
-		return E_SORT_BY_NAME_ASC == sort_order;
-	}
-	else if ("sort_by_type" == command_name)
-	{
-		return E_SORT_BY_TYPE_ASC == sort_order;
-	}
-	else if ("sort_by_name_desc" == command_name)
-	{
-		return E_SORT_BY_NAME_DESC == sort_order;
-	}
-	else if ("sort_by_type_desc" == command_name)
-	{
-		return E_SORT_BY_TYPE_DESC == sort_order;
-	}
-	else
-	{
-		if (!mBlockedList->getFirstSelected())
-		{
-			return false;
-		}
+    if ("sort_by_name" == command_name)
+    {
+        return E_SORT_BY_NAME_ASC == sort_order;
+    }
+    else if ("sort_by_type" == command_name)
+    {
+        return E_SORT_BY_TYPE_ASC == sort_order;
+    }
+    else if ("sort_by_name_desc" == command_name)
+    {
+        return E_SORT_BY_NAME_DESC == sort_order;
+    }
+    else if ("sort_by_type_desc" == command_name)
+    {
+        return E_SORT_BY_TYPE_DESC == sort_order;
+    }
+    else
+    {
+        if (!mBlockedList->getFirstSelected())
+        {
+            return false;
+        }
 
-		LLUUID blocked_id = mBlockedList->getFirstSelected()->getColumn(COL_UUID)->getValue().asUUID();
+        LLUUID blocked_id = mBlockedList->getFirstSelected()->getColumn(COL_UUID)->getValue().asUUID();
 
-		if ("block_voice" == command_name)
-		{
-			return LLMuteList::getInstance()->isMuted(blocked_id, LLMute::flagVoiceChat);
-		}
-		else if ("block_text" == command_name)
-		{
-			return LLMuteList::getInstance()->isMuted(blocked_id, LLMute::flagTextChat);
-		}
-		else if ("block_particles" == command_name)
-		{
-			return LLMuteList::getInstance()->isMuted(blocked_id, LLMute::flagParticles);
-		}
-		else if ("block_obj_sounds" == command_name)
-		{
-			return LLMuteList::getInstance()->isMuted(blocked_id, LLMute::flagObjectSounds);
-		}
-	}
+        if ("block_voice" == command_name)
+        {
+            return LLMuteList::getInstance()->isMuted(blocked_id, LLMute::flagVoiceChat);
+        }
+        else if ("block_text" == command_name)
+        {
+            return LLMuteList::getInstance()->isMuted(blocked_id, LLMute::flagTextChat);
+        }
+        else if ("block_particles" == command_name)
+        {
+            return LLMuteList::getInstance()->isMuted(blocked_id, LLMute::flagParticles);
+        }
+        else if ("block_obj_sounds" == command_name)
+        {
+            return LLMuteList::getInstance()->isMuted(blocked_id, LLMute::flagObjectSounds);
+        }
+    }
 
-	return false;
+    return false;
 }
 
 bool FSPanelBlockList::isActionEnabled(const LLSD& userdata)
 {
-	std::string command_name = userdata.asString();
-	if ("unblock_item" == command_name)
-	{
-		return (mBlockedList->getNumSelected() > 0);
-	}
-	else if ("profile_item" == command_name 
-		|| "block_voice" == command_name
-		|| "block_text" == command_name
-		|| "block_particles" == command_name
-		|| "block_obj_sounds" == command_name)
-	{
-		return (mBlockedList->getNumSelected() == 1 &&
-				(LLMute::EType)mBlockedList->getFirstSelected()->getColumn(COL_TYPE)->getValue().asInteger() == LLMute::AGENT);
-	}
+    std::string command_name = userdata.asString();
+    if ("unblock_item" == command_name)
+    {
+        return (mBlockedList->getNumSelected() > 0);
+    }
+    else if ("profile_item" == command_name
+        || "block_voice" == command_name
+        || "block_text" == command_name
+        || "block_particles" == command_name
+        || "block_obj_sounds" == command_name)
+    {
+        return (mBlockedList->getNumSelected() == 1 &&
+                (LLMute::EType)mBlockedList->getFirstSelected()->getColumn(COL_TYPE)->getValue().asInteger() == LLMute::AGENT);
+    }
 
-	return false;
+    return false;
 }
 
 bool FSPanelBlockList::isActionVisible(const LLSD& userdata)
 {
-	const std::string command_name = userdata.asString();
+    const std::string command_name = userdata.asString();
 
-	if ("block_voice" == command_name
-		|| "block_text" == command_name
-		|| "block_particles" == command_name
-		|| "block_obj_sounds" == command_name)
-	{
-		return mBlockedList->getNumSelected() == 1 && (LLMute::AGENT == (LLMute::EType)mBlockedList->getFirstSelected()->getColumn(COL_TYPE)->getValue().asInteger());
-	}
+    if ("block_voice" == command_name
+        || "block_text" == command_name
+        || "block_particles" == command_name
+        || "block_obj_sounds" == command_name)
+    {
+        return mBlockedList->getNumSelected() == 1 && (LLMute::AGENT == (LLMute::EType)mBlockedList->getFirstSelected()->getColumn(COL_TYPE)->getValue().asInteger());
+    }
 
-	return false;
+    return false;
 }
 
 void FSPanelBlockList::toggleMute(U32 flags)
 {
-	LLScrollListItem* item = mBlockedList->getFirstSelected();
-	if (!item)
-	{
-		return;
-	}
+    LLScrollListItem* item = mBlockedList->getFirstSelected();
+    if (!item)
+    {
+        return;
+    }
 
-	LLMute mute(item->getColumn(COL_UUID)->getValue().asUUID(), item->getColumn(COL_NAME)->getValue().asString(), (LLMute::EType)item->getColumn(COL_TYPE)->getValue().asInteger());
+    LLMute mute(item->getColumn(COL_UUID)->getValue().asUUID(), item->getColumn(COL_NAME)->getValue().asString(), (LLMute::EType)item->getColumn(COL_TYPE)->getValue().asInteger());
 
-	if (!LLMuteList::getInstance()->isMuted(item->getColumn(COL_UUID)->getValue().asUUID(), flags))
-	{
-		LLMuteList::getInstance()->add(mute, flags);
-	}
-	else
-	{
-		LLMuteList::getInstance()->remove(mute, flags);
-	}
+    if (!LLMuteList::getInstance()->isMuted(item->getColumn(COL_UUID)->getValue().asUUID(), flags))
+    {
+        LLMuteList::getInstance()->add(mute, flags);
+    }
+    else
+    {
+        LLMuteList::getInstance()->remove(mute, flags);
+    }
 }
 
 void FSPanelBlockList::blockResidentByName()
 {
-	const bool allow_multiple = false;
-	const bool close_on_select = true;
+    const bool allow_multiple = false;
+    const bool close_on_select = true;
 
-	LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&FSPanelBlockList::callbackBlockPicked, this, _1, _2), allow_multiple, close_on_select);
-	LLFloater* parent = dynamic_cast<LLFloater*>(getParent());
-	if (parent)
-	{
-		parent->addDependentFloater(picker);
-	}
-	mAvatarPicker = picker->getHandle();
+    LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&FSPanelBlockList::callbackBlockPicked, this, _1, _2), allow_multiple, close_on_select);
+    LLFloater* parent = dynamic_cast<LLFloater*>(getParent());
+    if (parent)
+    {
+        parent->addDependentFloater(picker);
+    }
+    mAvatarPicker = picker->getHandle();
 }
 
 void FSPanelBlockList::blockObjectByName()
 {
-	LLFloaterGetBlockedObjectName* picker = LLFloaterGetBlockedObjectName::show(boost::bind(&FSPanelBlockList::callbackBlockByName, this, _1));
-	LLFloater* parent = dynamic_cast<LLFloater*>(getParent());
-	if (parent)
-	{
-		parent->addDependentFloater(picker);
-	}
-	mObjectPicker = picker->getHandle();
+    LLFloaterGetBlockedObjectName* picker = LLFloaterGetBlockedObjectName::show(boost::bind(&FSPanelBlockList::callbackBlockByName, this, _1));
+    LLFloater* parent = dynamic_cast<LLFloater*>(getParent());
+    if (parent)
+    {
+        parent->addDependentFloater(picker);
+    }
+    mObjectPicker = picker->getHandle();
 }
 
 void FSPanelBlockList::onSelectionChanged()
 {
-	updateButtons();
+    updateButtons();
 }
 
 void FSPanelBlockList::showProfile()
 {
-	if (mBlockedList->getNumSelected() == 1 &&
-		(LLMute::EType)mBlockedList->getFirstSelected()->getColumn(COL_TYPE)->getValue().asInteger() == LLMute::AGENT)
-	{
-		LLAvatarActions::showProfile(mBlockedList->getFirstSelected()->getColumn(COL_UUID)->getValue().asUUID());
-	}
+    if (mBlockedList->getNumSelected() == 1 &&
+        (LLMute::EType)mBlockedList->getFirstSelected()->getColumn(COL_TYPE)->getValue().asInteger() == LLMute::AGENT)
+    {
+        LLAvatarActions::showProfile(mBlockedList->getFirstSelected()->getColumn(COL_UUID)->getValue().asUUID());
+    }
 }
 
 void FSPanelBlockList::callbackBlockPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names)
 {
-	if (names.empty() || ids.empty()) return;
-	LLMute mute(ids[0], names[0].getUserName(), LLMute::AGENT);
-	LLMuteList::getInstance()->add(mute);
-	showPanelAndSelect(mute.mID);
+    if (names.empty() || ids.empty()) return;
+    LLMute mute(ids[0], names[0].getUserName(), LLMute::AGENT);
+    LLMuteList::getInstance()->add(mute);
+    showPanelAndSelect(mute.mID);
 }
 
 void FSPanelBlockList::callbackBlockByName(const std::string& text)
 {
-	if (text.empty()) return;
+    if (text.empty()) return;
 
-	LLMute mute(LLUUID::null, text, LLMute::BY_NAME);
-	bool success = LLMuteList::getInstance()->add(mute);
-	if (!success)
-	{
-		LLNotificationsUtil::add("MuteByNameFailed");
-	}
-	else
-	{
-		mBlockedList->selectItemByLabel(text);
-		mBlockedList->scrollToShowSelected();
-	}
+    LLMute mute(LLUUID::null, text, LLMute::BY_NAME);
+    bool success = LLMuteList::getInstance()->add(mute);
+    if (!success)
+    {
+        LLNotificationsUtil::add("MuteByNameFailed");
+    }
+    else
+    {
+        mBlockedList->selectItemByLabel(text);
+        mBlockedList->scrollToShowSelected();
+    }
 }
 
 void FSPanelBlockList::onFilterEdit(std::string search_string)
 {
-	mFilterSubStringOrig = search_string;
-	LLStringUtil::trimHead(mFilterSubStringOrig);
-	// Searches are case-insensitive
-	std::string search_upper = mFilterSubStringOrig;
-	LLStringUtil::toUpper(search_upper);
+    mFilterSubStringOrig = search_string;
+    LLStringUtil::trimHead(mFilterSubStringOrig);
+    // Searches are case-insensitive
+    std::string search_upper = mFilterSubStringOrig;
+    LLStringUtil::toUpper(search_upper);
 
-	if (mFilterSubString == search_upper)
-	{
-		return;
-	}
+    if (mFilterSubString == search_upper)
+    {
+        return;
+    }
 
-	mFilterSubString = search_upper;
+    mFilterSubString = search_upper;
 
-	// Apply new filter.
-	mBlockedList->setFilterString(mFilterSubStringOrig);
+    // Apply new filter.
+    mBlockedList->setFilterString(mFilterSubStringOrig);
 }
 
 void FSPanelBlockList::onSortChanged()
 {
-	bool ascending = mBlockedList->getSortAscending();
-	std::string column = mBlockedList->getSortColumnName();
+    bool ascending = mBlockedList->getSortAscending();
+    std::string column = mBlockedList->getSortColumnName();
 
-	if (column == "item_name")
-	{
-		if (ascending)
-		{
-			gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_NAME_ASC);
-		}
-		else
-		{
-			gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_NAME_DESC);
-		}
-	}
-	else if (column == "item_type")
-	{
-		if (ascending)
-		{
-			gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_TYPE_ASC);
-		}
-		else
-		{
-			gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_TYPE_DESC);
-		}
-	}
+    if (column == "item_name")
+    {
+        if (ascending)
+        {
+            gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_NAME_ASC);
+        }
+        else
+        {
+            gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_NAME_DESC);
+        }
+    }
+    else if (column == "item_type")
+    {
+        if (ascending)
+        {
+            gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_TYPE_ASC);
+        }
+        else
+        {
+            gSavedSettings.setU32("BlockPeopleSortOrder", E_SORT_BY_TYPE_DESC);
+        }
+    }
 }
 
 //EOF

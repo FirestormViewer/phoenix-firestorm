@@ -19,7 +19,6 @@ include(EXPAT)
 include(FMODSTUDIO)
 include(GLOD) # <FS:Beq/> restore GLOD
 include(Hunspell)
-include(ICU4C)
 include(JPEGEncoderBasic)
 include(LLAppearance)
 include(LLAudio)
@@ -2011,6 +2010,7 @@ set(viewer_APPSETTINGS_FILES
     app_settings/cloud.xml
     app_settings/cmd_line.xml
     app_settings/commands.xml
+    app_settings/emoji_groups.xml
     app_settings/foldertypes.xml
     app_settings/graphic_preset_controls.xml
     app_settings/grass.xml
@@ -2385,7 +2385,6 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         ${LLPHYSICSEXTENSIONS_LIBRARIES}
         ll::bugsplat
         ll::tracy
-        ll::icu4c
         fs::glod # <FS:Beq/> restore GLOD dependencies
         fs::discord # <FS:Ansariel> Discord  support
         )
@@ -2668,7 +2667,7 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
         # OUTPUT_VARIABLE PARENT_DIRECTORY_CYGWIN
         # OUTPUT_STRIP_TRAILING_WHITESPACE)
       # add_custom_command(OUTPUT "${VIEWER_SYMBOL_FILE}"
-        # # Use of 'tar ...j' here assumes VIEWER_SYMBOL_FILE endswith .tar.xz;
+        # # Use of 'tar ...J' here assumes VIEWER_SYMBOL_FILE endswith .tar.xz;
         # # testing a string suffix is painful enough in CMake language that
         # # we'll continue assuming it until forced to generalize.
         # COMMAND "tar"

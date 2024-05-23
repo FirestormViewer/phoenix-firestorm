@@ -48,7 +48,7 @@ HttpOptions::HttpOptions() :
     mVerifyHost(false),
     mDNSCacheTimeout(-1L),
     mNoBody(false),
-	mLastModified(0) // <FS:Ansariel> GetIfModified request
+    mLastModified(0) // <FS:Ansariel> GetIfModified request
 {}
 
 
@@ -58,66 +58,66 @@ HttpOptions::~HttpOptions()
 
 void HttpOptions::setWantHeaders(bool wanted)
 {
-	mWantHeaders = wanted;
+    mWantHeaders = wanted;
 }
 
 
 void HttpOptions::setTrace(long level)
 {
-	mTracing = int(level);
+    mTracing = int(level);
 }
 
 
 void HttpOptions::setTimeout(unsigned int timeout)
 {
-	mTimeout = timeout;
+    mTimeout = timeout;
 }
 
 
 void HttpOptions::setTransferTimeout(unsigned int timeout)
 {
-	mTransferTimeout = timeout;
+    mTransferTimeout = timeout;
 }
 
 
 void HttpOptions::setRetries(unsigned int retries)
 {
-	mRetries = retries;
+    mRetries = retries;
 }
 
 void HttpOptions::setMinBackoff(HttpTime delay)
 {
-	mMinRetryBackoff = delay;
+    mMinRetryBackoff = delay;
 }
 
 void HttpOptions::setMaxBackoff(HttpTime delay)
 {
-	mMaxRetryBackoff = delay;
+    mMaxRetryBackoff = delay;
 }
 
 void HttpOptions::setUseRetryAfter(bool use_retry)
 {
-	mUseRetryAfter = use_retry;
+    mUseRetryAfter = use_retry;
 }
 
 void HttpOptions::setFollowRedirects(bool follow_redirect)
 {
-	mFollowRedirects = follow_redirect;
+    mFollowRedirects = follow_redirect;
 }
 
 void HttpOptions::setSSLVerifyPeer(bool verify)
 {
-	mVerifyPeer = verify;
+    mVerifyPeer = verify;
 }
 
 void HttpOptions::setSSLVerifyHost(bool verify)
 {
-	mVerifyHost = verify;
+    mVerifyHost = verify;
 }
 
 void HttpOptions::setDNSCacheTimeout(int timeout)
 {
-	mDNSCacheTimeout = timeout;
+    mDNSCacheTimeout = timeout;
 }
 
 void HttpOptions::setHeadersOnly(bool nobody)
@@ -138,7 +138,7 @@ void HttpOptions::setDefaultSSLVerifyPeer(bool verify)
 // <FS:Ansariel> GetIfModified request
 void HttpOptions::setLastModified(long last_modified)
 {
-	mLastModified = last_modified;
+    mLastModified = last_modified;
 }
 // </FS:Ansariel>
 

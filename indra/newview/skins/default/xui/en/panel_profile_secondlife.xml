@@ -77,7 +77,12 @@
      value="None"
     />
     <string
-     name="age_format"
+     name="age_format_short"
+    >
+        [REG_DATE]
+    </string>
+    <string
+     name="age_format_full"
     >
         [REG_DATE]
 ([AGE])
@@ -778,6 +783,18 @@
      enabled="false"
      bottom="-28"
      left="55"
+     height="16"
+     width="130"
+     follows="left|bottom"
+     layout="topleft"
+     visible="false"/>
+    <check_box
+     name="hide_sl_age"
+     label="Show full birthdate"
+     tool_tip="Let people see your SL age"
+     enabled="false"
+     bottom="-28"
+     left="230"
      height="16"
      width="130"
      follows="left|bottom"

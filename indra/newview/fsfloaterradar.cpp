@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
  * $/LicenseInfo$
@@ -29,8 +29,8 @@
 #include "fsfloaterradar.h"
 
 FSFloaterRadar::FSFloaterRadar(const LLSD& key)
-	:	LLFloater(key),
-		mRadarPanel(nullptr)
+    :   LLFloater(key),
+        mRadarPanel(nullptr)
 {
 }
 
@@ -40,21 +40,21 @@ FSFloaterRadar::~FSFloaterRadar()
 
 bool FSFloaterRadar::postBuild()
 {
-	mRadarPanel = findChild<FSPanelRadar>("panel_radar");
-	if (!mRadarPanel)
-	{
-		return false;
-	}
-	mRadarPanel->setVisibleCheckFunction(boost::bind(&FSFloaterRadar::getVisible, this));
+    mRadarPanel = findChild<FSPanelRadar>("panel_radar");
+    if (!mRadarPanel)
+    {
+        return false;
+    }
+    mRadarPanel->setVisibleCheckFunction(boost::bind(&FSFloaterRadar::getVisible, this));
 
-	return true;
+    return true;
 }
 
 // virtual
 void FSFloaterRadar::onOpen(const LLSD& key)
 {
-	// Fill radar with most recent data so we don't have a blank window until next radar update
-	mRadarPanel->requestUpdate();
-	LLFloater::onOpen(key);
+    // Fill radar with most recent data so we don't have a blank window until next radar update
+    mRadarPanel->requestUpdate();
+    LLFloater::onOpen(key);
 }
 

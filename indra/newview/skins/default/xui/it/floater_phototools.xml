@@ -61,16 +61,16 @@
 				</combo_box>
 			</panel>
 			<panel name="P_R_Res">
-				<text name="T_R_Res" tool_tip="Determina la qualità dei riflessi sull'acqua. Impostando 'Molto buona' o superiore, è necessario abilitare anche 'Illuminazione Avanzata' nella scheda 'Luce'.">
+				<text name="T_R_Res" tool_tip="Determina la qualità dei riflessi sull'acqua.">
 					Risoluzione
 				</text>
 				<combo_box name="ReflectionRescombo">
 					<combo_box.item label="Discreta" name="0"/>
 					<combo_box.item label="Buona" name="1"/>
-					<combo_box.item label="Molto buona - NOTA: è necessario abilitare anche 'Illuminazione Avanzata' (scheda Luce)" name="2"/>
-					<combo_box.item label="Eccellente - NOTA: è necessario abilitare anche 'Illuminazione Avanzata' (scheda Luce)" name="3"/>
-					<combo_box.item label="Eccezionale - NOTA: è necessario abilitare anche 'Illuminazione Avanzata' (scheda Luce)" name="4"/>
-					<combo_box.item label="Realistica - NOTA: è necessario abilitare anche 'Illuminazione Avanzata' (scheda Luce)" name="5"/>
+					<combo_box.item label="Molto buona" name="2"/>
+					<combo_box.item label="Eccellente" name="3"/>
+					<combo_box.item label="Eccezionale" name="4"/>
+					<combo_box.item label="Realistica" name="5"/>
 				</combo_box>
 				<check_box label="Acqua Trasparente" name="TransparentWater" tool_tip="Rende l'acqua trasparente. Senza questa spunta, l'acqua apparirà opaca con una semplice texture."/>
 			</panel>
@@ -82,8 +82,6 @@
 				</text>
 			</panel>
 			<panel name="P_L_S_Settings">
-				<check_box label="Abilita Illuminazione Avanzata" name="RenderDeferred" tool_tip="Abilita le ombre di sole e luna e dalle altre fonti di luce. Permette anche di abilitare la profondità di campo ed altre funzioni grafiche. In sostanza questa impostazione abilita la maggior parte degli abbellimenti grafici."/>
-				<check_box label="Abilita Luci Locali" name="LocalLights" tool_tip="Abilita tutte le luci. Se disabilitata, rimarranno attive solo le luci del sole e della luna. Utile per disabilitare le luci provenienti dagli oggetti ed usare soltanto quelle di sole e luna."/>
 				<check_box label="Abilita Luci Attachments" tool_tip="Abilita tutte le luci provenienti da oggetti indossati dagli avatar, come ad esempio le face-light. Utile per disabilitare le face-light quando necessario." name="Render Attached Lights"/>
 			</panel>
 			<panel name="P_Shadows">

@@ -68,6 +68,8 @@
 #include "lltabcontainer.h"
 #include "lltextbox.h"
 
+#include <filesystem>
+
 #include <boost/algorithm/string.hpp>
 // <AW: opensim-limits>
 #include "llworld.h"
@@ -96,7 +98,7 @@ const F32 SKIN_WEIGHT_CAMERA_DISTANCE = 16.f;
 
 #include "glod/glod.h" // <FS:Beq/> More flexible LOD generation
 // <FS:Beq> mesh loader suffix configuration
-//static 
+//static
 const std::array<std::string,5> LLModelPreview::sSuffixVarNames
 {
     "FSMeshLowestLodSuffix",
@@ -114,10 +116,10 @@ bool stop_gloderror()
 
     if (error != GLOD_NO_ERROR)
     {
-   		std::ostringstream out;
-		out << "GLOD error detected, cannot generate LOD (try another method?): " << std::hex << error;
-		LL_WARNS("MeshUpload") << out.str() << LL_ENDL;
-		LLFloaterModelPreview::addStringToLog(out, true);
+        std::ostringstream out;
+        out << "GLOD error detected, cannot generate LOD (try another method?): " << std::hex << error;
+        LL_WARNS("MeshUpload") << out.str() << LL_ENDL;
+        LLFloaterModelPreview::addStringToLog(out, true);
         return true;
     }
 
@@ -151,7 +153,7 @@ std::string stripSuffix(std::string name)
     for(int i=0; i < LLModel::NUM_LODS; i++)
     {
         const auto& suffix = gSavedSettings.getString(LLModelPreview::sSuffixVarNames[i]);
-        if (suffix.size() && name.find(suffix) != std::string::npos) 
+        if (suffix.size() && name.find(suffix) != std::string::npos)
         {
             return name.substr(0, name.rfind('_'));
         }
@@ -344,124 +346,124 @@ void LLModelPreview::updateDimentionsAndOffsets()
 // prior to this a mess in multiple places meant that all LODs are forced to carry unwanted triangles for unused materials
 bool LLModelPreview::matchMaterialOrder(LLModel* lod, LLModel* ref, int& refFaceCnt, int& modelFaceCnt )
 {
-	//Is this a subset?
-	//LODs cannot currently add new materials, e.g.
-	//1. ref = a,b,c lod1 = d,e => This is not permitted
-	//2. ref = a,b,c lod1 = c => This would be permitted
-	
-	LL_DEBUGS("MESHSKININFO") << "In matchMaterialOrder." << LL_ENDL;
-	bool isASubset = lod->isMaterialListSubset( ref );
-	if ( !isASubset )
-	{
-		LL_DEBUGS("MESHSKININFO")<<"Material of model is not a subset of reference."<<LL_ENDL;
-		std::ostringstream out;
-		out << "LOD model " << lod->getName() << "'s materials are not a subset of the High LOD (reference) model " << ref->getName();
-		LL_DEBUGS() << out.str() << LL_ENDL;
-		LLFloaterModelPreview::addStringToLog(out, true);
-		return false;
-	}
+    //Is this a subset?
+    //LODs cannot currently add new materials, e.g.
+    //1. ref = a,b,c lod1 = d,e => This is not permitted
+    //2. ref = a,b,c lod1 = c => This would be permitted
 
-	if (lod->mMaterialList.size() > ref->mMaterialList.size())
-	{
-		LL_DEBUGS("MESHSKININFO") << "Material of model has more materials than a reference." << LL_ENDL;
-		std::ostringstream out;
-		out << "LOD model " << lod->getName() << " has more materials than the High LOD (reference) model " << ref->getName();
-		LL_DEBUGS() << out.str() << LL_ENDL;
-		LLFloaterModelPreview::addStringToLog(out, true);
-		// We passed isMaterialListSubset, so materials are a subset, but subset isn't supposed to be
-		// larger than original and if we keep going, reordering will cause a crash
-		return false;
-	}
+    LL_DEBUGS("MESHSKININFO") << "In matchMaterialOrder." << LL_ENDL;
+    bool isASubset = lod->isMaterialListSubset( ref );
+    if ( !isASubset )
+    {
+        LL_DEBUGS("MESHSKININFO")<<"Material of model is not a subset of reference."<<LL_ENDL;
+        std::ostringstream out;
+        out << "LOD model " << lod->getName() << "'s materials are not a subset of the High LOD (reference) model " << ref->getName();
+        LL_DEBUGS() << out.str() << LL_ENDL;
+        LLFloaterModelPreview::addStringToLog(out, true);
+        return false;
+    }
 
-	LL_DEBUGS("MESHSKININFO") << "subset check passed." << LL_ENDL;
-	std::map<std::string, U32> index_map;
-	
-	//build a map of material slot names to face indexes
-	bool reorder = false;
-	auto max_lod_mats =  lod->mMaterialList.size();
+    if (lod->mMaterialList.size() > ref->mMaterialList.size())
+    {
+        LL_DEBUGS("MESHSKININFO") << "Material of model has more materials than a reference." << LL_ENDL;
+        std::ostringstream out;
+        out << "LOD model " << lod->getName() << " has more materials than the High LOD (reference) model " << ref->getName();
+        LL_DEBUGS() << out.str() << LL_ENDL;
+        LLFloaterModelPreview::addStringToLog(out, true);
+        // We passed isMaterialListSubset, so materials are a subset, but subset isn't supposed to be
+        // larger than original and if we keep going, reordering will cause a crash
+        return false;
+    }
 
-	for ( U32 i = 0; i < ref->mMaterialList.size(); i++ )
-	{
-		// create the reference map for later
-		index_map[ref->mMaterialList[i]] = i;
-		LL_DEBUGS("MESHSKININFO") << "setting reference material " <<  ref->mMaterialList[i] << " as index " << i << LL_ENDL;
-		if( i >= max_lod_mats ||  lod->mMaterialList[i] != ref->mMaterialList[i] )
-		{
-			// i is already out of range of the original material sets in this LOD OR is not matching.
-			LL_DEBUGS("MESHSKININFO") << "mismatch at " << i << " " << ref->mMaterialList[i] 
-									 << " != " << ((i >= max_lod_mats)? "Out-of-range":lod->mMaterialList[i]) << LL_ENDL;
-			// we have a misalignment/ordering
-			// check that ref[i] is in cur and if not add a blank
-			U32 j{0};
-			for ( ; j < max_lod_mats; j++ )
-			{
-				if( i != j && lod->mMaterialList[j] == ref->mMaterialList[i] )
-				{
-					LL_DEBUGS("MESHSKININFO") << "material " << ref->mMaterialList[i] 
-											<< " found at " << j << LL_ENDL;
-					// we found it but in the wrong place.
-					reorder = true;
-					break;
-				}
-			}
-			if( j >= max_lod_mats )
-			{
-				std::ostringstream out;
-				out << "material " << ref->mMaterialList[i] 
-					<< " not found in lod adding placeholder";
-				LL_DEBUGS("MESHSKININFO") << out.str() << LL_ENDL;
-				if (mImporterDebug)
-				{
-					LLFloaterModelPreview::addStringToLog(out, false);
-				}
-			// The material is not in the submesh, add a placeholder.
-				// this is appended to the existing data so we'll need to reorder
-				// Note that this placeholder will be eliminated on the writeData (upload) and replaced with
-				// "NoGeometry" in the LLSD
-				reorder = true; 
-				LLVolumeFace face;
+    LL_DEBUGS("MESHSKININFO") << "subset check passed." << LL_ENDL;
+    std::map<std::string, U32> index_map;
 
-				face.resizeIndices(3);
-				face.resizeVertices(1);
-				face.mPositions->clear();
-				face.mNormals->clear();
-				face.mTexCoords->setZero();
-				memset(face.mIndices, 0, sizeof(U16)*3);
-				lod->addFace(face);
-				lod->mMaterialList.push_back( ref->mMaterialList[i] );
-			}
-		}
-		//if any material name does not match reference, we need to reorder
-	}
-	LL_DEBUGS("MESHSKININFO") << "finished parsing materials" << LL_ENDL; 
-	for ( U32 i = 0; i < lod->mMaterialList.size(); i++ )
-	{
-		LL_DEBUGS("MESHSKININFO") << "lod material " <<  lod->mMaterialList[i] << " has index " << i << LL_ENDL;    
-	}
-	// Sanity check. We have added placeholders for any mats in ref that are not in this.
-	// the mat count MUST be equal now.
-	if (lod->mMaterialList.size() != ref->mMaterialList.size())
-	{
-		std::ostringstream out;
-		out << "Material of LOD model " << lod->getName() << " has more materials than the reference " << ref->getName() << ".";
-		LL_INFOS("MESHSKININFO") << out.str() << LL_ENDL;
-		LLFloaterModelPreview::addStringToLog(out, true);
-		return false;
-	}
+    //build a map of material slot names to face indexes
+    bool reorder = false;
+    auto max_lod_mats =  lod->mMaterialList.size();
+
+    for ( U32 i = 0; i < ref->mMaterialList.size(); i++ )
+    {
+        // create the reference map for later
+        index_map[ref->mMaterialList[i]] = i;
+        LL_DEBUGS("MESHSKININFO") << "setting reference material " <<  ref->mMaterialList[i] << " as index " << i << LL_ENDL;
+        if( i >= max_lod_mats ||  lod->mMaterialList[i] != ref->mMaterialList[i] )
+        {
+            // i is already out of range of the original material sets in this LOD OR is not matching.
+            LL_DEBUGS("MESHSKININFO") << "mismatch at " << i << " " << ref->mMaterialList[i]
+                                     << " != " << ((i >= max_lod_mats)? "Out-of-range":lod->mMaterialList[i]) << LL_ENDL;
+            // we have a misalignment/ordering
+            // check that ref[i] is in cur and if not add a blank
+            U32 j{0};
+            for ( ; j < max_lod_mats; j++ )
+            {
+                if( i != j && lod->mMaterialList[j] == ref->mMaterialList[i] )
+                {
+                    LL_DEBUGS("MESHSKININFO") << "material " << ref->mMaterialList[i]
+                                            << " found at " << j << LL_ENDL;
+                    // we found it but in the wrong place.
+                    reorder = true;
+                    break;
+                }
+            }
+            if( j >= max_lod_mats )
+            {
+                std::ostringstream out;
+                out << "material " << ref->mMaterialList[i]
+                    << " not found in lod adding placeholder";
+                LL_DEBUGS("MESHSKININFO") << out.str() << LL_ENDL;
+                if (mImporterDebug)
+                {
+                    LLFloaterModelPreview::addStringToLog(out, false);
+                }
+            // The material is not in the submesh, add a placeholder.
+                // this is appended to the existing data so we'll need to reorder
+                // Note that this placeholder will be eliminated on the writeData (upload) and replaced with
+                // "NoGeometry" in the LLSD
+                reorder = true;
+                LLVolumeFace face;
+
+                face.resizeIndices(3);
+                face.resizeVertices(1);
+                face.mPositions->clear();
+                face.mNormals->clear();
+                face.mTexCoords->setZero();
+                memset(face.mIndices, 0, sizeof(U16)*3);
+                lod->addFace(face);
+                lod->mMaterialList.push_back( ref->mMaterialList[i] );
+            }
+        }
+        //if any material name does not match reference, we need to reorder
+    }
+    LL_DEBUGS("MESHSKININFO") << "finished parsing materials" << LL_ENDL;
+    for ( U32 i = 0; i < lod->mMaterialList.size(); i++ )
+    {
+        LL_DEBUGS("MESHSKININFO") << "lod material " <<  lod->mMaterialList[i] << " has index " << i << LL_ENDL;
+    }
+    // Sanity check. We have added placeholders for any mats in ref that are not in this.
+    // the mat count MUST be equal now.
+    if (lod->mMaterialList.size() != ref->mMaterialList.size())
+    {
+        std::ostringstream out;
+        out << "Material of LOD model " << lod->getName() << " has more materials than the reference " << ref->getName() << ".";
+        LL_INFOS("MESHSKININFO") << out.str() << LL_ENDL;
+        LLFloaterModelPreview::addStringToLog(out, true);
+        return false;
+    }
 
 
-	// <FS:Beq> Fix up material matching badness
-	// if (reorder &&  (base_mat == cur_mat)) //don't reorder if material name sets don't match
-	if ( reorder )
-	{
-		LL_DEBUGS("MESHSKININFO") << "re-ordering." << LL_ENDL;
-		lod->sortVolumeFacesByMaterialName();
-		lod->mMaterialList = ref->mMaterialList;
-	}
-	
-	return true;
+    // <FS:Beq> Fix up material matching badness
+    // if (reorder &&  (base_mat == cur_mat)) //don't reorder if material name sets don't match
+    if ( reorder )
+    {
+        LL_DEBUGS("MESHSKININFO") << "re-ordering." << LL_ENDL;
+        lod->sortVolumeFacesByMaterialName();
+        lod->mMaterialList = ref->mMaterialList;
+    }
+
+    return true;
 }
-//</FS:Beq> 
+//</FS:Beq>
 
 void LLModelPreview::rebuildUploadData()
 {
@@ -655,13 +657,13 @@ void LLModelPreview::rebuildUploadData()
                     // That's ok, but might not what they wanted. Use default_physics_shape if found.
                     std::ostringstream out;
                     out << "No physics model specified for " << instance.mLabel;
-                    if (mDefaultPhysicsShapeP)
+                    if (mDefaultPhysicsShapeP.notNull())
                     {
                         out << " - using: " << DEFAULT_PHYSICS_MESH_NAME;
                         lod_model = mDefaultPhysicsShapeP;
                     }
                     LL_WARNS() << out.str() << LL_ENDL;
-                    LLFloaterModelPreview::addStringToLog(out, !mDefaultPhysicsShapeP); // Flash log tab if no default.
+                    LLFloaterModelPreview::addStringToLog(out, mDefaultPhysicsShapeP.isNull()); // Flash log tab if no default.
                 }
 
                 if (lod_model)
@@ -785,7 +787,7 @@ void LLModelPreview::rebuildUploadData()
             if (!found_model && mModel[lod][model_ind] && !mModel[lod][model_ind]->mSubmodelID)
             {
                 // <FS:Beq> this is not debug, this is an important/useful error advisory
-                // if (mImporterDebug) 
+                // if (mImporterDebug)
                 {
                     std::ostringstream out;
                     // <FS:Beq> Make the logging less confusing hopefully.
@@ -809,7 +811,7 @@ void LLModelPreview::rebuildUploadData()
     }
     // <FS:Beq> FIRE-30965 Cleanup braindead mesh parsing error handlers
     // else if (getLoadState() == LLModelLoader::ERROR_MATERIALS
-        else if (getLoadState() == LLModelLoader::ERROR_MATERIALS_NOT_A_SUBSET 
+        else if (getLoadState() == LLModelLoader::ERROR_MATERIALS_NOT_A_SUBSET
              || getLoadState() == LLModelLoader::ERROR_HIGH_LOD_MODEL_MISSING
              || getLoadState() == LLModelLoader::ERROR_LOD_MODEL_MISMATCH
     // </FS:Beq>
@@ -1371,6 +1373,29 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
     { //only replace given LoD
         mModel[loaded_lod] = mModelLoader->mModelList;
         mScene[loaded_lod] = mModelLoader->mScene;
+
+        // Duplicate the model if it is an internal bounding box model
+        if (loaded_lod == LLModel::LOD_PHYSICS &&
+            mBaseModel.size() > 1 && // This makes sense for multiple models only
+            mModelLoader->mModelList.size() == 1 && // Just on the off-chance
+            mModelLoader->mScene.size() == 1 &&     // Just on the off-chance
+            std::filesystem::path(mModelLoader->mFilename).filename() == "cube.dae")
+        {
+            // Create a copy of the just loaded model for each model in mBaseModel
+            const LLModel* origin = mModelLoader->mModelList.front();
+            const LLModelInstance& mi = mModelLoader->mScene.begin()->second.front();
+            for (U32 i = 1; i < mBaseModel.size(); ++i)
+            {
+                LLPointer<LLModel> copy(new LLModel(origin->getParams(), origin->getDetail()));
+                copy->mLabel = origin->mLabel;
+                copy->copyVolumeFaces(origin);
+                copy->mPosition = origin->mPosition;
+                copy->mMaterialList = origin->mMaterialList;
+                mModel[loaded_lod].push_back(copy);
+                mScene[loaded_lod][mi.mTransform].push_back(LLModelInstance(copy, copy->mLabel, mi.mTransform, mi.mMaterial));
+            }
+        }
+
         mVertexBuffer[loaded_lod].clear();
 
         setPreviewLOD(loaded_lod);
@@ -1393,8 +1418,9 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
             if (loaded_lod == LLModel::LOD_PHYSICS)
             {   // Explicitly loading physics. See if there is a default mesh.
                 LLMatrix4 ignored_transform; // Each mesh that uses this will supply their own.
-                mDefaultPhysicsShapeP = nullptr;
-                FindModel(mScene[loaded_lod], DEFAULT_PHYSICS_MESH_NAME + getLodSuffix(loaded_lod), mDefaultPhysicsShapeP, ignored_transform);
+                LLModel* out_model = nullptr;
+                FindModel(mScene[loaded_lod], DEFAULT_PHYSICS_MESH_NAME + getLodSuffix(loaded_lod), out_model, ignored_transform);
+                mDefaultPhysicsShapeP = out_model;
                 mWarnOfUnmatchedPhyicsMeshes = true;
             }
             bool legacyMatching = gSavedSettings.getBOOL("ImporterLegacyMatching");
@@ -1468,6 +1494,17 @@ void LLModelPreview::loadModelCallback(S32 loaded_lod)
                                     LLFloaterModelPreview::addStringToLog(out, false);
                                 }
                                 mModel[loaded_lod][idx]->mLabel = name;
+                                // Rename the correspondent instance as well
+                                [&]()
+                                {
+                                    for (auto& p : mScene[loaded_lod])
+                                        for (auto& i : p.second)
+                                            if (i.mModel == mModel[loaded_lod][idx])
+                                            {
+                                                i.mLabel = name;
+                                                return;
+                                            }
+                                }();
                             }
                         }
                     }
@@ -1621,7 +1658,7 @@ void LLModelPreview::restoreNormals()
 }
 
 // <FS:Beq> Improved LOD generation
-// Restore the GLOD entry point. 
+// Restore the GLOD entry point.
 // There would appear to be quite a lot of commonality which would be well suited to refactoring but
 // LL are still playing with Mesh Optimiser code.
 void LLModelPreview::genGlodLODs(S32 which_lod, U32 decimation, bool enforce_tri_limit)
@@ -2194,15 +2231,15 @@ F32 LLModelPreview::genMeshOptimizerPerModel(LLModel *base_model, LLModel *targe
         //     << " target Indices: " << target_indices
         //     << " new Indices: " << size_new_indices
         //     << " original count: " << size_indices << LL_ENDL;
-   		std::ostringstream out;
+        std::ostringstream out;
         out << "Negative result error from meshoptimizer for model " << target_model->mLabel
             << " target Indices: " << target_indices
             << " new Indices: " << size_new_indices
             << " original count: " << size_indices ;
-		LL_WARNS() << out.str() << LL_ENDL;
-		LLFloaterModelPreview::addStringToLog(out, true);
+        LL_WARNS() << out.str() << LL_ENDL;
+        LLFloaterModelPreview::addStringToLog(out, true);
     }
-    else 
+    else
     {
         if (mImporterDebug)
         {
@@ -2211,8 +2248,8 @@ F32 LLModelPreview::genMeshOptimizerPerModel(LLModel *base_model, LLModel *targe
                 << " target Indices: " << target_indices
                 << " new Indices: " << size_new_indices
                 << " original count: " << size_indices << " (result error:" << result_error << ")";
-		    LL_DEBUGS() << out.str() << LL_ENDL;
-        	LLFloaterModelPreview::addStringToLog(out, true);
+            LL_DEBUGS() << out.str() << LL_ENDL;
+            LLFloaterModelPreview::addStringToLog(out, true);
         }
         // </FS:Beq>
     }
@@ -2472,17 +2509,17 @@ F32 LLModelPreview::genMeshOptimizerPerFace(LLModel *base_model, LLModel *target
         //     << " original count: " << size_indices
         //     << " error treshold: " << error_threshold
         //     << LL_ENDL;
-   		std::ostringstream out;
+        std::ostringstream out;
         out << "Negative result error from meshoptimizer for face " << face_idx
             << " of model " << target_model->mLabel
             << " target Indices: " << target_indices
             << " new Indices: " << size_new_indices
             << " original count: " << size_indices
             << " error treshold: " << error_threshold;
-		LL_WARNS() << out.str() << LL_ENDL;
-		LLFloaterModelPreview::addStringToLog(out, true);
+        LL_WARNS() << out.str() << LL_ENDL;
+        LLFloaterModelPreview::addStringToLog(out, true);
     }
-    else 
+    else
     {
         if (mImporterDebug)
         {
@@ -2493,8 +2530,8 @@ F32 LLModelPreview::genMeshOptimizerPerFace(LLModel *base_model, LLModel *target
                 << " new Indices: " << size_new_indices
                 << " original count: " << size_indices
                 << " error treshold: " << error_threshold << " (result error:" << result_error << ")";
-		    LL_DEBUGS("MeshUpload") << out.str() << LL_ENDL;
-        	LLFloaterModelPreview::addStringToLog(out, true);
+            LL_DEBUGS("MeshUpload") << out.str() << LL_ENDL;
+            LLFloaterModelPreview::addStringToLog(out, true);
         }
         // </FS:Beq>
     }
@@ -2523,7 +2560,7 @@ F32 LLModelPreview::genMeshOptimizerPerFace(LLModel *base_model, LLModel *target
                 << " original count: " << size_indices
                 << " error treshold: " << error_threshold;
             LL_INFOS("MeshUpload") << out.str() << LL_ENDL;
-        	LLFloaterModelPreview::addStringToLog(out, true);
+            LLFloaterModelPreview::addStringToLog(out, true);
         }
 
         // Face got optimized away
@@ -2572,7 +2609,7 @@ void LLModelPreview::genMeshOptimizerLODs(S32 which_lod, S32 meshopt_mode, U32 d
     // Allow LoD from -1 to LLModel::LOD_PHYSICS
     if (which_lod < -1 || which_lod > LLModel::NUM_LODS - 1)
     {
-        std::ostringstream out; 
+        std::ostringstream out;
         out << "Invalid level of detail: " << which_lod;
         LL_WARNS() << out.str() << LL_ENDL;
         LLFloaterModelPreview::addStringToLog(out, true); // <FS:Beq/> if you don't flash the log tab on error when do you?
@@ -3249,7 +3286,7 @@ void LLModelPreview::updateStatusMessages()
                     LL_INFOS() << out.str() << LL_ENDL;
                     LLFloaterModelPreview::addStringToLog(out, true);
                     out.str("");
-                    // </FS:Beq>                     
+                    // </FS:Beq>
                     break;
                 }
             }
@@ -3289,7 +3326,7 @@ void LLModelPreview::updateStatusMessages()
     //}
 #ifndef HAVOK_TPV
     has_physics_error |= PhysicsError::NOHAVOK;
-#endif 
+#endif
 
     auto physStatusIcon = mFMP->getChild<LLIconCtrl>("physics_status_message_icon");
 
@@ -3297,7 +3334,7 @@ void LLModelPreview::updateStatusMessages()
     {
         mFMP->childSetVisible("physics_status_message_text", true); //display or clear
         physStatusIcon->setVisible(true);
-        // The order here is important. 
+        // The order here is important.
         if (has_physics_error & PhysicsError::TOOMANYHULLS)
         {
             mFMP->childSetValue("physics_status_message_text", mFMP->getString("phys_status_hull_limit_exceeded"));
@@ -3483,7 +3520,7 @@ void LLModelPreview::updateStatusMessages()
         //    mViewOption["show_physics"] = false;
         //    fmp->childSetValue("show_physics", false);
         //}
-            
+
             // mViewOption["show_physics"] = true; // <FS:Beq/> merge LL uploader changes
             if (phys_hulls > 0)
             {
@@ -3561,7 +3598,7 @@ void LLModelPreview::updateStatusMessages()
             fmp->childEnable("simplify_cancel");
             fmp->childEnable("decompose_cancel");
         }
-        // <FS:Beq> move the closing bracket for the if(fmp) to prevent possible crash 
+        // <FS:Beq> move the closing bracket for the if(fmp) to prevent possible crash
         //    }
 
 
@@ -3806,7 +3843,7 @@ void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
 
             LLVertexBuffer* vb = NULL;
 
-            
+
 
             U32 mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_TEXCOORD0;
 
@@ -4072,7 +4109,7 @@ void LLModelPreview::lookupLODModelFiles(S32 lod)
     // }
     // Note: we cannot use gDirUtilp here because the getExtension forces a tolower which would then break uppercase extensions on Linux/Mac
     std::size_t offset = lod_filename.find_last_of('.');
-	std::string ext = (offset == std::string::npos || offset == 0) ? "" : lod_filename.substr(offset+1);
+    std::string ext = (offset == std::string::npos || offset == 0) ? "" : lod_filename.substr(offset+1);
     lod_filename = gDirUtilp->getDirName(lod_filename) + gDirUtilp->getDirDelimiter() + stripSuffix(gDirUtilp->getBaseFileName(lod_filename, true))  + getLodSuffix(next_lod) + "." + ext;
     std::ostringstream out;
     out << "Looking for file: " << lod_filename << " for LOD " << next_lod;
@@ -4228,7 +4265,7 @@ bool LLModelPreview::render()
     LLGLDisable no_blend(GL_BLEND);
     LLGLEnable cull(GL_CULL_FACE);
     LLGLDepthTest depth(GL_FALSE); // SL-12781 disable z-buffer to render background color
-    
+
     {
         gUIProgram.bind();
 
@@ -4300,7 +4337,7 @@ bool LLModelPreview::render()
                     upload_skin=auto_enable_weight_upload();
                     fmp->childSetValue("upload_skin", upload_skin);
 
-                    skin_weight = upload_skin && auto_enable_show_weights(); 
+                    skin_weight = upload_skin && auto_enable_show_weights();
                     mViewOption["show_skin_weight"] = skin_weight;
                     mFMP->childSetValue("show_skin_weight", skin_weight);
                     fmp->setViewOptionEnabled("show_skin_weight", upload_skin);
@@ -4326,7 +4363,7 @@ bool LLModelPreview::render()
                 }
                 // </FS:Beq>
                 mFMP->childEnable("upload_skin");
-                // mFMP->childSetValue("show_skin_weight", skin_weight); // <FS:Beq/> BUG-229632 
+                // mFMP->childSetValue("show_skin_weight", skin_weight); // <FS:Beq/> BUG-229632
 
             }
             else if ((flags & LEGACY_RIG_FLAG_TOO_MANY_JOINTS) > 0)
@@ -4444,9 +4481,9 @@ bool LLModelPreview::render()
     LLQuaternion av_rot = camera_rot;
     F32 camera_distance = skin_weight ? SKIN_WEIGHT_CAMERA_DISTANCE : mCameraDistance;
     LLViewerCamera::getInstance()->setOriginAndLookAt(
-        target_pos + ((LLVector3(camera_distance, 0.f, 0.f) + offset) * av_rot),		// camera
-        LLVector3::z_axis,																	// up
-        target_pos);											// point of interest
+        target_pos + ((LLVector3(camera_distance, 0.f, 0.f) + offset) * av_rot),        // camera
+        LLVector3::z_axis,                                                                  // up
+        target_pos);                                            // point of interest
 
 
     z_near = llclamp(z_far * 0.001f, 0.001f, 0.1f);
@@ -4512,7 +4549,7 @@ bool LLModelPreview::render()
                 LLMatrix4 mat = instance.mTransform;
 
                 gGL.multMatrix((GLfloat*)mat.mMatrix);
-        
+
                 U32 num_models = mVertexBuffer[mPreviewLOD][model].size();
                 for (U32 i = 0; i < num_models; ++i)
                 {
@@ -4690,7 +4727,7 @@ bool LLModelPreview::render()
                                     // gGL.setLineWidth(PREVIEW_PSYH_EDGE_WIDTH); // <FS> Line width OGL core profile fix by Rye Mutt
                                     gGL.diffuseColor4fv(phys_edge_col().mV);
                                     gGL.setLineWidth(phys_edge_width());
-                                    // </FS:Beq> 
+                                    // </FS:Beq>
                                     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
                                     buffer->drawRange(LLRender::TRIANGLES, 0, buffer->getNumVerts() - 1, buffer->getNumIndices(), 0);
 
@@ -4718,7 +4755,7 @@ bool LLModelPreview::render()
                         //show degenerate triangles
                         LLGLDepthTest depth(GL_TRUE, GL_TRUE, GL_ALWAYS);
                         LLGLDisable cull(GL_CULL_FACE);
-                        
+
                         // gGL.diffuseColor4f(1.f, 0.f, 0.f, 1.f); // <FS:Beq/> restore proper functionality
                         const LLVector4a scale(0.5f);
 
@@ -4808,9 +4845,9 @@ bool LLModelPreview::render()
             bool pelvis_recalc = false;
 
             LLViewerCamera::getInstance()->setOriginAndLookAt(
-                target_pos + ((LLVector3(camera_distance, 0.f, 0.f) + offset) * av_rot),		// camera
-                LLVector3::z_axis,																	// up
-                target_pos);											// point of interest
+                target_pos + ((LLVector3(camera_distance, 0.f, 0.f) + offset) * av_rot),        // camera
+                LLVector3::z_axis,                                                                  // up
+                target_pos);                                            // point of interest
 
             for (LLModelLoader::scene::iterator iter = mScene[mPreviewLOD].begin(); iter != mScene[mPreviewLOD].end(); ++iter)
             {
@@ -4967,22 +5004,22 @@ bool LLModelPreview::render()
 void LLModelPreview::renderGroundPlane(float z_offset)
 {   // Not necesarilly general - beware - but it seems to meet the needs of LLModelPreview::render
 
-	gGL.diffuseColor3f( 1.0f, 0.0f, 1.0f );
+    gGL.diffuseColor3f( 1.0f, 0.0f, 1.0f );
 
-	gGL.begin(LLRender::LINES);
-	gGL.vertex3fv(mGroundPlane[0].mV);
-	gGL.vertex3fv(mGroundPlane[1].mV);
+    gGL.begin(LLRender::LINES);
+    gGL.vertex3fv(mGroundPlane[0].mV);
+    gGL.vertex3fv(mGroundPlane[1].mV);
 
-	gGL.vertex3fv(mGroundPlane[1].mV);
-	gGL.vertex3fv(mGroundPlane[2].mV);
+    gGL.vertex3fv(mGroundPlane[1].mV);
+    gGL.vertex3fv(mGroundPlane[2].mV);
 
-	gGL.vertex3fv(mGroundPlane[2].mV);
-	gGL.vertex3fv(mGroundPlane[3].mV);
+    gGL.vertex3fv(mGroundPlane[2].mV);
+    gGL.vertex3fv(mGroundPlane[3].mV);
 
-	gGL.vertex3fv(mGroundPlane[3].mV);
-	gGL.vertex3fv(mGroundPlane[0].mV);
+    gGL.vertex3fv(mGroundPlane[3].mV);
+    gGL.vertex3fv(mGroundPlane[0].mV);
 
-	gGL.end();
+    gGL.end();
 }
 
 
@@ -5012,7 +5049,7 @@ void LLModelPreview::zoom(F32 zoom_amt)
     F32 new_zoom = mCameraZoom + zoom_amt;
     // TODO: stop clamping in render
     // <FS:Beq> restore settings control
-    // mCameraZoom = llclamp(new_zoom, 1.f, PREVIEW_ZOOM_LIMIT); 
+    // mCameraZoom = llclamp(new_zoom, 1.f, PREVIEW_ZOOM_LIMIT);
     static LLCachedControl<F32> zoom_limit(gSavedSettings, "MeshPreviewZoomLimit");
     mCameraZoom = llclamp(new_zoom, 1.f, zoom_limit());
     // </FS:Beq>

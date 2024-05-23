@@ -30,29 +30,29 @@
 class LLSnapshotModel
 {
 public:
-	enum ESnapshotType
-	{
-		SNAPSHOT_POSTCARD,
-		SNAPSHOT_TEXTURE,
-		SNAPSHOT_LOCAL,
-		SNAPSHOT_WEB,
-		SNAPSHOT_FLICKR,
-		SNAPSHOT_NONE // <FS:Ansariel> Fix XUI parser warnings
-	};
+    enum ESnapshotType
+    {
+        SNAPSHOT_POSTCARD,
+        SNAPSHOT_TEXTURE,
+        SNAPSHOT_LOCAL,
+        SNAPSHOT_WEB,
+        SNAPSHOT_FLICKR,
+        SNAPSHOT_NONE // <FS:Ansariel> Fix XUI parser warnings
+    };
 
-	typedef enum e_snapshot_format
-	{
-		SNAPSHOT_FORMAT_PNG,
-		SNAPSHOT_FORMAT_JPEG,
-		SNAPSHOT_FORMAT_BMP
-	} ESnapshotFormat;
+    typedef enum e_snapshot_format
+    {
+        SNAPSHOT_FORMAT_PNG,
+        SNAPSHOT_FORMAT_JPEG,
+        SNAPSHOT_FORMAT_BMP
+    } ESnapshotFormat;
 
-	typedef enum
-	{
-		SNAPSHOT_TYPE_COLOR,
-		SNAPSHOT_TYPE_DEPTH,
-		SNAPSHOT_TYPE_DEPTH24 // <FS:Ansariel> FIRE-15667: 24bit depth maps
-	} ESnapshotLayerType;
+    typedef enum
+    {
+        SNAPSHOT_TYPE_COLOR,
+        SNAPSHOT_TYPE_DEPTH,
+        SNAPSHOT_TYPE_DEPTH24 // <FS:Ansariel> FIRE-15667: 24bit depth maps
+    } ESnapshotLayerType;
 };
 
 #endif // LL_LLSNAPSHOTMODEL_H

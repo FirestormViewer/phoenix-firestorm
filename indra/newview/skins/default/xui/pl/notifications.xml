@@ -112,10 +112,15 @@ Inicjalizacja Marketplace nieudana z powodu błędu sieci lub systemu. Spróbuj 
 
 &apos;[ERROR_CODE]&apos;
 	</notification>
+	<notification name="InvalidKeystroke">
+		Naciśnięto nieprawidłowy klawisz.
+[REASON].
+Wprowadź poprawny tekst.
+	</notification>
 	<notification name="MerchantForceValidateListing">
 		Aby wylistowanie tej rzeczy było możliwe hierarchia w jej zawartości została automatycznie naprawiona.
 		<usetemplate ignoretext="Ostrzegaj, gdy wylistowanie rzeczy automatycznie naprawia hierarchię zawartości" name="okignore" />
-    </notification>
+	</notification>
 	<notification name="ConfirmMerchantActiveChange">
 		Jeśli kontynuujesz, to zmieni się aktywna zawartość tej rzeczy. Czy chcesz kontynuować?
 		<usetemplate ignoretext="Potwierdź przed zmodyfikowaniem aktywnej rzeczy na Marketplace" name="okcancelignore" notext="Anuluj" />
@@ -1710,14 +1715,14 @@ Otwieranie stron internetowych z nieznanego źródła może narazić Twój kompu
 		<usetemplate ignoretext="Potwierdź zanim zwrócisz obiekty do ich właścicieli" name="okcancelignore" notext="Anuluj" />
 	</notification>
 	<notification name="GroupLeaveConfirmMember">
-		Jesteś członkiem grupy &lt;nolink&gt;[GROUP]&lt;/nolink&gt;.
-Chcesz ją opuścić?
-		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+		Opuścić grupę &apos;&lt;nolink&gt;[GROUP]&lt;/nolink&gt;&apos;?
+W tej chwili opłata za ponowne dołączenie do tej grupy wynosi [COST]L$.
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Opuść" />
 	</notification>
-	<notification name="GroupLeaveConfirmMemberWithFee">
-		Jesteś członkiem grupy &lt;nolink&gt;[GROUP]&lt;/nolink&gt;. Ponowne dołączenie będzie kosztować [AMOUNT] L$.
-Chcesz ją opuścić?
-		<usetemplate name="okcancelbuttons" notext="Anuluj" />
+	<notification name="GroupLeaveConfirmMemberNoFee">
+		Opuścić grupę &apos;&lt;nolink&gt;[GROUP]&lt;/nolink&gt;&apos;?
+Obecnie ponowne dołączenie do tej grupy nie wiąże się z żadnymi opłatami.
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Opuść" />
 	</notification>
 	<notification name="OwnerCannotLeaveGroup">
 		Nie możesz opuścić tej grupy, ponieważ jesteś ostatnim z jej właścicieli. Przydziel najpierw innemu użytkownikowi rolę właściciela.
@@ -2382,6 +2387,15 @@ Nie możesz tego cofnąć.
 
 Czy na pewno chcesz je skasować?
 		<usetemplate ignoretext="Potwierdź przed kasowaniem filtrowanych obiektów" name="okcancelignore" notext="Anuluj" />
+	</notification>
+	<notification name="DeleteWornItems">
+		Niektóre elementy, które chcesz usunąć, aktualnie znajdują się na Twoim awatarze.
+Usunąć je z Twojego awatara?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Zdejmij element(y) i usuń" />
+	</notification>
+	<notification name="CantDeleteRequiredClothing">
+		Niektóre elementy, które chcesz usunąć, są warstwami wymaganymi (skórka, kształt, włosy, oczy).
+Przed usunięciem tych elementów należy je najpierw czymś zastąpić.
 	</notification>
 	<notification name="DeleteThumbnail">
 		Usunąć obraz tego elementu? Nie można tego cofnąć.
@@ -5177,6 +5191,13 @@ Rozważ wymianę obiektów, które wyglądają na zdeformowane z taką wartości
 Mnożnik LOD >3: Zwiększa lag. Zalecane tylko dla fotografii.
 Mnożnik LOD >4: Używaj tylko w specjalnych przypadkach. Resetuje się po restarcie.
 Mnożnik LOD >8: Brak widocznych efektów. Może powodować błędy.
+	</notification>
+	<notification name="OverrideVRAMWarning">
+		UWAGA: Wyłączenie automatycznego wykrywania VRAM może zdestabilizować Twój komputer.
+
+Większość użytkowników powinna pozostawić wykrywanie włączone i pozwolić przeglądarce oraz systemowi operacyjnemu określać poprawną wartość.
+
+To ustawienie jest przeznaczone dla przypadków, gdy wykrywanie VRAM zgłasza nieprawidłowe wartości. Używaj ostrożnie, w razie wątpliwości zasięgnij porady Wsparcia.
 	</notification>
 	<notification name="CurrencyURIOverrideReceived">
 		W tym regionie wybrano portal walutowy strony trzeciej.

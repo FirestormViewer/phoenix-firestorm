@@ -1,4 +1,4 @@
-/** 
+/**
  * @file llinventoryfunctions.h
  * @brief Miscellaneous inventory-related functions and classes
  * class definition
@@ -6,21 +6,21 @@
  * $LicenseInfo:firstyear=2001&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -38,7 +38,7 @@ const S32 COMPUTE_STOCK_INFINITE = -1;
 const S32 COMPUTE_STOCK_NOT_EVALUATED = -2;
 
 // <FS:TT> - Firestorm folder name for use by AO, bridge and possibly others
-#define ROOT_FIRESTORM_FOLDER 	"#Firestorm"
+#define ROOT_FIRESTORM_FOLDER   "#Firestorm"
 // </FS:TT>
 
 /********************************************************************************
@@ -51,17 +51,19 @@ bool get_is_parent_to_worn_item(const LLUUID& id);
 
 // Is this item or its baseitem is worn, attached, etc...
 bool get_is_item_worn(const LLUUID& id);
+bool get_is_item_worn(const LLViewerInventoryItem* item);
 
 // Could this item be worn (correct type + not already being worn)
 bool get_can_item_be_worn(const LLUUID& id);
 
-bool get_is_item_removable(const LLInventoryModel* model, const LLUUID& id);
+bool get_is_item_removable(const LLInventoryModel* model, const LLUUID& id, bool check_worn);
 
 // Performs the appropiate edit action (if one exists) for this item
 bool get_is_item_editable(const LLUUID& inv_item_id);
 void handle_item_edit(const LLUUID& inv_item_id);
 
 bool get_is_category_removable(const LLInventoryModel* model, const LLUUID& id);
+bool get_is_category_and_children_removable(LLInventoryModel* model, const LLUUID& folder_id, bool check_worn);
 
 bool get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id);
 
@@ -191,10 +193,10 @@ private:
 class LLInventoryCollectFunctor
 {
 public:
-	virtual ~LLInventoryCollectFunctor(){};
-	virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item) = 0;
+    virtual ~LLInventoryCollectFunctor(){};
+    virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item) = 0;
 
-	static bool itemTransferCommonlyAllowed(const LLInventoryItem* item);
+    static bool itemTransferCommonlyAllowed(const LLInventoryItem* item);
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -207,12 +209,12 @@ class LLViewerInventoryItem;
 class LLAssetIDMatches : public LLInventoryCollectFunctor
 {
 public:
-	LLAssetIDMatches(const LLUUID& asset_id) : mAssetID(asset_id) {}
-	virtual ~LLAssetIDMatches() {}
-	bool operator()(LLInventoryCategory* cat, LLInventoryItem* item);
-	
+    LLAssetIDMatches(const LLUUID& asset_id) : mAssetID(asset_id) {}
+    virtual ~LLAssetIDMatches() {}
+    bool operator()(LLInventoryCategory* cat, LLInventoryItem* item);
+
 protected:
-	LLUUID mAssetID;
+    LLUUID mAssetID;
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -224,12 +226,12 @@ protected:
 class LLLinkedItemIDMatches : public LLInventoryCollectFunctor
 {
 public:
-	LLLinkedItemIDMatches(const LLUUID& item_id) : mBaseItemID(item_id) {}
-	virtual ~LLLinkedItemIDMatches() {}
-	bool operator()(LLInventoryCategory* cat, LLInventoryItem* item);
-	
+    LLLinkedItemIDMatches(const LLUUID& item_id) : mBaseItemID(item_id) {}
+    virtual ~LLLinkedItemIDMatches() {}
+    bool operator()(LLInventoryCategory* cat, LLInventoryItem* item);
+
 protected:
-	LLUUID mBaseItemID;
+    LLUUID mBaseItemID;
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -242,12 +244,12 @@ protected:
 class LLIsType : public LLInventoryCollectFunctor
 {
 public:
-	LLIsType(LLAssetType::EType type) : mType(type) {}
-	virtual ~LLIsType() {}
-	virtual bool operator()(LLInventoryCategory* cat,
-							LLInventoryItem* item);
+    LLIsType(LLAssetType::EType type) : mType(type) {}
+    virtual ~LLIsType() {}
+    virtual bool operator()(LLInventoryCategory* cat,
+                            LLInventoryItem* item);
 protected:
-	LLAssetType::EType mType;
+    LLAssetType::EType mType;
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -259,12 +261,12 @@ protected:
 class LLIsNotType : public LLInventoryCollectFunctor
 {
 public:
-	LLIsNotType(LLAssetType::EType type) : mType(type) {}
-	virtual ~LLIsNotType() {}
-	virtual bool operator()(LLInventoryCategory* cat,
-							LLInventoryItem* item);
+    LLIsNotType(LLAssetType::EType type) : mType(type) {}
+    virtual ~LLIsNotType() {}
+    virtual bool operator()(LLInventoryCategory* cat,
+                            LLInventoryItem* item);
 protected:
-	LLAssetType::EType mType;
+    LLAssetType::EType mType;
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -278,12 +280,12 @@ protected:
 class LLIsOfAssetType : public LLInventoryCollectFunctor
 {
 public:
-	LLIsOfAssetType(LLAssetType::EType type) : mType(type) {}
-	virtual ~LLIsOfAssetType() {}
-	virtual bool operator()(LLInventoryCategory* cat,
-							LLInventoryItem* item);
+    LLIsOfAssetType(LLAssetType::EType type) : mType(type) {}
+    virtual ~LLIsOfAssetType() {}
+    virtual bool operator()(LLInventoryCategory* cat,
+                            LLInventoryItem* item);
 protected:
-	LLAssetType::EType mType;
+    LLAssetType::EType mType;
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -311,23 +313,23 @@ protected:
 class LLIsValidItemLink : public LLInventoryCollectFunctor
 {
 public:
-	virtual bool operator()(LLInventoryCategory* cat,
-							LLInventoryItem* item);
+    virtual bool operator()(LLInventoryCategory* cat,
+                            LLInventoryItem* item);
 };
 
 class LLIsTypeWithPermissions : public LLInventoryCollectFunctor
 {
 public:
-	LLIsTypeWithPermissions(LLAssetType::EType type, const PermissionBit perms, const LLUUID &agent_id, const LLUUID &group_id) 
-		: mType(type), mPerm(perms), mAgentID(agent_id), mGroupID(group_id) {}
-	virtual ~LLIsTypeWithPermissions() {}
-	virtual bool operator()(LLInventoryCategory* cat,
-							LLInventoryItem* item);
+    LLIsTypeWithPermissions(LLAssetType::EType type, const PermissionBit perms, const LLUUID &agent_id, const LLUUID &group_id)
+        : mType(type), mPerm(perms), mAgentID(agent_id), mGroupID(group_id) {}
+    virtual ~LLIsTypeWithPermissions() {}
+    virtual bool operator()(LLInventoryCategory* cat,
+                            LLInventoryItem* item);
 protected:
-	LLAssetType::EType mType;
-	PermissionBit mPerm;
-	LLUUID			mAgentID;
-	LLUUID			mGroupID;
+    LLAssetType::EType mType;
+    PermissionBit mPerm;
+    LLUUID          mAgentID;
+    LLUUID          mGroupID;
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -339,10 +341,10 @@ protected:
 class LLBuddyCollector : public LLInventoryCollectFunctor
 {
 public:
-	LLBuddyCollector() {}
-	virtual ~LLBuddyCollector() {}
-	virtual bool operator()(LLInventoryCategory* cat,
-							LLInventoryItem* item);
+    LLBuddyCollector() {}
+    virtual ~LLBuddyCollector() {}
+    virtual bool operator()(LLInventoryCategory* cat,
+                            LLInventoryItem* item);
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -354,13 +356,13 @@ public:
 class LLUniqueBuddyCollector : public LLInventoryCollectFunctor
 {
 public:
-	LLUniqueBuddyCollector() {}
-	virtual ~LLUniqueBuddyCollector() {}
-	virtual bool operator()(LLInventoryCategory* cat,
-							LLInventoryItem* item);
+    LLUniqueBuddyCollector() {}
+    virtual ~LLUniqueBuddyCollector() {}
+    virtual bool operator()(LLInventoryCategory* cat,
+                            LLInventoryItem* item);
 
 protected:
-	std::set<LLUUID> mSeen;
+    std::set<LLUUID> mSeen;
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -372,12 +374,12 @@ protected:
 class LLParticularBuddyCollector : public LLInventoryCollectFunctor
 {
 public:
-	LLParticularBuddyCollector(const LLUUID& id) : mBuddyID(id) {}
-	virtual ~LLParticularBuddyCollector() {}
-	virtual bool operator()(LLInventoryCategory* cat,
-							LLInventoryItem* item);
+    LLParticularBuddyCollector(const LLUUID& id) : mBuddyID(id) {}
+    virtual ~LLParticularBuddyCollector() {}
+    virtual bool operator()(LLInventoryCategory* cat,
+                            LLInventoryItem* item);
 protected:
-	LLUUID mBuddyID;
+    LLUUID mBuddyID;
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -388,12 +390,12 @@ protected:
 class LLNameCategoryCollector : public LLInventoryCollectFunctor
 {
 public:
-	LLNameCategoryCollector(const std::string& name) : mName(name) {}
-	virtual ~LLNameCategoryCollector() {}
-	virtual bool operator()(LLInventoryCategory* cat,
-							LLInventoryItem* item);
+    LLNameCategoryCollector(const std::string& name) : mName(name) {}
+    virtual ~LLNameCategoryCollector() {}
+    virtual bool operator()(LLInventoryCategory* cat,
+                            LLInventoryItem* item);
 protected:
-	std::string mName;
+    std::string mName;
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -404,11 +406,11 @@ protected:
 class LLFindCOFValidItems : public LLInventoryCollectFunctor
 {
 public:
-	LLFindCOFValidItems() {}
-	virtual ~LLFindCOFValidItems() {}
-	virtual bool operator()(LLInventoryCategory* cat,
-							LLInventoryItem* item);
-	
+    LLFindCOFValidItems() {}
+    virtual ~LLFindCOFValidItems() {}
+    virtual bool operator()(LLInventoryCategory* cat,
+                            LLInventoryItem* item);
+
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -431,23 +433,23 @@ public:
 class LLFindByMask : public LLInventoryCollectFunctor
 {
 public:
-	LLFindByMask(U64 mask)
-		: mFilterMask(mask)
-	{}
+    LLFindByMask(U64 mask)
+        : mFilterMask(mask)
+    {}
 
-	virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
-	{
-		//converting an inventory type to a bitmap filter mask
-		if(item && (mFilterMask & (1LL << item->getInventoryType())) )
-		{
-			return true;
-		}
+    virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
+    {
+        //converting an inventory type to a bitmap filter mask
+        if(item && (mFilterMask & (1LL << item->getInventoryType())) )
+        {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 private:
-	U64 mFilterMask;
+    U64 mFilterMask;
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -458,27 +460,27 @@ private:
 class LLFindNonLinksByMask : public LLInventoryCollectFunctor
 {
 public:
-	LLFindNonLinksByMask(U64 mask)
-		: mFilterMask(mask)
-	{}
+    LLFindNonLinksByMask(U64 mask)
+        : mFilterMask(mask)
+    {}
 
-	virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
-	{
-		if(item && !item->getIsLinkType() && (mFilterMask & (1LL << item->getInventoryType())) )
-		{
-			return true;
-		}
+    virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
+    {
+        if(item && !item->getIsLinkType() && (mFilterMask & (1LL << item->getInventoryType())) )
+        {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	void setFilterMask(U64 mask)
-	{
-		mFilterMask = mask;
-	}
+    void setFilterMask(U64 mask)
+    {
+        mFilterMask = mask;
+    }
 
 private:
-	U64 mFilterMask;
+    U64 mFilterMask;
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -489,10 +491,10 @@ private:
 class LLFindWearables : public LLInventoryCollectFunctor
 {
 public:
-	LLFindWearables() {}
-	virtual ~LLFindWearables() {}
-	virtual bool operator()(LLInventoryCategory* cat,
-							LLInventoryItem* item);
+    LLFindWearables() {}
+    virtual ~LLFindWearables() {}
+    virtual bool operator()(LLInventoryCategory* cat,
+                            LLInventoryItem* item);
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -503,24 +505,24 @@ public:
 class LLFindWearablesEx : public LLInventoryCollectFunctor
 {
 public:
-	LLFindWearablesEx(bool is_worn, bool include_body_parts = true);
-	virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item);
+    LLFindWearablesEx(bool is_worn, bool include_body_parts = true);
+    virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item);
 private:
-	bool mIncludeBodyParts;
-	bool mIsWorn;
+    bool mIncludeBodyParts;
+    bool mIsWorn;
 };
 
 //Inventory collect functor collecting wearables of a specific wearable type
 class LLFindWearablesOfType : public LLInventoryCollectFunctor
 {
 public:
-	LLFindWearablesOfType(LLWearableType::EType type) : mWearableType(type) {}
-	virtual ~LLFindWearablesOfType() {}
-	virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item);
-	void setType(LLWearableType::EType type);
+    LLFindWearablesOfType(LLWearableType::EType type) : mWearableType(type) {}
+    virtual ~LLFindWearablesOfType() {}
+    virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item);
+    void setType(LLWearableType::EType type);
 
 private:
-	LLWearableType::EType mWearableType;
+    LLWearableType::EType mWearableType;
 };
 
 class LLIsTextureType : public LLInventoryCollectFunctor
@@ -536,48 +538,48 @@ public:
 class LLFindActualWearablesOfType : public LLFindWearablesOfType
 {
 public:
-	LLFindActualWearablesOfType(LLWearableType::EType type) : LLFindWearablesOfType(type) {}
-	virtual ~LLFindActualWearablesOfType() {}
-	virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
-	{
-		if (item && item->getIsLinkType()) return false;
-		return LLFindWearablesOfType::operator()(cat, item);
-	}
+    LLFindActualWearablesOfType(LLWearableType::EType type) : LLFindWearablesOfType(type) {}
+    virtual ~LLFindActualWearablesOfType() {}
+    virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
+    {
+        if (item && item->getIsLinkType()) return false;
+        return LLFindWearablesOfType::operator()(cat, item);
+    }
 };
 
 /* Filters out items of a particular asset type */
 class LLIsTypeActual : public LLIsType
 {
 public:
-	LLIsTypeActual(LLAssetType::EType type) : LLIsType(type) {}
-	virtual ~LLIsTypeActual() {}
-	virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
-	{
-		if (item && item->getIsLinkType()) return false;
-		return LLIsType::operator()(cat, item);
-	}
+    LLIsTypeActual(LLAssetType::EType type) : LLIsType(type) {}
+    virtual ~LLIsTypeActual() {}
+    virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
+    {
+        if (item && item->getIsLinkType()) return false;
+        return LLIsType::operator()(cat, item);
+    }
 };
 
 // Collect non-removable folders and items.
 class LLFindNonRemovableObjects : public LLInventoryCollectFunctor
 {
 public:
-	virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item);
+    virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item);
 };
 
 // [SL:KB] - Patch: UI-Misc | Checked: 2014-03-02 (Catznip-3.6)
 class LLFindLandmarks : public  LLInventoryCollectFunctor
 {
 public:
-	LLFindLandmarks(bool fFilterDuplicates, bool fFilterSelf);
-	virtual ~LLFindLandmarks() { }
+    LLFindLandmarks(bool fFilterDuplicates, bool fFilterSelf);
+    virtual ~LLFindLandmarks() { }
 
-	/*virtual*/ bool operator()(LLInventoryCategory* cat, LLInventoryItem* item);
+    /*virtual*/ bool operator()(LLInventoryCategory* cat, LLInventoryItem* item);
 
 protected:
-	bool              m_fFilterDuplicates;
-	std::list<LLUUID> m_AssetIds;
-	bool              m_fFilterSelf;
+    bool              m_fFilterDuplicates;
+    std::list<LLUUID> m_AssetIds;
+    bool              m_fFilterSelf;
 };
 // [/SL:KB]
 
@@ -592,28 +594,28 @@ class LLFolderView;
 class LLInventoryState
 {
 public:
-	// HACK: Until we can route this info through the instant message hierarchy
-	static bool sWearNewClothing;
-	static LLUUID sWearNewClothingTransactionID;	// wear all clothing in this transaction	
+    // HACK: Until we can route this info through the instant message hierarchy
+    static bool sWearNewClothing;
+    static LLUUID sWearNewClothingTransactionID;    // wear all clothing in this transaction
 };
 
 struct LLInventoryAction
 {
-	static void doToSelected(LLInventoryModel* model, LLFolderView* root, const std::string& action, bool user_confirm = true);
-	static void callback_doToSelected(const LLSD& notification, const LLSD& response, class LLInventoryModel* model, class LLFolderView* root, const std::string& action);
-	static void callback_copySelected(const LLSD& notification, const LLSD& response, class LLInventoryModel* model, class LLFolderView* root, const std::string& action);
-	static void onItemsRemovalConfirmation(const LLSD& notification, const LLSD& response, LLHandle<LLFolderView> root);
-	static void removeItemFromDND(LLFolderView* root);
+    static void doToSelected(LLInventoryModel* model, LLFolderView* root, const std::string& action, bool user_confirm = true);
+    static void callback_doToSelected(const LLSD& notification, const LLSD& response, class LLInventoryModel* model, class LLFolderView* root, const std::string& action);
+    static void callback_copySelected(const LLSD& notification, const LLSD& response, class LLInventoryModel* model, class LLFolderView* root, const std::string& action);
+    static void onItemsRemovalConfirmation(const LLSD& notification, const LLSD& response, LLHandle<LLFolderView> root);
+    static void removeItemFromDND(LLFolderView* root);
 
     static void saveMultipleTextures(const std::vector<std::string>& filenames, std::set<LLFolderViewItem*> selected_items, LLInventoryModel* model);
 
-	// <FS:Ansariel> Undo delete item confirmation per-session annoyance
+    // <FS:Ansariel> Undo delete item confirmation per-session annoyance
     //static bool sDeleteConfirmationDisplayed;
 
 private:
-	static void buildMarketplaceFolders(LLFolderView* root);
-	static void updateMarketplaceFolders();
-	static std::list<LLUUID> sMarketplaceFolders; // Marketplace folders that will need update once the action is completed
+    static void buildMarketplaceFolders(LLFolderView* root);
+    static void updateMarketplaceFolders();
+    static std::list<LLUUID> sMarketplaceFolders; // Marketplace folders that will need update once the action is completed
 };
 
 

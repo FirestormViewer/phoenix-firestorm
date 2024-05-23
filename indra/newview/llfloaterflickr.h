@@ -1,4 +1,4 @@
-/** 
+/**
 * @file   llfloaterflickr.h
 * @brief  Header file for llfloaterflickr
 * @author cho@lindenlab.com
@@ -39,56 +39,56 @@ class LLFloaterBigPreview;
 class LLFlickrPhotoPanel : public LLPanel
 {
 public:
-	LLFlickrPhotoPanel();
-	~LLFlickrPhotoPanel();
+    LLFlickrPhotoPanel();
+    ~LLFlickrPhotoPanel();
 
-	bool postBuild();
-	S32 notify(const LLSD& info);
-	void draw();
+    bool postBuild();
+    S32 notify(const LLSD& info);
+    void draw();
 
-	LLSnapshotLivePreview* getPreviewView();
-	void onVisibilityChange(bool new_visibility);
-	void onClickNewSnapshot();
+    LLSnapshotLivePreview* getPreviewView();
+    void onVisibilityChange(bool new_visibility);
+    void onClickNewSnapshot();
     void onClickBigPreview();
-	void onSend();
-	bool onFlickrConnectStateChange(const LLSD& data);
+    void onSend();
+    bool onFlickrConnectStateChange(const LLSD& data);
 
-	void sendPhoto();
-	void clearAndClose();
+    void sendPhoto();
+    void clearAndClose();
 
-	void updateControls();
-	void updateResolution(bool do_update);
-	void checkAspectRatio(S32 index);
-	LLUICtrl* getRefreshBtn();
+    void updateControls();
+    void updateResolution(bool do_update);
+    void checkAspectRatio(S32 index);
+    LLUICtrl* getRefreshBtn();
 
-	// <FS:Ansariel> Exodus' flickr upload
-	/*virtual*/ void onOpen(const LLSD& key);
-	void flickrAuthResponse(bool success, const LLSD& response);
-	void uploadCallback(bool success, const LLSD& response);
-	// </FS:Ansariel>
+    // <FS:Ansariel> Exodus' flickr upload
+    /*virtual*/ void onOpen(const LLSD& key);
+    void flickrAuthResponse(bool success, const LLSD& response);
+    void uploadCallback(bool success, const LLSD& response);
+    // </FS:Ansariel>
 
 private:
     bool isPreviewVisible();
     void attachPreview();
 
-	// <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
-	bool checkImageSize(LLSnapshotLivePreview* previewp, S32& width, S32& height, bool isWidthChanged, S32 max_value);
+    // <FS:Ansariel> FIRE-15112: Allow custom resolution for SLShare
+    bool checkImageSize(LLSnapshotLivePreview* previewp, S32& width, S32& height, bool isWidthChanged, S32 max_value);
 
-	LLHandle<LLView> mPreviewHandle;
+    LLHandle<LLView> mPreviewHandle;
 
-	LLUICtrl * mResolutionComboBox;
-	LLUICtrl * mFilterComboBox;
-	LLUICtrl * mRefreshBtn;
-	LLUICtrl * mWorkingLabel;
-	LLUICtrl * mThumbnailPlaceholder;
-	LLUICtrl * mTitleTextBox;
-	LLUICtrl * mDescriptionTextBox;
-	LLUICtrl * mLocationCheckbox;
-	LLUICtrl * mTagsTextBox;
-	LLUICtrl * mRatingComboBox;
-	LLUICtrl * mPostButton;
-	LLUICtrl * mCancelButton;
-	LLButton * mBtnPreview;
+    LLUICtrl * mResolutionComboBox;
+    LLUICtrl * mFilterComboBox;
+    LLUICtrl * mRefreshBtn;
+    LLUICtrl * mWorkingLabel;
+    LLUICtrl * mThumbnailPlaceholder;
+    LLUICtrl * mTitleTextBox;
+    LLUICtrl * mDescriptionTextBox;
+    LLUICtrl * mLocationCheckbox;
+    LLUICtrl * mTagsTextBox;
+    LLUICtrl * mRatingComboBox;
+    LLUICtrl * mPostButton;
+    LLUICtrl * mCancelButton;
+    LLButton * mBtnPreview;
 
     LLFloaterBigPreview * mBigPreviewFloater;
 };
@@ -96,47 +96,47 @@ private:
 class LLFlickrAccountPanel : public LLPanel
 {
 public:
-	LLFlickrAccountPanel();
-	bool postBuild();
-	void draw();
+    LLFlickrAccountPanel();
+    bool postBuild();
+    void draw();
 
 private:
-	void onVisibilityChange(bool new_visibility);
-	bool onFlickrConnectStateChange(const LLSD& data);
-	bool onFlickrConnectInfoChange();
-	void onConnect();
-	void onUseAnotherAccount();
-	void onDisconnect();
+    void onVisibilityChange(bool new_visibility);
+    bool onFlickrConnectStateChange(const LLSD& data);
+    bool onFlickrConnectInfoChange();
+    void onConnect();
+    void onUseAnotherAccount();
+    void onDisconnect();
 
-	void showConnectButton();
-	void hideConnectButton();
-	void showDisconnectedLayout();
-	void showConnectedLayout();
+    void showConnectButton();
+    void hideConnectButton();
+    void showDisconnectedLayout();
+    void showConnectedLayout();
 
-	LLTextBox * mAccountCaptionLabel;
-	LLTextBox * mAccountNameLabel;
-	LLUICtrl * mPanelButtons;
-	LLUICtrl * mConnectButton;
-	LLUICtrl * mDisconnectButton;
+    LLTextBox * mAccountCaptionLabel;
+    LLTextBox * mAccountNameLabel;
+    LLUICtrl * mPanelButtons;
+    LLUICtrl * mConnectButton;
+    LLUICtrl * mDisconnectButton;
 };
 
 
 class LLFloaterFlickr : public LLFloater
 {
 public:
-	LLFloaterFlickr(const LLSD& key);
-	bool postBuild();
-	void draw();
-	void onClose(bool app_quitting);
-	void onCancel();
-	
-	void showPhotoPanel();
+    LLFloaterFlickr(const LLSD& key);
+    bool postBuild();
+    void draw();
+    void onClose(bool app_quitting);
+    void onCancel();
 
-	// <FS:Ansariel> Exodus' flickr upload
-	void onOpen(const LLSD& key);
+    void showPhotoPanel();
+
+    // <FS:Ansariel> Exodus' flickr upload
+    void onOpen(const LLSD& key);
 
 private:
-	LLFlickrPhotoPanel* mFlickrPhotoPanel;
+    LLFlickrPhotoPanel* mFlickrPhotoPanel;
     LLTextBox* mStatusErrorText;
     LLTextBox* mStatusLoadingText;
     LLUICtrl*  mStatusLoadingIndicator;

@@ -1,25 +1,25 @@
-/** 
+/**
  * @file llviewermenu.h
  * @brief Builds menus out of objects
  *
  * $LicenseInfo:firstyear=2002&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -191,38 +191,38 @@ void destroy_texture(const LLUUID& id);
 class LLViewerMenuHolderGL : public LLMenuHolderGL
 {
 public:
-	struct Params : public LLInitParam::Block<Params, LLMenuHolderGL::Params>
-	{};
+    struct Params : public LLInitParam::Block<Params, LLMenuHolderGL::Params>
+    {};
 
-	LLViewerMenuHolderGL(const Params& p);
+    LLViewerMenuHolderGL(const Params& p);
 
-	virtual bool hideMenus();
-	
-	void setParcelSelection(LLSafeHandle<LLParcelSelection> selection);
-	void setObjectSelection(LLSafeHandle<LLObjectSelection> selection);
+    virtual bool hideMenus();
 
-	virtual const LLRect getMenuRect() const;
+    void setParcelSelection(LLSafeHandle<LLParcelSelection> selection);
+    void setObjectSelection(LLSafeHandle<LLObjectSelection> selection);
+
+    virtual const LLRect getMenuRect() const;
 
 protected:
-	LLSafeHandle<LLParcelSelection> mParcelSelection;
-	LLSafeHandle<LLObjectSelection> mObjectSelection;
+    LLSafeHandle<LLParcelSelection> mParcelSelection;
+    LLSafeHandle<LLObjectSelection> mObjectSelection;
 };
 
-extern LLMenuBarGL*		gMenuBarView;
-//extern LLView*			gMenuBarHolder;
-extern LLMenuGL*		gEditMenu;
-extern LLMenuGL*		gPopupMenuView;
-extern LLViewerMenuHolderGL*	gMenuHolder;
-extern LLMenuBarGL*		gLoginMenuBarView;
+extern LLMenuBarGL*     gMenuBarView;
+//extern LLView*            gMenuBarHolder;
+extern LLMenuGL*        gEditMenu;
+extern LLMenuGL*        gPopupMenuView;
+extern LLViewerMenuHolderGL*    gMenuHolder;
+extern LLMenuBarGL*     gLoginMenuBarView;
 
 // Context menus in 3D scene
-extern LLContextMenu		*gMenuAvatarSelf;
-extern LLContextMenu		*gMenuAvatarOther;
-extern LLContextMenu		*gMenuObject;
-extern LLContextMenu		*gMenuAttachmentSelf;
-extern LLContextMenu		*gMenuAttachmentOther;
-extern LLContextMenu		*gMenuLand;
-extern LLContextMenu		*gMenuMuteParticle;
+extern LLContextMenu        *gMenuAvatarSelf;
+extern LLContextMenu        *gMenuAvatarOther;
+extern LLContextMenu        *gMenuObject;
+extern LLContextMenu        *gMenuAttachmentSelf;
+extern LLContextMenu        *gMenuAttachmentOther;
+extern LLContextMenu        *gMenuLand;
+extern LLContextMenu        *gMenuMuteParticle;
 
 // Needed to build menus when attachment site list available
 extern LLMenuGL* gAttachSubMenu;
@@ -241,13 +241,13 @@ extern LLContextMenu* gDetachBodyPartPieMenus[9];
 
 // <FS:Zi> Pie Menu
 // Pie menus in 3D scene
-extern PieMenu			*gPieMenuAvatarSelf;
-extern PieMenu			*gPieMenuAvatarOther;
-extern PieMenu			*gPieMenuObject;
-extern PieMenu			*gPieMenuAttachmentSelf;
-extern PieMenu			*gPieMenuAttachmentOther;
-extern PieMenu			*gPieMenuLand;
-extern PieMenu			*gPieMenuMuteParticle;
+extern PieMenu          *gPieMenuAvatarSelf;
+extern PieMenu          *gPieMenuAvatarOther;
+extern PieMenu          *gPieMenuObject;
+extern PieMenu          *gPieMenuAttachmentSelf;
+extern PieMenu          *gPieMenuAttachmentOther;
+extern PieMenu          *gPieMenuLand;
+extern PieMenu          *gPieMenuMuteParticle;
 
 // Needed to build pie menus when attachment site list available
 extern PieMenu* gPieAttachScreenMenu;
@@ -259,9 +259,9 @@ extern PieMenu* gPieDetachBodyPartMenus[PIE_MAX_SLICES];
 // <FS:Zi> Pie Menu
 
 // <FS:Ansariel> FIRE-7893: Detach function on inspect self toast without function
-extern LLToggleableMenu	*gMenuInspectSelf;
-extern LLContextMenu	*gInspectSelfDetachScreenMenu;
-extern LLContextMenu	*gInspectSelfDetachMenu;
+extern LLToggleableMenu *gMenuInspectSelf;
+extern LLContextMenu    *gInspectSelfDetachScreenMenu;
+extern LLContextMenu    *gInspectSelfDetachMenu;
 // </FS:Ansariel>
 
 extern LLMenuItemCallGL* gAutorespondMenu;

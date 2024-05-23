@@ -1,4 +1,4 @@
-/** 
+/**
  * @file llpanelmaininventory.h
  * @brief llpanelmaininventory.h
  * class definition
@@ -6,21 +6,21 @@
  * $LicenseInfo:firstyear=2001&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -50,7 +50,7 @@ class LLSidepanelInventory;
 class LLToggleableMenu;
 class LLFloater;
 class LLFloaterSidePanelContainer;
-class LLComboBox;	// <FS:Zi> Filter dropdown
+class LLComboBox;   // <FS:Zi> Filter dropdown
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLPanelMainInventory
@@ -62,12 +62,12 @@ class LLComboBox;	// <FS:Zi> Filter dropdown
 class LLPanelMainInventory : public LLPanel, LLInventoryObserver
 {
 public:
-	friend class LLFloaterInventoryFinder;
+    friend class LLFloaterInventoryFinder;
 
-	LLPanelMainInventory(const LLPanel::Params& p = getDefaultParams());
-	~LLPanelMainInventory();
+    LLPanelMainInventory(const LLPanel::Params& p = getDefaultParams());
+    ~LLPanelMainInventory();
 
-	bool postBuild();
+    bool postBuild();
 
     enum EViewModeType
     {
@@ -76,44 +76,44 @@ public:
         MODE_COMBINATION
     };
 
-	virtual bool handleKeyHere(KEY key, MASK mask);
+    virtual bool handleKeyHere(KEY key, MASK mask);
 
-	// Inherited functionality
-	/*virtual*/ bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
-									   EDragAndDropType cargo_type,
-									   void* cargo_data,
-									   EAcceptance* accept,
-									   std::string& tooltip_msg);
-	/*virtual*/ void changed(U32);
-	/*virtual*/ void draw();
-	/*virtual*/ void 	onVisibilityChange ( bool new_visibility );
-	// <FS:Ansariel> CTRL-F focusses local search editor
-	/*virtual*/ bool hasAccelerators() const { return true; }
+    // Inherited functionality
+    /*virtual*/ bool handleDragAndDrop(S32 x, S32 y, MASK mask, bool drop,
+                                       EDragAndDropType cargo_type,
+                                       void* cargo_data,
+                                       EAcceptance* accept,
+                                       std::string& tooltip_msg);
+    /*virtual*/ void changed(U32);
+    /*virtual*/ void draw();
+    /*virtual*/ void    onVisibilityChange ( bool new_visibility );
+    // <FS:Ansariel> CTRL-F focusses local search editor
+    /*virtual*/ bool hasAccelerators() const { return true; }
 
-	LLInventoryPanel* getPanel() { return mActivePanel; }
-	LLInventoryPanel* getActivePanel() { return mActivePanel; }
-	const LLInventoryPanel* getActivePanel() const { return mActivePanel; }
-	LLInventoryPanel* getAllItemsPanel();
-	void selectAllItemsPanel();
-	// <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel
-	void showAllItemsPanel();
-	// </FS:Ansariel>
+    LLInventoryPanel* getPanel() { return mActivePanel; }
+    LLInventoryPanel* getActivePanel() { return mActivePanel; }
+    const LLInventoryPanel* getActivePanel() const { return mActivePanel; }
+    LLInventoryPanel* getAllItemsPanel();
+    void selectAllItemsPanel();
+    // <FS:Ansariel> FIRE-19493: "Show Original" should open main inventory panel
+    void showAllItemsPanel();
+    // </FS:Ansariel>
     void setActivePanel();
 
-	bool isRecentItemsPanelSelected();
+    bool isRecentItemsPanelSelected();
 
-	const std::string& getFilterText() const { return mFilterText; }
-	
-	void setSelectCallback(const LLFolderView::signal_t::slot_type& cb);
+    const std::string& getFilterText() const { return mFilterText; }
 
-	void onFilterEdit(const std::string& search_string );
+    void setSelectCallback(const LLFolderView::signal_t::slot_type& cb);
 
-	void setFocusFilterEditor();
+    void onFilterEdit(const std::string& search_string );
 
-	static LLFloaterSidePanelContainer* newWindow();
+    void setFocusFilterEditor();
+
+    static LLFloaterSidePanelContainer* newWindow();
     static void newFolderWindow(LLUUID folder_id = LLUUID(), LLUUID item_to_select = LLUUID());
 
-	void toggleFindOptions();
+    void toggleFindOptions();
 
     void resetFilters();
     void resetAllItemsFilters();
@@ -144,82 +144,82 @@ public:
 
     LLInventoryFilter& getCurrentFilter();
 
-	// <FS:Zi> Filter dropdown
-	void onFilterTypeSelected(const std::string& filter_type_name);
-	void updateFilterDropdown(const LLInventoryFilter* filter);
-	// </FS:Zi> Filter dropdown
+    // <FS:Zi> Filter dropdown
+    void onFilterTypeSelected(const std::string& filter_type_name);
+    void updateFilterDropdown(const LLInventoryFilter* filter);
+    // </FS:Zi> Filter dropdown
 
-	void doCustomAction(const LLSD& userdata) { onCustomAction(userdata); } // <FS:Ansariel> Prevent warning "No callback found for: 'Inventory.CustomAction' in control: Find Links"
+    void doCustomAction(const LLSD& userdata) { onCustomAction(userdata); } // <FS:Ansariel> Prevent warning "No callback found for: 'Inventory.CustomAction' in control: Find Links"
 
-	// <FS:Ansariel> FIRE-12808: Don't save filters during settings restore
-	static bool sSaveFilters;
+    // <FS:Ansariel> FIRE-12808: Don't save filters during settings restore
+    static bool sSaveFilters;
 
 protected:
-	//
-	// Misc functions
-	//
-	void setFilterTextFromFilter();
-	void startSearch();
-	
-	void onSelectionChange(LLInventoryPanel *panel, const std::deque<LLFolderViewItem*>& items, bool user_action);
+    //
+    // Misc functions
+    //
+    void setFilterTextFromFilter();
+    void startSearch();
 
-	static bool filtersVisible(void* user_data);
-	void onClearSearch();
-	static void onFoldersByName(void *user_data);
-	static bool checkFoldersByName(void *user_data);
-	
-	static bool incrementalFind(LLFolderViewItem* first_item, const char *find_text, bool backward);
-	void onFilterSelected();
+    void onSelectionChange(LLInventoryPanel *panel, const std::deque<LLFolderViewItem*>& items, bool user_action);
 
-	const std::string getFilterSubString();
-	void setFilterSubString(const std::string& string);
+    static bool filtersVisible(void* user_data);
+    void onClearSearch();
+    static void onFoldersByName(void *user_data);
+    static bool checkFoldersByName(void *user_data);
 
-	// menu callbacks
-	void doToSelected(const LLSD& userdata);
-	void closeAllFolders();
-	void doCreate(const LLSD& userdata);
+    static bool incrementalFind(LLFolderViewItem* first_item, const char *find_text, bool backward);
+    void onFilterSelected();
 
-	// <FS:Zi> Sort By menu handlers
-	void setSortBy(const LLSD& userdata);
-	bool isSortByChecked(const LLSD& userdata);
-	// </FS:Zi> Sort By menu handlers
+    const std::string getFilterSubString();
+    void setFilterSubString(const std::string& string);
 
-	void saveTexture(const LLSD& userdata);
-	bool isSaveTextureEnabled(const LLSD& userdata);
-	void updateItemcountText();
+    // menu callbacks
+    void doToSelected(const LLSD& userdata);
+    void closeAllFolders();
+    void doCreate(const LLSD& userdata);
+
+    // <FS:Zi> Sort By menu handlers
+    void setSortBy(const LLSD& userdata);
+    bool isSortByChecked(const LLSD& userdata);
+    // </FS:Zi> Sort By menu handlers
+
+    void saveTexture(const LLSD& userdata);
+    bool isSaveTextureEnabled(const LLSD& userdata);
+    void updateItemcountText();
 
     void updatePanelVisibility();
     void updateCombinationVisibility();
 
-	// <FS:Zi> Inventory Collapse and Expand Buttons
-	void onCollapseButtonClicked();
-	void onExpandButtonClicked();
-	// </FS:Zi> Inventory Collapse and Expand Buttons
-	void onFocusReceived();
-	void onSelectSearchType();
-	void updateSearchTypeCombo();
+    // <FS:Zi> Inventory Collapse and Expand Buttons
+    void onCollapseButtonClicked();
+    void onExpandButtonClicked();
+    // </FS:Zi> Inventory Collapse and Expand Buttons
+    void onFocusReceived();
+    void onSelectSearchType();
+    void updateSearchTypeCombo();
     void setSearchType(LLInventoryFilter::ESearchType type);
 
     LLSidepanelInventory* getParentSidepanelInventory();
 
 private:
-	LLFloaterInventoryFinder* getFinder();
+    LLFloaterInventoryFinder* getFinder();
 
-	LLFilterEditor*				mFilterEditor;
-	LLTabContainer*				mFilterTabs;
-	LLUICtrl*					mCounterCtrl;
-	LLHandle<LLFloater>			mFinderHandle;
-	LLInventoryPanel*			mActivePanel;
-	LLInventoryPanel*			mWornItemsPanel;
-	bool						mResortActivePanel;
-	LLSaveFolderState*			mSavedFolderState;
-	std::string					mFilterText;
-	std::string					mFilterSubString;
-	S32							mItemCount;
-	std::string					mItemCountString;
-	S32							mCategoryCount;
-	std::string					mCategoryCountString;
-	LLComboBox*					mSearchTypeCombo;
+    LLFilterEditor*             mFilterEditor;
+    LLTabContainer*             mFilterTabs;
+    LLUICtrl*                   mCounterCtrl;
+    LLHandle<LLFloater>         mFinderHandle;
+    LLInventoryPanel*           mActivePanel;
+    LLInventoryPanel*           mWornItemsPanel;
+    bool                        mResortActivePanel;
+    LLSaveFolderState*          mSavedFolderState;
+    std::string                 mFilterText;
+    std::string                 mFilterSubString;
+    S32                         mItemCount;
+    std::string                 mItemCountString;
+    S32                         mCategoryCount;
+    std::string                 mCategoryCountString;
+    LLComboBox*                 mSearchTypeCombo;
 
     LLButton* mBackBtn;
     LLButton* mForwardBtn;
@@ -239,86 +239,86 @@ private:
     LLLayoutPanel* mCombinationListLayoutPanel;
     LLLayoutStack* mCombinationLayoutStack;
 
-	// <FS:Zi> Filter dropdown
-	LLComboBox*					mFilterComboBox;
-	std::map<std::string,U64>	mFilterMap;			// contains name-to-number mapping for dropdown filter types
-	U64							mFilterMask;		// contains the cumulated bit filter for all dropdown filter types
-	// </FS:Zi> Filter dropdown
+    // <FS:Zi> Filter dropdown
+    LLComboBox*                 mFilterComboBox;
+    std::map<std::string,U64>   mFilterMap;         // contains name-to-number mapping for dropdown filter types
+    U64                         mFilterMask;        // contains the cumulated bit filter for all dropdown filter types
+    // </FS:Zi> Filter dropdown
 
     boost::signals2::connection mListViewRootUpdatedConnection;
     boost::signals2::connection mGalleryRootUpdatedConnection;
 
-	//////////////////////////////////////////////////////////////////////////////////
-	// List Commands                                                                //
+    //////////////////////////////////////////////////////////////////////////////////
+    // List Commands                                                                //
 protected:
-	void initListCommandsHandlers();
-	void updateListCommands();
-	void onAddButtonClick();
-	void showActionMenu(LLMenuGL* menu, std::string spawning_view_name);
-	void onTrashButtonClick(); // <FS:Ansariel> Keep better inventory layout
-	void onClipboardAction(const LLSD& userdata);
-	bool isActionEnabled(const LLSD& command_name);
-	bool isActionChecked(const LLSD& userdata);
-	void onCustomAction(const LLSD& command_name);
+    void initListCommandsHandlers();
+    void updateListCommands();
+    void onAddButtonClick();
+    void showActionMenu(LLMenuGL* menu, std::string spawning_view_name);
+    void onTrashButtonClick(); // <FS:Ansariel> Keep better inventory layout
+    void onClipboardAction(const LLSD& userdata);
+    bool isActionEnabled(const LLSD& command_name);
+    bool isActionChecked(const LLSD& userdata);
+    void onCustomAction(const LLSD& command_name);
     bool isActionVisible(const LLSD& userdata);
 
-	// <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
-	void onCoalescedObjectsToggled(const LLSD& userdata);
-	bool isCoalescedObjectsChecked(const LLSD& userdata);
-	// </FS:Zi>
+    // <FS:Zi> FIRE-31369: Add inventory filter for coalesced objects
+    void onCoalescedObjectsToggled(const LLSD& userdata);
+    bool isCoalescedObjectsChecked(const LLSD& userdata);
+    // </FS:Zi>
 
-	// <FS:Zi> Filter Links Menu
-	bool isFilterLinksChecked(const LLSD& userdata);
-	void onFilterLinksChecked(const LLSD& userdata);
-	// </FS:Zi> Filter Links Menu
+    // <FS:Zi> Filter Links Menu
+    bool isFilterLinksChecked(const LLSD& userdata);
+    void onFilterLinksChecked(const LLSD& userdata);
+    // </FS:Zi> Filter Links Menu
 
-	// <FS:Zi> FIRE-1175 - Filter Permissions Menu
-	bool isFilterPermissionsChecked(const LLSD &userdata);
-	void onFilterPermissionsChecked(const LLSD &userdata);
-	// </FS:Zi>
+    // <FS:Zi> FIRE-1175 - Filter Permissions Menu
+    bool isFilterPermissionsChecked(const LLSD &userdata);
+    void onFilterPermissionsChecked(const LLSD &userdata);
+    // </FS:Zi>
 
-	// <FS:Zi> Extended Inventory Search
-	bool isSearchTypeChecked(const LLSD& userdata);
-	void onSearchTypeChecked(const LLSD& userdata);
-	// </FS:Zi> Extended Inventory Search
+    // <FS:Zi> Extended Inventory Search
+    bool isSearchTypeChecked(const LLSD& userdata);
+    void onSearchTypeChecked(const LLSD& userdata);
+    // </FS:Zi> Extended Inventory Search
 
-	// <FS:Ansariel> Keep better inventory layout
-	bool handleDragAndDropToTrash(bool drop, EDragAndDropType cargo_type, EAcceptance* accept);
+    // <FS:Ansariel> Keep better inventory layout
+    bool handleDragAndDropToTrash(bool drop, EDragAndDropType cargo_type, EAcceptance* accept);
     static bool hasSettingsInventory();
     static bool hasMaterialsInventory();
     void updateTitle();
     void updateNavButtons();
-    
+
     void onCombinationRootChanged(bool gallery_clicked);
     void onCombinationGallerySelectionChanged(const LLUUID& category_id);
     void onCombinationInventorySelectionChanged(const std::deque<LLFolderViewItem*>& items, bool user_action);
-	/**
-	 * Set upload cost in "Upload" sub menu.
-	 */
-	void setUploadCostIfNeeded();
+    /**
+     * Set upload cost in "Upload" sub menu.
+     */
+    void setUploadCostIfNeeded();
     void disableAddIfNeeded();
 private:
-	LLDragAndDropButton*		mTrashButton; // <FS:Ansariel> Keep better inventory layout
-	LLToggleableMenu*			mMenuGearDefault;
+    LLDragAndDropButton*        mTrashButton; // <FS:Ansariel> Keep better inventory layout
+    LLToggleableMenu*           mMenuGearDefault;
     LLToggleableMenu*           mMenuViewDefault;
-	LLToggleableMenu*			mMenuVisibility;
-	LLMenuButton*				mGearMenuButton;
+    LLToggleableMenu*           mMenuVisibility;
+    LLMenuButton*               mGearMenuButton;
     LLMenuButton*               mViewMenuButton;
-	LLMenuButton*				mVisibilityMenuButton;
-	LLHandle<LLView>			mMenuAddHandle;
+    LLMenuButton*               mVisibilityMenuButton;
+    LLHandle<LLView>            mMenuAddHandle;
 
-	// <FS:Zi> Inventory Collapse and Expand Buttons
-	LLButton*					mCollapseBtn;
-	LLButton*					mExpandBtn;
-	// </FS:Zi> Inventory Collapse and Expand Buttons
+    // <FS:Zi> Inventory Collapse and Expand Buttons
+    LLButton*                   mCollapseBtn;
+    LLButton*                   mExpandBtn;
+    // </FS:Zi> Inventory Collapse and Expand Buttons
 
-	bool						mNeedUploadCost;
+    bool                        mNeedUploadCost;
 
     bool                        mForceShowInvLayout;
     bool                        mReshapeInvLayout;
     LLUUID                      mCombInvUUIDNeedsRename;
-	// List Commands                                                              //
-	////////////////////////////////////////////////////////////////////////////////
+    // List Commands                                                              //
+    ////////////////////////////////////////////////////////////////////////////////
 };
 
 #endif // LL_LLPANELMAININVENTORY_H

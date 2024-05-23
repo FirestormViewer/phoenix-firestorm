@@ -32,13 +32,13 @@
 class exoFlickr
 {
 public:
-	typedef boost::function<void(bool success, const LLSD& response)> response_callback_t;
+    typedef boost::function<void(bool success, const LLSD& response)> response_callback_t;
 
-	static void request(const std::string& method, const LLSD& args, response_callback_t callback);
-	static void uploadPhoto(const LLSD& args, LLImageFormatted *image, response_callback_t callback);
+    static void request(const std::string& method, const LLSD& args, response_callback_t callback);
+    static void uploadPhoto(const LLSD& args, LLImageFormatted *image, response_callback_t callback);
 
-	static void signRequest(LLSD& params, std::string method, std::string url);
-	static std::string getSignatureForCall(const LLSD& parameters, std::string url, std::string method);
+    static void signRequest(LLSD& params, std::string method, std::string url);
+    static std::string getSignatureForCall(const LLSD& parameters, std::string url, std::string method);
 };
 
 #endif

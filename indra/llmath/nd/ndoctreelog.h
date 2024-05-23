@@ -30,16 +30,16 @@
 
 namespace nd
 {
-	namespace octree
-	{
-		namespace debug
-		{
-			extern U32 gOctreeDebug;
-			void doOctreeLog( std::string const &aStr );
-			void checkOctreeLog();
-			void setOctreeLogFilename( std::string const & );
-		}
-	}
+    namespace octree
+    {
+        namespace debug
+        {
+            extern U32 gOctreeDebug;
+            void doOctreeLog( std::string const &aStr );
+            void checkOctreeLog();
+            void setOctreeLogFilename( std::string const & );
+        }
+    }
 }
 
 #define ND_OCTREE_LOG { if( nd::octree::debug::gOctreeDebug ){ nd::octree::debug::checkOctreeLog(); std::stringstream strm; strm << std::setprecision(10)

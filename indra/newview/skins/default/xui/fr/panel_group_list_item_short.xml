@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="group_list_item">
 	<text name="group_name" value="Inconnu"/>
+	<button name="notices_btn" tool_tip="Notices de groupe"/>
 	<button name="visibility_hide_btn" tool_tip="Masquer le groupe sur mon profil"/>
 	<button name="visibility_show_btn" tool_tip="Afficher le groupe sur mon profil"/>
 	<button name="info_btn" tool_tip="En savoir plus"/>
