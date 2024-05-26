@@ -1,7 +1,34 @@
+/**
+ * @file fsfloaterwhitelisthelper.cpp
+ * @brief Helper tool implementation to display paths to whitelist in antivirus tools
+ *
+ * $LicenseInfo:firstyear=2024&license=fsviewerlgpl$
+ * Phoenix Firestorm Viewer Source Code
+ * Copyright (C) 2024, The Phoenix Firestorm Project, Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation;
+ * version 2.1 of the License only.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
+ * http://www.firestormviewer.org
+ * $/LicenseInfo$
+ */
+
+#include "llviewerprecompiledheaders.h"
+
 #include "fsfloaterwhitelisthelper.h"
-#include "lltextbox.h"
 #include "lltexteditor.h"
-#include "lluictrlfactory.h"
 #include "llviewercontrol.h"
 #include "lldir.h"
 
@@ -10,15 +37,9 @@ FSFloaterWhiteListHelper::FSFloaterWhiteListHelper(const LLSD& key) : LLFloater(
 {
 }
 
-FSFloaterWhiteListHelper::~FSFloaterWhiteListHelper()=default;
-
 BOOL FSFloaterWhiteListHelper::postBuild()
 {
-    LLTextEditor* text_editor = getChild<LLTextEditor>("whitelist_text");
-    if (text_editor)
-    {
-        populateWhitelistInfo();
-    }
+    populateWhitelistInfo();
     return TRUE;
 }
 
@@ -46,7 +67,7 @@ void FSFloaterWhiteListHelper::populateWhitelistInfo()
     }
 #endif
 
-    const std::string& slpluginexe_path = gDirUtilp->getLLPluginLauncher();
+    const std::string slpluginexe_path = gDirUtilp->getLLPluginLauncher();
 
     std::string whitelist_folder_info = 
         gDirUtilp->getExecutableDir() + "\n" // Executable Dir
@@ -61,15 +82,6 @@ void FSFloaterWhiteListHelper::populateWhitelistInfo()
         + gDirUtilp->getBaseFileName(slpluginexe_path, false) + "\n" // SLPlugin Launcher Binary
         + slpluginexe_path + "\n"; // SLPlugin Launcher full path
 
-    LLTextEditor* text_editor = getChild<LLTextEditor>("whitelist_folders_editor");
-    if (text_editor)
-    {
-        text_editor->setText(whitelist_folder_info);
-    }
-
-    text_editor = getChild<LLTextEditor>("whitelist_exes_editor");
-    if (text_editor)
-    {
-        text_editor->setText(whitelist_exe_info);
-    }
+    getChild<LLTextEditor>("whitelist_folders_editor")->setText(whitelist_folder_info);
+    getChild<LLTextEditor>("whitelist_exes_editor")->setText(whitelist_exe_info);
 }
