@@ -1,0 +1,17 @@
+<floater name="whitelist_floater" title="Whitelist für Verzeichnnisse und Dateien">
+	<text name="whitelist_intro">
+		Anti-Virus- und Anti-Malware-Software sind essenziell für die sichere Nutzung des Internet, können aber eine Vielzahl an Problem für den Viewer erzeugen.
+Um die Beinträchtigung zu minimieren und Stabilität und Performance zu erhöhen, raten wir daher eingehend alle Benutzer Ausnahmen (auch bekannt als Whitelisting) für wichtige Verzeichnisse und Programme einzurichten, die vom Viewer verwendet werden.
+
+Weitere Details hierzu finden Sie unter
+https://wiki.firestormviewer.org/antivirus_whitelisting
+	</text>
+	<text name="whitelist_folder_instruction">
+		Das folgende Textfeld die Verzeichnisse angezeigt, die vom Viewer verwendet werden.
+Bitte fügen Sie diese zu den Verzeichnis-Ausnahmen hinzu.
+	</text>
+	<text name="whitelist_exe_instruction">
+		Das folgende Textfeld zeigt die Namen und vollständigen Pfade der ausführbaren Dateien des Viewers an.
+Bitte fügen Sie diese zu den Ausnahmen für ausführbare Dateien hinzu hinzu.
+	</text>
+</floater>

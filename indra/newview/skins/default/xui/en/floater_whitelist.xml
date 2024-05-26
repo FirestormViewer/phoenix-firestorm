@@ -14,13 +14,13 @@
           top="16"
           width="689"
           wrap="true">
-Anti-virus and Anti-malware are an essential part of safe internet use, but they can cause a variety of issues for the viewer.
+Anti-virus and Anti-malware are an essential part of safe Internet use, but they can cause a variety of issues for the viewer.
 To reduce interference and improve stability and performance, we strongly advise that all users ensure that there are exclusions (known as Whitelisting) for important folders and programs that the viewer uses. 
 
 For more detailed information, visit
 https://wiki.firestormviewer.org/antivirus_whitelisting
      
-     </text>         
+     </text>
      <text
           follows="top|left|right"
           font="SansSerif"
@@ -31,9 +31,9 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
           top_pad="10"
           width="689"
           wrap="true">
-To help simpify the task the box below shows the folders the viewer is using. 
+To help simplify the task the box below shows the folders the viewer is using. 
 Please add these to your AV folder exclusions as shown on the above wiki page.
-     </text>         
+     </text>
      <text_editor
           parse_urls="true"
           follows="top|left|right|bottom"
@@ -58,7 +58,7 @@ Please add these to your AV folder exclusions as shown on the above wiki page.
           wrap="true">
 The following box is the name and full path of the viewer executables. 
 Add these to you AV executable exclusions as shown in the above wiki.
-     </text>         
+     </text>
      <text_editor
           parse_urls="true"
           follows="top|left|right|bottom"
