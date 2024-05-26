@@ -184,6 +184,9 @@ set(viewer_SOURCE_FILES
     vjfloaterlocalmesh.cpp
     vjlocalmeshimportdae.cpp
 
+    # Whitelist helper
+    fsfloaterwhitelisthelper.cpp
+
     llaccountingcostmanager.cpp
     llaisapi.cpp
     llagent.cpp
@@ -977,6 +980,9 @@ set(viewer_HEADER_FILES
     vjlocalmesh.h
     vjfloaterlocalmesh.h
     vjlocalmeshimportdae.h
+
+    # whitelist helper
+    fsfloaterwhitelisthelper.h
 
     llaccountingcostmanager.h
     llaisapi.h
