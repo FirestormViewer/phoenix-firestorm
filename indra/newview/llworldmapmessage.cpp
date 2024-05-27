@@ -171,6 +171,7 @@ void LLWorldMapMessage::processMapBlockReply(LLMessageSystem* msg, void**)
         return;
     }
     // </FS:humbletim>
+
     // There's only one flag that we ever use here
     if (agent_flags != LAYER_FLAG)
     {
