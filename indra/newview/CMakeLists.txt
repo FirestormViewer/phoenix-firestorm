@@ -167,6 +167,7 @@ set(viewer_SOURCE_FILES
     fsscriptlibrary.cpp
     fsscrolllistctrl.cpp
     fsslurlcommand.cpp
+    fsworldmapmessage.cpp
     groupchatlistener.cpp
     lggbeamcolormapfloater.cpp
     lggbeammapfloater.cpp
@@ -960,6 +961,7 @@ set(viewer_HEADER_FILES
     fsscrolllistctrl.h
     fsslurl.h
     fsslurlcommand.h
+    fsworldmapmessage.h
     groupchatlistener.h
     llaccountingcost.h
     lggbeamcolormapfloater.h

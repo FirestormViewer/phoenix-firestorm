@@ -35,10 +35,8 @@
 
 // <FS:CR> Aurora Sim
 #include "llviewernetwork.h"
-#ifdef OPENSIM
-#include "llworldmapmessage.fs.c++"
-#endif
 // </FS:CR> Aurora Sim
+#include "fsworldmapmessage.h" // <FS:humbletim/> FIRE-31368: [OPENSIM] ... Search returns more than one result
 
 const U32 LAYER_FLAG = 2;
 
@@ -102,9 +100,12 @@ void LLWorldMapMessage::sendNamedRegionRequest(std::string region_name,
         const std::string& callback_url,
         bool teleport)  // immediately teleport when result returned
 {
-#ifdef OPENSIM
-    if (hypergrid_sendExactNamedRegionRequest(region_name, callback, callback_url, teleport)) return;
-#endif
+    // <FS:humbletim> FIRE-31368: [OPENSIM] ... Search returns more than one result
+    if (hypergrid_sendExactNamedRegionRequest(region_name, callback, callback_url, teleport)) {
+        return;
+    }
+    // </FS:humbletim>
+
     //LL_INFOS("WorldMap") << LL_ENDL;
     mSLURLRegionName = region_name;
     mSLURLRegionHandle = 0;
@@ -167,9 +168,12 @@ void LLWorldMapMessage::processMapBlockReply(LLMessageSystem* msg, void**)
     U32 agent_flags;
     msg->getU32Fast(_PREHASH_AgentData, _PREHASH_Flags, agent_flags);
 
-#ifdef OPENSIM
-    if (agent_flags != LAYER_FLAG && hypergrid_processExactNamedRegionResponse(msg, agent_flags)) return;
-#endif
+    // <FS:humbletim> FIRE-31368: [OPENSIM] ... Search returns more than one result
+    if (hypergrid_processExactNamedRegionResponse(msg, agent_flags)) {
+        return;
+    }
+    // </FS:humbletim>
+
 
     // There's only one flag that we ever use here
     if (agent_flags != LAYER_FLAG)

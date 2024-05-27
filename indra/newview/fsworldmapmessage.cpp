@@ -8,29 +8,19 @@
 //     - in particular where a grid hosts overlapping names, hop Region matching may work better
 
 
-#include "llworldmapmessage.fs.h"
+#include "fsworldmapmessage.h"
 
 #include <regex>
 #include <string>
 
-#include "llagent.h"
 #include "llcommon.h"
+#include "llagent.h"
 #include "llsingleton.h"
 #include "llworldmap.h" // grid_to_region_handle
 #include "llworldmapmessage.h"
 #include "message.h"
 
-#include "llnotificationsutil.h"
-
-#define htxhop_log(format, ...)                                                                                  \
-    {                                                                                                            \
-        fprintf(stderr, format "\n", __VA_ARGS__);                                                               \
-        fflush(stderr);                                                                                          \
-        LLNotificationsUtil::add("ChatSystemMessageTip", LLSD().with("MESSAGE", llformat(format, __VA_ARGS__))); \
-        LL_WARNS("GridManager") << llformat(format, __VA_ARGS__) << LL_ENDL;                                     \
-    }
-
-#include "llviewercontrol.h"
+#define htxhop_log(format, ...) LL_DEBUGS("GridManager") << llformat(format, __VA_ARGS__) << LL_ENDL;
 
 inline std::string extract_region(std::string const& s)
 {
@@ -48,19 +38,6 @@ inline std::string extract_region(std::string const& s)
     }
     return {};
 }
-// int main() {
-//     for (const auto& s : {
-//         "http://hg.osgrid.org:80/ Vue North",
-//         "hop://hg.osgrid.org:80/ Vue North",
-//         "hg.osgrid.org:80/ Vue North",
-//         "hg.osgrid.org:80:Vue North",
-//         "hg.osgrid.org:80/Vue North",
-//     }) fprintf(stderr, "'%s' = '%s'\n", s, extract_region(s).c_str());fflush(stderr);
-//     return 0;
-// }
-
-static LLCachedControl<S32> htxhop_flags(gSavedSettings, "htxhop_flags", 0, "default: 0\nLAYER_FLAG: 2\n");
-#define htxhop_debug_setting_disable (+htxhop_flags == 2)
 
 // helper to encapsulate Region Map Block responses
 struct _MapBlock {
@@ -132,21 +109,24 @@ static std::map<std::string, _AdoptedRegionNameQuery> _region_name_queries;
 bool hypergrid_sendExactNamedRegionRequest(std::string const& region_name, url_callback_t const& callback, std::string const& callback_url,
     bool teleport)
 {
-    if (htxhop_debug_setting_disable || !callback)
+    if (!callback) {
         return false;
+    }
     auto key = extract_region(region_name);
-    if (key.empty())
+    if (key.empty()) {
         return false;
+    }
     _region_name_queries[key] = { key, region_name, callback, callback_url, teleport };
-    htxhop_log("[xxHTxx] Send Region Name '%s' (key: %s)", region_name.c_str(), key.c_str());
+    htxhop_log("Send Region Name '%s' (key: %s)", region_name.c_str(), key.c_str());
     _hypergrid_sendMapNameRequest(region_name, EXACT_FLAG);
     return true;
 }
 
 bool hypergrid_processExactNamedRegionResponse(LLMessageSystem* msg, U32 agent_flags)
 {
-    if (htxhop_debug_setting_disable || !msg)
+    if (!msg) {
         return false;
+    }
     // NOTE: we assume only agent_flags have been read from msg so far
     S32 num_blocks = msg->getNumberOfBlocksFast(_PREHASH_Data);
 
@@ -155,10 +135,9 @@ bool hypergrid_processExactNamedRegionResponse(LLMessageSystem* msg, U32 agent_f
     for (int b = 0; b < num_blocks; b++) {
         blocks.emplace_back(msg, b);
     }
-    /* EXPIRE:>=2024-05-10 */ for (auto const& _block : blocks)
-        htxhop_log("#%02d key='%s' block.name='%s' block.region_handle=%llu", _block.index, extract_region(_block.name).c_str(),
-            _block.name.c_str(), _block.region_handle());
-
+    for (auto const& _block : blocks) {
+        htxhop_log("#%02d key='%s' block.name='%s' block.region_handle=%llu", _block.index, extract_region(_block.name).c_str(), _block.name.c_str(), _block.region_handle());
+    }
     // special case: handle singular result w/empty name tho valid region handle AND singular pending query as a match
     // (might be that a landing area / redirect hop URL is coming back: "^hop://grid:port/$", which extract_region's into "")
     bool solo_result = blocks.size() == 2 && blocks[0].region_handle() && extract_region(blocks[0].name).empty() && !blocks[1].region_handle();
@@ -169,13 +148,15 @@ bool hypergrid_processExactNamedRegionResponse(LLMessageSystem* msg, U32 agent_f
 
     for (auto const& _block : blocks) {
         auto key = extract_region(_block.name);
-        if (key.empty())
+        if (key.empty()) {
             continue;
+        }
         auto idx = _region_name_queries.find(key);
-        if (idx == _region_name_queries.end())
+        if (idx == _region_name_queries.end()) {
             continue;
+        }
         auto pending = idx->second;
-        htxhop_log("[xxHTxx] Recv Region Name '%s' (key: %s) block.name='%s' block.region_handle=%llu)", pending.region_name.c_str(),
+        htxhop_log("Recv Region Name '%s' (key: %s) block.name='%s' block.region_handle=%llu)", pending.region_name.c_str(),
             pending.key.c_str(), _block.name.c_str(), _block.region_handle());
         _region_name_queries.erase(idx);
         pending.arbitrary_callback(_block.region_handle(), pending.arbitrary_slurl, _block.image_id, pending.arbitrary_teleport);

@@ -1,5 +1,10 @@
-// NOTE: optional header file in case wanting to integrate as .h/.cpp
-#pragma once
+/*
+ * @file fsworldmapmessage.h
+ */
+
+#ifndef FS_WORLDMAPMESSAGE_H
+#define FS_WORLDMAPMESSAGE_H
+
 #include <cstdint>
 #include <functional>
 #include <string>
@@ -11,3 +16,5 @@ bool hypergrid_sendExactNamedRegionRequest(
     std::string const& callback_url,
     bool teleport);
 bool hypergrid_processExactNamedRegionResponse(LLMessageSystem* msg, uint32_t agent_flags);
+
+#endif // FS_WORLDMAPMESSAGE_H
