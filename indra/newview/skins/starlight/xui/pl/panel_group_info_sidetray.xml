@@ -43,6 +43,9 @@
 			<layout_stack name="layout">
 				<layout_panel name="button_row">
 					<layout_stack name="button_row_ls">
+						<layout_panel name="btn_activate_lp">
+							<button label="Aktywuj" name="btn_activate" />
+						</layout_panel>
 						<layout_panel name="btn_chat_lp">
 							<button label="Czat" name="btn_chat"/>
 						</layout_panel>
