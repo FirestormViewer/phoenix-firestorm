@@ -12,7 +12,10 @@
 	<string name="BadgeTeam" value="Zespół [APP_NAME]a" />
 	<string name="no_partner_text" value="Brak" />
 	<string name="no_group_text" value="Brak" />
-	<string name="age_format">
+	<string name="age_format_short">
+		Urodziny: [REG_DATE]
+	</string>
+	<string name="age_format_full">
 Urodziny: [REG_DATE]
 ([AGE])
 	</string>
@@ -66,6 +69,7 @@ Urodziny: [REG_DATE]
 		</layout_panel>
 	</layout_stack>
 	<check_box name="show_in_search" label="Pokaż w wyszukiwarce" tool_tip="Pozwól innym zobaczyć Cię w wynikach wyszukiwania" />
+	<check_box name="hide_sl_age" label="Pełna data urodzenia" tool_tip="Pozwól innym widzieć Twój wiek w SL" />
 	<button name="save_description_changes" label="Zapisz" />
 	<button name="discard_description_changes" label="Odrzuć" />
 </panel>
