@@ -105,7 +105,6 @@ void LLWorldMapMessage::sendNamedRegionRequest(std::string region_name,
         return;
     }
     // </FS:humbletim>
-
     //LL_INFOS("WorldMap") << LL_ENDL;
     mSLURLRegionName = region_name;
     mSLURLRegionHandle = 0;
@@ -167,14 +166,11 @@ void LLWorldMapMessage::processMapBlockReply(LLMessageSystem* msg, void**)
     }
     U32 agent_flags;
     msg->getU32Fast(_PREHASH_AgentData, _PREHASH_Flags, agent_flags);
-
     // <FS:humbletim> FIRE-31368: [OPENSIM] ... Search returns more than one result
     if (hypergrid_processExactNamedRegionResponse(msg, agent_flags)) {
         return;
     }
     // </FS:humbletim>
-
-
     // There's only one flag that we ever use here
     if (agent_flags != LAYER_FLAG)
     {

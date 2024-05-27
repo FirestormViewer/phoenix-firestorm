@@ -17,6 +17,7 @@
 #include "llagent.h"
 #include "llsingleton.h"
 #include "llworldmap.h" // grid_to_region_handle
+#include "fsgridhandler.h"
 #include "llworldmapmessage.h"
 #include "message.h"
 
@@ -77,7 +78,8 @@ struct _MapBlock {
     }
 };
 
-#define EXACT_FLAG 0x00000000
+constexpr U32 EXACT_FLAG = 0x00000000;
+constexpr U32 LAYER_FLAG = 0x00000002;
 
 // see: LLWorldMapMessage::sendNamedRegionRequest
 void _hypergrid_sendMapNameRequest(std::string const& region_name, U32 flags)
@@ -109,7 +111,7 @@ static std::map<std::string, _AdoptedRegionNameQuery> _region_name_queries;
 bool hypergrid_sendExactNamedRegionRequest(std::string const& region_name, url_callback_t const& callback, std::string const& callback_url,
     bool teleport)
 {
-    if (!callback) {
+    if (!LLGridManager::instance().isInOpenSim() || !callback) {
         return false;
     }
     auto key = extract_region(region_name);
@@ -124,7 +126,7 @@ bool hypergrid_sendExactNamedRegionRequest(std::string const& region_name, url_c
 
 bool hypergrid_processExactNamedRegionResponse(LLMessageSystem* msg, U32 agent_flags)
 {
-    if (!msg) {
+    if (!LLGridManager::instance().isInOpenSim() || !msg || agent_flags & LAYER_FLAG) {
         return false;
     }
     // NOTE: we assume only agent_flags have been read from msg so far
