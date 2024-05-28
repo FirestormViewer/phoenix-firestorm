@@ -91,12 +91,12 @@ namespace LLProfiler
 //      #define TRACY_NO_BROADCAST   1
 //      #define TRACY_ONLY_LOCALHOST 1
         #define TRACY_ONLY_IPV4      1
-        #include "Tracy.hpp"
+        #include "tracy/Tracy.hpp"
 // <FS:Beq> Fixed mutual exclusion issues with RAM and GPU. NOTE: This might still break on Apple in which case we'll need to restrict that platform
         //// GPU Mutually exclusive with detailed memory tracing
         // #define LL_PROFILER_ENABLE_TRACY_OPENGL 0
         #define LL_PROFILER_ENABLE_TRACY_MEMORY 0
-        #define LL_PROFILER_ENABLE_TRACY_OPENGL 0
+        #define LL_PROFILER_ENABLE_TRACY_OPENGL 1
 
         // Enable RenderDoc labeling
         #define LL_PROFILER_ENABLE_RENDER_DOC 0
@@ -132,9 +132,9 @@ namespace LLProfiler
         #define LL_PROFILE_ZONE_WARN(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0x0FFFF00 )  // RGB red
 
         // <FS:Beq> Additional FS Tracy macros
-        #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, LLProfiler::active ) // <FS:Beq/> Additional Tracy macro
-        #define LL_PROFILE_PLOT( name, value )          TracyPlot( name, value)
-        #define LL_PROFILE_PLOT_SQ( name, prev, value ) TracyPlot(name,prev);TracyPlot( name, value)
+        #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, LLProfiler::active );
+        #define LL_PROFILE_PLOT( name, value )          TracyPlot( name, value);
+        #define LL_PROFILE_PLOT_CONFIG_SQUARE(name)     TracyPlotConfig(name, tracy::PlotFormatType::Number, true, false, 0);
         #define LL_PROFILE_IS_CONNECTED                 TracyIsConnected
         // </FS:Beq>
     #endif
@@ -158,7 +158,7 @@ namespace LLProfiler
         // <FS:Beq> Additional FS Tracy macros
         #define LL_PROFILE_ZONE_COLOR(color)
         #define LL_PROFILE_PLOT( name, value )
-        #define LL_PROFILE_PLOT_SQ( name, prev, value )
+        #define LL_PROFILE_PLOT_CONFIG_SQUARE(name)
         #define LL_PROFILE_IS_CONNECTED
         // </FS:Beq>
     #endif
@@ -190,7 +190,7 @@ namespace LLProfiler
         // <FS:Beq> Additional FS Tracy macros
         #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, LLProfiler::active )
         #define LL_PROFILE_PLOT( name, value )          TracyPlot( name, value)
-        #define LL_PROFILE_PLOT_SQ( name, prev, value ) TracyPlot( name, prev );TracyPlot( name, value )
+        #define LL_PROFILE_PLOT_CONFIG_SQUARE(name)     TracyPlotConfig(name, tracy::PlotFormatType::Number, true, false, 0)
         #define LL_PROFILE_IS_CONNECTED                 TracyIsConnected
         // </FS:Beq>
     #endif
@@ -215,7 +215,7 @@ namespace LLProfiler
     // <FS:Ansariel> Additional FS Tracy macros
     #define LL_PROFILE_ZONE_COLOR(color)
     #define LL_PROFILE_PLOT( name, value )
-    #define LL_PROFILE_PLOT_SQ( name, prev, value )
+    #define LL_PROFILE_PLOT_CONFIG_SQUARE(name)
     #define LL_PROFILE_IS_CONNECTED
     // </FS:Ansariel>
 #endif // LL_PROFILER
