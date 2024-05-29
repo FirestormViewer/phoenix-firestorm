@@ -104,28 +104,28 @@ namespace LLProfiler
     #endif
 
     #if LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY
-        #define LL_PROFILER_FRAME_END                   FrameMark
+        #define LL_PROFILER_FRAME_END                   FrameMark;
         // <FS:Beq> Note: this threadlocal forces memory colelction enabled from the start. It conflicts with deferred profiling.
         #define LL_PROFILER_SET_THREAD_NAME( name )     tracy::SetThreadName( name );    gProfilerEnabled = true;
         // </FS:Beq>
-        #define LL_PROFILER_THREAD_BEGIN(name)          FrameMarkStart( name ) // C string
-        #define LL_PROFILER_THREAD_END(name)            FrameMarkEnd( name )   // C string
+        #define LL_PROFILER_THREAD_BEGIN(name)          FrameMarkStart( name ); // C string
+        #define LL_PROFILER_THREAD_END(name)            FrameMarkEnd( name );   // C string
         // <FS:Beq> revert change that obscures custom FTM zones. We may want to may FTM Zones unique in future.
         // #define LL_RECORD_BLOCK_TIME(name)              ZoneScoped // Want descriptive names; was: ZoneNamedN( ___tracy_scoped_zone, #name, LLProfiler::active );
-        #define LL_RECORD_BLOCK_TIME(name)              ZoneNamedN( ___tracy_scoped_zone, #name, LLProfiler::active )
+        #define LL_RECORD_BLOCK_TIME(name)              ZoneNamedN( ___tracy_scoped_zone, #name, LLProfiler::active );
         // </FS:Beq>
 
         // <FS:Beq>
         // #define LL_PROFILE_ZONE_NAMED(name)             ZoneNamedN( ___tracy_scoped_zone, name, true )
         // #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, true ) // RGB
         // #define LL_PROFILE_ZONE_SCOPED                  ZoneScoped
-        #define LL_PROFILE_ZONE_NAMED(name)             ZoneNamedN( ___tracy_scoped_zone, name, LLProfiler::active )
-        #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, LLProfiler::active ) // RGB
-        #define LL_PROFILE_ZONE_SCOPED                  ZoneNamed( ___tracy_scoped_zone, LLProfiler::active ) // <FS:Beq/> Enable deferred collection through filters
+        #define LL_PROFILE_ZONE_NAMED(name)             ZoneNamedN( ___tracy_scoped_zone, name, LLProfiler::active );
+        #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, LLProfiler::active ); // RGB
+        #define LL_PROFILE_ZONE_SCOPED                  ZoneNamed( ___tracy_scoped_zone, LLProfiler::active ); // <FS:Beq/> Enable deferred collection through filters
         // </FS:Beq>
 
-        #define LL_PROFILE_ZONE_NUM( val )              ZoneValue( val )
-        #define LL_PROFILE_ZONE_TEXT( text, size )      ZoneText( text, size )
+        #define LL_PROFILE_ZONE_NUM( val )              ZoneValue( val );
+        #define LL_PROFILE_ZONE_TEXT( text, size )      ZoneText( text, size );
 
         #define LL_PROFILE_ZONE_ERR(name)               LL_PROFILE_ZONE_NAMED_COLOR( name, 0XFF0000  )  // RGB yellow
         #define LL_PROFILE_ZONE_INFO(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0X00FFFF  )  // RGB cyan
@@ -163,10 +163,10 @@ namespace LLProfiler
         // </FS:Beq>
     #endif
     #if LL_PROFILER_CONFIGURATION == LL_PROFILER_CONFIG_TRACY_FAST_TIMER
-        #define LL_PROFILER_FRAME_END                   FrameMark
+        #define LL_PROFILER_FRAME_END                   FrameMark;
         #define LL_PROFILER_SET_THREAD_NAME( name )     tracy::SetThreadName( name );    gProfilerEnabled = true;
-        #define LL_PROFILER_THREAD_BEGIN(name)          FrameMarkStart( name ) // C string
-        #define LL_PROFILER_THREAD_END(name)            FrameMarkEnd( name )   // C string
+        #define LL_PROFILER_THREAD_BEGIN(name)          FrameMarkStart( name ); // C string
+        #define LL_PROFILER_THREAD_END(name)            FrameMarkEnd( name );   // C string
 
         // <FS:Beq> revert change that obscures custom FTM zones.
         // #define LL_RECORD_BLOCK_TIME(name)              ZoneScoped                                          const LLTrace::BlockTimer& LL_GLUE_TOKENS(block_time_recorder, __LINE__)(LLTrace::timeThisBlock(name)); (void)LL_GLUE_TOKENS(block_time_recorder, __LINE__);
@@ -177,20 +177,20 @@ namespace LLProfiler
         // #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, true ) // RGB
         // #define LL_PROFILE_ZONE_SCOPED                  ZoneScoped
         #define LL_PROFILE_ZONE_NAMED(name)             ZoneNamedN( ___tracy_scoped_zone, name, LLProfiler::active );
-        #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, LLProfiler::active ) // RGB
-        #define LL_PROFILE_ZONE_SCOPED                  ZoneNamed( ___tracy_scoped_zone, LLProfiler::active ) // <FS:Beq/> Enable deferred collection through filters
+        #define LL_PROFILE_ZONE_NAMED_COLOR(name,color) ZoneNamedNC( ___tracy_scopped_zone, name, color, LLProfiler::active ); // RGB
+        #define LL_PROFILE_ZONE_SCOPED                  ZoneNamed( ___tracy_scoped_zone, LLProfiler::active ); // <FS:Beq/> Enable deferred collection through filters
         // </FS:Beq>
 
-        #define LL_PROFILE_ZONE_NUM( val )              ZoneValue( val )
-        #define LL_PROFILE_ZONE_TEXT( text, size )      ZoneText( text, size )
+        #define LL_PROFILE_ZONE_NUM( val )              ZoneValue( val );
+        #define LL_PROFILE_ZONE_TEXT( text, size )      ZoneText( text, size );
 
         #define LL_PROFILE_ZONE_ERR(name)               LL_PROFILE_ZONE_NAMED_COLOR( name, 0XFF0000  )  // RGB yellow
         #define LL_PROFILE_ZONE_INFO(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0X00FFFF  )  // RGB cyan
         #define LL_PROFILE_ZONE_WARN(name)              LL_PROFILE_ZONE_NAMED_COLOR( name, 0x0FFFF00 )  // RGB red
         // <FS:Beq> Additional FS Tracy macros
-        #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, LLProfiler::active )
-        #define LL_PROFILE_PLOT( name, value )          TracyPlot( name, value)
-        #define LL_PROFILE_PLOT_CONFIG_SQUARE(name)     TracyPlotConfig(name, tracy::PlotFormatType::Number, true, false, 0)
+        #define LL_PROFILE_ZONE_COLOR(color)            ZoneNamedC( ___tracy_scoped_zone, color, LLProfiler::active );
+        #define LL_PROFILE_PLOT( name, value )          TracyPlot( name, value);
+        #define LL_PROFILE_PLOT_CONFIG_SQUARE(name)     TracyPlotConfig(name, tracy::PlotFormatType::Number, true, false, 0);
         #define LL_PROFILE_IS_CONNECTED                 TracyIsConnected
         // </FS:Beq>
     #endif
@@ -221,10 +221,10 @@ namespace LLProfiler
 #endif // LL_PROFILER
 
 #if LL_PROFILER_ENABLE_TRACY_OPENGL
-#define LL_PROFILE_GPU_ZONE(name)        TracyGpuZone(name)
-#define LL_PROFILE_GPU_ZONEC(name,color) TracyGpuZoneC(name,color)
-#define LL_PROFILER_GPU_COLLECT           TracyGpuCollect
-#define LL_PROFILER_GPU_CONTEXT           TracyGpuContext
+#define LL_PROFILE_GPU_ZONE(name)        TracyGpuZone(name);
+#define LL_PROFILE_GPU_ZONEC(name,color) TracyGpuZoneC(name,color);
+#define LL_PROFILER_GPU_COLLECT           TracyGpuCollect;
+#define LL_PROFILER_GPU_CONTEXT           TracyGpuContext;
 #define LL_PROFILER_GPU_CONTEXT_NS(name, size)           TracyGpuContext;TracyGpuContextName(name,size);
 
 // disable memory tracking (incompatible with GPU tracing
@@ -240,8 +240,8 @@ namespace LLProfiler
 #define LL_LABEL_OBJECT_GL(type, name, length, label)
 
 #if LL_PROFILER_CONFIGURATION > 1
-#define LL_PROFILE_ALLOC(ptr, size)             TracyAlloc(ptr, size)
-#define LL_PROFILE_FREE(ptr)                    TracyFree(ptr)
+#define LL_PROFILE_ALLOC(ptr, size)             TracyAlloc(ptr, size);
+#define LL_PROFILE_FREE(ptr)                    TracyFree(ptr);
 #else
 #define LL_PROFILE_ALLOC(ptr, size)             (void)(ptr); (void)(size);
 #define LL_PROFILE_FREE(ptr)                    (void)(ptr);
@@ -250,7 +250,7 @@ namespace LLProfiler
 #endif
 
 #if LL_PROFILER_ENABLE_RENDER_DOC
-#define LL_LABEL_OBJECT_GL(type, name, length, label) glObjectLabel(type, name, length, label)
+#define LL_LABEL_OBJECT_GL(type, name, length, label) glObjectLabel(type, name, length, label);
 #else
 #define LL_LABEL_OBJECT_GL(type, name, length, label)
 #endif

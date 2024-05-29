@@ -279,6 +279,7 @@ namespace LLPerfStats
 
             auto ot{upd.objType};
             auto& key{upd.objID};
+            auto& avKey{upd.avID};
             auto type {upd.statType};
             auto val {upd.time};
             // <FS:Beq> markup to support coverage testing on stats collection
@@ -297,6 +298,14 @@ namespace LLPerfStats
                 doUpd(key, ot, type,val);
                 return;
             }
+
+            
+            if (ot == ObjType_t::OT_AVATAR)
+            {
+                // LL_INFOS("perfstats") << "Avatar update:" << LL_ENDL;
+                doUpd(avKey, ot, type, val);
+                return;
+            }            
         }
 
         static inline void doUpd(const LLUUID& key, ObjType_t ot, StatType_t type, uint64_t val)
