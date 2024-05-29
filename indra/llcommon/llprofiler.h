@@ -225,6 +225,7 @@ namespace LLProfiler
 #define LL_PROFILE_GPU_ZONEC(name,color) TracyGpuZoneC(name,color)
 #define LL_PROFILER_GPU_COLLECT           TracyGpuCollect
 #define LL_PROFILER_GPU_CONTEXT           TracyGpuContext
+#define LL_PROFILER_GPU_CONTEXT_NS(name, size)           TracyGpuContext;TracyGpuContextName(name,size);
 
 // disable memory tracking (incompatible with GPU tracing
 #define LL_PROFILE_ALLOC(ptr, size)             (void)(ptr); (void)(size);
@@ -234,6 +235,7 @@ namespace LLProfiler
 #define LL_PROFILE_GPU_ZONEC(name,color) (void)name;(void)color;
 #define LL_PROFILER_GPU_COLLECT
 #define LL_PROFILER_GPU_CONTEXT
+#define LL_PROFILER_GPU_CONTEXT_NS(name, size)           (void)name;(void)size;
 
 #define LL_LABEL_OBJECT_GL(type, name, length, label)
 

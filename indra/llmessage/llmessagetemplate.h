@@ -365,6 +365,7 @@ public:
 
     BOOL callHandlerFunc(LLMessageSystem *msgsystem) const
     {
+        LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
         if (mHandlerFunc)
         {
 

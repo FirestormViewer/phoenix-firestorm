@@ -283,7 +283,6 @@ namespace LLPerfStats
             auto val {upd.time};
             // <FS:Beq> markup to support coverage testing on stats collection
             #ifdef TRACY_ENABLE
-            auto& avKey{upd.avID};
             static char obstr[36];
             static char avstr[36];            
             LL_PROFILE_ZONE_TEXT(key.toStringFast(obstr), 36);
