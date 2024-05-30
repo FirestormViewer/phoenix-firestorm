@@ -82,7 +82,8 @@
 			<button label="Débloquer" name="unblock" tool_tip="Débloquer ce Résident"/>
 		</layout_panel>
 	</layout_stack>
-	<check_box label="Afficher dans la recherche" name="show_in_search_checkbox" tool_tip="Permettez aux usagers de vous voir dans les résultats de recherche"/>
+	<check_box label="Afficher dans la recherche" name="show_in_search" tool_tip="Permettez aux usagers de vous voir dans les résultats de recherche"/>
+	<check_box name="hide_sl_age" label="Afficher la date de naissance complète'" tool_tip="Laissez les gens voir votre âge SL"/>
 	<button name="save_description_changes" label="Enregistrer" />
 	<button name="discard_description_changes" label="Annuler" />
 </panel>

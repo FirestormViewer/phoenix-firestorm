@@ -35,7 +35,7 @@
 #include "llviewerregion.h"
 #include "rlvhandler.h"
 
-static constexpr char* CAPNAME = "AgentProfile";
+static constexpr char CAPNAME[] = "AgentProfile";
 
 FSRadarEntry::FSRadarEntry(const LLUUID& avid)
     : mID(avid),
@@ -55,85 +55,10 @@ FSRadarEntry::FSRadarEntry(const LLUUID& avid)
     mNotes(LLStringUtil::null),
     mAlertAge(false),
     mAgeAlertPerformed(false),
-    mAvatarNameCallbackConnection(),
-    mRegionCapabilitiesReceivedCallbackConnection(),
-    mRegionChangedCallbackConnection()
+    mPropertiesRequested(false),
+    mAvatarNameCallbackConnection()
 {
-    if (mID.notNull())
-    {
-        // NOTE: typically we request these once on creation to avoid excess traffic/processing.
-        //This means updates to these properties won't typically be seen while target is in nearby range.
-        LLAvatarPropertiesProcessor* processor = LLAvatarPropertiesProcessor::getInstance();
-        processor->addObserver(mID, this);
-
-        if (auto region = gAgent.getRegion(); region)
-        {
-            if (region->capabilitiesReceived())
-            {
-                if (LLGridManager::instance().isInSecondLife() || region->isCapabilityAvailable(CAPNAME))
-                {
-                    processor->sendAvatarPropertiesRequest(mID);
-                }
-                else
-                {
-                    processor->sendAvatarLegacyPropertiesRequest(mID);
-                    processor->sendAvatarNotesRequest(mID);
-                }
-            }
-            else
-            {
-                auto capsReceivedCb = [this](const LLUUID&, LLViewerRegion* reg)
-                    {
-                        if (mRegionCapabilitiesReceivedCallbackConnection.connected())
-                        {
-                            mRegionCapabilitiesReceivedCallbackConnection.disconnect();
-                        }
-                        gAgent.removeRegionChangedCallback(mRegionChangedCallbackConnection);
-                        if (LLGridManager::instance().isInSecondLife() || (reg && reg->isCapabilityAvailable(CAPNAME)))
-                        {
-                            LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(mID);
-                        }
-                        else
-                        {
-                            LLAvatarPropertiesProcessor::getInstance()->sendAvatarLegacyPropertiesRequest(mID);
-                            LLAvatarPropertiesProcessor::getInstance()->sendAvatarNotesRequest(mID);
-                        }
-                    };
-
-                mRegionChangedCallbackConnection = gAgent.addRegionChangedCallback([this, capsReceivedCb]()
-                    {
-                        if (mRegionCapabilitiesReceivedCallbackConnection.connected())
-                        {
-                            mRegionCapabilitiesReceivedCallbackConnection.disconnect();
-                        }
-
-                        if (auto newregion = gAgent.getRegion(); newregion)
-                        {
-                            if (newregion->capabilitiesReceived())
-                            {
-                                gAgent.removeRegionChangedCallback(mRegionChangedCallbackConnection);
-                                if (LLGridManager::instance().isInSecondLife() || newregion->isCapabilityAvailable(CAPNAME))
-                                {
-                                    LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(mID);
-                                }
-                                else
-                                {
-                                    LLAvatarPropertiesProcessor::getInstance()->sendAvatarLegacyPropertiesRequest(mID);
-                                    LLAvatarPropertiesProcessor::getInstance()->sendAvatarNotesRequest(mID);
-                                }
-                            }
-                            else
-                            {
-                                mRegionCapabilitiesReceivedCallbackConnection = newregion->setCapabilitiesReceivedCallback(capsReceivedCb);
-                            }
-                        }
-                    });
-
-                mRegionCapabilitiesReceivedCallbackConnection = region->setCapabilitiesReceivedCallback(capsReceivedCb);
-            }
-        }
-    }
-
+    requestProperties();
     updateName();
 }
 
@@ -147,11 +72,34 @@ FSRadarEntry::~FSRadarEntry()
     {
         mAvatarNameCallbackConnection.disconnect();
     }
-    if (mRegionCapabilitiesReceivedCallbackConnection.connected())
+}
+
+void FSRadarEntry::requestProperties()
+{
+    if (!mPropertiesRequested && mID.notNull())
     {
-        mRegionCapabilitiesReceivedCallbackConnection.disconnect();
+        // NOTE: typically we request these once on creation to avoid excess traffic/processing.
+        //This means updates to these properties won't typically be seen while target is in nearby range.
+        LLAvatarPropertiesProcessor* processor = LLAvatarPropertiesProcessor::getInstance();
+        processor->addObserver(mID, this);
+
+        if (auto region = gAgent.getRegion())
+        {
+            if (region->capabilitiesReceived())
+            {
+                if (LLGridManager::instance().isInSecondLife() || region->isCapabilityAvailable(CAPNAME))
+                {
+                    processor->sendAvatarPropertiesRequest(mID);
+                }
+                else
+                {
+                    processor->sendAvatarLegacyPropertiesRequest(mID);
+                    processor->sendAvatarNotesRequest(mID);
+                }
+                mPropertiesRequested = true;
+            }
+        }
     }
-    gAgent.removeRegionChangedCallback(mRegionChangedCallbackConnection);
 }
 
 void FSRadarEntry::updateName()

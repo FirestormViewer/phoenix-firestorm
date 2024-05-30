@@ -93,16 +93,16 @@
 			</panel>
 		
 			<panel name="P_R_Res">
-				<text name="T_R_Res" tool_tip="水の反射の解像度／品質を決定します。「非常によい」以上に設定する場合は、「光」タブの「高度な照明モデル」を有効にしておく必要があります。">
+				<text name="T_R_Res" tool_tip="水の反射の解像度／品質を決定します。">
 					解像度
 				</text>
 				<combo_box name="ReflectionRescombo">
 					<combo_box.item label="ふつう" name="0" />
 					<combo_box.item label="よい" name="1" />
-					<combo_box.item label="非常によい          - ※注意！　「高度な照明モデル」（光タブ内）を有効にしておく必要があります。" name="2" />
-					<combo_box.item label="優れている            - ※注意！　「高度な照明モデル」（光タブ内）を有効にしておく必要があります。" name="3" />
-					<combo_box.item label="非常に優れている      - ※注意！　「高度な照明モデル」（光タブ内）を有効にしておく必要があります。" name="4" />
-					<combo_box.item label="実物レベル             - ※注意！　「高度な照明モデル」（光タブ内）を有効にしておく必要があります。" name="5" />
+					<combo_box.item label="非常によい" name="2" />
+					<combo_box.item label="優れている" name="3" />
+					<combo_box.item label="非常に優れている" name="4" />
+					<combo_box.item label="実物レベル" name="5" />
 				</combo_box>
 				<check_box label="透明な水" name="TransparentWater" tool_tip="水を透明に描画します。ここにチェックを入れると、単純なテクスチャが適用された不透明な水を描画しなくなります。" />
 			</panel>
@@ -116,8 +116,6 @@
 			</panel>
 
 			<panel name="P_L_S_Settings">
-				<check_box label="高度な照明モデルを有効にする" name="RenderDeferred" tool_tip="ここにチェックを入れると、太陽、月、およびインワールドの光源による影を描画します。同時に、「被写界深度（DOF）」その他のグラフィック機能も「オン」にします。基本的に、インワールドにある「魅力的なもの」の殆どはこの機能を有効にしないと見ることができません。もしこの機能を有効にできない、或いは効果が確認できないという場合は、まず「WL」タブの「環境（大気）シェーダー」と「基本シェーダー」が共に有効になっていることを確認して下さい。" />
-				<check_box label="近くの光を有効にする" name="LocalLights" tool_tip="ここにチェックを入れるとインワールドにある光を全て点灯します。ここのチェックを外した場合でも、太陽と月は消えません。SIM内の光を除いて、太陽と月の光だけを使用したい場合に便利です。" />
 				<check_box label="装着している光源（フェイスライト）を有効にする" tool_tip="この機能は、例えばフェイスライトのような装着しているあらゆる光源を有効にします。その必要がある時にフェイスライトをオフにするのに便利な機能です。" name="Render Attached Lights" />
 			</panel>
 

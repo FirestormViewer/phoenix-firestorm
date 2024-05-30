@@ -139,6 +139,7 @@ set(viewer_SOURCE_FILES
     fsfloatervolumecontrols.cpp
     fsfloatervramusage.cpp
     fsfloaterwearablefavorites.cpp
+    fsfloaterwhitelisthelper.cpp
     fskeywords.cpp
     fslslbridge.cpp
     fslslbridgerequest.cpp
@@ -167,6 +168,7 @@ set(viewer_SOURCE_FILES
     fsscriptlibrary.cpp
     fsscrolllistctrl.cpp
     fsslurlcommand.cpp
+    fsworldmapmessage.cpp
     lggbeamcolormapfloater.cpp
     lggbeammapfloater.cpp
     lggbeammaps.cpp
@@ -178,8 +180,6 @@ set(viewer_SOURCE_FILES
     llpanelopenregionsettings.cpp
     # <FS:Ansariel> [Legacy Bake]
     llagentwearablesfetch.cpp
-
-    # local mesh
     vjlocalmesh.cpp
     vjfloaterlocalmesh.cpp
     vjlocalmeshimportdae.cpp
@@ -938,6 +938,7 @@ set(viewer_HEADER_FILES
     fsfloatervolumecontrols.h
     fsfloatervramusage.h
     fsfloaterwearablefavorites.h
+    fsfloaterwhitelisthelper.h
     fsgridhandler.h
     fskeywords.h
     fslslbridge.h
@@ -968,6 +969,7 @@ set(viewer_HEADER_FILES
     fsscrolllistctrl.h
     fsslurl.h
     fsslurlcommand.h
+    fsworldmapmessage.h
     lggbeamcolormapfloater.h
     lggbeammapfloater.h
     lggbeammaps.h
@@ -978,8 +980,6 @@ set(viewer_HEADER_FILES
     llfloaterflickr.h
     # <FS:Ansariel> [Legacy Bake]
     llagentwearablesfetch.h
-
-    # local mesh
     vjlocalmesh.h
     vjfloaterlocalmesh.h
     vjlocalmeshimportdae.h

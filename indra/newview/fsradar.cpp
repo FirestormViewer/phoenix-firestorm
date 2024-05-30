@@ -90,13 +90,15 @@ public:
 //=============================================================================
 
 FSRadar::FSRadar() :
-        mRadarAlertRequest(false),
-        mRadarFrameCount(0),
-        mRadarLastBulkOffsetRequestTime(0),
-        mRadarLastRequestTime(0.f),
-        mShowUsernamesCallbackConnection(),
-        mNameFormatCallbackConnection(),
-        mAgeAlertCallbackConnection()
+    mRadarAlertRequest(false),
+    mRadarFrameCount(0),
+    mRadarLastBulkOffsetRequestTime(0),
+    mRadarLastRequestTime(0.f),
+    mShowUsernamesCallbackConnection(),
+    mNameFormatCallbackConnection(),
+    mAgeAlertCallbackConnection(),
+    mRegionCapabilitiesReceivedCallbackConnection(),
+    mRegionChangedCallbackConnection()
 {
     // Use the callback from LLAvatarNameCache here or we might update the names too early!
     LLAvatarNameCache::getInstance()->addUseDisplayNamesCallback(boost::bind(&FSRadar::updateNames, this));
@@ -104,10 +106,18 @@ FSRadar::FSRadar() :
 
     mNameFormatCallbackConnection = gSavedSettings.getControl("RadarNameFormat")->getSignal()->connect(boost::bind(&FSRadar::updateNames, this));
     mAgeAlertCallbackConnection = gSavedSettings.getControl("RadarAvatarAgeAlertValue")->getSignal()->connect(boost::bind(&FSRadar::updateAgeAlertCheck, this));
+
+    mRegionChangedCallbackConnection = gAgent.addRegionChangedCallback([this]() { onRegionChanged(); });
 }
 
 FSRadar::~FSRadar()
 {
+    gAgent.removeRegionChangedCallback(mRegionChangedCallbackConnection);
+    if (mRegionCapabilitiesReceivedCallbackConnection.connected())
+    {
+        mRegionCapabilitiesReceivedCallbackConnection.disconnect();
+    }
+
     if (mShowUsernamesCallbackConnection.connected())
     {
         mShowUsernamesCallbackConnection.disconnect();
@@ -594,9 +604,9 @@ void FSRadar::updateRadarList()
         entry_options["name_style"] = nameCellStyle;
 
         LLColor4 name_color = colortable.getColor("AvatarListItemIconDefaultColor", LLColor4::white).get();
-        name_color = contactsets->colorize(avId, (sFSRadarColorNamesByDistance ? range_color.get() : name_color), LGG_CS_RADAR);
+        name_color = contactsets->colorize(avId, (sFSRadarColorNamesByDistance ? range_color.get() : name_color), ContactSetType::RADAR);
 
-        contactsets->hasFriendColorThatShouldShow(avId, LGG_CS_RADAR, name_color);
+        contactsets->hasFriendColorThatShouldShow(avId, ContactSetType::RADAR, name_color);
 
         entry_options["name_color"] = name_color.getValue();
 
@@ -1040,8 +1050,35 @@ void FSRadar::updateAgeAlertCheck()
 
 void FSRadar::updateNotes(const LLUUID& avatar_id, std::string_view notes)
 {
-    if (auto entry = getEntry(avatar_id); entry)
+    if (auto entry = getEntry(avatar_id))
     {
         entry->setNotes(notes);
+    }
+}
+
+void FSRadar::onRegionChanged()
+{
+    if (mRegionCapabilitiesReceivedCallbackConnection.connected())
+    {
+        mRegionCapabilitiesReceivedCallbackConnection.disconnect();
+    }
+
+    if (auto region = gAgent.getRegion())
+    {
+        if (region->capabilitiesReceived())
+        {
+            for (auto& [id, entry] : mEntryList)
+                entry->requestProperties();
+        }
+        else
+        {
+            mRegionCapabilitiesReceivedCallbackConnection = region->setCapabilitiesReceivedCallback(
+                [this](const LLUUID&, LLViewerRegion*)
+                {
+                    mRegionCapabilitiesReceivedCallbackConnection.disconnect();
+                    for (auto& [id, entry] : mEntryList)
+                        entry->requestProperties();
+                });
+        }
     }
 }

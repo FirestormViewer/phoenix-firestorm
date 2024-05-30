@@ -22,11 +22,13 @@
 #include "lggcontactsets.h"
 
 #include "fscommon.h"
+#include "fsdata.h"
 #include "fsradar.h"
 #include "llagent.h"
 #include "llavatarnamecache.h"
 #include "llcallingcard.h"
 #include "lldir.h"
+#include "llsdutil.h"
 #include "llmutelist.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
@@ -35,13 +37,11 @@
 #include "lluicolortable.h"
 #include "llviewercontrol.h"
 #include "llvoavatar.h"
-#include "fsdata.h"
 #include "rlvactions.h"
 #include "rlvhandler.h"
 
 constexpr F32 COLOR_DAMPENING = 0.8f;
-const std::string CONTACT_SETS_FILE = "settings_friends_groups.xml";
-const std::string CS_PSEUDONYM_QUOTED = "'--- ---'";
+constexpr char CONTACT_SETS_FILE[] = "settings_friends_groups.xml";
 
 LGGContactSets::LGGContactSets()
 {
@@ -223,14 +223,13 @@ LLSD LGGContactSets::exportToLLSD()
 
 void LGGContactSets::importFromLLSD(const LLSD& data)
 {
-    for (LLSD::map_const_iterator data_it = data.beginMap(); data_it != data.endMap(); ++data_it)
+    for (const auto& [key, value] : llsd::inMap(data))
     {
-        std::string name = data_it->first;
-        if (isInternalSetName(name))
+        if (isInternalSetName(key))
         {
-            if (name == CS_GLOBAL_SETTINGS)
+            if (key == CS_GLOBAL_SETTINGS)
             {
-                LLSD global_setting_data = data_it->second;
+                LLSD global_setting_data = value;
 
                 LLColor4 color = LLColor4::grey;
                 if (global_setting_data.has("defaultColor"))
@@ -240,32 +239,28 @@ void LGGContactSets::importFromLLSD(const LLSD& data)
                 mDefaultColor = color;
             }
 
-            if (name == CS_SET_EXTRA_AVS)
+            if (key == CS_SET_EXTRA_AVS)
             {
-                LLSD extra_avatar_data = data_it->second;
-
-                for (LLSD::map_const_iterator extra_avatar_it = extra_avatar_data.beginMap(); extra_avatar_it != extra_avatar_data.endMap(); ++extra_avatar_it)
+                for (const auto& [av_key, av_value] : llsd::inMap(value))
                 {
-                    mExtraAvatars.insert(LLUUID(extra_avatar_it->first));
+                    mExtraAvatars.insert(LLUUID(av_key));
                 }
             }
 
-            if (name == CS_SET_PSEUDONYM)
+            if (key == CS_SET_PSEUDONYM)
             {
-                LLSD pseudonym_data = data_it->second;
-
-                for (LLSD::map_const_iterator pseudonym_data_it = pseudonym_data.beginMap(); pseudonym_data_it != pseudonym_data.endMap(); ++pseudonym_data_it)
+                for (const auto& [av_key, av_value] : llsd::inMap(value))
                 {
-                    mPseudonyms[LLUUID(pseudonym_data_it->first)] = pseudonym_data_it->second.asString();
+                    mPseudonyms.emplace(LLUUID(av_key), av_value.asString());
                 }
             }
         }
         else
         {
-            LLSD set_data = data_it->second;
+            LLSD set_data = value;
 
             ContactSet* new_set = new ContactSet();
-            new_set->mName = name;
+            new_set->mName = key;
 
             LLColor4 color = getDefaultColor();
             if (set_data.has("color"))
@@ -283,14 +278,13 @@ void LGGContactSets::importFromLLSD(const LLSD& data)
 
             if (set_data.has("friends"))
             {
-                LLSD friend_data = set_data["friends"];
-                for (LLSD::map_const_iterator friend_it = friend_data.beginMap(); friend_it != friend_data.endMap(); ++friend_it)
+                for (const auto& [av_key, av_value] : llsd::inMap(set_data["friends"]))
                 {
-                    new_set->mFriends.insert(LLUUID(friend_it->first));
+                    new_set->mFriends.emplace(LLUUID(av_key));
                 }
             }
 
-            mContactSets[name] = new_set;
+            mContactSets[key] = new_set;
         }
     }
 }
@@ -305,7 +299,7 @@ LLColor4 LGGContactSets::getSetColor(std::string_view set_name) const
     return getDefaultColor();
 };
 
-LLColor4 LGGContactSets::colorize(const LLUUID& uuid, LLColor4 color, ELGGCSType type) const
+LLColor4 LGGContactSets::colorize(const LLUUID& uuid, LLColor4 color, ContactSetType type) const
 {
     static LLCachedControl<bool> legacy_radar_friend(gSavedSettings, "FSLegacyRadarFriendColoring");
     static LLCachedControl<bool> legacy_radar_linden(gSavedSettings, "FSLegacyRadarLindenColoring");
@@ -315,17 +309,17 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, LLColor4 color, ELGGCSType
     {
         switch (type)
         {
-            case LGG_CS_CHAT:
-            case LGG_CS_IM:
+            case ContactSetType::CHAT:
+            case ContactSetType::IM:
                 color = LLUIColorTable::instance().getColor("UserChatColor", LLColor4::white).get();
                 break;
-            case LGG_CS_TAG:
+            case ContactSetType::TAG:
                 color = LLUIColorTable::instance().getColor("NameTagSelf", LLColor4::white).get();
                 break;
-            case LGG_CS_MINIMAP:
+            case ContactSetType::MINIMAP:
                 color = LLUIColorTable::instance().getColor("MapAvatarSelfColor", LLColor4::white).get();
                 break;
-            case LGG_CS_RADAR:
+            case ContactSetType::RADAR:
             default:
                 LL_DEBUGS("ContactSets") << "Unhandled colorize case!" << LL_ENDL;
                 break;
@@ -335,14 +329,14 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, LLColor4 color, ELGGCSType
     {
         switch (type)
         {
-            case LGG_CS_CHAT:
+            case ContactSetType::CHAT:
                 if (!rlv_shownames)
                     color = LLUIColorTable::instance().getColor("FriendsChatColor", LLColor4::white).get();
                 break;
-            case LGG_CS_IM:
+            case ContactSetType::IM:
                 color = LLUIColorTable::instance().getColor("FriendsChatColor", LLColor4::white).get();
                 break;
-            case LGG_CS_TAG:
+            case ContactSetType::TAG:
             {
                 // This is optional per prefs.
                 static LLCachedControl<bool> color_friends(gSavedSettings, "NameTagShowFriends");
@@ -351,12 +345,12 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, LLColor4 color, ELGGCSType
                     color = LLUIColorTable::instance().getColor("NameTagFriend", LLColor4::white).get();
                 }
             }
-                break;
-            case LGG_CS_MINIMAP:
+            break;
+            case ContactSetType::MINIMAP:
                 if (!rlv_shownames)
                     color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::white).get();
                 break;
-            case LGG_CS_RADAR:
+            case ContactSetType::RADAR:
                 if (legacy_radar_friend && !rlv_shownames)
                     color = LLUIColorTable::instance().getColor("MapAvatarFriendColor", LLColor4::white).get();
                 break;
@@ -373,17 +367,17 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, LLColor4 color, ELGGCSType
     {
         switch (type)
         {
-            case LGG_CS_CHAT:
-            case LGG_CS_IM:
+            case ContactSetType::CHAT:
+            case ContactSetType::IM:
                 color = LLUIColorTable::instance().getColor("MutedChatColor", LLColor4::grey3).get();
                 break;
-            case LGG_CS_TAG:
+            case ContactSetType::TAG:
                 color = LLUIColorTable::instance().getColor("NameTagMuted", LLColor4::grey3).get();
                 break;
-            case LGG_CS_MINIMAP:
+            case ContactSetType::MINIMAP:
                 color = LLUIColorTable::instance().getColor("MapAvatarMutedColor", LLColor4::grey3).get();
                 break;
-            case LGG_CS_RADAR:
+            case ContactSetType::RADAR:
             default:
                 LL_DEBUGS("ContactSets") << "Unhandled colorize case!" << LL_ENDL;
                 break;
@@ -393,17 +387,17 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, LLColor4 color, ELGGCSType
     {
         switch (type)
         {
-            case LGG_CS_CHAT:
-            case LGG_CS_IM:
+            case ContactSetType::CHAT:
+            case ContactSetType::IM:
                 color = LLUIColorTable::instance().getColor("FirestormChatColor", LLColor4::red).get();
                 break;
-            case LGG_CS_TAG:
+            case ContactSetType::TAG:
                 color = LLUIColorTable::instance().getColor("NameTagFirestorm", LLColor4::red).get();
                 break;
-            case LGG_CS_MINIMAP:
+            case ContactSetType::MINIMAP:
                 color = LLUIColorTable::instance().getColor("MapAvatarFirestormColor", LLColor4::red).get();
                 break;
-            case LGG_CS_RADAR:
+            case ContactSetType::RADAR:
             default:
                 LL_DEBUGS("ContactSets") << "Unhandled colorize case!" << LL_ENDL;
                 break;
@@ -415,17 +409,17 @@ LLColor4 LGGContactSets::colorize(const LLUUID& uuid, LLColor4 color, ELGGCSType
         {
             switch (type)
             {
-                case LGG_CS_CHAT:
-                case LGG_CS_IM:
+                case ContactSetType::CHAT:
+                case ContactSetType::IM:
                     color = LLUIColorTable::instance().getColor("LindenChatColor", LLColor4::blue).get();
                     break;
-                case LGG_CS_TAG:
+                case ContactSetType::TAG:
                     color = LLUIColorTable::instance().getColor("NameTagLinden", LLColor4::blue).get();
                     break;
-                case LGG_CS_MINIMAP:
+                case ContactSetType::MINIMAP:
                     color = LLUIColorTable::instance().getColor("MapAvatarLindenColor", LLColor4::blue).get();
                     break;
-                case LGG_CS_RADAR:
+                case ContactSetType::RADAR:
                     if (legacy_radar_linden)
                         color = LLUIColorTable::instance().getColor("MapAvatarLindenColor", LLColor4::blue).get();
                     break;
@@ -452,7 +446,7 @@ LLColor4 LGGContactSets::getFriendColor(const LLUUID& friend_id, std::string_vie
         return color;
     }
 
-    U32 lowest = U32_MAX;
+    U32 lowest{ U32_MAX };
     for (const auto& set_name : getFriendSets(friend_id))
     {
         if (set_name != ignored_set_name)
@@ -485,14 +479,14 @@ LLColor4 LGGContactSets::getFriendColor(const LLUUID& friend_id, std::string_vie
     return color;
 }
 
-bool LGGContactSets::hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGCSType type) const
+bool LGGContactSets::hasFriendColorThatShouldShow(const LLUUID& friend_id, ContactSetType type) const
 {
     LLColor4 color = LLColor4::white;
     return hasFriendColorThatShouldShow(friend_id, type, color);
 }
 
 // handle all settings and rlv that would prevent us from showing the cs color
-bool LGGContactSets::hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGCSType type, LLColor4& color) const
+bool LGGContactSets::hasFriendColorThatShouldShow(const LLUUID& friend_id, ContactSetType type, LLColor4& color) const
 {
     if (!RlvActions::canShowName(RlvActions::SNC_DEFAULT, friend_id))
     {
@@ -506,20 +500,20 @@ bool LGGContactSets::hasFriendColorThatShouldShow(const LLUUID& friend_id, ELGGC
 
     switch (type)
     {
-        case LGG_CS_CHAT:
-        case LGG_CS_IM:
+        case ContactSetType::CHAT:
+        case ContactSetType::IM:
             if (!fsContactSetsColorizeChat)
                 return false;
             break;
-        case LGG_CS_TAG:
+        case ContactSetType::TAG:
             if (!fsContactSetsColorizeTag)
                 return false;
             break;
-        case LGG_CS_RADAR:
+        case ContactSetType::RADAR:
             if (!fsContactSetsColorizeRadar)
                 return false;
             break;
-        case LGG_CS_MINIMAP:
+        case ContactSetType::MINIMAP:
             if (!fsContactSetsColorizeMiniMap)
                 return false;
             break;
@@ -607,9 +601,9 @@ uuid_vec_t LGGContactSets::getFriendsInAnySet() const
 
     for (const auto& [set_name, set] : mContactSets)
     {
-        for (uuid_set_t::iterator itr = set->mFriends.begin(); itr != set->mFriends.end(); ++itr)
+        for (const auto& friend_id : set->mFriends)
         {
-            friendsInAnySet.insert(*itr);
+            friendsInAnySet.emplace(friend_id);
         }
     }
 
@@ -648,7 +642,7 @@ bool LGGContactSets::isFriendInSet(const LLUUID& friend_id, std::string_view set
         return isNonFriend(friend_id);
     }
 
-    if( set_name.empty() )
+    if (set_name.empty())
         return false;
 
     if (ContactSet* set = getContactSet(set_name); set)
@@ -1056,12 +1050,10 @@ bool LGGContactSets::handleRemoveAvatarFromSetCallback(const LLSD& notification,
         LGGContactSets& instance = LGGContactSets::instance();
         LLAvatarTracker& tracker = LLAvatarTracker::instance();
 
-        for (LLSD::array_const_iterator it = notification["payload"]["ids"].beginArray();
-            it != notification["payload"]["ids"].endArray();
-            ++it)
+        const std::string set_name = notification["payload"]["contact_set"].asString();
+        for (const auto& item : llsd::inArray(notification["payload"]["ids"]))
         {
-            const LLUUID& id = it->asUUID();
-            std::string set_name = notification["payload"]["contact_set"].asString();
+            const LLUUID& id = item.asUUID();
 
             instance.removeFriendFromSet(id, set_name, false);
 
