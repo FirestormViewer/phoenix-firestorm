@@ -34,23 +34,21 @@
 //     - only affects LLWorldMapMessage->sendNamedRegionRequest(name, callback, ...)
 //     - in particular where a grid hosts overlapping names, hop Region matching may work better
 
+#include "llviewerprecompiledheaders.h"
 
+#ifdef OPENSIM
 #include "fsworldmapmessage.h"
 
-#include <regex>
-#include <string>
-
-#include "llcommon.h"
 #include "llagent.h"
-#include "llsingleton.h"
 #include "llworldmap.h" // grid_to_region_handle
 #include "fsgridhandler.h"
 #include "llworldmapmessage.h"
 #include "message.h"
+#include <regex>
 
 #define htxhop_log(format, ...) LL_DEBUGS("GridManager") << llformat(format, __VA_ARGS__) << LL_ENDL;
 
-inline std::string extract_region(std::string const& s)
+static inline std::string extract_region(const std::string& s)
 {
     static auto const& patterns = {
         std::regex { R"(/ ([^/:=]+)$)" }, // TODO: figure out where the spec lives for hop "slash space" embedding...
@@ -59,8 +57,10 @@ inline std::string extract_region(std::string const& s)
     std::smatch match_results;
     std::string ls { s };
     LLStringUtil::toLower(ls);
-    for (auto const& pattern : patterns) {
-        if (std::regex_search(ls, match_results, pattern)) {
+    for (const auto& pattern : patterns)
+    {
+        if (std::regex_search(ls, match_results, pattern))
+        {
             return match_results[1].str();
         }
     }
@@ -68,7 +68,8 @@ inline std::string extract_region(std::string const& s)
 }
 
 // helper to encapsulate Region Map Block responses
-struct _MapBlock {
+struct _MapBlock
+{
     S32 index {};
     U16 x_regions {}, y_regions {}, x_size { REGION_WIDTH_UNITS }, y_size { REGION_WIDTH_UNITS };
     std::string name {};
@@ -93,11 +94,13 @@ struct _MapBlock {
         //        msg->getU8Fast(_PREHASH_Data, _PREHASH_Agents, agents, block);
         msg->getUUIDFast(_PREHASH_Data, _PREHASH_MapImageID, image_id, block);
         // <FS:CR> Aurora Sim
-        if (msg->getNumberOfBlocksFast(_PREHASH_Size) > 0) {
+        if (msg->getNumberOfBlocksFast(_PREHASH_Size) > 0)
+        {
             msg->getU16Fast(_PREHASH_Size, _PREHASH_SizeX, x_size, block);
             msg->getU16Fast(_PREHASH_Size, _PREHASH_SizeY, y_size, block);
         }
-        if (x_size == 0 || (x_size % 16) != 0 || (y_size % 16) != 0) {
+        if (x_size == 0 || (x_size % 16) != 0 || (y_size % 16) != 0)
+        {
             x_size = 256;
             y_size = 256;
         }
@@ -109,40 +112,43 @@ constexpr U32 EXACT_FLAG = 0x00000000;
 constexpr U32 LAYER_FLAG = 0x00000002;
 
 // see: LLWorldMapMessage::sendNamedRegionRequest
-void _hypergrid_sendMapNameRequest(std::string const& region_name, U32 flags)
+static void _hypergrid_sendMapNameRequest(const std::string& region_name, U32 flags)
 {
     LLMessageSystem* msg = gMessageSystem;
     msg->newMessageFast(_PREHASH_MapNameRequest);
     msg->nextBlockFast(_PREHASH_AgentData);
-    msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-    msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+    msg->addUUIDFast(_PREHASH_AgentID, gAgentID);
+    msg->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
     msg->addU32Fast(_PREHASH_Flags, flags);
     msg->addU32Fast(_PREHASH_EstateID, 0); // Filled in on sim
-    msg->addBOOLFast(_PREHASH_Godlike, FALSE); // Filled in on sim
+    msg->addBOOLFast(_PREHASH_Godlike, false); // Filled in on sim
     msg->nextBlockFast(_PREHASH_NameData);
     msg->addStringFast(_PREHASH_Name, region_name);
     gAgent.sendReliableMessage();
 }
 
-using url_callback_t = std::function<void(uint64_t region_handle, const std::string& url, const LLUUID& snapshot_id, bool teleport)>;
-struct _AdoptedRegionNameQuery {
-    std::string key;
-    std::string region_name;
+struct _AdoptedRegionNameQuery
+{
+    std::string key{};
+    std::string region_name{};
     url_callback_t arbitrary_callback;
-    std::string arbitrary_slurl;
-    bool arbitrary_teleport;
+    std::string arbitrary_slurl{};
+    bool arbitrary_teleport{ false };
 };
+
 // map extracted region names => pending query entries
 static std::map<std::string, _AdoptedRegionNameQuery> _region_name_queries;
 
-bool hypergrid_sendExactNamedRegionRequest(std::string const& region_name, url_callback_t const& callback, std::string const& callback_url,
-    bool teleport)
+bool hypergrid_sendExactNamedRegionRequest(const std::string& region_name, const url_callback_t& callback, const std::string& callback_url, bool teleport)
 {
-    if (!LLGridManager::instance().isInOpenSim() || !callback) {
+    if (!LLGridManager::instance().isInOpenSim() || !callback)
+    {
         return false;
     }
+
     auto key = extract_region(region_name);
-    if (key.empty()) {
+    if (key.empty())
+    {
         return false;
     }
     _region_name_queries[key] = { key, region_name, callback, callback_url, teleport };
@@ -153,7 +159,8 @@ bool hypergrid_sendExactNamedRegionRequest(std::string const& region_name, url_c
 
 bool hypergrid_processExactNamedRegionResponse(LLMessageSystem* msg, U32 agent_flags)
 {
-    if (!LLGridManager::instance().isInOpenSim() || !msg || agent_flags & LAYER_FLAG) {
+    if (!LLGridManager::instance().isInOpenSim() || !msg || agent_flags & LAYER_FLAG)
+    {
         return false;
     }
     // NOTE: we assume only agent_flags have been read from msg so far
@@ -161,30 +168,38 @@ bool hypergrid_processExactNamedRegionResponse(LLMessageSystem* msg, U32 agent_f
 
     std::vector<_MapBlock> blocks;
     blocks.reserve(num_blocks);
-    for (int b = 0; b < num_blocks; b++) {
+    for (S32 b = 0; b < num_blocks; b++)
+    {
         blocks.emplace_back(msg, b);
     }
-    for (auto const& _block : blocks) {
+    for (const auto& _block : blocks)
+    {
         htxhop_log("#%02d key='%s' block.name='%s' block.region_handle=%llu", _block.index, extract_region(_block.name).c_str(), _block.name.c_str(), _block.region_handle());
     }
     // special case: handle singular result w/empty name tho valid region handle AND singular pending query as a match
     // (might be that a landing area / redirect hop URL is coming back: "^hop://grid:port/$", which extract_region's into "")
     bool solo_result = blocks.size() == 2 && blocks[0].region_handle() && extract_region(blocks[0].name).empty() && !blocks[1].region_handle();
-    if (solo_result && _region_name_queries.size() == 1) {
+    if (solo_result && _region_name_queries.size() == 1)
+    {
         htxhop_log("applying first block as redirect; region_handle: %llu", blocks[0].region_handle());
         blocks[0].name = _region_name_queries.begin()->second.region_name;
     }
 
-    for (auto const& _block : blocks) {
+    for (const auto& _block : blocks)
+    {
         auto key = extract_region(_block.name);
-        if (key.empty()) {
+        if (key.empty())
+        {
             continue;
         }
+
         auto idx = _region_name_queries.find(key);
-        if (idx == _region_name_queries.end()) {
+        if (idx == _region_name_queries.end())
+        {
             continue;
         }
-        auto pending = idx->second;
+
+        const auto& pending = idx->second;
         htxhop_log("Recv Region Name '%s' (key: %s) block.name='%s' block.region_handle=%llu)", pending.region_name.c_str(),
             pending.key.c_str(), _block.name.c_str(), _block.region_handle());
         _region_name_queries.erase(idx);
@@ -193,3 +208,4 @@ bool hypergrid_processExactNamedRegionResponse(LLMessageSystem* msg, U32 agent_f
     }
     return false;
 }
+#endif

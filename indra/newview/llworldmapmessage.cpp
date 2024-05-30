@@ -101,9 +101,12 @@ void LLWorldMapMessage::sendNamedRegionRequest(std::string region_name,
         bool teleport)  // immediately teleport when result returned
 {
     // <FS:humbletim> FIRE-31368: [OPENSIM] ... Search returns more than one result
-    if (hypergrid_sendExactNamedRegionRequest(region_name, callback, callback_url, teleport)) {
+#ifdef OPENSIM
+    if (hypergrid_sendExactNamedRegionRequest(region_name, callback, callback_url, teleport))
+    {
         return;
     }
+#endif
     // </FS:humbletim>
     //LL_INFOS("WorldMap") << LL_ENDL;
     mSLURLRegionName = region_name;
@@ -167,9 +170,12 @@ void LLWorldMapMessage::processMapBlockReply(LLMessageSystem* msg, void**)
     U32 agent_flags;
     msg->getU32Fast(_PREHASH_AgentData, _PREHASH_Flags, agent_flags);
     // <FS:humbletim> FIRE-31368: [OPENSIM] ... Search returns more than one result
-    if (hypergrid_processExactNamedRegionResponse(msg, agent_flags)) {
+#ifdef OPENSIM
+    if (hypergrid_processExactNamedRegionResponse(msg, agent_flags))
+    {
         return;
     }
+#endif
     // </FS:humbletim>
 
     // There's only one flag that we ever use here
