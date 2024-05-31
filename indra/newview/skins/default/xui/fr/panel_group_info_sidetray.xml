@@ -9,7 +9,10 @@
 	<panel.string name="leave_txt">Quitter</panel.string>
 	<layout_stack name="group_info_sidetray_main">
 		<layout_panel name="header_container">
-			<panel name="group_info_top"><line_editor label="Saisissez le nom de votre nouveau groupe ici" name="group_name_editor"/></panel>
+			<panel name="group_info_top">
+				<text_editor name="group_name" value="(Chargement ...)"/>
+				<line_editor label="Saisissez le nom de votre nouveau groupe ici" name="group_name_editor"/>
+			</panel>
 		</layout_panel>
 		<layout_panel name="group_info_content">
 			<layout_stack name="layout">
@@ -24,11 +27,17 @@
 				</layout_panel>
 			</layout_stack>
 			<layout_stack name="button_row_ls">
-				<layout_panel name="btn_chat_lp"><button label="Chat" name="btn_chat"/></layout_panel>
-				<layout_panel name="call_btn_lp"><button name="btn_call" label="Appel de groupe" tool_tip="Appeler ce groupe"/></layout_panel>
+				<layout_panel name="btn_activate_lp">
+					<button label="Activer" name="btn_activate" />
+				</layout_panel>
+				<layout_panel name="btn_chat_lp">
+					<button label="Chat" name="btn_chat"/>
+				</layout_panel>
+				<layout_panel name="call_btn_lp">
+					<button name="btn_call" label="Appel de groupe" tool_tip="Appeler ce groupe"/>
+				</layout_panel>
 				<layout_panel name="btn_apply_lp">
 					<button label="Enregistrer" label_selected="Enregistrer" name="btn_apply"/>
-					<button label="Créer un groupe" name="btn_create" tool_tip="Créer un nouveau groupe"/>
 				</layout_panel>
 			</layout_stack>
 		</layout_panel>
