@@ -199,7 +199,7 @@ bool hypergrid_processExactNamedRegionResponse(LLMessageSystem* msg, U32 agent_f
             continue;
         }
 
-        const auto& pending = idx->second;
+        auto pending = idx->second;
         htxhop_log("Recv Region Name '%s' (key: %s) block.name='%s' block.region_handle=%llu)", pending.region_name.c_str(),
             pending.key.c_str(), _block.name.c_str(), _block.region_handle());
         _region_name_queries.erase(idx);
