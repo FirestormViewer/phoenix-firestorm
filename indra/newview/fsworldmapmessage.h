@@ -37,10 +37,13 @@
 class LLMessageSystem;
 class LLUUID;
 
-using url_callback_t = std::function<void(uint64_t region_handle, const std::string& url, const LLUUID& snapshot_id, bool teleport)>;
+namespace hypergrid
+{
+    // Needs to be identical to url_callback_t defined in llworldmapmessage.h
+    using url_callback_t = std::function<void(U64 region_handle, const std::string& url, const LLUUID& snapshot_id, bool teleport)>;
 
-bool hypergrid_sendExactNamedRegionRequest(const std::string& region_name, const url_callback_t& callback, const std::string& callback_url, bool teleport);
-bool hypergrid_processExactNamedRegionResponse(LLMessageSystem* msg, U32 agent_flags);
-
+    bool sendExactNamedRegionRequest(const std::string& region_name, const url_callback_t& callback, const std::string& callback_url, bool teleport);
+    bool processExactNamedRegionResponse(LLMessageSystem* msg, U32 agent_flags);
+}
 #endif
 #endif // FS_WORLDMAPMESSAGE_H
