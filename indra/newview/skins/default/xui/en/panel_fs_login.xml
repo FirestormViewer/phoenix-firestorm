@@ -150,23 +150,23 @@
         Start at:
       </text>
       <combo_box
-          allow_text_entry="true"
-          control_name="NextLoginLocation"
-          follows="left|bottom"
-          height="22"
-          max_chars="128"
-          top_pad="0"
-          name="start_location_combo"
-          width="165">
-          <combo_box.item
+        allow_text_entry="true"
+        control_name="NextLoginLocation"
+        follows="left|bottom"
+        height="22"
+        max_chars="128"
+        top_pad="0"
+        name="start_location_combo"
+        width="165">
+        <combo_box.item
           label="Last location"
           name="MyLastLocation"
           value="last" />
-          <combo_box.item
+        <combo_box.item
           label="Home"
           name="MyHome"
           value="home" />
-          <combo_box.item
+        <combo_box.item
           label="&lt;Type region name&gt;"
           name="Typeregionname" value="" />
       </combo_box>
