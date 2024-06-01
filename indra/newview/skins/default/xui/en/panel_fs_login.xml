@@ -158,17 +158,17 @@
           top_pad="0"
           name="start_location_combo"
           width="165">
-        <combo_box.item
-            label="Last location"
-            name="MyLastLocation"
-            value="last" />
-        <combo_box.item
-            label="Home"
-            name="MyHome"
-            value="home" />
-        <combo_box.item
-            label="&lt;Type region name&gt;"
-            name="Typeregionname" value="" />
+          <combo_box.item
+          label="Last location"
+          name="MyLastLocation"
+          value="last" />
+          <combo_box.item
+          label="Home"
+          name="MyHome"
+          value="home" />
+          <combo_box.item
+          label="&lt;Type region name&gt;"
+          name="Typeregionname" value="" />
       </combo_box>
     </layout_panel>
     <layout_panel
@@ -179,6 +179,17 @@
         width="145"
         height="80"
         visible="false">
+      <text
+        follows="left|top|right"
+        font="SansSerifMedium"
+        text_color="EmphasisColor"
+        top="10"
+        height="16"
+        name="grid_builder_text"
+        left="5"
+        width="190">
+      + Click to add more grids
+      </text>
       <text
         follows="left|bottom"
         font="SansSerifSmall"
@@ -193,6 +204,7 @@
         allow_text_entry="true"
         follows="left|bottom"
         height="22"
+        top_pad="0"
         max_chars="256"
         force_disable_fulltext_search="true"
         combo_editor.commit_on_focus_lost="false"
