@@ -153,6 +153,17 @@
     <key>Value</key>
     <string>http://phoenixviewer.com/app/fsdata/grids.xml</string>
   </map>
+  <key>FSGridBuilderURL</key>
+  <map>
+    <key>Comment</key>
+    <string>Fetch an html page of grids from this URL.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>https://phoenixviewer.com/app/fsdata/fs_grid_builder.html</string>
+  </map>
   <key>LastConnectedGrid</key>
   <map>
     <key>Comment</key>

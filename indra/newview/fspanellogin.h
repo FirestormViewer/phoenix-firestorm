@@ -111,6 +111,7 @@ private:
     static void onClickRemove(void*);
     static void onRemoveCallback(const LLSD& notification, const LLSD& response);
     static void onClickGridMgrHelp(void*);
+    static void onClickGridBuilder(void*);
     static std::string credentialName();
 
 private:
