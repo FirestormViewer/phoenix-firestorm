@@ -187,7 +187,8 @@
         height="16"
         name="grid_builder_text"
         left="5"
-        width="190">
+        width="190"
+        visible="false">
       + Click to add more grids
       </text>
       <text

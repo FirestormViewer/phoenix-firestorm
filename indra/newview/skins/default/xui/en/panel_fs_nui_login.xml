@@ -291,7 +291,8 @@
       name="grid_builder_text"
       valign="center"
       left="45"
-      width="250">
+      width="250"
+      visible="false">
     + Click to add more grids
     </text>
     </layout_panel>
