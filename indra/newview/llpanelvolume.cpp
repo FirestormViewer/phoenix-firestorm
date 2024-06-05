@@ -391,6 +391,7 @@ void LLPanelVolume::getState( )
 
     // Reflection Probe
     BOOL is_probe = volobjp && volobjp->isReflectionProbe();
+    bool is_mirror = volobjp && volobjp->getReflectionProbeIsMirror();
     getChild<LLUICtrl>("Reflection Probe")->setValue(is_probe);
     getChildView("Reflection Probe")->setEnabled(editable && single_volume && volobjp && !volobjp->isMesh());
 
@@ -404,9 +405,9 @@ void LLPanelVolume::getState( )
 
     getChildView("Probe Dynamic")->setEnabled(probe_enabled);
     getChildView("Probe Update Type")->setEnabled(probe_enabled);
-    getChildView("Probe Volume Type")->setEnabled(probe_enabled);
-    getChildView("Probe Ambiance")->setEnabled(probe_enabled);
-    getChildView("Probe Near Clip")->setEnabled(probe_enabled);
+    getChildView("Probe Volume Type")->setEnabled(probe_enabled && !is_mirror);
+    getChildView("Probe Ambiance")->setEnabled(probe_enabled && !is_mirror);
+    getChildView("Probe Near Clip")->setEnabled(probe_enabled && !is_mirror);
     getChildView("Probe Update Label")->setEnabled(probe_enabled);
 
     if (!probe_enabled)
@@ -445,8 +446,8 @@ void LLPanelVolume::getState( )
             update_type = "Dynamic Mirror";
         }
 
-        getChildView("Probe Ambiance")->setEnabled(update_type != "Mirror");
-        getChildView("Probe Near Clip")->setEnabled(update_type != "Mirror");
+        getChildView("Probe Ambiance")->setEnabled(!is_mirror);
+        getChildView("Probe Near Clip")->setEnabled(!is_mirror);
 
         getChild<LLComboBox>("Probe Volume Type", true)->setValue(volume_type);
         getChild<LLSpinCtrl>("Probe Ambiance", true)->setValue(volobjp->getReflectionProbeAmbiance());
@@ -1494,6 +1495,8 @@ void LLPanelVolume::onCommitProbe(LLUICtrl* ctrl, void* userdata)
 
     bool is_mirror = update_type.find("Mirror") != std::string::npos;
 
+    self->getChildView("Probe Volume Type")->setEnabled(!is_mirror);
+
     volobjp->setReflectionProbeIsDynamic(update_type.find("Dynamic") != std::string::npos);
     volobjp->setReflectionProbeIsMirror(is_mirror);
 
@@ -1502,7 +1505,7 @@ void LLPanelVolume::onCommitProbe(LLUICtrl* ctrl, void* userdata)
 
     std::string shape_type = self->getChild<LLUICtrl>("Probe Volume Type")->getValue().asString();
 
-    bool is_box = shape_type == "Box";
+    bool is_box = shape_type == "Box" || is_mirror;
 
     if (volobjp->setReflectionProbeIsBox(is_box))
     {
