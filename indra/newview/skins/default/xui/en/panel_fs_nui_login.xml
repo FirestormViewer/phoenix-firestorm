@@ -282,6 +282,18 @@
     <combo_box.drop_down_button
       font="SansSerifLarge"/>
     </combo_box>
+    <text
+      follows="left|top|right"
+      font="SansSerifMedium"
+      text_color="EmphasisColor"
+      top_pad="5"
+      height="16"
+      name="grid_builder_text"
+      valign="center"
+      left="45"
+      width="250">
+    + Click to add more grids
+    </text>
     </layout_panel>
     <layout_panel
       follows="left|top|right"

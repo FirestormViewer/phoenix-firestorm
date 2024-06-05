@@ -102,7 +102,7 @@ void LLWorldMapMessage::sendNamedRegionRequest(std::string region_name,
 {
     // <FS:humbletim> FIRE-31368: [OPENSIM] ... Search returns more than one result
 #ifdef OPENSIM
-    if (hypergrid_sendExactNamedRegionRequest(region_name, callback, callback_url, teleport))
+    if (hypergrid::sendExactNamedRegionRequest(region_name, callback, callback_url, teleport))
     {
         return;
     }
@@ -171,7 +171,7 @@ void LLWorldMapMessage::processMapBlockReply(LLMessageSystem* msg, void**)
     msg->getU32Fast(_PREHASH_AgentData, _PREHASH_Flags, agent_flags);
     // <FS:humbletim> FIRE-31368: [OPENSIM] ... Search returns more than one result
 #ifdef OPENSIM
-    if (hypergrid_processExactNamedRegionResponse(msg, agent_flags))
+    if (hypergrid::processExactNamedRegionResponse(msg, agent_flags))
     {
         return;
     }
