@@ -763,7 +763,7 @@ LL_COMMON_API llwchar utf8str_to_wchar(const std::string& utf8str, size_t offset
 
 LL_COMMON_API std::string utf8str_showBytesUTF8(const std::string& utf8str);
 
-LL_COMMON_API bool wstring_has_emoji(const LLWString& wstr);
+LL_COMMON_API bool wstring_has_emoji(LLWStringView wstr);
 
 LL_COMMON_API bool wstring_remove_emojis(LLWString& wstr);
 

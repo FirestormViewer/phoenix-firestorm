@@ -37,10 +37,10 @@ FSFloaterWhiteListHelper::FSFloaterWhiteListHelper(const LLSD& key) : LLFloater(
 {
 }
 
-BOOL FSFloaterWhiteListHelper::postBuild()
+bool FSFloaterWhiteListHelper::postBuild()
 {
     populateWhitelistInfo();
-    return TRUE;
+    return true;
 }
 
 void FSFloaterWhiteListHelper::populateWhitelistInfo()
