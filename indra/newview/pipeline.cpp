@@ -8219,6 +8219,12 @@ void LLPipeline::renderDeferredLighting()
                     const F32 *c = center.getF32ptr();
                     F32        s = volume->getLightRadius() * 1.5f;
 
+                    // <FS:Beq> relocated above colour calc for early exit on small lights
+                    if (s <= 0.001f)
+                    {
+                        continue;
+                    }
+                    // </FS:Beq>
                     // send light color to shader in linear space
                     LLColor3 col = volume->getLightLinearColor() * light_scale;
 
@@ -8226,12 +8232,12 @@ void LLPipeline::renderDeferredLighting()
                     {
                         continue;
                     }
-
-                    if (s <= 0.001f)
-                    {
-                        continue;
-                    }
-
+                    // <FS:Beq> relocated above colour calc for early exit on small lights
+                    // if (s <= 0.001f)
+                    // {
+                    //     continue;
+                    // }
+                    // </FS:Beq>
                     LLVector4a sa;
                     sa.splat(s);
                     if (camera->AABBInFrustumNoFarClip(center, sa) == 0)

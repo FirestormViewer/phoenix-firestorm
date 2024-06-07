@@ -456,6 +456,7 @@ template<class T> std::string LLStringUtilBase<T>::sLocale;
 typedef LLStringUtilBase<char> LLStringUtil;
 typedef LLStringUtilBase<llwchar> LLWStringUtil;
 typedef std::basic_string<llwchar> LLWString;
+typedef std::basic_string_view<llwchar> LLWStringView;
 
 //@ Use this where we want to disallow input in the form of "foo"
 //  This is used to catch places where english text is embedded in the code

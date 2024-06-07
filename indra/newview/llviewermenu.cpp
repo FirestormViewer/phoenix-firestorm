@@ -9168,13 +9168,10 @@ class LLAttachmentDetach : public view_listener_t
 
 // [RLVa:KB] - Checked: 2010-03-15 (RLVa-1.2.0a) | Modified: RLVa-1.0.5
                 // NOTE: copy/paste of the code in enable_detach()
-                if ((rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_REMOVE)))
+                if ((rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_REMOVE)) &&
+                    gRlvAttachmentLocks.isLockedAttachment(objectp->getRootEdit()))
                 {
-                    //LLObjectSelectionHandle hSelect = LLSelectMgr::getInstance()->getSelection();
-                    //RlvSelectHasLockedAttach f;
-                    //if ((hSelect->isAttachment()) && (hSelect->getFirstRootNode(&f, false) != NULL))
-                    //  return true;
-                    return !gRlvAttachmentLocks.isLockedAttachment(objectp->getRootEdit()); // <FS:Ansariel> Kitty will have to check this...
+                    return false;
                 }
 // [/RLVa:KB]
 

@@ -70,7 +70,7 @@ LLTimer* LLTimer::sTimer = NULL;
 #if 0
 void ms_sleep(U32 ms)
 {
-    LL_PROFILE_ZONE_SCOPED;
+    // LL_PROFILE_ZONE_SCOPED;
     using TimePoint = std::chrono::steady_clock::time_point;
     auto resume_time = TimePoint::clock::now() + std::chrono::milliseconds(ms);
     while (TimePoint::clock::now() < resume_time)

@@ -268,7 +268,25 @@ background_visible="true"
 			orientation="horizontal"
 			top_delta="0"
 			width="279">
-	
+
+				<layout_panel
+				follows="bottom|left|right"
+				height="23"
+				layout="bottomleft"
+				left_pad="3"
+				name="btn_activate_lp"
+			    auto_resize="true"
+				width="72">
+					<button
+				     follows="bottom|left|right"
+				     label="Activate"
+				     name="btn_activate"
+				     left="1"     
+				     height="23"
+				     top="0"
+				     width="71" />		
+				</layout_panel>
+
 				<layout_panel
 				follows="bottom|left|right"
 				height="23"
@@ -276,7 +294,7 @@ background_visible="true"
 				left_pad="3"
 				name="btn_chat_lp"
 			    auto_resize="true"
-				width="83">
+				width="72">
 					<button
 				     follows="bottom|left|right"
 				     label="Chat"
@@ -284,7 +302,7 @@ background_visible="true"
 				     left="1"     
 				     height="23"
 				     top="0"
-				     width="82" />		
+				     width="71" />		
 				</layout_panel>
 				
 				<layout_panel
@@ -294,7 +312,7 @@ background_visible="true"
 				left_pad="3"
 				name="call_btn_lp"
 			    auto_resize="true"
-				width="113">
+				width="72">
 					<button
 			         follows="bottom|left|right"
 			         left="1"
@@ -304,7 +322,7 @@ background_visible="true"
 			         layout="topleft"
 			         tool_tip="Call this group"
 			         top="0"
-			         width="112" />		
+			         width="71" />		
 				</layout_panel>
 				
 				<layout_panel
@@ -314,7 +332,7 @@ background_visible="true"
 				left_pad="3"
 				name="btn_apply_lp"
 			    auto_resize="true"
-				width="83">
+				width="72">
 					<button
 				     follows="bottom|left|right"
 				     height="23"
@@ -323,7 +341,7 @@ background_visible="true"
 				     name="btn_apply"
 				     left="1"
 				     top="0"
-				     width="82" />
+				     width="71" />
 				</layout_panel>
 		</layout_stack>
    <!--<button

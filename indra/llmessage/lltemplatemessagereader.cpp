@@ -541,6 +541,11 @@ bool LLTemplateMessageReader::decodeData(const U8* buffer, const LLHost& sender 
     llassert( mCurrentRMessageTemplate);
     llassert( !mCurrentRMessageData );
     delete mCurrentRMessageData; // just to make sure
+	// <FS:Beq> storage for Tracy tag
+	#ifdef TRACY_ENABLE
+	static char msgstr[36];
+	#endif
+    // </FS:Beq>    
 
     // The offset tells us how may bytes to skip after the end of the
     // message name.
@@ -556,6 +561,7 @@ bool LLTemplateMessageReader::decodeData(const U8* buffer, const LLHost& sender 
         iter != mCurrentRMessageTemplate->mMemberBlocks.end();
         ++iter)
     {
+        LL_PROFILE_ZONE_NAMED_CATEGORY_NETWORK("BuildFromTemplate");
         LLMessageBlock* mbci = *iter;
         U8  repeat_number;
         S32 i;
@@ -598,6 +604,13 @@ bool LLTemplateMessageReader::decodeData(const U8* buffer, const LLHost& sender 
         }
 
         LLMsgBlkData* cur_data_block = NULL;
+        // <FS:Beq> Tracy Message processing
+		LL_DEBUGS("LLMessage") << "Processing " << mbci->mName << " with " << repeat_number << " repetitions" << LL_ENDL;
+		#ifdef TRACY_ENABLE
+		strncpy(msgstr, mbci->mName, 35);
+		LL_PROFILE_ZONE_TEXT(msgstr, 35);
+		#endif        
+        // </FS:Beq>
 
         // now loop through the block
         for (i = 0; i < repeat_number; i++)
@@ -622,6 +635,7 @@ bool LLTemplateMessageReader::decodeData(const U8* buffer, const LLHost& sender 
                      mbci->mMemberVariables.begin();
                  iter != mbci->mMemberVariables.end(); iter++)
             {
+				LL_PROFILE_ZONE_NAMED_CATEGORY_NETWORK("AddVariables");
                 const LLMessageVariable& mvci = **iter;
 
                 // ok, build out the variables
@@ -704,6 +718,12 @@ bool LLTemplateMessageReader::decodeData(const U8* buffer, const LLHost& sender 
     }
 
     {
+        // <FS:Beq> Tracy Message processing
+        LL_PROFILE_ZONE_NAMED_CATEGORY_NETWORK("ProcessMessage");
+		#ifdef TRACY_ENABLE
+		LL_PROFILE_ZONE_TEXT(msgstr, 35);
+		#endif
+        // </FS:Beq>
         static LLTimer decode_timer;
 
         if(LLMessageReader::getTimeDecodes() || gMessageSystem->getTimingCallback())
@@ -742,7 +762,7 @@ bool LLTemplateMessageReader::decodeData(const U8* buffer, const LLHost& sender 
 
                 if(decode_time > LLMessageReader::getTimeDecodesSpamThreshold())
                 {
-                    LL_DEBUGS() << "--------- Message " << mCurrentRMessageTemplate->mName << " decode took " << decode_time << " seconds. (" <<
+					LL_DEBUGS("LLMessage") << "--------- Message " << mCurrentRMessageTemplate->mName << " decode took " << decode_time << " seconds. (" <<
                         mCurrentRMessageTemplate->mMaxDecodeTimePerMsg << " max, " <<
                         (mCurrentRMessageTemplate->mTotalDecodeTime / mCurrentRMessageTemplate->mTotalDecoded) << " avg)" << LL_ENDL;
                 }

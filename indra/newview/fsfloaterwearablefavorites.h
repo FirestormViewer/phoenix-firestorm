@@ -61,6 +61,11 @@ public:
         return mDADSignal.connect(cb);
     }
 
+    void rearrange()
+    {
+        rearrangeItems();
+    }
+
 protected:
     friend class LLUICtrlFactory;
     FSWearableFavoritesItemsList(const Params&);

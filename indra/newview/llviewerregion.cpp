@@ -831,6 +831,7 @@ void LLViewerRegion::setRegionID(const LLUUID& region_id)
 
 void LLViewerRegion::loadObjectCache()
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     if (mCacheLoaded)
     {
         return;
@@ -3123,6 +3124,7 @@ void LLViewerRegion::clearVOCacheFromMemory()
 
 void LLViewerRegion::unpackRegionHandshake()
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     LLMessageSystem *msg = gMessageSystem;
 
     U64 region_flags = 0;

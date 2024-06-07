@@ -1,0 +1,74 @@
+<floater name="whitelist_floater"
+     title="Whitelist Folders and Binaries"
+     width="700"
+     height="470"
+     can_minimize="true"
+     can_resize="false">
+     <text
+          follows="top|left|right"
+          font="SansSerif"
+          height="120"
+          layout="topleft"
+          left="11"
+          name="whitelist_intro"
+          top="16"
+          width="689"
+          wrap="true">
+Anti-virus and Anti-malware are an essential part of safe Internet use, but they can cause a variety of issues for the viewer.
+To reduce interference and improve stability and performance, we strongly advise that all users ensure that there are exclusions (known as Whitelisting) for important folders and programs that the viewer uses. 
+
+For more detailed information, visit
+https://wiki.firestormviewer.org/antivirus_whitelisting
+     
+     </text>
+     <text
+          follows="top|left|right"
+          font="SansSerif"
+          height="35"
+          layout="topleft"
+          left="11"
+          name="whitelist_folder_instruction"
+          top_pad="10"
+          width="689"
+          wrap="true">
+To help simplify the task the box below shows the folders the viewer is using. 
+Please add these to your AV folder exclusions as shown on the above wiki page.
+     </text>
+     <text_editor
+          parse_urls="true"
+          follows="top|left|right|bottom"
+          font="SansSerif"
+          height="100"
+          bg_readonly_color="Transparent"
+          left="5"
+          max_length="65536"
+          name="whitelist_folders_editor"
+          top_pad="5"
+          width="689"
+          word_wrap="true" />
+     <text
+          follows="top|left|right"
+          font="SansSerif"
+          height="35"
+          layout="topleft"
+          left="11"
+          name="whitelist_exe_instruction"
+          top_pad="5"
+          width="689"
+          wrap="true">
+The following box is the name and full path of the viewer executables. 
+Add these to you AV executable exclusions as shown in the above wiki.
+     </text>
+     <text_editor
+          parse_urls="true"
+          follows="top|left|right|bottom"
+          font="SansSerif"
+          height="130"
+          bg_readonly_color="Transparent"
+          left="5"
+          max_length="65536"
+          name="whitelist_exes_editor"
+          top_pad="5"
+          width="689"
+          word_wrap="true" />
+</floater>

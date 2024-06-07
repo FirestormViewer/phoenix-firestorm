@@ -68,6 +68,7 @@ public:
 private:
     void updateName();
     void onAvatarNameCache(const LLUUID& av_id, const LLAvatarName& av_name);
+    void requestProperties();
     void processProperties(void* data, EAvatarProcessorType type);
 
     LLUUID      mID;
@@ -87,10 +88,9 @@ private:
     bool        mIgnore;
     bool        mAlertAge;
     bool        mAgeAlertPerformed;
+    bool        mPropertiesRequested;
 
     LLAvatarNameCache::callback_connection_t mAvatarNameCallbackConnection;
-    boost::signals2::connection mRegionCapabilitiesReceivedCallbackConnection;
-    boost::signals2::connection mRegionChangedCallbackConnection;
 };
 
 #endif // FS_RADARENTRY_H

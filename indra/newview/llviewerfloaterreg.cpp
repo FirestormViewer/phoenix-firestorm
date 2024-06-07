@@ -229,6 +229,7 @@
 #include "particleeditor.h"
 #include "quickprefs.h"
 #include "vjfloaterlocalmesh.h" // local mesh
+#include "fsfloaterwhitelisthelper.h" // fs whitelist helper
 
 
 // handle secondlife:///app/openfloater/{NAME} URLs
@@ -649,6 +650,8 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("sound_explorer", "floater_NACL_explore_sounds.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<NACLFloaterExploreSounds>);
     LLFloaterReg::add("vram_usage", "floater_fs_vram_usage.xml", static_cast<LLFloaterBuildFunc>(&LLFloaterReg::build<FSFloaterVRAMUsage>));
     LLFloaterReg::add("local_mesh_floater", "floater_vj_local_mesh.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterLocalMesh>); // local mesh
+    LLFloaterReg::add("fs_whitelist_floater", "floater_whitelist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterWhiteListHelper>); // white list advisor
+
 
     LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }

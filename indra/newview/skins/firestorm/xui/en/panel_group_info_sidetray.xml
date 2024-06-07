@@ -224,10 +224,30 @@ background_visible="false"
 				height="23"
 				layout="bottomleft"
 				left_pad="3"
+				name="btn_activate_lp"
+			    user_resize="false"
+			    auto_resize="true"
+				width="72">
+					<button
+			         layout="topleft"
+				     follows="bottom|left|right"
+				     label="Activate"
+				     name="btn_activate"
+				     left="1"
+				     height="23"
+				     top="0"
+				     width="71" />
+				</layout_panel>
+
+				<layout_panel
+				follows="bottom|left|right"
+				height="23"
+				layout="bottomleft"
+				left_pad="3"
 				name="btn_chat_lp"
 			    user_resize="false"
 			    auto_resize="true"
-				width="97">
+				width="72">
 					<button
 			         layout="topleft"
 				     follows="bottom|left|right"
@@ -236,7 +256,7 @@ background_visible="false"
 				     left="1"
 				     height="23"
 				     top="0"
-				     width="96" />
+				     width="71" />
 				</layout_panel>
 
 				<layout_panel
@@ -247,7 +267,7 @@ background_visible="false"
 				name="call_btn_lp"
 			    user_resize="false"
 			    auto_resize="true"
-				width="97">
+				width="72">
 					<button
 			         follows="bottom|left|right"
 			         left="1"
@@ -257,7 +277,7 @@ background_visible="false"
 			         layout="topleft"
 			         tool_tip="Call this group"
 			         top="0"
-			         width="96" />
+			         width="71" />
 				</layout_panel>
 
 				<layout_panel
@@ -268,7 +288,7 @@ background_visible="false"
 				name="btn_apply_lp"
 			    user_resize="false"
 			    auto_resize="true"
-				width="97">
+				width="72">
 					<button
 				     follows="bottom|left|right"
 				     height="23"
@@ -277,7 +297,7 @@ background_visible="false"
 				     name="btn_apply"
 				     left="1"
 				     top="0"
-				     width="96" />
+				     width="71" />
 				</layout_panel>
 		   </layout_stack>
 

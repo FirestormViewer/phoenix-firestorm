@@ -232,6 +232,11 @@ bool LLPanelGroup::postBuild()
     button = getChild<LLButton>("btn_refresh");
     button->setClickedCallback(onBtnRefresh, this);
 
+    // <FS:PP> FIRE-33939: Activate button
+    button = getChild<LLButton>("btn_activate");
+    button->setClickedCallback(onBtnActivateClicked, this);
+    // <FS:PP>
+
     childSetCommitCallback("back",boost::bind(&LLPanelGroup::onBackBtnClick,this),NULL);
 
     LLPanelGroupTab* panel_general = findChild<LLPanelGroupTab>("group_general_tab_panel");
@@ -296,6 +301,7 @@ void LLPanelGroup::reposButtons()
     reposButton("btn_cancel");
     reposButton("btn_chat");
     reposButton("btn_call");
+    reposButton("btn_activate"); // <FS:PP> FIRE-33939: Activate button
 }
 
 void LLPanelGroup::reshape(S32 width, S32 height, bool called_from_parent )
@@ -346,6 +352,15 @@ void LLPanelGroup::onBtnGroupChatClicked(void* user_data)
     LLPanelGroup* self = static_cast<LLPanelGroup*>(user_data);
     self->chatGroup();
 }
+
+// <FS:PP> FIRE-33939: Activate button
+void LLPanelGroup::onBtnActivateClicked(void* user_data)
+{
+    LLPanelGroup* self = static_cast<LLPanelGroup*>(user_data);
+    self->activateGroup();
+    self->refreshData();
+}
+// </FS:PP>
 
 void LLPanelGroup::onBtnJoin()
 {
@@ -486,6 +501,15 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
     if(button_chat)
             button_chat->setVisible(!is_null_group_id);
 
+    // <FS:PP> FIRE-33939: Activate button
+    LLButton* button_activate = findChild<LLButton>("btn_activate");
+    if (button_activate)
+    {
+        button_activate->setVisible(!is_null_group_id);
+        button_activate->setEnabled(group_id != gAgent.getGroupID());
+    }
+    // </FS:PP>
+
     getChild<LLUICtrl>("prepend_founded_by")->setVisible(!is_null_group_id);
 
     // <FS:Ansariel> TabContainer switch
@@ -566,6 +590,10 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
             button_call->setVisible(false);
         if(button_chat)
             button_chat->setVisible(false);
+        // <FS:PP> FIRE-33939: Activate button
+        if(button_activate)
+            button_activate->setVisible(false);
+        // </FS:PP>
     }
     else
     {
@@ -625,6 +653,10 @@ void LLPanelGroup::setGroupID(const LLUUID& group_id)
             button_call->setVisible(is_member);
         if(button_chat)
             button_chat->setVisible(is_member);
+        // <FS:PP> FIRE-33939: Activate button
+        if(button_activate)
+            button_activate->setVisible(is_member);
+        // </FS:PP>
     }
 
     // <FS:Ansariel> TabContainer switch
@@ -710,6 +742,12 @@ void LLPanelGroup::draw()
         mRefreshTimer.stop();
         childEnable("btn_refresh");
         childEnable("groups_accordion");
+        // <FS:PP> FIRE-33939: Activate button
+        if (gAgent.getGroupID() != getID())
+        {
+            childEnable("btn_activate");
+        }
+        // </FS:PP>
     }
 
     LLButton* button_apply = findChild<LLButton>("btn_apply");
@@ -741,6 +779,7 @@ void LLPanelGroup::refreshData()
     // 5 second timeout
     childDisable("btn_refresh");
     childDisable("groups_accordion");
+    childDisable("btn_activate"); // <FS:PP> FIRE-33939: Activate button
 
     mRefreshTimer.start();
     mRefreshTimer.setTimerExpirySec(5);
@@ -755,6 +794,17 @@ void LLPanelGroup::chatGroup()
 {
     LLGroupActions::startIM(getID());
 }
+
+// <FS:PP> FIRE-33939: Activate button
+void LLPanelGroup::activateGroup()
+{
+    LLUUID group_id = getID();
+    if (gAgent.getGroupID() != group_id)
+    {
+        LLGroupActions::activate(group_id);
+    }
+}
+// </FS:PP>
 
 void LLPanelGroup::showNotice(const std::string& subject,
                   const std::string& message,

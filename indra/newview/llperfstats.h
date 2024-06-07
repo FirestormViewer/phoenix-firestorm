@@ -279,13 +279,16 @@ namespace LLPerfStats
 
             auto ot{upd.objType};
             auto& key{upd.objID};
+            auto& avKey{upd.avID};
             auto type {upd.statType};
             auto val {upd.time};
             // <FS:Beq> markup to support coverage testing on stats collection
             #ifdef TRACY_ENABLE
-            //LL_PROFILE_ZONE_TEXT(key.toStringFast(obstr), 36);
-            //LL_PROFILE_ZONE_TEXT(avKey.toStringFast(avstr), 36);
-            //LL_PROFILE_ZONE_NUM(val);
+            static char obstr[36];
+            static char avstr[36];            
+            LL_PROFILE_ZONE_TEXT(key.toStringFast(obstr), 36);
+            LL_PROFILE_ZONE_TEXT(avKey.toStringFast(avstr), 36);
+            LL_PROFILE_ZONE_NUM(val);
             #endif
             // </FS:Beq>
 
@@ -295,6 +298,14 @@ namespace LLPerfStats
                 doUpd(key, ot, type,val);
                 return;
             }
+
+            
+            if (ot == ObjType_t::OT_AVATAR)
+            {
+                // LL_INFOS("perfstats") << "Avatar update:" << LL_ENDL;
+                doUpd(avKey, ot, type, val);
+                return;
+            }            
         }
 
         static inline void doUpd(const LLUUID& key, ObjType_t ot, StatType_t type, uint64_t val)
@@ -429,13 +440,13 @@ namespace LLPerfStats
         // </FS:Beq>
             stat.time = LLTrace::BlockTimer::getCPUClockCount64() - start;
         // <FS:Beq> extra profiling coverage tracking
-        #ifdef ATTACHMENT_TRACKING
-            static char obstr[36];
-            static char avstr[36];
-            LL_PROFILE_ZONE_NUM(static_cast<U64>(stat.objType));
-            LL_PROFILE_ZONE_TEXT(stat.avID.toStringFast(avstr), 36);
-            LL_PROFILE_ZONE_TEXT(stat.objID.toStringFast(obstr), 36);
-            LL_PROFILE_ZONE_NUM(stat.time);
+        #if TRACY_ENABLE && defined(ATTACHMENT_TRACKING)
+            // static char obstr[36];
+            // static char avstr[36];
+            // LL_PROFILE_ZONE_NUM(static_cast<U64>(stat.objType));
+            // LL_PROFILE_ZONE_TEXT(stat.avID.toStringFast(avstr), 36);
+            // LL_PROFILE_ZONE_TEXT(stat.objID.toStringFast(obstr), 36);
+            // LL_PROFILE_ZONE_NUM(stat.time);
         #endif
         // </FS:Beq>
             StatsRecorder::send(std::move(stat));
