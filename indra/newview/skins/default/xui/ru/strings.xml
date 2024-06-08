@@ -1444,6 +1444,20 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="executable_files">
 		Исполняемые файлы программы
 	</string>
+
+	<string name="Validator_InvalidNumericString">Недопустимая числовая строка: "[STR]"</string>
+	<string name="Validator_ShouldNotBeMinus">Недопустимый начальный символ: '[CH]' (не должно быть минусом)</string>
+	<string name="Validator_ShouldNotBeMinusOrZero">Недопустимый начальный символ: '[CH]' (не должно быть ни минуса, ни нуля)</string>
+	<string name="Validator_ShouldBeDigit">Недопустимый символ [NR]: '[CH]' (должна быть только цифра)</string>
+	<string name="Validator_ShouldBeDigitOrDot">Недопустимый символ [NR]: '[CH]' (должна быть только цифра или десятичная точка)</string>
+	<string name="Validator_ShouldBeDigitOrAlpha">Недопустимый символ [NR]: '[CH]' (должна быть только цифра или буквенно-цифровой символ ASCII)</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrSpace">Недопустимый символ [NR]: '[CH]' (должна быть только цифра или буквенно-цифровой символ ASCII или пробел)</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrPunct">Недопустимый символ [NR]: '[CH]' (должна быть только цифра или буквенно-цифровой символ ASCII или пунктуация)</string>
+	<string name="Validator_ShouldBeDigitOrAlphaOrPunctNotSpace">Недопустимый символ [NR]: '[CH]' (должна быть только цифра или буквенно-цифровой символ ASCII или пунктуация без пробела)</string>
+	<string name="Validator_ShouldBeDigitNotSpace">Недопустимый символ [NR]: '[CH]' (должна быть только цифра без пробела)</string>
+	<string name="Validator_ShouldBeASCII">Недопустимый символ [NR]: '[CH]' (должен быть только символ ASCII)</string>
+	<string name="Validator_ShouldBeNewLineOrASCII">Недопустимый символ [NR]: '[CH]' (должен быть только символ ASCII или новая строка)</string>
+
 	<string name="LSLTipSleepTime">
 		Пауза скрипта на [SLEEP_TIME] секунд.
 	</string>
@@ -5297,8 +5311,11 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="dance8">
 		танец8
 	</string>
-	<string name="AvatarBirthDateFormat">
+	<string name="AvatarBirthDateFormatFull">
 		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc]
+	</string>
+	<string name="AvatarBirthDateFormatShort">
+		[day,datetime,utc].[mthnum,datetime,utc]
 	</string>
 	<string name="AvatarBirthDateFormat_legacy">
 		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]
@@ -5417,7 +5434,8 @@ https://www.firestormviewer.org/support за помощь в решении эт
 		Для этого комплекта одежды нет вещей
 	</string>
 	<string name="ExternalEditorNotSet">
-		Выберите редактор, используя параметр ExternalEditor.
+		Выберите редактор, установив переменную среды LL_SCRIPT_EDITOR или параметр Внешнего Редактора.
+смотрите https://wiki.secondlife.com/wiki/LSL_Alternate_Editors
 	</string>
 	<string name="ExternalEditorNotFound">
 		Не удается найти указанный внешний редактор.
@@ -6579,6 +6597,9 @@ ID объекта: [INSPECTING_KEY]
 	</string>
 	<string name="avatar_age_alert">
 		сработало возрастное предупреждение. Возраст: [AGE] дней
+	</string>
+	<string name="avatar_age_not_available">
+		н.д.
 	</string>
 	<string name="TotalScriptCountChangeIncrease">
 		Количество скриптов в регионе возросло с [OLD_VALUE] до [NEW_VALUE] ([DIFFERENCE]).

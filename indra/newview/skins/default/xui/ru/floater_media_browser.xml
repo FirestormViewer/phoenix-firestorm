@@ -11,7 +11,7 @@
 			<button label="Назад" name="back"/>
 			<button label="Вперед" name="forward"/>
 			<button label="Обновить" name="reload"/>
-			<button label="Перейти" name="go"/>
+			<button label="Зайти" name="go"/>
 		</layout_panel>
 		<layout_panel name="time_controls">
 			<button label="назад" name="rewind"/>
@@ -19,11 +19,18 @@
 			<button label="вперед" name="seek"/>
 		</layout_panel>
 		<layout_panel name="parcel_owner_controls">
-			<button label="Отправить текущую страницу на участок" name="assign"/>
+			<button label="Отправить страницу на участок" name="assign"/>
 		</layout_panel>
 		<layout_panel name="external_controls">
+			<text name="plugin_fail_text">
+Похоже, что плагин для веб-браузера открывается не сразу.
+Если плагин не загружается, пожалуйста, посетите сайт:
+
+https://wiki.firestormviewer.org/fs_media
+
+для информации о возможных действиях по устранению этой проблемы.
+			</text>
 			<button label="Открыть в моем браузере" name="open_browser"/>
-			<check_box label="Всегда открывать в моем браузере" name="open_always"/>
 			<button label="Закрыть" name="close"/>
 		</layout_panel>
 	</layout_stack>

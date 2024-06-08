@@ -1541,6 +1541,7 @@ BOOL LLVOCache::updateEntry(const HeaderEntryInfo* entry)
 bool LLVOCache::readFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::vocache_entry_map_t& cache_entry_map)
 // </FS:Beq>
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     if(!mEnabled)
     {
         LL_WARNS() << "Not reading cache for handle " << handle << "): Cache is currently disabled." << LL_ENDL;
@@ -1559,6 +1560,7 @@ bool LLVOCache::readFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::voca
     S32 num_entries=0;  // <FS:Beq/> FIRE-33808 - Material Override Cache causes long delays
     std::string filename;
     {
+		LL_PROFILE_ZONE_NAMED_CATEGORY_NETWORK("VOCache:loadRegionObjectCache");        
         LLUUID cache_id;
         getObjectCacheFilename(handle, filename);
         LLAPRFile apr_file(filename, APR_READ|APR_BINARY, mLocalAPRFilePoolp);
@@ -1567,6 +1569,7 @@ bool LLVOCache::readFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::voca
 
         if(success)
         {
+            LL_PROFILE_ZONE_NAMED_CATEGORY_NETWORK("VOCache:loadCacheForRegion");
             if(cache_id != id)
             {
                 LL_INFOS() << "Cache ID doesn't match for this region, discarding"<< LL_ENDL;
@@ -1615,6 +1618,7 @@ bool LLVOCache::readFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::voca
 // void LLVOCache::readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::vocache_gltf_overrides_map_t& cache_extras_entry_map)
 void LLVOCache::readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCacheEntry::vocache_gltf_overrides_map_t& cache_extras_entry_map, const LLVOCacheEntry::vocache_entry_map_t& cache_entry_map)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     int loaded= 0;
     int discarded = 0;
     // get ViewerRegion pointer from handle
@@ -1635,6 +1639,13 @@ void LLVOCache::readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCac
     }
 
     std::string filename(getObjectCacheExtrasFilename(handle));
+    // <FS:Beq> Material Override Cache caused long delays
+	#ifdef TRACY_ENABLE
+	static char extra_filename[256];
+	strncpy(extra_filename, filename.c_str(), 256);
+	LL_PROFILE_ZONE_TEXT(extra_filename,256);
+	#endif
+    // </FS:Beq>
     llifstream in(filename, std::ios::in | std::ios::binary);
 
     std::string line;
@@ -1714,8 +1725,10 @@ void LLVOCache::readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCac
     LL_DEBUGS("GLTF") << "Beginning reading extras cache for handle " << handle << " from " << getObjectCacheExtrasFilename(handle) << LL_ENDL;
 
     LLSD entry_llsd;
+	LL_PROFILE_ZONE_NUM(num_entries);
     for (U32 i = 0; i < num_entries && !in.eof(); i++)
     {
+		LL_PROFILE_ZONE_NAMED_CATEGORY_NETWORK("RegionExtrasReadEntries");
         static const U32 max_size = 4096;
         bool success = LLSDSerialize::deserialize(entry_llsd, in, max_size);
         // check bool(in) this time since eof is not a failure condition here
@@ -1756,6 +1769,7 @@ void LLVOCache::readGenericExtrasFromCache(U64 handle, const LLUUID& id, LLVOCac
 
 void LLVOCache::purgeEntries(U32 size)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     // <FS:Beq/> FIRE-33808 - Material Override Cache causes long delays
     LL_DEBUGS("VOCache","GLTF") << "Purging " << size << " entries from cache" << LL_ENDL;
     while(mHeaderEntryQueue.size() > size)
@@ -1775,6 +1789,7 @@ void LLVOCache::purgeEntries(U32 size)
 
 void LLVOCache::writeToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry::vocache_entry_map_t& cache_entry_map, BOOL dirty_cache, bool removal_enabled)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     // <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
     std::string filename;
     getObjectCacheFilename(handle, filename);
@@ -1929,19 +1944,20 @@ void LLVOCache::removeGenericExtrasForHandle(U64 handle)
     auto* entry = mHandleEntryMap[handle];
     if (entry)
     {
+        LL_WARNS("GLTF", "VOCache") << "Removing generic extras for handle " << entry->mHandle << "Filename: " << getObjectCacheExtrasFilename(handle) << LL_ENDL;
         removeEntry(entry);
     }
     else
     {
         //shouldn't happen, but if it does, we should remove the extras file since it's orphaned
-        LL_WARNS("GLTF", "VOCache") << "Removing generic extras for handle " << entry->mHandle << "Filename: " << getObjectCacheExtrasFilename(handle) << LL_ENDL;
-        LLFile::remove(getObjectCacheExtrasFilename(entry->mHandle));
+        LLFile::remove(getObjectCacheExtrasFilename(handle));
     }
 }
 // </FS:Beq>
 
 void LLVOCache::writeGenericExtrasToCache(U64 handle, const LLUUID& id, const LLVOCacheEntry::vocache_gltf_overrides_map_t& cache_extras_entry_map, BOOL dirty_cache, bool removal_enabled)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
     if(!mEnabled)
     {
         LL_WARNS() << "Not writing extras cache for handle " << handle << "): Cache is currently disabled." << LL_ENDL;

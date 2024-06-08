@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="group_list_item">
 	<text name="group_name" value="Неизвестно"/>
+	<button name="notices_btn" tool_tip="Групповые уведомления"/>
 	<button name="visibility_hide_btn" tool_tip="Скрыть группу в моем профиле"/>
 	<button name="visibility_show_btn" tool_tip="Показывать группу в моем профиле"/>
 	<button name="info_btn" tool_tip="Больше информации"/>

@@ -2642,6 +2642,13 @@
                  parameter="http://community.secondlife.com/t5/Blogs/ct-p/Blogs"/>
         </menu_item_call>-->
         <menu_item_separator/>
+        <menu_item_call
+            name="whitelist_folders"
+            label="Whitelist adviser">
+            <menu_item_call.on_click
+               function="Floater.Show"
+               parameter="fs_whitelist_floater" />
+        </menu_item_call>
         <menu_item_check
              label="Check Grid status"
              name="Grid Status">

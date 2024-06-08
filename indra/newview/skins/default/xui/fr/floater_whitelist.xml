@@ -1,0 +1,17 @@
+<floater name="whitelist_floater" title="Liste blanche de dossiers et programmes">
+	<text name="whitelist_intro">
+Les antivirus et les anti-logiciels malveillants sont un élément essentiel d'une utilisation sûre de l'internet, mais ils peuvent causer toute une série de problèmes à la visionneuse.
+Pour réduire les interférences et améliorer la stabilité et les performances, nous conseillons vivement à tous les utilisateurs de veiller à ce qu'il y ait des exclusions (connues sous le nom de liste blanche) pour les dossiers et les programmes importants que la visionneuse utilise. 
+
+Pour plus d'informations, visitez le site
+https://wiki.firestormviewer.org/antivirus_whitelisting
+	</text>
+	<text name="whitelist_folder_instruction">
+Pour vous simplifier la tâche, l'encadré ci-dessous indique les dossiers utilisés par la visionneuse. 
+Veuillez les ajouter à vos exclusions de dossiers AV, comme indiqué sur la page wiki ci-dessus.
+	</text>
+	<text name="whitelist_exe_instruction">
+La case suivante indique le nom et le chemin d'accès complet des exécutables de la visionneuse. 
+Ajoutez-les à vos exclusions d'exécutables AV comme indiqué dans le wiki ci-dessus.
+	</text>
+</floater>

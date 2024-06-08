@@ -76,6 +76,7 @@ public:
     void refreshData();
     void callGroup();
     void chatGroup();
+    void activateGroup(); // <FS:PP> FIRE-33939: Activate button
 
     virtual void reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
 
@@ -102,6 +103,7 @@ protected:
     static void onBtnRefresh(void*);
     static void onBtnGroupCallClicked(void*);
     static void onBtnGroupChatClicked(void*);
+    static void onBtnActivateClicked(void*); // <FS:PP> FIRE-33939: Activate button
 
     void reposButton(const std::string& name);
     void reposButtons();

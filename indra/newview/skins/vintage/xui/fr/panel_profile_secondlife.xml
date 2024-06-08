@@ -11,7 +11,10 @@
 	</string>
 	<string name="no_partner_text" value="Aucun" />
 	<string name="no_group_text" value="Aucun" />
-	<string name="age_format">
+	<string name="age_format_short">
+		Anniversaire : [REG_DATE]
+	</string>
+	<string name="age_format_full">
 Anniversaire : [REG_DATE]
 ([AGE])
 	</string>
@@ -66,6 +69,7 @@ Anniversaire : [REG_DATE]
 		</layout_panel>
 	</layout_stack>
 	<check_box name="show_in_search" label="Afficher dans la recherche" tool_tip="Laissez les autres vous voir dans les résultats de recherche" />
+	<check_box name="hide_sl_age" label="Afficher la date de naissance complète'" tool_tip="Laissez les gens voir votre âge SL"/>
 	<button name="save_description_changes" label="Enregistrer" />
 	<button name="discard_description_changes" label="Annuler" />
 </panel>

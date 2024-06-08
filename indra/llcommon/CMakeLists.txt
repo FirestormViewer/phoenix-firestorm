@@ -268,8 +268,12 @@ if (DARWIN)
   list(APPEND llcommon_SOURCE_FILES llsys_objc.mm)
 endif (DARWIN)
     
-# <FS:Beq/> Tracy Profiler support
+# <FS:Beq> Tracy Profiler support
 list(APPEND llcommon_SOURCE_FILES llprofiler.cpp)
+if (USE_TRACY)
+list(APPEND llcommon_SOURCE_FILES fstracyclient.cpp)
+endif()
+# </FS:Beq>
 
 # <FS:ND> Add all nd* files. memory pool, intrinsics, ...
 

@@ -39,7 +39,7 @@
 							<button label="Чат" name="btn_chat"/>
 						</layout_panel>
 						<layout_panel name="call_btn_lp">
-							<button label="Звонок группе" name="btn_call" tool_tip="Звонок этой группе"/>
+							<button label="Звонок" name="btn_call" tool_tip="Звонок этой группе"/>
 						</layout_panel>
 						<layout_panel name="btn_apply_lp">
 							<button label="Сохранить" label_selected="Сохранить" name="btn_apply"/>

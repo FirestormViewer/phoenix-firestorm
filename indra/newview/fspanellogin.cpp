@@ -250,6 +250,12 @@ FSPanelLogin::FSPanelLogin(const LLRect &rect,
     LLTextBox* grid_mgr_help_text = getChild<LLTextBox>("grid_login_text");
     grid_mgr_help_text->setClickedCallback(onClickGridMgrHelp, NULL);
 
+#ifdef OPENSIM
+    LLTextBox* grid_builder_text = getChild<LLTextBox>("grid_builder_text");
+    grid_builder_text->setClickedCallback(onClickGridBuilder, NULL);
+    grid_builder_text->setVisible(true);
+#endif
+
     LLSLURL start_slurl(LLStartUp::getStartSLURL());
     // The StartSLURL might have been set either by an explicit command-line
     // argument (CmdLineLoginLocation) or by default.
@@ -1354,6 +1360,12 @@ void FSPanelLogin::onClickGridMgrHelp(void*)
         LLViewerHelp* vhelp = LLViewerHelp::getInstance();
         vhelp->showTopic(vhelp->gridMgrHelpTopic());
     }
+}
+
+//static
+void FSPanelLogin::onClickGridBuilder(void*)
+{
+    LLWeb::loadURLInternal(gSavedSettings.getString("FSGridBuilderURL"));
 }
 
 void FSPanelLogin::onSelectUser()
