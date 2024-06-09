@@ -166,7 +166,7 @@ U32 FSFloaterVRAMUsage::calcTexturSize( LLViewerObject *aObject, std::ostream *a
         if( !pTex || pTex->isMissingAsset() )
             continue;
 
-        U32 textureId = stTextures.size();
+        U32 textureId = static_cast<U32>(stTextures.size());
         bool bOldTexId( false );
 
         if( stTextures.end() != stTextures.find( pTex->getID() ) )

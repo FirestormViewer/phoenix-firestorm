@@ -47,7 +47,7 @@ JointKey JointKey::construct(const std::string& aName)
         return { aName, itr->second };
     }
 
-    U32 size = mpStringToKeys.size() + 1;
+    U32 size = static_cast<U32>(mpStringToKeys.size()) + 1;
     mpStringToKeys.try_emplace(aName, size);
     return { aName, size };
 }
@@ -94,7 +94,7 @@ void LLVector3OverrideMap::showJointVector3Overrides( std::ostringstream& os ) c
 
 U32 LLVector3OverrideMap::count() const
 {
-    return m_map.size();
+    return static_cast<U32>(m_map.size());
 }
 
 void LLVector3OverrideMap::add(const LLUUID& mesh_id, const LLVector3& pos)
@@ -104,7 +104,7 @@ void LLVector3OverrideMap::add(const LLUUID& mesh_id, const LLVector3& pos)
 
 bool LLVector3OverrideMap::remove(const LLUUID& mesh_id)
 {
-    U32 remove_count = m_map.erase(mesh_id);
+    auto remove_count = m_map.erase(mesh_id);
     return (remove_count > 0);
 }
 

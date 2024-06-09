@@ -62,8 +62,8 @@ class LLLocalMeshFace
 
         void setFaceBoundingBox(LLVector4 data_in, bool initial_values = false);
 
-        int                     getNumVerts() const { return mPositions.size(); }
-        int                     getNumIndices() const { return mIndices.size(); }
+        int                     getNumVerts() const { return static_cast<int>(mPositions.size()); }
+        int                     getNumIndices() const { return static_cast<int>(mIndices.size()); }
 
         std::vector<int>&       getIndices()                    { return mIndices; };
         std::vector<LLVector4>& getPositions()                  { return mPositions; };

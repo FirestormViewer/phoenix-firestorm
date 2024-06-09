@@ -193,8 +193,8 @@ void FloaterAO::updateList()
         }
     }
 
-    mSetSelector->selectNthItem(selected_index);
-    mSetSelectorSmall->selectNthItem(selected_index);
+    mSetSelector->selectNthItem(static_cast<S32>(selected_index));
+    mSetSelectorSmall->selectNthItem(static_cast<S32>(selected_index));
 
     enableSetControls(true);
     if (mSetSelector->getSelectedItemLabel().empty())

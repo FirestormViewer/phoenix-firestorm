@@ -128,9 +128,9 @@ private:
 
     static bool sCredentialSet;
 
-    unsigned int mUsernameLength;
-    unsigned int mPasswordLength;
-    unsigned int mLocationLength;
+    size_t mUsernameLength;
+    size_t mPasswordLength;
+    size_t mLocationLength;
 
     std::string     mPreviousUsername;
     static std::string  sPassword;

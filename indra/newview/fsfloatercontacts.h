@@ -151,7 +151,7 @@ private:
     LLGroupList*            mGroupList;
 
     bool                    mAllowRightsChange;
-    S32                     mNumRightsChanged;
+    size_t                  mNumRightsChanged;
     bool                    mRightsChangeNotificationTriggered;
 
     std::string             mFriendListFontName;

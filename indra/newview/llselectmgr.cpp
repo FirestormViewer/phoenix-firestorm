@@ -7942,7 +7942,7 @@ void LLObjectSelection::updateEffects()
 
 S32 LLObjectSelection::getNumNodes()
 {
-    return mList.size();
+    return static_cast<S32>(mList.size());
 }
 
 // <FS:Zi> Fix for crash while selecting objects with derendered child prims
@@ -8059,7 +8059,7 @@ bool LLObjectSelection::isEmpty() const
 S32 LLObjectSelection::getObjectCount()
 {
     cleanupNodes();
-    S32 count = mList.size();
+    S32 count = static_cast<S32>(mList.size());
 
     return count;
 }
@@ -8798,7 +8798,7 @@ bool LLSelectMgr::selectionMove(const LLVector3& displ,
 
             if (enable_rot)
             {
-                int children_count = obj->getChildren().size();
+                auto children_count = obj->getChildren().size();
                 if (obj_count > 1 && children_count > 0)
                 {
                     // for linked sets, rotate around the group center

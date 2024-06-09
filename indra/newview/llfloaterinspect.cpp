@@ -620,7 +620,7 @@ void LLFloaterInspect::refresh()
     args["NUM_VERTICES"] = format_res_string;
     res_mgr.getIntegerString(format_res_string, tcount);
     args["NUM_TRIANGLES"] = format_res_string;
-    res_mgr.getIntegerString(format_res_string, mTextureList.size());
+    res_mgr.getIntegerString(format_res_string, static_cast<S32>(mTextureList.size()));
     args["NUM_TEXTURES"] = format_res_string;
     res_mgr.getIntegerString(format_res_string, mTextureMemory / 1024);
     args["TEXTURE_MEMORY"] = format_res_string;

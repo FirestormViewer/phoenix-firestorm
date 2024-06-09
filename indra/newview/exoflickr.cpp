@@ -269,7 +269,7 @@ std::string exoFlickr::getSignatureForCall(const LLSD& parameters, std::string u
     std::string key = std::string(EXO_FLICKR_API_SECRET) + "&" + gSavedPerAccountSettings.getString("ExodusFlickrTokenSecret");
 
     std::string to_hash = q.str();
-    HMAC(EVP_sha1(), (void*)key.c_str(), key.length(), (unsigned char*)to_hash.c_str(), to_hash.length(), data, &length);
+    HMAC(EVP_sha1(), (void*)key.c_str(), static_cast<int>(key.length()), (unsigned char*)to_hash.c_str(), to_hash.length(), data, &length);
     std::string signature = LLBase64::encode((U8*)data, length);
     return signature;
 }

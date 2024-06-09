@@ -142,7 +142,7 @@ public:
     bool handle(const LLSD& params, const LLSD& query_map, const std::string& grid, LLMediaCtrl* web)
     {
         // make sure that we at least have a region name
-        int num_params = params.size();
+        auto num_params = params.size();
         if (num_params < 1)
         {
             return false;
@@ -156,7 +156,7 @@ public:
         }
         boost::regex name_rx("[A-Za-z0-9()_%]+");
         boost::regex coord_rx("[0-9]+");
-        for (int i = 0; i < num_params; i++)
+        for (size_t i = 0; i < num_params; i++)
         {
             if (i > 0)
             {
@@ -986,7 +986,7 @@ const LLUUID& LLViewerRegion::getOwner() const
 void LLViewerRegion::setRegionNameAndZone   (const std::string& name_zone)
 {
     std::string::size_type pipe_pos = name_zone.find('|');
-    S32 length   = name_zone.size();
+    auto length   = name_zone.size();
     if (pipe_pos != std::string::npos)
     {
         mName   = name_zone.substr(0, pipe_pos);
@@ -1267,7 +1267,7 @@ void LLViewerRegion::killCacheEntry(U32 local_id)
 
 U32 LLViewerRegion::getNumOfActiveCachedObjects() const
 {
-    return  mImpl->mActiveSet.size();
+    return static_cast<U32>(mImpl->mActiveSet.size());
 }
 
 void LLViewerRegion::addActiveCacheEntry(LLVOCacheEntry* entry)
@@ -1354,7 +1354,7 @@ bool LLViewerRegion::addVisibleGroup(LLViewerOctreeGroup* group)
 
 U32 LLViewerRegion::getNumOfVisibleGroups() const
 {
-    return mImpl ? mImpl->mVisibleGroups.size() : 0;
+    return mImpl ? static_cast<U32>(mImpl->mVisibleGroups.size()) : 0;
 }
 
 void LLViewerRegion::updateReflectionProbes()
@@ -1831,7 +1831,7 @@ void LLViewerRegion::killInvisibleObjects(F32 max_time)
     }
 
     std::vector<LLDrawable*> delete_list;
-    S32 update_counter = llmin(max_update, mImpl->mActiveSet.size());
+    auto update_counter = llmin(max_update, mImpl->mActiveSet.size());
     LLVOCacheEntry::vocache_entry_set_t::iterator iter = mImpl->mActiveSet.upper_bound(mLastVisitedEntry);
 
     for(; update_counter > 0; --update_counter, ++iter)
@@ -1870,10 +1870,9 @@ void LLViewerRegion::killInvisibleObjects(F32 max_time)
     if(!delete_list.empty())
     {
         mInvisibilityCheckHistory |= 1;
-        S32 count = delete_list.size();
-        for(S32 i = 0; i < count; i++)
+        for (auto drawable : delete_list)
         {
-            gObjectList.killObject(delete_list[i]->getVObj());
+            gObjectList.killObject(drawable->getVObj());
         }
         delete_list.clear();
     }
@@ -2788,10 +2787,9 @@ void LLViewerRegion::decodeBoundingInfo(LLVOCacheEntry* entry)
         if(iter != mOrphanMap.end())
         {
             std::vector<U32>* orphans = &mOrphanMap[entry->getLocalID()];
-            S32 size = orphans->size();
-            for(S32 i = 0; i < size; i++)
+            for (U32 orphan : *orphans)
             {
-                LLVOCacheEntry* child = getCacheEntry((*orphans)[i]);
+                LLVOCacheEntry* child = getCacheEntry(orphan);
                 if(child)
                 {
                     entry->addChild(child);
@@ -3072,7 +3070,7 @@ void LLViewerRegion::requestCacheMisses()
 
     mCacheDirty = true ;
     // LL_INFOS() << "KILLDEBUG Sent cache miss full " << full_count << " crc " << crc_count << LL_ENDL;
-    LLViewerStatsRecorder::instance().requestCacheMissesEvent(mCacheMissList.size());
+    LLViewerStatsRecorder::instance().requestCacheMissesEvent(static_cast<S32>(mCacheMissList.size()));
 
     mCacheMissList.clear();
 }

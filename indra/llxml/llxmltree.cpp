@@ -565,7 +565,7 @@ bool LLXmlTreeParser::parseString(const std::string &string, LLXmlTreeNode** roo
 
     mKeepContents = keep_contents;
 
-    bool success = LLXmlParser::parse(string.c_str(), string.length(), true);
+    bool success = LLXmlParser::parse(string.c_str(), static_cast<S32>(string.length()), 1);
 
     *root = mRoot;
     mRoot = NULL;

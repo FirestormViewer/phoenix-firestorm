@@ -896,7 +896,7 @@ void AOEngine::cycle(eCycleMode cycleMode)
         {
             if (state->mCurrentAnimation == 0)
             {
-                state->mCurrentAnimation = state->mAnimations.size() - 1;
+                state->mCurrentAnimation = static_cast<U32>(state->mAnimations.size()) - 1;
             }
             else
             {
@@ -1044,7 +1044,7 @@ void AOEngine::addAnimation(const AOSet* set, AOSet::AOState* state, const LLInv
     anim.mInventoryUUID = item->getUUID();
     anim.mOriginalUUID = item->getLinkedUUID();
     anim.mName = item->getName();
-    anim.mSortOrder = state->mAnimations.size() + 1;
+    anim.mSortOrder = static_cast<S32>(state->mAnimations.size()) + 1;
     state->mAnimations.emplace_back(std::move(anim));
 
     bool wasProtected = gSavedPerAccountSettings.getBOOL("LockAOFolders");
@@ -1118,11 +1118,11 @@ bool AOEngine::findForeignItems(const LLUUID& uuid) const
 
     if (items)
     {
-        for (S32 index = items->size() - 1; index >= 0; --index)
+        for (S32 index = static_cast<S32>(items->size()) - 1; index >= 0; --index)
         {
-            bool move = false;
+            bool move{ false };
 
-            LLPointer<LLViewerInventoryItem> item = items->at(index);
+            const LLPointer<LLViewerInventoryItem>& item = items->at(index);
             if (item->getIsLinkType())
             {
                 if (item->getInventoryType() != LLInventoryType::IT_ANIMATION)
@@ -2263,7 +2263,7 @@ void AOEngine::processImport(bool from_timer)
                 LL_DEBUGS("AOEngine") << "new_cat_id: " << new_cat_id << LL_ENDL;
                 state->mInventoryUUID = new_cat_id;
 
-                S32 animationIndex = state->mAnimations.size() - 1;
+                S32 animationIndex = static_cast<S32>(state->mAnimations.size()) - 1;
                 while (!state->mAnimations.empty())
                 {
                     LL_DEBUGS("AOEngine") << "linking animation " << state->mAnimations[animationIndex].mName << LL_ENDL;

@@ -90,7 +90,7 @@ public:
 
     LLChatEntry* getChatBox() { return mInputEditor; }
 
-    S32 getMessageArchiveLength() {return mMessageArchive.size();}
+    S32 getMessageArchiveLength() { return static_cast<S32>(mMessageArchive.size()); }
 
     virtual bool handleKeyHere( KEY key, MASK mask );
 

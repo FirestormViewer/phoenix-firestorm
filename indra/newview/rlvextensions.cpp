@@ -67,8 +67,8 @@ bool RlvExtGetSet::onReplyCommand(const RlvCommand& rlvCmd, ERlvCmdRet& cmdRet)
 bool RlvExtGetSet::processCommand(const RlvCommand& rlvCmd, ERlvCmdRet& eRet)
 {
     std::string strBehaviour = rlvCmd.getBehaviour(), strGetSet, strSetting;
-    int idxSetting = strBehaviour.find('_');
-    if ( (strBehaviour.length() >= 6) && (-1 != idxSetting) && ((int)strBehaviour.length() > idxSetting + 1) )
+    size_t idxSetting = strBehaviour.find('_');
+    if ( (strBehaviour.length() >= 6) && (std::string::npos != idxSetting) && (strBehaviour.length() > idxSetting + 1) )
     {
         strSetting = strBehaviour.substr(idxSetting + 1);
         strBehaviour.erase(idxSetting); // Get rid of "_<setting>"

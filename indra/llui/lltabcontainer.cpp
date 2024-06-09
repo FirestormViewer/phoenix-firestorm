@@ -1439,7 +1439,7 @@ void LLTabContainer::removeTabPanel(LLPanel* child)
 
     if (mCurrentTabIdx >= (S32)mTabList.size())
     {
-        mCurrentTabIdx = mTabList.size()-1;
+        mCurrentTabIdx = static_cast<S32>(mTabList.size()) - 1;
     }
     selectTab(mCurrentTabIdx);
     if (has_focus)
@@ -1518,7 +1518,7 @@ S32 LLTabContainer::getCurrentPanelIndex()
 
 S32 LLTabContainer::getTabCount()
 {
-    return mTabList.size();
+    return static_cast<S32>(mTabList.size());
 }
 
 LLPanel* LLTabContainer::getPanelByIndex(S32 index)
@@ -1585,7 +1585,7 @@ void LLTabContainer::selectFirstTab()
 
 void LLTabContainer::selectLastTab()
 {
-    selectTab( mTabList.size()-1 );
+    selectTab(static_cast<S32>(mTabList.size()) - 1);
 }
 
 void LLTabContainer::selectNextTab()
@@ -1623,12 +1623,12 @@ void LLTabContainer::selectPrevTab()
     }
     S32 idx = mCurrentTabIdx-1;
     if (idx < 0)
-        idx = mTabList.size()-1;
+        idx = static_cast<S32>(mTabList.size()) - 1;
     while (!selectTab(idx) && idx != mCurrentTabIdx)
     {
         idx = idx - 1;
         if (idx < 0)
-            idx = mTabList.size()-1;
+            idx = static_cast<S32>(mTabList.size()) - 1;
     }
     if (tab_has_focus)
     {

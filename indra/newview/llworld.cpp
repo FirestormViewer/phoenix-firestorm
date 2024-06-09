@@ -1850,8 +1850,8 @@ void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positi
     {
         LLViewerRegion* regionp = *iter;
         const LLVector3d& origin_global = regionp->getOriginGlobal();
-        S32 count = regionp->mMapAvatars.size();
-        for (S32 i = 0; i < count; i++)
+        auto count = regionp->mMapAvatars.size();
+        for (size_t i = 0; i < count; i++)
         {
             // <FS:Ansariel>
             //LLVector3d pos_global = unpackLocalToGlobalPosition(regionp->mMapAvatars.at(i), origin_global);
@@ -1932,7 +1932,7 @@ bool LLWorld::getAvatar(const LLUUID& idAvatar, LLVector3d& posAvatar) const
 
     for (const LLViewerRegion* pRegion : LLWorld::getInstance()->getRegionList())
     {
-        for (S32 idxAgent = 0, cntAgent = pRegion->mMapAvatarIDs.size(); idxAgent < cntAgent; ++idxAgent)
+        for (size_t idxAgent = 0, cntAgent = pRegion->mMapAvatarIDs.size(); idxAgent < cntAgent; ++idxAgent)
         {
             if (idAvatar == pRegion->mMapAvatarIDs[idxAgent])
             {

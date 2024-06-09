@@ -762,8 +762,8 @@ bool RlvCommand::parseCommand(const std::string& strCommand, std::string& strBeh
     // (See behaviour notes for the command parsing truth table)
 
     // Format: <behaviour>[:<option>]=<param>
-    int idxParam  = strCommand.find('=');
-    int idxOption = (idxParam > 0) ? strCommand.find(':') : -1;
+    int idxParam  = static_cast<int>(strCommand.find('='));
+    int idxOption = (idxParam > 0) ? static_cast<int>(strCommand.find(':')) : -1;
     if (idxOption > idxParam - 1)
         idxOption = -1;
 
@@ -1292,7 +1292,7 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
     bool fSeenWType[LLWearableType::WT_COUNT] = { false };
 
     EWearAction eCurAction = eAction;
-    for (S32 idxItem = 0, cntItem = items.size(); idxItem < cntItem; idxItem++)
+    for (size_t idxItem = 0, cntItem = items.size(); idxItem < cntItem; idxItem++)
     {
         LLViewerInventoryItem* pRlvItem = items.at(idxItem);
         LLViewerInventoryItem* pItem = (LLAssetType::AT_LINK == pRlvItem->getActualType()) ? pRlvItem->getLinkedItem() : pRlvItem;
@@ -2059,7 +2059,7 @@ std::string rlvGetLastParenthesisedText(const std::string& strText, std::string:
         *pidxStart = std::string::npos; // Assume we won't find anything
 
     // Extracts the last - matched - parenthesised text from the input string
-    int idxIt; std::string::size_type idxEnd; int cntLevel = 1;
+    size_t idxIt; std::string::size_type idxEnd; int cntLevel = 1;
     if ((idxEnd = strText.find_last_of(')')) == std::string::npos)
         return std::string();
 

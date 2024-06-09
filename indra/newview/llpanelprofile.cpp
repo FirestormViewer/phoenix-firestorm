@@ -2004,7 +2004,7 @@ void LLPanelProfileSecondLife::onCommitMenu(const LLSD& userdata)
     else if (item_name == "copy_user_id")
     {
         LLWString wstr = utf8str_to_wstring(getAvatarId().asString());
-        LLClipboard::instance().copyToClipboard(wstr, 0, wstr.size());
+        LLClipboard::instance().copyToClipboard(wstr, 0, static_cast<S32>(wstr.size()));
     }
     else if (item_name == "agent_permissions")
     {
@@ -2029,7 +2029,7 @@ void LLPanelProfileSecondLife::onCommitMenu(const LLSD& userdata)
         {
             wstr = utf8str_to_wstring(av_name.getUserName());
         }
-        LLClipboard::instance().copyToClipboard(wstr, 0, wstr.size());
+        LLClipboard::instance().copyToClipboard(wstr, 0, static_cast<S32>(wstr.size()));
     }
     else if (item_name == "edit_display_name")
     {
@@ -2075,7 +2075,7 @@ void LLPanelProfileSecondLife::onCommitMenu(const LLSD& userdata)
     else if (item_name == "copy_uri")
     {
         LLWString wstr = utf8str_to_wstring(LLSLURL("agent", agent_id, "about").getSLURLString());
-        LLClipboard::instance().copyToClipboard(wstr, 0, wstr.size());
+        LLClipboard::instance().copyToClipboard(wstr, 0, static_cast<S32>(wstr.size()));
     }
     else if (item_name == "kick")
     {

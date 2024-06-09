@@ -248,7 +248,7 @@ void FSPanelContactSets::onClickRemoveAvatar()
 
     LLSD payload, args;
     std::string set = mContactSetCombo->getValue().asString();
-    S32 selected_size = mAvatarSelections.size();
+    auto selected_size = mAvatarSelections.size();
     args["SET_NAME"] = set;
     args["TARGET"] = (selected_size > 1 ? llformat("%d", selected_size) : LLSLURL("agent", mAvatarSelections.front(), "about").getSLURLString());
     payload["contact_set"] = set;

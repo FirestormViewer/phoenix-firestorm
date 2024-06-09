@@ -592,7 +592,7 @@ const std::string& LLLineEditor::getSuggestion(U32 index) const
 
 U32 LLLineEditor::getSuggestionCount() const
 {
-    return mSuggestionList.size();
+    return static_cast<U32>(mSuggestionList.size());
 }
 
 void LLLineEditor::replaceWithSuggestion(U32 index)
@@ -1026,7 +1026,7 @@ void LLLineEditor::addChar(const llwchar uni_char)
         mText.erase(getCursor(), 1);
     }
 
-    S32 cur_bytes = mText.getString().size();
+    S32 cur_bytes = static_cast<S32>(mText.getString().size());
 
     S32 new_bytes = wchar_utf8_length(new_c);
 
@@ -1039,7 +1039,7 @@ void LLLineEditor::addChar(const llwchar uni_char)
     }
     else if (mMaxLengthChars)
     {
-        S32 wide_chars = mText.getWString().size();
+        auto wide_chars = mText.getWString().size();
         if ((wide_chars + 1) > mMaxLengthChars)
         {
             allow_char = false;
@@ -1385,7 +1385,7 @@ void LLLineEditor::pasteHelper(bool is_primary)
 
             if (mMaxLengthChars)
             {
-                U32 available_chars = mMaxLengthChars - mText.getWString().size();
+                auto available_chars = mMaxLengthChars - mText.getWString().size();
 
                 if (available_chars < clean_string.size())
                 {
@@ -2393,10 +2393,10 @@ bool LLLineEditor::postvalidateFloat(const std::string &str)
 
     LLWString trimmed = utf8str_to_wstring(str);
     LLWStringUtil::trim(trimmed);
-    S32 len = trimmed.length();
+    auto len = trimmed.length();
     if( 0 < len )
     {
-        S32 i = 0;
+        size_t i = 0;
 
         // First character can be a negative sign
         if( '-' == trimmed[0] )
@@ -2453,7 +2453,7 @@ bool LLLineEditor::evaluateFloat()
     if (!success)
     {
         // Move the cursor to near the error on failure
-        setCursor(LLCalc::getInstance()->getLastErrorPos());
+        setCursor(static_cast<S32>(LLCalc::getInstance()->getLastErrorPos()));
         // *TODO: Translated error message indicating the type of error? Select error text?
     }
     else
@@ -2603,7 +2603,7 @@ void LLLineEditor::updatePreedit(const LLWString &preedit_string,
     if (LL_KIM_OVERWRITE == gKeyboard->getInsertMode())
     {
         mPreeditOverwrittenWString.assign( LLWString( mText, insert_preedit_at, mPreeditWString.length() ) );
-        mText.erase(insert_preedit_at, mPreeditWString.length());
+        mText.erase(insert_preedit_at, static_cast<S32>(mPreeditWString.length()));
     }
     else
     {

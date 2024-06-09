@@ -124,7 +124,7 @@ private:
     std::string mFilePath;
     LLLoadedCallbackEntry::source_callback_list_t mCallbackTextureList;
     LLFrameTimer mWaitTimer;
-    S32 mLastRequest;
+    size_t mLastRequest;
     bool mExported;
     bool mAborted;
     bool mDirty;

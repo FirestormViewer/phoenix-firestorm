@@ -687,7 +687,7 @@ bool LLGestureMgr::triggerAndReviseString(const std::string &utf8str, std::strin
             {
                 // choose one at random
                 {
-                    S32 random = ll_rand(matching.size());
+                    S32 random = ll_rand(static_cast<S32>(matching.size()));
 
                     gesture = matching[random];
 
@@ -761,7 +761,7 @@ bool LLGestureMgr::triggerGesture(KEY key, MASK mask)
     // choose one and play it
     if (matching.size() > 0)
     {
-        U32 random = ll_rand(matching.size());
+        U32 random = ll_rand(static_cast<S32>(matching.size()));
 
         LLMultiGesture* gesture = matching[random];
 
@@ -799,7 +799,7 @@ bool LLGestureMgr::triggerGestureRelease(KEY key, MASK mask)
 
 S32 LLGestureMgr::getPlayingCount() const
 {
-    return mPlaying.size();
+    return static_cast<S32>(mPlaying.size());
 }
 
 
@@ -1489,7 +1489,7 @@ void LLGestureMgr::notifyObservers()
 
 bool LLGestureMgr::matchPrefix(const std::string& in_str, std::string* out_str)
 {
-    S32 in_len = in_str.length();
+    auto in_len = in_str.length();
 
     //return whole trigger, if received text equals to it
     item_map_t::iterator it;
@@ -1517,7 +1517,7 @@ bool LLGestureMgr::matchPrefix(const std::string& in_str, std::string* out_str)
         {
             const std::string& trigger = gesture->getTrigger();
 
-            if (in_len > (S32)trigger.length())
+            if (in_len > trigger.length())
             {
                 // too short, bail out
                 continue;

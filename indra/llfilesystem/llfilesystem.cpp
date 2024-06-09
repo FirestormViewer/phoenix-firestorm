@@ -212,7 +212,7 @@ bool LLFileSystem::read(U8* buffer, S32 bytes)
     {
         if (fseek(file, mPosition, SEEK_SET) == 0)
         {
-            mBytesRead = fread(buffer, 1, bytes, file);
+            mBytesRead = static_cast<S32>(fread(buffer, 1, bytes, file));
             fclose(file);
 
             mPosition += mBytesRead;
@@ -306,7 +306,7 @@ bool LLFileSystem::write(const U8* buffer, S32 bytes)
         LLFILE* ofs = LLFile::fopen(filename, "a+b");
         if (ofs)
         {
-            S32 bytes_written = fwrite(buffer, 1, bytes, ofs);
+            S32 bytes_written = static_cast<S32>(fwrite(buffer, 1, bytes, ofs));
             mPosition = ftell(ofs);
             fclose(ofs);
             success = (bytes_written == bytes);
@@ -319,7 +319,7 @@ bool LLFileSystem::write(const U8* buffer, S32 bytes)
         {
             if (fseek(ofs, mPosition, SEEK_SET) == 0)
             {
-                S32 bytes_written = fwrite(buffer, 1, bytes, ofs);
+                S32 bytes_written = static_cast<S32>(fwrite(buffer, 1, bytes, ofs));
                 mPosition = ftell(ofs);
                 fclose(ofs);
                 success = (bytes_written == bytes);
@@ -330,7 +330,7 @@ bool LLFileSystem::write(const U8* buffer, S32 bytes)
             ofs = LLFile::fopen(filename, "wb");
             if (ofs)
             {
-                S32 bytes_written = fwrite(buffer, 1, bytes, ofs);
+                S32 bytes_written = static_cast<S32>(fwrite(buffer, 1, bytes, ofs));
                 mPosition = ftell(ofs);
                 fclose(ofs);
                 success = (bytes_written == bytes);
@@ -342,7 +342,7 @@ bool LLFileSystem::write(const U8* buffer, S32 bytes)
         LLFILE* ofs = LLFile::fopen(filename, "wb");
         if (ofs)
         {
-            S32 bytes_written = fwrite(buffer, 1, bytes, ofs);
+            S32 bytes_written = static_cast<S32>(fwrite(buffer, 1, bytes, ofs));
             mPosition = ftell(ofs);
             fclose(ofs);
             success = (bytes_written == bytes);

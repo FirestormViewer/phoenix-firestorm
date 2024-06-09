@@ -1195,7 +1195,7 @@ bool LLImageTGA::decodeAndProcess( LLImageRaw* raw_image, F32 domain, F32 weight
 // Reads a .tga file and creates an LLImageTGA with its data.
 bool LLImageTGA::loadFile( const std::string& path )
 {
-    S32 len = path.size();
+    auto len = path.size();
     if( len < 5 )
     {
         return false;
@@ -1238,7 +1238,7 @@ bool LLImageTGA::loadFile( const std::string& path )
         return false;
     }
 
-    S32 bytes_read = fread(buffer, 1, file_size, file);
+    S32 bytes_read = static_cast<S32>(fread(buffer, 1, file_size, file));
     if( bytes_read != file_size )
     {
         deleteData();

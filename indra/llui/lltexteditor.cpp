@@ -98,13 +98,13 @@ public:
     }
     virtual S32 undo( LLTextBase* editor )
     {
-        remove(editor, getPosition(), mWString.length() );
+        remove(editor, getPosition(), static_cast<S32>(mWString.length()));
         return getPosition();
     }
     virtual S32 redo( LLTextBase* editor )
     {
-        insert(editor, getPosition(), mWString );
-        return getPosition() + mWString.length();
+        insert(editor, getPosition(), mWString);
+        return getPosition() + static_cast<S32>(mWString.length());
     }
 
 private:
@@ -151,13 +151,13 @@ public:
     }
     virtual S32 undo( LLTextBase* editor )
     {
-        remove(editor, getPosition(), mWString.length() );
+        remove(editor, getPosition(), static_cast<S32>(mWString.length()));
         return getPosition();
     }
     virtual S32 redo( LLTextBase* editor )
     {
-        insert(editor, getPosition(), mWString );
-        return getPosition() + mWString.length();
+        insert(editor, getPosition(), mWString);
+        return getPosition() + static_cast<S32>(mWString.length());
     }
 
 private:
@@ -216,7 +216,7 @@ public:
     virtual S32 undo( LLTextBase* editor )
     {
         insert(editor, getPosition(), mWString);
-        return getPosition() + mWString.length();
+        return getPosition() + static_cast<S32>(mWString.length());
     }
     virtual S32 redo( LLTextBase* editor )
     {
@@ -379,7 +379,7 @@ void LLTextEditor::selectNext(const std::string& search_text_in, bool case_insen
         if (selected_text == search_text)
         {
 //          // We already have this word selected, we are searching for the next.
-//          setCursorPos(mCursorPos + search_text.size());
+//          setCursorPos(mCursorPos + static_cast<S32>(search_text.size()));
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
             if (search_up)
             {
@@ -389,23 +389,23 @@ void LLTextEditor::selectNext(const std::string& search_text_in, bool case_insen
             else
             {
                 // We already have this word selected, we are searching for the next.
-                setCursorPos(mCursorPos + search_text.size());
+                setCursorPos(mCursorPos + static_cast<S32>(search_text.size()));
             }
 // [/SL:KB]
         }
     }
 
-//  S32 loc = text.find(search_text,mCursorPos);
+//  S32 loc = static_cast<S32>(text.find(search_text,mCursorPos));
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
-    S32 loc = (search_up) ? text.rfind(search_text, llmax(0, mCursorPos - (S32)search_text.size())) : text.find(search_text,mCursorPos);
+    S32 loc = (search_up) ? static_cast<S32>(text.rfind(search_text, llmax(0, mCursorPos - (S32)search_text.size()))) : static_cast<S32>(text.find(search_text,mCursorPos));
 // [/SL:KB]
 
     // If Maybe we wrapped, search again
     if (wrap && (-1 == loc))
     {
-//      loc = text.find(search_text);
+//      loc = static_cast<S32>(text.find(search_text));
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-29 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
-        loc = (search_up) ? text.rfind(search_text) : text.find(search_text);
+        loc = (search_up) ? static_cast<S32>(text.rfind(search_text)) : static_cast<S32>(text.find(search_text));
 // [/SL:KB]
     }
 
@@ -1678,8 +1678,8 @@ void LLTextEditor::cleanStringForPaste(LLWString & clean_string)
     if( mAllowEmbeddedItems )
     {
         const llwchar LF = 10;
-        S32 len = clean_string.length();
-        for( S32 i = 0; i < len; i++ )
+        auto len = clean_string.length();
+        for( size_t i = 0; i < len; i++ )
         {
             llwchar wc = clean_string[i];
             if( (wc < LLFontFreetype::FIRST_CHAR) && (wc != LF) )
@@ -2692,7 +2692,7 @@ void LLTextEditor::appendWidget(const LLInlineViewSegment::Params& params, const
 
     LLWString widget_wide_text = utf8str_to_wstring(text);
 
-    LLTextSegmentPtr segment = new LLInlineViewSegment(params, old_length, old_length + widget_wide_text.size());
+    LLTextSegmentPtr segment = new LLInlineViewSegment(params, old_length, old_length + static_cast<S32>(widget_wide_text.size()));
     insert(getLength(), widget_wide_text, false, segment);
 
     // Set the cursor and scroll position
@@ -3048,7 +3048,7 @@ void LLTextEditor::updatePreedit(const LLWString &preedit_string,
     if (LL_KIM_OVERWRITE == gKeyboard->getInsertMode())
     {
         mPreeditOverwrittenWString = getWText().substr(insert_preedit_at, mPreeditWString.length());
-        removeStringNoUndo(insert_preedit_at, mPreeditWString.length());
+        removeStringNoUndo(insert_preedit_at, static_cast<S32>(mPreeditWString.length()));
     }
     else
     {

@@ -92,7 +92,7 @@ bool is_irc_me_prefix(std::string_view text)
 std::string unescape_name(std::string_view name)
 {
     // bugfix for SL-46920: preventing filenames that break stuff.
-    char * curl_str = curl_unescape(name.data(), name.size()); // Calling data() should be ok here because we also pass the length
+    char * curl_str = curl_unescape(name.data(), static_cast<int>(name.size())); // Calling data() should be ok here because we also pass the length
     std::string unescaped_name(curl_str);
     curl_free(curl_str);
     curl_str = NULL;
@@ -440,7 +440,7 @@ bool FSCommon::checkIsActionEnabled(const LLUUID& av_id, EFSRegistrarFunctionAct
 LLSD FSCommon::populateGroupCount()
 {
     LLStringUtil::format_map_t args;
-    S32 groupcount = gAgent.mGroups.size();
+    S32 groupcount = static_cast<S32>(gAgent.mGroups.size());
     S32 maxgroup = LLAgentBenefitsMgr::current().getGroupMembershipLimit();
     args["[COUNT]"] = llformat("%d", groupcount);
     args["[REMAINING]"] = llformat("%d", maxgroup > groupcount ? maxgroup - groupcount : 0);

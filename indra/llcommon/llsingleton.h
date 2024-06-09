@@ -569,6 +569,7 @@ public:
                          classname<DERIVED_TYPE>(),
                          " -- creating new instance"});
                 // fall through
+                [[fallthrough]];
             case UNINITIALIZED:
             case QUEUED:
                 // QUEUED means some secondary thread has already requested an

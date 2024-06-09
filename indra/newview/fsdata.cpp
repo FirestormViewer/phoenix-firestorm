@@ -682,7 +682,7 @@ LLSD FSData::resolveClientTag(const LLUUID& id, bool new_system, const LLColor4&
     {
         if (client_tag_visibility >= 3)
         {
-            U32 tag_len = strnlen((const char*)&id.mData[0], UUID_BYTES);
+            auto tag_len = strnlen((const char*)&id.mData[0], UUID_BYTES);
             std::string clienttagname = std::string((const char*)&id.mData[0], tag_len);
             LLStringFn::replace_ascii_controlchars(clienttagname, LL_UNKNOWN_CHAR);
             curtag["name"] = clienttagname;

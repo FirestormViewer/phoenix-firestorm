@@ -275,7 +275,7 @@ std::string RlvFloaterBehaviours::getFormattedBehaviourString(ERlvBehaviourFilte
 void RlvFloaterBehaviours::onBtnCopyToClipboard()
 {
     LLWString wstrRestrictions = utf8str_to_wstring(getFormattedBehaviourString(ERlvBehaviourFilter::ALL));
-    LLClipboard::instance().copyToClipboard(wstrRestrictions, 0, wstrRestrictions.length());
+    LLClipboard::instance().copyToClipboard(wstrRestrictions, 0, static_cast<S32>(wstrRestrictions.length()));
 }
 
 // Checked: 2011-05-23 (RLVa-1.3.1c) | Modified: RLVa-1.3.1c

@@ -2240,7 +2240,7 @@ void LLFloaterPreference::refreshEnabledState()
 void LLFloaterPreference::onCopySearch()
 {
     std::string searchQuery = "secondlife:///app/openfloater/preferences?search=" + LLURI::escape(mFilterEdit->getText());
-    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(searchQuery), 0, searchQuery.size());
+    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(searchQuery), 0, static_cast<S32>(searchQuery.size()));
 }
 // </FS:Zi>
 
@@ -5298,29 +5298,32 @@ S32 copy_prefs_file(const std::string& from, const std::string& to)
     LL_WARNS() << "copying " << from << " to " << to << LL_ENDL;
     S32 rv = 0;
     LLFILE* in = LLFile::fopen(from, "rb"); /*Flawfinder: ignore*/
-    if(!in)
+    if (!in)
     {
         LL_WARNS() << "couldn't open source file " << from << " - copy aborted." << LL_ENDL;
         return -1;
     }
 
     LLFILE* out = LLFile::fopen(to, "wb");  /*Flawfinder: ignore*/
-    if(!out)
+    if (!out)
     {
         fclose(in);
         LL_WARNS() << "couldn't open destination file " << to << " - copy aborted." << LL_ENDL;
         return -1;
     }
 
-    S32 read = 0;
-    const S32 COPY_BUFFER_SIZE = 16384;
+    size_t read = 0;
+    constexpr S32 COPY_BUFFER_SIZE = 16384;
     U8 buffer[COPY_BUFFER_SIZE];
-    while(((read = fread(buffer, 1, sizeof(buffer), in)) > 0)
-          && (fwrite(buffer, 1, read, out) == (U32)read));      /* Flawfinder : ignore */
-    if(ferror(in) || ferror(out)) rv = -2;
+    while (((read = fread(buffer, 1, sizeof(buffer), in)) > 0)
+          && (fwrite(buffer, 1, read, out) == read));      /* Flawfinder : ignore */
+    if (ferror(in) || ferror(out))
+        rv = -2;
 
-    if(in) fclose(in);
-    if(out) fclose(out);
+    if (in)
+        fclose(in);
+    if (out)
+        fclose(out);
 
     return rv;
 }
