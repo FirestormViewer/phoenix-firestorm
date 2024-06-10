@@ -934,7 +934,7 @@ void LLTextBase::drawText()
             }
 
             // Draw squiggly lines under any visible misspelled words
-            while ( (mMisspellRanges.end() != misspell_it) && (misspell_it->first < seg_end) && (misspell_it->second > seg_start) )
+            while ( (mMisspellRanges.end() != misspell_it) && (misspell_it->first < (U32)seg_end) && (misspell_it->second > (U32)seg_start) )
             {
                 // Skip the current word if the user is still busy editing it
                 if ( (!mSpellCheckTimer.hasExpired()) && (misspell_it->first <= (U32)mCursorPos) && (misspell_it->second >= (U32)mCursorPos) )
@@ -943,7 +943,7 @@ void LLTextBase::drawText()
                     continue;
                 }
 
-                U32 misspell_start = llmax<U32>(misspell_it->first, seg_start), misspell_end = llmin<U32>(misspell_it->second, seg_end);
+                U32 misspell_start = llmax<U32>(misspell_it->first, (U32)seg_start), misspell_end = llmin<U32>(misspell_it->second, (U32)seg_end);
                 S32 squiggle_start = 0, squiggle_end = 0, pony = 0;
                 cur_segment->getDimensions(seg_start - cur_segment->getStart(), misspell_start - seg_start, squiggle_start, pony);
                 cur_segment->getDimensions(misspell_start - cur_segment->getStart(), misspell_end - misspell_start, squiggle_end, pony);
@@ -966,7 +966,7 @@ void LLTextBase::drawText()
                     squiggle_start += 4;
                 }
 
-                if (misspell_it->second > seg_end)
+                if (misspell_it->second > (U32)seg_end)
                 {
                     break;
                 }
@@ -3945,9 +3945,9 @@ S32 LLNormalTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 lin
 void LLNormalTextSegment::dump() const
 {
     LL_INFOS() << "Segment [" <<
-//          mColor.mV[VX] << ", " <<
-//          mColor.mV[VY] << ", " <<
-//          mColor.mV[VZ] << "]\t[" <<
+//          mColor.mV[VRED] << ", " <<
+//          mColor.mV[VGREEN] << ", " <<
+//          mColor.mV[VBLUE] << "]\t[" <<
         mStart << ", " <<
         getEnd() << "]" <<
         LL_ENDL;

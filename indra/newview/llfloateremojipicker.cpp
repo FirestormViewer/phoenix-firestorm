@@ -39,9 +39,9 @@
 #include "llscrolllistctrl.h"
 #include "llscrolllistitem.h"
 #include "llsdserialize.h"
-#include "lltextbox.h" 
+#include "lltextbox.h"
 #include "lltrans.h"
-#include "llviewerchat.h" 
+#include "llviewerchat.h"
 #include "llviewercontrol.h"  // <FS:Beq/> Add B&W emoji font support
 
 LLFloaterEmojiPicker::recent_emojis_updated_callback_t LLFloaterEmojiPicker::sRecentEmojisUpdatedCallback{}; // <FS:Ansariel> Live-update recently used emojis

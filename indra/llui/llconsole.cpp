@@ -604,7 +604,7 @@ void LLConsole::Paragraph::updateLines(F32 screen_width, const LLFontGL* font, L
         }
 
         S32 skip_chars = 0; // skip '\n'
-        S32 line_length = static_cast<S32>(line_end) - paragraph_offset;
+        U32 line_length = static_cast<U32>(line_end) - paragraph_offset;
         U32 drawable = font->maxDrawableChars(mParagraphText.c_str()+paragraph_offset, screen_width, line_length, LLFontGL::WORD_BOUNDARY_IF_POSSIBLE);
         // </FS>
 
@@ -812,11 +812,11 @@ void LLConsole::update()
         F32 skip_time = mTimer.getElapsedTimeF32() - mLinePersistTime;
 
         paragraph_t temp_para;
-        std::map<LLUUID, S32> session_map;
+        std::map<LLUUID, U32> session_map;
         for (paragraph_t::reverse_iterator it = mParagraphs.rbegin(); it != mParagraphs.rend(); ++it)
         {
             Paragraph& para = *it;
-            session_map[para.mSessionID] += (S32)para.mLines.size();
+            session_map[para.mSessionID] += (U32)para.mLines.size();
             if (session_map[para.mSessionID] <= mMaxLines && // max lines on a per session basis
                 !((mLinePersistTime > 0.f) && (para.mAddTime - skip_time) / (mLinePersistTime - mFadeTime) <= 0.f)) // not expired yet
             {

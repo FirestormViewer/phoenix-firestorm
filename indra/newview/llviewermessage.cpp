@@ -5169,7 +5169,7 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
                 {
                     S32 new_val = (S32)stat_value;
                     S32 change_count = new_val - prev_total_scripts;
-                    if (llabs(change_count) >= fsReportTotalScriptCountChangesThreshold && prev_total_scripts > -1)
+                    if (llabs(change_count) >= (S32)fsReportTotalScriptCountChangesThreshold && prev_total_scripts > -1)
                     {
                         LLStringUtil::format_map_t args;
                         args["NEW_VALUE"] = llformat("%d", new_val);

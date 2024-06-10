@@ -379,7 +379,7 @@ void FSFloaterPerformance::draw()
             getChild<LLTextBox>("frame_breakdown")->setText(getString("frame_stats", args));
 
             auto button = getChild<LLButton>("AutoTuneFPS");
-            if((bool)button->getToggleState() != LLPerfStats::tunables.userAutoTuneEnabled)
+            if (button->getToggleState() != LLPerfStats::tunables.userAutoTuneEnabled)
             {
                 button->toggleState();
             }
@@ -392,7 +392,7 @@ void FSFloaterPerformance::draw()
                 {
                     U32 non_avatar_time_ns = tot_frame_time_ns - tot_avatar_time_ns;
                     // If the target frame time < non avatar frame time then we can pototentially reach it.
-                    if (non_avatar_time_ns < target_frame_time_ns)
+                    if (non_avatar_time_ns < (U32)target_frame_time_ns)
                     {
                         textbox->setColor(LLUIColorTable::instance().getColor("orange"));
                     }

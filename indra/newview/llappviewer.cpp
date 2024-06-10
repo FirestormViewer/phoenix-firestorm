@@ -3925,12 +3925,12 @@ LLSD LLAppViewer::getViewerInfo() const
     info["CPU"] = gSysCPU.getCPUString();
     info["MEMORY_MB"] = LLSD::Integer(gSysMemory.getPhysicalMemoryKB().valueInUnits<LLUnits::Megabytes>());
     info["USED_RAM"] = LLSD::Real(LLMemory::getAllocatedMemKB().valueInUnits<LLUnits::Megabytes>());
-    info["CONCURRENCY"] = LLSD::Integer((S32)boost::thread::hardware_concurrency());    // <FS:Beq> Add hardware concurrency to info
+    info["CONCURRENCY"] = LLSD::Integer(std::thread::hardware_concurrency());    // <FS:Beq> Add hardware concurrency to info
     // Moved hack adjustment to Windows memory size into llsys.cpp
     info["OS_VERSION"] = LLOSInfo::instance().getOSString();
     info["GRAPHICS_CARD_VENDOR"] = ll_safe_string((const char*)(glGetString(GL_VENDOR)));
     info["GRAPHICS_CARD"] = ll_safe_string((const char*)(glGetString(GL_RENDERER)));
-    info["GRAPHICS_CARD_MEMORY"] = gGLManager.mVRAM;
+    info["GRAPHICS_CARD_MEMORY"] = LLSD::Integer(gGLManager.mVRAM);
 
 #if LL_WINDOWS
     std::string drvinfo;

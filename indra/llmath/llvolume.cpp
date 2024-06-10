@@ -427,7 +427,7 @@ public:
             llassert(!branch->isLeaf()); // Empty leaf
         }
 
-        for (S32 i = 0; i < branch->getChildCount(); ++i)
+        for (U32 i = 0; i < branch->getChildCount(); ++i)
         {  //stretch by child extents
             LLVolumeOctreeListener* child = (LLVolumeOctreeListener*) branch->getChild(i)->getListener(0);
             min.setMin(min, child->mExtents[0]);
@@ -2737,7 +2737,7 @@ bool LLVolume::unpackVolumeFacesInternal(const LLSD& mdl)
 
             if (do_reverse_triangles)
             {
-                for (U32 j = 0; j < face.mNumIndices; j += 3)
+                for (S32 j = 0; j < face.mNumIndices; j += 3)
                 {
                     // swap the 2nd and 3rd index
                     S32 swap = face.mIndices[j+1];
@@ -2774,7 +2774,7 @@ bool LLVolume::unpackVolumeFacesInternal(const LLSD& mdl)
                     min_tc = face.mTexCoords[0];
                     max_tc = face.mTexCoords[0];
 
-                    for (U32 j = 1; j < face.mNumVertices; ++j)
+                    for (S32 j = 1; j < face.mNumVertices; ++j)
                     {
                         update_min_max(min_tc, max_tc, face.mTexCoords[j]);
                     }
@@ -3899,7 +3899,7 @@ void LLVolume::generateSilhouetteVertices(std::vector<LLVector3> &vertices,
             LLVector4a* v = (LLVector4a*)face.mPositions;
             LLVector4a* n = (LLVector4a*)face.mNormals;
 
-            for (U32 j = 0; j < face.mNumIndices / 3; j++)
+            for (S32 j = 0; j < face.mNumIndices / 3; j++)
             {
                 for (S32 k = 0; k < 3; k++)
                 {
@@ -4025,7 +4025,7 @@ void LLVolume::generateSilhouetteVertices(std::vector<LLVector3> &vertices,
             LLVector4a* v = (LLVector4a*) face.mPositions;
             LLVector4a* n = (LLVector4a*) face.mNormals;
 
-            for (U32 j = 0; j < face.mNumIndices/3; j++)
+            for (S32 j = 0; j < face.mNumIndices/3; j++)
             {
                 //approximate normal
                 S32 v1 = face.mIndices[j*3+0];
@@ -4062,7 +4062,7 @@ void LLVolume::generateSilhouetteVertices(std::vector<LLVector3> &vertices,
             }
 
             //for each triangle
-            for (U32 j = 0; j < face.mNumIndices/3; j++)
+            for (S32 j = 0; j < face.mNumIndices/3; j++)
             {
                 if (fFacing[j] == (AWAY | TOWARDS))
                 { //this is a degenerate triangle
@@ -5115,7 +5115,7 @@ void LLVolumeFace::optimize(F32 angle_cutoff)
     range.setSub(mExtents[1],mExtents[0]);
 
     //remove redundant vertices
-    for (U32 i = 0; i < mNumIndices; ++i)
+    for (S32 i = 0; i < mNumIndices; ++i)
     {
         U16 index = mIndices[i];
 
@@ -5501,7 +5501,7 @@ struct MikktData
         LLVector3 inv_scale(1.f / face->mNormalizedScale.mV[0], 1.f / face->mNormalizedScale.mV[1], 1.f / face->mNormalizedScale.mV[2]);
 
 
-        for (int i = 0; i < face->mNumIndices; ++i)
+        for (S32 i = 0; i < face->mNumIndices; ++i)
         {
             U32 idx = face->mIndices[i];
 
@@ -5620,11 +5620,11 @@ bool LLVolumeFace::cacheOptimize(bool gen_tangents)
 
             allocateTangents(mNumVertices);
 
-            for (int i = 0; i < mNumIndices; ++i)
+            for (S32 i = 0; i < mNumIndices; ++i)
             {
                 U32 src_idx = i;
                 U32 dst_idx = remap[i];
-                if (dst_idx >= mNumVertices)
+                if (dst_idx >= (U32)mNumVertices)
                 {
                     dst_idx = mNumVertices - 1;
                     // Shouldn't happen, figure out what gets returned in remap and why.
@@ -5651,7 +5651,7 @@ bool LLVolumeFace::cacheOptimize(bool gen_tangents)
             scale.load3(mNormalizedScale.mV);
             scale.getF32ptr()[3] = 1.f;
 
-            for (int i = 0; i < mNumVertices; ++i)
+            for (S32 i = 0; i < mNumVertices; ++i)
             {
                 mPositions[i].mul(inv_scale);
                 mNormals[i].mul(scale);
@@ -6519,7 +6519,7 @@ void LLVolumeFace::createTangents()
         CalculateTangentArray(mNumVertices, mPositions, mNormals, mTexCoords, mNumIndices / 3, mIndices, mTangents);
 
         //normalize normals
-        for (U32 i = 0; i < mNumVertices; i++)
+        for (S32 i = 0; i < mNumVertices; i++)
         {
             //bump map/planar projection code requires normals to be normalized
             mNormals[i].normalize3fast();
@@ -6791,7 +6791,7 @@ bool LLVolumeFace::createSide(LLVolume* volume, bool partial_build)
             {
                 // Get s value for tex-coord.
                 S32 index = mBeginS + s;
-                if (index >= profile.size())
+                if (index >= (S32)profile.size())
                 {
                     // edge?
                     ss = flat ? 1.f - begin_stex : 1.f;

@@ -132,9 +132,7 @@ public:
     std::string mDriverVersionVendorString;
     std::string mGLVersionString;
 
-    S32 mVRAM; // VRAM in MB
-
-    void getPixelFormat(); // Get the best pixel format
+    U32 mVRAM; // VRAM in MB
 
     std::string getGLInfoString();
     void printGLInfoString();
@@ -152,7 +150,6 @@ public:
 private:
     void initExtensions();
     void initGLStates();
-    void initGLImages();
 };
 
 extern LLGLManager gGLManager;

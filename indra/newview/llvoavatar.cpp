@@ -946,7 +946,7 @@ bool LLVOAvatar::isFullyBaked()
     if (getNumTEs() == 0) return false;
     // <FS:Beq> OS BOM limit the tests to avoid "invalid face error"
     // for (U32 i = 0; i < mBakedTextureDatas.size(); i++)
-    for (U32 i = 0; i < getNumBakes(); i++)
+    for (S32 i = 0; i < getNumBakes(); i++)
     {
         if (!isTextureDefined(mBakedTextureDatas[i].mTextureIndex)
             && ((i != BAKED_SKIRT) || isWearingWearableType(LLWearableType::WT_SKIRT))
@@ -7401,8 +7401,8 @@ void LLVOAvatar::addAttachmentOverridesForObject(LLViewerObject *vo, std::set<LL
 
     if ( vobj && vobj->isMesh() && pSkinData )
     {
-        const int bindCnt = static_cast<int>(pSkinData->mAlternateBindMatrix.size());
-        const int jointCnt = static_cast<int>(pSkinData->mJointNames.size());
+        const unsigned int bindCnt = static_cast<unsigned int>(pSkinData->mAlternateBindMatrix.size());
+        const unsigned int jointCnt = static_cast<unsigned int>(pSkinData->mJointNames.size());
         if ((bindCnt > 0) && (bindCnt != jointCnt))
         {
             LL_WARNS_ONCE() << "invalid mesh, bindCnt " << bindCnt << "!= jointCnt " << jointCnt << ", joint overrides will be ignored." << LL_ENDL;
@@ -7429,10 +7429,10 @@ void LLVOAvatar::addAttachmentOverridesForObject(LLViewerObject *vo, std::set<LL
                 LL_DEBUGS("AnimatedObjects") << "adding attachment overrides for " << mesh_id
                                              << " to root object " << root_object->getID() << LL_ENDL;
             }
-            bool fullRig = jointCnt>=JOINT_COUNT_REQUIRED_FOR_FULLRIG;
+            bool fullRig = jointCnt >= JOINT_COUNT_REQUIRED_FOR_FULLRIG;
             if ( fullRig && !mesh_overrides_loaded )
             {
-                for ( int i=0; i<jointCnt; ++i )
+                for (unsigned int i = 0; i < jointCnt; ++i)
                 {
 //<FS:ND> Query by JointKey rather than just a string, the key can be a U32 index for faster lookup
 //                  std::string lookingForJoint = pSkinData->mJointNames[ i ].c_str();
@@ -8336,7 +8336,7 @@ S32 LLVOAvatar::getMaxAttachments() const
 //-----------------------------------------------------------------------------
 bool LLVOAvatar::canAttachMoreObjects(U32 n) const
 {
-    return (getNumAttachments() + n) <= getMaxAttachments();
+    return (getNumAttachments() + n) <= (U32)getMaxAttachments();
 }
 
 //-----------------------------------------------------------------------------
@@ -8370,7 +8370,7 @@ S32 LLVOAvatar::getMaxAnimatedObjectAttachments() const
 //-----------------------------------------------------------------------------
 bool LLVOAvatar::canAttachMoreAnimatedObjects(U32 n) const
 {
-    return (getNumAnimatedObjectAttachments() + n) <= getMaxAnimatedObjectAttachments();
+    return (getNumAnimatedObjectAttachments() + n) <= (U32)getMaxAnimatedObjectAttachments();
 }
 
 //-----------------------------------------------------------------------------
@@ -9698,7 +9698,7 @@ void LLVOAvatar::updateMeshTextures()
     mBakedTextureDebugText += "indx layerset linvld ltda ilb ulkg ltid\n";
     // <FS:Beq> BOM OS
     // for (U32 i=0; i < mBakedTextureDatas.size(); i++)
-    for (U32 i=0; i < getNumBakes(); i++)
+    for (S32 i=0; i < getNumBakes(); i++)
     {
         is_layer_baked[i] = isTextureDefined(mBakedTextureDatas[i].mTextureIndex);
         LLViewerTexLayerSet* layerset = NULL;
@@ -9748,7 +9748,7 @@ void LLVOAvatar::updateMeshTextures()
     }
     // <FS:Beq> BOM OS
     // for (U32 i=0; i < mBakedTextureDatas.size(); i++)
-    for (U32 i=0; i < getNumBakes(); i++)
+    for (S32 i=0; i < getNumBakes(); i++)
     // </FS:Beq>
     {
         debugColorizeSubMeshes(i, LLColor4::white);
