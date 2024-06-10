@@ -104,19 +104,14 @@ void LLEmojiHelper::showHelper(LLUICtrl* hostctrl_p, S32 local_x, S32 local_y, c
     {
         LLFloater* pHelperFloater = LLFloaterReg::getInstance(DEFAULT_EMOJI_HELPER_FLOATER);
         // <FS:Beq> Try to prevent failed build of emoji picker from killing the viewer.
-        if(pHelperFloater)
-        {
-        // </FS:Beq>
-        mHelperHandle = pHelperFloater->getHandle();
-        mHelperCommitConn = pHelperFloater->setCommitCallback(std::bind([&](const LLSD& sdValue) { onCommitEmoji(utf8str_to_wstring(sdValue.asStringRef())[0]); }, std::placeholders::_2));
-        // <FS:Beq> Try to prevent failed build of emoji picker from killing the viewer.
-        }
-        else
+        if(!pHelperFloater)
         {
             LL_WARNS() << "Cannot show emoji helper, reason unknown." << LL_ENDL;
             return;
         }
         // </FS:Beq>
+        mHelperHandle = pHelperFloater->getHandle();
+        mHelperCommitConn = pHelperFloater->setCommitCallback(std::bind([&](const LLSD& sdValue) { onCommitEmoji(utf8str_to_wstring(sdValue.asStringRef())[0]); }, std::placeholders::_2));
     }
     setHostCtrl(hostctrl_p);
     mEmojiCommitCb = cb;
