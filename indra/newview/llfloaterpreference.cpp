@@ -156,6 +156,7 @@
 #include "llviewershadermgr.h"
 #include "NACLantispam.h"
 #include "../llcrashlogger/llcrashlogger.h"
+#include <filesystem>
 #if LL_WINDOWS
 #include <VersionHelpers.h>
 #endif
@@ -5272,38 +5273,13 @@ void LLPanelPreferenceSkins::refreshPreviewImage()
 // </FS:PP>
 
 // <FS:Zi> Backup Settings
-// copied from llxfer_file.cpp - Hopefully this will be part of LLFile some day -Zi
-// added a safeguard so the destination file is only created when the source file exists -Zi
-S32 copy_prefs_file(const std::string& from, const std::string& to)
+static void copy_prefs_file(const std::string& from, const std::string& to)
 {
-    LL_WARNS() << "copying " << from << " to " << to << LL_ENDL;
-    S32 rv = 0;
-    LLFILE* in = LLFile::fopen(from, "rb"); /*Flawfinder: ignore*/
-    if(!in)
-    {
-        LL_WARNS() << "couldn't open source file " << from << " - copy aborted." << LL_ENDL;
-        return -1;
-    }
+    LL_INFOS() << "Copying " << from << " to " << to << LL_ENDL;
 
-    LLFILE* out = LLFile::fopen(to, "wb");  /*Flawfinder: ignore*/
-    if(!out)
-    {
-        fclose(in);
-        LL_WARNS() << "couldn't open destination file " << to << " - copy aborted." << LL_ENDL;
-        return -1;
-    }
-
-    S32 read = 0;
-    const S32 COPY_BUFFER_SIZE = 16384;
-    U8 buffer[COPY_BUFFER_SIZE];
-    while(((read = fread(buffer, 1, sizeof(buffer), in)) > 0)
-          && (fwrite(buffer, 1, read, out) == (U32)read));      /* Flawfinder : ignore */
-    if(ferror(in) || ferror(out)) rv = -2;
-
-    if(in) fclose(in);
-    if(out) fclose(out);
-
-    return rv;
+    std::error_code ec;
+    if (!std::filesystem::copy_file(from, to, ec) || ec)
+        LL_WARNS() << "Couldn't copy file: " << ec.message() << LL_ENDL;
 }
 
 static LLPanelInjector<FSPanelPreferenceBackup> t_pref_backup("panel_preference_backup");

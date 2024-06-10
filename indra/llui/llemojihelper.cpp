@@ -103,20 +103,34 @@ void LLEmojiHelper::showHelper(LLUICtrl* hostctrl_p, S32 local_x, S32 local_y, c
     if (mHelperHandle.isDead())
     {
         LLFloater* pHelperFloater = LLFloaterReg::getInstance(DEFAULT_EMOJI_HELPER_FLOATER);
+        // <FS:Beq> Try to prevent failed build of emoji picker from killing the viewer.
+        if(!pHelperFloater)
+        {
+            LL_WARNS() << "Cannot show emoji helper, reason unknown." << LL_ENDL;
+            return;
+        }
+        // </FS:Beq>
         mHelperHandle = pHelperFloater->getHandle();
         mHelperCommitConn = pHelperFloater->setCommitCallback(std::bind([&](const LLSD& sdValue) { onCommitEmoji(utf8str_to_wstring(sdValue.asStringRef())[0]); }, std::placeholders::_2));
     }
     setHostCtrl(hostctrl_p);
     mEmojiCommitCb = cb;
 
-    S32 floater_x, floater_y;
-    if (!hostctrl_p->localPointToOtherView(local_x, local_y, &floater_x, &floater_y, gFloaterView))
+    S32 floater_x=0, floater_y=0;// <FS:Beq/> initialise to avoid warnings
+    if (hostctrl_p && !hostctrl_p->localPointToOtherView(local_x, local_y, &floater_x, &floater_y, gFloaterView))// <FS:Beq/> another unchecked pointer access
     {
-        LL_ERRS() << "Cannot show emoji helper for non-floater controls." << LL_ENDL;
+        LL_WARNS() << "Cannot show emoji helper for non-floater controls." << LL_ENDL; // <FS:Beq/> Is this really worth crashing over?
         return;
     }
 
     LLFloater* pHelperFloater = mHelperHandle.get();
+    // <FS:Beq> Be a bit paranoid - the previous code should have ensured this or returned.
+    if (!pHelperFloater)
+    {
+        LL_WARNS() << "Helper floater unexpectedly null." << LL_ENDL;
+        return;
+    }
+    // </FS:Beq>
     LLRect rect = pHelperFloater->getRect();
     S32 left = floater_x - HELPER_FLOATER_OFFSET_X;
     S32 top = floater_y - HELPER_FLOATER_OFFSET_Y + rect.getHeight();
