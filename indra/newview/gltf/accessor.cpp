@@ -41,9 +41,9 @@ const Buffer& Buffer::operator=(const tinygltf::Buffer& src)
 const BufferView& BufferView::operator=(const tinygltf::BufferView& src)
 {
     mBuffer = src.buffer;
-    mByteLength = src.byteLength;
-    mByteOffset = src.byteOffset;
-    mByteStride = src.byteStride;
+    mByteLength = (S32)src.byteLength;
+    mByteOffset = (S32)src.byteOffset;
+    mByteStride = (S32)src.byteStride;
     mTarget = src.target;
     mName = src.name;
     return *this;
@@ -52,9 +52,9 @@ const BufferView& BufferView::operator=(const tinygltf::BufferView& src)
 const Accessor& Accessor::operator=(const tinygltf::Accessor& src)
 {
     mBufferView = src.bufferView;
-    mByteOffset = src.byteOffset;
+    mByteOffset = (S32)src.byteOffset;
     mComponentType = src.componentType;
-    mCount = src.count;
+    mCount = (S32)src.count;
     mType = src.type;
     mNormalized = src.normalized;
     mName = src.name;

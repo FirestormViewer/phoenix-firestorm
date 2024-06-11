@@ -1935,9 +1935,7 @@ void LLVOCache::writeGenericExtrasToCache(U64 handle, const LLUUID& id, const LL
         return;
     }
 
-    // <FS:Beq> FIRE-33808 - Material Override Cache causes long delays
     std::string filename = getObjectCacheExtrasFilename(handle);
-    // </FS:Beq>
     llofstream out(filename, std::ios::out | std::ios::binary);
     if(!out.good())
     {
@@ -1970,9 +1968,9 @@ void LLVOCache::writeGenericExtrasToCache(U64 handle, const LLUUID& id, const LL
     LLViewerRegion* pRegion = LLWorld::getInstance()->getRegionFromHandle(handle);
 
     U32 num_entries = 0;
-    size_t inmem_entries = 0;
+    U32 inmem_entries = 0;
     U32 skipped = 0;
-    inmem_entries = cache_extras_entry_map.size();
+    inmem_entries = (U32)cache_extras_entry_map.size();
     for (auto [local_id, entry] : cache_extras_entry_map)
     {
         // Only write out GLTFOverrides that we can actually apply again on import.
