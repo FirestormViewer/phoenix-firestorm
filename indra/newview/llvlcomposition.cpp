@@ -220,7 +220,7 @@ LLTerrainMaterials::Type LLTerrainMaterials::getMaterialType()
 {
     LL_PROFILE_ZONE_SCOPED;
 
-    const BOOL use_textures = texturesReady(false, false) || !materialsReady(false, false);
+    const bool use_textures = texturesReady(false, false) || !materialsReady(false, false);
     return use_textures ? Type::TEXTURE : Type::PBR;
 }
 
