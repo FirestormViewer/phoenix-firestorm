@@ -78,15 +78,13 @@ void FSRadarEntry::requestProperties()
 {
     if (!mPropertiesRequested && mID.notNull())
     {
-        // NOTE: typically we request these once on creation to avoid excess traffic/processing.
-        //This means updates to these properties won't typically be seen while target is in nearby range.
-        LLAvatarPropertiesProcessor* processor = LLAvatarPropertiesProcessor::getInstance();
-        processor->addObserver(mID, this);
-
         if (auto region = gAgent.getRegion())
         {
             if (region->capabilitiesReceived())
             {
+                LLAvatarPropertiesProcessor* processor = LLAvatarPropertiesProcessor::getInstance();
+                processor->addObserver(mID, this);
+
                 if (LLGridManager::instance().isInSecondLife() || region->isCapabilityAvailable(CAPNAME))
                 {
                     processor->sendAvatarPropertiesRequest(mID);

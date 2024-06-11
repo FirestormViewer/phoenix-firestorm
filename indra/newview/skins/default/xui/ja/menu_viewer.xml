@@ -261,7 +261,7 @@
 			<menu_item_call label="権限の初期設定..." name="Set default permissions" />
 		</menu>
 		<menu label="アップロード" name="Upload">
-			<menu_item_call label="画像（L$[COST]）..." name="Upload Image"/>
+			<menu_item_call label="画像..." name="Upload Image"/>
 			<menu_item_call label="サウンド（L$[COST]）..." name="Upload Sound"/>
 			<menu_item_call label="アニメーション（L$[COST]）..." name="Upload Animation"/>
 			<menu_item_call label="メッシュモデル" name="Upload Model"/>

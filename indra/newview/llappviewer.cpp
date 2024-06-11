@@ -243,6 +243,7 @@
 #include "pipeline.h"
 #include "llgesturemgr.h"
 #include "llsky.h"
+#include "llvlcomposition.h"
 #include "llvlmanager.h"
 #include "llviewercamera.h"
 #include "lldrawpoolbump.h"
@@ -253,6 +254,8 @@
 #include "llavatariconctrl.h"
 #include "llgroupiconctrl.h"
 #include "llviewerassetstats.h"
+#include "gltfscenemanager.h"
+
 #include "workqueue.h"
 using namespace LL;
 
@@ -1474,6 +1477,8 @@ bool LLAppViewer::init()
     LLWorld::createInstance();
     LLSelectMgr::createInstance();
     LLViewerCamera::createInstance();
+    LL::GLTFSceneManager::createInstance();
+
 
 #if LL_WINDOWS
     if (!mSecondInstance)
@@ -2505,7 +2510,7 @@ bool LLAppViewer::cleanup()
     ll_close_fail_log();
 
     LLError::LLCallStacks::cleanup();
-
+    LL::GLTFSceneManager::deleteSingleton();
     LLEnvironment::deleteSingleton();
     LLSelectMgr::deleteSingleton();
     LLViewerEventRecorder::deleteSingleton();
@@ -5711,6 +5716,7 @@ void LLAppViewer::idle()
         {
             LLPerfStats::tunedAvatars=0; // <FS:Beq> reset the number of avatars that have been tweaked.
             gObjectList.update(gAgent);
+            LL::GLTFSceneManager::instance().update();
         }
     }
 

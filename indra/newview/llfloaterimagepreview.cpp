@@ -34,6 +34,7 @@
 #include "llimagepng.h"
 
 #include "llagent.h"
+#include "llagentbenefits.h"
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
 #include "llcombobox.h"
@@ -286,6 +287,15 @@ void LLFloaterImagePreview::onBtnUpload()
     onBtnOK();
 }
 // </FS:Zi>
+
+//-----------------------------------------------------------------------------
+// getExpectedUploadCost()
+//-----------------------------------------------------------------------------
+S32 LLFloaterImagePreview::getExpectedUploadCost() const
+{
+    return LLAgentBenefitsMgr::current().getTextureUploadCost(mRawImagep);
+}
+
 //-----------------------------------------------------------------------------
 // LLFloaterImagePreview()
 //-----------------------------------------------------------------------------
@@ -572,7 +582,7 @@ bool LLFloaterImagePreview::loadImage(const std::string& src_filename)
         return false;
     }
 
-    raw_image->biasedScaleToPowerOfTwo(1024);
+    raw_image->biasedScaleToPowerOfTwo(LLViewerFetchedTexture::MAX_IMAGE_SIZE_DEFAULT);
     mRawImagep = raw_image;
     }
     catch (...)

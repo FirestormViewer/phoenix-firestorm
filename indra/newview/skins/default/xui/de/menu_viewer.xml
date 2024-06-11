@@ -251,7 +251,7 @@
 			<menu_item_call label="Standard-Berechtigungen festlegen..." name="Set default permissions"/>
 		</menu>
 		<menu label="Hochladen" name="Upload">
-			<menu_item_call label="Bild ([COST] L$)..." name="Upload Image"/>
+			<menu_item_call label="Bild..." name="Upload Image"/>
 			<menu_item_call label="Sound ([COST] L$)..." name="Upload Sound"/>
 			<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
 			<menu_item_call label="Modell..." name="Upload Model"/>
@@ -343,6 +343,11 @@
 		</menu>
 		<menu label="Darstellungstypen" name="Rendering Types">
 			<menu_item_check label="Einfach" name="Rendering Type Simple"/>
+			<menu_item_check label="Materialien" name="Rendering Type Materials"/>
+			<menu_item_check label="Alpha-Masken" name="Rendering Type Alpha Mask"/>
+			<menu_item_check label="Ganz hell Alpha-Masken" name="Rendering Type Fullbright Alpha Mask"/>
+			<menu_item_check label="Leuchten" name="Rendering Type Glow"/>
+			<menu_item_check label="Ganz hell" name="Rendering Type Fullbright"/>
 			<menu_item_check label="Alpha" name="Rendering Type Alpha"/>
 			<menu_item_check label="Baum" name="Rendering Type Tree"/>
 			<menu_item_check label="Avatare" name="Rendering Type Character"/>
@@ -473,6 +478,8 @@
 			<menu_item_check label="Periodischer langsamer Frame" name="Periodic Slow Frame"/>
 			<menu_item_check label="Rahmenprofil" name="Frame Profile"/>
 			<menu_item_call label="Benchmark" name="Benchmark"/>
+			<menu_item_call label="HDRI-Vorschau" name="HDRI Preview"/>
+			<menu_item_call label="GLTF-Szenenvorschau" name="GLTF Scene Preview"/>
 		</menu>
 		<menu label="Metadaten darstellen" name="Render Metadata">
 			<menu_item_check label="Bounding Boxes" name="Bounding Boxes"/>
@@ -530,6 +537,7 @@
 			<menu_item_check label="Angehängte Partikel rendern" name="Render Attached Particles"/>
 			<menu_item_check label="Shader-Cache aktivieren" name="Enable Shader Cache"/>
 			<menu_item_call label="Shader-Cache bereinigen" name="Shader Cache Clear"/>
+			<menu_item_call label="Terrain neu erstellen" name="Rebuild Terrain"/>
 		</menu>
 		<menu label="Netzwerk" name="Network">
 			<menu_item_check label="Agent pausieren" name="AgentPause"/>

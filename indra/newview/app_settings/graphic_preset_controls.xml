@@ -25,6 +25,8 @@
 		<string>RenderDeferredSSAO</string>
 		<string>RenderDepthOfField</string>
 		<string>RenderDepthOfFieldInEditMode</string>
+		<string>RenderDesaturateIrradiance</string>
+		<string>RenderDiffuseLuminanceScale</string>
 		<string>RenderDisablePostProcessing</string>
 		<string>RenderPostProcessingHDR</string>
 		<string>RenderDefaultProbeUpdatePeriod</string>
@@ -38,9 +40,18 @@
 		<string>RenderGlowIterations</string>
 		<string>RenderGlowNoise</string>
 		<string>RenderGlowResolutionPow</string>
+		<string>RenderHDRIExposure</string>
+		<string>RenderHDRIRotation</string>
+		<string>RenderHDRISplitScreen</string>
+		<string>RenderHDRIIrradianceOnly</string>
+		<string>RenderHeroProbeResolution</string>
+		<string>RenderHeroProbeDistance</string>
+		<string>RenderHeroProbeUpdateRate</string>
+		<string>RenderHeroProbeConservativeUpdateMultiplier</string>
 		<string>RenderLocalLightCount</string>
 		<string>RenderMaxPartCount</string>
 		<string>RenderMaxVRAMBudget</string>
+		<string>RenderMirrors</string>
 		<string>RenderQualityPerformance</string>
 		<string>RenderReflectionsEnabled</string>
 		<string>RenderReflectionProbeAmbiance</string>
@@ -74,7 +85,12 @@
 		<string>RenderSunDynamicRange</string>
 		<string>RenderTerrainDetail</string>
 		<string>RenderTerrainLODFactor</string>
+		<string>RenderTerrainPBRDetail</string>
+		<string>RenderTerrainPBRScale</string>
+		<string>RenderTerrainPBRPlanarSampleCount</string>
+		<string>RenderTerrainPBRTriplanarBlendFactor</string>
 		<string>RenderTerrainScale</string>
+		<string>RenderMaxTextureResolution</string>
 		<string>RenderTreeLODFactor</string>
 		<string>RenderTransparentWater</string>
 		<string>RenderUnloadedAvatar</string>

@@ -147,6 +147,7 @@ protected:
     void            sendTexGen();               // applies and sends bump map
     void            sendShiny(U32 shininess);           // applies and sends shininess
     void            sendFullbright();       // applies and sends full bright
+
     void            sendGlow();
     void            alignTestureLayer();
 

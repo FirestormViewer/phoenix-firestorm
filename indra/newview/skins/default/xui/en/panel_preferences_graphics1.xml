@@ -221,26 +221,15 @@
        width="80">
         Ultra
       </text>
-        <check_box
-         control_name="FullScreen"
-         height="16"
-         initial_value="false"
-         label="Fullscreen Mode"
-         layout="topleft"
-         left="4"
-         name="Fullscreen Mode"
-         tool_tip="Run Firestorm in Fullscreen mode. A restart is required to change mode."
-         top="80"
-         width="280" />
         <text
          type="string"
          length="1"
          follows="left|top"
          height="12"
          layout="topleft"
-         left_delta="1"
+         left="4"
          name="ShadersText"
-         top_pad="5"
+         top="70"
          width="128">
           Shaders:
         </text>
@@ -282,6 +271,19 @@
          width="256">
          <check_box.commit_callback
           function="Pref.RenderOptionUpdate" />
+        </check_box>
+        <check_box
+         control_name="RenderMirrors"
+         height="16"
+         initial_value="false"
+         label="Mirrors"
+         layout="topleft"
+         left_delta="0"
+         name="Mirrors"
+         top_pad="1"
+         width="280">
+          <check_box.commit_callback
+           function="Pref.RenderOptionUpdate" />
         </check_box>
         <text
          type="string"
@@ -391,8 +393,6 @@
            name="3"
            value="3"/>
         </combo_box>
-<!-- FS:TM Avatar Physics was moved down to LOD section-->
-<!-- FS:TM Point Lighting added instead of above-->
         <text
          type="string"
          length="1"
@@ -428,7 +428,101 @@
            name="1"
            value="1"/>
         </combo_box>
+
+        <!-- Mirror settings. -->
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="-5"
+         name="MirrorResolutionText"
+         text_readonly_color="LabelDisabledColor"
+         top_pad="4"
+         width="170">
+          Mirror Resolution:
+        </text>
+        <combo_box
+         control_name="RenderHeroProbeResolution"
+         enabled_control="RenderMirrors"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="MirrorResolution"
+         width="150">
+          <combo_box.item
+           label="256"
+           name="0"
+           value="256"/>
+          <combo_box.item
+           label="512"
+           name="1"
+           value="512"/>
+          <combo_box.item
+           label="1024"
+           name="2"
+           value="1024"/>
+          <combo_box.item
+           label="2048"
+           name="3"
+           value="2048"/>
+        </combo_box>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="-5"
+         name="HeroProbeUpdateText"
+         text_readonly_color="LabelDisabledColor"
+         top_pad="4"
+         width="170">
+          Mirror Update Rate:
+        </text>
+        <combo_box
+         control_name="RenderHeroProbeUpdateRate"
+         enabled_control="RenderMirrors"
+         height="23"
+         layout="topleft"
+         left_delta="5"
+         top_pad="3"
+         name="HeroProbeUpdateRate"
+         width="150">
+          <combo_box.item
+           label="Every Frame"
+           name="0"
+           value="1"/>
+          <combo_box.item
+           label="Every 2nd Frame"
+           name="1"
+           value="2"/>
+          <combo_box.item
+           label="Every 3rd Frame"
+           name="2"
+           value="3"/>
+          <combo_box.item
+           label="Every 4th Frame"
+           name="3"
+           value="4"/>
+        </combo_box>
+        <!-- End of mirror settings -->
+
       <!--Top of second column in General tab-->
+        <check_box
+         control_name="FullScreen"
+         height="16"
+         initial_value="false"
+         label="Fullscreen Mode"
+         layout="topleft"
+         left="196"
+         name="Fullscreen Mode"
+         tool_tip="Run Firestorm in Fullscreen mode. A restart is required to change mode."
+         top="80"
+         width="280" />
+
         <slider
          control_name="RenderFarClip"
          decimal_digits="0"
@@ -443,7 +537,7 @@
          max_val="1024"
          min_val="32"
          name="DrawDistance"
-         top="80"
+         top_pad="6"
          width="301" />
         <text
          type="string"
@@ -910,21 +1004,9 @@
              name="FSAADisabled"
              value="0" />
             <combo_box.item
-             label="2x"
-             name="2x"
+             label="FXAA"
+             name="FXAA"
              value="2" />
-            <combo_box.item
-             label="4x"
-             name="4x"
-             value="4" />
-            <combo_box.item
-             label="8x"
-             name="8x"
-             value="8" />
-            <combo_box.item
-             label="16x"
-             name="16x"
-             value="16" />
         </combo_box>
 
         <text

@@ -1728,7 +1728,7 @@ void LLViewerFetchedTexture::processTextureStats()
         {
             if (mFullWidth > MAX_IMAGE_SIZE_DEFAULT || mFullHeight > MAX_IMAGE_SIZE_DEFAULT)
             {
-                mDesiredDiscardLevel = 1; // MAX_IMAGE_SIZE_DEFAULT = 1024 and max size ever is 2048
+                mDesiredDiscardLevel = 1; // MAX_IMAGE_SIZE_DEFAULT = 2048 and max size ever is 4096
             }
             else
             {
@@ -1741,7 +1741,7 @@ void LLViewerFetchedTexture::processTextureStats()
         }
         else
         {
-            U32 desired_size = MAX_IMAGE_SIZE_DEFAULT; // MAX_IMAGE_SIZE_DEFAULT = 1024 and max size ever is 2048
+            U32 desired_size = MAX_IMAGE_SIZE_DEFAULT; // MAX_IMAGE_SIZE_DEFAULT = 2048 and max size ever is 4096
             // <FS:Ansariel> Keep restriction on "fetched" (seems to be HUD) textures as well
             if (mBoostLevel <= LLGLTexture::BOOST_SCULPTED)
             {
@@ -3127,6 +3127,14 @@ void LLViewerLODTexture::processTextureStats()
 
     static LLCachedControl<bool> textures_fullres(gSavedSettings,"TextureLoadFullRes", false);
 
+    { // restrict texture resolution to download based on RenderMaxTextureResolution
+        static LLCachedControl<U32> max_texture_resolution(gSavedSettings, "RenderMaxTextureResolution", 2048);
+        // sanity clamp debug setting to avoid settings hack shenanigans
+        F32 tex_res = (F32)llclamp((S32)max_texture_resolution, 512, 2048);
+        tex_res *= tex_res;
+        mMaxVirtualSize = llmin(mMaxVirtualSize, tex_res);
+    }
+
     if (textures_fullres)
     {
         mDesiredDiscardLevel = 0;
@@ -3136,7 +3144,7 @@ void LLViewerLODTexture::processTextureStats()
     {
         mDesiredDiscardLevel = 0;
         if (mFullWidth > MAX_IMAGE_SIZE_DEFAULT || mFullHeight > MAX_IMAGE_SIZE_DEFAULT)
-            mDesiredDiscardLevel = 1; // MAX_IMAGE_SIZE_DEFAULT = 1024 and max size ever is 2048
+            mDesiredDiscardLevel = 1; // MAX_IMAGE_SIZE_DEFAULT = 2048 and max size ever is 4096
     }
     else if (mBoostLevel < LLGLTexture::BOOST_HIGH && mMaxVirtualSize <= 10.f)
     {
@@ -3181,7 +3189,7 @@ void LLViewerLODTexture::processTextureStats()
         discard_level = floorf(discard_level);
 
         F32 min_discard = 0.f;
-        U32 desired_size = MAX_IMAGE_SIZE_DEFAULT; // MAX_IMAGE_SIZE_DEFAULT = 1024 and max size ever is 2048
+        U32 desired_size = MAX_IMAGE_SIZE_DEFAULT; // MAX_IMAGE_SIZE_DEFAULT = 2048 and max size ever is 4096
         if (mBoostLevel <= LLGLTexture::BOOST_SCULPTED)
         {
             desired_size = DESIRED_NORMAL_TEXTURE_SIZE;

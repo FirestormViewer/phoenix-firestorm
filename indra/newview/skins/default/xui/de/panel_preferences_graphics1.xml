@@ -26,13 +26,13 @@
 		<text name="ShadersPrefText4">
 			Ultra
 		</text>
-		<check_box label="Vollbildmodus" name="Fullscreen Mode" tool_tip="Firestorm im Vollbildmodus ausführen. (Erfordert Neustart)"/>
 		<text name="ShadersText">
 			Shader:
 		</text>
 		<check_box label="Transparentes Wasser" name="TransparentWater"/>
 		<check_box label="Ambient Occlusion" name="UseSSAO"/>
 		<check_box label="Screen Space Reflections" name="ScreenSpaceReflections"/>
+		<check_box label="Spiegelung" name="Mirrors"/>
 		<text name="shadows_label">
 			Schatten:
 		</text>
@@ -61,7 +61,7 @@
 		<text name="reflection_label">
 			Wasserreflexionen:
 		</text>
-		<combo_box initial_value="true" label="Wasserreflexionen" name="Reflections">
+		<combo_box label="Wasserreflexionen" name="Reflections">
 			<combo_box.item label="Keine (undurchsichtig)" name="-2"/>
 			<combo_box.item label="Keine (transparent)" name="-1"/>
 			<combo_box.item label="Minimal" name="0"/>
@@ -78,6 +78,25 @@
 			<combo_box.item label="Reduziert" name="2"/>
 			<combo_box.item label="Nur Sonne/Mond" name="1"/>
 		</combo_box>
+		<text name="MirrorResolutionText">
+			Spiegelungsauflösung:
+		</text>
+		<combo_box name="MirrorResolution">
+			<combo_box.item label="256" name="0"/>
+			<combo_box.item label="512" name="1"/>
+			<combo_box.item label="1024" name="2"/>
+			<combo_box.item label="2048" name="3"/>
+		</combo_box>
+		<text name="HeroProbeUpdateText">
+			Aktualisierung Spiegelung:
+		</text>
+		<combo_box name="HeroProbeUpdateRate">
+			<combo_box.item label="Jeden Frame" name="0"/>
+			<combo_box.item label="Jeden 2. Frame" name="1"/>
+			<combo_box.item label="Jeden 3. Frame" name="2"/>
+			<combo_box.item label="Jeden 4. Frame" name="3"/>
+		</combo_box>
+		<check_box label="Vollbildmodus" name="Fullscreen Mode" tool_tip="Firestorm im Vollbildmodus ausführen. (Erfordert Neustart)"/>
 		<slider label="Sichtweite:" name="DrawDistance"/>
 		<text name="DrawDistanceMeterText2">
 			m
@@ -133,10 +152,7 @@
 		</text>
 		<combo_box label="Antialiasing" name="fsaa">
 			<combo_box.item label="Deaktiviert" name="FSAADisabled"/>
-			<combo_box.item label="2x" name="2x"/>
-			<combo_box.item label="4x" name="4x"/>
-			<combo_box.item label="8x" name="8x"/>
-			<combo_box.item label="16x" name="16x"/>
+			<combo_box.item label="FXAA" name="FXAA"/>
 		</combo_box>
 		<text name="advanced_settings">
 			Erweiterte Einstellungen (Neustart erforderlich):

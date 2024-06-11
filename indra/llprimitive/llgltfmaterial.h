@@ -233,10 +233,17 @@ protected:
     void updateLocalTexDataDigest();
 
 public:
+    // *TODO: If/when we implement additional GLTF extensions, they may not be
+    // compatible with our GLTF terrain implementation. We may want to disallow
+    // materials with some features from being set on terrain, if their
+    // implementation on terrain is not compliant with the spec:
+    //     - KHR_materials_transmission: Probably OK?
+    //     - KHR_materials_ior: Probably OK?
+    //     - KHR_materials_volume: Likely incompatible, as our terrain
+    //       heightmaps cannot currently be described as finite enclosed
+    //       volumes.
+    // See also LLPanelRegionTerrainInfo::validateMaterials
     // These fields are local to viewer and are a part of local bitmap support
-    // IMPORTANT: do not move this member down (and do not move
-    // mLocalTexDataDigest either): the getHash() method does rely on the
-    // current ordering. HB
     typedef std::map<LLUUID, LLUUID> local_tex_map_t;
     local_tex_map_t mTrackingIdToLocalTexture;
 
