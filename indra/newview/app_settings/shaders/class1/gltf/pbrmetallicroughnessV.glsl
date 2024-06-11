@@ -1,7 +1,7 @@
 /**
- * @file class1\deferred\pbralphaV.glsl
+ * @file pbrmetallicroughnessV.glsl
  *
- * $LicenseInfo:firstyear=2022&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2024&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2022, Linden Research, Inc.
  *
@@ -23,135 +23,149 @@
  * $/LicenseInfo$
  */
 
+// GLTF pbrMetallicRoughness implementation
 
-#ifndef IS_HUD
-
-// default alpha implementation
+uniform mat4 modelview_matrix;
 
 #ifdef HAS_SKIN
-uniform mat4 modelview_matrix;
 uniform mat4 projection_matrix;
-mat4 getObjectSkinnedTransform();
 #else
 uniform mat3 normal_matrix;
 uniform mat4 modelview_projection_matrix;
 #endif
 uniform mat4 texture_matrix0;
 
-#if !defined(HAS_SKIN)
-uniform mat4 modelview_matrix;
-#endif
-
-out vec3 vary_position;
-
 uniform vec4[2] texture_base_color_transform;
 uniform vec4[2] texture_normal_transform;
 uniform vec4[2] texture_metallic_roughness_transform;
 uniform vec4[2] texture_emissive_transform;
 
-out vec3 vary_fragcoord;
-
 in vec3 position;
 in vec4 diffuse_color;
+in vec2 texcoord0;
+out vec2 base_color_texcoord;
+out vec2 emissive_texcoord;
+out vec4 vertex_color;
+out vec3 vary_position;
+
+#ifndef UNLIT
 in vec3 normal;
 in vec4 tangent;
-in vec2 texcoord0;
-
-out vec2 base_color_texcoord;
 out vec2 normal_texcoord;
 out vec2 metallic_roughness_texcoord;
-out vec2 emissive_texcoord;
-
-out vec4 vertex_color;
-
 out vec3 vary_tangent;
 flat out float vary_sign;
 out vec3 vary_normal;
+vec3 tangent_space_transform(vec4 vertex_tangent, vec3 vertex_normal, vec4[2] khr_gltf_transform, mat4 sl_animation_transform);
+#endif
 
 vec2 texture_transform(vec2 vertex_texcoord, vec4[2] khr_gltf_transform, mat4 sl_animation_transform);
-vec3 tangent_space_transform(vec4 vertex_tangent, vec3 vertex_normal, vec4[2] khr_gltf_transform, mat4 sl_animation_transform);
 
+
+#ifdef ALPHA_BLEND
+out vec3 vary_fragcoord;
+#endif
+
+#ifdef HAS_SKIN
+in uvec4 joint;
+in vec4 weight4;
+
+layout (std140) uniform GLTFJoints
+{
+    // list of OBBs for user override probes
+    mat3x4 gltf_joints[MAX_JOINTS_PER_GLTF_OBJECT];
+};
+
+mat4 getGLTFSkinTransform()
+{
+    int i;
+
+    vec4 w = weight4;
+
+    uint i1 = joint.x;
+    uint i2 = joint.y;
+    uint i3 = joint.z;
+    uint i4 = joint.w;
+
+    mat3 mat = mat3(gltf_joints[i1])*w.x;
+         mat += mat3(gltf_joints[i2])*w.y;
+         mat += mat3(gltf_joints[i3])*w.z;
+         mat += mat3(gltf_joints[i4])*w.w;
+
+    vec3 trans = vec3(gltf_joints[i1][0].w,gltf_joints[i1][1].w,gltf_joints[i1][2].w)*w.x;
+         trans += vec3(gltf_joints[i2][0].w,gltf_joints[i2][1].w,gltf_joints[i2][2].w)*w.y;
+         trans += vec3(gltf_joints[i3][0].w,gltf_joints[i3][1].w,gltf_joints[i3][2].w)*w.z;
+         trans += vec3(gltf_joints[i4][0].w,gltf_joints[i4][1].w,gltf_joints[i4][2].w)*w.w;
+
+    mat4 ret;
+
+    ret[0] = vec4(mat[0], 0);
+    ret[1] = vec4(mat[1], 0);
+    ret[2] = vec4(mat[2], 0);
+    ret[3] = vec4(trans, 1.0);
+
+    return ret;
+
+#ifdef IS_AMD_CARD
+   // If it's AMD make sure the GLSL compiler sees the arrays referenced once by static index. Otherwise it seems to optimise the storage awawy which leads to unfun crashes and artifacts.
+   mat3x4 dummy1 = gltf_joints[0];
+   mat3x4 dummy2 = gltf_joints[MAX_JOINTS_PER_GLTF_OBJECT-1];
+#endif
+
+}
+
+#endif
 
 void main()
 {
 #ifdef HAS_SKIN
-    mat4 mat = getObjectSkinnedTransform();
+    mat4 mat = getGLTFSkinTransform();
+
     mat = modelview_matrix * mat;
+
     vec3 pos = (mat*vec4(position.xyz,1.0)).xyz;
     vary_position = pos;
-    vec4 vert = projection_matrix * vec4(pos,1.0);
-#else
-    //transform vertex
-    vec4 vert = modelview_projection_matrix * vec4(position.xyz, 1.0);
-#endif
+
+    vec4 vert = projection_matrix * vec4(pos, 1.0);
     gl_Position = vert;
 
-    vary_fragcoord.xyz = vert.xyz;
+#else
+    vary_position = (modelview_matrix*vec4(position.xyz, 1.0)).xyz;
+    //transform vertex
+    vec4 vert = modelview_projection_matrix * vec4(position.xyz, 1.0);
+    gl_Position = vert;
+#endif
 
     base_color_texcoord = texture_transform(texcoord0, texture_base_color_transform, texture_matrix0);
-    normal_texcoord = texture_transform(texcoord0, texture_normal_transform, texture_matrix0);
-    metallic_roughness_texcoord = texture_transform(texcoord0, texture_metallic_roughness_transform, texture_matrix0);
     emissive_texcoord = texture_transform(texcoord0, texture_emissive_transform, texture_matrix0);
 
+#ifndef UNLIT
+    normal_texcoord = texture_transform(texcoord0, texture_normal_transform, texture_matrix0);
+    metallic_roughness_texcoord = texture_transform(texcoord0, texture_metallic_roughness_transform, texture_matrix0);
+#endif
+    
+
+#ifndef UNLIT
 #ifdef HAS_SKIN
     vec3 n = (mat*vec4(normal.xyz+position.xyz,1.0)).xyz-pos.xyz;
     vec3 t = (mat*vec4(tangent.xyz+position.xyz,1.0)).xyz-pos.xyz;
 #else //HAS_SKIN
     vec3 n = normal_matrix * normal;
     vec3 t = normal_matrix * tangent.xyz;
-#endif //HAS_SKIN
+#endif
 
     n = normalize(n);
-
     vary_tangent = normalize(tangent_space_transform(vec4(t, tangent.w), n, texture_normal_transform, texture_matrix0));
     vary_sign = tangent.w;
     vary_normal = n;
+#endif
 
     vertex_color = diffuse_color;
-
-#if !defined(HAS_SKIN)
-    vary_position = (modelview_matrix*vec4(position.xyz, 1.0)).xyz;
+#ifdef ALPHA_BLEND
+    vary_fragcoord = vert.xyz;
 #endif
 }
 
-#else
-
-// fullbright HUD alpha implementation
-
-uniform mat4 modelview_projection_matrix;
-
-uniform mat4 texture_matrix0;
-
-uniform mat4 modelview_matrix;
-
-out vec3 vary_position;
-
-uniform vec4[2] texture_base_color_transform;
-uniform vec4[2] texture_emissive_transform;
-
-in vec3 position;
-in vec4 diffuse_color;
-in vec2 texcoord0;
-
-out vec2 base_color_texcoord;
-out vec2 emissive_texcoord;
-
-out vec4 vertex_color;
-
-vec2 texture_transform(vec2 vertex_texcoord, vec4[2] khr_gltf_transform, mat4 sl_animation_transform);
 
 
-void main()
-{
-    //transform vertex
-    vec4 vert = modelview_projection_matrix * vec4(position.xyz, 1.0);
-    gl_Position = vert;
-    vary_position = vert.xyz;
 
-    base_color_texcoord = texture_transform(texcoord0, texture_base_color_transform, texture_matrix0);
-    emissive_texcoord = texture_transform(texcoord0, texture_emissive_transform, texture_matrix0);
-
-    vertex_color = diffuse_color;
-}
-
-#endif

@@ -589,13 +589,13 @@ void LLFloaterIMSessionTab::appendMessage(const LLChat& chat, const LLSD& args)
     mChatHistory->appendMessage(chat, chat_args);
 }
 
-void LLFloaterIMSessionTab::updateUsedEmojis(LLWString text)
+void LLFloaterIMSessionTab::updateUsedEmojis(LLWStringView text)
 {
     LLEmojiDictionary* dictionary = LLEmojiDictionary::getInstance();
     llassert_always(dictionary);
 
     bool emojiSent = false;
-    for (llwchar& c : text)
+    for (const llwchar& c : text)
     {
         if (dictionary->isEmoji(c))
         {

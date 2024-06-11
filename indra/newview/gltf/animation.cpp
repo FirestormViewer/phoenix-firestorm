@@ -28,11 +28,12 @@
 
 #include "asset.h"
 #include "buffer_util.h"
+#include "../llskinningutil.h"
 
 using namespace LL::GLTF;
 using namespace boost::json;
 
-void Animation::allocateGLResources(Asset& asset)
+bool Animation::prep(Asset& asset)
 {
     if (!mSamplers.empty())
     {
@@ -40,7 +41,10 @@ void Animation::allocateGLResources(Asset& asset)
         mMaxTime = -FLT_MAX;
         for (auto& sampler : mSamplers)
         {
-            sampler.allocateGLResources(asset);
+            if (!sampler.prep(asset))
+            {
+                return false;
+            }
             mMinTime = llmin(sampler.mMinTime, mMinTime);
             mMaxTime = llmax(sampler.mMaxTime, mMaxTime);
         }
@@ -52,13 +56,21 @@ void Animation::allocateGLResources(Asset& asset)
 
     for (auto& channel : mRotationChannels)
     {
-        channel.allocateGLResources(asset, mSamplers[channel.mSampler]);
+        if (!channel.prep(asset, mSamplers[channel.mSampler]))
+        {
+            return false;
+        }
     }
 
     for (auto& channel : mTranslationChannels)
     {
-        channel.allocateGLResources(asset, mSamplers[channel.mSampler]);
+        if (!channel.prep(asset, mSamplers[channel.mSampler]))
+        {
+            return false;
+        }
     }
+
+    return true;
 }
 
 void Animation::update(Asset& asset, F32 dt)
@@ -85,7 +97,7 @@ void Animation::apply(Asset& asset, float time)
     }
 };
 
-void Animation::Sampler::allocateGLResources(Asset& asset)
+bool Animation::Sampler::prep(Asset& asset)
 {
     Accessor& accessor = asset.mAccessors[mInput];
     mMinTime = accessor.mMin[0];
@@ -95,6 +107,8 @@ void Animation::Sampler::allocateGLResources(Asset& asset)
 
     LLStrider<F32> frame_times = mFrameTimes.data();
     copy(asset, accessor, frame_times);
+
+    return true;
 }
 
 
@@ -117,16 +131,6 @@ const Animation::Sampler& Animation::Sampler::operator=(const Value& src)
         copy(src, "min_time", mMinTime);
         copy(src, "max_time", mMaxTime);
     }
-    return *this;
-}
-
-
-const Animation::Sampler& Animation::Sampler::operator=(const tinygltf::AnimationSampler& src)
-{
-    mInput = src.input;
-    mOutput = src.output;
-    mInterpolation = src.interpolation;
-
     return *this;
 }
 
@@ -172,17 +176,6 @@ const Animation::Channel& Animation::Channel::operator=(const Value& src)
     return *this;
 }
 
-const Animation::Channel& Animation::Channel::operator=(const tinygltf::AnimationChannel& src)
-{
-    mSampler = src.sampler;
-
-    mTarget.mNode = src.target_node;
-    mTarget.mPath = src.target_path;
-
-    return *this;
-}
-
-
 void Animation::Sampler::getFrameInfo(Asset& asset, F32 time, U32& frameIndex, F32& t)
 {
     LL_PROFILE_ZONE_SCOPED;
@@ -223,11 +216,13 @@ void Animation::Sampler::getFrameInfo(Asset& asset, F32 time, U32& frameIndex, F
     }
 }
 
-void Animation::RotationChannel::allocateGLResources(Asset& asset, Animation::Sampler& sampler)
+bool Animation::RotationChannel::prep(Asset& asset, Animation::Sampler& sampler)
 {
     Accessor& accessor = asset.mAccessors[sampler.mOutput];
 
     copy(asset, accessor, mRotations);
+
+    return true;
 }
 
 void Animation::RotationChannel::apply(Asset& asset, Sampler& sampler, F32 time)
@@ -254,11 +249,13 @@ void Animation::RotationChannel::apply(Asset& asset, Sampler& sampler, F32 time)
     }
 }
 
-void Animation::TranslationChannel::allocateGLResources(Asset& asset, Animation::Sampler& sampler)
+bool Animation::TranslationChannel::prep(Asset& asset, Animation::Sampler& sampler)
 {
     Accessor& accessor = asset.mAccessors[sampler.mOutput];
 
     copy(asset, accessor, mTranslations);
+
+    return true;
 }
 
 void Animation::TranslationChannel::apply(Asset& asset, Sampler& sampler, F32 time)
@@ -286,11 +283,13 @@ void Animation::TranslationChannel::apply(Asset& asset, Sampler& sampler, F32 ti
     }
 }
 
-void Animation::ScaleChannel::allocateGLResources(Asset& asset, Animation::Sampler& sampler)
+bool Animation::ScaleChannel::prep(Asset& asset, Animation::Sampler& sampler)
 {
     Accessor& accessor = asset.mAccessors[sampler.mOutput];
 
     copy(asset, accessor, mScales);
+
+    return true;
 }
 
 void Animation::ScaleChannel::apply(Asset& asset, Sampler& sampler, F32 time)
@@ -364,47 +363,80 @@ const Animation& Animation::operator=(const Value& src)
     return *this;
 }
 
-const Animation& Animation::operator=(const tinygltf::Animation& src)
+Skin::~Skin()
 {
-    mName = src.name;
-
-    mSamplers.resize(src.samplers.size());
-    for (U32 i = 0; i < src.samplers.size(); ++i)
+    if (mUBO)
     {
-        mSamplers[i] = src.samplers[i];
+        glDeleteBuffers(1, &mUBO);
     }
-
-    for (U32 i = 0; i < src.channels.size(); ++i)
-    {
-        if (src.channels[i].target_path == "rotation")
-        {
-            mRotationChannels.push_back(RotationChannel());
-            mRotationChannels.back() = src.channels[i];
-        }
-
-        if (src.channels[i].target_path == "translation")
-        {
-            mTranslationChannels.push_back(TranslationChannel());
-            mTranslationChannels.back() = src.channels[i];
-        }
-
-        if (src.channels[i].target_path == "scale")
-        {
-            mScaleChannels.push_back(ScaleChannel());
-            mScaleChannels.back() = src.channels[i];
-        }
-    }
-
-    return *this;
 }
 
-void Skin::allocateGLResources(Asset& asset)
+void Skin::uploadMatrixPalette(Asset& asset)
+{
+    // prepare matrix palette
+
+    U32 max_joints = LLSkinningUtil::getMaxGLTFJointCount();
+
+    if (mUBO == 0)
+    {
+        glGenBuffers(1, &mUBO);
+    }
+
+    U32 joint_count = llmin(max_joints, mJoints.size());
+
+    std::vector<mat4> t_mp;
+
+    t_mp.resize(joint_count);
+
+    for (U32 i = 0; i < joint_count; ++i)
+    {
+        Node& joint = asset.mNodes[mJoints[i]];
+        // build matrix palette in asset space
+        t_mp[i] = joint.mAssetMatrix * mInverseBindMatricesData[i];
+    }
+
+    std::vector<F32> glmp;
+
+    glmp.resize(joint_count * 12);
+
+    F32* mp = glmp.data();
+
+    for (U32 i = 0; i < joint_count; ++i)
+    {
+        F32* m = glm::value_ptr(t_mp[i]);
+
+        U32 idx = i * 12;
+
+        mp[idx + 0] = m[0];
+        mp[idx + 1] = m[1];
+        mp[idx + 2] = m[2];
+        mp[idx + 3] = m[12];
+
+        mp[idx + 4] = m[4];
+        mp[idx + 5] = m[5];
+        mp[idx + 6] = m[6];
+        mp[idx + 7] = m[13];
+
+        mp[idx + 8] = m[8];
+        mp[idx + 9] = m[9];
+        mp[idx + 10] = m[10];
+        mp[idx + 11] = m[14];
+    }
+
+    glBindBuffer(GL_UNIFORM_BUFFER, mUBO);
+    glBufferData(GL_UNIFORM_BUFFER, glmp.size() * sizeof(F32), glmp.data(), GL_STREAM_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+bool Skin::prep(Asset& asset)
 {
     if (mInverseBindMatrices != INVALID_INDEX)
     {
         Accessor& accessor = asset.mAccessors[mInverseBindMatrices];
         copy(asset, accessor, mInverseBindMatricesData);
     }
+
+    return true;
 }
 
 const Skin& Skin::operator=(const Value& src)
@@ -416,16 +448,6 @@ const Skin& Skin::operator=(const Value& src)
         copy(src, "inverseBindMatrices", mInverseBindMatrices);
         copy(src, "joints", mJoints);
     }
-    return *this;
-}
-
-const Skin& Skin::operator=(const tinygltf::Skin& src)
-{
-    mName = src.name;
-    mSkeleton = src.skeleton;
-    mInverseBindMatrices = src.inverseBindMatrices;
-    mJoints = src.joints;
-
     return *this;
 }
 

@@ -1,7 +1,7 @@
 /**
- * @file class1\deferred\pbralphaF.glsl
+ * @file pbrmetallicroughnessF.glsl
  *
- * $LicenseInfo:firstyear=2022&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2024&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2022, Linden Research, Inc.
  *
@@ -25,49 +25,68 @@
 
 /*[EXTRA_CODE_HERE]*/
 
-#ifndef IS_HUD
 
+// GLTF pbrMetallicRoughness implementation
+
+
+// ==================================
+// needed by all variants
+// ==================================
 uniform sampler2D diffuseMap;  //always in sRGB space
-uniform sampler2D bumpMap;
 uniform sampler2D emissiveMap;
-uniform sampler2D specularMap; // PBR: Packed: Occlusion, Metal, Roughness
+uniform vec3 emissiveColor;
+in vec3 vary_position;
+in vec4 vertex_color;
+in vec2 base_color_texcoord;
+in vec2 emissive_texcoord;
+uniform float minimum_alpha;
 
+void mirrorClip(vec3 pos);
+vec3 linear_to_srgb(vec3 c);
+vec3 srgb_to_linear(vec3 c);
+// ==================================
+
+
+// ==================================
+// needed by all lit variants
+// ==================================
+#ifndef UNLIT
+uniform sampler2D normalMap;
+uniform sampler2D metallicRoughnessMap;
+uniform sampler2D occlusionMap;
 uniform float metallicFactor;
 uniform float roughnessFactor;
-uniform vec3 emissiveColor;
-
-#if defined(HAS_SUN_SHADOW) || defined(HAS_SSAO)
-uniform sampler2D lightMap;
-#endif
-
-uniform int sun_up_factor;
-uniform vec3 sun_dir;
-uniform vec3 moon_dir;
-
-out vec4 frag_color;
-
-in vec3 vary_fragcoord;
-
-#ifdef HAS_SUN_SHADOW
-  uniform vec2 screen_res;
-#endif
-
-in vec3 vary_position;
-
-in vec2 base_color_texcoord;
-in vec2 normal_texcoord;
-in vec2 metallic_roughness_texcoord;
-in vec2 emissive_texcoord;
-
-in vec4 vertex_color;
-
 in vec3 vary_normal;
 in vec3 vary_tangent;
 flat in float vary_sign;
+in vec2 normal_texcoord;
+in vec2 metallic_roughness_texcoord;
+#endif
+// ==================================
 
 
-#ifdef HAS_ALPHA_MASK
-uniform float minimum_alpha; // PBR alphaMode: MASK, See: mAlphaCutoff, setAlphaCutoff()
+// ==================================
+// needed by all alpha variants
+// ==================================
+#ifdef ALPHA_BLEND
+in vec3 vary_fragcoord;
+uniform vec4 clipPlane;
+uniform float clipSign;
+void waterClip(vec3 pos);
+void calcAtmosphericVarsLinear(vec3 inPositionEye, vec3 norm, vec3 light_dir, out vec3 sunlit, out vec3 amblit, out vec3 atten, out vec3 additive);
+vec4 applySkyAndWaterFog(vec3 pos, vec3 additive, vec3 atten, vec4 color);
+#endif
+// ==================================
+
+
+// ==================================
+// needed by lit alpha
+// ==================================
+#if defined(ALPHA_BLEND) && !defined(UNLIT)
+
+#ifdef HAS_SUN_SHADOW
+uniform sampler2D lightMap;
+uniform vec2 screen_res;
 #endif
 
 // Lights
@@ -78,20 +97,15 @@ uniform vec4 light_attenuation[8]; // linear, quadratic, is omni, unused, See: L
 uniform vec3 light_diffuse[8];
 uniform vec2 light_deferred_attenuation[8]; // light size and falloff
 
-vec3 srgb_to_linear(vec3 c);
-vec3 linear_to_srgb(vec3 c);
-
-void calcAtmosphericVarsLinear(vec3 inPositionEye, vec3 norm, vec3 light_dir, out vec3 sunlit, out vec3 amblit, out vec3 atten, out vec3 additive);
-vec4 applySkyAndWaterFog(vec3 pos, vec3 additive, vec3 atten, vec4 color);
+uniform int sun_up_factor;
+uniform vec3 sun_dir;
+uniform vec3 moon_dir;
 
 void calcHalfVectors(vec3 lv, vec3 n, vec3 v, out vec3 h, out vec3 l, out float nh, out float nl, out float nv, out float vh, out float lightDist);
 float calcLegacyDistanceAttenuation(float distance, float falloff);
 float sampleDirectionalShadow(vec3 pos, vec3 norm, vec2 pos_screen);
 void sampleReflectionProbes(inout vec3 ambenv, inout vec3 glossenv,
         vec2 tc, vec3 pos, vec3 norm, float glossiness, bool transparent, vec3 amblit_linear);
-
-void mirrorClip(vec3 pos);
-void waterClip(vec3 pos);
 
 void calcDiffuseSpecular(vec3 baseColor, float metallic, inout vec3 diffuseColor, inout vec3 specularColor);
 
@@ -111,13 +125,6 @@ vec3 pbrBaseLight(vec3 diffuseColor,
                   vec3 additive,
                   vec3 atten);
 
-vec3 pbrPunctual(vec3 diffuseColor, vec3 specularColor,
-                    float perceptualRoughness,
-                    float metallic,
-                    vec3 n, // normal
-                    vec3 v, // surface point to camera
-                    vec3 l); //surface point to light
-
 vec3 pbrCalcPointLightOrSpotLight(vec3 diffuseColor, vec3 specularColor,
                     float perceptualRoughness,
                     float metallic,
@@ -129,45 +136,115 @@ vec3 pbrCalcPointLightOrSpotLight(vec3 diffuseColor, vec3 specularColor,
                     vec3 lightColor,
                     float lightSize, float falloff, float is_pointlight, float ambiance);
 
+#endif
+// ==================================
+
+
+// ==================================
+// output definition
+// ==================================
+#if defined(ALPHA_BLEND) || defined(UNLIT)
+out vec4 frag_color;
+#else
+out vec4 frag_data[4];
+#endif
+// ==================================
+
+
 void main()
 {
-    mirrorClip(vary_position);
 
-    vec3 color = vec3(0,0,0);
-
-    vec3  light_dir   = (sun_up_factor == 1) ? sun_dir : moon_dir;
-    vec3  pos         = vary_position;
-
-    waterClip(pos);
+// ==================================
+// all variants
+//   mirror clip
+//   base color
+//   masking
+//   emissive
+// ==================================
+    vec3 pos = vary_position;
+    mirrorClip(pos);
 
     vec4 basecolor = texture(diffuseMap, base_color_texcoord.xy).rgba;
     basecolor.rgb = srgb_to_linear(basecolor.rgb);
-#ifdef HAS_ALPHA_MASK
+    basecolor *= vertex_color;
+
     if (basecolor.a < minimum_alpha)
     {
         discard;
     }
-#endif
 
-    vec3 col = vertex_color.rgb * basecolor.rgb;
+    vec3 emissive = emissiveColor;
+    emissive *= srgb_to_linear(texture(emissiveMap, emissive_texcoord.xy).rgb);
+// ==================================
 
-    vec3 vNt = texture(bumpMap, normal_texcoord.xy).xyz*2.0-1.0;
+// ==================================
+// all lit variants
+//   prepare norm
+//   prepare orm
+// ==================================
+#ifndef UNLIT
+    // from mikktspace.com
+    vec3 vNt = texture(normalMap, normal_texcoord.xy).xyz*2.0-1.0;
     float sign = vary_sign;
     vec3 vN = vary_normal;
     vec3 vT = vary_tangent.xyz;
 
     vec3 vB = sign * cross(vN, vT);
     vec3 norm = normalize( vNt.x * vT + vNt.y * vB + vNt.z * vN );
-
     norm *= gl_FrontFacing ? 1.0 : -1.0;
+
+    // RGB = Occlusion, Roughness, Metal
+    // default values, see LLViewerTexture::sDefaultPBRORMImagep
+    //   occlusion 1.0
+    //   roughness 0.0
+    //   metal     0.0
+    vec3 orm = texture(metallicRoughnessMap, metallic_roughness_texcoord.xy).rgb;
+    orm.r = texture(occlusionMap, metallic_roughness_texcoord.xy).r;
+    orm.g *= roughnessFactor;
+    orm.b *= metallicFactor;
+#endif
+// ==================================
+
+// ==================================
+// non alpha output
+// ==================================
+#ifndef ALPHA_BLEND
+#ifdef UNLIT
+    vec4 color = basecolor;
+    color.rgb += emissive.rgb;
+    frag_color = color;
+#else
+    frag_data[0] = max(vec4(basecolor.rgb, 0.0), vec4(0));
+    frag_data[1] = max(vec4(orm.rgb,0.0), vec4(0));
+    frag_data[2] = vec4(norm, GBUFFER_FLAG_HAS_PBR);
+    frag_data[3] = max(vec4(emissive,0), vec4(0));
+#endif
+#endif
+
+
+// ==================================
+// alpha implementation
+// ==================================
+#ifdef ALPHA_BLEND
 
     float scol = 1.0;
     vec3 sunlit;
     vec3 amblit;
     vec3 additive;
     vec3 atten;
+
+    vec3  light_dir;
+
+#ifdef UNLIT
+    light_dir = vec3(0,0,1);
+    vec3 norm = vec3(0,0,1);
+#else
+    light_dir = (sun_up_factor == 1) ? sun_dir : moon_dir;
+#endif
+
     calcAtmosphericVarsLinear(pos.xyz, norm, light_dir, sunlit, amblit, additive, atten);
 
+#ifndef UNLIT
     vec3 sunlit_linear = srgb_to_linear(sunlit);
 
     vec2 frag = vary_fragcoord.xy/vary_fragcoord.z*0.5+0.5;
@@ -176,16 +253,8 @@ void main()
     scol = sampleDirectionalShadow(pos.xyz, norm.xyz, frag);
 #endif
 
-    vec3 orm = texture(specularMap, metallic_roughness_texcoord.xy).rgb; //orm is packed into "emissiveRect" to keep the data in linear color space
-
     float perceptualRoughness = orm.g * roughnessFactor;
     float metallic = orm.b * metallicFactor;
-    float ao = orm.r;
-
-    // emissiveColor is the emissive color factor from GLTF and is already in linear space
-    vec3 colorEmissive = emissiveColor;
-    // emissiveMap here is a vanilla RGB texture encoded as sRGB, manually convert to linear
-    colorEmissive *= srgb_to_linear(texture(emissiveMap, emissive_texcoord.xy).rgb);
 
     // PBR IBL
     float gloss      = 1.0 - perceptualRoughness;
@@ -195,11 +264,11 @@ void main()
 
     vec3 diffuseColor;
     vec3 specularColor;
-    calcDiffuseSpecular(col.rgb, metallic, diffuseColor, specularColor);
+    calcDiffuseSpecular(basecolor.rgb, metallic, diffuseColor, specularColor);
 
     vec3 v = -normalize(pos.xyz);
 
-    color = pbrBaseLight(diffuseColor, specularColor, metallic, v, norm.xyz, perceptualRoughness, light_dir, sunlit_linear, scol, radiance, irradiance, colorEmissive, ao, additive, atten);
+    vec3 color = pbrBaseLight(diffuseColor, specularColor, metallic, v, norm.xyz, perceptualRoughness, light_dir, sunlit_linear, scol, radiance, irradiance, emissive, orm.r, additive, atten);
 
     vec3 light = vec3(0);
 
@@ -221,60 +290,11 @@ void main()
     float a = basecolor.a*vertex_color.a;
 
     frag_color = max(vec4(color.rgb,a), vec4(0));
+#else // UNLIT
+    vec4 color = basecolor;
+    color.rgb += emissive.rgb;
+    frag_color = color;
+#endif
+#endif  // ALPHA_BLEND
 }
 
-#else
-
-uniform sampler2D diffuseMap;  //always in sRGB space
-uniform sampler2D emissiveMap;
-
-uniform vec3 emissiveColor;
-
-out vec4 frag_color;
-
-in vec3 vary_position;
-
-in vec2 base_color_texcoord;
-in vec2 emissive_texcoord;
-
-in vec4 vertex_color;
-
-#ifdef HAS_ALPHA_MASK
-uniform float minimum_alpha; // PBR alphaMode: MASK, See: mAlphaCutoff, setAlphaCutoff()
-#endif
-
-vec3 srgb_to_linear(vec3 c);
-vec3 linear_to_srgb(vec3 c);
-
-
-void main()
-{
-    vec3 color = vec3(0,0,0);
-
-    vec3  pos         = vary_position;
-
-    vec4 basecolor = texture(diffuseMap, base_color_texcoord.xy).rgba;
-    basecolor.rgb = srgb_to_linear(basecolor.rgb);
-#ifdef HAS_ALPHA_MASK
-    if (basecolor.a < minimum_alpha)
-    {
-        discard;
-    }
-#endif
-
-    color = vertex_color.rgb * basecolor.rgb;
-
-    // emissiveColor is the emissive color factor from GLTF and is already in linear space
-    vec3 colorEmissive = emissiveColor;
-    // emissiveMap here is a vanilla RGB texture encoded as sRGB, manually convert to linear
-    colorEmissive *= srgb_to_linear(texture(emissiveMap, emissive_texcoord.xy).rgb);
-
-
-    float a = basecolor.a*vertex_color.a;
-    color += colorEmissive;
-
-    color = linear_to_srgb(color);
-    frag_color = max(vec4(color.rgb,a), vec4(0));
-}
-
-#endif

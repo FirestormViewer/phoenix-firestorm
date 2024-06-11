@@ -147,6 +147,7 @@
 #include "llcleanup.h"
 #include "llviewershadermgr.h"
 #include "gltfscenemanager.h"
+#include "gltf/asset.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "fsavatarrenderpersistence.h"
 #include "rlvactions.h"
@@ -4014,6 +4015,33 @@ bool enable_gltf()
 {
     static LLCachedControl<bool> enablegltf(gSavedSettings, "GLTFEnabled", false);
     return enablegltf;
+}
+
+bool enable_gltf_save_as()
+{
+    if (enable_gltf())
+    {
+        LLViewerObject* obj = LLSelectMgr::getInstance()->getSelection()->getFirstRootObject();
+        if (obj)
+        {
+            if (obj->mGLTFAsset && obj->mGLTFAsset->isLocalPreview())
+            {
+                return true;
+            }
+
+            LLPermissions* permissions = LLSelectMgr::getInstance()->findObjectPermissions(obj);
+            if (permissions)
+            {
+                return permissions->allowExportBy(gAgent.getID());
+            }
+        }
+    }
+    return false;
+}
+
+bool enable_gltf_upload()
+{
+    return enable_gltf_save_as();
 }
 
 class LLSelfRemoveAllAttachments : public view_listener_t
@@ -10091,15 +10119,6 @@ class LLAdvancedClickGLTFSaveAs : public view_listener_t
     }
 };
 
-class LLAdvancedClickGLTFDecompose : public view_listener_t
-{
-    bool handleEvent(const LLSD& userdata)
-    {
-        LL::GLTFSceneManager::instance().decomposeSelection();
-        return true;
-    }
-};
-
 class LLAdvancedClickGLTFUpload: public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
@@ -12583,7 +12602,6 @@ void initialize_menus()
     view_listener_t::addMenu(new LLAdvancedClickHDRIPreview(), "Advanced.ClickHDRIPreview");
     view_listener_t::addMenu(new LLAdvancedClickGLTFOpen(), "Advanced.ClickGLTFOpen");
     view_listener_t::addMenu(new LLAdvancedClickGLTFSaveAs(), "Advanced.ClickGLTFSaveAs");
-    view_listener_t::addMenu(new LLAdvancedClickGLTFDecompose(), "Advanced.ClickGLTFDecompose");
     view_listener_t::addMenu(new LLAdvancedClickGLTFUpload(), "Advanced.ClickGLTFUpload");
     view_listener_t::addMenu(new LLAdvancedClickResizeWindow(), "Advanced.ClickResizeWindow");
     view_listener_t::addMenu(new LLAdvancedPurgeShaderCache(), "Advanced.ClearShaderCache");
@@ -12948,6 +12966,8 @@ void initialize_menus()
     enable.add("EnableSelectInPathfindingCharacters", boost::bind(&enable_object_select_in_pathfinding_characters));
     enable.add("Advanced.EnableErrorOSException", boost::bind(&enable_os_exception));
     enable.add("EnableGLTF", boost::bind(&enable_gltf));
+    enable.add("EnableGLTFSaveAs", boost::bind(&enable_gltf_save_as));
+    enable.add("EnableGLTFUpload", boost::bind(&enable_gltf_upload));
     enable.add("EnableBridgeFunction", boost::bind(&enable_bridge_function));   // <FS:CR>
 
     view_listener_t::addMenu(new LLFloaterVisible(), "FloaterVisible");

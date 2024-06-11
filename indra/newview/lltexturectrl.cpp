@@ -703,7 +703,7 @@ bool LLFloaterTexturePicker::postBuild()
 
     getChild<LLComboBox>("l_bake_use_texture_combo_box")->setCommitCallback(onBakeTextureSelect, this);
 
-    setBakeTextureEnabled(true);
+    setBakeTextureEnabled(mInventoryPickType != PICK_MATERIAL);
     return true;
 }
 
@@ -2058,7 +2058,7 @@ void LLTextureCtrl::showPicker(bool take_focus)
         {
             texture_floaterp->setSetImageAssetIDCallback(boost::bind(&LLTextureCtrl::setImageAssetID, this, _1));
 
-            texture_floaterp->setBakeTextureEnabled(mBakeTextureEnabled);
+            texture_floaterp->setBakeTextureEnabled(mBakeTextureEnabled && mInventoryPickType != PICK_MATERIAL);
         }
 
         LLFloater* root_floater = gFloaterView->getParentFloater(this);
@@ -2300,7 +2300,7 @@ void LLTextureCtrl::setBakeTextureEnabled(bool enabled)
     LLFloaterTexturePicker* floaterp = (LLFloaterTexturePicker*)mFloaterHandle.get();
     if (floaterp)
     {
-        floaterp->setBakeTextureEnabled(enabled);
+        floaterp->setBakeTextureEnabled(enabled && mInventoryPickType != PICK_MATERIAL);
     }
 }
 

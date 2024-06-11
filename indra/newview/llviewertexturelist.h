@@ -197,6 +197,9 @@ private:    // PoundLife - Improved Object Inspect
                                      LLGLenum primary_format = 0,
                                      const LLUUID& force_id = LLUUID::null
                                      );
+    
+    LLImageRaw* getRawImageFromMemory(const U8* data, U32 size, std::string_view mimetype);
+    LLViewerFetchedTexture* getImageFromMemory(const U8* data, U32 size, std::string_view mimetype);
 
     LLViewerFetchedTexture* createImage(const LLUUID &image_id,
                                      FTType f_type,

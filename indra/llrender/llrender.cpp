@@ -1012,6 +1012,7 @@ void LLRender::syncLightState()
 
 void LLRender::syncMatrices()
 {
+    STOP_GLERROR;
     static const U32 name[] =
     {
         LLShaderMgr::MODELVIEW_MATRIX,
@@ -1034,8 +1035,6 @@ void LLRender::syncMatrices()
 
     if (shader)
     {
-        //llassert(shader);
-
         bool mvp_done = false;
 
         U32 i = MM_MODELVIEW;
@@ -1156,6 +1155,7 @@ void LLRender::syncMatrices()
             syncLightState();
         }
     }
+    STOP_GLERROR;
 }
 
 void LLRender::translatef(const GLfloat& x, const GLfloat& y, const GLfloat& z)
@@ -1628,6 +1628,7 @@ void LLRender::end()
 }
 void LLRender::flush()
 {
+    STOP_GLERROR;
     if (mCount > 0)
     {
         LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
@@ -1738,6 +1739,9 @@ void LLRender::flush()
                     vb->setColorData(mColorsp.get());
                 }
 
+#if LL_DARWIN
+                vb->unmapBuffer();
+#endif
                 vb->unbind();
 
                 sVBCache[vhash] = { vb , std::chrono::steady_clock::now() };

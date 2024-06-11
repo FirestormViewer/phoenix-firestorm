@@ -31,7 +31,7 @@
 // whenever we add support for more types
 
 #ifdef _MSC_VER
-#define LL_FUNCSIG __FUNCSIG__ 
+#define LL_FUNCSIG __FUNCSIG__
 #else
 #define LL_FUNCSIG __PRETTY_FUNCTION__
 #endif
@@ -168,6 +168,16 @@ namespace LL
         inline void copyVec4<U8, LLColor4U>(U8* src, LLColor4U& dst)
         {
             dst.set(src[0], src[1], src[2], src[3]);
+        }
+
+        template<>
+        inline void copyVec4<U16, U64>(U16* src, U64& dst)
+        {
+            U16* data = (U16*)&dst;
+            data[0] = src[0];
+            data[1] = src[1];
+            data[2] = src[2];
+            data[3] = src[3];
         }
 
         template<>
@@ -353,37 +363,29 @@ namespace LL
             const Buffer& buffer = asset.mBuffers[bufferView.mBuffer];
             const U8* src = buffer.mData.data() + bufferView.mByteOffset + accessor.mByteOffset;
 
-            if (accessor.mComponentType == TINYGLTF_COMPONENT_TYPE_FLOAT)
+            switch (accessor.mComponentType)
             {
-                LL::GLTF::copy(asset, accessor, (const F32*)src, dst, bufferView.mByteStride);
-            }
-            else if (accessor.mComponentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT)
-            {
-                LL::GLTF::copy(asset, accessor, (const U16*)src, dst, bufferView.mByteStride);
-            }
-            else if (accessor.mComponentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT)
-            {
-                LL::GLTF::copy(asset, accessor, (const U32*)src, dst, bufferView.mByteStride);
-            }
-            else if (accessor.mComponentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE)
-            {
-                LL::GLTF::copy(asset, accessor, (const U8*)src, dst, bufferView.mByteStride);
-            }
-            else if (accessor.mComponentType == TINYGLTF_COMPONENT_TYPE_SHORT)
-            {
-                LL::GLTF::copy(asset, accessor, (const S16*)src, dst, bufferView.mByteStride);
-            }
-            else if (accessor.mComponentType == TINYGLTF_COMPONENT_TYPE_BYTE)
-            {
-                LL::GLTF::copy(asset, accessor, (const S8*)src, dst, bufferView.mByteStride);
-            }
-            else if (accessor.mComponentType == TINYGLTF_COMPONENT_TYPE_DOUBLE)
-            {
-                LL::GLTF::copy(asset, accessor, (const F64*)src, dst, bufferView.mByteStride);
-            }
-            else
-            {
-                LL_ERRS("GLTF") << "Unsupported component type" << LL_ENDL;
+            case Accessor::ComponentType::FLOAT:
+                copy(asset, accessor, (const F32*)src, dst, bufferView.mByteStride);
+                break;
+            case Accessor::ComponentType::UNSIGNED_INT:
+                copy(asset, accessor, (const U32*)src, dst, bufferView.mByteStride);
+                break;
+            case Accessor::ComponentType::SHORT:
+                copy(asset, accessor, (const S16*)src, dst, bufferView.mByteStride);
+                break;
+            case Accessor::ComponentType::UNSIGNED_SHORT:
+                copy(asset, accessor, (const U16*)src, dst, bufferView.mByteStride);
+                break;
+            case Accessor::ComponentType::BYTE:
+                copy(asset, accessor, (const S8*)src, dst, bufferView.mByteStride);
+                break;
+            case Accessor::ComponentType::UNSIGNED_BYTE:
+                copy(asset, accessor, (const U8*)src, dst, bufferView.mByteStride);
+                break;
+            default:
+                LL_ERRS("GLTF") << "Invalid component type" << LL_ENDL;
+                break;
             }
         }
 
@@ -400,7 +402,7 @@ namespace LL
         //=========================================================================================================
         // boost::json copying utilities
         // ========================================================================================================
-        
+
         //====================== unspecialized base template, single value ===========================
 
         // to/from Value
@@ -517,6 +519,104 @@ namespace LL
             return true;
         }
 
+
+        // to/from extension
+
+        // for internal use only, use copy_extensions instead
+        template<typename T>
+        inline bool _copy_extension(const boost::json::object& extensions, std::string_view member, T* dst)
+        {
+            if (extensions.contains(member))
+            {
+                return copy(extensions.at(member), *dst);
+            }
+
+            return false;
+        }
+
+        // Copy all extensions from src.extensions to provided destinations
+        // Usage:
+        //  copy_extensions(src,
+        //                  "KHR_materials_unlit", &mUnlit,
+        //                  "KHR_materials_pbrSpecularGlossiness", &mPbrSpecularGlossiness);
+        // returns true if any of the extensions are copied
+        template<class... Types>
+        inline bool copy_extensions(const boost::json::value& src, Types... args)
+        {
+            // extract the extensions object (don't assume it exists and verify that it is an object)
+            if (src.is_object())
+            {
+                boost::json::object obj = src.get_object();
+                if (obj.contains("extensions"))
+                {
+                    const boost::json::value& extensions = obj.at("extensions");
+                    if (extensions.is_object())
+                    {
+                        const boost::json::object& ext_obj = extensions.as_object();
+                        bool success = false;
+                        // copy each extension, return true if any of them succeed, do not short circuit on success
+                        U32 count = sizeof...(args);
+                        for (U32 i = 0; i < count; i += 2)
+                        {
+                            if (_copy_extension(ext_obj, args...))
+                            {
+                                success = true;
+                            }
+                        }
+                        return success;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        // internal use aonly, use write_extensions instead
+        template<typename T>
+        inline bool _write_extension(boost::json::object& extensions, const T* src, string_view member)
+        {
+            if (src->mPresent)
+            {
+                Value v;
+                if (write(*src, v))
+                {
+                    extensions[member] = v;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Write all extensions to dst.extensions
+        // Usage:
+        //  write_extensions(dst,
+        //                   "KHR_materials_unlit", mUnlit,
+        //                   "KHR_materials_pbrSpecularGlossiness", mPbrSpecularGlossiness);
+        // returns true if any of the extensions are written
+        template<class... Types>
+        inline bool write_extensions(boost::json::object& dst, Types... args)
+        {
+            bool success = false;
+
+            boost::json::object extensions;
+            U32 count = sizeof...(args) - 1;
+
+            for (U32 i = 0; i < count; i += 2)
+            {
+                if (_write_extension(extensions, args...))
+                {
+                    success = true;
+                }
+            }
+
+            if (success)
+            {
+                dst["extensions"] = extensions;
+            }
+
+            return success;
+        }
+
         // conditionally write a member to an object if the member
         // is not the default value
         template<typename T>
@@ -528,7 +628,7 @@ namespace LL
             }
             return false;
         }
-        
+
         template<typename T>
         inline bool write(const std::unordered_map<std::string, T>& src, string_view member, boost::json::object& dst, const std::unordered_map<std::string, T>& default_value = std::unordered_map<std::string, T>())
         {
@@ -571,6 +671,44 @@ namespace LL
             return false;
         }
 
+        // Accessor::ComponentType
+        template<>
+        inline bool copy(const Value& src, Accessor::ComponentType& dst)
+        {
+            if (src.is_int64())
+            {
+                dst = (Accessor::ComponentType)src.get_int64();
+                return true;
+            }
+            return false;
+        }
+
+        template<>
+        inline bool write(const Accessor::ComponentType& src, Value& dst)
+        {
+            dst = (S32)src;
+            return true;
+        }
+
+        //Primitive::Mode
+        template<>
+        inline bool copy(const Value& src, Primitive::Mode& dst)
+        {
+            if (src.is_int64())
+            {
+                dst = (Primitive::Mode)src.get_int64();
+                return true;
+            }
+            return false;
+        }
+
+        template<>
+        inline bool write(const Primitive::Mode& src, Value& dst)
+        {
+            dst = (S32)src;
+            return true;
+        }
+
         // vec4
         template<>
         inline bool copy(const Value& src, vec4& dst)
@@ -580,14 +718,17 @@ namespace LL
                 const boost::json::array& arr = src.as_array();
                 if (arr.size() == 4)
                 {
-                    if (arr[0].is_double() &&
-                        arr[1].is_double() &&
-                        arr[2].is_double() &&
-                        arr[3].is_double())
-                    {
-                        dst = vec4(arr[0].get_double(), arr[1].get_double(), arr[2].get_double(), arr[3].get_double());
-                        return true;
-                    }
+                    vec4 v;
+                    std::error_code ec;
+
+                    v.x = arr[0].to_number<F32>(ec); if (ec) return false;
+                    v.y = arr[1].to_number<F32>(ec); if (ec) return false;
+                    v.z = arr[2].to_number<F32>(ec); if (ec) return false;
+                    v.w = arr[3].to_number<F32>(ec); if (ec) return false;
+
+                    dst = v;
+
+                    return true;
                 }
             }
             return false;
@@ -615,17 +756,13 @@ namespace LL
                 const boost::json::array& arr = src.as_array();
                 if (arr.size() == 4)
                 {
-                    if (arr[0].is_double() &&
-                        arr[1].is_double() &&
-                        arr[2].is_double() &&
-                        arr[3].is_double())
-                    {
-                        dst.x = arr[0].get_double();
-                        dst.y = arr[1].get_double();
-                        dst.z = arr[2].get_double();
-                        dst.w = arr[3].get_double();
-                        return true;
-                    }
+                    std::error_code ec;
+                    dst.x = arr[0].to_number<F32>(ec); if (ec) return false;
+                    dst.y = arr[1].to_number<F32>(ec); if (ec) return false;
+                    dst.z = arr[2].to_number<F32>(ec); if (ec) return false;
+                    dst.w = arr[3].to_number<F32>(ec); if (ec) return false;
+
+                    return true;
                 }
             }
             return false;
@@ -654,12 +791,13 @@ namespace LL
                 const boost::json::array& arr = src.as_array();
                 if (arr.size() == 3)
                 {
-                    if (arr[0].is_double() &&
-                        arr[1].is_double() &&
-                        arr[2].is_double())
-                    {
-                        dst = vec3(arr[0].get_double(), arr[1].get_double(), arr[2].get_double());
-                    }
+                    std::error_code ec;
+                    vec3 t;
+                    t.x = arr[0].to_number<F32>(ec); if (ec) return false;
+                    t.y = arr[1].to_number<F32>(ec); if (ec) return false;
+                    t.z = arr[2].to_number<F32>(ec); if (ec) return false;
+
+                    dst = t;
                     return true;
                 }
             }
@@ -701,12 +839,10 @@ namespace LL
         template<>
         inline bool copy(const Value& src, F32& dst)
         {
-            if (src.is_double())
-            {
-                dst = src.get_double();
-                return true;
-            }
-            return false;
+            std::error_code ec;
+            F32 t = src.to_number<F32>(ec); if (ec) return false;
+            dst = t;
+            return true;
         }
 
         template<>
@@ -740,12 +876,10 @@ namespace LL
         template<>
         inline bool copy(const Value& src, F64& dst)
         {
-            if (src.is_double())
-            {
-                dst = src.get_double();
-                return true;
-            }
-            return false;
+            std::error_code ec;
+            F64 t = src.to_number<F64>(ec); if (ec) return false;
+            dst = t;
+            return true;
         }
 
         template<>
@@ -830,11 +964,9 @@ namespace LL
 
                     for (U32 i = 0; i < arr.size(); ++i)
                     {
-                        if (arr[i].is_double())
-                        {
-                            p[i] = arr[i].get_double();
-                        }
-                        else
+                        std::error_code ec;
+                        p[i] = arr[i].to_number<F32>(ec);
+                        if (ec)
                         {
                             return false;
                         }
@@ -881,7 +1013,7 @@ namespace LL
             return true;
         }
 
-        // 
+        //
         // ========================================================================================================
 
     }

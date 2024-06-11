@@ -124,7 +124,6 @@ if(WINDOWS)
         MESSAGE(WARNING "New MSVC_VERSION ${MSVC_VERSION} of MSVC: adapt Copy3rdPartyLibs.cmake")
     endif (MSVC80)
 
-    # <FS:Ansariel> Try using the VC runtime redistributables that came with the VS installation first
     if (MSVC_TOOLSET_VER AND DEFINED ENV{VCTOOLSREDISTDIR})
         if(ADDRESS_SIZE EQUAL 32)
             set(redist_find_path "$ENV{VCTOOLSREDISTDIR}x86\\Microsoft.VC${MSVC_TOOLSET_VER}.CRT")
@@ -134,7 +133,6 @@ if(WINDOWS)
         get_filename_component(redist_path "${redist_find_path}" ABSOLUTE)
         MESSAGE(STATUS "VC Runtime redist path: ${redist_path}")
     endif (MSVC_TOOLSET_VER AND DEFINED ENV{VCTOOLSREDISTDIR})
-    # </FS:Ansariel>
 
     if(ADDRESS_SIZE EQUAL 32)
         # this folder contains the 32bit DLLs.. (yes really!)
@@ -158,14 +156,12 @@ if(WINDOWS)
             vcruntime${MSVC_VER}.dll
             vcruntime${MSVC_VER}_1.dll
             )
-        # <FS:Ansariel> Try using the VC runtime redistributables that came with the VS installation first
         if(redist_path AND EXISTS "${redist_path}/${release_msvc_file}")
             MESSAGE(STATUS "Copying redist file from ${redist_path}/${release_msvc_file}")
             to_staging_dirs(
                 ${redist_path}
                 third_party_targets
                 ${release_msvc_file})
-        # </FS:Ansariel>
         elseif(EXISTS "${registry_path}/${release_msvc_file}")
             MESSAGE(STATUS "Copying redist file from ${registry_path}/${release_msvc_file}")
             to_staging_dirs(

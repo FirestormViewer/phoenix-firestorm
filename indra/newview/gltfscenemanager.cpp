@@ -107,32 +107,6 @@ void GLTFSceneManager::saveAs()
     }
 }
 
-void GLTFSceneManager::decomposeSelection()
-{
-    LLViewerObject* obj = LLSelectMgr::instance().getSelection()->getFirstRootObject();
-    if (obj && obj->mGLTFAsset)
-    {
-        LLFilePickerReplyThread::startPicker(
-            [](const std::vector<std::string>& filenames, LLFilePicker::ELoadFilter load_filter, LLFilePicker::ESaveFilter save_filter)
-            {
-                if (LLAppViewer::instance()->quitRequested())
-                {
-                    return;
-                }
-                if (filenames.size() > 0)
-                {
-                    GLTFSceneManager::instance().decomposeSelection(filenames[0]);
-                }
-            },
-            LLFilePicker::FFSAVE_GLTF,
-            "scene.gltf");
-    }
-    else
-    {
-        LLNotificationsUtil::add("GLTFSaveSelection");
-    }
-}
-
 void GLTFSceneManager::uploadSelection()
 {
     if (mUploadingAsset)
@@ -153,77 +127,86 @@ void GLTFSceneManager::uploadSelection()
 
         for (auto& image : asset.mImages)
         {
-            if (!image.mData.empty())
+            if (image.mTexture.notNull())
             {
                 mPendingImageUploads++;
 
-                LLPointer<LLImageRaw> raw = new LLImageRaw(image.mWidth, image.mHeight, image.mComponent);
-                U8* data = raw->allocateData();
-                llassert_always(image.mData.size() == raw->getDataSize());
-                memcpy(data, image.mData.data(), image.mData.size());
+                LLPointer<LLImageRaw> raw;
 
-                // for GLTF native content, store image in GLTF orientation
-                raw->verticalFlip();
-
-                LLPointer<LLImageJ2C> j2c = LLViewerTextureList::convertToUploadFile(raw);
-
-                std::string buffer;
-                buffer.assign((const char*)j2c->getData(), j2c->getDataSize());
-
-                LLUUID asset_id = LLUUID::generateNewID();
-
-                std::string name;
-                S32 idx = (S32)(&image - &asset.mImages[0]);
-
-                if (image.mName.empty())
+                if (image.mBufferView != INVALID_INDEX)
                 {
+                    BufferView& view = asset.mBufferViews[image.mBufferView];
+                    Buffer& buffer = asset.mBuffers[view.mBuffer];
 
-                    name = llformat("Image_%d", idx);
+                    raw = LLViewerTextureManager::getRawImageFromMemory(buffer.mData.data() + view.mByteOffset, view.mByteLength, image.mMimeType);
+
+                    image.clearData(asset);
                 }
                 else
                 {
-                    name = image.mName;
+                    raw = image.mTexture->getCachedRawImage();
                 }
 
-                LLNewBufferedResourceUploadInfo::uploadFailure_f failure = [this](LLUUID assetId, LLSD response, std::string reason)
-                    {
-                        // TODO: handle failure
-                        mPendingImageUploads--;
-                        return false;
-                    };
+                if (raw.notNull())
+                {
+                    LLPointer<LLImageJ2C> j2c = LLViewerTextureList::convertToUploadFile(raw);
 
+                    std::string buffer;
+                    buffer.assign((const char*)j2c->getData(), j2c->getDataSize());
 
-                LLNewBufferedResourceUploadInfo::uploadFinish_f finish = [this, idx, raw, j2c](LLUUID assetId, LLSD response)
+                    LLUUID asset_id = LLUUID::generateNewID();
+
+                    std::string name;
+                    S32 idx = (S32)(&image - &asset.mImages[0]);
+
+                    if (image.mName.empty())
                     {
-                        if (mUploadingAsset && mUploadingAsset->mImages.size() > idx)
+
+                        name = llformat("Image_%d", idx);
+                    }
+                    else
+                    {
+                        name = image.mName;
+                    }
+
+                    LLNewBufferedResourceUploadInfo::uploadFailure_f failure = [this](LLUUID assetId, LLSD response, std::string reason)
                         {
-                            mUploadingAsset->mImages[idx].mUri = assetId.asString();
+                            // TODO: handle failure
                             mPendingImageUploads--;
-                        }
-                    };
+                            return false;
+                        };
 
-                S32 expected_upload_cost = LLAgentBenefitsMgr::current().getTextureUploadCost(j2c);
 
-                LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLNewBufferedResourceUploadInfo>(
-                    buffer,
-                    asset_id,
-                    name,
-                    name,
-                    0,
-                    LLFolderType::FT_TEXTURE,
-                    LLInventoryType::IT_TEXTURE,
-                    LLAssetType::AT_TEXTURE,
-                    LLFloaterPerms::getNextOwnerPerms("Uploads"),
-                    LLFloaterPerms::getGroupPerms("Uploads"),
-                    LLFloaterPerms::getEveryonePerms("Uploads"),
-                    expected_upload_cost,
-                    false,
-                    finish,
-                    failure));
+                    LLNewBufferedResourceUploadInfo::uploadFinish_f finish = [this, idx, raw, j2c](LLUUID assetId, LLSD response)
+                        {
+                            if (mUploadingAsset && mUploadingAsset->mImages.size() > idx)
+                            {
+                                mUploadingAsset->mImages[idx].mUri = assetId.asString();
+                                mPendingImageUploads--;
+                            }
+                        };
 
-                upload_new_resource(uploadInfo);
+                    S32 expected_upload_cost = LLAgentBenefitsMgr::current().getTextureUploadCost(j2c);
 
-                image.clearData(asset);
+                    LLResourceUploadInfo::ptr_t uploadInfo(std::make_shared<LLNewBufferedResourceUploadInfo>(
+                        buffer,
+                        asset_id,
+                        name,
+                        name,
+                        0,
+                        LLFolderType::FT_TEXTURE,
+                        LLInventoryType::IT_TEXTURE,
+                        LLAssetType::AT_TEXTURE,
+                        LLFloaterPerms::getNextOwnerPerms("Uploads"),
+                        LLFloaterPerms::getGroupPerms("Uploads"),
+                        LLFloaterPerms::getEveryonePerms("Uploads"),
+                        expected_upload_cost,
+                        false,
+                        finish,
+                        failure));
+
+                    upload_new_resource(uploadInfo);
+                }
             }
         }
 
@@ -297,61 +280,44 @@ void GLTFSceneManager::uploadSelection()
     }
 }
 
-void GLTFSceneManager::decomposeSelection(const std::string& filename)
-{
-    LLViewerObject* obj = LLSelectMgr::instance().getSelection()->getFirstRootObject();
-    if (obj && obj->mGLTFAsset)
-    {
-        // copy asset out for decomposition
-        Asset asset = *obj->mGLTFAsset;
-
-        // decompose the asset into component parts
-        asset.decompose(filename);
-
-        // copy decomposed asset into tinygltf for serialization
-        tinygltf::Model model;
-        asset.save(model);
-
-        LLTinyGLTFHelper::saveModel(filename, model);
-    }
-}
-
 void GLTFSceneManager::save(const std::string& filename)
 {
     LLViewerObject* obj = LLSelectMgr::instance().getSelection()->getFirstRootObject();
     if (obj && obj->mGLTFAsset)
     {
         Asset* asset = obj->mGLTFAsset.get();
-        tinygltf::Model model;
-        asset->save(model);
-
-        LLTinyGLTFHelper::saveModel(filename, model);
+        if (!asset->save(filename))
+        {
+            LLNotificationsUtil::add("GLTFSaveFailed");
+        }
     }
 }
 
 void GLTFSceneManager::load(const std::string& filename)
 {
-    tinygltf::Model model;
-    LLTinyGLTFHelper::loadModel(filename, model);
-
     std::shared_ptr<Asset> asset = std::make_shared<Asset>();
-    *asset = model;
 
-    gDebugProgram.bind(); // bind a shader to satisfy LLVertexBuffer assertions
-    asset->allocateGLResources(filename, model);
-    asset->updateTransforms();
+    if (asset->load(filename))
+    {
+        gDebugProgram.bind(); // bind a shader to satisfy LLVertexBuffer assertions
+        asset->updateTransforms();
 
-    // hang the asset off the currently selected object, or off of the avatar if no object is selected
-    LLViewerObject* obj = LLSelectMgr::instance().getSelection()->getFirstRootObject();
+        // hang the asset off the currently selected object, or off of the avatar if no object is selected
+        LLViewerObject* obj = LLSelectMgr::instance().getSelection()->getFirstRootObject();
 
-    if (obj)
-    { // assign to self avatar
-        obj->mGLTFAsset = asset;
-        obj->markForUpdate();
-        if (std::find(mObjects.begin(), mObjects.end(), obj) == mObjects.end())
-        {
-            mObjects.push_back(obj);
+        if (obj)
+        { // assign to self avatar
+            obj->mGLTFAsset = asset;
+            obj->markForUpdate();
+            if (std::find(mObjects.begin(), mObjects.end(), obj) == mObjects.end())
+            {
+                mObjects.push_back(obj);
+            }
         }
+    }
+    else
+    {
+        LLNotificationsUtil::add("GLTFLoadFailed");
     }
 }
 
@@ -392,32 +358,26 @@ void GLTFSceneManager::onGLTFBinLoadComplete(const LLUUID& id, LLAssetType::ETyp
             // find the Buffer with the given id in the asset
             if (obj->mGLTFAsset)
             {
-                for (auto& buffer : obj->mGLTFAsset->mBuffers)
+                obj->mGLTFAsset->mPendingBuffers--;
+
+
+                if (obj->mGLTFAsset->mPendingBuffers == 0)
                 {
-                    LLUUID buffer_id;
-                    if (LLUUID::parseUUID(buffer.mUri, &buffer_id) && buffer_id == id)
+                    if (obj->mGLTFAsset->prep())
                     {
-                        LLFileSystem file(id, asset_type, LLFileSystem::READ);
-
-                        buffer.mData.resize(file.getSize());
-                        file.read((U8*)buffer.mData.data(), buffer.mData.size());
-
-                        obj->mGLTFAsset->mPendingBuffers--;
-
-                        if (obj->mGLTFAsset->mPendingBuffers == 0)
+                        GLTFSceneManager& mgr = GLTFSceneManager::instance();
+                        if (std::find(mgr.mObjects.begin(), mgr.mObjects.end(), obj) == mgr.mObjects.end())
                         {
-                            obj->mGLTFAsset->allocateGLResources();
-                            GLTFSceneManager& mgr = GLTFSceneManager::instance();
-                            if (std::find(mgr.mObjects.begin(), mgr.mObjects.end(), obj) == mgr.mObjects.end())
-                            {
-                                GLTFSceneManager::instance().mObjects.push_back(obj);
-                            }
+                            GLTFSceneManager::instance().mObjects.push_back(obj);
                         }
+                    }
+                    else
+                    {
+                        LL_WARNS("GLTF") << "Failed to prepare GLTF asset: " << id << LL_ENDL;
+                        obj->mGLTFAsset = nullptr;
                     }
                 }
             }
-
-
         }
     }
     else
@@ -492,30 +452,9 @@ void GLTFSceneManager::update()
     {
         if (mPendingImageUploads == 0 && mPendingBinaryUploads == 0)
         {
-            std::string filename(gDirUtilp->getTempDir() + "/upload.gltf");
-#if 0
-            tinygltf::Model model;
-            mUploadingAsset->save(model);
-
-            tinygltf::TinyGLTF writer;
-
-            writer.WriteGltfSceneToFile(&model, filename, false, false, true, false);
-#else
             boost::json::object obj;
             mUploadingAsset->serialize(obj);
-            std::string json = boost::json::serialize(obj, {});
-
-            {
-                std::ofstream o(filename);
-                o << json;
-            }
-#endif
-
-            std::ifstream t(filename);
-            std::stringstream str;
-            str << t.rdbuf();
-
-            std::string buffer = str.str();
+            std::string buffer = boost::json::serialize(obj, {});
 
             LLNewBufferedResourceUploadInfo::uploadFailure_f failure = [this](LLUUID assetId, LLSD response, std::string reason)
                 {
@@ -589,7 +528,26 @@ void GLTFSceneManager::update()
     }
 }
 
-void GLTFSceneManager::render(bool opaque, bool rigged)
+void GLTFSceneManager::render(bool opaque, bool rigged, bool unlit)
+{
+    U8 variant = 0;
+    if (rigged)
+    {
+        variant |= LLGLSLShader::GLTFVariant::RIGGED;
+    }
+    if (!opaque)
+    {
+        variant |= LLGLSLShader::GLTFVariant::ALPHA_BLEND;
+    }
+    if (unlit)
+    {
+        variant |= LLGLSLShader::GLTFVariant::UNLIT;
+    }
+
+    render(variant);
+}
+
+void GLTFSceneManager::render(U8 variant)
 {
     // for debugging, just render the whole scene as opaque
     // by traversing the whole scenegraph
@@ -597,6 +555,8 @@ void GLTFSceneManager::render(bool opaque, bool rigged)
     // appropriate shader is already boundd
 
     gGL.matrixMode(LLRender::MM_MODELVIEW);
+
+    bool rigged = variant & LLGLSLShader::GLTFVariant::RIGGED;
 
     for (U32 i = 0; i < mObjects.size(); ++i)
     {
@@ -608,7 +568,6 @@ void GLTFSceneManager::render(bool opaque, bool rigged)
         }
 
         Asset* asset = mObjects[i]->mGLTFAsset.get();
-
         gGL.pushMatrix();
 
         LLMatrix4a mat = mObjects[i]->getGLTFAssetToAgentTransform();
@@ -620,9 +579,169 @@ void GLTFSceneManager::render(bool opaque, bool rigged)
 
         mat4 mdv = glm::make_mat4(modelview.getF32ptr());
         asset->updateRenderTransforms(mdv);
-        asset->render(opaque, rigged);
+
+        if (rigged)
+        { // provide a modelview matrix that goes from asset to camera space for rigged render passes
+            // (matrix palettes are in asset space)
+            gGL.loadMatrix(glm::value_ptr(mdv));
+        }
+        render(*asset, variant);
 
         gGL.popMatrix();
+    }
+}
+
+void GLTFSceneManager::render(Asset& asset, U8 variant)
+{
+    bool opaque = !(variant & LLGLSLShader::GLTFVariant::ALPHA_BLEND);
+    bool rigged = variant & LLGLSLShader::GLTFVariant::RIGGED;
+
+    if (opaque)
+    {
+        gGLTFPBRMetallicRoughnessProgram.bind(variant);
+    }
+    else
+    { // alpha shaders need all the shadow map setup etc
+        gPipeline.bindDeferredShader(gGLTFPBRMetallicRoughnessProgram.mGLTFVariants[variant]);
+    }
+
+    for (auto& node : asset.mNodes)
+    {
+        if (node.mSkin != INVALID_INDEX)
+        {
+            if (rigged)
+            {
+                Skin& skin = asset.mSkins[node.mSkin];
+                glBindBufferBase(GL_UNIFORM_BUFFER, LLGLSLShader::UB_GLTF_JOINTS, skin.mUBO);
+            }
+        }
+
+        if (node.mMesh != INVALID_INDEX)
+        {
+            Mesh& mesh = asset.mMeshes[node.mMesh];
+            for (auto& primitive : mesh.mPrimitives)
+            {
+                if (primitive.mShaderVariant != variant)
+                {
+                    continue;
+                }
+
+                if (!rigged)
+                {
+                    gGL.loadMatrix((F32*)glm::value_ptr(node.mRenderMatrix));
+                }
+                bool cull = true;
+                if (primitive.mMaterial != INVALID_INDEX)
+                {
+                    Material& material = asset.mMaterials[primitive.mMaterial];
+                    bind(asset, material);
+
+                    cull = !material.mDoubleSided;
+                }
+                else
+                {
+                    LLFetchedGLTFMaterial::sDefault.bind();
+                }
+
+                LLGLDisable cull_face(!cull ? GL_CULL_FACE : 0);
+
+                primitive.mVertexBuffer->setBuffer();
+                if (primitive.mVertexBuffer->getNumIndices() > 0)
+                {
+                    primitive.mVertexBuffer->draw(primitive.mGLMode, primitive.mVertexBuffer->getNumIndices(), 0);
+                }
+                else
+                {
+                    primitive.mVertexBuffer->drawArrays(primitive.mGLMode, 0, primitive.mVertexBuffer->getNumVerts());
+                }
+            }
+        }
+    }
+}
+
+static void bindTexture(Asset& asset, S32 uniform, Material::TextureInfo& info, LLViewerTexture* fallback)
+{
+    if (info.mIndex != INVALID_INDEX)
+    {
+        LLViewerTexture* tex = asset.mImages[asset.mTextures[info.mIndex].mSource].mTexture;
+        if (tex)
+        {
+            tex->addTextureStats(2048.f * 2048.f);
+            LLGLSLShader::sCurBoundShaderPtr->bindTexture(uniform, tex);
+        }
+        else
+        {
+            LLGLSLShader::sCurBoundShaderPtr->bindTexture(uniform, fallback);
+        }
+    }
+    else
+    {
+        LLGLSLShader::sCurBoundShaderPtr->bindTexture(uniform, fallback);
+    }
+}
+
+
+void GLTFSceneManager::bind(Asset& asset, Material& material)
+{
+    // bind for rendering (derived from LLFetchedGLTFMaterial::bind)
+    // glTF 2.0 Specification 3.9.4. Alpha Coverage
+    // mAlphaCutoff is only valid for LLGLTFMaterial::ALPHA_MODE_MASK
+    F32 min_alpha = -1.0;
+
+    LLGLSLShader* shader = LLGLSLShader::sCurBoundShaderPtr;
+
+    if (!LLPipeline::sShadowRender || (material.mAlphaMode == Material::AlphaMode::BLEND))
+    {
+        if (material.mAlphaMode == Material::AlphaMode::MASK)
+        {
+            // dividing the alpha cutoff by transparency here allows the shader to compare against
+            // the alpha value of the texture without needing the transparency value
+            if (material.mPbrMetallicRoughness.mBaseColorFactor.a > 0.f)
+            {
+                min_alpha = material.mAlphaCutoff / material.mPbrMetallicRoughness.mBaseColorFactor.a;
+            }
+            else
+            {
+                min_alpha = 1024.f;
+            }
+        }
+        shader->uniform1f(LLShaderMgr::MINIMUM_ALPHA, min_alpha);
+    }
+
+    bindTexture(asset, LLShaderMgr::DIFFUSE_MAP, material.mPbrMetallicRoughness.mBaseColorTexture, LLViewerFetchedTexture::sWhiteImagep);
+
+    F32 base_color_packed[8];
+    //mTextureTransform[GLTF_TEXTURE_INFO_BASE_COLOR].getPacked(base_color_packed);
+    LLGLTFMaterial::sDefault.mTextureTransform[LLGLTFMaterial::GLTF_TEXTURE_INFO_BASE_COLOR].getPacked(base_color_packed);
+    shader->uniform4fv(LLShaderMgr::TEXTURE_BASE_COLOR_TRANSFORM, 2, (F32*)base_color_packed);
+
+    if (!LLPipeline::sShadowRender)
+    {
+        bindTexture(asset, LLShaderMgr::NORMAL_MAP, material.mNormalTexture, LLViewerFetchedTexture::sFlatNormalImagep);
+        bindTexture(asset, LLShaderMgr::METALLIC_ROUGHNESS_MAP, material.mPbrMetallicRoughness.mMetallicRoughnessTexture, LLViewerFetchedTexture::sWhiteImagep);
+        bindTexture(asset, LLShaderMgr::OCCLUSION_MAP, material.mOcclusionTexture, LLViewerFetchedTexture::sWhiteImagep);
+        bindTexture(asset, LLShaderMgr::EMISSIVE_MAP, material.mEmissiveTexture, LLViewerFetchedTexture::sWhiteImagep);
+
+        // NOTE: base color factor is baked into vertex stream
+
+        shader->uniform1f(LLShaderMgr::ROUGHNESS_FACTOR, material.mPbrMetallicRoughness.mRoughnessFactor);
+        shader->uniform1f(LLShaderMgr::METALLIC_FACTOR, material.mPbrMetallicRoughness.mMetallicFactor);
+        shader->uniform3fv(LLShaderMgr::EMISSIVE_COLOR, 1, glm::value_ptr(material.mEmissiveFactor));
+
+        F32 normal_packed[8];
+        //mTextureTransform[GLTF_TEXTURE_INFO_NORMAL].getPacked(normal_packed);
+        LLGLTFMaterial::sDefault.mTextureTransform[LLGLTFMaterial::GLTF_TEXTURE_INFO_NORMAL].getPacked(normal_packed);
+        shader->uniform4fv(LLShaderMgr::TEXTURE_NORMAL_TRANSFORM, 2, (F32*)normal_packed);
+
+        F32 metallic_roughness_packed[8];
+        //mTextureTransform[GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS].getPacked(metallic_roughness_packed);
+        LLGLTFMaterial::sDefault.mTextureTransform[LLGLTFMaterial::GLTF_TEXTURE_INFO_METALLIC_ROUGHNESS].getPacked(metallic_roughness_packed);
+        shader->uniform4fv(LLShaderMgr::TEXTURE_METALLIC_ROUGHNESS_TRANSFORM, 2, (F32*)metallic_roughness_packed);
+
+        F32 emissive_packed[8];
+        //mTextureTransform[GLTF_TEXTURE_INFO_EMISSIVE].getPacked(emissive_packed);
+        LLGLTFMaterial::sDefault.mTextureTransform[LLGLTFMaterial::GLTF_TEXTURE_INFO_EMISSIVE].getPacked(emissive_packed);
+        shader->uniform4fv(LLShaderMgr::TEXTURE_EMISSIVE_TRANSFORM, 2, (F32*)emissive_packed);
     }
 }
 
