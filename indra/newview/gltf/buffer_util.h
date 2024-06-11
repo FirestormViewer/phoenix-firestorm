@@ -99,6 +99,13 @@ namespace LL
 #pragma clang diagnostic ignored "-Wunused-function"
 #endif
 
+// <FS:Zi> make gcc ignore this as well
+#if defined(__GNUC__)
+#pragma GCC diagnostic ignored "-Wunused-function"
+#pragma GCC diagnostic push
+#endif
+// </FS:Zi>
+
         template<>
         void copyScalar<F32, F32>(F32* src, F32& dst)
         {
@@ -212,6 +219,12 @@ namespace LL
         {
             dst.set_value(src);
         }
+
+// <FS:Zi> make gcc ignore this as well
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+// </FS:Zi>
 
 #if defined(__clang__)
 #pragma clang diagnostic pop
