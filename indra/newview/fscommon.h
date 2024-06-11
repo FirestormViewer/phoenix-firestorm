@@ -94,7 +94,7 @@ namespace FSCommon
 
     LLUUID getGroupForRezzing();
 
-    void updateUsedEmojis(LLWString text);
+    void updateUsedEmojis(LLWStringView text);
 };
 
 #endif // FS_COMMON_H

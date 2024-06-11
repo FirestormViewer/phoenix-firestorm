@@ -153,6 +153,17 @@
     <key>Value</key>
     <string>http://phoenixviewer.com/app/fsdata/grids.xml</string>
   </map>
+  <key>FSGridBuilderURL</key>
+  <map>
+    <key>Comment</key>
+    <string>Fetch an html page of grids from this URL.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>https://phoenixviewer.com/app/fsdata/fs_grid_builder.html</string>
+  </map>
   <key>LastConnectedGrid</key>
   <map>
     <key>Comment</key>
@@ -13981,6 +13992,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+  <key>FSUseLegacyUnsupportedHardwareChecks</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, Firestorm will perform utterly pointless checks that probably made sense in 2004.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+  </map>
   <key>FSUseStandaloneGroupFloater</key>
     <map>
       <key>Comment</key>

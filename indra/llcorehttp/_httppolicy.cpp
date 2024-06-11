@@ -213,6 +213,7 @@ void HttpPolicy::retryOp(const HttpOpRequest::ptr_t &op)
 //
 HttpService::ELoopSpeed HttpPolicy::processReadyQueue()
 {
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;// <FS:Beq/> missing http trace
     const HttpTime now(totalTime());
     HttpService::ELoopSpeed result(HttpService::REQUEST_SLEEP);
     HttpLibcurl & transport(mService->getTransport());

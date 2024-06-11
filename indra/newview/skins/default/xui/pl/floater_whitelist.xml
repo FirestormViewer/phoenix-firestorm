@@ -1,0 +1,17 @@
+<floater name="whitelist_floater" title="Dodaj foldery i pliki binarne do wykluczeń">
+	<text name="whitelist_intro">
+		Antywirusy i oprogramowanie chroniące przed złośliwym oprogramowaniem są istotnym elementem bezpiecznego korzystania z Internetu, ale mogą powodować wiele problemów.
+Aby poprawić stabilność i wydajność zdecydowanie zalecamy, aby wszyscy użytkownicy upewnili się, że dodali do wykluczeń (tzw. białej listy) ważne foldery i programy używane przez przeglądarkę.
+
+Więcej szczegółowych informacji znajdziesz na stronie
+https://wiki.firestormviewer.org/antivirus_whitelisting
+	</text>
+	<text name="whitelist_folder_instruction">
+		Aby uprościć zadanie, w polu poniżej znajdują się foldery używane przez przeglądarkę.
+Dodaj je do wykluczeń antywirusa, jak pokazano na stronie wiki powyżej.
+	</text>
+	<text name="whitelist_exe_instruction">
+		Poniższe pole zawiera nazwy i ścieżki plików wykonywalnych przeglądarki.
+Dodaj je do wykluczeń antywirusa, jak pokazano na stronie wiki powyżej.
+	</text>
+</floater>

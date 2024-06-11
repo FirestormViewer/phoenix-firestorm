@@ -122,6 +122,7 @@ void LLSDSerialize::serialize(const LLSD& sd, std::ostream& str, ELLSD_Serialize
 // static
 bool LLSDSerialize::deserialize(LLSD& sd, std::istream& str, llssize max_bytes)
 {
+	LL_PROFILE_ZONE_SCOPED_CATEGORY_LLSD;
     char hdr_buf[MAX_HDR_LEN + 1] = ""; /* Flawfinder: ignore */
     bool fail_if_not_legacy = false;
 

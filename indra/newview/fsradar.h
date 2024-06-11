@@ -119,6 +119,8 @@ private:
     void radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name, std::string_view postMsg);
     void updateAgeAlertCheck();
 
+    void onRegionChanged();
+
     std::unique_ptr<Updater> mRadarListUpdater;
 
     struct RadarFields
@@ -150,6 +152,9 @@ private:
     boost::signals2::connection mShowUsernamesCallbackConnection;
     boost::signals2::connection mNameFormatCallbackConnection;
     boost::signals2::connection mAgeAlertCallbackConnection;
+
+    boost::signals2::connection mRegionCapabilitiesReceivedCallbackConnection;
+    boost::signals2::connection mRegionChangedCallbackConnection;
 };
 
 #endif // FS_RADAR_H

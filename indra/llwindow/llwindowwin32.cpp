@@ -1667,6 +1667,7 @@ const   S32   max_format  = (S32)num_formats - 1;
         close();
         return false;
     }
+	//LL_PROFILER_GPU_CONTEXT; <FS:Beq/> TODO(Beq) review this 
 
     LL_PROFILER_GPU_CONTEXT
 
@@ -1701,7 +1702,7 @@ const   S32   max_format  = (S32)num_formats - 1;
         swapBuffers();
     }
 
-    LL_PROFILER_GPU_CONTEXT;
+    LL_PROFILER_GPU_CONTEXT_NS("MainGL Context", 14);
 
     return true;
 }
@@ -1871,7 +1872,7 @@ void* LLWindowWin32::createSharedContext()
 void LLWindowWin32::makeContextCurrent(void* contextPtr)
 {
     wglMakeCurrent(mhDC, (HGLRC) contextPtr);
-    LL_PROFILER_GPU_CONTEXT;
+
 }
 
 void LLWindowWin32::destroySharedContext(void* contextPtr)

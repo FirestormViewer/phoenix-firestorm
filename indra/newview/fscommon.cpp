@@ -505,7 +505,7 @@ bool FSCommon::isFilterEditorKeyCombo(KEY key, MASK mask)
 
 LLUUID FSCommon::getGroupForRezzing()
 {
-    LLUUID group_id = gAgent.getGroupID();
+    LLUUID group_id{ gAgent.getGroupID() };
     LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 
     if (parcel && gSavedSettings.getBOOL("RezUnderLandGroup"))
@@ -523,12 +523,12 @@ LLUUID FSCommon::getGroupForRezzing()
     return group_id;
 }
 
-void FSCommon::updateUsedEmojis(LLWString text)
+void FSCommon::updateUsedEmojis(LLWStringView text)
 {
     LLEmojiDictionary* dictionary = LLEmojiDictionary::getInstance();
 
-    bool emojiSent = false;
-    for (llwchar& c : text)
+    bool emojiSent{ false };
+    for (const llwchar& c : text)
     {
         if (dictionary->isEmoji(c))
         {

@@ -884,7 +884,7 @@ bool LLVLComposition::generateMinimapTileLand(const F32 x, const F32 y,
     U32 st_comps = 3;
     U32 st_width = BASE_SIZE;
     U32 st_height = BASE_SIZE;
-    
+
     if (tex_comps != st_comps)
     {
         llassert(false);
